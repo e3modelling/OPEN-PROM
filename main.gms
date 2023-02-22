@@ -24,8 +24,10 @@ $setGlobal readCountryDB 'yes'
 $setGlobal readCountryCalib 'yes'
 
 $setGlobal horizon '2010*2050'
+$setGlobal endy 2020
+$setGlobal starty 2018
 
-* end of dollar commands section, from here on no new $commands are allowed (only $(bat)include & $on/offtext) 
+* end of dollar commands section, no further $commands are allowed (only $(bat)include & $on/offtext) 
 
 file name / '' /; !! construct for printing diagnostic output into log file
 put name;

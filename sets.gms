@@ -14,10 +14,6 @@ JOR       JORDAN
 TUR       TURKEY
 /
 
-gasExporters(allCy) Main gas exporters  /ALG/
-gasImporters(allCy) Main gas importers /MOR,TUN,EGY,ISR,JOR,LEB/
-ambitious(allCy) Countries with ambitious NDC targets /MOR,TUN,LEB/
-JORDAN(allCy) Jordan /JOR/
 runCy(allCy) Countries for which the model is running
 /
 ALG       ALGERIA
@@ -33,7 +29,7 @@ JOR       JORDAN
 
 ytime           Model time horizon                                /1990*2050/
 ytime30(ytime)  Model time horizon up to 2030                     /1990*2030/
-an(ytime)       Years for which the model is running              /2018*2020/
+an(ytime)       Years for which the model is running              /%starty%*%endy%/
 twenties(ytime) THE DECADE FROM 2020-2030                         /2021*2030/
 thirties(ytime) THE DECADE FROM 2030-2040                         /2031*2040/
 after2020(ytime) The period 2021 to 2050                          /2021*2050/
