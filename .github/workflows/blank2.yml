@@ -35,10 +35,10 @@ jobs:
         uses: GAMS-dev/actions/run-job@v1
         with:
             url: ${{ secrets.ENGINE_URL }}
-            model: 'main'
+#            model: 'main'
             namespace: ${{ secrets.ENGINE_NS }}
             username: ${{ secrets.ENGINE_USER }}
             password: ${{ secrets.ENGINE_PASSWORD }}
-#            run: 'main.gms'
+            run: 'main.gms'
 #                arguments: 'a=c'
 #                model_data: '${{ github.workspace }}/model.zip'
