@@ -31,7 +31,7 @@ jobs:
                         zip -r model.zip main.gms sets.gms
 
       # Runs a set of commands using the runners shell
-#      - name: Submit demo job
+      - name: Submit demo job
 #        uses: GAMS-dev/actions/run-job@v1
 #        with:
 #            url: ${{ secrets.ENGINE_URL }}
