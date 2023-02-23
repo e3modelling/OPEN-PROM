@@ -31,7 +31,7 @@ $setGlobal starty 2018
 
 file name / '' /; !! construct for printing diagnostic output into log file
 put name;
-end
+
 $include sets.gms
 *$include h2model_sets.gms
 
