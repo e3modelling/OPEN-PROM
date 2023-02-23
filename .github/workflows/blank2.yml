@@ -28,16 +28,16 @@ jobs:
       # Runs a single command using the runners shell
       - name: Compress model
         run: |
-                        zip -r model.zip .
+                        zip -r model.zip main.gms sets.gms
 
       # Runs a set of commands using the runners shell
       - name: Submit demo job
-    uses: GAMS-dev/actions/run-job@v1
-    with:
-        url: ${{ secrets.ENGINE_URL }}
-        namespace: ${{ secrets.ENGINE_NS }}
-        username: ${{ secrets.ENGINE_USER }}
-        password: ${{ secrets.ENGINE_PASSWORD }}
-        run: 'main.gms'
-        arguments: 'a=c'
-        model_data: '${{ github.workspace }}/model.zip'
+          uses: GAMS-dev/actions/run-job@v1
+          with:
+              url: ${{ secrets.ENGINE_URL }}
+              namespace: ${{ secrets.ENGINE_NS }}
+              username: ${{ secrets.ENGINE_USER }}
+              password: ${{ secrets.ENGINE_PASSWORD }}
+              run: 'main.gms'
+              arguments: 'a=c'
+              model_data: '${{ github.workspace }}/model.zip'
