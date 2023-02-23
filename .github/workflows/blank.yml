@@ -22,20 +22,20 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - uses: actions/checkout@v2
+    - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
-      - run: |
+    # Runs a single command using the runners shell
+    - run: |
                         zip -r model.zip .
 
-      # Runs a set of commands using the runners shell
-      - name: Submit job
-      uses: GAMS-dev/actions/run-job@v1
-      with:
-          url: ${{ secrets.ENGINE_URL }}
-          namespace: ${{ secrets.ENGINE_NS }}
-          username: ${{ secrets.ENGINE_USER }}
-          password: ${{ secrets.ENGINE_PASSWORD }}
-          run: 'main.gms'
-              arguments: 'a=c'
-              model_data: '${{ github.workspace }}/model.zip'
+    # Runs a set of commands using the runners shell
+    - name: Submit job
+    uses: GAMS-dev/actions/run-job@v1
+    with:
+        url: ${{ secrets.ENGINE_URL }}
+        namespace: ${{ secrets.ENGINE_NS }}
+        username: ${{ secrets.ENGINE_USER }}
+        password: ${{ secrets.ENGINE_PASSWORD }}
+        run: 'main.gms'
+            arguments: 'a=c'
+            model_data: '${{ github.workspace }}/model.zip'
