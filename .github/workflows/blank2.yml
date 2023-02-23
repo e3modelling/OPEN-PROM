@@ -33,8 +33,8 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Submit demo job
         uses: GAMS-dev/actions/run-job@v1
-#        with:
-#            url: ${{ secrets.ENGINE_URL }}
+        with:
+            url: ${{ secrets.ENGINE_URL }}
 #            namespace: ${{ secrets.ENGINE_NS }}
 #            username: ${{ secrets.ENGINE_USER }}
 #            password: ${{ secrets.ENGINE_PASSWORD }}
