@@ -41,4 +41,4 @@ jobs:
             password: ${{ secrets.ENGINE_PASSWORD }}
             run: 'main.gms'
 #                arguments: 'a=c'
-#                model_data: '${{ github.workspace }}/model.zip'
+                model_data: '${{ github.workspace }}/model.zip'
