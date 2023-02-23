@@ -36,7 +36,7 @@ jobs:
         with:
             url: ${{ secrets.ENGINE_URL }}
             model: 'main'
-#            namespace: ${{ secrets.ENGINE_NS }}
+            namespace: ${{ secrets.ENGINE_NS }}
 #            username: ${{ secrets.ENGINE_USER }}
 #            password: ${{ secrets.ENGINE_PASSWORD }}
 #            run: 'main.gms'
