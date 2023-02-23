@@ -35,6 +35,7 @@ jobs:
         uses: GAMS-dev/actions/run-job@v1
         with:
             url: ${{ secrets.ENGINE_URL }}
+            model: 'main'
 #            namespace: ${{ secrets.ENGINE_NS }}
 #            username: ${{ secrets.ENGINE_USER }}
 #            password: ${{ secrets.ENGINE_PASSWORD }}
