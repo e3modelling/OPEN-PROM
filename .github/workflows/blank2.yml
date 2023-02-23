@@ -37,8 +37,8 @@ jobs:
             url: ${{ secrets.ENGINE_URL }}
             model: 'main'
             namespace: ${{ secrets.ENGINE_NS }}
-#            username: ${{ secrets.ENGINE_USER }}
-#            password: ${{ secrets.ENGINE_PASSWORD }}
+            username: ${{ secrets.ENGINE_USER }}
+            password: ${{ secrets.ENGINE_PASSWORD }}
 #            run: 'main.gms'
 #                arguments: 'a=c'
 #                model_data: '${{ github.workspace }}/model.zip'
