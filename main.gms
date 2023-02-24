@@ -26,6 +26,7 @@ $setGlobal readCountryCalib 'yes'
 $setGlobal horizon '2010*2050'
 $setGlobal endy 2020
 $setGlobal starty 2018
+$setGlobal basey %starty% - %periodOfYears%
 
 * end of dollar commands section, no further $commands are allowed (only $(bat)include & $on/offtext) 
 
@@ -36,4 +37,3 @@ $include sets.gms
 *$include h2model_sets.gms
 
 *$include params.gms
-
