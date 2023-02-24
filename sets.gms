@@ -40,11 +40,11 @@ an2(ytime) /2016*2030/
 an3(ytime) /2016*2020/
 an4(ytime) /2021*2025/
 an5(ytime) /2026*2030/
-dataY(ytime)    Historical year before the base year of the model /1990*2017/
-carbon(ytime)   Years for which cabon tax is applied
+datay(ytime)    Historical years before the base year of the model /1990*%basey%-1/
+carbon(ytime)   Years for which carbon tax is applied
 period(ytime)   Model can also run for periods of years
-tFirst(ytime)   Base year                                         /2017/
-tFirstAn(ytime) First year for which the model is running         /2018/
+tFirst(ytime)   Base year                                         /%basey%/
+tFirstAn(ytime) First year for which the model is running         /%starty%/
 time(ytime)     Model time horizon used in equation definitions
 timeRep(ytime)  Model time horizon used in report
 hour            "Segments of hours in a year (250,1250,...,8250)" /h0*h8/
@@ -185,9 +185,6 @@ PG_SF6         "Electricity production, related with SF6"
 OI_SF6         "Other Industries activities, related with SF6"
 /
 
-pg(sbs)
-/pg/
-
 SCTtoSBS(SCT, SBS)  Sectors to Subsectors
 /
 INDU.(IS,NF,CH,BM,PP,FD,EN,TX,OE,OI)
@@ -226,7 +223,7 @@ RegulaPolicies(POLICIES_set) Set of policies entering in the regula falsi loops
 APolicies(RegulaPolicies) Regula falsi policies that are active
 PolicyYears(RegulaPolicies, ytime) Years for which a policy is effective
 
-NAP(Policies_set) National Allocation plan sector categories
+NAP(Policies_set) National Allocation Plan sector categories
 /
 Trade    Carbon Value for trading sectors
 NoTrade  Carbon Value for non-trading sectors
@@ -335,12 +332,6 @@ NEF     "New energy forms"
 HEATPUMP "Low enthalpy heat produced by heatpumps reducing the total final consumption of the sector"
 /
 
-HEATPUMP(EF) Heatpumps are reducing the heat requirements of the sector but increasing electricity consumption
-/HEATPUMP/
-
-h2f(ef)
-/h2f/
-
 EFA(EF)          Aggregate Energy Forms
 /
 SLD   "Solid Fuels"
@@ -365,6 +356,7 @@ OLQ     "Other Liquids"
 NGS     "Natural Gas"
 OGS     "Other Gases"
 /
+
 REFORM1(EF) FUELS CONSIDERED IN PRICE REFORM
 /HCL
 LGN/
@@ -400,8 +392,7 @@ EFtoEFA(EF,EFA)  Energy Forms Aggregations (for summary balance report)
 (HYD,WND,SOL,GEO,NUC,BMSWAS).NFF
 (H2F,MET,ETH).NEF
 /
-OLQ(EF)
-/OLQ/
+
 WEF              Imported Energy Forms (affecting fuel prices)
 /
 WHCL    Imported Hard Coal
@@ -512,6 +503,7 @@ GEO
 WND
 H2F
 /
+
 h2f1(pgef)
 /h2f/
 
@@ -560,8 +552,6 @@ IMP   Improved
 
 TEA(TEAALL)         Technologies currently used inside the model
 /ORD/
-
-
 
 TTECH(EF)        Transport Technologies
 /
@@ -1022,6 +1012,7 @@ PGACGS.(HCL,ICG,THE)
 PGAGGS.(GAS,GGC,THE)
 PGAWNO.(WND,REN)
 /
+
 geme3tech
 /
 coalconv
@@ -1183,7 +1174,7 @@ mc_m     value for the ratio of x to potential after which exponential is taking
 Macro            "Elements used for reading Pop,GDP, Consumption Expenditure and Value Added"
 /GDP,CONS_EXP,IS,NF,CH,BM,PP,FD,TX,EN,OE,OI,SE,AG,PCH,NEN,BU,HOU,POP,HOU_SIZE,HOUSEHOLDS/
 
-HOUCHAR(Macro)   "Elements used for reading ingabidants per Households and number of Households"
+HOUCHAR(Macro)   "Elements used for reading inhabitants per Households and number of Households"
 /CONS_EXP,HOU_SIZE,HOUSEHOLDS/
 
 ETYPES           "Elasticities types"
