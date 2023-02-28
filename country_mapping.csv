@@ -1,250 +1,250 @@
-Full Country Name,ISO Code,Region Code
-Afghanistan,AFG,RAS
-Aland Islands,ALA,RWO
-Albania,ALB,REU
-Algeria,DZA,REP
-American Samoa,ASM,RAS
-Andorra,AND,REU
-Angola,AGO,RAF
-Anguilla,AIA,RLA
-Antarctica,ATA,RLA
-Antigua and Barbuda,ATG,RLA
-Argentina,ARG,ARG
-Armenia,ARM,RWO
-Aruba,ABW,RLA
-Australia,AUS,OCE
-Austria,AUT,AUT
-Azerbaijan,AZE,REP
-Bahamas,BHS,RLA
-Bahrain,BHR,RAF
-Bangladesh,BGD,RAS
-Barbados,BRB,RLA
-Belarus,BLR,REU
-Belgium,BEL,BEL
-Belize,BLZ,RLA
-Benin,BEN,RAF
-Bermuda,BMU,RLA
-Bhutan,BTN,RAS
-"Bolivia, Plurinational State of",BOL,RLA
-"Bonaire, Sint Eustatius and Saba",BES,RLA
-Bosnia and Herzegovina,BIH,REU
-Botswana,BWA,RAF
-Bouvet Island,BVT,RLA
-Brazil,BRA,BRA
-British Indian Ocean Territory,IOT,RAS
-Brunei Darussalam,BRN,RAS
-Bulgaria,BGR,BGR
-Burkina Faso,BFA,RAF
-Burundi,BDI,RAF
-Cambodia,KHM,RAS
-Cameroon,CMR,RAF
-Canada,CAN,CAN
-Cape Verde,CPV,RAF
-Cayman Islands,CYM,RLA
-Central African Republic,CAF,RAF
-Chad,TCD,RAF
-Chile,CHL,RLA
-China,CHN,CHA
-Christmas Island,CXR,RAS
-Cocos (Keeling) Islands,CCK,RAS
-Colombia,COL,RLA
-Comoros,COM,RAF
-Congo,COG,RAF
-"Congo, the Democratic Republic of the",COD,RAF
-Cook Islands,COK,RAS
-Costa Rica,CRI,RLA
-Cote d Ivoire,CIV,RAF
-Croatia,HRV,HRV
-Cuba,CUB,RLA
-Curacao,CUW,RLA
-Cyprus,CYP,CYP
-Czech Republic,CZE,CZE
-Denmark,DNK,DNK
-Djibouti,DJI,RAF
-Dominica,DMA,RLA
-Dominican Republic,DOM,RLA
-Ecuador,ECU,RLA
-Egypt,EGY,EGY
-El Salvador,SLV,RLA
-Equatorial Guinea,GNQ,RAF
-Eritrea,ERI,RAF
-Estonia,EST,EST
-Ethiopia,ETH,RAF
-Falkland Islands (Malvinas),FLK,RLA
-Faroe Islands,FRO,RWO
-Fiji,FJI,RAS
-Finland,FIN,FIN
-France,FRA,FRA
-French Guiana,GUF,RLA
-French Polynesia,PYF,OCE
-French Southern Territories,ATF,RAS
-Gabon,GAB,RAF
-Gambia,GMB,RAF
-Georgia,GEO,RWO
-Germany,DEU,DEU
-Ghana,GHA,RAF
-Gibraltar,GIB,RWO
-Greece,GRC,GRC
-Greenland,GRL,REU
-Grenada,GRD,RLA
-Guadeloupe,GLP,RLA
-Guam,GUM,RAS
-Guatemala,GTM,RLA
-Guernsey,GGY,RWO
-Guinea,GIN,RAF
-Guinea-Bissau,GNB,RAF
-Guyana,GUY,RLA
-Haiti,HTI,RLA
-Heard Island and McDonald Islands,HMD,RWO
-Holy See (Vatican City State),VAT,REU
-Honduras,HND,RLA
-Hong Kong,HKG,CHA
-Hungary,HUN,HUN
-Iceland,ISL,NSI
-India,IND,IND
-Indonesia,IDN,IDN
-"Iran, Islamic Republic of",IRN,REP
-Iraq,IRQ,REP
-Ireland,IRL,IRL
-Isle of Man,IMN,RWO
-Israel,ISR,ISR
-Italy,ITA,ITA
-Jamaica,JAM,RLA
-Japan,JPN,JPN
-Jersey,JEY,RWO
-Jordan,JOR,REP
-Kazakhstan,KAZ,RWO
-Kenya,KEN,RAF
-Kiribati,KIR,OCE
-"Korea, Democratic People's Republic of",PRK,RAS
-"Korea, Republic of",KOR,KOR
-Kuwait,KWT,REP
-Kyrgyzstan,KGZ,RWO
-Lao People's Democratic Republic,LAO,RAS
-Latvia,LVA,LVA
-Lebanon,LBN,REP
-Lesotho,LSO,RAF
-Liberia,LBR,RAF
-Libya,LBY,REP
-Liechtenstein,LIE,NSI
-Lithuania,LTU,LTU
-Luxembourg,LUX,LUX
-Macao,MAC,CHA
-"Macedonia, the former Yugoslav Republic of",MKD,REU
-Madagascar,MDG,RAF
-Malawi,MWI,RAF
-Malaysia,MYS,RAS
-Maldives,MDV,RAS
-Mali,MLI,RAF
-Malta,MLT,MLT
-Marshall Islands,MHL,RAS
-Martinique,MTQ,RLA
-Mauritania,MRT,RAF
-Mauritius,MUS,RAF
-Mayotte,MYT,RAF
-Mexico,MEX,MEX
-"Micronesia, Federated States of",FSM,RAS
-"Moldova, Republic of",MDA,REU
-Monaco,MCO,REU
-Mongolia,MNG,RAS
-Montenegro,MNE,REU
-Montserrat,MSR,RLA
-Morocco,MAR,MAR
-Mozambique,MOZ,RAF
-Myanmar,MMR,RAS
-Namibia,NAM,RAF
-Nauru,NRU,RAS
-Nepal,NPL,RAS
-Netherlands,NLD,NLD
-New Caledonia,NCL,OCE
-New Zealand,NZL,OCE
-Nicaragua,NIC,RLA
-Niger,NER,RAF
-Nigeria,NGA,REP
-Niue,NIU,RAS
-Norfolk Island,NFK,RAS
-Northern Mariana Islands,MNP,RAS
-Norway,NOR,NSI
-Oman,OMN,RAF
-Pakistan,PAK,RAS
-Palau,PLW,RAS
-"Palestine, State of",PSE,RAF
-Panama,PAN,RLA
-Papua New Guinea,PNG,OCE
-Paraguay,PRY,RLA
-Peru,PER,RLA
-Philippines,PHL,RAS
-Pitcairn,PCN,RAS
-Poland,POL,POL
-Portugal,PRT,PRT
-Puerto Rico,PRI,RLA
-Qatar,QAT,REP
-Reunion,REU,RAF
-Romania,ROU,ROU
-Russian Federation,RUS,RUS
-Rwanda,RWA,RAF
-Saint Barthelemy,BLM,RLA
-"Saint Helena, Ascension and Tristan da Cunha",SHN,RAF
-Saint Kitts and Nevis,KNA,RLA
-Saint Lucia,LCA,RLA
-Saint Martin (French part),MAF,RLA
-Saint Pierre and Miquelon,SPM,RWO
-Saint Vincent and the Grenadines,VCT,RLA
-Samoa,WSM,RAS
-San Marino,SMR,REU
-Sao Tome and Principe,STP,RAF
-Saudi Arabia,SAU,SAU
-Senegal,SEN,RAF
-Serbia,SRB,REU
-Seychelles,SYC,RAF
-Sierra Leone,SLE,RAF
-Singapore,SGP,RAS
-Sint Maarten (Dutch part),SXM,RLA
-Slovakia,SVK,SVK
-Slovenia,SVN,SVN
-Solomon Islands,SLB,RAS
-Somalia,SOM,RAF
-South Africa,ZAF,ZAF
-South Georgia and the South Sandwich Islands,SGS,RLA
-South Sudan,SSD,RAF
-Spain,ESP,ESP
-Sri Lanka,LKA,RAS
-Sudan,SDN,RAF
-Suriname,SUR,RLA
-Svalbard and Jan Mayen,SJM,REU
-Swaziland,SWZ,RAF
-Sweden,SWE,SWE
-Switzerland,CHE,NSI
-Syrian Arab Republic,SYR,REP
-"Taiwan, Province of China",TWN,CHA
-Tajikistan,TJK,RWO
-"Tanzania, United Republic of",TZA,RAF
-Thailand,THA,RAS
-Timor-Leste,TLS,RAS
-Togo,TGO,RAF
-Tokelau,TKL,RAS
-Tonga,TON,RAS
-Trinidad and Tobago,TTO,RLA
-Tunisia,TUN,TUN
-Turkey,TUR,TUR
-Turkmenistan,TKM,RWO
-Turks and Caicos Islands,TCA,RLA
-Tuvalu,TUV,OCE
-Uganda,UGA,RAF
-Ukraine,UKR,REU
-United Arab Emirates,ARE,REP
-United Kingdom,GBR,GBR
-United States,USA,USA
-United States Minor Outlying Islands,UMI,RAS
-Uruguay,URY,RLA
-Uzbekistan,UZB,RWO
-Vanuatu,VUT,OCE
-"Venezuela, Bolivarian Republic of",VEN,REP
-Viet Nam,VNM,RAS
-"Virgin Islands, British",VGB,RLA
-"Virgin Islands, U.S.",VIR,RLA
-Wallis and Futuna,WLF,RAS
-Western Sahara,ESH,REP
-Yemen,YEM,REP
-Zambia,ZMB,RAF
-Zimbabwe,ZWE,RAF
+Full Country Name,ISO3 Code,Region Code,Full Region Name
+Afghanistan,AFG,RAS,Rest of Asia
+Aland Islands,ALA,RWO,Rest of world
+Albania,ALB,REU,Rest of Europe 2
+Algeria,DZA,REP,Rest of energy producing countries
+American Samoa,ASM,RAS,Rest of Asia
+Andorra,AND,REU,Rest of Europe 2
+Angola,AGO,RAF,Rest of Africa
+Anguilla,AIA,RLA,Rest of Patin America
+Antarctica,ATA,RLA,Rest of Latin America
+Antigua and Barbuda,ATG,RLA,Rest of Latin America
+Argentina,ARG,ARG,Argentina
+Armenia,ARM,RWO,Rest of world
+Aruba,ABW,RLA,Rest of Latin America
+Australia,AUS,OCE,Oceania
+Austria,AUT,AUT,Austria
+Azerbaijan,AZE,REP,Rest of energy producing countries
+Bahamas,BHS,RLA,Rest of Latin America
+Bahrain,BHR,RAF,Rest of Africa
+Bangladesh,BGD,RAS,Rest of Asia
+Barbados,BRB,RLA,Rest of Latin America
+Belarus,BLR,REU,Rest of Europe 2
+Belgium,BEL,BEL,Belgium
+Belize,BLZ,RLA,Rest of Latin America
+Benin,BEN,RAF,Rest of Africa
+Bermuda,BMU,RLA,Rest of Latin America
+Bhutan,BTN,RAS,Rest of Asia
+Bolivia; Plurinational State of,BOL,RLA,Rest of Latin America
+Bonaire; Sint Eustatius and Saba,BES,RLA,Rest of Latin America
+Bosnia and Herzegovina,BIH,REU,Rest of Europe 2
+Botswana,BWA,RAF,Rest of Africa
+Bouvet Island,BVT,RLA,Rest of Latin America
+Brazil,BRA,BRA,Brazil
+British Indian Ocean Territory,IOT,RAS,Rest of Asia
+Brunei Darussalam,BRN,RAS,Rest of Asia
+Bulgaria,BGR,BGR,Bulgaria
+Burkina Faso,BFA,RAF,Rest of Africa
+Burundi,BDI,RAF,Rest of Africa
+Cambodia,KHM,RAS,Rest of Asia
+Cameroon,CMR,RAF,Rest of Africa
+Canada,CAN,CAN,Canada
+Cape Verde,CPV,RAF,Rest of Africa
+Cayman Islands,CYM,RLA,Rest of Latin America
+Central African Republic,CAF,RAF,Rest of Africa
+Chad,TCD,RAF,Rest of Africa
+Chile,CHL,RLA,Rest of Latin America
+China,CHN,CHA,China
+Christmas Island,CXR,RAS,Rest of Asia
+Cocos (Keeling) Islands,CCK,RAS,Rest of Asia
+Colombia,COL,RLA,Rest of Latin America
+Comoros,COM,RAF,Rest of Africa
+Congo,COG,RAF,Rest of Africa
+Congo; the Democratic Republic of the,COD,RAF,Rest of Africa
+Cook Islands,COK,RAS,Rest of Asia
+Costa Rica,CRI,RLA,Rest of Latin America
+Cote d Ivoire,CIV,RAF,Rest of Africa
+Croatia,HRV,HRV,Croatia
+Cuba,CUB,RLA,Rest of Latin America
+Curacao,CUW,RLA,Rest of Latin America
+Cyprus,CYP,CYP,Cyprus
+Czech Republic,CZE,CZE,Czech Republic
+Denmark,DNK,DNK,Denmark
+Djibouti,DJI,RAF,Rest of Africa
+Dominica,DMA,RLA,Rest of Latin America
+Dominican Republic,DOM,RLA,Rest of Latin America
+Ecuador,ECU,RLA,Rest of Latin America
+Egypt,EGY,EGY,Egypt
+El Salvador,SLV,RLA,Rest of Latin America
+Equatorial Guinea,GNQ,RAF,Rest of Africa
+Eritrea,ERI,RAF,Rest of Africa
+Estonia,EST,EST,Estonia
+Ethiopia,ETH,RAF,Rest of Africa
+Falkland Islands (Malvinas),FLK,RLA,Rest of Latin America
+Faroe Islands,FRO,RWO,Rest of world
+Fiji,FJI,RAS,Rest of Asia
+Finland,FIN,FIN,Finland
+France,FRA,FRA,France
+French Guiana,GUF,RLA,Rest of Latin America
+French Polynesia,PYF,OCE,Oceania
+French Southern Territories,ATF,RAS,Rest of Asia
+Gabon,GAB,RAF,Rest of Africa
+Gambia,GMB,RAF,Rest of Africa
+Georgia,GEO,RWO,Rest of world
+Germany,DEU,DEU,Germany
+Ghana,GHA,RAF,Rest of Africa
+Gibraltar,GIB,RWO,Rest of world
+Greece,GRC,GRC,Greece
+Greenland,GRL,REU,Rest of Europe 2
+Grenada,GRD,RLA,Rest of Latin America
+Guadeloupe,GLP,RLA,Rest of Latin America
+Guam,GUM,RAS,Rest of Asia
+Guatemala,GTM,RLA,Rest of Latin America
+Guernsey,GGY,RWO,Rest of world
+Guinea,GIN,RAF,Rest of Africa
+Guinea-Bissau,GNB,RAF,Rest of Africa
+Guyana,GUY,RLA,Rest of Latin America
+Haiti,HTI,RLA,Rest of Latin America
+Heard Island and McDonald Islands,HMD,RWO,Rest of world
+Holy See (Vatican City State),VAT,REU,Rest of Europe 2
+Honduras,HND,RLA,Rest of Latin America
+Hong Kong,HKG,CHA,China
+Hungary,HUN,HUN,Hungary
+Iceland,ISL,NSI,Rest of Europe 1
+India,IND,IND,India
+Indonesia,IDN,IDN,Indonesia
+Iran; Islamic Republic of,IRN,REP,Rest of energy producing countries
+Iraq,IRQ,REP,Rest of energy producing countries
+Ireland,IRL,IRL,Ireland
+Isle of Man,IMN,RWO,Rest of world
+Israel,ISR,ISR,Israel
+Italy,ITA,ITA,Italy
+Jamaica,JAM,RLA,Rest of Latin America
+Japan,JPN,JPN,Japan
+Jersey,JEY,RWO,Rest of world
+Jordan,JOR,REP,Rest of energy producing countries
+Kazakhstan,KAZ,RWO,Rest of world
+Kenya,KEN,RAF,Rest of Africa
+Kiribati,KIR,OCE,Oceania
+Korea; Democratic People's Republic of,PRK,RAS,Rest of Asia
+Korea; Republic of,KOR,KOR,"Korea, Republic of"
+Kuwait,KWT,REP,Rest of energy producing countries
+Kyrgyzstan,KGZ,RWO,Rest of world
+Lao People's Democratic Republic,LAO,RAS,Rest of Asia
+Latvia,LVA,LVA,Latvia
+Lebanon,LBN,REP,Rest of energy producing countries
+Lesotho,LSO,RAF,Rest of Africa
+Liberia,LBR,RAF,Rest of Africa
+Libya,LBY,REP,Rest of energy producing countries
+Liechtenstein,LIE,NSI,Rest of Europe 1
+Lithuania,LTU,LTU,Lithuania
+Luxembourg,LUX,LUX,Luxembourg
+Macao,MAC,CHA,China
+Macedonia; the former Yugoslav Republic of,MKD,REU,Rest of Europe 2
+Madagascar,MDG,RAF,Rest of Africa
+Malawi,MWI,RAF,Rest of Africa
+Malaysia,MYS,RAS,Rest of Asia
+Maldives,MDV,RAS,Rest of Asia
+Mali,MLI,RAF,Rest of Africa
+Malta,MLT,MLT,Malta
+Marshall Islands,MHL,RAS,Rest of Asia
+Martinique,MTQ,RLA,Rest of Latin America
+Mauritania,MRT,RAF,Rest of Africa
+Mauritius,MUS,RAF,Rest of Africa
+Mayotte,MYT,RAF,Rest of Africa
+Mexico,MEX,MEX,Mexico
+Micronesia; Federated States of,FSM,RAS,Rest of Asia
+Moldova; Republic of,MDA,REU,Rest of Europe 2
+Monaco,MCO,REU,Rest of Europe 2
+Mongolia,MNG,RAS,Rest of Asia
+Montenegro,MNE,REU,Rest of Europe 2
+Montserrat,MSR,RLA,Rest of Latin America
+Morocco,MAR,MAR,Morocco
+Mozambique,MOZ,RAF,Rest of Africa
+Myanmar,MMR,RAS,Rest of Asia
+Namibia,NAM,RAF,Rest of Africa
+Nauru,NRU,RAS,Rest of Asia
+Nepal,NPL,RAS,Rest of Asia
+Netherlands,NLD,NLD,Netherlands
+New Caledonia,NCL,OCE,Oceania
+New Zealand,NZL,OCE,Oceania
+Nicaragua,NIC,RLA,Rest of Latin America
+Niger,NER,RAF,Rest of Africa
+Nigeria,NGA,REP,Rest of energy producing countries
+Niue,NIU,RAS,Rest of Asia
+Norfolk Island,NFK,RAS,Rest of Asia
+Northern Mariana Islands,MNP,RAS,Rest of Asia
+Norway,NOR,NSI,Rest of Europe 1
+Oman,OMN,RAF,Rest of Africa
+Pakistan,PAK,RAS,Rest of Asia
+Palau,PLW,RAS,Rest of Asia
+Palestine; State of,PSE,RAF,Rest of Africa
+Panama,PAN,RLA,Rest of Latin America
+Papua New Guinea,PNG,OCE,Oceania
+Paraguay,PRY,RLA,Rest of Latin America
+Peru,PER,RLA,Rest of Latin America
+Philippines,PHL,RAS,Rest of Asia
+Pitcairn,PCN,RAS,Rest of Asia
+Poland,POL,POL,Poland
+Portugal,PRT,PRT,Portugal
+Puerto Rico,PRI,RLA,Rest of Latin America
+Qatar,QAT,REP,Rest of energy producing countries
+Reunion,REU,RAF,Rest of Africa
+Romania,ROU,ROU,Romania
+Russian Federation,RUS,RUS,Russian Federation
+Rwanda,RWA,RAF,Rest of Africa
+Saint Barthelemy,BLM,RLA,Rest of Latin America
+Saint Helena; Ascension and Tristan da Cunha,SHN,RAF,Rest of Africa
+Saint Kitts and Nevis,KNA,RLA,Rest of Latin America
+Saint Lucia,LCA,RLA,Rest of Latin America
+Saint Martin (French part),MAF,RLA,Rest of Latin America
+Saint Pierre and Miquelon,SPM,RWO,Rest of world
+Saint Vincent and the Grenadines,VCT,RLA,Rest of Latin America
+Samoa,WSM,RAS,Rest of Asia
+San Marino,SMR,REU,Rest of Europe 2
+Sao Tome and Principe,STP,RAF,Rest of Africa
+Saudi Arabia,SAU,SAU,Saudi Arabia
+Senegal,SEN,RAF,Rest of Africa
+Serbia,SRB,REU,Rest of Europe 2
+Seychelles,SYC,RAF,Rest of Africa
+Sierra Leone,SLE,RAF,Rest of Africa
+Singapore,SGP,RAS,Rest of Asia
+Sint Maarten (Dutch part),SXM,RLA,Rest of Latin America
+Slovakia,SVK,SVK,Slovakia
+Slovenia,SVN,SVN,Slovenia
+Solomon Islands,SLB,RAS,Rest of Asia
+Somalia,SOM,RAF,Rest of Africa
+South Africa,ZAF,ZAF,South Africa
+South Georgia and the South Sandwich Islands,SGS,RLA,Rest of Latin America
+South Sudan,SSD,RAF,Rest of Africa
+Spain,ESP,ESP,Spain
+Sri Lanka,LKA,RAS,Rest of Asia
+Sudan,SDN,RAF,Rest of Africa
+Suriname,SUR,RLA,Rest of Latin America
+Svalbard and Jan Mayen,SJM,REU,Rest of Europe 2
+Swaziland,SWZ,RAF,Rest of Africa
+Sweden,SWE,SWE,Sweden
+Switzerland,CHE,NSI,Rest of Europe 1
+Syrian Arab Republic,SYR,REP,Rest of energy producing countries
+Taiwan; Province of China,TWN,CHA,China
+Tajikistan,TJK,RWO,Rest of world
+Tanzania; United Republic of,TZA,RAF,Rest of Africa
+Thailand,THA,RAS,Rest of Asia
+Timor-Leste,TLS,RAS,Rest of Asia
+Togo,TGO,RAF,Rest of Africa
+Tokelau,TKL,RAS,Rest of Asia
+Tonga,TON,RAS,Rest of Asia
+Trinidad and Tobago,TTO,RLA,Rest of Latin America
+Tunisia,TUN,TUN,Tunisia
+Turkey,TUR,TUR,Turkey
+Turkmenistan,TKM,RWO,Rest of world
+Turks and Caicos Islands,TCA,RLA,Rest of Latin America
+Tuvalu,TUV,OCE,OceanPa
+Uganda,UGA,RAF,Rest of Africa
+Ukraine,UKR,REU,Rest of Europe 2
+United Arab Emirates,ARE,REP,Rest of energy producing countries
+United Kingdom,GBR,GBR,United Kingdom
+United States,USA,USA,United States
+United States Minor Outlying Islands,UMI,RAS,Rest of Asia
+Uruguay,URY,RLA,Rest of Latin America
+Uzbekistan,UZB,RWO,Rest of world
+Vanuatu,VUT,OCE,Oceania
+Venezuela; Bolivarian Republic of,VEN,REP,Rest of energy producing countries
+Viet Nam,VNM,RAS,Rest of Asia
+Virgin Islands; British,VGB,RLA,Rest of Latin America
+Virgin Islands; U.S.,VIR,RLA,Rest of Latin America
+Wallis and Futuna,WLF,RAS,Rest of Asia
+Western Sahara,ESH,REP,Rest of energy producing countries
+Yemen,YEM,REP,Rest of energy producing countries
+Zambia,ZMB,RAF,Rest of Africa
+Zimbabwe,ZWE,RAF,Rest of Africa
