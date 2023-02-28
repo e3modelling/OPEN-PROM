@@ -34,6 +34,6 @@ file name / '' /; !! construct for printing diagnostic output into log file
 put name;
 
 $include sets.gms
-*$include h2model_sets.gms
+$include h2model_sets.gms
 
-*$include params.gms
+*$include parameters.gms
