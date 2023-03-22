@@ -1,35 +1,20 @@
 sets
-*        Geographic Coverage      *
+***        Geographic Coverage      *
 allCy    Countries for which the model is applied
 /
-ALG       ALGERIA
-MOR       MOROCCO
-TUN       TUNISIA
-EGY       EGYPT
-LIB       LIBYA
-ISR       ISRAEL
-LEB       LEBANON
-SYR       SYRIA
-JOR       JORDAN
-TUR       TURKEY
+RAS       REST OF ASIA
+MAR       MOROCCO
 /
 
 runCy(allCy) Countries for which the model is running
 /
-ALG       ALGERIA
-MOR       MOROCCO
-TUN       TUNISIA
-EGY       EGYPT
-ISR       ISRAEL
-LEB       LEBANON
-JOR       JORDAN
+%fCountries%
 /
 
-*        Model Time Horizon       *
+***        Model Time Horizon       *
 
-ytime           Model time horizon                                /1990*2050/
-ytime30(ytime)  Model time horizon up to 2030                     /1990*2030/
-an(ytime)       Years for which the model is running              /%starty%*%endy%/
+ytime           Model time horizon                                /%fHorizon%/
+an(ytime)       Years for which the model is running              /%fStartY%*%fEndY%/
 twenties(ytime) THE DECADE FROM 2020-2030                         /2021*2030/
 thirties(ytime) THE DECADE FROM 2030-2040                         /2031*2040/
 after2020(ytime) The period 2021 to 2050                          /2021*2050/
@@ -40,16 +25,15 @@ an2(ytime) /2016*2030/
 an3(ytime) /2016*2020/
 an4(ytime) /2021*2025/
 an5(ytime) /2026*2030/
-datay(ytime)    Historical years before the base year of the model /1990*%basey%-1/
 carbon(ytime)   Years for which carbon tax is applied
 period(ytime)   Model can also run for periods of years
-tFirst(ytime)   Base year                                         /%basey%/
-tFirstAn(ytime) First year for which the model is running         /%starty%/
+tFirst(ytime)   Base year                                         /%fBaseY%/
+tFirstAn(ytime) First year for which the model is running         /%fStartY%/
 time(ytime)     Model time horizon used in equation definitions
 timeRep(ytime)  Model time horizon used in report
 hour            "Segments of hours in a year (250,1250,...,8250)" /h0*h8/
 
-*          Consumer Sizes         *
+***          Consumer Sizes         *
 
 conSet       Consumer size groups related to space heating
 /
@@ -64,7 +48,7 @@ iSet(eSet)   Industrial consumer /i/
 rSet(eSet)   Residential consumer /r/
 
 
-*       Auxiliary Counters        *
+***       Auxiliary Counters        *
 
 rCon         counter for the number of consumers              /0,1*19/
 nSet         auxiliary counter for the definition of Vr       /b1*b20/
@@ -73,7 +57,7 @@ rc                                                            /1*3/
 rres                                                          /r1*r4/
 
 
-*       Sectoral Structure        *
+***       Sectoral Structure        *
 
 sct          Model Sectors
 /
@@ -1136,25 +1120,6 @@ OI_HFC.HFC
 BM_CO2.CO2
 (PG_SF6,OI_SF6).SF6
 /
-
-NO_SCT_GHGtoallCy(SCT_GHG,allCy,ytime) Mapping between Sectors that do not emit in some countries
-/
-HCL_PRD_CH4.(ALG,MOR,TUN,EGY,LIB,ISR,LEB,JOR,SYR,TUR).(2001*2030)
-LGN_PRD_CH4.(ALG,MOR,TUN,EGY,LIB,ISR,LEB,JOR,SYR,TUR).(2001*2030)
-NF_PFC.(ALG,MOR,TUN,EGY,LIB,ISR,LEB,JOR,SYR,TUR).(2001*2030)
-OI_SF6.(ALG,MOR,TUN,EGY,LIB,ISR,LEB,JOR,SYR,TUR).(2001*2030)
-OI_PFC.(ALG,MOR,TUN,EGY,LIB,ISR,LEB,JOR,SYR,TUR).(2001*2030)
-
-BM_CO2.(ALG,MOR,TUN,EGY,LIB,ISR,LEB,JOR,SYR,TUR).(2001*2030)
-/
-
-NO_DEMANDtoallCy(DSBS,allCy,ytime) Mapping between Sectors that do not EXIST IN CERTAIN COUNTRIES
-/
-(PCH,NF).TUN.(2001*2030)
-/
-
-NO_FUEL_TO_SCT (DSBS,EF,allCy,ytime)
-/NF.OLQ.TUN.(2001*2030)/
 
 CO2SEQELAST Elasticities for CO2 sequestration cost curve
 /

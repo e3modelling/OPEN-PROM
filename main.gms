@@ -1,39 +1,45 @@
-* "dollar" ($) commands section: define GAMS code control and compilation-time options
+*** "dollar" ($) commands section: define GAMS flags & code control & compilation-time options
 
-* turn on end-of-line comments (starting with !!, i.e. the GAMS default)
+*** onEolCom: turn on end-of-line comments (starting with !!, i.e. the GAMS default)
 $onEolCom
-* turn on alternative flow control syntax (more readable loop, for, if etc.)
+*** onEnd: turn on alternative flow control syntax (more readable loop, for, if etc.)
 $onEnd
+*** onEmpty allows declarations of empty parameters
+$onEmpty
 
-* TODO: check if the contents of this block are actually used later
-$setGlobal countries 'ALG MOR TUN EGY ISR JOR LEB'
+*** TODO: check if the contents of this block are actually used later
+*** GAMS "flags" definitions
+$setGlobal fCountries 'RAS,MAR'
 
-$setGlobal singleCountryRun 'yes'
+$setGlobal fSingleCountryRun 'yes'
 
-$setGlobal countryList %countries%
+$setGlobal fCountryList %countries%
 
-$setGlobal scenario 'DECARB_400'
-$setGlobal baseline 'BASE'
+$setGlobal fScenario 'DECARB_400'
+$setGlobal fBaseline 'BASE'
 
-$setGlobal periodOfYears '1'
+$setGlobal fPeriodOfYears '1'
 
-$setGlobal includeNonCO2 no
+$setGlobal fIncludeNonCO2 no
 
-$setGlobal readCommonDB 'yes'
-$setGlobal readCountryDB 'yes'
-$setGlobal readCountryCalib 'yes'
+$setGlobal fReadCommonDB 'yes'
+$setGlobal fReadCountryDB 'yes'
+$setGlobal fReadCountryCalib 'yes'
 
-$setGlobal horizon '2010*2050'
-$setGlobal endy 2020
-$setGlobal starty 2018
-$setGlobal basey %starty% - %periodOfYears%
+$setGlobal fHorizon '2010*2100'
+$setGlobal fEndY 2020
+$setGlobal fStartY 2018
+$setGlobal fBaseY %fStartY% - %fPeriodOfYears%
 
-* end of dollar commands section, no further $commands are allowed (only $(bat)include & $on/offtext) 
+*** end of dollar commands section, no further flag definitions allowed 
 
 file name / '' /; !! construct for printing diagnostic output into log file
 put name;
 
+$call '"C:\Program Files\R\R-4.2.2\bin\Rscript.exe" ".\dummy.R"'
 $include sets.gms
-$include h2model_sets.gms
-
-*$include parameters.gms
+$include declarations.gms
+$include input.gms
+$include equations.gms
+$include preloop.gms
+$include solve.gms
