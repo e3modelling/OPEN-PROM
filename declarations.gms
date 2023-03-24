@@ -1,10 +1,11 @@
 
 Equations
 *** Power Generation
-QElecDem(allCy,YTIME)     "Calculate total electricity demand"
+QElecDem(allCy,YTIME)     "Compute total electricity demand"
 
 *** Transport
-qMExtV(allCy,YTIME)       "Equation for passenger cars market extension (GDP dependent)"
+qMExtV(allCy,YTIME)       "Compute passenger cars market extension (GDP dependent)"
+qMExtF(allCy,YTIME)       "Compute passenger cars market extension (GDP independent)"
 
 qDummyObj                 "Define dummy objective function"
 ;
@@ -17,6 +18,9 @@ VLosses(allCy,EFS,YTIME)       "Distribution losses (Mtoe)"
 VEnCons(allCy,EFS,YTIME)       "Final consumption in energy sector (Mtoe)"
 VNetImp(allCy,EFS,YTIME)       "Net imports (Mtoe)"
 VMExtV(allCy,YTIME)            "Passenger cars market extension (GDP dependent)"
+VMExtF(allCy,YTIME)            "Passenger cars market extension (GDP independent)"
+VLamda(allCy,YTIME)            "Ratio of car ownership over saturation car ownership (1)"
+VNumVeh(allCy,YTIME)           "Stock of passenger cars (million vehicles)"
 vDummyObj                      "Dummy maximisation variable (1)"
 ;
 

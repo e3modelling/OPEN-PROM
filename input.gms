@@ -18,3 +18,8 @@ $ondelim
 $include "./iElastA.csv"
 $offdelim
 ;
+table iSigma(allCy,SG) "S parameters of Gompertz function for passenger cars vehicle km (1)"
+$ondelim
+$include "./iSigma.csv"
+$offdelim
+;
