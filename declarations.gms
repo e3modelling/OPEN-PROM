@@ -4,10 +4,10 @@ Equations
 QElecDem(allCy,YTIME)     "Compute total electricity demand"
 
 *** Transport
-qMExtV(allCy,YTIME)       "Compute passenger cars market extension (GDP dependent)"
-qMExtF(allCy,YTIME)       "Compute passenger cars market extension (GDP independent)"
-qNumVeh(allCy,YTIME)      "Compute stock of passenger cars (in million vehicles)"
-qNewReg(allCy,YTIME)      "Compute new registrations of passenger cars"
+QMExtV(allCy,YTIME)       "Compute passenger cars market extension (GDP dependent)"
+QMExtF(allCy,YTIME)       "Compute passenger cars market extension (GDP independent)"
+QNumVeh(allCy,YTIME)      "Compute stock of passenger cars (in million vehicles)"
+QNewReg(allCy,YTIME)      "Compute new registrations of passenger cars"
 
 qDummyObj                 "Define dummy objective function"
 ;

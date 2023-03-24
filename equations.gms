@@ -13,28 +13,28 @@ QElecDem(runCy,YTIME)$TIME(YTIME)..
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)
-qMExtV(runCy,YTIME)$TIME(YTIME)..
+QMExtV(runCy,YTIME)$TIME(YTIME)..
          VMExtV(runCy,YTIME)
                  =E=
          iTransChar(runCy,"RES_MEXTV",YTIME) * VMExtV(runCy,YTIME-1) *
          [(iGDP(YTIME,runCy)/iPop(YTIME,runCy)) / (iGDP(YTIME-1,runCy)/iPop(YTIME-1,runCy))] ** iElastA(runCy,"PC","a",YTIME);
 
 * Compute passenger cars market extension (GDP independent)
-qMExtF(runCy,YTIME)$TIME(YTIME)..
+QMExtF(runCy,YTIME)$TIME(YTIME)..
          VMExtF(runCy,YTIME)
                  =E=
          iTransChar(runCy,"RES_MEXTF",YTIME) * iSigma(runCy,"S1") * EXP(iSigma(runCy,"S2") * EXP(iSigma(runCy,"S3") * VLamda(runCy,YTIME))) *
          VNumVeh(runCy,YTIME-1) / (iPop(YTIME-1,runCy) * 1000);
 
 * Compute stock of passenger cars (in million vehicles)
-qNumVeh(runCy,YTIME)$TIME(YTIME)..
+QNumVeh(runCy,YTIME)$TIME(YTIME)..
          VNumVeh(runCy,YTIME)
                  =E=
          (VNumVeh(runCy,YTIME-1)/(iPop(YTIME-1,runCy)*1000) + VMExtF(runCy,YTIME) + VMExtV(runCy,YTIME)) *
          iPop(YTIME,runCy) * 1000;
 
 * Compute new registrations of passenger cars
-qNewReg(runCy,YTIME)$TIME(YTIME)..
+QNewReg(runCy,YTIME)$TIME(YTIME)..
          VNewReg(runCy,YTIME)
                  =E=
          (VMExtF(runCy,YTIME) + VMExtV(runCy,YTIME)) * (iPop(YTIME,runCy)*1000)  !! new cars due to GDP
