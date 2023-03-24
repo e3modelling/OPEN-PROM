@@ -38,8 +38,9 @@ QNewReg(runCy,YTIME)$TIME(YTIME)..
          VNewReg(runCy,YTIME)
                  =E=
          (VMExtF(runCy,YTIME) + VMExtV(runCy,YTIME)) * (iPop(YTIME,runCy)*1000)  !! new cars due to GDP
-         - VNumVeh(runCy,YTIME-1)*(1 - iPop(YTIME,runCy)/iPop(YTIME-1,runCy))       !! new cars due to population
+         - VNumVeh(runCy,YTIME-1)*(1 - iPop(YTIME,runCy)/iPop(YTIME-1,runCy))    !! new cars due to population
          + VScrap(runCy,YTIME);
+
 
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
