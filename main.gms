@@ -36,7 +36,7 @@ $setGlobal fBaseY %fStartY% - %fPeriodOfYears%
 file name / '' /; !! construct for printing diagnostic output into log file
 put name;
 
-$call '"C:\Program Files\R\R-4.2.2\bin\Rscript.exe" ".\dummy.R"'
+$call '"C:\Program Files\R\R-4.2.2\bin\Rscript.exe" ".\loadMadratData.R"'
 $include sets.gms
 $include declarations.gms
 $include input.gms
