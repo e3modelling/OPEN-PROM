@@ -7,6 +7,7 @@ QElecDem(allCy,YTIME)     "Compute total electricity demand"
 qMExtV(allCy,YTIME)       "Compute passenger cars market extension (GDP dependent)"
 qMExtF(allCy,YTIME)       "Compute passenger cars market extension (GDP independent)"
 qNumVeh(allCy,YTIME)      "Compute stock of passenger cars (in million vehicles)"
+qNewReg(allCy,YTIME)      "Compute new registrations of passenger cars"
 
 qDummyObj                 "Define dummy objective function"
 ;
@@ -22,6 +23,8 @@ VMExtV(allCy,YTIME)            "Passenger cars market extension (GDP dependent)"
 VMExtF(allCy,YTIME)            "Passenger cars market extension (GDP independent)"
 VLamda(allCy,YTIME)            "Ratio of car ownership over saturation car ownership (1)"
 VNumVeh(allCy,YTIME)           "Stock of passenger cars (million vehicles)"
+VNewReg(allCy,YTIME)           "Passenger cars new registrations (million vehicles)"
+VScrap(allCy,YTIME)            "Scrapped passenger cars (million vehicles)"
 vDummyObj                      "Dummy maximisation variable (1)"
 ;
 
