@@ -39,5 +39,5 @@ jobs:
             username: ${{ secrets.ENGINE_USER }}
             password: ${{ secrets.ENGINE_PASSWORD }}
             run: 'main.gms'
-            arguments: 'a=cr'
+            arguments: 'a=ce'
             model_data: '${{ github.workspace }}/model.zip'
