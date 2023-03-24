@@ -17,16 +17,14 @@ qMExtV(runCy,YTIME)$TIME(YTIME)..
          VMExtV(runCy,YTIME)
                  =E=
          iTransChar(runCy,"RES_MEXTV",YTIME) * VMExtV(runCy,YTIME-1) *
-***         [(iGDP(runCy,YTIME)/iPop(runCy,YTIME)) / (iGDP(runCy,YTIME-1)/iPop(runCy,YTIME-1))] ** iElastA(runCy,"PC","a",YTIME)
-         [(iGDP(YTIME,runCy)/(iPop(YTIME,runCy)+0.1)) / ((1+iGDP(YTIME-1,runCy))/(0.1+iPop(YTIME-1,runCy)))] ** iElastA(runCy,"PC","a",YTIME);
+         [(iGDP(YTIME,runCy)/iPop(YTIME,runCy)) / (iGDP(YTIME-1,runCy)/iPop(YTIME-1,runCy))] ** iElastA(runCy,"PC","a",YTIME);
 
 * Equation for passenger cars market extension (GDP independent)
 qMExtF(runCy,YTIME)$TIME(YTIME)..
          VMExtF(runCy,YTIME)
                  =E=
          iTransChar(runCy,"RES_MEXTF",YTIME) * iSigma(runCy,"S1") * EXP(iSigma(runCy,"S2") * EXP(iSigma(runCy,"S3") * VLamda(runCy,YTIME))) *
-***      VNumVeh(runCy,YTIME-1) /(iPop(YTIME-1,runCy) * 1000);
-         VNumVeh(runCy,YTIME-1) /(1+iPop(YTIME-1,runCy) * 1000);
+         VNumVeh(runCy,YTIME-1) /(iPop(YTIME-1,runCy) * 1000);
 
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
