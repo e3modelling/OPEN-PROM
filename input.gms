@@ -23,3 +23,8 @@ $ondelim
 $include "./iSigma.csv"
 $offdelim
 ;
+table iResActiv(allCy,TRANSE,YTIME) "Residuals on transport activity ()"
+$ondelim
+$include "./iResActiv.csv"
+$offdelim
+;

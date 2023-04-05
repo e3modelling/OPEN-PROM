@@ -1,3 +1,8 @@
+Parameters
+iCGI(allCy,YTIME)         "Capital Goods Index (defined as CGI(Scenario)/CGI(Baseline))"
+iNPDL(SBS)                "Number of Polynomial Distribution Lags (PDL)"
+iFPDL(SBS,KPDL)           "Polynomial Distribution Lags (PDL) Coefficients per subsector"
+;
 
 Equations
 *** Power Generation
@@ -8,6 +13,7 @@ QMExtV(allCy,YTIME)       "Compute passenger cars market extension (GDP dependen
 QMExtF(allCy,YTIME)       "Compute passenger cars market extension (GDP independent)"
 QNumVeh(allCy,YTIME)      "Compute stock of passenger cars (in million vehicles)"
 QNewReg(allCy,YTIME)      "Compute new registrations of passenger cars"
+QTrnspActiv(allCy,TRANSE,YTIME)"Compute passenger transport acitivity"
 
 qDummyObj                 "Define dummy objective function"
 ;
@@ -25,6 +31,10 @@ VLamda(allCy,YTIME)            "Ratio of car ownership over saturation car owner
 VNumVeh(allCy,YTIME)           "Stock of passenger cars (million vehicles)"
 VNewReg(allCy,YTIME)           "Passenger cars new registrations (million vehicles)"
 VScrap(allCy,YTIME)            "Scrapped passenger cars (million vehicles)"
+VTrnspActiv(allCy,TRANSE,YTIME)"Passenger transport acitivity"
+                                !! - Activity for passenger cars is measured in (000)km
+                                !! - Activity for all other passenger transportation modes is measured in Gpkm
+VFuelPrice(allCy,TRANSE,YTIME) "Average fuel prices per subsector (kUS$2005/toe)"
 vDummyObj                      "Dummy maximisation variable (1)"
 ;
 
