@@ -1223,7 +1223,7 @@ CR
 
 
 SG               "S parameters in Gompertz function for passenger cars vehicle km"
-/S1,S2,S3/
+/S1,S2,S3,SAT/
 
 TRANSPCHAR       "Various transport data used in equations and post-solution calculations"
 /

@@ -77,5 +77,11 @@ QScrap(runCy,YTIME)$TIME(YTIME)..
                  =E=
          VScrRate(runCy,YTIME) * VNumVeh(runCy,YTIME-1);
 
+* Compute ratio of car ownership over saturation car ownership
+QLevl(runCy,YTIME)$TIME(YTIME)..
+         VLevl(runCy,YTIME) !! level of saturation of gompertz function
+                 =E=
+         ( (VNumVeh(runCy,YTIME-1)/(iPop(YTIME-1,runCy)*1000)) / iSigma(runCy,"SAT") + 1 - SQRT( SQR((VNumVeh(runCy,YTIME-1)/(iPop(YTIME-1,runCy)*1000)) /  iSigma(runCy,"SAT") - 1) + SQR(1E-4) ) )/2;
+
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
