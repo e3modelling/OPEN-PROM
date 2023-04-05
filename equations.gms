@@ -71,5 +71,11 @@ QTrnspActiv(runCy,TRANSE,YTIME)$(TIME(YTIME) $TRANP(TRANSE))..
                  )
          )$(not (sameas(TRANSE,"PC") or sameas(TRANSE,"PA")));   !! other passenger transportation modes
 
+* Compute scrapped passenger cars
+QScrap(runCy,YTIME)$TIME(YTIME)..
+         VScrap(runCy,YTIME)
+                 =E=
+         VScrRate(runCy,YTIME) * VNumVeh(runCy,YTIME-1);
+
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;

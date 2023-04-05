@@ -14,6 +14,7 @@ QMExtF(allCy,YTIME)       "Compute passenger cars market extension (GDP independ
 QNumVeh(allCy,YTIME)      "Compute stock of passenger cars (in million vehicles)"
 QNewReg(allCy,YTIME)      "Compute new registrations of passenger cars"
 QTrnspActiv(allCy,TRANSE,YTIME)"Compute passenger transport acitivity"
+QScrap(allCy,YTIME)       "Compute scrapped passenger cars"
 
 qDummyObj                 "Define dummy objective function"
 ;
@@ -35,6 +36,7 @@ VTrnspActiv(allCy,TRANSE,YTIME)"Passenger transport acitivity"
                                 !! - Activity for passenger cars is measured in (000)km
                                 !! - Activity for all other passenger transportation modes is measured in Gpkm
 VFuelPrice(allCy,TRANSE,YTIME) "Average fuel prices per subsector (kUS$2005/toe)"
+VScrRate(allCy,YTIME)          "Scrapping rate of passenger cars"
 vDummyObj                      "Dummy maximisation variable (1)"
 ;
 
