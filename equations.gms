@@ -39,26 +39,26 @@ QNewReg(runCy,YTIME)$TIME(YTIME)..
                  =E=
          (VMExtF(runCy,YTIME) + VMExtV(runCy,YTIME)) * (iPop(YTIME,runCy)*1000)  !! new cars due to GDP
          - VNumVeh(runCy,YTIME-1)*(1 - iPop(YTIME,runCy)/iPop(YTIME-1,runCy))    !! new cars due to population
-         + VScrap(runCy,YTIME);
+         + VScrap(runCy,YTIME);                                                  !! new cars due to scrapping
 
 * Compute passenger transport activity
 QTrnspActiv(runCy,TRANSE,YTIME)$(TIME(YTIME) $TRANP(TRANSE))..
          VTrnspActiv(runCy,TRANSE,YTIME)
                  =E=
-         (
+         (  !! passenger cars
            iResActiv(runCy,TRANSE,YTIME) * VTrnspActiv(runCy,TRANSE,YTIME-1) *
            (VFuelPrice(runCy,TRANSE,YTIME)/VFuelPrice(runCy,TRANSE,YTIME-1))**iElastA(runCy,TRANSE,"b1",YTIME) *
            (VFuelPrice(runCy,TRANSE,YTIME-1)/VFuelPrice(runCy,TRANSE,YTIME-2))**iElastA(runCy,TRANSE,"b2",YTIME) *
            [(VNumVeh(runCy,YTIME-1)/(iPop(YTIME-1,runCy)*1000))/(VNumVeh(runCy,YTIME)/(iPop(YTIME,runCy)*1000))]**iElastA(runCy,TRANSE,"b3",YTIME) *
            [(iGDP(YTIME,runCy)/iPop(YTIME,runCy))/(iGDP(YTIME-1,runCy)/iPop(YTIME-1,runCy))]**iElastA(runCy,TRANSE,"b4",YTIME)
-         )$sameas(TRANSE,"PC") + !! passenger cars
-         (
+         )$sameas(TRANSE,"PC") +
+         (  !! passenger aviation
            iResActiv(runCy,TRANSE,YTIME) * VTrnspActiv(runCy,TRANSE,YTIME-1) *
            [(iGDP(YTIME,runCy)/iPop(YTIME,runCy))/(iGDP(YTIME-1,runCy)/iPop(YTIME-1,runCy))]**iElastA(runCy,TRANSE,"a",YTIME) *
            (VFuelPrice(runCy,TRANSE,YTIME)/VFuelPrice(runCy,TRANSE,YTIME-1))**iElastA(runCy,TRANSE,"c1",YTIME) *
            (VFuelPrice(runCy,TRANSE,YTIME-1)/VFuelPrice(runCy,TRANSE,YTIME-2))**iElastA(runCy,TRANSE,"c2",YTIME)
-         )$sameas(TRANSE,"PA") + !! passenger aviation
-         (
+         )$sameas(TRANSE,"PA") +
+         (   !! other passenger transportation modes
           iResActiv(runCy,TRANSE,YTIME) * VTrnspActiv(runCy,TRANSE,YTIME-1) *
            [(iGDP(YTIME,runCy)/iPop(YTIME,runCy))/(iGDP(YTIME-1,runCy)/iPop(YTIME-1,runCy))]**iElastA(runCy,TRANSE,"a",YTIME) *
            (VFuelPrice(runCy,TRANSE,YTIME)/VFuelPrice(runCy,TRANSE,YTIME-1))**iElastA(runCy,TRANSE,"c1",YTIME) *
@@ -69,7 +69,7 @@ QTrnspActiv(runCy,TRANSE,YTIME)$(TIME(YTIME) $TRANP(TRANSE))..
                     VFuelPrice(runCy,TRANSE,YTIME-(ord(kpdl)+1)))/
                     (iCGI(runCy,YTIME)**(1/6))]**(iElastA(runCy,TRANSE,"c3",YTIME)*iFPDL(TRANSE,KPDL))
                  )
-         )$(not (sameas(TRANSE,"PC") or sameas(TRANSE,"PA")));   !! other passenger transportation modes
+         )$(NOT (sameas(TRANSE,"PC") or sameas(TRANSE,"PA")));
 
 * Compute scrapped passenger cars
 QScrap(runCy,YTIME)$TIME(YTIME)..
@@ -82,6 +82,13 @@ QLevl(runCy,YTIME)$TIME(YTIME)..
          VLevl(runCy,YTIME) !! level of saturation of gompertz function
                  =E=
          ( (VNumVeh(runCy,YTIME-1)/(iPop(YTIME-1,runCy)*1000)) / iSigma(runCy,"SAT") + 1 - SQRT( SQR((VNumVeh(runCy,YTIME-1)/(iPop(YTIME-1,runCy)*1000)) /  iSigma(runCy,"SAT") - 1) + SQR(1E-4) ) )/2;
+
+* Compute passenger cars scrapping rate
+QScrRate(runCy,YTIME)$TIME(YTIME)..
+         VScrRate(runCy,YTIME)
+                  =E=
+         [(iGDP(YTIME,runCy)/iPop(YTIME,runCy)) / (iGDP(YTIME-1,runCy)/iPop(YTIME-1,runCy))]**0.5
+         * VScrRate(runCy,YTIME-1);
 
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;

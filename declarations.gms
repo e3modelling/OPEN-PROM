@@ -4,6 +4,7 @@ iNPDL(SBS)                "Number of Polynomial Distribution Lags (PDL)"
 iFPDL(SBS,KPDL)           "Polynomial Distribution Lags (PDL) Coefficients per subsector"
 ;
 
+
 Equations
 *** Power Generation
 QElecDem(allCy,YTIME)     "Compute total electricity demand"
@@ -16,9 +17,11 @@ QNewReg(allCy,YTIME)      "Compute new registrations of passenger cars"
 QTrnspActiv(allCy,TRANSE,YTIME)"Compute passenger transport acitivity"
 QScrap(allCy,YTIME)       "Compute scrapped passenger cars"
 QLevl(allCy,YTIME)        "Compute ratio of car ownership over saturation car ownership"
+QScrRate(allCy,YTIME)    "Compute passenger cars scrapping rate"
 
 qDummyObj                 "Define dummy objective function"
 ;
+
 
 Variables
 VElecDem(allCy,YTIME)          "Total electricity demand (TWh)"
@@ -41,6 +44,7 @@ VScrRate(allCy,YTIME)          "Scrapping rate of passenger cars"
 VLevl(allCy,YTIME)             "Ratio of car ownership over saturation car ownership"
 vDummyObj                      "Dummy maximisation variable (1)"
 ;
+
 
 Scalars
 sTWhToMtoe   "TWh to Mtoe conversion factor" /0.086/

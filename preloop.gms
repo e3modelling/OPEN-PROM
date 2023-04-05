@@ -1,6 +1,6 @@
 iCGI(allCy,YTIME) = 1;
-!! Calculation of polynomial distribution lags coefficients
 
+* Calculation of polynomial distribution lags coefficients
 iNPDL(DSBS) = 6;
 loop DSBS do
    loop KPDL$(ord(KPDL) le iNPDL(DSBS)) do
