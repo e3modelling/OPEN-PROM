@@ -18,6 +18,7 @@ QTrnspActiv(allCy,TRANSE,YTIME)"Compute passenger transport acitivity"
 QScrap(allCy,YTIME)       "Compute scrapped passenger cars"
 QLevl(allCy,YTIME)        "Compute ratio of car ownership over saturation car ownership"
 QScrRate(allCy,YTIME)    "Compute passenger cars scrapping rate"
+QElecConsAll(allCy,DSBS,YTIME)"Compute electricity consumption per final demand sector"
 
 qDummyObj                 "Define dummy objective function"
 ;
@@ -42,6 +43,10 @@ VTrnspActiv(allCy,TRANSE,YTIME)"Passenger transport acitivity"
 VFuelPrice(allCy,TRANSE,YTIME) "Average fuel prices per subsector (kUS$2005/toe)"
 VScrRate(allCy,YTIME)          "Scrapping rate of passenger cars"
 VLevl(allCy,YTIME)             "Ratio of car ownership over saturation car ownership"
+VElecConsAll(allCy,DSBS,YTIME) "Electricity demand per final sector (Mtoe)"
+VConsFuel(allCy,DSBS,EF,YTIME) "Consumption of fuels in each demand subsector in Mtoe (excluding heat from heatpumps)"
+VDemTr(allCy,TRANSE,EF,YTIME)  "Final energy demand in transport subsectors per fuel in Mtoe"
+
 vDummyObj                      "Dummy maximisation variable (1)"
 ;
 

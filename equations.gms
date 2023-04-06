@@ -90,5 +90,11 @@ QScrRate(runCy,YTIME)$TIME(YTIME)..
          [(iGDP(YTIME,runCy)/iPop(YTIME,runCy)) / (iGDP(YTIME-1,runCy)/iPop(YTIME-1,runCy))]**0.5
          * VScrRate(runCy,YTIME-1);
 
+* Compute electricity consumption per final demand sector
+QElecConsAll(runCy,DSBS,YTIME)$TIME(YTIME)..
+         VElecConsAll(runCy,DSBS,YTIME)
+             =E=
+         sum(INDDOM $SAMEAS(INDDOM,DSBS), VConsFuel(runCy,INDDOM,"ELC",YTIME)) + sum(TRANSE $SAMEAS(TRANSE,DSBS), VDemTr(runCy,TRANSE,"ELC",YTIME));
+
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
