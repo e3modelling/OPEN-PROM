@@ -96,5 +96,12 @@ QElecConsAll(runCy,DSBS,YTIME)$TIME(YTIME)..
              =E=
          sum(INDDOM $SAMEAS(INDDOM,DSBS), VConsFuel(runCy,INDDOM,"ELC",YTIME)) + sum(TRANSE $SAMEAS(TRANSE,DSBS), VDemTr(runCy,TRANSE,"ELC",YTIME));
 
+
+* INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+             
+ QElecConsInd(runCy,YTIME)$TIME(YTIME)..
+         VElecConsInd(runCy,YTIME)=E= SUM(INDSE,VElecNonSub(runCy,INDSE,YTIME))
+         ;        
+
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
