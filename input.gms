@@ -28,3 +28,9 @@ $ondelim
 $include "./iResActiv.csv"
 $offdelim
 ;
+table iElastNonSubElec(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)"
+$ondelim
+$include "./iElastNonSubElec.csv"
+$offdelim
+;
+

@@ -47,7 +47,7 @@ VTrnspActiv(allCy,TRANSE,YTIME)"Passenger transport acitivity"
 VFuelPrice(allCy,TRANSE,YTIME) "Average fuel prices per subsector (kUS$2005/toe)"
 VScrRate(allCy,YTIME)          "Scrapping rate of passenger cars (1)"
 VElecConsAll(allCy,DSBS,YTIME) "Electricity demand per final sector (Mtoe)"
-VConsFuel(allCy,DSBS,EF,YTIME) "Consumption of fuels in each demand subsector in Mtoe (excluding heat from heatpumps)"
+VConsFuel(allCy,DSBS,EF,YTIME) "Consumption of fuels in each demand subsector, excluding heat from heatpumps (Mtoe)"
 VDemTr(allCy,TRANSE,EF,YTIME)  "Final energy demand in transport subsectors per fuel (Mtoe)"
 
 
