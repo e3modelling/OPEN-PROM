@@ -79,7 +79,7 @@ QScrap(runCy,YTIME)$TIME(YTIME)..
 
 * Compute ratio of car ownership over saturation car ownership
 QLevl(runCy,YTIME)$TIME(YTIME)..
-         VLevl(runCy,YTIME) !! level of saturation of gompertz function
+         VLamda(runCy,YTIME) !! level of saturation of gompertz function
                  =E=
          ( (VNumVeh(runCy,YTIME-1)/(iPop(YTIME-1,runCy)*1000)) / iSigma(runCy,"SAT") + 1 - SQRT( SQR((VNumVeh(runCy,YTIME-1)/(iPop(YTIME-1,runCy)*1000)) /  iSigma(runCy,"SAT") - 1) + SQR(1E-4) ) )/2;
 

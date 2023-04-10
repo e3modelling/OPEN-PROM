@@ -1136,7 +1136,7 @@ mc_m     value for the ratio of x to potential after which exponential is taking
 
 *   DUMMY SETS USED FOR DATA INPUT  *
 
-Macro            "Elements used for reading Pop,GDP, Consumption Expenditure and Value Added"
+Macro            "Elements used for reading Pop, GDP, Consumption Expenditure and Value Added"
 /GDP,CONS_EXP,IS,NF,CH,BM,PP,FD,TX,EN,OE,OI,SE,AG,PCH,NEN,BU,HOU,POP,HOU_SIZE,HOUSEHOLDS/
 
 HOUCHAR(Macro)   "Elements used for reading inhabitants per Households and number of Households"

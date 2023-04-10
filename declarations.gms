@@ -41,8 +41,7 @@ VTrnspActiv(allCy,TRANSE,YTIME)"Passenger transport acitivity"
                                 !! - Activity for passenger cars is measured in (000)km
                                 !! - Activity for all other passenger transportation modes is measured in Gpkm
 VFuelPrice(allCy,TRANSE,YTIME) "Average fuel prices per subsector (kUS$2005/toe)"
-VScrRate(allCy,YTIME)          "Scrapping rate of passenger cars"
-VLevl(allCy,YTIME)             "Ratio of car ownership over saturation car ownership"
+VScrRate(allCy,YTIME)          "Scrapping rate of passenger cars (1)"
 VElecConsAll(allCy,DSBS,YTIME) "Electricity demand per final sector (Mtoe)"
 VConsFuel(allCy,DSBS,EF,YTIME) "Consumption of fuels in each demand subsector in Mtoe (excluding heat from heatpumps)"
 VDemTr(allCy,TRANSE,EF,YTIME)  "Final energy demand in transport subsectors per fuel in Mtoe"
