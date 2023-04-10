@@ -103,7 +103,11 @@ QElecConsAll(runCy,DSBS,YTIME)$TIME(YTIME)..
 QElecConsInd(runCy,YTIME)$TIME(YTIME)..
          VElecConsInd(runCy,YTIME)
          =E=
-         SUM(INDSE,VElecNonSub(runCy,INDSE,YTIME));        
+         SUM(INDSE,VElecNonSub(runCy,INDSE,YTIME));       
+
+* Total final demand (of substitutable fuels) in industrial sectors (Mtoe)
+QDemInd(runCy,YTIME)$TIME(YTIME)..
+        VDemInd(runCy,YTIME)=E= SUM(INDSE,VDemSub(runCy,INDSE,YTIME));
 
 
 * Define dummy objective function
