@@ -28,3 +28,9 @@ $ondelim
 $include "./iResActiv.csv"
 $offdelim
 ;
+table iElastNonSubElec(allCy,SBS,ETYPES,YTIME) "Elasticities of Non Substitutable Electricity (1)"
+$ondelim
+$include "./iElastNonSubElec.csv"
+$offdelim
+;
+
