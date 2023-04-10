@@ -23,7 +23,7 @@ QScrRate(allCy,YTIME)     "Compute passenger cars scrapping rate"
 
 
 ***  INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-QElecConsInd(allCy,YTIME)                   "Compute Consumption of electricity in industrial sectors "
+QElecConsInd(allCy,YTIME)                   "Compute Consumption of electricity in industrial sectors"
 qDummyObj                                   "Define dummy objective function"
 ;
 
@@ -48,12 +48,12 @@ VFuelPrice(allCy,TRANSE,YTIME) "Average fuel prices per subsector (kUS$2005/toe)
 VScrRate(allCy,YTIME)          "Scrapping rate of passenger cars (1)"
 VElecConsAll(allCy,DSBS,YTIME) "Electricity demand per final sector (Mtoe)"
 VConsFuel(allCy,DSBS,EF,YTIME) "Consumption of fuels in each demand subsector in Mtoe (excluding heat from heatpumps)"
-VDemTr(allCy,TRANSE,EF,YTIME)  "Final energy demand in transport subsectors per fuel in Mtoe"
+VDemTr(allCy,TRANSE,EF,YTIME)  "Final energy demand in transport subsectors per fuel (Mtoe)"
 
 
 ***  INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-VElecNonSub(allCy,DSBS,YTIME) "Consumption of non-substituable electricity in Industry and Tertiary (in Mtoe)"
-VElecConsInd(allCy,YTIME)     "TOTAL CONSUMPTION OF ELCNS IN INDUSTRIAL SECTORS"
+VElecNonSub(allCy,DSBS,YTIME) "Consumption of non-substituable electricity in Industry and Tertiary (Mtoe)"
+VElecConsInd(allCy,YTIME)     "Total Consumption of Electricity in industrial sectors (Mtoe)"
 vDummyObj                     "Dummy maximisation variable (1)"
 ;
 

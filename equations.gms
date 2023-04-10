@@ -98,10 +98,13 @@ QElecConsAll(runCy,DSBS,YTIME)$TIME(YTIME)..
 
 
 * INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-             
- QElecConsInd(runCy,YTIME)$TIME(YTIME)..
-         VElecConsInd(runCy,YTIME)=E= SUM(INDSE,VElecNonSub(runCy,INDSE,YTIME))
-         ;        
+
+* Compute Consumption of electricity in industrial sectors
+QElecConsInd(runCy,YTIME)$TIME(YTIME)..
+         VElecConsInd(runCy,YTIME)
+         =E=
+         SUM(INDSE,VElecNonSub(runCy,INDSE,YTIME));        
+
 
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
