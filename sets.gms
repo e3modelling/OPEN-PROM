@@ -315,6 +315,8 @@ NEF     "New energy forms"
 * heatpump energy (reduces the final energy demand of non electric consumption
 HEATPUMP "Low enthalpy heat produced by heatpumps reducing the total final consumption of the sector"
 /
+HEATPUMP(EF) Heatpumps are reducing the heat requirements of the sector but increasing electricity consumption
+/HEATPUMP/
 
 EFA(EF)          Aggregate Energy Forms
 /

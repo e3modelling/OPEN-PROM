@@ -27,6 +27,7 @@ QElecConsInd(allCy,YTIME)             "Compute Consumption of electricity in ind
 QDemInd(allCy,YTIME)                  "Copmpute total final demand (of substitutable fuels) in industrial sectors (Mtoe)"
 QElecIndPrices(allCy,YTIME)           "Compute electricity industry prices"
 QElecConsHeatPla(allCy, DSBS, YTIME)  "Compute electricity consumed in heatpump plants"
+QFuelCons(allCy,DSBS,EF,YTIME)        "Compute fuel consumption (Mtoe)"
 qDummyObj                             "Define dummy objective function"
 ;
 
@@ -62,8 +63,8 @@ VDemSub(allCy,DSBS,YTIME)            "Total final demand (of substitutable fuels
 VElecIndPrices(allCy,YTIME)          "Electricity index - a function of industry price"
 VElecIndPricesEst(allCy, YTIME)      "Electricity index - a function of industry price - Estimate"
 VElecConsHeatPla(allCy, DSBS, YTIME) "Electricity consumed in heatpump plants"
-
-vDummyObj                      "Dummy maximisation variable (1)"
+VConsFuelSub(allCy,DSBS,EF,YTIME)    "Consumption of fuels in each demand subsector (Mtoe) (including heat from heatpumps)"
+vDummyObj                            "Dummy maximisation variable (1)"
 ;
 
 
