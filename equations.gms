@@ -112,9 +112,12 @@ QDemInd(runCy,YTIME)$TIME(YTIME)..
 * Compute electricity industry prices
 QElecIndPrices(runCy,YTIME)$TIME(YTIME)..
          VElecIndPrices(runCy,YTIME) =E=
-        ( VElecIndPricesEst(runCy,YTIME) + sElecToSteRatioChp - SQRT( SQR(VElecIndPricesEst(runCy,YTIME)-sElecToSteRatioChp) + SQR(1E-4) ) )/2
-;
+        ( VElecIndPricesEst(runCy,YTIME) + sElecToSteRatioChp - SQRT( SQR(VElecIndPricesEst(runCy,YTIME)-sElecToSteRatioChp) + SQR(1E-4) ) )/2;
 
+* Compute electricity consumed in heatpump plants
+QElecConsHeatPla(runCy,INDDOM,YTIME)$time(ytime) ..
+         VElecConsHeatPla(runCy,INDDOM,YTIME)
+         =E=   1E-7;
 
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;

@@ -26,6 +26,7 @@ QScrRate(allCy,YTIME)          "Compute passenger cars scrapping rate"
 QElecConsInd(allCy,YTIME)             "Compute Consumption of electricity in industrial sectors"
 QDemInd(allCy,YTIME)                  "Copmpute total final demand (of substitutable fuels) in industrial sectors (Mtoe)"
 QElecIndPrices(allCy,YTIME)           "Compute electricity industry prices"
+QElecConsHeatPla(allCy, DSBS, YTIME)  "Compute electricity consumed in heatpump plants"
 qDummyObj                             "Define dummy objective function"
 ;
 
@@ -54,12 +55,13 @@ VDemTr(allCy,TRANSE,EF,YTIME)  "Final energy demand in transport subsectors per 
 
 
 ***  INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-VElecNonSub(allCy,DSBS,YTIME)  "Consumption of non-substituable electricity in Industry and Tertiary (Mtoe)"
-VElecConsInd(allCy,YTIME)      "Total Consumption of Electricity in industrial sectors (Mtoe)"
-VDemInd(allCy,YTIME)           "Total final demand (of substitutable fuels) in industrial sectors (Mtoe)"
-VDemSub(allCy,DSBS,YTIME)      "Total final demand (of substitutable fuels)per subsector (Mtoe)"
-VElecIndPrices(allCy,YTIME)    "Electricity index - a function of industry price"
-VElecIndPricesEst(allCy, YTIME)"Electricity index - a function of industry price - Estimate"
+VElecNonSub(allCy,DSBS,YTIME)        "Consumption of non-substituable electricity in Industry and Tertiary (Mtoe)"
+VElecConsInd(allCy,YTIME)            "Total Consumption of Electricity in industrial sectors (Mtoe)"
+VDemInd(allCy,YTIME)                 "Total final demand (of substitutable fuels) in industrial sectors (Mtoe)"
+VDemSub(allCy,DSBS,YTIME)            "Total final demand (of substitutable fuels)per subsector (Mtoe)"
+VElecIndPrices(allCy,YTIME)          "Electricity index - a function of industry price"
+VElecIndPricesEst(allCy, YTIME)      "Electricity index - a function of industry price - Estimate"
+VElecConsHeatPla(allCy, DSBS, YTIME) "Electricity consumed in heatpump plants"
 
 vDummyObj                      "Dummy maximisation variable (1)"
 ;
