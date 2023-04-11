@@ -1,6 +1,6 @@
 * Power Generation
 
-* Calculate total electricity demand
+* Compute total electricity demand
 QElecDem(runCy,YTIME)$TIME(YTIME)..
          VElecDem(runCy,YTIME)
              =E=
@@ -105,9 +105,15 @@ QElecConsInd(runCy,YTIME)$TIME(YTIME)..
          =E=
          SUM(INDSE,VElecNonSub(runCy,INDSE,YTIME));       
 
-* Total final demand (of substitutable fuels) in industrial sectors (Mtoe)
+* Compute total final demand (of substitutable fuels) in industrial sectors (Mtoe)
 QDemInd(runCy,YTIME)$TIME(YTIME)..
         VDemInd(runCy,YTIME)=E= SUM(INDSE,VDemSub(runCy,INDSE,YTIME));
+
+* Compute electricity industry prices
+QElecIndPrices(runCy,YTIME)$TIME(YTIME)..
+         VElecIndPrices(runCy,YTIME) =E=
+        ( VElecIndPricesEst(runCy,YTIME) + sElecToSteRatioChp - SQRT( SQR(VElecIndPricesEst(runCy,YTIME)-sElecToSteRatioChp) + SQR(1E-4) ) )/2
+;
 
 
 * Define dummy objective function
