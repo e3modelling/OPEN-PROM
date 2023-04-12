@@ -21,13 +21,13 @@ QLevl(allCy,YTIME)             "Compute ratio of car ownership over saturation c
 QScrRate(allCy,YTIME)          "Compute passenger cars scrapping rate"
 
 
-
 ***  INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 QElecConsInd(allCy,YTIME)             "Compute Consumption of electricity in industrial sectors"
-QDemInd(allCy,YTIME)                  "Copmpute total final demand (of substitutable fuels) in industrial sectors (Mtoe)"
+QDemInd(allCy,YTIME)                  "Copmpute total final demand (of substitutable fuels) in industrial sectors"
 QElecIndPrices(allCy,YTIME)           "Compute electricity industry prices"
 QElecConsHeatPla(allCy, DSBS, YTIME)  "Compute electricity consumed in heatpump plants"
-QFuelCons(allCy,DSBS,EF,YTIME)        "Compute fuel consumption (Mtoe)"
+QFuelCons(allCy,DSBS,EF,YTIME)        "Compute fuel consumption"
+QElecIndPricesEst(allCy, YTIME)       "Electricity index - a function of industry price - Estimate"
 qDummyObj                             "Define dummy objective function"
 ;
 
@@ -45,10 +45,10 @@ VLamda(allCy,YTIME)            "Ratio of car ownership over saturation car owner
 VNumVeh(allCy,YTIME)           "Stock of passenger cars (million vehicles)"
 VNewReg(allCy,YTIME)           "Passenger cars new registrations (million vehicles)"
 VScrap(allCy,YTIME)            "Scrapped passenger cars (million vehicles)"
-VTrnspActiv(allCy,TRANSE,YTIME)"Passenger transport acitivity"
+VTrnspActiv(allCy,TRANSE,YTIME)"Passenger transport acitivity (1)"
                                 !! - Activity for passenger cars is measured in (000)km
                                 !! - Activity for all other passenger transportation modes is measured in Gpkm
-VFuelPrice(allCy,TRANSE,YTIME) "Average fuel prices per subsector (kUS$2005/toe)"
+VFuelPrice(allCy,DSBS,YTIME)   "Average fuel prices per subsector (kUS$2005/toe)"
 VScrRate(allCy,YTIME)          "Scrapping rate of passenger cars (1)"
 VElecConsAll(allCy,DSBS,YTIME) "Electricity demand per final sector (Mtoe)"
 VConsFuel(allCy,DSBS,EF,YTIME) "Consumption of fuels in each demand subsector, excluding heat from heatpumps (Mtoe)"
@@ -60,10 +60,12 @@ VElecNonSub(allCy,DSBS,YTIME)        "Consumption of non-substituable electricit
 VElecConsInd(allCy,YTIME)            "Total Consumption of Electricity in industrial sectors (Mtoe)"
 VDemInd(allCy,YTIME)                 "Total final demand (of substitutable fuels) in industrial sectors (Mtoe)"
 VDemSub(allCy,DSBS,YTIME)            "Total final demand (of substitutable fuels)per subsector (Mtoe)"
-VElecIndPrices(allCy,YTIME)          "Electricity index - a function of industry price"
-VElecIndPricesEst(allCy, YTIME)      "Electricity index - a function of industry price - Estimate"
-VElecConsHeatPla(allCy, DSBS, YTIME) "Electricity consumed in heatpump plants"
-VConsFuelSub(allCy,DSBS,EF,YTIME)    "Consumption of fuels in each demand subsector (Mtoe) (including heat from heatpumps)"
+VElecIndPrices(allCy,YTIME)          "Electricity index - a function of industry price (1)"
+VElecConsHeatPla(allCy, DSBS, YTIME) "Electricity consumed in heatpump plants (Mtoe)"
+VConsFuelSub(allCy,DSBS,EF,YTIME)    "Consumption of fuels in each demand subsector (including heat from heatpumps) (Mtoe)"
+VElecIndPricesEst(allCy,YTIME)       "Electricity index - a function of industry price - Estimate (1)"
+VResElecIndex(allCy,YTIME)           "Residual for electricity Index (1)"
+VFuelPriceSub(allCy,SBS,EF,YTIME)    "Fuel prices per subsector and fuel (kUS$2005/toe)"
 vDummyObj                            "Dummy maximisation variable (1)"
 ;
 

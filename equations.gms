@@ -126,5 +126,19 @@ QFuelCons(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,E
          VConsFuelSub(runCy,DSBS,EF,YTIME)$(not ELCEF(EF)) + 
          (VConsFuelSub(runCy,DSBS,EF,YTIME) + VElecConsHeatPla(runCy,DSBS,YTIME))$ELCEF(EF);
 
+
+
+* Compute Electricity Index of industry price
+QElecIndPricesEst(runCy,YTIME)$TIME(YTIME)..
+         VElecIndPricesEst(runCy,YTIME)
+                 =E=
+         VResElecIndex(runCy,YTIME) * VElecIndPrices(runCy,YTIME-1) *
+        ((VFuelPriceSub(runCy,"OI","ELC",YTIME-1)/VFuelPrice(runCy,"OI",YTIME-1))/
+        (VFuelPriceSub(runCy,"OI","ELC",YTIME-2)/VFuelPrice(runCy,"OI",YTIME-2)))**(0.3) *
+        ((VFuelPriceSub(runCy,"OI","ELC",YTIME-2)/VFuelPrice(runCy,"OI",YTIME-2))/
+        (VFuelPriceSub(runCy,"OI","ELC",YTIME-3)/VFuelPrice(runCy,"OI",YTIME-3)))**(0.3); 
+
+
+
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
