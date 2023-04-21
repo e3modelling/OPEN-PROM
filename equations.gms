@@ -136,32 +136,9 @@ QElecIndPricesEst(runCy,YTIME)$TIME(YTIME)..
         ((VFuelPriceSub(runCy,"OI","ELC",YTIME-1)/VFuelPrice(runCy,"OI",YTIME-1))/
         (VFuelPriceSub(runCy,"OI","ELC",YTIME-2)/VFuelPrice(runCy,"OI",YTIME-2)))**(0.3) *
         ((VFuelPriceSub(runCy,"OI","ELC",YTIME-2)/VFuelPrice(runCy,"OI",YTIME-2))/
-        (VFuelPriceSub(runCy,"OI","ELC",YTIME-3)/VFuelPrice(runCy,"OI",YTIME-3)))**(0.3);
-
-* Compute fuel prices per subsector and fuel especially for chp plants (take into account the profit of electricity sales)
-*QFuePriSubChp(runCy,DSBS,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS))  $SECTTECH(DSBS,EF) )..
-*VFuePriSubChp(runCy,DSBS,EF,TEA,YTIME) =E=   
-*( ((VFuelPriceSub(runCy,DSBS,EF,YTIME) + (VRenValue(YTIME)/1000)$(not RENEF(EF))+VCosTech(runCy,DSBS,EF,TEA,YTIME)/1000)/iUseEneConvSubTech(DSBS,EF,YTIME)- (0$(not CHP(EF)) + (VFuelPriceSub(runCy,"OI","ELC",YTIME)*iFracElecPriChp(runCy,YTIME)*VElecIndPrices(runCy,YTIME))$CHP(EF))) + (0.003) + SQRT( SQR(((VFuelPriceSub(runCy,DSBS,EF,YTIME)+VCosTech(runCy,DSBS,EF,TEA,YTIME)/1000)/VCosTech(runCy,DSBS,EF,TEA,YTIME)- (0$(not CHP(EF)) + (VFuelPriceSub(runCy,"OI","ELC",YTIME)*iFracElecPriChp(runCy,YTIME)*VElecIndPrices(runCy,YTIME))$CHP(EF)))-(0.003)) + SQR(1e-7) ) )/2;
-
-* Compute electricity production cost per CHP plant and demand sector in Euro per KWh
-QElecProdCos(runCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS))..
-         VElecProdCost(runCy,DSBS,CHP,YTIME)
-                 =E=
-                  ( (
-                    ( ( iDisc(runCy,"PG",YTIME) * exp(iDisc(runCy,"PG",YTIME)*iLifChpPla(CHP))
-                        / (exp(iDisc(runCy,"PG",YTIME)*iLifChpPla(CHP)) -1))
-                      * iCapCosChp(runCy,CHP,YTIME)* 1E3 * iCGI(runCy,YTIME)  + iFixOandMCosChp(runCy,CHP,YTIME)
-                    )/(iAvailRateChp(runCy,CHP)*8.76)/1000
-                    + iCosPerChp(runCy,CHP,YTIME)/1E3
+        (VFuelPriceSub(runCy,"OI","ELC",YTIME-3)/VFuelPrice(runCy,"OI",YTIME-3)))**(0.3); 
 
 
-                    + sum(PGEF$CHPtoEF(CHP,PGEF), (VFuelPriceSub(runCy,"PG",PGEF,YTIME)+1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
-                         (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
-                         *0.086/(   iBoiEffChp(runCy,CHP,YTIME)*VElecIndPrices(runCy,YTIME)    )
-                  )))
-
-;
 
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
-
