@@ -55,7 +55,7 @@ $offdelim
 ;
 table iAvailRateChp(allCy,CHP) "Availability rate of CHP Plants ()"
 $ondelim
-$include "./iAvaRateChp.csv"
+$include "./iAvailRateChp.csv"
 $offdelim
 ;
 table iCosPerChp(allCy,CHP, YTIME) "Variable (other than fuel) cost per CHP Type (Gross Euro05/KW)"
