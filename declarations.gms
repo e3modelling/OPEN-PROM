@@ -2,7 +2,7 @@ Parameters
 iCGI(allCy,YTIME)                           "Capital Goods Index (defined as CGI(Scenario)/CGI(Baseline))"
 iNPDL(SBS)                                  "Number of Polynomial Distribution Lags (PDL)"
 iFPDL(SBS,KPDL)                             "Polynomial Distribution Lags (PDL) Coefficients per subsector"
-iResDemSub(allCy,SBS,YTIME)                 "Residuals in total energy demand per subsector (energy intensity)"
+iResDemSub(allCy,SBS,YTIME)                 "Residuals in total energy demand per subsector (1)"
 iLifChpPla(CHP)                              "Technical Lifetime for CHP plants (years)" /
 $ondelim
 $include "./iLifChpPla.csv"
