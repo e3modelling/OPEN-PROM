@@ -36,7 +36,7 @@ QElecConsHeatPla(allCy, DSBS, YTIME)   "Compute electricity consumed in heatpump
 QFuelCons(allCy,DSBS,EF,YTIME)         "Compute fuel consumption"
 QElecIndPricesEst(allCy, YTIME)        "Compute Electricity index - a function of industry price - Estimate"
 *QFuePriSubChp(allCy,DSBS,EF,TEA,YTIME) "Compute fuel prices per subsector and fuel especially for chp plants"
-QElecProdCos(allCy,DSBS,CHP,YTIME)     "Compute electricity production cost per CHP plant and demand sector"
+QElecProdCosChp(allCy,DSBS,CHP,YTIME)     "Compute electricity production cost per CHP plant and demand sector"
 qDummyObj                              "Define dummy objective function"
 ;
 
@@ -78,7 +78,7 @@ VFuelPriceSub(allCy,SBS,EF,YTIME)      "Fuel prices per subsector and fuel (kUS$
 VFuePriSubChp(allCy,DSBS,EF,TEA,YTIME) "Fuel prices per subsector and fuel for CHP plants"
 *VRenValue(YTIME)                       "Renewable value (Euro2005/KWh)"
 *VCosTech(allCy,SBS,EF,TEA,YTIME)       "Variable Cost of technology ()"
-VElecProdCost(allCy,DSBS,CHP,YTIME)    "Electricity production cost per CHP plant and demand sector (Euro/KWh)"
+VElecProdCostChp(allCy,DSBS,CHP,YTIME)    "Electricity production cost per CHP plant and demand sector (Euro/KWh)"
 VCarVal(allCy,NAP,YTIME)               "Carbon value for all countries (Euro2005/tn CO2)"
 vDummyObj                              "Dummy maximisation variable (1)"
 ;
