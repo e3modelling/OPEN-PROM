@@ -9,7 +9,7 @@ $include "./iLifChpPla.csv"
 $offdelim
 /
 iCo2EmiFac(allCy,SBS,EF,YTIME)               "CO2 emission factors per subsector (kgCO2/kgoe fuel burned)"
-iUsfEnergy(allCy,SBS,EF,TEA,YTIME)           "Useful Energy Conversion Factor per subsector and technology ()"
+iUsfEnergy(allCy,SBS,EF,TEA,YTIME)           "Useful Energy Conversion Factor per subsector and technology (1)"
 ;
 
 
@@ -78,7 +78,11 @@ VResElecIndex(allCy,YTIME)             "Residual for electricity Index (1)"
 VFuelPriceSub(allCy,SBS,EF,YTIME)      "Fuel prices per subsector and fuel (kUS$2005/toe)"
 VFuePriSubChp(allCy,DSBS,EF,TEA,YTIME) "Fuel prices per subsector and fuel for CHP plants (kUS$2005/toe)"
 VRenValue(YTIME)                       "Renewable value (Euro2005/KWh)"
-VCosTech(allCy,SBS,EF,TEA,YTIME)       "Variable Cost of technology ()"
+VCosTech(allCy,SBS,EF,TEA,YTIME)       "Variable Cost of technology (Euro2005/toe-year)"
+                                        !! - For transport is expressed in kEuro05 per vehicle
+                                        !! - For Industrial sectors (except Iron and Steel) is expressed in Euro05/toe-year
+                                        !! - For Iron and Steel is expressed in Euro05/tn-of-steel
+                                        !! - For Domestic sectors is expressed in Euro05/toe-year
 VElecProdCostChp(allCy,DSBS,CHP,YTIME)    "Electricity production cost per CHP plant and demand sector (Euro/KWh)"
 VCarVal(allCy,NAP,YTIME)               "Carbon value for all countries (Euro2005/tn CO2)"
 vDummyObj                              "Dummy maximisation variable (1)"

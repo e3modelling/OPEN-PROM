@@ -140,11 +140,12 @@ QElecIndPricesEst(runCy,YTIME)$TIME(YTIME)..
 
 * Compute fuel prices per subsector and fuel especially for chp plants (take into account the profit of electricity sales)
 QFuePriSubChp(runCy,DSBS,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS))  $SECTTECH(DSBS,EF) )..
-VFuePriSubChp(runCy,DSBS,EF,TEA,YTIME) =E=   
+VFuePriSubChp(runCy,DSBS,EF,TEA,YTIME)
+                =E=   
              (((VFuelPriceSub(runCy,DSBS,EF,YTIME) + (VRenValue(YTIME)/1000)$(not RENEF(EF))+VCosTech(runCy,DSBS,EF,TEA,YTIME)/1000)/iUsfEnergy(runCy,DSBS,EF,TEA,YTIME)- 
-(0$(not CHP(EF)) + (VFuelPriceSub(runCy,"OI","ELC",YTIME)*iFracElecPriChp(runCy,YTIME)*VElecIndPrices(runCy,YTIME))$CHP(EF))) + 
-(0.003) + SQRT( SQR(((VFuelPriceSub(runCy,DSBS,EF,YTIME)+VCosTech(runCy,DSBS,EF,TEA,YTIME)/1000)/VCosTech(runCy,DSBS,EF,TEA,YTIME)- 
-(0$(not CHP(EF)) + (VFuelPriceSub(runCy,"OI","ELC",YTIME)*iFracElecPriChp(runCy,YTIME)*VElecIndPrices(runCy,YTIME))$CHP(EF)))-(0.003)) + SQR( 0.0000001) ) )/2;
+               (0$(not CHP(EF)) + (VFuelPriceSub(runCy,"OI","ELC",YTIME)*iFracElecPriChp(runCy,YTIME)*VElecIndPrices(runCy,YTIME))$CHP(EF))) + 
+              (0.003) + SQRT( SQR(((VFuelPriceSub(runCy,DSBS,EF,YTIME)+VCosTech(runCy,DSBS,EF,TEA,YTIME)/1000)/VCosTech(runCy,DSBS,EF,TEA,YTIME)- 
+              (0$(not CHP(EF)) + (VFuelPriceSub(runCy,"OI","ELC",YTIME)*iFracElecPriChp(runCy,YTIME)*VElecIndPrices(runCy,YTIME))$CHP(EF)))-(0.003)) + SQR(1e-7) ) )/2;
 
 
 * Compute electricity production cost per CHP plant and demand sector 
@@ -158,7 +159,7 @@ QElecProdCosChp(runCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS))..
                     + iCosPerChp(runCy,CHP,YTIME)/1000
                     + sum(PGEF$CHPtoEF(CHP,PGEF), (VFuelPriceSub(runCy,"PG",PGEF,YTIME)+0.001*iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
                          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
-                         * sTWhToMtoe /  (iBoiEffChp(runCy,CHP,YTIME) * VElecIndPrices(runCy,YTIME)) );
+                         * sTWhToMtoe /  (iBoiEffChp(runCy,CHP,YTIME) * VElecIndPrices(runCy,YTIME)) );                
 
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
