@@ -1,14 +1,15 @@
 Parameters
-iCGI(allCy,YTIME)                           "Capital Goods Index (defined as CGI(Scenario)/CGI(Baseline))"
-iNPDL(SBS)                                  "Number of Polynomial Distribution Lags (PDL)"
-iFPDL(SBS,KPDL)                             "Polynomial Distribution Lags (PDL) Coefficients per subsector"
-iResDemSub(allCy,SBS,YTIME)                 "Residuals in total energy demand per subsector (1)"
+iCGI(allCy,YTIME)                            "Capital Goods Index (defined as CGI(Scenario)/CGI(Baseline))"
+iNPDL(SBS)                                   "Number of Polynomial Distribution Lags (PDL)"
+iFPDL(SBS,KPDL)                              "Polynomial Distribution Lags (PDL) Coefficients per subsector"
+iResDemSub(allCy,SBS,YTIME)                  "Residuals in total energy demand per subsector (1)"
 iLifChpPla(CHP)                              "Technical Lifetime for CHP plants (years)" /
 $ondelim
 $include "./iLifChpPla.csv"
 $offdelim
 /
 iCo2EmiFac(allCy,SBS,EF,YTIME)               "CO2 emission factors per subsector (kgCO2/kgoe fuel burned)"
+iUsfEnergy(allCy,SBS,EF,TEA,YTIME)           "Useful Energy Conversion Factor per subsector and technology (1)"
 ;
 
 
@@ -29,15 +30,16 @@ QScrRate(allCy,YTIME)          "Compute passenger cars scrapping rate"
 
 
 ***  INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-QElecConsInd(allCy,YTIME)              "Compute Consumption of electricity in industrial sectors"
-QDemInd(allCy,YTIME)                   "Copmpute total final demand (of substitutable fuels) in industrial sectors"
-QElecIndPrices(allCy,YTIME)            "Compute electricity industry prices"
-QElecConsHeatPla(allCy, DSBS, YTIME)   "Compute electricity consumed in heatpump plants"
-QFuelCons(allCy,DSBS,EF,YTIME)         "Compute fuel consumption"
-QElecIndPricesEst(allCy, YTIME)        "Compute Electricity index - a function of industry price - Estimate"
-*QFuePriSubChp(allCy,DSBS,EF,TEA,YTIME) "Compute fuel prices per subsector and fuel especially for chp plants"
+QElecConsInd(allCy,YTIME)                 "Compute Consumption of electricity in industrial sectors"
+QDemInd(allCy,YTIME)                      "Copmpute total final demand (of substitutable fuels) in industrial sectors"
+QElecIndPrices(allCy,YTIME)               "Compute electricity industry prices"
+QElecConsHeatPla(allCy, DSBS, YTIME)      "Compute electricity consumed in heatpump plants"
+QFuelCons(allCy,DSBS,EF,YTIME)            "Compute fuel consumption"
+QElecIndPricesEst(allCy, YTIME)           "Compute Electricity index - a function of industry price - Estimate"
+QFuePriSubChp(allCy,DSBS,EF,TEA,YTIME)    "Compute fuel prices per subsector and fuel especially for chp plants"
 QElecProdCosChp(allCy,DSBS,CHP,YTIME)     "Compute electricity production cost per CHP plant and demand sector"
-qDummyObj                              "Define dummy objective function"
+*QTechCost(allCy,DSBS,Rcon,EF,TEA,YTIME)   "Compute technology cost (Keuro/toe)"
+qDummyObj                                 "Define dummy objective function"
 ;
 
 
@@ -75,9 +77,13 @@ VConsFuelSub(allCy,DSBS,EF,YTIME)      "Consumption of fuels in each demand subs
 VElecIndPricesEst(allCy,YTIME)         "Electricity index - a function of industry price - Estimate (1)"
 VResElecIndex(allCy,YTIME)             "Residual for electricity Index (1)"
 VFuelPriceSub(allCy,SBS,EF,YTIME)      "Fuel prices per subsector and fuel (kUS$2005/toe)"
-VFuePriSubChp(allCy,DSBS,EF,TEA,YTIME) "Fuel prices per subsector and fuel for CHP plants"
-*VRenValue(YTIME)                       "Renewable value (Euro2005/KWh)"
-*VCosTech(allCy,SBS,EF,TEA,YTIME)       "Variable Cost of technology ()"
+VFuePriSubChp(allCy,DSBS,EF,TEA,YTIME) "Fuel prices per subsector and fuel for CHP plants (kUS$2005/toe)"
+VRenValue(YTIME)                       "Renewable value (Euro2005/KWh)"
+VCosTech(allCy,SBS,EF,TEA,YTIME)       "Variable Cost of technology (Euro2005/toe-year)"
+                                        !! - For transport is expressed in kEuro05 per vehicle
+                                        !! - For Industrial sectors (except Iron and Steel) is expressed in Euro05/toe-year
+                                        !! - For Iron and Steel is expressed in Euro05/tn-of-steel
+                                        !! - For Domestic sectors is expressed in Euro05/toe-year
 VElecProdCostChp(allCy,DSBS,CHP,YTIME)    "Electricity production cost per CHP plant and demand sector (Euro/KWh)"
 VCarVal(allCy,NAP,YTIME)               "Carbon value for all countries (Euro2005/tn CO2)"
 vDummyObj                              "Dummy maximisation variable (1)"

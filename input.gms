@@ -33,16 +33,11 @@ $ondelim
 $include "./iElastNonSubElec.csv"
 $offdelim
 ;
-*table iUseEneConvSubTech(SBS,EF,YTIME) "Useful Energy Conversion Factor per subsector and technology ()"
-*$ondelim
-*$include "./iUseEneConvSubTech.csv"
-*$offdelim
-*;
-*table iFracElecPriChp(allCy, YTIME) "Fraction of Electricity Price at which a CHP sells electricity to network ()"
-*$ondelim
-*$include "./iFracElecPriChp.csv"
-*$offdelim
-*;
+table iFracElecPriChp(allCy, YTIME) "Fraction of Electricity Price at which a CHP sells electricity to network (1)"
+$ondelim
+$include "./iFracElecPriChp.csv"
+$offdelim
+;
 table iCapCosChp(allCy,CHP,YTIME) "Capital Cost per CHP plant type (kEuro05/KW)"
 $ondelim
 $include "./iCapCosChp.csv"
@@ -80,13 +75,9 @@ $offdelim
 ;
 iCo2EmiFac(allCy,SBS,EF,YTIME) = iCo2EmiFacAllSbs(allCy,EF);
 iCo2EmiFac(allCy,"IS","HCL",YTIME)$(not An(YTIME))   = iCo2EmiFacAllSbs(allCy,"SLD"); !! This is the assignment for coke
-
-
-
-
-
-
-
-
-
-
+table iUsfEneConvSubTech(SBS,EF,YTIME)             "Useful Energy Conversion Factor per subsector and technology (1)"
+$ondelim
+$include "./iUseEneConvSubTech.csv"
+$offdelim
+;
+iUsfEnergy(allCy,SBS,EF,TEA,YTIME) = iUsfEneConvSubTech(SBS,EF,YTIME);
