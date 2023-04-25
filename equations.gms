@@ -159,7 +159,11 @@ QElecProdCosChp(runCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS))..
                     + iCosPerChp(runCy,CHP,YTIME)/1000
                     + sum(PGEF$CHPtoEF(CHP,PGEF), (VFuelPriceSub(runCy,"PG",PGEF,YTIME)+0.001*iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
                          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
-                         * sTWhToMtoe /  (iBoiEffChp(runCy,CHP,YTIME) * VElecIndPrices(runCy,YTIME)) );                
+                         * sTWhToMtoe /  (iBoiEffChp(runCy,CHP,YTIME) * VElecIndPrices(runCy,YTIME)) );        
+
+* Compute technology cost
+*EQDEMCOST1(runCy,DSBS,Rcon,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(Rcon) le Ncon(DSBS)+1) $SECTTECH(DSBS,EF) )..
+*DEMCOST1(CYrun,DSBS,Rcon,EF,TEA,YTIME) =E= DEMCOST(CYrun,DSBS,Rcon,EF,TEA,YTIME)**(-ELSB(CYRUN,DSBS)) ;        
 
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;

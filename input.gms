@@ -33,7 +33,7 @@ $ondelim
 $include "./iElastNonSubElec.csv"
 $offdelim
 ;
-table iFracElecPriChp(allCy, YTIME) "Fraction of Electricity Price at which a CHP sells electricity to network (KEuro1990)"
+table iFracElecPriChp(allCy, YTIME) "Fraction of Electricity Price at which a CHP sells electricity to network (1)"
 $ondelim
 $include "./iFracElecPriChp.csv"
 $offdelim

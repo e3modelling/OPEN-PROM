@@ -30,15 +30,16 @@ QScrRate(allCy,YTIME)          "Compute passenger cars scrapping rate"
 
 
 ***  INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-QElecConsInd(allCy,YTIME)              "Compute Consumption of electricity in industrial sectors"
-QDemInd(allCy,YTIME)                   "Copmpute total final demand (of substitutable fuels) in industrial sectors"
-QElecIndPrices(allCy,YTIME)            "Compute electricity industry prices"
-QElecConsHeatPla(allCy, DSBS, YTIME)   "Compute electricity consumed in heatpump plants"
-QFuelCons(allCy,DSBS,EF,YTIME)         "Compute fuel consumption"
-QElecIndPricesEst(allCy, YTIME)        "Compute Electricity index - a function of industry price - Estimate"
-QFuePriSubChp(allCy,DSBS,EF,TEA,YTIME) "Compute fuel prices per subsector and fuel especially for chp plants"
-QElecProdCosChp(allCy,DSBS,CHP,YTIME)  "Compute electricity production cost per CHP plant and demand sector"
-qDummyObj                              "Define dummy objective function"
+QElecConsInd(allCy,YTIME)                 "Compute Consumption of electricity in industrial sectors"
+QDemInd(allCy,YTIME)                      "Copmpute total final demand (of substitutable fuels) in industrial sectors"
+QElecIndPrices(allCy,YTIME)               "Compute electricity industry prices"
+QElecConsHeatPla(allCy, DSBS, YTIME)      "Compute electricity consumed in heatpump plants"
+QFuelCons(allCy,DSBS,EF,YTIME)            "Compute fuel consumption"
+QElecIndPricesEst(allCy, YTIME)           "Compute Electricity index - a function of industry price - Estimate"
+QFuePriSubChp(allCy,DSBS,EF,TEA,YTIME)    "Compute fuel prices per subsector and fuel especially for chp plants"
+QElecProdCosChp(allCy,DSBS,CHP,YTIME)     "Compute electricity production cost per CHP plant and demand sector"
+*QTechCost(allCy,DSBS,Rcon,EF,TEA,YTIME)   "Compute technology cost (Keuro/toe)"
+qDummyObj                                 "Define dummy objective function"
 ;
 
 
