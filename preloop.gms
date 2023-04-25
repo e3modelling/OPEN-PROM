@@ -12,6 +12,11 @@ endloop;
 
 model openprom /all/;
 
+
+option iGDP:2:0:6;
+display iGDP;
+display iUsfEnergy;
+
 *TIME(YTIME) = %fStartY%;
 VFuelPrice.l(allCy,TRANSE,YTIME) = 1;
 VNumVeh.l(allCy,YTIME) = 1;
@@ -19,5 +24,4 @@ VTrnspActiv.l(allCy,TRANSE,YTIME) = 1;
 VFuelPrice.l(allCy,DSBS,YTIME) =1;
 VFuelPriceSub.l(allCy,SBS,EF,YTIME) =1;
 VElecIndPrices.l(allCy,YTIME)=1;
-option iGDP:2:0:6;
-display iGDP;
+VCosTech.l(allCy,SBS,EF,TEA,YTIME) = 1;

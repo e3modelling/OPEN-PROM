@@ -27,7 +27,7 @@ $setGlobal fReadCountryDB 'yes'
 $setGlobal fReadCountryCalib 'yes'
 
 $setGlobal fHorizon '2010*2100'
-$setGlobal fEndY 2020
+$setGlobal fEndY 2018
 $setGlobal fStartY 2018
 $setGlobal fBaseY %fStartY% - %fPeriodOfYears%
 
