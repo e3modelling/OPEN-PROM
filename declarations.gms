@@ -1,14 +1,15 @@
 Parameters
-iCGI(allCy,YTIME)                           "Capital Goods Index (defined as CGI(Scenario)/CGI(Baseline))"
-iNPDL(SBS)                                  "Number of Polynomial Distribution Lags (PDL)"
-iFPDL(SBS,KPDL)                             "Polynomial Distribution Lags (PDL) Coefficients per subsector"
-iResDemSub(allCy,SBS,YTIME)                 "Residuals in total energy demand per subsector (1)"
+iCGI(allCy,YTIME)                            "Capital Goods Index (defined as CGI(Scenario)/CGI(Baseline))"
+iNPDL(SBS)                                   "Number of Polynomial Distribution Lags (PDL)"
+iFPDL(SBS,KPDL)                              "Polynomial Distribution Lags (PDL) Coefficients per subsector"
+iResDemSub(allCy,SBS,YTIME)                  "Residuals in total energy demand per subsector (1)"
 iLifChpPla(CHP)                              "Technical Lifetime for CHP plants (years)" /
 $ondelim
 $include "./iLifChpPla.csv"
 $offdelim
 /
 iCo2EmiFac(allCy,SBS,EF,YTIME)               "CO2 emission factors per subsector (kgCO2/kgoe fuel burned)"
+iUsfEnergy(allCy,SBS,EF,TEA,YTIME)           "Useful Energy Conversion Factor per subsector and technology ()"
 ;
 
 
@@ -35,8 +36,8 @@ QElecIndPrices(allCy,YTIME)            "Compute electricity industry prices"
 QElecConsHeatPla(allCy, DSBS, YTIME)   "Compute electricity consumed in heatpump plants"
 QFuelCons(allCy,DSBS,EF,YTIME)         "Compute fuel consumption"
 QElecIndPricesEst(allCy, YTIME)        "Compute Electricity index - a function of industry price - Estimate"
-*QFuePriSubChp(allCy,DSBS,EF,TEA,YTIME) "Compute fuel prices per subsector and fuel especially for chp plants"
-QElecProdCosChp(allCy,DSBS,CHP,YTIME)     "Compute electricity production cost per CHP plant and demand sector"
+QFuePriSubChp(allCy,DSBS,EF,TEA,YTIME) "Compute fuel prices per subsector and fuel especially for chp plants"
+QElecProdCosChp(allCy,DSBS,CHP,YTIME)  "Compute electricity production cost per CHP plant and demand sector"
 qDummyObj                              "Define dummy objective function"
 ;
 
@@ -75,9 +76,9 @@ VConsFuelSub(allCy,DSBS,EF,YTIME)      "Consumption of fuels in each demand subs
 VElecIndPricesEst(allCy,YTIME)         "Electricity index - a function of industry price - Estimate (1)"
 VResElecIndex(allCy,YTIME)             "Residual for electricity Index (1)"
 VFuelPriceSub(allCy,SBS,EF,YTIME)      "Fuel prices per subsector and fuel (kUS$2005/toe)"
-VFuePriSubChp(allCy,DSBS,EF,TEA,YTIME) "Fuel prices per subsector and fuel for CHP plants"
-*VRenValue(YTIME)                       "Renewable value (Euro2005/KWh)"
-*VCosTech(allCy,SBS,EF,TEA,YTIME)       "Variable Cost of technology ()"
+VFuePriSubChp(allCy,DSBS,EF,TEA,YTIME) "Fuel prices per subsector and fuel for CHP plants (kUS$2005/toe)"
+VRenValue(YTIME)                       "Renewable value (Euro2005/KWh)"
+VCosTech(allCy,SBS,EF,TEA,YTIME)       "Variable Cost of technology ()"
 VElecProdCostChp(allCy,DSBS,CHP,YTIME)    "Electricity production cost per CHP plant and demand sector (Euro/KWh)"
 VCarVal(allCy,NAP,YTIME)               "Carbon value for all countries (Euro2005/tn CO2)"
 vDummyObj                              "Dummy maximisation variable (1)"
