@@ -161,11 +161,12 @@ QElecProdCosChp(runCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS))..
                          * sTWhToMtoe /  (iBoiEffChp(runCy,CHP,YTIME) * VElecIndPrices(runCy,YTIME)) );        
 
 * Compute technology cost
+<<<<<<< HEAD
 QTechCost(runCy,DSBS,rCon,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) $SECTTECH(DSBS,EF) )..
 VTechCost(runCy,DSBS,rCon,EF,TEA,YTIME) 
                  =E= 
-                 VTechnologyCost(runCy,DSBS,rCon,EF,TEA,YTIME)**(-iElaSub(runCy,DSBS)) ;        
-
+                 VTechnologyCost(runCy,DSBS,rCon,EF,TEA,YTIME)**(-iElaSub(runCy,DSBS)) ;       
+                 
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
 
