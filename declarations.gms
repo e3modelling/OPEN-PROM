@@ -10,6 +10,20 @@ $offdelim
 /
 iCo2EmiFac(allCy,SBS,EF,YTIME)               "CO2 emission factors per subsector (kgCO2/kgoe fuel burned)"
 iUsfEnergy(allCy,SBS,EF,TEA,YTIME)           "Useful Energy Conversion Factor per subsector and technology (1)"
+iNcon(SBS)                                    "Number of consumers (1)"
+iDisFunConSize(allCy,DSBS,rCon)               "Distribution function of consumer size groups (1)"
+iAnnConsModCons(allCy,SBS)                    "Annual consumption of the modal consumer, average for all countries"
+!! - For passenger cars iAnnConsModCons is measured in Million km per vehicle
+                                                 !! - For other passenger tranportation modes iAnnConsModCons is measured in Mpkm per vehicle
+                                                 !! - For goods transport, iAnnConsModCons is measured in Mtkm per vehicle
+iAnnConsLargCons(allCy,SBS)                   "Annual consumption of the largest consumer, average for all countries"
+ !! - For passenger cars iAnnConsLargCons is measured in Million km per vehicle
+                                                 !! - For other passenger tranportation modes iAnnConsLargCons is measured in Mpkm per vehicle
+                                                 !! - For goods transport, iAnnConsLargCons is measured in Mtkm per vehicle
+iAnnSmallCons(allCy,SBS)                      "Annual consumtion of the smallest consumer, average for all countries (Million km/vehicle)"
+ !!- For passenger cars iAnnSmallCons is measured in (Million km/vehicle)
+                                                 !! - For other passenger tranportation modes iAnnSmallCons is measured in (Mpkm/vehicle)
+                                                 !! - For goods transport, iAnnSmallCons is measured in (Mtkm/vehicle)
 ;
 
 
@@ -38,7 +52,7 @@ QFuelCons(allCy,DSBS,EF,YTIME)            "Compute fuel consumption"
 QElecIndPricesEst(allCy, YTIME)           "Compute Electricity index - a function of industry price - Estimate"
 QFuePriSubChp(allCy,DSBS,EF,TEA,YTIME)    "Compute fuel prices per subsector and fuel especially for chp plants"
 QElecProdCosChp(allCy,DSBS,CHP,YTIME)     "Compute electricity production cost per CHP plant and demand sector"
-*QTechCost(allCy,DSBS,Rcon,EF,TEA,YTIME)   "Compute technology cost (Keuro/toe)"
+QTechCost(allCy,DSBS,rCon,EF,TEA,YTIME)   "Compute technology cost (Keuro/toe)"
 qDummyObj                                 "Define dummy objective function"
 ;
 
@@ -85,8 +99,10 @@ VCosTech(allCy,SBS,EF,TEA,YTIME)       "Variable Cost of technology (Euro2005/to
                                         !! - For Iron and Steel is expressed in Euro05/tn-of-steel
                                         !! - For Domestic sectors is expressed in Euro05/toe-year
 VElecProdCostChp(allCy,DSBS,CHP,YTIME)    "Electricity production cost per CHP plant and demand sector (Euro/KWh)"
-VCarVal(allCy,NAP,YTIME)               "Carbon value for all countries (Euro2005/tn CO2)"
-vDummyObj                              "Dummy maximisation variable (1)"
+VCarVal(allCy,NAP,YTIME)                  "Carbon value for all countries (Euro2005/tn CO2)"
+VTechCost(allCy,DSBS,rCon,EF,TEA,YTIME)   "Technology cost (Keuro/toe)"
+VTechnologyCost(allCy,DSBS,rcon,EF,TEA,YTIME)  "Technology cost (Keuro/toe)"
+vDummyObj                                 "Dummy maximisation variable (1)"
 ;
 
 
