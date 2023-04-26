@@ -162,7 +162,7 @@ iAnnConsModCons(runCy,"BU") = 0.5 ;
 Loop (runCy,DSBS) DO
      Loop rCon$(ord(rCon) le iNcon(DSBS)+1) DO
           iDisFunConSize(runCy,DSBS,rCon) =
-                 Prod(Nset$(ord(Nset) le iNcon(DSBS)),ord(nSet))
+                 Prod(nSet$(ord(Nset) le iNcon(DSBS)),ord(nSet))
                  /
                  (
                   (
