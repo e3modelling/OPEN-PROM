@@ -75,14 +75,17 @@ $offdelim
 ;
 iCo2EmiFac(allCy,SBS,EF,YTIME) = iCo2EmiFacAllSbs(allCy,EF);
 iCo2EmiFac(allCy,"IS","HCL",YTIME)$(not An(YTIME))   = iCo2EmiFacAllSbs(allCy,"SLD"); !! This is the assignment for coke
+
 table iUsfEneConvSubTech(SBS,EF,YTIME)             "Useful Energy Conversion Factor per subsector and technology (1)"
 $ondelim
 $include "./iUseEneConvSubTech.csv"
 $offdelim
 ;
-iUsfEnergy(allCy,SBS,EF,TEA,YTIME) = iUsfEneConvSubTech(SBS,EF,YTIME);
+iUsfEnergyConvFact(allCy,SBS,EF,TEA,YTIME) = iUsfEneConvSubTech(SBS,EF,YTIME);
+
 table iElaSub(allCy,DSBS)                           "Elasticities by subsectors (1)"
-$ondelim$include "./iElaSub.csv"
+$ondelim
+$include "./iElaSub.csv"
 $offdelim
 ;
 table iConsSizeDistHeat(allCy,conSet)                "Consumer sizes for district heating (1)"

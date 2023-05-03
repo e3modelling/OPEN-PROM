@@ -142,8 +142,8 @@ QElecIndPricesEst(runCy,YTIME)$TIME(YTIME)..
 QFuePriSubChp(runCy,DSBS,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS))  $SECTTECH(DSBS,EF) )..
 VFuePriSubChp(runCy,DSBS,EF,TEA,YTIME)
                 =E=   
-             (((VFuelPriceSub(runCy,DSBS,EF,YTIME) + (VRenValue(YTIME)/1000)$(not RENEF(EF))+VCosTech(runCy,DSBS,EF,TEA,YTIME)/1000)/iUsfEnergy(runCy,DSBS,EF,TEA,YTIME)- 
-               (0$(not CHP(EF)) + (VFuelPriceSub(runCy,"OI","ELC",YTIME)*iFracElecPriChp(runCy,YTIME)*VElecIndPrices(runCy,YTIME))$CHP(EF)))  + SQRT( SQR(((VFuelPriceSub(runCy,DSBS,EF,YTIME)+VCosTech(runCy,DSBS,EF,TEA,YTIME)/1000)/VCosTech(runCy,DSBS,EF,TEA,YTIME)- 
+             (((VFuelPriceSub(runCy,DSBS,EF,YTIME) + (VRenValue(YTIME)/1000)$(not RENEF(EF))+VTechCostVar(runCy,DSBS,EF,TEA,YTIME)/1000)/iUsfEnergyConvFact(runCy,DSBS,EF,TEA,YTIME)- 
+               (0$(not CHP(EF)) + (VFuelPriceSub(runCy,"OI","ELC",YTIME)*iFracElecPriChp(runCy,YTIME)*VElecIndPrices(runCy,YTIME))$CHP(EF)))  + SQRT( SQR(((VFuelPriceSub(runCy,DSBS,EF,YTIME)+VTechCostVar(runCy,DSBS,EF,TEA,YTIME)/1000)/VTechCostVar(runCy,DSBS,EF,TEA,YTIME)- 
               (0$(not CHP(EF)) + (VFuelPriceSub(runCy,"OI","ELC",YTIME)*iFracElecPriChp(runCy,YTIME)*VElecIndPrices(runCy,YTIME))$CHP(EF))))  ) )/2;
 
 
@@ -164,11 +164,11 @@ QElecProdCosChp(runCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS))..
 QTechCost(runCy,DSBS,rCon,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) $SECTTECH(DSBS,EF) )..
 VTechCost(runCy,DSBS,rCon,EF,TEA,YTIME) 
                  =E= 
-                 VTechnologyCostConsuSize(runCy,DSBS,rCon,EF,TEA,YTIME)**(-iElaSub(runCy,DSBS)) ;   
+                 VTechCostIntrm(runCy,DSBS,rCon,EF,TEA,YTIME)**(-iElaSub(runCy,DSBS)) ;   
 
 * Compute technology cost 
-QTechnologyCost(runCy,DSBS,rCon,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) $SECTTECH(DSBS,EF))..
-         VTechnologyCostConsuSize(runCy,DSBS,rCon,EF,TEA,YTIME) =E=
+QTechCostIntrm(runCy,DSBS,rCon,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) $SECTTECH(DSBS,EF))..
+         VTechCostIntrm(runCy,DSBS,rCon,EF,TEA,YTIME) =E=
                   ( (( (iDisc(runCy,DSBS,YTIME)$(not CHP(EF)) + iDisc(runCy,"PG",YTIME)$CHP(EF)) !! in case of chp plants we use the discount rate of power generation sector
                        * exp((iDisc(runCy,DSBS,YTIME)$(not CHP(EF)) + iDisc(runCy,"PG",YTIME)$CHP(EF))*VLifeTimeTech(runCy,DSBS,EF,TEA,YTIME))
                      )
@@ -190,7 +190,7 @@ QTechnologyCost(runCy,DSBS,rCon,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $
                     iFixOMCostTech(runCy,DSBS,EF,YTIME)/1000
                     +
                     (
-                      (VFuelPriceSub(runCy,DSBS,EF,YTIME)+VCosTech(runCy,DSBS,EF,TEA,YTIME)/1000)/iUsfEnergy(runCy,DSBS,EF,TEA,YTIME)
+                      (VFuelPriceSub(runCy,DSBS,EF,YTIME)+VTechCostVar(runCy,DSBS,EF,TEA,YTIME)/1000)/iUsfEnergyConvFact(runCy,DSBS,EF,TEA,YTIME)
                     )
                     * iAnnCons(runCy,DSBS,"smallest") * (iAnnCons(runCy,DSBS,"largest")/iAnnCons(runCy,DSBS,"smallest"))**((ord(rCon)-1)/iNcon(DSBS))
                   )$NENSE(DSBS)

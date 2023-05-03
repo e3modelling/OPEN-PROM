@@ -1,7 +1,7 @@
 Parameters
-iCGI(allCy,YTIME)                            "Capital Goods Index (defined as CGI(Scenario)/CGI(Baseline))"
-iNPDL(SBS)                                   "Number of Polynomial Distribution Lags (PDL)"
-iFPDL(SBS,KPDL)                              "Polynomial Distribution Lags (PDL) Coefficients per subsector"
+iCGI(allCy,YTIME)                            "Capital Goods Index (defined as CGI(Scenario)/CGI(Baseline)) (1)"
+iNPDL(SBS)                                   "Number of Polynomial Distribution Lags (PDL) (1)"
+iFPDL(SBS,KPDL)                              "Polynomial Distribution Lags (PDL) Coefficients per subsector (1)"
 iResDemSub(allCy,SBS,YTIME)                  "Residuals in total energy demand per subsector (1)"
 iLifChpPla(CHP)                              "Technical Lifetime for CHP plants (years)" /
 $ondelim
@@ -9,10 +9,10 @@ $include "./iLifChpPla.csv"
 $offdelim
 /
 iCo2EmiFac(allCy,SBS,EF,YTIME)                  "CO2 emission factors per subsector (kgCO2/kgoe fuel burned)"
-iUsfEnergy(allCy,SBS,EF,TEA,YTIME)              "Useful Energy Conversion Factor per subsector and technology (1)"
+iUsfEnergyConvFact(allCy,SBS,EF,TEA,YTIME)      "Useful Energy Conversion Factor per subsector, technology, and country (1)"
 iNcon(SBS)                                      "Number of consumers (1)"
 iDisFunConSize(allCy,DSBS,rCon)                 "Distribution function of consumer size groups (1)"
-iAnnCons(allCy,DSBS,conSet)                     "Annual consumtion of the smallest,modal,largest consumer, average for all countries ()"
+iAnnCons(allCy,DSBS,conSet)                     "Annual consumtion of the smallest,modal,largest consumer, average for all countries (various)"
                                                  !! For passenger cars (Million km/vehicle)
                                                  !! For other passenger tranportation modes (Mpkm/vehicle)
                                                  !! For goods transport, (Mtkm/vehicle)
@@ -53,9 +53,9 @@ QFuelCons(allCy,DSBS,EF,YTIME)                "Compute fuel consumption"
 QElecIndPricesEst(allCy,YTIME)                "Compute Electricity index - a function of industry price - Estimate"
 QFuePriSubChp(allCy,DSBS,EF,TEA,YTIME)        "Compute fuel prices per subsector and fuel especially for chp plants"
 QElecProdCosChp(allCy,DSBS,CHP,YTIME)         "Compute electricity production cost per CHP plant and demand sector"
-QTechCost(allCy,DSBS,rCon,EF,TEA,YTIME)       "Compute technology cost (Keuro/toe)"
-QTechnologyCost(allCy,DSBS,rCon,EF,TEA,YTIME) "Compute technology cost of annual consumption of consumer size (Keuro/toe)"
-qDummyObj                                      "Define dummy objective function"
+QTechCost(allCy,DSBS,rCon,EF,TEA,YTIME)       "Compute technology cost"
+QTechCostIntrm(allCy,DSBS,rCon,EF,TEA,YTIME)  "Compute intermediate technology cost"
+qDummyObj                                     "Define dummy objective function"
 ;
 
 
@@ -97,7 +97,7 @@ VResElecIndex(allCy,YTIME)             "Residual for electricity Index (1)"
 VFuelPriceSub(allCy,SBS,EF,YTIME)      "Fuel prices per subsector and fuel (kUS$2005/toe)"
 VFuePriSubChp(allCy,DSBS,EF,TEA,YTIME) "Fuel prices per subsector and fuel for CHP plants (kUS$2005/toe)"
 VRenValue(YTIME)                       "Renewable value (Euro2005/KWh)"
-VCosTech(allCy,SBS,EF,TEA,YTIME)       "Variable Cost of technology (Euro2005/toe-year)"
+VTechCostVar(allCy,SBS,EF,TEA,YTIME)   "Variable Cost of technology (various)"
                                         !! - For transport (kEuro05/vehicle)
                                         !! - For Industrial sectors except Iron and Steel (Euro05/toe-year)
                                         !! - For Iron and Steel (Euro05/tn-of-steel)
@@ -105,7 +105,7 @@ VCosTech(allCy,SBS,EF,TEA,YTIME)       "Variable Cost of technology (Euro2005/to
 VElecProdCostChp(allCy,DSBS,CHP,YTIME)                  "Electricity production cost per CHP plant and demand sector (Euro/KWh)"
 VCarVal(allCy,NAP,YTIME)                                "Carbon value for all countries (Euro2005/tn CO2)"
 VTechCost(allCy,DSBS,rCon,EF,TEA,YTIME)                 "Technology cost (Keuro/toe)"
-VTechnologyCostConsuSize(allCy,DSBS,rcon,EF,TEA,YTIME)  "Technology cost of annual consumption of consumer size (Keuro/toe)"
+VTechCostIntrm(allCy,DSBS,rcon,EF,TEA,YTIME)            "Intermediate technology cost (Keuro/toe)"
 vDummyObj                                               "Dummy maximisation variable (1)"
 ;
 

@@ -16,7 +16,6 @@ model openprom /all/;
 
 option iGDP:2:0:6;
 display iGDP;
-display iUsfEnergy;
 
 *TIME(YTIME) = %fStartY%;
 VFuelPrice.l(allCy,TRANSE,YTIME) = 1;
@@ -25,6 +24,6 @@ VTrnspActiv.l(allCy,TRANSE,YTIME) = 1;
 VFuelPrice.l(allCy,DSBS,YTIME) =1;
 VFuelPriceSub.l(allCy,SBS,EF,YTIME) =1;
 VElecIndPrices.l(allCy,YTIME)=1;
-VCosTech.l(allCy,SBS,EF,TEA,YTIME) = 1;
-VTechnologyCostConsuSize.l(allCy,DSBS,rcon,EF,TEA,YTIME) =1;
+VTechCostVar.l(allCy,SBS,EF,TEA,YTIME) = 1;
+VTechCostIntrm.l(allCy,DSBS,rcon,EF,TEA,YTIME) =1;
 VLifeTimeTech.l(allCy,DSBS,EF,TEA,YTIME)=1;
