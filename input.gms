@@ -93,10 +93,17 @@ $ondelim$include "./iConsSizeDistHeat.csv"
 $offdelim
 ;
 table iCapCostTechIndu(allCy,DSBS,EF,YTIME)      "Capital Cost of technology For Industrial sectors except Iron and Steel (kEuro2005/toe-year)"
+                                             !! Capital Cost of technology For transport (kEuro2005/vehicle)                                       
+                                             !! Capital Cost of technology For Iron and Steel is expressed (kEuro2005/tn-of-steel)                                     
+                                             !! Capital Cost of Technology For Domestic Sectors is expressed (kEuro2005/toe-year) 
 $ondelim$include "./iCapCostTechIndu.csv"
 $offdelim
 ;
- table iFixOMCostTech(allCy,SBS,EF,YTIME)           "Fixed O&M cost of technology (Euro2005/toe-year)"
+ table iFixOMCostTech(allCy,SBS,EF,YTIME)           "Fixed O&M cost of technology (Euro2005/toe-year)"                                   
+                                            !! Fixed O&M cost of technology for Transport (kEuro2005/vehicle)
+                                            !! Fixed O&M cost of technology for Industrial sectors-except Iron and Steel (Euro2005/toe-year)"                                            
+                                            !! Fixed O&M cost of technology for Iron and Steel (Euro2005/tn-of-steel)"                                          
+                                            !! Fixed O&M cost of technology for Domestic sectors (Euro2005/toe-year)"  
 $ondelim$include "./iFixCostTechIndu.csv"
 $offdelim
 ; 

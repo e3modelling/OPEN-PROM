@@ -15,16 +15,7 @@ iDisFunConSize(allCy,DSBS,rCon)                 "Distribution function of consum
 iAnnCons(allCy,DSBS,conSet)                     "Annual consumtion of the smallest,modal,largest consumer, average for all countries (various)"
                                                  !! For passenger cars (Million km/vehicle)
                                                  !! For other passenger tranportation modes (Mpkm/vehicle)
-                                                 !! For goods transport, (Mtkm/vehicle)
-*iCapCostTechTrans(allCy,TRANSE,EF,TEA,YTIME)    "Capital Cost of technology For transport (kEuro2005/vehicle)"                                          
-*iCapCostTechIronSteel(allCy,SBS,EF,TEA,YTIME)  "Capital Cost of technology For Iron and Steel is expressed (kEuro2005/tn-of-steel)"                                      
-*iCapCostTechDomestic(allCy,DOMSE,EF,TEA,YTIME)  "Capital Cost of Technology For Domestic Sectors is expressed (kEuro2005/toe-year)"  
-*iCapCostTechNonEneBun(allCy,NENSE,EF,TEA,YTIME) "Capital Cost of Technology For Non Energy Sector and Bunkers"                                      
-*iFixOMCostTechTra(allCy,TRANSE,EF,TEA,YTIME)    "Fixed O&M cost of technology for Transport (kEuro2005/vehicle)"
-*iFixOMCostTechIndu(allCy,INDSE,EF,TEA,YTIME)    "Fixed O&M cost of technology for Industrial sectors-except Iron and Steel (Euro2005/toe-year)"                                            
-*iFixOMCostTechIronSteel(allCy,'IS',EF,TEA,YTIME)"Fixed O&M cost of technology for Iron and Steel (Euro2005/tn-of-steel)"                                          
-*iFixOMCostTechDom(allCy,DOMSE,EF,TEA,YTIME)     "Fixed O&M cost of technology for Domestic sectors (Euro2005/toe-year)"   
-                                       
+                                                 !! For goods transport, (Mtkm/vehicle)                                                                      
 ;
 
 
@@ -55,7 +46,8 @@ QFuePriSubChp(allCy,DSBS,EF,TEA,YTIME)        "Compute fuel prices per subsector
 QElecProdCosChp(allCy,DSBS,CHP,YTIME)         "Compute electricity production cost per CHP plant and demand sector"
 QTechCost(allCy,DSBS,rCon,EF,TEA,YTIME)       "Compute technology cost"
 QTechCostIntrm(allCy,DSBS,rCon,EF,TEA,YTIME)  "Compute intermediate technology cost"
-qDummyObj                                     "Define dummy objective function"
+QTechCostMatr(allCy,DSBS,rCon,EF,TEA,YTIME)   "Compute the technology cost including the maturity factor per technology and subsector"
+qDummyObj                                      "Define dummy objective function"
 ;
 
 
@@ -106,6 +98,8 @@ VElecProdCostChp(allCy,DSBS,CHP,YTIME)                  "Electricity production 
 VCarVal(allCy,NAP,YTIME)                                "Carbon value for all countries (Euro2005/tn CO2)"
 VTechCost(allCy,DSBS,rCon,EF,TEA,YTIME)                 "Technology cost (Keuro/toe)"
 VTechCostIntrm(allCy,DSBS,rcon,EF,TEA,YTIME)            "Intermediate technology cost (Keuro/toe)"
+VTechCostMatr(allCy,DSBS,rCon,EF,TEA,YTIME)             "Technology cost including maturity factor (Keuro/toe)"
+VMatrFactor(allCy,SBS,EF,TEA,YTIME)                     "Maturity factor per technology and subsector (1)"
 vDummyObj                                               "Dummy maximisation variable (1)"
 ;
 
