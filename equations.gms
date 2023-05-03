@@ -201,6 +201,13 @@ VTechCostMatr(runCy,DSBS,rCon,EF,TEA,YTIME)
                                                =E=
 VMatrFactor(runCy,DSBS,EF,TEA,YTIME) * VTechCost(runCy,DSBS,rCon,EF,TEA,YTIME) ;
 
+*Compute Technology sorting based on variable cost
+QTechSort(runCy,DSBS,rCon,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) )..
+VTechSort(runCy,DSBS,rCon,YTIME)
+                        =E=
+sum((EF,TEA)$(SECTTECH(DSBS,EF) ),VTechCostMatr(runCy,DSBS,rCon,EF,TEA,YTIME));
+
+
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
 
