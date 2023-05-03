@@ -224,12 +224,14 @@ TRANSE(DSBS)      All Transport Subsectors      /PC,PT,PA,GU,GT,GN/
 TRANS1(SBS)       All Transport Subsectors      /PC,PT,PA,GU,GT,GN/
 TRANP(TRANSE)     Passenger Transport           /PC,PT,PA/
 TRANP1(SBS)       Passenger Transport           /PC,PT,PA/
-TRANG(TRANSE)     Goods Transport               /GU,GT,GN/
+TRANG(DSBS)     Goods Transport               /GU,GT,GN/
 TRANG1(SBS)       Goods Transport               /GU,GT,GN/
 TRANR(TRANSE)     Road Transport                /PC,GU/
 TRANR1(SBS)       Road Transport                /PC,GU/
 TRANT(TRANSE)     Train Transport               /PT,GT/
 TRANA(TRANSE)     Aviation                      /PA/
+TRANPC(DSBS)     Cars                      /PC/
+TRANP2(TRANSE)     Passenger Transport           /PT,PA/
 *TRANI(TRANSE)     Inland Navigation             /PN,GN/
 
 INDSE(DSBS)       Industrial SubSectors         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI/

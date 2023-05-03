@@ -8,22 +8,23 @@ $ondelim
 $include "./iLifChpPla.csv"
 $offdelim
 /
-iCo2EmiFac(allCy,SBS,EF,YTIME)               "CO2 emission factors per subsector (kgCO2/kgoe fuel burned)"
-iUsfEnergy(allCy,SBS,EF,TEA,YTIME)           "Useful Energy Conversion Factor per subsector and technology (1)"
-iNcon(SBS)                                    "Number of consumers (1)"
-iDisFunConSize(allCy,DSBS,rCon)               "Distribution function of consumer size groups (1)"
-iAnnConsModCons(allCy,SBS)                    "Annual consumption of the modal consumer, average for all countries"
-!! - For passenger cars iAnnConsModCons is measured in Million km per vehicle
-                                                 !! - For other passenger tranportation modes iAnnConsModCons is measured in Mpkm per vehicle
-                                                 !! - For goods transport, iAnnConsModCons is measured in Mtkm per vehicle
-iAnnConsLargCons(allCy,SBS)                   "Annual consumption of the largest consumer, average for all countries"
- !! - For passenger cars iAnnConsLargCons is measured in Million km per vehicle
-                                                 !! - For other passenger tranportation modes iAnnConsLargCons is measured in Mpkm per vehicle
-                                                 !! - For goods transport, iAnnConsLargCons is measured in Mtkm per vehicle
-iAnnSmallCons(allCy,SBS)                      "Annual consumtion of the smallest consumer, average for all countries (Million km/vehicle)"
- !!- For passenger cars iAnnSmallCons is measured in (Million km/vehicle)
-                                                 !! - For other passenger tranportation modes iAnnSmallCons is measured in (Mpkm/vehicle)
-                                                 !! - For goods transport, iAnnSmallCons is measured in (Mtkm/vehicle)
+iCo2EmiFac(allCy,SBS,EF,YTIME)                  "CO2 emission factors per subsector (kgCO2/kgoe fuel burned)"
+iUsfEnergy(allCy,SBS,EF,TEA,YTIME)              "Useful Energy Conversion Factor per subsector and technology (1)"
+iNcon(SBS)                                      "Number of consumers (1)"
+iDisFunConSize(allCy,DSBS,rCon)                 "Distribution function of consumer size groups (1)"
+iAnnCons(allCy,DSBS,conSet)                     "Annual consumtion of the smallest,modal,largest consumer, average for all countries ()"
+                                                 !! For passenger cars (Million km/vehicle)
+                                                 !! For other passenger tranportation modes (Mpkm/vehicle)
+                                                 !! For goods transport, (Mtkm/vehicle)
+*iCapCostTechTrans(allCy,TRANSE,EF,TEA,YTIME)    "Capital Cost of technology For transport (kEuro2005/vehicle)"                                          
+*iCapCostTechIronSteel(allCy,SBS,EF,TEA,YTIME)  "Capital Cost of technology For Iron and Steel is expressed (kEuro2005/tn-of-steel)"                                      
+*iCapCostTechDomestic(allCy,DOMSE,EF,TEA,YTIME)  "Capital Cost of Technology For Domestic Sectors is expressed (kEuro2005/toe-year)"  
+*iCapCostTechNonEneBun(allCy,NENSE,EF,TEA,YTIME) "Capital Cost of Technology For Non Energy Sector and Bunkers"                                      
+*iFixOMCostTechTra(allCy,TRANSE,EF,TEA,YTIME)    "Fixed O&M cost of technology for Transport (kEuro2005/vehicle)"
+*iFixOMCostTechIndu(allCy,INDSE,EF,TEA,YTIME)    "Fixed O&M cost of technology for Industrial sectors-except Iron and Steel (Euro2005/toe-year)"                                            
+*iFixOMCostTechIronSteel(allCy,'IS',EF,TEA,YTIME)"Fixed O&M cost of technology for Iron and Steel (Euro2005/tn-of-steel)"                                          
+*iFixOMCostTechDom(allCy,DOMSE,EF,TEA,YTIME)     "Fixed O&M cost of technology for Domestic sectors (Euro2005/toe-year)"   
+                                       
 ;
 
 
@@ -44,40 +45,43 @@ QScrRate(allCy,YTIME)          "Compute passenger cars scrapping rate"
 
 
 ***  INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-QElecConsInd(allCy,YTIME)                 "Compute Consumption of electricity in industrial sectors"
-QDemInd(allCy,YTIME)                      "Copmpute total final demand (of substitutable fuels) in industrial sectors"
-QElecIndPrices(allCy,YTIME)               "Compute electricity industry prices"
-QElecConsHeatPla(allCy, DSBS, YTIME)      "Compute electricity consumed in heatpump plants"
-QFuelCons(allCy,DSBS,EF,YTIME)            "Compute fuel consumption"
-QElecIndPricesEst(allCy, YTIME)           "Compute Electricity index - a function of industry price - Estimate"
-QFuePriSubChp(allCy,DSBS,EF,TEA,YTIME)    "Compute fuel prices per subsector and fuel especially for chp plants"
-QElecProdCosChp(allCy,DSBS,CHP,YTIME)     "Compute electricity production cost per CHP plant and demand sector"
-QTechCost(allCy,DSBS,rCon,EF,TEA,YTIME)   "Compute technology cost (Keuro/toe)"
-qDummyObj                                 "Define dummy objective function"
+QElecConsInd(allCy,YTIME)                     "Compute Consumption of electricity in industrial sectors"
+QDemInd(allCy,YTIME)                          "Copmpute total final demand (of substitutable fuels) in industrial sectors"
+QElecIndPrices(allCy,YTIME)                   "Compute electricity industry prices"
+QElecConsHeatPla(allCy,DSBS,YTIME)            "Compute electricity consumed in heatpump plants"
+QFuelCons(allCy,DSBS,EF,YTIME)                "Compute fuel consumption"
+QElecIndPricesEst(allCy,YTIME)                "Compute Electricity index - a function of industry price - Estimate"
+QFuePriSubChp(allCy,DSBS,EF,TEA,YTIME)        "Compute fuel prices per subsector and fuel especially for chp plants"
+QElecProdCosChp(allCy,DSBS,CHP,YTIME)         "Compute electricity production cost per CHP plant and demand sector"
+QTechCost(allCy,DSBS,rCon,EF,TEA,YTIME)       "Compute technology cost (Keuro/toe)"
+QTechnologyCost(allCy,DSBS,rCon,EF,TEA,YTIME) "Compute technology cost of annual consumption of consumer size (Keuro/toe)"
+qDummyObj                                      "Define dummy objective function"
 ;
 
 
 Variables
-VElecDem(allCy,YTIME)          "Total electricity demand (TWh)"
-VFeCons(allCy,EF,YTIME)        "Total final energy consumnption (Mtoe)"
-VFNonEnCons(allCy,EFS,YTIME)   "Final non energy consumption (Mtoe)"
-VLosses(allCy,EFS,YTIME)       "Distribution losses (Mtoe)"
-VEnCons(allCy,EFS,YTIME)       "Final consumption in energy sector (Mtoe)"
-VNetImp(allCy,EFS,YTIME)       "Net imports (Mtoe)"
-VMExtV(allCy,YTIME)            "Passenger cars market extension (GDP dependent)"
-VMExtF(allCy,YTIME)            "Passenger cars market extension (GDP independent)"
-VLamda(allCy,YTIME)            "Ratio of car ownership over saturation car ownership (1)"
-VNumVeh(allCy,YTIME)           "Stock of passenger cars (million vehicles)"
-VNewReg(allCy,YTIME)           "Passenger cars new registrations (million vehicles)"
-VScrap(allCy,YTIME)            "Scrapped passenger cars (million vehicles)"
-VTrnspActiv(allCy,TRANSE,YTIME)"Passenger transport acitivity (1)"
-                                !! - Activity for passenger cars is measured in (000)km
-                                !! - Activity for all other passenger transportation modes is measured in Gpkm
-VFuelPrice(allCy,DSBS,YTIME)   "Average fuel prices per subsector (kUS$2005/toe)"
-VScrRate(allCy,YTIME)          "Scrapping rate of passenger cars (1)"
-VElecConsAll(allCy,DSBS,YTIME) "Electricity demand per final sector (Mtoe)"
-VConsFuel(allCy,DSBS,EF,YTIME) "Consumption of fuels in each demand subsector, excluding heat from heatpumps (Mtoe)"
-VDemTr(allCy,TRANSE,EF,YTIME)  "Final energy demand in transport subsectors per fuel (Mtoe)"
+VElecDem(allCy,YTIME)                 "Total electricity demand (TWh)"
+VFeCons(allCy,EF,YTIME)               "Total final energy consumnption (Mtoe)"
+VFNonEnCons(allCy,EFS,YTIME)          "Final non energy consumption (Mtoe)"
+VLosses(allCy,EFS,YTIME)              "Distribution losses (Mtoe)"
+VEnCons(allCy,EFS,YTIME)              "Final consumption in energy sector (Mtoe)"
+VNetImp(allCy,EFS,YTIME)              "Net imports (Mtoe)"
+VMExtV(allCy,YTIME)                   "Passenger cars market extension (GDP dependent)"
+VMExtF(allCy,YTIME)                   "Passenger cars market extension (GDP independent)"
+VLamda(allCy,YTIME)                   "Ratio of car ownership over saturation car ownership (1)"
+VNumVeh(allCy,YTIME)                  "Stock of passenger cars (million vehicles)"
+VNewReg(allCy,YTIME)                  "Passenger cars new registrations (million vehicles)"
+VScrap(allCy,YTIME)                   "Scrapped passenger cars (million vehicles)"
+VTrnspActiv(allCy,TRANSE,YTIME)       "Passenger transport acitivity (1)"
+                                         !! - Activity for passenger cars is measured in (000)km
+                                         !! - Activity for all other passenger transportation modes is measured in Gpkm
+VFuelPrice(allCy,DSBS,YTIME)           "Average fuel prices per subsector (kUS$2005/toe)"
+VScrRate(allCy,YTIME)                  "Scrapping rate of passenger cars (1)"
+VElecConsAll(allCy,DSBS,YTIME)         "Electricity demand per final sector (Mtoe)"
+VConsFuel(allCy,DSBS,EF,YTIME)         "Consumption of fuels in each demand subsector, excluding heat from heatpumps (Mtoe)"
+VDemTr(allCy,TRANSE,EF,YTIME)          "Final energy demand in transport subsectors per fuel (Mtoe)"
+VLifeTimeTech(allCy,DSBS,EF,TEA,YTIME) "Lifetime of technologies (years)"
+
 
 
 ***  INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
@@ -86,7 +90,7 @@ VElecConsInd(allCy,YTIME)              "Total Consumption of Electricity in indu
 VDemInd(allCy,YTIME)                   "Total final demand (of substitutable fuels) in industrial sectors (Mtoe)"
 VDemSub(allCy,DSBS,YTIME)              "Total final demand (of substitutable fuels)per subsector (Mtoe)"
 VElecIndPrices(allCy,YTIME)            "Electricity index - a function of industry price (1)"
-VElecConsHeatPla(allCy, DSBS, YTIME)   "Electricity consumed in heatpump plants (Mtoe)"
+VElecConsHeatPla(allCy,DSBS,YTIME)     "Electricity consumed in heatpump plants (Mtoe)"
 VConsFuelSub(allCy,DSBS,EF,YTIME)      "Consumption of fuels in each demand subsector (including heat from heatpumps) (Mtoe)"
 VElecIndPricesEst(allCy,YTIME)         "Electricity index - a function of industry price - Estimate (1)"
 VResElecIndex(allCy,YTIME)             "Residual for electricity Index (1)"
@@ -94,15 +98,15 @@ VFuelPriceSub(allCy,SBS,EF,YTIME)      "Fuel prices per subsector and fuel (kUS$
 VFuePriSubChp(allCy,DSBS,EF,TEA,YTIME) "Fuel prices per subsector and fuel for CHP plants (kUS$2005/toe)"
 VRenValue(YTIME)                       "Renewable value (Euro2005/KWh)"
 VCosTech(allCy,SBS,EF,TEA,YTIME)       "Variable Cost of technology (Euro2005/toe-year)"
-                                        !! - For transport is expressed in kEuro05 per vehicle
-                                        !! - For Industrial sectors (except Iron and Steel) is expressed in Euro05/toe-year
-                                        !! - For Iron and Steel is expressed in Euro05/tn-of-steel
-                                        !! - For Domestic sectors is expressed in Euro05/toe-year
-VElecProdCostChp(allCy,DSBS,CHP,YTIME)    "Electricity production cost per CHP plant and demand sector (Euro/KWh)"
-VCarVal(allCy,NAP,YTIME)                  "Carbon value for all countries (Euro2005/tn CO2)"
-VTechCost(allCy,DSBS,rCon,EF,TEA,YTIME)   "Technology cost (Keuro/toe)"
-VTechnologyCost(allCy,DSBS,rcon,EF,TEA,YTIME)  "Technology cost (Keuro/toe)"
-vDummyObj                                 "Dummy maximisation variable (1)"
+                                        !! - For transport (kEuro05/vehicle)
+                                        !! - For Industrial sectors except Iron and Steel (Euro05/toe-year)
+                                        !! - For Iron and Steel (Euro05/tn-of-steel)
+                                        !! - For Domestic sectors (Euro05/toe-year)
+VElecProdCostChp(allCy,DSBS,CHP,YTIME)                  "Electricity production cost per CHP plant and demand sector (Euro/KWh)"
+VCarVal(allCy,NAP,YTIME)                                "Carbon value for all countries (Euro2005/tn CO2)"
+VTechCost(allCy,DSBS,rCon,EF,TEA,YTIME)                 "Technology cost (Keuro/toe)"
+VTechnologyCostConsuSize(allCy,DSBS,rcon,EF,TEA,YTIME)  "Technology cost of annual consumption of consumer size (Keuro/toe)"
+vDummyObj                                               "Dummy maximisation variable (1)"
 ;
 
 
