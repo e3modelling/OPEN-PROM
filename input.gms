@@ -75,9 +75,129 @@ $offdelim
 ;
 iCo2EmiFac(allCy,SBS,EF,YTIME) = iCo2EmiFacAllSbs(allCy,EF);
 iCo2EmiFac(allCy,"IS","HCL",YTIME)$(not An(YTIME))   = iCo2EmiFacAllSbs(allCy,"SLD"); !! This is the assignment for coke
+
 table iUsfEneConvSubTech(SBS,EF,YTIME)             "Useful Energy Conversion Factor per subsector and technology (1)"
 $ondelim
 $include "./iUseEneConvSubTech.csv"
 $offdelim
 ;
-iUsfEnergy(allCy,SBS,EF,TEA,YTIME) = iUsfEneConvSubTech(SBS,EF,YTIME);
+iUsfEnergyConvFact(allCy,SBS,EF,TEA,YTIME) = iUsfEneConvSubTech(SBS,EF,YTIME);
+
+table iElaSub(allCy,DSBS)                           "Elasticities by subsectors (1)"
+$ondelim
+$include "./iElaSub.csv"
+$offdelim
+;
+table iConsSizeDistHeat(allCy,conSet)                "Consumer sizes for district heating (1)"
+$ondelim$include "./iConsSizeDistHeat.csv"
+$offdelim
+;
+table iCapCostTechIndu(allCy,DSBS,EF,YTIME)      "Capital Cost of technology For Industrial sectors except Iron and Steel (kEuro2005/toe-year)"
+$ondelim$include "./iCapCostTechIndu.csv"
+$offdelim
+;
+ table iFixOMCostTech(allCy,SBS,EF,YTIME)           "Fixed O&M cost of technology (Euro2005/toe-year)"
+$ondelim$include "./iFixCostTechIndu.csv"
+$offdelim
+; 
+*Calculation of consumer size groups and their distribution function
+iNcon(TRANSE)$(sameas(TRANSE,"PC") or sameas(TRANSE,"GU")) = 10; !! 11 different consumer size groups for cars and trucks
+iNcon(TRANSE)$(not (sameas(TRANSE,"PC") or sameas(TRANSE,"GU"))) = 1; !! 2 different consumer size groups for inland navigation, trains, busses and aviation
+iNcon(INDSE) = 10; !! 11 different consumer size groups for industrial sectors
+iNcon(DOMSE) = 10; !! 11 different consumer size groups for domestic and tertiary sectors
+iNcon(NENSE) = 10; !! 11 different consumer size groups for non energy uses
+iNcon("BU") = 2;   !! ... except bunkers .
+
+
+* 11 vehicle mileage groups
+* 0.952 turned out to be a (constant) ratio between modal and average mileage through iterations in Excel
+
+
+iAnnCons(runCy,'PC','smallest')= 0.5 * 0.952 * iTransChar(runCy,"KM_VEH","2010") * 1000 * 1E-6;
+iAnnCons(runCy,'PC' ,'modal')=0.952 * iTransChar(runCy,"KM_VEH","2010") * 1000 * 1E-6;
+iAnnCons(runCy,'PC' ,'largest')= 4 * 0.952 * iTransChar(runCy,"KM_VEH","2010") * 1000 * 1E-6;
+
+
+* modal value is assumed to be 2 tonnes/vehicle, min = 1/3*modal and max = 10*modal tkm.
+* 0.706 is the constant ratio of modal/average tkm through iterations in Excel
+
+iAnnCons(runCy,'GU','smallest')=0.5 * 0.706 * iTransChar(runCy,"KM_VEH_TRUCK","2010")* 1000 * 2 / 3  * 1E-6;
+iAnnCons(runCy,'GU','modal')=0.706 * iTransChar(runCy,"KM_VEH_TRUCK","2010") * 1000 * 2  * 1E-6;
+iAnnCons(runCy,'GU','largest')=4 * 0.706 * iTransChar(runCy,"KM_VEH_TRUCK","2010") * 1000 * 2 * 10  * 1E-6;
+
+iAnnCons(runCy,'PA','smallest')=40000 * 50 * 1E-6;
+iAnnCons(runCy,'PA','modal')=400000 * 100 * 1E-6;
+iAnnCons(runCy,'PA','largest')=800000 * 300 * 1E-6;
+
+* Size will not play a role in buses, trains, ships and aircraft
+* Following values are given only for the sake of uniformity, but iDisFunConSize is not really calculated for non-road transport!
+
+*iAnnConsPB(runCy,'PB',"smallest") = 20000 * 5 * 1E-6;
+*iAnnConsPB(runCy,'PB',"modal") = 50000* 15 * 1E-6;
+*iAnnConsPB(runCy,'PB',"largest") = 200000 * 50 * 1E-6;
+
+
+iAnnCons(runCy,'PT',"smallest") = 50000 * 50 * 1E-6;
+iAnnCons(runCy,'PT',"modal") = 200000 * 150 * 1e-6;
+iAnnCons(runCy,'PT',"largest") = 400000 * 500 * 1E-6;
+
+
+iAnnCons(runCy,'GT',"smallest") = 50000 * 20 * 1E-6;
+iAnnCons(runCy,'GT',"modal") = 200000 * 200 * 1e-6;
+iAnnCons(runCy,'GT',"largest") = 400000 * 500 * 1E-6;
+
+*iAnnConsPN(runCy,'PN',"smallest") = 10000 * 50 * 1E-6;
+*iAnnConsPN(runCy,'PN',"modal") = 50000 * 100 * 1e-6;
+*iAnnConsPN(runCy,'PN',"largest") = 100000 * 500 * 1E-6;
+
+
+iAnnCons(runCy,'GN',"smallest") = 10000 * 20 * 1E-6;
+iAnnCons(runCy,'GN',"modal") = 50000 * 300 * 1e-6;
+iAnnCons(runCy,'GN',"largest") = 100000 * 1000 * 1E-6;
+
+iAnnCons(runCy,INDSE,"smallest") = 0.2  ;
+iAnnCons(runCy,INDSE,"largest") = 0.9 ;
+* assuming an average utilisation rate of 0.6 for iron & steel and 0.5 for other industry (see iterations in Excel):
+iAnnCons(runCy,"IS","modal") = 0.587;
+iAnnCons(runCy,INDSE,"modal")$(not sameas(INDSE,"IS")) = 0.487;
+
+iAnnCons(runCy,DOMSE,"smallest") = iConsSizeDistHeat(runCy,"smallest")  ;
+iAnnCons(runCy,DOMSE,"largest") = iConsSizeDistHeat(runCy,"largest") ;
+iAnnCons(runCy,DOMSE,"modal") = iConsSizeDistHeat(runCy,"modal");
+
+iAnnCons(runCy,NENSE,"smallest") = 0.2  ;
+iAnnCons(runCy,NENSE,"largest") = 0.9 ;
+* assuming an average utilisation rate of 0.5 for non-energy uses:
+iAnnCons(runCy,NENSE,"modal") = 0.487 ;
+
+iAnnCons(runCy,"BU","smallest") = 0.2 ;
+iAnnCons(runCy,"BU","largest") = 1 ;
+iAnnCons(runCy,"BU","modal") = 0.5 ;
+
+* Consumer size groups distribution function
+
+Loop (runCy,DSBS) DO
+     Loop rCon$(ord(rCon) le iNcon(DSBS)+1) DO
+          iDisFunConSize(runCy,DSBS,rCon) =
+                 Prod(nSet$(ord(Nset) le iNcon(DSBS)),ord(nSet))
+                 /
+                 (
+                  (
+                   Prod(nSet$(ord(nSet) le iNcon(DSBS)-(ord(rCon)-1)),ord(nSet))$(ord(rCon) lt iNcon(DSBS)+1)
+                       +1$(ord(rCon) eq iNcon(DSBS)+1)
+                   )
+                   *
+                   (
+                      Prod(nSet$(ord(nSet) le ord(rCon)-1),ord(nSet))$(ord(rCon) ne 1)+1$(ord(rCon) eq 1))
+                 )
+                 *
+                 Power(log(iAnnCons(runCy,DSBS,"modal")/iAnnCons(runCy,DSBS,"smallest")),ord(rCon)-1)
+                 *
+                 Power(log(iAnnCons(runCy,DSBS,"largest")/iAnnCons(runCy,DSBS,"modal")),iNcon(DSBS)-(ord(rCon)-1))
+                 /
+                (Power(log(iAnnCons(runCy,DSBS,"largest")/iAnnCons(runCy,DSBS,"smallest")),iNcon(DSBS)) )
+                *
+                iAnnCons(runCy,DSBS,"smallest")*(iAnnCons(runCy,DSBS,"largest")/iAnnCons(runCy,DSBS,"smallest"))**((ord(rCon)-1)/iNcon(DSBS))
+;
+     ENDLOOP;
+ENDLOOP;

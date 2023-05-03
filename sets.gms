@@ -230,7 +230,6 @@ TRANR(TRANSE)     Road Transport                /PC,GU/
 TRANR1(SBS)       Road Transport                /PC,GU/
 TRANT(TRANSE)     Train Transport               /PT,GT/
 TRANA(TRANSE)     Aviation                      /PA/
-*TRANI(TRANSE)     Inland Navigation             /PN,GN/
 
 INDSE(DSBS)       Industrial SubSectors         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI/
 DOMSE(DSBS)       Tertiary SubSectors           /SE,AG,HOU/

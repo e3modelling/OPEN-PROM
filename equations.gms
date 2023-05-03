@@ -142,10 +142,9 @@ QElecIndPricesEst(runCy,YTIME)$TIME(YTIME)..
 QFuePriSubChp(runCy,DSBS,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS))  $SECTTECH(DSBS,EF) )..
 VFuePriSubChp(runCy,DSBS,EF,TEA,YTIME)
                 =E=   
-             (((VFuelPriceSub(runCy,DSBS,EF,YTIME) + (VRenValue(YTIME)/1000)$(not RENEF(EF))+VCosTech(runCy,DSBS,EF,TEA,YTIME)/1000)/iUsfEnergy(runCy,DSBS,EF,TEA,YTIME)- 
-               (0$(not CHP(EF)) + (VFuelPriceSub(runCy,"OI","ELC",YTIME)*iFracElecPriChp(runCy,YTIME)*VElecIndPrices(runCy,YTIME))$CHP(EF))) + 
-              (0.003) + SQRT( SQR(((VFuelPriceSub(runCy,DSBS,EF,YTIME)+VCosTech(runCy,DSBS,EF,TEA,YTIME)/1000)/VCosTech(runCy,DSBS,EF,TEA,YTIME)- 
-              (0$(not CHP(EF)) + (VFuelPriceSub(runCy,"OI","ELC",YTIME)*iFracElecPriChp(runCy,YTIME)*VElecIndPrices(runCy,YTIME))$CHP(EF)))-(0.003)) + SQR(1e-7) ) )/2;
+             (((VFuelPriceSub(runCy,DSBS,EF,YTIME) + (VRenValue(YTIME)/1000)$(not RENEF(EF))+VTechCostVar(runCy,DSBS,EF,TEA,YTIME)/1000)/iUsfEnergyConvFact(runCy,DSBS,EF,TEA,YTIME)- 
+               (0$(not CHP(EF)) + (VFuelPriceSub(runCy,"OI","ELC",YTIME)*iFracElecPriChp(runCy,YTIME)*VElecIndPrices(runCy,YTIME))$CHP(EF)))  + SQRT( SQR(((VFuelPriceSub(runCy,DSBS,EF,YTIME)+VTechCostVar(runCy,DSBS,EF,TEA,YTIME)/1000)/VTechCostVar(runCy,DSBS,EF,TEA,YTIME)- 
+              (0$(not CHP(EF)) + (VFuelPriceSub(runCy,"OI","ELC",YTIME)*iFracElecPriChp(runCy,YTIME)*VElecIndPrices(runCy,YTIME))$CHP(EF))))  ) )/2;
 
 
 * Compute electricity production cost per CHP plant and demand sector 
@@ -162,8 +161,41 @@ QElecProdCosChp(runCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS))..
                          * sTWhToMtoe /  (iBoiEffChp(runCy,CHP,YTIME) * VElecIndPrices(runCy,YTIME)) );        
 
 * Compute technology cost
-*EQDEMCOST1(runCy,DSBS,Rcon,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(Rcon) le Ncon(DSBS)+1) $SECTTECH(DSBS,EF) )..
-*DEMCOST1(CYrun,DSBS,Rcon,EF,TEA,YTIME) =E= DEMCOST(CYrun,DSBS,Rcon,EF,TEA,YTIME)**(-ELSB(CYRUN,DSBS)) ;        
+QTechCost(runCy,DSBS,rCon,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) $SECTTECH(DSBS,EF) )..
+VTechCost(runCy,DSBS,rCon,EF,TEA,YTIME) 
+                 =E= 
+                 VTechCostIntrm(runCy,DSBS,rCon,EF,TEA,YTIME)**(-iElaSub(runCy,DSBS)) ;   
+
+* Compute technology cost 
+QTechCostIntrm(runCy,DSBS,rCon,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) $SECTTECH(DSBS,EF))..
+         VTechCostIntrm(runCy,DSBS,rCon,EF,TEA,YTIME) =E=
+                  ( (( (iDisc(runCy,DSBS,YTIME)$(not CHP(EF)) + iDisc(runCy,"PG",YTIME)$CHP(EF)) !! in case of chp plants we use the discount rate of power generation sector
+                       * exp((iDisc(runCy,DSBS,YTIME)$(not CHP(EF)) + iDisc(runCy,"PG",YTIME)$CHP(EF))*VLifeTimeTech(runCy,DSBS,EF,TEA,YTIME))
+                     )
+                      / (exp((iDisc(runCy,DSBS,YTIME)$(not CHP(EF)) + iDisc(runCy,"PG",YTIME)$CHP(EF))*VLifeTimeTech(runCy,DSBS,EF,TEA,YTIME))- 1)
+                    ) * iCapCostTechIndu(runCy,DSBS,EF,YTIME) * iCGI(runCy,YTIME)
+                    +
+                    iFixOMCostTech(runCy,DSBS,EF,YTIME)/1000
+                    +
+                    VFuePriSubChp(runCy,DSBS,EF,TEA,YTIME)
+                    * iAnnCons(runCy,DSBS,"smallest") * (iAnnCons(runCy,DSBS,"largest")/iAnnCons(runCy,DSBS,"smallest"))**((ord(rCon)-1)/iNcon(DSBS))
+                  )$INDDOM(DSBS)
+                 +
+                  ( (( iDisc(runCy,DSBS,YTIME)
+                       * exp(iDisc(runCy,DSBS,YTIME)*VLifeTimeTech(runCy,DSBS,EF,TEA,YTIME))
+                     )
+                      / (exp(iDisc(runCy,DSBS,YTIME)*VLifeTimeTech(runCy,DSBS,EF,TEA,YTIME))- 1)
+                    ) * iCapCostTechIndu(runCy,DSBS,EF,YTIME) * iCGI(runCy,YTIME)
+                    +
+                    iFixOMCostTech(runCy,DSBS,EF,YTIME)/1000
+                    +
+                    (
+                      (VFuelPriceSub(runCy,DSBS,EF,YTIME)+VTechCostVar(runCy,DSBS,EF,TEA,YTIME)/1000)/iUsfEnergyConvFact(runCy,DSBS,EF,TEA,YTIME)
+                    )
+                    * iAnnCons(runCy,DSBS,"smallest") * (iAnnCons(runCy,DSBS,"largest")/iAnnCons(runCy,DSBS,"smallest"))**((ord(rCon)-1)/iNcon(DSBS))
+                  )$NENSE(DSBS)
+;     
 
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
+
