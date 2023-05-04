@@ -92,7 +92,7 @@ table iConsSizeDistHeat(allCy,conSet)                "Consumer sizes for distric
 $ondelim$include "./iConsSizeDistHeat.csv"
 $offdelim
 ;
-table iCapCostTechIndu(allCy,DSBS,EF,YTIME)      "Capital Cost of technology For Industrial sectors except Iron and Steel (kEuro2005/toe-year)"
+table iCapCostTech(allCy,DSBS,EF,YTIME)      "Capital Cost of technology For Industrial sectors except Iron and Steel (kEuro2005/toe-year)"
                                              !! Capital Cost of technology For transport (kEuro2005/vehicle)                                       
                                              !! Capital Cost of technology For Iron and Steel is expressed (kEuro2005/tn-of-steel)                                     
                                              !! Capital Cost of Technology For Domestic Sectors is expressed (kEuro2005/toe-year) 
