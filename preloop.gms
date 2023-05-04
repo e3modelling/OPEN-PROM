@@ -1,5 +1,5 @@
 iCGI(allCy,YTIME) = 1;
-iCumDistrFuncConsSize(allCy,DSBS) = sum(rCon, iDisFunConSize(allCy,DSBS,rCon));
+
 
 
 
