@@ -1,8 +1,3 @@
-iCGI(allCy,YTIME) = 1;
-iCumDistrFuncConsSize(allCy,DSBS) = sum(rCon, iDisFunConSize(allCy,DSBS,rCon));
-
-
-
 * Calculation of polynomial distribution lags coefficients
 iNPDL(DSBS) = 6;
 loop DSBS do

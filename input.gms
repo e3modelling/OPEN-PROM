@@ -208,3 +208,6 @@ Loop (runCy,DSBS) DO
 ;
      ENDLOOP;
 ENDLOOP;
+
+iCumDistrFuncConsSize(allCy,DSBS) = sum(rCon, iDisFunConSize(allCy,DSBS,rCon));
+iCGI(allCy,YTIME) = 1;
