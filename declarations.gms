@@ -49,6 +49,7 @@ QTechCost(allCy,DSBS,rCon,EF,TEA,YTIME)       "Compute technology cost"
 QTechCostIntrm(allCy,DSBS,rCon,EF,TEA,YTIME)  "Compute intermediate technology cost"
 QTechCostMatr(allCy,DSBS,rCon,EF,TEA,YTIME)   "Compute the technology cost including the maturity factor per technology and subsector"
 QTechSort(allCy,DSBS,rCon,YTIME)              "Compute Technology sorting based on variable cost"
+QGapFinalDem(allCy,DSBS,YTIME)                "Compute the gap in final demand of industry, tertiary, non-energy uses and bunkers"
 QTechShareNewEquip(allCy,DSBS,EF,TEA,YTIME)   "Compute technology share in new equipment"
 qDummyObj                                     "Define dummy objective function"
 ;
@@ -104,6 +105,8 @@ VTechCostIntrm(allCy,DSBS,rcon,EF,TEA,YTIME)            "Intermediate technology
 VTechCostMatr(allCy,DSBS,rCon,EF,TEA,YTIME)             "Technology cost including maturity factor (Keuro/toe)"
 VMatrFactor(allCy,SBS,EF,TEA,YTIME)                     "Maturity factor per technology and subsector (1)"
 VTechSort(allCy,DSBS,rCon,YTIME)                        "Technology sorting based on variable cost (1)"
+VConsRemSubEquip(allCy,DSBS,EF,YTIME)                   "Consumption of remaining substitutable equipment (Mtoe)"
+VGapFinalDem(allCy,DSBS,YTIME)                          "Final Demand GAP to be filed by new technologies (Mtoe)"
 VTechShareNewEquip(allCy,DSBS,EF,TEA,YTIME)             "Technology share in new equipment (1)"
 vDummyObj                                               "Dummy maximisation variable (1)"
 ;
