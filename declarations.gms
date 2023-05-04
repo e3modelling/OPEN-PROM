@@ -51,6 +51,7 @@ QTechCostMatr(allCy,DSBS,rCon,EF,TEA,YTIME)   "Compute the technology cost inclu
 QTechSort(allCy,DSBS,rCon,YTIME)              "Compute Technology sorting based on variable cost"
 QGapFinalDem(allCy,DSBS,YTIME)                "Compute the gap in final demand of industry, tertiary, non-energy uses and bunkers"
 QTechShareNewEquip(allCy,DSBS,EF,TEA,YTIME)   "Compute technology share in new equipment"
+QFuelConsInclHP(allCy,DSBS,EF,YTIME)          "Equation for fuel consumption in Mtoe (including heat from heatpumps)"
 
 
 *** Miscellaneous
@@ -111,6 +112,7 @@ VTechSort(allCy,DSBS,rCon,YTIME)                        "Technology sorting base
 VConsRemSubEquip(allCy,DSBS,EF,YTIME)                   "Consumption of remaining substitutable equipment (Mtoe)"
 VGapFinalDem(allCy,DSBS,YTIME)                          "Final Demand GAP to be filed by new technologies (Mtoe)"
 VTechShareNewEquip(allCy,DSBS,EF,TEA,YTIME)             "Technology share in new equipment (1)"
+VFuelConsInclHP(allCy,DSBS,EF,YTIME)                    "Consumption of fuels in each demand subsector including heat from heatpumps (Mtoe)"
 
 
 *** Miscellaneous
