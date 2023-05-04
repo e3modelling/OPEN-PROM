@@ -207,6 +207,12 @@ VTechSort(runCy,DSBS,rCon,YTIME)
                         =E=
 sum((EF,TEA)$(SECTTECH(DSBS,EF) ),VTechCostMatr(runCy,DSBS,rCon,EF,TEA,YTIME));
 
+* Compute the gap in final demand (industry, tertiary, non-energy uses and bubkers)
+QGapFinalDem(runCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)))..
+         VGapFinalDem(runCy,DSBS,YTIME)
+                 =E=
+         ((VDemSub(runCy,DSBS,YTIME) - sum(EF$SECTTECH(DSBS,EF), VConsRemSubEquip(runCy,DSBS,EF,YTIME))) 
+         + 0 + SQRT( SQR((VDemSub(runCy,DSBS,YTIME) - sum(EF$SECTTECH(DSBS,EF), VConsRemSubEquip(runCy,DSBS,EF,YTIME)))-0) + SQR(1e-4) ) )/2;
 
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
