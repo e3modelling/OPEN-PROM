@@ -1,8 +1,3 @@
-iCGI(allCy,YTIME) = 1;
-
-
-
-
 * Calculation of polynomial distribution lags coefficients
 iNPDL(DSBS) = 6;
 loop DSBS do

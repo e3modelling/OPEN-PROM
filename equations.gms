@@ -207,7 +207,13 @@ VTechSort(runCy,DSBS,rCon,YTIME)
                         =E=
 sum((EF,TEA)$(SECTTECH(DSBS,EF) ),VTechCostMatr(runCy,DSBS,rCon,EF,TEA,YTIME));
 
-<<<<<<< HEAD
+* Compute the gap in final demand (industry, tertiary, non-energy uses and bubkers)
+QGapFinalDem(runCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)))..
+         VGapFinalDem(runCy,DSBS,YTIME)
+                 =E=
+         ((VDemSub(runCy,DSBS,YTIME) - sum(EF$SECTTECH(DSBS,EF), VConsRemSubEquip(runCy,DSBS,EF,YTIME))) 
+         + 0 + SQRT( SQR((VDemSub(runCy,DSBS,YTIME) - sum(EF$SECTTECH(DSBS,EF), VConsRemSubEquip(runCy,DSBS,EF,YTIME)))-0) + SQR(1e-4) ) )/2;
+         
 * Compute technology share in new equipment
 QTechShareNewEquip(runCy,DSBS,EF,TEA,YTIME)$(TIME(YTIME) $SECTTECH(DSBS,EF) $(not TRANSE(DSBS)) )..
          VTechShareNewEquip(runCy,DSBS,EF,TEA,YTIME) =E=
@@ -216,15 +222,6 @@ QTechShareNewEquip(runCy,DSBS,EF,TEA,YTIME)$(TIME(YTIME) $SECTTECH(DSBS,EF) $(no
                   VTechCost(runCy,DSBS,rCon,EF,TEA,YTIME)
                   * iDisFunConSize(runCy,DSBS,rCon)/VTechSort(runCy,DSBS,rCon,YTIME));
 
-=======
-* Compute the gap in final demand (industry, tertiary, non-energy uses and bubkers)
-QGapFinalDem(runCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)))..
-         VGapFinalDem(runCy,DSBS,YTIME)
-                 =E=
-         ((VDemSub(runCy,DSBS,YTIME) - sum(EF$SECTTECH(DSBS,EF), VConsRemSubEquip(runCy,DSBS,EF,YTIME))) 
-         + 0 + SQRT( SQR((VDemSub(runCy,DSBS,YTIME) - sum(EF$SECTTECH(DSBS,EF), VConsRemSubEquip(runCy,DSBS,EF,YTIME)))-0) + SQR(1e-4) ) )/2;
->>>>>>> eleftheria_new_branch
 
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
-
