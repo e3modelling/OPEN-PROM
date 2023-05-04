@@ -173,7 +173,7 @@ QTechCostIntrm(runCy,DSBS,rCon,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(
                        * exp((iDisc(runCy,DSBS,YTIME)$(not CHP(EF)) + iDisc(runCy,"PG",YTIME)$CHP(EF))*VLifeTimeTech(runCy,DSBS,EF,TEA,YTIME))
                      )
                       / (exp((iDisc(runCy,DSBS,YTIME)$(not CHP(EF)) + iDisc(runCy,"PG",YTIME)$CHP(EF))*VLifeTimeTech(runCy,DSBS,EF,TEA,YTIME))- 1)
-                    ) * iCapCostTechIndu(runCy,DSBS,EF,YTIME) * iCGI(runCy,YTIME)
+                    ) * iCapCostTech(runCy,DSBS,EF,YTIME) * iCGI(runCy,YTIME)
                     +
                     iFixOMCostTech(runCy,DSBS,EF,YTIME)/1000
                     +
@@ -185,7 +185,7 @@ QTechCostIntrm(runCy,DSBS,rCon,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(
                        * exp(iDisc(runCy,DSBS,YTIME)*VLifeTimeTech(runCy,DSBS,EF,TEA,YTIME))
                      )
                       / (exp(iDisc(runCy,DSBS,YTIME)*VLifeTimeTech(runCy,DSBS,EF,TEA,YTIME))- 1)
-                    ) * iCapCostTechIndu(runCy,DSBS,EF,YTIME) * iCGI(runCy,YTIME)
+                    ) * iCapCostTech(runCy,DSBS,EF,YTIME) * iCGI(runCy,YTIME)
                     +
                     iFixOMCostTech(runCy,DSBS,EF,YTIME)/1000
                     +
@@ -193,8 +193,28 @@ QTechCostIntrm(runCy,DSBS,rCon,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(
                       (VFuelPriceSub(runCy,DSBS,EF,YTIME)+VTechCostVar(runCy,DSBS,EF,TEA,YTIME)/1000)/iUsfEnergyConvFact(runCy,DSBS,EF,TEA,YTIME)
                     )
                     * iAnnCons(runCy,DSBS,"smallest") * (iAnnCons(runCy,DSBS,"largest")/iAnnCons(runCy,DSBS,"smallest"))**((ord(rCon)-1)/iNcon(DSBS))
-                  )$NENSE(DSBS)
-;     
+                  )$NENSE(DSBS);  
+
+* Compute technology cost including Maturity factor per technology and subsector
+QTechCostMatr(runCy,DSBS,rCon,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) $SECTTECH(DSBS,EF) )..
+VTechCostMatr(runCy,DSBS,rCon,EF,TEA,YTIME) 
+                                               =E=
+VMatrFactor(runCy,DSBS,EF,TEA,YTIME) * VTechCost(runCy,DSBS,rCon,EF,TEA,YTIME) ;
+
+* Compute Technology sorting based on variable cost
+QTechSort(runCy,DSBS,rCon,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) )..
+VTechSort(runCy,DSBS,rCon,YTIME)
+                        =E=
+sum((EF,TEA)$(SECTTECH(DSBS,EF) ),VTechCostMatr(runCy,DSBS,rCon,EF,TEA,YTIME));
+
+* Compute technology share in new equipment
+QTechShareNewEquip(runCy,DSBS,EF,TEA,YTIME)$(TIME(YTIME) $SECTTECH(DSBS,EF) $(not TRANSE(DSBS)) )..
+         VTechShareNewEquip(runCy,DSBS,EF,TEA,YTIME) =E=
+         VMatrFactor(runCy,DSBS,EF,TEA,YTIME) / iCumDistrFuncConsSize(runCy,DSBS) *
+         sum(rCon$(ord(rCon) le iNcon(DSBS)+1),
+                  VTechCost(runCy,DSBS,rCon,EF,TEA,YTIME)
+                  * iDisFunConSize(runCy,DSBS,rCon)/VTechSort(runCy,DSBS,rCon,YTIME));
+
 
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
