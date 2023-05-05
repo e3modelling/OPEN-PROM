@@ -36,7 +36,7 @@ QLevl(allCy,YTIME)             "Compute ratio of car ownership over saturation c
 QScrRate(allCy,YTIME)          "Compute passenger cars scrapping rate"
 
 
-***  INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+***  INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS EQUATIONS
 QElecConsInd(allCy,YTIME)                     "Compute Consumption of electricity in industrial sectors"
 QDemInd(allCy,YTIME)                          "Copmpute total final demand (of substitutable fuels) in industrial sectors"
 QElecIndPrices(allCy,YTIME)                   "Compute electricity industry prices"
@@ -55,6 +55,9 @@ QFuelConsInclHP(allCy,DSBS,EF,YTIME)          "Equation for fuel consumption in 
 QVarProCostPerCHPDem(allCy,DSBS,CHP,YTIME)    "Compute  variable including fuel electricity production cost per CHP plant and demand sector "
 QAvgElcProCostCHP(allCy,CHP,YTIME)            "Compute Average Electricity production cost per CHP plant"
 QAvgVarElecProd(allCy,CHP,YTIME)              "Compute Average variable including fuel electricity production cost per CHP plant"
+
+*** REST OF ENERGY BALANCE SECTORS EQUATIONS
+QTotFinEneCons(allCy,EFS,YTIME)              "Compute total final energy consumption"
 
 *** Miscellaneous
 qDummyObj                                     "Define dummy objective function"
@@ -119,6 +122,8 @@ VProCostCHPDem(allCy,DSBS,CHP,YTIME)                    "Variable including fuel
 VAvgElcProCHP(allCy,CHP,YTIME)                          "Average Electricity production cost per CHP plant (Euro/KWh)"
 VAvgVarProdCostCHP(allCy,CHP,YTIME)                     "Average variable including fuel electricity production cost per CHP plant (Euro/KWh)"
 
+*** REST OF ENERGY BALANCE SECTORS VARIABLES
+VTotFinEneCons(allCy,EF,YTIME)                          "Total final energy Consumnption (Mtoe)"
 *** Miscellaneous
 vDummyObj                                               "Dummy maximisation variable (1)"
 ;

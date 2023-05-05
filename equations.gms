@@ -256,5 +256,16 @@ QAvgVarElecProd(runCy,CHP,YTIME)$(TIME(YTIME) ) ..
          *VProCostCHPDem(runCy,INDDOM,CHP,YTIME)))
          $SUM(INDDOM2,VConsFuel.L(runCy,INDDOM2,CHP,YTIME-1))+0$(NOT SUM(INDDOM2,VConsFuel.L(runCy,INDDOM2,CHP,YTIME-1)));
 
+* REST OF ENERGY BALANCE SECTORS
+* Compute total final energy consumption
+QTotFinEneCons(runCy,EFS,YTIME)$TIME(YTIME)..
+         VTotFinEneCons(runCy,EFS,YTIME)
+             =E=
+         sum(INDDOM,
+             sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(INDDOM,EF) ), VConsFuel(runCy,INDDOM,EF,YTIME)))
+         +
+         sum(TRANSE,
+             sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(TRANSE,EF)), VDemTr(runCy,TRANSE,EF,YTIME)));
+
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
