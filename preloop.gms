@@ -27,3 +27,4 @@ VTechCostIntrm.l(allCy,DSBS,rcon,EF,TEA,YTIME) = 0.1;
 VLifeTimeTech.l(allCy,DSBS,EF,TEA,YTIME)= 0.1;
 VTechSort.l(allCy,DSBS,rCon,YTIME) = 0.1;
 VMatrFactor.l(allCy,SBS,EF,TEA,YTIME) =0.1;
+VConsFuel.l(allCy,DSBS,EF,YTIME)=0.1;

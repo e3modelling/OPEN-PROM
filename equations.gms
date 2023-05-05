@@ -222,7 +222,7 @@ QTechShareNewEquip(runCy,DSBS,EF,TEA,YTIME)$(TIME(YTIME) $SECTTECH(DSBS,EF) $(no
                   VTechCost(runCy,DSBS,rCon,EF,TEA,YTIME)
                   * iDisFunConSize(runCy,DSBS,rCon)/VTechSort(runCy,DSBS,rCon,YTIME));
 
-*Compute fuel consumption in Mtoe (including heat from heatpumps)
+*Compute fuel consumption including heat from heatpumps
 QFuelConsInclHP(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF) )..
          VFuelConsInclHP(runCy,DSBS,EF,YTIME)
                  =E=
@@ -230,5 +230,21 @@ QFuelConsInclHP(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(
          sum(TEA,VTechShareNewEquip(runCy,DSBS,EF,TEA,YTIME)*VGapFinalDem(runCy,DSBS,YTIME))
          + (VElecNonSub(runCy,DSBS,YTIME))$(INDDOM(DSBS) $(ELCEF(EF)));
 
+* Compute variable including fuel electricity production cost per CHP plant and demand sector 
+QVarProCostPerCHPDem(runCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS))..
+         VProCostCHPDem(runCy,DSBS,CHP,YTIME)
+                 =E=
+         iCosPerChp(runCy,CHP,YTIME)/1E3
+                    + sum(PGEF$CHPtoEF(CHP,PGEF), (VFuelPriceSub(runCy,"PG",PGEF,YTIME)+1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
+                         (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
+                         *sTWhToMtoe/(   iBoiEffChp(runCy,CHP,YTIME)*VElecIndPrices(runCy,YTIME)    ));
+
+* Compute Average Electricity production cost per CHP plant 
+QAvgElcProCostCHP(runCy,CHP,YTIME)$TIME(YTIME)..
+         VAvgElcProCHP(runCy,CHP,YTIME)
+         =E=
+
+         (sum(INDDOM, VConsFuel(runCy,INDDOM,CHP,YTIME-1)/SUM(INDDOM2,VConsFuel(runCy,INDDOM2,CHP,YTIME-1))*VElecProdCostChp(runCy,INDDOM,CHP,YTIME)))
+         $SUM(INDDOM2,VConsFuel.L(runCy,INDDOM2,CHP,YTIME-1))+0$(NOT SUM(INDDOM2,VConsFuel.L(runCy,INDDOM2,CHP,YTIME-1)));
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
