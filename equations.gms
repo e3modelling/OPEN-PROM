@@ -267,5 +267,9 @@ QTotFinEneCons(runCy,EFS,YTIME)$TIME(YTIME)..
          sum(TRANSE,
              sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(TRANSE,EF)), VDemTr(runCy,TRANSE,EF,YTIME)));
 
+* Compute total final energy consumption in ALL countries
+QTotFinEneConsAll(YTIME)$TIME(YTIME)..
+         VTotFinEneConsAll(YTIME) =E= sum((runCy,EFS), VTotFinEneCons(runCy,EFS,YTIME) );             
+
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;

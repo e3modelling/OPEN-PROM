@@ -58,6 +58,7 @@ QAvgVarElecProd(allCy,CHP,YTIME)              "Compute Average variable includin
 
 *** REST OF ENERGY BALANCE SECTORS EQUATIONS
 QTotFinEneCons(allCy,EFS,YTIME)              "Compute total final energy consumption"
+QTotFinEneConsAll(YTIME)                     "Compute total final energy consumption in ALL countries"
 
 *** Miscellaneous
 qDummyObj                                     "Define dummy objective function"
@@ -123,7 +124,8 @@ VAvgElcProCHP(allCy,CHP,YTIME)                          "Average Electricity pro
 VAvgVarProdCostCHP(allCy,CHP,YTIME)                     "Average variable including fuel electricity production cost per CHP plant (Euro/KWh)"
 
 *** REST OF ENERGY BALANCE SECTORS VARIABLES
-VTotFinEneCons(allCy,EF,YTIME)                          "Total final energy Consumnption (Mtoe)"
+VTotFinEneCons(allCy,EF,YTIME)                          "Total final energy Consumption (Mtoe)"
+VTotFinEneConsAll(YTIME)                                "Total final energy Consumption in ALL COUNTRIES (Mtoe) "
 *** Miscellaneous
 vDummyObj                                               "Dummy maximisation variable (1)"
 ;
