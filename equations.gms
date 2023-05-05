@@ -269,7 +269,14 @@ QTotFinEneCons(runCy,EFS,YTIME)$TIME(YTIME)..
 
 * Compute total final energy consumption in ALL countries
 QTotFinEneConsAll(YTIME)$TIME(YTIME)..
-         VTotFinEneConsAll(YTIME) =E= sum((runCy,EFS), VTotFinEneCons(runCy,EFS,YTIME) );             
+         VTotFinEneConsAll(YTIME) =E= sum((runCy,EFS), VTotFinEneCons(runCy,EFS,YTIME) );     
+
+* Compute final non-energy consumption
+QFinNonEneCons(runCy,EFS,YTIME)$TIME(YTIME)..
+         VFinNonEneCons(runCy,EFS,YTIME)
+             =E=
+         sum(NENSE$(not sameas("BU",NENSE)),
+             sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(NENSE,EF) ), VConsFuel(runCy,NENSE,EF,YTIME)));                 
 
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
