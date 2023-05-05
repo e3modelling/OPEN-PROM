@@ -53,7 +53,7 @@ QGapFinalDem(allCy,DSBS,YTIME)                "Compute the gap in final demand o
 QTechShareNewEquip(allCy,DSBS,EF,TEA,YTIME)   "Compute technology share in new equipment"
 QFuelConsInclHP(allCy,DSBS,EF,YTIME)          "Equation for fuel consumption in Mtoe (including heat from heatpumps)"
 QVarProCostPerCHPDem(allCy,DSBS,CHP,YTIME)    "Compute  variable including fuel electricity production cost per CHP plant and demand sector "
-
+QAvgElcProCostCHP(allCy,CHP,YTIME)            "Compute Average Electricity production cost per CHP plant "
 
 *** Miscellaneous
 qDummyObj                                     "Define dummy objective function"
@@ -115,7 +115,7 @@ VGapFinalDem(allCy,DSBS,YTIME)                          "Final Demand GAP to be 
 VTechShareNewEquip(allCy,DSBS,EF,TEA,YTIME)             "Technology share in new equipment (1)"
 VFuelConsInclHP(allCy,DSBS,EF,YTIME)                    "Consumption of fuels in each demand subsector including heat from heatpumps (Mtoe)"
 VProCostCHPDem(allCy,DSBS,CHP,YTIME)                    "Variable including fuel electricity production cost per CHP plant and demand sector (Euro/KWh)"
-
+VAvgElcProCHP(allCy,CHP,YTIME)                          "Average Electricity production cost per CHP plant (Euro/KWh)"
 *** Miscellaneous
 vDummyObj                                               "Dummy maximisation variable (1)"
 ;
