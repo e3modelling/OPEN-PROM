@@ -282,7 +282,14 @@ QFinNonEneCons(runCy,EFS,YTIME)$TIME(YTIME)..
 QDistrLosses(runCy,EFS,YTIME)$TIME(YTIME)..
          VDistrLosses(runCy,EFS,YTIME)
              =E=
-         (iRateLossesFinCons(EFS,YTIME) * (VTotFinEneCons(runCy,EFS,YTIME) + VFinNonEneCons(runCy,EFS,YTIME)))$(not H2EF(EFS));                            
+         (iRateLossesFinCons(EFS,YTIME) * (VTotFinEneCons(runCy,EFS,YTIME) + VFinNonEneCons(runCy,EFS,YTIME)))$(not H2EF(EFS));  
+
+* Compute the transformation output from district heating plants
+QTranfOutputDHPlants(runCy,STEAM,YTIME)$TIME(YTIME)..
+         VTransfOutputDHPlants(runCy,STEAM,YTIME)
+             =E=
+         sum(DOMSE,
+             sum(DH$(EFtoEFS(DH,STEAM) $SECTTECH(DOMSE,DH)), VConsFuel(runCy,DOMSE,DH,YTIME)));                                   
 
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;

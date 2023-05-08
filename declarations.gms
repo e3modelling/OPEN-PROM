@@ -63,6 +63,7 @@ QTotFinEneCons(allCy,EFS,YTIME)              "Compute total final energy consump
 QTotFinEneConsAll(YTIME)                     "Compute total final energy consumption in ALL countries"
 QFinNonEneCons(allCy,EFS,YTIME)              "Compute final non-energy consumption"
 QDistrLosses(allCy,EFS,YTIME)                "Compute distribution losses"
+QTranfOutputDHPlants(allCy,EFS,YTIME)        "Compute the transformation output from district heating plants"
 
 *** Miscellaneous
 qDummyObj                                     "Define dummy objective function"
@@ -132,6 +133,7 @@ VTotFinEneCons(allCy,EF,YTIME)                          "Total final energy Cons
 VTotFinEneConsAll(YTIME)                                "Total final energy Consumption in ALL COUNTRIES (Mtoe)"
 VFinNonEneCons(allCy,EFS,YTIME)                         "Final non energy consumption (Mtoe)"
 VDistrLosses(allCy,EFS,YTIME)                           "Distribution losses (Mtoe)"
+VTransfOutputDHPlants(allCy,EFS,YTIME)                  "Transformation output from District Heating Plants (Mtoe)"
 *** Miscellaneous
 vDummyObj                                               "Dummy maximisation variable (1)"
 ;
