@@ -289,7 +289,14 @@ QTranfOutputDHPlants(runCy,STEAM,YTIME)$TIME(YTIME)..
          VTransfOutputDHPlants(runCy,STEAM,YTIME)
              =E=
          sum(DOMSE,
-             sum(DH$(EFtoEFS(DH,STEAM) $SECTTECH(DOMSE,DH)), VConsFuel(runCy,DOMSE,DH,YTIME)));                                   
+             sum(DH$(EFtoEFS(DH,STEAM) $SECTTECH(DOMSE,DH)), VConsFuel(runCy,DOMSE,DH,YTIME)));
+
+* Compute the transformation input to distrcit heating plants
+QTransfInputDHPlants(runCy,EFS,YTIME)$TIME(YTIME)..
+         VTransfInputDHPlants(runCy,EFS,YTIME)
+             =E=
+         sum(DH$DHtoEF(DH,EFS),
+             sum(DOMSE$SECTTECH(DOMSE,DH),VConsFuel(runCy,DOMSE,DH,YTIME)) / iEffDHPlants(runCy,EFS,YTIME));                                                
 
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;

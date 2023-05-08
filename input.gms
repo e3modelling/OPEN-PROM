@@ -108,9 +108,9 @@ $ondelim
 $include "./iFixCostTechIndu.csv"
 $offdelim
 ;   
-table iSplEneProdRDScenarios(EF, YTIME)               "Supplementary parameter for data transfer in iEneProdRDscenarios" 
+table iRateLossesFinConsSup(EF, YTIME)               "Supplementary parameter for Rate of losses over Available for Final Consumption"
 $ondelim
-$include "./iSplEneProdRDScenarios.csv"
+$include "./iRateLossesFinConsSup.csv"
 $offdelim
 ;
 table iEneProdRDscenariosSupplement(SBS,YTIME)       "Supplementary Parameter for Energy productivity indices and R&D indices"  
@@ -118,10 +118,17 @@ $ondelim
 $include "./iEneProdRDscenariosSupplement.csv"
 $offdelim
 ;
-iEneProdRDscenarios(SBS,YTIME)$an(YTIME)=iEneProdRDscenariosSupplement(SBS,YTIME);
+iEneProdRDscenarios(SBS,YTIME)=iEneProdRDscenariosSupplement(SBS,YTIME);
+table iParDHEfficiency(PGEFS,YTIME)                   "Parameter of  district heating Efficiency "
+$ondelim
+$include "./iParDHEfficiency.csv"
+$offdelim
+;
 
 *VDistrLosses.FX(runCy,EFS,TT)$PERIOD(TT) = VDistrLosses.L(runCy,EFS,TT);
-iRateLossesFinCons(EFS,YTIME)$an(YTIME)  = iSplEneProdRDScenarios(EFS, YTIME)*iEneProdRDscenarios("PG",YTIME);
+iRateLossesFinCons(EFS,YTIME)$an(YTIME)  = iRateLossesFinConsSup(EFS, YTIME)*iEneProdRDscenarios("PG",YTIME);
+iEffDHPlants(runCy,EFS,YTIME)  = sum(PGEFS$sameas(EFS,PGEFS),iParDHEfficiency(PGEFS,"2010"));
+iEffDHPlants(runCy,EF,YTIME)$(an(ytime) )= iEffDHPlants(runCy,EF,YTIME) / iEneProdRDscenarios("PG",YTIME);
 
 *Calculation of consumer size groups and their distribution function
 iNcon(TRANSE)$(sameas(TRANSE,"PC") or sameas(TRANSE,"GU")) = 10; !! 11 different consumer size groups for cars and trucks
