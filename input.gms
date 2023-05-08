@@ -108,28 +108,28 @@ $ondelim
 $include "./iFixCostTechIndu.csv"
 $offdelim
 ;   
-table iRateLossesFinConsSup(EF, YTIME)               "Supplementary parameter for Rate of losses over Available for Final Consumption"
+table iRateLossesFinConsSup(EF, YTIME)               "Supplementary parameter for Rate of losses over Available for Final Consumption (1)"
 $ondelim
 $include "./iRateLossesFinConsSup.csv"
 $offdelim
 ;
-table iEneProdRDscenariosSupplement(SBS,YTIME)       "Supplementary Parameter for Energy productivity indices and R&D indices"  
+table iEneProdRDscenariosSupplement(SBS,YTIME)       "Supplementary Parameter for Energy productivity indices and R&D indices (1)"  
 $ondelim
 $include "./iEneProdRDscenariosSupplement.csv"
 $offdelim
 ;
 iEneProdRDscenarios(SBS,YTIME)=iEneProdRDscenariosSupplement(SBS,YTIME);
-table iParDHEfficiency(PGEFS,YTIME)                   "Parameter of  district heating Efficiency "
+table iParDHEfficiency(PGEFS,YTIME)                   "Parameter of  district heating Efficiency (1)"
 $ondelim
 $include "./iParDHEfficiency.csv"
 $offdelim
 ;
-table iAvgEffGas(allCy,EF,YTIME)                      "Average Efficiency of Gasworks, Blast Furnances, Briquetting plants"
+table iAvgEffGas(allCy,EF,YTIME)                      "Average Efficiency of Gasworks, Blast Furnances, Briquetting plants (1)"
 $ondelim
 $include "./iAvgEffGas.csv"
 $offdelim
 ;
-table iSuppTransfInputPatFuel(EF,YTIME)         "Supplementary Parameter for the transformation input to patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works"
+table iSuppTransfInputPatFuel(EF,YTIME)         "Supplementary Parameter for the transformation input to patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works (1)"
 $ondelim
 $include "./iSuppTransfInputPatFuel.csv"
 $offdelim
