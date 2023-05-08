@@ -140,8 +140,8 @@ VFinNonEneCons(allCy,EFS,YTIME)                         "Final non energy consum
 VDistrLosses(allCy,EFS,YTIME)                           "Distribution losses (Mtoe)"
 VTransfOutputDHPlants(allCy,EFS,YTIME)                  "Transformation output from District Heating Plants (Mtoe)"
 VTransfInputDHPlants(allCy,EFS,YTIME)                   "Transformation input to District Heating Plants (Mtoe)"
-VTransfInputPatFuel(allCy,EFS,YTIME)                    "Transformation input to patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works"
-VTransfOutputPatFuel(allCy,EFS,YTIME)                   "Transformation input to patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works"
+VTransfInputPatFuel(allCy,EFS,YTIME)                    "Transformation input to patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works (1)"
+VTransfOutputPatFuel(allCy,EFS,YTIME)                   "Transformation input to patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works (1)"
 *** Miscellaneous
 vDummyObj                                               "Dummy maximisation variable (1)"
 ;
