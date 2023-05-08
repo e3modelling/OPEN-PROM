@@ -276,7 +276,13 @@ QFinNonEneCons(runCy,EFS,YTIME)$TIME(YTIME)..
          VFinNonEneCons(runCy,EFS,YTIME)
              =E=
          sum(NENSE$(not sameas("BU",NENSE)),
-             sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(NENSE,EF) ), VConsFuel(runCy,NENSE,EF,YTIME)));                 
+             sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(NENSE,EF) ), VConsFuel(runCy,NENSE,EF,YTIME)));  
+
+* Compute distribution losses
+QDistrLosses(runCy,EFS,YTIME)$TIME(YTIME)..
+         VDistrLosses(runCy,EFS,YTIME)
+             =E=
+         (iRateLossesFinCons(EFS,YTIME) * (VTotFinEneCons(runCy,EFS,YTIME) + VFinNonEneCons(runCy,EFS,YTIME)))$(not H2EF(EFS));                            
 
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
