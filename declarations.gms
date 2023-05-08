@@ -18,7 +18,8 @@ iAnnCons(allCy,DSBS,conSet)                     "Annual consumtion of the smalle
                                                  !! For goods transport, (Mtkm/vehicle)  
 iCumDistrFuncConsSize(allCy,DSBS)               "Cummulative distribution function of consumer size groups (1)"
 iRateLossesFinCons(EF,YTIME)                    "Rate of losses over Available for Final Consumption (1)" 
-iEneProdRDscenarios(SBS,YTIME)                  "Energy productivity index used in R&D scenarios (1)"                                                                                          
+iEneProdRDscenarios(SBS,YTIME)                  "Energy productivity index used in R&D scenarios (1)" 
+iEffDHPlants(allCy,EF,YTIME)                    "Efficiency of District Heating Plants (1)"                                                                                 
 ;
 
 
@@ -64,6 +65,7 @@ QTotFinEneConsAll(YTIME)                     "Compute total final energy consump
 QFinNonEneCons(allCy,EFS,YTIME)              "Compute final non-energy consumption"
 QDistrLosses(allCy,EFS,YTIME)                "Compute distribution losses"
 QTranfOutputDHPlants(allCy,EFS,YTIME)        "Compute the transformation output from district heating plants"
+QTransfInputDHPlants(allCy,EFS,YTIME)        "Compute the transformation input to distrcit heating plants"
 
 *** Miscellaneous
 qDummyObj                                     "Define dummy objective function"
@@ -134,6 +136,7 @@ VTotFinEneConsAll(YTIME)                                "Total final energy Cons
 VFinNonEneCons(allCy,EFS,YTIME)                         "Final non energy consumption (Mtoe)"
 VDistrLosses(allCy,EFS,YTIME)                           "Distribution losses (Mtoe)"
 VTransfOutputDHPlants(allCy,EFS,YTIME)                  "Transformation output from District Heating Plants (Mtoe)"
+VTransfInputDHPlants(allCy,EFS,YTIME)                   "Transformation input to District Heating Plants (Mtoe)"
 *** Miscellaneous
 vDummyObj                                               "Dummy maximisation variable (1)"
 ;
