@@ -88,7 +88,7 @@ $ondelim
 $include "./iElaSub.csv"
 $offdelim
 ;
-table iConsSizeDistHeat(allCy,conSet)                "Consumer sizes for district heating (1)"
+table iConsSizeDistHeat(allCy,conSet)               "Consumer sizes for district heating (1)"
 $ondelim$include "./iConsSizeDistHeat.csv"
 $offdelim
 ;
@@ -99,14 +99,30 @@ table iCapCostTech(allCy,DSBS,EF,YTIME)      "Capital Cost of technology For Ind
 $ondelim$include "./iCapCostTechIndu.csv"
 $offdelim
 ;
- table iFixOMCostTech(allCy,SBS,EF,YTIME)           "Fixed O&M cost of technology (Euro2005/toe-year)"                                   
+table iFixOMCostTech(allCy,SBS,EF,YTIME)           "Fixed O&M cost of technology (Euro2005/toe-year)"                                   
                                             !! Fixed O&M cost of technology for Transport (kEuro2005/vehicle)
                                             !! Fixed O&M cost of technology for Industrial sectors-except Iron and Steel (Euro2005/toe-year)"                                            
                                             !! Fixed O&M cost of technology for Iron and Steel (Euro2005/tn-of-steel)"                                          
                                             !! Fixed O&M cost of technology for Domestic sectors (Euro2005/toe-year)"  
-$ondelim$include "./iFixCostTechIndu.csv"
+$ondelim
+$include "./iFixCostTechIndu.csv"
 $offdelim
-; 
+;   
+table iSplEneProdRDScenarios(EF, YTIME)               "Supplementary parameter for data transfer in iEneProdRDscenarios" 
+$ondelim
+$include "./iSplEneProdRDScenarios.csv"
+$offdelim
+;
+table iEneProdRDscenariosSupplement(SBS,YTIME)       "Supplementary Parameter for Energy productivity indices and R&D indices"  
+$ondelim
+$include "./iEneProdRDscenariosSupplement.csv"
+$offdelim
+;
+iEneProdRDscenarios(SBS,YTIME)$an(YTIME)=iEneProdRDscenariosSupplement(SBS,YTIME);
+
+*VDistrLosses.FX(runCy,EFS,TT)$PERIOD(TT) = VDistrLosses.L(runCy,EFS,TT);
+iRateLossesFinCons(EFS,YTIME)$an(YTIME)  = iSplEneProdRDScenarios(EFS, YTIME)*iEneProdRDscenarios("PG",YTIME);
+
 *Calculation of consumer size groups and their distribution function
 iNcon(TRANSE)$(sameas(TRANSE,"PC") or sameas(TRANSE,"GU")) = 10; !! 11 different consumer size groups for cars and trucks
 iNcon(TRANSE)$(not (sameas(TRANSE,"PC") or sameas(TRANSE,"GU"))) = 1; !! 2 different consumer size groups for inland navigation, trains, busses and aviation

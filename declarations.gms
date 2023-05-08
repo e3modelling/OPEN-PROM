@@ -16,7 +16,9 @@ iAnnCons(allCy,DSBS,conSet)                     "Annual consumtion of the smalle
                                                  !! For passenger cars (Million km/vehicle)
                                                  !! For other passenger tranportation modes (Mpkm/vehicle)
                                                  !! For goods transport, (Mtkm/vehicle)  
-iCumDistrFuncConsSize(allCy,DSBS)               "Cummulative distribution function of consumer size groups (1)"                                                                                                         
+iCumDistrFuncConsSize(allCy,DSBS)               "Cummulative distribution function of consumer size groups (1)"
+iRateLossesFinCons(EF,YTIME)                    "Rate of losses over Available for Final Consumption (1)" 
+iEneProdRDscenarios(SBS,YTIME)                  "Energy productivity index used in R&D scenarios (1)"                                                                                          
 ;
 
 
@@ -59,7 +61,8 @@ QAvgVarElecProd(allCy,CHP,YTIME)              "Compute Average variable includin
 *** REST OF ENERGY BALANCE SECTORS EQUATIONS
 QTotFinEneCons(allCy,EFS,YTIME)              "Compute total final energy consumption"
 QTotFinEneConsAll(YTIME)                     "Compute total final energy consumption in ALL countries"
-QFinNonEneCons(allCy,EFS,YTIME) "Compute final non-energy consumption"
+QFinNonEneCons(allCy,EFS,YTIME)              "Compute final non-energy consumption"
+QDistrLosses(allCy,EFS,YTIME)                "Compute distribution losses"
 
 *** Miscellaneous
 qDummyObj                                     "Define dummy objective function"
@@ -128,6 +131,7 @@ VAvgVarProdCostCHP(allCy,CHP,YTIME)                     "Average variable includ
 VTotFinEneCons(allCy,EF,YTIME)                          "Total final energy Consumption (Mtoe)"
 VTotFinEneConsAll(YTIME)                                "Total final energy Consumption in ALL COUNTRIES (Mtoe)"
 VFinNonEneCons(allCy,EFS,YTIME)                         "Final non energy consumption (Mtoe)"
+VDistrLosses(allCy,EFS,YTIME)                           "Distribution losses (Mtoe)"
 *** Miscellaneous
 vDummyObj                                               "Dummy maximisation variable (1)"
 ;
