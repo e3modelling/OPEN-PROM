@@ -124,7 +124,18 @@ $ondelim
 $include "./iParDHEfficiency.csv"
 $offdelim
 ;
-
+table iAvgEffGas(allCy,EF,YTIME)                      "Average Efficiency of Gasworks, Blast Furnances, Briquetting plants"
+$ondelim
+$include "./iAvgEffGas.csv"
+$offdelim
+;
+table iSuppTransfInputPatFuel(EF,YTIME)         "Supplementary Parameter for the transformation input to patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works"
+$ondelim
+$include "./iSuppTransfInputPatFuel.csv"
+$offdelim
+; 
+iTransfInpGasworks(runCy,EFS,YTIME)= iSuppTransfInputPatFuel(EFS,YTIME);
+iShareFueTransfInput(runCy,EFS)$sum(EF$EFS(EF),iTransfInpGasworks(runCy,EF,"2010")) =  iTransfInpGasworks(runCy,EFS,"2010") / sum(EF$EFS(EF),iTransfInpGasworks(runCy,EF,"2010"));
 *VDistrLosses.FX(runCy,EFS,TT)$PERIOD(TT) = VDistrLosses.L(runCy,EFS,TT);
 iRateLossesFinCons(EFS,YTIME)$an(YTIME)  = iRateLossesFinConsSup(EFS, YTIME)*iEneProdRDscenarios("PG",YTIME);
 iEffDHPlants(runCy,EFS,YTIME)  = sum(PGEFS$sameas(EFS,PGEFS),iParDHEfficiency(PGEFS,"2010"));

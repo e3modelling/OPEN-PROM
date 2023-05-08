@@ -19,7 +19,9 @@ iAnnCons(allCy,DSBS,conSet)                     "Annual consumtion of the smalle
 iCumDistrFuncConsSize(allCy,DSBS)               "Cummulative distribution function of consumer size groups (1)"
 iRateLossesFinCons(EF,YTIME)                    "Rate of losses over Available for Final Consumption (1)" 
 iEneProdRDscenarios(SBS,YTIME)                  "Energy productivity index used in R&D scenarios (1)" 
-iEffDHPlants(allCy,EF,YTIME)                    "Efficiency of District Heating Plants (1)"                                                                                 
+iEffDHPlants(allCy,EF,YTIME)                    "Efficiency of District Heating Plants (1)" 
+iShareFueTransfInput(allCy,EF)                  "Share of fuels in transformation input to Gasworks, Blast Furnances, Briquetting plants in base year"
+iTransfInpGasworks(allCy,EF,YTIME)              "Transformation Input in Gasworks, Blast Furnances, Briquetting plants in Mtoe" 
 ;
 
 
@@ -66,6 +68,7 @@ QFinNonEneCons(allCy,EFS,YTIME)              "Compute final non-energy consumpti
 QDistrLosses(allCy,EFS,YTIME)                "Compute distribution losses"
 QTranfOutputDHPlants(allCy,EFS,YTIME)        "Compute the transformation output from district heating plants"
 QTransfInputDHPlants(allCy,EFS,YTIME)        "Compute the transformation input to distrcit heating plants"
+QTransfInputPatFuel(allCy,EFS,YTIME)         "Compute the transfomration input to patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works"
 
 *** Miscellaneous
 qDummyObj                                     "Define dummy objective function"
@@ -137,6 +140,8 @@ VFinNonEneCons(allCy,EFS,YTIME)                         "Final non energy consum
 VDistrLosses(allCy,EFS,YTIME)                           "Distribution losses (Mtoe)"
 VTransfOutputDHPlants(allCy,EFS,YTIME)                  "Transformation output from District Heating Plants (Mtoe)"
 VTransfInputDHPlants(allCy,EFS,YTIME)                   "Transformation input to District Heating Plants (Mtoe)"
+VTransfInputPatFuel(allCy,EFS,YTIME)                    "Transformation input to patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works"
+VTransfOutputPatFuel(allCy,EFS,YTIME)                   "Transformation input to patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works"
 *** Miscellaneous
 vDummyObj                                               "Dummy maximisation variable (1)"
 ;

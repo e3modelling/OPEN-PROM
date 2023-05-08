@@ -296,7 +296,13 @@ QTransfInputDHPlants(runCy,EFS,YTIME)$TIME(YTIME)..
          VTransfInputDHPlants(runCy,EFS,YTIME)
              =E=
          sum(DH$DHtoEF(DH,EFS),
-             sum(DOMSE$SECTTECH(DOMSE,DH),VConsFuel(runCy,DOMSE,DH,YTIME)) / iEffDHPlants(runCy,EFS,YTIME));                                                
+             sum(DOMSE$SECTTECH(DOMSE,DH),VConsFuel(runCy,DOMSE,DH,YTIME)) / iEffDHPlants(runCy,EFS,YTIME));   
+
+* Compute the transfomration input to patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works
+QTransfInputPatFuel(runCy,EFS,YTIME)$TIME(YTIME)..
+         VTransfInputPatFuel(runCy,EFS,YTIME)
+             =E=
+         sum(EF$(EFS(EF) $iAvgEffGas(runCy,EF,YTIME)) , VTransfOutputPatFuel(runCy,EFS,YTIME)/iAvgEffGas(runCy,EF,YTIME)) * iShareFueTransfInput(runCy,EFS);                                                         
 
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
