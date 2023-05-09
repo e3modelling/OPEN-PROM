@@ -362,5 +362,22 @@ QTransfInPowerPls(runCy,PGEF,YTIME)$TIME(YTIME)..
         +
         sum(CHP$CHPtoEF(CHP,PGEF),  sum(INDDOM,VConsFuel(runCy,INDDOM,CHP,YTIME))+sTWhToMtoe*VChpElecProd(runCy,CHP,YTIME))/(0.8+0.1*(ord(YTIME)-16)/32);
 
+* Compute transformation output from thermal power plants
+QTransfOutThermPP(runCy,TOCTEF,YTIME)$TIME(YTIME)..
+         VTransfOutThermPowSta(runCy,TOCTEF,YTIME)
+             =E=
+        (
+             sum(PGALL$(not PGNUCL(PGALL)),VElecProd(runCy,PGALL,YTIME)) * sTWhToMtoe
+             +
+             sum(CHP,VChpElecProd(runCy,CHP,YTIME)*sTWhToMtoe)
+         )$ELCEF(TOCTEF)
+        +
+        (                                                                                                         
+          sum(INDDOM,
+          sum(CHP$SECTTECH(INDDOM,CHP), VConsFuel(runCy,INDDOM,CHP,YTIME)))+
+          iRateEneBranCons(TOCTEF,YTIME)*(VFeCons(runCy,TOCTEF,YTIME) + VFNonEnCons(runCy,TOCTEF,YTIME) + VLosses(runCy,TOCTEF,YTIME)) + 
+          VLosses(runCy,TOCTEF,YTIME)                                                                                    
+         )$STEAM(TOCTEF);        
+
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
