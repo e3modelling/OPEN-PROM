@@ -345,5 +345,9 @@ QTransfInputRefineries(runCy,"CRO",YTIME)$(TIME(YTIME) )..
 * Compute transformation output from nuclear plants
 QTransfOutputNuclear(runCy,"ELC",YTIME)$TIME(YTIME) ..
          VTransfOutputNuclear(runCy,"ELC",YTIME) =E=SUM(PGNUCL,VElecProd(runCy,PGNUCL,YTIME))*sTWhToMtoe;
+
+* Compute transformation input to nuclear plants
+QTransfInNuclear(runCy,"NUC",YTIME)$TIME(YTIME)..
+        VTransfInNuclear(runCy,"NUC",YTIME) =E=SUM(PGNUCL,VElecProd(runCy,PGNUCL,YTIME)/VPlantEffPlantType(runCy,PGNUCL,YTIME))*sTWhToMtoe;;         
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
