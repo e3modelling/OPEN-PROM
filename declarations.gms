@@ -20,8 +20,10 @@ iCumDistrFuncConsSize(allCy,DSBS)               "Cummulative distribution functi
 iRateLossesFinCons(EF,YTIME)                    "Rate of losses over Available for Final Consumption (1)" 
 iEneProdRDscenarios(SBS,YTIME)                  "Energy productivity index used in R&D scenarios (1)" 
 iEffDHPlants(allCy,EF,YTIME)                    "Efficiency of District Heating Plants (1)" 
-iShareFueTransfInput(allCy,EF)                  "Share of fuels in transformation input to Gasworks, Blast Furnances, Briquetting plants in base year"
-iTransfInpGasworks(allCy,EF,YTIME)              "Transformation Input in Gasworks, Blast Furnances, Briquetting plants in Mtoe" 
+iShareFueTransfInput(allCy,EF)                  "Share of fuels in transformation input to Gasworks, Blast Furnances, Briquetting plants in base year (1)"
+iTransfInpGasworks(allCy,EF,YTIME)              "Transformation Input in Gasworks, Blast Furnances, Briquetting plants (Mtoe)"
+iResRefCapacity(YTIME)	                        "Residual in Refineries Capacity (1)"
+iRefCapacity(YTIME)	                            "Refineries Capacity (Million Barrels/day)"
 ;
 
 
@@ -69,6 +71,7 @@ QDistrLosses(allCy,EFS,YTIME)                "Compute distribution losses"
 QTranfOutputDHPlants(allCy,EFS,YTIME)        "Compute the transformation output from district heating plants"
 QTransfInputDHPlants(allCy,EFS,YTIME)        "Compute the transformation input to distrcit heating plants"
 QTransfInputPatFuel(allCy,EFS,YTIME)         "Compute the transfomration input to patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works"
+QRefCapacity(allCy,YTIME)	                 "Compute refineries capacity"	
 
 *** Miscellaneous
 qDummyObj                                     "Define dummy objective function"
@@ -142,6 +145,7 @@ VTransfOutputDHPlants(allCy,EFS,YTIME)                  "Transformation output f
 VTransfInputDHPlants(allCy,EFS,YTIME)                   "Transformation input to District Heating Plants (Mtoe)"
 VTransfInputPatFuel(allCy,EFS,YTIME)                    "Transformation input to patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works (1)"
 VTransfOutputPatFuel(allCy,EFS,YTIME)                   "Transformation input to patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works (1)"
+VRefCapacity(allCy,YTIME)	                            "Refineries capacity (Million barrels/day)"	
 *** Miscellaneous
 vDummyObj                                               "Dummy maximisation variable (1)"
 ;
