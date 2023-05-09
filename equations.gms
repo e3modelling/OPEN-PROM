@@ -342,5 +342,8 @@ QTransfInputRefineries(runCy,"CRO",YTIME)$(TIME(YTIME) )..
          sum(EFS$EFtoEFA(EFS,"LQD"), VTransfOutputRefineries(runCy,EFS,YTIME)) /
          sum(EFS$EFtoEFA(EFS,"LQD"), VTransfOutputRefineries(runCy,EFS,YTIME-1))  ]$iRefCapacity("2010");                   
 
+* Compute transformation output from nuclear plants
+QTransfOutputNuclear(runCy,"ELC",YTIME)$TIME(YTIME) ..
+         VTransfOutputNuclear(runCy,"ELC",YTIME) =E=SUM(PGNUCL,VElecProd(runCy,PGNUCL,YTIME))*sTWhToMtoe;
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
