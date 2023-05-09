@@ -73,7 +73,8 @@ QTranfOutputDHPlants(allCy,EFS,YTIME)        "Compute the transformation output 
 QTransfInputDHPlants(allCy,EFS,YTIME)        "Compute the transformation input to distrcit heating plants"
 QTransfInputPatFuel(allCy,EFS,YTIME)         "Compute the transfomration input to patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works"
 QRefCapacity(allCy,YTIME)	                 "Compute refineries capacity"	
-QTranfOutputRefineries(allCy,EFS,YTIME)	     "Compute the transformation output from refineries"	
+QTranfOutputRefineries(allCy,EFS,YTIME)	     "Compute the transformation output from refineries"
+QTransfInputRefineries(allCy,EFS,YTIME)	     "Compute the transformation input to refineries"		
 *** Miscellaneous
 qDummyObj                                     "Define dummy objective function"
 ;
@@ -147,7 +148,8 @@ VTransfInputDHPlants(allCy,EFS,YTIME)                   "Transformation input to
 VTransfInputPatFuel(allCy,EFS,YTIME)                    "Transformation input to patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works (1)"
 VTransfOutputPatFuel(allCy,EFS,YTIME)                   "Transformation input to patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works (1)"
 VRefCapacity(allCy,YTIME)	                            "Refineries capacity (Million barrels/day)"	
-VTransfOutputRefineries(allCy,EFS,YTIME)	            "Transformation output from refineries (Mtoe)"	
+VTransfOutputRefineries(allCy,EFS,YTIME)	            "Transformation output from refineries (Mtoe)"
+VTransfInputRefineries(allCy,EFS,YTIME)	                "Transformation input to refineries (Mtoe)"		
 *** Miscellaneous
 vDummyObj                                               "Dummy maximisation variable (1)"
 ;
