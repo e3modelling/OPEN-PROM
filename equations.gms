@@ -378,13 +378,7 @@ QTransfOutThermPP(runCy,TOCTEF,YTIME)$TIME(YTIME)..
           iRateEneBranCons(TOCTEF,YTIME)*(VFeCons(runCy,TOCTEF,YTIME) + VFNonEnCons(runCy,TOCTEF,YTIME) + VLosses(runCy,TOCTEF,YTIME)) + 
           VLosses(runCy,TOCTEF,YTIME)                                                                                    
          )$STEAM(TOCTEF); 
-
-* Compute total transformation output
-QTotTransfOutput(runCy,EFS,YTIME)$TIME(YTIME)..
-         VTotTransfOutput(runCy,EFS,YTIME)
-                 =E=
-         VTransfOutThermPowSta(runCy,EFS,YTIME) + VTransfOutputDHPlants(runCy,EFS,YTIME) + VTransfOutputNuclear(runCy,EFS,YTIME) + VTransfOutputPatFuel(runCy,EFS,YTIME) +
-         VTransfOutputRefineries(runCy,EFS,YTIME) + iHydProd(runCy,EFS,YTIME);                
+            
 
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
