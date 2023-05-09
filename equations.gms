@@ -318,5 +318,20 @@ QRefCapacity(runCy,YTIME)$TIME(YTIME)..
          $(ord(YTIME) gt 16)
          )     ] $iRefCapacity("2010");
 
+* Compute the transformation output from refineries
+QTranfOutputRefineries(runCy,EFS,YTIME)$(TIME(YTIME) $EFtoEFA(EFS,"LQD"))..
+         VTransfOutputRefineries(runCy,EFS,YTIME)
+             =E=
+         [
+         iResTransfOutputRefineries(EFS,YTIME) * VTransfOutputRefineries(runCy,EFS,YTIME-1)
+         * (VRefCapacity(runCy,YTIME)/VRefCapacity(runCy,YTIME-1))**0.3
+         * (
+             1$(TFIRST(YTIME-1) or TFIRST(YTIME-2))
+             +
+             (
+                sum(EF$EFtoEFA(EF,"LQD"),VTotFinEneCons(runCy,EF,YTIME-1))/sum(EF$EFtoEFA(EF,"LQD"),VTotFinEneCons(runCy,EF,YTIME-2))
+             )$(not (TFIRST(YTIME-1) or TFIRST(YTIME-2)))
+           )**(0.7)  ]$iRefCapacity("2010");         
+
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;

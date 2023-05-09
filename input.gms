@@ -144,6 +144,12 @@ $ondelim
 $include "./iSuppRefCapacity.csv"
 $offdelim
 ;
+table iSupTrnasfOutputRefineries(EF,YTIME)	"Supplmenetary parameter for the transformation output from refineries (Mtoe)"
+$ondelim
+$include"./iSupTrnasfOutputRefineries.csv"
+$offdelim
+;	
+iResTransfOutputRefineries(EFS,YTIME) = iSupTrnasfOutputRefineries(EFS,YTIME);
 iRefCapacity(YTIME)= iSuppRefCapacity("REF_CAP",YTIME);
 iResRefCapacity(YTIME) = iSupResRefCapacity("REF_CAP_RES",YTIME);
 iTransfInpGasworks(runCy,EFS,YTIME)= iSuppTransfInputPatFuel(EFS,YTIME);
