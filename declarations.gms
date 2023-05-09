@@ -76,7 +76,8 @@ QRefCapacity(allCy,YTIME)	                 "Compute refineries capacity"
 QTranfOutputRefineries(allCy,EFS,YTIME)	     "Compute the transformation output from refineries"
 QTransfInputRefineries(allCy,EFS,YTIME)	     "Compute the transformation input to refineries"
 QTransfOutputNuclear(allCy,EFS,YTIME)	     "Compute transformation output from nuclear plants"
-QTransfInNuclear(allCy,EFS,YTIME)	          "Compute transformation input to nuclear plants"				
+QTransfInNuclear(allCy,EFS,YTIME)	         "Compute transformation input to nuclear plants"
+QTransfInPowerPls(allCy,EFS,YTIME)	         "Compute transformation input to power plants"					
 *** Miscellaneous
 qDummyObj                                     "Define dummy objective function"
 ;
@@ -155,7 +156,9 @@ VTransfInputRefineries(allCy,EFS,YTIME)	                "Transformation input to
 VTransfOutputNuclear(allCy,EFS,YTIME)	                "Transformation output from nuclear plants (Mtoe)"
 VElecProd(allCy,PGALL,YTIME)	                        "Electricity production (TWh)"
 VTransfInNuclear(allCy,EFS,YTIME)	                    "Transformation input to nuclear plants (Mtoe)"	
-VPlantEffPlantType(allCy,PGALL,YTIME)	                "Plant efficiency per plant type (1)"				
+VPlantEffPlantType(allCy,PGALL,YTIME)	                "Plant efficiency per plant type (1)"	
+VTransfInThermPowPls(allCy,EFS,YTIME)	                "Transformation input to thermal power plants (Mtoe)"
+VChpElecProd(allCy,CHP,YTIME)	                        "CHP electricity production (TWh)"					
 *** Miscellaneous
 vDummyObj                                               "Dummy maximisation variable (1)"
 ;
