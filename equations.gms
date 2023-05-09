@@ -358,7 +358,7 @@ QTransfInPowerPls(runCy,PGEF,YTIME)$TIME(YTIME)..
              VElecProd(runCy,PGALL,YTIME) * sTWhToMtoe /  VPlantEffPlantType(runCy,PGALL,YTIME))
         +
         sum(PGALL$(PGALLtoEF(PGALL,PGEF)$PGGEO(PGALL)),
-             VElecProd(runCy,PGALL,YTIME) * sTWhToMtoe /  (1$sameas("US",runCy)+0.15$(not sameas("US",runCy))))
+             VElecProd(runCy,PGALL,YTIME) * sTWhToMtoe) 
         +
         sum(CHP$CHPtoEF(CHP,PGEF),  sum(INDDOM,VConsFuel(runCy,INDDOM,CHP,YTIME))+sTWhToMtoe*VChpElecProd(runCy,CHP,YTIME))/(0.8+0.1*(ord(YTIME)-16)/32);
 
