@@ -30,5 +30,5 @@ VMatrFactor.l(allCy,SBS,EF,TEA,YTIME) =0.1;
 VConsFuel.l(allCy,DSBS,EF,YTIME)=0.1;
 VRefCapacity.l(allCy,YTIME)=0.1;
 VTotFinEneCons.l(allCy,EF,YTIME)=0.1;  
-*VTransfOutputPatFuel.l(allCy,EFS,YTIME)=0.1;
+VTransfOutputRefineries.l(allCy,EFS,YTIME)=0.1;	
 
