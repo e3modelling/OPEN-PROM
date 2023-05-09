@@ -345,5 +345,22 @@ QTransfInputRefineries(runCy,"CRO",YTIME)$(TIME(YTIME) )..
 * Compute transformation output from nuclear plants
 QTransfOutputNuclear(runCy,"ELC",YTIME)$TIME(YTIME) ..
          VTransfOutputNuclear(runCy,"ELC",YTIME) =E=SUM(PGNUCL,VElecProd(runCy,PGNUCL,YTIME))*sTWhToMtoe;
+
+* Compute transformation input to nuclear plants
+QTransfInNuclear(runCy,"NUC",YTIME)$TIME(YTIME)..
+        VTransfInNuclear(runCy,"NUC",YTIME) =E=SUM(PGNUCL,VElecProd(runCy,PGNUCL,YTIME)/VPlantEffPlantType(runCy,PGNUCL,YTIME))*sTWhToMtoe;
+
+* Compute transformation input to power plants
+QTransfInPowerPls(runCy,PGEF,YTIME)$TIME(YTIME)..
+         VTransfInThermPowPls(runCy,PGEF,YTIME)
+             =E=
+        sum(PGALL$(PGALLtoEF(PGALL,PGEF)$((not PGGEO(PGALL)) $(not PGNUCL(PGALL)))),
+             VElecProd(runCy,PGALL,YTIME) * sTWhToMtoe /  VPlantEffPlantType(runCy,PGALL,YTIME))
+        +
+        sum(PGALL$(PGALLtoEF(PGALL,PGEF)$PGGEO(PGALL)),
+             VElecProd(runCy,PGALL,YTIME) * sTWhToMtoe) 
+        +
+        sum(CHP$CHPtoEF(CHP,PGEF),  sum(INDDOM,VConsFuel(runCy,INDDOM,CHP,YTIME))+sTWhToMtoe*VChpElecProd(runCy,CHP,YTIME))/(0.8+0.1*(ord(YTIME)-16)/32);
+
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
