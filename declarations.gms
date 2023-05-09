@@ -24,7 +24,8 @@ iShareFueTransfInput(allCy,EF)                  "Share of fuels in transformatio
 iTransfInpGasworks(allCy,EF,YTIME)              "Transformation Input in Gasworks, Blast Furnances, Briquetting plants (Mtoe)"
 iResRefCapacity(YTIME)	                        "Residual in Refineries Capacity (1)"
 iRefCapacity(YTIME)	                            "Refineries Capacity (Million Barrels/day)"
-iResTransfOutputRefineries(EF,YTIME)         	"Residual in Transformation Output from Refineries (Mtoe)"	
+iResTransfOutputRefineries(EF,YTIME)         	"Residual in Transformation Output from Refineries (Mtoe)"
+iRateEneBranCons(EF,YTIME)	            "Rate of Energy Branch Consumption over total transformation output (1)"		
 ;
 
 
@@ -77,7 +78,8 @@ QTranfOutputRefineries(allCy,EFS,YTIME)	     "Compute the transformation output 
 QTransfInputRefineries(allCy,EFS,YTIME)	     "Compute the transformation input to refineries"
 QTransfOutputNuclear(allCy,EFS,YTIME)	     "Compute transformation output from nuclear plants"
 QTransfInNuclear(allCy,EFS,YTIME)	         "Compute transformation input to nuclear plants"
-QTransfInPowerPls(allCy,EFS,YTIME)	         "Compute transformation input to power plants"					
+QTransfInPowerPls(allCy,EFS,YTIME)	         "Compute transformation input to power plants"	
+QTransfOutThermPP(allCy,EFS,YTIME)	         "Compute transformation output from thermal power plants"					
 *** Miscellaneous
 qDummyObj                                     "Define dummy objective function"
 ;
@@ -158,7 +160,8 @@ VElecProd(allCy,PGALL,YTIME)	                        "Electricity production (TW
 VTransfInNuclear(allCy,EFS,YTIME)	                    "Transformation input to nuclear plants (Mtoe)"	
 VPlantEffPlantType(allCy,PGALL,YTIME)	                "Plant efficiency per plant type (1)"	
 VTransfInThermPowPls(allCy,EFS,YTIME)	                "Transformation input to thermal power plants (Mtoe)"
-VChpElecProd(allCy,CHP,YTIME)	                        "CHP electricity production (TWh)"					
+VChpElecProd(allCy,CHP,YTIME)	                        "CHP electricity production (TWh)"
+VTransfOutThermPowSta(allCy,EFS,YTIME)	                "Transformation output from thermal power stations (Mtoe)"					
 *** Miscellaneous
 vDummyObj                                               "Dummy maximisation variable (1)"
 ;

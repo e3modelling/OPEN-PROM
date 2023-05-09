@@ -149,6 +149,12 @@ $ondelim
 $include"./iSupTrnasfOutputRefineries.csv"
 $offdelim
 ;	
+table iSupRateEneBranCons(EF,YTIME)	"Rate of Energy Branch Consumption over total transformation output of iRateEneBranCons (1)"
+$ondelim
+$include"./iSupRateEneBranCons.csv"
+$offdelim
+;
+iRateEneBranCons(EFS,YTIME)= iSupRateEneBranCons(EFS,YTIME)*iEneProdRDscenarios("PG",YTIME);
 iResTransfOutputRefineries(EFS,YTIME) = iSupTrnasfOutputRefineries(EFS,YTIME);
 iRefCapacity(YTIME)= iSuppRefCapacity("REF_CAP",YTIME);
 iResRefCapacity(YTIME) = iSupResRefCapacity("REF_CAP_RES",YTIME);
