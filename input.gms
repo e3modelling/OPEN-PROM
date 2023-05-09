@@ -134,6 +134,18 @@ $ondelim
 $include "./iSuppTransfInputPatFuel.csv"
 $offdelim
 ; 
+table iSupResRefCapacity(SUPOTH,YTIME)	"Supplementary Parameter for the residual in refineries Capacity (1)"
+$ondelim
+$include "./iSupResRefCapacity.csv"
+$offdelim
+;
+table iSuppRefCapacity(SUPOTH,YTIME)	"Supplementary Parameter for the residual in refineries Capacity (1)"
+$ondelim
+$include "./iSuppRefCapacity.csv"
+$offdelim
+;
+iRefCapacity(YTIME)= iSuppRefCapacity("REF_CAP",YTIME);
+iResRefCapacity(YTIME) = iSupResRefCapacity("REF_CAP_RES",YTIME);
 iTransfInpGasworks(runCy,EFS,YTIME)= iSuppTransfInputPatFuel(EFS,YTIME);
 iShareFueTransfInput(runCy,EFS)$sum(EF$EFS(EF),iTransfInpGasworks(runCy,EF,"2010")) =  iTransfInpGasworks(runCy,EFS,"2010") / sum(EF$EFS(EF),iTransfInpGasworks(runCy,EF,"2010"));
 *VDistrLosses.FX(runCy,EFS,TT)$PERIOD(TT) = VDistrLosses.L(runCy,EFS,TT);

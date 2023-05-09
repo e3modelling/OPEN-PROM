@@ -302,7 +302,21 @@ QTransfInputDHPlants(runCy,EFS,YTIME)$TIME(YTIME)..
 QTransfInputPatFuel(runCy,EFS,YTIME)$TIME(YTIME)..
          VTransfInputPatFuel(runCy,EFS,YTIME)
              =E=
-         sum(EF$(EFS(EF) $iAvgEffGas(runCy,EF,YTIME)) , VTransfOutputPatFuel(runCy,EFS,YTIME)/iAvgEffGas(runCy,EF,YTIME)) * iShareFueTransfInput(runCy,EFS);                                                         
+         sum(EF$(EFS(EF) $iAvgEffGas(runCy,EF,YTIME)) , VTransfOutputPatFuel(runCy,EFS,YTIME)/iAvgEffGas(runCy,EF,YTIME)) * iShareFueTransfInput(runCy,EFS); 
+
+* Compute refineries capacity
+QRefCapacity(runCy,YTIME)$TIME(YTIME)..
+         VRefCapacity(runCy,YTIME)
+             =E=
+         [
+         iResRefCapacity(YTIME) * VRefCapacity(runCy,YTIME-1)
+         *
+         (1$(ord(YTIME) le 16) +
+         (prod(rc,
+         (sum(EFS$EFtoEFA(EFS,"LQD"),VTotFinEneCons(runCy,EFS,YTIME-(ord(rc)+1)))/sum(EFS$EFtoEFA(EFS,"LQD"),VTotFinEneCons(runCy,EFS,YTIME-(ord(rc)+2))))**(0.5/(ord(rc)+1)))
+         )
+         $(ord(YTIME) gt 16)
+         )     ] $iRefCapacity("2010");
 
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
