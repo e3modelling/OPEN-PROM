@@ -85,7 +85,8 @@ QTransfOutThermPP(allCy,EFS,YTIME)	         "Compute transformation output from 
 QTotTransfInput(allCy,EFS,YTIME)	         "Compute total transformation input"
 QTotTransfOutput(allCy,EFS,YTIME)	         "Compute total transformation output"
 QTransfers(allCy,EFS,YTIME)	                 "Compute transfers"
-QGrsInlCons(allCy,EFS,YTIME)	             "Compute gross inland consumption not including consumption of energy branch"									
+QGrsInlConsNotEneBarnch(allCy,EFS,YTIME)	 "Compute gross inland consumption not including consumption of energy branch"	
+QGrssInCons(allCy,EFS,YTIME)	             "Compute gross inland consumption"									
 *** Miscellaneous
 qDummyObj                                     "Define dummy objective function"
 ;
@@ -170,7 +171,8 @@ VTransfOutThermPowSta(allCy,EFS,YTIME)	                "Transformation output fr
 VTotTransfInput(allCy,EFS,YTIME)	                    "Total transformation input (Mtoe)"
 VTotTransfOutput(allCy,EFS,YTIME)	                    "Total transformation output (Mtoe)"
 VTransfers(allCy,EFS,YTIME)	                            "Transfers (Mtoe)"
-VGrsInlCons(allCy,EFS,YTIME)	                        "Gross Inland Consumption not including consumption of energy branch (Mtoe)"		 	 				
+VGrsInlConsNotEneBranch(allCy,EFS,YTIME)	            "Gross Inland Consumption not including consumption of energy branch (Mtoe)"
+VGrssInCons(allCy,EFS,YTIME)	                        "Gross Inland Consumption (Mtoe)"			 	 				
 *** Miscellaneous
 vDummyObj                                               "Dummy maximisation variable (1)"
 ;
