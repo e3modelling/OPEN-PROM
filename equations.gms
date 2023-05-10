@@ -408,6 +408,6 @@ QTotTransfOutput(runCy,TOCTEF,YTIME)$TIME(YTIME)..
           sum(CHP$SECTTECH(INDDOM,CHP), VConsFuel(runCy,INDDOM,CHP,YTIME)))+
           iRateEneBranCons(TOCTEF,YTIME)*(VFeCons(runCy,TOCTEF,YTIME) + VFNonEnCons(runCy,TOCTEF,YTIME) + VDistrLosses(runCy,TOCTEF,YTIME)) + 
           VDistrLosses(runCy,TOCTEF,YTIME)                                                                                   
-         );   !!$STEAM(TOCTEF)
+         )$STEAM(TOCTEF);   
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
