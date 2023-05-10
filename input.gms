@@ -154,6 +154,7 @@ $ondelim
 $include"./iSupRateEneBranCons.csv"
 $offdelim
 ;
+iTotInput(allCy,EF,YTIME)=1E-7;
 iRateEneBranCons(EFS,YTIME)= iSupRateEneBranCons(EFS,YTIME)*iEneProdRDscenarios("PG",YTIME);
 iResTransfOutputRefineries(EFS,YTIME) = iSupTrnasfOutputRefineries(EFS,YTIME);
 iRefCapacity(YTIME)= iSuppRefCapacity("REF_CAP",YTIME);
