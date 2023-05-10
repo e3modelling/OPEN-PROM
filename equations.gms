@@ -409,5 +409,12 @@ QTransfers(runCy,EFS,YTIME)$TIME(YTIME)..
                  SUM(EFS2$EFTOEFA(EFS2,"LQD"),VTransfers(runCy,EFS2,YTIME-1)))$sameas(EFS,"CRO")   )$(iFeedTransfr(EFS,"2010"))$(NOT sameas("OLQ",EFS)) 
 );         
   
+* Compute gross inland consumption not including consumption of energy branch
+ QGrsInlCons(runCy,EFS,YTIME)$TIME(YTIME)..
+         VGrsInlCons(runCy,EFS,YTIME)
+                 =E=
+         VFeCons(runCy,EFS,YTIME) + VFNonEnCons(runCy,EFS,YTIME) + VTotTransfInput(runCy,EFS,YTIME) - VTotTransfOutput(runCy,EFS,YTIME) + VLosses(runCy,EFS,YTIME) - 
+         VTransfers(runCy,EFS,YTIME); 
+
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
