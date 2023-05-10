@@ -26,6 +26,8 @@ iResRefCapacity(YTIME)	                        "Residual in Refineries Capacity 
 iRefCapacity(YTIME)	                            "Refineries Capacity (Million Barrels/day)"
 iResTransfOutputRefineries(EF,YTIME)         	"Residual in Transformation Output from Refineries (Mtoe)"
 iRateEneBranCons(EF,YTIME)	                    "Rate of Energy Branch Consumption over total transformation output (1)"
+iResFeedTransfr(YTIME)	                        "Residual for Feedstocks in Transfers"	
+iFeedTransfr(EFS,YTIME)	                "Feedstocks in Transfers (Mtoe)"		
 ;
 
 
@@ -81,7 +83,8 @@ QTransfInNuclear(allCy,EFS,YTIME)	         "Compute transformation input to nucl
 QTransfInPowerPls(allCy,EFS,YTIME)	         "Compute transformation input to power plants"	
 QTransfOutThermPP(allCy,EFS,YTIME)	         "Compute transformation output from thermal power plants"
 QTotTransfInput(allCy,EFS,YTIME)	         "Compute total transformation input"
-QTotTransfOutput(allCy,EFS,YTIME)	         "Compute total transformation output"								
+QTotTransfOutput(allCy,EFS,YTIME)	         "Compute total transformation output"
+QTransfers(allCy,EFS,YTIME)	                 "Compute transfers"									
 *** Miscellaneous
 qDummyObj                                     "Define dummy objective function"
 ;
@@ -164,7 +167,8 @@ VTransfInThermPowPls(allCy,EFS,YTIME)	                "Transformation input to t
 VChpElecProd(allCy,CHP,YTIME)	                        "CHP electricity production (TWh)"
 VTransfOutThermPowSta(allCy,EFS,YTIME)	                "Transformation output from thermal power stations (Mtoe)"
 VTotTransfInput(allCy,EFS,YTIME)	                    "Total transformation input (Mtoe)"
-VTotTransfOutput(allCy,EFS,YTIME)	                    "Total transformation output (Mtoe)" 	 				
+VTotTransfOutput(allCy,EFS,YTIME)	                    "Total transformation output (Mtoe)"
+VTransfers(allCy,EFS,YTIME)	                            "Transfers (Mtoe)"	 	 				
 *** Miscellaneous
 vDummyObj                                               "Dummy maximisation variable (1)"
 ;

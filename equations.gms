@@ -399,6 +399,15 @@ QTotTransfOutput(runCy,EFS,YTIME)$TIME(YTIME)..
                  =E=
          VTransfOutThermPowSta(runCy,EFS,YTIME) + VTransfOutputDHPlants(runCy,EFS,YTIME) + VTransfOutputNuclear(runCy,EFS,YTIME) + VTransfOutputPatFuel(runCy,EFS,YTIME) +
          VTransfOutputRefineries(runCy,EFS,YTIME);        !!+ TONEW(CYrun,EFS,YTIME)
+
+* Compute transfers
+QTransfers(runCy,EFS,YTIME)$TIME(YTIME)..
+         VTransfers(runCy,EFS,YTIME) =E=
+         (( (VTransfers(runCy,EFS,YTIME-1)*iResFeedTransfr(YTIME)*VFeCons(runCy,EFS,YTIME)/VFeCons(runCy,EFS,YTIME-1))$EFTOEFA(EFS,"LQD")+
+          (
+                 VTransfers(runCy,"CRO",YTIME-1)*iResFeedTransfr(YTIME)*SUM(EFS2$EFTOEFA(EFS2,"LQD"),VTransfers(runCy,EFS2,YTIME))/
+                 SUM(EFS2$EFTOEFA(EFS2,"LQD"),VTransfers(runCy,EFS2,YTIME-1)))$sameas(EFS,"CRO")   )$(iFeedTransfr(EFS,"2010"))$(NOT sameas("OLQ",EFS)) 
+);         
   
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;

@@ -154,6 +154,13 @@ $ondelim
 $include"./iSupRateEneBranCons.csv"
 $offdelim
 ;
+table iSuppTransfers(EFS,YTIME)	                    "Supplementary Parameter for Transfers (Mtoe)"
+$ondelim
+$include"./iSuppTransfers.csv"
+$offdelim
+;
+iResFeedTransfr(YTIME)$an(YTIME) = iSupResRefCapacity("FEED_RES",YTIME);
+iFeedTransfr(EFS,YTIME) = iSuppTransfers(EFS,YTIME);
 iRateEneBranCons(EFS,YTIME)= iSupRateEneBranCons(EFS,YTIME)*iEneProdRDscenarios("PG",YTIME);
 iResTransfOutputRefineries(EFS,YTIME) = iSupTrnasfOutputRefineries(EFS,YTIME);
 iRefCapacity(YTIME)= iSuppRefCapacity("REF_CAP",YTIME);
