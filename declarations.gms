@@ -25,7 +25,7 @@ iTransfInpGasworks(allCy,EF,YTIME)              "Transformation Input in Gaswork
 iResRefCapacity(YTIME)	                        "Residual in Refineries Capacity (1)"
 iRefCapacity(YTIME)	                            "Refineries Capacity (Million Barrels/day)"
 iResTransfOutputRefineries(EF,YTIME)         	"Residual in Transformation Output from Refineries (Mtoe)"
-iRateEneBranCons(EF,YTIME)	                    "Rate of Energy Branch Consumption over total transformation output (1)"			
+iRateEneBranCons(EF,YTIME)	                    "Rate of Energy Branch Consumption over total transformation output (1)"
 ;
 
 
@@ -79,7 +79,8 @@ QTransfInputRefineries(allCy,EFS,YTIME)	     "Compute the transformation input t
 QTransfOutputNuclear(allCy,EFS,YTIME)	     "Compute transformation output from nuclear plants"
 QTransfInNuclear(allCy,EFS,YTIME)	         "Compute transformation input to nuclear plants"
 QTransfInPowerPls(allCy,EFS,YTIME)	         "Compute transformation input to power plants"	
-QTransfOutThermPP(allCy,EFS,YTIME)	         "Compute transformation output from thermal power plants"						
+QTransfOutThermPP(allCy,EFS,YTIME)	         "Compute transformation output from thermal power plants"
+QTotTransfInput(allCy,EFS,YTIME)	         "Compute total transformation input"							
 *** Miscellaneous
 qDummyObj                                     "Define dummy objective function"
 ;
@@ -161,7 +162,9 @@ VTransfInNuclear(allCy,EFS,YTIME)	                    "Transformation input to n
 VPlantEffPlantType(allCy,PGALL,YTIME)	                "Plant efficiency per plant type (1)"	
 VTransfInThermPowPls(allCy,EFS,YTIME)	                "Transformation input to thermal power plants (Mtoe)"
 VChpElecProd(allCy,CHP,YTIME)	                        "CHP electricity production (TWh)"
-VTransfOutThermPowSta(allCy,EFS,YTIME)	                "Transformation output from thermal power stations (Mtoe)"	 				
+VTransfOutThermPowSta(allCy,EFS,YTIME)	                "Transformation output from thermal power stations (Mtoe)"
+VTotTransfInput(allCy,EFS,YTIME)	                    "Total transformation input (Mtoe)"
+VTotTransfOutput(allCy,EFS,YTIME)	                    "Total transformation output (Mtoe)"	 	 				
 *** Miscellaneous
 vDummyObj                                               "Dummy maximisation variable (1)"
 ;
