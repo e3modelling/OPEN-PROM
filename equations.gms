@@ -394,20 +394,11 @@ QTotTransfInput(runCy,EFS,YTIME)$TIME(YTIME)..
         )$sameas(EFS,"OGS");            
 
 * Compute total transformation output
-QTotTransfOutput(runCy,TOCTEF,YTIME)$TIME(YTIME)..
-         VTransfOutThermPowSta(runCy,TOCTEF,YTIME)
-             =E=
-        (
-             sum(PGALL$(not PGNUCL(PGALL)),VElecProd(runCy,PGALL,YTIME)) * sTWhToMtoe
-             +
-             sum(CHP,VChpElecProd(runCy,CHP,YTIME)*sTWhToMtoe)
-         )$ELCEF(TOCTEF)
-        +
-        (                                                                                                        
-          sum(INDDOM,
-          sum(CHP$SECTTECH(INDDOM,CHP), VConsFuel(runCy,INDDOM,CHP,YTIME)))+
-          iRateEneBranCons(TOCTEF,YTIME)*(VFeCons(runCy,TOCTEF,YTIME) + VFNonEnCons(runCy,TOCTEF,YTIME) + VDistrLosses(runCy,TOCTEF,YTIME)) + 
-          VDistrLosses(runCy,TOCTEF,YTIME)                                                                                   
-         )$STEAM(TOCTEF);   
+QTotTransfOutput(runCy,EFS,YTIME)$TIME(YTIME)..
+         VTotTransfOutput(runCy,EFS,YTIME)
+                 =E=
+         VTransfOutThermPowSta(runCy,EFS,YTIME) + VTransfOutputDHPlants(runCy,EFS,YTIME) + VTransfOutputNuclear(runCy,EFS,YTIME) + VTransfOutputPatFuel(runCy,EFS,YTIME) +
+         VTransfOutputRefineries(runCy,EFS,YTIME);        !!+ TONEW(CYrun,EFS,YTIME)
+  
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
