@@ -379,6 +379,19 @@ QTransfOutThermPP(runCy,TOCTEF,YTIME)$TIME(YTIME)..
           VLosses(runCy,TOCTEF,YTIME)                                                                                    
          )$STEAM(TOCTEF); 
             
+* Computer total transformation input
+QTotTransfInput(runCy,EFS,YTIME)$TIME(YTIME)..
+         VTotTransfInput(runCy,EFS,YTIME)
+                 =E=
+        (
+            VTransfInThermPowPls(runCy,EFS,YTIME) + VTransfInputDHPlants(runCy,EFS,YTIME) + VTransfInNuclear(runCy,EFS,YTIME) +
+             VTransfInputPatFuel(runCy,EFS,YTIME) + VTransfInputRefineries(runCy,EFS,YTIME)  + iTotInput(runCy,EFS,YTIME)   !!$H2PRODEF(EFS)
+        )$(not sameas(EFS,"OGS"))
+        +
+        (
+          VTotTransfOutput(runCy,EFS,YTIME) - VFeCons(runCy,EFS,YTIME) - VFNonEnCons(runCy,EFS,YTIME) - iRateEneBranCons(EFS,YTIME)*
+          VTotTransfOutput(runCy,EFS,YTIME) - VLosses(runCy,EFS,YTIME)
+        )$sameas(EFS,"OGS");            
 
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
