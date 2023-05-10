@@ -385,7 +385,7 @@ QTotTransfInput(runCy,EFS,YTIME)$TIME(YTIME)..
                  =E=
         (
             VTransfInThermPowPls(runCy,EFS,YTIME) + VTransfInputDHPlants(runCy,EFS,YTIME) + VTransfInNuclear(runCy,EFS,YTIME) +
-             VTransfInputPatFuel(runCy,EFS,YTIME) + VTransfInputRefineries(runCy,EFS,YTIME)  + iTotInput(runCy,EFS,YTIME)   !!$H2PRODEF(EFS)
+             VTransfInputPatFuel(runCy,EFS,YTIME) + VTransfInputRefineries(runCy,EFS,YTIME)     !!$H2PRODEF(EFS)
         )$(not sameas(EFS,"OGS"))
         +
         (

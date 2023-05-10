@@ -26,7 +26,6 @@ iResRefCapacity(YTIME)	                        "Residual in Refineries Capacity 
 iRefCapacity(YTIME)	                            "Refineries Capacity (Million Barrels/day)"
 iResTransfOutputRefineries(EF,YTIME)         	"Residual in Transformation Output from Refineries (Mtoe)"
 iRateEneBranCons(EF,YTIME)	                    "Rate of Energy Branch Consumption over total transformation output (1)"
-iTotInput(allCy,EF,YTIME)			            "Find an appropriate name (1)"
 ;
 
 

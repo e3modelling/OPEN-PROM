@@ -119,42 +119,41 @@ $include "./iEneProdRDscenariosSupplement.csv"
 $offdelim
 ;
 iEneProdRDscenarios(SBS,YTIME)=iEneProdRDscenariosSupplement(SBS,YTIME);
-table iParDHEfficiency(PGEFS,YTIME)                   "Parameter of  district heating Efficiency (1)"
+table iParDHEfficiency(PGEFS,YTIME)                 "Parameter of  district heating Efficiency (1)"
 $ondelim
 $include "./iParDHEfficiency.csv"
 $offdelim
 ;
-table iAvgEffGas(allCy,EF,YTIME)                      "Average Efficiency of Gasworks, Blast Furnances, Briquetting plants (1)"
+table iAvgEffGas(allCy,EF,YTIME)                    "Average Efficiency of Gasworks, Blast Furnances, Briquetting plants (1)"
 $ondelim
 $include "./iAvgEffGas.csv"
 $offdelim
 ;
-table iSuppTransfInputPatFuel(EF,YTIME)         "Supplementary Parameter for the transformation input to patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works (1)"
+table iSuppTransfInputPatFuel(EF,YTIME)            "Supplementary Parameter for the transformation input to patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works (1)"
 $ondelim
 $include "./iSuppTransfInputPatFuel.csv"
 $offdelim
 ; 
-table iSupResRefCapacity(SUPOTH,YTIME)	"Supplementary Parameter for the residual in refineries Capacity (1)"
+table iSupResRefCapacity(SUPOTH,YTIME)	           "Supplementary Parameter for the residual in refineries Capacity (1)"
 $ondelim
 $include "./iSupResRefCapacity.csv"
 $offdelim
 ;
-table iSuppRefCapacity(SUPOTH,YTIME)	"Supplementary Parameter for the residual in refineries Capacity (1)"
+table iSuppRefCapacity(SUPOTH,YTIME)	          "Supplementary Parameter for the residual in refineries Capacity (1)"
 $ondelim
 $include "./iSuppRefCapacity.csv"
 $offdelim
 ;
-table iSupTrnasfOutputRefineries(EF,YTIME)	"Supplmenetary parameter for the transformation output from refineries (Mtoe)"
+table iSupTrnasfOutputRefineries(EF,YTIME)	     "Supplmenetary parameter for the transformation output from refineries (Mtoe)"
 $ondelim
 $include"./iSupTrnasfOutputRefineries.csv"
 $offdelim
 ;	
-table iSupRateEneBranCons(EF,YTIME)	"Rate of Energy Branch Consumption over total transformation output of iRateEneBranCons (1)"
+table iSupRateEneBranCons(EF,YTIME)	          "Rate of Energy Branch Consumption over total transformation output of iRateEneBranCons (1)"
 $ondelim
 $include"./iSupRateEneBranCons.csv"
 $offdelim
 ;
-iTotInput(allCy,EF,YTIME)=1E-7;
 iRateEneBranCons(EFS,YTIME)= iSupRateEneBranCons(EFS,YTIME)*iEneProdRDscenarios("PG",YTIME);
 iResTransfOutputRefineries(EFS,YTIME) = iSupTrnasfOutputRefineries(EFS,YTIME);
 iRefCapacity(YTIME)= iSuppRefCapacity("REF_CAP",YTIME);
