@@ -273,7 +273,7 @@ QTotFinEneConsAll(YTIME)$TIME(YTIME)..
 
 * Compute final non-energy consumption
 QFinNonEneCons(runCy,EFS,YTIME)$TIME(YTIME)..
-         VFinNonEneCons(runCy,EFS,YTIME)
+         VFNonEnCons(runCy,EFS,YTIME)
              =E=
          sum(NENSE$(not sameas("BU",NENSE)),
              sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(NENSE,EF) ), VConsFuel(runCy,NENSE,EF,YTIME)));  
@@ -282,7 +282,7 @@ QFinNonEneCons(runCy,EFS,YTIME)$TIME(YTIME)..
 QDistrLosses(runCy,EFS,YTIME)$TIME(YTIME)..
          VDistrLosses(runCy,EFS,YTIME)
              =E=
-         (iRateLossesFinCons(EFS,YTIME) * (VTotFinEneCons(runCy,EFS,YTIME) + VFinNonEneCons(runCy,EFS,YTIME)))$(not H2EF(EFS));  
+         (iRateLossesFinCons(EFS,YTIME) * (VTotFinEneCons(runCy,EFS,YTIME) + VFNonEnCons(runCy,EFS,YTIME)))$(not H2EF(EFS));  
 
 * Compute the transformation output from district heating plants
 QTranfOutputDHPlants(runCy,STEAM,YTIME)$TIME(YTIME)..
@@ -393,5 +393,21 @@ QTotTransfInput(runCy,EFS,YTIME)$TIME(YTIME)..
           VTotTransfOutput(runCy,EFS,YTIME) - VLosses(runCy,EFS,YTIME)
         )$sameas(EFS,"OGS");            
 
+* Compute total transformation output
+QTotTransfOutput(runCy,TOCTEF,YTIME)$TIME(YTIME)..
+         VTransfOutThermPowSta(runCy,TOCTEF,YTIME)
+             =E=
+        (
+             sum(PGALL$(not PGNUCL(PGALL)),VElecProd(runCy,PGALL,YTIME)) * sTWhToMtoe
+             +
+             sum(CHP,VChpElecProd(runCy,CHP,YTIME)*sTWhToMtoe)
+         )$ELCEF(TOCTEF)
+        +
+        (                                                                                                        
+          sum(INDDOM,
+          sum(CHP$SECTTECH(INDDOM,CHP), VConsFuel(runCy,INDDOM,CHP,YTIME)))+
+          iRateEneBranCons(TOCTEF,YTIME)*(VFeCons(runCy,TOCTEF,YTIME) + VFNonEnCons(runCy,TOCTEF,YTIME) + VDistrLosses(runCy,TOCTEF,YTIME)) + 
+          VDistrLosses(runCy,TOCTEF,YTIME)                                                                                   
+         )$STEAM(TOCTEF);   
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;

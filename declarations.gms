@@ -80,7 +80,8 @@ QTransfOutputNuclear(allCy,EFS,YTIME)	     "Compute transformation output from n
 QTransfInNuclear(allCy,EFS,YTIME)	         "Compute transformation input to nuclear plants"
 QTransfInPowerPls(allCy,EFS,YTIME)	         "Compute transformation input to power plants"	
 QTransfOutThermPP(allCy,EFS,YTIME)	         "Compute transformation output from thermal power plants"
-QTotTransfInput(allCy,EFS,YTIME)	         "Compute total transformation input"							
+QTotTransfInput(allCy,EFS,YTIME)	         "Compute total transformation input"
+QTotTransfOutput(allCy,EFS,YTIME)	         "Compute total transformation output"								
 *** Miscellaneous
 qDummyObj                                     "Define dummy objective function"
 ;
@@ -147,7 +148,6 @@ VAvgVarProdCostCHP(allCy,CHP,YTIME)                     "Average variable includ
 *** REST OF ENERGY BALANCE SECTORS VARIABLES
 VTotFinEneCons(allCy,EF,YTIME)                          "Total final energy Consumption (Mtoe)"
 VTotFinEneConsAll(YTIME)                                "Total final energy Consumption in ALL COUNTRIES (Mtoe)"
-VFinNonEneCons(allCy,EFS,YTIME)                         "Final non energy consumption (Mtoe)"
 VDistrLosses(allCy,EFS,YTIME)                           "Distribution losses (Mtoe)"
 VTransfOutputDHPlants(allCy,EFS,YTIME)                  "Transformation output from District Heating Plants (Mtoe)"
 VTransfInputDHPlants(allCy,EFS,YTIME)                   "Transformation input to District Heating Plants (Mtoe)"
@@ -164,7 +164,7 @@ VTransfInThermPowPls(allCy,EFS,YTIME)	                "Transformation input to t
 VChpElecProd(allCy,CHP,YTIME)	                        "CHP electricity production (TWh)"
 VTransfOutThermPowSta(allCy,EFS,YTIME)	                "Transformation output from thermal power stations (Mtoe)"
 VTotTransfInput(allCy,EFS,YTIME)	                    "Total transformation input (Mtoe)"
-VTotTransfOutput(allCy,EFS,YTIME)	                    "Total transformation output (Mtoe)"	 	 				
+VTotTransfOutput(allCy,EFS,YTIME)	                    "Total transformation output (Mtoe)" 	 				
 *** Miscellaneous
 vDummyObj                                               "Dummy maximisation variable (1)"
 ;
