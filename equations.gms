@@ -410,11 +410,18 @@ QTransfers(runCy,EFS,YTIME)$TIME(YTIME)..
 );         
   
 * Compute gross inland consumption not including consumption of energy branch
- QGrsInlCons(runCy,EFS,YTIME)$TIME(YTIME)..
-         VGrsInlCons(runCy,EFS,YTIME)
+ QGrsInlConsNotEneBarnch(runCy,EFS,YTIME)$TIME(YTIME)..
+         VGrsInlConsNotEneBranch(runCy,EFS,YTIME)
                  =E=
          VFeCons(runCy,EFS,YTIME) + VFNonEnCons(runCy,EFS,YTIME) + VTotTransfInput(runCy,EFS,YTIME) - VTotTransfOutput(runCy,EFS,YTIME) + VLosses(runCy,EFS,YTIME) - 
          VTransfers(runCy,EFS,YTIME); 
+
+* Compute gross inland consumption
+QGrssInCons(runCy,EFS,YTIME)$TIME(YTIME)..
+         VGrssInCons(runCy,EFS,YTIME)
+                 =E=
+         VFeCons(runCy,EFS,YTIME) + VEnCons(runCy,EFS,YTIME) + VFNonEnCons(runCy,EFS,YTIME) + VTotTransfInput(runCy,EFS,YTIME) - VTotTransfOutput(runCy,EFS,YTIME) +
+          VLosses(runCy,EFS,YTIME) - VTransfers(runCy,EFS,YTIME);         
 
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
