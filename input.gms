@@ -134,7 +134,7 @@ $ondelim
 $include "./iSuppTransfInputPatFuel.csv"
 $offdelim
 ; 
-table iSupResRefCapacity(SUPOTH,YTIME)	           "Supplementary Parameter for the residual in refineries Capacity (1)"
+table iSupResRefCapacity(allCy,SUPOTH,YTIME)	           "Supplementary Parameter for the residual in refineries Capacity (1)"
 $ondelim
 $include "./iSupResRefCapacity.csv"
 $offdelim
@@ -154,17 +154,39 @@ $ondelim
 $include"./iSupRateEneBranCons.csv"
 $offdelim
 ;
-table iSuppTransfers(EFS,YTIME)	                    "Supplementary Parameter for Transfers (Mtoe)"
+table iSuppTransfers(EFS,YTIME)	                "Supplementary Parameter for Transfers (Mtoe)"
 $ondelim
 $include"./iSuppTransfers.csv"
 $offdelim
 ;
-iResFeedTransfr(YTIME)$an(YTIME) = iSupResRefCapacity("FEED_RES",YTIME);
+table iSuppPrimProd(EF,YTIME)	                     "Supplementary Parameter for Primary Production"
+$ondelim
+$include"./iSuppPrimProd.csv"
+$offdelim
+;
+iFuelPriPro(PPRODEF,YTIME) = iSuppPrimProd(PPRODEF,YTIME);
+table iIntFuelPrcsBslnScnr(WEF,YTIME)	           "International Fuel Prices USED IN BASELINE SCENARIO ($2015/toe)"
+$ondelim
+$include"./iIntFuelPrcsBslnScnr.csv"
+$offdelim
+;
+table iSuppRatePrimProd(EF,YTIME)	              "Supplementary Parameter for iRatePrimProd"	
+$ondelim
+$include"./iSuppRatePrimProd.csv"
+$offdelim
+;
+iIntPricesMainFuelsBsln(WEF,YTIME) = iIntFuelPrcsBslnScnr(WEF,YTIME);
+iRatePriProTotPriNeeds(runCy,PPRODEF,YTIME) = iSuppRatePrimProd(PPRODEF,YTIME);
+iIntPricesMainFuels(WEF,YTIME) = iIntFuelPrcsBslnScnr(WEF,YTIME);
+iResHcNgOilPrProd(runCy,"HCL",YTIME)$an(YTIME)   = iSupResRefCapacity(runCy,"HCL_PPROD",YTIME);
+iResHcNgOilPrProd(runCy,"NGS",YTIME)$an(YTIME)   = iSupResRefCapacity(runCy,"NGS_PPROD",YTIME);
+iResHcNgOilPrProd(runCy,"CRO",YTIME)$an(YTIME)   = iSupResRefCapacity(runCy,"OIL_PPROD",YTIME);
+iResFeedTransfr(runCy,YTIME)$an(YTIME) = iSupResRefCapacity(runCy,"FEED_RES",YTIME);
 iFeedTransfr(EFS,YTIME) = iSuppTransfers(EFS,YTIME);
 iRateEneBranCons(EFS,YTIME)= iSupRateEneBranCons(EFS,YTIME)*iEneProdRDscenarios("PG",YTIME);
 iResTransfOutputRefineries(EFS,YTIME) = iSupTrnasfOutputRefineries(EFS,YTIME);
 iRefCapacity(YTIME)= iSuppRefCapacity("REF_CAP",YTIME);
-iResRefCapacity(YTIME) = iSupResRefCapacity("REF_CAP_RES",YTIME);
+iResRefCapacity(runCy,YTIME) = iSupResRefCapacity(runCy,"REF_CAP_RES",YTIME);
 iTransfInpGasworks(runCy,EFS,YTIME)= iSuppTransfInputPatFuel(EFS,YTIME);
 iShareFueTransfInput(runCy,EFS)$sum(EF$EFS(EF),iTransfInpGasworks(runCy,EF,"2010")) =  iTransfInpGasworks(runCy,EFS,"2010") / sum(EF$EFS(EF),iTransfInpGasworks(runCy,EF,"2010"));
 *VDistrLosses.FX(runCy,EFS,TT)$PERIOD(TT) = VDistrLosses.L(runCy,EFS,TT);

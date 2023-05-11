@@ -309,7 +309,7 @@ QRefCapacity(runCy,YTIME)$TIME(YTIME)..
          VRefCapacity(runCy,YTIME)
              =E=
          [
-         iResRefCapacity(YTIME) * VRefCapacity(runCy,YTIME-1)
+         iResRefCapacity(runCy,YTIME) * VRefCapacity(runCy,YTIME-1)
          *
          (1$(ord(YTIME) le 16) +
          (prod(rc,
@@ -403,14 +403,14 @@ QTotTransfOutput(runCy,EFS,YTIME)$TIME(YTIME)..
 * Compute transfers
 QTransfers(runCy,EFS,YTIME)$TIME(YTIME)..
          VTransfers(runCy,EFS,YTIME) =E=
-         (( (VTransfers(runCy,EFS,YTIME-1)*iResFeedTransfr(YTIME)*VFeCons(runCy,EFS,YTIME)/VFeCons(runCy,EFS,YTIME-1))$EFTOEFA(EFS,"LQD")+
+         (( (VTransfers(runCy,EFS,YTIME-1)*iResFeedTransfr(runCy,YTIME)*VFeCons(runCy,EFS,YTIME)/VFeCons(runCy,EFS,YTIME-1))$EFTOEFA(EFS,"LQD")+
           (
-                 VTransfers(runCy,"CRO",YTIME-1)*iResFeedTransfr(YTIME)*SUM(EFS2$EFTOEFA(EFS2,"LQD"),VTransfers(runCy,EFS2,YTIME))/
+                 VTransfers(runCy,"CRO",YTIME-1)*iResFeedTransfr(runCy,YTIME)*SUM(EFS2$EFTOEFA(EFS2,"LQD"),VTransfers(runCy,EFS2,YTIME))/
                  SUM(EFS2$EFTOEFA(EFS2,"LQD"),VTransfers(runCy,EFS2,YTIME-1)))$sameas(EFS,"CRO")   )$(iFeedTransfr(EFS,"2010"))$(NOT sameas("OLQ",EFS)) 
 );         
   
 * Compute gross inland consumption not including consumption of energy branch
- QGrsInlConsNotEneBarnch(runCy,EFS,YTIME)$TIME(YTIME)..
+ QGrsInlConsNotEneBranch(runCy,EFS,YTIME)$TIME(YTIME)..
          VGrsInlConsNotEneBranch(runCy,EFS,YTIME)
                  =E=
          VFeCons(runCy,EFS,YTIME) + VFNonEnCons(runCy,EFS,YTIME) + VTotTransfInput(runCy,EFS,YTIME) - VTotTransfOutput(runCy,EFS,YTIME) + VLosses(runCy,EFS,YTIME) - 
@@ -421,7 +421,32 @@ QGrssInCons(runCy,EFS,YTIME)$TIME(YTIME)..
          VGrssInCons(runCy,EFS,YTIME)
                  =E=
          VFeCons(runCy,EFS,YTIME) + VEnCons(runCy,EFS,YTIME) + VFNonEnCons(runCy,EFS,YTIME) + VTotTransfInput(runCy,EFS,YTIME) - VTotTransfOutput(runCy,EFS,YTIME) +
-          VLosses(runCy,EFS,YTIME) - VTransfers(runCy,EFS,YTIME);         
+          VLosses(runCy,EFS,YTIME) - VTransfers(runCy,EFS,YTIME);  
+
+* Compute primary production
+QPrimProd(runCy,PPRODEF,YTIME)$TIME(YTIME)..
+         VPrimProd(runCy,PPRODEF,YTIME)
+                 =E=  [
+         (
+             iRatePriProTotPriNeeds(runCy,PPRODEF,YTIME) * (VGrsInlConsNotEneBranch(runCy,PPRODEF,YTIME) +  VEnCons(runCy,PPRODEF,YTIME))
+         )$(not (sameas(PPRODEF,"CRO")or sameas(PPRODEF,"NGS")))
+         +
+         (
+             iResHcNgOilPrProd(runCy,PPRODEF,YTIME) * VPrimProd(runCy,PPRODEF,YTIME-1) *
+             (VGrsInlConsNotEneBranch(runCy,PPRODEF,YTIME)/VGrsInlConsNotEneBranch(runCy,PPRODEF,YTIME-1))**iNatGasPriProElst(runCy)
+         )$(sameas(PPRODEF,"NGS") )
+        +
+         (
+           iRatePriProTotPriNeeds(runCy,PPRODEF,YTIME) * VPrimProd(runCy,PPRODEF,YTIME-1) *
+           ((VGrsInlConsNotEneBranch(runCy,PPRODEF,YTIME) + VExportsFake(runCy,PPRODEF,YTIME))/
+            (VGrsInlConsNotEneBranch(runCy,PPRODEF,YTIME-1) + VExportsFake(runCy,PPRODEF,YTIME-1)))
+         )$(sameas(PPRODEF,"NGS") )
+         +(
+           iResHcNgOilPrProd(runCy,PPRODEF,YTIME) *  iFuelPriPro(PPRODEF,YTIME) *
+           prod(kpdl$(ord(kpdl) lt 5),
+                         (iIntPricesMainFuels("WCRO",YTIME-(ord(kpdl)+1))/iIntPricesMainFuelsBsln("WCRO",YTIME-(ord(kpdl)+1)))
+                         **(0.2*iPolDstrbtnLagCoeffPriOilPr(kpdl)))
+         )$sameas(PPRODEF,"CRO")   ]$iRatePriProTotPriNeeds(runCy,PPRODEF,YTIME);                 
 
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
