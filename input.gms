@@ -180,7 +180,7 @@ $ondelim
 $include"./iSuppExports.csv"
 $offdelim
 ;
-table iImpExp(allCy,EFS,YTIME)	                 "Imports of Expotrting countries Usually Zero (1)" 
+table iImpExp(allCy,EFS,YTIME)	                 "Imports of exporting countries usually zero (1) 
 $ondelim
 $include"./iImpExp.csv"
 $offdelim
