@@ -8,6 +8,11 @@ $ondelim
 $include "./iPop.csvr"
 $offdelim
 ;
+table iActv(YTIME,allCy,SBS) "Activity"
+$ondelim
+$include "./iActv.csvr"
+$offdelim
+;
 table iTransChar(allCy,TRANSPCHAR,YTIME) "km per car, passengers per car and residuals for passenger cars market extension ()"
 $ondelim
 $include "./iTransChar.csv"
@@ -183,6 +188,11 @@ $offdelim
 table iImpExp(allCy,EFS,YTIME)	                 "Imports of exporting countries usually zero (1)" 
 $ondelim
 $include"./iImpExp.csv"
+$offdelim
+;
+table iResDemSub(allCy,SBS,YTIME)                  "Residuals in total energy demand per subsector (1)"
+$ondelim
+$include"./iResDemSub.csv"
 $offdelim
 ;
 iRatioImpFinElecDem(runCy,YTIME)$an(YTIME) = iSuppRefCapacity(runCy,"ELC_IMP",YTIME);
