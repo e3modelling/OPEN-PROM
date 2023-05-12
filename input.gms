@@ -108,17 +108,17 @@ $ondelim
 $include "./iFixCostTechIndu.csv"
 $offdelim
 ;   
-table iRateLossesFinConsSup(EF, YTIME)               "Supplementary parameter for Rate of losses over Available for Final Consumption (1)"
+table iRateLossesFinConsSup(allCy,EF, YTIME)               "Supplementary parameter for Rate of losses over Available for Final Consumption (1)"
 $ondelim
 $include "./iRateLossesFinConsSup.csv"
 $offdelim
 ;
-table iEneProdRDscenariosSupplement(SBS,YTIME)       "Supplementary Parameter for Energy productivity indices and R&D indices (1)"  
+table iEneProdRDscenariosSupplement(allCy,SBS,YTIME)       "Supplementary Parameter for Energy productivity indices and R&D indices (1)"  
 $ondelim
 $include "./iEneProdRDscenariosSupplement.csv"
 $offdelim
 ;
-iEneProdRDscenarios(SBS,YTIME)=iEneProdRDscenariosSupplement(SBS,YTIME);
+iEneProdRDscenarios(runCy,SBS,YTIME)=iEneProdRDscenariosSupplement(runCy,SBS,YTIME);
 table iParDHEfficiency(PGEFS,YTIME)                 "Parameter of  district heating Efficiency (1)"
 $ondelim
 $include "./iParDHEfficiency.csv"
@@ -139,60 +139,60 @@ $ondelim
 $include "./iSupResRefCapacity.csv"
 $offdelim
 ;
-table iSuppRefCapacity(SUPOTH,YTIME)	          "Supplementary Parameter for the residual in refineries Capacity (1)"
+table iSuppRefCapacity(allCy,SUPOTH,YTIME)	          "Supplementary Parameter for the residual in refineries Capacity (1)"
 $ondelim
 $include "./iSuppRefCapacity.csv"
 $offdelim
 ;
-table iSupTrnasfOutputRefineries(EF,YTIME)	     "Supplmenetary parameter for the transformation output from refineries (Mtoe)"
+table iSupTrnasfOutputRefineries(allCy,EF,YTIME)	     "Supplmenetary parameter for the transformation output from refineries (Mtoe)"
 $ondelim
 $include"./iSupTrnasfOutputRefineries.csv"
 $offdelim
 ;	
-table iSupRateEneBranCons(EF,YTIME)	          "Rate of Energy Branch Consumption over total transformation output of iRateEneBranCons (1)"
+table iSupRateEneBranCons(allCy,EF,YTIME)	          "Rate of Energy Branch Consumption over total transformation output of iRateEneBranCons (1)"
 $ondelim
 $include"./iSupRateEneBranCons.csv"
 $offdelim
 ;
-table iSuppTransfers(EFS,YTIME)	                "Supplementary Parameter for Transfers (Mtoe)"
+table iSuppTransfers(allCy,EFS,YTIME)	                "Supplementary Parameter for Transfers (Mtoe)"
 $ondelim
 $include"./iSuppTransfers.csv"
 $offdelim
 ;
-table iSuppPrimProd(EF,YTIME)	                     "Supplementary Parameter for Primary Production"
+table iSuppPrimProd(allCy,PPRODEF,YTIME)	                     "Supplementary Parameter for Primary Production"
 $ondelim
 $include"./iSuppPrimProd.csv"
 $offdelim
 ;
-iFuelPriPro(PPRODEF,YTIME) = iSuppPrimProd(PPRODEF,YTIME);
+iFuelPriPro(allCy,PPRODEF,YTIME) = iSuppPrimProd(allCy,PPRODEF,YTIME);
 table iIntFuelPrcsBslnScnr(WEF,YTIME)	           "International Fuel Prices USED IN BASELINE SCENARIO ($2015/toe)"
 $ondelim
 $include"./iIntFuelPrcsBslnScnr.csv"
 $offdelim
 ;
-table iSuppRatePrimProd(EF,YTIME)	              "Supplementary Parameter for iRatePrimProd"	
+table iSuppRatePrimProd(allCy,EF,YTIME)	              "Supplementary Parameter for iRatePrimProd"	
 $ondelim
 $include"./iSuppRatePrimProd.csv"
 $offdelim
 ;
 iIntPricesMainFuelsBsln(WEF,YTIME) = iIntFuelPrcsBslnScnr(WEF,YTIME);
-iRatePriProTotPriNeeds(runCy,PPRODEF,YTIME) = iSuppRatePrimProd(PPRODEF,YTIME);
+iRatePriProTotPriNeeds(runCy,PPRODEF,YTIME) = iSuppRatePrimProd(runCy,PPRODEF,YTIME);
 iIntPricesMainFuels(WEF,YTIME) = iIntFuelPrcsBslnScnr(WEF,YTIME);
 iResHcNgOilPrProd(runCy,"HCL",YTIME)$an(YTIME)   = iSupResRefCapacity(runCy,"HCL_PPROD",YTIME);
 iResHcNgOilPrProd(runCy,"NGS",YTIME)$an(YTIME)   = iSupResRefCapacity(runCy,"NGS_PPROD",YTIME);
 iResHcNgOilPrProd(runCy,"CRO",YTIME)$an(YTIME)   = iSupResRefCapacity(runCy,"OIL_PPROD",YTIME);
 iResFeedTransfr(runCy,YTIME)$an(YTIME) = iSupResRefCapacity(runCy,"FEED_RES",YTIME);
-iFeedTransfr(EFS,YTIME) = iSuppTransfers(EFS,YTIME);
-iRateEneBranCons(EFS,YTIME)= iSupRateEneBranCons(EFS,YTIME)*iEneProdRDscenarios("PG",YTIME);
-iResTransfOutputRefineries(EFS,YTIME) = iSupTrnasfOutputRefineries(EFS,YTIME);
-iRefCapacity(YTIME)= iSuppRefCapacity("REF_CAP",YTIME);
+iFeedTransfr(runCy,EFS,YTIME) = iSuppTransfers(runCy,EFS,YTIME);
+iRateEneBranCons(allCy,EFS,YTIME)= iSupRateEneBranCons(allCy,EFS,YTIME)*iEneProdRDscenarios(allCy,"PG",YTIME);
+iResTransfOutputRefineries(runCy,EFS,YTIME) = iSupTrnasfOutputRefineries(runCy,EFS,YTIME);
+iRefCapacity(runCy,YTIME)= iSuppRefCapacity(runCy,"REF_CAP",YTIME);
 iResRefCapacity(runCy,YTIME) = iSupResRefCapacity(runCy,"REF_CAP_RES",YTIME);
 iTransfInpGasworks(runCy,EFS,YTIME)= iSuppTransfInputPatFuel(EFS,YTIME);
 iShareFueTransfInput(runCy,EFS)$sum(EF$EFS(EF),iTransfInpGasworks(runCy,EF,"2010")) =  iTransfInpGasworks(runCy,EFS,"2010") / sum(EF$EFS(EF),iTransfInpGasworks(runCy,EF,"2010"));
 *VDistrLosses.FX(runCy,EFS,TT)$PERIOD(TT) = VDistrLosses.L(runCy,EFS,TT);
-iRateLossesFinCons(EFS,YTIME)$an(YTIME)  = iRateLossesFinConsSup(EFS, YTIME)*iEneProdRDscenarios("PG",YTIME);
+iRateLossesFinCons(runCy,EFS,YTIME)$an(YTIME)  = iRateLossesFinConsSup(runCy,EFS, YTIME)*iEneProdRDscenarios(runCy,"PG",YTIME);
 iEffDHPlants(runCy,EFS,YTIME)  = sum(PGEFS$sameas(EFS,PGEFS),iParDHEfficiency(PGEFS,"2010"));
-iEffDHPlants(runCy,EF,YTIME)$(an(ytime) )= iEffDHPlants(runCy,EF,YTIME) / iEneProdRDscenarios("PG",YTIME);
+iEffDHPlants(runCy,EF,YTIME)$(an(ytime) )= iEffDHPlants(runCy,EF,YTIME) / iEneProdRDscenarios(runCy,"PG",YTIME);
 
 *Calculation of consumer size groups and their distribution function
 iNcon(TRANSE)$(sameas(TRANSE,"PC") or sameas(TRANSE,"GU")) = 10; !! 11 different consumer size groups for cars and trucks

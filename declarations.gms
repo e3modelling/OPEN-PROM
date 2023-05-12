@@ -17,24 +17,24 @@ iAnnCons(allCy,DSBS,conSet)                     "Annual consumtion of the smalle
                                                  !! For other passenger tranportation modes (Mpkm/vehicle)
                                                  !! For goods transport, (Mtkm/vehicle)  
 iCumDistrFuncConsSize(allCy,DSBS)               "Cummulative distribution function of consumer size groups (1)"
-iRateLossesFinCons(EF,YTIME)                    "Rate of losses over Available for Final Consumption (1)" 
-iEneProdRDscenarios(SBS,YTIME)                  "Energy productivity index used in R&D scenarios (1)" 
+iRateLossesFinCons(allCy,EF,YTIME)              "Rate of losses over Available for Final Consumption (1)" 
+iEneProdRDscenarios(allCy,SBS,YTIME)            "Energy productivity index used in R&D scenarios (1)" 
 iEffDHPlants(allCy,EF,YTIME)                    "Efficiency of District Heating Plants (1)" 
 iShareFueTransfInput(allCy,EF)                  "Share of fuels in transformation input to Gasworks, Blast Furnances, Briquetting plants in base year (1)"
 iTransfInpGasworks(allCy,EF,YTIME)              "Transformation Input in Gasworks, Blast Furnances, Briquetting plants (Mtoe)"
-iResRefCapacity(allCy,YTIME)	                        "Residual in Refineries Capacity (1)"
-iRefCapacity(YTIME)	                            "Refineries Capacity (Million Barrels/day)"
-iResTransfOutputRefineries(EF,YTIME)         	"Residual in Transformation Output from Refineries (Mtoe)"
-iRateEneBranCons(EF,YTIME)	                    "Rate of Energy Branch Consumption over total transformation output (1)"
-iResFeedTransfr(allCy,YTIME)	                        "Residual for Feedstocks in Transfers (1)"	
-iFeedTransfr(EFS,YTIME)	                        "Feedstocks in Transfers (Mtoe)"
+iResRefCapacity(allCy,YTIME)	                "Residual in Refineries Capacity (1)"
+iRefCapacity(allCy,YTIME)	                    "Refineries Capacity (Million Barrels/day)"
+iResTransfOutputRefineries(allCy,EF,YTIME)      "Residual in Transformation Output from Refineries (Mtoe)"
+iRateEneBranCons(allCy,EF,YTIME)	            "Rate of Energy Branch Consumption over total transformation output (1)"
+iResFeedTransfr(allCy,YTIME)	                "Residual for Feedstocks in Transfers (1)"	
+iFeedTransfr(allCy,EFS,YTIME)	                "Feedstocks in Transfers (Mtoe)"
 iResHcNgOilPrProd(allCy,EF,YTIME)	            "Residuals for Hard Coal, Natural Gas and Oil Primary Production (1)"
-iNatGasPriProElst(allCy)	                    "Natural Gas primary production elasticity related to gross inland consumption"	/
+iNatGasPriProElst(allCy)	                    "Natural Gas primary production elasticity related to gross inland consumption (1)"	/
 $ondelim
 $include "./iNatGasPriProElst.csv"
 $offdelim
 /
-iFuelPriPro(EF,YTIME)                 	        "Fuel Primary Production (Mtoe)"
+iFuelPriPro(allCy,EF,YTIME)                 	"Fuel Primary Production (Mtoe)"
 iIntPricesMainFuels(WEF,YTIME)	                "International Prices of main fuels (kEuro05/toe)"	
 iIntFuelPrices(WEF,YTIME)	                    "International Fuel Prices (dollars2015/toe)"
 iIntPricesMainFuelsBsln(WEF,YTIME)          	"International Prices of main fuels in Baseline scenario (kEuro2005/toe)"
