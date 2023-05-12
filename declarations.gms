@@ -108,7 +108,8 @@ QGrsInlConsNotEneBranch(allCy,EFS,YTIME)	 "Compute gross inland consumption not 
 QGrssInCons(allCy,EFS,YTIME)	             "Compute gross inland consumption"	
 QPrimProd(allCy,EFS,YTIME)	                 "Compute primary production"	
 QFakeExp(allCy,EFS,YTIME)	                 "Compute fake exports"	
-QFakeImprts(allCy,EFS,YTIME)	             "Compute fake imports"									
+QFakeImprts(allCy,EFS,YTIME)	             "Compute fake imports"	
+QNetImports(allCy,EFS,YTIME)	             "Compute net imports"									
 *** Miscellaneous
 qDummyObj                                     "Define dummy objective function"
 ;
@@ -197,7 +198,8 @@ VGrsInlConsNotEneBranch(allCy,EFS,YTIME)	            "Gross Inland Consumption n
 VGrssInCons(allCy,EFS,YTIME)	                        "Gross Inland Consumption (Mtoe)"
 VPrimProd(allCy,EFS,YTIME)	                            "Primary Production (Mtoe)"	
 VExportsFake(allCy,EFS,YTIME)                        	"Exports fake (Mtoe)" 		
-VFkImpAllFuelsNotNatGas(allCy,EFS,YTIME)             	"Fake Imports for all fuels except natural gas (Mtoe)"		 	 				
+VFkImpAllFuelsNotNatGas(allCy,EFS,YTIME)             	"Fake Imports for all fuels except natural gas (Mtoe)"
+VNetImports(allCy,EFS,YTIME)	                        "Net Imports (Mtoe)"			 	 				
 *** Miscellaneous
 vDummyObj                                               "Dummy maximisation variable (1)"
 ;
