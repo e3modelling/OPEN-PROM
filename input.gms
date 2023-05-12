@@ -180,6 +180,12 @@ $ondelim
 $include"./iSuppExports.csv"
 $offdelim
 ;
+table iImpExp(allCy,EFS,YTIME	)	                 "Imports of Expotrting countries Usually Zero (1)" 
+$ondelim
+$include"./iImpExp.csv"
+$offdelim
+;
+iRatioImpFinElecDem(runCy,YTIME)$an(YTIME) = iSuppRefCapacity(runCy,"ELC_IMP",YTIME);
 iFuelExprts(runCy,EFS,YTIME) = iSuppExports(runCy,EFS,YTIME);
 iIntPricesMainFuelsBsln(WEF,YTIME) = iIntFuelPrcsBslnScnr(WEF,YTIME);
 iRatePriProTotPriNeeds(runCy,PPRODEF,YTIME) = iSuppRatePrimProd(runCy,PPRODEF,YTIME);
