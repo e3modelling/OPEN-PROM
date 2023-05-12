@@ -32,4 +32,5 @@ VRefCapacity.l(allCy,YTIME)=0.1;
 VTotFinEneCons.l(allCy,EF,YTIME)=0.1;  
 VTransfOutputRefineries.l(allCy,EFS,YTIME)=0.1;
 VPlantEffPlantType.l(allCy,PGALL,YTIME)=0.1;	
+VGrsInlConsNotEneBranch.l(allCy,EFS,YTIME)=0.1;
 

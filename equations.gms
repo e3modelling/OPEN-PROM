@@ -282,7 +282,7 @@ QFinNonEneCons(runCy,EFS,YTIME)$TIME(YTIME)..
 QDistrLosses(runCy,EFS,YTIME)$TIME(YTIME)..
          VDistrLosses(runCy,EFS,YTIME)
              =E=
-         (iRateLossesFinCons(EFS,YTIME) * (VTotFinEneCons(runCy,EFS,YTIME) + VFNonEnCons(runCy,EFS,YTIME)))$(not H2EF(EFS));  
+         (iRateLossesFinCons(runCy,EFS,YTIME) * (VTotFinEneCons(runCy,EFS,YTIME) + VFNonEnCons(runCy,EFS,YTIME)))$(not H2EF(EFS));  
 
 * Compute the transformation output from district heating plants
 QTranfOutputDHPlants(runCy,STEAM,YTIME)$TIME(YTIME)..
@@ -309,21 +309,21 @@ QRefCapacity(runCy,YTIME)$TIME(YTIME)..
          VRefCapacity(runCy,YTIME)
              =E=
          [
-         iResRefCapacity(YTIME) * VRefCapacity(runCy,YTIME-1)
+         iResRefCapacity(runCy,YTIME) * VRefCapacity(runCy,YTIME-1)
          *
          (1$(ord(YTIME) le 16) +
          (prod(rc,
          (sum(EFS$EFtoEFA(EFS,"LQD"),VTotFinEneCons(runCy,EFS,YTIME-(ord(rc)+1)))/sum(EFS$EFtoEFA(EFS,"LQD"),VTotFinEneCons(runCy,EFS,YTIME-(ord(rc)+2))))**(0.5/(ord(rc)+1)))
          )
          $(ord(YTIME) gt 16)
-         )     ] $iRefCapacity("2010");
+         )     ] $iRefCapacity(runCy,"2010");
 
 * Compute the transformation output from refineries
 QTranfOutputRefineries(runCy,EFS,YTIME)$(TIME(YTIME) $EFtoEFA(EFS,"LQD"))..
          VTransfOutputRefineries(runCy,EFS,YTIME)
              =E=
          [
-         iResTransfOutputRefineries(EFS,YTIME) * VTransfOutputRefineries(runCy,EFS,YTIME-1)
+         iResTransfOutputRefineries(runCy,EFS,YTIME) * VTransfOutputRefineries(runCy,EFS,YTIME-1)
          * (VRefCapacity(runCy,YTIME)/VRefCapacity(runCy,YTIME-1))**0.3
          * (
              1$(TFIRST(YTIME-1) or TFIRST(YTIME-2))
@@ -331,7 +331,7 @@ QTranfOutputRefineries(runCy,EFS,YTIME)$(TIME(YTIME) $EFtoEFA(EFS,"LQD"))..
              (
                 sum(EF$EFtoEFA(EF,"LQD"),VTotFinEneCons(runCy,EF,YTIME-1))/sum(EF$EFtoEFA(EF,"LQD"),VTotFinEneCons(runCy,EF,YTIME-2))
              )$(not (TFIRST(YTIME-1) or TFIRST(YTIME-2)))
-           )**(0.7)  ]$iRefCapacity("2010"); 
+           )**(0.7)  ]$iRefCapacity(runCy,"2010"); 
 
 * Compute the transformation input to refineries
 QTransfInputRefineries(runCy,"CRO",YTIME)$(TIME(YTIME) )..
@@ -340,7 +340,7 @@ QTransfInputRefineries(runCy,"CRO",YTIME)$(TIME(YTIME) )..
          [
          VTransfInputRefineries(runCy,"CRO",YTIME-1) *
          sum(EFS$EFtoEFA(EFS,"LQD"), VTransfOutputRefineries(runCy,EFS,YTIME)) /
-         sum(EFS$EFtoEFA(EFS,"LQD"), VTransfOutputRefineries(runCy,EFS,YTIME-1))  ]$iRefCapacity("2010");                   
+         sum(EFS$EFtoEFA(EFS,"LQD"), VTransfOutputRefineries(runCy,EFS,YTIME-1))  ]$iRefCapacity(runCy,"2010");                   
 
 * Compute transformation output from nuclear plants
 QTransfOutputNuclear(runCy,"ELC",YTIME)$TIME(YTIME) ..
@@ -375,7 +375,7 @@ QTransfOutThermPP(runCy,TOCTEF,YTIME)$TIME(YTIME)..
         (                                                                                                         
           sum(INDDOM,
           sum(CHP$SECTTECH(INDDOM,CHP), VConsFuel(runCy,INDDOM,CHP,YTIME)))+
-          iRateEneBranCons(TOCTEF,YTIME)*(VFeCons(runCy,TOCTEF,YTIME) + VFNonEnCons(runCy,TOCTEF,YTIME) + VLosses(runCy,TOCTEF,YTIME)) + 
+          iRateEneBranCons(runCy,TOCTEF,YTIME)*(VFeCons(runCy,TOCTEF,YTIME) + VFNonEnCons(runCy,TOCTEF,YTIME) + VLosses(runCy,TOCTEF,YTIME)) + 
           VLosses(runCy,TOCTEF,YTIME)                                                                                    
          )$STEAM(TOCTEF); 
             
@@ -389,7 +389,7 @@ QTotTransfInput(runCy,EFS,YTIME)$TIME(YTIME)..
         )$(not sameas(EFS,"OGS"))
         +
         (
-          VTotTransfOutput(runCy,EFS,YTIME) - VFeCons(runCy,EFS,YTIME) - VFNonEnCons(runCy,EFS,YTIME) - iRateEneBranCons(EFS,YTIME)*
+          VTotTransfOutput(runCy,EFS,YTIME) - VFeCons(runCy,EFS,YTIME) - VFNonEnCons(runCy,EFS,YTIME) - iRateEneBranCons(runCy,EFS,YTIME)*
           VTotTransfOutput(runCy,EFS,YTIME) - VLosses(runCy,EFS,YTIME)
         )$sameas(EFS,"OGS");            
 
@@ -403,14 +403,14 @@ QTotTransfOutput(runCy,EFS,YTIME)$TIME(YTIME)..
 * Compute transfers
 QTransfers(runCy,EFS,YTIME)$TIME(YTIME)..
          VTransfers(runCy,EFS,YTIME) =E=
-         (( (VTransfers(runCy,EFS,YTIME-1)*iResFeedTransfr(YTIME)*VFeCons(runCy,EFS,YTIME)/VFeCons(runCy,EFS,YTIME-1))$EFTOEFA(EFS,"LQD")+
+         (( (VTransfers(runCy,EFS,YTIME-1)*iResFeedTransfr(runCy,YTIME)*VFeCons(runCy,EFS,YTIME)/VFeCons(runCy,EFS,YTIME-1))$EFTOEFA(EFS,"LQD")+
           (
-                 VTransfers(runCy,"CRO",YTIME-1)*iResFeedTransfr(YTIME)*SUM(EFS2$EFTOEFA(EFS2,"LQD"),VTransfers(runCy,EFS2,YTIME))/
-                 SUM(EFS2$EFTOEFA(EFS2,"LQD"),VTransfers(runCy,EFS2,YTIME-1)))$sameas(EFS,"CRO")   )$(iFeedTransfr(EFS,"2010"))$(NOT sameas("OLQ",EFS)) 
+                 VTransfers(runCy,"CRO",YTIME-1)*iResFeedTransfr(runCy,YTIME)*SUM(EFS2$EFTOEFA(EFS2,"LQD"),VTransfers(runCy,EFS2,YTIME))/
+                 SUM(EFS2$EFTOEFA(EFS2,"LQD"),VTransfers(runCy,EFS2,YTIME-1)))$sameas(EFS,"CRO")   )$(iFeedTransfr(runCy,EFS,"2010"))$(NOT sameas("OLQ",EFS)) 
 );         
   
 * Compute gross inland consumption not including consumption of energy branch
- QGrsInlConsNotEneBarnch(runCy,EFS,YTIME)$TIME(YTIME)..
+ QGrsInlConsNotEneBranch(runCy,EFS,YTIME)$TIME(YTIME)..
          VGrsInlConsNotEneBranch(runCy,EFS,YTIME)
                  =E=
          VFeCons(runCy,EFS,YTIME) + VFNonEnCons(runCy,EFS,YTIME) + VTotTransfInput(runCy,EFS,YTIME) - VTotTransfOutput(runCy,EFS,YTIME) + VLosses(runCy,EFS,YTIME) - 
@@ -421,7 +421,32 @@ QGrssInCons(runCy,EFS,YTIME)$TIME(YTIME)..
          VGrssInCons(runCy,EFS,YTIME)
                  =E=
          VFeCons(runCy,EFS,YTIME) + VEnCons(runCy,EFS,YTIME) + VFNonEnCons(runCy,EFS,YTIME) + VTotTransfInput(runCy,EFS,YTIME) - VTotTransfOutput(runCy,EFS,YTIME) +
-          VLosses(runCy,EFS,YTIME) - VTransfers(runCy,EFS,YTIME);         
+          VLosses(runCy,EFS,YTIME) - VTransfers(runCy,EFS,YTIME);  
+
+* Compute primary production
+QPrimProd(runCy,PPRODEF,YTIME)$TIME(YTIME)..
+         VPrimProd(runCy,PPRODEF,YTIME)
+                 =E=  [
+         (
+             iRatePriProTotPriNeeds(runCy,PPRODEF,YTIME) * (VGrsInlConsNotEneBranch(runCy,PPRODEF,YTIME) +  VEnCons(runCy,PPRODEF,YTIME))
+         )$(not (sameas(PPRODEF,"CRO")or sameas(PPRODEF,"NGS")))
+         +
+         (
+             iResHcNgOilPrProd(runCy,PPRODEF,YTIME) * VPrimProd(runCy,PPRODEF,YTIME-1) *
+             (VGrsInlConsNotEneBranch(runCy,PPRODEF,YTIME)/VGrsInlConsNotEneBranch(runCy,PPRODEF,YTIME-1))**iNatGasPriProElst(runCy)
+         )$(sameas(PPRODEF,"NGS") )
+        +
+         (
+           iRatePriProTotPriNeeds(runCy,PPRODEF,YTIME) * VPrimProd(runCy,PPRODEF,YTIME-1) *
+           ((VGrsInlConsNotEneBranch(runCy,PPRODEF,YTIME) + VExportsFake(runCy,PPRODEF,YTIME))/
+            (VGrsInlConsNotEneBranch(runCy,PPRODEF,YTIME-1) + VExportsFake(runCy,PPRODEF,YTIME-1)))
+         )$(sameas(PPRODEF,"NGS") )
+         +(
+           iResHcNgOilPrProd(runCy,PPRODEF,YTIME) *  iFuelPriPro(runCy,PPRODEF,YTIME) *
+           prod(kpdl$(ord(kpdl) lt 5),
+                         (iIntPricesMainFuels("WCRO",YTIME-(ord(kpdl)+1))/iIntPricesMainFuelsBsln("WCRO",YTIME-(ord(kpdl)+1)))
+                         **(0.2*iPolDstrbtnLagCoeffPriOilPr(kpdl)))
+         )$sameas(PPRODEF,"CRO")   ]$iRatePriProTotPriNeeds(runCy,PPRODEF,YTIME);                 
 
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;

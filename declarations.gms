@@ -17,17 +17,33 @@ iAnnCons(allCy,DSBS,conSet)                     "Annual consumtion of the smalle
                                                  !! For other passenger tranportation modes (Mpkm/vehicle)
                                                  !! For goods transport, (Mtkm/vehicle)  
 iCumDistrFuncConsSize(allCy,DSBS)               "Cummulative distribution function of consumer size groups (1)"
-iRateLossesFinCons(EF,YTIME)                    "Rate of losses over Available for Final Consumption (1)" 
-iEneProdRDscenarios(SBS,YTIME)                  "Energy productivity index used in R&D scenarios (1)" 
+iRateLossesFinCons(allCy,EF,YTIME)              "Rate of losses over Available for Final Consumption (1)" 
+iEneProdRDscenarios(allCy,SBS,YTIME)            "Energy productivity index used in R&D scenarios (1)" 
 iEffDHPlants(allCy,EF,YTIME)                    "Efficiency of District Heating Plants (1)" 
 iShareFueTransfInput(allCy,EF)                  "Share of fuels in transformation input to Gasworks, Blast Furnances, Briquetting plants in base year (1)"
 iTransfInpGasworks(allCy,EF,YTIME)              "Transformation Input in Gasworks, Blast Furnances, Briquetting plants (Mtoe)"
-iResRefCapacity(YTIME)	                        "Residual in Refineries Capacity (1)"
-iRefCapacity(YTIME)	                            "Refineries Capacity (Million Barrels/day)"
-iResTransfOutputRefineries(EF,YTIME)         	"Residual in Transformation Output from Refineries (Mtoe)"
-iRateEneBranCons(EF,YTIME)	                    "Rate of Energy Branch Consumption over total transformation output (1)"
-iResFeedTransfr(YTIME)	                        "Residual for Feedstocks in Transfers (1)"	
-iFeedTransfr(EFS,YTIME)	                        "Feedstocks in Transfers (Mtoe)"		
+iResRefCapacity(allCy,YTIME)	                "Residual in Refineries Capacity (1)"
+iRefCapacity(allCy,YTIME)	                    "Refineries Capacity (Million Barrels/day)"
+iResTransfOutputRefineries(allCy,EF,YTIME)      "Residual in Transformation Output from Refineries (Mtoe)"
+iRateEneBranCons(allCy,EF,YTIME)	            "Rate of Energy Branch Consumption over total transformation output (1)"
+iResFeedTransfr(allCy,YTIME)	                "Residual for Feedstocks in Transfers (1)"	
+iFeedTransfr(allCy,EFS,YTIME)	                "Feedstocks in Transfers (Mtoe)"
+iResHcNgOilPrProd(allCy,EF,YTIME)	            "Residuals for Hard Coal, Natural Gas and Oil Primary Production (1)"
+iNatGasPriProElst(allCy)	                    "Natural Gas primary production elasticity related to gross inland consumption (1)"	/
+$ondelim
+$include "./iNatGasPriProElst.csv"
+$offdelim
+/
+iFuelPriPro(allCy,EF,YTIME)                 	"Fuel Primary Production (Mtoe)"
+iIntPricesMainFuels(WEF,YTIME)	                "International Prices of main fuels (kEuro05/toe)"	
+iIntFuelPrices(WEF,YTIME)	                    "International Fuel Prices (dollars2015/toe)"
+iIntPricesMainFuelsBsln(WEF,YTIME)          	"International Prices of main fuels in Baseline scenario (kEuro2005/toe)"
+iPolDstrbtnLagCoeffPriOilPr(kpdl)	            "Polynomial Distribution Lag Coefficients for primary oil production (1)"/
+$ondelim
+$include "./iPolDstrbtnLagCoeffPriOilPr.csv"
+$offdelim
+/	
+iRatePriProTotPriNeeds(allCy,EF,YTIME)	        "Rate of Primary Production in Total Primary Needs (1)"									
 ;
 
 
@@ -85,8 +101,9 @@ QTransfOutThermPP(allCy,EFS,YTIME)	         "Compute transformation output from 
 QTotTransfInput(allCy,EFS,YTIME)	         "Compute total transformation input"
 QTotTransfOutput(allCy,EFS,YTIME)	         "Compute total transformation output"
 QTransfers(allCy,EFS,YTIME)	                 "Compute transfers"
-QGrsInlConsNotEneBarnch(allCy,EFS,YTIME)	 "Compute gross inland consumption not including consumption of energy branch"	
-QGrssInCons(allCy,EFS,YTIME)	             "Compute gross inland consumption"									
+QGrsInlConsNotEneBranch(allCy,EFS,YTIME)	 "Compute gross inland consumption not including consumption of energy branch"	
+QGrssInCons(allCy,EFS,YTIME)	             "Compute gross inland consumption"	
+QPrimProd(allCy,EFS,YTIME)	                 "Compute primary production"									
 *** Miscellaneous
 qDummyObj                                     "Define dummy objective function"
 ;
@@ -172,7 +189,9 @@ VTotTransfInput(allCy,EFS,YTIME)	                    "Total transformation input
 VTotTransfOutput(allCy,EFS,YTIME)	                    "Total transformation output (Mtoe)"
 VTransfers(allCy,EFS,YTIME)	                            "Transfers (Mtoe)"
 VGrsInlConsNotEneBranch(allCy,EFS,YTIME)	            "Gross Inland Consumption not including consumption of energy branch (Mtoe)"
-VGrssInCons(allCy,EFS,YTIME)	                        "Gross Inland Consumption (Mtoe)"			 	 				
+VGrssInCons(allCy,EFS,YTIME)	                        "Gross Inland Consumption (Mtoe)"
+VPrimProd(allCy,EFS,YTIME)	                            "Primary Production (Mtoe)"	
+VExportsFake(allCy,EFS,YTIME)                        	"Exports fake (Mtoe)" 			 	 				
 *** Miscellaneous
 vDummyObj                                               "Dummy maximisation variable (1)"
 ;
