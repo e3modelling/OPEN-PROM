@@ -456,7 +456,33 @@ QFakeExp(runCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS))..
                  iFuelExprts(runCy,EFS,YTIME)
          )
 +  iFuelExprts(runCy,EFS,YTIME);
-                       
+
+* Compute fake imports
+QFakeImprts(runCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS))..
+
+         VFkImpAllFuelsNotNatGas(runCy,EFS,YTIME)
+
+                 =E=
+         (
+            iRatioImpFinElecDem(runCy,YTIME) * (VFeCons(runCy,EFS,YTIME) + VFNonEnCons(runCy,EFS,YTIME)) + VExportsFake(runCy,EFS,YTIME)
+         )$ELCEF(EFS)
+         +
+         (
+            VGrssInCons(runCy,EFS,YTIME)+ VExportsFake(runCy,EFS,YTIME) + VConsFuel(runCy,"BU",EFS,YTIME)$SECTTECH("BU",EFS)
+            - VPrimProd(runCy,EFS,YTIME)
+         )$(sameas(EFS,"CRO"))
+
+         +
+         (
+            VGrssInCons(runCy,EFS,YTIME)+ VExportsFake(runCy,EFS,YTIME) + VConsFuel(runCy,"BU",EFS,YTIME)$SECTTECH("BU",EFS)
+            - VPrimProd(runCy,EFS,YTIME)
+         )$(sameas(EFS,"NGS"))
+         +iImpExp(runCy,"NGS",YTIME)$(sameas(EFS,"NGS"))
+         +
+         (
+            (1-iRatePriProTotPriNeeds(runCy,EFS,YTIME)) *
+            (VGrssInCons(runCy,EFS,YTIME) + VExportsFake(runCy,EFS,YTIME) + VConsFuel(runCy,"BU",EFS,YTIME)$SECTTECH("BU",EFS) )
+         )$(not (ELCEF(EFS) or sameas(EFS,"NGS") or sameas(EFS,"CRO")));                       
 
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;

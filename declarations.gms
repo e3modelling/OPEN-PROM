@@ -45,7 +45,8 @@ $offdelim
 /	
 iRatePriProTotPriNeeds(allCy,EF,YTIME)	        "Rate of Primary Production in Total Primary Needs (1)"	
 iFuelExprts(allCy,EF,YTIME)	                    "Fuel Exports (Mtoe)"	
-iSuppExports(allCy,EF,YTIME)                	"Supplementary parameter for  exports (Mtoe)"									
+iSuppExports(allCy,EF,YTIME)                	"Supplementary parameter for  exports (Mtoe)"
+iRatioImpFinElecDem(allCy,YTIME)	            "Ratio of imports in final electricity demand (1)"										
 ;
 
 
@@ -106,7 +107,8 @@ QTransfers(allCy,EFS,YTIME)	                 "Compute transfers"
 QGrsInlConsNotEneBranch(allCy,EFS,YTIME)	 "Compute gross inland consumption not including consumption of energy branch"	
 QGrssInCons(allCy,EFS,YTIME)	             "Compute gross inland consumption"	
 QPrimProd(allCy,EFS,YTIME)	                 "Compute primary production"	
-QFakeExp(allCy,EFS,YTIME)	                 "Compute fake exports"									
+QFakeExp(allCy,EFS,YTIME)	                 "Compute fake exports"	
+QFakeImprts(allCy,EFS,YTIME)	             "Compute fake imports"									
 *** Miscellaneous
 qDummyObj                                     "Define dummy objective function"
 ;
@@ -194,7 +196,8 @@ VTransfers(allCy,EFS,YTIME)	                            "Transfers (Mtoe)"
 VGrsInlConsNotEneBranch(allCy,EFS,YTIME)	            "Gross Inland Consumption not including consumption of energy branch (Mtoe)"
 VGrssInCons(allCy,EFS,YTIME)	                        "Gross Inland Consumption (Mtoe)"
 VPrimProd(allCy,EFS,YTIME)	                            "Primary Production (Mtoe)"	
-VExportsFake(allCy,EFS,YTIME)                        	"Exports fake (Mtoe)" 			 	 				
+VExportsFake(allCy,EFS,YTIME)                        	"Exports fake (Mtoe)" 		
+VFkImpAllFuelsNotNatGas(allCy,EFS,YTIME)             	"Fake Imports for all fuels except natural gas (Mtoe)"		 	 				
 *** Miscellaneous
 vDummyObj                                               "Dummy maximisation variable (1)"
 ;
