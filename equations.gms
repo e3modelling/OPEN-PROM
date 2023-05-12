@@ -316,7 +316,7 @@ QRefCapacity(runCy,YTIME)$TIME(YTIME)..
          (sum(EFS$EFtoEFA(EFS,"LQD"),VTotFinEneCons(runCy,EFS,YTIME-(ord(rc)+1)))/sum(EFS$EFtoEFA(EFS,"LQD"),VTotFinEneCons(runCy,EFS,YTIME-(ord(rc)+2))))**(0.5/(ord(rc)+1)))
          )
          $(ord(YTIME) gt 16)
-         )     ] $iRefCapacity(runCy,"2010");
+         )     ] $iRefCapacity(runCy,"%fStartHorizon%");
 
 * Compute the transformation output from refineries
 QTranfOutputRefineries(runCy,EFS,YTIME)$(TIME(YTIME) $EFtoEFA(EFS,"LQD"))..
@@ -331,7 +331,7 @@ QTranfOutputRefineries(runCy,EFS,YTIME)$(TIME(YTIME) $EFtoEFA(EFS,"LQD"))..
              (
                 sum(EF$EFtoEFA(EF,"LQD"),VTotFinEneCons(runCy,EF,YTIME-1))/sum(EF$EFtoEFA(EF,"LQD"),VTotFinEneCons(runCy,EF,YTIME-2))
              )$(not (TFIRST(YTIME-1) or TFIRST(YTIME-2)))
-           )**(0.7)  ]$iRefCapacity(runCy,"2010"); 
+           )**(0.7)  ]$iRefCapacity(runCy,"%fStartHorizon%"); 
 
 * Compute the transformation input to refineries
 QTransfInputRefineries(runCy,"CRO",YTIME)$(TIME(YTIME) )..
@@ -340,7 +340,7 @@ QTransfInputRefineries(runCy,"CRO",YTIME)$(TIME(YTIME) )..
          [
          VTransfInputRefineries(runCy,"CRO",YTIME-1) *
          sum(EFS$EFtoEFA(EFS,"LQD"), VTransfOutputRefineries(runCy,EFS,YTIME)) /
-         sum(EFS$EFtoEFA(EFS,"LQD"), VTransfOutputRefineries(runCy,EFS,YTIME-1))  ]$iRefCapacity(runCy,"2010");                   
+         sum(EFS$EFtoEFA(EFS,"LQD"), VTransfOutputRefineries(runCy,EFS,YTIME-1))  ]$iRefCapacity(runCy,"%fStartHorizon%");                   
 
 * Compute transformation output from nuclear plants
 QTransfOutputNuclear(runCy,"ELC",YTIME)$TIME(YTIME) ..
@@ -406,7 +406,7 @@ QTransfers(runCy,EFS,YTIME)$TIME(YTIME)..
          (( (VTransfers(runCy,EFS,YTIME-1)*iResFeedTransfr(runCy,YTIME)*VFeCons(runCy,EFS,YTIME)/VFeCons(runCy,EFS,YTIME-1))$EFTOEFA(EFS,"LQD")+
           (
                  VTransfers(runCy,"CRO",YTIME-1)*iResFeedTransfr(runCy,YTIME)*SUM(EFS2$EFTOEFA(EFS2,"LQD"),VTransfers(runCy,EFS2,YTIME))/
-                 SUM(EFS2$EFTOEFA(EFS2,"LQD"),VTransfers(runCy,EFS2,YTIME-1)))$sameas(EFS,"CRO")   )$(iFeedTransfr(runCy,EFS,"2010"))$(NOT sameas("OLQ",EFS)) 
+                 SUM(EFS2$EFTOEFA(EFS2,"LQD"),VTransfers(runCy,EFS2,YTIME-1)))$sameas(EFS,"CRO")   )$(iFeedTransfr(runCy,EFS,"%fStartHorizon%"))$(NOT sameas("OLQ",EFS)) 
 );         
   
 * Compute gross inland consumption not including consumption of energy branch
