@@ -482,7 +482,14 @@ QFakeImprts(runCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS))..
          (
             (1-iRatePriProTotPriNeeds(runCy,EFS,YTIME)) *
             (VGrssInCons(runCy,EFS,YTIME) + VExportsFake(runCy,EFS,YTIME) + VConsFuel(runCy,"BU",EFS,YTIME)$SECTTECH("BU",EFS) )
-         )$(not (ELCEF(EFS) or sameas(EFS,"NGS") or sameas(EFS,"CRO")));                       
+         )$(not (ELCEF(EFS) or sameas(EFS,"NGS") or sameas(EFS,"CRO")));
+
+* Compute net imports
+QNetImports(runCy,EFS,YTIME)$TIME(YTIME)..
+         VNetImports(runCy,EFS,YTIME)
+                 =E=
+         VFkImpAllFuelsNotNatGas(runCy,EFS,YTIME) - VExportsFake(runCy,EFS,YTIME);
+                               
 
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
