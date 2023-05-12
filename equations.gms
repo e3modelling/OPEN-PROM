@@ -490,6 +490,21 @@ QNetImports(runCy,EFS,YTIME)$TIME(YTIME)..
                  =E=
          VFkImpAllFuelsNotNatGas(runCy,EFS,YTIME) - VExportsFake(runCy,EFS,YTIME);
                                
+* Compute energy branch final consumption
+QEneBrnchEneCons(runCy,EFS,YTIME)$TIME(YTIME)..
+         VEnCons(runCy,EFS,YTIME)
+                 =E=
+         iRateEneBranCons(runCy,EFS,YTIME) *
+         (
+           (
+              VTotTransfOutput(runCy,EFS,YTIME) +
+              VPrimProd(runCy,EFS,YTIME)$(sameas(EFS,"CRO") or sameas(EFS,"NGS"))
+            )$(not TOCTEF(EFS))
+            +
+            (
+              VFeCons(runCy,EFS,YTIME) + VFNonEnCons(runCy,EFS,YTIME) + VLosses(runCy,EFS,YTIME)
+            )$TOCTEF(EFS)
+         );                              
 
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
