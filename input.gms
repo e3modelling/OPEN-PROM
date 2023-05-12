@@ -175,6 +175,12 @@ $ondelim
 $include"./iSuppRatePrimProd.csv"
 $offdelim
 ;
+table iSuppExports(allCy,EF,YTIME)	                 "Supplementary parameter for  exports (Mtoe)"		
+$ondelim
+$include"./iSuppExports.csv"
+$offdelim
+;
+iFuelExprts(runCy,EFS,YTIME) = iSuppExports(runCy,EFS,YTIME);
 iIntPricesMainFuelsBsln(WEF,YTIME) = iIntFuelPrcsBslnScnr(WEF,YTIME);
 iRatePriProTotPriNeeds(runCy,PPRODEF,YTIME) = iSuppRatePrimProd(runCy,PPRODEF,YTIME);
 iIntPricesMainFuels(WEF,YTIME) = iIntFuelPrcsBslnScnr(WEF,YTIME);

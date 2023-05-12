@@ -446,7 +446,17 @@ QPrimProd(runCy,PPRODEF,YTIME)$TIME(YTIME)..
            prod(kpdl$(ord(kpdl) lt 5),
                          (iIntPricesMainFuels("WCRO",YTIME-(ord(kpdl)+1))/iIntPricesMainFuelsBsln("WCRO",YTIME-(ord(kpdl)+1)))
                          **(0.2*iPolDstrbtnLagCoeffPriOilPr(kpdl)))
-         )$sameas(PPRODEF,"CRO")   ]$iRatePriProTotPriNeeds(runCy,PPRODEF,YTIME);                 
+         )$sameas(PPRODEF,"CRO")   ]$iRatePriProTotPriNeeds(runCy,PPRODEF,YTIME);   
+
+* Compute fake exports
+QFakeExp(runCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS))..
+         VExportsFake(runCy,EFS,YTIME)
+                 =E=
+         (
+                 iFuelExprts(runCy,EFS,YTIME)
+         )
++  iFuelExprts(runCy,EFS,YTIME);
+                       
 
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
