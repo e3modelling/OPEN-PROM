@@ -43,7 +43,9 @@ $ondelim
 $include "./iPolDstrbtnLagCoeffPriOilPr.csv"
 $offdelim
 /	
-iRatePriProTotPriNeeds(allCy,EF,YTIME)	        "Rate of Primary Production in Total Primary Needs (1)"									
+iRatePriProTotPriNeeds(allCy,EF,YTIME)	        "Rate of Primary Production in Total Primary Needs (1)"	
+iFuelExprts(allCy,EF,YTIME)	                    "Fuel Exports (Mtoe)"	
+iSuppExports(allCy,EF,YTIME)                	"Supplementary parameter for  exports (Mtoe)"									
 ;
 
 
@@ -103,7 +105,8 @@ QTotTransfOutput(allCy,EFS,YTIME)	         "Compute total transformation output"
 QTransfers(allCy,EFS,YTIME)	                 "Compute transfers"
 QGrsInlConsNotEneBranch(allCy,EFS,YTIME)	 "Compute gross inland consumption not including consumption of energy branch"	
 QGrssInCons(allCy,EFS,YTIME)	             "Compute gross inland consumption"	
-QPrimProd(allCy,EFS,YTIME)	                 "Compute primary production"									
+QPrimProd(allCy,EFS,YTIME)	                 "Compute primary production"	
+QFakeExp(allCy,EFS,YTIME)	                 "Compute fake exports"									
 *** Miscellaneous
 qDummyObj                                     "Define dummy objective function"
 ;
