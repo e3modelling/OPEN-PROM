@@ -506,5 +506,12 @@ QEneBrnchEneCons(runCy,EFS,YTIME)$TIME(YTIME)..
             )$TOCTEF(EFS)
          );                              
 
+* Compute CO2 captured by electricity and hydrogen production plants 
+QCO2ElcHrg(runCy,YTIME)$TIME(YTIME)..
+         VCO2ElcHrgProd(runCy,YTIME)
+         =E=
+         sum(PGEF,sum(CCS$PGALLtoEF(CCS,PGEF),
+                 VElecProd(runCy,CCS,YTIME)*sTWhToMtoe/VPlantEffPlantType(runCy,CCS,YTIME)*
+                 iCo2EmiFac(runCy,"PG",PGEF,YTIME)));
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
