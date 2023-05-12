@@ -8,7 +8,10 @@ $ondelim
 $include "./iPop.csvr"
 $offdelim
 ;
-table iActv(YTIME,allCy,SBS) "Activity"
+table iActv(YTIME,allCy,SBS) "Sector activity (various)"
+                              !! main sectors (Billion Euro05) 
+                              !! bunkers and households (1)
+                              !! transport (Gpkm, or Gvehkm or Gtkm)
 $ondelim
 $include "./iActv.csvr"
 $offdelim
