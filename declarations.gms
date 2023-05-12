@@ -109,7 +109,8 @@ QGrssInCons(allCy,EFS,YTIME)	             "Compute gross inland consumption"
 QPrimProd(allCy,EFS,YTIME)	                 "Compute primary production"	
 QFakeExp(allCy,EFS,YTIME)	                 "Compute fake exports"	
 QFakeImprts(allCy,EFS,YTIME)	             "Compute fake imports"	
-QNetImports(allCy,EFS,YTIME)	             "Compute net imports"									
+QNetImports(allCy,EFS,YTIME)	             "Compute net imports"
+QEneBrnchEneCons(allCy,EFS,YTIME)	         "Compute energy branch final consumption"										
 *** Miscellaneous
 qDummyObj                                     "Define dummy objective function"
 ;
