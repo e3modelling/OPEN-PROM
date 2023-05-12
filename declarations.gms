@@ -46,8 +46,9 @@ $offdelim
 iRatePriProTotPriNeeds(allCy,EF,YTIME)	        "Rate of Primary Production in Total Primary Needs (1)"	
 iFuelExprts(allCy,EF,YTIME)	                    "Fuel Exports (Mtoe)"	
 iSuppExports(allCy,EF,YTIME)                	"Supplementary parameter for  exports (Mtoe)"
-iRatioImpFinElecDem(allCy,YTIME)	            "Ratio of imports in final electricity demand (1)"		
-
+iRatioImpFinElecDem(allCy,YTIME)	            "Ratio of imports in final electricity demand (1)"	
+iEstcsCO2Sqstrn(allCy,CO2SEQELAST)	            "Elasticities for CO2 sequestration cost curve (1)"		
+;
 
 
 Equations
@@ -111,7 +112,12 @@ QFakeExp(allCy,EFS,YTIME)	                 "Compute fake exports"
 QFakeImprts(allCy,EFS,YTIME)	             "Compute fake imports"	
 QNetImports(allCy,EFS,YTIME)	             "Compute net imports"
 QEneBrnchEneCons(allCy,EFS,YTIME)	         "Compute energy branch final consumption"
-QCO2ElcHrg(allCy,YTIME)	                     "Compute CO2 captured by electricity and hydrogen production plants (Mtn CO2)"											
+
+*** CO2 SEQUESTRATION COST CURVES EQUATIONS
+QCO2ElcHrg(allCy,YTIME)	                     "Compute CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
+QCumCO2Capt(allCy,YTIME)	                 "Compute cumulative CO2 captured (Mtn of CO2)"
+QWghtTrnstLinToExpo(allCy,YTIME)	         "Weight for transtition from linear CO2 sequestration cost curve to exponential"
+QCstCO2SeqCsts(allCy,YTIME)	                 "Compute cost curve for CO2 sequestration costs" 														
 *** Miscellaneous
 qDummyObj                                     "Define dummy objective function"
 ;
@@ -202,7 +208,12 @@ VPrimProd(allCy,EFS,YTIME)	                            "Primary Production (Mtoe
 VExportsFake(allCy,EFS,YTIME)                        	"Exports fake (Mtoe)" 		
 VFkImpAllFuelsNotNatGas(allCy,EFS,YTIME)             	"Fake Imports for all fuels except natural gas (Mtoe)"
 VNetImports(allCy,EFS,YTIME)	                        "Net Imports (Mtoe)"
-VCO2ElcHrgProd(allCy,YTIME)	                            "CO2 captured by electricity and hydrogen production plants (Mtn CO2)"				 	 				
+
+*** CO2 SEQUESTRATION COST CURVES VARIABLES
+VCO2ElcHrgProd(allCy,YTIME)	                            "CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
+VCumCO2Capt(allCy,YTIME)	                            "Cumulative CO2 captured (Mtn CO2)"		
+VWghtTrnstLnrToExpo(allCy,YTIME)	                    "Weight for transtition from linear CO2 sequestration cost curve to exponential"
+VCO2CO2SeqCsts(allCy,YTIME)	                            "Cost curve for CO2 sequestration costs (Euro/tn of CO2 sequestrated)"				 	 				
 *** Miscellaneous
 vDummyObj                                               "Dummy maximisation variable (1)"
 ;

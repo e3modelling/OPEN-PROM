@@ -506,6 +506,8 @@ QEneBrnchEneCons(runCy,EFS,YTIME)$TIME(YTIME)..
             )$TOCTEF(EFS)
          );                              
 
+* CO2 SEQUESTRATION COST CURVES
+
 * Compute CO2 captured by electricity and hydrogen production plants 
 QCO2ElcHrg(runCy,YTIME)$TIME(YTIME)..
          VCO2ElcHrgProd(runCy,YTIME)
@@ -513,5 +515,22 @@ QCO2ElcHrg(runCy,YTIME)$TIME(YTIME)..
          sum(PGEF,sum(CCS$PGALLtoEF(CCS,PGEF),
                  VElecProd(runCy,CCS,YTIME)*sTWhToMtoe/VPlantEffPlantType(runCy,CCS,YTIME)*
                  iCo2EmiFac(runCy,"PG",PGEF,YTIME)));
+
+* Compute cumulative CO2 captured 
+QCumCO2Capt(runCy,YTIME)$TIME(YTIME)..
+         VCumCO2Capt(runCy,YTIME) =E= VCumCO2Capt(runCy,YTIME-1)+VCO2ElcHrgProd(runCy,YTIME-1);   
+
+* Compute Weight for transtition from linear CO2 sequestration cost curve to exponential
+QWghtTrnstLinToExpo(runCy,YTIME)$TIME(YTIME)..
+         VWghtTrnstLnrToExpo(runCy,YTIME)
+         =E=
+         1/(1+exp(-iEstcsCO2Sqstrn(runCy,"mc_s")*( VCumCO2Capt(runCy,YTIME)/iEstcsCO2Sqstrn(runCy,"pot")-iEstcsCO2Sqstrn(runCy,"mc_m")))); 
+
+* Compute cost curve for CO2 sequestration costs 
+QCstCO2SeqCsts(runCy,YTIME)$TIME(YTIME)..
+         VCO2CO2SeqCsts(runCy,YTIME) =E=
+       (1-VWghtTrnstLnrToExpo(runCy,YTIME))*(iEstcsCO2Sqstrn(runCy,"mc_a")*VCumCO2Capt(runCy,YTIME)+iEstcsCO2Sqstrn(runCy,"mc_b"))+
+       VWghtTrnstLnrToExpo(runCy,YTIME)*(iEstcsCO2Sqstrn(runCy,"mc_c")*exp(iEstcsCO2Sqstrn(runCy,"mc_d")*VCumCO2Capt(runCy,YTIME)));           
+
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
