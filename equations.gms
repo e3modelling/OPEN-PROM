@@ -19,6 +19,14 @@ QEstBaseLoad(runCy,YTIME)$TIME(YTIME)..
              + 0.5*VEnCons(runCy,"ELC",YTIME)
          ) / sTWhToMtoe / sGwToTwhPerYear;
 
+* Compute load factor of entire domestic system
+QLoadFacDom(runCy,YTIME)$TIME(YTIME)..
+         VCapChpPlants(runCy,YTIME)
+             =E=
+         (sum(INDDOM,VConsFuel(runCy,INDDOM,"ELC",YTIME)) + sum(TRANSE, VDemTr(runCy,TRANSE,"ELC",YTIME)))/
+         (sum(INDDOM,VConsFuel(runCy,INDDOM,"ELC",YTIME)/iLoadFacElecDem(runCy,INDDOM,YTIME)) + 
+         sum(TRANSE, VDemTr(runCy,TRANSE,"ELC",YTIME)/iLoadFacElecDem(runCy,TRANSE,YTIME)));         
+
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)

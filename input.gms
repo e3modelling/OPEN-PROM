@@ -231,7 +231,12 @@ iShareFueTransfInput(runCy,EFS)$sum(EF$EFS(EF),iTransfInpGasworks(runCy,EF,"2010
 iRateLossesFinCons(runCy,EFS,YTIME)$an(YTIME)  = iRateLossesFinConsSup(runCy,EFS, YTIME)*iEneProdRDscenarios(runCy,"PG",YTIME);
 iEffDHPlants(runCy,EFS,YTIME)  = sum(PGEFS$sameas(EFS,PGEFS),iParDHEfficiency(PGEFS,"2010"));
 iEffDHPlants(runCy,EF,YTIME)$(an(ytime) )= iEffDHPlants(runCy,EF,YTIME) / iEneProdRDscenarios(runCy,"PG",YTIME);
-
+table iPwrLoadFactorDem(allCy,SBS,YTIME)              "Parameters for load factor adjustment (1)"
+$ondelim
+$include"./iPwrLoadFactorDem.csv"
+$offdelim
+;
+iLoadFacElecDem(allCy,DSBS,YTIME)$(ord(YTIME)>(ordfirst-4)) = iPwrLoadFactorDem(allCy,DSBS,YTIME);
 *Calculation of consumer size groups and their distribution function
 iNcon(TRANSE)$(sameas(TRANSE,"PC") or sameas(TRANSE,"GU")) = 10; !! 11 different consumer size groups for cars and trucks
 iNcon(TRANSE)$(not (sameas(TRANSE,"PC") or sameas(TRANSE,"GU"))) = 1; !! 2 different consumer size groups for inland navigation, trains, busses and aviation
