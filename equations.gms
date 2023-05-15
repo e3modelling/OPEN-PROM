@@ -108,6 +108,21 @@ QElecConsAll(runCy,DSBS,YTIME)$TIME(YTIME)..
 
 * INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 
+* Compute total final demand per subsector
+QDemSub(runCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)))..
+         VDemSub(runCy,DSBS,YTIME)
+                 =E=
+         [
+         iResDemSub(runCy,DSBS,YTIME) * VDemSub(runCy,DSBS,YTIME-1)
+         * ( iActv(YTIME,runCy,DSBS)/iActv(YTIME-1,runCy,DSBS) )**iElastA(runCy,DSBS,"a",YTIME)
+         * ( VFuelPrice(runCy,DSBS,YTIME)/VFuelPrice(runCy,DSBS,YTIME-1) )**iElastA(runCy,DSBS,"b1",YTIME)
+         * ( VFuelPrice(runCy,DSBS,YTIME-1)/VFuelPrice(runCy,DSBS,YTIME-2) )**iElastA(runCy,DSBS,"b2",YTIME)
+         * prod(KPDL,
+                  ( (VFuelPrice(runCy,DSBS,YTIME-ord(KPDL))/VFuelPrice(runCy,DSBS,YTIME-(ord(KPDL)+1)))/(iCGI(runCy,YTIME)**(1/6))
+                  )**( iElastA(runCy,DSBS,"c",YTIME)*iFPDL(DSBS,KPDL))
+                )  ]$iActv(YTIME-1,runCy,DSBS)
+;
+
 * Compute Consumption of electricity in industrial sectors
 QElecConsInd(runCy,YTIME)$TIME(YTIME)..
          VElecConsInd(runCy,YTIME)

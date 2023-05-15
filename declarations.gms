@@ -2,7 +2,6 @@ Parameters
 iCGI(allCy,YTIME)                            "Capital Goods Index (defined as CGI(Scenario)/CGI(Baseline)) (1)"
 iNPDL(SBS)                                   "Number of Polynomial Distribution Lags (PDL) (1)"
 iFPDL(SBS,KPDL)                              "Polynomial Distribution Lags (PDL) Coefficients per subsector (1)"
-iResDemSub(allCy,SBS,YTIME)                  "Residuals in total energy demand per subsector (1)"
 iLifChpPla(CHP)                              "Technical Lifetime for CHP plants (years)" /
 $ondelim
 $include "./iLifChpPla.csv"
@@ -70,6 +69,7 @@ QScrRate(allCy,YTIME)          "Compute passenger cars scrapping rate"
 
 
 ***  INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS EQUATIONS
+QDemSub(allCy,DSBS,YTIME)                     "Compute total final demand per subsector"
 QElecConsInd(allCy,YTIME)                     "Compute Consumption of electricity in industrial sectors"
 QDemInd(allCy,YTIME)                          "Copmpute total final demand (of substitutable fuels) in industrial sectors"
 QElecIndPrices(allCy,YTIME)                   "Compute electricity industry prices"
