@@ -9,6 +9,15 @@ QElecDem(runCy,YTIME)$TIME(YTIME)..
            + VEnCons(runCy,"ELC",YTIME) - VNetImp(runCy,"ELC",YTIME)
          );
 
+* Compute estimated base load
+QEstBaseLoad(runCy,YTIME)$TIME(YTIME)..
+         VEstBaseLoad(runCy,YTIME)
+             =E=
+         (
+             sum(DSBS, iBaseLoadShareDem(runCy,DSBS,YTIME)*VElecConsAll(runCy,DSBS,YTIME))*(1+iRateLossesFinCons(runCy,"ELC",YTIME))*
+             (1 - VNetImports(runCy,"ELC",YTIME)/(sum(DSBS, VElecConsAll(runCy,DSBS,YTIME))+VLosses(runCy,"ELC",YTIME)))
+             + 0.5*VEnCons(runCy,"ELC",YTIME)
+         ) / sTWhToMtoe / sGwToTwhPerYear;
 
 * Transport
 
@@ -521,6 +530,8 @@ QEneBrnchEneCons(runCy,EFS,YTIME)$TIME(YTIME)..
             )$TOCTEF(EFS)
          );                              
 
+* CO2 SEQUESTRATION COST CURVES
+
 * Compute CO2 captured by electricity and hydrogen production plants 
 QCO2ElcHrg(runCy,YTIME)$TIME(YTIME)..
          VCO2ElcHrgProd(runCy,YTIME)
@@ -528,5 +539,22 @@ QCO2ElcHrg(runCy,YTIME)$TIME(YTIME)..
          sum(PGEF,sum(CCS$PGALLtoEF(CCS,PGEF),
                  VElecProd(runCy,CCS,YTIME)*sTWhToMtoe/VPlantEffPlantType(runCy,CCS,YTIME)*
                  iCo2EmiFac(runCy,"PG",PGEF,YTIME)));
+
+* Compute cumulative CO2 captured 
+QCumCO2Capt(runCy,YTIME)$TIME(YTIME)..
+         VCumCO2Capt(runCy,YTIME) =E= VCumCO2Capt(runCy,YTIME-1)+VCO2ElcHrgProd(runCy,YTIME-1);   
+
+* Compute Weight for transtition from linear CO2 sequestration cost curve to exponential
+QWghtTrnstLinToExpo(runCy,YTIME)$TIME(YTIME)..
+         VWghtTrnstLnrToExpo(runCy,YTIME)
+         =E=
+         1/(1+exp(-iElastCO2Seq(runCy,"mc_s")*( VCumCO2Capt(runCy,YTIME)/iElastCO2Seq(runCy,"pot")-iElastCO2Seq(runCy,"mc_m")))); 
+
+* Compute cost curve for CO2 sequestration costs 
+QCstCO2SeqCsts(runCy,YTIME)$TIME(YTIME)..
+         VCO2CO2SeqCsts(runCy,YTIME) =E=
+       (1-VWghtTrnstLnrToExpo(runCy,YTIME))*(iElastCO2Seq(runCy,"mc_a")*VCumCO2Capt(runCy,YTIME)+iElastCO2Seq(runCy,"mc_b"))+
+       VWghtTrnstLnrToExpo(runCy,YTIME)*(iElastCO2Seq(runCy,"mc_c")*exp(iElastCO2Seq(runCy,"mc_d")*VCumCO2Capt(runCy,YTIME)));           
+
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
