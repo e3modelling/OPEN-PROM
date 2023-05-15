@@ -50,7 +50,7 @@ iElastCO2Seq(allCy,CO2SEQELAST)	                "Elasticities for CO2 sequestrat
 iBaseLoadShareDem(allCy,DSBS,YTIME)	            "Baseload share of demand per sector (1)"
 iLoadFacElecDem(allCy,DSBS,YTIME)	            "Load factor of electricity demand per sector (1)"
 iMxmLoadFacElecDem(allCy,YTIME)	                "Maximum load factor of electricity demand (1)"	
-iBslCorrection(allCy,YTIME)	                    "Parameter of baseload correction"				
+iBslCorrection(allCy,YTIME)	                    "Parameter of baseload correction (1)"				
 ;
 
 
