@@ -57,7 +57,8 @@ Equations
 QElecDem(allCy,YTIME)         "Compute total electricity demand"
 QElecConsAll(allCy,DSBS,YTIME)"Compute electricity consumption per final demand sector"
 QEstBaseLoad(allCy,YTIME)	  "Compute estimated base load"	
-QLoadFacDom(allCy,YTIME)	  "Compute load factor of entire domestic system"	
+QLoadFacDom(allCy,YTIME)	  "Compute load factor of entire domestic system"
+QElecPeakLoad(allCy,YTIME)	  "Compute elerctricity peak load"		
 
 *** Transport
 QMExtV(allCy,YTIME)            "Compute passenger cars market extension (GDP dependent)"
@@ -133,7 +134,7 @@ Variables
 VEstBaseLoad(allCy,YTIME)	          "Estimated base load (GW)"	
 VElecDem(allCy,YTIME)                 "Total electricity demand (TWh)"
 VCapChpPlants(allCy,YTIME)            "Capacity of CHP Plants (GW)"	
-
+VElecPeakLoad(allCy,YTIME)	          "Electricity peak load (GW)"	
 VFeCons(allCy,EF,YTIME)               "Total final energy consumnption (Mtoe)"
 VFNonEnCons(allCy,EFS,YTIME)          "Final non energy consumption (Mtoe)"
 VLosses(allCy,EFS,YTIME)              "Distribution losses (Mtoe)"

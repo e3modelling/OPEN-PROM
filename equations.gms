@@ -27,6 +27,11 @@ QLoadFacDom(runCy,YTIME)$TIME(YTIME)..
          (sum(INDDOM,VConsFuel(runCy,INDDOM,"ELC",YTIME)/iLoadFacElecDem(runCy,INDDOM,YTIME)) + 
          sum(TRANSE, VDemTr(runCy,TRANSE,"ELC",YTIME)/iLoadFacElecDem(runCy,TRANSE,YTIME)));         
 
+* Compute elerctricity peak load
+QElecPeakLoad(runCy,YTIME)$TIME(YTIME)..
+         VElecPeakLoad(runCy,YTIME)
+             =E=
+         VElecDem(runCy,YTIME)/(VCapChpPlants(runCy,YTIME)*sGwToTwhPerYear);
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)
