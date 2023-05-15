@@ -47,7 +47,8 @@ iFuelExprts(allCy,EF,YTIME)	                    "Fuel Exports (Mtoe)"
 iSuppExports(allCy,EF,YTIME)                	"Supplementary parameter for  exports (Mtoe)"
 iRatioImpFinElecDem(allCy,YTIME)	            "Ratio of imports in final electricity demand (1)"	
 iElastCO2Seq(allCy,CO2SEQELAST)	                "Elasticities for CO2 sequestration cost curve (1)"	
-iBaseLoadShareDem(allCy,DSBS,YTIME)	            "Baseload share of demand per sector (1)"		
+iBaseLoadShareDem(allCy,DSBS,YTIME)	            "Baseload share of demand per sector (1)"
+iLoadFacElecDem(allCy,DSBS,YTIME)	            "Load factor of electricity demand per sector (1)"			
 ;
 
 
@@ -56,6 +57,8 @@ Equations
 QElecDem(allCy,YTIME)         "Compute total electricity demand"
 QElecConsAll(allCy,DSBS,YTIME)"Compute electricity consumption per final demand sector"
 QEstBaseLoad(allCy,YTIME)	  "Compute estimated base load"	
+QLoadFacDom(allCy,YTIME)	  "Compute load factor of entire domestic system"
+QElecPeakLoad(allCy,YTIME)	  "Compute elerctricity peak load"		
 
 *** Transport
 QMExtV(allCy,YTIME)            "Compute passenger cars market extension (GDP dependent)"
@@ -130,8 +133,8 @@ Variables
 *** Power Generation Variables
 VEstBaseLoad(allCy,YTIME)	          "Estimated base load (GW)"	
 VElecDem(allCy,YTIME)                 "Total electricity demand (TWh)"
-
-
+VCapChpPlants(allCy,YTIME)            "Capacity of CHP Plants (GW)"	
+VElecPeakLoad(allCy,YTIME)	          "Electricity peak load (GW)"	
 VFeCons(allCy,EF,YTIME)               "Total final energy consumnption (Mtoe)"
 VFNonEnCons(allCy,EFS,YTIME)          "Final non energy consumption (Mtoe)"
 VLosses(allCy,EFS,YTIME)              "Distribution losses (Mtoe)"
