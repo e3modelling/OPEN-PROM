@@ -236,6 +236,12 @@ $ondelim
 $include"./iPwrLoadFactorDem.csv"
 $offdelim
 ;
+table iLoadFactoraAdj(allCy,VARIOUS_LABELS,YTIME)               "Parameter for load factor adjustment iMxmLoadFacElecDem (1)"
+$ondelim
+$include"./iLoadFactoraAdj.csv"
+$offdelim
+;
+iMxmLoadFacElecDem(allCy,YTIME)$an(YTIME) = iLoadFactoraAdj(allCy,"MAXLOADSH",YTIME);
 iLoadFacElecDem(allCy,DSBS,YTIME)$(ord(YTIME)>(ordfirst-4)) = iPwrLoadFactorDem(allCy,DSBS,YTIME);
 *Calculation of consumer size groups and their distribution function
 iNcon(TRANSE)$(sameas(TRANSE,"PC") or sameas(TRANSE,"GU")) = 10; !! 11 different consumer size groups for cars and trucks

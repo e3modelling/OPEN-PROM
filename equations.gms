@@ -32,6 +32,13 @@ QElecPeakLoad(runCy,YTIME)$TIME(YTIME)..
          VElecPeakLoad(runCy,YTIME)
              =E=
          VElecDem(runCy,YTIME)/(VCapChpPlants(runCy,YTIME)*sGwToTwhPerYear);
+
+* Compute baseload corresponding to maximum load
+QBslMaxmLoad(runCy,YTIME)$TIME(YTIME)..
+         (VElecDem(runCy,YTIME)-VBslMaxmLoad(runCy,YTIME)*sGwToTwhPerYear)
+             =E=
+         iMxmLoadFacElecDem(runCy,YTIME)*(VElecPeakLoad(runCy,YTIME)-VBslMaxmLoad(runCy,YTIME))*sGwToTwhPerYear;  
+
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)
