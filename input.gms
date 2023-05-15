@@ -167,7 +167,7 @@ $ondelim
 $include"./iSuppTransfers.csv"
 $offdelim
 ;
-table iSuppPrimProd(allCy,PPRODEF,YTIME)	                     "Supplementary Parameter for Primary Production"
+table iSuppPrimProd(allCy,PPRODEF,YTIME)	          "Supplementary Parameter for Primary Production (Mtoe)"
 $ondelim
 $include"./iSuppPrimProd.csv"
 $offdelim
@@ -178,7 +178,7 @@ $ondelim
 $include"./iIntFuelPrcsBslnScnr.csv"
 $offdelim
 ;
-table iSuppRatePrimProd(allCy,EF,YTIME)	              "Supplementary Parameter for iRatePrimProd"	
+table iSuppRatePrimProd(allCy,EF,YTIME)	              "Supplementary Parameter for iRatePrimProd (1)"	
 $ondelim
 $include"./iSuppRatePrimProd.csv"
 $offdelim
@@ -236,6 +236,12 @@ $ondelim
 $include"./iPwrLoadFactorDem.csv"
 $offdelim
 ;
+table iLoadFactorAdjMxm(allCy,VARIOUS_LABELS,YTIME)               "Parameter for load factor adjustment iMxmLoadFacElecDem (1)"
+$ondelim
+$include"./iLoadFactorAdjMxm.csv"
+$offdelim
+;
+iMxmLoadFacElecDem(allCy,YTIME)$an(YTIME) = iLoadFactorAdjMxm(allCy,"MAXLOADSH",YTIME);
 iLoadFacElecDem(allCy,DSBS,YTIME)$(ord(YTIME)>(ordfirst-4)) = iPwrLoadFactorDem(allCy,DSBS,YTIME);
 *Calculation of consumer size groups and their distribution function
 iNcon(TRANSE)$(sameas(TRANSE,"PC") or sameas(TRANSE,"GU")) = 10; !! 11 different consumer size groups for cars and trucks
