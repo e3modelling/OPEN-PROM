@@ -9,6 +9,15 @@ QElecDem(runCy,YTIME)$TIME(YTIME)..
            + VEnCons(runCy,"ELC",YTIME) - VNetImp(runCy,"ELC",YTIME)
          );
 
+* Compute estimated base load
+QEstBaseLoad(runCy,YTIME)$TIME(YTIME)..
+         VEstBaseLoad(runCy,YTIME)
+             =E=
+         (
+             sum(DSBS, iBaseLoadShareDem(runCy,DSBS,YTIME)*VElecConsAll(runCy,DSBS,YTIME))*(1+iRateLossesFinCons(runCy,"ELC",YTIME))*
+             (1 - VNetImports(runCy,"ELC",YTIME)/(sum(DSBS, VElecConsAll(runCy,DSBS,YTIME))+VLosses(runCy,"ELC",YTIME)))
+             + 0.5*VEnCons(runCy,"ELC",YTIME)
+         ) / sTWhToMtoe / sGwToTwhPerYear;
 
 * Transport
 

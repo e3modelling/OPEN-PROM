@@ -190,6 +190,12 @@ $ondelim
 $include"./Ico2SeqData.csv"
 $offdelim
 ;
+table iLoadFactorAdj(allCy,DSBS,YTIME)	"Parameters for load factor adjustment iBaseLoadShareDem"	
+$ondelim
+$include"./iLoadFactorAdj.csv"
+$offdelim
+;
+iBaseLoadShareDem(allCy,DSBS,YTIME)$an(YTIME)  = iLoadFactorAdj(allCy,DSBS,YTIME);
 iElastCO2Seq(allCy,CO2SEQELAST) = ICO2SeqData(allCy,CO2SEQELAST,"2010");
 iRatioImpFinElecDem(runCy,YTIME)$an(YTIME) = iSuppRefCapacity(runCy,"ELC_IMP",YTIME);
 iFuelExprts(runCy,EFS,YTIME) = iSuppExports(runCy,EFS,YTIME);

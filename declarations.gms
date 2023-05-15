@@ -47,7 +47,8 @@ iRatePriProTotPriNeeds(allCy,EF,YTIME)	        "Rate of Primary Production in To
 iFuelExprts(allCy,EF,YTIME)	                    "Fuel Exports (Mtoe)"	
 iSuppExports(allCy,EF,YTIME)                	"Supplementary parameter for  exports (Mtoe)"
 iRatioImpFinElecDem(allCy,YTIME)	            "Ratio of imports in final electricity demand (1)"	
-iElastCO2Seq(allCy,CO2SEQELAST)	            "Elasticities for CO2 sequestration cost curve (1)"		
+iElastCO2Seq(allCy,CO2SEQELAST)	                "Elasticities for CO2 sequestration cost curve (1)"	
+iBaseLoadShareDem(allCy,DSBS,YTIME)	            "Baseload share of demand per sector (1)"		
 ;
 
 
@@ -55,6 +56,7 @@ Equations
 *** Power Generation
 QElecDem(allCy,YTIME)         "Compute total electricity demand"
 QElecConsAll(allCy,DSBS,YTIME)"Compute electricity consumption per final demand sector"
+QEstBaseLoad(allCy,YTIME)	  "Compute estimated base load"	
 
 *** Transport
 QMExtV(allCy,YTIME)            "Compute passenger cars market extension (GDP dependent)"
@@ -124,7 +126,12 @@ qDummyObj                                     "Define dummy objective function"
 
 
 Variables
+
+*** Power Generation Variables
+VEstBaseLoad(allCy,YTIME)	          "Estimated base load (GW)"	
 VElecDem(allCy,YTIME)                 "Total electricity demand (TWh)"
+
+
 VFeCons(allCy,EF,YTIME)               "Total final energy consumnption (Mtoe)"
 VFNonEnCons(allCy,EFS,YTIME)          "Final non energy consumption (Mtoe)"
 VLosses(allCy,EFS,YTIME)              "Distribution losses (Mtoe)"
@@ -222,4 +229,5 @@ vDummyObj                                               "Dummy maximisation vari
 Scalars
 sTWhToMtoe         "TWh to Mtoe conversion factor" /0.086/
 sElecToSteRatioChp "Technical maximum of electricity to steam ratio in CHP plants" /1.15/
+sGwToTwhPerYear     "convert GW mean power into TWh/y" /8.76/
 ;
