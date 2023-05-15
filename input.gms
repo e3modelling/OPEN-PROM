@@ -185,9 +185,9 @@ $ondelim
 $include"./iImpExp.csv"
 $offdelim
 ;
-table ICO2SeqData(allCy,CO2SEQELAST,YTIME)	       "Data for CO2 sequestration (1)" 
+table iCO2SeqData(allCy,CO2SEQELAST,YTIME)	       "Data for CO2 sequestration (1)" 
 $ondelim
-$include"./Ico2SeqData.csv"
+$include"./iCO2SeqData.csv"
 $offdelim
 ;
 table iLoadFactorAdj(allCy,DSBS,YTIME)	"Parameters for load factor adjustment iBaseLoadShareDem (1)"	
@@ -196,7 +196,7 @@ $include"./iLoadFactorAdj.csv"
 $offdelim
 ;
 iBaseLoadShareDem(allCy,DSBS,YTIME)$an(YTIME)  = iLoadFactorAdj(allCy,DSBS,YTIME);
-iElastCO2Seq(allCy,CO2SEQELAST) = ICO2SeqData(allCy,CO2SEQELAST,"2010");
+iElastCO2Seq(allCy,CO2SEQELAST) = iCO2SeqData(allCy,CO2SEQELAST,"2010");
 iRatioImpFinElecDem(runCy,YTIME)$an(YTIME) = iSuppRefCapacity(runCy,"ELC_IMP",YTIME);
 iFuelExprts(runCy,EFS,YTIME) = iSuppExports(runCy,EFS,YTIME);
 iIntPricesMainFuelsBsln(WEF,YTIME) = iIntFuelPrcsBslnScnr(WEF,YTIME);
