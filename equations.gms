@@ -39,6 +39,12 @@ QBslMaxmLoad(runCy,YTIME)$TIME(YTIME)..
              =E=
          iMxmLoadFacElecDem(runCy,YTIME)*(VElecPeakLoad(runCy,YTIME)-VBslMaxmLoad(runCy,YTIME))*sGwToTwhPerYear;  
 
+* Compute electricity base load
+QElecBaseLoad(runCy,YTIME)$TIME(YTIME)..
+         VCorrBaseLoad(runCy,YTIME)
+             =E=
+         (1/(1+Exp(iBslCorrection(runCy,YTIME)*(VEstBaseLoad(runCy,YTIME)-VBslMaxmLoad(runCy,YTIME)))))*VEstBaseLoad(runCy,YTIME)
+        +(1-1/(1+Exp(iBslCorrection(runCy,YTIME)*(VEstBaseLoad(runCy,YTIME)-VBslMaxmLoad(runCy,YTIME)))))*VBslMaxmLoad(runCy,YTIME);
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)
