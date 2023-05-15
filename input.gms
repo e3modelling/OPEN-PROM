@@ -190,7 +190,7 @@ $ondelim
 $include"./Ico2SeqData.csv"
 $offdelim
 ;
-iEstcsCO2Sqstrn(allCy,CO2SEQELAST) = ICO2SeqData(allCy,CO2SEQELAST,"2010");
+iElastCO2Seq(allCy,CO2SEQELAST) = ICO2SeqData(allCy,CO2SEQELAST,"2010");
 iRatioImpFinElecDem(runCy,YTIME)$an(YTIME) = iSuppRefCapacity(runCy,"ELC_IMP",YTIME);
 iFuelExprts(runCy,EFS,YTIME) = iSuppExports(runCy,EFS,YTIME);
 iIntPricesMainFuelsBsln(WEF,YTIME) = iIntFuelPrcsBslnScnr(WEF,YTIME);

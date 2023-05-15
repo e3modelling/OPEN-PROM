@@ -524,13 +524,13 @@ QCumCO2Capt(runCy,YTIME)$TIME(YTIME)..
 QWghtTrnstLinToExpo(runCy,YTIME)$TIME(YTIME)..
          VWghtTrnstLnrToExpo(runCy,YTIME)
          =E=
-         1/(1+exp(-iEstcsCO2Sqstrn(runCy,"mc_s")*( VCumCO2Capt(runCy,YTIME)/iEstcsCO2Sqstrn(runCy,"pot")-iEstcsCO2Sqstrn(runCy,"mc_m")))); 
+         1/(1+exp(-iElastCO2Seq(runCy,"mc_s")*( VCumCO2Capt(runCy,YTIME)/iElastCO2Seq(runCy,"pot")-iElastCO2Seq(runCy,"mc_m")))); 
 
 * Compute cost curve for CO2 sequestration costs 
 QCstCO2SeqCsts(runCy,YTIME)$TIME(YTIME)..
          VCO2CO2SeqCsts(runCy,YTIME) =E=
-       (1-VWghtTrnstLnrToExpo(runCy,YTIME))*(iEstcsCO2Sqstrn(runCy,"mc_a")*VCumCO2Capt(runCy,YTIME)+iEstcsCO2Sqstrn(runCy,"mc_b"))+
-       VWghtTrnstLnrToExpo(runCy,YTIME)*(iEstcsCO2Sqstrn(runCy,"mc_c")*exp(iEstcsCO2Sqstrn(runCy,"mc_d")*VCumCO2Capt(runCy,YTIME)));           
+       (1-VWghtTrnstLnrToExpo(runCy,YTIME))*(iElastCO2Seq(runCy,"mc_a")*VCumCO2Capt(runCy,YTIME)+iElastCO2Seq(runCy,"mc_b"))+
+       VWghtTrnstLnrToExpo(runCy,YTIME)*(iElastCO2Seq(runCy,"mc_c")*exp(iElastCO2Seq(runCy,"mc_d")*VCumCO2Capt(runCy,YTIME)));           
 
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
