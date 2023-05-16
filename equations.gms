@@ -52,8 +52,14 @@ QTotReqElecProd(runCy,YTIME)$TIME(YTIME)..
              =E=
          sum(HOUR, (VElecPeakLoad(runCy,YTIME)-VCorrBaseLoad(runCy,YTIME))
                    * exp(-iLoadCurveConstr(runCy,YTIME)*(0.25+(ord(HOUR)-1)))
-             ) + 9*VCorrBaseLoad(runCy,YTIME)
-;      
+             ) + 9*VCorrBaseLoad(runCy,YTIME);   
+
+* Compute total electricity generation capacity
+QTotElecGenCap(runCy,YTIME)$TIME(YTIME)..
+        VTotElecGenCapEst(runCy,YTIME)
+             =E=
+        iResMargTotAvailCap(runCy,"TOT_CAP_RES",YTIME) * VTotElecGenCap(runCy,YTIME-1)
+        * VElecPeakLoad(runCy,YTIME)/VElecPeakLoad(runCy,YTIME-1);              
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)

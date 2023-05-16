@@ -350,3 +350,9 @@ iCumDistrFuncConsSize(allCy,DSBS) = sum(rCon, iDisFunConSize(allCy,DSBS,rCon));
 iCGI(allCy,YTIME) = 1;
 iLoadCurveConstr(allCy,YTIME)=0;
 
+table iResTotCapMxmLoad(allCy,PGRES,YTIME)              "Residuals for total capacity and maximum load (1)"	
+$ondelim
+$include"./iResTotCapMxmLoad.csv"
+$offdelim
+;
+iResMargTotAvailCap(allCy,PGRES,YTIME)$an(YTIME) = iResTotCapMxmLoad(allCy,PGRES,YTIME);

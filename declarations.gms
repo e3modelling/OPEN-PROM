@@ -51,7 +51,8 @@ iBaseLoadShareDem(allCy,DSBS,YTIME)	            "Baseload share of demand per se
 iLoadFacElecDem(allCy,DSBS,YTIME)	            "Load factor of electricity demand per sector (1)"
 iMxmLoadFacElecDem(allCy,YTIME)	                "Maximum load factor of electricity demand (1)"	
 iBslCorrection(allCy,YTIME)	                    "Parameter of baseload correction (1)"
-iLoadCurveConstr(allCy,YTIME)	                "Parameter for load curve construction"					
+iLoadCurveConstr(allCy,YTIME)	                "Parameter for load curve construction (1)"
+iResMargTotAvailCap(allCy,PGRES,YTIME)	        "Reserve margins on total available capacity and peak load (1)"							
 ;
 
 
@@ -64,7 +65,8 @@ QLoadFacDom(allCy,YTIME)	  "Compute load factor of entire domestic system"
 QElecPeakLoad(allCy,YTIME)	  "Compute elerctricity peak load"		
 QBslMaxmLoad(allCy,YTIME) 	  "Compute baseload corresponding to maximum load"
 QElecBaseLoad(allCy,YTIME)	  "Compute electricity base load"
-QTotReqElecProd(allCy,YTIME)  "Compute total required electricity production"				
+QTotReqElecProd(allCy,YTIME)  "Compute total required electricity production"
+QTotElecGenCap(allCy,YTIME)	  "Compute total electricity generation capacity"					
 *** Transport
 QMExtV(allCy,YTIME)            "Compute passenger cars market extension (GDP dependent)"
 QMExtF(allCy,YTIME)            "Compute passenger cars market extension (GDP independent)"
@@ -143,7 +145,8 @@ VElecPeakLoad(allCy,YTIME)	          "Electricity peak load (GW)"
 VBslMaxmLoad(allCy,YTIME)	          "Baseload corresponding to Maximum Load Factor (1)"	
 VCorrBaseLoad(allCy,YTIME)	          "Corrected base load (GW)"	
 VTotReqElecProd(allCy,YTIME)	      "Total required electricity production (TWh)"	
-
+VTotElecGenCapEst(allCy,YTIME)	      "Estimated Total electricity generation capacity (GW)"	
+VTotElecGenCap(allCy,YTIME)	          "Total electricity generation capacity (GW)"	
 VFeCons(allCy,EF,YTIME)               "Total final energy consumnption (Mtoe)"
 VFNonEnCons(allCy,EFS,YTIME)          "Final non energy consumption (Mtoe)"
 VLosses(allCy,EFS,YTIME)              "Distribution losses (Mtoe)"
