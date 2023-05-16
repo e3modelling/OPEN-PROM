@@ -356,3 +356,65 @@ $include"./iResTotCapMxmLoad.csv"
 $offdelim
 ;
 iResMargTotAvailCap(allCy,PGRES,YTIME)$an(YTIME) = iResTotCapMxmLoad(allCy,PGRES,YTIME);
+table iInvCost(PGALL,YTIME)             "Investment Cost (KEuro2005/Kw)"
+$ondelim
+$include"./iInvCost.csv"
+$offdelim
+;
+table iVarCost(PGALL,YTIME)             "Investment Cost (KEuro2005/Kw)"
+$ondelim
+$include"./iVarCost.csv"
+$offdelim
+;
+iVarGroCostPlaType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF-12)  = iVarCost(PGALL,"2011");
+iVarGroCostPlaType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF+3) = iVarCost(PGALL,"2020");
+iVarGroCostPlaType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF+33) = iVarCost(PGALL,"2050");
+iVarGroCostPlaType(runCy,PGALL,YTIME)$(ord(YTIME)<11) = iVarGroCostPlaType(runCy,PGALL,"2011");
+
+iCapGrossCosPlanType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF-12)  = iInvCost(PGALL,"2011");
+iCapGrossCosPlanType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF+3) = iInvCost(PGALL,"2020");
+iCapGrossCosPlanType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF+33) = iInvCost(PGALL,"2050");
+iCapGrossCosPlanType(runCy,PGALL,YTIME)$(ord(YTIME)<11) = iCapGrossCosPlanType(runCy,PGALL,"2010");
+iGrossCapCosSubRen(runCy,PGALL,YTIME)=iCapGrossCosPlanType(runCy,PGALL,YTIME);
+table iFixOandMCost(PGALL,YTIME)    "Fixed O&M costs (Euro2005/Kw)"
+$ondelim
+$include"./iFixOandMCost.csv"
+$offdelim
+;
+table iAvailRate(PGALL,YTIME)	    "Plant availability rate (1)"
+$ondelim
+$include"./iAvailRate.csv"
+$offdelim
+;
+iPlantAvailRate(runCy,PGALL,"2011") = iAvailRate(PGALL,"2011");
+iPlantAvailRate(runCy,PGALL,"2020") = iAvailRate(PGALL,"2020");
+iPlantAvailRate(runCy,PGALL,"2050") = iAvailRate(PGALL,"2050");
+iFixGrosCostPlaType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF-12)  = iFixOandMCost(PGALL,"2011");
+iFixGrosCostPlaType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF+3) = iFixOandMCost(PGALL,"2020");
+iFixGrosCostPlaType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF+33) = iFixOandMCost(PGALL,"2050");
+
+loop(runCy,PGALL,YTIME)$AN(YTIME) DO
+         abort $(iGrossCapCosSubRen(runCy,PGALL,YTIME)<0) "CAPITAL COST IS NEGATIVE", iGrossCapCosSubRen
+ENDLOOP;
+
+loop YTIME$((ord(YTIME) gt TF-12) $(ord(YTIME) lt TF+3)) do
+         iCapGrossCosPlanType(runCy,PGALL,YTIME) = (iCapGrossCosPlanType(runCy,PGALL,"2020")-
+         iCapGrossCosPlanType(runCy,PGALL,"2011"))/15+iCapGrossCosPlanType(runCy,PGALL,YTIME-1);
+         iFixGrosCostPlaType(runCy,PGALL,YTIME) = (iFixGrosCostPlaType(runCy,PGALL,"2020")-
+         iFixGrosCostPlaType(runCy,PGALL,"2011"))/15+iFixGrosCostPlaType(runCy,PGALL,YTIME-1);
+         iPlantAvailRate(runCy,PGALL,YTIME) = (iPlantAvailRate(runCy,PGALL,"2020")-
+         iPlantAvailRate(runCy,PGALL,"2011"))/15+iPlantAvailRate(runCy,PGALL,YTIME-1);
+         iVarGroCostPlaType(runCy,PGALL,YTIME) = (iVarGroCostPlaType(runCy,PGALL,"2020")-
+         iVarGroCostPlaType(runCy,PGALL,"2011"))/15+iVarGroCostPlaType(runCy,PGALL,YTIME-1);
+endloop;
+
+loop YTIME$((ord(YTIME) gt TF+3) $(ord(YTIME) lt TF+33)) do
+         iCapGrossCosPlanType(runCy,PGALL,YTIME) = (iCapGrossCosPlanType(runCy,PGALL,"2050")-
+         iCapGrossCosPlanType(runCy,PGALL,"2020"))/30+iCapGrossCosPlanType(runCy,PGALL,YTIME-1);
+         iFixGrosCostPlaType(runCy,PGALL,YTIME) = (iFixGrosCostPlaType(runCy,PGALL,"2050")-
+         iFixGrosCostPlaType(runCy,PGALL,"2020"))/30+iFixGrosCostPlaType(runCy,PGALL,YTIME-1);
+         iPlantAvailRate(runCy,PGALL,YTIME) = (iPlantAvailRate(runCy,PGALL,"2050")-
+         iPlantAvailRate(runCy,PGALL,"2020"))/30+iPlantAvailRate(runCy,PGALL,YTIME-1);
+         iVarGroCostPlaType(runCy,PGALL,YTIME) = (iVarGroCostPlaType(runCy,PGALL,"2050")-
+         iVarGroCostPlaType(runCy,PGALL,"2020"))/30+iVarGroCostPlaType(runCy,PGALL,YTIME-1);
+endloop;

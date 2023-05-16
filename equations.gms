@@ -67,6 +67,22 @@ QTotElecGenCap(runCy,YTIME)$TIME(YTIME)..
          =E=
      VTotElecGenCapEst(runCy,YTIME);  
 
+* Compute hourly production cost used in investment decisions
+QHourProdCostInv(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME)) ..
+         VHourProdTech(runCy,PGALL,HOUR,YTIME) =E=
+                  ( (
+                    ( ( iDisc(runCy,"PG",YTIME-4) * exp(iDisc(runCy,"PG",YTIME-4)*iTechLftPlaType(PGALL))
+                        / (exp(iDisc(runCy,"PG",YTIME-4)*iTechLftPlaType(PGALL)) -1))
+                      * iGrossCapCosSubRen(runCy,PGALL,YTIME-4)* 1E3 * iCGI(runCy,YTIME-4)  + iFixGrosCostPlaType(runCy,PGALL,YTIME-4)
+                    )/iPlantAvailRate(runCy,PGALL,YTIME-4) / (1000*(ord(HOUR)-1+0.25))
+                    + iVarGroCostPlaType(runCy,PGALL,YTIME-4)/1E3 + (VRenValue(YTIME)*8.6e-5)$( not ( PGREN(PGALL) 
+                    $(not sameas("PGASHYD",PGALL)) $(not sameas("PGSHYD",PGALL)) $(not sameas("PGLHYD",PGALL)) ))
+                    + sum(PGEF$PGALLtoEF(PGALL,PGEF), (VFuelPriceSub(runCy,"PG",PGEF,YTIME-4)*VCO2CO2SeqCsts(runCy,YTIME-4)*1e-3*
+                    iCo2EmiFac(runCy,"PG",PGEF,YTIME-4)
+                         +1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME-4)*
+                         (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME-4))))
+                         *sTWhToMtoe/VPlantEffPlantType(runCy,PGALL,YTIME-4))$(not PGREN(PGALL))
+                  ));
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)

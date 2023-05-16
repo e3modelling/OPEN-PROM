@@ -52,22 +52,33 @@ iLoadFacElecDem(allCy,DSBS,YTIME)	            "Load factor of electricity demand
 iMxmLoadFacElecDem(allCy,YTIME)	                "Maximum load factor of electricity demand (1)"	
 iBslCorrection(allCy,YTIME)	                    "Parameter of baseload correction (1)"
 iLoadCurveConstr(allCy,YTIME)	                "Parameter for load curve construction (1)"
-iResMargTotAvailCap(allCy,PGRES,YTIME)	        "Reserve margins on total available capacity and peak load (1)"							
+iResMargTotAvailCap(allCy,PGRES,YTIME)	        "Reserve margins on total available capacity and peak load (1)"
+iTechLftPlaType(PGALL)	                        "Technical Lifetime per plant type (year)"/
+$ondelim
+$include "./iTechLftPlaType.csv"
+$offdelim
+/
+iPlantAvailRate(allCy,PGALL,YTIME)	    "Plant availability rate (1)"
+iGrossCapCosSubRen(allCy,PGALL,YTIME)	"Gross Capital Cost per Plant Type with subsidy for renewables (kEuro2005/KW)"		
+iVarGroCostPlaType(allCy,PGALL,YTIME)	"Variable gross cost other than fuel per Plant Type (Euro2005/KW)"
+iCapGrossCosPlanType(allCy,PGALL,YTIME)	"Capital gross cost per plant type (kEuro2005/KW)"	
+iFixGrosCostPlaType(allCy,PGALL,YTIME)	  "Fixed O&M Gross Cost per Plant Type (Euro2005/KW)"										
 ;
 
 
 Equations
 *** Power Generation
-QElecDem(allCy,YTIME)         "Compute total electricity demand"
-QElecConsAll(allCy,DSBS,YTIME)"Compute electricity consumption per final demand sector"
-QEstBaseLoad(allCy,YTIME)	  "Compute estimated base load"	
-QLoadFacDom(allCy,YTIME)	  "Compute load factor of entire domestic system"
-QElecPeakLoad(allCy,YTIME)	  "Compute elerctricity peak load"		
-QBslMaxmLoad(allCy,YTIME) 	  "Compute baseload corresponding to maximum load"
-QElecBaseLoad(allCy,YTIME)	  "Compute electricity base load"
-QTotReqElecProd(allCy,YTIME)  "Compute total required electricity production"
-QTotEstElecGenCap(allCy,YTIME)"Compute Estimated total electricity generation capacity"	
-QTotElecGenCap(allCy,YTIME)	  "Compute total electricity generation capacity"					
+QElecDem(allCy,YTIME)                      "Compute total electricity demand"
+QElecConsAll(allCy,DSBS,YTIME)             "Compute electricity consumption per final demand sector"
+QEstBaseLoad(allCy,YTIME)	               "Compute estimated base load"	
+QLoadFacDom(allCy,YTIME)	               "Compute load factor of entire domestic system"
+QElecPeakLoad(allCy,YTIME)	               "Compute elerctricity peak load"		
+QBslMaxmLoad(allCy,YTIME) 	               "Compute baseload corresponding to maximum load"
+QElecBaseLoad(allCy,YTIME)	               "Compute electricity base load"
+QTotReqElecProd(allCy,YTIME)               "Compute total required electricity production"
+QTotEstElecGenCap(allCy,YTIME)             "Compute Estimated total electricity generation capacity"	
+QTotElecGenCap(allCy,YTIME)	               "Compute total electricity generation capacity"
+QHourProdCostInv(allCy,PGALL,HOUR,YTIME)   "Compute hourly production cost used in investment decisions"						
 *** Transport
 QMExtV(allCy,YTIME)            "Compute passenger cars market extension (GDP dependent)"
 QMExtF(allCy,YTIME)            "Compute passenger cars market extension (GDP independent)"
@@ -143,7 +154,8 @@ VEstBaseLoad(allCy,YTIME)	          "Estimated base load (GW)"
 VElecDem(allCy,YTIME)                 "Total electricity demand (TWh)"
 VCapChpPlants(allCy,YTIME)            "Capacity of CHP Plants (GW)"	
 VElecPeakLoad(allCy,YTIME)	          "Electricity peak load (GW)"	
-VBslMaxmLoad(allCy,YTIME)	          "Baseload corresponding to Maximum Load Factor (1)"	
+VBslMaxmLoad(allCy,YTIME)	          "Baseload corresponding to Maximum Load Factor (1)"
+VHourProdTech(allCy,PGALL,HOUR,YTIME) "Hourly production cost of technology (Euro/KWh)"		
 VCorrBaseLoad(allCy,YTIME)	          "Corrected base load (GW)"	
 VTotReqElecProd(allCy,YTIME)	      "Total required electricity production (TWh)"	
 VTotElecGenCapEst(allCy,YTIME)	      "Estimated Total electricity generation capacity (GW)"	
