@@ -50,7 +50,8 @@ iElastCO2Seq(allCy,CO2SEQELAST)	                "Elasticities for CO2 sequestrat
 iBaseLoadShareDem(allCy,DSBS,YTIME)	            "Baseload share of demand per sector (1)"
 iLoadFacElecDem(allCy,DSBS,YTIME)	            "Load factor of electricity demand per sector (1)"
 iMxmLoadFacElecDem(allCy,YTIME)	                "Maximum load factor of electricity demand (1)"	
-iBslCorrection(allCy,YTIME)	                    "Parameter of baseload correction (1)"				
+iBslCorrection(allCy,YTIME)	                    "Parameter of baseload correction (1)"
+iLoadCurveConstr(allCy,YTIME)	                "Parameter for load curve construction"					
 ;
 
 
@@ -62,7 +63,8 @@ QEstBaseLoad(allCy,YTIME)	  "Compute estimated base load"
 QLoadFacDom(allCy,YTIME)	  "Compute load factor of entire domestic system"
 QElecPeakLoad(allCy,YTIME)	  "Compute elerctricity peak load"		
 QBslMaxmLoad(allCy,YTIME) 	  "Compute baseload corresponding to maximum load"
-QElecBaseLoad(allCy,YTIME)	  "Compute electricity base load"		
+QElecBaseLoad(allCy,YTIME)	  "Compute electricity base load"
+QTotReqElecProd(allCy,YTIME)  "Compute total required electricity production"				
 *** Transport
 QMExtV(allCy,YTIME)            "Compute passenger cars market extension (GDP dependent)"
 QMExtF(allCy,YTIME)            "Compute passenger cars market extension (GDP independent)"
@@ -140,6 +142,7 @@ VCapChpPlants(allCy,YTIME)            "Capacity of CHP Plants (GW)"
 VElecPeakLoad(allCy,YTIME)	          "Electricity peak load (GW)"	
 VBslMaxmLoad(allCy,YTIME)	          "Baseload corresponding to Maximum Load Factor (1)"	
 VCorrBaseLoad(allCy,YTIME)	          "Corrected base load (GW)"	
+VTotReqElecProd(allCy,YTIME)	      "Total required electricity production (TWh)"	
 
 VFeCons(allCy,EF,YTIME)               "Total final energy consumnption (Mtoe)"
 VFNonEnCons(allCy,EFS,YTIME)          "Final non energy consumption (Mtoe)"

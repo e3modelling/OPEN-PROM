@@ -45,6 +45,15 @@ QElecBaseLoad(runCy,YTIME)$TIME(YTIME)..
              =E=
          (1/(1+Exp(iBslCorrection(runCy,YTIME)*(VEstBaseLoad(runCy,YTIME)-VBslMaxmLoad(runCy,YTIME)))))*VEstBaseLoad(runCy,YTIME)
         +(1-1/(1+Exp(iBslCorrection(runCy,YTIME)*(VEstBaseLoad(runCy,YTIME)-VBslMaxmLoad(runCy,YTIME)))))*VBslMaxmLoad(runCy,YTIME);
+
+* Compute total required electricity production
+QTotReqElecProd(runCy,YTIME)$TIME(YTIME)..
+         VTotReqElecProd(runCy,YTIME)
+             =E=
+         sum(HOUR, (VElecPeakLoad(runCy,YTIME)-VCorrBaseLoad(runCy,YTIME))
+                   * exp(-iLoadCurveConstr(runCy,YTIME)*(0.25+(ord(HOUR)-1)))
+             ) + 9*VCorrBaseLoad(runCy,YTIME)
+;      
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)

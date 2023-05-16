@@ -348,3 +348,5 @@ ENDLOOP;
 
 iCumDistrFuncConsSize(allCy,DSBS) = sum(rCon, iDisFunConSize(allCy,DSBS,rCon));
 iCGI(allCy,YTIME) = 1;
+iLoadCurveConstr(allCy,YTIME)=0;
+
