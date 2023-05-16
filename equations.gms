@@ -93,7 +93,12 @@ QHourProdCostInvDec(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME) $NOCCS(PGALL)) ..
 * Compute gamma parameter used in CCS/No CCS decision tree
 QGammaInCcsDecTree(runCy,YTIME)$TIME(YTIME)..
          VSensCcs(runCy,YTIME) =E= 20+25*EXP(-0.06*((sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME-1)))));
-         
+
+* Compute hourly production cost used in investment decisions"
+QHourProdCostInvDecisions(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME) $(CCS(PGALL) or NOCCS(PGALL))) ..
+         VHourProdCostOfTech(runCy,PGALL,HOUR,YTIME) 
+         =E=
+          VHourProdTech(runCy,PGALL,HOUR,YTIME)**(-VSensCcs(runCy,YTIME))       ;
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)
