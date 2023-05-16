@@ -83,6 +83,12 @@ QHourProdCostInv(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME)) ..
                          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME-4))))
                          *sTWhToMtoe/VPlantEffPlantType(runCy,PGALL,YTIME-4))$(not PGREN(PGALL))
                   ));
+
+* Compute hourly production cost used in investment decisions
+QHourProdCostInvDec(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME) $NOCCS(PGALL)) ..
+         VHourProdCostTech(runCy,PGALL,HOUR,YTIME) =E=
+         VPowerPlantNewEq(runCy,PGALL,YTIME)*VHourProdTech(runCy,PGALL,HOUR,YTIME)+
+         sum(CCS$CCS_NOCCS(CCS,PGALL), VPowerPlaShrNewEq(runCy,CCS,YTIME)*VHourProdTech(runCy,CCS,HOUR,YTIME));                  
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)
