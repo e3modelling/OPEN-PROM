@@ -42,3 +42,4 @@ VSensCcs.l(allCy,YTIME)=1;
 VHourProdTech.l(allCy,PGALL,HOUR,YTIME)=1;
 VCarVal.l(allCy,NAP,YTIME)=1;
 VFuelPriceSub.l(allCy,"PG",PGEF,YTIME)=1;
+VProdCostTechnology.l(allCy,PGALL2,YTIME)=0.1;

@@ -76,6 +76,7 @@ QLoadFacDom(allCy,YTIME)	               "Compute load factor of entire domestic 
 QElecPeakLoad(allCy,YTIME)	               "Compute elerctricity peak load"		
 QBslMaxmLoad(allCy,YTIME) 	               "Compute baseload corresponding to maximum load"
 QElecBaseLoad(allCy,YTIME)	               "Compute electricity base load"
+QShrcap(allCy,PGALL,YTIME)	               "Compute SHRCAP"	
 QTotReqElecProd(allCy,YTIME)               "Compute total required electricity production"
 QTotEstElecGenCap(allCy,YTIME)             "Compute Estimated total electricity generation capacity"	
 QTotElecGenCap(allCy,YTIME)	               "Compute total electricity generation capacity"

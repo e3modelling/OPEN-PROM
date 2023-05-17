@@ -104,6 +104,14 @@ QHourProdCostInvDecisions(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME) $(CCS(PGALL) or N
 QProdCostInvDecis(runCy,PGALL,YTIME)$(TIME(YTIME) $(CCS(PGALL) or NOCCS(PGALL)) ) ..
          VProdCostTechnology(runCy,PGALL,YTIME) =E=  sum(HOUR,VHourProdTech(runCy,PGALL,HOUR,YTIME)**(-VSensCcs(runCy,YTIME))) ;
 
+* Compute SHRCAP
+QShrcap(runCy,PGALL,YTIME)$(TIME(YTIME) $CCS(PGALL))..
+         VPowerPlaShrNewEq(runCy,PGALL,YTIME) =E=
+         1.1 *VProdCostTechnology(runCy,PGALL,YTIME)
+         /(1.1*VProdCostTechnology(runCy,PGALL,YTIME)
+           + sum(PGALL2$CCS_NOCCS(PGALL,PGALL2),VProdCostTechnology(runCy,PGALL2,YTIME))
+           );         
+
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)
