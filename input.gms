@@ -418,3 +418,14 @@ loop YTIME$((ord(YTIME) gt TF+3) $(ord(YTIME) lt TF+33)) do
          iVarGroCostPlaType(runCy,PGALL,YTIME) = (iVarGroCostPlaType(runCy,PGALL,"2050")-
          iVarGroCostPlaType(runCy,PGALL,"2020"))/30+iVarGroCostPlaType(runCy,PGALL,YTIME-1);
 endloop;
+*table iTotAvailCapBsYr(allCy)	            "Total installed available capacity in base year (GW)"
+*$ondelim
+*$include"./iTotAvailCapBsYr.csv"
+*$offdelim
+*;
+*VTotElecGenCap.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
+*VTotElecGenCapEst.L(runCy,TT) = iResMargTotAvailCap(runCy,"TOT_CAP_RES",TT) * VTotElecGenCap.L(runCy,TT-1)
+*        * VElecPeakLoad.L(runCy,TT)/VElecPeakLoad.L(runCy,TT-1);
+
+*iTotAvailCapBsYr(allCy) = iDataElecSteamGen("TOTCAP","2017")+iDataElecSteamGen("CHP_CAP","2017")*0.85;
+

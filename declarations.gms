@@ -58,11 +58,12 @@ $ondelim
 $include "./iTechLftPlaType.csv"
 $offdelim
 /
-iPlantAvailRate(allCy,PGALL,YTIME)	    "Plant availability rate (1)"
-iGrossCapCosSubRen(allCy,PGALL,YTIME)	"Gross Capital Cost per Plant Type with subsidy for renewables (kEuro2005/KW)"		
-iVarGroCostPlaType(allCy,PGALL,YTIME)	"Variable gross cost other than fuel per Plant Type (Euro2005/KW)"
-iCapGrossCosPlanType(allCy,PGALL,YTIME)	"Capital gross cost per plant type (kEuro2005/KW)"	
-iFixGrosCostPlaType(allCy,PGALL,YTIME)	  "Fixed O&M Gross Cost per Plant Type (Euro2005/KW)"										
+iPlantAvailRate(allCy,PGALL,YTIME)	      "Plant availability rate (1)"
+iGrossCapCosSubRen(allCy,PGALL,YTIME)	  "Gross Capital Cost per Plant Type with subsidy for renewables (kEuro2005/KW)"		
+iVarGroCostPlaType(allCy,PGALL,YTIME)	  "Variable gross cost other than fuel per Plant Type (Euro2005/KW)"
+iCapGrossCosPlanType(allCy,PGALL,YTIME)	  "Capital gross cost per plant type (kEuro2005/KW)"	
+iFixGrosCostPlaType(allCy,PGALL,YTIME)	  "Fixed O&M Gross Cost per Plant Type (Euro2005/KW)"
+*iDataElecSteamGen(PGOTH,YTIME)	          "Various Data releated to electricity and steam generation (1)"												
 ;
 
 
@@ -81,7 +82,8 @@ QTotElecGenCap(allCy,YTIME)	               "Compute total electricity generation
 QHourProdCostInv(allCy,PGALL,HOUR,YTIME)   "Compute hourly production cost used in investment decisions"
 QHourProdCostInvDec(allCy,PGALL,HOUR,YTIME)"Compute hourly production cost used in investment decisions"
 QGammaInCcsDecTree(allCy,YTIME)	           "Compute gamma parameter used in CCS/No CCS decision tree"
-QHourProdCostInvDecisions(allCy,PGALL,HOUR,YTIME)	"Compute hourly production cost used in investment decisions"									
+QHourProdCostInvDecisions(allCy,PGALL,HOUR,YTIME)	"Compute hourly production cost used in investment decisions"
+QProdCostInvDecis(allCy,PGALL,YTIME)	            "Compute production cost used in investment decisions"										
 *** Transport
 QMExtV(allCy,YTIME)            "Compute passenger cars market extension (GDP dependent)"
 QMExtF(allCy,YTIME)            "Compute passenger cars market extension (GDP independent)"
@@ -160,6 +162,7 @@ VElecPeakLoad(allCy,YTIME)	              "Electricity peak load (GW)"
 VBslMaxmLoad(allCy,YTIME)	              "Baseload corresponding to Maximum Load Factor (1)"
 VHourProdCostOfTech(allCy,PGALL,HOUR,YTIME)"Hourly production cost of technology (Euro/KWh)"	
 VHourProdTech(allCy,PGALL,HOUR,YTIME)     "Hourly production cost of technology (Euro/KWh)"
+VProdCostTechnology(allCy,PGALL,YTIME)	  "Production cost of technology (Euro/KWh)"	
 VSensCcs(allCy,YTIME)	                  "Variable that controlls the sensitivity of CCS acceptance (1)"			
 VCorrBaseLoad(allCy,YTIME)	              "Corrected base load (GW)"
 VPowerPlantNewEq(allCy,PGALL,YTIME)	      "Power plant share in new equipment (1)"

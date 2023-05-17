@@ -64,7 +64,7 @@ QTotEstElecGenCap(runCy,YTIME)$TIME(YTIME)..
 * Compute total electricity generation capacity
 QTotElecGenCap(runCy,YTIME)$TIME(YTIME)..
         VTotElecGenCap(runCy,YTIME) 
-         =E=
+        =E=
      VTotElecGenCapEst(runCy,YTIME);  
 
 * Compute hourly production cost used in investment decisions
@@ -98,7 +98,12 @@ QGammaInCcsDecTree(runCy,YTIME)$TIME(YTIME)..
 QHourProdCostInvDecisions(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME) $(CCS(PGALL) or NOCCS(PGALL))) ..
          VHourProdCostOfTech(runCy,PGALL,HOUR,YTIME) 
          =E=
-          VHourProdTech(runCy,PGALL,HOUR,YTIME)**(-VSensCcs(runCy,YTIME))       ;
+          VHourProdTech(runCy,PGALL,HOUR,YTIME)**(-VSensCcs(runCy,YTIME));
+
+* Compute production cost used in investment decisions
+QProdCostInvDecis(runCy,PGALL,YTIME)$(TIME(YTIME) $(CCS(PGALL) or NOCCS(PGALL)) ) ..
+         VProdCostTechnology(runCy,PGALL,YTIME) =E=  sum(HOUR,VHourProdTech(runCy,PGALL,HOUR,YTIME)**(-VSensCcs(runCy,YTIME))) ;
+
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)
