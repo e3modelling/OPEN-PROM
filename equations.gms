@@ -112,6 +112,11 @@ QShrcap(runCy,PGALL,YTIME)$(TIME(YTIME) $CCS(PGALL))..
            + sum(PGALL2$CCS_NOCCS(PGALL,PGALL2),VProdCostTechnology(runCy,PGALL2,YTIME))
            );         
 
+* Compute SHRCAP excluding CCs
+QShrcapNoCcs(runCy,PGALL,YTIME)$(TIME(YTIME) $NOCCS(PGALL))..
+         VPowerPlantNewEq(runCy,PGALL,YTIME) 
+         =E= 
+         1 - sum(CCS$CCS_NOCCS(CCS,PGALL), VPowerPlaShrNewEq(runCy,CCS,YTIME));
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)

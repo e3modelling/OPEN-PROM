@@ -84,7 +84,8 @@ QHourProdCostInv(allCy,PGALL,HOUR,YTIME)   "Compute hourly production cost used 
 QHourProdCostInvDec(allCy,PGALL,HOUR,YTIME)"Compute hourly production cost used in investment decisions"
 QGammaInCcsDecTree(allCy,YTIME)	           "Compute gamma parameter used in CCS/No CCS decision tree"
 QHourProdCostInvDecisions(allCy,PGALL,HOUR,YTIME)	"Compute hourly production cost used in investment decisions"
-QProdCostInvDecis(allCy,PGALL,YTIME)	            "Compute production cost used in investment decisions"										
+QProdCostInvDecis(allCy,PGALL,YTIME)	            "Compute production cost used in investment decisions"
+QShrcapNoCcs(allCy,PGALL,YTIME)	                    "Compute SHRCAP excluding CCs"											
 *** Transport
 QMExtV(allCy,YTIME)            "Compute passenger cars market extension (GDP dependent)"
 QMExtF(allCy,YTIME)            "Compute passenger cars market extension (GDP independent)"
