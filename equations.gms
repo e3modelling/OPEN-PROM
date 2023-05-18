@@ -162,7 +162,14 @@ QEndogScrapIndex(runCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)))..
                  =E=
          VVarCostTechNotPGSCRN(runCy,PGALL,YTIME)/
          (VVarCostTechNotPGSCRN(runCy,PGALL,YTIME)+(iScaleEndogScrap(runCy,PGALL,YTIME)*
-         sum(PGALL2,VProdCostTechPreReplacAvail(runCy,PGALL,PGALL2,YTIME)))**(-5));                                
+         sum(PGALL2,VProdCostTechPreReplacAvail(runCy,PGALL,PGALL2,YTIME)))**(-5));
+
+* Compute total electricity generation capacity excluding CHP plants
+QElecGenNoChp(runCy,YTIME)$TIME(YTIME)..
+         VElecGenNoChp(runCy,YTIME)
+          =E=
+VTotElecGenCap(runCy,YTIME) - SUM(CHP,VElecCapChpPla(runCy,CHP,YTIME)*0.85);      
+
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)
