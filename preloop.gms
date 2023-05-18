@@ -45,3 +45,7 @@ VFuelPriceSub.l(allCy,"PG",PGEF,YTIME)=1;
 VProdCostTechnology.l(allCy,PGALL2,YTIME)=0.1;
 VVarCostTech.l(allCy,PGALL,YTIME)=0.1;
 VProdCostTechPreReplacAvail.l(allCy,PGALL,PGALL2,YTIME)=0.1;
+*VHourProdCostTech.up(allCy,PGALL,HOUR,YTIME)=1e6;
+*VHourProdCostTech.l(allCy,PGALL,HOUR,YTIME)=1;
+*VTemScalWeibull.up(allCy,PGALL,HOUR,YTIME)=1e6;
+*VHourProdCostTech.lo(allCy,PGALL,HOUR,YTIME)=0.0001;

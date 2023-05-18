@@ -186,7 +186,15 @@ QGapPowerGenCap(runCy,YTIME)$TIME(YTIME)..
           + Sum(PGALL$PGSCRN(PGALL), (VElecGenPlantsCapac(runCy,PGALL,YTIME-1)-iPlantDecomSched(runCy,PGALL,YTIME))/
           iTechLftPlaType(PGALL))
        ) -0) + SQR(1e-10) ) )/2;
-
+$ontext
+* Compute temporary variable facilitating the scaling in Weibull equation
+QTemScalWeibull (runCy,PGALL,HOUR,YTIME)$((not CCS(PGALL))$TIME(YTIME))..
+          VTemScalWeibull(runCy,PGALL,HOUR,YTIME) 
+         =E=
+         (VHourProdTech(runCy,PGALL,HOUR,YTIME)$(not NOCCS(PGALL))
+         +
+          VHourProdCostTech(runCy,PGALL,HOUR,YTIME)$NOCCS(PGALL))**(-6);     
+$offtext
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)
