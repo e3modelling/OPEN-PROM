@@ -134,6 +134,21 @@ QVarCostTechNotPGSCRN(runCy,PGALL,YTIME)$(time(YTIME) $(not PGSCRN(PGALL)))..
               =E=
           VVarCostTech(runCy,PGALL,YTIME)**(-5);
 
+* Compute production cost of technology  used in premature replacement
+QProdCostTechPreReplac(runCy,PGALL,YTIME)$TIME(YTIME)..
+         VProdCostTechPreReplac(runCy,PGALL,YTIME) =e=
+                        (
+                          ((iDisc(runCy,"PG",YTIME) * exp(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(PGALL))/
+                          (exp(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(PGALL)) -1))
+                            * iCapGrossCosPlanType(runCy,PGALL,YTIME)* 1E3 * iCGI(runCy,YTIME)  + 
+                            iFixGrosCostPlaType(runCy,PGALL,YTIME))/(8760*iPlantAvailRate(runCy,PGALL,YTIME))
+                           + (iVarGroCostPlaType(runCy,PGALL,YTIME)/1E3 + sum(PGEF$PGALLtoEF(PGALL,PGEF), 
+                           (VFuelPriceSub(runCy,"PG",PGEF,YTIME)+
+                            iCO2CaptRate(runCy,PGALL,YTIME)*VCO2CO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME) +
+                             (1-iCO2CaptRate(runCy,PGALL,YTIME))*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
+                         (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
+                                 *sTWhToMtoe/VPlantEffPlantType(runCy,PGALL,YTIME))$(not PGREN(PGALL)))
+                         );
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)
