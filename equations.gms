@@ -120,12 +120,19 @@ QShrcapNoCcs(runCy,PGALL,YTIME)$(TIME(YTIME) $NOCCS(PGALL))..
 
 * Compute variable cost of technology 
 QVarCostTech(runCy,PGALL,YTIME)$(time(YTIME))..
-         VVarCostTech(runCy,PGALL,YTIME) =E=
+         VVarCostTech(runCy,PGALL,YTIME) 
+             =E=
          (iVarGroCostPlaType(runCy,PGALL,YTIME)/1E3 + sum(PGEF$PGALLtoEF(PGALL,PGEF), (VFuelPriceSub(runCy,"PG",PGEF,YTIME)/1.2441+
          iCO2CaptRate(runCy,PGALL,YTIME)*VCO2CO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)
          + (1-iCO2CaptRate(runCy,PGALL,YTIME))*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)
           *(sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
           *sTWhToMtoe/VPlantEffPlantType(runCy,PGALL,YTIME))$(not PGREN(PGALL)));
+
+* Compute variable cost of technology excluding PGSCRN
+QVarCostTechNotPGSCRN(runCy,PGALL,YTIME)$(time(YTIME) $(not PGSCRN(PGALL)))..
+         VVarCostTechNotPGSCRN(runCy,PGALL,YTIME) 
+              =E=
+          VVarCostTech(runCy,PGALL,YTIME)**(-5);
 
 * Transport
 
