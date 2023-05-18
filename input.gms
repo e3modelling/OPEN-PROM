@@ -429,3 +429,4 @@ endloop;
 
 *iTotAvailCapBsYr(allCy) = iDataElecSteamGen("TOTCAP","2017")+iDataElecSteamGen("CHP_CAP","2017")*0.85;
 
+iCO2CaptRate(runCy,PGALL,YTIME)$(ord(YTIME)>(ordfirst-12))  =  iCO2CaptRateData(PGALL);

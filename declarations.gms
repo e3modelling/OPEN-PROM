@@ -63,7 +63,14 @@ iGrossCapCosSubRen(allCy,PGALL,YTIME)	  "Gross Capital Cost per Plant Type with 
 iVarGroCostPlaType(allCy,PGALL,YTIME)	  "Variable gross cost other than fuel per Plant Type (Euro2005/KW)"
 iCapGrossCosPlanType(allCy,PGALL,YTIME)	  "Capital gross cost per plant type (kEuro2005/KW)"	
 iFixGrosCostPlaType(allCy,PGALL,YTIME)	  "Fixed O&M Gross Cost per Plant Type (Euro2005/KW)"
-*iDataElecSteamGen(PGOTH,YTIME)	          "Various Data releated to electricity and steam generation (1)"												
+*iDataElecSteamGen(PGOTH,YTIME)	          "Various Data releated to electricity and steam generation (1)"
+iCO2CaptRate(allCy,PGALL,YTIME)	          "Plant CO2 capture rate (1)"
+iCO2CaptRateData(PGALL)	                  "Plant CO2 capture rate Data (1))"/
+$ondelim
+$include "./iCO2CaptRateData.csv"
+$offdelim
+/
+
 ;
 
 
@@ -77,6 +84,7 @@ QElecPeakLoad(allCy,YTIME)	               "Compute elerctricity peak load"
 QBslMaxmLoad(allCy,YTIME) 	               "Compute baseload corresponding to maximum load"
 QElecBaseLoad(allCy,YTIME)	               "Compute electricity base load"
 QShrcap(allCy,PGALL,YTIME)	               "Compute SHRCAP"	
+QVarCostTech(allCy,PGALL,YTIME)	           "Compute variable cost of technology" 	
 QTotReqElecProd(allCy,YTIME)               "Compute total required electricity production"
 QTotEstElecGenCap(allCy,YTIME)             "Compute Estimated total electricity generation capacity"	
 QTotElecGenCap(allCy,YTIME)	               "Compute total electricity generation capacity"
@@ -167,6 +175,7 @@ VHourProdTech(allCy,PGALL,HOUR,YTIME)     "Hourly production cost of technology 
 VProdCostTechnology(allCy,PGALL,YTIME)	  "Production cost of technology (Euro/KWh)"	
 VSensCcs(allCy,YTIME)	                  "Variable that controlls the sensitivity of CCS acceptance (1)"			
 VCorrBaseLoad(allCy,YTIME)	              "Corrected base load (GW)"
+VVarCostTech(allCy,PGALL,YTIME)	          "Variable cost of technology (Euro/KWh)"	
 VPowerPlantNewEq(allCy,PGALL,YTIME)	      "Power plant share in new equipment (1)"
 VPowerPlaShrNewEq(allCy,PGALL,YTIME)	  "Power plant share in new equipment (1)"		
 VHourProdCostTech(allCy,PGALL,HOUR,YTIME) "Hourly production cost of technology (Euro/KWh)"		
