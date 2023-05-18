@@ -149,6 +149,12 @@ QProdCostTechPreReplac(runCy,PGALL,YTIME)$TIME(YTIME)..
                          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
                                  *sTWhToMtoe/VPlantEffPlantType(runCy,PGALL,YTIME))$(not PGREN(PGALL)))
                          );
+
+* Compute production cost of technology  used in premature replacement including plant availability rate
+QProdCostTechPreReplacAvail(runCy,PGALL,PGALL2,YTIME)$TIME(YTIME)..
+         VProdCostTechPreReplacAvail(runCy,PGALL,PGALL2,YTIME) =E=
+         iPlantAvailRate(runCy,PGALL,YTIME)/iPlantAvailRate(runCy,PGALL2,YTIME)*VProdCostTechPreReplac(runCy,PGALL,YTIME)+
+         VVarCostTech(runCy,PGALL,YTIME)*(1-iPlantAvailRate(runCy,PGALL,YTIME)/iPlantAvailRate(runCy,PGALL2,YTIME));                         
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)
