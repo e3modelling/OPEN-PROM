@@ -44,3 +44,4 @@ VCarVal.l(allCy,NAP,YTIME)=1;
 VFuelPriceSub.l(allCy,"PG",PGEF,YTIME)=1;
 VProdCostTechnology.l(allCy,PGALL2,YTIME)=0.1;
 VVarCostTech.l(allCy,PGALL,YTIME)=0.1;
+VProdCostTechPreReplacAvail.l(allCy,PGALL,PGALL2,YTIME)=0.1;

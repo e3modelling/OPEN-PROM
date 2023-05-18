@@ -65,12 +65,17 @@ iCapGrossCosPlanType(allCy,PGALL,YTIME)	  "Capital gross cost per plant type (kE
 iFixGrosCostPlaType(allCy,PGALL,YTIME)	  "Fixed O&M Gross Cost per Plant Type (Euro2005/KW)"
 *iDataElecSteamGen(PGOTH,YTIME)	          "Various Data releated to electricity and steam generation (1)"
 iCO2CaptRate(allCy,PGALL,YTIME)	          "Plant CO2 capture rate (1)"
-iCO2CaptRateData(PGALL)	                  "Plant CO2 capture rate Data (1))"/
+iCO2CaptRateData(PGALL)	                  "Plant CO2 capture rate Data (1)"/
 $ondelim
 $include "./iCO2CaptRateData.csv"
 $offdelim
 /
-
+iScaleEndogScrap(allCy,PGALL,YTIME)	"Scale parameter for endogenous scrapping applied to the sum of full costs (1)"	
+iPremReplacem(allCy,PGALL)	    "Premature replacement (1)"/
+$ondelim
+$include"./iPremReplacem.csv"
+$offdelim
+/
 ;
 
 
@@ -84,6 +89,7 @@ QElecPeakLoad(allCy,YTIME)	               "Compute elerctricity peak load"
 QBslMaxmLoad(allCy,YTIME) 	               "Compute baseload corresponding to maximum load"
 QElecBaseLoad(allCy,YTIME)	               "Compute electricity base load"
 QShrcap(allCy,PGALL,YTIME)	               "Compute SHRCAP"	
+QEndogScrapIndex(allCy,PGALL,YTIME)	       "Compute endogenous scrapping index" 	
 QProdCostTechPreReplacAvail(allCy,PGALL,PGALL2,YTIME)	"Compute production cost of technology  used in premature replacement including plant availability rate"	
 QVarCostTechNotPGSCRN(allCy,PGALL,YTIME)   "Compute variable cost of technology excluding PGSCRN"	
 QVarCostTech(allCy,PGALL,YTIME)	           "Compute variable cost of technology" 	
@@ -177,7 +183,8 @@ VHourProdCostOfTech(allCy,PGALL,HOUR,YTIME)"Hourly production cost of technology
 VVarCostTechNotPGSCRN(allCy,PGALL,YTIME)   "Variable cost of technology excluding PGSCRN (Euro/KWh)"		
 VHourProdTech(allCy,PGALL,HOUR,YTIME)     "Hourly production cost of technology (Euro/KWh)"
 VProdCostTechnology(allCy,PGALL,YTIME)	  "Production cost of technology (Euro/KWh)"
-VProdCostTechPreReplac(allCy,PGALL,YTIME) "Production cost of technology used in premature replacement (Euro/KWh)"		
+VProdCostTechPreReplac(allCy,PGALL,YTIME) "Production cost of technology used in premature replacement (Euro/KWh)"
+VEndogScrapIndex(allCy,PGALL,YTIME)	      "Index used for endogenous power plants scrapping (1)"			
 VSensCcs(allCy,YTIME)	                  "Variable that controlls the sensitivity of CCS acceptance (1)"			
 VCorrBaseLoad(allCy,YTIME)	              "Corrected base load (GW)"
 VVarCostTech(allCy,PGALL,YTIME)	          "Variable cost of technology (Euro/KWh)"	

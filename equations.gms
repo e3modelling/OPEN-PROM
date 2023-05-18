@@ -154,7 +154,15 @@ QProdCostTechPreReplac(runCy,PGALL,YTIME)$TIME(YTIME)..
 QProdCostTechPreReplacAvail(runCy,PGALL,PGALL2,YTIME)$TIME(YTIME)..
          VProdCostTechPreReplacAvail(runCy,PGALL,PGALL2,YTIME) =E=
          iPlantAvailRate(runCy,PGALL,YTIME)/iPlantAvailRate(runCy,PGALL2,YTIME)*VProdCostTechPreReplac(runCy,PGALL,YTIME)+
-         VVarCostTech(runCy,PGALL,YTIME)*(1-iPlantAvailRate(runCy,PGALL,YTIME)/iPlantAvailRate(runCy,PGALL2,YTIME));                         
+         VVarCostTech(runCy,PGALL,YTIME)*(1-iPlantAvailRate(runCy,PGALL,YTIME)/iPlantAvailRate(runCy,PGALL2,YTIME));  
+
+* Compute endogenous scrapping index 
+QEndogScrapIndex(runCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)))..
+         VEndogScrapIndex(runCy,PGALL,YTIME)
+                 =E=
+         VVarCostTechNotPGSCRN(runCy,PGALL,YTIME)/
+         (VVarCostTechNotPGSCRN(runCy,PGALL,YTIME)+(iScaleEndogScrap(runCy,PGALL,YTIME)*
+         sum(PGALL2,VProdCostTechPreReplacAvail(runCy,PGALL,PGALL2,YTIME)))**(-5));                                
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)
