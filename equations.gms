@@ -170,6 +170,23 @@ QElecGenNoChp(runCy,YTIME)$TIME(YTIME)..
           =E=
 VTotElecGenCap(runCy,YTIME) - SUM(CHP,VElecCapChpPla(runCy,CHP,YTIME)*0.85);      
 
+* Compute the gap in power generation capacity
+QGapPowerGenCap(runCy,YTIME)$TIME(YTIME)..
+         VGapPowerGenCap(runCy,YTIME)
+             =E=
+ (        (  VElecGenNoChp(runCy,YTIME) - VElecGenNoChp(runCy,YTIME-1) + sum(PGALL,VElecGenPlanCap(runCy,PGALL,YTIME-1) * 
+ (1 - VEndogScrapIndex(runCy,PGALL,YTIME))) +
+          sum(PGALL, (iPlantDecomSched(runCy,PGALL,YTIME)-iDecInvPlantSched(runCy,PGALL,YTIME))*iPlantAvailRate(runCy,PGALL,YTIME))
+          + Sum(PGALL$PGSCRN(PGALL), (VElecGenPlantsCapac(runCy,PGALL,YTIME-1)-iPlantDecomSched(runCy,PGALL,YTIME))/
+          iTechLftPlaType(PGALL))
+       )
+  + 0 + SQRT( SQR(       (  VElecGenNoChp(runCy,YTIME) - VElecGenNoChp(runCy,YTIME-1) +
+        sum(PGALL,VElecGenPlanCap(runCy,PGALL,YTIME-1) * (1 - VEndogScrapIndex(runCy,PGALL,YTIME))) +
+          sum(PGALL, (iPlantDecomSched(runCy,PGALL,YTIME)-iDecInvPlantSched(runCy,PGALL,YTIME))*iPlantAvailRate(runCy,PGALL,YTIME))
+          + Sum(PGALL$PGSCRN(PGALL), (VElecGenPlantsCapac(runCy,PGALL,YTIME-1)-iPlantDecomSched(runCy,PGALL,YTIME))/
+          iTechLftPlaType(PGALL))
+       ) -0) + SQR(1e-10) ) )/2;
+
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)

@@ -76,6 +76,8 @@ $ondelim
 $include"./iPremReplacem.csv"
 $offdelim
 /
+iPlantDecomSched(allCy,PGALL,YTIME)	"Decided plant decomissioning schedule (GW)"
+iDecInvPlantSched(allCy,PGALL,YTIME) "Decided plant investment schedule (GW)"				
 ;
 
 
@@ -103,7 +105,8 @@ QGammaInCcsDecTree(allCy,YTIME)	           "Compute gamma parameter used in CCS/
 QHourProdCostInvDecisions(allCy,PGALL,HOUR,YTIME)	"Compute hourly production cost used in investment decisions"
 QProdCostInvDecis(allCy,PGALL,YTIME)	            "Compute production cost used in investment decisions"
 QShrcapNoCcs(allCy,PGALL,YTIME)	                    "Compute SHRCAP excluding CCs"
-QProdCostTechPreReplac(allCy,PGALL,YTIME)	        "Compute production cost of technology  used in premature replacement"												
+QProdCostTechPreReplac(allCy,PGALL,YTIME)	        "Compute production cost of technology  used in premature replacement"	
+QGapPowerGenCap(allCy,YTIME)	                    "Compute the gap in power generation capacity"												
 *** Transport
 QMExtV(allCy,YTIME)            "Compute passenger cars market extension (GDP dependent)"
 QMExtF(allCy,YTIME)            "Compute passenger cars market extension (GDP independent)"
@@ -184,11 +187,14 @@ VHourProdCostOfTech(allCy,PGALL,HOUR,YTIME)"Hourly production cost of technology
 VVarCostTechNotPGSCRN(allCy,PGALL,YTIME)   "Variable cost of technology excluding PGSCRN (Euro/KWh)"		
 VHourProdTech(allCy,PGALL,HOUR,YTIME)     "Hourly production cost of technology (Euro/KWh)"
 VProdCostTechnology(allCy,PGALL,YTIME)	  "Production cost of technology (Euro/KWh)"
-VElecCapChpPla(allCy,CHP,YTIME)	          "Capacity of CHP Plants (GW)"	
+VElecCapChpPla(allCy,CHP,YTIME)	          "Capacity of CHP Plants (GW)"
+VElecGenPlantsCapac(allCy,PGALL,YTIME)	  "Electricity generation plants capacity (GW)"	
+VGapPowerGenCap(allCy,YTIME)	          "Gap in total generation capacity to be filled by new equipment (GW)"		
 VProdCostTechPreReplac(allCy,PGALL,YTIME) "Production cost of technology used in premature replacement (Euro/KWh)"
 VEndogScrapIndex(allCy,PGALL,YTIME)	      "Index used for endogenous power plants scrapping (1)"			
 VSensCcs(allCy,YTIME)	                  "Variable that controlls the sensitivity of CCS acceptance (1)"			
 VCorrBaseLoad(allCy,YTIME)	              "Corrected base load (GW)"
+VElecGenPlanCap(allCy,PGALL,YTIME)	      "Electricity generation plants capacity (GW)"	
 VElecGenNoChp(allCy,YTIME)	              "Total electricity generation capacity excluding CHP (GW)"	
 VVarCostTech(allCy,PGALL,YTIME)	          "Variable cost of technology (Euro/KWh)"	
 VPowerPlantNewEq(allCy,PGALL,YTIME)	      "Power plant share in new equipment (1)"

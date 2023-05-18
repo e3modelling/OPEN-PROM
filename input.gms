@@ -432,3 +432,29 @@ endloop;
 iCO2CaptRate(runCy,PGALL,YTIME)$(ord(YTIME)>(ordfirst-12))  =  iCO2CaptRateData(PGALL);
 
 iScaleEndogScrap(allCy,PGALL,YTIME) = iPremReplacem(allCy,PGALL);
+table iDecomPlants(allCy,PGALL,PG1_set)	            "Decomissioning Plants (MW)"
+$ondelim
+$include"./iDecomPlants.csv"
+$offdelim
+;
+iPlantDecomSched(allCy,PGALL,"2010") = iDecomPlants(allCy,PGALL,"DEC_10");
+iPlantDecomSched(allCy,PGALL,"2018") = iDecomPlants(allCy,PGALL,"DEC_18");
+iPlantDecomSched(allCy,PGALL,YTIME) $((ord(YTIME) gt TF-5) $(ord(YTIME) le TF))     = (iDecomPlants(allCy,PGALL,"DEC_05")/5);
+iPlantDecomSched(allCy,PGALL,YTIME)$((ord(YTIME) gt TF) $(ord(YTIME) le TF+5))      = (iDecomPlants(allCy,PGALL,"DEC_10")/5);
+iPlantDecomSched(allCy,PGALL,YTIME)$((ord(YTIME) gt TF+5) $(ord(YTIME) le TF+10))   = (iDecomPlants(allCy,PGALL,"DEC_15")/5);
+iPlantDecomSched(allCy,PGALL,YTIME)$((ord(YTIME) gt TF+10) $(ord(YTIME) le TF+15))  = (iDecomPlants(allCy,PGALL,"DEC_20")/5);
+iPlantDecomSched(allCy,PGALL,YTIME)$((ord(YTIME) gt TF+15) $(ord(YTIME) le TF+20))  = (iDecomPlants(allCy,PGALL,"DEC_25")/5);
+iPlantDecomSched(allCy,PGALL,YTIME)$((ord(YTIME) gt TF+20) $(ord(YTIME) le TF+25))  = (iDecomPlants(allCy,PGALL,"DEC_30")/5);
+table iInvPlants(allCy,PGALL,PG1_set)	            "Investment Plants (MW)"
+$ondelim
+$include"./iInvPlants.csv"
+$offdelim
+;
+iDecInvPlantSched(allCy,PGALL,"2010") = iInvPlants(allCy,PGALL,"INV_10");
+iDecInvPlantSched(allCy,PGALL,"2011") = iInvPlants(allCy,PGALL,"INV_11");
+iDecInvPlantSched(allCy,PGALL,"2012") = iInvPlants(allCy,PGALL,"INV_12");
+iDecInvPlantSched(allCy,PGALL,"2013") = iInvPlants(allCy,PGALL,"INV_13");
+iDecInvPlantSched(allCy,PGALL,"2014") = iInvPlants(allCy,PGALL,"INV_14");
+iDecInvPlantSched(allCy,PGALL,"2015") = iInvPlants(allCy,PGALL,"INV_15");
+iDecInvPlantSched(allCy,PGALL,"2018") = iInvPlants(allCy,PGALL,"INV_18");
+iDecInvPlantSched(allCy,PGALL,"2019") = iInvPlants(allCy,PGALL,"INV_19");
