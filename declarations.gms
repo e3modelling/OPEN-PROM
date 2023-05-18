@@ -77,7 +77,9 @@ $include"./iPremReplacem.csv"
 $offdelim
 /
 iPlantDecomSched(allCy,PGALL,YTIME)	"Decided plant decomissioning schedule (GW)"
-iDecInvPlantSched(allCy,PGALL,YTIME) "Decided plant investment schedule (GW)"				
+iDecInvPlantSched(allCy,PGALL,YTIME) "Decided plant investment schedule (GW)"
+iMinRenPotential(allCy,PGRENEF,YTIME)	"Minimum renewable potential (GW)"	
+iMaxRenPotential(allCy,PGRENEF,YTIME)	"Maximum enewable potential (GW)"					
 ;
 
 
@@ -92,7 +94,8 @@ QBslMaxmLoad(allCy,YTIME) 	               "Compute baseload corresponding to max
 QElecBaseLoad(allCy,YTIME)	               "Compute electricity base load"
 QShrcap(allCy,PGALL,YTIME)	               "Compute SHRCAP"	
 *QTemScalWeibull(allCy,PGALL,HOUR,YTIME)    "Compute temporary variable facilitating the scaling in Weibull equation"	
-QElecGenNoChp(allCy,YTIME)	               "Compute total electricity generation capacity excluding CHP plants"	
+QElecGenNoChp(allCy,YTIME)	               "Compute total electricity generation capacity excluding CHP plants"
+QRenPotSupplyCurve(allCy,PGRENEF,YTIME)	   "Compute renewable potential supply curve"		
 QEndogScrapIndex(allCy,PGALL,YTIME)	       "Compute endogenous scrapping index" 	
 QProdCostTechPreReplacAvail(allCy,PGALL,PGALL2,YTIME)	"Compute production cost of technology  used in premature replacement including plant availability rate"	
 QVarCostTechNotPGSCRN(allCy,PGALL,YTIME)   "Compute variable cost of technology excluding PGSCRN"	
@@ -189,6 +192,7 @@ VVarCostTechNotPGSCRN(allCy,PGALL,YTIME)   "Variable cost of technology excludin
 VHourProdTech(allCy,PGALL,HOUR,YTIME)     "Hourly production cost of technology (Euro/KWh)"
 VProdCostTechnology(allCy,PGALL,YTIME)	  "Production cost of technology (Euro/KWh)"
 VElecCapChpPla(allCy,CHP,YTIME)	          "Capacity of CHP Plants (GW)"
+VRenPotSupplyCurve(allCy,PGRENEF,YTIME)	  "Renewable potential supply curve	(1)"
 *VTemScalWeibull(allCy,PGALL,HOUR,YTIME)   "Temporary variable facilitating the scaling in Weibull equation"	
 VElecGenPlantsCapac(allCy,PGALL,YTIME)	  "Electricity generation plants capacity (GW)"	
 VGapPowerGenCap(allCy,YTIME)	          "Gap in total generation capacity to be filled by new equipment (GW)"		

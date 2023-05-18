@@ -195,6 +195,13 @@ QTemScalWeibull (runCy,PGALL,HOUR,YTIME)$((not CCS(PGALL))$TIME(YTIME))..
          +
           VHourProdCostTech(runCy,PGALL,HOUR,YTIME)$NOCCS(PGALL))**(-6);     
 $offtext
+
+* Compute renewable potential supply curve
+QRenPotSupplyCurve(runCy,PGRENEF,YTIME)$TIME(YTIME)..
+         VRenPotSupplyCurve(runCy,PGRENEF,YTIME) =E=
+         iMinRenPotential(runCy,PGRENEF,YTIME) +(VCarVal(runCy,"Trade",YTIME))/(70)*
+         (iMaxRenPotential(runCy,PGRENEF,YTIME)-iMinRenPotential(runCy,PGRENEF,YTIME));
+         
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)
