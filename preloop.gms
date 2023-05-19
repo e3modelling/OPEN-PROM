@@ -61,3 +61,4 @@ VHourProdCostTech.SCALE(runCy,PGALL,HOUR,TT)$PERIOD(ytime) = max(abs(VHourProdCo
 $offtext
 VNewInvDecis.l(allCy,YTIME)=0.1;
 VVarCostTechnology.l(allCy,PGALL,YTIME)=0.1;
+VElecPeakLoads.l(allCy,YTIME)=0.1;

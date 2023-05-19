@@ -282,7 +282,15 @@ QVarCostTechnology(runCy,PGALL,YTIME)$TIME(YTIME)..
 QElecPeakLoads(runCy,YTIME)$TIME(YTIME)..
          VElecPeakLoads(runCy,YTIME) 
          =E= 
-         sum(PGALL, VVarCostTechnology(runCy,PGALL,YTIME));            
+         sum(PGALL, VVarCostTechnology(runCy,PGALL,YTIME));     
+
+* Compute Power plants sorting according to variable cost  to decide the plant dispatching 
+QElectrPeakLoad(runCy,PGALL,YTIME)$TIME(YTIME)..
+         VPowPlantSorting(runCy,PGALL,YTIME)
+                 =E=
+         VVarCostTechnology(runCy,PGALL,YTIME)
+         /
+         VElecPeakLoads(runCy,YTIME);                
 
 * Transport
 
