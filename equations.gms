@@ -276,8 +276,14 @@ QElecGenCap(runCy,PGALL,YTIME)$TIME(YTIME)..
 QVarCostTechnology(runCy,PGALL,YTIME)$TIME(YTIME)..
          VVarCostTechnology(runCy,PGALL,YTIME)
          =E=  
-          iMatureFacPlaDisp(runCy,PGALL,YTIME)*VVarCostTechnology(runCy,PGALL,YTIME)**(-2);  
-                 
+          iMatureFacPlaDisp(runCy,PGALL,YTIME)*VVarCostTechnology(runCy,PGALL,YTIME)**(-2);
+
+* Compute Electricity peak loads
+QElecPeakLoads(runCy,YTIME)$TIME(YTIME)..
+         VElecPeakLoads(runCy,YTIME) 
+         =E= 
+         sum(PGALL, VVarCostTechnology(runCy,PGALL,YTIME));            
+
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)
