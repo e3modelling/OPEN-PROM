@@ -201,7 +201,12 @@ QRenPotSupplyCurve(runCy,PGRENEF,YTIME)$TIME(YTIME)..
          VRenPotSupplyCurve(runCy,PGRENEF,YTIME) =E=
          iMinRenPotential(runCy,PGRENEF,YTIME) +(VCarVal(runCy,"Trade",YTIME))/(70)*
          (iMaxRenPotential(runCy,PGRENEF,YTIME)-iMinRenPotential(runCy,PGRENEF,YTIME));
-         
+
+* Compute maximum allowed renewable potential 
+QMaxmAllowRenPotent(runCy,PGRENEF,YTIME)$TIME(YTIME)..      
+         VMaxmAllowRenPotent(runCy,PGRENEF,YTIME) =E=
+         ( VRenPotSupplyCurve(runCy,PGRENEF,YTIME)+ iMaxRenPotential(runCy,PGRENEF,YTIME))/2;
+
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)
