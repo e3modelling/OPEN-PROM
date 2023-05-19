@@ -252,6 +252,19 @@ QPowPlaShaNewEquip(runCy,PGALL,YTIME)$(TIME(YTIME)) ..
           +
           sum(NOCCS$CCS_NOCCS(PGALL,NOCCS),VPowPlaShaNewEquip(runCy,NOCCS,YTIME))$CCS(PGALL);
 
+* Compute electricity generation capacity
+QElecGenCapacity(runCy,PGALL,YTIME)$TIME(YTIME)..
+         VElecGenPlantsCapac(runCy,PGALL,YTIME)
+             =E=
+         (VElecGenPlanCap(runCy,PGALL,YTIME-1)*VEndogScrapIndex(runCy,PGALL,YTIME-1)
+          +(VPowPlaShaNewEquip(runCy,PGALL,YTIME) * VGapPowerGenCap(runCy,YTIME))$( (not CCS(PGALL)) AND (not NOCCS(PGALL)))
+          +(VPowPlaShaNewEquip(runCy,PGALL,YTIME) * VPowerPlantNewEq(runCy,PGALL,YTIME) * VGapPowerGenCap(runCy,YTIME))$NOCCS(PGALL)
+          +(VPowPlaShaNewEquip(runCy,PGALL,YTIME) * VPowerPlantNewEq(runCy,PGALL,YTIME) * VGapPowerGenCap(runCy,YTIME))$CCS(PGALL)
+          + iDecInvPlantSched(runCy,PGALL,YTIME) * iPlantAvailRate(runCy,PGALL,YTIME)
+          - iPlantDecomSched(runCy,PGALL,YTIME) * iPlantAvailRate(runCy,PGALL,YTIME)
+         )
+         - ((VElecGenPlantsCapac(runCy,PGALL,YTIME-1)-iPlantDecomSched(runCy,PGALL,YTIME-1))* 
+         iPlantAvailRate(runCy,PGALL,YTIME)*(1/iTechLftPlaType(PGALL)))$PGSCRN(PGALL);
 
 * Transport
 

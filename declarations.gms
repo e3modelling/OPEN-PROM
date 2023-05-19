@@ -95,6 +95,7 @@ QBslMaxmLoad(allCy,YTIME) 	               "Compute baseload corresponding to max
 QElecBaseLoad(allCy,YTIME)	               "Compute electricity base load"
 QShrcap(allCy,PGALL,YTIME)	               "Compute SHRCAP"	
 *QTempScalWeibull(allCy,PGALL,YTIME)	   "Compute temporary variable facilitating the scaling in Weibull equation"
+QElecGenCapacity(allCy,PGALL,YTIME)	       "Compute electricity generation capacity"	
 QPowPlaShaNewEquip(allCy,PGALL,YTIME)	   "Compute the power plant share in new equipment"	
 QNewInvDecis(allCy,YTIME)	               "Compute for Power Plant new investment decision"		
 QMaxmAllowRenPotent(allCy,PGRENEF,YTIME)   "Compute maximum allowed renewable potential"
