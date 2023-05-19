@@ -338,6 +338,15 @@ QScalFacPlantDispatch(runCy,HOUR,YTIME)$TIME(YTIME)..
          * exp(-iLoadCurveConstr(runCy,YTIME)*(0.25 + ord(HOUR)-1))
          + VCorrBaseLoad(runCy,YTIME);
 $offtext
+
+* Estimate the electricity of CHP Plants
+QElecChpPlants(runCy,YTIME)$TIME(YTIME)..
+         VElecChpPlants(runCy,YTIME) 
+         =E=
+         ( (1/0.086 * sum((INDDOM,CHP),VConsFuel(runCy,INDDOM,CHP,YTIME)) * VElecIndPrices(runCy,YTIME)) + 
+         iMxmShareChpElec(runCy,YTIME)*VElecDem(runCy,YTIME) - SQRT( SQR((1/0.086 * sum((INDDOM,CHP),VConsFuel(runCy,INDDOM,CHP,YTIME)) * 
+         VElecIndPrices(runCy,YTIME)) - 
+         iMxmShareChpElec(runCy,YTIME)*VElecDem(runCy,YTIME)) + SQR(1E-4) ) )/2;
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)

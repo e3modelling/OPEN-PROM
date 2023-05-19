@@ -502,3 +502,8 @@ $include"./iMatureFacLoad.csv"
 $offdelim
 ;
 iMatureFacPlaDisp(allCy,PGALL,YTIME)$an(YTIME) = iMatureFacLoad(allCy,PGALL,YTIME);
+table iMxmShareChpElec(allCy,YTIME)	 "Maximum share of CHP electricity in a country (1)"
+$ondelim
+$include"./iMxmShareChpElec.csv"
+$offdelim
+;
