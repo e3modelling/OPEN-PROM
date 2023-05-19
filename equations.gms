@@ -207,6 +207,10 @@ QMaxmAllowRenPotent(runCy,PGRENEF,YTIME)$TIME(YTIME)..
          VMaxmAllowRenPotent(runCy,PGRENEF,YTIME) =E=
          ( VRenPotSupplyCurve(runCy,PGRENEF,YTIME)+ iMaxRenPotential(runCy,PGRENEF,YTIME))/2;
 
+* Compute minimum allowed renewable potential 
+QMnmAllowRenPot(runCy,PGRENEF,YTIME)$TIME(YTIME)..  
+         VMnmAllowRenPot(runCy,PGRENEF,YTIME) =E=
+         ( VRenPotSupplyCurve(runCy,PGRENEF,YTIME) + VMnmAllowRenPot(runCy,PGRENEF,YTIME))/2;
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)
