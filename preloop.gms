@@ -45,8 +45,17 @@ VFuelPriceSub.l(allCy,"PG",PGEF,YTIME)=1;
 VProdCostTechnology.l(allCy,PGALL2,YTIME)=0.1;
 VVarCostTech.l(allCy,PGALL,YTIME)=0.1;
 VProdCostTechPreReplacAvail.l(allCy,PGALL,PGALL2,YTIME)=0.1;
-*VHourProdCostTech.up(allCy,PGALL,HOUR,YTIME)=1e6;
-*VHourProdCostTech.l(allCy,PGALL,HOUR,YTIME)=1;
+*VHourProdCostTech.up(allCy,PGALL,HOUR,YTIME)=8000;
+*VHourProdCostTech.l(allCy,PGALL,HOUR,YTIME)=10;
 *VTemScalWeibull.up(allCy,PGALL,HOUR,YTIME)=1e6;
 *VHourProdCostTech.lo(allCy,PGALL,HOUR,YTIME)=0.0001;
 VRenPotSupplyCurve.l(allCy,PGRENEF,YTIME)=0.1;
+$ontext
+
+VPowerPlantNewEq.l(allCy,PGALL,TT)=0.1;
+VHourProdCostOfTech.l(allCy,PGALL,HOUR,TT)=0.1;
+VPowerPlaShrNewEq.l(allCy,PGALL,TT)=0.1;
+VHourProdCostTech.l(runCy,PGALL,HOUR,TT)$period(ytime) = VPowerPlantNewEq.l(runCy,PGALL,TT)*VHourProdCostOfTech.l(runCy,PGALL,HOUR,TT)+
+         sum(CCS$CCS_NOCCS(CCS,PGALL), VPowerPlaShrNewEq.L(runCy,CCS,TT)*VHourProdCostOfTech.L(runCy,CCS,HOUR,TT));
+VHourProdCostTech.SCALE(runCy,PGALL,HOUR,TT)$PERIOD(ytime) = max(abs(VHourProdCostTech.l(runCy,PGALL,HOUR,TT)),1E-20);
+$offtext

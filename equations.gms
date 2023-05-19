@@ -223,7 +223,20 @@ QRenTechMatMult(runCy,PGALL,YTIME)$TIME(YTIME)..
                  sum(PGRENEF$PGALLtoPGRENEF(PGALL,PGRENEF),
                  sum(PGALL2$(PGALLtoPGRENEF(PGALL2,PGRENEF) $PGREN(PGALL2)),
                  VElecGenPlanCap(runCy,PGALL2,YTIME-1))/VRenPotSupplyCurve(runCy,PGRENEF,YTIME))-0.6)))
-           )$PGREN(PGALL);         
+           )$PGREN(PGALL);  
+$ontext
+* Compute temporary variable facilitating the scaling in Weibull equation
+QTempScalWeibull(runCy,PGALL,YTIME)$((not CCS(PGALL)) $TIME(YTIME))..
+         VTempScalWeibull(runCy,PGALL,YTIME) 
+         =E=
+              iMatFacPlaAvailCap(runCy,PGALL,YTIME) * VRenTechMatMult(runCy,PGALL,YTIME)*
+              sum(HOUR,
+                 (VHourProdTech(runCy,PGALL,HOUR,YTIME)$(not NOCCS(PGALL))
+                 +
+                 VHourProdCostTech(runCy,PGALL,HOUR,YTIME)$NOCCS(PGALL)
+                 )**(-6)
+              ); 
+$offtext                               
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)

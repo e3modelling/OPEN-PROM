@@ -487,3 +487,12 @@ iMinRenPotential(allCy,"SOL",YTIME)  = iCummMnmInstRenCap(allCy,"SOL",YTIME);
 iMinRenPotential(allCy,"DPV",YTIME)  = iCummMnmInstRenCap(allCy,"DPV",YTIME);
 iMinRenPotential(allCy,"BMSWAS",YTIME) = iCummMnmInstRenCap(allCy,"BMSWAS",YTIME);
 iMinRenPotential(allCy,"OTHREN",YTIME) = iCummMnmInstRenCap(allCy,"OTHREN",YTIME);
+$ontext
+table iMatFacCap(allCy,PGALL,YTIME)	 "Maturty factors on Capacity (1)"
+$ondelim
+$include"./iMatFacCap.csv"
+$offdelim
+;
+iMatFacPlaAvailCap(allCy,PGALL,YTIME)$an(YTIME) = iMatFacCap(allCy,PGALL,YTIME);
+iMatFacPlaAvailCap(allCy,CCS,YTIME)$an(YTIME)  =0;
+$offtext

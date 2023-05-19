@@ -76,10 +76,11 @@ $ondelim
 $include"./iPremReplacem.csv"
 $offdelim
 /
-iPlantDecomSched(allCy,PGALL,YTIME)	"Decided plant decomissioning schedule (GW)"
-iDecInvPlantSched(allCy,PGALL,YTIME) "Decided plant investment schedule (GW)"
-iMinRenPotential(allCy,PGRENEF,YTIME)	"Minimum renewable potential (GW)"	
-iMaxRenPotential(allCy,PGRENEF,YTIME)	"Maximum enewable potential (GW)"					
+iPlantDecomSched(allCy,PGALL,YTIME)	     "Decided plant decomissioning schedule (GW)"
+iDecInvPlantSched(allCy,PGALL,YTIME)     "Decided plant investment schedule (GW)"
+iMinRenPotential(allCy,PGRENEF,YTIME)	 "Minimum renewable potential (GW)"	
+iMaxRenPotential(allCy,PGRENEF,YTIME)	 "Maximum enewable potential (GW)"
+*iMatFacPlaAvailCap(allCy,PGALL,YTIME)	 "Maturity factor related to plant available capacity (1)"						
 ;
 
 
@@ -93,6 +94,7 @@ QElecPeakLoad(allCy,YTIME)	               "Compute elerctricity peak load"
 QBslMaxmLoad(allCy,YTIME) 	               "Compute baseload corresponding to maximum load"
 QElecBaseLoad(allCy,YTIME)	               "Compute electricity base load"
 QShrcap(allCy,PGALL,YTIME)	               "Compute SHRCAP"	
+*QTempScalWeibull(allCy,PGALL,YTIME)	       "Compute temporary variable facilitating the scaling in Weibull equation"	
 QMaxmAllowRenPotent(allCy,PGRENEF,YTIME)   "Compute maximum allowed renewable potential"
 QMnmAllowRenPot(allCy,PGRENEF,YTIME)	   "Compute minimum allowed renewable potential" 
 QRenTechMatMult(allCy,PGALL,YTIME)	       "Compute renewable technologies maturity multiplier"		 	
@@ -195,6 +197,7 @@ VVarCostTechNotPGSCRN(allCy,PGALL,YTIME)   "Variable cost of technology excludin
 VHourProdTech(allCy,PGALL,HOUR,YTIME)     "Hourly production cost of technology (Euro/KWh)"
 VProdCostTechnology(allCy,PGALL,YTIME)	  "Production cost of technology (Euro/KWh)"
 VElecCapChpPla(allCy,CHP,YTIME)	          "Capacity of CHP Plants (GW)"
+*VTempScalWeibull(allCy,PGALL,YTIME)	      "Temporary variable facilitating the scaling in Weibull equation (1)"
 VRenTechMatMult(allCy,PGALL,YTIME)	      "Renewable technologies maturity multiplier (1)"	
 VRenPotSupplyCurve(allCy,PGRENEF,YTIME)	  "Renewable potential supply curve	(1)"
 VMaxmAllowRenPotent(allCy,PGRENEF,YTIME)  "Maximum allowed renewable potential (GW)"
