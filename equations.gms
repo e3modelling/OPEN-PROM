@@ -370,6 +370,11 @@ QElecProdPowGenPlants(runCy,PGALL,YTIME)$TIME(YTIME)..
          * VElecGenPlanCap(runCy,PGALL,YTIME)* sum(HOUR, exp(-VScalFacPlaDisp(runCy,HOUR,YTIME)));
         !!/VPowPlantSorting(runCy,PGALL,YTIME)));
 
+* Compute sector contribution to total CHP production
+QSecContrTotChpProd(runCy,INDDOM,CHP,YTIME)$(TIME(YTIME) $SECTTECH(INDDOM,CHP))..
+         VSecContrTotChpProd(runCy,INDDOM,CHP,YTIME) 
+          =E=
+         VConsFuel(runCy,INDDOM,CHP,YTIME)/(1e-6+SUM(INDDOM2,VConsFuel(runCy,INDDOM2,CHP,YTIME)));
 
 * Transport
 
