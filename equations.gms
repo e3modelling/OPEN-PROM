@@ -290,7 +290,12 @@ QElectrPeakLoad(runCy,PGALL,YTIME)$TIME(YTIME)..
                  =E=
          VVarCostTechnology(runCy,PGALL,YTIME)
          /
-         VElecPeakLoads(runCy,YTIME);                
+         VElecPeakLoads(runCy,YTIME);  
+
+* Compute the new capacity added every year
+QNewCapYearly(runCy,PGALL,YTIME)$(PGREN(PGALL)$TIME(YTIME))..
+         VNewCapYearly(runCy,PGALL,YTIME) =e=
+VElecGenPlanCap(runCy,PGALL,YTIME)- VElecGenPlanCap(runCy,PGALL,YTIME-1);                       
 
 * Transport
 
