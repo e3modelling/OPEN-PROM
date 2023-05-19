@@ -361,6 +361,16 @@ VReqElecProd(runCy,YTIME)
          sum(hour, sum(CHP,VElecCapChpPla(runCy,CHP,YTIME)*exp(-VScalFacPlaDisp(runCy,HOUR,YTIME)/ 
          sum(pgall$chptoeon(chp,pgall),VPowPlantSorting(runCy,PGALL,YTIME)))));
 
+* Compute electricity production from power generation plants
+QElecProdPowGenPlants(runCy,PGALL,YTIME)$TIME(YTIME)..
+         VElecProdPowGenPlants(runCy,PGALL,YTIME)
+                 =E=
+         VNonChpElecProd(runCy,YTIME) /
+         (VTotReqElecProd(runCy,YTIME)- VReqElecProd(runCy,YTIME))
+         * VElecGenPlanCap(runCy,PGALL,YTIME)* sum(HOUR, exp(-VScalFacPlaDisp(runCy,HOUR,YTIME)));
+        !!/VPowPlantSorting(runCy,PGALL,YTIME)));
+
+
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)
