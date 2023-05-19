@@ -325,6 +325,19 @@ VElecGenPlanCap(runCy,pgall,ytime)$ (not PGREN(PGALL))
 VOverallCap(runCy,PGALL,YTIME-1)
 /VAvgCapFacRes(runCy,PGALL,YTIME-1))$PGREN(PGALL);
 
+$ontext
+* Compute the scaling factor for plant dispatching
+QScalFacPlantDispatch(runCy,HOUR,YTIME)$TIME(YTIME)..
+         sum(PGALL,
+                 (VOverallCap(runCy,PGALL,YTIME)+
+                 sum(CHP$CHPtoEON(CHP,PGALL),VElecCapChpPla(runCy,CHP,YTIME)))*
+                 exp(-VScalFacPlaDisp(runCy,HOUR,YTIME)/VPowPlantSorting(runCy,PGALL,YTIME))
+                 )
+         =E=
+         (VElecPeakLoad(runCy,YTIME) - VCorrBaseLoad(runCy,YTIME))
+         * exp(-iLoadCurveConstr(runCy,YTIME)*(0.25 + ord(HOUR)-1))
+         + VCorrBaseLoad(runCy,YTIME);
+$offtext
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)
