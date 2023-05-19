@@ -80,7 +80,8 @@ iPlantDecomSched(allCy,PGALL,YTIME)	     "Decided plant decomissioning schedule 
 iDecInvPlantSched(allCy,PGALL,YTIME)     "Decided plant investment schedule (GW)"
 iMinRenPotential(allCy,PGRENEF,YTIME)	 "Minimum renewable potential (GW)"	
 iMaxRenPotential(allCy,PGRENEF,YTIME)	 "Maximum enewable potential (GW)"
-*iMatFacPlaAvailCap(allCy,PGALL,YTIME)	 "Maturity factor related to plant available capacity (1)"						
+*iMatFacPlaAvailCap(allCy,PGALL,YTIME)	 "Maturity factor related to plant available capacity (1)"
+iMatureFacPlaDisp(allCy,PGALL,YTIME)	 "Maturity factor related to plant dispatching (1)"							
 ;
 
 
@@ -96,6 +97,7 @@ QElecBaseLoad(allCy,YTIME)	               "Compute electricity base load"
 QShrcap(allCy,PGALL,YTIME)	               "Compute SHRCAP"	
 QElecGenCap(allCy,PGALL,YTIME)	           "Compute electricity generation capacity"	
 *QTempScalWeibull(allCy,PGALL,YTIME)	   "Compute temporary variable facilitating the scaling in Weibull equation"
+QVarCostTechnology(allCy,PGALL,YTIME)	   "Compute variable cost of technology" 	
 QElecGenCapacity(allCy,PGALL,YTIME)	       "Compute electricity generation capacity"	
 QPowPlaShaNewEquip(allCy,PGALL,YTIME)	   "Compute the power plant share in new equipment"	
 QNewInvDecis(allCy,YTIME)	               "Compute for Power Plant new investment decision"		
@@ -202,6 +204,7 @@ VHourProdTech(allCy,PGALL,HOUR,YTIME)     "Hourly production cost of technology 
 VProdCostTechnology(allCy,PGALL,YTIME)	  "Production cost of technology (Euro/KWh)"
 VElecCapChpPla(allCy,CHP,YTIME)	          "Capacity of CHP Plants (GW)"
 VTempScalWeibull(allCy,PGALL,YTIME)	      "Temporary variable facilitating the scaling in Weibull equation (1)"
+VVarCostTechnology(allCy,PGALL,YTIME)	  "Variable cost of technology (Euro/KWh)"	
 VNewInvDecis(allCy,YTIME)	              "Power plant sorting for new investment decision according to total cost (1)"	
 VPowPlaShaNewEquip(allCy,PGALL,YTIME)	  "Power plant share in new equipment (1)"	
 VRenTechMatMult(allCy,PGALL,YTIME)	      "Renewable technologies maturity multiplier (1)"	

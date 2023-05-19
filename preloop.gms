@@ -60,3 +60,4 @@ VHourProdCostTech.l(runCy,PGALL,HOUR,TT)$period(ytime) = VPowerPlantNewEq.l(runC
 VHourProdCostTech.SCALE(runCy,PGALL,HOUR,TT)$PERIOD(ytime) = max(abs(VHourProdCostTech.l(runCy,PGALL,HOUR,TT)),1E-20);
 $offtext
 VNewInvDecis.l(allCy,YTIME)=0.1;
+VVarCostTechnology.l(allCy,PGALL,YTIME)=0.1;

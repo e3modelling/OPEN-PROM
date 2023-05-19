@@ -496,3 +496,9 @@ $offdelim
 iMatFacPlaAvailCap(allCy,PGALL,YTIME)$an(YTIME) = iMatFacCap(allCy,PGALL,YTIME);
 iMatFacPlaAvailCap(allCy,CCS,YTIME)$an(YTIME)  =0;
 $offtext
+table iMatureFacLoad(allCy,PGALL,YTIME)	 "Maturty factors on Load (1)"
+$ondelim
+$include"./iMatureFacLoad.csv"
+$offdelim
+;
+iMatureFacPlaDisp(allCy,PGALL,YTIME)$an(YTIME) = iMatureFacLoad(allCy,PGALL,YTIME);

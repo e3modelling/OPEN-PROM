@@ -271,6 +271,13 @@ QElecGenCap(runCy,PGALL,YTIME)$TIME(YTIME)..
          VElecGenPlanCap(runCy,PGALL,YTIME)
              =E=
          ( VElecGenPlantsCapac(runCy,PGALL,YTIME) + 1e-6 + SQRT( SQR(VElecGenPlantsCapac(runCy,PGALL,YTIME)-1e-6) + SQR(1e-4) ) )/2;
+
+* Compute variable cost of technology 
+QVarCostTechnology(runCy,PGALL,YTIME)$TIME(YTIME)..
+         VVarCostTechnology(runCy,PGALL,YTIME)
+         =E=  
+          iMatureFacPlaDisp(runCy,PGALL,YTIME)*VVarCostTechnology(runCy,PGALL,YTIME)**(-2);  
+                 
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)
