@@ -266,6 +266,11 @@ QElecGenCapacity(runCy,PGALL,YTIME)$TIME(YTIME)..
          - ((VElecGenPlantsCapac(runCy,PGALL,YTIME-1)-iPlantDecomSched(runCy,PGALL,YTIME-1))* 
          iPlantAvailRate(runCy,PGALL,YTIME)*(1/iTechLftPlaType(PGALL)))$PGSCRN(PGALL);
 
+* Compute electricity generation capacity
+QElecGenCap(runCy,PGALL,YTIME)$TIME(YTIME)..
+         VElecGenPlanCap(runCy,PGALL,YTIME)
+             =E=
+         ( VElecGenPlantsCapac(runCy,PGALL,YTIME) + 1e-6 + SQRT( SQR(VElecGenPlantsCapac(runCy,PGALL,YTIME)-1e-6) + SQR(1e-4) ) )/2;
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)
