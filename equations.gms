@@ -383,6 +383,16 @@ QElecProdChpPlants(runCy,CHP,YTIME)$TIME(YTIME)..
          sum(INDDOM,VConsFuel(runCy,INDDOM,CHP,YTIME))/SUM(chp2,sum(INDDOM,VConsFuel(runCy,INDDOM,CHP2,YTIME)))*
          (VElecDem(runCy,YTIME) - SUM(PGALL,VElecProd(runCy,PGALL,YTIME)));
 
+* Compute the share of renewables in gross electricity production for subsdidized renewables
+QShareRenGrossElecProd(runCy,YTIME)$TIME(YTIME)..
+                 VResShareGrossElecProd(runCy,YTIME) 
+                 =E=
+                 (SUM(PGNREN$((not sameas("PGASHYD",PGNREN)) $(not sameas("PGSHYD",PGNREN)) $(not sameas("PGLHYD",PGNREN)) ),
+                         VElecProdPowGenPlants(runCy,PGNREN,YTIME)))/
+                 (SUM(PGALL,VElecProdPowGenPlants(runCy,PGALL,YTIME))+ 
+                 1e-3*sum(DSBS,sum(CHP$SECTTECH(DSBS,CHP),VConsFuel(runCy,DSBS,CHP,YTIME)))/8.6e-5*VElecIndPrices(runCy,YTIME) + 
+                 1/0.086 *VNetImports(runCy,"ELC",YTIME));         
+
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)
