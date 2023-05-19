@@ -316,6 +316,15 @@ VNewCapYearly(runCy,PGALL,YTIME-3)+VNewCapYearly(runCy,PGALL,YTIME-4)+VNewCapYea
 VNewCapYearly(runCy,PGALL,YTIME-6)+VNewCapYearly(runCy,PGALL,YTIME-7)+VNewCapYearly(runCy,PGALL,YTIME-8)+
 VNewCapYearly(runCy,PGALL,YTIME-9));
 
+* Compute overall capacity
+QOverallCap(runCy,PGALL,YTIME)$TIME(YTIME)..
+     VOverallCap(runCy,PGALL,YTIME)
+     =E=
+VElecGenPlanCap(runCy,pgall,ytime)$ (not PGREN(PGALL))
++VAvgCapFacRes(runCy,PGALL,YTIME-1)*(VNewCapYearly(runCy,PGALL,YTIME)/iPlantAvailRate(runCy,PGALL,YTIME)+
+VOverallCap(runCy,PGALL,YTIME-1)
+/VAvgCapFacRes(runCy,PGALL,YTIME-1))$PGREN(PGALL);
+
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)
