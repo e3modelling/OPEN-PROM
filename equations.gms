@@ -376,6 +376,13 @@ QSecContrTotChpProd(runCy,INDDOM,CHP,YTIME)$(TIME(YTIME) $SECTTECH(INDDOM,CHP)).
           =E=
          VConsFuel(runCy,INDDOM,CHP,YTIME)/(1e-6+SUM(INDDOM2,VConsFuel(runCy,INDDOM2,CHP,YTIME)));
 
+* Compute electricity production from CHP plants 
+QElecProdChpPlants(runCy,CHP,YTIME)$TIME(YTIME)..
+         VChpElecProd(runCy,CHP,YTIME)
+                 =E=
+         sum(INDDOM,VConsFuel(runCy,INDDOM,CHP,YTIME))/SUM(chp2,sum(INDDOM,VConsFuel(runCy,INDDOM,CHP2,YTIME)))*
+         (VElecDem(runCy,YTIME) - SUM(PGALL,VElecProd(runCy,PGALL,YTIME)));
+
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)
