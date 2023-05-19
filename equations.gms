@@ -236,7 +236,13 @@ QTempScalWeibull(runCy,PGALL,YTIME)$((not CCS(PGALL)) $TIME(YTIME))..
                  VHourProdCostTech(runCy,PGALL,HOUR,YTIME)$NOCCS(PGALL)
                  )**(-6)
               ); 
-$offtext                               
+$offtext  
+
+* Compute for Power Plant new investment decision
+QNewInvDecis(runCy,YTIME)$TIME(YTIME)..
+         VNewInvDecis(runCy,YTIME)
+             =E=
+         sum(PGALL$(not CCS(PGALL)),VTempScalWeibull(runCy,PGALL,YTIME));
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)
