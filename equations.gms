@@ -354,6 +354,13 @@ QNonChpElecProd(runCy,YTIME)$TIME(YTIME)..
          =E=
   (VElecDem(runCy,YTIME) - VElecChpPlants(runCy,YTIME));  
 
+* Compute total required electricity production 
+QReqElecProd(runCy,YTIME)$TIME(YTIME)..
+VReqElecProd(runCy,YTIME) 
+                   =E=
+         sum(hour, sum(CHP,VElecCapChpPla(runCy,CHP,YTIME)*exp(-VScalFacPlaDisp(runCy,HOUR,YTIME)/ 
+         sum(pgall$chptoeon(chp,pgall),VPowPlantSorting(runCy,PGALL,YTIME)))));
+
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)
