@@ -243,6 +243,16 @@ QNewInvDecis(runCy,YTIME)$TIME(YTIME)..
          VNewInvDecis(runCy,YTIME)
              =E=
          sum(PGALL$(not CCS(PGALL)),VTempScalWeibull(runCy,PGALL,YTIME));
+
+* Compute the power plant share in new equipment
+QPowPlaShaNewEquip(runCy,PGALL,YTIME)$(TIME(YTIME)) ..
+        VPowPlaShaNewEquip(runCy,PGALL,YTIME)
+             =E=
+         ( VTempScalWeibull(runCy,PGALL,YTIME)/ VNewInvDecis(runCy,YTIME))$(not CCS(PGALL))
+          +
+          sum(NOCCS$CCS_NOCCS(PGALL,NOCCS),VPowPlaShaNewEquip(runCy,NOCCS,YTIME))$CCS(PGALL);
+
+
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)
