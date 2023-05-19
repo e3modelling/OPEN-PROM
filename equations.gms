@@ -211,6 +211,19 @@ QMaxmAllowRenPotent(runCy,PGRENEF,YTIME)$TIME(YTIME)..
 QMnmAllowRenPot(runCy,PGRENEF,YTIME)$TIME(YTIME)..  
          VMnmAllowRenPot(runCy,PGRENEF,YTIME) =E=
          ( VRenPotSupplyCurve(runCy,PGRENEF,YTIME) + VMnmAllowRenPot(runCy,PGRENEF,YTIME))/2;
+
+* Compute renewable technologies maturity multiplier
+QRenTechMatMult(runCy,PGALL,YTIME)$TIME(YTIME)..
+         VRenTechMatMult(runCy,PGALL,YTIME)
+          =E=
+         1$(NOT PGREN(PGALL))
+         +
+         (
+           1/(1+EXP(9*(
+                 sum(PGRENEF$PGALLtoPGRENEF(PGALL,PGRENEF),
+                 sum(PGALL2$(PGALLtoPGRENEF(PGALL2,PGRENEF) $PGREN(PGALL2)),
+                 VElecGenPlanCap(runCy,PGALL2,YTIME-1))/VRenPotSupplyCurve(runCy,PGRENEF,YTIME))-0.6)))
+           )$PGREN(PGALL);         
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)
