@@ -62,3 +62,4 @@ $offtext
 VNewInvDecis.l(allCy,YTIME)=0.1;
 VVarCostTechnology.l(allCy,PGALL,YTIME)=0.1;
 VElecPeakLoads.l(allCy,YTIME)=0.1;
+VNewCapYearly.l(allCy,PGALL,YTIME)=0.1;

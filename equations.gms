@@ -297,6 +297,25 @@ QNewCapYearly(runCy,PGALL,YTIME)$(PGREN(PGALL)$TIME(YTIME))..
          VNewCapYearly(runCy,PGALL,YTIME) =e=
 VElecGenPlanCap(runCy,PGALL,YTIME)- VElecGenPlanCap(runCy,PGALL,YTIME-1);                       
 
+* Compute the average capacity factor of RES
+QAvgCapFacRes(runCy,PGALL,YTIME)$(PGREN(PGALL)$TIME(YTIME))..
+   VAvgCapFacRes(runCy,PGALL,YTIME)
+      =E=
+    (iPlantAvailRate(runCy,PGALL,YTIME)*VNewCapYearly(runCy,PGALL,YTIME)+
+     iPlantAvailRate(runCy,PGALL,YTIME-1)*VNewCapYearly(runCy,PGALL,YTIME-1)+
+     iPlantAvailRate(runCy,PGALL,YTIME-2)*VNewCapYearly(runCy,PGALL,YTIME-2)+
+     iPlantAvailRate(runCy,PGALL,YTIME-3)*VNewCapYearly(runCy,PGALL,YTIME-3)+
+     iPlantAvailRate(runCy,PGALL,YTIME-4)*VNewCapYearly(runCy,PGALL,YTIME-4)+
+     iPlantAvailRate(runCy,PGALL,YTIME-5)*VNewCapYearly(runCy,PGALL,YTIME-5)+
+     iPlantAvailRate(runCy,PGALL,YTIME-6)*VNewCapYearly(runCy,PGALL,YTIME-6)+
+     iPlantAvailRate(runCy,PGALL,YTIME-7)*VNewCapYearly(runCy,PGALL,YTIME-7)+
+     iPlantAvailRate(runCy,PGALL,YTIME-8)*VNewCapYearly(runCy,PGALL,YTIME-8)+
+     iPlantAvailRate(runCy,PGALL,YTIME-9)*VNewCapYearly(runCy,PGALL,YTIME-9))/
+(VNewCapYearly(runCy,PGALL,YTIME)+VNewCapYearly(runCy,PGALL,YTIME-1)+VNewCapYearly(runCy,PGALL,YTIME-2)+
+VNewCapYearly(runCy,PGALL,YTIME-3)+VNewCapYearly(runCy,PGALL,YTIME-4)+VNewCapYearly(runCy,PGALL,YTIME-5)+
+VNewCapYearly(runCy,PGALL,YTIME-6)+VNewCapYearly(runCy,PGALL,YTIME-7)+VNewCapYearly(runCy,PGALL,YTIME-8)+
+VNewCapYearly(runCy,PGALL,YTIME-9));
+
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)
@@ -700,7 +719,7 @@ QTotTransfOutput(runCy,EFS,YTIME)$TIME(YTIME)..
          VTotTransfOutput(runCy,EFS,YTIME)
                  =E=
          VTransfOutThermPowSta(runCy,EFS,YTIME) + VTransfOutputDHPlants(runCy,EFS,YTIME) + VTransfOutputNuclear(runCy,EFS,YTIME) + VTransfOutputPatFuel(runCy,EFS,YTIME) +
-         VTransfOutputRefineries(runCy,EFS,YTIME);        !!+ TONEW(CYrun,EFS,YTIME)
+         VTransfOutputRefineries(runCy,EFS,YTIME);        !!+ TONEW(runCy,EFS,YTIME)
 
 * Compute transfers
 QTransfers(runCy,EFS,YTIME)$TIME(YTIME)..
