@@ -448,7 +448,23 @@ QLongPowGenIntPri(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
 
                  (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
 
-                 *sTWhToMtoe/VPlantEffPlantType(runCy,PGALL,YTIME)));                               
+                 *sTWhToMtoe/VPlantEffPlantType(runCy,PGALL,YTIME))); 
+
+* Compute short term power generation cost of technologies including international Prices of main fuels 
+QShoPowGenIntPri(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
+         VShoPowGenIntPri(runCy,PGALL,ESET,YTIME)
+                 =E=
+             sum(PGEF$PGALLTOEF(PGALL,PGEF),
+                 (iVarGroCostPlaType(runCy,PGALL,YTIME)/1000+((
+  SUM(EF,sum(WEF$EFtoWEF("PG",EF,WEF), iIntPricesMainFuels(WEF,YTIME))*sTWhToMtoe/1000*1.5))$(not PGREN(PGALL))    +
+
+                 iCO2CaptRate(runCy,PGALL,YTIME)*VCO2CO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME) +
+
+                 (1-iCO2CaptRate(runCy,PGALL,YTIME))*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
+
+                 (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
+
+                 *sTWhToMtoe/VPlantEffPlantType(runCy,PGALL,YTIME)));                                               
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)
