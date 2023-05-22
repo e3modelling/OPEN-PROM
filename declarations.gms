@@ -213,6 +213,8 @@ QCstCO2SeqCsts(allCy,YTIME)	                 "Compute cost curve for CO2 sequest
 *** Emissions Constraints Equations
 QTotCo2AllCoun(YTIME)	                   "Compute total CO2eq GHG emissions in all countries"
 QTotGhgEmisAllCountrNap(NAP,YTIME)	       "Compute total CO2eq GHG emissions in all countries per NAP sector"	
+QHouseExpEne(allCy,YTIME)	               "Compute households expenditures on energy"
+
 *** Miscellaneous
 qDummyObj                                     "Define dummy objective function"
 ;
@@ -372,6 +374,8 @@ VCO2CO2SeqCsts(allCy,YTIME)	                            "Cost curve for CO2 sequ
 *** Emissions Constraints Variables
 VTotCo2AllCoun(YTIME)	                                "Total CO2eq GHG emissions in all countries (1)"
 VTotGhgEmisAllCountrNap(NAP,YTIME)	                    "Total CO2eq GHG emissions in all countries per NAP sector (1)"	
+VHouseExpEne(allCy,YTIME)	                            "Households expenditures on energy (billions)"
+	
 *** Miscellaneous
 vDummyObj                                               "Dummy maximisation variable (1)"
 ;

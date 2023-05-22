@@ -1118,6 +1118,14 @@ QTotCo2AllCoun(YTIME)$TIME(YTIME)..
          VTotCo2AllCoun(YTIME) 
          =E=
          sum(NAP, VTotGhgEmisAllCountrNap(NAP,YTIME));
-         
+
+* Compute households expenditures on energy
+QHouseExpEne(runCy,YTIME)$TIME(YTIME)..
+                 VHouseExpEne(runCy,YTIME)
+                 =E= 
+                 SUM(DSBS$HOU(DSBS),SUM(EF$SECTTECH(dSBS,EF),VConsRemSubEquip(runCy,DSBS,EF,YTIME)*(VFuelPriceSub(runCy,DSBS,EF,YTIME)-iEffValueInEuro(runCy,DSBS,YTIME)/
+                 1000-iCo2EmiFac(runCy,"PG",EF,YTIME)*sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))/1000)))
+                                          +VElecPriIndResNoCliPol(runCy,"R",YTIME)*VElecNonSub(runCy,"HOU",YTIME)/sTWhToMtoe;         
+
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
