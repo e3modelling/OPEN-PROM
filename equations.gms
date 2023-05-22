@@ -1091,8 +1091,10 @@ QCstCO2SeqCsts(runCy,YTIME)$TIME(YTIME)..
        (1-VWghtTrnstLnrToExpo(runCy,YTIME))*(iElastCO2Seq(runCy,"mc_a")*VCumCO2Capt(runCy,YTIME)+iElastCO2Seq(runCy,"mc_b"))+
        VWghtTrnstLnrToExpo(runCy,YTIME)*(iElastCO2Seq(runCy,"mc_c")*exp(iElastCO2Seq(runCy,"mc_d")*VCumCO2Capt(runCy,YTIME)));           
 
-*EMISSIONS CONSTRAINTS 
-*Compute total CO2eq GHG emissions in all countries per NAP sector
+
+* EMISSIONS CONSTRAINTS 
+
+* Compute total CO2eq GHG emissions in all countries per NAP sector
 QTotGhgEmisAllCountrNap(NAP,YTIME)$TIME(YTIME)..
          VTotGhgEmisAllCountrNap(NAP,YTIME)
           =E=
@@ -1126,6 +1128,40 @@ QHouseExpEne(runCy,YTIME)$TIME(YTIME)..
                  SUM(DSBS$HOU(DSBS),SUM(EF$SECTTECH(dSBS,EF),VConsRemSubEquip(runCy,DSBS,EF,YTIME)*(VFuelPriceSub(runCy,DSBS,EF,YTIME)-iEffValueInEuro(runCy,DSBS,YTIME)/
                  1000-iCo2EmiFac(runCy,"PG",EF,YTIME)*sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))/1000)))
                                           +VElecPriIndResNoCliPol(runCy,"R",YTIME)*VElecNonSub(runCy,"HOU",YTIME)/sTWhToMtoe;         
+
+
+* Prices
+
+* Compute fuel prices per subsector and fuel, separate carbon value in each sector
+QFuelPriSubSepCarbVal(runCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF) $TIME(YTIME) $(not sameas("NUC",EF)))..
+         VFuelPriceSub(runCy,SBS,EF,YTIME)
+                 =E=
+      (
+           (1+sum(WEF$EFtoWEF(SBS,EF,WEF),sum(NAP$NAPtoALLSBS(NAP,SBS),iScenarioPri(WEF,NAP,YTIME))))*     !!ONLY FOR THE ETS SECTORS
+         (
+
+           (1-iPriceReform(runCy,SBS,EF,YTIME))*
+           (iResInPriceEq(runCy,SBS,EF,YTIME) + VFuelPriceSub(runCy,SBS,EF,YTIME-1)
+           + iIntToConsuPrices(runCy,SBS,EF,YTIME) * sum(WEF$EFtoWEF(SBS,EF,WEF), (iIntPricesMainFuels(WEF,YTIME) - iIntPricesMainFuels(WEF,YTIME-1)) / 1000 ))
+           + iPriceReform(runCy,SBS,EF,YTIME)*iPriceTragets(runCy,SBS,EF,YTIME)
+)
+          + iCo2EmiFac(runCy,SBS,EF,YTIME) *sum(NAP$NAPtoALLSBS(NAP,SBS),(VCarVal(runCy,NAP,YTIME)))/1000
+          + ((iEffValueInEuro(runCy,SBS,YTIME)-iEffValueInEuro(runCy,SBS,YTIME-1))/1000)$DSBS(SBS)
+         )$( not (ELCEF(EF) or HEATPUMP(EF) or ALTEF(EF)))
+         +
+         (
+iConsPricesFuelSub(runCy,SBS,EF,"2017") $(DSBS(SBS))$ALTEF(EF)
+         )
+         +
+         (
+           (iResInPriceEq(runCy,SBS,EF,YTIME)*0.086 + VElecPriInduResConsu(runCy,"i",YTIME)$INDTRANS(SBS)+VElecPriInduResConsu(runCy,"r",YTIME)$RESIDENT(SBS))/sTWhToMtoe
+            +
+            ((iEffValueInEuro(runCy,SBS,YTIME))/1000)$DSBS(SBS)
+         )$(ELCEF(EF) or HEATPUMP(EF))
+         +
+         (
+                 VHydrogenPri(runCy,SBS,YTIME-1)$DSBS(SBS)
+         )$(H2EF(EF) or sameas("STE1AH2F",EF));
 
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;

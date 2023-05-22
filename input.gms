@@ -517,3 +517,55 @@ $include"./iContrElecPrice.csv"
 $offdelim
 ;
 iFacElecPriConsu(allCy,ELCPCHAR,YTIME)$an(YTIME) = iContrElecPrice(allCy,ELCPCHAR,YTIME);
+iScenarioPri(WEF,"NOTRADE",YTIME)=0;
+table iDataPriceReform(allCy,AGSECT,EF,YTIME)	 "Price reform (1)"
+$ondelim
+$include"./iDataPriceReform.csv"
+$offdelim
+;
+* INSERT MECHANSIM FOR PRICE REFORM!!
+iPriceReform(runCy,INDSE1(SBS),EF,YTIME)=iDataPriceReform(runCy,"INDSE1",EF,YTIME) ;
+iPriceReform(runCy,DOMSE1(SBS),EF,YTIME)=iDataPriceReform(runCy,"DOMSE1",EF,YTIME) ;
+iPriceReform(runCy,NENSE1(SBS),EF,YTIME)=iDataPriceReform(runCy,"NENSE1",EF,YTIME) ;
+iPriceReform(runCy,TRANS1(SBS),EF,YTIME)=iDataPriceReform(runCy,"TRANS1",EF,YTIME) ;
+iPriceReform(runCy,PG(SBS),EF,YTIME)=iDataPriceReform(runCy,"INDSE1",EF,YTIME) ;
+table iDataPriceTargets(allCy,AGSECT,EF,YTIME)	 "Data for the Price targets (1)"
+$ondelim
+$include"./iDataPriceTargets.csv"
+$offdelim
+;
+iPriceTragets(runCy,INDSE1(SBS),EF,YTIME)=iDataPriceTargets(runCy,"INDSE1",EF,"2030") ;
+iPriceTragets(runCy,DOMSE1(SBS),EF,YTIME)=iDataPriceTargets(runCy,"DOMSE1",EF,"2030") ;
+iPriceTragets(runCy,NENSE1(SBS),EF,YTIME)=iDataPriceTargets(runCy,"NENSE1",EF,"2030") ;
+iPriceTragets(runCy,TRANS1(SBS),EF,YTIME)=iDataPriceTargets(runCy,"TRANS1",EF,"2030") ;
+iPriceTragets(runCy,PG(SBS),EF,YTIME)=iDataPriceTargets(runCy,"INDSE1",EF,"2030") ;
+
+*SPECIFIC CASE FOR NATURAL GAS PRICES!!!
+
+iPriceTragets("RAS",INDSE1(SBS),"NGS",YTIME)=iDataPriceTargets("RAS","INDSE1","NGS",YTIME) ;
+iPriceTragets("RAS",DOMSE1(SBS),"NGS",YTIME)=iDataPriceTargets("RAS","DOMSE1","NGS",YTIME) ;
+iPriceTragets("RAS",NENSE1(SBS),"NGS",YTIME)=iDataPriceTargets("RAS","NENSE1","NGS",YTIME) ;
+iPriceTragets("RAS",PG(SBS),"NGS",YTIME)=iDataPriceTargets("RAS","INDSE1","NGS",YTIME) ;
+
+iPriceTragets("MAR",INDSE1(SBS),"NGS",YTIME)=iDataPriceTargets("MAR","INDSE1","NGS",YTIME) ;
+iPriceTragets("MAR",DOMSE1(SBS),"NGS",YTIME)=iDataPriceTargets("MAR","DOMSE1","NGS",YTIME) ;
+iPriceTragets("MAR",NENSE1(SBS),"NGS",YTIME)=iDataPriceTargets("MAR","NENSE1","NGS",YTIME) ;
+iPriceTragets("MAR",PG(SBS),"NGS",YTIME)=iDataPriceTargets("MAR","INDSE1","NGS",YTIME) ;
+table iResDomPriEq(allCy,SBS,EF,YTIME)	 "Residuals for domestic prices in equations after 2005 (1)"
+$ondelim
+$include"./iResDomPriEq.csv"
+$offdelim
+;
+iResInPriceEq(allCy,SBS,EF,YTIME)$an(YTIME) = iResDomPriEq(allCy,SBS,EF,YTIME)/1000;
+table iWorldPriToDomPri(allCy,SBS,EF,YTIME)	 "Parameters linking world prices to domestic prices in equations, after 2005 (1)"
+$ondelim
+$include"./iWorldPriToDomPri.csv"
+$offdelim
+;
+iIntToConsuPrices(allCy,SBS,EF,YTIME)$an(YTIME) = iWorldPriToDomPri(allCy,SBS,EF,YTIME);
+table iDomFuelPrices(allCy,SBS,EF,YTIME)	 "Consumer Prices of fuels per subsector (kEuro2005/toe)"
+$ondelim
+$include"./iDomFuelPrices.csv"
+$offdelim
+;
+iConsPricesFuelSub(allCy,SBS,EF,YTIME)$(not AN(YTIME)) = iDomFuelPrices(allCy,SBS,EF,YTIME)/1000;

@@ -788,7 +788,8 @@ PGSOL Solar Photovoltaic Plants
 *PGOTHREN Other renewables mainly geothermal
 /
 
-
+pg(sbs)
+/pg/
 
 
 BMSPGALL(PGALL)

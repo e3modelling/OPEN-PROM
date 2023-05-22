@@ -84,6 +84,12 @@ iMatFacPlaAvailCap(allCy,PGALL,YTIME)	 "Maturity factor related to plant availab
 iMatureFacPlaDisp(allCy,PGALL,YTIME)	 "Maturity factor related to plant dispatching (1)"		
 iEffValueInEuro(allCy,SBS,YTIME)	     "Efficiency value (Euro05/toe)"
 iFacElecPriConsu(allCy,ELCPCHAR,YTIME)	 "Factors affecting electricity prices to consumers	(1)"
+iPriceTragets(allCy,SBS,EF,YTIME)	     "Price Targets	(1)"
+iPriceReform(allCy,SBS,EF,YTIME)	     "Price reformation (1)"
+iScenarioPri(WEF,NAP,YTIME)	             "Scenario prices (KEuro1990/toe)"
+iResInPriceEq(allCy,SBS,EF,YTIME)	     "Residual in Price Equations (1)"
+iIntToConsuPrices(allCy,SBS,EF,YTIME)	 "Alpha Parameter, linking International Prices with Consumer Prices (1)"
+iConsPricesFuelSub(allCy,SBS,EF,YTIME)	 "Consumer Prices of fuels per subsector (kEuro2005/toe)"					
 ;	
 
 
@@ -214,6 +220,7 @@ QCstCO2SeqCsts(allCy,YTIME)	                 "Compute cost curve for CO2 sequest
 QTotCo2AllCoun(YTIME)	                   "Compute total CO2eq GHG emissions in all countries"
 QTotGhgEmisAllCountrNap(NAP,YTIME)	       "Compute total CO2eq GHG emissions in all countries per NAP sector"	
 QHouseExpEne(allCy,YTIME)	               "Compute households expenditures on energy"
+QFuelPriSubSepCarbVal(allCy,SBS,EF,YTIME)  "Compute fuel prices per subsector and fuel, separate carbon value in each sector"
 
 *** Miscellaneous
 qDummyObj                                     "Define dummy objective function"
@@ -365,6 +372,10 @@ VExportsFake(allCy,EFS,YTIME)                        	"Exports fake (Mtoe)"
 VFkImpAllFuelsNotNatGas(allCy,EFS,YTIME)             	"Fake Imports for all fuels except natural gas (Mtoe)"
 VNetImports(allCy,EFS,YTIME)	                        "Net Imports (Mtoe)"
 
+*** Prices Variables
+VElecPriInduResConsu(allCy,ESET,YTIME)	                "Electricity price to Industrial and Residential Consumers (Euro2005/KWh)"
+VHydrogenPri(allCy,SBS,YTIME)	                        "Total Hydrogen Cost Per Sector (Euro/toe)"	 
+
 *** CO2 SEQUESTRATION COST CURVES VARIABLES
 VCO2ElcHrgProd(allCy,YTIME)	                            "CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
 VCumCO2Capt(allCy,YTIME)	                            "Cumulative CO2 captured (Mtn CO2)"		
@@ -375,7 +386,7 @@ VCO2CO2SeqCsts(allCy,YTIME)	                            "Cost curve for CO2 sequ
 VTotCo2AllCoun(YTIME)	                                "Total CO2eq GHG emissions in all countries (1)"
 VTotGhgEmisAllCountrNap(NAP,YTIME)	                    "Total CO2eq GHG emissions in all countries per NAP sector (1)"	
 VHouseExpEne(allCy,YTIME)	                            "Households expenditures on energy (billions)"
-	
+
 *** Miscellaneous
 vDummyObj                                               "Dummy maximisation variable (1)"
 ;
