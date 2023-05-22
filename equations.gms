@@ -476,7 +476,28 @@ QLongPowGenCost(runCy,ESET,YTIME)$TIME(YTIME)..
         +
          sum(CHP, VAvgElcProCHP(runCy,CHP,YTIME)*VChpElecProd(runCy,CHP,YTIME))
          )
-/VElecDem(runCy,YTIME);                                                            
+/VElecDem(runCy,YTIME); 
+
+* Compute long term power generation cost excluding climate policies
+QLonPowGenCostNoClimPol(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
+         VLonPowGenCostNoClimPol(runCy,PGALL,ESET,YTIME)
+                 =E=
+
+             (iDisc(runCy,"PG",YTIME)*EXP(iDisc(runCy,"pg",YTIME)*iTechLftPlaType(PGALL)) /
+             (EXP(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(PGALL))-1)*iGrossCapCosSubRen(runCy,PGALL,YTIME)*1000*iCGI(runCy,YTIME) +
+             iFixGrosCostPlaType(runCy,PGALL,YTIME))/iPlantAvailRate(runCy,PGALL,YTIME)
+             / (1000*(7.25$ISET(ESET)+2.25$RSET(ESET))) +
+             sum(PGEF$PGALLTOEF(PGALL,PGEF),
+                 (iVarGroCostPlaType(runCy,PGALL,YTIME)/1000+((VFuelPriceSub(runCy,"PG",PGEF,YTIME)-iEffValueInEuro(runCy,"pg",ytime)/1000-iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
+                 sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))/1000 )/1.2441+
+
+                 iCO2CaptRate(runCy,PGALL,YTIME)*VCO2CO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME) +
+
+                 (1-iCO2CaptRate(runCy,PGALL,YTIME))*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
+
+                 (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
+
+                 *sTWhToMtoe/VPlantEffPlantType(runCy,PGALL,YTIME)));
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)

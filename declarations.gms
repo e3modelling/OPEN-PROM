@@ -81,8 +81,9 @@ iDecInvPlantSched(allCy,PGALL,YTIME)     "Decided plant investment schedule (GW)
 iMinRenPotential(allCy,PGRENEF,YTIME)	 "Minimum renewable potential (GW)"	
 iMaxRenPotential(allCy,PGRENEF,YTIME)	 "Maximum enewable potential (GW)"
 *iMatFacPlaAvailCap(allCy,PGALL,YTIME)	 "Maturity factor related to plant available capacity (1)"
-iMatureFacPlaDisp(allCy,PGALL,YTIME)	 "Maturity factor related to plant dispatching (1)"							
-;
+iMatureFacPlaDisp(allCy,PGALL,YTIME)	 "Maturity factor related to plant dispatching (1)"		
+iEffValueInEuro(allCy,SBS,YTIME)	     "Efficiency value (Euro05/toe)"
+;	
 
 
 Equations
@@ -98,6 +99,7 @@ QShrcap(allCy,PGALL,YTIME)	               "Compute SHRCAP"
 QElecGenCap(allCy,PGALL,YTIME)	           "Compute electricity generation capacity"
 *QScalFacPlantDispatch(allCy,HOUR,YTIME)   "Compute the scaling factor for plant dispatching"		
 *QTempScalWeibull(allCy,PGALL,YTIME)	   "Compute temporary variable facilitating the scaling in Weibull equation"
+QLonPowGenCostNoClimPol(allCy,PGALL,ESET,YTIME)	"Compute long term power generation cost excluding climate policies"	
 QLongPowGenCost(allCy,ESET,YTIME)	       "Compute long term power generation cost"	
 QShoPowGenIntPri(allCy,PGALL,ESET,YTIME)   "Compute short term power generation cost of technologies including international Prices of main fuels" 	
 QLongPowGenIntPri(allCy,PGALL,ESET,YTIME)  "Compute long term power generation cost of technologies including international Prices of main fuels" 	
@@ -224,6 +226,7 @@ VOverallCap(allCy,PGALL,YTIME)	          "Overall Capacity (MW)"
 VVarCostTechNotPGSCRN(allCy,PGALL,YTIME)  "Variable cost of technology excluding PGSCRN (Euro/KWh)"
 VLongAvgPowGenCost(allCy,ESET,YTIME)	      "Long-term average power generation cost (Euro2005/kWh)"	
 VLongPowGenIntPri(allCy,PGALL,ESET,YTIME) "Long term power generation cost of technologies including international Prices of main fuels (kEuro05/toe)"
+VLonPowGenCostNoClimPol(allCy,PGALL,ESET,YTIME)	"Long-term average power generation cost  excluding climate policies(Euro2005/kWh)" 	
 VShoPowGenIntPri(allCy,PGALL,ESET,YTIME)  "Short term power generation cost of technologies including international Prices of main fuels (kEuro05/toe)"		
 VLonMnmpowGenCost(allCy,PGALL,YTIME)	  "Long-term minimum power generation cost (Euro2005/kWh)"	
 VChpElecProd(allCy,CHP,YTIME)	          "CHP electricity production (TWh)"	

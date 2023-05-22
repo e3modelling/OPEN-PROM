@@ -507,3 +507,4 @@ $ondelim
 $include"./iMxmShareChpElec.csv"
 $offdelim
 ;
+iEffValueInEuro(allCy,SBS,YTIME)=0;
