@@ -1091,5 +1091,33 @@ QCstCO2SeqCsts(runCy,YTIME)$TIME(YTIME)..
        (1-VWghtTrnstLnrToExpo(runCy,YTIME))*(iElastCO2Seq(runCy,"mc_a")*VCumCO2Capt(runCy,YTIME)+iElastCO2Seq(runCy,"mc_b"))+
        VWghtTrnstLnrToExpo(runCy,YTIME)*(iElastCO2Seq(runCy,"mc_c")*exp(iElastCO2Seq(runCy,"mc_d")*VCumCO2Capt(runCy,YTIME)));           
 
+*EMISSIONS CONSTRAINTS 
+*Compute total CO2eq GHG emissions in all countries per NAP sector
+QTotGhgEmisAllCountrNap(NAP,YTIME)$TIME(YTIME)..
+         VTotGhgEmisAllCountrNap(NAP,YTIME)
+          =E=
+        (
+        sum(runCy,
+                 sum((EFS,INDSE)$(SECTTECH(INDSE,EFS)  $NAPtoALLSBS(NAP,INDSE)),
+                      VConsFuel(runCy,INDSE,EFS,YTIME) * iCo2EmiFac(runCy,INDSE,EFS,YTIME)) !! final consumption
+                +
+                 sum(PGEF, VTransfInThermPowPls(runCy,PGEF,YTIME)*iCo2EmiFac(runCy,"PG",PGEF,YTIME)$(not h2f1(pgef))) !! input to power generation sector
+                 +
+                 sum(EFS, VTransfInputDHPlants(runCy,EFS,YTIME)*iCo2EmiFac(runCy,"PG",EFS,YTIME)) !! input to district heating plants
+                 +
+                 sum(EFS, VEnCons(runCy,EFS,YTIME)*iCo2EmiFac(runCy,"PCH",EFS,YTIME)) !! consumption of energy branch
+
+                 -
+                 sum(PGEF,sum(CCS$PGALLtoEF(CCS,PGEF),
+                         VElecProd(runCy,CCS,YTIME)*sTWhToMtoe/VPlantEffPlantType(runCy,CCS,YTIME)*
+                         iCo2EmiFac(runCy,"PG",PGEF,YTIME)*iCO2CaptRate(runCy,CCS,YTIME)))));   !! CO2 captured by CCS plants in power generation
+
+* Compute total CO2eq GHG emissions in all countries
+QTotCo2AllCoun(YTIME)$TIME(YTIME)..
+
+         VTotCo2AllCoun(YTIME) 
+         =E=
+         sum(NAP, VTotGhgEmisAllCountrNap(NAP,YTIME));
+         
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
