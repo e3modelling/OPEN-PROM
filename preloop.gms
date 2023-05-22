@@ -12,8 +12,14 @@ model openprom /all/;
 
 
 option iGDP:2:0:6;
-display iGDP;
-
+display iCapGrossCosPlanType;
+display iFixGrosCostPlaType;
+display iCGI;
+display iDisc;
+display TF;
+display TFIRST;
+display iPlantAvailRate;
+display iCo2EmiFac;
 
 *TIME(YTIME) = %fStartY%;
 VFuelPrice.l(allCy,TRANSE,YTIME) = 0.1;
@@ -70,3 +76,12 @@ VReqElecProd.l(runCy,YTIME)=0.1;
 *VPowPlantSorting.up(runCy,PGALL,YTIME)=0.001;
 *VPowPlantSorting.scale(runCy,PGALL,YTIME)=1;
 VElecDem.l(allCy,YTIME)=0.1;
+VHourProdTech.lo(runCy,PGALL,HOUR,YTIME)=0.1;
+VHourProdCostTech.lo(runCy,PGALL,HOUR,YTIME)=0.1;
+VRenTechMatMult.l(allCy,PGALL,YTIME)=0.1;
+
+loop an do
+   i = i + 1;
+   TIME(YTIME) = NO;
+   TIME(AN)$(ord(an)=i) = YES;
+   display TIME;

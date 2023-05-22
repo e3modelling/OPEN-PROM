@@ -70,7 +70,7 @@ QTotElecGenCap(runCy,YTIME)$TIME(YTIME)..
 * Compute hourly production cost used in investment decisions
 QHourProdCostInv(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME)) ..
          VHourProdTech(runCy,PGALL,HOUR,YTIME) =E=
-                  ( (
+                  
                     ( ( iDisc(runCy,"PG",YTIME-4) * exp(iDisc(runCy,"PG",YTIME-4)*iTechLftPlaType(PGALL))
                         / (exp(iDisc(runCy,"PG",YTIME-4)*iTechLftPlaType(PGALL)) -1))
                       * iGrossCapCosSubRen(runCy,PGALL,YTIME-4)* 1E3 * iCGI(runCy,YTIME-4)  + iFixGrosCostPlaType(runCy,PGALL,YTIME-4)
@@ -82,7 +82,7 @@ QHourProdCostInv(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME)) ..
                          +1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME-4)*
                          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME-4))))
                          *sTWhToMtoe/VPlantEffPlantType(runCy,PGALL,YTIME-4))$(not PGREN(PGALL))
-                  ));
+                  ;
 
 * Compute hourly production cost used in investment decisions
 QHourProdCostInvDec(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME) $NOCCS(PGALL)) ..
@@ -186,15 +186,15 @@ QGapPowerGenCap(runCy,YTIME)$TIME(YTIME)..
           + Sum(PGALL$PGSCRN(PGALL), (VElecGenPlantsCapac(runCy,PGALL,YTIME-1)-iPlantDecomSched(runCy,PGALL,YTIME))/
           iTechLftPlaType(PGALL))
        ) -0) + SQR(1e-10) ) )/2;
-$ontext
+*$ontext
 * Compute temporary variable facilitating the scaling in Weibull equation
-QTemScalWeibull (runCy,PGALL,HOUR,YTIME)$((not CCS(PGALL))$TIME(YTIME))..
-          VTemScalWeibull(runCy,PGALL,HOUR,YTIME) 
+QScalWeibull(runCy,PGALL,HOUR,YTIME)$((not CCS(PGALL))$TIME(YTIME))..
+          VScalWeibull(runCy,PGALL,HOUR,YTIME) 
          =E=
          (VHourProdTech(runCy,PGALL,HOUR,YTIME)$(not NOCCS(PGALL))
          +
           VHourProdCostTech(runCy,PGALL,HOUR,YTIME)$NOCCS(PGALL))**(-6);     
-$offtext
+*$offtext
 
 * Compute renewable potential supply curve
 QRenPotSupplyCurve(runCy,PGRENEF,YTIME)$TIME(YTIME)..
@@ -224,10 +224,10 @@ QRenTechMatMult(runCy,PGALL,YTIME)$TIME(YTIME)..
                  sum(PGALL2$(PGALLtoPGRENEF(PGALL2,PGRENEF) $PGREN(PGALL2)),
                  VElecGenPlanCap(runCy,PGALL2,YTIME-1))/VRenPotSupplyCurve(runCy,PGRENEF,YTIME))-0.6)))
            )$PGREN(PGALL);  
-$ontext
+*$ontext
 * Compute temporary variable facilitating the scaling in Weibull equation
-QTempScalWeibull(runCy,PGALL,YTIME)$((not CCS(PGALL)) $TIME(YTIME))..
-         VTempScalWeibull(runCy,PGALL,YTIME) 
+QScalWeibullSum(runCy,PGALL,YTIME)$((not CCS(PGALL)) $TIME(YTIME))..
+         VScalWeibullSum(runCy,PGALL,YTIME) 
          =E=
               iMatFacPlaAvailCap(runCy,PGALL,YTIME) * VRenTechMatMult(runCy,PGALL,YTIME)*
               sum(HOUR,
@@ -236,19 +236,19 @@ QTempScalWeibull(runCy,PGALL,YTIME)$((not CCS(PGALL)) $TIME(YTIME))..
                  VHourProdCostTech(runCy,PGALL,HOUR,YTIME)$NOCCS(PGALL)
                  )**(-6)
               ); 
-$offtext  
+*$offtext  
 
 * Compute for Power Plant new investment decision
 QNewInvDecis(runCy,YTIME)$TIME(YTIME)..
          VNewInvDecis(runCy,YTIME)
              =E=
-         sum(PGALL$(not CCS(PGALL)),VTempScalWeibull(runCy,PGALL,YTIME));
+         sum(PGALL$(not CCS(PGALL)),VScalWeibullSum(runCy,PGALL,YTIME));
 
 * Compute the power plant share in new equipment
 QPowPlaShaNewEquip(runCy,PGALL,YTIME)$(TIME(YTIME)) ..
         VPowPlaShaNewEquip(runCy,PGALL,YTIME)
              =E=
-         ( VTempScalWeibull(runCy,PGALL,YTIME)/ VNewInvDecis(runCy,YTIME))$(not CCS(PGALL))
+         ( VScalWeibullSum(runCy,PGALL,YTIME)/ VNewInvDecis(runCy,YTIME))$(not CCS(PGALL))
           +
           sum(NOCCS$CCS_NOCCS(PGALL,NOCCS),VPowPlaShaNewEquip(runCy,NOCCS,YTIME))$CCS(PGALL);
 

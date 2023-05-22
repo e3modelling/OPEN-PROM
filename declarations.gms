@@ -80,7 +80,7 @@ iPlantDecomSched(allCy,PGALL,YTIME)	     "Decided plant decomissioning schedule 
 iDecInvPlantSched(allCy,PGALL,YTIME)     "Decided plant investment schedule (GW)"
 iMinRenPotential(allCy,PGRENEF,YTIME)	 "Minimum renewable potential (GW)"	
 iMaxRenPotential(allCy,PGRENEF,YTIME)	 "Maximum enewable potential (GW)"
-*iMatFacPlaAvailCap(allCy,PGALL,YTIME)	 "Maturity factor related to plant available capacity (1)"
+iMatFacPlaAvailCap(allCy,PGALL,YTIME)	 "Maturity factor related to plant available capacity (1)"
 iMatureFacPlaDisp(allCy,PGALL,YTIME)	 "Maturity factor related to plant dispatching (1)"		
 iEffValueInEuro(allCy,SBS,YTIME)	     "Efficiency value (Euro05/toe)"
 iFacElecPriConsu(allCy,ELCPCHAR,YTIME)	 "Factors affecting electricity prices to consumers	(1)"
@@ -99,7 +99,7 @@ QElecBaseLoad(allCy,YTIME)	               "Compute electricity base load"
 QShrcap(allCy,PGALL,YTIME)	               "Compute SHRCAP"	
 QElecGenCap(allCy,PGALL,YTIME)	           "Compute electricity generation capacity"
 *QScalFacPlantDispatch(allCy,HOUR,YTIME)   "Compute the scaling factor for plant dispatching"		
-*QTempScalWeibull(allCy,PGALL,YTIME)	   "Compute temporary variable facilitating the scaling in Weibull equation"
+QScalWeibullSum(allCy,PGALL,YTIME)	       "Compute sum (over hours) of temporary variable facilitating the scaling in Weibull equation"
 QElecPriIndResNoCliPol(allCy,ESET,YTIME)   "Compute electricity price in Industrial and Residential Consumers excluding climate policies"
 QShortPowGenCost(allCy,ESET,YTIME)	       "Compute short term power generation cost"		
 QLonPowGenCostNoClimPol(allCy,ESET,YTIME)  "Compute long term power generation cost excluding climate policies"	
@@ -128,7 +128,7 @@ QMaxmAllowRenPotent(allCy,PGRENEF,YTIME)   "Compute maximum allowed renewable po
 QMnmAllowRenPot(allCy,PGRENEF,YTIME)	   "Compute minimum allowed renewable potential" 
 QRenTechMatMult(allCy,PGALL,YTIME)	       "Compute renewable technologies maturity multiplier"	
 QElecProdChpPlants(allCy,CHP,YTIME)	       "Compute electricity production from CHP plants" 		 	
-*QTemScalWeibull(allCy,PGALL,HOUR,YTIME)    "Compute temporary variable facilitating the scaling in Weibull equation"	
+QScalWeibull(allCy,PGALL,HOUR,YTIME)       "Compute temporary variable facilitating the scaling in Weibull equation"	
 QElecGenNoChp(allCy,YTIME)	               "Compute total electricity generation capacity excluding CHP plants"
 QRenPotSupplyCurve(allCy,PGRENEF,YTIME)	   "Compute renewable potential supply curve"		
 QEndogScrapIndex(allCy,PGALL,YTIME)	       "Compute endogenous scrapping index" 	
@@ -255,7 +255,7 @@ VHourProdTech(allCy,PGALL,HOUR,YTIME)     "Hourly production cost of technology 
 VElecChpPlants(allCy,YTIME)	              "Estimate the electricity of CHP Plants (1)"	
 VProdCostTechnology(allCy,PGALL,YTIME)	  "Production cost of technology (Euro/KWh)"
 VElecCapChpPla(allCy,CHP,YTIME)	          "Capacity of CHP Plants (GW)"
-VTempScalWeibull(allCy,PGALL,YTIME)	      "Temporary variable facilitating the scaling in Weibull equation (1)"
+VScalWeibullSum(allCy,PGALL,YTIME)	      "Sum (over hours) of temporary variable facilitating the scaling in Weibull equation (1)"
 VElecPeakLoads(allCy,YTIME)	              "Electricity peak loads (GW)"	
 VVarCostTechnology(allCy,PGALL,YTIME)	  "Variable cost of technology (Euro/KWh)"	
 VNewInvDecis(allCy,YTIME)	              "Power plant sorting for new investment decision according to total cost (1)"	
@@ -264,7 +264,7 @@ VRenTechMatMult(allCy,PGALL,YTIME)	      "Renewable technologies maturity multip
 VRenPotSupplyCurve(allCy,PGRENEF,YTIME)	  "Renewable potential supply curve	(1)"
 VMaxmAllowRenPotent(allCy,PGRENEF,YTIME)  "Maximum allowed renewable potential (GW)"
 VMnmAllowRenPot(allCy,PGRENEF,YTIME)	  "Minimum allowed renewable potential (GW)"		
-*VTemScalWeibull(allCy,PGALL,HOUR,YTIME)   "Temporary variable facilitating the scaling in Weibull equation"	
+VScalWeibull(allCy,PGALL,HOUR,YTIME)      "Temporary variable facilitating the scaling in Weibull equation"	
 VElecGenPlantsCapac(allCy,PGALL,YTIME)	  "Electricity generation plants capacity (GW)"	
 VGapPowerGenCap(allCy,YTIME)	          "Gap in total generation capacity to be filled by new equipment (GW)"		
 VProdCostTechPreReplac(allCy,PGALL,YTIME) "Production cost of technology used in premature replacement (Euro/KWh)"
@@ -384,5 +384,6 @@ vDummyObj                                               "Dummy maximisation vari
 Scalars
 sTWhToMtoe         "TWh to Mtoe conversion factor" /0.086/
 sElecToSteRatioChp "Technical maximum of electricity to steam ratio in CHP plants" /1.15/
-sGwToTwhPerYear     "convert GW mean power into TWh/y" /8.76/
+sGwToTwhPerYear    "convert GW mean power into TWh/y" /8.76/
+i                  "time step iterator" /0/
 ;

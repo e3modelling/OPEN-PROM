@@ -370,11 +370,13 @@ iVarGroCostPlaType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF-12)  = iVarCost(PGALL,"2
 iVarGroCostPlaType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF+3) = iVarCost(PGALL,"2020");
 iVarGroCostPlaType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF+33) = iVarCost(PGALL,"2050");
 iVarGroCostPlaType(runCy,PGALL,YTIME)$(ord(YTIME)<11) = iVarGroCostPlaType(runCy,PGALL,"2011");
+iVarGroCostPlaType(runCy,PGALL,YTIME)  = iVarCost(PGALL,YTIME);
 
 iCapGrossCosPlanType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF-12)  = iInvCost(PGALL,"2011");
 iCapGrossCosPlanType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF+3) = iInvCost(PGALL,"2020");
 iCapGrossCosPlanType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF+33) = iInvCost(PGALL,"2050");
 iCapGrossCosPlanType(runCy,PGALL,YTIME)$(ord(YTIME)<11) = iCapGrossCosPlanType(runCy,PGALL,"2010");
+iCapGrossCosPlanType(runCy,PGALL,YTIME)=iInvCost(PGALL,YTIME);
 iGrossCapCosSubRen(runCy,PGALL,YTIME)=iCapGrossCosPlanType(runCy,PGALL,YTIME);
 table iFixOandMCost(PGALL,YTIME)    "Fixed O&M costs (Euro2005/Kw)"
 $ondelim
@@ -418,6 +420,7 @@ loop YTIME$((ord(YTIME) gt TF+3) $(ord(YTIME) lt TF+33)) do
          iVarGroCostPlaType(runCy,PGALL,YTIME) = (iVarGroCostPlaType(runCy,PGALL,"2050")-
          iVarGroCostPlaType(runCy,PGALL,"2020"))/30+iVarGroCostPlaType(runCy,PGALL,YTIME-1);
 endloop;
+iFixGrosCostPlaType(runCy,PGALL,YTIME) = iFixOandMCost(PGALL,YTIME);
 *table iTotAvailCapBsYr(allCy)	            "Total installed available capacity in base year (GW)"
 *$ondelim
 *$include"./iTotAvailCapBsYr.csv"
@@ -487,7 +490,7 @@ iMinRenPotential(allCy,"SOL",YTIME)  = iCummMnmInstRenCap(allCy,"SOL",YTIME);
 iMinRenPotential(allCy,"DPV",YTIME)  = iCummMnmInstRenCap(allCy,"DPV",YTIME);
 iMinRenPotential(allCy,"BMSWAS",YTIME) = iCummMnmInstRenCap(allCy,"BMSWAS",YTIME);
 iMinRenPotential(allCy,"OTHREN",YTIME) = iCummMnmInstRenCap(allCy,"OTHREN",YTIME);
-$ontext
+*$ontext
 table iMatFacCap(allCy,PGALL,YTIME)	 "Maturty factors on Capacity (1)"
 $ondelim
 $include"./iMatFacCap.csv"
@@ -495,7 +498,7 @@ $offdelim
 ;
 iMatFacPlaAvailCap(allCy,PGALL,YTIME)$an(YTIME) = iMatFacCap(allCy,PGALL,YTIME);
 iMatFacPlaAvailCap(allCy,CCS,YTIME)$an(YTIME)  =0;
-$offtext
+*$offtext
 table iMatureFacLoad(allCy,PGALL,YTIME)	 "Maturty factors on Load (1)"
 $ondelim
 $include"./iMatureFacLoad.csv"
