@@ -534,6 +534,26 @@ QElecPriIndResNoCliPol(runCy,ESET,YTIME)$TIME(YTIME)..   !! The electricity pric
            )$RSET(ESET)
         );
 
+* Compute short term power generation cost
+QShortPowGenCost(runCy,ESET,YTIME)$TIME(YTIME)..
+        VAvgPowerGenCostShoTrm(runCy,ESET,YTIME)
+                 =E=
+        (
+        sum(PGALL,
+        VElecProdPowGenPlants(runCy,PGALL,YTIME)*
+        (
+        sum(PGEF$PGALLtoEF(PGALL,PGEF),
+        (iVarGroCostPlaType(runCy,PGALL,YTIME)/1000+(VFuelPriceSub(runCy,"PG",PGEF,YTIME)/1.2441+
+         iCO2CaptRate(runCy,PGALL,YTIME)*VCO2CO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME) +
+         (1-iCO2CaptRate(runCy,PGALL,YTIME))*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
+         (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
+                 *sTWhToMtoe/VPlantEffPlantType(runCy,PGALL,YTIME)))
+        ))
+        +
+         sum(CHP, VAvgVarProdCostCHP(runCy,CHP,YTIME)*VChpElecProd(runCy,CHP,YTIME))
+         )
+         /VElecDem(runCy,YTIME);
+
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)
