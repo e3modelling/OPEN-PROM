@@ -464,7 +464,19 @@ QShoPowGenIntPri(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
 
                  (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
 
-                 *sTWhToMtoe/VPlantEffPlantType(runCy,PGALL,YTIME)));                                               
+                 *sTWhToMtoe/VPlantEffPlantType(runCy,PGALL,YTIME)));    
+
+* Compute long term power generation cost
+QLongPowGenCost(runCy,ESET,YTIME)$TIME(YTIME)..
+         VLongAvgPowGenCost(runCy,ESET,YTIME)
+                 =E=
+         (
+         SUM(PGALL, VElecProdPowGenPlants(runCy,PGALL,YTIME)*VLongPowGenCost(runCy,PGALL,ESET,YTIME))
+
+        +
+         sum(CHP, VAvgElcProCHP(runCy,CHP,YTIME)*VChpElecProd(runCy,CHP,YTIME))
+         )
+/VElecDem(runCy,YTIME);                                                            
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)

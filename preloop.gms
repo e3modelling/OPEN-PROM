@@ -69,3 +69,4 @@ VPowPlantSorting.l(runCy,PGALL,YTIME)=0.01;
 VReqElecProd.l(runCy,YTIME)=0.1;
 *VPowPlantSorting.up(runCy,PGALL,YTIME)=0.001;
 *VPowPlantSorting.scale(runCy,PGALL,YTIME)=1;
+VElecDem.l(allCy,YTIME)=0.1;
