@@ -511,6 +511,29 @@ QLonPowGenCostNoClimPol(runCy,ESET,YTIME)$TIME(YTIME)..
          )
 /(VElecDem(runCy,YTIME));  
 
+* Compute electricity price in Industrial and Residential Consumers excluding climate policies
+QElecPriIndResNoCliPol(runCy,ESET,YTIME)$TIME(YTIME)..   !! The electricity price is based on previous year's production costs
+        VElecPriIndResNoCliPol(runCy,ESET,YTIME)
+                 =E=
+        (1 + iFacElecPriConsu(runCy,"VAT",YTIME)) *
+        (
+           (
+             (VFuelPriceSub(runCy,"OI","ELC",YTIME-1)*sTWhToMtoe)$TFIRST(YTIME-1) +
+             (  iFacElecPriConsu(runCy,"IND_RES",YTIME-1) + VRenShareElecProdSub(runCy,YTIME-1)*(VRenValue(YTIME)*8.6e-5)+
+                iFacElecPriConsu(runCy,"W_INDU",YTIME-1)*VLonPowGenCostNoClimPol(runCy,"i",YTIME-1) +
+               (1-iFacElecPriConsu(runCy,"W_INDU",YTIME-1))*VAvgPowerGenCostShoTrm(runCy,"i",YTIME-1)
+              )$(not TFIRST(YTIME-1))
+           )$ISET(ESET)
+        +
+           (
+             (VFuelPriceSub(runCy,"HOU","ELC",YTIME-1)*sTWhToMtoe)$TFIRST(YTIME-1) +
+             (  iFacElecPriConsu(runCy,"TERT_RES",YTIME-1) + VRenShareElecProdSub(runCy,YTIME-1)*(VRenValue(YTIME)*8.6e-5)+
+                iFacElecPriConsu(runCy,"W_TERT",YTIME-1)*VLonPowGenCostNoClimPol(runCy,"r",YTIME-1) +
+                (1-iFacElecPriConsu(runCy,"W_TERT",YTIME-1))*VAvgPowerGenCostShoTrm(runCy,"r",YTIME-1)
+             )$(not TFIRST(YTIME-1))
+           )$RSET(ESET)
+        );
+
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)

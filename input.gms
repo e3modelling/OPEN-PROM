@@ -508,3 +508,9 @@ $include"./iMxmShareChpElec.csv"
 $offdelim
 ;
 iEffValueInEuro(allCy,SBS,YTIME)=0;
+table iContrElecPrice(allCy,ELCPCHAR,YTIME)	 "Parameters controlling electricity price (1)"
+$ondelim
+$include"./iContrElecPrice.csv"
+$offdelim
+;
+iFacElecPriConsu(allCy,ELCPCHAR,YTIME)$an(YTIME) = iContrElecPrice(allCy,ELCPCHAR,YTIME);
