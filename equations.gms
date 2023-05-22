@@ -478,9 +478,9 @@ QLongPowGenCost(runCy,ESET,YTIME)$TIME(YTIME)..
          )
 /VElecDem(runCy,YTIME); 
 
-* Compute long term power generation cost excluding climate policies
-QLonPowGenCostNoClimPol(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
-         VLonPowGenCostNoClimPol(runCy,PGALL,ESET,YTIME)
+* Compute long term average power generation cost excluding climate policies
+QLonAvgPowGenCostNoClimPol(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
+         VLonAvgPowGenCostNoClimPol(runCy,PGALL,ESET,YTIME)
                  =E=
 
              (iDisc(runCy,"PG",YTIME)*EXP(iDisc(runCy,"pg",YTIME)*iTechLftPlaType(PGALL)) /
@@ -498,6 +498,19 @@ QLonPowGenCostNoClimPol(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
                  (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
 
                  *sTWhToMtoe/VPlantEffPlantType(runCy,PGALL,YTIME)));
+
+* Compute long term power generation cost excluding climate policies
+QLonPowGenCostNoClimPol(runCy,ESET,YTIME)$TIME(YTIME)..
+         VLonPowGenCostNoClimPol(runCy,ESET,YTIME)
+                 =E=
+         (
+         SUM(PGALL, (VElecProdPowGenPlants(runCy,PGALL,YTIME))*VLonAvgPowGenCostNoClimPol(runCy,PGALL,ESET,YTIME))
+
+        +
+         sum(CHP, VAvgElcProCHP(runCy,CHP,YTIME)*VChpElecProd(runCy,CHP,YTIME))
+         )
+/(VElecDem(runCy,YTIME));  
+
 * Transport
 
 * Compute passenger cars market extension (GDP dependent)
