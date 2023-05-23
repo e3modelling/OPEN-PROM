@@ -1175,5 +1175,27 @@ QAvgFuelPriSub(runCy,DSBS,YTIME)$TIME(YTIME)..
                  =E=
          sum(EF$SECTTECH(DSBS,EF), VFuelPriMultWgt(runCy,DSBS,EF,YTIME));         
 $offtext
+* Compute electricity price in Industrial and Residential Consumers
+QElecPriIndResCons(runCy,ESET,YTIME)$TIME(YTIME)..  !! The electricity price is based on previous year's production costs
+        VElecPriInduResConsu(runCy,ESET,YTIME)
+                 =E=
+        (1 + iFacElecPriConsu(runCy,"VAT",YTIME)) *
+        (
+           (
+             (VFuelPriceSub(runCy,"OI","ELC",YTIME-1)*sTWhToMtoe)$TFIRST(YTIME-1) +
+             (  iFacElecPriConsu(runCy,"IND_RES",YTIME-1) + VRenShareElecProdSub(runCy,YTIME-1)*(VRenValue(YTIME)*8.6e-5)+
+                iFacElecPriConsu(runCy,"W_INDU",YTIME-1)*VAvgPowerGenLongTrm(runCy,"i",YTIME-1) +
+               (1-iFacElecPriConsu(runCy,"W_INDU",YTIME-1))*VAvgPowerGenCostShoTrm(runCy,"i",YTIME-1)
+              )$(not TFIRST(YTIME-1))
+           )$ISET(ESET)
+        +
+           (
+             (VFuelPriceSub(runCy,"HOU","ELC",YTIME-1)*sTWhToMtoe)$TFIRST(YTIME-1) +
+             (  iFacElecPriConsu(runCy,"TERT_RES",YTIME-1) + VRenShareElecProdSub(runCy,YTIME-1)*(VRenValue(YTIME)*8.6e-5)+
+                iFacElecPriConsu(runCy,"W_TERT",YTIME-1)*VAvgPowerGenLongTrm(runCy,"r",YTIME-1) +
+                (1-iFacElecPriConsu(runCy,"W_TERT",YTIME-1))*VAvgPowerGenCostShoTrm(runCy,"r",YTIME-1)
+             )$(not TFIRST(YTIME-1))
+           )$RSET(ESET)
+        );
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;

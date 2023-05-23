@@ -228,7 +228,7 @@ QFuelPriSubSepCarbVal(allCy,SBS,EF,YTIME)  "Compute fuel prices per subsector an
 *** Prices
 QFuelPriSepCarbon(allCy,SBS,EF,YTIME)	"Compute fuel prices per subsector and fuel, separate carbon value in each sector"	
 *QAvgFuelPriSub(allCy,DSBS,YTIME)	    "Compute average fuel price per subsector" 	
-
+QElecPriIndResCons(allCy,ESET,YTIME)	"Compute electricity price in Industrial and Residential Consumers"	
 *** Miscellaneous
 qDummyObj                                     "Define dummy objective function"
 ;
@@ -383,6 +383,7 @@ VNetImports(allCy,EFS,YTIME)	                        "Net Imports (Mtoe)"
 VElecPriInduResConsu(allCy,ESET,YTIME)	                "Electricity price to Industrial and Residential Consumers (Euro2005/KWh)"
 VHydrogenPri(allCy,SBS,YTIME)	                        "Total Hydrogen Cost Per Sector (Euro/toe)"	 
 VFuelPriMultWgt(allCy,SBS,EF,YTIME)	                    "Fuel prices per subsector and fuel  mutliplied by weights (kdollars2005/toe)"	
+VAvgPowerGenLongTrm(allCy,ESET,YTIME)	                "Long-term average power generation cost (Euro2005/kWh)"	 
 
 *** CO2 SEQUESTRATION COST CURVES VARIABLES
 VCO2ElcHrgProd(allCy,YTIME)	                            "CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
