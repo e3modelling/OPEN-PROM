@@ -92,7 +92,9 @@ iIntToConsuPrices(allCy,SBS,EF,YTIME)	 "Alpha Parameter, linking International P
 iConsPricesFuelSub(allCy,SBS,EF,YTIME)	 "Consumer Prices of fuels per subsector (kEuro2005/toe)"	
 iWgtSecAvgPriFueCons(allCy,SBS,EF)	     "Weights for sector's average price, based on fuel consumption (1)"	
 iFuelConsPerFueSub(allCy,SBS,EF,YTIME)	 "Fuel consumption per fuel and subsector (Mtoe)"
-iTotFinEneDemSubBaseYr(allCy,SBS,YTIME)	 "Total Final Energy Demand per subsector in Base year (Mtoe)"						
+iTotFinEneDemSubBaseYr(allCy,SBS,YTIME)	 "Total Final Energy Demand per subsector in Base year (Mtoe)"
+iResNonSubsElecDem(allCy,SBS,YTIME	)	 "Residuals in Non Substitutable Electricity Demand	(1)"	
+iResFuelConsPerSubAndFuel(allCy,SBS,EF,YTIME)	"Residuals in fuel consumption per subsector and fuel (1)"					
 ;	
 
 
@@ -186,7 +188,8 @@ QFuelConsInclHP(allCy,DSBS,EF,YTIME)          "Equation for fuel consumption in 
 QVarProCostPerCHPDem(allCy,DSBS,CHP,YTIME)    "Compute  variable including fuel electricity production cost per CHP plant and demand sector "
 QAvgElcProCostCHP(allCy,CHP,YTIME)            "Compute Average Electricity production cost per CHP plant"
 QAvgVarElecProd(allCy,CHP,YTIME)              "Compute Average variable including fuel electricity production cost per CHP plant"
-
+QElecConsNonSub(allCy,INDDOM,YTIME)	          "Compute non-substituable electricity consumption in Industry and Tertiary"
+QConsOfRemSubEquip(allCy,DSBS,EF,YTIME)	      "Equation for consumption of remaining substitutble equipment"	
 *** REST OF ENERGY BALANCE SECTORS EQUATIONS
 QTotFinEneCons(allCy,EFS,YTIME)              "Compute total final energy consumption"
 QTotFinEneConsAll(YTIME)                     "Compute total final energy consumption in ALL countries"
@@ -228,7 +231,7 @@ QFuelPriSubSepCarbVal(allCy,SBS,EF,YTIME)  "Compute fuel prices per subsector an
 *** Prices
 QFuelPriSepCarbon(allCy,SBS,EF,YTIME)	"Compute fuel prices per subsector and fuel, separate carbon value in each sector"	
 *QAvgFuelPriSub(allCy,DSBS,YTIME)	    "Compute average fuel price per subsector" 	
-QElecPriIndResCons(allCy,ESET,YTIME)	"Compute electricity price in Industrial and Residential Consumers"	
+*QElecPriIndResCons(allCy,ESET,YTIME)	"Compute electricity price in Industrial and Residential Consumers"	
 *** Miscellaneous
 qDummyObj                                     "Define dummy objective function"
 ;

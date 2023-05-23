@@ -643,6 +643,34 @@ QElecConsAll(runCy,DSBS,YTIME)$TIME(YTIME)..
 
 * INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 
+* Compute non-substituable electricity consumption in Industry and Tertiary
+QElecConsNonSub(runCy,INDDOM,YTIME)$TIME(YTIME)..
+         VElecNonSub(runCy,INDDOM,YTIME)
+                 =E=
+         [
+         iResNonSubsElecDem(runCy,INDDOM,YTIME) * VElecNonSub(runCy,INDDOM,YTIME-1) * ( iActv(YTIME,runCy,INDDOM)/iActv(YTIME-1,runCy,INDDOM) )**
+         iElastNonSubElec(runCy,INDDOM,"a",YTIME)
+         * ( VFuelPriceSub(runCy,INDDOM,"ELC",YTIME)/VFuelPriceSub(runCy,INDDOM,"ELC",YTIME-1) )**iElastNonSubElec(runCy,INDDOM,"b1",YTIME)
+         * ( VFuelPriceSub(runCy,INDDOM,"ELC",YTIME-1)/VFuelPriceSub(runCy,INDDOM,"ELC",YTIME-2) )**iElastNonSubElec(runCy,INDDOM,"b2",YTIME)
+         * prod(KPDL,
+                  ( VFuelPriceSub(runCy,INDDOM,"ELC",YTIME-ord(KPDL))/VFuelPriceSub(runCy,INDDOM,"ELC",YTIME-(ord(KPDL)+1))
+                  )**( iElastNonSubElec(runCy,INDDOM,"c",YTIME)*iFPDL(INDDOM,KPDL))
+                )      ]$iActv(YTIME-1,runCy,INDDOM)+0;
+
+* Compute the consumption of the remaining substitutble equipment
+QConsOfRemSubEquip(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF))..
+         VConsRemSubEquip(runCy,DSBS,EF,YTIME)
+                 =E=
+         [
+         iResFuelConsPerSubAndFuel(runCy,DSBS,EF,YTIME) * (sum(TEA,VLifeTimeTech(runCy,DSBS,EF,TEA,YTIME)-1)/sum(TEA,VLifeTimeTech(runCy,DSBS,EF,TEA,YTIME)))
+         * (VFuelConsInclHP(runCy,DSBS,EF,YTIME-1) - (VElecNonSub(runCy,DSBS,YTIME-1)$(ELCEF(EF) $INDDOM(DSBS)) + 0$(not (ELCEF(EF) $INDDOM(DSBS)) )))
+         * (iActv(YTIME,runCy,DSBS)/iActv(YTIME-1,runCy,DSBS))**iElastA(runCy,DSBS,"a",YTIME)
+         * (VFuelPriceSub(runCy,DSBS,EF,YTIME)/VFuelPriceSub(runCy,DSBS,EF,YTIME-1))**iElastA(runCy,DSBS,"b1",YTIME)
+         * (VFuelPriceSub(runCy,DSBS,EF,YTIME-1)/VFuelPriceSub(runCy,DSBS,EF,YTIME-2))**iElastA(runCy,DSBS,"b2",YTIME)
+         * prod(KPDL,
+                 (VFuelPriceSub(runCy,DSBS,EF,YTIME-ord(KPDL))/VFuelPriceSub(runCy,DSBS,EF,YTIME-(ord(KPDL)+1)))**(iElastA(runCy,DSBS,"c",YTIME)*iFPDL(DSBS,KPDL))
+               )  ]$iActv(YTIME-1,runCy,DSBS)+0;
+
 * Compute total final demand per subsector
 QDemSub(runCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)))..
          VDemSub(runCy,DSBS,YTIME)
@@ -1174,7 +1202,7 @@ QAvgFuelPriSub(runCy,DSBS,YTIME)$TIME(YTIME)..
         VFuelPrice(runCy,DSBS,YTIME)
                  =E=
          sum(EF$SECTTECH(DSBS,EF), VFuelPriMultWgt(runCy,DSBS,EF,YTIME));         
-$offtext
+
 * Compute electricity price in Industrial and Residential Consumers
 QElecPriIndResCons(runCy,ESET,YTIME)$TIME(YTIME)..  !! The electricity price is based on previous year's production costs
         VElecPriInduResConsu(runCy,ESET,YTIME)
@@ -1197,5 +1225,6 @@ QElecPriIndResCons(runCy,ESET,YTIME)$TIME(YTIME)..  !! The electricity price is 
              )$(not TFIRST(YTIME-1))
            )$RSET(ESET)
         );
+$offtext
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
