@@ -169,7 +169,7 @@ QScrap(allCy,YTIME)            "Compute scrapped passenger cars"
 QLevl(allCy,YTIME)             "Compute ratio of car ownership over saturation car ownership"
 QScrRate(allCy,YTIME)          "Compute passenger cars scrapping rate"
 QPassCarsLft(allCy,DSBS,EF,TEA,YTIME)	"Compute the lifetime of passenger cars" 	
-
+QGoodsTranspActiv(allCy,TRANSE,YTIME)	"Compute goods transport activity"	
 ***  INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS EQUATIONS
 QDemSub(allCy,DSBS,YTIME)                     "Compute total final demand per subsector"
 QElecConsInd(allCy,YTIME)                     "Compute Consumption of electricity in industrial sectors"
@@ -322,6 +322,8 @@ VConsFuel(allCy,DSBS,EF,YTIME)         "Consumption of fuels in each demand subs
 VDemTr(allCy,TRANSE,EF,YTIME)          "Final energy demand in transport subsectors per fuel (Mtoe)"
 VLifeTimeTech(allCy,DSBS,EF,TEA,YTIME) "Lifetime of technologies (years)"
 
+*** Transport Variables
+VGoodsTranspActiv(allCy,TRANSE,YTIME)	"Goods transport acitivity (Gtkm)"	
 
 
 ***  INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES

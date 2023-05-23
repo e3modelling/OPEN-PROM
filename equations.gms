@@ -569,6 +569,36 @@ QPassCarsLft(runCy,DSBS,EF,TEA,YTIME)$(TIME(YTIME) $sameas(DSBS,"PC") $SECTTECH(
                  =E=
          1/VScrRate(runCy,YTIME);
 
+* Compute goods transport activity
+QGoodsTranspActiv(runCy,TRANSE,YTIME)$(TIME(YTIME) $TRANG(TRANSE))..
+         VGoodsTranspActiv(runCy,TRANSE,YTIME)
+                 =E=
+         (
+           iResActiv(runCy,TRANSE,YTIME) * VGoodsTranspActiv(runCy,TRANSE,YTIME-1)
+           * [(iGDP(YTIME,runCy)/iPop(YTIME,runCy))/(iGDP(YTIME-1,runCy)/iPop(YTIME-1,runCy))]**iElastA(runCy,TRANSE,"a",YTIME)
+           * (iPop(YTIME,runCy)/iPop(YTIME-1,runCy))
+           * (VFuelPrice(runCy,TRANSE,YTIME)/VFuelPrice(runCy,TRANSE,YTIME-1))**iElastA(runCy,TRANSE,"c1",YTIME)
+           * (VFuelPrice(runCy,TRANSE,YTIME-1)/VFuelPrice(runCy,TRANSE,YTIME-2))**iElastA(runCy,TRANSE,"c2",YTIME)
+           * prod(kpdl,
+                  [(VFuelPrice(runCy,TRANSE,YTIME-ord(kpdl))/
+                    VFuelPrice(runCy,TRANSE,YTIME-(ord(kpdl)+1)))/
+                    (iCGI(runCy,YTIME)**(1/6))]**(iElastA(runCy,TRANSE,"c3",YTIME)*iFPDL(TRANSE,KPDL))
+                 )
+         )$sameas(TRANSE,"GU")        !!trucks
+         +
+         (
+           iResActiv(runCy,TRANSE,YTIME) * VGoodsTranspActiv(runCy,TRANSE,YTIME-1)
+           * [(iGDP(YTIME,runCy)/iPop(YTIME,runCy))/(iGDP(YTIME-1,runCy)/iPop(YTIME-1,runCy))]**iElastA(runCy,TRANSE,"a",YTIME)
+           * (VFuelPrice(runCy,TRANSE,YTIME)/VFuelPrice(runCy,TRANSE,YTIME-1))**iElastA(runCy,TRANSE,"c1",YTIME)
+           * (VFuelPrice(runCy,TRANSE,YTIME-1)/VFuelPrice(runCy,TRANSE,YTIME-2))**iElastA(runCy,TRANSE,"c2",YTIME)
+           * prod(kpdl,
+                  [(VFuelPrice(runCy,TRANSE,YTIME-ord(kpdl))/
+                    VFuelPrice(runCy,TRANSE,YTIME-(ord(kpdl)+1)))/
+                    (iCGI(runCy,YTIME)**(1/6))]**(iElastA(runCy,TRANSE,"c3",YTIME)*iFPDL(TRANSE,KPDL))
+                 )
+           * (VGoodsTranspActiv(runCy,"GU",YTIME)/VGoodsTranspActiv(runCy,"GU",YTIME-1))**iElastA(runCy,TRANSE,"c4",YTIME)
+         )$(not sameas(TRANSE,"GU"));                      !!other freight transport
+
 * Compute passenger cars market extension (GDP dependent)
 QMExtV(runCy,YTIME)$TIME(YTIME)..
          VMExtV(runCy,YTIME)
