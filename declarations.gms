@@ -89,7 +89,10 @@ iPriceReform(allCy,SBS,EF,YTIME)	     "Price reformation (1)"
 iScenarioPri(WEF,NAP,YTIME)	             "Scenario prices (KEuro1990/toe)"
 iResInPriceEq(allCy,SBS,EF,YTIME)	     "Residual in Price Equations (1)"
 iIntToConsuPrices(allCy,SBS,EF,YTIME)	 "Alpha Parameter, linking International Prices with Consumer Prices (1)"
-iConsPricesFuelSub(allCy,SBS,EF,YTIME)	 "Consumer Prices of fuels per subsector (kEuro2005/toe)"					
+iConsPricesFuelSub(allCy,SBS,EF,YTIME)	 "Consumer Prices of fuels per subsector (kEuro2005/toe)"	
+iWgtSecAvgPriFueCons(allCy,SBS,EF)	     "Weights for sector's average price, based on fuel consumption (1)"	
+iFuelConsPerFueSub(allCy,SBS,EF,YTIME)	 "Fuel consumption per fuel and subsector (Mtoe)"
+iTotFinEneDemSubBaseYr(allCy,SBS,YTIME)	 "Total Final Energy Demand per subsector in Base year (Mtoe)"						
 ;	
 
 
@@ -221,6 +224,9 @@ QTotCo2AllCoun(YTIME)	                   "Compute total CO2eq GHG emissions in a
 QTotGhgEmisAllCountrNap(NAP,YTIME)	       "Compute total CO2eq GHG emissions in all countries per NAP sector"	
 QHouseExpEne(allCy,YTIME)	               "Compute households expenditures on energy"
 QFuelPriSubSepCarbVal(allCy,SBS,EF,YTIME)  "Compute fuel prices per subsector and fuel, separate carbon value in each sector"
+
+*** Prices
+QFuelPriSepCarbon(allCy,SBS,EF,YTIME)	"Compute fuel prices per subsector and fuel, separate carbon value in each sector (KEuro1990/toe)"	
 
 *** Miscellaneous
 qDummyObj                                     "Define dummy objective function"
@@ -375,6 +381,7 @@ VNetImports(allCy,EFS,YTIME)	                        "Net Imports (Mtoe)"
 *** Prices Variables
 VElecPriInduResConsu(allCy,ESET,YTIME)	                "Electricity price to Industrial and Residential Consumers (Euro2005/KWh)"
 VHydrogenPri(allCy,SBS,YTIME)	                        "Total Hydrogen Cost Per Sector (Euro/toe)"	 
+VFuelPriMultWgt(allCy,SBS,EF,YTIME)	                    "Fuel prices per subsector and fuel  mutliplied by weights (kdollars2005/toe)"	
 
 *** CO2 SEQUESTRATION COST CURVES VARIABLES
 VCO2ElcHrgProd(allCy,YTIME)	                            "CO2 captured by electricity and hydrogen production plants (Mtn CO2)"

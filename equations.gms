@@ -1154,7 +1154,7 @@ iConsPricesFuelSub(runCy,SBS,EF,"2017") $(DSBS(SBS))$ALTEF(EF)
          )
          +
          (
-           (iResInPriceEq(runCy,SBS,EF,YTIME)*0.086 + VElecPriInduResConsu(runCy,"i",YTIME)$INDTRANS(SBS)+VElecPriInduResConsu(runCy,"r",YTIME)$RESIDENT(SBS))/sTWhToMtoe
+           (iResInPriceEq(runCy,SBS,EF,YTIME)*sTWhToMtoe + VElecPriInduResConsu(runCy,"i",YTIME)$INDTRANS(SBS)+VElecPriInduResConsu(runCy,"r",YTIME)$RESIDENT(SBS))/sTWhToMtoe
             +
             ((iEffValueInEuro(runCy,SBS,YTIME))/1000)$DSBS(SBS)
          )$(ELCEF(EF) or HEATPUMP(EF))
@@ -1162,6 +1162,18 @@ iConsPricesFuelSub(runCy,SBS,EF,"2017") $(DSBS(SBS))$ALTEF(EF)
          (
                  VHydrogenPri(runCy,SBS,YTIME-1)$DSBS(SBS)
          )$(H2EF(EF) or sameas("STE1AH2F",EF));
+
+* Compute fuel prices per subsector and fuel, separate carbon value in each sector 
+QFuelPriSepCarbon(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $TIME(YTIME))..
+        VFuelPriMultWgt(runCy,DSBS,EF,YTIME)
+          =E= 
+        iWgtSecAvgPriFueCons(runCy,DSBS,EF) * VFuelPriceSub(runCy,DSBS,EF,YTIME);
+
+
+* EQPPA(CYrun,DSBS,YTIME)$TIME(YTIME)..
+*        PPA(CYrun,DSBS,YTIME)
+*                 =E=
+*         sum(EF$SECTTECH(DSBS,EF), PPW(CYrun,DSBS,EF,YTIME));         
 
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;

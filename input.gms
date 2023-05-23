@@ -569,3 +569,46 @@ $include"./iDomFuelPrices.csv"
 $offdelim
 ;
 iConsPricesFuelSub(allCy,SBS,EF,YTIME)$(not AN(YTIME)) = iDomFuelPrices(allCy,SBS,EF,YTIME)/1000;
+table iFuelCons(allCy,TRANSE,EF,YTIME)	 "Fuel consumption (Mtoe)"
+$ondelim
+$include"./iFuelCons.csv"
+$offdelim
+;
+iFuelConsPerFueSub(allCy,TRANSE,EF,YTIME)$(not An(YTIME))  = iFuelCons(allCy,TRANSE,EF,YTIME);
+*iFuelConsPerFueSub(allCy,INDSE,EF,YTIME)$(not An(YTIME))   = Indu_FCon(allCy,INDSE,EF,YTIME);
+*iFuelConsPerFueSub(allCy,DOMSE,EF,YTIME)$(not An(YTIME))   = Dom_FCon(allCy,DOMSE,EF,YTIME);
+*iFuelConsPerFueSub(allCy,NENSE,EF,YTIME)$(not An(YTIME))   = Nen_FCon(allCy,NENSE,EF,YTIME);
+
+
+* Calculation of weights for sector average fuel price
+
+parameter iDiffFuelsInSec(SBS) auxiliary parameter holding the number of different fuels in a sector;
+
+loop SBS do
+         iDiffFuelsInSec(SBS) = 0;
+         loop EF$(SECTTECH(SBS,EF) $(not plugin(EF)))  do
+              iDiffFuelsInSec(SBS) = iDiffFuelsInSec(SBS)+1;
+         endloop;
+endloop;
+
+iTotFinEneDemSubBaseYr(runCy,TRANSE,YTIME) = sum(EF$(SECTTECH(TRANSE,EF) $(not plugin(EF))), iFuelConsPerFueSub(runCy,TRANSE,EF,YTIME));
+iTotFinEneDemSubBaseYr(allCy,INDSE,YTIME)   = SUM(EF,iFuelConsPerFueSub(allCy,INDSE,EF,YTIME));
+iTotFinEneDemSubBaseYr(allCy,DOMSE,YTIME)   = SUM(EF,iFuelConsPerFueSub(allCy,DOMSE,EF,YTIME));
+iTotFinEneDemSubBaseYr(allCy,NENSE,YTIME)   = SUM(EF,iFuelConsPerFueSub(allCy,NENSE,EF,YTIME));
+
+iFuelCons(allCy,TRANSE,EF,YTIME)$(SECTTECH(TRANSE,EF) $(iFuelCons(allCy,TRANSE,EF,YTIME)<=0)) = 1e-6;
+iWgtSecAvgPriFueCons(runCy,TRANSE,EF)$(SECTTECH(TRANSE,EF) $(not plugin(EF)) ) = (iFuelConsPerFueSub(runCy,TRANSE,EF,"2019") / iTotFinEneDemSubBaseYr(runCy,TRANSE,"2019"))$iTotFinEneDemSubBaseYr(runCy,TRANSE,"2019")
+                                               + (1/iDiffFuelsInSec(TRANSE))$(not iTotFinEneDemSubBaseYr(runCy,TRANSE,"2019"));
+
+iWgtSecAvgPriFueCons(runCy,NENSE,EF)$SECTTECH(NENSE,EF) = ( iFuelConsPerFueSub(runCy,NENSE,EF,"2019") / iTotFinEneDemSubBaseYr(runCy,NENSE,"2019") )$iTotFinEneDemSubBaseYr(runCy,NENSE,"2019")
+                                             + (1/iDiffFuelsInSec(NENSE))$(not iTotFinEneDemSubBaseYr(runCy,NENSE,"2019"));
+
+
+iWgtSecAvgPriFueCons(runCy,INDDOM,EF)$(SECTTECH(INDDOM,EF)$(not sameas(EF,"ELC"))) = ( iFuelConsPerFueSub(runCy,INDDOM,EF,"2019") / (iTotFinEneDemSubBaseYr(runCy,INDDOM,"2019") - iFuelConsPerFueSub(runCy,INDDOM,"ELC","2019")) )$( iTotFinEneDemSubBaseYr(runCy,INDDOM,"2019") - iFuelConsPerFueSub(runCy,INDDOM,"ELC","2019") )
+                                                                        + (1/(iDiffFuelsInSec(INDDOM)-1))$(not (iTotFinEneDemSubBaseYr(runCy,INDDOM,"2019") - iFuelConsPerFueSub(runCy,INDDOM,"ELC","2019")));
+
+
+
+* Rescaling the weights
+iWgtSecAvgPriFueCons(runCy,SBS,EF)$(SECTTECH(SBS,EF) $sum(ef2$SECTTECH(SBS,EF),iWgtSecAvgPriFueCons(runCy,SBS,EF2))) = iWgtSecAvgPriFueCons(runCy,SBS,EF)/sum(ef2$SECTTECH(SBS,EF),iWgtSecAvgPriFueCons(runCy,SBS,EF2));
+
