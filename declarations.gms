@@ -169,7 +169,8 @@ QScrap(allCy,YTIME)            "Compute scrapped passenger cars"
 QLevl(allCy,YTIME)             "Compute ratio of car ownership over saturation car ownership"
 QScrRate(allCy,YTIME)          "Compute passenger cars scrapping rate"
 QPassCarsLft(allCy,DSBS,EF,TEA,YTIME)	"Compute the lifetime of passenger cars" 	
-QGoodsTranspActiv(allCy,TRANSE,YTIME)	"Compute goods transport activity"	
+QGoodsTranspActiv(allCy,TRANSE,YTIME)	"Compute goods transport activity"
+QGapTranspActiv(allCy,TRANSE,YTIME)	    "Compute the gap in transport activity"		
 ***  INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS EQUATIONS
 QDemSub(allCy,DSBS,YTIME)                     "Compute total final demand per subsector"
 QElecConsInd(allCy,YTIME)                     "Compute Consumption of electricity in industrial sectors"
@@ -323,8 +324,11 @@ VDemTr(allCy,TRANSE,EF,YTIME)          "Final energy demand in transport subsect
 VLifeTimeTech(allCy,DSBS,EF,TEA,YTIME) "Lifetime of technologies (years)"
 
 *** Transport Variables
-VGoodsTranspActiv(allCy,TRANSE,YTIME)	"Goods transport acitivity (Gtkm)"	
-
+VGoodsTranspActiv(allCy,TRANSE,YTIME)	    "Goods transport acitivity (Gtkm)"	
+VGapTranspFillNewTech(allCy,TRANSE,YTIME)	"Gap in transport activity to be filled by new technologies ()"
+                                           !! Gap for passenger cars (million vehicles)
+                                           !! Gap for all other passenger transportation modes (Gpkm)
+                                           !! Gap for all goods transport is measured (Gtkm)	
 
 ***  INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 VElecNonSub(allCy,DSBS,YTIME)          "Consumption of non-substituable electricity in Industry and Tertiary (Mtoe)"

@@ -599,6 +599,26 @@ QGoodsTranspActiv(runCy,TRANSE,YTIME)$(TIME(YTIME) $TRANG(TRANSE))..
            * (VGoodsTranspActiv(runCy,"GU",YTIME)/VGoodsTranspActiv(runCy,"GU",YTIME-1))**iElastA(runCy,TRANSE,"c4",YTIME)
          )$(not sameas(TRANSE,"GU"));                      !!other freight transport
 
+* Compute the gap in transport activity
+QGapTranspActiv(runCy,TRANSE,YTIME)$TIME(YTIME)..
+         VGapTranspFillNewTech(runCy,TRANSE,YTIME)
+                 =E=
+         VNewReg(runCy,YTIME)$sameas(TRANSE,"PC")
+         +
+         (
+         ( [VTrnspActiv(runCy,TRANSE,YTIME) - VTrnspActiv(runCy,TRANSE,YTIME-1) + VTrnspActiv(runCy,TRANSE,YTIME-1)/
+         (sum((TTECH,TEA)$SECTTECH(TRANSE,TTECH),VLifeTimeTech(runCy,TRANSE,TTECH,TEA,YTIME-1))/TECHS(TRANSE))] +
+          SQRT( SQR([VTrnspActiv(runCy,TRANSE,YTIME) - VTrnspActiv(runCy,TRANSE,YTIME-1) + VTrnspActiv(runCy,TRANSE,YTIME-1)/
+          (sum((TTECH,TEA)$SECTTECH(TRANSE,TTECH),VLifeTimeTech(runCy,TRANSE,TTECH,TEA,YTIME-1))/TECHS(TRANSE))]) + SQR(1e-4) ) )/2
+         )$(TRANP(TRANSE) $(not sameas(TRANSE,"PC")))
+         +
+         (
+         ( [VGoodsTranspActiv(runCy,TRANSE,YTIME) - VGoodsTranspActiv(runCy,TRANSE,YTIME-1) + VGoodsTranspActiv(runCy,TRANSE,YTIME-1)/
+         (sum((EF,TEA)$SECTTECH(TRANSE,EF),VLifeTimeTech(runCy,TRANSE,EF,TEA,YTIME-1))/TECHS(TRANSE))] + SQRT( SQR([VGoodsTranspActiv(runCy,TRANSE,YTIME) -
+          VGoodsTranspActiv(runCy,TRANSE,YTIME-1) + VGoodsTranspActiv(runCy,TRANSE,YTIME-1)/
+          (sum((EF,TEA)$SECTTECH(TRANSE,EF),VLifeTimeTech(runCy,TRANSE,EF,TEA,YTIME-1))/TECHS(TRANSE))]) + SQR(1e-4) ) )/2
+         )$TRANG(TRANSE);
+
 * Compute passenger cars market extension (GDP dependent)
 QMExtV(runCy,YTIME)$TIME(YTIME)..
          VMExtV(runCy,YTIME)
