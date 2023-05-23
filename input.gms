@@ -660,3 +660,19 @@ iResFuelConsPerSubAndFuel(allCy,DOMSE,EF,YTIME)$an(YTIME) = iResFuelConsPerFuelA
 iResFuelConsPerSubAndFuel(allCy,NENSE,EF,YTIME)$an(YTIME) = iResInFuelConsPerFuelAndSub(allCy,NENSE,EF,YTIME);
 
 iTransfOutputGasw(allCy,YTIME)$an(YTIME)  = iSupResRefCapacity(allCy,"TOOTH_RES",YTIME);
+table iResTranspFuelConsSubTech(allCy,TRANSE,EF,YTIME)	 "Residual Transport on Specific Fuel Consumption per Subsector and Technology (1)"
+$ondelim
+$include"./iResTranspFuelConsSubTech.csv"
+$offdelim
+;
+iResSpecificFuelConsCost(allCy,TRANSE,TTECH,EF,YTIME)$(sameas(TTECH,EF)$an(YTIME)) = iResTranspFuelConsSubTech(allCy,TRANSE,EF,YTIME)*iEneProdRDscenarios(allCy,TRANSE,YTIME);
+iResSpecificFuelConsCost(allCy,TRANSE,"BGDO","BGDO",YTIME)$(an(YTIME) $SECTTECH(TRANSE,"BGDO")) = iResSpecificFuelConsCost(allCy,TRANSE,"GDO","GDO",YTIME);
+
+iResSpecificFuelConsCost(allCy,TRANSE,"PHEVGSL","GSL",YTIME)$(TRANSETTECH(TRANSE,"PHEVGSL") $an(YTIME))= iResSpecificFuelConsCost(allCy,TRANSE,"GSL","GSL",YTIME);
+iResSpecificFuelConsCost(allCy,TRANSE,"PHEVGSL","ELC",YTIME)$(TRANSETTECH(TRANSE,"PHEVGSL") $an(YTIME))= iResSpecificFuelConsCost(allCy,TRANSE,"ELC","ELC",YTIME);
+
+iResSpecificFuelConsCost(allCy,TRANSE,"PHEVGDO","GDO",YTIME)$(TRANSETTECH(TRANSE,"PHEVGDO") $an(YTIME))= iResSpecificFuelConsCost(allCy,TRANSE,"GDO","GDO",YTIME);
+iResSpecificFuelConsCost(allCy,TRANSE,"PHEVGDO","ELC",YTIME)$(TRANSETTECH(TRANSE,"PHEVGDO") $an(YTIME))= iResSpecificFuelConsCost(allCy,TRANSE,"ELC","ELC",YTIME);
+
+iResSpecificFuelConsCost(allCy,TRANSE,"cHEVGDO","GDO",YTIME)$(TRANSETTECH(TRANSE,"cHEVGDO") $an(YTIME))= iResSpecificFuelConsCost(allCy,TRANSE,"GDO","GDO",YTIME);
+iResSpecificFuelConsCost(allCy,TRANSE,"cHEVGsl","gsl",YTIME)$(TRANSETTECH(TRANSE,"cHEVGsl") $an(YTIME))= iResSpecificFuelConsCost(allCy,TRANSE,"Gsl","Gsl",YTIME);

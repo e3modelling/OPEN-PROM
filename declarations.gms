@@ -95,7 +95,8 @@ iFuelConsPerFueSub(allCy,SBS,EF,YTIME)	 "Fuel consumption per fuel and subsector
 iTotFinEneDemSubBaseYr(allCy,SBS,YTIME)	 "Total Final Energy Demand per subsector in Base year (Mtoe)"
 iResNonSubsElecDem(allCy,SBS,YTIME	)	 "Residuals in Non Substitutable Electricity Demand	(1)"	
 iResFuelConsPerSubAndFuel(allCy,SBS,EF,YTIME)	"Residuals in fuel consumption per subsector and fuel (1)"	
-iTransfOutputGasw(allCy,YTIME)	                "Transformation Output from Gasworks, Blast Furnances, Briquetting plants Residual (1)"				
+iTransfOutputGasw(allCy,YTIME)	                "Transformation Output from Gasworks, Blast Furnances, Briquetting plants Residual (1)"	
+iResSpecificFuelConsCost(allCy,TRANSE,TTECH,EF,YTIME)	"Residuals on specific fuel consumption cost (1)"				
 ;	
 
 
@@ -170,7 +171,8 @@ QLevl(allCy,YTIME)             "Compute ratio of car ownership over saturation c
 QScrRate(allCy,YTIME)          "Compute passenger cars scrapping rate"
 QPassCarsLft(allCy,DSBS,EF,TEA,YTIME)	"Compute the lifetime of passenger cars" 	
 QGoodsTranspActiv(allCy,TRANSE,YTIME)	"Compute goods transport activity"
-QGapTranspActiv(allCy,TRANSE,YTIME)	    "Compute the gap in transport activity"		
+QGapTranspActiv(allCy,TRANSE,YTIME)	    "Compute the gap in transport activity"	
+QSpecificFuelCons(allCy,TRANSE,TTECH,TEA,EF,YTIME)	"Compute Specific Fuel Consumption"	
 ***  INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS EQUATIONS
 QDemSub(allCy,DSBS,YTIME)                     "Compute total final demand per subsector"
 QElecConsInd(allCy,YTIME)                     "Compute Consumption of electricity in industrial sectors"
@@ -329,6 +331,10 @@ VGapTranspFillNewTech(allCy,TRANSE,YTIME)	"Gap in transport activity to be fille
                                            !! Gap for passenger cars (million vehicles)
                                            !! Gap for all other passenger transportation modes (Gpkm)
                                            !! Gap for all goods transport is measured (Gtkm)	
+VSpecificFuelCons(allCy,TRANSE,TTECH,TEA,EF,YTIME)	"Specific Fuel Consumption ()"
+                                                      !! SFC for passenger cars (ktoe/Gkm)
+                                                      !! SFC for other passsenger transportation modes (ktoe/Gpkm)
+                                                      !! SFC for trucks is measured (ktoe/Gtkm)
 
 ***  INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 VElecNonSub(allCy,DSBS,YTIME)          "Consumption of non-substituable electricity in Industry and Tertiary (Mtoe)"

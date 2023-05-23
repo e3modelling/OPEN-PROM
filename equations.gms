@@ -619,6 +619,17 @@ QGapTranspActiv(runCy,TRANSE,YTIME)$TIME(YTIME)..
           (sum((EF,TEA)$SECTTECH(TRANSE,EF),VLifeTimeTech(runCy,TRANSE,EF,TEA,YTIME-1))/TECHS(TRANSE))]) + SQR(1e-4) ) )/2
          )$TRANG(TRANSE);
 
+* Compute Specific Fuel Consumption
+QSpecificFuelCons(runCy,TRANSE,TTECH,TEA,EF,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,EF) $TTECHtoEF(TTECH,EF) )..
+         VSpecificFuelCons(runCy,TRANSE,TTECH,TEA,EF,YTIME)
+                 =E=
+         iResSpecificFuelConsCost(runCy,TRANSE,TTECH,EF,YTIME)*VSpecificFuelCons(runCy,TRANSE,TTECH,TEA,EF,YTIME-1)
+          * prod(KPDL,
+                     (
+                        VFuelPriceSub(runCy,TRANSE,EF,YTIME-ord(KPDL))/VFuelPriceSub(runCy,TRANSE,EF,YTIME-(ord(KPDL)+1))
+                      )**(iElastA(runCy,TRANSE,"c5",YTIME)*iFPDL(TRANSE,KPDL))
+          );
+
 * Compute passenger cars market extension (GDP dependent)
 QMExtV(runCy,YTIME)$TIME(YTIME)..
          VMExtV(runCy,YTIME)
