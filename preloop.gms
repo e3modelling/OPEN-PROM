@@ -82,7 +82,7 @@ VHourProdTech.lo(runCy,PGALL,HOUR,YTIME)=0.1;
 VHourProdCostTech.lo(runCy,PGALL,HOUR,YTIME)=0.1;
 VRenTechMatMult.l(allCy,PGALL,YTIME)=0.1;
 VGoodsTranspActiv.l(allCy,TRANSE,YTIME)=0.1;
-
+*VTranspCostPerVeh.lo(allCy,TRANSE,RCon,TTECH,TEA,YTIME)=0.1;
 loop an do
    i = i + 1;
    TIME(YTIME) = NO;

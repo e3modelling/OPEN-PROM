@@ -174,7 +174,8 @@ QPassCarsLft(allCy,DSBS,EF,TEA,YTIME)	"Compute the lifetime of passenger cars"
 QGoodsTranspActiv(allCy,TRANSE,YTIME)	"Compute goods transport activity"
 QGapTranspActiv(allCy,TRANSE,YTIME)	    "Compute the gap in transport activity"	
 QSpecificFuelCons(allCy,TRANSE,TTECH,TEA,EF,YTIME)	"Compute Specific Fuel Consumption"
-QTranspCostPerMeanConsSize(allCy,TRANSE,RCon,TTECH,TEA,YTIME)	"Compute transportation cost per mean and consumer size in KEuro per vehicle"		
+QTranspCostPerMeanConsSize(allCy,TRANSE,RCon,TTECH,TEA,YTIME)	"Compute transportation cost per mean and consumer size in KEuro per vehicle"
+QTranspCostPerVeh(allCy,TRANSE,RCon,TTECH,TEA,YTIME)	        "Compute transportation cost per mean and consumer size in KEuro per vehicle"			
 ***  INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS EQUATIONS
 QDemSub(allCy,DSBS,YTIME)                     "Compute total final demand per subsector"
 QElecConsInd(allCy,YTIME)                     "Compute Consumption of electricity in industrial sectors"
@@ -342,7 +343,8 @@ VCosTech(allCy,SBS,EF,TEA,YTIME)	                            "Variable Cost of t
                                                        !! For transport (kEuro05/vehicle)
                                                        !! For Industrial sectors, except Iron and Steel (Euro05/toe-year)
                                                        !! For Iron and Steel  (Euro05/tn-of-steel)
-                                                       !! For Domestic sectors  (Euro05/toe-year)		
+                                                       !! For Domestic sectors  (Euro05/toe-year)
+VTranspCostPerVeh(allCy,TRANSE,RCon,TTECH,TEA,YTIME)	"Transportation cost per mean and consumer size (Keuro/vehicle)"			
 ***  INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 VElecNonSub(allCy,DSBS,YTIME)          "Consumption of non-substituable electricity in Industry and Tertiary (Mtoe)"
 VElecConsInd(allCy,YTIME)              "Total Consumption of Electricity in industrial sectors (Mtoe)"

@@ -656,6 +656,13 @@ QTranspCostPerMeanConsSize(runCy,TRANSE,RCon,TTECH,TEA,YTIME)$(TIME(YTIME) $SECT
                          *  iAnnCons(runCy,TRANSE,"smallest") * (iAnnCons(runCy,TRANSE,"largest")/iAnnCons(runCy,TRANSE,"smallest"))**((ord(Rcon)-1)/iNcon(TRANSE))
                        );
 
+* Compute transportation cost per mean and consumer size 
+QTranspCostPerVeh(runCy,TRANSE,rCon,TTECH,TEA,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $(ord(rCon) le iNcon(TRANSE)+1))..
+         VTranspCostPerVeh(runCy,TRANSE,rCon,TTECH,TEA,YTIME)
+         =E=
+         VTranspCostPermeanConsSize(runCy,TRANSE,rCon,TTECH,TEA,YTIME); !!**(-4);
+
+
 * Compute passenger cars market extension (GDP dependent)
 QMExtV(runCy,YTIME)$TIME(YTIME)..
          VMExtV(runCy,YTIME)
