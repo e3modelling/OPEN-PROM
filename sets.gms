@@ -1,4 +1,5 @@
 sets
+
 ***        Geographic Coverage      *
 allCy    Countries for which the model is applied
 /
@@ -54,6 +55,7 @@ rCon         counter for the number of consumers              /0,1*19/
 nSet         auxiliary counter for the definition of Vr       /b1*b20/
 kpdl         counter for Polynomial Distribution Lag          /a1*a6/
 rc                                                            /1*3/
+rcc                                                           /1*4/
 rres                                                          /r1*r4/
 
 
