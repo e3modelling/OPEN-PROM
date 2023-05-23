@@ -168,7 +168,7 @@ QTrnspActiv(allCy,TRANSE,YTIME)"Compute passenger transport acitivity"
 QScrap(allCy,YTIME)            "Compute scrapped passenger cars"
 QLevl(allCy,YTIME)             "Compute ratio of car ownership over saturation car ownership"
 QScrRate(allCy,YTIME)          "Compute passenger cars scrapping rate"
-
+QPassCarsLft(allCy,DSBS,EF,TEA,YTIME)	"Compute the lifetime of passenger cars" 	
 
 ***  INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS EQUATIONS
 QDemSub(allCy,DSBS,YTIME)                     "Compute total final demand per subsector"

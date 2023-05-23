@@ -57,6 +57,7 @@ VProdCostTechPreReplacAvail.l(allCy,PGALL,PGALL2,YTIME)=0.1;
 *VTemScalWeibull.up(allCy,PGALL,HOUR,YTIME)=1e6;
 *VHourProdCostTech.lo(allCy,PGALL,HOUR,YTIME)=0.0001;
 VRenPotSupplyCurve.l(allCy,PGRENEF,YTIME)=0.1;
+VScrRate.l(allCy,YTIME)=0.1;
 $ontext
 
 VPowerPlantNewEq.l(allCy,PGALL,TT)=0.1;

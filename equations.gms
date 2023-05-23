@@ -563,6 +563,12 @@ QShortPowGenCost(runCy,ESET,YTIME)$TIME(YTIME)..
 
 * Transport
 
+* Compute the lifetime of passenger cars 
+QPassCarsLft(runCy,DSBS,EF,TEA,YTIME)$(TIME(YTIME) $sameas(DSBS,"PC") $SECTTECH(DSBS,EF))..
+         VLifeTimeTech(runCy,DSBS,EF,TEA,YTIME)
+                 =E=
+         1/VScrRate(runCy,YTIME);
+
 * Compute passenger cars market extension (GDP dependent)
 QMExtV(runCy,YTIME)$TIME(YTIME)..
          VMExtV(runCy,YTIME)
