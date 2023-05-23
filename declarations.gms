@@ -96,7 +96,8 @@ iTotFinEneDemSubBaseYr(allCy,SBS,YTIME)	 "Total Final Energy Demand per subsecto
 iResNonSubsElecDem(allCy,SBS,YTIME	)	 "Residuals in Non Substitutable Electricity Demand	(1)"	
 iResFuelConsPerSubAndFuel(allCy,SBS,EF,YTIME)	"Residuals in fuel consumption per subsector and fuel (1)"	
 iTransfOutputGasw(allCy,YTIME)	                "Transformation Output from Gasworks, Blast Furnances, Briquetting plants Residual (1)"	
-iResSpecificFuelConsCost(allCy,TRANSE,TTECH,EF,YTIME)	"Residuals on specific fuel consumption cost (1)"				
+iResSpecificFuelConsCost(allCy,TRANSE,TTECH,EF,YTIME)	"Residuals on specific fuel consumption cost (1)"
+iShareAnnMilePlugInHybrid(allCy,YTIME)	                "Share of annual mileage of a plug-in hybrid which is covered by electricity (1)"				
 ;	
 
 
@@ -172,7 +173,8 @@ QScrRate(allCy,YTIME)          "Compute passenger cars scrapping rate"
 QPassCarsLft(allCy,DSBS,EF,TEA,YTIME)	"Compute the lifetime of passenger cars" 	
 QGoodsTranspActiv(allCy,TRANSE,YTIME)	"Compute goods transport activity"
 QGapTranspActiv(allCy,TRANSE,YTIME)	    "Compute the gap in transport activity"	
-QSpecificFuelCons(allCy,TRANSE,TTECH,TEA,EF,YTIME)	"Compute Specific Fuel Consumption"	
+QSpecificFuelCons(allCy,TRANSE,TTECH,TEA,EF,YTIME)	"Compute Specific Fuel Consumption"
+QTranspCostPerMeanConsSize(allCy,TRANSE,RCon,TTECH,TEA,YTIME)	"Compute transportation cost per mean and consumer size in KEuro per vehicle"		
 ***  INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS EQUATIONS
 QDemSub(allCy,DSBS,YTIME)                     "Compute total final demand per subsector"
 QElecConsInd(allCy,YTIME)                     "Compute Consumption of electricity in industrial sectors"
@@ -335,7 +337,12 @@ VSpecificFuelCons(allCy,TRANSE,TTECH,TEA,EF,YTIME)	"Specific Fuel Consumption ()
                                                       !! SFC for passenger cars (ktoe/Gkm)
                                                       !! SFC for other passsenger transportation modes (ktoe/Gpkm)
                                                       !! SFC for trucks is measured (ktoe/Gtkm)
-
+VTranspCostPermeanConsSize(allCy,TRANSE,RCon,TTECH,TEA,YTIME)	"Transportation cost per mean and consumer size (Keuro/vehicle)"
+VCosTech(allCy,SBS,EF,TEA,YTIME)	                            "Variable Cost of technology ()"
+                                                       !! For transport (kEuro05/vehicle)
+                                                       !! For Industrial sectors, except Iron and Steel (Euro05/toe-year)
+                                                       !! For Iron and Steel  (Euro05/tn-of-steel)
+                                                       !! For Domestic sectors  (Euro05/toe-year)		
 ***  INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 VElecNonSub(allCy,DSBS,YTIME)          "Consumption of non-substituable electricity in Industry and Tertiary (Mtoe)"
 VElecConsInd(allCy,YTIME)              "Total Consumption of Electricity in industrial sectors (Mtoe)"

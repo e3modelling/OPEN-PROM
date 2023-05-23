@@ -630,6 +630,32 @@ QSpecificFuelCons(runCy,TRANSE,TTECH,TEA,EF,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE
                       )**(iElastA(runCy,TRANSE,"c5",YTIME)*iFPDL(TRANSE,KPDL))
           );
 
+* Compute transportation cost per mean and consumer size in KEuro per vehicle
+QTranspCostPerMeanConsSize(runCy,TRANSE,RCon,TTECH,TEA,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $(ord(Rcon) le iNcon(TRANSE)+1))..
+         VTranspCostPermeanConsSize(runCy,TRANSE,RCon,TTECH,TEA,YTIME)
+         =E=
+                       (
+                         (
+                           (iDisc(runCy,TRANSE,YTIME)*exp(iDisc(runCy,TRANSE,YTIME)*VLifeTimeTech(runCy,TRANSE,TTECH,TEA,YTIME)))
+                           /
+                           (exp(iDisc(runCy,TRANSE,YTIME)*VLifeTimeTech(runCy,TRANSE,TTECH,TEA,YTIME)) - 1)
+                         ) * iCapCostTech(runCy,TRANSE,TTECH,YTIME)  * iCGI(runCy,YTIME)
+                         + iFixOMCostTech(runCy,TRANSE,TTECH,YTIME)  +
+                         (
+                           (sum(EF$TTECHtoEF(TTECH,EF),VSpecificFuelCons(runCy,TRANSE,TTECH,TEA,EF,YTIME)*VFuelPriceSub(runCy,TRANSE,EF,YTIME)) )$(not PLUGIN(TTECH))
+                           +
+                           (sum(EF$(TTECHtoEF(TTECH,EF) $(not sameas("ELC",EF))),
+
+                              (1-iShareAnnMilePlugInHybrid(runCy,YTIME))*VSpecificFuelCons(runCy,TRANSE,TTECH,TEA,EF,YTIME)*VFuelPriceSub(runCy,TRANSE,EF,YTIME))
+                             + iShareAnnMilePlugInHybrid(runCy,YTIME)*VSpecificFuelCons(runCy,TRANSE,TTECH,TEA,"ELC",YTIME)*VFuelPriceSub(runCy,TRANSE,"ELC",YTIME)
+                           )$PLUGIN(TTECH)
+
+                           + VCosTech(runCy,TRANSE,TTECH,TEA,YTIME)
+                           + (VRenValue(YTIME)/1000)$( not RENEF(TTECH))
+                         )
+                         *  iAnnCons(runCy,TRANSE,"smallest") * (iAnnCons(runCy,TRANSE,"largest")/iAnnCons(runCy,TRANSE,"smallest"))**((ord(Rcon)-1)/iNcon(TRANSE))
+                       );
+
 * Compute passenger cars market extension (GDP dependent)
 QMExtV(runCy,YTIME)$TIME(YTIME)..
          VMExtV(runCy,YTIME)
