@@ -574,10 +574,25 @@ $ondelim
 $include"./iFuelCons.csv"
 $offdelim
 ;
+table iIndFuelConsPerSub(allCy,INDSE,EF,YTIME)	 "Fuel consumption per industry subsector (Mtoe)"
+$ondelim
+$include"./iIndFuelConsPerSub.csv"
+$offdelim
+;
+table iDomFuelConsPerSub(allCy,DOMSE,EF,YTIME)	 "Fuel Consumption per domestic Subsector (Mtoe)"
+$ondelim
+$include"./iDomFuelConsPerSub.csv"
+$offdelim
+;
+table iFinConsSubFuel(allCy,NENSE,EF,YTIME)	 "Final Consumption per Subsector and fuel (Mtoe)"
+$ondelim
+$include"./iFinConsSubFuel.csv"
+$offdelim
+;
 iFuelConsPerFueSub(allCy,TRANSE,EF,YTIME)$(not An(YTIME))  = iFuelCons(allCy,TRANSE,EF,YTIME);
-*iFuelConsPerFueSub(allCy,INDSE,EF,YTIME)$(not An(YTIME))   = Indu_FCon(allCy,INDSE,EF,YTIME);
-*iFuelConsPerFueSub(allCy,DOMSE,EF,YTIME)$(not An(YTIME))   = Dom_FCon(allCy,DOMSE,EF,YTIME);
-*iFuelConsPerFueSub(allCy,NENSE,EF,YTIME)$(not An(YTIME))   = Nen_FCon(allCy,NENSE,EF,YTIME);
+iFuelConsPerFueSub(allCy,INDSE,EF,YTIME)$(not An(YTIME))   = iIndFuelConsPerSub(allCy,INDSE,EF,YTIME);
+iFuelConsPerFueSub(allCy,DOMSE,EF,YTIME)$(not An(YTIME))   = iDomFuelConsPerSub(allCy,DOMSE,EF,YTIME);
+iFuelConsPerFueSub(allCy,NENSE,EF,YTIME)$(not An(YTIME))   = iFinConsSubFuel(allCy,NENSE,EF,YTIME);
 
 
 * Calculation of weights for sector average fuel price

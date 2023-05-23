@@ -1168,12 +1168,12 @@ QFuelPriSepCarbon(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $TIME(YTIME))..
         VFuelPriMultWgt(runCy,DSBS,EF,YTIME)
           =E= 
         iWgtSecAvgPriFueCons(runCy,DSBS,EF) * VFuelPriceSub(runCy,DSBS,EF,YTIME);
-
-
-* EQPPA(CYrun,DSBS,YTIME)$TIME(YTIME)..
-*        PPA(CYrun,DSBS,YTIME)
-*                 =E=
-*         sum(EF$SECTTECH(DSBS,EF), PPW(CYrun,DSBS,EF,YTIME));         
-
+$ontext
+* Compute average fuel price per subsector  
+QAvgFuelPriSub(runCy,DSBS,YTIME)$TIME(YTIME)..
+        VFuelPrice(runCy,DSBS,YTIME)
+                 =E=
+         sum(EF$SECTTECH(DSBS,EF), VFuelPriMultWgt(runCy,DSBS,EF,YTIME));         
+$offtext
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;

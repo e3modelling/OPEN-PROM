@@ -226,7 +226,8 @@ QHouseExpEne(allCy,YTIME)	               "Compute households expenditures on ene
 QFuelPriSubSepCarbVal(allCy,SBS,EF,YTIME)  "Compute fuel prices per subsector and fuel, separate carbon value in each sector"
 
 *** Prices
-QFuelPriSepCarbon(allCy,SBS,EF,YTIME)	"Compute fuel prices per subsector and fuel, separate carbon value in each sector (KEuro1990/toe)"	
+QFuelPriSepCarbon(allCy,SBS,EF,YTIME)	"Compute fuel prices per subsector and fuel, separate carbon value in each sector"	
+*QAvgFuelPriSub(allCy,DSBS,YTIME)	    "Compute average fuel price per subsector" 	
 
 *** Miscellaneous
 qDummyObj                                     "Define dummy objective function"
