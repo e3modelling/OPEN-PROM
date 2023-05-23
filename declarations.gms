@@ -110,6 +110,7 @@ QBslMaxmLoad(allCy,YTIME) 	               "Compute baseload corresponding to max
 QElecBaseLoad(allCy,YTIME)	               "Compute electricity base load"
 QShrcap(allCy,PGALL,YTIME)	               "Compute SHRCAP"	
 QElecGenCap(allCy,PGALL,YTIME)	           "Compute electricity generation capacity"
+QLambda(allCy,YTIME)	                   "Compute Lambda parameter"	
 *QScalFacPlantDispatch(allCy,HOUR,YTIME)   "Compute the scaling factor for plant dispatching"		
 QScalWeibullSum(allCy,PGALL,YTIME)	       "Compute sum (over hours) of temporary variable facilitating the scaling in Weibull equation"
 QElecPriIndResNoCliPol(allCy,ESET,YTIME)   "Compute electricity price in Industrial and Residential Consumers excluding climate policies"

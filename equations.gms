@@ -1,5 +1,12 @@
 * Power Generation
 
+* Compute Lambda parameter
+QLambda(runCy,YTIME)$TIME(YTIME)..
+         (1 - exp( -iLoadCurveConstr(runCy,YTIME)*sGwToTwhPerYear)) / iLoadCurveConstr(runCy,YTIME)
+             =E=
+         (VElecDem(runCy,YTIME) - sGwToTwhPerYear*VCorrBaseLoad(runCy,YTIME))
+         / (VElecPeakLoad(runCy,YTIME) - VCorrBaseLoad(runCy,YTIME));
+
 * Compute total electricity demand
 QElecDem(runCy,YTIME)$TIME(YTIME)..
          VElecDem(runCy,YTIME)

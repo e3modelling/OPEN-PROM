@@ -348,7 +348,9 @@ ENDLOOP;
 
 iCumDistrFuncConsSize(allCy,DSBS) = sum(rCon, iDisFunConSize(allCy,DSBS,rCon));
 iCGI(allCy,YTIME) = 1;
-iLoadCurveConstr(allCy,YTIME)=0;
+*iLoadCurveConstr.L(runCy,TT)$(PERIOD(TT) $TFIRSTAN(TT))= 0.21;
+*iLoadCurveConstr.L(runCy,TT)$(PERIOD(TT) $(NOT TFIRSTAN(TT)))= iLoadCurveConstr.L(runCy,TT-1);
+iLoadCurveConstr(allCy,YTIME)=0.21;
 
 table iResTotCapMxmLoad(allCy,PGRES,YTIME)              "Residuals for total capacity and maximum load (1)"	
 $ondelim
