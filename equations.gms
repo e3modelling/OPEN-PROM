@@ -844,6 +844,15 @@ QAvgVarElecProd(runCy,CHP,YTIME)$(TIME(YTIME) ) ..
          $SUM(INDDOM2,VConsFuel.L(runCy,INDDOM2,CHP,YTIME-1))+0$(NOT SUM(INDDOM2,VConsFuel.L(runCy,INDDOM2,CHP,YTIME-1)));
 
 * REST OF ENERGY BALANCE SECTORS
+
+* Compute the  transfomration output from patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works
+QTransfOutputPatFuel(runCy,EFS,YTIME)$TIME(YTIME)..
+         VTransfOutputPatFuel(runCy,EFS,YTIME)
+             =E=
+         [
+         iTransfOutputGasw(runCy,YTIME) * VTransfOutputPatFuel(runCy,EFS,YTIME-1) * (iActv(YTIME,runCy,"IS")/iActv(YTIME-1,runCy,"IS"))**iElastA(runCy,"IS","a",YTIME)
+         ]$iActv(YTIME-1,runCy,"IS")+0;
+
 * Compute total final energy consumption
 QTotFinEneCons(runCy,EFS,YTIME)$TIME(YTIME)..
          VTotFinEneCons(runCy,EFS,YTIME)

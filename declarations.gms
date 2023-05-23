@@ -94,7 +94,8 @@ iWgtSecAvgPriFueCons(allCy,SBS,EF)	     "Weights for sector's average price, bas
 iFuelConsPerFueSub(allCy,SBS,EF,YTIME)	 "Fuel consumption per fuel and subsector (Mtoe)"
 iTotFinEneDemSubBaseYr(allCy,SBS,YTIME)	 "Total Final Energy Demand per subsector in Base year (Mtoe)"
 iResNonSubsElecDem(allCy,SBS,YTIME	)	 "Residuals in Non Substitutable Electricity Demand	(1)"	
-iResFuelConsPerSubAndFuel(allCy,SBS,EF,YTIME)	"Residuals in fuel consumption per subsector and fuel (1)"					
+iResFuelConsPerSubAndFuel(allCy,SBS,EF,YTIME)	"Residuals in fuel consumption per subsector and fuel (1)"	
+iTransfOutputGasw(allCy,YTIME)	                "Transformation Output from Gasworks, Blast Furnances, Briquetting plants Residual (1)"				
 ;	
 
 
@@ -192,6 +193,7 @@ QElecConsNonSub(allCy,INDDOM,YTIME)	          "Compute non-substituable electric
 QConsOfRemSubEquip(allCy,DSBS,EF,YTIME)	      "Equation for consumption of remaining substitutble equipment"	
 *** REST OF ENERGY BALANCE SECTORS EQUATIONS
 QTotFinEneCons(allCy,EFS,YTIME)              "Compute total final energy consumption"
+QTransfOutputPatFuel(allCy,EFS,YTIME)	     "Compute the  transfomration output from patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works"	
 QTotFinEneConsAll(YTIME)                     "Compute total final energy consumption in ALL countries"
 QFinNonEneCons(allCy,EFS,YTIME)              "Compute final non-energy consumption"
 QDistrLosses(allCy,EFS,YTIME)                "Compute distribution losses"
