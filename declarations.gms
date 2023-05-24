@@ -392,7 +392,6 @@ VAvgElcProCHP(allCy,CHP,YTIME)                          "Average Electricity pro
 VAvgVarProdCostCHP(allCy,CHP,YTIME)                     "Average variable including fuel electricity production cost per CHP plant (Euro/KWh)"
 
 *** REST OF ENERGY BALANCE SECTORS VARIABLES
-VTotFinEneCons(allCy,EF,YTIME)                          "Total final energy Consumption (Mtoe)"
 VTotFinEneConsAll(YTIME)                                "Total final energy Consumption in ALL COUNTRIES (Mtoe)"
 VDistrLosses(allCy,EFS,YTIME)                           "Distribution losses (Mtoe)"
 VTransfOutputDHPlants(allCy,EFS,YTIME)                  "Transformation output from District Heating Plants (Mtoe)"
