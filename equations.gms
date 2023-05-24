@@ -109,7 +109,9 @@ QHourProdCostInvDecisions(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME) $(CCS(PGALL) or N
 
 * Compute production cost used in investment decisions
 QProdCostInvDecis(runCy,PGALL,YTIME)$(TIME(YTIME) $(CCS(PGALL) or NOCCS(PGALL)) ) ..
-         VProdCostTechnology(runCy,PGALL,YTIME) =E=  sum(HOUR,VHourProdTech(runCy,PGALL,HOUR,YTIME)**(-VSensCcs(runCy,YTIME))) ;
+         VProdCostTechnology(runCy,PGALL,YTIME) 
+         =E=  
+         sum(HOUR,VHourProdTech(runCy,PGALL,HOUR,YTIME)**(-VSensCcs(runCy,YTIME))) ;
 
 * Compute SHRCAP
 QShrcap(runCy,PGALL,YTIME)$(TIME(YTIME) $CCS(PGALL))..
@@ -668,6 +670,13 @@ QTranspCostMatFac(runCy,TRANSE,RCon,TTECH,TEA,YTIME)$(TIME(YTIME) $SECTTECH(TRAN
          =E=
          VMatrFactor(runCy,TRANSE,TTECH,TEA,YTIME) * VTranspCostPerVeh(runCy,TRANSE,rCon,TTECH,TEA,YTIME);
 $offtext
+
+* Compute technology sorting based on variable cost
+QTechSortVarCost(runCy,TRANSE,rCon,YTIME)$(TIME(YTIME) $(ord(rCon) le iNcon(TRANSE)+1))..
+         VTechSortVarCost(runCy,TRANSE,rCon,YTIME)
+                 =E=
+         sum((TTECH,TEA)$SECTTECH(TRANSE,TTECH), VTranspCostMatFac(runCy,TRANSE,rCon,TTECH,TEA,YTIME))
+;
 * Compute passenger cars market extension (GDP dependent)
 QMExtV(runCy,YTIME)$TIME(YTIME)..
          VMExtV(runCy,YTIME)

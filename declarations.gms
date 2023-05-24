@@ -175,6 +175,7 @@ QGoodsTranspActiv(allCy,TRANSE,YTIME)	"Compute goods transport activity"
 QGapTranspActiv(allCy,TRANSE,YTIME)	    "Compute the gap in transport activity"	
 QSpecificFuelCons(allCy,TRANSE,TTECH,TEA,EF,YTIME)	"Compute Specific Fuel Consumption"
 QTranspCostPerMeanConsSize(allCy,TRANSE,RCon,TTECH,TEA,YTIME)	"Compute transportation cost per mean and consumer size in KEuro per vehicle"
+QTechSortVarCost(allCy,TRANSE,Rcon,YTIME)	                    "Compute technology sorting based on variable cost"	
 *QTranspCostPerVeh(allCy,TRANSE,RCon,TTECH,TEA,YTIME)	        "Compute transportation cost per mean and consumer size in KEuro per vehicle"
 *QTranspCostMatFac(allCy,TRANSE,RCon,TTECH,TEA,YTIME)	        "Compute transportation cost including maturity factor"				
 ***  INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS EQUATIONS
@@ -346,7 +347,8 @@ VCosTech(allCy,SBS,EF,TEA,YTIME)	                            "Variable Cost of t
                                                        !! For Iron and Steel  (Euro05/tn-of-steel)
                                                        !! For Domestic sectors  (Euro05/toe-year)
 *VTranspCostPerVeh(allCy,TRANSE,RCon,TTECH,TEA,YTIME)	"Transportation cost per mean and consumer size (Keuro/vehicle)"
-*VTranspCostMatFac(allCy,TRANSE,RCon,TTECH,TEA,YTIME)	"Transportation cost including maturity factor (Keuro/vehicle)"				
+VTranspCostMatFac(allCy,TRANSE,RCon,TTECH,TEA,YTIME)	"Transportation cost including maturity factor (Keuro/vehicle)"	
+VTechSortVarCost(allCy,TRANSE,Rcon,YTIME)	            "Technology sorting based on variable cost (1)"				
 ***  INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 VElecNonSub(allCy,DSBS,YTIME)          "Consumption of non-substituable electricity in Industry and Tertiary (Mtoe)"
 VElecConsInd(allCy,YTIME)              "Total Consumption of Electricity in industrial sectors (Mtoe)"
