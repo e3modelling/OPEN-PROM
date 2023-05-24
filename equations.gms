@@ -1038,7 +1038,7 @@ QTransfOutputPatFuel(runCy,EFS,YTIME)$TIME(YTIME)..
 
 * Compute total final energy consumption
 QTotFinEneCons(runCy,EFS,YTIME)$TIME(YTIME)..
-         VTotFinEneCons(runCy,EFS,YTIME)
+         VFeCons(runCy,EFS,YTIME)
              =E=
          sum(INDDOM,
              sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(INDDOM,EF) ), VConsFuel(runCy,INDDOM,EF,YTIME)))
@@ -1048,7 +1048,7 @@ QTotFinEneCons(runCy,EFS,YTIME)$TIME(YTIME)..
 
 * Compute total final energy consumption in ALL countries
 QTotFinEneConsAll(YTIME)$TIME(YTIME)..
-         VTotFinEneConsAll(YTIME) =E= sum((runCy,EFS), VTotFinEneCons(runCy,EFS,YTIME) );     
+         VTotFinEneConsAll(YTIME) =E= sum((runCy,EFS), VFeCons(runCy,EFS,YTIME) );     
 
 * Compute final non-energy consumption
 QFinNonEneCons(runCy,EFS,YTIME)$TIME(YTIME)..
@@ -1061,7 +1061,7 @@ QFinNonEneCons(runCy,EFS,YTIME)$TIME(YTIME)..
 QDistrLosses(runCy,EFS,YTIME)$TIME(YTIME)..
          VDistrLosses(runCy,EFS,YTIME)
              =E=
-         (iRateLossesFinCons(runCy,EFS,YTIME) * (VTotFinEneCons(runCy,EFS,YTIME) + VFNonEnCons(runCy,EFS,YTIME)))$(not H2EF(EFS));  
+         (iRateLossesFinCons(runCy,EFS,YTIME) * (VFeCons(runCy,EFS,YTIME) + VFNonEnCons(runCy,EFS,YTIME)))$(not H2EF(EFS));  
 
 * Compute the transformation output from district heating plants
 QTranfOutputDHPlants(runCy,STEAM,YTIME)$TIME(YTIME)..
@@ -1092,7 +1092,7 @@ QRefCapacity(runCy,YTIME)$TIME(YTIME)..
          *
          (1$(ord(YTIME) le 16) +
          (prod(rc,
-         (sum(EFS$EFtoEFA(EFS,"LQD"),VTotFinEneCons(runCy,EFS,YTIME-(ord(rc)+1)))/sum(EFS$EFtoEFA(EFS,"LQD"),VTotFinEneCons(runCy,EFS,YTIME-(ord(rc)+2))))**(0.5/(ord(rc)+1)))
+         (sum(EFS$EFtoEFA(EFS,"LQD"),VFeCons(runCy,EFS,YTIME-(ord(rc)+1)))/sum(EFS$EFtoEFA(EFS,"LQD"),VFeCons(runCy,EFS,YTIME-(ord(rc)+2))))**(0.5/(ord(rc)+1)))
          )
          $(ord(YTIME) gt 16)
          )     ] $iRefCapacity(runCy,"%fStartHorizon%");
@@ -1108,7 +1108,7 @@ QTranfOutputRefineries(runCy,EFS,YTIME)$(TIME(YTIME) $EFtoEFA(EFS,"LQD"))..
              1$(TFIRST(YTIME-1) or TFIRST(YTIME-2))
              +
              (
-                sum(EF$EFtoEFA(EF,"LQD"),VTotFinEneCons(runCy,EF,YTIME-1))/sum(EF$EFtoEFA(EF,"LQD"),VTotFinEneCons(runCy,EF,YTIME-2))
+                sum(EF$EFtoEFA(EF,"LQD"),VFeCons(runCy,EF,YTIME-1))/sum(EF$EFtoEFA(EF,"LQD"),VFeCons(runCy,EF,YTIME-2))
              )$(not (TFIRST(YTIME-1) or TFIRST(YTIME-2)))
            )**(0.7)  ]$iRefCapacity(runCy,"%fStartHorizon%"); 
 
@@ -1187,7 +1187,7 @@ QTransfers(runCy,EFS,YTIME)$TIME(YTIME)..
                  VTransfers(runCy,"CRO",YTIME-1)*iResFeedTransfr(runCy,YTIME)*SUM(EFS2$EFTOEFA(EFS2,"LQD"),VTransfers(runCy,EFS2,YTIME))/
                  SUM(EFS2$EFTOEFA(EFS2,"LQD"),VTransfers(runCy,EFS2,YTIME-1)))$sameas(EFS,"CRO")   )$(iFeedTransfr(runCy,EFS,"%fStartHorizon%"))$(NOT sameas("OLQ",EFS)) 
 );         
-  
+
 * Compute gross inland consumption not including consumption of energy branch
  QGrsInlConsNotEneBranch(runCy,EFS,YTIME)$TIME(YTIME)..
          VGrsInlConsNotEneBranch(runCy,EFS,YTIME)

@@ -396,7 +396,6 @@ VAvgVarProdCostCHP(allCy,CHP,YTIME)                     "Average variable includ
 
 *** REST OF ENERGY BALANCE SECTORS VARIABLES
 VPlantEffPlantType(allCy,PGALL,YTIME)	                "Plant efficiency per plant type (1)"
-VTotFinEneCons(allCy,EF,YTIME)                          "Total final energy Consumption (Mtoe)"
 VTotFinEneConsAll(YTIME)                                "Total final energy Consumption in ALL COUNTRIES (Mtoe)"
 VDistrLosses(allCy,EFS,YTIME)                           "Distribution losses (Mtoe)"
 VTransfOutputDHPlants(allCy,EFS,YTIME)                  "Transformation output from District Heating Plants (Mtoe)"
