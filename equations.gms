@@ -675,8 +675,18 @@ $offtext
 QTechSortVarCost(runCy,TRANSE,rCon,YTIME)$(TIME(YTIME) $(ord(rCon) le iNcon(TRANSE)+1))..
          VTechSortVarCost(runCy,TRANSE,rCon,YTIME)
                  =E=
-         sum((TTECH,TEA)$SECTTECH(TRANSE,TTECH), VTranspCostMatFac(runCy,TRANSE,rCon,TTECH,TEA,YTIME))
-;
+         sum((TTECH,TEA)$SECTTECH(TRANSE,TTECH), VTranspCostMatFac(runCy,TRANSE,rCon,TTECH,TEA,YTIME));
+$ontext
+* Compute technology sorting based on variable cost and new equipment
+QTechSortVarCostNewEquip(runCy,TRANSE,TTECH,TEA,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) )..
+         VTechSortVarCostNewEquip(runCy,TRANSE,TTECH,TEA,YTIME)
+         =E=
+         VMatrFactor(runCy,TRANSE,TTECH,TEA,YTIME) / iCumDistrFuncConsSize(runCy,TRANSE)
+         * sum( Rcon$(ord(Rcon) le iNcon(TRANSE)+1),
+                VTranspCostPerVeh(runCy,TRANSE,RCon,TTECH,TEA,YTIME)
+                * iDisFunConSize(runCy,TRANSE,RCon) / VTechSortVarCost(runCy,TRANSE,RCon,YTIME)
+              );
+$offtext
 * Compute passenger cars market extension (GDP dependent)
 QMExtV(runCy,YTIME)$TIME(YTIME)..
          VMExtV(runCy,YTIME)

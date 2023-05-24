@@ -52,6 +52,7 @@ VProdCostTechnology.l(allCy,PGALL2,YTIME)=0.1;
 *VProdCostTechnology.up(allCy,PGALL2,YTIME)=1e6;
 VVarCostTech.l(allCy,PGALL,YTIME)=0.1;
 VProdCostTechPreReplacAvail.l(allCy,PGALL,PGALL2,YTIME)=0.1;
+VTechSortVarCost.l(allCy,TRANSE,Rcon,YTIME)=0.1;
 *VHourProdCostTech.up(allCy,PGALL,HOUR,YTIME)=8000;
 *VHourProdCostTech.l(allCy,PGALL,HOUR,YTIME)=10;
 *VTemScalWeibull.up(allCy,PGALL,HOUR,YTIME)=1e6;
