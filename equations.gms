@@ -1,13 +1,5 @@
 * Power Generation
 
-* Compute CHP electric capacity
-QChpElecPlants(runCy,CHP,YTIME)$TIME(YTIME)..
-         VElecCapChpPla(runCy,CHP,YTIME)
-         =E=
-         1/sTWhToMtoe * sum(INDDOM,VConsFuel(runCy,INDDOM,CHP,YTIME)) * VElecIndPrices(runCy,YTIME)/
-         sum(PGALL$CHPtoEON(CHP,PGALL),iPlantAvailRate(runCy,PGALL,YTIME)) /
-         iUtilRateChpPlants(runCy,CHP,YTIME) /sGwToTwhPerYear;  
-         
 * Compute Lambda parameter
 QLambda(runCy,YTIME)$TIME(YTIME)..
          (1 - exp( -iLoadCurveConstr(runCy,YTIME)*sGwToTwhPerYear)) / iLoadCurveConstr(runCy,YTIME)
@@ -15,7 +7,7 @@ QLambda(runCy,YTIME)$TIME(YTIME)..
          (VElecDem(runCy,YTIME) - sGwToTwhPerYear*VCorrBaseLoad(runCy,YTIME))
          / (VElecPeakLoad(runCy,YTIME) - VCorrBaseLoad(runCy,YTIME));
 
-* Compute electricity final demand
+* Compute total electricity demand
 QElecDem(runCy,YTIME)$TIME(YTIME)..
          VElecDem(runCy,YTIME)
              =E=
@@ -99,7 +91,7 @@ QHourProdCostInv(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME)) ..
                          *sTWhToMtoe/iPlantEffByType(runCy,PGALL,YTIME-4))$(not PGREN(PGALL))
                   ;
 
-* Compute hourly production cost used in investment decisions excluding CCS
+* Compute hourly production cost used in investment decisions
 QHourProdCostInvDec(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME) $NOCCS(PGALL)) ..
          VHourProdCostTech(runCy,PGALL,HOUR,YTIME) =E=
          VPowerPlantNewEq(runCy,PGALL,YTIME)*VHourProdTech(runCy,PGALL,HOUR,YTIME)+
@@ -109,7 +101,7 @@ QHourProdCostInvDec(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME) $NOCCS(PGALL)) ..
 QGammaInCcsDecTree(runCy,YTIME)$TIME(YTIME)..
          VSensCcs(runCy,YTIME) =E= 20+25*EXP(-0.06*((sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME-1)))));
 
-* Compute hourly production cost used in investment decisions taking account CCS acceptance
+* Compute hourly production cost used in investment decisions"
 QHourProdCostInvDecisions(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME) $(CCS(PGALL) or NOCCS(PGALL))) ..
          VHourProdCostOfTech(runCy,PGALL,HOUR,YTIME) 
          =E=
@@ -356,7 +348,7 @@ QScalFacPlantDispatch(runCy,HOUR,YTIME)$TIME(YTIME)..
          + VCorrBaseLoad(runCy,YTIME);
 $offtext
 
-* Compute estimated electricity of CHP Plants
+* Estimate the electricity of CHP Plants
 QElecChpPlants(runCy,YTIME)$TIME(YTIME)..
          VElecChpPlants(runCy,YTIME) 
          =E=
@@ -685,7 +677,7 @@ QTechSortVarCost(runCy,TRANSE,rCon,YTIME)$(TIME(YTIME) $(ord(rCon) le iNcon(TRAN
                  =E=
          sum((TTECH,TEA)$SECTTECH(TRANSE,TTECH), VTranspCostMatFac(runCy,TRANSE,rCon,TTECH,TEA,YTIME));
 
-* Compute the share of each technology in total sectoral use
+* Compute technology sorting based on variable cost and new equipment
 QTechSortVarCostNewEquip(runCy,TRANSE,TTECH,TEA,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) )..
          VTechSortVarCostNewEquip(runCy,TRANSE,TTECH,TEA,YTIME)
          =E=
@@ -879,7 +871,7 @@ QElecConsInd(runCy,YTIME)$TIME(YTIME)..
 QDemInd(runCy,YTIME)$TIME(YTIME)..
         VDemInd(runCy,YTIME)=E= SUM(INDSE,VDemSub(runCy,INDSE,YTIME));
 
-* Compute electricity index
+* Compute electricity industry prices
 QElecIndPrices(runCy,YTIME)$TIME(YTIME)..
          VElecIndPrices(runCy,YTIME) =E=
         ( VElecIndPricesEst(runCy,YTIME) + sElecToSteRatioChp - SQRT( SQR(VElecIndPricesEst(runCy,YTIME)-sElecToSteRatioChp) + SQR(1E-4) ) )/2;
@@ -898,7 +890,7 @@ QFuelCons(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,E
 
 
 
-* Compute the estimated electricity index of industry price
+* Compute Electricity Index of industry price
 QElecIndPricesEst(runCy,YTIME)$TIME(YTIME)..
          VElecIndPricesEst(runCy,YTIME)
                  =E=
@@ -936,7 +928,7 @@ VTechCost(runCy,DSBS,rCon,EF,TEA,YTIME)
                  =E= 
                  VTechCostIntrm(runCy,DSBS,rCon,EF,TEA,YTIME)**(-iElaSub(runCy,DSBS)) ;   
 
-* Compute technology cost including lifetime
+* Compute technology cost 
 QTechCostIntrm(runCy,DSBS,rCon,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) $SECTTECH(DSBS,EF))..
          VTechCostIntrm(runCy,DSBS,rCon,EF,TEA,YTIME) =E=
                   ( (( (iDisc(runCy,DSBS,YTIME)$(not CHP(EF)) + iDisc(runCy,"PG",YTIME)$CHP(EF)) !! in case of chp plants we use the discount rate of power generation sector
@@ -977,7 +969,7 @@ VTechSort(runCy,DSBS,rCon,YTIME)
                         =E=
 sum((EF,TEA)$(SECTTECH(DSBS,EF) ),VTechCostMatr(runCy,DSBS,rCon,EF,TEA,YTIME));
 
-* Compute the gap in final demand on industry, tertiary, non-energy uses and bunkers
+* Compute the gap in final demand (industry, tertiary, non-energy uses and bunkers)
 QGapFinalDem(runCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)))..
          VGapFinalDem(runCy,DSBS,YTIME)
                  =E=
@@ -1299,13 +1291,13 @@ QCO2ElcHrg(runCy,YTIME)$TIME(YTIME)..
 QCumCO2Capt(runCy,YTIME)$TIME(YTIME)..
          VCumCO2Capt(runCy,YTIME) =E= VCumCO2Capt(runCy,YTIME-1)+VCO2ElcHrgProd(runCy,YTIME-1);   
 
-* Compute the transition weight from linear CO2 sequestration cost curve to exponential
+* Compute Weight for transtition from linear CO2 sequestration cost curve to exponential
 QWghtTrnstLinToExpo(runCy,YTIME)$TIME(YTIME)..
          VWghtTrnstLnrToExpo(runCy,YTIME)
          =E=
          1/(1+exp(-iElastCO2Seq(runCy,"mc_s")*( VCumCO2Capt(runCy,YTIME)/iElastCO2Seq(runCy,"pot")-iElastCO2Seq(runCy,"mc_m")))); 
 
-* Compute cost curve for CO2 sequestration costs in Euro per tn of CO2 sequestrated 
+* Compute cost curve for CO2 sequestration costs 
 QCstCO2SeqCsts(runCy,YTIME)$TIME(YTIME)..
          VCO2CO2SeqCsts(runCy,YTIME) =E=
        (1-VWghtTrnstLnrToExpo(runCy,YTIME))*(iElastCO2Seq(runCy,"mc_a")*VCumCO2Capt(runCy,YTIME)+iElastCO2Seq(runCy,"mc_b"))+
@@ -1383,7 +1375,7 @@ iConsPricesFuelSub(runCy,SBS,EF,"2017") $(DSBS(SBS))$ALTEF(EF)
                  VHydrogenPri(runCy,SBS,YTIME-1)$DSBS(SBS)
          )$(H2EF(EF) or sameas("STE1AH2F",EF));
 
-* Compute fuel prices per subsector and fuel multiplied by weights separate carbon value in each sector  
+* Compute fuel prices per subsector and fuel, separate carbon value in each sector 
 QFuelPriSepCarbon(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $TIME(YTIME))..
         VFuelPriMultWgt(runCy,DSBS,EF,YTIME)
           =E= 

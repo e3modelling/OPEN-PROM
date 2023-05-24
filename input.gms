@@ -695,39 +695,3 @@ $include"./iPlantEffByType.csv"
 $offdelim
 ;
 iPlantEffByType(allCy,PGALL,YTIME) = iPlantEffByTypeTemp(PGALL,"EFF_05");
-table iSuppPlantCapFac(allCy,PGRENEF,YTIME)	                "Capacity Factors (1)"	
-$ondelim
-$include"./iSuppPlantCapFac.csv"
-$offdelim
-;
-iPlantAvailRate(allCy,"PGLHYD",YTIME)=iSuppPlantCapFac(allCy,"LHYD",YTIME);
-iPlantAvailRate(allCy,"PGSHYD",YTIME)=iSuppPlantCapFac(allCy,"SHYD",YTIME);
-iPlantAvailRate(allCy,"PGWND",YTIME)=iSuppPlantCapFac(allCy,"WND",YTIME);
-iPlantAvailRate(allCy,"PGAWNO",YTIME)=iSuppPlantCapFac(allCy,"WNO",YTIME);
-iPlantAvailRate(allCy,"PGSOL",YTIME)=iSuppPlantCapFac(allCy,"SOL",YTIME);
-iPlantAvailRate(allCy,"PGADPV",YTIME)=iSuppPlantCapFac(allCy,"DPV",YTIME);
-iPlantAvailRate(allCy,"ATHBMSWAS",YTIME)=iSuppPlantCapFac(allCy,"BMSWAS",YTIME);
-iPlantAvailRate(allCy,"IGCCBMS",YTIME)=iSuppPlantCapFac(allCy,"BMSWAS",YTIME);
-iPlantAvailRate(allCy,"PGAOTHREN",YTIME)= iSuppPlantCapFac(allCy,"OTHREN",YTIME);
-
-iPlantAvailRate(allCy,"PGASHYD",YTIME)=iPlantAvailRate(allCy,"PGSHYD",ytime);
-iPlantAvailRate(allCy,"PGAWND",YTIME)=iPlantAvailRate(allCy,"PGWND",ytime);
-iPlantAvailRate(allCy,"PGASOL",YTIME)=iPlantAvailRate(allCy,"PGSOL",ytime);
-iPlantAvailRate(allCy,"ATHBMSWAS",YTIME)=iPlantAvailRate(allCy,"CTHBMSWAS",ytime);
-
-iUtilRateChpPlants(allCy,CHP,YTIME) = 0.5;
-loop YTIME$((ord(YTIME) gt TF+1) $(ord(YTIME) lt TF+6)) do
-         iUtilRateChpPlants(allCy,CHP,YTIME) = (iUtilRateChpPlants(allCy,CHP,"2020")-iUtilRateChpPlants(allCy,CHP,"2018"))/5+iUtilRateChpPlants(allCy,CHP,YTIME-1);
-endloop;
-loop YTIME$((ord(YTIME) gt TF+6) $(ord(YTIME) lt TF+11)) do
-         iUtilRateChpPlants(allCy,CHP,YTIME) = (iUtilRateChpPlants(allCy,CHP,"2025")-iUtilRateChpPlants(allCy,CHP,"2020"))/5+iUtilRateChpPlants(allCy,CHP,YTIME-1);
-endloop;
-loop YTIME$((ord(YTIME) gt TF+11) $(ord(YTIME) lt TF+16)) do
-         iUtilRateChpPlants(allCy,CHP,YTIME) = (iUtilRateChpPlants(allCy,CHP,"2030")-iUtilRateChpPlants(allCy,CHP,"2025"))/5+iUtilRateChpPlants(allCy,CHP,YTIME-1);
-endloop;
-loop YTIME$((ord(YTIME) gt TF+16) $(ord(YTIME) lt TF+21)) do
-         iUtilRateChpPlants(allCy,CHP,YTIME) = (iUtilRateChpPlants(allCy,CHP,"2035")-iUtilRateChpPlants(allCy,CHP,"2030"))/5+iUtilRateChpPlants(allCy,CHP,YTIME-1);
-endloop;
-loop YTIME$((ord(YTIME) gt TF+21) $(ord(YTIME) lt TF+41)) do
-         iUtilRateChpPlants(allCy,CHP,YTIME) = (iUtilRateChpPlants(allCy,CHP,"2050")-iUtilRateChpPlants(allCy,CHP,"2030"))/20+iUtilRateChpPlants(allCy,CHP,YTIME-1);
-endloop;
