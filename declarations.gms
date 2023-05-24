@@ -98,12 +98,14 @@ iResFuelConsPerSubAndFuel(allCy,SBS,EF,YTIME)	"Residuals in fuel consumption per
 iTransfOutputGasw(allCy,YTIME)	                "Transformation Output from Gasworks, Blast Furnances, Briquetting plants Residual (1)"	
 iResSpecificFuelConsCost(allCy,TRANSE,TTECH,EF,YTIME)	"Residuals on specific fuel consumption cost (1)"
 iShareAnnMilePlugInHybrid(allCy,YTIME)	                "Share of annual mileage of a plug-in hybrid which is covered by electricity (1)"
-iAvgVehCapLoadFac(allCy,TRANSE,TRANSUSE,YTIME)	        "Average capacity/vehicle and load factor (tn/veh or passenegers/veh)" 				
+iAvgVehCapLoadFac(allCy,TRANSE,TRANSUSE,YTIME)	        "Average capacity/vehicle and load factor (tn/veh or passenegers/veh)"
+iUtilRateChpPlants(allCy,CHP,YTIME)	                    "Utilisation rate of CHP Plants (1)"		
 ;	
 
 
 Equations
 *** Power Generation
+QChpElecPlants(allCy,CHP,YTIME)            "Compute CHP electric capacity"	
 QElecDem(allCy,YTIME)                      "Compute total electricity demand"
 QElecConsAll(allCy,DSBS,YTIME)             "Compute electricity consumption per final demand sector"
 QEstBaseLoad(allCy,YTIME)	               "Compute estimated base load"	
@@ -129,7 +131,7 @@ QShareRenGrossElecProd(allCy,YTIME)	       "Compute the share of renewables in g
 QSecContrTotChpProd(allCy,SBS,CHP,YTIME)   "Compute sector contribution to total CHP production"	
 QElecProdPowGenPlants(allCy,PGALL,YTIME)   "Compute electricity production from power generation plants"	
 QReqElecProd(allCy,YTIME)	               "Compute total required electricity production" 	
-QElecChpPlants(allCy,YTIME)	               "Estimate the electricity of CHP Plants"	
+QElecChpPlants(allCy,YTIME)	               "Compute estimated electricity of CHP Plants"	
 QOverallCap(allCy,PGALL,YTIME)	           "Compute overall capacity"
 QNonChpElecProd(allCy,YTIME)	           "Compute non CHP electricity production" 	
 QAvgCapFacRes(allCy,PGALL,YTIME)	       "Compute the average capacity factor of RES"	
@@ -155,9 +157,9 @@ QTotReqElecProd(allCy,YTIME)               "Compute total required electricity p
 QTotEstElecGenCap(allCy,YTIME)             "Compute Estimated total electricity generation capacity"	
 QTotElecGenCap(allCy,YTIME)	               "Compute total electricity generation capacity"
 QHourProdCostInv(allCy,PGALL,HOUR,YTIME)   "Compute hourly production cost used in investment decisions"
-QHourProdCostInvDec(allCy,PGALL,HOUR,YTIME)"Compute hourly production cost used in investment decisions"
+QHourProdCostInvDec(allCy,PGALL,HOUR,YTIME)"Compute hourly production cost used in investment decisions excluding CCS"
 QGammaInCcsDecTree(allCy,YTIME)	           "Compute gamma parameter used in CCS/No CCS decision tree"
-QHourProdCostInvDecisions(allCy,PGALL,HOUR,YTIME)	"Compute hourly production cost used in investment decisions"
+QHourProdCostInvDecisions(allCy,PGALL,HOUR,YTIME)	"Compute hourly production cost used in investment decisions taking account CCS acceptance"
 QProdCostInvDecis(allCy,PGALL,YTIME)	            "Compute production cost used in investment decisions"
 QShrcapNoCcs(allCy,PGALL,YTIME)	                    "Compute SHRCAP excluding CCs"
 QProdCostTechPreReplac(allCy,PGALL,YTIME)	        "Compute production cost of technology  used in premature replacement"	
@@ -177,7 +179,7 @@ QGapTranspActiv(allCy,TRANSE,YTIME)	    "Compute the gap in transport activity"
 QSpecificFuelCons(allCy,TRANSE,TTECH,TEA,EF,YTIME)	"Compute Specific Fuel Consumption"
 QTranspCostPerMeanConsSize(allCy,TRANSE,RCon,TTECH,TEA,YTIME)	"Compute transportation cost per mean and consumer size in KEuro per vehicle"
 QTechSortVarCost(allCy,TRANSE,Rcon,YTIME)	                    "Compute technology sorting based on variable cost"	
-QTechSortVarCostNewEquip(allCy,TRANSE,EF,TEA,YTIME)	            "Compute technology sorting based on variable cost and new equipment"	
+QTechSortVarCostNewEquip(allCy,TRANSE,EF,TEA,YTIME)	            "Compute the share of each technology in total sectoral use"	
 *QTranspCostPerVeh(allCy,TRANSE,RCon,TTECH,TEA,YTIME)	        "Compute transportation cost per mean and consumer size in KEuro per vehicle"
 *QTranspCostMatFac(allCy,TRANSE,RCon,TTECH,TEA,YTIME)	        "Compute transportation cost including maturity factor"	
 QConsEachTechTransp(allCy,TRANSE,TTECH,EF,TEA,YTIME)	        "Compute consumption of each technology in transport sectors"
@@ -235,8 +237,8 @@ QEneBrnchEneCons(allCy,EFS,YTIME)	         "Compute energy branch final consumpt
 *** CO2 SEQUESTRATION COST CURVES EQUATIONS
 QCO2ElcHrg(allCy,YTIME)	                     "Compute CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
 QCumCO2Capt(allCy,YTIME)	                 "Compute cumulative CO2 captured (Mtn of CO2)"
-QWghtTrnstLinToExpo(allCy,YTIME)	         "Transtition weight for shifting from linear to exponential CO2 sequestration cost curve"
-QCstCO2SeqCsts(allCy,YTIME)	                 "Compute cost curve for CO2 sequestration costs" 	
+QWghtTrnstLinToExpo(allCy,YTIME)	         "Compute the transition weight from linear CO2 sequestration cost curve to exponential"
+QCstCO2SeqCsts(allCy,YTIME)	                 "Compute cost curve for CO2 sequestration costs in Euro per tn of CO2 sequestrated" 	
 
 *** Emissions Constraints Equations
 QTotCo2AllCoun(YTIME)	                   "Compute total CO2eq GHG emissions in all countries"
@@ -256,6 +258,7 @@ qDummyObj                                     "Define dummy objective function"
 Variables
 
 *** Power Generation Variables
+VElecCapChpPla(allCy,CHP,YTIME)	          "Capacity of CHP Plants (GW)"
 VEstBaseLoad(allCy,YTIME)	              "Estimated base load (GW)"	
 VElecDem(allCy,YTIME)                     "Total electricity demand (TWh)"
 VCapChpPlants(allCy,YTIME)                "Capacity of CHP Plants (GW)"	
