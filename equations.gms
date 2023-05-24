@@ -676,7 +676,7 @@ QTechSortVarCost(runCy,TRANSE,rCon,YTIME)$(TIME(YTIME) $(ord(rCon) le iNcon(TRAN
          VTechSortVarCost(runCy,TRANSE,rCon,YTIME)
                  =E=
          sum((TTECH,TEA)$SECTTECH(TRANSE,TTECH), VTranspCostMatFac(runCy,TRANSE,rCon,TTECH,TEA,YTIME));
-$ontext
+
 * Compute technology sorting based on variable cost and new equipment
 QTechSortVarCostNewEquip(runCy,TRANSE,TTECH,TEA,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) )..
          VTechSortVarCostNewEquip(runCy,TRANSE,TTECH,TEA,YTIME)
@@ -686,7 +686,39 @@ QTechSortVarCostNewEquip(runCy,TRANSE,TTECH,TEA,YTIME)$(TIME(YTIME) $SECTTECH(TR
                 VTranspCostPerVeh(runCy,TRANSE,RCon,TTECH,TEA,YTIME)
                 * iDisFunConSize(runCy,TRANSE,RCon) / VTechSortVarCost(runCy,TRANSE,RCon,YTIME)
               );
-$offtext
+
+* Compute consumption of each technology in transport sectors
+QConsEachTechTransp(runCy,TRANSE,TTECH,EF,TEA,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $TTECHtoEF(TTECH,EF) )..
+         VConsEachTechTransp(runCy,TRANSE,TTECH,EF,TEA,YTIME)
+                 =E=
+         VConsEachTechTransp(runCy,TRANSE,TTECH,EF,TEA,YTIME-1) *
+         (
+                 (
+                     ((VLifeTimeTech(runCy,TRANSE,TTECH,TEA,YTIME-1)-1)/VLifeTimeTech(runCy,TRANSE,TTECH,TEA,YTIME-1))
+                      *(iAvgVehCapLoadFac(runCy,TRANSE,"CAP",YTIME-1)*iAvgVehCapLoadFac(runCy,TRANSE,"LF",YTIME-1))
+                      /(iAvgVehCapLoadFac(runCy,TRANSE,"CAP",YTIME)*iAvgVehCapLoadFac(runCy,TRANSE,"LF",YTIME))
+                 )$(not sameas(TRANSE,"PC"))
+                 +
+                 (1 - VScrRate(runCy,YTIME))$sameas(TRANSE,"PC")
+         )
+         +
+         VTechSortVarCostNewEquip(runCy,TRANSE,TTECH,TEA,YTIME) *
+         (
+                 VSpecificFuelCons(runCy,TRANSE,TTECH,TEA,EF,YTIME)$(not PLUGIN(TTECH))
+                 +
+                 ( ((1-iShareAnnMilePlugInHybrid(runCy,YTIME))*VSpecificFuelCons(runCy,TRANSE,TTECH,TEA,EF,YTIME))$(not sameas("ELC",EF))
+                   + iShareAnnMilePlugInHybrid(runCy,YTIME)*VSpecificFuelCons(runCy,TRANSE,TTECH,TEA,"ELC",YTIME))$PLUGIN(TTECH)
+         )/1000
+         * VGapTranspFillNewTech(runCy,TRANSE,YTIME) *
+         (
+                 (
+                  (iAvgVehCapLoadFac(runCy,TRANSE,"CAP",YTIME-1)*iAvgVehCapLoadFac(runCy,TRANSE,"LF",YTIME-1))
+                  / (iAvgVehCapLoadFac(runCy,TRANSE,"CAP",YTIME)*iAvgVehCapLoadFac(runCy,TRANSE,"LF",YTIME))
+                 )$(not sameas(TRANSE,"PC"))
+                 +
+                 (VTrnspActiv(runCy,TRANSE,YTIME))$sameas(TRANSE,"PC")
+         );
+
 * Compute passenger cars market extension (GDP dependent)
 QMExtV(runCy,YTIME)$TIME(YTIME)..
          VMExtV(runCy,YTIME)

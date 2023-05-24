@@ -682,3 +682,9 @@ $include"./iPlugHybrFractOfMileage.csv"
 $offdelim
 ;
 iShareAnnMilePlugInHybrid(allCy,YTIME)$an(YTIME) = iPlugHybrFractOfMileage(allCy,"ELSH",YTIME);
+table iCapDataLoadFacEachTransp(TRANSE,TRANSUSE)	 "Capacity data and Load factor for each transportation mode (passenger or tonnes/vehicle)"
+$ondelim
+$include"./iCapDataLoadFacEachTransp.csv"
+$offdelim
+;
+iAvgVehCapLoadFac(runCy,TRANSE,TRANSUSE,YTIME)$(ord(YTIME)>sum(TFIRST,(ord(TFIRST)-3))) = iCapDataLoadFacEachTransp(TRANSE,TRANSUSE);

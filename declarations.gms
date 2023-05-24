@@ -97,7 +97,8 @@ iResNonSubsElecDem(allCy,SBS,YTIME	)	 "Residuals in Non Substitutable Electricit
 iResFuelConsPerSubAndFuel(allCy,SBS,EF,YTIME)	"Residuals in fuel consumption per subsector and fuel (1)"	
 iTransfOutputGasw(allCy,YTIME)	                "Transformation Output from Gasworks, Blast Furnances, Briquetting plants Residual (1)"	
 iResSpecificFuelConsCost(allCy,TRANSE,TTECH,EF,YTIME)	"Residuals on specific fuel consumption cost (1)"
-iShareAnnMilePlugInHybrid(allCy,YTIME)	                "Share of annual mileage of a plug-in hybrid which is covered by electricity (1)"				
+iShareAnnMilePlugInHybrid(allCy,YTIME)	                "Share of annual mileage of a plug-in hybrid which is covered by electricity (1)"
+iAvgVehCapLoadFac(allCy,TRANSE,TRANSUSE,YTIME)	        "Average capacity/vehicle and load factor (tn/veh or passenegers/veh)" 				
 ;	
 
 
@@ -176,9 +177,10 @@ QGapTranspActiv(allCy,TRANSE,YTIME)	    "Compute the gap in transport activity"
 QSpecificFuelCons(allCy,TRANSE,TTECH,TEA,EF,YTIME)	"Compute Specific Fuel Consumption"
 QTranspCostPerMeanConsSize(allCy,TRANSE,RCon,TTECH,TEA,YTIME)	"Compute transportation cost per mean and consumer size in KEuro per vehicle"
 QTechSortVarCost(allCy,TRANSE,Rcon,YTIME)	                    "Compute technology sorting based on variable cost"	
-*QTechSortVarCostNewEquip(allCy,TRANSE,EF,TEA,YTIME)	            "Compute technology sorting based on variable cost and new equipment"	
+QTechSortVarCostNewEquip(allCy,TRANSE,EF,TEA,YTIME)	            "Compute technology sorting based on variable cost and new equipment"	
 *QTranspCostPerVeh(allCy,TRANSE,RCon,TTECH,TEA,YTIME)	        "Compute transportation cost per mean and consumer size in KEuro per vehicle"
-*QTranspCostMatFac(allCy,TRANSE,RCon,TTECH,TEA,YTIME)	        "Compute transportation cost including maturity factor"				
+*QTranspCostMatFac(allCy,TRANSE,RCon,TTECH,TEA,YTIME)	        "Compute transportation cost including maturity factor"	
+QConsEachTechTransp(allCy,TRANSE,TTECH,EF,TEA,YTIME)	        "Compute consumption of each technology in transport sectors"				
 ***  INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS EQUATIONS
 QDemSub(allCy,DSBS,YTIME)                     "Compute total final demand per subsector"
 QElecConsInd(allCy,YTIME)                     "Compute Consumption of electricity in industrial sectors"
@@ -350,7 +352,8 @@ VCosTech(allCy,SBS,EF,TEA,YTIME)	                            "Variable Cost of t
 VTranspCostPerVeh(allCy,TRANSE,RCon,TTECH,TEA,YTIME)	"Transportation cost per mean and consumer size (Keuro/vehicle)"
 VTranspCostMatFac(allCy,TRANSE,RCon,TTECH,TEA,YTIME)	"Transportation cost including maturity factor (Keuro/vehicle)"	
 VTechSortVarCost(allCy,TRANSE,Rcon,YTIME)	            "Technology sorting based on variable cost (1)"	
-*VTechSortVarCostNewEquip(allCy,TRANSE,EF,TEA,YTIME)	    "Technology share in new equipment (1)"				
+VTechSortVarCostNewEquip(allCy,TRANSE,EF,TEA,YTIME)	    "Technology share in new equipment (1)"	
+VConsEachTechTransp(allCy,TRANSE,TTECH,EF,TEA,YTIME)	"Consumption of each technology and subsector (Mtoe)"			
 ***  INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 VElecNonSub(allCy,DSBS,YTIME)          "Consumption of non-substituable electricity in Industry and Tertiary (Mtoe)"
 VElecConsInd(allCy,YTIME)              "Total Consumption of Electricity in industrial sectors (Mtoe)"
