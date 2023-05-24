@@ -180,7 +180,8 @@ QTechSortVarCost(allCy,TRANSE,Rcon,YTIME)	                    "Compute technolog
 QTechSortVarCostNewEquip(allCy,TRANSE,EF,TEA,YTIME)	            "Compute technology sorting based on variable cost and new equipment"	
 *QTranspCostPerVeh(allCy,TRANSE,RCon,TTECH,TEA,YTIME)	        "Compute transportation cost per mean and consumer size in KEuro per vehicle"
 *QTranspCostMatFac(allCy,TRANSE,RCon,TTECH,TEA,YTIME)	        "Compute transportation cost including maturity factor"	
-QConsEachTechTransp(allCy,TRANSE,TTECH,EF,TEA,YTIME)	        "Compute consumption of each technology in transport sectors"				
+QConsEachTechTransp(allCy,TRANSE,TTECH,EF,TEA,YTIME)	        "Compute consumption of each technology in transport sectors"
+QFinEneDemTranspPerFuel(allCy,TRANSE,EF,YTIME)	                "Compute final energy demand in transport per fuel"					
 ***  INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS EQUATIONS
 QDemSub(allCy,DSBS,YTIME)                     "Compute total final demand per subsector"
 QElecConsInd(allCy,YTIME)                     "Compute Consumption of electricity in industrial sectors"

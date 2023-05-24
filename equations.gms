@@ -719,6 +719,12 @@ QConsEachTechTransp(runCy,TRANSE,TTECH,EF,TEA,YTIME)$(TIME(YTIME) $SECTTECH(TRAN
                  (VTrnspActiv(runCy,TRANSE,YTIME))$sameas(TRANSE,"PC")
          );
 
+* Compute final energy demand in transport per fuel
+QFinEneDemTranspPerFuel(runCy,TRANSE,EF,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,EF))..
+         VDemTr(runCy,TRANSE,EF,YTIME)
+                 =E=
+         sum((TTECH,TEA)$(SECTTECH(TRANSE,TTECH) $TTECHtoEF(TTECH,EF) ), VConsEachTechTransp(runCy,TRANSE,TTECH,EF,TEA,YTIME));
+
 * Compute passenger cars market extension (GDP dependent)
 QMExtV(runCy,YTIME)$TIME(YTIME)..
          VMExtV(runCy,YTIME)
