@@ -181,7 +181,8 @@ QTechSortVarCostNewEquip(allCy,TRANSE,EF,TEA,YTIME)	            "Compute technol
 *QTranspCostPerVeh(allCy,TRANSE,RCon,TTECH,TEA,YTIME)	        "Compute transportation cost per mean and consumer size in KEuro per vehicle"
 *QTranspCostMatFac(allCy,TRANSE,RCon,TTECH,TEA,YTIME)	        "Compute transportation cost including maturity factor"	
 QConsEachTechTransp(allCy,TRANSE,TTECH,EF,TEA,YTIME)	        "Compute consumption of each technology in transport sectors"
-QFinEneDemTranspPerFuel(allCy,TRANSE,EF,YTIME)	                "Compute final energy demand in transport per fuel"					
+QFinEneDemTranspPerFuel(allCy,TRANSE,EF,YTIME)	                "Compute final energy demand in transport per fuel"
+QFinEneDemTransp(allCy,TRANSE,YTIME)	                        "Compute final energy demand in transport" 						
 ***  INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS EQUATIONS
 QDemSub(allCy,DSBS,YTIME)                     "Compute total final demand per subsector"
 QElecConsInd(allCy,YTIME)                     "Compute Consumption of electricity in industrial sectors"
@@ -354,7 +355,8 @@ VTranspCostPerVeh(allCy,TRANSE,RCon,TTECH,TEA,YTIME)	"Transportation cost per me
 VTranspCostMatFac(allCy,TRANSE,RCon,TTECH,TEA,YTIME)	"Transportation cost including maturity factor (Keuro/vehicle)"	
 VTechSortVarCost(allCy,TRANSE,Rcon,YTIME)	            "Technology sorting based on variable cost (1)"	
 VTechSortVarCostNewEquip(allCy,TRANSE,EF,TEA,YTIME)	    "Technology share in new equipment (1)"	
-VConsEachTechTransp(allCy,TRANSE,TTECH,EF,TEA,YTIME)	"Consumption of each technology and subsector (Mtoe)"			
+VConsEachTechTransp(allCy,TRANSE,TTECH,EF,TEA,YTIME)	"Consumption of each technology and subsector (Mtoe)"
+VFinEneDemTranspSub(allCy,TRANSE,YTIME)	                "Final energy demand in transport subsectors (Mtoe)"				
 ***  INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 VElecNonSub(allCy,DSBS,YTIME)          "Consumption of non-substituable electricity in Industry and Tertiary (Mtoe)"
 VElecConsInd(allCy,YTIME)              "Total Consumption of Electricity in industrial sectors (Mtoe)"

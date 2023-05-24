@@ -725,6 +725,12 @@ QFinEneDemTranspPerFuel(runCy,TRANSE,EF,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,EF)
                  =E=
          sum((TTECH,TEA)$(SECTTECH(TRANSE,TTECH) $TTECHtoEF(TTECH,EF) ), VConsEachTechTransp(runCy,TRANSE,TTECH,EF,TEA,YTIME));
 
+* Compute final energy demand in transport 
+QFinEneDemTransp(runCy,TRANSE,YTIME)$(TIME(YTIME)) ..
+         VFinEneDemTranspSub(runCy,TRANSE,YTIME)
+                 =E=
+         sum(EF,VDemTr(runCy,TRANSE,EF,YTIME));
+
 * Compute passenger cars market extension (GDP dependent)
 QMExtV(runCy,YTIME)$TIME(YTIME)..
          VMExtV(runCy,YTIME)
