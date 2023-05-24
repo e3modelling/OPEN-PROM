@@ -688,6 +688,13 @@ $include"./iCapDataLoadFacEachTransp.csv"
 $offdelim
 ;
 iAvgVehCapLoadFac(runCy,TRANSE,TRANSUSE,YTIME)$(ord(YTIME)>sum(TFIRST,(ord(TFIRST)-3))) = iCapDataLoadFacEachTransp(TRANSE,TRANSUSE);
+
+table iPlantEffByTypeTemp(PGALL,PGECONCHAR)           "Plant efficiency per plant type (1)"
+$ondelim
+$include"./iPlantEffByType.csv"
+$offdelim
+;
+iPlantEffByType(allCy,PGALL,YTIME) = iPlantEffByTypeTemp(PGALL,"EFF_05");
 table iSuppPlantCapFac(allCy,PGRENEF,YTIME)	                "Capacity Factors (1)"	
 $ondelim
 $include"./iSuppPlantCapFac.csv"

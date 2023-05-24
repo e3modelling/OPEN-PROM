@@ -7,6 +7,7 @@ $ondelim
 $include "./iLifChpPla.csv"
 $offdelim
 /
+iPlantEffByType(allCy,PGALL,YTIME)              "Plant efficiency per plant type (1)"
 iCo2EmiFac(allCy,SBS,EF,YTIME)                  "CO2 emission factors per subsector (kgCO2/kgoe fuel burned)"
 iUsfEnergyConvFact(allCy,SBS,EF,TEA,YTIME)      "Useful Energy Conversion Factor per subsector, technology, and country (1)"
 iNcon(SBS)                                      "Number of consumers (1)"
@@ -63,7 +64,7 @@ iGrossCapCosSubRen(allCy,PGALL,YTIME)	  "Gross Capital Cost per Plant Type with 
 iVarGroCostPlaType(allCy,PGALL,YTIME)	  "Variable gross cost other than fuel per Plant Type (Euro2005/KW)"
 iCapGrossCosPlanType(allCy,PGALL,YTIME)	  "Capital gross cost per plant type (kEuro2005/KW)"	
 iFixGrosCostPlaType(allCy,PGALL,YTIME)	  "Fixed O&M Gross Cost per Plant Type (Euro2005/KW)"
-*iDataElecSteamGen(PGOTH,YTIME)	          "Various Data releated to electricity and steam generation (1)"
+*iDataElecSteamGen(PGOTH,YTIME)	          "Various Data related to electricity and steam generation (1)"
 iCO2CaptRate(allCy,PGALL,YTIME)	          "Plant CO2 capture rate (1)"
 iCO2CaptRateData(PGALL)	                  "Plant CO2 capture rate Data (1)"/
 $ondelim
@@ -71,7 +72,7 @@ $include "./iCO2CaptRateData.csv"
 $offdelim
 /
 iScaleEndogScrap(allCy,PGALL,YTIME)	"Scale parameter for endogenous scrapping applied to the sum of full costs (1)"	
-iPremReplacem(allCy,PGALL)	    "Premature replacement (1)"/
+iPremReplacem(allCy,PGALL)	        "Premature replacement (1)"/
 $ondelim
 $include"./iPremReplacem.csv"
 $offdelim
@@ -136,7 +137,7 @@ QOverallCap(allCy,PGALL,YTIME)	           "Compute overall capacity"
 QNonChpElecProd(allCy,YTIME)	           "Compute non CHP electricity production" 	
 QAvgCapFacRes(allCy,PGALL,YTIME)	       "Compute the average capacity factor of RES"	
 QNewCapYearly(allCy,PGALL,YTIME)	       "Compute the new capacity added every year"	
-QElectrPeakLoad(allCy,PGALL,YTIME)	       "Compute Power plants sorting according to variable cost  to decide the plant dispatching" 	
+QElectrPeakLoad(allCy,PGALL,YTIME)	       "Compute Power plants sorting according to variable cost to decide the plant dispatching" 	
 QVarCostTechnology(allCy,PGALL,YTIME)	   "Compute variable cost of technology" 
 QElecPeakLoads(allCy,YTIME)	               "Compute Electricity peak loads"	
 QElecGenCapacity(allCy,PGALL,YTIME)	       "Compute electricity generation capacity"	
@@ -386,7 +387,7 @@ VTechCostMatr(allCy,DSBS,rCon,EF,TEA,YTIME)             "Technology cost includi
 VMatrFactor(allCy,SBS,EF,TEA,YTIME)                     "Maturity factor per technology and subsector (1)"
 VTechSort(allCy,DSBS,rCon,YTIME)                        "Technology sorting based on variable cost (1)"
 VConsRemSubEquip(allCy,DSBS,EF,YTIME)                   "Consumption of remaining substitutable equipment (Mtoe)"
-VGapFinalDem(allCy,DSBS,YTIME)                          "Final Demand GAP to be filed by new technologies (Mtoe)"
+VGapFinalDem(allCy,DSBS,YTIME)                          "Final demand gap to be filed by new technologies (Mtoe)"
 VTechShareNewEquip(allCy,DSBS,EF,TEA,YTIME)             "Technology share in new equipment (1)"
 VFuelConsInclHP(allCy,DSBS,EF,YTIME)                    "Consumption of fuels in each demand subsector including heat from heatpumps (Mtoe)"
 VProCostCHPDem(allCy,DSBS,CHP,YTIME)                    "Variable including fuel electricity production cost per CHP plant and demand sector (Euro/KWh)"
@@ -394,6 +395,7 @@ VAvgElcProCHP(allCy,CHP,YTIME)                          "Average Electricity pro
 VAvgVarProdCostCHP(allCy,CHP,YTIME)                     "Average variable including fuel electricity production cost per CHP plant (Euro/KWh)"
 
 *** REST OF ENERGY BALANCE SECTORS VARIABLES
+VPlantEffPlantType(allCy,PGALL,YTIME)	                "Plant efficiency per plant type (1)"
 VTotFinEneCons(allCy,EF,YTIME)                          "Total final energy Consumption (Mtoe)"
 VTotFinEneConsAll(YTIME)                                "Total final energy Consumption in ALL COUNTRIES (Mtoe)"
 VDistrLosses(allCy,EFS,YTIME)                           "Distribution losses (Mtoe)"
@@ -406,8 +408,7 @@ VTransfOutputRefineries(allCy,EFS,YTIME)	            "Transformation output from
 VTransfInputRefineries(allCy,EFS,YTIME)	                "Transformation input to refineries (Mtoe)"	
 VTransfOutputNuclear(allCy,EFS,YTIME)	                "Transformation output from nuclear plants (Mtoe)"
 VElecProd(allCy,PGALL,YTIME)	                        "Electricity production (TWh)"
-VTransfInNuclear(allCy,EFS,YTIME)	                    "Transformation input to nuclear plants (Mtoe)"	
-VPlantEffPlantType(allCy,PGALL,YTIME)	                "Plant efficiency per plant type (1)"	
+VTransfInNuclear(allCy,EFS,YTIME)	                    "Transformation input to nuclear plants (Mtoe)"		
 VTransfInThermPowPls(allCy,EFS,YTIME)	                "Transformation input to thermal power plants (Mtoe)"
 VChpElecProd(allCy,CHP,YTIME)	                        "CHP electricity production (TWh)"
 VTransfOutThermPowSta(allCy,EFS,YTIME)	                "Transformation output from thermal power stations (Mtoe)"
