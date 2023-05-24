@@ -88,7 +88,7 @@ QHourProdCostInv(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME)) ..
                     iCo2EmiFac(runCy,"PG",PGEF,YTIME-4)
                          +1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME-4)*
                          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME-4))))
-                         *sTWhToMtoe/VPlantEffPlantType(runCy,PGALL,YTIME-4))$(not PGREN(PGALL))
+                         *sTWhToMtoe/iPlantEffByType(runCy,PGALL,YTIME-4))$(not PGREN(PGALL))
                   ;
 
 * Compute hourly production cost used in investment decisions
@@ -135,7 +135,7 @@ QVarCostTech(runCy,PGALL,YTIME)$(time(YTIME))..
          iCO2CaptRate(runCy,PGALL,YTIME)*VCO2CO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)
          + (1-iCO2CaptRate(runCy,PGALL,YTIME))*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)
           *(sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
-          *sTWhToMtoe/VPlantEffPlantType(runCy,PGALL,YTIME))$(not PGREN(PGALL)));
+          *sTWhToMtoe/iPlantEffByType(runCy,PGALL,YTIME))$(not PGREN(PGALL)));
 
 * Compute variable cost of technology excluding PGSCRN
 QVarCostTechNotPGSCRN(runCy,PGALL,YTIME)$(time(YTIME) $(not PGSCRN(PGALL)))..
@@ -156,7 +156,7 @@ QProdCostTechPreReplac(runCy,PGALL,YTIME)$TIME(YTIME)..
                             iCO2CaptRate(runCy,PGALL,YTIME)*VCO2CO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME) +
                              (1-iCO2CaptRate(runCy,PGALL,YTIME))*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
                          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
-                                 *sTWhToMtoe/VPlantEffPlantType(runCy,PGALL,YTIME))$(not PGREN(PGALL)))
+                                 *sTWhToMtoe/iPlantEffByType(runCy,PGALL,YTIME))$(not PGREN(PGALL)))
                          );
 
 * Compute production cost of technology  used in premature replacement including plant availability rate
@@ -416,7 +416,7 @@ QLonPowGenCostTechNoCp(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
                  iCO2CaptRate(runCy,PGALL,YTIME)*VCO2CO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME) +
                  (1-iCO2CaptRate(runCy,PGALL,YTIME))*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
                  (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
-                 *sTWhToMtoe/VPlantEffPlantType(runCy,PGALL,YTIME)));
+                 *sTWhToMtoe/iPlantEffByType(runCy,PGALL,YTIME)));
 
 * Long-term minimum power generation cost
 QLonMnmpowGenCost(runCy,PGALL,YTIME)$TIME(YTIME)..
@@ -436,7 +436,7 @@ QLonMnmpowGenCost(runCy,PGALL,YTIME)$TIME(YTIME)..
 
                  (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
 
-                 *sTWhToMtoe/VPlantEffPlantType(runCy,PGALL,YTIME)));   
+                 *sTWhToMtoe/iPlantEffByType(runCy,PGALL,YTIME)));   
 
 * Compute long term power generation cost of technologies including international Prices of main fuels 
 QLongPowGenIntPri(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
@@ -457,7 +457,7 @@ QLongPowGenIntPri(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
 
                  (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
 
-                 *sTWhToMtoe/VPlantEffPlantType(runCy,PGALL,YTIME))); 
+                 *sTWhToMtoe/iPlantEffByType(runCy,PGALL,YTIME))); 
 
 * Compute short term power generation cost of technologies including international Prices of main fuels 
 QShoPowGenIntPri(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
@@ -473,7 +473,7 @@ QShoPowGenIntPri(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
 
                  (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
 
-                 *sTWhToMtoe/VPlantEffPlantType(runCy,PGALL,YTIME)));    
+                 *sTWhToMtoe/iPlantEffByType(runCy,PGALL,YTIME)));    
 
 * Compute long term power generation cost
 QLongPowGenCost(runCy,ESET,YTIME)$TIME(YTIME)..
@@ -506,7 +506,7 @@ QLonAvgPowGenCostNoClimPol(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
 
                  (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
 
-                 *sTWhToMtoe/VPlantEffPlantType(runCy,PGALL,YTIME)));
+                 *sTWhToMtoe/iPlantEffByType(runCy,PGALL,YTIME)));
 
 * Compute long term power generation cost excluding climate policies
 QLonPowGenCostNoClimPol(runCy,ESET,YTIME)$TIME(YTIME)..
@@ -556,7 +556,7 @@ QShortPowGenCost(runCy,ESET,YTIME)$TIME(YTIME)..
          iCO2CaptRate(runCy,PGALL,YTIME)*VCO2CO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME) +
          (1-iCO2CaptRate(runCy,PGALL,YTIME))*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
-                 *sTWhToMtoe/VPlantEffPlantType(runCy,PGALL,YTIME)))
+                 *sTWhToMtoe/iPlantEffByType(runCy,PGALL,YTIME)))
         ))
         +
          sum(CHP, VAvgVarProdCostCHP(runCy,CHP,YTIME)*VChpElecProd(runCy,CHP,YTIME))
@@ -832,7 +832,7 @@ QElecConsNonSub(runCy,INDDOM,YTIME)$TIME(YTIME)..
                   )**( iElastNonSubElec(runCy,INDDOM,"c",YTIME)*iFPDL(INDDOM,KPDL))
                 )      ]$iActv(YTIME-1,runCy,INDDOM)+0;
 
-* Compute the consumption of the remaining substitutble equipment
+* Compute the consumption of the remaining substitutable equipment
 QConsOfRemSubEquip(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF))..
          VConsRemSubEquip(runCy,DSBS,EF,YTIME)
                  =E=
@@ -1119,14 +1119,14 @@ QTransfOutputNuclear(runCy,"ELC",YTIME)$TIME(YTIME) ..
 
 * Compute transformation input to nuclear plants
 QTransfInNuclear(runCy,"NUC",YTIME)$TIME(YTIME)..
-        VTransfInNuclear(runCy,"NUC",YTIME) =E=SUM(PGNUCL,VElecProd(runCy,PGNUCL,YTIME)/VPlantEffPlantType(runCy,PGNUCL,YTIME))*sTWhToMtoe;
+        VTransfInNuclear(runCy,"NUC",YTIME) =E=SUM(PGNUCL,VElecProd(runCy,PGNUCL,YTIME)/iPlantEffByType(runCy,PGNUCL,YTIME))*sTWhToMtoe;
 
 * Compute transformation input to power plants
 QTransfInPowerPls(runCy,PGEF,YTIME)$TIME(YTIME)..
          VTransfInThermPowPls(runCy,PGEF,YTIME)
              =E=
         sum(PGALL$(PGALLtoEF(PGALL,PGEF)$((not PGGEO(PGALL)) $(not PGNUCL(PGALL)))),
-             VElecProd(runCy,PGALL,YTIME) * sTWhToMtoe /  VPlantEffPlantType(runCy,PGALL,YTIME))
+             VElecProd(runCy,PGALL,YTIME) * sTWhToMtoe /  iPlantEffByType(runCy,PGALL,YTIME))
         +
         sum(PGALL$(PGALLtoEF(PGALL,PGEF)$PGGEO(PGALL)),
              VElecProd(runCy,PGALL,YTIME) * sTWhToMtoe) 
@@ -1284,7 +1284,7 @@ QCO2ElcHrg(runCy,YTIME)$TIME(YTIME)..
          VCO2ElcHrgProd(runCy,YTIME)
          =E=
          sum(PGEF,sum(CCS$PGALLtoEF(CCS,PGEF),
-                 VElecProd(runCy,CCS,YTIME)*sTWhToMtoe/VPlantEffPlantType(runCy,CCS,YTIME)*
+                 VElecProd(runCy,CCS,YTIME)*sTWhToMtoe/iPlantEffByType(runCy,CCS,YTIME)*
                  iCo2EmiFac(runCy,"PG",PGEF,YTIME)));
 
 * Compute cumulative CO2 captured 
@@ -1323,7 +1323,7 @@ QTotGhgEmisAllCountrNap(NAP,YTIME)$TIME(YTIME)..
 
                  -
                  sum(PGEF,sum(CCS$PGALLtoEF(CCS,PGEF),
-                         VElecProd(runCy,CCS,YTIME)*sTWhToMtoe/VPlantEffPlantType(runCy,CCS,YTIME)*
+                         VElecProd(runCy,CCS,YTIME)*sTWhToMtoe/iPlantEffByType(runCy,CCS,YTIME)*
                          iCo2EmiFac(runCy,"PG",PGEF,YTIME)*iCO2CaptRate(runCy,CCS,YTIME)))));   !! CO2 captured by CCS plants in power generation
 
 * Compute total CO2eq GHG emissions in all countries

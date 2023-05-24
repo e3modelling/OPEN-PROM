@@ -32,7 +32,7 @@ $setGlobal fReadCountryCalib 'yes'
 $setGlobal fStartHorizon '2010'
 $setGlobal fEndHorizon '2100'
 $setGlobal fHorizon '%fStartHorizon%*%fEndHorizon%'
-$setGlobal fEndY 2019
+$setGlobal fEndY 2018
 $setGlobal fStartY 2018
 $setGlobal fBaseY %fStartY% - %fPeriodOfYears%
 
