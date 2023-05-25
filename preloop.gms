@@ -44,9 +44,9 @@ VElecConsAll.l(allCy,DSBS,YTIME)=0.1;
 VCapChpPlants.l(allCy,YTIME)=0.1;
 VElecPeakLoad.l(allCy,YTIME)=0.1;
 VElecPeakLoad.up(allCy,YTIME)=1e6;
-VHourProdTech.up(allCy,PGALL,HOUR,YTIME)=1e6;
+*VHourProdTech.up(allCy,PGALL,HOUR,YTIME)=1e6;
 VSensCcs.l(allCy,YTIME)=1;
-VHourProdTech.l(allCy,PGALL,HOUR,YTIME)=1;
+*VHourProdTech.l(allCy,PGALL,HOUR,YTIME)=1;
 VCarVal.fx(allCy,NAP,YTIME)=1;
 VFuelPriceSub.l(allCy,"PG",PGEF,YTIME)=1;
 VProdCostTechnology.l(allCy,PGALL2,YTIME)=0.1;
@@ -84,7 +84,7 @@ VReqElecProd.l(runCy,YTIME)=0.1;
 *VPowPlantSorting.up(runCy,PGALL,YTIME)=0.001;
 *VPowPlantSorting.scale(runCy,PGALL,YTIME)=1;
 VElecDem.l(allCy,YTIME)=0.1;
-VHourProdTech.lo(runCy,PGALL,HOUR,YTIME)=0.1;
+*VHourProdTech.lo(runCy,PGALL,HOUR,YTIME)=0.1;
 VHourProdCostTech.lo(runCy,PGALL,HOUR,YTIME)=0.1;
 VRenTechMatMult.l(allCy,PGALL,YTIME)=0.1;
 VGoodsTranspActiv.l(allCy,TRANSE,YTIME)=0.1;
@@ -94,4 +94,41 @@ loop an do
    TIME(YTIME) = NO;
    TIME(AN)$(ord(an)=s) = YES;
    display TIME;
+VRenValue.L(YTIME)=1;
+VCO2CO2SeqCsts.L(allCy,YTIME)=1;
+VScalWeibullSum.l(allCy,PGALL,YTIME)=2;
+VHourProdTech.L(runCy,PGALL,HOUR,TT) = 0.000000001;
+$ontext
+VScalWeibullSum.L(runCy,PGALL,TT) =
 
+              iMatFacPlaAvailCap(runCy,PGALL,TT) *VRenTechMatMult.L(runCy,PGALL,TT)*
+              sum(HOUR,
+                 (VHourProdTech.L(runCy,PGALL,HOUR,TT)$(not NOCCS(PGALL))
+                 +
+                 VHourProdCostTech.L(runCy,PGALL,HOUR,TT)$NOCCS(PGALL)
+                 )
+                 **(-6)
+              );
+
+                  !!$PERIOD(ytime)
+
+                  =
+
+                  
+                    ( iDisc(runCy,"PG",TT-4) * exp(iDisc(runCy,"PG",TT-4)*iTechLftPlaType(PGALL)));
+
+                        / (exp(iDisc(runCy,"PG",TT-4)*iTechLftPlaType(PGALL)) -1)
+                      * iGrossCapCosSubRen(runCy,PGALL,TT-4)* 1E3 * iCGI(runCy,TT-4)  + iFixGrosCostPlaType(runCy,PGALL,TT-4);
+                      
+                    )/iPlantAvailRate(runCy,PGALL,TT-4) / (1000*(ord(HOUR)-1+0.25))
+                    + iVarGroCostPlaType(runCy,PGALL,TT-4)/1E3 + ((VRenValue.L(TT)*8.6e-5))$( not ( PGREN(PGALL) $(not sameas("PGASHYD",PGALL)) $(not sameas("PGSHYD",PGALL))
+                     $(not sameas("PGLHYD",PGALL)) ))
+
+                    + sum(PGEF$PGALLtoEF(PGALL,PGEF), (VFuelPriceSub.L(runCy,"PG",PGEF,TT-4)+
+
+                        iCO2CaptRate(runCy,PGALL,TT-4)*VCO2CO2SeqCsts.L(runCy,TT-4)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,TT-4)
+                         +(1-iCO2CaptRate(runCy,PGALL,TT-4))*1e-3*iCo2EmiFac(runCy,"PG",PGEF,TT-4)*
+                         (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal.L(runCy,NAP,TT-4))))
+                         *0.086/iPlantEffByType(runCy,PGALL,TT-4))$(not PGREN(PGALL))
+                  ));
+$offtext                  

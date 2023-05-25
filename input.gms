@@ -152,7 +152,7 @@ $ondelim
 $include "./iSuppRefCapacity.csv"
 $offdelim
 ;
-table iSupTrnasfOutputRefineries(allCy,EF,YTIME)	     "Supplmenetary parameter for the transformation output from refineries (Mtoe)"
+table iSupTrnasfOutputRefineries(allCy,EF,YTIME)	     "Supplementary parameter for the transformation output from refineries (Mtoe)"
 $ondelim
 $include"./iSupTrnasfOutputRefineries.csv"
 $offdelim
@@ -432,7 +432,7 @@ $include"./iDataElecSteamGen.csv"
 $offdelim
 ;
 iTotAvailCapBsYr(allCy) = iDataElecSteamGen(allCy,"TOTCAP","2018")+iDataElecSteamGen(allCy,"CHP_CAP","2018")*0.85;
-
+iElecImp(allCy,YTIME)=0;
 iCO2CaptRate(runCy,PGALL,YTIME)$(ord(YTIME)>(ordfirst-12))  =  iCO2CaptRateData(PGALL);
 
 iScaleEndogScrap(allCy,PGALL,YTIME) = iPremReplacem(allCy,PGALL);

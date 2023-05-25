@@ -90,7 +90,8 @@ QTotElecGenCap(runCy,YTIME)$TIME(YTIME)..
 
 * Compute hourly production cost used in investment decisions
 QHourProdCostInv(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME)) ..
-         VHourProdTech(runCy,PGALL,HOUR,YTIME) =E=
+         VHourProdTech(runCy,PGALL,HOUR,YTIME)
+                  =E=
                   
                     ( ( iDisc(runCy,"PG",YTIME-4) * exp(iDisc(runCy,"PG",YTIME-4)*iTechLftPlaType(PGALL))
                         / (exp(iDisc(runCy,"PG",YTIME-4)*iTechLftPlaType(PGALL)) -1))
@@ -98,11 +99,13 @@ QHourProdCostInv(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME)) ..
                     )/iPlantAvailRate(runCy,PGALL,YTIME-4) / (1000*(ord(HOUR)-1+0.25))
                     + iVarGroCostPlaType(runCy,PGALL,YTIME-4)/1E3 + (VRenValue(YTIME)*8.6e-5)$( not ( PGREN(PGALL) 
                     $(not sameas("PGASHYD",PGALL)) $(not sameas("PGSHYD",PGALL)) $(not sameas("PGLHYD",PGALL)) ))
-                    + sum(PGEF$PGALLtoEF(PGALL,PGEF), (VFuelPriceSub(runCy,"PG",PGEF,YTIME-4)*VCO2CO2SeqCsts(runCy,YTIME-4)*1e-3*
+                    + sum(PGEF$PGALLtoEF(PGALL,PGEF), (VFuelPriceSub(runCy,"PG",PGEF,YTIME-4)+
+                        iCO2CaptRate(runCy,PGALL,YTIME-4)*VCO2CO2SeqCsts(runCy,YTIME-4)*1e-3*
                     iCo2EmiFac(runCy,"PG",PGEF,YTIME-4)
-                         +1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME-4)*
+                         +(1-iCO2CaptRate(runCy,PGALL,YTIME-4))*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME-4)*
                          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME-4))))
                          *sTWhToMtoe/iPlantEffByType(runCy,PGALL,YTIME-4))$(not PGREN(PGALL));
+
 
 * Compute hourly production cost used in investment decisions excluding CCS
 QHourProdCostInvDec(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME) $NOCCS(PGALL)) ..
@@ -1249,6 +1252,7 @@ QFakeImprts(runCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS))..
                  =E=
          (
             iRatioImpFinElecDem(runCy,YTIME) * (VFeCons(runCy,EFS,YTIME) + VFNonEnCons(runCy,EFS,YTIME)) + VExportsFake(runCy,EFS,YTIME)
+         + iElecImp(runCy,YTIME)
          )$ELCEF(EFS)
          +
          (
@@ -1298,7 +1302,7 @@ QCO2ElcHrg(runCy,YTIME)$TIME(YTIME)..
          =E=
          sum(PGEF,sum(CCS$PGALLtoEF(CCS,PGEF),
                  VElecProd(runCy,CCS,YTIME)*sTWhToMtoe/iPlantEffByType(runCy,CCS,YTIME)*
-                 iCo2EmiFac(runCy,"PG",PGEF,YTIME)));
+                 iCo2EmiFac(runCy,"PG",PGEF,YTIME)*iCO2CaptRate(runCy,CCS,YTIME)));
 
 * Compute cumulative CO2 captured 
 QCumCO2Capt(runCy,YTIME)$TIME(YTIME)..
@@ -1375,7 +1379,7 @@ QFuelPriSubSepCarbVal(runCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF) $TIME(YTIME) $(not s
          )$( not (ELCEF(EF) or HEATPUMP(EF) or ALTEF(EF)))
          +
          (
-iConsPricesFuelSub(runCy,SBS,EF,"2017") $(DSBS(SBS))$ALTEF(EF)
+iConsPricesFuelSub(runCy,SBS,EF,"2018") $(DSBS(SBS))$ALTEF(EF)
          )
          +
          (
