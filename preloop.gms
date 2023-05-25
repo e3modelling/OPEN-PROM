@@ -60,7 +60,10 @@ VTechSortVarCost.l(allCy,TRANSE,Rcon,YTIME)=0.1;
 *VHourProdCostTech.lo(allCy,PGALL,HOUR,YTIME)=0.0001;
 VRenPotSupplyCurve.l(allCy,PGRENEF,YTIME)=0.1;
 VScrRate.l(allCy,YTIME)=0.1;
-
+VTranspCostPermeanConsSize.l(allCy,TRANSE,RCon,TTECH,TEA,YTIME)=0.1;
+VTranspCostPermeanConsSize.lo(allCy,TRANSE,RCon,TTECH,TEA,YTIME)=0.0001;
+VElecNonSub.l(allCy,DSBS,YTIME)=0.1;
+VElecNonSub.lo(allCy,DSBS,YTIME)=0.0001;
 $ontext
 
 VPowerPlantNewEq.l(allCy,PGALL,TT)=0.1;

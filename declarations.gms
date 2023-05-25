@@ -60,11 +60,11 @@ $include "./iTechLftPlaType.csv"
 $offdelim
 /
 iPlantAvailRate(allCy,PGALL,YTIME)	      "Plant availability rate (1)"
+iTotAvailCapBsYr(allCy)	            "Total installed available capacity in base year (GW)"
 iGrossCapCosSubRen(allCy,PGALL,YTIME)	  "Gross Capital Cost per Plant Type with subsidy for renewables (kEuro2005/KW)"		
 iVarGroCostPlaType(allCy,PGALL,YTIME)	  "Variable gross cost other than fuel per Plant Type (Euro2005/KW)"
 iCapGrossCosPlanType(allCy,PGALL,YTIME)	  "Capital gross cost per plant type (kEuro2005/KW)"	
 iFixGrosCostPlaType(allCy,PGALL,YTIME)	  "Fixed O&M Gross Cost per Plant Type (Euro2005/KW)"
-*iDataElecSteamGen(PGOTH,YTIME)	          "Various Data related to electricity and steam generation (1)"
 iCO2CaptRate(allCy,PGALL,YTIME)	          "Plant CO2 capture rate (1)"
 iCO2CaptRateData(PGALL)	                  "Plant CO2 capture rate Data (1)"/
 $ondelim
@@ -99,12 +99,15 @@ iResFuelConsPerSubAndFuel(allCy,SBS,EF,YTIME)	"Residuals in fuel consumption per
 iTransfOutputGasw(allCy,YTIME)	                "Transformation Output from Gasworks, Blast Furnances, Briquetting plants Residual (1)"	
 iResSpecificFuelConsCost(allCy,TRANSE,TTECH,EF,YTIME)	"Residuals on specific fuel consumption cost (1)"
 iShareAnnMilePlugInHybrid(allCy,YTIME)	                "Share of annual mileage of a plug-in hybrid which is covered by electricity (1)"
-iAvgVehCapLoadFac(allCy,TRANSE,TRANSUSE,YTIME)	        "Average capacity/vehicle and load factor (tn/veh or passenegers/veh)" 				
+iAvgVehCapLoadFac(allCy,TRANSE,TRANSUSE,YTIME)	        "Average capacity/vehicle and load factor (tn/veh or passenegers/veh)" 
+iUtilRateChpPlants(allCy,CHP,YTIME)	                    "Utilisation rate of CHP Plants (1)"	
+iHydrogenPri(allCy,SBS,YTIME)	                        "Total Hydrogen Cost Per Sector (Euro/toe)"	 			
 ;	
 
 
 Equations
 *** Power Generation
+QChpElecPlants(allCy,CHP,YTIME)            "Compute CHP electric capacity"	
 QElecDem(allCy,YTIME)                      "Compute total electricity demand"
 QElecConsAll(allCy,DSBS,YTIME)             "Compute electricity consumption per final demand sector"
 QEstBaseLoad(allCy,YTIME)	               "Compute estimated base load"	
@@ -115,7 +118,8 @@ QElecBaseLoad(allCy,YTIME)	               "Compute electricity base load"
 QShrcap(allCy,PGALL,YTIME)	               "Compute SHRCAP"	
 QElecGenCap(allCy,PGALL,YTIME)	           "Compute electricity generation capacity"
 QLambda(allCy,YTIME)	                   "Compute Lambda parameter"	
-*QScalFacPlantDispatch(allCy,HOUR,YTIME)   "Compute the scaling factor for plant dispatching"		
+QScalFacPlantDispatch(allCy,HOUR,YTIME)   "Compute the scaling factor for plant dispatching"	
+QCurrRenPot(allCy,PGRENEF,YTIME)	       "Compute current renewable potential" 	
 QScalWeibullSum(allCy,PGALL,YTIME)	       "Compute sum (over hours) of temporary variable facilitating the scaling in Weibull equation"
 QElecPriIndResNoCliPol(allCy,ESET,YTIME)   "Compute electricity price in Industrial and Residential Consumers excluding climate policies"
 QShortPowGenCost(allCy,ESET,YTIME)	       "Compute short term power generation cost"		
@@ -179,8 +183,8 @@ QSpecificFuelCons(allCy,TRANSE,TTECH,TEA,EF,YTIME)	"Compute Specific Fuel Consum
 QTranspCostPerMeanConsSize(allCy,TRANSE,RCon,TTECH,TEA,YTIME)	"Compute transportation cost per mean and consumer size in KEuro per vehicle"
 QTechSortVarCost(allCy,TRANSE,Rcon,YTIME)	                    "Compute technology sorting based on variable cost"	
 QTechSortVarCostNewEquip(allCy,TRANSE,EF,TEA,YTIME)	            "Compute technology sorting based on variable cost and new equipment"	
-*QTranspCostPerVeh(allCy,TRANSE,RCon,TTECH,TEA,YTIME)	        "Compute transportation cost per mean and consumer size in KEuro per vehicle"
-*QTranspCostMatFac(allCy,TRANSE,RCon,TTECH,TEA,YTIME)	        "Compute transportation cost including maturity factor"	
+QTranspCostPerVeh(allCy,TRANSE,RCon,TTECH,TEA,YTIME)	        "Compute transportation cost per mean and consumer size in KEuro per vehicle"
+QTranspCostMatFac(allCy,TRANSE,RCon,TTECH,TEA,YTIME)	        "Compute transportation cost including maturity factor"	
 QConsEachTechTransp(allCy,TRANSE,TTECH,EF,TEA,YTIME)	        "Compute consumption of each technology in transport sectors"
 QFinEneDemTranspPerFuel(allCy,TRANSE,EF,YTIME)	                "Compute final energy demand in transport per fuel"
 QFinEneDemTransp(allCy,TRANSE,YTIME)	                        "Compute final energy demand in transport" 						
@@ -247,8 +251,8 @@ QFuelPriSubSepCarbVal(allCy,SBS,EF,YTIME)  "Compute fuel prices per subsector an
 
 *** Prices
 QFuelPriSepCarbon(allCy,SBS,EF,YTIME)	"Compute fuel prices per subsector and fuel, separate carbon value in each sector"	
-*QAvgFuelPriSub(allCy,DSBS,YTIME)	    "Compute average fuel price per subsector" 	
-*QElecPriIndResCons(allCy,ESET,YTIME)	"Compute electricity price in Industrial and Residential Consumers"	
+QAvgFuelPriSub(allCy,DSBS,YTIME)	    "Compute average fuel price per subsector" 	
+QElecPriIndResCons(allCy,ESET,YTIME)	"Compute electricity price in Industrial and Residential Consumers"	
 *** Miscellaneous
 qDummyObj                                     "Define dummy objective function"
 ;
@@ -257,6 +261,7 @@ qDummyObj                                     "Define dummy objective function"
 Variables
 
 *** Power Generation Variables
+VElecCapChpPla(allCy,CHP,YTIME)	          "Capacity of CHP Plants (GW)"
 VEstBaseLoad(allCy,YTIME)	              "Estimated base load (GW)"	
 VElecDem(allCy,YTIME)                     "Total electricity demand (TWh)"
 VCapChpPlants(allCy,YTIME)                "Capacity of CHP Plants (GW)"	
@@ -264,9 +269,10 @@ VElecPeakLoad(allCy,YTIME)	              "Electricity peak load (GW)"
 VBslMaxmLoad(allCy,YTIME)	              "Baseload corresponding to Maximum Load Factor (1)"
 VHourProdCostOfTech(allCy,PGALL,HOUR,YTIME)"Hourly production cost of technology (Euro/KWh)"
 VResShareGrossElecProd(allCy,YTIME)	       "Renewables share in gross electricity production for subsdidized renewables"
-VLongPowGenCost(allCy,PGALL,ESET,YTIME)	   "Long-term average power generation cost (Euro2005/kWh)"		
+VLongPowGenCost(allCy,PGALL,ESET,YTIME)	   "Long-term average power generation cost (Euro2005/kWh)"
+VCurrRenPot(allCy,PGRENEF,YTIME)	       "Current renewable potential (GW)"			
 VReqElecProd(allCy,YTIME)	               "Total required electricity production (TWh)"	
-VOverallCap(allCy,PGALL,YTIME)	          "Overall Capacity (MW)"	
+VOverallCap(allCy,PGALL,YTIME)	           "Overall Capacity (MW)"	
 VVarCostTechNotPGSCRN(allCy,PGALL,YTIME)  "Variable cost of technology excluding PGSCRN (Euro/KWh)"
 VAvgPowerGenCostShoTrm(allCy,ESET,YTIME)  "Short-term average power generation cost (Euro2005/kWh)"	
 VLongAvgPowGenCost(allCy,ESET,YTIME)	  "Long-term average power generation cost (Euro2005/kWh)"	
@@ -370,14 +376,12 @@ VElecIndPricesEst(allCy,YTIME)         "Electricity index - a function of indust
 VResElecIndex(allCy,YTIME)             "Residual for electricity Index (1)"
 VFuelPriceSub(allCy,SBS,EF,YTIME)      "Fuel prices per subsector and fuel (kUS$2005/toe)"
 VFuePriSubChp(allCy,DSBS,EF,TEA,YTIME) "Fuel prices per subsector and fuel for CHP plants (kUS$2005/toe)"
-VRenValue(YTIME)                       "Renewable value (Euro2005/KWh)"
 VTechCostVar(allCy,SBS,EF,TEA,YTIME)   "Variable Cost of technology (various)"
                                         !! - For transport (kEuro05/vehicle)
                                         !! - For Industrial sectors except Iron and Steel (Euro05/toe-year)
                                         !! - For Iron and Steel (Euro05/tn-of-steel)
                                         !! - For Domestic sectors (Euro05/toe-year)
 VElecProdCostChp(allCy,DSBS,CHP,YTIME)                  "Electricity production cost per CHP plant and demand sector (Euro/KWh)"
-VCarVal(allCy,NAP,YTIME)                                "Carbon value for all countries (Euro2005/tn CO2)"
 VTechCost(allCy,DSBS,rCon,EF,TEA,YTIME)                 "Technology cost (Keuro/toe)"
 VTechCostIntrm(allCy,DSBS,rcon,EF,TEA,YTIME)            "Intermediate technology cost (Keuro/toe)"
 VTechCostMatr(allCy,DSBS,rCon,EF,TEA,YTIME)             "Technology cost including maturity factor (Keuro/toe)"
@@ -420,7 +424,6 @@ VNetImports(allCy,EFS,YTIME)	                        "Net Imports (Mtoe)"
 
 *** Prices Variables
 VElecPriInduResConsu(allCy,ESET,YTIME)	                "Electricity price to Industrial and Residential Consumers (Euro2005/KWh)"
-VHydrogenPri(allCy,SBS,YTIME)	                        "Total Hydrogen Cost Per Sector (Euro/toe)"	 
 VFuelPriMultWgt(allCy,SBS,EF,YTIME)	                    "Fuel prices per subsector and fuel  mutliplied by weights (kdollars2005/toe)"	
 VAvgPowerGenLongTrm(allCy,ESET,YTIME)	                "Long-term average power generation cost (Euro2005/kWh)"	 
 
@@ -439,6 +442,10 @@ VHouseExpEne(allCy,YTIME)	                            "Households expenditures o
 vDummyObj                                               "Dummy maximisation variable (1)"
 ;
 
+Positive Variables
+VCarVal(allCy,NAP,YTIME)                                "Carbon value for all countries (Euro2005/tn CO2)"
+VRenValue(YTIME)                                        "Renewable value (Euro2005/KWh)"
+;
 
 Scalars
 sTWhToMtoe         "TWh to Mtoe conversion factor" /0.086/

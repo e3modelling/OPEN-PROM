@@ -1,5 +1,19 @@
 * Power Generation
 
+* Compute current renewable potential 
+QCurrRenPot(runCy,PGRENEF,YTIME)$TIME(YTIME)..
+         VCurrRenPot(runCy,PGRENEF,YTIME) 
+         =E=
+         ( VMaxmAllowRenPotent(runCy,PGRENEF,YTIME) + iMinRenPotential(runCy,PGRENEF,YTIME))/2;
+
+* Compute CHP electric capacity
+QChpElecPlants(runCy,CHP,YTIME)$TIME(YTIME)..
+         VElecCapChpPla(runCy,CHP,YTIME)
+         =E=
+         1/sTWhToMtoe * sum(INDDOM,VConsFuel(runCy,INDDOM,CHP,YTIME)) * VElecIndPrices(runCy,YTIME)/
+         sum(PGALL$CHPtoEON(CHP,PGALL),iPlantAvailRate(runCy,PGALL,YTIME)) /
+         iUtilRateChpPlants(runCy,CHP,YTIME) /sGwToTwhPerYear;  
+
 * Compute Lambda parameter
 QLambda(runCy,YTIME)$TIME(YTIME)..
          (1 - exp( -iLoadCurveConstr(runCy,YTIME)*sGwToTwhPerYear)) / iLoadCurveConstr(runCy,YTIME)
@@ -7,7 +21,7 @@ QLambda(runCy,YTIME)$TIME(YTIME)..
          (VElecDem(runCy,YTIME) - sGwToTwhPerYear*VCorrBaseLoad(runCy,YTIME))
          / (VElecPeakLoad(runCy,YTIME) - VCorrBaseLoad(runCy,YTIME));
 
-* Compute total electricity demand
+* Compute electricity final demand
 QElecDem(runCy,YTIME)$TIME(YTIME)..
          VElecDem(runCy,YTIME)
              =E=
@@ -88,10 +102,9 @@ QHourProdCostInv(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME)) ..
                     iCo2EmiFac(runCy,"PG",PGEF,YTIME-4)
                          +1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME-4)*
                          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME-4))))
-                         *sTWhToMtoe/iPlantEffByType(runCy,PGALL,YTIME-4))$(not PGREN(PGALL))
-                  ;
+                         *sTWhToMtoe/iPlantEffByType(runCy,PGALL,YTIME-4))$(not PGREN(PGALL));
 
-* Compute hourly production cost used in investment decisions
+* Compute hourly production cost used in investment decisions excluding CCS
 QHourProdCostInvDec(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME) $NOCCS(PGALL)) ..
          VHourProdCostTech(runCy,PGALL,HOUR,YTIME) =E=
          VPowerPlantNewEq(runCy,PGALL,YTIME)*VHourProdTech(runCy,PGALL,HOUR,YTIME)+
@@ -101,7 +114,7 @@ QHourProdCostInvDec(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME) $NOCCS(PGALL)) ..
 QGammaInCcsDecTree(runCy,YTIME)$TIME(YTIME)..
          VSensCcs(runCy,YTIME) =E= 20+25*EXP(-0.06*((sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME-1)))));
 
-* Compute hourly production cost used in investment decisions"
+* Compute hourly production cost used in investment decisions taking account CCS acceptance
 QHourProdCostInvDecisions(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME) $(CCS(PGALL) or NOCCS(PGALL))) ..
          VHourProdCostOfTech(runCy,PGALL,HOUR,YTIME) 
          =E=
@@ -195,7 +208,7 @@ QGapPowerGenCap(runCy,YTIME)$TIME(YTIME)..
           + Sum(PGALL$PGSCRN(PGALL), (VElecGenPlantsCapac(runCy,PGALL,YTIME-1)-iPlantDecomSched(runCy,PGALL,YTIME))/
           iTechLftPlaType(PGALL))
        ) -0) + SQR(1e-10) ) )/2;
-*$ontext
+
 * Compute temporary variable facilitating the scaling in Weibull equation
 QScalWeibull(runCy,PGALL,HOUR,YTIME)$((not CCS(PGALL))$TIME(YTIME))..
           VScalWeibull(runCy,PGALL,HOUR,YTIME) 
@@ -203,7 +216,7 @@ QScalWeibull(runCy,PGALL,HOUR,YTIME)$((not CCS(PGALL))$TIME(YTIME))..
          (VHourProdTech(runCy,PGALL,HOUR,YTIME)$(not NOCCS(PGALL))
          +
           VHourProdCostTech(runCy,PGALL,HOUR,YTIME)$NOCCS(PGALL))**(-6);     
-*$offtext
+
 
 * Compute renewable potential supply curve
 QRenPotSupplyCurve(runCy,PGRENEF,YTIME)$TIME(YTIME)..
@@ -233,7 +246,7 @@ QRenTechMatMult(runCy,PGALL,YTIME)$TIME(YTIME)..
                  sum(PGALL2$(PGALLtoPGRENEF(PGALL2,PGRENEF) $PGREN(PGALL2)),
                  VElecGenPlanCap(runCy,PGALL2,YTIME-1))/VRenPotSupplyCurve(runCy,PGRENEF,YTIME))-0.6)))
            )$PGREN(PGALL);  
-*$ontext
+
 * Compute temporary variable facilitating the scaling in Weibull equation
 QScalWeibullSum(runCy,PGALL,YTIME)$((not CCS(PGALL)) $TIME(YTIME))..
          VScalWeibullSum(runCy,PGALL,YTIME) 
@@ -245,7 +258,7 @@ QScalWeibullSum(runCy,PGALL,YTIME)$((not CCS(PGALL)) $TIME(YTIME))..
                  VHourProdCostTech(runCy,PGALL,HOUR,YTIME)$NOCCS(PGALL)
                  )**(-6)
               ); 
-*$offtext  
+  
 
 * Compute for Power Plant new investment decision
 QNewInvDecis(runCy,YTIME)$TIME(YTIME)..
@@ -334,7 +347,7 @@ VElecGenPlanCap(runCy,pgall,ytime)$ (not PGREN(PGALL))
 VOverallCap(runCy,PGALL,YTIME-1)
 /VAvgCapFacRes(runCy,PGALL,YTIME-1))$PGREN(PGALL);
 
-$ontext
+
 * Compute the scaling factor for plant dispatching
 QScalFacPlantDispatch(runCy,HOUR,YTIME)$TIME(YTIME)..
          sum(PGALL,
@@ -346,9 +359,9 @@ QScalFacPlantDispatch(runCy,HOUR,YTIME)$TIME(YTIME)..
          (VElecPeakLoad(runCy,YTIME) - VCorrBaseLoad(runCy,YTIME))
          * exp(-iLoadCurveConstr(runCy,YTIME)*(0.25 + ord(HOUR)-1))
          + VCorrBaseLoad(runCy,YTIME);
-$offtext
 
-* Estimate the electricity of CHP Plants
+
+* Compute estimated electricity of CHP Plants
 QElecChpPlants(runCy,YTIME)$TIME(YTIME)..
          VElecChpPlants(runCy,YTIME) 
          =E=
@@ -657,19 +670,19 @@ QTranspCostPerMeanConsSize(runCy,TRANSE,RCon,TTECH,TEA,YTIME)$(TIME(YTIME) $SECT
                          )
                          *  iAnnCons(runCy,TRANSE,"smallest") * (iAnnCons(runCy,TRANSE,"largest")/iAnnCons(runCy,TRANSE,"smallest"))**((ord(Rcon)-1)/iNcon(TRANSE))
                        );
-$ontext
+
 * Compute transportation cost per mean and consumer size 
 QTranspCostPerVeh(runCy,TRANSE,rCon,TTECH,TEA,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $(ord(rCon) le iNcon(TRANSE)+1))..
          VTranspCostPerVeh(runCy,TRANSE,rCon,TTECH,TEA,YTIME)
          =E=
-         VTranspCostPermeanConsSize(runCy,TRANSE,rCon,TTECH,TEA,YTIME); !!**(-4);
+         VTranspCostPermeanConsSize(runCy,TRANSE,rCon,TTECH,TEA,YTIME)**(-4);
 
 * Compute transportation cost including maturity factor
 QTranspCostMatFac(runCy,TRANSE,RCon,TTECH,TEA,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $(ord(rCon) le iNcon(TRANSE)+1))..
          VTranspCostMatFac(runCy,TRANSE,RCon,TTECH,TEA,YTIME) 
          =E=
          VMatrFactor(runCy,TRANSE,TTECH,TEA,YTIME) * VTranspCostPerVeh(runCy,TRANSE,rCon,TTECH,TEA,YTIME);
-$offtext
+
 
 * Compute technology sorting based on variable cost
 QTechSortVarCost(runCy,TRANSE,rCon,YTIME)$(TIME(YTIME) $(ord(rCon) le iNcon(TRANSE)+1))..
@@ -677,7 +690,7 @@ QTechSortVarCost(runCy,TRANSE,rCon,YTIME)$(TIME(YTIME) $(ord(rCon) le iNcon(TRAN
                  =E=
          sum((TTECH,TEA)$SECTTECH(TRANSE,TTECH), VTranspCostMatFac(runCy,TRANSE,rCon,TTECH,TEA,YTIME));
 
-* Compute technology sorting based on variable cost and new equipment
+* Compute the share of each technology in total sectoral use
 QTechSortVarCostNewEquip(runCy,TRANSE,TTECH,TEA,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) )..
          VTechSortVarCostNewEquip(runCy,TRANSE,TTECH,TEA,YTIME)
          =E=
@@ -890,7 +903,7 @@ QFuelCons(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,E
 
 
 
-* Compute Electricity Index of industry price
+* Compute the estimated electricity index of industry price
 QElecIndPricesEst(runCy,YTIME)$TIME(YTIME)..
          VElecIndPricesEst(runCy,YTIME)
                  =E=
@@ -928,7 +941,7 @@ VTechCost(runCy,DSBS,rCon,EF,TEA,YTIME)
                  =E= 
                  VTechCostIntrm(runCy,DSBS,rCon,EF,TEA,YTIME)**(-iElaSub(runCy,DSBS)) ;   
 
-* Compute technology cost 
+* Compute technology cost including lifetime 
 QTechCostIntrm(runCy,DSBS,rCon,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) $SECTTECH(DSBS,EF))..
          VTechCostIntrm(runCy,DSBS,rCon,EF,TEA,YTIME) =E=
                   ( (( (iDisc(runCy,DSBS,YTIME)$(not CHP(EF)) + iDisc(runCy,"PG",YTIME)$CHP(EF)) !! in case of chp plants we use the discount rate of power generation sector
@@ -969,7 +982,7 @@ VTechSort(runCy,DSBS,rCon,YTIME)
                         =E=
 sum((EF,TEA)$(SECTTECH(DSBS,EF) ),VTechCostMatr(runCy,DSBS,rCon,EF,TEA,YTIME));
 
-* Compute the gap in final demand (industry, tertiary, non-energy uses and bunkers)
+* Compute the gap in final demand on industry, tertiary, non-energy uses and bunkers
 QGapFinalDem(runCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)))..
          VGapFinalDem(runCy,DSBS,YTIME)
                  =E=
@@ -1291,13 +1304,13 @@ QCO2ElcHrg(runCy,YTIME)$TIME(YTIME)..
 QCumCO2Capt(runCy,YTIME)$TIME(YTIME)..
          VCumCO2Capt(runCy,YTIME) =E= VCumCO2Capt(runCy,YTIME-1)+VCO2ElcHrgProd(runCy,YTIME-1);   
 
-* Compute Weight for transtition from linear CO2 sequestration cost curve to exponential
+* Compute the transition weight from linear CO2 sequestration cost curve to exponential
 QWghtTrnstLinToExpo(runCy,YTIME)$TIME(YTIME)..
          VWghtTrnstLnrToExpo(runCy,YTIME)
          =E=
          1/(1+exp(-iElastCO2Seq(runCy,"mc_s")*( VCumCO2Capt(runCy,YTIME)/iElastCO2Seq(runCy,"pot")-iElastCO2Seq(runCy,"mc_m")))); 
 
-* Compute cost curve for CO2 sequestration costs 
+* Compute cost curve for CO2 sequestration costs in Euro per tn of CO2 sequestrated
 QCstCO2SeqCsts(runCy,YTIME)$TIME(YTIME)..
          VCO2CO2SeqCsts(runCy,YTIME) =E=
        (1-VWghtTrnstLnrToExpo(runCy,YTIME))*(iElastCO2Seq(runCy,"mc_a")*VCumCO2Capt(runCy,YTIME)+iElastCO2Seq(runCy,"mc_b"))+
@@ -1372,15 +1385,15 @@ iConsPricesFuelSub(runCy,SBS,EF,"2017") $(DSBS(SBS))$ALTEF(EF)
          )$(ELCEF(EF) or HEATPUMP(EF))
          +
          (
-                 VHydrogenPri(runCy,SBS,YTIME-1)$DSBS(SBS)
+                 iHydrogenPri(runCy,SBS,YTIME-1)$DSBS(SBS)
          )$(H2EF(EF) or sameas("STE1AH2F",EF));
 
-* Compute fuel prices per subsector and fuel, separate carbon value in each sector 
+* Compute fuel prices per subsector and fuel multiplied by weights separate carbon value in each sector
 QFuelPriSepCarbon(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $TIME(YTIME))..
         VFuelPriMultWgt(runCy,DSBS,EF,YTIME)
           =E= 
         iWgtSecAvgPriFueCons(runCy,DSBS,EF) * VFuelPriceSub(runCy,DSBS,EF,YTIME);
-$ontext
+
 * Compute average fuel price per subsector  
 QAvgFuelPriSub(runCy,DSBS,YTIME)$TIME(YTIME)..
         VFuelPrice(runCy,DSBS,YTIME)
@@ -1409,6 +1422,6 @@ QElecPriIndResCons(runCy,ESET,YTIME)$TIME(YTIME)..  !! The electricity price is 
              )$(not TFIRST(YTIME-1))
            )$RSET(ESET)
         );
-$offtext
+
 * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
