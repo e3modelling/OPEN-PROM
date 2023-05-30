@@ -35,9 +35,6 @@ $include "./iNatGasPriProElst.csv"
 $offdelim
 /
 iFuelPriPro(allCy,EF,YTIME)                 	"Fuel Primary Production (Mtoe)"
-iIntPricesMainFuels(WEF,YTIME)	                "International Prices of main fuels (kEuro05/toe)"	
-iIntFuelPrices(WEF,YTIME)	                    "International Fuel Prices (dollars2015/toe)"
-iIntPricesMainFuelsBsln(WEF,YTIME)          	"International Prices of main fuels in Baseline scenario (kEuro2005/toe)"
 iPolDstrbtnLagCoeffPriOilPr(kpdl)	            "Polynomial Distribution Lag Coefficients for primary oil production (1)"/
 $ondelim
 $include "./iPolDstrbtnLagCoeffPriOilPr.csv"
