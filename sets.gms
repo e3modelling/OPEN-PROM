@@ -1732,3 +1732,4 @@ Set stringcy(allCy)
 Set smallpg(pgall) /AGTGDO,AGTNGS/
 Alias (smallpg,smallpgg),(geme3tech,geme3tech1),(EF1,EF),(allCy2,allCy)
 ;
+

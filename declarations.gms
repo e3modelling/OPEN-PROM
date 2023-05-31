@@ -42,7 +42,7 @@ iPolDstrbtnLagCoeffPriOilPr(kpdl)	            "Polynomial Distribution Lag Coeff
 $ondelim
 $include "./iPolDstrbtnLagCoeffPriOilPr.csv"
 $offdelim
-/	
+/
 iRatePriProTotPriNeeds(allCy,EF,YTIME)	        "Rate of Primary Production in Total Primary Needs (1)"	
 iFuelExprts(allCy,EF,YTIME)	                    "Fuel Exports (Mtoe)"	
 iSuppExports(allCy,EF,YTIME)                	"Supplementary parameter for  exports (Mtoe)"
@@ -54,11 +54,7 @@ iMxmLoadFacElecDem(allCy,YTIME)	                "Maximum load factor of electric
 iBslCorrection(allCy,YTIME)	                    "Parameter of baseload correction (1)"
 iLoadCurveConstr(allCy,YTIME)	                "Parameter for load curve construction (1)"
 iResMargTotAvailCap(allCy,PGRES,YTIME)	        "Reserve margins on total available capacity and peak load (1)"
-iTechLftPlaType(PGALL)	                        "Technical Lifetime per plant type (year)"/
-$ondelim
-$include "./iTechLftPlaType.csv"
-$offdelim
-/
+iTechLftPlaType(PGALL)	                        "Technical Lifetime per plant type (year)"
 iElecImp(allCy,YTIME)	                  "Electricity Imports (1)"
 iPlantAvailRate(allCy,PGALL,YTIME)	      "Plant availability rate (1)"
 iTotAvailCapBsYr(allCy)	            "Total installed available capacity in base year (GW)"
@@ -102,7 +98,42 @@ iResSpecificFuelConsCost(allCy,TRANSE,TTECH,EF,YTIME)	"Residuals on specific fue
 iShareAnnMilePlugInHybrid(allCy,YTIME)	                "Share of annual mileage of a plug-in hybrid which is covered by electricity (1)"
 iAvgVehCapLoadFac(allCy,TRANSE,TRANSUSE,YTIME)	        "Average capacity/vehicle and load factor (tn/veh or passenegers/veh)" 
 iUtilRateChpPlants(allCy,CHP,YTIME)	                    "Utilisation rate of CHP Plants (1)"	
-iHydrogenPri(allCy,SBS,YTIME)	                        "Total Hydrogen Cost Per Sector (Euro/toe)"	 			
+iHydrogenPri(allCy,SBS,YTIME)	                        "Total Hydrogen Cost Per Sector (Euro/toe)"
+iTechLft(allCy,SBS,EF,TEA,YTIME)	                    "Technical Lifetime. For passenger cars it is a variable (1)"
+iSpeFuelConsCostBy(allCy,SBS,TTECH,TEA,EF)	            "Specific fuel consumption cost in Base year (ktoe/Gpkm or ktoe/Gtkm or ktoe/Gvkm)"	
+iShrNonSubElecInTotElecDem(allCy,SBS)	                "Share of non substitutable electricity in total electricity demand per subsector (1)"
+iElecIndex(allCy,YTIME)	                                "Electricity Index (1)"	
+iExogDemOfBiomass(allCy,SBS,YTIME)	                    "Demand of tranditional biomass defined exogenously ()"	
+iFinEneConsPrevYear(allCy,EF,YTIME)	                    "Final energy consumption used for holding previous year results (Mtoe)"	
+iCarbValYrExog(ytime)	                                "Carbon value for each year when it is exogenous ()"
+iShrHeatPumpElecCons(allCy,SBS)	                        "Share of heat pump electricity consumption in total substitutable electricity (1)"						 			
+iTranfOutGasworks(allCy,EF,YTIME)	                    "Transformation Output from Gasworks, Blast Furnances and Briquetting plants (Mtoe)"	
+iDistrLosses(allCy,EF,YTIME)	                        "Distribution Losses (Mtoe)"	
+iTransfOutputRef(allCy,EF,YTIME)	                    "Transformation Output from Refineries (Mtoe)"	
+iFinEneCons(allCy,EF,YTIME)	                            "Final energy consumption (Mtoe)"	
+iTotEneBranchCons(allCy,EF,YTIME)	                    "Total Energy Branch Consumption (Mtoe)"	
+iFuelImports(allCy,EF,YTIME)	                        "Fuel Imports (Mtoe)"	
+iGrosInlCons(allCy,EF,YTIME)	                        "Gross Inland Consumtpion (Mtoe)"	
+iGrossInConsNoEneBra(allCy,EF,YTIME)	                "Gross Inland Consumption,excluding energy branch (Mtoe)"	
+iPeakBsLoadBy(allCy,PGLOADTYPE)	                        "Peak and Base load for base year (GW)"	
+iHisChpGrCapData(allCy,CHP,YTIME)	                    "Historical CHP  gross capacity data (GW)"	
+iTransfInputRef(allCy,EF,YTIME)	                        "Transformation Input in Refineries (Mtoe)"	
+iInstCapGross(allCy,PGALL,PGCAPAST)	                    "Installed Capacity gross for 1995 and 2000 (GW)"
+iAvailInstCapPastYrs(allCy,PGALL,YTIME)	                "Available installed capacity for past years (GW)"		
+iSigma(allCy,SG)                                        "S parameters of Gompertz function for passenger cars vehicle km (1)"
+iPassCarsMarkSat(allCy)	                                "Passenger cars market saturation (1)"	
+iGdpPassCarsMarkExt(allCy)	                            "GDP-dependent passenger cars market extension (GDP/capita)"	
+iPassCarsScrapRate(allCy)	                            "Passenger cars scrapping rate (1)"	
+iCosTech(allCy,SBS,EF,TEA,YTIME)	                    "Variable Cost of technology ()"
+                                                        !! For transport (kEuro05/vehicle)
+                                                        !! For Industrial sectors, except Iron and Steel (Euro05/toe-year)
+                                                        !! For Iron and Steel  (Euro05/tn-of-steel)
+                                                        !! For Domestic sectors  (Euro05/toe-year)
+iFixOMCostTech(allCy,SBS,EF,YTIME)         "Fixed O&M cost of technology (Euro2005/toe-year)"                                   
+                                            !! Fixed O&M cost of technology for Transport (kEuro2005/vehicle)
+                                            !! Fixed O&M cost of technology for Industrial sectors-except Iron and Steel (Euro2005/toe-year)"                                            
+                                            !! Fixed O&M cost of technology for Iron and Steel (Euro2005/tn-of-steel)"                                          
+                                            !! Fixed O&M cost of technology for Domestic sectors (Euro2005/toe-year)"                                                          
 ;	
 
 
@@ -354,11 +385,6 @@ VSpecificFuelCons(allCy,TRANSE,TTECH,TEA,EF,YTIME)	"Specific Fuel Consumption ()
                                                       !! SFC for other passsenger transportation modes (ktoe/Gpkm)
                                                       !! SFC for trucks is measured (ktoe/Gtkm)
 VTranspCostPermeanConsSize(allCy,TRANSE,RCon,TTECH,TEA,YTIME)	"Transportation cost per mean and consumer size (Keuro/vehicle)"
-VCosTech(allCy,SBS,EF,TEA,YTIME)	                            "Variable Cost of technology ()"
-                                                       !! For transport (kEuro05/vehicle)
-                                                       !! For Industrial sectors, except Iron and Steel (Euro05/toe-year)
-                                                       !! For Iron and Steel  (Euro05/tn-of-steel)
-                                                       !! For Domestic sectors  (Euro05/toe-year)
 VTranspCostPerVeh(allCy,TRANSE,RCon,TTECH,TEA,YTIME)	"Transportation cost per mean and consumer size (Keuro/vehicle)"
 VTranspCostMatFac(allCy,TRANSE,RCon,TTECH,TEA,YTIME)	"Transportation cost including maturity factor (Keuro/vehicle)"	
 VTechSortVarCost(allCy,TRANSE,Rcon,YTIME)	            "Technology sorting based on variable cost (1)"	
@@ -427,7 +453,7 @@ VNetImports(allCy,EFS,YTIME)	                        "Net Imports (Mtoe)"
 VElecPriInduResConsu(allCy,ESET,YTIME)	                "Electricity price to Industrial and Residential Consumers (Euro2005/KWh)"
 VFuelPriMultWgt(allCy,SBS,EF,YTIME)	                    "Fuel prices per subsector and fuel  mutliplied by weights (kdollars2005/toe)"	
 VAvgPowerGenLongTrm(allCy,ESET,YTIME)	                "Long-term average power generation cost (Euro2005/kWh)"	 
-
+VFuelPriSubNoCarb(allCy,SBS,EF,YTIME)	                "Fuel prices per subsector and fuel  without carbon value (kdollars2005/toe)"	
 *** CO2 SEQUESTRATION COST CURVES VARIABLES
 VCO2ElcHrgProd(allCy,YTIME)	                            "CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
 VCumCO2Capt(allCy,YTIME)	                            "Cumulative CO2 captured (Mtn CO2)"		
@@ -455,4 +481,5 @@ sGwToTwhPerYear    "convert GW mean power into TWh/y" /8.76/
 s                  "time step iterator" /0/
 sSolverTryMax      "maximum attempts to solve each time step" /5/
 sModelStat         "helper parameter for solver status"
+sExogCarbValue	   "switch for exogenous carbon value (0=exogenous 1=endogenous)" /1/
 ;

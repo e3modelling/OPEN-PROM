@@ -668,7 +668,7 @@ QTranspCostPerMeanConsSize(runCy,TRANSE,RCon,TTECH,TEA,YTIME)$(TIME(YTIME) $SECT
                              + iShareAnnMilePlugInHybrid(runCy,YTIME)*VSpecificFuelCons(runCy,TRANSE,TTECH,TEA,"ELC",YTIME)*VFuelPriceSub(runCy,TRANSE,"ELC",YTIME)
                            )$PLUGIN(TTECH)
 
-                           + VCosTech(runCy,TRANSE,TTECH,TEA,YTIME)
+                           + iCosTech(runCy,TRANSE,TTECH,TEA,YTIME)
                            + (VRenValue(YTIME)/1000)$( not RENEF(TTECH))
                          )
                          *  iAnnCons(runCy,TRANSE,"smallest") * (iAnnCons(runCy,TRANSE,"largest")/iAnnCons(runCy,TRANSE,"smallest"))**((ord(Rcon)-1)/iNcon(TRANSE))
