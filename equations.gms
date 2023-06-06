@@ -1231,7 +1231,7 @@ QPrimProd(runCy,PPRODEF,YTIME)$TIME(YTIME)..
          +(
            iResHcNgOilPrProd(runCy,PPRODEF,YTIME) *  iFuelPriPro(runCy,PPRODEF,YTIME) *
            prod(kpdl$(ord(kpdl) lt 5),
-                         (iIntPricesMainFuels("WCRO",YTIME-(ord(kpdl)+1))/iIntPricesMainFuelsBsln("WCRO",YTIME-(ord(kpdl)+1)))
+                         (iPriceFuelsInt("WCRO",YTIME-(ord(kpdl)+1))/iPriceFuelsIntBase("WCRO",YTIME-(ord(kpdl)+1)))
                          **(0.2*iPolDstrbtnLagCoeffPriOilPr(kpdl)))
          )$sameas(PPRODEF,"CRO")   ]$iRatePriProTotPriNeeds(runCy,PPRODEF,YTIME);   
 

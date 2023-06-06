@@ -95,21 +95,20 @@ $include "./iInitSpecFuelCons.csv"
 $offdelim
 ;	
 iSpeFuelConsCostBy(allCy,TRANSE,TTECH,TEA,EF) = iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,"2017");
-$ontext
 table iUsfEneConvSubTech(SBS,EF,YTIME)             "Useful Energy Conversion Factor per subsector and technology (1)"
 $ondelim
 $include "./iUsfEneConvSubTech.csv"
 $offdelim
 ;
 iUsfEnergyConvFact(allCy,SBS,EF,TEA,YTIME) = iUsfEneConvSubTech(SBS,EF,YTIME);
-$offtext
 table iElaSub(allCy,DSBS)                           "Elasticities by subsectors (1)"
 $ondelim
 $include "./iElaSub.csv"
 $offdelim
 ;
 table iConsSizeDistHeat(allCy,conSet)               "Consumer sizes for district heating (1)"
-$ondelim$include "./iConsSizeDistHeat.csv"
+$ondelim
+$include "./iConsSizeDistHeat.csv"
 $offdelim
 ;
 table iCapCostTech(allCy,DSBS,EF,YTIME)      "Capital Cost of technology For Industrial sectors except Iron and Steel (kEuro2005/toe-year)"
@@ -176,9 +175,9 @@ $include"./iSuppPrimProd.csv"
 $offdelim
 ;
 iFuelPriPro(allCy,PPRODEF,YTIME) = iSuppPrimProd(allCy,PPRODEF,YTIME);
-table iIntFuelPrcsBslnScnr(WEF,YTIME)	           "International Fuel Prices USED IN BASELINE SCENARIO ($2034/toe)"
+table iPriceFuelsIntBase(WEF,YTIME)	           "International Fuel Prices USED IN BASELINE SCENARIO ($2015/toe)"
 $ondelim
-$include"./iIntFuelPrcsBslnScnr.csv"
+$include"./iPriceFuelsIntBase.csv"
 $offdelim
 ;
 table iSuppRatePrimProd(allCy,EF,YTIME)	              "Supplementary Parameter for iRatePrimProd (1)"	
@@ -253,9 +252,7 @@ iExogDemOfBiomass(allCy,DOMSE,YTIME) = 0;
 iElastCO2Seq(allCy,CO2SEQELAST) = iCO2SeqData(allCy,CO2SEQELAST,"2029");
 iRatioImpFinElecDem(runCy,YTIME)$an(YTIME) = iSuppRefCapacity(runCy,"ELC_IMP",YTIME);
 iFuelExprts(runCy,EFS,YTIME) = iSuppExports(runCy,EFS,YTIME);
-iIntPricesMainFuelsBsln(WEF,YTIME) = iIntFuelPrcsBslnScnr(WEF,YTIME);
 iRatePriProTotPriNeeds(runCy,PPRODEF,YTIME) = iSuppRatePrimProd(runCy,PPRODEF,YTIME);
-iIntPricesMainFuels(WEF,YTIME) = iIntFuelPrcsBslnScnr(WEF,YTIME);
 iResHcNgOilPrProd(runCy,"HCL",YTIME)$an(YTIME)   = iSupResRefCapacity(runCy,"HCL_PPROD",YTIME);
 iResHcNgOilPrProd(runCy,"NGS",YTIME)$an(YTIME)   = iSupResRefCapacity(runCy,"NGS_PPROD",YTIME);
 iResHcNgOilPrProd(runCy,"CRO",YTIME)$an(YTIME)   = iSupResRefCapacity(runCy,"OIL_PPROD",YTIME);
@@ -398,7 +395,7 @@ $include"./iResTotCapMxmLoad.csv"
 $offdelim
 ;
 iResMargTotAvailCap(allCy,PGRES,YTIME)$an(YTIME) = iResTotCapMxmLoad(allCy,PGRES,YTIME);
-$ontext
+*$ontext
 table iInvCost(PGALL,YTIME)             "Investment Cost (KEuro2005/Kw)"
 $ondelim
 $include"./iInvCost.csv"
@@ -439,7 +436,7 @@ iPlantAvailRate(runCy,PGALL,"2050") = iAvailRate(PGALL,"2050");
 iFixGrosCostPlaType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF-12)  = iFixOandMCost(PGALL,"2011");
 iFixGrosCostPlaType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF+3) = iFixOandMCost(PGALL,"2020");
 iFixGrosCostPlaType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF+33) = iFixOandMCost(PGALL,"2050");
-$offtext
+*$offtext
 table iDataDistrLosses(allCy,EF,YTIME)	    "Data for Distribution Losses (Mtoe)"
 $ondelim
 $include"./iDataDistrLosses.csv"
@@ -827,11 +824,6 @@ $ondelim
 $include"./iEnvPolicies.csv"
 $offdelim
 ;
-table iDataIndTechnology(INDSE,EF,ECONCHAR)   "Data for industry various units ()"
-$ondelim
-$include"./iDataIndTechnology.csv"
-$offdelim
-;
 table iDataPowGenCost(PGALL,PGECONCHAR)   "Data for power generation costs (various)"
 $ondelim
 $include"./iDataPowGenCost.csv"
@@ -848,9 +840,6 @@ iShrNonSubElecInTotElecDem(allCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(allCy
 iShrNonSubElecInTotElecDem(allCy,DOMSE)$(iShrNonSubElecInTotElecDem(allCy,DOMSE)>0.98) = 0.98;
 **   Macroeconomic
 $ontext
-CONSIZE(runCy,CONSET)                                                            = ConsizePRN(CONSET,"Size");
-DISCOUNT(runCy,SBS,YTIME)$(ord(YTIME)>(ordfirst-4))                             = DiscountPRN(SBS,YTIME);
-
 
 **  Prices
 
@@ -860,13 +849,13 @@ $offtext
 
 **  Transport Sector
 
-iCapCostTech(runCy,TRANSE,EF,TEA,YTIME)$(ord(YTIME) eq TF-12)  = iDataTransTech(TRANSE,EF,"IC_05");
-iCapCostTech(runCy,TRANSE,EF,TEA,YTIME)$(ord(YTIME) eq TF+8)   = iDataTransTech(TRANSE,EF,"IC_25");
-iCapCostTech(runCy,TRANSE,EF,TEA,YTIME)$(ord(YTIME) eq TF+33)  = iDataTransTech(TRANSE,EF,"IC_50");
+iCapCostTech(runCy,TRANSE,EF,YTIME)$(ord(YTIME) eq TF-12)  = iDataTransTech(TRANSE,EF,"IC_05");
+iCapCostTech(runCy,TRANSE,EF,YTIME)$(ord(YTIME) eq TF+8)   = iDataTransTech(TRANSE,EF,"IC_25");
+iCapCostTech(runCy,TRANSE,EF,YTIME)$(ord(YTIME) eq TF+33)  = iDataTransTech(TRANSE,EF,"IC_50");
 
-iFixOMCostTech(runCy,TRANSE,EF,TEA,YTIME)$(ord(YTIME) eq TF-12)= iDataTransTech(TRANSE,EF,"FC_05");
-iFixOMCostTech(runCy,TRANSE,EF,TEA,YTIME)$(ord(YTIME) eq TF+8) = iDataTransTech(TRANSE,EF,"FC_25");
-iFixOMCostTech(runCy,TRANSE,EF,TEA,YTIME)$(ord(YTIME) eq TF+33)= iDataTransTech(TRANSE,EF,"FC_50");
+iFixOMCostTech(runCy,TRANSE,EF,YTIME)$(ord(YTIME) eq TF-12)= iDataTransTech(TRANSE,EF,"FC_05");
+iFixOMCostTech(runCy,TRANSE,EF,YTIME)$(ord(YTIME) eq TF+8) = iDataTransTech(TRANSE,EF,"FC_25");
+iFixOMCostTech(runCy,TRANSE,EF,YTIME)$(ord(YTIME) eq TF+33)= iDataTransTech(TRANSE,EF,"FC_50");
 
 iCosTech(runCy,TRANSE,EF,TEA,YTIME)$(ord(YTIME) eq TF-12)= iDataTransTech(TRANSE,EF,"VC_05");
 iCosTech(runCy,TRANSE,EF,TEA,YTIME)$(ord(YTIME) eq TF+8) = iDataTransTech(TRANSE,EF,"VC_25");
@@ -879,21 +868,21 @@ iAvgVehCapLoadFac(runCy,TRANSE,TRANSUSE,YTIME)$(ord(YTIME)>sum(TFIRST,(ord(TFIRS
 **  Industrial Sector
 
 
-iCapCostTech(runCy,INDSE,EF,TEA,YTIME)$(ord(YTIME) eq TF-12)= iDataIndTechnology(INDSE,EF,"IC_05");
-iCapCostTech(runCy,INDSE,EF,TEA,YTIME)$(ord(YTIME) eq TF+8) = iDataIndTechnology(INDSE,EF,"IC_25");
-iCapCostTech(runCy,INDSE,EF,TEA,YTIME)$(ord(YTIME) eq TF+33)= iDataIndTechnology(INDSE,EF,"IC_50");
+iCapCostTech(runCy,INDSE,EF,YTIME)$(ord(YTIME) eq TF-12)= iDataIndTechnology(INDSE,EF,"IC_05");
+iCapCostTech(runCy,INDSE,EF,YTIME)$(ord(YTIME) eq TF+8) = iDataIndTechnology(INDSE,EF,"IC_25");
+iCapCostTech(runCy,INDSE,EF,YTIME)$(ord(YTIME) eq TF+33)= iDataIndTechnology(INDSE,EF,"IC_50");
 
-iFixOMCostTech(runCy,INDSE,EF,TEA,YTIME)$(ord(YTIME) eq TF-12) = iDataIndTechnology(INDSE,EF,"FC_05");
-iFixOMCostTech(runCy,INDSE,EF,TEA,YTIME)$(ord(YTIME) eq TF+8) = iDataIndTechnology(INDSE,EF,"FC_25");
-iFixOMCostTech(runCy,INDSE,EF,TEA,YTIME)$(ord(YTIME) eq TF+33) = iDataIndTechnology(INDSE,EF,"FC_50");
+iFixOMCostTech(runCy,INDSE,EF,YTIME)$(ord(YTIME) eq TF-12) = iDataIndTechnology(INDSE,EF,"FC_05");
+iFixOMCostTech(runCy,INDSE,EF,YTIME)$(ord(YTIME) eq TF+8) = iDataIndTechnology(INDSE,EF,"FC_25");
+iFixOMCostTech(runCy,INDSE,EF,YTIME)$(ord(YTIME) eq TF+33) = iDataIndTechnology(INDSE,EF,"FC_50");
 
 iCosTech(runCy,INDSE,EF,TEA,YTIME)$(ord(YTIME) eq TF-12) = iDataIndTechnology(INDSE,EF,"VC_05");
 iCosTech(runCy,INDSE,EF,TEA,YTIME)$(ord(YTIME) eq TF+8) = iDataIndTechnology(INDSE,EF,"VC_25");
 iCosTech(runCy,INDSE,EF,TEA,YTIME)$(ord(YTIME) eq TF+33) = iDataIndTechnology(INDSE,EF,"VC_50");
 
-iUsfEneConvSubTech(runCy,INDSE,EF,TEA,YTIME)$(ord(YTIME) <= TF-12)    = iDataIndTechnology(INDSE,EF,"USC_05");
-iUsfEneConvSubTech(runCy,INDSE,EF,TEA,YTIME)$(ord(YTIME) eq TF+8) = iDataIndTechnology(INDSE,EF,"USC_25");
-iUsfEneConvSubTech(runCy,INDSE,EF,TEA,YTIME)$(ord(YTIME) eq TF+33) = iDataIndTechnology(INDSE,EF,"USC_50");
+iUsfEneConvSubTech(runCy,INDSE,EF,YTIME)$(ord(YTIME) <= TF-12)    = iDataIndTechnology(INDSE,EF,"USC_05");
+iUsfEneConvSubTech(runCy,INDSE,EF,YTIME)$(ord(YTIME) eq TF+8) = iDataIndTechnology(INDSE,EF,"USC_25");
+iUsfEneConvSubTech(runCy,INDSE,EF,YTIME)$(ord(YTIME) eq TF+33) = iDataIndTechnology(INDSE,EF,"USC_50");
 
 iTechLft(runCy,INDSE,EF,TEA,YTIME)$(ord(YTIME)>(ordfirst-12)) = iDataIndTechnology(INDSE,EF,"LFT");
 

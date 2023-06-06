@@ -35,9 +35,6 @@ $include "./iNatGasPriProElst.csv"
 $offdelim
 /
 iFuelPriPro(allCy,EF,YTIME)                 	"Fuel Primary Production (Mtoe)"
-iIntPricesMainFuels(WEF,YTIME)	                "International Prices of main fuels (kEuro05/toe)"	
-iIntFuelPrices(WEF,YTIME)	                    "International Fuel Prices (dollars2015/toe)"
-iIntPricesMainFuelsBsln(WEF,YTIME)          	"International Prices of main fuels in Baseline scenario (kEuro2005/toe)"
 iPolDstrbtnLagCoeffPriOilPr(kpdl)	            "Polynomial Distribution Lag Coefficients for primary oil production (1)"/
 $ondelim
 $include "./iPolDstrbtnLagCoeffPriOilPr.csv"
@@ -133,7 +130,7 @@ iFixOMCostTech(allCy,SBS,EF,YTIME)         "Fixed O&M cost of technology (Euro20
                                             !! Fixed O&M cost of technology for Transport (kEuro2005/vehicle)
                                             !! Fixed O&M cost of technology for Industrial sectors-except Iron and Steel (Euro2005/toe-year)"                                            
                                             !! Fixed O&M cost of technology for Iron and Steel (Euro2005/tn-of-steel)"                                          
-                                            !! Fixed O&M cost of technology for Domestic sectors (Euro2005/toe-year)"                                                          
+                                            !! Fixed O&M cost of technology for Domestic sectors (Euro2005/toe-year)"                                                        
 ;	
 
 
