@@ -95,12 +95,6 @@ $include "./iInitSpecFuelCons.csv"
 $offdelim
 ;	
 iSpeFuelConsCostBy(allCy,TRANSE,TTECH,TEA,EF) = iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,"2017");
-table iUsfEneConvSubTech(SBS,EF,YTIME)             "Useful Energy Conversion Factor per subsector and technology (1)"
-$ondelim
-$include "./iUsfEneConvSubTech.csv"
-$offdelim
-;
-iUsfEnergyConvFact(allCy,SBS,EF,TEA,YTIME) = iUsfEneConvSubTech(SBS,EF,YTIME);
 table iElaSub(allCy,DSBS)                           "Elasticities by subsectors (1)"
 $ondelim
 $include "./iElaSub.csv"
@@ -217,12 +211,12 @@ $ondelim
 $include"./iResDemSub.csv"
 $offdelim
 ;
-table iDataTransTech (TRANSE,EF,ECONCHAR)                  "Technical Lifetime of transport, for cars it is a variable (years)"
+table iDataTransTech (TRANSE,EF,ECONCHAR)                  "Technoeconomic characteristics of transport (various)"
 $ondelim
 $include"./iDataTransTech.csv"
 $offdelim
 ;
-table iDataIndTechnology(INDSE,EF,ECONCHAR)                  "Technical lifetime of Industry (years)"
+table iDataIndTechnology(INDSE,EF,ECONCHAR)                  "Technoeconomic characteristics of industry (various)"
 $ondelim
 $include"./iDataIndTechnology.csv"
 $offdelim
@@ -895,21 +889,21 @@ iTechLft(runCy,INDSE,EF,TEA,YTIME)$(ord(YTIME)>(ordfirst-12)) = iDataIndTechnolo
 **  Domestic Sector
 
 
-iCapCostTech(runCy,DOMSE,EF,TEA,YTIME)$(ord(YTIME) eq TF-12)= iDataDomTech(DOMSE,EF,"IC_05");
-iCapCostTech(runCy,DOMSE,EF,TEA,YTIME)$(ord(YTIME) eq TF+8) = iDataDomTech(DOMSE,EF,"IC_25");
-iCapCostTech(runCy,DOMSE,EF,TEA,YTIME)$(ord(YTIME) eq TF+33)= iDataDomTech(DOMSE,EF,"IC_50");
+iCapCostTech(runCy,DOMSE,EF,YTIME)$(ord(YTIME) eq TF-12)= iDataDomTech(DOMSE,EF,"IC_05");
+iCapCostTech(runCy,DOMSE,EF,YTIME)$(ord(YTIME) eq TF+8) = iDataDomTech(DOMSE,EF,"IC_25");
+iCapCostTech(runCy,DOMSE,EF,YTIME)$(ord(YTIME) eq TF+33)= iDataDomTech(DOMSE,EF,"IC_50");
 
-iFixOMCostTech(runCy,DOMSE,EF,TEA,YTIME)$(ord(YTIME) eq TF-12)= iDataDomTech(DOMSE,EF,"FC_05");
-iFixOMCostTech(runCy,DOMSE,EF,TEA,YTIME)$(ord(YTIME) eq TF+8) = iDataDomTech(DOMSE,EF,"FC_25");
-iFixOMCostTech(runCy,DOMSE,EF,TEA,YTIME)$(ord(YTIME) eq TF+33)= iDataDomTech(DOMSE,EF,"FC_50");
+iFixOMCostTech(runCy,DOMSE,EF,YTIME)$(ord(YTIME) eq TF-12)= iDataDomTech(DOMSE,EF,"FC_05");
+iFixOMCostTech(runCy,DOMSE,EF,YTIME)$(ord(YTIME) eq TF+8) = iDataDomTech(DOMSE,EF,"FC_25");
+iFixOMCostTech(runCy,DOMSE,EF,YTIME)$(ord(YTIME) eq TF+33)= iDataDomTech(DOMSE,EF,"FC_50");
 
 iCosTech(runCy,DOMSE,EF,TEA,YTIME)$(ord(YTIME) eq TF-12)= iDataDomTech(DOMSE,EF,"VC_05");
 iCosTech(runCy,DOMSE,EF,TEA,YTIME)$(ord(YTIME) eq TF+8) = iDataDomTech(DOMSE,EF,"VC_25");
 iCosTech(runCy,DOMSE,EF,TEA,YTIME)$(ord(YTIME) eq TF+33)= iDataDomTech(DOMSE,EF,"VC_50");
 
-iUsfEneConvSubTech(runCy,DOMSE,EF,TEA,YTIME)$(ord(YTIME) <= TF-12)= iDataDomTech(DOMSE,EF,"USC_05");
-iUsfEneConvSubTech(runCy,DOMSE,EF,TEA,YTIME)$(ord(YTIME) eq TF+8) = iDataDomTech(DOMSE,EF,"USC_25");
-iUsfEneConvSubTech(runCy,DOMSE,EF,TEA,YTIME)$(ord(YTIME) eq TF+33)= iDataDomTech(DOMSE,EF,"USC_50");
+iUsfEneConvSubTech(runCy,DOMSE,EF,YTIME)$(ord(YTIME) <= TF-12)= iDataDomTech(DOMSE,EF,"USC_05");
+iUsfEneConvSubTech(runCy,DOMSE,EF,YTIME)$(ord(YTIME) eq TF+8) = iDataDomTech(DOMSE,EF,"USC_25");
+iUsfEneConvSubTech(runCy,DOMSE,EF,YTIME)$(ord(YTIME) eq TF+33)= iDataDomTech(DOMSE,EF,"USC_50");
 
 iTechLft(runCy,DOMSE,EF,TEA,YTIME)$(ord(YTIME)>(ordfirst-12))  = iDataDomTech(DOMSE,EF,"LFT");
 
@@ -923,24 +917,24 @@ $offtext
 **  Non Energy Sector and Bunkers
 
 
-iCapCostTech(runCy,NENSE,EF,TEA,YTIME)$(ord(YTIME) eq TF-12)= iDataNonEneSec(NENSE,EF,"IC_05");
-iCapCostTech(runCy,NENSE,EF,TEA,YTIME)$(ord(YTIME) eq TF+8) = iDataNonEneSec(NENSE,EF,"IC_25");
-iCapCostTech(runCy,NENSE,EF,TEA,YTIME)$(ord(YTIME) eq TF+33)= iDataNonEneSec(NENSE,EF,"IC_50");
+iCapCostTech(runCy,NENSE,EF,YTIME)$(ord(YTIME) eq TF-12)= iDataNonEneSec(NENSE,EF,"IC_05");
+iCapCostTech(runCy,NENSE,EF,YTIME)$(ord(YTIME) eq TF+8) = iDataNonEneSec(NENSE,EF,"IC_25");
+iCapCostTech(runCy,NENSE,EF,YTIME)$(ord(YTIME) eq TF+33)= iDataNonEneSec(NENSE,EF,"IC_50");
 
-iFixOMCostTech(runCy,NENSE,EF,TEA,YTIME)$(ord(YTIME) eq TF-12)= iDataNonEneSec(NENSE,EF,"FC_05");
-iFixOMCostTech(runCy,NENSE,EF,TEA,YTIME)$(ord(YTIME) eq TF+8) = iDataNonEneSec(NENSE,EF,"FC_25");
-iFixOMCostTech(runCy,NENSE,EF,TEA,YTIME)$(ord(YTIME) eq TF+33)= iDataNonEneSec(NENSE,EF,"FC_50");
+iFixOMCostTech(runCy,NENSE,EF,YTIME)$(ord(YTIME) eq TF-12)= iDataNonEneSec(NENSE,EF,"FC_05");
+iFixOMCostTech(runCy,NENSE,EF,YTIME)$(ord(YTIME) eq TF+8) = iDataNonEneSec(NENSE,EF,"FC_25");
+iFixOMCostTech(runCy,NENSE,EF,YTIME)$(ord(YTIME) eq TF+33)= iDataNonEneSec(NENSE,EF,"FC_50");
 
 iCosTech(runCy,NENSE,EF,TEA,YTIME)$(ord(YTIME) eq TF-12)= iDataNonEneSec(NENSE,EF,"VC_05");
 iCosTech(runCy,NENSE,EF,TEA,YTIME)$(ord(YTIME) eq TF+8) = iDataNonEneSec(NENSE,EF,"VC_25");
 iCosTech(runCy,NENSE,EF,TEA,YTIME)$(ord(YTIME) eq TF+33)= iDataNonEneSec(NENSE,EF,"VC_50");
 
-iUsfEneConvSubTech(runCy,NENSE,EF,TEA,YTIME)$(ord(YTIME) <= TF-12)= iDataNonEneSec(NENSE,EF,"USC_05");
-iUsfEneConvSubTech(runCy,NENSE,EF,TEA,YTIME)$(ord(YTIME) eq TF+8) = iDataNonEneSec(NENSE,EF,"USC_25");
-iUsfEneConvSubTech(runCy,NENSE,EF,TEA,YTIME)$(ord(YTIME) eq TF+33)= iDataNonEneSec(NENSE,EF,"USC_50");
+iUsfEneConvSubTech(runCy,NENSE,EF,YTIME)$(ord(YTIME) <= TF-12)= iDataNonEneSec(NENSE,EF,"USC_05");
+iUsfEneConvSubTech(runCy,NENSE,EF,YTIME)$(ord(YTIME) eq TF+8) = iDataNonEneSec(NENSE,EF,"USC_25");
+iUsfEneConvSubTech(runCy,NENSE,EF,YTIME)$(ord(YTIME) eq TF+33)= iDataNonEneSec(NENSE,EF,"USC_50");
 
 iTechLft(runCy,NENSE,EF,TEA,YTIME)$(ord(YTIME)>(ordfirst-4)) = iDataNonEneSec(NENSE,EF,"LFT");
-
+display TF;
 
 loop YTIME$((ord(YTIME) gt TF-12) $(ord(YTIME) lt TF+3)) do
          iCapGrossCosPlanType(runCy,PGALL,YTIME) = (iCapGrossCosPlanType(runCy,PGALL,"2020")-
@@ -955,8 +949,8 @@ loop YTIME$((ord(YTIME) gt TF-12) $(ord(YTIME) lt TF+3)) do
          iVarGroCostPlaType(runCy,PGALL,YTIME) = (iVarGroCostPlaType(runCy,PGALL,"2020")-
          iVarGroCostPlaType(runCy,PGALL,"2011"))/15+iVarGroCostPlaType(runCy,PGALL,YTIME-1);
 
-          iUsfEneConvSubTech(runCy,SBS,EF,TEA,YTIME) = (iUsfEneConvSubTech(runCy,SBS,EF,TEA,"2025")-iUsfEneConvSubTech(runCy,SBS,EF,TEA,"2005"))/
-          20+iUsfEneConvSubTech(runCy,SBS,EF,TEA,YTIME-1);
+          iUsfEneConvSubTech(runCy,SBS,EF,YTIME) = (iUsfEneConvSubTech(runCy,SBS,EF,"2025")-iUsfEneConvSubTech(runCy,SBS,EF,"2005"))/
+          20+iUsfEneConvSubTech(runCy,SBS,EF,YTIME-1);
 endloop;
 
 loop YTIME$((ord(YTIME) gt TF+3) $(ord(YTIME) lt TF+33)) do
@@ -972,8 +966,8 @@ loop YTIME$((ord(YTIME) gt TF+3) $(ord(YTIME) lt TF+33)) do
          iVarGroCostPlaType(runCy,PGALL,YTIME) = (iVarGroCostPlaType(runCy,PGALL,"2050")-
          iVarGroCostPlaType(runCy,PGALL,"2020"))/30+iVarGroCostPlaType(runCy,PGALL,YTIME-1);
 
-         iUsfEneConvSubTech(runCy,SBS,EF,TEA,YTIME)     = (iUsfEneConvSubTech(runCy,SBS,EF,TEA,"2050")-iUsfEneConvSubTech(runCy,SBS,EF,TEA,"2025"))/
-         25+iUsfEneConvSubTech(runCy,SBS,EF,TEA,YTIME-1);
+         iUsfEneConvSubTech(runCy,SBS,EF,YTIME)     = (iUsfEneConvSubTech(runCy,SBS,EF,"2050")-iUsfEneConvSubTech(runCy,SBS,EF,"2025"))/
+         25+iUsfEneConvSubTech(runCy,SBS,EF,YTIME-1);
 endloop;
 
 

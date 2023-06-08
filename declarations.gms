@@ -9,7 +9,6 @@ $offdelim
 /
 iPlantEffByType(allCy,PGALL,YTIME)              "Plant efficiency per plant type (1)"
 iCo2EmiFac(allCy,SBS,EF,YTIME)                  "CO2 emission factors per subsector (kgCO2/kgoe fuel burned)"
-iUsfEnergyConvFact(allCy,SBS,EF,TEA,YTIME)      "Useful Energy Conversion Factor per subsector, technology, and country (1)"
 iNcon(SBS)                                      "Number of consumers (1)"
 iDisFunConSize(allCy,DSBS,rCon)                 "Distribution function of consumer size groups (1)"
 iAnnCons(allCy,DSBS,conSet)                     "Annual consumtion of the smallest,modal,largest consumer, average for all countries (various)"
@@ -130,8 +129,9 @@ iFixOMCostTech(allCy,SBS,EF,YTIME)         "Fixed O&M cost of technology (Euro20
                                             !! Fixed O&M cost of technology for Transport (kEuro2005/vehicle)
                                             !! Fixed O&M cost of technology for Industrial sectors-except Iron and Steel (Euro2005/toe-year)"                                            
                                             !! Fixed O&M cost of technology for Iron and Steel (Euro2005/tn-of-steel)"                                          
-                                            !! Fixed O&M cost of technology for Domestic sectors (Euro2005/toe-year)"                                                        
-;	
+                                            !! Fixed O&M cost of technology for Domestic sectors (Euro2005/toe-year)"
+iUsfEneConvSubTech(allCy,SBS,EF,YTIME)               "Useful Energy Conversion Factor per subsector and technology (1)"
+;
 
 
 Equations
