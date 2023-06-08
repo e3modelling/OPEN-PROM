@@ -1,4 +1,4 @@
-table iGDP(YTIME,allCy) "GDP (billion US$2034)"
+table iGDP(YTIME,allCy) "GDP (billion US$2015)"
 $ondelim
 $include "./iGDP.csvr"
 $offdelim
@@ -175,6 +175,11 @@ $include"./iSuppPrimProd.csv"
 $offdelim
 ;
 iFuelPriPro(allCy,PPRODEF,YTIME) = iSuppPrimProd(allCy,PPRODEF,YTIME);
+table iPriceFuelsInt(WEF,YTIME)                "International Fuel Prices ($2015/toe)"
+$ondelim
+$include"./iPriceFuelsInt.csv"
+$offdelim
+;
 table iPriceFuelsIntBase(WEF,YTIME)	           "International Fuel Prices USED IN BASELINE SCENARIO ($2015/toe)"
 $ondelim
 $include"./iPriceFuelsIntBase.csv"

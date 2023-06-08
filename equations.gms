@@ -465,7 +465,7 @@ QLongPowGenIntPri(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
              / (1000*(7.25$ISET(ESET)+2.25$RSET(ESET))) +
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
                  (iVarGroCostPlaType(runCy,PGALL,YTIME)/1000+((
-  SUM(EF,sum(WEF$EFtoWEF("PG",EF,WEF), iIntPricesMainFuels(WEF,YTIME))*sTWhToMtoe/1000*1.5))$(not PGREN(PGALL))    +
+  SUM(EF,sum(WEF$EFtoWEF("PG",EF,WEF), iPriceFuelsInt(WEF,YTIME))*sTWhToMtoe/1000*1.5))$(not PGREN(PGALL))    +
 
                  iCO2CaptRate(runCy,PGALL,YTIME)*VCO2CO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME) +
 
@@ -481,7 +481,7 @@ QShoPowGenIntPri(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
                  =E=
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
                  (iVarGroCostPlaType(runCy,PGALL,YTIME)/1000+((
-  SUM(EF,sum(WEF$EFtoWEF("PG",EF,WEF), iIntPricesMainFuels(WEF,YTIME))*sTWhToMtoe/1000*1.5))$(not PGREN(PGALL))    +
+  SUM(EF,sum(WEF$EFtoWEF("PG",EF,WEF), iPriceFuelsInt(WEF,YTIME))*sTWhToMtoe/1000*1.5))$(not PGREN(PGALL))    +
 
                  iCO2CaptRate(runCy,PGALL,YTIME)*VCO2CO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME) +
 
@@ -1371,7 +1371,7 @@ QFuelPriSubSepCarbVal(runCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF) $TIME(YTIME) $(not s
 
            (1-iPriceReform(runCy,SBS,EF,YTIME))*
            (iResInPriceEq(runCy,SBS,EF,YTIME) + VFuelPriceSub(runCy,SBS,EF,YTIME-1)
-           + iIntToConsuPrices(runCy,SBS,EF,YTIME) * sum(WEF$EFtoWEF(SBS,EF,WEF), (iIntPricesMainFuels(WEF,YTIME) - iIntPricesMainFuels(WEF,YTIME-1)) / 1000 ))
+           + iIntToConsuPrices(runCy,SBS,EF,YTIME) * sum(WEF$EFtoWEF(SBS,EF,WEF), (iPriceFuelsInt(WEF,YTIME) - iPriceFuelsInt(WEF,YTIME-1)) / 1000 ))
            + iPriceReform(runCy,SBS,EF,YTIME)*iPriceTragets(runCy,SBS,EF,YTIME)
 )
           + iCo2EmiFac(runCy,SBS,EF,YTIME) *sum(NAP$NAPtoALLSBS(NAP,SBS),(VCarVal(runCy,NAP,YTIME)))/1000
