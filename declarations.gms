@@ -2,11 +2,7 @@ Parameters
 iCGI(allCy,YTIME)                            "Capital Goods Index (defined as CGI(Scenario)/CGI(Baseline)) (1)"
 iNPDL(SBS)                                   "Number of Polynomial Distribution Lags (PDL) (1)"
 iFPDL(SBS,KPDL)                              "Polynomial Distribution Lags (PDL) Coefficients per subsector (1)"
-iLifChpPla(CHP)                              "Technical Lifetime for CHP plants (years)" /
-$ondelim
-$include "./iLifChpPla.csv"
-$offdelim
-/
+iLifChpPla(allCy,DSBS,CHP)                      "Technical Lifetime for CHP plants (years)"
 iPlantEffByType(allCy,PGALL,YTIME)              "Plant efficiency per plant type (1)"
 iCo2EmiFac(allCy,SBS,EF,YTIME)                  "CO2 emission factors per subsector (kgCO2/kgoe fuel burned)"
 iNcon(SBS)                                      "Number of consumers (1)"
@@ -50,7 +46,7 @@ iMxmLoadFacElecDem(allCy,YTIME)	                "Maximum load factor of electric
 iBslCorrection(allCy,YTIME)	                    "Parameter of baseload correction (1)"
 iLoadCurveConstr(allCy,YTIME)	                "Parameter for load curve construction (1)"
 iResMargTotAvailCap(allCy,PGRES,YTIME)	        "Reserve margins on total available capacity and peak load (1)"
-iTechLftPlaType(PGALL)	                        "Technical Lifetime per plant type (year)"
+iTechLftPlaType(allCy,PGALL)	                        "Technical Lifetime per plant type (year)"
 iElecImp(allCy,YTIME)	                  "Electricity Imports (1)"
 iPlantAvailRate(allCy,PGALL,YTIME)	      "Plant availability rate (1)"
 iTotAvailCapBsYr(allCy)	            "Total installed available capacity in base year (GW)"
@@ -131,6 +127,11 @@ iFixOMCostTech(allCy,SBS,EF,YTIME)         "Fixed O&M cost of technology (Euro20
                                             !! Fixed O&M cost of technology for Iron and Steel (Euro2005/tn-of-steel)"                                          
                                             !! Fixed O&M cost of technology for Domestic sectors (Euro2005/toe-year)"
 iUsfEneConvSubTech(allCy,SBS,EF,YTIME)               "Useful Energy Conversion Factor per subsector and technology (1)"
+iInvCostChp(allCy,DSBS,CHP,YTIME)                    "Capital Cost per CHP plant type (kEuro05/KW)"
+iFixOMCostPerChp(allCy,DSBS,CHP,YTIME)               "Fixed O&M cost per CHP plant type (Euro2005/KW)"
+iVarCostChp(allCy,DSBS,CHP,YTIME)                    "Variable (other than fuel) cost per CHP Type (Gross Euro05/KW)"
+iAvailRateChp(allCy,DSBS,CHP)                        "Availability rate of CHP Plants ()"
+iBoiEffChp(allCy,CHP,YTIME)                          "Boiler efficiency (typical) used in adjusting CHP efficiency ()"
 ;
 
 

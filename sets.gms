@@ -14,7 +14,7 @@ runCy(allCy) Countries for which the model is running
 
 ***        Model Time Horizon       *
 
-ytime           Model time horizon                                /%fHorizon%/
+ytime           Model time horizon                                /%fStartHorizon%*%fEndHorizon%/
 an(ytime)       Years for which the model is running              /%fStartY%*%fEndY%/
 twenties(ytime) THE DECADE FROM 2020-2030                         /2021*2030/
 thirties(ytime) THE DECADE FROM 2030-2040                         /2031*2040/

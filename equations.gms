@@ -931,7 +931,7 @@ QElecProdCosChp(runCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS))..
                  =E=
                     ( ( iDisc(runCy,"PG",YTIME) * exp(iDisc(runCy,"PG",YTIME)*iLifChpPla(CHP))
                         / (exp(iDisc(runCy,"PG",YTIME)*iLifChpPla(CHP)) -1))
-                      * iCapCosChp(runCy,CHP,YTIME)* 1000 * iCGI(runCy,YTIME)  + iFixOandMCosChp(runCy,CHP,YTIME)
+                      * iCapCosChp(runCy,CHP,YTIME)* 1000 * iCGI(runCy,YTIME)  + iInvCostChp(runCy,CHP,YTIME)
                     )/(iAvailRateChp(runCy,CHP)*(1000*sTWhToMtoe))/1000
                     + iCosPerChp(runCy,CHP,YTIME)/1000
                     + sum(PGEF$CHPtoEF(CHP,PGEF), (VFuelPriceSub(runCy,"PG",PGEF,YTIME)+0.001*iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
