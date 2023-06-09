@@ -1,3 +1,6 @@
+option limcol = 2000;
+option limrow = 2000;
+
 *** "dollar" ($) commands section: define GAMS flags & code control & compilation-time options
 
 *** onEolCom: turn on end-of-line comments (starting with !!, i.e. the GAMS default)
@@ -18,7 +21,7 @@ $setGlobal fCountryList %countries%
 $setGlobal fScenario 'DECARB_400'
 $setGlobal fBaseline 'BASE'
 
-$setGlobal fPeriodOfYears '1'
+$evalGlobal fPeriodOfYears 1
 
 $setGlobal fIncludeNonCO2 no
 
@@ -26,12 +29,11 @@ $setGlobal fReadCommonDB 'yes'
 $setGlobal fReadCountryDB 'yes'
 $setGlobal fReadCountryCalib 'yes'
 
-$setGlobal fStartHorizon '2010'
-$setGlobal fEndHorizon '2100'
-$setGlobal fHorizon '%fStartHorizon%*%fEndHorizon%'
-$setGlobal fEndY 2020
-$setGlobal fStartY 2018
-$setGlobal fBaseY %fStartY% - %fPeriodOfYears%
+$evalGlobal fStartHorizon 2010
+$evalGlobal fEndHorizon 2100
+$evalGlobal fEndY 2018
+$evalGlobal fStartY 2018
+$evalGlobal fBaseY %fStartY% - %fPeriodOfYears%
 
 *** end of dollar commands section, no further flag definitions allowed 
 

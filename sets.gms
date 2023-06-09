@@ -1,4 +1,5 @@
 sets
+
 ***        Geographic Coverage      *
 allCy    Countries for which the model is applied
 /
@@ -13,7 +14,7 @@ runCy(allCy) Countries for which the model is running
 
 ***        Model Time Horizon       *
 
-ytime           Model time horizon                                /%fHorizon%/
+ytime           Model time horizon                                /%fStartHorizon%*%fEndHorizon%/
 an(ytime)       Years for which the model is running              /%fStartY%*%fEndY%/
 twenties(ytime) THE DECADE FROM 2020-2030                         /2021*2030/
 thirties(ytime) THE DECADE FROM 2030-2040                         /2031*2040/
@@ -30,6 +31,7 @@ period(ytime)   Model can also run for periods of years
 tFirst(ytime)   Base year                                         /%fBaseY%/
 tFirstAn(ytime) First year for which the model is running         /%fStartY%/
 time(ytime)     Model time horizon used in equation definitions   /%fStartY%*%fEndY%/
+datay(ytime)    Historical year before the base year of the model /%fStartHorizon%*%fBaseY%/
 timeRep(ytime)  Model time horizon used in report
 hour            "Segments of hours in a year (250,1250,...,8250)" /h0*h8/
 
@@ -54,6 +56,7 @@ rCon         counter for the number of consumers              /0,1*19/
 nSet         auxiliary counter for the definition of Vr       /b1*b20/
 kpdl         counter for Polynomial Distribution Lag          /a1*a6/
 rc                                                            /1*3/
+rcc                                                           /1*4/
 rres                                                          /r1*r4/
 
 
@@ -788,7 +791,8 @@ PGSOL Solar Photovoltaic Plants
 *PGOTHREN Other renewables mainly geothermal
 /
 
-
+pg(sbs)
+/pg/
 
 
 BMSPGALL(PGALL)
@@ -1729,3 +1733,4 @@ Set stringcy(allCy)
 Set smallpg(pgall) /AGTGDO,AGTNGS/
 Alias (smallpg,smallpgg),(geme3tech,geme3tech1),(EF1,EF),(allCy2,allCy)
 ;
+
