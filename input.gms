@@ -366,7 +366,6 @@ iCumDistrFuncConsSize(allCy,DSBS) = sum(rCon, iDisFunConSize(allCy,DSBS,rCon));
 iCGI(allCy,YTIME) = 1;
 *iLoadCurveConstr.L(runCy,TT)$(PERIOD(TT) $TFIRSTAN(TT))= 0.21;
 *iLoadCurveConstr.L(runCy,TT)$(PERIOD(TT) $(NOT TFIRSTAN(TT)))= iLoadCurveConstr.L(runCy,TT-1);
-iLoadCurveConstr(allCy,YTIME)=0.21;
 
 table iResTotCapMxmLoad(allCy,PGRES,YTIME)              "Residuals for total capacity and maximum load (1)"	
 $ondelim
@@ -1019,7 +1018,7 @@ iBoiEffChp(runCy,CHP,YTIME) = iDataChpPowGen(CHP,YTIME,"BOILEFF");
 loop YTIME$((ord(YTIME) gt TF-12) $(ord(YTIME) lt TF+3)) do
          iInvCostChp(runCy,DSBS,CHP,YTIME) = (iInvCostChp(runCy,DSBS,CHP,"2020")-iInvCostChp(runCy,DSBS,CHP,"2010"))/15+iInvCostChp(runCy,DSBS,CHP,YTIME-1);
          iFixOMCostPerChp(runCy,DSBS,CHP,YTIME) = (iFixOMCostPerChp(runCy,DSBS,CHP,"2020")-iFixOMCostPerChp(runCy,DSBS,CHP,"2010"))/15+iFixOMCostPerChp(runCy,DSBS,CHP,YTIME-1);
-         iCosPerChp(runCy,DSBS,CHP,YTIME) = (iCosPerChp(runCy,DSBS,CHP,"2020")-iCosPerChp(runCy,DSBS,CHP,"2010"))/15+iCosPerChp(runCy,DSBS,CHP,YTIME-1);
+         iVarCostChp(runCy,DSBS,CHP,YTIME) = (iVarCostChp(runCy,DSBS,CHP,"2020")-iVarCostChp(runCy,DSBS,CHP,"2010"))/15+iVarCostChp(runCy,DSBS,CHP,YTIME-1);
          iBoiEffChp(runCy,CHP,YTIME) = (iBoiEffChp(runCy,CHP,"2020")-iBoiEffChp(runCy,CHP,"2010"))/15+iBoiEffChp(runCy,CHP,YTIME-1);
 endloop;
 
@@ -1027,7 +1026,7 @@ endloop;
 loop YTIME$((ord(YTIME) gt TF+3) $(ord(YTIME) lt TF+33)) do
          iInvCostChp(runCy,DSBS,CHP,YTIME) = (iInvCostChp(runCy,DSBS,CHP,"2050")-iInvCostChp(runCy,DSBS,CHP,"2020"))/30+iInvCostChp(runCy,DSBS,CHP,YTIME-1);
          iFixOMCostPerChp(runCy,DSBS,CHP,YTIME) = (iFixOMCostPerChp(runCy,DSBS,CHP,"2050")-iFixOMCostPerChp(runCy,DSBS,CHP,"2020"))/30+iFixOMCostPerChp(runCy,DSBS,CHP,YTIME-1);
-         iCosPerChp(runCy,DSBS,CHP,YTIME) = (iCosPerChp(runCy,DSBS,CHP,"2050")-iCosPerChp(runCy,DSBS,CHP,"2020"))/30+iCosPerChp(runCy,DSBS,CHP,YTIME-1);
+         iVarCostChp(runCy,DSBS,CHP,YTIME) = (iVarCostChp(runCy,DSBS,CHP,"2050")-iVarCostChp(runCy,DSBS,CHP,"2020"))/30+iVarCostChp(runCy,DSBS,CHP,YTIME-1);
          iBoiEffChp(runCy,CHP,YTIME) = (iBoiEffChp(runCy,CHP,"2050")-iBoiEffChp(runCy,CHP,"2020"))/30+iBoiEffChp(runCy,CHP,YTIME-1);
 endloop;
 
@@ -1047,10 +1046,8 @@ $offtext
 * Update efficiencies according to energy productivity index
 iPlantEffByType(runCy,PGALL,YTIME)$(an(ytime) )= iPlantEffByType(runCy,PGALL,YTIME) / iEneProdRDscenarios(runCy,"pg",ytime);
 iEffDHPlants(runCy,EF,YTIME)$(an(ytime) )= iEffDHPlants(runCy,EF,YTIME) / iEneProdRDscenarios(runCy,"pg",ytime);
+iElecIndex(runCy,YTIME) = 0.9;
 
-* Update capital costs, fom costs and vom costs according to RD index (used only in RD scenario otherwise is set to 1)
 
-iCapGrossCosPlanType(runCy,PGALL,YTIME)$AN(YTIME)=iCapGrossCosPlanType(runCy,PGALL,YTIME)*iCapCostRnDPowGen(PGALL,YTIME);
-iFixGrosCostPlaType(runCy,PGALL,YTIME)$AN(YTIME)=iFixGrosCostPlaType(runCy,PGALL,YTIME)*iFixedOnMCostRnDPowGen(PGALL,YTIME);
-iVarGroCostPlaType(runCy,PGALL,YTIME)$AN(YTIME)=iVarGroCostPlaType(runCy,PGALL,YTIME)*iVarOnMCostRnDPowGen(PGALL,YTIME);
-iCapGrossCosPlanType(runCy,"PGANUC",YTIME)$AN(YTIME)=iCapGrossCosPlanType(runCy,"PGANUC",YTIME)*iNucCapCostRed(YTIME);
+
+

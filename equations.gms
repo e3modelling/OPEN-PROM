@@ -16,7 +16,7 @@ QChpElecPlants(runCy,CHP,YTIME)$TIME(YTIME)..
 
 * Compute Lambda parameter
 QLambda(runCy,YTIME)$TIME(YTIME)..
-         (1 - exp( -iLoadCurveConstr(runCy,YTIME)*sGwToTwhPerYear)) / iLoadCurveConstr(runCy,YTIME)
+         (1 - exp( -VLoadCurveConstr(runCy,YTIME)*sGwToTwhPerYear)) / VLoadCurveConstr(runCy,YTIME)
              =E=
          (VElecDem(runCy,YTIME) - sGwToTwhPerYear*VCorrBaseLoad(runCy,YTIME))
          / (VElecPeakLoad(runCy,YTIME) - VCorrBaseLoad(runCy,YTIME));
@@ -72,7 +72,7 @@ QTotReqElecProd(runCy,YTIME)$TIME(YTIME)..
          VTotReqElecProd(runCy,YTIME)
              =E=
          sum(HOUR, (VElecPeakLoad(runCy,YTIME)-VCorrBaseLoad(runCy,YTIME))
-                   * exp(-iLoadCurveConstr(runCy,YTIME)*(0.25+(ord(HOUR)-1)))
+                   * exp(-VLoadCurveConstr(runCy,YTIME)*(0.25+(ord(HOUR)-1)))
              ) + 9*VCorrBaseLoad(runCy,YTIME);   
 
 * Compute Estimated total electricity generation capacity
@@ -93,8 +93,8 @@ QHourProdCostInv(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME)) ..
          VHourProdTech(runCy,PGALL,HOUR,YTIME)
                   =E=
                   
-                    ( ( iDisc(runCy,"PG",YTIME-4) * exp(iDisc(runCy,"PG",YTIME-4)*iTechLftPlaType(PGALL))
-                        / (exp(iDisc(runCy,"PG",YTIME-4)*iTechLftPlaType(PGALL)) -1))
+                    ( ( iDisc(runCy,"PG",YTIME-4) * exp(iDisc(runCy,"PG",YTIME-4)*iTechLftPlaType(runCy,PGALL))
+                        / (exp(iDisc(runCy,"PG",YTIME-4)*iTechLftPlaType(runCy,PGALL)) -1))
                       * iGrossCapCosSubRen(runCy,PGALL,YTIME-4)* 1E3 * iCGI(runCy,YTIME-4)  + iFixGrosCostPlaType(runCy,PGALL,YTIME-4)
                     )/iPlantAvailRate(runCy,PGALL,YTIME-4) / (1000*(ord(HOUR)-1+0.25))
                     + iVarGroCostPlaType(runCy,PGALL,YTIME-4)/1E3 + (VRenValue(YTIME)*8.6e-5)$( not ( PGREN(PGALL) 
@@ -163,8 +163,8 @@ QVarCostTechNotPGSCRN(runCy,PGALL,YTIME)$(time(YTIME) $(not PGSCRN(PGALL)))..
 QProdCostTechPreReplac(runCy,PGALL,YTIME)$TIME(YTIME)..
          VProdCostTechPreReplac(runCy,PGALL,YTIME) =e=
                         (
-                          ((iDisc(runCy,"PG",YTIME) * exp(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(PGALL))/
-                          (exp(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(PGALL)) -1))
+                          ((iDisc(runCy,"PG",YTIME) * exp(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(runCy,PGALL))/
+                          (exp(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(runCy,PGALL)) -1))
                             * iCapGrossCosPlanType(runCy,PGALL,YTIME)* 1E3 * iCGI(runCy,YTIME)  + 
                             iFixGrosCostPlaType(runCy,PGALL,YTIME))/(8760*iPlantAvailRate(runCy,PGALL,YTIME))
                            + (iVarGroCostPlaType(runCy,PGALL,YTIME)/1E3 + sum(PGEF$PGALLtoEF(PGALL,PGEF), 
@@ -203,13 +203,13 @@ QGapPowerGenCap(runCy,YTIME)$TIME(YTIME)..
  (1 - VEndogScrapIndex(runCy,PGALL,YTIME))) +
           sum(PGALL, (iPlantDecomSched(runCy,PGALL,YTIME)-iDecInvPlantSched(runCy,PGALL,YTIME))*iPlantAvailRate(runCy,PGALL,YTIME))
           + Sum(PGALL$PGSCRN(PGALL), (VElecGenPlantsCapac(runCy,PGALL,YTIME-1)-iPlantDecomSched(runCy,PGALL,YTIME))/
-          iTechLftPlaType(PGALL))
+          iTechLftPlaType(runCy,PGALL))
        )
   + 0 + SQRT( SQR(       (  VElecGenNoChp(runCy,YTIME) - VElecGenNoChp(runCy,YTIME-1) +
         sum(PGALL,VElecGenPlanCap(runCy,PGALL,YTIME-1) * (1 - VEndogScrapIndex(runCy,PGALL,YTIME))) +
           sum(PGALL, (iPlantDecomSched(runCy,PGALL,YTIME)-iDecInvPlantSched(runCy,PGALL,YTIME))*iPlantAvailRate(runCy,PGALL,YTIME))
           + Sum(PGALL$PGSCRN(PGALL), (VElecGenPlantsCapac(runCy,PGALL,YTIME-1)-iPlantDecomSched(runCy,PGALL,YTIME))/
-          iTechLftPlaType(PGALL))
+          iTechLftPlaType(runCy,PGALL))
        ) -0) + SQR(1e-10) ) )/2;
 
 * Compute temporary variable facilitating the scaling in Weibull equation
@@ -289,7 +289,7 @@ QElecGenCapacity(runCy,PGALL,YTIME)$TIME(YTIME)..
           - iPlantDecomSched(runCy,PGALL,YTIME) * iPlantAvailRate(runCy,PGALL,YTIME)
          )
          - ((VElecGenPlantsCapac(runCy,PGALL,YTIME-1)-iPlantDecomSched(runCy,PGALL,YTIME-1))* 
-         iPlantAvailRate(runCy,PGALL,YTIME)*(1/iTechLftPlaType(PGALL)))$PGSCRN(PGALL);
+         iPlantAvailRate(runCy,PGALL,YTIME)*(1/iTechLftPlaType(runCy,PGALL)))$PGSCRN(PGALL);
 
 * Compute electricity generation capacity
 QElecGenCap(runCy,PGALL,YTIME)$TIME(YTIME)..
@@ -360,7 +360,7 @@ QScalFacPlantDispatch(runCy,HOUR,YTIME)$TIME(YTIME)..
                  )
          =E=
          (VElecPeakLoad(runCy,YTIME) - VCorrBaseLoad(runCy,YTIME))
-         * exp(-iLoadCurveConstr(runCy,YTIME)*(0.25 + ord(HOUR)-1))
+         * exp(-VLoadCurveConstr(runCy,YTIME)*(0.25 + ord(HOUR)-1))
          + VCorrBaseLoad(runCy,YTIME);
 
 
@@ -423,8 +423,8 @@ QLonPowGenCostTechNoCp(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
          VLongPowGenCost(runCy,PGALL,ESET,YTIME)
                  =E=
 
-             (iDisc(runCy,"PG",YTIME)*EXP(iDisc(runCy,"pg",YTIME)*iTechLftPlaType(PGALL)) /
-             (EXP(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(PGALL))-1)*iGrossCapCosSubRen(runCy,PGALL,YTIME)*1000*iCGI(runCy,YTIME) +
+             (iDisc(runCy,"PG",YTIME)*EXP(iDisc(runCy,"pg",YTIME)*iTechLftPlaType(runCy,PGALL)) /
+             (EXP(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(runCy,PGALL))-1)*iGrossCapCosSubRen(runCy,PGALL,YTIME)*1000*iCGI(runCy,YTIME) +
              iFixGrosCostPlaType(runCy,PGALL,YTIME))/iPlantAvailRate(runCy,PGALL,YTIME)
               / (1000*(6$ISET(ESET)+4$RSET(ESET))) +
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
@@ -439,8 +439,8 @@ QLonMnmpowGenCost(runCy,PGALL,YTIME)$TIME(YTIME)..
          VLonMnmpowGenCost(runCy,PGALL,YTIME)
                  =E=
 
-             (iDisc(runCy,"PG",YTIME)*EXP(iDisc(runCy,"pg",YTIME)*iTechLftPlaType(PGALL)) /
-             (EXP(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(PGALL))-1)*iGrossCapCosSubRen(runCy,PGALL,YTIME)*1000*iCGI(runCy,YTIME) +
+             (iDisc(runCy,"PG",YTIME)*EXP(iDisc(runCy,"pg",YTIME)*iTechLftPlaType(runCy,PGALL)) /
+             (EXP(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(runCy,PGALL))-1)*iGrossCapCosSubRen(runCy,PGALL,YTIME)*1000*iCGI(runCy,YTIME) +
              iFixGrosCostPlaType(runCy,PGALL,YTIME))/iPlantAvailRate(runCy,PGALL,YTIME)
              / (1000*sGwToTwhPerYear) +
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
@@ -459,8 +459,8 @@ QLongPowGenIntPri(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
          VLongPowGenIntPri(runCy,PGALL,ESET,YTIME)
                  =E=
 
-             (iDisc(runCy,"PG",YTIME)*EXP(iDisc(runCy,"pg",YTIME)*iTechLftPlaType(PGALL)) /
-             (EXP(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(PGALL))-1)*iGrossCapCosSubRen(runCy,PGALL,YTIME)/1.5*1000*iCGI(runCy,YTIME) +
+             (iDisc(runCy,"PG",YTIME)*EXP(iDisc(runCy,"pg",YTIME)*iTechLftPlaType(runCy,PGALL)) /
+             (EXP(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(runCy,PGALL))-1)*iGrossCapCosSubRen(runCy,PGALL,YTIME)/1.5*1000*iCGI(runCy,YTIME) +
              iFixGrosCostPlaType(runCy,PGALL,YTIME))/iPlantAvailRate(runCy,PGALL,YTIME)
              / (1000*(7.25$ISET(ESET)+2.25$RSET(ESET))) +
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
@@ -508,8 +508,8 @@ QLonAvgPowGenCostNoClimPol(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
          VLonAvgPowGenCostNoClimPol(runCy,PGALL,ESET,YTIME)
                  =E=
 
-             (iDisc(runCy,"PG",YTIME)*EXP(iDisc(runCy,"pg",YTIME)*iTechLftPlaType(PGALL)) /
-             (EXP(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(PGALL))-1)*iGrossCapCosSubRen(runCy,PGALL,YTIME)*1000*iCGI(runCy,YTIME) +
+             (iDisc(runCy,"PG",YTIME)*EXP(iDisc(runCy,"pg",YTIME)*iTechLftPlaType(runCy,PGALL)) /
+             (EXP(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(runCy,PGALL))-1)*iGrossCapCosSubRen(runCy,PGALL,YTIME)*1000*iCGI(runCy,YTIME) +
              iFixGrosCostPlaType(runCy,PGALL,YTIME))/iPlantAvailRate(runCy,PGALL,YTIME)
              / (1000*(7.25$ISET(ESET)+2.25$RSET(ESET))) +
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
@@ -816,7 +816,7 @@ QScrap(runCy,YTIME)$TIME(YTIME)..
 QLevl(runCy,YTIME)$TIME(YTIME)..
          VLamda(runCy,YTIME) !! level of saturation of gompertz function
                  =E=
-         ( (VNumVeh(runCy,YTIME-1)/(iPop(YTIME-1,runCy)*1000)) / iSigma(runCy,"SAT") + 1 - SQRT( SQR((VNumVeh(runCy,YTIME-1)/(iPop(YTIME-1,runCy)*1000)) /  iSigma(runCy,"SAT") - 1) + SQR(1E-4) ) )/2;
+         ( (VNumVeh(runCy,YTIME-1)/(iPop(YTIME-1,runCy)*1000)) / iPassCarsMarkSat(runCy) + 1 - SQRT( SQR((VNumVeh(runCy,YTIME-1)/(iPop(YTIME-1,runCy)*1000)) /  iPassCarsMarkSat(runCy) - 1)  ) )/2;
 
 * Compute passenger cars scrapping rate
 QScrRate(runCy,YTIME)$TIME(YTIME)..
@@ -920,7 +920,7 @@ QElecIndPricesEst(runCy,YTIME)$TIME(YTIME)..
 QFuePriSubChp(runCy,DSBS,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS))  $SECTTECH(DSBS,EF) )..
 VFuePriSubChp(runCy,DSBS,EF,TEA,YTIME)
                 =E=   
-             (((VFuelPriceSub(runCy,DSBS,EF,YTIME) + (VRenValue(YTIME)/1000)$(not RENEF(EF))+VTechCostVar(runCy,DSBS,EF,TEA,YTIME)/1000)/iUsfEneConvSubTech(runCy,DSBS,EF,TEA,YTIME)- 
+             (((VFuelPriceSub(runCy,DSBS,EF,YTIME) + (VRenValue(YTIME)/1000)$(not RENEF(EF))+VTechCostVar(runCy,DSBS,EF,TEA,YTIME)/1000)/iUsfEneConvSubTech(runCy,DSBS,EF,YTIME)- 
                (0$(not CHP(EF)) + (VFuelPriceSub(runCy,"OI","ELC",YTIME)*iFracElecPriChp(runCy,YTIME)*VElecIndPrices(runCy,YTIME))$CHP(EF)))  + SQRT( SQR(((VFuelPriceSub(runCy,DSBS,EF,YTIME)+VTechCostVar(runCy,DSBS,EF,TEA,YTIME)/1000)/VTechCostVar(runCy,DSBS,EF,TEA,YTIME)- 
               (0$(not CHP(EF)) + (VFuelPriceSub(runCy,"OI","ELC",YTIME)*iFracElecPriChp(runCy,YTIME)*VElecIndPrices(runCy,YTIME))$CHP(EF))))  ) )/2;
 
@@ -929,11 +929,11 @@ VFuePriSubChp(runCy,DSBS,EF,TEA,YTIME)
 QElecProdCosChp(runCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS))..
          VElecProdCostChp(runCy,DSBS,CHP,YTIME)
                  =E=
-                    ( ( iDisc(runCy,"PG",YTIME) * exp(iDisc(runCy,"PG",YTIME)*iLifChpPla(CHP))
-                        / (exp(iDisc(runCy,"PG",YTIME)*iLifChpPla(CHP)) -1))
-                      * iCapCosChp(runCy,CHP,YTIME)* 1000 * iCGI(runCy,YTIME)  + iInvCostChp(runCy,CHP,YTIME)
-                    )/(iAvailRateChp(runCy,CHP)*(1000*sTWhToMtoe))/1000
-                    + iCosPerChp(runCy,CHP,YTIME)/1000
+                    ( ( iDisc(runCy,"PG",YTIME) * exp(iDisc(runCy,"PG",YTIME)*iLifChpPla(runCy,DSBS,CHP))
+                        / (exp(iDisc(runCy,"PG",YTIME)*iLifChpPla(runCy,DSBS,CHP)) -1))
+                      * iCapCosChp(runCy,CHP,YTIME)* 1000 * iCGI(runCy,YTIME)  + iInvCostChp(runCy,DSBS,CHP,YTIME)
+                    )/(iAvailRateChp(runCy,DSBS,CHP)*(1000*sTWhToMtoe))/1000
+                    + iVarCostChp(runCy,DSBS,CHP,YTIME)/1000
                     + sum(PGEF$CHPtoEF(CHP,PGEF), (VFuelPriceSub(runCy,"PG",PGEF,YTIME)+0.001*iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
                          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
                          * sTWhToMtoe /  (iBoiEffChp(runCy,CHP,YTIME) * VElecIndPrices(runCy,YTIME)) );        
@@ -968,7 +968,7 @@ QTechCostIntrm(runCy,DSBS,rCon,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(
                     iFixOMCostTech(runCy,DSBS,EF,YTIME)/1000
                     +
                     (
-                      (VFuelPriceSub(runCy,DSBS,EF,YTIME)+VTechCostVar(runCy,DSBS,EF,TEA,YTIME)/1000)/iUsfEneConvSubTech(runCy,DSBS,EF,TEA,YTIME)
+                      (VFuelPriceSub(runCy,DSBS,EF,YTIME)+VTechCostVar(runCy,DSBS,EF,TEA,YTIME)/1000)/iUsfEneConvSubTech(runCy,DSBS,EF,YTIME)
                     )
                     * iAnnCons(runCy,DSBS,"smallest") * (iAnnCons(runCy,DSBS,"largest")/iAnnCons(runCy,DSBS,"smallest"))**((ord(rCon)-1)/iNcon(DSBS))
                   )$NENSE(DSBS);  
@@ -1012,7 +1012,7 @@ QFuelConsInclHP(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(
 QVarProCostPerCHPDem(runCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS))..
          VProCostCHPDem(runCy,DSBS,CHP,YTIME)
                  =E=
-         iCosPerChp(runCy,CHP,YTIME)/1E3
+         iVarCostChp(runCy,DSBS,CHP,YTIME)/1E3
                     + sum(PGEF$CHPtoEF(CHP,PGEF), (VFuelPriceSub(runCy,"PG",PGEF,YTIME)+1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
                          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
                          *sTWhToMtoe/(   iBoiEffChp(runCy,CHP,YTIME)*VElecIndPrices(runCy,YTIME)    ));

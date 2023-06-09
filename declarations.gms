@@ -44,7 +44,6 @@ iBaseLoadShareDem(allCy,DSBS,YTIME)	            "Baseload share of demand per se
 iLoadFacElecDem(allCy,DSBS,YTIME)	            "Load factor of electricity demand per sector (1)"
 iMxmLoadFacElecDem(allCy,YTIME)	                "Maximum load factor of electricity demand (1)"	
 iBslCorrection(allCy,YTIME)	                    "Parameter of baseload correction (1)"
-iLoadCurveConstr(allCy,YTIME)	                "Parameter for load curve construction (1)"
 iResMargTotAvailCap(allCy,PGRES,YTIME)	        "Reserve margins on total available capacity and peak load (1)"
 iTechLftPlaType(allCy,PGALL)	                        "Technical Lifetime per plant type (year)"
 iElecImp(allCy,YTIME)	                  "Electricity Imports (1)"
@@ -292,9 +291,10 @@ Variables
 
 *** Power Generation Variables
 VElecCapChpPla(allCy,CHP,YTIME)	          "Capacity of CHP Plants (GW)"
+VLoadCurveConstr(allCy,YTIME)	          "Parameter for load curve construction (1)"
 VEstBaseLoad(allCy,YTIME)	              "Estimated base load (GW)"	
 VElecDem(allCy,YTIME)                     "Total electricity demand (TWh)"
-VCapChpPlants(allCy,YTIME)                "Capacity of CHP Plants (GW)"	
+VCapChpPlants(allCy,YTIME)                "Electricity load factor for entire domestic system"	
 VElecPeakLoad(allCy,YTIME)	              "Electricity peak load (GW)"	
 VBslMaxmLoad(allCy,YTIME)	              "Baseload corresponding to Maximum Load Factor (1)"
 VHourProdCostOfTech(allCy,PGALL,HOUR,YTIME)"Hourly production cost of technology (Euro/KWh)"

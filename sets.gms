@@ -31,6 +31,7 @@ period(ytime)   Model can also run for periods of years
 tFirst(ytime)   Base year                                         /%fBaseY%/
 tFirstAn(ytime) First year for which the model is running         /%fStartY%/
 time(ytime)     Model time horizon used in equation definitions   /%fStartY%*%fEndY%/
+datay(ytime)    Historical year before the base year of the model /%fStartHorizon%*%fBaseY%/
 timeRep(ytime)  Model time horizon used in report
 hour            "Segments of hours in a year (250,1250,...,8250)" /h0*h8/
 

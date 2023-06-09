@@ -21,10 +21,11 @@ display TFIRST;
 display iPlantAvailRate;
 display iCo2EmiFac;
 display TEA;
-display iMatureFacPlaDisp;
+display iUsfEneConvSubTech;
 
 *TIME(YTIME) = %fStartY%;
 VFuelPrice.L(allCy,TRANSE,YTIME) = 0.1;
+VNumVeh.L(allCy,YTIME)=0.1;
 *VNumVeh.lags(allCy,YTIME) = 0.1;
 VTrnspActiv.l(allCy,TRANSE,YTIME) = 0.1;
 VFuelPrice.l(allCy,DSBS,YTIME) =1;
@@ -44,6 +45,7 @@ VElecConsAll.l(allCy,DSBS,YTIME)=0.1;
 VCapChpPlants.l(allCy,YTIME)=0.1;
 VElecPeakLoad.l(allCy,YTIME)=0.1;
 VElecPeakLoad.up(allCy,YTIME)=1e6;
+VElecProdPowGenPlants.l(allCy,PGALL,YTIME) = 1;
 *VHourProdTech.up(allCy,PGALL,HOUR,YTIME)=1e6;
 VSensCcs.l(allCy,YTIME)=1;
 *VHourProdTech.VLamda(allCy,PGALL,HOUR,YTIME)=1;
@@ -129,7 +131,7 @@ VNumVeh.UP(runCy,YTIME) = 1000; !! upper bound of VNumVeh is 1000 million vehicl
 VNumVeh.FX(runCy,YTIME)$(not An(YTIME)) = iActv(YTIME,runCy,"PC");
 VLamda.UP(runCy,YTIME) = 1;
 VLamda.FX(runCy,YTIME)$((not An(YTIME)) $(ord(YTIME) gt 1) ) = (VNumVeh.l(runCy,YTIME-1) / (iPop(YTIME-1,runCy)*1000) /
-           iSigma(runCy,"SAT"))$(iPop(YTIME-1,runCy))+VLamda.l(runCy,YTIME-1)$(not iPop(YTIME-1,runCy));
+           iPassCarsMarkSat(runCy))$(iPop(YTIME-1,runCy))+VLamda.l(runCy,YTIME-1)$(not iPop(YTIME-1,runCy));
 VMExtF.l(runCy,YTIME)$((not An(YTIME)) $(ord(YTIME) gt 1)  ) = ( iTransChar(runCy,"RES_MEXTF",YTIME) * iSigma(runCy,"S1") * EXP(iSigma(runCy,"S2") *
            EXP(iSigma(runCy,"S3") * VLamda.l(runCy,YTIME)))
                * VNumVeh.l(runCy,YTIME-1) /(iPop(YTIME-1,runCy) * 1000) )$(iPop(YTIME-1,runCy));
@@ -162,17 +164,18 @@ VDemTr.FX(runCy,TRANSE,EF,YTIME) $(SECTTECH(TRANSE,EF) $(not An(YTIME))) = iFuel
 
 VElecNonSub.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = iFuelConsPerFueSub(runCy,INDDOM,"ELC",YTIME) * iShrNonSubElecInTotElecDem(runCy,INDDOM);
 VElecConsInd.FX(runCy,YTIME)$(not An(YTIME))= SUM(INDSE,VElecNonSub.l(runCy,INDSE,YTIME));
+$ontext
 VFuePriSubChp.FX(runCy,DSBS,EF,TEA,YTIME)$((not An(YTIME)) $(not TRANSE(DSBS))  $SECTTECH(DSBS,EF)) =
-(((VFuelPriceSub.l(runCy,DSBS,EF,YTIME)+iCosTech(runCy,DSBS,EF,TEA,YTIME)/1000)/iUsfEneConvSubTech(runCy,DSBS,EF,TEA,YTIME)- 
-(0$(not CHP(EF)) + (VFuelPriceSub.l(runCy,"OI","ELC",YTIME)*iFracElecPriChp(runCy,YTIME)*iElecIndex(runCy,"2005"))$CHP(EF))) + (0.003) + 
-SQRT( SQR(((VFuelPriceSub.l(runCy,DSBS,EF,YTIME)+iCosTech(runCy,DSBS,EF,TEA,YTIME)/1000)/iUsfEneConvSubTech(runCy,DSBS,EF,TEA,YTIME)- (0$(not CHP(EF)) + 
-(VFuelPriceSub.l(runCy,"OI","ELC",YTIME)*CHPPRICE(runCy,YTIME)*iElecIndex(runCy,"2005"))$CHP(EF)))-(0.003)) + SQR(1e-7) ) )/2;
+(((VFuelPriceSub.l(runCy,DSBS,EF,YTIME)+iCosTech(runCy,DSBS,EF,TEA,YTIME)/1000)/iUsfEneConvSubTech(runCy,DSBS,EF,YTIME)- 
+(0$(not CHP(EF)) + (VFuelPriceSub.l(runCy,"OI","ELC",YTIME)*iFracElecPriChp(runCy,YTIME)*iElecIndex(runCy,"2010"))$CHP(EF))) + (0.003) + 
+SQRT( SQR(((VFuelPriceSub.l(runCy,DSBS,EF,YTIME)+iCosTech(runCy,DSBS,EF,TEA,YTIME)/1000)/iUsfEneConvSubTech(runCy,DSBS,EF,YTIME)- (0$(not CHP(EF)) + 
+(VFuelPriceSub.l(runCy,"OI","ELC",YTIME)*iFracElecPriChp(runCy,YTIME)*iElecIndex(runCy,"2010"))$CHP(EF)))-(0.003)) + SQR(1e-7) ) )/2;
+$offtext
 
-
-VDemSub.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = max(iTotFinEneDemSubBaseYr(runCy,INDDOM,YTIME) - VElecNonSub.VLamda(runCy,INDDOM,YTIME),1e-5);
+VDemSub.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = max(iTotFinEneDemSubBaseYr(runCy,INDDOM,YTIME) - VElecNonSub.L(runCy,INDDOM,YTIME),1e-5);
 VDemSub.FX(runCy,NENSE,YTIME)$(not An(YTIME)) = max(iTotFinEneDemSubBaseYr(runCy,NENSE,YTIME),1e-5);
-VDemSub.FX(runCy,"HOU",YTIME)$(not An(YTIME)) = max(iTotFinEneDemSubBaseYr(runCy,"HOU",YTIME) - VElecNonSub.VLamda(runCy,"HOU",YTIME)-iExogDemOfBiomass(runCy,"HOU",YTIME),1e-5);
-VDemInd.FX(runCy,YTIME)$(not An(YTIME))= SUM(INDSE,VDemSub.VLamda(runCy,INDSE,YTIME));
+VDemSub.FX(runCy,"HOU",YTIME)$(not An(YTIME)) = max(iTotFinEneDemSubBaseYr(runCy,"HOU",YTIME) - VElecNonSub.L(runCy,"HOU",YTIME)-iExogDemOfBiomass(runCy,"HOU",YTIME),1e-5);
+VDemInd.FX(runCy,YTIME)$(not An(YTIME))= SUM(INDSE,VDemSub.L(runCy,INDSE,YTIME));
 
 VElecIndPrices.FX(runCy,YTIME)$TFIRST(YTIME) = iElecIndex(runCy,YTIME);
 
@@ -182,7 +185,7 @@ VConsFuel.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $(not HEATPUMP(EF)) $(not T
 
 VConsFuelSub.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $(not TRANSE(DSBS)) $(not An(YTIME))) =
 (iFuelConsPerFueSub(runCy,DSBS,EF,YTIME))$((not ELCEF(EF)) $(not HEATPUMP(EF)))
-+(VElecConsHeatPla.l(runCy,DSBS,YTIME)*iUsfEneConvSubTech(runCy,DSBS,"HEATPUMP","ORD",YTIME))$HEATPUMP(EF)+
++(VElecConsHeatPla.l(runCy,DSBS,YTIME)*iUsfEneConvSubTech(runCy,DSBS,"HEATPUMP",YTIME))$HEATPUMP(EF)+
 (iFuelConsPerFueSub(runCy,DSBS,EF,YTIME)-VElecConsHeatPla.l(runCy,DSBS,YTIME))$ELCEF(EF)
 +1e-7$(H2EF(EF) or sameas("STE1AH2F",EF))
 ;
@@ -210,8 +213,8 @@ VPrimProd.FX(runCy,PPRODEF,YTIME)$(not An(YTIME)) = iFuelPriPro(runCy,PPRODEF,YT
 VEnCons.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iTotEneBranchCons(runCy,EFS,YTIME);
 
 VExportsFake.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iFuelExprts(runCy,EFS,YTIME);
-VFkImpAllFuelsNotNatGas.FX(runCy,"NGS",YTIME)$(not An(YTIME)AND NOT GASEXPORTERS(runCy)) = iFuelImports(runCy,"NGS",YTIME);
-VExportsFake.FX(runCy,"NGS",YTIME)$(not An(YTIME)AND GASEXPORTERS(runCy)) = iFuelExprts(runCy,"NGS",YTIME);
+VFkImpAllFuelsNotNatGas.FX(runCy,"NGS",YTIME)$(not An(YTIME)) = iFuelImports(runCy,"NGS",YTIME);
+VExportsFake.FX(runCy,"NGS",YTIME)$(not An(YTIME)) = iFuelExprts(runCy,"NGS",YTIME);
 
 VElecDem.FX(runCy,YTIME)$(not An(YTIME)) =  1/0.086 * ( iFinEneCons(runCy,"ELC",YTIME) + sum(NENSE, iFuelConsPerFueSub(runCy,NENSE,"ELC",YTIME)) + iDistrLosses(runCy,"ELC",YTIME)
                                              + iTotEneBranchCons(runCy,"ELC",YTIME) - (iFuelImports(runCy,"ELC",YTIME)-iFuelExprts(runCy,"ELC",YTIME)));
@@ -221,13 +224,13 @@ VCorrBaseLoad.FX(runCy,YTIME)$(not An(YTIME)) = iPeakBsLoadBy(runCy,"BASELOAD");
 
 VCapChpPlants.FX(runCy,YTIME)$(datay(YTIME)) =
          (sum(INDDOM,VConsFuel.l(runCy,INDDOM,"ELC",YTIME)) + sum(TRANSE, VDemTr.l(runCy,TRANSE,"ELC",YTIME)))/
-         (sum(INDDOM,VConsFuel.l(runCy,INDDOM,"ELC",YTIME)/VCapChpPlants(runCy,INDDOM,"2015")) + sum(TRANSE, VDemTr.l(runCy,TRANSE,"ELC",YTIME)/
-         VCapChpPlants(runCy,TRANSE,"2015")));
+         (sum(INDDOM,VConsFuel.l(runCy,INDDOM,"ELC",YTIME)/iLoadFacElecDem(runCy,INDDOM,"2015")) + sum(TRANSE, VDemTr.l(runCy,TRANSE,"ELC",YTIME)/
+         iLoadFacElecDem(runCy,TRANSE,"2015")));
 
 VElecPeakLoad.FX(runCy,YTIME)$(datay(YTIME)) = VElecDem.l(runCy,YTIME)/(VCapChpPlants.l(runCy,YTIME)*8.76);
 
 VTotElecGenCap.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
-TOTCAPNCHP.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
+VElecGenNoChp.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
 VElecCapChpPla.FX(runCy,CHP,YTIME)$(not An(YTIME)) = iHisChpGrCapData(runCy,CHP,YTIME);
 VPowPlaShaNewEquip.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) )=0;
 
@@ -239,7 +242,7 @@ VPowerPlaShrNewEq.FX(runCy,PGALL,YTIME)$(AN(YTIME) $(NOT CCS(PGALL)))=0;
 VPowerPlantNewEq.FX(runCy,PGALL,YTIME)$(AN(YTIME) $(NOT NOCCS(PGALL)) )=0;
 
 VNewInvDecis.FX(runCy,YTIME)$(NOT AN(YTIME))=1;
-
+$ontext
 VElecGenPlanCap.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  iAvailInstCapPastYrs(runCy,PGALL,YTIME);
 VElecGenPlantsCapac.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  iAvailInstCapPastYrs(runCy,PGALL,YTIME);
 VOverallCap.FX(runCy,PGALL,"2017") =  iAvailInstCapPastYrs(runCy,PGALL,"2017");
@@ -313,13 +316,13 @@ VTransfInThermPowPls.FX(runCy,EFS,YTIME)$(not PGEF(EFS)) = 0;
 VExportsFake.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
 VFkImpAllFuelsNotNatGas.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
 
-VScalFacPlaDisp.LO(CYall, HOUR, YTIME)=-1;
-iLoadCurveConstr.LO(CYall,YTIME)=0;
-
+VScalFacPlaDisp.LO(runCy, HOUR, YTIME)=-1;
+VLoadCurveConstr.LO(runCy,YTIME)=0;
+VLoadCurveConstr.L(runCy,YTIME)=0.01;
 
 VRenValue.FX(YTIME) = 0 ;
 *EFFVAL.FX(YTIME) = 0;
 *VEndogScrapIndex.fx(runCy,"athrfo","2017")=0.3;
 *VEndogScrapIndex.fx(runCy,"athNGS","2017")=0.9;
-VTotReqElecProd.fx(runCy,"2017")=sum(pgall,VElecProdPowGenPlants.VLamda(runCy,pgall,"2017"));
+VTotReqElecProd.fx(runCy,"2017")=sum(pgall,VElecProdPowGenPlants.L(runCy,pgall,"2017"));
 *CONSEF.fx(runCy,INDDOM,CHP,YTIME)  =1-6;
