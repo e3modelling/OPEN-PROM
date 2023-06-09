@@ -20,7 +20,7 @@ display TF;
 display TFIRST;
 display iPlantAvailRate;
 display iCo2EmiFac;
-display TEA;
+display iFixOMCostTech;
 display iUsfEneConvSubTech;
 
 *TIME(YTIME) = %fStartY%;
@@ -166,9 +166,9 @@ VElecNonSub.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = iFuelConsPerFueSub(runCy,IN
 VElecConsInd.FX(runCy,YTIME)$(not An(YTIME))= SUM(INDSE,VElecNonSub.l(runCy,INDSE,YTIME));
 $ontext
 VFuePriSubChp.FX(runCy,DSBS,EF,TEA,YTIME)$((not An(YTIME)) $(not TRANSE(DSBS))  $SECTTECH(DSBS,EF)) =
-(((VFuelPriceSub.l(runCy,DSBS,EF,YTIME)+iCosTech(runCy,DSBS,EF,TEA,YTIME)/1000)/iUsfEneConvSubTech(runCy,DSBS,EF,YTIME)- 
+(((VFuelPriceSub.l(runCy,DSBS,EF,YTIME)+iVarCostTech(runCy,DSBS,EF,TEA,YTIME)/1000)/iUsfEneConvSubTech(runCy,DSBS,EF,YTIME)- 
 (0$(not CHP(EF)) + (VFuelPriceSub.l(runCy,"OI","ELC",YTIME)*iFracElecPriChp(runCy,YTIME)*iElecIndex(runCy,"2010"))$CHP(EF))) + (0.003) + 
-SQRT( SQR(((VFuelPriceSub.l(runCy,DSBS,EF,YTIME)+iCosTech(runCy,DSBS,EF,TEA,YTIME)/1000)/iUsfEneConvSubTech(runCy,DSBS,EF,YTIME)- (0$(not CHP(EF)) + 
+SQRT( SQR(((VFuelPriceSub.l(runCy,DSBS,EF,YTIME)+iVarCostTech(runCy,DSBS,EF,TEA,YTIME)/1000)/iUsfEneConvSubTech(runCy,DSBS,EF,YTIME)- (0$(not CHP(EF)) + 
 (VFuelPriceSub.l(runCy,"OI","ELC",YTIME)*iFracElecPriChp(runCy,YTIME)*iElecIndex(runCy,"2010"))$CHP(EF)))-(0.003)) + SQR(1e-7) ) )/2;
 $offtext
 

@@ -7,7 +7,7 @@ iPlantEffByType(allCy,PGALL,YTIME)              "Plant efficiency per plant type
 iCo2EmiFac(allCy,SBS,EF,YTIME)                  "CO2 emission factors per subsector (kgCO2/kgoe fuel burned)"
 iNcon(SBS)                                      "Number of consumers (1)"
 iDisFunConSize(allCy,DSBS,rCon)                 "Distribution function of consumer size groups (1)"
-iAnnCons(allCy,DSBS,conSet)                     "Annual consumtion of the smallest,modal,largest consumer, average for all countries (various)"
+iAnnCons(allCy,DSBS,conSet)                     "Annual consumption of the smallest,modal,largest consumer, average for all countries (various)"
                                                  !! For passenger cars (Million km/vehicle)
                                                  !! For other passenger tranportation modes (Mpkm/vehicle)
                                                  !! For goods transport, (Mtkm/vehicle)  
@@ -115,7 +115,7 @@ iSigma(allCy,SG)                                        "S parameters of Gompert
 iPassCarsMarkSat(allCy)	                                "Passenger cars market saturation (1)"	
 iGdpPassCarsMarkExt(allCy)	                            "GDP-dependent passenger cars market extension (GDP/capita)"	
 iPassCarsScrapRate(allCy)	                            "Passenger cars scrapping rate (1)"	
-iCosTech(allCy,SBS,EF,TEA,YTIME)	                    "Variable Cost of technology ()"
+iVarCostTech(allCy,SBS,EF,YTIME)	                    "Variable Cost of technology ()"
                                                         !! For transport (kEuro05/vehicle)
                                                         !! For Industrial sectors, except Iron and Steel (Euro05/toe-year)
                                                         !! For Iron and Steel  (Euro05/tn-of-steel)
@@ -131,6 +131,11 @@ iFixOMCostPerChp(allCy,DSBS,CHP,YTIME)               "Fixed O&M cost per CHP pla
 iVarCostChp(allCy,DSBS,CHP,YTIME)                    "Variable (other than fuel) cost per CHP Type (Gross Euro05/KW)"
 iAvailRateChp(allCy,DSBS,CHP)                        "Availability rate of CHP Plants ()"
 iBoiEffChp(allCy,CHP,YTIME)                          "Boiler efficiency (typical) used in adjusting CHP efficiency ()"
+iCapCostTech(allCy,SBS,EF,YTIME)                      "Capital Cost of technology (various)"
+                                                 !! - For transport is expressed in kEuro05 per vehicle
+                                                 !! - For Industrial sectors (except Iron and Steel) is expressed in kEuro05/toe-year
+                                                 !! - For Iron and Steel is expressed in kEuro05/tn-of-steel
+                                                 !! - For Domestic Sectors is expressed in kEuro05/toe-year
 ;
 
 
