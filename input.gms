@@ -834,7 +834,7 @@ iVarCostTech(runCy,TRANSE,EF,YTIME)$(ord(YTIME) eq TF-7)= iDataTransTech(TRANSE,
 iVarCostTech(runCy,TRANSE,EF,YTIME)$(ord(YTIME) eq TF+8) = iDataTransTech(TRANSE,EF,"VC_25");
 iVarCostTech(runCy,TRANSE,EF,YTIME)$(ord(YTIME) eq TF+33)= iDataTransTech(TRANSE,EF,"VC_50");
 
-iTechLft(runCy,TRANSE,EF,TEA,YTIME)$(ord(YTIME)>sum(TFIRST,(ord(TFIRST)-3))) = iDataTransTech(TRANSE,EF,"LFT");
+iTechLft(runCy,TRANSE,EF,YTIME)$(ord(YTIME)>sum(TFIRST,(ord(TFIRST)-3))) = iDataTransTech(TRANSE,EF,"LFT");
 iAvgVehCapLoadFac(runCy,TRANSE,TRANSUSE,YTIME)$(ord(YTIME)>sum(TFIRST,(ord(TFIRST)-3)))= iCapDataLoadFacEachTransp(TRANSE,TRANSUSE);
 
 
@@ -856,7 +856,7 @@ iUsfEneConvSubTech(runCy,INDSE,EF,YTIME)$(ord(YTIME) <= TF-7)    = iDataIndTechn
 iUsfEneConvSubTech(runCy,INDSE,EF,YTIME)$(ord(YTIME) eq TF+8) = iDataIndTechnology(INDSE,EF,"USC_25");
 iUsfEneConvSubTech(runCy,INDSE,EF,YTIME)$(ord(YTIME) eq TF+33) = iDataIndTechnology(INDSE,EF,"USC_50");
 
-iTechLft(runCy,INDSE,EF,TEA,YTIME)$(ord(YTIME)>(ordfirst-7)) = iDataIndTechnology(INDSE,EF,"LFT");
+iTechLft(runCy,INDSE,EF,YTIME)$(ord(YTIME)>(ordfirst-8)) = iDataIndTechnology(INDSE,EF,"LFT");
 
 
 **  Domestic Sector
@@ -874,7 +874,7 @@ iUsfEneConvSubTech(runCy,DOMSE,EF,YTIME)$(ord(YTIME) <= TF-7)= iDataDomTech(DOMS
 iUsfEneConvSubTech(runCy,DOMSE,EF,YTIME)$(ord(YTIME) eq TF+8) = iDataDomTech(DOMSE,EF,"USC_25");
 iUsfEneConvSubTech(runCy,DOMSE,EF,YTIME)$(ord(YTIME) eq TF+33)= iDataDomTech(DOMSE,EF,"USC_50");
 
-iTechLft(runCy,DOMSE,EF,TEA,YTIME)$(ord(YTIME)>(ordfirst-7))  = iDataDomTech(DOMSE,EF,"LFT");
+iTechLft(runCy,DOMSE,EF,YTIME)$(ord(YTIME)>(ordfirst-8))  = iDataDomTech(DOMSE,EF,"LFT");
 
 $ontext
 NETWORKPARAM(NETWSET,INDDOM,NETEF)$(NETTECH(INDDOM,NETEF))                               = NetEffect(NETWSET,NETEF,"OTH");
@@ -898,7 +898,7 @@ iUsfEneConvSubTech(runCy,NENSE,EF,YTIME)$(ord(YTIME) <= TF-7)= iDataNonEneSec(NE
 iUsfEneConvSubTech(runCy,NENSE,EF,YTIME)$(ord(YTIME) eq TF+8) = iDataNonEneSec(NENSE,EF,"USC_25");
 iUsfEneConvSubTech(runCy,NENSE,EF,YTIME)$(ord(YTIME) eq TF+33)= iDataNonEneSec(NENSE,EF,"USC_50");
 
-iTechLft(runCy,NENSE,EF,TEA,YTIME)$(ord(YTIME)>(ordfirst-7)) = iDataNonEneSec(NENSE,EF,"LFT");
+iTechLft(runCy,NENSE,EF,YTIME)$(ord(YTIME)>(ordfirst-8)) = iDataNonEneSec(NENSE,EF,"LFT");
 display TF;
 
 loop YTIME$((ord(YTIME) gt TF-7) $(ord(YTIME) lt TF+8)) do

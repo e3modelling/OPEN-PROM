@@ -90,7 +90,7 @@ iShareAnnMilePlugInHybrid(allCy,YTIME)	                "Share of annual mileage 
 iAvgVehCapLoadFac(allCy,TRANSE,TRANSUSE,YTIME)	        "Average capacity/vehicle and load factor (tn/veh or passenegers/veh)" 
 iUtilRateChpPlants(allCy,CHP,YTIME)	                    "Utilisation rate of CHP Plants (1)"	
 iHydrogenPri(allCy,SBS,YTIME)	                        "Total Hydrogen Cost Per Sector (Euro/toe)"
-iTechLft(allCy,SBS,EF,TEA,YTIME)	                    "Technical Lifetime. For passenger cars it is a variable (1)"
+iTechLft(allCy,SBS,EF,YTIME)	                    "Technical Lifetime. For passenger cars it is a variable (1)"
 iSpeFuelConsCostBy(allCy,SBS,TTECH,TEA,EF)	            "Specific fuel consumption cost in Base year (ktoe/Gpkm or ktoe/Gtkm or ktoe/Gvkm)"	
 iShrNonSubElecInTotElecDem(allCy,SBS)	                "Share of non substitutable electricity in total electricity demand per subsector (1)"
 iElecIndex(allCy,YTIME)	                                "Electricity Index (1)"	
