@@ -12,15 +12,12 @@ model openprom /all/;
 
 
 option iGDP:2:0:6;
-display iCapGrossCosPlanType;
-display iFixGrosCostPlaType;
 display iCGI;
 display iDisc;
 display TF;
 display TFIRST;
-display iPlantAvailRate;
 display iCo2EmiFac;
-display iFixOMCostTech;
+display iInvCostChp;
 display iUsfEneConvSubTech;
 
 *TIME(YTIME) = %fStartY%;
@@ -267,7 +264,7 @@ VNewCapYearly.FX(runCy,PGALL,"2016")$PGREN(PGALL) = iAvailInstCapPastYrs(runCy,P
 VNewCapYearly.FX(runCy,PGALL,"2017")$PGREN(PGALL) = iAvailInstCapPastYrs(runCy,PGALL,"2017")- iAvailInstCapPastYrs(runCy,PGALL,"2016") +1E-10;
 VNewCapYearly.FX(runCy,"PGLHYD","2017") = +1E-10;
 $offtext
-VAvgCapFacRes.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =iPlantAvailRate(runCy,PGALL,YTIME);
+VAvgCapFacRes.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =iAvailRate(PGALL,YTIME);
 $ontext
 VElecProdPowGenPlants.FX(runCy,pgall,"2009")=iEleGenPastData(runCy,pgall,"prod_09")/1000;
 VElecProdPowGenPlants.FX(runCy,pgall,"2010")=iEleGenPastData(runCy,pgall,"prod_10")/1000;

@@ -50,15 +50,7 @@ iElecImp(allCy,YTIME)	                  "Electricity Imports (1)"
 iPlantAvailRate(allCy,PGALL,YTIME)	      "Plant availability rate (1)"
 iTotAvailCapBsYr(allCy)	            "Total installed available capacity in base year (GW)"
 iGrossCapCosSubRen(allCy,PGALL,YTIME)	  "Gross Capital Cost per Plant Type with subsidy for renewables (kEuro2005/KW)"		
-iVarGroCostPlaType(allCy,PGALL,YTIME)	  "Variable gross cost other than fuel per Plant Type (Euro2005/KW)"
-iCapGrossCosPlanType(allCy,PGALL,YTIME)	  "Capital gross cost per plant type (kEuro2005/KW)"	
-iFixGrosCostPlaType(allCy,PGALL,YTIME)	  "Fixed O&M Gross Cost per Plant Type (Euro2005/KW)"
 iCO2CaptRate(allCy,PGALL,YTIME)	          "Plant CO2 capture rate (1)"
-iCO2CaptRateData(PGALL)	                  "Plant CO2 capture rate Data (1)"/
-$ondelim
-$include "./iCO2CaptRateData.csv"
-$offdelim
-/
 iScaleEndogScrap(allCy,PGALL,YTIME)	"Scale parameter for endogenous scrapping applied to the sum of full costs (1)"	
 iPremReplacem(allCy,PGALL)	        "Premature replacement (1)"/
 $ondelim
@@ -96,7 +88,7 @@ iShrNonSubElecInTotElecDem(allCy,SBS)	                "Share of non substitutabl
 iElecIndex(allCy,YTIME)	                                "Electricity Index (1)"	
 iExogDemOfBiomass(allCy,SBS,YTIME)	                    "Demand of tranditional biomass defined exogenously ()"	
 iFinEneConsPrevYear(allCy,EF,YTIME)	                    "Final energy consumption used for holding previous year results (Mtoe)"	
-iCarbValYrExog(ytime)	                                "Carbon value for each year when it is exogenous ()"
+iCarbValYrExog(ytime)	                                "Carbon value for each year when it is exogenous (Euro05/tn CO2)"
 iShrHeatPumpElecCons(allCy,SBS)	                        "Share of heat pump electricity consumption in total substitutable electricity (1)"						 			
 iTranfOutGasworks(allCy,EF,YTIME)	                    "Transformation Output from Gasworks, Blast Furnances and Briquetting plants (Mtoe)"	
 iDistrLosses(allCy,EF,YTIME)	                        "Distribution Losses (Mtoe)"	

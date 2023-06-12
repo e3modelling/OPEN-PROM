@@ -242,8 +242,7 @@ iTransfInpGasworks(runCy,EFS,YTIME)= iSuppTransfInputPatFuel(EFS,YTIME);
 iShareFueTransfInput(runCy,EFS)$sum(EF$EFS(EF),iTransfInpGasworks(runCy,EF,"2029")) =  iTransfInpGasworks(runCy,EFS,"2029") / sum(EF$EFS(EF),iTransfInpGasworks(runCy,EF,"2029"));
 *VDistrLosses.FX(runCy,EFS,TT)$PERIOD(TT) = VDistrLosses.L(runCy,EFS,TT);
 iRateLossesFinCons(runCy,EFS,YTIME)$an(YTIME)  = iRateLossesFinConsSup(runCy,EFS, YTIME)*iEneProdRDscenarios(runCy,"PG",YTIME);
-iEffDHPlants(runCy,EFS,YTIME)  = sum(PGEFS$sameas(EFS,PGEFS),iParDHEfficiency(PGEFS,"2029"));
-iEffDHPlants(runCy,EF,YTIME)$(an(ytime) )= iEffDHPlants(runCy,EF,YTIME) / iEneProdRDscenarios(runCy,"PG",YTIME);
+
 table iPwrLoadFactorDem(allCy,SBS,YTIME)              "Parameters for load factor adjustment (1)"
 $ondelim
 $include"./iPwrLoadFactorDem.csv"
@@ -371,29 +370,18 @@ $offdelim
 ;
 iResMargTotAvailCap(allCy,PGRES,YTIME)$an(YTIME) = iResTotCapMxmLoad(allCy,PGRES,YTIME);
 *$ontext
-table iInvCost(PGALL,YTIME)             "Investment Cost (KEuro2005/Kw)"
+table iInvCost(PGALL,YTIME)             "Capital gross cost per plant type (kEuro2005/KW)"
 $ondelim
 $include"./iInvCost.csv"
 $offdelim
 ;
-table iVarCost(PGALL,YTIME)             "Investment Cost (KEuro2005/Kw)"
+table iVarCost(PGALL,YTIME)             "Variable gross cost other than fuel per Plant Type (Euro2005/KW)"
 $ondelim
 $include"./iVarCost.csv"
 $offdelim
 ;
-iVarGroCostPlaType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF-12)  = iVarCost(PGALL,"2011");
-iVarGroCostPlaType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF+3) = iVarCost(PGALL,"2020");
-iVarGroCostPlaType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF+33) = iVarCost(PGALL,"2050");
-iVarGroCostPlaType(runCy,PGALL,YTIME)$(ord(YTIME)<11) = iVarGroCostPlaType(runCy,PGALL,"2011");
-iVarGroCostPlaType(runCy,PGALL,YTIME)  = iVarCost(PGALL,YTIME);
 
-iCapGrossCosPlanType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF-12)  = iInvCost(PGALL,"2011");
-iCapGrossCosPlanType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF+3) = iInvCost(PGALL,"2020");
-iCapGrossCosPlanType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF+33) = iInvCost(PGALL,"2050");
-iCapGrossCosPlanType(runCy,PGALL,YTIME)$(ord(YTIME)<11) = iCapGrossCosPlanType(runCy,PGALL,"2029");
-iCapGrossCosPlanType(runCy,PGALL,YTIME)=iInvCost(PGALL,YTIME);
-
-table iFixOandMCost(PGALL,YTIME)    "Fixed O&M costs (Euro2005/Kw)"
+table iFixOandMCost(PGALL,YTIME)    "Fixed O&M Gross Cost per Plant Type (Euro2005/KW)"
 $ondelim
 $include"./iFixOandMCost.csv"
 $offdelim
@@ -404,14 +392,7 @@ $ondelim
 $include"./iAvailRate.csv"
 $offdelim
 ;
-iPlantAvailRate(runCy,PGALL,"2011") = iAvailRate(PGALL,"2011");
-iPlantAvailRate(runCy,PGALL,"2020") = iAvailRate(PGALL,"2020");
-iPlantAvailRate(runCy,PGALL,"2050") = iAvailRate(PGALL,"2050");
 
-iFixGrosCostPlaType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF-12)  = iFixOandMCost(PGALL,"2011");
-iFixGrosCostPlaType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF+3) = iFixOandMCost(PGALL,"2020");
-iFixGrosCostPlaType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF+33) = iFixOandMCost(PGALL,"2050");
-*$offtext
 table iDataDistrLosses(allCy,EF,YTIME)	    "Data for Distribution Losses (Mtoe)"
 $ondelim
 $include"./iDataDistrLosses.csv"
@@ -460,13 +441,11 @@ iFinEneCons(runCy,EFS,YTIME) = sum(INDDOM,
                        +
                        sum(TRANSE,
                          sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(TRANSE,EF) $(not plugin(EF)) ), iFuelConsPerFueSub(runCy,TRANSE,EF,YTIME)));
-iGrossCapCosSubRen(runCy,PGALL,YTIME)=iCapGrossCosPlanType(runCy,PGALL,YTIME);
+iGrossCapCosSubRen(runCy,PGALL,YTIME)=iInvCost(PGALL,YTIME);
 loop(runCy,PGALL,YTIME)$AN(YTIME) DO
          abort $(iGrossCapCosSubRen(runCy,PGALL,YTIME)<0) "CAPITAL COST IS NEGATIVE", iGrossCapCosSubRen
 ENDLOOP;
 
-
-iFixGrosCostPlaType(runCy,PGALL,YTIME) = iFixOandMCost(PGALL,YTIME);
 *VTotElecGenCap.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
 *VTotElecGenCapEst.L(runCy,TT) = iResMargTotAvailCap(runCy,"TOT_CAP_RES",TT) * VTotElecGenCap.L(runCy,TT-1)
 *        * VElecPeakLoad.L(runCy,TT)/VElecPeakLoad.L(runCy,TT-1);
@@ -477,7 +456,6 @@ $offdelim
 ;
 iTotAvailCapBsYr(allCy) = iDataElecSteamGen(allCy,"TOTCAP","2018")+iDataElecSteamGen(allCy,"CHP_CAP","2018")*0.85;
 iElecImp(allCy,YTIME)=0;
-iCO2CaptRate(runCy,PGALL,YTIME)$(ord(YTIME)>(ordfirst-12))  =  iCO2CaptRateData(PGALL);
 
 iScaleEndogScrap(allCy,PGALL,YTIME) = iPremReplacem(allCy,PGALL);
 table iDecomPlants(allCy,PGALL,PG1_set)	            "Decomissioning Plants (MW)"
@@ -743,32 +721,6 @@ $ondelim
 $include"./iCapDataLoadFacEachTransp.csv"
 $offdelim
 ;
-table iPlantEffByTypeTemp(PGALL,PGECONCHAR)           "Plant efficiency per plant type (1)"
-$ondelim
-$include"./iPlantEffByType.csv"
-$offdelim
-;
-iPlantEffByType(allCy,PGALL,YTIME) = iPlantEffByTypeTemp(PGALL,"EFF_05");
-
-table iSuppPlantCapFac(allCy,PGRENEF,YTIME)	                "Capacity Factors (1)"	
-$ondelim
-$include"./iSuppPlantCapFac.csv"
-$offdelim
-;
-iPlantAvailRate(allCy,"PGLHYD",YTIME)=iSuppPlantCapFac(allCy,"LHYD",YTIME);
-iPlantAvailRate(allCy,"PGSHYD",YTIME)=iSuppPlantCapFac(allCy,"SHYD",YTIME);
-iPlantAvailRate(allCy,"PGWND",YTIME)=iSuppPlantCapFac(allCy,"WND",YTIME);
-iPlantAvailRate(allCy,"PGAWNO",YTIME)=iSuppPlantCapFac(allCy,"WNO",YTIME);
-iPlantAvailRate(allCy,"PGSOL",YTIME)=iSuppPlantCapFac(allCy,"SOL",YTIME);
-iPlantAvailRate(allCy,"PGADPV",YTIME)=iSuppPlantCapFac(allCy,"DPV",YTIME);
-iPlantAvailRate(allCy,"ATHBMSWAS",YTIME)=iSuppPlantCapFac(allCy,"BMSWAS",YTIME);
-iPlantAvailRate(allCy,"IGCCBMS",YTIME)=iSuppPlantCapFac(allCy,"BMSWAS",YTIME);
-iPlantAvailRate(allCy,"PGAOTHREN",YTIME)= iSuppPlantCapFac(allCy,"OTHREN",YTIME);
-
-iPlantAvailRate(allCy,"PGASHYD",YTIME)=iPlantAvailRate(allCy,"PGSHYD",ytime);
-iPlantAvailRate(allCy,"PGAWND",YTIME)=iPlantAvailRate(allCy,"PGWND",ytime);
-iPlantAvailRate(allCy,"PGASOL",YTIME)=iPlantAvailRate(allCy,"PGSOL",ytime);
-iPlantAvailRate(allCy,"ATHBMSWAS",YTIME)=iPlantAvailRate(allCy,"CTHBMSWAS",ytime);
 
 iUtilRateChpPlants(allCy,CHP,YTIME) = 0.5;
 $ontext
@@ -909,7 +861,7 @@ loop YTIME$((ord(YTIME) gt TF-7) $(ord(YTIME) lt TF+8)) do
 endloop;
 
 
-loop YTIME$((ord(YTIME) gt TF+8) $(ord(YTIME) lt TF+33)) do
+loop YTIME$((ord(YTIME) gt TF+8) $(ord(YTIME) lt TF+84)) do
          iCapCostTech(runCy,SBS,EF,YTIME)= (iCapCostTech(runCy,SBS,EF,"2050")-iCapCostTech(runCy,SBS,EF,"2025"))/25+iCapCostTech(runCy,SBS,EF,YTIME-1);
          iFixOMCostTech(runCy,SBS,EF,YTIME)= (iFixOMCostTech(runCy,SBS,EF,"2050")-iFixOMCostTech(runCy,SBS,EF,"2025"))/25+iFixOMCostTech(runCy,SBS,EF,YTIME-1);
          iVarCostTech(runCy,SBS,EF,YTIME)= (iVarCostTech(runCy,SBS,EF,"2050")-iVarCostTech(runCy,SBS,EF,"2025"))/25+iVarCostTech(runCy,SBS,EF,YTIME-1);
@@ -918,35 +870,11 @@ endloop;
 
 
 loop YTIME$((ord(YTIME) gt TF-12) $(ord(YTIME) lt TF+3)) do
-         iCapGrossCosPlanType(runCy,PGALL,YTIME) = (iCapGrossCosPlanType(runCy,PGALL,"2020")-
-         iCapGrossCosPlanType(runCy,PGALL,"2011"))/15+iCapGrossCosPlanType(runCy,PGALL,YTIME-1);
-
-         iFixGrosCostPlaType(runCy,PGALL,YTIME) = (iFixGrosCostPlaType(runCy,PGALL,"2020")-
-         iFixGrosCostPlaType(runCy,PGALL,"2011"))/15+iFixGrosCostPlaType(runCy,PGALL,YTIME-1);
-
-         iPlantAvailRate(runCy,PGALL,YTIME) = (iPlantAvailRate(runCy,PGALL,"2020")-
-         iPlantAvailRate(runCy,PGALL,"2011"))/15+iPlantAvailRate(runCy,PGALL,YTIME-1);
-
-         iVarGroCostPlaType(runCy,PGALL,YTIME) = (iVarGroCostPlaType(runCy,PGALL,"2020")-
-         iVarGroCostPlaType(runCy,PGALL,"2011"))/15+iVarGroCostPlaType(runCy,PGALL,YTIME-1);
-
           iUsfEneConvSubTech(runCy,SBS,EF,YTIME) = (iUsfEneConvSubTech(runCy,SBS,EF,"2025")-iUsfEneConvSubTech(runCy,SBS,EF,"2010"))/
           20+iUsfEneConvSubTech(runCy,SBS,EF,YTIME-1);
 endloop;
 
-loop YTIME$((ord(YTIME) gt TF+3) $(ord(YTIME) lt TF+33)) do
-         iCapGrossCosPlanType(runCy,PGALL,YTIME) = (iCapGrossCosPlanType(runCy,PGALL,"2050")-
-         iCapGrossCosPlanType(runCy,PGALL,"2020"))/30+iCapGrossCosPlanType(runCy,PGALL,YTIME-1);
-
-         iFixGrosCostPlaType(runCy,PGALL,YTIME) = (iFixGrosCostPlaType(runCy,PGALL,"2050")-
-         iFixGrosCostPlaType(runCy,PGALL,"2020"))/30+iFixGrosCostPlaType(runCy,PGALL,YTIME-1);
-
-         iPlantAvailRate(runCy,PGALL,YTIME) = (iPlantAvailRate(runCy,PGALL,"2050")-
-         iPlantAvailRate(runCy,PGALL,"2020"))/30+iPlantAvailRate(runCy,PGALL,YTIME-1);
-
-         iVarGroCostPlaType(runCy,PGALL,YTIME) = (iVarGroCostPlaType(runCy,PGALL,"2050")-
-         iVarGroCostPlaType(runCy,PGALL,"2020"))/30+iVarGroCostPlaType(runCy,PGALL,YTIME-1);
-
+loop YTIME$((ord(YTIME) gt TF+3) $(ord(YTIME) lt TF+84)) do
          iUsfEneConvSubTech(runCy,SBS,EF,YTIME)     = (iUsfEneConvSubTech(runCy,SBS,EF,"2050")-iUsfEneConvSubTech(runCy,SBS,EF,"2025"))/
          25+iUsfEneConvSubTech(runCy,SBS,EF,YTIME-1);
 endloop;
@@ -955,49 +883,30 @@ endloop;
 **  Power Generation
 
 
-iCapGrossCosPlanType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF-4)  = iDataPowGenCost(PGALL,"IC_05");
-iCapGrossCosPlanType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF+11) = iDataPowGenCost(PGALL,"IC_20");
-iCapGrossCosPlanType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF+41) = iDataPowGenCost(PGALL,"IC_50");
 
-iFixGrosCostPlaType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF-4)  = iDataPowGenCost(PGALL,"FC_05");
-iFixGrosCostPlaType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF+11) = iDataPowGenCost(PGALL,"FC_20");
-iFixGrosCostPlaType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF+41) = iDataPowGenCost(PGALL,"FC_50");
 
-iVarGroCostPlaType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF-4)  = iDataPowGenCost(PGALL,"VC_05");
-iVarGroCostPlaType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF+11) = iDataPowGenCost(PGALL,"VC_20");
-iVarGroCostPlaType(runCy,PGALL,YTIME)$(ord(YTIME) eq TF+41) = iDataPowGenCost(PGALL,"VC_50");
+
 
 iTechLftPlaType(runCy,PGALL) = iDataPowGenCost(PGALL, "LFT");
 
-iPlantAvailRate(runCy,PGALL,"2010") = iDataPowGenCost(PGALL,"AVAIL_05");
-iPlantAvailRate(runCy,PGALL,"2020") = iDataPowGenCost(PGALL,"AVAIL_20");
-iPlantAvailRate(runCy,PGALL,"2050") = iDataPowGenCost(PGALL,"AVAIL_50");
 
 iPlantEffByType(runCy,PGALL,"2010") = iDataPowGenCost(PGALL,"EFF_05");
 iPlantEffByType(runCy,PGALL,"2020") = iDataPowGenCost(PGALL,"EFF_20");
 iPlantEffByType(runCy,PGALL,"2050") = iDataPowGenCost(PGALL,"EFF_50");
 
-loop YTIME$((ord(YTIME) gt TF-4) $(ord(YTIME) lt TF+11)) do
-         iCapGrossCosPlanType(runCy,PGALL,YTIME) = (iCapGrossCosPlanType(runCy,PGALL,"2020")-iCapGrossCosPlanType(runCy,PGALL,"2010"))/15+iCapGrossCosPlanType(runCy,PGALL,YTIME-1);
-         iFixGrosCostPlaType(runCy,PGALL,YTIME) = (iFixGrosCostPlaType(runCy,PGALL,"2020")-iFixGrosCostPlaType(runCy,PGALL,"2010"))/15+iFixGrosCostPlaType(runCy,PGALL,YTIME-1);
-         iVarGroCostPlaType(runCy,PGALL,YTIME) = (iVarGroCostPlaType(runCy,PGALL,"2020")-iVarGroCostPlaType(runCy,PGALL,"2010"))/15+iVarGroCostPlaType(runCy,PGALL,YTIME-1);
-         iPlantAvailRate(runCy,PGALL,YTIME) = (iPlantAvailRate(runCy,PGALL,"2020")-iPlantAvailRate(runCy,PGALL,"2010"))/15+iPlantAvailRate(runCy,PGALL,YTIME-1);
+loop YTIME$((ord(YTIME) gt TF-7) $(ord(YTIME) lt TF+12)) do
          iPlantEffByType(runCy,PGALL,YTIME) = (iPlantEffByType(runCy,PGALL,"2020")-iPlantEffByType(runCy,PGALL,"2010"))/15+iPlantEffByType(runCy,PGALL,YTIME-1);
 endloop;
 
 
-loop YTIME$((ord(YTIME) gt TF+11) $(ord(YTIME) lt TF+41)) do
-         iCapGrossCosPlanType(runCy,PGALL,YTIME) = (iCapGrossCosPlanType(runCy,PGALL,"2050")-iCapGrossCosPlanType(runCy,PGALL,"2020"))/30+iCapGrossCosPlanType(runCy,PGALL,YTIME-1);
-         iFixGrosCostPlaType(runCy,PGALL,YTIME) = (iFixGrosCostPlaType(runCy,PGALL,"2050")-iFixGrosCostPlaType(runCy,PGALL,"2020"))/30+iFixGrosCostPlaType(runCy,PGALL,YTIME-1);
-         iVarGroCostPlaType(runCy,PGALL,YTIME) = (iVarGroCostPlaType(runCy,PGALL,"2050")-iVarGroCostPlaType(runCy,PGALL,"2020"))/30+iVarGroCostPlaType(runCy,PGALL,YTIME-1);
-         iPlantAvailRate(runCy,PGALL,YTIME) = (iPlantAvailRate(runCy,PGALL,"2050")-iPlantAvailRate(runCy,PGALL,"2020"))/30+iPlantAvailRate(runCy,PGALL,YTIME-1);
+loop YTIME$((ord(YTIME) gt TF+11) $(ord(YTIME) lt TF+91)) do
          iPlantEffByType(runCy,PGALL,YTIME) = (iPlantEffByType(runCy,PGALL,"2050")-iPlantEffByType(runCy,PGALL,"2020"))/30+iPlantEffByType(runCy,PGALL,YTIME-1);
 endloop;
 
 
-iCO2CaptRate(runCy,PGALL,YTIME)$(ord(YTIME)>(ordfirst-4))  =  iDataPowGenCost(PGALL,"CR");
+iCO2CaptRate(runCy,PGALL,YTIME)$(ord(YTIME)>(ordfirst-8))  =  iDataPowGenCost(PGALL,"CR");
 
-iEffDHPlants(runCy,EFS,YTIME)$(ord(YTIME)>(ordfirst-4))  = sum(PGEFS$sameas(EFS,PGEFS),iParDHEfficiency(PGEFS,"2010"));
+iEffDHPlants(runCy,EFS,YTIME)$(ord(YTIME)>(ordfirst-8))  = sum(PGEFS$sameas(EFS,PGEFS),iParDHEfficiency(PGEFS,"2010"));
 
 
 
@@ -1007,30 +916,12 @@ $ondelim
 $include "./iDataChpPowGen.csv"
 $offdelim
 ;
-iInvCostChp(runCy,DSBS,CHP,YTIME) = iDataChpPowGen(CHP,YTIME,"IC");
-iFixOMCostPerChp(runCy,DSBS,CHP,YTIME) = iDataChpPowGen(CHP,YTIME,"FC");
-iVarCostChp(runCy,DSBS,CHP,YTIME) = iDataChpPowGen(CHP,YTIME,"VOM");
+iInvCostChp(runCy,DSBS,CHP,YTIME) = iDataChpPowGen(CHP,"2010","IC");
+iFixOMCostPerChp(runCy,DSBS,CHP,YTIME) = iDataChpPowGen(CHP,"2010","FC");
+iVarCostChp(runCy,DSBS,CHP,YTIME) = iDataChpPowGen(CHP,"2010","VOM");
 iLifChpPla(runCy,DSBS,CHP) = iDataChpPowGen(CHP,"2010","LFT");
 iAvailRateChp(runCy,DSBS,CHP) = iDataChpPowGen(CHP,"2010","AVAIL");
-iBoiEffChp(runCy,CHP,YTIME) = iDataChpPowGen(CHP,YTIME,"BOILEFF");
-
-         !! Interpolation for years in between
-
-
-loop YTIME$((ord(YTIME) gt TF-12) $(ord(YTIME) lt TF+3)) do
-         iInvCostChp(runCy,DSBS,CHP,YTIME) = (iInvCostChp(runCy,DSBS,CHP,"2020")-iInvCostChp(runCy,DSBS,CHP,"2010"))/15+iInvCostChp(runCy,DSBS,CHP,YTIME-1);
-         iFixOMCostPerChp(runCy,DSBS,CHP,YTIME) = (iFixOMCostPerChp(runCy,DSBS,CHP,"2020")-iFixOMCostPerChp(runCy,DSBS,CHP,"2010"))/15+iFixOMCostPerChp(runCy,DSBS,CHP,YTIME-1);
-         iVarCostChp(runCy,DSBS,CHP,YTIME) = (iVarCostChp(runCy,DSBS,CHP,"2020")-iVarCostChp(runCy,DSBS,CHP,"2010"))/15+iVarCostChp(runCy,DSBS,CHP,YTIME-1);
-         iBoiEffChp(runCy,CHP,YTIME) = (iBoiEffChp(runCy,CHP,"2020")-iBoiEffChp(runCy,CHP,"2010"))/15+iBoiEffChp(runCy,CHP,YTIME-1);
-endloop;
-
-
-loop YTIME$((ord(YTIME) gt TF+3) $(ord(YTIME) lt TF+33)) do
-         iInvCostChp(runCy,DSBS,CHP,YTIME) = (iInvCostChp(runCy,DSBS,CHP,"2050")-iInvCostChp(runCy,DSBS,CHP,"2020"))/30+iInvCostChp(runCy,DSBS,CHP,YTIME-1);
-         iFixOMCostPerChp(runCy,DSBS,CHP,YTIME) = (iFixOMCostPerChp(runCy,DSBS,CHP,"2050")-iFixOMCostPerChp(runCy,DSBS,CHP,"2020"))/30+iFixOMCostPerChp(runCy,DSBS,CHP,YTIME-1);
-         iVarCostChp(runCy,DSBS,CHP,YTIME) = (iVarCostChp(runCy,DSBS,CHP,"2050")-iVarCostChp(runCy,DSBS,CHP,"2020"))/30+iVarCostChp(runCy,DSBS,CHP,YTIME-1);
-         iBoiEffChp(runCy,CHP,YTIME) = (iBoiEffChp(runCy,CHP,"2050")-iBoiEffChp(runCy,CHP,"2020"))/30+iBoiEffChp(runCy,CHP,YTIME-1);
-endloop;
+iBoiEffChp(runCy,CHP,YTIME) = iDataChpPowGen(CHP,"2010","BOILEFF");
 
 **  Policies for climate change and renewables
 

@@ -11,7 +11,7 @@ QChpElecPlants(runCy,CHP,YTIME)$TIME(YTIME)..
          VElecCapChpPla(runCy,CHP,YTIME)
          =E=
          1/sTWhToMtoe * sum(INDDOM,VConsFuel(runCy,INDDOM,CHP,YTIME)) * VElecIndPrices(runCy,YTIME)/
-         sum(PGALL$CHPtoEON(CHP,PGALL),iPlantAvailRate(runCy,PGALL,YTIME)) /
+         sum(PGALL$CHPtoEON(CHP,PGALL),iAvailRate(PGALL,YTIME)) /
          iUtilRateChpPlants(runCy,CHP,YTIME) /sGwToTwhPerYear;  
 
 * Compute Lambda parameter
@@ -95,9 +95,9 @@ QHourProdCostInv(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME)) ..
                   
                     ( ( iDisc(runCy,"PG",YTIME-4) * exp(iDisc(runCy,"PG",YTIME-4)*iTechLftPlaType(runCy,PGALL))
                         / (exp(iDisc(runCy,"PG",YTIME-4)*iTechLftPlaType(runCy,PGALL)) -1))
-                      * iGrossCapCosSubRen(runCy,PGALL,YTIME-4)* 1E3 * iCGI(runCy,YTIME-4)  + iFixGrosCostPlaType(runCy,PGALL,YTIME-4)
-                    )/iPlantAvailRate(runCy,PGALL,YTIME-4) / (1000*(ord(HOUR)-1+0.25))
-                    + iVarGroCostPlaType(runCy,PGALL,YTIME-4)/1E3 + (VRenValue(YTIME)*8.6e-5)$( not ( PGREN(PGALL) 
+                      * iGrossCapCosSubRen(runCy,PGALL,YTIME-4)* 1E3 * iCGI(runCy,YTIME-4)  + iFixOandMCost(PGALL,YTIME-4)
+                    )/iAvailRate(PGALL,YTIME-4) / (1000*(ord(HOUR)-1+0.25))
+                    + iVarCost(PGALL,YTIME-4)/1E3 + (VRenValue(YTIME)*8.6e-5)$( not ( PGREN(PGALL) 
                     $(not sameas("PGASHYD",PGALL)) $(not sameas("PGSHYD",PGALL)) $(not sameas("PGLHYD",PGALL)) ))
                     + sum(PGEF$PGALLtoEF(PGALL,PGEF), (VFuelPriceSub(runCy,"PG",PGEF,YTIME-4)+
                         iCO2CaptRate(runCy,PGALL,YTIME-4)*VCO2CO2SeqCsts(runCy,YTIME-4)*1e-3*
@@ -147,7 +147,7 @@ QShrcapNoCcs(runCy,PGALL,YTIME)$(TIME(YTIME) $NOCCS(PGALL))..
 QVarCostTech(runCy,PGALL,YTIME)$(time(YTIME))..
          VVarCostTech(runCy,PGALL,YTIME) 
              =E=
-         (iVarGroCostPlaType(runCy,PGALL,YTIME)/1E3 + sum(PGEF$PGALLtoEF(PGALL,PGEF), (VFuelPriceSub(runCy,"PG",PGEF,YTIME)/1.2441+
+         (iVarCost(PGALL,YTIME)/1E3 + sum(PGEF$PGALLtoEF(PGALL,PGEF), (VFuelPriceSub(runCy,"PG",PGEF,YTIME)/1.2441+
          iCO2CaptRate(runCy,PGALL,YTIME)*VCO2CO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)
          + (1-iCO2CaptRate(runCy,PGALL,YTIME))*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)
           *(sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
@@ -165,9 +165,9 @@ QProdCostTechPreReplac(runCy,PGALL,YTIME)$TIME(YTIME)..
                         (
                           ((iDisc(runCy,"PG",YTIME) * exp(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(runCy,PGALL))/
                           (exp(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(runCy,PGALL)) -1))
-                            * iCapGrossCosPlanType(runCy,PGALL,YTIME)* 1E3 * iCGI(runCy,YTIME)  + 
-                            iFixGrosCostPlaType(runCy,PGALL,YTIME))/(8760*iPlantAvailRate(runCy,PGALL,YTIME))
-                           + (iVarGroCostPlaType(runCy,PGALL,YTIME)/1E3 + sum(PGEF$PGALLtoEF(PGALL,PGEF), 
+                            * iInvCost(PGALL,YTIME)* 1E3 * iCGI(runCy,YTIME)  + 
+                            iFixOandMCost(PGALL,YTIME))/(8760*iAvailRate(PGALL,YTIME))
+                           + (iVarCost(PGALL,YTIME)/1E3 + sum(PGEF$PGALLtoEF(PGALL,PGEF), 
                            (VFuelPriceSub(runCy,"PG",PGEF,YTIME)+
                             iCO2CaptRate(runCy,PGALL,YTIME)*VCO2CO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME) +
                              (1-iCO2CaptRate(runCy,PGALL,YTIME))*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
@@ -178,8 +178,8 @@ QProdCostTechPreReplac(runCy,PGALL,YTIME)$TIME(YTIME)..
 * Compute production cost of technology  used in premature replacement including plant availability rate
 QProdCostTechPreReplacAvail(runCy,PGALL,PGALL2,YTIME)$TIME(YTIME)..
          VProdCostTechPreReplacAvail(runCy,PGALL,PGALL2,YTIME) =E=
-         iPlantAvailRate(runCy,PGALL,YTIME)/iPlantAvailRate(runCy,PGALL2,YTIME)*VProdCostTechPreReplac(runCy,PGALL,YTIME)+
-         VVarCostTech(runCy,PGALL,YTIME)*(1-iPlantAvailRate(runCy,PGALL,YTIME)/iPlantAvailRate(runCy,PGALL2,YTIME));  
+         iAvailRate(PGALL,YTIME)/iAvailRate(PGALL2,YTIME)*VProdCostTechPreReplac(runCy,PGALL,YTIME)+
+         VVarCostTech(runCy,PGALL,YTIME)*(1-iAvailRate(PGALL,YTIME)/iAvailRate(PGALL2,YTIME));  
 
 * Compute endogenous scrapping index 
 QEndogScrapIndex(runCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)))..
@@ -201,13 +201,13 @@ QGapPowerGenCap(runCy,YTIME)$TIME(YTIME)..
              =E=
  (        (  VElecGenNoChp(runCy,YTIME) - VElecGenNoChp(runCy,YTIME-1) + sum(PGALL,VElecGenPlanCap(runCy,PGALL,YTIME-1) * 
  (1 - VEndogScrapIndex(runCy,PGALL,YTIME))) +
-          sum(PGALL, (iPlantDecomSched(runCy,PGALL,YTIME)-iDecInvPlantSched(runCy,PGALL,YTIME))*iPlantAvailRate(runCy,PGALL,YTIME))
+          sum(PGALL, (iPlantDecomSched(runCy,PGALL,YTIME)-iDecInvPlantSched(runCy,PGALL,YTIME))*iAvailRate(PGALL,YTIME))
           + Sum(PGALL$PGSCRN(PGALL), (VElecGenPlantsCapac(runCy,PGALL,YTIME-1)-iPlantDecomSched(runCy,PGALL,YTIME))/
           iTechLftPlaType(runCy,PGALL))
        )
   + 0 + SQRT( SQR(       (  VElecGenNoChp(runCy,YTIME) - VElecGenNoChp(runCy,YTIME-1) +
         sum(PGALL,VElecGenPlanCap(runCy,PGALL,YTIME-1) * (1 - VEndogScrapIndex(runCy,PGALL,YTIME))) +
-          sum(PGALL, (iPlantDecomSched(runCy,PGALL,YTIME)-iDecInvPlantSched(runCy,PGALL,YTIME))*iPlantAvailRate(runCy,PGALL,YTIME))
+          sum(PGALL, (iPlantDecomSched(runCy,PGALL,YTIME)-iDecInvPlantSched(runCy,PGALL,YTIME))*iAvailRate(PGALL,YTIME))
           + Sum(PGALL$PGSCRN(PGALL), (VElecGenPlantsCapac(runCy,PGALL,YTIME-1)-iPlantDecomSched(runCy,PGALL,YTIME))/
           iTechLftPlaType(runCy,PGALL))
        ) -0) + SQR(1e-10) ) )/2;
@@ -285,11 +285,11 @@ QElecGenCapacity(runCy,PGALL,YTIME)$TIME(YTIME)..
           +(VPowPlaShaNewEquip(runCy,PGALL,YTIME) * VGapPowerGenCap(runCy,YTIME))$( (not CCS(PGALL)) AND (not NOCCS(PGALL)))
           +(VPowPlaShaNewEquip(runCy,PGALL,YTIME) * VPowerPlantNewEq(runCy,PGALL,YTIME) * VGapPowerGenCap(runCy,YTIME))$NOCCS(PGALL)
           +(VPowPlaShaNewEquip(runCy,PGALL,YTIME) * VPowerPlantNewEq(runCy,PGALL,YTIME) * VGapPowerGenCap(runCy,YTIME))$CCS(PGALL)
-          + iDecInvPlantSched(runCy,PGALL,YTIME) * iPlantAvailRate(runCy,PGALL,YTIME)
-          - iPlantDecomSched(runCy,PGALL,YTIME) * iPlantAvailRate(runCy,PGALL,YTIME)
+          + iDecInvPlantSched(runCy,PGALL,YTIME) * iAvailRate(PGALL,YTIME)
+          - iPlantDecomSched(runCy,PGALL,YTIME) * iAvailRate(PGALL,YTIME)
          )
          - ((VElecGenPlantsCapac(runCy,PGALL,YTIME-1)-iPlantDecomSched(runCy,PGALL,YTIME-1))* 
-         iPlantAvailRate(runCy,PGALL,YTIME)*(1/iTechLftPlaType(runCy,PGALL)))$PGSCRN(PGALL);
+         iAvailRate(PGALL,YTIME)*(1/iTechLftPlaType(runCy,PGALL)))$PGSCRN(PGALL);
 
 * Compute electricity generation capacity
 QElecGenCap(runCy,PGALL,YTIME)$TIME(YTIME)..
@@ -326,16 +326,16 @@ VElecGenPlanCap(runCy,PGALL,YTIME)- VElecGenPlanCap(runCy,PGALL,YTIME-1);
 QAvgCapFacRes(runCy,PGALL,YTIME)$(PGREN(PGALL)$TIME(YTIME))..
    VAvgCapFacRes(runCy,PGALL,YTIME)
       =E=
-    (iPlantAvailRate(runCy,PGALL,YTIME)*VNewCapYearly(runCy,PGALL,YTIME)+
-     iPlantAvailRate(runCy,PGALL,YTIME-1)*VNewCapYearly(runCy,PGALL,YTIME-1)+
-     iPlantAvailRate(runCy,PGALL,YTIME-2)*VNewCapYearly(runCy,PGALL,YTIME-2)+
-     iPlantAvailRate(runCy,PGALL,YTIME-3)*VNewCapYearly(runCy,PGALL,YTIME-3)+
-     iPlantAvailRate(runCy,PGALL,YTIME-4)*VNewCapYearly(runCy,PGALL,YTIME-4)+
-     iPlantAvailRate(runCy,PGALL,YTIME-5)*VNewCapYearly(runCy,PGALL,YTIME-5)+
-     iPlantAvailRate(runCy,PGALL,YTIME-6)*VNewCapYearly(runCy,PGALL,YTIME-6)+
-     iPlantAvailRate(runCy,PGALL,YTIME-7)*VNewCapYearly(runCy,PGALL,YTIME-7)+
-     iPlantAvailRate(runCy,PGALL,YTIME-8)*VNewCapYearly(runCy,PGALL,YTIME-8)+
-     iPlantAvailRate(runCy,PGALL,YTIME-9)*VNewCapYearly(runCy,PGALL,YTIME-9))/
+    (iAvailRate(PGALL,YTIME)*VNewCapYearly(runCy,PGALL,YTIME)+
+     iAvailRate(PGALL,YTIME-1)*VNewCapYearly(runCy,PGALL,YTIME-1)+
+     iAvailRate(PGALL,YTIME-2)*VNewCapYearly(runCy,PGALL,YTIME-2)+
+     iAvailRate(PGALL,YTIME-3)*VNewCapYearly(runCy,PGALL,YTIME-3)+
+     iAvailRate(PGALL,YTIME-4)*VNewCapYearly(runCy,PGALL,YTIME-4)+
+     iAvailRate(PGALL,YTIME-5)*VNewCapYearly(runCy,PGALL,YTIME-5)+
+     iAvailRate(PGALL,YTIME-6)*VNewCapYearly(runCy,PGALL,YTIME-6)+
+     iAvailRate(PGALL,YTIME-7)*VNewCapYearly(runCy,PGALL,YTIME-7)+
+     iAvailRate(PGALL,YTIME-8)*VNewCapYearly(runCy,PGALL,YTIME-8)+
+     iAvailRate(PGALL,YTIME-9)*VNewCapYearly(runCy,PGALL,YTIME-9))/
 (VNewCapYearly(runCy,PGALL,YTIME)+VNewCapYearly(runCy,PGALL,YTIME-1)+VNewCapYearly(runCy,PGALL,YTIME-2)+
 VNewCapYearly(runCy,PGALL,YTIME-3)+VNewCapYearly(runCy,PGALL,YTIME-4)+VNewCapYearly(runCy,PGALL,YTIME-5)+
 VNewCapYearly(runCy,PGALL,YTIME-6)+VNewCapYearly(runCy,PGALL,YTIME-7)+VNewCapYearly(runCy,PGALL,YTIME-8)+
@@ -346,7 +346,7 @@ QOverallCap(runCy,PGALL,YTIME)$TIME(YTIME)..
      VOverallCap(runCy,PGALL,YTIME)
      =E=
 VElecGenPlanCap(runCy,pgall,ytime)$ (not PGREN(PGALL))
-+VAvgCapFacRes(runCy,PGALL,YTIME-1)*(VNewCapYearly(runCy,PGALL,YTIME)/iPlantAvailRate(runCy,PGALL,YTIME)+
++VAvgCapFacRes(runCy,PGALL,YTIME-1)*(VNewCapYearly(runCy,PGALL,YTIME)/iAvailRate(PGALL,YTIME)+
 VOverallCap(runCy,PGALL,YTIME-1)
 /VAvgCapFacRes(runCy,PGALL,YTIME-1))$PGREN(PGALL);
 
@@ -425,10 +425,10 @@ QLonPowGenCostTechNoCp(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
 
              (iDisc(runCy,"PG",YTIME)*EXP(iDisc(runCy,"pg",YTIME)*iTechLftPlaType(runCy,PGALL)) /
              (EXP(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(runCy,PGALL))-1)*iGrossCapCosSubRen(runCy,PGALL,YTIME)*1000*iCGI(runCy,YTIME) +
-             iFixGrosCostPlaType(runCy,PGALL,YTIME))/iPlantAvailRate(runCy,PGALL,YTIME)
+             iFixOandMCost(PGALL,YTIME))/iAvailRate(PGALL,YTIME)
               / (1000*(6$ISET(ESET)+4$RSET(ESET))) +
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
-                 (iVarGroCostPlaType(runCy,PGALL,YTIME)/1000+(VFuelPriceSub(runCy,"PG",PGEF,YTIME)/1.2441+
+                 (iVarCost(PGALL,YTIME)/1000+(VFuelPriceSub(runCy,"PG",PGEF,YTIME)/1.2441+
                  iCO2CaptRate(runCy,PGALL,YTIME)*VCO2CO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME) +
                  (1-iCO2CaptRate(runCy,PGALL,YTIME))*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
                  (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
@@ -441,10 +441,10 @@ QLonMnmpowGenCost(runCy,PGALL,YTIME)$TIME(YTIME)..
 
              (iDisc(runCy,"PG",YTIME)*EXP(iDisc(runCy,"pg",YTIME)*iTechLftPlaType(runCy,PGALL)) /
              (EXP(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(runCy,PGALL))-1)*iGrossCapCosSubRen(runCy,PGALL,YTIME)*1000*iCGI(runCy,YTIME) +
-             iFixGrosCostPlaType(runCy,PGALL,YTIME))/iPlantAvailRate(runCy,PGALL,YTIME)
+             iFixOandMCost(PGALL,YTIME))/iAvailRate(PGALL,YTIME)
              / (1000*sGwToTwhPerYear) +
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
-                 (iVarGroCostPlaType(runCy,PGALL,YTIME)/1000+(VFuelPriceSub(runCy,"PG",PGEF,YTIME)/1.2441+
+                 (iVarCost(PGALL,YTIME)/1000+(VFuelPriceSub(runCy,"PG",PGEF,YTIME)/1.2441+
 
                  iCO2CaptRate(runCy,PGALL,YTIME)*VCO2CO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME) +
 
@@ -461,10 +461,10 @@ QLongPowGenIntPri(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
 
              (iDisc(runCy,"PG",YTIME)*EXP(iDisc(runCy,"pg",YTIME)*iTechLftPlaType(runCy,PGALL)) /
              (EXP(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(runCy,PGALL))-1)*iGrossCapCosSubRen(runCy,PGALL,YTIME)/1.5*1000*iCGI(runCy,YTIME) +
-             iFixGrosCostPlaType(runCy,PGALL,YTIME))/iPlantAvailRate(runCy,PGALL,YTIME)
+             iFixOandMCost(PGALL,YTIME))/iAvailRate(PGALL,YTIME)
              / (1000*(7.25$ISET(ESET)+2.25$RSET(ESET))) +
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
-                 (iVarGroCostPlaType(runCy,PGALL,YTIME)/1000+((
+                 (iVarCost(PGALL,YTIME)/1000+((
   SUM(EF,sum(WEF$EFtoWEF("PG",EF,WEF), iPriceFuelsInt(WEF,YTIME))*sTWhToMtoe/1000*1.5))$(not PGREN(PGALL))    +
 
                  iCO2CaptRate(runCy,PGALL,YTIME)*VCO2CO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME) +
@@ -480,7 +480,7 @@ QShoPowGenIntPri(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
          VShoPowGenIntPri(runCy,PGALL,ESET,YTIME)
                  =E=
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
-                 (iVarGroCostPlaType(runCy,PGALL,YTIME)/1000+((
+                 (iVarCost(PGALL,YTIME)/1000+((
   SUM(EF,sum(WEF$EFtoWEF("PG",EF,WEF), iPriceFuelsInt(WEF,YTIME))*sTWhToMtoe/1000*1.5))$(not PGREN(PGALL))    +
 
                  iCO2CaptRate(runCy,PGALL,YTIME)*VCO2CO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME) +
@@ -510,10 +510,10 @@ QLonAvgPowGenCostNoClimPol(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
 
              (iDisc(runCy,"PG",YTIME)*EXP(iDisc(runCy,"pg",YTIME)*iTechLftPlaType(runCy,PGALL)) /
              (EXP(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(runCy,PGALL))-1)*iGrossCapCosSubRen(runCy,PGALL,YTIME)*1000*iCGI(runCy,YTIME) +
-             iFixGrosCostPlaType(runCy,PGALL,YTIME))/iPlantAvailRate(runCy,PGALL,YTIME)
+             iFixOandMCost(PGALL,YTIME))/iAvailRate(PGALL,YTIME)
              / (1000*(7.25$ISET(ESET)+2.25$RSET(ESET))) +
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
-                 (iVarGroCostPlaType(runCy,PGALL,YTIME)/1000+((VFuelPriceSub(runCy,"PG",PGEF,YTIME)-iEffValueInEuro(runCy,"pg",ytime)/1000-iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
+                 (iVarCost(PGALL,YTIME)/1000+((VFuelPriceSub(runCy,"PG",PGEF,YTIME)-iEffValueInEuro(runCy,"pg",ytime)/1000-iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
                  sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))/1000 )/1.2441+
 
                  iCO2CaptRate(runCy,PGALL,YTIME)*VCO2CO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME) +
@@ -568,7 +568,7 @@ QShortPowGenCost(runCy,ESET,YTIME)$TIME(YTIME)..
         VElecProdPowGenPlants(runCy,PGALL,YTIME)*
         (
         sum(PGEF$PGALLtoEF(PGALL,PGEF),
-        (iVarGroCostPlaType(runCy,PGALL,YTIME)/1000+(VFuelPriceSub(runCy,"PG",PGEF,YTIME)/1.2441+
+        (iVarCost(PGALL,YTIME)/1000+(VFuelPriceSub(runCy,"PG",PGEF,YTIME)/1.2441+
          iCO2CaptRate(runCy,PGALL,YTIME)*VCO2CO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME) +
          (1-iCO2CaptRate(runCy,PGALL,YTIME))*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
