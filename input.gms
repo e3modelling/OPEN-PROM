@@ -899,10 +899,10 @@ loop YTIME$((ord(YTIME) gt TF-7) $(ord(YTIME) lt TF+12)) do
 endloop;
 
 
-loop YTIME$((ord(YTIME) gt TF+11) $(ord(YTIME) lt TF+91)) do
+loop YTIME$((ord(YTIME) gt TF+11) $(ord(YTIME) lt TF+41)) do
          iPlantEffByType(runCy,PGALL,YTIME) = (iPlantEffByType(runCy,PGALL,"2050")-iPlantEffByType(runCy,PGALL,"2020"))/30+iPlantEffByType(runCy,PGALL,YTIME-1);
 endloop;
-
+iPlantEffByType(runCy,PGALL,YTIME)$(ord(YTIME)>(ordfirst+41)) = iPlantEffByType(runCy,PGALL,"2050");
 
 iCO2CaptRate(runCy,PGALL,YTIME)$(ord(YTIME)>(ordfirst-8))  =  iDataPowGenCost(PGALL,"CR");
 

@@ -12,13 +12,13 @@ model openprom /all/;
 
 
 option iGDP:2:0:6;
-display iCGI;
+display iGDP;
 display iDisc;
 display TF;
 display TFIRST;
 display iCo2EmiFac;
 display iInvCostChp;
-display iUsfEneConvSubTech;
+display iElastA;
 
 *TIME(YTIME) = %fStartY%;
 VFuelPrice.L(allCy,TRANSE,YTIME) = 0.1;
