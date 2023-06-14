@@ -68,7 +68,6 @@ iFacElecPriConsu(allCy,ELCPCHAR,YTIME)	 "Factors affecting electricity prices to
 iPriceTragets(allCy,SBS,EF,YTIME)	     "Price Targets	(1)"
 iPriceReform(allCy,SBS,EF,YTIME)	     "Price reformation (1)"
 iScenarioPri(WEF,NAP,YTIME)	             "Scenario prices (KEuro1990/toe)"
-iResInPriceEq(allCy,SBS,EF,YTIME)	     "Residual in Price Equations (1)"
 iConsPricesFuelSub(allCy,SBS,EF,YTIME)	 "Consumer Prices of fuels per subsector (kEuro2005/toe)"	
 iWgtSecAvgPriFueCons(allCy,SBS,EF)	     "Weights for sector's average price, based on fuel consumption (1)"	
 iFuelConsPerFueSub(allCy,SBS,EF,YTIME)	 "Fuel consumption per fuel and subsector (Mtoe)"

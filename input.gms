@@ -574,13 +574,7 @@ iPriceTragets("MAR",INDSE1(SBS),"NGS",YTIME)=iDataPriceTargets("MAR","INDSE1","N
 iPriceTragets("MAR",DOMSE1(SBS),"NGS",YTIME)=iDataPriceTargets("MAR","DOMSE1","NGS",YTIME) ;
 iPriceTragets("MAR",NENSE1(SBS),"NGS",YTIME)=iDataPriceTargets("MAR","NENSE1","NGS",YTIME) ;
 iPriceTragets("MAR",PG(SBS),"NGS",YTIME)=iDataPriceTargets("MAR","INDSE1","NGS",YTIME) ;
-table iResDomPriEq(allCy,SBS,EF,YTIME)	 "Residuals for domestic prices in equations after 2024 (1)"
-$ondelim
-$include"./iResDomPriEq.csv"
-$offdelim
-;
 iHydrogenPri(allCy,SBS,YTIME)=4.3;
-iResInPriceEq(allCy,SBS,EF,YTIME)$an(YTIME) = iResDomPriEq(allCy,SBS,EF,YTIME)/1000;
 table iDomFuelPrices(allCy,SBS,EF,YTIME)	 "Consumer Prices of fuels per subsector (kEuro2005/toe)"
 $ondelim
 $include"./iDomFuelPrices.csv"

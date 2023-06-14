@@ -1370,7 +1370,7 @@ QFuelPriSubSepCarbVal(runCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF) $TIME(YTIME) $(not s
          (
 
            (1-iPriceReform(runCy,SBS,EF,YTIME))*
-           (iResInPriceEq(runCy,SBS,EF,YTIME) + VFuelPriceSub(runCy,SBS,EF,YTIME-1))
+           ( VFuelPriceSub(runCy,SBS,EF,YTIME-1))
            + iPriceReform(runCy,SBS,EF,YTIME)*iPriceTragets(runCy,SBS,EF,YTIME)
 )
           + iCo2EmiFac(runCy,SBS,EF,YTIME) *sum(NAP$NAPtoALLSBS(NAP,SBS),(VCarVal(runCy,NAP,YTIME)))/1000
@@ -1382,7 +1382,7 @@ iConsPricesFuelSub(runCy,SBS,EF,"2018") $(DSBS(SBS))$ALTEF(EF)
          )
          +
          (
-           (iResInPriceEq(runCy,SBS,EF,YTIME)*sTWhToMtoe + VElecPriInduResConsu(runCy,"i",YTIME)$INDTRANS(SBS)+VElecPriInduResConsu(runCy,"r",YTIME)$RESIDENT(SBS))/sTWhToMtoe
+           ( VElecPriInduResConsu(runCy,"i",YTIME)$INDTRANS(SBS)+VElecPriInduResConsu(runCy,"r",YTIME)$RESIDENT(SBS))/sTWhToMtoe
             +
             ((iEffValueInEuro(runCy,SBS,YTIME))/1000)$DSBS(SBS)
          )$(ELCEF(EF) or HEATPUMP(EF))
