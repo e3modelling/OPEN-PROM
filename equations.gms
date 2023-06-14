@@ -1370,8 +1370,7 @@ QFuelPriSubSepCarbVal(runCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF) $TIME(YTIME) $(not s
          (
 
            (1-iPriceReform(runCy,SBS,EF,YTIME))*
-           (iResInPriceEq(runCy,SBS,EF,YTIME) + VFuelPriceSub(runCy,SBS,EF,YTIME-1)
-           + iIntToConsuPrices(runCy,SBS,EF,YTIME) * sum(WEF$EFtoWEF(SBS,EF,WEF), (iPriceFuelsInt(WEF,YTIME) - iPriceFuelsInt(WEF,YTIME-1)) / 1000 ))
+           (iResInPriceEq(runCy,SBS,EF,YTIME) + VFuelPriceSub(runCy,SBS,EF,YTIME-1))
            + iPriceReform(runCy,SBS,EF,YTIME)*iPriceTragets(runCy,SBS,EF,YTIME)
 )
           + iCo2EmiFac(runCy,SBS,EF,YTIME) *sum(NAP$NAPtoALLSBS(NAP,SBS),(VCarVal(runCy,NAP,YTIME)))/1000

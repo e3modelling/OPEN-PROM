@@ -581,13 +581,6 @@ $offdelim
 ;
 iHydrogenPri(allCy,SBS,YTIME)=4.3;
 iResInPriceEq(allCy,SBS,EF,YTIME)$an(YTIME) = iResDomPriEq(allCy,SBS,EF,YTIME)/1000;
-table iWorldPriToDomPri(allCy,SBS,EF,YTIME)	 "Parameters linking world prices to domestic prices in equations, after 2024 (1)"
-$ondelim
-$include"./iWorldPriToDomPri.csv"
-$offdelim
-;
-iIntToConsuPrices(allCy,SBS,EF,YTIME)$an(YTIME) = iWorldPriToDomPri(allCy,SBS,EF,YTIME);
-iIntToConsuPrices(runCy,SBS,EF,YTIME) = 0;
 table iDomFuelPrices(allCy,SBS,EF,YTIME)	 "Consumer Prices of fuels per subsector (kEuro2005/toe)"
 $ondelim
 $include"./iDomFuelPrices.csv"
