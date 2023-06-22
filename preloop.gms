@@ -17,8 +17,8 @@ display iDisc;
 display TF;
 display TFIRST;
 display iCo2EmiFac;
-display iInvCostChp;
-display iConsPricesFuelSub;
+display iActv;
+display iTotFinEneDemSubBaseYr;
 
 *TIME(YTIME) = %fStartY%;
 VFuelPrice.L(allCy,TRANSE,YTIME) = 0.1;

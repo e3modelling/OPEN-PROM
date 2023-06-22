@@ -208,9 +208,9 @@ $ondelim
 $include"./iDataNonEneSec.csv"
 $offdelim
 ;
-table iFuelConsIndSub(allCy,INDSE,Indu_Scon_Set)               "Fuel Consumption per industry Subsector (Mtoe)"
+table iIndChar(allCy,INDSE,Indu_Scon_Set)               "Industry sector charactetistics (various)"
 $ondelim
-$include"./iFuelConsIndSub.csv"
+$include"./iIndChar.csv"
 $offdelim
 ;
 table iInitConsSubAndInitShaNonSubElec(allCy,DOMSE,Indu_Scon_Set)      "Initial Consumption per Subsector and Initial Shares of Non Substitutable Electricity in Total Electricity Demand (Mtoe)"
@@ -218,7 +218,7 @@ $ondelim
 $include"./iInitConsSubAndInitShaNonSubElec.csv"
 $offdelim
 ;
-iShrHeatPumpElecCons(allCy,INDSE) = iFuelConsIndSub(allCy,INDSE,"SH_HPELC");
+iShrHeatPumpElecCons(allCy,INDSE) = iIndChar(allCy,INDSE,"SH_HPELC");
 iShrHeatPumpElecCons(allCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(allCy,DOMSE,"SH_HPELC");
 *iTechLft(allCy,TRANSE,EF,TEA,YTIME)$(ord(YTIME)>sum(TFIRST,(ord(TFIRST)-3))) = iDataTransTech(TRANSE,EF,"LFT");
 *iTechLft(allCy,INDSE,EF,TEA,YTIME)$(ord(YTIME)>(ordfirst-12)) = iDataIndTechnology(INDSE,EF,"LFT");
@@ -423,16 +423,19 @@ $ondelim
 $include"./iIndFuelConsPerSub.csv"
 $offdelim
 ;
+iIndFuelConsPerSub(allCy,INDSE,EF,YTIME)$(SECTTECH(INDSE,EF) $(iIndFuelConsPerSub(allCy,INDSE,EF,YTIME)<=0)) = 1e-6;
 table iDomFuelConsPerSub(allCy,DOMSE,EF,YTIME)	 "Fuel Consumption per domestic Subsector (Mtoe)"
 $ondelim
 $include"./iDomFuelConsPerSub.csv"
 $offdelim
 ;
+iDomFuelConsPerSub(allCy,DOMSE,EF,YTIME)$(SECTTECH(DOMSE,EF) $(iDomFuelConsPerSub(allCy,DOMSE,EF,YTIME)<=0)) = 1e-6;
 table iFinConsSubFuel(allCy,NENSE,EF,YTIME)	 "Final Consumption per Subsector and fuel (Mtoe)"
 $ondelim
 $include"./iFinConsSubFuel.csv"
 $offdelim
 ;
+iFinConsSubFuel(allCy,NENSE,EF,YTIME)$(SECTTECH(NENSE,EF) $(iFinConsSubFuel(allCy,NENSE,EF,YTIME)<=0)) = 1e-6;
 iFuelConsPerFueSub(allCy,INDSE,EF,YTIME)$(not An(YTIME))   = iIndFuelConsPerSub(allCy,INDSE,EF,YTIME);
 iFuelConsPerFueSub(allCy,DOMSE,EF,YTIME)$(not An(YTIME))   = iDomFuelConsPerSub(allCy,DOMSE,EF,YTIME);
 iFuelConsPerFueSub(allCy,NENSE,EF,YTIME)$(not An(YTIME))   = iFinConsSubFuel(allCy,NENSE,EF,YTIME);
@@ -747,7 +750,7 @@ iCarbValYrExog(YTIME)$an(YTIME) = iEnvPolicies("exogCV",YTIME);
 
                                                    
 ** Industry
-iShrNonSubElecInTotElecDem(allCy,INDSE)  = iFuelConsIndSub(allCy,INDSE,"SHR_NSE");
+iShrNonSubElecInTotElecDem(allCy,INDSE)  = iIndChar(allCy,INDSE,"SHR_NSE");
 iShrNonSubElecInTotElecDem(allCy,INDSE)$(iShrNonSubElecInTotElecDem(allCy,INDSE)>0.98) = 0.98;
 **Domestic - Tertiary
 iShrNonSubElecInTotElecDem(allCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(allCy,DOMSE,"SHR_NSE");

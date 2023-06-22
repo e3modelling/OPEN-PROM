@@ -1,7 +1,7 @@
 * description: Population; Source: SSP Scenarios (IIASA)
 * unit: million
-* origin: calcOutput(type = "POP", file = "iPop.csvr", regionmapping = regionmapping) (madrat 3.0.0 | .GlobalEnv)
-* creation date: Fri Mar 24 10:56:51 2023
+* origin: madrat::calcOutput(type = "POP", file = "iPop.csvr", regionmapping = regionmapping) (madrat 3.3.3 | .GlobalEnv)
+* creation date: Wed Jun 21 12:28:55 2023
 dummy,RAS,MAR
 2010,4016.713,2853.795
 2011,4067.5662,2878.4054

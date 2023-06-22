@@ -1,7 +1,7 @@
 * description: GDP|PPP; Source: SSP Scenarios (IIASA)
 * unit: billion US$2005/yr
-* origin: calcOutput(type = "GDP", file = "iGDP.csvr", regionmapping = regionmapping) (madrat 3.0.0 | .GlobalEnv)
-* creation date: Fri Mar 24 10:56:50 2023
+* origin: madrat::calcOutput(type = "GDP", file = "iGDP.csvr", regionmapping = regionmapping) (madrat 3.3.3 | .GlobalEnv)
+* creation date: Wed Jun 21 12:28:55 2023
 dummy,RAS,MAR
 2010,51499.29,16057.58
 2011,53093.9782,17355.561
