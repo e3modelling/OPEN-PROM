@@ -93,18 +93,18 @@ QHourProdCostInv(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME)) ..
          VHourProdTech(runCy,PGALL,HOUR,YTIME)
                   =E=
                   
-                    ( ( iDisc(runCy,"PG",YTIME-4) * exp(iDisc(runCy,"PG",YTIME-4)*iTechLftPlaType(runCy,PGALL))
-                        / (exp(iDisc(runCy,"PG",YTIME-4)*iTechLftPlaType(runCy,PGALL)) -1))
-                      * iGrossCapCosSubRen(runCy,PGALL,YTIME-4)* 1E3 * iCGI(runCy,YTIME-4)  + iFixOandMCost(PGALL,YTIME-4)
-                    )/iAvailRate(PGALL,YTIME-4) / (1000*(ord(HOUR)-1+0.25))
-                    + iVarCost(PGALL,YTIME-4)/1E3 + (VRenValue(YTIME)*8.6e-5)$( not ( PGREN(PGALL) 
+                    ( ( iDisc(runCy,"PG",YTIME) * exp(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(runCy,PGALL))
+                        / (exp(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(runCy,PGALL)) -1))
+                      * iGrossCapCosSubRen(runCy,PGALL,YTIME)* 1E3 * iCGI(runCy,YTIME)  + iFixOandMCost(PGALL,YTIME)
+                    )/iAvailRate(PGALL,YTIME) / (1000*(ord(HOUR)-1+0.25))
+                    + iVarCost(PGALL,YTIME)/1E3 + (VRenValue(YTIME)*8.6e-5)$( not ( PGREN(PGALL) 
                     $(not sameas("PGASHYD",PGALL)) $(not sameas("PGSHYD",PGALL)) $(not sameas("PGLHYD",PGALL)) ))
-                    + sum(PGEF$PGALLtoEF(PGALL,PGEF), (VFuelPriceSub(runCy,"PG",PGEF,YTIME-4)+
-                        iCO2CaptRate(runCy,PGALL,YTIME-4)*VCO2CO2SeqCsts(runCy,YTIME-4)*1e-3*
-                    iCo2EmiFac(runCy,"PG",PGEF,YTIME-4)
-                         +(1-iCO2CaptRate(runCy,PGALL,YTIME-4))*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME-4)*
-                         (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME-4))))
-                         *sTWhToMtoe/iPlantEffByType(runCy,PGALL,YTIME-4))$(not PGREN(PGALL));
+                    + sum(PGEF$PGALLtoEF(PGALL,PGEF), (VFuelPriceSub(runCy,"PG",PGEF,YTIME)+
+                        iCO2CaptRate(runCy,PGALL,YTIME)*VCO2CO2SeqCsts(runCy,YTIME)*1e-3*
+                    iCo2EmiFac(runCy,"PG",PGEF,YTIME)
+                         +(1-iCO2CaptRate(runCy,PGALL,YTIME))*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
+                         (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
+                         *sTWhToMtoe/iPlantEffByType(runCy,PGALL,YTIME))$(not PGREN(PGALL));
 
 
 * Compute hourly production cost used in investment decisions excluding CCS
