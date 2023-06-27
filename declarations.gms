@@ -99,7 +99,6 @@ iGrossInConsNoEneBra(allCy,EF,YTIME)	                "Gross Inland Consumption,e
 iPeakBsLoadBy(allCy,PGLOADTYPE)	                        "Peak and Base load for base year (GW)"	
 iHisChpGrCapData(allCy,CHP,YTIME)	                    "Historical CHP  gross capacity data (GW)"	
 iTransfInputRef(allCy,EF,YTIME)	                        "Transformation Input in Refineries (Mtoe)"	
-iInstCapGross(allCy,PGALL,PGCAPAST)	                    "Installed Capacity gross for 1995 and 2000 (GW)"
 iAvailInstCapPastYrs(allCy,PGALL,YTIME)	                "Available installed capacity for past years (GW)"		
 iSigma(allCy,SG)                                        "S parameters of Gompertz function for passenger cars vehicle km (1)"
 iPassCarsMarkSat(allCy)	                                "Passenger cars market saturation (1)"	
