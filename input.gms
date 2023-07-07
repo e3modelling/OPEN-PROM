@@ -731,17 +731,29 @@ loop YTIME$((ord(YTIME) gt TF+21) $(ord(YTIME) lt TF+41)) do
 endloop;
 $offtext
 **                   Power Generation
-table iInstCapElecFuel(allCy,PGALL,PG1_set)	     "Installed capacity only for reporting by electricity from fuel (GW)"	
+table iDataInstCapElecFuel(allCy,PGALL,PG1_set)	     "Installed capacity input (GW)"	
 $ondelim
-$include"./iInstCapElecFuel.csv"
+$include"./iDataInstCapElecFuel.csv"
 $offdelim
 ;
-table iEnvPolicies(POLICIES_SET,YTIME)	          "Environmental policies on emissions constraints  and subsidy on renewables (Mtn CO2)"
+
+iInstCapPast(allCy,PGALL,"2010") = iDataInstCapElecFuel(allCy,PGALL,"2010");
+iInstCapPast(allCy,PGALL,"2015") = iDataInstCapElecFuel(allCy,PGALL,"2015");
+iInstCapPast(allCy,PGALL,"2017") = iDataInstCapElecFuel(allCy,PGALL,"2017");
+
+
+iInstCapPast(allCy,PGALL,"2011") = iInstCapPast(allCy,PGALL,"2010") +(iInstCapPast(allCy,PGALL,"2015")- iInstCapPast(allCy,PGALL,"2010"))/5 ;
+iInstCapPast(allCy,PGALL,"2012") = iInstCapPast(allCy,PGALL,"2011") +(iInstCapPast(allCy,PGALL,"2015")- iInstCapPast(allCy,PGALL,"2010"))/5 ;
+iInstCapPast(allCy,PGALL,"2013") = iInstCapPast(allCy,PGALL,"2012") +(iInstCapPast(allCy,PGALL,"2015")- iInstCapPast(allCy,PGALL,"2010"))/5 ;
+iInstCapPast(allCy,PGALL,"2014") = iInstCapPast(allCy,PGALL,"2013") +(iInstCapPast(allCy,PGALL,"2015")- iInstCapPast(allCy,PGALL,"2010"))/5 ;
+iInstCapPast(allCy,PGALL,"2016") = iInstCapPast(allCy,PGALL,"2015") +(iInstCapPast(allCy,PGALL,"2017")- iInstCapPast(allCy,PGALL,"2015"))/2 ;
+
+table iEnvPolicies(POLICIES_SET,YTIME) "Environmental policies on emissions constraints  and subsidy on renewables (Mtn CO2)"
 $ondelim
 $include"./iEnvPolicies.csv"
 $offdelim
 ;
-table iDataPowGenCost(PGALL,PGECONCHAR)   "Data for power generation costs (various)"
+table iDataPowGenCost(PGALL,PGECONCHAR) "Data for power generation costs (various)"
 $ondelim
 $include"./iDataPowGenCost.csv"
 $offdelim

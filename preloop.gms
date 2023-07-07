@@ -18,7 +18,7 @@ display TF;
 display TFIRST;
 display iCo2EmiFac;
 display iActv;
-display iTotFinEneDemSubBaseYr;
+display iInstCapPast;
 
 *TIME(YTIME) = %fStartY%;
 VFuelPrice.L(allCy,TRANSE,YTIME) = 0.1;
