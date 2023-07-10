@@ -392,6 +392,11 @@ $ondelim
 $include"./iAvailRate.csv"
 $offdelim
 ;
+table iDataElecProd(allCy,PGALL,YTIME) "Electricity production past years (GWh)"
+$ondelim
+$include"./iDataElecProd.csv"
+$offdelim
+;
 
 table iDataDistrLosses(allCy,EF,YTIME)	    "Data for Distribution Losses (Mtoe)"
 $ondelim

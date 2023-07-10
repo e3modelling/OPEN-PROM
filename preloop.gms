@@ -266,10 +266,10 @@ VNewCapYearly.FX(runCy,"PGLHYD","2017") = +1E-10;
 $offtext
 VAvgCapFacRes.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =iAvailRate(PGALL,YTIME);
 $ontext
-VElecProdPowGenPlants.FX(runCy,pgall,"2009")=iEleGenPastData(runCy,pgall,"prod_09")/1000;
-VElecProdPowGenPlants.FX(runCy,pgall,"2010")=iEleGenPastData(runCy,pgall,"prod_10")/1000;
-VElecProdPowGenPlants.FX(runCy,pgall,"2015")=iEleGenPastData(runCy,pgall,"prod_15")/1000;
-VElecProdPowGenPlants.FX(runCy,pgall,"2017")=iEleGenPastData(runCy,pgall,"prod_17")/1000;
+VElecProdPowGenPlants.FX(runCy,pgall,"2009")=,iDataElecProd(runCy,pgall,"prod_09")/1000;
+VElecProdPowGenPlants.FX(runCy,pgall,"2010")=,iDataElecProd(runCy,pgall,"prod_10")/1000;
+VElecProdPowGenPlants.FX(runCy,pgall,"2015")=,iDataElecProd(runCy,pgall,"prod_15")/1000;
+VElecProdPowGenPlants.FX(runCy,pgall,"2017")=,iDataElecProd(runCy,pgall,"prod_17")/1000;
 $offtext
 
 VEndogScrapIndex.FX(runCy,PGALL,YTIME)$(not an(YTIME) ) = 1;
