@@ -182,7 +182,7 @@ $ondelim
 $include"./iCO2SeqData.csv"
 $offdelim
 ;
-iElastCO2Seq(allCy,CO2SEQELAST) = iCO2SeqData(allCy,CO2SEQELAST,"2029");
+iElastCO2Seq(allCy,CO2SEQELAST) = sum(tfirst,iCO2SeqData(allCy,CO2SEQELAST,TFIRST));
 table iResDemSub(allCy,SBS,YTIME)                  "Residuals in total energy demand per subsector (1)"
 $ondelim
 $include"./iResDemSub.csv"
@@ -462,7 +462,7 @@ $ondelim
 $include"./iDataElecSteamGen.csv"
 $offdelim
 ;
-iTotAvailCapBsYr(allCy) = iDataElecSteamGen(allCy,"TOTCAP","2018")+iDataElecSteamGen(allCy,"CHP_CAP","2018")*0.85;
+iTotAvailCapBsYr(allCy) = sum(tfirst,iDataElecSteamGen(allCy,"TOTCAP",TFIRST))+sum(tfirst,iDataElecSteamGen(allCy,"CHP_CAP",TFIRST))*0.85;
 iElecImp(allCy,YTIME)=0;
 
 iScaleEndogScrap(allCy,PGALL,YTIME) = iPremReplacem(allCy,PGALL);
@@ -471,14 +471,8 @@ $ondelim
 $include"./iDecomPlants.csv"
 $offdelim
 ;
-iPlantDecomSched(allCy,PGALL,"2029") = iDecomPlants(allCy,PGALL,"DEC_10");
-iPlantDecomSched(allCy,PGALL,"2018") = iDecomPlants(allCy,PGALL,"DEC_18");
-iPlantDecomSched(allCy,PGALL,YTIME) $((ord(YTIME) gt TF-5) $(ord(YTIME) le TF))     = (iDecomPlants(allCy,PGALL,"DEC_05")/5);
-iPlantDecomSched(allCy,PGALL,YTIME)$((ord(YTIME) gt TF) $(ord(YTIME) le TF+5))      = (iDecomPlants(allCy,PGALL,"DEC_10")/5);
-iPlantDecomSched(allCy,PGALL,YTIME)$((ord(YTIME) gt TF+5) $(ord(YTIME) le TF+10))   = (iDecomPlants(allCy,PGALL,"DEC_15")/5);
-iPlantDecomSched(allCy,PGALL,YTIME)$((ord(YTIME) gt TF+10) $(ord(YTIME) le TF+15))  = (iDecomPlants(allCy,PGALL,"DEC_20")/5);
-iPlantDecomSched(allCy,PGALL,YTIME)$((ord(YTIME) gt TF+15) $(ord(YTIME) le TF+20))  = (iDecomPlants(allCy,PGALL,"DEC_25")/5);
-iPlantDecomSched(allCy,PGALL,YTIME)$((ord(YTIME) gt TF+20) $(ord(YTIME) le TF+25))  = (iDecomPlants(allCy,PGALL,"DEC_30")/5);
+iPlantDecomSched(allCy,PGALL,YTIME) = iDecomPlants(allCy,PGALL,"DEC_10");
+
 table iInvPlants(allCy,PGALL,PG1_set)	            "Investment Plants (MW)"
 $ondelim
 $include"./iInvPlants.csv"
@@ -610,7 +604,7 @@ iGrosInlCons(allCy,EFS,YTIME)$(not An(YTIME)) = iDataGrossInlCons(allCy,EFS,YTIM
 iGrossInConsNoEneBra(runCy,EFS,YTIME) = iGrosInlCons(runCy,EFS,YTIME) + iTotEneBranchCons(runCy,EFS,YTIME)$EFtoEFA(EFS,"LQD")
                                                - iTotEneBranchCons(runCy,EFS,YTIME)$(not EFtoEFA(EFS,"LQD"));
 
-iPeakBsLoadBy(allCy,PGLOADTYPE) = iDataElecSteamGen(allCy,PGLOADTYPE,"2036");
+iPeakBsLoadBy(allCy,PGLOADTYPE) = sum(tfirst, iDataElecSteamGen(allCy,PGLOADTYPE,tfirst));
 
 table iDataElecAndSteamGen(allCy,CHP,YTIME)	 "Data releated to electricity and steam generation"
 $ondelim
@@ -627,8 +621,7 @@ $offdelim
 iTransfInputRef(allCy,EFS,YTIME)$(not An(YTIME)) = iDataTotTransfInputRef(allCy,EFS,YTIME);
 
 * Calculation of weights for sector average fuel price
-
-parameter iDiffFuelsInSec(SBS) auxiliary parameter holding the number of different fuels in a sector;
+iResElecIndex(allCy,YTIME) = 1;
 
 loop SBS do
          iDiffFuelsInSec(SBS) = 0;

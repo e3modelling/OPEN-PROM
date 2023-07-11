@@ -910,7 +910,7 @@ QFuelCons(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,E
 QElecIndPricesEst(runCy,YTIME)$TIME(YTIME)..
          VElecIndPricesEst(runCy,YTIME)
                  =E=
-         VResElecIndex(runCy,YTIME) * VElecIndPrices(runCy,YTIME-1) *
+         iResElecIndex(runCy,YTIME) * VElecIndPrices(runCy,YTIME-1) *
         ((VFuelPriceSub(runCy,"OI","ELC",YTIME-1)/VFuelPrice(runCy,"OI",YTIME-1))/
         (VFuelPriceSub(runCy,"OI","ELC",YTIME-2)/VFuelPrice(runCy,"OI",YTIME-2)))**(0.3) *
         ((VFuelPriceSub(runCy,"OI","ELC",YTIME-2)/VFuelPrice(runCy,"OI",YTIME-2))/

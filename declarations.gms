@@ -126,6 +126,8 @@ iCapCostTech(allCy,SBS,EF,YTIME)                      "Capital Cost of technolog
                                                  !! - For Iron and Steel is expressed in kEuro05/tn-of-steel
                                                  !! - For Domestic Sectors is expressed in kEuro05/toe-year
 iInstCapPast(allCy,PGALL,YTIME)        "Installed capacity past (GW)"
+iDiffFuelsInSec(SBS) "auxiliary parameter holding the number of different fuels in a sector"
+iResElecIndex(allCy,YTIME)             "Residual for electricity Index (1)"
 ;
 
 
@@ -393,7 +395,6 @@ VElecIndPrices(allCy,YTIME)            "Electricity index - a function of indust
 VElecConsHeatPla(allCy,DSBS,YTIME)     "Electricity consumed in heatpump plants (Mtoe)"
 VConsFuelSub(allCy,DSBS,EF,YTIME)      "Consumption of fuels in each demand subsector (including heat from heatpumps) (Mtoe)"
 VElecIndPricesEst(allCy,YTIME)         "Electricity index - a function of industry price - Estimate (1)"
-VResElecIndex(allCy,YTIME)             "Residual for electricity Index (1)"
 VFuelPriceSub(allCy,SBS,EF,YTIME)      "Fuel prices per subsector and fuel (kUS$2005/toe)"
 VFuePriSubChp(allCy,DSBS,EF,TEA,YTIME) "Fuel prices per subsector and fuel for CHP plants (kUS$2005/toe)"
 VTechCostVar(allCy,SBS,EF,TEA,YTIME)   "Variable Cost of technology (various)"
