@@ -757,8 +757,11 @@ $include"./iDataPowGenCost.csv"
 $offdelim
 ;
 iCarbValYrExog(YTIME)$an(YTIME) = iEnvPolicies("exogCV",YTIME);
-
-                                                   
+table iMatrFactor(allCy,SBS,EF,YTIME)       "Maturity factor per technology and subsector (1)"
+$ondelim
+$include"./iMatrFactor.csv"
+$offdelim
+;                                              
 ** Industry
 iShrNonSubElecInTotElecDem(allCy,INDSE)  = iIndChar(allCy,INDSE,"SHR_NSE");
 iShrNonSubElecInTotElecDem(allCy,INDSE)$(iShrNonSubElecInTotElecDem(allCy,INDSE)>0.98) = 0.98;

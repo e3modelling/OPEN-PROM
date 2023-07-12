@@ -406,7 +406,6 @@ VElecProdCostChp(allCy,DSBS,CHP,YTIME)                  "Electricity production 
 VTechCost(allCy,DSBS,rCon,EF,TEA,YTIME)                 "Technology cost (Keuro/toe)"
 VTechCostIntrm(allCy,DSBS,rcon,EF,TEA,YTIME)            "Intermediate technology cost (Keuro/toe)"
 VTechCostMatr(allCy,DSBS,rCon,EF,TEA,YTIME)             "Technology cost including maturity factor (Keuro/toe)"
-VMatrFactor(allCy,SBS,EF,TEA,YTIME)                     "Maturity factor per technology and subsector (1)"
 VTechSort(allCy,DSBS,rCon,YTIME)                        "Technology sorting based on variable cost (1)"
 VConsRemSubEquip(allCy,DSBS,EF,YTIME)                   "Consumption of remaining substitutable equipment (Mtoe)"
 VGapFinalDem(allCy,DSBS,YTIME)                          "Final demand gap to be filed by new technologies (Mtoe)"

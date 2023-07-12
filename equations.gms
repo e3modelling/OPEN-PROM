@@ -684,7 +684,7 @@ QTranspCostPerVeh(runCy,TRANSE,rCon,TTECH,TEA,YTIME)$(TIME(YTIME) $SECTTECH(TRAN
 QTranspCostMatFac(runCy,TRANSE,RCon,TTECH,TEA,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $(ord(rCon) le iNcon(TRANSE)+1))..
          VTranspCostMatFac(runCy,TRANSE,RCon,TTECH,TEA,YTIME) 
          =E=
-         VMatrFactor(runCy,TRANSE,TTECH,TEA,YTIME) * VTranspCostPerVeh(runCy,TRANSE,rCon,TTECH,TEA,YTIME);
+         iMatrFactor(runCy,TRANSE,TTECH,YTIME) * VTranspCostPerVeh(runCy,TRANSE,rCon,TTECH,TEA,YTIME);
 
 
 * Compute technology sorting based on variable cost
@@ -697,7 +697,7 @@ QTechSortVarCost(runCy,TRANSE,rCon,YTIME)$(TIME(YTIME) $(ord(rCon) le iNcon(TRAN
 QTechSortVarCostNewEquip(runCy,TRANSE,TTECH,TEA,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) )..
          VTechSortVarCostNewEquip(runCy,TRANSE,TTECH,TEA,YTIME)
          =E=
-         VMatrFactor(runCy,TRANSE,TTECH,TEA,YTIME) / iCumDistrFuncConsSize(runCy,TRANSE)
+         iMatrFactor(runCy,TRANSE,TTECH,YTIME) / iCumDistrFuncConsSize(runCy,TRANSE)
          * sum( Rcon$(ord(Rcon) le iNcon(TRANSE)+1),
                 VTranspCostPerVeh(runCy,TRANSE,RCon,TTECH,TEA,YTIME)
                 * iDisFunConSize(runCy,TRANSE,RCon) / VTechSortVarCost(runCy,TRANSE,RCon,YTIME)
@@ -977,7 +977,7 @@ QTechCostIntrm(runCy,DSBS,rCon,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(
 QTechCostMatr(runCy,DSBS,rCon,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) $SECTTECH(DSBS,EF) )..
 VTechCostMatr(runCy,DSBS,rCon,EF,TEA,YTIME) 
                                                =E=
-VMatrFactor(runCy,DSBS,EF,TEA,YTIME) * VTechCost(runCy,DSBS,rCon,EF,TEA,YTIME) ;
+iMatrFactor(runCy,DSBS,EF,YTIME) * VTechCost(runCy,DSBS,rCon,EF,TEA,YTIME) ;
 
 * Compute Technology sorting based on variable cost
 QTechSort(runCy,DSBS,rCon,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) )..
@@ -995,7 +995,7 @@ QGapFinalDem(runCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)))..
 * Compute technology share in new equipment
 QTechShareNewEquip(runCy,DSBS,EF,TEA,YTIME)$(TIME(YTIME) $SECTTECH(DSBS,EF) $(not TRANSE(DSBS)) )..
          VTechShareNewEquip(runCy,DSBS,EF,TEA,YTIME) =E=
-         VMatrFactor(runCy,DSBS,EF,TEA,YTIME) / iCumDistrFuncConsSize(runCy,DSBS) *
+         iMatrFactor(runCy,DSBS,EF,YTIME) / iCumDistrFuncConsSize(runCy,DSBS) *
          sum(rCon$(ord(rCon) le iNcon(DSBS)+1),
                   VTechCost(runCy,DSBS,rCon,EF,TEA,YTIME)
                   * iDisFunConSize(runCy,DSBS,rCon)/VTechSort(runCy,DSBS,rCon,YTIME));
