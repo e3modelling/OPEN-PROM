@@ -1,4 +1,7 @@
+*** preliminaries
+*** number of columns that are listed for each variable in the column listing
 option limcol = 2000;
+*** number of rows that are listed for each equation in the equation listing
 option limrow = 2000;
 
 *** "dollar" ($) commands section: define GAMS flags & code control & compilation-time options
@@ -12,7 +15,11 @@ $onEmpty
 
 *** TODO: check if the contents of this block are actually used later
 *** GAMS "flags" definitions
-$setGlobal fCountries 'RAS,MAR'
+
+*** Maximum number of solver attempts
+$evalGlobal SolverTryMax 1
+
+$setGlobal fCountries 'RAS'
 
 $setGlobal fSingleCountryRun 'yes'
 

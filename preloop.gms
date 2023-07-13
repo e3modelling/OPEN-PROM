@@ -11,14 +11,13 @@ endloop;
 model openprom /all/;
 
 
-option iGDP:2:0:6;
-display iGDP;
+option iPop:2:0:6;
+display iPop;
 display iDisc;
 display TF;
 display TFIRST;
 display iCo2EmiFac;
-display iActv;
-display iDataElecProd;
+display iUsfEneConvSubTech;
 
 *TIME(YTIME) = %fStartY%;
 VFuelPrice.L(allCy,TRANSE,YTIME) = 0.1;
@@ -301,8 +300,9 @@ VFkImpAllFuelsNotNatGas.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
 
 VScalFacPlaDisp.LO(runCy, HOUR, YTIME)=-1;
 VLoadCurveConstr.LO(runCy,YTIME)=0;
-*VLoadCurveConstr.L(runCy,YTIME)=0.01;
+VLoadCurveConstr.L(runCy,YTIME)=0.01;
 
 VRenValue.FX(YTIME) = 0 ;
 
 VTotReqElecProd.fx(runCy,YTIME)$TFIRST(YTIME)=sum(pgall,VElecProdPowGenPlants.L(runCy,pgall,YTIME)$TFIRST(YTIME));
+display VConsFuel.l;

@@ -225,7 +225,7 @@ iShrHeatPumpElecCons(allCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(allCy,DOMSE
 *iTechLft(allCy,DOMSE,EF,TEA,YTIME)$(ord(YTIME)>(ordfirst-12)) = iDataDomLft(DOMSE,EF,"LFT");
 *iTechLft(allCy,NENSE,EF,TEA,YTIME)$(ord(YTIME)>(ordfirst-4))  = iDataNonEneLft(NENSE,EF,"LFT");
 iExogDemOfBiomass(allCy,DOMSE,YTIME) = 0;
-iElastCO2Seq(allCy,CO2SEQELAST) = iCO2SeqData(allCy,CO2SEQELAST,"2029");
+iElastCO2Seq(allCy,CO2SEQELAST) = iCO2SeqData(allCy,CO2SEQELAST,"%fBaseY%");
 iRatioImpFinElecDem(runCy,YTIME)$an(YTIME) = iSuppRefCapacity(runCy,"ELC_IMP",YTIME);
 iFuelExprts(runCy,EFS,YTIME) = iSuppExports(runCy,EFS,YTIME);
 iRatePriProTotPriNeeds(runCy,PPRODEF,YTIME) = iSuppRatePrimProd(runCy,PPRODEF,YTIME);
@@ -239,7 +239,7 @@ iResTransfOutputRefineries(runCy,EFS,YTIME) = iSupTrnasfOutputRefineries(runCy,E
 iRefCapacity(runCy,YTIME)= iSuppRefCapacity(runCy,"REF_CAP",YTIME);
 iResRefCapacity(runCy,YTIME) = iSupResRefCapacity(runCy,"REF_CAP_RES",YTIME);
 iTransfInpGasworks(runCy,EFS,YTIME)= iSuppTransfInputPatFuel(EFS,YTIME);
-iShareFueTransfInput(runCy,EFS)$sum(EF$EFS(EF),iTransfInpGasworks(runCy,EF,"2029")) =  iTransfInpGasworks(runCy,EFS,"2029") / sum(EF$EFS(EF),iTransfInpGasworks(runCy,EF,"2029"));
+iShareFueTransfInput(runCy,EFS)$sum(EF$EFS(EF),iTransfInpGasworks(runCy,EF,"%fBaseY%")) =  iTransfInpGasworks(runCy,EFS,"%fBaseY%") / sum(EF$EFS(EF),iTransfInpGasworks(runCy,EF,"%fBaseY%"));
 *VDistrLosses.FX(runCy,EFS,TT)$PERIOD(TT) = VDistrLosses.L(runCy,EFS,TT);
 iRateLossesFinCons(runCy,EFS,YTIME)$an(YTIME)  = iRateLossesFinConsSup(runCy,EFS, YTIME)*iEneProdRDscenarios(runCy,"PG",YTIME);
 
@@ -269,17 +269,17 @@ iNcon("BU") = 2;   !! ... except bunkers .
 * 0.952 turned out to be a (constant) ratio between modal and average mileage through iterations in Excel
 
 
-iAnnCons(runCy,'PC','smallest')= 0.5 * 0.952 * iTransChar(runCy,"KM_VEH","2029") * 1000 * 1E-6;
-iAnnCons(runCy,'PC' ,'modal')=0.952 * iTransChar(runCy,"KM_VEH","2029") * 1000 * 1E-6;
-iAnnCons(runCy,'PC' ,'largest')= 4 * 0.952 * iTransChar(runCy,"KM_VEH","2029") * 1000 * 1E-6;
+iAnnCons(runCy,'PC','smallest')= 0.5 * 0.952 * iTransChar(runCy,"KM_VEH","%fBaseY%") * 1000 * 1E-6;
+iAnnCons(runCy,'PC' ,'modal')=0.952 * iTransChar(runCy,"KM_VEH","%fBaseY%") * 1000 * 1E-6;
+iAnnCons(runCy,'PC' ,'largest')= 4 * 0.952 * iTransChar(runCy,"KM_VEH","%fBaseY%") * 1000 * 1E-6;
 
 
 * modal value is assumed to be 2 tonnes/vehicle, min = 1/3*modal and max = 10*modal tkm.
 * 0.706 is the constant ratio of modal/average tkm through iterations in Excel
 
-iAnnCons(runCy,'GU','smallest')=0.5 * 0.706 * iTransChar(runCy,"KM_VEH_TRUCK","2029")* 1000 * 2 / 3  * 1E-6;
-iAnnCons(runCy,'GU','modal')=0.706 * iTransChar(runCy,"KM_VEH_TRUCK","2029") * 1000 * 2  * 1E-6;
-iAnnCons(runCy,'GU','largest')=4 * 0.706 * iTransChar(runCy,"KM_VEH_TRUCK","2029") * 1000 * 2 * 10  * 1E-6;
+iAnnCons(runCy,'GU','smallest')=0.5 * 0.706 * iTransChar(runCy,"KM_VEH_TRUCK","%fBaseY%")* 1000 * 2 / 3  * 1E-6;
+iAnnCons(runCy,'GU','modal')=0.706 * iTransChar(runCy,"KM_VEH_TRUCK","%fBaseY%") * 1000 * 2  * 1E-6;
+iAnnCons(runCy,'GU','largest')=4 * 0.706 * iTransChar(runCy,"KM_VEH_TRUCK","%fBaseY%") * 1000 * 2 * 10  * 1E-6;
 
 iAnnCons(runCy,'PA','smallest')=40000 * 50 * 1E-6;
 iAnnCons(runCy,'PA','modal')=400000 * 100 * 1E-6;
@@ -478,7 +478,7 @@ $ondelim
 $include"./iInvPlants.csv"
 $offdelim
 ;
-iDecInvPlantSched(allCy,PGALL,"2029") = iInvPlants(allCy,PGALL,"INV_10");
+iDecInvPlantSched(allCy,PGALL,"2010") = iInvPlants(allCy,PGALL,"INV_10");
 iDecInvPlantSched(allCy,PGALL,"2011") = iInvPlants(allCy,PGALL,"INV_11");
 iDecInvPlantSched(allCy,PGALL,"2012") = iInvPlants(allCy,PGALL,"INV_12");
 iDecInvPlantSched(allCy,PGALL,"2013") = iInvPlants(allCy,PGALL,"INV_13");
@@ -856,7 +856,7 @@ iUsfEneConvSubTech(runCy,NENSE,EF,YTIME)$(ord(YTIME) eq TF+33)= iDataNonEneSec(N
 iTechLft(runCy,NENSE,EF,YTIME)$(ord(YTIME)>(ordfirst-8)) = iDataNonEneSec(NENSE,EF,"LFT");
 display TF;
 
-loop YTIME$((ord(YTIME) gt TF-7) $(ord(YTIME) lt TF+8)) do
+loop YTIME$((ord(YTIME) gt TF-8) $(ord(YTIME) lt TF+8)) do
          iCapCostTech(runCy,SBS,EF,YTIME)= (iCapCostTech(runCy,SBS,EF,"2025")-iCapCostTech(runCy,SBS,EF,"2010"))/20+iCapCostTech(runCy,SBS,EF,YTIME-1);
          iFixOMCostTech(runCy,SBS,EF,YTIME)= (iFixOMCostTech(runCy,SBS,EF,"2025")-iFixOMCostTech(runCy,SBS,EF,"2010"))/20+iFixOMCostTech(runCy,SBS,EF,YTIME-1);
          iVarCostTech(runCy,SBS,EF,YTIME)= (iVarCostTech(runCy,SBS,EF,"2025")-iVarCostTech(runCy,SBS,EF,"2010"))/20+iVarCostTech(runCy,SBS,EF,YTIME-1);

@@ -471,7 +471,7 @@ sTWhToMtoe         "TWh to Mtoe conversion factor" /0.086/
 sElecToSteRatioChp "Technical maximum of electricity to steam ratio in CHP plants" /1.15/
 sGwToTwhPerYear    "convert GW mean power into TWh/y" /8.76/
 s                  "time step iterator" /0/
-sSolverTryMax      "maximum attempts to solve each time step" /5/
+sSolverTryMax      "maximum attempts to solve each time step" /%SolverTryMax%/
 sModelStat         "helper parameter for solver status"
 sExogCarbValue	   "switch for exogenous carbon value (0=exogenous 1=endogenous)" /1/
 ;
