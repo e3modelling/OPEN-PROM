@@ -18,7 +18,7 @@ display TF;
 display TFIRST;
 display iCo2EmiFac;
 display iActv;
-display iResElecIndex;
+display iDataElecProd;
 
 *TIME(YTIME) = %fStartY%;
 VFuelPrice.L(allCy,TRANSE,YTIME) = 0.1;
@@ -160,13 +160,13 @@ VDemTr.FX(runCy,TRANSE,EF,YTIME) $(SECTTECH(TRANSE,EF) $(not An(YTIME))) = iFuel
 
 VElecNonSub.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = iFuelConsPerFueSub(runCy,INDDOM,"ELC",YTIME) * iShrNonSubElecInTotElecDem(runCy,INDDOM);
 VElecConsInd.FX(runCy,YTIME)$(not An(YTIME))= SUM(INDSE,VElecNonSub.l(runCy,INDSE,YTIME));
-$ontext
+
 VFuePriSubChp.FX(runCy,DSBS,EF,TEA,YTIME)$((not An(YTIME)) $(not TRANSE(DSBS))  $SECTTECH(DSBS,EF)) =
-(((VFuelPriceSub.l(runCy,DSBS,EF,YTIME)+iVarCostTech(runCy,DSBS,EF,TEA,YTIME)/1000)/iUsfEneConvSubTech(runCy,DSBS,EF,YTIME)- 
+(((VFuelPriceSub.l(runCy,DSBS,EF,YTIME)+iVarCostTech(runCy,DSBS,EF,YTIME)/1000)/iUsfEneConvSubTech(runCy,DSBS,EF,YTIME)- 
 (0$(not CHP(EF)) + (VFuelPriceSub.l(runCy,"OI","ELC",YTIME)*iFracElecPriChp(runCy,YTIME)*iElecIndex(runCy,"2010"))$CHP(EF))) + (0.003) + 
-SQRT( SQR(((VFuelPriceSub.l(runCy,DSBS,EF,YTIME)+iVarCostTech(runCy,DSBS,EF,TEA,YTIME)/1000)/iUsfEneConvSubTech(runCy,DSBS,EF,YTIME)- (0$(not CHP(EF)) + 
+SQRT( SQR(((VFuelPriceSub.l(runCy,DSBS,EF,YTIME)+iVarCostTech(runCy,DSBS,EF,YTIME)/1000)/iUsfEneConvSubTech(runCy,DSBS,EF,YTIME)- (0$(not CHP(EF)) + 
 (VFuelPriceSub.l(runCy,"OI","ELC",YTIME)*iFracElecPriChp(runCy,YTIME)*iElecIndex(runCy,"2010"))$CHP(EF)))-(0.003)) + SQR(1e-7) ) )/2;
-$offtext
+
 
 VDemSub.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = max(iTotFinEneDemSubBaseYr(runCy,INDDOM,YTIME) - VElecNonSub.L(runCy,INDDOM,YTIME),1e-5);
 VDemSub.FX(runCy,NENSE,YTIME)$(not An(YTIME)) = max(iTotFinEneDemSubBaseYr(runCy,NENSE,YTIME),1e-5);
@@ -238,38 +238,25 @@ VPowerPlaShrNewEq.FX(runCy,PGALL,YTIME)$(AN(YTIME) $(NOT CCS(PGALL)))=0;
 VPowerPlantNewEq.FX(runCy,PGALL,YTIME)$(AN(YTIME) $(NOT NOCCS(PGALL)) )=0;
 
 VNewInvDecis.FX(runCy,YTIME)$(NOT AN(YTIME))=1;
-$ontext
-VElecGenPlanCap.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  iAvailInstCapPastYrs(runCy,PGALL,YTIME);
-VElecGenPlantsCapac.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  iAvailInstCapPastYrs(runCy,PGALL,YTIME);
-VOverallCap.FX(runCy,PGALL,"2017") =  iAvailInstCapPastYrs(runCy,PGALL,"2017");
 
-$ontext
-VNewCapYearly.FX(runCy,PGALL,"2001")$PGREN(PGALL) = iAvailInstCapPastYrs(runCy,PGALL,"2001")- iAvailInstCapPastYrs(runCy,PGALL,"2000") ;
-VNewCapYearly.FX(runCy,PGALL,"2002")$PGREN(PGALL) = iAvailInstCapPastYrs(runCy,PGALL,"2002")- iAvailInstCapPastYrs(runCy,PGALL,"2001") ;
-VNewCapYearly.FX(runCy,PGALL,"2003")$PGREN(PGALL) = iAvailInstCapPastYrs(runCy,PGALL,"2003")- iAvailInstCapPastYrs(runCy,PGALL,"2002") ;
-VNewCapYearly.FX(runCy,PGALL,"2004")$PGREN(PGALL) = iAvailInstCapPastYrs(runCy,PGALL,"2004")- iAvailInstCapPastYrs(runCy,PGALL,"2003") ;
-VNewCapYearly.FX(runCy,PGALL,"2005")$PGREN(PGALL) = iAvailInstCapPastYrs(runCy,PGALL,"2005")- iAvailInstCapPastYrs(runCy,PGALL,"2004") ;
-VNewCapYearly.FX(runCy,PGALL,"2006")$PGREN(PGALL) = iAvailInstCapPastYrs(runCy,PGALL,"2006")- iAvailInstCapPastYrs(runCy,PGALL,"2005") +1E-10;
-VNewCapYearly.FX(runCy,PGALL,"2007")$PGREN(PGALL) = iAvailInstCapPastYrs(runCy,PGALL,"2007")- iAvailInstCapPastYrs(runCy,PGALL,"2006") +1E-10;
-VNewCapYearly.FX(runCy,PGALL,"2008")$PGREN(PGALL) = iAvailInstCapPastYrs(runCy,PGALL,"2008")- iAvailInstCapPastYrs(runCy,PGALL,"2007") +1E-10;
-VNewCapYearly.FX(runCy,PGALL,"2009")$PGREN(PGALL) = iAvailInstCapPastYrs(runCy,PGALL,"2009")- iAvailInstCapPastYrs(runCy,PGALL,"2008") +1E-10;
-VNewCapYearly.FX(runCy,PGALL,"2010")$PGREN(PGALL) = iAvailInstCapPastYrs(runCy,PGALL,"2010")- iAvailInstCapPastYrs(runCy,PGALL,"2009") +1E-10;
-VNewCapYearly.FX(runCy,PGALL,"2011")$PGREN(PGALL) = iAvailInstCapPastYrs(runCy,PGALL,"2011")- iAvailInstCapPastYrs(runCy,PGALL,"2010") +1E-10;
-VNewCapYearly.FX(runCy,PGALL,"2012")$PGREN(PGALL) = iAvailInstCapPastYrs(runCy,PGALL,"2012")- iAvailInstCapPastYrs(runCy,PGALL,"2011") +1E-10;
-VNewCapYearly.FX(runCy,PGALL,"2013")$PGREN(PGALL) = iAvailInstCapPastYrs(runCy,PGALL,"2013")- iAvailInstCapPastYrs(runCy,PGALL,"2012") +1E-10;
-VNewCapYearly.FX(runCy,PGALL,"2014")$PGREN(PGALL) = iAvailInstCapPastYrs(runCy,PGALL,"2014")- iAvailInstCapPastYrs(runCy,PGALL,"2013") +1E-10;
-VNewCapYearly.FX(runCy,PGALL,"2015")$PGREN(PGALL) = iAvailInstCapPastYrs(runCy,PGALL,"2015")- iAvailInstCapPastYrs(runCy,PGALL,"2014") +1E-10;
-VNewCapYearly.FX(runCy,PGALL,"2016")$PGREN(PGALL) = iAvailInstCapPastYrs(runCy,PGALL,"2016")- iAvailInstCapPastYrs(runCy,PGALL,"2015") +1E-10;
-VNewCapYearly.FX(runCy,PGALL,"2017")$PGREN(PGALL) = iAvailInstCapPastYrs(runCy,PGALL,"2017")- iAvailInstCapPastYrs(runCy,PGALL,"2016") +1E-10;
-VNewCapYearly.FX(runCy,"PGLHYD","2017") = +1E-10;
-$offtext
+VElecGenPlanCap.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  iInstCapPast(runCy,PGALL,YTIME);
+VElecGenPlantsCapac.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  iInstCapPast(runCy,PGALL,YTIME);
+VOverallCap.FX(runCy,PGALL,YTIME)$TFIRST(YTIME) =  iInstCapPast(runCy,PGALL,YTIME)$TFIRST(YTIME);
+
+VNewCapYearly.FX(runCy,PGALL,"2011")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2011")- iInstCapPast(runCy,PGALL,"2010") +1E-10;
+VNewCapYearly.FX(runCy,PGALL,"2012")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2012")- iInstCapPast(runCy,PGALL,"2011") +1E-10;
+VNewCapYearly.FX(runCy,PGALL,"2013")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2013")- iInstCapPast(runCy,PGALL,"2012") +1E-10;
+VNewCapYearly.FX(runCy,PGALL,"2014")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2014")- iInstCapPast(runCy,PGALL,"2013") +1E-10;
+VNewCapYearly.FX(runCy,PGALL,"2015")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2015")- iInstCapPast(runCy,PGALL,"2014") +1E-10;
+VNewCapYearly.FX(runCy,PGALL,"2016")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2016")- iInstCapPast(runCy,PGALL,"2015") +1E-10;
+VNewCapYearly.FX(runCy,PGALL,"2017")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2017")- iInstCapPast(runCy,PGALL,"2016") +1E-10;
+VNewCapYearly.FX(runCy,"PGLHYD",YTIME)$TFIRST(YTIME) = +1E-10;
+
 VAvgCapFacRes.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =iAvailRate(PGALL,YTIME);
-$ontext
-VElecProdPowGenPlants.FX(runCy,pgall,"2009")=,iDataElecProd(runCy,pgall,"prod_09")/1000;
-VElecProdPowGenPlants.FX(runCy,pgall,"2010")=,iDataElecProd(runCy,pgall,"prod_10")/1000;
-VElecProdPowGenPlants.FX(runCy,pgall,"2015")=,iDataElecProd(runCy,pgall,"prod_15")/1000;
-VElecProdPowGenPlants.FX(runCy,pgall,"2017")=,iDataElecProd(runCy,pgall,"prod_17")/1000;
-$offtext
+
+
+VElecProdPowGenPlants.FX(runCy,pgall,YTIME)=iDataElecProd(runCy,pgall,YTIME)/1000;
+
 
 VEndogScrapIndex.FX(runCy,PGALL,YTIME)$(not an(YTIME) ) = 1;
 VEndogScrapIndex.FX(runCy,PGSCRN,YTIME) = 1;            !! premature replacement it is not allowed for all new plants
@@ -279,18 +266,18 @@ VCO2ElcHrgProd.FX(runCy,YTIME)$(not An(YTIME)) = 0;
 
 VRenShareElecProdSub.FX(runCy,YTIME)$(NOT AN(YTIME))=0;
 VRenPotSupplyCurve.FX(runCy,PGRENEF, YTIME) $(NOT AN(YTIME)) = iMinRenPotential(runCy,PGRENEF,YTIME);
-$ontext
-VAvgPowerGenLongTrm.VLamda(runCy,ESET,"2009") = 0;
-VLonPowGenCostNoClimPol.VLamda(runCy,ESET,"2009") = 0;
-VAvgPowerGenCostShoTrm.VLamda(runCy,ESET,"2009") = 0;
-VLongPowGenCost.VLamda(runCy,PGALL,ESET,"2009") = 0;
-VLonAvgPowGenCostNoClimPol.VLamda(runCy,PGALL,ESET,"2009") = 0;
-VAvgPowerGenLongTrm.VLamda(runCy,ESET,"2017") = 0;
-VLonPowGenCostNoClimPol.VLamda(runCy,ESET,"2017") = 0;
-VAvgPowerGenCostShoTrm.VLamda(runCy,ESET,"2017") = 0;
-VLongPowGenCost.VLamda(runCy,PGALL,ESET,"2017") = 0;
-VLonAvgPowGenCostNoClimPol.VLamda(runCy,PGALL,ESET,"2017") = 0;
-$offtext
+
+VAvgPowerGenLongTrm.L(runCy,ESET,"2010") = 0;
+VLonPowGenCostNoClimPol.L(runCy,ESET,"2010") = 0;
+VAvgPowerGenCostShoTrm.L(runCy,ESET,"2010") = 0;
+VLongPowGenCost.L(runCy,PGALL,ESET,"2010") = 0;
+VLonAvgPowGenCostNoClimPol.L(runCy,PGALL,ESET,"2010") = 0;
+VAvgPowerGenLongTrm.L(runCy,ESET,"2017") = 0;
+VLonPowGenCostNoClimPol.L(runCy,ESET,"2017") = 0;
+VAvgPowerGenCostShoTrm.L(runCy,ESET,"2017") = 0;
+VLongPowGenCost.L(runCy,PGALL,ESET,"2017") = 0;
+VLonAvgPowGenCostNoClimPol.L(runCy,PGALL,ESET,"2017") = 0;
+
 VCarVal.fx(runCy,NAP,YTIME)$(not An(YTIME))=0;
 VCarVal.FX(runCy,"TRADE",YTIME)$an(YTIME) = sExogCarbValue*iCarbValYrExog(YTIME);
 VCarVal.FX(runCy,"NOTRADE",YTIME)$an(YTIME) =sExogCarbValue*iCarbValYrExog(YTIME);
@@ -314,11 +301,8 @@ VFkImpAllFuelsNotNatGas.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
 
 VScalFacPlaDisp.LO(runCy, HOUR, YTIME)=-1;
 VLoadCurveConstr.LO(runCy,YTIME)=0;
-VLoadCurveConstr.L(runCy,YTIME)=0.01;
+*VLoadCurveConstr.L(runCy,YTIME)=0.01;
 
 VRenValue.FX(YTIME) = 0 ;
-*EFFVAL.FX(YTIME) = 0;
-*VEndogScrapIndex.fx(runCy,"athrfo","2017")=0.3;
-*VEndogScrapIndex.fx(runCy,"athNGS","2017")=0.9;
-VTotReqElecProd.fx(runCy,"2017")=sum(pgall,VElecProdPowGenPlants.L(runCy,pgall,"2017"));
-*CONSEF.fx(runCy,INDDOM,CHP,YTIME)  =1-6;
+
+VTotReqElecProd.fx(runCy,YTIME)$TFIRST(YTIME)=sum(pgall,VElecProdPowGenPlants.L(runCy,pgall,YTIME)$TFIRST(YTIME));
