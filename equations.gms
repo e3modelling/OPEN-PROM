@@ -16,7 +16,7 @@ QChpElecPlants(runCy,CHP,YTIME)$TIME(YTIME)..
 
 * Compute Lambda parameter
 QLambda(runCy,YTIME)$TIME(YTIME)..
-         (1 - exp( -VLoadCurveConstr(runCy,YTIME)*sGwToTwhPerYear)) / VLoadCurveConstr(runCy,YTIME)
+         (1 - exp( -VLoadCurveConstr(runCy,YTIME)*sGwToTwhPerYear))  / VLoadCurveConstr(runCy,YTIME)
              =E=
          (VElecDem(runCy,YTIME) - sGwToTwhPerYear*VCorrBaseLoad(runCy,YTIME))
          / (VElecPeakLoad(runCy,YTIME) - VCorrBaseLoad(runCy,YTIME));
@@ -333,13 +333,10 @@ QAvgCapFacRes(runCy,PGALL,YTIME)$(PGREN(PGALL)$TIME(YTIME))..
      iAvailRate(PGALL,YTIME-4)*VNewCapYearly(runCy,PGALL,YTIME-4)+
      iAvailRate(PGALL,YTIME-5)*VNewCapYearly(runCy,PGALL,YTIME-5)+
      iAvailRate(PGALL,YTIME-6)*VNewCapYearly(runCy,PGALL,YTIME-6)+
-     iAvailRate(PGALL,YTIME-7)*VNewCapYearly(runCy,PGALL,YTIME-7)+
-     iAvailRate(PGALL,YTIME-8)*VNewCapYearly(runCy,PGALL,YTIME-8)+
-     iAvailRate(PGALL,YTIME-9)*VNewCapYearly(runCy,PGALL,YTIME-9))/
+     iAvailRate(PGALL,YTIME-7)*VNewCapYearly(runCy,PGALL,YTIME-7))/
 (VNewCapYearly(runCy,PGALL,YTIME)+VNewCapYearly(runCy,PGALL,YTIME-1)+VNewCapYearly(runCy,PGALL,YTIME-2)+
 VNewCapYearly(runCy,PGALL,YTIME-3)+VNewCapYearly(runCy,PGALL,YTIME-4)+VNewCapYearly(runCy,PGALL,YTIME-5)+
-VNewCapYearly(runCy,PGALL,YTIME-6)+VNewCapYearly(runCy,PGALL,YTIME-7)+VNewCapYearly(runCy,PGALL,YTIME-8)+
-VNewCapYearly(runCy,PGALL,YTIME-9));
+VNewCapYearly(runCy,PGALL,YTIME-6)+VNewCapYearly(runCy,PGALL,YTIME-7));
 
 * Compute overall capacity
 QOverallCap(runCy,PGALL,YTIME)$TIME(YTIME)..
@@ -392,8 +389,7 @@ QElecProdPowGenPlants(runCy,PGALL,YTIME)$TIME(YTIME)..
                  =E=
          VNonChpElecProd(runCy,YTIME) /
          (VTotReqElecProd(runCy,YTIME)- VReqElecProd(runCy,YTIME))
-         * VElecGenPlanCap(runCy,PGALL,YTIME)* sum(HOUR, exp(-VScalFacPlaDisp(runCy,HOUR,YTIME)));
-        !!/VPowPlantSorting(runCy,PGALL,YTIME)));
+         * VElecGenPlanCap(runCy,PGALL,YTIME)* sum(HOUR, exp(-VScalFacPlaDisp(runCy,HOUR,YTIME)/VPowPlantSorting(runCy,PGALL,YTIME)));
 
 * Compute sector contribution to total CHP production
 QSecContrTotChpProd(runCy,INDDOM,CHP,YTIME)$(TIME(YTIME) $SECTTECH(INDDOM,CHP))..
@@ -405,8 +401,8 @@ QSecContrTotChpProd(runCy,INDDOM,CHP,YTIME)$(TIME(YTIME) $SECTTECH(INDDOM,CHP)).
 QElecProdChpPlants(runCy,CHP,YTIME)$TIME(YTIME)..
          VChpElecProd(runCy,CHP,YTIME)
                  =E=
-         sum(INDDOM,VConsFuel(runCy,INDDOM,CHP,YTIME))/SUM(chp2,sum(INDDOM,VConsFuel(runCy,INDDOM,CHP2,YTIME)))*
-         (VElecDem(runCy,YTIME) - SUM(PGALL,VElecProd(runCy,PGALL,YTIME)));
+        sum(INDDOM,VConsFuel(runCy,INDDOM,CHP,YTIME)) / SUM(chp2,sum(INDDOM,VConsFuel(runCy,INDDOM,CHP2,YTIME)))*
+        (VElecDem(runCy,YTIME) - SUM(PGALL,VElecProd(runCy,PGALL,YTIME)));
 
 * Compute the share of renewables in gross electricity production for subsdidized renewables
 QShareRenGrossElecProd(runCy,YTIME)$TIME(YTIME)..
