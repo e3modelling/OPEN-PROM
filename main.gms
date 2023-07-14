@@ -44,10 +44,9 @@ $evalGlobal fBaseY %fStartY% - %fPeriodOfYears%
 
 *** end of dollar commands section, no further flag definitions allowed 
 
-file name / '' /; !! construct for printing diagnostic output into log file
-put name;
-
+*** load input data files
 *$call '"C:\Program Files\R\R-4.2.2\bin\Rscript.exe" ".\loadMadratData.R"'
+
 $include sets.gms
 $include declarations.gms
 $include input.gms

@@ -90,7 +90,7 @@ QTotElecGenCap(runCy,YTIME)$TIME(YTIME)..
 
 * Compute hourly production cost used in investment decisions
 QHourProdCostInv(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME)) ..
-         VHourProdTech(runCy,PGALL,HOUR,YTIME)
+         VHourProdCostTech(runCy,PGALL,HOUR,YTIME)
                   =E=
                   
                     ( ( iDisc(runCy,"PG",YTIME) * exp(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(runCy,PGALL))
@@ -109,25 +109,25 @@ QHourProdCostInv(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME)) ..
 
 * Compute hourly production cost used in investment decisions excluding CCS
 QHourProdCostInvDec(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME) $NOCCS(PGALL)) ..
-         VHourProdCostTech(runCy,PGALL,HOUR,YTIME) =E=
-         VPowerPlantNewEq(runCy,PGALL,YTIME)*VHourProdTech(runCy,PGALL,HOUR,YTIME)+
-         sum(CCS$CCS_NOCCS(CCS,PGALL), VPowerPlaShrNewEq(runCy,CCS,YTIME)*VHourProdTech(runCy,CCS,HOUR,YTIME)); 
+         VHourProdCostTechNoCCS(runCy,PGALL,HOUR,YTIME) =E=
+         VPowerPlantNewEq(runCy,PGALL,YTIME)*VHourProdCostTech(runCy,PGALL,HOUR,YTIME)+
+         sum(CCS$CCS_NOCCS(CCS,PGALL), VPowerPlaShrNewEq(runCy,CCS,YTIME)*VHourProdCostTech(runCy,CCS,HOUR,YTIME)); 
 
 * Compute gamma parameter used in CCS/No CCS decision tree
 QGammaInCcsDecTree(runCy,YTIME)$TIME(YTIME)..
          VSensCcs(runCy,YTIME) =E= 20+25*EXP(-0.06*((sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME-1)))));
 
-* Compute hourly production cost used in investment decisions taking account CCS acceptance
-QHourProdCostInvDecisions(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME) $(CCS(PGALL) or NOCCS(PGALL))) ..
-         VHourProdCostOfTech(runCy,PGALL,HOUR,YTIME) 
+* Compute hourly production cost used in investment decisions taking into account CCS acceptance
+QHourProdCostInvDecisionsAfterCCS(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME) $(CCS(PGALL) or NOCCS(PGALL))) ..
+         VHourProdCostTechAfterCCS(runCy,PGALL,HOUR,YTIME) 
          =E=
-          VHourProdTech(runCy,PGALL,HOUR,YTIME)**(-VSensCcs(runCy,YTIME));
+          VHourProdCostTech(runCy,PGALL,HOUR,YTIME)**(-VSensCcs(runCy,YTIME));
 
 * Compute production cost used in investment decisions
 QProdCostInvDecis(runCy,PGALL,YTIME)$(TIME(YTIME) $(CCS(PGALL) or NOCCS(PGALL)) ) ..
          VProdCostTechnology(runCy,PGALL,YTIME) 
          =E=  
-         sum(HOUR,VHourProdTech(runCy,PGALL,HOUR,YTIME)**(-VSensCcs(runCy,YTIME))) ;
+         sum(HOUR,VHourProdCostTech(runCy,PGALL,HOUR,YTIME)**(-VSensCcs(runCy,YTIME))) ;
 
 * Compute SHRCAP
 QShrcap(runCy,PGALL,YTIME)$(TIME(YTIME) $CCS(PGALL))..
@@ -216,9 +216,9 @@ QGapPowerGenCap(runCy,YTIME)$TIME(YTIME)..
 QScalWeibull(runCy,PGALL,HOUR,YTIME)$((not CCS(PGALL))$TIME(YTIME))..
           VScalWeibull(runCy,PGALL,HOUR,YTIME) 
          =E=
-         (VHourProdTech(runCy,PGALL,HOUR,YTIME)$(not NOCCS(PGALL))
+         (VHourProdCostTech(runCy,PGALL,HOUR,YTIME)$(not NOCCS(PGALL))
          +
-          VHourProdCostTech(runCy,PGALL,HOUR,YTIME)$NOCCS(PGALL))**(-6);     
+          VHourProdCostTechNoCCS(runCy,PGALL,HOUR,YTIME)$NOCCS(PGALL))**(-6);     
 
 
 * Compute renewable potential supply curve
@@ -256,9 +256,9 @@ QScalWeibullSum(runCy,PGALL,YTIME)$((not CCS(PGALL)) $TIME(YTIME))..
          =E=
               iMatFacPlaAvailCap(runCy,PGALL,YTIME) * VRenTechMatMult(runCy,PGALL,YTIME)*
               sum(HOUR,
-                 (VHourProdTech(runCy,PGALL,HOUR,YTIME)$(not NOCCS(PGALL))
+                 (VHourProdCostTech(runCy,PGALL,HOUR,YTIME)$(not NOCCS(PGALL))
                  +
-                 VHourProdCostTech(runCy,PGALL,HOUR,YTIME)$NOCCS(PGALL)
+                 VHourProdCostTechNoCCS(runCy,PGALL,HOUR,YTIME)$NOCCS(PGALL)
                  )**(-6)
               ); 
   

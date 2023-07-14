@@ -41,62 +41,56 @@ VCapChpPlants.l(allCy,YTIME)=0.1;
 VElecPeakLoad.l(allCy,YTIME)=0.1;
 VElecPeakLoad.up(allCy,YTIME)=1e6;
 VElecProdPowGenPlants.l(allCy,PGALL,YTIME) = 1;
-*VHourProdTech.up(allCy,PGALL,HOUR,YTIME)=1e6;
+VHourProdCostTech.up(allCy,PGALL,HOUR,YTIME)=1e6;
 VSensCcs.l(allCy,YTIME)=1;
-*VHourProdTech.VLamda(allCy,PGALL,HOUR,YTIME)=1;
+*VHourProdCostTech.VLamda(allCy,PGALL,HOUR,YTIME)=1;
 VCarVal.fx(allCy,NAP,YTIME)=1;
 VFuelPriceSub.l(allCy,"PG",PGEF,YTIME)=1;
 VProdCostTechnology.l(allCy,PGALL2,YTIME)=0.1;
-*VProdCostTechnology.up(allCy,PGALL2,YTIME)=1e6;
+VProdCostTechnology.up(allCy,PGALL2,YTIME)=1e6;
 VVarCostTech.l(allCy,PGALL,YTIME)=0.1;
 VProdCostTechPreReplacAvail.l(allCy,PGALL,PGALL2,YTIME)=0.1;
 VTechSortVarCost.l(allCy,TRANSE,Rcon,YTIME)=0.1;
-*VHourProdCostTech.up(allCy,PGALL,HOUR,YTIME)=8000;
-*VHourProdCostTech.VLamda(allCy,PGALL,HOUR,YTIME)=10;
+VHourProdCostTechNoCCS.up(allCy,PGALL,HOUR,YTIME)=8000;
+*VHourProdCostTechNoCCS.VLamda(allCy,PGALL,HOUR,YTIME)=10;
 *VTemScalWeibull.up(allCy,PGALL,HOUR,YTIME)=1e6;
-*VHourProdCostTech.lo(allCy,PGALL,HOUR,YTIME)=0.0001;
+*VHourProdCostTechNoCCS.lo(allCy,PGALL,HOUR,YTIME)=0.0001;
 VRenPotSupplyCurve.l(allCy,PGRENEF,YTIME)=0.1;
 VScrRate.l(allCy,YTIME)=0.1;
 VTranspCostPermeanConsSize.l(allCy,TRANSE,RCon,TTECH,TEA,YTIME)=0.1;
 VTranspCostPermeanConsSize.lo(allCy,TRANSE,RCon,TTECH,TEA,YTIME)=0.0001;
 VElecNonSub.l(allCy,DSBS,YTIME)=0.1;
 VElecNonSub.lo(allCy,DSBS,YTIME)=0.0001;
-$ontext
 
-VPowerPlantNewEq.VLamda(allCy,PGALL,TT)=0.1;
-VHourProdCostOfTech.VLamda(allCy,PGALL,HOUR,TT)=0.1;
-VPowerPlaShrNewEq.VLamda(allCy,PGALL,TT)=0.1;
-VHourProdCostTech.VLamda(runCy,PGALL,HOUR,TT)$TIME(YTIME) = VPowerPlantNewEq.VLamda(runCy,PGALL,TT)*VHourProdCostOfTech.VLamda(runCy,PGALL,HOUR,TT)+
-         sum(CCS$CCS_NOCCS(CCS,PGALL), VPowerPlaShrNewEq.VLamda(runCy,CCS,TT)*VHourProdCostOfTech.VLamda(runCy,CCS,HOUR,TT));
-VHourProdCostTech.SCALE(runCy,PGALL,HOUR,TT)$TIME(YTIME) = max(abs(VHourProdCostTech.VLamda(runCy,PGALL,HOUR,TT)),1E-20);
-$offtext
+
+VPowerPlantNewEq.L(allCy,PGALL,TT)=0.1;
+VHourProdCostTechAfterCCS.L(allCy,PGALL,HOUR,TT)=0.1;
+VPowerPlaShrNewEq.L(allCy,PGALL,TT)=0.1;
+VHourProdCostTechNoCCS.L(runCy,PGALL,HOUR,TT) = VPowerPlantNewEq.L(runCy,PGALL,TT)*VHourProdCostTechAfterCCS.L(runCy,PGALL,HOUR,TT)+
+         sum(CCS$CCS_NOCCS(CCS,PGALL), VPowerPlaShrNewEq.L(runCy,CCS,TT)*VHourProdCostTechAfterCCS.L(runCy,CCS,HOUR,TT));
+VHourProdCostTechNoCCS.SCALE(runCy,PGALL,HOUR,TT)= max(abs(VHourProdCostTechNoCCS.L(runCy,PGALL,HOUR,TT)),1E-20);
 VNewInvDecis.l(allCy,YTIME)=0.1;
 VVarCostTechnology.l(allCy,PGALL,YTIME)=0.1;
 VElecPeakLoads.l(allCy,YTIME)=0.1;
 VNewCapYearly.l(allCy,PGALL,YTIME)=0.1;
 VAvgCapFacRes.l(allCy,PGALL,YTIME)=0.1;
-*VOverallCap.scale(allCy,PGALL,YTIME)=1;
+VOverallCap.scale(allCy,PGALL,YTIME)=1;
 VPowPlantSorting.l(runCy,PGALL,YTIME)=0.01;
 VReqElecProd.l(runCy,YTIME)=0.1;
-*VPowPlantSorting.up(runCy,PGALL,YTIME)=0.001;
-*VPowPlantSorting.scale(runCy,PGALL,YTIME)=1;
+VPowPlantSorting.up(runCy,PGALL,YTIME)=0.001;
+VPowPlantSorting.scale(runCy,PGALL,YTIME)=1;
 VElecDem.l(allCy,YTIME)=0.1;
-*VHourProdTech.lo(runCy,PGALL,HOUR,YTIME)=0.1;
 VHourProdCostTech.lo(runCy,PGALL,HOUR,YTIME)=0.1;
+VHourProdCostTechNoCCS.lo(runCy,PGALL,HOUR,YTIME)=0.1;
 VRenTechMatMult.l(allCy,PGALL,YTIME)=0.1;
 VGoodsTranspActiv.l(allCy,TRANSE,YTIME)=0.1;
-*VTranspCostPerVeh.lo(allCy,TRANSE,RCon,TTECH,TEA,YTIME)=0.1;
+VTranspCostPerVeh.lo(allCy,TRANSE,RCon,TTECH,TEA,YTIME)=0.1;
 VRenShareElecProdSub.FX(runCy,YTIME)$(NOT AN(YTIME))=0;
-loop an do
-   s = s + 1;
-   TIME(YTIME) = NO;
-   TIME(AN)$(ord(an)=s) = YES;
-   display TIME;
 VRenValue.l(YTIME)=1;
 VCO2CO2SeqCsts.l(allCy,YTIME)=1;
 VScalWeibullSum.l(allCy,PGALL,YTIME)=2;
 VScalWeibullSum.up(allCy,PGALL,YTIME)=1.0e+10;
-VHourProdTech.l(runCy,PGALL,HOUR,TT) = 0.000000001;
+VHourProdCostTech.l(runCy,PGALL,HOUR,TT) = 0.000000001;
 
 ********************************************************************************
 *                        VARIABLE INITIALISATION                               *
@@ -229,7 +223,7 @@ VElecGenNoChp.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
 VElecCapChpPla.FX(runCy,CHP,YTIME)$(not An(YTIME)) = iHisChpGrCapData(runCy,CHP,YTIME);
 VPowPlaShaNewEquip.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) )=0;
 
-VHourProdTech.FX(runCy,PGALL,HOUR,YTIME)$((NOT AN(YTIME)))=0;
+VHourProdCostTech.FX(runCy,PGALL,HOUR,YTIME)$((NOT AN(YTIME)))=0;
 
 VPowerPlaShrNewEq.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) )=0;
 VPowerPlantNewEq.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) )=0;
@@ -306,3 +300,9 @@ VRenValue.FX(YTIME) = 0 ;
 
 VTotReqElecProd.fx(runCy,YTIME)$TFIRST(YTIME)=sum(pgall,VElecProdPowGenPlants.L(runCy,pgall,YTIME)$TFIRST(YTIME));
 display VConsFuel.l;
+
+loop an do
+   s = s + 1;
+   TIME(YTIME) = NO;
+   TIME(AN)$(ord(an)=s) = YES;
+   display TIME;
