@@ -41,11 +41,6 @@ $ondelim
 $include "./iFracElecPriChp.csv"
 $offdelim
 ;
-table iCapCosChp(allCy,CHP,YTIME) "Capital Cost per CHP plant type (kEuro05/KW)"
-$ondelim
-$include "./iCapCosChp.csv"
-$offdelim
-;
 table iDisc(allCy,SBS,YTIME) "Discount rates per subsector ()"
 $ondelim
 $include "./iDisc.csv"

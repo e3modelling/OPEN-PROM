@@ -17,7 +17,7 @@ display iDisc;
 display TF;
 display TFIRST;
 display iCo2EmiFac;
-display iUsfEneConvSubTech;
+display iInstCapPast;
 
 *TIME(YTIME) = %fStartY%;
 VFuelPrice.L(allCy,TRANSE,YTIME) = 0.1;
@@ -41,7 +41,7 @@ VCapChpPlants.l(allCy,YTIME)=0.1;
 VElecPeakLoad.l(allCy,YTIME)=0.1;
 VElecPeakLoad.up(allCy,YTIME)=1e6;
 VElecProdPowGenPlants.l(allCy,PGALL,YTIME) = 1;
-VHourProdCostTech.up(allCy,PGALL,HOUR,YTIME)=1e6;
+*VHourProdCostTech.up(allCy,PGALL,HOUR,YTIME)=1e6;
 VSensCcs.l(allCy,YTIME)=1;
 *VHourProdCostTech.VLamda(allCy,PGALL,HOUR,YTIME)=1;
 VCarVal.fx(allCy,NAP,YTIME)=1;
@@ -60,7 +60,7 @@ VScrRate.l(allCy,YTIME)=0.1;
 VTranspCostPermeanConsSize.l(allCy,TRANSE,RCon,TTECH,TEA,YTIME)=0.1;
 VTranspCostPermeanConsSize.lo(allCy,TRANSE,RCon,TTECH,TEA,YTIME)=0.0001;
 VElecNonSub.l(allCy,DSBS,YTIME)=0.1;
-VElecNonSub.lo(allCy,DSBS,YTIME)=0.0001;
+*VElecNonSub.lo(allCy,DSBS,YTIME)=0.000001;
 
 
 VPowerPlantNewEq.L(allCy,PGALL,TT)=0.1;
@@ -80,17 +80,17 @@ VReqElecProd.l(runCy,YTIME)=0.1;
 VPowPlantSorting.up(runCy,PGALL,YTIME)=0.001;
 VPowPlantSorting.scale(runCy,PGALL,YTIME)=1;
 VElecDem.l(allCy,YTIME)=0.1;
-VHourProdCostTech.lo(runCy,PGALL,HOUR,YTIME)=0.1;
-VHourProdCostTechNoCCS.lo(runCy,PGALL,HOUR,YTIME)=0.1;
+*VHourProdCostTech.lo(runCy,PGALL,HOUR,YTIME)=0.0001;
+*VHourProdCostTechNoCCS.lo(runCy,PGALL,HOUR,YTIME)=0.1;
 VRenTechMatMult.l(allCy,PGALL,YTIME)=0.1;
 VGoodsTranspActiv.l(allCy,TRANSE,YTIME)=0.1;
-VTranspCostPerVeh.lo(allCy,TRANSE,RCon,TTECH,TEA,YTIME)=0.1;
+*VTranspCostPerVeh.lo(allCy,TRANSE,RCon,TTECH,TEA,YTIME)=0.1;
 VRenShareElecProdSub.FX(runCy,YTIME)$(NOT AN(YTIME))=0;
 VRenValue.l(YTIME)=1;
 VCO2CO2SeqCsts.l(allCy,YTIME)=1;
 VScalWeibullSum.l(allCy,PGALL,YTIME)=2;
-VScalWeibullSum.up(allCy,PGALL,YTIME)=1.0e+10;
-VHourProdCostTech.l(runCy,PGALL,HOUR,TT) = 0.000000001;
+*VScalWeibullSum.up(allCy,PGALL,YTIME)=1.0e+10;
+VHourProdCostTech.l(runCy,PGALL,HOUR,TT) = 0.0001;
 
 ********************************************************************************
 *                        VARIABLE INITIALISATION                               *
@@ -116,7 +116,7 @@ VFuelPriSubNoCarb.fx(runCy,INDDOM,"HEATPUMP",YTIME)$(SECTTECH(INDDOM,"HEATPUMP")
 
 VFuelPrice.FX(runCy,DSBS,YTIME)$(not An(YTIME)) = sum(EF$SECTTECH(DSBS,EF), iWgtSecAvgPriFueCons(runCy,DSBS,EF) * iConsPricesFuelSub(runCy,DSBS,EF,YTIME));
 
-VNumVeh.UP(runCy,YTIME) = 1000; !! upper bound of VNumVeh is 1000 million vehicles
+VNumVeh.UP(runCy,YTIME) = 10000; !! upper bound of VNumVeh is 10000 million vehicles
 VNumVeh.FX(runCy,YTIME)$(not An(YTIME)) = iActv(YTIME,runCy,"PC");
 VLamda.UP(runCy,YTIME) = 1;
 VLamda.FX(runCy,YTIME)$((not An(YTIME)) $(ord(YTIME) gt 1) ) = (VNumVeh.l(runCy,YTIME-1) / (iPop(YTIME-1,runCy)*1000) /
@@ -299,7 +299,7 @@ VLoadCurveConstr.L(runCy,YTIME)=0.01;
 VRenValue.FX(YTIME) = 0 ;
 
 VTotReqElecProd.fx(runCy,YTIME)$TFIRST(YTIME)=sum(pgall,VElecProdPowGenPlants.L(runCy,pgall,YTIME)$TFIRST(YTIME));
-display VConsFuel.l;
+display VCarVal.l;
 
 loop an do
    s = s + 1;

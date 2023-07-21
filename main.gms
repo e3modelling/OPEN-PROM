@@ -1,8 +1,9 @@
 *** preliminaries
+
 *** number of columns that are listed for each variable in the column listing
-option limcol = 2000;
+option limcol = 3;
 *** number of rows that are listed for each equation in the equation listing
-option limrow = 2000;
+option limrow = 3;
 
 *** "dollar" ($) commands section: define GAMS flags & code control & compilation-time options
 
