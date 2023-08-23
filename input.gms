@@ -178,11 +178,6 @@ $include"./iCO2SeqData.csv"
 $offdelim
 ;
 iElastCO2Seq(allCy,CO2SEQELAST) = sum(tfirst,iCO2SeqData(allCy,CO2SEQELAST,TFIRST));
-table iResDemSub(allCy,SBS,YTIME)                  "Residuals in total energy demand per subsector (1)"
-$ondelim
-$include"./iResDemSub.csv"
-$offdelim
-;
 table iDataTransTech (TRANSE,EF,ECONCHAR)                  "Technoeconomic characteristics of transport (various)"
 $ondelim
 $include"./iDataTransTech.csv"
@@ -577,7 +572,7 @@ $ondelim
 $include"./iDomFuelPrices.csv"
 $offdelim
 ;
-iConsPricesFuelSub(allCy,SBS,EF,YTIME)$(not AN(YTIME)) = iDomFuelPrices(allCy,SBS,EF,YTIME)/1000;
+iConsPricesFuelSub(allCy,SBS,EF,YTIME) = iDomFuelPrices(allCy,SBS,EF,YTIME)/1000;
 table iDataGrossInlCons(allCy,EF,YTIME)	 "Data for Gross Inland Conusmption (Mtoe)"
 $ondelim
 $include"./iDataGrossInlCons.csv"

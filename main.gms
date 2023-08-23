@@ -1,9 +1,9 @@
 *** preliminaries
 
 *** number of columns that are listed for each variable in the column listing
-option limcol = 3;
+option limcol = 16;
 *** number of rows that are listed for each equation in the equation listing
-option limrow = 3;
+option limrow = 16;
 
 *** "dollar" ($) commands section: define GAMS flags & code control & compilation-time options
 
@@ -46,7 +46,7 @@ $evalGlobal fBaseY %fStartY% - %fPeriodOfYears%
 *** end of dollar commands section, no further flag definitions allowed 
 
 *** load input data files
-*$call '"C:\Program Files\R\R-4.2.2\bin\Rscript.exe" ".\loadMadratData.R"'
+*$call '"C:\Users\gianoussakis\AppData\Local\Programs\R\R-4.3.0\bin\Rscript.exe" ".\loadMadratData.R"'
 
 $include sets.gms
 $include declarations.gms

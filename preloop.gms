@@ -8,7 +8,12 @@ loop DSBS do
    endloop;
 endloop;
 
-model openprom /all/;
+model openprom /
+
+QDemSub
+
+qDummyObj
+/;
 
 
 option iPop:2:0:6;
@@ -17,14 +22,15 @@ display iDisc;
 display TF;
 display TFIRST;
 display iCo2EmiFac;
-display iInstCapPast;
+display iWgtSecAvgPriFueCons;
+display iConsPricesFuelSub;
 
 *TIME(YTIME) = %fStartY%;
-VFuelPrice.L(allCy,TRANSE,YTIME) = 0.1;
+
 VNumVeh.L(allCy,YTIME)=0.1;
 *VNumVeh.lags(allCy,YTIME) = 0.1;
 VTrnspActiv.l(allCy,TRANSE,YTIME) = 0.1;
-VFuelPrice.l(allCy,DSBS,YTIME) =1;
+
 VFuelPriceSub.l(allCy,SBS,EF,YTIME) = 0.1;
 VElecIndPrices.l(allCy,YTIME)= 0.1;
 VTechCostVar.l(allCy,SBS,EF,TEA,YTIME) = 0.1;
@@ -114,7 +120,7 @@ VFuelPriSubNoCarb.FX(runCy,SBS,ALTEF,YTIME)$(SECTTECH(SBS,ALTEF) $(not An(YTIME)
 VFuelPriSubNoCarb.FX(runCy,"PG","NUC",YTIME) = 0.025; !! fixed price for nuclear fuel to 25Euro/toe
 VFuelPriSubNoCarb.fx(runCy,INDDOM,"HEATPUMP",YTIME)$(SECTTECH(INDDOM,"HEATPUMP") $(not An(YTIME))) = iConsPricesFuelSub(runCy,INDDOM,"ELC",YTIME);
 
-VFuelPrice.FX(runCy,DSBS,YTIME)$(not An(YTIME)) = sum(EF$SECTTECH(DSBS,EF), iWgtSecAvgPriFueCons(runCy,DSBS,EF) * iConsPricesFuelSub(runCy,DSBS,EF,YTIME));
+VFuelPrice.FX(runCy,DSBS,YTIME) = sum(EF$SECTTECH(DSBS,EF), iWgtSecAvgPriFueCons(runCy,DSBS,EF) * iConsPricesFuelSub(runCy,DSBS,EF,YTIME));
 
 VNumVeh.UP(runCy,YTIME) = 10000; !! upper bound of VNumVeh is 10000 million vehicles
 VNumVeh.FX(runCy,YTIME)$(not An(YTIME)) = iActv(YTIME,runCy,"PC");

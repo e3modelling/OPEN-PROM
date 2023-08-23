@@ -863,7 +863,7 @@ QDemSub(runCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)))..
          VDemSub(runCy,DSBS,YTIME)
                  =E=
          [
-         iResDemSub(runCy,DSBS,YTIME) * VDemSub(runCy,DSBS,YTIME-1)
+         VDemSub(runCy,DSBS,YTIME-1)
          * ( iActv(YTIME,runCy,DSBS)/iActv(YTIME-1,runCy,DSBS) )**iElastA(runCy,DSBS,"a",YTIME)
          * ( VFuelPrice(runCy,DSBS,YTIME)/VFuelPrice(runCy,DSBS,YTIME-1) )**iElastA(runCy,DSBS,"b1",YTIME)
          * ( VFuelPrice(runCy,DSBS,YTIME-1)/VFuelPrice(runCy,DSBS,YTIME-2) )**iElastA(runCy,DSBS,"b2",YTIME)

@@ -1,1 +1,8 @@
 print("Here the input data will be created with MADRAT and copied to the model")
+library(mrprom)
+library(mrcommons)
+setConfig(globalenv = TRUE)
+source("calcGDP.R")
+retrieveData("OPEN_PROM",puc=F,renv=F,regionmapping = "regionmappingOPDEV2.csv")
+file.copy(paste0(getConfig("outputfolder"),"/rev0_293fda4f_open_prom.tgz"),"rev0_293fda4f_open_prom.tgz")
+utils::untar("rev0_293fda4f_open_prom.tgz")
