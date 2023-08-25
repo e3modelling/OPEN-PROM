@@ -23,7 +23,7 @@ display TF;
 display TFIRST;
 display iCo2EmiFac;
 display iWgtSecAvgPriFueCons;
-display iConsPricesFuelSub;
+display iTotFinEneDemSubBaseYr;
 
 *TIME(YTIME) = %fStartY%;
 

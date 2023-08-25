@@ -413,27 +413,27 @@ $offdelim
 iTransfOutputRef(allCy,EFS,YTIME)$(not An(YTIME)) = iDataTransfOutputRef(allCy,EFS,YTIME);
 iFuelCons(allCy,TRANSE,EF,YTIME)$(SECTTECH(TRANSE,EF) $(iFuelCons(allCy,TRANSE,EF,YTIME)<=0)) = 1e-6;
 iFuelConsPerFueSub(allCy,TRANSE,EF,YTIME)$(not An(YTIME))  = iFuelCons(allCy,TRANSE,EF,YTIME);
-table iIndFuelConsPerSub(allCy,INDSE,EF,YTIME)	 "Fuel consumption per industry subsector (Mtoe)"
+table iFuelConsINDSE(allCy,INDSE,EF,YTIME)	 "Fuel consumption of industry subsector (Mtoe)"
 $ondelim
-$include"./iIndFuelConsPerSub.csv"
+$include"./iFuelConsINDSE.csv"
 $offdelim
 ;
-iIndFuelConsPerSub(allCy,INDSE,EF,YTIME)$(SECTTECH(INDSE,EF) $(iIndFuelConsPerSub(allCy,INDSE,EF,YTIME)<=0)) = 1e-6;
-table iDomFuelConsPerSub(allCy,DOMSE,EF,YTIME)	 "Fuel Consumption per domestic Subsector (Mtoe)"
+iFuelConsINDSE(allCy,INDSE,EF,YTIME)$(SECTTECH(INDSE,EF) $(iFuelConsINDSE(allCy,INDSE,EF,YTIME)<=0)) = 1e-6;
+table iFuelConsDOMSE(allCy,DOMSE,EF,YTIME)	 "Fuel consumption of domestic subsector (Mtoe)"
 $ondelim
-$include"./iDomFuelConsPerSub.csv"
+$include"./iFuelConsDOMSE.csv"
 $offdelim
 ;
-iDomFuelConsPerSub(allCy,DOMSE,EF,YTIME)$(SECTTECH(DOMSE,EF) $(iDomFuelConsPerSub(allCy,DOMSE,EF,YTIME)<=0)) = 1e-6;
-table iFinConsSubFuel(allCy,NENSE,EF,YTIME)	 "Final Consumption per Subsector and fuel (Mtoe)"
+iFuelConsDOMSE(allCy,DOMSE,EF,YTIME)$(SECTTECH(DOMSE,EF) $(iFuelConsDOMSE(allCy,DOMSE,EF,YTIME)<=0)) = 1e-6;
+table iFuelConsNENSE(allCy,NENSE,EF,YTIME)	 "Fuel consumption of non energy and bunkers (Mtoe)"
 $ondelim
-$include"./iFinConsSubFuel.csv"
+$include"./iFuelConsNENSE.csv"
 $offdelim
 ;
-iFinConsSubFuel(allCy,NENSE,EF,YTIME)$(SECTTECH(NENSE,EF) $(iFinConsSubFuel(allCy,NENSE,EF,YTIME)<=0)) = 1e-6;
-iFuelConsPerFueSub(allCy,INDSE,EF,YTIME)$(not An(YTIME))   = iIndFuelConsPerSub(allCy,INDSE,EF,YTIME);
-iFuelConsPerFueSub(allCy,DOMSE,EF,YTIME)$(not An(YTIME))   = iDomFuelConsPerSub(allCy,DOMSE,EF,YTIME);
-iFuelConsPerFueSub(allCy,NENSE,EF,YTIME)$(not An(YTIME))   = iFinConsSubFuel(allCy,NENSE,EF,YTIME);
+iFuelConsNENSE(allCy,NENSE,EF,YTIME)$(SECTTECH(NENSE,EF) $(iFuelConsNENSE(allCy,NENSE,EF,YTIME)<=0)) = 1e-6;
+iFuelConsPerFueSub(allCy,INDSE,EF,YTIME)$(not An(YTIME))   = iFuelConsINDSE(allCy,INDSE,EF,YTIME);
+iFuelConsPerFueSub(allCy,DOMSE,EF,YTIME)$(not An(YTIME))   = iFuelConsDOMSE(allCy,DOMSE,EF,YTIME);
+iFuelConsPerFueSub(allCy,NENSE,EF,YTIME)$(not An(YTIME))   = iFuelConsNENSE(allCy,NENSE,EF,YTIME);
 iFinEneCons(runCy,EFS,YTIME) = sum(INDDOM,
                          sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(INDDOM,EF)), iFuelConsPerFueSub(runCy,INDDOM,EF,YTIME)))
                        +
@@ -567,12 +567,12 @@ iPriceTragets("MAR",DOMSE1(SBS),"NGS",YTIME)=iDataPriceTargets("MAR","DOMSE1","N
 iPriceTragets("MAR",NENSE1(SBS),"NGS",YTIME)=iDataPriceTargets("MAR","NENSE1","NGS",YTIME) ;
 iPriceTragets("MAR",PG(SBS),"NGS",YTIME)=iDataPriceTargets("MAR","INDSE1","NGS",YTIME) ;
 iHydrogenPri(allCy,SBS,YTIME)=4.3;
-table iDomFuelPrices(allCy,SBS,EF,YTIME)	 "Consumer Prices of fuels per subsector (kEuro2005/toe)"
+table iFuelPrice(allCy,SBS,EF,YTIME)	 "Consumer Prices of fuels per subsector (kEuro2005/toe)"
 $ondelim
-$include"./iDomFuelPrices.csv"
+$include"./iFuelPrice.csv"
 $offdelim
 ;
-iConsPricesFuelSub(allCy,SBS,EF,YTIME) = iDomFuelPrices(allCy,SBS,EF,YTIME)/1000;
+iConsPricesFuelSub(allCy,SBS,EF,YTIME) = iFuelPrice(allCy,SBS,EF,YTIME)/1000;
 table iDataGrossInlCons(allCy,EF,YTIME)	 "Data for Gross Inland Conusmption (Mtoe)"
 $ondelim
 $include"./iDataGrossInlCons.csv"

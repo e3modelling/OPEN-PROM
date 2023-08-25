@@ -3,3 +3,9 @@
 .vscode/
 *.R
 !loadMadratData.R
+*.ini
+*.tgz
+pucFiles
+*.gdx
+*.rds
+regionmappingOPDEV2.csv

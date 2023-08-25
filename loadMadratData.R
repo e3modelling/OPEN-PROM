@@ -1,8 +1,7 @@
 print("Here the input data will be created with MADRAT and copied to the model")
 library(mrprom)
-
-setConfig(globalenv = TRUE)
-#source("calcGDP.R")
-retrieveData("OPEN_PROM",puc=F,renv=F,regionmapping = "regionmappingOPDEV2.csv",dev=8)
-file.copy(paste0(getConfig("outputfolder"),"/rev0_293fda4f_open_prom.tgz"),"rev0_293fda4f_open_prom.tgz")
-utils::untar("rev0_293fda4f_open_prom.tgz")
+dev <- unclass(Sys.time())
+fname <- paste0("rev0",dev,"_293fda4f_open_prom.tgz")
+retrieveData("OPEN_PROM",puc=F,renv=F,regionmapping = "regionmappingOPDEV2.csv",dev=dev)
+file.copy(paste0(getConfig("outputfolder"),"/",fname),fname)
+utils::untar(fname)
