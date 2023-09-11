@@ -67,8 +67,7 @@ iEffValueInEuro(allCy,SBS,YTIME)	     "Efficiency value (Euro05/toe)"
 iFacElecPriConsu(allCy,ELCPCHAR,YTIME)	 "Factors affecting electricity prices to consumers	(1)"
 iPriceTragets(allCy,SBS,EF,YTIME)	     "Price Targets	(1)"
 iPriceReform(allCy,SBS,EF,YTIME)	     "Price reformation (1)"
-iScenarioPri(WEF,NAP,YTIME)	             "Scenario prices (KEuro1990/toe)"
-iConsPricesFuelSub(allCy,SBS,EF,YTIME)	 "Consumer Prices of fuels per subsector (kEuro2005/toe)"	
+iScenarioPri(WEF,NAP,YTIME)	             "Scenario prices (KEuro1990/toe)"	
 iWgtSecAvgPriFueCons(allCy,SBS,EF)	     "Weights for sector's average price, based on fuel consumption (1)"	
 iFuelConsPerFueSub(allCy,SBS,EF,YTIME)	 "Fuel consumption per fuel and subsector (Mtoe)"
 iTotFinEneDemSubBaseYr(allCy,SBS,YTIME)	 "Total Final Energy Demand per subsector in Base year (Mtoe)"
@@ -214,7 +213,7 @@ QConsEachTechTransp(allCy,TRANSE,TTECH,EF,TEA,YTIME)	        "Compute consumptio
 QFinEneDemTranspPerFuel(allCy,TRANSE,EF,YTIME)	                "Compute final energy demand in transport per fuel"
 QFinEneDemTransp(allCy,TRANSE,YTIME)	                        "Compute final energy demand in transport" 						
 ***  INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS EQUATIONS
-QDemSub(allCy,DSBS,YTIME)                     "Compute total final demand per subsector"
+QDemSub(allCy,DSBS,YTIME)                     "Compute total final demand (of substitutable fuels) per subsector"
 QElecConsInd(allCy,YTIME)                     "Compute Consumption of electricity in industrial sectors"
 QDemInd(allCy,YTIME)                          "Copmpute total final demand (of substitutable fuels) in industrial sectors"
 QElecIndPrices(allCy,YTIME)                   "Compute electricity industry prices"
@@ -361,7 +360,7 @@ VScrap(allCy,YTIME)                   "Scrapped passenger cars (million vehicles
 VTrnspActiv(allCy,TRANSE,YTIME)       "Passenger transport acitivity (1)"
                                          !! - Activity for passenger cars is measured in (000)km
                                          !! - Activity for all other passenger transportation modes is measured in Gpkm
-VFuelPrice(allCy,DSBS,YTIME)           "Average fuel prices per subsector (kUS$2005/toe)"
+VFuelPriceAvg(allCy,DSBS,YTIME)           "Average fuel prices per subsector (k$2015/toe)"
 VScrRate(allCy,YTIME)                  "Scrapping rate of passenger cars (1)"
 VElecConsAll(allCy,DSBS,YTIME)         "Electricity demand per final sector (Mtoe)"
 VConsFuel(allCy,DSBS,EF,YTIME)         "Consumption of fuels in each demand subsector, excluding heat from heatpumps (Mtoe)"
@@ -394,7 +393,7 @@ VElecIndPrices(allCy,YTIME)            "Electricity index - a function of indust
 VElecConsHeatPla(allCy,DSBS,YTIME)     "Electricity consumed in heatpump plants (Mtoe)"
 VConsFuelSub(allCy,DSBS,EF,YTIME)      "Consumption of fuels in each demand subsector (including heat from heatpumps) (Mtoe)"
 VElecIndPricesEst(allCy,YTIME)         "Electricity index - a function of industry price - Estimate (1)"
-VFuelPriceSub(allCy,SBS,EF,YTIME)      "Fuel prices per subsector and fuel (kUS$2005/toe)"
+VFuelPriceSub(allCy,SBS,EF,YTIME)      "Fuel prices per subsector and fuel (k$2015/toe)"
 VFuePriSubChp(allCy,DSBS,EF,TEA,YTIME) "Fuel prices per subsector and fuel for CHP plants (kUS$2005/toe)"
 VTechCostVar(allCy,SBS,EF,TEA,YTIME)   "Variable Cost of technology (various)"
                                         !! - For transport (kEuro05/vehicle)

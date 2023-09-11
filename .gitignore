@@ -9,3 +9,6 @@ pucFiles
 *.gdx
 *.rds
 regionmappingOPDEV2.csv
+regionmappingOP.csv
+*.cmd
+*.dat

@@ -319,9 +319,10 @@ iAnnCons(runCy,NENSE,"modal") = 0.487 ;
 iAnnCons(runCy,"BU","smallest") = 0.2 ;
 iAnnCons(runCy,"BU","largest") = 1 ;
 iAnnCons(runCy,"BU","modal") = 0.5 ;
-
+iAnnCons(runCy,DSBS,ConSet)=0.9;
+iDisFunConSize(runCy,DSBS,rCon) = 1;
 * Consumer size groups distribution function
-
+$ontext
 Loop (runCy,DSBS) DO
      Loop rCon$(ord(rCon) le iNcon(DSBS)+1) DO
           iDisFunConSize(runCy,DSBS,rCon) =
@@ -347,7 +348,7 @@ Loop (runCy,DSBS) DO
 ;
      ENDLOOP;
 ENDLOOP;
-
+$offtext
 iCumDistrFuncConsSize(allCy,DSBS) = sum(rCon, iDisFunConSize(allCy,DSBS,rCon));
 iCGI(allCy,YTIME) = 1;
 *iLoadCurveConstr.L(runCy,TT)$(PERIOD(TT) $TFIRSTAN(TT))= 0.21;
@@ -567,12 +568,12 @@ iPriceTragets("MAR",DOMSE1(SBS),"NGS",YTIME)=iDataPriceTargets("MAR","DOMSE1","N
 iPriceTragets("MAR",NENSE1(SBS),"NGS",YTIME)=iDataPriceTargets("MAR","NENSE1","NGS",YTIME) ;
 iPriceTragets("MAR",PG(SBS),"NGS",YTIME)=iDataPriceTargets("MAR","INDSE1","NGS",YTIME) ;
 iHydrogenPri(allCy,SBS,YTIME)=4.3;
-table iFuelPrice(allCy,SBS,EF,YTIME)	 "Consumer Prices of fuels per subsector (kEuro2005/toe)"
+table iFuelPrice(allCy,SBS,EF,YTIME)	 "Prices of fuels per subsector (k$2015/toe)"
 $ondelim
 $include"./iFuelPrice.csv"
 $offdelim
 ;
-iConsPricesFuelSub(allCy,SBS,EF,YTIME) = iFuelPrice(allCy,SBS,EF,YTIME)/1000;
+iFuelPrice(allCy,SBS,EF,YTIME) = iFuelPrice(allCy,SBS,EF,YTIME)/1000; !! change units $15 -> k$15
 table iDataGrossInlCons(allCy,EF,YTIME)	 "Data for Gross Inland Conusmption (Mtoe)"
 $ondelim
 $include"./iDataGrossInlCons.csv"
@@ -930,8 +931,8 @@ EFFRES(PGALL,YTIME)$AN(YTIME)=EFFRES_PRN(PGALL,YTIME);
 NUCRES(YTIME)$an(ytime)=NUCRES_PRN("RES",YTIME);
 $offtext
 * Update efficiencies according to energy productivity index
-iPlantEffByType(runCy,PGALL,YTIME)$(an(ytime) )= iPlantEffByType(runCy,PGALL,YTIME) / iEneProdRDscenarios(runCy,"pg",ytime);
-iEffDHPlants(runCy,EF,YTIME)$(an(ytime) )= iEffDHPlants(runCy,EF,YTIME) / iEneProdRDscenarios(runCy,"pg",ytime);
+***iPlantEffByType(runCy,PGALL,YTIME)$(an(ytime) )= iPlantEffByType(runCy,PGALL,YTIME) / iEneProdRDscenarios(runCy,"pg",ytime);
+***iEffDHPlants(runCy,EF,YTIME)$(an(ytime) )= iEffDHPlants(runCy,EF,YTIME) / iEneProdRDscenarios(runCy,"pg",ytime);
 iElecIndex(runCy,YTIME) = 0.9;
 
 

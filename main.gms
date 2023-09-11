@@ -20,7 +20,7 @@ $onEmpty
 *** Maximum number of solver attempts
 $evalGlobal SolverTryMax 1
 
-$setGlobal fCountries 'RAS'
+$setGlobal fCountries 'RAS,RWO,REU,REP,RAF,RLA,ARG,OCE,AUT,BEL,BRA,BGR,CAN,CHA,HRV,CYP,CZE,DNK,EGY,EST,FIN,FRA,DEU,GRC,HUN,NSI,IND,IDN,IRN,IRL,ISR,ITA,JPN,KOR,LVA,LTU,LUX,MLT,MEX,MAR,NLD,NGA,POL,PRT,ROU,RUS,SAU,SVK,SVN,ZAF,ESP,SWE,TUN,TUR,GBR,USA'
 
 $setGlobal fSingleCountryRun 'yes'
 
@@ -39,7 +39,7 @@ $setGlobal fReadCountryCalib 'yes'
 
 $evalGlobal fStartHorizon 2010
 $evalGlobal fEndHorizon 2100
-$evalGlobal fEndY 2018
+$evalGlobal fEndY 2020
 $evalGlobal fStartY 2018
 $evalGlobal fBaseY %fStartY% - %fPeriodOfYears%
 
@@ -47,7 +47,7 @@ $evalGlobal fBaseY %fStartY% - %fPeriodOfYears%
 
 *** load input data files
 *$call '"C:\Users\gianoussakis\AppData\Local\Programs\R\R-4.3.0\bin\Rscript.exe" ".\loadMadratData.R"'
-$call '"C:\Users\GIannousakis\AppData\Local\Programs\R\R-4.3.1\bin\Rscript.exe" ".\loadMadratData.R"'
+*$call '"C:\Users\GIannousakis\AppData\Local\Programs\R\R-4.3.1\bin\Rscript.exe" ".\loadMadratData.R"'
 
 $include sets.gms
 $include declarations.gms
