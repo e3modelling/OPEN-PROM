@@ -1,6 +1,10 @@
+*' @title sets
+*' 
+*' @code
+*'
 sets
 
-***        Geographic Coverage      *
+*' ***        Geographic Coverage      *
 allCy    Countries for which the model is applied
 /
 RAS       REST OF ASIA
@@ -66,7 +70,7 @@ runCy(allCy) Countries for which the model is running
 %fCountries%
 /
 
-***        Model Time Horizon       *
+*' ***        Model Time Horizon       *
 
 ytime           Model time horizon                                /%fStartHorizon%*%fEndHorizon%/
 an(ytime)       Years for which the model is running              /%fStartY%*%fEndY%/
@@ -89,7 +93,7 @@ datay(ytime)    Historical year before the base year of the model /%fStartHorizo
 timeRep(ytime)  Model time horizon used in report
 hour            "Segments of hours in a year (250,1250,...,8250)" /h0*h8/
 
-***          Consumer Sizes         *
+*' ***          Consumer Sizes         *
 
 conSet       Consumer size groups related to space heating
 /
@@ -104,7 +108,7 @@ iSet(eSet)   Industrial consumer /i/
 rSet(eSet)   Residential consumer /r/
 
 
-***       Auxiliary Counters        *
+*' ***       Auxiliary Counters        *
 
 rCon         counter for the number of consumers              /0,1*19/
 nSet         auxiliary counter for the definition of Vr       /b1*b20/
@@ -114,7 +118,7 @@ rcc                                                           /1*4/
 rres                                                          /r1*r4/
 
 
-***       Sectoral Structure        *
+*' ***       Sectoral Structure        *
 
 sct          Model Sectors
 /
@@ -300,12 +304,12 @@ BUN(DSBS)         Bunkers                       /BU/
 
 INDDOM(DSBS)      Industry and Tertiary         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,SE,AG,HOU/
 INDDOM1(SBS)      Industry and Tertiary         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,SE,AG,HOU/
-* the following sets are used in price equation for electricity
+*' * the following sets are used in price equation for electricity
 INDTRANS(SBS)     Industry and Transport        /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI ,PC,PT,PA,GU,GT, GN /
 RESIDENT(SBS)     Residential                   /SE,AG,HOU/
 AGSECT            aggregate sectors             /INDSE1,DOMSE1,NENSE1,TRANS1,PG/
 
-*         Energy Forms            *
+*' *         Energy Forms            *
 
 EF           Energy Forms
 /
@@ -355,11 +359,11 @@ STE2OGS "Steam produced from district heating plants burning ogs"
 STE2BMS "Steam produced from district heating plants burning bmswas"
 PHEVGSL  "Plug in Hybrid engine - gasoline"
 PHEVGDO  "Plug in Hybrid engine - diesel"
-*hybrid cars with gasoline and diesel
+*' *hybrid cars with gasoline and diesel
 CHEVGSL  "conventional Hybrid engine - gasoline"
 CHEVGDO  "conventional Hybrid engine - diesel"
 
-* Aggregate Fuels
+*' * Aggregate Fuels
 SLD     "Solid Fuels"
 GAS     "Gases"
 LQD     "All Liquids"
@@ -584,7 +588,7 @@ ELC
 EFIS(EF)        Fuels in Iron and Steel sector in which useful energy conversion factor is expressed in tn per toe
 /HCL, ELC/
 
-*         Technologies            *
+*' *         Technologies            *
 
 TEAALL              Technology progress (Demand Side)
 /
@@ -1156,7 +1160,7 @@ PGAWNO Wind offshore
 /
 
 
-*           Emissions             *
+*' *           Emissions             *
 
 EMISS            "Pollutant Emissions"
 /
@@ -1193,7 +1197,7 @@ mc_m     value for the ratio of x to potential after which exponential is taking
 /
 
 
-*   DUMMY SETS USED FOR DATA INPUT  *
+*' *   DUMMY SETS USED FOR DATA INPUT  *
 
 Macro            "Elements used for reading Pop, GDP, Consumption Expenditure and Value Added"
 /GDP,CONS_EXP,IS,NF,CH,BM,PP,FD,TX,EN,OE,OI,SE,AG,PCH,NEN,BU,HOU,POP,HOU_SIZE,HOUSEHOLDS/
@@ -1395,7 +1399,7 @@ STE1AR           "Utilisation rate of Fuel Oil powered advanced CHP"
 STE1AG           "Utilisation rate of Natural Gas powered advanced CHP"
 STE1AB           "Utilisation rate of Biomass-Waste powered advanced CHP"
 STE1AH2F         "Utilisation rate of HYDROGEN powered FUEL CELL CHP"
-* The following fuels are related with district heating efficiency
+*' * The following fuels are related with district heating efficiency
 LGN
 HCL
 GDO
@@ -1475,15 +1479,15 @@ Speed
 /
 ;
 
-*         SET ASSIGNMENTS           *
+*' *         SET ASSIGNMENTS           *
 
 alias(TT, ytime);
-* TT set is used as an index to main time loop
+*' * TT set is used as an index to main time loop
 alias (YYTIME,ytime);
 alias(EF, EF2);
-* this alias is used in alternative transport fuels price calculations
+*' * this alias is used in alternative transport fuels price calculations
 alias(PGALL2,PGALL);
-*this alias is used in plant dispatching equation
+*' *this alias is used in plant dispatching equation
 
 
 scalar TF order of base year in set ytime;
@@ -1491,7 +1495,7 @@ TF=sum((TFIRST,ytime), ord(ytime)$TFIRST(ytime));
 
 
 
-* Allocate imported fuels to fuels used in demand subsectors
+*' * Allocate imported fuels to fuels used in demand subsectors
 EFtoWEF(SBS,EF,WEF)=NO;
 loop WEF do
   loop EF$WEFMAP(EF,WEF) do

@@ -1,3 +1,7 @@
+*' @title input
+*' 
+*' @code
+*'
 table iGDP(YTIME,allCy) "GDP (billion US$2015)"
 $ondelim
 $include "./iGDP.csvr"
@@ -246,7 +250,7 @@ $offdelim
 iBslCorrection(allCy,YTIME)$an(YTIME) = iLoadFactorAdjMxm(allCy,"AMAXBASE",YTIME);
 iMxmLoadFacElecDem(allCy,YTIME)$an(YTIME) = iLoadFactorAdjMxm(allCy,"MAXLOADSH",YTIME);
 iLoadFacElecDem(allCy,DSBS,YTIME)$(ord(YTIME)>(ordfirst-4)) = iPwrLoadFactorDem(allCy,DSBS,YTIME);
-*Calculation of consumer size groups and their distribution function
+*' *Calculation of consumer size groups and their distribution function
 iNcon(TRANSE)$(sameas(TRANSE,"PC") or sameas(TRANSE,"GU")) = 10; !! 11 different consumer size groups for cars and trucks
 iNcon(TRANSE)$(not (sameas(TRANSE,"PC") or sameas(TRANSE,"GU"))) = 1; !! 2 different consumer size groups for inland navigation, trains, busses and aviation
 iNcon(INDSE) = 10; !! 11 different consumer size groups for industrial sectors
@@ -255,8 +259,8 @@ iNcon(NENSE) = 10; !! 11 different consumer size groups for non energy uses
 iNcon("BU") = 2;   !! ... except bunkers .
 
 
-* 11 vehicle mileage groups
-* 0.952 turned out to be a (constant) ratio between modal and average mileage through iterations in Excel
+*' * 11 vehicle mileage groups
+*' * 0.952 turned out to be a (constant) ratio between modal and average mileage through iterations in Excel
 
 
 iAnnCons(runCy,'PC','smallest')= 0.5 * 0.952 * iTransChar(runCy,"KM_VEH","%fBaseY%") * 1000 * 1E-6;
@@ -264,8 +268,8 @@ iAnnCons(runCy,'PC' ,'modal')=0.952 * iTransChar(runCy,"KM_VEH","%fBaseY%") * 10
 iAnnCons(runCy,'PC' ,'largest')= 4 * 0.952 * iTransChar(runCy,"KM_VEH","%fBaseY%") * 1000 * 1E-6;
 
 
-* modal value is assumed to be 2 tonnes/vehicle, min = 1/3*modal and max = 10*modal tkm.
-* 0.706 is the constant ratio of modal/average tkm through iterations in Excel
+*' * modal value is assumed to be 2 tonnes/vehicle, min = 1/3*modal and max = 10*modal tkm.
+*' * 0.706 is the constant ratio of modal/average tkm through iterations in Excel
 
 iAnnCons(runCy,'GU','smallest')=0.5 * 0.706 * iTransChar(runCy,"KM_VEH_TRUCK","%fBaseY%")* 1000 * 2 / 3  * 1E-6;
 iAnnCons(runCy,'GU','modal')=0.706 * iTransChar(runCy,"KM_VEH_TRUCK","%fBaseY%") * 1000 * 2  * 1E-6;
@@ -275,8 +279,8 @@ iAnnCons(runCy,'PA','smallest')=40000 * 50 * 1E-6;
 iAnnCons(runCy,'PA','modal')=400000 * 100 * 1E-6;
 iAnnCons(runCy,'PA','largest')=800000 * 300 * 1E-6;
 
-* Size will not play a role in buses, trains, ships and aircraft
-* Following values are given only for the sake of uniformity, but iDisFunConSize is not really calculated for non-road transport!
+*' * Size will not play a role in buses, trains, ships and aircraft
+*' * Following values are given only for the sake of uniformity, but iDisFunConSize is not really calculated for non-road transport!
 
 *iAnnConsPB(runCy,'PB',"smallest") = 20000 * 5 * 1E-6;
 *iAnnConsPB(runCy,'PB',"modal") = 50000* 15 * 1E-6;
@@ -303,7 +307,7 @@ iAnnCons(runCy,'GN',"largest") = 100000 * 1000 * 1E-6;
 
 iAnnCons(runCy,INDSE,"smallest") = 0.2  ;
 iAnnCons(runCy,INDSE,"largest") = 0.9 ;
-* assuming an average utilisation rate of 0.6 for iron & steel and 0.5 for other industry (see iterations in Excel):
+*' * assuming an average utilisation rate of 0.6 for iron & steel and 0.5 for other industry (see iterations in Excel):
 iAnnCons(runCy,"IS","modal") = 0.587;
 iAnnCons(runCy,INDSE,"modal")$(not sameas(INDSE,"IS")) = 0.487;
 
@@ -313,7 +317,7 @@ iAnnCons(runCy,DOMSE,"modal") = iConsSizeDistHeat(runCy,"modal");
 
 iAnnCons(runCy,NENSE,"smallest") = 0.2  ;
 iAnnCons(runCy,NENSE,"largest") = 0.9 ;
-* assuming an average utilisation rate of 0.5 for non-energy uses:
+*' * assuming an average utilisation rate of 0.5 for non-energy uses:
 iAnnCons(runCy,NENSE,"modal") = 0.487 ;
 
 iAnnCons(runCy,"BU","smallest") = 0.2 ;
@@ -321,7 +325,7 @@ iAnnCons(runCy,"BU","largest") = 1 ;
 iAnnCons(runCy,"BU","modal") = 0.5 ;
 iAnnCons(runCy,DSBS,ConSet)=0.9;
 iDisFunConSize(runCy,DSBS,rCon) = 1;
-* Consumer size groups distribution function
+*' * Consumer size groups distribution function
 $ontext
 Loop (runCy,DSBS) DO
      Loop rCon$(ord(rCon) le iNcon(DSBS)+1) DO
@@ -539,7 +543,7 @@ $ondelim
 $include"./iDataPriceReform.csv"
 $offdelim
 ;
-* INSERT MECHANSIM FOR PRICE REFORM!!
+*' * INSERT MECHANSIM FOR PRICE REFORM!!
 iPriceReform(runCy,INDSE1(SBS),EF,YTIME)=iDataPriceReform(runCy,"INDSE1",EF,YTIME) ;
 iPriceReform(runCy,DOMSE1(SBS),EF,YTIME)=iDataPriceReform(runCy,"DOMSE1",EF,YTIME) ;
 iPriceReform(runCy,NENSE1(SBS),EF,YTIME)=iDataPriceReform(runCy,"NENSE1",EF,YTIME) ;
@@ -556,7 +560,7 @@ iPriceTragets(runCy,NENSE1(SBS),EF,YTIME)=iDataPriceTargets(runCy,"NENSE1",EF,"2
 iPriceTragets(runCy,TRANS1(SBS),EF,YTIME)=iDataPriceTargets(runCy,"TRANS1",EF,"2030") ;
 iPriceTragets(runCy,PG(SBS),EF,YTIME)=iDataPriceTargets(runCy,"INDSE1",EF,"2030") ;
 
-*SPECIFIC CASE FOR NATURAL GAS PRICES!!!
+*' *SPECIFIC CASE FOR NATURAL GAS PRICES!!!
 
 iPriceTragets("RAS",INDSE1(SBS),"NGS",YTIME)=iDataPriceTargets("RAS","INDSE1","NGS",YTIME) ;
 iPriceTragets("RAS",DOMSE1(SBS),"NGS",YTIME)=iDataPriceTargets("RAS","DOMSE1","NGS",YTIME) ;
@@ -611,7 +615,7 @@ $offdelim
 ;
 iTransfInputRef(allCy,EFS,YTIME)$(not An(YTIME)) = iDataTotTransfInputRef(allCy,EFS,YTIME);
 
-* Calculation of weights for sector average fuel price
+*' * Calculation of weights for sector average fuel price
 iResElecIndex(allCy,YTIME) = 1;
 
 loop SBS do
@@ -639,7 +643,7 @@ iWgtSecAvgPriFueCons(runCy,INDDOM,EF)$(SECTTECH(INDDOM,EF)$(not sameas(EF,"ELC")
 
 
 
-* Rescaling the weights
+*' * Rescaling the weights
 iWgtSecAvgPriFueCons(runCy,SBS,EF)$(SECTTECH(SBS,EF) $sum(ef2$SECTTECH(SBS,EF),iWgtSecAvgPriFueCons(runCy,SBS,EF2))) = iWgtSecAvgPriFueCons(runCy,SBS,EF)/sum(ef2$SECTTECH(SBS,EF),iWgtSecAvgPriFueCons(runCy,SBS,EF2));
 table iResNonSubElec(allCy,INDSE,YTIME)	 "Residuals for non subsitutable electricity (1)"
 $ondelim
@@ -753,13 +757,13 @@ $ondelim
 $include"./iMatrFactor.csv"
 $offdelim
 ;                                              
-** Industry
+*' ** Industry
 iShrNonSubElecInTotElecDem(allCy,INDSE)  = iIndChar(allCy,INDSE,"SHR_NSE");
 iShrNonSubElecInTotElecDem(allCy,INDSE)$(iShrNonSubElecInTotElecDem(allCy,INDSE)>0.98) = 0.98;
-**Domestic - Tertiary
+*' **Domestic - Tertiary
 iShrNonSubElecInTotElecDem(allCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(allCy,DOMSE,"SHR_NSE");
 iShrNonSubElecInTotElecDem(allCy,DOMSE)$(iShrNonSubElecInTotElecDem(allCy,DOMSE)>0.98) = 0.98;
-**   Macroeconomic
+*' **   Macroeconomic
 $ontext
 
 **  Prices
@@ -784,7 +788,7 @@ iTechLft(runCy,TRANSE,EF,YTIME)$(ord(YTIME)>sum(TFIRST,(ord(TFIRST)-3))) = iData
 iAvgVehCapLoadFac(runCy,TRANSE,TRANSUSE,YTIME)$(ord(YTIME)>sum(TFIRST,(ord(TFIRST)-3)))= iCapDataLoadFacEachTransp(TRANSE,TRANSUSE);
 
 
-**  Industrial Sector
+*' **  Industrial Sector
 
 iCapCostTech(runCy,INDSE,EF,YTIME)$(ord(YTIME) eq TF-7) = iDataIndTechnology(INDSE,EF,"IC_05");
 iCapCostTech(runCy,INDSE,EF,YTIME)$(ord(YTIME) eq TF+8) = iDataIndTechnology(INDSE,EF,"IC_25");
@@ -805,7 +809,7 @@ iUsfEneConvSubTech(runCy,INDSE,EF,YTIME)$(ord(YTIME) eq TF+33) = iDataIndTechnol
 iTechLft(runCy,INDSE,EF,YTIME)$(ord(YTIME)>(ordfirst-8)) = iDataIndTechnology(INDSE,EF,"LFT");
 
 
-**  Domestic Sector
+*' **  Domestic Sector
 
 
 iFixOMCostTech(runCy,DOMSE,EF,YTIME)$(ord(YTIME) eq TF-7)= iDataDomTech(DOMSE,EF,"FC_05");
@@ -829,7 +833,7 @@ NETWORKPARAM(NETWSET,INDDOM,"STE1AH2F")$(NETTECH(INDDOM,"STE1AH2F"))            
 NETWORKPARAM(NETWSET,TRANSE,NETEF)$(NETTECH(TRANSE,NETEF))                               = NetEffect(NETWSET,NETEF,"TRA");
 NETWORKPARAM(NETWSET,TRANSE,EF)$(NETTECH(TRANSE,EF)$PLUGIN(EF) )                         = NetEffect(NETWSET,"ELC","TRA");
 $offtext
-**  Non Energy Sector and Bunkers
+*' **  Non Energy Sector and Bunkers
 
 
 iFixOMCostTech(runCy,NENSE,EF,YTIME)$(ord(YTIME) eq TF-7)= iDataNonEneSec(NENSE,EF,"FC_05");
@@ -874,7 +878,7 @@ loop YTIME$((ord(YTIME) gt TF+3) $(ord(YTIME) lt TF+84)) do
 endloop;
 
 
-**  Power Generation
+*' **  Power Generation
 
 
 
@@ -904,7 +908,7 @@ iEffDHPlants(runCy,EFS,YTIME)$(ord(YTIME)>(ordfirst-8))  = sum(PGEFS$sameas(EFS,
 
 
 
-** CHP economic and technical data initialisation for electricity production
+*' ** CHP economic and technical data initialisation for electricity production
 table iDataChpPowGen(EF,YTIME,CHPPGSET)   "Data for power generation costs (various)"
 $ondelim
 $include "./iDataChpPowGen.csv"
@@ -917,7 +921,7 @@ iLifChpPla(runCy,DSBS,CHP) = iDataChpPowGen(CHP,"2010","LFT");
 iAvailRateChp(runCy,DSBS,CHP) = iDataChpPowGen(CHP,"2010","AVAIL");
 iBoiEffChp(runCy,CHP,YTIME) = iDataChpPowGen(CHP,"2010","BOILEFF");
 
-**  Policies for climate change and renewables
+*' **  Policies for climate change and renewables
 
 
 $ontext
@@ -930,7 +934,7 @@ VOMRES(PGALL,YTIME)$AN(YTIME)=VOMRES_PRN(PGALL,YTIME)  ;
 EFFRES(PGALL,YTIME)$AN(YTIME)=EFFRES_PRN(PGALL,YTIME);
 NUCRES(YTIME)$an(ytime)=NUCRES_PRN("RES",YTIME);
 $offtext
-* Update efficiencies according to energy productivity index
+*' * Update efficiencies according to energy productivity index
 ***iPlantEffByType(runCy,PGALL,YTIME)$(an(ytime) )= iPlantEffByType(runCy,PGALL,YTIME) / iEneProdRDscenarios(runCy,"pg",ytime);
 ***iEffDHPlants(runCy,EF,YTIME)$(an(ytime) )= iEffDHPlants(runCy,EF,YTIME) / iEneProdRDscenarios(runCy,"pg",ytime);
 iElecIndex(runCy,YTIME) = 0.9;

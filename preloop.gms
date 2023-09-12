@@ -1,4 +1,8 @@
-* Calculation of polynomial distribution lags coefficients
+*' @title Preloop
+*' 
+*' @code
+*' 
+*' * Calculation of polynomial distribution lags coefficients
 iNPDL(DSBS) = 6;
 loop DSBS do
    loop KPDL$(ord(KPDL) le iNPDL(DSBS)) do
@@ -98,9 +102,9 @@ VScalWeibullSum.l(allCy,PGALL,YTIME)=2;
 *VScalWeibullSum.up(allCy,PGALL,YTIME)=1.0e+10;
 VHourProdCostTech.l(runCy,PGALL,HOUR,TT) = 0.0001;
 
-********************************************************************************
-*                        VARIABLE INITIALISATION                               *
-********************************************************************************
+*' ********************************************************************************
+*' *                        VARIABLE INITIALISATION                               *
+*' ********************************************************************************
 
 
 VFuelPriceSub.FX(runCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF) $(not HEATPUMP(EF))  $(not An(YTIME))) = iFuelPrice(runCy,SBS,EF,YTIME);

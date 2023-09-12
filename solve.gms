@@ -1,3 +1,7 @@
+*' @title solve
+*' 
+*' @code
+*'
     openprom.optfile=1;
     sModelStat = 100;
     loop rcc$(rcc.val <= sSolverTryMax) do
