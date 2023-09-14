@@ -1,6 +1,5 @@
 *.lst
 *.log
-.vscode/
 *.R
 !loadMadratData.R
 *.ini
