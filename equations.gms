@@ -897,8 +897,8 @@ QElecConsHeatPla(runCy,INDDOM,YTIME)$time(ytime) ..
 QFuelCons(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF) $(not HEATPUMP(EF)) )..
          VConsFuel(runCy,DSBS,EF,YTIME)
                  =E=
-         VConsFuelSub(runCy,DSBS,EF,YTIME)$(not ELCEF(EF)) + 
-         (VConsFuelSub(runCy,DSBS,EF,YTIME) + VElecConsHeatPla(runCy,DSBS,YTIME))$ELCEF(EF);
+         VFuelConsInclHP(runCy,DSBS,EF,YTIME)$(not ELCEF(EF)) + 
+         (VFuelConsInclHP(runCy,DSBS,EF,YTIME) + VElecConsHeatPla(runCy,DSBS,YTIME))$ELCEF(EF);
 
 
 

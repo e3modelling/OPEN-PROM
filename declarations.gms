@@ -391,7 +391,6 @@ VDemInd(allCy,YTIME)                   "Total final demand (of substitutable fue
 VDemSub(allCy,DSBS,YTIME)              "Total final demand (of substitutable fuels) per subsector (Mtoe)"
 VElecIndPrices(allCy,YTIME)            "Electricity index - a function of industry price (1)"
 VElecConsHeatPla(allCy,DSBS,YTIME)     "Electricity consumed in heatpump plants (Mtoe)"
-VConsFuelSub(allCy,DSBS,EF,YTIME)      "Consumption of fuels in each demand subsector (including heat from heatpumps) (Mtoe)"
 VElecIndPricesEst(allCy,YTIME)         "Electricity index - a function of industry price - Estimate (1)"
 VFuelPriceSub(allCy,SBS,EF,YTIME)      "Fuel prices per subsector and fuel (k$2015/toe)"
 VFuePriSubChp(allCy,DSBS,EF,TEA,YTIME) "Fuel prices per subsector and fuel for CHP plants (kUS$2005/toe)"
