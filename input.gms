@@ -700,6 +700,11 @@ $ondelim
 $include"./iCapDataLoadFacEachTransp.csv"
 $offdelim
 ;
+table iNewReg(allCy,YTIME) "new car registrations per year"
+$ondelim
+$include"./iNewReg.csv"
+$offdelim
+;
 
 iUtilRateChpPlants(allCy,CHP,YTIME) = 0.5;
 $ontext

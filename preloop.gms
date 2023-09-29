@@ -13,13 +13,15 @@ model openprom /
 QDemSub
 QFinEneDemTranspPerFuel
 QFinEneDemTransp
+QConsEachTechTransp
+QGapTranspActiv
 
 qDummyObj
 /;
 
 
-option iPop:2:0:6;
-display iPop;
+option iActv:2:0:6;
+display iActv;
 display iDisc;
 display TF;
 display TFIRST;
@@ -32,7 +34,7 @@ display iTotFinEneDemSubBaseYr;
 VNumVeh.L(allCy,YTIME)=0.1;
 *VNumVeh.lags(allCy,YTIME) = 0.1;
 VTrnspActiv.l(allCy,TRANSE,YTIME) = 0.1;
-
+VNewReg.FX(allCy,YTIME) = iNewReg(allCy,YTIME);
 VFuelPriceSub.l(allCy,SBS,EF,YTIME) = 0.1;
 VElecIndPrices.l(allCy,YTIME)= 0.1;
 VTechCostVar.l(allCy,SBS,EF,TEA,YTIME) = 0.1;
