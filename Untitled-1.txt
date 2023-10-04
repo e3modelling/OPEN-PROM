@@ -1,0 +1,11 @@
+iACTV: exogenous sectoral activity data from GEM-E3, IRF, and WDI. Economic driver of the model. For passenger cars it is a variable. 
+million of vehicles	PC
+billion of pkm	PB
+billion of pkm	PT
+billion of pkm	PN
+million of passengers	PA
+billion of tkm	GU
+billion of tkm	GT
+billion of tkm	GN
+
+VTrnspActiv: 

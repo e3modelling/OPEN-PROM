@@ -26,6 +26,7 @@ $ondelim
 $include "./iElastA.csv"
 $offdelim
 ;
+iElastA(allCy,SBS,ETYPES,YTIME) = iElastA("MAR",SBS,ETYPES,YTIME); !! FIXME
 table iResActiv(allCy,TRANSE,YTIME) "Residuals on transport activity ()"
 $ondelim
 $include "./iResActiv.csv"
@@ -57,7 +58,7 @@ table iDataPassCars(allCy,GompSet1,Gompset2)        "Initial Data for Passenger 
 $ondelim
 $include "./iDataPassCars.csv"
 $offdelim
-;	
+;
 iSigma(allCy,"S1") = iDataPassCars(allCy,"PC","S1");
 iSigma(allCy,"S2") = iDataPassCars(allCy,"PC","S2");
 iSigma(allCy,"S3") = iDataPassCars(allCy,"PC","S3");
@@ -406,14 +407,14 @@ $ondelim
 $include"./iDataTransfOutputRef.csv"
 $offdelim
 ;
-table iFuelCons(allCy,TRANSE,EF,YTIME)	 "Fuel consumption (Mtoe)"
+table iFuelConsTRANSE(allCy,TRANSE,EF,YTIME)	 "Fuel consumption (Mtoe)"
 $ondelim
-$include"./iFuelCons.csv"
+$include"./iFuelConsTRANSE.csv"
 $offdelim
 ;
 iTransfOutputRef(allCy,EFS,YTIME)$(not An(YTIME)) = iDataTransfOutputRef(allCy,EFS,YTIME);
-iFuelCons(allCy,TRANSE,EF,YTIME)$(SECTTECH(TRANSE,EF) $(iFuelCons(allCy,TRANSE,EF,YTIME)<=0)) = 1e-6;
-iFuelConsPerFueSub(allCy,TRANSE,EF,YTIME)$(not An(YTIME))  = iFuelCons(allCy,TRANSE,EF,YTIME);
+iFuelConsTRANSE(allCy,TRANSE,EF,YTIME)$(SECTTECH(TRANSE,EF) $(iFuelConsTRANSE(allCy,TRANSE,EF,YTIME)<=0)) = 1e-6;
+iFuelConsPerFueSub(allCy,TRANSE,EF,YTIME)$(not An(YTIME))  = iFuelConsTRANSE(allCy,TRANSE,EF,YTIME);
 table iFuelConsINDSE(allCy,INDSE,EF,YTIME)	 "Fuel consumption of industry subsector (Mtoe)"
 $ondelim
 $include"./iFuelConsINDSE.csv"

@@ -1,9 +1,9 @@
 *** preliminaries
 
 *** number of columns that are listed for each variable in the column listing
-option limcol = 16;
+option limcol = 100;
 *** number of rows that are listed for each equation in the equation listing
-option limrow = 16;
+option limrow = 100;
 
 *** "dollar" ($) commands section: define GAMS flags & code control & compilation-time options
 
@@ -39,7 +39,7 @@ $setGlobal fReadCountryCalib 'yes'
 
 $evalGlobal fStartHorizon 2010
 $evalGlobal fEndHorizon 2100
-$evalGlobal fEndY 2020
+$evalGlobal fEndY 2018
 $evalGlobal fStartY 2018
 $evalGlobal fBaseY %fStartY% - %fPeriodOfYears%
 
