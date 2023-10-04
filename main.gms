@@ -1,16 +1,16 @@
 *' @title OPEN PROM
 *'
-*' @description The OPEN PROM is a model to test and
-*' present the basic functionality of the gms and goxygen packages (@gms, @goxygen).
+*' @description This is the OPEN-PROM model, the open version of the 
+*' world energy model PROMETHEUS of E3Modelling. 
 *'
-*' It has the structure of a plain GAMS model and can be interpreted
-*' by goxygen, but has no content and cannot be solved with GAMS.
+*' Some preliminary documentation of OPEN-PROM can be found in the 
+*' Wiki of this repository, extensive documentation of the PROMETHEUS model 
+*' (on which both MENA-EDS and OPEN-PROM are based) can be found 
+*' here: https://e3modelling.com/modelling-tools/prometheus/
 *' 
 *' *** preliminaries 
 *' 
-*' *** number of columns that are listed for each variable in the column listing
-*' 
-*' @code Let's add some standard code
+*' @code 
 option limcol = 16;
 *' 
 *' *** number of rows that are listed for each equation in the equation listing
@@ -74,4 +74,3 @@ $include input.gms
 $include equations.gms
 $include preloop.gms
 $include solve.gms
-
