@@ -11,8 +11,8 @@ endloop;
 model openprom /
 
 QDemSub
-*QFinEneDemTranspPerFuel
-*QFinEneDemTransp
+QFinEneDemTranspPerFuel
+QFinEneDemTransp
 *QSpecificFuelCons
 QConsEachTechTransp
 QGapTranspActiv
@@ -149,7 +149,7 @@ VScrRate.UP(runCy,YTIME) = 1;
 VScrRate.FX(runCy,YTIME) = iDataPassCars(runCy,"PC","scr"); !! FIXME
 VGapTranspFillNewTech.FX(runCy,TRANSE,YTIME)$(not AN(YTIME))=0;
 VTrnspActiv.FX(runCy,"PC",YTIME) = iTransChar(runCy,"KM_VEH",YTIME); !! FIXME
-VTrnspActiv.FX(runCy,TRANP,YTIME)$((not An(YTIME)) $(not sameas(TRANP,"PC"))) = iActv(YTIME,runCy,TRANP);
+VTrnspActiv.FX(runCy,TRANP,YTIME) $(not sameas(TRANP,"PC")) = iActv(YTIME,runCy,TRANP); !! FIXME
 VTrnspActiv.FX(runCy,TRANSE,YTIME)$(not TRANP(TRANSE)) = 0;
 VGoodsTranspActiv.FX(runCy,TRANG,YTIME)$(not An(YTIME)) = iActv(YTIME,runCy,TRANG);
 VGoodsTranspActiv.FX(runCy,TRANSE,YTIME)$(not TRANG(TRANSE)) = 0;
