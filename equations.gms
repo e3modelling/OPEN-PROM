@@ -588,7 +588,7 @@ QGoodsTranspActiv(runCy,TRANSE,YTIME)$(TIME(YTIME) $TRANG(TRANSE))..
          VGoodsTranspActiv(runCy,TRANSE,YTIME)
                  =E=
          (
-           iResActiv(runCy,TRANSE,YTIME) * VGoodsTranspActiv(runCy,TRANSE,YTIME-1)
+          VGoodsTranspActiv(runCy,TRANSE,YTIME-1)
            * [(iGDP(YTIME,runCy)/iPop(YTIME,runCy))/(iGDP(YTIME-1,runCy)/iPop(YTIME-1,runCy))]**iElastA(runCy,TRANSE,"a",YTIME)
            * (iPop(YTIME,runCy)/iPop(YTIME-1,runCy))
            * (VFuelPriceAvg(runCy,TRANSE,YTIME)/VFuelPriceAvg(runCy,TRANSE,YTIME-1))**iElastA(runCy,TRANSE,"c1",YTIME)
@@ -601,7 +601,7 @@ QGoodsTranspActiv(runCy,TRANSE,YTIME)$(TIME(YTIME) $TRANG(TRANSE))..
          )$sameas(TRANSE,"GU")        !!trucks
          +
          (
-           iResActiv(runCy,TRANSE,YTIME) * VGoodsTranspActiv(runCy,TRANSE,YTIME-1)
+           VGoodsTranspActiv(runCy,TRANSE,YTIME-1)
            * [(iGDP(YTIME,runCy)/iPop(YTIME,runCy))/(iGDP(YTIME-1,runCy)/iPop(YTIME-1,runCy))]**iElastA(runCy,TRANSE,"a",YTIME)
            * (VFuelPriceAvg(runCy,TRANSE,YTIME)/VFuelPriceAvg(runCy,TRANSE,YTIME-1))**iElastA(runCy,TRANSE,"c1",YTIME)
            * (VFuelPriceAvg(runCy,TRANSE,YTIME-1)/VFuelPriceAvg(runCy,TRANSE,YTIME-2))**iElastA(runCy,TRANSE,"c2",YTIME)
@@ -620,16 +620,15 @@ QGapTranspActiv(runCy,TRANSE,YTIME)$TIME(YTIME)..
          VNewReg(runCy,YTIME)$sameas(TRANSE,"PC")
          +
          (
-         ( [VTrnspActiv(runCy,TRANSE,YTIME) - VTrnspActiv(runCy,TRANSE,YTIME-1) + VTrnspActiv(runCy,TRANSE,YTIME-1)/
+         ( [VTrnspActiv(runCy,TRANSE,YTIME)/
          (sum((TTECH,TEA)$SECTTECH(TRANSE,TTECH),VLifeTimeTech(runCy,TRANSE,TTECH,TEA,YTIME-1))/TECHS(TRANSE))] +
-          SQRT( SQR([VTrnspActiv(runCy,TRANSE,YTIME) - VTrnspActiv(runCy,TRANSE,YTIME-1) + VTrnspActiv(runCy,TRANSE,YTIME-1)/
+          SQRT( SQR([VTrnspActiv(runCy,TRANSE,YTIME)/
           (sum((TTECH,TEA)$SECTTECH(TRANSE,TTECH),VLifeTimeTech(runCy,TRANSE,TTECH,TEA,YTIME-1))/TECHS(TRANSE))]) + SQR(1e-4) ) )/2
          )$(TRANP(TRANSE) $(not sameas(TRANSE,"PC")))
          +
          (
-         ( [VGoodsTranspActiv(runCy,TRANSE,YTIME) - VGoodsTranspActiv(runCy,TRANSE,YTIME-1) + VGoodsTranspActiv(runCy,TRANSE,YTIME-1)/
-         (sum((EF,TEA)$SECTTECH(TRANSE,EF),VLifeTimeTech(runCy,TRANSE,EF,TEA,YTIME-1))/TECHS(TRANSE))] + SQRT( SQR([VGoodsTranspActiv(runCy,TRANSE,YTIME) -
-          VGoodsTranspActiv(runCy,TRANSE,YTIME-1) + VGoodsTranspActiv(runCy,TRANSE,YTIME-1)/
+         ( [VGoodsTranspActiv(runCy,TRANSE,YTIME)/
+         (sum((EF,TEA)$SECTTECH(TRANSE,EF),VLifeTimeTech(runCy,TRANSE,EF,TEA,YTIME-1))/TECHS(TRANSE))] + SQRT( SQR([VGoodsTranspActiv(runCy,TRANSE,YTIME)/
           (sum((EF,TEA)$SECTTECH(TRANSE,EF),VLifeTimeTech(runCy,TRANSE,EF,TEA,YTIME-1))/TECHS(TRANSE))]) + SQR(1e-4) ) )/2
          )$TRANG(TRANSE);
 
@@ -637,7 +636,7 @@ QGapTranspActiv(runCy,TRANSE,YTIME)$TIME(YTIME)..
 QSpecificFuelCons(runCy,TRANSE,TTECH,TEA,EF,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,EF) $TTECHtoEF(TTECH,EF) )..
          VSpecificFuelCons(runCy,TRANSE,TTECH,TEA,EF,YTIME)
                  =E=
-         iResSpecificFuelConsCost(runCy,TRANSE,TTECH,EF,YTIME)*VSpecificFuelCons(runCy,TRANSE,TTECH,TEA,EF,YTIME-1)
+         VSpecificFuelCons(runCy,TRANSE,TTECH,TEA,EF,YTIME-1)
           * prod(KPDL,
                      (
                         VFuelPriceSub(runCy,TRANSE,EF,YTIME-ord(KPDL))/VFuelPriceSub(runCy,TRANSE,EF,YTIME-(ord(KPDL)+1))

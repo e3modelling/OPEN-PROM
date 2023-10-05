@@ -26,6 +26,7 @@ $ondelim
 $include "./iElastA.csv"
 $offdelim
 ;
+iElastA(allCy,SBS,ETYPES,YTIME) = iElastA("MAR",SBS,ETYPES,YTIME); !! FIXME
 table iResActiv(allCy,TRANSE,YTIME) "Residuals on transport activity ()"
 $ondelim
 $include "./iResActiv.csv"
@@ -57,7 +58,7 @@ table iDataPassCars(allCy,GompSet1,Gompset2)        "Initial Data for Passenger 
 $ondelim
 $include "./iDataPassCars.csv"
 $offdelim
-;	
+;
 iSigma(allCy,"S1") = iDataPassCars(allCy,"PC","S1");
 iSigma(allCy,"S2") = iDataPassCars(allCy,"PC","S2");
 iSigma(allCy,"S3") = iDataPassCars(allCy,"PC","S3");
@@ -68,7 +69,8 @@ table iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,YTIME)        "Initial Specific fu
 $ondelim
 $include "./iInitSpecFuelCons.csv"
 $offdelim
-;	
+;
+iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,YTIME) = iInitSpecFuelCons("MAR",TRANSE,TTECH,EF,YTIME); !! FIXME
 iSpeFuelConsCostBy(allCy,TRANSE,TTECH,TEA,EF) = iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,"2017");
 table iElaSub(allCy,DSBS)                           "Elasticities by subsectors (1)"
 $ondelim
@@ -178,10 +180,63 @@ $include"./iCO2SeqData.csv"
 $offdelim
 ;
 iElastCO2Seq(allCy,CO2SEQELAST) = sum(tfirst,iCO2SeqData(allCy,CO2SEQELAST,TFIRST));
-table iDataTransTech (TRANSE,EF,ECONCHAR)                  "Technoeconomic characteristics of transport (various)"
-$ondelim
-$include"./iDataTransTech.csv"
-$offdelim
+
+*Sources for vehicle lifetime:
+*US Department of Transportation, International Union of Railways, Statista, EU CORDIS
+table iDataTransTech (TRANSE, EF, ECONCHAR) "Technoeconomic characteristics of transport (various)"
+            IC_05 IC_25 IC_50 FC_05 FC_25 FC_50 VC_05 VC_25 VC_50 LFT
+PC.GSL      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0
+PC.LPG      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0
+PC.GDO      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0
+PC.NGS      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0
+PC.ELC      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0
+PC.ETH      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0
+PC.MET      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0
+PC.H2F      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0
+PC.CHEVGSL  0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0
+PC.CHEVGDO  0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0
+PC.BGDO     0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0
+PC.PHEVGSL  0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0
+PC.PHEVGDO  0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0
+*PB.GSL     0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   12 
+*PB.LPG     0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   12
+*PB.GDO     0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   12
+*PB.NGS     0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   12
+*PB.ELC     0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   12
+*PB.ETH     0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   12
+*PB.MET     0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   12
+*PB.H2F     0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   12
+*PB.BGDO    0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   12
+*PB.PHEVGSL 0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   12
+*PB.PHEVGDO 0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   12
+PT.GDO      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   30
+PT.ELC      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   30
+PT.MET      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   30
+PT.H2F      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   30
+PA.KRS      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   25
+PA.H2F      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   25
+*PN.GSL     0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   40
+*PN.GDO     0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   40
+*PN.H2F     0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   40
+GU.GSL      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   15
+GU.LPG      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   15
+GU.GDO      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   15
+GU.NGS      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   15
+GU.ELC      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   15
+GU.ETH      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   15
+GU.MET      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   15
+GU.H2F      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   15
+GU.BGDO     0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   15
+GU.CHEVGDO  0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   15
+GU.PHEVGSL  0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   15
+GU.PHEVGDO  0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   15
+GT.GDO      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   30
+GT.ELC      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   30
+GT.MET      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   30
+GT.H2F      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   30
+GN.GSL      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   40
+GN.GDO      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   40
+GN.H2F      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   40
 ;
 table iDataIndTechnology(INDSE,EF,ECONCHAR)                  "Technoeconomic characteristics of industry (various)"
 $ondelim
@@ -406,14 +461,14 @@ $ondelim
 $include"./iDataTransfOutputRef.csv"
 $offdelim
 ;
-table iFuelCons(allCy,TRANSE,EF,YTIME)	 "Fuel consumption (Mtoe)"
+table iFuelConsTRANSE(allCy,TRANSE,EF,YTIME)	 "Fuel consumption (Mtoe)"
 $ondelim
-$include"./iFuelCons.csv"
+$include"./iFuelConsTRANSE.csv"
 $offdelim
 ;
 iTransfOutputRef(allCy,EFS,YTIME)$(not An(YTIME)) = iDataTransfOutputRef(allCy,EFS,YTIME);
-iFuelCons(allCy,TRANSE,EF,YTIME)$(SECTTECH(TRANSE,EF) $(iFuelCons(allCy,TRANSE,EF,YTIME)<=0)) = 1e-6;
-iFuelConsPerFueSub(allCy,TRANSE,EF,YTIME)$(not An(YTIME))  = iFuelCons(allCy,TRANSE,EF,YTIME);
+iFuelConsTRANSE(allCy,TRANSE,EF,YTIME)$(SECTTECH(TRANSE,EF) $(iFuelConsTRANSE(allCy,TRANSE,EF,YTIME)<=0)) = 1e-6;
+iFuelConsPerFueSub(allCy,TRANSE,EF,YTIME)$(not An(YTIME))  = iFuelConsTRANSE(allCy,TRANSE,EF,YTIME);
 table iFuelConsINDSE(allCy,INDSE,EF,YTIME)	 "Fuel consumption of industry subsector (Mtoe)"
 $ondelim
 $include"./iFuelConsINDSE.csv"
@@ -689,15 +744,20 @@ iResSpecificFuelConsCost(allCy,TRANSE,"PHEVGDO","ELC",YTIME)$(TRANSETTECH(TRANSE
 
 iResSpecificFuelConsCost(allCy,TRANSE,"cHEVGDO","GDO",YTIME)$(TRANSETTECH(TRANSE,"cHEVGDO") $an(YTIME))= iResSpecificFuelConsCost(allCy,TRANSE,"GDO","GDO",YTIME);
 iResSpecificFuelConsCost(allCy,TRANSE,"cHEVGsl","gsl",YTIME)$(TRANSETTECH(TRANSE,"cHEVGsl") $an(YTIME))= iResSpecificFuelConsCost(allCy,TRANSE,"Gsl","Gsl",YTIME);
-table iPlugHybrFractOfMileage(allCy,ELSH_SET,YTIME)	 "Plug in hybrid fraction of mileage covered by electricity, residualls on GDP-Depnd car market ext (1)"
+table iPlugHybrFractOfMileage(ELSH_SET,YTIME)	 "Plug in hybrid fraction of mileage covered by electricity, residualls on GDP-Depnd car market ext (1)"
 $ondelim
 $include"./iPlugHybrFractOfMileage.csv"
 $offdelim
 ;
-iShareAnnMilePlugInHybrid(allCy,YTIME)$an(YTIME) = iPlugHybrFractOfMileage(allCy,"ELSH",YTIME);
+iShareAnnMilePlugInHybrid(allCy,YTIME)$an(YTIME) = iPlugHybrFractOfMileage("ELSH",YTIME);
 table iCapDataLoadFacEachTransp(TRANSE,TRANSUSE)	 "Capacity data and Load factor for each transportation mode (passenger or tonnes/vehicle)"
 $ondelim
 $include"./iCapDataLoadFacEachTransp.csv"
+$offdelim
+;
+table iNewReg(allCy,YTIME) "new car registrations per year"
+$ondelim
+$include"./iNewReg.csv"
 $offdelim
 ;
 
@@ -781,7 +841,7 @@ iVarCostTech(runCy,TRANSE,EF,YTIME)$(ord(YTIME) eq TF+8) = iDataTransTech(TRANSE
 iVarCostTech(runCy,TRANSE,EF,YTIME)$(ord(YTIME) eq TF+33)= iDataTransTech(TRANSE,EF,"VC_50");
 
 iTechLft(runCy,TRANSE,EF,YTIME)$(ord(YTIME)>sum(TFIRST,(ord(TFIRST)-3))) = iDataTransTech(TRANSE,EF,"LFT");
-iAvgVehCapLoadFac(runCy,TRANSE,TRANSUSE,YTIME)$(ord(YTIME)>sum(TFIRST,(ord(TFIRST)-3)))= iCapDataLoadFacEachTransp(TRANSE,TRANSUSE);
+iAvgVehCapLoadFac(runCy,TRANSE,TRANSUSE,YTIME) = iCapDataLoadFacEachTransp(TRANSE,TRANSUSE);
 
 
 **  Industrial Sector
