@@ -57,3 +57,6 @@ $include solve.gms
 
 * FIXME: This is title of the issue to create
 * author=derevirn
+
+* FIXME: Test issue to create
+* author=derevirn
