@@ -69,7 +69,8 @@ table iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,YTIME)        "Initial Specific fu
 $ondelim
 $include "./iInitSpecFuelCons.csv"
 $offdelim
-;	
+;
+iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,YTIME) = iInitSpecFuelCons("MAR",TRANSE,TTECH,EF,YTIME); !! FIXME
 iSpeFuelConsCostBy(allCy,TRANSE,TTECH,TEA,EF) = iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,"2017");
 table iElaSub(allCy,DSBS)                           "Elasticities by subsectors (1)"
 $ondelim
