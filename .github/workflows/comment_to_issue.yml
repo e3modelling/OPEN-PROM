@@ -1,4 +1,4 @@
-name: TODO workflow
+name: Comment to Issue
 on: [push, pull_request]
 jobs:
   build:
