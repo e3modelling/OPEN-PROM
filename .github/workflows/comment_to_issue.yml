@@ -17,5 +17,4 @@ jobs:
         MIN_CHARACTERS: 5
         INCLUDE_PATTERN: "\\.(gms|R)$"
 
-permissions:
-  issues: write
+permissions: write-all
