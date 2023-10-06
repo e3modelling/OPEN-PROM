@@ -1,0 +1,26 @@
+name: Comment to Issue
+on:
+  pull_request:
+    branches: 
+      - main
+    types: [closed]
+
+jobs:
+  build:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Run tdg-github-action
+      uses: ribtoks/tdg-github-action@master
+      with:
+        TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        REPO: ${{ github.repository }}
+        SHA: ${{ github.sha }}
+        REF: ${{ github.ref }}
+        LABEL: "FIXME"
+        MIN_WORDS: 1
+        MIN_CHARACTERS: 5
+        INCLUDE_PATTERN: "\\.(gms|R)$"
+
+permissions: write-all
