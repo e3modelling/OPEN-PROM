@@ -54,9 +54,3 @@ $include input.gms
 $include equations.gms
 $include preloop.gms
 $include solve.gms
-
-* FIXME: This is title of the issue to create
-* author=derevirn
-
-* FIXME: This is another issue
-* author=derevirn

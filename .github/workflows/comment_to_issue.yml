@@ -12,9 +12,9 @@ jobs:
         REPO: ${{ github.repository }}
         SHA: ${{ github.sha }}
         REF: ${{ github.ref }}
-        LABEL: "FIXME Issue"
-        MIN_WORDS: 2
-        MIN_CHARACTERS: 10
+        LABEL: "FIXME"
+        MIN_WORDS: 1
+        MIN_CHARACTERS: 5
         INCLUDE_PATTERN: "\\.(gms|R)$"
 
 permissions:
