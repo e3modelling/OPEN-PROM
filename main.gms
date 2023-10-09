@@ -57,3 +57,6 @@ $include solve.gms
 
 * FIXME: This issue will be created after the PR is merged.
 * author=derevirn
+
+* FIXME: Testing GH Action changed permissions.
+* author=derevirn
