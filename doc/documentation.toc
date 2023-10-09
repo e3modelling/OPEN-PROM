@@ -1,0 +1,20 @@
+\babel@toc {english}{}\relax 
+\contentsline {section}{\nonumberline OPEN PROM}{2}{section*.3}%
+\contentsline {subsection}{\nonumberline Authors}{4}{subsection*.5}%
+\contentsline {subsection}{\nonumberline How to cite}{4}{subsection*.7}%
+\contentsline {subsubsection}{\nonumberline Bibtex format}{4}{subsubsection*.9}%
+\contentsline {subsubsection}{\nonumberline Citation File Format}{5}{subsubsection*.11}%
+\contentsline {section}{\nonumberline declarations (declarations.gms)}{6}{section*.13}%
+\contentsline {subsection}{\nonumberline Description}{6}{subsection*.15}%
+\contentsline {section}{\nonumberline Equations (equations.gms)}{29}{section*.17}%
+\contentsline {subsection}{\nonumberline Description}{29}{subsection*.19}%
+\contentsline {section}{\nonumberline input (input.gms)}{76}{section*.21}%
+\contentsline {subsection}{\nonumberline Description}{76}{subsection*.23}%
+\contentsline {section}{\nonumberline Preloop (preloop.gms)}{106}{section*.25}%
+\contentsline {subsection}{\nonumberline Description}{106}{subsection*.27}%
+\contentsline {section}{\nonumberline sets (sets.gms)}{115}{section*.29}%
+\contentsline {subsection}{\nonumberline Description}{115}{subsection*.31}%
+\contentsline {section}{\nonumberline solve (solve.gms)}{154}{section*.33}%
+\contentsline {subsection}{\nonumberline Description}{154}{subsection*.35}%
+\contentsline {section}{\nonumberline References}{154}{section*.37}%
+\providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

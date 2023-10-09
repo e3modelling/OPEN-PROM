@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="generator" content="goxygen" />
+  <meta name="author" content="Plessias Georgios" />
+  <meta name="author" content="Giannousakis Anastasis" />
+<title>OPEN PROM – Overview</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href='https://fonts.googleapis.com/css?family=Abel|Allerta Stencil|Roboto Mono' rel='stylesheet'>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+<script type="text/x-mathjax-config">
+                    MathJax.Hub.Config({
+                      CommonHTML: { linebreaks: { automatic: true } },
+                      "HTML-CSS": { linebreaks: { automatic: true } },
+                             SVG: { linebreaks: { automatic: true } }
+                    });
+</script>
+</head>
+<body>
+<div class="header">
+    <div class="headerimg">
+      <a href="index.htm"><img id="logo" src="images/logo.png" height="100" alt="model logo" /></a>
+    </div>
+    <div class="headertext">
+      <h1 id="mainheadertitle"><a href="https://github.com/e3modelling/OPEN-PROM">OPEN PROM</a></h1>
+      <h3>0.1</h3>
+      <div class="by">created with <a href="https://github.com/pik-piam/goxygen">goxygen</a> 1.0.3</div>
+    </div>
+</div>
+
+<div class="pagenav" id="pagenav">
+    <div class="dropdown">
+   <button class="dropbtn">Overview
+     <i class="fa fa-caret-down"></i>
+   </button>
+   <div id="mainnav" class="dropdown-content">
+   <a href='index.htm'>Overview</a>
+   <a href='declarations.htm'>declarations</a>
+   <a href='equations.htm'>Equations</a>
+   <a href='input.htm'>input</a>
+   <a href='preloop.htm'>Preloop</a>
+   <a href='sets.htm'>sets</a>
+   <a href='solve.htm'>solve</a>
+   </div>
+  </div>
+  <div class="dropdown">
+   <button class="dropbtn">Contents
+     <i class="fa fa-caret-down"></i>
+   </button>
+   <div class="dropdown-content">
+   <ul>
+   <li><a href="#open-prom" id="toc-open-prom">OPEN PROM</a>
+   <ul>
+   <li><a href="#authors" id="toc-authors">Authors</a></li>
+   <li><a href="#how-to-cite" id="toc-how-to-cite">How to cite</a>
+   <ul>
+   <li><a href="#bibtex-format" id="toc-bibtex-format">Bibtex
+   format</a></li>
+   <li><a href="#citation-file-format"
+   id="toc-citation-file-format">Citation File Format</a></li>
+   </ul></li>
+   <li><a href="#references" id="toc-references">References</a></li>
+   </ul></li>
+   </ul>
+   </div>
+  </div>
+</div>
+
+<h1 id="open-prom">OPEN PROM</h1>
+<p>This is the OPEN-PROM model, the open version of the world energy
+model PROMETHEUS of E3Modelling.</p>
+<p>Some preliminary documentation of OPEN-PROM can be found in the Wiki
+of this repository, extensive documentation of the PROMETHEUS model (on
+which both MENA-EDS and OPEN-PROM are based) can be found here:
+https://e3modelling.com/modelling-tools/prometheus/</p>
+<p>*** preliminaries</p>
+<pre><code>option limcol = 16;</code></pre>
+<p>*** number of rows that are listed for each equation in the equation
+listing</p>
+<pre><code>option limrow = 16;</code></pre>
+<p>*** “dollar” ($) commands section: define GAMS flags &amp; code
+control &amp; compilation-time options</p>
+<p>*** onEolCom: turn on end-of-line comments (starting with !!,
+i.e. the GAMS default)</p>
+<pre><code>$onEolCom</code></pre>
+<p>*** onEnd: turn on alternative flow control syntax (more readable
+loop, for, if etc.)</p>
+<pre><code>$onEnd</code></pre>
+<p>*** onEmpty allows declarations of empty parameters</p>
+<pre><code>$onEmpty</code></pre>
+<p>*** TODO: check if the contents of this block are actually used
+later</p>
+<p>*** GAMS “flags” definitions</p>
+<p>*** Maximum number of solver attempts</p>
+<pre><code>$evalGlobal SolverTryMax 1</code></pre>
+<pre><code>$setGlobal fCountries &#39;RAS,RWO,REU,REP,RAF,RLA,ARG,OCE,AUT,BEL,BRA,BGR,CAN,CHA,HRV,CYP,CZE,DNK,EGY,EST,FIN,FRA,DEU,GRC,HUN,NSI,IND,IDN,IRN,IRL,ISR,ITA,JPN,KOR,LVA,LTU,LUX,MLT,MEX,MAR,NLD,NGA,POL,PRT,ROU,RUS,SAU,SVK,SVN,ZAF,ESP,SWE,TUN,TUR,GBR,USA&#39;</code></pre>
+<pre><code>$setGlobal fSingleCountryRun &#39;yes&#39;</code></pre>
+<pre><code>$setGlobal fCountryList %countries%</code></pre>
+<pre><code>$setGlobal fScenario &#39;DECARB_400&#39;
+$setGlobal fBaseline &#39;BASE&#39;</code></pre>
+<pre><code>$evalGlobal fPeriodOfYears 1</code></pre>
+<pre><code>$setGlobal fIncludeNonCO2 no</code></pre>
+<pre><code>$setGlobal fReadCommonDB &#39;yes&#39;
+$setGlobal fReadCountryDB &#39;yes&#39;
+$setGlobal fReadCountryCalib &#39;yes&#39;</code></pre>
+<pre><code>$evalGlobal fStartHorizon 2010
+$evalGlobal fEndHorizon 2100
+$evalGlobal fEndY 2020
+$evalGlobal fStartY 2018
+$evalGlobal fBaseY %fStartY% - %fPeriodOfYears%</code></pre>
+<p>*** end of dollar commands section, no further flag definitions
+allowed</p>
+<p>*** load input data files</p>
+<pre><code>$include sets.gms
+$include declarations.gms
+$include input.gms
+$include equations.gms
+$include preloop.gms
+$include solve.gms</code></pre>
+<h2 id="authors">Authors</h2>
+<p>Giannousakis Anastasis <a href="mailto:bat@m.an"
+class="email">bat@m.an</a>, Plessias Georgios <a href="mailto:bat@m.an"
+class="email">bat@m.an</a></p>
+<h2 id="how-to-cite">How to cite</h2>
+<p>Anastasis G, Georgios P (2019). “OPEN PROM - Version 0.1.”</p>
+<h3 id="bibtex-format">Bibtex format</h3>
+<pre><code>@Misc{,
+  title = {OPEN PROM - Version 0.1},
+  author = {Giannousakis Anastasis and Plessias Georgios},
+  date = {2019-05-13},
+  year = {2019},
+}</code></pre>
+<h3 id="citation-file-format">Citation File Format</h3>
+<pre><code>cff-version: 1.0.3
+message: If you use this model, please cite it as below.
+authors:
+- family-names: Anastasis
+  given-names: Giannousakis
+  affiliation: E3Modelling
+  email: bat@m.an
+- family-names: Georgios
+  given-names: Plessias
+  affiliation: E3Modelling
+  email: bat@m.an
+title: OPEN PROM
+version: &#39;0.1&#39;
+date-released: &#39;2019-05-13&#39;
+repository-code: https://github.com/e3modelling/OPEN-PROM
+keywords: testing
+license: CC0
+</code></pre>
+<h2 id="references">References</h2>
+<script>
+window.onscroll = function() {myFunction()};
+
+var navbar = document.getElementById("pagenav");
+var sticky = navbar.offsetTop;
+
+function myFunction() {
+  var currentScrollPos = window.pageYOffset;
+  if (window.pageYOffset >= sticky) {
+    if (prevScrollpos > currentScrollPos) {
+      document.getElementById("pagenav").style.top = "0";
+      document.getElementById("pagenav").style.position = "fixed";
+    } else {
+      document.getElementById("pagenav").style.top = "-50px";
+    }
+  } else {
+      document.getElementById("pagenav").style.position = "static";
+  }
+  prevScrollpos = currentScrollPos;
+}
+</script>
+</body>
+</html>

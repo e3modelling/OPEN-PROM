@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="generator" content="goxygen" />
+  <meta name="author" content="Plessias Georgios" />
+  <meta name="author" content="Giannousakis Anastasis" />
+<title>OPEN PROM – declarations</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href='https://fonts.googleapis.com/css?family=Abel|Allerta Stencil|Roboto Mono' rel='stylesheet'>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+<script type="text/x-mathjax-config">
+                    MathJax.Hub.Config({
+                      CommonHTML: { linebreaks: { automatic: true } },
+                      "HTML-CSS": { linebreaks: { automatic: true } },
+                             SVG: { linebreaks: { automatic: true } }
+                    });
+</script>
+</head>
+<body>
+<div class="header">
+    <div class="headerimg">
+      <a href="index.htm"><img id="logo" src="images/logo.png" height="100" alt="model logo" /></a>
+    </div>
+    <div class="headertext">
+      <h1 id="mainheadertitle"><a href="https://github.com/e3modelling/OPEN-PROM">OPEN PROM</a></h1>
+      <h3>0.1</h3>
+      <div class="by">created with <a href="https://github.com/pik-piam/goxygen">goxygen</a> 1.0.3</div>
+    </div>
+</div>
+
+<div class="pagenav" id="pagenav">
+    <div class="dropdown">
+   <button class="dropbtn">declarations
+     <i class="fa fa-caret-down"></i>
+   </button>
+   <div id="mainnav" class="dropdown-content">
+   <a href='index.htm'>Overview</a>
+   <a href='declarations.htm'>declarations</a>
+   <a href='equations.htm'>Equations</a>
+   <a href='input.htm'>input</a>
+   <a href='preloop.htm'>Preloop</a>
+   <a href='sets.htm'>sets</a>
+   <a href='solve.htm'>solve</a>
+   </div>
+  </div>
+  <div class="dropdown">
+   <button class="dropbtn">Contents
+     <i class="fa fa-caret-down"></i>
+   </button>
+   <div class="dropdown-content">
+   <ul>
+   <li><a href="#id-declarations.gms"
+   id="toc-id-declarations.gms">declarations (declarations.gms)</a>
+   <ul>
+   <li><a href="#description" id="toc-description">Description</a></li>
+   <li><a href="#references" id="toc-references">References</a></li>
+   </ul></li>
+   </ul>
+   </div>
+  </div>
+</div>
+
+<h1 id="id-declarations.gms">declarations (declarations.gms)</h1>
+<h2 id="description">Description</h2>
+<pre><code>Parameters
+iCGI(allCy,YTIME)                            &quot;Capital Goods Index (defined as CGI(Scenario)/CGI(Baseline)) (1)&quot;
+iNPDL(SBS)                                   &quot;Number of Polynomial Distribution Lags (PDL) (1)&quot;
+iFPDL(SBS,KPDL)                              &quot;Polynomial Distribution Lags (PDL) Coefficients per subsector (1)&quot;
+iLifChpPla(allCy,DSBS,CHP)                      &quot;Technical Lifetime for CHP plants (years)&quot;
+iPlantEffByType(allCy,PGALL,YTIME)              &quot;Plant efficiency per plant type (1)&quot;
+iCo2EmiFac(allCy,SBS,EF,YTIME)                  &quot;CO2 emission factors per subsector (kgCO2/kgoe fuel burned)&quot;
+iNcon(SBS)                                      &quot;Number of consumers (1)&quot;
+iDisFunConSize(allCy,DSBS,rCon)                 &quot;Distribution function of consumer size groups (1)&quot;
+iAnnCons(allCy,DSBS,conSet)                     &quot;Annual consumption of the smallest,modal,largest consumer, average for all countries (various)&quot;
+                                                 !! For passenger cars (Million km/vehicle)
+                                                 !! For other passenger tranportation modes (Mpkm/vehicle)
+                                                 !! For goods transport, (Mtkm/vehicle)  
+iCumDistrFuncConsSize(allCy,DSBS)               &quot;Cummulative distribution function of consumer size groups (1)&quot;
+iRateLossesFinCons(allCy,EF,YTIME)              &quot;Rate of losses over Available for Final Consumption (1)&quot; 
+iEneProdRDscenarios(allCy,SBS,YTIME)            &quot;Energy productivity index used in R&amp;D scenarios (1)&quot; 
+iEffDHPlants(allCy,EF,YTIME)                    &quot;Efficiency of District Heating Plants (1)&quot; 
+iShareFueTransfInput(allCy,EF)                  &quot;Share of fuels in transformation input to Gasworks, Blast Furnances, Briquetting plants in base year (1)&quot;
+iTransfInpGasworks(allCy,EF,YTIME)              &quot;Transformation Input in Gasworks, Blast Furnances, Briquetting plants (Mtoe)&quot;
+iResRefCapacity(allCy,YTIME)                    &quot;Residual in Refineries Capacity (1)&quot;
+iRefCapacity(allCy,YTIME)                       &quot;Refineries Capacity (Million Barrels/day)&quot;
+iResTransfOutputRefineries(allCy,EF,YTIME)      &quot;Residual in Transformation Output from Refineries (Mtoe)&quot;
+iRateEneBranCons(allCy,EF,YTIME)                &quot;Rate of Energy Branch Consumption over total transformation output (1)&quot;
+iResFeedTransfr(allCy,YTIME)                    &quot;Residual for Feedstocks in Transfers (1)&quot;  
+iFeedTransfr(allCy,EFS,YTIME)                   &quot;Feedstocks in Transfers (Mtoe)&quot;
+iResHcNgOilPrProd(allCy,EF,YTIME)               &quot;Residuals for Hard Coal, Natural Gas and Oil Primary Production (1)&quot;
+iNatGasPriProElst(allCy)                        &quot;Natural Gas primary production elasticity related to gross inland consumption (1)&quot; /
+$ondelim
+$include &quot;./iNatGasPriProElst.csv&quot;
+$offdelim
+/
+iFuelPriPro(allCy,EF,YTIME)                     &quot;Fuel Primary Production (Mtoe)&quot;
+iPolDstrbtnLagCoeffPriOilPr(kpdl)               &quot;Polynomial Distribution Lag Coefficients for primary oil production (1)&quot;/
+$ondelim
+$include &quot;./iPolDstrbtnLagCoeffPriOilPr.csv&quot;
+$offdelim
+/
+iRatePriProTotPriNeeds(allCy,EF,YTIME)          &quot;Rate of Primary Production in Total Primary Needs (1)&quot; 
+iFuelExprts(allCy,EF,YTIME)                     &quot;Fuel Exports (Mtoe)&quot;   
+iSuppExports(allCy,EF,YTIME)                    &quot;Supplementary parameter for  exports (Mtoe)&quot;
+iRatioImpFinElecDem(allCy,YTIME)                &quot;Ratio of imports in final electricity demand (1)&quot;  
+iElastCO2Seq(allCy,CO2SEQELAST)                 &quot;Elasticities for CO2 sequestration cost curve (1)&quot; 
+iBaseLoadShareDem(allCy,DSBS,YTIME)             &quot;Baseload share of demand per sector (1)&quot;
+iLoadFacElecDem(allCy,DSBS,YTIME)               &quot;Load factor of electricity demand per sector (1)&quot;
+iMxmLoadFacElecDem(allCy,YTIME)                 &quot;Maximum load factor of electricity demand (1)&quot; 
+iBslCorrection(allCy,YTIME)                     &quot;Parameter of baseload correction (1)&quot;
+iResMargTotAvailCap(allCy,PGRES,YTIME)          &quot;Reserve margins on total available capacity and peak load (1)&quot;
+iTechLftPlaType(allCy,PGALL)                            &quot;Technical Lifetime per plant type (year)&quot;
+iElecImp(allCy,YTIME)                     &quot;Electricity Imports (1)&quot;
+iPlantAvailRate(allCy,PGALL,YTIME)        &quot;Plant availability rate (1)&quot;
+iTotAvailCapBsYr(allCy)             &quot;Total installed available capacity in base year (GW)&quot;
+iGrossCapCosSubRen(allCy,PGALL,YTIME)     &quot;Gross Capital Cost per Plant Type with subsidy for renewables (kEuro2005/KW)&quot;        
+iCO2CaptRate(allCy,PGALL,YTIME)           &quot;Plant CO2 capture rate (1)&quot;
+iScaleEndogScrap(allCy,PGALL,YTIME) &quot;Scale parameter for endogenous scrapping applied to the sum of full costs (1)&quot; 
+iPremReplacem(allCy,PGALL)          &quot;Premature replacement (1)&quot;/
+$ondelim
+$include&quot;./iPremReplacem.csv&quot;
+$offdelim
+/
+iPlantDecomSched(allCy,PGALL,YTIME)      &quot;Decided plant decomissioning schedule (GW)&quot;
+iDecInvPlantSched(allCy,PGALL,YTIME)     &quot;Decided plant investment schedule (GW)&quot;
+iMinRenPotential(allCy,PGRENEF,YTIME)    &quot;Minimum renewable potential (GW)&quot; 
+iMaxRenPotential(allCy,PGRENEF,YTIME)    &quot;Maximum enewable potential (GW)&quot;
+iMatFacPlaAvailCap(allCy,PGALL,YTIME)    &quot;Maturity factor related to plant available capacity (1)&quot;
+iMatureFacPlaDisp(allCy,PGALL,YTIME)     &quot;Maturity factor related to plant dispatching (1)&quot;     
+iEffValueInEuro(allCy,SBS,YTIME)         &quot;Efficiency value (Euro05/toe)&quot;
+iFacElecPriConsu(allCy,ELCPCHAR,YTIME)   &quot;Factors affecting electricity prices to consumers (1)&quot;
+iPriceTragets(allCy,SBS,EF,YTIME)        &quot;Price Targets (1)&quot;
+iPriceReform(allCy,SBS,EF,YTIME)         &quot;Price reformation (1)&quot;
+iScenarioPri(WEF,NAP,YTIME)              &quot;Scenario prices (KEuro1990/toe)&quot;  
+iWgtSecAvgPriFueCons(allCy,SBS,EF)       &quot;Weights for sector&#39;s average price, based on fuel consumption (1)&quot;    
+iFuelConsPerFueSub(allCy,SBS,EF,YTIME)   &quot;Fuel consumption per fuel and subsector (Mtoe)&quot;
+iTotFinEneDemSubBaseYr(allCy,SBS,YTIME)  &quot;Total Final Energy Demand per subsector in Base year (Mtoe)&quot;
+iResNonSubsElecDem(allCy,SBS,YTIME  )    &quot;Residuals in Non Substitutable Electricity Demand (1)&quot;    
+iResFuelConsPerSubAndFuel(allCy,SBS,EF,YTIME)   &quot;Residuals in fuel consumption per subsector and fuel (1)&quot;  
+iTransfOutputGasw(allCy,YTIME)                  &quot;Transformation Output from Gasworks, Blast Furnances, Briquetting plants Residual (1)&quot; 
+iResSpecificFuelConsCost(allCy,TRANSE,TTECH,EF,YTIME)   &quot;Residuals on specific fuel consumption cost (1)&quot;
+iShareAnnMilePlugInHybrid(allCy,YTIME)                  &quot;Share of annual mileage of a plug-in hybrid which is covered by electricity (1)&quot;
+iAvgVehCapLoadFac(allCy,TRANSE,TRANSUSE,YTIME)          &quot;Average capacity/vehicle and load factor (tn/veh or passenegers/veh)&quot; 
+iUtilRateChpPlants(allCy,CHP,YTIME)                     &quot;Utilisation rate of CHP Plants (1)&quot;    
+iHydrogenPri(allCy,SBS,YTIME)                           &quot;Total Hydrogen Cost Per Sector (Euro/toe)&quot;
+iTechLft(allCy,SBS,EF,YTIME)                        &quot;Technical Lifetime. For passenger cars it is a variable (1)&quot;
+iSpeFuelConsCostBy(allCy,SBS,TTECH,TEA,EF)              &quot;Specific fuel consumption cost in Base year (ktoe/Gpkm or ktoe/Gtkm or ktoe/Gvkm)&quot; 
+iShrNonSubElecInTotElecDem(allCy,SBS)                   &quot;Share of non substitutable electricity in total electricity demand per subsector (1)&quot;
+iElecIndex(allCy,YTIME)                                 &quot;Electricity Index (1)&quot; 
+iExogDemOfBiomass(allCy,SBS,YTIME)                      &quot;Demand of tranditional biomass defined exogenously ()&quot; 
+iFinEneConsPrevYear(allCy,EF,YTIME)                     &quot;Final energy consumption used for holding previous year results (Mtoe)&quot;    
+iCarbValYrExog(ytime)                                   &quot;Carbon value for each year when it is exogenous (Euro05/tn CO2)&quot;
+iShrHeatPumpElecCons(allCy,SBS)                         &quot;Share of heat pump electricity consumption in total substitutable electricity (1)&quot;                                 
+iTranfOutGasworks(allCy,EF,YTIME)                       &quot;Transformation Output from Gasworks, Blast Furnances and Briquetting plants (Mtoe)&quot;    
+iDistrLosses(allCy,EF,YTIME)                            &quot;Distribution Losses (Mtoe)&quot;    
+iTransfOutputRef(allCy,EF,YTIME)                        &quot;Transformation Output from Refineries (Mtoe)&quot;  
+iFinEneCons(allCy,EF,YTIME)                             &quot;Final energy consumption (Mtoe)&quot;   
+iTotEneBranchCons(allCy,EF,YTIME)                       &quot;Total Energy Branch Consumption (Mtoe)&quot;    
+iFuelImports(allCy,EF,YTIME)                            &quot;Fuel Imports (Mtoe)&quot;   
+iGrosInlCons(allCy,EF,YTIME)                            &quot;Gross Inland Consumtpion (Mtoe)&quot;   
+iGrossInConsNoEneBra(allCy,EF,YTIME)                    &quot;Gross Inland Consumption,excluding energy branch (Mtoe)&quot;   
+iPeakBsLoadBy(allCy,PGLOADTYPE)                         &quot;Peak and Base load for base year (GW)&quot; 
+iHisChpGrCapData(allCy,CHP,YTIME)                       &quot;Historical CHP  gross capacity data (GW)&quot;  
+iTransfInputRef(allCy,EF,YTIME)                         &quot;Transformation Input in Refineries (Mtoe)&quot; 
+iSigma(allCy,SG)                                        &quot;S parameters of Gompertz function for passenger cars vehicle km (1)&quot;
+iPassCarsMarkSat(allCy)                                 &quot;Passenger cars market saturation (1)&quot;  
+iGdpPassCarsMarkExt(allCy)                              &quot;GDP-dependent passenger cars market extension (GDP/capita)&quot;    
+iPassCarsScrapRate(allCy)                               &quot;Passenger cars scrapping rate (1)&quot; 
+iVarCostTech(allCy,SBS,EF,YTIME)                        &quot;Variable Cost of technology ()&quot;
+                                                        !! For transport (kEuro05/vehicle)
+                                                        !! For Industrial sectors, except Iron and Steel (Euro05/toe-year)
+                                                        !! For Iron and Steel  (Euro05/tn-of-steel)
+                                                        !! For Domestic sectors  (Euro05/toe-year)
+iFixOMCostTech(allCy,SBS,EF,YTIME)         &quot;Fixed O&amp;M cost of technology (Euro2005/toe-year)&quot;                                   
+                                            !! Fixed O&amp;M cost of technology for Transport (kEuro2005/vehicle)
+                                            !! Fixed O&amp;M cost of technology for Industrial sectors-except Iron and Steel (Euro2005/toe-year)&quot;                                            
+                                            !! Fixed O&amp;M cost of technology for Iron and Steel (Euro2005/tn-of-steel)&quot;                                          
+                                            !! Fixed O&amp;M cost of technology for Domestic sectors (Euro2005/toe-year)&quot;
+iUsfEneConvSubTech(allCy,SBS,EF,YTIME)               &quot;Useful Energy Conversion Factor per subsector and technology (1)&quot;
+iInvCostChp(allCy,DSBS,CHP,YTIME)                    &quot;Capital Cost per CHP plant type (kEuro05/KW)&quot;
+iFixOMCostPerChp(allCy,DSBS,CHP,YTIME)               &quot;Fixed O&amp;M cost per CHP plant type (Euro2005/KW)&quot;
+iVarCostChp(allCy,DSBS,CHP,YTIME)                    &quot;Variable (other than fuel) cost per CHP Type (Gross Euro05/KW)&quot;
+iAvailRateChp(allCy,DSBS,CHP)                        &quot;Availability rate of CHP Plants ()&quot;
+iBoiEffChp(allCy,CHP,YTIME)                          &quot;Boiler efficiency (typical) used in adjusting CHP efficiency ()&quot;
+iCapCostTech(allCy,SBS,EF,YTIME)                      &quot;Capital Cost of technology (various)&quot;
+                                                 !! - For transport is expressed in kEuro05 per vehicle
+                                                 !! - For Industrial sectors (except Iron and Steel) is expressed in kEuro05/toe-year
+                                                 !! - For Iron and Steel is expressed in kEuro05/tn-of-steel
+                                                 !! - For Domestic Sectors is expressed in kEuro05/toe-year
+iInstCapPast(allCy,PGALL,YTIME)        &quot;Installed capacity past (GW)&quot;
+iDiffFuelsInSec(SBS) &quot;auxiliary parameter holding the number of different fuels in a sector&quot;
+iResElecIndex(allCy,YTIME)             &quot;Residual for electricity Index (1)&quot;
+;
+Equations</code></pre>
+<p>*** Power Generation</p>
+<pre><code>QChpElecPlants(allCy,CHP,YTIME)            &quot;Compute CHP electric capacity&quot;  
+QElecDem(allCy,YTIME)                      &quot;Compute total electricity demand&quot;
+QElecConsAll(allCy,DSBS,YTIME)             &quot;Compute electricity consumption per final demand sector&quot;
+QEstBaseLoad(allCy,YTIME)                  &quot;Compute estimated base load&quot;    
+QLoadFacDom(allCy,YTIME)                   &quot;Compute load factor of entire domestic system&quot;
+QElecPeakLoad(allCy,YTIME)                 &quot;Compute elerctricity peak load&quot;     
+QBslMaxmLoad(allCy,YTIME)                  &quot;Compute baseload corresponding to maximum load&quot;
+QElecBaseLoad(allCy,YTIME)                 &quot;Compute electricity base load&quot;
+QShrcap(allCy,PGALL,YTIME)                 &quot;Compute SHRCAP&quot; 
+QElecGenCap(allCy,PGALL,YTIME)             &quot;Compute electricity generation capacity&quot;
+QLambda(allCy,YTIME)                       &quot;Compute Lambda parameter&quot;   
+QScalFacPlantDispatch(allCy,HOUR,YTIME)   &quot;Compute the scaling factor for plant dispatching&quot;    
+QCurrRenPot(allCy,PGRENEF,YTIME)           &quot;Compute current renewable potential&quot;    
+QScalWeibullSum(allCy,PGALL,YTIME)         &quot;Compute sum (over hours) of temporary variable facilitating the scaling in Weibull equation&quot;
+QElecPriIndResNoCliPol(allCy,ESET,YTIME)   &quot;Compute electricity price in Industrial and Residential Consumers excluding climate policies&quot;
+QShortPowGenCost(allCy,ESET,YTIME)         &quot;Compute short term power generation cost&quot;       
+QLonPowGenCostNoClimPol(allCy,ESET,YTIME)  &quot;Compute long term power generation cost excluding climate policies&quot; 
+QLonAvgPowGenCostNoClimPol(allCy,PGALL,ESET,YTIME)  &quot;Compute long term average power generation cost excluding climate policies&quot;    
+QLongPowGenCost(allCy,ESET,YTIME)          &quot;Compute long term power generation cost&quot;    
+QShoPowGenIntPri(allCy,PGALL,ESET,YTIME)   &quot;Compute short term power generation cost of technologies including international Prices of main fuels&quot;  
+QLongPowGenIntPri(allCy,PGALL,ESET,YTIME)  &quot;Compute long term power generation cost of technologies including international Prices of main fuels&quot;   
+QLonMnmpowGenCost(allCy,PGALL,YTIME)       &quot;Long-term minimum power generation cost&quot;    
+QLonPowGenCostTechNoCp(allCy,PGALL,ESET,YTIME)  &quot;Compute long term power generation cost of technologies excluding climate policies&quot;    
+QShareRenGrossElecProd(allCy,YTIME)        &quot;Compute the share of renewables in gross electricity production for subsdidized renewables&quot; 
+QSecContrTotChpProd(allCy,SBS,CHP,YTIME)   &quot;Compute sector contribution to total CHP production&quot;    
+QElecProdPowGenPlants(allCy,PGALL,YTIME)   &quot;Compute electricity production from power generation plants&quot;    
+QReqElecProd(allCy,YTIME)                  &quot;Compute total required electricity production&quot;  
+QElecChpPlants(allCy,YTIME)                &quot;Estimate the electricity of CHP Plants&quot; 
+QOverallCap(allCy,PGALL,YTIME)             &quot;Compute overall capacity&quot;
+QNonChpElecProd(allCy,YTIME)               &quot;Compute non CHP electricity production&quot;     
+QAvgCapFacRes(allCy,PGALL,YTIME)           &quot;Compute the average capacity factor of RES&quot; 
+QNewCapYearly(allCy,PGALL,YTIME)           &quot;Compute the new capacity added every year&quot;  
+QElectrPeakLoad(allCy,PGALL,YTIME)         &quot;Compute Power plants sorting according to variable cost to decide the plant dispatching&quot;    
+QVarCostTechnology(allCy,PGALL,YTIME)      &quot;Compute variable cost of technology&quot; 
+QElecPeakLoads(allCy,YTIME)                &quot;Compute Electricity peak loads&quot; 
+QElecGenCapacity(allCy,PGALL,YTIME)        &quot;Compute electricity generation capacity&quot;    
+QPowPlaShaNewEquip(allCy,PGALL,YTIME)      &quot;Compute the power plant share in new equipment&quot; 
+QNewInvDecis(allCy,YTIME)                  &quot;Compute for Power Plant new investment decision&quot;        
+QMaxmAllowRenPotent(allCy,PGRENEF,YTIME)   &quot;Compute maximum allowed renewable potential&quot;
+QMnmAllowRenPot(allCy,PGRENEF,YTIME)       &quot;Compute minimum allowed renewable potential&quot; 
+QRenTechMatMult(allCy,PGALL,YTIME)         &quot;Compute renewable technologies maturity multiplier&quot; 
+QElecProdChpPlants(allCy,CHP,YTIME)        &quot;Compute electricity production from CHP plants&quot;             
+QScalWeibull(allCy,PGALL,HOUR,YTIME)       &quot;Compute temporary variable facilitating the scaling in Weibull equation&quot;    
+QElecGenNoChp(allCy,YTIME)                 &quot;Compute total electricity generation capacity excluding CHP plants&quot;
+QRenPotSupplyCurve(allCy,PGRENEF,YTIME)    &quot;Compute renewable potential supply curve&quot;       
+QEndogScrapIndex(allCy,PGALL,YTIME)        &quot;Compute endogenous scrapping index&quot;     
+QProdCostTechPreReplacAvail(allCy,PGALL,PGALL2,YTIME)   &quot;Compute production cost of technology  used in premature replacement including plant availability rate&quot;    
+QVarCostTechNotPGSCRN(allCy,PGALL,YTIME)   &quot;Compute variable cost of technology excluding PGSCRN&quot;   
+QVarCostTech(allCy,PGALL,YTIME)            &quot;Compute variable cost of technology&quot;    
+QTotReqElecProd(allCy,YTIME)               &quot;Compute total required electricity production&quot;
+QTotEstElecGenCap(allCy,YTIME)             &quot;Compute Estimated total electricity generation capacity&quot;    
+QTotElecGenCap(allCy,YTIME)                &quot;Compute total electricity generation capacity&quot;
+QHourProdCostInv(allCy,PGALL,HOUR,YTIME)   &quot;Compute hourly production cost used in investment decisions&quot;
+QHourProdCostInvDec(allCy,PGALL,HOUR,YTIME)&quot;Compute hourly production cost used in investment decisions&quot;
+QGammaInCcsDecTree(allCy,YTIME)            &quot;Compute gamma parameter used in CCS/No CCS decision tree&quot;
+QHourProdCostInvDecisionsAfterCCS(allCy,PGALL,HOUR,YTIME)   &quot;Compute hourly production cost used in investment decisions taking into account CCS acceptance&quot;
+QProdCostInvDecis(allCy,PGALL,YTIME)                &quot;Compute production cost used in investment decisions&quot;
+QShrcapNoCcs(allCy,PGALL,YTIME)                     &quot;Compute SHRCAP excluding CCs&quot;
+QProdCostTechPreReplac(allCy,PGALL,YTIME)           &quot;Compute production cost of technology  used in premature replacement&quot;  
+QGapPowerGenCap(allCy,YTIME)                        &quot;Compute the gap in power generation capacity&quot;                                              </code></pre>
+<p>*** Transport</p>
+<pre><code>QMExtV(allCy,YTIME)            &quot;Compute passenger cars market extension (GDP dependent)&quot;
+QMExtF(allCy,YTIME)            &quot;Compute passenger cars market extension (GDP independent)&quot;
+QNumVeh(allCy,YTIME)           &quot;Compute stock of passenger cars (in million vehicles)&quot;
+QNewReg(allCy,YTIME)           &quot;Compute new registrations of passenger cars&quot;
+QTrnspActiv(allCy,TRANSE,YTIME)&quot;Compute passenger transport acitivity&quot;
+QScrap(allCy,YTIME)            &quot;Compute scrapped passenger cars&quot;
+QLevl(allCy,YTIME)             &quot;Compute ratio of car ownership over saturation car ownership&quot;
+QScrRate(allCy,YTIME)          &quot;Compute passenger cars scrapping rate&quot;
+QPassCarsLft(allCy,DSBS,EF,TEA,YTIME)   &quot;Compute the lifetime of passenger cars&quot;    
+QGoodsTranspActiv(allCy,TRANSE,YTIME)   &quot;Compute goods transport activity&quot;
+QGapTranspActiv(allCy,TRANSE,YTIME)     &quot;Compute the gap in transport activity&quot; 
+QSpecificFuelCons(allCy,TRANSE,TTECH,TEA,EF,YTIME)  &quot;Compute Specific Fuel Consumption&quot;
+QTranspCostPerMeanConsSize(allCy,TRANSE,RCon,TTECH,TEA,YTIME)   &quot;Compute transportation cost per mean and consumer size in KEuro per vehicle&quot;
+QTechSortVarCost(allCy,TRANSE,Rcon,YTIME)                       &quot;Compute technology sorting based on variable cost&quot; 
+QTechSortVarCostNewEquip(allCy,TRANSE,EF,TEA,YTIME)             &quot;Compute technology sorting based on variable cost and new equipment&quot;   
+QTranspCostPerVeh(allCy,TRANSE,RCon,TTECH,TEA,YTIME)            &quot;Compute transportation cost per mean and consumer size in KEuro per vehicle&quot;
+QTranspCostMatFac(allCy,TRANSE,RCon,TTECH,TEA,YTIME)            &quot;Compute transportation cost including maturity factor&quot; 
+QConsEachTechTransp(allCy,TRANSE,TTECH,EF,TEA,YTIME)            &quot;Compute consumption of each technology in transport sectors&quot;
+QFinEneDemTranspPerFuel(allCy,TRANSE,EF,YTIME)                  &quot;Compute final energy demand in transport per fuel&quot;
+QFinEneDemTransp(allCy,TRANSE,YTIME)                            &quot;Compute final energy demand in transport&quot;                      </code></pre>
+<p>*** INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS EQUATIONS</p>
+<pre><code>QDemSub(allCy,DSBS,YTIME)                     &quot;Compute total final demand (of substitutable fuels) per subsector&quot;
+QElecConsInd(allCy,YTIME)                     &quot;Compute Consumption of electricity in industrial sectors&quot;
+QDemInd(allCy,YTIME)                          &quot;Copmpute total final demand (of substitutable fuels) in industrial sectors&quot;
+QElecIndPrices(allCy,YTIME)                   &quot;Compute electricity industry prices&quot;
+QElecConsHeatPla(allCy,DSBS,YTIME)            &quot;Compute electricity consumed in heatpump plants&quot;
+QFuelCons(allCy,DSBS,EF,YTIME)                &quot;Compute fuel consumption&quot;
+QElecIndPricesEst(allCy,YTIME)                &quot;Compute Electricity index - a function of industry price - Estimate&quot;
+QFuePriSubChp(allCy,DSBS,EF,TEA,YTIME)        &quot;Compute fuel prices per subsector and fuel especially for chp plants&quot;
+QElecProdCosChp(allCy,DSBS,CHP,YTIME)         &quot;Compute electricity production cost per CHP plant and demand sector&quot;
+QTechCost(allCy,DSBS,rCon,EF,TEA,YTIME)       &quot;Compute technology cost&quot;
+QTechCostIntrm(allCy,DSBS,rCon,EF,TEA,YTIME)  &quot;Compute intermediate technology cost&quot;
+QTechCostMatr(allCy,DSBS,rCon,EF,TEA,YTIME)   &quot;Compute the technology cost including the maturity factor per technology and subsector&quot;
+QTechSort(allCy,DSBS,rCon,YTIME)              &quot;Compute Technology sorting based on variable cost&quot;
+QGapFinalDem(allCy,DSBS,YTIME)                &quot;Compute the gap in final demand of industry, tertiary, non-energy uses and bunkers&quot;
+QTechShareNewEquip(allCy,DSBS,EF,TEA,YTIME)   &quot;Compute technology share in new equipment&quot;
+QFuelConsInclHP(allCy,DSBS,EF,YTIME)          &quot;Equation for fuel consumption in Mtoe (including heat from heatpumps)&quot;
+QVarProCostPerCHPDem(allCy,DSBS,CHP,YTIME)    &quot;Compute  variable including fuel electricity production cost per CHP plant and demand sector &quot;
+QAvgElcProCostCHP(allCy,CHP,YTIME)            &quot;Compute Average Electricity production cost per CHP plant&quot;
+QAvgVarElecProd(allCy,CHP,YTIME)              &quot;Compute Average variable including fuel electricity production cost per CHP plant&quot;
+QElecConsNonSub(allCy,INDDOM,YTIME)           &quot;Compute non-substituable electricity consumption in Industry and Tertiary&quot;
+QConsOfRemSubEquip(allCy,DSBS,EF,YTIME)       &quot;Equation for consumption of remaining substitutble equipment&quot;    </code></pre>
+<p>*** REST OF ENERGY BALANCE SECTORS EQUATIONS</p>
+<pre><code>QTotFinEneCons(allCy,EFS,YTIME)              &quot;Compute total final energy consumption&quot;
+QTransfOutputPatFuel(allCy,EFS,YTIME)        &quot;Compute the  transfomration output from patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works&quot;   
+QTotFinEneConsAll(YTIME)                     &quot;Compute total final energy consumption in ALL countries&quot;
+QFinNonEneCons(allCy,EFS,YTIME)              &quot;Compute final non-energy consumption&quot;
+QDistrLosses(allCy,EFS,YTIME)                &quot;Compute distribution losses&quot;
+QTranfOutputDHPlants(allCy,EFS,YTIME)        &quot;Compute the transformation output from district heating plants&quot;
+QTransfInputDHPlants(allCy,EFS,YTIME)        &quot;Compute the transformation input to distrcit heating plants&quot;
+QTransfInputPatFuel(allCy,EFS,YTIME)         &quot;Compute the transfomration input to patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works&quot;
+QRefCapacity(allCy,YTIME)                    &quot;Compute refineries capacity&quot;  
+QTranfOutputRefineries(allCy,EFS,YTIME)      &quot;Compute the transformation output from refineries&quot;
+QTransfInputRefineries(allCy,EFS,YTIME)      &quot;Compute the transformation input to refineries&quot;
+QTransfOutputNuclear(allCy,EFS,YTIME)        &quot;Compute transformation output from nuclear plants&quot;
+QTransfInNuclear(allCy,EFS,YTIME)            &quot;Compute transformation input to nuclear plants&quot;
+QTransfInPowerPls(allCy,EFS,YTIME)           &quot;Compute transformation input to power plants&quot; 
+QTransfOutThermPP(allCy,EFS,YTIME)           &quot;Compute transformation output from thermal power plants&quot;
+QTotTransfInput(allCy,EFS,YTIME)             &quot;Compute total transformation input&quot;
+QTotTransfOutput(allCy,EFS,YTIME)            &quot;Compute total transformation output&quot;
+QTransfers(allCy,EFS,YTIME)                  &quot;Compute transfers&quot;
+QGrsInlConsNotEneBranch(allCy,EFS,YTIME)     &quot;Compute gross inland consumption not including consumption of energy branch&quot;  
+QGrssInCons(allCy,EFS,YTIME)                 &quot;Compute gross inland consumption&quot; 
+QPrimProd(allCy,EFS,YTIME)                   &quot;Compute primary production&quot;   
+QFakeExp(allCy,EFS,YTIME)                    &quot;Compute fake exports&quot; 
+QFakeImprts(allCy,EFS,YTIME)                 &quot;Compute fake imports&quot; 
+QNetImports(allCy,EFS,YTIME)                 &quot;Compute net imports&quot;
+QEneBrnchEneCons(allCy,EFS,YTIME)            &quot;Compute energy branch final consumption&quot;</code></pre>
+<p>*** CO2 SEQUESTRATION COST CURVES EQUATIONS</p>
+<pre><code>QCO2ElcHrg(allCy,YTIME)                      &quot;Compute CO2 captured by electricity and hydrogen production plants (Mtn CO2)&quot;
+QCumCO2Capt(allCy,YTIME)                     &quot;Compute cumulative CO2 captured (Mtn of CO2)&quot;
+QWghtTrnstLinToExpo(allCy,YTIME)             &quot;Transtition weight for shifting from linear to exponential CO2 sequestration cost curve&quot;
+QCstCO2SeqCsts(allCy,YTIME)                  &quot;Compute cost curve for CO2 sequestration costs&quot;   </code></pre>
+<p>*** Emissions Constraints Equations</p>
+<pre><code>QTotCo2AllCoun(YTIME)                      &quot;Compute total CO2eq GHG emissions in all countries&quot;
+QTotGhgEmisAllCountrNap(NAP,YTIME)         &quot;Compute total CO2eq GHG emissions in all countries per NAP sector&quot;  
+QHouseExpEne(allCy,YTIME)                  &quot;Compute households expenditures on energy&quot;
+QFuelPriSubSepCarbVal(allCy,SBS,EF,YTIME)  &quot;Compute fuel prices per subsector and fuel, separate carbon value in each sector&quot;</code></pre>
+<p>*** Prices</p>
+<pre><code>QFuelPriSepCarbon(allCy,SBS,EF,YTIME)   &quot;Compute fuel prices per subsector and fuel, separate carbon value in each sector&quot;  
+QAvgFuelPriSub(allCy,DSBS,YTIME)        &quot;Compute average fuel price per subsector&quot;  
+QElecPriIndResCons(allCy,ESET,YTIME)    &quot;Compute electricity price in Industrial and Residential Consumers&quot; </code></pre>
+<p>*** Miscellaneous</p>
+<pre><code>qDummyObj                                     &quot;Define dummy objective function&quot;
+;
+Variables</code></pre>
+<p>*** Power Generation Variables</p>
+<pre><code>VElecCapChpPla(allCy,CHP,YTIME)           &quot;Capacity of CHP Plants (GW)&quot;
+VLoadCurveConstr(allCy,YTIME)             &quot;Parameter for load curve construction (1)&quot;
+VEstBaseLoad(allCy,YTIME)                 &quot;Estimated base load (GW)&quot;    
+VElecDem(allCy,YTIME)                     &quot;Total electricity demand (TWh)&quot;
+VCapChpPlants(allCy,YTIME)                &quot;Electricity load factor for entire domestic system&quot;  
+VElecPeakLoad(allCy,YTIME)                &quot;Electricity peak load (GW)&quot;  
+VBslMaxmLoad(allCy,YTIME)                 &quot;Baseload corresponding to Maximum Load Factor (1)&quot;
+VHourProdCostTechAfterCCS(allCy,PGALL,HOUR,YTIME)&quot;Hourly production cost of technology accounting for CCS acceptance (Euro/KWh)&quot;
+VResShareGrossElecProd(allCy,YTIME)        &quot;Renewables share in gross electricity production for subsdidized renewables&quot;
+VLongPowGenCost(allCy,PGALL,ESET,YTIME)    &quot;Long-term average power generation cost (Euro2005/kWh)&quot;
+VCurrRenPot(allCy,PGRENEF,YTIME)           &quot;Current renewable potential (GW)&quot;           
+VReqElecProd(allCy,YTIME)                  &quot;Total required electricity production (TWh)&quot;    
+VOverallCap(allCy,PGALL,YTIME)             &quot;Overall Capacity (MW)&quot;  
+VVarCostTechNotPGSCRN(allCy,PGALL,YTIME)  &quot;Variable cost of technology excluding PGSCRN (Euro/KWh)&quot;
+VAvgPowerGenCostShoTrm(allCy,ESET,YTIME)  &quot;Short-term average power generation cost (Euro2005/kWh)&quot; 
+VLongAvgPowGenCost(allCy,ESET,YTIME)      &quot;Long-term average power generation cost (Euro2005/kWh)&quot;  
+VLongPowGenIntPri(allCy,PGALL,ESET,YTIME) &quot;Long term power generation cost of technologies including international prices of main fuels (kEuro05/toe)&quot;
+VRenShareElecProdSub(allCy,YTIME)         &quot;Renewables share in gross electricity production for subsdidized renewables (1)&quot;  
+VElecPriIndResNoCliPol(allCy,ESET,YTIME)  &quot;Electricity price to Industrial and Residential Consumers (Euro2005/KWh)&quot;    
+VLonPowGenCostNoClimPol(allCy,ESET,YTIME) &quot;Long-term average power generation cost  excluding climate policies (Euro2005/kWh)&quot;  
+VLonAvgPowGenCostNoClimPol(allCy,PGALL,ESET,YTIME)  &quot;Long-term average power generation cost excluding climate policies(Euro2005/kWh)&quot;  
+VShoPowGenIntPri(allCy,PGALL,ESET,YTIME)  &quot;Short term power generation cost of technologies including international Prices of main fuels (kEuro05/toe)&quot;     
+VLonMnmpowGenCost(allCy,PGALL,YTIME)      &quot;Long-term minimum power generation cost (Euro2005/kWh)&quot;  
+VChpElecProd(allCy,CHP,YTIME)             &quot;CHP electricity production (TWh)&quot;    
+VScalFacPlaDisp(allCy,HOUR,YTIME)         &quot;Scaling factor for plant dispatching (1)&quot;
+VSecContrTotChpProd(allCy,SBS,CHP,YTIME)  &quot;Contribution of each sector in total CHP production (1)&quot; 
+VPowPlantSorting(allCy,PGALL,YTIME)       &quot;Power plants sorting according to variable cost to decide the plant dispatching (1)&quot;
+VElecProdPowGenPlants(allCy,PGALL,YTIME)  &quot;Electricity production (TWh)&quot;    
+VAvgCapFacRes(allCy,PGALL,YTIME)          &quot;The average capacity factor of RES (1)&quot;
+VNewCapYearly(allCy,PGALL,YTIME)          &quot;The new capacity added every year (MW)&quot;  
+VNonChpElecProd(allCy,YTIME)              &quot;Non CHP total electricity production (TWh)&quot;              
+VHourProdCostTech(allCy,PGALL,HOUR,YTIME)     &quot;Hourly production cost of technology (Euro/KWh)&quot;
+VElecChpPlants(allCy,YTIME)               &quot;Estimate the electricity of CHP Plants (1)&quot;  
+VProdCostTechnology(allCy,PGALL,YTIME)    &quot;Production cost of technology (Euro/KWh)&quot;
+VElecCapChpPla(allCy,CHP,YTIME)           &quot;Capacity of CHP Plants (GW)&quot;
+VScalWeibullSum(allCy,PGALL,YTIME)        &quot;Sum (over hours) of temporary variable facilitating the scaling in Weibull equation (1)&quot;
+VElecPeakLoads(allCy,YTIME)               &quot;Electricity peak loads (GW)&quot; 
+VVarCostTechnology(allCy,PGALL,YTIME)     &quot;Variable cost of technology (Euro/KWh)&quot;  
+VNewInvDecis(allCy,YTIME)                 &quot;Power plant sorting for new investment decision according to total cost (1)&quot; 
+VPowPlaShaNewEquip(allCy,PGALL,YTIME)     &quot;Power plant share in new equipment (1)&quot;  
+VRenTechMatMult(allCy,PGALL,YTIME)        &quot;Renewable technologies maturity multiplier (1)&quot;  
+VRenPotSupplyCurve(allCy,PGRENEF,YTIME)   &quot;Renewable potential supply curve (1)&quot;
+VMaxmAllowRenPotent(allCy,PGRENEF,YTIME)  &quot;Maximum allowed renewable potential (GW)&quot;
+VMnmAllowRenPot(allCy,PGRENEF,YTIME)      &quot;Minimum allowed renewable potential (GW)&quot;        
+VScalWeibull(allCy,PGALL,HOUR,YTIME)      &quot;Temporary variable facilitating the scaling in Weibull equation&quot; 
+VElecGenPlantsCapac(allCy,PGALL,YTIME)    &quot;Electricity generation plants capacity (GW)&quot; 
+VGapPowerGenCap(allCy,YTIME)              &quot;Gap in total generation capacity to be filled by new equipment (GW)&quot;     
+VProdCostTechPreReplac(allCy,PGALL,YTIME) &quot;Production cost of technology used in premature replacement (Euro/KWh)&quot;
+VEndogScrapIndex(allCy,PGALL,YTIME)       &quot;Index used for endogenous power plants scrapping (1)&quot;            
+VSensCcs(allCy,YTIME)                     &quot;Variable that controlls the sensitivity of CCS acceptance (1)&quot;           
+VCorrBaseLoad(allCy,YTIME)                &quot;Corrected base load (GW)&quot;
+VElecGenPlanCap(allCy,PGALL,YTIME)        &quot;Electricity generation plants capacity (GW)&quot; 
+VElecGenNoChp(allCy,YTIME)                &quot;Total electricity generation capacity excluding CHP (GW)&quot;    
+VVarCostTech(allCy,PGALL,YTIME)           &quot;Variable cost of technology (Euro/KWh)&quot;  
+VPowerPlantNewEq(allCy,PGALL,YTIME)       &quot;Power plant share in new equipment (1)&quot;
+VPowerPlaShrNewEq(allCy,PGALL,YTIME)      &quot;Power plant share in new equipment (1)&quot;      
+VHourProdCostTechNoCCS(allCy,PGALL,HOUR,YTIME) &quot;Hourly production cost of technology (Euro/KWh)&quot;    
+VProdCostTechPreReplacAvail(allCy,PGALL,PGALL2,YTIME)   &quot;Production cost of technology used in premature replacement including plant availability rate (Euro/KWh)&quot;      
+VTotReqElecProd(allCy,YTIME)          &quot;Total required electricity production (TWh)&quot; 
+VTotElecGenCapEst(allCy,YTIME)        &quot;Estimated Total electricity generation capacity (GW)&quot;    
+VTotElecGenCap(allCy,YTIME)           &quot;Total electricity generation capacity (GW)&quot;  
+VFeCons(allCy,EF,YTIME)               &quot;Total final energy consumnption (Mtoe)&quot;
+VFNonEnCons(allCy,EFS,YTIME)          &quot;Final non energy consumption (Mtoe)&quot;
+VLosses(allCy,EFS,YTIME)              &quot;Distribution losses (Mtoe)&quot;
+VEnCons(allCy,EFS,YTIME)              &quot;Final consumption in energy sector (Mtoe)&quot;
+VNetImp(allCy,EFS,YTIME)              &quot;Net imports (Mtoe)&quot;
+VMExtV(allCy,YTIME)                   &quot;Passenger cars market extension (GDP dependent)&quot;
+VMExtF(allCy,YTIME)                   &quot;Passenger cars market extension (GDP independent)&quot;
+VLamda(allCy,YTIME)                   &quot;Ratio of car ownership over saturation car ownership (1)&quot;
+VNumVeh(allCy,YTIME)                  &quot;Stock of passenger cars (million vehicles)&quot;
+VNewReg(allCy,YTIME)                  &quot;Passenger cars new registrations (million vehicles)&quot;
+VScrap(allCy,YTIME)                   &quot;Scrapped passenger cars (million vehicles)&quot;
+VTrnspActiv(allCy,TRANSE,YTIME)       &quot;Passenger transport acitivity (1)&quot;
+                                         !! - Activity for passenger cars is measured in (000)km
+                                         !! - Activity for all other passenger transportation modes is measured in Gpkm
+VFuelPriceAvg(allCy,DSBS,YTIME)           &quot;Average fuel prices per subsector (k$2015/toe)&quot;
+VScrRate(allCy,YTIME)                  &quot;Scrapping rate of passenger cars (1)&quot;
+VElecConsAll(allCy,DSBS,YTIME)         &quot;Electricity demand per final sector (Mtoe)&quot;
+VConsFuel(allCy,DSBS,EF,YTIME)         &quot;Consumption of fuels in each demand subsector, excluding heat from heatpumps (Mtoe)&quot;
+VDemTr(allCy,TRANSE,EF,YTIME)          &quot;Final energy demand in transport subsectors per fuel (Mtoe)&quot;
+VLifeTimeTech(allCy,DSBS,EF,TEA,YTIME) &quot;Lifetime of technologies (years)&quot;</code></pre>
+<p>*** Transport Variables</p>
+<pre><code>VGoodsTranspActiv(allCy,TRANSE,YTIME)       &quot;Goods transport acitivity (Gtkm)&quot;  
+VGapTranspFillNewTech(allCy,TRANSE,YTIME)   &quot;Gap in transport activity to be filled by new technologies ()&quot;
+                                           !! Gap for passenger cars (million vehicles)
+                                           !! Gap for all other passenger transportation modes (Gpkm)
+                                           !! Gap for all goods transport is measured (Gtkm)    
+VSpecificFuelCons(allCy,TRANSE,TTECH,TEA,EF,YTIME)  &quot;Specific Fuel Consumption ()&quot;
+                                                      !! SFC for passenger cars (ktoe/Gkm)
+                                                      !! SFC for other passsenger transportation modes (ktoe/Gpkm)
+                                                      !! SFC for trucks is measured (ktoe/Gtkm)
+VTranspCostPermeanConsSize(allCy,TRANSE,RCon,TTECH,TEA,YTIME)   &quot;Transportation cost per mean and consumer size (Keuro/vehicle)&quot;
+VTranspCostPerVeh(allCy,TRANSE,RCon,TTECH,TEA,YTIME)    &quot;Transportation cost per mean and consumer size (Keuro/vehicle)&quot;
+VTranspCostMatFac(allCy,TRANSE,RCon,TTECH,TEA,YTIME)    &quot;Transportation cost including maturity factor (Keuro/vehicle)&quot; 
+VTechSortVarCost(allCy,TRANSE,Rcon,YTIME)               &quot;Technology sorting based on variable cost (1)&quot; 
+VTechSortVarCostNewEquip(allCy,TRANSE,EF,TEA,YTIME)     &quot;Technology share in new equipment (1)&quot; 
+VConsEachTechTransp(allCy,TRANSE,TTECH,EF,TEA,YTIME)    &quot;Consumption of each technology and subsector (Mtoe)&quot;
+VFinEneDemTranspSub(allCy,TRANSE,YTIME)                 &quot;Final energy demand in transport subsectors (Mtoe)&quot;                </code></pre>
+<p>*** INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES</p>
+<pre><code>VElecNonSub(allCy,DSBS,YTIME)          &quot;Consumption of non-substituable electricity in Industry and Tertiary (Mtoe)&quot;
+VElecConsInd(allCy,YTIME)              &quot;Total Consumption of Electricity in industrial sectors (Mtoe)&quot;
+VDemInd(allCy,YTIME)                   &quot;Total final demand (of substitutable fuels) in industrial sectors (Mtoe)&quot;
+VDemSub(allCy,DSBS,YTIME)              &quot;Total final demand (of substitutable fuels) per subsector (Mtoe)&quot;
+VElecIndPrices(allCy,YTIME)            &quot;Electricity index - a function of industry price (1)&quot;
+VElecConsHeatPla(allCy,DSBS,YTIME)     &quot;Electricity consumed in heatpump plants (Mtoe)&quot;
+VConsFuelSub(allCy,DSBS,EF,YTIME)      &quot;Consumption of fuels in each demand subsector (including heat from heatpumps) (Mtoe)&quot;
+VElecIndPricesEst(allCy,YTIME)         &quot;Electricity index - a function of industry price - Estimate (1)&quot;
+VFuelPriceSub(allCy,SBS,EF,YTIME)      &quot;Fuel prices per subsector and fuel (k$2015/toe)&quot;
+VFuePriSubChp(allCy,DSBS,EF,TEA,YTIME) &quot;Fuel prices per subsector and fuel for CHP plants (kUS$2005/toe)&quot;
+VTechCostVar(allCy,SBS,EF,TEA,YTIME)   &quot;Variable Cost of technology (various)&quot;
+                                        !! - For transport (kEuro05/vehicle)
+                                        !! - For Industrial sectors except Iron and Steel (Euro05/toe-year)
+                                        !! - For Iron and Steel (Euro05/tn-of-steel)
+                                        !! - For Domestic sectors (Euro05/toe-year)
+VElecProdCostChp(allCy,DSBS,CHP,YTIME)                  &quot;Electricity production cost per CHP plant and demand sector (Euro/KWh)&quot;
+VTechCost(allCy,DSBS,rCon,EF,TEA,YTIME)                 &quot;Technology cost (Keuro/toe)&quot;
+VTechCostIntrm(allCy,DSBS,rcon,EF,TEA,YTIME)            &quot;Intermediate technology cost (Keuro/toe)&quot;
+VTechCostMatr(allCy,DSBS,rCon,EF,TEA,YTIME)             &quot;Technology cost including maturity factor (Keuro/toe)&quot;
+VTechSort(allCy,DSBS,rCon,YTIME)                        &quot;Technology sorting based on variable cost (1)&quot;
+VConsRemSubEquip(allCy,DSBS,EF,YTIME)                   &quot;Consumption of remaining substitutable equipment (Mtoe)&quot;
+VGapFinalDem(allCy,DSBS,YTIME)                          &quot;Final demand gap to be filed by new technologies (Mtoe)&quot;
+VTechShareNewEquip(allCy,DSBS,EF,TEA,YTIME)             &quot;Technology share in new equipment (1)&quot;
+VFuelConsInclHP(allCy,DSBS,EF,YTIME)                    &quot;Consumption of fuels in each demand subsector including heat from heatpumps (Mtoe)&quot;
+VProCostCHPDem(allCy,DSBS,CHP,YTIME)                    &quot;Variable including fuel electricity production cost per CHP plant and demand sector (Euro/KWh)&quot;
+VAvgElcProCHP(allCy,CHP,YTIME)                          &quot;Average Electricity production cost per CHP plant (Euro/KWh)&quot;
+VAvgVarProdCostCHP(allCy,CHP,YTIME)                     &quot;Average variable including fuel electricity production cost per CHP plant (Euro/KWh)&quot;</code></pre>
+<p>*** REST OF ENERGY BALANCE SECTORS VARIABLES</p>
+<pre><code>VPlantEffPlantType(allCy,PGALL,YTIME)                   &quot;Plant efficiency per plant type (1)&quot;
+VTotFinEneConsAll(YTIME)                                &quot;Total final energy Consumption in ALL COUNTRIES (Mtoe)&quot;
+VDistrLosses(allCy,EFS,YTIME)                           &quot;Distribution losses (Mtoe)&quot;
+VTransfOutputDHPlants(allCy,EFS,YTIME)                  &quot;Transformation output from District Heating Plants (Mtoe)&quot;
+VTransfInputDHPlants(allCy,EFS,YTIME)                   &quot;Transformation input to District Heating Plants (Mtoe)&quot;
+VTransfInputPatFuel(allCy,EFS,YTIME)                    &quot;Transformation input to patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works (1)&quot;
+VTransfOutputPatFuel(allCy,EFS,YTIME)                   &quot;Transformation input to patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works (1)&quot;
+VRefCapacity(allCy,YTIME)                               &quot;Refineries capacity (Million barrels/day)&quot; 
+VTransfOutputRefineries(allCy,EFS,YTIME)                &quot;Transformation output from refineries (Mtoe)&quot;
+VTransfInputRefineries(allCy,EFS,YTIME)                 &quot;Transformation input to refineries (Mtoe)&quot; 
+VTransfOutputNuclear(allCy,EFS,YTIME)                   &quot;Transformation output from nuclear plants (Mtoe)&quot;
+VElecProd(allCy,PGALL,YTIME)                            &quot;Electricity production (TWh)&quot;
+VTransfInNuclear(allCy,EFS,YTIME)                       &quot;Transformation input to nuclear plants (Mtoe)&quot;     
+VTransfInThermPowPls(allCy,EFS,YTIME)                   &quot;Transformation input to thermal power plants (Mtoe)&quot;
+VChpElecProd(allCy,CHP,YTIME)                           &quot;CHP electricity production (TWh)&quot;
+VTransfOutThermPowSta(allCy,EFS,YTIME)                  &quot;Transformation output from thermal power stations (Mtoe)&quot;
+VTotTransfInput(allCy,EFS,YTIME)                        &quot;Total transformation input (Mtoe)&quot;
+VTotTransfOutput(allCy,EFS,YTIME)                       &quot;Total transformation output (Mtoe)&quot;
+VTransfers(allCy,EFS,YTIME)                             &quot;Transfers (Mtoe)&quot;
+VGrsInlConsNotEneBranch(allCy,EFS,YTIME)                &quot;Gross Inland Consumption not including consumption of energy branch (Mtoe)&quot;
+VGrssInCons(allCy,EFS,YTIME)                            &quot;Gross Inland Consumption (Mtoe)&quot;
+VPrimProd(allCy,EFS,YTIME)                              &quot;Primary Production (Mtoe)&quot; 
+VExportsFake(allCy,EFS,YTIME)                           &quot;Exports fake (Mtoe)&quot;       
+VFkImpAllFuelsNotNatGas(allCy,EFS,YTIME)                &quot;Fake Imports for all fuels except natural gas (Mtoe)&quot;
+VNetImports(allCy,EFS,YTIME)                            &quot;Net Imports (Mtoe)&quot;</code></pre>
+<p>*** Prices Variables</p>
+<pre><code>VElecPriInduResConsu(allCy,ESET,YTIME)                  &quot;Electricity price to Industrial and Residential Consumers (Euro2005/KWh)&quot;
+VFuelPriMultWgt(allCy,SBS,EF,YTIME)                     &quot;Fuel prices per subsector and fuel  mutliplied by weights (kdollars2005/toe)&quot;  
+VAvgPowerGenLongTrm(allCy,ESET,YTIME)                   &quot;Long-term average power generation cost (Euro2005/kWh)&quot;     
+VFuelPriSubNoCarb(allCy,SBS,EF,YTIME)                   &quot;Fuel prices per subsector and fuel  without carbon value (kdollars2005/toe)&quot;   </code></pre>
+<p>*** CO2 SEQUESTRATION COST CURVES VARIABLES</p>
+<pre><code>VCO2ElcHrgProd(allCy,YTIME)                             &quot;CO2 captured by electricity and hydrogen production plants (Mtn CO2)&quot;
+VCumCO2Capt(allCy,YTIME)                                &quot;Cumulative CO2 captured (Mtn CO2)&quot;     
+VWghtTrnstLnrToExpo(allCy,YTIME)                        &quot;Weight for transtition from linear CO2 sequestration cost curve to exponential (1)&quot;
+VCO2CO2SeqCsts(allCy,YTIME)                             &quot;Cost curve for CO2 sequestration costs (Euro/tn of CO2 sequestrated)&quot;</code></pre>
+<p>*** Emissions Constraints Variables</p>
+<pre><code>VTotCo2AllCoun(YTIME)                                   &quot;Total CO2eq GHG emissions in all countries (1)&quot;
+VTotGhgEmisAllCountrNap(NAP,YTIME)                      &quot;Total CO2eq GHG emissions in all countries per NAP sector (1)&quot; 
+VHouseExpEne(allCy,YTIME)                               &quot;Households expenditures on energy (billions)&quot;</code></pre>
+<p>*** Miscellaneous</p>
+<pre><code>vDummyObj                                               &quot;Dummy maximisation variable (1)&quot;
+;
+Positive Variables
+VCarVal(allCy,NAP,YTIME)                                &quot;Carbon value for all countries (Euro2005/tn CO2)&quot;
+VRenValue(YTIME)                                        &quot;Renewable value (Euro2005/KWh)&quot;
+;
+Scalars
+sTWhToMtoe         &quot;TWh to Mtoe conversion factor&quot; /0.086/
+sElecToSteRatioChp &quot;Technical maximum of electricity to steam ratio in CHP plants&quot; /1.15/
+sGwToTwhPerYear    &quot;convert GW mean power into TWh/y&quot; /8.76/
+s                  &quot;time step iterator&quot; /0/
+sSolverTryMax      &quot;maximum attempts to solve each time step&quot; /%SolverTryMax%/
+sModelStat         &quot;helper parameter for solver status&quot;
+sExogCarbValue     &quot;switch for exogenous carbon value (0=exogenous 1=endogenous)&quot; /1/
+;</code></pre>
+<h2 id="references">References</h2>
+<script>
+window.onscroll = function() {myFunction()};
+
+var navbar = document.getElementById("pagenav");
+var sticky = navbar.offsetTop;
+
+function myFunction() {
+  var currentScrollPos = window.pageYOffset;
+  if (window.pageYOffset >= sticky) {
+    if (prevScrollpos > currentScrollPos) {
+      document.getElementById("pagenav").style.top = "0";
+      document.getElementById("pagenav").style.position = "fixed";
+    } else {
+      document.getElementById("pagenav").style.top = "-50px";
+    }
+  } else {
+      document.getElementById("pagenav").style.position = "static";
+  }
+  prevScrollpos = currentScrollPos;
+}
+</script>
+</body>
+</html>
