@@ -3,7 +3,7 @@
 This tutorial is a step by step guide to installing the task runner extension as well as utilizing a custom button, whose function is to run the GAMS code exactly like the Run (F9) button in *GAMS studio*.
 
 *Warning:*
-It is recommended that you follow this tutorial after you have successfully completed the [how-to-install-vscode-and-git-tutorial](https://github.com/e3modelling/OPEN-PROM/wiki/Git-and-VS-Code) and have cloned the repository and added all the necessary extensions.
+It is recommended that you follow this tutorial after you have successfully completed the [how-to-install-vscode-and-git-tutorial](https://github.com/e3modelling/OPEN-PROM/Tutorials/Git-and-VS-Code) and have cloned the repository and added all the necessary extensions.
 
 ## Step by step guide
 
