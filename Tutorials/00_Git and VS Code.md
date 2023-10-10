@@ -23,7 +23,7 @@
 
 ***Setting Up GitHub Account:***
 
-If you don't have a GitHub account, sign up at https://github.com.\
+If you don't have a GitHub account, sign up at https://github.com.
 Verify your email address by following the link sent to your email.
 
 - Configuring Git:
