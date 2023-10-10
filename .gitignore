@@ -2,10 +2,12 @@
 *.log
 *.R
 !loadMadratData.R
+!ReportData.R
 *.ini
 *.tgz
 pucFiles
 *.gdx
+*.gsp
 *.rds
 regionmappingOPDEV2.csv
 regionmappingOP.csv
