@@ -22,7 +22,7 @@ A quick overview of the Tutorials contents:
 
 - ***04_Running OPEN‐PROM:***
 
-    Brief description on to execute the OPEN-PROM, as well as the order of script execution.
+    Brief description on how to execute the OPEN-PROM, as well as the order of script execution.
 
 - ***05_GAMS error codes:***
 
@@ -30,7 +30,7 @@ A quick overview of the Tutorials contents:
 
 - ***06_OPEN PROM country to region mapping:***
 
-    Explanatory document about countries and regions mapping used in the model.
+    Explanatory document about the countries and regions mapping used in the model.
 
 - ***07_Creating FIXME Issues from Code Comments:***
 
