@@ -12,10 +12,6 @@ A quick overview of the Tutorials contents:
 
     A step by step guide to installing the task runner extension as well as utilizing a custom button, whose function is to run the GAMS code exactly like the Run (F9) button in GAMS studio.
 
-- ***02_Set up Github Actions for GAMS code using GAMS Engine:***
-
-    Basic steps to properly set up GAMS.
-
 - ***03_Loading Input Data Files:***
 
     A brief guide about loading input data files to the OPEN-PROM model.
@@ -35,6 +31,10 @@ A quick overview of the Tutorials contents:
 - ***07_Creating FIXME Issues from Code Comments:***
 
     A brief guide about automatically creating new issues, by adding a specifically formatted type of comment on your code.
+
+- ***07_Set up Github Actions for GAMS code using GAMS Engine:***
+
+    Basic steps to properly set up Github Actions running GAMS code.
 
 
 OPEN-PROM ("open PROMETHEUS") is an energy-economy model currently under development; the present version is based on MENA-EDS ENERGY MODEL v4.0 (c) E3Modelling 2020.
