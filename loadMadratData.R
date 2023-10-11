@@ -1,7 +1,10 @@
 print("Here the input data will be created with MADRAT and copied to the model")
 library(mrprom)
-dev <- unclass(Sys.time())
-fname <- paste0("rev0",dev,"_28b9ea46_open_prom.tgz")
+dev <- unclass(Sys.time()) # create a unique dataset name based on current time
+fname <- paste0("rev0",dev,"_28b9ea46_open_prom.tgz") # file name
+# run the fullOPEN-PROM function generating the whole input dataset of OPEN-PROM
+# retrieveData contains a call to fullOPEN-PROM
 retrieveData("OPEN_PROM",puc=F,renv=F,regionmapping = "regionmappingOP.csv",dev=dev)
+# copy the dataset into the model
 file.copy(paste0(getConfig("outputfolder"),"/",fname),fname)
 utils::untar(fname)
