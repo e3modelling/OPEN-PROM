@@ -32,11 +32,14 @@ $ondelim
 $include "./iResActiv.csv"
 $offdelim
 ;
-table iElastNonSubElec(allCy,SBS,ETYPES,YTIME) "Elasticities of Non Substitutable Electricity (1)"
+* FIXME derive elasticities per country
+* author=giannou
+table iElastNonSubElecData(SBS,ETYPES,YTIME) "Elasticities of Non Substitutable Electricity (1)"
 $ondelim
-$include "./iElastNonSubElec.csv"
+$include "./iElastNonSubElecData.csv"
 $offdelim
 ;
+iElastNonSubElec(allCy,SBS,ETYPES,YTIME) = iElastNonSubElecData(SBS,ETYPES,YTIME);
 table iFracElecPriChp(allCy, YTIME) "Fraction of Electricity Price at which a CHP sells electricity to network (1)"
 $ondelim
 $include "./iFracElecPriChp.csv"
