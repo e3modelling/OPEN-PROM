@@ -26,13 +26,15 @@ $ondelim
 $include "./iElastA.csv"
 $offdelim
 ;
-iElastA(allCy,SBS,ETYPES,YTIME) = iElastA("MAR",SBS,ETYPES,YTIME); !! FIXME
+* FIXME: derive elasticities for all countries, not just for MAR
+* author=giannou
+iElastA(allCy,SBS,ETYPES,YTIME) = iElastA("MAR",SBS,ETYPES,YTIME);
 table iResActiv(allCy,TRANSE,YTIME) "Residuals on transport activity ()"
 $ondelim
 $include "./iResActiv.csv"
 $offdelim
 ;
-* FIXME derive elasticities per country
+* FIXME: derive elasticities per country
 * author=giannou
 table iElastNonSubElecData(SBS,ETYPES,YTIME) "Elasticities of Non Substitutable Electricity (1)"
 $ondelim
@@ -73,7 +75,9 @@ $ondelim
 $include "./iInitSpecFuelCons.csv"
 $offdelim
 ;
-iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,YTIME) = iInitSpecFuelCons("MAR",TRANSE,TTECH,EF,YTIME); !! FIXME
+* FIXME: derive elasticities for all countries, not just for MAR
+* author=giannou
+iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,YTIME) = iInitSpecFuelCons("MAR",TRANSE,TTECH,EF,YTIME); 
 iSpeFuelConsCostBy(allCy,TRANSE,TTECH,TEA,EF) = iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,"2017");
 table iElaSub(allCy,DSBS)                           "Elasticities by subsectors (1)"
 $ondelim
