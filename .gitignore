@@ -13,3 +13,4 @@ regionmappingOPDEV2.csv
 regionmappingOP.csv
 *.cmd
 *.dat
+/data_report
