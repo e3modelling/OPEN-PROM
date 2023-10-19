@@ -18,8 +18,20 @@ var_gdp$variable <- "GDP|PPP"
 var_gdp$unit <- "billion US$2005/yr"
 var_gdp <- select(var_gdp, -data)
 
+var_demtr <- readGDX('./blabla.gdx', 'VDemTr', field = 'l')
+var_demtr <- as.quitte(var_demtr)
+var_demtr$model <- "OPEN-PROM"
+var_demtr$unit <- "Mtoe"
+var_demtr$variable <- paste("fuel consumption", var_demtr$TRANSE, var_demtr$EF,
+                            "TRANSE", sep = " ")
+var_demtr <- select(var_demtr, -TRANSE, -EF)
+
 # Merging the datasets
-gdx_data <- bind_rows(var_pop, var_gdp)
+gdx_data <- bind_rows(var_pop, var_gdp, var_demtr)
+
+
+# Keeping rows from the USA only
+gdx_data <- filter(gdx_data, gdx_data$region == "USA")
 
 # Create the data_report folder if it doesn't exist
 if (!file.exists("./data_report"))
@@ -28,5 +40,5 @@ if (!file.exists("./data_report"))
 } 
 
 report <- iamCheck(gdx_data, pdf = "./data_report/report.pdf",
-          refData = "./GDP_POP.mif",
-          verbose = TRUE)
+          refData = "./GDP_POP_CONSUMPTION.mif",
+          verbose = FALSE)
