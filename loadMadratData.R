@@ -1,4 +1,4 @@
-print("Here the input data will be created with MADRAT and copied to the model")
+print("Generating input data with mrprom/MADRAT and copying to OPEN-PROM")
 library(mrprom)
 dev <- unclass(Sys.time()) # create a unique dataset name based on current time
 fname <- paste0("rev0",dev,"_28b9ea46_open_prom.tgz") # file name

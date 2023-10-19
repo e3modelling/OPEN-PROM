@@ -19,7 +19,7 @@ QGapTranspActiv
 QGoodsTranspActiv
 QElecConsNonSub
 QElecConsInd
-*QConsOfRemSubEquip
+QConsOfRemSubEquip
 
 qDummyObj
 /;
