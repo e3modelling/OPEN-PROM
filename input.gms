@@ -70,7 +70,7 @@ $ondelim
 $include "./iInitSpecFuelCons.csv"
 $offdelim
 ;
-iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,YTIME) = iInitSpecFuelCons("MAR",TRANSE,TTECH,EF,YTIME); !! FIXME
+iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,YTIME) = iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,YTIME); !! FIXME
 iSpeFuelConsCostBy(allCy,TRANSE,TTECH,TEA,EF) = iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,"2017");
 table iElaSub(allCy,DSBS)                           "Elasticities by subsectors (1)"
 $ondelim

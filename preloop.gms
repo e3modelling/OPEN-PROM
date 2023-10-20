@@ -13,7 +13,7 @@ model openprom /
 QDemSub
 QFinEneDemTranspPerFuel
 QFinEneDemTransp
-*QSpecificFuelCons
+QSpecificFuelCons
 QConsEachTechTransp
 QGapTranspActiv
 QGoodsTranspActiv
