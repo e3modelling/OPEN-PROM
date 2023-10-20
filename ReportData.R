@@ -39,6 +39,16 @@ if (!file.exists("./data_report"))
   dir.create("./data_report")
 } 
 
+# Creating a custom configuration dataframe for the iamCheck() function
+custom_cfg <- filter(iamProjectConfig(), variable %in% c("GDP|PPP", "Population"))
+
+vdemtr_cfg <- tibble( variable = unique(var_demtr$variable),
+              unit = "Mtoe", min = 0, max = NA,
+              definition = "fuel consumption")
+
+custom_cfg <- bind_rows(custom_cfg, vdemtr_cfg)
+
+# Generating the report 
 report <- iamCheck(gdx_data, pdf = "./data_report/report.pdf",
           refData = "./GDP_POP_CONSUMPTION.mif",
-          verbose = FALSE)
+          cfg = custom_cfg, verbose = TRUE)
