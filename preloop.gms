@@ -20,6 +20,9 @@ QGoodsTranspActiv
 QElecConsNonSub
 QElecConsInd
 QConsOfRemSubEquip
+QGapFinalDem
+QFuelCons
+QFuelConsInclHP
 
 qDummyObj
 /;

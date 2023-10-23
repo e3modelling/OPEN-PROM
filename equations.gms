@@ -834,7 +834,7 @@ QElecConsNonSub(runCy,INDDOM,YTIME)$TIME(YTIME)..
          VElecNonSub(runCy,INDDOM,YTIME)
                  =E=
          [
-         iResNonSubsElecDem(runCy,INDDOM,YTIME) * VElecNonSub(runCy,INDDOM,YTIME-1) * ( iActv(YTIME,runCy,INDDOM)/iActv(YTIME-1,runCy,INDDOM) )**
+         VElecNonSub(runCy,INDDOM,YTIME-1) * ( iActv(YTIME,runCy,INDDOM)/iActv(YTIME-1,runCy,INDDOM) )**
          iElastNonSubElec(runCy,INDDOM,"a",YTIME)
          * ( VFuelPriceSub(runCy,INDDOM,"ELC",YTIME)/VFuelPriceSub(runCy,INDDOM,"ELC",YTIME-1) )**iElastNonSubElec(runCy,INDDOM,"b1",YTIME)
          * ( VFuelPriceSub(runCy,INDDOM,"ELC",YTIME-1)/VFuelPriceSub(runCy,INDDOM,"ELC",YTIME-2) )**iElastNonSubElec(runCy,INDDOM,"b2",YTIME)

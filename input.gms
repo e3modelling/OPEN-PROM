@@ -260,11 +260,14 @@ $ondelim
 $include"./iDataNonEneSec.csv"
 $offdelim
 ;
-table iIndChar(allCy,INDSE,Indu_Scon_Set)               "Industry sector charactetistics (various)"
+* FIXME: check if country-specific data is needed; move to mrprom
+* author=giannou
+table iIndCharData(allCy,INDSE,Indu_Scon_Set)               "Industry sector charactetistics (various)"
 $ondelim
-$include"./iIndChar.csv"
+$include"./iIndCharData.csv"
 $offdelim
 ;
+iIndChar(allCy,INDSE,Indu_Scon_Set) = iIndCharData("MAR",INDSE,Indu_Scon_Set);
 table iInitConsSubAndInitShaNonSubElec(allCy,DOMSE,Indu_Scon_Set)      "Initial Consumption per Subsector and Initial Shares of Non Substitutable Electricity in Total Electricity Demand (Mtoe)"
 $ondelim
 $include"./iInitConsSubAndInitShaNonSubElec.csv"
