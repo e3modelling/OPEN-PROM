@@ -156,9 +156,9 @@ VMExtF.FX(runCy,YTIME)$((not An(YTIME)) $(ord(YTIME) gt 1)  ) = ( iTransChar(run
 VMExtV.FX(runCy,YTIME)$(not An(YTIME)) = iDataPassCars(runCy,"PC","MEXTV");
 
 VScrRate.UP(runCy,YTIME) = 1;
-VScrRate.FX(runCy,YTIME) = 0.1; 
-* FIXME derive elasticities per country
+* FIXME VScrRate.FX(runCy,YTIME) = 0.1 , to be retained only for base year "2017", rest will be computed endogenously.
 * author=redmonkeycloud
+VScrRate.FX(runCy,YTIME) = 0.1; 
 VGapTranspFillNewTech.FX(runCy,TRANSE,YTIME)$(not AN(YTIME))=0;
 * FIXME: VTrnspActiv.FX(runCy,"PC",YTIME), only the line of code below
 * author=giannou
