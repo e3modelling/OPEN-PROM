@@ -13,7 +13,7 @@ model openprom /
 QDemSub
 QFinEneDemTranspPerFuel
 QFinEneDemTransp
-*QSpecificFuelCons
+QSpecificFuelCons
 QConsEachTechTransp
 QGapTranspActiv
 QGoodsTranspActiv
@@ -156,9 +156,9 @@ VMExtF.FX(runCy,YTIME)$((not An(YTIME)) $(ord(YTIME) gt 1)  ) = ( iTransChar(run
 VMExtV.FX(runCy,YTIME)$(not An(YTIME)) = iDataPassCars(runCy,"PC","MEXTV");
 
 VScrRate.UP(runCy,YTIME) = 1;
-* FIXME: VScrRate.FX(runCy,YTIME), only the line of code below
-* author=giannou
-VScrRate.FX(runCy,YTIME) = iDataPassCars(runCy,"PC","scr"); 
+* FIXME VScrRate.FX(runCy,YTIME) = 0.1 , to be retained only for base year "2017", rest will be computed endogenously.
+* author=redmonkeycloud
+VScrRate.FX(runCy,YTIME) = 0.1; 
 VGapTranspFillNewTech.FX(runCy,TRANSE,YTIME)$(not AN(YTIME))=0;
 * FIXME: VTrnspActiv.FX(runCy,"PC",YTIME), only the line of code below
 * author=giannou
@@ -179,8 +179,8 @@ VTechSortVarCostNewEquip.FX(runCy,TRANSE,TTECH,TEA,YTIME)$( SECTTECH(TRANSE,TTEC
 * FIXME: VConsEachTechTransp.FX(runCy,TRANSE,TTECH,EF,TEA,YTIME)... , only the line of code below
 * author=giannou
 VConsEachTechTransp.FX(runCy,TRANSE,TTECH,EF,TEA,YTIME)$(SECTTECH(TRANSE,TTECH)  $(not PLUGIN(TTECH)) $TTECHtoEF(TTECH,EF) $(not AN(YTIME))) = iFuelConsPerFueSub(runCy,TRANSE,EF,YTIME); 
-VConsEachTechTransp.FX(runCy,TRANSE,TTECH,EF,TEA,YTIME)$(SECTTECH(TRANSE,TTECH)  $PLUGIN(TTECH)) = 0;
-VConsEachTechTransp.FX(runCy,TRANSE,TTECH,EF,TEA,YTIME)$(SECTTECH(TRANSE,TTECH)  $CHYBV(TTECH)) =0;
+VConsEachTechTransp.FX(runCy,TRANSE,TTECH,EF,TEA,YTIME)$(SECTTECH(TRANSE,TTECH)  $PLUGIN(TTECH) $(not AN(YTIME))) = 0;
+VConsEachTechTransp.FX(runCy,TRANSE,TTECH,EF,TEA,YTIME)$(SECTTECH(TRANSE,TTECH)  $CHYBV(TTECH) $(not AN(YTIME))) =0;
 VDemTr.FX(runCy,TRANSE,EF,YTIME) $(SECTTECH(TRANSE,EF) $(not An(YTIME))) = iFuelConsPerFueSub(runCy,TRANSE,EF,YTIME);
 
 VElecNonSub.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = iFuelConsPerFueSub(runCy,INDDOM,"ELC",YTIME) * iShrNonSubElecInTotElecDem(runCy,INDDOM);
@@ -332,7 +332,7 @@ VRenValue.FX(YTIME) = 0 ;
 
 VTotReqElecProd.fx(runCy,YTIME)$TFIRST(YTIME)=sum(pgall,VElecProdPowGenPlants.L(runCy,pgall,YTIME)$TFIRST(YTIME));
 display VCarVal.l;
-execute_unload "blabla.gdx";
+
 loop an do
    s = s + 1;
    TIME(YTIME) = NO;

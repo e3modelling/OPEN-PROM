@@ -636,8 +636,7 @@ QGapTranspActiv(runCy,TRANSE,YTIME)$TIME(YTIME)..
 QSpecificFuelCons(runCy,TRANSE,TTECH,TEA,EF,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,EF) $TTECHtoEF(TTECH,EF) )..
          VSpecificFuelCons(runCy,TRANSE,TTECH,TEA,EF,YTIME)
                  =E=
-         VSpecificFuelCons(runCy,TRANSE,TTECH,TEA,EF,YTIME-1)
-          * prod(KPDL,
+         VSpecificFuelCons(runCy,TRANSE,TTECH,TEA,EF,YTIME-1) * prod(KPDL,
                      (
                         VFuelPriceSub(runCy,TRANSE,EF,YTIME-ord(KPDL))/VFuelPriceSub(runCy,TRANSE,EF,YTIME-(ord(KPDL)+1))
                       )**(iElastA(runCy,TRANSE,"c5",YTIME)*iFPDL(TRANSE,KPDL))

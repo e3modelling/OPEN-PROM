@@ -9,5 +9,6 @@
 
 
 endloop;  !! close outer iteration loop
+execute_unload "blabla.gdx";
 
 
