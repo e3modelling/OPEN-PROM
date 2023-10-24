@@ -833,7 +833,7 @@ QElecConsNonSub(runCy,INDDOM,YTIME)$TIME(YTIME)..
          VElecNonSub(runCy,INDDOM,YTIME)
                  =E=
          [
-         iResNonSubsElecDem(runCy,INDDOM,YTIME) * VElecNonSub(runCy,INDDOM,YTIME-1) * ( iActv(YTIME,runCy,INDDOM)/iActv(YTIME-1,runCy,INDDOM) )**
+         VElecNonSub(runCy,INDDOM,YTIME-1) * ( iActv(YTIME,runCy,INDDOM)/iActv(YTIME-1,runCy,INDDOM) )**
          iElastNonSubElec(runCy,INDDOM,"a",YTIME)
          * ( VFuelPriceSub(runCy,INDDOM,"ELC",YTIME)/VFuelPriceSub(runCy,INDDOM,"ELC",YTIME-1) )**iElastNonSubElec(runCy,INDDOM,"b1",YTIME)
          * ( VFuelPriceSub(runCy,INDDOM,"ELC",YTIME-1)/VFuelPriceSub(runCy,INDDOM,"ELC",YTIME-2) )**iElastNonSubElec(runCy,INDDOM,"b2",YTIME)
@@ -847,7 +847,7 @@ QConsOfRemSubEquip(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTE
          VConsRemSubEquip(runCy,DSBS,EF,YTIME)
                  =E=
          [
-         iResFuelConsPerSubAndFuel(runCy,DSBS,EF,YTIME) * (sum(TEA,VLifeTimeTech(runCy,DSBS,EF,TEA,YTIME)-1)/sum(TEA,VLifeTimeTech(runCy,DSBS,EF,TEA,YTIME)))
+         (sum(TEA,VLifeTimeTech(runCy,DSBS,EF,TEA,YTIME)-1)/sum(TEA,VLifeTimeTech(runCy,DSBS,EF,TEA,YTIME)))
          * (VFuelConsInclHP(runCy,DSBS,EF,YTIME-1) - (VElecNonSub(runCy,DSBS,YTIME-1)$(ELCEF(EF) $INDDOM(DSBS)) + 0$(not (ELCEF(EF) $INDDOM(DSBS)) )))
          * (iActv(YTIME,runCy,DSBS)/iActv(YTIME-1,runCy,DSBS))**iElastA(runCy,DSBS,"a",YTIME)
          * (VFuelPriceSub(runCy,DSBS,EF,YTIME)/VFuelPriceSub(runCy,DSBS,EF,YTIME-1))**iElastA(runCy,DSBS,"b1",YTIME)

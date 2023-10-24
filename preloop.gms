@@ -17,7 +17,12 @@ QSpecificFuelCons
 QConsEachTechTransp
 QGapTranspActiv
 QGoodsTranspActiv
-
+QElecConsNonSub
+QElecConsInd
+QConsOfRemSubEquip
+QGapFinalDem
+QFuelCons
+QFuelConsInclHP
 
 qDummyObj
 /;
@@ -33,7 +38,9 @@ display iWgtSecAvgPriFueCons;
 display iTechLft;
 
 *TIME(YTIME) = %fStartY%;
-VTechSortVarCostNewEquip.FX(allCy,TRANSE,EF2,TEA,YTIME) = iFuelConsTRANSE(allCy,TRANSE,EF2,YTIME)/sum(EF$(SECTTECH(TRANSE,EF)),iFuelConsTRANSE(allCy,TRANSE,EF,YTIME)); !! FIXME
+* FIXME: VTechSortVarCostNewEquip.FX(allCy,TRANSE,EF2,TEA,YTIME) , only the line of code below
+* author=giannou
+VTechSortVarCostNewEquip.FX(allCy,TRANSE,EF2,TEA,YTIME) = iFuelConsTRANSE(allCy,TRANSE,EF2,YTIME)/sum(EF$(SECTTECH(TRANSE,EF)),iFuelConsTRANSE(allCy,TRANSE,EF,YTIME)); 
 VNumVeh.L(allCy,YTIME)=0.1;
 *VNumVeh.lags(allCy,YTIME) = 0.1;
 VTrnspActiv.l(allCy,TRANSE,YTIME) = 0.1;
@@ -109,14 +116,15 @@ VHourProdCostTech.l(runCy,PGALL,HOUR,TT) = 0.0001;
 *                        VARIABLE INITIALISATION                               *
 ********************************************************************************
 
-
-VFuelPriceSub.FX(runCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF) $(not HEATPUMP(EF))  $(not An(YTIME))) = iFuelPrice(runCy,SBS,EF,YTIME);
-VFuelPriceSub.FX(runCy,SBS,ALTEF,YTIME)$(SECTTECH(SBS,ALTEF) $(not An(YTIME))) = sum(EF$ALTMAP(SBS,ALTEF,EF),iFuelPrice(runCy,SBS,EF,YTIME));
+* FIXME: VFuelPriceSub should be computed endogenously, add $(not An(YTIME)) below
+* author=giannou
+VFuelPriceSub.FX(runCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF) $(not HEATPUMP(EF)) ) = iFuelPrice(runCy,SBS,EF,YTIME);
+VFuelPriceSub.FX(runCy,SBS,ALTEF,YTIME)$(SECTTECH(SBS,ALTEF)) = sum(EF$ALTMAP(SBS,ALTEF,EF),iFuelPrice(runCy,SBS,EF,YTIME));
 VFuelPriceSub.FX(runCy,"PG","NUC",YTIME) = 0.025; !! fixed price for nuclear fuel to 25Euro/toe
 VFuelPriceSub.FX(runCy,"H2P","NUC",YTIME) = 0.025; !! fixed price for nuclear fuel to 25Euro/toe
-VFuelPriceSub.fx(runCy,INDDOM,"HEATPUMP",YTIME)$(SECTTECH(INDDOM,"HEATPUMP") $(not An(YTIME))) = iFuelPrice(runCy,INDDOM,"ELC",YTIME);
-VFuelPriceSub.fx(runCy,"H2P",EF,YTIME)$(SECTTECH("H2P",EF) $(not An(YTIME))) = VFuelPriceSub.l(runCy,"PG",EF,YTIME);
-VFuelPriceSub.fx(runCy,"H2P","ELC",YTIME)$(not An(YTIME)) = VFuelPriceSub.l(runCy,"OI","ELC",YTIME);
+VFuelPriceSub.fx(runCy,INDDOM,"HEATPUMP",YTIME)$(SECTTECH(INDDOM,"HEATPUMP")) = iFuelPrice(runCy,INDDOM,"ELC",YTIME);
+VFuelPriceSub.fx(runCy,"H2P",EF,YTIME)$(SECTTECH("H2P",EF) ) = VFuelPriceSub.l(runCy,"PG",EF,YTIME);
+VFuelPriceSub.fx(runCy,"H2P","ELC",YTIME)= VFuelPriceSub.l(runCy,"OI","ELC",YTIME);
 
 VElecPriInduResConsu.FX(runCy,"i",YTIME)$(not an(ytime)) = VFuelPriceSub.l(runCy,"OI","ELC",YTIME)*0.086;
 VElecPriInduResConsu.FX(runCy,"r",YTIME)$(not an(ytime)) = VFuelPriceSub.l(runCy,"HOU","ELC",YTIME)*0.086;
@@ -132,7 +140,9 @@ VFuelPriceAvg.FX(runCy,DSBS,YTIME) = sum(EF$SECTTECH(DSBS,EF), iWgtSecAvgPriFueC
 VNumVeh.UP(runCy,YTIME) = 10000; !! upper bound of VNumVeh is 10000 million vehicles
 VNumVeh.FX(runCy,YTIME)$(not An(YTIME)) = iActv(YTIME,runCy,"PC");
 VLamda.UP(runCy,YTIME) = 1;
-iPassCarsMarkSat(runCy) = 1; !! FIXME
+* FIXME: iPassCarsMarkSat(runCy) = 1
+* author=giannou
+iPassCarsMarkSat(runCy) = 1; 
 VLamda.FX(runCy,YTIME)$((not An(YTIME)) $(ord(YTIME) gt 1) ) = (VNumVeh.l(runCy,YTIME-1) / (iPop(YTIME-1,runCy)*1000) /
            iPassCarsMarkSat(runCy))$(iPop(YTIME-1,runCy))+VLamda.l(runCy,YTIME-1)$(not iPop(YTIME-1,runCy));
 VMExtF.l(runCy,YTIME)$((not An(YTIME)) $(ord(YTIME) gt 1)  ) = ( iTransChar(runCy,"RES_MEXTF",YTIME) * iSigma(runCy,"S1") * EXP(iSigma(runCy,"S2") *
@@ -150,8 +160,12 @@ VScrRate.FX(runCy,YTIME) = 0.1;
 * FIXME derive elasticities per country
 * author=redmonkeycloud
 VGapTranspFillNewTech.FX(runCy,TRANSE,YTIME)$(not AN(YTIME))=0;
-VTrnspActiv.FX(runCy,"PC",YTIME) = iTransChar(runCy,"KM_VEH",YTIME); !! FIXME
-VTrnspActiv.FX(runCy,TRANP,YTIME) $(not sameas(TRANP,"PC")) = iActv(YTIME,runCy,TRANP); !! FIXME
+* FIXME: VTrnspActiv.FX(runCy,"PC",YTIME), only the line of code below
+* author=giannou
+VTrnspActiv.FX(runCy,"PC",YTIME) = iTransChar(runCy,"KM_VEH",YTIME); 
+* FIXME: VTrnspActiv.FX(runCy,TRANP,YTIME) $(not sameas(TRANP,"PC")), only the line of code below
+* author=giannou
+VTrnspActiv.FX(runCy,TRANP,YTIME) $(not sameas(TRANP,"PC")) = iActv(YTIME,runCy,TRANP); 
 VTrnspActiv.FX(runCy,TRANSE,YTIME)$(not TRANP(TRANSE)) = 0;
 VGoodsTranspActiv.FX(runCy,TRANG,YTIME)$(not An(YTIME)) = iActv(YTIME,runCy,TRANG);
 VGoodsTranspActiv.FX(runCy,TRANSE,YTIME)$(not TRANG(TRANSE)) = 0;
@@ -162,7 +176,9 @@ VLifeTimeTech.FX(runCy,"PC",TTECH,TEA,YTIME)$( (not AN(YTIME)) $SECTTECH("PC",TT
 
 VSpecificFuelCons.FX(runCy,TRANSE,TTECH,TEA,EF,"2017")$(SECTTECH(TRANSE,EF) ) = iSpeFuelConsCostBy(runCy,TRANSE,TTECH,TEA,EF);
 VTechSortVarCostNewEquip.FX(runCy,TRANSE,TTECH,TEA,YTIME)$( SECTTECH(TRANSE,TTECH) $(not AN(YTIME))) = 0;
-VConsEachTechTransp.FX(runCy,TRANSE,TTECH,EF,TEA,YTIME)$(SECTTECH(TRANSE,TTECH)  $(not PLUGIN(TTECH)) $TTECHtoEF(TTECH,EF) $(not AN(YTIME))) = iFuelConsPerFueSub(runCy,TRANSE,EF,YTIME); !! FIXME
+* FIXME: VConsEachTechTransp.FX(runCy,TRANSE,TTECH,EF,TEA,YTIME)... , only the line of code below
+* author=giannou
+VConsEachTechTransp.FX(runCy,TRANSE,TTECH,EF,TEA,YTIME)$(SECTTECH(TRANSE,TTECH)  $(not PLUGIN(TTECH)) $TTECHtoEF(TTECH,EF) $(not AN(YTIME))) = iFuelConsPerFueSub(runCy,TRANSE,EF,YTIME); 
 VConsEachTechTransp.FX(runCy,TRANSE,TTECH,EF,TEA,YTIME)$(SECTTECH(TRANSE,TTECH)  $PLUGIN(TTECH)) = 0;
 VConsEachTechTransp.FX(runCy,TRANSE,TTECH,EF,TEA,YTIME)$(SECTTECH(TRANSE,TTECH)  $CHYBV(TTECH)) =0;
 VDemTr.FX(runCy,TRANSE,EF,YTIME) $(SECTTECH(TRANSE,EF) $(not An(YTIME))) = iFuelConsPerFueSub(runCy,TRANSE,EF,YTIME);

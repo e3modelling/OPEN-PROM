@@ -26,17 +26,22 @@ $ondelim
 $include "./iElastA.csv"
 $offdelim
 ;
-iElastA(allCy,SBS,ETYPES,YTIME) = iElastA("MAR",SBS,ETYPES,YTIME); !! FIXME
+* FIXME: derive elasticities for all countries, not just for MAR
+* author=giannou
+iElastA(allCy,SBS,ETYPES,YTIME) = iElastA("MAR",SBS,ETYPES,YTIME);
 table iResActiv(allCy,TRANSE,YTIME) "Residuals on transport activity ()"
 $ondelim
 $include "./iResActiv.csv"
 $offdelim
 ;
-table iElastNonSubElec(allCy,SBS,ETYPES,YTIME) "Elasticities of Non Substitutable Electricity (1)"
+* FIXME: derive elasticities per country
+* author=giannou
+table iElastNonSubElecData(SBS,ETYPES,YTIME) "Elasticities of Non Substitutable Electricity (1)"
 $ondelim
-$include "./iElastNonSubElec.csv"
+$include "./iElastNonSubElecData.csv"
 $offdelim
 ;
+iElastNonSubElec(allCy,SBS,ETYPES,YTIME) = iElastNonSubElecData(SBS,ETYPES,YTIME);
 table iFracElecPriChp(allCy, YTIME) "Fraction of Electricity Price at which a CHP sells electricity to network (1)"
 $ondelim
 $include "./iFracElecPriChp.csv"
@@ -70,7 +75,9 @@ $ondelim
 $include "./iInitSpecFuelCons.csv"
 $offdelim
 ;
-iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,YTIME) = iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,YTIME); !! FIXME
+* FIXME: derive elasticities for all countries, not just for MAR
+* author=giannou
+iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,YTIME) = iInitSpecFuelCons("MAR",TRANSE,TTECH,EF,YTIME); 
 iSpeFuelConsCostBy(allCy,TRANSE,TTECH,TEA,EF) = iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,"2017");
 table iElaSub(allCy,DSBS)                           "Elasticities by subsectors (1)"
 $ondelim
@@ -253,11 +260,14 @@ $ondelim
 $include"./iDataNonEneSec.csv"
 $offdelim
 ;
-table iIndChar(allCy,INDSE,Indu_Scon_Set)               "Industry sector charactetistics (various)"
+* FIXME: check if country-specific data is needed; move to mrprom
+* author=giannou
+table iIndCharData(allCy,INDSE,Indu_Scon_Set)               "Industry sector charactetistics (various)"
 $ondelim
-$include"./iIndChar.csv"
+$include"./iIndCharData.csv"
 $offdelim
 ;
+iIndChar(allCy,INDSE,Indu_Scon_Set) = iIndCharData("MAR",INDSE,Indu_Scon_Set);
 table iInitConsSubAndInitShaNonSubElec(allCy,DOMSE,Indu_Scon_Set)      "Initial Consumption per Subsector and Initial Shares of Non Substitutable Electricity in Total Electricity Demand (Mtoe)"
 $ondelim
 $include"./iInitConsSubAndInitShaNonSubElec.csv"

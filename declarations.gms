@@ -126,6 +126,8 @@ iCapCostTech(allCy,SBS,EF,YTIME)                      "Capital Cost of technolog
 iInstCapPast(allCy,PGALL,YTIME)        "Installed capacity past (GW)"
 iDiffFuelsInSec(SBS) "auxiliary parameter holding the number of different fuels in a sector"
 iResElecIndex(allCy,YTIME)             "Residual for electricity Index (1)"
+iElastNonSubElec(allCy,SBS,ETYPES,YTIME) "Elasticities of Non Substitutable Electricity (1)"
+iIndChar(allCy,INDSE,Indu_Scon_Set)               "Industry sector charactetistics (various)"
 ;
 
 
