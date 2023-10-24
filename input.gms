@@ -75,10 +75,10 @@ $ondelim
 $include "./iInitSpecFuelCons.csv"
 $offdelim
 ;
-* FIXME: derive elasticities for all countries, not just for MAR
-* author=giannou
-iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,YTIME) = iInitSpecFuelCons("MAR",TRANSE,TTECH,EF,YTIME); 
-iSpeFuelConsCostBy(allCy,TRANSE,TTECH,TEA,EF) = iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,"2017");
+* FIXME: iInitSpecFuelCons("MAR",TRANSE,TTECH,EF,"2017") initial values for all countries equal to initial values of MAR.
+* author=redmonkeycloud
+iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,YTIME) = iInitSpecFuelCons("MAR",TRANSE,TTECH,EF,"2017"); 
+iSpeFuelConsCostBy(allCy,TRANSE,TTECH,TEA,EF) = iInitSpecFuelCons("MAR",TRANSE,TTECH,EF,"2017");
 table iElaSub(allCy,DSBS)                           "Elasticities by subsectors (1)"
 $ondelim
 $include "./iElaSub.csv"
