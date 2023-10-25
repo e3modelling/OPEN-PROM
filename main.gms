@@ -1,5 +1,7 @@
 *** preliminaries
 
+*** Generating an execution profile
+option profile = 1;
 *** number of columns that are listed for each variable in the column listing
 option limcol = 300;
 *** number of rows that are listed for each equation in the equation listing
@@ -46,7 +48,7 @@ $evalGlobal fBaseY %fStartY% - %fPeriodOfYears%
 *** end of dollar commands section, no further flag definitions allowed 
 
 *** load input data files
-$call "RScript ./loadMadratData.R"
+* $call "RScript ./loadMadratData.R"
 
 $include sets.gms
 $include declarations.gms
