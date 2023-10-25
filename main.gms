@@ -1,5 +1,7 @@
 *** preliminaries
 
+*** Generating an execution profile
+option profile = 1;
 *** number of columns that are listed for each variable in the column listing
 option limcol = 300;
 *** number of rows that are listed for each equation in the equation listing
