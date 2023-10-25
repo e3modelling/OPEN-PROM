@@ -65,8 +65,11 @@ $include "./iDataPassCars.csv"
 $offdelim
 ;
 iSigma(allCy,"S1") = iDataPassCars(allCy,"PC","S1");
+iDataPassCars.FX(allCy,"PC","S1") = 1.0;
 iSigma(allCy,"S2") = iDataPassCars(allCy,"PC","S2");
+iDataPassCars.FX(allCy,"PC","S2") = -0.01;
 iSigma(allCy,"S3") = iDataPassCars(allCy,"PC","S3");
+iDataPassCars.FX(allCy,"PC","S3") = 6.5;
 iPassCarsMarkSat(allCy) = iDataPassCars(allCy,"PC","SAT");
 iGdpPassCarsMarkExt(allCy) = iDataPassCars(allCy,"PC","MEXTV");
 iPassCarsScrapRate(allCy)  = iDataPassCars(allCy,"PC", "SCR");

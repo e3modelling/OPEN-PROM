@@ -143,9 +143,15 @@ VFuelPriceAvg.FX(runCy,DSBS,YTIME) = sum(EF$SECTTECH(DSBS,EF), iWgtSecAvgPriFueC
 VNumVeh.UP(runCy,YTIME) = 10000; !! upper bound of VNumVeh is 10000 million vehicles
 VNumVeh.FX(runCy,YTIME)$(not An(YTIME)) = iActv(YTIME,runCy,"PC");
 VLamda.UP(runCy,YTIME) = 1;
+
 * FIXME: iPassCarsMarkSat(runCy) = 1
 * author=giannou
 iPassCarsMarkSat(runCy) = 1; 
+
+*FIXME: iTransChar(runCy,"RES_MEXTF",YTIME) = 0.01, Initial value derived from ALG.xlsx .
+* author=redmonkeycloud
+iTransChar.FX(runCy,"RES_MEXTF",YTIME) = 0.01;
+
 VLamda.FX(runCy,YTIME)$((not An(YTIME)) $(ord(YTIME) gt 1) ) = (VNumVeh.l(runCy,YTIME-1) / (iPop(YTIME-1,runCy)*1000) /
            iPassCarsMarkSat(runCy))$(iPop(YTIME-1,runCy))+VLamda.l(runCy,YTIME-1)$(not iPop(YTIME-1,runCy));
 VMExtF.l(runCy,YTIME)$((not An(YTIME)) $(ord(YTIME) gt 1)  ) = ( iTransChar(runCy,"RES_MEXTF",YTIME) * iSigma(runCy,"S1") * EXP(iSigma(runCy,"S2") *
