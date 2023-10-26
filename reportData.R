@@ -28,7 +28,7 @@ var_demtr <- select(var_demtr, -TRANSE, -EF)
 # Merging the datasets
 gdx_data <- bind_rows(var_pop, var_gdp, var_demtr)
 
-# Keeping rows from the USA only
+# Keeping rows from Egypt only
 gdx_data <- filter(gdx_data, gdx_data$region == "EGY")
 
 # Creating a custom configuration dataframe for the iamCheck() function
