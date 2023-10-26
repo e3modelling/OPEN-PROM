@@ -64,6 +64,7 @@ $ondelim
 $include "./iDataPassCars.csv"
 $offdelim
 ;
+*FIXME: iDataPassCars.FX(allCy,"PC","S1")/(allCy,"PC","S2")/(allCy,"PC","S3")
 iSigma(allCy,"S1") = iDataPassCars(allCy,"PC","S1");
 iDataPassCars.FX(allCy,"PC","S1") = 1.0;
 iSigma(allCy,"S2") = iDataPassCars(allCy,"PC","S2");
