@@ -148,7 +148,7 @@ VLamda.UP(runCy,YTIME) = 1;
 * author=giannou
 iPassCarsMarkSat(runCy) = 1; 
 
-*FIXME: iTransChar(runCy,"RES_MEXTF",YTIME) = 0.01, Initial value derived from ALG.xlsx .
+* FIXME: iTransChar(runCy,"RES_MEXTF",YTIME) = 0.01, Initial value derived from ALG.xlsx .
 * author=redmonkeycloud
 iTransChar.FX(runCy,"RES_MEXTF",YTIME) = 0.01;
 
@@ -163,6 +163,9 @@ VMExtF.FX(runCy,YTIME)$((not An(YTIME)) $(ord(YTIME) gt 1)  ) = ( iTransChar(run
                           VNumVeh.l(runCy,YTIME-1) /(iPop(YTIME-1,runCy) * 1000) )$(iPop(YTIME-1,runCy))+VMExtF.l(runCy,YTIME-1)$(not iPop(YTIME-1,runCy));
 
 VMExtV.FX(runCy,YTIME)$(not An(YTIME)) = iDataPassCars(runCy,"PC","MEXTV");
+* FIXME: iDataPassCars.FX(runCy,"PC","MEXTV") = 0.01;
+* author=redmonkeycloud
+iDataPassCars.FX(runCy,"PC","MEXTV") = 0.01;
 
 VScrRate.UP(runCy,YTIME) = 1;
 * FIXME VScrRate.FX(runCy,YTIME) = 0.1 , to be retained only for base year "2017", rest will be computed endogenously.
