@@ -148,7 +148,7 @@ VLamda.UP(runCy,YTIME) = 1;
 * author=giannou
 iPassCarsMarkSat(runCy) = 1; 
 
-* FIXME: iTransChar(runCy,"RES_MEXTF",YTIME) = 0.01, Initial value derived from ALG.xlsx .
+* FIXME: iTransChar(runCy,"RES_MEXTF",YTIME) = 0.01, Initial value derived from ALG.xlsx .(To be added in iTransChar.csv)
 * author=redmonkeycloud
 iTransChar.FX(runCy,"RES_MEXTF",YTIME) = 0.01;
 
