@@ -253,7 +253,7 @@ VCapChpPlants.FX(runCy,YTIME)$(datay(YTIME)) =
 $offtext
 VElecPeakLoad.FX(runCy,YTIME)$(datay(YTIME)) = VElecDem.l(runCy,YTIME)/(VCapChpPlants.l(runCy,YTIME)*8.76);
 
-VTotElecGenCap.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
+VTotElecGenCap.FX(runCy,YTIME) = iTotAvailCapBsYr(runCy);
 VElecGenNoChp.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
 VElecCapChpPla.FX(runCy,CHP,YTIME)$(not An(YTIME)) = iHisChpGrCapData(runCy,CHP,YTIME);
 VPowPlaShaNewEquip.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) )=0;
