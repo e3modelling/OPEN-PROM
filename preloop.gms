@@ -25,6 +25,7 @@ QFuelCons
 QFuelConsInclHP
 QPassCarsLft
 QScrRate
+QScrap
 
 
 qDummyObj
@@ -141,16 +142,18 @@ VFuelPriSubNoCarb.fx(runCy,INDDOM,"HEATPUMP",YTIME)$(SECTTECH(INDDOM,"HEATPUMP")
 VFuelPriceAvg.FX(runCy,DSBS,YTIME) = sum(EF$SECTTECH(DSBS,EF), iWgtSecAvgPriFueCons(runCy,DSBS,EF) * iFuelPrice(runCy,DSBS,EF,YTIME));
 
 VNumVeh.UP(runCy,YTIME) = 10000; !! upper bound of VNumVeh is 10000 million vehicles
-VNumVeh.FX(runCy,YTIME)$(not An(YTIME)) = iActv(YTIME,runCy,"PC");
+* FIXME: VNumVeh.FX(runCy,YTIME)$(not An(YTIME)) = iActv(YTIME,runCy,"PC"), temporary solution until eq QNumVeh is activated.
+* author=redmonkeycloud
+VNumVeh.FX(runCy,YTIME) = iActv(YTIME,runCy,"PC");
 VLamda.UP(runCy,YTIME) = 1;
 
 * FIXME: iPassCarsMarkSat(runCy) = 1
 * author=giannou
-iPassCarsMarkSat(runCy) = 1; 
+iPassCarsMarkSat(runCy) = 0.7; 
 
 * FIXME: iTransChar(runCy,"RES_MEXTF",YTIME) = 0.01, Initial value derived from ALG.xlsx .(To be added in iTransChar.csv)
 * author=redmonkeycloud
-iTransChar.FX(runCy,"RES_MEXTF",YTIME) = 0.01;
+iTransChar(runCy,"RES_MEXTF",YTIME) = 0.01;
 
 VLamda.FX(runCy,YTIME)$((not An(YTIME)) $(ord(YTIME) gt 1) ) = (VNumVeh.l(runCy,YTIME-1) / (iPop(YTIME-1,runCy)*1000) /
            iPassCarsMarkSat(runCy))$(iPop(YTIME-1,runCy))+VLamda.l(runCy,YTIME-1)$(not iPop(YTIME-1,runCy));
@@ -165,7 +168,7 @@ VMExtF.FX(runCy,YTIME)$((not An(YTIME)) $(ord(YTIME) gt 1)  ) = ( iTransChar(run
 VMExtV.FX(runCy,YTIME)$(not An(YTIME)) = iDataPassCars(runCy,"PC","MEXTV");
 * FIXME: iDataPassCars.FX(runCy,"PC","MEXTV") = 0.01;
 * author=redmonkeycloud
-iDataPassCars.FX(runCy,"PC","MEXTV") = 0.01;
+iDataPassCars(runCy,"PC","MEXTV") = 0.01;
 
 VScrRate.UP(runCy,YTIME) = 1;
 * FIXME VScrRate.FX(runCy,YTIME) = 0.1 , to be retained only for base year "2017", rest will be computed endogenously.
