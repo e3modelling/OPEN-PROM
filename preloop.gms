@@ -165,6 +165,10 @@ VMExtF.FX(runCy,YTIME)$((not An(YTIME)) $(ord(YTIME) gt 1)  ) = ( iTransChar(run
                           VLamda.l(runCy,YTIME)))* 
                           VNumVeh.l(runCy,YTIME-1) /(iPop(YTIME-1,runCy) * 1000) )$(iPop(YTIME-1,runCy))+VMExtF.l(runCy,YTIME-1)$(not iPop(YTIME-1,runCy));
 
+* FIXME: VMExtV.FX(runCy,YTIME-1) = 9.03E-19, temporary assignment of base value for 2017.
+* author=redmonkeycloud
+VMExtV.FX(runCy,"2017") = 9.03E-19;
+
 VMExtV.FX(runCy,YTIME)$(not An(YTIME)) = iDataPassCars(runCy,"PC","MEXTV");
 * FIXME: iDataPassCars.FX(runCy,"PC","MEXTV") = 0.01;
 * author=redmonkeycloud
