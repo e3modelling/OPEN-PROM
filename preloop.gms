@@ -26,11 +26,11 @@ QFuelConsInclHP
 QPassCarsLft
 QScrRate
 QScrap
-*QMExtF
-*QMExtV
+QMExtF
+QMExtV
 QLevl
-*QNewReg
-*QNumVeh
+QNewReg
+QNumVeh
 
 
 qDummyObj
@@ -147,9 +147,9 @@ VFuelPriSubNoCarb.fx(runCy,INDDOM,"HEATPUMP",YTIME)$(SECTTECH(INDDOM,"HEATPUMP")
 VFuelPriceAvg.FX(runCy,DSBS,YTIME) = sum(EF$SECTTECH(DSBS,EF), iWgtSecAvgPriFueCons(runCy,DSBS,EF) * iFuelPrice(runCy,DSBS,EF,YTIME));
 
 VNumVeh.UP(runCy,YTIME) = 10000; !! upper bound of VNumVeh is 10000 million vehicles
-* FIXME: VNumVeh.FX(runCy,YTIME)$(not An(YTIME)) = iActv(YTIME,runCy,"PC"), temporary solution until eq QNumVeh is activated.
+* FIXME: VNumVeh.FX(runCy,YTIME) = iActv(YTIME,runCy,"PC"), to be used only if eq QNumVeh is deactivated.
 * author=redmonkeycloud
-VNumVeh.FX(runCy,YTIME) = iActv(YTIME,runCy,"PC");
+VNumVeh.FX(runCy,YTIME)$(not An(YTIME)) = iActv(YTIME,runCy,"PC");
 VLamda.UP(runCy,YTIME) = 1;
 
 * FIXME: iPassCarsMarkSat(runCy) = 1
