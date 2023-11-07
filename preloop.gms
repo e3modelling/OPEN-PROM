@@ -25,7 +25,11 @@ QFuelCons
 QFuelConsInclHP
 QPassCarsLft
 QScrRate
-
+QTechCostMatr
+QTechSort
+QTechShareNewEquip
+QTechCostIntrm
+QTechCost
 
 qDummyObj
 /;

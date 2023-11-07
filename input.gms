@@ -384,10 +384,9 @@ iAnnCons(runCy,NENSE,"modal") = 0.487 ;
 iAnnCons(runCy,"BU","smallest") = 0.2 ;
 iAnnCons(runCy,"BU","largest") = 1 ;
 iAnnCons(runCy,"BU","modal") = 0.5 ;
-iAnnCons(runCy,DSBS,ConSet)=0.9;
-iDisFunConSize(runCy,DSBS,rCon) = 1;
+*iAnnCons(runCy,DSBS,ConSet)=0.9;
 * Consumer size groups distribution function
-$ontext
+*$ontext
 Loop (runCy,DSBS) DO
      Loop rCon$(ord(rCon) le iNcon(DSBS)+1) DO
           iDisFunConSize(runCy,DSBS,rCon) =
@@ -413,7 +412,7 @@ Loop (runCy,DSBS) DO
 ;
      ENDLOOP;
 ENDLOOP;
-$offtext
+*$offtext
 iCumDistrFuncConsSize(allCy,DSBS) = sum(rCon, iDisFunConSize(allCy,DSBS,rCon));
 iCGI(allCy,YTIME) = 1;
 *iLoadCurveConstr.L(runCy,TT)$(PERIOD(TT) $TFIRSTAN(TT))= 0.21;
