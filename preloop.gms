@@ -31,7 +31,7 @@ QMExtV
 QLevl
 QNewReg
 QNumVeh
-
+QElecConsAll
 
 qDummyObj
 /;
