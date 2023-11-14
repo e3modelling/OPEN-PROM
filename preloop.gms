@@ -25,6 +25,7 @@ QFuelCons
 QFuelConsInclHP
 QPassCarsLft
 QScrRate
+QElecConsAll 
 QElecGenNoChp
 
 qDummyObj
