@@ -10,4 +10,4 @@
 
 endloop;  !! close outer iteration loop
 
-execute_unload "blabla.gdx";
+*execute_unload "blabla.gdx";

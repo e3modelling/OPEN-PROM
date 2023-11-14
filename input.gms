@@ -697,15 +697,15 @@ iTotFinEneDemSubBaseYr(allCy,DOMSE,YTIME)   = SUM(EF,iFuelConsPerFueSub(allCy,DO
 iTotFinEneDemSubBaseYr(allCy,NENSE,YTIME)   = SUM(EF,iFuelConsPerFueSub(allCy,NENSE,EF,YTIME));
 
 
-iWgtSecAvgPriFueCons(runCy,TRANSE,EF)$(SECTTECH(TRANSE,EF) $(not plugin(EF)) ) = (iFuelConsPerFueSub(runCy,TRANSE,EF,"2019") / iTotFinEneDemSubBaseYr(runCy,TRANSE,"2019"))$iTotFinEneDemSubBaseYr(runCy,TRANSE,"2019")
-                                               + (1/iDiffFuelsInSec(TRANSE))$(not iTotFinEneDemSubBaseYr(runCy,TRANSE,"2019"));
+iWgtSecAvgPriFueCons(runCy,TRANSE,EF)$(SECTTECH(TRANSE,EF) $(not plugin(EF)) ) = (iFuelConsPerFueSub(runCy,TRANSE,EF,"2017") / iTotFinEneDemSubBaseYr(runCy,TRANSE,"2017"))$iTotFinEneDemSubBaseYr(runCy,TRANSE,"2017")
+                                               + (1/iDiffFuelsInSec(TRANSE))$(not iTotFinEneDemSubBaseYr(runCy,TRANSE,"2017"));
 
-iWgtSecAvgPriFueCons(runCy,NENSE,EF)$SECTTECH(NENSE,EF) = ( iFuelConsPerFueSub(runCy,NENSE,EF,"2019") / iTotFinEneDemSubBaseYr(runCy,NENSE,"2019") )$iTotFinEneDemSubBaseYr(runCy,NENSE,"2019")
-                                             + (1/iDiffFuelsInSec(NENSE))$(not iTotFinEneDemSubBaseYr(runCy,NENSE,"2019"));
+iWgtSecAvgPriFueCons(runCy,NENSE,EF)$SECTTECH(NENSE,EF) = ( iFuelConsPerFueSub(runCy,NENSE,EF,"2017") / iTotFinEneDemSubBaseYr(runCy,NENSE,"2017") )$iTotFinEneDemSubBaseYr(runCy,NENSE,"2017")
+                                             + (1/iDiffFuelsInSec(NENSE))$(not iTotFinEneDemSubBaseYr(runCy,NENSE,"2017"));
 
 
-iWgtSecAvgPriFueCons(runCy,INDDOM,EF)$(SECTTECH(INDDOM,EF)$(not sameas(EF,"ELC"))) = ( iFuelConsPerFueSub(runCy,INDDOM,EF,"2019") / (iTotFinEneDemSubBaseYr(runCy,INDDOM,"2019") - iFuelConsPerFueSub(runCy,INDDOM,"ELC","2019")) )$( iTotFinEneDemSubBaseYr(runCy,INDDOM,"2019") - iFuelConsPerFueSub(runCy,INDDOM,"ELC","2019") )
-                                                                        + (1/(iDiffFuelsInSec(INDDOM)-1))$(not (iTotFinEneDemSubBaseYr(runCy,INDDOM,"2019") - iFuelConsPerFueSub(runCy,INDDOM,"ELC","2019")));
+iWgtSecAvgPriFueCons(runCy,INDDOM,EF)$(SECTTECH(INDDOM,EF)$(not sameas(EF,"ELC"))) = ( iFuelConsPerFueSub(runCy,INDDOM,EF,"2017") / (iTotFinEneDemSubBaseYr(runCy,INDDOM,"2017") - iFuelConsPerFueSub(runCy,INDDOM,"ELC","2017")) )$( iTotFinEneDemSubBaseYr(runCy,INDDOM,"2017") - iFuelConsPerFueSub(runCy,INDDOM,"ELC","2017") )
+                                                                        + (1/(iDiffFuelsInSec(INDDOM)-1))$(not (iTotFinEneDemSubBaseYr(runCy,INDDOM,"2017") - iFuelConsPerFueSub(runCy,INDDOM,"ELC","2017")));
 
 
 
