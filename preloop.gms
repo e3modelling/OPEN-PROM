@@ -362,7 +362,7 @@ VRenValue.FX(YTIME) = 0 ;
 VTotReqElecProd.fx(runCy,YTIME)$TFIRST(YTIME)=sum(pgall,VElecProdPowGenPlants.L(runCy,pgall,YTIME)$TFIRST(YTIME));
 display VCarVal.l;
 
-loop an do
+loop an do !! start outer iteration loop (time steps)
    s = s + 1;
    TIME(YTIME) = NO;
    TIME(AN)$(ord(an)=s) = YES;
