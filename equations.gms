@@ -79,8 +79,7 @@ QTotReqElecProd(runCy,YTIME)$TIME(YTIME)..
 QTotEstElecGenCap(runCy,YTIME)$TIME(YTIME)..
         VTotElecGenCapEst(runCy,YTIME)
              =E=
-        iResMargTotAvailCap(runCy,"TOT_CAP_RES",YTIME) * VTotElecGenCap(runCy,YTIME-1)
-        * VElecPeakLoad(runCy,YTIME)/VElecPeakLoad(runCy,YTIME-1);          
+        VTotElecGenCap(runCy,YTIME-1) * VElecPeakLoad(runCy,YTIME)/VElecPeakLoad(runCy,YTIME-1);          
 
 * Compute total electricity generation capacity
 QTotElecGenCap(runCy,YTIME)$TIME(YTIME)..
