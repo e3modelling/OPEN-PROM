@@ -22,8 +22,8 @@ model openprom /
 *QBslMaxmLoad
 *QElecBaseLoad
 *QTotReqElecProd
-*QTotEstElecGenCap
-*QTotElecGenCap
+QTotEstElecGenCap
+QTotElecGenCap
 *QHourProdCostInv
 *QHourProdCostInvDec
 *QGammaInCcsDecTree
@@ -399,7 +399,7 @@ VCapChpPlants.FX(runCy,YTIME)$(datay(YTIME)) =
          (sum(INDDOM,VConsFuel.l(runCy,INDDOM,"ELC",YTIME)/iLoadFacElecDem(runCy,INDDOM,"2015")) + sum(TRANSE, VDemTr.l(runCy,TRANSE,"ELC",YTIME)/
          iLoadFacElecDem(runCy,TRANSE,"2015")));
 $offtext
-VElecPeakLoad.FX(runCy,YTIME)$(datay(YTIME)) = VElecDem.l(runCy,YTIME)/(VCapChpPlants.l(runCy,YTIME)*8.76);
+VElecPeakLoad.FX(runCy,YTIME) = VElecDem.l(runCy,YTIME)/(VCapChpPlants.l(runCy,YTIME)*8.76);
 
 VTotElecGenCap.FX(runCy,YTIME) = iTotAvailCapBsYr(runCy);
 VElecGenNoChp.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
