@@ -94,11 +94,11 @@ $ondelim
 $include "./iElaSub.csv"
 $offdelim
 ;
-table iConsSizeDistHeat(allCy,conSet)               "Consumer sizes for district heating (1)"
-$ondelim
-$include "./iConsSizeDistHeat.csv"
-$offdelim
-;
+iElaSub(allCy,DSBS) = iElaSub("MAR",DSBS);
+parameter iConsSizeDistHeat(conSet)               "Consumer sizes for district heating (1)" /smallest 0.425506805,
+                                                                                             modal    0.595709528,
+                                                                                             largest 0.833993339/;
+
 table iCapCostTechTr(allCy,TRANSE,EF,YTIME)      "Capital Cost of technology for transport (kEuro2005/vehicle)" 
 $ondelim$include "./iCapCostTechTr.csv"
 $offdelim
@@ -332,9 +332,9 @@ iAnnCons(runCy,INDSE,"largest") = 0.9 ;
 iAnnCons(runCy,"IS","modal") = 0.587;
 iAnnCons(runCy,INDSE,"modal")$(not sameas(INDSE,"IS")) = 0.487;
 
-iAnnCons(runCy,DOMSE,"smallest") = iConsSizeDistHeat(runCy,"smallest")  ;
-iAnnCons(runCy,DOMSE,"largest") = iConsSizeDistHeat(runCy,"largest") ;
-iAnnCons(runCy,DOMSE,"modal") = iConsSizeDistHeat(runCy,"modal");
+iAnnCons(runCy,DOMSE,"smallest") = iConsSizeDistHeat("smallest")  ;
+iAnnCons(runCy,DOMSE,"largest") = iConsSizeDistHeat("largest") ;
+iAnnCons(runCy,DOMSE,"modal") = iConsSizeDistHeat("modal");
 
 iAnnCons(runCy,NENSE,"smallest") = 0.2  ;
 iAnnCons(runCy,NENSE,"largest") = 0.9 ;
@@ -344,9 +344,9 @@ iAnnCons(runCy,NENSE,"modal") = 0.487 ;
 iAnnCons(runCy,"BU","smallest") = 0.2 ;
 iAnnCons(runCy,"BU","largest") = 1 ;
 iAnnCons(runCy,"BU","modal") = 0.5 ;
-*iAnnCons(runCy,DSBS,ConSet)=0.9;
+
 * Consumer size groups distribution function
-*$ontext
+
 Loop (runCy,DSBS) DO
      Loop rCon$(ord(rCon) le iNcon(DSBS)+1) DO
           iDisFunConSize(runCy,DSBS,rCon) =
@@ -372,7 +372,7 @@ Loop (runCy,DSBS) DO
 ;
      ENDLOOP;
 ENDLOOP;
-*$offtext
+
 iCumDistrFuncConsSize(allCy,DSBS) = sum(rCon, iDisFunConSize(allCy,DSBS,rCon));
 iCGI(allCy,YTIME) = 1;
 *iLoadCurveConstr.L(runCy,TT)$(PERIOD(TT) $TFIRSTAN(TT))= 0.21;
@@ -781,7 +781,8 @@ table iMatrFactor(allCy,SBS,EF,YTIME)       "Maturity factor per technology and 
 $ondelim
 $include"./iMatrFactor.csv"
 $offdelim
-;                                              
+;
+iMatrFactor(allCy,SBS,EF,YTIME) = iMatrFactor("MAR",SBS,EF,YTIME);                                          
 ** Industry
 iShrNonSubElecInTotElecDem(allCy,INDSE)  = iIndChar(allCy,INDSE,"SHR_NSE");
 iShrNonSubElecInTotElecDem(allCy,INDSE)$(iShrNonSubElecInTotElecDem(allCy,INDSE)>0.98) = 0.98;
