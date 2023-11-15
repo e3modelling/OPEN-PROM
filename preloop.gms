@@ -87,13 +87,13 @@ QSpecificFuelCons
 QConsEachTechTransp 
 QFinEneDemTranspPerFuel 
 QFinEneDemTransp 
-*QMExtV
-*QMExtF
-*QNumVeh
-*QNewReg
+QMExtV
+QMExtF
+QNumVeh
+QNewReg
 *QTrnspActiv
-*QScrap
-*QLevl
+QScrap
+QLevl
 QScrRate 
 QElecConsAll 
 
