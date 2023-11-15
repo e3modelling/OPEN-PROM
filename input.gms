@@ -496,8 +496,8 @@ $ondelim
 $include"./iFuelConsNENSE.csv"
 $offdelim
 ;
-# FIXME: Include $(not An(YTIME)) to iFuelConsPerFueSub when necessary (removing for now)
-# author=derevirn
+* FIXME: Include $(not An(YTIME)) to iFuelConsPerFueSub when necessary (removing for now)
+* author=derevirn
 iFuelConsNENSE(allCy,NENSE,EF,YTIME)$(SECTTECH(NENSE,EF) $(iFuelConsNENSE(allCy,NENSE,EF,YTIME)<=0)) = 1e-6;
 iFuelConsPerFueSub(allCy,INDSE,EF,YTIME) = iFuelConsINDSE(allCy,INDSE,EF,YTIME);
 iFuelConsPerFueSub(allCy,DOMSE,EF,YTIME) = iFuelConsDOMSE(allCy,DOMSE,EF,YTIME);
