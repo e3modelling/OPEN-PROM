@@ -1,6 +1,5 @@
 * description: Population; Source: SSP Scenarios (IIASA)
 * unit: billion
-Add-Eqs-QMExtV,-QMExtF,-QNumVeh,-QNewReg
 * origin: calcOutput(type = "POP", aggregate = TRUE, file = "iPop.csvr") (madrat 3.6.4 | mrprom 0.1.2)
 * creation date: Wed Nov 15 10:31:47 2023
 
