@@ -87,13 +87,13 @@ QSpecificFuelCons
 QConsEachTechTransp 
 QFinEneDemTranspPerFuel 
 QFinEneDemTransp 
-*QMExtV
-*QMExtF
-*QNumVeh
-*QNewReg
+QMExtV
+QMExtF
+QNumVeh
+QNewReg
 *QTrnspActiv
-*QScrap
-*QLevl
+QScrap
+QLevl
 QScrRate 
 QElecConsAll 
 
@@ -175,6 +175,7 @@ QFuelConsInclHP
 *QElecPriIndResCons
 
 
+
 qDummyObj
 /;
 
@@ -195,7 +196,7 @@ VTechSortVarCostNewEquip.FX(allCy,TRANSE,EF2,TEA,YTIME) = iFuelConsTRANSE(allCy,
 VNumVeh.L(allCy,YTIME)=0.1;
 *VNumVeh.lags(allCy,YTIME) = 0.1;
 VTrnspActiv.l(allCy,TRANSE,YTIME) = 0.1;
-VNewReg.FX(allCy,YTIME) = iNewReg(allCy,YTIME);
+VNewReg.FX(allCy,YTIME)$(not an(ytime)) = iNewReg(allCy,YTIME);
 VFuelPriceSub.l(allCy,SBS,EF,YTIME) = 0.1;
 VElecIndPrices.l(allCy,YTIME)= 0.1;
 VTechCostVar.l(allCy,SBS,EF,TEA,YTIME) = 0.1;
@@ -289,13 +290,25 @@ VFuelPriSubNoCarb.fx(runCy,INDDOM,"HEATPUMP",YTIME)$(SECTTECH(INDDOM,"HEATPUMP")
 VFuelPriceAvg.FX(runCy,DSBS,YTIME) = sum(EF$SECTTECH(DSBS,EF), iWgtSecAvgPriFueCons(runCy,DSBS,EF) * iFuelPrice(runCy,DSBS,EF,YTIME));
 
 VNumVeh.UP(runCy,YTIME) = 10000; !! upper bound of VNumVeh is 10000 million vehicles
+* FIXME: VNumVeh.FX(runCy,YTIME) = iActv(YTIME,runCy,"PC"), to be used only if eq QNumVeh is deactivated.
+* author=redmonkeycloud
 VNumVeh.FX(runCy,YTIME)$(not An(YTIME)) = iActv(YTIME,runCy,"PC");
 VLamda.UP(runCy,YTIME) = 1;
+
 * FIXME: iPassCarsMarkSat(runCy) = 1
 * author=giannou
-iPassCarsMarkSat(runCy) = 1; 
+iPassCarsMarkSat(runCy) = 0.7; 
+
+* FIXME: iTransChar(runCy,"RES_MEXTF",YTIME) = 0.04, Initial value derived from transport.xlsx (BF 5) .(To be added in iTransChar.csv)
+* author=redmonkeycloud
+iTransChar(runCy,"RES_MEXTF",YTIME) = 0.04;
+
+* FIXME: iTransChar(runCy,"RES_MEXTV",YTIME) = 0.04, Initial value derived from transport.xlsx (BF 5) .(To be added in iTransChar.csv)
+* author=redmonkeycloud
+iTransChar(runCy,"RES_MEXTV",YTIME) = 0.04;
+
 VLamda.FX(runCy,YTIME)$((not An(YTIME)) $(ord(YTIME) gt 1) ) = (VNumVeh.l(runCy,YTIME-1) / (iPop(YTIME-1,runCy)*1000) /
-           iPassCarsMarkSat(runCy))$(iPop(YTIME-1,runCy))+VLamda.l(runCy,YTIME-1)$(not iPop(YTIME-1,runCy));
+iPassCarsMarkSat(runCy))$(iPop(YTIME-1,runCy))+VLamda.l(runCy,YTIME-1)$(not iPop(YTIME-1,runCy));
 VMExtF.l(runCy,YTIME)$((not An(YTIME)) $(ord(YTIME) gt 1)  ) = ( iTransChar(runCy,"RES_MEXTF",YTIME) * iSigma(runCy,"S1") * EXP(iSigma(runCy,"S2") *
            EXP(iSigma(runCy,"S3") * VLamda.l(runCy,YTIME)))
                * VNumVeh.l(runCy,YTIME-1) /(iPop(YTIME-1,runCy) * 1000) )$(iPop(YTIME-1,runCy));
@@ -304,16 +317,24 @@ VMExtF.FX(runCy,YTIME)$((not An(YTIME)) $(ord(YTIME) gt 1)  ) = ( iTransChar(run
                           VLamda.l(runCy,YTIME)))* 
                           VNumVeh.l(runCy,YTIME-1) /(iPop(YTIME-1,runCy) * 1000) )$(iPop(YTIME-1,runCy))+VMExtF.l(runCy,YTIME-1)$(not iPop(YTIME-1,runCy));
 
+
+* FIXME: iDataPassCars.FX(runCy,"PC","MEXTV") = 0.01, derived from MOR.xlsx (G16).
+* author=redmonkeycloud
+iDataPassCars(runCy,"PC","MEXTV") = 0.01;
 VMExtV.FX(runCy,YTIME)$(not An(YTIME)) = iDataPassCars(runCy,"PC","MEXTV");
 
 VScrRate.UP(runCy,YTIME) = 1;
+
 * FIXME VScrRate.FX(runCy,YTIME) = 0.1 , to be retained only for base year "2017", rest will be computed endogenously.
 * author=redmonkeycloud
 VScrRate.FX(runCy,"2017") = 0.1; 
+
 VGapTranspFillNewTech.FX(runCy,TRANSE,YTIME)$(not AN(YTIME))=0;
+
 * FIXME: VTrnspActiv.FX(runCy,"PC",YTIME), only the line of code below
 * author=giannou
 VTrnspActiv.FX(runCy,"PC",YTIME) = iTransChar(runCy,"KM_VEH",YTIME); 
+
 * FIXME: VTrnspActiv.FX(runCy,TRANP,YTIME) $(not sameas(TRANP,"PC")), only the line of code below
 * author=giannou
 VTrnspActiv.FX(runCy,TRANP,YTIME) $(not sameas(TRANP,"PC")) = iActv(YTIME,runCy,TRANP); 
@@ -484,7 +505,7 @@ VRenValue.FX(YTIME) = 0 ;
 VTotReqElecProd.fx(runCy,YTIME)$TFIRST(YTIME)=sum(pgall,VElecProdPowGenPlants.L(runCy,pgall,YTIME)$TFIRST(YTIME));
 display VCarVal.l;
 
-loop an do
+loop an do !! start outer iteration loop (time steps)
    s = s + 1;
    TIME(YTIME) = NO;
    TIME(AN)$(ord(an)=s) = YES;
