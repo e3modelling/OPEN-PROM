@@ -478,7 +478,7 @@ $offdelim
 ;
 iTransfOutputRef(allCy,EFS,YTIME)$(not An(YTIME)) = iDataTransfOutputRef(allCy,EFS,YTIME);
 iFuelConsTRANSE(allCy,TRANSE,EF,YTIME)$(SECTTECH(TRANSE,EF) $(iFuelConsTRANSE(allCy,TRANSE,EF,YTIME)<=0)) = 1e-6;
-iFuelConsPerFueSub(allCy,TRANSE,EF,YTIME)$(not An(YTIME))  = iFuelConsTRANSE(allCy,TRANSE,EF,YTIME);
+iFuelConsPerFueSub(allCy,TRANSE,EF,YTIME) = iFuelConsTRANSE(allCy,TRANSE,EF,YTIME);
 table iFuelConsINDSE(allCy,INDSE,EF,YTIME)	 "Fuel consumption of industry subsector (Mtoe)"
 $ondelim
 $include"./iFuelConsINDSE.csv"
@@ -496,10 +496,12 @@ $ondelim
 $include"./iFuelConsNENSE.csv"
 $offdelim
 ;
+# FIXME: Include $(not An(YTIME)) to iFuelConsPerFueSub when necessary (removing for now)
+# author=derevirn
 iFuelConsNENSE(allCy,NENSE,EF,YTIME)$(SECTTECH(NENSE,EF) $(iFuelConsNENSE(allCy,NENSE,EF,YTIME)<=0)) = 1e-6;
-iFuelConsPerFueSub(allCy,INDSE,EF,YTIME)$(not An(YTIME))   = iFuelConsINDSE(allCy,INDSE,EF,YTIME);
-iFuelConsPerFueSub(allCy,DOMSE,EF,YTIME)$(not An(YTIME))   = iFuelConsDOMSE(allCy,DOMSE,EF,YTIME);
-iFuelConsPerFueSub(allCy,NENSE,EF,YTIME)$(not An(YTIME))   = iFuelConsNENSE(allCy,NENSE,EF,YTIME);
+iFuelConsPerFueSub(allCy,INDSE,EF,YTIME) = iFuelConsINDSE(allCy,INDSE,EF,YTIME);
+iFuelConsPerFueSub(allCy,DOMSE,EF,YTIME) = iFuelConsDOMSE(allCy,DOMSE,EF,YTIME);
+iFuelConsPerFueSub(allCy,NENSE,EF,YTIME) = iFuelConsNENSE(allCy,NENSE,EF,YTIME);
 iFinEneCons(runCy,EFS,YTIME) = sum(INDDOM,
                          sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(INDDOM,EF)), iFuelConsPerFueSub(runCy,INDDOM,EF,YTIME)))
                        +
