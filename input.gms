@@ -64,8 +64,13 @@ $ondelim
 $include "./iDataPassCars.csv"
 $offdelim
 ;
+*FIXME: iDataPassCars.FX(allCy,"PC","S1")/(allCy,"PC","S2")/(allCy,"PC","S3")
+* author=redmonkeycloud
+iDataPassCars(allCy,"PC","S1") = 1.0;
 iSigma(allCy,"S1") = iDataPassCars(allCy,"PC","S1");
+iDataPassCars(allCy,"PC","S2") = -0.01;
 iSigma(allCy,"S2") = iDataPassCars(allCy,"PC","S2");
+iDataPassCars(allCy,"PC","S3") = 6.5;
 iSigma(allCy,"S3") = iDataPassCars(allCy,"PC","S3");
 iPassCarsMarkSat(allCy) = iDataPassCars(allCy,"PC","SAT");
 iGdpPassCarsMarkExt(allCy) = iDataPassCars(allCy,"PC","MEXTV");
