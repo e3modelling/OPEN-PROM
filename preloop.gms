@@ -10,28 +10,171 @@ endloop;
 
 model openprom /
 
-QDemSub
-QFinEneDemTranspPerFuel
-QFinEneDemTransp
-QSpecificFuelCons
-QConsEachTechTransp
-QGapTranspActiv
-QGoodsTranspActiv
-QElecConsNonSub
-QElecConsInd
-QConsOfRemSubEquip
-QGapFinalDem
-QFuelCons
-QFuelConsInclHP
-QPassCarsLft
-QScrRate
-QScrap
-QMExtF
-QMExtV
-QLevl
-QNewReg
-QNumVeh
-QElecConsAll
+* Power Generation *
+
+*QCurrRenPot
+*QChpElecPlants
+*QLambda
+*QElecDem
+*QEstBaseLoad
+*QLoadFacDom
+*QElecPeakLoad
+*QBslMaxmLoad
+*QElecBaseLoad
+*QTotReqElecProd
+*QTotEstElecGenCap
+*QTotElecGenCap
+*QHourProdCostInv
+*QHourProdCostInvDec
+*QGammaInCcsDecTree
+*QHourProdCostInvDecisionsAfterCCS
+*QProdCostInvDecis
+*QShrcap
+*QShrcapNoCcs
+*QVarCostTech
+*QVarCostTechNotPGSCRN
+*QProdCostTechPreReplac
+*QProdCostTechPreReplacAvail
+*QEndogScrapIndex
+QElecGenNoChp
+*QGapPowerGenCap
+*QScalWeibull
+*QRenPotSupplyCurve
+*QMaxmAllowRenPotent
+*QMnmAllowRenPot
+*QRenTechMatMult
+*QScalWeibullSum
+*QNewInvDecis
+*QPowPlaShaNewEquip
+*QElecGenCapacity
+*QElecGenCap
+*QVarCostTechnology
+*QElecPeakLoads
+*QElectrPeakLoad
+*QNewCapYearly
+*QAvgCapFacRes
+*QOverallCap
+*QScalFacPlantDispatch
+*QElecChpPlants
+*QNonChpElecProd
+*QReqElecProd
+*QElecProdPowGenPlants
+*QSecContrTotChpProd
+*QElecProdChpPlants
+*QShareRenGrossElecProd
+*QLonPowGenCostTechNoCp
+*QLonMnmpowGenCost
+*QLongPowGenIntPri
+*QShoPowGenIntPri
+*QLongPowGenCost
+*QLonAvgPowGenCostNoClimPol
+*QLonPowGenCostNoClimPol
+*QElecPriIndResNoCliPol
+*QShortPowGenCost
+
+
+* Transport *
+
+QPassCarsLft 
+QGoodsTranspActiv 
+QGapTranspActiv 
+QSpecificFuelCons 
+*QTranspCostPerMeanConsSize
+*QTranspCostPerVeh
+*QTranspCostMatFac
+*QTechSortVarCost
+*QTechSortVarCostNewEquip
+QConsEachTechTransp 
+QFinEneDemTranspPerFuel 
+QFinEneDemTransp 
+*QMExtV
+*QMExtF
+*QNumVeh
+*QNewReg
+*QTrnspActiv
+*QScrap
+*QLevl
+QScrRate 
+QElecConsAll 
+
+
+* INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES *
+
+QElecConsNonSub 
+QConsOfRemSubEquip 
+QDemSub 
+QElecConsInd 
+*QDemInd
+*QElecIndPrices
+*QElecConsHeatPla
+QFuelCons 
+*QElecIndPricesEst
+*QFuePriSubChp
+*QElecProdCosChp
+*QTechCost
+*QTechCostIntrm
+*QTechCostMatr
+*QTechSort
+QGapFinalDem 
+*QTechShareNewEquip
+QFuelConsInclHP 
+*QVarProCostPerCHPDem
+*QAvgElcProCostCHP
+*QAvgVarElecProd
+
+
+* REST OF ENERGY BALANCE SECTORS *
+
+*QTransfOutputPatFuel
+*QTotFinEneCons
+*QTotFinEneConsAll
+*QFinNonEneCons
+*QDistrLosses
+*QTranfOutputDHPlants
+*QTransfInputDHPlants
+*QTransfInputPatFuel
+*QRefCapacity
+*QTranfOutputRefineries
+*QTransfInputRefineries
+*QTransfOutputNuclear
+*QTransfInNuclear
+*QTransfInPowerPls
+*QTransfOutThermPP
+*QTotTransfInput
+*QTotTransfOutput
+*QTransfers
+*QGrsInlConsNotEneBranch
+*QGrssInCons
+*QPrimProd
+*QFakeExp
+*QFakeImprts
+*QNetImports
+*QEneBrnchEneCons
+
+
+* CO2 SEQUESTRATION COST CURVES *
+
+*QCO2ElcHrg
+*QCumCO2Capt
+*QWghtTrnstLinToExpo
+*QCstCO2SeqCsts
+
+
+* EMISSIONS CONSTRAINTS *
+
+*QTotGhgEmisAllCountrNap
+*QTotCo2AllCoun
+*QHouseExpEne
+
+
+* Prices *
+
+*QFuelPriSubSepCarbVal
+*QFuelPriSepCarbon
+*QAvgFuelPriSub
+*QElecPriIndResCons
+
+
 
 qDummyObj
 /;
@@ -279,9 +422,9 @@ VCapChpPlants.FX(runCy,YTIME)$(datay(YTIME)) =
 $offtext
 VElecPeakLoad.FX(runCy,YTIME)$(datay(YTIME)) = VElecDem.l(runCy,YTIME)/(VCapChpPlants.l(runCy,YTIME)*8.76);
 
-VTotElecGenCap.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
+VTotElecGenCap.FX(runCy,YTIME) = iTotAvailCapBsYr(runCy);
 VElecGenNoChp.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
-VElecCapChpPla.FX(runCy,CHP,YTIME)$(not An(YTIME)) = iHisChpGrCapData(runCy,CHP,YTIME);
+VElecCapChpPla.FX(runCy,CHP,YTIME) = iHisChpGrCapData(runCy,CHP,YTIME);
 VPowPlaShaNewEquip.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) )=0;
 
 VHourProdCostTech.FX(runCy,PGALL,HOUR,YTIME)$((NOT AN(YTIME)))=0;
