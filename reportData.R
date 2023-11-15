@@ -3,42 +3,45 @@ library(gdx)
 library(quitte)
 library(iamc)
 library(tidyr)
+library(utils)
 
-all_variables <- readGDX('./openprom_p.gdx', types = "variables", field = 'l')
-z <- c("ALG", "MOR", "TUN", "EGY", "LIB", "ISR", "LEB", "SYR", "JOR", "TUR", "GLO")
+openprom_p_variables <- readGDX('./openprom_p.gdx', types = "variables", field = 'l')
+blabla_variables <- readGDX('./blabla.gdx', name = names(openprom_p_variables), field = 'l')
+mena_prom_mapping <- read.csv("MENA-PROM mapping - mena_prom_mapping.csv")
+
+z <- c("TUN", "EGY", "ISR", "DZA", "MAR", "LBN", "JOR")
+years <- c(2017:2021)
 
 x <- NULL
-for (j in 1:length(all_variables)) {
-  l <- all_variables[j]
-  name <- names(l)
+variable <- NULL
+for (j in names(blabla_variables)) {
+  l <- blabla_variables[j]
   l <- as.quitte(l[[1]])
   l["model"] <- "OPEN-PROM"
-  d <- names(l)
-  l["variable"] <- name
+  l["variable"] <- j
   for (i in 8:length(l)) {
     if (l[1, i] != "NA"){
-      l = unite(l, variable, c(variable, d[i]), sep = " ", remove = FALSE)
+      l = unite(l, variable, c(variable, names(l)[i]), sep = " ", remove = FALSE)
     }
   }
-  l <- select((l), -c(d[8:length(l)]))
+  l <- select((l), -c(names(l)[8:length(l)]))
   l <- l[which(l$region %in% z), ]
-  x <- rbind(x, l)
+  l <- l[which(l$period %in% years), ]
+  
+  index <- match(j, mena_prom_mapping$OPEN.PROM)
+  MENA_EDS_variables <- mena_prom_mapping[index, 2]
+  a <- readSource("MENA_EDS", subtype = MENA_EDS_variables)
+  if (!is.null(getRegions(a))) {
+    q <- as.quitte(a)
+    q$region <- sub("ALG", "DZA", q$region)
+    q$region <- sub("MOR", "MAR", q$region)
+    q$region <- sub("LEB", "LBN", q$region)
+    q$variable <- sub(MENA_EDS_variables, j, q$variable)
+    x <- rbind(x, l, q)
+  }
 }
 
-x[which(is.na(x["period"])), 6] <- "2020"
-x["period"] <- as.numeric(unlist(x["period"]))
-x <- interpolate_missing_periods(x, period = 2019:2020, expand.values = TRUE)
-x <- as.quitte(x)
-
-write.mif(x, "openprom_p.mif", append = FALSE)
-
-a <- readSource("MENA_EDS")
-q <- as.quitte(a)
-y <- rbind(x, q)
-
-write.mif(y, "both_models.mif", append = FALSE)
-
-
+write.mif(x, "both_models.mif", append = FALSE)
 
 
 
