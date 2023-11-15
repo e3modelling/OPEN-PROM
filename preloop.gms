@@ -111,12 +111,12 @@ QFuelCons
 *QElecIndPricesEst
 *QFuePriSubChp
 *QElecProdCosChp
-*QTechCost
-*QTechCostIntrm
-*QTechCostMatr
-*QTechSort
+QTechCost
+QTechCostIntrm
+QTechCostMatr
+QTechSort
 QGapFinalDem 
-*QTechShareNewEquip
+QTechShareNewEquip
 QFuelConsInclHP 
 *QVarProCostPerCHPDem
 *QAvgElcProCostCHP
