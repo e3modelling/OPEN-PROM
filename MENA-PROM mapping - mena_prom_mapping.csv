@@ -484,7 +484,7 @@ Variable,U,VTechCostMatr,Technology cost including maturity factor (Keuro/toe),"
 Parameter,UF,iUsfEneConvSubTech,Useful Energy Conversion Factor per subsector and technology (1),"CYall,SBS,EF,TEA,YTIME","allCy,SBS,EF,YTIME",Common parameters for all Demand Subsectors
 Parameter,USETR,iAvgVehCapLoadFac,Average capacity/vehicle and load factor (tn/veh or passenegers/veh) ,"CYall,TRANSE,TRANSUSE,YTIME","allCy,TRANSE,TRANSUSE,YTIME",Transport Sector specific Parameters
 Variable,UTR,VTranspCostMatFac,Transportation cost including maturity factor(Keuro/vehicle),"CYALL,TRANSE,RCon,TTECH,TEA,YTIME","allCy,TRANSE,RCon,TTECH,TEA,YTIME",TRANSPORT SECTOR VARIABLES
-Parameter,VARCOST,iCosTech,Variable Cost of technology (),"CYall,SBS,EF,TEA,YTIME","allCy,SBS,EF,TEA,YTIME",Common parameters for all Demand Subsectors
+Parameter,VARCOST,iVarCostTech,Variable Cost of technology (),"CYall,SBS,EF,TEA,YTIME","allCy,SBS,EF,TEA,YTIME",Common parameters for all Demand Subsectors
 Variable,VARCOSTPG,VVarCostTech,Variable cost of technology (Euro/KWh),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Variable,VARCOSTPG1,VVarCostTechNotPGSCRN,Variable cost of technology excluding PGSCRN (Euro/KWh),"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Variable,VARCOSTPG2,VVarCostTechnology,Variable cost of technology (Euro/KWh),"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
