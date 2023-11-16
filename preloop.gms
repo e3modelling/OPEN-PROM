@@ -190,7 +190,7 @@ display iWgtSecAvgPriFueCons;
 display iTechLft;
 
 *TIME(YTIME) = %fStartY%;
-* FIXME: VTechSortVarCostNewEquip.FX(allCy,TRANSE,EF2,TEA,YTIME) , only the line of code below
+* FIXME: VTechSortVarCostNewEquip.FX(allCy,TRANSE,EF2,TEA,YTIME) , add $(not An(YTIME) when QTechSortVarCostNewEquip activated.
 * author=giannou
 VTechSortVarCostNewEquip.FX(allCy,TRANSE,EF2,TEA,YTIME) = iFuelConsTRANSE(allCy,TRANSE,EF2,YTIME)/sum(EF$(SECTTECH(TRANSE,EF)),iFuelConsTRANSE(allCy,TRANSE,EF,YTIME)); 
 VNumVeh.L(allCy,YTIME)=0.1;
@@ -294,17 +294,9 @@ VNumVeh.UP(runCy,YTIME) = 10000; !! upper bound of VNumVeh is 10000 million vehi
 * author=redmonkeycloud
 VNumVeh.FX(runCy,YTIME)$(not An(YTIME)) = iActv(YTIME,runCy,"PC");
 VLamda.UP(runCy,YTIME) = 1;
-
-* FIXME: iPassCarsMarkSat(runCy) = 1
-* author=giannou
 iPassCarsMarkSat(runCy) = 0.7; 
 
-* FIXME: iTransChar(runCy,"RES_MEXTF",YTIME) = 0.04, Initial value derived from transport.xlsx (BF 5) .(To be added in iTransChar.csv)
-* author=redmonkeycloud
 iTransChar(runCy,"RES_MEXTF",YTIME) = 0.04;
-
-* FIXME: iTransChar(runCy,"RES_MEXTV",YTIME) = 0.04, Initial value derived from transport.xlsx (BF 5) .(To be added in iTransChar.csv)
-* author=redmonkeycloud
 iTransChar(runCy,"RES_MEXTV",YTIME) = 0.04;
 
 VLamda.FX(runCy,YTIME)$((not An(YTIME)) $(ord(YTIME) gt 1) ) = (VNumVeh.l(runCy,YTIME-1) / (iPop(YTIME-1,runCy)*1000) /
@@ -318,15 +310,10 @@ VMExtF.FX(runCy,YTIME)$((not An(YTIME)) $(ord(YTIME) gt 1)  ) = ( iTransChar(run
                           VNumVeh.l(runCy,YTIME-1) /(iPop(YTIME-1,runCy) * 1000) )$(iPop(YTIME-1,runCy))+VMExtF.l(runCy,YTIME-1)$(not iPop(YTIME-1,runCy));
 
 
-* FIXME: iDataPassCars.FX(runCy,"PC","MEXTV") = 0.01, derived from MOR.xlsx (G16).
-* author=redmonkeycloud
 iDataPassCars(runCy,"PC","MEXTV") = 0.01;
 VMExtV.FX(runCy,YTIME)$(not An(YTIME)) = iDataPassCars(runCy,"PC","MEXTV");
 
 VScrRate.UP(runCy,YTIME) = 1;
-
-* FIXME VScrRate.FX(runCy,YTIME) = 0.1 , to be retained only for base year "2017", rest will be computed endogenously.
-* author=redmonkeycloud
 VScrRate.FX(runCy,"2017") = 0.1; 
 
 VGapTranspFillNewTech.FX(runCy,TRANSE,YTIME)$(not AN(YTIME))=0;
