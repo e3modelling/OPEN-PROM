@@ -78,6 +78,7 @@ $offdelim
 iDisc(allCy,SBS,YTIME) = iDisc("MAR",SBS,YTIME) ;
 iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,YTIME) = iInitSpecFuelCons("MAR",TRANSE,TTECH,EF,"2017"); 
 iSpeFuelConsCostBy(allCy,TRANSE,TTECH,TEA,EF) = iInitSpecFuelCons("MAR",TRANSE,TTECH,EF,"2017");
+
 table iElaSub(allCy,DSBS)                           "Elasticities by subsectors (1)"
 $ondelim
 $include "./iElaSub.csv"
