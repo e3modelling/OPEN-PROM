@@ -109,7 +109,7 @@ QElecIndPrices
 QElecConsHeatPla
 QFuelCons 
 QElecIndPricesEst
-*QFuePriSubChp
+QFuePriSubChp
 QElecProdCosChp
 QTechCost
 QTechCostIntrm
@@ -187,7 +187,7 @@ display TF;
 display TFIRST;
 display runCy;
 display iWgtSecAvgPriFueCons;
-display iTechLft;
+display iVarCostTech;
 
 *TIME(YTIME) = %fStartY%;
 * FIXME: VTechSortVarCostNewEquip.FX(allCy,TRANSE,EF2,TEA,YTIME) , only the line of code below
@@ -359,9 +359,9 @@ VElecConsInd.FX(runCy,YTIME)$(not An(YTIME))= SUM(INDSE,VElecNonSub.l(runCy,INDS
 
 VFuePriSubChp.FX(runCy,DSBS,EF,TEA,YTIME)$((not An(YTIME)) $(not TRANSE(DSBS))  $SECTTECH(DSBS,EF)) =
 (((VFuelPriceSub.l(runCy,DSBS,EF,YTIME)+iVarCostTech(runCy,DSBS,EF,YTIME)/1000)/iUsfEneConvSubTech(runCy,DSBS,EF,YTIME)- 
-(0$(not CHP(EF)) + (VFuelPriceSub.l(runCy,"OI","ELC",YTIME)*iFracElecPriChp(runCy,YTIME)*iElecIndex(runCy,"2010"))$CHP(EF))) + (0.003) + 
+(0$(not CHP(EF)) + (VFuelPriceSub.l(runCy,"OI","ELC",YTIME)*iFracElecPriChp*iElecIndex(runCy,"2010"))$CHP(EF))) + (0.003) + 
 SQRT( SQR(((VFuelPriceSub.l(runCy,DSBS,EF,YTIME)+iVarCostTech(runCy,DSBS,EF,YTIME)/1000)/iUsfEneConvSubTech(runCy,DSBS,EF,YTIME)- (0$(not CHP(EF)) + 
-(VFuelPriceSub.l(runCy,"OI","ELC",YTIME)*iFracElecPriChp(runCy,YTIME)*iElecIndex(runCy,"2010"))$CHP(EF)))-(0.003)) + SQR(1e-7) ) )/2;
+(VFuelPriceSub.l(runCy,"OI","ELC",YTIME)*iFracElecPriChp*iElecIndex(runCy,"2010"))$CHP(EF)))-(0.003)) + SQR(1e-7) ) )/2;
 
 
 VDemSub.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = max(iTotFinEneDemSubBaseYr(runCy,INDDOM,YTIME) - VElecNonSub.L(runCy,INDDOM,YTIME),1e-5);

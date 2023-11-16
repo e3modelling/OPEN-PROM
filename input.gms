@@ -42,11 +42,6 @@ $include "./iElastNonSubElecData.csv"
 $offdelim
 ;
 iElastNonSubElec(allCy,SBS,ETYPES,YTIME) = iElastNonSubElecData(SBS,ETYPES,YTIME);
-table iFracElecPriChp(allCy, YTIME) "Fraction of Electricity Price at which a CHP sells electricity to network (1)"
-$ondelim
-$include "./iFracElecPriChp.csv"
-$offdelim
-;
 table iDisc(allCy,SBS,YTIME) "Discount rates per subsector ()"
 $ondelim
 $include "./iDisc.csv"

@@ -469,4 +469,5 @@ s                  "time step iterator" /0/
 sSolverTryMax      "maximum attempts to solve each time step" /%SolverTryMax%/
 sModelStat         "helper parameter for solver status"
 sExogCarbValue	   "switch for exogenous carbon value (0=exogenous 1=endogenous)" /1/
+iFracElecPriChp    "Fraction of Electricity Price at which a CHP sells electricity to network" /0.3/
 ;
