@@ -59,8 +59,7 @@ $ondelim
 $include "./iDataPassCars.csv"
 $offdelim
 ;
-*FIXME: iDataPassCars.FX(allCy,"PC","S1")/(allCy,"PC","S2")/(allCy,"PC","S3")
-* author=redmonkeycloud
+
 iDataPassCars(allCy,"PC","S1") = 1.0;
 iSigma(allCy,"S1") = iDataPassCars(allCy,"PC","S1");
 iDataPassCars(allCy,"PC","S2") = -0.01;
@@ -76,12 +75,7 @@ $include "./iInitSpecFuelCons.csv"
 $offdelim
 ;
 
-* FIXME: iDisc("MAR",SBS,YTIME) values for all countries equal to  values of MAR.
-* author=redmonkeycloud
 iDisc(allCy,SBS,YTIME) = iDisc("MAR",SBS,YTIME) ;
-
-* FIXME: iInitSpecFuelCons("MAR",TRANSE,TTECH,EF,"2017") initial values for all countries equal to initial values of MAR.
-* author=redmonkeycloud
 iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,YTIME) = iInitSpecFuelCons("MAR",TRANSE,TTECH,EF,"2017"); 
 iSpeFuelConsCostBy(allCy,TRANSE,TTECH,TEA,EF) = iInitSpecFuelCons("MAR",TRANSE,TTECH,EF,"2017");
 table iElaSub(allCy,DSBS)                           "Elasticities by subsectors (1)"
