@@ -912,7 +912,7 @@ QElecIndPricesEst(runCy,YTIME)$TIME(YTIME)..
 
 * Compute fuel prices per subsector and fuel especially for chp plants (take into account the profit of electricity sales)
 QFuePriSubChp(runCy,DSBS,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS))  $SECTTECH(DSBS,EF) )..
-VFuePriSubChp(runCy,DSBS,EF,TEA,YTIME)
+        VFuePriSubChp(runCy,DSBS,EF,TEA,YTIME)
                 =E=   
              (((VFuelPriceSub(runCy,DSBS,EF,YTIME) + (VRenValue(YTIME)/1000)$(not RENEF(EF))+iVarCostTech(runCy,DSBS,EF,YTIME)/1000)/iUsfEneConvSubTech(runCy,DSBS,EF,YTIME)- 
                (0$(not CHP(EF)) + (VFuelPriceSub(runCy,"OI","ELC",YTIME)*iFracElecPriChp(runCy,YTIME)*VElecIndPrices(runCy,YTIME))$CHP(EF)))  + SQRT( SQR(((VFuelPriceSub(runCy,DSBS,EF,YTIME)+iVarCostTech(runCy,DSBS,EF,YTIME)/1000)/iVarCostTech(runCy,DSBS,EF,YTIME)- 
@@ -934,7 +934,7 @@ QElecProdCosChp(runCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS))..
 
 * Compute technology cost
 QTechCost(runCy,DSBS,rCon,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) $SECTTECH(DSBS,EF) )..
-VTechCost(runCy,DSBS,rCon,EF,TEA,YTIME) 
+        VTechCost(runCy,DSBS,rCon,EF,TEA,YTIME) 
                  =E= 
                  VTechCostIntrm(runCy,DSBS,rCon,EF,TEA,YTIME)**(-iElaSub(runCy,DSBS)) ;   
 
@@ -969,15 +969,15 @@ QTechCostIntrm(runCy,DSBS,rCon,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(
 
 * Compute technology cost including Maturity factor per technology and subsector
 QTechCostMatr(runCy,DSBS,rCon,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) $SECTTECH(DSBS,EF) )..
-VTechCostMatr(runCy,DSBS,rCon,EF,TEA,YTIME) 
+        VTechCostMatr(runCy,DSBS,rCon,EF,TEA,YTIME) 
                                                =E=
-iMatrFactor(runCy,DSBS,EF,YTIME) * VTechCost(runCy,DSBS,rCon,EF,TEA,YTIME) ;
+        iMatrFactor(runCy,DSBS,EF,YTIME) * VTechCost(runCy,DSBS,rCon,EF,TEA,YTIME) ;
 
 * Compute Technology sorting based on variable cost
 QTechSort(runCy,DSBS,rCon,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) )..
-VTechSort(runCy,DSBS,rCon,YTIME)
+        VTechSort(runCy,DSBS,rCon,YTIME)
                         =E=
-sum((EF,TEA)$(SECTTECH(DSBS,EF) ),VTechCostMatr(runCy,DSBS,rCon,EF,TEA,YTIME));
+        sum((EF,TEA)$(SECTTECH(DSBS,EF) ),VTechCostMatr(runCy,DSBS,rCon,EF,TEA,YTIME));
 
 * Compute the gap in final demand on industry, tertiary, non-energy uses and bunkers
 QGapFinalDem(runCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)))..

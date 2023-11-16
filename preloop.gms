@@ -110,7 +110,7 @@ QElecConsHeatPla
 QFuelCons 
 QElecIndPricesEst
 *QFuePriSubChp
-*QElecProdCosChp
+QElecProdCosChp
 QTechCost
 QTechCostIntrm
 QTechCostMatr
@@ -118,9 +118,9 @@ QTechSort
 QGapFinalDem 
 QTechShareNewEquip
 QFuelConsInclHP 
-*QVarProCostPerCHPDem
-*QAvgElcProCostCHP
-*QAvgVarElecProd
+QVarProCostPerCHPDem
+QAvgElcProCostCHP
+QAvgVarElecProd
 
 
 * REST OF ENERGY BALANCE SECTORS *
