@@ -396,11 +396,6 @@ VElecConsHeatPla(allCy,DSBS,YTIME)     "Electricity consumed in heatpump plants 
 VElecIndPricesEst(allCy,YTIME)         "Electricity index - a function of industry price - Estimate (1)"
 VFuelPriceSub(allCy,SBS,EF,YTIME)      "Fuel prices per subsector and fuel (k$2015/toe)"
 VFuePriSubChp(allCy,DSBS,EF,TEA,YTIME) "Fuel prices per subsector and fuel for CHP plants (kUS$2005/toe)"
-VTechCostVar(allCy,SBS,EF,TEA,YTIME)   "Variable Cost of technology (various)"
-                                        !! - For transport (kEuro05/vehicle)
-                                        !! - For Industrial sectors except Iron and Steel (Euro05/toe-year)
-                                        !! - For Iron and Steel (Euro05/tn-of-steel)
-                                        !! - For Domestic sectors (Euro05/toe-year)
 VElecProdCostChp(allCy,DSBS,CHP,YTIME)                  "Electricity production cost per CHP plant and demand sector (Euro/KWh)"
 VTechCost(allCy,DSBS,rCon,EF,TEA,YTIME)                 "Technology cost (Keuro/toe)"
 VTechCostIntrm(allCy,DSBS,rcon,EF,TEA,YTIME)            "Intermediate technology cost (Keuro/toe)"

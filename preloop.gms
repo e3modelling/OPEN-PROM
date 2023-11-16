@@ -104,11 +104,11 @@ QElecConsNonSub
 QConsOfRemSubEquip 
 QDemSub 
 QElecConsInd 
-*QDemInd
-*QElecIndPrices
-*QElecConsHeatPla
+QDemInd
+QElecIndPrices
+QElecConsHeatPla
 QFuelCons 
-*QElecIndPricesEst
+QElecIndPricesEst
 *QFuePriSubChp
 *QElecProdCosChp
 QTechCost
@@ -199,7 +199,6 @@ VTrnspActiv.l(allCy,TRANSE,YTIME) = 0.1;
 VNewReg.FX(allCy,YTIME)$(not an(ytime)) = iNewReg(allCy,YTIME);
 VFuelPriceSub.l(allCy,SBS,EF,YTIME) = 0.1;
 VElecIndPrices.l(allCy,YTIME)= 0.1;
-VTechCostVar.l(allCy,SBS,EF,TEA,YTIME) = 0.1;
 VTechCostIntrm.l(allCy,DSBS,rcon,EF,TEA,YTIME) = 0.1;
 VLifeTimeTech.l(allCy,DSBS,EF,TEA,YTIME)= 0.1;
 VTechSort.l(allCy,DSBS,rCon,YTIME) = 0.1;
@@ -264,9 +263,9 @@ VScalWeibullSum.l(allCy,PGALL,YTIME)=2;
 *VScalWeibullSum.up(allCy,PGALL,YTIME)=1.0e+10;
 VHourProdCostTech.l(runCy,PGALL,HOUR,TT) = 0.0001;
 
-********************************************************************************
+
 *                        VARIABLE INITIALISATION                               *
-********************************************************************************
+
 
 * FIXME: VFuelPriceSub should be computed endogenously, add $(not An(YTIME)) below
 * author=giannou

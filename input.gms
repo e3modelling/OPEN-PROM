@@ -805,7 +805,8 @@ iCapCostTech(runCy,TRANSE,EF,YTIME)  = iCapCostTechTr(runCy,TRANSE,EF,YTIME);
 iFixOMCostTech(runCy,TRANSE,EF,YTIME)$(ord(YTIME) eq TF-7)= iDataTransTech(TRANSE,EF,"FC_05");
 iFixOMCostTech(runCy,TRANSE,EF,YTIME)$(ord(YTIME) eq TF+8) = iDataTransTech(TRANSE,EF,"FC_25");
 iFixOMCostTech(runCy,TRANSE,EF,YTIME)$(ord(YTIME) eq TF+33)= iDataTransTech(TRANSE,EF,"FC_50");
-
+* FIXME: derive iVarCostTech from EU Reference Scenario data, or similar, extend range to 2100
+* author=giannou
 iVarCostTech(runCy,TRANSE,EF,YTIME)$(ord(YTIME) eq TF-7)= iDataTransTech(TRANSE,EF,"VC_05");
 iVarCostTech(runCy,TRANSE,EF,YTIME)$(ord(YTIME) eq TF+8) = iDataTransTech(TRANSE,EF,"VC_25");
 iVarCostTech(runCy,TRANSE,EF,YTIME)$(ord(YTIME) eq TF+33)= iDataTransTech(TRANSE,EF,"VC_50");
