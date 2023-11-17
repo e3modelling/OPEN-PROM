@@ -126,10 +126,10 @@ QAvgVarElecProd
 * REST OF ENERGY BALANCE SECTORS *
 
 *QTransfOutputPatFuel
-*QTotFinEneCons
-*QTotFinEneConsAll
-*QFinNonEneCons
-*QDistrLosses
+QTotFinEneCons
+QTotFinEneConsAll
+QFinNonEneCons
+QDistrLosses
 *QTranfOutputDHPlants
 *QTransfInputDHPlants
 *QTransfInputPatFuel
