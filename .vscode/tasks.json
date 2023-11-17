@@ -6,7 +6,7 @@
         {
             "label": "GAMS",
             "type": "shell",
-            "command": "gams main.gms",
+            "command": "gams main.gms lo=2",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
