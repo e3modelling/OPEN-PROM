@@ -4,9 +4,14 @@ library(quitte)
 library(iamc)
 library(tidyr)
 library(utils)
+library(mrprom)
 
-openprom_p_variables <- readGDX('./openprom_p.gdx', types = "variables", field = 'l')
-blabla_variables <- readGDX('./blabla.gdx', name = names(openprom_p_variables), field = 'l')
+openprom_p_variables <- gdxInfo("openprom_p.gdx",returnList=T,dump=F)
+blabla_variables <- list() 
+for (i in openprom_p_variables[["variables"]]) {
+  if (i %in% c("VTechCostIntrm", "vDummyObj")) next
+  blabla_variables[[i]] <- read.gdx('./blabla.gdx', i, field = 'l')
+}
 mena_prom_mapping <- read.csv("MENA-PROM mapping - mena_prom_mapping.csv")
 
 z <- c("TUN", "EGY", "ISR", "DZA", "MAR", "LBN", "JOR")
@@ -15,16 +20,16 @@ years <- c(2017:2021)
 x <- NULL
 variable <- NULL
 for (j in names(blabla_variables)) {
-  l <- blabla_variables[j]
-  l <- as.quitte(l[[1]])
+  l <- blabla_variables[[j]]
+  if (nrow(l) == 0) next
+  l <- as.quitte(l)
   l["model"] <- "OPEN-PROM"
-  l["variable"] <- j
-  for (i in 8:length(l)) {
-    if (l[1, i] != "NA"){
-      l = unite(l, variable, c(variable, names(l)[i]), sep = " ", remove = FALSE)
-    }
-  }
-  l <- select((l), -c(names(l)[8:length(l)]))
+  l["variable"] <- factor(j)
+  l["period"] <- l["ytime"]
+  l["region"] <- l["allcy"]
+  cols1 <- names(l)[!names(l) %in% c("ytime", "allcy")]
+  cols2 <- names(l)[!names(l) %in% c("model", "scenario", "region", "unit", "period", "value", "ytime", "allcy")]
+  l <- select(l, all_of(cols1)) %>% unite(col = "variable", sep = " ", all_of(cols2))
   l <- l[which(l$region %in% z), ]
   l <- l[which(l$period %in% years), ]
   
@@ -41,8 +46,11 @@ for (j in names(blabla_variables)) {
   }
 }
 
-write.mif(x, "both_models.mif", append = FALSE)
-
+write.mif(x, "tmp.mif", append = FALSE)
+# replace "NA" with "N/A" in the .mif file, otherwise scenTool doesn't work
+tmp <- readLines("tmp.mif")
+unlink("tmp.mif")
+writeLines(gsub(";NA;", ";N/A;", tmp), "both_models.mif")
 
 
 
