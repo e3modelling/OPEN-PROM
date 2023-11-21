@@ -201,7 +201,7 @@ iElastCO2Seq(allCy,CO2SEQELAST) = sum(tfirst,iCO2SeqData(allCy,CO2SEQELAST,TFIRS
 
 *Sources for vehicle lifetime:
 *US Department of Transportation, International Union of Railways, Statista, EU CORDIS
-table iDataTransTech (TRANSE, EF, ECONCHAR) "Technoeconomic characteristics of transport (various)"
+table iDataTransTech (TRANSE, EF, ECONCHAR, YTIME) "Technoeconomic characteristics of transport (various)"
 $ondelim
 $include"./iDataTransTech.csv"
 $offdelim
@@ -801,17 +801,14 @@ $offtext
 
 **  Transport Sector
 
-iCapCostTech(runCy,TRANSE,EF,YTIME)  = iCapCostTechTr(runCy,TRANSE,EF,YTIME);
+iCapCostTech(runCy,TRANSE,EF,YTIME)  = iDataTransTech(TRANSE,EF,"IC",YTIME);
 
-iFixOMCostTech(runCy,TRANSE,EF,YTIME)$(ord(YTIME) eq TF-7)= iDataTransTech(TRANSE,EF,"FC_05");
-iFixOMCostTech(runCy,TRANSE,EF,YTIME)$(ord(YTIME) eq TF+8) = iDataTransTech(TRANSE,EF,"FC_25");
-iFixOMCostTech(runCy,TRANSE,EF,YTIME)$(ord(YTIME) eq TF+33)= iDataTransTech(TRANSE,EF,"FC_50");
+iFixOMCostTech(runCy,TRANSE,EF,YTIME) = iDataTransTech(TRANSE,EF,"FC",YTIME);
 
-iVarCostTech(runCy,TRANSE,EF,YTIME)$(ord(YTIME) eq TF-7)= iDataTransTech(TRANSE,EF,"VC_05");
-iVarCostTech(runCy,TRANSE,EF,YTIME)$(ord(YTIME) eq TF+8) = iDataTransTech(TRANSE,EF,"VC_25");
-iVarCostTech(runCy,TRANSE,EF,YTIME)$(ord(YTIME) eq TF+33)= iDataTransTech(TRANSE,EF,"VC_50");
+iVarCostTech(runCy,TRANSE,EF,YTIME) = iDataTransTech(TRANSE,EF,"VC",YTIME);
 
-iTechLft(runCy,TRANSE,EF,YTIME)$(ord(YTIME)>sum(TFIRST,(ord(TFIRST)-3))) = iDataTransTech(TRANSE,EF,"LFT");
+iTechLft(runCy,TRANSE,EF,YTIME) = iDataTransTech(TRANSE,EF,"LFT",YTIME);
+
 iAvgVehCapLoadFac(runCy,TRANSE,TRANSUSE,YTIME) = iCapDataLoadFacEachTransp(TRANSE,TRANSUSE);
 
 
