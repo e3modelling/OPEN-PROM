@@ -1217,6 +1217,7 @@ VAT      "VAT"
 
 ECONCHAR         "Technical - Economic characteristics for demand technologies"
 /
+IC       "Capital Cost"
 IC_00    "Capital Cost in 2000"
 IC_05    "Capital Cost in 2005"
 IC_10    "Capital Cost in 2010"
@@ -1226,6 +1227,7 @@ IC_25    "Capital Cost in 2025"
 IC_30    "Capital Cost in 2030"
 IC_50    "Capital cost in 2050"
 
+FC       "Fixed O&M Cost"
 FC_00    "Fixed O&M Cost in 2000"
 FC_05    "Fixed O&M Cost in 2005"
 FC_10    "Fixed O&M Cost in 2010"
@@ -1235,7 +1237,7 @@ FC_25    "Fixed O&M Cost in 2025"
 FC_30    "Fixed O&M Cost in 2030"
 FC_50    "Fixed O&M Cost in 2050"
 
-
+VC       "Variable Cost"
 VC_00    "Variable Cost in 2000"
 VC_05    "Variable Cost in 2005"
 VC_10    "Variable Cost in 2010"
