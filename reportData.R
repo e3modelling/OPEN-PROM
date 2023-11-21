@@ -9,12 +9,13 @@ library(mrprom)
 openprom_p_variables <- gdxInfo("openprom_p.gdx",returnList=T,dump=F)
 blabla_variables <- list() 
 for (i in openprom_p_variables[["variables"]]) {
-  if (i %in% c("VTechCostIntrm", "vDummyObj")) next
+  if (i %in% c("VTechCostIntrm", "VConsEachTechTransp", "vDummyObj")) next
   blabla_variables[[i]] <- read.gdx('./blabla.gdx', i, field = 'l')
 }
 mena_prom_mapping <- read.csv("MENA-PROM mapping - mena_prom_mapping.csv")
 
-z <- c("TUN", "EGY", "ISR", "DZA", "MAR", "LBN", "JOR")
+z <- c("TUN", "EGY", "ISR", "MAR")
+zm <- sub("MAR", "MOR", z)
 years <- c(2017:2021)
 
 x <- NULL
@@ -37,21 +38,14 @@ for (j in names(blabla_variables)) {
   MENA_EDS_variables <- mena_prom_mapping[index, 2]
   a <- readSource("MENA_EDS", subtype = MENA_EDS_variables)
   if (!is.null(getRegions(a))) {
-    q <- as.quitte(a)
-    q$region <- sub("ALG", "DZA", q$region)
+    q <- as.quitte(a[zm, , ])
     q$region <- sub("MOR", "MAR", q$region)
-    q$region <- sub("LEB", "LBN", q$region)
     q$variable <- sub(MENA_EDS_variables, j, q$variable)
     x <- rbind(x, l, q)
   }
 }
 
-write.mif(x, "tmp.mif", append = FALSE)
-# replace "NA" with "N/A" in the .mif file, otherwise scenTool doesn't work
-tmp <- readLines("tmp.mif")
-unlink("tmp.mif")
-writeLines(gsub(";NA;", ";N/A;", tmp), "both_models.mif")
-
+write.report(as.magpie(x), "bothmodels.mif")
 
 
 
