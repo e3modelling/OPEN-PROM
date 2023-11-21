@@ -75,7 +75,12 @@ $include "./iInitSpecFuelCons.csv"
 $offdelim
 ;
 
+* FIXME: iDisc("MAR",SBS,YTIME) values for all countries equal to  values of MAR.
+* author=redmonkeycloud
 iDisc(allCy,SBS,YTIME) = iDisc("MAR",SBS,YTIME) ;
+
+* FIXME: iInitSpecFuelCons("MAR",TRANSE,TTECH,EF,"2017") initial values for all countries equal to initial values of MAR.
+* author=redmonkeycloud
 iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,YTIME) = iInitSpecFuelCons("MAR",TRANSE,TTECH,EF,"2017"); 
 iSpeFuelConsCostBy(allCy,TRANSE,TTECH,TEA,EF) = iInitSpecFuelCons("MAR",TRANSE,TTECH,EF,"2017");
 
