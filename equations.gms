@@ -775,20 +775,20 @@ QTrnspActiv(runCy,TRANSE,YTIME)$(TIME(YTIME) $TRANP(TRANSE))..
          VTrnspActiv(runCy,TRANSE,YTIME)
                  =E=
          (  !! passenger cars
-           iResActiv(runCy,TRANSE,YTIME) * VTrnspActiv(runCy,TRANSE,YTIME-1) *
+            VTrnspActiv(runCy,TRANSE,YTIME-1) *
            (VFuelPriceAvg(runCy,TRANSE,YTIME)/VFuelPriceAvg(runCy,TRANSE,YTIME-1))**iElastA(runCy,TRANSE,"b1",YTIME) *
            (VFuelPriceAvg(runCy,TRANSE,YTIME-1)/VFuelPriceAvg(runCy,TRANSE,YTIME-2))**iElastA(runCy,TRANSE,"b2",YTIME) *
            [(VNumVeh(runCy,YTIME-1)/(iPop(YTIME-1,runCy)*1000))/(VNumVeh(runCy,YTIME)/(iPop(YTIME,runCy)*1000))]**iElastA(runCy,TRANSE,"b3",YTIME) *
            [(iGDP(YTIME,runCy)/iPop(YTIME,runCy))/(iGDP(YTIME-1,runCy)/iPop(YTIME-1,runCy))]**iElastA(runCy,TRANSE,"b4",YTIME)
          )$sameas(TRANSE,"PC") +
          (  !! passenger aviation
-           iResActiv(runCy,TRANSE,YTIME) * VTrnspActiv(runCy,TRANSE,YTIME-1) *
+            VTrnspActiv(runCy,TRANSE,YTIME-1) *
            [(iGDP(YTIME,runCy)/iPop(YTIME,runCy))/(iGDP(YTIME-1,runCy)/iPop(YTIME-1,runCy))]**iElastA(runCy,TRANSE,"a",YTIME) *
            (VFuelPriceAvg(runCy,TRANSE,YTIME)/VFuelPriceAvg(runCy,TRANSE,YTIME-1))**iElastA(runCy,TRANSE,"c1",YTIME) *
            (VFuelPriceAvg(runCy,TRANSE,YTIME-1)/VFuelPriceAvg(runCy,TRANSE,YTIME-2))**iElastA(runCy,TRANSE,"c2",YTIME)
          )$sameas(TRANSE,"PA") +
          (   !! other passenger transportation modes
-          iResActiv(runCy,TRANSE,YTIME) * VTrnspActiv(runCy,TRANSE,YTIME-1) *
+           VTrnspActiv(runCy,TRANSE,YTIME-1) *
            [(iGDP(YTIME,runCy)/iPop(YTIME,runCy))/(iGDP(YTIME-1,runCy)/iPop(YTIME-1,runCy))]**iElastA(runCy,TRANSE,"a",YTIME) *
            (VFuelPriceAvg(runCy,TRANSE,YTIME)/VFuelPriceAvg(runCy,TRANSE,YTIME-1))**iElastA(runCy,TRANSE,"c1",YTIME) *
            (VFuelPriceAvg(runCy,TRANSE,YTIME-1)/VFuelPriceAvg(runCy,TRANSE,YTIME-2))**iElastA(runCy,TRANSE,"c2",YTIME) *
