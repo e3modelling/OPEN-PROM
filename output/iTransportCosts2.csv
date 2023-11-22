@@ -1,0 +1,10 @@
+* description: Agricultural Land Use Intensity Tau
+* unit: 1
+* note: data based on Dietrich J.P., Schmitz C., Müller C., Fader M., Lotze-Campen H., Popp A.,
+*       Measuring agricultural land-use intensity - A global analysis using a model-assisted approach
+*       Ecological Modelling, Volume 232, 10 May 2012, Pages 109-118, ISSN 0304-3800, https://doi.org/10.1016/j.ecolmodel.2012.03.002.
+* origin: calcOutput(type = "TauTotal", file = "iTransportCosts2.csv") (madrat 3.3.6 | madrat 3.3.6)
+* creation date: Mon Jul 31 10:44:01 2023
+dummy,LAM,OAS,SSA,EUR,NEU,MEA,REF,CAZ,CHA,IND,JPN,USA
+y1995,0.988313327368734,0.827305435951847,0.681042903743291,1.46868208768183,0.902716504589365,0.644037564134099,0.800288362174561,0.968791193497529,1.17098345932397,0.892351015447095,1.27260977297175,1.25429011023673
+y2000,0.987654498472421,0.828971574120654,0.682478500889765,1.46903393278233,0.897944133220727,0.642905184655633,0.792967896081384,0.977973997183115,1.17605712660667,0.891512894370392,1.27113058472393,1.25358802881597
