@@ -42,11 +42,6 @@ $include "./iElastNonSubElecData.csv"
 $offdelim
 ;
 iElastNonSubElec(allCy,SBS,ETYPES,YTIME) = iElastNonSubElecData(SBS,ETYPES,YTIME);
-table iFracElecPriChp(allCy, YTIME) "Fraction of Electricity Price at which a CHP sells electricity to network (1)"
-$ondelim
-$include "./iFracElecPriChp.csv"
-$offdelim
-;
 table iDisc(allCy,SBS,YTIME) "Discount rates per subsector ()"
 $ondelim
 $include "./iDisc.csv"
@@ -64,8 +59,12 @@ $ondelim
 $include "./iDataPassCars.csv"
 $offdelim
 ;
+
+iDataPassCars(allCy,"PC","S1") = 1.0;
 iSigma(allCy,"S1") = iDataPassCars(allCy,"PC","S1");
+iDataPassCars(allCy,"PC","S2") = -0.01;
 iSigma(allCy,"S2") = iDataPassCars(allCy,"PC","S2");
+iDataPassCars(allCy,"PC","S3") = 6.5;
 iSigma(allCy,"S3") = iDataPassCars(allCy,"PC","S3");
 iPassCarsMarkSat(allCy) = iDataPassCars(allCy,"PC","SAT");
 iGdpPassCarsMarkExt(allCy) = iDataPassCars(allCy,"PC","MEXTV");
@@ -75,20 +74,26 @@ $ondelim
 $include "./iInitSpecFuelCons.csv"
 $offdelim
 ;
+
+* FIXME: iDisc("MAR",SBS,YTIME) values for all countries equal to  values of MAR.
+* author=redmonkeycloud
+iDisc(allCy,SBS,YTIME) = iDisc("MAR",SBS,YTIME) ;
+
 * FIXME: iInitSpecFuelCons("MAR",TRANSE,TTECH,EF,"2017") initial values for all countries equal to initial values of MAR.
 * author=redmonkeycloud
 iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,YTIME) = iInitSpecFuelCons("MAR",TRANSE,TTECH,EF,"2017"); 
 iSpeFuelConsCostBy(allCy,TRANSE,TTECH,TEA,EF) = iInitSpecFuelCons("MAR",TRANSE,TTECH,EF,"2017");
+
 table iElaSub(allCy,DSBS)                           "Elasticities by subsectors (1)"
 $ondelim
 $include "./iElaSub.csv"
 $offdelim
 ;
-table iConsSizeDistHeat(allCy,conSet)               "Consumer sizes for district heating (1)"
-$ondelim
-$include "./iConsSizeDistHeat.csv"
-$offdelim
-;
+iElaSub(allCy,DSBS) = iElaSub("MAR",DSBS);
+parameter iConsSizeDistHeat(conSet)               "Consumer sizes for district heating (1)" /smallest 0.425506805,
+                                                                                             modal    0.595709528,
+                                                                                             largest 0.833993339/;
+
 table iCapCostTechTr(allCy,TRANSE,EF,YTIME)      "Capital Cost of technology for transport (kEuro2005/vehicle)" 
 $ondelim$include "./iCapCostTechTr.csv"
 $offdelim
@@ -190,60 +195,10 @@ iElastCO2Seq(allCy,CO2SEQELAST) = sum(tfirst,iCO2SeqData(allCy,CO2SEQELAST,TFIRS
 
 *Sources for vehicle lifetime:
 *US Department of Transportation, International Union of Railways, Statista, EU CORDIS
-table iDataTransTech (TRANSE, EF, ECONCHAR) "Technoeconomic characteristics of transport (various)"
-            IC_05 IC_25 IC_50 FC_05 FC_25 FC_50 VC_05 VC_25 VC_50 LFT
-PC.GSL      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0
-PC.LPG      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0
-PC.GDO      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0
-PC.NGS      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0
-PC.ELC      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0
-PC.ETH      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0
-PC.MET      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0
-PC.H2F      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0
-PC.CHEVGSL  0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0
-PC.CHEVGDO  0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0
-PC.BGDO     0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0
-PC.PHEVGSL  0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0
-PC.PHEVGDO  0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0
-*PB.GSL     0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   12 
-*PB.LPG     0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   12
-*PB.GDO     0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   12
-*PB.NGS     0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   12
-*PB.ELC     0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   12
-*PB.ETH     0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   12
-*PB.MET     0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   12
-*PB.H2F     0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   12
-*PB.BGDO    0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   12
-*PB.PHEVGSL 0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   12
-*PB.PHEVGDO 0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   12
-PT.GDO      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   30
-PT.ELC      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   30
-PT.MET      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   30
-PT.H2F      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   30
-PA.KRS      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   25
-PA.H2F      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   25
-*PN.GSL     0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   40
-*PN.GDO     0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   40
-*PN.H2F     0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   40
-GU.GSL      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   15
-GU.LPG      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   15
-GU.GDO      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   15
-GU.NGS      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   15
-GU.ELC      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   15
-GU.ETH      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   15
-GU.MET      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   15
-GU.H2F      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   15
-GU.BGDO     0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   15
-GU.CHEVGDO  0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   15
-GU.PHEVGSL  0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   15
-GU.PHEVGDO  0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   15
-GT.GDO      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   30
-GT.ELC      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   30
-GT.MET      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   30
-GT.H2F      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   30
-GN.GSL      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   40
-GN.GDO      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   40
-GN.H2F      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   40
+table iDataTransTech (TRANSE, EF, ECONCHAR, YTIME) "Technoeconomic characteristics of transport (various)"
+$ondelim
+$include"./iDataTransTech.csv"
+$offdelim
 ;
 table iDataIndTechnology(INDSE,EF,ECONCHAR)                  "Technoeconomic characteristics of industry (various)"
 $ondelim
@@ -372,9 +327,9 @@ iAnnCons(runCy,INDSE,"largest") = 0.9 ;
 iAnnCons(runCy,"IS","modal") = 0.587;
 iAnnCons(runCy,INDSE,"modal")$(not sameas(INDSE,"IS")) = 0.487;
 
-iAnnCons(runCy,DOMSE,"smallest") = iConsSizeDistHeat(runCy,"smallest")  ;
-iAnnCons(runCy,DOMSE,"largest") = iConsSizeDistHeat(runCy,"largest") ;
-iAnnCons(runCy,DOMSE,"modal") = iConsSizeDistHeat(runCy,"modal");
+iAnnCons(runCy,DOMSE,"smallest") = iConsSizeDistHeat("smallest")  ;
+iAnnCons(runCy,DOMSE,"largest") = iConsSizeDistHeat("largest") ;
+iAnnCons(runCy,DOMSE,"modal") = iConsSizeDistHeat("modal");
 
 iAnnCons(runCy,NENSE,"smallest") = 0.2  ;
 iAnnCons(runCy,NENSE,"largest") = 0.9 ;
@@ -384,10 +339,9 @@ iAnnCons(runCy,NENSE,"modal") = 0.487 ;
 iAnnCons(runCy,"BU","smallest") = 0.2 ;
 iAnnCons(runCy,"BU","largest") = 1 ;
 iAnnCons(runCy,"BU","modal") = 0.5 ;
-iAnnCons(runCy,DSBS,ConSet)=0.9;
-iDisFunConSize(runCy,DSBS,rCon) = 1;
+
 * Consumer size groups distribution function
-$ontext
+
 Loop (runCy,DSBS) DO
      Loop rCon$(ord(rCon) le iNcon(DSBS)+1) DO
           iDisFunConSize(runCy,DSBS,rCon) =
@@ -413,7 +367,7 @@ Loop (runCy,DSBS) DO
 ;
      ENDLOOP;
 ENDLOOP;
-$offtext
+
 iCumDistrFuncConsSize(allCy,DSBS) = sum(rCon, iDisFunConSize(allCy,DSBS,rCon));
 iCGI(allCy,YTIME) = 1;
 *iLoadCurveConstr.L(runCy,TT)$(PERIOD(TT) $TFIRSTAN(TT))= 0.21;
@@ -822,7 +776,8 @@ table iMatrFactor(allCy,SBS,EF,YTIME)       "Maturity factor per technology and 
 $ondelim
 $include"./iMatrFactor.csv"
 $offdelim
-;                                              
+;
+iMatrFactor(allCy,SBS,EF,YTIME) = iMatrFactor("MAR",SBS,EF,YTIME);                                          
 ** Industry
 iShrNonSubElecInTotElecDem(allCy,INDSE)  = iIndChar(allCy,INDSE,"SHR_NSE");
 iShrNonSubElecInTotElecDem(allCy,INDSE)$(iShrNonSubElecInTotElecDem(allCy,INDSE)>0.98) = 0.98;
@@ -840,17 +795,14 @@ $offtext
 
 **  Transport Sector
 
-iCapCostTech(runCy,TRANSE,EF,YTIME)  = iCapCostTechTr(runCy,TRANSE,EF,YTIME);
+iCapCostTech(runCy,TRANSE,EF,YTIME)  = iDataTransTech(TRANSE,EF,"IC",YTIME);
 
-iFixOMCostTech(runCy,TRANSE,EF,YTIME)$(ord(YTIME) eq TF-7)= iDataTransTech(TRANSE,EF,"FC_05");
-iFixOMCostTech(runCy,TRANSE,EF,YTIME)$(ord(YTIME) eq TF+8) = iDataTransTech(TRANSE,EF,"FC_25");
-iFixOMCostTech(runCy,TRANSE,EF,YTIME)$(ord(YTIME) eq TF+33)= iDataTransTech(TRANSE,EF,"FC_50");
+iFixOMCostTech(runCy,TRANSE,EF,YTIME) = iDataTransTech(TRANSE,EF,"FC",YTIME);
 
-iVarCostTech(runCy,TRANSE,EF,YTIME)$(ord(YTIME) eq TF-7)= iDataTransTech(TRANSE,EF,"VC_05");
-iVarCostTech(runCy,TRANSE,EF,YTIME)$(ord(YTIME) eq TF+8) = iDataTransTech(TRANSE,EF,"VC_25");
-iVarCostTech(runCy,TRANSE,EF,YTIME)$(ord(YTIME) eq TF+33)= iDataTransTech(TRANSE,EF,"VC_50");
+iVarCostTech(runCy,TRANSE,EF,YTIME) = iDataTransTech(TRANSE,EF,"VC",YTIME);
 
-iTechLft(runCy,TRANSE,EF,YTIME)$(ord(YTIME)>sum(TFIRST,(ord(TFIRST)-3))) = iDataTransTech(TRANSE,EF,"LFT");
+iTechLft(runCy,TRANSE,EF,YTIME) = iDataTransTech(TRANSE,EF,"LFT",YTIME);
+
 iAvgVehCapLoadFac(runCy,TRANSE,TRANSUSE,YTIME) = iCapDataLoadFacEachTransp(TRANSE,TRANSUSE);
 
 

@@ -56,8 +56,6 @@ for (j in names(blabla_variables)) {
 
 write.report(as.magpie(x), "bothmodels.mif") 
 
-
-
 # Reading data from the GDX file
 var_pop <- readGDX('./blabla.gdx', 'iPop')
 var_pop <- as.quitte(var_pop)

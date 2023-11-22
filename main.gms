@@ -6,6 +6,8 @@ option profile = 1;
 option limcol = 300;
 *** number of rows that are listed for each equation in the equation listing
 option limrow = 300;
+*** save a GDX file after solve, containing all computed variables
+option savepoint = 1;
 
 *** "dollar" ($) commands section: define GAMS flags & code control & compilation-time options
 
@@ -57,8 +59,3 @@ $include equations.gms
 $include preloop.gms
 $include solve.gms
 
-* FIXME: This issue will be created after the PR is merged.
-* author=derevirn
-
-* FIXME: Testing GH Action changed permissions.
-* author=derevirn
