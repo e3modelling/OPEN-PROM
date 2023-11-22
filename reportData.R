@@ -4,46 +4,55 @@ library(quitte)
 library(iamc)
 library(tidyr)
 library(utils)
+library(mrprom)
 
-openprom_p_variables <- readGDX('./openprom_p.gdx', types = "variables", field = 'l')
-blabla_variables <- readGDX('./blabla.gdx', name = names(openprom_p_variables), field = 'l')
+openprom_p_variables <- gdxInfo("openprom_p.gdx",returnList=T,dump=F)
+blabla_variables <- list() 
+for (i in openprom_p_variables[["variables"]]) {
+  if (i %in% c("VTechCostIntrm", "VConsEachTechTransp", "vDummyObj")) next
+  blabla_variables[[i]] <- read.gdx('./blabla.gdx', i, field = 'l')
+}
 mena_prom_mapping <- read.csv("MENA-PROM mapping - mena_prom_mapping.csv")
 
-z <- c("TUN", "EGY", "ISR", "DZA", "MAR", "LBN", "JOR")
+z <- c("TUN", "EGY", "ISR", "MAR")
+zm <- sub("MAR", "MOR", z)
 years <- c(2017:2021)
 
 x <- NULL
 variable <- NULL
 for (j in names(blabla_variables)) {
-  l <- blabla_variables[j]
-  l <- as.quitte(l[[1]])
+  l <- blabla_variables[[j]]
+  if (nrow(l) == 0) next
+  l <- as.quitte(l)
   l["model"] <- "OPEN-PROM"
-  l["variable"] <- j
-  for (i in 8:length(l)) {
-    if (l[1, i] != "NA"){
-      l = unite(l, variable, c(variable, names(l)[i]), sep = " ", remove = FALSE)
-    }
-  }
-  l <- select((l), -c(names(l)[8:length(l)]))
+  l["variable"] <- factor(j)
+  l["period"] <- l["ytime"]
+  l["region"] <- l["allcy"]
+  cols1 <- names(l)[!names(l) %in% c("ytime", "allcy")]
+  cols2 <- names(l)[!names(l) %in% c("model", "scenario", "region", "unit", "period", "value", "ytime", "allcy")]
+  l <- select(l, all_of(cols1)) %>% unite(col = "variable", sep = " ", all_of(cols2))
   l <- l[which(l$region %in% z), ]
   l <- l[which(l$period %in% years), ]
   
   index <- match(j, mena_prom_mapping$OPEN.PROM)
   MENA_EDS_variables <- mena_prom_mapping[index, 2]
   a <- readSource("MENA_EDS", subtype = MENA_EDS_variables)
+
   if (!is.null(getRegions(a))) {
-    q <- as.quitte(a)
-    q$region <- sub("ALG", "DZA", q$region)
-    q$region <- sub("MOR", "MAR", q$region)
-    q$region <- sub("LEB", "LBN", q$region)
-    q$variable <- sub(MENA_EDS_variables, j, q$variable)
-    x <- rbind(x, l, q)
+    a <- as.quitte(a[zm, years, ])
+    a["model"] <- "MENA_EDS"
+    a["variable"] <- MENA_EDS_variables
+    cols1 <- names(a)[!names(a) %in% c("ytime", "allcy")]
+    cols2 <- names(a)[!names(a) %in% c("model", "scenario", "region", "unit", "period", "value", "ytime", "allcy")]
+    a <- select(a, all_of(cols1)) %>% unite(col = "variable", sep = " ", all_of(cols2))
+    a$region <- sub("MOR", "MAR", a$region)
+    a$variable <- sub(MENA_EDS_variables, j, a$variable)
+    a$variable <- sub(" NA", "", a$variable)
+    x <- rbind(x, l, a)
   }
 }
 
-write.mif(x, "both_models.mif", append = FALSE)
-
-
+write.report(as.magpie(x), "bothmodels.mif")
 
 
 
