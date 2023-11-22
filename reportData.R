@@ -42,12 +42,14 @@ for (j in names(blabla_variables)) {
     a <- as.quitte(a[zm, years, ])
     a["model"] <- "MENA_EDS"
     a["variable"] <- MENA_EDS_variables
+    if("data" %in% colnames(a)) {
+      a <- subset(a, select=-c(data))
+    }
     cols1 <- names(a)[!names(a) %in% c("ytime", "allcy")]
     cols2 <- names(a)[!names(a) %in% c("model", "scenario", "region", "unit", "period", "value", "ytime", "allcy")]
     a <- select(a, all_of(cols1)) %>% unite(col = "variable", sep = " ", all_of(cols2))
     a$region <- sub("MOR", "MAR", a$region)
     a$variable <- sub(MENA_EDS_variables, j, a$variable)
-    a$variable <- sub(" NA", "", a$variable)
     x <- rbind(x, l, a)
   }
 }
