@@ -37,17 +37,24 @@ for (j in names(blabla_variables)) {
   index <- match(j, mena_prom_mapping$OPEN.PROM)
   MENA_EDS_variables <- mena_prom_mapping[index, 2]
   a <- readSource("MENA_EDS", subtype = MENA_EDS_variables)
+  
   if (!is.null(getRegions(a))) {
-    q <- as.quitte(a[zm, , ])
-    q$region <- sub("MOR", "MAR", q$region)
-    q$variable <- sub(MENA_EDS_variables, j, q$variable)
-    x <- rbind(x, l, q)
+    a <- as.quitte(a[zm, years, ])
+    a["model"] <- "MENA_EDS"
+    a["variable"] <- MENA_EDS_variables
+    if("data" %in% colnames(a)) {
+      a <- subset(a, select=-c(data))
+    }
+    cols1 <- names(a)[!names(a) %in% c("ytime", "allcy")]
+    cols2 <- names(a)[!names(a) %in% c("model", "scenario", "region", "unit", "period", "value", "ytime", "allcy")]
+    a <- select(a, all_of(cols1)) %>% unite(col = "variable", sep = " ", all_of(cols2))
+    a$region <- sub("MOR", "MAR", a$region)
+    a$variable <- sub(MENA_EDS_variables, j, a$variable)
+    x <- rbind(x, l, a)
   }
 }
 
-write.report(as.magpie(x), "bothmodels.mif")
-
-
+write.report(as.magpie(x), "bothmodels.mif") 
 
 # Reading data from the GDX file
 var_pop <- readGDX('./blabla.gdx', 'iPop')
