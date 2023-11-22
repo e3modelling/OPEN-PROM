@@ -317,12 +317,8 @@ VScrRate.FX(runCy,"2017") = 0.1;
 
 VGapTranspFillNewTech.FX(runCy,TRANSE,YTIME)$(not AN(YTIME))=0;
 
-* FIXME: VTrnspActiv.FX(runCy,"PC",YTIME), only the line of code below
-* author=giannou
 VTrnspActiv.FX(runCy,"PC",YTIME)$(not AN(YTIME)) = iTransChar(runCy,"KM_VEH",YTIME); 
 
-* FIXME: VTrnspActiv.FX(runCy,TRANP,YTIME) $(not sameas(TRANP,"PC")), only the line of code below
-* author=giannou
 VTrnspActiv.FX(runCy,TRANP,YTIME) $(not AN(YTIME) and not sameas(TRANP,"PC")) = iActv(YTIME,runCy,TRANP); 
 VTrnspActiv.FX(runCy,TRANSE,YTIME)$(not TRANP(TRANSE)) = 0;
 VGoodsTranspActiv.FX(runCy,TRANG,YTIME)$(not An(YTIME)) = iActv(YTIME,runCy,TRANG);
