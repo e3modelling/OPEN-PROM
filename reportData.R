@@ -52,7 +52,7 @@ for (j in names(blabla_variables)) {
   }
 }
 
-write.report(as.magpie(x), "bothmodels.mif")
+write.report(as.magpie(x), "bothmodels.mif") 
 
 
 
