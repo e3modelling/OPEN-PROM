@@ -81,8 +81,8 @@ QGapTranspActiv
 QSpecificFuelCons 
 QTranspCostPerMeanConsSize
 QTranspCostPerVeh
-*QTranspCostMatFac
-*QTechSortVarCost
+QTranspCostMatFac
+QTechSortVarCost
 *QTechSortVarCostNewEquip
 QConsEachTechTransp 
 QFinEneDemTranspPerFuel 
@@ -318,7 +318,6 @@ VScrRate.FX(runCy,"2017") = 0.1;
 VGapTranspFillNewTech.FX(runCy,TRANSE,YTIME)$(not AN(YTIME))=0;
 
 VTrnspActiv.FX(runCy,"PC",YTIME)$(not AN(YTIME)) = iTransChar(runCy,"KM_VEH",YTIME); 
-
 VTrnspActiv.FX(runCy,TRANP,YTIME) $(not AN(YTIME) and not sameas(TRANP,"PC")) = iActv(YTIME,runCy,TRANP); 
 VTrnspActiv.FX(runCy,TRANSE,YTIME)$(not TRANP(TRANSE)) = 0;
 VGoodsTranspActiv.FX(runCy,TRANG,YTIME)$(not An(YTIME)) = iActv(YTIME,runCy,TRANG);
