@@ -79,8 +79,8 @@ QPassCarsLft
 QGoodsTranspActiv 
 QGapTranspActiv 
 QSpecificFuelCons 
-*QTranspCostPerMeanConsSize
-*QTranspCostPerVeh
+QTranspCostPerMeanConsSize
+QTranspCostPerVeh
 *QTranspCostMatFac
 *QTechSortVarCost
 *QTechSortVarCostNewEquip
@@ -91,7 +91,7 @@ QMExtV
 QMExtF
 QNumVeh
 QNewReg
-*QTrnspActiv
+QTrnspActiv
 QScrap
 QLevl
 QScrRate 
@@ -317,13 +317,9 @@ VScrRate.FX(runCy,"2017") = 0.1;
 
 VGapTranspFillNewTech.FX(runCy,TRANSE,YTIME)$(not AN(YTIME))=0;
 
-* FIXME: VTrnspActiv.FX(runCy,"PC",YTIME), only the line of code below
-* author=giannou
-VTrnspActiv.FX(runCy,"PC",YTIME) = iTransChar(runCy,"KM_VEH",YTIME); 
+VTrnspActiv.FX(runCy,"PC",YTIME)$(not AN(YTIME)) = iTransChar(runCy,"KM_VEH",YTIME); 
 
-* FIXME: VTrnspActiv.FX(runCy,TRANP,YTIME) $(not sameas(TRANP,"PC")), only the line of code below
-* author=giannou
-VTrnspActiv.FX(runCy,TRANP,YTIME) $(not sameas(TRANP,"PC")) = iActv(YTIME,runCy,TRANP); 
+VTrnspActiv.FX(runCy,TRANP,YTIME) $(not AN(YTIME) and not sameas(TRANP,"PC")) = iActv(YTIME,runCy,TRANP); 
 VTrnspActiv.FX(runCy,TRANSE,YTIME)$(not TRANP(TRANSE)) = 0;
 VGoodsTranspActiv.FX(runCy,TRANG,YTIME)$(not An(YTIME)) = iActv(YTIME,runCy,TRANG);
 VGoodsTranspActiv.FX(runCy,TRANSE,YTIME)$(not TRANG(TRANSE)) = 0;
