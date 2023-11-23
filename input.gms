@@ -47,13 +47,24 @@ $ondelim
 $include "./iDisc.csv"
 $offdelim
 ;
-table iCo2EmiFacAllSbs(allCy,EF) "CO2 emission factors (kgCO2/kgoe fuel burned)"
-$ondelim
-$include "./iCo2EmiFacAllSbs.csv"
-$offdelim
-;
-iCo2EmiFac(allCy,SBS,EF,YTIME) = iCo2EmiFacAllSbs(allCy,EF);
-iCo2EmiFac(allCy,"IS","HCL",YTIME)$(not An(YTIME))   = iCo2EmiFacAllSbs(allCy,"SLD"); !! This is the assignment for coke
+* FIXME: iCo2EmiFacAllSbs(EF) derive the values with mrprom
+* author=giannou
+parameter iCo2EmiFacAllSbs(EF) "CO2 emission factors (kgCO2/kgoe fuel burned)" /
+LGN 4.15330622,
+HCL 3.941453651,
+SLD 4.438008647,
+GSL 2.872144882,
+GDO 3.068924588,
+LPG 2.612562612,
+KRS 2.964253636,
+RFO 3.207089028,
+OLQ 3.207089028,
+NGS 2.336234395,
+OGS 3.207089028,
+BMSWAS 0/;
+
+iCo2EmiFac(allCy,SBS,EF,YTIME) = iCo2EmiFacAllSbs(EF);
+iCo2EmiFac(allCy,"IS","HCL",YTIME)   = iCo2EmiFacAllSbs("SLD"); !! This is the assignment for coke
 table iDataPassCars(allCy,GompSet1,Gompset2)        "Initial Data for Passenger Cars ()"
 $ondelim
 $include "./iDataPassCars.csv"

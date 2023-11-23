@@ -105,7 +105,6 @@ Parameter,DTIRF,iTransfInputRef,Transformation Input in Refineries (Mtoe),"CYall
 Parameter,DTOOTH,iTranfOutGasworks,"Transformation Output from Gasworks, Blast Furnances and Briquetting plants (Mtoe)","CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
 Parameter,DTORF,iTransfOutputRef,Transformation Output from Refineries (Mtoe),"CYall,EF,YTIME","allCy,EFS,YTIME",Supply Side Specific Parameters
 Variable,DUMMYOBJ,vDummyObj,Dummy maximisation variable (1),-,-,-
-Parameter,EFFVAL,iEffValueInEuro,Efficiency value (Euro05/toe),"CYALL,SBS,YTIME","allCy,SBS,YTIME",POSITIVE VARIABLES
 Parameter,EFPRICE,-,Consumer Prices of fuels per subsector (kEuro2005/toe),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",Macro economic indicators
 Parameter,ELASTA,iElastA,Activity Elasticities per subsector (1),"CYall,SBS,ETYPES,YTIME","allCy,SBS,ETYPES,YTIME",Common parameters for all Demand Subsectors
 Parameter,ELASTGAS,iNatGasPriProElst,Natural Gas primary production elasticity related to gross inland consumption,CYall,allCy,
@@ -407,7 +406,6 @@ Variable,RESVAL,VRenValue,Renewable value (Euro2005/KWh),YTIME,YTIME,Possitive V
 Parameter,RTORF,iResTransfOutputRefineries,Residual in Transformation Output from Refineries (Mtoe),"CYall,EF,YTIME","EF,YTIME",Supply Side Specific Parameters
 Parameter,S,iSigma,S parameters of Gompertz function for passenger cars vehicle km (1),"CYall,SG","allCy,SG",TRANSPORT SECTOR VARIABLES
 Parameter,SAT,iPassCarsMarkSat,Passenger cars market saturation [1],CYall,allCy,Transport Sector specific Parameters
-Parameter,SCENARIO_PRICES,iScenarioPri,Scenario prices (KEuro1990/toe),"WEF,NAP,YTIME","WEF,NAP,YTIME",POWER GENERATION SECTOR
 Variable,SCR,VScrRate,Scrapping rate of passenger cars (1),"CYall,YTIME","allCy,YTIME",TRANSPORT SECTOR VARIABLES
 Variable,SCRAP,VScrap,Scrapped passenger cars (million vehicles),"CYall,YTIME","allCy,YTIME",TRANSPORT SECTOR VARIABLES
 Variable,SFC,VSpecificFuelCons,Specific Fuel Consumption (),"CYall,TRANSE,TTECH,TEA,EF,YTIME","allCy,TRANSE,TTECH,TEA,EF,YTIME",TRANSPORT SECTOR VARIABLES
