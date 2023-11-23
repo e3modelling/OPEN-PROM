@@ -83,7 +83,7 @@ QTranspCostPerMeanConsSize
 QTranspCostPerVeh
 QTranspCostMatFac
 QTechSortVarCost
-*QTechSortVarCostNewEquip
+QTechSortVarCostNewEquip
 QConsEachTechTransp 
 QFinEneDemTranspPerFuel 
 QFinEneDemTransp 
@@ -229,7 +229,7 @@ VHourProdCostTechNoCCS.up(allCy,PGALL,HOUR,YTIME)=8000;
 VRenPotSupplyCurve.l(allCy,PGRENEF,YTIME)=0.1;
 VScrRate.l(allCy,YTIME)=0.1;
 VTranspCostPermeanConsSize.l(allCy,TRANSE,RCon,TTECH,TEA,YTIME)=0.1;
-VTranspCostPermeanConsSize.lo(allCy,TRANSE,RCon,TTECH,TEA,YTIME)=0.0001;
+*VTranspCostPermeanConsSize.lo(allCy,TRANSE,RCon,TTECH,TEA,YTIME)=0.0001;
 VElecNonSub.l(allCy,DSBS,YTIME)=0.1;
 *VElecNonSub.lo(allCy,DSBS,YTIME)=0.000001;
 
@@ -484,7 +484,7 @@ VLoadCurveConstr.L(runCy,YTIME)=0.01;
 VRenValue.FX(YTIME) = 0 ;
 
 VTotReqElecProd.fx(runCy,YTIME)$TFIRST(YTIME)=sum(pgall,VElecProdPowGenPlants.L(runCy,pgall,YTIME)$TFIRST(YTIME));
-display VCarVal.l;
+display iDisFunConSize;
 
 loop an do !! start outer iteration loop (time steps)
    s = s + 1;
