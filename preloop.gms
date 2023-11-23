@@ -81,9 +81,9 @@ QGapTranspActiv
 QSpecificFuelCons 
 QTranspCostPerMeanConsSize
 QTranspCostPerVeh
-*QTranspCostMatFac
-*QTechSortVarCost
-*QTechSortVarCostNewEquip
+QTranspCostMatFac
+QTechSortVarCost
+QTechSortVarCostNewEquip
 QConsEachTechTransp 
 QFinEneDemTranspPerFuel 
 QFinEneDemTransp 
@@ -189,10 +189,7 @@ display runCy;
 display iWgtSecAvgPriFueCons;
 display iVarCostTech;
 
-*TIME(YTIME) = %fStartY%;
-* FIXME: VTechSortVarCostNewEquip.FX(allCy,TRANSE,EF2,TEA,YTIME) , add $(not An(YTIME) when QTechSortVarCostNewEquip activated.
-* author=giannou
-VTechSortVarCostNewEquip.FX(allCy,TRANSE,EF2,TEA,YTIME) = iFuelConsTRANSE(allCy,TRANSE,EF2,YTIME)/sum(EF$(SECTTECH(TRANSE,EF)),iFuelConsTRANSE(allCy,TRANSE,EF,YTIME)); 
+VTechSortVarCostNewEquip.FX(allCy,TRANSE,EF2,TEA,YTIME)$(not An(YTIME)) = iFuelConsTRANSE(allCy,TRANSE,EF2,YTIME)/sum(EF$(SECTTECH(TRANSE,EF)),iFuelConsTRANSE(allCy,TRANSE,EF,YTIME)); 
 VNumVeh.L(allCy,YTIME)=0.1;
 *VNumVeh.lags(allCy,YTIME) = 0.1;
 VTrnspActiv.l(allCy,TRANSE,YTIME) = 0.1;
@@ -229,7 +226,7 @@ VHourProdCostTechNoCCS.up(allCy,PGALL,HOUR,YTIME)=8000;
 VRenPotSupplyCurve.l(allCy,PGRENEF,YTIME)=0.1;
 VScrRate.l(allCy,YTIME)=0.1;
 VTranspCostPermeanConsSize.l(allCy,TRANSE,RCon,TTECH,TEA,YTIME)=0.1;
-VTranspCostPermeanConsSize.lo(allCy,TRANSE,RCon,TTECH,TEA,YTIME)=0.0001;
+*VTranspCostPermeanConsSize.lo(allCy,TRANSE,RCon,TTECH,TEA,YTIME)=0.0001;
 VElecNonSub.l(allCy,DSBS,YTIME)=0.1;
 *VElecNonSub.lo(allCy,DSBS,YTIME)=0.000001;
 
@@ -318,7 +315,6 @@ VScrRate.FX(runCy,"2017") = 0.1;
 VGapTranspFillNewTech.FX(runCy,TRANSE,YTIME)$(not AN(YTIME))=0;
 
 VTrnspActiv.FX(runCy,"PC",YTIME)$(not AN(YTIME)) = iTransChar(runCy,"KM_VEH",YTIME); 
-
 VTrnspActiv.FX(runCy,TRANP,YTIME) $(not AN(YTIME) and not sameas(TRANP,"PC")) = iActv(YTIME,runCy,TRANP); 
 VTrnspActiv.FX(runCy,TRANSE,YTIME)$(not TRANP(TRANSE)) = 0;
 VGoodsTranspActiv.FX(runCy,TRANG,YTIME)$(not An(YTIME)) = iActv(YTIME,runCy,TRANG);
@@ -485,7 +481,7 @@ VLoadCurveConstr.L(runCy,YTIME)=0.01;
 VRenValue.FX(YTIME) = 0 ;
 
 VTotReqElecProd.fx(runCy,YTIME)$TFIRST(YTIME)=sum(pgall,VElecProdPowGenPlants.L(runCy,pgall,YTIME)$TFIRST(YTIME));
-display VCarVal.l;
+display iDisFunConSize;
 
 loop an do !! start outer iteration loop (time steps)
    s = s + 1;
