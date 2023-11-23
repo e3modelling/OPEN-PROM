@@ -774,20 +774,20 @@ QTrnspActiv(runCy,TRANSE,YTIME)$(TIME(YTIME) $TRANP(TRANSE))..
          VTrnspActiv(runCy,TRANSE,YTIME)
                  =E=
          (  !! passenger cars
-           iResActiv(runCy,TRANSE,YTIME) * VTrnspActiv(runCy,TRANSE,YTIME-1) *
+            VTrnspActiv(runCy,TRANSE,YTIME-1) *
            (VFuelPriceAvg(runCy,TRANSE,YTIME)/VFuelPriceAvg(runCy,TRANSE,YTIME-1))**iElastA(runCy,TRANSE,"b1",YTIME) *
            (VFuelPriceAvg(runCy,TRANSE,YTIME-1)/VFuelPriceAvg(runCy,TRANSE,YTIME-2))**iElastA(runCy,TRANSE,"b2",YTIME) *
            [(VNumVeh(runCy,YTIME-1)/(iPop(YTIME-1,runCy)*1000))/(VNumVeh(runCy,YTIME)/(iPop(YTIME,runCy)*1000))]**iElastA(runCy,TRANSE,"b3",YTIME) *
            [(iGDP(YTIME,runCy)/iPop(YTIME,runCy))/(iGDP(YTIME-1,runCy)/iPop(YTIME-1,runCy))]**iElastA(runCy,TRANSE,"b4",YTIME)
          )$sameas(TRANSE,"PC") +
          (  !! passenger aviation
-           iResActiv(runCy,TRANSE,YTIME) * VTrnspActiv(runCy,TRANSE,YTIME-1) *
+            VTrnspActiv(runCy,TRANSE,YTIME-1) *
            [(iGDP(YTIME,runCy)/iPop(YTIME,runCy))/(iGDP(YTIME-1,runCy)/iPop(YTIME-1,runCy))]**iElastA(runCy,TRANSE,"a",YTIME) *
            (VFuelPriceAvg(runCy,TRANSE,YTIME)/VFuelPriceAvg(runCy,TRANSE,YTIME-1))**iElastA(runCy,TRANSE,"c1",YTIME) *
            (VFuelPriceAvg(runCy,TRANSE,YTIME-1)/VFuelPriceAvg(runCy,TRANSE,YTIME-2))**iElastA(runCy,TRANSE,"c2",YTIME)
          )$sameas(TRANSE,"PA") +
          (   !! other passenger transportation modes
-          iResActiv(runCy,TRANSE,YTIME) * VTrnspActiv(runCy,TRANSE,YTIME-1) *
+           VTrnspActiv(runCy,TRANSE,YTIME-1) *
            [(iGDP(YTIME,runCy)/iPop(YTIME,runCy))/(iGDP(YTIME-1,runCy)/iPop(YTIME-1,runCy))]**iElastA(runCy,TRANSE,"a",YTIME) *
            (VFuelPriceAvg(runCy,TRANSE,YTIME)/VFuelPriceAvg(runCy,TRANSE,YTIME-1))**iElastA(runCy,TRANSE,"c1",YTIME) *
            (VFuelPriceAvg(runCy,TRANSE,YTIME-1)/VFuelPriceAvg(runCy,TRANSE,YTIME-2))**iElastA(runCy,TRANSE,"c2",YTIME) *
@@ -903,7 +903,7 @@ QFuelCons(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,E
 QElecIndPricesEst(runCy,YTIME)$TIME(YTIME)..
          VElecIndPricesEst(runCy,YTIME)
                  =E=
-         iResElecIndex(runCy,YTIME) * VElecIndPrices(runCy,YTIME-1) *
+         VElecIndPrices(runCy,YTIME-1) *
         ((VFuelPriceSub(runCy,"OI","ELC",YTIME-1)/VFuelPriceAvg(runCy,"OI",YTIME-1))/
         (VFuelPriceSub(runCy,"OI","ELC",YTIME-2)/VFuelPriceAvg(runCy,"OI",YTIME-2)))**(0.3) *
         ((VFuelPriceSub(runCy,"OI","ELC",YTIME-2)/VFuelPriceAvg(runCy,"OI",YTIME-2))/
@@ -911,11 +911,11 @@ QElecIndPricesEst(runCy,YTIME)$TIME(YTIME)..
 
 * Compute fuel prices per subsector and fuel especially for chp plants (take into account the profit of electricity sales)
 QFuePriSubChp(runCy,DSBS,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS))  $SECTTECH(DSBS,EF) )..
-VFuePriSubChp(runCy,DSBS,EF,TEA,YTIME)
+        VFuePriSubChp(runCy,DSBS,EF,TEA,YTIME)
                 =E=   
-             (((VFuelPriceSub(runCy,DSBS,EF,YTIME) + (VRenValue(YTIME)/1000)$(not RENEF(EF))+VTechCostVar(runCy,DSBS,EF,TEA,YTIME)/1000)/iUsfEneConvSubTech(runCy,DSBS,EF,YTIME)- 
-               (0$(not CHP(EF)) + (VFuelPriceSub(runCy,"OI","ELC",YTIME)*iFracElecPriChp(runCy,YTIME)*VElecIndPrices(runCy,YTIME))$CHP(EF)))  + SQRT( SQR(((VFuelPriceSub(runCy,DSBS,EF,YTIME)+VTechCostVar(runCy,DSBS,EF,TEA,YTIME)/1000)/VTechCostVar(runCy,DSBS,EF,TEA,YTIME)- 
-              (0$(not CHP(EF)) + (VFuelPriceSub(runCy,"OI","ELC",YTIME)*iFracElecPriChp(runCy,YTIME)*VElecIndPrices(runCy,YTIME))$CHP(EF))))  ) )/2;
+             (((VFuelPriceSub(runCy,DSBS,EF,YTIME) + (VRenValue(YTIME)/1000)$(not RENEF(EF))+iVarCostTech(runCy,DSBS,EF,YTIME)/1000)/iUsfEneConvSubTech(runCy,DSBS,EF,YTIME)- 
+               (0$(not CHP(EF)) + (VFuelPriceSub(runCy,"OI","ELC",YTIME)*iFracElecPriChp*VElecIndPrices(runCy,YTIME))$CHP(EF)))  + SQRT( SQR(((VFuelPriceSub(runCy,DSBS,EF,YTIME)+iVarCostTech(runCy,DSBS,EF,YTIME)/1000)/iUsfEneConvSubTech(runCy,DSBS,EF,YTIME)- 
+              (0$(not CHP(EF)) + (VFuelPriceSub(runCy,"OI","ELC",YTIME)*iFracElecPriChp*VElecIndPrices(runCy,YTIME))$CHP(EF))))  ) )/2;
 
 
 * Compute electricity production cost per CHP plant and demand sector 
@@ -933,7 +933,7 @@ QElecProdCosChp(runCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS))..
 
 * Compute technology cost
 QTechCost(runCy,DSBS,rCon,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) $SECTTECH(DSBS,EF) )..
-VTechCost(runCy,DSBS,rCon,EF,TEA,YTIME) 
+        VTechCost(runCy,DSBS,rCon,EF,TEA,YTIME) 
                  =E= 
                  VTechCostIntrm(runCy,DSBS,rCon,EF,TEA,YTIME)**(-iElaSub(runCy,DSBS)) ;   
 
@@ -961,22 +961,22 @@ QTechCostIntrm(runCy,DSBS,rCon,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(
                     iFixOMCostTech(runCy,DSBS,EF,YTIME)/1000
                     +
                     (
-                      (VFuelPriceSub(runCy,DSBS,EF,YTIME)+VTechCostVar(runCy,DSBS,EF,TEA,YTIME)/1000)/iUsfEneConvSubTech(runCy,DSBS,EF,YTIME)
+                      (VFuelPriceSub(runCy,DSBS,EF,YTIME)+iVarCostTech(runCy,DSBS,EF,YTIME)/1000)/iUsfEneConvSubTech(runCy,DSBS,EF,YTIME)
                     )
                     * iAnnCons(runCy,DSBS,"smallest") * (iAnnCons(runCy,DSBS,"largest")/iAnnCons(runCy,DSBS,"smallest"))**((ord(rCon)-1)/iNcon(DSBS))
                   )$NENSE(DSBS);  
 
 * Compute technology cost including Maturity factor per technology and subsector
 QTechCostMatr(runCy,DSBS,rCon,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) $SECTTECH(DSBS,EF) )..
-VTechCostMatr(runCy,DSBS,rCon,EF,TEA,YTIME) 
+        VTechCostMatr(runCy,DSBS,rCon,EF,TEA,YTIME) 
                                                =E=
-iMatrFactor(runCy,DSBS,EF,YTIME) * VTechCost(runCy,DSBS,rCon,EF,TEA,YTIME) ;
+        iMatrFactor(runCy,DSBS,EF,YTIME) * VTechCost(runCy,DSBS,rCon,EF,TEA,YTIME) ;
 
 * Compute Technology sorting based on variable cost
 QTechSort(runCy,DSBS,rCon,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) )..
-VTechSort(runCy,DSBS,rCon,YTIME)
+        VTechSort(runCy,DSBS,rCon,YTIME)
                         =E=
-sum((EF,TEA)$(SECTTECH(DSBS,EF) ),VTechCostMatr(runCy,DSBS,rCon,EF,TEA,YTIME));
+        sum((EF,TEA)$(SECTTECH(DSBS,EF) ),VTechCostMatr(runCy,DSBS,rCon,EF,TEA,YTIME));
 
 * Compute the gap in final demand on industry, tertiary, non-energy uses and bunkers
 QGapFinalDem(runCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)))..

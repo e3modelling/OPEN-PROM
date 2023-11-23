@@ -79,21 +79,21 @@ QPassCarsLft
 QGoodsTranspActiv 
 QGapTranspActiv 
 QSpecificFuelCons 
-*QTranspCostPerMeanConsSize
-*QTranspCostPerVeh
+QTranspCostPerMeanConsSize
+QTranspCostPerVeh
 *QTranspCostMatFac
 *QTechSortVarCost
 *QTechSortVarCostNewEquip
 QConsEachTechTransp 
 QFinEneDemTranspPerFuel 
 QFinEneDemTransp 
-*QMExtV
-*QMExtF
-*QNumVeh
-*QNewReg
-*QTrnspActiv
-*QScrap
-*QLevl
+QMExtV
+QMExtF
+QNumVeh
+QNewReg
+QTrnspActiv
+QScrap
+QLevl
 QScrRate 
 QElecConsAll 
 
@@ -104,32 +104,32 @@ QElecConsNonSub
 QConsOfRemSubEquip 
 QDemSub 
 QElecConsInd 
-*QDemInd
-*QElecIndPrices
-*QElecConsHeatPla
+QDemInd
+QElecIndPrices
+QElecConsHeatPla
 QFuelCons 
-*QElecIndPricesEst
-*QFuePriSubChp
-*QElecProdCosChp
-*QTechCost
-*QTechCostIntrm
-*QTechCostMatr
-*QTechSort
+QElecIndPricesEst
+QFuePriSubChp
+QElecProdCosChp
+QTechCost
+QTechCostIntrm
+QTechCostMatr
+QTechSort
 QGapFinalDem 
-*QTechShareNewEquip
+QTechShareNewEquip
 QFuelConsInclHP 
-*QVarProCostPerCHPDem
-*QAvgElcProCostCHP
-*QAvgVarElecProd
+QVarProCostPerCHPDem
+QAvgElcProCostCHP
+QAvgVarElecProd
 
 
 * REST OF ENERGY BALANCE SECTORS *
 
 *QTransfOutputPatFuel
-*QTotFinEneCons
-*QTotFinEneConsAll
-*QFinNonEneCons
-*QDistrLosses
+QTotFinEneCons
+QTotFinEneConsAll
+QFinNonEneCons
+QDistrLosses
 *QTranfOutputDHPlants
 *QTransfInputDHPlants
 *QTransfInputPatFuel
@@ -170,9 +170,10 @@ QFuelConsInclHP
 * Prices *
 
 *QFuelPriSubSepCarbVal
-*QFuelPriSepCarbon
-*QAvgFuelPriSub
+QFuelPriSepCarbon
+QAvgFuelPriSub
 *QElecPriIndResCons
+
 
 
 qDummyObj
@@ -186,19 +187,18 @@ display TF;
 display TFIRST;
 display runCy;
 display iWgtSecAvgPriFueCons;
-display iTechLft;
+display iVarCostTech;
 
 *TIME(YTIME) = %fStartY%;
-* FIXME: VTechSortVarCostNewEquip.FX(allCy,TRANSE,EF2,TEA,YTIME) , only the line of code below
+* FIXME: VTechSortVarCostNewEquip.FX(allCy,TRANSE,EF2,TEA,YTIME) , add $(not An(YTIME) when QTechSortVarCostNewEquip activated.
 * author=giannou
 VTechSortVarCostNewEquip.FX(allCy,TRANSE,EF2,TEA,YTIME) = iFuelConsTRANSE(allCy,TRANSE,EF2,YTIME)/sum(EF$(SECTTECH(TRANSE,EF)),iFuelConsTRANSE(allCy,TRANSE,EF,YTIME)); 
 VNumVeh.L(allCy,YTIME)=0.1;
 *VNumVeh.lags(allCy,YTIME) = 0.1;
 VTrnspActiv.l(allCy,TRANSE,YTIME) = 0.1;
-VNewReg.FX(allCy,YTIME) = iNewReg(allCy,YTIME);
+VNewReg.FX(allCy,YTIME)$(not an(ytime)) = iNewReg(allCy,YTIME);
 VFuelPriceSub.l(allCy,SBS,EF,YTIME) = 0.1;
 VElecIndPrices.l(allCy,YTIME)= 0.1;
-VTechCostVar.l(allCy,SBS,EF,TEA,YTIME) = 0.1;
 VTechCostIntrm.l(allCy,DSBS,rcon,EF,TEA,YTIME) = 0.1;
 VLifeTimeTech.l(allCy,DSBS,EF,TEA,YTIME)= 0.1;
 VTechSort.l(allCy,DSBS,rCon,YTIME) = 0.1;
@@ -263,9 +263,9 @@ VScalWeibullSum.l(allCy,PGALL,YTIME)=2;
 *VScalWeibullSum.up(allCy,PGALL,YTIME)=1.0e+10;
 VHourProdCostTech.l(runCy,PGALL,HOUR,TT) = 0.0001;
 
-********************************************************************************
+
 *                        VARIABLE INITIALISATION                               *
-********************************************************************************
+
 
 * FIXME: VFuelPriceSub should be computed endogenously, add $(not An(YTIME)) below
 * author=giannou
@@ -284,18 +284,22 @@ VElecPriIndResNoCliPol.FX(runCy,"r",YTIME)$(not an(ytime)) = VFuelPriceSub.l(run
 VFuelPriSubNoCarb.FX(runCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF) $(not HEATPUMP(EF))  $(not An(YTIME))) = iFuelPrice(runCy,SBS,EF,YTIME);
 VFuelPriSubNoCarb.FX(runCy,SBS,ALTEF,YTIME)$(SECTTECH(SBS,ALTEF) $(not An(YTIME))) = sum(EF$ALTMAP(SBS,ALTEF,EF),iFuelPrice(runCy,SBS,EF,YTIME));
 VFuelPriSubNoCarb.FX(runCy,"PG","NUC",YTIME) = 0.025; !! fixed price for nuclear fuel to 25Euro/toe
-VFuelPriSubNoCarb.fx(runCy,INDDOM,"HEATPUMP",YTIME)$(SECTTECH(INDDOM,"HEATPUMP") $(not An(YTIME))) = iFuelPrice(runCy,INDDOM,"ELC",YTIME);
-
-VFuelPriceAvg.FX(runCy,DSBS,YTIME) = sum(EF$SECTTECH(DSBS,EF), iWgtSecAvgPriFueCons(runCy,DSBS,EF) * iFuelPrice(runCy,DSBS,EF,YTIME));
+VFuelPriSubNoCarb.fx(runCy,INDDOM,"HEATPUMP",YTIME)$(SECTTECH(INDDOM,"HEATPUMP")$(not An(YTIME))) = iFuelPrice(runCy,INDDOM,"ELC",YTIME);
+VFuelPriceAvg.L(runCy,DSBS,YTIME) = 0.1;
+VFuelPriceAvg.FX(runCy,DSBS,YTIME)$(not An(YTIME)) = sum(EF$SECTTECH(DSBS,EF), iWgtSecAvgPriFueCons(runCy,DSBS,EF) * iFuelPrice(runCy,DSBS,EF,YTIME));
 
 VNumVeh.UP(runCy,YTIME) = 10000; !! upper bound of VNumVeh is 10000 million vehicles
+* FIXME: VNumVeh.FX(runCy,YTIME) = iActv(YTIME,runCy,"PC"), to be used only if eq QNumVeh is deactivated.
+* author=redmonkeycloud
 VNumVeh.FX(runCy,YTIME)$(not An(YTIME)) = iActv(YTIME,runCy,"PC");
 VLamda.UP(runCy,YTIME) = 1;
-* FIXME: iPassCarsMarkSat(runCy) = 1
-* author=giannou
-iPassCarsMarkSat(runCy) = 1; 
+iPassCarsMarkSat(runCy) = 0.7; 
+
+iTransChar(runCy,"RES_MEXTF",YTIME) = 0.04;
+iTransChar(runCy,"RES_MEXTV",YTIME) = 0.04;
+
 VLamda.FX(runCy,YTIME)$((not An(YTIME)) $(ord(YTIME) gt 1) ) = (VNumVeh.l(runCy,YTIME-1) / (iPop(YTIME-1,runCy)*1000) /
-           iPassCarsMarkSat(runCy))$(iPop(YTIME-1,runCy))+VLamda.l(runCy,YTIME-1)$(not iPop(YTIME-1,runCy));
+iPassCarsMarkSat(runCy))$(iPop(YTIME-1,runCy))+VLamda.l(runCy,YTIME-1)$(not iPop(YTIME-1,runCy));
 VMExtF.l(runCy,YTIME)$((not An(YTIME)) $(ord(YTIME) gt 1)  ) = ( iTransChar(runCy,"RES_MEXTF",YTIME) * iSigma(runCy,"S1") * EXP(iSigma(runCy,"S2") *
            EXP(iSigma(runCy,"S3") * VLamda.l(runCy,YTIME)))
                * VNumVeh.l(runCy,YTIME-1) /(iPop(YTIME-1,runCy) * 1000) )$(iPop(YTIME-1,runCy));
@@ -304,19 +308,18 @@ VMExtF.FX(runCy,YTIME)$((not An(YTIME)) $(ord(YTIME) gt 1)  ) = ( iTransChar(run
                           VLamda.l(runCy,YTIME)))* 
                           VNumVeh.l(runCy,YTIME-1) /(iPop(YTIME-1,runCy) * 1000) )$(iPop(YTIME-1,runCy))+VMExtF.l(runCy,YTIME-1)$(not iPop(YTIME-1,runCy));
 
+
+iDataPassCars(runCy,"PC","MEXTV") = 0.01;
 VMExtV.FX(runCy,YTIME)$(not An(YTIME)) = iDataPassCars(runCy,"PC","MEXTV");
 
 VScrRate.UP(runCy,YTIME) = 1;
-* FIXME VScrRate.FX(runCy,YTIME) = 0.1 , to be retained only for base year "2017", rest will be computed endogenously.
-* author=redmonkeycloud
 VScrRate.FX(runCy,"2017") = 0.1; 
+
 VGapTranspFillNewTech.FX(runCy,TRANSE,YTIME)$(not AN(YTIME))=0;
-* FIXME: VTrnspActiv.FX(runCy,"PC",YTIME), only the line of code below
-* author=giannou
-VTrnspActiv.FX(runCy,"PC",YTIME) = iTransChar(runCy,"KM_VEH",YTIME); 
-* FIXME: VTrnspActiv.FX(runCy,TRANP,YTIME) $(not sameas(TRANP,"PC")), only the line of code below
-* author=giannou
-VTrnspActiv.FX(runCy,TRANP,YTIME) $(not sameas(TRANP,"PC")) = iActv(YTIME,runCy,TRANP); 
+
+VTrnspActiv.FX(runCy,"PC",YTIME)$(not AN(YTIME)) = iTransChar(runCy,"KM_VEH",YTIME); 
+
+VTrnspActiv.FX(runCy,TRANP,YTIME) $(not AN(YTIME) and not sameas(TRANP,"PC")) = iActv(YTIME,runCy,TRANP); 
 VTrnspActiv.FX(runCy,TRANSE,YTIME)$(not TRANP(TRANSE)) = 0;
 VGoodsTranspActiv.FX(runCy,TRANG,YTIME)$(not An(YTIME)) = iActv(YTIME,runCy,TRANG);
 VGoodsTranspActiv.FX(runCy,TRANSE,YTIME)$(not TRANG(TRANSE)) = 0;
@@ -339,9 +342,9 @@ VElecConsInd.FX(runCy,YTIME)$(not An(YTIME))= SUM(INDSE,VElecNonSub.l(runCy,INDS
 
 VFuePriSubChp.FX(runCy,DSBS,EF,TEA,YTIME)$((not An(YTIME)) $(not TRANSE(DSBS))  $SECTTECH(DSBS,EF)) =
 (((VFuelPriceSub.l(runCy,DSBS,EF,YTIME)+iVarCostTech(runCy,DSBS,EF,YTIME)/1000)/iUsfEneConvSubTech(runCy,DSBS,EF,YTIME)- 
-(0$(not CHP(EF)) + (VFuelPriceSub.l(runCy,"OI","ELC",YTIME)*iFracElecPriChp(runCy,YTIME)*iElecIndex(runCy,"2010"))$CHP(EF))) + (0.003) + 
+(0$(not CHP(EF)) + (VFuelPriceSub.l(runCy,"OI","ELC",YTIME)*iFracElecPriChp*iElecIndex(runCy,"2010"))$CHP(EF))) + (0.003) + 
 SQRT( SQR(((VFuelPriceSub.l(runCy,DSBS,EF,YTIME)+iVarCostTech(runCy,DSBS,EF,YTIME)/1000)/iUsfEneConvSubTech(runCy,DSBS,EF,YTIME)- (0$(not CHP(EF)) + 
-(VFuelPriceSub.l(runCy,"OI","ELC",YTIME)*iFracElecPriChp(runCy,YTIME)*iElecIndex(runCy,"2010"))$CHP(EF)))-(0.003)) + SQR(1e-7) ) )/2;
+(VFuelPriceSub.l(runCy,"OI","ELC",YTIME)*iFracElecPriChp*iElecIndex(runCy,"2010"))$CHP(EF)))-(0.003)) + SQR(1e-7) ) )/2;
 
 
 VDemSub.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = max(iTotFinEneDemSubBaseYr(runCy,INDDOM,YTIME) - VElecNonSub.L(runCy,INDDOM,YTIME),1e-5);
@@ -484,7 +487,7 @@ VRenValue.FX(YTIME) = 0 ;
 VTotReqElecProd.fx(runCy,YTIME)$TFIRST(YTIME)=sum(pgall,VElecProdPowGenPlants.L(runCy,pgall,YTIME)$TFIRST(YTIME));
 display VCarVal.l;
 
-loop an do
+loop an do !! start outer iteration loop (time steps)
    s = s + 1;
    TIME(YTIME) = NO;
    TIME(AN)$(ord(an)=s) = YES;
