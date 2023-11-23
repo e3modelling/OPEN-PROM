@@ -208,7 +208,7 @@ VFeCons.l(allCy,EF,YTIME) = 0.1;
 VTransfOutputRefineries.l(allCy,EFS,YTIME)=0.1;
 VGrsInlConsNotEneBranch.l(allCy,EFS,YTIME)=0.1;
 VElecConsAll.l(allCy,DSBS,YTIME)=0.1;
-VCapChpPlants.l(allCy,YTIME)=0.1;
+VLoadFacDom.l(allCy,YTIME)=0.1;
 VElecPeakLoad.l(allCy,YTIME)=0.1;
 VElecPeakLoad.up(allCy,YTIME)=1e6;
 VElecProdPowGenPlants.l(allCy,PGALL,YTIME) = 1;
@@ -396,13 +396,13 @@ VElecDem.FX(runCy,YTIME) =  1/0.086 * ( iFinEneCons(runCy,"ELC",YTIME) + sum(NEN
 
 
 VCorrBaseLoad.FX(runCy,YTIME)$(not An(YTIME)) = iPeakBsLoadBy(runCy,"BASELOAD");
-$ontext
-VCapChpPlants.FX(runCy,YTIME)$(datay(YTIME)) =
+
+VLoadFacDom.FX(runCy,YTIME)$(datay(YTIME)) =
          (sum(INDDOM,VConsFuel.l(runCy,INDDOM,"ELC",YTIME)) + sum(TRANSE, VDemTr.l(runCy,TRANSE,"ELC",YTIME)))/
          (sum(INDDOM,VConsFuel.l(runCy,INDDOM,"ELC",YTIME)/iLoadFacElecDem(runCy,INDDOM,"2015")) + sum(TRANSE, VDemTr.l(runCy,TRANSE,"ELC",YTIME)/
          iLoadFacElecDem(runCy,TRANSE,"2015")));
-$offtext
-VElecPeakLoad.FX(runCy,YTIME) = VElecDem.l(runCy,YTIME)/(VCapChpPlants.l(runCy,YTIME)*8.76);
+
+VElecPeakLoad.FX(runCy,YTIME) = VElecDem.l(runCy,YTIME)/(VLoadFacDom.l(runCy,YTIME)*8.76);
 
 VTotElecGenCap.FX(runCy,YTIME) = iTotAvailCapBsYr(runCy);
 VElecGenNoChp.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
