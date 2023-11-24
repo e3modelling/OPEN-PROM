@@ -253,11 +253,6 @@ iShareFueTransfInput(runCy,EFS)$sum(EF$EFS(EF),iTransfInpGasworks(runCy,EF,"%fBa
 *VDistrLosses.FX(runCy,EFS,TT)$PERIOD(TT) = VDistrLosses.L(runCy,EFS,TT);
 iRateLossesFinCons(runCy,EFS,YTIME)$an(YTIME)  = iRateLossesFinConsSup(runCy,EFS, YTIME)*iEneProdRDscenarios(runCy,"PG",YTIME);
 
-table iPwrLoadFactorDem(allCy,SBS,YTIME)              "Parameters for load factor adjustment (1)"
-$ondelim
-$include"./iPwrLoadFactorDem.csv"
-$offdelim
-;
 table iLoadFactorAdjMxm(allCy,VARIOUS_LABELS,YTIME)               "Parameter for load factor adjustment iMxmLoadFacElecDem (1)"
 $ondelim
 $include"./iLoadFactorAdjMxm.csv"
@@ -265,7 +260,33 @@ $offdelim
 ;
 iBslCorrection(allCy,YTIME)$an(YTIME) = iLoadFactorAdjMxm(allCy,"AMAXBASE",YTIME);
 iMxmLoadFacElecDem(allCy,YTIME)$an(YTIME) = iLoadFactorAdjMxm(allCy,"MAXLOADSH",YTIME);
-iLoadFacElecDem(allCy,DSBS,YTIME)$(ord(YTIME)>(ordfirst-4)) = iPwrLoadFactorDem(allCy,DSBS,YTIME);
+
+parameter iLoadFacElecDem(DSBS)    "Load factor of electricity demand per sector (1)" /
+IS 	0.92,
+NF 	0.94,
+CH 	0.83,
+BM 	0.82,
+PP 	0.74,
+FD 	0.65,
+EN 	0.7,
+TX 	0.61,
+OE 	0.92,
+OI 	0.67,
+SE 	0.64,
+AG 	0.52,
+HOU	0.72,
+PC 	0.7,
+PB 	0.7,
+PT 	0.62,
+PN 	0.7,
+PA 	0.7,
+GU 	0.7,
+GT 	0.62,
+GN 	0.7,
+BU 	0.7,
+PCH	0.83,
+NEN	0.83 / ;
+
 *Calculation of consumer size groups and their distribution function
 iNcon(TRANSE)$(sameas(TRANSE,"PC") or sameas(TRANSE,"GU")) = 10; !! 11 different consumer size groups for cars and trucks
 iNcon(TRANSE)$(not (sameas(TRANSE,"PC") or sameas(TRANSE,"GU"))) = 1; !! 2 different consumer size groups for inland navigation, trains, busses and aviation
