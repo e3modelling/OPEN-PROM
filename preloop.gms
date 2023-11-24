@@ -393,7 +393,7 @@ VElecDem.FX(runCy,YTIME) =  1/0.086 * ( iFinEneCons(runCy,"ELC",YTIME) + sum(NEN
 
 VCorrBaseLoad.FX(runCy,YTIME)$(not An(YTIME)) = iPeakBsLoadBy(runCy,"BASELOAD");
 
-VLoadFacDom.FX(runCy,YTIME)$(datay(YTIME)) =
+VLoadFacDom.FX(runCy,YTIME) =
          (sum(INDDOM,VConsFuel.l(runCy,INDDOM,"ELC",YTIME)) + sum(TRANSE, VDemTr.l(runCy,TRANSE,"ELC",YTIME)))/
          (sum(INDDOM,VConsFuel.l(runCy,INDDOM,"ELC",YTIME)/iLoadFacElecDem(runCy,INDDOM,"2015")) + sum(TRANSE, VDemTr.l(runCy,TRANSE,"ELC",YTIME)/
          iLoadFacElecDem(runCy,TRANSE,"2015")));
