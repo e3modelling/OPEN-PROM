@@ -440,7 +440,7 @@ $include"./iDataOtherTransfOutput.csv"
 $offdelim
 ;
 iTranfOutGasworks(allCy,EFS,YTIME)$(not An(YTIME)) = iDataOtherTransfOutput(allCy,EFS,YTIME);
-iDistrLosses(allCy,EFS,YTIME)$(not An(YTIME))  = iDataDistrLosses(allCy,EFS,YTIME);
+iDistrLosses(allCy,EFS,YTIME) = iDataDistrLosses(allCy,EFS,YTIME);
 table iDataTransfOutputRef(allCy,EF,YTIME)	    "Data for Other transformation output  (Mtoe)"
 $ondelim
 $include"./iDataTransfOutputRef.csv"
@@ -626,13 +626,13 @@ $ondelim
 $include"./iDataConsEneBranch.csv"
 $offdelim
 ;
-iTotEneBranchCons(allCy,EFS,YTIME)$(not An(YTIME)) = iDataConsEneBranch(allCy,EFS,YTIME);
+iTotEneBranchCons(allCy,EFS,YTIME) = iDataConsEneBranch(allCy,EFS,YTIME);
 table iDataImports(allCy,EF,YTIME)	           "Data for imports (Mtoe)"
 $ondelim
 $include"./iDataImports.csv"
 $offdelim
 ;
-iFuelImports(allCy,EFS,YTIME)$(not An(YTIME)) = iDataImports(allCy,EFS,YTIME);
+iFuelImports(allCy,EFS,YTIME) = iDataImports(allCy,EFS,YTIME);
 iGrosInlCons(allCy,EFS,YTIME)$(not An(YTIME)) = iDataGrossInlCons(allCy,EFS,YTIME);
 iGrossInConsNoEneBra(runCy,EFS,YTIME) = iGrosInlCons(runCy,EFS,YTIME) + iTotEneBranchCons(runCy,EFS,YTIME)$EFtoEFA(EFS,"LQD")
                                                - iTotEneBranchCons(runCy,EFS,YTIME)$(not EFtoEFA(EFS,"LQD"));
