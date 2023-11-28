@@ -1364,7 +1364,7 @@ QFuelPriSubSepCarbVal(runCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF) $TIME(YTIME) $(not s
          )$( not (ELCEF(EF) or HEATPUMP(EF) or ALTEF(EF)))
          +
          (
-iFuelPrice(runCy,SBS,EF,"%fStartY%")$(DSBS(SBS))$ALTEF(EF)
+VFuelPriceSub(runCy,SBS,EF,YTIME-1)$(DSBS(SBS))$ALTEF(EF)
          )
          +
          (

@@ -268,7 +268,7 @@ Equation,EQVARCOSTPG2,QVarCostTechnology,Compute variable cost of technology ,"C
 Equation,EQVEH,QNumVeh,Compute stock of passenger cars (in million vehicles),"CYall,YTIME","allCy,YTIME",Transport
 Equation,EQZZ,QEndogScrapIndex,Compute endogenous scrapping index ,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 scalar,exogCV,sExogCarbValue,switch for exogenous carbon value (0=exogenous 1=endogenous) /1/,,,
-Parameter,exogCVp,iCarbValYrExog,Carbon value for each year when it is exogenous (Euro05/tn CO2),ytime,ytime,Reguala Falsi Parameters
+Parameter,exogCVp,iCarbValYrExog,Carbon value for each year when it is exogenous (Euro05/tn CO2),ytime,"allCy,ytime",Reguala Falsi Parameters
 Variable,EXPO_TZ,VExportsFake,Exports fake (Mtoe) ,"CYall,EFS,YTIME","allCy,EFS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Parameter,FEEDRES,iResFeedTransfr,Residual for Feedstocks in Transfers (Mtoe),"CYall,YTIME","allCy,YTIME",Supply Side Specific Parameters
 Parameter,FEEDTRANS,iFeedTransfr,Feedstocks in Transfers (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",Supply Side Specific Parameters

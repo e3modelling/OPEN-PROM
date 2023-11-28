@@ -597,6 +597,8 @@ iPriceTragets("MAR",INDSE1(SBS),"NGS",YTIME)=iDataPriceTargets("MAR","INDSE1","N
 iPriceTragets("MAR",DOMSE1(SBS),"NGS",YTIME)=iDataPriceTargets("MAR","DOMSE1","NGS",YTIME) ;
 iPriceTragets("MAR",NENSE1(SBS),"NGS",YTIME)=iDataPriceTargets("MAR","NENSE1","NGS",YTIME) ;
 iPriceTragets("MAR",PG(SBS),"NGS",YTIME)=iDataPriceTargets("MAR","INDSE1","NGS",YTIME) ;
+* FIXME: iHydrogenPri should be computed with mrprom
+* author=giannou
 iHydrogenPri(allCy,SBS,YTIME)=4.3;
 table iFuelPrice(allCy,SBS,EF,YTIME)	 "Prices of fuels per subsector (k$2015/toe)"
 $ondelim
@@ -772,7 +774,7 @@ iInstCapPast(allCy,PGALL,"2013") = iInstCapPast(allCy,PGALL,"2012") +(iInstCapPa
 iInstCapPast(allCy,PGALL,"2014") = iInstCapPast(allCy,PGALL,"2013") +(iInstCapPast(allCy,PGALL,"2015")- iInstCapPast(allCy,PGALL,"2010"))/5 ;
 iInstCapPast(allCy,PGALL,"2016") = iInstCapPast(allCy,PGALL,"2015") +(iInstCapPast(allCy,PGALL,"2017")- iInstCapPast(allCy,PGALL,"2015"))/2 ;
 
-table iEnvPolicies(POLICIES_SET,YTIME) "Environmental policies on emissions constraints  and subsidy on renewables (Mtn CO2)"
+table iEnvPolicies(allCy,POLICIES_SET,YTIME) "Environmental policies on emissions constraints  and subsidy on renewables (Mtn CO2)"
 $ondelim
 $include"./iEnvPolicies.csv"
 $offdelim
@@ -782,7 +784,7 @@ $ondelim
 $include"./iDataPowGenCost.csv"
 $offdelim
 ;
-iCarbValYrExog(YTIME)$an(YTIME) = iEnvPolicies("exogCV",YTIME);
+iCarbValYrExog(allCy,YTIME)$an(YTIME) = iEnvPolicies(allCy,"exogCV",YTIME);
 table iMatrFactor(allCy,SBS,EF,YTIME)       "Maturity factor per technology and subsector (1)"
 $ondelim
 $include"./iMatrFactor.csv"
