@@ -1358,20 +1358,12 @@ QHouseExpEne(runCy,YTIME)$TIME(YTIME)..
 QFuelPriSubSepCarbVal(runCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF) $TIME(YTIME) $(not sameas("NUC",EF)))..
          VFuelPriceSub(runCy,SBS,EF,YTIME)
                  =E=
-      (
-           (1+sum(WEF$EFtoWEF(SBS,EF,WEF),sum(NAP$NAPtoALLSBS(NAP,SBS),iScenarioPri(WEF,NAP,YTIME))))*     !!ONLY FOR THE ETS SECTORS
-         (
-
-           (1-iPriceReform(runCy,SBS,EF,YTIME))*
-           ( VFuelPriceSub(runCy,SBS,EF,YTIME-1))
-           + iPriceReform(runCy,SBS,EF,YTIME)*iPriceTragets(runCy,SBS,EF,YTIME)
-)
-          + iCo2EmiFac(runCy,SBS,EF,YTIME) *sum(NAP$NAPtoALLSBS(NAP,SBS),(VCarVal(runCy,NAP,YTIME)))/1000
-          + ((iEffValueInEuro(runCy,SBS,YTIME)-iEffValueInEuro(runCy,SBS,YTIME-1))/1000)$DSBS(SBS)
+         (VFuelPriceSub(runCy,SBS,EF,YTIME-1) +
+          iCo2EmiFac(runCy,SBS,EF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,SBS),(VCarVal(runCy,NAP,YTIME)))/1000
          )$( not (ELCEF(EF) or HEATPUMP(EF) or ALTEF(EF)))
          +
          (
-iFuelPrice(runCy,SBS,EF,"2018") $(DSBS(SBS))$ALTEF(EF)
+VFuelPriceSub(runCy,SBS,EF,YTIME-1)$(DSBS(SBS))$ALTEF(EF)
          )
          +
          (

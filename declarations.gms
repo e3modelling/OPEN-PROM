@@ -84,7 +84,7 @@ iShrNonSubElecInTotElecDem(allCy,SBS)	                "Share of non substitutabl
 iElecIndex(allCy,YTIME)	                                "Electricity Index (1)"	
 iExogDemOfBiomass(allCy,SBS,YTIME)	                    "Demand of tranditional biomass defined exogenously ()"	
 iFinEneConsPrevYear(allCy,EF,YTIME)	                    "Final energy consumption used for holding previous year results (Mtoe)"	
-iCarbValYrExog(ytime)	                                "Carbon value for each year when it is exogenous (Euro05/tn CO2)"
+iCarbValYrExog(allCy,ytime)	                                "Carbon value for each year when it is exogenous (Euro05/tn CO2)"
 iShrHeatPumpElecCons(allCy,SBS)	                        "Share of heat pump electricity consumption in total substitutable electricity (1)"						 			
 iTranfOutGasworks(allCy,EF,YTIME)	                    "Transformation Output from Gasworks, Blast Furnances and Briquetting plants (Mtoe)"	
 iDistrLosses(allCy,EF,YTIME)	                        "Distribution Losses (Mtoe)"	
@@ -467,6 +467,6 @@ sGwToTwhPerYear    "convert GW mean power into TWh/y" /8.76/
 s                  "time step iterator" /0/
 sSolverTryMax      "maximum attempts to solve each time step" /%SolverTryMax%/
 sModelStat         "helper parameter for solver status"
-sExogCarbValue	   "switch for exogenous carbon value (0=exogenous 1=endogenous)" /1/
+sExogCarbValue	   "switch for exogenous carbon value (0=exogenous 1=endogenous)" /0/
 iFracElecPriChp    "Fraction of Electricity Price at which a CHP sells electricity to network" /0.3/
 ;

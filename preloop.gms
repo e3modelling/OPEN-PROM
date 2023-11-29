@@ -169,7 +169,7 @@ QDistrLosses
 
 * Prices *
 
-*QFuelPriSubSepCarbVal
+QFuelPriSubSepCarbVal
 QFuelPriSepCarbon
 QAvgFuelPriSub
 *QElecPriIndResCons
@@ -212,7 +212,6 @@ VElecProdPowGenPlants.l(allCy,PGALL,YTIME) = 1;
 *VHourProdCostTech.up(allCy,PGALL,HOUR,YTIME)=1e6;
 VSensCcs.l(allCy,YTIME)=1;
 *VHourProdCostTech.VLamda(allCy,PGALL,HOUR,YTIME)=1;
-VCarVal.fx(allCy,NAP,YTIME)=1;
 VFuelPriceSub.l(allCy,"PG",PGEF,YTIME)=1;
 VProdCostTechnology.l(allCy,PGALL2,YTIME)=0.1;
 VProdCostTechnology.up(allCy,PGALL2,YTIME)=1e6;
@@ -264,18 +263,23 @@ VHourProdCostTech.l(runCy,PGALL,HOUR,TT) = 0.0001;
 *                        VARIABLE INITIALISATION                               *
 
 
-* FIXME: VFuelPriceSub should be computed endogenously, add $(not An(YTIME)) below
+VFuelPriceSub.FX(runCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF)$(not HEATPUMP(EF))$(not An(YTIME))) = iFuelPrice(runCy,SBS,EF,YTIME);
+VFuelPriceSub.FX(runCy,SBS,ALTEF,YTIME)$(SECTTECH(SBS,ALTEF)$(not An(YTIME))) = sum(EF$ALTMAP(SBS,ALTEF,EF),iFuelPrice(runCy,SBS,EF,YTIME));
+* FIXME: VFuelPriceSub (NUC/MET/ETH/BGDO) should be computed endogenously after startYear, and with mrprom before startYear
 * author=giannou
-VFuelPriceSub.FX(runCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF) $(not HEATPUMP(EF)) ) = iFuelPrice(runCy,SBS,EF,YTIME);
-VFuelPriceSub.FX(runCy,SBS,ALTEF,YTIME)$(SECTTECH(SBS,ALTEF)) = sum(EF$ALTMAP(SBS,ALTEF,EF),iFuelPrice(runCy,SBS,EF,YTIME));
 VFuelPriceSub.FX(runCy,"PG","NUC",YTIME) = 0.025; !! fixed price for nuclear fuel to 25Euro/toe
 VFuelPriceSub.FX(runCy,"H2P","NUC",YTIME) = 0.025; !! fixed price for nuclear fuel to 25Euro/toe
-VFuelPriceSub.fx(runCy,INDDOM,"HEATPUMP",YTIME)$(SECTTECH(INDDOM,"HEATPUMP")) = iFuelPrice(runCy,INDDOM,"ELC",YTIME);
-VFuelPriceSub.fx(runCy,"H2P",EF,YTIME)$(SECTTECH("H2P",EF) ) = VFuelPriceSub.l(runCy,"PG",EF,YTIME);
-VFuelPriceSub.fx(runCy,"H2P","ELC",YTIME)= VFuelPriceSub.l(runCy,"OI","ELC",YTIME);
+VFuelPriceSub.FX(runCy,SBS,"MET",YTIME)$(not An(YTIME)) = 800; !! fixed price methanol
+VFuelPriceSub.FX(runCy,SBS,"ETH",YTIME)$(not An(YTIME)) = 800; !! fixed price for ethanol
+VFuelPriceSub.FX(runCy,SBS,"BGDO",YTIME)$(not An(YTIME)) = 350; !! fixed price for biodiesel
+VFuelPriceSub.fx(runCy,INDDOM,"HEATPUMP",YTIME)$(SECTTECH(INDDOM,"HEATPUMP")$(not An(YTIME))) = iFuelPrice(runCy,INDDOM,"ELC",YTIME);
+VFuelPriceSub.fx(runCy,"H2P",EF,YTIME)$(SECTTECH("H2P",EF)$(not An(YTIME))) = VFuelPriceSub.l(runCy,"PG",EF,YTIME);
+VFuelPriceSub.fx(runCy,"H2P","ELC",YTIME)$(not An(YTIME))= VFuelPriceSub.l(runCy,"OI","ELC",YTIME);
 
-VElecPriInduResConsu.FX(runCy,"i",YTIME)$(not an(ytime)) = VFuelPriceSub.l(runCy,"OI","ELC",YTIME)*0.086;
-VElecPriInduResConsu.FX(runCy,"r",YTIME)$(not an(ytime)) = VFuelPriceSub.l(runCy,"HOU","ELC",YTIME)*0.086;
+* FIXME: VElecPriInduResConsu should be computed endogenously, add $(not An(YTIME)) below
+* author=giannou
+VElecPriInduResConsu.FX(runCy,"i",YTIME) = VFuelPriceSub.l(runCy,"OI","ELC",YTIME)*sTWhToMtoe;
+VElecPriInduResConsu.FX(runCy,"r",YTIME) = VFuelPriceSub.l(runCy,"HOU","ELC",YTIME)*sTWhToMtoe;
 VElecPriIndResNoCliPol.FX(runCy,"i",YTIME)$(not an(ytime)) = VFuelPriceSub.l(runCy,"OI","ELC",YTIME)*0.086;
 VElecPriIndResNoCliPol.FX(runCy,"r",YTIME)$(not an(ytime)) = VFuelPriceSub.l(runCy,"HOU","ELC",YTIME)*0.086;
 VFuelPriSubNoCarb.FX(runCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF) $(not HEATPUMP(EF))  $(not An(YTIME))) = iFuelPrice(runCy,SBS,EF,YTIME);
@@ -454,8 +458,8 @@ VLongPowGenCost.L(runCy,PGALL,ESET,"2017") = 0;
 VLonAvgPowGenCostNoClimPol.L(runCy,PGALL,ESET,"2017") = 0;
 
 VCarVal.fx(runCy,NAP,YTIME)$(not An(YTIME))=0;
-VCarVal.FX(runCy,"TRADE",YTIME)$an(YTIME) = sExogCarbValue*iCarbValYrExog(YTIME);
-VCarVal.FX(runCy,"NOTRADE",YTIME)$an(YTIME) =sExogCarbValue*iCarbValYrExog(YTIME);
+VCarVal.FX(runCy,"TRADE",YTIME)$an(YTIME) = sExogCarbValue*iCarbValYrExog(runCy,YTIME);
+VCarVal.FX(runCy,"NOTRADE",YTIME)$an(YTIME) =sExogCarbValue*iCarbValYrExog(runCy,YTIME);
 
 VCumCO2Capt.FX(runCy,YTIME)$(not an(YTIME)) = 0 ;
 
