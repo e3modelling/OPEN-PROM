@@ -22,8 +22,8 @@ model openprom /
 *QBslMaxmLoad
 *QElecBaseLoad
 *QTotReqElecProd
-*QTotEstElecGenCap
-*QTotElecGenCap
+QTotEstElecGenCap
+QTotElecGenCap
 *QHourProdCostInv
 *QHourProdCostInvDec
 *QGammaInCcsDecTree
@@ -205,7 +205,7 @@ VFeCons.l(allCy,EF,YTIME) = 0.1;
 VTransfOutputRefineries.l(allCy,EFS,YTIME)=0.1;
 VGrsInlConsNotEneBranch.l(allCy,EFS,YTIME)=0.1;
 VElecConsAll.l(allCy,DSBS,YTIME)=0.1;
-VCapChpPlants.l(allCy,YTIME)=0.1;
+VLoadFacDom.l(allCy,YTIME)=0.1;
 VElecPeakLoad.l(allCy,YTIME)=0.1;
 VElecPeakLoad.up(allCy,YTIME)=1e6;
 VElecProdPowGenPlants.l(allCy,PGALL,YTIME) = 1;
@@ -391,20 +391,20 @@ VExportsFake.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iFuelExprts(runCy,EFS,YTIME);
 VFkImpAllFuelsNotNatGas.FX(runCy,"NGS",YTIME)$(not An(YTIME)) = iFuelImports(runCy,"NGS",YTIME);
 VExportsFake.FX(runCy,"NGS",YTIME)$(not An(YTIME)) = iFuelExprts(runCy,"NGS",YTIME);
 
-VElecDem.FX(runCy,YTIME)$(not An(YTIME)) =  1/0.086 * ( iFinEneCons(runCy,"ELC",YTIME) + sum(NENSE, iFuelConsPerFueSub(runCy,NENSE,"ELC",YTIME)) + iDistrLosses(runCy,"ELC",YTIME)
+VElecDem.FX(runCy,YTIME) =  1/0.086 * ( iFinEneCons(runCy,"ELC",YTIME) + sum(NENSE, iFuelConsPerFueSub(runCy,NENSE,"ELC",YTIME)) + iDistrLosses(runCy,"ELC",YTIME)
                                              + iTotEneBranchCons(runCy,"ELC",YTIME) - (iFuelImports(runCy,"ELC",YTIME)-iFuelExprts(runCy,"ELC",YTIME)));
 
 
 VCorrBaseLoad.FX(runCy,YTIME)$(not An(YTIME)) = iPeakBsLoadBy(runCy,"BASELOAD");
-$ontext
-VCapChpPlants.FX(runCy,YTIME)$(datay(YTIME)) =
-         (sum(INDDOM,VConsFuel.l(runCy,INDDOM,"ELC",YTIME)) + sum(TRANSE, VDemTr.l(runCy,TRANSE,"ELC",YTIME)))/
-         (sum(INDDOM,VConsFuel.l(runCy,INDDOM,"ELC",YTIME)/iLoadFacElecDem(runCy,INDDOM,"2015")) + sum(TRANSE, VDemTr.l(runCy,TRANSE,"ELC",YTIME)/
-         iLoadFacElecDem(runCy,TRANSE,"2015")));
-$offtext
-VElecPeakLoad.FX(runCy,YTIME)$(datay(YTIME)) = VElecDem.l(runCy,YTIME)/(VCapChpPlants.l(runCy,YTIME)*8.76);
 
-VTotElecGenCap.FX(runCy,YTIME) = iTotAvailCapBsYr(runCy);
+VLoadFacDom.FX(runCy,YTIME) =
+         (sum(INDDOM,VConsFuel.l(runCy,INDDOM,"ELC",YTIME)) + sum(TRANSE, VDemTr.l(runCy,TRANSE,"ELC",YTIME)))/
+         (sum(INDDOM,VConsFuel.l(runCy,INDDOM,"ELC",YTIME)/iLoadFacElecDem(INDDOM)) + sum(TRANSE, VDemTr.l(runCy,TRANSE,"ELC",YTIME)/
+         iLoadFacElecDem(TRANSE)));
+
+VElecPeakLoad.FX(runCy,YTIME) = VElecDem.l(runCy,YTIME)/(VLoadFacDom.l(runCy,YTIME)*8.76);
+
+VTotElecGenCap.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
 VElecGenNoChp.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
 VElecCapChpPla.FX(runCy,CHP,YTIME) = iHisChpGrCapData(runCy,CHP,YTIME);
 VPowPlaShaNewEquip.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) )=0;
