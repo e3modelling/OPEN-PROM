@@ -42,17 +42,17 @@ QEstBaseLoad(runCy,YTIME)$TIME(YTIME)..
 
 * Compute load factor of entire domestic system
 QLoadFacDom(runCy,YTIME)$TIME(YTIME)..
-         VCapChpPlants(runCy,YTIME)
+         VLoadFacDom(runCy,YTIME)
              =E=
          (sum(INDDOM,VConsFuel(runCy,INDDOM,"ELC",YTIME)) + sum(TRANSE, VDemTr(runCy,TRANSE,"ELC",YTIME)))/
-         (sum(INDDOM,VConsFuel(runCy,INDDOM,"ELC",YTIME)/iLoadFacElecDem(runCy,INDDOM,YTIME)) + 
-         sum(TRANSE, VDemTr(runCy,TRANSE,"ELC",YTIME)/iLoadFacElecDem(runCy,TRANSE,YTIME)));         
+         (sum(INDDOM,VConsFuel(runCy,INDDOM,"ELC",YTIME)/iLoadFacElecDem(INDDOM)) + 
+         sum(TRANSE, VDemTr(runCy,TRANSE,"ELC",YTIME)/iLoadFacElecDem(TRANSE)));         
 
 * Compute elerctricity peak load
 QElecPeakLoad(runCy,YTIME)$TIME(YTIME)..
          VElecPeakLoad(runCy,YTIME)
              =E=
-         VElecDem(runCy,YTIME)/(VCapChpPlants(runCy,YTIME)*sGwToTwhPerYear);
+         VElecDem(runCy,YTIME)/(VLoadFacDom(runCy,YTIME)*sGwToTwhPerYear);
 
 * Compute baseload corresponding to maximum load
 QBslMaxmLoad(runCy,YTIME)$TIME(YTIME)..
@@ -79,8 +79,7 @@ QTotReqElecProd(runCy,YTIME)$TIME(YTIME)..
 QTotEstElecGenCap(runCy,YTIME)$TIME(YTIME)..
         VTotElecGenCapEst(runCy,YTIME)
              =E=
-        iResMargTotAvailCap(runCy,"TOT_CAP_RES",YTIME) * VTotElecGenCap(runCy,YTIME-1)
-        * VElecPeakLoad(runCy,YTIME)/VElecPeakLoad(runCy,YTIME-1);          
+        VTotElecGenCap(runCy,YTIME-1) * VElecPeakLoad(runCy,YTIME)/VElecPeakLoad(runCy,YTIME-1);          
 
 * Compute total electricity generation capacity
 QTotElecGenCap(runCy,YTIME)$TIME(YTIME)..

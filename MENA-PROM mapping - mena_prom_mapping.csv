@@ -301,7 +301,7 @@ Variable,L,VLamda,Ratio of car ownership over saturation car ownership (1),"CYal
 Variable,LAMBDA,VLoadCurveConstr,Parameter for load curve construction,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Variable,LFT,VLifeTimeTech,Lifetime of technologies (years),"CYall,DSBS,EF,TEA,YTIME","allCy,DSBS,EF,TEA,YTIME",PRICES
 Parameter,LOADF,iLoadFacElecDem,Load factor of electricity demand per sector,"CYaLL,DSBS,YTIME","allCy,DSBS,YTIME",Power Generation Parameters
-Variable,LOADFALL,VCapChpPlants,"""Electricity load factor for entire domestic system""","CYaLL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Variable,LOADFALL,VLoadFacDom,"""Electricity load factor for entire domestic system""","CYaLL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Variable,LOS,VLosses,Distribution losses (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
 Variable,LOS,VDistrLosses,Distribution losses (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,LTAC,VAvgPowerGenLongTrm,Long-term average power generation cost (Euro2005/kWh),"CYall,ESET,YTIME ","allCy,ESET,YTIME",POWER GENERATION SECTOR

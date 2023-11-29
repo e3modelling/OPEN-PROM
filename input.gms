@@ -253,11 +253,6 @@ iShareFueTransfInput(runCy,EFS)$sum(EF$EFS(EF),iTransfInpGasworks(runCy,EF,"%fBa
 *VDistrLosses.FX(runCy,EFS,TT)$PERIOD(TT) = VDistrLosses.L(runCy,EFS,TT);
 iRateLossesFinCons(runCy,EFS,YTIME)$an(YTIME)  = iRateLossesFinConsSup(runCy,EFS, YTIME)*iEneProdRDscenarios(runCy,"PG",YTIME);
 
-table iPwrLoadFactorDem(allCy,SBS,YTIME)              "Parameters for load factor adjustment (1)"
-$ondelim
-$include"./iPwrLoadFactorDem.csv"
-$offdelim
-;
 table iLoadFactorAdjMxm(allCy,VARIOUS_LABELS,YTIME)               "Parameter for load factor adjustment iMxmLoadFacElecDem (1)"
 $ondelim
 $include"./iLoadFactorAdjMxm.csv"
@@ -265,7 +260,33 @@ $offdelim
 ;
 iBslCorrection(allCy,YTIME)$an(YTIME) = iLoadFactorAdjMxm(allCy,"AMAXBASE",YTIME);
 iMxmLoadFacElecDem(allCy,YTIME)$an(YTIME) = iLoadFactorAdjMxm(allCy,"MAXLOADSH",YTIME);
-iLoadFacElecDem(allCy,DSBS,YTIME)$(ord(YTIME)>(ordfirst-4)) = iPwrLoadFactorDem(allCy,DSBS,YTIME);
+
+parameter iLoadFacElecDem(DSBS)    "Load factor of electricity demand per sector (1)" /
+IS 	0.92,
+NF 	0.94,
+CH 	0.83,
+BM 	0.82,
+PP 	0.74,
+FD 	0.65,
+EN 	0.7,
+TX 	0.61,
+OE 	0.92,
+OI 	0.67,
+SE 	0.64,
+AG 	0.52,
+HOU	0.72,
+PC 	0.7,
+*PB 	0.7,
+PT 	0.62,
+*PN 	0.7,
+PA 	0.7,
+GU 	0.7,
+GT 	0.62,
+GN 	0.7,
+BU 	0.7,
+PCH	0.83,
+NEN	0.83 / ;
+
 *Calculation of consumer size groups and their distribution function
 iNcon(TRANSE)$(sameas(TRANSE,"PC") or sameas(TRANSE,"GU")) = 10; !! 11 different consumer size groups for cars and trucks
 iNcon(TRANSE)$(not (sameas(TRANSE,"PC") or sameas(TRANSE,"GU"))) = 1; !! 2 different consumer size groups for inland navigation, trains, busses and aviation
@@ -419,7 +440,7 @@ $include"./iDataOtherTransfOutput.csv"
 $offdelim
 ;
 iTranfOutGasworks(allCy,EFS,YTIME)$(not An(YTIME)) = iDataOtherTransfOutput(allCy,EFS,YTIME);
-iDistrLosses(allCy,EFS,YTIME)$(not An(YTIME))  = iDataDistrLosses(allCy,EFS,YTIME);
+iDistrLosses(allCy,EFS,YTIME) = iDataDistrLosses(allCy,EFS,YTIME);
 table iDataTransfOutputRef(allCy,EF,YTIME)	    "Data for Other transformation output  (Mtoe)"
 $ondelim
 $include"./iDataTransfOutputRef.csv"
@@ -432,7 +453,7 @@ $offdelim
 ;
 iTransfOutputRef(allCy,EFS,YTIME)$(not An(YTIME)) = iDataTransfOutputRef(allCy,EFS,YTIME);
 iFuelConsTRANSE(allCy,TRANSE,EF,YTIME)$(SECTTECH(TRANSE,EF) $(iFuelConsTRANSE(allCy,TRANSE,EF,YTIME)<=0)) = 1e-6;
-iFuelConsPerFueSub(allCy,TRANSE,EF,YTIME)$(not An(YTIME))  = iFuelConsTRANSE(allCy,TRANSE,EF,YTIME);
+iFuelConsPerFueSub(allCy,TRANSE,EF,YTIME) = iFuelConsTRANSE(allCy,TRANSE,EF,YTIME);
 table iFuelConsINDSE(allCy,INDSE,EF,YTIME)	 "Fuel consumption of industry subsector (Mtoe)"
 $ondelim
 $include"./iFuelConsINDSE.csv"
@@ -450,10 +471,12 @@ $ondelim
 $include"./iFuelConsNENSE.csv"
 $offdelim
 ;
+* FIXME: Include $(not An(YTIME)) to iFuelConsPerFueSub when necessary (removing for now)
+* author=derevirn
 iFuelConsNENSE(allCy,NENSE,EF,YTIME)$(SECTTECH(NENSE,EF) $(iFuelConsNENSE(allCy,NENSE,EF,YTIME)<=0)) = 1e-6;
-iFuelConsPerFueSub(allCy,INDSE,EF,YTIME)$(not An(YTIME))   = iFuelConsINDSE(allCy,INDSE,EF,YTIME);
-iFuelConsPerFueSub(allCy,DOMSE,EF,YTIME)$(not An(YTIME))   = iFuelConsDOMSE(allCy,DOMSE,EF,YTIME);
-iFuelConsPerFueSub(allCy,NENSE,EF,YTIME)$(not An(YTIME))   = iFuelConsNENSE(allCy,NENSE,EF,YTIME);
+iFuelConsPerFueSub(allCy,INDSE,EF,YTIME) = iFuelConsINDSE(allCy,INDSE,EF,YTIME);
+iFuelConsPerFueSub(allCy,DOMSE,EF,YTIME) = iFuelConsDOMSE(allCy,DOMSE,EF,YTIME);
+iFuelConsPerFueSub(allCy,NENSE,EF,YTIME) = iFuelConsNENSE(allCy,NENSE,EF,YTIME);
 iFinEneCons(runCy,EFS,YTIME) = sum(INDDOM,
                          sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(INDDOM,EF)), iFuelConsPerFueSub(runCy,INDDOM,EF,YTIME)))
                        +
@@ -603,13 +626,13 @@ $ondelim
 $include"./iDataConsEneBranch.csv"
 $offdelim
 ;
-iTotEneBranchCons(allCy,EFS,YTIME)$(not An(YTIME)) = iDataConsEneBranch(allCy,EFS,YTIME);
+iTotEneBranchCons(allCy,EFS,YTIME) = iDataConsEneBranch(allCy,EFS,YTIME);
 table iDataImports(allCy,EF,YTIME)	           "Data for imports (Mtoe)"
 $ondelim
 $include"./iDataImports.csv"
 $offdelim
 ;
-iFuelImports(allCy,EFS,YTIME)$(not An(YTIME)) = iDataImports(allCy,EFS,YTIME);
+iFuelImports(allCy,EFS,YTIME) = iDataImports(allCy,EFS,YTIME);
 iGrosInlCons(allCy,EFS,YTIME)$(not An(YTIME)) = iDataGrossInlCons(allCy,EFS,YTIME);
 iGrossInConsNoEneBra(runCy,EFS,YTIME) = iGrosInlCons(runCy,EFS,YTIME) + iTotEneBranchCons(runCy,EFS,YTIME)$EFtoEFA(EFS,"LQD")
                                                - iTotEneBranchCons(runCy,EFS,YTIME)$(not EFtoEFA(EFS,"LQD"));
