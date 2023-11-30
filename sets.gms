@@ -3,62 +3,7 @@ sets
 ***        Geographic Coverage      *
 allCy    Countries for which the model is applied
 /
-RAS       REST OF ASIA
-MAR       MOROCCO
-RWO
-REU
-REP
-RAF
-RLA
-ARG
-OCE
-AUT
-BEL
-BRA
-BGR
-CAN
-CHA
-HRV
-CYP
-CZE
-DNK
-EGY
-EST
-FIN
-FRA
-DEU
-GRC
-HUN
-NSI
-IND
-IDN
-IRN
-IRL
-ISR
-ITA
-JPN
-KOR
-LVA
-LTU
-LUX
-MLT
-MEX
-NLD
-NGA
-POL
-PRT
-ROU
-RUS
-SAU
-SVK
-SVN
-ZAF
-ESP
-SWE
-TUN
-TUR
-GBR
-USA
+RAS,MAR,RWO,IND,USA,EGY,CHA
 /
 
 runCy(allCy) Countries for which the model is running

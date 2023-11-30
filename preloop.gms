@@ -172,7 +172,7 @@ QDistrLosses
 QFuelPriSubSepCarbVal
 QFuelPriSepCarbon
 QAvgFuelPriSub
-*QElecPriIndResCons
+QElecPriIndResCons
 
 
 
@@ -278,8 +278,8 @@ VFuelPriceSub.fx(runCy,"H2P","ELC",YTIME)$(not An(YTIME))= VFuelPriceSub.l(runCy
 
 * FIXME: VElecPriInduResConsu should be computed endogenously, add $(not An(YTIME)) below
 * author=giannou
-VElecPriInduResConsu.FX(runCy,"i",YTIME) = VFuelPriceSub.l(runCy,"OI","ELC",YTIME)*sTWhToMtoe;
-VElecPriInduResConsu.FX(runCy,"r",YTIME) = VFuelPriceSub.l(runCy,"HOU","ELC",YTIME)*sTWhToMtoe;
+VElecPriInduResConsu.FX(runCy,"i",YTIME)$(not An(YTIME)) = VFuelPriceSub.l(runCy,"OI","ELC",YTIME)*sTWhToMtoe;
+VElecPriInduResConsu.FX(runCy,"r",YTIME)$(not An(YTIME)) = VFuelPriceSub.l(runCy,"HOU","ELC",YTIME)*sTWhToMtoe;
 VElecPriIndResNoCliPol.FX(runCy,"i",YTIME)$(not an(ytime)) = VFuelPriceSub.l(runCy,"OI","ELC",YTIME)*0.086;
 VElecPriIndResNoCliPol.FX(runCy,"r",YTIME)$(not an(ytime)) = VFuelPriceSub.l(runCy,"HOU","ELC",YTIME)*0.086;
 VFuelPriSubNoCarb.FX(runCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF) $(not HEATPUMP(EF))  $(not An(YTIME))) = iFuelPrice(runCy,SBS,EF,YTIME);
@@ -446,12 +446,12 @@ VCO2ElcHrgProd.FX(runCy,YTIME)$(not An(YTIME)) = 0;
 VRenShareElecProdSub.FX(runCy,YTIME)$(NOT AN(YTIME))=0;
 VRenPotSupplyCurve.FX(runCy,PGRENEF, YTIME) $(NOT AN(YTIME)) = iMinRenPotential(runCy,PGRENEF,YTIME);
 
-VAvgPowerGenLongTrm.L(runCy,ESET,"2010") = 0;
+VLongAvgPowGenCost.L(runCy,ESET,"2010") = 0;
 VLonPowGenCostNoClimPol.L(runCy,ESET,"2010") = 0;
 VAvgPowerGenCostShoTrm.L(runCy,ESET,"2010") = 0;
 VLongPowGenCost.L(runCy,PGALL,ESET,"2010") = 0;
 VLonAvgPowGenCostNoClimPol.L(runCy,PGALL,ESET,"2010") = 0;
-VAvgPowerGenLongTrm.L(runCy,ESET,"2017") = 0;
+VLongAvgPowGenCost.L(runCy,ESET,"2017") = 0;
 VLonPowGenCostNoClimPol.L(runCy,ESET,"2017") = 0;
 VAvgPowerGenCostShoTrm.L(runCy,ESET,"2017") = 0;
 VLongPowGenCost.L(runCy,PGALL,ESET,"2017") = 0;
