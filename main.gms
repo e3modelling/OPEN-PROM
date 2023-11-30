@@ -23,8 +23,10 @@ $onEmpty
 
 *** Maximum number of solver attempts
 $evalGlobal SolverTryMax 1
+*** Setting research mode (0) or development mode (1) to modify settings and parameters accordingly
+$setGlobal DevMode 0 
 
-$setGlobal fCountries 'MAR,IND,USA,EGY,CHA,RWO'
+$setGlobal fCountries 'IND,USA,EGY'
 
 $setGlobal fSingleCountryRun 'yes'
 
@@ -58,4 +60,3 @@ $include input.gms
 $include equations.gms
 $include preloop.gms
 $include solve.gms
-
