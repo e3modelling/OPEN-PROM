@@ -3,9 +3,9 @@
 *** Generating an execution profile
 option profile = 1;
 *** number of columns that are listed for each variable in the column listing
-option limcol = 3000;
+option limcol = 300;
 *** number of rows that are listed for each equation in the equation listing
-option limrow = 3000;
+option limrow = 300;
 *** save a GDX file after solve, containing all computed variables
 option savepoint = 1;
 
@@ -24,7 +24,7 @@ $onEmpty
 *** Maximum number of solver attempts
 $evalGlobal SolverTryMax 1
 
-$setGlobal fCountries 'RAS,RWO,REU,REP,RAF,RLA,ARG,OCE,AUT,BEL,BRA,BGR,CAN,CHA,HRV,CYP,CZE,DNK,EGY,EST,FIN,FRA,DEU,GRC,HUN,NSI,IND,IDN,IRN,IRL,ISR,ITA,JPN,KOR,LVA,LTU,LUX,MLT,MEX,MAR,NLD,NGA,POL,PRT,ROU,RUS,SAU,SVK,SVN,ZAF,ESP,SWE,TUN,TUR,GBR,USA'
+$setGlobal fCountries 'MAR,IND,USA,EGY,CHA,RWO'
 
 $setGlobal fSingleCountryRun 'yes'
 
