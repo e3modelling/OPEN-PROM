@@ -647,7 +647,7 @@ $offdelim
 ;
 iFuelImports(allCy,EFS,YTIME)$(not An(YTIME)) = iDataImports(allCy,EFS,YTIME);
 
-VNetImp.FX(allCy,EFS,YTIME) = iDataImports(allCy,"ELC",YTIME);
+iNetImp(allCy,EFS,YTIME) = iDataImports(allCy,"ELC",YTIME);
 
 iGrosInlCons(allCy,EFS,YTIME)$(not An(YTIME)) = iDataGrossInlCons(allCy,EFS,YTIME);
 iGrossInConsNoEneBra(runCy,EFS,YTIME) = iGrosInlCons(runCy,EFS,YTIME) + iTotEneBranchCons(runCy,EFS,YTIME)$EFtoEFA(EFS,"LQD")
