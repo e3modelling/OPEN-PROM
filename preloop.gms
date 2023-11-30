@@ -67,9 +67,9 @@ QElecGenNoChp
 *QLongPowGenIntPri
 *QShoPowGenIntPri
 *QLongPowGenCost
-*QLonAvgPowGenCostNoClimPol
-*QLonPowGenCostNoClimPol
-*QElecPriIndResNoCliPol
+QLonAvgPowGenCostNoClimPol
+QLonPowGenCostNoClimPol
+QElecPriIndResNoCliPol
 *QShortPowGenCost
 
 
@@ -164,7 +164,7 @@ QDistrLosses
 
 *QTotGhgEmisAllCountrNap
 *QTotCo2AllCoun
-*QHouseExpEne
+QHouseExpEne
 
 
 * Prices *
