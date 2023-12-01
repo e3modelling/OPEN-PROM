@@ -1,7 +1,6 @@
 library(dplyr)
 library(gdx)
 library(quitte)
-library(iamc)
 library(tidyr)
 library(utils)
 library(mrprom)
@@ -69,4 +68,5 @@ x["scenario"] <- "missing"
 x["unit"] <- "missing"
 x <- as.quitte(x)
 x <- as.magpie(x)
-write.report(x, "f.mif")
+write.report(x, "DataOutput2.mif")
+
