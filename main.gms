@@ -3,9 +3,9 @@
 *** Generating an execution profile
 option profile = 1;
 *** number of columns that are listed for each variable in the column listing
-option limcol = 3000;
+option limcol = 300;
 *** number of rows that are listed for each equation in the equation listing
-option limrow = 3000;
+option limrow = 300;
 *** save a GDX file after solve, containing all computed variables
 option savepoint = 1;
 

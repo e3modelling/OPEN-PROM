@@ -1396,17 +1396,15 @@ QElecPriIndResCons(runCy,ESET,YTIME)$TIME(YTIME)..  !! The electricity price is 
         (
            (
              (VFuelPriceSub(runCy,"OI","ELC",YTIME-1)*sTWhToMtoe)$TFIRST(YTIME-1) +
-             (  iFacElecPriConsu(runCy,"IND_RES",YTIME-1) + VRenShareElecProdSub(runCy,YTIME-1)*(VRenValue(YTIME)*8.6e-5)+
-                iFacElecPriConsu(runCy,"W_INDU",YTIME-1)*VAvgPowerGenLongTrm(runCy,"i",YTIME-1) +
-               (1-iFacElecPriConsu(runCy,"W_INDU",YTIME-1))*VAvgPowerGenCostShoTrm(runCy,"i",YTIME-1)
+             (  iFacElecPriConsu(runCy,"IND_RES",YTIME-1)+
+                VLongAvgPowGenCost(runCy,"i",YTIME-1)
               )$(not TFIRST(YTIME-1))
            )$ISET(ESET)
         +
            (
              (VFuelPriceSub(runCy,"HOU","ELC",YTIME-1)*sTWhToMtoe)$TFIRST(YTIME-1) +
-             (  iFacElecPriConsu(runCy,"TERT_RES",YTIME-1) + VRenShareElecProdSub(runCy,YTIME-1)*(VRenValue(YTIME)*8.6e-5)+
-                iFacElecPriConsu(runCy,"W_TERT",YTIME-1)*VAvgPowerGenLongTrm(runCy,"r",YTIME-1) +
-                (1-iFacElecPriConsu(runCy,"W_TERT",YTIME-1))*VAvgPowerGenCostShoTrm(runCy,"r",YTIME-1)
+             (  iFacElecPriConsu(runCy,"TERT_RES",YTIME-1)+
+               VLongAvgPowGenCost(runCy,"r",YTIME-1)
              )$(not TFIRST(YTIME-1))
            )$RSET(ESET)
         );
