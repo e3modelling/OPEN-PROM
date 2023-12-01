@@ -127,6 +127,7 @@ iDiffFuelsInSec(SBS) "auxiliary parameter holding the number of different fuels 
 iResElecIndex(allCy,YTIME)             "Residual for electricity Index (1)"
 iElastNonSubElec(allCy,SBS,ETYPES,YTIME) "Elasticities of Non Substitutable Electricity (1)"
 iIndChar(allCy,INDSE,Indu_Scon_Set)               "Industry sector charactetistics (various)"
+iNetImp(allCy,EFS,YTIME)              "Net imports (Mtoe)"
 ;
 
 
@@ -351,7 +352,6 @@ VFeCons(allCy,EF,YTIME)               "Total final energy consumnption (Mtoe)"
 VFNonEnCons(allCy,EFS,YTIME)          "Final non energy consumption (Mtoe)"
 VLosses(allCy,EFS,YTIME)              "Distribution losses (Mtoe)"
 VEnCons(allCy,EFS,YTIME)              "Final consumption in energy sector (Mtoe)"
-VNetImp(allCy,EFS,YTIME)              "Net imports (Mtoe)"
 VMExtV(allCy,YTIME)                   "Passenger cars market extension (GDP dependent)"
 VMExtF(allCy,YTIME)                   "Passenger cars market extension (GDP independent)"
 VLamda(allCy,YTIME)                   "Ratio of car ownership over saturation car ownership (1)"
@@ -411,7 +411,6 @@ VAvgVarProdCostCHP(allCy,CHP,YTIME)                     "Average variable includ
 *** REST OF ENERGY BALANCE SECTORS VARIABLES
 VPlantEffPlantType(allCy,PGALL,YTIME)	                "Plant efficiency per plant type (1)"
 VTotFinEneConsAll(YTIME)                                "Total final energy Consumption in ALL COUNTRIES (Mtoe)"
-VDistrLosses(allCy,EFS,YTIME)                           "Distribution losses (Mtoe)"
 VTransfOutputDHPlants(allCy,EFS,YTIME)                  "Transformation output from District Heating Plants (Mtoe)"
 VTransfInputDHPlants(allCy,EFS,YTIME)                   "Transformation input to District Heating Plants (Mtoe)"
 VTransfInputPatFuel(allCy,EFS,YTIME)                    "Transformation input to patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works (1)"

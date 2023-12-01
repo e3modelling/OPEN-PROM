@@ -89,7 +89,7 @@ Parameter,DiscountPRN,-,-,"SBS,YTIME",-,
 Parameter,DLFT,iTechLft,Technical Lifetime. For passenger cars it is a variable (1),"CYall,SBS,EF,TEA,YTIME","allCy,SBS,EF,TEA,YTIME",Common parameters for all Demand Subsectors
 Parameter,DLOS,iDistrLosses,Distribution Losses (Mtoe),"CYall,EF,YTIME","allCy,EFS,YTIME",Supply Side Specific Parameters
 Parameter,DMEXTV,iGdpPassCarsMarkExt,GDP-dependent passenger cars market extension (GDP/capita),CYall,allCy,Transport Sector specific Parameters
-Variable,DNETIMP,VNetImp,Net imports (Mtoe),"CYall,EFS,YTIME","(allCy,EFS,YTIME",Supply Side Specific Parameters
+Parameter,DNETIMP,iNetImp,Net imports (Mtoe),"CYall,EFS,YTIME","(allCy,EFS,YTIME",Supply Side Specific Parameters
 Parameter,Dom_FCon,iFuelConsDOMSE,Fuel consumption of domestic subsector (Mtoe),"DOMSE,EF,YTIME","allCy,DOMSE,EF,YTIME",Parameters for data transfering
 Parameter,Dom_RFCon,iResFuelConsPerFuelAndSub,Residuals in fuel consumption per fuel and subsector (1),"DOMSE,EF,YTIME","allCy,DOMSE,EF,YTIME",Parameters for data transfering
 Parameter,Dom_RNSE,iResNonSubElecCons,Residuals in Non Substitutable Electricity Consumption per substector,"DOMSE,YTIME","allCy,DOMSE,YTIME",Parameters for data transfering
@@ -302,7 +302,7 @@ Variable,LFT,VLifeTimeTech,Lifetime of technologies (years),"CYall,DSBS,EF,TEA,Y
 Parameter,LOADF,iLoadFacElecDem,Load factor of electricity demand per sector,"CYaLL,DSBS,YTIME","allCy,DSBS,YTIME",Power Generation Parameters
 Variable,LOADFALL,VLoadFacDom,"""Electricity load factor for entire domestic system""","CYaLL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Variable,LOS,VLosses,Distribution losses (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
-Variable,LOS,VDistrLosses,Distribution losses (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+Variable,LTAC,VAvgPowerGenLongTrm,Long-term average power generation cost (Euro2005/kWh),"CYall,ESET,YTIME ","allCy,ESET,YTIME",POWER GENERATION SECTOR
 Variable,LTAC,VLongAvgPowGenCost,Long-term average power generation cost (Euro2005/kWh),"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
 Variable,LTAC_INT_PRICE,VLongPowGenIntPri,Long term power generation cost of technologies including international prices of main fuels (kEuro05/toe),"CYALL,PGALL,ESET,YTIME","allCy,PGALL,ESET,YTIME",POWER GENERATION SECTOR
 Variable,LTAC_nocv,VLonPowGenCostNoClimPol,Long-term average power generation cost  excluding climate policies (Euro2005/kWh),"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
