@@ -26,7 +26,7 @@ $evalGlobal SolverTryMax 1
 *** Setting research mode (0) or development mode (1) to modify settings and parameters accordingly
 $setGlobal DevMode 0 
 
-$setGlobal fCountries 'IND,USA,EGY'
+$setGlobal fCountries 'MAR,IND,USA,EGY,CHA,RWO'
 
 $setGlobal fSingleCountryRun 'yes'
 
