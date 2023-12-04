@@ -645,7 +645,10 @@ $ondelim
 $include"./iDataImports.csv"
 $offdelim
 ;
-iFuelImports(allCy,EFS,YTIME) = iDataImports(allCy,EFS,YTIME);
+iFuelImports(allCy,EFS,YTIME)$(not An(YTIME)) = iDataImports(allCy,EFS,YTIME);
+
+iNetImp(allCy,EFS,YTIME) = iDataImports(allCy,"ELC",YTIME);
+
 iGrosInlCons(allCy,EFS,YTIME)$(not An(YTIME)) = iDataGrossInlCons(allCy,EFS,YTIME);
 iGrossInConsNoEneBra(runCy,EFS,YTIME) = iGrosInlCons(runCy,EFS,YTIME) + iTotEneBranchCons(runCy,EFS,YTIME)$EFtoEFA(EFS,"LQD")
                                                - iTotEneBranchCons(runCy,EFS,YTIME)$(not EFtoEFA(EFS,"LQD"));

@@ -27,7 +27,7 @@ QElecDem(runCy,YTIME)$TIME(YTIME)..
              =E=
          1/sTWhToMtoe *
          ( VFeCons(runCy,"ELC",YTIME) + VFNonEnCons(runCy,"ELC",YTIME) + VLosses(runCy,"ELC",YTIME)
-           + VEnCons(runCy,"ELC",YTIME) - VNetImp(runCy,"ELC",YTIME)
+           + VEnCons(runCy,"ELC",YTIME) - iNetImp(runCy,"ELC",YTIME)
          );
 
 * Compute estimated base load
@@ -1058,7 +1058,7 @@ QFinNonEneCons(runCy,EFS,YTIME)$TIME(YTIME)..
 
 * Compute distribution losses
 QDistrLosses(runCy,EFS,YTIME)$TIME(YTIME)..
-         VDistrLosses(runCy,EFS,YTIME)
+         VLosses(runCy,EFS,YTIME)
              =E=
          (iRateLossesFinCons(runCy,EFS,YTIME) * (VFeCons(runCy,EFS,YTIME) + VFNonEnCons(runCy,EFS,YTIME)))$(not H2EF(EFS));  
 
