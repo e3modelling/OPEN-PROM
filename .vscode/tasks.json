@@ -4,9 +4,9 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "GAMS",
+            "label": "OPEN-PROM DEV",
             "type": "shell",
-            "command": "gams main.gms lo=2",
+            "command": "gams main.gms --lo=2 --DevMode=1",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -15,6 +15,21 @@
             "presentation": {
                 "focus": true
             }
-        }
+        },
+
+        {
+            "label": "OPEN-PROM RESEARCH",
+            "type": "shell",
+            "command": "gams main.gms --lo=2 --DevMode=0",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "focus": true
+            }
+        },
+
     ]
 }
