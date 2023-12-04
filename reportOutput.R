@@ -22,15 +22,29 @@ name <- as.data.frame(name)
 
 #blabla_variables <- read.gdx('./openprom_p.gdx', "VFeCons", field = 'l')
 blabla_variables <- read.gdx('./blabla.gdx', "VFeCons", field = 'l')
-names(blabla_variables) <- c("allCy","EF","ytime","value")
+
+blabla_variables <- as.quitte(blabla_variables)
 reportOutput <- list() 
+blabla_variables["model"] <- "OPEN-PROM"
+blabla_variables["region"] <- blabla_variables["allcy"]
+blabla_variables <- select(blabla_variables , -c("allcy"))
+blabla_variables["period"] <- blabla_variables["ytime"]
+blabla_variables <- select(blabla_variables , -c("ytime"))
+blabla_variables["EF"] <- blabla_variables["ef"]
+blabla_variables <- select(blabla_variables , -c("ef"))
+blabla_variables["unit"] <- "Mtoe"
+
+a <- readSource("MENA_EDS", subtype =  "CF")
+a <- as.quitte(a)
+a["model"] <- "MENA_EDS"
+a["unit"] <- "Mtoe"
 
 for (i in 1:nrow(k)) {
-  z <- blabla_variables
+  z <- rbind(blabla_variables, a)
   q <- unlist(strsplit(k[i, 1], ","))
   z <- z %>% filter(EF %in% q)
   z['fuel'] <- name[i, 1]
-  reportOutput[[i]] <- mutate(z, value = sum(value, na.rm = TRUE), .by = c("allCy", "ytime"))
+  reportOutput[[i]] <- mutate(z, value = sum(value, na.rm = TRUE), .by = c("period", "region", "model"))
   reportOutput[[i]] <- select(reportOutput[[i]] , -c("EF"))
   reportOutput[[i]] <- reportOutput[[i]]  %>% distinct()
   
@@ -45,7 +59,7 @@ for (i in 2:length(reportOutput)) {
   sum2 <- sum
 }
 
-sum3 <- mutate(sum2, value = sum(value, na.rm = TRUE), .by = c("allCy", "ytime"))
+sum3 <- mutate(sum2, value = sum(value, na.rm = TRUE), .by = c("period", "region", "model"))
 sum4 <- sum3 %>% select(-c('fuel'))
 sum4 <- sum4  %>% distinct()
 total <- reportOutput[[1]]
@@ -57,16 +71,33 @@ names(reportOutput)[26] <- "diff_total_othermodels"
 
 x <- rbind(reportOutput[[1]], sum3, reportOutput[[26]])
 x <- as.quitte(x)
-x["period"] <- x["ytime"]
-x <- select(x , -c("ytime"))
-x["region"] <- x["allcy"]
-x <- select(x , -c("allcy"))
-x["model"] <- "OPEN-PROM"
-x["variable"] <- x["fuel"]
+
+x$fuel <- gsub("\"", " ", x$fuel)
+x["variable"] <- paste0("Final Energy", x$fuel)
+fuel <- x["fuel"]
 x <- select(x , -c("fuel"))
 x["scenario"] <- "missing"
-x["unit"] <- "missing"
 x <- as.quitte(x)
-x <- as.magpie(x)
-write.report(x, "DataOutput2.mif")
+
+b <- readSource("ENERDATA", subtype =  "onsumption", convert = TRUE)
+
+map <- toolGetMapping(name = "enerdata-by-fuel.csv",
+                      type = "sectoral",
+                      where = "mappingfolder")
+
+b <- b[, , map[, 1]]
+b <- as.quitte(b)
+names(map) <- sub("ENERDATA", "variable", names(map))
+map[,1] <- sub("\\..*", "", map[,1])
+
+b <- left_join(b, map, by = "variable")
+b["variable"] <- paste0("Final Energy ", b$fuel)
+b <- select(b , -c("fuel"))
+b["model"] <- "ENERDATA"
+b["scenario"] <- "missing"
+
+v <- rbind(x, b)
+v <- as.magpie(v)
+
+write.report(v, "DataOutput3.mif")
 
