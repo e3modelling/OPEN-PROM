@@ -254,7 +254,7 @@ VGoodsTranspActiv.l(allCy,TRANSE,YTIME)=0.1;
 *VTranspCostPerVeh.lo(allCy,TRANSE,RCon,TTECH,TEA,YTIME)=0.1;
 VRenShareElecProdSub.FX(runCy,YTIME)$(NOT AN(YTIME))=0;
 VRenValue.l(YTIME)=1;
-VCO2CO2SeqCsts.l(allCy,YTIME)=1;
+VCO2SeqCsts.l(allCy,YTIME)=1;
 VScalWeibullSum.l(allCy,PGALL,YTIME)=2;
 *VScalWeibullSum.up(allCy,PGALL,YTIME)=1.0e+10;
 VHourProdCostTech.l(runCy,PGALL,HOUR,TT) = 0.0001;
@@ -461,7 +461,7 @@ VCarVal.FX(runCy,"NOTRADE",YTIME)$an(YTIME) =sExogCarbValue*iCarbValYrExog(runCy
 
 VCumCO2Capt.FX(runCy,YTIME)$(not an(YTIME)) = 0 ;
 
-VCO2CO2SeqCsts.FX(runCy,YTIME)$(not an(YTIME)) =
+VCO2SeqCsts.FX(runCy,YTIME)$(not an(YTIME)) =
        (iElastCO2Seq(runCy,"mc_a") *iElastCO2Seq(runCy,"mc_b"));
 
 VDemTr.FX(runCy,TRANSE,EF,YTIME)$(not SECTTECH(TRANSE,EF)) = 0;

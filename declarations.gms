@@ -444,7 +444,7 @@ VFuelPriSubNoCarb(allCy,SBS,EF,YTIME)	                "Fuel prices per subsector
 VCO2ElcHrgProd(allCy,YTIME)	                            "CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
 VCumCO2Capt(allCy,YTIME)	                            "Cumulative CO2 captured (Mtn CO2)"		
 VWghtTrnstLnrToExpo(allCy,YTIME)	                    "Weight for transtition from linear CO2 sequestration cost curve to exponential (1)"
-VCO2CO2SeqCsts(allCy,YTIME)	                            "Cost curve for CO2 sequestration costs (Euro/tn of CO2 sequestrated)"
+VCO2SeqCsts(allCy,YTIME)	                            "Cost curve for CO2 sequestration costs (Euro/tn of CO2 sequestrated)"
 
 *** Emissions Constraints Variables
 VTotCo2AllCoun(YTIME)	                                "Total CO2eq GHG emissions in all countries (1)"
