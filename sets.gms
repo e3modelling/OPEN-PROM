@@ -9,10 +9,12 @@ RAS,MAR,RWO,IND,USA,EGY,CHA
 runCy(allCy) Countries for which the model is running
 /
 %fCountries%
-/
+/;
+* runCy is equal to allCy on research mode
+runCy(allCy)$(%DevMode% = 0) = allCy(allCy) ;
 
+sets
 ***        Model Time Horizon       *
-
 ytime           Model time horizon                                /%fStartHorizon%*%fEndHorizon%/
 an(ytime)       Years for which the model is running              /%fStartY%*%fEndY%/
 twenties(ytime) THE DECADE FROM 2020-2030                         /2021*2030/
@@ -1730,4 +1732,3 @@ Set stringcy(allCy)
 Set smallpg(pgall) /AGTGDO,AGTNGS/
 Alias (smallpg,smallpgg),(geme3tech,geme3tech1),(EF1,EF),(allCy2,allCy)
 ;
-
