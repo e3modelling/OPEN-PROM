@@ -24,7 +24,7 @@ $onEmpty
 *** Maximum number of solver attempts
 $evalGlobal SolverTryMax 1
 *** Setting research mode (0) or development mode (1) to modify settings and parameters accordingly
-$setGlobal DevMode 0 
+$setGlobal DevMode 0
 
 $setGlobal fCountries 'MAR,IND,USA,EGY,CHA,RWO'
 
@@ -52,7 +52,10 @@ $evalGlobal fBaseY %fStartY% - %fPeriodOfYears%
 *** end of dollar commands section, no further flag definitions allowed 
 
 *** load input data files
-$call "RScript ./loadMadratData.R"
+
+$ifthen %DevMode% == 0 $call "RScript ./loadMadratData.R DevMode=0"
+$elseif %DevMode% == 1 $call "RScript ./loadMadratData.R DevMode=1"
+$endif
 
 $include sets.gms
 $include declarations.gms
