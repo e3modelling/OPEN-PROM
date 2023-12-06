@@ -81,11 +81,7 @@ x <- rbind(reportOutput[[1]], sum2, reportOutput[[26]])
 x <- as.quitte(x)
 
 x$fuel <- gsub("\"", " ", x$fuel)
-#rename variables
-x["variable"] <- paste0("Final Energy ", x$fuel)
 fuel <- x["fuel"]
-x <- select(x , -c("fuel"))
-x["scenario"] <- "missing"
 x <- as.quitte(x)
 
 #filter enerdata by onsumption
@@ -102,13 +98,15 @@ names(map) <- sub("ENERDATA", "variable", names(map))
 map[,1] <- sub("\\..*", "", map[,1])
 #add a column with the fuels that match each variable of enerdata
 b <- left_join(b, map, by = "variable")
-#rename the enerdata variables to match the other two models 
-b["variable"] <- paste0("Final Energy ", b$fuel)
-b <- select(b , -c("fuel"))
 b["model"] <- "ENERDATA"
-b["scenario"] <- "missing"
 #rbind the open prom and mena with enerdata
 v <- rbind(x, b)
+v <- v %>% mutate_if(is.character, str_trim)
+
+v["variable"] <- paste0("Final Energy ", v$fuel)
+v <- filter(v, period > 2009 & period < 2031)
+v <- select(v , -c("fuel"))
+v <- as.quitte(v)
 v <- as.magpie(v)
 
 write.report(v, "Final Energy.mif")
