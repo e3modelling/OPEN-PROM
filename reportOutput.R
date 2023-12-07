@@ -1,3 +1,4 @@
+# This script generates a mif file for comparison of OPEN-PROM data with MENA-EDS and ENERDATA
 library(dplyr)
 library(gdx)
 library(quitte)
@@ -6,110 +7,59 @@ library(utils)
 library(mrprom)
 library(stringr)
 
-sets <- readSets(system.file(file.path("extdata", "sets.gms"), package = "mrprom"), "BALEF2EFS")
-name <- sub("\\..*", "", sets)
-k <- NULL
-name <- NULL
-for (i in 1:nrow(sets)) {
-  k[i] <- gsub(".*\\.", "", sets[i, 1])
-  name[i] <- sub("\\..*", "", sets[i, 1])
-  if (str_detect(k[i], ",")) {
-    k[i] <- str_extract(string = k[i], pattern = "(?<=\\().*(?=\\))")
-  }
-}
-k <- as.data.frame(k)
-name <- as.data.frame(name)
+# read MENA-PROM mapping, will use it to choose the correct variables from MENA
+map <- read.csv("MENA-PROM mapping - mena_prom_mapping.csv")
 
-#add model OPEN-PROM
-blabla_variables <- read.gdx('./blabla.gdx', "VFeCons", field = 'l')
+# read GAMS set used for reporting of Final Energy
+sets <- readSets("sets.gms", "BALEF2EFS")
+sets[, 1] <- gsub("\"","",sets[, 1])
+sets <- separate_wider_delim(sets,cols = 1, delim = ".", names = c("BAL","EF"))
+sets[["EF"]] <- sub("\\(","",sets[["EF"]])
+sets[["EF"]] <- sub("\\)","",sets[["EF"]])
+sets <- separate_rows(sets,EF)
 
-blabla_variables <- as.quitte(blabla_variables)
-reportOutput <- list() 
-blabla_variables["model"] <- "OPEN-PROM"
-blabla_variables["region"] <- blabla_variables["allcy"]
-blabla_variables <- select(blabla_variables , -c("allcy"))
-blabla_variables["period"] <- blabla_variables["ytime"]
-blabla_variables <- select(blabla_variables , -c("ytime"))
-blabla_variables["EF"] <- blabla_variables["ef"]
-blabla_variables <- select(blabla_variables , -c("ef"))
-blabla_variables["unit"] <- "Mtoe"
-#add moedel MENA_EDS
-a <- readSource("MENA_EDS", subtype =  "CF")
-a <- as.quitte(a)
-a["model"] <- "MENA_EDS"
-a["unit"] <- "Mtoe"
 
-# 25 balance fuels so nrow(k) = 25
-#example k[2,1] <- "HCL" "LGN" and is for Solids
-for (i in 1:nrow(k)) {
-  z <- rbind(blabla_variables, a)
-  q <- unlist(strsplit(k[i, 1], ","))
-  #filter data and keep only model fuels that are for each balance fuel
-  #example q for solids is "HCL" "LGN", so keep from z["EF"] only "HCL" and "LGN"
-  z <- z %>% filter(EF %in% q)
-  z['fuel'] <- name[i, 1]
-  #take the sum from the fuels we kept in line 49 by region, period and model(MENA or OPEN-PROM)
-  reportOutput[[i]] <- mutate(z, value = sum(value, na.rm = TRUE), .by = c("period", "region", "model"))
-  reportOutput[[i]] <- select(reportOutput[[i]] , -c("EF"))
-  reportOutput[[i]] <- reportOutput[[i]]  %>% distinct()
-  
-}
+#add model OPEN-PROM data
+VFeCons <- readGDX('./blabla.gdx', "VFeCons", field = 'l')
+# aggregate from PROM fuels to reporting fuel categories
+VFeCons<-toolAggregate(VFeCons[,,unique(sets$EF)],dim=3,rel=sets,from="EF",to="BAL")
+getItems(VFeCons, 3) <- paste0("Final Energy ", getItems(VFeCons, 3))
 
-names(reportOutput) <- name[,1]
-# use rbind to have the 24 model fuels (except total) in one dataframe
-sum <- NULL
-sum2 <- NULL
-# starts from two (except the first which is the total)
-for (i in 2:length(reportOutput)) {
-  sum <- rbind(reportOutput[[i]], sum2)
-  sum2 <- sum
-}
-#sum all the 24 model fuels to compare it with total
-sum3 <- mutate(sum2, value = sum(value, na.rm = TRUE), .by = c("period", "region", "model"))
-sum4 <- sum3 %>% select(-c('fuel'))
-sum4 <- sum4  %>% distinct()
-#the total is the first one
-total <- reportOutput[[1]]
-diff_total_othermdels <- total
-#the total minus the sum we calculated  
-diff_total_othermdels["value"] <- total["value"] - sum4["value"]
-diff_total_othermdels["fuel"] <- "diff_total_othermodels"
-reportOutput[[26]] <- diff_total_othermdels
-names(reportOutput)[26] <- "diff_total_othermodels"
-#rbind total, the 24 models and the difference between models and total 
-x <- rbind(reportOutput[[1]], sum2, reportOutput[[26]])
-x <- as.quitte(x)
 
-x$fuel <- gsub("\"", " ", x$fuel)
-fuel <- x["fuel"]
-x <- as.quitte(x)
+#add model MENA_EDS data (choosing the correct variable from MENA by use of the MENA-PROM mapping)
+a <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VFeCons", "MENA.EDS"])
+getRegions(a) <- sub("MOR", "MAR", getRegions(a)) # fix wrong region names in MENA
+# choose years and regions that both models have
+years <- intersect(getYears(a,as.integer=TRUE),getYears(VFeCons,as.integer=TRUE))
+regs <- intersect(getRegions(a),getRegions(VFeCons))
+# aggregate from MENA fuels to reporting fuel categories
+a <- toolAggregate(a[,years,unique(sets$EF)],dim=3,rel=sets,from="EF",to="BAL")
+# complete names
+getItems(a, 3) <- paste0("Final Energy ", getItems(a, 3))
 
-#filter enerdata by onsumption
+# write data in mif file
+write.report(VFeCons[regs,years,],file="final.mif",model="OPEN-PROM",unit="Mtoe",scenario="BASE")
+write.report(a[regs,,],file="final.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario="BASE")
+
+
+#filter ENERDATA by onsumption
 b <- readSource("ENERDATA", subtype =  "onsumption", convert = TRUE)
-#map of enerdta and balance fuel
+# map of enerdata and balance fuel
 map <- toolGetMapping(name = "enerdata-by-fuel.csv",
                       type = "sectoral",
                       where = "mappingfolder")
 #keep the variables from the map
-b <- b[, , map[, 1]]
+b <- b[regs, , map[, 1]]
 b <- as.quitte(b)
 names(map) <- sub("ENERDATA", "variable", names(map))
 #remove units
 map[,1] <- sub("\\..*", "", map[,1])
 #add a column with the fuels that match each variable of enerdata
-b <- left_join(b, map, by = "variable")
-b["model"] <- "ENERDATA"
-#rbind the open prom and mena with enerdata
-v <- rbind(x, b)
-v <- v %>% mutate_if(is.character, str_trim)
-
+v <- left_join(b, map, by = "variable")
 v["variable"] <- paste0("Final Energy ", v$fuel)
-v <- filter(v, period > 2009 & period < 2031)
+v <- filter(v, period %in% years)
 v <- select(v , -c("fuel"))
 v <- as.quitte(v)
 v <- as.magpie(v)
-
-write.report(v, "Final Energy.mif")
-
-#I think write.mif is faster(no need to convert it to magpie)
-#write.mif(v, "Final Energy.mif", append = FALSE)
+# write data in mif file
+write.report(v,file="final.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario="BASE")

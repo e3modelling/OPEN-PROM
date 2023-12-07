@@ -9,12 +9,12 @@ library(mrprom)
 openprom_p_variables <- gdxInfo("openprom_p.gdx",returnList=T,dump=F)
 blabla_variables <- list() 
 for (i in openprom_p_variables[["variables"]]) {
-  if (i %in% c("VTechCostIntrm", "VConsEachTechTransp", "vDummyObj")) next
+  if (i %in% c("VTotFinEneConsAll","VTechCostIntrm", "VConsEachTechTransp", "vDummyObj")) next
   blabla_variables[[i]] <- read.gdx('./blabla.gdx', i, field = 'l')
 }
 mena_prom_mapping <- read.csv("MENA-PROM mapping - mena_prom_mapping.csv")
 
-z <- c("TUN", "EGY", "ISR", "MAR")
+z <- c("EGY", "MAR")
 zm <- sub("MAR", "MOR", z)
 years <- c(2017:2021)
 
