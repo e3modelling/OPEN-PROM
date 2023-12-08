@@ -39,9 +39,9 @@ QTotElecGenCap
 QElecGenNoChp
 *QGapPowerGenCap
 *QScalWeibull
-*QRenPotSupplyCurve
-*QMaxmAllowRenPotent
-*QMnmAllowRenPot
+QRenPotSupplyCurve
+QMaxmAllowRenPotent
+QMnmAllowRenPot
 *QRenTechMatMult
 *QScalWeibullSum
 *QNewInvDecis
