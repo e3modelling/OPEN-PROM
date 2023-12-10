@@ -300,7 +300,7 @@ QElecGenCap(runCy,PGALL,YTIME)$TIME(YTIME)..
 QVarCostTechnology(runCy,PGALL,YTIME)$TIME(YTIME)..
          VVarCostTechnology(runCy,PGALL,YTIME)
          =E=  
-          iMatureFacPlaDisp(runCy,PGALL,YTIME)*VVarCostTechnology(runCy,PGALL,YTIME)**(-2);
+          iMatureFacPlaDisp(runCy,PGALL,YTIME)*VVarCostTech(runCy,PGALL,YTIME)**(-2);
 
 * Compute Electricity peak loads
 QElecPeakLoads(runCy,YTIME)$TIME(YTIME)..
