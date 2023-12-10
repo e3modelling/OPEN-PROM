@@ -568,12 +568,19 @@ $offdelim
 iMatFacPlaAvailCap(allCy,PGALL,YTIME)$an(YTIME) = iMatFacCap(allCy,PGALL,YTIME);
 iMatFacPlaAvailCap(allCy,CCS,YTIME)$an(YTIME)  =0;
 *$offtext
+
+$ontext
 table iMatureFacLoad(allCy,PGALL,YTIME)	 "Maturty factors on Load (1)"
 $ondelim
 $include"./iMatureFacLoad.csv"
 $offdelim
 ;
-iMatureFacPlaDisp(allCy,PGALL,YTIME)$an(YTIME) = iMatureFacLoad(allCy,PGALL,YTIME);
+$offtext 
+
+* FIXME: Temporarily setting maturity factors related to plant dispatching equal to 1.
+* author=derevirn
+iMatureFacPlaDisp(allCy,PGALL,YTIME)$an(YTIME) = 1;
+
 table iMxmShareChpElec(allCy,YTIME)	 "Maximum share of CHP electricity in a country (1)"
 $ondelim
 $include"./iMxmShareChpElec.csv"
