@@ -6,7 +6,7 @@
         {
             "label": "OPEN-PROM DEV",
             "type": "shell",
-            "command": "gams main.gms --lo=2 --DevMode=1",
+            "command": "gams main.gms --DevMode=1 -logOption 4",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -20,7 +20,35 @@
         {
             "label": "OPEN-PROM RESEARCH",
             "type": "shell",
-            "command": "gams main.gms --lo=2 --DevMode=0",
+            "command": "gams main.gms --DevMode=0 -logOption 4",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "focus": true
+            }
+        },
+
+        {
+            "label": "REPORTING",
+            "type": "shell",
+            "command": "Rscript reportOutput.R",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "focus": true
+            }
+        },
+
+        {
+            "label": "SCENTOOL",
+            "type": "shell",
+            "command": "Rscript -e 'mip::scenTool()'",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
