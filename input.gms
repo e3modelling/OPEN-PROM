@@ -533,7 +533,7 @@ iDecInvPlantSched(allCy,PGALL,"2019") = iInvPlants(allCy,PGALL,"INV_19");
 
 table iCummMxmInstRenCap(allCy,PGRENEF,YTIME)	 "Cummulative maximum potential installed Capacity for Renewables (GW)"
 $ondelim
-$include"./iCummMxmInstRenCap.csv"
+$include"./iMaxResPot.csv"
 $offdelim
 ;
 iCummMxmInstRenCap(allCy,PGRENEF,YTIME)$(not iCummMxmInstRenCap(allCy,PGRENEF,YTIME)) = 1e-4;
@@ -547,7 +547,7 @@ iMaxRenPotential(allCy,"BMSWAS",YTIME)$AN(YTIME) = iCummMxmInstRenCap(allCy,"BMS
 iMaxRenPotential(allCy,"OTHREN",YTIME)$AN(YTIME) = iCummMxmInstRenCap(allCy,"OTHREN",YTIME);
 table iCummMnmInstRenCap(allCy,PGRENEF,YTIME)	 "Cummulative minimum potential installed Capacity for Renewables (GW)"
 $ondelim
-$include"./iCummMnmInstRenCap.csv"
+$include"./iMinResPot.csv"
 $offdelim
 ;
 iCummMnmInstRenCap(allCy,PGRENEF,YTIME)$(not iCummMnmInstRenCap(allCy,PGRENEF,YTIME)) = 1e-4;
@@ -580,6 +580,7 @@ $offtext
 * FIXME: Temporarily setting maturity factors related to plant dispatching equal to 1.
 * author=derevirn
 iMatureFacPlaDisp(allCy,PGALL,YTIME)$an(YTIME) = 1;
+iCO2CaptRate(runCy,PGALL,YTIME) = 0; 
 
 table iMxmShareChpElec(allCy,YTIME)	 "Maximum share of CHP electricity in a country (1)"
 $ondelim
