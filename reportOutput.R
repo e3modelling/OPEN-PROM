@@ -117,3 +117,49 @@ x <- x[regs, ,]
 # write data in mif file
 write.report(x,file="elec_prices.mif",model="ENERDATA",unit="Euro2005/KWh",append=TRUE,scenario="BASE")
 
+
+map2 <- toolGetMapping(name = "prom-enerdata-fucon-mapping.csv",
+                      type = "sectoral",
+                      where = "mappingfolder")
+
+#add model OPEN-PROM data final energy demand by transport subsectors (Mtoe) and by fuel
+VDemTr <- readGDX('./blabla.gdx', "VDemTr", field = 'l')
+
+map2 <- map2 %>% filter(SBS %in% c("PC","PT","PA","GU","GT","GN"))
+map2$EF = paste(map2$SBS, map2$EF, sep=".")
+# aggregate from PROM fuels to reporting fuel categories
+VDemTr <- toolAggregate(VDemTr[,,unique(map2$EF)],dim=3,rel=map2,from="EF",to="SBS")
+getItems(VDemTr, 3) <- paste0("Final Energy demand in transport subsectors ", getItems(VDemTr, 3))
+
+#add model MENA_EDS data (choosing the correct variable from MENA by use of the MENA-PROM mapping)
+a <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VDemTr", "MENA.EDS"])
+getRegions(a) <- sub("MOR", "MAR", getRegions(a)) # fix wrong region names in MENA
+# choose years and regions that both models have
+years <- intersect(getYears(a,as.integer=TRUE),getYears(VDemTr,as.integer=TRUE))
+regs <- intersect(getRegions(a),getRegions(VDemTr))
+a <- toolAggregate(a[,,unique(map2$EF)],dim=3,rel=map2,from="EF",to="SBS")
+getItems(a, 3) <- paste0("Final Energy demand in transport subsectors ", getItems(a, 3))
+
+# write data in mif file
+write.report(VDemTr[regs,years,],file="transport.mif",model="OPEN-PROM",unit="Mtoe",scenario="BASE")
+write.report(a[regs,,],file="transport.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario="BASE")
+
+transportation <- dimSums(VDemTr, dim = 3)
+getItems(transportation, 3) <- "Final Energy transportation"
+transportation_mena <- dimSums(VDemTr, dim = 3)
+getItems(transportation_mena, 3) <- "Final Energy transportation"
+
+# write data in mif file
+write.report(transportation[regs,years,],file="transport.mif",model="OPEN-PROM",unit="Mtoe",scenario="BASE")
+write.report(transportation_mena[regs,,],file="transport.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario="BASE")
+
+sets5 <- readSets("sets.gms", "EFtoEFA")
+sets5[5,] <- paste0(sets5[5,] , sets5[6,])
+sets5 <- sets5[ - 6,]
+sets5 <- as.data.frame(sets5)
+sets5 <- separate_wider_delim(sets5,cols = 1, delim = ".", names = c("EF","EFA"))
+sets5[["EF"]] <- sub("\\(","",sets5[["EF"]])
+sets5[["EF"]] <- sub("\\)","",sets5[["EF"]])
+sets5 <- separate_rows(sets5,EF)
+
+
