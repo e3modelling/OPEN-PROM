@@ -195,14 +195,14 @@ write.report(transportation_by_energy_form[regs,years,],file="reporting.mif",mod
 write.report(transportation_mena_by_energy_form[regs,,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario="BASE")
 
 #missing fuels
-v <- getItems(VDemTr,3.2)
-v <- as.data.frame(v)
-l <- v %>% filter(!v %in% as.character(unique(sets5$EF)))
+#v <- getItems(VDemTr,3.2)
+#v <- as.data.frame(v)
+#l <- v %>% filter(!v %in% as.character(unique(sets5$EF)))
 
-VDemTr_missing <- VDemTr[,,as.character(unique(l$v))]
-x <- as.quitte(VDemTr_missing)
-z <- x %>% filter(value > 0)
-u <- unique(z["EF"])
+#VDemTr_missing <- VDemTr[,,as.character(unique(l$v))]
+#x <- as.quitte(VDemTr_missing)
+#z <- x %>% filter(value > 0)
+#u <- unique(z["EF"])
 
 #filter IFuelCons by transport
 b3 <- calcOutput(type = "IFuelCons", subtype = "TRANSE", aggregate = FALSE)
