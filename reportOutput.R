@@ -37,31 +37,31 @@ a <- toolAggregate(a[,years,unique(sets$EF)],dim=3,rel=sets,from="EF",to="BAL")
 getItems(a, 3) <- paste0("Final Energy ", getItems(a, 3))
 
 # write data in mif file
-write.report(VFeCons[regs,years,],file="final.mif",model="OPEN-PROM",unit="Mtoe",scenario="BASE")
-write.report(a[regs,,],file="final.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario="BASE")
+write.report(VFeCons[regs,years,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",scenario="BASE")
+write.report(a[regs,,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario="BASE")
 
 
 #filter ENERDATA by onsumption
 b <- readSource("ENERDATA", subtype =  "onsumption", convert = TRUE)
 # map of enerdata and balance fuel
-map <- toolGetMapping(name = "enerdata-by-fuel.csv",
-                      type = "sectoral",
-                      where = "mappingfolder")
+map_enerdata <- toolGetMapping(name = "enerdata-by-fuel.csv",
+                               type = "sectoral",
+                               where = "mappingfolder")
 #keep the variables from the map
-b <- b[regs, , map[, 1]]
+b <- b[regs, , map_enerdata[, 1]]
 b <- as.quitte(b)
-names(map) <- sub("ENERDATA", "variable", names(map))
+names(map_enerdata) <- sub("ENERDATA", "variable", names(map_enerdata))
 #remove units
-map[,1] <- sub("\\..*", "", map[,1])
+map_enerdata[,1] <- sub("\\..*", "", map_enerdata[,1])
 #add a column with the fuels that match each variable of enerdata
-v <- left_join(b, map, by = "variable")
+v <- left_join(b, map_enerdata, by = "variable")
 v["variable"] <- paste0("Final Energy ", v$fuel)
 v <- filter(v, period %in% years)
 v <- select(v , -c("fuel"))
 v <- as.quitte(v)
 v <- as.magpie(v)
 # write data in mif file
-write.report(v,file="final.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario="BASE")
+write.report(v,file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario="BASE")
 
 
 #add model OPEN-PROM data Electricity prices
@@ -93,8 +93,8 @@ getNames(MENA_Residential) <- "Electricity prices Residential"
 z <- mbind(MENA_Industrial, MENA_Residential)
 
 # write data in mif file
-write.report(elec_prices[regs,years,],file="elec_prices.mif",model="OPEN-PROM",unit="Euro2005/KWh",scenario="BASE")
-write.report(z[regs,,],file="elec_prices.mif",model="MENA-EDS",unit="Euro2005/KWh",append=TRUE,scenario="BASE")
+write.report(elec_prices[regs,years,],file="reporting.mif",model="OPEN-PROM",unit="Euro2005/KWh",append=TRUE,scenario="BASE")
+write.report(z[regs,,],file="reporting.mif",model="MENA-EDS",unit="Euro2005/KWh",append=TRUE,scenario="BASE")
 
 #filter ENERDATA by lectricity
 k <- readSource("ENERDATA", subtype =  "lectricity", convert = TRUE)
@@ -115,44 +115,59 @@ getItems(ENERDATA_Residential, 3) <- "Electricity prices Residential"
 x <- mbind(ENERDATA_Industrial, ENERDATA_Residential)
 x <- x[regs, ,]
 # write data in mif file
-write.report(x,file="elec_prices.mif",model="ENERDATA",unit="Euro2005/KWh",append=TRUE,scenario="BASE")
+write.report(x,file="reporting.mif",model="ENERDATA",unit="Euro2005/KWh",append=TRUE,scenario="BASE")
 
+#Link between Model Subsectors and Fuels
+sets4 <- readSets("sets.gms", "SECTTECH")
+sets4[6,] <- paste0(sets4[6,] , sets4[7,])
+sets4 <- sets4[ - c(7),,drop = FALSE]
+sets4[8,] <- paste0(sets4[8,] , sets4[9,], sets4[10,])
+sets4 <- sets4[ - c(8, 9),,drop = FALSE]
+sets4 <- separate_wider_delim(sets4,cols = 1, delim = ".", names = c("SBS","EF"))
+sets4[["EF"]] <- sub("\\(","",sets4[["EF"]])
+sets4[["EF"]] <- sub("\\)","",sets4[["EF"]])
+sets4[["SBS"]] <- sub("\\(","",sets4[["SBS"]])
+sets4[["SBS"]] <- sub("\\)","",sets4[["SBS"]])
+sets4 <- separate_rows(sets4,EF)
+sets4 <- separate_rows(sets4,SBS)
+#TRANSFINAL(TRANSE), 6 categories
+sets6 <- readSets("sets.gms", "TRANSE")
+sets6 <- separate_rows(sets6, `TRANSE(DSBS)`)
 
-map2 <- toolGetMapping(name = "prom-enerdata-fucon-mapping.csv",
-                      type = "sectoral",
-                      where = "mappingfolder")
+map_subsectors <- sets4 %>% filter(SBS %in% as.character((sets6$`TRANSE(DSBS)`)))
+map_subsectors$EF = paste(map_subsectors$SBS, map_subsectors$EF, sep=".")
 
 #add model OPEN-PROM data final energy demand by transport subsectors (Mtoe) and by fuel
 VDemTr <- readGDX('./blabla.gdx', "VDemTr", field = 'l')
 
-map2 <- map2 %>% filter(SBS %in% c("PC","PT","PA","GU","GT","GN"))
-map2$EF = paste(map2$SBS, map2$EF, sep=".")
-# aggregate from PROM fuels to reporting fuel categories
-VDemTr <- toolAggregate(VDemTr[,,unique(map2$EF)],dim=3,rel=map2,from="EF",to="SBS")
-getItems(VDemTr, 3) <- paste0("Final Energy demand in transport subsectors ", getItems(VDemTr, 3))
+# aggregate from PROM fuels to subsectors
+VDemTr_subsectors <- toolAggregate(VDemTr[,,unique(map_subsectors$EF)],dim=3,rel=map_subsectors,from="EF",to="SBS")
+getItems(VDemTr_subsectors, 3) <- paste0("Final Energy demand in transport subsectors ", getItems(VDemTr_subsectors, 3))
 
 #add model MENA_EDS data (choosing the correct variable from MENA by use of the MENA-PROM mapping)
 a <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VDemTr", "MENA.EDS"])
 getRegions(a) <- sub("MOR", "MAR", getRegions(a)) # fix wrong region names in MENA
 # choose years and regions that both models have
-years <- intersect(getYears(a,as.integer=TRUE),getYears(VDemTr,as.integer=TRUE))
-regs <- intersect(getRegions(a),getRegions(VDemTr))
-a <- toolAggregate(a[,,unique(map2$EF)],dim=3,rel=map2,from="EF",to="SBS")
-getItems(a, 3) <- paste0("Final Energy demand in transport subsectors ", getItems(a, 3))
+years <- intersect(getYears(a,as.integer=TRUE),getYears(VDemTr_subsectors,as.integer=TRUE))
+regs <- intersect(getRegions(a),getRegions(VDemTr_subsectors))
+mena_subsectors <- toolAggregate(a[,,unique(map_subsectors$EF)],dim=3,rel=map_subsectors,from="EF",to="SBS")
+getItems(mena_subsectors, 3) <- paste0("Final Energy demand in transport subsectors ", getItems(mena_subsectors, 3))
 
 # write data in mif file
-write.report(VDemTr[regs,years,],file="transport.mif",model="OPEN-PROM",unit="Mtoe",scenario="BASE")
-write.report(a[regs,,],file="transport.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario="BASE")
+write.report(VDemTr_subsectors[regs,years,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario="BASE")
+write.report(mena_subsectors[regs,,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario="BASE")
 
-transportation <- dimSums(VDemTr, dim = 3)
+#Final Energy transportation 
+transportation <- dimSums(VDemTr_subsectors, dim = 3)
 getItems(transportation, 3) <- "Final Energy transportation"
-transportation_mena <- dimSums(a, dim = 3)
+transportation_mena <- dimSums(mena_subsectors, dim = 3)
 getItems(transportation_mena, 3) <- "Final Energy transportation"
 
 # write data in mif file
-write.report(transportation[regs,years,],file="transport.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario="BASE")
-write.report(transportation_mena[regs,,],file="transport.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario="BASE")
+write.report(transportation[regs,years,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario="BASE")
+write.report(transportation_mena[regs,,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario="BASE")
 
+#Energy Forms Aggregations
 sets5 <- readSets("sets.gms", "EFtoEFA")
 sets5[5,] <- paste0(sets5[5,] , sets5[6,])
 sets5 <- sets5[ - 6,]
@@ -162,26 +177,24 @@ sets5[["EF"]] <- sub("\\(","",sets5[["EF"]])
 sets5[["EF"]] <- sub("\\)","",sets5[["EF"]])
 sets5 <- separate_rows(sets5,EF)
 
-#add model OPEN-PROM data final energy demand by transport subsectors (Mtoe) and by fuel
-VDemTr <- readGDX('./blabla.gdx', "VDemTr", field = 'l')
-
 sets5 <- sets5 %>% filter(EF %in% getItems(VDemTr,3.2))
 
-VDemTr_by_fuel <- toolAggregate(VDemTr[,,as.character(unique(sets5$EF))],dim=3.2,rel=sets5,from="EF",to="EFA")
-#add model MENA_EDS data (choosing the correct variable from MENA by use of the MENA-PROM mapping)
-a <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VDemTr", "MENA.EDS"])
-getRegions(a) <- sub("MOR", "MAR", getRegions(a)) # fix wrong region names in MENA
-a_by_fuel <- toolAggregate(a[,,as.character(unique(sets5$EF))],dim=3.2,rel=sets5,from="EF",to="EFA")
-#
-transportation_by_fuel <- dimSums(VDemTr_by_fuel, 3.1)
-getItems(transportation_by_fuel,3.1) <- paste0("Final Energy demand in transport by fuel ", getItems(transportation_by_fuel, 3.1))
-transportation_mena_by_fuel <- dimSums(a_by_fuel,3.1)
-getItems(transportation_mena_by_fuel, 3.1) <- paste0("Final Energy demand in transport by fuel ", getItems(transportation_mena_by_fuel, 3.1))
+#Aggregate model OPEN-PROM by energy form
+VDemTr_by_energy_form <- toolAggregate(VDemTr[,,as.character(unique(sets5$EF))],dim=3.2,rel=sets5,from="EF",to="EFA")
+
+#Aggregate model MENA_EDS by energy form
+mena_by_energy_form <- toolAggregate(a[,,as.character(unique(sets5$EF))],dim=3.2,rel=sets5,from="EF",to="EFA")
+
+transportation_by_energy_form <- dimSums(VDemTr_by_energy_form, 3.1)
+getItems(transportation_by_energy_form,3.1) <- paste0("Final Energy demand in transport by energy form ", getItems(transportation_by_energy_form, 3.1))
+transportation_mena_by_energy_form <- dimSums(mena_by_energy_form,3.1)
+getItems(transportation_mena_by_energy_form, 3.1) <- paste0("Final Energy demand in transport by energy form ", getItems(transportation_mena_by_energy_form, 3.1))
 
 # write data in mif file
-write.report(transportation_by_fuel[regs,years,],file="transport.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario="BASE")
-write.report(transportation_mena_by_fuel[regs,,],file="transport.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario="BASE")
+write.report(transportation_by_energy_form[regs,years,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario="BASE")
+write.report(transportation_mena_by_energy_form[regs,,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario="BASE")
 
+#missing fuels
 v <- getItems(VDemTr,3.2)
 v <- as.data.frame(v)
 l <- v %>% filter(!v %in% as.character(unique(sets5$EF)))
@@ -190,3 +203,4 @@ VDemTr_missing <- VDemTr[,,as.character(unique(l$v))]
 x <- as.quitte(VDemTr_missing)
 z <- x %>% filter(value > 0)
 u <- unique(z["EF"])
+
