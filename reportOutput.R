@@ -146,11 +146,11 @@ write.report(a[regs,,],file="transport.mif",model="MENA-EDS",unit="Mtoe",append=
 
 transportation <- dimSums(VDemTr, dim = 3)
 getItems(transportation, 3) <- "Final Energy transportation"
-transportation_mena <- dimSums(VDemTr, dim = 3)
+transportation_mena <- dimSums(a, dim = 3)
 getItems(transportation_mena, 3) <- "Final Energy transportation"
 
 # write data in mif file
-write.report(transportation[regs,years,],file="transport.mif",model="OPEN-PROM",unit="Mtoe",scenario="BASE")
+write.report(transportation[regs,years,],file="transport.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario="BASE")
 write.report(transportation_mena[regs,,],file="transport.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario="BASE")
 
 sets5 <- readSets("sets.gms", "EFtoEFA")
@@ -162,4 +162,31 @@ sets5[["EF"]] <- sub("\\(","",sets5[["EF"]])
 sets5[["EF"]] <- sub("\\)","",sets5[["EF"]])
 sets5 <- separate_rows(sets5,EF)
 
+#add model OPEN-PROM data final energy demand by transport subsectors (Mtoe) and by fuel
+VDemTr <- readGDX('./blabla.gdx', "VDemTr", field = 'l')
 
+sets5 <- sets5 %>% filter(EF %in% getItems(VDemTr,3.2))
+
+VDemTr_by_fuel <- toolAggregate(VDemTr[,,as.character(unique(sets5$EF))],dim=3.2,rel=sets5,from="EF",to="EFA")
+#add model MENA_EDS data (choosing the correct variable from MENA by use of the MENA-PROM mapping)
+a <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VDemTr", "MENA.EDS"])
+getRegions(a) <- sub("MOR", "MAR", getRegions(a)) # fix wrong region names in MENA
+a_by_fuel <- toolAggregate(a[,,as.character(unique(sets5$EF))],dim=3.2,rel=sets5,from="EF",to="EFA")
+#
+transportation_by_fuel <- dimSums(VDemTr_by_fuel, 3.1)
+getItems(transportation_by_fuel,3.1) <- paste0("Final Energy demand in transport by fuel ", getItems(transportation_by_fuel, 3.1))
+transportation_mena_by_fuel <- dimSums(a_by_fuel,3.1)
+getItems(transportation_mena_by_fuel, 3.1) <- paste0("Final Energy demand in transport by fuel ", getItems(transportation_mena_by_fuel, 3.1))
+
+# write data in mif file
+write.report(transportation_by_fuel[regs,years,],file="transport.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario="BASE")
+write.report(transportation_mena_by_fuel[regs,,],file="transport.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario="BASE")
+
+v <- getItems(VDemTr,3.2)
+v <- as.data.frame(v)
+l <- v %>% filter(!v %in% as.character(unique(sets5$EF)))
+
+VDemTr_missing <- VDemTr[,,as.character(unique(l$v))]
+x <- as.quitte(VDemTr_missing)
+z <- x %>% filter(value > 0)
+u <- unique(z["EF"])
