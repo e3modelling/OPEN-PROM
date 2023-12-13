@@ -585,7 +585,9 @@ $ondelim
 $include"./iContrElecPrice.csv"
 $offdelim
 ;
-iFacElecPriConsu(allCy,ELCPCHAR,YTIME)$an(YTIME) = iContrElecPrice(allCy,ELCPCHAR,YTIME);
+* FIXME: iContrElecPrice values will be pinned down during model calibration, using MAR values for now
+* author=giannou
+iFacElecPriConsu(allCy,ELCPCHAR,YTIME)$an(YTIME) = iContrElecPrice("MAR",ELCPCHAR,YTIME);
 iScenarioPri(WEF,"NOTRADE",YTIME)=0;
 table iDataPriceReform(allCy,AGSECT,EF,YTIME)	 "Price reform (1)"
 $ondelim
