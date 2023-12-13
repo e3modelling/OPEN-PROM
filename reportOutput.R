@@ -48,13 +48,13 @@ map_enerdata <- toolGetMapping(name = "enerdata-by-fuel.csv",
                                type = "sectoral",
                                where = "mappingfolder")
 #keep the variables from the map
-b <- b[regs, , map_enerdata[, 1]]
-b <- as.quitte(b)
+b2 <- b[regs, , map_enerdata[, 1]]
+b2 <- as.quitte(b2)
 names(map_enerdata) <- sub("ENERDATA", "variable", names(map_enerdata))
 #remove units
 map_enerdata[,1] <- sub("\\..*", "", map_enerdata[,1])
 #add a column with the fuels that match each variable of enerdata
-v <- left_join(b, map_enerdata, by = "variable")
+v <- left_join(b2, map_enerdata, by = "variable")
 v["variable"] <- paste0("Final Energy ", v$fuel)
 v <- filter(v, period %in% years)
 v <- select(v , -c("fuel"))
@@ -203,4 +203,40 @@ VDemTr_missing <- VDemTr[,,as.character(unique(l$v))]
 x <- as.quitte(VDemTr_missing)
 z <- x %>% filter(value > 0)
 u <- unique(z["EF"])
+
+#filter IFuelCons by transport
+b3 <- calcOutput(type = "IFuelCons", subtype = "TRANSE", aggregate = FALSE)
+b3 <- b3[regs,,]
+
+map_subsectors_ener <- sets4 %>% filter(SBS %in% as.character((sets6$`TRANSE(DSBS)`)))
+map_subsectors_ener$EF = paste(map_subsectors_ener$SBS, "Mtoe",map_subsectors_ener$EF, sep=".")
+#filter to have only the variables which are in enerdata
+map_subsectors_ener <- map_subsectors_ener %>% filter(EF %in% getItems(b3,3))
+
+# aggregate from enerdata fuels to subsectors
+b3_subsector <- toolAggregate(b3[,,as.character(unique(map_subsectors_ener$EF))],dim=3,rel=map_subsectors_ener,from="EF",to="SBS")
+getItems(b3_subsector, 3) <- paste0("Final Energy demand in transport subsectors ", getItems(b3_subsector, 3))
+
+# write data in mif file
+write.report(b3_subsector[regs,,],file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario="BASE")
+
+#Final Energy transportation enerdata
+transportation_ener <- dimSums(b3_subsector, dim = 3)
+getItems(transportation_ener, 3) <- "Final Energy transportation"
+
+# write data in mif file
+write.report(transportation_ener[regs,,],file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario="BASE")
+
+map_subsectors_ener2 <- sets5
+#filter to have only the variables which are in enerdata
+map_subsectors_ener2 <- map_subsectors_ener2 %>% filter(EF %in% getItems(b3,3.3))
+
+#Aggregate model enerdata by energy form
+b3_by_energy_form <- toolAggregate(b3[,,as.character(unique(map_subsectors_ener2$EF))],dim=3.3,rel=map_subsectors_ener2,from="EF",to="EFA")
+
+b3_by_energy_form <- dimSums(b3_by_energy_form, 3.1)
+getItems(b3_by_energy_form,3.2) <- paste0("Final Energy demand in transport by energy form ", getItems(b3_by_energy_form, 3.2))
+
+# write data in mif file
+write.report(b3_by_energy_form[regs,,],file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario="BASE")
 
