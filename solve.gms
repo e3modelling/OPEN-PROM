@@ -22,4 +22,4 @@ VFuelConsInclHP.FX(allCy,DSBS,EF,YTIME)$TIME(YTIME) = VFuelConsInclHP.L(allCy,DS
 VTrnspActiv.FX(allCy,TRANSE,YTIME)$TIME(YTIME) = VTrnspActiv.L(allCy,TRANSE,YTIME)$TIME(YTIME);
 endloop;  !! close outer iteration loop (time steps)
 
-*execute_unload "blabla.gdx";
+execute_unload "blabla.gdx";
