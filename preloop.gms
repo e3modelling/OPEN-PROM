@@ -461,7 +461,7 @@ VCarVal.FX(runCy,"NOTRADE",YTIME)$an(YTIME) =sExogCarbValue*iCarbValYrExog(runCy
 
 VCumCO2Capt.FX(runCy,YTIME)$(not an(YTIME)) = 0 ;
 
-VCO2CO2SeqCsts.FX(runCy,YTIME)$(not an(YTIME)) =
+VCO2CO2SeqCsts.FX(runCy,YTIME) =
        (iElastCO2Seq(runCy,"mc_a") *iElastCO2Seq(runCy,"mc_b"));
 
 VDemTr.FX(runCy,TRANSE,EF,YTIME)$(not SECTTECH(TRANSE,EF)) = 0;
