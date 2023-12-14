@@ -952,26 +952,17 @@ endloop;
 
 iTechLftPlaType(runCy,PGALL) = iDataPowGenCost(PGALL, "LFT");
 
-
-iPlantEffByType(runCy,PGALL,"2010") = iDataPowGenCost(PGALL,"EFF_05");
-iPlantEffByType(runCy,PGALL,"2020") = iDataPowGenCost(PGALL,"EFF_20");
-iPlantEffByType(runCy,PGALL,"2050") = iDataPowGenCost(PGALL,"EFF_50");
-
-loop YTIME$((ord(YTIME) gt TF-7) $(ord(YTIME) lt TF+12)) do
-         iPlantEffByType(runCy,PGALL,YTIME) = (iPlantEffByType(runCy,PGALL,"2020")-iPlantEffByType(runCy,PGALL,"2010"))/15+iPlantEffByType(runCy,PGALL,YTIME-1);
-endloop;
-
-
-loop YTIME$((ord(YTIME) gt TF+11) $(ord(YTIME) lt TF+41)) do
-         iPlantEffByType(runCy,PGALL,YTIME) = (iPlantEffByType(runCy,PGALL,"2050")-iPlantEffByType(runCy,PGALL,"2020"))/30+iPlantEffByType(runCy,PGALL,YTIME-1);
-endloop;
-iPlantEffByType(runCy,PGALL,YTIME)$(ord(YTIME)>(ordfirst+41)) = iPlantEffByType(runCy,PGALL,"2050");
-
 *iCO2CaptRate(runCy,PGALL,YTIME)$(ord(YTIME)>(ordfirst-8))  =  iDataPowGenCost(PGALL,"CR");
 
 iEffDHPlants(runCy,EFS,YTIME)$(ord(YTIME)>(ordfirst-8))  = sum(PGEFS$sameas(EFS,PGEFS),iParDHEfficiency(PGEFS,"2010"));
 
 
+table iDataPlantEffByType(PGALL, YTIME)   "Data for plant efficiency per plant type"
+$ondelim
+$include "./iDataPlantEffByType.csv"
+$offdelim
+
+iPlantEffByType(runCy,PGALL,YTIME) = iDataPlantEffByType(PGALL, YTIME) ;
 
 ** CHP economic and technical data initialisation for electricity production
 table iDataChpPowGen(EF,YTIME,CHPPGSET)   "Data for power generation costs (various)"
