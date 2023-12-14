@@ -16,7 +16,7 @@ mena_prom_mapping <- read.csv("MENA-PROM mapping - mena_prom_mapping.csv")
 
 z <- c("EGY", "MAR")
 zm <- sub("MAR", "MOR", z)
-years <- c(2017:2021)
+years <- c(2010:2025)
 
 x <- NULL
 variable <- NULL
