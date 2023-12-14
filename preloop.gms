@@ -450,10 +450,13 @@ VAvgPowerGenCostShoTrm.L(runCy,ESET,"2010") = 0;
 VLongPowGenCost.L(runCy,PGALL,ESET,"2010") = 0;
 VLonAvgPowGenCostNoClimPol.L(runCy,PGALL,ESET,"2010") = 0;
 VLongAvgPowGenCost.L(runCy,ESET,"2017") = 0;
-VLonPowGenCostNoClimPol.L(runCy,ESET,"2017") = 0;
-VAvgPowerGenCostShoTrm.L(runCy,ESET,"2017") = 0;
+VLonPowGenCostNoClimPol.FX(runCy,ESET,"%fBaseY%") = 0;
+* FIXME: Temporary fix. To be reversed back to VAvgPowerGenCostShoTrm.L(runCy,ESET,"%fBaseY%") = 0, when QShortPowGenCost is activated.
+* author=redmonkeycloud
+VAvgPowerGenCostShoTrm.FX(runCy,ESET,YTIME) = 0.02;
+
 VLongPowGenCost.L(runCy,PGALL,ESET,"2017") = 0;
-VLonAvgPowGenCostNoClimPol.L(runCy,PGALL,ESET,"2017") = 0;
+VLonAvgPowGenCostNoClimPol.FX(runCy,PGALL,ESET,"%fBaseY%") = 0;
 
 VCarVal.fx(runCy,NAP,YTIME)$(not An(YTIME))=0;
 VCarVal.FX(runCy,"TRADE",YTIME)$an(YTIME) = sExogCarbValue*iCarbValYrExog(runCy,YTIME);
@@ -461,7 +464,9 @@ VCarVal.FX(runCy,"NOTRADE",YTIME)$an(YTIME) =sExogCarbValue*iCarbValYrExog(runCy
 
 VCumCO2Capt.FX(runCy,YTIME)$(not an(YTIME)) = 0 ;
 
-VCO2SeqCsts.FX(runCy,YTIME)$(not an(YTIME)) =
+* FIXME: Temporary fix. To be reversed back to VCO2SeqCsts.FX(runCy,YTIME)$(not an(YTIME)), when QCstCO2SeqCsts is activated.
+* author=redmonkeycloud
+VCO2SeqCsts.FX(runCy,YTIME) =
        (iElastCO2Seq(runCy,"mc_a") *iElastCO2Seq(runCy,"mc_b"));
 
 VDemTr.FX(runCy,TRANSE,EF,YTIME)$(not SECTTECH(TRANSE,EF)) = 0;
