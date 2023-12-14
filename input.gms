@@ -961,6 +961,7 @@ table iDataPlantEffByType(PGALL, YTIME)   "Data for plant efficiency per plant t
 $ondelim
 $include "./iDataPlantEffByType.csv"
 $offdelim
+;
 
 iPlantEffByType(runCy,PGALL,YTIME) = iDataPlantEffByType(PGALL, YTIME) ;
 
