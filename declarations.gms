@@ -422,7 +422,6 @@ VTransfOutputNuclear(allCy,EFS,YTIME)	                "Transformation output fro
 VElecProd(allCy,PGALL,YTIME)	                        "Electricity production (TWh)"
 VTransfInNuclear(allCy,EFS,YTIME)	                    "Transformation input to nuclear plants (Mtoe)"		
 VTransfInThermPowPls(allCy,EFS,YTIME)	                "Transformation input to thermal power plants (Mtoe)"
-VChpElecProd(allCy,CHP,YTIME)	                        "CHP electricity production (TWh)"
 VTransfOutThermPowSta(allCy,EFS,YTIME)	                "Transformation output from thermal power stations (Mtoe)"
 VTotTransfInput(allCy,EFS,YTIME)	                    "Total transformation input (Mtoe)"
 VTotTransfOutput(allCy,EFS,YTIME)	                    "Total transformation output (Mtoe)"
