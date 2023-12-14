@@ -1,4 +1,6 @@
-* Power Generation
+*' @title Equations of OPEN-PROM
+*' @equations
+*' Power Generation
 
 * Compute current renewable potential 
 QCurrRenPot(runCy,PGRENEF,YTIME)$TIME(YTIME)..
@@ -142,7 +144,7 @@ QShrcapNoCcs(runCy,PGALL,YTIME)$(TIME(YTIME) $NOCCS(PGALL))..
          =E= 
          1 - sum(CCS$CCS_NOCCS(CCS,PGALL), VPowerPlaShrNewEq(runCy,CCS,YTIME));
 
-* Compute variable cost of technology 
+*' Compute variable cost of technology 
 QVarCostTech(runCy,PGALL,YTIME)$(time(YTIME))..
          VVarCostTech(runCy,PGALL,YTIME) 
              =E=
