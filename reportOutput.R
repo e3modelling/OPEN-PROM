@@ -41,8 +41,8 @@ write.report(VFeCons[regs,years,],file="reporting.mif",model="OPEN-PROM",unit="M
 write.report(a[regs,,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario="BASE")
 
 
-#filter ENERDATA by onsumption
-b <- readSource("ENERDATA", subtype =  "onsumption", convert = TRUE)
+#filter ENERDATA by consumption
+b <- readSource("ENERDATA", subtype =  "consumption", convert = TRUE)
 # map of enerdata and balance fuel
 map_enerdata <- toolGetMapping(name = "enerdata-by-fuel.csv",
                                type = "sectoral",
@@ -179,12 +179,31 @@ sets5 <- separate_rows(sets5,EF)
 
 sets5 <- sets5 %>% filter(EF %in% getItems(VDemTr,3.2))
 
+ELC <- readSets("sets.gms", "ELCEF")
+#Add electricity, Hydrogen, Biomass and Waste
+sets5[nrow(sets5) + 1, ] <- ELC[1,1]
+sets5[nrow(sets5) + 1, ] <- "H2F"
+sets5[nrow(sets5) + 1, ] <- "BMSWAS"
+
 #Aggregate model OPEN-PROM by energy form
 VDemTr_by_energy_form <- toolAggregate(VDemTr[,,as.character(unique(sets5$EF))],dim=3.2,rel=sets5,from="EF",to="EFA")
 
 #Aggregate model MENA_EDS by energy form
 mena_by_energy_form <- toolAggregate(a[,,as.character(unique(sets5$EF))],dim=3.2,rel=sets5,from="EF",to="EFA")
 
+#transportation by subsector and by energy form
+transportation_by_subsector_by_energy_form <- VDemTr_by_energy_form
+getItems(transportation_by_subsector_by_energy_form, 3.1) <- paste0("Final Energy demand in transport by subsector and by energy form ", getItems(transportation_by_subsector_by_energy_form, 3.1))
+
+#transportation by subsector and by energy form MENA_EDS
+transportation_mena_by_subsector_by_energy_form <- mena_by_energy_form
+getItems(transportation_mena_by_subsector_by_energy_form, 3.1) <- paste0("Final Energy demand in transport by subsector and by energy form ", getItems(transportation_mena_by_subsector_by_energy_form, 3.1))
+
+# write data in mif file
+write.report(transportation_by_subsector_by_energy_form[regs,years,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario="BASE")
+write.report(transportation_mena_by_subsector_by_energy_form[regs,,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario="BASE")
+
+#transportation_by_energy_form
 transportation_by_energy_form <- dimSums(VDemTr_by_energy_form, 3.1)
 getItems(transportation_by_energy_form,3.1) <- paste0("Final Energy demand in transport by energy form ", getItems(transportation_by_energy_form, 3.1))
 transportation_mena_by_energy_form <- dimSums(mena_by_energy_form,3.1)
@@ -231,11 +250,20 @@ map_subsectors_ener2 <- sets5
 #filter to have only the variables which are in enerdata
 map_subsectors_ener2 <- map_subsectors_ener2 %>% filter(EF %in% getItems(b3,3.3))
 
-#Aggregate model enerdata by energy form
+#Aggregate model enerdata by subsector and by energy form
 b3_by_energy_form <- toolAggregate(b3[,,as.character(unique(map_subsectors_ener2$EF))],dim=3.3,rel=map_subsectors_ener2,from="EF",to="EFA")
 
+#enerdata by subsector and by energy form MENA_EDS
+transportation_enerdata_by_subsector_by_energy_form <- b3_by_energy_form
+transportation_enerdata_by_subsector_by_energy_form <- dimSums(transportation_enerdata_by_subsector_by_energy_form, 3.2)
+getItems(transportation_enerdata_by_subsector_by_energy_form, 3.1) <- paste0("Final Energy demand in transport by subsector and by energy form ", getItems(transportation_enerdata_by_subsector_by_energy_form, 3.1))
+
+# write data in mif file
+write.report(transportation_enerdata_by_subsector_by_energy_form[regs,,],file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario="BASE")
+
+#Aggregate model enerdata by energy form
 b3_by_energy_form <- dimSums(b3_by_energy_form, 3.1)
-getItems(b3_by_energy_form,3.2) <- paste0("Final Energy demand in transport by energy form ", getItems(b3_by_energy_form, 3.2))
+getItems(b3_by_energy_form,3) <- paste0("Final Energy demand in transport by energy form ", getItems(b3_by_energy_form, 3.2))
 
 # write data in mif file
 write.report(b3_by_energy_form[regs,,],file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario="BASE")
