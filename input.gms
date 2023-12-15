@@ -941,10 +941,12 @@ endloop;
 
 
 
-
-
-
-iTechLftPlaType(runCy,PGALL) = iDataPowGenCost(PGALL, "LFT");
+table iDataTechLftPlaType(PGALL, LFT) "Data for power generation costs (various)"
+$ondelim
+$include"./iDataTechLftPlaType.csv"
+$offdelim
+;
+iTechLftPlaType(runCy,PGALL) = iDataTechLftPlaType(PGALL, "LFT");
 
 
 iPlantEffByType(runCy,PGALL,"2010") = iDataPowGenCost(PGALL,"EFF_05");

@@ -1224,7 +1224,8 @@ LFT
 CR
 /
 
-
+LFT(PGECONCHAR) "Technical Lifetime"
+/ LFT / 
 
 SG               "S parameters in Gompertz function for passenger cars vehicle km"
 /S1,S2,S3,SAT/
