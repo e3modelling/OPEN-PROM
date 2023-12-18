@@ -109,17 +109,11 @@ table iCapCostTechTr(allCy,TRANSE,EF,YTIME)      "Capital Cost of technology for
 $ondelim$include "./iCapCostTechTr.csv"
 $offdelim
 ;
-table iRateLossesFinConsSup(allCy,EF, YTIME)               "Supplementary parameter for Rate of losses over Available for Final Consumption (1)"
+table iRateLossesFinCons(allCy,EF,YTIME)               "Rate of losses over Available for Final Consumption (1)"
 $ondelim
-$include "./iRateLossesFinConsSup.csv"
+$include "./iRateLossesFinCons.csv"
 $offdelim
 ;
-table iEneProdRDscenariosSupplement(allCy,SBS,YTIME)       "Supplementary Parameter for Energy productivity indices and R&D indices (1)"  
-$ondelim
-$include "./iEneProdRDscenariosSupplement.csv"
-$offdelim
-;
-iEneProdRDscenarios(runCy,SBS,YTIME)=iEneProdRDscenariosSupplement(runCy,SBS,YTIME);
 table iParDHEfficiency(PGEFS,YTIME)                 "Parameter of  district heating Efficiency (1)"
 $ondelim
 $include "./iParDHEfficiency.csv"
@@ -255,14 +249,13 @@ iResHcNgOilPrProd(runCy,"NGS",YTIME)$an(YTIME)   = iSupResRefCapacity(runCy,"NGS
 iResHcNgOilPrProd(runCy,"CRO",YTIME)$an(YTIME)   = iSupResRefCapacity(runCy,"OIL_PPROD",YTIME);
 iResFeedTransfr(runCy,YTIME)$an(YTIME) = iSupResRefCapacity(runCy,"FEED_RES",YTIME);
 iFeedTransfr(runCy,EFS,YTIME) = iSuppTransfers(runCy,EFS,YTIME);
-iRateEneBranCons(allCy,EFS,YTIME)= iSupRateEneBranCons(allCy,EFS,YTIME)*iEneProdRDscenarios(allCy,"PG",YTIME);
+iRateEneBranCons(allCy,EFS,YTIME)= iSupRateEneBranCons(allCy,EFS,YTIME);
 iResTransfOutputRefineries(runCy,EFS,YTIME) = iSupTrnasfOutputRefineries(runCy,EFS,YTIME);
 iRefCapacity(runCy,YTIME)= iSuppRefCapacity(runCy,"REF_CAP",YTIME);
 iResRefCapacity(runCy,YTIME) = iSupResRefCapacity(runCy,"REF_CAP_RES",YTIME);
 iTransfInpGasworks(runCy,EFS,YTIME)= iSuppTransfInputPatFuel(EFS,YTIME);
 iShareFueTransfInput(runCy,EFS)$sum(EF$EFS(EF),iTransfInpGasworks(runCy,EF,"%fBaseY%")) =  iTransfInpGasworks(runCy,EFS,"%fBaseY%") / sum(EF$EFS(EF),iTransfInpGasworks(runCy,EF,"%fBaseY%"));
 *VDistrLosses.FX(runCy,EFS,TT)$PERIOD(TT) = VDistrLosses.L(runCy,EFS,TT);
-iRateLossesFinCons(runCy,EFS,YTIME)$an(YTIME)  = iRateLossesFinConsSup(runCy,EFS, YTIME)*iEneProdRDscenarios(runCy,"PG",YTIME);
 
 table iLoadFactorAdjMxm(allCy,VARIOUS_LABELS,YTIME)               "Parameter for load factor adjustment iMxmLoadFacElecDem (1)"
 $ondelim
@@ -533,7 +526,7 @@ iDecInvPlantSched(allCy,PGALL,"2019") = iInvPlants(allCy,PGALL,"INV_19");
 
 table iCummMxmInstRenCap(allCy,PGRENEF,YTIME)	 "Cummulative maximum potential installed Capacity for Renewables (GW)"
 $ondelim
-$include"./iCummMxmInstRenCap.csv"
+$include"./iMaxResPot.csv"
 $offdelim
 ;
 iCummMxmInstRenCap(allCy,PGRENEF,YTIME)$(not iCummMxmInstRenCap(allCy,PGRENEF,YTIME)) = 1e-4;
@@ -547,7 +540,7 @@ iMaxRenPotential(allCy,"BMSWAS",YTIME)$AN(YTIME) = iCummMxmInstRenCap(allCy,"BMS
 iMaxRenPotential(allCy,"OTHREN",YTIME)$AN(YTIME) = iCummMxmInstRenCap(allCy,"OTHREN",YTIME);
 table iCummMnmInstRenCap(allCy,PGRENEF,YTIME)	 "Cummulative minimum potential installed Capacity for Renewables (GW)"
 $ondelim
-$include"./iCummMnmInstRenCap.csv"
+$include"./iMinResPot.csv"
 $offdelim
 ;
 iCummMnmInstRenCap(allCy,PGRENEF,YTIME)$(not iCummMnmInstRenCap(allCy,PGRENEF,YTIME)) = 1e-4;
@@ -568,12 +561,20 @@ $offdelim
 iMatFacPlaAvailCap(allCy,PGALL,YTIME)$an(YTIME) = iMatFacCap(allCy,PGALL,YTIME);
 iMatFacPlaAvailCap(allCy,CCS,YTIME)$an(YTIME)  =0;
 *$offtext
+
+$ontext
 table iMatureFacLoad(allCy,PGALL,YTIME)	 "Maturty factors on Load (1)"
 $ondelim
 $include"./iMatureFacLoad.csv"
 $offdelim
 ;
-iMatureFacPlaDisp(allCy,PGALL,YTIME)$an(YTIME) = iMatureFacLoad(allCy,PGALL,YTIME);
+$offtext 
+
+* FIXME: Temporarily setting maturity factors related to plant dispatching equal to 1.
+* author=derevirn
+iMatureFacPlaDisp(allCy,PGALL,YTIME)$an(YTIME) = 1;
+iCO2CaptRate(runCy,PGALL,YTIME) = 0; 
+
 table iMxmShareChpElec(allCy,YTIME)	 "Maximum share of CHP electricity in a country (1)"
 $ondelim
 $include"./iMxmShareChpElec.csv"
@@ -738,7 +739,7 @@ $ondelim
 $include"./iResTranspFuelConsSubTech.csv"
 $offdelim
 ;
-iResSpecificFuelConsCost(allCy,TRANSE,TTECH,EF,YTIME)$(sameas(TTECH,EF)$an(YTIME)) = iResTranspFuelConsSubTech(allCy,TRANSE,EF,YTIME)*iEneProdRDscenarios(allCy,TRANSE,YTIME);
+iResSpecificFuelConsCost(allCy,TRANSE,TTECH,EF,YTIME)$(sameas(TTECH,EF)$an(YTIME)) = iResTranspFuelConsSubTech(allCy,TRANSE,EF,YTIME);
 iResSpecificFuelConsCost(allCy,TRANSE,"BGDO","BGDO",YTIME)$(an(YTIME) $SECTTECH(TRANSE,"BGDO")) = iResSpecificFuelConsCost(allCy,TRANSE,"GDO","GDO",YTIME);
 
 iResSpecificFuelConsCost(allCy,TRANSE,"PHEVGSL","GSL",YTIME)$(TRANSETTECH(TRANSE,"PHEVGSL") $an(YTIME))= iResSpecificFuelConsCost(allCy,TRANSE,"GSL","GSL",YTIME);
@@ -948,26 +949,18 @@ $offdelim
 ;
 iTechLftPlaType(runCy,PGALL) = iDataTechLftPlaType(PGALL, "LFT");
 
-
-iPlantEffByType(runCy,PGALL,"2010") = iDataPowGenCost(PGALL,"EFF_05");
-iPlantEffByType(runCy,PGALL,"2020") = iDataPowGenCost(PGALL,"EFF_20");
-iPlantEffByType(runCy,PGALL,"2050") = iDataPowGenCost(PGALL,"EFF_50");
-
-loop YTIME$((ord(YTIME) gt TF-7) $(ord(YTIME) lt TF+12)) do
-         iPlantEffByType(runCy,PGALL,YTIME) = (iPlantEffByType(runCy,PGALL,"2020")-iPlantEffByType(runCy,PGALL,"2010"))/15+iPlantEffByType(runCy,PGALL,YTIME-1);
-endloop;
-
-
-loop YTIME$((ord(YTIME) gt TF+11) $(ord(YTIME) lt TF+41)) do
-         iPlantEffByType(runCy,PGALL,YTIME) = (iPlantEffByType(runCy,PGALL,"2050")-iPlantEffByType(runCy,PGALL,"2020"))/30+iPlantEffByType(runCy,PGALL,YTIME-1);
-endloop;
-iPlantEffByType(runCy,PGALL,YTIME)$(ord(YTIME)>(ordfirst+41)) = iPlantEffByType(runCy,PGALL,"2050");
-
-iCO2CaptRate(runCy,PGALL,YTIME)$(ord(YTIME)>(ordfirst-8))  =  iDataPowGenCost(PGALL,"CR");
+*iCO2CaptRate(runCy,PGALL,YTIME)$(ord(YTIME)>(ordfirst-8))  =  iDataPowGenCost(PGALL,"CR");
 
 iEffDHPlants(runCy,EFS,YTIME)$(ord(YTIME)>(ordfirst-8))  = sum(PGEFS$sameas(EFS,PGEFS),iParDHEfficiency(PGEFS,"2010"));
 
 
+table iDataPlantEffByType(PGALL, YTIME)   "Data for plant efficiency per plant type"
+$ondelim
+$include "./iDataPlantEffByType.csv"
+$offdelim
+;
+
+iPlantEffByType(runCy,PGALL,YTIME) = iDataPlantEffByType(PGALL, YTIME) ;
 
 ** CHP economic and technical data initialisation for electricity production
 table iDataChpPowGen(EF,YTIME,CHPPGSET)   "Data for power generation costs (various)"
@@ -999,6 +992,7 @@ $offtext
 ***iPlantEffByType(runCy,PGALL,YTIME)$(an(ytime) )= iPlantEffByType(runCy,PGALL,YTIME) / iEneProdRDscenarios(runCy,"pg",ytime);
 ***iEffDHPlants(runCy,EF,YTIME)$(an(ytime) )= iEffDHPlants(runCy,EF,YTIME) / iEneProdRDscenarios(runCy,"pg",ytime);
 iElecIndex(runCy,YTIME) = 0.9;
+*iRateLossesFinCons(allCy,EFS, YTIME)$(iFinEneCons(allCy,EFS,YTIME)>0 $(not an(ytime))) = iDistrLosses(allCy,EFS,YTIME) / iFinEneCons(allCy,EFS,YTIME);
 
 
 

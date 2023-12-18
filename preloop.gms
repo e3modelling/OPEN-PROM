@@ -31,7 +31,7 @@ QTotElecGenCap
 *QProdCostInvDecis
 *QShrcap
 *QShrcapNoCcs
-*QVarCostTech
+QVarCostTech
 *QVarCostTechNotPGSCRN
 *QProdCostTechPreReplac
 *QProdCostTechPreReplacAvail
@@ -48,9 +48,9 @@ QMnmAllowRenPot
 *QPowPlaShaNewEquip
 *QElecGenCapacity
 *QElecGenCap
-*QVarCostTechnology
-*QElecPeakLoads
-*QElectrPeakLoad
+QVarCostTechnology
+QElecPeakLoads
+QElectrPeakLoad
 *QNewCapYearly
 *QAvgCapFacRes
 *QOverallCap
@@ -194,14 +194,14 @@ VNumVeh.L(allCy,YTIME)=0.1;
 *VNumVeh.lags(allCy,YTIME) = 0.1;
 VTrnspActiv.l(allCy,TRANSE,YTIME) = 0.1;
 VNewReg.FX(allCy,YTIME)$(not an(ytime)) = iNewReg(allCy,YTIME);
-VFuelPriceSub.l(allCy,SBS,EF,YTIME) = 0.1;
+VFuelPriceSub.l(allCy,SBS,EF,YTIME) = 1.5;
 VElecIndPrices.l(allCy,YTIME)= 0.1;
 VTechCostIntrm.l(allCy,DSBS,rcon,EF,TEA,YTIME) = 0.1;
 VLifeTimeTech.l(allCy,DSBS,EF,TEA,YTIME)= 0.1;
 VTechSort.l(allCy,DSBS,rCon,YTIME) = 0.1;
 VConsFuel.l(allCy,DSBS,EF,YTIME)=0.1;
 VRefCapacity.l(allCy,YTIME)=0.1;
-VFeCons.l(allCy,EF,YTIME) = 0.1;
+*VFeCons.l(allCy,EF,YTIME) = 000000.1;
 VTransfOutputRefineries.l(allCy,EFS,YTIME)=0.1;
 VGrsInlConsNotEneBranch.l(allCy,EFS,YTIME)=0.1;
 VElecConsAll.l(allCy,DSBS,YTIME)=0.1;
@@ -242,7 +242,7 @@ VAvgCapFacRes.l(allCy,PGALL,YTIME)=0.1;
 VOverallCap.scale(allCy,PGALL,YTIME)=1;
 VPowPlantSorting.l(runCy,PGALL,YTIME)=0.01;
 VReqElecProd.l(runCy,YTIME)=0.1;
-VPowPlantSorting.up(runCy,PGALL,YTIME)=0.001;
+*VPowPlantSorting.up(runCy,PGALL,YTIME)=0.001;
 VPowPlantSorting.scale(runCy,PGALL,YTIME)=1;
 VElecDem.l(allCy,YTIME)=0.1;
 *VHourProdCostTech.lo(runCy,PGALL,HOUR,YTIME)=0.0001;
@@ -464,9 +464,7 @@ VCarVal.FX(runCy,"NOTRADE",YTIME)$an(YTIME) =sExogCarbValue*iCarbValYrExog(runCy
 
 VCumCO2Capt.FX(runCy,YTIME)$(not an(YTIME)) = 0 ;
 
-* FIXME: Temporary fix. To be reversed back to VCO2SeqCsts.FX(runCy,YTIME)$(not an(YTIME)), when QCstCO2SeqCsts is activated.
-* author=redmonkeycloud
-VCO2SeqCsts.FX(runCy,YTIME) =
+VCO2CO2SeqCsts.FX(runCy,YTIME) =
        (iElastCO2Seq(runCy,"mc_a") *iElastCO2Seq(runCy,"mc_b"));
 
 VDemTr.FX(runCy,TRANSE,EF,YTIME)$(not SECTTECH(TRANSE,EF)) = 0;

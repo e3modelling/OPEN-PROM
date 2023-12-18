@@ -13,7 +13,6 @@ iAnnCons(allCy,DSBS,conSet)                     "Annual consumption of the small
                                                  !! For goods transport, (Mtkm/vehicle)  
 iCumDistrFuncConsSize(allCy,DSBS)               "Cummulative distribution function of consumer size groups (1)"
 iRateLossesFinCons(allCy,EF,YTIME)              "Rate of losses over Available for Final Consumption (1)" 
-iEneProdRDscenarios(allCy,SBS,YTIME)            "Energy productivity index used in R&D scenarios (1)" 
 iEffDHPlants(allCy,EF,YTIME)                    "Efficiency of District Heating Plants (1)" 
 iShareFueTransfInput(allCy,EF)                  "Share of fuels in transformation input to Gasworks, Blast Furnances, Briquetting plants in base year (1)"
 iTransfInpGasworks(allCy,EF,YTIME)              "Transformation Input in Gasworks, Blast Furnances, Briquetting plants (Mtoe)"
