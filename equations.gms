@@ -1,4 +1,6 @@
-* Power Generation
+*' @title Equations of OPEN-PROM
+*' @equations
+*' Power Generation
 
 * Compute current renewable potential 
 QCurrRenPot(runCy,PGRENEF,YTIME)$TIME(YTIME)..
@@ -142,7 +144,8 @@ QShrcapNoCcs(runCy,PGALL,YTIME)$(TIME(YTIME) $NOCCS(PGALL))..
          =E= 
          1 - sum(CCS$CCS_NOCCS(CCS,PGALL), VPowerPlaShrNewEq(runCy,CCS,YTIME));
 
-* Compute variable cost of technology 
+*' Compute the variable cost of each power plant technology for every region,
+*' By utilizing the gross cost, fuel prices, CO2 emission factors & capture, and plant efficiency. 
 QVarCostTech(runCy,PGALL,YTIME)$(time(YTIME))..
          VVarCostTech(runCy,PGALL,YTIME) 
              =E=
@@ -296,19 +299,22 @@ QElecGenCap(runCy,PGALL,YTIME)$TIME(YTIME)..
              =E=
          ( VElecGenPlantsCapac(runCy,PGALL,YTIME) + 1e-6 + SQRT( SQR(VElecGenPlantsCapac(runCy,PGALL,YTIME)-1e-6) + SQR(1e-4) ) )/2;
 
-* Compute variable cost of technology 
+*' Compute the variable cost of each power plant technology for every region,
+*' by utilizing the maturity factor related to plant dispatching.
 QVarCostTechnology(runCy,PGALL,YTIME)$TIME(YTIME)..
          VVarCostTechnology(runCy,PGALL,YTIME)
          =E=  
-          iMatureFacPlaDisp(runCy,PGALL,YTIME)*VVarCostTechnology(runCy,PGALL,YTIME)**(-2);
+          iMatureFacPlaDisp(runCy,PGALL,YTIME)*VVarCostTech(runCy,PGALL,YTIME)**(-2);
 
-* Compute Electricity peak loads
+*' Compute the electricity peak loads of each region,
+*' as a sum of the variable costs of all power plant technologies.
 QElecPeakLoads(runCy,YTIME)$TIME(YTIME)..
          VElecPeakLoads(runCy,YTIME) 
          =E= 
          sum(PGALL, VVarCostTechnology(runCy,PGALL,YTIME));     
 
-* Compute Power plants sorting according to variable cost  to decide the plant dispatching 
+*' Compute power plant sorting to decide the plant dispatching. 
+*' This is accomplished by dividing the variable cost by the peak loads.
 QElectrPeakLoad(runCy,PGALL,YTIME)$TIME(YTIME)..
          VPowPlantSorting(runCy,PGALL,YTIME)
                  =E=
