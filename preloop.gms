@@ -31,7 +31,7 @@ QTotElecGenCap
 *QProdCostInvDecis
 *QShrcap
 *QShrcapNoCcs
-*QVarCostTech
+QVarCostTech
 *QVarCostTechNotPGSCRN
 *QProdCostTechPreReplac
 *QProdCostTechPreReplacAvail
@@ -48,9 +48,9 @@ QMnmAllowRenPot
 *QPowPlaShaNewEquip
 *QElecGenCapacity
 *QElecGenCap
-*QVarCostTechnology
-*QElecPeakLoads
-*QElectrPeakLoad
+QVarCostTechnology
+QElecPeakLoads
+QElectrPeakLoad
 *QNewCapYearly
 *QAvgCapFacRes
 *QOverallCap
@@ -242,7 +242,7 @@ VAvgCapFacRes.l(allCy,PGALL,YTIME)=0.1;
 VOverallCap.scale(allCy,PGALL,YTIME)=1;
 VPowPlantSorting.l(runCy,PGALL,YTIME)=0.01;
 VReqElecProd.l(runCy,YTIME)=0.1;
-VPowPlantSorting.up(runCy,PGALL,YTIME)=0.001;
+*VPowPlantSorting.up(runCy,PGALL,YTIME)=0.001;
 VPowPlantSorting.scale(runCy,PGALL,YTIME)=1;
 VElecDem.l(allCy,YTIME)=0.1;
 *VHourProdCostTech.lo(runCy,PGALL,HOUR,YTIME)=0.0001;
