@@ -109,17 +109,11 @@ table iCapCostTechTr(allCy,TRANSE,EF,YTIME)      "Capital Cost of technology for
 $ondelim$include "./iCapCostTechTr.csv"
 $offdelim
 ;
-table iRateLossesFinConsSup(allCy,EF, YTIME)               "Supplementary parameter for Rate of losses over Available for Final Consumption (1)"
+table iRateLossesFinCons(allCy,EF,YTIME)               "Rate of losses over Available for Final Consumption (1)"
 $ondelim
-$include "./iRateLossesFinConsSup.csv"
+$include "./iRateLossesFinCons.csv"
 $offdelim
 ;
-table iEneProdRDscenariosSupplement(allCy,SBS,YTIME)       "Supplementary Parameter for Energy productivity indices and R&D indices (1)"  
-$ondelim
-$include "./iEneProdRDscenariosSupplement.csv"
-$offdelim
-;
-iEneProdRDscenarios(runCy,SBS,YTIME)=iEneProdRDscenariosSupplement(runCy,SBS,YTIME);
 table iParDHEfficiency(PGEFS,YTIME)                 "Parameter of  district heating Efficiency (1)"
 $ondelim
 $include "./iParDHEfficiency.csv"
@@ -255,14 +249,13 @@ iResHcNgOilPrProd(runCy,"NGS",YTIME)$an(YTIME)   = iSupResRefCapacity(runCy,"NGS
 iResHcNgOilPrProd(runCy,"CRO",YTIME)$an(YTIME)   = iSupResRefCapacity(runCy,"OIL_PPROD",YTIME);
 iResFeedTransfr(runCy,YTIME)$an(YTIME) = iSupResRefCapacity(runCy,"FEED_RES",YTIME);
 iFeedTransfr(runCy,EFS,YTIME) = iSuppTransfers(runCy,EFS,YTIME);
-iRateEneBranCons(allCy,EFS,YTIME)= iSupRateEneBranCons(allCy,EFS,YTIME)*iEneProdRDscenarios(allCy,"PG",YTIME);
+iRateEneBranCons(allCy,EFS,YTIME)= iSupRateEneBranCons(allCy,EFS,YTIME);
 iResTransfOutputRefineries(runCy,EFS,YTIME) = iSupTrnasfOutputRefineries(runCy,EFS,YTIME);
 iRefCapacity(runCy,YTIME)= iSuppRefCapacity(runCy,"REF_CAP",YTIME);
 iResRefCapacity(runCy,YTIME) = iSupResRefCapacity(runCy,"REF_CAP_RES",YTIME);
 iTransfInpGasworks(runCy,EFS,YTIME)= iSuppTransfInputPatFuel(EFS,YTIME);
 iShareFueTransfInput(runCy,EFS)$sum(EF$EFS(EF),iTransfInpGasworks(runCy,EF,"%fBaseY%")) =  iTransfInpGasworks(runCy,EFS,"%fBaseY%") / sum(EF$EFS(EF),iTransfInpGasworks(runCy,EF,"%fBaseY%"));
 *VDistrLosses.FX(runCy,EFS,TT)$PERIOD(TT) = VDistrLosses.L(runCy,EFS,TT);
-iRateLossesFinCons(runCy,EFS,YTIME)$an(YTIME)  = iRateLossesFinConsSup(runCy,EFS, YTIME)*iEneProdRDscenarios(runCy,"PG",YTIME);
 
 table iLoadFactorAdjMxm(allCy,VARIOUS_LABELS,YTIME)               "Parameter for load factor adjustment iMxmLoadFacElecDem (1)"
 $ondelim
@@ -736,7 +729,7 @@ $ondelim
 $include"./iResTranspFuelConsSubTech.csv"
 $offdelim
 ;
-iResSpecificFuelConsCost(allCy,TRANSE,TTECH,EF,YTIME)$(sameas(TTECH,EF)$an(YTIME)) = iResTranspFuelConsSubTech(allCy,TRANSE,EF,YTIME)*iEneProdRDscenarios(allCy,TRANSE,YTIME);
+iResSpecificFuelConsCost(allCy,TRANSE,TTECH,EF,YTIME)$(sameas(TTECH,EF)$an(YTIME)) = iResTranspFuelConsSubTech(allCy,TRANSE,EF,YTIME);
 iResSpecificFuelConsCost(allCy,TRANSE,"BGDO","BGDO",YTIME)$(an(YTIME) $SECTTECH(TRANSE,"BGDO")) = iResSpecificFuelConsCost(allCy,TRANSE,"GDO","GDO",YTIME);
 
 iResSpecificFuelConsCost(allCy,TRANSE,"PHEVGSL","GSL",YTIME)$(TRANSETTECH(TRANSE,"PHEVGSL") $an(YTIME))= iResSpecificFuelConsCost(allCy,TRANSE,"GSL","GSL",YTIME);
@@ -995,6 +988,7 @@ $offtext
 ***iPlantEffByType(runCy,PGALL,YTIME)$(an(ytime) )= iPlantEffByType(runCy,PGALL,YTIME) / iEneProdRDscenarios(runCy,"pg",ytime);
 ***iEffDHPlants(runCy,EF,YTIME)$(an(ytime) )= iEffDHPlants(runCy,EF,YTIME) / iEneProdRDscenarios(runCy,"pg",ytime);
 iElecIndex(runCy,YTIME) = 0.9;
+*iRateLossesFinCons(allCy,EFS, YTIME)$(iFinEneCons(allCy,EFS,YTIME)>0 $(not an(ytime))) = iDistrLosses(allCy,EFS,YTIME) / iFinEneCons(allCy,EFS,YTIME);
 
 
 

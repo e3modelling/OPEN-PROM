@@ -126,8 +126,8 @@ Variable,ELCPROD,VElecProd,Electricity production (TWh),"CYall,PGALL,YTIME","all
 Variable,ELCPROD,VElecProdPowGenPlants,Electricity production (TWh),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Parameter,ELSB,iElaSub,Elasticities by subsectors (1),"CYALL,DSBS","allCy,DSBS",
 Parameter,ELSH,iShareAnnMilePlugInHybrid,Share of annual mileage of a plug-in hybrid which is covered by electricity (1),"CYall,YTIME","CYall,YTIME",Transport Sector specific Parameters
-Parameter,EN_PRD_INDX,iEneProdRDscenarios,Energy productivity index used in R&D scenarios,"CYall,SBS,YTIME","allCy,SBS,YTIME",Macro economic indicators
-Parameter,EN_PRD_INDX_PRN,iEneProdRDscenariosSupplement,Supplementary parameter for energy productivity index used in R&D scenarios,"CYall,SBS,YTIME","allCy,SBS,YTIME",Parameters 
+Parameter,EN_PRD_INDX,REMOVED FROM OPEN-PROM,Energy productivity index used in R&D scenarios,"CYall,SBS,YTIME",,Macro economic indicators
+Parameter,EN_PRD_INDX_PRN,REMOVED FROM OPEN-PROM,Supplementary parameter for energy productivity index used in R&D scenarios,"CYall,SBS,YTIME",,Parameters 
 Equation,EQACTVTRG,QGoodsTranspActiv,Compute goods transport activity,"CYall,TRANSE,YTIME","allCy,TRANSE,YTIME",TRANSPORT SPECIFIC EQUATIONS
 Equation,EQACTVTRP,QTrnspActiv,Compute passenger transport activity,"CYall,TRANSE,YTIME","allCy,TRANSE,YTIME",Transport
 Equation,EQAFFORDABILITY,QHouseExpEne,Compute households expenditures on energy,"CYALL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
@@ -424,7 +424,7 @@ Parameter,STT,iCumDistrFuncConsSize,Cummulative distribution function of consume
 Variable,SU,VTechSort,Technology sorting based on variable cost (1),"CYall,DSBS,Rcon,YTIME","allCy,DSBS,rCon,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,SUCAP,VNewInvDecis,Power plant sorting for new investment decision according to total cost (1),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Parameter,Sup_ACEN,iSupRateEneBranCons,Rate of Energy Branch Consumption over total transformation output of iRateEneBranCons (1),"EF,YTIME","EF,YTIME",Declare Parameters for data transfering
-Parameter,Sup_ALOS,iRateLossesFinConsSup,Supplementary parameter for Rate of losses over Available for Final Consumption,"EF,YTIME","EF,YTIME",Parameters for data transfering
+Parameter,Sup_ALOS,REMOVED FROM OPEN-PROM,Supplementary parameter for Rate of losses over Available for Final Consumption,"EF,YTIME",,Parameters for data transfering
 Parameter,Sup_APPROD,iSuppRatePrimProd,Supplementary Parameter for iRatePrimProd (1),"EF,YTIME","allCy,EF,YTIME",Parameter for data transfering
 Parameter,Sup_CEN,iDataConsEneBranch,Data for Consumption of Energy Branch (Mtoe),"EF,YTIME","allCy,EF,YTIME",Parameters for data transfering
 Parameter,Sup_EXP,iSuppExports,Supplementary parameter for  exports (Mtoe),"EF,YTIME","allCy,EF,YTIME",Parameter for data transfering
