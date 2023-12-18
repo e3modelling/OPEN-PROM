@@ -17,7 +17,7 @@ sets <- separate_wider_delim(sets,cols = 1, delim = ".", names = c("BAL","EF"))
 sets[["EF"]] <- sub("\\(","",sets[["EF"]])
 sets[["EF"]] <- sub("\\)","",sets[["EF"]])
 sets <- separate_rows(sets,EF)
-
+sets$BAL <- gsub("Gas fuels", "Gases", sets$BAL)
 
 #add model OPEN-PROM data
 VFeCons <- readGDX('./blabla.gdx', "VFeCons", field = 'l')
@@ -180,19 +180,19 @@ sets5[["EF"]] <- sub("\\(","",sets5[["EF"]])
 sets5[["EF"]] <- sub("\\)","",sets5[["EF"]])
 sets5 <- separate_rows(sets5,EF)
 
-sets5 <- sets5 %>% filter(EF %in% getItems(VDemTr,3.2))
-
 ELC <- readSets("sets.gms", "ELCEF")
 #Add electricity, Hydrogen, Biomass and Waste
 sets5[nrow(sets5) + 1, ] <- ELC[1,1]
 sets5[nrow(sets5) + 1, ] <- "H2F"
 sets5[nrow(sets5) + 1, ] <- "BMSWAS"
 
+sets10 <- sets5 %>% filter(EF %in% getItems(VDemTr,3.2))
+
 #Aggregate model OPEN-PROM by subsector and by energy form 
-VDemTr_by_energy_form <- toolAggregate(VDemTr[,,as.character(unique(sets5$EF))],dim=3.2,rel=sets5,from="EF",to="EFA")
+VDemTr_by_energy_form <- toolAggregate(VDemTr[,,as.character(unique(sets10$EF))],dim=3.2,rel=sets10,from="EF",to="EFA")
 
 #Aggregate model MENA_EDS by subsector and by energy form
-mena_by_energy_form <- toolAggregate(a[,,as.character(unique(sets5$EF))],dim=3.2,rel=sets5,from="EF",to="EFA")
+mena_by_energy_form <- toolAggregate(a[,,as.character(unique(sets10$EF))],dim=3.2,rel=sets10,from="EF",to="EFA")
 
 #transportation by subsector and by energy form
 transportation_by_subsector_by_energy_form <- VDemTr_by_energy_form
@@ -219,7 +219,7 @@ write.report(transportation_mena_by_energy_form[regs,years,],file="reporting.mif
 #missing fuels
 #v <- getItems(VDemTr,3.2)
 #v <- as.data.frame(v)
-#l <- v %>% filter(!v %in% as.character(unique(sets5$EF)))
+#l <- v %>% filter(!v %in% as.character(unique(sets10$EF)))
 
 #VDemTr_missing <- VDemTr[,,as.character(unique(l$v))]
 #x <- as.quitte(VDemTr_missing)
@@ -250,7 +250,7 @@ getItems(transportation_ener, 3) <- "Final Energy demand transportation"
 # write data in mif file
 write.report(transportation_ener[regs,year,],file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario="BASE")
 
-map_subsectors_ener2 <- sets5
+map_subsectors_ener2 <- sets10
 #filter to have only the variables which are in enerdata
 map_subsectors_ener2 <- map_subsectors_ener2 %>% filter(EF %in% getItems(b3,3.3))
 
@@ -271,4 +271,119 @@ getItems(b3_by_energy_form,3) <- paste0("Final Energy demand in transport by ene
 
 # write data in mif file
 write.report(b3_by_energy_form[regs,year,],file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario="BASE")
+
+
+#industry
+#add model OPEN-PROM data final energy demand by industry subsectors (Mtoe) and by fuel
+VConsFuel <- readGDX('./blabla.gdx', "VConsFuel", field = 'l')
+
+#Industrial SubSectors
+sets8 <- readSets("sets.gms", "INDSE")
+sets8 <- separate_rows(sets8, `INDSE(DSBS)`)
+sets8 <- as.data.frame(sets8)
+VConsFuel <- VConsFuel[,,sets8$`INDSE(DSBS)`]
+
+VConsFuel_subsectors <- VConsFuel[,,sets8$`INDSE(DSBS)`]
+VConsFuel_subsectors <- dimSums(VConsFuel_subsectors, dim = 3.2)
+getItems(VConsFuel_subsectors, 3) <- paste0("Final Energy demand in industry subsectors ", getItems(VConsFuel_subsectors, 3))
+
+#add model MENA_EDS data (choosing the correct variable from MENA by use of the MENA-PROM mapping)
+a <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VConsFuel", "MENA.EDS"])
+getRegions(a) <- sub("MOR", "MAR", getRegions(a)) # fix wrong region names in MENA
+# choose years and regions that both models have
+years <- intersect(getYears(a,as.integer=TRUE),getYears(VConsFuel_subsectors,as.integer=TRUE))
+regs <- intersect(getRegions(a),getRegions(VConsFuel_subsectors))
+a <- a[,,sets8$`INDSE(DSBS)`]
+mena_subsectors_industry <- a[,,sets8$`INDSE(DSBS)`]
+mena_subsectors_industry <- dimSums(mena_subsectors_industry, dim = 3.2)
+getItems(mena_subsectors_industry, 3) <- paste0("Final Energy demand in industry subsectors ", getItems(mena_subsectors_industry, 3))
+
+# write data in mif file
+write.report(VConsFuel_subsectors[regs,years,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario="BASE")
+write.report(mena_subsectors_industry[regs,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario="BASE")
+
+#Final Energy industry 
+industry <- dimSums(VConsFuel_subsectors, dim = 3)
+getItems(industry, 3) <- "Final Energy demand industry"
+industry_mena <- dimSums(mena_subsectors_industry, dim = 3)
+getItems(industry_mena, 3) <- "Final Energy demand industry"
+
+# write data in mif file
+write.report(industry[regs,years,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario="BASE")
+write.report(industry_mena[regs,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario="BASE")
+
+#Energy Forms Aggregations
+sets9 <- sets5 %>% filter(EF %in% getItems(VConsFuel,3.2))
+
+#Aggregate model OPEN-PROM by subsector and by energy form 
+VConsFuel_by_energy_form <- toolAggregate(VConsFuel[,,as.character(unique(sets9$EF))],dim=3.2,rel=sets9,from="EF",to="EFA")
+
+#Aggregate model MENA_EDS by subsector and by energy form
+mena_by_energy_form_industry <- toolAggregate(a[,,as.character(unique(sets9$EF))],dim=3.2,rel=sets9,from="EF",to="EFA")
+
+#industry by subsector and by energy form
+industry_by_subsector_by_energy_form <- VConsFuel_by_energy_form
+getItems(industry_by_subsector_by_energy_form, 3.1) <- paste0("Final Energy demand in industry by subsector and by energy form ", getItems(industry_by_subsector_by_energy_form, 3.1))
+
+#industry by subsector and by energy form MENA_EDS
+industry_mena_by_subsector_by_energy_form <- mena_by_energy_form_industry
+getItems(industry_mena_by_subsector_by_energy_form, 3.1) <- paste0("Final Energy demand in industry by subsector and by energy form ", getItems(industry_mena_by_subsector_by_energy_form, 3.1))
+
+# write data in mif file
+write.report(industry_by_subsector_by_energy_form[regs,years,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario="BASE")
+write.report(industry_mena_by_subsector_by_energy_form[regs,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario="BASE")
+
+#industry_by_energy_form
+industry_by_energy_form <- dimSums(VConsFuel_by_energy_form, 3.1)
+getItems(industry_by_energy_form,3.1) <- paste0("Final Energy demand in industry by energy form ", getItems(industry_by_energy_form, 3.1))
+industry_mena_by_energy_form <- dimSums(mena_by_energy_form_industry,3.1)
+getItems(industry_mena_by_energy_form, 3.1) <- paste0("Final Energy demand in industry by energy form ", getItems(industry_mena_by_energy_form, 3.1))
+
+# write data in mif file
+write.report(industry_by_energy_form[regs,years,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario="BASE")
+write.report(industry_mena_by_energy_form[regs,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario="BASE")
+
+
+#filter IFuelCons by INDSE
+b4 <- calcOutput(type = "IFuelCons", subtype = "INDSE", aggregate = FALSE)
+year <- Reduce(intersect, list(getYears(a,as.integer=TRUE),getYears(VConsFuel_subsectors,as.integer=TRUE),getYears(b4,as.integer=TRUE)))
+b4 <- b4[regs,year,]
+b4 <- b4[,,sets8$`INDSE(DSBS)`]
+b4_by_subsector <- dimSums(b4[,,sets8$`INDSE(DSBS)`],dim = 3.3)
+b4_by_subsector <- dimSums(b4_by_subsector[,,sets8$`INDSE(DSBS)`],dim = 3.2)
+
+getItems(b4_by_subsector, 3) <- paste0("Final Energy demand in industry subsectors ", getItems(b4_by_subsector, 3))
+
+# write data in mif file
+write.report(b4_by_subsector[regs,year,],file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario="BASE")
+
+#Final Energy industry enerdata
+industry_ener <- dimSums(b4_by_subsector, dim = 3)
+getItems(industry_ener, 3) <- "Final Energy demand industry"
+
+# write data in mif file
+write.report(industry_ener[regs,year,],file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario="BASE")
+
+map_subsectors_ener4 <- sets9
+#filter to have only the variables which are in enerdata
+map_subsectors_ener4 <- map_subsectors_ener4 %>% filter(EF %in% getItems(b4,3.3))
+
+#Aggregate model enerdata by subsector and by energy form
+b4_by_energy_form <- toolAggregate(b4[,year,as.character(unique(map_subsectors_ener4$EF))],dim=3.3,rel=map_subsectors_ener4,from="EF",to="EFA")
+
+#enerdata by subsector and by energy form
+industry_enerdata_by_subsector_by_energy_form <- b4_by_energy_form
+industry_enerdata_by_subsector_by_energy_form <- dimSums(industry_enerdata_by_subsector_by_energy_form, 3.2)
+getItems(industry_enerdata_by_subsector_by_energy_form, 3.1) <- paste0("Final Energy demand in industry by subsector and by energy form ", getItems(industry_enerdata_by_subsector_by_energy_form, 3.1))
+
+# write data in mif file
+write.report(industry_enerdata_by_subsector_by_energy_form[regs,year,],file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario="BASE")
+
+#Aggregate model enerdata by energy form
+industry_enerdata__by_energy_form <- dimSums(b4_by_energy_form, 3.1)
+getItems(industry_enerdata__by_energy_form,3) <- paste0("Final Energy demand in industry by energy form ", getItems(industry_enerdata__by_energy_form, 3.2))
+
+# write data in mif file
+write.report(industry_enerdata__by_energy_form[regs,year,],file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario="BASE")
+
 
