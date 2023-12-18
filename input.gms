@@ -533,7 +533,7 @@ iDecInvPlantSched(allCy,PGALL,"2019") = iInvPlants(allCy,PGALL,"INV_19");
 
 table iCummMxmInstRenCap(allCy,PGRENEF,YTIME)	 "Cummulative maximum potential installed Capacity for Renewables (GW)"
 $ondelim
-$include"./iCummMxmInstRenCap.csv"
+$include"./iMaxResPot.csv"
 $offdelim
 ;
 iCummMxmInstRenCap(allCy,PGRENEF,YTIME)$(not iCummMxmInstRenCap(allCy,PGRENEF,YTIME)) = 1e-4;
@@ -547,7 +547,7 @@ iMaxRenPotential(allCy,"BMSWAS",YTIME)$AN(YTIME) = iCummMxmInstRenCap(allCy,"BMS
 iMaxRenPotential(allCy,"OTHREN",YTIME)$AN(YTIME) = iCummMxmInstRenCap(allCy,"OTHREN",YTIME);
 table iCummMnmInstRenCap(allCy,PGRENEF,YTIME)	 "Cummulative minimum potential installed Capacity for Renewables (GW)"
 $ondelim
-$include"./iCummMnmInstRenCap.csv"
+$include"./iMinResPot.csv"
 $offdelim
 ;
 iCummMnmInstRenCap(allCy,PGRENEF,YTIME)$(not iCummMnmInstRenCap(allCy,PGRENEF,YTIME)) = 1e-4;
@@ -568,12 +568,20 @@ $offdelim
 iMatFacPlaAvailCap(allCy,PGALL,YTIME)$an(YTIME) = iMatFacCap(allCy,PGALL,YTIME);
 iMatFacPlaAvailCap(allCy,CCS,YTIME)$an(YTIME)  =0;
 *$offtext
+
+$ontext
 table iMatureFacLoad(allCy,PGALL,YTIME)	 "Maturty factors on Load (1)"
 $ondelim
 $include"./iMatureFacLoad.csv"
 $offdelim
 ;
-iMatureFacPlaDisp(allCy,PGALL,YTIME)$an(YTIME) = iMatureFacLoad(allCy,PGALL,YTIME);
+$offtext 
+
+* FIXME: Temporarily setting maturity factors related to plant dispatching equal to 1.
+* author=derevirn
+iMatureFacPlaDisp(allCy,PGALL,YTIME)$an(YTIME) = 1;
+iCO2CaptRate(runCy,PGALL,YTIME) = 0; 
+
 table iMxmShareChpElec(allCy,YTIME)	 "Maximum share of CHP electricity in a country (1)"
 $ondelim
 $include"./iMxmShareChpElec.csv"
@@ -944,26 +952,18 @@ endloop;
 
 iTechLftPlaType(runCy,PGALL) = iDataPowGenCost(PGALL, "LFT");
 
-
-iPlantEffByType(runCy,PGALL,"2010") = iDataPowGenCost(PGALL,"EFF_05");
-iPlantEffByType(runCy,PGALL,"2020") = iDataPowGenCost(PGALL,"EFF_20");
-iPlantEffByType(runCy,PGALL,"2050") = iDataPowGenCost(PGALL,"EFF_50");
-
-loop YTIME$((ord(YTIME) gt TF-7) $(ord(YTIME) lt TF+12)) do
-         iPlantEffByType(runCy,PGALL,YTIME) = (iPlantEffByType(runCy,PGALL,"2020")-iPlantEffByType(runCy,PGALL,"2010"))/15+iPlantEffByType(runCy,PGALL,YTIME-1);
-endloop;
-
-
-loop YTIME$((ord(YTIME) gt TF+11) $(ord(YTIME) lt TF+41)) do
-         iPlantEffByType(runCy,PGALL,YTIME) = (iPlantEffByType(runCy,PGALL,"2050")-iPlantEffByType(runCy,PGALL,"2020"))/30+iPlantEffByType(runCy,PGALL,YTIME-1);
-endloop;
-iPlantEffByType(runCy,PGALL,YTIME)$(ord(YTIME)>(ordfirst+41)) = iPlantEffByType(runCy,PGALL,"2050");
-
-iCO2CaptRate(runCy,PGALL,YTIME)$(ord(YTIME)>(ordfirst-8))  =  iDataPowGenCost(PGALL,"CR");
+*iCO2CaptRate(runCy,PGALL,YTIME)$(ord(YTIME)>(ordfirst-8))  =  iDataPowGenCost(PGALL,"CR");
 
 iEffDHPlants(runCy,EFS,YTIME)$(ord(YTIME)>(ordfirst-8))  = sum(PGEFS$sameas(EFS,PGEFS),iParDHEfficiency(PGEFS,"2010"));
 
 
+table iDataPlantEffByType(PGALL, YTIME)   "Data for plant efficiency per plant type"
+$ondelim
+$include "./iDataPlantEffByType.csv"
+$offdelim
+;
+
+iPlantEffByType(runCy,PGALL,YTIME) = iDataPlantEffByType(PGALL, YTIME) ;
 
 ** CHP economic and technical data initialisation for electricity production
 table iDataChpPowGen(EF,YTIME,CHPPGSET)   "Data for power generation costs (various)"
