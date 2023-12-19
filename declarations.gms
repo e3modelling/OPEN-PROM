@@ -320,7 +320,6 @@ VNonChpElecProd(allCy,YTIME)	          "Non CHP total electricity production (TW
 VHourProdCostTech(allCy,PGALL,HOUR,YTIME)     "Hourly production cost of technology (Euro/KWh)"
 VElecChpPlants(allCy,YTIME)	              "Estimate the electricity of CHP Plants (1)"	
 VProdCostTechnology(allCy,PGALL,YTIME)	  "Production cost of technology (Euro/KWh)"
-VElecCapChpPla(allCy,CHP,YTIME)	          "Capacity of CHP Plants (GW)"
 VScalWeibullSum(allCy,PGALL,YTIME)	      "Sum (over hours) of temporary variable facilitating the scaling in Weibull equation (1)"
 VElecPeakLoads(allCy,YTIME)	              "Electricity peak loads (GW)"	
 VVarCostTechnology(allCy,PGALL,YTIME)	  "Variable cost of technology (Euro/KWh)"	
