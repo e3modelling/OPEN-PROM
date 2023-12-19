@@ -394,8 +394,8 @@ getItems(industry_enerdata__by_energy_form,3) <- paste0("Final Energy Industry "
 write.report(industry_enerdata__by_energy_form[regs,year,],file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario="BASE")
 
 
-#tertiary
-#tertiary SubSectors
+#Residential and Commercial
+#Residential and Commercial SubSectors
 sets11 <- readSets("sets.gms", "DOMSE")
 sets11 <- separate_rows(sets11, `DOMSE(DSBS)`)
 sets11 <- as.data.frame(sets11)
@@ -409,12 +409,12 @@ map_subsectors7 <- sets13 %>% filter(SBS %in% as.character((sets11$`DOMSE(DSBS)`
 map_subsectors7$EF <- paste(map_subsectors7$SBS, map_subsectors7$EF, sep=".")
 
 VConsFuel_subsectors_DOMSE <- toolAggregate(q3[,,unique(map_subsectors7$EF)],dim=3,rel=map_subsectors7,from="EF",to="SBS")
-getItems(VConsFuel_subsectors_DOMSE, 3) <- paste0("Final Energy Tertiary ", getItems(VConsFuel_subsectors_DOMSE, 3))
+getItems(VConsFuel_subsectors_DOMSE, 3) <- paste0("Final Energy Residential and Commercial ", getItems(VConsFuel_subsectors_DOMSE, 3))
 
 q4 <- q2[,,sets11$`DOMSE(DSBS)`]
 
 mena_subsectors_DOMSE <- toolAggregate(q4[,,unique(map_subsectors7$EF)],dim=3,rel=map_subsectors7,from="EF",to="SBS")
-getItems(mena_subsectors_DOMSE, 3) <- paste0("Final Energy Tertiary ", getItems(mena_subsectors_DOMSE, 3))
+getItems(mena_subsectors_DOMSE, 3) <- paste0("Final Energy Residential and Commercial ", getItems(mena_subsectors_DOMSE, 3))
 
 years <- intersect(getYears(mena_subsectors_DOMSE,as.integer=TRUE),getYears(VConsFuel_subsectors_DOMSE,as.integer=TRUE))
 regs <- intersect(getRegions(mena_subsectors_DOMSE),getRegions(VConsFuel_subsectors_DOMSE))
@@ -423,11 +423,11 @@ regs <- intersect(getRegions(mena_subsectors_DOMSE),getRegions(VConsFuel_subsect
 write.report(VConsFuel_subsectors_DOMSE[regs,years,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario="BASE")
 write.report(mena_subsectors_DOMSE[regs,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario="BASE")
 
-#Final Energy tertiary 
+#Final Energy Residential and Commercial 
 residential <- dimSums(VConsFuel_subsectors_DOMSE, dim = 3)
-getItems(residential, 3) <- "Final Energy Tertiary"
+getItems(residential, 3) <- "Final Energy Residential and Commercial"
 residential_mena <- dimSums(mena_subsectors_DOMSE, dim = 3)
-getItems(residential_mena, 3) <- "Final Energy Tertiary"
+getItems(residential_mena, 3) <- "Final Energy Residential and Commercial"
 
 # write data in mif file
 write.report(residential[regs,years,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario="BASE")
@@ -444,21 +444,21 @@ mena_by_energy_form_residential <- toolAggregate(q4[,,as.character(unique(sets12
 
 #by subsector and by energy form
 residential_by_subsector_by_energy_form <- VConsFuel_by_energy_form_DOMSE
-getItems(residential_by_subsector_by_energy_form, 3.1) <- paste0("Final Energy Tertiary ", getItems(residential_by_subsector_by_energy_form, 3.1))
+getItems(residential_by_subsector_by_energy_form, 3.1) <- paste0("Final Energy Residential and Commercial ", getItems(residential_by_subsector_by_energy_form, 3.1))
 
 #by subsector and by energy form MENA_EDS
 residential_mena_by_subsector_by_energy_form <- mena_by_energy_form_residential
-getItems(residential_mena_by_subsector_by_energy_form, 3.1) <- paste0("Final Energy Tertiary ", getItems(residential_mena_by_subsector_by_energy_form, 3.1))
+getItems(residential_mena_by_subsector_by_energy_form, 3.1) <- paste0("Final Energy Residential and Commercial ", getItems(residential_mena_by_subsector_by_energy_form, 3.1))
 
 # write data in mif file
 write.report(residential_by_subsector_by_energy_form[regs,years,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario="BASE")
 write.report(residential_mena_by_subsector_by_energy_form[regs,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario="BASE")
 
-#tertiary_by_energy_form
+#Residential and Commercial_by_energy_form
 residential_by_energy_form <- dimSums(VConsFuel_by_energy_form_DOMSE, 3.1)
-getItems(residential_by_energy_form,3.1) <- paste0("Final Energy Tertiary ", getItems(residential_by_energy_form, 3.1))
+getItems(residential_by_energy_form,3.1) <- paste0("Final Energy Residential and Commercial ", getItems(residential_by_energy_form, 3.1))
 mena_by_energy_form_residential <- dimSums(mena_by_energy_form_residential,3.1)
-getItems(mena_by_energy_form_residential, 3.1) <- paste0("Final Energy Tertiary ", getItems(mena_by_energy_form_residential, 3.1))
+getItems(mena_by_energy_form_residential, 3.1) <- paste0("Final Energy Residential and Commercial ", getItems(mena_by_energy_form_residential, 3.1))
 
 # write data in mif file
 write.report(residential_by_energy_form[regs,years,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario="BASE")
@@ -479,14 +479,14 @@ map_subsectors_ener8 <- map_subsectors_ener8 %>% filter(EF %in% getItems(b5,3))
 # aggregate from enerdata fuels to subsectors
 b5_by_subsector <- toolAggregate(b5[,,as.character(unique(map_subsectors_ener8$EF))],dim=3,rel=map_subsectors_ener8,from="EF",to="SBS")
 
-getItems(b5_by_subsector, 3) <- paste0("Final Energy Tertiary ", getItems(b5_by_subsector, 3))
+getItems(b5_by_subsector, 3) <- paste0("Final Energy Residential and Commercial ", getItems(b5_by_subsector, 3))
 
 # write data in mif file
 write.report(b5_by_subsector[regs,year,],file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario="BASE")
 
 #Final Energy industry enerdata
 residential_ener <- dimSums(b5_by_subsector, dim = 3)
-getItems(residential_ener, 3) <- "Final Energy Tertiary"
+getItems(residential_ener, 3) <- "Final Energy Residential and Commercial"
 
 # write data in mif file
 write.report(residential_ener[regs,year,],file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario="BASE")
@@ -501,14 +501,14 @@ b5_by_energy_form <- toolAggregate(b5[,year,as.character(unique(map_subsectors_e
 #enerdata by subsector and by energy form
 residential_enerdata_by_subsector_by_energy_form <- b5_by_energy_form
 residential_enerdata_by_subsector_by_energy_form <- dimSums(residential_enerdata_by_subsector_by_energy_form, 3.2)
-getItems(residential_enerdata_by_subsector_by_energy_form, 3.1) <- paste0("Final Energy Tertiary ", getItems(residential_enerdata_by_subsector_by_energy_form, 3.1))
+getItems(residential_enerdata_by_subsector_by_energy_form, 3.1) <- paste0("Final Energy Residential and Commercial ", getItems(residential_enerdata_by_subsector_by_energy_form, 3.1))
 
 # write data in mif file
 write.report(residential_enerdata_by_subsector_by_energy_form[regs,year,],file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario="BASE")
 
 #Aggregate model enerdata by energy form
 residential_enerdata__by_energy_form <- dimSums(b5_by_energy_form, 3.1)
-getItems(residential_enerdata__by_energy_form,3) <- paste0("Final Energy Tertiary ", getItems(residential_enerdata__by_energy_form, 3.2))
+getItems(residential_enerdata__by_energy_form,3) <- paste0("Final Energy Residential and Commercial ", getItems(residential_enerdata__by_energy_form, 3.2))
 
 # write data in mif file
 write.report(residential_enerdata__by_energy_form[regs,year,],file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario="BASE")
