@@ -792,10 +792,6 @@ PGSOL Solar Photovoltaic Plants
 *PGOTHREN Other renewables mainly geothermal
 /
 
-pg(sbs)
-/pg/
-
-
 BMSPGALL(PGALL)
 /
 ATHBMSWAS
@@ -1227,7 +1223,6 @@ AVAIL_50
 LFT
 CR
 /
-
 
 
 SG               "S parameters in Gompertz function for passenger cars vehicle km"

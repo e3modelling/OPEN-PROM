@@ -1,7 +1,7 @@
 * description: GDP|PPP; Source: SSP Scenarios (IIASA)
 * unit: billion US$2015/yr
-* origin: calcOutput(type = "iGDP", aggregate = TRUE, file = "iGDP.csvr") (madrat 3.7.2 | mrprom 0.9.0)
-* creation date: Thu Nov 30 14:04:08 2023
+* origin: calcOutput(type = "iGDP", aggregate = TRUE, file = "iGDP.csvr") (madrat 3.7.2 | mrprom 0.9.1)
+* creation date: Fri Dec  1 17:36:12 2023
 dummy,RWO,CHA,EGY,IND,MAR,USA
 2010,49889.0438024,11069.6679328,545.7534928,4433.4045872,166.6187848,15882.528832
 2011,51479.94136272,12225.20299808,565.77619376,4764.44384176,174.885828,16287.3105488

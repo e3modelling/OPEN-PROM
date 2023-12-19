@@ -67,9 +67,9 @@ QElectrPeakLoad
 *QLongPowGenIntPri
 *QShoPowGenIntPri
 *QLongPowGenCost
-*QLonAvgPowGenCostNoClimPol
-*QLonPowGenCostNoClimPol
-*QElecPriIndResNoCliPol
+QLonAvgPowGenCostNoClimPol
+QLonPowGenCostNoClimPol
+QElecPriIndResNoCliPol
 *QShortPowGenCost
 
 
@@ -164,7 +164,7 @@ QDistrLosses
 
 *QTotGhgEmisAllCountrNap
 *QTotCo2AllCoun
-*QHouseExpEne
+QHouseExpEne
 
 
 * Prices *
@@ -252,7 +252,7 @@ VGoodsTranspActiv.l(allCy,TRANSE,YTIME)=0.1;
 *VTranspCostPerVeh.lo(allCy,TRANSE,RCon,TTECH,TEA,YTIME)=0.1;
 VRenShareElecProdSub.FX(runCy,YTIME)$(NOT AN(YTIME))=0;
 VRenValue.l(YTIME)=1;
-VCO2CO2SeqCsts.l(allCy,YTIME)=1;
+VCO2SeqCsts.l(allCy,YTIME)=1;
 VScalWeibullSum.l(allCy,PGALL,YTIME)=2;
 *VScalWeibullSum.up(allCy,PGALL,YTIME)=1.0e+10;
 VHourProdCostTech.l(runCy,PGALL,HOUR,TT) = 0.0001;
@@ -450,10 +450,13 @@ VAvgPowerGenCostShoTrm.L(runCy,ESET,"2010") = 0;
 VLongPowGenCost.L(runCy,PGALL,ESET,"2010") = 0;
 VLonAvgPowGenCostNoClimPol.L(runCy,PGALL,ESET,"2010") = 0;
 VLongAvgPowGenCost.L(runCy,ESET,"2017") = 0;
-VLonPowGenCostNoClimPol.L(runCy,ESET,"2017") = 0;
-VAvgPowerGenCostShoTrm.L(runCy,ESET,"2017") = 0;
+VLonPowGenCostNoClimPol.FX(runCy,ESET,"%fBaseY%") = 0;
+* FIXME: Temporary fix. To be reversed back to VAvgPowerGenCostShoTrm.L(runCy,ESET,"%fBaseY%") = 0, when QShortPowGenCost is activated.
+* author=redmonkeycloud
+VAvgPowerGenCostShoTrm.FX(runCy,ESET,YTIME) = 0.02;
+
 VLongPowGenCost.L(runCy,PGALL,ESET,"2017") = 0;
-VLonAvgPowGenCostNoClimPol.L(runCy,PGALL,ESET,"2017") = 0;
+VLonAvgPowGenCostNoClimPol.FX(runCy,PGALL,ESET,"%fBaseY%") = 0;
 
 VCarVal.fx(runCy,NAP,YTIME)$(not An(YTIME))=0;
 VCarVal.FX(runCy,"TRADE",YTIME)$an(YTIME) = sExogCarbValue*iCarbValYrExog(runCy,YTIME);
@@ -461,8 +464,7 @@ VCarVal.FX(runCy,"NOTRADE",YTIME)$an(YTIME) =sExogCarbValue*iCarbValYrExog(runCy
 
 VCumCO2Capt.FX(runCy,YTIME)$(not an(YTIME)) = 0 ;
 
-VCO2CO2SeqCsts.FX(runCy,YTIME) =
-       (iElastCO2Seq(runCy,"mc_a") *iElastCO2Seq(runCy,"mc_b"));
+VCO2SeqCsts.FX(runCy,YTIME) = iElastCO2Seq(runCy,"mc_a") *iElastCO2Seq(runCy,"mc_b");
 
 VDemTr.FX(runCy,TRANSE,EF,YTIME)$(not SECTTECH(TRANSE,EF)) = 0;
 VTransfOutputDHPlants.FX(runCy,EFS,YTIME)$(not STEAM(EFS)) = 0;

@@ -191,12 +191,12 @@ $include"./iLoadFactorAdj.csv"
 $offdelim
 ;
 iBaseLoadShareDem(allCy,DSBS,YTIME)$an(YTIME)  = iLoadFactorAdj(allCy,DSBS,YTIME);
-table iCO2SeqData(allCy,CO2SEQELAST,YTIME)	       "Data for CO2 sequestration (1)" 
+table iCO2SeqData(CO2SEQELAST,YTIME)	       "Data for CO2 sequestration (1)" 
 $ondelim
 $include"./iCO2SeqData.csv"
 $offdelim
 ;
-iElastCO2Seq(allCy,CO2SEQELAST) = sum(tfirst,iCO2SeqData(allCy,CO2SEQELAST,TFIRST));
+iElastCO2Seq(allCy,CO2SEQELAST) = sum(tfirst,iCO2SeqData(CO2SEQELAST,TFIRST));
 
 *Sources for vehicle lifetime:
 *US Department of Transportation, International Union of Railways, Statista, EU CORDIS
@@ -240,7 +240,7 @@ iShrHeatPumpElecCons(allCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(allCy,DOMSE
 *iTechLft(allCy,DOMSE,EF,TEA,YTIME)$(ord(YTIME)>(ordfirst-12)) = iDataDomLft(DOMSE,EF,"LFT");
 *iTechLft(allCy,NENSE,EF,TEA,YTIME)$(ord(YTIME)>(ordfirst-4))  = iDataNonEneLft(NENSE,EF,"LFT");
 iExogDemOfBiomass(allCy,DOMSE,YTIME) = 0;
-iElastCO2Seq(allCy,CO2SEQELAST) = iCO2SeqData(allCy,CO2SEQELAST,"%fBaseY%");
+iElastCO2Seq(allCy,CO2SEQELAST) = iCO2SeqData(CO2SEQELAST,"%fBaseY%");
 iRatioImpFinElecDem(runCy,YTIME)$an(YTIME) = iSuppRefCapacity(runCy,"ELC_IMP",YTIME);
 iFuelExprts(runCy,EFS,YTIME) = iSuppExports(runCy,EFS,YTIME);
 iRatePriProTotPriNeeds(runCy,PPRODEF,YTIME) = iSuppRatePrimProd(runCy,PPRODEF,YTIME);
@@ -586,7 +586,9 @@ $ondelim
 $include"./iContrElecPrice.csv"
 $offdelim
 ;
-iFacElecPriConsu(allCy,ELCPCHAR,YTIME)$an(YTIME) = iContrElecPrice(allCy,ELCPCHAR,YTIME);
+* FIXME: iContrElecPrice values will be pinned down during model calibration, using MAR values for now
+* author=giannou
+iFacElecPriConsu(allCy,ELCPCHAR,YTIME)$an(YTIME) = iContrElecPrice("MAR",ELCPCHAR,YTIME);
 iScenarioPri(WEF,"NOTRADE",YTIME)=0;
 table iDataPriceReform(allCy,AGSECT,EF,YTIME)	 "Price reform (1)"
 $ondelim
@@ -598,7 +600,7 @@ iPriceReform(runCy,INDSE1(SBS),EF,YTIME)=iDataPriceReform(runCy,"INDSE1",EF,YTIM
 iPriceReform(runCy,DOMSE1(SBS),EF,YTIME)=iDataPriceReform(runCy,"DOMSE1",EF,YTIME) ;
 iPriceReform(runCy,NENSE1(SBS),EF,YTIME)=iDataPriceReform(runCy,"NENSE1",EF,YTIME) ;
 iPriceReform(runCy,TRANS1(SBS),EF,YTIME)=iDataPriceReform(runCy,"TRANS1",EF,YTIME) ;
-iPriceReform(runCy,PG(SBS),EF,YTIME)=iDataPriceReform(runCy,"INDSE1",EF,YTIME) ;
+iPriceReform(runCy,"PG",EF,YTIME)=iDataPriceReform(runCy,"INDSE1",EF,YTIME) ;
 table iDataPriceTargets(allCy,AGSECT,EF,YTIME)	 "Data for the Price targets (1)"
 $ondelim
 $include"./iDataPriceTargets.csv"
@@ -608,19 +610,19 @@ iPriceTragets(runCy,INDSE1(SBS),EF,YTIME)=iDataPriceTargets(runCy,"INDSE1",EF,"2
 iPriceTragets(runCy,DOMSE1(SBS),EF,YTIME)=iDataPriceTargets(runCy,"DOMSE1",EF,"2030") ;
 iPriceTragets(runCy,NENSE1(SBS),EF,YTIME)=iDataPriceTargets(runCy,"NENSE1",EF,"2030") ;
 iPriceTragets(runCy,TRANS1(SBS),EF,YTIME)=iDataPriceTargets(runCy,"TRANS1",EF,"2030") ;
-iPriceTragets(runCy,PG(SBS),EF,YTIME)=iDataPriceTargets(runCy,"INDSE1",EF,"2030") ;
+iPriceTragets(runCy,"PG",EF,YTIME)=iDataPriceTargets(runCy,"INDSE1",EF,"2030") ;
 
 *SPECIFIC CASE FOR NATURAL GAS PRICES!!!
 
 iPriceTragets("RAS",INDSE1(SBS),"NGS",YTIME)=iDataPriceTargets("RAS","INDSE1","NGS",YTIME) ;
 iPriceTragets("RAS",DOMSE1(SBS),"NGS",YTIME)=iDataPriceTargets("RAS","DOMSE1","NGS",YTIME) ;
 iPriceTragets("RAS",NENSE1(SBS),"NGS",YTIME)=iDataPriceTargets("RAS","NENSE1","NGS",YTIME) ;
-iPriceTragets("RAS",PG(SBS),"NGS",YTIME)=iDataPriceTargets("RAS","INDSE1","NGS",YTIME) ;
+iPriceTragets("RAS","PG","NGS",YTIME)=iDataPriceTargets("RAS","INDSE1","NGS",YTIME) ;
 
 iPriceTragets("MAR",INDSE1(SBS),"NGS",YTIME)=iDataPriceTargets("MAR","INDSE1","NGS",YTIME) ;
 iPriceTragets("MAR",DOMSE1(SBS),"NGS",YTIME)=iDataPriceTargets("MAR","DOMSE1","NGS",YTIME) ;
 iPriceTragets("MAR",NENSE1(SBS),"NGS",YTIME)=iDataPriceTargets("MAR","NENSE1","NGS",YTIME) ;
-iPriceTragets("MAR",PG(SBS),"NGS",YTIME)=iDataPriceTargets("MAR","INDSE1","NGS",YTIME) ;
+iPriceTragets("MAR","PG","NGS",YTIME)=iDataPriceTargets("MAR","INDSE1","NGS",YTIME) ;
 * FIXME: iHydrogenPri should be computed with mrprom
 * author=giannou
 iHydrogenPri(allCy,SBS,YTIME)=4.3;
@@ -940,10 +942,12 @@ endloop;
 
 
 
-
-
-
-iTechLftPlaType(runCy,PGALL) = iDataPowGenCost(PGALL, "LFT");
+table iDataTechLftPlaType(PGALL, PGECONCHAR) "Data for power generation costs (various)"
+$ondelim
+$include"./iDataTechLftPlaType.csv"
+$offdelim
+;
+iTechLftPlaType(runCy,PGALL) = iDataTechLftPlaType(PGALL, "LFT");
 
 *iCO2CaptRate(runCy,PGALL,YTIME)$(ord(YTIME)>(ordfirst-8))  =  iDataPowGenCost(PGALL,"CR");
 

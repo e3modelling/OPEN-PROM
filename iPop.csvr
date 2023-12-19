@@ -1,7 +1,7 @@
 * description: Population; Source: SSP Scenarios (IIASA)
 * unit: billion
-* origin: calcOutput(type = "POP", aggregate = TRUE, file = "iPop.csvr") (madrat 3.7.2 | mrprom 0.9.0)
-* creation date: Thu Nov 30 14:04:07 2023
+* origin: calcOutput(type = "POP", aggregate = TRUE, file = "iPop.csvr") (madrat 3.7.2 | mrprom 0.9.1)
+* creation date: Fri Dec  1 17:36:11 2023
 dummy,RWO,CHA,EGY,IND,MAR,USA
 2010,3.881103,1.341335,0.081121,1.224614,0.031951,0.310384
 2011,3.9313222,1.345752,0.0825136,1.2412778,0.0322318,0.3128742
