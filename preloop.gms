@@ -148,7 +148,7 @@ QDistrLosses                       !! VLosses(runCy,EFS,YTIME)
 *QPrimProd                         !! VPrimProd(runCy,PPRODEF,YTIME)
 *QFakeExp                          !! VExportsFake(runCy,EFS,YTIME)
 *QFakeImprts                       !! VFkImpAllFuelsNotNatGas(runCy,EFS,YTIME)
-*QNetImports                       !! QNetImports(runCy,EFS,YTIME)
+*QNetImports                       !! VNetImports(runCy,EFS,YTIME)
 *QEneBrnchEneCons                  !! VEnCons(runCy,EFS,YTIME)
 
 
