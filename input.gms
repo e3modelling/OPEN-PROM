@@ -405,11 +405,6 @@ $offdelim
 ;
 iResMargTotAvailCap(allCy,PGRES,YTIME)$an(YTIME) = iResTotCapMxmLoad(allCy,PGRES,YTIME);
 *$ontext
-table iInvCost(PGALL,YTIME)             "Capital gross cost per plant type (kEuro2005/KW)"
-$ondelim
-$include"./iInvCost.csv"
-$offdelim
-;
 table iVarCost(PGALL,YTIME)             "Variable gross cost other than fuel per Plant Type (Euro2005/KW)"
 $ondelim
 $include"./iVarCost.csv"
@@ -486,9 +481,14 @@ iFinEneCons(runCy,EFS,YTIME) = sum(INDDOM,
                        +
                        sum(TRANSE,
                          sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(TRANSE,EF) $(not plugin(EF)) ), iFuelConsPerFueSub(runCy,TRANSE,EF,YTIME)));
-iGrossCapCosSubRen(runCy,PGALL,YTIME)=iInvCost(PGALL,YTIME);
-loop(runCy,PGALL,YTIME)$AN(YTIME) DO
-         abort $(iGrossCapCosSubRen(runCy,PGALL,YTIME)<0) "CAPITAL COST IS NEGATIVE", iGrossCapCosSubRen
+
+table iGrossCapCosSubRen(PGALL,YTIME)             "Gross Capital Cost per Plant Type with subsidy for renewables (kEuro2005/KW)"
+$ondelim
+$include"./iGrossCapCosSubRen.csv"
+$offdelim
+;
+loop(PGALL,YTIME)$AN(YTIME) DO
+         abort $(iGrossCapCosSubRen(PGALL,YTIME)<0) "CAPITAL COST IS NEGATIVE", iGrossCapCosSubRen
 ENDLOOP;
 
 *VTotElecGenCap.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);

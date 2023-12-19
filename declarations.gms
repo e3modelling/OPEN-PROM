@@ -47,7 +47,6 @@ iTechLftPlaType(allCy,PGALL)	                        "Technical Lifetime per pla
 iElecImp(allCy,YTIME)	                  "Electricity Imports (1)"
 iPlantAvailRate(allCy,PGALL,YTIME)	      "Plant availability rate (1)"
 iTotAvailCapBsYr(allCy)	            "Total installed available capacity in base year (GW)"
-iGrossCapCosSubRen(allCy,PGALL,YTIME)	  "Gross Capital Cost per Plant Type with subsidy for renewables (kEuro2005/KW)"		
 iCO2CaptRate(allCy,PGALL,YTIME)	          "Plant CO2 capture rate (1)"
 iScaleEndogScrap(allCy,PGALL,YTIME)	"Scale parameter for endogenous scrapping applied to the sum of full costs (1)"	
 iPremReplacem(allCy,PGALL)	        "Premature replacement (1)"/

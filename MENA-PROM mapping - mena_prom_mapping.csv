@@ -349,8 +349,8 @@ Parameter,"PG1_Tech(PGALL,""INV_10"")",iInvPlants,Investment Plants (MW),"PGALL,
 Parameter,"PG1_Tech(PGALL,""PROD_09"")",iDataElecProd,Data for electricity production (GWh),,,
 Parameter,PGAVAIL,iAvailRate,Plant availability rate (1),"CYAll,PGALL,YTIME","PGALL,YTIME",
 Parameter,PGCAPBASE,iInstCapPast,Available installed capacity for past years (GW),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",Power Generation Parameters
-Parameter,PGCAPCOST,iInvCost,Capital gross cost per plant type (kEuro2005/KW),"CYall,PGALL,YTIME","PGALL,YTIME",Power Generation Parameters
-Parameter,PGCAPCOST_BAR,iGrossCapCosSubRen,Gross Capital Cost per Plant Type with subsidy for renewables (kEuro2005/KW),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",Power Generation Parameters
+Parameter,PGCAPCOST,REMOVED FROM OPEN-PROM,Capital gross cost per plant type (kEuro2005/KW),"CYall,PGALL,YTIME","PGALL,YTIME",Power Generation Parameters
+Parameter,PGCAPCOST_BAR,iGrossCapCosSubRen,Gross Capital Cost per Plant Type with subsidy for renewables (kEuro2005/KW),"CYall,PGALL,YTIME","PGALL,YTIME",Power Generation Parameters
 Parameter,PGCAPPAST,iDataInstCapElecFuel,Installed capacity (GW),"CYall,PGALL,PGCAPAST",,Power Generation Parameters
 Parameter,PGCR,iCO2CaptRate,Plant CO2 capture rate,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",Power Generation Parameters
 Parameter,PGDCAP,iPlantDecomSched,Decided plant decomissioning schedule (GW),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",Power Generation Parameters

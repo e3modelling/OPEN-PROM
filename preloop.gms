@@ -17,14 +17,14 @@ QChpElecPlants                     !! VElecCapChpPla(runCy,CHP,YTIME)
 *QLambda                           !! -
 QElecDem                           !! VElecDem(runCy,YTIME)
 *QEstBaseLoad                      !! VEstBaseLoad(runCy,YTIME)
-*QLoadFacDom                       !! VLoadFacDom(runCy,YTIME)
+QLoadFacDom                        !! VLoadFacDom(runCy,YTIME)
 QElecPeakLoad                      !! VElecPeakLoad(runCy,YTIME)
 *QBslMaxmLoad                      !! VBslMaxmLoad(runCy,YTIME)
 *QElecBaseLoad                     !! VCorrBaseLoad(runCy,YTIME)
 *QTotReqElecProd                   !! VTotReqElecProd(runCy,YTIME)
 QTotEstElecGenCap                  !! VTotElecGenCapEst(runCy,YTIME)
 QTotElecGenCap                     !! VTotElecGenCap(runCy,YTIME)	
-*QHourProdCostInv                  !! VHourProdCostTech(runCy,PGALL,HOUR,YTIME)
+QHourProdCostInv                   !! VHourProdCostTech(runCy,PGALL,HOUR,YTIME)
 *QHourProdCostInvDec               !! VHourProdCostTechNoCCS(runCy,PGALL,HOUR,YTIME)
 *QGammaInCcsDecTree                !! VSensCcs(runCy,YTIME)
 *QHourProdCostInvDecisionsAfterCCS !! VHourProdCostTechAfterCCS(runCy,PGALL,HOUR,YTIME) 
@@ -395,12 +395,12 @@ VElecDem.FX(runCy,YTIME)$(not An(YTIME)) =  1/0.086 * ( iFinEneCons(runCy,"ELC",
 
 VCorrBaseLoad.FX(runCy,YTIME)$(not An(YTIME)) = iPeakBsLoadBy(runCy,"BASELOAD");
 
-VLoadFacDom.FX(runCy,YTIME) =
+VLoadFacDom.FX(runCy,YTIME)$(datay(YTIME)) =
          (sum(INDDOM,VConsFuel.l(runCy,INDDOM,"ELC",YTIME)) + sum(TRANSE, VDemTr.l(runCy,TRANSE,"ELC",YTIME)))/
          (sum(INDDOM,VConsFuel.l(runCy,INDDOM,"ELC",YTIME)/iLoadFacElecDem(INDDOM)) + sum(TRANSE, VDemTr.l(runCy,TRANSE,"ELC",YTIME)/
          iLoadFacElecDem(TRANSE)));
 
-VElecPeakLoad.FX(runCy,YTIME)$(not An(YTIME)) = VElecDem.l(runCy,YTIME)/(VLoadFacDom.l(runCy,YTIME)*8.76);
+VElecPeakLoad.FX(runCy,YTIME)$(datay(YTIME)) = VElecDem.l(runCy,YTIME)/(VLoadFacDom.l(runCy,YTIME)*8.76);
 
 VTotElecGenCap.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
 VElecGenNoChp.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);

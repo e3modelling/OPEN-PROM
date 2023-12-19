@@ -96,7 +96,7 @@ QHourProdCostInv(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME)) ..
                   
                     ( ( iDisc(runCy,"PG",YTIME) * exp(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(runCy,PGALL))
                         / (exp(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(runCy,PGALL)) -1))
-                      * iGrossCapCosSubRen(runCy,PGALL,YTIME)* 1E3 * iCGI(runCy,YTIME)  + iFixOandMCost(PGALL,YTIME)
+                      * iGrossCapCosSubRen(PGALL,YTIME)* 1E3 * iCGI(runCy,YTIME)  + iFixOandMCost(PGALL,YTIME)
                     )/iAvailRate(PGALL,YTIME) / (1000*(ord(HOUR)-1+0.25))
                     + iVarCost(PGALL,YTIME)/1E3 + (VRenValue(YTIME)*8.6e-5)$( not ( PGREN(PGALL) 
                     $(not sameas("PGASHYD",PGALL)) $(not sameas("PGSHYD",PGALL)) $(not sameas("PGLHYD",PGALL)) ))
@@ -167,7 +167,7 @@ QProdCostTechPreReplac(runCy,PGALL,YTIME)$TIME(YTIME)..
                         (
                           ((iDisc(runCy,"PG",YTIME) * exp(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(runCy,PGALL))/
                           (exp(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(runCy,PGALL)) -1))
-                            * iInvCost(PGALL,YTIME)* 1E3 * iCGI(runCy,YTIME)  + 
+                            * iGrossCapCosSubRen(PGALL,YTIME)* 1E3 * iCGI(runCy,YTIME)  + 
                             iFixOandMCost(PGALL,YTIME))/(8760*iAvailRate(PGALL,YTIME))
                            + (iVarCost(PGALL,YTIME)/1E3 + sum(PGEF$PGALLtoEF(PGALL,PGEF), 
                            (VFuelPriceSub(runCy,"PG",PGEF,YTIME)+
@@ -425,7 +425,7 @@ QLonPowGenCostTechNoCp(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
                  =E=
 
              (iDisc(runCy,"PG",YTIME)*EXP(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(runCy,PGALL)) /
-             (EXP(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(runCy,PGALL))-1)*iGrossCapCosSubRen(runCy,PGALL,YTIME)*1000*iCGI(runCy,YTIME) +
+             (EXP(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(runCy,PGALL))-1)*iGrossCapCosSubRen(PGALL,YTIME)*1000*iCGI(runCy,YTIME) +
              iFixOandMCost(PGALL,YTIME))/iAvailRate(PGALL,YTIME)
               / (1000*(6$ISET(ESET)+4$RSET(ESET))) +
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
@@ -441,7 +441,7 @@ QLonMnmpowGenCost(runCy,PGALL,YTIME)$TIME(YTIME)..
                  =E=
 
              (iDisc(runCy,"PG",YTIME)*EXP(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(runCy,PGALL)) /
-             (EXP(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(runCy,PGALL))-1)*iGrossCapCosSubRen(runCy,PGALL,YTIME)*1000*iCGI(runCy,YTIME) +
+             (EXP(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(runCy,PGALL))-1)*iGrossCapCosSubRen(PGALL,YTIME)*1000*iCGI(runCy,YTIME) +
              iFixOandMCost(PGALL,YTIME))/iAvailRate(PGALL,YTIME)
              / (1000*sGwToTwhPerYear) +
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
@@ -461,7 +461,7 @@ QLongPowGenIntPri(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
                  =E=
 
              (iDisc(runCy,"PG",YTIME)*EXP(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(runCy,PGALL)) /
-             (EXP(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(runCy,PGALL))-1)*iGrossCapCosSubRen(runCy,PGALL,YTIME)/1.5*1000*iCGI(runCy,YTIME) +
+             (EXP(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(runCy,PGALL))-1)*iGrossCapCosSubRen(PGALL,YTIME)/1.5*1000*iCGI(runCy,YTIME) +
              iFixOandMCost(PGALL,YTIME))/iAvailRate(PGALL,YTIME)
              / (1000*(7.25$ISET(ESET)+2.25$RSET(ESET))) +
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
@@ -515,7 +515,7 @@ QLonAvgPowGenCostNoClimPol(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
                  =E=
 
              (iDisc(runCy,"PG",YTIME)*EXP(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(runCy,PGALL)) /
-             (EXP(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(runCy,PGALL))-1)*iGrossCapCosSubRen(runCy,PGALL,YTIME)*1000*iCGI(runCy,YTIME) +
+             (EXP(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(runCy,PGALL))-1)*iGrossCapCosSubRen(PGALL,YTIME)*1000*iCGI(runCy,YTIME) +
              iFixOandMCost(PGALL,YTIME))/iAvailRate(PGALL,YTIME)
              / (1000*(7.25$ISET(ESET)+2.25$RSET(ESET))) +
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
