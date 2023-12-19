@@ -12,8 +12,8 @@ model openprom /
 
 * Power Generation *
 
-*QCurrRenPot
-*QChpElecPlants
+QCurrRenPot
+QChpElecPlants
 *QLambda
 QElecDem
 *QEstBaseLoad
@@ -404,7 +404,7 @@ VElecPeakLoad.FX(runCy,YTIME)$(not An(YTIME)) = VElecDem.l(runCy,YTIME)/(VLoadFa
 
 VTotElecGenCap.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
 VElecGenNoChp.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
-VElecCapChpPla.FX(runCy,CHP,YTIME) = iHisChpGrCapData(runCy,CHP,YTIME);
+VElecCapChpPla.FX(runCy,CHP,YTIME)$(not An(YTIME)) = iHisChpGrCapData(runCy,CHP,YTIME);
 VPowPlaShaNewEquip.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) )=0;
 
 VHourProdCostTech.FX(runCy,PGALL,HOUR,YTIME)$((NOT AN(YTIME)))=0;
