@@ -942,7 +942,7 @@ endloop;
 
 
 
-table iDataTechLftPlaType(PGALL, LFT) "Data for power generation costs (various)"
+table iDataTechLftPlaType(PGALL, PGECONCHAR) "Data for power generation costs (various)"
 $ondelim
 $include"./iDataTechLftPlaType.csv"
 $offdelim
