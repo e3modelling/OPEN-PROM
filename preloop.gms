@@ -12,167 +12,167 @@ model openprom /
 
 * Power Generation *
 
-QCurrRenPot
-QChpElecPlants
-*QLambda
-QElecDem
-*QEstBaseLoad
-*QLoadFacDom
-QElecPeakLoad
-*QBslMaxmLoad
-*QElecBaseLoad
-*QTotReqElecProd
-QTotEstElecGenCap
-QTotElecGenCap
-*QHourProdCostInv
-*QHourProdCostInvDec
-*QGammaInCcsDecTree
-*QHourProdCostInvDecisionsAfterCCS
-*QProdCostInvDecis
-*QShrcap
-*QShrcapNoCcs
-QVarCostTech
-*QVarCostTechNotPGSCRN
-*QProdCostTechPreReplac
-*QProdCostTechPreReplacAvail
-*QEndogScrapIndex
-QElecGenNoChp
-*QGapPowerGenCap
-*QScalWeibull
-QRenPotSupplyCurve
-QMaxmAllowRenPotent
-QMnmAllowRenPot
-*QRenTechMatMult
-*QScalWeibullSum
-*QNewInvDecis
-*QPowPlaShaNewEquip
-*QElecGenCapacity
-*QElecGenCap
-QVarCostTechnology
-QElecPeakLoads
-QElectrPeakLoad
-*QNewCapYearly
-*QAvgCapFacRes
-*QOverallCap
-*QScalFacPlantDispatch
-*QElecChpPlants
-*QNonChpElecProd
-*QReqElecProd
-*QElecProdPowGenPlants
-*QSecContrTotChpProd
-*QElecProdChpPlants
-*QShareRenGrossElecProd
-*QLonPowGenCostTechNoCp
-*QLonMnmpowGenCost
-*QLongPowGenIntPri
-*QShoPowGenIntPri
-*QLongPowGenCost
-QLonAvgPowGenCostNoClimPol
-QLonPowGenCostNoClimPol
-QElecPriIndResNoCliPol
-*QShortPowGenCost
+QCurrRenPot                        !! VCurrRenPot
+QChpElecPlants                     !! VElecCapChpPla
+*QLambda                           !! -
+QElecDem                           !! VElecDem
+*QEstBaseLoad                      !! VEstBaseLoad
+*QLoadFacDom                       !! VLoadFacDom
+QElecPeakLoad                      !! VElecPeakLoad	
+*QBslMaxmLoad                      !! VBslMaxmLoad
+*QElecBaseLoad                     !! VCorrBaseLoad
+*QTotReqElecProd                   !! VTotReqElecProd	
+QTotEstElecGenCap                  !! VTotElecGenCapEst	
+QTotElecGenCap                     !! VTotElecGenCap	
+*QHourProdCostInv                  !! VHourProdCostTech
+*QHourProdCostInvDec               !! VHourProdCostTechNoCCS
+*QGammaInCcsDecTree                !! VSensCcs
+*QHourProdCostInvDecisionsAfterCCS !! VHourProdCostTechAfterCCS
+*QProdCostInvDecis                 !! VProdCostTechnology
+*QShrcap                           !! VPowerPlaShrNewEq
+*QShrcapNoCcs                      !! VPowerPlantNewEq
+QVarCostTech                       !! VVarCostTech
+*QVarCostTechNotPGSCRN             !! VVarCostTechNotPGSCRN
+*QProdCostTechPreReplac            !! VProdCostTechPreReplac
+*QProdCostTechPreReplacAvail       !! VProdCostTechPreReplacAvail
+*QEndogScrapIndex                  !! VEndogScrapIndex
+QElecGenNoChp                      !! VElecGenNoChp
+*QGapPowerGenCap                   !! VGapPowerGenCap
+*QScalWeibull                      !! VScalWeibull
+QRenPotSupplyCurve                 !! VRenPotSupplyCurve
+QMaxmAllowRenPotent                !! VMaxmAllowRenPotent
+QMnmAllowRenPot                    !! VMnmAllowRenPot
+*QRenTechMatMult                   !! VRenTechMatMult
+*QScalWeibullSum                   !! VScalWeibullSum
+*QNewInvDecis                      !! VNewInvDecis
+*QPowPlaShaNewEquip                !! VPowPlaShaNewEquip
+*QElecGenCapacity                  !! VElecGenPlantsCapac
+*QElecGenCap                       !! VElecGenPlanCap
+QVarCostTechnology                 !! VVarCostTechnology
+QElecPeakLoads                     !! VElecPeakLoads
+QElectrPeakLoad                    !! VPowPlantSorting
+*QNewCapYearly                     !! VNewCapYearly
+*QAvgCapFacRes                     !! VAvgCapFacRes
+*QOverallCap                       !! VOverallCap
+*QScalFacPlantDispatch             !! -
+*QElecChpPlants                    !! VElecChpPlants
+*QNonChpElecProd                   !! VNonChpElecProd
+*QReqElecProd                      !! VReqElecProd
+*QElecProdPowGenPlants             !! VElecProdPowGenPlants
+*QSecContrTotChpProd               !! VSecContrTotChpProd
+*QElecProdChpPlants                !! VChpElecProd
+*QShareRenGrossElecProd            !! VResShareGrossElecProd
+*QLonPowGenCostTechNoCp            !! VLongPowGenCost
+*QLonMnmpowGenCost                 !! VLonMnmpowGenCost
+*QLongPowGenIntPri                 !! VLongPowGenIntPri
+*QShoPowGenIntPri                  !! VShoPowGenIntPri
+*QLongPowGenCost                   !! VLongAvgPowGenCost
+QLonAvgPowGenCostNoClimPol         !! VLonAvgPowGenCostNoClimPol
+QLonPowGenCostNoClimPol            !! VLonPowGenCostNoClimPol
+QElecPriIndResNoCliPol             !! VElecPriIndResNoCliPol
+*QShortPowGenCost                  !! VAvgPowerGenCostShoTrm
 
 
 * Transport *
 
-QPassCarsLft 
-QGoodsTranspActiv 
-QGapTranspActiv 
-QSpecificFuelCons 
-QTranspCostPerMeanConsSize
-QTranspCostPerVeh
-QTranspCostMatFac
-QTechSortVarCost
-QTechSortVarCostNewEquip
-QConsEachTechTransp 
-QFinEneDemTranspPerFuel 
-QFinEneDemTransp 
-QMExtV
-QMExtF
-QNumVeh
-QNewReg
-QTrnspActiv
-QScrap
-QLevl
-QScrRate 
-QElecConsAll 
+QPassCarsLft                       !! VLifeTimeTech
+QGoodsTranspActiv                  !! VGoodsTranspActiv
+QGapTranspActiv                    !! VGapTranspFillNewTech
+QSpecificFuelCons                  !! VSpecificFuelCons
+QTranspCostPerMeanConsSize         !! VTranspCostPermeanConsSize
+QTranspCostPerVeh                  !! VTranspCostPerVeh
+QTranspCostMatFac                  !! VTranspCostMatFac
+QTechSortVarCost                   !! VTechSortVarCost
+QTechSortVarCostNewEquip           !! VTechSortVarCostNewEquip
+QConsEachTechTransp                !! VConsEachTechTransp
+QFinEneDemTranspPerFuel            !! VDemTr
+QFinEneDemTransp                   !! VFinEneDemTranspSub
+QMExtV                             !! VMExtV
+QMExtF                             !! VMExtF
+QNumVeh                            !! VNumVeh
+QNewReg                            !! VNewReg
+QTrnspActiv                        !! VTrnspActiv
+QScrap                             !! VScrap
+QLevl                              !! VLamda
+QScrRate                           !! VScrRate
+QElecConsAll                       !! VElecConsAll
 
 
 * INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES *
 
-QElecConsNonSub 
-QConsOfRemSubEquip 
-QDemSub 
-QElecConsInd 
-QDemInd
-QElecIndPrices
-QElecConsHeatPla
-QFuelCons 
-QElecIndPricesEst
-QFuePriSubChp
-QElecProdCosChp
-QTechCost
-QTechCostIntrm
-QTechCostMatr
-QTechSort
-QGapFinalDem 
-QTechShareNewEquip
-QFuelConsInclHP 
-QVarProCostPerCHPDem
-QAvgElcProCostCHP
-QAvgVarElecProd
+QElecConsNonSub                    !! VElecNonSub
+QConsOfRemSubEquip                 !! VConsRemSubEquip
+QDemSub                            !! VDemSub
+QElecConsInd                       !! VElecConsInd
+QDemInd                            !! VDemInd
+QElecIndPrices                     !! VElecIndPrices
+QElecConsHeatPla                   !! VElecConsHeatPla
+QFuelCons                          !! VConsFuel
+QElecIndPricesEst                  !! VElecIndPricesEst
+QFuePriSubChp                      !! VFuePriSubChp
+QElecProdCosChp                    !! VElecProdCostChp
+QTechCost                          !! VTechCost
+QTechCostIntrm                     !! VTechCostIntrm
+QTechCostMatr                      !! VTechCostMatr
+QTechSort                          !! VTechSort
+QGapFinalDem                       !! VGapFinalDem
+QTechShareNewEquip                 !! VTechShareNewEquip
+QFuelConsInclHP                    !! VFuelConsInclHP
+QVarProCostPerCHPDem               !! VProCostCHPDem
+QAvgElcProCostCHP                  !! VAvgElcProCHP
+QAvgVarElecProd                    !! VAvgVarProdCostCHP
 
 
 * REST OF ENERGY BALANCE SECTORS *
 
-*QTransfOutputPatFuel
-QTotFinEneCons
-QTotFinEneConsAll
-QFinNonEneCons
-QDistrLosses
-*QTranfOutputDHPlants
-*QTransfInputDHPlants
-*QTransfInputPatFuel
-*QRefCapacity
-*QTranfOutputRefineries
-*QTransfInputRefineries
-*QTransfOutputNuclear
-*QTransfInNuclear
-*QTransfInPowerPls
-*QTransfOutThermPP
-*QTotTransfInput
-*QTotTransfOutput
-*QTransfers
-*QGrsInlConsNotEneBranch
-*QGrssInCons
-*QPrimProd
-*QFakeExp
-*QFakeImprts
-*QNetImports
-*QEneBrnchEneCons
+*QTransfOutputPatFuel              !! VTransfOutputPatFuel
+QTotFinEneCons                     !! VFeCons
+QTotFinEneConsAll                  !! VTotFinEneConsAll
+QFinNonEneCons                     !! VFNonEnCons
+QDistrLosses                       !! VLosses
+*QTranfOutputDHPlants              !! VTransfOutputDHPlants
+*QTransfInputDHPlants              !! VTransfInputDHPlants
+*QTransfInputPatFuel               !! VTransfInputPatFuel
+*QRefCapacity                      !! VRefCapacity
+*QTranfOutputRefineries            !! VTransfOutputRefineries
+*QTransfInputRefineries            !! VTransfInputRefineries
+*QTransfOutputNuclear              !! VTransfOutputNuclear
+*QTransfInNuclear                  !! VTransfInNuclear
+*QTransfInPowerPls                 !! VTransfInThermPowPls
+*QTransfOutThermPP                 !! VTransfOutThermPowSta
+*QTotTransfInput                   !! VTotTransfInput
+*QTotTransfOutput                  !! VTotTransfOutput
+*QTransfers                        !! VTransfers
+*QGrsInlConsNotEneBranch           !! VGrsInlConsNotEneBranch
+*QGrssInCons                       !! VGrssInCons            
+*QPrimProd                         !! VPrimProd
+*QFakeExp                          !! VExportsFake
+*QFakeImprts                       !! VFkImpAllFuelsNotNatGas
+*QNetImports                       !! QNetImports
+*QEneBrnchEneCons                  !! VEnCons
 
 
 * CO2 SEQUESTRATION COST CURVES *
 
-*QCO2ElcHrg
-*QCumCO2Capt
-*QWghtTrnstLinToExpo
-*QCstCO2SeqCsts
+*QCO2ElcHrg                        !! VCO2ElcHrgProd
+*QCumCO2Capt                       !! VCumCO2Capt
+*QWghtTrnstLinToExpo               !! VWghtTrnstLnrToExpo
+*QCstCO2SeqCsts                    !! VCO2SeqCsts         
 
 
 * EMISSIONS CONSTRAINTS *
 
-*QTotGhgEmisAllCountrNap
-*QTotCo2AllCoun
-QHouseExpEne
+*QTotGhgEmisAllCountrNap           !! VTotGhgEmisAllCountrNap
+*QTotCo2AllCoun                    !! VTotCo2AllCoun
+QHouseExpEne                       !! QHouseExpEne
 
 
 * Prices *
 
-QFuelPriSubSepCarbVal
-QFuelPriSepCarbon
-QAvgFuelPriSub
-QElecPriIndResCons
+QFuelPriSubSepCarbVal              !! VFuelPriceSub
+QFuelPriSepCarbon                  !! VFuelPriMultWgt
+QAvgFuelPriSub                     !! VFuelPriceAvg
+QElecPriIndResCons                 !! VElecPriInduResConsu
 
 
 
