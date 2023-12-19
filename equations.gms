@@ -504,7 +504,12 @@ QLongPowGenCost(runCy,ESET,YTIME)$TIME(YTIME)..
          )
 /VElecDem(runCy,YTIME); 
 
-* Compute long term average power generation cost excluding climate policies
+*' The equation QLonAvgPowGenCostNoClimPol represents the long-term average power generation cost excluding climate policies.
+*' It calculates the cost in Euro2005 per kilowatt-hour (kWh) for a specific combination of parameters. The equation is composed 
+*' of various factors, including discount rates, technical lifetime of the plant type, gross capital cost with subsidies for renewables,
+*' fixed operation and maintenance costs, plant availability rate, variable costs other than fuel, fuel prices, efficiency values, CO2 emission factors,
+*' CO2 capture rates, and carbon values. The equation incorporates a summation over different plant fuel types and considers the cost curve for CO2 sequestration.
+*' The final result is the average power generation cost per unit of electricity produced, taking into account various economic and technical parameters.
 QLonAvgPowGenCostNoClimPol(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
          VLonAvgPowGenCostNoClimPol(runCy,PGALL,ESET,YTIME)
                  =E=
@@ -525,7 +530,9 @@ QLonAvgPowGenCostNoClimPol(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
 
                  *sTWhToMtoe/iPlantEffByType(runCy,PGALL,YTIME)));
 
-* Compute long term power generation cost excluding climate policies
+*' Compute long term power generation cost excluding climate policies by summing the Electricity production multiplied by Long-term average power generation cost excluding 
+*' climate policies added to the sum of Average Electricity production cost per CHP plant multiplied by the CHP electricity production and all of the above divided by 
+*' the Total electricity demand.
 QLonPowGenCostNoClimPol(runCy,ESET,YTIME)$TIME(YTIME)..
          VLonPowGenCostNoClimPol(runCy,ESET,YTIME)
                  =E=
@@ -537,7 +544,9 @@ QLonPowGenCostNoClimPol(runCy,ESET,YTIME)$TIME(YTIME)..
          )
 /(VElecDem(runCy,YTIME));  
 
-* Compute electricity price in Industrial and Residential Consumers excluding climate policies
+*' Compute electricity price in Industrial and Residential Consumers excluding climate policies by multiplying the Factors affecting electricity prices to consumers by the sum of 
+*' Fuel prices per subsector and fuel multiplied by the TWh to Mtoe conversion factor adding the Factors affecting electricity prices to consumers and the Long-term average power 
+*' generation cost  excluding climate policies for Electricity of Other Industrial sectors and for Electricity for Households .
 QElecPriIndResNoCliPol(runCy,ESET,YTIME)$TIME(YTIME)..   !! The electricity price is based on previous year's production costs
         VElecPriIndResNoCliPol(runCy,ESET,YTIME)
                  =E=
@@ -1347,7 +1356,9 @@ QTotCo2AllCoun(YTIME)$TIME(YTIME)..
          =E=
          sum(NAP, VTotGhgEmisAllCountrNap(NAP,YTIME));
 
-* Compute households expenditures on energy
+*' Compute households expenditures on energy by utilizing the sum of consumption of remaining substitutable equipment multiplied by the fuel prices per subsector and fuel 
+*' minus the efficiency values divided by CO2 emission factors per subsector and multiplied by the sum of carbon values for all countries and adding the Electricity price
+*' to Industrial and Residential Consumers multiplied by Consumption of non-substituable electricity in Industry and Tertiary divided by TWh to Mtoe conversion factor.
 QHouseExpEne(runCy,YTIME)$TIME(YTIME)..
                  VHouseExpEne(runCy,YTIME)
                  =E= 
