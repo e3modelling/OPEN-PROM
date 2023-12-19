@@ -508,7 +508,7 @@ QLongPowGenCost(runCy,ESET,YTIME)$TIME(YTIME)..
 *' It calculates the cost in Euro2005 per kilowatt-hour (kWh) for a specific combination of parameters. The equation is composed 
 *' of various factors, including discount rates, technical lifetime of the plant type, gross capital cost with subsidies for renewables,
 *' fixed operation and maintenance costs, plant availability rate, variable costs other than fuel, fuel prices, efficiency values, CO2 emission factors,
-*' CO2 capture rates, and carbon values. The equation incorporates a summation over different plant fuel types and considers the cost curve for CO2 sequestration.
+*' CO2 capture rates, and carbon prices. The equation incorporates a summation over different plant fuel types and considers the cost curve for CO2 sequestration.
 *' The final result is the average power generation cost per unit of electricity produced, taking into account various economic and technical parameters.
 QLonAvgPowGenCostNoClimPol(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
          VLonAvgPowGenCostNoClimPol(runCy,PGALL,ESET,YTIME)
