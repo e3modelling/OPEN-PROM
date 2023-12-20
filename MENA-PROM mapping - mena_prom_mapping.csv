@@ -210,7 +210,7 @@ Equation,EQNEWREG,QNewReg,Compute new registrations of passenger cars,"CYall,YTI
 Equation,EQNONCHPELCPROD,QNonChpElecProd,Compute non CHP electricity production ,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Parameter,BASESHARE,iBaseLoadShareDem,Baseload share of demand per sector (1),"CYall,DSBS,YTIME","allCy,DSBS,YTIME",Power Generation Parameters
 Equation,EQPEAKLOAD,QElecPeakLoad,Compute elerctricity peak load,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Equation,EQPOTREN,QCurrRenPot,Compute current renewable potential ,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",Power Generation
+Equation,EQPOTREN,qCurrRenPot,Compute current renewable potential ,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",Power Generation
 Equation,EQPOTRENMAXC,QMaxmAllowRenPotent,Compute maximum allowed renewable potential ,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
 Equation,EQPOTRENMINC,QMnmAllowRenPot,Compute minimum allowed renewable potential ,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
 Equation,EQPOTRENT,QRenPotSupplyCurve,Compute renewable potential supply curve,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
@@ -226,7 +226,7 @@ Equation,EQPRODCOSTNOCCS,QHourProdCostInvDec,Compute hourly production cost used
 Equation,EQPRODCOSTZZ,QProdCostTechPreReplac,Compute production cost of technology  used in premature replacement,"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Equation,EQPRODCOSTZZ1,QProdCostTechPreReplacAvail,Compute production cost of technology  used in premature replacement including plant availability rate,"CYALL,PGALL,PGALL2,YTIME","allCy,PGALL,PGALL2,YTIME",POWER GENERATION SECTOR
 Equation,EQREFCAP,QRefCapacity,Compute refineries capacity,"CYall,YTIME","allCy,YTIME",REST OF ENERGY BALANCE SECTORS
-Equation,EQRESSHARE,QShareRenGrossElecProd,Compute the share of renewables in gross electricity production for subsdidized renewables,"CYALL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Equation,EQRESSHARE,qShareRenGrossElecProd,Compute the share of renewables in gross electricity production for subsdidized renewables,"CYALL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQSCR,QScrRate,Compute passenger cars scrapping rate,"CYall,YTIME","allCy,YTIME",Transport
 Equation,EQSCRAP,QScrap,Compute scrapped passenger cars (in million vehicles),"CYall,YTIME","allCy,YTIME",Transport
 Equation,EQSFC,QSpecificFuelCons,Compute Specific Fuel Consumption,"CYall,TRANSE,TTECH,TEA,EF,YTIME","allCy,TRANSE,TTECH,TEA,EF,YTIME",TRANSPORT SPECIFIC EQUATIONS

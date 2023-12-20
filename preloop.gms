@@ -12,7 +12,7 @@ model openprom /
 
 * Power Generation *
 
-QCurrRenPot                        !! VCurrRenPot(runCy,PGRENEF,YTIME)
+qCurrRenPot                        !! VCurrRenPot(runCy,PGRENEF,YTIME)
 QChpElecPlants                     !! VElecCapChpPla(runCy,CHP,YTIME)
 *QLambda                           !! -
 QElecDem                           !! VElecDem(runCy,YTIME)
@@ -61,7 +61,7 @@ QElectrPeakLoad                    !! VPowPlantSorting(runCy,PGALL,YTIME)
 *QElecProdPowGenPlants             !! VElecProdPowGenPlants(runCy,PGALL,YTIME)
 *QSecContrTotChpProd               !! VSecContrTotChpProd(runCy,INDDOM,CHP,YTIME)
 *QElecProdChpPlants                !! VChpElecProd(runCy,CHP,YTIME)
-*QShareRenGrossElecProd            !! VResShareGrossElecProd(runCy,YTIME) 
+qShareRenGrossElecProd             !! VResShareGrossElecProd(runCy,YTIME) 
 QLonPowGenCostTechNoCp             !! VLongPowGenCost(runCy,PGALL,ESET,YTIME)
 *qLonMnmpowGenCost                 !! VLonMnmpowGenCost(runCy,PGALL,YTIME)
 *qLongPowGenIntPri                 !! VLongPowGenIntPri(runCy,PGALL,ESET,YTIME)

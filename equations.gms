@@ -3,7 +3,7 @@
 *' Power Generation
 
 * Compute current renewable potential 
-QCurrRenPot(runCy,PGRENEF,YTIME)$TIME(YTIME)..
+qCurrRenPot(runCy,PGRENEF,YTIME)$TIME(YTIME)..
          VCurrRenPot(runCy,PGRENEF,YTIME) 
          =E=
          ( VMaxmAllowRenPotent(runCy,PGRENEF,YTIME) + iMinRenPotential(runCy,PGRENEF,YTIME))/2;
@@ -459,7 +459,7 @@ QElecProdChpPlants(runCy,CHP,YTIME)$TIME(YTIME)..
         (VElecDem(runCy,YTIME) - SUM(PGALL,VElecProd(runCy,PGALL,YTIME)));
 
 * Compute the share of renewables in gross electricity production for subsdidized renewables
-QShareRenGrossElecProd(runCy,YTIME)$TIME(YTIME)..
+qShareRenGrossElecProd(runCy,YTIME)$TIME(YTIME)..
                  VResShareGrossElecProd(runCy,YTIME) 
                  =E=
                  (SUM(PGNREN$((not sameas("PGASHYD",PGNREN)) $(not sameas("PGSHYD",PGNREN)) $(not sameas("PGLHYD",PGNREN)) ),
