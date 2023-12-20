@@ -185,12 +185,32 @@ $ondelim
 $include"./iImpExp.csv"
 $offdelim
 ;
-table iLoadFactorAdj(allCy,DSBS,YTIME)	"Parameters for load factor adjustment iBaseLoadShareDem (1)"	
-$ondelim
-$include"./iLoadFactorAdj.csv"
-$offdelim
-;
-iBaseLoadShareDem(allCy,DSBS,YTIME)$an(YTIME)  = iLoadFactorAdj(allCy,DSBS,YTIME);
+parameter iLoadFactorAdj(DSBS)	"Parameters for load factor adjustment iBaseLoadShareDem (1)" /
+IS 	0.9,
+NF 	0.92,
+CH 	0.78,
+BM 	0.81,
+PP 	0.91,
+FD 	0.61,
+EN 	0.65,
+TX 	0.6,
+OE 	0.9,
+OI 	0.59,
+SE 	0.58,
+AG 	0.45,
+HOU	0.55,
+PC 	0.43,
+*PB 	0.43,
+PT 	0.29,
+*PN 	0.43,
+PA 	0.43,
+GU 	0.43,
+GT 	0.29,
+GN 	0.43,
+BU 	0.43,
+PCH	0.78,
+NEN	0.78 / ;
+iBaseLoadShareDem(allCy,DSBS,YTIME)$an(YTIME)  = iLoadFactorAdj(DSBS);
 table iCO2SeqData(CO2SEQELAST,YTIME)	       "Data for CO2 sequestration (1)" 
 $ondelim
 $include"./iCO2SeqData.csv"
