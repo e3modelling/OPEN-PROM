@@ -196,9 +196,9 @@ Equation,EQLFT,QPassCarsLft,Compute the lifetime of passenger cars ,"CYall,DSBS,
 Equation,EQLOADF,QLoadFacDom,Compute load factor of entire domestic system,"CYrun,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQLOS,QDistrLosses,Compute distribution losses,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
 Equation,EQLTAC,QLongPowGenCost,Compute long term power generation cost,"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
-Equation,EQLTAC_INT_PRICE,QLongPowGenIntPri,Compute long term power generation cost of technologies including international Prices of main fuels ,"CYALL,PGALL,ESET,YTIME","allCy,PGALL,ESET,YTIME",POWER GENERATION SECTOR
+Equation,EQLTAC_INT_PRICE,qLongPowGenIntPri,Compute long term power generation cost of technologies including international Prices of main fuels ,"CYALL,PGALL,ESET,YTIME","allCy,PGALL,ESET,YTIME",POWER GENERATION SECTOR
 Equation,EQLTAC_nocv,QLonPowGenCostNoClimPol,Compute long term power generation cost excluding climate policies,"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
-Equation,EQLTACMIN,QLonMnmpowGenCost,Compute long-term minimum power generation cost,"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
+Equation,EQLTACMIN,qLonMnmpowGenCost,Compute long-term minimum power generation cost,"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Equation,EQLTACNEW,QLonPowGenCostTechNoCp,Compute long term power generation cost of technologies excluding climate policies,"CYALL,PGALL,ESET,YTIME","allCy,PGALL,ESET,YTIME",POWER GENERATION SECTOR
 Equation,EQLTACNEW_nocv,QLonAvgPowGenCostNoClimPol,Compute long term average power generation cost excluding climate policies,"CYALL,PGALL,ESET,YTIME","allCy,PGALL,ESET,YTIME",POWER GENERATION SECTOR
 Equation,EQMAXBASE,QBslMaxmLoad,Compute baseload corresponding to maximum load,"runCy,YTIME","allCy,YTIME",POWER GENERATION SECTOR
@@ -238,7 +238,7 @@ Equation,EQSHLOADS,QElecPeakLoads,Compute Electricity peak loads,"CYall,YTIME","
 Equation,EQSHR,QTechShareNewEquip,Compute technology share in new equipment,"CYall,DSBS,EF,TEA,YTIME","allCy,DSBS,EF,TEA,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQSHRTR,QTechSortVarCostNewEquip,Compute the share of each technology in total sectoral use,"CYall,TRANSE,EF,TEA,YTIME","allCy,TRANSE,EF,TEA,YTIME",TRANSPORT SPECIFIC EQUATIONS
 Equation,EQSTAC,qShortPowGenCost,Compute short term power generation cost,"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
-Equation,EQSTAC_INT_PRICE,QShoPowGenIntPri,Compute short term power generation cost of technologies including international Prices of main fuels ,"CYALL,PGALL,ESET,YTIME","allCy,PGALL,ESET,YTIME",POWER GENERATION SECTOR
+Equation,EQSTAC_INT_PRICE,qShoPowGenIntPri,Compute short term power generation cost of technologies including international Prices of main fuels ,"CYALL,PGALL,ESET,YTIME","allCy,PGALL,ESET,YTIME",POWER GENERATION SECTOR
 Equation,EQSU,QTechSort,Compute Technology sorting based on variable cost,"CYall,DSBS,Rcon,YTIME","allCy,DSBS,rCon,YTIME",
 Equation,EQSUCAP,QNewInvDecis,Compute for Power Plant new investment decision,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQSUTR,QTechSortVarCost,Compute technology sorting based on variable cost,"CYall,TRANSE,Rcon,YTIME","allCy,TRANSE,Rcon,YTIME",TRANSPORT SPECIFIC EQUATIONS

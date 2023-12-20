@@ -485,7 +485,7 @@ QLonPowGenCostTechNoCp(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
                  *sTWhToMtoe/iPlantEffByType(runCy,PGALL,YTIME)));
 
 * Long-term minimum power generation cost
-QLonMnmpowGenCost(runCy,PGALL,YTIME)$TIME(YTIME)..
+qLonMnmpowGenCost(runCy,PGALL,YTIME)$TIME(YTIME)..
          VLonMnmpowGenCost(runCy,PGALL,YTIME)
                  =E=
 
@@ -505,7 +505,7 @@ QLonMnmpowGenCost(runCy,PGALL,YTIME)$TIME(YTIME)..
                  *sTWhToMtoe/iPlantEffByType(runCy,PGALL,YTIME)));   
 
 * Compute long term power generation cost of technologies including international Prices of main fuels 
-QLongPowGenIntPri(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
+qLongPowGenIntPri(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
          VLongPowGenIntPri(runCy,PGALL,ESET,YTIME)
                  =E=
 
@@ -526,7 +526,7 @@ QLongPowGenIntPri(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
                  *sTWhToMtoe/iPlantEffByType(runCy,PGALL,YTIME))); 
 
 * Compute short term power generation cost of technologies including international Prices of main fuels 
-QShoPowGenIntPri(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
+qShoPowGenIntPri(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
          VShoPowGenIntPri(runCy,PGALL,ESET,YTIME)
                  =E=
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
