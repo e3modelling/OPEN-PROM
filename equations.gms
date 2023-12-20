@@ -3,7 +3,7 @@
 *' Power Generation
 
 * Compute current renewable potential 
-QCurrRenPot(runCy,PGRENEF,YTIME)$TIME(YTIME)..
+qCurrRenPot(runCy,PGRENEF,YTIME)$TIME(YTIME)..
          VCurrRenPot(runCy,PGRENEF,YTIME) 
          =E=
          ( VMaxmAllowRenPotent(runCy,PGRENEF,YTIME) + iMinRenPotential(runCy,PGRENEF,YTIME))/2;

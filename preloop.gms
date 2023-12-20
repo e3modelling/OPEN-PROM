@@ -12,9 +12,9 @@ model openprom /
 
 * Power Generation *
 
-QCurrRenPot                        !! VCurrRenPot(runCy,PGRENEF,YTIME)
+qCurrRenPot                        !! VCurrRenPot(runCy,PGRENEF,YTIME)
 QChpElecPlants                     !! VElecCapChpPla(runCy,CHP,YTIME)
-*QLambda                           !! -
+*QLambda                           !! VLoadCurveConstr(runCy,YTIME)
 QElecDem                           !! VElecDem(runCy,YTIME)
 *QEstBaseLoad                      !! VEstBaseLoad(runCy,YTIME)
 QLoadFacDom                        !! VLoadFacDom(runCy,YTIME)
