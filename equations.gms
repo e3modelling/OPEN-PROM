@@ -108,13 +108,28 @@ QHourProdCostInv(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME)) ..
                          *sTWhToMtoe/iPlantEffByType(runCy,PGALL,YTIME))$(not PGREN(PGALL));
 
 
-* Compute hourly production cost used in investment decisions excluding CCS
+*' Compute hourly production cost used in investment decisions excluding CCS
+*' The equation QHourProdCostInvDec calculates the hourly production cost for
+*' a given technology without carbon capture and storage (CCS) investments. 
+*' The result, VHourProdCostTechNoCCS, is expressed in Euro per kilowatt-hour (Euro/KWh).
+*' The equation is based on the power plant's share in new equipment (VPowerPlantNewEq) and
+*' the hourly production cost of technology without CCS (VHourProdCostTech). Additionally, 
+*' it considers the contribution of other technologies with CCS (CCS_NOCCS) by summing their
+*' shares in new equipment (VPowerPlaShrNewEq) multiplied by their respective hourly production
+*' costs. The equation reflects the cost dynamics associated with technology investments and provides
+*' insights into the hourly production cost for power generation without CCS.
+
 QHourProdCostInvDec(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME) $NOCCS(PGALL)) ..
          VHourProdCostTechNoCCS(runCy,PGALL,HOUR,YTIME) =E=
          VPowerPlantNewEq(runCy,PGALL,YTIME)*VHourProdCostTech(runCy,PGALL,HOUR,YTIME)+
          sum(CCS$CCS_NOCCS(CCS,PGALL), VPowerPlaShrNewEq(runCy,CCS,YTIME)*VHourProdCostTech(runCy,CCS,HOUR,YTIME)); 
 
-* Compute gamma parameter used in CCS/No CCS decision tree
+*' Compute gamma parameter used in CCS/No CCS decision tree
+*' The equation reflects a dynamic relationship where the sensitivity
+*' to CCS acceptance is influenced by the carbon prices of different countries.
+*' The resulting VSensCcs provides a measure of the sensitivity of CCS acceptance
+*' based on the carbon values in the previous year.
+
 QGammaInCcsDecTree(runCy,YTIME)$TIME(YTIME)..
          VSensCcs(runCy,YTIME) =E= 20+25*EXP(-0.06*((sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME-1)))));
 
@@ -124,13 +139,24 @@ QHourProdCostInvDecisionsAfterCCS(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME) $(CCS(PGA
          =E=
           VHourProdCostTech(runCy,PGALL,HOUR,YTIME)**(-VSensCcs(runCy,YTIME));
 
-* Compute production cost used in investment decisions
+*' Compute production cost used in investment decisions
+*' The equation QProdCostInvDecis calculates the production cost of a technology (VProdCostTechnology)
+*' for a specific power plant and year. The equation involves the hourly production cost of the technology
+*' (VHourProdCostTech) and a sensitivity variable controlling carbon capture and storage (CCS) acceptance (VSensCcs).
+*' The summation over hours (HOUR) is weighted by the inverse of the technology's hourly production cost raised to the 
+*' power of minus one-fourth of the sensitivity variable. 
 QProdCostInvDecis(runCy,PGALL,YTIME)$(TIME(YTIME) $(CCS(PGALL) or NOCCS(PGALL)) ) ..
          VProdCostTechnology(runCy,PGALL,YTIME) 
          =E=  
          sum(HOUR,VHourProdCostTech(runCy,PGALL,HOUR,YTIME)**(-VSensCcs(runCy,YTIME)/4)) ;
 
-* Compute SHRCAP
+*' Compute SHRCAP
+*' The equation QShrcap calculates the power plant's share in new equipment (VPowerPlaShrNewEq) 
+*'for a specific power plant and year when carbon capture and storage (CCS) is implemented. The
+*' share is determined based on a formulation that considers the production costs of the technology
+*' (VProdCostTechnology). The numerator of the share calculation involves a factor of 1.1 multiplied
+*' by the production cost of the technology for the specific power plant and year. The denominator
+*' includes the sum of the numerator and the production costs of other power plant types without CCS (CCS_NOCCS).
 QShrcap(runCy,PGALL,YTIME)$(TIME(YTIME) $CCS(PGALL))..
          VPowerPlaShrNewEq(runCy,PGALL,YTIME) =E=
          1.1 *VProdCostTechnology(runCy,PGALL,YTIME)
@@ -138,7 +164,12 @@ QShrcap(runCy,PGALL,YTIME)$(TIME(YTIME) $CCS(PGALL))..
            + sum(PGALL2$CCS_NOCCS(PGALL,PGALL2),VProdCostTechnology(runCy,PGALL2,YTIME))
            );         
 
-* Compute SHRCAP excluding CCs
+*' Compute SHRCAP excluding CCs
+*' The equation QShrcapNoCcs calculates the power plant's share in new equipment (VPowerPlantNewEq)
+*' for a specific power plant and year when carbon capture and storage (CCS) is not implemented (NOCCS).
+*' The equation is based on the complementarity relationship, expressing that the power plant's share in
+*' new equipment without CCS is equal to one minus the sum of the shares of power plants with CCS in the
+*' new equipment. The sum is taken over all power plants with CCS for the given power plant type (PGALL) and year (YTIME).
 QShrcapNoCcs(runCy,PGALL,YTIME)$(TIME(YTIME) $NOCCS(PGALL))..
          VPowerPlantNewEq(runCy,PGALL,YTIME) 
          =E= 
@@ -214,7 +245,14 @@ QGapPowerGenCap(runCy,YTIME)$TIME(YTIME)..
           iTechLftPlaType(runCy,PGALL))
        ) -0) + SQR(1e-10) ) )/2;
 
-* Compute temporary variable facilitating the scaling in Weibull equation
+*' Compute temporary variable facilitating the scaling in Weibull equation
+*' The equation VScalWeibull calculates a temporary variable (VScalWeibull) 
+*' that facilitates the scaling in the Weibull equation. The equation involves
+*' the hourly production costs of technology (VHourProdCostTech) for power plants
+*' with carbon capture and storage (CCS) and without CCS (NOCCS). The production 
+*' costs are raised to the power of -6, and the result is used as a scaling factor
+*' in the Weibull equation. The equation captures the cost-related considerations 
+*' in determining the scaling factor for the Weibull equation based on the production costs of different technologies.
 QScalWeibull(runCy,PGALL,HOUR,YTIME)$((not CCS(PGALL))$TIME(YTIME))..
           VScalWeibull(runCy,PGALL,HOUR,YTIME) 
          =E=
