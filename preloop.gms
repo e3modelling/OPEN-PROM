@@ -66,11 +66,11 @@ QElectrPeakLoad                    !! VPowPlantSorting(runCy,PGALL,YTIME)
 *QLonMnmpowGenCost                 !! VLonMnmpowGenCost(runCy,PGALL,YTIME)
 *QLongPowGenIntPri                 !! VLongPowGenIntPri(runCy,PGALL,ESET,YTIME)
 *QShoPowGenIntPri                  !! VShoPowGenIntPri(runCy,PGALL,ESET,YTIME)
-*QLongPowGenCost                   !! VLongAvgPowGenCost(runCy,ESET,YTIME)
+QLongPowGenCost                    !! VLongAvgPowGenCost(runCy,ESET,YTIME)
 QLonAvgPowGenCostNoClimPol         !! VLonAvgPowGenCostNoClimPol(runCy,PGALL,ESET,YTIME)
 QLonPowGenCostNoClimPol            !! VLonPowGenCostNoClimPol(runCy,ESET,YTIME)
 QElecPriIndResNoCliPol             !! VElecPriIndResNoCliPol(runCy,ESET,YTIME)
-*QShortPowGenCost                  !! VAvgPowerGenCostShoTrm(runCy,ESET,YTIME)
+*qShortPowGenCost                  !! VAvgPowerGenCostShoTrm(runCy,ESET,YTIME)
 
 
 * Transport *
@@ -480,7 +480,7 @@ VFkImpAllFuelsNotNatGas.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
 
 VScalFacPlaDisp.LO(runCy, HOUR, YTIME)=-1;
 VLoadCurveConstr.LO(runCy,YTIME)=0;
-VLoadCurveConstr.L(runCy,YTIME)=0.01;
+VLoadCurveConstr.L(runCy,YTIME)=0.21;
 
 VRenValue.FX(YTIME) = 0 ;
 

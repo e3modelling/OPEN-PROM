@@ -617,7 +617,7 @@ QElecPriIndResNoCliPol(runCy,ESET,YTIME)$TIME(YTIME)..   !! The electricity pric
         );
 
 * Compute short term power generation cost
-QShortPowGenCost(runCy,ESET,YTIME)$TIME(YTIME)..
+qShortPowGenCost(runCy,ESET,YTIME)$TIME(YTIME)..
         VAvgPowerGenCostShoTrm(runCy,ESET,YTIME)
                  =E=
         (

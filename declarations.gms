@@ -146,7 +146,7 @@ QScalFacPlantDispatch(allCy,HOUR,YTIME)   "Compute the scaling factor for plant 
 QCurrRenPot(allCy,PGRENEF,YTIME)	       "Compute current renewable potential" 	
 QScalWeibullSum(allCy,PGALL,YTIME)	       "Compute sum (over hours) of temporary variable facilitating the scaling in Weibull equation"
 QElecPriIndResNoCliPol(allCy,ESET,YTIME)   "Compute electricity price in Industrial and Residential Consumers excluding climate policies"
-QShortPowGenCost(allCy,ESET,YTIME)	       "Compute short term power generation cost"		
+qShortPowGenCost(allCy,ESET,YTIME)	       "Compute short term power generation cost"		
 QLonPowGenCostNoClimPol(allCy,ESET,YTIME)  "Compute long term power generation cost excluding climate policies"	
 QLonAvgPowGenCostNoClimPol(allCy,PGALL,ESET,YTIME)	"Compute long term average power generation cost excluding climate policies"	
 QLongPowGenCost(allCy,ESET,YTIME)	       "Compute long term power generation cost"	

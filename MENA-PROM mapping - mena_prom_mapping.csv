@@ -237,7 +237,7 @@ Equation,EQSHLOAD,QElectrPeakLoad,Compute Power plants sorting according to vari
 Equation,EQSHLOADS,QElecPeakLoads,Compute Electricity peak loads,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQSHR,QTechShareNewEquip,Compute technology share in new equipment,"CYall,DSBS,EF,TEA,YTIME","allCy,DSBS,EF,TEA,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQSHRTR,QTechSortVarCostNewEquip,Compute the share of each technology in total sectoral use,"CYall,TRANSE,EF,TEA,YTIME","allCy,TRANSE,EF,TEA,YTIME",TRANSPORT SPECIFIC EQUATIONS
-Equation,EQSTAC,QShortPowGenCost,Compute short term power generation cost,"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
+Equation,EQSTAC,qShortPowGenCost,Compute short term power generation cost,"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
 Equation,EQSTAC_INT_PRICE,QShoPowGenIntPri,Compute short term power generation cost of technologies including international Prices of main fuels ,"CYALL,PGALL,ESET,YTIME","allCy,PGALL,ESET,YTIME",POWER GENERATION SECTOR
 Equation,EQSU,QTechSort,Compute Technology sorting based on variable cost,"CYall,DSBS,Rcon,YTIME","allCy,DSBS,rCon,YTIME",
 Equation,EQSUCAP,QNewInvDecis,Compute for Power Plant new investment decision,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
