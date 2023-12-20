@@ -15,6 +15,11 @@ authors:
     given-names: Giannis
     affiliation: "E3Modelling"
     email: e3modelling.com
+
+  - family-names: Sioutas
+    given-names: Fotis
+    affiliation: "E3Modelling"
+    email: sioutas@e3modelling.com
 title: OPEN PROM
 version: 0.1
 date-released: 2024-05-13

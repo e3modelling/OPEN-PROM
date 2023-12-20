@@ -3,6 +3,7 @@
 *' @description This is the OPEN-PROM model, the open version of the world energy model PROMETHEUS of E3-Modelling.
 *' @code
 *' *** preliminaries 
+*' 
 *' *** Generating an execution profile
 option profile = 1;
 *' *** number of columns that are listed for each variable in the column listing
@@ -13,7 +14,7 @@ option limrow = 300;
 option savepoint = 1;
 
 *' *** "dollar" ($) commands section: define GAMS flags & code control & compilation-time options
-
+*' 
 *' *** onEolCom: turn on end-of-line comments (starting with !!, i.e. the GAMS default)
 $onEolCom
 *' *** onEnd: turn on alternative flow control syntax (more readable loop, for, if etc.)
@@ -23,7 +24,7 @@ $onEmpty
 
 *** TODO: check if the contents of this block are actually used later
 *' *** GAMS "flags" definitions
-
+*' 
 *' *** Maximum number of solver attempts
 $evalGlobal SolverTryMax 1
 *' *** Setting research mode (0) or development mode (1) to modify settings and parameters accordingly
