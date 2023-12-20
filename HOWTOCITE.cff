@@ -1,0 +1,25 @@
+cff-version: 1.0.3
+message: Hello
+authors:
+  - family-names: Giannousakis
+    given-names: Anastasis
+    affiliation: "E3Modelling"
+    email: giannousakis@e3modelling.com
+
+  - family-names: Plesias
+    given-names: Giorgos
+    affiliation: "E3Modelling"
+    email: plessias@e3modelling.com
+
+  - family-names: Tolios
+    given-names: Giannis
+    affiliation: "E3Modelling"
+    email: e3modelling.com
+title: OPEN PROM
+version: 0.1
+date-released: 2024
+repository-code: https://github.com/e3modelling/OPEN-PROM
+keywords:
+  - prometheus
+license: CC0
+

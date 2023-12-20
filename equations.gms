@@ -1,5 +1,5 @@
 *' @title Equations of OPEN-PROM
-*' @equations
+*' @code
 *' Power Generation
 
 * Compute current renewable potential 
