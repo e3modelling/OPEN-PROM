@@ -118,7 +118,6 @@ QHourProdCostInv(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME)) ..
 *' shares in new equipment (VPowerPlaShrNewEq) multiplied by their respective hourly production
 *' costs. The equation reflects the cost dynamics associated with technology investments and provides
 *' insights into the hourly production cost for power generation without CCS.
-
 QHourProdCostInvDec(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME) $NOCCS(PGALL)) ..
          VHourProdCostTechNoCCS(runCy,PGALL,HOUR,YTIME) =E=
          VPowerPlantNewEq(runCy,PGALL,YTIME)*VHourProdCostTech(runCy,PGALL,HOUR,YTIME)+
@@ -129,7 +128,6 @@ QHourProdCostInvDec(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME) $NOCCS(PGALL)) ..
 *' to CCS acceptance is influenced by the carbon prices of different countries.
 *' The resulting VSensCcs provides a measure of the sensitivity of CCS acceptance
 *' based on the carbon values in the previous year.
-
 QGammaInCcsDecTree(runCy,YTIME)$TIME(YTIME)..
          VSensCcs(runCy,YTIME) =E= 20+25*EXP(-0.06*((sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME-1)))));
 
@@ -186,13 +184,22 @@ QVarCostTech(runCy,PGALL,YTIME)$(time(YTIME))..
           *(sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
           *sTWhToMtoe/iPlantEffByType(runCy,PGALL,YTIME))$(not PGREN(PGALL)));
 
-* Compute variable cost of technology excluding PGSCRN
+*' Compute variable cost of technology excluding PGSCRN
+*' The equation QVarCostTechNotPGSCRN calculates the variable VVarCostTechNotPGSCRN for a specific
+*' power plant and year when the power plant is not subject to PGSCRN. The calculation involves raising the variable
+*' cost of the technology (VVarCostTech) for the specified power plant and year to the power of -5.
 QVarCostTechNotPGSCRN(runCy,PGALL,YTIME)$(time(YTIME) $(not PGSCRN(PGALL)))..
          VVarCostTechNotPGSCRN(runCy,PGALL,YTIME) 
               =E=
           VVarCostTech(runCy,PGALL,YTIME)**(-5);
 
-* Compute production cost of technology  used in premature replacement
+*' Compute production cost of technology  used in premature replacement
+*' The equation QProdCostTechPreReplac calculates the production cost of a technology (VProdCostTechPreReplac)
+*' for a specific power plant and year. The equation involves various factors, including discount rates, technical
+*' lifetime of the plant type, gross capital cost with subsidies for renewables, capital goods index, fixed operation 
+*' and maintenance costs, plant availability rate, variable costs other than fuel, fuel prices, CO2 capture rates, cost
+*' curve for CO2 sequestration costs, CO2 emission factors, carbon values, plant efficiency, and specific conditions excluding
+*' renewable power plants (not PGREN). The equation reflects the complex dynamics of calculating the production cost, considering both economic and technical parameters.
 QProdCostTechPreReplac(runCy,PGALL,YTIME)$TIME(YTIME)..
          VProdCostTechPreReplac(runCy,PGALL,YTIME) =e=
                         (
@@ -208,7 +215,11 @@ QProdCostTechPreReplac(runCy,PGALL,YTIME)$TIME(YTIME)..
                                  *sTWhToMtoe/iPlantEffByType(runCy,PGALL,YTIME))$(not PGREN(PGALL)))
                          );
 
-* Compute production cost of technology  used in premature replacement including plant availability rate
+*' Compute production cost of technology  used in premature replacement including plant availability rate
+*'The equation QProdCostTechPreReplacAvail calculates the production cost of a technology used in premature replacement,
+*' considering plant availability rates. The result, VProdCostTechPreReplacAvail, is expressed in Euro per kilowatt-hour (Euro/KWh). 
+*'The equation involves the production cost of the technology used in premature replacement without considering availability rates 
+*'(VProdCostTechPreReplac) and incorporates adjustments based on the availability rates of two power plants (PGALL and PGALL2).
 QProdCostTechPreReplacAvail(runCy,PGALL,PGALL2,YTIME)$TIME(YTIME)..
          VProdCostTechPreReplacAvail(runCy,PGALL,PGALL2,YTIME) =E=
          iAvailRate(PGALL,YTIME)/iAvailRate(PGALL2,YTIME)*VProdCostTechPreReplac(runCy,PGALL,YTIME)+
