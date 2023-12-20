@@ -6,7 +6,7 @@ authors:
     affiliation: "E3Modelling"
     email: giannousakis@e3modelling.com
 
-  - family-names: Plesias
+  - family-names: Plessias
     given-names: Giorgos
     affiliation: "E3Modelling"
     email: plessias@e3modelling.com
@@ -17,7 +17,7 @@ authors:
     email: e3modelling.com
 title: OPEN PROM
 version: 0.1
-date-released: 2024
+date-released: 2024-05-13
 repository-code: https://github.com/e3modelling/OPEN-PROM
 keywords:
   - prometheus
