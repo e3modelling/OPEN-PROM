@@ -277,13 +277,11 @@ iTransfInpGasworks(runCy,EFS,YTIME)= iSuppTransfInputPatFuel(EFS,YTIME);
 iShareFueTransfInput(runCy,EFS)$sum(EF$EFS(EF),iTransfInpGasworks(runCy,EF,"%fBaseY%")) =  iTransfInpGasworks(runCy,EFS,"%fBaseY%") / sum(EF$EFS(EF),iTransfInpGasworks(runCy,EF,"%fBaseY%"));
 *VDistrLosses.FX(runCy,EFS,TT)$PERIOD(TT) = VDistrLosses.L(runCy,EFS,TT);
 
-table iLoadFactorAdjMxm(allCy,VARIOUS_LABELS,YTIME)               "Parameter for load factor adjustment iMxmLoadFacElecDem (1)"
-$ondelim
-$include"./iLoadFactorAdjMxm.csv"
-$offdelim
-;
-iBslCorrection(allCy,YTIME)$an(YTIME) = iLoadFactorAdjMxm(allCy,"AMAXBASE",YTIME);
-iMxmLoadFacElecDem(allCy,YTIME)$an(YTIME) = iLoadFactorAdjMxm(allCy,"MAXLOADSH",YTIME);
+parameter iLoadFactorAdjMxm(VARIOUS_LABELS)    "Parameter for load factor adjustment iMxmLoadFacElecDem (1)" /
+AMAXBASE 3,
+MAXLOADSH 0.45 / ;
+iBslCorrection(allCy,YTIME)$an(YTIME) = iLoadFactorAdjMxm("AMAXBASE");
+iMxmLoadFacElecDem(allCy,YTIME)$an(YTIME) = iLoadFactorAdjMxm("MAXLOADSH");
 
 parameter iLoadFacElecDem(DSBS)    "Load factor of electricity demand per sector (1)" /
 IS 	0.92,
