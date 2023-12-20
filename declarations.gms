@@ -186,7 +186,7 @@ QTotElecGenCap(allCy,YTIME)	               "Compute total electricity generation
 QHourProdCostInv(allCy,PGALL,HOUR,YTIME)   "Compute hourly production cost used in investment decisions"
 QHourProdCostInvDec(allCy,PGALL,HOUR,YTIME)"Compute hourly production cost used in investment decisions"
 QGammaInCcsDecTree(allCy,YTIME)	           "Compute gamma parameter used in CCS/No CCS decision tree"
-QHourProdCostInvDecisionsAfterCCS(allCy,PGALL,HOUR,YTIME)	"Compute hourly production cost used in investment decisions taking into account CCS acceptance"
+qHourProdCostInvDecisionsAfterCCS(allCy,PGALL,HOUR,YTIME)	"Compute hourly production cost used in investment decisions taking into account CCS acceptance"
 QProdCostInvDecis(allCy,PGALL,YTIME)	            "Compute production cost used in investment decisions"
 QShrcapNoCcs(allCy,PGALL,YTIME)	                    "Compute SHRCAP excluding CCs"
 QProdCostTechPreReplac(allCy,PGALL,YTIME)	        "Compute production cost of technology  used in premature replacement"	

@@ -132,10 +132,10 @@ QGammaInCcsDecTree(runCy,YTIME)$TIME(YTIME)..
          VSensCcs(runCy,YTIME) =E= 20+25*EXP(-0.06*((sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME-1)))));
 
 * Compute hourly production cost used in investment decisions taking into account CCS acceptance
-QHourProdCostInvDecisionsAfterCCS(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME) $(CCS(PGALL) or NOCCS(PGALL))) ..
+qHourProdCostInvDecisionsAfterCCS(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME) $(CCS(PGALL) or NOCCS(PGALL))) ..
          VHourProdCostTechAfterCCS(runCy,PGALL,HOUR,YTIME) 
          =E=
-          VHourProdCostTech(runCy,PGALL,HOUR,YTIME)**(-VSensCcs(runCy,YTIME));
+          VHourProdCostTech(runCy,PGALL,HOUR,YTIME)**(-VSensCcs(runCy,YTIME)/4);
 
 *' Compute production cost used in investment decisions
 *' The equation QProdCostInvDecis calculates the production cost of a technology (VProdCostTechnology)

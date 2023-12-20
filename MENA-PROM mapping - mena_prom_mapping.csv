@@ -220,7 +220,7 @@ Equation,EQPPROD,QPrimProd,Compute primary production,"CYall,EFS,YTIME","allCy,E
 Equation,EQPPSU,QFuePriSubChp,Compute fuel prices per subsector and fuel especially for chp plants,"(CYall,DSBS,EF,TEA,YTIME)","allCy,DSBS,EF,TEA,YTIME",Variable prices
 Equation,EQPPW,QFuelPriSepCarbon,Compute fuel prices per subsector and fuel multiplied by weights separate carbon value in each sector ,"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",PRICES EQUATIONS
 Equation,EQPRODCOST,QHourProdCostInv,Compute hourly production cost used in investment decisions,"CYALL,PGALL,HOUR,YTIME","allCy,PGALL,HOUR,YTIME",POWER GENERATION SECTOR
-Equation,EQPRODCOSTC,QHourProdCostInvDecisionsAfterCCS,Compute hourly production cost used in investment decisions taking into account CCS acceptance,"CYALL,PGALL,HOUR,YTIME","allCy,PGALL,HOUR,YTIME",POWER GENERATION SECTOR
+Equation,EQPRODCOSTC,qHourProdCostInvDecisionsAfterCCS,Compute hourly production cost used in investment decisions taking into account CCS acceptance,"CYALL,PGALL,HOUR,YTIME","allCy,PGALL,HOUR,YTIME",POWER GENERATION SECTOR
 Equation,EQPRODCOSTCS,QProdCostInvDecis,Compute production cost used in investment decisions,"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Equation,EQPRODCOSTNOCCS,QHourProdCostInvDec,Compute hourly production cost used in investment decisions excluding CCS,"CYALL,PGALL,HOUR,YTIME","allCy,PGALL,HOUR,YTIME",POWER GENERATION SECTOR
 Equation,EQPRODCOSTZZ,QProdCostTechPreReplac,Compute production cost of technology  used in premature replacement,"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
