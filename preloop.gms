@@ -25,20 +25,20 @@ QElecPeakLoad                      !! VElecPeakLoad(runCy,YTIME)
 QTotEstElecGenCap                  !! VTotElecGenCapEst(runCy,YTIME)
 QTotElecGenCap                     !! VTotElecGenCap(runCy,YTIME)	
 QHourProdCostInv                   !! VHourProdCostTech(runCy,PGALL,HOUR,YTIME)
-*QHourProdCostInvDec               !! VHourProdCostTechNoCCS(runCy,PGALL,HOUR,YTIME)
-*QGammaInCcsDecTree                !! VSensCcs(runCy,YTIME)
+QHourProdCostInvDec                !! VHourProdCostTechNoCCS(runCy,PGALL,HOUR,YTIME)
+QGammaInCcsDecTree                 !! VSensCcs(runCy,YTIME)
 *QHourProdCostInvDecisionsAfterCCS !! VHourProdCostTechAfterCCS(runCy,PGALL,HOUR,YTIME) 
-*QProdCostInvDecis                 !! VProdCostTechnology(runCy,PGALL,YTIME)
-*QShrcap                           !! VPowerPlaShrNewEq(runCy,PGALL,YTIME)
-*QShrcapNoCcs                      !! VPowerPlantNewEq(runCy,PGALL,YTIME)
+QProdCostInvDecis                  !! VProdCostTechnology(runCy,PGALL,YTIME)
+QShrcap                            !! VPowerPlaShrNewEq(runCy,PGALL,YTIME)
+QShrcapNoCcs                       !! VPowerPlantNewEq(runCy,PGALL,YTIME)
 QVarCostTech                       !! VVarCostTech(runCy,PGALL,YTIME)
-*QVarCostTechNotPGSCRN             !! VVarCostTechNotPGSCRN(runCy,PGALL,YTIME)
-*QProdCostTechPreReplac            !! VProdCostTechPreReplac(runCy,PGALL,YTIME)
-*QProdCostTechPreReplacAvail       !! VProdCostTechPreReplacAvail(runCy,PGALL,PGALL2,YTIME)
+QVarCostTechNotPGSCRN              !! VVarCostTechNotPGSCRN(runCy,PGALL,YTIME)
+QProdCostTechPreReplac             !! VProdCostTechPreReplac(runCy,PGALL,YTIME)
+QProdCostTechPreReplacAvail        !! VProdCostTechPreReplacAvail(runCy,PGALL,PGALL2,YTIME)
 *QEndogScrapIndex                  !! VEndogScrapIndex(runCy,PGALL,YTIME)
 QElecGenNoChp                      !! VElecGenNoChp(runCy,YTIME)
 *QGapPowerGenCap                   !! VGapPowerGenCap(runCy,YTIME)
-*QScalWeibull                      !! VScalWeibull(runCy,PGALL,HOUR,YTIME) 
+QScalWeibull                       !! VScalWeibull(runCy,PGALL,HOUR,YTIME) 
 QRenPotSupplyCurve                 !! VRenPotSupplyCurve(runCy,PGRENEF,YTIME)
 QMaxmAllowRenPotent                !! VMaxmAllowRenPotent(runCy,PGRENEF,YTIME)
 QMnmAllowRenPot                    !! VMnmAllowRenPot(runCy,PGRENEF,YTIME)
@@ -211,12 +211,12 @@ VElecProdPowGenPlants.l(allCy,PGALL,YTIME) = 1;
 VSensCcs.l(allCy,YTIME)=1;
 *VHourProdCostTech.VLamda(allCy,PGALL,HOUR,YTIME)=1;
 VFuelPriceSub.l(allCy,"PG",PGEF,YTIME)=1;
-VProdCostTechnology.l(allCy,PGALL2,YTIME)=0.1;
-VProdCostTechnology.up(allCy,PGALL2,YTIME)=1e6;
+VProdCostTechnology.lo(allCy,PGALL2,YTIME)=0.00000001;
+*VProdCostTechnology.up(allCy,PGALL2,YTIME)=1e6;
 VVarCostTech.l(allCy,PGALL,YTIME)=0.1;
 VProdCostTechPreReplacAvail.l(allCy,PGALL,PGALL2,YTIME)=0.1;
 VTechSortVarCost.l(allCy,TRANSE,Rcon,YTIME)=0.1;
-VHourProdCostTechNoCCS.up(allCy,PGALL,HOUR,YTIME)=8000;
+*VHourProdCostTechNoCCS.up(allCy,PGALL,HOUR,YTIME)=8000;
 *VHourProdCostTechNoCCS.VLamda(allCy,PGALL,HOUR,YTIME)=10;
 *VTemScalWeibull.up(allCy,PGALL,HOUR,YTIME)=1e6;
 *VHourProdCostTechNoCCS.lo(allCy,PGALL,HOUR,YTIME)=0.0001;
