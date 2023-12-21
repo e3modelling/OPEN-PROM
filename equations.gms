@@ -34,7 +34,9 @@ QElecDem(runCy,YTIME)$TIME(YTIME)..
            + VEnCons(runCy,"ELC",YTIME) - iNetImp(runCy,"ELC",YTIME)
          );
 
-*' * Compute estimated base load
+*' This equation computes the estimated base load as a quantity dependent on the electricity demand per final sector,
+*' as well as the baseload share of demand per sector, the rate of losses for final Consumption, the net imports,
+*' distribution losses and final consumption in energy sector.
 QEstBaseLoad(runCy,YTIME)$TIME(YTIME)..
          VEstBaseLoad(runCy,YTIME)
              =E=
@@ -44,7 +46,9 @@ QEstBaseLoad(runCy,YTIME)$TIME(YTIME)..
              + 0.5*VEnCons(runCy,"ELC",YTIME)
          ) / sTWhToMtoe / sGwToTwhPerYear;
 
-*' * Compute load factor of entire domestic system
+*' This equation calculates the load factor of the entire domestic system as a sum of consumption in each demand subsector
+*' and the sum of energy demand in transport subsectors (electricity only). Those sums are also divided by the load factor
+*' of electricity demand per sector
 QLoadFacDom(runCy,YTIME)$TIME(YTIME)..
          VLoadFacDom(runCy,YTIME)
              =E=
@@ -58,20 +62,23 @@ QElecPeakLoad(runCy,YTIME)$TIME(YTIME)..
              =E=
          VElecDem(runCy,YTIME)/(VLoadFacDom(runCy,YTIME)*sGwToTwhPerYear);
 
-*' * Compute baseload corresponding to maximum load
+*' This equation calculates the baseload corresponding to maximum load by multiplying the maximum load factor of electricity demand
+*' to the electricity peak load, minus the baseload corresponding to maximum load factor.
 QBslMaxmLoad(runCy,YTIME)$TIME(YTIME)..
          (VElecDem(runCy,YTIME)-VBslMaxmLoad(runCy,YTIME)*sGwToTwhPerYear)
              =E=
          iMxmLoadFacElecDem(runCy,YTIME)*(VElecPeakLoad(runCy,YTIME)-VBslMaxmLoad(runCy,YTIME))*sGwToTwhPerYear;  
 
-*' * Compute electricity base load
+*' This equation calculates the electricity base load utilizing exponential functions that include the estimated base load,
+*' the baseload corresponding to maximum load factor, and the parameter of baseload correction.
 QElecBaseLoad(runCy,YTIME)$TIME(YTIME)..
          VCorrBaseLoad(runCy,YTIME)
              =E=
          (1/(1+Exp(iBslCorrection(runCy,YTIME)*(VEstBaseLoad(runCy,YTIME)-VBslMaxmLoad(runCy,YTIME)))))*VEstBaseLoad(runCy,YTIME)
         +(1-1/(1+Exp(iBslCorrection(runCy,YTIME)*(VEstBaseLoad(runCy,YTIME)-VBslMaxmLoad(runCy,YTIME)))))*VBslMaxmLoad(runCy,YTIME);
 
-*' * Compute total required electricity production
+*' This equation calculates the total required electricity production as a sum of the electricity peak load minus the corrected base load,
+*' multiplied by the exponential function of the parameter for load curve construction.
 QTotReqElecProd(runCy,YTIME)$TIME(YTIME)..
          VTotReqElecProd(runCy,YTIME)
              =E=
