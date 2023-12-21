@@ -278,7 +278,7 @@ QGapPowerGenCap(runCy,YTIME)$TIME(YTIME)..
 
 
 *' Compute temporary variable facilitating the scaling in Weibull equation
-*' The equation VScalWeibull calculates a temporary variable (VScalWeibull) 
+*' The equation vScalWeibull calculates a temporary variable (vScalWeibull) 
 *' that facilitates the scaling in the Weibull equation. The equation involves
 *' the hourly production costs of technology (VHourProdCostTech) for power plants
 *' with carbon capture and storage (CCS) and without CCS (NOCCS). The production 
