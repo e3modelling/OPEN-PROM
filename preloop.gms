@@ -1,4 +1,6 @@
-* Calculation of polynomial distribution lags coefficients
+*' @title Preloop
+*' @code
+*' * Calculation of polynomial distribution lags coefficients
 iNPDL(DSBS) = 6;
 loop DSBS do
    loop KPDL$(ord(KPDL) le iNPDL(DSBS)) do
@@ -10,7 +12,7 @@ endloop;
 
 model openprom /
 
-* Power Generation *
+*' * Power Generation *
 
 QCurrRenPot                        !! VCurrRenPot(runCy,PGRENEF,YTIME)
 QChpElecPlants                     !! VElecCapChpPla(runCy,CHP,YTIME)
@@ -73,7 +75,7 @@ QElecPriIndResNoCliPol             !! VElecPriIndResNoCliPol(runCy,ESET,YTIME)
 *QShortPowGenCost                  !! VAvgPowerGenCostShoTrm(runCy,ESET,YTIME)
 
 
-* Transport *
+*' * Transport *
 
 QPassCarsLft                       !! VLifeTimeTech(runCy,DSBS,EF,TEA,YTIME)
 QGoodsTranspActiv                  !! VGoodsTranspActiv(runCy,TRANSE,YTIME)
@@ -98,7 +100,7 @@ QScrRate                           !! VScrRate(runCy,YTIME)
 QElecConsAll                       !! VElecConsAll(runCy,DSBS,YTIME)
 
 
-* INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES *
+*' * INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES *
 
 QElecConsNonSub                    !! VElecNonSub(runCy,INDDOM,YTIME)
 QConsOfRemSubEquip                 !! VConsRemSubEquip(runCy,DSBS,EF,YTIME)
@@ -123,7 +125,7 @@ QAvgElcProCostCHP                  !! VAvgElcProCHP(runCy,CHP,YTIME)
 QAvgVarElecProd                    !! VAvgVarProdCostCHP(runCy,CHP,YTIME)
 
 
-* REST OF ENERGY BALANCE SECTORS *
+*' * REST OF ENERGY BALANCE SECTORS *
 
 *QTransfOutputPatFuel              !! VTransfOutputPatFuel(runCy,EFS,YTIME)
 QTotFinEneCons                     !! VFeCons(runCy,EFS,YTIME)
@@ -152,7 +154,7 @@ QDistrLosses                       !! VLosses(runCy,EFS,YTIME)
 *QEneBrnchEneCons                  !! VEnCons(runCy,EFS,YTIME)
 
 
-* CO2 SEQUESTRATION COST CURVES *
+*' * CO2 SEQUESTRATION COST CURVES *
 
 *QCO2ElcHrg                        !! VCO2ElcHrgProd(runCy,YTIME)
 *QCumCO2Capt                       !! VCumCO2Capt(runCy,YTIME)
@@ -160,14 +162,14 @@ QDistrLosses                       !! VLosses(runCy,EFS,YTIME)
 *QCstCO2SeqCsts                    !! VCO2SeqCsts(runCy,YTIME)         
 
 
-* EMISSIONS CONSTRAINTS *
+*' * EMISSIONS CONSTRAINTS *
 
 *QTotGhgEmisAllCountrNap           !! VTotGhgEmisAllCountrNap(NAP,YTIME)
 *QTotCo2AllCoun                    !! VTotCo2AllCoun(YTIME) 
 QHouseExpEne                       !! QHouseExpEne(runCy,YTIME)
 
 
-* Prices *
+*' * Prices *
 
 QFuelPriSubSepCarbVal              !! VFuelPriceSub(runCy,SBS,EF,YTIME)
 QFuelPriSepCarbon                  !! VFuelPriMultWgt(runCy,DSBS,EF,YTIME)
@@ -258,7 +260,7 @@ VScalWeibullSum.l(allCy,PGALL,YTIME)=2;
 VHourProdCostTech.l(runCy,PGALL,HOUR,TT) = 0.0001;
 
 
-*                        VARIABLE INITIALISATION                               *
+*' *                        VARIABLE INITIALISATION                               *
 
 
 VFuelPriceSub.FX(runCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF)$(not HEATPUMP(EF))$(not An(YTIME))) = iFuelPrice(runCy,SBS,EF,YTIME);
