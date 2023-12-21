@@ -505,6 +505,7 @@ $ondelim
 $include"./iGrossCapCosSubRen.csv"
 $offdelim
 ;
+iGrossCapCosSubRen(PGALL,YTIME) = iGrossCapCosSubRen(PGALL,YTIME)/1000;
 loop(PGALL,YTIME)$AN(YTIME) DO
          abort $(iGrossCapCosSubRen(PGALL,YTIME)<0) "CAPITAL COST IS NEGATIVE", iGrossCapCosSubRen
 ENDLOOP;
