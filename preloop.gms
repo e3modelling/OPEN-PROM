@@ -16,14 +16,14 @@ model openprom /
 
 qCurrRenPot                        !! VCurrRenPot(runCy,PGRENEF,YTIME)
 QChpElecPlants                     !! VElecCapChpPla(runCy,CHP,YTIME)
-*QLambda                           !! VLoadCurveConstr
+*QLambda                           !! VLoadCurveConstr(runCy,YTIME)
 QElecDem                           !! VElecDem(runCy,YTIME)
 *QEstBaseLoad                      !! VEstBaseLoad(runCy,YTIME)
 QLoadFacDom                        !! VLoadFacDom(runCy,YTIME)
 QElecPeakLoad                      !! VElecPeakLoad(runCy,YTIME)
-*QBslMaxmLoad                      !! VBslMaxmLoad(runCy,YTIME)
-*QElecBaseLoad                     !! VCorrBaseLoad(runCy,YTIME)
-*QTotReqElecProd                    !! VTotReqElecProd(runCy,YTIME)
+QBslMaxmLoad                       !! VBslMaxmLoad(runCy,YTIME)
+QElecBaseLoad                      !! VCorrBaseLoad(runCy,YTIME)
+QTotReqElecProd                    !! VTotReqElecProd(runCy,YTIME)
 QTotEstElecGenCap                  !! VTotElecGenCapEst(runCy,YTIME)
 QTotElecGenCap                     !! VTotElecGenCap(runCy,YTIME)	
 QHourProdCostInv                   !! VHourProdCostTech(runCy,PGALL,HOUR,YTIME)
@@ -150,7 +150,7 @@ QDistrLosses                       !! VLosses(runCy,EFS,YTIME)
 *QPrimProd                         !! VPrimProd(runCy,PPRODEF,YTIME)
 *QFakeExp                          !! VExportsFake(runCy,EFS,YTIME)
 *QFakeImprts                       !! VFkImpAllFuelsNotNatGas(runCy,EFS,YTIME)
-*QNetImports                       !! QNetImports(runCy,EFS,YTIME)
+*QNetImports                       !! VNetImports(runCy,EFS,YTIME)
 *QEneBrnchEneCons                  !! VEnCons(runCy,EFS,YTIME)
 
 
@@ -487,7 +487,9 @@ VFkImpAllFuelsNotNatGas.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
 
 VScalFacPlaDisp.LO(runCy, HOUR, YTIME)=-1;
 VLoadCurveConstr.LO(runCy,YTIME)=0;
-VLoadCurveConstr.L(runCy,YTIME)=0.21;
+* FIXME: To be reverted back to VLoadCurveConstr.L(runCy,YTIME)=0.21 , when QLambda is activated.
+* author=redmonkeycloud
+VLoadCurveConstr.FX(runCy,YTIME)=0.21;
 
 VRenValue.FX(YTIME) = 0 ;
 
