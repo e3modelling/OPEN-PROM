@@ -6,7 +6,7 @@
 *' * Compute current renewable potential 
 qCurrRenPot(runCy,PGRENEF,YTIME)$TIME(YTIME)..
 
-         VCurrRenPot(runCy,PGRENEF,YTIME) 
+         vCurrRenPot(runCy,PGRENEF,YTIME) 
          =E=
          ( VMaxmAllowRenPotent(runCy,PGRENEF,YTIME) + iMinRenPotential(runCy,PGRENEF,YTIME))/2;
 
@@ -145,7 +145,7 @@ QGammaInCcsDecTree(runCy,YTIME)$TIME(YTIME)..
 
 * Compute hourly production cost used in investment decisions taking into account CCS acceptance
 qHourProdCostInvDecisionsAfterCCS(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME) $(CCS(PGALL) or NOCCS(PGALL))) ..
-         VHourProdCostTechAfterCCS(runCy,PGALL,HOUR,YTIME) 
+         vHourProdCostTechAfterCCS(runCy,PGALL,HOUR,YTIME) 
          =E=
           VHourProdCostTech(runCy,PGALL,HOUR,YTIME)**(-VSensCcs(runCy,YTIME)/4);
 
@@ -278,7 +278,7 @@ QGapPowerGenCap(runCy,YTIME)$TIME(YTIME)..
 
 
 *' Compute temporary variable facilitating the scaling in Weibull equation
-*' The equation VScalWeibull calculates a temporary variable (VScalWeibull) 
+*' The equation vScalWeibull calculates a temporary variable (vScalWeibull) 
 *' that facilitates the scaling in the Weibull equation. The equation involves
 *' the hourly production costs of technology (VHourProdCostTech) for power plants
 *' with carbon capture and storage (CCS) and without CCS (NOCCS). The production 
@@ -286,8 +286,8 @@ QGapPowerGenCap(runCy,YTIME)$TIME(YTIME)..
 *' in the Weibull equation. The equation captures the cost-related considerations 
 *' in determining the scaling factor for the Weibull equation based on the production costs of different technologies.
 
-QScalWeibull(runCy,PGALL,HOUR,YTIME)$((not CCS(PGALL))$TIME(YTIME))..
-          VScalWeibull(runCy,PGALL,HOUR,YTIME) 
+qScalWeibull(runCy,PGALL,HOUR,YTIME)$((not CCS(PGALL))$TIME(YTIME))..
+          vScalWeibull(runCy,PGALL,HOUR,YTIME) 
          =E=
          (VHourProdCostTech(runCy,PGALL,HOUR,YTIME)$(not NOCCS(PGALL))
          +
@@ -468,8 +468,8 @@ QElecProdPowGenPlants(runCy,PGALL,YTIME)$TIME(YTIME)..
          * VElecGenPlanCap(runCy,PGALL,YTIME)* sum(HOUR, exp(-VScalFacPlaDisp(runCy,HOUR,YTIME)/VPowPlantSorting(runCy,PGALL,YTIME)));
 
 *' * Compute sector contribution to total CHP production
-QSecContrTotChpProd(runCy,INDDOM,CHP,YTIME)$(TIME(YTIME) $SECTTECH(INDDOM,CHP))..
-         VSecContrTotChpProd(runCy,INDDOM,CHP,YTIME) 
+qSecContrTotChpProd(runCy,INDDOM,CHP,YTIME)$(TIME(YTIME) $SECTTECH(INDDOM,CHP))..
+         vSecContrTotChpProd(runCy,INDDOM,CHP,YTIME) 
           =E=
          VConsFuel(runCy,INDDOM,CHP,YTIME)/(1e-6+SUM(INDDOM2,VConsFuel(runCy,INDDOM2,CHP,YTIME)));
 
@@ -483,7 +483,7 @@ QElecProdChpPlants(runCy,CHP,YTIME)$TIME(YTIME)..
 
 qShareRenGrossElecProd(runCy,YTIME)$TIME(YTIME)..
 
-                 VResShareGrossElecProd(runCy,YTIME) 
+                 vResShareGrossElecProd(runCy,YTIME) 
                  =E=
                  (SUM(PGNREN$((not sameas("PGASHYD",PGNREN)) $(not sameas("PGSHYD",PGNREN)) $(not sameas("PGLHYD",PGNREN)) ),
                          VElecProdPowGenPlants(runCy,PGNREN,YTIME)))/
@@ -510,7 +510,7 @@ QLonPowGenCostTechNoCp(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
 *' * Long-term minimum power generation cost
 qLonMnmpowGenCost(runCy,PGALL,YTIME)$TIME(YTIME)..
 
-         VLonMnmpowGenCost(runCy,PGALL,YTIME)
+         vLonMnmpowGenCost(runCy,PGALL,YTIME)
                  =E=
 
              (iDisc(runCy,"PG",YTIME)*EXP(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(runCy,PGALL)) /
@@ -532,7 +532,7 @@ qLonMnmpowGenCost(runCy,PGALL,YTIME)$TIME(YTIME)..
 *' * Compute long term power generation cost of technologies including international Prices of main fuels 
 qLongPowGenIntPri(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
 
-         VLongPowGenIntPri(runCy,PGALL,ESET,YTIME)
+         vLongPowGenIntPri(runCy,PGALL,ESET,YTIME)
                  =E=
 
              (iDisc(runCy,"PG",YTIME)*EXP(iDisc(runCy,"PG",YTIME)*iTechLftPlaType(runCy,PGALL)) /
@@ -555,7 +555,7 @@ qLongPowGenIntPri(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
 *' * Compute short term power generation cost of technologies including international Prices of main fuels 
 qShoPowGenIntPri(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
 
-         VShoPowGenIntPri(runCy,PGALL,ESET,YTIME)
+         vShoPowGenIntPri(runCy,PGALL,ESET,YTIME)
                  =E=
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
                  (iVarCost(PGALL,YTIME)/1000+((
@@ -648,7 +648,7 @@ QElecPriIndResNoCliPol(runCy,ESET,YTIME)$TIME(YTIME)..   !! The electricity pric
 *' * Compute short term power generation cost
 qShortPowGenCost(runCy,ESET,YTIME)$TIME(YTIME)..
 
-        VAvgPowerGenCostShoTrm(runCy,ESET,YTIME)
+        vAvgPowerGenCostShoTrm(runCy,ESET,YTIME)
                  =E=
         (
         sum(PGALL,
@@ -827,8 +827,8 @@ QFinEneDemTranspPerFuel(runCy,TRANSE,EF,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,EF)
          sum((TTECH,TEA)$(SECTTECH(TRANSE,TTECH) $TTECHtoEF(TTECH,EF) ), VConsEachTechTransp(runCy,TRANSE,TTECH,EF,TEA,YTIME));
 
 *' * Compute final energy demand in transport 
-QFinEneDemTransp(runCy,TRANSE,YTIME)$(TIME(YTIME)) ..
-         VFinEneDemTranspSub(runCy,TRANSE,YTIME)
+qFinEneDemTransp(runCy,TRANSE,YTIME)$(TIME(YTIME)) ..
+         vFinEneDemTranspSub(runCy,TRANSE,YTIME)
                  =E=
          sum(EF,VDemTr(runCy,TRANSE,EF,YTIME));
 
@@ -963,14 +963,14 @@ QDemSub(runCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)))..
 ;
 
 *' * Compute Consumption of electricity in industrial sectors
-QElecConsInd(runCy,YTIME)$TIME(YTIME)..
-         VElecConsInd(runCy,YTIME)
+qElecConsInd(runCy,YTIME)$TIME(YTIME)..
+         vElecConsInd(runCy,YTIME)
          =E=
          SUM(INDSE,VElecNonSub(runCy,INDSE,YTIME));       
 
 *' * Compute total final demand (of substitutable fuels) in industrial sectors (Mtoe)
-QDemInd(runCy,YTIME)$TIME(YTIME)..
-        VDemInd(runCy,YTIME)=E= SUM(INDSE,VDemSub(runCy,INDSE,YTIME));
+qDemInd(runCy,YTIME)$TIME(YTIME)..
+        vDemInd(runCy,YTIME)=E= SUM(INDSE,VDemSub(runCy,INDSE,YTIME));
 
 *' * Compute electricity industry prices
 QElecIndPrices(runCy,YTIME)$TIME(YTIME)..
@@ -1140,8 +1140,8 @@ QTotFinEneCons(runCy,EFS,YTIME)$TIME(YTIME)..
              sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(TRANSE,EF)), VDemTr(runCy,TRANSE,EF,YTIME)));
 
 *' * Compute total final energy consumption in ALL countries
-QTotFinEneConsAll(YTIME)$TIME(YTIME)..
-         VTotFinEneConsAll(YTIME) =E= sum((runCy,EFS), VFeCons(runCy,EFS,YTIME) );     
+qTotFinEneConsAll(YTIME)$TIME(YTIME)..
+         vTotFinEneConsAll(YTIME) =E= sum((runCy,EFS), VFeCons(runCy,EFS,YTIME) );     
 
 *' * Compute final non-energy consumption
 QFinNonEneCons(runCy,EFS,YTIME)$TIME(YTIME)..
@@ -1429,17 +1429,17 @@ QTotGhgEmisAllCountrNap(NAP,YTIME)$TIME(YTIME)..
                          iCo2EmiFac(runCy,"PG",PGEF,YTIME)*iCO2CaptRate(runCy,CCS,YTIME)))));   !! CO2 captured by CCS plants in power generation
 
 *' * Compute total CO2eq GHG emissions in all countries
-QTotCo2AllCoun(YTIME)$TIME(YTIME)..
+qTotCo2AllCoun(YTIME)$TIME(YTIME)..
 
-         VTotCo2AllCoun(YTIME) 
+         vTotCo2AllCoun(YTIME) 
          =E=
          sum(NAP, VTotGhgEmisAllCountrNap(NAP,YTIME));
 
 *' Compute households expenditures on energy by utilizing the sum of consumption of remaining substitutable equipment multiplied by the fuel prices per subsector and fuel 
 *' minus the efficiency values divided by CO2 emission factors per subsector and multiplied by the sum of carbon values for all countries and adding the Electricity price
 *' to Industrial and Residential Consumers multiplied by Consumption of non-substituable electricity in Industry and Tertiary divided by TWh to Mtoe conversion factor.
-QHouseExpEne(runCy,YTIME)$TIME(YTIME)..
-                 VHouseExpEne(runCy,YTIME)
+qHouseExpEne(runCy,YTIME)$TIME(YTIME)..
+                 vHouseExpEne(runCy,YTIME)
                  =E= 
                  SUM(DSBS$HOU(DSBS),SUM(EF$SECTTECH(dSBS,EF),VConsRemSubEquip(runCy,DSBS,EF,YTIME)*(VFuelPriceSub(runCy,DSBS,EF,YTIME)-iEffValueInEuro(runCy,DSBS,YTIME)/
                  1000-iCo2EmiFac(runCy,"PG",EF,YTIME)*sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))/1000)))
