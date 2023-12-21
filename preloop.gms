@@ -14,14 +14,14 @@ model openprom /
 
 qCurrRenPot                        !! VCurrRenPot(runCy,PGRENEF,YTIME)
 QChpElecPlants                     !! VElecCapChpPla(runCy,CHP,YTIME)
-QLambda                           !! VLoadCurveConstr
+*QLambda                           !! VLoadCurveConstr
 QElecDem                           !! VElecDem(runCy,YTIME)
 *QEstBaseLoad                      !! VEstBaseLoad(runCy,YTIME)
 QLoadFacDom                        !! VLoadFacDom(runCy,YTIME)
 QElecPeakLoad                      !! VElecPeakLoad(runCy,YTIME)
 *QBslMaxmLoad                      !! VBslMaxmLoad(runCy,YTIME)
 *QElecBaseLoad                     !! VCorrBaseLoad(runCy,YTIME)
-QTotReqElecProd                    !! VTotReqElecProd(runCy,YTIME)
+*QTotReqElecProd                    !! VTotReqElecProd(runCy,YTIME)
 QTotEstElecGenCap                  !! VTotElecGenCapEst(runCy,YTIME)
 QTotElecGenCap                     !! VTotElecGenCap(runCy,YTIME)	
 QHourProdCostInv                   !! VHourProdCostTech(runCy,PGALL,HOUR,YTIME)
@@ -54,7 +54,7 @@ QElectrPeakLoad                    !! VPowPlantSorting(runCy,PGALL,YTIME)
 *QNewCapYearly                     !! VNewCapYearly(runCy,PGALL,YTIME)
 *QAvgCapFacRes                     !! VAvgCapFacRes(runCy,PGALL,YTIME)
 QOverallCap                       !! VOverallCap(runCy,PGALL,YTIME)
-QScalFacPlantDispatch              !! VScalFacPlaDisp
+*QScalFacPlantDispatch              !! VScalFacPlaDisp
 *QElecChpPlants                    !! VElecChpPlants(runCy,YTIME) 
 *QNonChpElecProd                   !! VNonChpElecProd(runCy,YTIME) 
 QReqElecProd                      !! VReqElecProd(runCy,YTIME) 
@@ -455,7 +455,7 @@ VAvgPowerGenCostShoTrm.L(runCy,ESET,"2010") = 0;
 VLongPowGenCost.L(runCy,PGALL,ESET,"2010") = 0;
 VLonAvgPowGenCostNoClimPol.L(runCy,PGALL,ESET,"2010") = 0;
 VLongAvgPowGenCost.L(runCy,ESET,"2017") = 0;
-VLonPowGenCostNoClimPol.FX(runCy,ESET,"%fBaseY%") = 0;
+VLonPowGenCostNoClimPol.l(runCy,ESET,"%fBaseY%") = 0;
 * FIXME: Temporary fix. To be reversed back to VAvgPowerGenCostShoTrm.L(runCy,ESET,"%fBaseY%") = 0, when QShortPowGenCost is activated.
 * author=redmonkeycloud
 VAvgPowerGenCostShoTrm.FX(runCy,ESET,YTIME) = 0.02;
