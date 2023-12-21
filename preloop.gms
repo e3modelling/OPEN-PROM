@@ -14,14 +14,14 @@ model openprom /
 
 qCurrRenPot                        !! VCurrRenPot(runCy,PGRENEF,YTIME)
 QChpElecPlants                     !! VElecCapChpPla(runCy,CHP,YTIME)
-*QLambda                           !! -
+QLambda                           !! VLoadCurveConstr
 QElecDem                           !! VElecDem(runCy,YTIME)
 *QEstBaseLoad                      !! VEstBaseLoad(runCy,YTIME)
 QLoadFacDom                        !! VLoadFacDom(runCy,YTIME)
 QElecPeakLoad                      !! VElecPeakLoad(runCy,YTIME)
 *QBslMaxmLoad                      !! VBslMaxmLoad(runCy,YTIME)
 *QElecBaseLoad                     !! VCorrBaseLoad(runCy,YTIME)
-*QTotReqElecProd                   !! VTotReqElecProd(runCy,YTIME)
+QTotReqElecProd                    !! VTotReqElecProd(runCy,YTIME)
 QTotEstElecGenCap                  !! VTotElecGenCapEst(runCy,YTIME)
 QTotElecGenCap                     !! VTotElecGenCap(runCy,YTIME)	
 QHourProdCostInv                   !! VHourProdCostTech(runCy,PGALL,HOUR,YTIME)
@@ -53,13 +53,13 @@ QElecPeakLoads                     !! VElecPeakLoads(runCy,YTIME)
 QElectrPeakLoad                    !! VPowPlantSorting(runCy,PGALL,YTIME)
 *QNewCapYearly                     !! VNewCapYearly(runCy,PGALL,YTIME)
 *QAvgCapFacRes                     !! VAvgCapFacRes(runCy,PGALL,YTIME)
-*QOverallCap                       !! VOverallCap(runCy,PGALL,YTIME)
-*QScalFacPlantDispatch             !! -
+QOverallCap                       !! VOverallCap(runCy,PGALL,YTIME)
+QScalFacPlantDispatch              !! VScalFacPlaDisp
 *QElecChpPlants                    !! VElecChpPlants(runCy,YTIME) 
 *QNonChpElecProd                   !! VNonChpElecProd(runCy,YTIME) 
-*QReqElecProd                      !! VReqElecProd(runCy,YTIME) 
-*QElecProdPowGenPlants             !! VElecProdPowGenPlants(runCy,PGALL,YTIME)
-*QSecContrTotChpProd               !! VSecContrTotChpProd(runCy,INDDOM,CHP,YTIME)
+QReqElecProd                      !! VReqElecProd(runCy,YTIME) 
+QElecProdPowGenPlants             !! VElecProd(runCy,PGALL,YTIME)
+qSecContrTotChpProd                !! VSecContrTotChpProd(runCy,INDDOM,CHP,YTIME)
 QElecProdChpPlants                 !! VChpElecProd(runCy,CHP,YTIME)
 qShareRenGrossElecProd             !! VResShareGrossElecProd(runCy,YTIME) 
 QLonPowGenCostTechNoCp             !! VLongPowGenCost(runCy,PGALL,ESET,YTIME)
@@ -206,7 +206,7 @@ VTransfOutputRefineries.l(allCy,EFS,YTIME)=0.1;
 VGrsInlConsNotEneBranch.l(allCy,EFS,YTIME)=0.1;
 VElecConsAll.l(allCy,DSBS,YTIME)=0.1;
 VLoadFacDom.l(allCy,YTIME)=0.1;
-VElecProdPowGenPlants.l(allCy,PGALL,YTIME) = 1;
+*VElecProd.l(allCy,PGALL,YTIME) = 1;
 *VHourProdCostTech.up(allCy,PGALL,HOUR,YTIME)=1e6;
 VSensCcs.l(allCy,YTIME)=1;
 *VHourProdCostTech.VLamda(allCy,PGALL,HOUR,YTIME)=1;
@@ -233,17 +233,22 @@ VHourProdCostTechAfterCCS.L(allCy,PGALL,HOUR,TT)=0.1;
 VPowerPlaShrNewEq.L(allCy,PGALL,TT)=0.1;
 VHourProdCostTechNoCCS.L(runCy,PGALL,HOUR,TT) = VPowerPlantNewEq.L(runCy,PGALL,TT)*VHourProdCostTechAfterCCS.L(runCy,PGALL,HOUR,TT)+
          sum(CCS$CCS_NOCCS(CCS,PGALL), VPowerPlaShrNewEq.L(runCy,CCS,TT)*VHourProdCostTechAfterCCS.L(runCy,CCS,HOUR,TT));
-VHourProdCostTechNoCCS.SCALE(runCy,PGALL,HOUR,TT)= max(abs(VHourProdCostTechNoCCS.L(runCy,PGALL,HOUR,TT)),1E-20);
+*VHourProdCostTechNoCCS.SCALE(runCy,PGALL,HOUR,TT)= max(abs(VHourProdCostTechNoCCS.L(runCy,PGALL,HOUR,TT)),1E-20);
 VNewInvDecis.l(allCy,YTIME)=0.1;
 VVarCostTechnology.l(allCy,PGALL,YTIME)=0.1;
 VElecPeakLoads.l(allCy,YTIME)=0.1;
 VNewCapYearly.l(allCy,PGALL,YTIME)=0.1;
 VAvgCapFacRes.l(allCy,PGALL,YTIME)=0.1;
-VOverallCap.scale(allCy,PGALL,YTIME)=1;
 VPowPlantSorting.l(runCy,PGALL,YTIME)=0.01;
-VReqElecProd.l(runCy,YTIME)=0.1;
+*VOverallCap.scale(allCy,PGALL,YTIME)=1;
+*VElecCapChpPla.l(runCy,CHP,YTIME) = 1/0.086 * sum(INDDOM,VConsFuel.L(runCy,INDDOM,CHP,YTIME)) * VElecIndPrices.L(runCy,YTIME)/
+*          sum(PGALL$CHPtoEON(CHP,PGALL),iAvailRate(PGALL,YTIME)) /
+*         iUtilRateChpPlants(runCy,CHP,YTIME) /8.76;
+VPowPlantSorting.l(runCy,PGALL,YTIME)=VVarCostTechnology.L(runCy,PGALL,YTIME)/VElecPeakLoads.L(runCy,YTIME);
+VReqElecProd.l(runCy,YTIME) = 0.01;
+*VReqElecProd.l(runCy,YTIME)=sum(hour, sum(CHP,VElecCapChpPla.L(runCy,CHP,YTIME)*exp(-VScalFacPlaDisp.L(runCy,HOUR,YTIME)/ sum(pgall$chptoeon(chp,pgall),VPowPlantSorting.L(runCy,PGALL,YTIME)))));
 *VPowPlantSorting.up(runCy,PGALL,YTIME)=0.001;
-VPowPlantSorting.scale(runCy,PGALL,YTIME)=1;
+*VPowPlantSorting.scale(runCy,PGALL,YTIME)=1;
 VElecDem.l(allCy,YTIME)=0.1;
 *VHourProdCostTech.lo(runCy,PGALL,HOUR,YTIME)=0.0001;
 *VHourProdCostTechNoCCS.lo(runCy,PGALL,HOUR,YTIME)=0.1;
@@ -393,7 +398,7 @@ VElecDem.FX(runCy,YTIME)$(not An(YTIME)) =  1/0.086 * ( iFinEneCons(runCy,"ELC",
                                              + iTotEneBranchCons(runCy,"ELC",YTIME) - (iFuelImports(runCy,"ELC",YTIME)-iFuelExprts(runCy,"ELC",YTIME)));
 
 
-VCorrBaseLoad.FX(runCy,YTIME)$(not An(YTIME)) = iPeakBsLoadBy(runCy,"BASELOAD");
+VCorrBaseLoad.FX(runCy,YTIME) = iPeakBsLoadBy(runCy,"BASELOAD");
 
 VLoadFacDom.FX(runCy,YTIME)$(datay(YTIME)) =
          (sum(INDDOM,VConsFuel.l(runCy,INDDOM,"ELC",YTIME)) + sum(TRANSE, VDemTr.l(runCy,TRANSE,"ELC",YTIME)))/
@@ -432,7 +437,7 @@ VNewCapYearly.FX(runCy,"PGLHYD",YTIME)$TFIRST(YTIME) = +1E-10;
 VAvgCapFacRes.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =iAvailRate(PGALL,YTIME);
 
 
-VElecProdPowGenPlants.FX(runCy,pgall,YTIME)=iDataElecProd(runCy,pgall,YTIME)/1000;
+VElecProd.FX(runCy,pgall,YTIME)$DATAY(YTIME)=iDataElecProd(runCy,pgall,YTIME)/1000;
 
 
 VEndogScrapIndex.FX(runCy,PGALL,YTIME)$(not an(YTIME) ) = 1;
@@ -484,7 +489,7 @@ VLoadCurveConstr.L(runCy,YTIME)=0.21;
 
 VRenValue.FX(YTIME) = 0 ;
 
-VTotReqElecProd.fx(runCy,YTIME)$TFIRST(YTIME)=sum(pgall,VElecProdPowGenPlants.L(runCy,pgall,YTIME)$TFIRST(YTIME));
+VTotReqElecProd.fx(runCy,"%fBaseY%")=sum(pgall,VElecProd.L(runCy,pgall,"%fBaseY%"));
 display iDisFunConSize;
 
 loop an do !! start outer iteration loop (time steps)
