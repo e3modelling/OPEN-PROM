@@ -294,7 +294,7 @@ VLamda.UP(runCy,YTIME) = 1;
 iPassCarsMarkSat(runCy) = 0.7; 
 
 * Compute electricity consumed in heatpump plants, QElecConsHeatPla(runCy,INDDOM,YTIME)$time(ytime).
-VElecConsHeatPla(runCy,INDDOM,YTIME) =E= 1E-7;
+VElecConsHeatPla.FX(runCy,INDDOM,YTIME) =E= 1E-7;
 
 iTransChar(runCy,"RES_MEXTF",YTIME) = 0.04;
 iTransChar(runCy,"RES_MEXTV",YTIME) = 0.04;
