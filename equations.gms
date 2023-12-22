@@ -977,11 +977,6 @@ QElecIndPrices(runCy,YTIME)$TIME(YTIME)..
          VElecIndPrices(runCy,YTIME) =E=
         ( VElecIndPricesEst(runCy,YTIME) + sElecToSteRatioChp - SQRT( SQR(VElecIndPricesEst(runCy,YTIME)-sElecToSteRatioChp) + SQR(1E-4) ) )/2;
 
-*' * Compute electricity consumed in heatpump plants
-QElecConsHeatPla(runCy,INDDOM,YTIME)$time(ytime) ..
-         VElecConsHeatPla(runCy,INDDOM,YTIME)
-         =E=   1E-7;
-
 *' * Compute fuel consumption (Mtoe)
 QFuelCons(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF) $(not HEATPUMP(EF)) )..
          VConsFuel(runCy,DSBS,EF,YTIME)

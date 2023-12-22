@@ -108,7 +108,6 @@ QDemSub                            !! VDemSub(runCy,DSBS,YTIME)
 qElecConsInd                       !! vElecConsInd(runCy,YTIME)
 qDemInd                            !! vDemInd(runCy,YTIME)
 QElecIndPrices                     !! VElecIndPrices(runCy,YTIME)
-QElecConsHeatPla                   !! VElecConsHeatPla(runCy,INDDOM,YTIME)
 QFuelCons                          !! VConsFuel(runCy,DSBS,EF,YTIME)
 QElecIndPricesEst                  !! VElecIndPricesEst(runCy,YTIME)
 QFuePriSubChp                      !! VFuePriSubChp(runCy,DSBS,EF,TEA,YTIME)
@@ -293,6 +292,9 @@ VNumVeh.UP(runCy,YTIME) = 10000; !! upper bound of VNumVeh is 10000 million vehi
 VNumVeh.FX(runCy,YTIME)$(not An(YTIME)) = iActv(YTIME,runCy,"PC");
 VLamda.UP(runCy,YTIME) = 1;
 iPassCarsMarkSat(runCy) = 0.7; 
+
+* Compute electricity consumed in heatpump plants, QElecConsHeatPla(runCy,INDDOM,YTIME)$time(ytime).
+VElecConsHeatPla(runCy,INDDOM,YTIME) =E= 1E-7;
 
 iTransChar(runCy,"RES_MEXTF",YTIME) = 0.04;
 iTransChar(runCy,"RES_MEXTV",YTIME) = 0.04;
