@@ -185,6 +185,7 @@ $ondelim
 $include"./iImpExp.csv"
 $offdelim
 ;
+iImpExp(allCy,EFS,YTIME)	= iImpExp("MAR",EFS,YTIME);
 parameter iLoadFactorAdj(DSBS)	"Parameters for load factor adjustment iBaseLoadShareDem (1)" /
 IS 	0.9,
 NF 	0.92,
