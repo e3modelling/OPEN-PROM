@@ -453,7 +453,7 @@ vDummyObj                                               "Dummy maximisation vari
 ;
 
 Positive Variables
-VCarVal(allCy,NAP,YTIME)                                "Carbon value for all countries (Euro2005/tn CO2)"
+VCarVal(allCy,NAP,YTIME)                                "Carbon prices for all countries (Euro2005/tn CO2)"
 VRenValue(YTIME)                                        "Renewable value (Euro2005/KWh)"
 ;
 
