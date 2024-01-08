@@ -1719,8 +1719,7 @@ QCstCO2SeqCsts(runCy,YTIME)$TIME(YTIME)..
 
 *' The equation QTotGhgEmisAllCountrNap computes the total CO2 equivalent (CO2eq) greenhouse gas emissions in all countries
 *' per National Allocation Plan (NAP) sector for a specific year (YTIME). The result, VTotGhgEmisAllCountrNap, represents the 
-*' sum of CO2eq emissions for each NAP sector across all countries.
-*' The equation involves several components:
+*' sum of CO2eq emissions for each NAP sector across all countries.The equation involves several components:
 *' Consumption of Fuels (VConsFuel): The consumption of fuels in each demand subsector, excluding heat from heat pumps, is considered.
 *' The emissions are calculated based on the fuel consumption and the CO2 emission factor for each subsector.
 *' Transformation Input to Thermal Power Plants (VTransfInThermPowPls): The transformation input to thermal power plants is considered,
@@ -1772,7 +1771,6 @@ qHouseExpEne(runCy,YTIME)$TIME(YTIME)..
                  SUM(DSBS$HOU(DSBS),SUM(EF$SECTTECH(dSBS,EF),VConsRemSubEquip(runCy,DSBS,EF,YTIME)*(VFuelPriceSub(runCy,DSBS,EF,YTIME)-iEffValueInEuro(runCy,DSBS,YTIME)/
                  1000-iCo2EmiFac(runCy,"PG",EF,YTIME)*sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))/1000)))
                                           +VElecPriIndResNoCliPol(runCy,"R",YTIME)*VElecNonSub(runCy,"HOU",YTIME)/sTWhToMtoe;         
-
 
 *' * Prices
 
