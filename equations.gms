@@ -390,7 +390,7 @@ QNewInvDecis(runCy,YTIME)$TIME(YTIME)..
 *' For power plants without CCS (not CCS(PGALL)), the share in new equipment is determined by the ratio of the VScalWeibullSum value for the specific power plant to the
 *' overall new investment decision for power plants (VNewInvDecis). This ratio provides a proportionate share of new equipment for each power plant, considering factors such
 *' as material-specific scaling and economic considerations.For power plants with CCS (CCS(PGALL)), the share is determined by summing the shares of corresponding power plants
-*' without CCS (NOCCS$CCS_NOCCS(PGALL,NOCCS)). This allows for the allocation of shares in new equipment for CCS and non-CCS versions of the same power plant.
+*' without CCS (NOCCSCCS_NOCCS(PGALL,NOCCS)). This allows for the allocation of shares in new equipment for CCS and non-CCS versions of the same power plant.
 QPowPlaShaNewEquip(runCy,PGALL,YTIME)$(TIME(YTIME)) ..
         VPowPlaShaNewEquip(runCy,PGALL,YTIME)
              =E=
