@@ -810,18 +810,11 @@ $ondelim
 $include"./iDataInstCapElecFuel.csv"
 $offdelim
 ;
-
-iInstCapPast(allCy,PGALL,"2010") = iDataInstCapElecFuel(allCy,PGALL,"2010");
-iInstCapPast(allCy,PGALL,"2015") = iDataInstCapElecFuel(allCy,PGALL,"2015");
-iInstCapPast(allCy,PGALL,"2017") = iDataInstCapElecFuel(allCy,PGALL,"2017");
-
-
-iInstCapPast(allCy,PGALL,"2011") = iInstCapPast(allCy,PGALL,"2010") +(iInstCapPast(allCy,PGALL,"2015")- iInstCapPast(allCy,PGALL,"2010"))/5 ;
-iInstCapPast(allCy,PGALL,"2012") = iInstCapPast(allCy,PGALL,"2011") +(iInstCapPast(allCy,PGALL,"2015")- iInstCapPast(allCy,PGALL,"2010"))/5 ;
-iInstCapPast(allCy,PGALL,"2013") = iInstCapPast(allCy,PGALL,"2012") +(iInstCapPast(allCy,PGALL,"2015")- iInstCapPast(allCy,PGALL,"2010"))/5 ;
-iInstCapPast(allCy,PGALL,"2014") = iInstCapPast(allCy,PGALL,"2013") +(iInstCapPast(allCy,PGALL,"2015")- iInstCapPast(allCy,PGALL,"2010"))/5 ;
-iInstCapPast(allCy,PGALL,"2016") = iInstCapPast(allCy,PGALL,"2015") +(iInstCapPast(allCy,PGALL,"2017")- iInstCapPast(allCy,PGALL,"2015"))/2 ;
-
+table iInstCapPast(allCy,PGALL,YTIME)        "Installed capacity past (GW)"
+$ondelim
+$include"./iInstCapPast.csv"
+$offdelim
+;
 table iEnvPolicies(allCy,POLICIES_SET,YTIME) "Environmental policies on emissions constraints  and subsidy on renewables (Mtn CO2)"
 $ondelim
 $include"./iEnvPolicies.csv"

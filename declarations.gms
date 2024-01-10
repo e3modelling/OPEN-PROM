@@ -122,7 +122,6 @@ iCapCostTech(allCy,SBS,EF,YTIME)                      "Capital Cost of technolog
                                                  !! - For Industrial sectors (except Iron and Steel) is expressed in kEuro05/toe-year
                                                  !! - For Iron and Steel is expressed in kEuro05/tn-of-steel
                                                  !! - For Domestic Sectors is expressed in kEuro05/toe-year
-iInstCapPast(allCy,PGALL,YTIME)        "Installed capacity past (GW)"
 iDiffFuelsInSec(SBS) "auxiliary parameter holding the number of different fuels in a sector"
 iResElecIndex(allCy,YTIME)             "Residual for electricity Index (1)"
 iElastNonSubElec(allCy,SBS,ETYPES,YTIME) "Elasticities of Non Substitutable Electricity (1)"
