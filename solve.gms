@@ -20,6 +20,7 @@ VDemSub.FX(allCy,DSBS,YTIME)$TIME(YTIME) = VDemSub.L(allCy,DSBS,YTIME)$TIME(YTIM
 VFuelPriceSub.FX(allCy,SBS,EF,YTIME)$TIME(YTIME) = VFuelPriceSub.L(allCy,SBS,EF,YTIME)$TIME(YTIME);
 VFuelConsInclHP.FX(allCy,DSBS,EF,YTIME)$TIME(YTIME) = VFuelConsInclHP.L(allCy,DSBS,EF,YTIME)$TIME(YTIME);
 VTrnspActiv.FX(allCy,TRANSE,YTIME)$TIME(YTIME) = VTrnspActiv.L(allCy,TRANSE,YTIME)$TIME(YTIME);
+VLongAvgPowGenCost.FX(allCy,ESET,YTIME)$TIME(YTIME) = VLongAvgPowGenCost.L(allCy,ESET,YTIME)$TIME(YTIME);
 endloop;  !! close outer iteration loop (time steps)
 
 execute_unload "blabla.gdx";
