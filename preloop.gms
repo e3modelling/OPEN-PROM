@@ -58,7 +58,7 @@ QElectrPeakLoad                    !! VPowPlantSorting(runCy,PGALL,YTIME)
 QOverallCap                       !! VOverallCap(runCy,PGALL,YTIME)
 *QScalFacPlantDispatch              !! VScalFacPlaDisp
 *QElecChpPlants                    !! VElecChpPlants(runCy,YTIME) 
-*QNonChpElecProd                   !! VNonChpElecProd(runCy,YTIME) 
+QNonChpElecProd                   !! VNonChpElecProd(runCy,YTIME) 
 QReqElecProd                       !! VReqElecProd(runCy,YTIME) 
 QElecProdPowGenPlants              !! VElecProd(runCy,PGALL,YTIME)
 qSecContrTotChpProd                !! vSecContrTotChpProd(runCy,INDDOM,CHP,YTIME)
@@ -251,6 +251,7 @@ VReqElecProd.l(runCy,YTIME) = 0.01;
 *VReqElecProd.l(runCy,YTIME)=sum(hour, sum(CHP,VElecCapChpPla.L(runCy,CHP,YTIME)*exp(-VScalFacPlaDisp.L(runCy,HOUR,YTIME)/ sum(pgall$chptoeon(chp,pgall),VPowPlantSorting.L(runCy,PGALL,YTIME)))));
 *VPowPlantSorting.up(runCy,PGALL,YTIME)=0.001;
 *VPowPlantSorting.scale(runCy,PGALL,YTIME)=1;
+VScalFacPlaDisp.L(runCy,HOUR,YTIME) = 1.e-12;
 VElecDem.l(allCy,YTIME)=0.1;
 *VHourProdCostTech.lo(runCy,PGALL,HOUR,YTIME)=0.0001;
 *VHourProdCostTechNoCCS.lo(runCy,PGALL,HOUR,YTIME)=0.1;
@@ -400,7 +401,7 @@ VElecDem.FX(runCy,YTIME)$(not An(YTIME)) =  1/0.086 * ( iFinEneCons(runCy,"ELC",
                                              + iTotEneBranchCons(runCy,"ELC",YTIME) - (iFuelImports(runCy,"ELC",YTIME)-iFuelExprts(runCy,"ELC",YTIME)));
 
 
-VCorrBaseLoad.FX(runCy,YTIME) = iPeakBsLoadBy(runCy,"BASELOAD");
+VCorrBaseLoad.FX(runCy,YTIME)$(not An(YTIME)) = iPeakBsLoadBy(runCy,"BASELOAD");
 
 VLoadFacDom.FX(runCy,YTIME)$(datay(YTIME)) =
          (sum(INDDOM,VConsFuel.l(runCy,INDDOM,"ELC",YTIME)) + sum(TRANSE, VDemTr.l(runCy,TRANSE,"ELC",YTIME)))/
@@ -423,8 +424,8 @@ VPowerPlantNewEq.FX(runCy,PGALL,YTIME)$(AN(YTIME) $(NOT NOCCS(PGALL)) )=0;
 
 VNewInvDecis.FX(runCy,YTIME)$(NOT AN(YTIME))=1;
 
-VElecGenPlanCap.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  iInstCapPast(runCy,PGALL,YTIME);
-VElecGenPlantsCapac.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  iInstCapPast(runCy,PGALL,YTIME);
+VElecGenPlanCap.FX(runCy,PGALL,YTIME) = iInstCapPast(runCy,PGALL,YTIME);
+VElecGenPlantsCapac.FX(runCy,PGALL,YTIME) =  iInstCapPast(runCy,PGALL,YTIME);
 VOverallCap.FX(runCy,PGALL,YTIME)$TFIRST(YTIME) =  iInstCapPast(runCy,PGALL,YTIME)$TFIRST(YTIME);
 
 VNewCapYearly.FX(runCy,PGALL,"2011")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2011")- iInstCapPast(runCy,PGALL,"2010") +1E-10;
