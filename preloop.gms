@@ -386,7 +386,9 @@ VGrsInlConsNotEneBranch.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iGrossInConsNoEneB
 * author=derevirn
 VGrssInCons.FX(runCy,EFS,YTIME) = iGrosInlCons(runCy,EFS,YTIME);
 VTransfers.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iFeedTransfr(runCy,EFS,YTIME);
-VPrimProd.FX(runCy,PPRODEF,YTIME)$(not An(YTIME)) = iFuelPriPro(runCy,PPRODEF,YTIME);
+* FIXME: Add $(not An(YTIME)) to VPrimProd when QPrimProd is included to the model.
+* author=derevirn
+VPrimProd.FX(runCy,PPRODEF,YTIME) = iFuelPriPro(runCy,PPRODEF,YTIME);
 * FIXME: VEnCons to be added $(not An(YTIME)), when the QEneBrnchEneCons is activated.
 * author=redmonkeycloud
 VEnCons.FX(runCy,EFS,YTIME) = iTotEneBranchCons(runCy,EFS,YTIME);
