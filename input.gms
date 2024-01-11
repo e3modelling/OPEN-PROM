@@ -521,7 +521,7 @@ $offdelim
 iTotAvailCapBsYr(allCy) = sum(tfirst,iDataElecSteamGen(allCy,"TOTCAP",TFIRST))+sum(tfirst,iDataElecSteamGen(allCy,"CHP_CAP",TFIRST))*0.85;
 iElecImp(allCy,YTIME)=0;
 
-iScaleEndogScrap(allCy,PGALL,YTIME) = iPremReplacem(allCy,PGALL);
+iScaleEndogScrap(allCy,PGALL,YTIME) = 0.035;
 table iDecomPlants(allCy,PGALL,PG1_set)	            "Decomissioning Plants (MW)"
 $ondelim
 $include"./iDecomPlants.csv"
