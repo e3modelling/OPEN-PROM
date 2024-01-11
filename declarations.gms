@@ -122,7 +122,6 @@ iCapCostTech(allCy,SBS,EF,YTIME)                      "Capital Cost of technolog
                                                  !! - For Industrial sectors (except Iron and Steel) is expressed in kEuro05/toe-year
                                                  !! - For Iron and Steel is expressed in kEuro05/tn-of-steel
                                                  !! - For Domestic Sectors is expressed in kEuro05/toe-year
-iInstCapPast(allCy,PGALL,YTIME)        "Installed capacity past (GW)"
 iDiffFuelsInSec(SBS) "auxiliary parameter holding the number of different fuels in a sector"
 iResElecIndex(allCy,YTIME)             "Residual for electricity Index (1)"
 iElastNonSubElec(allCy,SBS,ETYPES,YTIME) "Elasticities of Non Substitutable Electricity (1)"
@@ -314,7 +313,7 @@ VChpElecProd(allCy,CHP,YTIME)	          "CHP electricity production (TWh)"
 VScalFacPlaDisp(allCy,HOUR,YTIME)	      "Scaling factor for plant dispatching	(1)"
 vSecContrTotChpProd(allCy,SBS,CHP,YTIME)  "Contribution of each sector in total CHP production (1)"	
 VPowPlantSorting(allCy,PGALL,YTIME)	      "Power plants sorting according to variable cost to decide the plant dispatching (1)"
-VElecProdPowGenPlants(allCy,PGALL,YTIME)  "Electricity production (TWh)"	
+VElecProd(allCy,PGALL,YTIME)  "Electricity production (TWh)"	
 VAvgCapFacRes(allCy,PGALL,YTIME)	      "The average capacity factor of RES (1)"
 VNewCapYearly(allCy,PGALL,YTIME)	      "The new capacity added every year (MW)"	
 VNonChpElecProd(allCy,YTIME)	          "Non CHP total electricity production (TWh)"				
@@ -418,7 +417,6 @@ VRefCapacity(allCy,YTIME)	                            "Refineries capacity (Mill
 VTransfOutputRefineries(allCy,EFS,YTIME)	            "Transformation output from refineries (Mtoe)"
 VTransfInputRefineries(allCy,EFS,YTIME)	                "Transformation input to refineries (Mtoe)"	
 VTransfOutputNuclear(allCy,EFS,YTIME)	                "Transformation output from nuclear plants (Mtoe)"
-VElecProd(allCy,PGALL,YTIME)	                        "Electricity production (TWh)"
 VTransfInNuclear(allCy,EFS,YTIME)	                    "Transformation input to nuclear plants (Mtoe)"		
 VTransfInThermPowPls(allCy,EFS,YTIME)	                "Transformation input to thermal power plants (Mtoe)"
 VTransfOutThermPowSta(allCy,EFS,YTIME)	                "Transformation output from thermal power stations (Mtoe)"
