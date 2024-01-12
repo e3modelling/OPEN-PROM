@@ -523,12 +523,16 @@ iTotAvailCapBsYr(allCy) = sum(tfirst,iDataElecSteamGen(allCy,"TOTCAP",TFIRST))+s
 iElecImp(allCy,YTIME)=0;
 
 iScaleEndogScrap(allCy,PGALL,YTIME) = iPremReplacem(allCy,PGALL);
+$ontext
 table iDecomPlants(allCy,PGALL,PG1_set)	            "Decomissioning Plants (MW)"
 $ondelim
 $include"./iDecomPlants.csv"
 $offdelim
 ;
-iPlantDecomSched(allCy,PGALL,YTIME) = iDecomPlants(allCy,PGALL,"DEC_10");
+$offtext
+* FIXME: To be reverted back to: iPlantDecomSched(allCy,PGALL,YTIME) = iDecomPlants(allCy,PGALL,"DEC_10");, when iDecomPlants is calibrated.
+* author=redmonkeycloud
+iPlantDecomSched(allCy,PGALL,YTIME) = 0 ;
 
 table iInvPlants(allCy,PGALL,PG1_set)	            "Investment Plants (MW)"
 $ondelim
