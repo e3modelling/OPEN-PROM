@@ -56,7 +56,7 @@ $evalGlobal fBaseY %fStartY% - %fPeriodOfYears%
 *** end of dollar commands section, no further flag definitions allowed 
 
 *' *** load input data files
-*$call "RScript ./loadMadratData.R"
+$call "RScript ./loadMadratData.R"
 
 $include sets.gms
 $include declarations.gms
