@@ -25,6 +25,8 @@ VElecIndPrices.FX(allCy,YTIME)$TIME(YTIME) = VElecIndPrices.L(allCy,YTIME)$TIME(
 VTotElecGenCap.FX(allCy,YTIME)$TIME(YTIME) = VTotElecGenCap.L(allCy,YTIME)$TIME(YTIME);
 VLonPowGenCostNoClimPol.FX(allCy,ESET,YTIME)$TIME(YTIME) = VLonPowGenCostNoClimPol.L(allCy,ESET,YTIME)$TIME(YTIME);
 VElecPeakLoad.FX(allCy,YTIME)$TIME(YTIME) = VElecPeakLoad.L(allCy,YTIME)$TIME(YTIME);
+VOverallCap.FX(runCy,PGALL,YTIME)$TIME(YTIME) = VOverallCap.L(runCy,PGALL,YTIME)$TIME(YTIME);
+VConsFuel.FX(runCy,DSBS,EF,YTIME)$TIME(YTIME) = VConsFuel.L(runCy,DSBS,EF,YTIME)$TIME(YTIME);
 endloop;  !! close outer iteration loop (time steps)
 
 execute_unload "blabla.gdx";
