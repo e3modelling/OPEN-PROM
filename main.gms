@@ -26,7 +26,7 @@ $onEmpty
 *' *** GAMS "flags" definitions
 *' 
 *' *** Maximum number of solver attempts
-$evalGlobal SolverTryMax 1
+$evalGlobal SolverTryMax 2
 *' *** Setting research mode (0) or development mode (1) to modify settings and parameters accordingly
 $setGlobal DevMode 0 
 
@@ -56,7 +56,7 @@ $evalGlobal fBaseY %fStartY% - %fPeriodOfYears%
 *** end of dollar commands section, no further flag definitions allowed 
 
 *' *** load input data files
-$call "RScript ./loadMadratData.R"
+*$call "RScript ./loadMadratData.R"
 
 $include sets.gms
 $include declarations.gms

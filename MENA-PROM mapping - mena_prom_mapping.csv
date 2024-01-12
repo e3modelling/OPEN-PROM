@@ -123,7 +123,6 @@ Variable,ELCPRICE_NOCV,VElecPriIndResNoCliPol,Electricity price to Industrial an
 Parameter,ELCPRICECHAR,iFacElecPriConsu,Factors affecting electricity prices to consumers,"CYall,ELCPCHAR,YTIME ","allCy,ELCPCHAR,YTIME",Prices
 Parameter,ElcpricecharPRN,iContrElecPrice,Parameters controlling electricity price,"ELCPCHAR,YTIME","allCy,ELCPCHAR,YTIME",Parameters for data transfering
 Variable,ELCPROD,VElecProd,Electricity production (TWh),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
-Variable,ELCPROD,VElecProdPowGenPlants,Electricity production (TWh),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Parameter,ELSB,iElaSub,Elasticities by subsectors (1),"CYALL,DSBS","allCy,DSBS",
 Parameter,ELSH,iShareAnnMilePlugInHybrid,Share of annual mileage of a plug-in hybrid which is covered by electricity (1),"CYall,YTIME","CYall,YTIME",Transport Sector specific Parameters
 Parameter,EN_PRD_INDX,REMOVED FROM OPEN-PROM,Energy productivity index used in R&D scenarios,"CYall,SBS,YTIME",,Macro economic indicators

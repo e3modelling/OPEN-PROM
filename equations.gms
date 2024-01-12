@@ -535,7 +535,7 @@ VReqElecProd(runCy,YTIME)
 *' from power generation plants based on the proportion of electricity demand that needs to be met by power generation plants, considering their
 *' capacity and the scaling factor for dispatching.
 QElecProdPowGenPlants(runCy,PGALL,YTIME)$TIME(YTIME)..
-         VElecProdPowGenPlants(runCy,PGALL,YTIME)
+         VElecProd(runCy,PGALL,YTIME)
                  =E=
          VNonChpElecProd(runCy,YTIME) /
          (VTotReqElecProd(runCy,YTIME)- VReqElecProd(runCy,YTIME))
@@ -572,8 +572,8 @@ qShareRenGrossElecProd(runCy,YTIME)$TIME(YTIME)..
                  vResShareGrossElecProd(runCy,YTIME) 
                  =E=
                  (SUM(PGNREN$((not sameas("PGASHYD",PGNREN)) $(not sameas("PGSHYD",PGNREN)) $(not sameas("PGLHYD",PGNREN)) ),
-                         VElecProdPowGenPlants(runCy,PGNREN,YTIME)))/
-                 (SUM(PGALL,VElecProdPowGenPlants(runCy,PGALL,YTIME))+ 
+                         VElecProd(runCy,PGNREN,YTIME)))/
+                 (SUM(PGALL,VElecProd(runCy,PGALL,YTIME))+ 
                  1e-3*sum(DSBS,sum(CHP$SECTTECH(DSBS,CHP),VConsFuel(runCy,DSBS,CHP,YTIME)))/8.6e-5*VElecIndPrices(runCy,YTIME) + 
                  1/0.086 *VNetImports(runCy,"ELC",YTIME));         
 
@@ -677,7 +677,7 @@ QLongPowGenCost(runCy,ESET,YTIME)$TIME(YTIME)..
          VLongAvgPowGenCost(runCy,ESET,YTIME)
                  =E=
          (
-         SUM(PGALL, VElecProdPowGenPlants(runCy,PGALL,YTIME)*VLongPowGenCost(runCy,PGALL,ESET,YTIME))
+         SUM(PGALL, VElecProd(runCy,PGALL,YTIME)*VLongPowGenCost(runCy,PGALL,ESET,YTIME))
 
         +
          sum(CHP, VAvgElcProCHP(runCy,CHP,YTIME)*VChpElecProd(runCy,CHP,YTIME))
@@ -717,7 +717,7 @@ QLonPowGenCostNoClimPol(runCy,ESET,YTIME)$TIME(YTIME)..
          VLonPowGenCostNoClimPol(runCy,ESET,YTIME)
                  =E=
          (
-         SUM(PGALL, (VElecProdPowGenPlants(runCy,PGALL,YTIME))*VLonAvgPowGenCostNoClimPol(runCy,PGALL,ESET,YTIME))
+         SUM(PGALL, (VElecProd(runCy,PGALL,YTIME))*VLonAvgPowGenCostNoClimPol(runCy,PGALL,ESET,YTIME))
 
         +
          sum(CHP, VAvgElcProCHP(runCy,CHP,YTIME)*VChpElecProd(runCy,CHP,YTIME))
@@ -756,7 +756,7 @@ qShortPowGenCost(runCy,ESET,YTIME)$TIME(YTIME)..
                  =E=
         (
         sum(PGALL,
-        VElecProdPowGenPlants(runCy,PGALL,YTIME)*
+        VElecProd(runCy,PGALL,YTIME)*
         (
         sum(PGEF$PGALLtoEF(PGALL,PGEF),
         (iVarCost(PGALL,YTIME)/1000+(VFuelPriceSub(runCy,"PG",PGEF,YTIME)/1.2441+
