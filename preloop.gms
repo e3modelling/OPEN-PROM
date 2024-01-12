@@ -18,7 +18,7 @@ qCurrRenPot                        !! vCurrRenPot(runCy,PGRENEF,YTIME)
 QChpElecPlants                     !! VElecCapChpPla(runCy,CHP,YTIME)
 *QLambda                           !! VLoadCurveConstr(runCy,YTIME)
 QElecDem                           !! VElecDem(runCy,YTIME)
-*QEstBaseLoad                      !! VEstBaseLoad(runCy,YTIME)
+QEstBaseLoad                      !! VEstBaseLoad(runCy,YTIME)
 QLoadFacDom                        !! VLoadFacDom(runCy,YTIME)
 QElecPeakLoad                      !! VElecPeakLoad(runCy,YTIME)
 QBslMaxmLoad                       !! VBslMaxmLoad(runCy,YTIME)
@@ -108,7 +108,6 @@ QDemSub                            !! VDemSub(runCy,DSBS,YTIME)
 qElecConsInd                       !! vElecConsInd(runCy,YTIME)
 qDemInd                            !! vDemInd(runCy,YTIME)
 QElecIndPrices                     !! VElecIndPrices(runCy,YTIME)
-QElecConsHeatPla                   !! VElecConsHeatPla(runCy,INDDOM,YTIME)
 QFuelCons                          !! VConsFuel(runCy,DSBS,EF,YTIME)
 QElecIndPricesEst                  !! VElecIndPricesEst(runCy,YTIME)
 QFuePriSubChp                      !! VFuePriSubChp(runCy,DSBS,EF,TEA,YTIME)
@@ -148,9 +147,9 @@ QDistrLosses                       !! VLosses(runCy,EFS,YTIME)
 *QGrsInlConsNotEneBranch           !! VGrsInlConsNotEneBranch(runCy,EFS,YTIME)
 *QGrssInCons                       !! VGrssInCons(runCy,EFS,YTIME)            
 *QPrimProd                         !! VPrimProd(runCy,PPRODEF,YTIME)
-*QFakeExp                          !! VExportsFake(runCy,EFS,YTIME)
-*QFakeImprts                       !! VFkImpAllFuelsNotNatGas(runCy,EFS,YTIME)
-*QNetImports                       !! VNetImports(runCy,EFS,YTIME)
+QFakeExp                          !! VExportsFake(runCy,EFS,YTIME)
+QFakeImprts                       !! VFkImpAllFuelsNotNatGas(runCy,EFS,YTIME)
+QNetImports                       !! VNetImports(runCy,EFS,YTIME)
 *QEneBrnchEneCons                  !! VEnCons(runCy,EFS,YTIME)
 
 
@@ -300,6 +299,9 @@ VNumVeh.FX(runCy,YTIME)$(not An(YTIME)) = iActv(YTIME,runCy,"PC");
 VLamda.UP(runCy,YTIME) = 1;
 iPassCarsMarkSat(runCy) = 0.7; 
 
+* Compute electricity consumed in heatpump plants, QElecConsHeatPla(runCy,INDDOM,YTIME)$time(ytime).
+VElecConsHeatPla.FX(runCy,INDDOM,YTIME) = 1E-7;
+
 iTransChar(runCy,"RES_MEXTF",YTIME) = 0.04;
 iTransChar(runCy,"RES_MEXTV",YTIME) = 0.04;
 
@@ -386,9 +388,13 @@ VRefCapacity.FX(runCy,YTIME)$(not An(YTIME)) = iRefCapacity(runCy,YTIME);
 VTransfOutputRefineries.FX(runCy,EFS,YTIME)$(EFtoEFA(EFS,"LQD") $(not An(YTIME))) = iTransfOutputRef(runCy,EFS,YTIME);
 VTransfInputRefineries.FX(runCy,"CRO",YTIME)$(not An(YTIME)) = iTransfInputRef(runCy,"CRO",YTIME);
 VGrsInlConsNotEneBranch.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iGrossInConsNoEneBra(runCy,EFS,YTIME);
-VGrssInCons.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iGrosInlCons(runCy,EFS,YTIME);
+* FIXME: Add $(not An(YTIME)) to VGrssInCons when QGrssInCons is included to the model.
+* author=derevirn
+VGrssInCons.FX(runCy,EFS,YTIME) = iGrosInlCons(runCy,EFS,YTIME);
 VTransfers.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iFeedTransfr(runCy,EFS,YTIME);
-VPrimProd.FX(runCy,PPRODEF,YTIME)$(not An(YTIME)) = iFuelPriPro(runCy,PPRODEF,YTIME);
+* FIXME: Add $(not An(YTIME)) to VPrimProd when QPrimProd is included to the model.
+* author=derevirn
+VPrimProd.FX(runCy,PPRODEF,YTIME) = iFuelPriPro(runCy,PPRODEF,YTIME);
 * FIXME: VEnCons to be added $(not An(YTIME)), when the QEneBrnchEneCons is activated.
 * author=redmonkeycloud
 VEnCons.FX(runCy,EFS,YTIME) = iTotEneBranchCons(runCy,EFS,YTIME);
@@ -481,8 +487,6 @@ VTransfInputRefineries.FX(runCy,EFS,YTIME)$(not sameas("CRO",EFS)) = 0;
 VTransfOutputNuclear.FX(runCy,EFS,YTIME)$(not sameas("ELC",EFS)) = 0;
 VTransfInNuclear.FX(runCy,EFS,YTIME)$(not sameas("NUC",EFS)) = 0;
 VTransfInThermPowPls.FX(runCy,EFS,YTIME)$(not PGEF(EFS)) = 0;
-* FIXME: This is a test issue that was generated automatically
-* author=derevirn
 VExportsFake.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
 VFkImpAllFuelsNotNatGas.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
 

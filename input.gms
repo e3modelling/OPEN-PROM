@@ -185,6 +185,7 @@ $ondelim
 $include"./iImpExp.csv"
 $offdelim
 ;
+iImpExp(allCy,EFS,YTIME)	= iImpExp("MAR",EFS,YTIME);
 parameter iLoadFactorAdj(DSBS)	"Parameters for load factor adjustment iBaseLoadShareDem (1)" /
 IS 	0.9,
 NF 	0.92,
@@ -671,7 +672,7 @@ iFuelImports(allCy,EFS,YTIME)$(not An(YTIME)) = iDataImports(allCy,EFS,YTIME);
 
 iNetImp(allCy,EFS,YTIME) = iDataImports(allCy,"ELC",YTIME);
 
-iGrosInlCons(allCy,EFS,YTIME)$(not An(YTIME)) = iDataGrossInlCons(allCy,EFS,YTIME);
+iGrosInlCons(allCy,EFS,YTIME) = iDataGrossInlCons(allCy,EFS,YTIME);
 iGrossInConsNoEneBra(runCy,EFS,YTIME) = iGrosInlCons(runCy,EFS,YTIME) + iTotEneBranchCons(runCy,EFS,YTIME)$EFtoEFA(EFS,"LQD")
                                                - iTotEneBranchCons(runCy,EFS,YTIME)$(not EFtoEFA(EFS,"LQD"));
 
