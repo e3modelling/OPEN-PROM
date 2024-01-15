@@ -430,8 +430,8 @@ VPowerPlantNewEq.FX(runCy,PGALL,YTIME)$(AN(YTIME) $(NOT NOCCS(PGALL)) )=0;
 
 VNewInvDecis.FX(runCy,YTIME)$(NOT AN(YTIME))=1;
 
-VElecGenPlanCap.FX(runCy,PGALL,YTIME) = iInstCapPast(runCy,PGALL,YTIME);
-VElecGenPlantsCapac.FX(runCy,PGALL,YTIME) =  iInstCapPast(runCy,PGALL,YTIME);
+VElecGenPlanCap.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = iInstCapPast(runCy,PGALL,YTIME);
+VElecGenPlantsCapac.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  iInstCapPast(runCy,PGALL,YTIME);
 VOverallCap.FX(runCy,PGALL,YTIME)$TFIRST(YTIME) =  iInstCapPast(runCy,PGALL,YTIME)$TFIRST(YTIME);
 
 VNewCapYearly.FX(runCy,PGALL,"2011")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2011")- iInstCapPast(runCy,PGALL,"2010") +1E-10;
