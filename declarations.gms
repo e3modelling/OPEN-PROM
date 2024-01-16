@@ -60,7 +60,6 @@ iPlantDecomSched(allCy,PGALL,YTIME)	     "Decided plant decomissioning schedule 
 iDecInvPlantSched(allCy,PGALL,YTIME)     "Decided plant investment schedule (GW)"
 iMinRenPotential(allCy,PGRENEF,YTIME)	 "Minimum renewable potential (GW)"	
 iMaxRenPotential(allCy,PGRENEF,YTIME)	 "Maximum enewable potential (GW)"
-iMatFacPlaAvailCap(allCy,PGALL,YTIME)	 "Maturity factor related to plant available capacity (1)"
 iMatureFacPlaDisp(allCy,PGALL,YTIME)	 "Maturity factor related to plant dispatching (1)"		
 iEffValueInEuro(allCy,SBS,YTIME)	     "Efficiency value (Euro05/toe)"
 iFacElecPriConsu(allCy,ELCPCHAR,YTIME)	 "Factors affecting electricity prices to consumers	(1)"
