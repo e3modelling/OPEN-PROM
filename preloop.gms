@@ -39,7 +39,7 @@ QProdCostTechPreReplac             !! VProdCostTechPreReplac(runCy,PGALL,YTIME)
 QProdCostTechPreReplacAvail        !! VProdCostTechPreReplacAvail(runCy,PGALL,PGALL2,YTIME)
 *QEndogScrapIndex                  !! VEndogScrapIndex(runCy,PGALL,YTIME)
 QElecGenNoChp                      !! VElecGenNoChp(runCy,YTIME)
-*QGapPowerGenCap                   !! VGapPowerGenCap(runCy,YTIME)
+QGapPowerGenCap                   !! VGapPowerGenCap(runCy,YTIME)
 qScalWeibull                       !! vScalWeibull(runCy,PGALL,HOUR,YTIME) 
 QRenPotSupplyCurve                 !! VRenPotSupplyCurve(runCy,PGRENEF,YTIME)
 QMaxmAllowRenPotent                !! VMaxmAllowRenPotent(runCy,PGRENEF,YTIME)
@@ -48,13 +48,13 @@ QMnmAllowRenPot                    !! VMnmAllowRenPot(runCy,PGRENEF,YTIME)
 *QScalWeibullSum                   !! VScalWeibullSum(runCy,PGALL,YTIME)
 *QNewInvDecis                      !! VNewInvDecis(runCy,YTIME)
 *QPowPlaShaNewEquip                !! VPowPlaShaNewEquip(runCy,PGALL,YTIME)
-*QElecGenCapacity                  !! VElecGenPlantsCapac(runCy,PGALL,YTIME)
-*QElecGenCap                       !! VElecGenPlanCap(runCy,PGALL,YTIME)
+QElecGenCapacity                  !! VElecGenPlantsCapac(runCy,PGALL,YTIME)
+QElecGenCap                       !! VElecGenPlanCap(runCy,PGALL,YTIME)
 QVarCostTechnology                 !! VVarCostTechnology(runCy,PGALL,YTIME)
 QElecPeakLoads                     !! VElecPeakLoads(runCy,YTIME) 
 QElectrPeakLoad                    !! VPowPlantSorting(runCy,PGALL,YTIME)
-*QNewCapYearly                     !! VNewCapYearly(runCy,PGALL,YTIME)
-*QAvgCapFacRes                     !! VAvgCapFacRes(runCy,PGALL,YTIME)
+QNewCapYearly                     !! VNewCapYearly(runCy,PGALL,YTIME)
+QAvgCapFacRes                     !! VAvgCapFacRes(runCy,PGALL,YTIME)
 QOverallCap                       !! VOverallCap(runCy,PGALL,YTIME)
 *QScalFacPlantDispatch              !! VScalFacPlaDisp
 *QElecChpPlants                    !! VElecChpPlants(runCy,YTIME) 
@@ -419,7 +419,9 @@ VElecPeakLoad.FX(runCy,YTIME)$(datay(YTIME)) = VElecDem.l(runCy,YTIME)/(VLoadFac
 VTotElecGenCap.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
 VElecGenNoChp.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
 VElecCapChpPla.FX(runCy,CHP,YTIME)$(not An(YTIME)) = iHisChpGrCapData(runCy,CHP,YTIME);
-VPowPlaShaNewEquip.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) )=0;
+* FIXME: Temporary fix. To be reversed back to VPowPlaShaNewEquip.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) )=0, when QPowPlaShaNewEquip is activated.
+* author=redmonkeycloud
+VPowPlaShaNewEquip.FX(runCy,PGALL,YTIME) = 0;
 
 VHourProdCostTech.FX(runCy,PGALL,HOUR,YTIME)$((NOT AN(YTIME)))=0;
 
@@ -430,8 +432,8 @@ VPowerPlantNewEq.FX(runCy,PGALL,YTIME)$(AN(YTIME) $(NOT NOCCS(PGALL)) )=0;
 
 VNewInvDecis.FX(runCy,YTIME)$(NOT AN(YTIME))=1;
 
-VElecGenPlanCap.FX(runCy,PGALL,YTIME) = iInstCapPast(runCy,PGALL,YTIME);
-VElecGenPlantsCapac.FX(runCy,PGALL,YTIME) =  iInstCapPast(runCy,PGALL,YTIME);
+*VElecGenPlanCap.FX(runCy,PGALL,YTIME) = iInstCapPast(runCy,PGALL,YTIME);
+*VElecGenPlantsCapac.FX(runCy,PGALL,YTIME) =  iInstCapPast(runCy,PGALL,YTIME);
 VOverallCap.FX(runCy,PGALL,YTIME)$TFIRST(YTIME) =  iInstCapPast(runCy,PGALL,YTIME)$TFIRST(YTIME);
 
 VNewCapYearly.FX(runCy,PGALL,"2011")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2011")- iInstCapPast(runCy,PGALL,"2010") +1E-10;
@@ -448,8 +450,10 @@ VAvgCapFacRes.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =iAvailRate(PGALL,YTIME);
 
 VElecProd.FX(runCy,pgall,YTIME)$DATAY(YTIME)=iDataElecProd(runCy,pgall,YTIME)/1000;
 
+* FIXME: Temporary fix. To be reversed back to VEndogScrapIndex.FX(runCy,PGALL,YTIME)$(not an(YTIME) ) = 1, when QEndogScrapIndex is activated.
+* author=redmonkeycloud
+VEndogScrapIndex.FX(runCy,PGALL,YTIME) = 1;
 
-VEndogScrapIndex.FX(runCy,PGALL,YTIME)$(not an(YTIME) ) = 1;
 VEndogScrapIndex.FX(runCy,PGSCRN,YTIME) = 1;            !! premature replacement it is not allowed for all new plants
 
 
