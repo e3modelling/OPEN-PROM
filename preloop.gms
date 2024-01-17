@@ -421,7 +421,7 @@ VElecGenNoChp.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
 VElecCapChpPla.FX(runCy,CHP,YTIME)$(not An(YTIME)) = iHisChpGrCapData(runCy,CHP,YTIME);
 * FIXME: Temporary fix. To be reversed back to VPowPlaShaNewEquip.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) )=0, when QPowPlaShaNewEquip is activated.
 * author=redmonkeycloud
-VPowPlaShaNewEquip.FX(runCy,PGALL,YTIME) = 0;
+VPowPlaShaNewEquip.FX(runCy,PGALL,YTIME) = 0.5;
 
 VHourProdCostTech.FX(runCy,PGALL,HOUR,YTIME)$((NOT AN(YTIME)))=0;
 
