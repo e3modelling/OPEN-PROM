@@ -306,7 +306,8 @@ qScalWeibull(runCy,PGALL,HOUR,YTIME)$((not CCS(PGALL))$TIME(YTIME))..
 
 *' The equation calculates the renewable potential supply curve (VRenPotSupplyCurve) for a specified year (YTIME). It involves the following terms:
 *' iMinRenPotential(runCy,PGRENEF,YTIME): Represents the minimum renewable potential for the given renewable energy form (PGRENEF) and country (runCy) in the specified year.
-*' VCarVal(runCy,"Trade",YTIME): Refers to the trade value associated with the country (runCy) in the specified year for the purpose of renewable potential estimation.
+*' VCarVal(runCy,"Trade",YTIME): Refers to the carbon price value associated with the country (runCy) in the specified year for the purpose of renewable potential estimation,
+*' the "Trade" attribute refers to tradable permits (if carbon pricing exists in the form of an emissions trading scheme).
 *' iMaxRenPotential(runCy,PGRENEF,YTIME): Denotes the maximum renewable potential for the specified renewable energy form (PGRENEF) and country (runCy) in the given year.
 *' The renewable potential supply curve is then calculated by linearly interpolating between the minimum and maximum renewable potentials based on the trade value.
 *' The trade value is normalized by dividing it by 70. The equation essentially defines a linear relationship between the trade value and the renewable potential within
@@ -356,7 +357,7 @@ QRenTechMatMult(runCy,PGALL,YTIME)$TIME(YTIME)..
            )$PGREN(PGALL);  
 
 *' The equation calculates a temporary variable, VScalWeibullSum, which is used to facilitate scaling in the Weibull equation. The scaling is influenced by three main factors:
-*' Material Factor for Planned Available Capacity (iMatFacPlaAvailCap): This factor represents the material-specific influence on the planned available capacity for a power
+*' Maturity Factor for Planned Available Capacity (iMatFacPlaAvailCap): This factor represents the material-specific influence on the planned available capacity for a power
 *' plant. It accounts for the capacity planning aspect of the power generation technology.
 *' Renewable Technologies Maturity Multiplier (VRenTechMatMult): This multiplier reflects the maturity level of renewable technologies. It adjusts the scaling based on how
 *' mature and established the renewable technology is, with a higher maturity leading to a larger multiplier.
@@ -486,7 +487,7 @@ VOverallCap(runCy,PGALL,YTIME-1)
 /VAvgCapFacRes(runCy,PGALL,YTIME-1))$PGREN(PGALL);
 
 *' This equation calculates the scaling factor for plant dispatching (VScalFacPlantDispatch) in a specific country (runCy), hour of the day (HOUR),
-*' and time period (YTIME). The scaling factor is used in the optimization model for determining the dispatch order of different power plants during a particular hour.
+*' and time period (YTIME). The scaling factor for determining the dispatch order of different power plants during a particular hour.
 QScalFacPlantDispatch(runCy,HOUR,YTIME)$TIME(YTIME)..
          sum(PGALL,
                  (VOverallCap(runCy,PGALL,YTIME)+

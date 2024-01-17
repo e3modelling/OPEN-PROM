@@ -522,28 +522,29 @@ $offdelim
 iTotAvailCapBsYr(allCy) = sum(tfirst,iDataElecSteamGen(allCy,"TOTCAP",TFIRST))+sum(tfirst,iDataElecSteamGen(allCy,"CHP_CAP",TFIRST))*0.85;
 iElecImp(allCy,YTIME)=0;
 
-iScaleEndogScrap(allCy,PGALL,YTIME) = 0.035;
+iScaleEndogScrap(allCy,PGALL,YTIME) = iPremReplacem(allCy,PGALL);
+$ontext
 table iDecomPlants(allCy,PGALL,PG1_set)	            "Decomissioning Plants (MW)"
 $ondelim
 $include"./iDecomPlants.csv"
 $offdelim
 ;
-iPlantDecomSched(allCy,PGALL,YTIME) = iDecomPlants(allCy,PGALL,"DEC_10");
+$offtext
 
+* FIXME: To be reverted back to: iPlantDecomSched(allCy,PGALL,YTIME) = iDecomPlants(allCy,PGALL,"DEC_10");, when iDecomPlants is calibrated.
+* author=redmonkeycloud
+iPlantDecomSched(allCy,PGALL,YTIME) = 0 ;
+$ontext
 table iInvPlants(allCy,PGALL,PG1_set)	            "Investment Plants (MW)"
 $ondelim
 $include"./iInvPlants.csv"
 $offdelim
 ;
-iDecInvPlantSched(allCy,PGALL,"2010") = iInvPlants(allCy,PGALL,"INV_10");
-iDecInvPlantSched(allCy,PGALL,"2011") = iInvPlants(allCy,PGALL,"INV_11");
-iDecInvPlantSched(allCy,PGALL,"2012") = iInvPlants(allCy,PGALL,"INV_12");
-iDecInvPlantSched(allCy,PGALL,"2013") = iInvPlants(allCy,PGALL,"INV_13");
-iDecInvPlantSched(allCy,PGALL,"2014") = iInvPlants(allCy,PGALL,"INV_14");
-iDecInvPlantSched(allCy,PGALL,"2034") = iInvPlants(allCy,PGALL,"INV_15");
-iDecInvPlantSched(allCy,PGALL,"2018") = iInvPlants(allCy,PGALL,"INV_18");
-iDecInvPlantSched(allCy,PGALL,"2019") = iInvPlants(allCy,PGALL,"INV_19");
+$offtext
 
+* FIXME: Add country-specific planned investment data when they become available.
+* author=redmonkeycloud
+iDecInvPlantSched(runCy,PGALL,YTIME) = 0 ;
 table iCummMxmInstRenCap(allCy,PGRENEF,YTIME)	 "Cummulative maximum potential installed Capacity for Renewables (GW)"
 $ondelim
 $include"./iMaxResPot.csv"
