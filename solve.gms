@@ -27,6 +27,12 @@ VLonPowGenCostNoClimPol.FX(allCy,ESET,YTIME)$TIME(YTIME) = VLonPowGenCostNoClimP
 VElecPeakLoad.FX(allCy,YTIME)$TIME(YTIME) = VElecPeakLoad.L(allCy,YTIME)$TIME(YTIME);
 VOverallCap.FX(runCy,PGALL,YTIME)$TIME(YTIME) = VOverallCap.L(runCy,PGALL,YTIME)$TIME(YTIME);
 VConsFuel.FX(runCy,DSBS,EF,YTIME)$TIME(YTIME) = VConsFuel.L(runCy,DSBS,EF,YTIME)$TIME(YTIME);
+VEndogScrapIndex.FX(runCy,PGALL,YTIME)$TIME(YTIME) = VEndogScrapIndex.L(runCy,PGALL,YTIME)$TIME(YTIME);
+VElecGenPlantsCapac.FX(runCy,PGALL,YTIME)$TIME(YTIME) = VElecGenPlantsCapac.L(runCy,PGALL,YTIME)$TIME(YTIME);
+VElecGenPlanCap.FX(runCy,PGALL,YTIME)$TIME(YTIME) = VElecGenPlanCap.L(runCy,PGALL,YTIME)$TIME(YTIME);
+VNewCapYearly.FX(runCy,PGALL,YTIME)$TIME(YTIME) = VNewCapYearly.L(runCy,PGALL,YTIME)$TIME(YTIME);
+VAvgCapFacRes.FX(runCy,PGALL,YTIME)$TIME(YTIME) = VAvgCapFacRes.L(runCy,PGALL,YTIME)$TIME(YTIME);
+VOverallCap.FX(runCy,PGALL,YTIME)$TIME(YTIME) = VOverallCap.L(runCy,PGALL,YTIME)$TIME(YTIME);
 endloop;  !! close outer iteration loop (time steps)
 
 execute_unload "blabla.gdx";

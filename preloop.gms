@@ -16,7 +16,7 @@ model openprom /
 
 qCurrRenPot                        !! vCurrRenPot(runCy,PGRENEF,YTIME)
 QChpElecPlants                     !! VElecCapChpPla(runCy,CHP,YTIME)
-*QLambda                           !! VLoadCurveConstr(runCy,YTIME)
+QLambda                           !! VLoadCurveConstr(runCy,YTIME)
 QElecDem                           !! VElecDem(runCy,YTIME)
 QEstBaseLoad                      !! VEstBaseLoad(runCy,YTIME)
 QLoadFacDom                        !! VLoadFacDom(runCy,YTIME)
@@ -37,17 +37,17 @@ QVarCostTech                       !! VVarCostTech(runCy,PGALL,YTIME)
 QVarCostTechNotPGSCRN              !! VVarCostTechNotPGSCRN(runCy,PGALL,YTIME)
 QProdCostTechPreReplac             !! VProdCostTechPreReplac(runCy,PGALL,YTIME)
 QProdCostTechPreReplacAvail        !! VProdCostTechPreReplacAvail(runCy,PGALL,PGALL2,YTIME)
-*QEndogScrapIndex                  !! VEndogScrapIndex(runCy,PGALL,YTIME)
+QEndogScrapIndex                  !! VEndogScrapIndex(runCy,PGALL,YTIME)
 QElecGenNoChp                      !! VElecGenNoChp(runCy,YTIME)
 QGapPowerGenCap                   !! VGapPowerGenCap(runCy,YTIME)
 qScalWeibull                       !! vScalWeibull(runCy,PGALL,HOUR,YTIME) 
 QRenPotSupplyCurve                 !! VRenPotSupplyCurve(runCy,PGRENEF,YTIME)
 QMaxmAllowRenPotent                !! VMaxmAllowRenPotent(runCy,PGRENEF,YTIME)
 QMnmAllowRenPot                    !! VMnmAllowRenPot(runCy,PGRENEF,YTIME)
-*QRenTechMatMult                   !! VRenTechMatMult(runCy,PGALL,YTIME)
-*QScalWeibullSum                   !! VScalWeibullSum(runCy,PGALL,YTIME)
-*QNewInvDecis                      !! VNewInvDecis(runCy,YTIME)
-*QPowPlaShaNewEquip                !! VPowPlaShaNewEquip(runCy,PGALL,YTIME)
+QRenTechMatMult                   !! VRenTechMatMult(runCy,PGALL,YTIME)
+QScalWeibullSum                   !! VScalWeibullSum(runCy,PGALL,YTIME)
+QNewInvDecis                      !! VNewInvDecis(runCy,YTIME)
+QPowPlaShaNewEquip                !! VPowPlaShaNewEquip(runCy,PGALL,YTIME)
 QElecGenCapacity                  !! VElecGenPlantsCapac(runCy,PGALL,YTIME)
 QElecGenCap                       !! VElecGenPlanCap(runCy,PGALL,YTIME)
 QVarCostTechnology                 !! VVarCostTechnology(runCy,PGALL,YTIME)
@@ -406,22 +406,20 @@ VExportsFake.FX(runCy,"NGS",YTIME)$(not An(YTIME)) = iFuelExprts(runCy,"NGS",YTI
 VElecDem.FX(runCy,YTIME)$(not An(YTIME)) =  1/0.086 * ( iFinEneCons(runCy,"ELC",YTIME) + sum(NENSE, iFuelConsPerFueSub(runCy,NENSE,"ELC",YTIME)) + iDistrLosses(runCy,"ELC",YTIME)
                                              + iTotEneBranchCons(runCy,"ELC",YTIME) - (iFuelImports(runCy,"ELC",YTIME)-iFuelExprts(runCy,"ELC",YTIME)));
 
-
+VCorrBaseLoad.L(runCy,YTIME) = 0.5;
 VCorrBaseLoad.FX(runCy,YTIME)$(not An(YTIME)) = iPeakBsLoadBy(runCy,"BASELOAD");
 
 VLoadFacDom.FX(runCy,YTIME)$(datay(YTIME)) =
          (sum(INDDOM,VConsFuel.l(runCy,INDDOM,"ELC",YTIME)) + sum(TRANSE, VDemTr.l(runCy,TRANSE,"ELC",YTIME)))/
          (sum(INDDOM,VConsFuel.l(runCy,INDDOM,"ELC",YTIME)/iLoadFacElecDem(INDDOM)) + sum(TRANSE, VDemTr.l(runCy,TRANSE,"ELC",YTIME)/
          iLoadFacElecDem(TRANSE)));
-
+VElecPeakLoad.L(runCy,YTIME) = 1;
 VElecPeakLoad.FX(runCy,YTIME)$(datay(YTIME)) = VElecDem.l(runCy,YTIME)/(VLoadFacDom.l(runCy,YTIME)*8.76);
 
 VTotElecGenCap.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
 VElecGenNoChp.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
 VElecCapChpPla.FX(runCy,CHP,YTIME)$(not An(YTIME)) = iHisChpGrCapData(runCy,CHP,YTIME);
-* FIXME: Temporary fix. To be reversed back to VPowPlaShaNewEquip.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) )=0, when QPowPlaShaNewEquip is activated.
-* author=redmonkeycloud
-VPowPlaShaNewEquip.FX(runCy,PGALL,YTIME) = 0.5;
+VPowPlaShaNewEquip.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) )=0;
 
 VHourProdCostTech.FX(runCy,PGALL,HOUR,YTIME)$((NOT AN(YTIME)))=0;
 
@@ -452,7 +450,7 @@ VElecProd.FX(runCy,pgall,YTIME)$DATAY(YTIME)=iDataElecProd(runCy,pgall,YTIME)/10
 
 * FIXME: Temporary fix. To be reversed back to VEndogScrapIndex.FX(runCy,PGALL,YTIME)$(not an(YTIME) ) = 1, when QEndogScrapIndex is activated.
 * author=redmonkeycloud
-VEndogScrapIndex.FX(runCy,PGALL,YTIME) = 1;
+VEndogScrapIndex.FX(runCy,PGALL,YTIME)$(not an(YTIME) ) = 1;
 
 VEndogScrapIndex.FX(runCy,PGSCRN,YTIME) = 1;            !! premature replacement it is not allowed for all new plants
 
@@ -496,14 +494,10 @@ VFkImpAllFuelsNotNatGas.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
 
 VScalFacPlaDisp.LO(runCy, HOUR, YTIME)=-1;
 VLoadCurveConstr.LO(runCy,YTIME)=0;
-* FIXME: To be reverted back to VLoadCurveConstr.L(runCy,YTIME)=0.21 , when QLambda is activated.
-* author=redmonkeycloud
-VLoadCurveConstr.FX(runCy,YTIME)=0.21;
-
+VLoadCurveConstr.L(runCy,YTIME)=0.21;
 VRenValue.FX(YTIME) = 0 ;
-
 VTotReqElecProd.fx(runCy,"%fBaseY%")=sum(pgall,VElecProd.L(runCy,pgall,"%fBaseY%"));
-display iDisFunConSize;
+display VProdCostTechPreReplacAvail.l;
 
 loop an do !! start outer iteration loop (time steps)
    s = s + 1;

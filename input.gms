@@ -522,7 +522,52 @@ $offdelim
 iTotAvailCapBsYr(allCy) = sum(tfirst,iDataElecSteamGen(allCy,"TOTCAP",TFIRST))+sum(tfirst,iDataElecSteamGen(allCy,"CHP_CAP",TFIRST))*0.85;
 iElecImp(allCy,YTIME)=0;
 
-iScaleEndogScrap(allCy,PGALL,YTIME) = iPremReplacem(allCy,PGALL);
+parameter iScaleEndogScrap(PGALL) "Scale parameter for endogenous scrapping applied to the sum of full costs (1)"/
+*CTHLGN 0.035,
+*CTHHCL 0.035,
+*CTHRFO 0.035,
+*CTHNGS 0.035,
+CTHBMSWAS 0.035,
+ATHLGN 0.035,
+ATHHCL 0.035,
+ATHRFO 0.035,
+ATHNGS 0.035,
+ATHBMSWAS 0.035,
+SUPCRL 0.035,
+SUPCR 0.035,
+FBCLGN 0.035,
+FBCHCL 0.035,
+IGCCLGN 0.035,
+IGCCHCL 0.035,
+IGCCBMS 0.035,
+CCCGT 0.035,
+*ACCHT 0.035,
+ACCGT 0.035,
+*CGTGDO 0.035,
+*CGTNGS 0.035,
+AGTGDO 0.035,
+AGTNGS 0.035,
+*ICEH2 0.035,
+*FC1 0.035,
+*FC2 0.035,
+*PGNUC 0.035,
+PGLHYD 0.035,
+PGSHYD 0.035,
+PGWND 0.035,
+PGSOL 0.035,
+*PGOTHREN 0.035,
+PGASHYD 0.035,
+PGAWND 0.035,
+PGASOL 0.035,
+PGANUC 0.035,
+PGAPSS 0.035,
+PGAPSSL 0.035,
+PGACGSL 0.035,
+PGACGS 0.035,
+PGAGGS 0.035,
+PGAWNO 0.035,
+PGADPV 0.035,
+PGAOTHREN 0.035/;
 $ontext
 table iDecomPlants(allCy,PGALL,PG1_set)	            "Decomissioning Plants (MW)"
 $ondelim
@@ -574,12 +619,12 @@ iMinRenPotential(allCy,"DPV",YTIME)  = iCummMnmInstRenCap(allCy,"DPV",YTIME);
 iMinRenPotential(allCy,"BMSWAS",YTIME) = iCummMnmInstRenCap(allCy,"BMSWAS",YTIME);
 iMinRenPotential(allCy,"OTHREN",YTIME) = iCummMnmInstRenCap(allCy,"OTHREN",YTIME);
 *$ontext
-table iMatFacCap(allCy,PGALL,YTIME)	 "Maturty factors on Capacity (1)"
+table iMatFacPlaAvailCap(allCy,PGALL,YTIME)	 "Maturity factor related to plant available capacity (1)"
 $ondelim
-$include"./iMatFacCap.csv"
+$include"./iMatFacPlaAvailCap.csv"
 $offdelim
 ;
-iMatFacPlaAvailCap(allCy,PGALL,YTIME)$an(YTIME) = iMatFacCap(allCy,PGALL,YTIME);
+
 iMatFacPlaAvailCap(allCy,CCS,YTIME)$an(YTIME)  =0;
 *$offtext
 
@@ -817,6 +862,7 @@ $ondelim
 $include"./iInstCapPast.csv"
 $offdelim
 ;
+display iInstCapPast;
 table iEnvPolicies(allCy,POLICIES_SET,YTIME) "Environmental policies on emissions constraints  and subsidy on renewables (Mtn CO2)"
 $ondelim
 $include"./iEnvPolicies.csv"
