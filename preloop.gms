@@ -419,9 +419,7 @@ VElecPeakLoad.FX(runCy,YTIME)$(datay(YTIME)) = VElecDem.l(runCy,YTIME)/(VLoadFac
 VTotElecGenCap.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
 VElecGenNoChp.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
 VElecCapChpPla.FX(runCy,CHP,YTIME)$(not An(YTIME)) = iHisChpGrCapData(runCy,CHP,YTIME);
-* FIXME: Temporary fix. To be reversed back to VPowPlaShaNewEquip.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) )=0, when QPowPlaShaNewEquip is activated.
-* author=redmonkeycloud
- VPowPlaShaNewEquip.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) )=0;
+VPowPlaShaNewEquip.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) )=0;
 
 VHourProdCostTech.FX(runCy,PGALL,HOUR,YTIME)$((NOT AN(YTIME)))=0;
 
@@ -496,12 +494,8 @@ VFkImpAllFuelsNotNatGas.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
 
 VScalFacPlaDisp.LO(runCy, HOUR, YTIME)=-1;
 VLoadCurveConstr.LO(runCy,YTIME)=0;
-* FIXME: To be reverted back to VLoadCurveConstr.L(runCy,YTIME)=0.21 , when QLambda is activated.
-* author=redmonkeycloud
 VLoadCurveConstr.L(runCy,YTIME)=0.21;
-
 VRenValue.FX(YTIME) = 0 ;
-
 VTotReqElecProd.fx(runCy,"%fBaseY%")=sum(pgall,VElecProd.L(runCy,pgall,"%fBaseY%"));
 display VProdCostTechPreReplacAvail.l;
 
