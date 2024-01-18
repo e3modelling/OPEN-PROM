@@ -50,12 +50,6 @@ iElecImp(allCy,YTIME)	                  "Electricity Imports (1)"
 iPlantAvailRate(allCy,PGALL,YTIME)	      "Plant availability rate (1)"
 iTotAvailCapBsYr(allCy)	            "Total installed available capacity in base year (GW)"
 iCO2CaptRate(allCy,PGALL,YTIME)	          "Plant CO2 capture rate (1)"
-iScaleEndogScrap(allCy,PGALL,YTIME)	"Scale parameter for endogenous scrapping applied to the sum of full costs (1)"	
-iPremReplacem(allCy,PGALL)	        "Premature replacement (1)"/
-$ondelim
-$include"./iPremReplacem.csv"
-$offdelim
-/
 iPlantDecomSched(allCy,PGALL,YTIME)	     "Decided plant decomissioning schedule (GW)"
 iDecInvPlantSched(allCy,PGALL,YTIME)     "Decided plant investment schedule (GW)"
 iMinRenPotential(allCy,PGRENEF,YTIME)	 "Minimum renewable potential (GW)"	

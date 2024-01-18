@@ -421,7 +421,7 @@ VElecGenNoChp.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
 VElecCapChpPla.FX(runCy,CHP,YTIME)$(not An(YTIME)) = iHisChpGrCapData(runCy,CHP,YTIME);
 * FIXME: Temporary fix. To be reversed back to VPowPlaShaNewEquip.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) )=0, when QPowPlaShaNewEquip is activated.
 * author=redmonkeycloud
-VPowPlaShaNewEquip.FX(runCy,PGALL,YTIME) = 0.5;
+ VPowPlaShaNewEquip.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) )=0;
 
 VHourProdCostTech.FX(runCy,PGALL,HOUR,YTIME)$((NOT AN(YTIME)))=0;
 
@@ -452,7 +452,7 @@ VElecProd.FX(runCy,pgall,YTIME)$DATAY(YTIME)=iDataElecProd(runCy,pgall,YTIME)/10
 
 * FIXME: Temporary fix. To be reversed back to VEndogScrapIndex.FX(runCy,PGALL,YTIME)$(not an(YTIME) ) = 1, when QEndogScrapIndex is activated.
 * author=redmonkeycloud
-VEndogScrapIndex.FX(runCy,PGALL,YTIME) = 1;
+VEndogScrapIndex.FX(runCy,PGALL,YTIME)$(not an(YTIME) ) = 1;
 
 VEndogScrapIndex.FX(runCy,PGSCRN,YTIME) = 1;            !! premature replacement it is not allowed for all new plants
 
@@ -503,7 +503,7 @@ VLoadCurveConstr.L(runCy,YTIME)=0.21;
 VRenValue.FX(YTIME) = 0 ;
 
 VTotReqElecProd.fx(runCy,"%fBaseY%")=sum(pgall,VElecProd.L(runCy,pgall,"%fBaseY%"));
-display iDisFunConSize;
+display VProdCostTechPreReplacAvail.l;
 
 loop an do !! start outer iteration loop (time steps)
    s = s + 1;
