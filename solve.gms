@@ -32,7 +32,6 @@ VElecGenPlantsCapac.FX(runCy,PGALL,YTIME)$TIME(YTIME) = VElecGenPlantsCapac.L(ru
 VElecGenPlanCap.FX(runCy,PGALL,YTIME)$TIME(YTIME) = VElecGenPlanCap.L(runCy,PGALL,YTIME)$TIME(YTIME);
 VNewCapYearly.FX(runCy,PGALL,YTIME)$TIME(YTIME) = VNewCapYearly.L(runCy,PGALL,YTIME)$TIME(YTIME);
 VAvgCapFacRes.FX(runCy,PGALL,YTIME)$TIME(YTIME) = VAvgCapFacRes.L(runCy,PGALL,YTIME)$TIME(YTIME);
-VOverallCap.FX(runCy,PGALL,YTIME)$TIME(YTIME) = VOverallCap.L(runCy,PGALL,YTIME)$TIME(YTIME);
 endloop;  !! close outer iteration loop (time steps)
 
 execute_unload "blabla.gdx";
