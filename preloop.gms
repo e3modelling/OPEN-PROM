@@ -56,7 +56,7 @@ QElectrPeakLoad                    !! VPowPlantSorting(runCy,PGALL,YTIME)
 QNewCapYearly                      !! VNewCapYearly(runCy,PGALL,YTIME)
 QAvgCapFacRes                      !! VAvgCapFacRes(runCy,PGALL,YTIME)
 QOverallCap                        !! VOverallCap(runCy,PGALL,YTIME)
-*QScalFacPlantDispatch              !! VScalFacPlaDisp
+*QScalFacPlantDispatch             !! VScalFacPlaDisp
 QElecChpPlants                     !! VElecChpPlants(runCy,YTIME) 
 QNonChpElecProd                    !! VNonChpElecProd(runCy,YTIME) 
 *QReqElecProd                      !! VReqElecProd(runCy,YTIME) 
