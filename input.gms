@@ -47,7 +47,7 @@ $ondelim
 $include "./iDisc.csv"
 $offdelim
 ;
-* FIXME: iCo2EmiFacAllSbs(EF) derive the emission factors with mrprom
+* FIXME: Drive the emission factors with mrprom
 * author=giannou
 parameter iCo2EmiFacAllSbs(EF) "CO2 emission factors (kgCO2/kgoe fuel burned)" /
 LGN 4.15330622,
@@ -613,7 +613,7 @@ $ondelim
 $include"./iContrElecPrice.csv"
 $offdelim
 ;
-* FIXME: iContrElecPrice values will be pinned down during model calibration, using MAR values for now
+* FIXME: Values will be pinned down during model calibration, using MAR values for now
 * author=giannou
 iFacElecPriConsu(allCy,ELCPCHAR,YTIME)$an(YTIME) = iContrElecPrice("MAR",ELCPCHAR,YTIME);
 iScenarioPri(WEF,"NOTRADE",YTIME)=0;
