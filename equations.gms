@@ -272,7 +272,7 @@ QElecGenNoChp(runCy,YTIME)$TIME(YTIME)..
 VTotElecGenCap(runCy,YTIME) - SUM(CHP,VElecCapChpPla(runCy,CHP,YTIME)*0.85);      
 
 *' In essence, the equation evaluates the difference between the current and expected power generation capacity, accounting for various factors such as planned capacity,
-*' decommissioning schedules, and endogenous scrapping. The square root term introduces a level of error tolerance in the calculation.
+*' decommissioning schedules, and endogenous scrapping. The square root term introduces a degree of tolerance in the calculation.
 QGapPowerGenCap(runCy,YTIME)$TIME(YTIME)..
          VGapPowerGenCap(runCy,YTIME)
              =E=
@@ -1305,7 +1305,7 @@ QAvgElcProCostCHP(runCy,CHP,YTIME)$TIME(YTIME)..
 *' (VAvgVarProdCostCHP). The equation involves a summation over demand subsectors (INDDOM), where the variable cost per CHP plant is calculated based on fuel
 *' consumption and the variable cost of electricity production (VProCostCHPDem). The resulting average variable cost is expressed in Euro per kilowatt-hour (Euro/KWh).
 *' The conditional statement: $SUM(INDDOM2,VConsFuel.L(runCy,INDDOM2,CHP,YTIME-1))+0$(NOT SUM(INDDOM2,VConsFuel.L(runCy,INDDOM2,CHP,YTIME-1))), ensures that the
-*' denominator in the calculation is not zero, avoiding division by zero errors.
+*' denominator in the calculation is not zero, avoiding division by zero issues.
 QAvgVarElecProd(runCy,CHP,YTIME)$(TIME(YTIME) ) ..
          VAvgVarProdCostCHP(runCy,CHP,YTIME)
          =E=
