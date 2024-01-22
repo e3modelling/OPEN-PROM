@@ -523,28 +523,21 @@ iTotAvailCapBsYr(allCy) = sum(tfirst,iDataElecSteamGen(allCy,"TOTCAP",TFIRST))+s
 iElecImp(allCy,YTIME)=0;
 iScaleEndogScrap(PGALL) = 0.035;
 
-$ontext
-table iDecomPlants(allCy,PGALL,PG1_set)	            "Decomissioning Plants (MW)"
+
+table iDecomPlants(allCy,PGALL,YTIME)	            "Decomissioning Plants (MW)"
 $ondelim
 $include"./iDecomPlants.csv"
 $offdelim
 ;
-$offtext
+iPlantDecomSched(allCy,PGALL,YTIME) = iDecomPlants(allCy,PGALL,YTIME);
 
-* FIXME: To be reverted back to: iPlantDecomSched(allCy,PGALL,YTIME) = iDecomPlants(allCy,PGALL,"DEC_10");, when iDecomPlants is calibrated.
-* author=redmonkeycloud
-iPlantDecomSched(allCy,PGALL,YTIME) = 0 ;
-$ontext
-table iInvPlants(allCy,PGALL,PG1_set)	            "Investment Plants (MW)"
+table iInvPlants(allCy,PGALL,YTIME)	            "Investment Plants (MW)"
 $ondelim
 $include"./iInvPlants.csv"
 $offdelim
 ;
-$offtext
+iDecInvPlantSched(allCy,PGALL,YTIME) = iInvPlants(allCy,PGALL,YTIME);
 
-* FIXME: Add country-specific planned investment data when they become available.
-* author=redmonkeycloud
-iDecInvPlantSched(runCy,PGALL,YTIME) = 0 ;
 table iCummMxmInstRenCap(allCy,PGRENEF,YTIME)	 "Cummulative maximum potential installed Capacity for Renewables (GW)"
 $ondelim
 $include"./iMaxResPot.csv"
