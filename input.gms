@@ -521,53 +521,8 @@ $offdelim
 ;
 iTotAvailCapBsYr(allCy) = sum(tfirst,iDataElecSteamGen(allCy,"TOTCAP",TFIRST))+sum(tfirst,iDataElecSteamGen(allCy,"CHP_CAP",TFIRST))*0.85;
 iElecImp(allCy,YTIME)=0;
+iScaleEndogScrap(PGALL) = 0.035;
 
-parameter iScaleEndogScrap(PGALL) "Scale parameter for endogenous scrapping applied to the sum of full costs (1)"/
-*CTHLGN 0.035,
-*CTHHCL 0.035,
-*CTHRFO 0.035,
-*CTHNGS 0.035,
-CTHBMSWAS 0.035,
-ATHLGN 0.035,
-ATHHCL 0.035,
-ATHRFO 0.035,
-ATHNGS 0.035,
-ATHBMSWAS 0.035,
-SUPCRL 0.035,
-SUPCR 0.035,
-FBCLGN 0.035,
-FBCHCL 0.035,
-IGCCLGN 0.035,
-IGCCHCL 0.035,
-IGCCBMS 0.035,
-CCCGT 0.035,
-*ACCHT 0.035,
-ACCGT 0.035,
-*CGTGDO 0.035,
-*CGTNGS 0.035,
-AGTGDO 0.035,
-AGTNGS 0.035,
-*ICEH2 0.035,
-*FC1 0.035,
-*FC2 0.035,
-*PGNUC 0.035,
-PGLHYD 0.035,
-PGSHYD 0.035,
-PGWND 0.035,
-PGSOL 0.035,
-*PGOTHREN 0.035,
-PGASHYD 0.035,
-PGAWND 0.035,
-PGASOL 0.035,
-PGANUC 0.035,
-PGAPSS 0.035,
-PGAPSSL 0.035,
-PGACGSL 0.035,
-PGACGS 0.035,
-PGAGGS 0.035,
-PGAWNO 0.035,
-PGADPV 0.035,
-PGAOTHREN 0.035/;
 $ontext
 table iDecomPlants(allCy,PGALL,PG1_set)	            "Decomissioning Plants (MW)"
 $ondelim
@@ -640,12 +595,15 @@ $offtext
 * author=derevirn
 iMatureFacPlaDisp(allCy,PGALL,YTIME)$an(YTIME) = 1;
 iCO2CaptRate(runCy,PGALL,YTIME) = 0; 
-
+iMxmShareChpElec(runCy,YTIME) = 0.1;
+$ontext
 table iMxmShareChpElec(allCy,YTIME)	 "Maximum share of CHP electricity in a country (1)"
 $ondelim
 $include"./iMxmShareChpElec.csv"
 $offdelim
 ;
+$offtext 
+
 iEffValueInEuro(allCy,SBS,YTIME)=0;
 table iContrElecPrice(allCy,ELCPCHAR,YTIME)	 "Parameters controlling electricity price (1)"
 $ondelim

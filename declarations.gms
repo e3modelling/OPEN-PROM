@@ -115,11 +115,13 @@ iCapCostTech(allCy,SBS,EF,YTIME)                      "Capital Cost of technolog
                                                  !! - For Industrial sectors (except Iron and Steel) is expressed in kEuro05/toe-year
                                                  !! - For Iron and Steel is expressed in kEuro05/tn-of-steel
                                                  !! - For Domestic Sectors is expressed in kEuro05/toe-year
-iDiffFuelsInSec(SBS) "auxiliary parameter holding the number of different fuels in a sector"
-iResElecIndex(allCy,YTIME)             "Residual for electricity Index (1)"
-iElastNonSubElec(allCy,SBS,ETYPES,YTIME) "Elasticities of Non Substitutable Electricity (1)"
-iIndChar(allCy,INDSE,Indu_Scon_Set)               "Industry sector charactetistics (various)"
-iNetImp(allCy,EFS,YTIME)              "Net imports (Mtoe)"
+iDiffFuelsInSec(SBS)                                "auxiliary parameter holding the number of different fuels in a sector"
+iResElecIndex(allCy,YTIME)                          "Residual for electricity Index (1)"
+iElastNonSubElec(allCy,SBS,ETYPES,YTIME)            "Elasticities of Non Substitutable Electricity (1)"
+iIndChar(allCy,INDSE,Indu_Scon_Set)                 "Industry sector charactetistics (various)"
+iNetImp(allCy,EFS,YTIME)                            "Net imports (Mtoe)"
+iMxmShareChpElec(allCy,YTIME)	                    "Maximum share of CHP electricity in a country (1)"
+iScaleEndogScrap(PGALL)                             "Scale parameter for endogenous scrapping applied to the sum of full costs (1)"
 ;
 
 
