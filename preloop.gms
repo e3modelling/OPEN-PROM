@@ -447,9 +447,6 @@ VAvgCapFacRes.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =iAvailRate(PGALL,YTIME);
 
 
 VElecProd.FX(runCy,pgall,YTIME)$DATAY(YTIME)=iDataElecProd(runCy,pgall,YTIME)/1000;
-
-* FIXME: Temporary fix. To be reversed back to VEndogScrapIndex.FX(runCy,PGALL,YTIME)$(not an(YTIME) ) = 1, when QEndogScrapIndex is activated.
-* author=redmonkeycloud
 VEndogScrapIndex.FX(runCy,PGALL,YTIME)$(not an(YTIME) ) = 1;
 
 VEndogScrapIndex.FX(runCy,PGSCRN,YTIME) = 1;            !! premature replacement it is not allowed for all new plants
