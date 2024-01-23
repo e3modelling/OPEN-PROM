@@ -280,7 +280,7 @@ Variable,GAPTR,VGapTranspFillNewTech,Gap in transport activity to be filled by n
 Parameter,GDP,iGDP,GDP (billion US$2015),"CYAll,YTIME","YTIME,allCy",Macro economic indicators
 Variable,GIC,VGrssInCons,Gross Inland Consumption (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",Variables
 Variable,GICP,VGrsInlConsNotEneBranch,Gross Inland Consumption not including consumption of energy branch (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",Variables
-Parameter,H,iScaleEndogScrap,Scale parameter for endogenous scrapping applied to the sum of full costs,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",Power Generation Parameters
+Parameter,H,iScaleEndogScrap,Scale parameter for endogenous scrapping applied to the sum of full costs,"PGALL,YTIME","allCy,PGALL,YTIME",Power Generation Parameters
 Parameter,H2_PRICE,iHydrogenPri,Total Hydrogen Cost Per Sector (Euro/toe),"CYALL,SBS,YTIME ","allCy,SBS,YTIME",Power Generation Parameters
 Parameter,IMP_OF_EXP_COUNTRIES,iImpExp,Imports of exporting countries usually zero (1),"CYALL,EFS,YTIME","allCy,EFS,YTIME",PARAMEETERS RELATED TO THE NEW IMPORT MECHANISM (USED FOR NATURAL GAS IMPORTS+EXPORTS)
 Variable,IMPO_TZ,VFkImpAllFuelsNotNatGas,Fake Imports for all fuels except natural gas (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",Variables
@@ -337,7 +337,7 @@ Parameter,PG_MAXLOADSH,iLoadFactorAdjMxm,Parameter for load factor adjustment iM
 Parameter,PG_Mfc,iMatFacCap,Maturty factors on Capacity (1),"PGALL,YTIME","allCy,PGALL,YTIME",Parameters for data transfering
 Parameter,PG_Mfl,iMatureFacLoad,Maturty factors on Load (1),"PGALL,YTIME","allCy,PGALL,YTIME",Parameters for data transfering
 Parameter,PG_Oth,iDataElecSteamGen,Various Data releated to electricity and steam generation,"PGOTH,YTIME","PGOTH,YTIME",Parameters for data transfering
-Parameter,PG_PMR,iPremReplacem,Premature replacement,"PGALL,PMR_SET","allCy,PGALL",Parameters for data transfering
+Parameter,PG_PMR,REMOVED FROM OPEN-PROM,Premature replacement,"PGALL,PMR_SET",,Parameters for data transfering
 Parameter,PG_RENAVAIL,iSuppPlantCapFac,Availability Factors (1),"PGRENEF,YTIME","PGRENEF,YTIME",Declare Parameters for data transfering
 Parameter,PG_RencMAX,iCummMxmInstRenCap,Cummulative potential installed Capacity for Renewables (in GW) - maximum potential,"PGRENEF,YTIME","allCy,PGRENEF,YTIME",Parameters for data transfering
 Parameter,PG_RenCMIN,iCummMnmInstRenCap,Cummulative potential installed Capacity for Renewables (in GW) - minimum potential,"PGRENEF,YTIME","allCy,PGRENEF,YTIME",Parameters for data transfering

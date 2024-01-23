@@ -47,7 +47,7 @@ $ondelim
 $include "./iDisc.csv"
 $offdelim
 ;
-* FIXME: iCo2EmiFacAllSbs(EF) derive the emission factors with mrprom
+* FIXME: Drive the emission factors with mrprom
 * author=giannou
 parameter iCo2EmiFacAllSbs(EF) "CO2 emission factors (kgCO2/kgoe fuel burned)" /
 LGN 4.15330622,
@@ -522,7 +522,8 @@ $offdelim
 iTotAvailCapBsYr(allCy) = sum(tfirst,iDataElecSteamGen(allCy,"TOTCAP",TFIRST))+sum(tfirst,iDataElecSteamGen(allCy,"CHP_CAP",TFIRST))*0.85;
 iElecImp(allCy,YTIME)=0;
 
-iScaleEndogScrap(allCy,PGALL,YTIME) = iPremReplacem(allCy,PGALL);
+parameter iScaleEndogScrap(PGALL) "Scale parameter for endogenous scrapping applied to the sum of full costs (1)";
+iScaleEndogScrap(PGALL) = 0.035;
 $ontext
 table iDecomPlants(allCy,PGALL,PG1_set)	            "Decomissioning Plants (MW)"
 $ondelim
@@ -574,12 +575,12 @@ iMinRenPotential(allCy,"DPV",YTIME)  = iCummMnmInstRenCap(allCy,"DPV",YTIME);
 iMinRenPotential(allCy,"BMSWAS",YTIME) = iCummMnmInstRenCap(allCy,"BMSWAS",YTIME);
 iMinRenPotential(allCy,"OTHREN",YTIME) = iCummMnmInstRenCap(allCy,"OTHREN",YTIME);
 *$ontext
-table iMatFacCap(allCy,PGALL,YTIME)	 "Maturty factors on Capacity (1)"
+table iMatFacPlaAvailCap(allCy,PGALL,YTIME)	 "Maturity factor related to plant available capacity (1)"
 $ondelim
-$include"./iMatFacCap.csv"
+$include"./iMatFacPlaAvailCap.csv"
 $offdelim
 ;
-iMatFacPlaAvailCap(allCy,PGALL,YTIME)$an(YTIME) = iMatFacCap(allCy,PGALL,YTIME);
+
 iMatFacPlaAvailCap(allCy,CCS,YTIME)$an(YTIME)  =0;
 *$offtext
 
@@ -596,18 +597,23 @@ $offtext
 iMatureFacPlaDisp(allCy,PGALL,YTIME)$an(YTIME) = 1;
 iCO2CaptRate(runCy,PGALL,YTIME) = 0; 
 
+parameter iMxmShareChpElec "Maximum share of CHP electricity in a country (1)";
+iMxmShareChpElec(runCy,YTIME) = 0.1;
+$ontext
 table iMxmShareChpElec(allCy,YTIME)	 "Maximum share of CHP electricity in a country (1)"
 $ondelim
 $include"./iMxmShareChpElec.csv"
 $offdelim
 ;
+$offtext
+
 iEffValueInEuro(allCy,SBS,YTIME)=0;
 table iContrElecPrice(allCy,ELCPCHAR,YTIME)	 "Parameters controlling electricity price (1)"
 $ondelim
 $include"./iContrElecPrice.csv"
 $offdelim
 ;
-* FIXME: iContrElecPrice values will be pinned down during model calibration, using MAR values for now
+* FIXME: Values will be pinned down during model calibration, using MAR values for now
 * author=giannou
 iFacElecPriConsu(allCy,ELCPCHAR,YTIME)$an(YTIME) = iContrElecPrice("MAR",ELCPCHAR,YTIME);
 iScenarioPri(WEF,"NOTRADE",YTIME)=0;
@@ -817,6 +823,7 @@ $ondelim
 $include"./iInstCapPast.csv"
 $offdelim
 ;
+display iInstCapPast;
 table iEnvPolicies(allCy,POLICIES_SET,YTIME) "Environmental policies on emissions constraints  and subsidy on renewables (Mtn CO2)"
 $ondelim
 $include"./iEnvPolicies.csv"

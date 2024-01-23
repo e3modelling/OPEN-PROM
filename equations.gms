@@ -12,8 +12,8 @@ qCurrRenPot(runCy,PGRENEF,YTIME)$TIME(YTIME)..
          ( VMaxmAllowRenPotent(runCy,PGRENEF,YTIME) + iMinRenPotential(runCy,PGRENEF,YTIME))/2;
 
 *' This equation computes the electric capacity of Combined Heat and Power (CHP) plants. The capacity is calculated in gigawatts (GW) and is based on several factors,
-*' including the consumption of fuel in the industrial sector (INDDOM), the electricity prices in the industrial sector (VElecIndPrices), the availability rate of power
-*' generation plants (iAvailRate), and the utilization rate of CHP plants (iUtilRateChpPlants). The result represents the electric capacity of CHP plants in GW.
+*' including the consumption of fuel in the industrial sector, the electricity prices in the industrial sector, the availability rate of power
+*' generation plants, and the utilization rate of CHP plants. The result represents the electric capacity of CHP plants in GW.
 QChpElecPlants(runCy,CHP,YTIME)$TIME(YTIME)..
          VElecCapChpPla(runCy,CHP,YTIME)
          =E=
@@ -25,14 +25,14 @@ QChpElecPlants(runCy,CHP,YTIME)$TIME(YTIME)..
 *' and the ratio of the differences in electricity demand and corrected base load to the difference between peak load and corrected base load. It plays a role in shaping
 *' the load curve for effective electricity demand modeling.
 QLambda(runCy,YTIME)$TIME(YTIME)..
-         (1 - exp( -VLoadCurveConstr(runCy,YTIME)*sGwToTwhPerYear))  / VLoadCurveConstr(runCy,YTIME)
+         (1 - exp( -VLoadCurveConstr(runCy,YTIME)*sGwToTwhPerYear))  / (VLoadCurveConstr(runCy,YTIME)+0.001)
              =E=
          (VElecDem(runCy,YTIME) - sGwToTwhPerYear*VCorrBaseLoad(runCy,YTIME))
          / (VElecPeakLoad(runCy,YTIME) - VCorrBaseLoad(runCy,YTIME));
 
 *' The equation calculates the total electricity demand by summing the components of final energy consumption in electricity, final non-energy consumption in electricity,
-*' distribution losses, and final consumption in the energy sector for electricity, and then subtracting net imports. The result is normalized using the conversion factor 
-*' 1/sTWhToMtoe, which converts terawatt-hours (TWh) to million tonnes of oil equivalent (Mtoe). The formula provides a comprehensive measure of the factors contributing
+*' distribution losses, and final consumption in the energy sector for electricity, and then subtracting net imports. The result is normalized using a conversion factor 
+*' which converts terawatt-hours (TWh) to million tonnes of oil equivalent (Mtoe). The formula provides a comprehensive measure of the factors contributing
 *' to the total electricity demand.
 QElecDem(runCy,YTIME)$TIME(YTIME)..
          VElecDem(runCy,YTIME)
@@ -111,7 +111,7 @@ QTotElecGenCap(runCy,YTIME)$TIME(YTIME)..
         =E=
      VTotElecGenCapEst(runCy,YTIME);  
 
-*' The equation calculates the hourly production cost of a power generation plant (PGALL) used in investment decisions. The cost is determined based on various factors,
+*' The equation calculates the hourly production cost of a power generation plant used in investment decisions. The cost is determined based on various factors,
 *' including the discount rate, gross capital cost, fixed operation and maintenance cost, availability rate, variable cost, renewable value, and fuel prices.
 *' The production cost is normalized per unit of electricity generated (kEuro2005/kWh) and is considered for each hour of the day. The equation includes considerations
 *' for renewable plants (excluding certain types) and fossil fuel plants.
@@ -132,14 +132,13 @@ QHourProdCostInv(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME)) ..
                          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
                          *sTWhToMtoe/iPlantEffByType(runCy,PGALL,YTIME))$(not PGREN(PGALL));
 
-*' Compute hourly production cost used in investment decisions excluding CCS
-*' The equation QHourProdCostInvDec calculates the hourly production cost for
-*' a given technology without carbon capture and storage (CCS) investments. 
-*' The result, VHourProdCostTechNoCCS, is expressed in Euro per kilowatt-hour (Euro/KWh).
-*' The equation is based on the power plant's share in new equipment (VPowerPlantNewEq) and
-*' the hourly production cost of technology without CCS (VHourProdCostTech). Additionally, 
-*' it considers the contribution of other technologies with CCS (CCS_NOCCS) by summing their
-*' shares in new equipment (VPowerPlaShrNewEq) multiplied by their respective hourly production
+*' The equation calculates the hourly production cost for
+*' a given technology without carbon capture and storage investments. 
+*' The result is expressed in Euro per kilowatt-hour (Euro/KWh).
+*' The equation is based on the power plant's share in new equipment and
+*' the hourly production cost of technology without CCS . Additionally, 
+*' it considers the contribution of other technologies with CCS by summing their
+*' shares in new equipment multiplied by their respective hourly production
 *' costs. The equation reflects the cost dynamics associated with technology investments and provides
 *' insights into the hourly production cost for power generation without CCS.
 QHourProdCostInvDec(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME) $NOCCS(PGALL)) ..
@@ -147,41 +146,38 @@ QHourProdCostInvDec(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME) $NOCCS(PGALL)) ..
          VPowerPlantNewEq(runCy,PGALL,YTIME)*VHourProdCostTech(runCy,PGALL,HOUR,YTIME)+
          sum(CCS$CCS_NOCCS(CCS,PGALL), VPowerPlaShrNewEq(runCy,CCS,YTIME)*VHourProdCostTech(runCy,CCS,HOUR,YTIME)); 
 
-*' Compute gamma parameter used in CCS/No CCS decision tree
 *' The equation reflects a dynamic relationship where the sensitivity
 *' to CCS acceptance is influenced by the carbon prices of different countries.
-*' The resulting VSensCcs provides a measure of the sensitivity of CCS acceptance
+*' The result provides a measure of the sensitivity of CCS acceptance
 *' based on the carbon values in the previous year.
 QGammaInCcsDecTree(runCy,YTIME)$TIME(YTIME)..
          VSensCcs(runCy,YTIME) =E= 20+25*EXP(-0.06*((sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME-1)))));
 
-*' The equation computes the hourly production cost used in investment decisions, taking into account the acceptance of Carbon Capture and Storage (CCS).
-*' The production cost is modified based on the sensitivity of CCS acceptance, represented by the variable VSensCcs. The sensitivity is used as an exponent
-*' to adjust the original production cost (VHourProdCostTech) for power generation plants (PGALL) during each hour (HOUR) and for the specified year (YTIME).
+*' The equation computes the hourly production cost used in investment decisions, taking into account the acceptance of Carbon Capture and Storage .
+*' The production cost is modified based on the sensitivity of CCS acceptance. The sensitivity is used as an exponent
+*' to adjust the original production cost for power generation plants during each hour and for the specified year .
 *' This adjustment reflects the impact of CCS acceptance on the production cost.
 qHourProdCostInvDecisionsAfterCCS(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME) $(CCS(PGALL) or NOCCS(PGALL))) ..
          vHourProdCostTechAfterCCS(runCy,PGALL,HOUR,YTIME) 
          =E=
           VHourProdCostTech(runCy,PGALL,HOUR,YTIME)**(-VSensCcs(runCy,YTIME)/4);
 
-*' Compute production cost used in investment decisions
-*' The equation QProdCostInvDecis calculates the production cost of a technology (VProdCostTechnology)
-*' for a specific power plant and year. The equation involves the hourly production cost of the technology
-*' (VHourProdCostTech) and a sensitivity variable controlling carbon capture and storage (CCS) acceptance (VSensCcs).
-*' The summation over hours (HOUR) is weighted by the inverse of the technology's hourly production cost raised to the 
+*' The equation calculates the production cost of a technology for a specific power plant and year. 
+*' The equation involves the hourly production cost of the technology
+*' and a sensitivity variable controlling carbon capture and storage acceptance.
+*' The summation over hours is weighted by the inverse of the technology's hourly production cost raised to the 
 *' power of minus one-fourth of the sensitivity variable. 
 QProdCostInvDecis(runCy,PGALL,YTIME)$(TIME(YTIME) $(CCS(PGALL) or NOCCS(PGALL)) ) ..
          VProdCostTechnology(runCy,PGALL,YTIME) 
          =E=  
          sum(HOUR,VHourProdCostTech(runCy,PGALL,HOUR,YTIME)**(-VSensCcs(runCy,YTIME)/4)) ;
 
-*' Compute SHRCAP
-*' The equation QShrcap calculates the power plant's share in new equipment (VPowerPlaShrNewEq) 
-*'for a specific power plant and year when carbon capture and storage (CCS) is implemented. The
-*' share is determined based on a formulation that considers the production costs of the technology
-*' (VProdCostTechnology). The numerator of the share calculation involves a factor of 1.1 multiplied
+*' The equation calculates the power plant's share in new equipment 
+*' for a specific power plant and year when carbon capture and storage is implemented. The
+*' share is determined based on a formulation that considers the production costs of the technology.
+*' The numerator of the share calculation involves a factor of 1.1 multiplied
 *' by the production cost of the technology for the specific power plant and year. The denominator
-*' includes the sum of the numerator and the production costs of other power plant types without CCS (CCS_NOCCS).
+*' includes the sum of the numerator and the production costs of other power plant types without CCS.
 QShrcap(runCy,PGALL,YTIME)$(TIME(YTIME) $CCS(PGALL))..
          VPowerPlaShrNewEq(runCy,PGALL,YTIME) =E=
          1.1 *VProdCostTechnology(runCy,PGALL,YTIME)
@@ -189,12 +185,11 @@ QShrcap(runCy,PGALL,YTIME)$(TIME(YTIME) $CCS(PGALL))..
            + sum(PGALL2$CCS_NOCCS(PGALL,PGALL2),VProdCostTechnology(runCy,PGALL2,YTIME))
            );         
 
-*' Compute SHRCAP excluding CCs
-*' The equation QShrcapNoCcs calculates the power plant's share in new equipment (VPowerPlantNewEq)
-*' for a specific power plant and year when carbon capture and storage (CCS) is not implemented (NOCCS).
+*' The equation calculates the power plant's share in new equipment 
+*' for a specific power plant and year when carbon capture and storage is not implemented .
 *' The equation is based on the complementarity relationship, expressing that the power plant's share in
 *' new equipment without CCS is equal to one minus the sum of the shares of power plants with CCS in the
-*' new equipment. The sum is taken over all power plants with CCS for the given power plant type (PGALL) and year (YTIME).
+*' new equipment. The sum is taken over all power plants with CCS for the given power plant type and year .
 QShrcapNoCcs(runCy,PGALL,YTIME)$(TIME(YTIME) $NOCCS(PGALL))..
          VPowerPlantNewEq(runCy,PGALL,YTIME) 
          =E= 
@@ -211,22 +206,20 @@ QVarCostTech(runCy,PGALL,YTIME)$(time(YTIME))..
           *(sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
           *sTWhToMtoe/iPlantEffByType(runCy,PGALL,YTIME))$(not PGREN(PGALL)));
 
-*' Compute variable cost of technology excluding PGSCRN
-*' The equation QVarCostTechNotPGSCRN calculates the variable VVarCostTechNotPGSCRN for a specific
-*' power plant and year when the power plant is not subject to PGSCRN. The calculation involves raising the variable
-*' cost of the technology (VVarCostTech) for the specified power plant and year to the power of -5.
+*' The equation calculates the variable for a specific
+*' power plant and year when the power plant is not subject to endogenous scrapping. The calculation involves raising the variable
+*' cost of the technology for the specified power plant and year to the power of -5.
 QVarCostTechNotPGSCRN(runCy,PGALL,YTIME)$(time(YTIME) $(not PGSCRN(PGALL)))..
          VVarCostTechNotPGSCRN(runCy,PGALL,YTIME) 
               =E=
           VVarCostTech(runCy,PGALL,YTIME)**(-5);
 
-*' Compute production cost of technology  used in premature replacement
-*' The equation QProdCostTechPreReplac calculates the production cost of a technology (VProdCostTechPreReplac)
+*' The equation calculates the production cost of a technology 
 *' for a specific power plant and year. The equation involves various factors, including discount rates, technical
 *' lifetime of the plant type, gross capital cost with subsidies for renewables, capital goods index, fixed operation 
 *' and maintenance costs, plant availability rate, variable costs other than fuel, fuel prices, CO2 capture rates, cost
 *' curve for CO2 sequestration costs, CO2 emission factors, carbon values, plant efficiency, and specific conditions excluding
-*' renewable power plants (not PGREN). The equation reflects the complex dynamics of calculating the production cost, considering both economic and technical parameters.
+*' renewable power plants . The equation reflects the complex dynamics of calculating the production cost, considering both economic and technical parameters.
 QProdCostTechPreReplac(runCy,PGALL,YTIME)$TIME(YTIME)..
          VProdCostTechPreReplac(runCy,PGALL,YTIME) =e=
                         (
@@ -242,37 +235,36 @@ QProdCostTechPreReplac(runCy,PGALL,YTIME)$TIME(YTIME)..
                                  *sTWhToMtoe/iPlantEffByType(runCy,PGALL,YTIME))$(not PGREN(PGALL)))
                          );
 
-*' Compute production cost of technology  used in premature replacement including plant availability rate
-*'The equation QProdCostTechPreReplacAvail calculates the production cost of a technology used in premature replacement,
-*' considering plant availability rates. The result, VProdCostTechPreReplacAvail, is expressed in Euro per kilowatt-hour (Euro/KWh). 
-*'The equation involves the production cost of the technology used in premature replacement without considering availability rates 
-*'(VProdCostTechPreReplac) and incorporates adjustments based on the availability rates of two power plants (PGALL and PGALL2).
+*' The equation calculates the production cost of a technology used in premature replacement,
+*' considering plant availability rates. The result is expressed in Euro per kilowatt-hour (Euro/KWh). 
+*' The equation involves the production cost of the technology used in premature replacement without considering availability rates 
+*' and incorporates adjustments based on the availability rates of two power plants .
 QProdCostTechPreReplacAvail(runCy,PGALL,PGALL2,YTIME)$TIME(YTIME)..
          VProdCostTechPreReplacAvail(runCy,PGALL,PGALL2,YTIME) =E=
          iAvailRate(PGALL,YTIME)/iAvailRate(PGALL2,YTIME)*VProdCostTechPreReplac(runCy,PGALL,YTIME)+
          VVarCostTech(runCy,PGALL,YTIME)*(1-iAvailRate(PGALL,YTIME)/iAvailRate(PGALL2,YTIME));  
 
-*' The equation computes the endogenous scrapping index (VEndogScrapIndex) for power generation plants (PGALL) during the specified year (YTIME).
-*' The index is calculated as the variable cost of technology excluding power plants flagged as not subject to scrapping (VVarCostTechNotPGSCRN)
-*' divided by the sum of this variable cost and a scaled value based on the scale parameter for endogenous scrapping (iScaleEndogScrap). The scale
+*' The equation computes the endogenous scrapping index for power generation plants  during the specified year .
+*' The index is calculated as the variable cost of technology excluding power plants flagged as not subject to scrapping 
+*' divided by the sum of this variable cost and a scaled value based on the scale parameter for endogenous scrapping . The scale
 *' parameter is applied to the sum of full costs and raised to the power of -5. The resulting index is used to determine the endogenous scrapping of power plants.
 QEndogScrapIndex(runCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)))..
          VEndogScrapIndex(runCy,PGALL,YTIME)
                  =E=
          VVarCostTechNotPGSCRN(runCy,PGALL,YTIME)/
-         (VVarCostTechNotPGSCRN(runCy,PGALL,YTIME)+(iScaleEndogScrap(runCy,PGALL,YTIME)*
+         (VVarCostTechNotPGSCRN(runCy,PGALL,YTIME)+(iScaleEndogScrap(PGALL)*
          sum(PGALL2,VProdCostTechPreReplacAvail(runCy,PGALL,PGALL2,YTIME)))**(-5));
 
-*' The equation calculates the total electricity generation capacity excluding Combined Heat and Power (CHP) plants (VElecGenNoChp) for a specified year (YTIME).
-*' It is derived by subtracting the sum of the capacities of CHP plants (VElecCapChpPla) multiplied by a factor of 0.85 (assuming an efficiency of 85%) from the
-*' total electricity generation capacity (VTotElecGenCap). This provides the total electricity generation capacity without considering the contribution of CHP plants.
+*' The equation calculates the total electricity generation capacity excluding Combined Heat and Power plants for a specified year .
+*' It is derived by subtracting the sum of the capacities of CHP plants multiplied by a factor of 0.85 (assuming an efficiency of 85%) from the
+*' total electricity generation capacity . This provides the total electricity generation capacity without considering the contribution of CHP plants.
 QElecGenNoChp(runCy,YTIME)$TIME(YTIME)..
          VElecGenNoChp(runCy,YTIME)
           =E=
 VTotElecGenCap(runCy,YTIME) - SUM(CHP,VElecCapChpPla(runCy,CHP,YTIME)*0.85);      
 
 *' In essence, the equation evaluates the difference between the current and expected power generation capacity, accounting for various factors such as planned capacity,
-*' decommissioning schedules, and endogenous scrapping. The square root term introduces a level of error tolerance in the calculation.
+*' decommissioning schedules, and endogenous scrapping. The square root term introduces a degree of tolerance in the calculation.
 QGapPowerGenCap(runCy,YTIME)$TIME(YTIME)..
          VGapPowerGenCap(runCy,YTIME)
              =E=
@@ -289,11 +281,10 @@ QGapPowerGenCap(runCy,YTIME)$TIME(YTIME)..
           iTechLftPlaType(runCy,PGALL))
        ) -0) + SQR(1e-10) ) )/2;
 
-*' Compute temporary variable facilitating the scaling in Weibull equation
-*' The equation vScalWeibull calculates a temporary variable (vScalWeibull) 
+*' The equation  calculates a temporary variable 
 *' that facilitates the scaling in the Weibull equation. The equation involves
-*' the hourly production costs of technology (VHourProdCostTech) for power plants
-*' with carbon capture and storage (CCS) and without CCS (NOCCS). The production 
+*' the hourly production costs of technology for power plants
+*' with carbon capture and storage and without CCS . The production 
 *' costs are raised to the power of -6, and the result is used as a scaling factor
 *' in the Weibull equation. The equation captures the cost-related considerations 
 *' in determining the scaling factor for the Weibull equation based on the production costs of different technologies.
@@ -304,11 +295,11 @@ qScalWeibull(runCy,PGALL,HOUR,YTIME)$((not CCS(PGALL))$TIME(YTIME))..
          +
           VHourProdCostTechNoCCS(runCy,PGALL,HOUR,YTIME)$NOCCS(PGALL))**(-6);     
 
-*' The equation calculates the renewable potential supply curve (VRenPotSupplyCurve) for a specified year (YTIME). It involves the following terms:
-*' iMinRenPotential(runCy,PGRENEF,YTIME): Represents the minimum renewable potential for the given renewable energy form (PGRENEF) and country (runCy) in the specified year.
-*' VCarVal(runCy,"Trade",YTIME): Refers to the carbon price value associated with the country (runCy) in the specified year for the purpose of renewable potential estimation,
+*' The equation calculates the renewable potential supply curve for a specified year. Including:
+*' The minimum renewable potential for the given renewable energy form and country in the specified year.
+*' The carbon price value associated with the country in the specified year for the purpose of renewable potential estimation,
 *' the "Trade" attribute refers to tradable permits (if carbon pricing exists in the form of an emissions trading scheme).
-*' iMaxRenPotential(runCy,PGRENEF,YTIME): Denotes the maximum renewable potential for the specified renewable energy form (PGRENEF) and country (runCy) in the given year.
+*' The maximum renewable potential for the specified renewable energy form  and country in the given year.
 *' The renewable potential supply curve is then calculated by linearly interpolating between the minimum and maximum renewable potentials based on the trade value.
 *' The trade value is normalized by dividing it by 70. The equation essentially defines a linear relationship between the trade value and the renewable potential within
 *' the specified range.
@@ -317,32 +308,30 @@ QRenPotSupplyCurve(runCy,PGRENEF,YTIME)$TIME(YTIME)..
          iMinRenPotential(runCy,PGRENEF,YTIME) +(VCarVal(runCy,"Trade",YTIME))/(70)*
          (iMaxRenPotential(runCy,PGRENEF,YTIME)-iMinRenPotential(runCy,PGRENEF,YTIME));
 
-*' *The equation calculates the maximum allowed renewable potential (VMaxmAllowRenPotent) for a specific renewable energy form (PGRENEF) and country (runCy) in the
-*' given year (YTIME). It involves the following terms:
-*' VRenPotSupplyCurve(runCy,PGRENEF,YTIME): Represents the renewable potential supply curve for the specified renewable energy form, country, and year, as calculated
-*' in the previous equation.
-*' iMaxRenPotential(runCy,PGRENEF,YTIME): Denotes the maximum renewable potential for the specified renewable energy form and country in the given year.
+*' *The equation calculates the maximum allowed renewable potential for a specific renewable energy form and country in the
+*' given year . Including:
+*' VThe renewable potential supply curve for the specified renewable energy form, country, and year, as calculated in the previous equation.
+*' The maximum renewable potential for the specified renewable energy form and country in the given year.
 *' The maximum allowed renewable potential is computed as the average between the calculated renewable potential supply curve and the maximum renewable potential.
 *' This formulation ensures that the potential does not exceed the maximum allowed value. 
 QMaxmAllowRenPotent(runCy,PGRENEF,YTIME)$TIME(YTIME)..      
          VMaxmAllowRenPotent(runCy,PGRENEF,YTIME) =E=
          ( VRenPotSupplyCurve(runCy,PGRENEF,YTIME)+ iMaxRenPotential(runCy,PGRENEF,YTIME))/2;
 
-*' The equation calculates the minimum allowed renewable potential (VMnmAllowRenPot) for a specific renewable energy form (PGRENEF) and country (runCy)
-*' in the given year (YTIME). It involves the following terms:
-*' VRenPotSupplyCurve(runCy,PGRENEF,YTIME): Represents the renewable potential supply curve for the specified renewable energy form, country, and year,
-*' as calculated in a previous equation.
-*' VMnmAllowRenPot(runCy,PGRENEF,YTIME): Denotes the minimum renewable potential for the specified renewable energy form and country in the given year.
+*' The equation calculates the minimum allowed renewable potential for a specific renewable energy form and country 
+*' in the given year . Including:
+*' The renewable potential supply curve for the specified renewable energy form, country, and year, as calculated in a previous equation.
+*' The minimum renewable potential for the specified renewable energy form and country in the given year.
 *' The minimum allowed renewable potential is computed as the average between the calculated renewable potential supply curve and the minimum renewable potential.
 *' This formulation ensures that the potential does not fall below the minimum allowed value.
 QMnmAllowRenPot(runCy,PGRENEF,YTIME)$TIME(YTIME)..  
          VMnmAllowRenPot(runCy,PGRENEF,YTIME) =E=
          ( VRenPotSupplyCurve(runCy,PGRENEF,YTIME) + VMnmAllowRenPot(runCy,PGRENEF,YTIME))/2;
 
-*' The equation calculates a maturity multiplier for renewable technologies. If the technology is renewable (PGREN(PGALL) is true), the multiplier is determined
+*' The equation calculates a maturity multiplier for renewable technologies. If the technology is renewable , the multiplier is determined
 *' based on an exponential function that involves the ratio of the planned electricity generation capacities of renewable technologies to the renewable potential
 *' supply curve. This ratio is adjusted using a logistic function with parameters that influence the maturity of renewable technologies. If the technology is not
-*' renewable (NOT PGREN(PGALL) is true), the maturity multiplier is set to 1. The purpose is to model the maturity level of renewable technologies based on their
+*' renewable, the maturity multiplier is set to 1. The purpose is to model the maturity level of renewable technologies based on their
 *' planned capacities relative to the renewable potential supply curve.
 QRenTechMatMult(runCy,PGALL,YTIME)$TIME(YTIME)..
          VRenTechMatMult(runCy,PGALL,YTIME)
@@ -350,20 +339,20 @@ QRenTechMatMult(runCy,PGALL,YTIME)$TIME(YTIME)..
          1$(NOT PGREN(PGALL))
          +
          (
-           1/(1+EXP(9*(
+           1/(1+(
                  sum(PGRENEF$PGALLtoPGRENEF(PGALL,PGRENEF),
                  sum(PGALL2$(PGALLtoPGRENEF(PGALL2,PGRENEF) $PGREN(PGALL2)),
-                 VElecGenPlanCap(runCy,PGALL2,YTIME-1))/VRenPotSupplyCurve(runCy,PGRENEF,YTIME))-0.6)))
+                 VElecGenPlanCap(runCy,PGALL2,YTIME-1))/VRenPotSupplyCurve(runCy,PGRENEF,YTIME))))
            )$PGREN(PGALL);  
 
-*' The equation calculates a temporary variable, VScalWeibullSum, which is used to facilitate scaling in the Weibull equation. The scaling is influenced by three main factors:
-*' Maturity Factor for Planned Available Capacity (iMatFacPlaAvailCap): This factor represents the material-specific influence on the planned available capacity for a power
+*' The equation calculates a temporary variable which is used to facilitate scaling in the Weibull equation. The scaling is influenced by three main factors:
+*' Maturity Factor for Planned Available Capacity : This factor represents the material-specific influence on the planned available capacity for a power
 *' plant. It accounts for the capacity planning aspect of the power generation technology.
-*' Renewable Technologies Maturity Multiplier (VRenTechMatMult): This multiplier reflects the maturity level of renewable technologies. It adjusts the scaling based on how
+*' Renewable Technologies Maturity Multiplier: This multiplier reflects the maturity level of renewable technologies. It adjusts the scaling based on how
 *' mature and established the renewable technology is, with a higher maturity leading to a larger multiplier.
-*' Hourly Production Costs (VHourProdCostTech): The summation involves the hourly production costs of the technology raised to the power of -6. This suggests that higher
+*' Hourly Production Costs : The summation involves the hourly production costs of the technology raised to the power of -6. This suggests that higher
 *' production costs contribute less to the overall scaling, emphasizing the importance of cost efficiency in the scaling process.
-*' The resulting VScalWeibullSum is a combined measure that takes into account material factors, technology maturity, and cost efficiency in the context of the Weibull
+*' The result is a combined measure that takes into account material factors, technology maturity, and cost efficiency in the context of the Weibull
 *' equation, providing a comprehensive basis for scaling considerations.
 QScalWeibullSum(runCy,PGALL,YTIME)$((not CCS(PGALL)) $TIME(YTIME))..
          VScalWeibullSum(runCy,PGALL,YTIME) 
@@ -376,9 +365,9 @@ QScalWeibullSum(runCy,PGALL,YTIME)$((not CCS(PGALL)) $TIME(YTIME))..
                  )**(-6)
               ); 
   
-*' The equation calculates the variable VNewInvDecis, representing the new investment decision for power plants in a given country (runCy) and time period (YTIME).
-*' It sums the VScalWeibullSum values for all power plants that do not have carbon capture and storage (CCS) technology (not CCS(PGALL)).
-*' The VScalWeibullSum values capture the scaling factors influenced by material-specific factors, renewable technology maturity,
+*' The equation calculates the variable representing the new investment decision for power plants in a given country and time period.
+*' It sums the values for all power plants that do not have carbon capture and storage technology .
+*' The values capture the scaling factors influenced by material-specific factors, renewable technology maturity,
 *' and cost efficiency considerations. Summing these values over relevant power plants provides an aggregated measure for informing new investment decisions, emphasizing
 *' factors such as technology readiness and economic viability.
 QNewInvDecis(runCy,YTIME)$TIME(YTIME)..
@@ -386,12 +375,12 @@ QNewInvDecis(runCy,YTIME)$TIME(YTIME)..
              =E=
          sum(PGALL$(not CCS(PGALL)),VScalWeibullSum(runCy,PGALL,YTIME));
 
-*' The equation calculates the variable VPowPlaShaNewEquip, representing the power plant share in new equipment for a specific power plant (PGALL) in a given country (runCy)
-*' and time period (YTIME). The calculation depends on whether the power plant has carbon capture and storage (CCS) technology (CCS(PGALL)).
-*' For power plants without CCS (not CCS(PGALL)), the share in new equipment is determined by the ratio of the VScalWeibullSum value for the specific power plant to the
-*' overall new investment decision for power plants (VNewInvDecis). This ratio provides a proportionate share of new equipment for each power plant, considering factors such
-*' as material-specific scaling and economic considerations.For power plants with CCS (CCS(PGALL)), the share is determined by summing the shares of corresponding power plants
-*' without CCS (NOCCSCCS_NOCCS(PGALL,NOCCS)). This allows for the allocation of shares in new equipment for CCS and non-CCS versions of the same power plant.
+*' The equation calculates the variable  representing the power plant share in new equipment for a specific power plant  in a given country 
+*' and time period . The calculation depends on whether the power plant has carbon capture and storage technology .
+*' For power plants without CCS , the share in new equipment is determined by the ratio of the value for the specific power plant to the
+*' overall new investment decision for power plants . This ratio provides a proportionate share of new equipment for each power plant, considering factors such
+*' as material-specific scaling and economic considerations.For power plants with CCS , the share is determined by summing the shares of corresponding power plants
+*' without CCS. This allows for the allocation of shares in new equipment for CCS and non-CCS versions of the same power plant.
 QPowPlaShaNewEquip(runCy,PGALL,YTIME)$(TIME(YTIME)) ..
         VPowPlaShaNewEquip(runCy,PGALL,YTIME)
              =E=
@@ -399,8 +388,8 @@ QPowPlaShaNewEquip(runCy,PGALL,YTIME)$(TIME(YTIME)) ..
           +
           sum(NOCCS$CCS_NOCCS(PGALL,NOCCS),VPowPlaShaNewEquip(runCy,NOCCS,YTIME))$CCS(PGALL);
 
-*' This equation calculates the variable VElecGenPlantsCapac, representing the electricity generation capacity for a specific power plant (PGALL) in a given country (runCy)
-*' and time period (YTIME). The calculation takes into account various factors related to new investments, decommissioning, and technology-specific parameters.
+*' This equation calculates the variable representing the electricity generation capacity for a specific power plant in a given country
+*' and time period. The calculation takes into account various factors related to new investments, decommissioning, and technology-specific parameters.
 *' The equation aims to model the evolution of electricity generation capacity over time, considering new investments, decommissioning, and technology-specific parameters.
 QElecGenCapacity(runCy,PGALL,YTIME)$TIME(YTIME)..
          VElecGenPlantsCapac(runCy,PGALL,YTIME)
@@ -415,8 +404,8 @@ QElecGenCapacity(runCy,PGALL,YTIME)$TIME(YTIME)..
          - ((VElecGenPlantsCapac(runCy,PGALL,YTIME-1)-iPlantDecomSched(runCy,PGALL,YTIME-1))* 
          iAvailRate(PGALL,YTIME)*(1/iTechLftPlaType(runCy,PGALL)))$PGSCRN(PGALL);
 
-*' This equation calculates the variable VElecGenPlanCap, representing the planned electricity generation capacity for a specific power plant (PGALL) in a given country
-*' (runCy) and time period (YTIME). The calculation involves adjusting the actual electricity generation capacity (VElecGenPlantsCapac) by a small constant and the square
+*' This equation calculates the variable representing the planned electricity generation capacity for a specific power plant  in a given country
+*' and time period. The calculation involves adjusting the actual electricity generation capacity by a small constant and the square
 *' root of the sum of the square of the capacity and a small constant. The purpose of this adjustment is likely to avoid numerical issues and ensure a positive value for
 *' the planned capacity.
 QElecGenCap(runCy,PGALL,YTIME)$TIME(YTIME)..
@@ -447,18 +436,18 @@ QElectrPeakLoad(runCy,PGALL,YTIME)$TIME(YTIME)..
          /
          VElecPeakLoads(runCy,YTIME);  
 
-*' This equation calculates the variable VNewCapYearly, representing the newly added electricity generation capacity for a specific renewable power plant (PGALL)
-*' in a given country (runCy) and time period (YTIME). The calculation involves subtracting the planned electricity generation capacity in the current time period
+*' This equation calculates the variable representing the newly added electricity generation capacity for a specific renewable power plant 
+*' in a given country and time period. The calculation involves subtracting the planned electricity generation capacity in the current time period
 *' from the planned capacity in the previous time period. The purpose of this equation is to quantify the increase in electricity generation capacity for renewable
-*' power plants on a yearly basis
+*' power plants on a yearly basis.
 QNewCapYearly(runCy,PGALL,YTIME)$(PGREN(PGALL)$TIME(YTIME))..
          VNewCapYearly(runCy,PGALL,YTIME) =e=
 VElecGenPlanCap(runCy,PGALL,YTIME)- VElecGenPlanCap(runCy,PGALL,YTIME-1);                       
 
-*' This equation calculates the variable VAvgCapFacRes, representing the average capacity factor of renewable energy sources (RES) for a specific renewable power plant
-*' (PGALL) in a given country (runCy) and time period (YTIME). The capacity factor is a measure of the actual electricity generation output relative to the maximum
-*' possible output.The calculation involves considering the availability rates (iAvailRate) for the renewable power plant in the current and seven previous time periods,
-*' as well as the newly added capacity (VNewCapYearly) in these periods. The average capacity factor is then computed as the weighted average of the availability rates
+*' This equation calculates the variable representing the average capacity factor of renewable energy sources for a specific renewable power plant
+*' in a given country  and time period. The capacity factor is a measure of the actual electricity generation output relative to the maximum
+*' possible output.The calculation involves considering the availability rates for the renewable power plant in the current and seven previous time periods,
+*' as well as the newly added capacity in these periods. The average capacity factor is then computed as the weighted average of the availability rates
 *' over these eight periods.
 QAvgCapFacRes(runCy,PGALL,YTIME)$(PGREN(PGALL)$TIME(YTIME))..
    VAvgCapFacRes(runCy,PGALL,YTIME)
@@ -475,7 +464,7 @@ QAvgCapFacRes(runCy,PGALL,YTIME)$(PGREN(PGALL)$TIME(YTIME))..
 VNewCapYearly(runCy,PGALL,YTIME-3)+VNewCapYearly(runCy,PGALL,YTIME-4)+VNewCapYearly(runCy,PGALL,YTIME-5)+
 VNewCapYearly(runCy,PGALL,YTIME-6)+VNewCapYearly(runCy,PGALL,YTIME-7));
 
-*' This equation calculates the variable VOverallCap, representing the overall capacity for a specific power plant (PGALL) in a given country (runCy) and time period (YTIME).
+*' This equation calculates the variable representing the overall capacity for a specific power plant in a given country and time period .
 *' The overall capacity is a composite measure that includes the existing capacity for non-renewable power plants and the expected capacity for renewable power plants based
 *' on their average capacity factor.
 QOverallCap(runCy,PGALL,YTIME)$TIME(YTIME)..
@@ -486,8 +475,8 @@ VElecGenPlanCap(runCy,pgall,ytime)$ (not PGREN(PGALL))
 VOverallCap(runCy,PGALL,YTIME-1)
 /VAvgCapFacRes(runCy,PGALL,YTIME-1))$PGREN(PGALL);
 
-*' This equation calculates the scaling factor for plant dispatching (VScalFacPlantDispatch) in a specific country (runCy), hour of the day (HOUR),
-*' and time period (YTIME). The scaling factor for determining the dispatch order of different power plants during a particular hour.
+*' This equation calculates the scaling factor for plant dispatching in a specific country , hour of the day,
+*' and time period . The scaling factor for determining the dispatch order of different power plants during a particular hour.
 QScalFacPlantDispatch(runCy,HOUR,YTIME)$TIME(YTIME)..
          sum(PGALL,
                  (VOverallCap(runCy,PGALL,YTIME)+
@@ -499,8 +488,8 @@ QScalFacPlantDispatch(runCy,HOUR,YTIME)$TIME(YTIME)..
          * exp(-VLoadCurveConstr(runCy,YTIME)*(0.25 + ord(HOUR)-1))
          + VCorrBaseLoad(runCy,YTIME);
 
-*' This equation calculates the estimated electricity generation of Combined Heat and Power (CHP) plants (VElecChpPlants) in a specific country (runCy) and time period
-*' (YTIME). The estimation is based on the fuel consumption of CHP plants, their electricity prices, the maximum share of CHP electricity in total demand, and the overall
+*' This equation calculates the estimated electricity generation of Combined Heat and Power plantsin a specific countryand time period.
+*' The estimation is based on the fuel consumption of CHP plants, their electricity prices, the maximum share of CHP electricity in total demand, and the overall
 *' electricity demand. The equation essentially estimates the electricity generation of CHP plants by considering their fuel consumption, electricity prices, and the maximum
 *' share of CHP electricity in total demand. The square root expression ensures that the estimated electricity generation remains non-negative.
 QElecChpPlants(runCy,YTIME)$TIME(YTIME)..
@@ -511,8 +500,8 @@ QElecChpPlants(runCy,YTIME)$TIME(YTIME)..
          VElecIndPrices(runCy,YTIME)) - 
          iMxmShareChpElec(runCy,YTIME)*VElecDem(runCy,YTIME)) + SQR(1E-4) ) )/2;
 
-*' This equation calculates the non-Combined Heat and Power (CHP) electricity production (VNonChpElecProd) in a specific country (runCy) and time period (YTIME).
-*' It is essentially the difference between the total electricity demand (VElecDem) and the estimated electricity generation from CHP plants (VElecChpPlants).In summary,
+*' This equation calculates the non-Combined Heat and Power electricity production in a specific country and time period .
+*' It is essentially the difference between the total electricity demand and the estimated electricity generation from CHP plants .In summary,
 *' the equation calculates the electricity production from technologies other than CHP by subtracting the estimated CHP electricity generation from the total electricity
 *' demand. 
 QNonChpElecProd(runCy,YTIME)$TIME(YTIME)..
@@ -520,7 +509,7 @@ QNonChpElecProd(runCy,YTIME)$TIME(YTIME)..
          =E=
   (VElecDem(runCy,YTIME) - VElecChpPlants(runCy,YTIME));  
 
-*' This equation calculates the total required electricity production (VReqElecProd) for a specific country (runCy) and time period (YTIME).
+*' This equation calculates the total required electricity production for a specific country and time period .
 *' The total required electricity production is the sum of electricity generation from different technologies, including CHP plants, across all hours of the day.
 *' The total required electricity production is the sum of the electricity generation from all CHP plants across all hours, considering the scaling factor for plant
 *' dispatching. 
@@ -530,8 +519,8 @@ VReqElecProd(runCy,YTIME)
          sum(hour, sum(CHP,VElecCapChpPla(runCy,CHP,YTIME)*exp(-VScalFacPlaDisp(runCy,HOUR,YTIME)/ 
          sum(pgall$chptoeon(chp,pgall),VPowPlantSorting(runCy,PGALL,YTIME)))));
 
-*' This equation calculates the electricity production from power generation plants (VElecProdPowGenPlants) for a specific country (runCy),
-*' power generation plant type (PGALL), and time period (YTIME). The electricity production is determined based on the overall electricity
+*' This equation calculates the electricity production from power generation plants for a specific country ,
+*' power generation plant type , and time period . The electricity production is determined based on the overall electricity
 *' demand, the required electricity production, and the capacity of the power generation plants.The equation calculates the electricity production
 *' from power generation plants based on the proportion of electricity demand that needs to be met by power generation plants, considering their
 *' capacity and the scaling factor for dispatching.
@@ -542,8 +531,8 @@ QElecProdPowGenPlants(runCy,PGALL,YTIME)$TIME(YTIME)..
          (VTotReqElecProd(runCy,YTIME)- VReqElecProd(runCy,YTIME))
          * VElecGenPlanCap(runCy,PGALL,YTIME)* sum(HOUR, exp(-VScalFacPlaDisp(runCy,HOUR,YTIME)/VPowPlantSorting(runCy,PGALL,YTIME)));
 
-*' This equation calculates the sector contribution to total CHP (Combined Heat and Power) production (vSecContrTotChpProd). The contribution
-*' is calculated for a specific country (runCy), industrial sector (INDDOM), CHP technology (CHP), and time period (YTIME).The sector contribution
+*' This equation calculates the sector contribution to total Combined Heat and Power production . The contribution
+*' is calculated for a specific country , industrial sector , CHP technology , and time period .The sector contribution
 *' is calculated by dividing the fuel consumption of the specific industrial sector for CHP by the total fuel consumption of CHP across all industrial
 *' sectors. The result represents the proportion of CHP production attributable to the specified industrial sector. The denominator has a small constant
 *' (1e-6) added to avoid division by zero.
@@ -552,8 +541,8 @@ qSecContrTotChpProd(runCy,INDDOM,CHP,YTIME)$(TIME(YTIME) $SECTTECH(INDDOM,CHP)).
           =E=
          VConsFuel(runCy,INDDOM,CHP,YTIME)/(1e-6+SUM(INDDOM2,VConsFuel(runCy,INDDOM2,CHP,YTIME)));
 
-*' This equation calculates the electricity production from CHP (Combined Heat and Power) plants (VChpElecProd). The electricity production is computed
-*' for a specific country (runCy), CHP technology (CHP), and time period (YTIME).The electricity production from CHP plants is computed by taking the
+*' This equation calculates the electricity production from Combined Heat and Power plants . The electricity production is computed
+*' for a specific country , CHP technology , and time period.The electricity production from CHP plants is computed by taking the
 *' ratio of the fuel consumption by the specified industrial sector for CHP technology to the total fuel consumption for all industrial sectors and CHP
 *' technologies. This ratio is then multiplied by the difference between total electricity demand and the sum of electricity production from all power
 *' generation plants. The result represents the portion of electricity production from CHP plants attributed to the specified CHP technology.
@@ -563,8 +552,8 @@ QElecProdChpPlants(runCy,CHP,YTIME)$TIME(YTIME)..
         sum(INDDOM,VConsFuel(runCy,INDDOM,CHP,YTIME)) / SUM(chp2,sum(INDDOM,VConsFuel(runCy,INDDOM,CHP2,YTIME)))*
         (VElecDem(runCy,YTIME) - SUM(PGALL,VElecProd(runCy,PGALL,YTIME)));
 
-*' This equation calculates the share of gross electricity production attributed to renewable sources (vResShareGrossElecProd).
-*' The share is computed for a specific country (runCy) and time period (YTIME).The share of gross electricity production from
+*' This equation calculates the share of gross electricity production attributed to renewable sources.
+*' The share is computed for a specific country and time period.The share of gross electricity production from
 *' renewable sources is calculated by dividing the sum of renewable electricity production by the sum of total electricity production,
 *' industrial sector electricity production, and net electricity imports. The result represents the proportion of electricity production
 *' attributed to renewable sources in the specified country and time period.
@@ -578,8 +567,8 @@ qShareRenGrossElecProd(runCy,YTIME)$TIME(YTIME)..
                  1e-3*sum(DSBS,sum(CHP$SECTTECH(DSBS,CHP),VConsFuel(runCy,DSBS,CHP,YTIME)))/8.6e-5*VElecIndPrices(runCy,YTIME) + 
                  1/0.086 *VNetImports(runCy,"ELC",YTIME));         
 
-*' This equation calculates the long-term power generation cost of technologies excluding climate policies (VLongPowGenCost).
-*' The cost is computed for a specific country (runCy), power generation technology (PGALL), energy sector (ESET), and time period (YTIME).
+*' This equation calculates the long-term power generation cost of technologies excluding climate policies.
+*' The cost is computed for a specific country, power generation technology , energy sector, and time period.
 *' The long-term power generation cost is computed as a combination of capital costs, operating and maintenance costs, and variable costs,
 *' considering factors such as discount rates, technological lifetimes, and subsidies. The resulting cost is adjusted based on the availability
 *' rate and conversion factors. The equation provides a comprehensive calculation of the long-term cost associated with power generation technologies,
@@ -599,9 +588,9 @@ QLonPowGenCostTechNoCp(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
                  (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
                  *sTWhToMtoe/iPlantEffByType(runCy,PGALL,YTIME)));
 
-*' This equation calculates the long-term minimum power generation cost (vLonMnmpowGenCost) for a specific country (runCy), power generation technology (PGALL),
-*' and time period (YTIME). The minimum cost is computed considering various factors, including discount rates, technological lifetimes, gross capital costs,
-*' fixed operating and maintenance costs, availability rates, variable costs, fuel prices, carbon capture rates, carbon capture and storage (CCS) costs, carbon
+*' This equation calculates the long-term minimum power generation cost for a specific country , power generation technology,
+*' and time period. The minimum cost is computed considering various factors, including discount rates, technological lifetimes, gross capital costs,
+*' fixed operating and maintenance costs, availability rates, variable costs, fuel prices, carbon capture rates, carbon capture and storage costs, carbon
 *' emission factors, and plant efficiency.The long-term minimum power generation cost is calculated as a combination of capital costs, operating and maintenance
 *' costs, and variable costs, considering factors such as discount rates, technological lifetimes, and subsidies. The resulting cost is adjusted based on the
 *' availability rate and conversion factors. This equation provides insight into the minimum cost associated with power generation technologies, excluding climate
@@ -685,7 +674,7 @@ QLongPowGenCost(runCy,ESET,YTIME)$TIME(YTIME)..
          )
 /VElecDem(runCy,YTIME); 
 
-*' The equation QLonAvgPowGenCostNoClimPol represents the long-term average power generation cost excluding climate policies.
+*' The equation represents the long-term average power generation cost excluding climate policies.
 *' It calculates the cost in Euro2005 per kilowatt-hour (kWh) for a specific combination of parameters. The equation is composed 
 *' of various factors, including discount rates, technical lifetime of the plant type, gross capital cost with subsidies for renewables,
 *' fixed operation and maintenance costs, plant availability rate, variable costs other than fuel, fuel prices, efficiency values, CO2 emission factors,
@@ -781,7 +770,7 @@ QPassCarsLft(runCy,DSBS,EF,TEA,YTIME)$(TIME(YTIME) $sameas(DSBS,"PC") $SECTTECH(
          1/VScrRate(runCy,YTIME);
 
 *' This equation calculates the activity for goods transport, considering different types of goods transport such as trucks and other freight transport.
-*' The activity is influenced by factors such as GDP, population, fuel prices, and elasticities. The equation includes terms for trucks (GU) and other
+*' The activity is influenced by factors such as GDP, population, fuel prices, and elasticities. The equation includes terms for trucks and other
 *' freight transport modes.
 QGoodsTranspActiv(runCy,TRANSE,YTIME)$(TIME(YTIME) $TRANG(TRANSE))..
          VGoodsTranspActiv(runCy,TRANSE,YTIME)
@@ -835,7 +824,7 @@ QGapTranspActiv(runCy,TRANSE,YTIME)$TIME(YTIME)..
          )$TRANG(TRANSE);
 
 *' This equation calculates the specific fuel consumption for a given technology, subsector, energy form, and time. The specific fuel consumption depends on various factors,
-*' including fuel prices and elasticities. The equation involves a product term over a set of KPDL (Polynomial Distribution Lags) and considers the elasticity of fuel prices.
+*' including fuel prices and elasticities. The equation involves a product term over a set of Polynomial Distribution Lags and considers the elasticity of fuel prices.
 QSpecificFuelCons(runCy,TRANSE,TTECH,TEA,EF,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,EF) $TTECHtoEF(TTECH,EF) )..
          VSpecificFuelCons(runCy,TRANSE,TTECH,TEA,EF,YTIME)
                  =E=
@@ -847,7 +836,7 @@ QSpecificFuelCons(runCy,TRANSE,TTECH,TEA,EF,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE
 
 *' This equation calculates the transportation cost per mean and consumer size in kEuro per vehicle. It involves several terms, including capital costs,
 *' variable costs, and fuel costs. The equation considers different technologies and their associated costs, as well as factors like the discount rate,
-*' specific fuel consumption, and annual 
+*' specific fuel consumption, and annual .
 QTranspCostPerMeanConsSize(runCy,TRANSE,RCon,TTECH,TEA,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $(ord(Rcon) le iNcon(TRANSE)+1))..
          VTranspCostPermeanConsSize(runCy,TRANSE,RCon,TTECH,TEA,YTIME)
          =E=
@@ -909,7 +898,7 @@ QTechSortVarCostNewEquip(runCy,TRANSE,TTECH,TEA,YTIME)$(TIME(YTIME) $SECTTECH(TR
 
 *' This equation calculates the consumption of each technology in transport sectors. It considers various factors such as the lifetime of the technology,
 *' average capacity per vehicle, load factor, scrapping rate, and specific fuel consumption. The equation also takes into account the technology's variable
-*' cost for new equipment and the gap in transport activity to be filled by new technologies. The result is expressed in million tonnes of oil equivalent (Mtoe).
+*' cost for new equipment and the gap in transport activity to be filled by new technologies. The result is expressed in million tonnes of oil equivalent.
 QConsEachTechTransp(runCy,TRANSE,TTECH,EF,TEA,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $TTECHtoEF(TTECH,EF) )..
          VConsEachTechTransp(runCy,TRANSE,TTECH,EF,TEA,YTIME)
                  =E=
@@ -942,14 +931,14 @@ QConsEachTechTransp(runCy,TRANSE,TTECH,EF,TEA,YTIME)$(TIME(YTIME) $SECTTECH(TRAN
          );
 
 *' This equation calculates the final energy demand in transport for each fuel within a specific transport subsector.
-*' It sums up the consumption of each technology and subsector for the given fuel. The result is expressed in million tonnes of oil equivalent (Mtoe).
+*' It sums up the consumption of each technology and subsector for the given fuel. The result is expressed in million tonnes of oil equivalent.
 QFinEneDemTranspPerFuel(runCy,TRANSE,EF,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,EF))..
          VDemTr(runCy,TRANSE,EF,YTIME)
                  =E=
          sum((TTECH,TEA)$(SECTTECH(TRANSE,TTECH) $TTECHtoEF(TTECH,EF) ), VConsEachTechTransp(runCy,TRANSE,TTECH,EF,TEA,YTIME));
 
-*' This equation calculates the final energy demand in different transport subsectors by summing up the final energy demand for each energy form (EF) within
-*' each transport subsector. The result is expressed in million tonnes of oil equivalent (Mtoe).
+*' This equation calculates the final energy demand in different transport subsectors by summing up the final energy demand for each energy form within
+*' each transport subsector. The result is expressed in million tonnes of oil equivalent.
 qFinEneDemTransp(runCy,TRANSE,YTIME)$(TIME(YTIME)) ..
          vFinEneDemTranspSub(runCy,TRANSE,YTIME)
                  =E=
@@ -965,7 +954,7 @@ QMExtV(runCy,YTIME)$TIME(YTIME)..
          [(iGDP(YTIME,runCy)/iPop(YTIME,runCy)) / (iGDP(YTIME-1,runCy)/iPop(YTIME-1,runCy))] ** iElastA(runCy,"PC","a",YTIME);
 
 *' This equation calculates the market extension of passenger cars that is independent of GDP. It involves various parameters such as transportation characteristics,
-*' Gompertz function parameters (S1, S2, S3), the ratio of the previous year's stock of passenger cars to the previous year's population, and the saturation ratio (Lamda).
+*' Gompertz function parameters (S1, S2, S3), the ratio of the previous year's stock of passenger cars to the previous year's population, and the saturation ratio .
 QMExtF(runCy,YTIME)$TIME(YTIME)..
          VMExtF(runCy,YTIME)
                  =E=
@@ -1124,7 +1113,7 @@ qDemInd(runCy,YTIME)$TIME(YTIME)..
         vDemInd(runCy,YTIME)=E= SUM(INDSE,VDemSub(runCy,INDSE,YTIME));
 
 *' This equation determines the electricity industry prices based on an estimated electricity index and a technical maximum of the electricity to steam ratio
-*' in Combined Heat and Power (CHP) plants. The industry prices are calculated as a function of the estimated electricity index and the specified maximum
+*' in Combined Heat and Power plants. The industry prices are calculated as a function of the estimated electricity index and the specified maximum
 *' electricity to steam ratio. The equation ensures that the electricity industry prices remain within a realistic range, considering the technical constraints
 *' of CHP plants. It involves the estimated electricity index, and a technical maximum of the electricity to steam ratio in CHP plants is incorporated to account
 *' for the specific characteristics of these facilities. This equation ensures that the derived electricity industry prices align with the estimated index and
@@ -1134,7 +1123,7 @@ QElecIndPrices(runCy,YTIME)$TIME(YTIME)..
         ( VElecIndPricesEst(runCy,YTIME) + sElecToSteRatioChp - SQRT( SQR(VElecIndPricesEst(runCy,YTIME)-sElecToSteRatioChp) + SQR(1E-4) ) )/2;
 
 *' This equation calculates the total fuel consumption in each demand subsector, excluding heat from heat pumps. The fuel consumption is measured
-*' in million tons of oil equivalent (Mtoe) and is influenced by two main components: the consumption of fuels in each demand subsector, including
+*' in million tons of oil equivalent and is influenced by two main components: the consumption of fuels in each demand subsector, including
 *' heat from heat pumps, and the electricity consumed in heat pump plants.The equation uses the fuel consumption data for each demand subsector,
 *' considering both cases with and without heat pump influence. When heat pumps are involved, the electricity consumed in these plants is also
 *' taken into account. The result is the total fuel consumption in each demand subsector, providing a comprehensive measure of the energy consumption pattern.
@@ -1175,11 +1164,11 @@ QFuePriSubChp(runCy,DSBS,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS))  $SECTTE
               (0$(not CHP(EF)) + (VFuelPriceSub(runCy,"OI","ELC",YTIME)*iFracElecPriChp*VElecIndPrices(runCy,YTIME))$CHP(EF))))  ) )/2;
 
 
-*' The equation computes the electricity production cost per Combined Heat and Power (CHP) plant for a specific demand sector within a given subsector.
+*' The equation computes the electricity production cost per Combined Heat and Power plant for a specific demand sector within a given subsector.
 *' The cost is determined based on various factors, including the discount rate, technical lifetime of CHP plants, capital cost, fixed O&M cost, availability rate,
 *' variable cost, and fuel-related costs. The equation provides a comprehensive assessment of the overall expenses associated with electricity production from CHP
 *' plants, considering both the fixed and variable components, as well as factors such as carbon prices and CO2 emission factors.
-*' The resulting variable, VElecProdCostChp, represents the electricity production cost per CHP plant and demand sector, expressed in Euro per kilowatt-hour (Euro/KWh).
+*' The resulting variable represents the electricity production cost per CHP plant and demand sector, expressed in Euro per kilowatt-hour (Euro/KWh).
 QElecProdCosChp(runCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS))..
          VElecProdCostChp(runCy,DSBS,CHP,YTIME)
                  =E=
@@ -1234,24 +1223,24 @@ QTechCostIntrm(runCy,DSBS,rCon,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(
                     * iAnnCons(runCy,DSBS,"smallest") * (iAnnCons(runCy,DSBS,"largest")/iAnnCons(runCy,DSBS,"smallest"))**((ord(rCon)-1)/iNcon(DSBS))
                   )$NENSE(DSBS);  
 
-*' This equation calculates the technology cost, including the maturity factor (VTechCostMatr), for each energy form (EF) and technology (TEA) within
-*' the specified subsector (DSBS) and consumer size group (rCon). The cost is determined by multiplying the maturity factor (iMatrFactor) with the
-*' technology cost (VTechCost) based on the given parameters.
+*' This equation calculates the technology cost, including the maturity factor , for each energy form  and technology  within
+*' the specified subsector and consumer size group . The cost is determined by multiplying the maturity factor with the
+*' technology cost based on the given parameters.
 QTechCostMatr(runCy,DSBS,rCon,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) $SECTTECH(DSBS,EF) )..
         VTechCostMatr(runCy,DSBS,rCon,EF,TEA,YTIME) 
                                                =E=
         iMatrFactor(runCy,DSBS,EF,YTIME) * VTechCost(runCy,DSBS,rCon,EF,TEA,YTIME) ;
 
-*' This equation calculates the technology sorting based on variable cost (VTechSort). It is determined by summing the technology cost,
-*' including the maturity factor (VTechCostMatr), for each energy form (EF) and technology (TEA) within the specified subsector (DSBS)
-*' and consumer size group (rCon). The sorting is conducted based on variable cost considerations.
+*' This equation calculates the technology sorting based on variable cost . It is determined by summing the technology cost,
+*' including the maturity factor , for each energy form and technology within the specified subsector 
+*' and consumer size group. The sorting is conducted based on variable cost considerations.
 QTechSort(runCy,DSBS,rCon,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) )..
         VTechSort(runCy,DSBS,rCon,YTIME)
                         =E=
         sum((EF,TEA)$(SECTTECH(DSBS,EF) ),VTechCostMatr(runCy,DSBS,rCon,EF,TEA,YTIME));
 
-*' This equation calculates the gap in final demand for industry, tertiary, non-energy uses, and bunkers (VGapFinalDem).
-*' It is determined by subtracting the total final demand (of substitutable fuels) per subsector from the consumption of
+*' This equation calculates the gap in final demand for industry, tertiary, non-energy uses, and bunkers.
+*' It is determined by subtracting the total final demand per subsector from the consumption of
 *' remaining substitutable equipment. The square root term is included to ensure a non-negative result.
 QGapFinalDem(runCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)))..
          VGapFinalDem(runCy,DSBS,YTIME)
@@ -1259,7 +1248,7 @@ QGapFinalDem(runCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)))..
          VDemSub(runCy,DSBS,YTIME) - sum(EF$SECTTECH(DSBS,EF), VConsRemSubEquip(runCy,DSBS,EF,YTIME))
          + SQRT( SQR(VDemSub(runCy,DSBS,YTIME) - sum(EF$SECTTECH(DSBS,EF), VConsRemSubEquip(runCy,DSBS,EF,YTIME)))) /2;
 
-*' This equation calculates the technology share in new equipment (VTechShareNewEquip) based on factors such as maturity factor,
+*' This equation calculates the technology share in new equipment based on factors such as maturity factor,
 *' cumulative distribution function of consumer size groups, number of consumers, technology cost, distribution function of consumer
 *' size groups, and technology sorting.
 QTechShareNewEquip(runCy,DSBS,EF,TEA,YTIME)$(TIME(YTIME) $SECTTECH(DSBS,EF) $(not TRANSE(DSBS)) )..
@@ -1269,7 +1258,7 @@ QTechShareNewEquip(runCy,DSBS,EF,TEA,YTIME)$(TIME(YTIME) $SECTTECH(DSBS,EF) $(no
                   VTechCost(runCy,DSBS,rCon,EF,TEA,YTIME)
                   * iDisFunConSize(runCy,DSBS,rCon)/VTechSort(runCy,DSBS,rCon,YTIME));
 
-*' This equation calculates the consumption of fuels in each demand subsector, including heat from heat pumps (VFuelConsInclHP).
+*' This equation calculates the consumption of fuels in each demand subsector, including heat from heat pumps .
 *' It considers the consumption of remaining substitutable equipment, the technology share in new equipment, and the final demand
 *' gap to be filled by new technologies. Additionally, non-substitutable electricity consumption in Industry and Tertiary sectors is included.
 QFuelConsInclHP(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF) )..
@@ -1280,7 +1269,7 @@ QFuelConsInclHP(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(
          + (VElecNonSub(runCy,DSBS,YTIME))$(INDDOM(DSBS) $(ELCEF(EF)));
 
 *' This equation calculates the variable, including fuel electricity production cost per CHP plant and demand sector, taking into account the variable cost (other than fuel)
-*' per CHP type and the summation of fuel-related costs for each energy form (PGEF). The calculation involves fuel prices, CO2 emission factors, boiler efficiency, electricity
+*' per CHP type and the summation of fuel-related costs for each energy form . The calculation involves fuel prices, CO2 emission factors, boiler efficiency, electricity
 *' index, and carbon prices, adjusted by various factors. The equation uses these terms to calculate the variable, including fuel electricity production cost per CHP plant and
 *' demand sector. The result is expressed in Euro per kilowatt-hour (Euro/KWh). 
 QVarProCostPerCHPDem(runCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS))..
@@ -1291,9 +1280,9 @@ QVarProCostPerCHPDem(runCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS))..
                          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
                          *sTWhToMtoe/(   iBoiEffChp(runCy,CHP,YTIME)*VElecIndPrices(runCy,YTIME)    ));
 
-*' The equation QAvgElcProCostCHP calculates the average electricity production cost per Combined Heat and Power (CHP) plant (VAvgElcProCHP).
-*' It involves a summation over demand subsectors (INDDOM). The average electricity production cost is determined by considering the electricity
-*' production cost per CHP plant for each demand subsector (VElecProdCostChp). The result is expressed in Euro per kilowatt-hour (Euro/KWh).
+*' The equation calculates the average electricity production cost per Combined Heat and Power plant .
+*' It involves a summation over demand subsectors . The average electricity production cost is determined by considering the electricity
+*' production cost per CHP plant for each demand subsector. The result is expressed in Euro per kilowatt-hour (Euro/KWh).
 QAvgElcProCostCHP(runCy,CHP,YTIME)$TIME(YTIME)..
          VAvgElcProCHP(runCy,CHP,YTIME)
          =E=
@@ -1301,11 +1290,10 @@ QAvgElcProCostCHP(runCy,CHP,YTIME)$TIME(YTIME)..
          (sum(INDDOM, VConsFuel(runCy,INDDOM,CHP,YTIME-1)/SUM(INDDOM2,VConsFuel(runCy,INDDOM2,CHP,YTIME-1))*VElecProdCostChp(runCy,INDDOM,CHP,YTIME)))
          $SUM(INDDOM2,VConsFuel.L(runCy,INDDOM2,CHP,YTIME-1))+0$(NOT SUM(INDDOM2,VConsFuel.L(runCy,INDDOM2,CHP,YTIME-1)));
 
-*' The equation QAvgVarElecProd computes the average variable cost, including fuel and electricity production cost, per Combined Heat and Power (CHP) plant
-*' (VAvgVarProdCostCHP). The equation involves a summation over demand subsectors (INDDOM), where the variable cost per CHP plant is calculated based on fuel
-*' consumption and the variable cost of electricity production (VProCostCHPDem). The resulting average variable cost is expressed in Euro per kilowatt-hour (Euro/KWh).
-*' The conditional statement: $SUM(INDDOM2,VConsFuel.L(runCy,INDDOM2,CHP,YTIME-1))+0$(NOT SUM(INDDOM2,VConsFuel.L(runCy,INDDOM2,CHP,YTIME-1))), ensures that the
-*' denominator in the calculation is not zero, avoiding division by zero errors.
+*' The equation computes the average variable cost, including fuel and electricity production cost, per Combined Heat and Power plant.
+*' The equation involves a summation over demand subsectors , where the variable cost per CHP plant is calculated based on fuel
+*' consumption and the variable cost of electricity production . The resulting average variable cost is expressed in Euro per kilowatt-hour (Euro/KWh).
+*' The conditional statement ensures that the denominator in the calculation is not zero, avoiding division by zero issues.
 QAvgVarElecProd(runCy,CHP,YTIME)$(TIME(YTIME) ) ..
          VAvgVarProdCostCHP(runCy,CHP,YTIME)
          =E=
@@ -1316,9 +1304,9 @@ QAvgVarElecProd(runCy,CHP,YTIME)$(TIME(YTIME) ) ..
 
 *' * REST OF ENERGY BALANCE SECTORS
 
-*' The equation QTransfOutputPatFuel calculates the transformation output from patent fuel and briquetting plants, coke-oven plants, blast furnace plants,
-*' and gas works (VTransfOutputPatFuel). The equation involves the use of a residual (iTransfOutputGasw) and is governed by certain parameters such as sector
-*' activity (iActv), activity elasticities (iElastA), and the ratio of current year activity to the previous year (iActv(YTIME,runCy,"IS")/iActv(YTIME-1,runCy,"IS")).
+*' The equation calculates the transformation output from patent fuel and briquetting plants, coke-oven plants, blast furnace plants,
+*' and gas works. The equation involves the use of a residual and is governed by certain parameters such as sector
+*' activity, activity elasticities, and the ratio of current year activity to the previous year .
 QTransfOutputPatFuel(runCy,EFS,YTIME)$TIME(YTIME)..
          VTransfOutputPatFuel(runCy,EFS,YTIME)
              =E=
@@ -1326,10 +1314,10 @@ QTransfOutputPatFuel(runCy,EFS,YTIME)$TIME(YTIME)..
          iTransfOutputGasw(runCy,YTIME) * VTransfOutputPatFuel(runCy,EFS,YTIME-1) * (iActv(YTIME,runCy,"IS")/iActv(YTIME-1,runCy,"IS"))**iElastA(runCy,"IS","a",YTIME)
          ]$iActv(YTIME-1,runCy,"IS");
 
-*' The equation QTotFinEneCons computes the total final energy consumption (VFeCons) in million tonnes of oil equivalent (Mtoe) for each country (runCy),
-*' energy form sector (EFS), and time period (YTIME). The total final energy consumption is calculated as the sum of final energy consumption in the
-*' Industry and Tertiary sectors (INDDOM) and the sum of final energy demand in all transport subsectors (TRANSE). The consumption is determined by the 
-*' relevant link between model subsectors and fuels (SECTTECH).
+*' The equation computes the total final energy consumption in million tonnes of oil equivalent for each country ,
+*' energy form sector, and time period. The total final energy consumption is calculated as the sum of final energy consumption in the
+*' Industry and Tertiary sectors and the sum of final energy demand in all transport subsectors. The consumption is determined by the 
+*' relevant link between model subsectors and fuels.
 QTotFinEneCons(runCy,EFS,YTIME)$TIME(YTIME)..
          VFeCons(runCy,EFS,YTIME)
              =E=
@@ -1339,68 +1327,68 @@ QTotFinEneCons(runCy,EFS,YTIME)$TIME(YTIME)..
          sum(TRANSE,
              sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(TRANSE,EF)), VDemTr(runCy,TRANSE,EF,YTIME)));
 
-*' The equation qTotFinEneConsAll computes the total final energy consumption (vTotFinEneConsAll) in million tonnes of oil equivalent (Mtoe)
-*' for all countries at a specific time period (YTIME). This is achieved by summing the final energy consumption (VFeCons) for each energy
-*' form sector (EFS) across all countries (runCy).
+*' The equation computes the total final energy consumption in million tonnes of oil equivalent 
+*' for all countries at a specific time period. This is achieved by summing the final energy consumption for each energy
+*' form sector across all countries.
 qTotFinEneConsAll(YTIME)$TIME(YTIME)..
          vTotFinEneConsAll(YTIME) =E= sum((runCy,EFS), VFeCons(runCy,EFS,YTIME) );     
 
-*' The equation QFinNonEneCons computes the final non-energy consumption (VFNonEnCons) in million tonnes of oil equivalent (Mtoe)
-*' for a given energy form sector (EFS). The calculation involves summing the consumption of fuels in each non-energy and bunkers
-*' demand subsector (NENSE) based on the corresponding fuel aggregation for the supply side (EFtoEFS). This process is performed 
-*' for each time period (YTIME).
+*' The equation computes the final non-energy consumption in million tonnes of oil equivalent
+*' for a given energy form sector. The calculation involves summing the consumption of fuels in each non-energy and bunkers
+*' demand subsector based on the corresponding fuel aggregation for the supply side. This process is performed 
+*' for each time period.
 QFinNonEneCons(runCy,EFS,YTIME)$TIME(YTIME)..
          VFNonEnCons(runCy,EFS,YTIME)
              =E=
          sum(NENSE$(not sameas("BU",NENSE)),
              sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(NENSE,EF) ), VConsFuel(runCy,NENSE,EF,YTIME)));  
 
-*' The equation QDistrLosses computes the distribution losses (VLosses) in million tonnes of oil equivalent (Mtoe) for a given energy form sector (EFS).
-*' The losses are determined by the rate of losses over available for final consumption (iRateLossesFinCons) multiplied by the sum of total final energy
-*' consumption (VFeCons) and final non-energy consumption (VFNonEnCons). This calculation is performed for each time period (YTIME).
-*' Please note that distribution losses are not considered for the hydrogen sector (H2EF(EF)).
+*' The equation computes the distribution losses in million tonnes of oil equivalent for a given energy form sector.
+*' The losses are determined by the rate of losses over available for final consumption multiplied by the sum of total final energy
+*' consumption and final non-energy consumption. This calculation is performed for each time period.
+*' Please note that distribution losses are not considered for the hydrogen sector.
 QDistrLosses(runCy,EFS,YTIME)$TIME(YTIME)..
          VLosses(runCy,EFS,YTIME)
              =E=
          (iRateLossesFinCons(runCy,EFS,YTIME) * (VFeCons(runCy,EFS,YTIME) + VFNonEnCons(runCy,EFS,YTIME)))$(not H2EF(EFS));  
 
-*' The equation QTransfOutputDHPlants calculates the transformation output from district heating plants (VTransfOutputDHPlants).
-*' This transformation output is determined by summing over different demand sectors (DOMSE) and district heating systems (DH)
-*' that correspond to the specified energy form set (EFtoEFS(DH, STEAM)). The equation then sums over these district heating 
-*' systems and calculates the consumption of fuels (VConsFuel) in each of these sectors. The resulting value represents the 
-*' transformation output from district heating plants in million tonnes of oil equivalent (Mtoe).
+*' The equation calculates the transformation output from district heating plants .
+*' This transformation output is determined by summing over different demand sectors and district heating systems 
+*' that correspond to the specified energy form set. The equation then sums over these district heating 
+*' systems and calculates the consumption of fuels in each of these sectors. The resulting value represents the 
+*' transformation output from district heating plants in million tonnes of oil equivalent.
 QTranfOutputDHPlants(runCy,STEAM,YTIME)$TIME(YTIME)..
          VTransfOutputDHPlants(runCy,STEAM,YTIME)
              =E=
          sum(DOMSE,
              sum(DH$(EFtoEFS(DH,STEAM) $SECTTECH(DOMSE,DH)), VConsFuel(runCy,DOMSE,DH,YTIME)));
 
-*' The equation QTransfInputDHPlants calculates the transformation input to district heating plants (VTransfInputDHPlants).
-*' This transformation input is determined by summing over different district heating systems (DH) that correspond to the
-*' specified energy form set (DHtoEF(DH, EFS)). The equation then sums over different demand sectors (DOMSE) within each 
-*' district heating system and calculates the consumption of fuels (VConsFuel) in each of these sectors, taking into account
-*' the efficiency of district heating plants (iEffDHPlants). The resulting value represents the transformation input to district
-*' heating plants in million tonnes of oil equivalent (Mtoe).
+*' The equation calculates the transformation input to district heating plants.
+*' This transformation input is determined by summing over different district heating systems that correspond to the
+*' specified energy form set . The equation then sums over different demand sectors within each 
+*' district heating system and calculates the consumption of fuels in each of these sectors, taking into account
+*' the efficiency of district heating plants. The resulting value represents the transformation input to district
+*' heating plants in million tonnes of oil equivalent.
 QTransfInputDHPlants(runCy,EFS,YTIME)$TIME(YTIME)..
          VTransfInputDHPlants(runCy,EFS,YTIME)
              =E=
          sum(DH$DHtoEF(DH,EFS),
              sum(DOMSE$SECTTECH(DOMSE,DH),VConsFuel(runCy,DOMSE,DH,YTIME)) / iEffDHPlants(runCy,EFS,YTIME));   
 
-*' The equation QTransfInputPatFuel calculates the transformation input to patent fuel and briquetting plants, coke-oven plants, blast furnace plants,
-*' and gas works (VTransfInputPatFuel). This transformation input is computed by summing over different energy forms (EF) within the specified set (EFS)
-*' and using the corresponding transformation output (VTransfOutputPatFuel). The efficiency of gasworks, blast furnaces, and briquetting plants (iAvgEffGas)
+*' The equation calculates the transformation input to patent fuel and briquetting plants, coke-oven plants, blast furnace plants,
+*' and gas works. This transformation input is computed by summing over different energy forms within the specified set
+*' and using the corresponding transformation output. The efficiency of gasworks, blast furnaces, and briquetting plants
 *' is taken into account, and the result is multiplied by the share of fuels in the transformation input to gasworks, blast furnaces, and briquetting plants
-*' in the base year (iShareFueTransfInput). The output represents the transformation input in the base year (1).
+*' in the base year. The output represents the transformation input in the base year (1).
 QTransfInputPatFuel(runCy,EFS,YTIME)$TIME(YTIME)..
          VTransfInputPatFuel(runCy,EFS,YTIME)
              =E=
          sum(EF$(EFS(EF) $iAvgEffGas(runCy,EF,YTIME)) , VTransfOutputPatFuel(runCy,EFS,YTIME)/iAvgEffGas(runCy,EF,YTIME)) * iShareFueTransfInput(runCy,EFS); 
 
-*' The equation QRefCapacity calculates the refineries' capacity (VRefCapacity) for a given scenario and year (YTIME).
-*' The calculation is based on a residual factor (iResRefCapacity), the previous year's capacity, and a production scaling
-*' factor that takes into account the historical consumption trends for different energy forms (EFS). The scaling factor is
-*' influenced by the base year (tFirst) and the production scaling parameter (prod(rc,...)). The result represents the refineries'
+*' The equation calculates the refineries' capacity for a given scenario and year.
+*' The calculation is based on a residual factor, the previous year's capacity, and a production scaling
+*' factor that takes into account the historical consumption trends for different energy forms. The scaling factor is
+*' influenced by the base year and the production scaling parameter. The result represents the refineries'
 *' capacity in million barrels per day (Million Barrels/day).
 QRefCapacity(runCy,YTIME)$TIME(YTIME)..
          VRefCapacity(runCy,YTIME)
@@ -1415,9 +1403,9 @@ QRefCapacity(runCy,YTIME)$TIME(YTIME)..
          $(ord(YTIME) gt 16)
          )     ] $iRefCapacity(runCy,"%fStartHorizon%");
 
-*' The equation QTranfOutputRefineries calculates the transformation output from refineries (VTransfOutputRefineries) for a specific energy form (EFS)
-*' in a given scenario and year (YTIME). The output is computed based on a residual factor (iResTransfOutputRefineries), the previous year's output, and the
-*' change in refineries' capacity (VRefCapacity). The calculation includes considerations for the base year (tFirst) and adjusts the result accordingly.
+*' The equation calculates the transformation output from refineries for a specific energy form 
+*' in a given scenario and year. The output is computed based on a residual factor, the previous year's output, and the
+*' change in refineries' capacity. The calculation includes considerations for the base year and adjusts the result accordingly.
 *' The result represents the transformation output from refineries for the specified energy form in million tons of oil equivalent.
 QTranfOutputRefineries(runCy,EFS,YTIME)$(TIME(YTIME) $EFtoEFA(EFS,"LQD"))..
          VTransfOutputRefineries(runCy,EFS,YTIME)
@@ -1433,10 +1421,10 @@ QTranfOutputRefineries(runCy,EFS,YTIME)$(TIME(YTIME) $EFtoEFA(EFS,"LQD"))..
              )$(not (TFIRST(YTIME-1) or TFIRST(YTIME-2)))
            )**(0.7)  ]$iRefCapacity(runCy,"%fStartHorizon%"); 
 
-*' The equation QTransfInputRefineries calculates the transformation input to refineries (VTransfInputRefineries) for the energy form "CRO" (Crude Oil)
-*' in a specific scenario and year (YTIME). The input is computed based on the previous year's input to refineries, multiplied by the ratio of the transformation
+*' The equation calculates the transformation input to refineries for the energy form Crude Oil
+*' in a specific scenario and year. The input is computed based on the previous year's input to refineries, multiplied by the ratio of the transformation
 *' output from refineries for the given energy form and year to the output in the previous year. This calculation is conditional on the refineries' capacity
-*' (iRefCapacity) being active in the specified starting horizon.The result represents the transformation input to refineries for crude oil in million tons of oil equivalent.
+*' being active in the specified starting horizon.The result represents the transformation input to refineries for crude oil in million tons of oil equivalent.
 QTransfInputRefineries(runCy,"CRO",YTIME)$(TIME(YTIME) )..
          VTransfInputRefineries(runCy,"CRO",YTIME)
              =E=
@@ -1445,29 +1433,27 @@ QTransfInputRefineries(runCy,"CRO",YTIME)$(TIME(YTIME) )..
          sum(EFS$EFtoEFA(EFS,"LQD"), VTransfOutputRefineries(runCy,EFS,YTIME)) /
          sum(EFS$EFtoEFA(EFS,"LQD"), VTransfOutputRefineries(runCy,EFS,YTIME-1))  ]$iRefCapacity(runCy,"%fStartHorizon%");                   
 
-*' The equation QTransfOutputNuclear calculates the transformation output from nuclear plants (VTransfOutputNuclear) for electricity production ("ELC")
-*' in a specific scenario and year (YTIME). The output is computed as the sum of electricity production from all nuclear power plants (PGNUCL) in the given
-*' scenario and year, multiplied by the conversion factor from terawatt-hours to million tons of oil equivalent (sTWhToMtoe).
+*' The equation calculates the transformation output from nuclear plants for electricity production 
+*' in a specific scenario and year. The output is computed as the sum of electricity production from all nuclear power plants in the given
+*' scenario and year, multiplied by the conversion factor from terawatt-hours to million tons of oil equivalent.
 *' The result represents the transformation output from nuclear plants for electricity production in million tons of oil equivalent.
 QTransfOutputNuclear(runCy,"ELC",YTIME)$TIME(YTIME) ..
          VTransfOutputNuclear(runCy,"ELC",YTIME) =E=SUM(PGNUCL,VElecProd(runCy,PGNUCL,YTIME))*sTWhToMtoe;
 
-*' The equation QTransfInNuclear computes the transformation input to nuclear plants (VTransfInNuclear) for a specific scenario and year (YTIME).
-*' The input is calculated based on the sum of electricity production from all nuclear power plants (PGNUCL) in the given scenario and year, divided
-*' by the plant efficiency (iPlantEffByType) and multiplied by the conversion factor from terawatt-hours to million tons of oil equivalent (sTWhToMtoe).
+*' The equation computes the transformation input to nuclear plants for a specific scenario and year.
+*' The input is calculated based on the sum of electricity production from all nuclear power plants in the given scenario and year, divided
+*' by the plant efficiency and multiplied by the conversion factor from terawatt-hours to million tons of oil equivalent (sTWhToMtoe).
 *' The result represents the transformation input to nuclear plants in million tons of oil equivalent.
 QTransfInNuclear(runCy,"NUC",YTIME)$TIME(YTIME)..
         VTransfInNuclear(runCy,"NUC",YTIME) =E=SUM(PGNUCL,VElecProd(runCy,PGNUCL,YTIME)/iPlantEffByType(runCy,PGNUCL,YTIME))*sTWhToMtoe;
 
-*' The equation QTransfInPowerPls computes the transformation input to thermal power plants (VTransfInThermPowPls) for a specific power generation form (PGEF)
-*' in a given scenario and year (YTIME). The input is calculated based on the following conditions:
-*' For conventional power plants (PGALL) that are not geothermal (PGGEO) or nuclear (PGNUCL), the transformation input is determined by the electricity production
-*' from the respective power plant (VElecProd) multiplied by the conversion factor from terawatt-hours to million tons of oil equivalent (sTWhToMtoe), divided by the
-*' plant efficiency (iPlantEffByType).
-*' For geothermal power plants (PGGEO), the transformation input is based on the electricity production from the geothermal plant (VElecProd) multiplied by the conversion
-*' factor.
-*' For combined heat and power (CHP) plants (CHP), the input is calculated as the sum of the consumption of fuels in various demand subsectors (VConsFuel) and the electricity
-*' production from the CHP plant (VChpElecProd). This sum is then divided by a factor based on the year (ord(YTIME)) to account for variations over time.The result represents
+*' The equation computes the transformation input to thermal power plants for a specific power generation form 
+*' in a given scenario and year. The input is calculated based on the following conditions:
+*' For conventional power plants that are not geothermal or nuclear, the transformation input is determined by the electricity production
+*' from the respective power plant multiplied by the conversion factor from terawatt-hours to million tons of oil equivalent (sTWhToMtoe), divided by the
+*' plant efficiency.For geothermal power plants, the transformation input is based on the electricity production from the geothermal plant multiplied by the conversion
+*' factor.For combined heat and power plants , the input is calculated as the sum of the consumption of fuels in various demand subsectors and the electricity
+*' production from the CHP plant . This sum is then divided by a factor based on the year to account for variations over time.The result represents
 *' the transformation input to thermal power plants in million tons of oil equivalent.
 QTransfInPowerPls(runCy,PGEF,YTIME)$TIME(YTIME)..
          VTransfInThermPowPls(runCy,PGEF,YTIME)
@@ -1480,13 +1466,13 @@ QTransfInPowerPls(runCy,PGEF,YTIME)$TIME(YTIME)..
         +
         sum(CHP$CHPtoEF(CHP,PGEF),  sum(INDDOM,VConsFuel(runCy,INDDOM,CHP,YTIME))+sTWhToMtoe*VChpElecProd(runCy,CHP,YTIME))/(0.8+0.1*(ord(YTIME)-16)/32);
 
-*' The equation QTransfOutThermPP calculates the transformation output from thermal power stations (VTransfOutThermPowSta) for a specific energy branch (TOCTEF)
-*' in a given scenario and year (YTIME). The result is computed based on the following conditions: 
-*' If the energy branch is related to electricity (ELCEF(TOCTEF)), the transformation output from thermal power stations is the sum of electricity production from
-*' conventional power plants (VElecProd) and combined heat and power (CHP) plants (VChpElecProd). The production values are converted from terawatt-hours (TWh) to
-*' million tons of oil equivalent (Mtoe).
-*' If the energy branch is associated with steam (STEAM(TOCTEF)), the transformation output is determined by the sum of the consumption of fuels in various demand
-*' subsectors (VConsFuel), the rate of energy branch consumption over total transformation output (iRateEneBranCons), and losses (VLosses).
+*' The equation calculates the transformation output from thermal power stations for a specific energy branch
+*' in a given scenario and year. The result is computed based on the following conditions: 
+*' If the energy branch is related to electricity, the transformation output from thermal power stations is the sum of electricity production from
+*' conventional power plants and combined heat and power plants. The production values are converted from terawatt-hours (TWh) to
+*' million tons of oil equivalent.
+*' If the energy branch is associated with steam, the transformation output is determined by the sum of the consumption of fuels in various demand
+*' subsectors, the rate of energy branch consumption over total transformation output, and losses.
 *' The result represents the transformation output from thermal power stations in million tons of oil equivalent.
 QTransfOutThermPP(runCy,TOCTEF,YTIME)$TIME(YTIME)..
          VTransfOutThermPowSta(runCy,TOCTEF,YTIME)
@@ -1504,10 +1490,10 @@ QTransfOutThermPP(runCy,TOCTEF,YTIME)$TIME(YTIME)..
           VLosses(runCy,TOCTEF,YTIME)                                                                                    
          )$STEAM(TOCTEF); 
             
-*' The equation QTotTransfInput calculates the total transformation input (VTotTransfInput) for a specific energy branch (EFS)
-*' in a given scenario and year (YTIME). The result is obtained by summing the transformation inputs from different sources, including
-*' thermal power plants (VTransfInThermPowPls), District Heating Plants (VTransfInputDHPlants), nuclear plants (VTransfInNuclear), patent
-*' fuel and briquetting plants (VTransfInputPatFuel), and refineries (VTransfInputRefineries). In the case where the energy branch is "OGS"
+*' The equation calculates the total transformation input for a specific energy branch 
+*' in a given scenario and year. The result is obtained by summing the transformation inputs from different sources, including
+*' thermal power plants, District Heating Plants, nuclear plants, patent
+*' fuel and briquetting plants, and refineries. In the case where the energy branch is "OGS"
 *' (Other Gas), the total transformation input is calculated as the difference between the total transformation output and various consumption
 *' and loss components. The outcome represents the total transformation input in million tons of oil equivalent.
 QTotTransfInput(runCy,EFS,YTIME)$TIME(YTIME)..
@@ -1523,20 +1509,20 @@ QTotTransfInput(runCy,EFS,YTIME)$TIME(YTIME)..
           VTotTransfOutput(runCy,EFS,YTIME) - VLosses(runCy,EFS,YTIME)
         )$sameas(EFS,"OGS");            
 
-*' The equation QTotTransfOutput calculates the total transformation output (VTotTransfOutput) for a specific energy branch (EFS) in a given scenario and year (YTIME).
-*' The result is obtained by summing the transformation outputs from different sources, including thermal power stations (VTransfOutThermPowSta), District Heating Plants
-*' (VTransfOutputDHPlants), nuclear plants (VTransfOutputNuclear), patent fuel and briquetting plants, coke-oven plants, blast furnace plants, and gas works
-*' (VTransfOutputPatFuel), as well as refineries (VTransfOutputRefineries). The outcome represents the total transformation output in million tons of oil equivalent.
+*' The equation calculates the total transformation output for a specific energy branch in a given scenario and year.
+*' The result is obtained by summing the transformation outputs from different sources, including thermal power stations, District Heating Plants,
+*' nuclear plants, patent fuel and briquetting plants, coke-oven plants, blast furnace plants, and gas works
+*' as well as refineries. The outcome represents the total transformation output in million tons of oil equivalent.
 QTotTransfOutput(runCy,EFS,YTIME)$TIME(YTIME)..
          VTotTransfOutput(runCy,EFS,YTIME)
                  =E=
          VTransfOutThermPowSta(runCy,EFS,YTIME) + VTransfOutputDHPlants(runCy,EFS,YTIME) + VTransfOutputNuclear(runCy,EFS,YTIME) + VTransfOutputPatFuel(runCy,EFS,YTIME) +
          VTransfOutputRefineries(runCy,EFS,YTIME);        !!+ TONEW(runCy,EFS,YTIME)
 
-*' The equation QTransfers calculates the transfers of a specific energy branch (EFS) in a given scenario and year (YTIME).
-*' The result, represented by VTransfers, is computed based on a complex formula that involves the previous year's transfers,
-*' the residual for feedstocks in transfers (iResFeedTransfr), and various conditions.
-*' In particular, the equation includes terms related to feedstock transfers (iFeedTransfr), residual feedstock transfers (iResFeedTransfr),
+*' The equation calculates the transfers of a specific energy branch in a given scenario and year.
+*' The result is computed based on a complex formula that involves the previous year's transfers,
+*' the residual for feedstocks in transfers, and various conditions.
+*' In particular, the equation includes terms related to feedstock transfers, residual feedstock transfers,
 *' and specific conditions for the energy branch "CRO" (crop residues). The outcome represents the transfers in million tons of oil equivalent.
 QTransfers(runCy,EFS,YTIME)$TIME(YTIME)..
          VTransfers(runCy,EFS,YTIME) =E=
@@ -1546,8 +1532,8 @@ QTransfers(runCy,EFS,YTIME)$TIME(YTIME)..
                  SUM(EFS2$EFTOEFA(EFS2,"LQD"),VTransfers(runCy,EFS2,YTIME-1)))$sameas(EFS,"CRO")   )$(iFeedTransfr(runCy,EFS,"%fStartHorizon%"))$(NOT sameas("OLQ",EFS)) 
 );         
 
-*' The equation QGrsInlConsNotEneBranch calculates the gross inland consumption excluding the consumption of a specific energy branch (EFS)
-*' in a given scenario and year (YTIME). The result, represented by VGrsInlConsNotEneBranch, is computed by summing various components, including
+*' The equation calculates the gross inland consumption excluding the consumption of a specific energy branch
+*' in a given scenario and year. The result is computed by summing various components, including
 *' total final energy consumption, final non-energy consumption, total transformation input and output, distribution losses, and transfers.
 *' The outcome represents the gross inland consumption excluding the consumption of the specified energy branch in million tons of oil equivalent.
  QGrsInlConsNotEneBranch(runCy,EFS,YTIME)$TIME(YTIME)..
@@ -1556,7 +1542,7 @@ QTransfers(runCy,EFS,YTIME)$TIME(YTIME)..
          VFeCons(runCy,EFS,YTIME) + VFNonEnCons(runCy,EFS,YTIME) + VTotTransfInput(runCy,EFS,YTIME) - VTotTransfOutput(runCy,EFS,YTIME) + VLosses(runCy,EFS,YTIME) - 
          VTransfers(runCy,EFS,YTIME); 
 
-*' The equation QGrssInCons calculates the gross inland consumption (VGrssInCons) for a specific energy branch (EFS) in a given scenario and year (YTIME).
+*' The equation calculates the gross inland consumptionfor a specific energy branch in a given scenario and year.
 *' This is computed by summing various components, including total final energy consumption, final consumption in the energy sector, final non-energy consumption,
 *' total transformation input and output, distribution losses, and transfers. The result represents the gross inland consumption in million tons of oil equivalent.
 QGrssInCons(runCy,EFS,YTIME)$TIME(YTIME)..
@@ -1565,14 +1551,14 @@ QGrssInCons(runCy,EFS,YTIME)$TIME(YTIME)..
          VFeCons(runCy,EFS,YTIME) + VEnCons(runCy,EFS,YTIME) + VFNonEnCons(runCy,EFS,YTIME) + VTotTransfInput(runCy,EFS,YTIME) - VTotTransfOutput(runCy,EFS,YTIME) +
           VLosses(runCy,EFS,YTIME) - VTransfers(runCy,EFS,YTIME);  
 
-*' The equation QPrimProd calculates the primary production (VPrimProd) for a specific primary production definition (PPRODEF) in a given scenario and year (YTIME).
+*' The equation calculates the primary production for a specific primary production definition in a given scenario and year.
 *' The computation involves different scenarios based on the type of primary production definition:
-*' For primary production definitions other than "CRO" and "NGS," the primary production is directly proportional to the rate of primary production in total primary needs,
+*' For primary production definitions the primary production is directly proportional to the rate of primary production in total primary needs,
 *' and it depends on gross inland consumption not including the consumption of the energy branch.
-*' For "NGS" (Natural Gas) primary production, the calculation considers a specific formula involving the rate of primary production in total primary needs, residuals for
+*' For Natural Gas primary production, the calculation considers a specific formula involving the rate of primary production in total primary needs, residuals for
 *' hard coal, natural gas, and oil primary production, the elasticity related to gross inland consumption for natural gas, and other factors. Additionally, there is a lag
-*' effect with coefficients (iPolDstrbtnLagCoeffPriOilPr) for primary oil production.
-*' For "CRO" (Crude Oil) primary production, the computation includes the rate of primary production in total primary needs, residuals for hard coal, natural gas, and oil
+*' effect with coefficients for primary oil production.
+*' For Crude Oil primary production, the computation includes the rate of primary production in total primary needs, residuals for hard coal, natural gas, and oil
 *' primary production, the fuel primary production, and a product term involving the polynomial distribution lag coefficients for primary oil production.
 *' The result represents the primary production in million tons of oil equivalent.
 QPrimProd(runCy,PPRODEF,YTIME)$TIME(YTIME)..
@@ -1599,8 +1585,8 @@ QPrimProd(runCy,PPRODEF,YTIME)$TIME(YTIME)..
                          **(0.2*iPolDstrbtnLagCoeffPriOilPr(kpdl)))
          )$sameas(PPRODEF,"CRO")   ]$iRatePriProTotPriNeeds(runCy,PPRODEF,YTIME);   
 
-*' The equation QFakeExp calculates the fake exports (VExportsFake) for a specific energy branch (EFS)
-*' in a given scenario and year (YTIME). The computation is based on the fuel exports (iFuelExprts) for
+*' The equation calculates the fake exports for a specific energy branch
+*' in a given scenario and year. The computation is based on the fuel exports for
 *' the corresponding energy branch. The result represents the fake exports in million tons of oil equivalent.
 QFakeExp(runCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS))..
          VExportsFake(runCy,EFS,YTIME)
@@ -1610,11 +1596,11 @@ QFakeExp(runCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS))..
          )
 +  iFuelExprts(runCy,EFS,YTIME);
 
-*' The equation QFakeImprts computes the fake imports (VFkImpAllFuelsNotNatGas) for a specific energy branch (EFS)
-*' in a given scenario and year (YTIME). The calculation is based on different conditions for various energy branches,
-*' such as electricity (ELCEF), crude oil (CRO), and natural gas (NGS). The equation involves gross inland consumption
-*' (VGrssInCons), fake exports (VExportsFake), consumption of fuels in demand subsectors (VConsFuel), electricity imports
-*' (iElecImp), and other factors. The result represents the fake imports in million tons of oil equivalent for all fuels except natural gas.
+*' The equation computes the fake imports for a specific energy branch 
+*' in a given scenario and year. The calculation is based on different conditions for various energy branches,
+*' such as electricity, crude oil, and natural gas. The equation involves gross inland consumption,
+*' fake exports, consumption of fuels in demand subsectors, electricity imports,
+*' and other factors. The result represents the fake imports in million tons of oil equivalent for all fuels except natural gas.
 QFakeImprts(runCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS))..
 
          VFkImpAllFuelsNotNatGas(runCy,EFS,YTIME)
@@ -1642,16 +1628,16 @@ QFakeImprts(runCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS))..
             (VGrssInCons(runCy,EFS,YTIME) + VExportsFake(runCy,EFS,YTIME) + VConsFuel(runCy,"BU",EFS,YTIME)$SECTTECH("BU",EFS) )
          )$(not (ELCEF(EFS) or sameas(EFS,"NGS") or sameas(EFS,"CRO")));
 
-*' The equation QNetImports computes the net imports (VNetImports) for a specific energy branch (EFS)
-*' in a given scenario and year. It subtracts the fake exports (VExportsFake) from the fake imports for
-*' all fuels except natural gas (VFkImpAllFuelsNotNatGas). The result represents the net imports in million tons of oil equivalent.
+*' The equation computes the net imports for a specific energy branch 
+*' in a given scenario and year. It subtracts the fake exports from the fake imports for
+*' all fuels except natural gas . The result represents the net imports in million tons of oil equivalent.
 QNetImports(runCy,EFS,YTIME)$TIME(YTIME)..
          VNetImports(runCy,EFS,YTIME)
                  =E=
          VFkImpAllFuelsNotNatGas(runCy,EFS,YTIME) - VExportsFake(runCy,EFS,YTIME);
                                
-*' The equation QEneBrnchEneCons calculates the final energy consumption in the energy sector (VEnCons).
-*' It considers the rate of energy branch consumption over the total transformation output (iRateEneBranCons).
+*' The equation calculates the final energy consumption in the energy sector.
+*' It considers the rate of energy branch consumption over the total transformation output.
 *' The final consumption is determined based on the total transformation output and primary production for energy
 *' branches, excluding Oil, Coal, and Gas. The result, VEnCons, represents the final consumption in million tons of
 *' oil equivalent for the specified scenario and year.
@@ -1672,11 +1658,11 @@ QEneBrnchEneCons(runCy,EFS,YTIME)$TIME(YTIME)..
 
 *' * CO2 SEQUESTRATION COST CURVES
 
-*' The equation QCO2ElcHrg calculates the CO2 captured by electricity and hydrogen production plants (VCO2ElcHrgProd)
-*' in million tons of CO2 for a specific scenario and year (runCy, YTIME). The CO2 capture is determined by summing 
-*' the product of electricity production (VElecProd) from plants with carbon capture and storage (CCS), the conversion
-*' factor from terawatt-hours to million tons of oil equivalent (sTWhToMtoe), the plant efficiency (iPlantEffByType),
-*' the CO2 emission factor (iCo2EmiFac), and the plant CO2 capture rate (iCO2CaptRate). 
+*' The equation calculates the CO2 captured by electricity and hydrogen production plants
+*' in million tons of CO2 for a specific scenario and year. The CO2 capture is determined by summing 
+*' the product of electricity production from plants with carbon capture and storage, the conversion
+*' factor from terawatt-hours to million tons of oil equivalent (sTWhToMtoe), the plant efficiency,
+*' the CO2 emission factor, and the plant CO2 capture rate. 
 QCO2ElcHrg(runCy,YTIME)$TIME(YTIME)..
          VCO2ElcHrgProd(runCy,YTIME)
          =E=
@@ -1684,32 +1670,32 @@ QCO2ElcHrg(runCy,YTIME)$TIME(YTIME)..
                  VElecProd(runCy,CCS,YTIME)*sTWhToMtoe/iPlantEffByType(runCy,CCS,YTIME)*
                  iCo2EmiFac(runCy,"PG",PGEF,YTIME)*iCO2CaptRate(runCy,CCS,YTIME)));
 
-*' The equation QCumCO2Capt calculates the cumulative CO2 captured (VCumCO2Capt) in million tons of CO2 for a given scenario and year.
+*' The equation calculates the cumulative CO2 captured in million tons of CO2 for a given scenario and year.
 *' The cumulative CO2 captured at the current time period is determined by adding the CO2 captured by electricity and hydrogen production
-*' plants (VCO2ElcHrgProd) to the cumulative CO2 captured in the previous time period. This equation captures the ongoing total CO2 capture
+*' plants to the cumulative CO2 captured in the previous time period. This equation captures the ongoing total CO2 capture
 *' over time in the specified scenario.
 QCumCO2Capt(runCy,YTIME)$TIME(YTIME)..
          VCumCO2Capt(runCy,YTIME) =E= VCumCO2Capt(runCy,YTIME-1)+VCO2ElcHrgProd(runCy,YTIME-1);   
 
-*' The equation QWghtTrnstLinToExpo computes the transition weight (VWghtTrnstLnrToExpo) from a linear to exponential CO2 sequestration
-*' cost curve for a specific scenario and year (runCy, YTIME). The transition weight is determined based on the cumulative CO2 captured
-*' (VCumCO2Capt) and parameters defining the transition characteristics (iElastCO2Seq).The transition weight is calculated using a logistic function.
+*' The equation computes the transition weight from a linear to exponential CO2 sequestration
+*' cost curve for a specific scenario and year. The transition weight is determined based on the cumulative CO2 captured
+*' and parameters defining the transition characteristics.The transition weight is calculated using a logistic function.
 *' This equation provides a mechanism to smoothly transition from a linear to exponential cost curve based on the cumulative CO2 captured, allowing
-*' for a realistic representation of the cost dynamics associated with CO2 sequestration. The resulting VWghtTrnstLnrToExpo represents the weight for
+*' for a realistic representation of the cost dynamics associated with CO2 sequestration. The result represents the weight for
 *' the transition in the specified scenario and year.
 QWghtTrnstLinToExpo(runCy,YTIME)$TIME(YTIME)..
          VWghtTrnstLnrToExpo(runCy,YTIME)
          =E=
          1/(1+exp(-iElastCO2Seq(runCy,"mc_s")*( VCumCO2Capt(runCy,YTIME)/iElastCO2Seq(runCy,"pot")-iElastCO2Seq(runCy,"mc_m")))); 
 
-*' The equation QCstCO2SeqCsts calculates the cost curve for CO2 sequestration costs (VCO2SeqCsts) in Euro per ton of CO2 sequestered
-*' for a specific scenario and year (runCy, YTIME). The cost curve is determined based on cumulative CO2 captured (VCumCO2Capt) and
-*' elasticities for the CO2 sequestration cost curve (iElastCO2Seq).The equation is formulated to represent a flexible cost curve that
+*' The equation calculates the cost curve for CO2 sequestration costs in Euro per ton of CO2 sequestered
+*' for a specific scenario and year. The cost curve is determined based on cumulative CO2 captured and
+*' elasticities for the CO2 sequestration cost curve.The equation is formulated to represent a flexible cost curve that
 *' can transition from linear to exponential. The transition is controlled by the weight for the transition from linear to exponential
-*' (VWghtTrnstLnrToExpo). The cost curve is expressed as a combination of linear and exponential functions, allowing for a realistic
+*' The cost curve is expressed as a combination of linear and exponential functions, allowing for a realistic.
 *' representation of the relationship between cumulative CO2 captured and sequestration costs. This equation provides a dynamic and
 *' realistic approach to modeling CO2 sequestration costs, considering the cumulative CO2 captured and the associated elasticities
-*' for the cost curve. The resulting VCO2SeqCsts represents the cost of sequestering one ton of CO2 in the specified scenario and year.
+*' for the cost curve. The result represents the cost of sequestering one ton of CO2 in the specified scenario and year.
 QCstCO2SeqCsts(runCy,YTIME)$TIME(YTIME)..
          VCO2SeqCsts(runCy,YTIME) =E=
        (1-VWghtTrnstLnrToExpo(runCy,YTIME))*(iElastCO2Seq(runCy,"mc_a")*VCumCO2Capt(runCy,YTIME)+iElastCO2Seq(runCy,"mc_b"))+
@@ -1718,21 +1704,21 @@ QCstCO2SeqCsts(runCy,YTIME)$TIME(YTIME)..
 
 *' * EMISSIONS CONSTRAINTS 
 
-*' The equation QTotGhgEmisAllCountrNap computes the total CO2 equivalent (CO2eq) greenhouse gas emissions in all countries
-*' per National Allocation Plan (NAP) sector for a specific year (YTIME). The result, VTotGhgEmisAllCountrNap, represents the 
-*' sum of CO2eq emissions for each NAP sector across all countries.The equation involves several components:
-*' Consumption of Fuels (VConsFuel): The consumption of fuels in each demand subsector, excluding heat from heat pumps, is considered.
+*' The equation computes the total CO2 equivalent greenhouse gas emissions in all countries
+*' per National Allocation Plan (NAP) sector for a specific year. The result represents the 
+*' sum of CO2 emissions for each NAP sector across all countries.The equation involves several components:
+*' The consumption of fuels in each demand subsector, excluding heat from heat pumps, is considered.
 *' The emissions are calculated based on the fuel consumption and the CO2 emission factor for each subsector.
-*' Transformation Input to Thermal Power Plants (VTransfInThermPowPls): The transformation input to thermal power plants is considered,
+*' Transformation Input to Thermal Power Plants is considered,
 *' and the emissions are calculated based on the input and the CO2 emission factor.
-*' Transformation Input to District Heating Plants (VTransfInputDHPlants): The transformation input to district heating plants is considered,
+*' Transformation Input to District Heating Plants : The transformation input to district heating plants is considered,
 *' and emissions are calculated based on the input and the CO2 emission factor.
-*' Final Consumption in Energy Sector (VEnCons): The final consumption in the energy sector is considered, and emissions are calculated based
+*' Final Consumption in Energy Sector : The final consumption in the energy sector is considered, and emissions are calculated based
 *' on the consumption and the CO2 emission factor.
-*' Electricity Production (VElecProd): The emissions from electricity production are considered, including adjustments for plant efficiency,
-*' CO2 emission factors, and the CO2 capture rate for plants with carbon capture and storage (CCS).
+*' Electricity Production: The emissions from electricity production are considered, including adjustments for plant efficiency,
+*' CO2 emission factors, and the CO2 capture rate for plants with carbon capture and storage.
 *' The equation provides a comprehensive approach to calculating CO2eq emissions for each NAP sector, considering various aspects of fuel consumption
-*' and transformation across different subsectors. The result VTotGhgEmisAllCountrNap represents the overall CO2eq emissions for each NAP sector across
+*' and transformation across different subsectors. The result represents the overall CO2 emissions for each NAP sector across
 *' all countries for the specified year.
 QTotGhgEmisAllCountrNap(NAP,YTIME)$TIME(YTIME)..
          VTotGhgEmisAllCountrNap(NAP,YTIME)
@@ -1753,9 +1739,9 @@ QTotGhgEmisAllCountrNap(NAP,YTIME)$TIME(YTIME)..
                          VElecProd(runCy,CCS,YTIME)*sTWhToMtoe/iPlantEffByType(runCy,CCS,YTIME)*
                          iCo2EmiFac(runCy,"PG",PGEF,YTIME)*iCO2CaptRate(runCy,CCS,YTIME)))));   !! CO2 captured by CCS plants in power generation
 
-*' The equation qTotCo2AllCoun computes the total CO2 equivalent (CO2eq) greenhouse gas emissions in all countries for a specific year (YTIME).
-*' The result, vTotCo2AllCoun, represents the sum of total CO2eq emissions across all countries. The summation is performed over the NAP (National Allocation Plan) sectors,
-*' considering the total CO2eq GHG emissions per NAP sector (VTotGhgEmisAllCountrNap) for each country. This equation provides a concise and systematic approach to aggregating
+*' The equation computes the total CO2 equivalent greenhouse gas emissions in all countries for a specific year.
+*' The result represents the sum of total CO2eq emissions across all countries. The summation is performed over the NAP (National Allocation Plan) sectors,
+*' considering the total CO2 GHG emissions per NAP sectorfor each country. This equation provides a concise and systematic approach to aggregating
 *' greenhouse gas emissions at a global level, considering contributions from different sectors and countries. 
 qTotCo2AllCoun(YTIME)$TIME(YTIME)..
 
@@ -1775,12 +1761,12 @@ qHouseExpEne(runCy,YTIME)$TIME(YTIME)..
 
 *' * Prices
 
-*' The equation QFuelPriSubSepCarbVal computes fuel prices per subsector and fuel (VFuelPriceSub) with separate carbon values in
-*' each sector for a specific scenario, subsector (SBS), fuel (EF), and year (YTIME).The equation considers various scenarios based
+*' The equation computes fuel prices per subsector and fuel with separate carbon values in
+*' each sector for a specific scenario, subsector, fuel, and year.The equation considers various scenarios based
 *' on the type of fuel and whether it is subject to changes in carbon values. It incorporates factors such as carbon emission factors
-*' (iCo2EmiFac), carbon values for all countries (VCarVal), electricity prices to industrial and residential consumers (VElecPriInduResConsu),
-*' efficiency values (iEffValueInEuro), and the total hydrogen cost per sector (iHydrogenPri).The result of the equation is the fuel price per 
-*'subsector and fuel, adjusted based on changes in carbon values, electricity prices, efficiency, and hydrogen costs.
+*' carbon values for all countries, electricity prices to industrial and residential consumers,
+*' efficiency values, and the total hydrogen cost per sector.The result of the equation is the fuel price per 
+*' subsector and fuel, adjusted based on changes in carbon values, electricity prices, efficiency, and hydrogen costs.
 QFuelPriSubSepCarbVal(runCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF) $TIME(YTIME) $(not sameas("NUC",EF)))..
          VFuelPriceSub(runCy,SBS,EF,YTIME)
                  =E=
@@ -1802,31 +1788,31 @@ VFuelPriceSub(runCy,SBS,EF,YTIME-1)$(DSBS(SBS))$ALTEF(EF)
                  iHydrogenPri(runCy,SBS,YTIME-1)$DSBS(SBS)
          )$(H2EF(EF) or sameas("STE1AH2F",EF));
 
-*' The equation QFuelPriSepCarbon calculates the fuel prices per subsector and fuel multiplied by weights (VFuelPriMultWgt)
-*' considering separate carbon values in each sector. This equation is applied for a specific scenario, subsector (DSBS), fuel (EF), and year (YTIME).
-*' The calculation involves multiplying the sector's average price weight based on fuel consumption (iWgtSecAvgPriFueCons) by the fuel price per subsector
-*' and fuel (VFuelPriceSub). The weights are determined by the sector's average price, considering the specific fuel consumption for the given scenario, subsector, and fuel.
-*' This equation allows for a more nuanced calculation of fuel prices, taking into account the carbon values in each sector. The resulting VFuelPriMultWgt represents the fuel
+*' The equation calculates the fuel prices per subsector and fuel multiplied by weights
+*' considering separate carbon values in each sector. This equation is applied for a specific scenario, subsector, fuel, and year.
+*' The calculation involves multiplying the sector's average price weight based on fuel consumption by the fuel price per subsector
+*' and fuel. The weights are determined by the sector's average price, considering the specific fuel consumption for the given scenario, subsector, and fuel.
+*' This equation allows for a more nuanced calculation of fuel prices, taking into account the carbon values in each sector. The result represents the fuel
 *' prices per subsector and fuel, multiplied by the corresponding weights, and adjusted based on the specific carbon values in each sector.
 QFuelPriSepCarbon(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $TIME(YTIME))..
         VFuelPriMultWgt(runCy,DSBS,EF,YTIME)
           =E= 
         iWgtSecAvgPriFueCons(runCy,DSBS,EF) * VFuelPriceSub(runCy,DSBS,EF,YTIME);
 
-*' The equation QAvgFuelPriSub calculates the average fuel price per subsector (VFuelPriceAvg) for a specific scenario, subsector, and year.
-*' The calculation involves summing the product of fuel prices per subsector and fuel (VFuelPriMultWgt) and their corresponding weights (SECTTECH)
-*' for the specified scenario, subsector (DSBS), and year (YTIME).The equation is designed to compute the weighted average fuel price, considering
+*' The equation calculates the average fuel price per subsector for a specific scenario, subsector, and year.
+*' The calculation involves summing the product of fuel prices per subsector and fuel and their corresponding weights
+*' for the specified scenario, subsector, and year.The equation is designed to compute the weighted average fuel price, considering
 *' different fuels within the subsector and their respective weights.
 QAvgFuelPriSub(runCy,DSBS,YTIME)$TIME(YTIME)..
         VFuelPriceAvg(runCy,DSBS,YTIME)
                  =E=
          sum(EF$SECTTECH(DSBS,EF), VFuelPriMultWgt(runCy,DSBS,EF,YTIME));         
 
-*' The equation QElecPriIndResCons calculates the electricity price for industrial and residential consumers (VElecPriInduResConsu)
+*' The equation calculates the electricity price for industrial and residential consumers
 *' in a given scenario, energy set, and year. The electricity price is based on the previous year's production costs, incorporating
-*' various factors such as fuel prices, factors affecting electricity prices to consumers (iFacElecPriConsu), and long-term average
-*' power generation costs (VLongAvgPowGenCost).The equation is structured to handle different energy sets (ESET). It calculates the electricity
-*' price for industrial consumers (ISET) and residential consumers (RSET) separately. The electricity price is influenced by fuel prices,
+*' various factors such as fuel prices, factors affecting electricity prices to consumers, and long-term average
+*' power generation costs. The equation is structured to handle different energy sets. It calculates the electricity
+*' price for industrial consumers and residential consumers separately. The electricity price is influenced by fuel prices,
 *' factors affecting electricity prices, and long-term average power generation costs. It provides a comprehensive representation of the
 *' factors contributing to the electricity price for industrial and residential consumers in the specified scenario, energy set, and year.
 QElecPriIndResCons(runCy,ESET,YTIME)$TIME(YTIME)..  !! The electricity price is based on previous year's production costs

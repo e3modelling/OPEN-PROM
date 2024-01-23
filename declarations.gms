@@ -50,17 +50,10 @@ iElecImp(allCy,YTIME)	                  "Electricity Imports (1)"
 iPlantAvailRate(allCy,PGALL,YTIME)	      "Plant availability rate (1)"
 iTotAvailCapBsYr(allCy)	            "Total installed available capacity in base year (GW)"
 iCO2CaptRate(allCy,PGALL,YTIME)	          "Plant CO2 capture rate (1)"
-iScaleEndogScrap(allCy,PGALL,YTIME)	"Scale parameter for endogenous scrapping applied to the sum of full costs (1)"	
-iPremReplacem(allCy,PGALL)	        "Premature replacement (1)"/
-$ondelim
-$include"./iPremReplacem.csv"
-$offdelim
-/
 iPlantDecomSched(allCy,PGALL,YTIME)	     "Decided plant decomissioning schedule (GW)"
 iDecInvPlantSched(allCy,PGALL,YTIME)     "Decided plant investment schedule (GW)"
 iMinRenPotential(allCy,PGRENEF,YTIME)	 "Minimum renewable potential (GW)"	
 iMaxRenPotential(allCy,PGRENEF,YTIME)	 "Maximum enewable potential (GW)"
-iMatFacPlaAvailCap(allCy,PGALL,YTIME)	 "Maturity factor related to plant available capacity (1)"
 iMatureFacPlaDisp(allCy,PGALL,YTIME)	 "Maturity factor related to plant dispatching (1)"		
 iEffValueInEuro(allCy,SBS,YTIME)	     "Efficiency value (Euro05/toe)"
 iFacElecPriConsu(allCy,ELCPCHAR,YTIME)	 "Factors affecting electricity prices to consumers	(1)"
