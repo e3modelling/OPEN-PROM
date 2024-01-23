@@ -72,7 +72,7 @@ QLongPowGenCost                    !! VLongAvgPowGenCost(runCy,ESET,YTIME)
 QLonAvgPowGenCostNoClimPol         !! VLonAvgPowGenCostNoClimPol(runCy,PGALL,ESET,YTIME)
 QLonPowGenCostNoClimPol            !! VLonPowGenCostNoClimPol(runCy,ESET,YTIME)
 QElecPriIndResNoCliPol             !! VElecPriIndResNoCliPol(runCy,ESET,YTIME)
-*qShortPowGenCost                  !! vAvgPowerGenCostShoTrm(runCy,ESET,YTIME)
+qShortPowGenCost                   !! vAvgPowerGenCostShoTrm(runCy,ESET,YTIME)
 
 
 *' * Transport *
@@ -467,9 +467,7 @@ VLongPowGenCost.L(runCy,PGALL,ESET,"2010") = 0;
 VLonAvgPowGenCostNoClimPol.L(runCy,PGALL,ESET,"2010") = 0;
 VLongAvgPowGenCost.L(runCy,ESET,"2017") = 0;
 VLonPowGenCostNoClimPol.l(runCy,ESET,"%fBaseY%") = 0;
-* FIXME: Temporary fix. To be reversed back to vAvgPowerGenCostShoTrm.L(runCy,ESET,"%fBaseY%") = 0, when qShortPowGenCost is activated.
-* author=redmonkeycloud
-vAvgPowerGenCostShoTrm.FX(runCy,ESET,YTIME) = 0.02;
+vAvgPowerGenCostShoTrm.L(runCy,ESET,"%fBaseY%") = 0;
 
 VLongPowGenCost.L(runCy,PGALL,ESET,"2017") = 0;
 VLonAvgPowGenCostNoClimPol.FX(runCy,PGALL,ESET,"%fBaseY%") = 0;
