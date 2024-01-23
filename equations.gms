@@ -84,8 +84,8 @@ QBslMaxmLoad(runCy,YTIME)$TIME(YTIME)..
 QElecBaseLoad(runCy,YTIME)$TIME(YTIME)..
          VCorrBaseLoad(runCy,YTIME)
              =E=
-         (1/(1+Exp(iBslCorrection(runCy,YTIME)*(VEstBaseLoad(runCy,YTIME)-VBslMaxmLoad(runCy,YTIME)))))*VEstBaseLoad(runCy,YTIME)
-        +(1-1/(1+Exp(iBslCorrection(runCy,YTIME)*(VEstBaseLoad(runCy,YTIME)-VBslMaxmLoad(runCy,YTIME)))))*VBslMaxmLoad(runCy,YTIME);
+         (1/(1+(iBslCorrection(runCy,YTIME)*(VEstBaseLoad(runCy,YTIME)-VBslMaxmLoad(runCy,YTIME)))))*VEstBaseLoad(runCy,YTIME)
+        +(1-1/(1+(iBslCorrection(runCy,YTIME)*(VEstBaseLoad(runCy,YTIME)-VBslMaxmLoad(runCy,YTIME)))))*VBslMaxmLoad(runCy,YTIME);
 
 *' This equation calculates the total required electricity production as a sum of the electricity peak load minus the corrected base load,
 *' multiplied by the exponential function of the parameter for load curve construction.
@@ -425,7 +425,7 @@ QVarCostTechnology(runCy,PGALL,YTIME)$TIME(YTIME)..
 QElecPeakLoads(runCy,YTIME)$TIME(YTIME)..
          VElecPeakLoads(runCy,YTIME) 
          =E= 
-         sum(PGALL, VVarCostTechnology(runCy,PGALL,YTIME));     
+         SQRT(sum(PGALL, VVarCostTechnology(runCy,PGALL,YTIME)));     
 
 *' Compute power plant sorting to decide the plant dispatching. 
 *' This is accomplished by dividing the variable cost by the peak loads.
