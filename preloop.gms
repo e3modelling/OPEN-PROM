@@ -66,8 +66,8 @@ QElecProdChpPlants                 !! VChpElecProd(runCy,CHP,YTIME)
 qShareRenGrossElecProd             !! vResShareGrossElecProd(runCy,YTIME) 
 QLonPowGenCostTechNoCp             !! VLongPowGenCost(runCy,PGALL,ESET,YTIME)
 qLonMnmpowGenCost                  !! vLonMnmpowGenCost(runCy,PGALL,YTIME)
-qLongPowGenIntPri                 !! vLongPowGenIntPri(runCy,PGALL,ESET,YTIME)
-qShoPowGenIntPri                  !! vShoPowGenIntPri(runCy,PGALL,ESET,YTIME)
+qLongPowGenIntPri                  !! vLongPowGenIntPri(runCy,PGALL,ESET,YTIME)
+qShoPowGenIntPri                   !! vShoPowGenIntPri(runCy,PGALL,ESET,YTIME)
 QLongPowGenCost                    !! VLongAvgPowGenCost(runCy,ESET,YTIME)
 QLonAvgPowGenCostNoClimPol         !! VLonAvgPowGenCostNoClimPol(runCy,PGALL,ESET,YTIME)
 QLonPowGenCostNoClimPol            !! VLonPowGenCostNoClimPol(runCy,ESET,YTIME)
@@ -150,7 +150,7 @@ QTransfInPowerPls                  !! VTransfInThermPowPls(runCy,PGEF,YTIME)
 QFakeExp                           !! VExportsFake(runCy,EFS,YTIME)
 QFakeImprts                        !! VFkImpAllFuelsNotNatGas(runCy,EFS,YTIME)
 QNetImports                        !! VNetImports(runCy,EFS,YTIME)
-*QEneBrnchEneCons                  !! VEnCons(runCy,EFS,YTIME)
+QEneBrnchEneCons                   !! VEnCons(runCy,EFS,YTIME)
 
 
 *' * CO2 SEQUESTRATION COST CURVES *
@@ -163,8 +163,8 @@ QCstCO2SeqCsts                     !! VCO2SeqCsts(runCy,YTIME)
 
 *' * EMISSIONS CONSTRAINTS *
 
-*QTotGhgEmisAllCountrNap           !! VTotGhgEmisAllCountrNap(NAP,YTIME)
-*qTotCo2AllCoun                    !! vTotCo2AllCoun(YTIME) 
+QTotGhgEmisAllCountrNap           !! VTotGhgEmisAllCountrNap(NAP,YTIME)
+qTotCo2AllCoun                    !! vTotCo2AllCoun(YTIME) 
 qHouseExpEne                       !! vHouseExpEne(runCy,YTIME)
 
 
@@ -393,9 +393,7 @@ VTransfers.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iFeedTransfr(runCy,EFS,YTIME);
 * FIXME: Add $(not An(YTIME)) to VPrimProd when QPrimProd is included to the model.
 * author=derevirn
 VPrimProd.FX(runCy,PPRODEF,YTIME) = iFuelPriPro(runCy,PPRODEF,YTIME);
-* FIXME: VEnCons to be added $(not An(YTIME)), when the QEneBrnchEneCons is activated.
-* author=redmonkeycloud
-VEnCons.FX(runCy,EFS,YTIME) = iTotEneBranchCons(runCy,EFS,YTIME);
+VEnCons.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iTotEneBranchCons(runCy,EFS,YTIME);
 
 VExportsFake.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iFuelExprts(runCy,EFS,YTIME);
 VFkImpAllFuelsNotNatGas.FX(runCy,"NGS",YTIME)$(not An(YTIME)) = iFuelImports(runCy,"NGS",YTIME);
