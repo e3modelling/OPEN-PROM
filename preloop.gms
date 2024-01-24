@@ -66,8 +66,8 @@ QElecProdChpPlants                 !! VChpElecProd(runCy,CHP,YTIME)
 qShareRenGrossElecProd             !! vResShareGrossElecProd(runCy,YTIME) 
 QLonPowGenCostTechNoCp             !! VLongPowGenCost(runCy,PGALL,ESET,YTIME)
 qLonMnmpowGenCost                  !! vLonMnmpowGenCost(runCy,PGALL,YTIME)
-*qLongPowGenIntPri                 !! vLongPowGenIntPri(runCy,PGALL,ESET,YTIME)
-*qShoPowGenIntPri                  !! vShoPowGenIntPri(runCy,PGALL,ESET,YTIME)
+qLongPowGenIntPri                 !! vLongPowGenIntPri(runCy,PGALL,ESET,YTIME)
+qShoPowGenIntPri                  !! vShoPowGenIntPri(runCy,PGALL,ESET,YTIME)
 QLongPowGenCost                    !! VLongAvgPowGenCost(runCy,ESET,YTIME)
 QLonAvgPowGenCostNoClimPol         !! VLonAvgPowGenCostNoClimPol(runCy,PGALL,ESET,YTIME)
 QLonPowGenCostNoClimPol            !! VLonPowGenCostNoClimPol(runCy,ESET,YTIME)
@@ -293,8 +293,6 @@ VFuelPriceAvg.L(runCy,DSBS,YTIME) = 0.1;
 VFuelPriceAvg.FX(runCy,DSBS,YTIME)$(not An(YTIME)) = sum(EF$SECTTECH(DSBS,EF), iWgtSecAvgPriFueCons(runCy,DSBS,EF) * iFuelPrice(runCy,DSBS,EF,YTIME));
 
 VNumVeh.UP(runCy,YTIME) = 10000; !! upper bound of VNumVeh is 10000 million vehicles
-* FIXME: VNumVeh.FX(runCy,YTIME) = iActv(YTIME,runCy,"PC"), to be used only if eq QNumVeh is deactivated.
-* author=redmonkeycloud
 VNumVeh.FX(runCy,YTIME)$(not An(YTIME)) = iActv(YTIME,runCy,"PC");
 VLamda.UP(runCy,YTIME) = 1;
 iPassCarsMarkSat(runCy) = 0.7; 
