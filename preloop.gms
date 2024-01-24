@@ -155,9 +155,9 @@ QNetImports                        !! VNetImports(runCy,EFS,YTIME)
 
 *' * CO2 SEQUESTRATION COST CURVES *
 
-*QCO2ElcHrg                        !! VCO2ElcHrgProd(runCy,YTIME)
-*QCumCO2Capt                       !! VCumCO2Capt(runCy,YTIME)
-*QWghtTrnstLinToExpo               !! VWghtTrnstLnrToExpo(runCy,YTIME)
+QCO2ElcHrg                         !! VCO2ElcHrgProd(runCy,YTIME)
+QCumCO2Capt                        !! VCumCO2Capt(runCy,YTIME)
+QWghtTrnstLinToExpo                !! VWghtTrnstLnrToExpo(runCy,YTIME)
 *QCstCO2SeqCsts                    !! VCO2SeqCsts(runCy,YTIME)         
 
 
