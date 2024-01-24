@@ -34,6 +34,7 @@ VNewCapYearly.FX(runCy,PGALL,YTIME)$TIME(YTIME) = VNewCapYearly.L(runCy,PGALL,YT
 VAvgCapFacRes.FX(runCy,PGALL,YTIME)$TIME(YTIME) = VAvgCapFacRes.L(runCy,PGALL,YTIME)$TIME(YTIME);
 VCO2SeqCsts.FX(runCy,YTIME)$TIME(YTIME) = VCO2SeqCsts.L(runCy,YTIME)$TIME(YTIME);
 VCO2ElcHrgProd.FX(runCy,YTIME)$TIME(YTIME) = VCO2ElcHrgProd.L(runCy,YTIME)$TIME(YTIME);
+VCumCO2Capt.FX(runCy,YTIME)$TIME(YTIME) = VCumCO2Capt.L(runCy,YTIME)$TIME(YTIME)
 endloop;  !! close outer iteration loop (time steps)
 
 execute_unload "blabla.gdx";
