@@ -1304,16 +1304,6 @@ QAvgVarElecProd(runCy,CHP,YTIME)$(TIME(YTIME) ) ..
 
 *' * REST OF ENERGY BALANCE SECTORS
 
-*' The equation calculates the transformation output from patent fuel and briquetting plants, coke-oven plants, blast furnace plants,
-*' and gas works. The equation involves the use of a residual and is governed by certain parameters such as sector
-*' activity, activity elasticities, and the ratio of current year activity to the previous year .
-QTransfOutputPatFuel(runCy,EFS,YTIME)$TIME(YTIME)..
-         VTransfOutputPatFuel(runCy,EFS,YTIME)
-             =E=
-         [
-         iTransfOutputGasw(runCy,YTIME) * VTransfOutputPatFuel(runCy,EFS,YTIME-1) * (iActv(YTIME,runCy,"IS")/iActv(YTIME-1,runCy,"IS"))**iElastA(runCy,"IS","a",YTIME)
-         ]$iActv(YTIME-1,runCy,"IS");
-
 *' The equation computes the total final energy consumption in million tonnes of oil equivalent for each country ,
 *' energy form sector, and time period. The total final energy consumption is calculated as the sum of final energy consumption in the
 *' Industry and Tertiary sectors and the sum of final energy demand in all transport subsectors. The consumption is determined by the 
@@ -1373,17 +1363,7 @@ QTransfInputDHPlants(runCy,EFS,YTIME)$TIME(YTIME)..
          VTransfInputDHPlants(runCy,EFS,YTIME)
              =E=
          sum(DH$DHtoEF(DH,EFS),
-             sum(DOMSE$SECTTECH(DOMSE,DH),VConsFuel(runCy,DOMSE,DH,YTIME)) / iEffDHPlants(runCy,EFS,YTIME));   
-
-*' The equation calculates the transformation input to patent fuel and briquetting plants, coke-oven plants, blast furnace plants,
-*' and gas works. This transformation input is computed by summing over different energy forms within the specified set
-*' and using the corresponding transformation output. The efficiency of gasworks, blast furnaces, and briquetting plants
-*' is taken into account, and the result is multiplied by the share of fuels in the transformation input to gasworks, blast furnaces, and briquetting plants
-*' in the base year. The output represents the transformation input in the base year (1).
-QTransfInputPatFuel(runCy,EFS,YTIME)$TIME(YTIME)..
-         VTransfInputPatFuel(runCy,EFS,YTIME)
-             =E=
-         sum(EF$(EFS(EF) $iAvgEffGas(runCy,EF,YTIME)) , VTransfOutputPatFuel(runCy,EFS,YTIME)/iAvgEffGas(runCy,EF,YTIME)) * iShareFueTransfInput(runCy,EFS); 
+             sum(DOMSE$SECTTECH(DOMSE,DH),VConsFuel(runCy,DOMSE,DH,YTIME)) / iEffDHPlants(runCy,EFS,YTIME));
 
 *' The equation calculates the refineries' capacity for a given scenario and year.
 *' The calculation is based on a residual factor, the previous year's capacity, and a production scaling
@@ -1501,7 +1481,7 @@ QTotTransfInput(runCy,EFS,YTIME)$TIME(YTIME)..
                  =E=
         (
             VTransfInThermPowPls(runCy,EFS,YTIME) + VTransfInputDHPlants(runCy,EFS,YTIME) + VTransfInNuclear(runCy,EFS,YTIME) +
-             VTransfInputPatFuel(runCy,EFS,YTIME) + VTransfInputRefineries(runCy,EFS,YTIME)     !!$H2PRODEF(EFS)
+             VTransfInputRefineries(runCy,EFS,YTIME)     !!$H2PRODEF(EFS)
         )$(not sameas(EFS,"OGS"))
         +
         (
@@ -1516,7 +1496,7 @@ QTotTransfInput(runCy,EFS,YTIME)$TIME(YTIME)..
 QTotTransfOutput(runCy,EFS,YTIME)$TIME(YTIME)..
          VTotTransfOutput(runCy,EFS,YTIME)
                  =E=
-         VTransfOutThermPowSta(runCy,EFS,YTIME) + VTransfOutputDHPlants(runCy,EFS,YTIME) + VTransfOutputNuclear(runCy,EFS,YTIME) + VTransfOutputPatFuel(runCy,EFS,YTIME) +
+         VTransfOutThermPowSta(runCy,EFS,YTIME) + VTransfOutputDHPlants(runCy,EFS,YTIME) + VTransfOutputNuclear(runCy,EFS,YTIME) +
          VTransfOutputRefineries(runCy,EFS,YTIME);        !!+ TONEW(runCy,EFS,YTIME)
 
 *' The equation calculates the transfers of a specific energy branch in a given scenario and year.

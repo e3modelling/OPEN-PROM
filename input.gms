@@ -119,21 +119,14 @@ $ondelim
 $include "./iParDHEfficiency.csv"
 $offdelim
 ;
-table iAvgEffGas(allCy,EF,YTIME)                    "Average Efficiency of Gasworks, Blast Furnances, Briquetting plants (1)"
-$ondelim
-$include "./iAvgEffGas.csv"
-$offdelim
-;
 table iSuppTransfInputPatFuel(EF,YTIME)            "Supplementary Parameter for the transformation input to patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works (1)"
 $ondelim
 $include "./iSuppTransfInputPatFuel.csv"
 $offdelim
 ; 
-table iSupResRefCapacity(allCy,SUPOTH,YTIME)	           "Supplementary Parameter for the residual in refineries Capacity (1)"
-$ondelim
-$include "./iSupResRefCapacity.csv"
-$offdelim
-;
+parameter iSupResRefCapacity(allCy,SUPOTH,YTIME)	           "Supplementary Parameter for the residual in refineries Capacity (1)";
+iSupResRefCapacity(allCy,SUPOTH,YTIME) = 1;
+
 table iSuppRefCapacity(allCy,SUPOTH,YTIME)	          "Supplementary Parameter for the residual in refineries Capacity (1)"
 $ondelim
 $include "./iSuppRefCapacity.csv"
@@ -275,7 +268,6 @@ iResTransfOutputRefineries(runCy,EFS,YTIME) = iSupTrnasfOutputRefineries(runCy,E
 iRefCapacity(runCy,YTIME)= iSuppRefCapacity(runCy,"REF_CAP",YTIME);
 iResRefCapacity(runCy,YTIME) = iSupResRefCapacity(runCy,"REF_CAP_RES",YTIME);
 iTransfInpGasworks(runCy,EFS,YTIME)= iSuppTransfInputPatFuel(EFS,YTIME);
-iShareFueTransfInput(runCy,EFS)$sum(EF$EFS(EF),iTransfInpGasworks(runCy,EF,"%fBaseY%")) =  iTransfInpGasworks(runCy,EFS,"%fBaseY%") / sum(EF$EFS(EF),iTransfInpGasworks(runCy,EF,"%fBaseY%"));
 *VDistrLosses.FX(runCy,EFS,TT)$PERIOD(TT) = VDistrLosses.L(runCy,EFS,TT);
 
 parameter iLoadFactorAdjMxm(VARIOUS_LABELS)    "Parameter for load factor adjustment iMxmLoadFacElecDem (1)" /
@@ -754,7 +746,6 @@ iResFuelConsPerSubAndFuel(allCy,INDSE,EF,YTIME)$an(YTIME) = iResFuelConsSub(allC
 iResFuelConsPerSubAndFuel(allCy,DOMSE,EF,YTIME)$an(YTIME) = iResFuelConsPerFuelAndSub(allCy,DOMSE,EF,YTIME);
 iResFuelConsPerSubAndFuel(allCy,NENSE,EF,YTIME)$an(YTIME) = iResInFuelConsPerFuelAndSub(allCy,NENSE,EF,YTIME);
 
-iTransfOutputGasw(allCy,YTIME)$an(YTIME)  = iSupResRefCapacity(allCy,"TOOTH_RES",YTIME);
 table iResTranspFuelConsSubTech(allCy,TRANSE,EF,YTIME)	 "Residual Transport on Specific Fuel Consumption per Subsector and Technology (1)"
 $ondelim
 $include"./iResTranspFuelConsSubTech.csv"

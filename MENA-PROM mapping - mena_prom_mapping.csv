@@ -410,7 +410,7 @@ Variable,SFC,VSpecificFuelCons,Specific Fuel Consumption (),"CYall,TRANSE,TTECH,
 Variable,SHCAP,VPowPlaShaNewEquip,Power plant share in new equipment (1),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Variable,SHCAPCCS,VPowerPlaShrNewEq,Power plant share in new equipment,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Variable,SHCAPNOCCS,VPowerPlantNewEq,Power plant share in new equipment,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
-Parameter,SHIOTH,iShareFueTransfInput,"Share of fuels in transformation input to Gasworks, Blast Furnances, Briquetting plants in base year","CYall,EF","allCy,EF",Supply Side Specific Parameters
+Parameter,SHIOTH,REMOVED FROM OPEN-PROM,"Share of fuels in transformation input to Gasworks, Blast Furnances, Briquetting plants in base year","CYall,EF","allCy,EF",Supply Side Specific Parameters
 Variable,SHLOAD,VPowPlantSorting,Power plants sorting according to variable cost to decide the plant dispatching (1),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Variable,SHLOADS,VElecPeakLoads,Electricity peak loads (GW),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Variable,SHR,VTechShareNewEquip,Technology share in new equipment (1),"CYall,DSBS,EF,TEA,YTIME","allCy,DSBS,EF,TEA,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
@@ -447,16 +447,16 @@ Variable,TICT,VTransfInThermPowPls,Transformation input to thermal power plants 
 Variable,TIDH,VTransfInputDHPlants,Transformation input to District Heating Plants (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Parameter,TINEW,iTotInput,"TINEW(CYALL,EF,YTIME)=1E-7;","CYALL,EF,YTIME","allCy,EF,YTIME",Power Generation Parameters
 Variable,TINUC,VTransfInNuclear,Transformation input to nuclear plants (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-Variable,TIOTH,VTransfInputPatFuel,"Transformation input to patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works","allCy,EFS,YTIME","CYall,EFS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-Parameter,TIOTHEFF,iAvgEffGas,"Average Efficiency of Gasworks, Blast Furnances, Briquetting plants","CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
+Variable,TIOTH,REMOVED FROM OPEN-PROM,"Transformation input to patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works","allCy,EFS,YTIME","CYall,EFS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+Parameter,TIOTHEFF,REMOVED FROM OPEN-PROM,"Average Efficiency of Gasworks, Blast Furnances, Briquetting plants","CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
 Variable,TIRF,VTransfInputRefineries,Transformation input to refineries (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,TITOT,VTotTransfInput,Total transformation input (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",
 Variable,TOCT,VTransfOutThermPowSta,Transformation output from thermal power stations (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,TODH,VTransfOutputDHPlants,Transformation output from District Heating Plants (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Parameter,TONEW,iHydProd,Hydrogen production (Mtoe),"CYALL,EF,YTIME","allCy,EF,YTIME",Power Generation Parameters
 Variable,TONUC,VTransfOutputNuclear,Transformation output from nuclear plants (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
-Variable,TOOTH,VTransfOutputPatFuel,"Transformation output from patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works","CYall,EF,YTIME","allCy,EF,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-Parameter,TOOTHRES,iTransfOutputGasw,"Transformation Output from Gasworks, Blast Furnances, Briquetting plants Residual","CYall,YTIME","allCy,YTIME",Supply Side Specific Parameters
+Variable,TOOTH,REMOVED FROM OPEN-PROM,"Transformation output from patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works","CYall,EF,YTIME","allCy,EF,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+Parameter,TOOTHRES,REMOVED FROM OPEN-PROM,"Transformation Output from Gasworks, Blast Furnances, Briquetting plants Residual","CYall,YTIME","allCy,YTIME",Supply Side Specific Parameters
 Variable,TORF,VTransfOutputRefineries,Transformation output from refineries (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Parameter,TOTAL_EF,iDiffFuelsInSec,Auxiliary parameter holding the number of different fuels in a sector,SBS,,
 Variable,TOTCAP,VTotElecGenCap,Total electricity generation capacity (GW),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR

@@ -126,14 +126,12 @@ QAvgVarElecProd                    !! VAvgVarProdCostCHP(runCy,CHP,YTIME)
 
 *' * REST OF ENERGY BALANCE SECTORS *
 
-*QTransfOutputPatFuel              !! VTransfOutputPatFuel(runCy,EFS,YTIME)
 QTotFinEneCons                     !! VFeCons(runCy,EFS,YTIME)
 qTotFinEneConsAll                  !! vTotFinEneConsAll(YTIME)
 QFinNonEneCons                     !! VFNonEnCons(runCy,EFS,YTIME)
 QDistrLosses                       !! VLosses(runCy,EFS,YTIME)
 QTranfOutputDHPlants               !! VTransfOutputDHPlants(runCy,STEAM,YTIME)
 QTransfInputDHPlants               !! VTransfInputDHPlants(runCy,EFS,YTIME)
-*QTransfInputPatFuel               !! VTransfInputPatFuel(runCy,EFS,YTIME)
 *QRefCapacity                      !! VRefCapacity(runCy,YTIME)
 *QTranfOutputRefineries            !! VTransfOutputRefineries(runCy,EFS,YTIME)
 *QTransfInputRefineries            !! VTransfInputRefineries(runCy,"CRO",YTIME)
@@ -380,7 +378,6 @@ VFeCons.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iFinEneCons(runCy,EFS,YTIME);
 iFinEneConsPrevYear(runCy,EFS,YTIME)$(not An(YTIME)) = iFinEneCons(runCy,EFS,YTIME);
 VLosses.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iDistrLosses(runCy,EFS,YTIME);
 
-VTransfOutputPatFuel.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iTranfOutGasworks(runCy,EFS,YTIME);
 VTransfOutThermPowSta.FX(runCy,EFS,YTIME)$(not TOCTEF(EFS)) = 0;
 VRefCapacity.FX(runCy,YTIME)$(not An(YTIME)) = iRefCapacity(runCy,YTIME);
 VTransfOutputRefineries.FX(runCy,EFS,YTIME)$(EFtoEFA(EFS,"LQD") $(not An(YTIME))) = iTransfOutputRef(runCy,EFS,YTIME);
