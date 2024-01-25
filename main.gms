@@ -56,7 +56,9 @@ $evalGlobal fBaseY %fStartY% - %fPeriodOfYears%
 *** end of dollar commands section, no further flag definitions allowed 
 
 *' *** load input data files
-$call "RScript ./loadMadratData.R"
+$ifthen %DevMode% == 0 $call "RScript ./loadMadratData.R DevMode=0"
+$elseif %DevMode% == 1 $call "RScript ./loadMadratData.R DevMode=1"
+$endif
 
 $include sets.gms
 $include declarations.gms
