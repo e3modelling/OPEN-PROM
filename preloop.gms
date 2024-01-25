@@ -385,12 +385,20 @@ VTransfOutThermPowSta.FX(runCy,EFS,YTIME)$(not TOCTEF(EFS)) = 0;
 VRefCapacity.FX(runCy,YTIME)$(not An(YTIME)) = iRefCapacity(runCy,YTIME);
 VTransfOutputRefineries.FX(runCy,EFS,YTIME)$(EFtoEFA(EFS,"LQD") $(not An(YTIME))) = iTransfOutputRef(runCy,EFS,YTIME);
 VTransfInputRefineries.FX(runCy,"CRO",YTIME)$(not An(YTIME)) = iTransfInputRef(runCy,"CRO",YTIME);
-VGrsInlConsNotEneBranch.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iGrossInConsNoEneBra(runCy,EFS,YTIME);
-* FIXME: Add $(not An(YTIME)) to VGrssInCons when QGrssInCons is included to the model.
+
+* FIXME: Add $(not An(YTIME)), when QGrsInlConsNotEneBranch is activated.
+* author=redmonkeycloud
+VGrsInlConsNotEneBranch.FX(runCy,EFS,YTIME) = iGrossInConsNoEneBra(runCy,EFS,YTIME);
+
+* FIXME: Add $(not An(YTIME)) to VGrssInCons, when QGrssInCons is included to the model.
 * author=derevirn
 VGrssInCons.FX(runCy,EFS,YTIME) = iGrosInlCons(runCy,EFS,YTIME);
-VTransfers.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iFeedTransfr(runCy,EFS,YTIME);
-* FIXME: Add $(not An(YTIME)) to VPrimProd when QPrimProd is included to the model.
+
+* FIXME: Add $(not An(YTIME)), when QTransfers is activated.
+* author=redmonkeycloud
+VTransfers.FX(runCy,EFS,YTIME) = iFeedTransfr(runCy,EFS,YTIME);
+
+* FIXME: Add $(not An(YTIME)), to VPrimProd when QPrimProd is included to the model.
 * author=derevirn
 VPrimProd.FX(runCy,PPRODEF,YTIME) = iFuelPriPro(runCy,PPRODEF,YTIME);
 VEnCons.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iTotEneBranchCons(runCy,EFS,YTIME);
