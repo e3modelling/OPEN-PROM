@@ -410,7 +410,7 @@ VTransfInputRefineries(allCy,EFS,YTIME)	                "Transformation input to
 VTransfOutputNuclear(allCy,EFS,YTIME)	                "Transformation output from nuclear plants (Mtoe)"
 VTransfInNuclear(allCy,EFS,YTIME)	                    "Transformation input to nuclear plants (Mtoe)"		
 VTransfInThermPowPls(allCy,EFS,YTIME)	                "Transformation input to thermal power plants (Mtoe)"
-VTransfOutThermPowSta(allCy,EFS,YTIME)	                "Transformation output from thermal power stations (Mtoe)"
+VTransfOutThermPP(allCy,EFS,YTIME)	                "Transformation output from thermal power stations (Mtoe)"
 VTotTransfInput(allCy,EFS,YTIME)	                    "Total transformation input (Mtoe)"
 VTotTransfOutput(allCy,EFS,YTIME)	                    "Total transformation output (Mtoe)"
 VTransfers(allCy,EFS,YTIME)	                            "Transfers (Mtoe)"

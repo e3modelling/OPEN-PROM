@@ -451,7 +451,7 @@ Variable,TIOTH,REMOVED FROM OPEN-PROM,"Transformation input to patent fuel and b
 Parameter,TIOTHEFF,REMOVED FROM OPEN-PROM,"Average Efficiency of Gasworks, Blast Furnances, Briquetting plants","CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
 Variable,TIRF,VTransfInputRefineries,Transformation input to refineries (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,TITOT,VTotTransfInput,Total transformation input (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",
-Variable,TOCT,VTransfOutThermPowSta,Transformation output from thermal power stations (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+Variable,TOCT,VTransfOutThermPP,Transformation output from thermal power stations (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,TODH,VTransfOutputDHPlants,Transformation output from District Heating Plants (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Parameter,TONEW,iHydProd,Hydrogen production (Mtoe),"CYALL,EF,YTIME","allCy,EF,YTIME",Power Generation Parameters
 Variable,TONUC,VTransfOutputNuclear,Transformation output from nuclear plants (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS

@@ -1455,7 +1455,7 @@ QTransfInPowerPls(runCy,PGEF,YTIME)$TIME(YTIME)..
 *' subsectors, the rate of energy branch consumption over total transformation output, and losses.
 *' The result represents the transformation output from thermal power stations in million tons of oil equivalent.
 QTransfOutThermPP(runCy,TOCTEF,YTIME)$TIME(YTIME)..
-         VTransfOutThermPowSta(runCy,TOCTEF,YTIME)
+         VTransfOutThermPP(runCy,TOCTEF,YTIME)
              =E=
         (
              sum(PGALL$(not PGNUCL(PGALL)),VElecProd(runCy,PGALL,YTIME)) * sTWhToMtoe
@@ -1496,7 +1496,7 @@ QTotTransfInput(runCy,EFS,YTIME)$TIME(YTIME)..
 QTotTransfOutput(runCy,EFS,YTIME)$TIME(YTIME)..
          VTotTransfOutput(runCy,EFS,YTIME)
                  =E=
-         VTransfOutThermPowSta(runCy,EFS,YTIME) + VTransfOutputDHPlants(runCy,EFS,YTIME) + VTransfOutputNuclear(runCy,EFS,YTIME) +
+         VTransfOutThermPP(runCy,EFS,YTIME) + VTransfOutputDHPlants(runCy,EFS,YTIME) + VTransfOutputNuclear(runCy,EFS,YTIME) +
          VTransfOutputRefineries(runCy,EFS,YTIME);        !!+ TONEW(runCy,EFS,YTIME)
 
 *' The equation calculates the transfers of a specific energy branch in a given scenario and year.
