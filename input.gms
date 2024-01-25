@@ -516,7 +516,7 @@ iElecImp(allCy,YTIME)=0;
 
 parameter iScaleEndogScrap(PGALL) "Scale parameter for endogenous scrapping applied to the sum of full costs (1)";
 iScaleEndogScrap(PGALL) = 0.035;
-$ontext
+
 table iDecomPlants(allCy,PGALL,YTIME)	            "Decomissioning Plants (MW)"
 $ondelim
 $include"./iDecomPlants.csv"
@@ -531,7 +531,6 @@ $include"./iInvPlants.csv"
 $offdelim
 ;
 iDecInvPlantSched(allCy,PGALL,YTIME) = iInvPlants(allCy,PGALL,YTIME);
-$offtext
 
 table iCummMxmInstRenCap(allCy,PGRENEF,YTIME)	 "Cummulative maximum potential installed Capacity for Renewables (GW)"
 $ondelim
