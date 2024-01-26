@@ -16,7 +16,6 @@ iAnnCons(allCy,DSBS,conSet)                     "Annual consumption of the small
 iCumDistrFuncConsSize(allCy,DSBS)               "Cummulative distribution function of consumer size groups (1)"
 iRateLossesFinCons(allCy,EF,YTIME)              "Rate of losses over Available for Final Consumption (1)" 
 iEffDHPlants(allCy,EF,YTIME)                    "Efficiency of District Heating Plants (1)" 
-iShareFueTransfInput(allCy,EF)                  "Share of fuels in transformation input to Gasworks, Blast Furnances, Briquetting plants in base year (1)"
 iTransfInpGasworks(allCy,EF,YTIME)              "Transformation Input in Gasworks, Blast Furnances, Briquetting plants (Mtoe)"
 iResRefCapacity(allCy,YTIME)	                "Residual in Refineries Capacity (1)"
 iRefCapacity(allCy,YTIME)	                    "Refineries Capacity (Million Barrels/day)"
@@ -65,7 +64,6 @@ iFuelConsPerFueSub(allCy,SBS,EF,YTIME)	 "Fuel consumption per fuel and subsector
 iTotFinEneDemSubBaseYr(allCy,SBS,YTIME)	 "Total Final Energy Demand per subsector in Base year (Mtoe)"
 iResNonSubsElecDem(allCy,SBS,YTIME	)	 "Residuals in Non Substitutable Electricity Demand	(1)"	
 iResFuelConsPerSubAndFuel(allCy,SBS,EF,YTIME)	"Residuals in fuel consumption per subsector and fuel (1)"	
-iTransfOutputGasw(allCy,YTIME)	                "Transformation Output from Gasworks, Blast Furnances, Briquetting plants Residual (1)"	
 iResSpecificFuelConsCost(allCy,TRANSE,TTECH,EF,YTIME)	"Residuals on specific fuel consumption cost (1)"
 iShareAnnMilePlugInHybrid(allCy,YTIME)	                "Share of annual mileage of a plug-in hybrid which is covered by electricity (1)"
 iAvgVehCapLoadFac(allCy,TRANSE,TRANSUSE,YTIME)	        "Average capacity/vehicle and load factor (tn/veh or passenegers/veh)" 
@@ -115,11 +113,13 @@ iCapCostTech(allCy,SBS,EF,YTIME)                      "Capital Cost of technolog
                                                  !! - For Industrial sectors (except Iron and Steel) is expressed in kEuro05/toe-year
                                                  !! - For Iron and Steel is expressed in kEuro05/tn-of-steel
                                                  !! - For Domestic Sectors is expressed in kEuro05/toe-year
-iDiffFuelsInSec(SBS) "auxiliary parameter holding the number of different fuels in a sector"
-iResElecIndex(allCy,YTIME)             "Residual for electricity Index (1)"
-iElastNonSubElec(allCy,SBS,ETYPES,YTIME) "Elasticities of Non Substitutable Electricity (1)"
-iIndChar(allCy,INDSE,Indu_Scon_Set)               "Industry sector charactetistics (various)"
-iNetImp(allCy,EFS,YTIME)              "Net imports (Mtoe)"
+iDiffFuelsInSec(SBS)                                "auxiliary parameter holding the number of different fuels in a sector"
+iResElecIndex(allCy,YTIME)                          "Residual for electricity Index (1)"
+iElastNonSubElec(allCy,SBS,ETYPES,YTIME)            "Elasticities of Non Substitutable Electricity (1)"
+iIndChar(allCy,INDSE,Indu_Scon_Set)                 "Industry sector charactetistics (various)"
+iNetImp(allCy,EFS,YTIME)                            "Net imports (Mtoe)"
+iMxmShareChpElec(allCy,YTIME)	                    "Maximum share of CHP electricity in a country (1)"
+iScaleEndogScrap(PGALL)                             "Scale parameter for endogenous scrapping applied to the sum of full costs (1)"
 ;
 
 
@@ -404,15 +404,13 @@ VPlantEffPlantType(allCy,PGALL,YTIME)	                "Plant efficiency per plan
 vTotFinEneConsAll(YTIME)                                "Total final energy Consumption in ALL COUNTRIES (Mtoe)"
 VTransfOutputDHPlants(allCy,EFS,YTIME)                  "Transformation output from District Heating Plants (Mtoe)"
 VTransfInputDHPlants(allCy,EFS,YTIME)                   "Transformation input to District Heating Plants (Mtoe)"
-VTransfInputPatFuel(allCy,EFS,YTIME)                    "Transformation input to patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works (1)"
-VTransfOutputPatFuel(allCy,EFS,YTIME)                   "Transformation input to patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works (1)"
 VRefCapacity(allCy,YTIME)	                            "Refineries capacity (Million barrels/day)"	
 VTransfOutputRefineries(allCy,EFS,YTIME)	            "Transformation output from refineries (Mtoe)"
 VTransfInputRefineries(allCy,EFS,YTIME)	                "Transformation input to refineries (Mtoe)"	
 VTransfOutputNuclear(allCy,EFS,YTIME)	                "Transformation output from nuclear plants (Mtoe)"
 VTransfInNuclear(allCy,EFS,YTIME)	                    "Transformation input to nuclear plants (Mtoe)"		
 VTransfInThermPowPls(allCy,EFS,YTIME)	                "Transformation input to thermal power plants (Mtoe)"
-VTransfOutThermPowSta(allCy,EFS,YTIME)	                "Transformation output from thermal power stations (Mtoe)"
+VTransfOutThermPP(allCy,EFS,YTIME)	                "Transformation output from thermal power stations (Mtoe)"
 VTotTransfInput(allCy,EFS,YTIME)	                    "Total transformation input (Mtoe)"
 VTotTransfOutput(allCy,EFS,YTIME)	                    "Total transformation output (Mtoe)"
 VTransfers(allCy,EFS,YTIME)	                            "Transfers (Mtoe)"

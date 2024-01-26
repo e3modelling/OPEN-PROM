@@ -56,23 +56,23 @@ QElectrPeakLoad                    !! VPowPlantSorting(runCy,PGALL,YTIME)
 QNewCapYearly                      !! VNewCapYearly(runCy,PGALL,YTIME)
 QAvgCapFacRes                      !! VAvgCapFacRes(runCy,PGALL,YTIME)
 QOverallCap                        !! VOverallCap(runCy,PGALL,YTIME)
-*QScalFacPlantDispatch             !! VScalFacPlaDisp
+QScalFacPlantDispatch              !! VScalFacPlaDisp
 QElecChpPlants                     !! VElecChpPlants(runCy,YTIME) 
 QNonChpElecProd                    !! VNonChpElecProd(runCy,YTIME) 
-*QReqElecProd                      !! VReqElecProd(runCy,YTIME) 
-*QElecProdPowGenPlants             !! VElecProd(runCy,PGALL,YTIME)
+QReqElecProd                       !! VReqElecProd(runCy,YTIME) 
+QElecProdPowGenPlants              !! VElecProd(runCy,PGALL,YTIME)
 qSecContrTotChpProd                !! vSecContrTotChpProd(runCy,INDDOM,CHP,YTIME)
 QElecProdChpPlants                 !! VChpElecProd(runCy,CHP,YTIME)
 qShareRenGrossElecProd             !! vResShareGrossElecProd(runCy,YTIME) 
 QLonPowGenCostTechNoCp             !! VLongPowGenCost(runCy,PGALL,ESET,YTIME)
 qLonMnmpowGenCost                  !! vLonMnmpowGenCost(runCy,PGALL,YTIME)
-*qLongPowGenIntPri                 !! vLongPowGenIntPri(runCy,PGALL,ESET,YTIME)
-*qShoPowGenIntPri                  !! vShoPowGenIntPri(runCy,PGALL,ESET,YTIME)
+qLongPowGenIntPri                  !! vLongPowGenIntPri(runCy,PGALL,ESET,YTIME)
+qShoPowGenIntPri                   !! vShoPowGenIntPri(runCy,PGALL,ESET,YTIME)
 QLongPowGenCost                    !! VLongAvgPowGenCost(runCy,ESET,YTIME)
 QLonAvgPowGenCostNoClimPol         !! VLonAvgPowGenCostNoClimPol(runCy,PGALL,ESET,YTIME)
 QLonPowGenCostNoClimPol            !! VLonPowGenCostNoClimPol(runCy,ESET,YTIME)
 QElecPriIndResNoCliPol             !! VElecPriIndResNoCliPol(runCy,ESET,YTIME)
-*qShortPowGenCost                  !! vAvgPowerGenCostShoTrm(runCy,ESET,YTIME)
+qShortPowGenCost                   !! vAvgPowerGenCostShoTrm(runCy,ESET,YTIME)
 
 
 *' * Transport *
@@ -126,23 +126,21 @@ QAvgVarElecProd                    !! VAvgVarProdCostCHP(runCy,CHP,YTIME)
 
 *' * REST OF ENERGY BALANCE SECTORS *
 
-*QTransfOutputPatFuel              !! VTransfOutputPatFuel(runCy,EFS,YTIME)
 QTotFinEneCons                     !! VFeCons(runCy,EFS,YTIME)
 qTotFinEneConsAll                  !! vTotFinEneConsAll(YTIME)
 QFinNonEneCons                     !! VFNonEnCons(runCy,EFS,YTIME)
 QDistrLosses                       !! VLosses(runCy,EFS,YTIME)
-*QTranfOutputDHPlants              !! VTransfOutputDHPlants(runCy,STEAM,YTIME)
-*QTransfInputDHPlants              !! VTransfInputDHPlants(runCy,EFS,YTIME)
-*QTransfInputPatFuel               !! VTransfInputPatFuel(runCy,EFS,YTIME)
+QTranfOutputDHPlants               !! VTransfOutputDHPlants(runCy,STEAM,YTIME)
+QTransfInputDHPlants               !! VTransfInputDHPlants(runCy,EFS,YTIME)
 *QRefCapacity                      !! VRefCapacity(runCy,YTIME)
 *QTranfOutputRefineries            !! VTransfOutputRefineries(runCy,EFS,YTIME)
 *QTransfInputRefineries            !! VTransfInputRefineries(runCy,"CRO",YTIME)
-*QTransfOutputNuclear              !! VTransfOutputNuclear(runCy,"ELC",YTIME)
-*QTransfInNuclear                  !! VTransfInNuclear(runCy,"NUC",YTIME)
-*QTransfInPowerPls                 !! VTransfInThermPowPls(runCy,PGEF,YTIME)
-*QTransfOutThermPP                 !! VTransfOutThermPowSta(runCy,TOCTEF,YTIME)
-*QTotTransfInput                   !! VTotTransfInput(runCy,EFS,YTIME)
-*QTotTransfOutput                  !! VTotTransfOutput(runCy,EFS,YTIME)
+QTransfOutputNuclear               !! VTransfOutputNuclear(runCy,"ELC",YTIME)
+QTransfInNuclear                   !! VTransfInNuclear(runCy,"NUC",YTIME)
+QTransfInPowerPls                  !! VTransfInThermPowPls(runCy,PGEF,YTIME)
+QTransfOutThermPP                 !! VTransfOutThermPP(runCy,TOCTEF,YTIME)
+QTotTransfInput                   !! VTotTransfInput(runCy,EFS,YTIME)
+QTotTransfOutput                  !! VTotTransfOutput(runCy,EFS,YTIME)
 *QTransfers                        !! VTransfers(runCy,EFS,YTIME)
 *QGrsInlConsNotEneBranch           !! VGrsInlConsNotEneBranch(runCy,EFS,YTIME)
 *QGrssInCons                       !! VGrssInCons(runCy,EFS,YTIME)            
@@ -150,21 +148,21 @@ QDistrLosses                       !! VLosses(runCy,EFS,YTIME)
 QFakeExp                           !! VExportsFake(runCy,EFS,YTIME)
 QFakeImprts                        !! VFkImpAllFuelsNotNatGas(runCy,EFS,YTIME)
 QNetImports                        !! VNetImports(runCy,EFS,YTIME)
-*QEneBrnchEneCons                  !! VEnCons(runCy,EFS,YTIME)
+QEneBrnchEneCons                   !! VEnCons(runCy,EFS,YTIME)
 
 
 *' * CO2 SEQUESTRATION COST CURVES *
 
-*QCO2ElcHrg                        !! VCO2ElcHrgProd(runCy,YTIME)
-*QCumCO2Capt                       !! VCumCO2Capt(runCy,YTIME)
-*QWghtTrnstLinToExpo               !! VWghtTrnstLnrToExpo(runCy,YTIME)
-*QCstCO2SeqCsts                    !! VCO2SeqCsts(runCy,YTIME)         
+QCO2ElcHrg                         !! VCO2ElcHrgProd(runCy,YTIME)
+QCumCO2Capt                        !! VCumCO2Capt(runCy,YTIME)
+QWghtTrnstLinToExpo                !! VWghtTrnstLnrToExpo(runCy,YTIME)
+QCstCO2SeqCsts                     !! VCO2SeqCsts(runCy,YTIME)         
 
 
 *' * EMISSIONS CONSTRAINTS *
 
-*QTotGhgEmisAllCountrNap           !! VTotGhgEmisAllCountrNap(NAP,YTIME)
-*qTotCo2AllCoun                    !! vTotCo2AllCoun(YTIME) 
+QTotGhgEmisAllCountrNap           !! VTotGhgEmisAllCountrNap(NAP,YTIME)
+qTotCo2AllCoun                    !! vTotCo2AllCoun(YTIME) 
 qHouseExpEne                       !! vHouseExpEne(runCy,YTIME)
 
 
@@ -293,8 +291,6 @@ VFuelPriceAvg.L(runCy,DSBS,YTIME) = 0.1;
 VFuelPriceAvg.FX(runCy,DSBS,YTIME)$(not An(YTIME)) = sum(EF$SECTTECH(DSBS,EF), iWgtSecAvgPriFueCons(runCy,DSBS,EF) * iFuelPrice(runCy,DSBS,EF,YTIME));
 
 VNumVeh.UP(runCy,YTIME) = 10000; !! upper bound of VNumVeh is 10000 million vehicles
-* FIXME: VNumVeh.FX(runCy,YTIME) = iActv(YTIME,runCy,"PC"), to be used only if eq QNumVeh is deactivated.
-* author=redmonkeycloud
 VNumVeh.FX(runCy,YTIME)$(not An(YTIME)) = iActv(YTIME,runCy,"PC");
 VLamda.UP(runCy,YTIME) = 1;
 iPassCarsMarkSat(runCy) = 0.7; 
@@ -382,8 +378,7 @@ VFeCons.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iFinEneCons(runCy,EFS,YTIME);
 iFinEneConsPrevYear(runCy,EFS,YTIME)$(not An(YTIME)) = iFinEneCons(runCy,EFS,YTIME);
 VLosses.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iDistrLosses(runCy,EFS,YTIME);
 
-VTransfOutputPatFuel.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iTranfOutGasworks(runCy,EFS,YTIME);
-VTransfOutThermPowSta.FX(runCy,EFS,YTIME)$(not TOCTEF(EFS)) = 0;
+VTransfOutThermPP.FX(runCy,EFS,YTIME)$(not TOCTEF(EFS)) = 0;
 VRefCapacity.FX(runCy,YTIME)$(not An(YTIME)) = iRefCapacity(runCy,YTIME);
 VTransfOutputRefineries.FX(runCy,EFS,YTIME)$(EFtoEFA(EFS,"LQD") $(not An(YTIME))) = iTransfOutputRef(runCy,EFS,YTIME);
 VTransfInputRefineries.FX(runCy,"CRO",YTIME)$(not An(YTIME)) = iTransfInputRef(runCy,"CRO",YTIME);
@@ -395,9 +390,7 @@ VTransfers.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iFeedTransfr(runCy,EFS,YTIME);
 * FIXME: Add $(not An(YTIME)) to VPrimProd when QPrimProd is included to the model.
 * author=derevirn
 VPrimProd.FX(runCy,PPRODEF,YTIME) = iFuelPriPro(runCy,PPRODEF,YTIME);
-* FIXME: VEnCons to be added $(not An(YTIME)), when the QEneBrnchEneCons is activated.
-* author=redmonkeycloud
-VEnCons.FX(runCy,EFS,YTIME) = iTotEneBranchCons(runCy,EFS,YTIME);
+VEnCons.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iTotEneBranchCons(runCy,EFS,YTIME);
 
 VExportsFake.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iFuelExprts(runCy,EFS,YTIME);
 VFkImpAllFuelsNotNatGas.FX(runCy,"NGS",YTIME)$(not An(YTIME)) = iFuelImports(runCy,"NGS",YTIME);
@@ -447,9 +440,6 @@ VAvgCapFacRes.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =iAvailRate(PGALL,YTIME);
 
 
 VElecProd.FX(runCy,pgall,YTIME)$DATAY(YTIME)=iDataElecProd(runCy,pgall,YTIME)/1000;
-
-* FIXME: Temporary fix. To be reversed back to VEndogScrapIndex.FX(runCy,PGALL,YTIME)$(not an(YTIME) ) = 1, when QEndogScrapIndex is activated.
-* author=redmonkeycloud
 VEndogScrapIndex.FX(runCy,PGALL,YTIME)$(not an(YTIME) ) = 1;
 
 VEndogScrapIndex.FX(runCy,PGSCRN,YTIME) = 1;            !! premature replacement it is not allowed for all new plants
@@ -467,9 +457,7 @@ VLongPowGenCost.L(runCy,PGALL,ESET,"2010") = 0;
 VLonAvgPowGenCostNoClimPol.L(runCy,PGALL,ESET,"2010") = 0;
 VLongAvgPowGenCost.L(runCy,ESET,"2017") = 0;
 VLonPowGenCostNoClimPol.l(runCy,ESET,"%fBaseY%") = 0;
-* FIXME: Temporary fix. To be reversed back to vAvgPowerGenCostShoTrm.L(runCy,ESET,"%fBaseY%") = 0, when qShortPowGenCost is activated.
-* author=redmonkeycloud
-vAvgPowerGenCostShoTrm.FX(runCy,ESET,YTIME) = 0.02;
+vAvgPowerGenCostShoTrm.L(runCy,ESET,"%fBaseY%") = 0;
 
 VLongPowGenCost.L(runCy,PGALL,ESET,"2017") = 0;
 VLonAvgPowGenCostNoClimPol.FX(runCy,PGALL,ESET,"%fBaseY%") = 0;
@@ -480,7 +468,7 @@ VCarVal.FX(runCy,"NOTRADE",YTIME)$an(YTIME) =sExogCarbValue*iCarbValYrExog(runCy
 
 VCumCO2Capt.FX(runCy,YTIME)$(not an(YTIME)) = 0 ;
 
-VCO2SeqCsts.FX(runCy,YTIME) = iElastCO2Seq(runCy,"mc_a") *iElastCO2Seq(runCy,"mc_b");
+*VCO2SeqCsts.FX(runCy,YTIME) = iElastCO2Seq(runCy,"mc_a") *iElastCO2Seq(runCy,"mc_b");
 
 VDemTr.FX(runCy,TRANSE,EF,YTIME)$(not SECTTECH(TRANSE,EF)) = 0;
 VTransfOutputDHPlants.FX(runCy,EFS,YTIME)$(not STEAM(EFS)) = 0;
