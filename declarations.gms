@@ -21,7 +21,6 @@ iResRefCapacity(allCy,YTIME)	                "Residual in Refineries Capacity (1
 iRefCapacity(allCy,YTIME)	                    "Refineries Capacity (Million Barrels/day)"
 iResTransfOutputRefineries(allCy,EF,YTIME)      "Residual in Transformation Output from Refineries (Mtoe)"
 iRateEneBranCons(allCy,EF,YTIME)	            "Rate of Energy Branch Consumption over total transformation output (1)"
-iResFeedTransfr(allCy,YTIME)	                "Residual for Feedstocks in Transfers (1)"	
 iFeedTransfr(allCy,EFS,YTIME)	                "Feedstocks in Transfers (Mtoe)"
 iResHcNgOilPrProd(allCy,EF,YTIME)	            "Residuals for Hard Coal, Natural Gas and Oil Primary Production (1)"
 iNatGasPriProElst(allCy)	                    "Natural Gas primary production elasticity related to gross inland consumption (1)"	/

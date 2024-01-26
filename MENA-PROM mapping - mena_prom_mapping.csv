@@ -269,7 +269,7 @@ Equation,EQZZ,QEndogScrapIndex,Compute endogenous scrapping index ,"CYall,PGALL,
 scalar,exogCV,sExogCarbValue,switch for exogenous carbon value (0=exogenous 1=endogenous) /1/,,,
 Parameter,exogCVp,iCarbValYrExog,Carbon value for each year when it is exogenous (Euro05/tn CO2),ytime,"allCy,ytime",Reguala Falsi Parameters
 Variable,EXPO_TZ,VExportsFake,Exports fake (Mtoe) ,"CYall,EFS,YTIME","allCy,EFS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-Parameter,FEEDRES,iResFeedTransfr,Residual for Feedstocks in Transfers (Mtoe),"CYall,YTIME","allCy,YTIME",Supply Side Specific Parameters
+Parameter,FEEDRES,REMOVED FROM OPEN-PROM,Residual for Feedstocks in Transfers (Mtoe),"CYall,YTIME","allCy,YTIME",Supply Side Specific Parameters
 Parameter,FEEDTRANS,iFeedTransfr,Feedstocks in Transfers (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",Supply Side Specific Parameters
 Parameter,FIXCOST,iFixOMCostTech,Fixed O&M cost of technology (Euro2005/toe-year),"CYall,SBS,EF,TEA,YTIME","allCy,SBS,EF,YTIME",Common parameters for all Demand Subsectors
 Parameter,FOMRES,-,,"PGALL,YTIME",,
