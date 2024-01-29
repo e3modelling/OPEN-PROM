@@ -132,19 +132,19 @@ QFinNonEneCons                     !! VFNonEnCons(runCy,EFS,YTIME)
 QDistrLosses                       !! VLosses(runCy,EFS,YTIME)
 QTranfOutputDHPlants               !! VTransfOutputDHPlants(runCy,STEAM,YTIME)
 QTransfInputDHPlants               !! VTransfInputDHPlants(runCy,EFS,YTIME)
-*QRefCapacity                      !! VRefCapacity(runCy,YTIME)
-*QTranfOutputRefineries            !! VTransfOutputRefineries(runCy,EFS,YTIME)
-*QTransfInputRefineries            !! VTransfInputRefineries(runCy,"CRO",YTIME)
+QRefCapacity                       !! VRefCapacity(runCy,YTIME)
+QTranfOutputRefineries             !! VTransfOutputRefineries(runCy,EFS,YTIME)
+QTransfInputRefineries             !! VTransfInputRefineries(runCy,"CRO",YTIME)
 QTransfOutputNuclear               !! VTransfOutputNuclear(runCy,"ELC",YTIME)
 QTransfInNuclear                   !! VTransfInNuclear(runCy,"NUC",YTIME)
 QTransfInPowerPls                  !! VTransfInThermPowPls(runCy,PGEF,YTIME)
-QTransfOutThermPP                 !! VTransfOutThermPP(runCy,TOCTEF,YTIME)
-QTotTransfInput                   !! VTotTransfInput(runCy,EFS,YTIME)
-QTotTransfOutput                  !! VTotTransfOutput(runCy,EFS,YTIME)
-*QTransfers                        !! VTransfers(runCy,EFS,YTIME)
-*QGrsInlConsNotEneBranch           !! VGrsInlConsNotEneBranch(runCy,EFS,YTIME)
-*QGrssInCons                       !! VGrssInCons(runCy,EFS,YTIME)            
-*QPrimProd                         !! VPrimProd(runCy,PPRODEF,YTIME)
+QTransfOutThermPP                  !! VTransfOutThermPP(runCy,TOCTEF,YTIME)
+QTotTransfInput                    !! VTotTransfInput(runCy,EFS,YTIME)
+QTotTransfOutput                   !! VTotTransfOutput(runCy,EFS,YTIME)
+QTransfers                         !! VTransfers(runCy,EFS,YTIME)
+QGrsInlConsNotEneBranch            !! VGrsInlConsNotEneBranch(runCy,EFS,YTIME)
+QGrssInCons                        !! VGrssInCons(runCy,EFS,YTIME)            
+QPrimProd                          !! VPrimProd(runCy,PPRODEF,YTIME)
 QFakeExp                           !! VExportsFake(runCy,EFS,YTIME)
 QFakeImprts                        !! VFkImpAllFuelsNotNatGas(runCy,EFS,YTIME)
 QNetImports                        !! VNetImports(runCy,EFS,YTIME)
@@ -382,14 +382,13 @@ VTransfOutThermPP.FX(runCy,EFS,YTIME)$(not TOCTEF(EFS)) = 0;
 VRefCapacity.FX(runCy,YTIME)$(not An(YTIME)) = iRefCapacity(runCy,YTIME);
 VTransfOutputRefineries.FX(runCy,EFS,YTIME)$(EFtoEFA(EFS,"LQD") $(not An(YTIME))) = iTransfOutputRef(runCy,EFS,YTIME);
 VTransfInputRefineries.FX(runCy,"CRO",YTIME)$(not An(YTIME)) = iTransfInputRef(runCy,"CRO",YTIME);
+
 VGrsInlConsNotEneBranch.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iGrossInConsNoEneBra(runCy,EFS,YTIME);
-* FIXME: Add $(not An(YTIME)) to VGrssInCons when QGrssInCons is included to the model.
-* author=derevirn
-VGrssInCons.FX(runCy,EFS,YTIME) = iGrosInlCons(runCy,EFS,YTIME);
+
+VGrssInCons.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iGrosInlCons(runCy,EFS,YTIME);
 VTransfers.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iFeedTransfr(runCy,EFS,YTIME);
-* FIXME: Add $(not An(YTIME)) to VPrimProd when QPrimProd is included to the model.
-* author=derevirn
-VPrimProd.FX(runCy,PPRODEF,YTIME) = iFuelPriPro(runCy,PPRODEF,YTIME);
+
+VPrimProd.FX(runCy,PPRODEF,YTIME)$(not An(YTIME)) = iFuelPriPro(runCy,PPRODEF,YTIME);
 VEnCons.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iTotEneBranchCons(runCy,EFS,YTIME);
 
 VExportsFake.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iFuelExprts(runCy,EFS,YTIME);
