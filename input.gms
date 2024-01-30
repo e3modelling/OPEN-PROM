@@ -398,7 +398,7 @@ $include"./iResTotCapMxmLoad.csv"
 $offdelim
 ;
 iResMargTotAvailCap(allCy,PGRES,YTIME)$an(YTIME) = iResTotCapMxmLoad(allCy,PGRES,YTIME);
-*$ontext
+
 table iVarCost(PGALL,YTIME)             "Variable gross cost other than fuel per Plant Type (Euro2005/KW)"
 $ondelim
 $include"./iVarCost.csv"
@@ -559,13 +559,6 @@ iCO2CaptRate(runCy,PGALL,YTIME) = 0;
 
 parameter iMxmShareChpElec "Maximum share of CHP electricity in a country (1)";
 iMxmShareChpElec(runCy,YTIME) = 0.1;
-$ontext
-table iMxmShareChpElec(allCy,YTIME)	 "Maximum share of CHP electricity in a country (1)"
-$ondelim
-$include"./iMxmShareChpElec.csv"
-$offdelim
-;
-$offtext
 
 iEffValueInEuro(allCy,SBS,YTIME)=0;
 table iContrElecPrice(allCy,ELCPCHAR,YTIME)	 "Parameters controlling electricity price (1)"
@@ -754,23 +747,7 @@ $offdelim
 ;
 
 iUtilRateChpPlants(allCy,CHP,YTIME) = 0.5;
-$ontext
-loop YTIME$((ord(YTIME) gt TF+1) $(ord(YTIME) lt TF+6)) do
-         iUtilRateChpPlants(allCy,CHP,YTIME) = (iUtilRateChpPlants(allCy,CHP,"2020")-iUtilRateChpPlants(allCy,CHP,"2018"))/5+iUtilRateChpPlants(allCy,CHP,YTIME-1);
-endloop;
-loop YTIME$((ord(YTIME) gt TF+6) $(ord(YTIME) lt TF+11)) do
-         iUtilRateChpPlants(allCy,CHP,YTIME) = (iUtilRateChpPlants(allCy,CHP,"2025")-iUtilRateChpPlants(allCy,CHP,"2020"))/5+iUtilRateChpPlants(allCy,CHP,YTIME-1);
-endloop;
-loop YTIME$((ord(YTIME) gt TF+11) $(ord(YTIME) lt TF+16)) do
-         iUtilRateChpPlants(allCy,CHP,YTIME) = (iUtilRateChpPlants(allCy,CHP,"2030")-iUtilRateChpPlants(allCy,CHP,"2025"))/5+iUtilRateChpPlants(allCy,CHP,YTIME-1);
-endloop;
-loop YTIME$((ord(YTIME) gt TF+16) $(ord(YTIME) lt TF+21)) do
-         iUtilRateChpPlants(allCy,CHP,YTIME) = (iUtilRateChpPlants(allCy,CHP,"2035")-iUtilRateChpPlants(allCy,CHP,"2030"))/5+iUtilRateChpPlants(allCy,CHP,YTIME-1);
-endloop;
-loop YTIME$((ord(YTIME) gt TF+21) $(ord(YTIME) lt TF+41)) do
-         iUtilRateChpPlants(allCy,CHP,YTIME) = (iUtilRateChpPlants(allCy,CHP,"2050")-iUtilRateChpPlants(allCy,CHP,"2030"))/20+iUtilRateChpPlants(allCy,CHP,YTIME-1);
-endloop;
-$offtext
+
 **                   Power Generation
 table iInstCapPast(allCy,PGALL,YTIME)        "Installed capacity past (GW)"
 $ondelim
