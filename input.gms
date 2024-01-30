@@ -69,7 +69,6 @@ IND.PC    0.0201531648401507
 MAR.PC    0.0201531648401507
 USA.PC    0.0418811968705786
 ;
-display iDataPassCars;
 
 iDataPassCars(allCy,"PC","S1") = 1.0;
 iSigma(allCy,"S1") = iDataPassCars(allCy,"PC","S1");
@@ -250,7 +249,7 @@ MAR.EN   1.6664         0.95      0.00001
 MAR.OE   0.00000001     0.95      0.00001
 MAR.OI   1.5161         0.95      0.00001
 ;
-display iIndCharData;
+
 iIndChar(allCy,INDSE,Indu_Scon_Set) = iIndCharData("MAR",INDSE,Indu_Scon_Set);
 table iInitConsSubAndInitShaNonSubElec(DOMSE,Indu_Scon_Set)      "Initial Consumption per Subsector and Initial Shares of Non Substitutable Electricity in Total Electricity Demand (Mtoe)"
      BASE   SHR_NSE SH_HPELC
@@ -258,7 +257,7 @@ SE   1.8266 0.9     0.00001
 HOU  11.511 0.9     0.00001
 AG   0.2078 0.9     0.00001
 ;
-display iInitConsSubAndInitShaNonSubElec;
+
 iShrHeatPumpElecCons(allCy,INDSE) = iIndChar(allCy,INDSE,"SH_HPELC");
 iShrHeatPumpElecCons(allCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(DOMSE,"SH_HPELC");
 iExogDemOfBiomass(allCy,DOMSE,YTIME) = 0;
@@ -287,7 +286,6 @@ a2 1.333269594,
 a3 1.000071707,
 a4 0.666634797,
 a5 0.33343691 /;
-display iPolDstrbtnLagCoeffPriOilPr;
 
 parameter iLoadFacElecDem(DSBS)    "Load factor of electricity demand per sector (1)" /
 IS 	0.92,
@@ -760,7 +758,6 @@ GU   5    0.7
 GT   600  0.8
 GN   1500 0.9 
 ;
-display iCapDataLoadFacEachTransp;
 table iNewReg(allCy,YTIME) "new car registrations per year"
 $ondelim
 $include"./iNewReg.csv"
