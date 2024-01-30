@@ -29,11 +29,6 @@ $offdelim
 * FIXME: derive elasticities for all countries, not just for MAR
 * author=giannou
 iElastA(allCy,SBS,ETYPES,YTIME) = iElastA("MAR",SBS,ETYPES,YTIME);
-table iResActiv(allCy,TRANSE,YTIME) "Residuals on transport activity ()"
-$ondelim
-$include "./iResActiv.csv"
-$offdelim
-;
 * FIXME: derive elasticities per country
 * author=giannou
 table iElastNonSubElecData(SBS,ETYPES,YTIME) "Elasticities of Non Substitutable Electricity (1)"
@@ -105,10 +100,6 @@ parameter iConsSizeDistHeat(conSet)               "Consumer sizes for district h
                                                                                              modal    0.595709528,
                                                                                              largest 0.833993339/;
 
-table iCapCostTechTr(allCy,TRANSE,EF,YTIME)      "Capital Cost of technology for transport (kEuro2005/vehicle)" 
-$ondelim$include "./iCapCostTechTr.csv"
-$offdelim
-;
 table iRateLossesFinCons(allCy,EF,YTIME)               "Rate of losses over Available for Final Consumption (1)"
 $ondelim
 $include "./iRateLossesFinCons.csv"
@@ -247,10 +238,6 @@ $offdelim
 ;
 iShrHeatPumpElecCons(allCy,INDSE) = iIndChar(allCy,INDSE,"SH_HPELC");
 iShrHeatPumpElecCons(allCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(DOMSE,"SH_HPELC");
-*iTechLft(allCy,TRANSE,EF,TEA,YTIME)$(ord(YTIME)>sum(TFIRST,(ord(TFIRST)-3))) = iDataTransTech(TRANSE,EF,"LFT");
-*iTechLft(allCy,INDSE,EF,TEA,YTIME)$(ord(YTIME)>(ordfirst-12)) = iDataIndTechnology(INDSE,EF,"LFT");
-*iTechLft(allCy,DOMSE,EF,TEA,YTIME)$(ord(YTIME)>(ordfirst-12)) = iDataDomLft(DOMSE,EF,"LFT");
-*iTechLft(allCy,NENSE,EF,TEA,YTIME)$(ord(YTIME)>(ordfirst-4))  = iDataNonEneLft(NENSE,EF,"LFT");
 iExogDemOfBiomass(allCy,DOMSE,YTIME) = 0;
 iElastCO2Seq(allCy,CO2SEQELAST) = iCO2SeqData(CO2SEQELAST,"%fBaseY%");
 iRatioImpFinElecDem(runCy,YTIME)$an(YTIME) = iSuppRefCapacity(runCy,"ELC_IMP",YTIME);
@@ -259,14 +246,12 @@ iRatePriProTotPriNeeds(runCy,PPRODEF,YTIME) = iSuppRatePrimProd(runCy,PPRODEF,YT
 iResHcNgOilPrProd(runCy,"HCL",YTIME)$an(YTIME)   = iSupResRefCapacity(runCy,"HCL_PPROD",YTIME);
 iResHcNgOilPrProd(runCy,"NGS",YTIME)$an(YTIME)   = iSupResRefCapacity(runCy,"NGS_PPROD",YTIME);
 iResHcNgOilPrProd(runCy,"CRO",YTIME)$an(YTIME)   = iSupResRefCapacity(runCy,"OIL_PPROD",YTIME);
-*iResFeedTransfr(runCy,YTIME)$an(YTIME) = 1;
 iFeedTransfr(runCy,EFS,YTIME) = iSuppTransfers(runCy,EFS,YTIME);
 iRateEneBranCons(allCy,EFS,YTIME)= iSupRateEneBranCons(allCy,EFS,YTIME);
 iResTransfOutputRefineries(runCy,EFS,YTIME) = iSupTrnasfOutputRefineries(runCy,EFS,YTIME);;
 iRefCapacity(runCy,YTIME)= iSuppRefCapacity(runCy,"REF_CAP",YTIME);
 iResRefCapacity(runCy,YTIME) = iSupResRefCapacity(runCy,"REF_CAP_RES",YTIME);
 iTransfInpGasworks(runCy,EFS,YTIME)= iSuppTransfInputPatFuel(EFS,YTIME);
-*VDistrLosses.FX(runCy,EFS,TT)$PERIOD(TT) = VDistrLosses.L(runCy,EFS,TT);
 
 parameter iLoadFactorAdjMxm(VARIOUS_LABELS)    "Parameter for load factor adjustment iMxmLoadFacElecDem (1)" /
 AMAXBASE 3,
@@ -558,7 +543,7 @@ iMinRenPotential(allCy,"SOL",YTIME)  = iCummMnmInstRenCap(allCy,"SOL",YTIME);
 iMinRenPotential(allCy,"DPV",YTIME)  = iCummMnmInstRenCap(allCy,"DPV",YTIME);
 iMinRenPotential(allCy,"BMSWAS",YTIME) = iCummMnmInstRenCap(allCy,"BMSWAS",YTIME);
 iMinRenPotential(allCy,"OTHREN",YTIME) = iCummMnmInstRenCap(allCy,"OTHREN",YTIME);
-*$ontext
+
 table iMatFacPlaAvailCap(allCy,PGALL,YTIME)	 "Maturity factor related to plant available capacity (1)"
 $ondelim
 $include"./iMatFacPlaAvailCap.csv"
@@ -566,15 +551,6 @@ $offdelim
 ;
 
 iMatFacPlaAvailCap(allCy,CCS,YTIME)$an(YTIME)  =0;
-*$offtext
-
-$ontext
-table iMatureFacLoad(allCy,PGALL,YTIME)	 "Maturty factors on Load (1)"
-$ondelim
-$include"./iMatureFacLoad.csv"
-$offdelim
-;
-$offtext 
 
 * FIXME: Temporarily setting maturity factors related to plant dispatching equal to 1.
 * author=derevirn
@@ -796,11 +772,6 @@ loop YTIME$((ord(YTIME) gt TF+21) $(ord(YTIME) lt TF+41)) do
 endloop;
 $offtext
 **                   Power Generation
-table iDataInstCapElecFuel(allCy,PGALL,PG1_set)	     "Installed capacity input (GW)"	
-$ondelim
-$include"./iDataInstCapElecFuel.csv"
-$offdelim
-;
 table iInstCapPast(allCy,PGALL,YTIME)        "Installed capacity past (GW)"
 $ondelim
 $include"./iInstCapPast.csv"
@@ -812,11 +783,7 @@ $ondelim
 $include"./iEnvPolicies.csv"
 $offdelim
 ;
-table iDataPowGenCost(PGALL,PGECONCHAR) "Data for power generation costs (various)"
-$ondelim
-$include"./iDataPowGenCost.csv"
-$offdelim
-;
+
 iCarbValYrExog(allCy,YTIME)$an(YTIME) = iEnvPolicies(allCy,"exogCV",YTIME);
 table iMatrFactor(allCy,SBS,EF,YTIME)       "Maturity factor per technology and subsector (1)"
 $ondelim
@@ -952,8 +919,6 @@ $include"./iDataTechLftPlaType.csv"
 $offdelim
 ;
 iTechLftPlaType(runCy,PGALL) = iDataTechLftPlaType(PGALL, "LFT");
-
-*iCO2CaptRate(runCy,PGALL,YTIME)$(ord(YTIME)>(ordfirst-8))  =  iDataPowGenCost(PGALL,"CR");
 
 iEffDHPlants(runCy,EFS,YTIME)$(ord(YTIME)>(ordfirst-8))  = sum(PGEFS$sameas(EFS,PGEFS),iParDHEfficiency(PGEFS,"2010"));
 
