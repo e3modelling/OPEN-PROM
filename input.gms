@@ -404,8 +404,6 @@ ENDLOOP;
 
 iCumDistrFuncConsSize(allCy,DSBS) = sum(rCon, iDisFunConSize(allCy,DSBS,rCon));
 iCGI(allCy,YTIME) = 1;
-*iLoadCurveConstr.L(runCy,TT)$(PERIOD(TT) $TFIRSTAN(TT))= 0.21;
-*iLoadCurveConstr.L(runCy,TT)$(PERIOD(TT) $(NOT TFIRSTAN(TT)))= iLoadCurveConstr.L(runCy,TT-1);
 
 table iResTotCapMxmLoad(allCy,PGRES,YTIME)              "Residuals for total capacity and maximum load (1)"	
 $ondelim
@@ -749,17 +747,6 @@ $ondelim
 $include"./iResTranspFuelConsSubTech.csv"
 $offdelim
 ;
-iResSpecificFuelConsCost(allCy,TRANSE,TTECH,EF,YTIME)$(sameas(TTECH,EF)$an(YTIME)) = iResTranspFuelConsSubTech(allCy,TRANSE,EF,YTIME);
-iResSpecificFuelConsCost(allCy,TRANSE,"BGDO","BGDO",YTIME)$(an(YTIME) $SECTTECH(TRANSE,"BGDO")) = iResSpecificFuelConsCost(allCy,TRANSE,"GDO","GDO",YTIME);
-
-iResSpecificFuelConsCost(allCy,TRANSE,"PHEVGSL","GSL",YTIME)$(TRANSETTECH(TRANSE,"PHEVGSL") $an(YTIME))= iResSpecificFuelConsCost(allCy,TRANSE,"GSL","GSL",YTIME);
-iResSpecificFuelConsCost(allCy,TRANSE,"PHEVGSL","ELC",YTIME)$(TRANSETTECH(TRANSE,"PHEVGSL") $an(YTIME))= iResSpecificFuelConsCost(allCy,TRANSE,"ELC","ELC",YTIME);
-
-iResSpecificFuelConsCost(allCy,TRANSE,"PHEVGDO","GDO",YTIME)$(TRANSETTECH(TRANSE,"PHEVGDO") $an(YTIME))= iResSpecificFuelConsCost(allCy,TRANSE,"GDO","GDO",YTIME);
-iResSpecificFuelConsCost(allCy,TRANSE,"PHEVGDO","ELC",YTIME)$(TRANSETTECH(TRANSE,"PHEVGDO") $an(YTIME))= iResSpecificFuelConsCost(allCy,TRANSE,"ELC","ELC",YTIME);
-
-iResSpecificFuelConsCost(allCy,TRANSE,"cHEVGDO","GDO",YTIME)$(TRANSETTECH(TRANSE,"cHEVGDO") $an(YTIME))= iResSpecificFuelConsCost(allCy,TRANSE,"GDO","GDO",YTIME);
-iResSpecificFuelConsCost(allCy,TRANSE,"cHEVGsl","gsl",YTIME)$(TRANSETTECH(TRANSE,"cHEVGsl") $an(YTIME))= iResSpecificFuelConsCost(allCy,TRANSE,"Gsl","Gsl",YTIME);
 table iPlugHybrFractOfMileage(ELSH_SET,YTIME)	 "Plug in hybrid fraction of mileage covered by electricity, residualls on GDP-Depnd car market ext (1)"
 $ondelim
 $include"./iPlugHybrFractOfMileage.csv"
@@ -890,13 +877,6 @@ iUsfEneConvSubTech(runCy,DOMSE,EF,YTIME)$(ord(YTIME) eq TF+33)= iDataDomTech(DOM
 
 iTechLft(runCy,DOMSE,EF,YTIME)$(ord(YTIME)>(ordfirst-8))  = iDataDomTech(DOMSE,EF,"LFT");
 
-$ontext
-NETWORKPARAM(NETWSET,INDDOM,NETEF)$(NETTECH(INDDOM,NETEF))                               = NetEffect(NETWSET,NETEF,"OTH");
-NETWORKPARAM(NETWSET,INDDOM,"STE1AH2F")$(NETTECH(INDDOM,"STE1AH2F"))                     = NetEffect(NETWSET,"H2F","OTH");
-
-NETWORKPARAM(NETWSET,TRANSE,NETEF)$(NETTECH(TRANSE,NETEF))                               = NetEffect(NETWSET,NETEF,"TRA");
-NETWORKPARAM(NETWSET,TRANSE,EF)$(NETTECH(TRANSE,EF)$PLUGIN(EF) )                         = NetEffect(NETWSET,"ELC","TRA");
-$offtext
 **  Non Energy Sector and Bunkers
 
 
