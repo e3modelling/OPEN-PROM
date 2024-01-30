@@ -61,10 +61,15 @@ BMSWAS 0/;
 iCo2EmiFac(allCy,SBS,EF,YTIME) = iCo2EmiFacAllSbs(EF);
 iCo2EmiFac(allCy,"IS","HCL",YTIME)   = iCo2EmiFacAllSbs("SLD"); !! This is the assignment for coke
 table iDataPassCars(allCy,GompSet1,Gompset2)        "Initial Data for Passenger Cars ()"
-$ondelim
-$include "./iDataPassCars.csv"
-$offdelim
+          scr
+RWO.PC    0.0200641155285507
+CHA.PC    0.0201531648401507
+EGY.PC    0.0201531648401507
+IND.PC    0.0201531648401507
+MAR.PC    0.0201531648401507
+USA.PC    0.0418811968705786
 ;
+display iDataPassCars;
 
 iDataPassCars(allCy,"PC","S1") = 1.0;
 iSigma(allCy,"S1") = iDataPassCars(allCy,"PC","S1");
@@ -223,16 +228,37 @@ $offdelim
 * FIXME: check if country-specific data is needed; move to mrprom
 * author=giannou
 table iIndCharData(allCy,INDSE,Indu_Scon_Set)               "Industry sector charactetistics (various)"
-$ondelim
-$include"./iIndCharData.csv"
-$offdelim
+         BASE           SHR_NSE   SH_HPELC
+RAS.IS   0.4397         0.7       0.00001
+RAS.NF   0              0.95      0.00001
+RAS.CH   0.1422         0.95      0.00001
+RAS.BM   2.1062         0.95      0.00001
+RAS.PP   0              0.95      0.00001
+RAS.FD   0.6641         0.95      0.00001
+RAS.TX   0.0638         0.95      0.00001
+RAS.EN   1.6664         0.95      0.00001
+RAS.OE   0.00000001     0.95      0.00001
+RAS.OI   1.5161         0.95      0.00001
+MAR.IS   0.4397         0.7       0.00001
+MAR.NF   0              0.95      0.00001
+MAR.CH   0.1422         0.95      0.00001
+MAR.BM   2.1062         0.95      0.00001
+MAR.PP   0              0.95      0.00001
+MAR.FD   0.6641         0.95      0.00001
+MAR.TX   0.0638         0.95      0.00001
+MAR.EN   1.6664         0.95      0.00001
+MAR.OE   0.00000001     0.95      0.00001
+MAR.OI   1.5161         0.95      0.00001
 ;
+display iIndCharData;
 iIndChar(allCy,INDSE,Indu_Scon_Set) = iIndCharData("MAR",INDSE,Indu_Scon_Set);
 table iInitConsSubAndInitShaNonSubElec(DOMSE,Indu_Scon_Set)      "Initial Consumption per Subsector and Initial Shares of Non Substitutable Electricity in Total Electricity Demand (Mtoe)"
-$ondelim
-$include"./iInitConsSubAndInitShaNonSubElec.csv"
-$offdelim
+     BASE   SHR_NSE SH_HPELC
+SE   1.8266 0.9     0.00001
+HOU  11.511 0.9     0.00001
+AG   0.2078 0.9     0.00001
 ;
+display iInitConsSubAndInitShaNonSubElec;
 iShrHeatPumpElecCons(allCy,INDSE) = iIndChar(allCy,INDSE,"SH_HPELC");
 iShrHeatPumpElecCons(allCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(DOMSE,"SH_HPELC");
 iExogDemOfBiomass(allCy,DOMSE,YTIME) = 0;
@@ -255,6 +281,13 @@ AMAXBASE 3,
 MAXLOADSH 0.45 / ;
 iBslCorrection(allCy,YTIME)$an(YTIME) = iLoadFactorAdjMxm("AMAXBASE");
 iMxmLoadFacElecDem(allCy,YTIME)$an(YTIME) = iLoadFactorAdjMxm("MAXLOADSH");
+parameter iPolDstrbtnLagCoeffPriOilPr(kpdl)	  "Polynomial Distribution Lag Coefficients for primary oil production (1)"/
+a1 1.666706504,
+a2 1.333269594,
+a3 1.000071707,
+a4 0.666634797,
+a5 0.33343691 /;
+display iPolDstrbtnLagCoeffPriOilPr;
 
 parameter iLoadFacElecDem(DSBS)    "Load factor of electricity demand per sector (1)" /
 IS 	0.92,
@@ -730,10 +763,17 @@ $offdelim
 ;
 iShareAnnMilePlugInHybrid(allCy,YTIME)$an(YTIME) = iPlugHybrFractOfMileage("ELSH",YTIME);
 table iCapDataLoadFacEachTransp(TRANSE,TRANSUSE)	 "Capacity data and Load factor for each transportation mode (passenger or tonnes/vehicle)"
-$ondelim
-$include"./iCapDataLoadFacEachTransp.csv"
-$offdelim
+     Cap  LF
+PC   2    
+*PB  40   0.4
+PT   300  0.4
+*PN  300  0.5
+PA   180  0.65
+GU   5    0.7
+GT   600  0.8
+GN   1500 0.9 
 ;
+display iCapDataLoadFacEachTransp;
 table iNewReg(allCy,YTIME) "new car registrations per year"
 $ondelim
 $include"./iNewReg.csv"
