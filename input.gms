@@ -162,12 +162,9 @@ $ondelim
 $include"./iSuppExports.csv"
 $offdelim
 ;
-table iImpExp(allCy,EFS,YTIME)	                 "Imports of exporting countries usually zero (1)" 
-$ondelim
-$include"./iImpExp.csv"
-$offdelim
-;
-iImpExp(allCy,EFS,YTIME)	= iImpExp("MAR",EFS,YTIME);
+parameter iImpExp(allCy,EFS,YTIME)	                 "Imports of exporting countries usually zero (1)" ;
+iImpExp(allCy,EFS,YTIME)	= 0;
+
 parameter iLoadFactorAdj(DSBS)	"Parameters for load factor adjustment iBaseLoadShareDem (1)" /
 IS 	0.9,
 NF 	0.92,
@@ -638,11 +635,8 @@ iGrossInConsNoEneBra(runCy,EFS,YTIME) = iGrosInlCons(runCy,EFS,YTIME) + iTotEneB
 
 iPeakBsLoadBy(allCy,PGLOADTYPE) = sum(tfirst, iDataElecSteamGen(allCy,PGLOADTYPE,tfirst));
 
-table iDataElecAndSteamGen(allCy,CHP,YTIME)	 "Data releated to electricity and steam generation"
-$ondelim
-$include"./iDataElecAndSteamGen.csv"
-$offdelim
-;
+parameter iDataElecAndSteamGen(allCy,CHP,YTIME)	 "Data releated to electricity and steam generation";
+iDataElecAndSteamGen(allCy,CHP,YTIME) = 0 ;
 iHisChpGrCapData(allCy,CHP,YTIME) = iDataElecAndSteamGen(allCy,CHP,YTIME);
 
 table iDataTotTransfInputRef(allCy,EF,YTIME)	 "Total Transformation Input in Refineries (Mtoe)"
