@@ -22,7 +22,6 @@ $onEnd
 *' *** onEmpty allows declarations of empty parameters
 $onEmpty
 
-*** TODO: check if the contents of this block are actually used later
 *' *** GAMS "flags" definitions
 *' 
 *' *** Maximum number of solver attempts
@@ -32,31 +31,20 @@ $setGlobal DevMode 0
 
 $setGlobal fCountries 'MAR,IND,USA,EGY,CHA,RWO'
 
-$setGlobal fSingleCountryRun 'yes'
-
 $setGlobal fCountryList %countries%
-
-$setGlobal fScenario 'DECARB_400'
-$setGlobal fBaseline 'BASE'
 
 $evalGlobal fPeriodOfYears 1
 
-$setGlobal fIncludeNonCO2 no
-
-$setGlobal fReadCommonDB 'yes'
-$setGlobal fReadCountryDB 'yes'
-$setGlobal fReadCountryCalib 'yes'
-
 $evalGlobal fStartHorizon 2010
 $evalGlobal fEndHorizon 2100
-$evalGlobal fEndY 2030
+$evalGlobal fEndY 2050
 $evalGlobal fStartY 2018
 $evalGlobal fBaseY %fStartY% - %fPeriodOfYears%
 
 *** end of dollar commands section, no further flag definitions allowed 
 
 *' *** load input data files
-$call "RScript ./loadMadratData.R"
+*$call "RScript ./loadMadratData.R"
 
 $include sets.gms
 $include declarations.gms

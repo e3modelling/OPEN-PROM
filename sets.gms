@@ -17,23 +17,10 @@ sets
 ***        Model Time Horizon       *
 ytime           Model time horizon                                /%fStartHorizon%*%fEndHorizon%/
 an(ytime)       Years for which the model is running              /%fStartY%*%fEndY%/
-twenties(ytime) THE DECADE FROM 2020-2030                         /2021*2030/
-thirties(ytime) THE DECADE FROM 2030-2040                         /2031*2040/
-after2020(ytime) The period 2021 to 2050                          /2021*2050/
-after2030(ytime) The period 2031 to 2050                          /2031*2050/
-after2035(ytime) The period 2036 to 2050                          /2036*2050/
-an1(ytime) /2010*2015/
-an2(ytime) /2016*2030/
-an3(ytime) /2016*2020/
-an4(ytime) /2021*2025/
-an5(ytime) /2026*2030/
-carbon(ytime)   Years for which carbon tax is applied
 period(ytime)   Model can also run for periods of years
 tFirst(ytime)   Base year                                         /%fBaseY%/
-tFirstAn(ytime) First year for which the model is running         /%fStartY%/
 time(ytime)     Model time horizon used in equation definitions   /%fStartY%*%fEndY%/
 datay(ytime)    Historical year before the base year of the model /%fStartHorizon%*%fBaseY%/
-timeRep(ytime)  Model time horizon used in report
 hour            "Segments of hours in a year (250,1250,...,8250)" /h0*h8/
 
 ***          Consumer Sizes         *
@@ -45,7 +32,6 @@ modal
 largest
 /
 
-conSizeSet /size/
 eSet         Electricity consumers used for average electricity price calculations /i,r/
 iSet(eSet)   Industrial consumer /i/
 rSet(eSet)   Residential consumer /r/
@@ -58,7 +44,6 @@ nSet         auxiliary counter for the definition of Vr       /b1*b20/
 kpdl         counter for Polynomial Distribution Lag          /a1*a6/
 rc                                                            /1*3/
 rcc                                                           /1*4/
-rres                                                          /r1*r4/
 
 
 ***       Sectoral Structure        *
@@ -208,9 +193,6 @@ RegulaPolicies(POLICIES_set) Set of policies entering in the regula falsi loops
   NONE          No policy
 /
 
-APolicies(RegulaPolicies) Regula falsi policies that are active
-PolicyYears(RegulaPolicies, ytime) Years for which a policy is effective
-
 NAP(Policies_set) National Allocation Plan sector categories
 /
 Trade    Carbon Value for trading sectors
@@ -227,26 +209,18 @@ DSBS(SBS)         All Demand Subsectors         /PC,PT,PA,GU,GT,GN, IS,NF,CH,BM,
 TRANSE(DSBS)      All Transport Subsectors      /PC,PT,PA,GU,GT,GN/
 TRANS1(SBS)       All Transport Subsectors      /PC,PT,PA,GU,GT,GN/
 TRANP(TRANSE)     Passenger Transport           /PC,PT,PA/
-TRANP1(SBS)       Passenger Transport           /PC,PT,PA/
 TRANG(TRANSE)     Goods Transport               /GU,GT,GN/
-TRANG1(SBS)       Goods Transport               /GU,GT,GN/
-TRANR(TRANSE)     Road Transport                /PC,GU/
-TRANR1(SBS)       Road Transport                /PC,GU/
-TRANT(TRANSE)     Train Transport               /PT,GT/
-TRANA(TRANSE)     Aviation                      /PA/
 
 INDSE(DSBS)       Industrial SubSectors         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI/
 DOMSE(DSBS)       Tertiary SubSectors           /SE,AG,HOU/
 INDSE1(SBS)       Industrial SubSectors         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI/
 DOMSE1(SBS)       Tertiary SubSectors           /SE,AG,HOU/
 HOU(DSBS)         Households                     /HOU/
-TERSE(DSBS)       Services and Agriculture      /SE,AG/
 NENSE(DSBS)       Non Energy and Bunkers        /PCH,NEN,BU/
 NENSE1(SBS)       Non Energy and Bunkers        /PCH,NEN,BU/
 BUN(DSBS)         Bunkers                       /BU/
 
 INDDOM(DSBS)      Industry and Tertiary         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,SE,AG,HOU/
-INDDOM1(SBS)      Industry and Tertiary         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,SE,AG,HOU/
 * the following sets are used in price equation for electricity
 INDTRANS(SBS)     Industry and Transport        /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI ,PC,PT,PA,GU,GT, GN /
 RESIDENT(SBS)     Residential                   /SE,AG,HOU/
@@ -315,7 +289,7 @@ REN     "Renewables except Hydro"
 NFF     "Non Fossil Fuels"
 NEF     "New energy forms"
 
-* heatpump energy (reduces the final energy demand of non electric consumption
+* heatpump energy (reduces the final energy demand of non electric consumption)
 HEATPUMP "Low enthalpy heat produced by heatpumps reducing the total final consumption of the sector"
 /
 HEATPUMP(EF) Heatpumps are reducing the heat requirements of the sector but increasing electricity consumption
@@ -528,9 +502,6 @@ ELC
 *BMSWAS
 /
 
-EFIS(EF)        Fuels in Iron and Steel sector in which useful energy conversion factor is expressed in tn per toe
-/HCL, ELC/
-
 *         Technologies            *
 
 TEAALL              Technology progress (Demand Side)
@@ -591,24 +562,6 @@ CHEVGSL
 CHEVGDO
 /
 
-
-ITECH(EF)        Industrial Technologies
-/
-LGN,HCL,GDO,RFO,OLQ,NGS,OGS,STE1AL,
-STE1AH,STE1AD,STE1AR,STE1AG,STE1AB,STE1AH2F, HEATPUMP, BMSWAS,ELC
-/
-
-DTECH(EF)        Tertiary Technologies
-/
-LGN,HCL,GSL,GDO,RFO,OLQ,NGS,OGS,STE1AL,
-STE1AH,STE1AD,STE1AR,STE1AG,STE1AB,STE1AH2F, HEATPUMP,STE2LGN,STE2OSL,STE2GDO,STE2RFO,STE2OLQ,STE2NGS,
-STE2OGS,STE2BMS,SOL,BMSWAS,ELC
-/
-
-BTECH(EF)        Bunkers Technologies                    /GDO,RFO,OLQ/
-
-PNTECH(EF)       Petrochemical Technologies               /LGN,HCL,GDO,RFO,OLQ,NGS,OGS/
-
 SECTTECH(SBS,EF) Link between Model Subsectors and Fuels
 /
 PC.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO,CHEVGSL,CHEVGDO)
@@ -630,97 +583,6 @@ BU.(GDO,RFO)
 PG.(LGN,HCL,GDO,RFO,NGS,NUC,HYD,BMSWAS,SOL,GEO,WND)
 H2P.(HCL,RFO,NGS,NUC,BMSWAS,SOL,WND,ELC)
 /
-
-NETTECH(SBS,EF) Link between model subsectors and technologies participating in network effect
-/
-(PC,GU).(ELC,H2F,PHEVGSL,PHEVGDO)
-(PT,GT).(H2F)
-PA.(H2F)
-*(PN,GN).(H2F)
-(IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(STE1AH2F,HEATPUMP,ELC)
-(SE,HOU,AG).                    (STE1AH2F,HEATPUMP,ELC)
-/
-
-
-NETTECHTRA(SBS,EF) Link between transport subsectors and technologies participating in network effect
-/
-(PC).(ELC,H2F,PHEVGSL,PHEVGDO)
-PT.H2F
-PA.H2F
-*PN.H2F
-GU.(ELC,H2F,PHEVGSL,PHEVGDO)
-GT.H2F
-GN.H2F
-/
-
-
-NETEF(EF)
-/
-ELC,H2F,PHEVGSL,PHEVGDO,STE1AH2F,HEATPUMP
-/
-
-NETEF2(EF)
-/
-ELC,H2F,HEATPUMP
-/
-
-NETEF3(EF)
-/
-ELC,H2F,PHEVGSL,PHEVGDO
-/
-NETEF4
-/
-OTH,TRA
-/
-
-TRANSFINAL(TRANSE)
-/PC,PA,PT,GU,GT,GN/
-
-TRANSPFINAL(TRANSFINAL)/PC,PA,PT/
-TRANSGFINAL(TRANSFINAL)/GU,GT,GN/
-
-TRANSNONPC(TRANSE)
-/PA,PT/
-
-TRANSGOOD(TRANSE)
-/GU,GT,GN/
-
-TRANSPC(TRANSE)
-/PC/
-
-TRANSPASS(TRANSE)
-/PA,PC,PT/
-
-
-NETEFtoNETEF2(EF,EF)
-
-/
-ELC.(ELC,PHEVGSL,PHEVGDO)
-HEATPUMP.HEATPUMP
-H2F.(H2F,STE1AH2F)
-/
-
-NETEFtoNETEF3(EF,EF)
-
-/
-ELC.(ELC,PHEVGSL,PHEVGDO)
-H2F.H2F
-/
-
-
-TRANSETTECH(TRANSE,TTECH) Technologies used in transport sectors
-/
-PC.(GSL,LPG,GDO,NGS,ELC,ETH,MET,H2F,BGDO,PHEVGSL,PHEVGDO,CHEVGSL,CHEVGDO)
-*PB.(GSL,LPG,GDO,NGS,ELC,ETH,MET,H2F,BGDO,PHEVGSL,PHEVGDO)
-GU.(GSL,LPG,GDO,NGS,ELC,ETH,MET,H2F,BGDO,PHEVGSL,PHEVGDO,CHEVGDO)
-(PT,GT).(GDO,ELC,MET,H2F)
-PA.(KRS,H2F)
-*(PN,GN).(GSL,GDO,H2F)
-GN.(GSL,GDO,H2F)
-/
-
-
-
 
 
 PGALL            Power Generation Plant Types
@@ -774,29 +636,6 @@ PGAWNO Wind offshore
 
 PGASOL(PGALL)
 /PGASOL/
-CONVPGALL(PGALL)            Conventional power generation plant types
-/
-*CTHLGN Conventional thermal monovalent lignite
-*CTHHCL Conventional thermal monovalent hard coal
-*CTHRFO Conventional thermal monovalent fuel oil
-*CTHNGS Conventional thermal monovalent natural gas
-CTHBMSWAS Conventional thermal monovalent biomass and waste
-CCCGT  Conventional combined cycle gas turbine
-*CGTGDO Conventional gas turbines (peak devices) diesel oil
-*CGTNGS Conventional gas turbines (peak devices) natural gas
-*PGNUC Nuclear Plants
-PGLHYD Large Hydro Plants
-PGSHYD Small Hydro Plants
-PGWND Wind Plants
-PGSOL Solar Photovoltaic Plants
-*PGOTHREN Other renewables mainly geothermal
-/
-
-BMSPGALL(PGALL)
-/
-ATHBMSWAS
-IGCCBMS
-/
 
 CCS(PGALL) Plants which can be equipped with CCS
 /
@@ -826,19 +665,10 @@ PGACGS.IGCCHCL
 PGAGGS.ACCGT
 /
 
-
-
-
 CHP(EF)       CHP Plants
 /
 STE1AL,STE1AH,STE1AD,STE1AR,STE1AG,STE1AB
 /
-
-*CONVCHP(EF)  Conventional CHP Plants
-*/
-*STE1CL,STE1CH,STE1CD,STE1CR,STE1CG,STE1CB
-*/
-
 
 DH(EF)       District Heating
 /
@@ -853,14 +683,10 @@ STE2BMS
 /
 
 PGNUCL(PGALL)    Nuclear plants                            / PGANUC/
-*PGEXO(PGALL)     Plant types that are forecast exogenously /PGNUC, PGLHYD/
-PGEXO(allCy,PGALL,Ytime)     Plant types for exogenous investment
 PGREN(PGALL)     Renewable Plants                          /PGLHYD,PGSHYD,PGWND,PGSOL,PGASHYD,PGAWND,PGASOL,PGAOTHREN, PGAWNO, PGADPV/
 PGNREN(PGALL)    Advanced Renewable Plants potential      /PGASHYD,PGAWND,PGASOL,PGAOTHREN,PGAWNO,PGADPV,ATHBMSWAS,IGCCBMS/
 PGGEO(PGALL)     Geothermal Plants                        /PGAOTHREN/
 PGRENEF          Renewable energy forms in power generation  /LHYD,SHYD,WND,WNO,SOL,DPV,BMSWAS,OTHREN/
-PGHYDRO(PGALL) Hydro power technologies  /PGLHYD,PGSHYD,PGASHYD/
-PGRENSUBS(PGALL) RES technologies to be subsidized in a scenario /PGAWND,PGASOL,PGAWNO,PGADPV,ATHBMSWAS,IGCCBMS,PGASHYD/
 
 PGALLtoPGRENEF(PGALL,PGRENEF)     Correspondence between renewable plants and renewable energy forms
 /
@@ -873,8 +699,6 @@ PGADPV.DPV
 (PGAOTHREN).OTHREN
 (CTHBMSWAS,ATHBMSWAS,IGCCBMS).BMSWAS
 /
-
-
 
 PGALLtoEF(PGALL,PGEF)     Correspondence between plants and energy forms
 /
@@ -932,105 +756,6 @@ STE1AB.ATHBMSWAS
 *STE1AH2F.FC2
 /
 
-PGALLAG        Aggregations of power plants used in the aggregated report
-/
-NUC      "Nuclear Power Plants"
-REN      "Renewables"
-HYD      "Hydro Plants"
-WND      "Wind Plants"
-BMS      "Biomass and waste"
-SOL      "Other renewables (mainly solar)"
-THE      "Thermal plants"
-HCL      "Solids"
-ICG      "Clean coal"
-SUP      "Supercritical"
-OIL      "oil"
-GAS      "Gas plants"
-GGC      "Combined cycles"
-OTH      "Hydrogen"
-/
-
-PGALLtoPGALLAG(PGALL,PGALLAG)
-/
-
-*CTHLGN.(HCL,THE)
-*CTHHCL.(HCL,THE)
-*CTHRFO.(OIL,THE)
-*CTHNGS.(GAS,THE)
-CTHBMSWAS.(BMS,REN)
-ATHLGN.(HCL,THE)
-ATHHCL.(HCL,THE)
-ATHRFO.(OIL,THE)
-ATHNGS.(GAS,THE)
-ATHBMSWAS.(BMS,REN)
-SUPCRL.(HCL,SUP,THE)
-SUPCR.(HCL,SUP,THE)
-FBCLGN.(HCL,SUP,THE)
-FBCHCL.(HCL,SUP,THE)
-IGCCLGN.(HCL,ICG,THE)
-IGCCHCL.(HCL,ICG,THE)
-IGCCBMS.(BMS,REN)
-CCCGT.(GAS,GGC,THE)
-ACCGT.(GAS,GGC,THE)
-*(ACCHT,ICEH2).OTH
-*CGTGDO.(OIL,THE)
-*CGTNGS.(GAS,THE)
-AGTGDO.(OIL,THE)
-AGTNGS.(GAS,THE)
-*FC1.OTH
-*FC2.OTH
-*PGNUC.NUC
-PGLHYD.(HYD,REN)
-PGSHYD.(HYD,REN)
-PGWND.(WND,REN)
-PGSOL.(SOL,REN)
-*PGOTHREN.(SOL,REN)
-PGASHYD.(HYD,REN)
-PGAWND.(WND,REN)
-PGASOL.(SOL,REN)
-PGADPV.(SOL,REN)
-PGAOTHREN.(SOL,REN)
-PGANUC.NUC
-PGAPSS.(HCL,SUP,THE)
-PGAPSSL.(HCL,SUP,THE)
-PGACGSL.(HCL,ICG,THE)
-PGACGS.(HCL,ICG,THE)
-PGAGGS.(GAS,GGC,THE)
-PGAWNO.(WND,REN)
-/
-
-geme3tech
-/
-coalconv
-gasconv
-oilconv
-gasadv
-nuc
-hyd
-bms
-wind
-spv
-csp
-coalccs
-gasccs
-/
-
-pgmap(geme3tech,pgall)
-/
-coalconv.(ATHLGN,ATHHCL,SUPCRL,SUPCR,FBCLGN,FBCHCL,IGCCLGN,IGCCHCL)
-gasconv.(ATHNGS,AGTNGS)
-oilconv.(ATHRFO,AGTGDO)
-gasadv.(CCCGT,ACCGT)
-nuc.(PGANUC)
-hyd.(PGLHYD,PGSHYD,PGASHYD)
-bms.(CTHBMSWAS,ATHBMSWAS,IGCCBMS)
-wind.(PGWND,PGAWND,PGAWNO)
-spv.(PGSOL,PGADPV)
-csp.(PGASOL)
-coalccs.(PGAPSS,PGAPSSL,PGACGSL,PGACGS)
-gasccs.(PGAGGS )
-/
-
 PGSCRN(PGALL)     New plants involved in endogenous scrapping (these plants are not scrapped)
 /
 ATHBMSWAS
@@ -1062,42 +787,6 @@ PGAWNO
 PGADPV
 PGAOTHREN
 /
-
-NEWTECHS(PGALL) new technologies
-/
-ATHLGN  Advanced thermal monovalent lignite
-ATHHCL Advanced thermal monovalent hard coal
-ATHRFO Advanced thermal monovalent fuel oil
-ATHNGS Advanced thermal monovalent natural gas
-ATHBMSWAS Advanced thermal monovalent biomass and waste
-SUPCRL  Supercritical lignite
-SUPCR  Supercritical coal
-FBCLGN Fluidised bed lignite
-FBCHCL Fluidised bed hard coal
-IGCCLGN Integrated gasification combine cycle lignite
-IGCCHCL Integrtaed gasification combine cycle hard coal
-IGCCBMS Integrated gasification combine cycle biomass
-ACCGT  Advanced combined cycle gas turbine
-AGTGDO Advanced gas turbines (peak devices) diesel oil
-AGTNGS Advanced gas turbines (peak devices) natural gas
-*ACCHT Advanced combined cycle hydrogen combustion turbines
-*ICEH2  Internal combustion engine powered by H2
-*FC1  Fuel cells
-*FC2  Advanced Fuel cells
-PGASHYD Advanced Small Hydro Plants
-PGAWND Advanced Wind Plants
-PGASOL Advanced Solar Thermal Plants
-PGADPV Advanced Building Integrated PV Plants
-PGAOTHREN Advanced geothermal Plants
-PGANUC New Nuclear Designs
-PGAPSSL Supercritical lignite with CCS
-PGAPSS Supercritical coal with CCS
-PGACGSL Integrated lignite gasification with CCS
-PGACGS Integrated coal gasification with CCS
-PGAGGS Gas turbine combined cycle with CCS
-PGAWNO Wind offshore
-/
-
 
 *           Emissions             *
 
@@ -1726,8 +1415,4 @@ r_co2_h
 /
 
 
-;
-Set stringcy(allCy)
-Set smallpg(pgall) /AGTGDO,AGTNGS/
-Alias (smallpg,smallpgg),(geme3tech,geme3tech1),(EF1,EF),(allCy2,allCy)
 ;
