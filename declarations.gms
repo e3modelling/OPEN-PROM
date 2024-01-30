@@ -29,11 +29,6 @@ $include "./iNatGasPriProElst.csv"
 $offdelim
 /
 iFuelPriPro(allCy,EF,YTIME)                 	"Fuel Primary Production (Mtoe)"
-iPolDstrbtnLagCoeffPriOilPr(kpdl)	            "Polynomial Distribution Lag Coefficients for primary oil production (1)"/
-$ondelim
-$include "./iPolDstrbtnLagCoeffPriOilPr.csv"
-$offdelim
-/
 iRatePriProTotPriNeeds(allCy,EF,YTIME)	        "Rate of Primary Production in Total Primary Needs (1)"	
 iFuelExprts(allCy,EF,YTIME)	                    "Fuel Exports (Mtoe)"	
 iSuppExports(allCy,EF,YTIME)                	"Supplementary parameter for  exports (Mtoe)"
