@@ -2,8 +2,7 @@
 
 **Objective:**
 
-This tutorial provides a step-by-step guide to installing the Task Runner extension in Visual Studio Code and utilizing a custom button for running GAMS code.
-At the end of this tutorial, you will have the knowledge and skills to enhance your Visual Studio Code workflow by installing the Task Runner extension and utilizing custom tasks for running GAMS code. By following the step-by-step guide provided, you will be able to integrate task automation into your development process, whether for development or research purposes. With the ability to toggle between development and research modes and understand the associated computational requirements, you will optimize your efficiency and productivity when working with GAMS code in Visual Studio Code.
+By the end of this tutorial, you'll know how to install the Task Runner extension in Visual Studio Code and use custom tasks to run GAMS code. This will streamline your workflow, whether for development or research, by automating tasks and optimizing efficiency. You'll learn to toggle between development and research modes, understanding their computational requirements, and enhance productivity when working with GAMS code in Visual Studio Code.
 
 **Warning:**
 It is recommended to follow this tutorial after completing Tutorial 00 and having cloned the repository, and added all necessary extensions.
