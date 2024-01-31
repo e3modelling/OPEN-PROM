@@ -37,14 +37,14 @@ $evalGlobal fPeriodOfYears 1
 
 $evalGlobal fStartHorizon 2010
 $evalGlobal fEndHorizon 2100
-$evalGlobal fEndY 2050
+$evalGlobal fEndY 2030
 $evalGlobal fStartY 2018
 $evalGlobal fBaseY %fStartY% - %fPeriodOfYears%
 
 *** end of dollar commands section, no further flag definitions allowed 
 
 *' *** load input data files
-*$call "RScript ./loadMadratData.R"
+$call "RScript ./loadMadratData.R"
 
 $include sets.gms
 $include declarations.gms
