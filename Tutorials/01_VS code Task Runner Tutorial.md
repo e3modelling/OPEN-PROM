@@ -2,7 +2,7 @@
 
 **Objective:**
 
-By the end of this tutorial, you'll know how to install the Task Runner extension in Visual Studio Code and use custom tasks to run GAMS code. This will streamline your workflow, whether for development or research, by automating tasks and optimizing efficiency. You'll learn to toggle between development and research modes, understanding their computational requirements, and enhance productivity when working with GAMS code in Visual Studio Code.
+Learn how to install the Task Runner extension in VS Code. This allows to quickly execute tasks by creating and using buttons similar to the ones found in other programs (e.g. GAMS Studio). These buttons can streamline your workflow, whether for development or research, by automating tasks. You'll also learn about development and research modes, and their computational requirements.
 
 **Warning:**
 It is recommended to follow this tutorial after completing Tutorial 00 and having cloned the repository, and added all necessary extensions.
@@ -29,10 +29,10 @@ The OPEN-PROM tasks are divided into two modes: development and research.
 
 - **Development Mode:**
   - Use development mode when adding new features or modifying the model code.
-  - Development mode is less demanding in terms of computational resources.
+  - Development mode is less demanding in terms of computational resources (6 countries instead of the 50+ countries in research mode).
 
 - **Research Mode:**
-  - Prefer research mode when studying various policy scenarios.
+  - Prefer research mode for production runs.
   - Research mode requires more computational resources and takes longer to execute.
 
 If you want to study the command-line flags of each mode, refer to the `.vscode/tasks.json` file in your project directory.

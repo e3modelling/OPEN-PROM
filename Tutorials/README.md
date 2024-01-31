@@ -2,6 +2,12 @@ Welcome to the OPEN-PROM tutorial!
 
 The contents of the tutorial are listed on the left (in "Tutorials" folder).
 
+Necessary software: GAMS (required); R, Git, GAMS Studio/VS Code (optional)
+
+Model users: Install GAMS (if you haven't done so already), add GAMS (and R) to your PATH variable, and then proceed with Tutorial 03. Note that to run the model you need input data, which are not distributed with the model code. If you don't have the data please get in touch with us: giannousakis@e3modelling.com
+
+Model developers: Install GAMS (if you haven't done so already), add GAMS (and R) to your PATH variable, and then proceed with Tutorial 00
+
 A quick overview of the Tutorials contents:
 
  - ***00_Git and VS Code:***
@@ -18,11 +24,11 @@ A quick overview of the Tutorials contents:
 
 - ***03_Running OPEN‐PROM:***
 
-    Brief description on how to execute the OPEN-PROM, as well as the order of script execution.
+    Brief description on how to execute OPEN-PROM, as well as the order of script execution.
 
 - ***04_GAMS error codes:***
 
-    Contains a URL redirecting you to the official GAMS error codes documentation.
+    Contains examples or GAMS errors, as well as a URL redirecting you to the official GAMS error codes documentation.
 
 - ***05_OPEN PROM country to region mapping:***
 
@@ -30,7 +36,7 @@ A quick overview of the Tutorials contents:
 
 - ***06_Creating FIXME Issues from Code Comments:***
 
-    A brief guide about automatically creating new issues, by adding a specifically formatted type of comment on your code.
+    A brief guide about automatically creating new Github issues, by adding a specifically formatted type of comment in your code.
 
 - ***07_Set up Github Actions for GAMS code using GAMS Engine:***
 
@@ -45,4 +51,3 @@ Extensive documentation of the PROMETHEUS model (on which both MENA-EDS and OPEN
 
 OPEN-PROM is written in GAMS (*G*eneral *A*lgebraic *M*odelling *S*ystem https://gams.com/) and its main file is `main.gms`.
 
-Model developers: To have the necessary software (GAMS, R, Git, GAMS Studio/VS Code), install GAMS (if you haven't done so already), add GAMS and R to your PATH variable, and then proceed with Tutorial 00
