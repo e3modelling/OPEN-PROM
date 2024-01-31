@@ -1,5 +1,9 @@
 ## Setting Up Git and VS Code for GitHub: A Step-by-Step Guide
 
+**Objective:**
+
+At the end of this tutorial, you will be able to set up Git and Visual Studio Code (VS Code) for GitHub collaboration. Through a comprehensive step-by-step guide, you will learn to understand key terminology such as Git, GitHub, and VS Code, check for existing Git installations and install Git if necessary, configure Git settings, including your name and email address, install VS Code and navigate its interface effectively, clone a repository from GitHub using Git commands, open the cloned repository in VS Code and explore the Task Runner extension, execute tasks in development and research modes, understanding their respective purposes and computational requirements, and utilize basic VS Code functionalities like file operations, source control, extensions, and the sidebar. By acquiring these skills, you will be equipped to efficiently manage version control, collaborate on projects via GitHub, and leverage the capabilities of VS Code for enhanced productivity in software development and modeling tasks.
+
 - Git is a widely used Version Control software
 - VS Code (Visual Studio Code) is a widely used and versatile text editor for modelers and developers 
 

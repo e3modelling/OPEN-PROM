@@ -36,6 +36,8 @@ A quick overview of the Tutorials contents:
 
     Basic steps to properly set up Github Actions running GAMS code.
 
+- ***08_Troubleshooting Guide Setting Up Git and Visual Studio Code for GitHub***
+    Simple steps to troubleshoot and resolve common problems during the setup process of Git and Visual Studio Code for GitHub.
 
 OPEN-PROM ("open PROMETHEUS") is an energy-economy model currently under development; the present version is based on MENA-EDS ENERGY MODEL v4.0 (c) E3Modelling 2020.
 
