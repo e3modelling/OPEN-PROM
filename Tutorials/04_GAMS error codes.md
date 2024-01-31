@@ -1,3 +1,51 @@
-Here is a page explaining typical error codes of GAMS. Useful for looking at results of Github Actions runs of OPEN-PROM.
+# GAMS Troubleshooting Guide (Debugging a GAMS Run)
 
+**Objective:**
+
+Encountering errors while working with GAMS (General Algebraic Modeling System) is common, but understanding how to troubleshoot them can save time and frustration. This guide provides solutions to some of the most common errors encountered in GAMS, including compilation errors, pretriangular infeasibilities, and infeasibilities.
+
+## Compilation Errors
+
+### Error 101: "Syntax error, unexpected keyword in the declaration of a component" 
+
+**Solution:** This error indicates a syntax error in your GAMS code. Double-check the syntax of your model declaration and make sure all keywords are spelled correctly.
+
+### Error 102: "Symbol 'xxx' already defined" 
+
+**Solution:** This error occurs when a symbol is defined multiple times in the model. Check for duplicate definitions of symbols (variables, equations, parameters) and ensure each symbol is defined only once.
+
+### Error 103: "Inconsistent equation definition" 
+
+**Solution:** This error indicates inconsistencies in the definition of equations. Review the equations in your model and ensure they are correctly defined according to the problem requirements.
+
+## Pretriangular Infeasibilities
+
+### Error 170: "Pretriangular Infeasible or Unbounded" 
+
+**Solution:** This error occurs when the initial values provided for the variables or parameters result in infeasibility or unboundedness. Adjust the initial values or constraints to ensure feasibility.
+
+### Error 171: "GAMS: Internal Solver Error" 
+
+**Solution:** This error indicates an internal solver error. Try increasing the solver tolerance or switching to a different solver to see if the error persists. If the issue persists, contact GAMS support for assistance.
+
+## Infeasibilities
+
+### Error 201: "Model infeasible" 
+
+**Solution:** This error indicates that the model is infeasible, meaning there are no feasible solutions that satisfy all constraints. Review the model constraints and objective function to identify conflicting or overly restrictive conditions.
+
+### Error 202: "Constraint 'xxx' is infeasible" 
+
+**Solution:** This error indicates that a specific constraint in the model is infeasible. Check the constraints associated with the given identifier ('xxx') and revise them if necessary to ensure feasibility.
+
+## General Troubleshooting Tips
+
+- **Check Log Files:** Review the GAMS log files for detailed error messages and diagnostic information.
+- **Consult Documentation:** Refer to the GAMS documentation and user guides for explanations of error messages and troubleshooting tips.
+- **Update GAMS Version:** Ensure you are using the latest version of GAMS, as newer versions may include bug fixes and improvements.
+- **Search Forums and Communities:** Look for solutions to common GAMS errors in online forums and communities, or post your question to seek assistance from experienced users.
+
+By following these troubleshooting tips and solutions, you can effectively resolve common errors encountered while working with GAMS and optimize your modeling workflow.
+
+Here is a page explaining typical error codes of GAMS.
 https://www.gams.com/latest/docs/UG_GAMSReturnCodes.html
