@@ -764,8 +764,8 @@ qShortPowGenCost(runCy,ESET,YTIME)$TIME(YTIME)..
 
 *' This equation calculates the lifetime of passenger cars based on the scrapping rate of passenger cars. The lifetime is inversely proportional to the scrapping rate,
 *' meaning that as the scrapping rate increases, the lifetime of passenger cars decreases.
-QPassCarsLft(runCy,DSBS,EF,TEA,YTIME)$(TIME(YTIME) $sameas(DSBS,"PC") $SECTTECH(DSBS,EF))..
-         VLifeTimeTech(runCy,DSBS,EF,TEA,YTIME)
+QPassCarsLft(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $sameas(DSBS,"PC") $SECTTECH(DSBS,EF))..
+         VLifeTimeTech(runCy,DSBS,EF,YTIME)
                  =E=
          1/VScrRate(runCy,YTIME);
 
@@ -812,23 +812,23 @@ QGapTranspActiv(runCy,TRANSE,YTIME)$TIME(YTIME)..
          +
          (
          ( [VTrnspActiv(runCy,TRANSE,YTIME)/
-         (sum((TTECH,TEA)$SECTTECH(TRANSE,TTECH),VLifeTimeTech(runCy,TRANSE,TTECH,TEA,YTIME-1))/TECHS(TRANSE))] +
+         (sum((TTECH)$SECTTECH(TRANSE,TTECH),VLifeTimeTech(runCy,TRANSE,TTECH,YTIME-1))/TECHS(TRANSE))] +
           SQRT( SQR([VTrnspActiv(runCy,TRANSE,YTIME)/
-          (sum((TTECH,TEA)$SECTTECH(TRANSE,TTECH),VLifeTimeTech(runCy,TRANSE,TTECH,TEA,YTIME-1))/TECHS(TRANSE))]) + SQR(1e-4) ) )/2
+          (sum((TTECH)$SECTTECH(TRANSE,TTECH),VLifeTimeTech(runCy,TRANSE,TTECH,YTIME-1))/TECHS(TRANSE))]) + SQR(1e-4) ) )/2
          )$(TRANP(TRANSE) $(not sameas(TRANSE,"PC")))
          +
          (
          ( [VGoodsTranspActiv(runCy,TRANSE,YTIME)/
-         (sum((EF,TEA)$SECTTECH(TRANSE,EF),VLifeTimeTech(runCy,TRANSE,EF,TEA,YTIME-1))/TECHS(TRANSE))] + SQRT( SQR([VGoodsTranspActiv(runCy,TRANSE,YTIME)/
-          (sum((EF,TEA)$SECTTECH(TRANSE,EF),VLifeTimeTech(runCy,TRANSE,EF,TEA,YTIME-1))/TECHS(TRANSE))]) + SQR(1e-4) ) )/2
+         (sum((EF)$SECTTECH(TRANSE,EF),VLifeTimeTech(runCy,TRANSE,EF,YTIME-1))/TECHS(TRANSE))] + SQRT( SQR([VGoodsTranspActiv(runCy,TRANSE,YTIME)/
+          (sum((EF)$SECTTECH(TRANSE,EF),VLifeTimeTech(runCy,TRANSE,EF,YTIME-1))/TECHS(TRANSE))]) + SQR(1e-4) ) )/2
          )$TRANG(TRANSE);
 
 *' This equation calculates the specific fuel consumption for a given technology, subsector, energy form, and time. The specific fuel consumption depends on various factors,
 *' including fuel prices and elasticities. The equation involves a product term over a set of Polynomial Distribution Lags and considers the elasticity of fuel prices.
-QSpecificFuelCons(runCy,TRANSE,TTECH,TEA,EF,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,EF) $TTECHtoEF(TTECH,EF) )..
-         VSpecificFuelCons(runCy,TRANSE,TTECH,TEA,EF,YTIME)
+QSpecificFuelCons(runCy,TRANSE,TTECH,EF,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,EF) $TTECHtoEF(TTECH,EF) )..
+         VSpecificFuelCons(runCy,TRANSE,TTECH,EF,YTIME)
                  =E=
-         VSpecificFuelCons(runCy,TRANSE,TTECH,TEA,EF,YTIME-1) * prod(KPDL,
+         VSpecificFuelCons(runCy,TRANSE,TTECH,EF,YTIME-1) * prod(KPDL,
                      (
                         VFuelPriceSub(runCy,TRANSE,EF,YTIME-ord(KPDL))/VFuelPriceSub(runCy,TRANSE,EF,YTIME-(ord(KPDL)+1))
                       )**(iElastA(runCy,TRANSE,"c5",YTIME)*iFPDL(TRANSE,KPDL))
@@ -837,23 +837,23 @@ QSpecificFuelCons(runCy,TRANSE,TTECH,TEA,EF,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE
 *' This equation calculates the transportation cost per mean and consumer size in kEuro per vehicle. It involves several terms, including capital costs,
 *' variable costs, and fuel costs. The equation considers different technologies and their associated costs, as well as factors like the discount rate,
 *' specific fuel consumption, and annual .
-QTranspCostPerMeanConsSize(runCy,TRANSE,RCon,TTECH,TEA,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $(ord(Rcon) le iNcon(TRANSE)+1))..
-         VTranspCostPermeanConsSize(runCy,TRANSE,RCon,TTECH,TEA,YTIME)
+QTranspCostPerMeanConsSize(runCy,TRANSE,RCon,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $(ord(Rcon) le iNcon(TRANSE)+1))..
+         VTranspCostPermeanConsSize(runCy,TRANSE,RCon,TTECH,YTIME)
          =E=
                        (
                          (
-                           (iDisc(runCy,TRANSE,YTIME)*exp(iDisc(runCy,TRANSE,YTIME)*VLifeTimeTech(runCy,TRANSE,TTECH,TEA,YTIME)))
+                           (iDisc(runCy,TRANSE,YTIME)*exp(iDisc(runCy,TRANSE,YTIME)*VLifeTimeTech(runCy,TRANSE,TTECH,YTIME)))
                            /
-                           (exp(iDisc(runCy,TRANSE,YTIME)*VLifeTimeTech(runCy,TRANSE,TTECH,TEA,YTIME)) - 1)
+                           (exp(iDisc(runCy,TRANSE,YTIME)*VLifeTimeTech(runCy,TRANSE,TTECH,YTIME)) - 1)
                          ) * iCapCostTech(runCy,TRANSE,TTECH,YTIME)  * iCGI(runCy,YTIME)
                          + iFixOMCostTech(runCy,TRANSE,TTECH,YTIME)  +
                          (
-                           (sum(EF$TTECHtoEF(TTECH,EF),VSpecificFuelCons(runCy,TRANSE,TTECH,TEA,EF,YTIME)*VFuelPriceSub(runCy,TRANSE,EF,YTIME)) )$(not PLUGIN(TTECH))
+                           (sum(EF$TTECHtoEF(TTECH,EF),VSpecificFuelCons(runCy,TRANSE,TTECH,EF,YTIME)*VFuelPriceSub(runCy,TRANSE,EF,YTIME)) )$(not PLUGIN(TTECH))
                            +
                            (sum(EF$(TTECHtoEF(TTECH,EF) $(not sameas("ELC",EF))),
 
-                              (1-iShareAnnMilePlugInHybrid(runCy,YTIME))*VSpecificFuelCons(runCy,TRANSE,TTECH,TEA,EF,YTIME)*VFuelPriceSub(runCy,TRANSE,EF,YTIME))
-                             + iShareAnnMilePlugInHybrid(runCy,YTIME)*VSpecificFuelCons(runCy,TRANSE,TTECH,TEA,"ELC",YTIME)*VFuelPriceSub(runCy,TRANSE,"ELC",YTIME)
+                              (1-iShareAnnMilePlugInHybrid(runCy,YTIME))*VSpecificFuelCons(runCy,TRANSE,TTECH,EF,YTIME)*VFuelPriceSub(runCy,TRANSE,EF,YTIME))
+                             + iShareAnnMilePlugInHybrid(runCy,YTIME)*VSpecificFuelCons(runCy,TRANSE,TTECH,"ELC",YTIME)*VFuelPriceSub(runCy,TRANSE,"ELC",YTIME)
                            )$PLUGIN(TTECH)
 
                            + iVarCostTech(runCy,TRANSE,TTECH,YTIME)
@@ -864,48 +864,48 @@ QTranspCostPerMeanConsSize(runCy,TRANSE,RCon,TTECH,TEA,YTIME)$(TIME(YTIME) $SECT
 
 *' This equation calculates the transportation cost per mean and consumer size. It involves taking the inverse fourth power of the
 *' variable representing the transportation cost per mean and consumer size.
-QTranspCostPerVeh(runCy,TRANSE,rCon,TTECH,TEA,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $(ord(rCon) le iNcon(TRANSE)+1))..
-         VTranspCostPerVeh(runCy,TRANSE,rCon,TTECH,TEA,YTIME)
+QTranspCostPerVeh(runCy,TRANSE,rCon,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $(ord(rCon) le iNcon(TRANSE)+1))..
+         VTranspCostPerVeh(runCy,TRANSE,rCon,TTECH,YTIME)
          =E=
-         VTranspCostPermeanConsSize(runCy,TRANSE,rCon,TTECH,TEA,YTIME)**(-4);
+         VTranspCostPermeanConsSize(runCy,TRANSE,rCon,TTECH,YTIME)**(-4);
 
 *' This equation calculates the transportation cost, including the maturity factor. It involves multiplying the maturity factor for a specific technology
 *' and subsector by the transportation cost per vehicle for the mean and consumer size. The result is a variable representing the transportation cost,
 *' including the maturity factor.
-QTranspCostMatFac(runCy,TRANSE,RCon,TTECH,TEA,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $(ord(rCon) le iNcon(TRANSE)+1))..
-         VTranspCostMatFac(runCy,TRANSE,RCon,TTECH,TEA,YTIME) 
+QTranspCostMatFac(runCy,TRANSE,RCon,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $(ord(rCon) le iNcon(TRANSE)+1))..
+         VTranspCostMatFac(runCy,TRANSE,RCon,TTECH,YTIME) 
          =E=
-         iMatrFactor(runCy,TRANSE,TTECH,YTIME) * VTranspCostPerVeh(runCy,TRANSE,rCon,TTECH,TEA,YTIME);
+         iMatrFactor(runCy,TRANSE,TTECH,YTIME) * VTranspCostPerVeh(runCy,TRANSE,rCon,TTECH,YTIME);
 
 *' This equation calculates the technology sorting based on variable cost. It involves the summation of transportation costs, including the maturity factor,
 *' for each technology and subsector. The result is a variable representing the technology sorting based on variable cost.
 QTechSortVarCost(runCy,TRANSE,rCon,YTIME)$(TIME(YTIME) $(ord(rCon) le iNcon(TRANSE)+1))..
          VTechSortVarCost(runCy,TRANSE,rCon,YTIME)
                  =E=
-         sum((TTECH,TEA)$SECTTECH(TRANSE,TTECH), VTranspCostMatFac(runCy,TRANSE,rCon,TTECH,TEA,YTIME));
+         sum((TTECH)$SECTTECH(TRANSE,TTECH), VTranspCostMatFac(runCy,TRANSE,rCon,TTECH,YTIME));
 
 *' This equation calculates the share of each technology in the total sectoral use. It takes into account factors such as the maturity factor,
 *' cumulative distribution function of consumer size groups, transportation cost per mean and consumer size, distribution function of consumer
 *' size groups, and technology sorting based on variable cost. The result is a dimensionless value representing the share of each technology in the total sectoral use.
-QTechSortVarCostNewEquip(runCy,TRANSE,TTECH,TEA,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) )..
-         VTechSortVarCostNewEquip(runCy,TRANSE,TTECH,TEA,YTIME)
+QTechSortVarCostNewEquip(runCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) )..
+         VTechSortVarCostNewEquip(runCy,TRANSE,TTECH,YTIME)
          =E=
          iMatrFactor(runCy,TRANSE,TTECH,YTIME) / iCumDistrFuncConsSize(runCy,TRANSE)
          * sum( Rcon$(ord(Rcon) le iNcon(TRANSE)+1),
-                VTranspCostPerVeh(runCy,TRANSE,RCon,TTECH,TEA,YTIME)
+                VTranspCostPerVeh(runCy,TRANSE,RCon,TTECH,YTIME)
                 * iDisFunConSize(runCy,TRANSE,RCon) / VTechSortVarCost(runCy,TRANSE,RCon,YTIME)
               );
 
 *' This equation calculates the consumption of each technology in transport sectors. It considers various factors such as the lifetime of the technology,
 *' average capacity per vehicle, load factor, scrapping rate, and specific fuel consumption. The equation also takes into account the technology's variable
 *' cost for new equipment and the gap in transport activity to be filled by new technologies. The result is expressed in million tonnes of oil equivalent.
-QConsEachTechTransp(runCy,TRANSE,TTECH,EF,TEA,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $TTECHtoEF(TTECH,EF) )..
-         VConsEachTechTransp(runCy,TRANSE,TTECH,EF,TEA,YTIME)
+QConsEachTechTransp(runCy,TRANSE,TTECH,EF,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $TTECHtoEF(TTECH,EF) )..
+         VConsEachTechTransp(runCy,TRANSE,TTECH,EF,YTIME)
                  =E=
-         VConsEachTechTransp(runCy,TRANSE,TTECH,EF,TEA,YTIME-1) *
+         VConsEachTechTransp(runCy,TRANSE,TTECH,EF,YTIME-1) *
          (
                  (
-                     ((VLifeTimeTech(runCy,TRANSE,TTECH,TEA,YTIME-1)-1)/VLifeTimeTech(runCy,TRANSE,TTECH,TEA,YTIME-1))
+                     ((VLifeTimeTech(runCy,TRANSE,TTECH,YTIME-1)-1)/VLifeTimeTech(runCy,TRANSE,TTECH,YTIME-1))
                       *(iAvgVehCapLoadFac(runCy,TRANSE,"CAP",YTIME-1)*iAvgVehCapLoadFac(runCy,TRANSE,"LF",YTIME-1))
                       /(iAvgVehCapLoadFac(runCy,TRANSE,"CAP",YTIME)*iAvgVehCapLoadFac(runCy,TRANSE,"LF",YTIME))
                  )$(not sameas(TRANSE,"PC"))
@@ -913,12 +913,12 @@ QConsEachTechTransp(runCy,TRANSE,TTECH,EF,TEA,YTIME)$(TIME(YTIME) $SECTTECH(TRAN
                  (1 - VScrRate(runCy,YTIME))$sameas(TRANSE,"PC")
          )
          +
-         VTechSortVarCostNewEquip(runCy,TRANSE,TTECH,TEA,YTIME) *
+         VTechSortVarCostNewEquip(runCy,TRANSE,TTECH,YTIME) *
          (
-                 VSpecificFuelCons(runCy,TRANSE,TTECH,TEA,EF,YTIME)$(not PLUGIN(TTECH))
+                 VSpecificFuelCons(runCy,TRANSE,TTECH,EF,YTIME)$(not PLUGIN(TTECH))
                  +
-                 ( ((1-iShareAnnMilePlugInHybrid(runCy,YTIME))*VSpecificFuelCons(runCy,TRANSE,TTECH,TEA,EF,YTIME))$(not sameas("ELC",EF))
-                   + iShareAnnMilePlugInHybrid(runCy,YTIME)*VSpecificFuelCons(runCy,TRANSE,TTECH,TEA,"ELC",YTIME))$PLUGIN(TTECH)
+                 ( ((1-iShareAnnMilePlugInHybrid(runCy,YTIME))*VSpecificFuelCons(runCy,TRANSE,TTECH,EF,YTIME))$(not sameas("ELC",EF))
+                   + iShareAnnMilePlugInHybrid(runCy,YTIME)*VSpecificFuelCons(runCy,TRANSE,TTECH,"ELC",YTIME))$PLUGIN(TTECH)
          )/1000
          * VGapTranspFillNewTech(runCy,TRANSE,YTIME) *
          (
@@ -935,7 +935,7 @@ QConsEachTechTransp(runCy,TRANSE,TTECH,EF,TEA,YTIME)$(TIME(YTIME) $SECTTECH(TRAN
 QFinEneDemTranspPerFuel(runCy,TRANSE,EF,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,EF))..
          VDemTr(runCy,TRANSE,EF,YTIME)
                  =E=
-         sum((TTECH,TEA)$(SECTTECH(TRANSE,TTECH) $TTECHtoEF(TTECH,EF) ), VConsEachTechTransp(runCy,TRANSE,TTECH,EF,TEA,YTIME));
+         sum((TTECH)$(SECTTECH(TRANSE,TTECH) $TTECHtoEF(TTECH,EF) ), VConsEachTechTransp(runCy,TRANSE,TTECH,EF,YTIME));
 
 *' This equation calculates the final energy demand in different transport subsectors by summing up the final energy demand for each energy form within
 *' each transport subsector. The result is expressed in million tonnes of oil equivalent.
@@ -1072,14 +1072,14 @@ QConsOfRemSubEquip(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTE
          VConsRemSubEquip(runCy,DSBS,EF,YTIME)
                  =E=
          [
-         (sum(TEA,VLifeTimeTech(runCy,DSBS,EF,TEA,YTIME)-1)/sum(TEA,VLifeTimeTech(runCy,DSBS,EF,TEA,YTIME)))
-         * (VFuelConsInclHP(runCy,DSBS,EF,YTIME-1) - (VElecNonSub(runCy,DSBS,YTIME-1)$(ELCEF(EF) $INDDOM(DSBS)) + 0$(not (ELCEF(EF) $INDDOM(DSBS)) )))
+         VLifeTimeTech(runCy,DSBS,EF,YTIME)-1/VLifeTimeTech(runCy,DSBS,EF,YTIME)
+         * (VFuelConsInclHP(runCy,DSBS,EF,YTIME-1) - (VElecNonSub(runCy,DSBS,YTIME-1)$(ELCEF(EF) $INDDOM(DSBS)) + 0$(not (ELCEF(EF) $INDDOM(DSBS)))))
          * (iActv(YTIME,runCy,DSBS)/iActv(YTIME-1,runCy,DSBS))**iElastA(runCy,DSBS,"a",YTIME)
          * (VFuelPriceSub(runCy,DSBS,EF,YTIME)/VFuelPriceSub(runCy,DSBS,EF,YTIME-1))**iElastA(runCy,DSBS,"b1",YTIME)
          * (VFuelPriceSub(runCy,DSBS,EF,YTIME-1)/VFuelPriceSub(runCy,DSBS,EF,YTIME-2))**iElastA(runCy,DSBS,"b2",YTIME)
          * prod(KPDL,
                  (VFuelPriceSub(runCy,DSBS,EF,YTIME-ord(KPDL))/VFuelPriceSub(runCy,DSBS,EF,YTIME-(ord(KPDL)+1)))**(iElastA(runCy,DSBS,"c",YTIME)*iFPDL(DSBS,KPDL))
-               )  ]$iActv(YTIME-1,runCy,DSBS);
+               )  ]$(iActv(YTIME-1,runCy,DSBS));
 
 *' This equation calculates the total final demand for substitutable fuels in each subsector. The demand is determined by factors such as the current activity level,
 *' past activity levels, and the average fuel prices, with adjustments based on elasticity coefficients and polynomial distribution lags. The equation captures the
@@ -1156,8 +1156,8 @@ QElecIndPricesEst(runCy,YTIME)$TIME(YTIME)..
 *' The fuel price for CHP plants is determined by subtracting the relevant components for CHP plants (fuel price for electricity generation and a fraction of electricity
 *' price for CHP sales) from the overall fuel price for the subsector. Additionally, the equation includes a square root term to handle complex computations related to the
 *' difference in fuel prices. This equation provides insights into the cost considerations for fuel in the context of CHP plants, considering various economic and technical parameters.
-QFuePriSubChp(runCy,DSBS,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS))  $SECTTECH(DSBS,EF) )..
-        VFuePriSubChp(runCy,DSBS,EF,TEA,YTIME)
+QFuePriSubChp(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS))  $SECTTECH(DSBS,EF) )..
+        VFuePriSubChp(runCy,DSBS,EF,YTIME)
                 =E=   
              (((VFuelPriceSub(runCy,DSBS,EF,YTIME) + (VRenValue(YTIME)/1000)$(not RENEF(EF))+iVarCostTech(runCy,DSBS,EF,YTIME)/1000)/iUsfEneConvSubTech(runCy,DSBS,EF,YTIME)- 
                (0$(not CHP(EF)) + (VFuelPriceSub(runCy,"OI","ELC",YTIME)*iFracElecPriChp*VElecIndPrices(runCy,YTIME))$CHP(EF)))  + SQRT( SQR(((VFuelPriceSub(runCy,DSBS,EF,YTIME)+iVarCostTech(runCy,DSBS,EF,YTIME)/1000)/iUsfEneConvSubTech(runCy,DSBS,EF,YTIME)- 
@@ -1185,34 +1185,34 @@ QElecProdCosChp(runCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS))..
 *' This cost estimation is based on an intermediate technology cost and the elasticity parameter associated with the given subsector.
 *' The intermediate technology cost is raised to the power of the elasticity parameter to determine the final technology cost. The equation
 *' provides a comprehensive assessment of the overall expenses associated with different technologies in the given subsector and consumer size group.
-QTechCost(runCy,DSBS,rCon,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) $SECTTECH(DSBS,EF) )..
-        VTechCost(runCy,DSBS,rCon,EF,TEA,YTIME) 
+QTechCost(runCy,DSBS,rCon,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) $SECTTECH(DSBS,EF) )..
+        VTechCost(runCy,DSBS,rCon,EF,YTIME) 
                  =E= 
-                 VTechCostIntrm(runCy,DSBS,rCon,EF,TEA,YTIME)**(-iElaSub(runCy,DSBS)) ;   
+                 VTechCostIntrm(runCy,DSBS,rCon,EF,YTIME)**(-iElaSub(runCy,DSBS)) ;   
 
 *' The equation computes the intermediate technology cost, including the lifetime factor, for each technology, energy form, and consumer size group
 *' within the specified subsector. This cost estimation plays a crucial role in evaluating the overall expenses associated with adopting and implementing
 *' various technologies in the given subsector and consumer size group. The equation encompasses diverse parameters, such as discount rates, lifetime of 
 *' technologies, capital costs, fixed operation and maintenance costs, fuel prices, annual consumption rates, the number of consumers, the capital goods 
 *' index, and useful energy conversion factors.
-QTechCostIntrm(runCy,DSBS,rCon,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) $SECTTECH(DSBS,EF))..
-         VTechCostIntrm(runCy,DSBS,rCon,EF,TEA,YTIME) =E=
+QTechCostIntrm(runCy,DSBS,rCon,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) $SECTTECH(DSBS,EF))..
+         VTechCostIntrm(runCy,DSBS,rCon,EF,YTIME) =E=
                   ( (( (iDisc(runCy,DSBS,YTIME)$(not CHP(EF)) + iDisc(runCy,"PG",YTIME)$CHP(EF)) !! in case of chp plants we use the discount rate of power generation sector
-                       * exp((iDisc(runCy,DSBS,YTIME)$(not CHP(EF)) + iDisc(runCy,"PG",YTIME)$CHP(EF))*VLifeTimeTech(runCy,DSBS,EF,TEA,YTIME))
+                       * exp((iDisc(runCy,DSBS,YTIME)$(not CHP(EF)) + iDisc(runCy,"PG",YTIME)$CHP(EF))*VLifeTimeTech(runCy,DSBS,EF,YTIME))
                      )
-                      / (exp((iDisc(runCy,DSBS,YTIME)$(not CHP(EF)) + iDisc(runCy,"PG",YTIME)$CHP(EF))*VLifeTimeTech(runCy,DSBS,EF,TEA,YTIME))- 1)
+                      / (exp((iDisc(runCy,DSBS,YTIME)$(not CHP(EF)) + iDisc(runCy,"PG",YTIME)$CHP(EF))*VLifeTimeTech(runCy,DSBS,EF,YTIME))- 1)
                     ) * iCapCostTech(runCy,DSBS,EF,YTIME) * iCGI(runCy,YTIME)
                     +
                     iFixOMCostTech(runCy,DSBS,EF,YTIME)/1000
                     +
-                    VFuePriSubChp(runCy,DSBS,EF,TEA,YTIME)
+                    VFuePriSubChp(runCy,DSBS,EF,YTIME)
                     * iAnnCons(runCy,DSBS,"smallest") * (iAnnCons(runCy,DSBS,"largest")/iAnnCons(runCy,DSBS,"smallest"))**((ord(rCon)-1)/iNcon(DSBS))
                   )$INDDOM(DSBS)
                  +
                   ( (( iDisc(runCy,DSBS,YTIME)
-                       * exp(iDisc(runCy,DSBS,YTIME)*VLifeTimeTech(runCy,DSBS,EF,TEA,YTIME))
+                       * exp(iDisc(runCy,DSBS,YTIME)*VLifeTimeTech(runCy,DSBS,EF,YTIME))
                      )
-                      / (exp(iDisc(runCy,DSBS,YTIME)*VLifeTimeTech(runCy,DSBS,EF,TEA,YTIME))- 1)
+                      / (exp(iDisc(runCy,DSBS,YTIME)*VLifeTimeTech(runCy,DSBS,EF,YTIME))- 1)
                     ) * iCapCostTech(runCy,DSBS,EF,YTIME) * iCGI(runCy,YTIME)
                     +
                     iFixOMCostTech(runCy,DSBS,EF,YTIME)/1000
@@ -1226,10 +1226,10 @@ QTechCostIntrm(runCy,DSBS,rCon,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(
 *' This equation calculates the technology cost, including the maturity factor , for each energy form  and technology  within
 *' the specified subsector and consumer size group . The cost is determined by multiplying the maturity factor with the
 *' technology cost based on the given parameters.
-QTechCostMatr(runCy,DSBS,rCon,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) $SECTTECH(DSBS,EF) )..
-        VTechCostMatr(runCy,DSBS,rCon,EF,TEA,YTIME) 
+QTechCostMatr(runCy,DSBS,rCon,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) $SECTTECH(DSBS,EF) )..
+        VTechCostMatr(runCy,DSBS,rCon,EF,YTIME) 
                                                =E=
-        iMatrFactor(runCy,DSBS,EF,YTIME) * VTechCost(runCy,DSBS,rCon,EF,TEA,YTIME) ;
+        iMatrFactor(runCy,DSBS,EF,YTIME) * VTechCost(runCy,DSBS,rCon,EF,YTIME) ;
 
 *' This equation calculates the technology sorting based on variable cost . It is determined by summing the technology cost,
 *' including the maturity factor , for each energy form and technology within the specified subsector 
@@ -1237,7 +1237,7 @@ QTechCostMatr(runCy,DSBS,rCon,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(o
 QTechSort(runCy,DSBS,rCon,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) )..
         VTechSort(runCy,DSBS,rCon,YTIME)
                         =E=
-        sum((EF,TEA)$(SECTTECH(DSBS,EF) ),VTechCostMatr(runCy,DSBS,rCon,EF,TEA,YTIME));
+        sum((EF)$(SECTTECH(DSBS,EF) ),VTechCostMatr(runCy,DSBS,rCon,EF,YTIME));
 
 *' This equation calculates the gap in final demand for industry, tertiary, non-energy uses, and bunkers.
 *' It is determined by subtracting the total final demand per subsector from the consumption of
@@ -1251,11 +1251,11 @@ QGapFinalDem(runCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)))..
 *' This equation calculates the technology share in new equipment based on factors such as maturity factor,
 *' cumulative distribution function of consumer size groups, number of consumers, technology cost, distribution function of consumer
 *' size groups, and technology sorting.
-QTechShareNewEquip(runCy,DSBS,EF,TEA,YTIME)$(TIME(YTIME) $SECTTECH(DSBS,EF) $(not TRANSE(DSBS)) )..
-         VTechShareNewEquip(runCy,DSBS,EF,TEA,YTIME) =E=
+QTechShareNewEquip(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $SECTTECH(DSBS,EF) $(not TRANSE(DSBS)) )..
+         VTechShareNewEquip(runCy,DSBS,EF,YTIME) =E=
          iMatrFactor(runCy,DSBS,EF,YTIME) / iCumDistrFuncConsSize(runCy,DSBS) *
          sum(rCon$(ord(rCon) le iNcon(DSBS)+1),
-                  VTechCost(runCy,DSBS,rCon,EF,TEA,YTIME)
+                  VTechCost(runCy,DSBS,rCon,EF,YTIME)
                   * iDisFunConSize(runCy,DSBS,rCon)/VTechSort(runCy,DSBS,rCon,YTIME));
 
 *' This equation calculates the consumption of fuels in each demand subsector, including heat from heat pumps .
@@ -1265,8 +1265,8 @@ QFuelConsInclHP(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(
          VFuelConsInclHP(runCy,DSBS,EF,YTIME)
                  =E=
          VConsRemSubEquip(runCy,DSBS,EF,YTIME)+
-         sum(TEA,VTechShareNewEquip(runCy,DSBS,EF,TEA,YTIME)*VGapFinalDem(runCy,DSBS,YTIME))
-         + (VElecNonSub(runCy,DSBS,YTIME))$(INDDOM(DSBS) $(ELCEF(EF)));
+         VTechShareNewEquip(runCy,DSBS,EF,YTIME)*VGapFinalDem(runCy,DSBS,YTIME)
+         + (VElecNonSub(runCy,DSBS,YTIME))$(INDDOM(DSBS) and ELCEF(EF));
 
 *' This equation calculates the variable, including fuel electricity production cost per CHP plant and demand sector, taking into account the variable cost (other than fuel)
 *' per CHP type and the summation of fuel-related costs for each energy form . The calculation involves fuel prices, CO2 emission factors, boiler efficiency, electricity
