@@ -510,9 +510,6 @@ ORD   Ordinary
 IMP   Improved
 /
 
-TEA(TEAALL)         Technologies currently used inside the model
-/ORD/
-
 TTECH(EF)        Transport Technologies
 /
 GSL      "Internal Combustion Engine fueled by Gasoline"
@@ -1144,9 +1141,7 @@ Parameter TECHS(DSBS) Number of technologies in transport subsectors;
 loop DSBS$TRANSE(DSBS) do
      TECHS(DSBS)=0;
      loop EF$SECTTECH(DSBS,EF) do
-          loop TEA do
-              TECHS(DSBS) = TECHS(DSBS)+1;
-          endloop
+       TECHS(DSBS) = TECHS(DSBS)+1;
      endloop;
 endloop;
 
