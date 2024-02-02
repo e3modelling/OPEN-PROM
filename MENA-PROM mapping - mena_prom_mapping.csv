@@ -24,7 +24,7 @@ Parameter,CAPCOST,iCapCostTech,"""Capital Cost of technology (various)""
                                                  !! - For transport is expressed in kEuro05 per vehicle
                                                  !! - For Industrial sectors (except Iron and Steel) is expressed in kEuro05/toe-year
                                                  !! - For Iron and Steel is expressed in kEuro05/tn-of-steel
-                                                 !! - For Domestic Sectors is expressed in kEuro05/toe-year","CYall,SBS,EF,TEA,YTIME","allCy,SBS,EF,YTIME",
+                                                 !! - For Domestic Sectors is expressed in kEuro05/toe-year","CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",
 Variable,CCO2CAPT,VCumCO2Capt,Cumulative CO2 captured (Mtn CO2),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Parameter,CCRES,-,,"PGALL,YTIME",,
 Parameter,CCRES_PRN,-,,"PGALL,YTIME",,
@@ -61,11 +61,11 @@ Sets,CONSET,conSet,Consumer size groups related to space heating,,,
 Parameter,CONSIZE,iConsSizeDistHeat,Consumer sizes for district heating (1),,,
 Parameter,ConsizePRN,-,-,"CONSET,CONSIZE_set",-,
 Variable,CONSS,VConsRemSubEquip,Consumption of remaining substitutable equipment (Mtoe),"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-Variable,CONTR,VConsEachTechTransp,Consumption of each technology and subsector (Mtoe),"CYall,TRANSE,TTECH,EF,TEA,YTIME","allCy,TRANSE,TTECH,EF,TEA,YTIME",TRANSPORT SECTOR VARIABLES
+Variable,CONTR,VConsEachTechTransp,Consumption of each technology and subsector (Mtoe),"CYall,TRANSE,TTECH,EF,YTIME","allCy,TRANSE,TTECH,EF,YTIME",TRANSPORT SECTOR VARIABLES
 Variable,COSTSUCAP,vScalWeibull,Temporary variable facilitating the scaling in Weibull equation,"CYall,PGALL,HOUR,YTIME","allCy,PGALL,HOUR,YTIME",POWER GENERATION SECTOR
 Variable,COSTSUCAP2,VScalWeibullSum,Sum (over hours) of temporary variable facilitating the scaling in Weibull equation (1),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
-Variable,COSTTR,VTranspCostPermeanConsSize,Transportation cost per mean and consumer size (Keuro/vehicle),"CYALL,TRANSE,RCon,TTECH,TEA,YTIME","allCy,TRANSE,RCon,TTECH,TEA,YTIME",TRANSPORT SECTOR VARIABLES
-Variable,COSTTR1,VTranspCostPerVeh,Transportation cost per mean and consumer size (Keuro/vehicle),"CYALL,TRANSE,RCon,TTECH,TEA,YTIME","allCy,TRANSE,RCon,TTECH,TEA,YTIME",TRANSPORT SECTOR VARIABLES
+Variable,COSTTR,VTranspCostPermeanConsSize,Transportation cost per mean and consumer size (Keuro/vehicle),"CYALL,TRANSE,RCon,TTECH,YTIME","allCy,TRANSE,RCon,TTECH,YTIME",TRANSPORT SECTOR VARIABLES
+Variable,COSTTR1,VTranspCostPerVeh,Transportation cost per mean and consumer size (Keuro/vehicle),"CYALL,TRANSE,RCon,TTECH,YTIME","allCy,TRANSE,RCon,TTECH,YTIME",TRANSPORT SECTOR VARIABLES
 Variable,CVALL,VCarVal,Carbon value for all countries (Euro05/tn CO2),"CYALL,NAP,YTIME","allCy,NAP,YTIME",Positive Variable Main Objective
 Parameter,DCEN,iTotEneBranchCons,Total Energy Branch Consumption (Mtoe),"CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
 Parameter,DCF,iFinEneCons,Final energy consumption (Mtoe),"CYall,EF,YTIME","allCy,EFS,YTIME",Common parameters for all Demand Subsectors
@@ -73,8 +73,8 @@ Parameter,DCHPCAPAC,iHisChpGrCapData,Historical CHP  gross capacity data (GW),"C
 Parameter,DCONSEF,iFuelConsPerFueSub,Fuel consumption per fuel and subsector (Mtoe),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",Common parameters for all Demand Subsectors
 Parameter,DDEMSE,iTotFinEneDemSubBaseYr,Total Final Energy Demand per subsector in Base year (Mtoe),"CYall,SBS,YTIME","allCy,SBS,YTIME",Common parameters for all Demand Subsectors
 Parameter,DELCINDEX,iElecIndex,Electricity Index (1),"CYall,YTIME","allCy,YTIME",Prices
-Variable,DEMCOST,VTechCostIntrm,Intermediate technology cost (Keuro/toe),"CYall,DSBS,Rcon,EF,TEA,YTIME","allCy,DSBS,rcon,EF,TEA,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-Variable,DEMCOST1,VTechCost,Technology cost ( Keuro/toe),"CYall,DSBS,Rcon,EF,TEA,YTIME","allCy,DSBS,Rcon,EF,TEA,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+Variable,DEMCOST,VTechCostIntrm,Intermediate technology cost (Keuro/toe),"CYall,DSBS,Rcon,EF,YTIME","allCy,DSBS,rcon,EF,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+Variable,DEMCOST1,VTechCost,Technology cost ( Keuro/toe),"CYall,DSBS,Rcon,EF,YTIME","allCy,DSBS,Rcon,EF,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,DEMSE,VDemSub,Total final demand (of substitutable fuels) per subsector (Mtoe),"CYall,DSBS,YTIME","allCy,DSBS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,DEMSEIND,vDemInd,Total final demand (of substitutable fuels) in industrial sectors (Mtoe),"CYALL,YTIME","allCy, YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,DEMTR,VDemTr,Final energy demand in transport subsectors per fuel (Mtoe),"CYall,TRANSE,EF,YTIME","allCy,TRANSE,EF,YTIME",TRANSPORT SECTOR VARIABLES
@@ -86,7 +86,7 @@ Parameter,DH_Eff,iParDHEfficiency,Parameter of  district heating Efficiency ,"PG
 Parameter,DIMPO,iFuelImports,Fuel Imports (Mtoe),"CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
 Parameter,DISCOUNT,iDisc,Discount rates per subsector (),"CYall,SBS,YTIME","allCy,SBS,YTIME",Macroeconomic indicators
 Parameter,DiscountPRN,-,-,"SBS,YTIME",-,
-Parameter,DLFT,iTechLft,Technical Lifetime. For passenger cars it is a variable (1),"CYall,SBS,EF,TEA,YTIME","allCy,SBS,EF,TEA,YTIME",Common parameters for all Demand Subsectors
+Parameter,DLFT,iTechLft,Technical Lifetime. For passenger cars it is a variable (1),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",Common parameters for all Demand Subsectors
 Parameter,DLOS,iDistrLosses,Distribution Losses (Mtoe),"CYall,EF,YTIME","allCy,EFS,YTIME",Supply Side Specific Parameters
 Parameter,DMEXTV,iGdpPassCarsMarkExt,GDP-dependent passenger cars market extension (GDP/capita),CYall,allCy,Transport Sector specific Parameters
 Parameter,DNETIMP,iNetImp,Net imports (Mtoe),"CYall,EFS,YTIME","(allCy,EFS,YTIME",Supply Side Specific Parameters
@@ -99,7 +99,7 @@ Parameter,DompricePRN,iFuelPrice,Prices of fuels per subsector ($2015/toe),"SBS,
 Parameter,DPPROD,iFuelPriPro,Fuel Primary Production (Mtoe),"CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
 Parameter,DREFCAP,iRefCapacity,Refineries Capacity (Million Barrels/day),"CYall,YTIME",YTIME,Supply Side Specific Parameters
 Parameter,DSCR,iPassCarsScrapRate,Passenger cars scrapping rate (1),CYall,allCy,Transport Sector specific Parameters
-Parameter,DSFC,iSpeFuelConsCostBy,Specific fuel consumption cost in Base year (ktoe/Gpkm or ktoe/Gtkm or ktoe/Gvkm),"CYall,SBS,TTECH,TEA,EF","allCy,SBS,TTECH,TEA,EF",Transport Sector specific Parameters
+Parameter,DSFC,iSpeFuelConsCostBy,Specific fuel consumption cost in Base year (ktoe/Gpkm or ktoe/Gtkm or ktoe/Gvkm),"CYall,SBS,TTECH,EF","allCy,SBS,TTECH,EF",Transport Sector specific Parameters
 Parameter,DTIOTH,iTransfInpGasworks,"Transformation Input in Gasworks, Blast Furnances, Briquetting plants in Mtoe","CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
 Parameter,DTIRF,iTransfInputRef,Transformation Input in Refineries (Mtoe),"CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
 Parameter,DTOOTH,iTranfOutGasworks,"Transformation Output from Gasworks, Blast Furnances and Briquetting plants (Mtoe)","CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
@@ -159,13 +159,13 @@ Equation,EQCO2SEQW,QWghtTrnstLinToExpo,Compute the transition weight from linear
 Equation,EQCONSEF,QFuelCons,Compute fuel consumption (Mtoe),"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQCONSEF_BAR,QFuelConsInclHP,Compute fuel consumption including heat from heatpumps,"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQCONSS,QConsOfRemSubEquip,Compute consumption of remaining substitutble equipment,"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
-Equation,EQCONTR,QConsEachTechTransp,Compute consumption of each technology in transport sectors,"CYall,TRANSE,TTECH,EF,TEA,YTIME","allCy,TRANSE,TTECH,EF,TEA,YTIME",TRANSPORT SPECIFIC EQUATIONS
+Equation,EQCONTR,QConsEachTechTransp,Compute consumption of each technology in transport sectors,"CYall,TRANSE,TTECH,EF,YTIME","allCy,TRANSE,TTECH,EF,YTIME",TRANSPORT SPECIFIC EQUATIONS
 Equation,EQCOSTSUCAP,qScalWeibull,Compute temporary variable facilitating the scaling in Weibull equation,"CYALL,PGALL,HOUR,YTIME","allCy,PGALL,HOUR,YTIME",POWER GENERATION SECTOR
 Equation,EQCOSTSUCAP2,QScalWeibullSum,Compute sum (over hours) of temporary variable facilitating the scaling in Weibull equation,"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
-Equation,EQCOSTTR,QTranspCostPerMeanConsSize,Compute transportation cost per mean and consumer size in KEuro per vehicle,"CYALL,TRANSE,RCon,TTECH,TEA,YTIME","allCy,TRANSE,RCon,TTECH,TEA,YTIME",TRANSPORT SPECIFIC EQUATIONS
-Equation,EQCOSTTR1,QTranspCostPerVeh,Compute transportation cost per mean and consumer size in KEuro per vehicle,"CYALL,TRANSE,RCon,TTECH,TEA,YTIME","allCy,TRANSE,RCon,TTECH,TEA,YTIME",TRANSPORT SPECIFIC EQUATIONS
-Equation,EQDEMCOST,QTechCostIntrm,Compute  technology cost including lifetime,"CYall,DSBS,Rcon,EF,TEA,YTIME","allCy,DSBS,rCon,EF,TEA,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
-Equation,EQDEMCOST1,QTechCost,Compute technology cost ,"CYall,DSBS,Rcon,EF,TEA,YTIME","allCy,DSBS,Rcon,EF,TEA,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
+Equation,EQCOSTTR,QTranspCostPerMeanConsSize,Compute transportation cost per mean and consumer size in KEuro per vehicle,"CYALL,TRANSE,RCon,TTECH,YTIME","allCy,TRANSE,RCon,TTECH,YTIME",TRANSPORT SPECIFIC EQUATIONS
+Equation,EQCOSTTR1,QTranspCostPerVeh,Compute transportation cost per mean and consumer size in KEuro per vehicle,"CYALL,TRANSE,RCon,TTECH,YTIME","allCy,TRANSE,RCon,TTECH,YTIME",TRANSPORT SPECIFIC EQUATIONS
+Equation,EQDEMCOST,QTechCostIntrm,Compute  technology cost including lifetime,"CYall,DSBS,Rcon,EF,YTIME","allCy,DSBS,rCon,EF,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
+Equation,EQDEMCOST1,QTechCost,Compute technology cost ,"CYall,DSBS,Rcon,EF,YTIME","allCy,DSBS,Rcon,EF,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQDEMSE,QDemSub,Compute for total final demand (of substitutable fuels) per subsector ,"CYall,DSBS,YTIME","allCy,DSBS,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQDEMSEIND,qDemInd,Compute total final demand (of substitutable fuels) in industrial sectors ,"CYALL,YTIME","allCy, YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQDEMTR,QFinEneDemTranspPerFuel,Compute final energy demand in transport per fuel,"CYall,TRANSE,EF,YTIME","allCy,TRANSE,EF,YTIME",TRANSPORT SPECIFIC EQUATIONS
@@ -191,7 +191,7 @@ Equation,EQGICP,QGrsInlConsNotEneBranch,Compute gross inland consumption not inc
 Equation,EQIMPO_TZ,QFakeImprts,Compute fake imports,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
 Equation,EQL,QLevl,Compute ratio of car ownership over saturation car ownership,"CYall,YTIME","allCy,YTIME",Transport
 Equation,EQLAMBDA,QLambda,Compute Lambda parameter,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Equation,EQLFT,QPassCarsLft,Compute the lifetime of passenger cars ,"CYall,DSBS,EF,TEA,YTIME","allCy,DSBS,EF,TEA,YTIME",TRANSPORT SPECIFIC EQUATIONS
+Equation,EQLFT,QPassCarsLft,Compute the lifetime of passenger cars ,"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",TRANSPORT SPECIFIC EQUATIONS
 Equation,EQLOADF,QLoadFacDom,Compute load factor of entire domestic system,"CYrun,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQLOS,QDistrLosses,Compute distribution losses,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
 Equation,EQLTAC,QLongPowGenCost,Compute long term power generation cost,"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
@@ -216,7 +216,7 @@ Equation,EQPOTRENT,QRenPotSupplyCurve,Compute renewable potential supply curve,"
 Equation,EQPP,QFuelPriSubSepCarbVal,"Compute fuel prices per subsector and fuel, separate carbon value in each sector","CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",POWER GENERATION SECTOR
 Equation,EQPPA,QAvgFuelPriSub,Compute average fuel price per subsector ,"CYall,DSBS,YTIME","allCy,DSBS,YTIME",PRICES EQUATIONS
 Equation,EQPPROD,QPrimProd,Compute primary production,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
-Equation,EQPPSU,QFuePriSubChp,Compute fuel prices per subsector and fuel especially for chp plants,"(CYall,DSBS,EF,TEA,YTIME)","allCy,DSBS,EF,TEA,YTIME",Variable prices
+Equation,EQPPSU,QFuePriSubChp,Compute fuel prices per subsector and fuel especially for chp plants,"(CYall,DSBS,EF,YTIME)","allCy,DSBS,EF,YTIME",Variable prices
 Equation,EQPPW,QFuelPriSepCarbon,Compute fuel prices per subsector and fuel multiplied by weights separate carbon value in each sector ,"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",PRICES EQUATIONS
 Equation,EQPRODCOST,QHourProdCostInv,Compute hourly production cost used in investment decisions,"CYALL,PGALL,HOUR,YTIME","allCy,PGALL,HOUR,YTIME",POWER GENERATION SECTOR
 Equation,EQPRODCOSTC,qHourProdCostInvDecisionsAfterCCS,Compute hourly production cost used in investment decisions taking into account CCS acceptance,"CYALL,PGALL,HOUR,YTIME","allCy,PGALL,HOUR,YTIME",POWER GENERATION SECTOR
@@ -228,14 +228,14 @@ Equation,EQREFCAP,QRefCapacity,Compute refineries capacity,"CYall,YTIME","allCy,
 Equation,EQRESSHARE,qShareRenGrossElecProd,Compute the share of renewables in gross electricity production for subsdidized renewables,"CYALL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQSCR,QScrRate,Compute passenger cars scrapping rate,"CYall,YTIME","allCy,YTIME",Transport
 Equation,EQSCRAP,QScrap,Compute scrapped passenger cars (in million vehicles),"CYall,YTIME","allCy,YTIME",Transport
-Equation,EQSFC,QSpecificFuelCons,Compute Specific Fuel Consumption,"CYall,TRANSE,TTECH,TEA,EF,YTIME","allCy,TRANSE,TTECH,TEA,EF,YTIME",TRANSPORT SPECIFIC EQUATIONS
+Equation,EQSFC,QSpecificFuelCons,Compute Specific Fuel Consumption,"CYall,TRANSE,TTECH,EF,YTIME","allCy,TRANSE,TTECH,EF,YTIME",TRANSPORT SPECIFIC EQUATIONS
 Equation,EQSHCAP,QPowPlaShaNewEquip,Compute the power plant share in new equipment,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Equation,EQSHCAPCCS,QShrcap,Compute SHRCAP,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Equation,EQSHCAPNOCCS,QShrcapNoCcs,Compute SHRCAP excluding CCS,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Equation,EQSHLOAD,QElectrPeakLoad,Compute Power plants sorting according to variable cost  to decide the plant dispatching ,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Equation,EQSHLOADS,QElecPeakLoads,Compute Electricity peak loads,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Equation,EQSHR,QTechShareNewEquip,Compute technology share in new equipment,"CYall,DSBS,EF,TEA,YTIME","allCy,DSBS,EF,TEA,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
-Equation,EQSHRTR,QTechSortVarCostNewEquip,Compute the share of each technology in total sectoral use,"CYall,TRANSE,EF,TEA,YTIME","allCy,TRANSE,EF,TEA,YTIME",TRANSPORT SPECIFIC EQUATIONS
+Equation,EQSHR,QTechShareNewEquip,Compute technology share in new equipment,"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
+Equation,EQSHRTR,QTechSortVarCostNewEquip,Compute the share of each technology in total sectoral use,"CYall,TRANSE,EF,YTIME","allCy,TRANSE,EF,YTIME",TRANSPORT SPECIFIC EQUATIONS
 Equation,EQSTAC,qShortPowGenCost,Compute short term power generation cost,"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
 Equation,EQSTAC_INT_PRICE,qShoPowGenIntPri,Compute short term power generation cost of technologies including international Prices of main fuels ,"CYALL,PGALL,ESET,YTIME","allCy,PGALL,ESET,YTIME",POWER GENERATION SECTOR
 Equation,EQSU,QTechSort,Compute Technology sorting based on variable cost,"CYall,DSBS,Rcon,YTIME","allCy,DSBS,rCon,YTIME",
@@ -259,8 +259,8 @@ Equation,EQTOTOT,QTotTransfOutput,Compute total transformation output,"CYall,EFS
 Equation,EQTOTPROD,QTotReqElecProd,Compute total required electricity production,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQTOTPRODCHP,QReqElecProd,Compute total required electricity production ,"CYALL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQTRANS,QTransfers,Compute transfers,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
-Equation,EQU,QTechCostMatr,Compute the technology cost including the maturity factor per technology and subsector,"CYall,DSBS,Rcon,EF,TEA,YTIME","allCy,DSBS,rCon,EF,TEA,YTIME",TRANSPORT SPECIFIC EQUATIONS
-Equation,EQUTR,QTranspCostMatFac,Compute transportation cost including maturity factor,"CYALL,TRANSE,RCon,TTECH,TEA,YTIME","allCy,TRANSE,RCon,TTECH,TEA,YTIME",TRANSPORT SPECIFIC EQUATIONS
+Equation,EQU,QTechCostMatr,Compute the technology cost including the maturity factor per technology and subsector,"CYall,DSBS,Rcon,EF,YTIME","allCy,DSBS,rCon,EF,YTIME",TRANSPORT SPECIFIC EQUATIONS
+Equation,EQUTR,QTranspCostMatFac,Compute transportation cost including maturity factor,"CYALL,TRANSE,RCon,TTECH,YTIME","allCy,TRANSE,RCon,TTECH,YTIME",TRANSPORT SPECIFIC EQUATIONS
 Equation,EQVARCOSTPG,QVarCostTech,Compute variable cost of technology ,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Equation,EQVARCOSTPG1,QVarCostTechNotPGSCRN,Compute variable cost of technology excluding PGSCRN,"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Equation,EQVARCOSTPG2,QVarCostTechnology,Compute variable cost of technology ,"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
@@ -271,7 +271,7 @@ Parameter,exogCVp,iCarbValYrExog,Carbon value for each year when it is exogenous
 Variable,EXPO_TZ,VExportsFake,Exports fake (Mtoe) ,"CYall,EFS,YTIME","allCy,EFS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Parameter,FEEDRES,REMOVED FROM OPEN-PROM,Residual for Feedstocks in Transfers (Mtoe),"CYall,YTIME","allCy,YTIME",Supply Side Specific Parameters
 Parameter,FEEDTRANS,iFeedTransfr,Feedstocks in Transfers (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",Supply Side Specific Parameters
-Parameter,FIXCOST,iFixOMCostTech,Fixed O&M cost of technology (Euro2005/toe-year),"CYall,SBS,EF,TEA,YTIME","allCy,SBS,EF,YTIME",Common parameters for all Demand Subsectors
+Parameter,FIXCOST,iFixOMCostTech,Fixed O&M cost of technology (Euro2005/toe-year),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",Common parameters for all Demand Subsectors
 Parameter,FOMRES,-,,"PGALL,YTIME",,
 Parameter,FPDL,iFPDL,Polynomial Distribution Lags (PDL) Coefficients per subsector (1),"SBS,KPDL","SBS,KPDL",Macro economic indicators
 Variable,GAP,VGapFinalDem,Final Demand GAP to be filed by new technologies (Mtoe),"CYall,DSBS,YTIME","allCy,DSBS,YTIME",VARIABLES
@@ -297,7 +297,7 @@ Parameter,kappa,iPriceReform,Price reformation,"CYall,SBS,EF,YTIME","allCy,SBS,E
 Parameter,KAPPA1,iDataPriceReform,Price reformation,"CYall,AGSECT,EF,YTIME","allCy,AGSECT,EF,YTIME",POWER GENERATION SECTOR
 Variable,L,VLamda,Ratio of car ownership over saturation car ownership (1),"CYall,YTIME","allCy,YTIME",TRANSPORT SECTOR VARIABLES
 Variable,LAMBDA,VLoadCurveConstr,Parameter for load curve construction,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Variable,LFT,VLifeTimeTech,Lifetime of technologies (years),"CYall,DSBS,EF,TEA,YTIME","allCy,DSBS,EF,TEA,YTIME",PRICES
+Variable,LFT,VLifeTimeTech,Lifetime of technologies (years),"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",PRICES
 Parameter,LOADF,iLoadFacElecDem,Load factor of electricity demand per sector,"CYaLL,DSBS,YTIME","allCy,DSBS,YTIME",Power Generation Parameters
 Variable,LOADFALL,VLoadFacDom,"""Electricity load factor for entire domestic system""","CYaLL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Variable,LOS,VLosses,Distribution losses (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
@@ -314,7 +314,7 @@ Scalar,MAXELCINDEX,sElecToSteRatioChp,Technical maximum of electricity to steam 
 Parameter,MAXLOADSH,iMxmLoadFacElecDem,Maximum load factor of electricity demand,"CYaLL,YTIME","allCy,YTIME",Power Generation Parameters
 Variable,MEXTF,VMExtF,Passenger cars market extension (GDP independent),"CYall,YTIME","allCy,YTIME",TRANSPORT SECTOR VARIABLES
 Variable,MEXTV,VMExtV,Passenger cars market extension (GDP dependent),"CYall,YTIME","allCy,YTIME",TRANSPORT SECTOR VARIABLES
-Parameter,MF,iMatrFactor,Maturity factor per technology and subsector (1),"CYall,SBS,EF,TEA,YTIME","allCy,SBS,EF,TEA,YTIME",Common parameters for all Demand Subsectors
+Parameter,MF,iMatrFactor,Maturity factor per technology and subsector (1),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",Common parameters for all Demand Subsectors
 Variable,MFRENMULT,VRenTechMatMult,Renewable technologies maturity multiplier,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Parameter,Ncon,iNcon,Number of consumers (1),SBS,SBS,Macro economic indicators
 Parameter,Nen_FCon,iFuelConsNENSE,Final Consumption per Subsector and fuel (Mtoe),"NENSE,EF,YTIME","allCy,NENSE,EF,YTIME",Parameters for data transfering
@@ -379,7 +379,7 @@ Variable,PP_NOCV,VFuelPriSubNoCarb,Fuel prices per subsector and fuel  without c
 Variable,PPA,VFuelPriceAvg,Average fuel prices per subsector (kUS$2005/toe),"CYall,DSBS,YTIME","allCy,TRANSE,YTIME",PRICES
 Variable,PPROD,VPrimProd,Primary Production (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",
 Parameter,PPRODRES,iResHcNgOilPrProd,"Residuals for Hard Coal, Natural Gas and Oil Primary Production (1)","CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
-Variable,PPSU,VFuePriSubChp,Fuel prices per subsector and fuel for CHP plants (kUS$2005/toe),"CYall,DSBS,EF,TEA,YTIME","allCy,DSBS,EF,TEA,YTIME",PRICES
+Variable,PPSU,VFuePriSubChp,Fuel prices per subsector and fuel for CHP plants (kUS$2005/toe),"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",PRICES
 Variable,PPW,VFuelPriMultWgt,Fuel prices per subsector and fuel  mutliplied by weights (kdollars2005/toe),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",PRICES
 Variable,PRODCOST,VHourProdCostTech,Hourly production cost of technology (Euro/KWh),"CYall,PGALL,HOUR,YTIME","allCy,PGALL,HOUR,YTIME",POWER GENERATION SECTOR
 Variable,PRODCOSTC,vHourProdCostTechAfterCCS,Hourly production cost of technology (Euro/KWh),"CYall,PGALL,HOUR,YTIME","allCy,PGALL,HOUR,YTIME",POWER GENERATION SECTOR
@@ -406,17 +406,17 @@ Parameter,S,iSigma,S parameters of Gompertz function for passenger cars vehicle 
 Parameter,SAT,iPassCarsMarkSat,Passenger cars market saturation [1],CYall,allCy,Transport Sector specific Parameters
 Variable,SCR,VScrRate,Scrapping rate of passenger cars (1),"CYall,YTIME","allCy,YTIME",TRANSPORT SECTOR VARIABLES
 Variable,SCRAP,VScrap,Scrapped passenger cars (million vehicles),"CYall,YTIME","allCy,YTIME",TRANSPORT SECTOR VARIABLES
-Variable,SFC,VSpecificFuelCons,Specific Fuel Consumption (),"CYall,TRANSE,TTECH,TEA,EF,YTIME","allCy,TRANSE,TTECH,TEA,EF,YTIME",TRANSPORT SECTOR VARIABLES
+Variable,SFC,VSpecificFuelCons,Specific Fuel Consumption (),"CYall,TRANSE,TTECH,EF,YTIME","allCy,TRANSE,TTECH,EF,YTIME",TRANSPORT SECTOR VARIABLES
 Variable,SHCAP,VPowPlaShaNewEquip,Power plant share in new equipment (1),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Variable,SHCAPCCS,VPowerPlaShrNewEq,Power plant share in new equipment,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Variable,SHCAPNOCCS,VPowerPlantNewEq,Power plant share in new equipment,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Parameter,SHIOTH,REMOVED FROM OPEN-PROM,"Share of fuels in transformation input to Gasworks, Blast Furnances, Briquetting plants in base year","CYall,EF","allCy,EF",Supply Side Specific Parameters
 Variable,SHLOAD,VPowPlantSorting,Power plants sorting according to variable cost to decide the plant dispatching (1),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Variable,SHLOADS,VElecPeakLoads,Electricity peak loads (GW),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Variable,SHR,VTechShareNewEquip,Technology share in new equipment (1),"CYall,DSBS,EF,TEA,YTIME","allCy,DSBS,EF,TEA,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+Variable,SHR,VTechShareNewEquip,Technology share in new equipment (1),"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Parameter,SHRHPELC,iShrHeatPumpElecCons,Share of heat pump electricity consumption in total substitutable electricity (1),"CYall,SBS","allCy,SBS",Common parameters for all Demand Subsectors
 Parameter,SHRNSE,iShrNonSubElecInTotElecDem,Share of non substitutable electricity in total electricity demand per subsector (1),"CYall,SBS","allCy,SBS",Common parameters for all Demand Subsectors
-Variable,SHRTR,VTechSortVarCostNewEquip,Technology share in new equipment,"CYall,TRANSE,EF,TEA,YTIME","allCy,TRANSE,EF,TEA,YTIME",TRANSPORT SECTOR VARIABLES
+Variable,SHRTR,VTechSortVarCostNewEquip,Technology share in new equipment,"CYall,TRANSE,EF,YTIME","allCy,TRANSE,EF,YTIME",TRANSPORT SECTOR VARIABLES
 Variable,STAC,vAvgPowerGenCostShoTrm,Short-term average power generation cost (Euro2005/kWh),"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
 Variable,STAC_INT_PRICE,vShoPowGenIntPri,Short term power generation cost of technologies including international Prices of main fuels (kEuro05/toe),"CYALL,PGALL,ESET,YTIME","allCy,PGALL,ESET,YTIME",POWER GENERATION SECTOR
 Parameter,STT,iCumDistrFuncConsSize,Cummulative distribution function of consumer size groups (1),"CYall,DSBS","allCy,DSBS",Macro economic indicators
@@ -472,15 +472,15 @@ Parameter,Trans_FCon,iFuelCons,Fuel consumption (Mtoe),"TRANSE,EF,YTIME","allCy,
 Parameter,Trans_Gomp,iDataPassCars,Initial Data for Passenger Cars (),"GompSet1,Gompset2","allCy,GompSet1,Gompset2",Parameters for data transfering
 Parameter,Trans_RSFC,iResTranspFuelConsSubTech,Residual Transport on Specific Fuel Consumption per Subsector and Technology,"TRANSE,EF,YTIME","allCy,TRANSE,EF,YTIME",Parameters for data transfering
 Parameter,Trans_SFC,iInitSpecFuelCons,Initial Specific fuel consumption (),"TRANSE,TTECH,EF,YTIME","TRANSE,TTECH,EF,YTIME",Parameters for data transfering
-Parameter,Trans_Tech,iCapCostTechTr,Capital Cost of technology for transport (kEuro2005/vehicle),"CYall,TRANSE,EF,TEA,YTIME","allCy,TRANSE,EF,YTIME",Common parameters for all Demand Subsectors
+Parameter,Trans_Tech,iCapCostTechTr,Capital Cost of technology for transport (kEuro2005/vehicle),"CYall,TRANSE,EF,YTIME","allCy,TRANSE,EF,YTIME",Common parameters for all Demand Subsectors
 Parameter,Trans_Tech,iDataTransTech,Technoeconomic characteristics of transport (various),"TRANSE,EF,ECONCHAR","TRANSE,EF,ECONCHAR",common data parameters
 Parameter,Trans_Use,iCapDataLoadFacEachTransp,Capacity data and Load factor for each transportation mode (passenger or tonnes/vehicle),"TRANSE,TRANSUSE","TRANSE,TRANSUSE",common data parameters
 Parameter,TRANSCHAR,iTransChar,"km per car, passengers per car and residuals for passenger cars market extension ()","CYall,TRANSPCHAR,YTIME","allCy,TRANSPCHAR,YTIME",TRANSPORT SECTOR VARIABLES
-Variable,U,VTechCostMatr,Technology cost including maturity factor (Keuro/toe),"CYall,DSBS,Rcon,EF,TEA,YTIME","allCy,DSBS,rCon,EF,TEA,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-Parameter,UF,iUsfEneConvSubTech,Useful Energy Conversion Factor per subsector and technology (1),"CYall,SBS,EF,TEA,YTIME","allCy,SBS,EF,YTIME",Common parameters for all Demand Subsectors
+Variable,U,VTechCostMatr,Technology cost including maturity factor (Keuro/toe),"CYall,DSBS,Rcon,EF,YTIME","allCy,DSBS,rCon,EF,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+Parameter,UF,iUsfEneConvSubTech,Useful Energy Conversion Factor per subsector and technology (1),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",Common parameters for all Demand Subsectors
 Parameter,USETR,iAvgVehCapLoadFac,Average capacity/vehicle and load factor (tn/veh or passenegers/veh) ,"CYall,TRANSE,TRANSUSE,YTIME","allCy,TRANSE,TRANSUSE,YTIME",Transport Sector specific Parameters
-Variable,UTR,VTranspCostMatFac,Transportation cost including maturity factor(Keuro/vehicle),"CYALL,TRANSE,RCon,TTECH,TEA,YTIME","allCy,TRANSE,RCon,TTECH,TEA,YTIME",TRANSPORT SECTOR VARIABLES
-Parameter,VARCOST,iVarCostTech,Variable Cost of technology (),"CYall,SBS,EF,TEA,YTIME","allCy,SBS,EF,TEA,YTIME",Common parameters for all Demand Subsectors
+Variable,UTR,VTranspCostMatFac,Transportation cost including maturity factor(Keuro/vehicle),"CYALL,TRANSE,RCon,TTECH,YTIME","allCy,TRANSE,RCon,TTECH,YTIME",TRANSPORT SECTOR VARIABLES
+Parameter,VARCOST,iVarCostTech,Variable Cost of technology (),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",Common parameters for all Demand Subsectors
 Variable,VARCOSTPG,VVarCostTech,Variable cost of technology (Euro/KWh),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Variable,VARCOSTPG1,VVarCostTechNotPGSCRN,Variable cost of technology excluding PGSCRN (Euro/KWh),"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Variable,VARCOSTPG2,VVarCostTechnology,Variable cost of technology (Euro/KWh),"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
