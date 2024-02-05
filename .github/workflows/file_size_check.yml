@@ -6,8 +6,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check large files
-        uses: ActionsDesk/lfs-warning@v2.0
+        uses: ppremk/lfs-warning@v3.2
         with:
-          filesizelimit: 262144 # 256
+          filesizelimit: 262144 # 256 KB
 
 permissions: read-all
