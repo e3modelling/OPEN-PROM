@@ -8,6 +8,7 @@ jobs:
       - name: Check large files
         uses: ppremk/lfs-warning@v3.2
         with:
+          token: ${{ secrets.GITHUB_TOKEN }} 
           filesizelimit: 262144 # 256 KB
 
 permissions: read-all
