@@ -1,14 +1,28 @@
-name: Check file size
+name: 'File Size Checker'
 on: [push]
 
 jobs:
-  file-size-check:
+  check-file-size:
     runs-on: ubuntu-latest
     steps:
-      - name: Check large files
-        uses: ppremk/lfs-warning@v3.2
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }} 
-          filesizelimit: 262144 # 256 KB
+    - name: 'Checkout code'
+      uses: actions/checkout@v2
+    - name: 'Check file size'
+      run: |
+        # Set the maximum file size to 256KB
+        MAX_SIZE=262144
+        # List files added or modified (ignoring deleted)
+        FILES=$(git diff --cached --name-only --diff-filter=AM)
+        # Loop through files and check file size
+        for FILE in $FILES; do
+          if [ -f "$FILE" ]; then
+            SIZE=$(wc -c <"$FILE")
+            if [ "$SIZE" -gt "$MAX_SIZE" ]; then
+              echo "Error: $FILE exceeds the maximum file size limit of 256KB."
+              exit 1
+            fi
+          fi
+        done
+        echo "All files are within the size limit."
 
 permissions: read-all
