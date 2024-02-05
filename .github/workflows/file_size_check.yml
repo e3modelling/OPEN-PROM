@@ -1,5 +1,5 @@
 name: 'File Size Checker'
-on: [push]
+on: [push, pull_request]
 
 jobs:
   check-file-size:
@@ -11,18 +11,19 @@ jobs:
       run: |
         # Set the maximum file size to 256KB
         MAX_SIZE=262144
-        # List files added or modified (ignoring deleted)
-        FILES=$(git diff --cached --name-only --diff-filter=AM)
-        # Loop through files and check file size
+        
+        # List all files in the repository excluding .git directory
+        FILES=$(find . -type f ! -path './.git/*')
+        
+        # Loop through all files and check file size
         for FILE in $FILES; do
-          if [ -f "$FILE" ]; then
-            SIZE=$(wc -c <"$FILE")
-            if [ "$SIZE" -gt "$MAX_SIZE" ]; then
-              echo "Error: $FILE exceeds the maximum file size limit of 256KB."
-              exit 1
-            fi
+          SIZE=$(wc -c <"$FILE")
+          if [ "$SIZE" -gt "$MAX_SIZE" ]; then
+            echo "Error: $FILE exceeds the maximum file size limit of 256KB."
+            exit 1
           fi
         done
+        
         echo "All files are within the size limit."
 
 permissions: read-all
