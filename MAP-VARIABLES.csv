@@ -1,0 +1,38 @@
+item,from,to,set
+VDemSub,VDemSub-1,VGapFinalDem,DSBS $(not TRANSE(DSBS))
+VDemSub,iActv,VGapFinalDem,DSBS $(not TRANSE(DSBS))
+VDemSub,VFuelPriceAvg,VGapFinalDem,DSBS $(not TRANSE(DSBS))
+VFuelPriceAvg,VFuelPriMultWgt,VDemSub,DSBS
+VFuelPriMultWgt,VFuelPriceSub,VFuelPriceAvg,
+VFuelPriceSub,VFuelPriceSub-1,VFuelPriMultWgt,"SBS $( not (ELCEF(EF) or HEATPUMP(EF) or ALTEF(EF))) $(not sameas(""NUC"",EF)))"
+VFuelPriceSub,VElecPriInduResConsu,,SBS $(ELCEF(EF) or HEATPUMP(EF))
+VElecPriInduResConsu,VFuelPriceSub-1,VFuelPriceSub,SBS $(ELCEF(EF) or HEATPUMP(EF))
+VGapFinalDem,VDemSub,VFuelConsInclHP,DSBS $(not TRANSE(DSBS))
+VGapFinalDem,VConsRemSubEquip,VFuelConsInclHP,DSBS $(not TRANSE(DSBS))
+VFuelConsInclHP,VGapFinalDem,VConsRemSubEquip+1,DSBS $(not TRANSE(DSBS))
+VFuelConsInclHP,VConsRemSubEquip,VConsRemSubEquip+1,DSBS $(not TRANSE(DSBS))
+VFuelConsInclHP,VTechShareNewEquip,VConsRemSubEquip+1,DSBS $(not TRANSE(DSBS))
+VFuelConsInclHP,VElecNonSub,VConsRemSubEquip+1,DSBS $(not TRANSE(DSBS))
+VElecNonSub,iActv,,INDDOM
+VConsRemSubEquip,iActv,VFuelConsInclHP,DSBS $(not TRANSE(DSBS))
+VConsRemSubEquip,VFuelConsInclHP-1,VFuelConsInclHP,DSBS $(not TRANSE(DSBS))
+VConsRemSubEquip,VLifeTimeTech,VFuelConsInclHP,DSBS $(not TRANSE(DSBS))
+VConsRemSubEquip,VLifeTimeTech-1,VFuelConsInclHP,DSBS $(not TRANSE(DSBS))
+VConsRemSubEquip,VElecNonSub-1,VFuelConsInclHP,DSBS $(not TRANSE(DSBS))
+VConsRemSubEquip,VFuelPriceSub,VFuelConsInclHP,DSBS $(not TRANSE(DSBS))
+VFuelConsInclHP,VGapFinalDem,VConsFuel,DSBS $(not TRANSE(DSBS))
+VFuelConsInclHP,VConsRemSubEquip,VConsFuel,DSBS $(not TRANSE(DSBS))
+VFuelConsInclHP,VTechShareNewEquip,VConsFuel,DSBS $(not TRANSE(DSBS))
+VFuelConsInclHP,VElecNonSub,VConsFuel,DSBS $(not TRANSE(DSBS))
+VFeCons,VConsFuel,VElecDem,EFS
+VFeCons,VDemTr,VElecDem,EFS
+VFuePriSubChp,VFuelPriceSub,VTechCostIntrm,DSBS $(not TRANSE(DSBS))
+VFuePriSubChp,VElecIndPrices,VTechCostIntrm,DSBS $(not TRANSE(DSBS))
+VTechCostIntrm,VFuePriSubChp,VTechCost,DSBS $(not TRANSE(DSBS))
+VTechCost,VTechCostIntrm,VTechCostMatr,DSBS $(not TRANSE(DSBS))
+VTechCostMatr,VTechCost,VTechSort,DSBS $(not TRANSE(DSBS))
+VTechShareNewEquip,VTechCost,VFuelConsInclHP,DSBS $(not TRANSE(DSBS))
+VTechShareNewEquip,VTechSort,VFuelConsInclHP,DSBS $(not TRANSE(DSBS))
+VTechSort,VTechCostMatr,VTechShareNewEquip,DSBS $(not TRANSE(DSBS))
+VTechCost,VTechCostIntrm,VTechShareNewEquip,DSBS $(not TRANSE(DSBS))
+VTechCostIntrm,VLifeTimeTech,VTechCost,DSBS $(not TRANSE(DSBS))
