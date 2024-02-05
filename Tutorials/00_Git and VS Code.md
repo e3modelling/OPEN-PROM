@@ -1,7 +1,43 @@
 ## Setting Up Git and VS Code for GitHub: A Step-by-Step Guide
 
+**Learn Objectives:**
+
+* Git and Visual Studio Code (VS Code), recommended tools for developing and running OPEN-PROM
+* Key terminology, how to check for- and install Git, configure settings, install VS Code, "clone" a repository, and explore the Task Runner extensions
+
+***Preliminaries:***
 - Git is a widely used Version Control software
-- VS Code is a widely used and versatile text editor for modelers and developers 
+- VS Code (Visual Studio Code) is a widely used and versatile text editor for modelers and developers 
+
+***Clarifying Terminology:***
+
+Before diving into the setup process, let's clarify some key terms you'll encounter:
+
+- **Git:**
+Git is a distributed version control system that allows multiple developers to collaborate on projects efficiently. It tracks changes to files, maintains a history of revisions, and facilitates collaboration through features like branching and merging.
+
+- **GitHub:**
+GitHub is a web-based platform built on top of Git, providing hosting for software development projects. It offers features such as repository hosting, code review, issue tracking, and project management. GitHub is widely used by developers and organizations for open-source and private projects alike.
+
+- **Visual Studio Code (VS Code):**
+Visual Studio Code is a lightweight, open-source code editor developed by Microsoft. It offers built-in support for various programming languages, debugging tools, and extensions to enhance functionality. VS Code is highly customizable and popular among developers for its versatility and ease of use.
+
+- **Repository:**
+A repository, or repo for short, is a central location where files and directories related to a project are stored and managed. In the context of Git and GitHub, a repository typically contains the source code for a software project along with version history and other project-related files.
+
+- **Cloning:**
+Cloning refers to the process of creating a local copy of a repository from a remote source, such as GitHub. When you clone a repository, you replicate its entire history and contents onto your local machine, allowing you to work on the project offline and collaborate with others.
+
+- **Commit:**
+A commit is a snapshot of changes made to files in a repository at a specific point in time. When you commit changes in Git, you create a new revision in the project's history, along with a descriptive message that explains the changes made. Commits are essential for tracking progress and collaborating on projects.
+
+- **Push:**
+Pushing refers to the act of uploading local changes to a remote repository, such as GitHub. When you push commits to a remote repository, you synchronize your local changes with the central repository, making them accessible to other collaborators.
+
+- **Pull:**
+Pulling, or fetching, involves retrieving changes from a remote repository and incorporating them into your local repository. When you pull changes, you update your local copy of the repository to reflect any new commits made by other collaborators.
+
+Understanding these terms will help you navigate the setup process and work effectively with Git, GitHub, and Visual Studio Code.
 
 
 ***Check for Existing Git Installation:***
@@ -36,7 +72,7 @@ Verify your email address by following the link sent to your email.
 
 ***Setting Up VS Code:***
 
-1. Download and install Visual Studio Code from the official website: https://code.visualstudio.com/download
+1. Download and install VS Code (Visual Studio Code) from the official website: https://code.visualstudio.com/download
 2. Launch VS Code after installation.
 
 - Connecting to Company GitHub and Cloning a Repository:
@@ -62,7 +98,7 @@ Verify your email address by following the link sent to your email.
 
 - Open VS Code from Command Prompt:
 
-    With the cloned repository folder as your current working directory, open Visual Studio Code from the command prompt using:
+    With the cloned repository folder as your current working directory, open VS Code (Visual Studio Code) from the command prompt using:
 
     `code .`
 
@@ -87,7 +123,7 @@ Basic VS code guide
 ===================
 
 ## Main Bar:
-The main bar in Visual Studio Code is the horizontal strip at the top of the application window.It provides quick access to various important features and actions within the editor.\
+The main bar in VS Code (Visual Studio Code) is the horizontal strip at the top of the application window.It provides quick access to various important features and actions within the editor.\
 Here's what you'll find in the main bar:
 
 
@@ -138,7 +174,7 @@ Here's what you'll find in the main bar:
 
 ## Sidebar:
 
-The sidebar in Visual Studio Code is the vertical strip located on the left side of the application window.\
+The sidebar in VS Code (Visual Studio Code) is the vertical strip located on the left side of the application window.\
 It hosts several important navigation and information panels.\
 Here's what you'll find in the sidebar:
 
@@ -171,7 +207,7 @@ Provides quick access to extension settings.
 
 **6. Project Manager:**
 
-Allows you to manage and organize different projects within Visual Studio Code.\
+Allows you to manage and organize different projects within VS Code (Visual Studio Code).\
 Provides quick access to your frequently used projects and workspaces.\
 Allows you to save and open groups of files, folders, and settings as a project.
 
@@ -197,12 +233,12 @@ Some of the features offered by GitLens include:
 - Interactive Rebase Workflow: Manage interactive rebase operations directly within VS Code.
 
 
-Adding the Git History Extension to Visual Studio Code:
+Adding the Git History Extension to VS Code (Visual Studio Code):
 =============================================================
 
-**1. Open Visual Studio Code:**
+**1. Open VS Code (Visual Studio Code):**
 
-Launch Visual Studio Code on your computer.
+Launch VS Code (Visual Studio Code) on your computer.
 
 **2. Access the Extension Marketplace:**
 
@@ -220,20 +256,20 @@ Click on the "Install" button next to the Git History  extension.
 
 **5. Wait for Installation:**
 
-Visual Studio Code will download and install the Git History  extension.\
+VS Code (Visual Studio Code) will download and install the Git History  extension.\
 You'll see a progress bar indicating the installation process.
 
 **6. Restart VS Code (if Required):**
 
-After the installation is complete, you might be prompted to restart Visual Studio Code.\
+After the installation is complete, you might be prompted to restart VS Code (Visual Studio Code).\
 If prompted, click on the "Restart" button.
 
-(OPTIONAL) Adding the GitLens Extension to Visual Studio Code:
+(OPTIONAL) Adding the GitLens Extension to VS Code (Visual Studio Code):
 =============================================================
 
-**1. Open Visual Studio Code:**
+**1. Open VS Code (Visual Studio Code):**
 
-Launch Visual Studio Code on your computer.
+Launch VS Code (Visual Studio Code) on your computer.
 
 **2. Access the Extension Marketplace:**
 
@@ -250,11 +286,11 @@ Click on the "Install" button next to the GitLens  extension.
 
 **5. Wait for Installation:**
 
-Visual Studio Code will download and install the GitLens  extension.\
+VS Code (Visual Studio Code) will download and install the GitLens  extension.\
 You'll see a progress bar indicating the installation process.
 
 **6. Restart VS Code (if Required):**
 
-After the installation is complete, you might be prompted to restart Visual Studio Code.\
-If prompted, click on the "Restart" button.
-You are all set up !!!
+After the installation is complete, you might be prompted to restart VS Code (Visual Studio Code).\
+If prompted, click on the "Restart" button.\
+**You are all set up !!!**
