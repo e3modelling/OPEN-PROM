@@ -1,0 +1,13 @@
+name: Check file size
+on: [push]
+
+jobs:
+  file-size-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check large files
+        uses: ActionsDesk/lfs-warning@v2.0
+        with:
+          filesizelimit: 262144 # 256
+
+permissions: read-all
