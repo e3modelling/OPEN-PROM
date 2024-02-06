@@ -12,11 +12,8 @@ jobs:
         # Set the maximum file size to 1 MB
         MAX_SIZE=1048576
         
-        # List all files in the repository excluding .git directory
-        FILES=$(find . -type f ! -path './.git/*')
-        
-        # Loop through all files and check file size
-        for FILE in $FILES; do
+        # Find all files in the repository excluding .git directory, and handle spaces in file names
+        find . -type f ! -path './.git/*' -print0 | while IFS= read -r -d '' FILE; do
           SIZE=$(wc -c <"$FILE")
           if [ "$SIZE" -gt "$MAX_SIZE" ]; then
             echo "Error: $FILE exceeds the maximum file size limit of 1 MB."
