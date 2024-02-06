@@ -9,8 +9,8 @@ jobs:
       uses: actions/checkout@v2
     - name: 'Check file size'
       run: |
-        # Set the maximum file size to 256KB
-        MAX_SIZE=262144
+        # Set the maximum file size to 1 MB
+        MAX_SIZE=1048576
         
         # List all files in the repository excluding .git directory
         FILES=$(find . -type f ! -path './.git/*')
@@ -19,7 +19,7 @@ jobs:
         for FILE in $FILES; do
           SIZE=$(wc -c <"$FILE")
           if [ "$SIZE" -gt "$MAX_SIZE" ]; then
-            echo "Error: $FILE exceeds the maximum file size limit of 256KB."
+            echo "Error: $FILE exceeds the maximum file size limit of 1 MB."
             exit 1
           fi
         done
