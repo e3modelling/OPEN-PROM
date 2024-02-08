@@ -763,7 +763,8 @@ $ondelim
 $include"./iMatrFactor.csv"
 $offdelim
 ;
-* FIXME: Specify maturity factors for each country, instead of assigning MAR values
+* FIXME: Specify maturity factors for each country and decrease CSV file size.
+* author=derevirn
 iMatrFactor(allCy,SBS,EF,YTIME) = iMatrFactor("MAR",SBS,EF,YTIME);                                          
 ** Industry
 iShrNonSubElecInTotElecDem(allCy,INDSE)  = iIndChar(allCy,INDSE,"SHR_NSE");
