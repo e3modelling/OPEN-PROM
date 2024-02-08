@@ -6,7 +6,7 @@
         {
             "label": "OPEN-PROM DEV",
             "type": "shell",
-            "command": "gams main.gms --DevMode=1 -logOption 4",
+            "command": "gams main.gms --DevMode=1 -logOption 4 -Idir=./data",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -20,7 +20,7 @@
         {
             "label": "OPEN-PROM RESEARCH",
             "type": "shell",
-            "command": "gams main.gms --DevMode=0 -logOption 4",
+            "command": "gams main.gms --DevMode=0 -logOption 4 -Idir=./data",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
