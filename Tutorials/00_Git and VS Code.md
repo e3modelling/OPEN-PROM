@@ -54,8 +54,9 @@ Understanding these terms will help you navigate the setup process and work effe
     *If Git is not installed, follow these steps:*
 
     1.	Download the Git installer for your operating system from the official Git website: https://git-scm.com/downloads
-    2.	Run the installer and follow the on-screen instructions.
-    3. Once installed, repeat the `git --version` command to verify the installation.
+    2.	Run the installer and follow the on-screen instructions
+    3.	Make sure to tell Git to use the Windows command prompt, rather than its own
+    4.  Once installed, repeat the `git --version` command to verify the installation
 
 ***Setting Up GitHub Account:***
 
