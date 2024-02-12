@@ -17,7 +17,7 @@ qCurrRenPot(runCy,PGRENEF,YTIME)$TIME(YTIME)..
 QChpElecPlants(runCy,CHP,YTIME)$TIME(YTIME)..
          VElecCapChpPla(runCy,CHP,YTIME)
          =E=
-         1/sTWhToMtoe * sum(INDDOM,VConsFuel(runCy,INDDOM,CHP,YTIME)) * VElecIndPrices(runCy,YTIME)/
+         1/sTWhToMtoe * sum(INDDOM,VConsFuelNoHeat(runCy,INDDOM,CHP,YTIME)) * VElecIndPrices(runCy,YTIME)/
          sum(PGALL$CHPtoEON(CHP,PGALL),iAvailRate(PGALL,YTIME)) /
          iUtilRateChpPlants(runCy,CHP,YTIME) /sGwToTwhPerYear;  
 
@@ -60,8 +60,8 @@ QEstBaseLoad(runCy,YTIME)$TIME(YTIME)..
 QLoadFacDom(runCy,YTIME)$TIME(YTIME)..
          VLoadFacDom(runCy,YTIME)
              =E=
-         (sum(INDDOM,VConsFuel(runCy,INDDOM,"ELC",YTIME)) + sum(TRANSE, VFinDemFuel(runCy,TRANSE,"ELC",YTIME)))/
-         (sum(INDDOM,VConsFuel(runCy,INDDOM,"ELC",YTIME)/iLoadFacElecDem(INDDOM)) + 
+         (sum(INDDOM,VConsFuelNoHeat(runCy,INDDOM,"ELC",YTIME)) + sum(TRANSE, VFinDemFuel(runCy,TRANSE,"ELC",YTIME)))/
+         (sum(INDDOM,VConsFuelNoHeat(runCy,INDDOM,"ELC",YTIME)/iLoadFacElecDem(INDDOM)) + 
          sum(TRANSE, VFinDemFuel(runCy,TRANSE,"ELC",YTIME)/iLoadFacElecDem(TRANSE)));         
 
 *' The equation calculates the electricity peak load by dividing the total electricity demand by the load factor for the domestic sector and converting the result
@@ -495,8 +495,8 @@ QScalFacPlantDispatch(runCy,HOUR,YTIME)$TIME(YTIME)..
 QElecChpPlants(runCy,YTIME)$TIME(YTIME)..
          VElecChpPlants(runCy,YTIME) 
          =E=
-         ( (1/0.086 * sum((INDDOM,CHP),VConsFuel(runCy,INDDOM,CHP,YTIME)) * VElecIndPrices(runCy,YTIME)) + 
-         iMxmShareChpElec(runCy,YTIME)*VElecDem(runCy,YTIME) - SQRT( SQR((1/0.086 * sum((INDDOM,CHP),VConsFuel(runCy,INDDOM,CHP,YTIME)) * 
+         ( (1/0.086 * sum((INDDOM,CHP),VConsFuelNoHeat(runCy,INDDOM,CHP,YTIME)) * VElecIndPrices(runCy,YTIME)) + 
+         iMxmShareChpElec(runCy,YTIME)*VElecDem(runCy,YTIME) - SQRT( SQR((1/0.086 * sum((INDDOM,CHP),VConsFuelNoHeat(runCy,INDDOM,CHP,YTIME)) * 
          VElecIndPrices(runCy,YTIME)) - 
          iMxmShareChpElec(runCy,YTIME)*VElecDem(runCy,YTIME)) + SQR(1E-4) ) )/2;
 
@@ -539,7 +539,7 @@ QElecProdPowGenPlants(runCy,PGALL,YTIME)$TIME(YTIME)..
 qSecContrTotChpProd(runCy,INDDOM,CHP,YTIME)$(TIME(YTIME) $SECTTECH(INDDOM,CHP))..
          vSecContrTotChpProd(runCy,INDDOM,CHP,YTIME) 
           =E=
-         VConsFuel(runCy,INDDOM,CHP,YTIME)/(1e-6+SUM(INDDOM2,VConsFuel(runCy,INDDOM2,CHP,YTIME)));
+         VConsFuelNoHeat(runCy,INDDOM,CHP,YTIME)/(1e-6+SUM(INDDOM2,VConsFuelNoHeat(runCy,INDDOM2,CHP,YTIME)));
 
 *' This equation calculates the electricity production from Combined Heat and Power plants . The electricity production is computed
 *' for a specific country , CHP technology , and time period.The electricity production from CHP plants is computed by taking the
@@ -549,7 +549,7 @@ qSecContrTotChpProd(runCy,INDDOM,CHP,YTIME)$(TIME(YTIME) $SECTTECH(INDDOM,CHP)).
 QElecProdChpPlants(runCy,CHP,YTIME)$TIME(YTIME)..
          VChpElecProd(runCy,CHP,YTIME)
                  =E=
-        sum(INDDOM,VConsFuel(runCy,INDDOM,CHP,YTIME)) / SUM(chp2,sum(INDDOM,VConsFuel(runCy,INDDOM,CHP2,YTIME)))*
+        sum(INDDOM,VConsFuelNoHeat(runCy,INDDOM,CHP,YTIME)) / SUM(chp2,sum(INDDOM,VConsFuelNoHeat(runCy,INDDOM,CHP2,YTIME)))*
         (VElecDem(runCy,YTIME) - SUM(PGALL,VElecProd(runCy,PGALL,YTIME)));
 
 *' This equation calculates the share of gross electricity production attributed to renewable sources.
@@ -564,7 +564,7 @@ qShareRenGrossElecProd(runCy,YTIME)$TIME(YTIME)..
                  (SUM(PGNREN$((not sameas("PGASHYD",PGNREN)) $(not sameas("PGSHYD",PGNREN)) $(not sameas("PGLHYD",PGNREN)) ),
                          VElecProd(runCy,PGNREN,YTIME)))/
                  (SUM(PGALL,VElecProd(runCy,PGALL,YTIME))+ 
-                 1e-3*sum(DSBS,sum(CHP$SECTTECH(DSBS,CHP),VConsFuel(runCy,DSBS,CHP,YTIME)))/8.6e-5*VElecIndPrices(runCy,YTIME) + 
+                 1e-3*sum(DSBS,sum(CHP$SECTTECH(DSBS,CHP),VConsFuelNoHeat(runCy,DSBS,CHP,YTIME)))/8.6e-5*VElecIndPrices(runCy,YTIME) + 
                  1/0.086 *VNetImports(runCy,"ELC",YTIME));         
 
 *' This equation calculates the long-term power generation cost of technologies excluding climate policies.
@@ -756,7 +756,7 @@ qShortPowGenCost(runCy,ESET,YTIME)$TIME(YTIME)..
                  *sTWhToMtoe/iPlantEffByType(runCy,PGALL,YTIME)))
         ))
         +
-         sum(CHP, VAvgVarProdCostCHP(runCy,CHP,YTIME)*VChpElecProd(runCy,CHP,YTIME))
+         sum(CHP, VCostAvgVarChpFuel(runCy,CHP,YTIME)*VChpElecProd(runCy,CHP,YTIME))
          )
          /VElecDem(runCy,YTIME);
 
@@ -1041,7 +1041,7 @@ QScrRate(runCy,YTIME)$TIME(YTIME)..
 QElecConsAll(runCy,DSBS,YTIME)$TIME(YTIME)..
          VElecConsAll(runCy,DSBS,YTIME)
              =E=
-         sum(INDDOM $SAMEAS(INDDOM,DSBS), VConsFuel(runCy,INDDOM,"ELC",YTIME)) + sum(TRANSE $SAMEAS(TRANSE,DSBS), VFinDemFuel(runCy,TRANSE,"ELC",YTIME));
+         sum(INDDOM $SAMEAS(INDDOM,DSBS), VConsFuelNoHeat(runCy,INDDOM,"ELC",YTIME)) + sum(TRANSE $SAMEAS(TRANSE,DSBS), VFinDemFuel(runCy,TRANSE,"ELC",YTIME));
 
 
 *' * INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
@@ -1051,11 +1051,11 @@ QElecConsAll(runCy,DSBS,YTIME)$TIME(YTIME)..
 *' activity levels and electricity prices over time. Polynomial distribution lags contribute to the sensitivity of consumption to historical electricity price trends.
 *' The result provides an estimate of non-substitutable electricity consumption, taking into account the evolving technological and economic conditions in the industry
 *' and tertiary sectors.
-QElecConsNonSub(runCy,INDDOM,YTIME)$TIME(YTIME)..
-         VElecNonSub(runCy,INDDOM,YTIME)
+QConsElecIndTertNonSub(runCy,INDDOM,YTIME)$TIME(YTIME)..
+         VConsElecIndTertNonSub(runCy,INDDOM,YTIME)
                  =E=
          [
-         VElecNonSub(runCy,INDDOM,YTIME-1) * ( iActv(YTIME,runCy,INDDOM)/iActv(YTIME-1,runCy,INDDOM) )**
+         VConsElecIndTertNonSub(runCy,INDDOM,YTIME-1) * ( iActv(YTIME,runCy,INDDOM)/iActv(YTIME-1,runCy,INDDOM) )**
          iElastNonSubElec(runCy,INDDOM,"a",YTIME)
          * ( VFuelPriceSub(runCy,INDDOM,"ELC",YTIME)/VFuelPriceSub(runCy,INDDOM,"ELC",YTIME-1) )**iElastNonSubElec(runCy,INDDOM,"b1",YTIME)
          * ( VFuelPriceSub(runCy,INDDOM,"ELC",YTIME-1)/VFuelPriceSub(runCy,INDDOM,"ELC",YTIME-2) )**iElastNonSubElec(runCy,INDDOM,"b2",YTIME)
@@ -1068,12 +1068,12 @@ QElecConsNonSub(runCy,INDDOM,YTIME)$TIME(YTIME)..
 *' past fuel consumption patterns, current activity levels, and elasticity coefficients. The equation utilizes a dynamic approach, adjusting the consumption based on changes
 *' in activity levels and fuel prices over time. The polynomial distribution lags contribute to the sensitivity of consumption to historical fuel price trends. The result
 *' provides an estimate of the remaining equipment consumption in the context of evolving technological and economic conditions.
-QConsOfRemSubEquip(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF))..
-         VConsRemSubEquip(runCy,DSBS,EF,YTIME)
+QConsSub(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF))..
+         VConsSub(runCy,DSBS,EF,YTIME)
                  =E=
          [
          (sum(TEA,VLftPcScrRate(runCy,DSBS,EF,TEA,YTIME)-1)/sum(TEA,VLftPcScrRate(runCy,DSBS,EF,TEA,YTIME)))
-         * (VFuelConsInclHP(runCy,DSBS,EF,YTIME-1) - (VElecNonSub(runCy,DSBS,YTIME-1)$(ELCEF(EF) $INDDOM(DSBS)) + 0$(not (ELCEF(EF) $INDDOM(DSBS)) )))
+         * (VFuelConsInclHP(runCy,DSBS,EF,YTIME-1) - (VConsElecIndTertNonSub(runCy,DSBS,YTIME-1)$(ELCEF(EF) $INDDOM(DSBS)) + 0$(not (ELCEF(EF) $INDDOM(DSBS)) )))
          * (iActv(YTIME,runCy,DSBS)/iActv(YTIME-1,runCy,DSBS))**iElastA(runCy,DSBS,"a",YTIME)
          * (VFuelPriceSub(runCy,DSBS,EF,YTIME)/VFuelPriceSub(runCy,DSBS,EF,YTIME-1))**iElastA(runCy,DSBS,"b1",YTIME)
          * (VFuelPriceSub(runCy,DSBS,EF,YTIME-1)/VFuelPriceSub(runCy,DSBS,EF,YTIME-2))**iElastA(runCy,DSBS,"b2",YTIME)
@@ -1101,10 +1101,10 @@ QDemSub(runCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)))..
 *' This equation calculates the total consumption of electricity in industrial sectors. The consumption is obtained by summing up the electricity
 *' consumption in each industrial subsector, excluding substitutable electricity. This equation provides an aggregate measure of electricity consumption
 *' in the industrial sectors, considering only non-substitutable electricity.
-qElecConsInd(runCy,YTIME)$TIME(YTIME)..
-         vElecConsInd(runCy,YTIME)
+qConsElecInd(runCy,YTIME)$TIME(YTIME)..
+         vConsElecInd(runCy,YTIME)
          =E=
-         SUM(INDSE,VElecNonSub(runCy,INDSE,YTIME));       
+         SUM(INDSE,VConsElecIndTertNonSub(runCy,INDSE,YTIME));       
 
 *' This equation calculates the total final demand for substitutable fuels in industrial sectors. The total demand is obtained by summing up the
 *' final demand for substitutable fuels across various industrial subsectors. This equation provides a comprehensive view of the total demand for
@@ -1129,8 +1129,8 @@ QElecIndPrices(runCy,YTIME)$TIME(YTIME)..
 *' taken into account. The result is the total fuel consumption in each demand subsector, providing a comprehensive measure of the energy consumption pattern.
 *' This equation offers a comprehensive view of fuel consumption, considering both traditional fuel sources and the additional electricity consumption
 *' associated with heat pump plants.
-QFuelCons(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF) $(not HEATPUMP(EF)) )..
-         VConsFuel(runCy,DSBS,EF,YTIME)
+QConsFuelNoHeat(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF) $(not HEATPUMP(EF)) )..
+         VConsFuelNoHeat(runCy,DSBS,EF,YTIME)
                  =E=
          VFuelConsInclHP(runCy,DSBS,EF,YTIME)$(not ELCEF(EF)) + 
          (VFuelConsInclHP(runCy,DSBS,EF,YTIME) + VElecConsHeatPla(runCy,DSBS,YTIME))$ELCEF(EF);
@@ -1169,8 +1169,8 @@ QFuePriSubChp(runCy,DSBS,EF,TEA,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS))  $SECTTE
 *' variable cost, and fuel-related costs. The equation provides a comprehensive assessment of the overall expenses associated with electricity production from CHP
 *' plants, considering both the fixed and variable components, as well as factors such as carbon prices and CO2 emission factors.
 *' The resulting variable represents the electricity production cost per CHP plant and demand sector, expressed in Euro per kilowatt-hour (Euro/KWh).
-QElecProdCosChp(runCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS))..
-         VElecProdCostChp(runCy,DSBS,CHP,YTIME)
+QCostElecProdChp(runCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS))..
+         VCostElecProdChp(runCy,DSBS,CHP,YTIME)
                  =E=
                     ( ( iDisc(runCy,"PG",YTIME) * exp(iDisc(runCy,"PG",YTIME)*iLifChpPla(runCy,DSBS,CHP))
                         / (exp(iDisc(runCy,"PG",YTIME)*iLifChpPla(runCy,DSBS,CHP)) -1))
@@ -1245,8 +1245,8 @@ QTechSort(runCy,DSBS,rCon,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le
 QGapFinalDem(runCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)))..
          VGapFinalDem(runCy,DSBS,YTIME)
                  =E=
-         VDemSub(runCy,DSBS,YTIME) - sum(EF$SECTTECH(DSBS,EF), VConsRemSubEquip(runCy,DSBS,EF,YTIME))
-         + SQRT( SQR(VDemSub(runCy,DSBS,YTIME) - sum(EF$SECTTECH(DSBS,EF), VConsRemSubEquip(runCy,DSBS,EF,YTIME)))) /2;
+         VDemSub(runCy,DSBS,YTIME) - sum(EF$SECTTECH(DSBS,EF), VConsSub(runCy,DSBS,EF,YTIME))
+         + SQRT( SQR(VDemSub(runCy,DSBS,YTIME) - sum(EF$SECTTECH(DSBS,EF), VConsSub(runCy,DSBS,EF,YTIME)))) /2;
 
 *' This equation calculates the technology share in new equipment based on factors such as maturity factor,
 *' cumulative distribution function of consumer size groups, number of consumers, technology cost, distribution function of consumer
@@ -1264,9 +1264,9 @@ QTechShareNewEquip(runCy,DSBS,EF,TEA,YTIME)$(TIME(YTIME) $SECTTECH(DSBS,EF) $(no
 QFuelConsInclHP(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF) )..
          VFuelConsInclHP(runCy,DSBS,EF,YTIME)
                  =E=
-         VConsRemSubEquip(runCy,DSBS,EF,YTIME)+
+         VConsSub(runCy,DSBS,EF,YTIME)+
          sum(TEA,VTechShareNewEquip(runCy,DSBS,EF,TEA,YTIME)*VGapFinalDem(runCy,DSBS,YTIME))
-         + (VElecNonSub(runCy,DSBS,YTIME))$(INDDOM(DSBS) $(ELCEF(EF)));
+         + (VConsElecIndTertNonSub(runCy,DSBS,YTIME))$(INDDOM(DSBS) $(ELCEF(EF)));
 
 *' This equation calculates the variable, including fuel electricity production cost per CHP plant and demand sector, taking into account the variable cost (other than fuel)
 *' per CHP type and the summation of fuel-related costs for each energy form . The calculation involves fuel prices, CO2 emission factors, boiler efficiency, electricity
@@ -1287,20 +1287,20 @@ QAvgElcProCostCHP(runCy,CHP,YTIME)$TIME(YTIME)..
          VAvgElcProCHP(runCy,CHP,YTIME)
          =E=
 
-         (sum(INDDOM, VConsFuel(runCy,INDDOM,CHP,YTIME-1)/SUM(INDDOM2,VConsFuel(runCy,INDDOM2,CHP,YTIME-1))*VElecProdCostChp(runCy,INDDOM,CHP,YTIME)))
-         $SUM(INDDOM2,VConsFuel.L(runCy,INDDOM2,CHP,YTIME-1))+0$(NOT SUM(INDDOM2,VConsFuel.L(runCy,INDDOM2,CHP,YTIME-1)));
+         (sum(INDDOM, VConsFuelNoHeat(runCy,INDDOM,CHP,YTIME-1)/SUM(INDDOM2,VConsFuelNoHeat(runCy,INDDOM2,CHP,YTIME-1))*VCostElecProdChp(runCy,INDDOM,CHP,YTIME)))
+         $SUM(INDDOM2,VConsFuelNoHeat.L(runCy,INDDOM2,CHP,YTIME-1))+0$(NOT SUM(INDDOM2,VConsFuelNoHeat.L(runCy,INDDOM2,CHP,YTIME-1)));
 
 *' The equation computes the average variable cost, including fuel and electricity production cost, per Combined Heat and Power plant.
 *' The equation involves a summation over demand subsectors , where the variable cost per CHP plant is calculated based on fuel
 *' consumption and the variable cost of electricity production . The resulting average variable cost is expressed in Euro per kilowatt-hour (Euro/KWh).
 *' The conditional statement ensures that the denominator in the calculation is not zero, avoiding division by zero issues.
-QAvgVarElecProd(runCy,CHP,YTIME)$(TIME(YTIME) ) ..
-         VAvgVarProdCostCHP(runCy,CHP,YTIME)
+QCostAvgVarChpFuel(runCy,CHP,YTIME)$(TIME(YTIME) ) ..
+         VCostAvgVarChpFuel(runCy,CHP,YTIME)
          =E=
 
-         (sum(INDDOM, VConsFuel(runCy,INDDOM,CHP,YTIME-1)/SUM(INDDOM2,VConsFuel(runCy,INDDOM2,CHP,YTIME-1))
+         (sum(INDDOM, VConsFuelNoHeat(runCy,INDDOM,CHP,YTIME-1)/SUM(INDDOM2,VConsFuelNoHeat(runCy,INDDOM2,CHP,YTIME-1))
          *VProCostCHPDem(runCy,INDDOM,CHP,YTIME)))
-         $SUM(INDDOM2,VConsFuel.L(runCy,INDDOM2,CHP,YTIME-1))+0$(NOT SUM(INDDOM2,VConsFuel.L(runCy,INDDOM2,CHP,YTIME-1)));
+         $SUM(INDDOM2,VConsFuelNoHeat.L(runCy,INDDOM2,CHP,YTIME-1))+0$(NOT SUM(INDDOM2,VConsFuelNoHeat.L(runCy,INDDOM2,CHP,YTIME-1)));
 
 *' * REST OF ENERGY BALANCE SECTORS
 
@@ -1312,7 +1312,7 @@ QTotFinEneCons(runCy,EFS,YTIME)$TIME(YTIME)..
          VFeCons(runCy,EFS,YTIME)
              =E=
          sum(INDDOM,
-             sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(INDDOM,EF) ), VConsFuel(runCy,INDDOM,EF,YTIME)))
+             sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(INDDOM,EF) ), VConsFuelNoHeat(runCy,INDDOM,EF,YTIME)))
          +
          sum(TRANSE,
              sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(TRANSE,EF)), VFinDemFuel(runCy,TRANSE,EF,YTIME)));
@@ -1331,7 +1331,7 @@ QFinNonEneCons(runCy,EFS,YTIME)$TIME(YTIME)..
          VFNonEnCons(runCy,EFS,YTIME)
              =E=
          sum(NENSE$(not sameas("BU",NENSE)),
-             sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(NENSE,EF) ), VConsFuel(runCy,NENSE,EF,YTIME)));  
+             sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(NENSE,EF) ), VConsFuelNoHeat(runCy,NENSE,EF,YTIME)));  
 
 *' The equation computes the distribution losses in million tonnes of oil equivalent for a given energy form sector.
 *' The losses are determined by the rate of losses over available for final consumption multiplied by the sum of total final energy
@@ -1351,7 +1351,7 @@ QTranfOutputDHPlants(runCy,STEAM,YTIME)$TIME(YTIME)..
          VTransfOutputDHPlants(runCy,STEAM,YTIME)
              =E=
          sum(DOMSE,
-             sum(DH$(EFtoEFS(DH,STEAM) $SECTTECH(DOMSE,DH)), VConsFuel(runCy,DOMSE,DH,YTIME)));
+             sum(DH$(EFtoEFS(DH,STEAM) $SECTTECH(DOMSE,DH)), VConsFuelNoHeat(runCy,DOMSE,DH,YTIME)));
 
 *' The equation calculates the transformation input to district heating plants.
 *' This transformation input is determined by summing over different district heating systems that correspond to the
@@ -1363,7 +1363,7 @@ QTransfInputDHPlants(runCy,EFS,YTIME)$TIME(YTIME)..
          VTransfInputDHPlants(runCy,EFS,YTIME)
              =E=
          sum(DH$DHtoEF(DH,EFS),
-             sum(DOMSE$SECTTECH(DOMSE,DH),VConsFuel(runCy,DOMSE,DH,YTIME)) / iEffDHPlants(runCy,EFS,YTIME));
+             sum(DOMSE$SECTTECH(DOMSE,DH),VConsFuelNoHeat(runCy,DOMSE,DH,YTIME)) / iEffDHPlants(runCy,EFS,YTIME));
 
 *' The equation calculates the refineries' capacity for a given scenario and year.
 *' The calculation is based on a residual factor, the previous year's capacity, and a production scaling
@@ -1444,7 +1444,7 @@ QTransfInPowerPls(runCy,PGEF,YTIME)$TIME(YTIME)..
         sum(PGALL$(PGALLtoEF(PGALL,PGEF)$PGGEO(PGALL)),
              VElecProd(runCy,PGALL,YTIME) * sTWhToMtoe) 
         +
-        sum(CHP$CHPtoEF(CHP,PGEF),  sum(INDDOM,VConsFuel(runCy,INDDOM,CHP,YTIME))+sTWhToMtoe*VChpElecProd(runCy,CHP,YTIME))/(0.8+0.1*(ord(YTIME)-16)/32);
+        sum(CHP$CHPtoEF(CHP,PGEF),  sum(INDDOM,VConsFuelNoHeat(runCy,INDDOM,CHP,YTIME))+sTWhToMtoe*VChpElecProd(runCy,CHP,YTIME))/(0.8+0.1*(ord(YTIME)-16)/32);
 
 *' The equation calculates the transformation output from thermal power stations for a specific energy branch
 *' in a given scenario and year. The result is computed based on the following conditions: 
@@ -1465,7 +1465,7 @@ QTransfOutThermPP(runCy,TOCTEF,YTIME)$TIME(YTIME)..
         +
         (                                                                                                         
           sum(INDDOM,
-          sum(CHP$SECTTECH(INDDOM,CHP), VConsFuel(runCy,INDDOM,CHP,YTIME)))+
+          sum(CHP$SECTTECH(INDDOM,CHP), VConsFuelNoHeat(runCy,INDDOM,CHP,YTIME)))+
           iRateEneBranCons(runCy,TOCTEF,YTIME)*(VFeCons(runCy,TOCTEF,YTIME) + VFNonEnCons(runCy,TOCTEF,YTIME) + VLosses(runCy,TOCTEF,YTIME)) + 
           VLosses(runCy,TOCTEF,YTIME)                                                                                    
          )$STEAM(TOCTEF); 
@@ -1592,20 +1592,20 @@ QFakeImprts(runCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS))..
          )$ELCEF(EFS)
          +
          (
-            VGrssInCons(runCy,EFS,YTIME)+ VExportsFake(runCy,EFS,YTIME) + VConsFuel(runCy,"BU",EFS,YTIME)$SECTTECH("BU",EFS)
+            VGrssInCons(runCy,EFS,YTIME)+ VExportsFake(runCy,EFS,YTIME) + VConsFuelNoHeat(runCy,"BU",EFS,YTIME)$SECTTECH("BU",EFS)
             - VPrimProd(runCy,EFS,YTIME)
          )$(sameas(EFS,"CRO"))
 
          +
          (
-            VGrssInCons(runCy,EFS,YTIME)+ VExportsFake(runCy,EFS,YTIME) + VConsFuel(runCy,"BU",EFS,YTIME)$SECTTECH("BU",EFS)
+            VGrssInCons(runCy,EFS,YTIME)+ VExportsFake(runCy,EFS,YTIME) + VConsFuelNoHeat(runCy,"BU",EFS,YTIME)$SECTTECH("BU",EFS)
             - VPrimProd(runCy,EFS,YTIME)
          )$(sameas(EFS,"NGS"))
          +iImpExp(runCy,"NGS",YTIME)$(sameas(EFS,"NGS"))
          +
          (
             (1-iRatePriProTotPriNeeds(runCy,EFS,YTIME)) *
-            (VGrssInCons(runCy,EFS,YTIME) + VExportsFake(runCy,EFS,YTIME) + VConsFuel(runCy,"BU",EFS,YTIME)$SECTTECH("BU",EFS) )
+            (VGrssInCons(runCy,EFS,YTIME) + VExportsFake(runCy,EFS,YTIME) + VConsFuelNoHeat(runCy,"BU",EFS,YTIME)$SECTTECH("BU",EFS) )
          )$(not (ELCEF(EFS) or sameas(EFS,"NGS") or sameas(EFS,"CRO")));
 
 *' The equation computes the net imports for a specific energy branch 
@@ -1706,7 +1706,7 @@ QTotGhgEmisAllCountrNap(NAP,YTIME)$TIME(YTIME)..
         (
         sum(runCy,
                  sum((EFS,INDSE)$(SECTTECH(INDSE,EFS)  $NAPtoALLSBS(NAP,INDSE)),
-                      VConsFuel(runCy,INDSE,EFS,YTIME) * iCo2EmiFac(runCy,INDSE,EFS,YTIME)) !! final consumption
+                      VConsFuelNoHeat(runCy,INDSE,EFS,YTIME) * iCo2EmiFac(runCy,INDSE,EFS,YTIME)) !! final consumption
                 +
                  sum(PGEF, VTransfInThermPowPls(runCy,PGEF,YTIME)*iCo2EmiFac(runCy,"PG",PGEF,YTIME)$(not h2f1(pgef))) !! input to power generation sector
                  +
@@ -1735,9 +1735,9 @@ qTotCo2AllCoun(YTIME)$TIME(YTIME)..
 qHouseExpEne(runCy,YTIME)$TIME(YTIME)..
                  vHouseExpEne(runCy,YTIME)
                  =E= 
-                 SUM(DSBS$HOU(DSBS),SUM(EF$SECTTECH(dSBS,EF),VConsRemSubEquip(runCy,DSBS,EF,YTIME)*(VFuelPriceSub(runCy,DSBS,EF,YTIME)-iEffValueInEuro(runCy,DSBS,YTIME)/
+                 SUM(DSBS$HOU(DSBS),SUM(EF$SECTTECH(dSBS,EF),VConsSub(runCy,DSBS,EF,YTIME)*(VFuelPriceSub(runCy,DSBS,EF,YTIME)-iEffValueInEuro(runCy,DSBS,YTIME)/
                  1000-iCo2EmiFac(runCy,"PG",EF,YTIME)*sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))/1000)))
-                                          +VElecPriIndResNoCliPol(runCy,"R",YTIME)*VElecNonSub(runCy,"HOU",YTIME)/sTWhToMtoe;         
+                                          +VElecPriIndResNoCliPol(runCy,"R",YTIME)*VConsElecIndTertNonSub(runCy,"HOU",YTIME)/sTWhToMtoe;         
 
 *' * Prices
 
