@@ -81,11 +81,15 @@ QBslMaxmLoad(runCy,YTIME)$TIME(YTIME)..
 
 *' This equation calculates the electricity base load utilizing exponential functions that include the estimated base load,
 *' the baseload corresponding to maximum load factor, and the parameter of baseload correction.
+QElecBaseLoadtmp(runCy,YTIME)$TIME(YTIME)..
+         VElecBaseLoadtmp(runCy,YTIME)
+             =E=
+         exp(iBslCorrection(runCy,YTIME)*(VEstBaseLoad(runCy,YTIME)-VBslMaxmLoad(runCy,YTIME)));
 QElecBaseLoad(runCy,YTIME)$TIME(YTIME)..
          VCorrBaseLoad(runCy,YTIME)
              =E=
-         (1/(1+(iBslCorrection(runCy,YTIME)*(VEstBaseLoad(runCy,YTIME)-VBslMaxmLoad(runCy,YTIME)))))*VEstBaseLoad(runCy,YTIME)
-        +(1-1/(1+(iBslCorrection(runCy,YTIME)*(VEstBaseLoad(runCy,YTIME)-VBslMaxmLoad(runCy,YTIME)))))*VBslMaxmLoad(runCy,YTIME);
+         (1/(1+VElecBaseLoadtmp(runCy,YTIME)))*VEstBaseLoad(runCy,YTIME)
+        +(1-1/(1+VElecBaseLoadtmp(runCy,YTIME)))*VBslMaxmLoad(runCy,YTIME);
 
 *' This equation calculates the total required electricity production as a sum of the electricity peak load minus the corrected base load,
 *' multiplied by the exponential function of the parameter for load curve construction.
@@ -339,10 +343,10 @@ QRenTechMatMult(runCy,PGALL,YTIME)$TIME(YTIME)..
          1$(NOT PGREN(PGALL))
          +
          (
-           1/(1+(
+           1/(1+exp(0.01*(
                  sum(PGRENEF$PGALLtoPGRENEF(PGALL,PGRENEF),
                  sum(PGALL2$(PGALLtoPGRENEF(PGALL2,PGRENEF) $PGREN(PGALL2)),
-                 VElecGenPlanCap(runCy,PGALL2,YTIME-1))/VRenPotSupplyCurve(runCy,PGRENEF,YTIME))))
+                 VElecGenPlanCap(runCy,PGALL2,YTIME-1))/VRenPotSupplyCurve(runCy,PGRENEF,YTIME))-0.6)))
            )$PGREN(PGALL);  
 
 *' The equation calculates a temporary variable which is used to facilitate scaling in the Weibull equation. The scaling is influenced by three main factors:
@@ -425,7 +429,7 @@ QVarCostTechnology(runCy,PGALL,YTIME)$TIME(YTIME)..
 QElecPeakLoads(runCy,YTIME)$TIME(YTIME)..
          VElecPeakLoads(runCy,YTIME) 
          =E= 
-         SQRT(sum(PGALL, VVarCostTechnology(runCy,PGALL,YTIME)));     
+         sum(PGALL, VVarCostTechnology(runCy,PGALL,YTIME));     
 
 *' Compute power plant sorting to decide the plant dispatching. 
 *' This is accomplished by dividing the variable cost by the peak loads.

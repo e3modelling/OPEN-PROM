@@ -13,7 +13,7 @@ endloop;
 model openprom /
 
 *' * Power Generation *
-
+QElecBaseLoadtmp
 qCurrRenPot                        !! vCurrRenPot(runCy,PGRENEF,YTIME)
 QChpElecPlants                     !! VElecCapChpPla(runCy,CHP,YTIME)
 QLambda                            !! VLoadCurveConstr(runCy,YTIME)
@@ -234,8 +234,8 @@ VHourProdCostTechNoCCS.L(runCy,PGALL,HOUR,TT) = VPowerPlantNewEq.L(runCy,PGALL,T
          sum(CCS$CCS_NOCCS(CCS,PGALL), VPowerPlaShrNewEq.L(runCy,CCS,TT)*vHourProdCostTechAfterCCS.L(runCy,CCS,HOUR,TT));
 *VHourProdCostTechNoCCS.SCALE(runCy,PGALL,HOUR,TT)= max(abs(VHourProdCostTechNoCCS.L(runCy,PGALL,HOUR,TT)),1E-20);
 VNewInvDecis.l(allCy,YTIME)=0.1;
-VVarCostTechnology.l(allCy,PGALL,YTIME)=0.1;
-VElecPeakLoads.l(allCy,YTIME)=0.1;
+VVarCostTechnology.l(allCy,PGALL,YTIME)=10000;
+VElecPeakLoads.l(allCy,YTIME)=10000000;
 VNewCapYearly.l(allCy,PGALL,YTIME)=0.1;
 VAvgCapFacRes.l(allCy,PGALL,YTIME)=0.1;
 VPowPlantSorting.l(runCy,PGALL,YTIME)=0.01;
@@ -243,13 +243,13 @@ VPowPlantSorting.l(runCy,PGALL,YTIME)=0.01;
 *VElecCapChpPla.l(runCy,CHP,YTIME) = 1/0.086 * sum(INDDOM,VConsFuel.L(runCy,INDDOM,CHP,YTIME)) * VElecIndPrices.L(runCy,YTIME)/
 *          sum(PGALL$CHPtoEON(CHP,PGALL),iAvailRate(PGALL,YTIME)) /
 *         iUtilRateChpPlants(runCy,CHP,YTIME) /8.76;
-VPowPlantSorting.l(runCy,PGALL,YTIME)=VVarCostTechnology.L(runCy,PGALL,YTIME)/VElecPeakLoads.L(runCy,YTIME);
+*VPowPlantSorting.l(runCy,PGALL,YTIME)=VVarCostTechnology.L(runCy,PGALL,YTIME)/VElecPeakLoads.L(runCy,YTIME);
 VReqElecProd.l(runCy,YTIME) = 0.01;
 *VReqElecProd.l(runCy,YTIME)=sum(hour, sum(CHP,VElecCapChpPla.L(runCy,CHP,YTIME)*exp(-VScalFacPlaDisp.L(runCy,HOUR,YTIME)/ sum(pgall$chptoeon(chp,pgall),VPowPlantSorting.L(runCy,PGALL,YTIME)))));
 *VPowPlantSorting.up(runCy,PGALL,YTIME)=0.001;
 *VPowPlantSorting.scale(runCy,PGALL,YTIME)=1;
 VScalFacPlaDisp.L(runCy,HOUR,YTIME) = 1.e-12;
-VElecDem.l(allCy,YTIME)=0.1;
+VElecDem.l(allCy,YTIME)=10;
 *VHourProdCostTech.lo(runCy,PGALL,HOUR,YTIME)=0.0001;
 *VHourProdCostTechNoCCS.lo(runCy,PGALL,HOUR,YTIME)=0.1;
 VRenTechMatMult.l(allCy,PGALL,YTIME)=0.1;
@@ -398,14 +398,14 @@ VExportsFake.FX(runCy,"NGS",YTIME)$(not An(YTIME)) = iFuelExprts(runCy,"NGS",YTI
 VElecDem.FX(runCy,YTIME)$(not An(YTIME)) =  1/0.086 * ( iFinEneCons(runCy,"ELC",YTIME) + sum(NENSE, iFuelConsPerFueSub(runCy,NENSE,"ELC",YTIME)) + iDistrLosses(runCy,"ELC",YTIME)
                                              + iTotEneBranchCons(runCy,"ELC",YTIME) - (iFuelImports(runCy,"ELC",YTIME)-iFuelExprts(runCy,"ELC",YTIME)));
 
-VCorrBaseLoad.L(runCy,YTIME) = 0.5;
+VCorrBaseLoad.L(runCy,YTIME) = 5;
 VCorrBaseLoad.FX(runCy,YTIME)$(not An(YTIME)) = iPeakBsLoadBy(runCy,"BASELOAD");
 
 VLoadFacDom.FX(runCy,YTIME)$(datay(YTIME)) =
          (sum(INDDOM,VConsFuel.l(runCy,INDDOM,"ELC",YTIME)) + sum(TRANSE, VDemTr.l(runCy,TRANSE,"ELC",YTIME)))/
          (sum(INDDOM,VConsFuel.l(runCy,INDDOM,"ELC",YTIME)/iLoadFacElecDem(INDDOM)) + sum(TRANSE, VDemTr.l(runCy,TRANSE,"ELC",YTIME)/
          iLoadFacElecDem(TRANSE)));
-VElecPeakLoad.L(runCy,YTIME) = 1;
+VElecPeakLoad.L(runCy,YTIME) = 10;
 VElecPeakLoad.FX(runCy,YTIME)$(datay(YTIME)) = VElecDem.l(runCy,YTIME)/(VLoadFacDom.l(runCy,YTIME)*8.76);
 
 VTotElecGenCap.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
@@ -480,7 +480,7 @@ VExportsFake.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
 VFkImpAllFuelsNotNatGas.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
 
 VScalFacPlaDisp.LO(runCy, HOUR, YTIME)=-1;
-VLoadCurveConstr.LO(runCy,YTIME)=0;
+VLoadCurveConstr.LO(runCy,YTIME)=0.0001;
 VLoadCurveConstr.L(runCy,YTIME)=0.21;
 VRenValue.FX(YTIME) = 0 ;
 VTotReqElecProd.fx(runCy,"%fBaseY%")=sum(pgall,VElecProd.L(runCy,pgall,"%fBaseY%"));

@@ -7,11 +7,11 @@
 *' *** Generating an execution profile
 option profile = 1;
 *' *** number of columns that are listed for each variable in the column listing
-option limcol = 300;
+option limcol = 30;
 *' *** number of rows that are listed for each equation in the equation listing
-option limrow = 300;
+option limrow = 30;
 *' *** save a GDX file after solve, containing all computed variables
-option savepoint = 1;
+option savepoint = 0;
 
 *' *** "dollar" ($) commands section: define GAMS flags & code control & compilation-time options
 *' 
@@ -37,16 +37,16 @@ $evalGlobal fPeriodOfYears 1
 
 $evalGlobal fStartHorizon 2010
 $evalGlobal fEndHorizon 2100
-$evalGlobal fEndY 2030
+$evalGlobal fEndY 2018
 $evalGlobal fStartY 2018
 $evalGlobal fBaseY %fStartY% - %fPeriodOfYears%
 
 *** end of dollar commands section, no further flag definitions allowed 
 
 *' *** load input data files
-$ifthen %DevMode% == 0 $call "RScript ./loadMadratData.R DevMode=0"
-$elseif %DevMode% == 1 $call "RScript ./loadMadratData.R DevMode=1"
-$endif
+*$ifthen %DevMode% == 0 $call "RScript ./loadMadratData.R DevMode=0"
+*$elseif %DevMode% == 1 $call "RScript ./loadMadratData.R DevMode=1"
+*$endif
 
 $include sets.gms
 $include declarations.gms

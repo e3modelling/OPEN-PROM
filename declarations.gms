@@ -126,6 +126,7 @@ QLoadFacDom(allCy,YTIME)	               "Compute load factor of entire domestic 
 QElecPeakLoad(allCy,YTIME)	               "Compute elerctricity peak load"		
 QBslMaxmLoad(allCy,YTIME) 	               "Compute baseload corresponding to maximum load"
 QElecBaseLoad(allCy,YTIME)	               "Compute electricity base load"
+QElecBaseLoadtmp(allCy,YTIME)	               "Compute electricity base load"
 QShrcap(allCy,PGALL,YTIME)	               "Compute SHRCAP"	
 QElecGenCap(allCy,PGALL,YTIME)	           "Compute electricity generation capacity"
 QLambda(allCy,YTIME)	                   "Compute Lambda parameter"	
@@ -322,6 +323,7 @@ VProdCostTechPreReplac(allCy,PGALL,YTIME) "Production cost of technology used in
 VEndogScrapIndex(allCy,PGALL,YTIME)	      "Index used for endogenous power plants scrapping (1)"			
 VSensCcs(allCy,YTIME)	                  "Variable that controlls the sensitivity of CCS acceptance (1)"			
 VCorrBaseLoad(allCy,YTIME)	              "Corrected base load (GW)"
+VElecBaseLoadtmp(allCy,YTIME)
 VElecGenPlanCap(allCy,PGALL,YTIME)	      "Electricity generation plants capacity (GW)"	
 VElecGenNoChp(allCy,YTIME)	              "Total electricity generation capacity excluding CHP (GW)"	
 VVarCostTech(allCy,PGALL,YTIME)	          "Variable cost of technology (Euro/KWh)"	

@@ -532,14 +532,14 @@ $include"./iDecomPlants.csv"
 $offdelim
 ;
 
-iPlantDecomSched(allCy,PGALL,YTIME) = iDecomPlants(allCy,PGALL,YTIME);
+iPlantDecomSched(allCy,PGALL,YTIME) = 0;
 
 table iInvPlants(allCy,PGALL,YTIME)	            "Investment Plants (MW)"
 $ondelim
 $include"./iInvPlants.csv"
 $offdelim
 ;
-iDecInvPlantSched(allCy,PGALL,YTIME) = iInvPlants(allCy,PGALL,YTIME);
+iDecInvPlantSched(allCy,PGALL,YTIME) = 0;
 
 table iCummMxmInstRenCap(allCy,PGRENEF,YTIME)	 "Cummulative maximum potential installed Capacity for Renewables (GW)"
 $ondelim
