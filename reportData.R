@@ -71,7 +71,7 @@ var_gdp$variable <- "GDP|PPP"
 var_gdp$unit <- "billion US$2015/yr"
 var_gdp <- select(var_gdp, -data)
 
-var_demtr <- readGDX('./blabla.gdx', 'VDemTr', field = 'l')
+var_demtr <- readGDX('./blabla.gdx', 'VFinDemFuel', field = 'l')
 var_demtr <- as.quitte(var_demtr)
 var_demtr$model <- "OPEN-PROM"
 var_demtr$unit <- "Mtoe"
