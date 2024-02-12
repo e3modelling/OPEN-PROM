@@ -3,8 +3,8 @@ In this tutorial, you can find instructions about automatically creating new iss
 ```
 * FIXME: This is a test issue that was generated automatically
 * author=derevirn
-VExportsFake.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
-VFkImpAllFuelsNotNatGas.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
+VExprtsFakeEneBrnch.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
+VImptsFakeEneBrnch.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
 
 VScalFacPlaDisp.LO(runCy, HOUR, YTIME)=-1;
 VLoadCurveConstr.LO(runCy,YTIME)=0;

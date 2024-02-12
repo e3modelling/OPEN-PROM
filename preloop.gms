@@ -126,18 +126,18 @@ QCostAvgVarChpFuel                    !! VCostAvgVarChpFuel(runCy,CHP,YTIME)
 
 *' * REST OF ENERGY BALANCE SECTORS *
 
-QTotFinEneCons                     !! VFeCons(runCy,EFS,YTIME)
-qTotFinEneConsAll                  !! vTotFinEneConsAll(YTIME)
-QFinNonEneCons                     !! VFNonEnCons(runCy,EFS,YTIME)
-QDistrLosses                       !! VLosses(runCy,EFS,YTIME)
-QTranfOutputDHPlants               !! VTransfOutputDHPlants(runCy,STEAM,YTIME)
+QConsFinEneCountry                     !! VConsFinEneCountry(runCy,EFS,YTIME)
+qConsFinEneAll                  !! vConsFinEneAll(YTIME)
+QConsFinNonEne                     !! VConsFinNonEne(runCy,EFS,YTIME)
+QDistrLosses                       !! VDistrLosses(runCy,EFS,YTIME)
+QOutTransfDhp               !! VOutTransfDhp(runCy,STEAM,YTIME)
 QTransfInputDHPlants               !! VTransfInputDHPlants(runCy,EFS,YTIME)
-QRefCapacity                       !! VRefCapacity(runCy,YTIME)
-QTranfOutputRefineries             !! VTransfOutputRefineries(runCy,EFS,YTIME)
+QCapRef                       !! VCapRef(runCy,YTIME)
+QOutTransfRefSpec             !! VOutTransfRefSpec(runCy,EFS,YTIME)
 QTransfInputRefineries             !! VTransfInputRefineries(runCy,"CRO",YTIME)
 QTransfOutputNuclear               !! VTransfOutputNuclear(runCy,"ELC",YTIME)
 QTransfInNuclear                   !! VTransfInNuclear(runCy,"NUC",YTIME)
-QTransfInPowerPls                  !! VTransfInThermPowPls(runCy,PGEF,YTIME)
+QInpTransfTherm                  !! VInpTransfTherm(runCy,PGEF,YTIME)
 QTransfOutThermPP                  !! VTransfOutThermPP(runCy,TOCTEF,YTIME)
 QTotTransfInput                    !! VTotTransfInput(runCy,EFS,YTIME)
 QTotTransfOutput                   !! VTotTransfOutput(runCy,EFS,YTIME)
@@ -145,10 +145,10 @@ QTransfers                         !! VTransfers(runCy,EFS,YTIME)
 QGrsInlConsNotEneBranch            !! VGrsInlConsNotEneBranch(runCy,EFS,YTIME)
 QGrssInCons                        !! VGrssInCons(runCy,EFS,YTIME)            
 QPrimProd                          !! VPrimProd(runCy,PPRODEF,YTIME)
-QFakeExp                           !! VExportsFake(runCy,EFS,YTIME)
-QFakeImprts                        !! VFkImpAllFuelsNotNatGas(runCy,EFS,YTIME)
+QExprtsFakeEneBrnch                           !! VExprtsFakeEneBrnch(runCy,EFS,YTIME)
+QImptsFakeEneBrnch                        !! VImptsFakeEneBrnch(runCy,EFS,YTIME)
 QNetImports                        !! VNetImports(runCy,EFS,YTIME)
-QEneBrnchEneCons                   !! VEnCons(runCy,EFS,YTIME)
+QConsFiEneSec                   !! VConsFiEneSec(runCy,EFS,YTIME)
 
 
 *' * CO2 SEQUESTRATION COST CURVES *
@@ -199,9 +199,9 @@ VTechCostIntrm.l(allCy,DSBS,rcon,EF,TEA,YTIME) = 0.1;
 VLftPcScrRate.l(allCy,DSBS,EF,TEA,YTIME)= 0.1;
 VTechSort.l(allCy,DSBS,rCon,YTIME) = 0.1;
 VConsFuelNoHeat.l(allCy,DSBS,EF,YTIME)=0.1;
-VRefCapacity.l(allCy,YTIME)=0.1;
-*VFeCons.l(allCy,EF,YTIME) = 000000.1;
-VTransfOutputRefineries.l(allCy,EFS,YTIME)=0.1;
+VCapRef.l(allCy,YTIME)=0.1;
+*VConsFinEneCountry.l(allCy,EF,YTIME) = 000000.1;
+VOutTransfRefSpec.l(allCy,EFS,YTIME)=0.1;
 VGrsInlConsNotEneBranch.l(allCy,EFS,YTIME)=0.1;
 VElecConsAll.l(allCy,DSBS,YTIME)=0.1;
 VLoadFacDom.l(allCy,YTIME)=0.1;
@@ -374,13 +374,13 @@ VConsSub.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $(not An(ytime))) =
 
 
 
-VFeCons.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iFinEneCons(runCy,EFS,YTIME);
+VConsFinEneCountry.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iFinEneCons(runCy,EFS,YTIME);
 iFinEneConsPrevYear(runCy,EFS,YTIME)$(not An(YTIME)) = iFinEneCons(runCy,EFS,YTIME);
-VLosses.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iDistrLosses(runCy,EFS,YTIME);
+VDistrLosses.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iDistrLosses(runCy,EFS,YTIME);
 
 VTransfOutThermPP.FX(runCy,EFS,YTIME)$(not TOCTEF(EFS)) = 0;
-VRefCapacity.FX(runCy,YTIME)$(not An(YTIME)) = iRefCapacity(runCy,YTIME);
-VTransfOutputRefineries.FX(runCy,EFS,YTIME)$(EFtoEFA(EFS,"LQD") $(not An(YTIME))) = iTransfOutputRef(runCy,EFS,YTIME);
+VCapRef.FX(runCy,YTIME)$(not An(YTIME)) = iRefCapacity(runCy,YTIME);
+VOutTransfRefSpec.FX(runCy,EFS,YTIME)$(EFtoEFA(EFS,"LQD") $(not An(YTIME))) = iTransfOutputRef(runCy,EFS,YTIME);
 VTransfInputRefineries.FX(runCy,"CRO",YTIME)$(not An(YTIME)) = iTransfInputRef(runCy,"CRO",YTIME);
 
 VGrsInlConsNotEneBranch.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iGrossInConsNoEneBra(runCy,EFS,YTIME);
@@ -389,11 +389,11 @@ VGrssInCons.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iGrosInlCons(runCy,EFS,YTIME);
 VTransfers.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iFeedTransfr(runCy,EFS,YTIME);
 
 VPrimProd.FX(runCy,PPRODEF,YTIME)$(not An(YTIME)) = iFuelPriPro(runCy,PPRODEF,YTIME);
-VEnCons.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iTotEneBranchCons(runCy,EFS,YTIME);
+VConsFiEneSec.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iTotEneBranchCons(runCy,EFS,YTIME);
 
-VExportsFake.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iFuelExprts(runCy,EFS,YTIME);
-VFkImpAllFuelsNotNatGas.FX(runCy,"NGS",YTIME)$(not An(YTIME)) = iFuelImports(runCy,"NGS",YTIME);
-VExportsFake.FX(runCy,"NGS",YTIME)$(not An(YTIME)) = iFuelExprts(runCy,"NGS",YTIME);
+VExprtsFakeEneBrnch.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iFuelExprts(runCy,EFS,YTIME);
+VImptsFakeEneBrnch.FX(runCy,"NGS",YTIME)$(not An(YTIME)) = iFuelImports(runCy,"NGS",YTIME);
+VExprtsFakeEneBrnch.FX(runCy,"NGS",YTIME)$(not An(YTIME)) = iFuelExprts(runCy,"NGS",YTIME);
 
 VElecDem.FX(runCy,YTIME)$(not An(YTIME)) =  1/0.086 * ( iFinEneCons(runCy,"ELC",YTIME) + sum(NENSE, iFuelConsPerFueSub(runCy,NENSE,"ELC",YTIME)) + iDistrLosses(runCy,"ELC",YTIME)
                                              + iTotEneBranchCons(runCy,"ELC",YTIME) - (iFuelImports(runCy,"ELC",YTIME)-iFuelExprts(runCy,"ELC",YTIME)));
@@ -470,14 +470,14 @@ VCumCO2Capt.FX(runCy,YTIME)$(not an(YTIME)) = 0 ;
 *VCO2SeqCsts.FX(runCy,YTIME) = iElastCO2Seq(runCy,"mc_a") *iElastCO2Seq(runCy,"mc_b");
 
 VFinDemFuel.FX(runCy,TRANSE,EF,YTIME)$(not SECTTECH(TRANSE,EF)) = 0;
-VTransfOutputDHPlants.FX(runCy,EFS,YTIME)$(not STEAM(EFS)) = 0;
-VTransfOutputRefineries.FX(runCy,EFS,YTIME)$(not EFtoEFA(EFS,"LQD")) = 0;
+VOutTransfDhp.FX(runCy,EFS,YTIME)$(not STEAM(EFS)) = 0;
+VOutTransfRefSpec.FX(runCy,EFS,YTIME)$(not EFtoEFA(EFS,"LQD")) = 0;
 VTransfInputRefineries.FX(runCy,EFS,YTIME)$(not sameas("CRO",EFS)) = 0;
 VTransfOutputNuclear.FX(runCy,EFS,YTIME)$(not sameas("ELC",EFS)) = 0;
 VTransfInNuclear.FX(runCy,EFS,YTIME)$(not sameas("NUC",EFS)) = 0;
-VTransfInThermPowPls.FX(runCy,EFS,YTIME)$(not PGEF(EFS)) = 0;
-VExportsFake.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
-VFkImpAllFuelsNotNatGas.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
+VInpTransfTherm.FX(runCy,EFS,YTIME)$(not PGEF(EFS)) = 0;
+VExprtsFakeEneBrnch.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
+VImptsFakeEneBrnch.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
 
 VScalFacPlaDisp.LO(runCy, HOUR, YTIME)=-1;
 VLoadCurveConstr.LO(runCy,YTIME)=0;
