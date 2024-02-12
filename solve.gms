@@ -10,7 +10,7 @@
 * Fix values of variables for the next time step
 VNumVeh.FX(allCy,YTIME)$TIME(YTIME) = VNumVeh.L(allCy,YTIME)$TIME(YTIME);
 VMEPcGdp.FX(allCy,YTIME)$TIME(YTIME) = VMEPcGdp.L(allCy,YTIME)$TIME(YTIME);
-VFuelPriceAvg.FX(allCy,DSBS,YTIME)$TIME(YTIME) = VFuelPriceAvg.L(allCy,DSBS,YTIME)$TIME(YTIME);
+VAvgFuelPriSub.FX(allCy,DSBS,YTIME)$TIME(YTIME) = VAvgFuelPriSub.L(allCy,DSBS,YTIME)$TIME(YTIME);
 VScrRate.FX(allCy,YTIME)$TIME(YTIME) = VScrRate.L(allCy,YTIME)$TIME(YTIME);
 VActivGoodsTransp.FX(allCy,TRANSE,YTIME)$TIME(YTIME) = VActivGoodsTransp.L(allCy,TRANSE,YTIME)$TIME(YTIME);
 VConsSpecFuelTech.FX(allCy,TRANSE,TTECH,TEA,EF,YTIME)$TIME(YTIME) = VConsSpecFuelTech.L(allCy,TRANSE,TTECH,TEA,EF,YTIME)$TIME(YTIME);

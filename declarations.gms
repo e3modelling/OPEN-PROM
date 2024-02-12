@@ -261,9 +261,9 @@ qHouseExpEne(allCy,YTIME)	               "Compute households expenditures on ene
 QFuelPriSubCarVal(allCy,SBS,EF,YTIME)  "Compute fuel prices per subsector and fuel, separate carbon value in each sector"
 
 *' *** Prices
-QFuelPriSepCarbon(allCy,SBS,EF,YTIME)	"Compute fuel prices per subsector and fuel, separate carbon value in each sector"	
+QFuelPriSepCarbonWght(allCy,SBS,EF,YTIME)	"Compute fuel prices per subsector and fuel, separate carbon value in each sector"	
 QAvgFuelPriSub(allCy,DSBS,YTIME)	    "Compute average fuel price per subsector" 	
-QElecPriIndResCons(allCy,ESET,YTIME)	"Compute electricity price in Industrial and Residential Consumers"	
+QElecPriIndResConsu(allCy,ESET,YTIME)	"Compute electricity price in Industrial and Residential Consumers"	
 *' *** Miscellaneous
 qDummyObj                                     "Define dummy objective function"
 ;
@@ -345,7 +345,7 @@ VScrap(allCy,YTIME)                   "Scrapped passenger cars (million vehicles
 VTrnspActiv(allCy,TRANSE,YTIME)       "Passenger transport acitivity (1)"
                                          !! - Activity for passenger cars is measured in (000)km
                                          !! - Activity for all other passenger transportation modes is measured in Gpkm
-VFuelPriceAvg(allCy,DSBS,YTIME)           "Average fuel prices per subsector (k$2015/toe)"
+VAvgFuelPriSub(allCy,DSBS,YTIME)           "Average fuel prices per subsector (k$2015/toe)"
 VScrRate(allCy,YTIME)                  "Scrapping rate of passenger cars (1)"
 VElecConsAll(allCy,DSBS,YTIME)         "Electricity demand per final sector (Mtoe)"
 VConsFuelNoHeat(allCy,DSBS,EF,YTIME)         "Consumption of fuels in each demand subsector, excluding heat from heatpumps (Mtoe)"
@@ -415,8 +415,8 @@ VImptsFakeEneBrnch(allCy,EFS,YTIME)             	"Fake Imports for all fuels exc
 VNetImports(allCy,EFS,YTIME)	                        "Net Imports (Mtoe)"
 
 *' *** Prices Variables
-VElecPriInduResConsu(allCy,ESET,YTIME)	                "Electricity price to Industrial and Residential Consumers (Euro2005/KWh)"
-VFuelPriMultWgt(allCy,SBS,EF,YTIME)	                    "Fuel prices per subsector and fuel  mutliplied by weights (kdollars2005/toe)"	
+VElecPriIndResConsu(allCy,ESET,YTIME)	                "Electricity price to Industrial and Residential Consumers (Euro2005/KWh)"
+VFuelPriSepCarbonWght(allCy,SBS,EF,YTIME)	                    "Fuel prices per subsector and fuel  mutliplied by weights (kdollars2005/toe)"	
 VAvgPowerGenLongTrm(allCy,ESET,YTIME)	                "Long-term average power generation cost (Euro2005/kWh)"	 
 VFuelPriSubNoCarb(allCy,SBS,EF,YTIME)	                "Fuel prices per subsector and fuel  without carbon value (kdollars2005/toe)"	
 *' *** CO2 SEQUESTRATION COST CURVES VARIABLES
