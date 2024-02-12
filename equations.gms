@@ -271,13 +271,13 @@ QGapPowerGenCap(runCy,YTIME)$TIME(YTIME)..
  (        (  VElecGenNoChp(runCy,YTIME) - VElecGenNoChp(runCy,YTIME-1) + sum(PGALL,VElecGenPlanCap(runCy,PGALL,YTIME-1) * 
  (1 - VEndogScrapIndex(runCy,PGALL,YTIME))) +
           sum(PGALL, (iPlantDecomSched(runCy,PGALL,YTIME)-iDecInvPlantSched(runCy,PGALL,YTIME))*iAvailRate(PGALL,YTIME))
-          + Sum(PGALL$PGSCRN(PGALL), (VCapGenPlant(runCy,PGALL,YTIME-1)-iPlantDecomSched(runCy,PGALL,YTIME))/
+          + Sum(PGALL$PGSCRN(PGALL), (VGenPlantCap(runCy,PGALL,YTIME-1)-iPlantDecomSched(runCy,PGALL,YTIME))/
           iTechLftPlaType(runCy,PGALL))
        )
   + 0 + SQRT( SQR(       (  VElecGenNoChp(runCy,YTIME) - VElecGenNoChp(runCy,YTIME-1) +
         sum(PGALL,VElecGenPlanCap(runCy,PGALL,YTIME-1) * (1 - VEndogScrapIndex(runCy,PGALL,YTIME))) +
           sum(PGALL, (iPlantDecomSched(runCy,PGALL,YTIME)-iDecInvPlantSched(runCy,PGALL,YTIME))*iAvailRate(PGALL,YTIME))
-          + Sum(PGALL$PGSCRN(PGALL), (VCapGenPlant(runCy,PGALL,YTIME-1)-iPlantDecomSched(runCy,PGALL,YTIME))/
+          + Sum(PGALL$PGSCRN(PGALL), (VGenPlantCap(runCy,PGALL,YTIME-1)-iPlantDecomSched(runCy,PGALL,YTIME))/
           iTechLftPlaType(runCy,PGALL))
        ) -0) + SQR(1e-10) ) )/2;
 
@@ -391,8 +391,8 @@ QPowPlaShaNewEquip(runCy,PGALL,YTIME)$(TIME(YTIME)) ..
 *' This equation calculates the variable representing the electricity generation capacity for a specific power plant in a given country
 *' and time period. The calculation takes into account various factors related to new investments, decommissioning, and technology-specific parameters.
 *' The equation aims to model the evolution of electricity generation capacity over time, considering new investments, decommissioning, and technology-specific parameters.
-QCapGenPlant(runCy,PGALL,YTIME)$TIME(YTIME)..
-         VCapGenPlant(runCy,PGALL,YTIME)
+QGenPlantCap(runCy,PGALL,YTIME)$TIME(YTIME)..
+         VGenPlantCap(runCy,PGALL,YTIME)
              =E=
          (VElecGenPlanCap(runCy,PGALL,YTIME-1)*VEndogScrapIndex(runCy,PGALL,YTIME-1)
           +(VPowPlaShaNewEquip(runCy,PGALL,YTIME) * VGapPowerGenCap(runCy,YTIME))$( (not CCS(PGALL)) AND (not NOCCS(PGALL)))
@@ -401,7 +401,7 @@ QCapGenPlant(runCy,PGALL,YTIME)$TIME(YTIME)..
           + iDecInvPlantSched(runCy,PGALL,YTIME) * iAvailRate(PGALL,YTIME)
           - iPlantDecomSched(runCy,PGALL,YTIME) * iAvailRate(PGALL,YTIME)
          )
-         - ((VCapGenPlant(runCy,PGALL,YTIME-1)-iPlantDecomSched(runCy,PGALL,YTIME-1))* 
+         - ((VGenPlantCap(runCy,PGALL,YTIME-1)-iPlantDecomSched(runCy,PGALL,YTIME-1))* 
          iAvailRate(PGALL,YTIME)*(1/iTechLftPlaType(runCy,PGALL)))$PGSCRN(PGALL);
 
 *' This equation calculates the variable representing the planned electricity generation capacity for a specific power plant  in a given country
@@ -411,7 +411,7 @@ QCapGenPlant(runCy,PGALL,YTIME)$TIME(YTIME)..
 QElecGenCap(runCy,PGALL,YTIME)$TIME(YTIME)..
          VElecGenPlanCap(runCy,PGALL,YTIME)
              =E=
-         ( VCapGenPlant(runCy,PGALL,YTIME) + 1e-6 + SQRT( SQR(VCapGenPlant(runCy,PGALL,YTIME)-1e-6) + SQR(1e-4) ) )/2;
+         ( VGenPlantCap(runCy,PGALL,YTIME) + 1e-6 + SQRT( SQR(VGenPlantCap(runCy,PGALL,YTIME)-1e-6) + SQR(1e-4) ) )/2;
 
 *' Compute the variable cost of each power plant technology for every region,
 *' by utilizing the maturity factor related to plant dispatching.
@@ -467,19 +467,19 @@ VNewCapYearly(runCy,PGALL,YTIME-6)+VNewCapYearly(runCy,PGALL,YTIME-7));
 *' This equation calculates the variable representing the overall capacity for a specific power plant in a given country and time period .
 *' The overall capacity is a composite measure that includes the existing capacity for non-renewable power plants and the expected capacity for renewable power plants based
 *' on their average capacity factor.
-QOverallCap(runCy,PGALL,YTIME)$TIME(YTIME)..
-     VOverallCap(runCy,PGALL,YTIME)
+QCapOverall(runCy,PGALL,YTIME)$TIME(YTIME)..
+     VCapOverall(runCy,PGALL,YTIME)
      =E=
 VElecGenPlanCap(runCy,pgall,ytime)$ (not PGREN(PGALL))
 +VAvgCapFacRes(runCy,PGALL,YTIME-1)*(VNewCapYearly(runCy,PGALL,YTIME)/iAvailRate(PGALL,YTIME)+
-VOverallCap(runCy,PGALL,YTIME-1)
+VCapOverall(runCy,PGALL,YTIME-1)
 /VAvgCapFacRes(runCy,PGALL,YTIME-1))$PGREN(PGALL);
 
 *' This equation calculates the scaling factor for plant dispatching in a specific country , hour of the day,
 *' and time period . The scaling factor for determining the dispatch order of different power plants during a particular hour.
 QScalFacPlantDispatch(runCy,HOUR,YTIME)$TIME(YTIME)..
          sum(PGALL,
-                 (VOverallCap(runCy,PGALL,YTIME)+
+                 (VCapOverall(runCy,PGALL,YTIME)+
                  sum(CHP$CHPtoEON(CHP,PGALL),VCapElecChp(runCy,CHP,YTIME)))*
                  exp(-VScalFacPlaDisp(runCy,HOUR,YTIME)/VSortPlantDispatch(runCy,PGALL,YTIME))
                  )
@@ -546,8 +546,8 @@ qSecContrTotChpProd(runCy,INDDOM,CHP,YTIME)$(TIME(YTIME) $SECTTECH(INDDOM,CHP)).
 *' ratio of the fuel consumption by the specified industrial sector for CHP technology to the total fuel consumption for all industrial sectors and CHP
 *' technologies. This ratio is then multiplied by the difference between total electricity demand and the sum of electricity production from all power
 *' generation plants. The result represents the portion of electricity production from CHP plants attributed to the specified CHP technology.
-QProdElecChp(runCy,CHP,YTIME)$TIME(YTIME)..
-         VProdElecChp(runCy,CHP,YTIME)
+QElecChpPlants(runCy,CHP,YTIME)$TIME(YTIME)..
+         VElecChpPlants(runCy,CHP,YTIME)
                  =E=
         sum(INDDOM,VConsFuel(runCy,INDDOM,CHP,YTIME)) / SUM(chp2,sum(INDDOM,VConsFuel(runCy,INDDOM,CHP2,YTIME)))*
         (VElecDem(runCy,YTIME) - SUM(PGALL,VProdElecPlantsCntr(runCy,PGALL,YTIME)));
@@ -670,7 +670,7 @@ QCostPowGenAvgLng(runCy,ESET,YTIME)$TIME(YTIME)..
          SUM(PGALL, VProdElecPlantsCntr(runCy,PGALL,YTIME)*VLngCostPowGenTechNoCp(runCy,PGALL,ESET,YTIME))
 
         +
-         sum(CHP, VAvgElcProCHP(runCy,CHP,YTIME)*VProdElecChp(runCy,CHP,YTIME))
+         sum(CHP, VAvgElcProCHP(runCy,CHP,YTIME)*VElecChpPlants(runCy,CHP,YTIME))
          )
 /VElecDem(runCy,YTIME); 
 
@@ -710,7 +710,7 @@ QLonPowGenCostNoClimPol(runCy,ESET,YTIME)$TIME(YTIME)..
          SUM(PGALL, (VProdElecPlantsCntr(runCy,PGALL,YTIME))*VLonAvgPowGenCostNoClimPol(runCy,PGALL,ESET,YTIME))
 
         +
-         sum(CHP, VAvgElcProCHP(runCy,CHP,YTIME)*VProdElecChp(runCy,CHP,YTIME))
+         sum(CHP, VAvgElcProCHP(runCy,CHP,YTIME)*VElecChpPlants(runCy,CHP,YTIME))
          )
 /(VElecDem(runCy,YTIME));  
 
@@ -756,7 +756,7 @@ qCostPowGenAvgShrt(runCy,ESET,YTIME)$TIME(YTIME)..
                  *sTWhToMtoe/iPlantEffByType(runCy,PGALL,YTIME)))
         ))
         +
-         sum(CHP, VAvgVarProdCostCHP(runCy,CHP,YTIME)*VProdElecChp(runCy,CHP,YTIME))
+         sum(CHP, VAvgVarProdCostCHP(runCy,CHP,YTIME)*VElecChpPlants(runCy,CHP,YTIME))
          )
          /VElecDem(runCy,YTIME);
 
@@ -1444,7 +1444,7 @@ QTransfInPowerPls(runCy,PGEF,YTIME)$TIME(YTIME)..
         sum(PGALL$(PGALLtoEF(PGALL,PGEF)$PGGEO(PGALL)),
              VProdElecPlantsCntr(runCy,PGALL,YTIME) * sTWhToMtoe) 
         +
-        sum(CHP$CHPtoEF(CHP,PGEF),  sum(INDDOM,VConsFuel(runCy,INDDOM,CHP,YTIME))+sTWhToMtoe*VProdElecChp(runCy,CHP,YTIME))/(0.8+0.1*(ord(YTIME)-16)/32);
+        sum(CHP$CHPtoEF(CHP,PGEF),  sum(INDDOM,VConsFuel(runCy,INDDOM,CHP,YTIME))+sTWhToMtoe*VElecChpPlants(runCy,CHP,YTIME))/(0.8+0.1*(ord(YTIME)-16)/32);
 
 *' The equation calculates the transformation output from thermal power stations for a specific energy branch
 *' in a given scenario and year. The result is computed based on the following conditions: 
@@ -1460,7 +1460,7 @@ QTransfOutThermPP(runCy,TOCTEF,YTIME)$TIME(YTIME)..
         (
              sum(PGALL$(not PGNUCL(PGALL)),VProdElecPlantsCntr(runCy,PGALL,YTIME)) * sTWhToMtoe
              +
-             sum(CHP,VProdElecChp(runCy,CHP,YTIME)*sTWhToMtoe)
+             sum(CHP,VElecChpPlants(runCy,CHP,YTIME)*sTWhToMtoe)
          )$ELCEF(TOCTEF)
         +
         (                                                                                                         

@@ -48,21 +48,21 @@ QRenTechMatMult                    !! VRenTechMatMult(runCy,PGALL,YTIME)
 QScalWeibullSum                    !! VScalWeibullSum(runCy,PGALL,YTIME)
 QNewInvDecis                       !! VNewInvDecis(runCy,YTIME)
 QPowPlaShaNewEquip                 !! VPowPlaShaNewEquip(runCy,PGALL,YTIME)
-QCapGenPlant                   !! VCapGenPlant(runCy,PGALL,YTIME)
+QGenPlantCap                   !! VGenPlantCap(runCy,PGALL,YTIME)
 QElecGenCap                        !! VElecGenPlanCap(runCy,PGALL,YTIME)
 QVarCostTechnology                 !! VVarCostTechnology(runCy,PGALL,YTIME)
 QElecPeakLoads                     !! VElecPeakLoads(runCy,YTIME) 
 QSortPlantDispatch                    !! VSortPlantDispatch(runCy,PGALL,YTIME)
 QNewCapYearly                      !! VNewCapYearly(runCy,PGALL,YTIME)
 QAvgCapFacRes                      !! VAvgCapFacRes(runCy,PGALL,YTIME)
-QOverallCap                        !! VOverallCap(runCy,PGALL,YTIME)
+QCapOverall                        !! VCapOverall(runCy,PGALL,YTIME)
 QScalFacPlantDispatch              !! VScalFacPlaDisp
 QElecChpPlants                     !! VElecChpPlants(runCy,YTIME) 
 QNonChpElecProd                    !! VNonChpElecProd(runCy,YTIME) 
 QReqElecProd                       !! VReqElecProd(runCy,YTIME) 
 QProdElecPlantsCntr              !! VProdElecPlantsCntr(runCy,PGALL,YTIME)
 qSecContrTotChpProd                !! vSecContrTotChpProd(runCy,INDDOM,CHP,YTIME)
-QProdElecChp                 !! VProdElecChp(runCy,CHP,YTIME)
+QElecChpPlants                 !! VElecChpPlants(runCy,CHP,YTIME)
 qProdGrossResShare             !! vProdGrossResShare(runCy,YTIME) 
 QLngCostPowGenTechNoCp             !! VLngCostPowGenTechNoCp(runCy,PGALL,ESET,YTIME)
 qLonMnmpowGenCost                  !! vLonMnmpowGenCost(runCy,PGALL,YTIME)
@@ -239,7 +239,7 @@ VElecPeakLoads.l(allCy,YTIME)=0.1;
 VNewCapYearly.l(allCy,PGALL,YTIME)=0.1;
 VAvgCapFacRes.l(allCy,PGALL,YTIME)=0.1;
 VSortPlantDispatch.l(runCy,PGALL,YTIME)=0.01;
-*VOverallCap.scale(allCy,PGALL,YTIME)=1;
+*VCapOverall.scale(allCy,PGALL,YTIME)=1;
 *VCapElecChp.l(runCy,CHP,YTIME) = 1/0.086 * sum(INDDOM,VConsFuel.L(runCy,INDDOM,CHP,YTIME)) * VElecIndPrices.L(runCy,YTIME)/
 *          sum(PGALL$CHPtoEON(CHP,PGALL),iAvailRate(PGALL,YTIME)) /
 *         iUtilRateChpPlants(runCy,CHP,YTIME) /8.76;
@@ -423,8 +423,8 @@ VShareNewTechNoCcs.FX(runCy,PGALL,YTIME)$(AN(YTIME) $(NOT NOCCS(PGALL)) )=0;
 VNewInvDecis.FX(runCy,YTIME)$(NOT AN(YTIME))=1;
 
 VElecGenPlanCap.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = iInstCapPast(runCy,PGALL,YTIME);
-VCapGenPlant.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  iInstCapPast(runCy,PGALL,YTIME);
-VOverallCap.FX(runCy,PGALL,YTIME)$TFIRST(YTIME) =  iInstCapPast(runCy,PGALL,YTIME)$TFIRST(YTIME);
+VGenPlantCap.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  iInstCapPast(runCy,PGALL,YTIME);
+VCapOverall.FX(runCy,PGALL,YTIME)$TFIRST(YTIME) =  iInstCapPast(runCy,PGALL,YTIME)$TFIRST(YTIME);
 
 VNewCapYearly.FX(runCy,PGALL,"2011")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2011")- iInstCapPast(runCy,PGALL,"2010") +1E-10;
 VNewCapYearly.FX(runCy,PGALL,"2012")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2012")- iInstCapPast(runCy,PGALL,"2011") +1E-10;
