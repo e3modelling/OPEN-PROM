@@ -249,9 +249,9 @@ QNetImports(allCy,EFS,YTIME)	             "Compute net imports"
 QConsFiEneSec(allCy,EFS,YTIME)	         "Compute energy branch final consumption"
 
 *' *** CO2 SEQUESTRATION COST CURVES EQUATIONS
-QCO2ElcHrg(allCy,YTIME)	                     "Compute CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
-QCumCO2Capt(allCy,YTIME)	                 "Compute cumulative CO2 captured (Mtn of CO2)"
-QWghtTrnstLinToExpo(allCy,YTIME)	         "Transtition weight for shifting from linear to exponential CO2 sequestration cost curve"
+QCapCo2ElecHydr(allCy,YTIME)	                     "Compute CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
+QCaptCummCo2(allCy,YTIME)	                 "Compute cumulative CO2 captured (Mtn of CO2)"
+QTrnsWghtLinToExp(allCy,YTIME)	         "Transtition weight for shifting from linear to exponential CO2 sequestration cost curve"
 QCstCO2SeqCsts(allCy,YTIME)	                 "Compute cost curve for CO2 sequestration costs" 	
 
 *' *** Emissions Constraints Equations
@@ -420,10 +420,10 @@ VFuelPriMultWgt(allCy,SBS,EF,YTIME)	                    "Fuel prices per subsect
 VAvgPowerGenLongTrm(allCy,ESET,YTIME)	                "Long-term average power generation cost (Euro2005/kWh)"	 
 VFuelPriSubNoCarb(allCy,SBS,EF,YTIME)	                "Fuel prices per subsector and fuel  without carbon value (kdollars2005/toe)"	
 *' *** CO2 SEQUESTRATION COST CURVES VARIABLES
-VCO2ElcHrgProd(allCy,YTIME)	                            "CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
-VCumCO2Capt(allCy,YTIME)	                            "Cumulative CO2 captured (Mtn CO2)"		
-VWghtTrnstLnrToExpo(allCy,YTIME)	                    "Weight for transtition from linear CO2 sequestration cost curve to exponential (1)"
-VCO2SeqCsts(allCy,YTIME)	                            "Cost curve for CO2 sequestration costs (Euro/tn of CO2 sequestrated)"
+VCapCo2ElecHydr(allCy,YTIME)	                            "CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
+VCaptCummCo2(allCy,YTIME)	                            "Cumulative CO2 captured (Mtn CO2)"		
+VTrnsWghtLinToExp(allCy,YTIME)	                    "Weight for transtition from linear CO2 sequestration cost curve to exponential (1)"
+VCstCO2SeqCsts(allCy,YTIME)	                            "Cost curve for CO2 sequestration costs (Euro/tn of CO2 sequestrated)"
 
 *' *** Emissions Constraints Variables
 vTotCo2AllCoun(YTIME)	                                "Total CO2eq GHG emissions in all countries (1)"
