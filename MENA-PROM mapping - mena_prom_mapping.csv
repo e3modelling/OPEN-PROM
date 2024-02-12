@@ -213,7 +213,7 @@ Equation,EQPOTREN,qCurrRenPot,Compute current renewable potential ,"CYall,PGRENE
 Equation,EQPOTRENMAXC,QMaxmAllowRenPotent,Compute maximum allowed renewable potential ,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
 Equation,EQPOTRENMINC,QMnmAllowRenPot,Compute minimum allowed renewable potential ,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
 Equation,EQPOTRENT,QRenPotSupplyCurve,Compute renewable potential supply curve,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
-Equation,EQPP,QFuelPriSubSepCarbVal,"Compute fuel prices per subsector and fuel, separate carbon value in each sector","CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",POWER GENERATION SECTOR
+Equation,EQPP,QFuelPriSubCarVal,"Compute fuel prices per subsector and fuel, separate carbon value in each sector","CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",POWER GENERATION SECTOR
 Equation,EQPPA,QAvgFuelPriSub,Compute average fuel price per subsector ,"CYall,DSBS,YTIME","allCy,DSBS,YTIME",PRICES EQUATIONS
 Equation,EQPPROD,QPrimProd,Compute primary production,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
 Equation,EQPPSU,QFuePriSubChp,Compute fuel prices per subsector and fuel especially for chp plants,"(CYall,DSBS,EF,TEA,YTIME)","allCy,DSBS,EF,TEA,YTIME",Variable prices
@@ -374,7 +374,7 @@ Variable,POTRENMAXC,VMaxmAllowRenPotent,Maximum allowed renewable potential (GW)
 Parameter,POTRENMIN,iMinRenPotential,Minimum renewable potential (GW),"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",Power Generation Parameters
 Variable,POTRENMINC,VMnmAllowRenPot,Minimum allowed renewable potential (GW),"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
 Variable,POTRENT,VRenPotSupplyCurve,Renewable potential supply curve,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
-Variable,PP,VFuelPriceSub,Fuel prices per subsector and fuel (kUS$2005/toe),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",PRICES
+Variable,PP,VFuelPriSubCarVal,Fuel prices per subsector and fuel (kUS$2005/toe),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",PRICES
 Variable,PP_NOCV,VFuelPriSubNoCarb,Fuel prices per subsector and fuel  without carbon value (kdollars2005/toe),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",Prices
 Variable,PPA,VFuelPriceAvg,Average fuel prices per subsector (kUS$2005/toe),"CYall,DSBS,YTIME","allCy,TRANSE,YTIME",PRICES
 Variable,PPROD,VPrimProd,Primary Production (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",

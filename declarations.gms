@@ -258,7 +258,7 @@ QCstCO2SeqCsts(allCy,YTIME)	                 "Compute cost curve for CO2 sequest
 qTotCo2AllCoun(YTIME)	                   "Compute total CO2eq GHG emissions in all countries"
 QTotGhgEmisAllCountrNap(NAP,YTIME)	       "Compute total CO2eq GHG emissions in all countries per NAP sector"	
 qHouseExpEne(allCy,YTIME)	               "Compute households expenditures on energy"
-QFuelPriSubSepCarbVal(allCy,SBS,EF,YTIME)  "Compute fuel prices per subsector and fuel, separate carbon value in each sector"
+QFuelPriSubCarVal(allCy,SBS,EF,YTIME)  "Compute fuel prices per subsector and fuel, separate carbon value in each sector"
 
 *' *** Prices
 QFuelPriSepCarbon(allCy,SBS,EF,YTIME)	"Compute fuel prices per subsector and fuel, separate carbon value in each sector"	
@@ -377,7 +377,7 @@ VDemSub(allCy,DSBS,YTIME)              "Total final demand (of substitutable fue
 VElecIndPrices(allCy,YTIME)            "Electricity index - a function of industry price (1)"
 VElecConsHeatPla(allCy,DSBS,YTIME)     "Electricity consumed in heatpump plants (Mtoe)"
 VElecIndPricesEst(allCy,YTIME)         "Electricity index - a function of industry price - Estimate (1)"
-VFuelPriceSub(allCy,SBS,EF,YTIME)      "Fuel prices per subsector and fuel (k$2015/toe)"
+VFuelPriSubCarVal(allCy,SBS,EF,YTIME)      "Fuel prices per subsector and fuel (k$2015/toe)"
 VFuePriSubChp(allCy,DSBS,EF,TEA,YTIME) "Fuel prices per subsector and fuel for CHP plants (kUS$2005/toe)"
 VCostElecProdChp(allCy,DSBS,CHP,YTIME)                  "Electricity production cost per CHP plant and demand sector (Euro/KWh)"
 VTechCost(allCy,DSBS,rCon,EF,TEA,YTIME)                 "Technology cost (Keuro/toe)"
