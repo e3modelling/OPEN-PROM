@@ -13,12 +13,12 @@ Parameter,APRICE,-,"Alpha' Parameter, linking International Prices with Consumer
 Parameter,APricePRN,,Parameters linking world prices to domestic prices in equations (after 2005),"SBS,EF,YTIME",,Parameters for data transfering
 Variable,AVCHPCOST,VAvgElcProCHP,Average Electricity production cost per CHP plant (Euro/KWh),"CYall,CHP,YTIME","allCy,CHP,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,AVCHPVCOST,VAvgVarProdCostCHP,"""Average variable including fuel electricity production cost per CHP plant (Euro/KWh)","CYall,CHP,YTIME","allCy,CHP,YTIME",
-Variable,AVERAV,VAvgCapFacRes,"The average capacity factor of RES, availability of RES increases over the years, but not all their capacity can produce electricity at such high availabilities","CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
-Variable,BASEEST,VEstBaseLoadSec,Estimated base load (GW),"CYall,YTIME","allCy,YTIME",
-Variable,BASELOAD,VBaseLoadElecExp,Corrected base load (GW),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Variable,AVERAV,VCapAvgFacRes,"The average capacity factor of RES, availability of RES increases over the years, but not all their capacity can produce electricity at such high availabilities","CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
+Variable,BASEEST,VLoadBaseEstSec,Estimated base load (GW),"CYall,YTIME","allCy,YTIME",
+Variable,BASELOAD,VLoadBaseElecExp,Corrected base load (GW),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Parameter,BOILEFF,iBoiEffChp,Boiler efficiency (typical) used in adjusting CHP efficiency (),"CYall,CHP,YTIME","allCy,CHP,YTIME",Power Generation Parameters
-Variable,CAPACITY,VElecGenPlanCap,Electricity generation plants capacity (GW),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
-Variable,CAPACITY2,VNewCapYearly,The new capacity added every year (MW),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
+Variable,CAPACITY,VCapGenPlannedPlant,Electricity generation plants capacity (GW),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
+Variable,CAPACITY2,VCapGenNewResPlant,The new capacity added every year (MW),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Variable,capall,VCapOverall,Overall Capacity (MW),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Parameter,CAPCOST,iCapCostTech,"""Capital Cost of technology (various)""
                                                  !! - For transport is expressed in kEuro05 per vehicle
@@ -38,7 +38,7 @@ Parameter,CHPAVAIL,iAvailRateChp,Availability rate of CHP Plants (),"CYall,DSBS,
 Variable,CHPCAPAC,VCapElecChp,Capacity of CHP Plants (GW),"CYall,CHP,YTIME","allCy,CHP,YTIME",POWER GENERATION SECTOR
 Parameter,CHPCAPCOST,iInvCostChp,Capital Cost per CHP plant type (kEuro05/KW),"CYall,DSBS,CHP,YTIME","allCy ,DSBS,CHP,YTIME",Power Generation Parameters
 Variable,CHPCOST,VElecProdCostChp,Electricity production cost per CHP plant and demand sector (Euro/KWh),"CYall,DSBS,CHP,YTIME","allCy,DSBS,CHP,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-Variable,CHPELCPROD,VElecChpPlants,CHP electricity production (TWh),"CYALL,CHP,YTIME","allCy,CHP,YTIME",POWER GENERATION SECTOR
+Variable,CHPELCPROD,VGenEstElecChpPlants,CHP electricity production (TWh),"CYALL,CHP,YTIME","allCy,CHP,YTIME",POWER GENERATION SECTOR
 Parameter,CHPFIXCOST,iFixOMCostPerChp,Fixed O&M cost per CHP plant type (Euro2005/KW),"CYall,DSBS,CHP,YTIME","allCy,DSBS,CHP,YTIME",
 Parameter,CHPLFT,iLifChpPla,Technical Lifetime for CHP plants (years),"CYall,DSBS,CHP","allCy,DSBS,CHP",Power Generation Parameters
 Parameter,CHPPG_Cost,iDataChpPowGen,Various data related to CHP power generation (various),"EF,CHPPGSET,YTIME","EF,YTIME,CHPPGSET",common data parameters
@@ -111,18 +111,18 @@ Parameter,ELASTGAS,iNatGasPriProElst,Natural Gas primary production elasticity r
 Parameter,ELASTNSE,iElastNonSubElec,,"CYall,SBS,ETYPES,YTIME","allCy,SBS,ETYPES,YTIME",Macro economic indicators
 Parameter,ELC_IMPORTS,iElecImp,Electricity Imports (1),"CYALL,YTIME","allCy,YTIME",Reguala Falsi Parameters
 Variable,ELCALL,VElecConsAll,Electricity demand per final sector (Mtoe),"CYall,DSBS,YTIME","allCy,DSBS,YTIME",POWER GENERATION SECTOR
-Variable,ELCCHP_EST,VElecChpPlants,Estimate the electricity of CHP Plants,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Variable,ELCDEMAND,VElecDem,Total electricity demand (TWh),"CYall,YTIME","allCy,YTIME",Power Generation
+Variable,ELCCHP_EST,VGenEstElecChpPlants,Estimate the electricity of CHP Plants,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Variable,ELCDEMAND,VDemElec,Total electricity demand (TWh),"CYall,YTIME","allCy,YTIME",Power Generation
 Variable,ELCHEATPUMP,VElecConsHeatPla,Electricity consumed in heatpump plants (Mtoe),"CYall,DSBS,YTIME","allCy, DSBS, YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,ELCINDEX,VElecIndPrices,Electricity index - a function of industry price (1),"CYall,YTIME","allCy,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,ELCINDEX_EST,VElecIndPricesEst,Electricity index - a function of industry price - Estimate (1),"CYALL,YTIME","allCy, YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,ELCNS,VElecNonSub,Consumption of non-substituable electricity in Industry and Tertiary (Mtoe),"CYall,DSBS,YTIME","allCy,DSBS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,ELCNSIND,vElecConsInd,Total Consumption of Electricity in industrial sectors (Mtoe),"CYALL,YTIME","allCy,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,ELCPRICE,VElecPriInduResConsu,Electricity price to Industrial and Residential Consumers (Euro2005/KWh),"CYall,ESET,YTIME","allCy,ESET,YTIME",VARIABLES
-Variable,ELCPRICE_NOCV,VElecPriIndResNoCliPol,Electricity price to Industrial and Residential Consumers (Euro2005/KWh),"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
+Variable,ELCPRICE_NOCV,VPriceElecIndResNoCliPol,Electricity price to Industrial and Residential Consumers (Euro2005/KWh),"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
 Parameter,ELCPRICECHAR,iFacElecPriConsu,Factors affecting electricity prices to consumers,"CYall,ELCPCHAR,YTIME ","allCy,ELCPCHAR,YTIME",Prices
 Parameter,ElcpricecharPRN,iContrElecPrice,Parameters controlling electricity price,"ELCPCHAR,YTIME","allCy,ELCPCHAR,YTIME",Parameters for data transfering
-Variable,ELCPROD,VProdElecPlantsCntr,Electricity production (TWh),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
+Variable,ELCPROD,VProdElecPowPlantsCy,Electricity production (TWh),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Parameter,ELSB,iElaSub,Elasticities by subsectors (1),"CYALL,DSBS","allCy,DSBS",
 Parameter,ELSH,iShareAnnMilePlugInHybrid,Share of annual mileage of a plug-in hybrid which is covered by electricity (1),"CYall,YTIME","CYall,YTIME",Transport Sector specific Parameters
 Parameter,EN_PRD_INDX,REMOVED FROM OPEN-PROM,Energy productivity index used in R&D scenarios,"CYall,SBS,YTIME",,Macro economic indicators
@@ -133,12 +133,12 @@ Equation,EQAFFORDABILITY,qHouseExpEne,Compute households expenditures on energy,
 Equation,EQALPHA,QScalFacPlantDispatch,Compute the scaling factor for plant dispatching,"CYall,HOUR,YTIME","allCy,HOUR,YTIME",POWER GENERATION SECTOR
 Equation,EQAVCHPCOST,QAvgElcProCostCHP,Compute Average Electricity production cost per CHP plant,"CYall,CHP,YTIME","allCy,CHP,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQAVCHPVCOST,QAvgVarElecProd,Compute Average variable including fuel electricity production cost per CHP plant ,"CYall,CHP,YTIME","allCy,CHP,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
-Equation,EQAVERAV,QAvgCapFacRes,Compute the average capacity factor of RES,"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
-Equation,EQBASEEST,QEstBaseLoadSec,Compute estimated base load,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Equation,EQBASELOAD,QBaseLoadElecExp,Compute electricity base load,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Equation,EQCAPACITY,QElecGenCap,Compute electricity generation capacity,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
-Equation,EQcapacity2,QNewCapYearly,Compute the new capacity added every year,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
-Equation,EQCAPACITYT,QGenPlantCap,Compute electricity generation capacity,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
+Equation,EQAVERAV,QCapAvgFacRes,Compute the average capacity factor of RES,"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
+Equation,EQBASEEST,QLoadBaseEstSec,Compute estimated base load,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Equation,EQBASELOAD,QLoadBaseElecExp,Compute electricity base load,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Equation,EQCAPACITY,QCapGenPlannedPlant,Compute electricity generation capacity,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
+Equation,EQcapacity2,QCapGenNewResPlant,Compute the new capacity added every year,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
+Equation,EQCAPACITYT,QCapGenPlant,Compute electricity generation capacity,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Equation,eqcapall,QCapOverall,Compute overall capacity,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Equation,EQCCO2CAPT,QCumCO2Capt,Compute cumulative CO2 captured (Mtn of CO2),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQCCSGAMMA,QSensCcs,Compute gamma parameter used in CCS/No CCS decision tree,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
@@ -148,7 +148,7 @@ Equation,EQCFNEN,QFinNonEneCons,Compute final non-energy consumption,"CYall,EFS,
 Equation,EQCFTOT,qTotFinEneConsAll,Compute total final energy consumption,YTIME,YTIME,REST OF ENERGY BALANCE SECTORS
 Equation,EQCHPCAPAC,QCapElecChp,Compute CHP electric capacity,"CYrun,CHP,YTIME",,POWER GENERATION SECTOR
 Equation,EQCHPCOST,QElecProdCosChp,Compute electricity production cost per CHP plant and demand sector in Euro per KWh,"CYall,DSBS,CHP,YTIME","allCy,DSBS,CHP,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
-Equation,EQCHPELCPROD,QElecChpPlants,Compute electricity production from CHP plants ,"Cyall,CHP,YTIME","allCy,CHP,YTIME",POWER GENERATION SECTOR
+Equation,EQCHPELCPROD,QGenEstElecChpPlants,Compute electricity production from CHP plants ,"Cyall,CHP,YTIME","allCy,CHP,YTIME",POWER GENERATION SECTOR
 Equation,EQCHPVCOST,QVarProCostPerCHPDem,Compute  variable including fuel electricity production cost per CHP plant and demand sector ,"CYall,DSBS,CHP,YTIME","allCy,DSBS,CHP,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQCHPW,qSecContrTotChpProd,Compute sector contribution to total CHP production,"CYall,SBS,CHP,YTIME","allCy,SBS,CHP,YTIME",POWER GENERATION SECTOR
 Equation,EQCO2CAPT,QCO2ElcHrg,Compute CO2 captured by electricity and hydrogen production plants ,"CYall,YTIME","allCy,YTIME",CO2 SEQUESTRATION COST CURVES
@@ -172,19 +172,19 @@ Equation,EQDEMTR,QFinEneDemTranspPerFuel,Compute final energy demand in transpor
 Equation,EQDEMTRALL,qFinEneDemTransp,Compute final energy demand in transport ,"CYall,TRANSE,YTIME","allCy,TRANSE,YTIME",TRANSPORT SPECIFIC EQUATIONS
 Equation,EQDUMMYOBJ,qDummyObj,Define dummy objective function,"CYall,INDDOM,YTIME",,
 Equation,EQELCALL,QElecConsAll,Compute electricity consumption per final demand sector,"CYall,DSBS,YTIME","allCy,DSBS,YTIME",Power Generation
-Equation,EQELCCHP_EST,QElecChpPlants,Compute estimated electricity of CHP Plants,"CYALL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Equation,EQELCDEMAND,QElecDem,Compute electricity final demand,"CYall,YTIME","allCy,YTIME",Power Generation
+Equation,EQELCCHP_EST,QGenEstElecChpPlants,Compute estimated electricity of CHP Plants,"CYALL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Equation,EQELCDEMAND,QDemElec,Compute electricity final demand,"CYall,YTIME","allCy,YTIME",Power Generation
 Equation,EQELCHEATPUMP,QElecConsHeatPla,Compute electricity consumed in heatpump plants (Mtoe),"CYall,DSBS,YTIME","allCy, DSBS, YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQELCINDEX,QElecIndPrices,Compute electricity index,"CYall,YTIME","allCy,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS
 Equation,EQELCINDEX_EST,QElecIndPricesEst,Compute the estimated electricity Index of industry price,"CYALL,YTIME","allCy, YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQELCNS,QElecConsNonSub,Compute non-substituable electricity consumption in Industry and Tertiary,"CYall,INDDOM,YTIME","allCy,INDDOM,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Equation,EQELCNSIND,qElecConsInd,Compute Consumption of electricity in industrial sectors ,"CYALL,YTIME","allCy,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQELCPRICE,QElecPriIndResCons,Compute electricity price in Industrial and Residential Consumers,"CYall,ESET,YTIME","allCy,ESET,YTIME",PRICES EQUATIONS
-Equation,EQELCPRICE_NOCV,QElecPriIndResNoCliPol,Compute electricity price in Industrial and Residential Consumers excluding climate policies,"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
-Equation,EQELCPROD,QProdElecPlantsCntr,Compute electricity production from power generation plants,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
+Equation,EQELCPRICE_NOCV,QPriceElecIndResNoCliPol,Compute electricity price in Industrial and Residential Consumers excluding climate policies,"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
+Equation,EQELCPROD,QProdElecPowPlantsCy,Compute electricity production from power generation plants,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Equation,EQEXPO_TZ,QFakeExp,Compute fake exports,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
 Equation,EQGAP,QGapFinalDem,"Compute the gap in final demand of industry, tertiary, non-energy uses and bubkers","CYall,DSBS,YTIME","allCy,DSBS,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
-Equation,EQGAPE,QGapPowerGenCap,Compute the gap in power generation capacity,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Equation,EQGAPE,QGapGenCapPowerDiff,Compute the gap in power generation capacity,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQGAPTR,QGapTranspActiv,Compute the gap in transport activity,"CYall,TRANSE,YTIME","allCy,TRANSE,YTIME",TRANSPORT SPECIFIC EQUATIONS
 Equation,EQGIC,QGrssInCons,Compute gross inland consumption,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
 Equation,EQGICP,QGrsInlConsNotEneBranch,Compute gross inland consumption not including consumption of energy branch,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
@@ -195,24 +195,24 @@ Equation,EQLFT,QPassCarsLft,Compute the lifetime of passenger cars ,"CYall,DSBS,
 Equation,EQLOADF,QLoadFacDom,Compute load factor of entire domestic system,"CYrun,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQLOS,QDistrLosses,Compute distribution losses,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
 Equation,EQLTAC,QCostPowGenAvgLng,Compute long term power generation cost,"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
-Equation,EQLTAC_INT_PRICE,qLongPowGenIntPri,Compute long term power generation cost of technologies including international Prices of main fuels ,"CYALL,PGALL,ESET,YTIME","allCy,PGALL,ESET,YTIME",POWER GENERATION SECTOR
-Equation,EQLTAC_nocv,QLonPowGenCostNoClimPol,Compute long term power generation cost excluding climate policies,"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
-Equation,EQLTACMIN,qLonMnmpowGenCost,Compute long-term minimum power generation cost,"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
-Equation,EQLTACNEW,QLngCostPowGenTechNoCp,Compute long term power generation cost of technologies excluding climate policies,"CYALL,PGALL,ESET,YTIME","allCy,PGALL,ESET,YTIME",POWER GENERATION SECTOR
-Equation,EQLTACNEW_nocv,QLonAvgPowGenCostNoClimPol,Compute long term average power generation cost excluding climate policies,"CYALL,PGALL,ESET,YTIME","allCy,PGALL,ESET,YTIME",POWER GENERATION SECTOR
-Equation,EQMAXBASE,QBslMaxmLoad,Compute baseload corresponding to maximum load,"runCy,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Equation,EQLTAC_INT_PRICE,qCostPowGenLongIntPri,Compute long term power generation cost of technologies including international Prices of main fuels ,"CYALL,PGALL,ESET,YTIME","allCy,PGALL,ESET,YTIME",POWER GENERATION SECTOR
+Equation,EQLTAC_nocv,QCostPowGenLonNoClimPol,Compute long term power generation cost excluding climate policies,"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
+Equation,EQLTACMIN,qCostPowGenLonMin,Compute long-term minimum power generation cost,"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
+Equation,EQLTACNEW,QCostPowGenLngTechNoCp,Compute long term power generation cost of technologies excluding climate policies,"CYALL,PGALL,ESET,YTIME","allCy,PGALL,ESET,YTIME",POWER GENERATION SECTOR
+Equation,EQLTACNEW_nocv,QCostAvgPowGenLonNoClimPol,Compute long term average power generation cost excluding climate policies,"CYALL,PGALL,ESET,YTIME","allCy,PGALL,ESET,YTIME",POWER GENERATION SECTOR
+Equation,EQMAXBASE,QLoadBaseMax,Compute baseload corresponding to maximum load,"runCy,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQMEXTF,QMExtF,Compute passenger cars market extension (GDP independent),"CYall,YTIME","allCy,YTIME",Transport
 Equation,EQMEXTV,QMExtV,Compute passenger cars market extension (GDP dependent),"CYall,YTIME","allCy,YTIME",Transport
 Equation,EQMFRENMULT,QRenTechMatMult,Compute renewable technologies maturity multiplier,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Equation,EQNETIMP,QNetImports,Compute net imports,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
 Equation,EQNEWREG,QNewReg,Compute new registrations of passenger cars,"CYall,YTIME","allCy,YTIME",Transport
-Equation,EQNONCHPELCPROD,QNonChpElecProd,Compute non CHP electricity production ,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Equation,EQNONCHPELCPROD,QProdNonChp,Compute non CHP electricity production ,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Parameter,BASESHARE,iBaseLoadShareDem,Baseload share of demand per sector (1),"CYall,DSBS,YTIME","allCy,DSBS,YTIME",Power Generation Parameters
-Equation,EQPEAKLOAD,QElecPeakLoad,Compute elerctricity peak load,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Equation,EQPOTREN,qResPotCurr,Compute current renewable potential ,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",Power Generation
-Equation,EQPOTRENMAXC,QMaxmAllowRenPotent,Compute maximum allowed renewable potential ,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
-Equation,EQPOTRENMINC,QMnmAllowRenPot,Compute minimum allowed renewable potential ,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
-Equation,EQPOTRENT,QRenPotSupplyCurve,Compute renewable potential supply curve,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
+Equation,EQPEAKLOAD,QLoadPeakElec,Compute elerctricity peak load,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Equation,EQPOTREN,qPotResCurr,Compute current renewable potential ,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",Power Generation
+Equation,EQPOTRENMAXC,QRenPotMaxAllow,Compute maximum allowed renewable potential ,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
+Equation,EQPOTRENMINC,QRenPotMinAllow,Compute minimum allowed renewable potential ,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
+Equation,EQPOTRENT,QPotRenSuppCurve,Compute renewable potential supply curve,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
 Equation,EQPP,QFuelPriSubSepCarbVal,"Compute fuel prices per subsector and fuel, separate carbon value in each sector","CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",POWER GENERATION SECTOR
 Equation,EQPPA,QAvgFuelPriSub,Compute average fuel price per subsector ,"CYall,DSBS,YTIME","allCy,DSBS,YTIME",PRICES EQUATIONS
 Equation,EQPPROD,QPrimProd,Compute primary production,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
@@ -222,14 +222,14 @@ Equation,EQPRODCOST,QCostHourProdInvDec,Compute hourly production cost used in i
 Equation,EQPRODCOSTC,qCostHourProdInvCCS,Compute hourly production cost used in investment decisions taking into account CCS acceptance,"CYALL,PGALL,HOUR,YTIME","allCy,PGALL,HOUR,YTIME",POWER GENERATION SECTOR
 Equation,EQPRODCOSTCS,QCostProdSpecTech,Compute production cost used in investment decisions,"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Equation,EQPRODCOSTNOCCS,QCostHourProdInvDecNoCcs,Compute hourly production cost used in investment decisions excluding CCS,"CYALL,PGALL,HOUR,YTIME","allCy,PGALL,HOUR,YTIME",POWER GENERATION SECTOR
-Equation,EQPRODCOSTZZ,QProdCostTechPreReplac,Compute production cost of technology  used in premature replacement,"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
-Equation,EQPRODCOSTZZ1,QProdCostTechPreReplacAvail,Compute production cost of technology  used in premature replacement including plant availability rate,"CYALL,PGALL,PGALL2,YTIME","allCy,PGALL,PGALL2,YTIME",POWER GENERATION SECTOR
+Equation,EQPRODCOSTZZ,QCostProdTechPreReplac,Compute production cost of technology  used in premature replacement,"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
+Equation,EQPRODCOSTZZ1,QCostProdTechPreReplacAvail,Compute production cost of technology  used in premature replacement including plant availability rate,"CYALL,PGALL,PGALL2,YTIME","allCy,PGALL,PGALL2,YTIME",POWER GENERATION SECTOR
 Equation,EQREFCAP,QRefCapacity,Compute refineries capacity,"CYall,YTIME","allCy,YTIME",REST OF ENERGY BALANCE SECTORS
 Equation,EQRESSHARE,qProdGrossResShare,Compute the share of renewables in gross electricity production for subsdidized renewables,"CYALL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQSCR,QScrRate,Compute passenger cars scrapping rate,"CYall,YTIME","allCy,YTIME",Transport
 Equation,EQSCRAP,QScrap,Compute scrapped passenger cars (in million vehicles),"CYall,YTIME","allCy,YTIME",Transport
 Equation,EQSFC,QSpecificFuelCons,Compute Specific Fuel Consumption,"CYall,TRANSE,TTECH,EF,YTIME","allCy,TRANSE,TTECH,EF,YTIME",TRANSPORT SPECIFIC EQUATIONS
-Equation,EQSHCAP,QPowPlaShaNewEquip,Compute the power plant share in new equipment,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
+Equation,EQSHCAP,QShaNewEqPowPla,Compute the power plant share in new equipment,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Equation,EQSHCAPCCS,QShareNewTechCcs,Compute SHRCAP,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Equation,EQSHCAPNOCCS,QShareNewTechNoCcs,Compute SHRCAP excluding CCS,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Equation,EQSHLOAD,QSortPlantDispatch,Compute Power plants sorting according to variable cost  to decide the plant dispatching ,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
@@ -237,9 +237,9 @@ Equation,EQSHLOADS,QElecPeakLoads,Compute Electricity peak loads,"CYall,YTIME","
 Equation,EQSHR,QTechShareNewEquip,Compute technology share in new equipment,"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQSHRTR,QTechSortVarCostNewEquip,Compute the share of each technology in total sectoral use,"CYall,TRANSE,EF,YTIME","allCy,TRANSE,EF,YTIME",TRANSPORT SPECIFIC EQUATIONS
 Equation,EQSTAC,qCostPowGenAvgShrt,Compute short term power generation cost,"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
-Equation,EQSTAC_INT_PRICE,qShoPowGenIntPri,Compute short term power generation cost of technologies including international Prices of main fuels ,"CYALL,PGALL,ESET,YTIME","allCy,PGALL,ESET,YTIME",POWER GENERATION SECTOR
+Equation,EQSTAC_INT_PRICE,qCostPowGenShortIntPri,Compute short term power generation cost of technologies including international Prices of main fuels ,"CYALL,PGALL,ESET,YTIME","allCy,PGALL,ESET,YTIME",POWER GENERATION SECTOR
 Equation,EQSU,QTechSort,Compute Technology sorting based on variable cost,"CYall,DSBS,Rcon,YTIME","allCy,DSBS,rCon,YTIME",
-Equation,EQSUCAP,QNewInvDecis,Compute for Power Plant new investment decision,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Equation,EQSUCAP,QDecisNewInv,Compute for Power Plant new investment decision,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQSUTR,QTechSortVarCost,Compute technology sorting based on variable cost,"CYall,TRANSE,Rcon,YTIME","allCy,TRANSE,Rcon,YTIME",TRANSPORT SPECIFIC EQUATIONS
 Equation,EQTICT,QTransfInPowerPls,Compute transformation input to power plants,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
 Equation,EQTIDH,QTransfInputDHPlants,Compute the transformation input to distrcit heating plants,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
@@ -252,20 +252,20 @@ Equation,EQTODH,QTranfOutputDHPlants,Compute the transformation output from dist
 Equation,EQTONUC,QTransfOutputNuclear,Compute transformation output from nuclear plants,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
 Equation,EQTOOTH,QTransfOutputPatFuel,"Compute the  transfomration output from patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works","CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
 Equation,EQTORF,QTranfOutputRefineries,Compute the transformation output from refineries,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
-Equation,EQTOTCAP,QTotElecGenCap,Compute total electricity generation capacity,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Equation,EQTOTCAP_EST,QTotEstElecGenCap,Compute estimated total electricity generation capacity,"CYall,YTIME","CYall,YTIME",POWER GENERATION SECTOR
-Equation,EQTOTCAPNCHP,QElecGenNoChp,Compute total electricity generation capacity excluding CHP plants,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Equation,EQTOTCAP,QCapGenTotElec,Compute total electricity generation capacity,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Equation,EQTOTCAP_EST,QCapGenTotEstElec,Compute estimated total electricity generation capacity,"CYall,YTIME","CYall,YTIME",POWER GENERATION SECTOR
+Equation,EQTOTCAPNCHP,QCapGenElecNoChp,Compute total electricity generation capacity excluding CHP plants,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQTOTOT,QTotTransfOutput,Compute total transformation output,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
-Equation,EQTOTPROD,QTotReqElecProd,Compute total required electricity production,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Equation,EQTOTPRODCHP,QReqElecProd,Compute total required electricity production ,"CYALL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Equation,EQTOTPROD,QProdReqTotElec,Compute total required electricity production,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Equation,EQTOTPRODCHP,QProdReqElec,Compute total required electricity production ,"CYALL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQTRANS,QTransfers,Compute transfers,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
 Equation,EQU,QTechCostMatr,Compute the technology cost including the maturity factor per technology and subsector,"CYall,DSBS,Rcon,EF,YTIME","allCy,DSBS,rCon,EF,YTIME",TRANSPORT SPECIFIC EQUATIONS
 Equation,EQUTR,QTranspCostMatFac,Compute transportation cost including maturity factor,"CYALL,TRANSE,RCon,TTECH,YTIME","allCy,TRANSE,RCon,TTECH,YTIME",TRANSPORT SPECIFIC EQUATIONS
-Equation,EQVARCOSTPG,QVarCostTech,Compute variable cost of technology ,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
-Equation,EQVARCOSTPG1,QVarCostTechNotPGSCRN,Compute variable cost of technology excluding PGSCRN,"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
-Equation,EQVARCOSTPG2,QVarCostTechnology,Compute variable cost of technology ,"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
+Equation,EQVARCOSTPG,QCostVarTech,Compute variable cost of technology ,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
+Equation,EQVARCOSTPG1,QCostVarTechNotPGSCRN,Compute variable cost of technology excluding PGSCRN,"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
+Equation,EQVARCOSTPG2,QCostVarPlantTech,Compute variable cost of technology ,"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Equation,EQVEH,QNumVeh,Compute stock of passenger cars (in million vehicles),"CYall,YTIME","allCy,YTIME",Transport
-Equation,EQZZ,QEndogScrapIndex,Compute endogenous scrapping index ,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
+Equation,EQZZ,QIndexEndogScrap,Compute endogenous scrapping index ,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 scalar,exogCV,sExogCarbValue,switch for exogenous carbon value (0=exogenous 1=endogenous) /1/,,,
 Parameter,exogCVp,iCarbValYrExog,Carbon value for each year when it is exogenous (Euro05/tn CO2),ytime,"allCy,ytime",Reguala Falsi Parameters
 Variable,EXPO_TZ,VExportsFake,Exports fake (Mtoe) ,"CYall,EFS,YTIME","allCy,EFS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
@@ -275,7 +275,7 @@ Parameter,FIXCOST,iFixOMCostTech,Fixed O&M cost of technology (Euro2005/toe-year
 Parameter,FOMRES,-,,"PGALL,YTIME",,
 Parameter,FPDL,iFPDL,Polynomial Distribution Lags (PDL) Coefficients per subsector (1),"SBS,KPDL","SBS,KPDL",Macro economic indicators
 Variable,GAP,VGapFinalDem,Final Demand GAP to be filed by new technologies (Mtoe),"CYall,DSBS,YTIME","allCy,DSBS,YTIME",VARIABLES
-Variable,GAPE,VGapPowerGenCap,Gap in total generation capacity to be filled by new equipment (GW),"CYall,YTIME","allCy,YTIME",VARIABLES
+Variable,GAPE,VGapGenCapPowerDiff,Gap in total generation capacity to be filled by new equipment (GW),"CYall,YTIME","allCy,YTIME",VARIABLES
 Variable,GAPTR,VGapTranspFillNewTech,Gap in transport activity to be filled by new technologies,"CYall,TRANSE,YTIME","allCy,TRANSE,YTIME",VARIABLES
 Parameter,GDP,iGDP,GDP (billion US$2015),"CYAll,YTIME","YTIME,allCy",Macro economic indicators
 Variable,GIC,VGrssInCons,Gross Inland Consumption (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",Variables
@@ -303,12 +303,12 @@ Variable,LOADFALL,VLoadFacDom,"""Electricity load factor for entire domestic sys
 Variable,LOS,VLosses,Distribution losses (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
 Variable,LTAC,VAvgPowerGenLongTrm,Long-term average power generation cost (Euro2005/kWh),"CYall,ESET,YTIME ","allCy,ESET,YTIME",POWER GENERATION SECTOR
 Variable,LTAC,VCostPowGenAvgLng,Long-term average power generation cost (Euro2005/kWh),"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
-Variable,LTAC_INT_PRICE,vLongPowGenIntPri,Long term power generation cost of technologies including international prices of main fuels (kEuro05/toe),"CYALL,PGALL,ESET,YTIME","allCy,PGALL,ESET,YTIME",POWER GENERATION SECTOR
-Variable,LTAC_nocv,VLonPowGenCostNoClimPol,Long-term average power generation cost  excluding climate policies (Euro2005/kWh),"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
-Variable,LTACMIN,vLonMnmpowGenCost,Long-term minimum power generation cost (Euro2005/kWh),"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
-Variable,LTACNEW,VLngCostPowGenTechNoCp,Long-term average power generation cost (Euro2005/kWh),"CYall,PGALL,ESET,YTIME","allCy,PGALL,ESET,YTIME",POWER GENERATION SECTOR
-Variable,LTACNEW_nocv,VLonAvgPowGenCostNoClimPol,Long-term average power generation cost excluding climate policies(Euro2005/kWh) ,"CYall,PGALL,ESET,YTIME","allCy,PGALL,ESET,YTIME",POWER GENERATION SECTOR
-Variable,MAXBASE,VBslMaxmLoad,Baseload corresponding to Maximum Load Factor (1),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Variable,LTAC_INT_PRICE,vCostPowGenLongIntPri,Long term power generation cost of technologies including international prices of main fuels (kEuro05/toe),"CYALL,PGALL,ESET,YTIME","allCy,PGALL,ESET,YTIME",POWER GENERATION SECTOR
+Variable,LTAC_nocv,VCostPowGenLonNoClimPol,Long-term average power generation cost  excluding climate policies (Euro2005/kWh),"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
+Variable,LTACMIN,vCostPowGenLonMin,Long-term minimum power generation cost (Euro2005/kWh),"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
+Variable,LTACNEW,VCostPowGenLngTechNoCp,Long-term average power generation cost (Euro2005/kWh),"CYall,PGALL,ESET,YTIME","allCy,PGALL,ESET,YTIME",POWER GENERATION SECTOR
+Variable,LTACNEW_nocv,VCostAvgPowGenLonNoClimPol,Long-term average power generation cost excluding climate policies(Euro2005/kWh) ,"CYall,PGALL,ESET,YTIME","allCy,PGALL,ESET,YTIME",POWER GENERATION SECTOR
+Variable,MAXBASE,VLoadBaseMax,Baseload corresponding to Maximum Load Factor (1),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Parameter,MAXCHPSHARE,iMxmShareChpElec,Maximum share of CHP electricity in a country (1),"CYall,YTIME","allCy,YTIME",Power Generation Parameters
 Scalar,MAXELCINDEX,sElecToSteRatioChp,Technical maximum of electricity to steam ratio in CHP plants /1.15/,-,-,Reguala Falsi Parameters
 Parameter,MAXLOADSH,iMxmLoadFacElecDem,Maximum load factor of electricity demand,"CYaLL,YTIME","allCy,YTIME",Power Generation Parameters
@@ -322,12 +322,12 @@ Parameter,Nen_RFCon,iResInFuelConsPerFuelAndSub,Residuals in fuel consumption pe
 Parameter,Nen_Tech,WAS IN OPENPROM:      iDataNonEneLft-            BECAME IN OPENPROM:     iDataNonEneSec,Technical lifetime of non energy uses and bunkers (years),"NENSE,EF,ECONCHAR","NENSE,EF,ECONCHAR",common data parameters
 Variable,NETIMP,VNetImports,Net Imports (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",Variables
 Variable,NEWREG,VNewReg,Passenger cars new registrations (million vehicles),"CYall,YTIME","allCy,YTIME",TRANSPORT SECTOR VARIABLES
-Variable,NONCHPELCPROD,VNonChpElecProd,Non CHP total electricity production (TWh),"CYALL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Variable,NONCHPELCPROD,VProdNonChp,Non CHP total electricity production (TWh),"CYALL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Parameter,NPDL,iNPDL,Number of Polynomial Distribution Lags (PDL),SBS,SBS,Macro economic indicators
 Sets,Nset,nSet,auxiliary counter for the definition of Vr /b1*b20/,,,Auxiliary Counters
 Parameter,NUCRES,-,,"PGALL,YTIME",,
 Parameter,OILPDL,iPolDstrbtnLagCoeffPriOilPr,Polynomial Distribution Lag Coefficients for primary oil production (1),kpdl,kpdl,Parameter
-Variable,PEAKLOAD,VElecPeakLoad,Electricity peak load (GW),"CYall,YTIME",,POWER GENERATION SECTOR
+Variable,PEAKLOAD,VLoadPeakElec,Electricity peak load (GW),"CYall,YTIME",,POWER GENERATION SECTOR
 Parameter,PG_BASESH,iLoadFactorAdj,Parameters for load factor adjustment iBaseLoadShareDem,"DSBS,YTIME","allCy,DSBS,YTIME",Parameters for data transfering
 Parameter,PG_CHPCAPAC,iDataElecAndSteamGen,Data releated to electricity and steam generation (1),"CHP,YTIME","allCy,CHP,YTIME",Parameters for data transfering
 Parameter,PG_Cost,iDataPowGenCost,Power Generation data,"PGALL,PGECONCHAR","PGALL,PGECONCHAR",common data parameters
@@ -368,12 +368,12 @@ Parameter,PGUTIL,iUtilRateChpPlants,Utilisation rate of CHP Plants (1),"CYall,CH
 Parameter,PGVARCOST,iVarCost,Variable gross cost other than fuel per Plant Type (Euro2005/KW),"CYall,PGALL,YTIME","PGALL,YTIME",Power Generation Parameters
 Parameter,POLICIES,iEnvPolicies,Environmental policies on emissions constraints  and subsidy on renewables (Mtn CO2),"POLICIES_SET,YTIME","POLICIES_SET,YTIME",common data parameters
 Parameter,POP,iPop,Population (billion),"CYAll,YTIME","YTIME,allCy",Macro economic indicators
-Variable,POTREN,vResPotCurr,Current renewable potential (GW),"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",Power Generation
+Variable,POTREN,vPotResCurr,Current renewable potential (GW),"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",Power Generation
 Parameter,POTRENMAX,iMaxRenPotential,Maximum enewable potential (GW ),"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",Power Generation Parameters
-Variable,POTRENMAXC,VMaxmAllowRenPotent,Maximum allowed renewable potential (GW),"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
+Variable,POTRENMAXC,VRenPotMaxAllow,Maximum allowed renewable potential (GW),"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
 Parameter,POTRENMIN,iMinRenPotential,Minimum renewable potential (GW),"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",Power Generation Parameters
-Variable,POTRENMINC,VMnmAllowRenPot,Minimum allowed renewable potential (GW),"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
-Variable,POTRENT,VRenPotSupplyCurve,Renewable potential supply curve,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
+Variable,POTRENMINC,VRenPotMinAllow,Minimum allowed renewable potential (GW),"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
+Variable,POTRENT,VPotRenSuppCurve,Renewable potential supply curve,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
 Variable,PP,VFuelPriceSub,Fuel prices per subsector and fuel (kUS$2005/toe),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",PRICES
 Variable,PP_NOCV,VFuelPriSubNoCarb,Fuel prices per subsector and fuel  without carbon value (kdollars2005/toe),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",Prices
 Variable,PPA,VFuelPriceAvg,Average fuel prices per subsector (kUS$2005/toe),"CYall,DSBS,YTIME","allCy,TRANSE,YTIME",PRICES
@@ -385,8 +385,8 @@ Variable,PRODCOST,VCostHourProdInvDec,Hourly production cost of technology (Euro
 Variable,PRODCOSTC,vCostHourProdInvCCS,Hourly production cost of technology (Euro/KWh),"CYall,PGALL,HOUR,YTIME","allCy,PGALL,HOUR,YTIME",POWER GENERATION SECTOR
 Variable,PRODCOSTCS,VCostProdSpecTech,Production cost of technology (Euro/KWh),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Variable,PRODCOSTNOCCS,VCostHourProdInvDecNoCcs,Hourly production cost of technology (Euro/KWh),"CYall,PGALL,HOUR,YTIME","allCy,PGALL,HOUR,YTIME",POWER GENERATION SECTOR
-Variable,PRODCOSTZZ,VProdCostTechPreReplac,Production cost of technology used in premature replacement (Euro/KWh),"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
-Variable,PRODCOSTZZ1,VProdCostTechPreReplacAvail,Production cost of technology used in premature replacement including plant availability rate (Euro/KWh),"CYALL,PGALL,PGALL2,YTIME","allCy,PGALL,PGALL2,YTIME",POWER GENERATION SECTOR
+Variable,PRODCOSTZZ,VCostProdTechPreReplac,Production cost of technology used in premature replacement (Euro/KWh),"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
+Variable,PRODCOSTZZ1,VCostProdTechPreReplacAvail,Production cost of technology used in premature replacement including plant availability rate (Euro/KWh),"CYALL,PGALL,PGALL2,YTIME","allCy,PGALL,PGALL2,YTIME",POWER GENERATION SECTOR
 Sets,Rcon,rCon,"counter for the number of consumers /0,1*19/",,,Auxiliary Counters
 Variable,REFCAP,VRefCapacity,Refineries capacity (Million barrels/day),"CYall,YTIME","allCy,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Parameter,REFCAPRES,iResRefCapacity,Residual in Refineries Capacity (1),"CYall,YTIME",YTIME,Supply Side Specific Parameters
@@ -407,7 +407,7 @@ Parameter,SAT,iPassCarsMarkSat,Passenger cars market saturation [1],CYall,allCy,
 Variable,SCR,VScrRate,Scrapping rate of passenger cars (1),"CYall,YTIME","allCy,YTIME",TRANSPORT SECTOR VARIABLES
 Variable,SCRAP,VScrap,Scrapped passenger cars (million vehicles),"CYall,YTIME","allCy,YTIME",TRANSPORT SECTOR VARIABLES
 Variable,SFC,VSpecificFuelCons,Specific Fuel Consumption (),"CYall,TRANSE,TTECH,EF,YTIME","allCy,TRANSE,TTECH,EF,YTIME",TRANSPORT SECTOR VARIABLES
-Variable,SHCAP,VPowPlaShaNewEquip,Power plant share in new equipment (1),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
+Variable,SHCAP,VShaNewEqPowPla,Power plant share in new equipment (1),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Variable,SHCAPCCS,VShareNewTechCcs,Power plant share in new equipment,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Variable,SHCAPNOCCS,VShareNewTechNoCcs,Power plant share in new equipment,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Parameter,SHIOTH,REMOVED FROM OPEN-PROM,"Share of fuels in transformation input to Gasworks, Blast Furnances, Briquetting plants in base year","CYall,EF","allCy,EF",Supply Side Specific Parameters
@@ -418,10 +418,10 @@ Parameter,SHRHPELC,iShrHeatPumpElecCons,Share of heat pump electricity consumpti
 Parameter,SHRNSE,iShrNonSubElecInTotElecDem,Share of non substitutable electricity in total electricity demand per subsector (1),"CYall,SBS","allCy,SBS",Common parameters for all Demand Subsectors
 Variable,SHRTR,VTechSortVarCostNewEquip,Technology share in new equipment,"CYall,TRANSE,EF,YTIME","allCy,TRANSE,EF,YTIME",TRANSPORT SECTOR VARIABLES
 Variable,STAC,vCostPowGenAvgShrt,Short-term average power generation cost (Euro2005/kWh),"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
-Variable,STAC_INT_PRICE,vShoPowGenIntPri,Short term power generation cost of technologies including international Prices of main fuels (kEuro05/toe),"CYALL,PGALL,ESET,YTIME","allCy,PGALL,ESET,YTIME",POWER GENERATION SECTOR
+Variable,STAC_INT_PRICE,vCostPowGenShortIntPri,Short term power generation cost of technologies including international Prices of main fuels (kEuro05/toe),"CYALL,PGALL,ESET,YTIME","allCy,PGALL,ESET,YTIME",POWER GENERATION SECTOR
 Parameter,STT,iCumDistrFuncConsSize,Cummulative distribution function of consumer size groups (1),"CYall,DSBS","allCy,DSBS",Macro economic indicators
 Variable,SU,VTechSort,Technology sorting based on variable cost (1),"CYall,DSBS,Rcon,YTIME","allCy,DSBS,rCon,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-Variable,SUCAP,VNewInvDecis,Power plant sorting for new investment decision according to total cost (1),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Variable,SUCAP,VDecisNewInv,Power plant sorting for new investment decision according to total cost (1),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Parameter,Sup_ACEN,iSupRateEneBranCons,Rate of Energy Branch Consumption over total transformation output of iRateEneBranCons (1),"EF,YTIME","EF,YTIME",Declare Parameters for data transfering
 Parameter,Sup_ALOS,REMOVED FROM OPEN-PROM,Supplementary parameter for Rate of losses over Available for Final Consumption,"EF,YTIME",,Parameters for data transfering
 Parameter,Sup_APPROD,iSuppRatePrimProd,Supplementary Parameter for iRatePrimProd (1),"EF,YTIME","allCy,EF,YTIME",Parameter for data transfering
@@ -442,7 +442,7 @@ Parameter,Sup_TRANS,iSuppTransfers,Supplementary Parameter for Transfers (Mtoe),
 Variable,SUTR,VTechSortVarCost,Technology sorting based on variable cost,"CYall,TRANSE,Rcon,YTIME","allCy,TRANSE,Rcon,YTIME",TRANSPORT SECTOR VARIABLES
 Parameter,targetprice,iPriceTragets,Price Targets,"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",Emission Related Parameters
 Parameter,targetprice1,REMOVED FROM OPEN-PROM,Data Transfer for Price Targets,"CYall,AGSECT,EF,YTIME","allCy,AGSECT,EF,YTIME",Reguala Falsi Parameters
-Variable,TCAPACITY,VGenPlantCap,Electricity generation plants capacity (GW),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
+Variable,TCAPACITY,VCapGenPlant,Electricity generation plants capacity (GW),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Variable,TICT,VTransfInThermPowPls,Transformation input to thermal power plants (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,TIDH,VTransfInputDHPlants,Transformation input to District Heating Plants (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Parameter,TINEW,iTotInput,"TINEW(CYALL,EF,YTIME)=1E-7;","CYALL,EF,YTIME","allCy,EF,YTIME",Power Generation Parameters
@@ -460,11 +460,11 @@ Parameter,TOOTHRES,REMOVED FROM OPEN-PROM,"Transformation Output from Gasworks, 
 Variable,TORF,VTransfOutputRefineries,Transformation output from refineries (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Parameter,TOTAL_EF,iDiffFuelsInSec,Auxiliary parameter holding the number of different fuels in a sector,SBS,,
 Variable,TOTCAP,VTotElecGenCap,Total electricity generation capacity (GW),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Variable,TOTCAP_EST,VTotElecGenCapEst,Estimated Total electricity generation capacity (GW),"CYall,YTIME","CYall,YTIME",POWER GENERATION SECTOR
-Variable,TOTCAPNCHP,VElecGenNoChp,Total electricity generation capacity excluding CHP ( GW),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Variable,TOTCAP_EST,VCapGenTotEstElec,Estimated Total electricity generation capacity (GW),"CYall,YTIME","CYall,YTIME",POWER GENERATION SECTOR
+Variable,TOTCAPNCHP,VCapGenElecNoChp,Total electricity generation capacity excluding CHP ( GW),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Variable,TOTOT,VTotTransfOutput,Total transformation output (Mtoe),"CYall,EFS,YTIME ","allCy,EFS,YTIME ",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-Variable,TOTPROD,VTotReqElecProd,Total required electricity production (TWh),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Variable,TOTPRODCHP,VReqElecProd,Total estimated CHP electricity production (TWh),"CYALL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Variable,TOTPROD,VProdReqTotElec,Total required electricity production (TWh),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Variable,TOTPRODCHP,VProdReqElec,Total estimated CHP electricity production (TWh),"CYALL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Parameter,TRADBMS,iExogDemOfBiomass,DEMAND OF TRADITIONAL BIOMASS-EXOGENOUSLY DEFINED,"CYALL,SBS,YTIME","allCy,DOMSE,YTIME",Common parameters for all Demand Subsectors
 Variable,TRANS,VTransfers,Transfers (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",
 Parameter,Trans_ELSH,iPlugHybrFractOfMileage,"Plug in hybrid fraction of mileage covered by electricity, residualls on GDP-Depnd car market ext (1)","ELSH_SET,YTIME","allCy,ELSH_SET,YTIME",Parameters for data transfering
@@ -481,9 +481,9 @@ Parameter,UF,iUsfEneConvSubTech,Useful Energy Conversion Factor per subsector an
 Parameter,USETR,iAvgVehCapLoadFac,Average capacity/vehicle and load factor (tn/veh or passenegers/veh) ,"CYall,TRANSE,TRANSUSE,YTIME","allCy,TRANSE,TRANSUSE,YTIME",Transport Sector specific Parameters
 Variable,UTR,VTranspCostMatFac,Transportation cost including maturity factor(Keuro/vehicle),"CYALL,TRANSE,RCon,TTECH,YTIME","allCy,TRANSE,RCon,TTECH,YTIME",TRANSPORT SECTOR VARIABLES
 Parameter,VARCOST,iVarCostTech,Variable Cost of technology (),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",Common parameters for all Demand Subsectors
-Variable,VARCOSTPG,VVarCostTech,Variable cost of technology (Euro/KWh),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
-Variable,VARCOSTPG1,VVarCostTechNotPGSCRN,Variable cost of technology excluding PGSCRN (Euro/KWh),"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
-Variable,VARCOSTPG2,VVarCostTechnology,Variable cost of technology (Euro/KWh),"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
+Variable,VARCOSTPG,VCostVarTech,Variable cost of technology (Euro/KWh),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
+Variable,VARCOSTPG1,VCostVarTechNotPGSCRN,Variable cost of technology excluding PGSCRN (Euro/KWh),"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
+Variable,VARCOSTPG2,VCostVarPlantTech,Variable cost of technology (Euro/KWh),"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Parameter,VCF,iFinEneConsPrevYear,Final energy consumption used for holding previous year results (Mtoe),"CYall,EF,YTIME","allCy,EF,YTIME",Common parameters for all Demand Subsectors
 Variable,VEH,VNumVeh,Stock of passenger cars (million vehicles),"CYall,YTIME","allCy,YTIME",TRANSPORT SECTOR VARIABLES
 Parameter,VOMRES,-,,"PGALL,YTIME",,
@@ -498,7 +498,7 @@ Parameter,Xm,iAnnCons,"Annual consumption by the consumer size smallest, modal, 
 Parameter,Xn,iAnnCons,"Annual consumption by the consumer size smallest, modal, largest (average for all countries)  !! For passenger cars (Million km/vehicle)
                                                  !! For other passenger tranportation modes (Mpkm/vehicle)
                                                  !! For goods transport, (Mtkm/vehicle)","CYall,SBS","allCy,DSBS,conSet",Macro economic indicators
-Variable,ZZ,VEndogScrapIndex,Index used for endogenous power plants scrapping,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
+Variable,ZZ,VIndexEndogScrap,Index used for endogenous power plants scrapping,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Parameter,REPELCP,unused,,,,
 Parameter,PGCHP,unused,,,,
 Parameter,PG_CHPCAPAC,unused,,,,

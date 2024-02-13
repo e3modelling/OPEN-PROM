@@ -24,8 +24,8 @@ VFuelConsInclHP,VGapFinalDem,VConsFuel,DSBS $(not TRANSE(DSBS))
 VFuelConsInclHP,VConsRemSubEquip,VConsFuel,DSBS $(not TRANSE(DSBS))
 VFuelConsInclHP,VTechShareNewEquip,VConsFuel,DSBS $(not TRANSE(DSBS))
 VFuelConsInclHP,VElecNonSub,VConsFuel,DSBS $(not TRANSE(DSBS))
-VFeCons,VConsFuel,VElecDem,EFS
-VFeCons,VDemTr,VElecDem,EFS
+VFeCons,VConsFuel,VDemElec,EFS
+VFeCons,VDemTr,VDemElec,EFS
 VConsFuel,VFuelConsInclHP,VFeCons,
 VConsFuel,VElecConsHeatPla,VFeCons,
 VFuePriSubChp,VFuelPriceSub,VTechCostIntrm,DSBS $(not TRANSE(DSBS))
@@ -38,12 +38,12 @@ VTechShareNewEquip,VTechSort,VFuelConsInclHP,DSBS $(not TRANSE(DSBS))
 VTechSort,VTechCostMatr,VTechShareNewEquip,DSBS $(not TRANSE(DSBS))
 VTechCost,VTechCostIntrm,VTechShareNewEquip,DSBS $(not TRANSE(DSBS))
 VTechCostIntrm,VLifeTimeTech,VTechCost,DSBS $(not TRANSE(DSBS))
-VElecDem,VFeCons,,
-VElecDem,VEnCons,,
-VElecDem,VFNonEnCons,,
-VElecDem,VLosses,,
+VDemElec,VFeCons,,
+VDemElec,VEnCons,,
+VDemElec,VFNonEnCons,,
+VDemElec,VLosses,,
 VTransfOutThermPP,VElecProd,,
 VTransfInThermPowPls,VElecProd,,
-VElecGenPlanCap,VElecGenPlantsCapac,VElecGenPlantsCapac+1,
-VElecGenPlantsCapac,VElecGenPlanCap-1,VElecGenPlanCap,
-VGapPowerGenCap,VElecGenPlanCap-1,VElecGenPlantsCapac,
+VCapGenPlannedPlant,VElecGenPlantsCapac,VElecGenPlantsCapac+1,
+VElecGenPlantsCapac,VCapGenPlannedPlant-1,VCapGenPlannedPlant,
+VGapGenCapPowerDiff,VCapGenPlannedPlant-1,VElecGenPlantsCapac,
