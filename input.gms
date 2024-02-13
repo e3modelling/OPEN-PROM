@@ -195,12 +195,16 @@ BU 	0.43,
 PCH	0.78,
 NEN	0.78 / ;
 iBaseLoadShareDem(allCy,DSBS,YTIME)$an(YTIME)  = iLoadFactorAdj(DSBS);
-table iCO2SeqData(CO2SEQELAST,YTIME)	       "Data for CO2 sequestration (1)" 
-$ondelim
-$include"./iCO2SeqData.csv"
-$offdelim
-;
-iElastCO2Seq(allCy,CO2SEQELAST) = sum(tfirst,iCO2SeqData(CO2SEQELAST,TFIRST));
+parameter iCO2SeqData(CO2SEQELAST)	       "Data for CO2 sequestration (1)" /
+POT	9175,
+mc_a	0.00125928,
+mc_b	6.6,
+mc_c	0.02,
+mc_d	0.000839237,
+mc_s	120,
+mc_m	1.013
+/ ;
+iElastCO2Seq(allCy,CO2SEQELAST) = iCO2SeqData(CO2SEQELAST);
 
 *Sources for vehicle lifetime:
 *US Department of Transportation, International Union of Railways, Statista, EU CORDIS
@@ -261,7 +265,7 @@ AG   0.2078 0.9     0.00001
 iShrHeatPumpElecCons(allCy,INDSE) = iIndChar(allCy,INDSE,"SH_HPELC");
 iShrHeatPumpElecCons(allCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(DOMSE,"SH_HPELC");
 iExogDemOfBiomass(allCy,DOMSE,YTIME) = 0;
-iElastCO2Seq(allCy,CO2SEQELAST) = iCO2SeqData(CO2SEQELAST,"%fBaseY%");
+*iElastCO2Seq(allCy,CO2SEQELAST) = iCO2SeqData(CO2SEQELAST,"%fBaseY%");
 iRatioImpFinElecDem(runCy,YTIME)$an(YTIME) = iSuppRefCapacity(runCy,"ELC_IMP",YTIME);
 iFuelExprts(runCy,EFS,YTIME) = iSuppExports(runCy,EFS,YTIME);
 iRatePriProTotPriNeeds(runCy,PPRODEF,YTIME) = iSuppRatePrimProd(runCy,PPRODEF,YTIME);
