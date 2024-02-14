@@ -998,6 +998,8 @@ $offdelim
 ;
 iResNonSubsElecDem(allCy,INDSE,YTIME)$an(YTIME) = iResNonSubElec(allCy,INDSE,YTIME);
 iResNonSubsElecDem(allCy,DOMSE,YTIME)$an(YTIME) = iResNonSubElecCons(allCy,DOMSE,YTIME);
+
+$ontext
 table iResFuelConsSub(allCy,INDSE,EF,YTIME)	 "Residuals for fuel consumption per subsector (1)"
 $ondelim
 $include"./iResFuelConsSub.csv"
@@ -1016,6 +1018,7 @@ $offdelim
 iResFuelConsPerSubAndFuel(allCy,INDSE,EF,YTIME)$an(YTIME) = iResFuelConsSub(allCy,INDSE,EF,YTIME);
 iResFuelConsPerSubAndFuel(allCy,DOMSE,EF,YTIME)$an(YTIME) = iResFuelConsPerFuelAndSub(allCy,DOMSE,EF,YTIME);
 iResFuelConsPerSubAndFuel(allCy,NENSE,EF,YTIME)$an(YTIME) = iResInFuelConsPerFuelAndSub(allCy,NENSE,EF,YTIME);
+$offtext
 
 table iResTranspFuelConsSubTech(allCy,TRANSE,EF,YTIME)	 "Residual Transport on Specific Fuel Consumption per Subsector and Technology (1)"
 $ondelim
