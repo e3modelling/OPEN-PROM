@@ -747,12 +747,15 @@ $ondelim
 $include"./iDataDistrLosses.csv"
 $offdelim
 ;
+$ontext
 table iDataOtherTransfOutput(allCy,EF,YTIME)	    "Data for Other transformation output  (Mtoe)"
 $ondelim
 $include"./iDataOtherTransfOutput.csv"
 $offdelim
 ;
 iTranfOutGasworks(allCy,EFS,YTIME)$(not An(YTIME)) = iDataOtherTransfOutput(allCy,EFS,YTIME);
+$offtext
+
 iDistrLosses(allCy,EFS,YTIME) = iDataDistrLosses(allCy,EFS,YTIME);
 table iDataTransfOutputRef(allCy,EF,YTIME)	    "Data for Other transformation output  (Mtoe)"
 $ondelim
@@ -890,6 +893,10 @@ $offdelim
 * author=giannou
 iFacElecPriConsu(allCy,ELCPCHAR,YTIME)$an(YTIME) = iContrElecPrice("MAR",ELCPCHAR,YTIME);
 iScenarioPri(WEF,"NOTRADE",YTIME)=0;
+
+* FIXME: Check if iPriceReform is necessary for the model.
+* author=derevirn
+$ontext
 table iDataPriceReform(allCy,AGSECT,EF,YTIME)	 "Price reform (1)"
 $ondelim
 $include"./iDataPriceReform.csv"
@@ -901,6 +908,8 @@ iPriceReform(runCy,DOMSE1(SBS),EF,YTIME)=iDataPriceReform(runCy,"DOMSE1",EF,YTIM
 iPriceReform(runCy,NENSE1(SBS),EF,YTIME)=iDataPriceReform(runCy,"NENSE1",EF,YTIME) ;
 iPriceReform(runCy,TRANS1(SBS),EF,YTIME)=iDataPriceReform(runCy,"TRANS1",EF,YTIME) ;
 iPriceReform(runCy,"PG",EF,YTIME)=iDataPriceReform(runCy,"INDSE1",EF,YTIME) ;
+$offtext
+
 * FIXME: iHydrogenPri should be computed with mrprom
 * author=giannou
 iHydrogenPri(allCy,SBS,YTIME)=4.3;
