@@ -38,46 +38,46 @@ QCostVarTechNotPGSCRN              !! VCostVarTechNotPGSCRN(runCy,PGALL,YTIME)
 QCostProdTechPreReplac             !! VCostProdTechPreReplac(runCy,PGALL,YTIME)
 QCostProdTechPreReplacAvail        !! VCostProdTechPreReplacAvail(runCy,PGALL,PGALL2,YTIME)
 QIndexEndogScrap                   !! VIndexEndogScrap(runCy,PGALL,YTIME)
-QCapGenElecNoChp                      !! VCapGenElecNoChp(runCy,YTIME)
-QGapGenCapPowerDiff                    !! VGapGenCapPowerDiff(runCy,YTIME)
+QCapGenElecNoChp                   !! VCapGenElecNoChp(runCy,YTIME)
+QGapGenCapPowerDiff                !! VGapGenCapPowerDiff(runCy,YTIME)
 qScalWeibull                       !! vScalWeibull(runCy,PGALL,HOUR,YTIME) 
-QPotRenSuppCurve                 !! VPotRenSuppCurve(runCy,PGRENEF,YTIME)
-QRenPotMaxAllow                !! VRenPotMaxAllow(runCy,PGRENEF,YTIME)
+QPotRenSuppCurve                   !! VPotRenSuppCurve(runCy,PGRENEF,YTIME)
+QRenPotMaxAllow                    !! VRenPotMaxAllow(runCy,PGRENEF,YTIME)
 QRenPotMinAllow                    !! VRenPotMinAllow(runCy,PGRENEF,YTIME)
 QRenTechMatMult                    !! VRenTechMatMult(runCy,PGALL,YTIME)
 QScalWeibullSum                    !! VScalWeibullSum(runCy,PGALL,YTIME)
 QDecisNewInv                       !! VDecisNewInv(runCy,YTIME)
-QShaNewEqPowPla                 !! VShaNewEqPowPla(runCy,PGALL,YTIME)
+QShaNewEqPowPla                    !! VShaNewEqPowPla(runCy,PGALL,YTIME)
 QCapGenPlant                       !! VCapGenPlant(runCy,PGALL,YTIME)
-QCapGenPlannedPlant                        !! VCapGenPlannedPlant(runCy,PGALL,YTIME)
-QCostVarPlantTech                 !! VCostVarPlantTech(runCy,PGALL,YTIME)
+QCapGenPlannedPlant                !! VCapGenPlannedPlant(runCy,PGALL,YTIME)
+QCostVarPlantTech                  !! VCostVarPlantTech(runCy,PGALL,YTIME)
 QElecPeakLoads                     !! VElecPeakLoads(runCy,YTIME) 
 QSortPlantDispatch                 !! VSortPlantDispatch(runCy,PGALL,YTIME)
-QCapGenNewResPlant                      !! VCapGenNewResPlant(runCy,PGALL,YTIME)
+QCapGenNewResPlant                 !! VCapGenNewResPlant(runCy,PGALL,YTIME)
 QCapAvgFacRes                      !! VCapAvgFacRes(runCy,PGALL,YTIME)
 QCapOverall                        !! VCapOverall(runCy,PGALL,YTIME)
 QScalFacPlantDispatch              !! VScalFacPlaDisp
-QGenEstElecChpPlants                     !! VGenEstElecChpPlants(runCy,YTIME) 
-QProdNonChp                    !! VProdNonChp(runCy,YTIME) 
+QGenEstElecChpPlants               !! VGenEstElecChpPlants(runCy,YTIME) 
+QProdNonChp                        !! VProdNonChp(runCy,YTIME) 
 QProdReqElec                       !! VProdReqElec(runCy,YTIME) 
-QProdElecPowPlantsCy                !! VProdElecPowPlantsCy(runCy,PGALL,YTIME)
+QProdElecPowPlantsCy               !! VProdElecPowPlantsCy(runCy,PGALL,YTIME)
 qSecContrTotChpProd                !! vSecContrTotChpProd(runCy,INDDOM,CHP,YTIME)
-QGenEstElecChpPlants                     !! VGenEstElecChpPlants(runCy,CHP,YTIME)
+QGenEstElecChpPlants               !! VGenEstElecChpPlants(runCy,CHP,YTIME)
 qProdGrossResShare                 !! vProdGrossResShare(runCy,YTIME) 
 QCostPowGenLngTechNoCp             !! VCostPowGenLngTechNoCp(runCy,PGALL,ESET,YTIME)
 qCostPowGenLonMin                  !! vCostPowGenLonMin(runCy,PGALL,YTIME)
-qCostPowGenLongIntPri                  !! vCostPowGenLongIntPri(runCy,PGALL,ESET,YTIME)
-qCostPowGenShortIntPri                   !! vCostPowGenShortIntPri(runCy,PGALL,ESET,YTIME)
+qCostPowGenLongIntPri              !! vCostPowGenLongIntPri(runCy,PGALL,ESET,YTIME)
+qCostPowGenShortIntPri             !! vCostPowGenShortIntPri(runCy,PGALL,ESET,YTIME)
 QCostPowGenAvgLng                  !! VCostPowGenAvgLng(runCy,ESET,YTIME)
 QCostAvgPowGenLonNoClimPol         !! VCostAvgPowGenLonNoClimPol(runCy,PGALL,ESET,YTIME)
 QCostPowGenLonNoClimPol            !! VCostPowGenLonNoClimPol(runCy,ESET,YTIME)
-QPriceElecIndResNoCliPol             !! VPriceElecIndResNoCliPol(runCy,ESET,YTIME)
+QPriceElecIndResNoCliPol           !! VPriceElecIndResNoCliPol(runCy,ESET,YTIME)
 qCostPowGenAvgShrt                 !! vCostPowGenAvgShrt(runCy,ESET,YTIME)
 
 
 *' * Transport *
 
-QLftPc                       !! VLftPc(runCy,DSBS,EF,YTIME)
+QLftPc                             !! VLftPc(runCy,DSBS,EF,YTIME)
 QActivGoodsTransp                  !! VActivGoodsTransp(runCy,TRANSE,YTIME)
 QGapTranspActiv                    !! VGapTranspActiv(runCy,TRANSE,YTIME)
 QConsSpecificFuel                  !! VConsSpecificFuel(runCy,TRANSE,TTECH,EF,YTIME)
@@ -85,70 +85,70 @@ QCostTranspPerMeanConsSize         !! VCostTranspPerMeanConsSize(runCy,TRANSE,rC
 QCostTranspPerVeh                  !! VCostTranspPerVeh(runCy,TRANSE,rCon,TTECH,YTIME)
 QCostTranspMatFac                  !! VCostTranspMatFac(runCy,TRANSE,RCon,TTECH,YTIME) 
 QSortTechVarCost                   !! VSortTechVarCost(runCy,TRANSE,rCon,YTIME)
-QShareTechSectoral           !! VShareTechSectoral(runCy,TRANSE,TTECH,YTIME)
-QConsTechTranspSectoral                !! VConsTechTranspSectoral(runCy,TRANSE,TTECH,EF,YTIME)
+QShareTechSectoral                 !! VShareTechSectoral(runCy,TRANSE,TTECH,YTIME)
+QConsTechTranspSectoral            !! VConsTechTranspSectoral(runCy,TRANSE,TTECH,EF,YTIME)
 QDemFinEneTranspPerFuel            !! VDemFinEneTranspPerFuel(runCy,TRANSE,EF,YTIME)
-qDemFinEneSubTransp                   !! vDemFinEneSubTransp(runCy,TRANSE,YTIME)
-QMEPcGdp                             !! VMEPcGdp(runCy,YTIME)
-QMEPcNonGdp                             !! VMEPcNonGdp(runCy,YTIME)
-QStockPcYearly                            !! VStockPcYearly(runCy,YTIME)
-QNewRegPcYearly                            !! VNewRegPcYearly(runCy,YTIME)
-QActivPassTrnsp                        !! VActivPassTrnsp(runCy,TRANSE,YTIME)
-QNumPcScrap                             !! VNumPcScrap(runCy,YTIME)
-QPcOwnPcLevl                              !! VPcOwnPcLevl(runCy,YTIME)
-QScrRatePc                           !! VScrRatePc(runCy,YTIME)
-QConsElecFinDemSec                       !! VConsElecFinDemSec(runCy,DSBS,YTIME)
+qDemFinEneSubTransp                !! vDemFinEneSubTransp(runCy,TRANSE,YTIME)
+QMEPcGdp                           !! VMEPcGdp(runCy,YTIME)
+QMEPcNonGdp                        !! VMEPcNonGdp(runCy,YTIME)
+QStockPcYearly                     !! VStockPcYearly(runCy,YTIME)
+QNewRegPcYearly                    !! VNewRegPcYearly(runCy,YTIME)
+QActivPassTrnsp                    !! VActivPassTrnsp(runCy,TRANSE,YTIME)
+QNumPcScrap                        !! VNumPcScrap(runCy,YTIME)
+QPcOwnPcLevl                       !! VPcOwnPcLevl(runCy,YTIME)
+QScrRatePc                         !! VScrRatePc(runCy,YTIME)
+QConsElecFinDemSec                 !! VConsElecFinDemSec(runCy,DSBS,YTIME)
 
 
 *' * INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES *
 
-QConsElecNonSubIndTert                    !! VConsElecNonSubIndTert(runCy,INDDOM,YTIME)
-QConsRemSubEquipSubSec                 !! VConsRemSubEquipSubSec(runCy,DSBS,EF,YTIME)
-QDemFinSubFuelSubSec                            !! VDemFinSubFuelSubSec(runCy,DSBS,YTIME)
-qConsTotElecInd                       !! vConsTotElecInd(runCy,YTIME)
-QDemFinSubFuelInd                            !! vDemFinSubFuelInd(runCy,YTIME)
-QPriceElecInd                     !! VPriceElecInd(runCy,YTIME)
+QConsElecNonSubIndTert             !! VConsElecNonSubIndTert(runCy,INDDOM,YTIME)
+QConsRemSubEquipSubSec             !! VConsRemSubEquipSubSec(runCy,DSBS,EF,YTIME)
+QDemFinSubFuelSubSec               !! VDemFinSubFuelSubSec(runCy,DSBS,YTIME)
+qConsTotElecInd                    !! vConsTotElecInd(runCy,YTIME)
+QDemFinSubFuelInd                  !! vDemFinSubFuelInd(runCy,YTIME)
+QPriceElecInd                      !! VPriceElecInd(runCy,YTIME)
 QConsFuel                          !! VConsFuel(runCy,DSBS,EF,YTIME)
-QIndxElecIndPrices                  !! VIndxElecIndPrices(runCy,YTIME)
-QPriceFuelSubSecChp                      !! VPriceFuelSubSecChp(runCy,DSBS,EF,YTIME)
-QCostElecProdChp                    !! VCostElecProdChp(runCy,DSBS,CHP,YTIME)
+QIndxElecIndPrices                 !! VIndxElecIndPrices(runCy,YTIME)
+QPriceFuelSubSecChp                !! VPriceFuelSubSecChp(runCy,DSBS,EF,YTIME)
+QCostElecProdChp                   !! VCostElecProdChp(runCy,DSBS,CHP,YTIME)
 QCostTech                          !! VCostTech(runCy,DSBS,rCon,EF,YTIME) 
 QCostTechIntrm                     !! VCostTechIntrm(runCy,DSBS,rCon,EF,YTIME) 
-QCostTechMatFac                      !! VCostTechMatFac(runCy,DSBS,rCon,EF,YTIME) 
-QSortTechVarCost                          !! VSortTechVarCost(runCy,DSBS,rCon,YTIME)
+QCostTechMatFac                    !! VCostTechMatFac(runCy,DSBS,rCon,EF,YTIME) 
+QSortTechVarCost                   !! VSortTechVarCost(runCy,DSBS,rCon,YTIME)
 QGapFinalDem                       !! VGapFinalDem(runCy,DSBS,YTIME)
 QShareTechNewEquip                 !! VShareTechNewEquip(runCy,DSBS,EF,YTIME)
 QConsFuelInclHP                    !! VConsFuelInclHP(runCy,DSBS,EF,YTIME)
-QShareTechNewEquip               !! VShareTechNewEquip(runCy,DSBS,CHP,YTIME)
-QCostElcAvgProdCHP                  !! VCostElcAvgProdCHP(runCy,CHP,YTIME)
-QCostVarAvgElecProd                    !! VCostVarAvgElecProd(runCy,CHP,YTIME)
+QShareTechNewEquip                 !! VShareTechNewEquip(runCy,DSBS,CHP,YTIME)
+QCostElcAvgProdCHP                 !! VCostElcAvgProdCHP(runCy,CHP,YTIME)
+QCostVarAvgElecProd                !! VCostVarAvgElecProd(runCy,CHP,YTIME)
 
 
 *' * REST OF ENERGY BALANCE SECTORS *
 
-QTotFinEneCons                     !! VFeCons(runCy,EFS,YTIME)
-qTotFinEneConsAll                  !! vTotFinEneConsAll(YTIME)
-QFinNonEneCons                     !! VFNonEnCons(runCy,EFS,YTIME)
-QDistrLosses                       !! VLosses(runCy,EFS,YTIME)
-QTranfOutputDHPlants               !! VTransfOutputDHPlants(runCy,STEAM,YTIME)
+QConsFinEneCountry                 !! VConsFinEneCountry(runCy,EFS,YTIME)
+qConsTotFinEne                     !! vConsTotFinEne(YTIME)
+QConsFinNonEne                     !! VConsFinNonEne(runCy,EFS,YTIME)
+QLossesDistr                       !! VLossesDistr(runCy,EFS,YTIME)
+QOutTransfDhp                      !! VOutTransfDhp(runCy,STEAM,YTIME)
 QTransfInputDHPlants               !! VTransfInputDHPlants(runCy,EFS,YTIME)
-QRefCapacity                       !! VRefCapacity(runCy,YTIME)
-QTranfOutputRefineries             !! VTransfOutputRefineries(runCy,EFS,YTIME)
-QTransfInputRefineries             !! VTransfInputRefineries(runCy,"CRO",YTIME)
-QTransfOutputNuclear               !! VTransfOutputNuclear(runCy,"ELC",YTIME)
-QTransfInNuclear                   !! VTransfInNuclear(runCy,"NUC",YTIME)
-QTransfInPowerPls                  !! VTransfInThermPowPls(runCy,PGEF,YTIME)
-QTransfOutThermPP                  !! VTransfOutThermPP(runCy,TOCTEF,YTIME)
-QTotTransfInput                    !! VTotTransfInput(runCy,EFS,YTIME)
-QTotTransfOutput                   !! VTotTransfOutput(runCy,EFS,YTIME)
+QCapRef                            !! VCapRef(runCy,YTIME)
+QOutTransfRefSpec                  !! VOutTransfRefSpec(runCy,EFS,YTIME)
+QInputTransfRef                    !! VInputTransfRef(runCy,"CRO",YTIME)
+QOutTransfNuclear                  !! VOutTransfNuclear(runCy,"ELC",YTIME)
+QInpTransfNuclear                  !! VInpTransfNuclear(runCy,"NUC",YTIME)
+QInpTransfTherm                    !! VInpTransfTherm(runCy,PGEF,YTIME)
+QOutTransfTherm                    !! VOutTransfTherm(runCy,TOCTEF,YTIME)
+QInpTotTransf                      !! VInpTotTransf(runCy,EFS,YTIME)
+QOutTotTransf                      !! VOutTotTransf(runCy,EFS,YTIME)
 QTransfers                         !! VTransfers(runCy,EFS,YTIME)
-QGrsInlConsNotEneBranch            !! VGrsInlConsNotEneBranch(runCy,EFS,YTIME)
-QGrssInCons                        !! VGrssInCons(runCy,EFS,YTIME)            
-QPrimProd                          !! VPrimProd(runCy,PPRODEF,YTIME)
-QFakeExp                           !! VExportsFake(runCy,EFS,YTIME)
-QFakeImprts                        !! VFkImpAllFuelsNotNatGas(runCy,EFS,YTIME)
-QNetImports                        !! VNetImports(runCy,EFS,YTIME)
-QEneBrnchEneCons                   !! VEnCons(runCy,EFS,YTIME)
+QConsGrssInlNotEneBranch            !! VConsGrssInlNotEneBranch(runCy,EFS,YTIME)
+QConsGrssInl                        !! VConsGrssInl(runCy,EFS,YTIME)            
+QProdPrimary                          !! VProdPrimary(runCy,PPRODEF,YTIME)
+QExprtsFakeEneBrnch                           !! VExprtsFakeEneBrnch(runCy,EFS,YTIME)
+QImptsFakeEneBrnch                        !! VFkImpAllFuelsNotNatGas(runCy,EFS,YTIME)
+QImpNetEneBrnch                        !! VImpNetEneBrnch(runCy,EFS,YTIME)
+QConsFiEneSec                   !! VConsFiEneSec(runCy,EFS,YTIME)
 
 
 *' * CO2 SEQUESTRATION COST CURVES *
@@ -199,10 +199,10 @@ VCostTechIntrm.l(allCy,DSBS,rcon,EF,YTIME) = 0.1;
 VLftPc.l(allCy,DSBS,EF,YTIME)= 0.1;
 VSortTechVarCost.l(allCy,DSBS,rCon,YTIME) = 0.1;
 VConsFuel.l(allCy,DSBS,EF,YTIME)=0.1;
-VRefCapacity.l(allCy,YTIME)=0.1;
-*VFeCons.l(allCy,EF,YTIME) = 000000.1;
-VTransfOutputRefineries.l(allCy,EFS,YTIME)=0.1;
-VGrsInlConsNotEneBranch.l(allCy,EFS,YTIME)=0.1;
+VCapRef.l(allCy,YTIME)=0.1;
+*VConsFinEneCountry.l(allCy,EF,YTIME) = 000000.1;
+VOutTransfRefSpec.l(allCy,EFS,YTIME)=0.1;
+VConsGrssInlNotEneBranch.l(allCy,EFS,YTIME)=0.1;
 VConsElecFinDemSec.l(allCy,DSBS,YTIME)=0.1;
 VLoadFacDom.l(allCy,YTIME)=0.1;
 *VProdElecPowPlantsCy.l(allCy,PGALL,YTIME) = 1;
@@ -374,26 +374,26 @@ VConsRemSubEquipSubSec.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $(not An(ytime
 
 
 
-VFeCons.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iFinEneCons(runCy,EFS,YTIME);
+VConsFinEneCountry.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iFinEneCons(runCy,EFS,YTIME);
 iFinEneConsPrevYear(runCy,EFS,YTIME)$(not An(YTIME)) = iFinEneCons(runCy,EFS,YTIME);
-VLosses.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iDistrLosses(runCy,EFS,YTIME);
+VLossesDistr.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iDistrLosses(runCy,EFS,YTIME);
 
-VTransfOutThermPP.FX(runCy,EFS,YTIME)$(not TOCTEF(EFS)) = 0;
-VRefCapacity.FX(runCy,YTIME)$(not An(YTIME)) = iRefCapacity(runCy,YTIME);
-VTransfOutputRefineries.FX(runCy,EFS,YTIME)$(EFtoEFA(EFS,"LQD") $(not An(YTIME))) = iTransfOutputRef(runCy,EFS,YTIME);
-VTransfInputRefineries.FX(runCy,"CRO",YTIME)$(not An(YTIME)) = iTransfInputRef(runCy,"CRO",YTIME);
+VOutTransfTherm.FX(runCy,EFS,YTIME)$(not TOCTEF(EFS)) = 0;
+VCapRef.FX(runCy,YTIME)$(not An(YTIME)) = iRefCapacity(runCy,YTIME);
+VOutTransfRefSpec.FX(runCy,EFS,YTIME)$(EFtoEFA(EFS,"LQD") $(not An(YTIME))) = iTransfOutputRef(runCy,EFS,YTIME);
+VInputTransfRef.FX(runCy,"CRO",YTIME)$(not An(YTIME)) = iTransfInputRef(runCy,"CRO",YTIME);
 
-VGrsInlConsNotEneBranch.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iGrossInConsNoEneBra(runCy,EFS,YTIME);
+VConsGrssInlNotEneBranch.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iGrossInConsNoEneBra(runCy,EFS,YTIME);
 
-VGrssInCons.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iGrosInlCons(runCy,EFS,YTIME);
+VConsGrssInl.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iGrosInlCons(runCy,EFS,YTIME);
 VTransfers.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iFeedTransfr(runCy,EFS,YTIME);
 
-VPrimProd.FX(runCy,PPRODEF,YTIME)$(not An(YTIME)) = iFuelPriPro(runCy,PPRODEF,YTIME);
-VEnCons.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iTotEneBranchCons(runCy,EFS,YTIME);
+VProdPrimary.FX(runCy,PPRODEF,YTIME)$(not An(YTIME)) = iFuelPriPro(runCy,PPRODEF,YTIME);
+VConsFiEneSec.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iTotEneBranchCons(runCy,EFS,YTIME);
 
-VExportsFake.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iFuelExprts(runCy,EFS,YTIME);
+VExprtsFakeEneBrnch.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iFuelExprts(runCy,EFS,YTIME);
 VFkImpAllFuelsNotNatGas.FX(runCy,"NGS",YTIME)$(not An(YTIME)) = iFuelImports(runCy,"NGS",YTIME);
-VExportsFake.FX(runCy,"NGS",YTIME)$(not An(YTIME)) = iFuelExprts(runCy,"NGS",YTIME);
+VExprtsFakeEneBrnch.FX(runCy,"NGS",YTIME)$(not An(YTIME)) = iFuelExprts(runCy,"NGS",YTIME);
 
 VDemElec.FX(runCy,YTIME)$(not An(YTIME)) =  1/0.086 * ( iFinEneCons(runCy,"ELC",YTIME) + sum(NENSE, iFuelConsPerFueSub(runCy,NENSE,"ELC",YTIME)) + iDistrLosses(runCy,"ELC",YTIME)
                                              + iTotEneBranchCons(runCy,"ELC",YTIME) - (iFuelImports(runCy,"ELC",YTIME)-iFuelExprts(runCy,"ELC",YTIME)));
@@ -470,13 +470,13 @@ VCumCO2Capt.FX(runCy,YTIME)$(not an(YTIME)) = 0 ;
 *VCO2SeqCsts.FX(runCy,YTIME) = iElastCO2Seq(runCy,"mc_a") *iElastCO2Seq(runCy,"mc_b");
 
 VDemFinEneTranspPerFuel.FX(runCy,TRANSE,EF,YTIME)$(not SECTTECH(TRANSE,EF)) = 0;
-VTransfOutputDHPlants.FX(runCy,EFS,YTIME)$(not STEAM(EFS)) = 0;
-VTransfOutputRefineries.FX(runCy,EFS,YTIME)$(not EFtoEFA(EFS,"LQD")) = 0;
-VTransfInputRefineries.FX(runCy,EFS,YTIME)$(not sameas("CRO",EFS)) = 0;
-VTransfOutputNuclear.FX(runCy,EFS,YTIME)$(not sameas("ELC",EFS)) = 0;
-VTransfInNuclear.FX(runCy,EFS,YTIME)$(not sameas("NUC",EFS)) = 0;
-VTransfInThermPowPls.FX(runCy,EFS,YTIME)$(not PGEF(EFS)) = 0;
-VExportsFake.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
+VOutTransfDhp.FX(runCy,EFS,YTIME)$(not STEAM(EFS)) = 0;
+VOutTransfRefSpec.FX(runCy,EFS,YTIME)$(not EFtoEFA(EFS,"LQD")) = 0;
+VInputTransfRef.FX(runCy,EFS,YTIME)$(not sameas("CRO",EFS)) = 0;
+VOutTransfNuclear.FX(runCy,EFS,YTIME)$(not sameas("ELC",EFS)) = 0;
+VInpTransfNuclear.FX(runCy,EFS,YTIME)$(not sameas("NUC",EFS)) = 0;
+VInpTransfTherm.FX(runCy,EFS,YTIME)$(not PGEF(EFS)) = 0;
+VExprtsFakeEneBrnch.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
 VFkImpAllFuelsNotNatGas.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
 
 VScalFacPlaDisp.LO(runCy, HOUR, YTIME)=-1;

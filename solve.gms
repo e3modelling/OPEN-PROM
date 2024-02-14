@@ -35,16 +35,16 @@ VCapAvgFacRes.FX(runCy,PGALL,YTIME)$TIME(YTIME) = VCapAvgFacRes.L(runCy,PGALL,YT
 VCO2SeqCsts.FX(runCy,YTIME)$TIME(YTIME) = VCO2SeqCsts.L(runCy,YTIME)$TIME(YTIME);
 VCO2ElcHrgProd.FX(runCy,YTIME)$TIME(YTIME) = VCO2ElcHrgProd.L(runCy,YTIME)$TIME(YTIME);
 VCumCO2Capt.FX(runCy,YTIME)$TIME(YTIME) = VCumCO2Capt.L(runCy,YTIME)$TIME(YTIME);
-VRefCapacity.FX(runCy,YTIME)$TIME(YTIME) = VRefCapacity.L(runCy,YTIME)$TIME(YTIME);
+VCapRef.FX(runCy,YTIME)$TIME(YTIME) = VCapRef.L(runCy,YTIME)$TIME(YTIME);
 VTransfers.FX(runCy,EFS,YTIME)$TIME(YTIME) = VTransfers.L(runCy,EFS,YTIME)$TIME(YTIME);
-VTransfInputRefineries.FX(runCy,"CRO",YTIME)$(TIME(YTIME)) = VTransfInputRefineries.L(runCy,"CRO",YTIME)$(TIME(YTIME));
-VPrimProd.FX(runCy,PPRODEF,YTIME)$TIME(YTIME) = VPrimProd.L(runCy,PPRODEF,YTIME)$TIME(YTIME);
+VInputTransfRef.FX(runCy,"CRO",YTIME)$(TIME(YTIME)) = VInputTransfRef.L(runCy,"CRO",YTIME)$(TIME(YTIME));
+VProdPrimary.FX(runCy,PPRODEF,YTIME)$TIME(YTIME) = VProdPrimary.L(runCy,PPRODEF,YTIME)$TIME(YTIME);
 VCapGenElecNoChp.FX(runCy,YTIME)$TIME(YTIME) = VCapGenElecNoChp.L(runCy,YTIME)$TIME(YTIME);
-VFeCons.FX(runCy,EFS,YTIME)$TIME(YTIME) = VFeCons.L(runCy,EFS,YTIME)$TIME(YTIME);
-VTransfOutputRefineries.FX(runCy,EFS,YTIME)$(TIME(YTIME) $EFtoEFA(EFS,"LQD")) = VTransfOutputRefineries.L(runCy,EFS,YTIME)$(TIME(YTIME) $EFtoEFA(EFS,"LQD"));
+VConsFinEneCountry.FX(runCy,EFS,YTIME)$TIME(YTIME) = VConsFinEneCountry.L(runCy,EFS,YTIME)$TIME(YTIME);
+VOutTransfRefSpec.FX(runCy,EFS,YTIME)$(TIME(YTIME) $EFtoEFA(EFS,"LQD")) = VOutTransfRefSpec.L(runCy,EFS,YTIME)$(TIME(YTIME) $EFtoEFA(EFS,"LQD"));
 VConsFuelInclHP.FX(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF)) = VConsFuelInclHP.L(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF));
-VExportsFake.FX(runCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS)) = VExportsFake.L(runCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS));
-VGrsInlConsNotEneBranch.FX(runCy,EFS,YTIME)$TIME(YTIME) =  VGrsInlConsNotEneBranch.L(runCy,EFS,YTIME)$TIME(YTIME);
+VExprtsFakeEneBrnch.FX(runCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS)) = VExprtsFakeEneBrnch.L(runCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS));
+VConsGrssInlNotEneBranch.FX(runCy,EFS,YTIME)$TIME(YTIME) =  VConsGrssInlNotEneBranch.L(runCy,EFS,YTIME)$TIME(YTIME);
 endloop;  !! close outer iteration loop (time steps)
 
 execute_unload "blabla.gdx";
