@@ -497,9 +497,26 @@ HOU.STE2BMS  0.296442 1.00489 2.37209 20  0.816667
 HOU.HEATPUMP 0.432    12.9254         20  1.848
 ;
 table iDataNonEneSec(NENSE,EF,ECONCHAR)                  "Technical data of non energy uses and bunkers (various)"
-$ondelim
-$include"./iDataNonEneSec.csv"
-$offdelim
+        IC      FC      VC      LFT USC
+PCH.HCL 0.26227 45.22   2.37209 20  0.65
+PCH.LGN 0.26227 47.6    2.37209 20  0.5
+PCH.LPG 0.18088 20.4    2.37209 20  0.72
+PCH.GDO 0.18088 9.044   2.37209 20  0.72
+PCH.RFO 0.18088 18.088  2.37209 20  0.72
+PCH.OLQ 0.18088 20.4    2.37209 20  0.72
+PCH.NGS 0.18088 0.9044  2.37209 20  0.8
+PCH.OGS 0.18088 1.36    2.37209 20  0.8
+BU.GDO  0.204   0.136           25  0.72
+BU.RFO  0.204   0.136           25  0.72
+BU.OLQ  0.136   6.8             25  0.72
+NEN.HCL 0.26227 45.22   2.37209 20  0.65
+NEN.LGN 0.26227 47.6    2.37209 20  0.5
+NEN.LPG 0.612   20.4    2.37209 20  0.72
+NEN.GDO 0.18088 9.044   2.37209 20  0.72
+NEN.RFO 0.18088 18.088  2.37209 20  0.72
+NEN.OLQ 0.612   20.4    2.37209 20  0.72
+NEN.NGS 0.18088 0.9044  2.37209 20  0.8
+NEN.OGS 0.18088 1.36    2.37209 20  0.8
 ;
 * FIXME: check if country-specific data is needed; move to mrprom
 * author=giannou
