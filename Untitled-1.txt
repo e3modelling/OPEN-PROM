@@ -8,4 +8,4 @@ billion of tkm	GU
 billion of tkm	GT
 billion of tkm	GN
 
-VTrnspActiv: 
+VActivPassTrnsp: 
