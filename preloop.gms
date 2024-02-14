@@ -331,8 +331,6 @@ VLifeTimeTech.FX(runCy,TRANSE,TTECH,YTIME)$(SECTTECH(TRANSE,TTECH) $(not sameas(
 VLifeTimeTech.FX(runCy,DSBS,EF,YTIME)$(not SECTTECH(DSBS,EF))=0;
 VLifeTimeTech.FX(runCy,"PC",TTECH,YTIME)$( (not AN(YTIME)) $SECTTECH("PC",TTECH))=10;
 
-* FIXME: VConsEachTechTransp.FX(runCy,TRANSE,TTECH,EF,YTIME)... , only the line of code below
-* author=giannou
 VConsEachTechTransp.FX(runCy,TRANSE,TTECH,EF,YTIME)$(SECTTECH(TRANSE,TTECH)  $(not PLUGIN(TTECH)) $TTECHtoEF(TTECH,EF) $(not AN(YTIME))) = iFuelConsPerFueSub(runCy,TRANSE,EF,YTIME); 
 VConsEachTechTransp.FX(runCy,TRANSE,TTECH,EF,YTIME)$(SECTTECH(TRANSE,TTECH)  $PLUGIN(TTECH) $(not AN(YTIME))) = 0;
 VConsEachTechTransp.FX(runCy,TRANSE,TTECH,EF,YTIME)$(SECTTECH(TRANSE,TTECH)  $CHYBV(TTECH) $(not AN(YTIME))) =0;
