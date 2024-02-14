@@ -1272,8 +1272,8 @@ QConsFuelInclHP(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(
 *' per CHP type and the summation of fuel-related costs for each energy form . The calculation involves fuel prices, CO2 emission factors, boiler efficiency, electricity
 *' index, and carbon prices, adjusted by various factors. The equation uses these terms to calculate the variable, including fuel electricity production cost per CHP plant and
 *' demand sector. The result is expressed in Euro per kilowatt-hour (Euro/KWh). 
-QShareTechNewEquip(runCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS))..
-         VShareTechNewEquip(runCy,DSBS,CHP,YTIME)
+QCostProdChpDem(runCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS))..
+         VCostProdChpDem(runCy,DSBS,CHP,YTIME)
                  =E=
          iVarCostChp(runCy,DSBS,CHP,YTIME)/1E3
                     + sum(PGEF$CHPtoEF(CHP,PGEF), (VPriceFuelSubCarVal(runCy,"PG",PGEF,YTIME)+1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
@@ -1299,7 +1299,7 @@ QCostVarAvgElecProd(runCy,CHP,YTIME)$(TIME(YTIME) ) ..
          =E=
 
          (sum(INDDOM, VConsFuel(runCy,INDDOM,CHP,YTIME-1)/SUM(INDDOM2,VConsFuel(runCy,INDDOM2,CHP,YTIME-1))
-         *VShareTechNewEquip(runCy,INDDOM,CHP,YTIME)))
+         *VCostProdChpDem(runCy,INDDOM,CHP,YTIME)))
          $SUM(INDDOM2,VConsFuel.L(runCy,INDDOM2,CHP,YTIME-1))+0$(NOT SUM(INDDOM2,VConsFuel.L(runCy,INDDOM2,CHP,YTIME-1)));
 
 *' * REST OF ENERGY BALANCE SECTORS
@@ -1583,7 +1583,7 @@ QExprtsFakeEneBrnch(runCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS))..
 *' and other factors. The result represents the fake imports in million tons of oil equivalent for all fuels except natural gas.
 QImptsFakeEneBrnch(runCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS))..
 
-         VFkImpAllFuelsNotNatGas(runCy,EFS,YTIME)
+         VImptsFakeEneBrnch(runCy,EFS,YTIME)
 
                  =E=
          (
@@ -1614,7 +1614,7 @@ QImptsFakeEneBrnch(runCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS))..
 QImpNetEneBrnch(runCy,EFS,YTIME)$TIME(YTIME)..
          VImpNetEneBrnch(runCy,EFS,YTIME)
                  =E=
-         VFkImpAllFuelsNotNatGas(runCy,EFS,YTIME) - VExprtsFakeEneBrnch(runCy,EFS,YTIME);
+         VImptsFakeEneBrnch(runCy,EFS,YTIME) - VExprtsFakeEneBrnch(runCy,EFS,YTIME);
                                
 *' The equation calculates the final energy consumption in the energy sector.
 *' It considers the rate of energy branch consumption over the total transformation output.

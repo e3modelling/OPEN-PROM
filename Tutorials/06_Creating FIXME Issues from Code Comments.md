@@ -4,7 +4,7 @@ In this tutorial, you can find instructions about automatically creating new iss
 * FIXME: This is a test issue that was generated automatically
 * author=derevirn
 VExprtsFakeEneBrnch.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
-VFkImpAllFuelsNotNatGas.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
+VImptsFakeEneBrnch.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
 
 VScalFacPlaDisp.LO(runCy, HOUR, YTIME)=-1;
 VLambda.LO(runCy,YTIME)=0;

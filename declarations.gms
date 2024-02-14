@@ -216,7 +216,7 @@ QSortTechVarCost(allCy,DSBS,rCon,YTIME)              "Compute Technology sorting
 QGapFinalDem(allCy,DSBS,YTIME)                "Compute the gap in final demand of industry, tertiary, non-energy uses and bunkers"
 QShareTechNewEquip(allCy,DSBS,EF,YTIME)   "Compute technology share in new equipment"
 QConsFuelInclHP(allCy,DSBS,EF,YTIME)          "Equation for fuel consumption in Mtoe (including heat from heatpumps)"
-QShareTechNewEquip(allCy,DSBS,CHP,YTIME)    "Compute  variable including fuel electricity production cost per CHP plant and demand sector "
+QCostProdChpDem(allCy,DSBS,CHP,YTIME)    "Compute  variable including fuel electricity production cost per CHP plant and demand sector "
 QCostElcAvgProdCHP(allCy,CHP,YTIME)            "Compute Average Electricity production cost per CHP plant"
 QCostVarAvgElecProd(allCy,CHP,YTIME)              "Compute Average variable including fuel electricity production cost per CHP plant"
 QConsElecNonSubIndTert(allCy,INDDOM,YTIME)	          "Compute non-substituable electricity consumption in Industry and Tertiary"
@@ -388,7 +388,7 @@ VConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)                   "Consumption of re
 VGapFinalDem(allCy,DSBS,YTIME)                          "Final demand gap to be filed by new technologies (Mtoe)"
 VShareTechNewEquip(allCy,DSBS,EF,YTIME)             "Technology share in new equipment (1)"
 VConsFuelInclHP(allCy,DSBS,EF,YTIME)                    "Consumption of fuels in each demand subsector including heat from heatpumps (Mtoe)"
-VShareTechNewEquip(allCy,DSBS,CHP,YTIME)                    "Variable including fuel electricity production cost per CHP plant and demand sector (Euro/KWh)"
+VCostProdChpDem(allCy,DSBS,CHP,YTIME)                    "Variable including fuel electricity production cost per CHP plant and demand sector (Euro/KWh)"
 VCostElcAvgProdCHP(allCy,CHP,YTIME)                          "Average Electricity production cost per CHP plant (Euro/KWh)"
 VCostVarAvgElecProd(allCy,CHP,YTIME)                     "Average variable including fuel electricity production cost per CHP plant (Euro/KWh)"
 
@@ -411,7 +411,7 @@ VConsGrssInlNotEneBranch(allCy,EFS,YTIME)	            "Gross Inland Consumption 
 VConsGrssInl(allCy,EFS,YTIME)	                        "Gross Inland Consumption (Mtoe)"
 VProdPrimary(allCy,EFS,YTIME)	                            "Primary Production (Mtoe)"	
 VExprtsFakeEneBrnch(allCy,EFS,YTIME)                        	"Exports fake (Mtoe)" 		
-VFkImpAllFuelsNotNatGas(allCy,EFS,YTIME)             	"Fake Imports for all fuels except natural gas (Mtoe)"
+VImptsFakeEneBrnch(allCy,EFS,YTIME)             	"Fake Imports for all fuels except natural gas (Mtoe)"
 VImpNetEneBrnch(allCy,EFS,YTIME)	                        "Net Imports (Mtoe)"
 
 *' *** Prices Variables

@@ -44,7 +44,7 @@ Parameter,CHPLFT,iLifChpPla,Technical Lifetime for CHP plants (years),"CYall,DSB
 Parameter,CHPPG_Cost,iDataChpPowGen,Various data related to CHP power generation (various),"EF,CHPPGSET,YTIME","EF,YTIME,CHPPGSET",common data parameters
 Parameter,CHPPRICE,iFracElecPriChp,Fraction of Electricity Price at which a CHP sells electricity to network (1),"CYall,YTIME",,Parameter Prices
 Parameter,CHPVARCOST,iVarCostChp,Variable (other than fuel) cost per CHP Type (Gross Euro05/KW),"CYall,DSBS,CHP,YTIME","allCy,DSBS,CHP,YTIME",Power Generation Parameters
-Variable,CHPVCOST,VShareTechNewEquip,Variable including fuel electricity production cost per CHP plant and demand sector (Euro/KWh),"CYall,DSBS,CHP,YTIME","allCy,DSBS,CHP,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+Variable,CHPVCOST,VCostProdChpDem,Variable including fuel electricity production cost per CHP plant and demand sector (Euro/KWh),"CYall,DSBS,CHP,YTIME","allCy,DSBS,CHP,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,CHPW,vSecContrTotChpProd,Contribution of each sector in total CHP production (1),"CYall,SBS,CHP,YTIME","allCy,SBS,CHP,YTIME",POWER GENERATION SECTOR
 Parameter,CO2_SEQ_DATA,iCO2SeqData,Data for CO2 sequestration ,"CO2SEQELAST,YTIME","allCy,CO2SEQELAST,YTIME",Parameters for data transfering
 Variable,CO2CAPT,VCapCo2ElecHydr,CO2 captured by electricity and hydrogen production plants (Mtn CO2),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
@@ -149,7 +149,7 @@ Equation,EQCFTOT,qConsTotFinEne,Compute total final energy consumption,YTIME,YTI
 Equation,EQCHPCAPAC,QCapElecChp,Compute CHP electric capacity,"CYrun,CHP,YTIME",,POWER GENERATION SECTOR
 Equation,EQCHPCOST,QCostElecProdChp,Compute electricity production cost per CHP plant and demand sector in Euro per KWh,"CYall,DSBS,CHP,YTIME","allCy,DSBS,CHP,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQCHPELCPROD,QGenEstElecChpPlants,Compute electricity production from CHP plants ,"Cyall,CHP,YTIME","allCy,CHP,YTIME",POWER GENERATION SECTOR
-Equation,EQCHPVCOST,QShareTechNewEquip,Compute  variable including fuel electricity production cost per CHP plant and demand sector ,"CYall,DSBS,CHP,YTIME","allCy,DSBS,CHP,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
+Equation,EQCHPVCOST,QCostProdChpDem,Compute  variable including fuel electricity production cost per CHP plant and demand sector ,"CYall,DSBS,CHP,YTIME","allCy,DSBS,CHP,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQCHPW,qSecContrTotChpProd,Compute sector contribution to total CHP production,"CYall,SBS,CHP,YTIME","allCy,SBS,CHP,YTIME",POWER GENERATION SECTOR
 Equation,EQCO2CAPT,QCapCo2ElecHydr,Compute CO2 captured by electricity and hydrogen production plants ,"CYall,YTIME","allCy,YTIME",CO2 SEQUESTRATION COST CURVES
 Equation,EQCO2EMISNAP,QGrnnHsEmisCo2Equiv,Compute total CO2eq GHG emissions in all countries per NAP sector,"NAP,YTIME","NAP,YTIME",POWER GENERATION SECTOR
@@ -283,7 +283,7 @@ Variable,GICP,VConsGrssInlNotEneBranch,Gross Inland Consumption not including co
 Parameter,H,iScaleEndogScrap,Scale parameter for endogenous scrapping applied to the sum of full costs,"PGALL,YTIME","allCy,PGALL,YTIME",Power Generation Parameters
 Parameter,H2_PRICE,iHydrogenPri,Total Hydrogen Cost Per Sector (Euro/toe),"CYALL,SBS,YTIME ","allCy,SBS,YTIME",Power Generation Parameters
 Parameter,IMP_OF_EXP_COUNTRIES,iImpExp,Imports of exporting countries usually zero (1),"CYALL,EFS,YTIME","allCy,EFS,YTIME",PARAMEETERS RELATED TO THE NEW IMPORT MECHANISM (USED FOR NATURAL GAS IMPORTS+EXPORTS)
-Variable,IMPO_TZ,VFkImpAllFuelsNotNatGas,Fake Imports for all fuels except natural gas (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",Variables
+Variable,IMPO_TZ,VImptsFakeEneBrnch,Fake Imports for all fuels except natural gas (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",Variables
 Parameter,Indu_FCon,iFuelConsINDSE,Fuel consumption of industry subsector (Mtoe),"INDSE,EF,YTIME","allCy,INDSE,EF,YTIME",PARAMETERS TRANSFORMATIONS AND CALCULATIONS
 Parameter,Indu_RFCon,iResFuelConsSub,Residuals for fuel consumption per subsector (1),"INDSE,EF,YTIME","allCy,INDSE,EF,YTIME",Parameters for data transfering
 Parameter,Indu_RNSE,iResNonSubElec,Residuals for non subsitutable electricity,"INDSE,YTIME","allCy,INDSE,YTIME",Parameters for data transfering
