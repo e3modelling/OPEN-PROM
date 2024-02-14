@@ -255,9 +255,9 @@ QTrnsWghtLinToExp(allCy,YTIME)	         "Transtition weight for shifting from li
 QCstCO2SeqCsts(allCy,YTIME)	                 "Compute cost curve for CO2 sequestration costs" 	
 
 *' *** Emissions Constraints Equations
-qTotCo2AllCoun(YTIME)	                   "Compute total CO2eq GHG emissions in all countries"
-QTotGhgEmisAllCountrNap(NAP,YTIME)	       "Compute total CO2eq GHG emissions in all countries per NAP sector"	
-qHouseExpEne(allCy,YTIME)	               "Compute households expenditures on energy"
+qGrnnHsEmisCo2EquivAllCntr(YTIME)	                   "Compute total CO2eq GHG emissions in all countries"
+QGrnnHsEmisCo2Equiv(NAP,YTIME)	       "Compute total CO2eq GHG emissions in all countries per NAP sector"	
+qExpendHouseEne(allCy,YTIME)	               "Compute households expenditures on energy"
 QFuelPriSubSepCarbVal(allCy,SBS,EF,YTIME)  "Compute fuel prices per subsector and fuel, separate carbon value in each sector"
 
 *' *** Prices
@@ -426,9 +426,9 @@ VTrnsWghtLinToExp(allCy,YTIME)	                    "Weight for transtition from 
 VCstCO2SeqCsts(allCy,YTIME)	                            "Cost curve for CO2 sequestration costs (Euro/tn of CO2 sequestrated)"
 
 *' *** Emissions Constraints Variables
-vTotCo2AllCoun(YTIME)	                                "Total CO2eq GHG emissions in all countries (1)"
-VTotGhgEmisAllCountrNap(NAP,YTIME)	                    "Total CO2eq GHG emissions in all countries per NAP sector (1)"	
-vHouseExpEne(allCy,YTIME)	                            "Households expenditures on energy (billions)"
+vGrnnHsEmisCo2EquivAllCntr(YTIME)	                                "Total CO2eq GHG emissions in all countries (1)"
+VGrnnHsEmisCo2Equiv(NAP,YTIME)	                    "Total CO2eq GHG emissions in all countries per NAP sector (1)"	
+vExpendHouseEne(allCy,YTIME)	                            "Households expenditures on energy (billions)"
 
 *' *** Miscellaneous
 vDummyObj                                               "Dummy maximisation variable (1)"

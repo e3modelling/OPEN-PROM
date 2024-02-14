@@ -1700,8 +1700,8 @@ QCstCO2SeqCsts(runCy,YTIME)$TIME(YTIME)..
 *' The equation provides a comprehensive approach to calculating CO2eq emissions for each NAP sector, considering various aspects of fuel consumption
 *' and transformation across different subsectors. The result represents the overall CO2 emissions for each NAP sector across
 *' all countries for the specified year.
-QTotGhgEmisAllCountrNap(NAP,YTIME)$TIME(YTIME)..
-         VTotGhgEmisAllCountrNap(NAP,YTIME)
+QGrnnHsEmisCo2Equiv(NAP,YTIME)$TIME(YTIME)..
+         VGrnnHsEmisCo2Equiv(NAP,YTIME)
           =E=
         (
         sum(runCy,
@@ -1723,17 +1723,17 @@ QTotGhgEmisAllCountrNap(NAP,YTIME)$TIME(YTIME)..
 *' The result represents the sum of total CO2eq emissions across all countries. The summation is performed over the NAP (National Allocation Plan) sectors,
 *' considering the total CO2 GHG emissions per NAP sectorfor each country. This equation provides a concise and systematic approach to aggregating
 *' greenhouse gas emissions at a global level, considering contributions from different sectors and countries. 
-qTotCo2AllCoun(YTIME)$TIME(YTIME)..
+qGrnnHsEmisCo2EquivAllCntr(YTIME)$TIME(YTIME)..
 
-         vTotCo2AllCoun(YTIME) 
+         vGrnnHsEmisCo2EquivAllCntr(YTIME) 
          =E=
-         sum(NAP, VTotGhgEmisAllCountrNap(NAP,YTIME));
+         sum(NAP, VGrnnHsEmisCo2Equiv(NAP,YTIME));
 
 *' Compute households expenditures on energy by utilizing the sum of consumption of remaining substitutable equipment multiplied by the fuel prices per subsector and fuel 
 *' minus the efficiency values divided by CO2 emission factors per subsector and multiplied by the sum of carbon prices for all countries and adding the Electricity price
 *' to Industrial and Residential Consumers multiplied by Consumption of non-substituable electricity in Industry and Tertiary divided by TWh to Mtoe conversion factor.
-qHouseExpEne(runCy,YTIME)$TIME(YTIME)..
-                 vHouseExpEne(runCy,YTIME)
+qExpendHouseEne(runCy,YTIME)$TIME(YTIME)..
+                 vExpendHouseEne(runCy,YTIME)
                  =E= 
                  SUM(DSBS$HOU(DSBS),SUM(EF$SECTTECH(dSBS,EF),VConsRemSubEquipSubSec(runCy,DSBS,EF,YTIME)*(VFuelPriceSub(runCy,DSBS,EF,YTIME)-iEffValueInEuro(runCy,DSBS,YTIME)/
                  1000-iCo2EmiFac(runCy,"PG",EF,YTIME)*sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))/1000)))

@@ -161,9 +161,9 @@ QCstCO2SeqCsts                     !! VCstCO2SeqCsts(runCy,YTIME)
 
 *' * EMISSIONS CONSTRAINTS *
 
-QTotGhgEmisAllCountrNap            !! VTotGhgEmisAllCountrNap(NAP,YTIME)
-qTotCo2AllCoun                     !! vTotCo2AllCoun(YTIME) 
-qHouseExpEne                       !! vHouseExpEne(runCy,YTIME)
+QGrnnHsEmisCo2Equiv            !! VGrnnHsEmisCo2Equiv(NAP,YTIME)
+qGrnnHsEmisCo2EquivAllCntr                     !! vGrnnHsEmisCo2EquivAllCntr(YTIME) 
+qExpendHouseEne                       !! vExpendHouseEne(runCy,YTIME)
 
 
 *' * Prices *
