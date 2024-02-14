@@ -102,12 +102,12 @@ QProdReqTotElec(runCy,YTIME)$TIME(YTIME)..
 QCapGenTotEstElec(runCy,YTIME)$TIME(YTIME)..
         VCapGenTotEstElec(runCy,YTIME)
              =E=
-        VTotElecGenCap(runCy,YTIME-1) * VLoadPeakElec(runCy,YTIME)/VLoadPeakElec(runCy,YTIME-1);          
+        VCapGenTotElec(runCy,YTIME-1) * VLoadPeakElec(runCy,YTIME)/VLoadPeakElec(runCy,YTIME-1);          
 
 *' The equation sets the total electricity generation capacity for a given year equal to the estimated total electricity generation capacity for the same year.
 *' This implies that the estimated capacity is considered as the actual capacity for the specified year.
 QCapGenTotElec(runCy,YTIME)$TIME(YTIME)..
-        VTotElecGenCap(runCy,YTIME) 
+        VCapGenTotElec(runCy,YTIME) 
         =E=
      VCapGenTotEstElec(runCy,YTIME);  
 
@@ -261,7 +261,7 @@ QIndexEndogScrap(runCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)))..
 QCapGenElecNoChp(runCy,YTIME)$TIME(YTIME)..
          VCapGenElecNoChp(runCy,YTIME)
           =E=
-VTotElecGenCap(runCy,YTIME) - SUM(CHP,VCapElecChp(runCy,CHP,YTIME)*0.85);      
+VCapGenTotElec(runCy,YTIME) - SUM(CHP,VCapElecChp(runCy,CHP,YTIME)*0.85);      
 
 *' In essence, the equation evaluates the difference between the current and expected power generation capacity, accounting for various factors such as planned capacity,
 *' decommissioning schedules, and endogenous scrapping. The square root term introduces a degree of tolerance in the calculation.

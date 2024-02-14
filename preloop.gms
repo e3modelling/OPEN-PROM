@@ -25,7 +25,7 @@ QLoadBaseMax                       !! VLoadBaseMax(runCy,YTIME)
 QLoadBaseElecExp                   !! VLoadBaseElecExp(runCy,YTIME)
 QProdReqTotElec                    !! VProdReqTotElec(runCy,YTIME)
 QCapGenTotEstElec                  !! VCapGenTotEstElec(runCy,YTIME)
-QCapGenTotElec                     !! VTotElecGenCap(runCy,YTIME)	
+QCapGenTotElec                     !! VCapGenTotElec(runCy,YTIME)	
 QCostHourProdInvDec                !! VCostHourProdInvDec(runCy,PGALL,HOUR,YTIME)
 QCostHourProdInvDecNoCcs           !! VCostHourProdInvDecNoCcs(runCy,PGALL,HOUR,YTIME)
 QSensCcs                           !! VSensCcs(runCy,YTIME)
@@ -411,7 +411,7 @@ VLoadFacDom.FX(runCy,YTIME)$(datay(YTIME)) =
 VLoadPeakElec.L(runCy,YTIME) = 1;
 VLoadPeakElec.FX(runCy,YTIME)$(datay(YTIME)) = VDemElec.l(runCy,YTIME)/(VLoadFacDom.l(runCy,YTIME)*8.76);
 
-VTotElecGenCap.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
+VCapGenTotElec.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
 VCapGenElecNoChp.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
 VCapElecChp.FX(runCy,CHP,YTIME)$(not An(YTIME)) = iHisChpGrCapData(runCy,CHP,YTIME);
 VShaNewEqPowPla.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) )=0;

@@ -331,7 +331,7 @@ VCostHourProdInvDecNoCcs(allCy,PGALL,HOUR,YTIME) "Hourly production cost of tech
 VCostProdTechPreReplacAvail(allCy,PGALL,PGALL2,YTIME)	"Production cost of technology used in premature replacement including plant availability rate (Euro/KWh)"		
 VProdReqTotElec(allCy,YTIME)	      "Total required electricity production (TWh)"	
 VCapGenTotEstElec(allCy,YTIME)	      "Estimated Total electricity generation capacity (GW)"	
-VTotElecGenCap(allCy,YTIME)	          "Total electricity generation capacity (GW)"	
+VCapGenTotElec(allCy,YTIME)	          "Total electricity generation capacity (GW)"	
 VConsFinEneCountry(allCy,EF,YTIME)               "Total final energy consumnption (Mtoe)"
 VConsFinNonEne(allCy,EFS,YTIME)          "Final non energy consumption (Mtoe)"
 VLossesDistr(allCy,EFS,YTIME)              "Distribution losses (Mtoe)"

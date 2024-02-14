@@ -459,7 +459,7 @@ Variable,TOOTH,REMOVED FROM OPEN-PROM,"Transformation output from patent fuel an
 Parameter,TOOTHRES,REMOVED FROM OPEN-PROM,"Transformation Output from Gasworks, Blast Furnances, Briquetting plants Residual","CYall,YTIME","allCy,YTIME",Supply Side Specific Parameters
 Variable,TORF,VOutTransfRefSpec,Transformation output from refineries (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Parameter,TOTAL_EF,iDiffFuelsInSec,Auxiliary parameter holding the number of different fuels in a sector,SBS,,
-Variable,TOTCAP,VTotElecGenCap,Total electricity generation capacity (GW),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Variable,TOTCAP,VCapGenTotElec,Total electricity generation capacity (GW),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Variable,TOTCAP_EST,VCapGenTotEstElec,Estimated Total electricity generation capacity (GW),"CYall,YTIME","CYall,YTIME",POWER GENERATION SECTOR
 Variable,TOTCAPNCHP,VCapGenElecNoChp,Total electricity generation capacity excluding CHP ( GW),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Variable,TOTOT,VOutTotTransf,Total transformation output (Mtoe),"CYall,EFS,YTIME ","allCy,EFS,YTIME ",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
