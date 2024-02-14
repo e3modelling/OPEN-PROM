@@ -10,14 +10,14 @@
 * Fix values of variables for the next time step
 VStockPcYearly.FX(allCy,YTIME)$TIME(YTIME) = VStockPcYearly.L(allCy,YTIME)$TIME(YTIME);
 VMEPcGdp.FX(allCy,YTIME)$TIME(YTIME) = VMEPcGdp.L(allCy,YTIME)$TIME(YTIME);
-VFuelPriceAvg.FX(allCy,DSBS,YTIME)$TIME(YTIME) = VFuelPriceAvg.L(allCy,DSBS,YTIME)$TIME(YTIME);
+VPriceFuelAvgSub.FX(allCy,DSBS,YTIME)$TIME(YTIME) = VPriceFuelAvgSub.L(allCy,DSBS,YTIME)$TIME(YTIME);
 VScrRatePc.FX(allCy,YTIME)$TIME(YTIME) = VScrRatePc.L(allCy,YTIME)$TIME(YTIME);
 VActivGoodsTransp.FX(allCy,TRANSE,YTIME)$TIME(YTIME) = VActivGoodsTransp.L(allCy,TRANSE,YTIME)$TIME(YTIME);
 VConsSpecificFuel.FX(allCy,TRANSE,TTECH,EF,YTIME)$TIME(YTIME) = VConsSpecificFuel.L(allCy,TRANSE,TTECH,EF,YTIME)$TIME(YTIME);
 VConsTechTranspSectoral.FX(allCy,TRANSE,TTECH,EF,YTIME)$TIME(YTIME) = VConsTechTranspSectoral.L(allCy,TRANSE,TTECH,EF,YTIME)$TIME(YTIME);
 VConsElecNonSubIndTert.FX(allCy,DSBS,YTIME)$TIME(YTIME) = VConsElecNonSubIndTert.L(allCy,DSBS,YTIME)$TIME(YTIME);
 VDemFinSubFuelSubSec.FX(allCy,DSBS,YTIME)$TIME(YTIME) = VDemFinSubFuelSubSec.L(allCy,DSBS,YTIME)$TIME(YTIME);
-VFuelPriceSub.FX(allCy,SBS,EF,YTIME)$TIME(YTIME) = VFuelPriceSub.L(allCy,SBS,EF,YTIME)$TIME(YTIME);
+VPriceFuelSubCarVal.FX(allCy,SBS,EF,YTIME)$TIME(YTIME) = VPriceFuelSubCarVal.L(allCy,SBS,EF,YTIME)$TIME(YTIME);
 VConsFuelInclHP.FX(allCy,DSBS,EF,YTIME)$TIME(YTIME) = VConsFuelInclHP.L(allCy,DSBS,EF,YTIME)$TIME(YTIME);
 VActivPassTrnsp.FX(allCy,TRANSE,YTIME)$TIME(YTIME) = VActivPassTrnsp.L(allCy,TRANSE,YTIME)$TIME(YTIME);
 VCostPowGenAvgLng.FX(allCy,ESET,YTIME)$TIME(YTIME) = VCostPowGenAvgLng.L(allCy,ESET,YTIME)$TIME(YTIME);

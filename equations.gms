@@ -125,7 +125,7 @@ QCostHourProdInvDec(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME)) ..
                     )/iAvailRate(PGALL,YTIME) / (1000*(ord(HOUR)-1+0.25))
                     + iVarCost(PGALL,YTIME)/1E3 + (VRenValue(YTIME)*8.6e-5)$( not ( PGREN(PGALL) 
                     $(not sameas("PGASHYD",PGALL)) $(not sameas("PGSHYD",PGALL)) $(not sameas("PGLHYD",PGALL)) ))
-                    + sum(PGEF$PGALLtoEF(PGALL,PGEF), (VFuelPriceSub(runCy,"PG",PGEF,YTIME)+
+                    + sum(PGEF$PGALLtoEF(PGALL,PGEF), (VPriceFuelSubCarVal(runCy,"PG",PGEF,YTIME)+
                         iCO2CaptRate(runCy,PGALL,YTIME)*VCstCO2SeqCsts(runCy,YTIME)*1e-3*
                     iCo2EmiFac(runCy,"PG",PGEF,YTIME)
                          +(1-iCO2CaptRate(runCy,PGALL,YTIME))*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
@@ -200,7 +200,7 @@ QShareNewTechNoCcs(runCy,PGALL,YTIME)$(TIME(YTIME) $NOCCS(PGALL))..
 QCostVarTech(runCy,PGALL,YTIME)$(time(YTIME))..
          VCostVarTech(runCy,PGALL,YTIME) 
              =E=
-         (iVarCost(PGALL,YTIME)/1E3 + sum(PGEF$PGALLtoEF(PGALL,PGEF), (VFuelPriceSub(runCy,"PG",PGEF,YTIME)/1.2441+
+         (iVarCost(PGALL,YTIME)/1E3 + sum(PGEF$PGALLtoEF(PGALL,PGEF), (VPriceFuelSubCarVal(runCy,"PG",PGEF,YTIME)/1.2441+
          iCO2CaptRate(runCy,PGALL,YTIME)*VCstCO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)
          + (1-iCO2CaptRate(runCy,PGALL,YTIME))*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)
           *(sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
@@ -228,7 +228,7 @@ QCostProdTechPreReplac(runCy,PGALL,YTIME)$TIME(YTIME)..
                             * iGrossCapCosSubRen(PGALL,YTIME)* 1E3 * iCGI(runCy,YTIME)  + 
                             iFixOandMCost(PGALL,YTIME))/(8760*iAvailRate(PGALL,YTIME))
                            + (iVarCost(PGALL,YTIME)/1E3 + sum(PGEF$PGALLtoEF(PGALL,PGEF), 
-                           (VFuelPriceSub(runCy,"PG",PGEF,YTIME)+
+                           (VPriceFuelSubCarVal(runCy,"PG",PGEF,YTIME)+
                             iCO2CaptRate(runCy,PGALL,YTIME)*VCstCO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME) +
                              (1-iCO2CaptRate(runCy,PGALL,YTIME))*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
                          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
@@ -582,7 +582,7 @@ QCostPowGenLngTechNoCp(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
              iFixOandMCost(PGALL,YTIME))/iAvailRate(PGALL,YTIME)
               / (1000*(6$ISET(ESET)+4$RSET(ESET))) +
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
-                 (iVarCost(PGALL,YTIME)/1000+(VFuelPriceSub(runCy,"PG",PGEF,YTIME)/1.2441+
+                 (iVarCost(PGALL,YTIME)/1000+(VPriceFuelSubCarVal(runCy,"PG",PGEF,YTIME)/1.2441+
                  iCO2CaptRate(runCy,PGALL,YTIME)*VCstCO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME) +
                  (1-iCO2CaptRate(runCy,PGALL,YTIME))*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
                  (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
@@ -605,7 +605,7 @@ qCostPowGenLonMin(runCy,PGALL,YTIME)$TIME(YTIME)..
              iFixOandMCost(PGALL,YTIME))/iAvailRate(PGALL,YTIME)
              / (1000*sGwToTwhPerYear) +
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
-                 (iVarCost(PGALL,YTIME)/1000+(VFuelPriceSub(runCy,"PG",PGEF,YTIME)/1.2441+
+                 (iVarCost(PGALL,YTIME)/1000+(VPriceFuelSubCarVal(runCy,"PG",PGEF,YTIME)/1.2441+
 
                  iCO2CaptRate(runCy,PGALL,YTIME)*VCstCO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME) +
 
@@ -689,7 +689,7 @@ QCostAvgPowGenLonNoClimPol(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
              iFixOandMCost(PGALL,YTIME))/iAvailRate(PGALL,YTIME)
              / (1000*(7.25$ISET(ESET)+2.25$RSET(ESET))) +
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
-                 (iVarCost(PGALL,YTIME)/1000+((VFuelPriceSub(runCy,"PG",PGEF,YTIME)-iEffValueInEuro(runCy,"PG",ytime)/1000-iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
+                 (iVarCost(PGALL,YTIME)/1000+((VPriceFuelSubCarVal(runCy,"PG",PGEF,YTIME)-iEffValueInEuro(runCy,"PG",ytime)/1000-iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
                  sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))/1000 )/1.2441+
 
                  iCO2CaptRate(runCy,PGALL,YTIME)*VCstCO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME) +
@@ -723,14 +723,14 @@ QPriceElecIndResNoCliPol(runCy,ESET,YTIME)$TIME(YTIME)..   !! The electricity pr
         (1 + iFacElecPriConsu(runCy,"VAT",YTIME)) *
         (
            (
-             (VFuelPriceSub(runCy,"OI","ELC",YTIME-1)*sTWhToMtoe)$TFIRST(YTIME-1) +
+             (VPriceFuelSubCarVal(runCy,"OI","ELC",YTIME-1)*sTWhToMtoe)$TFIRST(YTIME-1) +
              (  iFacElecPriConsu(runCy,"IND_RES",YTIME-1)+
                VCostPowGenLonNoClimPol(runCy,"i",YTIME-1)
               )$(not TFIRST(YTIME-1))
            )$ISET(ESET)
         +
            (
-             (VFuelPriceSub(runCy,"HOU","ELC",YTIME-1)*sTWhToMtoe)$TFIRST(YTIME-1) +
+             (VPriceFuelSubCarVal(runCy,"HOU","ELC",YTIME-1)*sTWhToMtoe)$TFIRST(YTIME-1) +
              (  iFacElecPriConsu(runCy,"TERT_RES",YTIME-1)+
                 VCostPowGenLonNoClimPol(runCy,"r",YTIME-1)
              )$(not TFIRST(YTIME-1))
@@ -749,7 +749,7 @@ qCostPowGenAvgShrt(runCy,ESET,YTIME)$TIME(YTIME)..
         VProdElecPowPlantsCy(runCy,PGALL,YTIME)*
         (
         sum(PGEF$PGALLtoEF(PGALL,PGEF),
-        (iVarCost(PGALL,YTIME)/1000+(VFuelPriceSub(runCy,"PG",PGEF,YTIME)/1.2441+
+        (iVarCost(PGALL,YTIME)/1000+(VPriceFuelSubCarVal(runCy,"PG",PGEF,YTIME)/1.2441+
          iCO2CaptRate(runCy,PGALL,YTIME)*VCstCO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME) +
          (1-iCO2CaptRate(runCy,PGALL,YTIME))*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
@@ -779,11 +779,11 @@ QActivGoodsTransp(runCy,TRANSE,YTIME)$(TIME(YTIME) $TRANG(TRANSE))..
           VActivGoodsTransp(runCy,TRANSE,YTIME-1)
            * [(iGDP(YTIME,runCy)/iPop(YTIME,runCy))/(iGDP(YTIME-1,runCy)/iPop(YTIME-1,runCy))]**iElastA(runCy,TRANSE,"a",YTIME)
            * (iPop(YTIME,runCy)/iPop(YTIME-1,runCy))
-           * (VFuelPriceAvg(runCy,TRANSE,YTIME)/VFuelPriceAvg(runCy,TRANSE,YTIME-1))**iElastA(runCy,TRANSE,"c1",YTIME)
-           * (VFuelPriceAvg(runCy,TRANSE,YTIME-1)/VFuelPriceAvg(runCy,TRANSE,YTIME-2))**iElastA(runCy,TRANSE,"c2",YTIME)
+           * (VPriceFuelAvgSub(runCy,TRANSE,YTIME)/VPriceFuelAvgSub(runCy,TRANSE,YTIME-1))**iElastA(runCy,TRANSE,"c1",YTIME)
+           * (VPriceFuelAvgSub(runCy,TRANSE,YTIME-1)/VPriceFuelAvgSub(runCy,TRANSE,YTIME-2))**iElastA(runCy,TRANSE,"c2",YTIME)
            * prod(kpdl,
-                  [(VFuelPriceAvg(runCy,TRANSE,YTIME-ord(kpdl))/
-                    VFuelPriceAvg(runCy,TRANSE,YTIME-(ord(kpdl)+1)))/
+                  [(VPriceFuelAvgSub(runCy,TRANSE,YTIME-ord(kpdl))/
+                    VPriceFuelAvgSub(runCy,TRANSE,YTIME-(ord(kpdl)+1)))/
                     (iCGI(runCy,YTIME)**(1/6))]**(iElastA(runCy,TRANSE,"c3",YTIME)*iFPDL(TRANSE,KPDL))
                  )
          )$sameas(TRANSE,"GU")        !!trucks
@@ -791,11 +791,11 @@ QActivGoodsTransp(runCy,TRANSE,YTIME)$(TIME(YTIME) $TRANG(TRANSE))..
          (
            VActivGoodsTransp(runCy,TRANSE,YTIME-1)
            * [(iGDP(YTIME,runCy)/iPop(YTIME,runCy))/(iGDP(YTIME-1,runCy)/iPop(YTIME-1,runCy))]**iElastA(runCy,TRANSE,"a",YTIME)
-           * (VFuelPriceAvg(runCy,TRANSE,YTIME)/VFuelPriceAvg(runCy,TRANSE,YTIME-1))**iElastA(runCy,TRANSE,"c1",YTIME)
-           * (VFuelPriceAvg(runCy,TRANSE,YTIME-1)/VFuelPriceAvg(runCy,TRANSE,YTIME-2))**iElastA(runCy,TRANSE,"c2",YTIME)
+           * (VPriceFuelAvgSub(runCy,TRANSE,YTIME)/VPriceFuelAvgSub(runCy,TRANSE,YTIME-1))**iElastA(runCy,TRANSE,"c1",YTIME)
+           * (VPriceFuelAvgSub(runCy,TRANSE,YTIME-1)/VPriceFuelAvgSub(runCy,TRANSE,YTIME-2))**iElastA(runCy,TRANSE,"c2",YTIME)
            * prod(kpdl,
-                  [(VFuelPriceAvg(runCy,TRANSE,YTIME-ord(kpdl))/
-                    VFuelPriceAvg(runCy,TRANSE,YTIME-(ord(kpdl)+1)))/
+                  [(VPriceFuelAvgSub(runCy,TRANSE,YTIME-ord(kpdl))/
+                    VPriceFuelAvgSub(runCy,TRANSE,YTIME-(ord(kpdl)+1)))/
                     (iCGI(runCy,YTIME)**(1/6))]**(iElastA(runCy,TRANSE,"c3",YTIME)*iFPDL(TRANSE,KPDL))
                  )
            * (VActivGoodsTransp(runCy,"GU",YTIME)/VActivGoodsTransp(runCy,"GU",YTIME-1))**iElastA(runCy,TRANSE,"c4",YTIME)
@@ -830,7 +830,7 @@ QConsSpecificFuel(runCy,TRANSE,TTECH,EF,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,EF)
                  =E=
          VConsSpecificFuel(runCy,TRANSE,TTECH,EF,YTIME-1) * prod(KPDL,
                      (
-                        VFuelPriceSub(runCy,TRANSE,EF,YTIME-ord(KPDL))/VFuelPriceSub(runCy,TRANSE,EF,YTIME-(ord(KPDL)+1))
+                        VPriceFuelSubCarVal(runCy,TRANSE,EF,YTIME-ord(KPDL))/VPriceFuelSubCarVal(runCy,TRANSE,EF,YTIME-(ord(KPDL)+1))
                       )**(iElastA(runCy,TRANSE,"c5",YTIME)*iFPDL(TRANSE,KPDL))
           );
 
@@ -848,12 +848,12 @@ QCostTranspPerMeanConsSize(runCy,TRANSE,RCon,TTECH,YTIME)$(TIME(YTIME) $SECTTECH
                          ) * iCapCostTech(runCy,TRANSE,TTECH,YTIME)  * iCGI(runCy,YTIME)
                          + iFixOMCostTech(runCy,TRANSE,TTECH,YTIME)  +
                          (
-                           (sum(EF$TTECHtoEF(TTECH,EF),VConsSpecificFuel(runCy,TRANSE,TTECH,EF,YTIME)*VFuelPriceSub(runCy,TRANSE,EF,YTIME)) )$(not PLUGIN(TTECH))
+                           (sum(EF$TTECHtoEF(TTECH,EF),VConsSpecificFuel(runCy,TRANSE,TTECH,EF,YTIME)*VPriceFuelSubCarVal(runCy,TRANSE,EF,YTIME)) )$(not PLUGIN(TTECH))
                            +
                            (sum(EF$(TTECHtoEF(TTECH,EF) $(not sameas("ELC",EF))),
 
-                              (1-iShareAnnMilePlugInHybrid(runCy,YTIME))*VConsSpecificFuel(runCy,TRANSE,TTECH,EF,YTIME)*VFuelPriceSub(runCy,TRANSE,EF,YTIME))
-                             + iShareAnnMilePlugInHybrid(runCy,YTIME)*VConsSpecificFuel(runCy,TRANSE,TTECH,"ELC",YTIME)*VFuelPriceSub(runCy,TRANSE,"ELC",YTIME)
+                              (1-iShareAnnMilePlugInHybrid(runCy,YTIME))*VConsSpecificFuel(runCy,TRANSE,TTECH,EF,YTIME)*VPriceFuelSubCarVal(runCy,TRANSE,EF,YTIME))
+                             + iShareAnnMilePlugInHybrid(runCy,YTIME)*VConsSpecificFuel(runCy,TRANSE,TTECH,"ELC",YTIME)*VPriceFuelSubCarVal(runCy,TRANSE,"ELC",YTIME)
                            )$PLUGIN(TTECH)
 
                            + iVarCostTech(runCy,TRANSE,TTECH,YTIME)
@@ -986,26 +986,26 @@ QActivPassTrnsp(runCy,TRANSE,YTIME)$(TIME(YTIME) $TRANP(TRANSE))..
                  =E=
          (  !! passenger cars
             VActivPassTrnsp(runCy,TRANSE,YTIME-1) *
-           (VFuelPriceAvg(runCy,TRANSE,YTIME)/VFuelPriceAvg(runCy,TRANSE,YTIME-1))**iElastA(runCy,TRANSE,"b1",YTIME) *
-           (VFuelPriceAvg(runCy,TRANSE,YTIME-1)/VFuelPriceAvg(runCy,TRANSE,YTIME-2))**iElastA(runCy,TRANSE,"b2",YTIME) *
+           (VPriceFuelAvgSub(runCy,TRANSE,YTIME)/VPriceFuelAvgSub(runCy,TRANSE,YTIME-1))**iElastA(runCy,TRANSE,"b1",YTIME) *
+           (VPriceFuelAvgSub(runCy,TRANSE,YTIME-1)/VPriceFuelAvgSub(runCy,TRANSE,YTIME-2))**iElastA(runCy,TRANSE,"b2",YTIME) *
            [(VStockPcYearly(runCy,YTIME-1)/(iPop(YTIME-1,runCy)*1000))/(VStockPcYearly(runCy,YTIME)/(iPop(YTIME,runCy)*1000))]**iElastA(runCy,TRANSE,"b3",YTIME) *
            [(iGDP(YTIME,runCy)/iPop(YTIME,runCy))/(iGDP(YTIME-1,runCy)/iPop(YTIME-1,runCy))]**iElastA(runCy,TRANSE,"b4",YTIME)
          )$sameas(TRANSE,"PC") +
          (  !! passenger aviation
             VActivPassTrnsp(runCy,TRANSE,YTIME-1) *
            [(iGDP(YTIME,runCy)/iPop(YTIME,runCy))/(iGDP(YTIME-1,runCy)/iPop(YTIME-1,runCy))]**iElastA(runCy,TRANSE,"a",YTIME) *
-           (VFuelPriceAvg(runCy,TRANSE,YTIME)/VFuelPriceAvg(runCy,TRANSE,YTIME-1))**iElastA(runCy,TRANSE,"c1",YTIME) *
-           (VFuelPriceAvg(runCy,TRANSE,YTIME-1)/VFuelPriceAvg(runCy,TRANSE,YTIME-2))**iElastA(runCy,TRANSE,"c2",YTIME)
+           (VPriceFuelAvgSub(runCy,TRANSE,YTIME)/VPriceFuelAvgSub(runCy,TRANSE,YTIME-1))**iElastA(runCy,TRANSE,"c1",YTIME) *
+           (VPriceFuelAvgSub(runCy,TRANSE,YTIME-1)/VPriceFuelAvgSub(runCy,TRANSE,YTIME-2))**iElastA(runCy,TRANSE,"c2",YTIME)
          )$sameas(TRANSE,"PA") +
          (   !! other passenger transportation modes
            VActivPassTrnsp(runCy,TRANSE,YTIME-1) *
            [(iGDP(YTIME,runCy)/iPop(YTIME,runCy))/(iGDP(YTIME-1,runCy)/iPop(YTIME-1,runCy))]**iElastA(runCy,TRANSE,"a",YTIME) *
-           (VFuelPriceAvg(runCy,TRANSE,YTIME)/VFuelPriceAvg(runCy,TRANSE,YTIME-1))**iElastA(runCy,TRANSE,"c1",YTIME) *
-           (VFuelPriceAvg(runCy,TRANSE,YTIME-1)/VFuelPriceAvg(runCy,TRANSE,YTIME-2))**iElastA(runCy,TRANSE,"c2",YTIME) *
+           (VPriceFuelAvgSub(runCy,TRANSE,YTIME)/VPriceFuelAvgSub(runCy,TRANSE,YTIME-1))**iElastA(runCy,TRANSE,"c1",YTIME) *
+           (VPriceFuelAvgSub(runCy,TRANSE,YTIME-1)/VPriceFuelAvgSub(runCy,TRANSE,YTIME-2))**iElastA(runCy,TRANSE,"c2",YTIME) *
            [(VStockPcYearly(runCy,YTIME)*VActivPassTrnsp(runCy,"PC",YTIME))/(VStockPcYearly(runCy,YTIME-1)*VActivPassTrnsp(runCy,"PC",YTIME-1))]**iElastA(runCy,TRANSE,"c4",YTIME) *
            prod(kpdl,
-                  [(VFuelPriceAvg(runCy,TRANSE,YTIME-ord(kpdl))/
-                    VFuelPriceAvg(runCy,TRANSE,YTIME-(ord(kpdl)+1)))/
+                  [(VPriceFuelAvgSub(runCy,TRANSE,YTIME-ord(kpdl))/
+                    VPriceFuelAvgSub(runCy,TRANSE,YTIME-(ord(kpdl)+1)))/
                     (iCGI(runCy,YTIME)**(1/6))]**(iElastA(runCy,TRANSE,"c3",YTIME)*iFPDL(TRANSE,KPDL))
                  )
          )$(NOT (sameas(TRANSE,"PC") or sameas(TRANSE,"PA")));
@@ -1057,10 +1057,10 @@ QConsElecNonSubIndTert(runCy,INDDOM,YTIME)$TIME(YTIME)..
          [
          VConsElecNonSubIndTert(runCy,INDDOM,YTIME-1) * ( iActv(YTIME,runCy,INDDOM)/iActv(YTIME-1,runCy,INDDOM) )**
          iElastNonSubElec(runCy,INDDOM,"a",YTIME)
-         * ( VFuelPriceSub(runCy,INDDOM,"ELC",YTIME)/VFuelPriceSub(runCy,INDDOM,"ELC",YTIME-1) )**iElastNonSubElec(runCy,INDDOM,"b1",YTIME)
-         * ( VFuelPriceSub(runCy,INDDOM,"ELC",YTIME-1)/VFuelPriceSub(runCy,INDDOM,"ELC",YTIME-2) )**iElastNonSubElec(runCy,INDDOM,"b2",YTIME)
+         * ( VPriceFuelSubCarVal(runCy,INDDOM,"ELC",YTIME)/VPriceFuelSubCarVal(runCy,INDDOM,"ELC",YTIME-1) )**iElastNonSubElec(runCy,INDDOM,"b1",YTIME)
+         * ( VPriceFuelSubCarVal(runCy,INDDOM,"ELC",YTIME-1)/VPriceFuelSubCarVal(runCy,INDDOM,"ELC",YTIME-2) )**iElastNonSubElec(runCy,INDDOM,"b2",YTIME)
          * prod(KPDL,
-                  ( VFuelPriceSub(runCy,INDDOM,"ELC",YTIME-ord(KPDL))/VFuelPriceSub(runCy,INDDOM,"ELC",YTIME-(ord(KPDL)+1))
+                  ( VPriceFuelSubCarVal(runCy,INDDOM,"ELC",YTIME-ord(KPDL))/VPriceFuelSubCarVal(runCy,INDDOM,"ELC",YTIME-(ord(KPDL)+1))
                   )**( iElastNonSubElec(runCy,INDDOM,"c",YTIME)*iFPDL(INDDOM,KPDL))
                 )      ]$iActv(YTIME-1,runCy,INDDOM);
 
@@ -1075,10 +1075,10 @@ QConsRemSubEquipSubSec(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SE
          (VLftPc(runCy,DSBS,EF,YTIME)-1)/VLftPc(runCy,DSBS,EF,YTIME)
          * (VConsFuelInclHP(runCy,DSBS,EF,YTIME-1) - (VConsElecNonSubIndTert(runCy,DSBS,YTIME-1)$(ELCEF(EF) $INDDOM(DSBS)) + 0$(not (ELCEF(EF) $INDDOM(DSBS)))))
          * (iActv(YTIME,runCy,DSBS)/iActv(YTIME-1,runCy,DSBS))**iElastA(runCy,DSBS,"a",YTIME)
-         * (VFuelPriceSub(runCy,DSBS,EF,YTIME)/VFuelPriceSub(runCy,DSBS,EF,YTIME-1))**iElastA(runCy,DSBS,"b1",YTIME)
-         * (VFuelPriceSub(runCy,DSBS,EF,YTIME-1)/VFuelPriceSub(runCy,DSBS,EF,YTIME-2))**iElastA(runCy,DSBS,"b2",YTIME)
+         * (VPriceFuelSubCarVal(runCy,DSBS,EF,YTIME)/VPriceFuelSubCarVal(runCy,DSBS,EF,YTIME-1))**iElastA(runCy,DSBS,"b1",YTIME)
+         * (VPriceFuelSubCarVal(runCy,DSBS,EF,YTIME-1)/VPriceFuelSubCarVal(runCy,DSBS,EF,YTIME-2))**iElastA(runCy,DSBS,"b2",YTIME)
          * prod(KPDL,
-                 (VFuelPriceSub(runCy,DSBS,EF,YTIME-ord(KPDL))/VFuelPriceSub(runCy,DSBS,EF,YTIME-(ord(KPDL)+1)))**(iElastA(runCy,DSBS,"c",YTIME)*iFPDL(DSBS,KPDL))
+                 (VPriceFuelSubCarVal(runCy,DSBS,EF,YTIME-ord(KPDL))/VPriceFuelSubCarVal(runCy,DSBS,EF,YTIME-(ord(KPDL)+1)))**(iElastA(runCy,DSBS,"c",YTIME)*iFPDL(DSBS,KPDL))
                )  ]$(iActv(YTIME-1,runCy,DSBS));
 
 *' This equation calculates the total final demand for substitutable fuels in each subsector. The demand is determined by factors such as the current activity level,
@@ -1090,10 +1090,10 @@ QDemFinSubFuelSubSec(runCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)))..
          [
          VDemFinSubFuelSubSec(runCy,DSBS,YTIME-1)
          * ( iActv(YTIME,runCy,DSBS)/iActv(YTIME-1,runCy,DSBS) )**iElastA(runCy,DSBS,"a",YTIME)
-         * ( VFuelPriceAvg(runCy,DSBS,YTIME)/VFuelPriceAvg(runCy,DSBS,YTIME-1) )**iElastA(runCy,DSBS,"b1",YTIME)
-         * ( VFuelPriceAvg(runCy,DSBS,YTIME-1)/VFuelPriceAvg(runCy,DSBS,YTIME-2) )**iElastA(runCy,DSBS,"b2",YTIME)
+         * ( VPriceFuelAvgSub(runCy,DSBS,YTIME)/VPriceFuelAvgSub(runCy,DSBS,YTIME-1) )**iElastA(runCy,DSBS,"b1",YTIME)
+         * ( VPriceFuelAvgSub(runCy,DSBS,YTIME-1)/VPriceFuelAvgSub(runCy,DSBS,YTIME-2) )**iElastA(runCy,DSBS,"b2",YTIME)
          * prod(KPDL,
-                  ( (VFuelPriceAvg(runCy,DSBS,YTIME-ord(KPDL))/VFuelPriceAvg(runCy,DSBS,YTIME-(ord(KPDL)+1)))/(iCGI(runCy,YTIME)**(1/6))
+                  ( (VPriceFuelAvgSub(runCy,DSBS,YTIME-ord(KPDL))/VPriceFuelAvgSub(runCy,DSBS,YTIME-(ord(KPDL)+1)))/(iCGI(runCy,YTIME)**(1/6))
                   )**( iElastA(runCy,DSBS,"c",YTIME)*iFPDL(DSBS,KPDL))
                 )  ]$iActv(YTIME-1,runCy,DSBS)
 ;
@@ -1145,10 +1145,10 @@ QIndxElecIndPrices(runCy,YTIME)$TIME(YTIME)..
          VIndxElecIndPrices(runCy,YTIME)
                  =E=
          VPriceElecInd(runCy,YTIME-1) *
-        ((VFuelPriceSub(runCy,"OI","ELC",YTIME-1)/VFuelPriceAvg(runCy,"OI",YTIME-1))/
-        (VFuelPriceSub(runCy,"OI","ELC",YTIME-2)/VFuelPriceAvg(runCy,"OI",YTIME-2)))**(0.3) *
-        ((VFuelPriceSub(runCy,"OI","ELC",YTIME-2)/VFuelPriceAvg(runCy,"OI",YTIME-2))/
-        (VFuelPriceSub(runCy,"OI","ELC",YTIME-3)/VFuelPriceAvg(runCy,"OI",YTIME-3)))**(0.3);
+        ((VPriceFuelSubCarVal(runCy,"OI","ELC",YTIME-1)/VPriceFuelAvgSub(runCy,"OI",YTIME-1))/
+        (VPriceFuelSubCarVal(runCy,"OI","ELC",YTIME-2)/VPriceFuelAvgSub(runCy,"OI",YTIME-2)))**(0.3) *
+        ((VPriceFuelSubCarVal(runCy,"OI","ELC",YTIME-2)/VPriceFuelAvgSub(runCy,"OI",YTIME-2))/
+        (VPriceFuelSubCarVal(runCy,"OI","ELC",YTIME-3)/VPriceFuelAvgSub(runCy,"OI",YTIME-3)))**(0.3);
 
 *' This equation calculates the fuel prices per subsector and fuel, specifically for Combined Heat and Power (CHP) plants, considering the profit earned from
 *' electricity sales. The equation incorporates various factors such as the base fuel price, renewable value, variable cost of technology, useful energy conversion
@@ -1159,9 +1159,9 @@ QIndxElecIndPrices(runCy,YTIME)$TIME(YTIME)..
 QPriceFuelSubSecChp(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS))  $SECTTECH(DSBS,EF) )..
         VPriceFuelSubSecChp(runCy,DSBS,EF,YTIME)
                 =E=   
-             (((VFuelPriceSub(runCy,DSBS,EF,YTIME) + (VRenValue(YTIME)/1000)$(not RENEF(EF))+iVarCostTech(runCy,DSBS,EF,YTIME)/1000)/iUsfEneConvSubTech(runCy,DSBS,EF,YTIME)- 
-               (0$(not CHP(EF)) + (VFuelPriceSub(runCy,"OI","ELC",YTIME)*iFracElecPriChp*VPriceElecInd(runCy,YTIME))$CHP(EF)))  + SQRT( SQR(((VFuelPriceSub(runCy,DSBS,EF,YTIME)+iVarCostTech(runCy,DSBS,EF,YTIME)/1000)/iUsfEneConvSubTech(runCy,DSBS,EF,YTIME)- 
-              (0$(not CHP(EF)) + (VFuelPriceSub(runCy,"OI","ELC",YTIME)*iFracElecPriChp*VPriceElecInd(runCy,YTIME))$CHP(EF))))  ) )/2;
+             (((VPriceFuelSubCarVal(runCy,DSBS,EF,YTIME) + (VRenValue(YTIME)/1000)$(not RENEF(EF))+iVarCostTech(runCy,DSBS,EF,YTIME)/1000)/iUsfEneConvSubTech(runCy,DSBS,EF,YTIME)- 
+               (0$(not CHP(EF)) + (VPriceFuelSubCarVal(runCy,"OI","ELC",YTIME)*iFracElecPriChp*VPriceElecInd(runCy,YTIME))$CHP(EF)))  + SQRT( SQR(((VPriceFuelSubCarVal(runCy,DSBS,EF,YTIME)+iVarCostTech(runCy,DSBS,EF,YTIME)/1000)/iUsfEneConvSubTech(runCy,DSBS,EF,YTIME)- 
+              (0$(not CHP(EF)) + (VPriceFuelSubCarVal(runCy,"OI","ELC",YTIME)*iFracElecPriChp*VPriceElecInd(runCy,YTIME))$CHP(EF))))  ) )/2;
 
 
 *' The equation computes the electricity production cost per Combined Heat and Power plant for a specific demand sector within a given subsector.
@@ -1177,7 +1177,7 @@ QCostElecProdChp(runCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS))..
                       * iInvCostChp(runCy,DSBS,CHP,YTIME)* 1000 * iCGI(runCy,YTIME)  + iFixOMCostPerChp(runCy,DSBS,CHP,YTIME)
                     )/(iAvailRateChp(runCy,DSBS,CHP)*(1000*sTWhToMtoe))/1000
                     + iVarCostChp(runCy,DSBS,CHP,YTIME)/1000
-                    + sum(PGEF$CHPtoEF(CHP,PGEF), (VFuelPriceSub(runCy,"PG",PGEF,YTIME)+0.001*iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
+                    + sum(PGEF$CHPtoEF(CHP,PGEF), (VPriceFuelSubCarVal(runCy,"PG",PGEF,YTIME)+0.001*iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
                          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
                          * sTWhToMtoe /  (iBoiEffChp(runCy,CHP,YTIME) * VPriceElecInd(runCy,YTIME)) );        
 
@@ -1218,7 +1218,7 @@ QCostTechIntrm(runCy,DSBS,rCon,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(
                     iFixOMCostTech(runCy,DSBS,EF,YTIME)/1000
                     +
                     (
-                      (VFuelPriceSub(runCy,DSBS,EF,YTIME)+iVarCostTech(runCy,DSBS,EF,YTIME)/1000)/iUsfEneConvSubTech(runCy,DSBS,EF,YTIME)
+                      (VPriceFuelSubCarVal(runCy,DSBS,EF,YTIME)+iVarCostTech(runCy,DSBS,EF,YTIME)/1000)/iUsfEneConvSubTech(runCy,DSBS,EF,YTIME)
                     )
                     * iAnnCons(runCy,DSBS,"smallest") * (iAnnCons(runCy,DSBS,"largest")/iAnnCons(runCy,DSBS,"smallest"))**((ord(rCon)-1)/iNcon(DSBS))
                   )$NENSE(DSBS);  
@@ -1276,7 +1276,7 @@ QShareTechNewEquip(runCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS))..
          VShareTechNewEquip(runCy,DSBS,CHP,YTIME)
                  =E=
          iVarCostChp(runCy,DSBS,CHP,YTIME)/1E3
-                    + sum(PGEF$CHPtoEF(CHP,PGEF), (VFuelPriceSub(runCy,"PG",PGEF,YTIME)+1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
+                    + sum(PGEF$CHPtoEF(CHP,PGEF), (VPriceFuelSubCarVal(runCy,"PG",PGEF,YTIME)+1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
                          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
                          *sTWhToMtoe/(   iBoiEffChp(runCy,CHP,YTIME)*VPriceElecInd(runCy,YTIME)    ));
 
@@ -1735,7 +1735,7 @@ qGrnnHsEmisCo2EquivAllCntr(YTIME)$TIME(YTIME)..
 qExpendHouseEne(runCy,YTIME)$TIME(YTIME)..
                  vExpendHouseEne(runCy,YTIME)
                  =E= 
-                 SUM(DSBS$HOU(DSBS),SUM(EF$SECTTECH(dSBS,EF),VConsRemSubEquipSubSec(runCy,DSBS,EF,YTIME)*(VFuelPriceSub(runCy,DSBS,EF,YTIME)-iEffValueInEuro(runCy,DSBS,YTIME)/
+                 SUM(DSBS$HOU(DSBS),SUM(EF$SECTTECH(dSBS,EF),VConsRemSubEquipSubSec(runCy,DSBS,EF,YTIME)*(VPriceFuelSubCarVal(runCy,DSBS,EF,YTIME)-iEffValueInEuro(runCy,DSBS,YTIME)/
                  1000-iCo2EmiFac(runCy,"PG",EF,YTIME)*sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))/1000)))
                                           +VPriceElecIndResNoCliPol(runCy,"R",YTIME)*VConsElecNonSubIndTert(runCy,"HOU",YTIME)/sTWhToMtoe;         
 
@@ -1747,19 +1747,19 @@ qExpendHouseEne(runCy,YTIME)$TIME(YTIME)..
 *' carbon values for all countries, electricity prices to industrial and residential consumers,
 *' efficiency values, and the total hydrogen cost per sector.The result of the equation is the fuel price per 
 *' subsector and fuel, adjusted based on changes in carbon values, electricity prices, efficiency, and hydrogen costs.
-QFuelPriSubSepCarbVal(runCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF) $TIME(YTIME) $(not sameas("NUC",EF)))..
-         VFuelPriceSub(runCy,SBS,EF,YTIME)
+QPriceFuelSubCarVal(runCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF) $TIME(YTIME) $(not sameas("NUC",EF)))..
+         VPriceFuelSubCarVal(runCy,SBS,EF,YTIME)
                  =E=
-         (VFuelPriceSub(runCy,SBS,EF,YTIME-1) +
+         (VPriceFuelSubCarVal(runCy,SBS,EF,YTIME-1) +
           iCo2EmiFac(runCy,SBS,EF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,SBS),(VCarVal(runCy,NAP,YTIME)))/1000
          )$( not (ELCEF(EF) or HEATPUMP(EF) or ALTEF(EF)))
          +
          (
-VFuelPriceSub(runCy,SBS,EF,YTIME-1)$(DSBS(SBS))$ALTEF(EF)
+VPriceFuelSubCarVal(runCy,SBS,EF,YTIME-1)$(DSBS(SBS))$ALTEF(EF)
          )
          +
          (
-           ( VElecPriInduResConsu(runCy,"i",YTIME)$INDTRANS(SBS)+VElecPriInduResConsu(runCy,"r",YTIME)$RESIDENT(SBS))/sTWhToMtoe
+           ( VPriceElecIndResConsu(runCy,"i",YTIME)$INDTRANS(SBS)+VPriceElecIndResConsu(runCy,"r",YTIME)$RESIDENT(SBS))/sTWhToMtoe
             +
             ((iEffValueInEuro(runCy,SBS,YTIME))/1000)$DSBS(SBS)
          )$(ELCEF(EF) or HEATPUMP(EF))
@@ -1774,19 +1774,19 @@ VFuelPriceSub(runCy,SBS,EF,YTIME-1)$(DSBS(SBS))$ALTEF(EF)
 *' and fuel. The weights are determined by the sector's average price, considering the specific fuel consumption for the given scenario, subsector, and fuel.
 *' This equation allows for a more nuanced calculation of fuel prices, taking into account the carbon values in each sector. The result represents the fuel
 *' prices per subsector and fuel, multiplied by the corresponding weights, and adjusted based on the specific carbon values in each sector.
-QFuelPriSepCarbon(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $TIME(YTIME))..
-        VFuelPriMultWgt(runCy,DSBS,EF,YTIME)
+QPriceFuelSepCarbonWght(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $TIME(YTIME))..
+        VPriceFuelSepCarbonWght(runCy,DSBS,EF,YTIME)
           =E= 
-        iWgtSecAvgPriFueCons(runCy,DSBS,EF) * VFuelPriceSub(runCy,DSBS,EF,YTIME);
+        iWgtSecAvgPriFueCons(runCy,DSBS,EF) * VPriceFuelSubCarVal(runCy,DSBS,EF,YTIME);
 
 *' The equation calculates the average fuel price per subsector for a specific scenario, subsector, and year.
 *' The calculation involves summing the product of fuel prices per subsector and fuel and their corresponding weights
 *' for the specified scenario, subsector, and year.The equation is designed to compute the weighted average fuel price, considering
 *' different fuels within the subsector and their respective weights.
-QAvgFuelPriSub(runCy,DSBS,YTIME)$TIME(YTIME)..
-        VFuelPriceAvg(runCy,DSBS,YTIME)
+QPriceFuelAvgSub(runCy,DSBS,YTIME)$TIME(YTIME)..
+        VPriceFuelAvgSub(runCy,DSBS,YTIME)
                  =E=
-         sum(EF$SECTTECH(DSBS,EF), VFuelPriMultWgt(runCy,DSBS,EF,YTIME));         
+         sum(EF$SECTTECH(DSBS,EF), VPriceFuelSepCarbonWght(runCy,DSBS,EF,YTIME));         
 
 *' The equation calculates the electricity price for industrial and residential consumers
 *' in a given scenario, energy set, and year. The electricity price is based on the previous year's production costs, incorporating
@@ -1795,20 +1795,20 @@ QAvgFuelPriSub(runCy,DSBS,YTIME)$TIME(YTIME)..
 *' price for industrial consumers and residential consumers separately. The electricity price is influenced by fuel prices,
 *' factors affecting electricity prices, and long-term average power generation costs. It provides a comprehensive representation of the
 *' factors contributing to the electricity price for industrial and residential consumers in the specified scenario, energy set, and year.
-QElecPriIndResCons(runCy,ESET,YTIME)$TIME(YTIME)..  !! The electricity price is based on previous year's production costs
-        VElecPriInduResConsu(runCy,ESET,YTIME)
+QPriceElecIndResConsu(runCy,ESET,YTIME)$TIME(YTIME)..  !! The electricity price is based on previous year's production costs
+        VPriceElecIndResConsu(runCy,ESET,YTIME)
                  =E=
         (1 + iFacElecPriConsu(runCy,"VAT",YTIME)) *
         (
            (
-             (VFuelPriceSub(runCy,"OI","ELC",YTIME-1)*sTWhToMtoe)$TFIRST(YTIME-1) +
+             (VPriceFuelSubCarVal(runCy,"OI","ELC",YTIME-1)*sTWhToMtoe)$TFIRST(YTIME-1) +
              (  iFacElecPriConsu(runCy,"IND_RES",YTIME-1)+
                 VCostPowGenAvgLng(runCy,"i",YTIME-1)
               )$(not TFIRST(YTIME-1))
            )$ISET(ESET)
         +
            (
-             (VFuelPriceSub(runCy,"HOU","ELC",YTIME-1)*sTWhToMtoe)$TFIRST(YTIME-1) +
+             (VPriceFuelSubCarVal(runCy,"HOU","ELC",YTIME-1)*sTWhToMtoe)$TFIRST(YTIME-1) +
              (  iFacElecPriConsu(runCy,"TERT_RES",YTIME-1)+
                VCostPowGenAvgLng(runCy,"r",YTIME-1)
              )$(not TFIRST(YTIME-1))

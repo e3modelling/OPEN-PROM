@@ -1,12 +1,12 @@
 item,from,to,set
 VDemFinSubFuelSubSec,VDemFinSubFuelSubSec-1,VGapFinalDem,DSBS $(not TRANSE(DSBS))
 VDemFinSubFuelSubSec,iActv,VGapFinalDem,DSBS $(not TRANSE(DSBS))
-VDemFinSubFuelSubSec,VFuelPriceAvg,VGapFinalDem,DSBS $(not TRANSE(DSBS))
-VFuelPriceAvg,VFuelPriMultWgt,VDemFinSubFuelSubSec,DSBS
-VFuelPriMultWgt,VFuelPriceSub,VFuelPriceAvg,
-VFuelPriceSub,VFuelPriceSub-1,VFuelPriMultWgt,"SBS $( not (ELCEF(EF) or HEATPUMP(EF) or ALTEF(EF))) $(not sameas(""NUC"",EF)))"
-VFuelPriceSub,VElecPriInduResConsu,,SBS $(ELCEF(EF) or HEATPUMP(EF))
-VElecPriInduResConsu,VFuelPriceSub-1,VFuelPriceSub,SBS $(ELCEF(EF) or HEATPUMP(EF))
+VDemFinSubFuelSubSec,VPriceFuelAvgSub,VGapFinalDem,DSBS $(not TRANSE(DSBS))
+VPriceFuelAvgSub,VPriceFuelSepCarbonWght,VDemFinSubFuelSubSec,DSBS
+VPriceFuelSepCarbonWght,VPriceFuelSubCarVal,VPriceFuelAvgSub,
+VPriceFuelSubCarVal,VPriceFuelSubCarVal-1,VPriceFuelSepCarbonWght,"SBS $( not (ELCEF(EF) or HEATPUMP(EF) or ALTEF(EF))) $(not sameas(""NUC"",EF)))"
+VPriceFuelSubCarVal,VPriceElecIndResConsu,,SBS $(ELCEF(EF) or HEATPUMP(EF))
+VPriceElecIndResConsu,VPriceFuelSubCarVal-1,VPriceFuelSubCarVal,SBS $(ELCEF(EF) or HEATPUMP(EF))
 VGapFinalDem,VDemFinSubFuelSubSec,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
 VGapFinalDem,VConsRemSubEquipSubSec,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
 VConsFuelInclHP,VGapFinalDem,VConsRemSubEquipSubSec+1,DSBS $(not TRANSE(DSBS))
@@ -19,7 +19,7 @@ VConsRemSubEquipSubSec,VConsFuelInclHP-1,VConsFuelInclHP,DSBS $(not TRANSE(DSBS)
 VConsRemSubEquipSubSec,VLftPc,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
 VConsRemSubEquipSubSec,VLftPc-1,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
 VConsRemSubEquipSubSec,VConsElecNonSubIndTert-1,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
-VConsRemSubEquipSubSec,VFuelPriceSub,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
+VConsRemSubEquipSubSec,VPriceFuelSubCarVal,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
 VConsFuelInclHP,VGapFinalDem,VConsFuel,DSBS $(not TRANSE(DSBS))
 VConsFuelInclHP,VConsRemSubEquipSubSec,VConsFuel,DSBS $(not TRANSE(DSBS))
 VConsFuelInclHP,VShareTechNewEquip,VConsFuel,DSBS $(not TRANSE(DSBS))
@@ -28,7 +28,7 @@ VConsFinEneCountry,VConsFuel,VDemElec,EFS
 VConsFinEneCountry,VDemFinEneTranspPerFuel,VDemElec,EFS
 VConsFuel,VConsFuelInclHP,VConsFinEneCountry,
 VConsFuel,VElecConsHeatPla,VConsFinEneCountry,
-VPriceFuelSubSecChp,VFuelPriceSub,VCostTechIntrm,DSBS $(not TRANSE(DSBS))
+VPriceFuelSubSecChp,VPriceFuelSubCarVal,VCostTechIntrm,DSBS $(not TRANSE(DSBS))
 VPriceFuelSubSecChp,VPriceElecInd,VCostTechIntrm,DSBS $(not TRANSE(DSBS))
 VCostTechIntrm,VPriceFuelSubSecChp,VCostTech,DSBS $(not TRANSE(DSBS))
 VCostTech,VCostTechIntrm,VCostTechMatFac,DSBS $(not TRANSE(DSBS))

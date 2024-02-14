@@ -118,7 +118,7 @@ Variable,ELCINDEX,VPriceElecInd,Electricity index - a function of industry price
 Variable,ELCINDEX_EST,VIndxElecIndPrices,Electricity index - a function of industry price - Estimate (1),"CYALL,YTIME","allCy, YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,ELCNS,VConsElecNonSubIndTert,Consumption of non-substituable electricity in Industry and Tertiary (Mtoe),"CYall,DSBS,YTIME","allCy,DSBS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,ELCNSIND,vConsTotElecInd,Total Consumption of Electricity in industrial sectors (Mtoe),"CYALL,YTIME","allCy,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-Variable,ELCPRICE,VElecPriInduResConsu,Electricity price to Industrial and Residential Consumers (Euro2005/KWh),"CYall,ESET,YTIME","allCy,ESET,YTIME",VARIABLES
+Variable,ELCPRICE,VPriceElecIndResConsu,Electricity price to Industrial and Residential Consumers (Euro2005/KWh),"CYall,ESET,YTIME","allCy,ESET,YTIME",VARIABLES
 Variable,ELCPRICE_NOCV,VPriceElecIndResNoCliPol,Electricity price to Industrial and Residential Consumers (Euro2005/KWh),"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
 Parameter,ELCPRICECHAR,iFacElecPriConsu,Factors affecting electricity prices to consumers,"CYall,ELCPCHAR,YTIME ","allCy,ELCPCHAR,YTIME",Prices
 Parameter,ElcpricecharPRN,iContrElecPrice,Parameters controlling electricity price,"ELCPCHAR,YTIME","allCy,ELCPCHAR,YTIME",Parameters for data transfering
@@ -179,7 +179,7 @@ Equation,EQELCINDEX,QPriceElecInd,Compute electricity index,"CYall,YTIME","allCy
 Equation,EQELCINDEX_EST,QIndxElecIndPrices,Compute the estimated electricity Index of industry price,"CYALL,YTIME","allCy, YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQELCNS,QConsElecNonSubIndTert,Compute non-substituable electricity consumption in Industry and Tertiary,"CYall,INDDOM,YTIME","allCy,INDDOM,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Equation,EQELCNSIND,qConsTotElecInd,Compute Consumption of electricity in industrial sectors ,"CYALL,YTIME","allCy,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
-Equation,EQELCPRICE,QElecPriIndResCons,Compute electricity price in Industrial and Residential Consumers,"CYall,ESET,YTIME","allCy,ESET,YTIME",PRICES EQUATIONS
+Equation,EQELCPRICE,QPriceElecIndResConsu,Compute electricity price in Industrial and Residential Consumers,"CYall,ESET,YTIME","allCy,ESET,YTIME",PRICES EQUATIONS
 Equation,EQELCPRICE_NOCV,QPriceElecIndResNoCliPol,Compute electricity price in Industrial and Residential Consumers excluding climate policies,"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
 Equation,EQELCPROD,QProdElecPowPlantsCy,Compute electricity production from power generation plants,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Equation,EQEXPO_TZ,QExprtsFakeEneBrnch,Compute fake exports,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
@@ -213,11 +213,11 @@ Equation,EQPOTREN,qPotResCurr,Compute current renewable potential ,"CYall,PGRENE
 Equation,EQPOTRENMAXC,QRenPotMaxAllow,Compute maximum allowed renewable potential ,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
 Equation,EQPOTRENMINC,QRenPotMinAllow,Compute minimum allowed renewable potential ,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
 Equation,EQPOTRENT,QPotRenSuppCurve,Compute renewable potential supply curve,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
-Equation,EQPP,QFuelPriSubSepCarbVal,"Compute fuel prices per subsector and fuel, separate carbon value in each sector","CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",POWER GENERATION SECTOR
-Equation,EQPPA,QAvgFuelPriSub,Compute average fuel price per subsector ,"CYall,DSBS,YTIME","allCy,DSBS,YTIME",PRICES EQUATIONS
+Equation,EQPP,QPriceFuelSubCarVal,"Compute fuel prices per subsector and fuel, separate carbon value in each sector","CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",POWER GENERATION SECTOR
+Equation,EQPPA,QPriceFuelAvgSub,Compute average fuel price per subsector ,"CYall,DSBS,YTIME","allCy,DSBS,YTIME",PRICES EQUATIONS
 Equation,EQPPROD,QProdPrimary,Compute primary production,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
 Equation,EQPPSU,QPriceFuelSubSecChp,Compute fuel prices per subsector and fuel especially for chp plants,"(CYall,DSBS,EF,YTIME)","allCy,DSBS,EF,YTIME",Variable prices
-Equation,EQPPW,QFuelPriSepCarbon,Compute fuel prices per subsector and fuel multiplied by weights separate carbon value in each sector ,"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",PRICES EQUATIONS
+Equation,EQPPW,QPriceFuelSepCarbonWght,Compute fuel prices per subsector and fuel multiplied by weights separate carbon value in each sector ,"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",PRICES EQUATIONS
 Equation,EQPRODCOST,QCostHourProdInvDec,Compute hourly production cost used in investment decisions,"CYALL,PGALL,HOUR,YTIME","allCy,PGALL,HOUR,YTIME",POWER GENERATION SECTOR
 Equation,EQPRODCOSTC,qCostHourProdInvCCS,Compute hourly production cost used in investment decisions taking into account CCS acceptance,"CYALL,PGALL,HOUR,YTIME","allCy,PGALL,HOUR,YTIME",POWER GENERATION SECTOR
 Equation,EQPRODCOSTCS,QCostProdSpecTech,Compute production cost used in investment decisions,"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
@@ -374,13 +374,13 @@ Variable,POTRENMAXC,VRenPotMaxAllow,Maximum allowed renewable potential (GW),"CY
 Parameter,POTRENMIN,iMinRenPotential,Minimum renewable potential (GW),"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",Power Generation Parameters
 Variable,POTRENMINC,VRenPotMinAllow,Minimum allowed renewable potential (GW),"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
 Variable,POTRENT,VPotRenSuppCurve,Renewable potential supply curve,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
-Variable,PP,VFuelPriceSub,Fuel prices per subsector and fuel (kUS$2005/toe),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",PRICES
+Variable,PP,VPriceFuelSubCarVal,Fuel prices per subsector and fuel (kUS$2005/toe),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",PRICES
 Variable,PP_NOCV,VFuelPriSubNoCarb,Fuel prices per subsector and fuel  without carbon value (kdollars2005/toe),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",Prices
-Variable,PPA,VFuelPriceAvg,Average fuel prices per subsector (kUS$2005/toe),"CYall,DSBS,YTIME","allCy,TRANSE,YTIME",PRICES
+Variable,PPA,VPriceFuelAvgSub,Average fuel prices per subsector (kUS$2005/toe),"CYall,DSBS,YTIME","allCy,TRANSE,YTIME",PRICES
 Variable,PPROD,VProdPrimary,Primary Production (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",
 Parameter,PPRODRES,iResHcNgOilPrProd,"Residuals for Hard Coal, Natural Gas and Oil Primary Production (1)","CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
 Variable,PPSU,VPriceFuelSubSecChp,Fuel prices per subsector and fuel for CHP plants (kUS$2005/toe),"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",PRICES
-Variable,PPW,VFuelPriMultWgt,Fuel prices per subsector and fuel  mutliplied by weights (kdollars2005/toe),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",PRICES
+Variable,PPW,VPriceFuelSepCarbonWght,Fuel prices per subsector and fuel  mutliplied by weights (kdollars2005/toe),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",PRICES
 Variable,PRODCOST,VCostHourProdInvDec,Hourly production cost of technology (Euro/KWh),"CYall,PGALL,HOUR,YTIME","allCy,PGALL,HOUR,YTIME",POWER GENERATION SECTOR
 Variable,PRODCOSTC,vCostHourProdInvCCS,Hourly production cost of technology (Euro/KWh),"CYall,PGALL,HOUR,YTIME","allCy,PGALL,HOUR,YTIME",POWER GENERATION SECTOR
 Variable,PRODCOSTCS,VCostProdSpecTech,Production cost of technology (Euro/KWh),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
