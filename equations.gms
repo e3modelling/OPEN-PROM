@@ -126,7 +126,7 @@ QCostHourProdInvDec(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME)) ..
                     + iVarCost(PGALL,YTIME)/1E3 + (VRenValue(YTIME)*8.6e-5)$( not ( PGREN(PGALL) 
                     $(not sameas("PGASHYD",PGALL)) $(not sameas("PGSHYD",PGALL)) $(not sameas("PGLHYD",PGALL)) ))
                     + sum(PGEF$PGALLtoEF(PGALL,PGEF), (VFuelPriceSub(runCy,"PG",PGEF,YTIME)+
-                        iCO2CaptRate(runCy,PGALL,YTIME)*VCO2SeqCsts(runCy,YTIME)*1e-3*
+                        iCO2CaptRate(runCy,PGALL,YTIME)*VCstCO2SeqCsts(runCy,YTIME)*1e-3*
                     iCo2EmiFac(runCy,"PG",PGEF,YTIME)
                          +(1-iCO2CaptRate(runCy,PGALL,YTIME))*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
                          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
@@ -201,7 +201,7 @@ QCostVarTech(runCy,PGALL,YTIME)$(time(YTIME))..
          VCostVarTech(runCy,PGALL,YTIME) 
              =E=
          (iVarCost(PGALL,YTIME)/1E3 + sum(PGEF$PGALLtoEF(PGALL,PGEF), (VFuelPriceSub(runCy,"PG",PGEF,YTIME)/1.2441+
-         iCO2CaptRate(runCy,PGALL,YTIME)*VCO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)
+         iCO2CaptRate(runCy,PGALL,YTIME)*VCstCO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)
          + (1-iCO2CaptRate(runCy,PGALL,YTIME))*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)
           *(sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
           *sTWhToMtoe/iPlantEffByType(runCy,PGALL,YTIME))$(not PGREN(PGALL)));
@@ -229,7 +229,7 @@ QCostProdTechPreReplac(runCy,PGALL,YTIME)$TIME(YTIME)..
                             iFixOandMCost(PGALL,YTIME))/(8760*iAvailRate(PGALL,YTIME))
                            + (iVarCost(PGALL,YTIME)/1E3 + sum(PGEF$PGALLtoEF(PGALL,PGEF), 
                            (VFuelPriceSub(runCy,"PG",PGEF,YTIME)+
-                            iCO2CaptRate(runCy,PGALL,YTIME)*VCO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME) +
+                            iCO2CaptRate(runCy,PGALL,YTIME)*VCstCO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME) +
                              (1-iCO2CaptRate(runCy,PGALL,YTIME))*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
                          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
                                  *sTWhToMtoe/iPlantEffByType(runCy,PGALL,YTIME))$(not PGREN(PGALL)))
@@ -583,7 +583,7 @@ QCostPowGenLngTechNoCp(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
               / (1000*(6$ISET(ESET)+4$RSET(ESET))) +
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
                  (iVarCost(PGALL,YTIME)/1000+(VFuelPriceSub(runCy,"PG",PGEF,YTIME)/1.2441+
-                 iCO2CaptRate(runCy,PGALL,YTIME)*VCO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME) +
+                 iCO2CaptRate(runCy,PGALL,YTIME)*VCstCO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME) +
                  (1-iCO2CaptRate(runCy,PGALL,YTIME))*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
                  (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
                  *sTWhToMtoe/iPlantEffByType(runCy,PGALL,YTIME)));
@@ -607,7 +607,7 @@ qCostPowGenLonMin(runCy,PGALL,YTIME)$TIME(YTIME)..
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
                  (iVarCost(PGALL,YTIME)/1000+(VFuelPriceSub(runCy,"PG",PGEF,YTIME)/1.2441+
 
-                 iCO2CaptRate(runCy,PGALL,YTIME)*VCO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME) +
+                 iCO2CaptRate(runCy,PGALL,YTIME)*VCstCO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME) +
 
                  (1-iCO2CaptRate(runCy,PGALL,YTIME))*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
 
@@ -632,7 +632,7 @@ qCostPowGenLongIntPri(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
                  (iVarCost(PGALL,YTIME)/1000+((
   SUM(EF,sum(WEF$EFtoWEF("PG",EF,WEF), iPriceFuelsInt(WEF,YTIME))*sTWhToMtoe/1000*1.5))$(not PGREN(PGALL))    +
 
-                 iCO2CaptRate(runCy,PGALL,YTIME)*VCO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME) +
+                 iCO2CaptRate(runCy,PGALL,YTIME)*VCstCO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME) +
 
                  (1-iCO2CaptRate(runCy,PGALL,YTIME))*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
 
@@ -652,7 +652,7 @@ qCostPowGenShortIntPri(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
                  (iVarCost(PGALL,YTIME)/1000+((
   SUM(EF,sum(WEF$EFtoWEF("PG",EF,WEF), iPriceFuelsInt(WEF,YTIME))*sTWhToMtoe/1000*1.5))$(not PGREN(PGALL))    +
 
-                 iCO2CaptRate(runCy,PGALL,YTIME)*VCO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME) +
+                 iCO2CaptRate(runCy,PGALL,YTIME)*VCstCO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME) +
 
                  (1-iCO2CaptRate(runCy,PGALL,YTIME))*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
 
@@ -692,7 +692,7 @@ QCostAvgPowGenLonNoClimPol(runCy,PGALL,ESET,YTIME)$TIME(YTIME)..
                  (iVarCost(PGALL,YTIME)/1000+((VFuelPriceSub(runCy,"PG",PGEF,YTIME)-iEffValueInEuro(runCy,"PG",ytime)/1000-iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
                  sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))/1000 )/1.2441+
 
-                 iCO2CaptRate(runCy,PGALL,YTIME)*VCO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME) +
+                 iCO2CaptRate(runCy,PGALL,YTIME)*VCstCO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME) +
 
                  (1-iCO2CaptRate(runCy,PGALL,YTIME))*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
 
@@ -750,7 +750,7 @@ qCostPowGenAvgShrt(runCy,ESET,YTIME)$TIME(YTIME)..
         (
         sum(PGEF$PGALLtoEF(PGALL,PGEF),
         (iVarCost(PGALL,YTIME)/1000+(VFuelPriceSub(runCy,"PG",PGEF,YTIME)/1.2441+
-         iCO2CaptRate(runCy,PGALL,YTIME)*VCO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME) +
+         iCO2CaptRate(runCy,PGALL,YTIME)*VCstCO2SeqCsts(runCy,YTIME)*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME) +
          (1-iCO2CaptRate(runCy,PGALL,YTIME))*1e-3*iCo2EmiFac(runCy,"PG",PGEF,YTIME)*
          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME))))
                  *sTWhToMtoe/iPlantEffByType(runCy,PGALL,YTIME)))
@@ -1643,8 +1643,8 @@ QConsFiEneSec(runCy,EFS,YTIME)$TIME(YTIME)..
 *' the product of electricity production from plants with carbon capture and storage, the conversion
 *' factor from terawatt-hours to million tons of oil equivalent (sTWhToMtoe), the plant efficiency,
 *' the CO2 emission factor, and the plant CO2 capture rate. 
-QCO2ElcHrg(runCy,YTIME)$TIME(YTIME)..
-         VCO2ElcHrgProd(runCy,YTIME)
+QCapCo2ElecHydr(runCy,YTIME)$TIME(YTIME)..
+         VCapCo2ElecHydr(runCy,YTIME)
          =E=
          sum(PGEF,sum(CCS$PGALLtoEF(CCS,PGEF),
                  VProdElecPowPlantsCy(runCy,CCS,YTIME)*sTWhToMtoe/iPlantEffByType(runCy,CCS,YTIME)*
@@ -1654,8 +1654,8 @@ QCO2ElcHrg(runCy,YTIME)$TIME(YTIME)..
 *' The cumulative CO2 captured at the current time period is determined by adding the CO2 captured by electricity and hydrogen production
 *' plants to the cumulative CO2 captured in the previous time period. This equation captures the ongoing total CO2 capture
 *' over time in the specified scenario.
-QCumCO2Capt(runCy,YTIME)$TIME(YTIME)..
-         VCumCO2Capt(runCy,YTIME) =E= VCumCO2Capt(runCy,YTIME-1)+VCO2ElcHrgProd(runCy,YTIME-1);   
+QCaptCummCo2(runCy,YTIME)$TIME(YTIME)..
+         VCaptCummCo2(runCy,YTIME) =E= VCaptCummCo2(runCy,YTIME-1)+VCapCo2ElecHydr(runCy,YTIME-1);   
 
 *' The equation computes the transition weight from a linear to exponential CO2 sequestration
 *' cost curve for a specific scenario and year. The transition weight is determined based on the cumulative CO2 captured
@@ -1663,10 +1663,10 @@ QCumCO2Capt(runCy,YTIME)$TIME(YTIME)..
 *' This equation provides a mechanism to smoothly transition from a linear to exponential cost curve based on the cumulative CO2 captured, allowing
 *' for a realistic representation of the cost dynamics associated with CO2 sequestration. The result represents the weight for
 *' the transition in the specified scenario and year.
-QWghtTrnstLinToExpo(runCy,YTIME)$TIME(YTIME)..
-         VWghtTrnstLnrToExpo(runCy,YTIME)
+QTrnsWghtLinToExp(runCy,YTIME)$TIME(YTIME)..
+         VTrnsWghtLinToExp(runCy,YTIME)
          =E=
-         1/(1+exp(-iElastCO2Seq(runCy,"mc_s")*( VCumCO2Capt(runCy,YTIME)/iElastCO2Seq(runCy,"pot")-iElastCO2Seq(runCy,"mc_m")))); 
+         1/(1+exp(-iElastCO2Seq(runCy,"mc_s")*( VCaptCummCo2(runCy,YTIME)/iElastCO2Seq(runCy,"pot")-iElastCO2Seq(runCy,"mc_m")))); 
 
 *' The equation calculates the cost curve for CO2 sequestration costs in Euro per ton of CO2 sequestered
 *' for a specific scenario and year. The cost curve is determined based on cumulative CO2 captured and
@@ -1677,9 +1677,9 @@ QWghtTrnstLinToExpo(runCy,YTIME)$TIME(YTIME)..
 *' realistic approach to modeling CO2 sequestration costs, considering the cumulative CO2 captured and the associated elasticities
 *' for the cost curve. The result represents the cost of sequestering one ton of CO2 in the specified scenario and year.
 QCstCO2SeqCsts(runCy,YTIME)$TIME(YTIME)..
-         VCO2SeqCsts(runCy,YTIME) =E=
-       (1-VWghtTrnstLnrToExpo(runCy,YTIME))*(iElastCO2Seq(runCy,"mc_a")*VCumCO2Capt(runCy,YTIME)+iElastCO2Seq(runCy,"mc_b"))+
-       VWghtTrnstLnrToExpo(runCy,YTIME)*(iElastCO2Seq(runCy,"mc_c")*exp(iElastCO2Seq(runCy,"mc_d")*VCumCO2Capt(runCy,YTIME)));           
+         VCstCO2SeqCsts(runCy,YTIME) =E=
+       (1-VTrnsWghtLinToExp(runCy,YTIME))*(iElastCO2Seq(runCy,"mc_a")*VCaptCummCo2(runCy,YTIME)+iElastCO2Seq(runCy,"mc_b"))+
+       VTrnsWghtLinToExp(runCy,YTIME)*(iElastCO2Seq(runCy,"mc_c")*exp(iElastCO2Seq(runCy,"mc_d")*VCaptCummCo2(runCy,YTIME)));           
 
 
 *' * EMISSIONS CONSTRAINTS 

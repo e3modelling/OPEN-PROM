@@ -25,7 +25,7 @@ Parameter,CAPCOST,iCapCostTech,"""Capital Cost of technology (various)""
                                                  !! - For Industrial sectors (except Iron and Steel) is expressed in kEuro05/toe-year
                                                  !! - For Iron and Steel is expressed in kEuro05/tn-of-steel
                                                  !! - For Domestic Sectors is expressed in kEuro05/toe-year","CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",
-Variable,CCO2CAPT,VCumCO2Capt,Cumulative CO2 captured (Mtn CO2),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Variable,CCO2CAPT,VCaptCummCo2,Cumulative CO2 captured (Mtn CO2),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Parameter,CCRES,-,,"PGALL,YTIME",,
 Parameter,CCRES_PRN,-,,"PGALL,YTIME",,
 Variable,CCSGAMMA,VSensCcs,Variable that controlls the sensitivity of CCS acceptance,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
@@ -47,14 +47,14 @@ Parameter,CHPVARCOST,iVarCostChp,Variable (other than fuel) cost per CHP Type (G
 Variable,CHPVCOST,VShareTechNewEquip,Variable including fuel electricity production cost per CHP plant and demand sector (Euro/KWh),"CYall,DSBS,CHP,YTIME","allCy,DSBS,CHP,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,CHPW,vSecContrTotChpProd,Contribution of each sector in total CHP production (1),"CYall,SBS,CHP,YTIME","allCy,SBS,CHP,YTIME",POWER GENERATION SECTOR
 Parameter,CO2_SEQ_DATA,iCO2SeqData,Data for CO2 sequestration ,"CO2SEQELAST,YTIME","allCy,CO2SEQELAST,YTIME",Parameters for data transfering
-Variable,CO2CAPT,VCO2ElcHrgProd,CO2 captured by electricity and hydrogen production plants (Mtn CO2),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Variable,CO2CAPT,VCapCo2ElecHydr,CO2 captured by electricity and hydrogen production plants (Mtn CO2),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Parameter,CO2EMFAC,iCo2EmiFac,CO2 emission factors (kgCO2/kgoe fuel burned),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",Emission Related Parameters
 Parameter,CO2emfac_PRN,iCo2EmiFacAllSbs,CO2 emission factors (kgCO2/kgoe fuel burned),"EF,YTIME","allCy,EF",Emission Related Parameters
 Variable,CO2EMISNAP,VTotGhgEmisAllCountrNap,Total CO2eq GHG emissions in all countries per NAP sector,"NAP,YTIME","NAP,YTIME",POWER GENERATION SECTOR
 Variable,CO2EMISTOT,vTotCo2AllCoun,Total CO2eq GHG emissions in all countries (1),YTIME,YTIME,POWER GENERATION SECTOR
-Variable,CO2SEQCOST,VCO2SeqCsts,Cost curve for CO2 sequestration costs (Euro/tn of CO2 sequestrated),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Variable,CO2SEQCOST,VCstCO2SeqCsts,Cost curve for CO2 sequestration costs (Euro/tn of CO2 sequestrated),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Parameter,CO2SEQPARAM,iElastCO2Seq,Elasticities for CO2 sequestration cost curve,"CYall,CO2SEQELAST","allCy,CO2SEQELAST",Emission Related Parameters
-Variable,CO2SEQW,VWghtTrnstLnrToExpo,Weight for transtition from linear CO2 sequestration cost curve to exponential,"CYALL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Variable,CO2SEQW,VTrnsWghtLinToExp,Weight for transtition from linear CO2 sequestration cost curve to exponential,"CYALL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Variable,CONSEF,VConsFuel,"Consumption of fuels in each demand subsector, excluding heat from heatpumps (Mtoe)","CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,CONSEF_BAR,VConsFuelInclHP,Consumption of fuels in each demand subsector including heat from heatpumps (Mtoe),"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Sets,CONSET,conSet,Consumer size groups related to space heating,,,
@@ -140,7 +140,7 @@ Equation,EQCAPACITY,QCapGenPlannedPlant,Compute electricity generation capacity,
 Equation,EQcapacity2,QCapGenNewResPlant,Compute the new capacity added every year,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Equation,EQCAPACITYT,QCapGenPlant,Compute electricity generation capacity,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Equation,eqcapall,QCapOverall,Compute overall capacity,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
-Equation,EQCCO2CAPT,QCumCO2Capt,Compute cumulative CO2 captured (Mtn of CO2),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Equation,EQCCO2CAPT,QCaptCummCo2,Compute cumulative CO2 captured (Mtn of CO2),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQCCSGAMMA,QSensCcs,Compute gamma parameter used in CCS/No CCS decision tree,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQCEN,QConsFiEneSec,Compute energy branch final consumption,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
 Equation,EQCF,QConsFinEneCountry,Compute total final energy consumption,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
@@ -151,11 +151,11 @@ Equation,EQCHPCOST,QCostElecProdChp,Compute electricity production cost per CHP 
 Equation,EQCHPELCPROD,QGenEstElecChpPlants,Compute electricity production from CHP plants ,"Cyall,CHP,YTIME","allCy,CHP,YTIME",POWER GENERATION SECTOR
 Equation,EQCHPVCOST,QShareTechNewEquip,Compute  variable including fuel electricity production cost per CHP plant and demand sector ,"CYall,DSBS,CHP,YTIME","allCy,DSBS,CHP,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQCHPW,qSecContrTotChpProd,Compute sector contribution to total CHP production,"CYall,SBS,CHP,YTIME","allCy,SBS,CHP,YTIME",POWER GENERATION SECTOR
-Equation,EQCO2CAPT,QCO2ElcHrg,Compute CO2 captured by electricity and hydrogen production plants ,"CYall,YTIME","allCy,YTIME",CO2 SEQUESTRATION COST CURVES
+Equation,EQCO2CAPT,QCapCo2ElecHydr,Compute CO2 captured by electricity and hydrogen production plants ,"CYall,YTIME","allCy,YTIME",CO2 SEQUESTRATION COST CURVES
 Equation,EQCO2EMISNAP,QTotGhgEmisAllCountrNap,Compute total CO2eq GHG emissions in all countries per NAP sector,"NAP,YTIME","NAP,YTIME",POWER GENERATION SECTOR
 Equation,EQCO2EMISTOT,qTotCo2AllCoun,Compute total CO2eq GHG emissions in all countries,YTIME,YTIME,POWER GENERATION SECTOR
 Equation,EQCO2SEQCOST,QCstCO2SeqCsts,Compute cost curve for CO2 sequestration costs in Euro per tn of CO2 sequestrated,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Equation,EQCO2SEQW,QWghtTrnstLinToExpo,Compute the transition weight from linear CO2 sequestration cost curve to exponential,"CYALL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Equation,EQCO2SEQW,QTrnsWghtLinToExp,Compute the transition weight from linear CO2 sequestration cost curve to exponential,"CYALL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQCONSEF,QConsFuel,Compute fuel consumption (Mtoe),"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQCONSEF_BAR,QConsFuelInclHP,Compute fuel consumption including heat from heatpumps,"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQCONSS,QConsRemSubEquipSubSec,Compute consumption of remaining substitutble equipment,"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS

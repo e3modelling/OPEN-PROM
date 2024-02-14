@@ -153,10 +153,10 @@ QConsFiEneSec                   !! VConsFiEneSec(runCy,EFS,YTIME)
 
 *' * CO2 SEQUESTRATION COST CURVES *
 
-QCO2ElcHrg                         !! VCO2ElcHrgProd(runCy,YTIME)
-QCumCO2Capt                        !! VCumCO2Capt(runCy,YTIME)
-QWghtTrnstLinToExpo                !! VWghtTrnstLnrToExpo(runCy,YTIME)
-QCstCO2SeqCsts                     !! VCO2SeqCsts(runCy,YTIME)         
+QCapCo2ElecHydr                         !! VCapCo2ElecHydr(runCy,YTIME)
+QCaptCummCo2                        !! VCaptCummCo2(runCy,YTIME)
+QTrnsWghtLinToExp                !! VTrnsWghtLinToExp(runCy,YTIME)
+QCstCO2SeqCsts                     !! VCstCO2SeqCsts(runCy,YTIME)         
 
 
 *' * EMISSIONS CONSTRAINTS *
@@ -257,7 +257,7 @@ VActivGoodsTransp.l(allCy,TRANSE,YTIME)=0.1;
 *VCostTranspPerVeh.lo(allCy,TRANSE,RCon,TTECH,YTIME)=0.1;
 VRenShareElecProdSub.FX(runCy,YTIME)$(NOT AN(YTIME))=0;
 VRenValue.l(YTIME)=1;
-VCO2SeqCsts.l(allCy,YTIME)=1;
+VCstCO2SeqCsts.l(allCy,YTIME)=1;
 VScalWeibullSum.l(allCy,PGALL,YTIME)=2;
 *VScalWeibullSum.up(allCy,PGALL,YTIME)=1.0e+10;
 VCostHourProdInvDec.l(runCy,PGALL,HOUR,TT) = 0.0001;
@@ -444,7 +444,7 @@ VIndexEndogScrap.FX(runCy,PGALL,YTIME)$(not an(YTIME) ) = 1;
 VIndexEndogScrap.FX(runCy,PGSCRN,YTIME) = 1;            !! premature replacement it is not allowed for all new plants
 
 
-VCO2ElcHrgProd.FX(runCy,YTIME)$(not An(YTIME)) = 0;
+VCapCo2ElecHydr.FX(runCy,YTIME)$(not An(YTIME)) = 0;
 
 VRenShareElecProdSub.FX(runCy,YTIME)$(NOT AN(YTIME))=0;
 VPotRenSuppCurve.FX(runCy,PGRENEF, YTIME) $(NOT AN(YTIME)) = iMinRenPotential(runCy,PGRENEF,YTIME);
@@ -465,9 +465,9 @@ VCarVal.fx(runCy,NAP,YTIME)$(not An(YTIME))=0;
 VCarVal.FX(runCy,"TRADE",YTIME)$an(YTIME) = sExogCarbValue*iCarbValYrExog(runCy,YTIME);
 VCarVal.FX(runCy,"NOTRADE",YTIME)$an(YTIME) =sExogCarbValue*iCarbValYrExog(runCy,YTIME);
 
-VCumCO2Capt.FX(runCy,YTIME)$(not an(YTIME)) = 0 ;
+VCaptCummCo2.FX(runCy,YTIME)$(not an(YTIME)) = 0 ;
 
-*VCO2SeqCsts.FX(runCy,YTIME) = iElastCO2Seq(runCy,"mc_a") *iElastCO2Seq(runCy,"mc_b");
+*VCstCO2SeqCsts.FX(runCy,YTIME) = iElastCO2Seq(runCy,"mc_a") *iElastCO2Seq(runCy,"mc_b");
 
 VDemFinEneTranspPerFuel.FX(runCy,TRANSE,EF,YTIME)$(not SECTTECH(TRANSE,EF)) = 0;
 VOutTransfDhp.FX(runCy,EFS,YTIME)$(not STEAM(EFS)) = 0;
