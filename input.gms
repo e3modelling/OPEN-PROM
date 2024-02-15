@@ -114,11 +114,14 @@ $ondelim
 $include "./iParDHEfficiency.csv"
 $offdelim
 ;
+$ontext
 table iSuppTransfInputPatFuel(EF,YTIME)            "Supplementary Parameter for the transformation input to patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works (1)"
 $ondelim
 $include "./iSuppTransfInputPatFuel.csv"
 $offdelim
 ; 
+$offtext
+
 parameter iSupResRefCapacity(allCy,SUPOTH,YTIME)	           "Supplementary Parameter for the residual in refineries Capacity (1)";
 iSupResRefCapacity(allCy,SUPOTH,YTIME) = 1;
 
@@ -567,7 +570,7 @@ iRateEneBranCons(allCy,EFS,YTIME)= iSupRateEneBranCons(allCy,EFS,YTIME);
 iResTransfOutputRefineries(runCy,EFS,YTIME) = iSupTrnasfOutputRefineries(runCy,EFS,YTIME);;
 iRefCapacity(runCy,YTIME)= iSuppRefCapacity(runCy,"REF_CAP",YTIME);
 iResRefCapacity(runCy,YTIME) = iSupResRefCapacity(runCy,"REF_CAP_RES",YTIME);
-iTransfInpGasworks(runCy,EFS,YTIME)= iSuppTransfInputPatFuel(EFS,YTIME);
+*iTransfInpGasworks(runCy,EFS,YTIME)= iSuppTransfInputPatFuel(EFS,YTIME);
 
 parameter iLoadFactorAdjMxm(VARIOUS_LABELS)    "Parameter for load factor adjustment iMxmLoadFacElecDem (1)" /
 AMAXBASE 3,
