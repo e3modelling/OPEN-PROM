@@ -37,11 +37,38 @@ $include "./iElastNonSubElecData.csv"
 $offdelim
 ;
 iElastNonSubElec(allCy,SBS,ETYPES,YTIME) = iElastNonSubElecData(SBS,ETYPES,YTIME);
-table iDisc(allCy,SBS,YTIME) "Discount rates per subsector ()"
-$ondelim
-$include "./iDisc.csv"
-$offdelim
-;
+
+parameter iDiscData(SBS) "Discount rates per subsector ()" /
+PCH     0.12
+IS      0.12
+NF      0.12
+CH      0.12
+BM      0.12
+PP      0.12
+FD      0.12
+EN      0.12
+TX      0.12
+OE      0.12
+OI      0.12
+SE      0.12
+AG      0.12
+HOU     0.175
+PC      0.175
+PT      0.08
+PA      0.12
+GU      0.12
+GT      0.08
+GN      0.12
+BU      0.12
+NEN     0.08
+PG      0.1
+H2P     0.08
+H2INFR  0.08 
+/;
+
+parameter iDisc(allCy,SBS,YTIME) "Discount rates per subsector for all countries ()" ;
+iDisc(allCy,SBS,YTIME) = iDiscData(SBS);
+
 * FIXME: Drive the emission factors with mrprom
 * author=giannou
 parameter iCo2EmiFacAllSbs(EF) "CO2 emission factors (kgCO2/kgoe fuel burned)" /
@@ -85,9 +112,6 @@ $include "./iInitSpecFuelCons.csv"
 $offdelim
 ;
 
-* FIXME: iDisc("MAR",SBS,YTIME) values for all countries equal to  values of MAR.
-* author=redmonkeycloud
-iDisc(allCy,SBS,YTIME) = iDisc("MAR",SBS,YTIME) ;
 
 * FIXME: iInitSpecFuelCons("MAR",TRANSE,TTECH,EF,"2017") initial values for all countries equal to initial values of MAR.
 * author=redmonkeycloud
