@@ -133,11 +133,21 @@ $ondelim
 $include "./iRateLossesFinCons.csv"
 $offdelim
 ;
-table iParDHEfficiency(PGEFS,YTIME)                 "Parameter of  district heating Efficiency (1)"
-$ondelim
-$include "./iParDHEfficiency.csv"
-$offdelim
-;
+
+parameter iParDHEffData(PGEFS) "Parameter of  district heating Efficiency (1)" /
+HCL		0.76,
+LGN		0.75,
+GDO		0.78,
+RFO		0.78,
+OLQ		0.78,
+NGS		0.8,
+OGS		0.78,
+BMSWAS    0.76 
+/;
+
+parameter iParDHEfficiency(PGEFS,YTIME)                 "Parameter of  district heating Efficiency for all years (1)" ;
+iParDHEfficiency(PGEFS,YTIME) = iParDHEffData(PGEFS)
+
 $ontext
 table iSuppTransfInputPatFuel(EF,YTIME)            "Supplementary Parameter for the transformation input to patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works (1)"
 $ondelim
