@@ -130,8 +130,9 @@ QElecBaseLoadtmp(allCy,YTIME)	               "Compute electricity base load"
 QShrcap(allCy,PGALL,YTIME)	               "Compute SHRCAP"	
 QElecGenCap(allCy,PGALL,YTIME)	           "Compute electricity generation capacity"
 QLambda(allCy,YTIME)	                   "Compute Lambda parameter"	
-QScalFacPlantDispatch(allCy,HOUR,YTIME)   "Compute the scaling factor for plant dispatching"	
-qCurrRenPot(allCy,PGRENEF,YTIME)	       "Compute current renewable potential" 	
+QScalFacPlantDispatch(allCy,HOUR,YTIME)   "Compute the scaling factor for plant dispatching"
+QScalFacPlantDispatchLHS(allCy,PGALL,HOUR,YTIME)	
+QCurrRenPot(allCy,PGRENEF,YTIME)	       "Compute current renewable potential" 	
 QScalWeibullSum(allCy,PGALL,YTIME)	       "Compute sum (over hours) of temporary variable facilitating the scaling in Weibull equation"
 QElecPriIndResNoCliPol(allCy,ESET,YTIME)   "Compute electricity price in Industrial and Residential Consumers excluding climate policies"
 qShortPowGenCost(allCy,ESET,YTIME)	       "Compute short term power generation cost"		
@@ -158,7 +159,7 @@ QElecGenCapacity(allCy,PGALL,YTIME)	       "Compute electricity generation capac
 QPowPlaShaNewEquip(allCy,PGALL,YTIME)	   "Compute the power plant share in new equipment"	
 QNewInvDecis(allCy,YTIME)	               "Compute for Power Plant new investment decision"		
 QMaxmAllowRenPotent(allCy,PGRENEF,YTIME)   "Compute maximum allowed renewable potential"
-QMnmAllowRenPot(allCy,PGRENEF,YTIME)	   "Compute minimum allowed renewable potential" 
+qMnmAllowRenPot(allCy,PGRENEF,YTIME)	   "Compute minimum allowed renewable potential" 
 QRenTechMatMult(allCy,PGALL,YTIME)	       "Compute renewable technologies maturity multiplier"	
 QElecProdChpPlants(allCy,CHP,YTIME)	       "Compute electricity production from CHP plants" 		 	
 qScalWeibull(allCy,PGALL,HOUR,YTIME)       "Compute temporary variable facilitating the scaling in Weibull equation"	
@@ -271,7 +272,7 @@ qDummyObj                                     "Define dummy objective function"
 
 
 Variables
-
+LHS(allCy,PGALL,HOUR,YTIME)	
 *' *** Power Generation Variables
 VElecCapChpPla(allCy,CHP,YTIME)	          "Capacity of CHP Plants (GW)"
 VLoadCurveConstr(allCy,YTIME)	          "Parameter for load curve construction (1)"
@@ -283,7 +284,7 @@ VBslMaxmLoad(allCy,YTIME)	              "Baseload corresponding to Maximum Load 
 vHourProdCostTechAfterCCS(allCy,PGALL,HOUR,YTIME)"Hourly production cost of technology accounting for CCS acceptance (Euro/KWh)"
 vResShareGrossElecProd(allCy,YTIME)	       "Renewables share in gross electricity production for subsdidized renewables"
 VLongPowGenCost(allCy,PGALL,ESET,YTIME)	   "Long-term average power generation cost (Euro2005/kWh)"
-vCurrRenPot(allCy,PGRENEF,YTIME)	       "Current renewable potential (GW)"			
+VCurrRenPot(allCy,PGRENEF,YTIME)	       "Current renewable potential (GW)"			
 VReqElecProd(allCy,YTIME)	               "Total required electricity production (TWh)"	
 VOverallCap(allCy,PGALL,YTIME)	           "Overall Capacity (MW)"	
 VVarCostTechNotPGSCRN(allCy,PGALL,YTIME)  "Variable cost of technology excluding PGSCRN (Euro/KWh)"
@@ -315,7 +316,7 @@ VPowPlaShaNewEquip(allCy,PGALL,YTIME)	  "Power plant share in new equipment (1)"
 VRenTechMatMult(allCy,PGALL,YTIME)	      "Renewable technologies maturity multiplier (1)"	
 VRenPotSupplyCurve(allCy,PGRENEF,YTIME)	  "Renewable potential supply curve	(1)"
 VMaxmAllowRenPotent(allCy,PGRENEF,YTIME)  "Maximum allowed renewable potential (GW)"
-VMnmAllowRenPot(allCy,PGRENEF,YTIME)	  "Minimum allowed renewable potential (GW)"		
+vMnmAllowRenPot(allCy,PGRENEF,YTIME)	  "Minimum allowed renewable potential (GW)"		
 vScalWeibull(allCy,PGALL,HOUR,YTIME)      "Temporary variable facilitating the scaling in Weibull equation"	
 VElecGenPlantsCapac(allCy,PGALL,YTIME)	  "Electricity generation plants capacity (GW)"	
 VGapPowerGenCap(allCy,YTIME)	          "Gap in total generation capacity to be filled by new equipment (GW)"		
@@ -448,6 +449,6 @@ sGwToTwhPerYear    "convert GW mean power into TWh/y" /8.76/
 s                  "time step iterator" /0/
 sSolverTryMax      "maximum attempts to solve each time step" /%SolverTryMax%/
 sModelStat         "helper parameter for solver status"
-sExogCarbValue	   "switch for exogenous carbon value (0=exogenous 1=endogenous)" /0/
+sExogCarbValue	   "switch for exogenous carbon value (0=endogenous 1=exogenous)" /1/
 iFracElecPriChp    "Fraction of Electricity Price at which a CHP sells electricity to network" /0.3/
 ;

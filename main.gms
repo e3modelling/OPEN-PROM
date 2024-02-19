@@ -29,7 +29,7 @@ $evalGlobal SolverTryMax 2
 *' *** Setting research mode (0) or development mode (1) to modify settings and parameters accordingly
 $setGlobal DevMode 0 
 
-$setGlobal fCountries 'MAR,IND,USA,EGY,CHA,RWO'
+$setGlobal fCountries 'SAU,LTU,MLT'
 
 $setGlobal fCountryList %countries%
 
@@ -37,7 +37,7 @@ $evalGlobal fPeriodOfYears 1
 
 $evalGlobal fStartHorizon 2010
 $evalGlobal fEndHorizon 2100
-$evalGlobal fEndY 2018
+$evalGlobal fEndY 2030
 $evalGlobal fStartY 2018
 $evalGlobal fBaseY %fStartY% - %fPeriodOfYears%
 

@@ -13,8 +13,9 @@ endloop;
 model openprom /
 
 *' * Power Generation *
+QScalFacPlantDispatchLHS
 QElecBaseLoadtmp
-qCurrRenPot                        !! vCurrRenPot(runCy,PGRENEF,YTIME)
+QCurrRenPot                        !! VCurrRenPot(runCy,PGRENEF,YTIME)
 QChpElecPlants                     !! VElecCapChpPla(runCy,CHP,YTIME)
 QLambda                            !! VLoadCurveConstr(runCy,YTIME)
 QElecDem                           !! VElecDem(runCy,YTIME)
@@ -29,7 +30,7 @@ QTotElecGenCap                     !! VTotElecGenCap(runCy,YTIME)
 QHourProdCostInv                   !! VHourProdCostTech(runCy,PGALL,HOUR,YTIME)
 QHourProdCostInvDec                !! VHourProdCostTechNoCCS(runCy,PGALL,HOUR,YTIME)
 QGammaInCcsDecTree                 !! VSensCcs(runCy,YTIME)
-qHourProdCostInvDecisionsAfterCCS  !! vHourProdCostTechAfterCCS(runCy,PGALL,HOUR,YTIME) 
+*qHourProdCostInvDecisionsAfterCCS  !! vHourProdCostTechAfterCCS(runCy,PGALL,HOUR,YTIME) 
 QProdCostInvDecis                  !! VProdCostTechnology(runCy,PGALL,YTIME)
 QShrcap                            !! VPowerPlaShrNewEq(runCy,PGALL,YTIME)
 QShrcapNoCcs                       !! VPowerPlantNewEq(runCy,PGALL,YTIME)
@@ -40,10 +41,10 @@ QProdCostTechPreReplacAvail        !! VProdCostTechPreReplacAvail(runCy,PGALL,PG
 QEndogScrapIndex                   !! VEndogScrapIndex(runCy,PGALL,YTIME)
 QElecGenNoChp                      !! VElecGenNoChp(runCy,YTIME)
 QGapPowerGenCap                    !! VGapPowerGenCap(runCy,YTIME)
-qScalWeibull                       !! vScalWeibull(runCy,PGALL,HOUR,YTIME) 
+*qScalWeibull                       !! vScalWeibull(runCy,PGALL,HOUR,YTIME) 
 QRenPotSupplyCurve                 !! VRenPotSupplyCurve(runCy,PGRENEF,YTIME)
 QMaxmAllowRenPotent                !! VMaxmAllowRenPotent(runCy,PGRENEF,YTIME)
-QMnmAllowRenPot                    !! VMnmAllowRenPot(runCy,PGRENEF,YTIME)
+qMnmAllowRenPot                    !! vMnmAllowRenPot(runCy,PGRENEF,YTIME)
 QRenTechMatMult                    !! VRenTechMatMult(runCy,PGALL,YTIME)
 QScalWeibullSum                    !! VScalWeibullSum(runCy,PGALL,YTIME)
 QNewInvDecis                       !! VNewInvDecis(runCy,YTIME)
@@ -246,9 +247,9 @@ VPowPlantSorting.l(runCy,PGALL,YTIME)=0.01;
 *VPowPlantSorting.l(runCy,PGALL,YTIME)=VVarCostTechnology.L(runCy,PGALL,YTIME)/VElecPeakLoads.L(runCy,YTIME);
 VReqElecProd.l(runCy,YTIME) = 0.01;
 *VReqElecProd.l(runCy,YTIME)=sum(hour, sum(CHP,VElecCapChpPla.L(runCy,CHP,YTIME)*exp(-VScalFacPlaDisp.L(runCy,HOUR,YTIME)/ sum(pgall$chptoeon(chp,pgall),VPowPlantSorting.L(runCy,PGALL,YTIME)))));
-*VPowPlantSorting.up(runCy,PGALL,YTIME)=0.001;
+VPowPlantSorting.lo(runCy,PGALL,YTIME)=1.e-20;
 *VPowPlantSorting.scale(runCy,PGALL,YTIME)=1;
-VScalFacPlaDisp.L(runCy,HOUR,YTIME) = 1.e-12;
+VScalFacPlaDisp.L(runCy,HOUR,YTIME) = 1.e-20;
 VElecDem.l(allCy,YTIME)=10;
 *VHourProdCostTech.lo(runCy,PGALL,HOUR,YTIME)=0.0001;
 *VHourProdCostTechNoCCS.lo(runCy,PGALL,HOUR,YTIME)=0.1;
@@ -447,7 +448,8 @@ VEndogScrapIndex.FX(runCy,PGSCRN,YTIME) = 1;            !! premature replacement
 VCO2ElcHrgProd.FX(runCy,YTIME)$(not An(YTIME)) = 0;
 
 VRenShareElecProdSub.FX(runCy,YTIME)$(NOT AN(YTIME))=0;
-VRenPotSupplyCurve.FX(runCy,PGRENEF, YTIME) $(NOT AN(YTIME)) = iMinRenPotential(runCy,PGRENEF,YTIME);
+VCurrRenPot.l(runCy,PGRENEF, YTIME) $(AN(YTIME)) = 1000;
+VCurrRenPot.FX(runCy,PGRENEF, YTIME) $(NOT AN(YTIME)) = iMinRenPotential(runCy,PGRENEF,YTIME);
 
 VLongAvgPowGenCost.L(runCy,ESET,"2010") = 0;
 VLonPowGenCostNoClimPol.L(runCy,ESET,"2010") = 0;
@@ -484,6 +486,15 @@ VLoadCurveConstr.LO(runCy,YTIME)=0.0001;
 VLoadCurveConstr.L(runCy,YTIME)=0.21;
 VRenValue.FX(YTIME) = 0 ;
 VTotReqElecProd.fx(runCy,"%fBaseY%")=sum(pgall,VElecProd.L(runCy,pgall,"%fBaseY%"));
+         VElecConsAll.l(runCy,DSBS,YTIME)
+             =
+         sum(INDDOM $SAMEAS(INDDOM,DSBS), VConsFuel.l(runCy,INDDOM,"ELC",YTIME)) + sum(TRANSE $SAMEAS(TRANSE,DSBS), VDemTr.l(runCy,TRANSE,"ELC",YTIME));
+         VBslMaxmLoad.l(runCy,YTIME)
+             =
+         (
+             sum(DSBS, iBaseLoadShareDem(runCy,DSBS,YTIME)*VElecConsAll.l(runCy,DSBS,YTIME))*(1+iRateLossesFinCons(runCy,"ELC",YTIME))
+             + 0.5*VEnCons.l(runCy,"ELC",YTIME)
+         ) / sTWhToMtoe / sGwToTwhPerYear;
 display VProdCostTechPreReplacAvail.l;
 
 loop an do !! start outer iteration loop (time steps)
