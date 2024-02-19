@@ -1069,11 +1069,103 @@ $offdelim
 ;
 $offtext
 
-table iPlugHybrFractOfMileage(ELSH_SET,YTIME)	 "Plug in hybrid fraction of mileage covered by electricity, residualls on GDP-Depnd car market ext (1)"
-$ondelim
-$include"./iPlugHybrFractOfMileage.csv"
-$offdelim
-;
+parameter iPlugHybrFractData(YTIME)  "Plug in hybrid fraction of mileage" /
+2010    0.5
+2011    0.504444
+2012    0.508889
+2013    0.513333
+2014    0.517778
+2015    0.522222
+2016    0.526667
+2017    0.531111
+2018    0.535556
+2019    0.54
+2020    0.544444
+2021    0.548889
+2022    0.553333
+2023    0.557778
+2024    0.562222
+2025    0.566667
+2026    0.571111
+2027    0.575556
+2028    0.58
+2029    0.584444
+2030    0.588889
+2031    0.593333
+2032    0.597778
+2033    0.602222
+2034    0.606667
+2035    0.611111
+2036    0.615556
+2037    0.62
+2038    0.624444
+2039    0.628889
+2040    0.633333
+2041    0.637778
+2042    0.642222
+2043    0.646667
+2044    0.651111
+2045    0.655556
+2046    0.66
+2047    0.664444
+2048    0.668889
+2049    0.673333
+2050    0.677778
+2051    0.682222
+2052    0.686667
+2053    0.691111
+2054    0.695556
+2055    0.7
+2056    0.688889
+2057    0.690741
+2058    0.69216
+2059    0.693076
+2060    0.693404
+2061    0.693045
+2062    0.691886
+2063    0.692385
+2064    0.692659
+2065    0.692743
+2066    0.692687
+2067    0.692567
+2068    0.692488
+2069    0.692588
+2070    0.692622
+2071    0.692616
+2072    0.692595
+2073    0.692579
+2074    0.692581
+2075    0.692597
+2076    0.692598
+2077    0.692594
+2078    0.692591
+2079    0.69259
+2080    0.692592
+2081    0.692594
+2082    0.692593
+2083    0.692592
+2084    0.692592
+2085    0.692592
+2086    0.692593
+2087    0.692593
+2088    0.692593
+2089    0.692593
+2090    0.692593
+2091    0.692593
+2092    0.692593
+2093    0.692593
+2094    0.692593
+2095    0.692593
+2096    0.692593
+2097    0.692593
+2098    0.692593
+2099    0.692593
+2100    0.692593
+/;
+
+parameter iPlugHybrFractOfMileage(ELSH_SET,YTIME)	 "Plug in hybrid fraction of mileage covered by electricity, residualls on GDP-Depnd car market ext (1)" ;
+iPlugHybrFractOfMileage(ELSH_SET,YTIME) = iPlugHybrFractData(YTIME);
+
 iShareAnnMilePlugInHybrid(allCy,YTIME)$an(YTIME) = iPlugHybrFractOfMileage("ELSH",YTIME);
 table iCapDataLoadFacEachTransp(TRANSE,TRANSUSE)	 "Capacity data and Load factor for each transportation mode (passenger or tonnes/vehicle)"
      Cap  LF
