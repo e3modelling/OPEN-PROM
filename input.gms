@@ -577,10 +577,57 @@ $offdelim
 ;
 
 iMatFacPlaAvailCap(allCy,CCS,YTIME)$an(YTIME)  =0;
-
+parameter
 * FIXME: Temporarily setting maturity factors related to plant dispatching equal to 1.
 * author=derevirn
-iMatureFacPlaDisp(allCy,PGALL,YTIME)$an(YTIME) = 1;
+iDataMatureFacPlaDisp(PGALL) /
+*CTHLGN	20.00000,
+*CTHHCL	20.00000,
+*CTHRFO	20.00000,
+*CTHNGS	20.00000,
+CTHBMSWAS	20.00000,
+ATHLGN	20.00000,
+ATHHCL	20.00000,
+ATHRFO	60.00000,
+ATHNGS	40.00000,
+ATHBMSWAS	20.00000,
+SUPCRL	20.00000,
+SUPCR	20.00000,
+FBCLGN	20.00000,
+FBCHCL	20.00000,
+IGCCLGN	20.00000,
+IGCCHCL	20.00000,
+IGCCBMS	20.00000,
+CCCGT	40.00000,
+*ACCHT	0.00000010,
+ACCGT	50.00000,
+*CGTGDO	20.00000,
+*CGTNGS	20.00000,
+AGTGDO	40.00000,
+AGTNGS	40.00000,
+*ICEH2	20.00000,
+*FC1	20.00000,
+*FC2	20.00000,
+*PGNUC	1.00000000,
+PGLHYD	0.20000,
+PGSHYD	0.00100,
+PGWND	0.60000,
+PGSOL	0.00050,
+*PGOTHREN	0.00000,
+PGASHYD	0.00050,
+PGAWND	0.60000,
+PGASOL	0.00050,
+PGADPV	0.00010,
+PGAOTHREN	0.00000,
+PGANUC	1.00000,
+PGAPSS	20.00000,
+PGAPSSL	20.00000,
+PGACGSL	20.00000,
+PGACGS	20.00000,
+PGAGGS	20.00000,
+PGAWNO	0.60000000/;
+iMatureFacPlaDisp(allCy,PGALL,YTIME)$an(YTIME) =iDataMatureFacPlaDisp(PGALL);
+
 iCO2CaptRate(runCy,PGALL,YTIME) = 0; 
 
 parameter iMxmShareChpElec "Maximum share of CHP electricity in a country (1)";
@@ -766,6 +813,7 @@ $offdelim
 * FIXME: Specify maturity factors for each country and decrease CSV file size.
 * author=derevirn
 iMatrFactor(allCy,SBS,EF,YTIME) = iMatrFactor("MAR",SBS,EF,YTIME);                                          
+iMatrFactor(allCy,SBS,EF,YTIME)$(iMatrFactor(allCy,SBS,EF,YTIME)=0) = 0.000001;
 ** Industry
 iShrNonSubElecInTotElecDem(allCy,INDSE)  = iIndChar(allCy,INDSE,"SHR_NSE");
 iShrNonSubElecInTotElecDem(allCy,INDSE)$(iShrNonSubElecInTotElecDem(allCy,INDSE)>0.98) = 0.98;

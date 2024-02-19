@@ -14,7 +14,7 @@ model openprom /
 
 *' * Power Generation *
 
-qCurrRenPot                        !! vCurrRenPot(runCy,PGRENEF,YTIME)
+QCurrRenPot                        !! VCurrRenPot(runCy,PGRENEF,YTIME)
 QChpElecPlants                     !! VElecCapChpPla(runCy,CHP,YTIME)
 QLambda                            !! VLoadCurveConstr(runCy,YTIME)
 QElecDem                           !! VElecDem(runCy,YTIME)
@@ -43,7 +43,7 @@ QGapPowerGenCap                    !! VGapPowerGenCap(runCy,YTIME)
 qScalWeibull                       !! vScalWeibull(runCy,PGALL,HOUR,YTIME) 
 QRenPotSupplyCurve                 !! VRenPotSupplyCurve(runCy,PGRENEF,YTIME)
 QMaxmAllowRenPotent                !! VMaxmAllowRenPotent(runCy,PGRENEF,YTIME)
-QMnmAllowRenPot                    !! VMnmAllowRenPot(runCy,PGRENEF,YTIME)
+qMnmAllowRenPot                    !! vMnmAllowRenPot(runCy,PGRENEF,YTIME)
 QRenTechMatMult                    !! VRenTechMatMult(runCy,PGALL,YTIME)
 QScalWeibullSum                    !! VScalWeibullSum(runCy,PGALL,YTIME)
 QNewInvDecis                       !! VNewInvDecis(runCy,YTIME)
@@ -215,11 +215,14 @@ VProdCostTechnology.lo(allCy,PGALL2,YTIME)=0.00000001;
 VVarCostTech.l(allCy,PGALL,YTIME)=0.1;
 VProdCostTechPreReplacAvail.l(allCy,PGALL,PGALL2,YTIME)=0.1;
 VTechSortVarCost.l(allCy,TRANSE,Rcon,YTIME)=0.1;
+VTechSortVarCost.lo(allCy,TRANSE,Rcon,YTIME)=1e-17;
 *VHourProdCostTechNoCCS.up(allCy,PGALL,HOUR,YTIME)=8000;
 *VHourProdCostTechNoCCS.VLamda(allCy,PGALL,HOUR,YTIME)=10;
 *VTemScalWeibull.up(allCy,PGALL,HOUR,YTIME)=1e6;
 *VHourProdCostTechNoCCS.lo(allCy,PGALL,HOUR,YTIME)=0.0001;
 VRenPotSupplyCurve.l(allCy,PGRENEF,YTIME)=0.1;
+VCurrRenPot.l(runCy,PGRENEF, YTIME) $(AN(YTIME)) = 1000;
+VCurrRenPot.FX(runCy,PGRENEF, YTIME) $(NOT AN(YTIME)) = iMinRenPotential(runCy,PGRENEF,YTIME);
 VScrRate.l(allCy,YTIME)=0.1;
 VTranspCostPermeanConsSize.l(allCy,TRANSE,RCon,TTECH,YTIME)=0.1;
 *VTranspCostPermeanConsSize.lo(allCy,TRANSE,RCon,TTECH,YTIME)=0.0001;
@@ -238,7 +241,7 @@ VVarCostTechnology.l(allCy,PGALL,YTIME)=0.1;
 VElecPeakLoads.l(allCy,YTIME)=0.1;
 VNewCapYearly.l(allCy,PGALL,YTIME)=0.1;
 VAvgCapFacRes.l(allCy,PGALL,YTIME)=0.1;
-VPowPlantSorting.l(runCy,PGALL,YTIME)=0.01;
+VPowPlantSorting.lo(runCy,PGALL,YTIME)=1.E-12;
 *VOverallCap.scale(allCy,PGALL,YTIME)=1;
 *VElecCapChpPla.l(runCy,CHP,YTIME) = 1/0.086 * sum(INDDOM,VConsFuel.L(runCy,INDDOM,CHP,YTIME)) * VElecIndPrices.L(runCy,YTIME)/
 *          sum(PGALL$CHPtoEON(CHP,PGALL),iAvailRate(PGALL,YTIME)) /
@@ -248,7 +251,7 @@ VReqElecProd.l(runCy,YTIME) = 0.01;
 *VReqElecProd.l(runCy,YTIME)=sum(hour, sum(CHP,VElecCapChpPla.L(runCy,CHP,YTIME)*exp(-VScalFacPlaDisp.L(runCy,HOUR,YTIME)/ sum(pgall$chptoeon(chp,pgall),VPowPlantSorting.L(runCy,PGALL,YTIME)))));
 *VPowPlantSorting.up(runCy,PGALL,YTIME)=0.001;
 *VPowPlantSorting.scale(runCy,PGALL,YTIME)=1;
-VScalFacPlaDisp.L(runCy,HOUR,YTIME) = 1.e-12;
+VScalFacPlaDisp.L(runCy,HOUR,YTIME) = 1.e-20;
 VElecDem.l(allCy,YTIME)=0.1;
 *VHourProdCostTech.lo(runCy,PGALL,HOUR,YTIME)=0.0001;
 *VHourProdCostTechNoCCS.lo(runCy,PGALL,HOUR,YTIME)=0.1;
