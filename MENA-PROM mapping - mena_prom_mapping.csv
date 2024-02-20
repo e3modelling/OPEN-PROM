@@ -38,7 +38,7 @@ Parameter,CHPAVAIL,iAvailRateChp,Availability rate of CHP Plants (),"CYall,DSBS,
 Variable,CHPCAPAC,VCapElecChp,Capacity of CHP Plants (GW),"CYall,CHP,YTIME","allCy,CHP,YTIME",POWER GENERATION SECTOR
 Parameter,CHPCAPCOST,iInvCostChp,Capital Cost per CHP plant type (kEuro05/KW),"CYall,DSBS,CHP,YTIME","allCy ,DSBS,CHP,YTIME",Power Generation Parameters
 Variable,CHPCOST,VCostElecProdChp,Electricity production cost per CHP plant and demand sector (Euro/KWh),"CYall,DSBS,CHP,YTIME","allCy,DSBS,CHP,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-Variable,CHPELCPROD,VGenEstElecChpPlants,CHP electricity production (TWh),"CYALL,CHP,YTIME","allCy,CHP,YTIME",POWER GENERATION SECTOR
+Variable,CHPELCPROD,VProdElecChp,CHP electricity production (TWh),"CYALL,CHP,YTIME","allCy,CHP,YTIME",POWER GENERATION SECTOR
 Parameter,CHPFIXCOST,iFixOMCostPerChp,Fixed O&M cost per CHP plant type (Euro2005/KW),"CYall,DSBS,CHP,YTIME","allCy,DSBS,CHP,YTIME",
 Parameter,CHPLFT,iLifChpPla,Technical Lifetime for CHP plants (years),"CYall,DSBS,CHP","allCy,DSBS,CHP",Power Generation Parameters
 Parameter,CHPPG_Cost,iDataChpPowGen,Various data related to CHP power generation (various),"EF,CHPPGSET,YTIME","EF,YTIME,CHPPGSET",common data parameters
@@ -111,7 +111,7 @@ Parameter,ELASTGAS,iNatGasPriProElst,Natural Gas primary production elasticity r
 Parameter,ELASTNSE,iElastNonSubElec,,"CYall,SBS,ETYPES,YTIME","allCy,SBS,ETYPES,YTIME",Macro economic indicators
 Parameter,ELC_IMPORTS,iElecImp,Electricity Imports (1),"CYALL,YTIME","allCy,YTIME",Reguala Falsi Parameters
 Variable,ELCALL,VConsElec,Electricity demand per final sector (Mtoe),"CYall,DSBS,YTIME","allCy,DSBS,YTIME",POWER GENERATION SECTOR
-Variable,ELCCHP_EST,VGenEstElecChpPlants,Estimate the electricity of CHP Plants,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Variable,ELCCHP_EST,VProdEstElecChp,Estimate the electricity of CHP Plants,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Variable,ELCDEMAND,VDemElecTot,Total electricity demand (TWh),"CYall,YTIME","allCy,YTIME",Power Generation
 Variable,ELCHEATPUMP,VElecConsHeatPla,Electricity consumed in heatpump plants (Mtoe),"CYall,DSBS,YTIME","allCy, DSBS, YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,ELCINDEX,VPriceElecInd,Electricity index - a function of industry price (1),"CYall,YTIME","allCy,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
@@ -148,7 +148,7 @@ Equation,EQCFNEN,QConsFinNonEne,Compute final non-energy consumption,"CYall,EFS,
 Equation,EQCFTOT,qConsTotFinEne,Compute total final energy consumption,YTIME,YTIME,REST OF ENERGY BALANCE SECTORS
 Equation,EQCHPCAPAC,QCapElecChp,Compute CHP electric capacity,"CYrun,CHP,YTIME",,POWER GENERATION SECTOR
 Equation,EQCHPCOST,QCostElecProdChp,Compute electricity production cost per CHP plant and demand sector in Euro per KWh,"CYall,DSBS,CHP,YTIME","allCy,DSBS,CHP,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
-Equation,EQCHPELCPROD,QGenEstElecChpPlants,Compute electricity production from CHP plants ,"Cyall,CHP,YTIME","allCy,CHP,YTIME",POWER GENERATION SECTOR
+Equation,EQCHPELCPROD,QProdElecChp,Compute electricity production from CHP plants ,"Cyall,CHP,YTIME","allCy,CHP,YTIME",POWER GENERATION SECTOR
 Equation,EQCHPVCOST,QCostProdChpDem,Compute  variable including fuel electricity production cost per CHP plant and demand sector ,"CYall,DSBS,CHP,YTIME","allCy,DSBS,CHP,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQCHPW,qSecContrTotChpProd,Compute sector contribution to total CHP production,"CYall,SBS,CHP,YTIME","allCy,SBS,CHP,YTIME",POWER GENERATION SECTOR
 Equation,EQCO2CAPT,QCapCo2ElecHydr,Compute CO2 captured by electricity and hydrogen production plants ,"CYall,YTIME","allCy,YTIME",CO2 SEQUESTRATION COST CURVES
@@ -172,7 +172,7 @@ Equation,EQDEMTR,QDemFinEneTranspPerFuel,Compute final energy demand in transpor
 Equation,EQDEMTRALL,qDemFinEneSubTransp,Compute final energy demand in transport ,"CYall,TRANSE,YTIME","allCy,TRANSE,YTIME",TRANSPORT SPECIFIC EQUATIONS
 Equation,EQDUMMYOBJ,qDummyObj,Define dummy objective function,"CYall,INDDOM,YTIME",,
 Equation,EQELCALL,QConsElec,Compute electricity consumption per final demand sector,"CYall,DSBS,YTIME","allCy,DSBS,YTIME",Power Generation
-Equation,EQELCCHP_EST,QGenEstElecChpPlants,Compute estimated electricity of CHP Plants,"CYALL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Equation,EQELCCHP_EST,QProdEstElecChp,Compute estimated electricity of CHP Plants,"CYALL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQELCDEMAND,QDemElecTot,Compute electricity final demand,"CYall,YTIME","allCy,YTIME",Power Generation
 Equation,EQELCHEATPUMP,QElecConsHeatPla,Compute electricity consumed in heatpump plants (Mtoe),"CYall,DSBS,YTIME","allCy, DSBS, YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQELCINDEX,QPriceElecInd,Compute electricity index,"CYall,YTIME","allCy,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS

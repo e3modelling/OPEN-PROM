@@ -492,8 +492,8 @@ QScalFacPlantDispatch(runCy,HOUR,YTIME)$TIME(YTIME)..
 *' The estimation is based on the fuel consumption of CHP plants, their electricity prices, the maximum share of CHP electricity in total demand, and the overall
 *' electricity demand. The equation essentially estimates the electricity generation of CHP plants by considering their fuel consumption, electricity prices, and the maximum
 *' share of CHP electricity in total demand. The square root expression ensures that the estimated electricity generation remains non-negative.
-QGenEstElecChpPlants(runCy,YTIME)$TIME(YTIME)..
-         VGenEstElecChpPlants(runCy,YTIME) 
+QProdEstElecChp(runCy,YTIME)$TIME(YTIME)..
+         VProdEstElecChp(runCy,YTIME) 
          =E=
          ( (1/0.086 * sum((INDDOM,CHP),VConsFuel(runCy,INDDOM,CHP,YTIME)) * VPriceElecInd(runCy,YTIME)) + 
          iMxmShareChpElec(runCy,YTIME)*VDemElecTot(runCy,YTIME) - SQRT( SQR((1/0.086 * sum((INDDOM,CHP),VConsFuel(runCy,INDDOM,CHP,YTIME)) * 
@@ -507,7 +507,7 @@ QGenEstElecChpPlants(runCy,YTIME)$TIME(YTIME)..
 QProdElecNonChp(runCy,YTIME)$TIME(YTIME)..
          VProdElecNonChp(runCy,YTIME) 
          =E=
-  (VDemElecTot(runCy,YTIME) - VGenEstElecChpPlants(runCy,YTIME));  
+  (VDemElecTot(runCy,YTIME) - VProdEstElecChp(runCy,YTIME));  
 
 *' This equation calculates the total required electricity production for a specific country and time period .
 *' The total required electricity production is the sum of electricity generation from different technologies, including CHP plants, across all hours of the day.
@@ -546,8 +546,8 @@ qSecContrTotChpProd(runCy,INDDOM,CHP,YTIME)$(TIME(YTIME) $SECTTECH(INDDOM,CHP)).
 *' ratio of the fuel consumption by the specified industrial sector for CHP technology to the total fuel consumption for all industrial sectors and CHP
 *' technologies. This ratio is then multiplied by the difference between total electricity demand and the sum of electricity production from all power
 *' generation plants. The result represents the portion of electricity production from CHP plants attributed to the specified CHP technology.
-QGenEstElecChpPlants(runCy,CHP,YTIME)$TIME(YTIME)..
-         VGenEstElecChpPlants(runCy,CHP,YTIME)
+QProdElecChp(runCy,CHP,YTIME)$TIME(YTIME)..
+         VProdElecChp(runCy,CHP,YTIME)
                  =E=
         sum(INDDOM,VConsFuel(runCy,INDDOM,CHP,YTIME)) / SUM(chp2,sum(INDDOM,VConsFuel(runCy,INDDOM,CHP2,YTIME)))*
         (VDemElecTot(runCy,YTIME) - SUM(PGALL,VProdElec(runCy,PGALL,YTIME)));
@@ -670,7 +670,7 @@ QCostPowGenAvgLng(runCy,ESET,YTIME)$TIME(YTIME)..
          SUM(PGALL, VProdElec(runCy,PGALL,YTIME)*VCostPowGenLngTechNoCp(runCy,PGALL,ESET,YTIME))
 
         +
-         sum(CHP, VCostElcAvgProdCHP(runCy,CHP,YTIME)*VGenEstElecChpPlants(runCy,CHP,YTIME))
+         sum(CHP, VCostElcAvgProdCHP(runCy,CHP,YTIME)*VProdElecChp(runCy,CHP,YTIME))
          )
 /VDemElecTot(runCy,YTIME); 
 
@@ -710,7 +710,7 @@ QCostPowGenLonNoClimPol(runCy,ESET,YTIME)$TIME(YTIME)..
          SUM(PGALL, (VProdElec(runCy,PGALL,YTIME))*VCostAvgPowGenLonNoClimPol(runCy,PGALL,ESET,YTIME))
 
         +
-         sum(CHP, VCostElcAvgProdCHP(runCy,CHP,YTIME)*VGenEstElecChpPlants(runCy,CHP,YTIME))
+         sum(CHP, VCostElcAvgProdCHP(runCy,CHP,YTIME)*VProdElecChp(runCy,CHP,YTIME))
          )
 /(VDemElecTot(runCy,YTIME));  
 
@@ -756,7 +756,7 @@ qCostPowGenAvgShrt(runCy,ESET,YTIME)$TIME(YTIME)..
                  *sTWhToMtoe/iPlantEffByType(runCy,PGALL,YTIME)))
         ))
         +
-         sum(CHP, VCostVarAvgElecProd(runCy,CHP,YTIME)*VGenEstElecChpPlants(runCy,CHP,YTIME))
+         sum(CHP, VCostVarAvgElecProd(runCy,CHP,YTIME)*VProdElecChp(runCy,CHP,YTIME))
          )
          /VDemElecTot(runCy,YTIME);
 
@@ -1444,7 +1444,7 @@ QInpTransfTherm(runCy,PGEF,YTIME)$TIME(YTIME)..
         sum(PGALL$(PGALLtoEF(PGALL,PGEF)$PGGEO(PGALL)),
              VProdElec(runCy,PGALL,YTIME) * sTWhToMtoe) 
         +
-        sum(CHP$CHPtoEF(CHP,PGEF),  sum(INDDOM,VConsFuel(runCy,INDDOM,CHP,YTIME))+sTWhToMtoe*VGenEstElecChpPlants(runCy,CHP,YTIME))/(0.8+0.1*(ord(YTIME)-16)/32);
+        sum(CHP$CHPtoEF(CHP,PGEF),  sum(INDDOM,VConsFuel(runCy,INDDOM,CHP,YTIME))+sTWhToMtoe*VProdElecChp(runCy,CHP,YTIME))/(0.8+0.1*(ord(YTIME)-16)/32);
 
 *' The equation calculates the transformation output from thermal power stations for a specific energy branch
 *' in a given scenario and year. The result is computed based on the following conditions: 
@@ -1460,7 +1460,7 @@ QOutTransfTherm(runCy,TOCTEF,YTIME)$TIME(YTIME)..
         (
              sum(PGALL$(not PGNUCL(PGALL)),VProdElec(runCy,PGALL,YTIME)) * sTWhToMtoe
              +
-             sum(CHP,VGenEstElecChpPlants(runCy,CHP,YTIME)*sTWhToMtoe)
+             sum(CHP,VProdElecChp(runCy,CHP,YTIME)*sTWhToMtoe)
          )$ELCEF(TOCTEF)
         +
         (                                                                                                         
