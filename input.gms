@@ -106,17 +106,54 @@ iSigma(allCy,"S3") = iDataPassCars(allCy,"PC","S3");
 iPassCarsMarkSat(allCy) = iDataPassCars(allCy,"PC","SAT");
 iGdpPassCarsMarkExt(allCy) = iDataPassCars(allCy,"PC","MEXTV");
 iPassCarsScrapRate(allCy)  = iDataPassCars(allCy,"PC", "SCR");
-table iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,YTIME)        "Initial Specific fuel consumption ()"
-$ondelim
-$include "./iInitSpecFuelCons.csv"
-$offdelim
-;
 
+parameter iInitSpecFuelConsData(TRANSE,TTECH,EF)        "Initial Specific fuel consumption ()" /
+PC.LPG.LPG	65.88
+PC.GSL.GSL	73.2
+PC.GDO.GDO	54.9
+PC.NGS.NGS	84.3391
+PC.MET.MET	71.84
+PC.ETH.ETH	102.1
+PC.BGDO.BGDO	54.9
+PC.H2F.H2F	24.15
+PC.ELC.ELC	20.496
+PC.PHEVGSL.GSL	43.92
+PC.PHEVGSL.ELC	20.496
+PC.PHEVGDO.GDO	32.94
+PC.PHEVGDO.ELC	20.496
+PC.CHEVGSL.GSL	45.384
+PC.CHEVGDO.GDO	40.8456
+PT.GDO.GDO	18.6313
+PT.MET.MET	12.6
+PT.H2F.H2F	8.9
+PT.ELC.ELC	2.73638
+PA.H2F.H2F	21.7
+GU.LPG.LPG	54.1073
+GU.GSL.GSL	60.1192
+GU.GDO.GDO	45.0894
+GU.NGS.NGS	66
+GU.MET.MET	56.2
+GU.ETH.ETH	80
+GU.BGDO.BGDO	45.0894
+GU.H2F.H2F	13.5268
+GU.ELC.ELC	27.0536
+GU.PHEVGSL.GSL	34.4
+GU.PHEVGSL.ELC	21.8
+GU.PHEVGDO.GDO	27.0536
+GU.PHEVGDO.ELC	21.8
+GU.CHEVGDO.GDO	21.8
+GT.GDO.GDO	33.629
+GT.MET.MET	78
+GT.H2F.H2F	92
+GT.ELC.ELC	11.5245
+GN.GSL.GSL	22.8
+GN.GDO.GDO	15.2
+GN.H2F.H2F	8.14286
+/;
 
-* FIXME: iInitSpecFuelCons("MAR",TRANSE,TTECH,EF,"2017") initial values for all countries equal to initial values of MAR.
-* author=redmonkeycloud
-iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,YTIME) = iInitSpecFuelCons("MAR",TRANSE,TTECH,EF,"2017"); 
-iSpeFuelConsCostBy(allCy,TRANSE,TTECH,EF) = iInitSpecFuelCons("MAR",TRANSE,TTECH,EF,"2017");
+table iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,YTIME)        "Initial Specific fuel consumption for all countries ()";
+iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,YTIME) = iInitSpecFuelConsData(TRANSE,TTECH,EF) ; 
+iSpeFuelConsCostBy(allCy,TRANSE,TTECH,EF) = iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,"2017");
 
 table iElaSub(allCy,DSBS)                           "Elasticities by subsectors (1)"
 $ondelim
@@ -146,7 +183,7 @@ BMSWAS    0.76
 /;
 
 parameter iParDHEfficiency(PGEFS,YTIME)                 "Parameter of  district heating Efficiency for all years (1)" ;
-iParDHEfficiency(PGEFS,YTIME) = iParDHEffData(PGEFS)
+iParDHEfficiency(PGEFS,YTIME) = iParDHEffData(PGEFS) ;
 
 $ontext
 table iSuppTransfInputPatFuel(EF,YTIME)            "Supplementary Parameter for the transformation input to patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works (1)"
