@@ -14,18 +14,18 @@ model openprom /
 
 *' * Power Generation *
 
-qPotResCurr                        !! vPotResCurr(runCy,PGRENEF,YTIME)
+qPotRenCurr                        !! vPotRenCurr(runCy,PGRENEF,YTIME)
 QCapElecChp                        !! VCapElecChp(runCy,CHP,YTIME)
 QLambda                            !! VLambda(runCy,YTIME)
-QDemElec                           !! VDemElec(runCy,YTIME)
-QLoadBaseEstSec                    !! VLoadBaseEstSec(runCy,YTIME)
+QDemElecTot                           !! VDemElecTot(runCy,YTIME)
+QBsldEst                    !! VBsldEst(runCy,YTIME)
 QLoadFacDom                        !! VLoadFacDom(runCy,YTIME)
-QLoadPeakElec                      !! VLoadPeakElec(runCy,YTIME)
-QLoadBaseMax                       !! VLoadBaseMax(runCy,YTIME)
-QLoadBaseElecExp                   !! VLoadBaseElecExp(runCy,YTIME)
+QPeakLoad                      !! VPeakLoad(runCy,YTIME)
+QBaseLoadMax                       !! VBaseLoadMax(runCy,YTIME)
+QBaseLoad                   !! VBaseLoad(runCy,YTIME)
 QProdReqTotElec                    !! VProdReqTotElec(runCy,YTIME)
-QCapGenTotEstElec                  !! VCapGenTotEstElec(runCy,YTIME)
-QCapGenTotElec                     !! VCapGenTotElec(runCy,YTIME)	
+QCapElecTotEst                  !! VCapElecTotEst(runCy,YTIME)
+QCapElecTot                     !! VCapElecTot(runCy,YTIME)	
 QCostHourProdInvDec                !! VCostHourProdInvDec(runCy,PGALL,HOUR,YTIME)
 QCostHourProdInvDecNoCcs           !! VCostHourProdInvDecNoCcs(runCy,PGALL,HOUR,YTIME)
 QSensCcs                           !! VSensCcs(runCy,YTIME)
@@ -38,32 +38,32 @@ QCostVarTechNotPGSCRN              !! VCostVarTechNotPGSCRN(runCy,PGALL,YTIME)
 QCostProdTechPreReplac             !! VCostProdTechPreReplac(runCy,PGALL,YTIME)
 QCostProdTechPreReplacAvail        !! VCostProdTechPreReplacAvail(runCy,PGALL,PGALL2,YTIME)
 QIndexEndogScrap                   !! VIndexEndogScrap(runCy,PGALL,YTIME)
-QCapGenElecNoChp                   !! VCapGenElecNoChp(runCy,YTIME)
+QCapElecNonChp                   !! VCapElecNonChp(runCy,YTIME)
 QGapGenCapPowerDiff                !! VGapGenCapPowerDiff(runCy,YTIME)
 qScalWeibull                       !! vScalWeibull(runCy,PGALL,HOUR,YTIME) 
 QPotRenSuppCurve                   !! VPotRenSuppCurve(runCy,PGRENEF,YTIME)
-QRenPotMaxAllow                    !! VRenPotMaxAllow(runCy,PGRENEF,YTIME)
-QRenPotMinAllow                    !! VRenPotMinAllow(runCy,PGRENEF,YTIME)
+QPotRenMaxAllow                    !! VPotRenMaxAllow(runCy,PGRENEF,YTIME)
+QPotRenMinAllow                    !! VPotRenMinAllow(runCy,PGRENEF,YTIME)
 QRenTechMatMult                    !! VRenTechMatMult(runCy,PGALL,YTIME)
 QScalWeibullSum                    !! VScalWeibullSum(runCy,PGALL,YTIME)
-QDecisNewInv                       !! VDecisNewInv(runCy,YTIME)
-QShaNewEqPowPla                    !! VShaNewEqPowPla(runCy,PGALL,YTIME)
-QCapGenPlant                       !! VCapGenPlant(runCy,PGALL,YTIME)
-QCapGenPlannedPlant                !! VCapGenPlannedPlant(runCy,PGALL,YTIME)
-QCostVarPlantTech                  !! VCostVarPlantTech(runCy,PGALL,YTIME)
+QNewInvElec                       !! VNewInvElec(runCy,YTIME)
+QSharePowPlaNewEq                    !! VSharePowPlaNewEq(runCy,PGALL,YTIME)
+QCapElec                       !! VCapElec(runCy,PGALL,YTIME)
+QCapElec2                !! VCapElec2(runCy,PGALL,YTIME)
+QCostVarTechElec                  !! VCostVarTechElec(runCy,PGALL,YTIME)
 QElecPeakLoads                     !! VElecPeakLoads(runCy,YTIME) 
 QSortPlantDispatch                 !! VSortPlantDispatch(runCy,PGALL,YTIME)
-QCapGenNewResPlant                 !! VCapGenNewResPlant(runCy,PGALL,YTIME)
-QCapAvgFacRes                      !! VCapAvgFacRes(runCy,PGALL,YTIME)
+QNewCapElec                 !! VNewCapElec(runCy,PGALL,YTIME)
+QCFAvgRen                      !! VCFAvgRen(runCy,PGALL,YTIME)
 QCapOverall                        !! VCapOverall(runCy,PGALL,YTIME)
 QScalFacPlantDispatch              !! VScalFacPlaDisp
 QGenEstElecChpPlants               !! VGenEstElecChpPlants(runCy,YTIME) 
-QProdNonChp                        !! VProdNonChp(runCy,YTIME) 
+QProdElecNonChp                        !! VProdElecNonChp(runCy,YTIME) 
 QProdReqElec                       !! VProdReqElec(runCy,YTIME) 
-QProdElecPowPlantsCy               !! VProdElecPowPlantsCy(runCy,PGALL,YTIME)
+QProdElec               !! VProdElec(runCy,PGALL,YTIME)
 qSecContrTotChpProd                !! vSecContrTotChpProd(runCy,INDDOM,CHP,YTIME)
 QGenEstElecChpPlants               !! VGenEstElecChpPlants(runCy,CHP,YTIME)
-qProdGrossResShare                 !! vProdGrossResShare(runCy,YTIME) 
+QShareRenGrossProd                 !! VShareRenGrossProd(runCy,YTIME) 
 QCostPowGenLngTechNoCp             !! VCostPowGenLngTechNoCp(runCy,PGALL,ESET,YTIME)
 qCostPowGenLonMin                  !! vCostPowGenLonMin(runCy,PGALL,YTIME)
 qCostPowGenLongIntPri              !! vCostPowGenLongIntPri(runCy,PGALL,ESET,YTIME)
@@ -97,7 +97,7 @@ QActivPassTrnsp                    !! VActivPassTrnsp(runCy,TRANSE,YTIME)
 QNumPcScrap                        !! VNumPcScrap(runCy,YTIME)
 QPcOwnPcLevl                       !! VPcOwnPcLevl(runCy,YTIME)
 QScrRatePc                         !! VScrRatePc(runCy,YTIME)
-QConsElecFinDemSec                 !! VConsElecFinDemSec(runCy,DSBS,YTIME)
+QConsElec                 !! VConsElec(runCy,DSBS,YTIME)
 
 
 *' * INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES *
@@ -145,8 +145,8 @@ QTransfers                         !! VTransfers(runCy,EFS,YTIME)
 QConsGrssInlNotEneBranch           !! VConsGrssInlNotEneBranch(runCy,EFS,YTIME)
 QConsGrssInl                       !! VConsGrssInl(runCy,EFS,YTIME)            
 QProdPrimary                       !! VProdPrimary(runCy,PPRODEF,YTIME)
-QExprtsFakeEneBrnch                !! VExprtsFakeEneBrnch(runCy,EFS,YTIME)
-QImptsFakeEneBrnch                 !! VImptsFakeEneBrnch(runCy,EFS,YTIME)
+QExp                !! VExp(runCy,EFS,YTIME)
+QImp                 !! VImp(runCy,EFS,YTIME)
 QImpNetEneBrnch                    !! VImpNetEneBrnch(runCy,EFS,YTIME)
 QConsFiEneSec                      !! VConsFiEneSec(runCy,EFS,YTIME)
 
@@ -203,7 +203,7 @@ VConsFuel.L(allCy,DSBS,EF,YTIME)=0.1;
 VCapRef.L(allCy,YTIME)=0.1;
 VOutTransfRefSpec.L(allCy,EFS,YTIME)=0.1;
 VConsGrssInlNotEneBranch.L(allCy,EFS,YTIME)=0.1;
-VConsElecFinDemSec.L(allCy,DSBS,YTIME)=0.1;
+VConsElec.L(allCy,DSBS,YTIME)=0.1;
 VLoadFacDom.L(allCy,YTIME)=0.1;
 VSensCcs.L(allCy,YTIME)=1;
 VCostVarTech.L(allCy,PGALL,YTIME)=0.1;
@@ -216,16 +216,16 @@ VConsElecNonSubIndTert.L(allCy,DSBS,YTIME)=0.1;
 VShareNewTechNoCcs.L(allCy,PGALL,TT)=0.1;
 vCostHourProdInvCCS.L(allCy,PGALL,HOUR,TT)=0.1;
 VShareNewTechCcs.L(allCy,PGALL,TT)=0.1;
-VDecisNewInv.L(allCy,YTIME)=0.1;
-VCostVarPlantTech.L(allCy,PGALL,YTIME)=0.1;
+VNewInvElec.L(allCy,YTIME)=0.1;
+VCostVarTechElec.L(allCy,PGALL,YTIME)=0.1;
 VElecPeakLoads.L(allCy,YTIME)=0.1;
-VCapGenNewResPlant.L(allCy,PGALL,YTIME)=0.1;
-VCapAvgFacRes.L(allCy,PGALL,YTIME)=0.1;
+VNewCapElec.L(allCy,PGALL,YTIME)=0.1;
+VCFAvgRen.L(allCy,PGALL,YTIME)=0.1;
 VSortPlantDispatch.L(runCy,PGALL,YTIME)=0.01;
-VSortPlantDispatch.L(runCy,PGALL,YTIME)=VCostVarPlantTech.L(runCy,PGALL,YTIME)/VElecPeakLoads.L(runCy,YTIME);
+VSortPlantDispatch.L(runCy,PGALL,YTIME)=VCostVarTechElec.L(runCy,PGALL,YTIME)/VElecPeakLoads.L(runCy,YTIME);
 VProdReqElec.L(runCy,YTIME) = 0.01;
 VScalFacPlaDisp.L(runCy,HOUR,YTIME) = 1.e-12;
-VDemElec.L(allCy,YTIME)=0.1;
+VDemElecTot.L(allCy,YTIME)=0.1;
 VRenTechMatMult.L(allCy,PGALL,YTIME)=0.1;
 VActivGoodsTransp.L(allCy,TRANSE,YTIME)=0.1;
 VRenValue.L(YTIME)=1;
@@ -233,8 +233,8 @@ VCstCO2SeqCsts.L(allCy,YTIME)=1;
 VScalWeibullSum.L(allCy,PGALL,YTIME)=2;
 VCostHourProdInvDec.L(runCy,PGALL,HOUR,TT) = 0.0001;
 VPriceFuelAvgSub.L(runCy,DSBS,YTIME) = 0.1;
-VLoadBaseElecExp.L(runCy,YTIME) = 0.5;
-VLoadPeakElec.L(runCy,YTIME) = 1;
+VBaseLoad.L(runCy,YTIME) = 0.5;
+VPeakLoad.L(runCy,YTIME) = 1;
 VLambda.L(runCy,YTIME)=0.21;
 VCostPowGenAvgLng.L(runCy,ESET,"%fStartHorizon%") = 0;
 VCostPowGenAvgLng.L(runCy,ESET,"%fBaseY%") = 0;
@@ -378,25 +378,25 @@ VTransfers.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iFeedTransfr(runCy,EFS,YTIME);
 VProdPrimary.FX(runCy,PPRODEF,YTIME)$(not An(YTIME)) = iFuelPriPro(runCy,PPRODEF,YTIME);
 VConsFiEneSec.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iTotEneBranchCons(runCy,EFS,YTIME);
 
-VExprtsFakeEneBrnch.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iFuelExprts(runCy,EFS,YTIME);
-VExprtsFakeEneBrnch.FX(runCy,"NGS",YTIME)$(not An(YTIME)) = iFuelExprts(runCy,"NGS",YTIME);
-VExprtsFakeEneBrnch.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
+VExp.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iFuelExprts(runCy,EFS,YTIME);
+VExp.FX(runCy,"NGS",YTIME)$(not An(YTIME)) = iFuelExprts(runCy,"NGS",YTIME);
+VExp.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
 
-VImptsFakeEneBrnch.FX(runCy,"NGS",YTIME)$(not An(YTIME)) = iFuelImports(runCy,"NGS",YTIME);
-VImptsFakeEneBrnch.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
+VImp.FX(runCy,"NGS",YTIME)$(not An(YTIME)) = iFuelImports(runCy,"NGS",YTIME);
+VImp.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
 
-VDemElec.FX(runCy,YTIME)$(not An(YTIME)) =  1/0.086 * ( iFinEneCons(runCy,"ELC",YTIME) + sum(NENSE, iFuelConsPerFueSub(runCy,NENSE,"ELC",YTIME)) + iDistrLosses(runCy,"ELC",YTIME)
+VDemElecTot.FX(runCy,YTIME)$(not An(YTIME)) =  1/0.086 * ( iFinEneCons(runCy,"ELC",YTIME) + sum(NENSE, iFuelConsPerFueSub(runCy,NENSE,"ELC",YTIME)) + iDistrLosses(runCy,"ELC",YTIME)
                                              + iTotEneBranchCons(runCy,"ELC",YTIME) - (iFuelImports(runCy,"ELC",YTIME)-iFuelExprts(runCy,"ELC",YTIME)));
-VLoadBaseElecExp.FX(runCy,YTIME)$(not An(YTIME)) = iPeakBsLoadBy(runCy,"BASELOAD");
+VBaseLoad.FX(runCy,YTIME)$(not An(YTIME)) = iPeakBsLoadBy(runCy,"BASELOAD");
 VLoadFacDom.FX(runCy,YTIME)$(datay(YTIME)) =
          (sum(INDDOM,VConsFuel.l(runCy,INDDOM,"ELC",YTIME)) + sum(TRANSE, VDemFinEneTranspPerFuel.l(runCy,TRANSE,"ELC",YTIME)))/
          (sum(INDDOM,VConsFuel.l(runCy,INDDOM,"ELC",YTIME)/iLoadFacElecDem(INDDOM)) + sum(TRANSE, VDemFinEneTranspPerFuel.l(runCy,TRANSE,"ELC",YTIME)/
          iLoadFacElecDem(TRANSE)));
-VLoadPeakElec.FX(runCy,YTIME)$(datay(YTIME)) = VDemElec.l(runCy,YTIME)/(VLoadFacDom.l(runCy,YTIME)*8.76);
-VCapGenTotElec.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
-VCapGenElecNoChp.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
+VPeakLoad.FX(runCy,YTIME)$(datay(YTIME)) = VDemElecTot.l(runCy,YTIME)/(VLoadFacDom.l(runCy,YTIME)*8.76);
+VCapElecTot.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
+VCapElecNonChp.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
 VCapElecChp.FX(runCy,CHP,YTIME)$(not An(YTIME)) = iHisChpGrCapData(runCy,CHP,YTIME);
-VShaNewEqPowPla.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) )=0;
+VSharePowPlaNewEq.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) )=0;
 VCostHourProdInvDec.FX(runCy,PGALL,HOUR,YTIME)$((NOT AN(YTIME)))=0;
 
 VShareNewTechCcs.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) )=0;
@@ -405,22 +405,22 @@ VShareNewTechCcs.FX(runCy,PGALL,YTIME)$(AN(YTIME) $(NOT CCS(PGALL)))=0;
 VShareNewTechNoCcs.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) )=0;
 VShareNewTechNoCcs.FX(runCy,PGALL,YTIME)$(AN(YTIME) $(NOT NOCCS(PGALL)) )=0;
 
-VDecisNewInv.FX(runCy,YTIME)$(NOT AN(YTIME))=1;
-VCapGenPlannedPlant.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = iInstCapPast(runCy,PGALL,YTIME);
-VCapGenPlant.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  iInstCapPast(runCy,PGALL,YTIME);
+VNewInvElec.FX(runCy,YTIME)$(NOT AN(YTIME))=1;
+VCapElec2.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = iInstCapPast(runCy,PGALL,YTIME);
+VCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  iInstCapPast(runCy,PGALL,YTIME);
 VCapOverall.FX(runCy,PGALL,YTIME)$TFIRST(YTIME) =  iInstCapPast(runCy,PGALL,YTIME)$TFIRST(YTIME);
 
-VCapGenNewResPlant.FX(runCy,PGALL,"2011")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2011")- iInstCapPast(runCy,PGALL,"%fStartHorizon%") +1E-10;
-VCapGenNewResPlant.FX(runCy,PGALL,"2012")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2012")- iInstCapPast(runCy,PGALL,"2011") +1E-10;
-VCapGenNewResPlant.FX(runCy,PGALL,"2013")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2013")- iInstCapPast(runCy,PGALL,"2012") +1E-10;
-VCapGenNewResPlant.FX(runCy,PGALL,"2014")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2014")- iInstCapPast(runCy,PGALL,"2013") +1E-10;
-VCapGenNewResPlant.FX(runCy,PGALL,"2015")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2015")- iInstCapPast(runCy,PGALL,"2014") +1E-10;
-VCapGenNewResPlant.FX(runCy,PGALL,"2016")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2016")- iInstCapPast(runCy,PGALL,"2015") +1E-10;
-VCapGenNewResPlant.FX(runCy,PGALL,"%fBaseY%")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"%fBaseY%")- iInstCapPast(runCy,PGALL,"2016") +1E-10;
-VCapGenNewResPlant.FX(runCy,"PGLHYD",YTIME)$TFIRST(YTIME) = +1E-10;
+VNewCapElec.FX(runCy,PGALL,"2011")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2011")- iInstCapPast(runCy,PGALL,"%fStartHorizon%") +1E-10;
+VNewCapElec.FX(runCy,PGALL,"2012")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2012")- iInstCapPast(runCy,PGALL,"2011") +1E-10;
+VNewCapElec.FX(runCy,PGALL,"2013")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2013")- iInstCapPast(runCy,PGALL,"2012") +1E-10;
+VNewCapElec.FX(runCy,PGALL,"2014")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2014")- iInstCapPast(runCy,PGALL,"2013") +1E-10;
+VNewCapElec.FX(runCy,PGALL,"2015")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2015")- iInstCapPast(runCy,PGALL,"2014") +1E-10;
+VNewCapElec.FX(runCy,PGALL,"2016")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2016")- iInstCapPast(runCy,PGALL,"2015") +1E-10;
+VNewCapElec.FX(runCy,PGALL,"%fBaseY%")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"%fBaseY%")- iInstCapPast(runCy,PGALL,"2016") +1E-10;
+VNewCapElec.FX(runCy,"PGLHYD",YTIME)$TFIRST(YTIME) = +1E-10;
 
-VCapAvgFacRes.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =iAvailRate(PGALL,YTIME);
-VProdElecPowPlantsCy.FX(runCy,pgall,YTIME)$DATAY(YTIME)=iDataElecProd(runCy,pgall,YTIME)/1000;
+VCFAvgRen.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =iAvailRate(PGALL,YTIME);
+VProdElec.FX(runCy,pgall,YTIME)$DATAY(YTIME)=iDataElecProd(runCy,pgall,YTIME)/1000;
 
 VIndexEndogScrap.FX(runCy,PGALL,YTIME)$(not an(YTIME) ) = 1;
 VIndexEndogScrap.FX(runCy,PGSCRN,YTIME) = 1;            !! premature replacement it is not allowed for all new plants
@@ -439,7 +439,7 @@ VOutTransfNuclear.FX(runCy,EFS,YTIME)$(not sameas("ELC",EFS)) = 0;
 VInpTransfNuclear.FX(runCy,EFS,YTIME)$(not sameas("NUC",EFS)) = 0;
 VInpTransfTherm.FX(runCy,EFS,YTIME)$(not PGEF(EFS)) = 0;
 VRenValue.FX(YTIME) = 0 ;
-VProdReqTotElec.fx(runCy,"%fBaseY%")=sum(pgall,VProdElecPowPlantsCy.L(runCy,pgall,"%fBaseY%"));
+VProdReqTotElec.fx(runCy,"%fBaseY%")=sum(pgall,VProdElec.L(runCy,pgall,"%fBaseY%"));
 
 display VCostProdTechPreReplacAvail.l;
 loop an do !! start outer iteration loop (time steps)

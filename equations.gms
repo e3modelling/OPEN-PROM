@@ -5,11 +5,11 @@
 
 *' This equation computes the current renewable potential, which is the average of the maximum allowed renewable potential and the minimum renewable potential
 *' for a given power generation sector and energy form in a specific time period. The result is the current renewable potential in gigawatts (GW). 
-qPotResCurr(runCy,PGRENEF,YTIME)$TIME(YTIME)..
+qPotRenCurr(runCy,PGRENEF,YTIME)$TIME(YTIME)..
 
-         vPotResCurr(runCy,PGRENEF,YTIME) 
+         vPotRenCurr(runCy,PGRENEF,YTIME) 
          =E=
-         ( VRenPotMaxAllow(runCy,PGRENEF,YTIME) + iMinRenPotential(runCy,PGRENEF,YTIME))/2;
+         ( VPotRenMaxAllow(runCy,PGRENEF,YTIME) + iMinRenPotential(runCy,PGRENEF,YTIME))/2;
 
 *' This equation computes the electric capacity of Combined Heat and Power (CHP) plants. The capacity is calculated in gigawatts (GW) and is based on several factors,
 *' including the consumption of fuel in the industrial sector, the electricity prices in the industrial sector, the availability rate of power
@@ -27,15 +27,15 @@ QCapElecChp(runCy,CHP,YTIME)$TIME(YTIME)..
 QLambda(runCy,YTIME)$TIME(YTIME)..
          (1 - exp( -VLambda(runCy,YTIME)*sGwToTwhPerYear))  / (VLambda(runCy,YTIME)+0.001)
              =E=
-         (VDemElec(runCy,YTIME) - sGwToTwhPerYear*VLoadBaseElecExp(runCy,YTIME))
-         / (VLoadPeakElec(runCy,YTIME) - VLoadBaseElecExp(runCy,YTIME));
+         (VDemElecTot(runCy,YTIME) - sGwToTwhPerYear*VBaseLoad(runCy,YTIME))
+         / (VPeakLoad(runCy,YTIME) - VBaseLoad(runCy,YTIME));
 
 *' The equation calculates the total electricity demand by summing the components of final energy consumption in electricity, final non-energy consumption in electricity,
 *' distribution losses, and final consumption in the energy sector for electricity, and then subtracting net imports. The result is normalized using a conversion factor 
 *' which converts terawatt-hours (TWh) to million tonnes of oil equivalent (Mtoe). The formula provides a comprehensive measure of the factors contributing
 *' to the total electricity demand.
-QDemElec(runCy,YTIME)$TIME(YTIME)..
-         VDemElec(runCy,YTIME)
+QDemElecTot(runCy,YTIME)$TIME(YTIME)..
+         VDemElecTot(runCy,YTIME)
              =E=
          1/sTWhToMtoe *
          ( VConsFinEneCountry(runCy,"ELC",YTIME) + VConsFinNonEne(runCy,"ELC",YTIME) + VLossesDistr(runCy,"ELC",YTIME)
@@ -45,12 +45,12 @@ QDemElec(runCy,YTIME)$TIME(YTIME)..
 *' This equation computes the estimated base load as a quantity dependent on the electricity demand per final sector,
 *' as well as the baseload share of demand per sector, the rate of losses for final Consumption, the net imports,
 *' distribution losses and final consumption in energy sector.
-QLoadBaseEstSec(runCy,YTIME)$TIME(YTIME)..
-         VLoadBaseEstSec(runCy,YTIME)
+QBsldEst(runCy,YTIME)$TIME(YTIME)..
+         VBsldEst(runCy,YTIME)
              =E=
          (
-             sum(DSBS, iBaseLoadShareDem(runCy,DSBS,YTIME)*VConsElecFinDemSec(runCy,DSBS,YTIME))*(1+iRateLossesFinCons(runCy,"ELC",YTIME))*
-             (1 - VImpNetEneBrnch(runCy,"ELC",YTIME)/(sum(DSBS, VConsElecFinDemSec(runCy,DSBS,YTIME))+VLossesDistr(runCy,"ELC",YTIME)))
+             sum(DSBS, iBaseLoadShareDem(runCy,DSBS,YTIME)*VConsElec(runCy,DSBS,YTIME))*(1+iRateLossesFinCons(runCy,"ELC",YTIME))*
+             (1 - VImpNetEneBrnch(runCy,"ELC",YTIME)/(sum(DSBS, VConsElec(runCy,DSBS,YTIME))+VLossesDistr(runCy,"ELC",YTIME)))
              + 0.5*VConsFiEneSec(runCy,"ELC",YTIME)
          ) / sTWhToMtoe / sGwToTwhPerYear;
 
@@ -67,49 +67,49 @@ QLoadFacDom(runCy,YTIME)$TIME(YTIME)..
 *' The equation calculates the electricity peak load by dividing the total electricity demand by the load factor for the domestic sector and converting the result
 *' to gigawatts (GW) using the conversion factor. This provides an estimate of the maximum power demand during a specific time period, taking into account the domestic
 *' load factor.
-QLoadPeakElec(runCy,YTIME)$TIME(YTIME)..
-         VLoadPeakElec(runCy,YTIME)
+QPeakLoad(runCy,YTIME)$TIME(YTIME)..
+         VPeakLoad(runCy,YTIME)
              =E=
-         VDemElec(runCy,YTIME)/(VLoadFacDom(runCy,YTIME)*sGwToTwhPerYear);
+         VDemElecTot(runCy,YTIME)/(VLoadFacDom(runCy,YTIME)*sGwToTwhPerYear);
 
 *' This equation calculates the baseload corresponding to maximum load by multiplying the maximum load factor of electricity demand
 *' to the electricity peak load, minus the baseload corresponding to maximum load factor.
-QLoadBaseMax(runCy,YTIME)$TIME(YTIME)..
-         (VDemElec(runCy,YTIME)-VLoadBaseMax(runCy,YTIME)*sGwToTwhPerYear)
+QBaseLoadMax(runCy,YTIME)$TIME(YTIME)..
+         (VDemElecTot(runCy,YTIME)-VBaseLoadMax(runCy,YTIME)*sGwToTwhPerYear)
              =E=
-         iMxmLoadFacElecDem(runCy,YTIME)*(VLoadPeakElec(runCy,YTIME)-VLoadBaseMax(runCy,YTIME))*sGwToTwhPerYear;  
+         iMxmLoadFacElecDem(runCy,YTIME)*(VPeakLoad(runCy,YTIME)-VBaseLoadMax(runCy,YTIME))*sGwToTwhPerYear;  
 
 *' This equation calculates the electricity base load utilizing exponential functions that include the estimated base load,
 *' the baseload corresponding to maximum load factor, and the parameter of baseload correction.
-QLoadBaseElecExp(runCy,YTIME)$TIME(YTIME)..
-         VLoadBaseElecExp(runCy,YTIME)
+QBaseLoad(runCy,YTIME)$TIME(YTIME)..
+         VBaseLoad(runCy,YTIME)
              =E=
-         (1/(1+(iBslCorrection(runCy,YTIME)*(VLoadBaseEstSec(runCy,YTIME)-VLoadBaseMax(runCy,YTIME)))))*VLoadBaseEstSec(runCy,YTIME)
-        +(1-1/(1+(iBslCorrection(runCy,YTIME)*(VLoadBaseEstSec(runCy,YTIME)-VLoadBaseMax(runCy,YTIME)))))*VLoadBaseMax(runCy,YTIME);
+         (1/(1+(iBslCorrection(runCy,YTIME)*(VBsldEst(runCy,YTIME)-VBaseLoadMax(runCy,YTIME)))))*VBsldEst(runCy,YTIME)
+        +(1-1/(1+(iBslCorrection(runCy,YTIME)*(VBsldEst(runCy,YTIME)-VBaseLoadMax(runCy,YTIME)))))*VBaseLoadMax(runCy,YTIME);
 
 *' This equation calculates the total required electricity production as a sum of the electricity peak load minus the corrected base load,
 *' multiplied by the exponential function of the parameter for load curve construction.
 QProdReqTotElec(runCy,YTIME)$TIME(YTIME)..
          VProdReqTotElec(runCy,YTIME)
              =E=
-         sum(HOUR, (VLoadPeakElec(runCy,YTIME)-VLoadBaseElecExp(runCy,YTIME))
+         sum(HOUR, (VPeakLoad(runCy,YTIME)-VBaseLoad(runCy,YTIME))
                    * exp(-VLambda(runCy,YTIME)*(0.25+(ord(HOUR)-1)))
-             ) + 9*VLoadBaseElecExp(runCy,YTIME);   
+             ) + 9*VBaseLoad(runCy,YTIME);   
 
 *' The equation calculates the estimated total electricity generation capacity by multiplying the previous year's total electricity generation capacity with
 *' the ratio of the current year's estimated electricity peak load to the previous year's electricity peak load. This provides an estimate of the required
 *' generation capacity based on the changes in peak load.
-QCapGenTotEstElec(runCy,YTIME)$TIME(YTIME)..
-        VCapGenTotEstElec(runCy,YTIME)
+QCapElecTotEst(runCy,YTIME)$TIME(YTIME)..
+        VCapElecTotEst(runCy,YTIME)
              =E=
-        VCapGenTotElec(runCy,YTIME-1) * VLoadPeakElec(runCy,YTIME)/VLoadPeakElec(runCy,YTIME-1);          
+        VCapElecTot(runCy,YTIME-1) * VPeakLoad(runCy,YTIME)/VPeakLoad(runCy,YTIME-1);          
 
 *' The equation sets the total electricity generation capacity for a given year equal to the estimated total electricity generation capacity for the same year.
 *' This implies that the estimated capacity is considered as the actual capacity for the specified year.
-QCapGenTotElec(runCy,YTIME)$TIME(YTIME)..
-        VCapGenTotElec(runCy,YTIME) 
+QCapElecTot(runCy,YTIME)$TIME(YTIME)..
+        VCapElecTot(runCy,YTIME) 
         =E=
-     VCapGenTotEstElec(runCy,YTIME);  
+     VCapElecTotEst(runCy,YTIME);  
 
 *' The equation calculates the hourly production cost of a power generation plant used in investment decisions. The cost is determined based on various factors,
 *' including the discount rate, gross capital cost, fixed operation and maintenance cost, availability rate, variable cost, renewable value, and fuel prices.
@@ -258,26 +258,26 @@ QIndexEndogScrap(runCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)))..
 *' The equation calculates the total electricity generation capacity excluding Combined Heat and Power plants for a specified year .
 *' It is derived by subtracting the sum of the capacities of CHP plants multiplied by a factor of 0.85 (assuming an efficiency of 85%) from the
 *' total electricity generation capacity . This provides the total electricity generation capacity without considering the contribution of CHP plants.
-QCapGenElecNoChp(runCy,YTIME)$TIME(YTIME)..
-         VCapGenElecNoChp(runCy,YTIME)
+QCapElecNonChp(runCy,YTIME)$TIME(YTIME)..
+         VCapElecNonChp(runCy,YTIME)
           =E=
-VCapGenTotElec(runCy,YTIME) - SUM(CHP,VCapElecChp(runCy,CHP,YTIME)*0.85);      
+VCapElecTot(runCy,YTIME) - SUM(CHP,VCapElecChp(runCy,CHP,YTIME)*0.85);      
 
 *' In essence, the equation evaluates the difference between the current and expected power generation capacity, accounting for various factors such as planned capacity,
 *' decommissioning schedules, and endogenous scrapping. The square root term introduces a degree of tolerance in the calculation.
 QGapGenCapPowerDiff(runCy,YTIME)$TIME(YTIME)..
          VGapGenCapPowerDiff(runCy,YTIME)
              =E=
- (        (  VCapGenElecNoChp(runCy,YTIME) - VCapGenElecNoChp(runCy,YTIME-1) + sum(PGALL,VCapGenPlannedPlant(runCy,PGALL,YTIME-1) * 
+ (        (  VCapElecNonChp(runCy,YTIME) - VCapElecNonChp(runCy,YTIME-1) + sum(PGALL,VCapElec2(runCy,PGALL,YTIME-1) * 
  (1 - VIndexEndogScrap(runCy,PGALL,YTIME))) +
           sum(PGALL, (iPlantDecomSched(runCy,PGALL,YTIME)-iDecInvPlantSched(runCy,PGALL,YTIME))*iAvailRate(PGALL,YTIME))
-          + Sum(PGALL$PGSCRN(PGALL), (VCapGenPlant(runCy,PGALL,YTIME-1)-iPlantDecomSched(runCy,PGALL,YTIME))/
+          + Sum(PGALL$PGSCRN(PGALL), (VCapElec(runCy,PGALL,YTIME-1)-iPlantDecomSched(runCy,PGALL,YTIME))/
           iTechLftPlaType(runCy,PGALL))
        )
-  + 0 + SQRT( SQR(       (  VCapGenElecNoChp(runCy,YTIME) - VCapGenElecNoChp(runCy,YTIME-1) +
-        sum(PGALL,VCapGenPlannedPlant(runCy,PGALL,YTIME-1) * (1 - VIndexEndogScrap(runCy,PGALL,YTIME))) +
+  + 0 + SQRT( SQR(       (  VCapElecNonChp(runCy,YTIME) - VCapElecNonChp(runCy,YTIME-1) +
+        sum(PGALL,VCapElec2(runCy,PGALL,YTIME-1) * (1 - VIndexEndogScrap(runCy,PGALL,YTIME))) +
           sum(PGALL, (iPlantDecomSched(runCy,PGALL,YTIME)-iDecInvPlantSched(runCy,PGALL,YTIME))*iAvailRate(PGALL,YTIME))
-          + Sum(PGALL$PGSCRN(PGALL), (VCapGenPlant(runCy,PGALL,YTIME-1)-iPlantDecomSched(runCy,PGALL,YTIME))/
+          + Sum(PGALL$PGSCRN(PGALL), (VCapElec(runCy,PGALL,YTIME-1)-iPlantDecomSched(runCy,PGALL,YTIME))/
           iTechLftPlaType(runCy,PGALL))
        ) -0) + SQR(1e-10) ) )/2;
 
@@ -314,8 +314,8 @@ QPotRenSuppCurve(runCy,PGRENEF,YTIME)$TIME(YTIME)..
 *' The maximum renewable potential for the specified renewable energy form and country in the given year.
 *' The maximum allowed renewable potential is computed as the average between the calculated renewable potential supply curve and the maximum renewable potential.
 *' This formulation ensures that the potential does not exceed the maximum allowed value. 
-QRenPotMaxAllow(runCy,PGRENEF,YTIME)$TIME(YTIME)..      
-         VRenPotMaxAllow(runCy,PGRENEF,YTIME) =E=
+QPotRenMaxAllow(runCy,PGRENEF,YTIME)$TIME(YTIME)..      
+         VPotRenMaxAllow(runCy,PGRENEF,YTIME) =E=
          ( VPotRenSuppCurve(runCy,PGRENEF,YTIME)+ iMaxRenPotential(runCy,PGRENEF,YTIME))/2;
 
 *' The equation calculates the minimum allowed renewable potential for a specific renewable energy form and country 
@@ -324,9 +324,9 @@ QRenPotMaxAllow(runCy,PGRENEF,YTIME)$TIME(YTIME)..
 *' The minimum renewable potential for the specified renewable energy form and country in the given year.
 *' The minimum allowed renewable potential is computed as the average between the calculated renewable potential supply curve and the minimum renewable potential.
 *' This formulation ensures that the potential does not fall below the minimum allowed value.
-QRenPotMinAllow(runCy,PGRENEF,YTIME)$TIME(YTIME)..  
-         VRenPotMinAllow(runCy,PGRENEF,YTIME) =E=
-         ( VPotRenSuppCurve(runCy,PGRENEF,YTIME) + VRenPotMinAllow(runCy,PGRENEF,YTIME))/2;
+QPotRenMinAllow(runCy,PGRENEF,YTIME)$TIME(YTIME)..  
+         VPotRenMinAllow(runCy,PGRENEF,YTIME) =E=
+         ( VPotRenSuppCurve(runCy,PGRENEF,YTIME) + VPotRenMinAllow(runCy,PGRENEF,YTIME))/2;
 
 *' The equation calculates a maturity multiplier for renewable technologies. If the technology is renewable , the multiplier is determined
 *' based on an exponential function that involves the ratio of the planned electricity generation capacities of renewable technologies to the renewable potential
@@ -342,7 +342,7 @@ QRenTechMatMult(runCy,PGALL,YTIME)$TIME(YTIME)..
            1/(1+(
                  sum(PGRENEF$PGALLtoPGRENEF(PGALL,PGRENEF),
                  sum(PGALL2$(PGALLtoPGRENEF(PGALL2,PGRENEF) $PGREN(PGALL2)),
-                 VCapGenPlannedPlant(runCy,PGALL2,YTIME-1))/VPotRenSuppCurve(runCy,PGRENEF,YTIME))))
+                 VCapElec2(runCy,PGALL2,YTIME-1))/VPotRenSuppCurve(runCy,PGRENEF,YTIME))))
            )$PGREN(PGALL);  
 
 *' The equation calculates a temporary variable which is used to facilitate scaling in the Weibull equation. The scaling is influenced by three main factors:
@@ -370,8 +370,8 @@ QScalWeibullSum(runCy,PGALL,YTIME)$((not CCS(PGALL)) $TIME(YTIME))..
 *' The values capture the scaling factors influenced by material-specific factors, renewable technology maturity,
 *' and cost efficiency considerations. Summing these values over relevant power plants provides an aggregated measure for informing new investment decisions, emphasizing
 *' factors such as technology readiness and economic viability.
-QDecisNewInv(runCy,YTIME)$TIME(YTIME)..
-         VDecisNewInv(runCy,YTIME)
+QNewInvElec(runCy,YTIME)$TIME(YTIME)..
+         VNewInvElec(runCy,YTIME)
              =E=
          sum(PGALL$(not CCS(PGALL)),VScalWeibullSum(runCy,PGALL,YTIME));
 
@@ -381,42 +381,42 @@ QDecisNewInv(runCy,YTIME)$TIME(YTIME)..
 *' overall new investment decision for power plants . This ratio provides a proportionate share of new equipment for each power plant, considering factors such
 *' as material-specific scaling and economic considerations.For power plants with CCS , the share is determined by summing the shares of corresponding power plants
 *' without CCS. This allows for the allocation of shares in new equipment for CCS and non-CCS versions of the same power plant.
-QShaNewEqPowPla(runCy,PGALL,YTIME)$(TIME(YTIME)) ..
-        VShaNewEqPowPla(runCy,PGALL,YTIME)
+QSharePowPlaNewEq(runCy,PGALL,YTIME)$(TIME(YTIME)) ..
+        VSharePowPlaNewEq(runCy,PGALL,YTIME)
              =E=
-         ( VScalWeibullSum(runCy,PGALL,YTIME)/ VDecisNewInv(runCy,YTIME))$(not CCS(PGALL))
+         ( VScalWeibullSum(runCy,PGALL,YTIME)/ VNewInvElec(runCy,YTIME))$(not CCS(PGALL))
           +
-          sum(NOCCS$CCS_NOCCS(PGALL,NOCCS),VShaNewEqPowPla(runCy,NOCCS,YTIME))$CCS(PGALL);
+          sum(NOCCS$CCS_NOCCS(PGALL,NOCCS),VSharePowPlaNewEq(runCy,NOCCS,YTIME))$CCS(PGALL);
 
 *' This equation calculates the variable representing the electricity generation capacity for a specific power plant in a given country
 *' and time period. The calculation takes into account various factors related to new investments, decommissioning, and technology-specific parameters.
 *' The equation aims to model the evolution of electricity generation capacity over time, considering new investments, decommissioning, and technology-specific parameters.
-QCapGenPlant(runCy,PGALL,YTIME)$TIME(YTIME)..
-         VCapGenPlant(runCy,PGALL,YTIME)
+QCapElec(runCy,PGALL,YTIME)$TIME(YTIME)..
+         VCapElec(runCy,PGALL,YTIME)
              =E=
-         (VCapGenPlannedPlant(runCy,PGALL,YTIME-1)*VIndexEndogScrap(runCy,PGALL,YTIME-1)
-          +(VShaNewEqPowPla(runCy,PGALL,YTIME) * VGapGenCapPowerDiff(runCy,YTIME))$( (not CCS(PGALL)) AND (not NOCCS(PGALL)))
-          +(VShaNewEqPowPla(runCy,PGALL,YTIME) * VShareNewTechNoCcs(runCy,PGALL,YTIME) * VGapGenCapPowerDiff(runCy,YTIME))$NOCCS(PGALL)
-          +(VShaNewEqPowPla(runCy,PGALL,YTIME) * VShareNewTechNoCcs(runCy,PGALL,YTIME) * VGapGenCapPowerDiff(runCy,YTIME))$CCS(PGALL)
+         (VCapElec2(runCy,PGALL,YTIME-1)*VIndexEndogScrap(runCy,PGALL,YTIME-1)
+          +(VSharePowPlaNewEq(runCy,PGALL,YTIME) * VGapGenCapPowerDiff(runCy,YTIME))$( (not CCS(PGALL)) AND (not NOCCS(PGALL)))
+          +(VSharePowPlaNewEq(runCy,PGALL,YTIME) * VShareNewTechNoCcs(runCy,PGALL,YTIME) * VGapGenCapPowerDiff(runCy,YTIME))$NOCCS(PGALL)
+          +(VSharePowPlaNewEq(runCy,PGALL,YTIME) * VShareNewTechNoCcs(runCy,PGALL,YTIME) * VGapGenCapPowerDiff(runCy,YTIME))$CCS(PGALL)
           + iDecInvPlantSched(runCy,PGALL,YTIME) * iAvailRate(PGALL,YTIME)
           - iPlantDecomSched(runCy,PGALL,YTIME) * iAvailRate(PGALL,YTIME)
          )
-         - ((VCapGenPlant(runCy,PGALL,YTIME-1)-iPlantDecomSched(runCy,PGALL,YTIME-1))* 
+         - ((VCapElec(runCy,PGALL,YTIME-1)-iPlantDecomSched(runCy,PGALL,YTIME-1))* 
          iAvailRate(PGALL,YTIME)*(1/iTechLftPlaType(runCy,PGALL)))$PGSCRN(PGALL);
 
 *' This equation calculates the variable representing the planned electricity generation capacity for a specific power plant  in a given country
 *' and time period. The calculation involves adjusting the actual electricity generation capacity by a small constant and the square
 *' root of the sum of the square of the capacity and a small constant. The purpose of this adjustment is likely to avoid numerical issues and ensure a positive value for
 *' the planned capacity.
-QCapGenPlannedPlant(runCy,PGALL,YTIME)$TIME(YTIME)..
-         VCapGenPlannedPlant(runCy,PGALL,YTIME)
+QCapElec2(runCy,PGALL,YTIME)$TIME(YTIME)..
+         VCapElec2(runCy,PGALL,YTIME)
              =E=
-         ( VCapGenPlant(runCy,PGALL,YTIME) + 1e-6 + SQRT( SQR(VCapGenPlant(runCy,PGALL,YTIME)-1e-6) + SQR(1e-4) ) )/2;
+         ( VCapElec(runCy,PGALL,YTIME) + 1e-6 + SQRT( SQR(VCapElec(runCy,PGALL,YTIME)-1e-6) + SQR(1e-4) ) )/2;
 
 *' Compute the variable cost of each power plant technology for every region,
 *' by utilizing the maturity factor related to plant dispatching.
-QCostVarPlantTech(runCy,PGALL,YTIME)$TIME(YTIME)..
-         VCostVarPlantTech(runCy,PGALL,YTIME)
+QCostVarTechElec(runCy,PGALL,YTIME)$TIME(YTIME)..
+         VCostVarTechElec(runCy,PGALL,YTIME)
          =E=  
           iMatureFacPlaDisp(runCy,PGALL,YTIME)*VCostVarTech(runCy,PGALL,YTIME)**(-2);
 
@@ -425,14 +425,14 @@ QCostVarPlantTech(runCy,PGALL,YTIME)$TIME(YTIME)..
 QElecPeakLoads(runCy,YTIME)$TIME(YTIME)..
          VElecPeakLoads(runCy,YTIME) 
          =E= 
-         SQRT(sum(PGALL, VCostVarPlantTech(runCy,PGALL,YTIME)));     
+         SQRT(sum(PGALL, VCostVarTechElec(runCy,PGALL,YTIME)));     
 
 *' Compute power plant sorting to decide the plant dispatching. 
 *' This is accomplished by dividing the variable cost by the peak loads.
 QSortPlantDispatch(runCy,PGALL,YTIME)$TIME(YTIME)..
          VSortPlantDispatch(runCy,PGALL,YTIME)
                  =E=
-         VCostVarPlantTech(runCy,PGALL,YTIME)
+         VCostVarTechElec(runCy,PGALL,YTIME)
          /
          VElecPeakLoads(runCy,YTIME);  
 
@@ -440,29 +440,29 @@ QSortPlantDispatch(runCy,PGALL,YTIME)$TIME(YTIME)..
 *' in a given country and time period. The calculation involves subtracting the planned electricity generation capacity in the current time period
 *' from the planned capacity in the previous time period. The purpose of this equation is to quantify the increase in electricity generation capacity for renewable
 *' power plants on a yearly basis.
-QCapGenNewResPlant(runCy,PGALL,YTIME)$(PGREN(PGALL)$TIME(YTIME))..
-         VCapGenNewResPlant(runCy,PGALL,YTIME) =e=
-VCapGenPlannedPlant(runCy,PGALL,YTIME)- VCapGenPlannedPlant(runCy,PGALL,YTIME-1);                       
+QNewCapElec(runCy,PGALL,YTIME)$(PGREN(PGALL)$TIME(YTIME))..
+         VNewCapElec(runCy,PGALL,YTIME) =e=
+VCapElec2(runCy,PGALL,YTIME)- VCapElec2(runCy,PGALL,YTIME-1);                       
 
 *' This equation calculates the variable representing the average capacity factor of renewable energy sources for a specific renewable power plant
 *' in a given country  and time period. The capacity factor is a measure of the actual electricity generation output relative to the maximum
 *' possible output.The calculation involves considering the availability rates for the renewable power plant in the current and seven previous time periods,
 *' as well as the newly added capacity in these periods. The average capacity factor is then computed as the weighted average of the availability rates
 *' over these eight periods.
-QCapAvgFacRes(runCy,PGALL,YTIME)$(PGREN(PGALL)$TIME(YTIME))..
-   VCapAvgFacRes(runCy,PGALL,YTIME)
+QCFAvgRen(runCy,PGALL,YTIME)$(PGREN(PGALL)$TIME(YTIME))..
+   VCFAvgRen(runCy,PGALL,YTIME)
       =E=
-    (iAvailRate(PGALL,YTIME)*VCapGenNewResPlant(runCy,PGALL,YTIME)+
-     iAvailRate(PGALL,YTIME-1)*VCapGenNewResPlant(runCy,PGALL,YTIME-1)+
-     iAvailRate(PGALL,YTIME-2)*VCapGenNewResPlant(runCy,PGALL,YTIME-2)+
-     iAvailRate(PGALL,YTIME-3)*VCapGenNewResPlant(runCy,PGALL,YTIME-3)+
-     iAvailRate(PGALL,YTIME-4)*VCapGenNewResPlant(runCy,PGALL,YTIME-4)+
-     iAvailRate(PGALL,YTIME-5)*VCapGenNewResPlant(runCy,PGALL,YTIME-5)+
-     iAvailRate(PGALL,YTIME-6)*VCapGenNewResPlant(runCy,PGALL,YTIME-6)+
-     iAvailRate(PGALL,YTIME-7)*VCapGenNewResPlant(runCy,PGALL,YTIME-7))/
-(VCapGenNewResPlant(runCy,PGALL,YTIME)+VCapGenNewResPlant(runCy,PGALL,YTIME-1)+VCapGenNewResPlant(runCy,PGALL,YTIME-2)+
-VCapGenNewResPlant(runCy,PGALL,YTIME-3)+VCapGenNewResPlant(runCy,PGALL,YTIME-4)+VCapGenNewResPlant(runCy,PGALL,YTIME-5)+
-VCapGenNewResPlant(runCy,PGALL,YTIME-6)+VCapGenNewResPlant(runCy,PGALL,YTIME-7));
+    (iAvailRate(PGALL,YTIME)*VNewCapElec(runCy,PGALL,YTIME)+
+     iAvailRate(PGALL,YTIME-1)*VNewCapElec(runCy,PGALL,YTIME-1)+
+     iAvailRate(PGALL,YTIME-2)*VNewCapElec(runCy,PGALL,YTIME-2)+
+     iAvailRate(PGALL,YTIME-3)*VNewCapElec(runCy,PGALL,YTIME-3)+
+     iAvailRate(PGALL,YTIME-4)*VNewCapElec(runCy,PGALL,YTIME-4)+
+     iAvailRate(PGALL,YTIME-5)*VNewCapElec(runCy,PGALL,YTIME-5)+
+     iAvailRate(PGALL,YTIME-6)*VNewCapElec(runCy,PGALL,YTIME-6)+
+     iAvailRate(PGALL,YTIME-7)*VNewCapElec(runCy,PGALL,YTIME-7))/
+(VNewCapElec(runCy,PGALL,YTIME)+VNewCapElec(runCy,PGALL,YTIME-1)+VNewCapElec(runCy,PGALL,YTIME-2)+
+VNewCapElec(runCy,PGALL,YTIME-3)+VNewCapElec(runCy,PGALL,YTIME-4)+VNewCapElec(runCy,PGALL,YTIME-5)+
+VNewCapElec(runCy,PGALL,YTIME-6)+VNewCapElec(runCy,PGALL,YTIME-7));
 
 *' This equation calculates the variable representing the overall capacity for a specific power plant in a given country and time period .
 *' The overall capacity is a composite measure that includes the existing capacity for non-renewable power plants and the expected capacity for renewable power plants based
@@ -470,10 +470,10 @@ VCapGenNewResPlant(runCy,PGALL,YTIME-6)+VCapGenNewResPlant(runCy,PGALL,YTIME-7))
 QCapOverall(runCy,PGALL,YTIME)$TIME(YTIME)..
      VCapOverall(runCy,PGALL,YTIME)
      =E=
-VCapGenPlannedPlant(runCy,pgall,ytime)$ (not PGREN(PGALL))
-+VCapAvgFacRes(runCy,PGALL,YTIME-1)*(VCapGenNewResPlant(runCy,PGALL,YTIME)/iAvailRate(PGALL,YTIME)+
+VCapElec2(runCy,pgall,ytime)$ (not PGREN(PGALL))
++VCFAvgRen(runCy,PGALL,YTIME-1)*(VNewCapElec(runCy,PGALL,YTIME)/iAvailRate(PGALL,YTIME)+
 VCapOverall(runCy,PGALL,YTIME-1)
-/VCapAvgFacRes(runCy,PGALL,YTIME-1))$PGREN(PGALL);
+/VCFAvgRen(runCy,PGALL,YTIME-1))$PGREN(PGALL);
 
 *' This equation calculates the scaling factor for plant dispatching in a specific country , hour of the day,
 *' and time period . The scaling factor for determining the dispatch order of different power plants during a particular hour.
@@ -484,9 +484,9 @@ QScalFacPlantDispatch(runCy,HOUR,YTIME)$TIME(YTIME)..
                  exp(-VScalFacPlaDisp(runCy,HOUR,YTIME)/VSortPlantDispatch(runCy,PGALL,YTIME))
                  )
          =E=
-         (VLoadPeakElec(runCy,YTIME) - VLoadBaseElecExp(runCy,YTIME))
+         (VPeakLoad(runCy,YTIME) - VBaseLoad(runCy,YTIME))
          * exp(-VLambda(runCy,YTIME)*(0.25 + ord(HOUR)-1))
-         + VLoadBaseElecExp(runCy,YTIME);
+         + VBaseLoad(runCy,YTIME);
 
 *' This equation calculates the estimated electricity generation of Combined Heat and Power plantsin a specific countryand time period.
 *' The estimation is based on the fuel consumption of CHP plants, their electricity prices, the maximum share of CHP electricity in total demand, and the overall
@@ -496,18 +496,18 @@ QGenEstElecChpPlants(runCy,YTIME)$TIME(YTIME)..
          VGenEstElecChpPlants(runCy,YTIME) 
          =E=
          ( (1/0.086 * sum((INDDOM,CHP),VConsFuel(runCy,INDDOM,CHP,YTIME)) * VPriceElecInd(runCy,YTIME)) + 
-         iMxmShareChpElec(runCy,YTIME)*VDemElec(runCy,YTIME) - SQRT( SQR((1/0.086 * sum((INDDOM,CHP),VConsFuel(runCy,INDDOM,CHP,YTIME)) * 
+         iMxmShareChpElec(runCy,YTIME)*VDemElecTot(runCy,YTIME) - SQRT( SQR((1/0.086 * sum((INDDOM,CHP),VConsFuel(runCy,INDDOM,CHP,YTIME)) * 
          VPriceElecInd(runCy,YTIME)) - 
-         iMxmShareChpElec(runCy,YTIME)*VDemElec(runCy,YTIME)) + SQR(1E-4) ) )/2;
+         iMxmShareChpElec(runCy,YTIME)*VDemElecTot(runCy,YTIME)) + SQR(1E-4) ) )/2;
 
 *' This equation calculates the non-Combined Heat and Power electricity production in a specific country and time period .
 *' It is essentially the difference between the total electricity demand and the estimated electricity generation from CHP plants .In summary,
 *' the equation calculates the electricity production from technologies other than CHP by subtracting the estimated CHP electricity generation from the total electricity
 *' demand. 
-QProdNonChp(runCy,YTIME)$TIME(YTIME)..
-         VProdNonChp(runCy,YTIME) 
+QProdElecNonChp(runCy,YTIME)$TIME(YTIME)..
+         VProdElecNonChp(runCy,YTIME) 
          =E=
-  (VDemElec(runCy,YTIME) - VGenEstElecChpPlants(runCy,YTIME));  
+  (VDemElecTot(runCy,YTIME) - VGenEstElecChpPlants(runCy,YTIME));  
 
 *' This equation calculates the total required electricity production for a specific country and time period .
 *' The total required electricity production is the sum of electricity generation from different technologies, including CHP plants, across all hours of the day.
@@ -524,12 +524,12 @@ VProdReqElec(runCy,YTIME)
 *' demand, the required electricity production, and the capacity of the power generation plants.The equation calculates the electricity production
 *' from power generation plants based on the proportion of electricity demand that needs to be met by power generation plants, considering their
 *' capacity and the scaling factor for dispatching.
-QProdElecPowPlantsCy(runCy,PGALL,YTIME)$TIME(YTIME)..
-         VProdElecPowPlantsCy(runCy,PGALL,YTIME)
+QProdElec(runCy,PGALL,YTIME)$TIME(YTIME)..
+         VProdElec(runCy,PGALL,YTIME)
                  =E=
-         VProdNonChp(runCy,YTIME) /
+         VProdElecNonChp(runCy,YTIME) /
          (VProdReqTotElec(runCy,YTIME)- VProdReqElec(runCy,YTIME))
-         * VCapGenPlannedPlant(runCy,PGALL,YTIME)* sum(HOUR, exp(-VScalFacPlaDisp(runCy,HOUR,YTIME)/VSortPlantDispatch(runCy,PGALL,YTIME)));
+         * VCapElec2(runCy,PGALL,YTIME)* sum(HOUR, exp(-VScalFacPlaDisp(runCy,HOUR,YTIME)/VSortPlantDispatch(runCy,PGALL,YTIME)));
 
 *' This equation calculates the sector contribution to total Combined Heat and Power production . The contribution
 *' is calculated for a specific country , industrial sector , CHP technology , and time period .The sector contribution
@@ -550,20 +550,20 @@ QGenEstElecChpPlants(runCy,CHP,YTIME)$TIME(YTIME)..
          VGenEstElecChpPlants(runCy,CHP,YTIME)
                  =E=
         sum(INDDOM,VConsFuel(runCy,INDDOM,CHP,YTIME)) / SUM(chp2,sum(INDDOM,VConsFuel(runCy,INDDOM,CHP2,YTIME)))*
-        (VDemElec(runCy,YTIME) - SUM(PGALL,VProdElecPowPlantsCy(runCy,PGALL,YTIME)));
+        (VDemElecTot(runCy,YTIME) - SUM(PGALL,VProdElec(runCy,PGALL,YTIME)));
 
 *' This equation calculates the share of gross electricity production attributed to renewable sources.
 *' The share is computed for a specific country and time period.The share of gross electricity production from
 *' renewable sources is calculated by dividing the sum of renewable electricity production by the sum of total electricity production,
 *' industrial sector electricity production, and net electricity imports. The result represents the proportion of electricity production
 *' attributed to renewable sources in the specified country and time period.
-qProdGrossResShare(runCy,YTIME)$TIME(YTIME)..
+QShareRenGrossProd(runCy,YTIME)$TIME(YTIME)..
 
-                 vProdGrossResShare(runCy,YTIME) 
+                 VShareRenGrossProd(runCy,YTIME) 
                  =E=
                  (SUM(PGNREN$((not sameas("PGASHYD",PGNREN)) $(not sameas("PGSHYD",PGNREN)) $(not sameas("PGLHYD",PGNREN)) ),
-                         VProdElecPowPlantsCy(runCy,PGNREN,YTIME)))/
-                 (SUM(PGALL,VProdElecPowPlantsCy(runCy,PGALL,YTIME))+ 
+                         VProdElec(runCy,PGNREN,YTIME)))/
+                 (SUM(PGALL,VProdElec(runCy,PGALL,YTIME))+ 
                  1e-3*sum(DSBS,sum(CHP$SECTTECH(DSBS,CHP),VConsFuel(runCy,DSBS,CHP,YTIME)))/8.6e-5*VPriceElecInd(runCy,YTIME) + 
                  1/0.086 *VImpNetEneBrnch(runCy,"ELC",YTIME));         
 
@@ -667,12 +667,12 @@ QCostPowGenAvgLng(runCy,ESET,YTIME)$TIME(YTIME)..
          VCostPowGenAvgLng(runCy,ESET,YTIME)
                  =E=
          (
-         SUM(PGALL, VProdElecPowPlantsCy(runCy,PGALL,YTIME)*VCostPowGenLngTechNoCp(runCy,PGALL,ESET,YTIME))
+         SUM(PGALL, VProdElec(runCy,PGALL,YTIME)*VCostPowGenLngTechNoCp(runCy,PGALL,ESET,YTIME))
 
         +
          sum(CHP, VCostElcAvgProdCHP(runCy,CHP,YTIME)*VGenEstElecChpPlants(runCy,CHP,YTIME))
          )
-/VDemElec(runCy,YTIME); 
+/VDemElecTot(runCy,YTIME); 
 
 *' The equation represents the long-term average power generation cost excluding climate policies.
 *' It calculates the cost in Euro2005 per kilowatt-hour (kWh) for a specific combination of parameters. The equation is composed 
@@ -707,12 +707,12 @@ QCostPowGenLonNoClimPol(runCy,ESET,YTIME)$TIME(YTIME)..
          VCostPowGenLonNoClimPol(runCy,ESET,YTIME)
                  =E=
          (
-         SUM(PGALL, (VProdElecPowPlantsCy(runCy,PGALL,YTIME))*VCostAvgPowGenLonNoClimPol(runCy,PGALL,ESET,YTIME))
+         SUM(PGALL, (VProdElec(runCy,PGALL,YTIME))*VCostAvgPowGenLonNoClimPol(runCy,PGALL,ESET,YTIME))
 
         +
          sum(CHP, VCostElcAvgProdCHP(runCy,CHP,YTIME)*VGenEstElecChpPlants(runCy,CHP,YTIME))
          )
-/(VDemElec(runCy,YTIME));  
+/(VDemElecTot(runCy,YTIME));  
 
 *' Compute electricity price in Industrial and Residential Consumers excluding climate policies by multiplying the Factors affecting electricity prices to consumers by the sum of 
 *' Fuel prices per subsector and fuel multiplied by the TWh to Mtoe conversion factor adding the Factors affecting electricity prices to consumers and the Long-term average power 
@@ -746,7 +746,7 @@ qCostPowGenAvgShrt(runCy,ESET,YTIME)$TIME(YTIME)..
                  =E=
         (
         sum(PGALL,
-        VProdElecPowPlantsCy(runCy,PGALL,YTIME)*
+        VProdElec(runCy,PGALL,YTIME)*
         (
         sum(PGEF$PGALLtoEF(PGALL,PGEF),
         (iVarCost(PGALL,YTIME)/1000+(VPriceFuelSubCarVal(runCy,"PG",PGEF,YTIME)/1.2441+
@@ -758,7 +758,7 @@ qCostPowGenAvgShrt(runCy,ESET,YTIME)$TIME(YTIME)..
         +
          sum(CHP, VCostVarAvgElecProd(runCy,CHP,YTIME)*VGenEstElecChpPlants(runCy,CHP,YTIME))
          )
-         /VDemElec(runCy,YTIME);
+         /VDemElecTot(runCy,YTIME);
 
 *' * Transport
 
@@ -1038,8 +1038,8 @@ QScrRatePc(runCy,YTIME)$TIME(YTIME)..
 *' It sums the electricity consumption from industrial subsectors and transport subsectors, taking into account the final energy demand in each sector.
 *' The result provides an estimate of electricity demand for different final demand sectors, offering insights into the overall electricity consumption
 *' pattern across various sectors.
-QConsElecFinDemSec(runCy,DSBS,YTIME)$TIME(YTIME)..
-         VConsElecFinDemSec(runCy,DSBS,YTIME)
+QConsElec(runCy,DSBS,YTIME)$TIME(YTIME)..
+         VConsElec(runCy,DSBS,YTIME)
              =E=
          sum(INDDOM $SAMEAS(INDDOM,DSBS), VConsFuel(runCy,INDDOM,"ELC",YTIME)) + sum(TRANSE $SAMEAS(TRANSE,DSBS), VDemFinEneTranspPerFuel(runCy,TRANSE,"ELC",YTIME));
 
@@ -1418,14 +1418,14 @@ QInputTransfRef(runCy,"CRO",YTIME)$(TIME(YTIME) )..
 *' scenario and year, multiplied by the conversion factor from terawatt-hours to million tons of oil equivalent.
 *' The result represents the transformation output from nuclear plants for electricity production in million tons of oil equivalent.
 QOutTransfNuclear(runCy,"ELC",YTIME)$TIME(YTIME) ..
-         VOutTransfNuclear(runCy,"ELC",YTIME) =E=SUM(PGNUCL,VProdElecPowPlantsCy(runCy,PGNUCL,YTIME))*sTWhToMtoe;
+         VOutTransfNuclear(runCy,"ELC",YTIME) =E=SUM(PGNUCL,VProdElec(runCy,PGNUCL,YTIME))*sTWhToMtoe;
 
 *' The equation computes the transformation input to nuclear plants for a specific scenario and year.
 *' The input is calculated based on the sum of electricity production from all nuclear power plants in the given scenario and year, divided
 *' by the plant efficiency and multiplied by the conversion factor from terawatt-hours to million tons of oil equivalent (sTWhToMtoe).
 *' The result represents the transformation input to nuclear plants in million tons of oil equivalent.
 QInpTransfNuclear(runCy,"NUC",YTIME)$TIME(YTIME)..
-        VInpTransfNuclear(runCy,"NUC",YTIME) =E=SUM(PGNUCL,VProdElecPowPlantsCy(runCy,PGNUCL,YTIME)/iPlantEffByType(runCy,PGNUCL,YTIME))*sTWhToMtoe;
+        VInpTransfNuclear(runCy,"NUC",YTIME) =E=SUM(PGNUCL,VProdElec(runCy,PGNUCL,YTIME)/iPlantEffByType(runCy,PGNUCL,YTIME))*sTWhToMtoe;
 
 *' The equation computes the transformation input to thermal power plants for a specific power generation form 
 *' in a given scenario and year. The input is calculated based on the following conditions:
@@ -1439,10 +1439,10 @@ QInpTransfTherm(runCy,PGEF,YTIME)$TIME(YTIME)..
          VInpTransfTherm(runCy,PGEF,YTIME)
              =E=
         sum(PGALL$(PGALLtoEF(PGALL,PGEF)$((not PGGEO(PGALL)) $(not PGNUCL(PGALL)))),
-             VProdElecPowPlantsCy(runCy,PGALL,YTIME) * sTWhToMtoe /  iPlantEffByType(runCy,PGALL,YTIME))
+             VProdElec(runCy,PGALL,YTIME) * sTWhToMtoe /  iPlantEffByType(runCy,PGALL,YTIME))
         +
         sum(PGALL$(PGALLtoEF(PGALL,PGEF)$PGGEO(PGALL)),
-             VProdElecPowPlantsCy(runCy,PGALL,YTIME) * sTWhToMtoe) 
+             VProdElec(runCy,PGALL,YTIME) * sTWhToMtoe) 
         +
         sum(CHP$CHPtoEF(CHP,PGEF),  sum(INDDOM,VConsFuel(runCy,INDDOM,CHP,YTIME))+sTWhToMtoe*VGenEstElecChpPlants(runCy,CHP,YTIME))/(0.8+0.1*(ord(YTIME)-16)/32);
 
@@ -1458,7 +1458,7 @@ QOutTransfTherm(runCy,TOCTEF,YTIME)$TIME(YTIME)..
          VOutTransfTherm(runCy,TOCTEF,YTIME)
              =E=
         (
-             sum(PGALL$(not PGNUCL(PGALL)),VProdElecPowPlantsCy(runCy,PGALL,YTIME)) * sTWhToMtoe
+             sum(PGALL$(not PGNUCL(PGALL)),VProdElec(runCy,PGALL,YTIME)) * sTWhToMtoe
              +
              sum(CHP,VGenEstElecChpPlants(runCy,CHP,YTIME)*sTWhToMtoe)
          )$ELCEF(TOCTEF)
@@ -1555,8 +1555,8 @@ QProdPrimary(runCy,PPRODEF,YTIME)$TIME(YTIME)..
         +
          (
            iRatePriProTotPriNeeds(runCy,PPRODEF,YTIME) * VProdPrimary(runCy,PPRODEF,YTIME-1) *
-           ((VConsGrssInlNotEneBranch(runCy,PPRODEF,YTIME) + VExprtsFakeEneBrnch(runCy,PPRODEF,YTIME))/
-            (VConsGrssInlNotEneBranch(runCy,PPRODEF,YTIME-1) + VExprtsFakeEneBrnch(runCy,PPRODEF,YTIME-1)))
+           ((VConsGrssInlNotEneBranch(runCy,PPRODEF,YTIME) + VExp(runCy,PPRODEF,YTIME))/
+            (VConsGrssInlNotEneBranch(runCy,PPRODEF,YTIME-1) + VExp(runCy,PPRODEF,YTIME-1)))
          )$(sameas(PPRODEF,"NGS") )
          +(
            iResHcNgOilPrProd(runCy,PPRODEF,YTIME) *  iFuelPriPro(runCy,PPRODEF,YTIME) *
@@ -1568,8 +1568,8 @@ QProdPrimary(runCy,PPRODEF,YTIME)$TIME(YTIME)..
 *' The equation calculates the fake exports for a specific energy branch
 *' in a given scenario and year. The computation is based on the fuel exports for
 *' the corresponding energy branch. The result represents the fake exports in million tons of oil equivalent.
-QExprtsFakeEneBrnch(runCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS))..
-         VExprtsFakeEneBrnch(runCy,EFS,YTIME)
+QExp(runCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS))..
+         VExp(runCy,EFS,YTIME)
                  =E=
          (
                  iFuelExprts(runCy,EFS,YTIME)
@@ -1581,31 +1581,31 @@ QExprtsFakeEneBrnch(runCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS))..
 *' such as electricity, crude oil, and natural gas. The equation involves gross inland consumption,
 *' fake exports, consumption of fuels in demand subsectors, electricity imports,
 *' and other factors. The result represents the fake imports in million tons of oil equivalent for all fuels except natural gas.
-QImptsFakeEneBrnch(runCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS))..
+QImp(runCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS))..
 
-         VImptsFakeEneBrnch(runCy,EFS,YTIME)
+         VImp(runCy,EFS,YTIME)
 
                  =E=
          (
-            iRatioImpFinElecDem(runCy,YTIME) * (VConsFinEneCountry(runCy,EFS,YTIME) + VConsFinNonEne(runCy,EFS,YTIME)) + VExprtsFakeEneBrnch(runCy,EFS,YTIME)
+            iRatioImpFinElecDem(runCy,YTIME) * (VConsFinEneCountry(runCy,EFS,YTIME) + VConsFinNonEne(runCy,EFS,YTIME)) + VExp(runCy,EFS,YTIME)
          + iElecImp(runCy,YTIME)
          )$ELCEF(EFS)
          +
          (
-            VConsGrssInl(runCy,EFS,YTIME)+ VExprtsFakeEneBrnch(runCy,EFS,YTIME) + VConsFuel(runCy,"BU",EFS,YTIME)$SECTTECH("BU",EFS)
+            VConsGrssInl(runCy,EFS,YTIME)+ VExp(runCy,EFS,YTIME) + VConsFuel(runCy,"BU",EFS,YTIME)$SECTTECH("BU",EFS)
             - VProdPrimary(runCy,EFS,YTIME)
          )$(sameas(EFS,"CRO"))
 
          +
          (
-            VConsGrssInl(runCy,EFS,YTIME)+ VExprtsFakeEneBrnch(runCy,EFS,YTIME) + VConsFuel(runCy,"BU",EFS,YTIME)$SECTTECH("BU",EFS)
+            VConsGrssInl(runCy,EFS,YTIME)+ VExp(runCy,EFS,YTIME) + VConsFuel(runCy,"BU",EFS,YTIME)$SECTTECH("BU",EFS)
             - VProdPrimary(runCy,EFS,YTIME)
          )$(sameas(EFS,"NGS"))
          +iImpExp(runCy,"NGS",YTIME)$(sameas(EFS,"NGS"))
          +
          (
             (1-iRatePriProTotPriNeeds(runCy,EFS,YTIME)) *
-            (VConsGrssInl(runCy,EFS,YTIME) + VExprtsFakeEneBrnch(runCy,EFS,YTIME) + VConsFuel(runCy,"BU",EFS,YTIME)$SECTTECH("BU",EFS) )
+            (VConsGrssInl(runCy,EFS,YTIME) + VExp(runCy,EFS,YTIME) + VConsFuel(runCy,"BU",EFS,YTIME)$SECTTECH("BU",EFS) )
          )$(not (ELCEF(EFS) or sameas(EFS,"NGS") or sameas(EFS,"CRO")));
 
 *' The equation computes the net imports for a specific energy branch 
@@ -1614,7 +1614,7 @@ QImptsFakeEneBrnch(runCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS))..
 QImpNetEneBrnch(runCy,EFS,YTIME)$TIME(YTIME)..
          VImpNetEneBrnch(runCy,EFS,YTIME)
                  =E=
-         VImptsFakeEneBrnch(runCy,EFS,YTIME) - VExprtsFakeEneBrnch(runCy,EFS,YTIME);
+         VImp(runCy,EFS,YTIME) - VExp(runCy,EFS,YTIME);
                                
 *' The equation calculates the final energy consumption in the energy sector.
 *' It considers the rate of energy branch consumption over the total transformation output.
@@ -1647,7 +1647,7 @@ QCapCo2ElecHydr(runCy,YTIME)$TIME(YTIME)..
          VCapCo2ElecHydr(runCy,YTIME)
          =E=
          sum(PGEF,sum(CCS$PGALLtoEF(CCS,PGEF),
-                 VProdElecPowPlantsCy(runCy,CCS,YTIME)*sTWhToMtoe/iPlantEffByType(runCy,CCS,YTIME)*
+                 VProdElec(runCy,CCS,YTIME)*sTWhToMtoe/iPlantEffByType(runCy,CCS,YTIME)*
                  iCo2EmiFac(runCy,"PG",PGEF,YTIME)*iCO2CaptRate(runCy,CCS,YTIME)));
 
 *' The equation calculates the cumulative CO2 captured in million tons of CO2 for a given scenario and year.
@@ -1716,7 +1716,7 @@ QGrnnHsEmisCo2Equiv(NAP,YTIME)$TIME(YTIME)..
 
                  -
                  sum(PGEF,sum(CCS$PGALLtoEF(CCS,PGEF),
-                         VProdElecPowPlantsCy(runCy,CCS,YTIME)*sTWhToMtoe/iPlantEffByType(runCy,CCS,YTIME)*
+                         VProdElec(runCy,CCS,YTIME)*sTWhToMtoe/iPlantEffByType(runCy,CCS,YTIME)*
                          iCo2EmiFac(runCy,"PG",PGEF,YTIME)*iCO2CaptRate(runCy,CCS,YTIME)))));   !! CO2 captured by CCS plants in power generation
 
 *' The equation computes the total CO2 equivalent greenhouse gas emissions in all countries for a specific year.
