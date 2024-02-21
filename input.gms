@@ -155,12 +155,28 @@ table iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,YTIME)        "Initial Specific fu
 iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,YTIME) = iInitSpecFuelConsData(TRANSE,TTECH,EF) ; 
 iSpeFuelConsCostBy(allCy,TRANSE,TTECH,EF) = iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,"2017");
 
-table iElaSub(allCy,DSBS)                           "Elasticities by subsectors (1)"
-$ondelim
-$include "./iElaSub.csv"
-$offdelim
-;
-iElaSub(allCy,DSBS) = iElaSub("MAR",DSBS);
+parameter iElaSubData(DSBS)       "Elasticities by subsector (1)" /
+PCH	2
+IS	2.57
+NF	1.99
+CH	2.23
+BM	3.43
+PP	2.27
+FD	2.54
+EN	2.61
+TX	3.02
+OE	1.49
+OI	1.61
+SE	1.47
+AG	1.82
+HOU	2.41
+BU	2
+NEN	2
+/;
+
+table iElaSub(allCy,DSBS)                           "Elasticities by subsector for all countries (1)";
+iElaSub(allCy,DSBS) = iElaSubData(DSBS);
+
 parameter iConsSizeDistHeat(conSet)               "Consumer sizes for district heating (1)" /smallest 0.425506805,
                                                                                              modal    0.595709528,
                                                                                              largest 0.833993339/;
