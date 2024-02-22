@@ -209,9 +209,9 @@ Equation,EQNEWREG,QNewReg,Compute new registrations of passenger cars,"CYall,YTI
 Equation,EQNONCHPELCPROD,QNonChpElecProd,Compute non CHP electricity production ,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Parameter,BASESHARE,iBaseLoadShareDem,Baseload share of demand per sector (1),"CYall,DSBS,YTIME","allCy,DSBS,YTIME",Power Generation Parameters
 Equation,EQPEAKLOAD,QElecPeakLoad,Compute elerctricity peak load,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Equation,EQPOTREN,qCurrRenPot,Compute current renewable potential ,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",Power Generation
+Equation,EQPOTREN,QCurrRenPot,Compute current renewable potential ,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",Power Generation
 Equation,EQPOTRENMAXC,QMaxmAllowRenPotent,Compute maximum allowed renewable potential ,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
-Equation,EQPOTRENMINC,QMnmAllowRenPot,Compute minimum allowed renewable potential ,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
+Equation,EQPOTRENMINC,qMnmAllowRenPot,Compute minimum allowed renewable potential ,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
 Equation,EQPOTRENT,QRenPotSupplyCurve,Compute renewable potential supply curve,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
 Equation,EQPP,QFuelPriSubSepCarbVal,"Compute fuel prices per subsector and fuel, separate carbon value in each sector","CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",POWER GENERATION SECTOR
 Equation,EQPPA,QAvgFuelPriSub,Compute average fuel price per subsector ,"CYall,DSBS,YTIME","allCy,DSBS,YTIME",PRICES EQUATIONS
@@ -368,11 +368,11 @@ Parameter,PGUTIL,iUtilRateChpPlants,Utilisation rate of CHP Plants (1),"CYall,CH
 Parameter,PGVARCOST,iVarCost,Variable gross cost other than fuel per Plant Type (Euro2005/KW),"CYall,PGALL,YTIME","PGALL,YTIME",Power Generation Parameters
 Parameter,POLICIES,iEnvPolicies,Environmental policies on emissions constraints  and subsidy on renewables (Mtn CO2),"POLICIES_SET,YTIME","POLICIES_SET,YTIME",common data parameters
 Parameter,POP,iPop,Population (billion),"CYAll,YTIME","YTIME,allCy",Macro economic indicators
-Variable,POTREN,vCurrRenPot,Current renewable potential (GW),"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",Power Generation
+Variable,POTREN,VCurrRenPot,Current renewable potential (GW),"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",Power Generation
 Parameter,POTRENMAX,iMaxRenPotential,Maximum enewable potential (GW ),"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",Power Generation Parameters
 Variable,POTRENMAXC,VMaxmAllowRenPotent,Maximum allowed renewable potential (GW),"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
 Parameter,POTRENMIN,iMinRenPotential,Minimum renewable potential (GW),"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",Power Generation Parameters
-Variable,POTRENMINC,VMnmAllowRenPot,Minimum allowed renewable potential (GW),"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
+Variable,POTRENMINC,vMnmAllowRenPot,Minimum allowed renewable potential (GW),"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
 Variable,POTRENT,VRenPotSupplyCurve,Renewable potential supply curve,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
 Variable,PP,VFuelPriceSub,Fuel prices per subsector and fuel (kUS$2005/toe),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",PRICES
 Variable,PP_NOCV,VFuelPriSubNoCarb,Fuel prices per subsector and fuel  without carbon value (kdollars2005/toe),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",Prices
