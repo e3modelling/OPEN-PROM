@@ -7,11 +7,13 @@
 *' *** Generating an execution profile
 option profile = 1;
 *' *** number of columns that are listed for each variable in the column listing
-option limcol = 300;
+option limcol = 30;
 *' *** number of rows that are listed for each equation in the equation listing
-option limrow = 300;
-*' *** save a GDX file after solve, containing all computed variables
+option limrow = 30;
+*' *** save a GDX file after each solve, containing all computed variables (0 off, 1 on)
 option savepoint = 1;
+*' *** print solution in .lst file (on/off)
+option solprint = on;
 
 *' *** "dollar" ($) commands section: define GAMS flags & code control & compilation-time options
 *' 
@@ -25,7 +27,7 @@ $onEmpty
 *' *** GAMS "flags" definitions
 *' 
 *' *** Maximum number of solver attempts
-$evalGlobal SolverTryMax 2
+$evalGlobal SolverTryMax 4
 *' *** Setting research mode (0) or development mode (1) to modify settings and parameters accordingly
 $setGlobal DevMode 0 
 
