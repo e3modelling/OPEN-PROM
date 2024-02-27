@@ -724,12 +724,16 @@ QElecPriIndResNoCliPol(runCy,ESET,YTIME)$TIME(YTIME)..   !! The electricity pric
         (
            (
              (VFuelPriceSub(runCy,"OI","ELC",YTIME-1)*sTWhToMtoe)$TFIRST(YTIME-1) +
-             (VLonPowGenCostNoClimPol(runCy,"i",YTIME-1) )$(not TFIRST(YTIME-1))
+             (
+               VLonPowGenCostNoClimPol(runCy,"i",YTIME-1) 
+              )$(not TFIRST(YTIME-1))
            )$ISET(ESET)
         +
            (
              (VFuelPriceSub(runCy,"HOU","ELC",YTIME-1)*sTWhToMtoe)$TFIRST(YTIME-1) +
-             (VLonPowGenCostNoClimPol(runCy,"r",YTIME-1) )$(not TFIRST(YTIME-1))
+             (
+                VLonPowGenCostNoClimPol(runCy,"r",YTIME-1) 
+             )$(not TFIRST(YTIME-1))
            )$RSET(ESET)
         );
 
@@ -1798,12 +1802,16 @@ QElecPriIndResCons(runCy,ESET,YTIME)$TIME(YTIME)..  !! The electricity price is 
         (
            (
              (VFuelPriceSub(runCy,"OI","ELC",YTIME-1)*sTWhToMtoe)$TFIRST(YTIME-1) +
-             (VLongAvgPowGenCost(runCy,"i",YTIME-1))$(not TFIRST(YTIME-1))
+             (
+                VLongAvgPowGenCost(runCy,"i",YTIME-1)
+              )$(not TFIRST(YTIME-1))
            )$ISET(ESET)
         +
            (
              (VFuelPriceSub(runCy,"HOU","ELC",YTIME-1)*sTWhToMtoe)$TFIRST(YTIME-1) +
-             (VLongAvgPowGenCost(runCy,"r",YTIME-1) )$(not TFIRST(YTIME-1))
+             (
+               VLongAvgPowGenCost(runCy,"r",YTIME-1) 
+             )$(not TFIRST(YTIME-1))
            )$RSET(ESET)
         );
 
