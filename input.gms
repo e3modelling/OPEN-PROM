@@ -1023,15 +1023,10 @@ parameter iMxmShareChpElec "Maximum share of CHP electricity in a country (1)";
 iMxmShareChpElec(runCy,YTIME) = 0.1;
 
 iEffValueInEuro(allCy,SBS,YTIME)=0;
-table iContrElecPrice(allCy,ELCPCHAR,YTIME)	 "Parameters controlling electricity price (1)"
-$ondelim
-$include"./iContrElecPrice.csv"
-$offdelim
-;
-* FIXME: Values will be pinned down during model calibration, using MAR values for now
-* author=giannou
-iFacElecPriConsu(allCy,ELCPCHAR,YTIME)$an(YTIME) = iContrElecPrice("MAR",ELCPCHAR,YTIME);
 iScenarioPri(WEF,"NOTRADE",YTIME)=0;
+
+* FIXME: Check if VAT (value added tax) rates are necessary for the model.
+iVAT(allCy, YTIME) = 0;
 
 * FIXME: Check if iPriceReform is necessary for the model.
 * author=derevirn
