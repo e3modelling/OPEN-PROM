@@ -6,7 +6,21 @@
         {
             "label": "OPEN-PROM DEV",
             "type": "shell",
-            "command": "gams main.gms --DevMode=1 -logOption 4 -Idir=./data",
+            "command": "gams main.gms --DevMode=1 --GenerateInput=off -logOption 4 -Idir=./data",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "focus": true
+            }
+        },
+
+        {
+            "label": "OPEN-PROM DEV NEW DATA",
+            "type": "shell",
+            "command": "gams main.gms --DevMode=1 --GenerateInput=on -logOption 4 -Idir=./data",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -20,7 +34,21 @@
         {
             "label": "OPEN-PROM RESEARCH",
             "type": "shell",
-            "command": "gams main.gms --DevMode=0 -logOption 4 -Idir=./data",
+            "command": "gams main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "focus": true
+            }
+        },
+               
+        {
+            "label": "OPEN-PROM RESEARCH NEW DATA",
+            "type": "shell",
+            "command": "gams main.gms --DevMode=0 --GenerateInput=on -logOption 4 -Idir=./data",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
