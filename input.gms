@@ -1295,14 +1295,14 @@ $offdelim
 ;
 
 iCarbValYrExog(allCy,YTIME)$an(YTIME) = iEnvPolicies(allCy,"exogCV",YTIME);
-table iMatrFactor(allCy,SBS,EF,YTIME)       "Maturity factor per technology and subsector (1)"
+table iMatrFactorData(SBS,EF,YTIME)       "Maturity factor per technology and subsector (1)"
 $ondelim
-$include"./iMatrFactor.csv"
+$include"./iMatrFactorData.csv"
 $offdelim
 ;
-* FIXME: Specify maturity factors for each country and decrease CSV file size.
-* author=derevirn
-iMatrFactor(allCy,SBS,EF,YTIME) = iMatrFactor("MAR",SBS,EF,YTIME);                                          
+
+parameter iMatrFactor(allCy,SBS,EF,YTIME)       "Maturity factor per technology and subsector for all countries (1)";
+iMatrFactor(allCy,SBS,EF,YTIME) = iMatrFactorData(SBS,EF,YTIME);                                          
 iMatrFactor(allCy,SBS,EF,YTIME)$(iMatrFactor(allCy,SBS,EF,YTIME)=0) = 0.000001;
 ** Industry
 iShrNonSubElecInTotElecDem(allCy,INDSE)  = iIndChar(allCy,INDSE,"SHR_NSE");
