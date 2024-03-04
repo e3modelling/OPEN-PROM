@@ -7,15 +7,17 @@
 *' Coding Etiquette:
 *' ----
 *' Below, you'll find the coding etiquette, a collection of conventions designed to streamline the development process and enhance code readability.
-*' Please uphold these standards as you code!
+*' Please uphold these standards as you code! The naming convention for objects in the code is established as follows:
 *' ----
-*' [Q/V/i][Cost/Cap/Dem/Cons/Price/etc.][more specific, if needed][Elec/Tr/Ind/Dom][etc.]
+*' [ prefix ][ object type (e.g. Capacity, Cost, Share, etc.) ][ more specific information, if needed ][ object scope, e.g. Transport, Electricity, etc. ][ more specific information, if needed ]
+*' Example:
+*' [ Q/V/i ][ Cost/Cap/Dem/Cons/Price/etc. ][ Total ][ Elec/Tr/Ind/Dom ][ etc. ]
 *' ----
 *' Q: Equation
-*' q: Equation whose main computed variable does not participate in more than one equation, thus has decreased impact on the model.
-*' V: Variable, main variable computed by each equation.
-*' v: Variable that does not participate in more than one equation, thus has decreased impact on the model.
-*' i: Input. Inputs are datasets or constants that are exogenous to the model.
+*' q: Equation whose main computed variable does not participate in more than one equation, thus has decreased impact on the model
+*' V: Variable, main variable computed by each equation
+*' v: Variable that does not participate in more than one equation, thus has decreased impact on the model
+*' i: Input, Inputs are datasets or constants that are exogenous to the model
 *' ----
 *' Cost: Cost
 *' Cap: Capacity
