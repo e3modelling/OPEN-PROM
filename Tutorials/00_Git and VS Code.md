@@ -45,14 +45,17 @@ Understanding these terms will help you navigate the setup process and work effe
     Type `git --version` and press Enter.
 
     If Git is already installed, you'll see its version number.\
-    If not, you'll receive an error message.
+    If not, you'll receive the following message.
+    ![alt text](<Screenshot (2).png>)
+
 
 - Install Git:
 
     *If Git is not installed, follow these steps:*
 
     1.	Download the Git installer for your operating system from the official Git website: https://git-scm.com/downloads
-    2.	Run the installer and follow the on-screen instructions.
+    2.	Run the installer and follow the on-screen instructions. Please note that you need to select the option of windows default console window, as shown below.
+    ![alt text](<Screenshot (1).png>)
     3. Once installed, repeat the `git --version` command to verify the installation.
     4. Re-open your terminal.
 
