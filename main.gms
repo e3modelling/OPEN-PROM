@@ -5,6 +5,11 @@
 *' *** preliminaries 
 *' ----
 *' Coding Etiquette:
+*' Below, you'll find the coding etiquette, a collection of conventions designed to streamline the development process and enhance code readability.
+*' Please uphold these standards as you code!
+*' ----
+*' [Q/V/i][Cost/Cap/Dem/Cons/Price/etc.][more specific, if needed][Elec/Tr/Ind/Dom][etc.]
+*' ----
 *' Q: Equation
 *' q: Equation whose main computed variable does not participate in more than one equation, thus has decreased impact on the model.
 *' V: Variable, main variable computed by each equation.
@@ -15,19 +20,32 @@
 *' Cap: Capacity
 *' Dem: Demand
 *' Pow: Power
+*' Prod: Production
 *' Cons: Consumption
-*' Price: Price
+*' Gen: Generation
+*' Req: Required
+*' Price: Pri
 *' Fin: Final
 *' Ene: Energy
 *' Elec: Electricity
 *' Ren: Renwable
+*' Sec: Sector
+*' Contr: Contribution
 *' Curr: Current
 *' Pot: Potential
-*' Transp: Transport
+*' Tr: Transport
 *' Ind: Industry
+*' Inv: Investment
 *' Dom: Domestic
+*' Dec: Decision
 *' Mat: Maturity
 *' Fac: Factor
+*' Mult: Multiplier
+*' Endog: Endogenous
+*' Exog: Exogenous
+*' Allow: Allowed
+*' Maxm: Maximum
+*' Mnm: Minimum
 *' Pc: Passenger Cars
 *' Cum: Cummulative
 *' Imp: Imports
@@ -41,8 +59,17 @@
 *' Ccs: Carbon capture and storage
 *' Clim: Climate
 *' Est: Estimated
+*' Transf: Transformation
+*' Capt: Captured
+*' Seq: Sequestration
+*' NAP: National Allocation Plan
+*' Carb: Carbon
+*' Val: Value
+*' Sub: Subsector
+*' Avg: Average
+*' Consu: Consumers
 *' ----
-*' [Q/V/i][Cost/Cap/Dem/Cons/Price/etc.][more specific, if needed][Elec/Transp/Ind/Dom][etc.]
+*' 
 *' *** Generating an execution profile
 option profile = 1;
 *' *** number of columns that are listed for each variable in the column listing
