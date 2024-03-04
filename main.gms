@@ -3,7 +3,46 @@
 *' @description This is the OPEN-PROM model, the open version of the world energy model PROMETHEUS of E3-Modelling.
 *' @code
 *' *** preliminaries 
-*' 
+*' ----
+*' Coding Etiquette:
+*' Q: Equation
+*' q: Equation whose main computed variable does not participate in more than one equation, thus has decreased impact on the model.
+*' V: Variable, main variable computed by each equation.
+*' v: Variable that does not participate in more than one equation, thus has decreased impact on the model.
+*' i: Input. Inputs are datasets or constants that are exogenous to the model.
+*' ----
+*' Cost: Cost
+*' Cap: Capacity
+*' Dem: Demand
+*' Pow: Power
+*' Cons: Consumption
+*' Price: Price
+*' Fin: Final
+*' Ene: Energy
+*' Elec: Electricity
+*' Ren: Renwable
+*' Curr: Current
+*' Pot: Potential
+*' Transp: Transport
+*' Ind: Industry
+*' Dom: Domestic
+*' Mat: Maturity
+*' Fac: Factor
+*' Pc: Passenger Cars
+*' Cum: Cummulative
+*' Imp: Imports
+*' Exp: Exports
+*' Bsl: Base Load
+*' Tot: Total
+*' Tech: Technology
+*' Var: Variable
+*' Pol: Policy
+*' Chp: Combined Heat and Power plants
+*' Ccs: Carbon capture and storage
+*' Clim: Climate
+*' Est: Estimated
+*' ----
+*' [Q/V/i][Cost/Cap/Dem/Cons/Price/etc.][more specific, if needed][Elec/Transp/Ind/Dom][etc.]
 *' *** Generating an execution profile
 option profile = 1;
 *' *** number of columns that are listed for each variable in the column listing
