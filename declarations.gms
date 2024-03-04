@@ -49,7 +49,7 @@ iMinRenPotential(allCy,PGRENEF,YTIME)	 "Minimum renewable potential (GW)"
 iMaxRenPotential(allCy,PGRENEF,YTIME)	 "Maximum enewable potential (GW)"
 iMatureFacPlaDisp(allCy,PGALL,YTIME)	 "Maturity factor related to plant dispatching (1)"		
 iEffValueInEuro(allCy,SBS,YTIME)	     "Efficiency value (Euro05/toe)"
-iFacElecPriConsu(allCy,ELCPCHAR,YTIME)	 "Factors affecting electricity prices to consumers	(1)"
+iVAT(allCy,YTIME)                        "VAT (value added tax) rates (1)"
 iPriceTragets(allCy,SBS,EF,YTIME)	     "Price Targets	(1)"
 iPriceReform(allCy,SBS,EF,YTIME)	     "Price reformation (1)"
 iScenarioPri(WEF,NAP,YTIME)	             "Scenario prices (KEuro1990/toe)"	
@@ -446,6 +446,6 @@ sGwToTwhPerYear    "convert GW mean power into TWh/y" /8.76/
 s                  "time step iterator" /0/
 sSolverTryMax      "maximum attempts to solve each time step" /%SolverTryMax%/
 sModelStat         "helper parameter for solver status"
-sExogCarbValue	   "switch for exogenous carbon value (0=exogenous 1=endogenous)" /0/
+sExogCarbValue	   "switch for exogenous carbon value (0=endogenous 1=exogenous)" /1/
 iFracElecPriChp    "Fraction of Electricity Price at which a CHP sells electricity to network" /0.3/
 ;

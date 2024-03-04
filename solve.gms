@@ -47,4 +47,4 @@ VExp.FX(runCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS)) = VExp.L(runCy,EFS,YTIME)$(TI
 VConsGrssInlNotEneBranch.FX(runCy,EFS,YTIME)$TIME(YTIME) =  VConsGrssInlNotEneBranch.L(runCy,EFS,YTIME)$TIME(YTIME);
 endloop;  !! close outer iteration loop (time steps)
 
-execute_unload "blabla.gdx";
+$if %WriteGDX% == on execute_unload "blabla.gdx";

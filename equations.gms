@@ -339,7 +339,7 @@ QRenTechMatMult(runCy,PGALL,YTIME)$TIME(YTIME)..
          1$(NOT PGREN(PGALL))
          +
          (
-           1/(1+(
+           1/(1+exp(0.01*(
                  sum(PGRENEF$PGALLtoPGRENEF(PGALL,PGRENEF),
                  sum(PGALL2$(PGALLtoPGRENEF(PGALL2,PGRENEF) $PGREN(PGALL2)),
                  VCapElec2(runCy,PGALL2,YTIME-1))/VPotRenSuppCurve(runCy,PGRENEF,YTIME))))
@@ -720,7 +720,7 @@ QCostPowGenLonNoClimPol(runCy,ESET,YTIME)$TIME(YTIME)..
 QPriceElecIndResNoCliPol(runCy,ESET,YTIME)$TIME(YTIME)..   !! The electricity price is based on previous year's production costs
         VPriceElecIndResNoCliPol(runCy,ESET,YTIME)
                  =E=
-        (1 + iFacElecPriConsu(runCy,"VAT",YTIME)) *
+        (1 + iVAT(runCy, YTIME)) *
         (
            (
              (VPriceFuelSubCarVal(runCy,"OI","ELC",YTIME-1)*sTWhToMtoe)$TFIRST(YTIME-1) +
@@ -1798,7 +1798,7 @@ QPriceFuelAvgSub(runCy,DSBS,YTIME)$TIME(YTIME)..
 QPriceElecIndResConsu(runCy,ESET,YTIME)$TIME(YTIME)..  !! The electricity price is based on previous year's production costs
         VPriceElecIndResConsu(runCy,ESET,YTIME)
                  =E=
-        (1 + iFacElecPriConsu(runCy,"VAT",YTIME)) *
+        (1 + iVAT(runCy,YTIME)) *
         (
            (
              (VPriceFuelSubCarVal(runCy,"OI","ELC",YTIME-1)*sTWhToMtoe)$TFIRST(YTIME-1) +
