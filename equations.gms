@@ -84,8 +84,8 @@ QBslMaxmLoad(runCy,YTIME)$TIME(YTIME)..
 QElecBaseLoad(runCy,YTIME)$TIME(YTIME)..
          VCorrBaseLoad(runCy,YTIME)
              =E=
-         (1/(1+(iBslCorrection(runCy,YTIME)*(VEstBaseLoad(runCy,YTIME)-VBslMaxmLoad(runCy,YTIME)))))*VEstBaseLoad(runCy,YTIME)
-        +(1-1/(1+(iBslCorrection(runCy,YTIME)*(VEstBaseLoad(runCy,YTIME)-VBslMaxmLoad(runCy,YTIME)))))*VBslMaxmLoad(runCy,YTIME);
+         (1/(1+exp(iBslCorrection(runCy,YTIME)*(VEstBaseLoad(runCy,YTIME)-VBslMaxmLoad(runCy,YTIME)))))*VEstBaseLoad(runCy,YTIME)
+        +(1-1/(1+exp(iBslCorrection(runCy,YTIME)*(VEstBaseLoad(runCy,YTIME)-VBslMaxmLoad(runCy,YTIME)))))*VBslMaxmLoad(runCy,YTIME);
 
 *' This equation calculates the total required electricity production as a sum of the electricity peak load minus the corrected base load,
 *' multiplied by the exponential function of the parameter for load curve construction.
@@ -151,7 +151,7 @@ QHourProdCostInvDec(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME) $NOCCS(PGALL)) ..
 *' The result provides a measure of the sensitivity of CCS acceptance
 *' based on the carbon values in the previous year.
 QGammaInCcsDecTree(runCy,YTIME)$TIME(YTIME)..
-         VSensCcs(runCy,YTIME) =E= 20+25*EXP(-0.06*((sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME-1)))));
+         VSensCcs(runCy,YTIME) =E= 10+EXP(-0.06*((sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME-1)))));
 
 *' The equation computes the hourly production cost used in investment decisions, taking into account the acceptance of Carbon Capture and Storage .
 *' The production cost is modified based on the sensitivity of CCS acceptance. The sensitivity is used as an exponent
@@ -160,7 +160,7 @@ QGammaInCcsDecTree(runCy,YTIME)$TIME(YTIME)..
 qHourProdCostInvDecisionsAfterCCS(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME) $(CCS(PGALL) or NOCCS(PGALL))) ..
          vHourProdCostTechAfterCCS(runCy,PGALL,HOUR,YTIME) 
          =E=
-          VHourProdCostTech(runCy,PGALL,HOUR,YTIME)**(-VSensCcs(runCy,YTIME)/4);
+          VHourProdCostTech(runCy,PGALL,HOUR,YTIME)**(-VSensCcs(runCy,YTIME));
 
 *' The equation calculates the production cost of a technology for a specific power plant and year. 
 *' The equation involves the hourly production cost of the technology
@@ -170,7 +170,7 @@ qHourProdCostInvDecisionsAfterCCS(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME) $(CCS(PGA
 QProdCostInvDecis(runCy,PGALL,YTIME)$(TIME(YTIME) $(CCS(PGALL) or NOCCS(PGALL)) ) ..
          VProdCostTechnology(runCy,PGALL,YTIME) 
          =E=  
-         sum(HOUR,VHourProdCostTech(runCy,PGALL,HOUR,YTIME)**(-VSensCcs(runCy,YTIME)/4)) ;
+         sum(HOUR,VHourProdCostTech(runCy,PGALL,HOUR,YTIME)**(-VSensCcs(runCy,YTIME))) ;
 
 *' The equation calculates the power plant's share in new equipment 
 *' for a specific power plant and year when carbon capture and storage is implemented. The
@@ -339,7 +339,7 @@ QRenTechMatMult(runCy,PGALL,YTIME)$TIME(YTIME)..
          1$(NOT PGREN(PGALL))
          +
          (
-           1/(1+exp(0.01*(
+           1/(1+exp(9*(
                  sum(PGRENEF$PGALLtoPGRENEF(PGALL,PGRENEF),
                  sum(PGALL2$(PGALLtoPGRENEF(PGALL2,PGRENEF) $PGREN(PGALL2)),
                  VElecGenPlanCap(runCy,PGALL2,YTIME-1))/VCurrRenPot(runCy,PGRENEF,YTIME))-0.6)))
@@ -425,7 +425,7 @@ QVarCostTechnology(runCy,PGALL,YTIME)$TIME(YTIME)..
 QElecPeakLoads(runCy,YTIME)$TIME(YTIME)..
          VElecPeakLoads(runCy,YTIME) 
          =E= 
-         SQRT(SQR(sum(PGALL, VVarCostTechnology(runCy,PGALL,YTIME))));     
+         sum(PGALL, VVarCostTechnology(runCy,PGALL,YTIME));     
 
 *' Compute power plant sorting to decide the plant dispatching. 
 *' This is accomplished by dividing the variable cost by the peak loads.
