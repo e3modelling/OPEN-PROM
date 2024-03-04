@@ -13,7 +13,7 @@ option limrow = 30;
 *' *** Save a GDX file after each solve, containing all computed variables (0 off, 1 on)
 option savepoint = 0;
 *' *** Print solution in .lst file (on/off)
-option solprint = off;
+option solprint = on;
 
 *' *** "dollar" ($) commands section: define GAMS flags & code control & compilation-time options
 *' 
@@ -31,7 +31,7 @@ $evalGlobal SolverTryMax 4
 *' *** Setting research mode (0) or development mode (1) to modify settings and parameters accordingly
 $setGlobal DevMode 0 
 *' *** Write a GDX file with all data at the end of the run
-$setGlobal WriteGDX on
+$setGlobal WriteGDX off
 *' *** Generate input data?
 $setGlobal GenerateInput on
 
@@ -43,7 +43,7 @@ $evalGlobal fPeriodOfYears 1
 
 $evalGlobal fStartHorizon 2010
 $evalGlobal fEndHorizon 2100
-$evalGlobal fEndY 2030
+$evalGlobal fEndY 2018
 $evalGlobal fStartY 2018
 $evalGlobal fBaseY %fStartY% - %fPeriodOfYears%
 
