@@ -724,15 +724,15 @@ QPriceElecIndResNoCliPol(runCy,ESET,YTIME)$TIME(YTIME)..   !! The electricity pr
         (
            (
              (VPriceFuelSubCarVal(runCy,"OI","ELC",YTIME-1)*sTWhToMtoe)$TFIRST(YTIME-1) +
-             (  iFacElecPriConsu(runCy,"IND_RES",YTIME-1)+
-               VCostPowGenLonNoClimPol(runCy,"i",YTIME-1)
+             (
+               VCostPowGenLonNoClimPol(runCy,"i",YTIME-1) 
               )$(not TFIRST(YTIME-1))
            )$ISET(ESET)
         +
            (
              (VPriceFuelSubCarVal(runCy,"HOU","ELC",YTIME-1)*sTWhToMtoe)$TFIRST(YTIME-1) +
-             (  iFacElecPriConsu(runCy,"TERT_RES",YTIME-1)+
-                VCostPowGenLonNoClimPol(runCy,"r",YTIME-1)
+             (
+                VCostPowGenLonNoClimPol(runCy,"r",YTIME-1) 
              )$(not TFIRST(YTIME-1))
            )$RSET(ESET)
         );
