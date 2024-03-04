@@ -5,9 +5,9 @@
 
 *' This equation computes the current renewable potential, which is the average of the maximum allowed renewable potential and the minimum renewable potential
 *' for a given power generation sector and energy form in a specific time period. The result is the current renewable potential in gigawatts (GW). 
-qPotRenCurr(runCy,PGRENEF,YTIME)$TIME(YTIME)..
+QPotRenCurr(runCy,PGRENEF,YTIME)$TIME(YTIME)..
 
-         vPotRenCurr(runCy,PGRENEF,YTIME) 
+         VPotRenCurr(runCy,PGRENEF,YTIME) 
          =E=
          ( VPotRenMaxAllow(runCy,PGRENEF,YTIME) + iMinRenPotential(runCy,PGRENEF,YTIME))/2;
 
@@ -25,7 +25,7 @@ QCapElecChp(runCy,CHP,YTIME)$TIME(YTIME)..
 *' and the ratio of the differences in electricity demand and corrected base load to the difference between peak load and corrected base load. It plays a role in shaping
 *' the load curve for effective electricity demand modeling.
 QLambda(runCy,YTIME)$TIME(YTIME)..
-         (1 - exp( -VLambda(runCy,YTIME)*sGwToTwhPerYear))  / (VLambda(runCy,YTIME)+0.001)
+         (1 - exp( -VLambda(runCy,YTIME)*sGwToTwhPerYear))  / VLambda(runCy,YTIME)
              =E=
          (VDemElecTot(runCy,YTIME) - sGwToTwhPerYear*VBaseLoad(runCy,YTIME))
          / (VPeakLoad(runCy,YTIME) - VBaseLoad(runCy,YTIME));
@@ -324,9 +324,9 @@ QPotRenMaxAllow(runCy,PGRENEF,YTIME)$TIME(YTIME)..
 *' The minimum renewable potential for the specified renewable energy form and country in the given year.
 *' The minimum allowed renewable potential is computed as the average between the calculated renewable potential supply curve and the minimum renewable potential.
 *' This formulation ensures that the potential does not fall below the minimum allowed value.
-QPotRenMinAllow(runCy,PGRENEF,YTIME)$TIME(YTIME)..  
-         VPotRenMinAllow(runCy,PGRENEF,YTIME) =E=
-         ( VPotRenSuppCurve(runCy,PGRENEF,YTIME) + VPotRenMinAllow(runCy,PGRENEF,YTIME))/2;
+qPotRenMinAllow(runCy,PGRENEF,YTIME)$TIME(YTIME)..  
+         vPotRenMinAllow(runCy,PGRENEF,YTIME) =E=
+         ( VPotRenSuppCurve(runCy,PGRENEF,YTIME) + iMinRenPotential(runCy,PGRENEF,YTIME))/2;
 
 *' The equation calculates a maturity multiplier for renewable technologies. If the technology is renewable , the multiplier is determined
 *' based on an exponential function that involves the ratio of the planned electricity generation capacities of renewable technologies to the renewable potential
@@ -342,7 +342,7 @@ QRenTechMatMult(runCy,PGALL,YTIME)$TIME(YTIME)..
            1/(1+exp(0.01*(
                  sum(PGRENEF$PGALLtoPGRENEF(PGALL,PGRENEF),
                  sum(PGALL2$(PGALLtoPGRENEF(PGALL2,PGRENEF) $PGREN(PGALL2)),
-                 VCapElec2(runCy,PGALL2,YTIME-1))/VPotRenSuppCurve(runCy,PGRENEF,YTIME))))
+                 VCapElec2(runCy,PGALL2,YTIME-1))/VPotRenCurr(runCy,PGRENEF,YTIME))-0.6)))
            )$PGREN(PGALL);  
 
 *' The equation calculates a temporary variable which is used to facilitate scaling in the Weibull equation. The scaling is influenced by three main factors:
@@ -425,7 +425,7 @@ QCostVarTechElec(runCy,PGALL,YTIME)$TIME(YTIME)..
 QElecPeakLoads(runCy,YTIME)$TIME(YTIME)..
          VElecPeakLoads(runCy,YTIME) 
          =E= 
-         SQRT(sum(PGALL, VCostVarTechElec(runCy,PGALL,YTIME)));     
+         SQRT(SQR(sum(PGALL, VCostVarTechElec(runCy,PGALL,YTIME))));     
 
 *' Compute power plant sorting to decide the plant dispatching. 
 *' This is accomplished by dividing the variable cost by the peak loads.

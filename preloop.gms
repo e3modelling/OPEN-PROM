@@ -14,7 +14,7 @@ model openprom /
 
 *' * Power Generation *
 
-qPotRenCurr                        !! vPotRenCurr(runCy,PGRENEF,YTIME)
+QPotRenCurr                        !! VPotRenCurr(runCy,PGRENEF,YTIME)
 QCapElecChp                        !! VCapElecChp(runCy,CHP,YTIME)
 QLambda                            !! VLambda(runCy,YTIME)
 QDemElecTot                        !! VDemElecTot(runCy,YTIME)
@@ -43,7 +43,7 @@ QGapGenCapPowerDiff                !! VGapGenCapPowerDiff(runCy,YTIME)
 qScalWeibull                       !! vScalWeibull(runCy,PGALL,HOUR,YTIME) 
 QPotRenSuppCurve                   !! VPotRenSuppCurve(runCy,PGRENEF,YTIME)
 QPotRenMaxAllow                    !! VPotRenMaxAllow(runCy,PGRENEF,YTIME)
-QPotRenMinAllow                    !! VPotRenMinAllow(runCy,PGRENEF,YTIME)
+qPotRenMinAllow                    !! vPotRenMinAllow(runCy,PGRENEF,YTIME)
 QRenTechMatMult                    !! VRenTechMatMult(runCy,PGALL,YTIME)
 QScalWeibullSum                    !! VScalWeibullSum(runCy,PGALL,YTIME)
 QNewInvElec                        !! VNewInvElec(runCy,YTIME)
