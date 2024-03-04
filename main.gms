@@ -5,6 +5,7 @@
 *' *** preliminaries 
 *' ----
 *' Coding Etiquette:
+*' ----
 *' Below, you'll find the coding etiquette, a collection of conventions designed to streamline the development process and enhance code readability.
 *' Please uphold these standards as you code!
 *' ----
@@ -69,7 +70,6 @@
 *' Avg: Average
 *' Consu: Consumers
 *' ----
-*' 
 *' *** Generating an execution profile
 option profile = 1;
 *' *** number of columns that are listed for each variable in the column listing
