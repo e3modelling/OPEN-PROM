@@ -37,11 +37,38 @@ $include "./iElastNonSubElecData.csv"
 $offdelim
 ;
 iElastNonSubElec(allCy,SBS,ETYPES,YTIME) = iElastNonSubElecData(SBS,ETYPES,YTIME);
-table iDisc(allCy,SBS,YTIME) "Discount rates per subsector ()"
-$ondelim
-$include "./iDisc.csv"
-$offdelim
-;
+
+parameter iDiscData(SBS) "Discount rates per subsector ()" /
+PCH     0.12
+IS      0.12
+NF      0.12
+CH      0.12
+BM      0.12
+PP      0.12
+FD      0.12
+EN      0.12
+TX      0.12
+OE      0.12
+OI      0.12
+SE      0.12
+AG      0.12
+HOU     0.175
+PC      0.175
+PT      0.08
+PA      0.12
+GU      0.12
+GT      0.08
+GN      0.12
+BU      0.12
+NEN     0.08
+PG      0.1
+H2P     0.08
+H2INFR  0.08 
+/;
+
+parameter iDisc(allCy,SBS,YTIME) "Discount rates per subsector for all countries ()" ;
+iDisc(allCy,SBS,YTIME) = iDiscData(SBS);
+
 * FIXME: Drive the emission factors with mrprom
 * author=giannou
 parameter iCo2EmiFacAllSbs(EF) "CO2 emission factors (kgCO2/kgoe fuel burned)" /
@@ -79,27 +106,77 @@ iSigma(allCy,"S3") = iDataPassCars(allCy,"PC","S3");
 iPassCarsMarkSat(allCy) = iDataPassCars(allCy,"PC","SAT");
 iGdpPassCarsMarkExt(allCy) = iDataPassCars(allCy,"PC","MEXTV");
 iPassCarsScrapRate(allCy)  = iDataPassCars(allCy,"PC", "SCR");
-table iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,YTIME)        "Initial Specific fuel consumption ()"
-$ondelim
-$include "./iInitSpecFuelCons.csv"
-$offdelim
-;
 
-* FIXME: iDisc("MAR",SBS,YTIME) values for all countries equal to  values of MAR.
-* author=redmonkeycloud
-iDisc(allCy,SBS,YTIME) = iDisc("MAR",SBS,YTIME) ;
+parameter iInitSpecFuelConsData(TRANSE,TTECH,EF)        "Initial Specific fuel consumption ()" /
+PC.LPG.LPG	65.88
+PC.GSL.GSL	73.2
+PC.GDO.GDO	54.9
+PC.NGS.NGS	84.3391
+PC.MET.MET	71.84
+PC.ETH.ETH	102.1
+PC.BGDO.BGDO	54.9
+PC.H2F.H2F	24.15
+PC.ELC.ELC	20.496
+PC.PHEVGSL.GSL	43.92
+PC.PHEVGSL.ELC	20.496
+PC.PHEVGDO.GDO	32.94
+PC.PHEVGDO.ELC	20.496
+PC.CHEVGSL.GSL	45.384
+PC.CHEVGDO.GDO	40.8456
+PT.GDO.GDO	18.6313
+PT.MET.MET	12.6
+PT.H2F.H2F	8.9
+PT.ELC.ELC	2.73638
+PA.H2F.H2F	21.7
+GU.LPG.LPG	54.1073
+GU.GSL.GSL	60.1192
+GU.GDO.GDO	45.0894
+GU.NGS.NGS	66
+GU.MET.MET	56.2
+GU.ETH.ETH	80
+GU.BGDO.BGDO	45.0894
+GU.H2F.H2F	13.5268
+GU.ELC.ELC	27.0536
+GU.PHEVGSL.GSL	34.4
+GU.PHEVGSL.ELC	21.8
+GU.PHEVGDO.GDO	27.0536
+GU.PHEVGDO.ELC	21.8
+GU.CHEVGDO.GDO	21.8
+GT.GDO.GDO	33.629
+GT.MET.MET	78
+GT.H2F.H2F	92
+GT.ELC.ELC	11.5245
+GN.GSL.GSL	22.8
+GN.GDO.GDO	15.2
+GN.H2F.H2F	8.14286
+/;
 
-* FIXME: iInitSpecFuelCons("MAR",TRANSE,TTECH,EF,"2017") initial values for all countries equal to initial values of MAR.
-* author=redmonkeycloud
-iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,YTIME) = iInitSpecFuelCons("MAR",TRANSE,TTECH,EF,"2017"); 
-iSpeFuelConsCostBy(allCy,TRANSE,TTECH,EF) = iInitSpecFuelCons("MAR",TRANSE,TTECH,EF,"2017");
+table iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,YTIME)        "Initial Specific fuel consumption for all countries ()";
+iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,YTIME) = iInitSpecFuelConsData(TRANSE,TTECH,EF) ; 
+iSpeFuelConsCostBy(allCy,TRANSE,TTECH,EF) = iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,"2017");
 
-table iElaSub(allCy,DSBS)                           "Elasticities by subsectors (1)"
-$ondelim
-$include "./iElaSub.csv"
-$offdelim
-;
-iElaSub(allCy,DSBS) = iElaSub("MAR",DSBS);
+parameter iElaSubData(DSBS)       "Elasticities by subsector (1)" /
+PCH	2
+IS	2.57
+NF	1.99
+CH	2.23
+BM	3.43
+PP	2.27
+FD	2.54
+EN	2.61
+TX	3.02
+OE	1.49
+OI	1.61
+SE	1.47
+AG	1.82
+HOU	2.41
+BU	2
+NEN	2
+/;
+
+table iElaSub(allCy,DSBS)                           "Elasticities by subsector for all countries (1)";
+iElaSub(allCy,DSBS) = iElaSubData(DSBS);
+
 parameter iConsSizeDistHeat(conSet)               "Consumer sizes for district heating (1)" /smallest 0.425506805,
                                                                                              modal    0.595709528,
                                                                                              largest 0.833993339/;
@@ -109,16 +186,29 @@ $ondelim
 $include "./iRateLossesFinCons.csv"
 $offdelim
 ;
-table iParDHEfficiency(PGEFS,YTIME)                 "Parameter of  district heating Efficiency (1)"
-$ondelim
-$include "./iParDHEfficiency.csv"
-$offdelim
-;
+
+parameter iParDHEffData(PGEFS) "Parameter of  district heating Efficiency (1)" /
+HCL		0.76,
+LGN		0.75,
+GDO		0.78,
+RFO		0.78,
+OLQ		0.78,
+NGS		0.8,
+OGS		0.78,
+BMSWAS    0.76 
+/;
+
+parameter iParDHEfficiency(PGEFS,YTIME)                 "Parameter of  district heating Efficiency for all years (1)" ;
+iParDHEfficiency(PGEFS,YTIME) = iParDHEffData(PGEFS) ;
+
+$ontext
 table iSuppTransfInputPatFuel(EF,YTIME)            "Supplementary Parameter for the transformation input to patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works (1)"
 $ondelim
 $include "./iSuppTransfInputPatFuel.csv"
 $offdelim
 ; 
+$offtext
+
 parameter iSupResRefCapacity(allCy,SUPOTH,YTIME)	           "Supplementary Parameter for the residual in refineries Capacity (1)";
 iSupResRefCapacity(allCy,SUPOTH,YTIME) = 1;
 
@@ -195,12 +285,16 @@ BU 	0.43,
 PCH	0.78,
 NEN	0.78 / ;
 iBaseLoadShareDem(allCy,DSBS,YTIME)$an(YTIME)  = iLoadFactorAdj(DSBS);
-table iCO2SeqData(CO2SEQELAST,YTIME)	       "Data for CO2 sequestration (1)" 
-$ondelim
-$include"./iCO2SeqData.csv"
-$offdelim
-;
-iElastCO2Seq(allCy,CO2SEQELAST) = sum(tfirst,iCO2SeqData(CO2SEQELAST,TFIRST));
+parameter iCO2SeqData(CO2SEQELAST)	       "Data for CO2 sequestration (1)" /
+POT	9175,
+mc_a	0.00125928,
+mc_b	6.6,
+mc_c	0.02,
+mc_d	0.000839237,
+mc_s	120,
+mc_m	1.013
+/ ;
+iElastCO2Seq(allCy,CO2SEQELAST) = iCO2SeqData(CO2SEQELAST);
 
 *Sources for vehicle lifetime:
 *US Department of Transportation, International Union of Railways, Statista, EU CORDIS
@@ -210,19 +304,309 @@ $include"./iDataTransTech.csv"
 $offdelim
 ;
 table iDataIndTechnology(INDSE,EF,ECONCHAR)                  "Technoeconomic characteristics of industry (various)"
-$ondelim
-$include"./iDataIndTechnology.csv"
-$offdelim
+            IC      FC      VC      LFT USC
+IS.HCL      0.32196 6.8     1.36    25  2.3255
+IS.LGN      0.48295 10.2    2.04    25  0.5
+IS.LPG      0.48295 10.2    2.04    25  0.72
+IS.KRS      0.48295 10.2    2.04    25  0.72
+IS.GDO      0.48295 10.2    2.04    25  0.72
+IS.RFO      0.48295 10.2    2.04    25  0.72
+IS.OLQ      0.48295 10.2    2.04    25  0.72
+IS.NGS      0.48295 10.2    2.04    25  0.8
+IS.OGS      0.48295 10.2    2.04    25  0.8
+IS.BMSWAS   0.48295 10.2    2.04    25  0.5
+IS.ELC      0.29367 6.8     1.36    25  5.74713
+IS.STE1AL   1.04547 17.284  17.68   25  0.35
+IS.STE1AH   1.04547 17.284  17.68   25  0.35
+IS.STE1AD   0.78340 23.3335 4.896   25  0.34
+IS.STE1AR   0.78340 23.3335 4.896   25  0.34
+IS.STE1AG   0.50901 12.9631 13.6    20  0.44
+IS.STE1AB   1.00334 28.8752 8.16    25  0.37
+IS.STE1AH2F 1.34817 40.4451         25  0.5
+IS.HEATPUMP 0.92974 19.3882 3.1021  25  1.848
+NF.HCL      3.8528  63.036          30  0.5
+NF.LGN      3.8528  63.036          30  0.5
+NF.LPG      3.21067 63.036          30  0.72
+NF.KRS      3.21067 63.036          30  0.72
+NF.GDO      3.21067 63.036          30  0.72
+NF.RFO      3.21067 63.036          30  0.72
+NF.OLQ      3.21067 63.036          30  0.72
+NF.NGS      2.56853 63.036          30  0.8
+NF.OGS      2.56853 63.036          30  0.8
+NF.BMSWAS   3.8528  63.036          30  0.5
+NF.ELC      3.4     63.036          30  0.97
+NF.STE1AL   2.43133 40.1956 41.1163 25  0.35
+NF.STE1AH   2.43133 40.1956 41.1163 25  0.35
+NF.STE1AD   1.82186 54.264  11.386  25  0.34
+NF.STE1AR   1.82186 54.264  11.386  25  0.34
+NF.STE1AG   1.18376 30.1467 31.6279 20  0.44
+NF.STE1AB   2.33335 67.1517 18.9767 25  0.37
+NF.STE1AH2F 3.13528 94.0585         30  0.5
+NF.HEATPUMP 4.94477 119.819         30  1.848
+CH.HCL      0.53294 5.44            25  0.5
+CH.LGN      0.53294 5.44            25  0.5
+CH.LPG      0.44411 5.44            25  0.72
+CH.KRS      0.44411 5.44            25  0.72
+CH.GDO      0.44411 5.44            25  0.72
+CH.RFO      0.44411 5.44            25  0.72
+CH.OLQ      0.44411 5.44            25  0.72
+CH.NGS      0.35529 5.44            25  0.8
+CH.OGS      0.35529 5.44            25  0.8
+CH.BMSWAS   0.53294 5.44            25  0.5
+CH.ELC      0.476   5.44            25  0.97
+CH.STE1AL   2.43133 40.1956 41.1163 25  0.35
+CH.STE1AH   2.43133 40.1956 41.1163 25  0.35
+CH.STE1AD   1.82186 54.264  11.386  25  0.34
+CH.STE1AR   1.82186 54.264  11.386  25  0.34
+CH.STE1AG   1.18376 30.1467 31.6279 20  0.44
+CH.STE1AB   2.33335 67.1517 18.9767 25  0.37
+CH.STE1AH2F 3.13528 94.0585         25  0.5
+CH.HEATPUMP 0.68398 10.3404         25  1.848
+BM.HCL      4.41477 3.2096          30  0.5
+BM.LGN      4.41477 3.2096          30  0.5
+BM.LPG      3.67898 3.2096          30  0.72
+BM.KRS      3.67898 3.2096          30  0.72
+BM.GDO      3.67898 3.2096          30  0.72
+BM.RFO      3.67898 3.2096          30  0.72
+BM.OLQ      3.67898 3.2096          30  0.72
+BM.NGS      2.94318 3.2096          30  0.8
+BM.OGS      2.94318 3.2096          30  0.8
+BM.BMSWAS   4.41477 3.2096          30  0.5
+BM.ELC      3.808   3.2096          30  0.97
+BM.STE1AL   2.43133 40.1956 41.1163 25  0.35
+BM.STE1AH   2.43133 40.1956 41.1163 25  0.35
+BM.STE1AD   1.82186 54.264  11.386  25  0.34
+BM.STE1AR   1.82186 54.264  11.386  25  0.34
+BM.STE1AG   1.18376 30.1467 31.6279 20  0.44
+BM.STE1AB   2.33335 67.1517 18.9767 25  0.37
+BM.STE1AH2F 3.13528 94.0585         30  0.5
+BM.HEATPUMP 5.66602 6.10081         30  1.848
+PP.HCL      0.90179 1.632           25  0.5
+PP.LGN      0.90179 1.632           25  0.5
+PP.LPG      0.75149 1.632           25  0.72
+PP.KRS      0.75149 1.632           25  0.72
+PP.GDO      0.75149 1.632           25  0.72
+PP.RFO      0.75149 1.632           25  0.72
+PP.OLQ      0.75149 1.632           25  0.72
+PP.NGS      0.60119 1.632           25  0.8
+PP.OGS      0.60119 1.632           25  0.8
+PP.BMSWAS   0.90179 1.632           25  0.5
+PP.ELC      0.884   1.632           25  0.97
+PP.STE1AL   2.43133 40.1956 41.1163 25  0.35
+PP.STE1AH   2.43133 40.1956 41.1163 25  0.35
+PP.STE1AD   1.82186 54.264  11.386  25  0.34
+PP.STE1AR   1.82186 54.264  11.386  25  0.34
+PP.STE1AG   1.18376 30.1467 31.6279 20  0.44
+PP.STE1AB   2.33335 67.1517 18.9767 25  0.37
+PP.STE1AH2F 2.27889 68.3668         25  0.5
+PP.HEATPUMP 1.15738 3.10211         25  1.68
+FD.HCL      0.63096 0.5372          25  0.5
+FD.LGN      0.63096 0.5372          25  0.5
+FD.LPG      0.42064 0.5372          25  0.72
+FD.KRS      0.42064 0.5372          25  0.72
+FD.GDO      0.42064 0.5372          25  0.72
+FD.RFO      0.42064 0.5372          25  0.72
+FD.OLQ      0.42064 0.5372          25  0.72
+FD.NGS      0.33651 0.5372          25  0.8
+FD.OGS      0.33651 0.5372          25  0.8
+FD.BMSWAS   0.63096 0.5372          25  0.5
+FD.ELC      0.476   0.5372          25  0.97
+FD.STE1AL   2.43133 40.1956 41.1163 25  0.35
+FD.STE1AH   2.43133 40.1956 41.1163 25  0.35
+FD.STE1AD   1.82186 54.264  11.386  25  0.34
+FD.STE1AR   1.82186 54.264  11.386  25  0.34
+FD.STE1AG   1.18376 30.1467 31.6279 20  0.44
+FD.STE1AB   2.33335 67.1517 18.9767 25  0.37
+FD.STE1AH2F 2.27889 68.3668         25  0.5
+FD.HEATPUMP 0.64783 1.02111         25  1.68
+EN.HCL      1.00937 0.31769         25  0.5
+EN.LGN      1.00937 0.31769         25  0.5
+EN.LPG      0.84114 0.31769         25  0.72
+EN.KRS      0.84114 0.31769         25  0.72
+EN.GDO      0.84114 0.31769         25  0.72
+EN.RFO      0.84114 0.31769         25  0.72
+EN.OLQ      0.84114 0.31769         25  0.72
+EN.NGS      0.67291 0.31769         25  0.8
+EN.OGS      0.67291 0.31769         25  0.8
+EN.BMSWAS   1.00937 0.31769         25  0.5
+EN.ELC      0.748   0.31769         20  0.97
+EN.STE1AL   2.43133 40.1956 41.1163 25  0.35
+EN.STE1AH   2.43133 40.1956 41.1163 25  0.35
+EN.STE1AD   1.82186 54.264  11.386  25  0.34
+EN.STE1AR   1.82186 54.264  11.386  25  0.34
+EN.STE1AG   1.18376 30.1467 31.6279 20  0.44
+EN.STE1AB   2.33335 67.1517 18.9767 25  0.37
+EN.STE1AH2F 2.27889 68.3668         25  0.5
+EN.HEATPUMP 1.29545 0.60387         25  1.68
+TX.HCL      0.67371 0.16959         20  0.5
+TX.LGN      0.67371 0.16959         20  0.5
+TX.LPG      0.44914 0.16959         20  0.72
+TX.KRS      0.44914 0.16959         20  0.72
+TX.GDO      0.44914 0.16959         20  0.72
+TX.RFO      0.44914 0.16959         20  0.72
+TX.OLQ      0.44914 0.16959         20  0.72
+TX.NGS      0.35931 0.16959         20  0.8
+TX.OGS      0.35931 0.16959         20  0.8
+TX.BMSWAS   0.476   0.16959         20  0.5
+TX.ELC      0.476   0.16959         20  0.97
+TX.STE1AL   2.43133 40.1956 41.1163 25  0.35
+TX.STE1AH   2.43133 40.1956 41.1163 25  0.35
+TX.STE1AD   1.82186 54.264  11.386  25  0.34
+TX.STE1AR   1.82186 54.264  11.386  25  0.34
+TX.STE1AG   1.18376 30.1467 31.6279 20  0.44
+TX.STE1AB   2.33335 67.1517 18.9767 25  0.37
+TX.STE1AH2F 2.27889 68.3668         20  0.5
+TX.HEATPUMP 0.69173 0.32236         20  1.68
+OE.HCL      1.00937 0.31769         25  0.5
+OE.LGN      1.00937 0.31769         25  0.5
+OE.LPG      0.84114 0.31769         25  0.72
+OE.KRS      0.84114 0.31769         25  0.72
+OE.GDO      0.84114 0.31769         25  0.72
+OE.RFO      0.84114 0.31769         25  0.72
+OE.OLQ      0.84114 0.31769         25  0.72
+OE.NGS      0.67291 0.31769         25  0.8
+OE.OGS      0.67291 0.31769         25  0.8
+OE.BMSWAS   1.00937 0.31769         25  0.5
+OE.ELC      0.84114 0.31769         25  0.97
+OE.STE1AL   2.43133 40.1956 41.1163 25  0.35
+OE.STE1AH   2.43133 40.1956 41.1163 25  0.35
+OE.STE1AD   1.82186 54.264  11.386  25  0.34
+OE.STE1AR   1.82186 54.264  11.386  25  0.34
+OE.STE1AG   1.18376 30.1467 31.6279 20  0.44
+OE.STE1AB   2.33335 67.1517 18.9767 25  0.37
+OE.STE1AH2F 2.27889 68.3668         25  0.5
+OE.HEATPUMP 1.29545 0.60387         25  1.68
+OI.HCL      0.94967 1.40352         20  0.5
+OI.LGN      0.94967 1.40352         20  0.5
+OI.LPG      0.79139 1.40352         20  0.72
+OI.KRS      0.79139 1.40352         20  0.72
+OI.GDO      0.79139 1.40352         20  0.72
+OI.RFO      0.79139 1.40352         20  0.72
+OI.OLQ      0.79139 1.40352         20  0.72
+OI.NGS      0.63311 1.40352         20  0.8
+OI.OGS      0.63311 1.40352         20  0.8
+OI.BMSWAS   0.94967 1.40352         20  0.5
+OI.ELC      0.68    1.40352         20  0.97
+OI.STE1AL   2.43133 40.1956 41.1163 25  0.35
+OI.STE1AH   2.43133 40.1956 41.1163 25  0.35
+OI.STE1AD   1.82186 54.264  11.386  25  0.34
+OI.STE1AR   1.82186 54.264  11.386  25  0.34
+OI.STE1AG   1.18376 30.1467 31.6279 20  0.44
+OI.STE1AB   2.33335 67.1517 18.9767 25  0.37
+OI.STE1AH2F 2.27889 68.3668         20  0.5
+OI.HEATPUMP 1.21884 2.66781         20  1.68
 ;
 table iDataDomTech(DOMSE,EF,ECONCHAR)                  "Technical lifetime of Industry (years)"
-$ondelim
-$include"./iDataDomTech.csv"
-$offdelim
+             IC       FC      VC      LFT USC
+SE.HCL       0.323544 10.88           20  0.7
+SE.LGN       0.323544 10.88           20  0.5
+SE.LPG       0.24888  10.88           20  0.8
+SE.GSL       0.323544 10.88           20  0.7
+SE.KRS       0.24888  10.88           20  0.8
+SE.GDO       0.24888  6.8             20  0.85
+SE.RFO       0.24888  10.88           20  0.8
+SE.OLQ       0.24888  10.88           20  0.8
+SE.NGS       0.2244   6.8             20  0.88
+SE.OGS       0.2244   10.88           20  0.8
+SE.SOL       0.86224  1.36            20  0.97
+SE.BMSWAS    0.323544 10.88           20  0.5
+SE.ELC       0.3      8.976           12  0.97
+SE.STE1AL    2.43133  40.1956 41.1163 30  0.375
+SE.STE1AH    2.43133  40.1956 41.1163 30  0.375
+SE.STE1AD    1.82186  54.264  11.386  30  0.3475
+SE.STE1AR    1.82186  54.264  11.386  30  0.3475
+SE.STE1AG    1.18376  30.1467 31.6279 25  0.485
+SE.STE1AB    2.33335  67.1517 18.9767 30  0.3975
+SE.STE1AH2F  2.68089  80.4266         20  0.465
+SE.STE2LGN   0.296442 1.00489 2.37209 20  0.816667
+SE.STE2OSL   0.296442 1.00489 2.37209 20  0.816667
+SE.STE2GDO   0.296442 1.00489 2.37209 20  0.856667
+SE.STE2RFO   0.296442 1.00489 2.37209 20  0.856667
+SE.STE2OLQ   0.296442 1.00489 2.37209 20  0.856667
+SE.STE2NGS   0.296442 1.00489 2.37209 20  0.896667
+SE.STE2OGS   0.296442 1.00489 2.37209 20  0.896667
+SE.STE2BMS   0.296442 1.00489 2.37209 20  0.816667
+SE.HEATPUMP  0.432    12.9254         20  1.848
+AG.HCL       0.323544 10.88           20  0.7
+AG.LGN       0.323544 10.88           20  0.5
+AG.LPG       0.24888  10.88           20  0.8
+AG.GSL       0.323544 10.88           20  0.7
+AG.KRS       0.24888  10.88           20  0.8
+AG.GDO       0.24888  6.8             20  0.85
+AG.RFO       0.24888  10.88           20  0.8
+AG.OLQ       0.24888  10.88           20  0.8
+AG.NGS       0.2244   6.8             20  0.88
+AG.OGS       0.2244   10.88           20  0.8
+AG.SOL       0.86224  1.36            20  0.97
+AG.BMSWAS    0.323544 10.88           20  0.5
+AG.ELC       0.3      8.976           12  0.97
+AG.STE1AL    2.43133  40.1956 41.1163 30  0.375
+AG.STE1AH    2.43133  40.1956 41.1163 30  0.375
+AG.STE1AD    1.82186  54.264  11.386  30  0.3475
+AG.STE1AR    1.82186  54.264  11.386  30  0.3475
+AG.STE1AG    1.18376  30.1467 31.6279 25  0.485
+AG.STE1AB    2.33335  67.1517 18.9767 30  0.3975
+AG.STE1AH2F  2.68089  80.4266         20  0.465
+AG.STE2LGN   0.296442 1.00489 2.37209 20  0.816667
+AG.STE2OSL   0.296442 1.00489 2.37209 20  0.816667
+AG.STE2GDO   0.296442 1.00489 2.37209 20  0.856667
+AG.STE2RFO   0.296442 1.00489 2.37209 20  0.856667
+AG.STE2OLQ   0.296442 1.00489 2.37209 20  0.856667
+AG.STE2NGS   0.296442 1.00489 2.37209 20  0.896667
+AG.STE2OGS   0.296442 1.00489 2.37209 20  0.896667
+AG.STE2BMS   0.296442 1.00489 2.37209 20  0.816667
+AG.HEATPUMP  0.432    12.9254         20  1.848
+HOU.HCL      0.323544 10.88           20  0.7
+HOU.LGN      0.323544 10.88           20  0.5
+HOU.LPG      0.24888  10.88           20  0.8
+HOU.GSL      0.323544 10.88           20  0.7
+HOU.KRS      0.24888  10.88           20  0.8
+HOU.GDO      0.24888  6.8             20  0.85
+HOU.RFO      0.24888  10.88           20  0.8
+HOU.OLQ      0.24888  10.88           20  0.8
+HOU.NGS      0.2244   6.8             20  0.88
+HOU.OGS      0.2244   10.88           20  0.8
+HOU.SOL      0.86224  1.36            20  0.97
+HOU.BMSWAS   0.323544 10.88           20  0.5
+HOU.ELC      0.3      8.976           12  0.97
+HOU.STE1AL   2.43133  40.1956 41.1163 30  0.375
+HOU.STE1AH   2.43133  40.1956 41.1163 30  0.375
+HOU.STE1AD   1.82186  54.264  11.386  30  0.3475
+HOU.STE1AR   1.82186  54.264  11.386  30  0.3475
+HOU.STE1AG   1.18376  30.1467 31.6279 25  0.485
+HOU.STE1AB   2.33335  67.1517 18.9767 30  0.3975
+HOU.STE1AH2F 2.68089  80.4266         20  0.465
+HOU.STE2LGN  0.296442 1.00489 2.37209 20  0.816667
+HOU.STE2OSL  0.296442 1.00489 2.37209 20  0.816667
+HOU.STE2GDO  0.296442 1.00489 2.37209 20  0.856667
+HOU.STE2RFO  0.296442 1.00489 2.37209 20  0.856667
+HOU.STE2OLQ  0.296442 1.00489 2.37209 20  0.856667
+HOU.STE2NGS  0.296442 1.00489 2.37209 20  0.896667
+HOU.STE2OGS  0.296442 1.00489 2.37209 20  0.896667
+HOU.STE2BMS  0.296442 1.00489 2.37209 20  0.816667
+HOU.HEATPUMP 0.432    12.9254         20  1.848
 ;
 table iDataNonEneSec(NENSE,EF,ECONCHAR)                  "Technical data of non energy uses and bunkers (various)"
-$ondelim
-$include"./iDataNonEneSec.csv"
-$offdelim
+        IC      FC      VC      LFT USC
+PCH.HCL 0.26227 45.22   2.37209 20  0.65
+PCH.LGN 0.26227 47.6    2.37209 20  0.5
+PCH.LPG 0.18088 20.4    2.37209 20  0.72
+PCH.GDO 0.18088 9.044   2.37209 20  0.72
+PCH.RFO 0.18088 18.088  2.37209 20  0.72
+PCH.OLQ 0.18088 20.4    2.37209 20  0.72
+PCH.NGS 0.18088 0.9044  2.37209 20  0.8
+PCH.OGS 0.18088 1.36    2.37209 20  0.8
+BU.GDO  0.204   0.136           25  0.72
+BU.RFO  0.204   0.136           25  0.72
+BU.OLQ  0.136   6.8             25  0.72
+NEN.HCL 0.26227 45.22   2.37209 20  0.65
+NEN.LGN 0.26227 47.6    2.37209 20  0.5
+NEN.LPG 0.612   20.4    2.37209 20  0.72
+NEN.GDO 0.18088 9.044   2.37209 20  0.72
+NEN.RFO 0.18088 18.088  2.37209 20  0.72
+NEN.OLQ 0.612   20.4    2.37209 20  0.72
+NEN.NGS 0.18088 0.9044  2.37209 20  0.8
+NEN.OGS 0.18088 1.36    2.37209 20  0.8
 ;
 * FIXME: check if country-specific data is needed; move to mrprom
 * author=giannou
@@ -261,7 +645,7 @@ AG   0.2078 0.9     0.00001
 iShrHeatPumpElecCons(allCy,INDSE) = iIndChar(allCy,INDSE,"SH_HPELC");
 iShrHeatPumpElecCons(allCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(DOMSE,"SH_HPELC");
 iExogDemOfBiomass(allCy,DOMSE,YTIME) = 0;
-iElastCO2Seq(allCy,CO2SEQELAST) = iCO2SeqData(CO2SEQELAST,"%fBaseY%");
+*iElastCO2Seq(allCy,CO2SEQELAST) = iCO2SeqData(CO2SEQELAST,"%fBaseY%");
 iRatioImpFinElecDem(runCy,YTIME)$an(YTIME) = iSuppRefCapacity(runCy,"ELC_IMP",YTIME);
 iFuelExprts(runCy,EFS,YTIME) = iSuppExports(runCy,EFS,YTIME);
 iRatePriProTotPriNeeds(runCy,PPRODEF,YTIME) = iSuppRatePrimProd(runCy,PPRODEF,YTIME);
@@ -273,7 +657,7 @@ iRateEneBranCons(allCy,EFS,YTIME)= iSupRateEneBranCons(allCy,EFS,YTIME);
 iResTransfOutputRefineries(runCy,EFS,YTIME) = iSupTrnasfOutputRefineries(runCy,EFS,YTIME);;
 iRefCapacity(runCy,YTIME)= iSuppRefCapacity(runCy,"REF_CAP",YTIME);
 iResRefCapacity(runCy,YTIME) = iSupResRefCapacity(runCy,"REF_CAP_RES",YTIME);
-iTransfInpGasworks(runCy,EFS,YTIME)= iSuppTransfInputPatFuel(EFS,YTIME);
+*iTransfInpGasworks(runCy,EFS,YTIME)= iSuppTransfInputPatFuel(EFS,YTIME);
 
 parameter iLoadFactorAdjMxm(VARIOUS_LABELS)    "Parameter for load factor adjustment iMxmLoadFacElecDem (1)" /
 AMAXBASE 3,
@@ -418,12 +802,14 @@ ENDLOOP;
 iCumDistrFuncConsSize(allCy,DSBS) = sum(rCon, iDisFunConSize(allCy,DSBS,rCon));
 iCGI(allCy,YTIME) = 1;
 
+$ontext
 table iResTotCapMxmLoad(allCy,PGRES,YTIME)              "Residuals for total capacity and maximum load (1)"	
 $ondelim
 $include"./iResTotCapMxmLoad.csv"
 $offdelim
 ;
 iResMargTotAvailCap(allCy,PGRES,YTIME)$an(YTIME) = iResTotCapMxmLoad(allCy,PGRES,YTIME);
+$offtext
 
 table iVarCost(PGALL,YTIME)             "Variable gross cost other than fuel per Plant Type (Euro2005/KW)"
 $ondelim
@@ -453,12 +839,15 @@ $ondelim
 $include"./iDataDistrLosses.csv"
 $offdelim
 ;
+$ontext
 table iDataOtherTransfOutput(allCy,EF,YTIME)	    "Data for Other transformation output  (Mtoe)"
 $ondelim
 $include"./iDataOtherTransfOutput.csv"
 $offdelim
 ;
 iTranfOutGasworks(allCy,EFS,YTIME)$(not An(YTIME)) = iDataOtherTransfOutput(allCy,EFS,YTIME);
+$offtext
+
 iDistrLosses(allCy,EFS,YTIME) = iDataDistrLosses(allCy,EFS,YTIME);
 table iDataTransfOutputRef(allCy,EF,YTIME)	    "Data for Other transformation output  (Mtoe)"
 $ondelim
@@ -634,15 +1023,14 @@ parameter iMxmShareChpElec "Maximum share of CHP electricity in a country (1)";
 iMxmShareChpElec(runCy,YTIME) = 0.1;
 
 iEffValueInEuro(allCy,SBS,YTIME)=0;
-table iContrElecPrice(allCy,ELCPCHAR,YTIME)	 "Parameters controlling electricity price (1)"
-$ondelim
-$include"./iContrElecPrice.csv"
-$offdelim
-;
-* FIXME: Values will be pinned down during model calibration, using MAR values for now
-* author=giannou
-iFacElecPriConsu(allCy,ELCPCHAR,YTIME)$an(YTIME) = iContrElecPrice("MAR",ELCPCHAR,YTIME);
 iScenarioPri(WEF,"NOTRADE",YTIME)=0;
+
+* FIXME: Check if VAT (value added tax) rates are necessary for the model.
+iVAT(allCy, YTIME) = 0;
+
+* FIXME: Check if iPriceReform is necessary for the model.
+* author=derevirn
+$ontext
 table iDataPriceReform(allCy,AGSECT,EF,YTIME)	 "Price reform (1)"
 $ondelim
 $include"./iDataPriceReform.csv"
@@ -654,6 +1042,8 @@ iPriceReform(runCy,DOMSE1(SBS),EF,YTIME)=iDataPriceReform(runCy,"DOMSE1",EF,YTIM
 iPriceReform(runCy,NENSE1(SBS),EF,YTIME)=iDataPriceReform(runCy,"NENSE1",EF,YTIME) ;
 iPriceReform(runCy,TRANS1(SBS),EF,YTIME)=iDataPriceReform(runCy,"TRANS1",EF,YTIME) ;
 iPriceReform(runCy,"PG",EF,YTIME)=iDataPriceReform(runCy,"INDSE1",EF,YTIME) ;
+$offtext
+
 * FIXME: iHydrogenPri should be computed with mrprom
 * author=giannou
 iHydrogenPri(allCy,SBS,YTIME)=4.3;
@@ -730,6 +1120,11 @@ iWgtSecAvgPriFueCons(runCy,INDDOM,EF)$(SECTTECH(INDDOM,EF)$(not sameas(EF,"ELC")
 
 * Rescaling the weights
 iWgtSecAvgPriFueCons(runCy,SBS,EF)$(SECTTECH(SBS,EF) $sum(ef2$SECTTECH(SBS,EF),iWgtSecAvgPriFueCons(runCy,SBS,EF2))) = iWgtSecAvgPriFueCons(runCy,SBS,EF)/sum(ef2$SECTTECH(SBS,EF),iWgtSecAvgPriFueCons(runCy,SBS,EF2));
+
+* FIXME: Check if iResNonSubsElecDem, iResFuelConsPerSubAndFuel and iResTranspFuelConsSubTech are necessary for the model.
+* author=derevirn
+
+$ontext
 table iResNonSubElec(allCy,INDSE,YTIME)	 "Residuals for non subsitutable electricity (1)"
 $ondelim
 $include"./iResNonSubElec.csv"
@@ -742,6 +1137,7 @@ $offdelim
 ;
 iResNonSubsElecDem(allCy,INDSE,YTIME)$an(YTIME) = iResNonSubElec(allCy,INDSE,YTIME);
 iResNonSubsElecDem(allCy,DOMSE,YTIME)$an(YTIME) = iResNonSubElecCons(allCy,DOMSE,YTIME);
+
 table iResFuelConsSub(allCy,INDSE,EF,YTIME)	 "Residuals for fuel consumption per subsector (1)"
 $ondelim
 $include"./iResFuelConsSub.csv"
@@ -766,11 +1162,105 @@ $ondelim
 $include"./iResTranspFuelConsSubTech.csv"
 $offdelim
 ;
-table iPlugHybrFractOfMileage(ELSH_SET,YTIME)	 "Plug in hybrid fraction of mileage covered by electricity, residualls on GDP-Depnd car market ext (1)"
-$ondelim
-$include"./iPlugHybrFractOfMileage.csv"
-$offdelim
-;
+$offtext
+
+parameter iPlugHybrFractData(YTIME)  "Plug in hybrid fraction of mileage" /
+2010    0.5
+2011    0.504444
+2012    0.508889
+2013    0.513333
+2014    0.517778
+2015    0.522222
+2016    0.526667
+2017    0.531111
+2018    0.535556
+2019    0.54
+2020    0.544444
+2021    0.548889
+2022    0.553333
+2023    0.557778
+2024    0.562222
+2025    0.566667
+2026    0.571111
+2027    0.575556
+2028    0.58
+2029    0.584444
+2030    0.588889
+2031    0.593333
+2032    0.597778
+2033    0.602222
+2034    0.606667
+2035    0.611111
+2036    0.615556
+2037    0.62
+2038    0.624444
+2039    0.628889
+2040    0.633333
+2041    0.637778
+2042    0.642222
+2043    0.646667
+2044    0.651111
+2045    0.655556
+2046    0.66
+2047    0.664444
+2048    0.668889
+2049    0.673333
+2050    0.677778
+2051    0.682222
+2052    0.686667
+2053    0.691111
+2054    0.695556
+2055    0.7
+2056    0.688889
+2057    0.690741
+2058    0.69216
+2059    0.693076
+2060    0.693404
+2061    0.693045
+2062    0.691886
+2063    0.692385
+2064    0.692659
+2065    0.692743
+2066    0.692687
+2067    0.692567
+2068    0.692488
+2069    0.692588
+2070    0.692622
+2071    0.692616
+2072    0.692595
+2073    0.692579
+2074    0.692581
+2075    0.692597
+2076    0.692598
+2077    0.692594
+2078    0.692591
+2079    0.69259
+2080    0.692592
+2081    0.692594
+2082    0.692593
+2083    0.692592
+2084    0.692592
+2085    0.692592
+2086    0.692593
+2087    0.692593
+2088    0.692593
+2089    0.692593
+2090    0.692593
+2091    0.692593
+2092    0.692593
+2093    0.692593
+2094    0.692593
+2095    0.692593
+2096    0.692593
+2097    0.692593
+2098    0.692593
+2099    0.692593
+2100    0.692593
+/;
+
+parameter iPlugHybrFractOfMileage(ELSH_SET,YTIME)	 "Plug in hybrid fraction of mileage covered by electricity, residualls on GDP-Depnd car market ext (1)" ;
+iPlugHybrFractOfMileage(ELSH_SET,YTIME) = iPlugHybrFractData(YTIME);
+
 iShareAnnMilePlugInHybrid(allCy,YTIME)$an(YTIME) = iPlugHybrFractOfMileage("ELSH",YTIME);
 table iCapDataLoadFacEachTransp(TRANSE,TRANSUSE)	 "Capacity data and Load factor for each transportation mode (passenger or tonnes/vehicle)"
      Cap  LF
@@ -805,14 +1295,14 @@ $offdelim
 ;
 
 iCarbValYrExog(allCy,YTIME)$an(YTIME) = iEnvPolicies(allCy,"exogCV",YTIME);
-table iMatrFactor(allCy,SBS,EF,YTIME)       "Maturity factor per technology and subsector (1)"
+table iMatrFactorData(SBS,EF,YTIME)       "Maturity factor per technology and subsector (1)"
 $ondelim
-$include"./iMatrFactor.csv"
+$include"./iMatrFactorData.csv"
 $offdelim
 ;
-* FIXME: Specify maturity factors for each country and decrease CSV file size.
-* author=derevirn
-iMatrFactor(allCy,SBS,EF,YTIME) = iMatrFactor("MAR",SBS,EF,YTIME);                                          
+
+parameter iMatrFactor(allCy,SBS,EF,YTIME)       "Maturity factor per technology and subsector for all countries (1)";
+iMatrFactor(allCy,SBS,EF,YTIME) = iMatrFactorData(SBS,EF,YTIME);                                          
 iMatrFactor(allCy,SBS,EF,YTIME)$(iMatrFactor(allCy,SBS,EF,YTIME)=0) = 0.000001;
 ** Industry
 iShrNonSubElecInTotElecDem(allCy,INDSE)  = iIndChar(allCy,INDSE,"SHR_NSE");
@@ -870,9 +1360,28 @@ iPlantEffByType(runCy,PGALL,YTIME) = iDataPlantEffByType(PGALL, YTIME) ;
 
 ** CHP economic and technical data initialisation for electricity production
 table iDataChpPowGen(EF,YTIME,CHPPGSET)   "Data for power generation costs (various)"
-$ondelim
-$include "./iDataChpPowGen.csv"
-$offdelim
+               IC      FC      LFT VOM     AVAIL BOILEFF
+STE1AL.2010    2.75    58.4621 35  5.19746 0.85  0.699301
+STE1AL.2020    2.75    52.9702     5.01869       0.699301
+STE1AL.2050    2.75    48.5081     3.3689        0.699301
+STE1AH.2010    2.2814  50.609  35  4.4306  0.85  0.746269
+STE1AH.2020    2.2814  43.5126     4.2842        0.746269
+STE1AH.2050    2.2814  37.7468     4.08204       0.746269
+STE1AD.2010    1.276   20.01   15  2.67042 0.29  0.813008
+STE1AD.2020    1.276   20.01       2.67042       0.813008
+STE1AD.2050    1.276   20.01       2.67042       0.813008
+STE1AR.2010    1.782   27.945  30  3.72938 0.8   0.78125
+STE1AR.2020    1.782   27.945      3.72938       0.78125
+STE1AR.2050    1.782   27.945      3.72938       0.78125
+STE1AG.2010    1.16358 19.35   25  2.56461 0.8   0.819672
+STE1AG.2020    1.09263 19.35       2.44861       0.819672
+STE1AG.2050    1.06425 19.35       2.23212       0.819672
+STE1AB.2010    3.2208  57.096  30  6.29638 0.85  0.746269
+STE1AB.2020    3.0866  54.717      6.05137       0.746269
+STE1AB.2050    2.8853  51.1485     5.61708       0.746269
+STE1AH2F.2010  1.16358 19.35   15  2.56461 0.8   0.829672
+STE1AH2F.2020  1.09263 19.35       2.44861       0.829672
+STE1AH2F.2050  1.06425 19.35       2.23212       0.829672
 ;
 iInvCostChp(runCy,DSBS,CHP,YTIME) = iDataChpPowGen(CHP,"2010","IC");
 iFixOMCostPerChp(runCy,DSBS,CHP,YTIME) = iDataChpPowGen(CHP,"2010","FC");
