@@ -1802,18 +1802,18 @@ QPriceElecIndResConsu(runCy,ESET,YTIME)$TIME(YTIME)..  !! The electricity price 
         (
            (
              (VPriceFuelSubCarVal(runCy,"OI","ELC",YTIME-1)*sTWhToMtoe)$TFIRST(YTIME-1) +
-             (  iFacElecPriConsu(runCy,"IND_RES",YTIME-1)+
+             (
                 VCostPowGenAvgLng(runCy,"i",YTIME-1)
               )$(not TFIRST(YTIME-1))
            )$ISET(ESET)
         +
            (
              (VPriceFuelSubCarVal(runCy,"HOU","ELC",YTIME-1)*sTWhToMtoe)$TFIRST(YTIME-1) +
-             (  iFacElecPriConsu(runCy,"TERT_RES",YTIME-1)+
-               VCostPowGenAvgLng(runCy,"r",YTIME-1)
+             (
+               VCostPowGenAvgLng(runCy,"r",YTIME-1) 
              )$(not TFIRST(YTIME-1))
            )$RSET(ESET)
         );
-
+        
 *' * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;
