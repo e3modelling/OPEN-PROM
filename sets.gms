@@ -793,7 +793,7 @@ STE2OGS.OGS,
 STE2BMS.BMSWAS
 /
 
-CHPtoEON(EF,PGALL)       Mapping of chp technologies to elec-only technologies
+CHPtoEON(EF,PGALL)       Mapping of CHP technologies to elec-only technologies
 /
 *STE1CL.CTHLGN,
 *STE1CH.CTHHCL,

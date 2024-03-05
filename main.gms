@@ -58,8 +58,8 @@
 *' Tech: Technology
 *' Var: Variable
 *' Pol: Policy
-*' Chp: Combined Heat and Power plants
-*' Ccs: Carbon capture and storage
+*' CHP: Combined Heat and Power plants
+*' CCS: Carbon capture and storage
 *' Clim: Climate
 *' Est: Estimated
 *' Transf: Transformation

@@ -71,7 +71,7 @@ iDisc(allCy,SBS,YTIME) = iDiscData(SBS);
 
 * FIXME: Drive the emission factors with mrprom
 * author=giannou
-parameter iCo2EmiFacAllSbs(EF) "CO2 emission factors (kgCO2/kgoe fuel burned)" /
+parameter iCO2EmiFacAllSbs(EF) "CO2 emission factors (kgCO2/kgoe fuel burned)" /
 LGN 4.15330622,
 HCL 3.941453651,
 SLD 4.438008647,
@@ -85,8 +85,8 @@ NGS 2.336234395,
 OGS 3.207089028,
 BMSWAS 0/;
 
-iCo2EmiFac(allCy,SBS,EF,YTIME) = iCo2EmiFacAllSbs(EF);
-iCo2EmiFac(allCy,"IS","HCL",YTIME)   = iCo2EmiFacAllSbs("SLD"); !! This is the assignment for coke
+iCO2EmiFac(allCy,SBS,EF,YTIME) = iCO2EmiFacAllSbs(EF);
+iCO2EmiFac(allCy,"IS","HCL",YTIME)   = iCO2EmiFacAllSbs("SLD"); !! This is the assignment for coke
 table iDataPassCars(allCy,GompSet1,Gompset2)        "Initial Data for Passenger Cars ()"
           scr
 RWO.PC    0.0200641155285507
@@ -1019,8 +1019,8 @@ iMatureFacPlaDisp(allCy,PGALL,YTIME)$an(YTIME) =iDataMatureFacPlaDisp(PGALL);
 
 iCO2CaptRate(runCy,PGALL,YTIME) = 0; 
 
-parameter iMxmShareChpElec "Maximum share of CHP electricity in a country (1)";
-iMxmShareChpElec(runCy,YTIME) = 0.1;
+parameter iMxmShareCHPElec "Maximum share of CHP electricity in a country (1)";
+iMxmShareCHPElec(runCy,YTIME) = 0.1;
 
 iEffValueInEuro(allCy,SBS,YTIME)=0;
 iScenarioPri(WEF,"NOTRADE",YTIME)=0;
@@ -1081,7 +1081,7 @@ iPeakBsLoadBy(allCy,PGLOADTYPE) = sum(tfirst, iDataElecSteamGen(allCy,PGLOADTYPE
 
 parameter iDataElecAndSteamGen(allCy,CHP,YTIME)	 "Data releated to electricity and steam generation";
 iDataElecAndSteamGen(allCy,CHP,YTIME) = 0 ;
-iHisChpGrCapData(allCy,CHP,YTIME) = iDataElecAndSteamGen(allCy,CHP,YTIME);
+iHisCHPGrCapData(allCy,CHP,YTIME) = iDataElecAndSteamGen(allCy,CHP,YTIME);
 
 table iDataTotTransfInputRef(allCy,EF,YTIME)	 "Total Transformation Input in Refineries (Mtoe)"
 $ondelim
@@ -1279,7 +1279,7 @@ $include"./iNewReg.csv"
 $offdelim
 ;
 
-iUtilRateChpPlants(allCy,CHP,YTIME) = 0.5;
+iUtilRateCHPPlants(allCy,CHP,YTIME) = 0.5;
 
 **                   Power Generation
 table iInstCapPast(allCy,PGALL,YTIME)        "Installed capacity past (GW)"
@@ -1359,7 +1359,7 @@ $offdelim
 iPlantEffByType(runCy,PGALL,YTIME) = iDataPlantEffByType(PGALL, YTIME) ;
 
 ** CHP economic and technical data initialisation for electricity production
-table iDataChpPowGen(EF,YTIME,CHPPGSET)   "Data for power generation costs (various)"
+table iDataCHPPowGen(EF,YTIME,CHPPGSET)   "Data for power generation costs (various)"
                IC      FC      LFT VOM     AVAIL BOILEFF
 STE1AL.2010    2.75    58.4621 35  5.19746 0.85  0.699301
 STE1AL.2020    2.75    52.9702     5.01869       0.699301
@@ -1383,12 +1383,12 @@ STE1AH2F.2010  1.16358 19.35   15  2.56461 0.8   0.829672
 STE1AH2F.2020  1.09263 19.35       2.44861       0.829672
 STE1AH2F.2050  1.06425 19.35       2.23212       0.829672
 ;
-iInvCostChp(runCy,DSBS,CHP,YTIME) = iDataChpPowGen(CHP,"2010","IC");
-iFixOMCostPerChp(runCy,DSBS,CHP,YTIME) = iDataChpPowGen(CHP,"2010","FC");
-iVarCostChp(runCy,DSBS,CHP,YTIME) = iDataChpPowGen(CHP,"2010","VOM");
-iLifChpPla(runCy,DSBS,CHP) = iDataChpPowGen(CHP,"2010","LFT");
-iAvailRateChp(runCy,DSBS,CHP) = iDataChpPowGen(CHP,"2010","AVAIL");
-iBoiEffChp(runCy,CHP,YTIME) = iDataChpPowGen(CHP,"2010","BOILEFF");
+iInvCostCHP(runCy,DSBS,CHP,YTIME) = iDataCHPPowGen(CHP,"2010","IC");
+iFixOMCostPerCHP(runCy,DSBS,CHP,YTIME) = iDataCHPPowGen(CHP,"2010","FC");
+iVarCostCHP(runCy,DSBS,CHP,YTIME) = iDataCHPPowGen(CHP,"2010","VOM");
+iLifCHPPla(runCy,DSBS,CHP) = iDataCHPPowGen(CHP,"2010","LFT");
+iAvailRateCHP(runCy,DSBS,CHP) = iDataCHPPowGen(CHP,"2010","AVAIL");
+iBoiEffCHP(runCy,CHP,YTIME) = iDataCHPPowGen(CHP,"2010","BOILEFF");
 
 **  Policies for climate change and renewables
 
