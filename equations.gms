@@ -25,7 +25,7 @@ QChpElecPlants(runCy,CHP,YTIME)$TIME(YTIME)..
 *' and the ratio of the differences in electricity demand and corrected base load to the difference between peak load and corrected base load. It plays a role in shaping
 *' the load curve for effective electricity demand modeling.
 QLambda(runCy,YTIME)$TIME(YTIME)..
-         (1 - exp( -VLoadCurveConstr(runCy,YTIME)*sGwToTwhPerYear))  / VLoadCurveConstr(runCy,YTIME)
+         (1 - exp( -VLoadCurveConstr(runCy,YTIME)*sGwToTwhPerYear))  / (0.0001+VLoadCurveConstr(runCy,YTIME))
              =E=
          (VElecDem(runCy,YTIME) - sGwToTwhPerYear*VCorrBaseLoad(runCy,YTIME))
          / (VElecPeakLoad(runCy,YTIME) - VCorrBaseLoad(runCy,YTIME));
