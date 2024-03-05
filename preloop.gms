@@ -276,8 +276,8 @@ VCostProdTechPreReplacAvail.l(allCy,PGALL,PGALL2,YTIME)=0.1;
 VTechSortVarCost.l(allCy,TRANSE,Rcon,YTIME)=0.1;
 VTechSortVarCost.lo(allCy,TRANSE,Rcon,YTIME)=1e-17;
 
-VRenPotSupplyCurve.l(allCy,PGRENEF,YTIME)=0.1;
-VRenPotSupplyCurve.FX(runCy,PGRENEF, YTIME) $(NOT AN(YTIME)) = iMinRenPotential(runCy,PGRENEF,YTIME);
+VPotRenSuppCurve.l(allCy,PGRENEF,YTIME)=0.1;
+VPotRenSuppCurve.FX(runCy,PGRENEF, YTIME) $(NOT AN(YTIME)) = iMinRenPotential(runCy,PGRENEF,YTIME);
 
 vPotRenCurr.l(runCy,PGRENEF, YTIME) $(AN(YTIME)) = 1000;
 vPotRenCurr.FX(runCy,PGRENEF, YTIME) $(NOT AN(YTIME)) = iMinRenPotential(runCy,PGRENEF,YTIME);
