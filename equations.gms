@@ -151,7 +151,7 @@ QCostHourProdInvDecNoCcs(runCy,PGALL,HOUR,YTIME)$(TIME(YTIME) $NOCCS(PGALL)) ..
 *' The result provides a measure of the sensitivity of CCS acceptance
 *' based on the carbon values in the previous year.
 QSensCcs(runCy,YTIME)$TIME(YTIME)..
-         VSensCcs(runCy,YTIME) =E= 10+*EXP(-0.06*((sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME-1)))));
+         VSensCcs(runCy,YTIME) =E= 10*EXP(-0.06*((sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(runCy,NAP,YTIME-1)))));
 
 *' The equation computes the hourly production cost used in investment decisions, taking into account the acceptance of Carbon Capture and Storage .
 *' The production cost is modified based on the sensitivity of CCS acceptance. The sensitivity is used as an exponent
