@@ -1020,7 +1020,69 @@ Indu_SCon_Set /Base, SHR_NSE, SH_HPELC/
 CHPPGSET /IC,FC,VOM,LFT,AVAIL,BOILEFF,MAXCHPSHARE/
 
 ELSH_SET /elsh/
-;
+
+BALEF fuels in balance report
+/
+"Total"
+"Solids"
+"Hard coal"
+"Lignite"
+"Crude oil and Feedstocks"
+"Liquids"
+"Liquified petroleum gas"
+"Gasoline"
+"Kerosene"
+"Diesel oil"
+"Fuel oil"
+"Other liquids"
+"Gas fuels"
+"Natural gas"
+"Derived gases"
+"Nuclear heat"
+"Steam"
+"Hydro"
+"Wind"
+"Solar energy"
+"Biomass"
+"Geothermal heat"
+"Methanol"
+"Hydrogen"
+"Electricity"
+/
+
+biomass(balef)
+/"biomass"/
+
+TOTAL(BALEF)
+/"TOTAL"/
+BALEF2EFS(BALEF, EFS) Mapping from balance fuels to model fuels
+/
+"Total".(HCL,LGN,CRO,LPG,GSL,KRS,GDO,RFO,OLQ,NGS,OGS,NUC,STE,HYD,WND,SOL,BMSWAS,GEO,MET,ETH,H2F,ELC)
+"Solids".(HCL,LGN)
+"Hard coal".HCL
+"Lignite".LGN
+"Crude oil and Feedstocks".CRO
+"Liquids".(LPG,GSL,KRS,GDO,RFO,OLQ)
+"Liquified petroleum gas".LPG
+"Gasoline".GSL
+"Kerosene".KRS
+"Diesel oil".GDO
+"Fuel oil".RFO
+"Other liquids".OLQ
+"Gas fuels".(NGS,OGS)
+"Natural gas".NGS
+"Derived gases".OGS
+"Nuclear heat".NUC
+"Steam".STE
+"Hydro".HYD
+"Wind".WND
+"Solar energy".SOL
+"Biomass".BMSWAS
+"Geothermal heat".GEO
+"Methanol".MET
+"Hydrogen".H2F
+"Electricity".ELC
+/
 
 *         SET ASSIGNMENTS           *
 

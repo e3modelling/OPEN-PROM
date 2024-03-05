@@ -97,13 +97,13 @@ $onEmpty
 *' *** Maximum number of solver attempts
 $evalGlobal SolverTryMax 4
 *' *** Setting research mode (0) or development mode (1) to modify settings and parameters accordingly
-$setGlobal DevMode 0 
+$setGlobal DevMode 0 !! can be overwritten if VS Code Tasks are used
 *' *** Write a GDX file with all data at the end of the run
 $setGlobal WriteGDX on
 *' *** Generate input data?
-$setGlobal GenerateInput on
+$setGlobal GenerateInput on !! can be overwritten if VS Code Tasks are used
 
-$setGlobal fCountries 'MAR,IND,USA,EGY,CHA,RWO'
+$setGlobal fCountries 'MAR,IND,USA,EGY,RWO' !! can be overwritten if VS Code Tasks are used
 
 $setGlobal fCountryList %countries%
 
