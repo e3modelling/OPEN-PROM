@@ -121,6 +121,7 @@ $evalGlobal fBaseY %fStartY% - %fPeriodOfYears%
 $ifthen.genInp %GenerateInput% == on 
 $ifthen.loadData %DevMode% == 0 $call "RScript ./loadMadratData.R DevMode=0"
 $elseif.loadData %DevMode% == 1 $call "RScript ./loadMadratData.R DevMode=1"
+$elseif.loadData %DevMode% == 2 $call "sh ./getDummyData.sh"
 $endif.loadData
 $endif.genInp
 
