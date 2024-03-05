@@ -84,7 +84,7 @@ QConsSpecificFuel                  !! VConsSpecificFuel(runCy,TRANSE,TTECH,EF,YT
 QCostTranspPerMeanConsSize         !! VCostTranspPerMeanConsSize(runCy,TRANSE,rCon,TTECH,YTIME)
 QCostTranspPerVeh                  !! VCostTranspPerVeh(runCy,TRANSE,rCon,TTECH,YTIME)
 QCostTranspMatFac                  !! VCostTranspMatFac(runCy,TRANSE,RCon,TTECH,YTIME) 
-QTechSortVarCost                   !! VSortTechVarCost(runCy,TRANSE,rCon,YTIME)
+QTechSortVarCost                   !! VTechSortVarCost(runCy,TRANSE,rCon,YTIME)
 QShareTechSectoral                 !! VShareTechSectoral(runCy,TRANSE,TTECH,YTIME)
 QConsTechTranspSectoral            !! VConsTechTranspSectoral(runCy,TRANSE,TTECH,EF,YTIME)
 QDemFinEneTranspPerFuel            !! VDemFinEneTranspPerFuel(runCy,TRANSE,EF,YTIME)
@@ -273,8 +273,8 @@ VCostVarTech.l(allCy,PGALL,YTIME)=0.1;
 
 VCostProdTechPreReplacAvail.l(allCy,PGALL,PGALL2,YTIME)=0.1;
 
-VSortTechVarCost.l(allCy,TRANSE,Rcon,YTIME)=0.1;
-VSortTechVarCost.lo(allCy,TRANSE,Rcon,YTIME)=1e-17;
+VTechSortVarCost.l(allCy,TRANSE,Rcon,YTIME)=0.1;
+VTechSortVarCost.lo(allCy,TRANSE,Rcon,YTIME)=1e-17;
 
 VRenPotSupplyCurve.l(allCy,PGRENEF,YTIME)=0.1;
 VRenPotSupplyCurve.FX(runCy,PGRENEF, YTIME) $(NOT AN(YTIME)) = iMinRenPotential(runCy,PGRENEF,YTIME);

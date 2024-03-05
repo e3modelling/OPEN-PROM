@@ -439,7 +439,7 @@ Parameter,Sup_TIRF,iDataTotTransfInputRef,Total Transformation Input in Refineri
 Parameter,Sup_TOOTH,iDataOtherTransfOutput,Data for Other transformation output ,"EF,YTIME","allCy,EF,YTIME",Parameters for data transfering
 Parameter,Sup_TORF,iDataTransfOutputRef,Data for the transformation Output from Refineries (Mtoe),"EF,YTIME","allCy,EF,YTIME",Parameters for data transfering
 Parameter,Sup_TRANS,iSuppTransfers,Supplementary Parameter for Transfers (Mtoe),"EFS,YTIME","allCy,EFS,YTIME",Supply side
-Variable,SUTR,VSortTechVarCost,Technology sorting based on variable cost,"CYall,TRANSE,Rcon,YTIME","allCy,TRANSE,Rcon,YTIME",TRANSPORT SECTOR VARIABLES
+Variable,SUTR,VTechSortVarCost,Technology sorting based on variable cost,"CYall,TRANSE,Rcon,YTIME","allCy,TRANSE,Rcon,YTIME",TRANSPORT SECTOR VARIABLES
 Parameter,targetprice,iPriceTragets,Price Targets,"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",Emission Related Parameters
 Parameter,targetprice1,REMOVED FROM OPEN-PROM,Data Transfer for Price Targets,"CYall,AGSECT,EF,YTIME","allCy,AGSECT,EF,YTIME",Reguala Falsi Parameters
 Variable,TCAPACITY,VCapElec,Electricity generation plants capacity (GW),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR

@@ -880,7 +880,7 @@ QCostTranspMatFac(runCy,TRANSE,RCon,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,T
 *' This equation calculates the technology sorting based on variable cost. It involves the summation of transportation costs, including the maturity factor,
 *' for each technology and subsector. The result is a variable representing the technology sorting based on variable cost.
 QTechSortVarCost(runCy,TRANSE,rCon,YTIME)$(TIME(YTIME) $(ord(rCon) le iNcon(TRANSE)+1))..
-         VSortTechVarCost(runCy,TRANSE,rCon,YTIME)
+         VTechSortVarCost(runCy,TRANSE,rCon,YTIME)
                  =E=
          sum((TTECH)$SECTTECH(TRANSE,TTECH), VCostTranspMatFac(runCy,TRANSE,rCon,TTECH,YTIME));
 
@@ -893,7 +893,7 @@ QShareTechSectoral(runCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH
          iMatrFactor(runCy,TRANSE,TTECH,YTIME) / iCumDistrFuncConsSize(runCy,TRANSE)
          * sum( Rcon$(ord(Rcon) le iNcon(TRANSE)+1),
                 VCostTranspPerVeh(runCy,TRANSE,RCon,TTECH,YTIME)
-                * iDisFunConSize(runCy,TRANSE,RCon) / VSortTechVarCost(runCy,TRANSE,RCon,YTIME)
+                * iDisFunConSize(runCy,TRANSE,RCon) / VTechSortVarCost(runCy,TRANSE,RCon,YTIME)
               );
 
 *' This equation calculates the consumption of each technology in transport sectors. It considers various factors such as the lifetime of the technology,
