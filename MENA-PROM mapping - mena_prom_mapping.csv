@@ -240,7 +240,7 @@ Equation,EQSTAC,qCostPowGenAvgShrt,Compute short term power generation cost,"CYa
 Equation,EQSTAC_INT_PRICE,qCostPowGenShortIntPri,Compute short term power generation cost of technologies including international Prices of main fuels ,"CYALL,PGALL,ESET,YTIME","allCy,PGALL,ESET,YTIME",POWER GENERATION SECTOR
 Equation,EQSU,QSortTechVarCost,Compute Technology sorting based on variable cost,"CYall,DSBS,Rcon,YTIME","allCy,DSBS,rCon,YTIME",
 Equation,EQSUCAP,QNewInvElec,Compute for Power Plant new investment decision,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Equation,EQSUTR,QSortTechVarCost,Compute technology sorting based on variable cost,"CYall,TRANSE,Rcon,YTIME","allCy,TRANSE,Rcon,YTIME",TRANSPORT SPECIFIC EQUATIONS
+Equation,EQSUTR,QTechSortVarCost,Compute technology sorting based on variable cost,"CYall,TRANSE,Rcon,YTIME","allCy,TRANSE,Rcon,YTIME",TRANSPORT SPECIFIC EQUATIONS
 Equation,EQTICT,QInpTransfTherm,Compute transformation input to power plants,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
 Equation,EQTIDH,QTransfInputDHPlants,Compute the transformation input to distrcit heating plants,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
 Equation,EQTINUC,QInpTransfNuclear,Compute transformation input to nuclear plants,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS

@@ -84,7 +84,7 @@ QConsSpecificFuel                  !! VConsSpecificFuel(runCy,TRANSE,TTECH,EF,YT
 QCostTranspPerMeanConsSize         !! VCostTranspPerMeanConsSize(runCy,TRANSE,rCon,TTECH,YTIME)
 QCostTranspPerVeh                  !! VCostTranspPerVeh(runCy,TRANSE,rCon,TTECH,YTIME)
 QCostTranspMatFac                  !! VCostTranspMatFac(runCy,TRANSE,RCon,TTECH,YTIME) 
-QSortTechVarCost                   !! VSortTechVarCost(runCy,TRANSE,rCon,YTIME)
+QTechSortVarCost                   !! VSortTechVarCost(runCy,TRANSE,rCon,YTIME)
 QShareTechSectoral                 !! VShareTechSectoral(runCy,TRANSE,TTECH,YTIME)
 QConsTechTranspSectoral            !! VConsTechTranspSectoral(runCy,TRANSE,TTECH,EF,YTIME)
 QDemFinEneTranspPerFuel            !! VDemFinEneTranspPerFuel(runCy,TRANSE,EF,YTIME)

@@ -879,7 +879,7 @@ QCostTranspMatFac(runCy,TRANSE,RCon,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,T
 
 *' This equation calculates the technology sorting based on variable cost. It involves the summation of transportation costs, including the maturity factor,
 *' for each technology and subsector. The result is a variable representing the technology sorting based on variable cost.
-QSortTechVarCost(runCy,TRANSE,rCon,YTIME)$(TIME(YTIME) $(ord(rCon) le iNcon(TRANSE)+1))..
+QTechSortVarCost(runCy,TRANSE,rCon,YTIME)$(TIME(YTIME) $(ord(rCon) le iNcon(TRANSE)+1))..
          VSortTechVarCost(runCy,TRANSE,rCon,YTIME)
                  =E=
          sum((TTECH)$SECTTECH(TRANSE,TTECH), VCostTranspMatFac(runCy,TRANSE,rCon,TTECH,YTIME));
