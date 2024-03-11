@@ -286,7 +286,8 @@ price <- price_gdx
 getItems(price, 3.1) <- paste0("Fuel Price ", getItems(price, 3.1))
 
 #add model MENA_EDS data (choosing the correct variable from MENA by use of the MENA-PROM mapping)
-MENA_EDS_price <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "iFuelPrice", "MENA.EDS"])
+#fix units from $2015/toe to k$2015/toe
+MENA_EDS_price <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "iFuelPrice", "MENA.EDS"]) / 1000
 MENA_EDS_pric <- MENA_EDS_price
 getRegions(MENA_EDS_pric) <- sub("MOR", "MAR", getRegions(MENA_EDS_pric)) # fix wrong region names in MENA
 # choose years and regions that both models have
@@ -295,7 +296,8 @@ regs <- intersect(getRegions(MENA_EDS_pric),getRegions(price))
 getItems(MENA_EDS_pric, 3.1) <- paste0("Fuel Price ", getItems(MENA_EDS_pric, 3.1))
 
 #FuelPrice enerdata
-a_ener_price <- calcOutput(type = "IFuelPrice", aggregate = FALSE)
+#fix units from $2015/toe to k$2015/toe
+a_ener_price <- calcOutput(type = "IFuelPrice", aggregate = FALSE) / 1000
 a_ener <- a_ener_price
 getItems(a_ener, 3.1) <- paste0("Fuel Price ", getItems(a_ener, 3.1))
 year <- Reduce(intersect, list(getYears(MENA_EDS_pric,as.integer=TRUE),getYears(price,as.integer=TRUE),getYears(a_ener,as.integer=TRUE)))
@@ -340,18 +342,109 @@ write.report(Fuel_Price_ener[,year,],file="reporting.mif",model="ENERDATA",unit=
 
                                 #  emission
 
+emission_gdx_1 <- readGDX('./blabla.gdx', "iCo2EmiFac", field = 'l')
+emission_gdx_2 <- readGDX('./blabla.gdx', "VConsFuel", field = 'l')
+emission_gdx_3 <- readGDX('./blabla.gdx', "VTransfInThermPowPls", field = 'l')
+emission_gdx_4 <- readGDX('./blabla.gdx', "VTransfInputDHPlants", field = 'l')
+emission_gdx_5 <- readGDX('./blabla.gdx', "VEnCons", field = 'l')
+emission_gdx_6 <- readGDX('./blabla.gdx', "VDemTr", field = 'l')
+emission_gdx_7 <- readGDX('./blabla.gdx', "VElecProd", field = 'l')
+emission_gdx_8 <- readGDX('./blabla.gdx', "iPlantEffByType", field = 'l')
+emission_gdx_9 <- readGDX('./blabla.gdx', "iCO2CaptRate", field = 'l')
 
-emission_gdx <- readGDX('./blabla.gdx', "iCo2EmiFac", field = 'l')
-emission <- emission_gdx
-getItems(emission, 3.1) <- paste0("Emission ", getItems(emission, 3.1))
+TRANSECTOR <- readSets("sets.gms", "TRANSE")
+TRANSECTOR <- unlist(strsplit(TRANSECTOR[, 1], ","))
+map_TRANSECTOR = paste(TRANSECTOR, ".", getItems(emission_gdx_1, 3.2))
+map_TRANSECTOR <- as.data.frame(map_TRANSECTOR)
+map_TRANSECTOR <- map_TRANSECTOR %>% 
+  mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
+
+INDSE <- readSets("sets.gms", "INDSE")
+INDSE <- unlist(strsplit(INDSE[, 1], ","))
+INDSE <- paste(INDSE, ".", getItems(emission_gdx_1, 3.2))
+INDSE <- as.data.frame(INDSE)
+INDSE <- INDSE %>% 
+  mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
+
+var_1 <- dimSums(emission_gdx_1[,,INDSE[, 1]], 3)
+var_2 <- dimSums(emission_gdx_2[,,INDSE[, 1]], 3)
+sum1 <- var_1 * var_2
+var_3 <- dimSums(emission_gdx_3, 3)
+var_5 <- dimSums(emission_gdx_1[,,"PG"], 3)
+sum2 <- var_3 * var_5
+var_4 <- dimSums(emission_gdx_4, 3)
+sum3 <- var_4 * var_5
+var_6 <- dimSums(emission_gdx_5, 3)
+var_7 <- dimSums(emission_gdx_1[,,"PCH"], 3)
+sum4 <- var_6 * var_7
+var_8 <- dimSums(emission_gdx_6, 3)
+var_9 <- dimSums(emission_gdx_1[,,map_TRANSECTOR[, 1]], 3)
+sum7 <- var_8 * var_9
+PGALLtoEF <- readSets("sets.gms", "PGALLtoEF")
+PGALLtoEF <- as.data.frame(PGALLtoEF)
+PGALLtoEF <- separate_wider_delim(PGALLtoEF,cols = 1, delim = ".", names = c("PGALL","EF"))
+PGALLtoEF[["PGALL"]] <- sub("\\(","",PGALLtoEF[["PGALL"]])
+PGALLtoEF[["PGALL"]] <- sub("\\)","",PGALLtoEF[["PGALL"]])
+PGALLtoEF <- separate_rows(PGALLtoEF,PGALL)
+
+var_10 <- dimSums(emission_gdx_1[,,"PG"],dim=3.1)
+var_11 <- toolAggregate(emission_gdx_7,dim=3,rel=PGALLtoEF,from="PGALL",to="EF")
+var_12 <- toolAggregate(emission_gdx_8,dim=3,rel=PGALLtoEF,from="PGALL",to="EF")
+var_13 <- toolAggregate(emission_gdx_9,dim=3,rel=PGALLtoEF,from="PGALL",to="EF")
+var_16 <- var_11 * 0.086 / var_12 * var_10 * var_13
+sum5 <- dimSums(var_16,dim=3)
+var_14 <- dimSums(emission_gdx_1[,,"BU"], 3)
+var_15 <- dimSums(emission_gdx_2[,,"BU"], 3)
+sum6 <- var_14 * var_15
+
+SUM <- sum1 + sum2 + sum3 + sum4 - sum5 + sum6 + sum7
+
+getItems(SUM, 3) <- paste0("Emission")
 
 #add model MENA_EDS data (choosing the correct variable from MENA by use of the MENA-PROM mapping)
-MENA_EDS_emission <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "iCo2EmiFac", "MENA.EDS"])
-MENA_EDS_emis <- MENA_EDS_emission
-getRegions(MENA_EDS_emis) <- sub("MOR", "MAR", getRegions(MENA_EDS_emis)) # fix wrong region names in MENA
+MENA_EDS_1 <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "iCo2EmiFac", "MENA.EDS"])
+MENA_EDS_2 <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VConsFuel", "MENA.EDS"])
+MENA_EDS_3 <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VTransfInThermPowPls", "MENA.EDS"])
+MENA_EDS_4 <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VTransfInputDHPlants", "MENA.EDS"])
+MENA_EDS_5 <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VEnCons", "MENA.EDS"])
+MENA_EDS_6 <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VDemTr", "MENA.EDS"])
+MENA_EDS_7 <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VElecProd", "MENA.EDS"])
+MENA_EDS_8 <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "iPlantEffByType", "MENA.EDS"])
+MENA_EDS_9 <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "iCO2CaptRate", "MENA.EDS"])
+
+MENA_var_1 <- dimSums(MENA_EDS_1[,,INDSE[, 1]], 3)
+MENA_var_2 <- dimSums(MENA_EDS_2[,,INDSE[, 1]], 3)
+MENA_sum1 <- MENA_var_1 * MENA_var_2
+MENA_var_3 <- dimSums(MENA_EDS_3, 3)
+MENA_var_5 <- dimSums(MENA_EDS_1[,,"PG"], 3)
+MENA_sum2 <- MENA_var_3 * MENA_var_5
+MENA_var_4 <- dimSums(MENA_EDS_4, 3)
+MENA_sum3 <- MENA_var_4 * MENA_var_5
+MENA_var_6 <- dimSums(MENA_EDS_5, 3)
+MENA_var_7 <- dimSums(MENA_EDS_1[,,"PCH"], 3)
+MENA_sum4 <- MENA_var_6 * MENA_var_7
+MENA_var_8 <- dimSums(MENA_EDS_6, 3)
+MENA_var_9 <- dimSums(MENA_EDS_1[,,map_TRANSECTOR[, 1]], 3)
+MENA_sum7 <- MENA_var_8 * MENA_var_9
+MENA_var_10 <- dimSums(MENA_EDS_1[,,"PG"],dim=3.1)
+MENA_var_11 <- toolAggregate(MENA_EDS_7,dim=3,rel=PGALLtoEF,from="PGALL",to="EF")
+MENA_var_12 <- toolAggregate(MENA_EDS_8,dim=3,rel=PGALLtoEF,from="PGALL",to="EF")
+MENA_var_13 <- toolAggregate(MENA_EDS_9,dim=3,rel=PGALLtoEF,from="PGALL",to="EF")
+MENA_var_16 <- MENA_var_11 * 0.086 / MENA_var_12 * MENA_var_10 * MENA_var_13
+MENA_sum5 <- dimSums(MENA_var_16,dim=3)
+MENA_var_14 <- dimSums(MENA_EDS_1[,,"BU"], 3)
+MENA_var_15 <- dimSums(MENA_EDS_2[,,"BU"], 3)
+MENA_sum6 <- MENA_var_14 * MENA_var_15
+
+MENA_SUM <- MENA_sum1 + MENA_sum2 + MENA_sum3 + MENA_sum4 - MENA_sum5 + MENA_sum6 + MENA_sum7
+
+getItems(MENA_SUM, 3) <- paste0("Emission")
+
 # choose years and regions that both models have
-years <- intersect(getYears(MENA_EDS_emis,as.integer=TRUE),getYears(emission,as.integer=TRUE))
-regs <- intersect(getRegions(MENA_EDS_emis),getRegions(emission))
-getItems(MENA_EDS_emis, 3.1) <- paste0("Emission ", getItems(MENA_EDS_emis, 3.1))
+years <- intersect(getYears(MENA_SUM,as.integer=TRUE),getYears(SUM,as.integer=TRUE))
+regs <- intersect(getRegions(MENA_SUM),getRegions(SUM))
+getItems(MENA_SUM, 3.1) <- paste0("Emission")
 
-
+# write data in mif file
+write.report(SUM[,years,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario="BASE")
+write.report(MENA_SUM[regs,years,],file="reporting.mif",model="MENA-EDS",unit="various",append=TRUE,scenario="BASE")
