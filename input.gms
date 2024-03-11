@@ -38,6 +38,12 @@ $offdelim
 ;
 iElastNonSubElec(allCy,SBS,ETYPES,YTIME) = iElastNonSubElecData(SBS,ETYPES,YTIME);
 
+parameter iNatGasPriProElst(allCy)	          "Natural Gas primary production elasticity related to gross inland consumption (1)" /
+$ondelim
+$include "./iNatGasPriProElst.csv"
+$offdelim
+/;
+
 parameter iDiscData(SBS) "Discount rates per subsector ()" /
 PCH     0.12
 IS      0.12
