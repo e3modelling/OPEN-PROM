@@ -23,11 +23,6 @@ iResTransfOutputRefineries(allCy,EF,YTIME)      "Residual in Transformation Outp
 iRateEneBranCons(allCy,EF,YTIME)	            "Rate of Energy Branch Consumption over total transformation output (1)"
 iFeedTransfr(allCy,EFS,YTIME)	                "Feedstocks in Transfers (Mtoe)"
 iResHcNgOilPrProd(allCy,EF,YTIME)	            "Residuals for Hard Coal, Natural Gas and Oil Primary Production (1)"
-iNatGasPriProElst(allCy)	                    "Natural Gas primary production elasticity related to gross inland consumption (1)"	/
-$ondelim
-$include "./iNatGasPriProElst.csv"
-$offdelim
-/
 iFuelPriPro(allCy,EF,YTIME)                 	"Fuel Primary Production (Mtoe)"
 iRatePriProTotPriNeeds(allCy,EF,YTIME)	        "Rate of Primary Production in Total Primary Needs (1)"	
 iFuelExprts(allCy,EF,YTIME)	                    "Fuel Exports (Mtoe)"	
