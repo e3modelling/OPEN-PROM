@@ -381,6 +381,9 @@ INDSE <- INDSE %>%
 PGEF <- readSets("sets.gms", "PGEF")
 PGEF <- as.data.frame(PGEF)
 
+CCS <- readSets("sets.gms", "CCS")
+CCS <- as.data.frame(CCS)
+
 var_1 <- dimSums(emission_gdx_1_a[,,INDSE[, 1]], 3, na.rm = TRUE)
 var_2 <- dimSums(emission_gdx_2_a[,,INDSE[, 1]], 3, na.rm = TRUE)
 sum1 <- var_1 * var_2
@@ -392,7 +395,7 @@ var_4 <- dimSums(emission_gdx_4_a, 3, na.rm = TRUE)
 var_20 <- dimSums(emission_gdx_1_a[,,"PG"], 3, na.rm = TRUE)
 sum3 <- var_4 * var_20
 var_6 <- dimSums(emission_gdx_5_a, 3, na.rm = TRUE)
-var_7 <- dimSums(emission_gdx_1_a[,,"PCH"], 3, na.rm = TRUE)
+var_7 <- dimSums(emission_gdx_1_a[,,"PG"], 3, na.rm = TRUE)
 sum4 <- var_6 * var_7
 var_8 <- dimSums(emission_gdx_6, 3, na.rm = TRUE)
 var_9 <- dimSums(emission_gdx_1[,,map_TRANSECTOR[, 1]], 3, na.rm = TRUE)
@@ -405,11 +408,13 @@ PGALLtoEF[["PGALL"]] <- sub("\\(","",PGALLtoEF[["PGALL"]])
 PGALLtoEF[["PGALL"]] <- sub("\\)","",PGALLtoEF[["PGALL"]])
 PGALLtoEF <- separate_rows(PGALLtoEF,PGALL)
 
+CCS <- PGALLtoEF[PGALLtoEF$PGALL %in% CCS$CCS, ]
+  
 var_10 <- dimSums(emission_gdx_1[,,"PG"],dim=3.1, na.rm = TRUE)
-var_10 <- dimSums(var_10[,,PGEF[,1]],dim=3, na.rm = TRUE)
-var_11 <- toolAggregate(emission_gdx_7,dim=3,rel=PGALLtoEF,from="PGALL",to="EF")
-var_12 <- toolAggregate(emission_gdx_8,dim=3,rel=PGALLtoEF,from="PGALL",to="EF")
-var_13 <- toolAggregate(emission_gdx_9,dim=3,rel=PGALLtoEF,from="PGALL",to="EF")
+var_10 <- var_10[,,CCS[,2]]
+var_11 <- toolAggregate(emission_gdx_7[,,CCS[,1]],dim=3,rel=CCS,from="PGALL",to="EF")
+var_12 <- toolAggregate(emission_gdx_8[,,CCS[,1]],dim=3,rel=CCS,from="PGALL",to="EF")
+var_13 <- toolAggregate(emission_gdx_9[,,CCS[,1]],dim=3,rel=CCS,from="PGALL",to="EF")
 var_16 <- var_11 * 0.086 / var_12 * var_10 * var_13
 sum5 <- dimSums(var_16,dim=3, na.rm = TRUE)
 var_14 <- dimSums(emission_gdx_1_a[,,"BU"], 3, na.rm = TRUE)
@@ -447,16 +452,16 @@ MENA_var_4 <- dimSums(MENA_emission_gdx_4_a, 3, na.rm = TRUE)
 MENA_var_20 <- dimSums(MENA_emission_gdx_1_a[,,"PG"], 3, na.rm = TRUE)
 MENA_sum3 <- MENA_var_4 * MENA_var_20
 MENA_var_6 <- dimSums(MENA_emission_gdx_5_a, 3, na.rm = TRUE)
-MENA_var_7 <- dimSums(MENA_emission_gdx_1_a[,,"PCH"], 3, na.rm = TRUE)
+MENA_var_7 <- dimSums(MENA_emission_gdx_1_a[,,"PG"], 3, na.rm = TRUE)
 MENA_sum4 <- MENA_var_6 * MENA_var_7
 MENA_var_8 <- dimSums(MENA_EDS_6, 3, na.rm = TRUE)
 MENA_var_9 <- dimSums(MENA_EDS_1[,,map_TRANSECTOR[, 1]], 3, na.rm = TRUE)
 MENA_sum7 <- MENA_var_8 * MENA_var_9
 MENA_var_10 <- dimSums(MENA_EDS_1[,,"PG"],dim=3.1, na.rm = TRUE)
-MENA_var_10 <- dimSums(MENA_var_10[,,PGEF[,1]],dim=3, na.rm = TRUE)
-MENA_var_11 <- toolAggregate(MENA_EDS_7,dim=3,rel=PGALLtoEF,from="PGALL",to="EF")
-MENA_var_12 <- toolAggregate(MENA_EDS_8,dim=3,rel=PGALLtoEF,from="PGALL",to="EF")
-MENA_var_13 <- toolAggregate(MENA_EDS_9,dim=3,rel=PGALLtoEF,from="PGALL",to="EF")
+MENA_var_10 <- MENA_var_10[,,CCS[,2]]
+MENA_var_11 <- toolAggregate(MENA_EDS_7[,,CCS[,1]],dim=3,rel=CCS,from="PGALL",to="EF")
+MENA_var_12 <- toolAggregate(MENA_EDS_8[,,CCS[,1]],dim=3,rel=CCS,from="PGALL",to="EF")
+MENA_var_13 <- toolAggregate(MENA_EDS_9[,,CCS[,1]],dim=3,rel=CCS,from="PGALL",to="EF")
 MENA_var_16 <- MENA_var_11 * 0.086 / MENA_var_12 * MENA_var_10 * MENA_var_13
 MENA_sum5 <- dimSums(MENA_var_16,dim=3, na.rm = TRUE)
 MENA_var_14 <- dimSums(MENA_emission_gdx_1_a[,,"BU"], 3, na.rm = TRUE)
