@@ -359,27 +359,45 @@ map_TRANSECTOR <- as.data.frame(map_TRANSECTOR)
 map_TRANSECTOR <- map_TRANSECTOR %>% 
   mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
 
+EFtoEFS <- readSets("sets.gms", "EFtoEFS")
+EFtoEFS <- as.data.frame(EFtoEFS)
+EFtoEFS <- separate_wider_delim(EFtoEFS,cols = 1, delim = ".", names = c("EFtoEFS","EF"))
+EFtoEFS[["EFtoEFS"]] <- sub("\\(","",EFtoEFS[["EFtoEFS"]])
+EFtoEFS[["EFtoEFS"]] <- sub("\\)","",EFtoEFS[["EFtoEFS"]])
+EFtoEFS <- EFtoEFS %>% separate_longer_delim(c(EFtoEFS, EF), delim = ",")
+
+emission_gdx_1_a <- toolAggregate(emission_gdx_1[,,unique(EFtoEFS$EF)],dim=3.2,rel=EFtoEFS,from="EF",to="EFtoEFS")
+emission_gdx_2_a <- toolAggregate(emission_gdx_2[,,unique(EFtoEFS$EF)],dim=3.2,rel=EFtoEFS,from="EF",to="EFtoEFS")
+emission_gdx_4_a <- toolAggregate(emission_gdx_4[,,unique(EFtoEFS$EF)],dim=3.2,rel=EFtoEFS,from="EF",to="EFtoEFS")
+emission_gdx_5_a <- toolAggregate(emission_gdx_5[,,unique(EFtoEFS$EF)],dim=3.2,rel=EFtoEFS,from="EF",to="EFtoEFS")
+
 INDSE <- readSets("sets.gms", "INDSE")
 INDSE <- unlist(strsplit(INDSE[, 1], ","))
-INDSE <- paste(INDSE, ".", getItems(emission_gdx_1, 3.2))
+INDSE <- paste(INDSE, ".", getItems(emission_gdx_1_a, 3.2))
 INDSE <- as.data.frame(INDSE)
 INDSE <- INDSE %>% 
   mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
 
-var_1 <- dimSums(emission_gdx_1[,,INDSE[, 1]], 3)
-var_2 <- dimSums(emission_gdx_2[,,INDSE[, 1]], 3)
+PGEF <- readSets("sets.gms", "PGEF")
+PGEF <- as.data.frame(PGEF)
+
+var_1 <- dimSums(emission_gdx_1_a[,,INDSE[, 1]], 3, na.rm = TRUE)
+var_2 <- dimSums(emission_gdx_2_a[,,INDSE[, 1]], 3, na.rm = TRUE)
 sum1 <- var_1 * var_2
-var_3 <- dimSums(emission_gdx_3, 3)
-var_5 <- dimSums(emission_gdx_1[,,"PG"], 3)
+var_3 <- dimSums(emission_gdx_3[,,PGEF[,1]], 3, na.rm = TRUE)
+var_5 <- dimSums(emission_gdx_1[,,"PG"], 3.1, na.rm = TRUE)
+var_5 <- dimSums(var_5[,,PGEF[,1]], 3, na.rm = TRUE)
 sum2 <- var_3 * var_5
-var_4 <- dimSums(emission_gdx_4, 3)
-sum3 <- var_4 * var_5
-var_6 <- dimSums(emission_gdx_5, 3)
-var_7 <- dimSums(emission_gdx_1[,,"PCH"], 3)
+var_4 <- dimSums(emission_gdx_4_a, 3, na.rm = TRUE)
+var_20 <- dimSums(emission_gdx_1_a[,,"PG"], 3, na.rm = TRUE)
+sum3 <- var_4 * var_20
+var_6 <- dimSums(emission_gdx_5_a, 3, na.rm = TRUE)
+var_7 <- dimSums(emission_gdx_1_a[,,"PCH"], 3, na.rm = TRUE)
 sum4 <- var_6 * var_7
-var_8 <- dimSums(emission_gdx_6, 3)
-var_9 <- dimSums(emission_gdx_1[,,map_TRANSECTOR[, 1]], 3)
+var_8 <- dimSums(emission_gdx_6, 3, na.rm = TRUE)
+var_9 <- dimSums(emission_gdx_1[,,map_TRANSECTOR[, 1]], 3, na.rm = TRUE)
 sum7 <- var_8 * var_9
+
 PGALLtoEF <- readSets("sets.gms", "PGALLtoEF")
 PGALLtoEF <- as.data.frame(PGALLtoEF)
 PGALLtoEF <- separate_wider_delim(PGALLtoEF,cols = 1, delim = ".", names = c("PGALL","EF"))
@@ -387,17 +405,18 @@ PGALLtoEF[["PGALL"]] <- sub("\\(","",PGALLtoEF[["PGALL"]])
 PGALLtoEF[["PGALL"]] <- sub("\\)","",PGALLtoEF[["PGALL"]])
 PGALLtoEF <- separate_rows(PGALLtoEF,PGALL)
 
-var_10 <- dimSums(emission_gdx_1[,,"PG"],dim=3.1)
+var_10 <- dimSums(emission_gdx_1[,,"PG"],dim=3.1, na.rm = TRUE)
+var_10 <- dimSums(var_10[,,PGEF[,1]],dim=3, na.rm = TRUE)
 var_11 <- toolAggregate(emission_gdx_7,dim=3,rel=PGALLtoEF,from="PGALL",to="EF")
 var_12 <- toolAggregate(emission_gdx_8,dim=3,rel=PGALLtoEF,from="PGALL",to="EF")
 var_13 <- toolAggregate(emission_gdx_9,dim=3,rel=PGALLtoEF,from="PGALL",to="EF")
 var_16 <- var_11 * 0.086 / var_12 * var_10 * var_13
-sum5 <- dimSums(var_16,dim=3)
-var_14 <- dimSums(emission_gdx_1[,,"BU"], 3)
-var_15 <- dimSums(emission_gdx_2[,,"BU"], 3)
+sum5 <- dimSums(var_16,dim=3, na.rm = TRUE)
+var_14 <- dimSums(emission_gdx_1_a[,,"BU"], 3, na.rm = TRUE)
+var_15 <- dimSums(emission_gdx_2_a[,,"BU"], 3, na.rm = TRUE)
 sum6 <- var_14 * var_15
 
-SUM <- sum1 + sum2 + sum3 + sum4 - sum5 + sum6 + sum7
+SUM <- ifelse(is.na(sum1), 0, sum1) + ifelse(is.na(sum2), 0, sum2) + ifelse(is.na(sum3), 0, sum3) + ifelse(is.na(sum4), 0, sum4) - ifelse(is.na(sum5), 0, sum5) + ifelse(is.na(sum6), 0, sum6)  + ifelse(is.na(sum7), 0, sum7)
 
 getItems(SUM, 3) <- paste0("Emission")
 
@@ -412,31 +431,39 @@ MENA_EDS_7 <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VElec
 MENA_EDS_8 <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "iPlantEffByType", "MENA.EDS"])
 MENA_EDS_9 <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "iCO2CaptRate", "MENA.EDS"])
 
-MENA_var_1 <- dimSums(MENA_EDS_1[,,INDSE[, 1]], 3)
-MENA_var_2 <- dimSums(MENA_EDS_2[,,INDSE[, 1]], 3)
+MENA_emission_gdx_1_a <- toolAggregate(MENA_EDS_1[,,unique(EFtoEFS$EF)],dim=3.2,rel=EFtoEFS,from="EF",to="EFtoEFS")
+MENA_emission_gdx_2_a <- toolAggregate(MENA_EDS_2[,,unique(EFtoEFS$EF)],dim=3.2,rel=EFtoEFS,from="EF",to="EFtoEFS")
+MENA_emission_gdx_4_a <- toolAggregate(MENA_EDS_4[,,unique(EFtoEFS$EF)],dim=3.2,rel=EFtoEFS,from="EF",to="EFtoEFS")
+MENA_emission_gdx_5_a <- toolAggregate(MENA_EDS_5[,,unique(EFtoEFS$EF)],dim=3.2,rel=EFtoEFS,from="EF",to="EFtoEFS")
+
+MENA_var_1 <- dimSums(MENA_emission_gdx_1_a[,,INDSE[, 1]], 3, na.rm = TRUE)
+MENA_var_2 <- dimSums(MENA_emission_gdx_2_a[,,INDSE[, 1]], 3, na.rm = TRUE)
 MENA_sum1 <- MENA_var_1 * MENA_var_2
-MENA_var_3 <- dimSums(MENA_EDS_3, 3)
-MENA_var_5 <- dimSums(MENA_EDS_1[,,"PG"], 3)
+MENA_var_3 <- dimSums(MENA_EDS_3[,,PGEF[,1]], 3, na.rm = TRUE)
+MENA_var_5 <- dimSums(MENA_EDS_1[,,"PG"], 3.1, na.rm = TRUE)
+MENA_var_5 <- dimSums(MENA_var_5[,,PGEF[,1]], 3, na.rm = TRUE)
 MENA_sum2 <- MENA_var_3 * MENA_var_5
-MENA_var_4 <- dimSums(MENA_EDS_4, 3)
-MENA_sum3 <- MENA_var_4 * MENA_var_5
-MENA_var_6 <- dimSums(MENA_EDS_5, 3)
-MENA_var_7 <- dimSums(MENA_EDS_1[,,"PCH"], 3)
+MENA_var_4 <- dimSums(MENA_emission_gdx_4_a, 3, na.rm = TRUE)
+MENA_var_20 <- dimSums(MENA_emission_gdx_1_a[,,"PG"], 3, na.rm = TRUE)
+MENA_sum3 <- MENA_var_4 * MENA_var_20
+MENA_var_6 <- dimSums(MENA_emission_gdx_5_a, 3, na.rm = TRUE)
+MENA_var_7 <- dimSums(MENA_emission_gdx_1_a[,,"PCH"], 3, na.rm = TRUE)
 MENA_sum4 <- MENA_var_6 * MENA_var_7
-MENA_var_8 <- dimSums(MENA_EDS_6, 3)
-MENA_var_9 <- dimSums(MENA_EDS_1[,,map_TRANSECTOR[, 1]], 3)
+MENA_var_8 <- dimSums(MENA_EDS_6, 3, na.rm = TRUE)
+MENA_var_9 <- dimSums(MENA_EDS_1[,,map_TRANSECTOR[, 1]], 3, na.rm = TRUE)
 MENA_sum7 <- MENA_var_8 * MENA_var_9
-MENA_var_10 <- dimSums(MENA_EDS_1[,,"PG"],dim=3.1)
+MENA_var_10 <- dimSums(MENA_EDS_1[,,"PG"],dim=3.1, na.rm = TRUE)
+MENA_var_10 <- dimSums(MENA_var_10[,,PGEF[,1]],dim=3, na.rm = TRUE)
 MENA_var_11 <- toolAggregate(MENA_EDS_7,dim=3,rel=PGALLtoEF,from="PGALL",to="EF")
 MENA_var_12 <- toolAggregate(MENA_EDS_8,dim=3,rel=PGALLtoEF,from="PGALL",to="EF")
 MENA_var_13 <- toolAggregate(MENA_EDS_9,dim=3,rel=PGALLtoEF,from="PGALL",to="EF")
 MENA_var_16 <- MENA_var_11 * 0.086 / MENA_var_12 * MENA_var_10 * MENA_var_13
-MENA_sum5 <- dimSums(MENA_var_16,dim=3)
-MENA_var_14 <- dimSums(MENA_EDS_1[,,"BU"], 3)
-MENA_var_15 <- dimSums(MENA_EDS_2[,,"BU"], 3)
+MENA_sum5 <- dimSums(MENA_var_16,dim=3, na.rm = TRUE)
+MENA_var_14 <- dimSums(MENA_emission_gdx_1_a[,,"BU"], 3, na.rm = TRUE)
+MENA_var_15 <- dimSums(MENA_emission_gdx_2_a[,,"BU"], 3, na.rm = TRUE)
 MENA_sum6 <- MENA_var_14 * MENA_var_15
 
-MENA_SUM <- MENA_sum1 + MENA_sum2 + MENA_sum3 + MENA_sum4 - MENA_sum5 + MENA_sum6 + MENA_sum7
+MENA_SUM <- ifelse(is.na(MENA_sum1), 0, MENA_sum1) + ifelse(is.na(MENA_sum2), 0, MENA_sum2) + ifelse(is.na(MENA_sum3), 0, MENA_sum3) + ifelse(is.na(MENA_sum4), 0, MENA_sum4) - ifelse(is.na(MENA_sum5), 0, MENA_sum5) + ifelse(is.na(MENA_sum6), 0, MENA_sum6) + ifelse(is.na(MENA_sum7), 0, MENA_sum7)
 
 getItems(MENA_SUM, 3) <- paste0("Emission")
 
@@ -448,3 +475,10 @@ getItems(MENA_SUM, 3.1) <- paste0("Emission")
 # write data in mif file
 write.report(SUM[,years,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario="BASE")
 write.report(MENA_SUM[regs,years,],file="reporting.mif",model="MENA-EDS",unit="various",append=TRUE,scenario="BASE")
+
+calc <- dimSums(SUM[,2018:2030,], 1, na.rm = TRUE)
+VTotGhgEmisAllCountrNap <- readGDX('./blabla.gdx', "VTotGhgEmisAllCountrNap", field = 'l')
+VTotGhgEmisAllCountrNap <- dimSums(VTotGhgEmisAllCountrNap[,2018:2030,], 3, na.rm = TRUE)
+diff <- calc - VTotGhgEmisAllCountrNap
+diff <- as.quitte(diff)
+
