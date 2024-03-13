@@ -125,9 +125,10 @@ $elseif.loadData %DevMode% == 2 $call "RScript ./loadMadratData.R DevMode=2"
 $endif.loadData
 $endif.genInp
 
-$include sets.gms
+$include "./core/sets.gms"
 $include declarations.gms
 $include input.gms
 $include equations.gms
 $include preloop.gms
 $include solve.gms
+$batinclude "./modules/include.gms"
