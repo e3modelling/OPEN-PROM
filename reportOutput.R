@@ -352,13 +352,6 @@ emission_gdx_7 <- readGDX('./blabla.gdx', "VElecProd", field = 'l')
 emission_gdx_8 <- readGDX('./blabla.gdx', "iPlantEffByType", field = 'l')
 emission_gdx_9 <- readGDX('./blabla.gdx', "iCO2CaptRate", field = 'l')
 
-TRANSECTOR <- readSets("sets.gms", "TRANSE")
-TRANSECTOR <- unlist(strsplit(TRANSECTOR[, 1], ","))
-map_TRANSECTOR = paste(TRANSECTOR, ".", getItems(emission_gdx_1, 3.2))
-map_TRANSECTOR <- as.data.frame(map_TRANSECTOR)
-map_TRANSECTOR <- map_TRANSECTOR %>% 
-  mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
-
 EFtoEFS <- readSets("sets.gms", "EFtoEFS")
 EFtoEFS <- as.data.frame(EFtoEFS)
 EFtoEFS <- separate_wider_delim(EFtoEFS,cols = 1, delim = ".", names = c("EFtoEFS","EF"))
@@ -371,9 +364,17 @@ emission_gdx_2_a <- toolAggregate(emission_gdx_2[,,unique(EFtoEFS$EF)],dim=3.2,r
 emission_gdx_4_a <- toolAggregate(emission_gdx_4[,,unique(EFtoEFS$EF)],dim=3.2,rel=EFtoEFS,from="EF",to="EFtoEFS")
 emission_gdx_5_a <- toolAggregate(emission_gdx_5[,,unique(EFtoEFS$EF)],dim=3.2,rel=EFtoEFS,from="EF",to="EFtoEFS")
 
+SECTTECH <- readSets("sets.gms", "SECTTECH")
+SECTTECH <- SECTTECH[c(6,7), 1]
+SECTTECH[1] <- gsub("\\.", ",", SECTTECH[1])
+SECTTECH <- unlist(strsplit(SECTTECH, ","))
+SECTTECH <- SECTTECH[c(11:26)]
+SECTTECH <- gsub("\\(|\\)", "", SECTTECH)
+SECTTECH <- as.data.frame(SECTTECH)
+
 INDSE <- readSets("sets.gms", "INDSE")
 INDSE <- unlist(strsplit(INDSE[, 1], ","))
-INDSE <- paste(INDSE, ".", getItems(emission_gdx_1_a, 3.2))
+INDSE <- paste(INDSE, ".", SECTTECH[,1])
 INDSE <- as.data.frame(INDSE)
 INDSE <- INDSE %>% 
   mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
@@ -397,7 +398,66 @@ sum3 <- var_4 * var_20
 var_6 <- dimSums(emission_gdx_5_a, 3, na.rm = TRUE)
 var_7 <- dimSums(emission_gdx_1_a[,,"PG"], 3, na.rm = TRUE)
 sum4 <- var_6 * var_7
-var_8 <- dimSums(emission_gdx_6, 3, na.rm = TRUE)
+
+
+PC <- readSets("sets.gms", "SECTTECH")
+PC <- PC[1, 1]
+PC <- regmatches(PC, gregexpr("(?<=\\().*?(?=\\))", PC, perl=T))[[1]]
+PC <- unlist(strsplit(PC, ","))
+PC <- as.data.frame(PC)
+PC <- paste("PC", ".", PC[,1])
+PC <- as.data.frame(PC)
+PC <- PC %>% 
+  mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
+GU <- readSets("sets.gms", "SECTTECH")
+GU <- GU[2, 1]
+GU <- regmatches(GU, gregexpr("(?<=\\().*?(?=\\))", GU, perl=T))[[1]]
+GU <- unlist(strsplit(GU, ","))
+GU <- as.data.frame(GU)
+GU <- paste("GU", ".", GU[,1])
+GU <- as.data.frame(GU)
+GU <- GU %>% 
+  mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
+PT <- readSets("sets.gms", "SECTTECH")
+PT <- PT[3, 1]
+PT <- regmatches(PT, gregexpr("(?<=\\().*?(?=\\))", PT, perl=T))[[1]]
+PT <- unlist(strsplit(PT, ","))
+PT <- as.data.frame(PT)
+PT <- as.data.frame(PT[c(3:5),1])
+PT <- paste("PT", ".", PT[,1])
+PT <- as.data.frame(PT)
+PT <- PT %>% 
+  mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
+GT <- readSets("sets.gms", "SECTTECH")
+GT <- GT[3, 1]
+GT <- regmatches(GT, gregexpr("(?<=\\().*?(?=\\))", GT, perl=T))[[1]]
+GT <- unlist(strsplit(GT, ","))
+GT <- as.data.frame(GT)
+GT <- as.data.frame(GT[c(3:5),1])
+GT <- paste("GT", ".", GT[,1])
+GT <- as.data.frame(GT)
+GT <- GT %>% 
+  mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
+PA <- as.data.frame("PA.KRS")
+GN <- readSets("sets.gms", "SECTTECH")
+GN <- GN[5, 1]
+GN <- regmatches(GN, gregexpr("(?<=\\().*?(?=\\))", GN, perl=T))[[1]]
+GN <- unlist(strsplit(GN, ","))
+GN <- as.data.frame(GN)
+GN <- paste("GN", ".", GN[,1])
+GN <- as.data.frame(GN)
+GN <- GN %>% 
+  mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
+names(PC) <- "r"
+names(PA) <- "r"
+names(PT) <- "r"
+names(GU) <- "r"
+names(GT) <- "r"
+names(GN) <- "r"
+
+map_TRANSECTOR <- rbind(PT,GT,PA,PC,GU,GN)
+
+var_8 <- dimSums(emission_gdx_6[,,map_TRANSECTOR[, 1]], 3, na.rm = TRUE)
 var_9 <- dimSums(emission_gdx_1[,,map_TRANSECTOR[, 1]], 3, na.rm = TRUE)
 sum7 <- var_8 * var_9
 
@@ -417,8 +477,19 @@ var_12 <- toolAggregate(emission_gdx_8[,,CCS[,1]],dim=3,rel=CCS,from="PGALL",to=
 var_13 <- toolAggregate(emission_gdx_9[,,CCS[,1]],dim=3,rel=CCS,from="PGALL",to="EF")
 var_16 <- var_11 * 0.086 / var_12 * var_10 * var_13
 sum5 <- dimSums(var_16,dim=3, na.rm = TRUE)
-var_14 <- dimSums(emission_gdx_1_a[,,"BU"], 3, na.rm = TRUE)
-var_15 <- dimSums(emission_gdx_2_a[,,"BU"], 3, na.rm = TRUE)
+
+SECTTECH2 <- readSets("sets.gms", "SECTTECH")
+SECTTECH2 <- SECTTECH2[11, 1]
+SECTTECH2 <- regmatches(SECTTECH2, gregexpr("(?<=\\().*?(?=\\))", SECTTECH2, perl=T))[[1]]
+SECTTECH2 <- unlist(strsplit(SECTTECH2, ","))
+SECTTECH2 <- as.data.frame(SECTTECH2)
+SECTTECH2 <- paste("BU", ".", SECTTECH2[,1])
+SECTTECH2 <- as.data.frame(SECTTECH2)
+SECTTECH2 <- SECTTECH2 %>% 
+  mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
+
+var_14 <- dimSums(emission_gdx_1_a[,,SECTTECH2[,1]], 3, na.rm = TRUE)
+var_15 <- dimSums(emission_gdx_2_a[,,SECTTECH2[,1]], 3, na.rm = TRUE)
 sum6 <- var_14 * var_15
 
 SUM <- ifelse(is.na(sum1), 0, sum1) + ifelse(is.na(sum2), 0, sum2) + ifelse(is.na(sum3), 0, sum3) + ifelse(is.na(sum4), 0, sum4) - ifelse(is.na(sum5), 0, sum5) + ifelse(is.na(sum6), 0, sum6)  + ifelse(is.na(sum7), 0, sum7)
