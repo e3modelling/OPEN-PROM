@@ -363,15 +363,8 @@ EFtoEFS[["EF"]] <- sub("\\(","",EFtoEFS[["EF"]])
 EFtoEFS[["EF"]] <- sub("\\)","",EFtoEFS[["EF"]])
 EFtoEFS <- EFtoEFS %>% separate_longer_delim(c(EF, EFS), delim = ",")
 
-#iCo2EmiFac_by_EFS <- toolAggregate(iCo2EmiFac[,,unique(EFtoEFS$EF)],dim=3.2,rel=EFtoEFS,from="EF",to="EFS")
-#VConsFuel_by_EFS <- toolAggregate(VConsFuel[,,unique(EFtoEFS$EF)],dim=3.2,rel=EFtoEFS,from="EF",to="EFS")
-#VTransfInputDHPlants_by_EFS <- toolAggregate(VTransfInputDHPlants[,,unique(EFtoEFS$EF)],dim=3.2,rel=EFS,from="EF",to="EFS")
-#VEnCons_by_EFS <- toolAggregate(VEnCons[,,unique(EFtoEFS$EF)],dim=3.2,rel=EFtoEFS,from="EF",to="EFS")
-
-iCo2EmiFac_by_EFS <- iCo2EmiFac[,,unique(EFtoEFS$EFS)]
-VConsFuel_by_EFS <- VConsFuel[,,unique(EFtoEFS$EFS)]
-VTransfInputDHPlants_by_EFS <- VTransfInputDHPlants[,,unique(EFtoEFS$EFS)]
-VEnCons_by_EFS <- VEnCons[,,unique(EFtoEFS$EFS)]
+iCo2EmiFac_by_EFS <- toolAggregate(iCo2EmiFac[,,unique(EFtoEFS$EF)],dim=3.2,rel=EFtoEFS,from="EF",to="EFS")
+VConsFuel_by_EFS <- toolAggregate(VConsFuel[,,unique(EFtoEFS$EF)],dim=3.2,rel=EFtoEFS,from="EF",to="EFS")
 
 SECTTECH <- readSets("sets.gms", "SECTTECH")
 SECTTECH <- SECTTECH[c(6,7), 1]
@@ -414,10 +407,10 @@ var_3 <- dimSums(VTransfInThermPowPls[,,PGEF[,1]], 3, na.rm = TRUE)#(PGEF, TICT.
 var_5 <- dimSums(iCo2EmiFac[,,"PG"], 3.1, na.rm = TRUE)
 var_5 <- dimSums(var_5[,,PGEF[,1]], 3, na.rm = TRUE)#CO2EMFAC(CYrun,"PG",PGEF,YTIME))
 sum2 <- var_3 * var_5
-var_4 <- dimSums(VTransfInputDHPlants_by_EFS, 3, na.rm = TRUE)#(EFS, TIDH.L(CYrun,EFS,YTIME)
+var_4 <- dimSums(VTransfInputDHPlants, 3, na.rm = TRUE)#(EFS, TIDH.L(CYrun,EFS,YTIME)
 var_20 <- dimSums(iCo2EmiFac_by_EFS[,,"PG"], 3, na.rm = TRUE)#CO2EMFAC(CYrun,"PG",EFS,YTIME))
 sum3 <- var_4 * var_20
-var_6 <- dimSums(VEnCons_by_EFS, 3, na.rm = TRUE)#(EFS, CEN.L(CYrun,EFS,YTIME)
+var_6 <- dimSums(VEnCons, 3, na.rm = TRUE)#(EFS, CEN.L(CYrun,EFS,YTIME)
 var_7 <- dimSums(iCo2EmiFac_by_EFS[,,"PG"], 3, na.rm = TRUE)#CO2EMFAC(CYrun,"PG",EFS,YTIME))
 sum4 <- var_6 * var_7
 
@@ -514,9 +507,9 @@ var_14 <- dimSums(iCo2EmiFac_by_EFS[,,SECTTECH2[,1]], 3, na.rm = TRUE)#co2emfac(
 var_15 <- dimSums(VConsFuel_by_EFS[,,SECTTECH2[,1]], 3, na.rm = TRUE)#consef.l(CYrun,DSBS,EFS,YTIME) 
 sum7 <- var_14 * var_15
 
-SUM <- ifelse(is.na(sum1), 0, sum1) + ifelse(is.na(sum2), 0, sum2) + ifelse(is.na(sum3), 0, sum3) + ifelse(is.na(sum4), 0, sum4) + ifelse(is.na(sum5), 0, sum5) - ifelse(is.na(sum6), 0, sum6)  + ifelse(is.na(sum7), 0, sum7)
+total_CO2 <- ifelse(is.na(sum1), 0, sum1) + ifelse(is.na(sum2), 0, sum2) + ifelse(is.na(sum3), 0, sum3) + ifelse(is.na(sum4), 0, sum4) + ifelse(is.na(sum5), 0, sum5) - ifelse(is.na(sum6), 0, sum6)  + ifelse(is.na(sum7), 0, sum7)
 
-getItems(SUM, 3) <- paste0("Emission")
+getItems(total_CO2, 3) <- paste0("Emission")
 
 #add model MENA_EDS data (choosing the correct variable from MENA by use of the MENA-PROM mapping)
 MENA_iCo2EmiFac <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "iCo2EmiFac", "MENA.EDS"])
@@ -531,8 +524,9 @@ MENA_iCO2CaptRate <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] ==
 
 MENA_iCo2EmiFac_by_EFS <- MENA_iCo2EmiFac[,,unique(EFtoEFS$EFS)]
 MENA_VConsFuel_by_EFS <- MENA_VConsFuel[,,unique(EFtoEFS$EFS)]
-MENA_VTransfInputDHPlants_by_EFS <- MENA_VTransfInputDHPlants[,,unique(EFtoEFS$EFS)]
-MENA_VEnCons_by_EFS <- MENA_VEnCons[,,unique(EFtoEFS$EFS)]
+
+MENA_iCo2EmiFac_by_EFS <- toolAggregate(MENA_iCo2EmiFac[,,unique(EFtoEFS$EF)],dim=3.2,rel=EFtoEFS,from="EF",to="EFS")
+MENA_VConsFuel_by_EFS <- toolAggregate(MENA_VConsFuel[,,unique(EFtoEFS$EF)],dim=3.2,rel=EFtoEFS,from="EF",to="EFS")
 
 MENA_var_1 <- dimSums(MENA_iCo2EmiFac_by_EFS[,,INDSE[, 1]], 3, na.rm = TRUE)
 MENA_var_2 <- dimSums(MENA_VConsFuel_by_EFS[,,INDSE[, 1]], 3, na.rm = TRUE)
@@ -541,10 +535,10 @@ MENA_var_3 <- dimSums(MENA_VTransfInThermPowPls[,,PGEF[,1]], 3, na.rm = TRUE)
 MENA_var_5 <- dimSums(MENA_iCo2EmiFac[,,"PG"], 3.1, na.rm = TRUE)
 MENA_var_5 <- dimSums(MENA_var_5[,,PGEF[,1]], 3, na.rm = TRUE)
 MENA_sum2 <- MENA_var_3 * MENA_var_5
-MENA_var_4 <- dimSums(MENA_VTransfInputDHPlants_by_EFS, 3, na.rm = TRUE)
+MENA_var_4 <- dimSums(MENA_VTransfInputDHPlants, 3, na.rm = TRUE)
 MENA_var_20 <- dimSums(MENA_iCo2EmiFac_by_EFS[,,"PG"], 3, na.rm = TRUE)
 MENA_sum3 <- MENA_var_4 * MENA_var_20
-MENA_var_6 <- dimSums(MENA_VEnCons_by_EFS, 3, na.rm = TRUE)
+MENA_var_6 <- dimSums(MENA_VEnCons, 3, na.rm = TRUE)
 MENA_var_7 <- dimSums(MENA_iCo2EmiFac_by_EFS[,,"PG"], 3, na.rm = TRUE)
 MENA_sum4 <- MENA_var_6 * MENA_var_7
 MENA_var_8 <- dimSums(MENA_VDemTr[,,map_TRANSECTOR[, 1]], 3, na.rm = TRUE)
@@ -567,15 +561,15 @@ getItems(MENA_SUM, 3) <- paste0("Emission")
 
 getRegions(MENA_SUM) <- sub("MOR", "MAR", getRegions(MENA_SUM))
 # choose years and regions that both models have
-years <- intersect(getYears(MENA_SUM,as.integer=TRUE),getYears(SUM,as.integer=TRUE))
-regs <- intersect(getRegions(MENA_SUM),getRegions(SUM))
+years <- intersect(getYears(MENA_SUM,as.integer=TRUE),getYears(total_CO2,as.integer=TRUE))
+regs <- intersect(getRegions(MENA_SUM),getRegions(total_CO2))
 getItems(MENA_SUM, 3.1) <- paste0("Emission")
 
 # write data in mif file
-write.report(SUM[,years,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario="BASE")
+write.report(total_CO2[,years,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario="BASE")
 write.report(MENA_SUM[regs,years,],file="reporting.mif",model="MENA-EDS",unit="various",append=TRUE,scenario="BASE")
 #c("MAR","IND","USA","EGY","RWO")
-calc <- dimSums(SUM[c("MAR","IND","USA","EGY","RWO"),2018:2020,], 1, na.rm = TRUE)
+calc <- dimSums(total_CO2[c("MAR","IND","USA","EGY","RWO"),2018:2020,], 1, na.rm = TRUE)
 VTotGhgEmisAllCountrNap <- readGDX('./blabla.gdx', "VTotGhgEmisAllCountrNap", field = 'l')
 VTotGhgEmisAllCountrNap <- dimSums(VTotGhgEmisAllCountrNap[,2018:2020,], 3, na.rm = TRUE)
 diff <- calc - VTotGhgEmisAllCountrNap
