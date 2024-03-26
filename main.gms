@@ -91,6 +91,8 @@ $onEolCom
 $onEnd
 *' *** onEmpty allows declarations of empty parameters
 $onEmpty
+*' *** offOrder allows ord operator on dynamic sets
+$offOrder
 
 *' *** GAMS "flags" definitions
 *' 
