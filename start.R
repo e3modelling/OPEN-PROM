@@ -1,9 +1,11 @@
 #library(gitr)
 
 # generate name of run folder
-folderName <- paste("default",format(Sys.time(), "%e-%m-%Y_%H-%M-%S"),sep="_")
+scenario <- "default"
+folderName <- paste(scenario, format(Sys.time(), "%e-%m-%Y_%H-%M-%S"), sep="_")
 
 # create run folder under /runs
+if (!file.exists("runs")) dir.create("runs")
 runfolder <- paste0("runs/", folderName)
 dir.create(runfolder)
 
