@@ -363,8 +363,12 @@ EFtoEFS[["EF"]] <- sub("\\(","",EFtoEFS[["EF"]])
 EFtoEFS[["EF"]] <- sub("\\)","",EFtoEFS[["EF"]])
 EFtoEFS <- EFtoEFS %>% separate_longer_delim(c(EF, EFS), delim = ",")
 
-iCo2EmiFac_by_EFS <- toolAggregate(iCo2EmiFac[,,unique(EFtoEFS$EF)],dim=3.2,rel=EFtoEFS,from="EF",to="EFS")
-VConsFuel_by_EFS <- toolAggregate(VConsFuel[,,unique(EFtoEFS$EF)],dim=3.2,rel=EFtoEFS,from="EF",to="EFS")
+#iCo2EmiFac_by_EFS <- toolAggregate(iCo2EmiFac[,,unique(EFtoEFS$EF)],dim=3.2,rel=EFtoEFS,from="EF",to="EFS")
+iCo2EmiFac_by_EFS <- iCo2EmiFac[,,EFtoEFS$EFS]
+getSets(iCo2EmiFac_by_EFS)["d3.2"] <- "EFS"
+#VConsFuel_by_EFS <- toolAggregate(VConsFuel[,,unique(EFtoEFS$EF)],dim=3.2,rel=EFtoEFS,from="EF",to="EFS")
+VConsFuel_by_EFS <- VConsFuel[,,EFtoEFS$EFS]
+getSets(VConsFuel_by_EFS)["d3.2"] <- "EFS"
 
 SECTTECH <- readSets("sets.gms", "SECTTECH")
 SECTTECH <- SECTTECH[c(6,7), 1]
@@ -374,46 +378,72 @@ SECTTECH <- SECTTECH[c(11:26)]
 SECTTECH <- gsub("\\(|\\)", "", SECTTECH)
 SECTTECH <- as.data.frame(SECTTECH)
 
+SECTTECH3 <- readSets("sets.gms", "SECTTECH")
+SECTTECH3 <- SECTTECH3[c(8,9,10), 1]
+SECTTECH3[1] <- gsub("\\.", ",", SECTTECH3[1])
+SECTTECH3 <- unlist(strsplit(SECTTECH3, ","))
+SECTTECH3 <- SECTTECH3[c(4:29)]
+SECTTECH3 <- gsub("\\(|\\)", "", SECTTECH3)
+SECTTECH3 <- as.data.frame(SECTTECH3)
+
+SECTTECH3 <- SECTTECH3 %>% 
+  mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
+
+SECTTECH3 <- SECTTECH3[!(SECTTECH3[,1] %in% SECTTECH[,1]),1]
+SECTTECH3 <- as.data.frame(SECTTECH3)
+names(SECTTECH3) <- sub("SECTTECH3", "SECTTECH", names(SECTTECH3))
+
+#SECTTECH <- rbind(SECTTECH, SECTTECH3)
+
 names(SECTTECH) <- sub("SECTTECH", "EF", names(SECTTECH))
 qx <- left_join(SECTTECH, EFtoEFS, by = "EF")
-qx <- select((qx), -c(EF))
+qx <- select((qx), -c(EFS))
 
 SECTTECH <- unique(qx)
-names(SECTTECH) <- sub("EFS", "SECTTECH", names(SECTTECH))
+names(SECTTECH) <- sub("EF", "SECTTECH", names(SECTTECH))
 
-IND <- readSets("sets.gms", "INDDOM")
+IND <- readSets("sets.gms", "INDSE")
 IND <- unlist(strsplit(IND[, 1], ","))
 IND <- as.data.frame(IND)
 INDSE <- NULL
 for (y in 1:nrow(IND)) {
-  p <- paste(IND[y,1], ".", SECTTECH[,1])
+  p <- paste(IND[y,1], ".", SECTTECH[1:16,1])
   p <- as.data.frame(p)
   p <- p %>% 
     mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
   INDSE <- rbind(INDSE, p)
 }
+
+# for (y in 11:nrow(IND)) {
+#   p <- paste(IND[y,1], ".", SECTTECH[12:13,1])
+#   p <- as.data.frame(p)
+#   p <- p %>% 
+#     mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
+#   INDSE <- rbind(INDSE, p)
+# }
+
 INDSE <- as.data.frame(INDSE)
 
 PGEF <- readSets("sets.gms", "PGEF")
 PGEF <- as.data.frame(PGEF)
 
-CCS <- readSets("sets.gms", "CCS")
-CCS <- as.data.frame(CCS)
+sum1 <- iCo2EmiFac[,,INDSE[, 1]] * VConsFuel[,,INDSE[, 1]]
+sum1 <- dimSums(sum1, 3, na.rm = TRUE)
 
-var_1 <- dimSums(iCo2EmiFac_by_EFS[,,INDSE[, 1]], 3, na.rm = TRUE)#CO2EMFAC(CYrun,DSBS,EFS,YTIME))
-var_2 <- dimSums(VConsFuel_by_EFS[,,INDSE[, 1]], 3, na.rm = TRUE)#CONSEF.L(CYrun,DSBS,EFS,YTIME)
-sum1 <- var_1 * var_2
-var_3 <- dimSums(VTransfInThermPowPls[,,PGEF[,1]], 3, na.rm = TRUE)#(PGEF, TICT.L(CYrun,PGEF,YTIME)
 var_5 <- dimSums(iCo2EmiFac[,,"PG"], 3.1, na.rm = TRUE)
-var_5 <- dimSums(var_5[,,PGEF[,1]], 3, na.rm = TRUE)#CO2EMFAC(CYrun,"PG",PGEF,YTIME))
-sum2 <- var_3 * var_5
-var_4 <- dimSums(VTransfInputDHPlants, 3, na.rm = TRUE)#(EFS, TIDH.L(CYrun,EFS,YTIME)
-var_20 <- dimSums(iCo2EmiFac_by_EFS[,,"PG"], 3, na.rm = TRUE)#CO2EMFAC(CYrun,"PG",EFS,YTIME))
-sum3 <- var_4 * var_20
-var_6 <- dimSums(VEnCons, 3, na.rm = TRUE)#(EFS, CEN.L(CYrun,EFS,YTIME)
-var_7 <- dimSums(iCo2EmiFac_by_EFS[,,"PG"], 3, na.rm = TRUE)#CO2EMFAC(CYrun,"PG",EFS,YTIME))
-sum4 <- var_6 * var_7
+sum2 <- VTransfInThermPowPls[,,PGEF[,1]]*var_5[,,PGEF[,1]]
+sum2 <- dimSums(sum2, 3, na.rm = TRUE)
 
+var_41 <- dimSums(iCo2EmiFac[,,"PG"], 3.1, na.rm = TRUE)
+getSets(var_41)["d3.1"] <- "EFS"
+#VTransfInputDHPlants <- toolAggregate(VTransfInputDHPlants[,,],dim=3.1,rel=EFtoEFS,from="EFS",to="EF")
+sum3 <- VTransfInputDHPlants * var_41[,,getItems(VTransfInputDHPlants,3)]
+sum3 <- dimSums(sum3, 3, na.rm = TRUE)
+
+var_7 <- dimSums(iCo2EmiFac[,,"PG"], 3.1, na.rm = TRUE)
+getSets(var_7)["d3.1"] <- "EFS"
+sum4 <- VEnCons * var_7[,,getItems(VEnCons,3)]
+sum4 <- dimSums(sum4, 3, na.rm = TRUE)
 
 PC <- readSets("sets.gms", "SECTTECH")
 PC <- PC[1, 1]
@@ -472,9 +502,8 @@ names(GN) <- "r"
 
 map_TRANSECTOR <- rbind(PT,GT,PA,PC,GU,GN)
 
-var_8 <- dimSums(VDemTr[,,map_TRANSECTOR[, 1]], 3, na.rm = TRUE)#DEMTR.L(CYrun,TRANSE,EF,YTIME)
-var_9 <- dimSums(iCo2EmiFac[,,map_TRANSECTOR[, 1]], 3, na.rm = TRUE)#CO2EMFAC(CYrun,TRANSE,EF,YTIME))
-sum5 <- var_8 * var_9
+sum5 <- VDemTr[,,map_TRANSECTOR[, 1]] * iCo2EmiFac[,,map_TRANSECTOR[, 1]]
+sum5 <- dimSums(sum5, 3, na.rm = TRUE)
 
 PGALLtoEF <- readSets("sets.gms", "PGALLtoEF")
 PGALLtoEF <- as.data.frame(PGALLtoEF)
@@ -483,15 +512,16 @@ PGALLtoEF[["PGALL"]] <- sub("\\(","",PGALLtoEF[["PGALL"]])
 PGALLtoEF[["PGALL"]] <- sub("\\)","",PGALLtoEF[["PGALL"]])
 PGALLtoEF <- separate_rows(PGALLtoEF,PGALL)
 
+CCS <- readSets("sets.gms", "CCS")
+CCS <- as.data.frame(CCS)
+
 CCS <- PGALLtoEF[PGALLtoEF$PGALL %in% CCS$CCS, ]
-  
+
 var_10 <- dimSums(iCo2EmiFac[,,"PG"],dim=3.1, na.rm = TRUE)
-var_10 <- var_10[,,CCS[,2]]#CO2EMFAC(CYrun,"PG",PGEF,YTIME)
-var_11 <- toolAggregate(VElecProd[,,CCS[,1]],dim=3,rel=CCS,from="PGALL",to="EF")#ELCPROD.L(CYrun,CCS,YTIME)
-var_12 <- toolAggregate(iPlantEffByType[,,CCS[,1]],dim=3,rel=CCS,from="PGALL",to="EF")#PGEFF(CYrun,CCS,YTIME)
-var_13 <- toolAggregate(iCO2CaptRate[,,CCS[,1]],dim=3,rel=CCS,from="PGALL",to="EF")#PGCR(CYrun,CCS,YTIME)))
-var_16 <- var_11 * 0.086 / var_12 * var_10 * var_13
-sum6 <- dimSums(var_16,dim=3, na.rm = TRUE)
+var_16 <- VElecProd[,,CCS[,1]] * 0.086 / iPlantEffByType[,,CCS[,1]] * var_10[,,CCS[,2]] * iCO2CaptRate[,,CCS[,1]]
+#iCO2CaptRate[,,CCS[,1]]
+#var_16 <- (ifelse(is.na(VElecProd[,,CCS[,1]]), 1, VElecProd[,,CCS[,1]])) * 0.086 / (ifelse(is.na(iPlantEffByType[,,CCS[,1]]), 1, iPlantEffByType[,,CCS[,1]])) * (ifelse(is.na(var_10[,,CCS[,2]]), 1, var_10[,,CCS[,2]])) * (ifelse(is.na(iCO2CaptRate[,,CCS[,1]]), 1, iCO2CaptRate[,,CCS[,1]]))
+sum6 <- dimSums(var_16,dim=3, na.rm = TRUE) 
 
 SECTTECH2 <- readSets("sets.gms", "SECTTECH")
 SECTTECH2 <- SECTTECH2[11, 1]
@@ -503,11 +533,11 @@ SECTTECH2 <- as.data.frame(SECTTECH2)
 SECTTECH2 <- SECTTECH2 %>% 
   mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
 
-var_14 <- dimSums(iCo2EmiFac_by_EFS[,,SECTTECH2[,1]], 3, na.rm = TRUE)#co2emfac(CYrun,DSBS,EFS,YTIME))
-var_15 <- dimSums(VConsFuel_by_EFS[,,SECTTECH2[,1]], 3, na.rm = TRUE)#consef.l(CYrun,DSBS,EFS,YTIME) 
-sum7 <- var_14 * var_15
+sum7 <- iCo2EmiFac[,,SECTTECH2[,1]] * VConsFuel[,,SECTTECH2[,1]]
+sum7 <- dimSums(sum7,dim=3, na.rm = TRUE)
 
-total_CO2 <- ifelse(is.na(sum1), 0, sum1) + ifelse(is.na(sum2), 0, sum2) + ifelse(is.na(sum3), 0, sum3) + ifelse(is.na(sum4), 0, sum4) + ifelse(is.na(sum5), 0, sum5) - ifelse(is.na(sum6), 0, sum6)  + ifelse(is.na(sum7), 0, sum7)
+total_CO2 <- sum1 + sum2 + sum3 + sum4 + sum5 - sum6 + sum7
+#total_CO2 <- sum1 + sum2 + sum3 + sum4 - sum6
 
 getItems(total_CO2, 3) <- paste0("Emission")
 
@@ -525,37 +555,36 @@ MENA_iCO2CaptRate <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] ==
 MENA_iCo2EmiFac_by_EFS <- MENA_iCo2EmiFac[,,unique(EFtoEFS$EFS)]
 MENA_VConsFuel_by_EFS <- MENA_VConsFuel[,,unique(EFtoEFS$EFS)]
 
-MENA_iCo2EmiFac_by_EFS <- toolAggregate(MENA_iCo2EmiFac[,,unique(EFtoEFS$EF)],dim=3.2,rel=EFtoEFS,from="EF",to="EFS")
-MENA_VConsFuel_by_EFS <- toolAggregate(MENA_VConsFuel[,,unique(EFtoEFS$EF)],dim=3.2,rel=EFtoEFS,from="EF",to="EFS")
+MENA_sum1 <- MENA_iCo2EmiFac[,,INDSE[, 1]] * MENA_VConsFuel[,,INDSE[, 1]]
+MENA_sum1 <- dimSums(MENA_sum1, 3, na.rm = TRUE)
 
-MENA_var_1 <- dimSums(MENA_iCo2EmiFac_by_EFS[,,INDSE[, 1]], 3, na.rm = TRUE)
-MENA_var_2 <- dimSums(MENA_VConsFuel_by_EFS[,,INDSE[, 1]], 3, na.rm = TRUE)
-MENA_sum1 <- MENA_var_1 * MENA_var_2
-MENA_var_3 <- dimSums(MENA_VTransfInThermPowPls[,,PGEF[,1]], 3, na.rm = TRUE)
 MENA_var_5 <- dimSums(MENA_iCo2EmiFac[,,"PG"], 3.1, na.rm = TRUE)
-MENA_var_5 <- dimSums(MENA_var_5[,,PGEF[,1]], 3, na.rm = TRUE)
-MENA_sum2 <- MENA_var_3 * MENA_var_5
-MENA_var_4 <- dimSums(MENA_VTransfInputDHPlants, 3, na.rm = TRUE)
-MENA_var_20 <- dimSums(MENA_iCo2EmiFac_by_EFS[,,"PG"], 3, na.rm = TRUE)
-MENA_sum3 <- MENA_var_4 * MENA_var_20
-MENA_var_6 <- dimSums(MENA_VEnCons, 3, na.rm = TRUE)
-MENA_var_7 <- dimSums(MENA_iCo2EmiFac_by_EFS[,,"PG"], 3, na.rm = TRUE)
-MENA_sum4 <- MENA_var_6 * MENA_var_7
-MENA_var_8 <- dimSums(MENA_VDemTr[,,map_TRANSECTOR[, 1]], 3, na.rm = TRUE)
-MENA_var_9 <- dimSums(MENA_iCo2EmiFac[,,map_TRANSECTOR[, 1]], 3, na.rm = TRUE)
-MENA_sum5 <- MENA_var_8 * MENA_var_9
-MENA_var_10 <- dimSums(MENA_iCo2EmiFac[,,"PG"],dim=3.1, na.rm = TRUE)
-MENA_var_10 <- MENA_var_10[,,CCS[,2]]
-MENA_var_11 <- toolAggregate(MENA_VElecProd[,,CCS[,1]],dim=3,rel=CCS,from="PGALL",to="EF")
-MENA_var_12 <- toolAggregate(MENA_iPlantEffByType[,,CCS[,1]],dim=3,rel=CCS,from="PGALL",to="EF")
-MENA_var_13 <- toolAggregate(MENA_iCO2CaptRate[,,CCS[,1]],dim=3,rel=CCS,from="PGALL",to="EF")
-MENA_var_16 <- MENA_var_11 * 0.086 / MENA_var_12 * MENA_var_10 * MENA_var_13
-MENA_sum6 <- dimSums(MENA_var_16,dim=3, na.rm = TRUE)
-MENA_var_14 <- dimSums(MENA_iCo2EmiFac_by_EFS[,,SECTTECH2[,1]], 3, na.rm = TRUE)
-MENA_var_15 <- dimSums(MENA_VConsFuel_by_EFS[,,SECTTECH2[,1]], 3, na.rm = TRUE)
-MENA_sum7 <- MENA_var_14 * MENA_var_15
+getSets(MENA_var_5)["d3.1"] <- "EFS"
+MENA_sum2 <- MENA_VTransfInThermPowPls[,,PGEF[,1]]*MENA_var_5[,,PGEF[,1]]
+MENA_sum2 <- dimSums(MENA_sum2, 3, na.rm = TRUE)
 
-MENA_SUM <- ifelse(is.na(MENA_sum1), 0, MENA_sum1) + ifelse(is.na(MENA_sum2), 0, MENA_sum2) + ifelse(is.na(MENA_sum3), 0, MENA_sum3) + ifelse(is.na(MENA_sum4), 0, MENA_sum4) + ifelse(is.na(MENA_sum5), 0, MENA_sum5) - ifelse(is.na(MENA_sum6), 0, MENA_sum6) + ifelse(is.na(MENA_sum7), 0, MENA_sum7)
+MENA_var_41 <- dimSums(MENA_iCo2EmiFac[,,"PG"], 3.1, na.rm = TRUE)
+getSets(MENA_var_41)["d3.1"] <- "EFS"
+MENA_sum3 <- MENA_VTransfInputDHPlants[,,] * MENA_var_41[,,getItems(MENA_VTransfInputDHPlants,3)]
+MENA_sum3 <- dimSums(MENA_sum3, 3, na.rm = TRUE)
+
+MENA_var_7 <- dimSums(MENA_iCo2EmiFac[,,"PG"], 3.1, na.rm = TRUE)
+getSets(MENA_var_7)["d3.1"] <- "EFS"
+MENA_sum4 <- MENA_VEnCons * MENA_var_7[,,getItems(MENA_VEnCons,3)]
+MENA_sum4 <- dimSums(MENA_sum4, 3, na.rm = TRUE)
+
+MENA_sum5 <- MENA_VDemTr[,,map_TRANSECTOR[, 1]] * MENA_iCo2EmiFac[,,map_TRANSECTOR[, 1]]
+MENA_sum5 <- dimSums(MENA_sum5, 3, na.rm = TRUE)
+
+MENA_var_10 <- dimSums(MENA_iCo2EmiFac[,,"PG"],dim=3.1, na.rm = TRUE)
+MENA_var_16 <- MENA_VElecProd[,,CCS[,1]] * 0.086 / MENA_iPlantEffByType[,,CCS[,1]] * MENA_var_10[,,CCS[,2]] * MENA_iCO2CaptRate[,,CCS[,1]]
+MENA_sum6 <- dimSums(MENA_var_16,dim=3, na.rm = TRUE)
+
+MENA_sum7 <- MENA_iCo2EmiFac[,,SECTTECH2[,1]] * MENA_VConsFuel[,,SECTTECH2[,1]]
+MENA_sum7 <- dimSums(MENA_sum7,dim=3, na.rm = TRUE)
+
+MENA_SUM <- MENA_sum1 + MENA_sum2 + MENA_sum3 + MENA_sum4 + MENA_sum5 - MENA_sum6 + MENA_sum7
+#MENA_SUM <- MENA_sum1 + MENA_sum2 + MENA_sum3 + MENA_sum4 - MENA_sum6
 
 getItems(MENA_SUM, 3) <- paste0("Emission")
 
@@ -569,21 +598,30 @@ getItems(MENA_SUM, 3.1) <- paste0("Emission")
 write.report(total_CO2[,years,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario="BASE")
 write.report(MENA_SUM[regs,years,],file="reporting.mif",model="MENA-EDS",unit="various",append=TRUE,scenario="BASE")
 #c("MAR","IND","USA","EGY","RWO")
-calc <- dimSums(total_CO2[c("MAR","IND","USA","EGY","RWO"),2018:2020,], 1, na.rm = TRUE)
+
+runCY <- readGDX('./blabla.gdx', "runCY", field = 'l')
+runCY <- as.vector(runCY)
+
+calc <- dimSums(total_CO2[,2018:2030,], 1, na.rm = TRUE)
 VTotGhgEmisAllCountrNap <- readGDX('./blabla.gdx', "VTotGhgEmisAllCountrNap", field = 'l')
-VTotGhgEmisAllCountrNap <- dimSums(VTotGhgEmisAllCountrNap[,2018:2020,], 3, na.rm = TRUE)
+VTotGhgEmisAllCountrNap <- dimSums(VTotGhgEmisAllCountrNap[,2018:2030,], 3, na.rm = TRUE)
 diff <- calc - VTotGhgEmisAllCountrNap
 diff <- as.quitte(diff)
 
+calc_MENA <- dimSums(MENA_SUM[,2018:2025,], 1, na.rm = TRUE)
+CO2EMISTOT <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VTotGhgEmisAllCountrNap", "MENA.EDS"])
+CO2EMISTOT <- dimSums(CO2EMISTOT[,2018:2025,], 3, na.rm = TRUE)
+diff_MENA <- calc_MENA - CO2EMISTOT
+diff_MENA <- as.quitte(diff_MENA)
+
 # calc_mena <- dimSums(MENA_SUM[regs,2018:2020,], 1, na.rm = TRUE)
 # 
-# l <- readSource("ENERDATA", "2", convert = TRUE)
-# l1 <- l[,,"CO2 emissions from fuel combustion (sectoral approach).MtCO2"]
-# l2 <- l[,,"CO2 emissions: fuel combustion (reference approach).MtCO2"]
-# getItems(l1,3) <- paste0("Emission")
-# getItems(l2,3) <- paste0("Emission")
+l <- readSource("ENERDATA", "2", convert = TRUE)
+l1 <- l[,,"CO2 emissions from fuel combustion (sectoral approach).MtCO2"]
+#l1 <- dimSums(l1[,,], 1, na.rm = TRUE)
+getItems(l1,3) <- paste0("Emission")
+l2 <- l[,,"CO2 emissions: fuel combustion (reference approach).MtCO2"]
 
 # write data in mif file
-# write.report(l1[,2010:2021,],file="reporting.mif",model="ENERDATA1",unit="various",append=TRUE,scenario="BASE")
-# write.report(l2[,2010:2021,],file="reporting.mif",model="ENERDATA2",unit="various",append=TRUE,scenario="BASE")
-# 
+write.report(l1[,year,],file="reporting.mif",model="ENERDATA",unit="various",append=TRUE,scenario="BASE")
+
