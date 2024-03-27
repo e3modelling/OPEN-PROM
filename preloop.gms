@@ -514,6 +514,7 @@ loop an do !! start outer iteration loop (time steps)
    TIME(YTIME) = NO;
    TIME(AN)$(ord(an)=s) = YES;
    display TIME;
+   cy = 0;
    loop runCyL do !! start countries loop
       cy = cy + 1;
       runCy(allCy) = NO;
