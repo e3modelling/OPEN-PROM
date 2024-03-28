@@ -339,7 +339,7 @@ QRenTechMatMult(runCy,PGALL,YTIME)$TIME(YTIME)..
          1$(NOT PGREN(PGALL))
          +
          (
-           1/(1+exp(9*(
+           1/(1+exp(5*(
                  sum(PGRENEF$PGALLtoPGRENEF(PGALL,PGRENEF),
                  sum(PGALL2$(PGALLtoPGRENEF(PGALL2,PGRENEF) $PGREN(PGALL2)),
                  VElecGenPlanCap(runCy,PGALL2,YTIME-1))/VCurrRenPot(runCy,PGRENEF,YTIME))-0.6)))
