@@ -64,11 +64,15 @@ USA
 runCy(allCy) Countries for which the model is running
 /
 %fCountries%
+/
+runCyL(allCy) Countries for which the model is running (used in countries loop)
+/
+%fCountries%
 /;
-
 
 * runCy is equal to allCy on research mode
 runCy(allCy)$(%DevMode% = 0) = allCy(allCy) ;
+runCyL(allCy)$(%DevMode% = 0) = allCy(allCy) ;
 
 sets
 ***        Model Time Horizon       *
