@@ -10,8 +10,9 @@ runfolder <- paste0("runs/", folderName)
 dir.create(runfolder)
 
 # copy necessary files to folder
-file.copy(grep(".gms",dir(), value = TRUE), to = runfolder)
-file.copy(grep(".csv",dir(), value = TRUE), to = runfolder)
+file.copy(grep(".gms$",dir(), value = TRUE), to = runfolder)
+file.copy(grep(".csv$",dir(), value = TRUE), to = runfolder)
+file.copy(grep("*.R$",dir(), value = TRUE), to = runfolder)
 file.copy("conopt.opt", to = runfolder)
 file.copy("data", to = runfolder, recursive = TRUE)
 
