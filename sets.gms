@@ -65,7 +65,7 @@ runCy(allCy) Countries for which the model is running
 /
 %fCountries%
 /
-runCyL(allCy) Countries for which the model is running
+runCyL(allCy) Countries for which the model is running (used in countries loop)
 /
 %fCountries%
 /;
