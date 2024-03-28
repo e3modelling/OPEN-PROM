@@ -34,7 +34,7 @@
         {
             "label": "OPEN-PROM RESEARCH",
             "type": "shell",
-            "command": "gams main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data",
+            "command": "Rscript start.R",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
