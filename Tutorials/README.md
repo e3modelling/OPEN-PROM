@@ -2,17 +2,17 @@ Welcome to the OPEN-PROM tutorial!
 
 The contents of the tutorial are listed on the left (in "Tutorials" folder).
 
-Necessary software: GAMS (required); R, Git, GAMS Studio/VS Code (optional)
+Necessary software: GAMS (required); R (required), Git (optional), GAMS Studio/VS Code (optional)
 
-Model users: Install GAMS (if you haven't done so already), add GAMS (and R) to your PATH variable, and then proceed with Tutorial 03. Note that to run the model you need input data, which are not distributed with the model code. If you don't have the data please get in touch with us: giannousakis@e3modelling.com
+Model users: Install GAMS and R (if you haven't done so already), add them to your PATH variable, and then proceed with Tutorial 03. Note that to run the model you need input data, which are not distributed with the model code. If you don't have the data please get in touch with us: info@e3modelling.com
 
-Model developers: Install GAMS (if you haven't done so already), add GAMS (and R) to your PATH variable, and then proceed with Tutorial 00
+Model developers: Install GAMS and R (if you haven't done so already), add them to your PATH variable, and then proceed with Tutorial 00
 
 A quick overview of the Tutorials contents:
 
  - ***00_Git and VS Code:***
 
-    A step by step guide to set up Git & VS Code, as well as adding all the nessessary extensions to VS code.
+    A step by step guide to set up Git & VS Code (useful tools for developing the model), as well as adding all the nessessary extensions to VS code.
 
 - ***01_VS code Task Runner Tutorial:***
 
