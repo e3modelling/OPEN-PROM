@@ -175,7 +175,7 @@ QElecPriIndResCons                 !! VElecPriInduResConsu(runCy,ESET,YTIME)
 
 
 
-qDummyObj
+*qDummyObj
 /;
 
 
