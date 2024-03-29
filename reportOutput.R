@@ -10,6 +10,10 @@ library(stringr)
 # read MENA-PROM mapping, will use it to choose the correct variables from MENA
 map <- read.csv("MENA-PROM mapping - mena_prom_mapping.csv")
 
+scenario_name <- list.dirs("./runs")[2]
+scenario_name <- str_match(scenario_name, "/\\s*(.*?)\\s*_")[,1]
+scenario_name <- str_sub(scenario_name, 7, - 2)
+
 # read GAMS set used for reporting of Final Energy
 sets <- readSets("sets.gms", "BALEF2EFS")
 sets[, 1] <- gsub("\"","",sets[, 1])
@@ -38,8 +42,8 @@ a <- toolAggregate(a[,years,unique(sets$EF)],dim=3,rel=sets,from="EF",to="BAL")
 getItems(a, 3) <- paste0("Final Energy ", getItems(a, 3))
 
 # write data in mif file
-write.report(VFeCons[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",scenario="BASE")
-write.report(a[regs,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario="BASE")
+write.report(VFeCons[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",scenario=scenario_name)
+write.report(a[regs,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario=scenario_name)
 
 
 #filter ENERDATA by consumption
@@ -64,7 +68,7 @@ v <- select(v , -c("fuel"))
 v <- as.quitte(v)
 v <- as.magpie(v)
 # write data in mif file
-write.report(v,file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario="BASE")
+write.report(v,file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario=scenario_name)
 
 
 #add model OPEN-PROM data Electricity prices
@@ -96,8 +100,8 @@ getNames(MENA_Residential) <- "Electricity prices Residential"
 z <- mbind(MENA_Industrial, MENA_Residential)
 
 # write data in mif file
-write.report(elec_prices[,,],file="reporting.mif",model="OPEN-PROM",unit="Euro2005/KWh",append=TRUE,scenario="BASE")
-write.report(z[regs,years,],file="reporting.mif",model="MENA-EDS",unit="Euro2005/KWh",append=TRUE,scenario="BASE")
+write.report(elec_prices[,,],file="reporting.mif",model="OPEN-PROM",unit="Euro2005/KWh",append=TRUE,scenario=scenario_name)
+write.report(z[regs,years,],file="reporting.mif",model="MENA-EDS",unit="Euro2005/KWh",append=TRUE,scenario=scenario_name)
 
 #filter ENERDATA by lectricity
 k <- readSource("ENERDATA", subtype =  "lectricity", convert = TRUE)
@@ -119,7 +123,7 @@ x <- mbind(ENERDATA_Industrial, ENERDATA_Residential)
 year <- Reduce(intersect, list(getYears(z,as.integer=TRUE),getYears(x,as.integer=TRUE),getYears(VElecPriInduResConsu,as.integer=TRUE)))
 x <- x[, year,]
 # write data in mif file
-write.report(x,file="reporting.mif",model="ENERDATA",unit="Euro2005/KWh",append=TRUE,scenario="BASE")
+write.report(x,file="reporting.mif",model="ENERDATA",unit="Euro2005/KWh",append=TRUE,scenario=scenario_name)
           
                # Final Energy | "TRANSE" | "INDSE" | "DOMSE" | "NENSE"
 
@@ -170,8 +174,8 @@ for (y in 1 : length(sector)) {
   getItems(a, 3) <- paste0("Final Energy ", sector[y]," ", getItems(a, 3))
   
   # write data in mif file
-  write.report(var[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario="BASE")
-  write.report(a[regs,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario="BASE")
+  write.report(var[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario=scenario_name)
+  write.report(a[regs,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario=scenario_name)
   
   #Final Energy by sector 
   sector_open <- dimSums(var, dim = 3, na.rm = TRUE)
@@ -180,8 +184,8 @@ for (y in 1 : length(sector)) {
   getItems(sector_mena, 3) <- paste0("Final Energy ", sector[y])
   
   # write data in mif file
-  write.report(sector_open[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario="BASE")
-  write.report(sector_mena[regs,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario="BASE")
+  write.report(sector_open[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario=scenario_name)
+  write.report(sector_mena[regs,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario=scenario_name)
   
   #Energy Forms Aggregations
   sets5 <- readSets("sets.gms", "EFtoEFA")
@@ -216,8 +220,8 @@ for (y in 1 : length(sector)) {
   getItems(mena_by_subsector_by_energy_form, 3.1) <- paste0("Final Energy ", sector[y]," ", getItems(mena_by_subsector_by_energy_form, 3.1))
   
   # write data in mif file
-  write.report(var_by_subsector_by_energy_form[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario="BASE")
-  write.report(mena_by_subsector_by_energy_form[regs,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario="BASE")
+  write.report(var_by_subsector_by_energy_form[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario=scenario_name)
+  write.report(mena_by_subsector_by_energy_form[regs,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario=scenario_name)
   
   #sector_by_energy_form
   by_energy_form <- dimSums(var_by_energy_form, 3.1, na.rm = TRUE)
@@ -226,8 +230,8 @@ for (y in 1 : length(sector)) {
   getItems(var_mena_by_energy_form, 3.1) <- paste0("Final Energy ", sector[y]," ", getItems(var_mena_by_energy_form, 3.1))
   
   # write data in mif file
-  write.report(by_energy_form[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario="BASE")
-  write.report(var_mena_by_energy_form[regs,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario="BASE")
+  write.report(by_energy_form[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario=scenario_name)
+  write.report(var_mena_by_energy_form[regs,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario=scenario_name)
   
   #filter IFuelCons by subtype enerdata
   b3 <- calcOutput(type = "IFuelCons", subtype = sector[y], aggregate = FALSE)
@@ -246,14 +250,14 @@ for (y in 1 : length(sector)) {
   getItems(b3_subsector, 3) <- paste0("Final Energy ", sector[y]," ", getItems(b3_subsector, 3))
   
   # write data in mif file
-  write.report(b3_subsector[,year,],file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario="BASE")
+  write.report(b3_subsector[,year,],file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario=scenario_name)
   
   #Final Energy enerdata
   FE_ener <- dimSums(b3, dim = 3, na.rm = TRUE)
   getItems(FE_ener, 3) <- paste0("Final Energy ", sector[y])
   
   # write data in mif file
-  write.report(FE_ener[,year,],file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario="BASE")
+  write.report(FE_ener[,year,],file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario=scenario_name)
   
   map_subsectors_ener2 <- sets10
   #filter to have only the variables which are in enerdata
@@ -268,14 +272,14 @@ for (y in 1 : length(sector)) {
   getItems(enerdata_by_subsector_by_energy_form, 3.1) <- paste0("Final Energy ", sector[y]," ", getItems(enerdata_by_subsector_by_energy_form, 3.1))
   
   # write data in mif file
-  write.report(enerdata_by_subsector_by_energy_form[,year,],file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario="BASE")
+  write.report(enerdata_by_subsector_by_energy_form[,year,],file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario=scenario_name)
   
   #Aggregate model enerdata by energy form
   b3_agg_by_energy_form <- dimSums(b3_by_energy_form, 3.1, na.rm = TRUE)
   getItems(b3_agg_by_energy_form,3) <- paste0("Final Energy ", sector[y]," ", getItems(b3_agg_by_energy_form, 3.2))
   
   # write data in mif file
-  write.report(b3_agg_by_energy_form[,year,],file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario="BASE")
+  write.report(b3_agg_by_energy_form[,year,],file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario=scenario_name)
 
 }                          
 
@@ -303,9 +307,9 @@ getItems(a_ener, 3.1) <- paste0("Fuel Price ", getItems(a_ener, 3.1))
 year <- Reduce(intersect, list(getYears(MENA_EDS_pric,as.integer=TRUE),getYears(price,as.integer=TRUE),getYears(a_ener,as.integer=TRUE)))
 
 # write data in mif file
-write.report(price[,,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario="BASE")
-write.report(MENA_EDS_pric[regs,years,],file="reporting.mif",model="MENA-EDS",unit="various",append=TRUE,scenario="BASE")
-write.report(a_ener[,year,],file="reporting.mif",model="ENERDATA",unit="various",append=TRUE,scenario="BASE")
+write.report(price[,,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario=scenario_name)
+write.report(MENA_EDS_pric[regs,years,],file="reporting.mif",model="MENA-EDS",unit="various",append=TRUE,scenario=scenario_name)
+write.report(a_ener[,year,],file="reporting.mif",model="ENERDATA",unit="various",append=TRUE,scenario=scenario_name)
 
 by_price_form <- dimSums(price_gdx, 3.1, na.rm = TRUE)
 by_price_form2 <- dimSums(price_gdx, 3.2, na.rm = TRUE)
@@ -332,17 +336,17 @@ getItems(Fuel_Price_MENA_EDS, 3) <- paste0("Fuel Price", getItems(Fuel_Price_MEN
 getItems(Fuel_Price_ener, 3) <- paste0("Fuel Price", getItems(Fuel_Price_ener, 3))
 
 # write data in mif file
-write.report(by_price_form[,,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario="BASE")
-write.report(by_price_form_MENA_EDS[regs,years,],file="reporting.mif",model="MENA-EDS",unit="various",append=TRUE,scenario="BASE")
-write.report(by_price_form_ener[,year,],file="reporting.mif",model="ENERDATA",unit="various",append=TRUE,scenario="BASE")
+write.report(by_price_form[,,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario=scenario_name)
+write.report(by_price_form_MENA_EDS[regs,years,],file="reporting.mif",model="MENA-EDS",unit="various",append=TRUE,scenario=scenario_name)
+write.report(by_price_form_ener[,year,],file="reporting.mif",model="ENERDATA",unit="various",append=TRUE,scenario=scenario_name)
 
-write.report(by_price_form2[,,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario="BASE")
-write.report(by_price_form2_MENA_EDS[regs,years,],file="reporting.mif",model="MENA-EDS",unit="various",append=TRUE,scenario="BASE")
-write.report(by_price_form2_ener[,year,],file="reporting.mif",model="ENERDATA",unit="various",append=TRUE,scenario="BASE")
+write.report(by_price_form2[,,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario=scenario_name)
+write.report(by_price_form2_MENA_EDS[regs,years,],file="reporting.mif",model="MENA-EDS",unit="various",append=TRUE,scenario=scenario_name)
+write.report(by_price_form2_ener[,year,],file="reporting.mif",model="ENERDATA",unit="various",append=TRUE,scenario=scenario_name)
 
-write.report(Fuel_Price[,,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario="BASE")
-write.report(Fuel_Price_MENA_EDS[regs,years,],file="reporting.mif",model="MENA-EDS",unit="various",append=TRUE,scenario="BASE")
-write.report(Fuel_Price_ener[,year,],file="reporting.mif",model="ENERDATA",unit="various",append=TRUE,scenario="BASE")
+write.report(Fuel_Price[,,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario=scenario_name)
+write.report(Fuel_Price_MENA_EDS[regs,years,],file="reporting.mif",model="MENA-EDS",unit="various",append=TRUE,scenario=scenario_name)
+write.report(Fuel_Price_ener[,year,],file="reporting.mif",model="ENERDATA",unit="various",append=TRUE,scenario=scenario_name)
 
                                 #  emission
 
@@ -558,8 +562,8 @@ regs <- intersect(getRegions(MENA_SUM),getRegions(total_CO2))
 getItems(MENA_SUM, 3.1) <- paste0("Emission")
 
 # write data in mif file
-write.report(total_CO2[,,],file="reporting.mif",model="OPEN-PROM",unit="MtCO2",append=TRUE,scenario="BASE")
-write.report(MENA_SUM[regs,years,],file="reporting.mif",model="MENA-EDS",unit="MtCO2",append=TRUE,scenario="BASE")
+write.report(total_CO2[,,],file="reporting.mif",model="OPEN-PROM",unit="MtCO2",append=TRUE,scenario=scenario_name)
+write.report(MENA_SUM[regs,years,],file="reporting.mif",model="MENA-EDS",unit="MtCO2",append=TRUE,scenario=scenario_name)
 #c("MAR","IND","USA","EGY","RWO")
 
 runCY <- readGDX('./blabla.gdx', "runCY", field = 'l')
@@ -570,15 +574,15 @@ l1 <- l[,,"CO2 emissions from fuel combustion (sectoral approach).MtCO2"]
 
 getItems(l1, 3) <- paste0("Emission")
 # write data in mif file
-write.report(l1[,year,],file="reporting.mif",model="ENERDATA",unit="MtCO2",append=TRUE,scenario="BASE")
+write.report(l1[,year,],file="reporting.mif",model="ENERDATA",unit="MtCO2",append=TRUE,scenario=scenario_name)
 
 a <- calcOutput(type = "CO2_emissions", aggregate = FALSE)
 getItems(a, 3) <- paste0("Emission")
-write.report(a[,year,],file="reporting.mif",model="EDGAR",unit="MtCO2",append=TRUE,scenario="BASE")
+write.report(a[,year,],file="reporting.mif",model="EDGAR",unit="MtCO2",append=TRUE,scenario=scenario_name)
 
 c <- readSource("PIK", convert = TRUE)
 c <- c[,,"Energy.MtCO2.CO2"]
 getItems(c, 3) <- paste0("Emission")
-write.report(c[,year,],file="reporting.mif",model="PIK",unit="MtCO2",append=TRUE,scenario="BASE")
+write.report(c[,year,],file="reporting.mif",model="PIK",unit="MtCO2",append=TRUE,scenario=scenario_name)
 
   
