@@ -1,7 +1,7 @@
 Here is the proposed classification of world countries to OPEN-PROM native regions:
 
 (Custom native region codes are highlighted - for the rest of the countries their official 3-digit ISO Code will be used).
-Machine-readable mapping is found [here](https://github.com/giannou/OPEN-PROM/blob/502b85b699c4c0bbcdcb4824b8baeefdb4a426cf/country_mapping.csv)
+Machine-readable mapping is found [here](https://github.com/e3modelling/mrprom/blob/main/inst/extdata/regional/regionmappingOP.csv)
 
 1.	Austria
 2.	Belgium
@@ -35,7 +35,7 @@ Machine-readable mapping is found [here](https://github.com/giannou/OPEN-PROM/bl
 30.	Japan
 31.	Canada
 32.	Brazil
-33.	China / CHINA, MACAO, HONG KONG, TAIWAN/ `**CHA**`
+33.	China /CHINA, MACAO, HONG KONG, TAIWAN/ `**CHA**`
 34.	India
 35.	South Korea
 36.	Indonesia
@@ -50,7 +50,7 @@ Machine-readable mapping is found [here](https://github.com/giannou/OPEN-PROM/bl
 45.	Rest of energy producing countries /ALGERIA, AZERBAIJAN, IRAQ, JORDAN, KUWAIT, LEBANON, LIBYAN ARAB JAMAHIRIYA, QATAR, SYRIAN ARAB REPUBLIC, UNITED ARAB EMIRATES, VENEZUELA, WESTERN SAHARA, YEMEN/ `**REP**`                       
 46.	South Africa
 47.	Rest of Europe 1 /NORWAY, SWITZERLAND, ICELAND, LIECHTENSTEIN/ `**NSI**`
-48.	Rest of Europe 2 /ALBANIA, ANDORRA, GREENLAND, VATICAN, SAN MARINO, SVALBARD AND JAN MAYEN, BELARUS, BOSNIA AND HERZEGOVINA , ICELAND, LIECHTENSTEIN, NORTH MACEDONIA, MOLDOVA, REPUBLIC OF MONACO, MONTENEGRO, NORWAY, SERBIA, SWITZERLAND, UKRAINE/ `**REU**`        
+48.	Rest of Europe 2 /ALBANIA, ANDORRA, GREENLAND, VATICAN, SAN MARINO, SVALBARD AND JAN MAYEN, BELARUS, BOSNIA AND HERZEGOVINA, NORTH MACEDONIA, MOLDOVA, REPUBLIC OF MONACO, MONTENEGRO, SERBIA, UKRAINE/ `**REU**`        
 49.	Egypt
 50.	Morocco
 51.	Tunisia
