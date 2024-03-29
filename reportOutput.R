@@ -38,7 +38,7 @@ a <- toolAggregate(a[,years,unique(sets$EF)],dim=3,rel=sets,from="EF",to="BAL")
 getItems(a, 3) <- paste0("Final Energy ", getItems(a, 3))
 
 # write data in mif file
-write.report(VFeCons[,years,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",scenario="BASE")
+write.report(VFeCons[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",scenario="BASE")
 write.report(a[regs,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario="BASE")
 
 
@@ -96,7 +96,7 @@ getNames(MENA_Residential) <- "Electricity prices Residential"
 z <- mbind(MENA_Industrial, MENA_Residential)
 
 # write data in mif file
-write.report(elec_prices[,years,],file="reporting.mif",model="OPEN-PROM",unit="Euro2005/KWh",append=TRUE,scenario="BASE")
+write.report(elec_prices[,,],file="reporting.mif",model="OPEN-PROM",unit="Euro2005/KWh",append=TRUE,scenario="BASE")
 write.report(z[regs,years,],file="reporting.mif",model="MENA-EDS",unit="Euro2005/KWh",append=TRUE,scenario="BASE")
 
 #filter ENERDATA by lectricity
@@ -170,17 +170,17 @@ for (y in 1 : length(sector)) {
   getItems(a, 3) <- paste0("Final Energy ", sector[y]," ", getItems(a, 3))
   
   # write data in mif file
-  write.report(var[,years,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario="BASE")
+  write.report(var[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario="BASE")
   write.report(a[regs,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario="BASE")
   
   #Final Energy by sector 
-  sector_open <- dimSums(var, dim = 3)
+  sector_open <- dimSums(var, dim = 3, na.rm = TRUE)
   getItems(sector_open, 3) <- paste0("Final Energy ", sector[y])
-  sector_mena <- dimSums(a, dim = 3)
+  sector_mena <- dimSums(a, dim = 3, na.rm = TRUE)
   getItems(sector_mena, 3) <- paste0("Final Energy ", sector[y])
   
   # write data in mif file
-  write.report(sector_open[,years,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario="BASE")
+  write.report(sector_open[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario="BASE")
   write.report(sector_mena[regs,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario="BASE")
   
   #Energy Forms Aggregations
@@ -216,17 +216,17 @@ for (y in 1 : length(sector)) {
   getItems(mena_by_subsector_by_energy_form, 3.1) <- paste0("Final Energy ", sector[y]," ", getItems(mena_by_subsector_by_energy_form, 3.1))
   
   # write data in mif file
-  write.report(var_by_subsector_by_energy_form[,years,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario="BASE")
+  write.report(var_by_subsector_by_energy_form[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario="BASE")
   write.report(mena_by_subsector_by_energy_form[regs,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario="BASE")
   
   #sector_by_energy_form
-  by_energy_form <- dimSums(var_by_energy_form, 3.1)
+  by_energy_form <- dimSums(var_by_energy_form, 3.1, na.rm = TRUE)
   getItems(by_energy_form,3.1) <- paste0("Final Energy ", sector[y]," ", getItems(by_energy_form, 3.1))
-  var_mena_by_energy_form <- dimSums(mena_by_energy_form,3.1)
+  var_mena_by_energy_form <- dimSums(mena_by_energy_form,3.1, na.rm = TRUE)
   getItems(var_mena_by_energy_form, 3.1) <- paste0("Final Energy ", sector[y]," ", getItems(var_mena_by_energy_form, 3.1))
   
   # write data in mif file
-  write.report(by_energy_form[,years,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario="BASE")
+  write.report(by_energy_form[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario="BASE")
   write.report(var_mena_by_energy_form[regs,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario="BASE")
   
   #filter IFuelCons by subtype enerdata
@@ -249,7 +249,7 @@ for (y in 1 : length(sector)) {
   write.report(b3_subsector[,year,],file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario="BASE")
   
   #Final Energy enerdata
-  FE_ener <- dimSums(b3, dim = 3)
+  FE_ener <- dimSums(b3, dim = 3, na.rm = TRUE)
   getItems(FE_ener, 3) <- paste0("Final Energy ", sector[y])
   
   # write data in mif file
@@ -264,14 +264,14 @@ for (y in 1 : length(sector)) {
   
   #enerdata by subsector and by energy form
   enerdata_by_subsector_by_energy_form <- b3_by_energy_form
-  enerdata_by_subsector_by_energy_form <- dimSums(enerdata_by_subsector_by_energy_form, 3.2)
+  enerdata_by_subsector_by_energy_form <- dimSums(enerdata_by_subsector_by_energy_form, 3.2, na.rm = TRUE)
   getItems(enerdata_by_subsector_by_energy_form, 3.1) <- paste0("Final Energy ", sector[y]," ", getItems(enerdata_by_subsector_by_energy_form, 3.1))
   
   # write data in mif file
   write.report(enerdata_by_subsector_by_energy_form[,year,],file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario="BASE")
   
   #Aggregate model enerdata by energy form
-  b3_agg_by_energy_form <- dimSums(b3_by_energy_form, 3.1)
+  b3_agg_by_energy_form <- dimSums(b3_by_energy_form, 3.1, na.rm = TRUE)
   getItems(b3_agg_by_energy_form,3) <- paste0("Final Energy ", sector[y]," ", getItems(b3_agg_by_energy_form, 3.2))
   
   # write data in mif file
@@ -303,19 +303,19 @@ getItems(a_ener, 3.1) <- paste0("Fuel Price ", getItems(a_ener, 3.1))
 year <- Reduce(intersect, list(getYears(MENA_EDS_pric,as.integer=TRUE),getYears(price,as.integer=TRUE),getYears(a_ener,as.integer=TRUE)))
 
 # write data in mif file
-write.report(price[,years,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario="BASE")
+write.report(price[,,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario="BASE")
 write.report(MENA_EDS_pric[regs,years,],file="reporting.mif",model="MENA-EDS",unit="various",append=TRUE,scenario="BASE")
 write.report(a_ener[,year,],file="reporting.mif",model="ENERDATA",unit="various",append=TRUE,scenario="BASE")
 
-by_price_form <- dimSums(price_gdx, 3.1)
-by_price_form2 <- dimSums(price_gdx, 3.2)
-by_price_form_MENA_EDS <- dimSums(MENA_EDS_price, 3.1)
-by_price_form2_MENA_EDS <- dimSums(MENA_EDS_price, 3.2)
-by_price_form_ener <- dimSums(a_ener_price, 3.1)
-by_price_form2_ener <- dimSums(a_ener_price, 3.2)
-Fuel_Price <- dimSums(price_gdx)
-Fuel_Price_MENA_EDS <- dimSums(MENA_EDS_price)
-Fuel_Price_ener <- dimSums(a_ener_price)
+by_price_form <- dimSums(price_gdx, 3.1, na.rm = TRUE)
+by_price_form2 <- dimSums(price_gdx, 3.2, na.rm = TRUE)
+by_price_form_MENA_EDS <- dimSums(MENA_EDS_price, 3.1, na.rm = TRUE)
+by_price_form2_MENA_EDS <- dimSums(MENA_EDS_price, 3.2, na.rm = TRUE)
+by_price_form_ener <- dimSums(a_ener_price, 3.1, na.rm = TRUE)
+by_price_form2_ener <- dimSums(a_ener_price, 3.2, na.rm = TRUE)
+Fuel_Price <- dimSums(price_gdx, na.rm = TRUE)
+Fuel_Price_MENA_EDS <- dimSums(MENA_EDS_price, na.rm = TRUE)
+Fuel_Price_ener <- dimSums(a_ener_price,3, na.rm = TRUE)
 
 getRegions(by_price_form_MENA_EDS) <- sub("MOR", "MAR", getRegions(by_price_form_MENA_EDS))
 getRegions(by_price_form2_MENA_EDS) <- sub("MOR", "MAR", getRegions(by_price_form2_MENA_EDS))
@@ -332,15 +332,15 @@ getItems(Fuel_Price_MENA_EDS, 3) <- paste0("Fuel Price", getItems(Fuel_Price_MEN
 getItems(Fuel_Price_ener, 3) <- paste0("Fuel Price", getItems(Fuel_Price_ener, 3))
 
 # write data in mif file
-write.report(by_price_form[,years,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario="BASE")
+write.report(by_price_form[,,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario="BASE")
 write.report(by_price_form_MENA_EDS[regs,years,],file="reporting.mif",model="MENA-EDS",unit="various",append=TRUE,scenario="BASE")
 write.report(by_price_form_ener[,year,],file="reporting.mif",model="ENERDATA",unit="various",append=TRUE,scenario="BASE")
 
-write.report(by_price_form2[,years,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario="BASE")
+write.report(by_price_form2[,,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario="BASE")
 write.report(by_price_form2_MENA_EDS[regs,years,],file="reporting.mif",model="MENA-EDS",unit="various",append=TRUE,scenario="BASE")
 write.report(by_price_form2_ener[,year,],file="reporting.mif",model="ENERDATA",unit="various",append=TRUE,scenario="BASE")
 
-write.report(Fuel_Price[,years,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario="BASE")
+write.report(Fuel_Price[,,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario="BASE")
 write.report(Fuel_Price_MENA_EDS[regs,years,],file="reporting.mif",model="MENA-EDS",unit="various",append=TRUE,scenario="BASE")
 write.report(Fuel_Price_ener[,year,],file="reporting.mif",model="ENERDATA",unit="various",append=TRUE,scenario="BASE")
 
@@ -363,86 +363,62 @@ EFtoEFS[["EF"]] <- sub("\\(","",EFtoEFS[["EF"]])
 EFtoEFS[["EF"]] <- sub("\\)","",EFtoEFS[["EF"]])
 EFtoEFS <- EFtoEFS %>% separate_longer_delim(c(EF, EFS), delim = ",")
 
-#iCo2EmiFac_by_EFS <- toolAggregate(iCo2EmiFac[,,unique(EFtoEFS$EF)],dim=3.2,rel=EFtoEFS,from="EF",to="EFS")
-iCo2EmiFac_by_EFS <- iCo2EmiFac[,,EFtoEFS$EFS]
-getSets(iCo2EmiFac_by_EFS)["d3.2"] <- "EFS"
-#VConsFuel_by_EFS <- toolAggregate(VConsFuel[,,unique(EFtoEFS$EF)],dim=3.2,rel=EFtoEFS,from="EF",to="EFS")
-VConsFuel_by_EFS <- VConsFuel[,,EFtoEFS$EFS]
-getSets(VConsFuel_by_EFS)["d3.2"] <- "EFS"
-
 SECTTECH <- readSets("sets.gms", "SECTTECH")
-SECTTECH <- SECTTECH[c(6,7), 1]
+
+SECTTECH <- SECTTECH[c(8,9,10), 1]
 SECTTECH[1] <- gsub("\\.", ",", SECTTECH[1])
 SECTTECH <- unlist(strsplit(SECTTECH, ","))
-SECTTECH <- SECTTECH[c(11:26)]
+SECTTECH <- SECTTECH[c(4:29)]
 SECTTECH <- gsub("\\(|\\)", "", SECTTECH)
 SECTTECH <- as.data.frame(SECTTECH)
 
-SECTTECH3 <- readSets("sets.gms", "SECTTECH")
-SECTTECH3 <- SECTTECH3[c(8,9,10), 1]
-SECTTECH3[1] <- gsub("\\.", ",", SECTTECH3[1])
-SECTTECH3 <- unlist(strsplit(SECTTECH3, ","))
-SECTTECH3 <- SECTTECH3[c(4:29)]
-SECTTECH3 <- gsub("\\(|\\)", "", SECTTECH3)
-SECTTECH3 <- as.data.frame(SECTTECH3)
-
-SECTTECH3 <- SECTTECH3 %>% 
+SECTTECH <- SECTTECH %>% 
   mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
 
-SECTTECH3 <- SECTTECH3[!(SECTTECH3[,1] %in% SECTTECH[,1]),1]
-SECTTECH3 <- as.data.frame(SECTTECH3)
-names(SECTTECH3) <- sub("SECTTECH3", "SECTTECH", names(SECTTECH3))
-
-#SECTTECH <- rbind(SECTTECH, SECTTECH3)
+SECTTECH <- as.data.frame(SECTTECH)
 
 names(SECTTECH) <- sub("SECTTECH", "EF", names(SECTTECH))
 qx <- left_join(SECTTECH, EFtoEFS, by = "EF")
-qx <- select((qx), -c(EFS))
+qx <- select((qx), -c(EF))
 
 SECTTECH <- unique(qx)
-names(SECTTECH) <- sub("EF", "SECTTECH", names(SECTTECH))
+names(SECTTECH) <- sub("EFS", "SECTTECH", names(SECTTECH))
 
-IND <- readSets("sets.gms", "INDSE")
+IND <- readSets("sets.gms", "INDDOM")
 IND <- unlist(strsplit(IND[, 1], ","))
 IND <- as.data.frame(IND)
-INDSE <- NULL
+INDDOM <- NULL
 for (y in 1:nrow(IND)) {
-  p <- paste(IND[y,1], ".", SECTTECH[1:16,1])
+  p <- paste(IND[y,1], ".", SECTTECH[c(1:2, 4:12), 1])
   p <- as.data.frame(p)
   p <- p %>% 
     mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
-  INDSE <- rbind(INDSE, p)
+  INDDOM <- rbind(INDDOM, p)
 }
 
-# for (y in 11:nrow(IND)) {
-#   p <- paste(IND[y,1], ".", SECTTECH[12:13,1])
-#   p <- as.data.frame(p)
-#   p <- p %>% 
-#     mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
-#   INDSE <- rbind(INDSE, p)
-# }
+for (y in 11:nrow(IND)) {
+  p <- paste(IND[y,1], ".", SECTTECH[c(3, 13), 1])
+  p <- as.data.frame(p)
+  p <- p %>%
+    mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
+  INDDOM <- rbind(INDDOM, p)
+}
 
-INDSE <- as.data.frame(INDSE)
+INDDOM <- as.data.frame(INDDOM)
 
 PGEF <- readSets("sets.gms", "PGEF")
 PGEF <- as.data.frame(PGEF)
 
-sum1 <- iCo2EmiFac[,,INDSE[, 1]] * VConsFuel[,,INDSE[, 1]]
+sum1 <- iCo2EmiFac[,,INDDOM[, 1]] * VConsFuel[,,INDDOM[, 1]]
 sum1 <- dimSums(sum1, 3, na.rm = TRUE)
 
-var_5 <- dimSums(iCo2EmiFac[,,"PG"], 3.1, na.rm = TRUE)
-sum2 <- VTransfInThermPowPls[,,PGEF[,1]]*var_5[,,PGEF[,1]]
+sum2 <- VTransfInThermPowPls[,,PGEF[,1]]*iCo2EmiFac[,,"PG"][,,PGEF[,1]]
 sum2 <- dimSums(sum2, 3, na.rm = TRUE)
 
-var_41 <- dimSums(iCo2EmiFac[,,"PG"], 3.1, na.rm = TRUE)
-getSets(var_41)["d3.1"] <- "EFS"
-#VTransfInputDHPlants <- toolAggregate(VTransfInputDHPlants[,,],dim=3.1,rel=EFtoEFS,from="EFS",to="EF")
-sum3 <- VTransfInputDHPlants * var_41[,,getItems(VTransfInputDHPlants,3)]
+sum3 <- VTransfInputDHPlants * iCo2EmiFac[,,"PG"][,,getItems(VTransfInputDHPlants,3)]
 sum3 <- dimSums(sum3, 3, na.rm = TRUE)
 
-var_7 <- dimSums(iCo2EmiFac[,,"PG"], 3.1, na.rm = TRUE)
-getSets(var_7)["d3.1"] <- "EFS"
-sum4 <- VEnCons * var_7[,,getItems(VEnCons,3)]
+sum4 <- VEnCons * iCo2EmiFac[,,"PG"][,,getItems(VEnCons,3)]
 sum4 <- dimSums(sum4, 3, na.rm = TRUE)
 
 PC <- readSets("sets.gms", "SECTTECH")
@@ -493,12 +469,12 @@ GN <- paste("GN", ".", GN[,1])
 GN <- as.data.frame(GN)
 GN <- GN %>% 
   mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
-names(PC) <- "r"
-names(PA) <- "r"
-names(PT) <- "r"
-names(GU) <- "r"
-names(GT) <- "r"
-names(GN) <- "r"
+names(PC) <- "name"
+names(PA) <- "name"
+names(PT) <- "name"
+names(GU) <- "name"
+names(GT) <- "name"
+names(GN) <- "name"
 
 map_TRANSECTOR <- rbind(PT,GT,PA,PC,GU,GN)
 
@@ -517,10 +493,7 @@ CCS <- as.data.frame(CCS)
 
 CCS <- PGALLtoEF[PGALLtoEF$PGALL %in% CCS$CCS, ]
 
-var_10 <- dimSums(iCo2EmiFac[,,"PG"],dim=3.1, na.rm = TRUE)
-var_16 <- VElecProd[,,CCS[,1]] * 0.086 / iPlantEffByType[,,CCS[,1]] * var_10[,,CCS[,2]] * iCO2CaptRate[,,CCS[,1]]
-#iCO2CaptRate[,,CCS[,1]]
-#var_16 <- (ifelse(is.na(VElecProd[,,CCS[,1]]), 1, VElecProd[,,CCS[,1]])) * 0.086 / (ifelse(is.na(iPlantEffByType[,,CCS[,1]]), 1, iPlantEffByType[,,CCS[,1]])) * (ifelse(is.na(var_10[,,CCS[,2]]), 1, var_10[,,CCS[,2]])) * (ifelse(is.na(iCO2CaptRate[,,CCS[,1]]), 1, iCO2CaptRate[,,CCS[,1]]))
+var_16 <- VElecProd[,,CCS[,1]] * 0.086 / iPlantEffByType[,,CCS[,1]] * iCo2EmiFac[,,"PG"][,,CCS[,2]] * iCO2CaptRate[,,CCS[,1]]
 sum6 <- dimSums(var_16,dim=3, na.rm = TRUE) 
 
 SECTTECH2 <- readSets("sets.gms", "SECTTECH")
@@ -552,32 +525,22 @@ MENA_VElecProd <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "V
 MENA_iPlantEffByType <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "iPlantEffByType", "MENA.EDS"])
 MENA_iCO2CaptRate <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "iCO2CaptRate", "MENA.EDS"])
 
-MENA_iCo2EmiFac_by_EFS <- MENA_iCo2EmiFac[,,unique(EFtoEFS$EFS)]
-MENA_VConsFuel_by_EFS <- MENA_VConsFuel[,,unique(EFtoEFS$EFS)]
-
-MENA_sum1 <- MENA_iCo2EmiFac[,,INDSE[, 1]] * MENA_VConsFuel[,,INDSE[, 1]]
+MENA_sum1 <- MENA_iCo2EmiFac[,,INDDOM[, 1]] * MENA_VConsFuel[,,INDDOM[, 1]]
 MENA_sum1 <- dimSums(MENA_sum1, 3, na.rm = TRUE)
 
-MENA_var_5 <- dimSums(MENA_iCo2EmiFac[,,"PG"], 3.1, na.rm = TRUE)
-getSets(MENA_var_5)["d3.1"] <- "EFS"
-MENA_sum2 <- MENA_VTransfInThermPowPls[,,PGEF[,1]]*MENA_var_5[,,PGEF[,1]]
+MENA_sum2 <- MENA_VTransfInThermPowPls[,,PGEF[,1]]*MENA_iCo2EmiFac[,,"PG"][,,PGEF[,1]]
 MENA_sum2 <- dimSums(MENA_sum2, 3, na.rm = TRUE)
 
-MENA_var_41 <- dimSums(MENA_iCo2EmiFac[,,"PG"], 3.1, na.rm = TRUE)
-getSets(MENA_var_41)["d3.1"] <- "EFS"
-MENA_sum3 <- MENA_VTransfInputDHPlants[,,] * MENA_var_41[,,getItems(MENA_VTransfInputDHPlants,3)]
+MENA_sum3 <- MENA_VTransfInputDHPlants[,,] * MENA_iCo2EmiFac[,,"PG"][,,getItems(MENA_VTransfInputDHPlants,3)]
 MENA_sum3 <- dimSums(MENA_sum3, 3, na.rm = TRUE)
 
-MENA_var_7 <- dimSums(MENA_iCo2EmiFac[,,"PG"], 3.1, na.rm = TRUE)
-getSets(MENA_var_7)["d3.1"] <- "EFS"
-MENA_sum4 <- MENA_VEnCons * MENA_var_7[,,getItems(MENA_VEnCons,3)]
+MENA_sum4 <- MENA_VEnCons * MENA_iCo2EmiFac[,,"PG"][,,getItems(MENA_VEnCons,3)]
 MENA_sum4 <- dimSums(MENA_sum4, 3, na.rm = TRUE)
 
 MENA_sum5 <- MENA_VDemTr[,,map_TRANSECTOR[, 1]] * MENA_iCo2EmiFac[,,map_TRANSECTOR[, 1]]
 MENA_sum5 <- dimSums(MENA_sum5, 3, na.rm = TRUE)
 
-MENA_var_10 <- dimSums(MENA_iCo2EmiFac[,,"PG"],dim=3.1, na.rm = TRUE)
-MENA_var_16 <- MENA_VElecProd[,,CCS[,1]] * 0.086 / MENA_iPlantEffByType[,,CCS[,1]] * MENA_var_10[,,CCS[,2]] * MENA_iCO2CaptRate[,,CCS[,1]]
+MENA_var_16 <- MENA_VElecProd[,,CCS[,1]] * 0.086 / MENA_iPlantEffByType[,,CCS[,1]] * MENA_iCo2EmiFac[,,"PG"][,,CCS[,2]] * MENA_iCO2CaptRate[,,CCS[,1]]
 MENA_sum6 <- dimSums(MENA_var_16,dim=3, na.rm = TRUE)
 
 MENA_sum7 <- MENA_iCo2EmiFac[,,SECTTECH2[,1]] * MENA_VConsFuel[,,SECTTECH2[,1]]
@@ -595,33 +558,27 @@ regs <- intersect(getRegions(MENA_SUM),getRegions(total_CO2))
 getItems(MENA_SUM, 3.1) <- paste0("Emission")
 
 # write data in mif file
-write.report(total_CO2[,years,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario="BASE")
-write.report(MENA_SUM[regs,years,],file="reporting.mif",model="MENA-EDS",unit="various",append=TRUE,scenario="BASE")
+write.report(total_CO2[,,],file="reporting.mif",model="OPEN-PROM",unit="MtCO2",append=TRUE,scenario="BASE")
+write.report(MENA_SUM[regs,years,],file="reporting.mif",model="MENA-EDS",unit="MtCO2",append=TRUE,scenario="BASE")
 #c("MAR","IND","USA","EGY","RWO")
 
 runCY <- readGDX('./blabla.gdx', "runCY", field = 'l')
 runCY <- as.vector(runCY)
 
-calc <- dimSums(total_CO2[,2018:2030,], 1, na.rm = TRUE)
-VTotGhgEmisAllCountrNap <- readGDX('./blabla.gdx', "VTotGhgEmisAllCountrNap", field = 'l')
-VTotGhgEmisAllCountrNap <- dimSums(VTotGhgEmisAllCountrNap[,2018:2030,], 3, na.rm = TRUE)
-diff <- calc - VTotGhgEmisAllCountrNap
-diff <- as.quitte(diff)
-
-calc_MENA <- dimSums(MENA_SUM[,2018:2025,], 1, na.rm = TRUE)
-CO2EMISTOT <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VTotGhgEmisAllCountrNap", "MENA.EDS"])
-CO2EMISTOT <- dimSums(CO2EMISTOT[,2018:2025,], 3, na.rm = TRUE)
-diff_MENA <- calc_MENA - CO2EMISTOT
-diff_MENA <- as.quitte(diff_MENA)
-
-# calc_mena <- dimSums(MENA_SUM[regs,2018:2020,], 1, na.rm = TRUE)
-# 
 l <- readSource("ENERDATA", "2", convert = TRUE)
 l1 <- l[,,"CO2 emissions from fuel combustion (sectoral approach).MtCO2"]
-#l1 <- dimSums(l1[,,], 1, na.rm = TRUE)
-getItems(l1,3) <- paste0("Emission")
-l2 <- l[,,"CO2 emissions: fuel combustion (reference approach).MtCO2"]
 
+getItems(l1, 3) <- paste0("Emission")
 # write data in mif file
-write.report(l1[,year,],file="reporting.mif",model="ENERDATA",unit="various",append=TRUE,scenario="BASE")
+write.report(l1[,year,],file="reporting.mif",model="ENERDATA",unit="MtCO2",append=TRUE,scenario="BASE")
 
+a <- calcOutput(type = "CO2_emissions", aggregate = FALSE)
+getItems(a, 3) <- paste0("Emission")
+write.report(a[,year,],file="reporting.mif",model="EDGAR",unit="MtCO2",append=TRUE,scenario="BASE")
+
+c <- readSource("PIK", convert = TRUE)
+c <- c[,,"Energy.MtCO2.CO2"]
+getItems(c, 3) <- paste0("Emission")
+write.report(c[,year,],file="reporting.mif",model="PIK",unit="MtCO2",append=TRUE,scenario="BASE")
+
+  
