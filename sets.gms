@@ -59,11 +59,87 @@ TUN
 TUR
 GBR
 USA
+LAM
+EUR
+MEA
 /
 
 runCy(allCy) Countries for which the model is running
 /
-%fCountries%
+$ontext
+RAS       REST OF ASIA
+MAR       MOROCCO
+RWO
+REU
+REP
+RAF
+RLA
+ARG
+OCE
+AUT
+BEL
+BRA
+BGR
+CAN
+CHA
+HRV
+CYP
+CZE
+DNK
+EGY
+EST
+FIN
+FRA
+*$offtext
+*DEU
+*GRC
+*HUN
+*NSI
+*IND
+*IDN
+*IRN
+*IRL
+*ISR
+*ITA
+*$offtext
+*JPN
+*KOR
+*$ontext
+*LVA
+*LTU
+LUX
+MLT
+MEX
+NLD
+NGA
+POL
+PRT
+ROU
+RUS
+SAU
+SVK
+SVN
+ZAF
+ESP
+SWE
+TUN
+TUR
+$offtext
+*GBR
+*USA
+JPN
+*EUR
+*RUS
+*RAF
+*RLA
+*RAS
+*RWO
+*IND
+*CHA
+*OCE
+*LAM
+*REU
+*MEA
 /;
 
 
@@ -100,7 +176,7 @@ rCon         counter for the number of consumers              /0,1*19/
 nSet         auxiliary counter for the definition of Vr       /b1*b20/
 kpdl         counter for Polynomial Distribution Lag          /a1*a6/
 rc                                                            /1*3/
-rcc                                                           /1*4/
+rcc                                                           /1*10/
 
 
 ***       Sectoral Structure        *

@@ -73,7 +73,7 @@
 *' Consu: Consumers
 *' ----
 *' *** Generating an execution profile
-option profile = 1;
+option profile = 0;
 *' *** Number of columns that are listed for each variable in the column listing
 option limcol = 30;
 *' *** Number of rows that are listed for each equation in the equation listing
@@ -81,7 +81,7 @@ option limrow = 30;
 *' *** Save a GDX file after each solve, containing all computed variables (0 off, 1 on)
 option savepoint = 0;
 *' *** Print solution in .lst file (on/off)
-option solprint = off;
+option solprint = on;
 
 *' *** "dollar" ($) commands section: define GAMS flags & code control & compilation-time options
 *' 
@@ -95,15 +95,15 @@ $onEmpty
 *' *** GAMS "flags" definitions
 *' 
 *' *** Maximum number of solver attempts
-$evalGlobal SolverTryMax 4
+$evalGlobal SolverTryMax 1
 *' *** Setting research mode (0) or development mode (1) to modify settings and parameters accordingly
 $setGlobal DevMode 0 !! can be overwritten if VS Code Tasks are used
 *' *** Write a GDX file with all data at the end of the run
-$setGlobal WriteGDX on
+$setGlobal WriteGDX off
 *' *** Generate input data?
 $setGlobal GenerateInput on !! can be overwritten if VS Code Tasks are used
 
-$setGlobal fCountries 'MAR,IND,USA,EGY,RWO' !! can be overwritten if VS Code Tasks are used
+$setGlobal fCountries 'PRT' !! can be overwritten if VS Code Tasks are used
 
 $setGlobal fCountryList %countries%
 
@@ -111,7 +111,7 @@ $evalGlobal fPeriodOfYears 1
 
 $evalGlobal fStartHorizon 2010
 $evalGlobal fEndHorizon 2100
-$evalGlobal fEndY 2030
+$evalGlobal fEndY 2018
 $evalGlobal fStartY 2018
 $evalGlobal fBaseY %fStartY% - %fPeriodOfYears%
 

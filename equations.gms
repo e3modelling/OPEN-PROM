@@ -91,11 +91,12 @@ QElecBaseLoad(runCy,YTIME)$TIME(YTIME)..
 *' multiplied by the exponential function of the parameter for load curve construction.
 QTotReqElecProd(runCy,YTIME)$TIME(YTIME)..
          VTotReqElecProd(runCy,YTIME)
-             =E=
-         sum(HOUR, (VElecPeakLoad(runCy,YTIME)-VCorrBaseLoad(runCy,YTIME))
-                   * exp(-VLoadCurveConstr(runCy,YTIME)*(0.25+(ord(HOUR)-1)))
-             ) + 9*VCorrBaseLoad(runCy,YTIME);   
-
+             =E= VNonChpElecProd(runCy,YTIME);
+$ontext             
+         sum(HOUR, (VElecPeakLoad(runCy,YTIME)-VEstBaseLoad(runCy,YTIME))
+                   * exp(-0.2*(0.25+(ord(HOUR)-1)))
+             ) + 9*VEstBaseLoad(runCy,YTIME);   
+$offtext
 *' The equation calculates the estimated total electricity generation capacity by multiplying the previous year's total electricity generation capacity with
 *' the ratio of the current year's estimated electricity peak load to the previous year's electricity peak load. This provides an estimate of the required
 *' generation capacity based on the changes in peak load.
@@ -478,16 +479,18 @@ VOverallCap(runCy,PGALL,YTIME-1)
 *' This equation calculates the scaling factor for plant dispatching in a specific country , hour of the day,
 *' and time period . The scaling factor for determining the dispatch order of different power plants during a particular hour.
 QScalFacPlantDispatch(runCy,HOUR,YTIME)$TIME(YTIME)..
+VScalFacPlaDisp(runCy,HOUR,YTIME) =e= 1e-10*(0.25 + ord(HOUR)-1);
+$ontext
          sum(PGALL,
                  (VOverallCap(runCy,PGALL,YTIME)+
                  sum(CHP$CHPtoEON(CHP,PGALL),VElecCapChpPla(runCy,CHP,YTIME)))*
                  exp(-VScalFacPlaDisp(runCy,HOUR,YTIME)/VPowPlantSorting(runCy,PGALL,YTIME))
                  )
          =E=
-         (VElecPeakLoad(runCy,YTIME) - VCorrBaseLoad(runCy,YTIME))
-         * exp(-VLoadCurveConstr(runCy,YTIME)*(0.25 + ord(HOUR)-1))
-         + VCorrBaseLoad(runCy,YTIME);
-
+         (VElecPeakLoad(runCy,YTIME) - VEstBaseLoad(runCy,YTIME))
+         * exp(-0.21*(0.25 + ord(HOUR)-1))
+         + VEstBaseLoad(runCy,YTIME);
+$offtext
 *' This equation calculates the estimated electricity generation of Combined Heat and Power plantsin a specific countryand time period.
 *' The estimation is based on the fuel consumption of CHP plants, their electricity prices, the maximum share of CHP electricity in total demand, and the overall
 *' electricity demand. The equation essentially estimates the electricity generation of CHP plants by considering their fuel consumption, electricity prices, and the maximum

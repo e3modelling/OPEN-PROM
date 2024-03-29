@@ -26,8 +26,8 @@ if (!is.null(DevMode) && DevMode == 0) {
     
 } else if (!is.null(DevMode) && DevMode == 1) {
     print("Creating data for development mode")
-    fname <- paste0("rev0",dev,"_a9c72a01_open_prom.tgz") # file name
-    retrieveData("OPEN_PROM",puc=F,renv=F,regionmapping = "regionmappingOPDEV2.csv",dev=dev)
+    fname <- paste0("rev0",dev,"_d900037e_open_prom.tgz") # file name
+    retrieveData("OPEN_PROM",puc=F,renv=F,regionmapping = "regionmappingOP4.csv",dev=dev)
 }
 
 # copy the dataset into the model
