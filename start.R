@@ -1,5 +1,7 @@
 #library(gitr)
-# Script for OPEN-PROM model execution and other associated tasks 
+# Script for OPEN-PROM model execution and other associated tasks.
+
+# 1 - Creating a separate folder for each model run.
 
 createRunFolder = 1 # Set to 0 to disable run folder creation and file copying
 
@@ -26,6 +28,38 @@ setwd(runfolder)
 
 }
 
-# run model
-system("gams main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data")
+# 2 - Executing the VS Code tasks
 
+# Parsing the command line argument
+args <- commandArgs(trailingOnly = TRUE)
+task <- NULL
+
+for (arg in args) {
+  key_value <- strsplit(arg, "=")[[1]]
+  
+  if (key_value[1] == "task") {
+    task <- as.numeric(key_value[2])
+  }
+}
+
+# Setting the correct GAMS flags for each task
+if (!is.null(task) && task == 0) {
+
+    # Running task OPEN-PROM DEV
+    system("gams main.gms --DevMode=1 --GenerateInput=off -logOption 4 -Idir=./data")
+
+} else if (!is.null(task) && task == 1) {
+
+    # Running task OPEN-PROM DEV NEW DATA
+    system("gams main.gms --DevMode=1 --GenerateInput=on -logOption 4 -Idir=./data")
+
+} else if (!is.null(task) && task == 2) {
+    
+    # Running task OPEN-PROM RESEARCH
+    system("gams main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data")
+
+} else if (!is.null(task) && task == 3) {
+    
+    # Running task OPEN-PROM RESEARCH NEW DATA
+    system("gams main.gms --DevMode=0 --GenerateInput=on -logOption 4 -Idir=./data")
+}
