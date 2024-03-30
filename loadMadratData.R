@@ -19,10 +19,10 @@ for (arg in args) {
 if (!is.null(DevMode) && DevMode == 0) {
     library(mrprom)
     print("Creating data for research mode")
-    fname <- paste0("rev0",dev,"_28b9ea46_open_prom.tgz") # file name
+    fname <- paste0("rev0",dev,"_1f966d19_open_prom.tgz") # file name
     # run the fullOPEN-PROM function generating the whole input dataset of OPEN-PROM
     # retrieveData contains a call to fullOPEN-PROM
-    retrieveData("OPEN_PROM",puc=F,renv=F,regionmapping = "regionmappingOP.csv",dev=dev)
+    retrieveData("OPEN_PROM",puc=F,renv=F,regionmapping = "regionmappingOP5.csv",dev=dev)
     file.copy(paste0(getConfig("outputfolder"),"/",fname),fname)
     
 } else if (!is.null(DevMode) && DevMode == 1) {
