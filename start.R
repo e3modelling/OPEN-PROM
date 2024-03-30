@@ -3,9 +3,9 @@
 
 # 1 - Creating a separate folder for each model run.
 
-createRunFolder = 1 # Set to 0 to disable run folder creation and file copying
+createRunFolder = F # Set to FALSE to disable run folder creation and file copying
 
-if(createRunFolder == 1) {
+if(createRunFolder) {
 
 # generate name of run folder
 scenario <- "default"
@@ -42,7 +42,7 @@ for (arg in args) {
   }
 }
 
-# Setting the correct GAMS flags for each task
+# Setting the appropriate GAMS flags for each task
 if (!is.null(task) && task == 0) {
 
     # Running task OPEN-PROM DEV
@@ -52,6 +52,9 @@ if (!is.null(task) && task == 0) {
 
     # Running task OPEN-PROM DEV NEW DATA
     system("gams main.gms --DevMode=1 --GenerateInput=on -logOption 4 -Idir=./data")
+    if(createRunFolder) {
+      file.copy("data", to = '../../', recursive = TRUE) # Copying generated data to parent folder for future runs
+      }        
 
 } else if (!is.null(task) && task == 2) {
     
@@ -62,4 +65,7 @@ if (!is.null(task) && task == 0) {
     
     # Running task OPEN-PROM RESEARCH NEW DATA
     system("gams main.gms --DevMode=0 --GenerateInput=on -logOption 4 -Idir=./data")
+    if(createRunFolder) {
+      file.copy("data", to = '../../', recursive = TRUE)
+      }    
 }
