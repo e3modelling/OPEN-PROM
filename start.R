@@ -1,11 +1,45 @@
-#library(gitr)
+library(jsonlite)
+
 # Script for OPEN-PROM model execution and other associated tasks.
+
+# 0 - Define a function that saves metadata about the model run
+
+saveMetadata<- function() {
+  # Gather Git information with system calls
+
+  commit_author <- system("git log -1 --format=%an", intern = TRUE)
+  commit_hash <- system("git log -1 --format=%H", intern = TRUE)
+  commit_comment <- system("git log -1 --format=%B", intern = TRUE)
+  commit_date <- system("git log -1 --format=%ad", intern = TRUE)
+  branch_name <- system("git rev-parse --abbrev-ref HEAD", intern = TRUE)
+  
+  # Organize information into a list
+  git_info <- list(
+    "Author" = commit_author,
+    "Commit Hash" = commit_hash,
+    "Commit Comment" = commit_comment,
+    "Date" = commit_date,
+    "Branch Name" = branch_name
+  )
+  
+  # Wrap the git_info list into another list to create the "Git information" hierarchy
+  data_to_save <- list("Git Information" = git_info)
+  
+  # Convert to JSON and save to file
+  json_data <- toJSON(data_to_save, pretty = TRUE)
+  write(json_data, file = "metadata.json")
+  
+  cat("Git information has been saved to metadata.json\n")
+}
 
 # 1 - Creating a separate folder for each model run.
 
-createRunFolder = F # Set to FALSE to disable run folder creation and file copying
+createRunFolder = TRUE # Set to FALSE to disable run folder creation and file copying
 
 if(createRunFolder) {
+
+# generate metadata file
+saveMetadata()
 
 # generate name of run folder
 scenario <- "default"
@@ -21,6 +55,7 @@ file.copy(grep(".gms$",dir(), value = TRUE), to = runfolder)
 file.copy(grep(".csv$",dir(), value = TRUE), to = runfolder)
 file.copy(grep("*.R$",dir(), value = TRUE), to = runfolder)
 file.copy("conopt.opt", to = runfolder)
+file.copy("metadata.json", to = runfolder)
 file.copy("data", to = runfolder, recursive = TRUE)
 
 # switch to the run folder
