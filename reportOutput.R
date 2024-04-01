@@ -516,7 +516,7 @@ sum7 <- dimSums(sum7,dim=3, na.rm = TRUE)
 total_CO2 <- sum1 + sum2 + sum3 + sum4 + sum5 - sum6 + sum7
 #total_CO2 <- sum1 + sum2 + sum3 + sum4 - sum6
 
-getItems(total_CO2, 3) <- paste0("Emission")
+getItems(total_CO2, 3) <- paste0("Emissions")
 
 #add model MENA_EDS data (choosing the correct variable from MENA by use of the MENA-PROM mapping)
 MENA_iCo2EmiFac <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "iCo2EmiFac", "MENA.EDS"])
@@ -553,17 +553,17 @@ MENA_sum7 <- dimSums(MENA_sum7,dim=3, na.rm = TRUE)
 MENA_SUM <- MENA_sum1 + MENA_sum2 + MENA_sum3 + MENA_sum4 + MENA_sum5 - MENA_sum6 + MENA_sum7
 #MENA_SUM <- MENA_sum1 + MENA_sum2 + MENA_sum3 + MENA_sum4 - MENA_sum6
 
-getItems(MENA_SUM, 3) <- paste0("Emission")
+getItems(MENA_SUM, 3) <- paste0("Emissions")
 
 getRegions(MENA_SUM) <- sub("MOR", "MAR", getRegions(MENA_SUM))
 # choose years and regions that both models have
 years <- intersect(getYears(MENA_SUM,as.integer=TRUE),getYears(total_CO2,as.integer=TRUE))
 regs <- intersect(getRegions(MENA_SUM),getRegions(total_CO2))
-getItems(MENA_SUM, 3.1) <- paste0("Emission")
+getItems(MENA_SUM, 3.1) <- paste0("Emissions")
 
 # write data in mif file
-write.report(total_CO2[,,],file="reporting.mif",model="OPEN-PROM",unit="MtCO2",append=TRUE,scenario=scenario_name)
-write.report(MENA_SUM[regs,years,],file="reporting.mif",model="MENA-EDS",unit="MtCO2",append=TRUE,scenario=scenario_name)
+write.report(total_CO2[,,],file="reporting.mif",model="OPEN-PROM",unit="Mt CO2",append=TRUE,scenario=scenario_name)
+write.report(MENA_SUM[regs,years,],file="reporting.mif",model="MENA-EDS",unit="Mt CO2",append=TRUE,scenario=scenario_name)
 #c("MAR","IND","USA","EGY","RWO")
 
 runCY <- readGDX('./blabla.gdx', "runCY", field = 'l')
@@ -572,17 +572,17 @@ runCY <- as.vector(runCY)
 l <- readSource("ENERDATA", "2", convert = TRUE)
 l1 <- l[,,"CO2 emissions from fuel combustion (sectoral approach).MtCO2"]
 
-getItems(l1, 3) <- paste0("Emission")
+getItems(l1, 3) <- paste0("Emission2")
 # write data in mif file
-write.report(l1[,year,],file="reporting.mif",model="ENERDATA",unit="MtCO2",append=TRUE,scenario=scenario_name)
+write.report(l1[,year,],file="reporting.mif",model="ENERDATA",unit="Mt CO2",append=TRUE,scenario=scenario_name)
 
 a <- calcOutput(type = "CO2_emissions", aggregate = FALSE)
-getItems(a, 3) <- paste0("Emission")
-write.report(a[,year,],file="reporting.mif",model="EDGAR",unit="MtCO2",append=TRUE,scenario=scenario_name)
+getItems(a, 3) <- paste0("Emissions")
+write.report(a[,year,],file="reporting.mif",model="EDGAR",unit="Mt CO2",append=TRUE,scenario=scenario_name)
 
 c <- readSource("PIK", convert = TRUE)
 c <- c[,,"Energy.MtCO2.CO2"]
-getItems(c, 3) <- paste0("Emission")
-write.report(c[,year,],file="reporting.mif",model="PIK",unit="MtCO2",append=TRUE,scenario=scenario_name)
+getItems(c, 3) <- paste0("Emissions")
+write.report(c[,year,],file="reporting.mif",model="PIK",unit="Mt CO2",append=TRUE,scenario=scenario_name)
 
   
