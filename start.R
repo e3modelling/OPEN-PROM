@@ -20,5 +20,5 @@ file.copy("data", to = runfolder, recursive = TRUE)
 setwd(runfolder)
 
 # run model
-system("gams main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data")
+system("gams main.gms --DevMode=0 --GenerateInput=on -logOption 4 -Idir=./data")
 
