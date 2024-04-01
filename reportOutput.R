@@ -10,9 +10,9 @@ library(stringr)
 # read MENA-PROM mapping, will use it to choose the correct variables from MENA
 map <- read.csv("MENA-PROM mapping - mena_prom_mapping.csv")
 
-scenario_name <- list.dirs("./runs")[2]
-scenario_name <- str_match(scenario_name, "/\\s*(.*?)\\s*_")[,1]
-scenario_name <- str_sub(scenario_name, 7, - 2)
+scenario_name <- basename(getwd())
+scenario_name <- str_match(scenario_name, "\\s*(.*?)\\s*_")[,1]
+scenario_name <- str_sub(scenario_name, 1, - 2)
 
 # read GAMS set used for reporting of Final Energy
 sets <- readSets("sets.gms", "BALEF2EFS")
@@ -43,7 +43,7 @@ getItems(a, 3) <- paste0("Final Energy ", getItems(a, 3))
 
 # write data in mif file
 write.report(VFeCons[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",scenario=scenario_name)
-write.report(a[regs,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario=scenario_name)
+write.report(a[,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario=scenario_name)
 
 
 #filter ENERDATA by consumption
@@ -101,7 +101,7 @@ z <- mbind(MENA_Industrial, MENA_Residential)
 
 # write data in mif file
 write.report(elec_prices[,,],file="reporting.mif",model="OPEN-PROM",unit="Euro2005/KWh",append=TRUE,scenario=scenario_name)
-write.report(z[regs,years,],file="reporting.mif",model="MENA-EDS",unit="Euro2005/KWh",append=TRUE,scenario=scenario_name)
+write.report(z[,years,],file="reporting.mif",model="MENA-EDS",unit="Euro2005/KWh",append=TRUE,scenario=scenario_name)
 
 #filter ENERDATA by lectricity
 k <- readSource("ENERDATA", subtype =  "lectricity", convert = TRUE)
@@ -175,7 +175,7 @@ for (y in 1 : length(sector)) {
   
   # write data in mif file
   write.report(var[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario=scenario_name)
-  write.report(a[regs,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario=scenario_name)
+  write.report(a[,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario=scenario_name)
   
   #Final Energy by sector 
   sector_open <- dimSums(var, dim = 3, na.rm = TRUE)
@@ -185,7 +185,7 @@ for (y in 1 : length(sector)) {
   
   # write data in mif file
   write.report(sector_open[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario=scenario_name)
-  write.report(sector_mena[regs,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario=scenario_name)
+  write.report(sector_mena[,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario=scenario_name)
   
   #Energy Forms Aggregations
   sets5 <- readSets("sets.gms", "EFtoEFA")
@@ -221,7 +221,7 @@ for (y in 1 : length(sector)) {
   
   # write data in mif file
   write.report(var_by_subsector_by_energy_form[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario=scenario_name)
-  write.report(mena_by_subsector_by_energy_form[regs,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario=scenario_name)
+  write.report(mena_by_subsector_by_energy_form[,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario=scenario_name)
   
   #sector_by_energy_form
   by_energy_form <- dimSums(var_by_energy_form, 3.1, na.rm = TRUE)
@@ -231,7 +231,7 @@ for (y in 1 : length(sector)) {
   
   # write data in mif file
   write.report(by_energy_form[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario=scenario_name)
-  write.report(var_mena_by_energy_form[regs,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario=scenario_name)
+  write.report(var_mena_by_energy_form[,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario=scenario_name)
   
   #filter IFuelCons by subtype enerdata
   b3 <- calcOutput(type = "IFuelCons", subtype = sector[y], aggregate = FALSE)
@@ -308,7 +308,7 @@ year <- Reduce(intersect, list(getYears(MENA_EDS_pric,as.integer=TRUE),getYears(
 
 # write data in mif file
 write.report(price[,,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario=scenario_name)
-write.report(MENA_EDS_pric[regs,years,],file="reporting.mif",model="MENA-EDS",unit="various",append=TRUE,scenario=scenario_name)
+write.report(MENA_EDS_pric[,years,],file="reporting.mif",model="MENA-EDS",unit="various",append=TRUE,scenario=scenario_name)
 write.report(a_ener[,year,],file="reporting.mif",model="ENERDATA",unit="various",append=TRUE,scenario=scenario_name)
 
 by_price_form <- dimSums(price_gdx, 3.1, na.rm = TRUE)
@@ -337,15 +337,15 @@ getItems(Fuel_Price_ener, 3) <- paste0("Fuel Price", getItems(Fuel_Price_ener, 3
 
 # write data in mif file
 write.report(by_price_form[,,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario=scenario_name)
-write.report(by_price_form_MENA_EDS[regs,years,],file="reporting.mif",model="MENA-EDS",unit="various",append=TRUE,scenario=scenario_name)
+write.report(by_price_form_MENA_EDS[,years,],file="reporting.mif",model="MENA-EDS",unit="various",append=TRUE,scenario=scenario_name)
 write.report(by_price_form_ener[,year,],file="reporting.mif",model="ENERDATA",unit="various",append=TRUE,scenario=scenario_name)
 
 write.report(by_price_form2[,,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario=scenario_name)
-write.report(by_price_form2_MENA_EDS[regs,years,],file="reporting.mif",model="MENA-EDS",unit="various",append=TRUE,scenario=scenario_name)
+write.report(by_price_form2_MENA_EDS[,years,],file="reporting.mif",model="MENA-EDS",unit="various",append=TRUE,scenario=scenario_name)
 write.report(by_price_form2_ener[,year,],file="reporting.mif",model="ENERDATA",unit="various",append=TRUE,scenario=scenario_name)
 
 write.report(Fuel_Price[,,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario=scenario_name)
-write.report(Fuel_Price_MENA_EDS[regs,years,],file="reporting.mif",model="MENA-EDS",unit="various",append=TRUE,scenario=scenario_name)
+write.report(Fuel_Price_MENA_EDS[,years,],file="reporting.mif",model="MENA-EDS",unit="various",append=TRUE,scenario=scenario_name)
 write.report(Fuel_Price_ener[,year,],file="reporting.mif",model="ENERDATA",unit="various",append=TRUE,scenario=scenario_name)
 
                                 #  emission
@@ -563,7 +563,7 @@ getItems(MENA_SUM, 3.1) <- paste0("Emissions")
 
 # write data in mif file
 write.report(total_CO2[,,],file="reporting.mif",model="OPEN-PROM",unit="Mt CO2",append=TRUE,scenario=scenario_name)
-write.report(MENA_SUM[regs,years,],file="reporting.mif",model="MENA-EDS",unit="Mt CO2",append=TRUE,scenario=scenario_name)
+write.report(MENA_SUM[,years,],file="reporting.mif",model="MENA-EDS",unit="Mt CO2",append=TRUE,scenario=scenario_name)
 #c("MAR","IND","USA","EGY","RWO")
 
 runCY <- readGDX('./blabla.gdx', "runCY", field = 'l')
@@ -572,7 +572,7 @@ runCY <- as.vector(runCY)
 l <- readSource("ENERDATA", "2", convert = TRUE)
 l1 <- l[,,"CO2 emissions from fuel combustion (sectoral approach).MtCO2"]
 
-getItems(l1, 3) <- paste0("Emission2")
+getItems(l1, 3) <- paste0("Emissions")
 # write data in mif file
 write.report(l1[,year,],file="reporting.mif",model="ENERDATA",unit="Mt CO2",append=TRUE,scenario=scenario_name)
 
@@ -585,4 +585,32 @@ c <- c[,,"Energy.MtCO2.CO2"]
 getItems(c, 3) <- paste0("Emissions")
 write.report(c[,year,],file="reporting.mif",model="PIK",unit="Mt CO2",append=TRUE,scenario=scenario_name)
 
-  
+                                ###  GDP 
+
+iGDP <- readGDX('./blabla.gdx', "iGDP", field = 'l')
+iGDP_FOP <- calcOutput(type = "iGDP", aggregate = FALSE)
+MENA_iGDP <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "iGDP", "MENA.EDS"])
+MENA_iGDP <- MENA_iGDP * 1.1792 * 1.11#(Euro05 to US$2015)
+getItems(iGDP, 3) <- paste0("GDP")
+getItems(iGDP_FOP, 3) <- paste0("GDP")
+getItems(MENA_iGDP, 3) <- paste0("GDP")
+# write data in mif file
+write.report(iGDP[,,],file="reporting.mif",model="OPEN-PROM",unit="billion US$2015",append=TRUE,scenario=scenario_name)
+write.report(MENA_iGDP[,years,],file="reporting.mif",model="MENA-EDS",unit="billion US$2015",append=TRUE,scenario=scenario_name)
+write.report(iGDP_FOP[,years,],file="reporting.mif",model="FULL-OP",unit="billion US$2015",append=TRUE,scenario=scenario_name)
+
+                            ###  iACTV
+
+iActv <- readGDX('./blabla.gdx', "iActv", field = 'l')
+ACTV_FOP <- calcOutput(type = "ACTV", aggregate = FALSE)
+MENA_iActv <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "iActv", "MENA.EDS"])
+
+getItems(iActv, 3) <- paste0("Actv", getItems(iActv, 3))
+getItems(ACTV_FOP, 3) <- paste0("Actv", getItems(ACTV_FOP, 3))
+getItems(MENA_iActv, 3) <- paste0("Actv", getItems(MENA_iActv, 3))
+
+
+# write data in mif file
+write.report(iActv[,,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario=scenario_name)
+write.report(MENA_iActv[,years,],file="reporting.mif",model="MENA-EDS",unit="various",append=TRUE,scenario=scenario_name)
+write.report(ACTV_FOP[,years,],file="reporting.mif",model="FULL-OP",unit="various",append=TRUE,scenario=scenario_name)
