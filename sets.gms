@@ -23,7 +23,7 @@ CYP
 CZE
 DNK
 EGY
-EST
+*EST
 FIN
 FRA
 DEU
@@ -38,9 +38,9 @@ ISR
 ITA
 JPN
 KOR
-LVA
-LTU
-LUX
+*LVA
+*LTU
+*LUX
 MLT
 MEX
 NLD
@@ -59,6 +59,7 @@ TUN
 TUR
 GBR
 USA
+ELL
 /
 
 runCy(allCy) Countries for which the model is running
