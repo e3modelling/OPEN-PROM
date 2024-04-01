@@ -26,11 +26,9 @@ $ondelim
 $include "./iElastA.csv"
 $offdelim
 ;
-* FIXME: derive elasticities for all countries, not just for MAR
-* author=giannou
+
 iElastA(allCy,SBS,ETYPES,YTIME) = iElastA("MAR",SBS,ETYPES,YTIME);
-* FIXME: derive elasticities per country
-* author=giannou
+
 table iElastNonSubElecData(SBS,ETYPES,YTIME) "Elasticities of Non Substitutable Electricity (1)"
 $ondelim
 $include "./iElastNonSubElecData.csv"
@@ -885,8 +883,7 @@ $ondelim
 $include"./iFuelConsNENSE.csv"
 $offdelim
 ;
-* FIXME: Include $(not An(YTIME)) to iFuelConsPerFueSub when necessary (removing for now)
-* author=derevirn
+
 iFuelConsNENSE(allCy,NENSE,EF,YTIME)$(SECTTECH(NENSE,EF) $(iFuelConsNENSE(allCy,NENSE,EF,YTIME)<=0)) = 1e-6;
 iFuelConsPerFueSub(allCy,INDSE,EF,YTIME) = iFuelConsINDSE(allCy,INDSE,EF,YTIME);
 iFuelConsPerFueSub(allCy,DOMSE,EF,YTIME) = iFuelConsDOMSE(allCy,DOMSE,EF,YTIME);
@@ -973,8 +970,6 @@ $offdelim
 
 iMatFacPlaAvailCap(allCy,CCS,YTIME)$an(YTIME)  =0;
 parameter
-* FIXME: Temporarily setting maturity factors related to plant dispatching equal to 1.
-* author=derevirn
 iDataMatureFacPlaDisp(PGALL) /
 *CTHLGN	20.00000,
 *CTHHCL	20.00000,
