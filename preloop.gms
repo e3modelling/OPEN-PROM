@@ -284,7 +284,7 @@ VCurrRenPot.FX(runCy,PGRENEF, YTIME) $(NOT AN(YTIME)) = iMinRenPotential(runCy,P
 
 VScrRate.l(allCy,YTIME)=0.1;
 VScrRate.UP(runCy,YTIME) = 1;
-VScrRate.FX(runCy,"2020") = 0.1; 
+VScrRate.FX(runCy,"%fBaseY%") = 0.1; 
 
 VTranspCostPermeanConsSize.l(allCy,TRANSE,RCon,TTECH,YTIME)=0.1;
 
@@ -387,7 +387,7 @@ VMExtV.FX(runCy,YTIME)$(not An(YTIME)) = iDataPassCars(runCy,"PC","MEXTV");
 
 VGapTranspFillNewTech.FX(runCy,TRANSE,YTIME)$(not AN(YTIME))=0;
 
-VSpecificFuelCons.FX(runCy,TRANSE,TTECH,EF,"2020")$(SECTTECH(TRANSE,EF) ) = iSpeFuelConsCostBy(runCy,TRANSE,TTECH,EF);
+VSpecificFuelCons.FX(runCy,TRANSE,TTECH,EF,"%fBaseY%")$(SECTTECH(TRANSE,EF) ) = iSpeFuelConsCostBy(runCy,TRANSE,TTECH,EF);
 
 VConsEachTechTransp.FX(runCy,TRANSE,TTECH,EF,YTIME)$(SECTTECH(TRANSE,TTECH)  $(not PLUGIN(TTECH)) $TTECHtoEF(TTECH,EF) $(not AN(YTIME))) = iFuelConsPerFueSub(runCy,TRANSE,EF,YTIME); 
 VConsEachTechTransp.FX(runCy,TRANSE,TTECH,EF,YTIME)$(SECTTECH(TRANSE,TTECH)  $PLUGIN(TTECH) $(not AN(YTIME))) = 0;
@@ -478,7 +478,7 @@ VEndogScrapIndex.FX(runCy,PGSCRN,YTIME) = 1;            !! premature replacement
 VCO2ElcHrgProd.FX(runCy,YTIME)$(not An(YTIME)) = 0;
 
 VLongAvgPowGenCost.L(runCy,ESET,"2010") = 0;
-VLongAvgPowGenCost.L(runCy,ESET,"2020") = 0;
+VLongAvgPowGenCost.L(runCy,ESET,"%fBaseY%") = 0;
 
 VLonPowGenCostNoClimPol.L(runCy,ESET,"2010") = 0;
 VLonPowGenCostNoClimPol.l(runCy,ESET,"%fBaseY%") = 0;
@@ -487,7 +487,7 @@ vAvgPowerGenCostShoTrm.L(runCy,ESET,"2010") = 0;
 vAvgPowerGenCostShoTrm.L(runCy,ESET,"%fBaseY%") = 0;
 
 VLongPowGenCost.L(runCy,PGALL,ESET,"2010") = 0;
-VLongPowGenCost.L(runCy,PGALL,ESET,"2020") = 0;
+VLongPowGenCost.L(runCy,PGALL,ESET,"%fBaseY%") = 0;
 
 VLonAvgPowGenCostNoClimPol.L(runCy,PGALL,ESET,"2010") = 0;
 VLonAvgPowGenCostNoClimPol.FX(runCy,PGALL,ESET,"%fBaseY%") = 0;
