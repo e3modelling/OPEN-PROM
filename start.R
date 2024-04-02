@@ -2,7 +2,7 @@
 
 # generate name of run folder
 scenario <- "default"
-folderName <- paste(scenario, format(Sys.time(), "%e-%m-%Y_%H-%M-%S"), sep="_")
+folderName <- paste(scenario, format(Sys.time(), "%d-%m-%Y_%H-%M-%S"), sep="_")
 
 # create run folder under /runs
 if (!file.exists("runs")) dir.create("runs")
