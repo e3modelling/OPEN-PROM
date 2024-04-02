@@ -73,18 +73,19 @@
 *' Consu: Consumers
 *' ----
 *' *** Generating an execution profile
-option profile = 1;
+option profile = 0;
 *' *** Number of columns that are listed for each variable in the column listing
-option limcol = 30;
+option limcol = 0;
 *' *** Number of rows that are listed for each equation in the equation listing
-option limrow = 30;
+option limrow = 0;
 *' *** Save a GDX file after each solve, containing all computed variables (0 off, 1 on)
 option savepoint = 0;
 *' *** Print solution in .lst file (on/off)
 option solprint = off;
 
 *' *** "dollar" ($) commands section: define GAMS flags & code control & compilation-time options
-*' 
+*  *** onDollar activates printing of the $commands to .lst file
+$onDollar
 *' *** onEolCom: turn on end-of-line comments (starting with !!, i.e. the GAMS default)
 $onEolCom
 *' *** onEnd: turn on alternative flow control syntax (more readable loop, for, if etc.)
@@ -113,7 +114,7 @@ $evalGlobal fPeriodOfYears 1
 
 $evalGlobal fStartHorizon 2010
 $evalGlobal fEndHorizon 2100
-$evalGlobal fEndY 2030
+$evalGlobal fEndY 2100
 $evalGlobal fStartY 2021
 $evalGlobal fBaseY %fStartY% - %fPeriodOfYears%
 
