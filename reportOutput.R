@@ -7,6 +7,32 @@ library(utils)
 library(mrprom)
 library(stringr)
 
+mapping <- "regionmappingOP5.csv"
+
+reportGDP <- function() {
+  
+  iGDP <- readGDX('./blabla.gdx', "iGDP")
+  iGDP_FOP <- calcOutput(type = "iGDP", aggregate = TRUE)
+  MENA_iGDP <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "iGDP", "MENA.EDS"])
+  MENA_iGDP <- MENA_iGDP * 1.1792 * 1.11#(Euro05 to US$2015)
+  getRegions(MENA_iGDP) <- sub("MOR", "MAR", getRegions(MENA_iGDP))
+  
+  getItems(iGDP, 3) <- paste0("GDP")
+  getItems(iGDP_FOP, 3) <- paste0("GDP")
+  getItems(MENA_iGDP, 3) <- paste0("GDP")
+  
+  #x <- mbind(iGDP, MENA_iGDP, iGDP_FOP)
+  # write data in mif file
+  write.report(iGDP[,,],file="reporting.mif",model="OPEN-PROM",unit="billion US$2015",append=TRUE,scenario=scenario_name)
+  write.report(MENA_iGDP[,years,],file="reporting.mif",model="MENA-EDS",unit="billion US$2015",append=TRUE,scenario=scenario_name)
+  write.report(iGDP_FOP[,years,],file="reporting.mif",model="FULL-OP",unit="billion US$2015",append=TRUE,scenario=scenario_name)
+  #return(x)
+}
+
+runCY <- readGDX('./blabla.gdx', "runCYL")
+rmap <- toolGetMapping(mapping, "regional", where = "mrprom")
+setConfig(regionmapping = mapping)
+
 # read MENA-PROM mapping, will use it to choose the correct variables from MENA
 map <- read.csv("MENA-PROM mapping - mena_prom_mapping.csv")
 
@@ -234,7 +260,7 @@ for (y in 1 : length(sector)) {
   write.report(var_mena_by_energy_form[,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario=scenario_name)
   
   #filter IFuelCons by subtype enerdata
-  b3 <- calcOutput(type = "IFuelCons", subtype = sector[y], aggregate = FALSE)
+  b3 <- calcOutput(type = "IFuelCons", subtype = sector[y], aggregate = TRUE)
   
   year <- Reduce(intersect, list(getYears(a,as.integer=TRUE),getYears(var,as.integer=TRUE),getYears(b3,as.integer=TRUE)))
   b3 <- b3[,year,]
@@ -285,7 +311,7 @@ for (y in 1 : length(sector)) {
 
                            # FuelPrice
 
-price_gdx <- readGDX('./blabla.gdx', "iFuelPrice", field = 'l')
+price_gdx <- readGDX('./blabla.gdx', "iFuelPrice")
 price <- price_gdx
 getItems(price, 3.1) <- paste0("Fuel Price ", getItems(price, 3.1))
 
@@ -301,7 +327,7 @@ getItems(MENA_EDS_pric, 3.1) <- paste0("Fuel Price ", getItems(MENA_EDS_pric, 3.
 
 #FuelPrice enerdata
 #fix units from $2015/toe to k$2015/toe
-a_ener_price <- calcOutput(type = "IFuelPrice", aggregate = FALSE) / 1000
+a_ener_price <- calcOutput(type = "IFuelPrice", aggregate = TRUE) / 1000
 a_ener <- a_ener_price
 getItems(a_ener, 3.1) <- paste0("Fuel Price ", getItems(a_ener, 3.1))
 year <- Reduce(intersect, list(getYears(MENA_EDS_pric,as.integer=TRUE),getYears(price,as.integer=TRUE),getYears(a_ener,as.integer=TRUE)))
@@ -350,15 +376,15 @@ write.report(Fuel_Price_ener[,year,],file="reporting.mif",model="ENERDATA",unit=
 
                                 #  emission
 
-iCo2EmiFac <- readGDX('./blabla.gdx', "iCo2EmiFac", field = 'l')
+iCo2EmiFac <- readGDX('./blabla.gdx', "iCo2EmiFac")
 VConsFuel <- readGDX('./blabla.gdx', "VConsFuel", field = 'l')
 VTransfInThermPowPls <- readGDX('./blabla.gdx', "VTransfInThermPowPls", field = 'l')
 VTransfInputDHPlants <- readGDX('./blabla.gdx', "VTransfInputDHPlants", field = 'l')
 VEnCons <- readGDX('./blabla.gdx', "VEnCons", field = 'l')
 VDemTr <- readGDX('./blabla.gdx', "VDemTr", field = 'l')
 VElecProd <- readGDX('./blabla.gdx', "VElecProd", field = 'l')
-iPlantEffByType <- readGDX('./blabla.gdx', "iPlantEffByType", field = 'l')
-iCO2CaptRate <- readGDX('./blabla.gdx', "iCO2CaptRate", field = 'l')
+iPlantEffByType <- readGDX('./blabla.gdx', "iPlantEffByType")
+iCO2CaptRate <- readGDX('./blabla.gdx', "iCO2CaptRate")
 
 EFtoEFS <- toolreadSets("sets.gms", "EFtoEFS")
 EFtoEFS <- as.data.frame(EFtoEFS)
@@ -566,9 +592,6 @@ write.report(total_CO2[,,],file="reporting.mif",model="OPEN-PROM",unit="Mt CO2",
 write.report(MENA_SUM[,years,],file="reporting.mif",model="MENA-EDS",unit="Mt CO2",append=TRUE,scenario=scenario_name)
 #c("MAR","IND","USA","EGY","RWO")
 
-runCY <- readGDX('./blabla.gdx', "runCY", field = 'l')
-runCY <- as.vector(runCY)
-
 l <- readSource("ENERDATA", "2", convert = TRUE)
 l1 <- l[,,"CO2 emissions from fuel combustion (sectoral approach).MtCO2"]
 
@@ -576,7 +599,7 @@ getItems(l1, 3) <- paste0("Emissions")
 # write data in mif file
 write.report(l1[,year,],file="reporting.mif",model="ENERDATA",unit="Mt CO2",append=TRUE,scenario=scenario_name)
 
-a <- calcOutput(type = "CO2_emissions", aggregate = FALSE)
+a <- calcOutput(type = "CO2_emissions", aggregate = TRUE)
 getItems(a, 3) <- paste0("Emissions")
 write.report(a[,year,],file="reporting.mif",model="EDGAR",unit="Mt CO2",append=TRUE,scenario=scenario_name)
 
@@ -585,26 +608,13 @@ c <- c[,,"Energy.MtCO2.CO2"]
 getItems(c, 3) <- paste0("Emissions")
 write.report(c[,year,],file="reporting.mif",model="PIK",unit="Mt CO2",append=TRUE,scenario=scenario_name)
 
-                                ###  GDP 
+output <- NULL
+output <- mbind(output, reportGDP())
 
-iGDP <- readGDX('./blabla.gdx', "iGDP", field = 'l')
-iGDP_FOP <- calcOutput(type = "iGDP", aggregate = FALSE)
-MENA_iGDP <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "iGDP", "MENA.EDS"])
-MENA_iGDP <- MENA_iGDP * 1.1792 * 1.11#(Euro05 to US$2015)
-getRegions(MENA_iGDP) <- sub("MOR", "MAR", getRegions(MENA_iGDP))
+                ###  iACTV
 
-getItems(iGDP, 3) <- paste0("GDP")
-getItems(iGDP_FOP, 3) <- paste0("GDP")
-getItems(MENA_iGDP, 3) <- paste0("GDP")
-# write data in mif file
-write.report(iGDP[,,],file="reporting.mif",model="OPEN-PROM",unit="billion US$2015",append=TRUE,scenario=scenario_name)
-write.report(MENA_iGDP[,years,],file="reporting.mif",model="MENA-EDS",unit="billion US$2015",append=TRUE,scenario=scenario_name)
-write.report(iGDP_FOP[,years,],file="reporting.mif",model="FULL-OP",unit="billion US$2015",append=TRUE,scenario=scenario_name)
-
-                            ###  iACTV
-
-iActv <- readGDX('./blabla.gdx', "iActv", field = 'l')
-ACTV_FOP <- calcOutput(type = "ACTV", aggregate = FALSE)
+iActv <- readGDX('./blabla.gdx', "iActv")
+ACTV_FOP <- calcOutput(type = "ACTV", aggregate = TRUE)
 MENA_iActv <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "iActv", "MENA.EDS"])
 getRegions(MENA_iActv) <- sub("MOR", "MAR", getRegions(MENA_iActv))
 
