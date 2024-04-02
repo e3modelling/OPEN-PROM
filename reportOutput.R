@@ -15,7 +15,7 @@ scenario_name <- str_match(scenario_name, "\\s*(.*?)\\s*_")[,1]
 scenario_name <- str_sub(scenario_name, 1, - 2)
 
 # read GAMS set used for reporting of Final Energy
-sets <- readSets("sets.gms", "BALEF2EFS")
+sets <- toolreadSets("sets.gms", "BALEF2EFS")
 sets[, 1] <- gsub("\"","",sets[, 1])
 sets <- separate_wider_delim(sets,cols = 1, delim = ".", names = c("BAL","EF"))
 sets[["EF"]] <- sub("\\(","",sets[["EF"]])
@@ -74,11 +74,11 @@ write.report(v,file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,sce
 #add model OPEN-PROM data Electricity prices
 VElecPriInduResConsu <- readGDX('./blabla.gdx', "VElecPriInduResConsu", field = 'l')
 #choose Industrial consumer /i/
-sets1 <- readSets("sets.gms", "iSet")
+sets1 <- toolreadSets("sets.gms", "iSet")
 elec_prices_Industry <- VElecPriInduResConsu[,,sets1[1,1]]
 getNames(elec_prices_Industry) <- "Electricity prices Industrial"
 #choose Residential consumer /r/
-sets2 <- readSets("sets.gms", "rSet")
+sets2 <- toolreadSets("sets.gms", "rSet")
 elec_prices_Residential <- VElecPriInduResConsu[,,sets2[1,1]]
 getNames(elec_prices_Residential) <- "Electricity prices Residential"
 elec_prices <- mbind(elec_prices_Industry, elec_prices_Residential)
@@ -128,7 +128,7 @@ write.report(x,file="reporting.mif",model="ENERDATA",unit="Euro2005/KWh",append=
                # Final Energy | "TRANSE" | "INDSE" | "DOMSE" | "NENSE"
 
 #Link between Model Subsectors and Fuels
-sets4 <- readSets("sets.gms", "SECTTECH")
+sets4 <- toolreadSets("sets.gms", "SECTTECH")
 sets4[6,] <- paste0(sets4[6,] , sets4[7,])
 sets4 <- sets4[ - c(7),,drop = FALSE]
 sets4[8,] <- paste0(sets4[8,] , sets4[9,], sets4[10,])
@@ -145,7 +145,7 @@ sector <- c("TRANSE", "INDSE", "DOMSE", "NENSE")
 blabla_var <- c("VDemTr", "VConsFuel", "VConsFuel", "VConsFuel")
 for (y in 1 : length(sector)) {
   
-  sets6 <- readSets("sets.gms", sector[y])
+  sets6 <- toolreadSets("sets.gms", sector[y])
   sets6 <- separate_rows(sets6, paste0(sector[y],"(DSBS)"))
   sets6 <- as.data.frame(sets6)
   var_gdx <- readGDX('./blabla.gdx', blabla_var[y], field = 'l')
@@ -188,7 +188,7 @@ for (y in 1 : length(sector)) {
   write.report(sector_mena[,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario=scenario_name)
   
   #Energy Forms Aggregations
-  sets5 <- readSets("sets.gms", "EFtoEFA")
+  sets5 <- toolreadSets("sets.gms", "EFtoEFA")
   sets5[5,] <- paste0(sets5[5,] , sets5[6,])
   sets5 <- sets5[ - 6,]
   sets5 <- as.data.frame(sets5)
@@ -197,7 +197,7 @@ for (y in 1 : length(sector)) {
   sets5[["EF"]] <- sub("\\)","",sets5[["EF"]])
   sets5 <- separate_rows(sets5,EF)
   
-  ELC <- readSets("sets.gms", "ELCEF")
+  ELC <- toolreadSets("sets.gms", "ELCEF")
   #Add electricity, Hydrogen, Biomass and Waste
   sets5[nrow(sets5) + 1, ] <- ELC[1,1]
   sets5[nrow(sets5) + 1, ] <- "H2F"
@@ -360,14 +360,14 @@ VElecProd <- readGDX('./blabla.gdx', "VElecProd", field = 'l')
 iPlantEffByType <- readGDX('./blabla.gdx', "iPlantEffByType", field = 'l')
 iCO2CaptRate <- readGDX('./blabla.gdx', "iCO2CaptRate", field = 'l')
 
-EFtoEFS <- readSets("sets.gms", "EFtoEFS")
+EFtoEFS <- toolreadSets("sets.gms", "EFtoEFS")
 EFtoEFS <- as.data.frame(EFtoEFS)
 EFtoEFS <- separate_wider_delim(EFtoEFS,cols = 1, delim = ".", names = c("EF","EFS"))
 EFtoEFS[["EF"]] <- sub("\\(","",EFtoEFS[["EF"]])
 EFtoEFS[["EF"]] <- sub("\\)","",EFtoEFS[["EF"]])
 EFtoEFS <- EFtoEFS %>% separate_longer_delim(c(EF, EFS), delim = ",")
 
-SECTTECH <- readSets("sets.gms", "SECTTECH")
+SECTTECH <- toolreadSets("sets.gms", "SECTTECH")
 
 SECTTECH <- SECTTECH[c(8,9,10), 1]
 SECTTECH[1] <- gsub("\\.", ",", SECTTECH[1])
@@ -388,7 +388,7 @@ qx <- select((qx), -c(EF))
 SECTTECH <- unique(qx)
 names(SECTTECH) <- sub("EFS", "SECTTECH", names(SECTTECH))
 
-IND <- readSets("sets.gms", "INDDOM")
+IND <- toolreadSets("sets.gms", "INDDOM")
 IND <- unlist(strsplit(IND[, 1], ","))
 IND <- as.data.frame(IND)
 INDDOM <- NULL
@@ -410,7 +410,7 @@ for (y in 11:nrow(IND)) {
 
 INDDOM <- as.data.frame(INDDOM)
 
-PGEF <- readSets("sets.gms", "PGEF")
+PGEF <- toolreadSets("sets.gms", "PGEF")
 PGEF <- as.data.frame(PGEF)
 
 sum1 <- iCo2EmiFac[,,INDDOM[, 1]] * VConsFuel[,,INDDOM[, 1]]
@@ -425,7 +425,7 @@ sum3 <- dimSums(sum3, 3, na.rm = TRUE)
 sum4 <- VEnCons * iCo2EmiFac[,,"PG"][,,getItems(VEnCons,3)]
 sum4 <- dimSums(sum4, 3, na.rm = TRUE)
 
-PC <- readSets("sets.gms", "SECTTECH")
+PC <- toolreadSets("sets.gms", "SECTTECH")
 PC <- PC[1, 1]
 PC <- regmatches(PC, gregexpr("(?<=\\().*?(?=\\))", PC, perl=T))[[1]]
 PC <- unlist(strsplit(PC, ","))
@@ -434,7 +434,7 @@ PC <- paste("PC", ".", PC[,1])
 PC <- as.data.frame(PC)
 PC <- PC %>% 
   mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
-GU <- readSets("sets.gms", "SECTTECH")
+GU <- toolreadSets("sets.gms", "SECTTECH")
 GU <- GU[2, 1]
 GU <- regmatches(GU, gregexpr("(?<=\\().*?(?=\\))", GU, perl=T))[[1]]
 GU <- unlist(strsplit(GU, ","))
@@ -443,7 +443,7 @@ GU <- paste("GU", ".", GU[,1])
 GU <- as.data.frame(GU)
 GU <- GU %>% 
   mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
-PT <- readSets("sets.gms", "SECTTECH")
+PT <- toolreadSets("sets.gms", "SECTTECH")
 PT <- PT[3, 1]
 PT <- regmatches(PT, gregexpr("(?<=\\().*?(?=\\))", PT, perl=T))[[1]]
 PT <- unlist(strsplit(PT, ","))
@@ -453,7 +453,7 @@ PT <- paste("PT", ".", PT[,1])
 PT <- as.data.frame(PT)
 PT <- PT %>% 
   mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
-GT <- readSets("sets.gms", "SECTTECH")
+GT <- toolreadSets("sets.gms", "SECTTECH")
 GT <- GT[3, 1]
 GT <- regmatches(GT, gregexpr("(?<=\\().*?(?=\\))", GT, perl=T))[[1]]
 GT <- unlist(strsplit(GT, ","))
@@ -464,7 +464,7 @@ GT <- as.data.frame(GT)
 GT <- GT %>% 
   mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
 PA <- as.data.frame("PA.KRS")
-GN <- readSets("sets.gms", "SECTTECH")
+GN <- toolreadSets("sets.gms", "SECTTECH")
 GN <- GN[5, 1]
 GN <- regmatches(GN, gregexpr("(?<=\\().*?(?=\\))", GN, perl=T))[[1]]
 GN <- unlist(strsplit(GN, ","))
@@ -485,14 +485,14 @@ map_TRANSECTOR <- rbind(PT,GT,PA,PC,GU,GN)
 sum5 <- VDemTr[,,map_TRANSECTOR[, 1]] * iCo2EmiFac[,,map_TRANSECTOR[, 1]]
 sum5 <- dimSums(sum5, 3, na.rm = TRUE)
 
-PGALLtoEF <- readSets("sets.gms", "PGALLtoEF")
+PGALLtoEF <- toolreadSets("sets.gms", "PGALLtoEF")
 PGALLtoEF <- as.data.frame(PGALLtoEF)
 PGALLtoEF <- separate_wider_delim(PGALLtoEF,cols = 1, delim = ".", names = c("PGALL","EF"))
 PGALLtoEF[["PGALL"]] <- sub("\\(","",PGALLtoEF[["PGALL"]])
 PGALLtoEF[["PGALL"]] <- sub("\\)","",PGALLtoEF[["PGALL"]])
 PGALLtoEF <- separate_rows(PGALLtoEF,PGALL)
 
-CCS <- readSets("sets.gms", "CCS")
+CCS <- toolreadSets("sets.gms", "CCS")
 CCS <- as.data.frame(CCS)
 
 CCS <- PGALLtoEF[PGALLtoEF$PGALL %in% CCS$CCS, ]
@@ -500,7 +500,7 @@ CCS <- PGALLtoEF[PGALLtoEF$PGALL %in% CCS$CCS, ]
 var_16 <- VElecProd[,,CCS[,1]] * 0.086 / iPlantEffByType[,,CCS[,1]] * iCo2EmiFac[,,"PG"][,,CCS[,2]] * iCO2CaptRate[,,CCS[,1]]
 sum6 <- dimSums(var_16,dim=3, na.rm = TRUE) 
 
-SECTTECH2 <- readSets("sets.gms", "SECTTECH")
+SECTTECH2 <- toolreadSets("sets.gms", "SECTTECH")
 SECTTECH2 <- SECTTECH2[11, 1]
 SECTTECH2 <- regmatches(SECTTECH2, gregexpr("(?<=\\().*?(?=\\))", SECTTECH2, perl=T))[[1]]
 SECTTECH2 <- unlist(strsplit(SECTTECH2, ","))
@@ -591,6 +591,8 @@ iGDP <- readGDX('./blabla.gdx', "iGDP", field = 'l')
 iGDP_FOP <- calcOutput(type = "iGDP", aggregate = FALSE)
 MENA_iGDP <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "iGDP", "MENA.EDS"])
 MENA_iGDP <- MENA_iGDP * 1.1792 * 1.11#(Euro05 to US$2015)
+getRegions(MENA_iGDP) <- sub("MOR", "MAR", getRegions(MENA_iGDP))
+
 getItems(iGDP, 3) <- paste0("GDP")
 getItems(iGDP_FOP, 3) <- paste0("GDP")
 getItems(MENA_iGDP, 3) <- paste0("GDP")
@@ -604,11 +606,11 @@ write.report(iGDP_FOP[,years,],file="reporting.mif",model="FULL-OP",unit="billio
 iActv <- readGDX('./blabla.gdx', "iActv", field = 'l')
 ACTV_FOP <- calcOutput(type = "ACTV", aggregate = FALSE)
 MENA_iActv <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "iActv", "MENA.EDS"])
+getRegions(MENA_iActv) <- sub("MOR", "MAR", getRegions(MENA_iActv))
 
 getItems(iActv, 3) <- paste0("Actv", getItems(iActv, 3))
 getItems(ACTV_FOP, 3) <- paste0("Actv", getItems(ACTV_FOP, 3))
 getItems(MENA_iActv, 3) <- paste0("Actv", getItems(MENA_iActv, 3))
-
 
 # write data in mif file
 write.report(iActv[,,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario=scenario_name)
