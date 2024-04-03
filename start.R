@@ -1,12 +1,12 @@
-library(jsonlite)
-
 ### Script for OPEN-PROM model execution and other associated tasks.
 
-withRunFolder = TRUE # Set to FALSE to disable run folder creation and file copying
+withRunFolder = TRUE # Set to FALSE to disable model run folder creation and file copying
+withUpload = TRUE # Set to FALSE to disable model run upload to Google Drive
 
-### 0 - Define function that saves model metadata into a JSON file.
+### Define function that saves model metadata into a JSON file.
 
 saveMetadata<- function(DevMode) {
+  library(jsonlite)
 
   # Gather Git information with system calls
   commit_author <- system("git log -1 --format=%an", intern = TRUE)
@@ -43,7 +43,7 @@ saveMetadata<- function(DevMode) {
   
 }
 
-### 1 - Define a function that creates a separate folder for each model run.
+### Define a function that creates a separate folder for each model run.
 
 createRunFolder <- function() {
 
@@ -69,7 +69,39 @@ createRunFolder <- function() {
 
 }
 
-### 2 - Executing the VS Code tasks
+### Define a that archives and uploads each model run to Google Drive
+uploadToGDrive <- function() {
+  library(googledrive)
+
+  folder_path <- getwd()
+  target_folder_id <- "10Ru6Ahs_eGuyf1Ban1O-z_N4aRbdggMr" # ID of the GDrive folder PROMETHEUS/tmp
+  archive_name <- paste0(basename(folder_path), ".tgz")
+  
+  # Create tgz archive with the files of each model run
+  all_files <- list.files(folder_path, recursive = TRUE, all.files = TRUE)
+  files_to_archive <- all_files[!grepl("\\.gdx$", all_files, ignore.case = TRUE)]
+  tar(tarfile = archive_name, files = files_to_archive, compression = "gzip", tar = "internal")
+  
+  # Upload the file to Google Drive
+  # Ensure googledrive is authenticated here
+  # Using exception handling to deal with errors
+  tryCatch({
+
+      drive_auth()
+      drive_upload(media = archive_name, path = as_id(target_folder_id)) 
+      
+      }, error = function(e) {
+      cat("An error occurred during file upload: ", e$message, "\n")
+  })
+  
+  # Delete the archive if it exists
+  if (file.exists(archive_name)) {
+    file.remove(archive_name)
+  }
+  
+}
+
+### Executing the VS Code tasks
 
 # Parsing the command line argument
 args <- commandArgs(trailingOnly = TRUE)
@@ -88,39 +120,48 @@ if (!is.null(task) && task == 0) {
 
     # Running task OPEN-PROM DEV
     saveMetadata(DevMode = 1)
-    if(withRunFolder) { createRunFolder() }
+    if(withRunFolder) createRunFolder()
 
     system("gams main.gms --DevMode=1 --GenerateInput=off -logOption 4 -Idir=./data")
+
+    if(withRunFolder && withUpload) uploadToGDrive()
 
 } else if (!is.null(task) && task == 1) {
 
     # Running task OPEN-PROM DEV NEW DATA
     saveMetadata(DevMode = 1)
-    if(withRunFolder) { createRunFolder() }
+    if(withRunFolder) createRunFolder()
 
     system("gams main.gms --DevMode=1 --GenerateInput=on -logOption 4 -Idir=./data")
 
     if(withRunFolder) {
       file.copy("data", to = '../../', recursive = TRUE) # Copying generated data to parent folder for future runs
+      
+      if(withUpload) uploadToGDrive()
       }        
 
 } else if (!is.null(task) && task == 2) {
     
     # Running task OPEN-PROM RESEARCH
     saveMetadata(DevMode = 0)
-    if(withRunFolder) { createRunFolder() }
+    if(withRunFolder) createRunFolder()
 
     system("gams main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data")
+
+    if(withRunFolder && withUpload) uploadToGDrive()
 
 } else if (!is.null(task) && task == 3) {
     
     # Running task OPEN-PROM RESEARCH NEW DATA
     saveMetadata(DevMode = 0)
-    if(withRunFolder) { createRunFolder() }
+    if(withRunFolder) createRunFolder()
 
     system("gams main.gms --DevMode=0 --GenerateInput=on -logOption 4 -Idir=./data")
 
     if(withRunFolder) {
       file.copy("data", to = '../../', recursive = TRUE)
-      }    
+
+      if(withUpload) uploadToGDrive()
+
+    }    
 }
