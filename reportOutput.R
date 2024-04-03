@@ -129,16 +129,16 @@ reportPrice <- function() {
     write.report(Fuel_Price_MENA_EDS[,years,],file="reporting.mif",model="MENA-EDS",unit="various",append=TRUE,scenario=scenario_name)
     write.report(Fuel_Price_ener[,year,],file="reporting.mif",model="ENERDATA",unit="various",append=TRUE,scenario=scenario_name)
 }
-reportEmissions <- function() {
-    iCo2EmiFac <- readGDX('./blabla.gdx', "iCo2EmiFac")
-    VConsFuel <- readGDX('./blabla.gdx', "VConsFuel", field = 'l')
-    VTransfInThermPowPls <- readGDX('./blabla.gdx', "VTransfInThermPowPls", field = 'l')
-    VTransfInputDHPlants <- readGDX('./blabla.gdx', "VTransfInputDHPlants", field = 'l')
-    VEnCons <- readGDX('./blabla.gdx', "VEnCons", field = 'l')
-    VDemTr <- readGDX('./blabla.gdx', "VDemTr", field = 'l')
-    VElecProd <- readGDX('./blabla.gdx', "VElecProd", field = 'l')
-    iPlantEffByType <- readGDX('./blabla.gdx', "iPlantEffByType")
-    iCO2CaptRate <- readGDX('./blabla.gdx', "iCO2CaptRate")
+reportEmissions <- function(regs) {
+    iCo2EmiFac <- readGDX('./blabla.gdx', "iCo2EmiFac")[regs, , ]
+    VConsFuel <- readGDX('./blabla.gdx', "VConsFuel", field = 'l')[regs, , ]
+    VTransfInThermPowPls <- readGDX('./blabla.gdx', "VTransfInThermPowPls", field = 'l')[regs, , ]
+    VTransfInputDHPlants <- readGDX('./blabla.gdx', "VTransfInputDHPlants", field = 'l')[regs, , ]
+    VEnCons <- readGDX('./blabla.gdx', "VEnCons", field = 'l')[regs, , ]
+    VDemTr <- readGDX('./blabla.gdx', "VDemTr", field = 'l')[regs, , ]
+    VElecProd <- readGDX('./blabla.gdx', "VElecProd", field = 'l')[regs, , ]
+    iPlantEffByType <- readGDX('./blabla.gdx', "iPlantEffByType")[regs, , ]
+    iCO2CaptRate <- readGDX('./blabla.gdx', "iCO2CaptRate")[regs, , ]
 
     EFtoEFS <- toolreadSets("sets.gms", "EFtoEFS")
     EFtoEFS <- as.data.frame(EFtoEFS)
@@ -338,12 +338,12 @@ reportEmissions <- function() {
     getRegions(MENA_SUM) <- sub("MOR", "MAR", getRegions(MENA_SUM))
     # choose years and regions that both models have
     years <- intersect(getYears(MENA_SUM,as.integer=TRUE),getYears(total_CO2,as.integer=TRUE))
-    regs <- intersect(getRegions(MENA_SUM),getRegions(total_CO2))
+    mregs <- intersect(getRegions(MENA_SUM),regs)
     getItems(MENA_SUM, 3.1) <- paste0("Emissions")
 
     # write data in mif file
     write.report(total_CO2[,,],file="reporting.mif",model="OPEN-PROM",unit="Mt CO2",append=TRUE,scenario=scenario_name)
-    write.report(MENA_SUM[,years,],file="reporting.mif",model="MENA-EDS",unit="Mt CO2",append=TRUE,scenario=scenario_name)
+    write.report(MENA_SUM[mregs,years,],file="reporting.mif",model="MENA-EDS",unit="Mt CO2",append=TRUE,scenario=scenario_name)
     #c("MAR","IND","USA","EGY","RWO")
 
     l <- readSource("ENERDATA", "2", convert = TRUE)
@@ -353,16 +353,16 @@ reportEmissions <- function() {
     
     getItems(l1, 3) <- paste0("Emissions")
     # write data in mif file
-    write.report(l1[,year,],file="reporting.mif",model="ENERDATA",unit="Mt CO2",append=TRUE,scenario=scenario_name)
+    write.report(l1[intersect(getRegions(l1),regs),year,],file="reporting.mif",model="ENERDATA",unit="Mt CO2",append=TRUE,scenario=scenario_name)
 
     a <- calcOutput(type = "CO2_emissions", aggregate = TRUE)
     getItems(a, 3) <- paste0("Emissions")
-    write.report(a[,c(year, 2022),],file="reporting.mif",model="EDGAR",unit="Mt CO2",append=TRUE,scenario=scenario_name)
+    write.report(a[intersect(getRegions(a),regs),c(year, 2022),],file="reporting.mif",model="EDGAR",unit="Mt CO2",append=TRUE,scenario=scenario_name)
 
-    c <- readSource("PIK", convert = TRUE)
-    c <- c[,,"Energy.MtCO2.CO2"]
-    getItems(c, 3) <- paste0("Emissions")
-    write.report(c[,c(year, 2022),],file="reporting.mif",model="PIK",unit="Mt CO2",append=TRUE,scenario=scenario_name)
+    pik <- readSource("PIK", convert = TRUE)
+    pik <- pik[,,"Energy.MtCO2.CO2"]
+    getItems(pik, 3) <- paste0("Emissions")
+    write.report(pik[intersect(getRegions(pik),regs),c(year, 2022),],file="reporting.mif",model="PIK",unit="Mt CO2",append=TRUE,scenario=scenario_name)
 }
 reportACTV <- function(regs) {
     iActv <- readGDX('./blabla.gdx', "iActv")[regs, , ]
@@ -611,10 +611,10 @@ if (is.na(scenario_name)) scenario_name <- "default"
 
 #output <- NULL
 #output <- mbind(output, reportGDP(runCY))
-#reportFinalEnergy(runCY)
+reportFinalEnergy(runCY)
 #reportGDP(runCY)
 #reportACTV(runCY)
-reportEmissions()
+reportEmissions(runCY)
 #reportPrice()
 
 
