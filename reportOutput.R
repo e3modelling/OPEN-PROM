@@ -514,13 +514,13 @@ reportFinalEnergy <- function(regs) {
     sets5[nrow(sets5) + 1, ] <- "H2F"
     sets5[nrow(sets5) + 1, ] <- "BMSWAS"
     
-    sets10 <- sets5 %>% filter(EF %in% getItems(var_gdx,3.2))
+    sets10 <- sets5 %>% filter(EF %in% getItems(var_gdx[,,sets6[, 1]],3.2))
     
     #Aggregate model OPEN-PROM by subsector and by energy form 
-    var_by_energy_form <- toolAggregate(var_gdx[,,as.character(unique(sets10$EF))],dim=3.2,rel=sets10,from="EF",to="EFA")
+    var_by_energy_form <- toolAggregate(var_gdx[,,sets6[, 1]][,,as.character(unique(sets10$EF))],dim=3.2,rel=sets10,from="EF",to="EFA")
     
     #Aggregate model MENA_EDS by subsector and by energy form
-    mena_by_energy_form <- toolAggregate(MENA_EDS[,,as.character(unique(sets10$EF))],dim=3.2,rel=sets10,from="EF",to="EFA")
+    mena_by_energy_form <- toolAggregate(MENA_EDS[,,sets6[, 1]][,,as.character(unique(sets10$EF))],dim=3.2,rel=sets10,from="EF",to="EFA")
     
     #sector by subsector and by energy form
     var_by_subsector_by_energy_form <- var_by_energy_form
@@ -546,7 +546,7 @@ reportFinalEnergy <- function(regs) {
     
     #filter IFuelCons by subtype enerdata
     b3 <- calcOutput(type = "IFuelCons", subtype = sector[y], aggregate = TRUE)
-    
+
     year <- Reduce(intersect, list(getYears(a,as.integer=TRUE),getYears(var,as.integer=TRUE),getYears(b3,as.integer=TRUE)))
     b3 <- b3[,year,]
     
