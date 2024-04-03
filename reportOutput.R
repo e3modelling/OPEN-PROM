@@ -349,18 +349,20 @@ reportEmissions <- function() {
     l <- readSource("ENERDATA", "2", convert = TRUE)
     l1 <- l[,,"CO2 emissions from fuel combustion (sectoral approach).MtCO2"]
 
+    year <- Reduce(intersect, list(getYears(MENA_SUM,as.integer=TRUE),getYears(total_CO2,as.integer=TRUE),getYears(l1,as.integer=TRUE)))
+    
     getItems(l1, 3) <- paste0("Emissions")
     # write data in mif file
     write.report(l1[,year,],file="reporting.mif",model="ENERDATA",unit="Mt CO2",append=TRUE,scenario=scenario_name)
 
     a <- calcOutput(type = "CO2_emissions", aggregate = TRUE)
     getItems(a, 3) <- paste0("Emissions")
-    write.report(a[,year,],file="reporting.mif",model="EDGAR",unit="Mt CO2",append=TRUE,scenario=scenario_name)
+    write.report(a[,c(year, 2022),],file="reporting.mif",model="EDGAR",unit="Mt CO2",append=TRUE,scenario=scenario_name)
 
     c <- readSource("PIK", convert = TRUE)
     c <- c[,,"Energy.MtCO2.CO2"]
     getItems(c, 3) <- paste0("Emissions")
-    write.report(c[,year,],file="reporting.mif",model="PIK",unit="Mt CO2",append=TRUE,scenario=scenario_name)
+    write.report(c[,c(year, 2022),],file="reporting.mif",model="PIK",unit="Mt CO2",append=TRUE,scenario=scenario_name)
 }
 reportACTV <- function(regs) {
     iActv <- readGDX('./blabla.gdx', "iActv")[regs, , ]
@@ -609,10 +611,10 @@ if (is.na(scenario_name)) scenario_name <- "default"
 
 #output <- NULL
 #output <- mbind(output, reportGDP(runCY))
-reportFinalEnergy(runCY)
+#reportFinalEnergy(runCY)
 #reportGDP(runCY)
 #reportACTV(runCY)
-#reportEmissions()
-#reportPrices()
+reportEmissions()
+#reportPrice()
 
 
