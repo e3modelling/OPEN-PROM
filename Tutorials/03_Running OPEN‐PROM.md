@@ -18,7 +18,7 @@ Every model run started by the aforementioned tasks, will be saved as a subfolde
 
 `googledrive::drive_auth()`
 
-After running this command, you must authorize the Tidyverse API Packages to access your Google Drive files. Upon completion, a token will be stored on your computer, hence allowing the seemless upload of model runs. In case you want to disable this feature, you can set the `withUpload` flag equal to `FALSE`.
+After running this command, you must authorize the Tidyverse API Packages to access your Google Drive files. Upon completion, a token will be stored on your computer, hence allowing the seamless upload of model runs. In case you want to disable this feature, you can set the `withUpload` flag equal to `FALSE`.
 
 # Testing the Model with Dummy Data
 As mentioned in Tutorial 02, OPEN-PROM utilizes some proprietary data sources that can't be publicly shared. Regardless of that, you can still run and experiment with the model, even if you don't have access to the aforementioned data. You simply need to download [OPEN-PROM v1.0.0](https://github.com/e3modelling/OPEN-PROM/releases/tag/v1.0.0), and make sure you have recent versions of GAMS and the R language installed on your computer. Afterwards, you simply need to open a terminal window and execute the following command:  
