@@ -69,12 +69,12 @@ createRunFolder <- function() {
 
 }
 
-### Define a that archives and uploads each model run to Google Drive
+### Define a function that archives and uploads each model run to Google Drive
 uploadToGDrive <- function() {
   library(googledrive)
 
   folder_path <- getwd()
-  target_folder_id <- "10Ru6Ahs_eGuyf1Ban1O-z_N4aRbdggMr" # ID of the GDrive folder PROMETHEUS/tmp
+  target_folder_id <- "1RrUGkOBx6e9FSVX9rdQnSZbjjWBmPJCc" # ID of the GDrive folder PROMETHEUS Model/Runs
   archive_name <- paste0(basename(folder_path), ".tgz")
   
   # Create tgz archive with the files of each model run
@@ -165,3 +165,4 @@ if (!is.null(task) && task == 0) {
 
     }    
 }
+
