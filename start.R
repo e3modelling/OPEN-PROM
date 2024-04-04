@@ -71,7 +71,10 @@ createRunFolder <- function() {
 
 ### Define a function that archives and uploads each model run to Google Drive
 uploadToGDrive <- function() {
-  library(googledrive)
+  if (!require(googledrive)) { 
+    install.packages("googledrive") # Install googledrive package if missing
+    library(googledrive)
+  }
 
   folder_path <- getwd()
   target_folder_id <- "1RrUGkOBx6e9FSVX9rdQnSZbjjWBmPJCc" # ID of the GDrive folder PROMETHEUS Model/Runs
