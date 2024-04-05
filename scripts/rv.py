@@ -56,10 +56,13 @@ def check_files(folder):
             time_difference = current_time - file_modification_time
             # Specify the threshold for considering the file as recently modified (in seconds)
             modification_threshold = 20
-            if any("*** Status: Normal completion" in line for line in last_lines) and time_difference < modification_threshold:
+            max_modification_threshold = 120
+            if any("*** Status: Normal completion" in line for line in last_lines) and time_difference > max_modification_threshold and time_difference > modification_threshold:
                 print(Fore.GREEN + f"{folder_name: <20} /Missing: NONE /status:COMPLETED" + Style.RESET_ALL)
             elif any("*** Status: Normal completion" in line for line in last_lines) and time_difference > modification_threshold:
                 print(Fore.BLUE  + f"{folder_name: <20} /Missing: NONE      /status:PENDING" + Style.RESET_ALL)
+            elif  any("*** Status: Normal completion" in line for line in last_lines) and time_difference < modification_threshold:
+                print(Fore.GREEN + f"{folder_name: <20} /Missing: NONE /status:COMPLETED" + Style.RESET_ALL)
             else:
                 print(Fore.RED + f"{folder_name: <20} /main.log -> FAILED /status:FAILED" + Style.RESET_ALL)
     
