@@ -6,7 +6,7 @@
         {
             "label": "OPEN-PROM DEV",
             "type": "shell",
-            "command": "gams main.gms --DevMode=1 --GenerateInput=off -logOption 4 -Idir=./data",
+            "command": "Rscript start.R task=0",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -20,7 +20,7 @@
         {
             "label": "OPEN-PROM DEV NEW DATA",
             "type": "shell",
-            "command": "gams main.gms --DevMode=1 --GenerateInput=on -logOption 4 -Idir=./data",
+            "command": "Rscript start.R task=1",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -34,7 +34,7 @@
         {
             "label": "OPEN-PROM RESEARCH",
             "type": "shell",
-            "command": "Rscript start.R",
+            "command": "Rscript start.R task=2",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -48,7 +48,7 @@
         {
             "label": "OPEN-PROM RESEARCH NEW DATA",
             "type": "shell",
-            "command": "gams main.gms --DevMode=0 --GenerateInput=on -logOption 4 -Idir=./data",
+            "command": "Rscript start.R task=3",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
