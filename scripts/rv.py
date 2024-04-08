@@ -20,7 +20,7 @@ def select_folders(base_path):
     # Extract the folder paths from the sorted list
     subfolders = [folder for folder, _ in subfolder_modification_times]
 
-    print("Recently started runs might be listed as PENDING, wait 15 seconds before running the script for recently completed runs.")
+    print("Recently started runs might be listed as FAILED, wait 15 seconds before running the script for recently started runs.")
 
     print("Checking all subfolders...")
     
