@@ -47,7 +47,12 @@ def check_files(folder):
     else:
         with open(main_log_path, "r") as file:
             # Read the last 5 lines of main.log
-            last_lines = file.readlines()[-5:]
+            last_lines = file.readlines()[-65:]
+            # Find the year before the optimal solution note
+            if any("an =" in line for line in last_lines): 
+                for line in last_lines:
+                    if "an =" in line:
+                        year = line.split("=")[1].strip()
             # Get the current time
             current_time = time.time()
             # Get the last modification time of the file
@@ -58,11 +63,11 @@ def check_files(folder):
             modification_threshold = 20
             max_modification_threshold = 120
             if any("*** Status: Normal completion" in line for line in last_lines) and time_difference > max_modification_threshold and time_difference > modification_threshold:
-                print(Fore.GREEN + f"{folder_name: <20} /Missing: NONE      /status:COMPLETED" + Style.RESET_ALL)
+                print(Fore.GREEN + f"{folder_name: <20} /Missing: NONE      /status:COMPLETED",f"/Year:{year}" + Style.RESET_ALL)
             elif any("*** Status: Normal completion" in line for line in last_lines) and time_difference > modification_threshold:
                 print(Fore.BLUE  + f"{folder_name: <20} /Missing: NONE      /status:PENDING" + Style.RESET_ALL)
             elif  any("*** Status: Normal completion" in line for line in last_lines) and time_difference < modification_threshold:
-                print(Fore.GREEN + f"{folder_name: <20} /Missing: NONE /status:COMPLETED" + Style.RESET_ALL)
+                print(Fore.GREEN + f"{folder_name: <20} /Missing: NONE /status:COMPLETED",f"/Year:{year}" + Style.RESET_ALL)
             else:
                 print(Fore.RED + f"{folder_name: <20} /main.log -> FAILED /status:FAILED" + Style.RESET_ALL)
     
@@ -71,9 +76,6 @@ def main():
     This function intializes all the functions of the script and
     loops over the selected subfolders.
     """
-    # The path needs to become dynamic.
-    # Test path: "C:/Users/plesias/Desktop/OPEN-PROM"
-    #base_path = "C:/Users/plesias/Desktop/OPEN-PROM"
     # The path to the "scripts" directory where the script is located
     script_directory = os.path.dirname(os.path.abspath(__file__))
     
