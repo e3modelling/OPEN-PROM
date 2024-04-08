@@ -15,39 +15,46 @@ reportPrice <- function() {
     #add model OPEN-PROM data Electricity prices
     VElecPriInduResConsu <- readGDX('./blabla.gdx', "VElecPriInduResConsu", field = 'l')[runCY, , ]
     #choose Industrial consumer /i/
-    sets1 <- toolreadSets("sets.gms", "iSet")
-    elec_prices_Industry <- VElecPriInduResConsu[,,sets1[1,1]]
+    sets_i <- toolreadSets("sets.gms", "iSet")
+    elec_prices_Industry <- VElecPriInduResConsu[,,sets_i[1,1]]
+    # complete names
     getNames(elec_prices_Industry) <- "Electricity prices Industrial"
     #choose Residential consumer /r/
-    sets2 <- toolreadSets("sets.gms", "rSet")
-    elec_prices_Residential <- VElecPriInduResConsu[,,sets2[1,1]]
+    sets_r <- toolreadSets("sets.gms", "rSet")
+    elec_prices_Residential <- VElecPriInduResConsu[,,sets_r[1,1]]
+    # complete names
     getNames(elec_prices_Residential) <- "Electricity prices Residential"
+    #Combine Industrial and Residential OPEN-PROM
     elec_prices <- mbind(elec_prices_Industry, elec_prices_Residential)
 
     #add model MENA_EDS data (choosing the correct variable from MENA by use of the MENA-PROM mapping)
-    z <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VElecPriInduResConsu", "MENA.EDS"])
-
-    getRegions(z) <- sub("MOR", "MAR", getRegions(z)) # fix wrong region names in MENA
+    elec_prices_MENA <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VElecPriInduResConsu", "MENA.EDS"])
+    # fix wrong region names in MENA
+    getRegions(elec_prices_MENA) <- sub("MOR", "MAR", getRegions(elec_prices_MENA))
     # choose years and regions that both models have
-    years <- intersect(getYears(z,as.integer=TRUE),getYears(VElecPriInduResConsu,as.integer=TRUE))
-    regs <- intersect(getRegions(z),getRegions(VElecPriInduResConsu))
+    years <- intersect(getYears(elec_prices_MENA,as.integer=TRUE),getYears(VElecPriInduResConsu,as.integer=TRUE))
+    regs <- intersect(getRegions(elec_prices_MENA),getRegions(VElecPriInduResConsu))
     #choose Industrial consumer /i/
-    MENA_Industrial <- z[,years,sets1[1,1]]
+    MENA_Industrial <- elec_prices_MENA[,years,sets_i[1,1]]
+    # complete names
     getNames(MENA_Industrial) <- "Electricity prices Industrial"
     #choose Residential consumer /r/
-    MENA_Residential <- z[,years,sets2[1,1]]
+    MENA_Residential <- elec_prices_MENA[,years,sets_r[1,1]]
     # complete names
     getNames(MENA_Residential) <- "Electricity prices Residential"
-    z <- mbind(MENA_Industrial, MENA_Residential)
+    #combine Industrial and Residential MENA
+    elec_prices_MENA <- mbind(MENA_Industrial, MENA_Residential)
 
     # write data in mif file
     write.report(elec_prices[,,],file="reporting.mif",model="OPEN-PROM",unit="Euro2005/KWh",append=TRUE,scenario=scenario_name)
-    write.report(z[,years,],file="reporting.mif",model="MENA-EDS",unit="Euro2005/KWh",append=TRUE,scenario=scenario_name)
+    write.report(elec_prices_MENA[,years,],file="reporting.mif",model="MENA-EDS",unit="Euro2005/KWh",append=TRUE,scenario=scenario_name)
 
-    #filter ENERDATA by lectricity
-    k <- readSource("ENERDATA", subtype =  "lectricity", convert = TRUE)
-    ENERDATA_Industrial <- k[,,"Constant price per toe in US$ of electricity in industry (taxes incl).$15/toe"]
-    ENERDATA_Residential<- k[,,"Constant price per toe in US$ of electricity for households (taxes incl).$15/toe"]
+    #filter ENERDATA by electricity
+    ENERDATA_electricity <- readSource("ENERDATA", subtype =  "lectricity", convert = TRUE)
+    #choose Industrial consumer /i/
+    ENERDATA_Industrial <- ENERDATA_electricity[,,"Constant price per toe in US$ of electricity in industry (taxes incl).$15/toe"]
+    #choose Residential consumer /r/
+    ENERDATA_Residential<- ENERDATA_electricity[,,"Constant price per toe in US$ of electricity for households (taxes incl).$15/toe"]
     #fix units from toe to kwh
     ENERDATA_Industrial <- ENERDATA_Industrial / 11630
     ENERDATA_Residential <- ENERDATA_Residential / 11630
@@ -58,76 +65,89 @@ reportPrice <- function() {
     ENERDATA_Industrial <- ENERDATA_Industrial / 1.24
     ENERDATA_Residential <- ENERDATA_Residential / 1.24
 
+    # complete names
     getItems(ENERDATA_Industrial, 3) <- "Electricity prices Industrial"
     getItems(ENERDATA_Residential, 3) <- "Electricity prices Residential"
-    x <- mbind(ENERDATA_Industrial, ENERDATA_Residential)
-    year <- Reduce(intersect, list(getYears(z,as.integer=TRUE),getYears(x,as.integer=TRUE),getYears(VElecPriInduResConsu,as.integer=TRUE)))
-    x <- x[, year,]
+    #combine Industrial and Residential MENA
+    elec_prices_ENERDATA <- mbind(ENERDATA_Industrial, ENERDATA_Residential)
+    # choose years and regions that both models have
+    year <- Reduce(intersect, list(getYears(elec_prices_MENA,as.integer=TRUE),getYears(elec_prices_ENERDATA,as.integer=TRUE),getYears(VElecPriInduResConsu,as.integer=TRUE)))
+    #filter ENERDATA by years that both models have
+    elec_prices_ENERDATA <- elec_prices_ENERDATA[, year,]
     # write data in mif file
-    write.report(x,file="reporting.mif",model="ENERDATA",unit="Euro2005/KWh",append=TRUE,scenario=scenario_name)
+    write.report(elec_prices_ENERDATA,file="reporting.mif",model="ENERDATA",unit="Euro2005/KWh",append=TRUE,scenario=scenario_name)
 
-    price_gdx <- readGDX('./blabla.gdx', "iFuelPrice")
-    price <- price_gdx
-    getItems(price, 3.1) <- paste0("Fuel Price ", getItems(price, 3.1))
+    #add model OPEN-PROM data iFuelPrice
+    FuelPrice_OPEN_PROM <- readGDX('./blabla.gdx', "iFuelPrice")
+    PRICE_by_sector_and_EF <- FuelPrice_OPEN_PROM
+    # complete names
+    getItems(PRICE_by_sector_and_EF, 3.1) <- paste0("Fuel Price ", getItems(PRICE_by_sector_and_EF, 3.1))
 
     #add model MENA_EDS data (choosing the correct variable from MENA by use of the MENA-PROM mapping)
     #fix units from $2015/toe to k$2015/toe
-    MENA_EDS_price <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "iFuelPrice", "MENA.EDS"]) / 1000
-    MENA_EDS_pric <- MENA_EDS_price
-    getRegions(MENA_EDS_pric) <- sub("MOR", "MAR", getRegions(MENA_EDS_pric)) # fix wrong region names in MENA
+    FuelPrice_MENA <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "iFuelPrice", "MENA.EDS"]) / 1000
+    PRICE_by_sector_and_EF_MENA <- FuelPrice_MENA
+    # fix wrong region names in MENA
+    getRegions(PRICE_by_sector_and_EF_MENA) <- sub("MOR", "MAR", getRegions(PRICE_by_sector_and_EF_MENA)) # fix wrong region names in MENA
     # choose years and regions that both models have
-    years <- intersect(getYears(MENA_EDS_pric,as.integer=TRUE),getYears(price,as.integer=TRUE))
-    regs <- intersect(getRegions(MENA_EDS_pric),getRegions(price))
-    getItems(MENA_EDS_pric, 3.1) <- paste0("Fuel Price ", getItems(MENA_EDS_pric, 3.1))
+    years <- intersect(getYears(PRICE_by_sector_and_EF_MENA,as.integer=TRUE),getYears(PRICE_by_sector_and_EF,as.integer=TRUE))
+    regs <- intersect(getRegions(PRICE_by_sector_and_EF_MENA),getRegions(PRICE_by_sector_and_EF))
+    # complete names
+    getItems(PRICE_by_sector_and_EF_MENA, 3.1) <- paste0("Fuel Price ", getItems(PRICE_by_sector_and_EF_MENA, 3.1))
 
     #FuelPrice enerdata
     #fix units from $2015/toe to k$2015/toe
-    a_ener_price <- calcOutput(type = "IFuelPrice", aggregate = TRUE) / 1000
-    a_ener <- a_ener_price
-    getItems(a_ener, 3.1) <- paste0("Fuel Price ", getItems(a_ener, 3.1))
-    year <- Reduce(intersect, list(getYears(MENA_EDS_pric,as.integer=TRUE),getYears(price,as.integer=TRUE),getYears(a_ener,as.integer=TRUE)))
+    FuelPrice_ENERDATA <- calcOutput(type = "IFuelPrice", aggregate = TRUE) / 1000
+    PRICE_by_sector_and_EF_ENERDATA <- FuelPrice_ENERDATA
+    # complete names
+    getItems(PRICE_by_sector_and_EF_ENERDATA, 3.1) <- paste0("Fuel Price ", getItems(PRICE_by_sector_and_EF_ENERDATA, 3.1))
+    # choose years that both models have
+    year <- Reduce(intersect, list(getYears(PRICE_by_sector_and_EF_MENA,as.integer=TRUE),getYears(PRICE_by_sector_and_EF,as.integer=TRUE),getYears(PRICE_by_sector_and_EF_ENERDATA,as.integer=TRUE)))
 
     # write data in mif file
-    write.report(price[,,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario=scenario_name)
-    write.report(MENA_EDS_pric[,years,],file="reporting.mif",model="MENA-EDS",unit="various",append=TRUE,scenario=scenario_name)
-    write.report(a_ener[,year,],file="reporting.mif",model="ENERDATA",unit="various",append=TRUE,scenario=scenario_name)
+    write.report(PRICE_by_sector_and_EF[,,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario=scenario_name)
+    write.report(PRICE_by_sector_and_EF_MENA[,years,],file="reporting.mif",model="MENA-EDS",unit="various",append=TRUE,scenario=scenario_name)
+    write.report(PRICE_by_sector_and_EF_ENERDATA[,year,],file="reporting.mif",model="ENERDATA",unit="various",append=TRUE,scenario=scenario_name)
 
-    by_price_form <- dimSums(price_gdx, 3.1, na.rm = TRUE)
-    by_price_form2 <- dimSums(price_gdx, 3.2, na.rm = TRUE)
-    by_price_form_MENA_EDS <- dimSums(MENA_EDS_price, 3.1, na.rm = TRUE)
-    by_price_form2_MENA_EDS <- dimSums(MENA_EDS_price, 3.2, na.rm = TRUE)
-    by_price_form_ener <- dimSums(a_ener_price, 3.1, na.rm = TRUE)
-    by_price_form2_ener <- dimSums(a_ener_price, 3.2, na.rm = TRUE)
-    Fuel_Price <- dimSums(price_gdx, na.rm = TRUE)
-    Fuel_Price_MENA_EDS <- dimSums(MENA_EDS_price, na.rm = TRUE)
-    Fuel_Price_ener <- dimSums(a_ener_price,3, na.rm = TRUE)
-
-    getRegions(by_price_form_MENA_EDS) <- sub("MOR", "MAR", getRegions(by_price_form_MENA_EDS))
-    getRegions(by_price_form2_MENA_EDS) <- sub("MOR", "MAR", getRegions(by_price_form2_MENA_EDS))
-    getRegions(Fuel_Price_MENA_EDS) <- sub("MOR", "MAR", getRegions(Fuel_Price_MENA_EDS))
-
-    getItems(by_price_form, 3) <- paste0("Fuel Price ", getItems(by_price_form, 3))
-    getItems(by_price_form2, 3) <- paste0("Fuel Price ", getItems(by_price_form2, 3))
-    getItems(by_price_form_MENA_EDS, 3) <- paste0("Fuel Price ", getItems(by_price_form_MENA_EDS, 3))
-    getItems(by_price_form2_MENA_EDS, 3) <- paste0("Fuel Price ", getItems(by_price_form2_MENA_EDS, 3))
-    getItems(by_price_form_ener, 3) <- paste0("Fuel Price ", getItems(by_price_form_ener, 3))
-    getItems(by_price_form2_ener, 3) <- paste0("Fuel Price ", getItems(by_price_form2_ener, 3))
-    getItems(Fuel_Price, 3) <- paste0("Fuel Price", getItems(Fuel_Price, 3))
-    getItems(Fuel_Price_MENA_EDS, 3) <- paste0("Fuel Price", getItems(Fuel_Price_MENA_EDS, 3))
-    getItems(Fuel_Price_ener, 3) <- paste0("Fuel Price", getItems(Fuel_Price_ener, 3))
+    #aggregation by SECTOR and EF
+    PRICE_by_EF_OPEN_PROM <- dimSums(FuelPrice_OPEN_PROM, 3.1, na.rm = TRUE)
+    PRICE_by_sector_OPEN_PROM <- dimSums(FuelPrice_OPEN_PROM, 3.2, na.rm = TRUE)
+    PRICE_by_EF_MENA <- dimSums(FuelPrice_MENA, 3.1, na.rm = TRUE)
+    PRICE_by_sector_MENA <- dimSums(FuelPrice_MENA, 3.2, na.rm = TRUE)
+    PRICE_by_EF_ENERDATA <- dimSums(FuelPrice_ENERDATA, 3.1, na.rm = TRUE)
+    PRICE_by_sector_ENERDATA <- dimSums(FuelPrice_ENERDATA, 3.2, na.rm = TRUE)
+    PRICE_total_OPEN_PROM <- dimSums(FuelPrice_OPEN_PROM, na.rm = TRUE)
+    PRICE_total_MENA <- dimSums(FuelPrice_MENA, na.rm = TRUE)
+    PRICE_total_ENERDATA <- dimSums(FuelPrice_ENERDATA,3, na.rm = TRUE)
+    
+    # fix wrong region names in MENA
+    getRegions(PRICE_by_EF_MENA) <- sub("MOR", "MAR", getRegions(PRICE_by_EF_MENA))
+    getRegions(PRICE_by_sector_MENA) <- sub("MOR", "MAR", getRegions(by_price_form2_MENA_EDS))
+    getRegions(PRICE_aggregate_MENA) <- sub("MOR", "MAR", getRegions(PRICE_aggregate_MENA))
+    
+    # complete names
+    getItems(PRICE_by_EF_OPEN_PROM, 3) <- paste0("Fuel Price ", getItems(PRICE_by_EF_OPEN_PROM, 3))
+    getItems(PRICE_by_sector_OPEN_PROM, 3) <- paste0("Fuel Price ", getItems(by_price_form2, 3))
+    getItems(PRICE_by_EF_MENA, 3) <- paste0("Fuel Price ", getItems(by_price_form_MENA_EDS, 3))
+    getItems(PRICE_by_sector_MENA, 3) <- paste0("Fuel Price ", getItems(by_price_form2_MENA_EDS, 3))
+    getItems(PRICE_by_EF_ENERDATA, 3) <- paste0("Fuel Price ", getItems(PRICE_by_EF_ENERDATA, 3))
+    getItems(PRICE_by_sector_ENERDATA, 3) <- paste0("Fuel Price ", getItems(PRICE_by_sector_ENERDATA, 3))
+    getItems(PRICE_total_OPEN_PROM, 3) <- paste0("Fuel Price", getItems(PRICE_total_OPEN_PROM, 3))
+    getItems(PRICE_total_MENA, 3) <- paste0("Fuel Price", getItems(PRICE_total_MENA, 3))
+    getItems(PRICE_total_ENERDATA, 3) <- paste0("Fuel Price", getItems(PRICE_total_ENERDATA, 3))
 
     # write data in mif file
-    write.report(by_price_form[,,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario=scenario_name)
-    write.report(by_price_form_MENA_EDS[,years,],file="reporting.mif",model="MENA-EDS",unit="various",append=TRUE,scenario=scenario_name)
-    write.report(by_price_form_ener[,year,],file="reporting.mif",model="ENERDATA",unit="various",append=TRUE,scenario=scenario_name)
+    write.report(PRICE_by_EF_OPEN_PROM[,,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario=scenario_name)
+    write.report(PRICE_by_EF_MENA[,years,],file="reporting.mif",model="MENA-EDS",unit="various",append=TRUE,scenario=scenario_name)
+    write.report(PRICE_by_EF_ENERDATA[,year,],file="reporting.mif",model="ENERDATA",unit="various",append=TRUE,scenario=scenario_name)
 
-    write.report(by_price_form2[,,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario=scenario_name)
-    write.report(by_price_form2_MENA_EDS[,years,],file="reporting.mif",model="MENA-EDS",unit="various",append=TRUE,scenario=scenario_name)
-    write.report(by_price_form2_ener[,year,],file="reporting.mif",model="ENERDATA",unit="various",append=TRUE,scenario=scenario_name)
+    write.report(PRICE_by_sector_OPEN_PROM[,,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario=scenario_name)
+    write.report(PRICE_by_sector_MENA[,years,],file="reporting.mif",model="MENA-EDS",unit="various",append=TRUE,scenario=scenario_name)
+    write.report(PRICE_by_sector_ENERDATA[,year,],file="reporting.mif",model="ENERDATA",unit="various",append=TRUE,scenario=scenario_name)
 
-    write.report(Fuel_Price[,,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario=scenario_name)
-    write.report(Fuel_Price_MENA_EDS[,years,],file="reporting.mif",model="MENA-EDS",unit="various",append=TRUE,scenario=scenario_name)
-    write.report(Fuel_Price_ener[,year,],file="reporting.mif",model="ENERDATA",unit="various",append=TRUE,scenario=scenario_name)
+    write.report(PRICE_total_OPEN_PROM[,,],file="reporting.mif",model="OPEN-PROM",unit="various",append=TRUE,scenario=scenario_name)
+    write.report(PRICE_total_MENA[,years,],file="reporting.mif",model="MENA-EDS",unit="various",append=TRUE,scenario=scenario_name)
+    write.report(PRICE_total_ENERDATA[,year,],file="reporting.mif",model="ENERDATA",unit="various",append=TRUE,scenario=scenario_name)
 }
 reportEmissions <- function(regs) {
     iCo2EmiFac <- readGDX('./blabla.gdx', "iCo2EmiFac")[regs, , ]
@@ -345,15 +365,16 @@ reportEmissions <- function(regs) {
     write.report(total_CO2[,,],file="reporting.mif",model="OPEN-PROM",unit="Mt CO2",append=TRUE,scenario=scenario_name)
     write.report(MENA_SUM[mregs,years,],file="reporting.mif",model="MENA-EDS",unit="Mt CO2",append=TRUE,scenario=scenario_name)
     #c("MAR","IND","USA","EGY","RWO")
-
-    l <- readSource("ENERDATA", "2", convert = TRUE)
-    l1 <- l[,,"CO2 emissions from fuel combustion (sectoral approach).MtCO2"]
-
-    year <- Reduce(intersect, list(getYears(MENA_SUM,as.integer=TRUE),getYears(total_CO2,as.integer=TRUE),getYears(l1,as.integer=TRUE)))
     
-    getItems(l1, 3) <- paste0("Emissions")
+    #filter ENERDATA by number 2
+    number_2 <- readSource("ENERDATA", "2", convert = TRUE)
+    CO2_emissions_ENERDATA <- number_2[,,"CO2 emissions from fuel combustion (sectoral approach).MtCO2"]
+
+    year <- Reduce(intersect, list(getYears(MENA_SUM,as.integer=TRUE),getYears(total_CO2,as.integer=TRUE),getYears(CO2_emissions_ENERDATA,as.integer=TRUE)))
+    
+    getItems(CO2_emissions_ENERDATA, 3) <- paste0("Emissions")
     # write data in mif file
-    write.report(l1[intersect(getRegions(l1),regs),year,],file="reporting.mif",model="ENERDATA",unit="Mt CO2",append=TRUE,scenario=scenario_name)
+    write.report(CO2_emissions_ENERDATA[intersect(getRegions(CO2_emissions_ENERDATA),regs),year,],file="reporting.mif",model="ENERDATA",unit="Mt CO2",append=TRUE,scenario=scenario_name)
 
     a <- calcOutput(type = "CO2_emissions", aggregate = TRUE)
     getItems(a, 3) <- paste0("Emissions")
@@ -389,45 +410,46 @@ reportFinalEnergy <- function(regs) {
     sets <- separate_rows(sets,EF)
     sets$BAL <- gsub("Gas fuels", "Gases", sets$BAL)
 
-    # add model OPEN-PROM data
+    # add model OPEN-PROM data Total final energy consumnption (Mtoe)
     VFeCons <- readGDX('./blabla.gdx', "VFeCons", field = 'l')[regs, , ]
     # aggregate from PROM fuels to reporting fuel categories
     VFeCons <- toolAggregate(VFeCons[ , , unique(sets$EF)], dim = 3, rel = sets, from = "EF", to = "BAL")
     getItems(VFeCons, 3) <- paste0("Final Energy ", getItems(VFeCons, 3))
 
-
     #add model MENA_EDS data (choosing the correct variable from MENA by use of the MENA-PROM mapping)
-    a <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VFeCons", "MENA.EDS"])
-    getRegions(a) <- sub("MOR", "MAR", getRegions(a)) # fix wrong region names in MENA
+    #Total final energy consumnption (Mtoe)
+    MENA_EDS_VFeCons <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VFeCons", "MENA.EDS"])
+    getRegions(MENA_EDS_VFeCons) <- sub("MOR", "MAR", getRegions(MENA_EDS_VFeCons)) # fix wrong region names in MENA
     # choose years and regions that both models have
-    years <- intersect(getYears(a,as.integer=TRUE),getYears(VFeCons,as.integer=TRUE))
-    menaregs <- intersect(getRegions(a),regs)
+    years <- intersect(getYears(MENA_EDS_VFeCons,as.integer=TRUE),getYears(VFeCons,as.integer=TRUE))
+    menaregs <- intersect(getRegions(MENA_EDS_VFeCons),regs)
     # aggregate from MENA fuels to reporting fuel categories
-    a <- toolAggregate(a[,years,unique(sets$EF)],dim=3,rel=sets,from="EF",to="BAL")
+    MENA_EDS_VFeCons <- toolAggregate(MENA_EDS_VFeCons[,years,unique(sets$EF)],dim=3,rel=sets,from="EF",to="BAL")
     # complete names
-    getItems(a, 3) <- paste0("Final Energy ", getItems(a, 3))
+    getItems(MENA_EDS_VFeCons, 3) <- paste0("Final Energy ", getItems(MENA_EDS_VFeCons, 3))
 
     # write data in mif file
     write.report(VFeCons[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",scenario=scenario_name)
-    write.report(a[menaregs,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario=scenario_name)
-
+    write.report(MENA_EDS_VFeCons[menaregs,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario=scenario_name)
 
     #filter ENERDATA by consumption
-    b <- readSource("ENERDATA", subtype =  "consumption", convert = TRUE)[intersect(regs, getISOlist()), ,]
+    consumption_ENERDATA <- readSource("ENERDATA", subtype =  "consumption", convert = TRUE)[intersect(regs, getISOlist()), ,]
+    
     # map of enerdata and balance fuel
     map_enerdata <- toolGetMapping(name = "enerdata-by-fuel.csv",
                                 type = "sectoral",
                                 where = "mrprom")
-
-    year <- Reduce(intersect, list(getYears(a,as.integer=TRUE),getYears(b,as.integer=TRUE),getYears(VFeCons,as.integer=TRUE)))
+    
+    # choose years that both models have
+    year <- Reduce(intersect, list(getYears(MENA_EDS_VFeCons,as.integer=TRUE),getYears(consumption_ENERDATA,as.integer=TRUE),getYears(VFeCons,as.integer=TRUE)))
     #keep the variables from the map
-    b2 <- b[, year, map_enerdata[, 1]]
-    b2 <- as.quitte(b2)
+    consumption_ENERDATA_map <- consumption_ENERDATA[, year, map_enerdata[, 1]]
+    consumption_ENERDATA_map <- as.quitte(consumption_ENERDATA_map)
     names(map_enerdata) <- sub("ENERDATA", "variable", names(map_enerdata))
     #remove units
     map_enerdata[,1] <- sub("\\..*", "", map_enerdata[,1])
     #add a column with the fuels that match each variable of enerdata
-    v <- left_join(b2, map_enerdata, by = "variable")
+    v <- left_join(consumption_ENERDATA_map, map_enerdata, by = "variable")
     v["variable"] <- paste0("Final Energy ", v$fuel)
     v <- filter(v, period %in% years)
     v <- select(v , -c("fuel"))
