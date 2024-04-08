@@ -17,6 +17,9 @@ def select_folders(base_path):
     # Sort the list of tuples based on modification time (newest to oldest)
     subfolder_modification_times.sort(key=lambda x: x[1], reverse=True)
 
+    # Extract the folder paths from the sorted list
+    subfolders = [folder for folder, _ in subfolder_modification_times]
+
     print("Checking all subfolders...")
     
     return subfolders
@@ -68,6 +71,8 @@ def check_files(folder):
                 print(Fore.BLUE  + f"{folder_name: <20} /Missing: NONE      /status:PENDING" + Style.RESET_ALL)
             elif  any("*** Status: Normal completion" in line for line in last_lines) and time_difference < modification_threshold:
                 print(Fore.GREEN + f"{folder_name: <20} /Missing: NONE /status:COMPLETED",f"/Year:{year}" + Style.RESET_ALL)
+            elif not any("*** Status: Normal completion" in line for line in last_lines) and time_difference > modification_threshold:
+                print(Fore.BLUE  + f"{folder_name: <20} /Missing: NONE      /status:PENDING" + Style.RESET_ALL)
             else:
                 print(Fore.RED + f"{folder_name: <20} /main.log -> FAILED /status:FAILED" + Style.RESET_ALL)
     
