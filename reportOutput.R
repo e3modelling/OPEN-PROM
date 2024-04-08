@@ -10,7 +10,7 @@ library(stringr)
 mapping <- "regionmappingOP5.csv" # region mapping used for aggregating validation data (e.g. ENERDATA)
 # this will be read in from a configuration file 
 
-reportPrice <- function() {
+reportPrice <- function(regs) {
   
   #add model OPEN-PROM data Electricity prices
   VElecPriInduResConsu <- readGDX('./blabla.gdx', "VElecPriInduResConsu", field = 'l')[runCY, , ]
@@ -75,7 +75,7 @@ reportPrice <- function() {
   #filter ENERDATA by years that both models have
     elec_prices_ENERDATA <- elec_prices_ENERDATA[, year,]
   # write data in mif file
-  write.report(elec_prices_ENERDATA[intersect(getRegions(x),regs),,],file="reporting.mif",model="ENERDATA",unit="Euro2005/KWh",append=TRUE,scenario=scenario_name)
+  write.report(elec_prices_ENERDATA[intersect(getRegions(elec_prices_ENERDATA),regs),,],file="reporting.mif",model="ENERDATA",unit="Euro2005/KWh",append=TRUE,scenario=scenario_name)
   
   #add model OPEN-PROM data iFuelPrice
     FuelPrice_OPEN_PROM <- readGDX('./blabla.gdx', "iFuelPrice")
@@ -122,14 +122,14 @@ reportPrice <- function() {
       
     # fix wrong region names in MENA
   getRegions(PRICE_by_EF_MENA) <- sub("MOR", "MAR", getRegions(PRICE_by_EF_MENA))
-  getRegions(PRICE_by_sector_MENA) <- sub("MOR", "MAR", getRegions(by_price_form2_MENA_EDS))
-  getRegions(PRICE_aggregate_MENA) <- sub("MOR", "MAR", getRegions(PRICE_aggregate_MENA))
+  getRegions(PRICE_by_sector_MENA) <- sub("MOR", "MAR", getRegions(PRICE_by_sector_MENA))
+  getRegions(PRICE_total_MENA) <- sub("MOR", "MAR", getRegions(PRICE_total_MENA))
       
     # complete names
   getItems(PRICE_by_EF_OPEN_PROM, 3) <- paste0("Fuel Price ", getItems(PRICE_by_EF_OPEN_PROM, 3))
-  getItems(PRICE_by_sector_OPEN_PROM, 3) <- paste0("Fuel Price ", getItems(by_price_form2, 3))
-  getItems(PRICE_by_EF_MENA, 3) <- paste0("Fuel Price ", getItems(by_price_form_MENA_EDS, 3))
-  getItems(PRICE_by_sector_MENA, 3) <- paste0("Fuel Price ", getItems(by_price_form2_MENA_EDS, 3))
+  getItems(PRICE_by_sector_OPEN_PROM, 3) <- paste0("Fuel Price ", getItems(PRICE_by_sector_OPEN_PROM, 3))
+  getItems(PRICE_by_EF_MENA, 3) <- paste0("Fuel Price ", getItems(PRICE_by_EF_MENA, 3))
+  getItems(PRICE_by_sector_MENA, 3) <- paste0("Fuel Price ", getItems(PRICE_by_sector_MENA, 3))
   getItems(PRICE_by_EF_ENERDATA, 3) <- paste0("Fuel Price ", getItems(PRICE_by_EF_ENERDATA, 3))
   getItems(PRICE_by_sector_ENERDATA, 3) <- paste0("Fuel Price ", getItems(PRICE_by_sector_ENERDATA, 3))
   getItems(PRICE_total_OPEN_PROM, 3) <- paste0("Fuel Price", getItems(PRICE_total_OPEN_PROM, 3))
