@@ -87,12 +87,12 @@ def plot_heatmap(df):
     columns represent years, and color indicates run success (green for success, red for failure).
     """
     if df is not None:
-        # Define colors for the heatmap (green for 1, red for 0)
-        cmap = sns.diverging_palette(10, 220, sep=80, n=2)
+        # Define custom color palette (green for 1, red for 0)
+        cmap = sns.color_palette(["red", "green"])
 
         # Create the heatmap without annotations
         plt.figure(figsize=(10, max(6, len(df) * 0.2)))  # Adjust height based on the number of countries
-        sns.heatmap(df, cmap=cmap, annot=False, fmt='d', linewidths=.5, linecolor='black')
+        sns.heatmap(df, cmap=cmap, annot=False, linewidths=.5, linecolor='black', vmin=0, vmax=1)
 
         plt.title('Run Success Heatmap')
         plt.xlabel('Year')
