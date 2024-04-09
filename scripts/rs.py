@@ -64,8 +64,8 @@ def plot_heatmap(df):
         # Define colors for the heatmap (green for 1, red for 0)
         cmap = sns.diverging_palette(10, 220, sep=80, n=2)
 
-        # Create the heatmap
-        plt.figure(figsize=(10, 6))
+        # Create the heatmap without annotations
+        plt.figure(figsize=(10, max(6, len(df) * 0.2)))  # Adjust height based on the number of countries
         sns.heatmap(df, cmap=cmap, annot=False, fmt='d', linewidths=.5, linecolor='black')
 
         plt.title('Run Success Heatmap')
