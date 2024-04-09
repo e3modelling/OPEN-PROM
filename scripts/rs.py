@@ -5,11 +5,21 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 def list_subfolders():
+    """
+    Input: None
+    Output: A list of subfolder names within the "runs" directory, sorted in chronological order from newest to oldest
+    based on their last modification time.
+    """
     runs_dir = "runs"
     subfolders = [f.name for f in sorted(os.scandir(runs_dir), key=lambda x: x.stat().st_mtime, reverse=True) if f.is_dir()]
     return subfolders
 
 def read_main_log(subfolder):
+    """
+    Input: subfolder - Name of the subfolder within the "runs" directory.
+    Output: The content of the main.log file located in the specified subfolder, returned as a list of strings
+    representing each line of the file.
+    """
     main_log_path = os.path.join("runs", subfolder, "main.log")
     if os.path.exists(main_log_path):
         with open(main_log_path, 'r') as file:
@@ -20,6 +30,11 @@ def read_main_log(subfolder):
         return []
 
 def parse_main_log(lines):
+    """
+    Input: lines - List of strings representing the content of the main.log file.
+    Output: A dictionary where keys are country names and values are dictionaries mapping years
+    to run success statuses (1 for success, 0 for failure).
+    """
     year_pattern = re.compile(r'an\s*=\s*(\d+)')
     country_pattern = re.compile(r'runCyL\s*=\s*([A-Z]+)')
     status_pattern = re.compile(r'\*\* Optimal solution')
@@ -46,6 +61,12 @@ def parse_main_log(lines):
     return country_year_status
 
 def create_dataframe(country_year_status):
+    """
+    Input: country_year_status - Dictionary where keys are country names and values are dictionaries mapping years
+    to run success statuses.
+    Output: A pandas DataFrame where rows represent countries, columns represent years, and cell values represent
+    run success statuses (1 for success, 0 for failure).
+    """
     if country_year_status:
         # Create DataFrame directly from country_year_status dictionary
         df = pd.DataFrame(country_year_status).fillna(0)
@@ -60,6 +81,11 @@ def create_dataframe(country_year_status):
         return None
 
 def plot_heatmap(df):
+    """
+    Input: df - Pandas DataFrame representing run success statuses for countries and years.
+    Output: Displays a heatmap visualization using seaborn and matplotlib, where rows represent countries,
+    columns represent years, and color indicates run success (green for success, red for failure).
+    """
     if df is not None:
         # Define colors for the heatmap (green for 1, red for 0)
         cmap = sns.diverging_palette(10, 220, sep=80, n=2)
