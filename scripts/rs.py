@@ -90,7 +90,6 @@ def main():
         country_year_status = parse_main_log(lines)
         df = create_dataframe(country_year_status)
 
-        print(df)
         plot_heatmap(df)
     else:
         print("No subfolders found in the 'runs' directory.")
