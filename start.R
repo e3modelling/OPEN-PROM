@@ -45,10 +45,9 @@ saveMetadata<- function(DevMode) {
 
 ### Define a function that creates a separate folder for each model run.
 
-createRunFolder <- function() {
+createRunFolder <- function(scenario = "default") {
 
   # generate name of run folder
-  scenario <- "default"
   folderName <- paste(scenario, format(Sys.time(), "%d-%m-%Y_%H-%M-%S"), sep="_")
 
   # create run folder under /runs
@@ -123,7 +122,7 @@ if (!is.null(task) && task == 0) {
 
     # Running task OPEN-PROM DEV
     saveMetadata(DevMode = 1)
-    if(withRunFolder) createRunFolder()
+    if(withRunFolder) createRunFolder("DEV")
 
     system("gams main.gms --DevMode=1 --GenerateInput=off -logOption 4 -Idir=./data")
 
@@ -133,7 +132,7 @@ if (!is.null(task) && task == 0) {
 
     # Running task OPEN-PROM DEV NEW DATA
     saveMetadata(DevMode = 1)
-    if(withRunFolder) createRunFolder()
+    if(withRunFolder) createRunFolder("DEVNEWDATA")
 
     system("gams main.gms --DevMode=1 --GenerateInput=on -logOption 4 -Idir=./data")
 
@@ -147,7 +146,7 @@ if (!is.null(task) && task == 0) {
     
     # Running task OPEN-PROM RESEARCH
     saveMetadata(DevMode = 0)
-    if(withRunFolder) createRunFolder()
+    if(withRunFolder) createRunFolder("RES")
 
     system("gams main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data")
 
@@ -157,7 +156,7 @@ if (!is.null(task) && task == 0) {
     
     # Running task OPEN-PROM RESEARCH NEW DATA
     saveMetadata(DevMode = 0)
-    if(withRunFolder) createRunFolder()
+    if(withRunFolder) createRunFolder("RESNEWDATA")
 
     system("gams main.gms --DevMode=0 --GenerateInput=on -logOption 4 -Idir=./data")
 
