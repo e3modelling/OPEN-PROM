@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 def list_subfolders():
     runs_dir = "runs"
-    subfolders = [f.name for f in os.scandir(runs_dir) if f.is_dir()]
+    subfolders = [f.name for f in sorted(os.scandir(runs_dir), key=lambda x: x.stat().st_mtime, reverse=True) if f.is_dir()]
     return subfolders
 
 def read_main_log(subfolder):
