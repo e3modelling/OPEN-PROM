@@ -92,7 +92,7 @@ def plot_heatmap(df):
 
         # Create the heatmap without annotations
         plt.figure(figsize=(10, max(6, len(df) * 0.2)))  # Adjust height based on the number of countries
-        sns.heatmap(df, cmap=cmap, annot=False, linewidths=.5, linecolor='black', vmin=0, vmax=1)
+        sns.heatmap(df, cmap=cmap, annot=False, linewidths=.5, linecolor='black', vmin=0, vmax=1, cbar=False)
 
         plt.title('Run Success Heatmap')
         plt.xlabel('Year')
