@@ -75,6 +75,14 @@ def check_files(folder):
                 for line in last_lines:
                     if "an =" in line:
                         year = line.split("=")[1].strip()
+            # Find the year before the optimal solution note
+            running_year = None
+         
+            # Find the year before the optimal solution note
+            for line in reversed(last_lines):
+                if "an =" in line:
+                    running_year = line.split("=")[1].strip()
+                    break
 
             # Get the current time
             current_time = time.time()
@@ -97,13 +105,6 @@ def check_files(folder):
                 print(Fore.GREEN + f"{folder_name: <20} /Missing: NONE /status:COMPLETED",f"/Year:{year}",f"/Horizon:{end_horizon_year}" + Style.RESET_ALL)
             elif time_difference < modification_threshold and not any("*** Status: Normal completion" in line for line in last_lines):
                 
-                # Find the year before the optimal solution note
-                running_year = None
-                for line in (last_lines):
-                    if "an =" in line:
-                        running_year = line.split("=")[1].strip()
-                        print(running_year)
-                    break
                 print(Fore.BLUE  + f"{folder_name: <20} /Missing: NONE      /status:PENDING",f"/Running_Year:{running_year}",f"/Horizon:{end_horizon_year}" + Style.RESET_ALL)
 
             else:
@@ -122,7 +123,7 @@ def main():
     base_path = os.path.abspath(os.path.join(script_directory, ".."))
     
     subfolders = select_folders(base_path)
-    
+
     for folder in subfolders:
         check_files(folder)
 
