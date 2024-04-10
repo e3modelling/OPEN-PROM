@@ -1,11 +1,11 @@
 reportEmissions <- function(regs) {
   iCo2EmiFac <- readGDX('./blabla.gdx', "iCo2EmiFac")[regs, , ]
   VConsFuel <- readGDX('./blabla.gdx', "VConsFuel", field = 'l')[regs, , ]
-  VTransfInThermPowPls <- readGDX('./blabla.gdx', "VTransfInThermPowPls", field = 'l')[regs, , ]
+  VInpTransfTherm <- readGDX('./blabla.gdx', "VInpTransfTherm", field = 'l')[regs, , ]
   VTransfInputDHPlants <- readGDX('./blabla.gdx', "VTransfInputDHPlants", field = 'l')[regs, , ]
-  VEnCons <- readGDX('./blabla.gdx', "VEnCons", field = 'l')[regs, , ]
-  VDemTr <- readGDX('./blabla.gdx', "VDemTr", field = 'l')[regs, , ]
-  VElecProd <- readGDX('./blabla.gdx', "VElecProd", field = 'l')[regs, , ]
+  VConsFiEneSec <- readGDX('./blabla.gdx', "VConsFiEneSec", field = 'l')[regs, , ]
+  VDemFinEneTranspPerFuel <- readGDX('./blabla.gdx', "VDemFinEneTranspPerFuel", field = 'l')[regs, , ]
+  VProdElec <- readGDX('./blabla.gdx', "VProdElec", field = 'l')[regs, , ]
   iPlantEffByType <- readGDX('./blabla.gdx', "iPlantEffByType")[regs, , ]
   iCO2CaptRate <- readGDX('./blabla.gdx', "iCO2CaptRate")[regs, , ]
   
@@ -65,13 +65,13 @@ reportEmissions <- function(regs) {
   sum1 <- iCo2EmiFac[,,INDDOM[, 1]] * VConsFuel[,,INDDOM[, 1]]
   sum1 <- dimSums(sum1, 3, na.rm = TRUE)
   
-  sum2 <- VTransfInThermPowPls[,,PGEF[,1]]*iCo2EmiFac[,,"PG"][,,PGEF[,1]]
+  sum2 <- VInpTransfTherm[,,PGEF[,1]]*iCo2EmiFac[,,"PG"][,,PGEF[,1]]
   sum2 <- dimSums(sum2, 3, na.rm = TRUE)
   
   sum3 <- VTransfInputDHPlants * iCo2EmiFac[,,"PG"][,,getItems(VTransfInputDHPlants,3)]
   sum3 <- dimSums(sum3, 3, na.rm = TRUE)
   
-  sum4 <- VEnCons * iCo2EmiFac[,,"PG"][,,getItems(VEnCons,3)]
+  sum4 <- VConsFiEneSec * iCo2EmiFac[,,"PG"][,,getItems(VConsFiEneSec,3)]
   sum4 <- dimSums(sum4, 3, na.rm = TRUE)
   
   PC <- toolreadSets("sets.gms", "SECTTECH")
@@ -131,7 +131,7 @@ reportEmissions <- function(regs) {
   
   map_TRANSECTOR <- rbind(PT,GT,PA,PC,GU,GN)
   
-  sum5 <- VDemTr[,,map_TRANSECTOR[, 1]] * iCo2EmiFac[,,map_TRANSECTOR[, 1]]
+  sum5 <- VDemFinEneTranspPerFuel[,,map_TRANSECTOR[, 1]] * iCo2EmiFac[,,map_TRANSECTOR[, 1]]
   sum5 <- dimSums(sum5, 3, na.rm = TRUE)
   
   PGALLtoEF <- toolreadSets("sets.gms", "PGALLtoEF")
@@ -146,7 +146,7 @@ reportEmissions <- function(regs) {
   
   CCS <- PGALLtoEF[PGALLtoEF$PGALL %in% CCS$CCS, ]
   
-  var_16 <- VElecProd[,,CCS[,1]] * 0.086 / iPlantEffByType[,,CCS[,1]] * iCo2EmiFac[,,"PG"][,,CCS[,2]] * iCO2CaptRate[,,CCS[,1]]
+  var_16 <- VProdElec[,,CCS[,1]] * 0.086 / iPlantEffByType[,,CCS[,1]] * iCo2EmiFac[,,"PG"][,,CCS[,2]] * iCO2CaptRate[,,CCS[,1]]
   sum6 <- dimSums(var_16,dim=3, na.rm = TRUE) 
   
   SECTTECH2 <- toolreadSets("sets.gms", "SECTTECH")
@@ -170,11 +170,11 @@ reportEmissions <- function(regs) {
   #add model MENA_EDS data (choosing the correct variable from MENA by use of the MENA-PROM mapping)
   MENA_iCo2EmiFac <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "iCo2EmiFac", "MENA.EDS"])
   MENA_VConsFuel <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VConsFuel", "MENA.EDS"])
-  MENA_VTransfInThermPowPls <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VTransfInThermPowPls", "MENA.EDS"])
+  MENA_VTransfInThermPowPls <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VInpTransfTherm", "MENA.EDS"])
   MENA_VTransfInputDHPlants <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VTransfInputDHPlants", "MENA.EDS"])
-  MENA_VEnCons <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VEnCons", "MENA.EDS"])
-  MENA_VDemTr <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VDemTr", "MENA.EDS"])
-  MENA_VElecProd <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VElecProd", "MENA.EDS"])
+  MENA_VEnCons <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VConsFiEneSec", "MENA.EDS"])
+  MENA_VDemTr <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VDemFinEneTranspPerFuel", "MENA.EDS"])
+  MENA_VElecProd <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VProdElec", "MENA.EDS"])
   MENA_iPlantEffByType <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "iPlantEffByType", "MENA.EDS"])
   MENA_iCO2CaptRate <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "iCO2CaptRate", "MENA.EDS"])
   

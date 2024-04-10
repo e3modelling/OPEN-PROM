@@ -9,17 +9,17 @@ reportFinalEnergy <- function(regs,rmap) {
   sets$BAL <- gsub("Gas fuels", "Gases", sets$BAL)
   
   # add model OPEN-PROM data Total final energy consumnption (Mtoe)
-  VFeCons <- readGDX('./blabla.gdx', "VFeCons", field = 'l')[regs, , ]
+  VConsFinEneCountry <- readGDX('./blabla.gdx', "VConsFinEneCountry", field = 'l')[regs, , ]
   # aggregate from PROM fuels to reporting fuel categories
-  VFeCons <- toolAggregate(VFeCons[ , , unique(sets$EF)], dim = 3, rel = sets, from = "EF", to = "BAL")
-  getItems(VFeCons, 3) <- paste0("Final Energy ", getItems(VFeCons, 3))
+  VConsFinEneCountry <- toolAggregate(VConsFinEneCountry[ , , unique(sets$EF)], dim = 3, rel = sets, from = "EF", to = "BAL")
+  getItems(VConsFinEneCountry, 3) <- paste0("Final Energy ", getItems(VConsFinEneCountry, 3))
   
   #add model MENA_EDS data (choosing the correct variable from MENA by use of the MENA-PROM mapping)
   #Total final energy consumnption (Mtoe)
-  MENA_EDS_VFeCons <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VFeCons", "MENA.EDS"])
+  MENA_EDS_VFeCons <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VConsFinEneCountry", "MENA.EDS"])
   getRegions(MENA_EDS_VFeCons) <- sub("MOR", "MAR", getRegions(MENA_EDS_VFeCons)) # fix wrong region names in MENA
   # choose years and regions that both models have
-  years <- intersect(getYears(MENA_EDS_VFeCons,as.integer=TRUE),getYears(VFeCons,as.integer=TRUE))
+  years <- intersect(getYears(MENA_EDS_VFeCons,as.integer=TRUE),getYears(VConsFinEneCountry,as.integer=TRUE))
   menaregs <- intersect(getRegions(MENA_EDS_VFeCons),regs)
   # aggregate from MENA fuels to reporting fuel categories
   MENA_EDS_VFeCons <- toolAggregate(MENA_EDS_VFeCons[,years,unique(sets$EF)],dim=3,rel=sets,from="EF",to="BAL")
@@ -27,7 +27,7 @@ reportFinalEnergy <- function(regs,rmap) {
   getItems(MENA_EDS_VFeCons, 3) <- paste0("Final Energy ", getItems(MENA_EDS_VFeCons, 3))
   
   # write data in mif file
-  write.report(VFeCons[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",scenario=scenario_name)
+  write.report(VConsFinEneCountry[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",scenario=scenario_name)
   write.report(MENA_EDS_VFeCons[menaregs,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario=scenario_name)
   
   #filter ENERDATA by consumption
@@ -39,7 +39,7 @@ reportFinalEnergy <- function(regs,rmap) {
                                  where = "mrprom")
   
   # choose years that both models have
-  year <- Reduce(intersect, list(getYears(MENA_EDS_VFeCons,as.integer=TRUE),getYears(consumption_ENERDATA,as.integer=TRUE),getYears(VFeCons,as.integer=TRUE)))
+  year <- Reduce(intersect, list(getYears(MENA_EDS_VFeCons,as.integer=TRUE),getYears(consumption_ENERDATA,as.integer=TRUE),getYears(VConsFinEneCountry,as.integer=TRUE)))
   #keep the variables from the map
   consumption_ENERDATA_variables <- consumption_ENERDATA[, year, map_enerdata[, 1]]
   consumption_ENERDATA_variables <- as.quitte(consumption_ENERDATA_variables)
@@ -76,7 +76,7 @@ reportFinalEnergy <- function(regs,rmap) {
   sets4 <- separate_rows(sets4,SBS)
   
   sector <- c("TRANSE", "INDSE", "DOMSE", "NENSE")
-  blabla_var <- c("VDemTr", "VConsFuel", "VConsFuel", "VConsFuel")
+  blabla_var <- c("VDemFinEneTranspPerFuel", "VConsFuel", "VConsFuel", "VConsFuel")
   for (y in 1 : length(sector)) {
     
     sets6 <- toolreadSets("sets.gms", sector[y])

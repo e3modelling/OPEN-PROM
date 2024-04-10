@@ -1,27 +1,27 @@
 reportPrice <- function(regs) {
   
   #add model OPEN-PROM data Electricity prices
-  VElecPriInduResConsu <- readGDX('./blabla.gdx', "VElecPriInduResConsu", field = 'l')[regs, , ]
+  VPriceElecIndResConsu <- readGDX('./blabla.gdx', "VPriceElecIndResConsu", field = 'l')[regs, , ]
   #choose Industrial consumer /i/
   sets_i <- toolreadSets("sets.gms", "iSet")
-  elec_prices_Industry <- VElecPriInduResConsu[,,sets_i[1,1]]
+  elec_prices_Industry <- VPriceElecIndResConsu[,,sets_i[1,1]]
   # complete names
   getNames(elec_prices_Industry) <- "Electricity prices Industrial"
   #choose Residential consumer /r/
   sets_r <- toolreadSets("sets.gms", "rSet")
-  elec_prices_Residential <- VElecPriInduResConsu[,,sets_r[1,1]]
+  elec_prices_Residential <- VPriceElecIndResConsu[,,sets_r[1,1]]
   # complete names
   getNames(elec_prices_Residential) <- "Electricity prices Residential"
   #Combine Industrial and Residential OPEN-PROM
   elec_prices <- mbind(elec_prices_Industry, elec_prices_Residential)
   
   #add model MENA_EDS data (choosing the correct variable from MENA by use of the MENA-PROM mapping)
-  elec_prices_MENA <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VElecPriInduResConsu", "MENA.EDS"])
+  elec_prices_MENA <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VPriceElecIndResConsu", "MENA.EDS"])
   # fix wrong region names in MENA
   getRegions(elec_prices_MENA) <- sub("MOR", "MAR", getRegions(elec_prices_MENA))
   # choose years and regions that both models have
-  years <- intersect(getYears(elec_prices_MENA,as.integer=TRUE),getYears(VElecPriInduResConsu,as.integer=TRUE))
-  menaregs <- intersect(getRegions(elec_prices_MENA),getRegions(VElecPriInduResConsu))
+  years <- intersect(getYears(elec_prices_MENA,as.integer=TRUE),getYears(VPriceElecIndResConsu,as.integer=TRUE))
+  menaregs <- intersect(getRegions(elec_prices_MENA),getRegions(VPriceElecIndResConsu))
   #choose Industrial consumer /i/
   MENA_Industrial <- elec_prices_MENA[,years,sets_i[1,1]]
   # complete names
@@ -59,7 +59,7 @@ reportPrice <- function(regs) {
   #combine Industrial and Residential MENA
   elec_prices_ENERDATA <- mbind(ENERDATA_Industrial, ENERDATA_Residential)
   # choose years and regions that both models have
-  year <- Reduce(intersect, list(getYears(elec_prices_MENA,as.integer=TRUE),getYears(elec_prices_ENERDATA,as.integer=TRUE),getYears(VElecPriInduResConsu,as.integer=TRUE)))
+  year <- Reduce(intersect, list(getYears(elec_prices_MENA,as.integer=TRUE),getYears(elec_prices_ENERDATA,as.integer=TRUE),getYears(VPriceElecIndResConsu,as.integer=TRUE)))
   #filter ENERDATA by years that both models have
   elec_prices_ENERDATA <- elec_prices_ENERDATA[, year,]
   # write data in mif file
