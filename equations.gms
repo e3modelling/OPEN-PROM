@@ -1,5 +1,14 @@
 *' @title Equations of OPEN-PROM
 *' @code
+
+*' GENERAL INFORMATION
+
+*' Equation format: "typical useful energy demand equation"
+*' The main explanatory variables (drivers) are activity indicators (economic activity) and corresponding energy costs.
+*' The type of "demand" is computed based on its past value, the ratio of the current and past activity indicators (with the corresponding elasticity), 
+*' and the ratio of lagged energy costs (with the corresponding elasticities). This type of equation captures both short term and long term reactions to energy costs.  
+
+
 *' Power Generation
 
 
@@ -1034,10 +1043,12 @@ QScrRate(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          [(iGDP(YTIME,allCy)/iPop(YTIME,allCy)) / (iGDP(YTIME-1,allCy)/iPop(YTIME-1,allCy))]**0.5
          * VScrRate(allCy,YTIME-1);
 
-*' This equation calculates the electricity consumption for each final demand sector, considering both the industry and transport subsectors.
-*' It sums the electricity consumption from industrial subsectors and transport subsectors, taking into account the final energy demand in each sector.
-*' The result provides an estimate of electricity demand for different final demand sectors, offering insights into the overall electricity consumption
-*' pattern across various sectors.
+
+*' This equation establishes a common variable (with arguments) for the electricity consumption per demand subsector of INDUSTRY, [DOMESTIC/TERTIARY/RESIDENTIAL] and TRANSPORT.
+*' The electricity consumption of the demand subsectors of INDUSTRY & [DOMESTIC/TERTIARY/RESIDENTIAL] is provided by the consumption of Electricity as a Fuel.
+*' The electricity consumption of the demand subsectors of TRANSPORT is provided by the Demand of Transport for Electricity as a Fuel.
+
+
 QElecConsAll(allCy,DSBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VElecConsAll(allCy,DSBS,YTIME)
              =E=
@@ -1046,11 +1057,11 @@ QElecConsAll(allCy,DSBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 
 *' * INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 
-*' This equation calculates the consumption of non-substitutable electricity in the industry and tertiary sectors. It considers factors such as past electricity
-*' consumption patterns, current activity levels, and elasticity coefficients. The dynamic approach of the equation adjusts the consumption based on changes in
-*' activity levels and electricity prices over time. Polynomial distribution lags contribute to the sensitivity of consumption to historical electricity price trends.
-*' The result provides an estimate of non-substitutable electricity consumption, taking into account the evolving technological and economic conditions in the industry
-*' and tertiary sectors.
+*' This equation computes the consumption/demand of non-substitutable electricity for subsectors of INDUSTRY and DOMESTIC in the "typical useful energy demand equation".
+*' The main explanatory variables are activity indicators of each subsector and electricity prices per subsector. Corresponding elasticities are applied for activity indicators
+*' and electricity prices.  
+
+
 QElecConsNonSub(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VElecNonSub(allCy,INDDOM,YTIME)
                  =E=
@@ -1064,10 +1075,12 @@ QElecConsNonSub(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                   )**( iElastNonSubElec(allCy,INDDOM,"c",YTIME)*iFPDL(INDDOM,KPDL))
                 )      ]$iActv(YTIME-1,allCy,INDDOM);
 
-*' This equation determines the consumption of the remaining substitutable equipment in a given subsector. It takes into account factors such as the lifetime of technologies,
-*' past fuel consumption patterns, current activity levels, and elasticity coefficients. The equation utilizes a dynamic approach, adjusting the consumption based on changes
-*' in activity levels and fuel prices over time. The polynomial distribution lags contribute to the sensitivity of consumption to historical fuel price trends. The result
-*' provides an estimate of the remaining equipment consumption in the context of evolving technological and economic conditions.
+
+*' This equation determines the consumption of the remaining substitutable equipment of each energy form per each demand subsector (excluding TRANSPORT).
+*' The "remaining" equipment is computed based on the past value of consumption (energy form, subsector) and the lifetime of the technology (energy form) for each subsector.  
+*' For the electricity energy form, the non substitutable consumption is subtracted.
+*' This equation expresses the "typical useful energy demand equation" where the main explanatory variables are activity indicators and fuel prices.
+
 QConsOfRemSubEquip(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF) $runCy(allCy))..
          VConsRemSubEquip(allCy,DSBS,EF,YTIME)
                  =E=
@@ -1081,9 +1094,10 @@ QConsOfRemSubEquip(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTE
                  (VFuelPriceSub(allCy,DSBS,EF,YTIME-ord(KPDL))/VFuelPriceSub(allCy,DSBS,EF,YTIME-(ord(KPDL)+1)))**(iElastA(allCy,DSBS,"c",YTIME)*iFPDL(DSBS,KPDL))
                )  ]$(iActv(YTIME-1,allCy,DSBS));
 
-*' This equation calculates the total final demand for substitutable fuels in each subsector. The demand is determined by factors such as the current activity level,
-*' past activity levels, and the average fuel prices, with adjustments based on elasticity coefficients and polynomial distribution lags. The equation captures the
-*' sensitivity of demand to changes in activity and fuel prices, providing a dynamic representation of the demand evolution over time.
+
+*' This equation computes the useful energy demand in each demand subsector (excluding TRANSPORT). This demand is potentially "satisfied" by multiple energy forms/fuels (substitutable demand).
+*' The equation follows the "typical useful energy demand" format where the main explanatory variables are activity indicators and average "weighted" fuel prices.
+
 QDemSub(allCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $runCy(allCy))..
          VDemSub(allCy,DSBS,YTIME)
                  =E=
@@ -1129,6 +1143,10 @@ QElecIndPrices(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' taken into account. The result is the total fuel consumption in each demand subsector, providing a comprehensive measure of the energy consumption pattern.
 *' This equation offers a comprehensive view of fuel consumption, considering both traditional fuel sources and the additional electricity consumption
 *' associated with heat pump plants.
+
+* MARO
+*' This equation calculates/computes the consumption per each energy form (excluding heat consumed by heatpumps), 
+*' per each demand subsector (excluding TRANSPORT subsectors).
 QFuelCons(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF) $(not HEATPUMP(EF)) $runCy(allCy))..
          VConsFuel(allCy,DSBS,EF,YTIME)
                  =E=
@@ -1755,7 +1773,7 @@ QFuelPriSubSepCarbVal(allCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF) $TIME(YTIME) $(not s
          )$( not (ELCEF(EF) or HEATPUMP(EF) or ALTEF(EF)))
          +
          (
-VFuelPriceSub(allCy,SBS,EF,YTIME-1)$(DSBS(SBS))$ALTEF(EF)
+          VFuelPriceSub(allCy,SBS,EF,YTIME-1)$(DSBS(SBS))$ALTEF(EF)
          )
          +
          (
