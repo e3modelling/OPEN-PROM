@@ -1,4 +1,4 @@
-reportFinalEnergy <- function(regs) {
+reportFinalEnergy <- function(regs,rmap) {
   # read GAMS set used for reporting of Final Energy
   sets <- toolreadSets("sets.gms", "BALEF2EFS")
   sets[, 1] <- gsub("\"","",sets[, 1])
@@ -31,7 +31,7 @@ reportFinalEnergy <- function(regs) {
   write.report(MENA_EDS_VFeCons[menaregs,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario=scenario_name)
   
   #filter ENERDATA by consumption
-  consumption_ENERDATA <- readSource("ENERDATA", subtype =  "consumption", convert = TRUE)[intersect(regs, getISOlist()), ,]
+  consumption_ENERDATA <- readSource("ENERDATA", subtype =  "consumption", convert = TRUE)
   
   # map of enerdata and balance fuel
   map_enerdata <- toolGetMapping(name = "enerdata-by-fuel.csv",
@@ -53,6 +53,8 @@ reportFinalEnergy <- function(regs) {
   v <- select(v , -c("fuel"))
   v <- as.quitte(v)
   v <- as.magpie(v)
+  v[is.na(v)] <- 0
+  v <- toolAggregate(v, rel = rmap)
   # write data in mif file
   write.report(v[intersect(getRegions(v),regs),,],file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario=scenario_name)
   

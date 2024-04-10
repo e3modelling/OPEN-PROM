@@ -30,8 +30,8 @@ if (is.na(scenario_name)) scenario_name <- "default"
 
 #output <- NULL
 #output <- mbind(output, reportGDP(runCY))
-reportFinalEnergy(runCY)
-reportGDP(runCY)
-reportACTV(runCY)
+reportFinalEnergy(runCY,rmap)
+#reportGDP(runCY)
+#reportACTV(runCY)
 reportEmissions(runCY)
-reportPrice(runCY)
+#reportPrice(runCY)
