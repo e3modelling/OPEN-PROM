@@ -27,14 +27,14 @@ $include "./iElastA.csv"
 $offdelim
 ;
 
-iElastA(allCy,SBS,ETYPES,YTIME) = iElastA("MAR",SBS,ETYPES,YTIME);
+iElastA(runCy,SBS,ETYPES,YTIME) = iElastA("MAR",SBS,ETYPES,YTIME);
 
 table iElastNonSubElecData(SBS,ETYPES,YTIME) "Elasticities of Non Substitutable Electricity (1)"
 $ondelim
 $include "./iElastNonSubElecData.csv"
 $offdelim
 ;
-iElastNonSubElec(allCy,SBS,ETYPES,YTIME) = iElastNonSubElecData(SBS,ETYPES,YTIME);
+iElastNonSubElec(runCy,SBS,ETYPES,YTIME) = iElastNonSubElecData(SBS,ETYPES,YTIME);
 
 parameter iNatGasPriProElst(allCy)	          "Natural Gas primary production elasticity related to gross inland consumption (1)" /
 $ondelim
@@ -71,7 +71,7 @@ H2INFR  0.08
 /;
 
 parameter iDisc(allCy,SBS,YTIME) "Discount rates per subsector for all countries ()" ;
-iDisc(allCy,SBS,YTIME) = iDiscData(SBS);
+iDisc(runCy,SBS,YTIME) = iDiscData(SBS);
 
 * FIXME: Drive the emission factors with mrprom
 * author=giannou
@@ -89,8 +89,8 @@ NGS 2.336234395,
 OGS 3.207089028,
 BMSWAS 0/;
 
-iCo2EmiFac(allCy,SBS,EF,YTIME) = iCo2EmiFacAllSbs(EF);
-iCo2EmiFac(allCy,"IS","HCL",YTIME)   = iCo2EmiFacAllSbs("SLD"); !! This is the assignment for coke
+iCo2EmiFac(runCy,SBS,EF,YTIME) = iCo2EmiFacAllSbs(EF);
+iCo2EmiFac(runCy,"IS","HCL",YTIME)   = iCo2EmiFacAllSbs("SLD"); !! This is the assignment for coke
 table iDataPassCars(allCy,GompSet1,Gompset2)        "Initial Data for Passenger Cars ()"
           scr
 RWO.PC    0.0200641155285507
@@ -101,15 +101,15 @@ MAR.PC    0.0201531648401507
 USA.PC    0.0418811968705786
 ;
 
-iDataPassCars(allCy,"PC","S1") = 1.0;
-iSigma(allCy,"S1") = iDataPassCars(allCy,"PC","S1");
-iDataPassCars(allCy,"PC","S2") = -0.01;
-iSigma(allCy,"S2") = iDataPassCars(allCy,"PC","S2");
-iDataPassCars(allCy,"PC","S3") = 6.5;
-iSigma(allCy,"S3") = iDataPassCars(allCy,"PC","S3");
-iPassCarsMarkSat(allCy) = iDataPassCars(allCy,"PC","SAT");
-iGdpPassCarsMarkExt(allCy) = iDataPassCars(allCy,"PC","MEXTV");
-iPassCarsScrapRate(allCy)  = iDataPassCars(allCy,"PC", "SCR");
+iDataPassCars(runCy,"PC","S1") = 1.0;
+iSigma(runCy,"S1") = iDataPassCars(runCy,"PC","S1");
+iDataPassCars(runCy,"PC","S2") = -0.01;
+iSigma(runCy,"S2") = iDataPassCars(runCy,"PC","S2");
+iDataPassCars(runCy,"PC","S3") = 6.5;
+iSigma(runCy,"S3") = iDataPassCars(runCy,"PC","S3");
+iPassCarsMarkSat(runCy) = iDataPassCars(runCy,"PC","SAT");
+iGdpPassCarsMarkExt(runCy) = iDataPassCars(runCy,"PC","MEXTV");
+iPassCarsScrapRate(runCy)  = iDataPassCars(runCy,"PC", "SCR");
 
 parameter iInitSpecFuelConsData(TRANSE,TTECH,EF)        "Initial Specific fuel consumption ()" /
 PC.LPG.LPG	65.88
@@ -156,8 +156,8 @@ GN.H2F.H2F	8.14286
 /;
 
 table iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,YTIME)        "Initial Specific fuel consumption for all countries ()";
-iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,YTIME) = iInitSpecFuelConsData(TRANSE,TTECH,EF) ; 
-iSpeFuelConsCostBy(allCy,TRANSE,TTECH,EF) = iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,"2017");
+iInitSpecFuelCons(runCy,TRANSE,TTECH,EF,YTIME) = iInitSpecFuelConsData(TRANSE,TTECH,EF) ; 
+iSpeFuelConsCostBy(runCy,TRANSE,TTECH,EF) = iInitSpecFuelCons(runCy,TRANSE,TTECH,EF,"2017");
 
 parameter iElaSubData(DSBS)       "Elasticities by subsector (1)" /
 PCH	2
@@ -179,7 +179,7 @@ NEN	2
 /;
 
 table iElaSub(allCy,DSBS)                           "Elasticities by subsector for all countries (1)";
-iElaSub(allCy,DSBS) = iElaSubData(DSBS);
+iElaSub(runCy,DSBS) = iElaSubData(DSBS);
 
 parameter iConsSizeDistHeat(conSet)               "Consumer sizes for district heating (1)" /smallest 0.425506805,
                                                                                              modal    0.595709528,
@@ -214,7 +214,7 @@ $offdelim
 $offtext
 
 parameter iSupResRefCapacity(allCy,SUPOTH,YTIME)	           "Supplementary Parameter for the residual in refineries Capacity (1)";
-iSupResRefCapacity(allCy,SUPOTH,YTIME) = 1;
+iSupResRefCapacity(runCy,SUPOTH,YTIME) = 1;
 
 table iSuppRefCapacity(allCy,SUPOTH,YTIME)	          "Supplementary Parameter for the residual in refineries Capacity (1)"
 $ondelim
@@ -222,7 +222,7 @@ $include "./iSuppRefCapacity.csv"
 $offdelim
 ;
 parameter iSupTrnasfOutputRefineries(allCy,EF,YTIME)	     "Supplementary parameter for the transformation output from refineries (Mtoe)";
-iSupTrnasfOutputRefineries(allCy,EF,YTIME) = 1;
+iSupTrnasfOutputRefineries(runCy,EF,YTIME) = 1;
 
 table iSupRateEneBranCons(allCy,EF,YTIME)	          "Rate of Energy Branch Consumption over total transformation output of iRateEneBranCons (1)"
 $ondelim
@@ -239,7 +239,7 @@ $ondelim
 $include"./iSuppPrimProd.csv"
 $offdelim
 ;
-iFuelPriPro(allCy,PPRODEF,YTIME) = iSuppPrimProd(allCy,PPRODEF,YTIME);
+iFuelPriPro(runCy,PPRODEF,YTIME) = iSuppPrimProd(runCy,PPRODEF,YTIME);
 table iPriceFuelsInt(WEF,YTIME)                "International Fuel Prices ($2015/toe)"
 $ondelim
 $include"./iPriceFuelsInt.csv"
@@ -261,7 +261,7 @@ $include"./iSuppExports.csv"
 $offdelim
 ;
 parameter iImpExp(allCy,EFS,YTIME)	                 "Imports of exporting countries usually zero (1)" ;
-iImpExp(allCy,EFS,YTIME)	= 0;
+iImpExp(runCy,EFS,YTIME)	= 0;
 
 parameter iLoadFactorAdj(DSBS)	"Parameters for load factor adjustment iBaseLoadShareDem (1)" /
 IS 	0.9,
@@ -288,7 +288,7 @@ GN 	0.43,
 BU 	0.43,
 PCH	0.78,
 NEN	0.78 / ;
-iBaseLoadShareDem(allCy,DSBS,YTIME)$an(YTIME)  = iLoadFactorAdj(DSBS);
+iBaseLoadShareDem(runCy,DSBS,YTIME)$an(YTIME)  = iLoadFactorAdj(DSBS);
 parameter iCO2SeqData(CO2SEQELAST)	       "Data for CO2 sequestration (1)" /
 POT	9175,
 mc_a	0.00125928,
@@ -298,7 +298,7 @@ mc_d	0.000839237,
 mc_s	120,
 mc_m	1.013
 / ;
-iElastCO2Seq(allCy,CO2SEQELAST) = iCO2SeqData(CO2SEQELAST);
+iElastCO2Seq(runCy,CO2SEQELAST) = iCO2SeqData(CO2SEQELAST);
 
 *Sources for vehicle lifetime:
 *US Department of Transportation, International Union of Railways, Statista, EU CORDIS
@@ -638,7 +638,7 @@ MAR.OE   0.00000001     0.95      0.00001
 MAR.OI   1.5161         0.95      0.00001
 ;
 
-iIndChar(allCy,INDSE,Indu_Scon_Set) = iIndCharData("MAR",INDSE,Indu_Scon_Set);
+iIndChar(runCy,INDSE,Indu_Scon_Set) = iIndCharData("MAR",INDSE,Indu_Scon_Set);
 table iInitConsSubAndInitShaNonSubElec(DOMSE,Indu_Scon_Set)      "Initial Consumption per Subsector and Initial Shares of Non Substitutable Electricity in Total Electricity Demand (Mtoe)"
      BASE   SHR_NSE SH_HPELC
 SE   1.8266 0.9     0.00001
@@ -646,10 +646,10 @@ HOU  11.511 0.9     0.00001
 AG   0.2078 0.9     0.00001
 ;
 
-iShrHeatPumpElecCons(allCy,INDSE) = iIndChar(allCy,INDSE,"SH_HPELC");
-iShrHeatPumpElecCons(allCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(DOMSE,"SH_HPELC");
-iExogDemOfBiomass(allCy,DOMSE,YTIME) = 0;
-*iElastCO2Seq(allCy,CO2SEQELAST) = iCO2SeqData(CO2SEQELAST,"%fBaseY%");
+iShrHeatPumpElecCons(runCy,INDSE) = iIndChar(runCy,INDSE,"SH_HPELC");
+iShrHeatPumpElecCons(runCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(DOMSE,"SH_HPELC");
+iExogDemOfBiomass(runCy,DOMSE,YTIME) = 0;
+*iElastCO2Seq(runCy,CO2SEQELAST) = iCO2SeqData(CO2SEQELAST,"%fBaseY%");
 iRatioImpFinElecDem(runCy,YTIME)$an(YTIME) = iSuppRefCapacity(runCy,"ELC_IMP",YTIME);
 iFuelExprts(runCy,EFS,YTIME) = iSuppExports(runCy,EFS,YTIME);
 iRatePriProTotPriNeeds(runCy,PPRODEF,YTIME) = iSuppRatePrimProd(runCy,PPRODEF,YTIME);
@@ -657,7 +657,7 @@ iResHcNgOilPrProd(runCy,"HCL",YTIME)$an(YTIME)   = iSupResRefCapacity(runCy,"HCL
 iResHcNgOilPrProd(runCy,"NGS",YTIME)$an(YTIME)   = iSupResRefCapacity(runCy,"NGS_PPROD",YTIME);
 iResHcNgOilPrProd(runCy,"CRO",YTIME)$an(YTIME)   = iSupResRefCapacity(runCy,"OIL_PPROD",YTIME);
 iFeedTransfr(runCy,EFS,YTIME) = iSuppTransfers(runCy,EFS,YTIME);
-iRateEneBranCons(allCy,EFS,YTIME)= iSupRateEneBranCons(allCy,EFS,YTIME);
+iRateEneBranCons(runCy,EFS,YTIME)= iSupRateEneBranCons(runCy,EFS,YTIME);
 iResTransfOutputRefineries(runCy,EFS,YTIME) = iSupTrnasfOutputRefineries(runCy,EFS,YTIME);;
 iRefCapacity(runCy,YTIME)= iSuppRefCapacity(runCy,"REF_CAP",YTIME);
 iResRefCapacity(runCy,YTIME) = iSupResRefCapacity(runCy,"REF_CAP_RES",YTIME);
@@ -666,8 +666,8 @@ iResRefCapacity(runCy,YTIME) = iSupResRefCapacity(runCy,"REF_CAP_RES",YTIME);
 parameter iLoadFactorAdjMxm(VARIOUS_LABELS)    "Parameter for load factor adjustment iMxmLoadFacElecDem (1)" /
 AMAXBASE 3,
 MAXLOADSH 0.45 / ;
-iBslCorrection(allCy,YTIME)$an(YTIME) = iLoadFactorAdjMxm("AMAXBASE");
-iMxmLoadFacElecDem(allCy,YTIME)$an(YTIME) = iLoadFactorAdjMxm("MAXLOADSH");
+iBslCorrection(runCy,YTIME)$an(YTIME) = iLoadFactorAdjMxm("AMAXBASE");
+iMxmLoadFacElecDem(runCy,YTIME)$an(YTIME) = iLoadFactorAdjMxm("MAXLOADSH");
 parameter iPolDstrbtnLagCoeffPriOilPr(kpdl)	  "Polynomial Distribution Lag Coefficients for primary oil production (1)"/
 a1 1.666706504,
 a2 1.333269594,
@@ -803,7 +803,7 @@ Loop (runCy,DSBS) DO
      ENDLOOP;
 ENDLOOP;
 
-iCumDistrFuncConsSize(allCy,DSBS) = sum(rCon, iDisFunConSize(allCy,DSBS,rCon));
+iCumDistrFuncConsSize(runCy,DSBS) = sum(rCon, iDisFunConSize(runCy,DSBS,rCon));
 iCGI(allCy,YTIME) = 1;
 
 $ontext
@@ -812,7 +812,7 @@ $ondelim
 $include"./iResTotCapMxmLoad.csv"
 $offdelim
 ;
-iResMargTotAvailCap(allCy,PGRES,YTIME)$an(YTIME) = iResTotCapMxmLoad(allCy,PGRES,YTIME);
+iResMargTotAvailCap(runCy,PGRES,YTIME)$an(YTIME) = iResTotCapMxmLoad(runCy,PGRES,YTIME);
 $offtext
 
 table iVarCost(PGALL,YTIME)             "Variable gross cost other than fuel per Plant Type (Euro2005/KW)"
@@ -849,10 +849,10 @@ $ondelim
 $include"./iDataOtherTransfOutput.csv"
 $offdelim
 ;
-iTranfOutGasworks(allCy,EFS,YTIME)$(not An(YTIME)) = iDataOtherTransfOutput(allCy,EFS,YTIME);
+iTranfOutGasworks(runCy,EFS,YTIME)$(not An(YTIME)) = iDataOtherTransfOutput(runCy,EFS,YTIME);
 $offtext
 
-iDistrLosses(allCy,EFS,YTIME) = iDataDistrLosses(allCy,EFS,YTIME);
+iDistrLosses(runCy,EFS,YTIME) = iDataDistrLosses(runCy,EFS,YTIME);
 table iDataTransfOutputRef(allCy,EF,YTIME)	    "Data for Other transformation output  (Mtoe)"
 $ondelim
 $include"./iDataTransfOutputRef.csv"
@@ -863,31 +863,31 @@ $ondelim
 $include"./iFuelConsTRANSE.csv"
 $offdelim
 ;
-iTransfOutputRef(allCy,EFS,YTIME)$(not An(YTIME)) = iDataTransfOutputRef(allCy,EFS,YTIME);
-iFuelConsTRANSE(allCy,TRANSE,EF,YTIME)$(SECTTECH(TRANSE,EF) $(iFuelConsTRANSE(allCy,TRANSE,EF,YTIME)<=0)) = 1e-6;
-iFuelConsPerFueSub(allCy,TRANSE,EF,YTIME) = iFuelConsTRANSE(allCy,TRANSE,EF,YTIME);
+iTransfOutputRef(runCy,EFS,YTIME)$(not An(YTIME)) = iDataTransfOutputRef(runCy,EFS,YTIME);
+iFuelConsTRANSE(runCy,TRANSE,EF,YTIME)$(SECTTECH(TRANSE,EF) $(iFuelConsTRANSE(runCy,TRANSE,EF,YTIME)<=0)) = 1e-6;
+iFuelConsPerFueSub(runCy,TRANSE,EF,YTIME) = iFuelConsTRANSE(runCy,TRANSE,EF,YTIME);
 table iFuelConsINDSE(allCy,INDSE,EF,YTIME)	 "Fuel consumption of industry subsector (Mtoe)"
 $ondelim
 $include"./iFuelConsINDSE.csv"
 $offdelim
 ;
-iFuelConsINDSE(allCy,INDSE,EF,YTIME)$(SECTTECH(INDSE,EF) $(iFuelConsINDSE(allCy,INDSE,EF,YTIME)<=0)) = 1e-6;
+iFuelConsINDSE(runCy,INDSE,EF,YTIME)$(SECTTECH(INDSE,EF) $(iFuelConsINDSE(runCy,INDSE,EF,YTIME)<=0)) = 1e-6;
 table iFuelConsDOMSE(allCy,DOMSE,EF,YTIME)	 "Fuel consumption of domestic subsector (Mtoe)"
 $ondelim
 $include"./iFuelConsDOMSE.csv"
 $offdelim
 ;
-iFuelConsDOMSE(allCy,DOMSE,EF,YTIME)$(SECTTECH(DOMSE,EF) $(iFuelConsDOMSE(allCy,DOMSE,EF,YTIME)<=0)) = 1e-6;
+iFuelConsDOMSE(runCy,DOMSE,EF,YTIME)$(SECTTECH(DOMSE,EF) $(iFuelConsDOMSE(runCy,DOMSE,EF,YTIME)<=0)) = 1e-6;
 table iFuelConsNENSE(allCy,NENSE,EF,YTIME)	 "Fuel consumption of non energy and bunkers (Mtoe)"
 $ondelim
 $include"./iFuelConsNENSE.csv"
 $offdelim
 ;
 
-iFuelConsNENSE(allCy,NENSE,EF,YTIME)$(SECTTECH(NENSE,EF) $(iFuelConsNENSE(allCy,NENSE,EF,YTIME)<=0)) = 1e-6;
-iFuelConsPerFueSub(allCy,INDSE,EF,YTIME) = iFuelConsINDSE(allCy,INDSE,EF,YTIME);
-iFuelConsPerFueSub(allCy,DOMSE,EF,YTIME) = iFuelConsDOMSE(allCy,DOMSE,EF,YTIME);
-iFuelConsPerFueSub(allCy,NENSE,EF,YTIME) = iFuelConsNENSE(allCy,NENSE,EF,YTIME);
+iFuelConsNENSE(runCy,NENSE,EF,YTIME)$(SECTTECH(NENSE,EF) $(iFuelConsNENSE(runCy,NENSE,EF,YTIME)<=0)) = 1e-6;
+iFuelConsPerFueSub(runCy,INDSE,EF,YTIME) = iFuelConsINDSE(runCy,INDSE,EF,YTIME);
+iFuelConsPerFueSub(runCy,DOMSE,EF,YTIME) = iFuelConsDOMSE(runCy,DOMSE,EF,YTIME);
+iFuelConsPerFueSub(runCy,NENSE,EF,YTIME) = iFuelConsNENSE(runCy,NENSE,EF,YTIME);
 iFinEneCons(runCy,EFS,YTIME) = sum(INDDOM,
                          sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(INDDOM,EF)), iFuelConsPerFueSub(runCy,INDDOM,EF,YTIME)))
                        +
@@ -912,8 +912,8 @@ $ondelim
 $include"./iDataElecSteamGen.csv"
 $offdelim
 ;
-iTotAvailCapBsYr(allCy) = sum(tfirst,iDataElecSteamGen(allCy,"TOTCAP",TFIRST))+sum(tfirst,iDataElecSteamGen(allCy,"CHP_CAP",TFIRST))*0.85;
-iElecImp(allCy,YTIME)=0;
+iTotAvailCapBsYr(runCy) = sum(tfirst,iDataElecSteamGen(runCy,"TOTCAP",TFIRST))+sum(tfirst,iDataElecSteamGen(runCy,"CHP_CAP",TFIRST))*0.85;
+iElecImp(runCy,YTIME)=0;
 
 parameter iScaleEndogScrap(PGALL) "Scale parameter for endogenous scrapping applied to the sum of full costs (1)";
 iScaleEndogScrap(PGALL) = 0.035;
@@ -924,43 +924,43 @@ $include"./iDecomPlants.csv"
 $offdelim
 ;
 
-iPlantDecomSched(allCy,PGALL,YTIME) = iDecomPlants(allCy,PGALL,YTIME);
+iPlantDecomSched(runCy,PGALL,YTIME) = iDecomPlants(runCy,PGALL,YTIME);
 
 table iInvPlants(allCy,PGALL,YTIME)	            "Investment Plants (MW)"
 $ondelim
 $include"./iInvPlants.csv"
 $offdelim
 ;
-iDecInvPlantSched(allCy,PGALL,YTIME) = iInvPlants(allCy,PGALL,YTIME);
+iDecInvPlantSched(runCy,PGALL,YTIME) = iInvPlants(runCy,PGALL,YTIME);
 
 table iCummMxmInstRenCap(allCy,PGRENEF,YTIME)	 "Cummulative maximum potential installed Capacity for Renewables (GW)"
 $ondelim
 $include"./iMaxResPot.csv"
 $offdelim
 ;
-iCummMxmInstRenCap(allCy,PGRENEF,YTIME)$(not iCummMxmInstRenCap(allCy,PGRENEF,YTIME)) = 1e-4;
-iMaxRenPotential(allCy,"LHYD",YTIME) = iCummMxmInstRenCap(allCy,"LHYD",YTIME);
-iMaxRenPotential(allCy,"SHYD",YTIME) = iCummMxmInstRenCap(allCy,"SHYD",YTIME);
-iMaxRenPotential(allCy,"WND",YTIME)$AN(YTIME) = iCummMxmInstRenCap(allCy,"WND",YTIME);
-iMaxRenPotential(allCy,"WNO",YTIME)$AN(YTIME) = iCummMxmInstRenCap(allCy,"WNO",YTIME);
-iMaxRenPotential(allCy,"SOL",YTIME)$AN(YTIME) = iCummMxmInstRenCap(allCy,"SOL",YTIME);
-iMaxRenPotential(allCy,"DPV",YTIME)$AN(YTIME) = iCummMxmInstRenCap(allCy,"DPV",YTIME);
-iMaxRenPotential(allCy,"BMSWAS",YTIME)$AN(YTIME) = iCummMxmInstRenCap(allCy,"BMSWAS",YTIME);
-iMaxRenPotential(allCy,"OTHREN",YTIME)$AN(YTIME) = iCummMxmInstRenCap(allCy,"OTHREN",YTIME);
+iCummMxmInstRenCap(runCy,PGRENEF,YTIME)$(not iCummMxmInstRenCap(runCy,PGRENEF,YTIME)) = 1e-4;
+iMaxRenPotential(runCy,"LHYD",YTIME) = iCummMxmInstRenCap(runCy,"LHYD",YTIME);
+iMaxRenPotential(runCy,"SHYD",YTIME) = iCummMxmInstRenCap(runCy,"SHYD",YTIME);
+iMaxRenPotential(runCy,"WND",YTIME)$AN(YTIME) = iCummMxmInstRenCap(runCy,"WND",YTIME);
+iMaxRenPotential(runCy,"WNO",YTIME)$AN(YTIME) = iCummMxmInstRenCap(runCy,"WNO",YTIME);
+iMaxRenPotential(runCy,"SOL",YTIME)$AN(YTIME) = iCummMxmInstRenCap(runCy,"SOL",YTIME);
+iMaxRenPotential(runCy,"DPV",YTIME)$AN(YTIME) = iCummMxmInstRenCap(runCy,"DPV",YTIME);
+iMaxRenPotential(runCy,"BMSWAS",YTIME)$AN(YTIME) = iCummMxmInstRenCap(runCy,"BMSWAS",YTIME);
+iMaxRenPotential(runCy,"OTHREN",YTIME)$AN(YTIME) = iCummMxmInstRenCap(runCy,"OTHREN",YTIME);
 table iCummMnmInstRenCap(allCy,PGRENEF,YTIME)	 "Cummulative minimum potential installed Capacity for Renewables (GW)"
 $ondelim
 $include"./iMinResPot.csv"
 $offdelim
 ;
-iCummMnmInstRenCap(allCy,PGRENEF,YTIME)$(not iCummMnmInstRenCap(allCy,PGRENEF,YTIME)) = 1e-4;
-iMinRenPotential(allCy,"LHYD",YTIME) = iCummMnmInstRenCap(allCy,"LHYD",YTIME);
-iMinRenPotential(allCy,"SHYD",YTIME) = iCummMnmInstRenCap(allCy,"SHYD",YTIME);
-iMinRenPotential(allCy,"WND",YTIME)  = iCummMnmInstRenCap(allCy,"WND",YTIME);
-iMinRenPotential(allCy,"WNO",YTIME)  = iCummMnmInstRenCap(allCy,"WNO",YTIME);
-iMinRenPotential(allCy,"SOL",YTIME)  = iCummMnmInstRenCap(allCy,"SOL",YTIME);
-iMinRenPotential(allCy,"DPV",YTIME)  = iCummMnmInstRenCap(allCy,"DPV",YTIME);
-iMinRenPotential(allCy,"BMSWAS",YTIME) = iCummMnmInstRenCap(allCy,"BMSWAS",YTIME);
-iMinRenPotential(allCy,"OTHREN",YTIME) = iCummMnmInstRenCap(allCy,"OTHREN",YTIME);
+iCummMnmInstRenCap(runCy,PGRENEF,YTIME)$(not iCummMnmInstRenCap(runCy,PGRENEF,YTIME)) = 1e-4;
+iMinRenPotential(runCy,"LHYD",YTIME) = iCummMnmInstRenCap(runCy,"LHYD",YTIME);
+iMinRenPotential(runCy,"SHYD",YTIME) = iCummMnmInstRenCap(runCy,"SHYD",YTIME);
+iMinRenPotential(runCy,"WND",YTIME)  = iCummMnmInstRenCap(runCy,"WND",YTIME);
+iMinRenPotential(runCy,"WNO",YTIME)  = iCummMnmInstRenCap(runCy,"WNO",YTIME);
+iMinRenPotential(runCy,"SOL",YTIME)  = iCummMnmInstRenCap(runCy,"SOL",YTIME);
+iMinRenPotential(runCy,"DPV",YTIME)  = iCummMnmInstRenCap(runCy,"DPV",YTIME);
+iMinRenPotential(runCy,"BMSWAS",YTIME) = iCummMnmInstRenCap(runCy,"BMSWAS",YTIME);
+iMinRenPotential(runCy,"OTHREN",YTIME) = iCummMnmInstRenCap(runCy,"OTHREN",YTIME);
 
 table iMatFacPlaAvailCap(allCy,PGALL,YTIME)	 "Maturity factor related to plant available capacity (1)"
 $ondelim
@@ -968,7 +968,7 @@ $include"./iMatFacPlaAvailCap.csv"
 $offdelim
 ;
 
-iMatFacPlaAvailCap(allCy,CCS,YTIME)$an(YTIME)  =0;
+iMatFacPlaAvailCap(runCy,CCS,YTIME)$an(YTIME)  =0;
 parameter
 iDataMatureFacPlaDisp(PGALL) /
 *CTHLGN	20.00000,
@@ -1016,18 +1016,18 @@ PGACGSL	20.00000,
 PGACGS	20.00000,
 PGAGGS	20.00000,
 PGAWNO	0.60000000/;
-iMatureFacPlaDisp(allCy,PGALL,YTIME)$an(YTIME) =iDataMatureFacPlaDisp(PGALL);
+iMatureFacPlaDisp(runCy,PGALL,YTIME)$an(YTIME) = iDataMatureFacPlaDisp(PGALL);
 
 iCO2CaptRate(runCy,PGALL,YTIME) = 0; 
 
 parameter iMxmShareChpElec "Maximum share of CHP electricity in a country (1)";
 iMxmShareChpElec(runCy,YTIME) = 0.1;
 
-iEffValueInEuro(allCy,SBS,YTIME)=0;
+iEffValueInEuro(runCy,SBS,YTIME)=0;
 iScenarioPri(WEF,"NOTRADE",YTIME)=0;
 
 * FIXME: Check if VAT (value added tax) rates are necessary for the model.
-iVAT(allCy, YTIME) = 0;
+iVAT(runCy, YTIME) = 0;
 
 * FIXME: Check if iPriceReform is necessary for the model.
 * author=derevirn
@@ -1047,13 +1047,13 @@ $offtext
 
 * FIXME: iHydrogenPri should be computed with mrprom
 * author=giannou
-iHydrogenPri(allCy,SBS,YTIME)=4.3;
+iHydrogenPri(runCy,SBS,YTIME)=4.3;
 table iFuelPrice(allCy,SBS,EF,YTIME)	 "Prices of fuels per subsector (k$2015/toe)"
 $ondelim
 $include"./iFuelPrice.csv"
 $offdelim
 ;
-iFuelPrice(allCy,SBS,EF,YTIME) = iFuelPrice(allCy,SBS,EF,YTIME)/1000; !! change units $15 -> k$15
+iFuelPrice(runCy,SBS,EF,YTIME) = iFuelPrice(runCy,SBS,EF,YTIME)/1000; !! change units $15 -> k$15
 table iDataGrossInlCons(allCy,EF,YTIME)	 "Data for Gross Inland Conusmption (Mtoe)"
 $ondelim
 $include"./iDataGrossInlCons.csv"
@@ -1064,35 +1064,35 @@ $ondelim
 $include"./iDataConsEneBranch.csv"
 $offdelim
 ;
-iTotEneBranchCons(allCy,EFS,YTIME) = iDataConsEneBranch(allCy,EFS,YTIME);
+iTotEneBranchCons(runCy,EFS,YTIME) = iDataConsEneBranch(runCy,EFS,YTIME);
 table iDataImports(allCy,EF,YTIME)	           "Data for imports (Mtoe)"
 $ondelim
 $include"./iDataImports.csv"
 $offdelim
 ;
-iFuelImports(allCy,EFS,YTIME)$(not An(YTIME)) = iDataImports(allCy,EFS,YTIME);
+iFuelImports(runCy,EFS,YTIME)$(not An(YTIME)) = iDataImports(runCy,EFS,YTIME);
 
-iNetImp(allCy,EFS,YTIME) = iDataImports(allCy,"ELC",YTIME);
+iNetImp(runCy,EFS,YTIME) = iDataImports(runCy,"ELC",YTIME);
 
-iGrosInlCons(allCy,EFS,YTIME) = iDataGrossInlCons(allCy,EFS,YTIME);
+iGrosInlCons(runCy,EFS,YTIME) = iDataGrossInlCons(runCy,EFS,YTIME);
 iGrossInConsNoEneBra(runCy,EFS,YTIME) = iGrosInlCons(runCy,EFS,YTIME) + iTotEneBranchCons(runCy,EFS,YTIME)$EFtoEFA(EFS,"LQD")
                                                - iTotEneBranchCons(runCy,EFS,YTIME)$(not EFtoEFA(EFS,"LQD"));
 
-iPeakBsLoadBy(allCy,PGLOADTYPE) = sum(tfirst, iDataElecSteamGen(allCy,PGLOADTYPE,tfirst));
+iPeakBsLoadBy(runCy,PGLOADTYPE) = sum(tfirst, iDataElecSteamGen(runCy,PGLOADTYPE,tfirst));
 
 parameter iDataElecAndSteamGen(allCy,CHP,YTIME)	 "Data releated to electricity and steam generation";
-iDataElecAndSteamGen(allCy,CHP,YTIME) = 0 ;
-iHisChpGrCapData(allCy,CHP,YTIME) = iDataElecAndSteamGen(allCy,CHP,YTIME);
+iDataElecAndSteamGen(runCy,CHP,YTIME) = 0 ;
+iHisChpGrCapData(runCy,CHP,YTIME) = iDataElecAndSteamGen(runCy,CHP,YTIME);
 
 table iDataTotTransfInputRef(allCy,EF,YTIME)	 "Total Transformation Input in Refineries (Mtoe)"
 $ondelim
 $include"./iDataTotTransfInputRef.csv"
 $offdelim
 ;
-iTransfInputRef(allCy,EFS,YTIME)$(not An(YTIME)) = iDataTotTransfInputRef(allCy,EFS,YTIME);
+iTransfInputRef(runCy,EFS,YTIME)$(not An(YTIME)) = iDataTotTransfInputRef(runCy,EFS,YTIME);
 
 * Calculation of weights for sector average fuel price
-iResElecIndex(allCy,YTIME) = 1;
+iResElecIndex(runCy,YTIME) = 1;
 
 loop SBS do
          iDiffFuelsInSec(SBS) = 0;
@@ -1102,9 +1102,9 @@ loop SBS do
 endloop;
 
 iTotFinEneDemSubBaseYr(runCy,TRANSE,YTIME) = sum(EF$(SECTTECH(TRANSE,EF) $(not plugin(EF))), iFuelConsPerFueSub(runCy,TRANSE,EF,YTIME));
-iTotFinEneDemSubBaseYr(allCy,INDSE,YTIME)   = SUM(EF,iFuelConsPerFueSub(allCy,INDSE,EF,YTIME));
-iTotFinEneDemSubBaseYr(allCy,DOMSE,YTIME)   = SUM(EF,iFuelConsPerFueSub(allCy,DOMSE,EF,YTIME));
-iTotFinEneDemSubBaseYr(allCy,NENSE,YTIME)   = SUM(EF,iFuelConsPerFueSub(allCy,NENSE,EF,YTIME));
+iTotFinEneDemSubBaseYr(runCy,INDSE,YTIME)   = SUM(EF,iFuelConsPerFueSub(runCy,INDSE,EF,YTIME));
+iTotFinEneDemSubBaseYr(runCy,DOMSE,YTIME)   = SUM(EF,iFuelConsPerFueSub(runCy,DOMSE,EF,YTIME));
+iTotFinEneDemSubBaseYr(runCy,NENSE,YTIME)   = SUM(EF,iFuelConsPerFueSub(runCy,NENSE,EF,YTIME));
 
 
 iWgtSecAvgPriFueCons(runCy,TRANSE,EF)$(SECTTECH(TRANSE,EF) $(not plugin(EF)) ) = (iFuelConsPerFueSub(runCy,TRANSE,EF,"%fBaseY%") / iTotFinEneDemSubBaseYr(runCy,TRANSE,"%fBaseY%"))$iTotFinEneDemSubBaseYr(runCy,TRANSE,"%fBaseY%")
@@ -1136,8 +1136,8 @@ $ondelim
 $include"./iResNonSubElecCons.csv"
 $offdelim
 ;
-iResNonSubsElecDem(allCy,INDSE,YTIME)$an(YTIME) = iResNonSubElec(allCy,INDSE,YTIME);
-iResNonSubsElecDem(allCy,DOMSE,YTIME)$an(YTIME) = iResNonSubElecCons(allCy,DOMSE,YTIME);
+iResNonSubsElecDem(runCy,INDSE,YTIME)$an(YTIME) = iResNonSubElec(runCy,INDSE,YTIME);
+iResNonSubsElecDem(runCy,DOMSE,YTIME)$an(YTIME) = iResNonSubElecCons(runCy,DOMSE,YTIME);
 
 table iResFuelConsSub(allCy,INDSE,EF,YTIME)	 "Residuals for fuel consumption per subsector (1)"
 $ondelim
@@ -1154,9 +1154,9 @@ $ondelim
 $include"./iResInFuelConsPerFuelAndSub.csv"
 $offdelim
 ;
-iResFuelConsPerSubAndFuel(allCy,INDSE,EF,YTIME)$an(YTIME) = iResFuelConsSub(allCy,INDSE,EF,YTIME);
-iResFuelConsPerSubAndFuel(allCy,DOMSE,EF,YTIME)$an(YTIME) = iResFuelConsPerFuelAndSub(allCy,DOMSE,EF,YTIME);
-iResFuelConsPerSubAndFuel(allCy,NENSE,EF,YTIME)$an(YTIME) = iResInFuelConsPerFuelAndSub(allCy,NENSE,EF,YTIME);
+iResFuelConsPerSubAndFuel(runCy,INDSE,EF,YTIME)$an(YTIME) = iResFuelConsSub(runCy,INDSE,EF,YTIME);
+iResFuelConsPerSubAndFuel(runCy,DOMSE,EF,YTIME)$an(YTIME) = iResFuelConsPerFuelAndSub(runCy,DOMSE,EF,YTIME);
+iResFuelConsPerSubAndFuel(runCy,NENSE,EF,YTIME)$an(YTIME) = iResInFuelConsPerFuelAndSub(runCy,NENSE,EF,YTIME);
 
 table iResTranspFuelConsSubTech(allCy,TRANSE,EF,YTIME)	 "Residual Transport on Specific Fuel Consumption per Subsector and Technology (1)"
 $ondelim
@@ -1262,7 +1262,7 @@ parameter iPlugHybrFractData(YTIME)  "Plug in hybrid fraction of mileage" /
 parameter iPlugHybrFractOfMileage(ELSH_SET,YTIME)	 "Plug in hybrid fraction of mileage covered by electricity, residualls on GDP-Depnd car market ext (1)" ;
 iPlugHybrFractOfMileage(ELSH_SET,YTIME) = iPlugHybrFractData(YTIME);
 
-iShareAnnMilePlugInHybrid(allCy,YTIME)$an(YTIME) = iPlugHybrFractOfMileage("ELSH",YTIME);
+iShareAnnMilePlugInHybrid(runCy,YTIME)$an(YTIME) = iPlugHybrFractOfMileage("ELSH",YTIME);
 table iCapDataLoadFacEachTransp(TRANSE,TRANSUSE)	 "Capacity data and Load factor for each transportation mode (passenger or tonnes/vehicle)"
      Cap  LF
 PC   2    
@@ -1280,7 +1280,7 @@ $include"./iNewReg.csv"
 $offdelim
 ;
 
-iUtilRateChpPlants(allCy,CHP,YTIME) = 0.5;
+iUtilRateChpPlants(runCy,CHP,YTIME) = 0.5;
 
 **                   Power Generation
 table iInstCapPast(allCy,PGALL,YTIME)        "Installed capacity past (GW)"
@@ -1303,14 +1303,14 @@ $offdelim
 ;
 
 parameter iMatrFactor(allCy,SBS,EF,YTIME)       "Maturity factor per technology and subsector for all countries (1)";
-iMatrFactor(allCy,SBS,EF,YTIME) = iMatrFactorData(SBS,EF,YTIME);                                          
-iMatrFactor(allCy,SBS,EF,YTIME)$(iMatrFactor(allCy,SBS,EF,YTIME)=0) = 0.000001;
+iMatrFactor(runCy,SBS,EF,YTIME) = iMatrFactorData(SBS,EF,YTIME);                                          
+iMatrFactor(runCy,SBS,EF,YTIME)$(iMatrFactor(runCy,SBS,EF,YTIME)=0) = 0.000001;
 ** Industry
-iShrNonSubElecInTotElecDem(allCy,INDSE)  = iIndChar(allCy,INDSE,"SHR_NSE");
-iShrNonSubElecInTotElecDem(allCy,INDSE)$(iShrNonSubElecInTotElecDem(allCy,INDSE)>0.98) = 0.98;
+iShrNonSubElecInTotElecDem(runCy,INDSE)  = iIndChar(runCy,INDSE,"SHR_NSE");
+iShrNonSubElecInTotElecDem(runCy,INDSE)$(iShrNonSubElecInTotElecDem(runCy,INDSE)>0.98) = 0.98;
 **Domestic - Tertiary
-iShrNonSubElecInTotElecDem(allCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(DOMSE,"SHR_NSE");
-iShrNonSubElecInTotElecDem(allCy,DOMSE)$(iShrNonSubElecInTotElecDem(allCy,DOMSE)>0.98) = 0.98;
+iShrNonSubElecInTotElecDem(runCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(DOMSE,"SHR_NSE");
+iShrNonSubElecInTotElecDem(runCy,DOMSE)$(iShrNonSubElecInTotElecDem(runCy,DOMSE)>0.98) = 0.98;
 **   Macroeconomic
 
 
