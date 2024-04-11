@@ -2,7 +2,7 @@
 # data with MENA-EDS and ENERDATA
 library(coda)
 
-#setwd("C:/Users/sioutas/github/open-prom-goxygen/runs")
+setwd(paste0(getwd(),"/runs"))
 
 dirs <- list.dirs()
 
