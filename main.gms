@@ -1,6 +1,6 @@
 *' @title Main
 *' 
-*' @description This is the OPEN-PROM model, the open version of the world energy model PROMETHEUS of E3-Modelling.
+*' @description This is the OPEN-PROM model, the open version of the world energy model PROMETHEUS of E3-Modelling
 *' @code
 *' *** preliminaries 
 *' ----
