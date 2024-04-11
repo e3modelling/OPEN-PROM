@@ -30,7 +30,7 @@ scenario_name <- basename(getwd())
 
 #output <- NULL
 #output <- mbind(output, reportGDP(runCY))
-reportFinalEnergy(runCY)
+reportFinalEnergy(runCY,rmap)
 #reportGDP(runCY)
 #reportACTV(runCY)
 reportEmissions(runCY)
