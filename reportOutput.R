@@ -24,15 +24,14 @@ setConfig(regionmapping = mapping)
 map <- read.csv("MENA-PROM mapping - mena_prom_mapping.csv")
 
 scenario_name <- basename(getwd())
-scenario_name <- str_match(scenario_name, "\\s*(.*?)\\s*_")[,1]
-scenario_name <- str_sub(scenario_name, 1, - 2)
-if (is.na(scenario_name)) scenario_name <- "default"
-if (scenario_name == "default") scenario_name <- basename(getwd())
+#scenario_name <- str_match(scenario_name, "\\s*(.*?)\\s*_")[,1]
+#scenario_name <- str_sub(scenario_name, 1, - 2)
+#if (is.na(scenario_name)) scenario_name <- "default"
 
 #output <- NULL
 #output <- mbind(output, reportGDP(runCY))
-#reportFinalEnergy(runCY)
-reportGDP(runCY)
+reportFinalEnergy(runCY)
+#reportGDP(runCY)
 #reportACTV(runCY)
-#reportEmissions(runCY)
+reportEmissions(runCY)
 #reportPrice(runCY)
