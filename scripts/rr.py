@@ -116,7 +116,7 @@ def list_subfolders(subfolder_status_list):
     Output: Displays the list of subfolders with color-coded status
     """
     if subfolder_status_list:
-        print("Choose up to two subfolders from the following list (separated by commas):")
+        print("Choose desired subfolders from the following list (separated by commas):")
         for i, (subfolder_status, _) in enumerate(subfolder_status_list):
             print(f"{i+1}. {subfolder_status}")
         return subfolder_status_list
