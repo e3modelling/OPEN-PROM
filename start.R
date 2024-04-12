@@ -124,7 +124,7 @@ if (!is.null(task) && task == 0) {
     saveMetadata(DevMode = 1)
     if(withRunFolder) createRunFolder("DEV")
 
-    system("gams main.gms --DevMode=1 --GenerateInput=off -logOption 4 -Idir=./data")
+    shell("gams main.gms --DevMode=1 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log")
 
     if(withRunFolder && withUpload) uploadToGDrive()
 
@@ -134,7 +134,7 @@ if (!is.null(task) && task == 0) {
     saveMetadata(DevMode = 1)
     if(withRunFolder) createRunFolder("DEVNEWDATA")
 
-    system("gams main.gms --DevMode=1 --GenerateInput=on -logOption 4 -Idir=./data")
+    shell("gams main.gms --DevMode=1 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 | tee full.log")
 
     if(withRunFolder) {
       file.copy("data", to = '../../', recursive = TRUE) # Copying generated data to parent folder for future runs
@@ -148,7 +148,7 @@ if (!is.null(task) && task == 0) {
     saveMetadata(DevMode = 0)
     if(withRunFolder) createRunFolder("RES")
 
-    system("gams main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data")
+    shell("gams main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log")
 
     if(withRunFolder && withUpload) uploadToGDrive()
 
@@ -158,7 +158,7 @@ if (!is.null(task) && task == 0) {
     saveMetadata(DevMode = 0)
     if(withRunFolder) createRunFolder("RESNEWDATA")
 
-    system("gams main.gms --DevMode=0 --GenerateInput=on -logOption 4 -Idir=./data")
+    shell("gams main.gms --DevMode=0 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 | tee full.log")
 
     if(withRunFolder) {
       file.copy("data", to = '../../', recursive = TRUE)
