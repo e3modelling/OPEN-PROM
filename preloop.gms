@@ -351,6 +351,7 @@ VRenValue.l(YTIME)=1;
 VRenValue.FX(YTIME) = 0 ;
 
 VCstCO2SeqCsts.l(runCy,YTIME)=1;
+*VCstCO2SeqCsts.FX(runCy,YTIME)$(not an(YTIME)) = iElastCO2Seq(allCy,"mc_b")
 
 VScalWeibullSum.l(runCy,PGALL,YTIME)=2;
 
