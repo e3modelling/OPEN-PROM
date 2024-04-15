@@ -6,30 +6,6 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from colorama import Fore, Style
 
-def select_folders(base_path):
-    """
-    This function's input is the folder path. It finds the desired directory, scans it,
-    presents a subfolder list sorted by modification time (newest to oldest).
-    Lastly, it returns a list of strings with all the subfolders.
-    """
-
-    runs_path = os.path.join(base_path, "runs")
-    subfolders = [f.path for f in os.scandir(runs_path) if f.is_dir()]
-
-    # Create a list of tuples containing subfolder path and its modification time
-    subfolder_modification_times = [(folder, os.path.getmtime(folder)) for folder in subfolders]
-
-    # Sort the list of tuples based on modification time (newest to oldest)
-    subfolder_modification_times.sort(key=lambda x: x[1], reverse=True)
-
-    # Extract the folder paths from the sorted list
-    subfolders = [folder for folder, _ in subfolder_modification_times]
-
-    print(Fore.YELLOW + "Recently started runs might be listed as FAILED, wait 15 seconds before running the script for recently started runs.")
-    print("Checking all subfolders..." + Style.RESET_ALL)
-
-    return subfolders
-
 def check_files_and_list_subfolders(base_path):
     """
     This function checks each subfolder for necessary files and generates a list of subfolders with color-coded status.
@@ -122,7 +98,8 @@ def list_subfolders(subfolder_status_list):
     Output: Displays the list of subfolders with color-coded status
     """
     if subfolder_status_list:
-        print("Choose desired subfolders from the following list (separated by commas):")
+        print(Fore.YELLOW + "Recently started runs might be listed as FAILED, wait 15 seconds before running the script for recently started runs.")
+        print("Checking all subfolders..." + Style.RESET_ALL)
         for idx, (subfolder_status, _) in enumerate(subfolder_status_list, 1):
             print(f"{idx:2}. {subfolder_status}")
         return subfolder_status_list
