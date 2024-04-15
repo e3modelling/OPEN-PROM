@@ -7,8 +7,8 @@ library(utils)
 library(mrprom)
 library(stringr)
 
-mapping <- "regionmappingOP5.csv" # region mapping used for aggregating validation data (e.g. ENERDATA)
-# this will be read in from a configuration file 
+# region mapping used for aggregating validation data (e.g. ENERDATA)
+mapping <- jsonlite::read_json("metadata.json")[["Model Information"]][["Region Mapping"]][[1]]
 
 source("reportPrice.R")
 source("reportEmissions.R")
