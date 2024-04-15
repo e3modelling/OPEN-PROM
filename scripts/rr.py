@@ -44,6 +44,10 @@ def check_files_and_list_subfolders(base_path):
     max_year_length = 4  # Maximum length for the year
     max_horizon_length = 4  # Maximum length for the horizon
 
+    current_time = time.time()
+    max_modification_threshold = 120  # 120 seconds threshold for max modification time
+    max_modification_time = current_time - max_modification_threshold
+
     subfolder_status_list = []
 
     for folder in subfolders:
@@ -60,12 +64,13 @@ def check_files_and_list_subfolders(base_path):
         if not os.path.exists(main_gms_path):
             status = f"Missing: main.gms  Status: NOT A RUN".ljust(max_status_length)
             color = Fore.RED
-        elif not os.path.exists(main_lst_path):
-            status = f"Missing: main.lst  Status: PENDING".ljust(max_status_length)
-            color = Fore.BLUE
-        elif not os.path.exists(main_log_path):
-            status = f"Missing: main.log  Status: PENDING".ljust(max_status_length)
-            color = Fore.BLUE
+        elif not os.path.exists(main_lst_path) or not os.path.exists(main_log_path):
+            if current_time > max_modification_time:
+                status = f"main.lst or main.log missing -> FAILED".ljust(max_status_length)
+                color = Fore.RED
+            else:
+                status = f"Missing: main.lst or main.log  Status: PENDING".ljust(max_status_length)
+                color = Fore.BLUE
         else:
             with open(main_gms_path, "r") as gms_file:
                 gms_content = gms_file.readlines()
@@ -87,12 +92,9 @@ def check_files_and_list_subfolders(base_path):
                         running_year = line.split("=")[1].strip().rjust(max_year_length)
                         break
 
-                current_time = time.time()
-                file_modification_time = os.path.getmtime(main_log_path)
-                time_difference = current_time - file_modification_time
+                time_difference = current_time - os.path.getmtime(main_log_path)
 
                 modification_threshold = 15
-                max_modification_threshold = 120
 
                 if any("*** Status: Normal completion" in line for line in last_lines) and time_difference > max_modification_threshold and time_difference > modification_threshold:
                     status = f"Missing: NONE      Status: COMPLETED  Year: {year}  Horizon: {end_horizon_year}".ljust(max_status_length)
@@ -113,7 +115,6 @@ def check_files_and_list_subfolders(base_path):
     subfolder_status_list.sort(key=lambda x: os.path.getmtime(x[1]), reverse=True)
 
     return subfolder_status_list
-
 
 def list_subfolders(subfolder_status_list):
     """
