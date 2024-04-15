@@ -11,8 +11,11 @@ files <- as.data.frame(files)
 
 vals <- interaction(files$files)
 opts <- as.character(unique(vals))
-choice <- multi.menu(opts, title = "Select run folders")
-scenario <- files[unique(vals) %in% opts[choice],]
+print_choices <- print(opts)
+choice <- gms::getLine()
+choice <- unlist(strsplit(choice, ","))
+
+scenario <- files[unique(vals) %in% opts[as.integer(choice)],]
 
 scenario_n <- basename(dirs)
 
@@ -21,6 +24,6 @@ for (i in scenario) {
   source("reportOutput.R")
   reporting <- read.report("reporting.mif")
   setwd("..")
-  write.report(reporting, file="compareScenarios.mif", append = TRUE)
+  write.report(reporting, file="compareScenarios8.mif", append = TRUE)
 }
 
