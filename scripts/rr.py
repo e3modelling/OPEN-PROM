@@ -6,30 +6,6 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from colorama import Fore, Style
 
-#def select_folders(base_path):
-   # """
-    #This function's input is the folder path. It finds the desired directory, scans it,
-    #presents a subfolder list sorted by modification time (newest to oldest).
-    #Lastly, it returns a list of strings with all the subfolders.
-    #"""
-
-    #runs_path = os.path.join(base_path, "runs")
-    #subfolders = [f.path for f in os.scandir(runs_path) if f.is_dir()]
-
-    # Create a list of tuples containing subfolder path and its modification time
-    #subfolder_modification_times = [(folder, os.path.getmtime(folder)) for folder in subfolders]
-
-    # Sort the list of tuples based on modification time (newest to oldest)
-    #subfolder_modification_times.sort(key=lambda x: x[1], reverse=True)
-
-    # Extract the folder paths from the sorted list
-    #subfolders = [folder for folder, _ in subfolder_modification_times]
-
-    #print(Fore.YELLOW + "Recently started runs might be listed as FAILED, wait 15 seconds before running the script for recently started runs.")
-    #print("Checking all subfolders..." + Style.RESET_ALL)
-
-    #return subfolders
-
 def check_files_and_list_subfolders(base_path):
     """
     This function checks each subfolder for necessary files and generates a list of subfolders with color-coded status.
@@ -42,6 +18,7 @@ def check_files_and_list_subfolders(base_path):
 
     max_status_length = 35  # Maximum length for the status message
     max_year_length = 4  # Maximum length for the year
+    max_horizon_length = 4  # Maximum length for the horizon
 
     current_time = time.time()
     max_modification_threshold = 120  # 120 seconds threshold for max modification time
@@ -197,6 +174,30 @@ def create_dataframe(country_year_status):
         print("No data found in the log file.")
         return None
 
+def plot_heatmap(df, fig_num, plot_title):
+    """
+    Input: df - Pandas DataFrame representing run success statuses for countries and years.
+    fig_num: figure number for matplotlib
+    plot_title: Title for the plot
+    Output: Displays a heatmap visualization using seaborn and matplotlib, where rows represent countries,
+    columns represent years, and color indicates run success (green for success, red for failure).
+    """
+    if df is not None:
+        # Define custom color palette (green for 1, red for 0)
+        cmap = sns.color_palette(["red", "green"])
+
+        # Create the heatmap without annotations
+        plt.figure(fig_num, figsize=(10, max(6, len(df) * 0.2)))  # Adjust height based on the number of countries
+        sns.heatmap(df, cmap=cmap, annot=False, linewidths=.5, linecolor='black', vmin=0, vmax=1, cbar=False)
+
+        plt.title(plot_title)
+        plt.xlabel('Year')
+        plt.ylabel('Country')
+
+        plt.show(block=False)
+    else:
+        print("DataFrame is empty.")
+
 def main():
     """
     This function initializes all the functions of the script and
@@ -210,7 +211,25 @@ def main():
     base_path = os.path.abspath(os.path.join(script_directory, ".."))
 
     subfolder_status_list = check_files_and_list_subfolders(base_path)
-    list_subfolders(subfolder_status_list)
-    
+    selected_subfolders = list_subfolders(subfolder_status_list)
+    if selected_subfolders:
+        choices = input("Enter the numbers of the subfolders (e.g., '1,2'): ")
+        choices = [int(choice.strip()) for choice in choices.split(",")]
+
+        selected_subfolders = [subfolder_status_list[choice - 1] for choice in choices]
+        print(f"Selected subfolders: {[subfolder for _, subfolder in selected_subfolders]}\n")
+
+        for idx, (subfolder_status, selected_subfolder) in enumerate(selected_subfolders, 1):
+            folder_name = selected_subfolder.split(os.sep)[-1]  # Extract folder name
+            lines = read_main_log(selected_subfolder)
+            country_year_status = parse_main_log(lines)
+            df = create_dataframe(country_year_status)
+
+            plot_heatmap(df, idx, folder_name)
+
+        plt.show()
+    else:
+        print("No subfolders found in the 'runs' directory.")
+
 if __name__ == "__main__":
     main()
