@@ -1,6 +1,5 @@
 # This script generates a mif file for comparison of OPEN-PROM run folder
 # data with MENA-EDS and ENERDATA
-library(coda)
 
 setwd(paste0(getwd(),"/runs"))
 
@@ -24,6 +23,6 @@ for (i in scenario) {
   source("reportOutput.R")
   reporting <- read.report("reporting.mif")
   setwd("..")
-  write.report(reporting, file="compareScenarios8.mif", append = TRUE)
+  write.report(reporting, file="compareScenarios.mif", append = TRUE)
 }
 
