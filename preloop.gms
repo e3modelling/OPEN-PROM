@@ -213,7 +213,7 @@ VActivPassTrnsp.FX(runCy,TRANSE,YTIME)$(not TRANP(TRANSE)) = 0;
 
 VNewRegPcYearly.FX(runCy,YTIME)$(not an(ytime)) = iNewReg(runCy,YTIME);
 
-VPriceFuelSubCarVal.l(runCy,SBS,EF,YTIME) = 1.5;
+VPriceFuelSubCarVal.l(runCy,SBS,EF,YTIME) = 0.5;
 VPriceFuelSubCarVal.l(runCy,"PG",PGEF,YTIME)=1;
 VPriceFuelSubCarVal.FX(runCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF)$(not HEATPUMP(EF))$(not An(YTIME))) = iFuelPrice(runCy,SBS,EF,YTIME);
 VPriceFuelSubCarVal.FX(runCy,SBS,ALTEF,YTIME)$(SECTTECH(SBS,ALTEF)$(not An(YTIME))) = sum(EF$ALTMAP(SBS,ALTEF,EF),iFuelPrice(runCy,SBS,EF,YTIME));
@@ -228,7 +228,7 @@ VPriceFuelSubCarVal.fx(runCy,INDDOM,"HEATPUMP",YTIME)$(SECTTECH(INDDOM,"HEATPUMP
 VPriceFuelSubCarVal.fx(runCy,"H2P",EF,YTIME)$(SECTTECH("H2P",EF)$(not An(YTIME))) = VPriceFuelSubCarVal.l(runCy,"PG",EF,YTIME);
 VPriceFuelSubCarVal.fx(runCy,"H2P","ELC",YTIME)$(not An(YTIME))= VPriceFuelSubCarVal.l(runCy,"OI","ELC",YTIME);
 
-VPriceElecInd.l(runCy,YTIME)= 0.1;
+VPriceElecInd.l(runCy,YTIME)= 0.9;
 VPriceElecInd.FX(runCy,YTIME)$TFIRST(YTIME) = iElecIndex(runCy,YTIME);
 
 VCostTechIntrm.l(runCy,DSBS,rcon,EF,YTIME) = 0.1;
@@ -241,7 +241,7 @@ VLftPc.FX(runCy,"PC",TTECH,YTIME)$( (not AN(YTIME)) $SECTTECH("PC",TTECH))=10;
 
 VSortTechVarCost.l(runCy,DSBS,rCon,YTIME) = 0.1;
 
-VConsFuel.l(runCy,DSBS,EF,YTIME)=0.1;
+VConsFuel.l(runCy,DSBS,EF,YTIME)=0.00000001;
 VConsFuel.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $(not HEATPUMP(EF)) $(not TRANSE(DSBS)) $(not An(YTIME))) = iFuelConsPerFueSub(runCy,DSBS,EF,YTIME);
 
 VCapRef.l(runCy,YTIME)=0.1;
@@ -259,7 +259,7 @@ VConsElec.l(runCy,DSBS,YTIME)=0.1;
 VDemFinEneTranspPerFuel.FX(runCy,TRANSE,EF,YTIME) $(SECTTECH(TRANSE,EF) $(not An(YTIME))) = iFuelConsPerFueSub(runCy,TRANSE,EF,YTIME);
 VDemFinEneTranspPerFuel.FX(runCy,TRANSE,EF,YTIME)$(not SECTTECH(TRANSE,EF)) = 0;
 
-VLoadFacDom.l(runCy,YTIME)=0.1;
+VLoadFacDom.l(runCy,YTIME)=0.5;
 VLoadFacDom.FX(runCy,YTIME)$(datay(YTIME)) =
          (sum(INDDOM,VConsFuel.l(runCy,INDDOM,"ELC",YTIME)) + sum(TRANSE, VDemFinEneTranspPerFuel.l(runCy,TRANSE,"ELC",YTIME)))/
          (sum(INDDOM,VConsFuel.l(runCy,INDDOM,"ELC",YTIME)/iLoadFacElecDem(INDDOM)) + sum(TRANSE, VDemFinEneTranspPerFuel.l(runCy,TRANSE,"ELC",YTIME)/
@@ -311,7 +311,7 @@ VCostVarTechElec.l(runCy,PGALL,YTIME)=0.1;
 
 VElecPeakLoads.l(runCy,YTIME)=0.1;
 
-VNewCapElec.l(runCy,PGALL,YTIME)=0.1;
+VNewCapElec.l(runCy,PGALL,YTIME)=0.000000000000000001;
 VNewCapElec.FX(runCy,PGALL,"2011")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2011")- iInstCapPast(runCy,PGALL,"2010") +1E-10;
 VNewCapElec.FX(runCy,PGALL,"2012")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2012")- iInstCapPast(runCy,PGALL,"2011") +1E-10;
 VNewCapElec.FX(runCy,PGALL,"2013")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2013")- iInstCapPast(runCy,PGALL,"2012") +1E-10;
@@ -327,15 +327,15 @@ VNewCapElec.FX(runCy,"PGLHYD",YTIME)$TFIRST(YTIME) = +1E-10;
 VCFAvgRen.l(runCy,PGALL,YTIME)=0.1;
 VCFAvgRen.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =iAvailRate(PGALL,YTIME);
 
-VSortPlantDispatch.lo(runCy,PGALL,YTIME)=1.E-12;
-VSortPlantDispatch.l(runCy,PGALL,YTIME)=VCostVarTechElec.L(runCy,PGALL,YTIME)/VElecPeakLoads.L(runCy,YTIME);
+VSortPlantDispatch.lo(runCy,PGALL,YTIME)=1.E-20;
+*VSortPlantDispatch.l(runCy,PGALL,YTIME)=VCostVarTechElec.L(runCy,PGALL,YTIME)/VElecPeakLoads.L(runCy,YTIME);
 
-VProdReqElec.l(runCy,YTIME) = 0.01;
+*VProdReqElec.l(runCy,YTIME) = 0.01;
 
-VScalFacPlaDisp.L(runCy,HOUR,YTIME) = 1.e-20;
+*VScalFacPlaDisp.L(runCy,HOUR,YTIME) = 1.e-20;
 VScalFacPlaDisp.LO(runCy, HOUR, YTIME)=-1;
 
-VDemElecTot.l(runCy,YTIME)=0.1;
+VDemElecTot.l(runCy,YTIME)=10;
 VDemElecTot.FX(runCy,YTIME)$(not An(YTIME)) =  1/0.086 * ( iFinEneCons(runCy,"ELC",YTIME) + sum(NENSE, iFuelConsPerFueSub(runCy,NENSE,"ELC",YTIME)) + iDistrLosses(runCy,"ELC",YTIME)
                                              + iTotEneBranchCons(runCy,"ELC",YTIME) - (iFuelImports(runCy,"ELC",YTIME)-iFuelExprts(runCy,"ELC",YTIME)));
 
@@ -469,7 +469,7 @@ VCapElec2.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = iInstCapPast(runCy,PGALL,YTIME);
 
 VCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  iInstCapPast(runCy,PGALL,YTIME);
 
-VCapOverall.FX(runCy,PGALL,YTIME)$TFIRST(YTIME) =  iInstCapPast(runCy,PGALL,YTIME)$TFIRST(YTIME);
+VCapOverall.FX(runCy,PGALL,"%fBaseY%") =  iInstCapPast(runCy,PGALL,"%fBaseY%");
 
 VProdElec.FX(runCy,pgall,YTIME)$DATAY(YTIME)=iDataElecProd(runCy,pgall,YTIME)/1000;
 
@@ -509,10 +509,11 @@ VInpTransfTherm.FX(runCy,EFS,YTIME)$(not PGEF(EFS)) = 0;
 
 VLambda.LO(runCy,YTIME)=0;
 VLambda.L(runCy,YTIME)=0.21;
-
+VProdReqTotElec.lo(runCy,YTIME) = 0.000000000001;
 VProdReqTotElec.fx(runCy,"%fBaseY%")=sum(pgall,VProdElec.L(runCy,pgall,"%fBaseY%"));
 
 openprom.optfile=1;
+execute_unload "presolve.gdx"
 loop an do !! start outer iteration loop (time steps)
    s = s + 1;
    TIME(YTIME) = NO;
