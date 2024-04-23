@@ -9,7 +9,7 @@ $include "./iPop.csvr"
 $offdelim
 ;
 table iActv(YTIME,allCy,SBS) "Sector activity (various)"
-                              !! main sectors (Billion Euro2015) 
+                              !! main sectors (Billion Dollars2015) 
                               !! bunkers and households (1)
                               !! transport (Gpkm, or Gvehkm or Gtkm)
 $ondelim
@@ -815,13 +815,13 @@ $offdelim
 iResMargTotAvailCap(runCy,PGRES,YTIME)$an(YTIME) = iResTotCapMxmLoad(runCy,PGRES,YTIME);
 $offtext
 
-table iVarCost(PGALL,YTIME)             "Variable gross cost other than fuel per Plant Type (Euro2015/KW)"
+table iVarCost(PGALL,YTIME)             "Variable gross cost other than fuel per Plant Type (Dollars2015/KW)"
 $ondelim
 $include"./iVarCost.csv"
 $offdelim
 ;
 
-table iFixOandMCost(PGALL,YTIME)    "Fixed O&M Gross Cost per Plant Type (Euro2015/KW)"
+table iFixOandMCost(PGALL,YTIME)    "Fixed O&M Gross Cost per Plant Type (Dollars2015/KW)"
 $ondelim
 $include"./iFixOandMCost.csv"
 $offdelim
@@ -894,7 +894,7 @@ iFinEneCons(runCy,EFS,YTIME) = sum(INDDOM,
                        sum(TRANSE,
                          sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(TRANSE,EF) $(not plugin(EF)) ), iFuelConsPerFueSub(runCy,TRANSE,EF,YTIME)));
 
-table iGrossCapCosSubRen(PGALL,YTIME)             "Gross Capital Cost per Plant Type with subsidy for renewables (kEuro2015/KW)"
+table iGrossCapCosSubRen(PGALL,YTIME)             "Gross Capital Cost per Plant Type with subsidy for renewables (kDollars2015/KW)"
 $ondelim
 $include"./iGrossCapCosSubRen.csv"
 $offdelim
