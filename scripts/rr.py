@@ -205,7 +205,7 @@ def main():
     loops over the selected subfolders.
     """
     parser = argparse.ArgumentParser(description='Visualize run success statuses for selected subfolders.')
-    parser.add_argument('-s', '--subfolders', nargs='+', type=int, help='selected subfolders to visualize (e.g., -s 1 2)')
+    parser.add_argument('-q', '--subfolders', action='store_true', help='automatically visualize the newest subfolder')
     args = parser.parse_args()
 
     # The path to the "scripts" directory where the script is located
@@ -215,26 +215,40 @@ def main():
     base_path = os.path.abspath(os.path.join(script_directory, ".."))
 
     subfolder_status_list = check_files_and_list_subfolders(base_path)
-    selected_subfolders = list_subfolders(subfolder_status_list)
-    if selected_subfolders:
-        choices = args.subfolders
-        if choices is None:
-            choices = input("Enter the numbers of the subfolders (e.g., '1 2'): ")
-            choices = [int(choice.strip()) for choice in choices.split()]
-        
+    selected_subfolders = []
+
+    if args.subfolders:
+        newest_subfolder = subfolder_status_list[-1][1]
+        print(f"Automatically visualizing the newest subfolder: {newest_subfolder}\n")
+        selected_subfolders.append((subfolder_status_list[-1][0], newest_subfolder))
+    else:
+        selected_subfolders = list_subfolders(subfolder_status_list)
+        if not selected_subfolders:
+            print("No subfolders found in the 'runs' directory.")
+            return
+
+        choices = input("Enter the numbers of the subfolders (e.g., '1 2'): ")
+        choices = [int(choice.strip()) for choice in choices.split()]
+
         selected_subfolders = [subfolder_status_list[choice - 1] for choice in choices]
         print(f"Selected subfolders: {[subfolder for _, subfolder in selected_subfolders]}\n")
 
-        for idx, (subfolder_status, selected_subfolder) in enumerate(selected_subfolders, 1):
-            folder_name = selected_subfolder.split(os.sep)[-1]  # Extract folder name
-            lines = read_main_log(selected_subfolder)
-            country_year_status = parse_main_log(lines)
-            df = create_dataframe(country_year_status)
+    for idx, (subfolder_status, selected_subfolder) in enumerate(selected_subfolders, 1):
+        folder_name = selected_subfolder.split(os.sep)[-1]  # Extract folder name
+        lines = read_main_log(selected_subfolder)
+        if not lines:
+            print(f"No data found in the log file for subfolder: {selected_subfolder}")
+            continue
+        country_year_status = parse_main_log(lines)
+        df = create_dataframe(country_year_status)
+        if df is None or df.empty:
+            print(f"No valid data found in the log file for subfolder: {selected_subfolder}")
+            continue
 
-            plot_heatmap(df, idx, folder_name)
+        plot_heatmap(df, idx, folder_name)
 
-        plt.show()
-    else:
-        print("No subfolders found in the 'runs' directory.")
+    plt.show()
+
+
 if __name__ == "__main__":
     main()

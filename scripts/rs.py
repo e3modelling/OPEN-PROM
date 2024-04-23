@@ -1,5 +1,6 @@
 import os
 import re
+import argparse
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -11,7 +12,7 @@ def list_subfolders():
     based on their last modification time.
     """
     runs_dir = "runs"
-    subfolders = [f.name for f in sorted(os.scandir(runs_dir), key=lambda x: x.stat().st_mtime, reverse=True) if f.is_dir()]
+    subfolders = [f.name for f in sorted(os.scandir(runs_dir), key=lambda x: x.stat().st_mtime, reverse=False) if f.is_dir()]
     return subfolders
 
 def read_main_log(subfolder):
@@ -80,11 +81,12 @@ def create_dataframe(country_year_status):
         print("No data found in the log file.")
         return None
 
-def plot_heatmap(df):
+def plot_heatmap(df, plot_title):
     """
     Input: df - Pandas DataFrame representing run success statuses for countries and years.
+           plot_title - Title for the plot
     Output: Displays a heatmap visualization using seaborn and matplotlib, where rows represent countries,
-    columns represent years, and color indicates run success (green for success, red for failure).
+            columns represent years, and color indicates run success (green for success, red for failure).
     """
     if df is not None:
         # Define custom color palette (green for 1, red for 0)
@@ -94,7 +96,7 @@ def plot_heatmap(df):
         plt.figure(figsize=(10, max(6, len(df) * 0.2)))  # Adjust height based on the number of countries
         sns.heatmap(df, cmap=cmap, annot=False, linewidths=.5, linecolor='black', vmin=0, vmax=1, cbar=False)
 
-        plt.title('Run Success Heatmap')
+        plt.title(plot_title)
         plt.xlabel('Year')
         plt.ylabel('Country')
 
@@ -102,23 +104,43 @@ def plot_heatmap(df):
     else:
         print("DataFrame is empty.")
 
+
 def main():
-    subfolders = list_subfolders()
-    if subfolders:
-        print("Choose a subfolder from the following list:")
-        for i, subfolder in enumerate(subfolders):
-            print(f"{i+1}. {subfolder}")
-        choice = int(input("Enter the number of the subfolder: "))
-        selected_subfolder = subfolders[choice - 1]
-        print(f"Selected subfolder: {selected_subfolder}\n")
+    parser = argparse.ArgumentParser(description='Visualize run success statuses for a selected subfolder.')
+    parser.add_argument('-q', '--quick', action='store_true', help='automatically plot the newest subfolder')
+    args = parser.parse_args()
 
-        lines = read_main_log(selected_subfolder)
-        country_year_status = parse_main_log(lines)
-        df = create_dataframe(country_year_status)
-
-        plot_heatmap(df)
+    if args.quick:
+        subfolders = list_subfolders()
+        if subfolders:
+            print("Automatically visualizing the newest subfolder:", subfolders[-1])
+            selected_subfolder = subfolders[-1]
+            print(f"Selected subfolder: {selected_subfolder}\n")
+            lines = read_main_log(selected_subfolder)
+            country_year_status = parse_main_log(lines)
+            df = create_dataframe(country_year_status)
+            plot_heatmap(df, plot_title=selected_subfolder)  # Pass the subfolder name as plot title
+        else:
+            print("No subfolders found in the 'runs' directory.")
+            return
     else:
-        print("No subfolders found in the 'runs' directory.")
+        print("Normal mode")
+        subfolders = list_subfolders()
+        if subfolders:
+            print("Choose a subfolder from the following list:")
+            for i, subfolder in enumerate(subfolders):
+                print(f"{i+1}. {subfolder}")
+            choice = int(input("Enter the number of the subfolder: "))
+            selected_subfolder = subfolders[choice - 1]
+            print(f"Selected subfolder: {selected_subfolder}\n")
+            lines = read_main_log(selected_subfolder)
+            country_year_status = parse_main_log(lines)
+            df = create_dataframe(country_year_status)
+            plot_heatmap(df, plot_title=selected_subfolder)  # Pass the subfolder name as plot title
+        else:
+            print("No subfolders found in the 'runs' directory.")
+            return
+
 
 if __name__ == "__main__":
     main()
