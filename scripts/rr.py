@@ -1,6 +1,7 @@
 import os
-import time
 import re
+import time
+import argparse
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -203,6 +204,9 @@ def main():
     This function initializes all the functions of the script and
     loops over the selected subfolders.
     """
+    parser = argparse.ArgumentParser(description='Visualize run success statuses for selected subfolders.')
+    parser.add_argument('-s', '--subfolders', nargs='+', type=int, help='selected subfolders to visualize (e.g., -s 1 2)')
+    args = parser.parse_args()
 
     # The path to the "scripts" directory where the script is located
     script_directory = os.path.dirname(os.path.abspath(__file__))
@@ -213,9 +217,11 @@ def main():
     subfolder_status_list = check_files_and_list_subfolders(base_path)
     selected_subfolders = list_subfolders(subfolder_status_list)
     if selected_subfolders:
-        choices = input("Enter the numbers of the subfolders (e.g., '1,2'): ")
-        choices = [int(choice.strip()) for choice in choices.split(",")]
-
+        choices = args.subfolders
+        if choices is None:
+            choices = input("Enter the numbers of the subfolders (e.g., '1 2'): ")
+            choices = [int(choice.strip()) for choice in choices.split()]
+        
         selected_subfolders = [subfolder_status_list[choice - 1] for choice in choices]
         print(f"Selected subfolders: {[subfolder for _, subfolder in selected_subfolders]}\n")
 
@@ -230,6 +236,5 @@ def main():
         plt.show()
     else:
         print("No subfolders found in the 'runs' directory.")
-
 if __name__ == "__main__":
     main()
