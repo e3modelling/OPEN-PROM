@@ -1460,9 +1460,9 @@ QInpTransfTherm(allCy,PGEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
              VProdElec(allCy,PGALL,YTIME) * sTWhToMtoe /  iPlantEffByType(allCy,PGALL,YTIME))
         +
         sum(PGALL$(PGALLtoEF(PGALL,PGEF)$PGGEO(PGALL)),
-             VProdElec(allCy,PGALL,YTIME) * sTWhToMtoe) 
+             VProdElec(allCy,PGALL,YTIME) * sTWhToMtoe / 0.15) 
         +
-        sum(CHP$CHPtoEF(CHP,PGEF),  sum(INDDOM,VConsFuel(allCy,INDDOM,CHP,YTIME))+sTWhToMtoe*VProdElecCHP(allCy,CHP,YTIME))/(0.8+0.1*(ord(YTIME)-16)/32);
+        sum(CHP$CHPtoEF(CHP,PGEF),  sum(INDDOM,VConsFuel(allCy,INDDOM,CHP,YTIME))+sTWhToMtoe*VProdElecCHP(allCy,CHP,YTIME))/(0.8+0.1*(ord(YTIME)-10)/32);
 
 *' The equation calculates the transformation output from thermal power stations for a specific energy branch
 *' in a given scenario and year. The result is computed based on the following conditions: 
@@ -1570,12 +1570,7 @@ QProdPrimary(allCy,PPRODEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
              iResHcNgOilPrProd(allCy,PPRODEF,YTIME) * VProdPrimary(allCy,PPRODEF,YTIME-1) *
              (VConsGrssInlNotEneBranch(allCy,PPRODEF,YTIME)/VConsGrssInlNotEneBranch(allCy,PPRODEF,YTIME-1))**iNatGasPriProElst(allCy)
          )$(sameas(PPRODEF,"NGS") )
-        +
-         (
-           iRatePriProTotPriNeeds(allCy,PPRODEF,YTIME) * VProdPrimary(allCy,PPRODEF,YTIME-1) *
-           ((VConsGrssInlNotEneBranch(allCy,PPRODEF,YTIME) + VExp(allCy,PPRODEF,YTIME))/
-            (VConsGrssInlNotEneBranch(allCy,PPRODEF,YTIME-1) + VExp(allCy,PPRODEF,YTIME-1)))
-         )$(sameas(PPRODEF,"NGS") )
+
          +(
            iResHcNgOilPrProd(allCy,PPRODEF,YTIME) *  iFuelPriPro(allCy,PPRODEF,YTIME) *
            prod(kpdl$(ord(kpdl) lt 5),
@@ -1591,8 +1586,7 @@ QExp(allCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS) $runCy(allCy))..
                  =E=
          (
                  iFuelExprts(allCy,EFS,YTIME)
-         )
-+  iFuelExprts(allCy,EFS,YTIME);
+         );
 
 *' The equation computes the fake imports for a specific energy branch 
 *' in a given scenario and year. The calculation is based on different conditions for various energy branches,
@@ -1619,7 +1613,7 @@ QImp(allCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS) $runCy(allCy))..
             VConsGrssInl(allCy,EFS,YTIME)+ VExp(allCy,EFS,YTIME) + VConsFuel(allCy,"BU",EFS,YTIME)$SECTTECH("BU",EFS)
             - VProdPrimary(allCy,EFS,YTIME)
          )$(sameas(EFS,"NGS"))
-         +iImpExp(allCy,"NGS",YTIME)$(sameas(EFS,"NGS"))
+*         +iImpExp(allCy,"NGS",YTIME)$(sameas(EFS,"NGS"))
          +
          (
             (1-iRatePriProTotPriNeeds(allCy,EFS,YTIME)) *
