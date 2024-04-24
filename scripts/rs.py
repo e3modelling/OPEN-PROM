@@ -115,8 +115,8 @@ def main():
     if args.quick:
         subfolders = list_subfolders()
         if subfolders:
-            print("Automatically visualizing the newest subfolder:", subfolders[0][0])
-            selected_subfolder = subfolders[0][0]
+            print("Automatically visualizing the newest subfolder:", subfolders[-1][0])
+            selected_subfolder = subfolders[-1][0]  # Select the last subfolder (newest)
             print(f"Selected subfolder: {selected_subfolder}\n")
             lines = read_main_log(selected_subfolder)
             country_year_status = parse_main_log(lines)
