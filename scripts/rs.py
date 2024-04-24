@@ -48,16 +48,19 @@ def parse_main_log(lines):
         year_match = re.search(year_pattern, line)
         country_match = re.search(country_pattern, line)
         status_match = re.search(status_pattern, line)
-        
+
         if year_match:
             current_year = int(year_match.group(1))
         if country_match:
             current_country = country_match.group(1)
+            # Initialize country's status dictionary if not already done
+            if current_country not in country_year_status:
+                country_year_status[current_country] = {}
         if status_match:
             current_status = 1 if status_match else 0
 
             if current_year and current_country:
-                country_year_status.setdefault(current_country, {})[current_year] = current_status
+                country_year_status[current_country][current_year] = current_status
 
     return country_year_status
 
@@ -104,7 +107,6 @@ def plot_heatmap(df, plot_title):
     else:
         print("DataFrame is empty.")
 
-
 def main():
     parser = argparse.ArgumentParser(description='Visualize run success statuses for a selected subfolder.')
     parser.add_argument('-q', '--quick', action='store_true', help='automatically plot the newest subfolder')
@@ -140,7 +142,6 @@ def main():
         else:
             print("No subfolders found in the 'runs' directory.")
             return
-
 
 if __name__ == "__main__":
     main()
