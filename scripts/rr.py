@@ -1,6 +1,7 @@
 import os
-import time
 import re
+import time
+import argparse
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -88,25 +89,26 @@ def check_files_and_list_subfolders(base_path):
         subfolder_status_list.append((f"{color} {folder_name:<{max_folder_name_length}} {status}{Style.RESET_ALL}", folder))
 
     # Sort the subfolders list based on their modification time
-    subfolder_status_list.sort(key=lambda x: os.path.getmtime(x[1]), reverse=True)
+    subfolder_status_list.sort(key=lambda x: os.path.getmtime(x[1]), reverse=False)
 
     return subfolder_status_list
 
 def list_subfolders(subfolder_status_list):
     """
     Input: subfolder_status_list - List of tuples containing color-coded folder status and folder path
-    Output: Displays the list of subfolders with color-coded status
+    Output: Displays the list of subfolders with color-coded status, with reversed numbering.
     """
     if subfolder_status_list:
         print(Fore.YELLOW + "Recently started runs might be listed as FAILED, wait 15 seconds before running the script for recently started runs.")
         print("Checking all subfolders..." + Style.RESET_ALL)
+
+    
         for idx, (subfolder_status, _) in enumerate(subfolder_status_list, 1):
-            print(f"{idx:2}. {subfolder_status}")
+            print(f"{len(subfolder_status_list) - idx + 1:2}. {subfolder_status}")  # Adjust the numbering
         return subfolder_status_list
     else:
         print("No subfolders found in the 'runs' directory.")
         return []
-
 
 def read_main_log(subfolder):
     """
@@ -146,11 +148,14 @@ def parse_main_log(lines):
             current_year = int(year_match.group(1))
         if country_match:
             current_country = country_match.group(1)
+            # Initialize country's status dictionary if not already done
+            if current_country not in country_year_status:
+                country_year_status[current_country] = {}
         if status_match:
             current_status = 1 if status_match else 0
 
             if current_year and current_country:
-                country_year_status.setdefault(current_country, {})[current_year] = current_status
+                country_year_status[current_country][current_year] = current_status
 
     return country_year_status
 
@@ -203,6 +208,9 @@ def main():
     This function initializes all the functions of the script and
     loops over the selected subfolders.
     """
+    parser = argparse.ArgumentParser(description='Visualize run success statuses for selected subfolders.')
+    parser.add_argument('-q', '--subfolders', action='store_true', help='automatically visualize the newest subfolder')
+    args = parser.parse_args()
 
     # The path to the "scripts" directory where the script is located
     script_directory = os.path.dirname(os.path.abspath(__file__))
@@ -211,25 +219,40 @@ def main():
     base_path = os.path.abspath(os.path.join(script_directory, ".."))
 
     subfolder_status_list = check_files_and_list_subfolders(base_path)
-    selected_subfolders = list_subfolders(subfolder_status_list)
-    if selected_subfolders:
-        choices = input("Enter the numbers of the subfolders (e.g., '1,2'): ")
-        choices = [int(choice.strip()) for choice in choices.split(",")]
+    selected_subfolders = []
+
+    if args.subfolders:
+        newest_subfolder = subfolder_status_list[-1][1]
+        print(f"Automatically visualizing the newest subfolder: {newest_subfolder}\n")
+        selected_subfolders.append((subfolder_status_list[-1][0], newest_subfolder))
+    else:
+        selected_subfolders = list_subfolders(subfolder_status_list)
+        if not selected_subfolders:
+            print("No subfolders found in the 'runs' directory.")
+            return
+
+        choices = input("Enter the numbers of the subfolders (e.g., '1 2'): ")
+        choices = [int(choice.strip()) for choice in choices.split()]
 
         selected_subfolders = [subfolder_status_list[choice - 1] for choice in choices]
         print(f"Selected subfolders: {[subfolder for _, subfolder in selected_subfolders]}\n")
 
-        for idx, (subfolder_status, selected_subfolder) in enumerate(selected_subfolders, 1):
-            folder_name = selected_subfolder.split(os.sep)[-1]  # Extract folder name
-            lines = read_main_log(selected_subfolder)
-            country_year_status = parse_main_log(lines)
-            df = create_dataframe(country_year_status)
+    for idx, (subfolder_status, selected_subfolder) in enumerate(selected_subfolders, 1):
+        folder_name = selected_subfolder.split(os.sep)[-1]  # Extract folder name
+        lines = read_main_log(selected_subfolder)
+        if not lines:
+            print(f"No data found in the log file for subfolder: {selected_subfolder}")
+            continue
+        country_year_status = parse_main_log(lines)
+        df = create_dataframe(country_year_status)
+        if df is None or df.empty:
+            print(f"No valid data found in the log file for subfolder: {selected_subfolder}")
+            continue
 
-            plot_heatmap(df, idx, folder_name)
+        plot_heatmap(df, idx, folder_name)
 
-        plt.show()
-    else:
-        print("No subfolders found in the 'runs' directory.")
+    plt.show()
+
 
 if __name__ == "__main__":
     main()
