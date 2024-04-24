@@ -8,11 +8,11 @@ import matplotlib.pyplot as plt
 def list_subfolders():
     """
     Input: None
-    Output: A list of subfolder names within the "runs" directory, sorted in chronological order from newest to oldest
-    based on their last modification time.
+    Output: A list of tuples containing subfolder names and their corresponding modification times, sorted in reverse chronological order
+    based on their modification times.
     """
     runs_dir = "runs"
-    subfolders = [f.name for f in sorted(os.scandir(runs_dir), key=lambda x: x.stat().st_mtime, reverse=False) if f.is_dir()]
+    subfolders = [(f.name, f.stat().st_mtime) for f in sorted(os.scandir(runs_dir), key=lambda x: x.stat().st_mtime, reverse=False) if f.is_dir()]
     return subfolders
 
 def read_main_log(subfolder):
@@ -115,8 +115,8 @@ def main():
     if args.quick:
         subfolders = list_subfolders()
         if subfolders:
-            print("Automatically visualizing the newest subfolder:", subfolders[-1])
-            selected_subfolder = subfolders[-1]
+            print("Automatically visualizing the newest subfolder:", subfolders[0][0])
+            selected_subfolder = subfolders[0][0]
             print(f"Selected subfolder: {selected_subfolder}\n")
             lines = read_main_log(selected_subfolder)
             country_year_status = parse_main_log(lines)
@@ -130,10 +130,10 @@ def main():
         subfolders = list_subfolders()
         if subfolders:
             print("Choose a subfolder from the following list:")
-            for i, subfolder in enumerate(subfolders):
-                print(f"{i+1}. {subfolder}")
+            for i, (subfolder, _) in enumerate(subfolders):
+                print(f"{len(subfolders)-i}. {subfolder}")
             choice = int(input("Enter the number of the subfolder: "))
-            selected_subfolder = subfolders[choice - 1]
+            selected_subfolder = subfolders[len(subfolders) - choice][0]
             print(f"Selected subfolder: {selected_subfolder}\n")
             lines = read_main_log(selected_subfolder)
             country_year_status = parse_main_log(lines)
