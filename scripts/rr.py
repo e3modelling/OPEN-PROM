@@ -96,18 +96,19 @@ def check_files_and_list_subfolders(base_path):
 def list_subfolders(subfolder_status_list):
     """
     Input: subfolder_status_list - List of tuples containing color-coded folder status and folder path
-    Output: Displays the list of subfolders with color-coded status
+    Output: Displays the list of subfolders with color-coded status, with reversed numbering.
     """
     if subfolder_status_list:
         print(Fore.YELLOW + "Recently started runs might be listed as FAILED, wait 15 seconds before running the script for recently started runs.")
         print("Checking all subfolders..." + Style.RESET_ALL)
+
+    
         for idx, (subfolder_status, _) in enumerate(subfolder_status_list, 1):
-            print(f"{idx:2}. {subfolder_status}")
+            print(f"{len(subfolder_status_list) - idx + 1:2}. {subfolder_status}")  # Adjust the numbering
         return subfolder_status_list
     else:
         print("No subfolders found in the 'runs' directory.")
         return []
-
 
 def read_main_log(subfolder):
     """
@@ -147,11 +148,14 @@ def parse_main_log(lines):
             current_year = int(year_match.group(1))
         if country_match:
             current_country = country_match.group(1)
+            # Initialize country's status dictionary if not already done
+            if current_country not in country_year_status:
+                country_year_status[current_country] = {}
         if status_match:
             current_status = 1 if status_match else 0
 
             if current_year and current_country:
-                country_year_status.setdefault(current_country, {})[current_year] = current_status
+                country_year_status[current_country][current_year] = current_status
 
     return country_year_status
 
