@@ -398,7 +398,6 @@ Parameter,RESNSE,iResNonSubsElecDem,Residuals in Non Substitutable Electricity D
 Parameter,RESPRICE,unused,Residual' in Price Equations,"CYall,SBS,EF,YTIME",,Prices
 Parameter,ResPricePRN,unused,Residuals for domestic prices in equations (after 2005),"SBS,EF,YTIME",,Parameters for data transfering
 Parameter,RESSFC,REMOVED FROM OPEN-PROM,Residuals on specific fuel consumption cost,"CYall,TRANSE,TTECH,EF,YTIME","allCy,TRANSE,TTECH,EF,YTIME",Transport Sector specific Parameters
-Variable,RESSHARE,VRenShareElecProdSub,Renewables share in gross electricity production for subsdidized renewables,"CYALL,YTIME ","allCy,YTIME",POWER GENERATION SECTOR
 Variable,RESSHARE,VShareRenGrossProd,Renewables share in gross electricity production for subsdidized renewables,"CYALL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Variable,RESVAL,VRenValue,Renewable value (Euro2005/KWh),YTIME,YTIME,Possitive Varibale
 Parameter,RTORF,iResTransfOutputRefineries,Residual in Transformation Output from Refineries (Mtoe),"CYall,EF,YTIME","EF,YTIME",Supply Side Specific Parameters

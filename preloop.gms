@@ -345,8 +345,6 @@ VActivGoodsTransp.l(runCy,TRANSE,YTIME)=0.1;
 VActivGoodsTransp.FX(runCy,TRANG,YTIME)$(not An(YTIME)) = iActv(YTIME,runCy,TRANG);
 VActivGoodsTransp.FX(runCy,TRANSE,YTIME)$(not TRANG(TRANSE)) = 0;
 
-VRenShareElecProdSub.FX(runCy,YTIME)$(NOT AN(YTIME))=0;
-
 VRenValue.l(YTIME)=1;
 VRenValue.FX(YTIME) = 0 ;
 
