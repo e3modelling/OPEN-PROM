@@ -224,7 +224,7 @@ def main():
     if args.subfolders:
         newest_subfolder = subfolder_status_list[-1][1]
         print(f"Automatically visualizing the newest subfolder: {newest_subfolder}\n")
-        selected_subfolders.append((subfolder_status_list[-1][0], newest_subfolder))
+        selected_subfolders.append((subfolder_status_list[-1][1], newest_subfolder))
     else:
         selected_subfolders = list_subfolders(subfolder_status_list)
         if not selected_subfolders:
@@ -234,7 +234,7 @@ def main():
         choices = input("Enter the numbers of the subfolders (e.g., '1 2'): ")
         choices = [int(choice.strip()) for choice in choices.split()]
 
-        selected_subfolders = [subfolder_status_list[choice - 1] for choice in choices]
+        selected_subfolders = [subfolder_status_list[len(subfolder_status_list) - choice] for choice in choices]
         print(f"Selected subfolders: {[subfolder for _, subfolder in selected_subfolders]}\n")
 
     for idx, (subfolder_status, selected_subfolder) in enumerate(selected_subfolders, 1):
