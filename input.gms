@@ -1072,7 +1072,7 @@ $offdelim
 ;
 iFuelImports(runCy,EFS,YTIME)$(not An(YTIME)) = iDataImports(runCy,EFS,YTIME);
 
-iNetImp(runCy,EFS,YTIME) = iDataImports(runCy,"ELC",YTIME);
+iNetImp(runCy,EFS,YTIME) = iDataImports(runCy,"ELC",YTIME)-iSuppExports(runCy,"ELC",YTIME);
 
 iGrosInlCons(runCy,EFS,YTIME) = iDataGrossInlCons(runCy,EFS,YTIME);
 iGrossInConsNoEneBra(runCy,EFS,YTIME) = iGrosInlCons(runCy,EFS,YTIME) + iTotEneBranchCons(runCy,EFS,YTIME)$EFtoEFA(EFS,"LQD")
