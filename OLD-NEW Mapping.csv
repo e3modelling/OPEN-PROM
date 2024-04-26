@@ -98,7 +98,6 @@ qSecContrTotChpProd        ,qSecContrTotCHPProd        ,"(INDDOM,CHP)$(SECTTECH(
 QElecProdChpPlants         ,QProdElecCHP            ,CHP,Power Generation
 " VChpElecProd(runCy,CHP,YTIME)"," VProdElecCHP(runCy,CHP,YTIME)",CHP,Power Generation
 qShareRenGrossElecProd       ,QShareRenGrossProd         ,,Power Generation
-" vResShareGrossElecProd(runCy,YTIME) "," VShareRenGrossProd(runCy,YTIME) ",,Power Generation
 QLonPowGenCostTechNoCp       ,QCostPowGenLngTechNoCp       ,"(PGALL,ESET)",Power Generation
 " VLongPowGenCost(runCy,PGALL,ESET,YTIME)"," VCostPowGenLngTechNoCp(runCy,PGALL,ESET,YTIME)","(PGALL,ESET)",Power Generation
 qLonMnmpowGenCost         ,qCostPowGenLonMin         ,PGALL,Power Generation

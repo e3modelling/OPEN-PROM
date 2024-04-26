@@ -275,7 +275,6 @@ VLoadFacDom(allCy,YTIME)                  "Electricity load factor for entire do
 VPeakLoad(allCy,YTIME)	              "Electricity peak load (GW)"	
 VBaseLoadMax(allCy,YTIME)	              "Baseload corresponding to Maximum Load Factor (1)"
 vCostHourProdInvCCS(allCy,PGALL,HOUR,YTIME)"Hourly production cost of technology accounting for CCS acceptance (Euro/KWh)"
-VShareRenGrossProd(allCy,YTIME)	       "Renewables share in gross electricity production for subsdidized renewables"
 VCostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME)	   "Long-term average power generation cost (Euro2005/kWh)"
 VPotRenCurr(allCy,PGRENEF,YTIME)	       "Current renewable potential (GW)"			
 VProdReqElec(allCy,YTIME)	               "Total required electricity production (TWh)"	
