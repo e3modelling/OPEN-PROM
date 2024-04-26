@@ -51,6 +51,7 @@ QDemElecTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
            + VConsFiEneSec(allCy,"ELC",YTIME) - iNetImp(allCy,"ELC",YTIME)
          );
 
+
 *' This equation computes the estimated base load as a quantity dependent on the electricity demand per final sector,
 *' as well as the baseload share of demand per sector, the rate of losses for final Consumption, the net imports,
 *' distribution losses and final consumption in energy sector.
