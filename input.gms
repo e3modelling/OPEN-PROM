@@ -500,6 +500,12 @@ OI.STE1AB   2.33335 67.1517 18.9767 25  0.37
 OI.STE1AH2F 2.27889 68.3668         20  0.5
 OI.HEATPUMP 1.21884 2.66781         20  1.68
 ;
+
+* Coverting EUR05 to USD2015
+iDataIndTechnology(INDSE,EF,"IC") = iDataIndTechnology(INDSE,EF,"IC") * 1.3;
+iDataIndTechnology(INDSE,EF,"FC") = iDataIndTechnology(INDSE,EF,"FC") * 1.3;
+iDataIndTechnology(INDSE,EF,"VC") = iDataIndTechnology(INDSE,EF,"VC") * 1.3;
+
 table iDataDomTech(DOMSE,EF,ECONCHAR)                  "Technical lifetime of Industry (years)"
              IC       FC      VC      LFT USC
 SE.HCL       0.323544 10.88           20  0.7
@@ -590,6 +596,12 @@ HOU.STE2OGS  0.296442 1.00489 2.37209 20  0.896667
 HOU.STE2BMS  0.296442 1.00489 2.37209 20  0.816667
 HOU.HEATPUMP 0.432    12.9254         20  1.848
 ;
+
+* Coverting EUR05 to USD2015
+iDataDomTech(DOMSE,EF,"IC") = iDataDomTech(DOMSE,EF,"IC") * 1.3;
+iDataDomTech(DOMSE,EF,"FC") = iDataDomTech(DOMSE,EF,"FC") * 1.3;
+iDataDomTech(DOMSE,EF,"VC") = iDataDomTech(DOMSE,EF,"VC") * 1.3;
+
 table iDataNonEneSec(NENSE,EF,ECONCHAR)                  "Technical data of non energy uses and bunkers (various)"
         IC      FC      VC      LFT USC
 PCH.HCL 0.26227 45.22   2.37209 20  0.65
@@ -612,6 +624,12 @@ NEN.OLQ 0.612   20.4    2.37209 20  0.72
 NEN.NGS 0.18088 0.9044  2.37209 20  0.8
 NEN.OGS 0.18088 1.36    2.37209 20  0.8
 ;
+
+* Converting EUR05 to USD2015
+iDataNonEneSec(NENSE,EF,"IC") = iDataNonEneSec(NENSE,EF,"IC") * 1.3;
+iDataNonEneSec(NENSE,EF,"FC") = iDataNonEneSec(NENSE,EF,"FC") * 1.3;
+iDataNonEneSec(NENSE,EF,"VC") = iDataNonEneSec(NENSE,EF,"VC") * 1.3;
+
 * FIXME: check if country-specific data is needed; move to mrprom
 * author=giannou
 table iIndCharData(allCy,INDSE,Indu_Scon_Set)               "Industry sector charactetistics (various)"
@@ -1384,6 +1402,12 @@ STE1AH2F.2010  1.16358 19.35   15  2.56461 0.8   0.829672
 STE1AH2F.2020  1.09263 19.35       2.44861       0.829672
 STE1AH2F.2050  1.06425 19.35       2.23212       0.829672
 ;
+
+* Converting EUR2005 to USD2015
+iDataChpPowGen(EF,YTIME,"IC") = iDataChpPowGen(EF,YTIME,"IC") * 1.3;
+iDataChpPowGen(EF,YTIME,"FC") = iDataChpPowGen(EF,YTIME,"FC") * 1.3;
+iDataChpPowGen(EF,YTIME,"VOM") = iDataChpPowGen(EF,YTIME,"VOM") * 1.3;
+
 iInvCostChp(runCy,DSBS,CHP,YTIME) = iDataChpPowGen(CHP,"2010","IC");
 iFixOMCostPerChp(runCy,DSBS,CHP,YTIME) = iDataChpPowGen(CHP,"2010","FC");
 iVarCostChp(runCy,DSBS,CHP,YTIME) = iDataChpPowGen(CHP,"2010","VOM");
