@@ -1,4 +1,4 @@
-print("Generating input data with mrprom/MADRAT and copying to OPEN-PROM")
+print("Creating input data with mrprom/MADRAT and copying to OPEN-PROM")
 
 # create a unique dataset name based on current time
 dev <- unclass(Sys.time())
@@ -18,7 +18,7 @@ for (arg in args) {
 # Creating datasets for research and development mode
 if (!is.null(DevMode) && DevMode == 0) {
     library(mrprom)
-    print("Creating data for research mode")
+    print( paste("Generating research mode data with mrprom ver.", packageVersion("mrprom")) )
     fname <- paste0("rev0",dev,"_1f966d19_open_prom.tgz") # file name
     # run the fullOPEN-PROM function generating the whole input dataset of OPEN-PROM
     # retrieveData contains a call to fullOPEN-PROM
@@ -27,7 +27,7 @@ if (!is.null(DevMode) && DevMode == 0) {
     
 } else if (!is.null(DevMode) && DevMode == 1) {
     library(mrprom)
-    print("Creating data for development mode")
+    print( paste("Generating development mode data with mrprom ver.", packageVersion("mrprom")) )
     fname <- paste0("rev0",dev,"_a9c72a01_open_prom.tgz") # file name
     retrieveData("OPEN_PROM",puc=F,renv=F,regionmapping = "regionmappingOPDEV2.csv",dev=dev)
     file.copy(paste0(getConfig("outputfolder"),"/",fname),fname)

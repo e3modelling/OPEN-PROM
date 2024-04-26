@@ -63,7 +63,6 @@ QProdReqElec                        !! VProdReqElec(runCy,YTIME)
 QProdElec                           !! VProdElec(runCy,PGALL,YTIME)
 qSecContrTotCHPProd                 !! vSecContrTotCHPProd(runCy,INDDOM,CHP,YTIME)
 QProdElecCHP                        !! VProdElecCHP(runCy,CHP,YTIME)
-QShareRenGrossProd                  !! VShareRenGrossProd(runCy,YTIME) 
 QCostPowGenLngTechNoCp              !! VCostPowGenLngTechNoCp(runCy,PGALL,ESET,YTIME)
 qCostPowGenLonMin                   !! vCostPowGenLonMin(runCy,PGALL,YTIME)
 qCostPowGenLongIntPri               !! vCostPowGenLongIntPri(runCy,PGALL,ESET,YTIME)
@@ -241,7 +240,7 @@ VLftPc.FX(runCy,"PC",TTECH,YTIME)$( (not AN(YTIME)) $SECTTECH("PC",TTECH))=10;
 
 VSortTechVarCost.l(runCy,DSBS,rCon,YTIME) = 0.1;
 
-VConsFuel.l(runCy,DSBS,EF,YTIME)=0.1;
+VConsFuel.l(runCy,DSBS,EF,YTIME)=0.0000000001;
 VConsFuel.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $(not HEATPUMP(EF)) $(not TRANSE(DSBS)) $(not An(YTIME))) = iFuelConsPerFueSub(runCy,DSBS,EF,YTIME);
 
 VCapRef.l(runCy,YTIME)=0.1;
@@ -274,7 +273,7 @@ VCostVarTech.l(runCy,PGALL,YTIME)=0.1;
 VCostProdTeCHPreReplacAvail.l(runCy,PGALL,PGALL2,YTIME)=0.1;
 
 VTechSortVarCost.l(runCy,TRANSE,Rcon,YTIME)=0.1;
-VTechSortVarCost.lo(runCy,TRANSE,Rcon,YTIME)=1e-17;
+VTechSortVarCost.lo(runCy,TRANSE,Rcon,YTIME)=1e-20;
 
 VPotRenSuppCurve.l(runCy,PGRENEF,YTIME)=0.1;
 VPotRenSuppCurve.FX(runCy,PGRENEF, YTIME) $(NOT AN(YTIME)) = iMinRenPotential(runCy,PGRENEF,YTIME);
@@ -344,8 +343,6 @@ VRenTechMatMult.l(runCy,PGALL,YTIME)=0.1;
 VActivGoodsTransp.l(runCy,TRANSE,YTIME)=0.1;
 VActivGoodsTransp.FX(runCy,TRANG,YTIME)$(not An(YTIME)) = iActv(YTIME,runCy,TRANG);
 VActivGoodsTransp.FX(runCy,TRANSE,YTIME)$(not TRANG(TRANSE)) = 0;
-
-VRenShareElecProdSub.FX(runCy,YTIME)$(NOT AN(YTIME))=0;
 
 VRenValue.l(YTIME)=1;
 VRenValue.FX(YTIME) = 0 ;

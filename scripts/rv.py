@@ -111,20 +111,22 @@ def check_files_and_list_subfolders(base_path):
         subfolder_status_list.append((f"{color} {folder_name:<{max_folder_name_length}} {status}{Style.RESET_ALL}", folder))
 
     # Sort the subfolders list based on their modification time
-    subfolder_status_list.sort(key=lambda x: os.path.getmtime(x[1]), reverse=True)
+    subfolder_status_list.sort(key=lambda x: os.path.getmtime(x[1]), reverse=False)
 
     return subfolder_status_list
 
 def list_subfolders(subfolder_status_list):
     """
     Input: subfolder_status_list - List of tuples containing color-coded folder status and folder path
-    Output: Displays the list of subfolders with color-coded status
+    Output: Displays the list of subfolders with color-coded status, with reversed numbering.
     """
     if subfolder_status_list:
         print(Fore.YELLOW + "Recently started runs might be listed as FAILED, wait 15 seconds before running the script for recently started runs.")
         print("Checking all subfolders..." + Style.RESET_ALL)
+
+    
         for idx, (subfolder_status, _) in enumerate(subfolder_status_list, 1):
-            print(f"{idx:2}. {subfolder_status}")
+            print(f"{len(subfolder_status_list) - idx + 1:2}. {subfolder_status}")  # Adjust the numbering
         return subfolder_status_list
     else:
         print("No subfolders found in the 'runs' directory.")
