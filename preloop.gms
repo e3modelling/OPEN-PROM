@@ -63,7 +63,6 @@ QProdReqElec                        !! VProdReqElec(runCy,YTIME)
 QProdElec                           !! VProdElec(runCy,PGALL,YTIME)
 qSecContrTotCHPProd                 !! vSecContrTotCHPProd(runCy,INDDOM,CHP,YTIME)
 QProdElecCHP                        !! VProdElecCHP(runCy,CHP,YTIME)
-QShareRenGrossProd                  !! VShareRenGrossProd(runCy,YTIME) 
 QCostPowGenLngTechNoCp              !! VCostPowGenLngTechNoCp(runCy,PGALL,ESET,YTIME)
 qCostPowGenLonMin                   !! vCostPowGenLonMin(runCy,PGALL,YTIME)
 qCostPowGenLongIntPri               !! vCostPowGenLongIntPri(runCy,PGALL,ESET,YTIME)
@@ -344,8 +343,6 @@ VRenTechMatMult.l(runCy,PGALL,YTIME)=0.1;
 VActivGoodsTransp.l(runCy,TRANSE,YTIME)=0.1;
 VActivGoodsTransp.FX(runCy,TRANG,YTIME)$(not An(YTIME)) = iActv(YTIME,runCy,TRANG);
 VActivGoodsTransp.FX(runCy,TRANSE,YTIME)$(not TRANG(TRANSE)) = 0;
-
-VRenShareElecProdSub.FX(runCy,YTIME)$(NOT AN(YTIME))=0;
 
 VRenValue.l(YTIME)=1;
 VRenValue.FX(YTIME) = 0 ;
