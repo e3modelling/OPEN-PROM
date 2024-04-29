@@ -561,21 +561,6 @@ QProdElecCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         sum(INDDOM,VConsFuel(allCy,INDDOM,CHP,YTIME)) / SUM(chp2,sum(INDDOM,VConsFuel(allCy,INDDOM,CHP2,YTIME)))*
         (VDemElecTot(allCy,YTIME) - SUM(PGALL,VProdElec(allCy,PGALL,YTIME)));
 
-*' This equation calculates the share of gross electricity production attributed to renewable sources.
-*' The share is computed for a specific country and time period.The share of gross electricity production from
-*' renewable sources is calculated by dividing the sum of renewable electricity production by the sum of total electricity production,
-*' industrial sector electricity production, and net electricity imports. The result represents the proportion of electricity production
-*' attributed to renewable sources in the specified country and time period.
-QShareRenGrossProd(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-
-                 VShareRenGrossProd(allCy,YTIME) 
-                 =E=
-                 (SUM(PGNREN$((not sameas("PGASHYD",PGNREN)) $(not sameas("PGSHYD",PGNREN)) $(not sameas("PGLHYD",PGNREN)) ),
-                         VProdElec(allCy,PGNREN,YTIME)))/
-                 (SUM(PGALL,VProdElec(allCy,PGALL,YTIME))+ 
-                 1e-3*sum(DSBS,sum(CHP$SECTTECH(DSBS,CHP),VConsFuel(allCy,DSBS,CHP,YTIME)))/8.6e-5*VPriceElecInd(allCy,YTIME) + 
-                 1/0.086 *VImpNetEneBrnch(allCy,"ELC",YTIME));         
-
 *' This equation calculates the long-term power generation cost of technologies excluding climate policies.
 *' The cost is computed for a specific country, power generation technology , energy sector, and time period.
 *' The long-term power generation cost is computed as a combination of capital costs, operating and maintenance costs, and variable costs,
