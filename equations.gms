@@ -684,7 +684,7 @@ QCostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy))).
              iFixOandMCost(PGALL,YTIME))/iAvailRate(PGALL,YTIME)
              / (1000*(7.25$ISET(ESET)+2.25$RSET(ESET))) +
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
-                 (iVarCost(PGALL,YTIME)/1000+((VPriceFuelSubCarVal(allCy,"PG",PGEF,YTIME)-iEffValueInEuro(allCy,"PG",ytime)/1000-iCo2EmiFac(allCy,"PG",PGEF,YTIME)*
+                 (iVarCost(PGALL,YTIME)/1000+((VPriceFuelSubCarVal(allCy,"PG",PGEF,YTIME)-iEffValueInDollars(allCy,"PG",ytime)/1000-iCo2EmiFac(allCy,"PG",PGEF,YTIME)*
                  sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(allCy,NAP,YTIME))/1000 )/1.2441+
 
                  iCO2CaptRate(allCy,PGALL,YTIME)*VCstCO2SeqCsts(allCy,YTIME)*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME) +
@@ -1747,7 +1747,7 @@ qGrnnHsEmisCO2EquivAllCntr(YTIME)$(TIME(YTIME))..
 qExpendHouseEne(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                  vExpendHouseEne(allCy,YTIME)
                  =E= 
-                 SUM(DSBS$HOU(DSBS),SUM(EF$SECTTECH(dSBS,EF),VConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)*(VPriceFuelSubCarVal(allCy,DSBS,EF,YTIME)-iEffValueInEuro(allCy,DSBS,YTIME)/
+                 SUM(DSBS$HOU(DSBS),SUM(EF$SECTTECH(dSBS,EF),VConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)*(VPriceFuelSubCarVal(allCy,DSBS,EF,YTIME)-iEffValueInDollars(allCy,DSBS,YTIME)/
                  1000-iCo2EmiFac(allCy,"PG",EF,YTIME)*sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(allCy,NAP,YTIME))/1000)))
                                           +VPriceElecIndResNoCliPol(allCy,"R",YTIME)*VConsElecNonSubIndTert(allCy,"HOU",YTIME)/sTWhToMtoe;         
 
@@ -1773,7 +1773,7 @@ QPriceFuelSubCarVal(allCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF) $TIME(YTIME) $(not sam
          (
            ( VPriceElecIndResConsu(allCy,"i",YTIME)$INDTRANS(SBS)+VPriceElecIndResConsu(allCy,"r",YTIME)$RESIDENT(SBS))/sTWhToMtoe
             +
-            ((iEffValueInEuro(allCy,SBS,YTIME))/1000)$DSBS(SBS)
+            ((iEffValueInDollars(allCy,SBS,YTIME))/1000)$DSBS(SBS)
          )$(ELCEF(EF) or HEATPUMP(EF))
          +
          (
