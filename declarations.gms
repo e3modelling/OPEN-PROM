@@ -197,7 +197,7 @@ qDemFinEneSubTransp(allCy,TRANSE,YTIME)	                   "Compute final energy
 *' ***  INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS EQUATIONS
 QDemFinSubFuelSubSec(allCy,DSBS,YTIME)                     "Compute total final demand (of substitutable fuels) per subsector"
 qConsTotElecInd(allCy,YTIME)                               "Compute Consumption of electricity in industrial sectors"
-QDemFinSubFuelInd(allCy,YTIME)                             "Copmpute total final demand (of substitutable fuels) in industrial sectors"
+qDemFinSubFuelInd(allCy,YTIME)                             "Copmpute total final demand (of substitutable fuels) in industrial sectors"
 QPriceElecInd(allCy,YTIME)                                 "Compute electricity industry prices"
 QElecConsHeatPla(allCy,DSBS,YTIME)                         "Compute electricity consumed in heatpump plants"
 QConsFuel(allCy,DSBS,EF,YTIME)                             "Compute fuel consumption"
@@ -216,6 +216,7 @@ QCostElcAvgProdCHP(allCy,CHP,YTIME)                        "Compute Average Elec
 QCostVarAvgElecProd(allCy,CHP,YTIME)                       "Compute Average variable including fuel electricity production cost per CHP plant"
 QConsElecNonSubIndTert(allCy,INDDOM,YTIME)	               "Compute non-substituable electricity consumption in Industry and Tertiary"
 QConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)	               "Equation for consumption of remaining substitutble equipment"	
+
 *' *** REST OF ENERGY BALANCE SECTORS EQUATIONS
 QConsFinEneCountry(allCy,EFS,YTIME)                        "Compute total final energy consumption"
 QTransfOutputPatFuel(allCy,EFS,YTIME)	                   "Compute the  transfomration output from patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works"	
