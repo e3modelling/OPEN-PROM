@@ -159,10 +159,11 @@ def parse_main_log(lines):
 
     return country_year_status
 
-def create_dataframe(country_year_status):
+def create_dataframe(country_year_status, pending_run=False):
     """
     Input: country_year_status - Dictionary where keys are country names and values are dictionaries mapping years
     to run success statuses.
+    pending_run: Flag indicating whether the run is pending
     Output: A pandas DataFrame where rows represent countries, columns represent years, and cell values represent
     run success statuses (1 for success, 0 for failure).
     """
@@ -174,6 +175,11 @@ def create_dataframe(country_year_status):
         # Transpose DataFrame to use years as columns
         df = df.T
         df = df.astype(int)
+
+        # Exclude the last year if the run is pending
+        if pending_run:
+            df = df.iloc[:, :-1]
+
         return df
     else:
         print("No data found in the log file.")
@@ -244,7 +250,11 @@ def main():
             print(f"No data found in the log file for subfolder: {selected_subfolder}")
             continue
         country_year_status = parse_main_log(lines)
-        df = create_dataframe(country_year_status)
+
+        # Check if the run is pending
+        pending_run = "Status: PENDING" in subfolder_status
+
+        df = create_dataframe(country_year_status, pending_run)
         if df is None or df.empty:
             print(f"No valid data found in the log file for subfolder: {selected_subfolder}")
             continue
@@ -252,7 +262,6 @@ def main():
         plot_heatmap(df, idx, folder_name)
 
     plt.show()
-
 
 if __name__ == "__main__":
     main()
