@@ -683,7 +683,7 @@ QCostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy))).
              iFixOandMCost(PGALL,YTIME))/iAvailRate(PGALL,YTIME)
              / (1000*(7.25$ISET(ESET)+2.25$RSET(ESET))) +
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
-                 (iVarCost(PGALL,YTIME)/1000+((VPriceFuelSubCarVal(allCy,"PG",PGEF,YTIME)-iEffValueInEuro(allCy,"PG",ytime)/1000-iCo2EmiFac(allCy,"PG",PGEF,YTIME)*
+                 (iVarCost(PGALL,YTIME)/1000+((VPriceFuelSubCarVal(allCy,"PG",PGEF,YTIME)-iEffValueInDollars(allCy,"PG",ytime)/1000-iCo2EmiFac(allCy,"PG",PGEF,YTIME)*
                  sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(allCy,NAP,YTIME))/1000 )/1.2441+
 
                  iCO2CaptRate(allCy,PGALL,YTIME)*VCstCO2SeqCsts(allCy,YTIME)*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME) +
@@ -1108,7 +1108,7 @@ qConsTotElecInd(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' This equation calculates the total final demand for substitutable fuels in industrial sectors. The total demand is obtained by summing up the
 *' final demand for substitutable fuels across various industrial subsectors. This equation provides a comprehensive view of the total demand for
 *' substitutable fuels within the industrial sectors, aggregated across individual subsectors.
-QDemFinSubFuelInd(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+qDemFinSubFuelInd(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         vDemFinSubFuelInd(allCy,YTIME)=E= SUM(INDSE,VDemFinSubFuelSubSec(allCy,INDSE,YTIME));
 
 *' This equation determines the electricity industry prices based on an estimated electricity index and a technical maximum of the electricity to steam ratio
@@ -1118,7 +1118,7 @@ QDemFinSubFuelInd(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' for the specific characteristics of these facilities. This equation ensures that the derived electricity industry prices align with the estimated index and
 *' technical constraints, providing a realistic representation of the electricity market in the industrial sector.
 
-* MARO to be reviewed
+
 
 QPriceElecInd(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VPriceElecInd(allCy,YTIME) =E=
@@ -1132,9 +1132,7 @@ QPriceElecInd(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' This equation offers a comprehensive view of fuel consumption, considering both traditional fuel sources and the additional electricity consumption
 *' associated with heat pump plants.
 
-* MARO
-*' This equation calculates/computes the consumption per each energy form (excluding heat consumed by heatpumps)-includes electricity consumed by heatpumps, 
-*' per each demand subsector (excluding TRANSPORT subsectors).
+
 QConsFuel(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF) $(not HEATPUMP(EF)) $runCy(allCy))..
          VConsFuel(allCy,DSBS,EF,YTIME)
                  =E=
@@ -1148,7 +1146,7 @@ QConsFuel(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,E
 *' historical changes in fuel prices, providing a more dynamic estimation of the electricity index. This equation provides a method to estimate the electricity index
 *' based on historical fuel price trends, allowing for a more flexible and responsive representation of industry price dynamics.
 
-* MARO to be reviewed
+
 QIndxElecIndPrices(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VIndxElecIndPrices(allCy,YTIME)
                  =E=
@@ -1165,7 +1163,7 @@ QIndxElecIndPrices(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' price for CHP sales) from the overall fuel price for the subsector. Additionally, the equation includes a square root term to handle complex computations related to the
 *' difference in fuel prices. This equation provides insights into the cost considerations for fuel in the context of CHP plants, considering various economic and technical parameters.
 
-* MARO to be checked for meaning
+
 QPriceFuelSubSecCHP(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS))  $SECTTECH(DSBS,EF) $runCy(allCy))..
         VPriceFuelSubSecCHP(allCy,DSBS,EF,YTIME)
                 =E=   
@@ -1185,7 +1183,7 @@ QCostElecProdCHP(allCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS) $runCy(allCy))
                     ( ( iDisc(allCy,"PG",YTIME) * exp(iDisc(allCy,"PG",YTIME)*iLifChpPla(allCy,DSBS,CHP))
                         / (exp(iDisc(allCy,"PG",YTIME)*iLifChpPla(allCy,DSBS,CHP)) -1))
                       * iInvCostChp(allCy,DSBS,CHP,YTIME)* 1000 * iCGI(allCy,YTIME)  + iFixOMCostPerChp(allCy,DSBS,CHP,YTIME)
-                    )/(iAvailRateChp(allCy,DSBS,CHP)*(1000*sTWhToMtoe))/1000
+                    )/(iAvailRateChp(allCy,DSBS,CHP)*(sGwToTwhPerYear))/1000
                     + iVarCostChp(allCy,DSBS,CHP,YTIME)/1000
                     + sum(PGEF$CHPtoEF(CHP,PGEF), (VPriceFuelSubCarVal(allCy,"PG",PGEF,YTIME)+0.001*iCo2EmiFac(allCy,"PG",PGEF,YTIME)*
                          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(allCy,NAP,YTIME))))
@@ -1206,7 +1204,7 @@ QCostTech(allCy,DSBS,rCon,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon)
 *' technologies, capital costs, fixed operation and maintenance costs, fuel prices, annual consumption rates, the number of consumers, the capital goods 
 *' index, and useful energy conversion factors.
 
-* MARO To be reviewed (description)
+
 QCostTechIntrm(allCy,DSBS,rCon,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) $SECTTECH(DSBS,EF) $runCy(allCy))..
          VCostTechIntrm(allCy,DSBS,rCon,EF,YTIME) =E=
                   ( (( (iDisc(allCy,DSBS,YTIME)$(not CHP(EF)) + iDisc(allCy,"PG",YTIME)$CHP(EF)) !! in case of chp plants we use the discount rate of power generation sector
@@ -1247,7 +1245,6 @@ QCostTechMatFac(allCy,DSBS,rCon,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord
 *' including the maturity factor , for each energy form and technology within the specified subsector 
 *' and consumer size group. The sorting is conducted based on variable cost considerations.
 
-*MARO to be reviewed (why variable cost?)
 QSortTechVarCost(allCy,DSBS,rCon,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) $runCy(allCy))..
         VSortTechVarCost(allCy,DSBS,rCon,YTIME)
                         =E=
@@ -1279,7 +1276,8 @@ QConsFuelInclHP(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(
          VConsFuelInclHP(allCy,DSBS,EF,YTIME)
                  =E=
          VConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)+
-         VShareTechNewEquip(allCy,DSBS,EF,YTIME)*VGapFinalDem(allCy,DSBS,YTIME)
+         (VShareTechNewEquip(allCy,DSBS,EF,YTIME)*VGapFinalDem(allCy,DSBS,YTIME))
+*'        $(VGapFinalDem.L(allCy,DSBS,YTIME)>0)
          + (VConsElecNonSubIndTert(allCy,DSBS,YTIME))$(INDDOM(DSBS) and ELCEF(EF));
 
 *' This equation calculates the variable, including fuel electricity production cost per CHP plant and demand sector, taking into account the variable cost (other than fuel)
@@ -1469,7 +1467,7 @@ QInpTransfTherm(allCy,PGEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' subsectors, the rate of energy branch consumption over total transformation output, and losses.
 *' The result represents the transformation output from thermal power stations in million tons of oil equivalent.
 
-* MARO to be reviewed (check second part!)
+
 
 QOutTransfTherm(allCy,TOCTEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VOutTransfTherm(allCy,TOCTEF,YTIME)
@@ -1746,7 +1744,7 @@ qGrnnHsEmisCO2EquivAllCntr(YTIME)$(TIME(YTIME))..
 qExpendHouseEne(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                  vExpendHouseEne(allCy,YTIME)
                  =E= 
-                 SUM(DSBS$HOU(DSBS),SUM(EF$SECTTECH(dSBS,EF),VConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)*(VPriceFuelSubCarVal(allCy,DSBS,EF,YTIME)-iEffValueInEuro(allCy,DSBS,YTIME)/
+                 SUM(DSBS$HOU(DSBS),SUM(EF$SECTTECH(dSBS,EF),VConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)*(VPriceFuelSubCarVal(allCy,DSBS,EF,YTIME)-iEffValueInDollars(allCy,DSBS,YTIME)/
                  1000-iCo2EmiFac(allCy,"PG",EF,YTIME)*sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(allCy,NAP,YTIME))/1000)))
                                           +VPriceElecIndResNoCliPol(allCy,"R",YTIME)*VConsElecNonSubIndTert(allCy,"HOU",YTIME)/sTWhToMtoe;         
 
@@ -1772,7 +1770,7 @@ QPriceFuelSubCarVal(allCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF) $TIME(YTIME) $(not sam
          (
            ( VPriceElecIndResConsu(allCy,"i",YTIME)$INDTRANS(SBS)+VPriceElecIndResConsu(allCy,"r",YTIME)$RESIDENT(SBS))/sTWhToMtoe
             +
-            ((iEffValueInEuro(allCy,SBS,YTIME))/1000)$DSBS(SBS)
+            ((iEffValueInDollars(allCy,SBS,YTIME))/1000)$DSBS(SBS)
          )$(ELCEF(EF) or HEATPUMP(EF))
          +
          (
