@@ -833,7 +833,7 @@ $offdelim
 iResMargTotAvailCap(runCy,PGRES,YTIME)$an(YTIME) = iResTotCapMxmLoad(runCy,PGRES,YTIME);
 $offtext
 
-table iVarCost(PGALL,YTIME)             "Variable gross cost other than fuel per Plant Type (Dollars2015/KW)"
+table iVarCost(PGALL,YTIME)             "Variable gross cost other than fuel per Plant Type (Dollars2015/MWh)"
 $ondelim
 $include"./iVarCost.csv"
 $offdelim
@@ -1041,7 +1041,7 @@ iCO2CaptRate(runCy,PGALL,YTIME) = 0;
 parameter iMxmShareChpElec "Maximum share of CHP electricity in a country (1)";
 iMxmShareChpElec(runCy,YTIME) = 0.1;
 
-iEffValueInEuro(runCy,SBS,YTIME)=0;
+iEffValueInDollars(runCy,SBS,YTIME)=0;
 iScenarioPri(WEF,"NOTRADE",YTIME)=0;
 
 * FIXME: Check if VAT (value added tax) rates are necessary for the model.

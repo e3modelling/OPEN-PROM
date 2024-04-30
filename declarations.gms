@@ -43,7 +43,7 @@ iDecInvPlantSched(allCy,PGALL,YTIME)            "Decided plant investment schedu
 iMinRenPotential(allCy,PGRENEF,YTIME)	        "Minimum renewable potential (GW)"	
 iMaxRenPotential(allCy,PGRENEF,YTIME)	        "Maximum enewable potential (GW)"
 iMatureFacPlaDisp(allCy,PGALL,YTIME)	        "Maturity factor related to plant dispatching (1)"		
-iEffValueInEuro(allCy,SBS,YTIME)	            "Efficiency value (Dollars2015/toe)"
+iEffValueInDollars(allCy,SBS,YTIME)	            "Efficiency value (Dollars2015/toe)"
 iVAT(allCy,YTIME)                               "VAT (value added tax) rates (1)"
 iPriceTragets(allCy,SBS,EF,YTIME)	            "Price Targets	(1)"
 iPriceReform(allCy,SBS,EF,YTIME)	            "Price reformation (1)"
