@@ -1108,7 +1108,7 @@ qConsTotElecInd(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' This equation calculates the total final demand for substitutable fuels in industrial sectors. The total demand is obtained by summing up the
 *' final demand for substitutable fuels across various industrial subsectors. This equation provides a comprehensive view of the total demand for
 *' substitutable fuels within the industrial sectors, aggregated across individual subsectors.
-QDemFinSubFuelInd(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+qDemFinSubFuelInd(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         vDemFinSubFuelInd(allCy,YTIME)=E= SUM(INDSE,VDemFinSubFuelSubSec(allCy,INDSE,YTIME));
 
 *' This equation determines the electricity industry prices based on an estimated electricity index and a technical maximum of the electricity to steam ratio
@@ -1183,7 +1183,7 @@ QCostElecProdCHP(allCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS) $runCy(allCy))
                     ( ( iDisc(allCy,"PG",YTIME) * exp(iDisc(allCy,"PG",YTIME)*iLifChpPla(allCy,DSBS,CHP))
                         / (exp(iDisc(allCy,"PG",YTIME)*iLifChpPla(allCy,DSBS,CHP)) -1))
                       * iInvCostChp(allCy,DSBS,CHP,YTIME)* 1000 * iCGI(allCy,YTIME)  + iFixOMCostPerChp(allCy,DSBS,CHP,YTIME)
-                    )/(iAvailRateChp(allCy,DSBS,CHP)*(1000*sTWhToMtoe))/1000
+                    )/(iAvailRateChp(allCy,DSBS,CHP)*(sGwToTwhPerYear))/1000
                     + iVarCostChp(allCy,DSBS,CHP,YTIME)/1000
                     + sum(PGEF$CHPtoEF(CHP,PGEF), (VPriceFuelSubCarVal(allCy,"PG",PGEF,YTIME)+0.001*iCo2EmiFac(allCy,"PG",PGEF,YTIME)*
                          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(allCy,NAP,YTIME))))

@@ -167,7 +167,7 @@ Equation,EQCOSTTR1,QCostTranspPerVeh,Compute transportation cost per mean and co
 Equation,EQDEMCOST,QCostTechIntrm,Compute  technology cost including lifetime,"CYall,DSBS,Rcon,EF,YTIME","allCy,DSBS,rCon,EF,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQDEMCOST1,QCostTech,Compute technology cost ,"CYall,DSBS,Rcon,EF,YTIME","allCy,DSBS,Rcon,EF,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQDEMSE,QDemFinSubFuelSubSec,Compute for total final demand (of substitutable fuels) per subsector ,"CYall,DSBS,YTIME","allCy,DSBS,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
-Equation,EQDEMSEIND,QDemFinSubFuelInd,Compute total final demand (of substitutable fuels) in industrial sectors ,"CYALL,YTIME","allCy, YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
+Equation,EQDEMSEIND,qDemFinSubFuelInd,Compute total final demand (of substitutable fuels) in industrial sectors ,"CYALL,YTIME","allCy, YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQDEMTR,QDemFinEneTranspPerFuel,Compute final energy demand in transport per fuel,"CYall,TRANSE,EF,YTIME","allCy,TRANSE,EF,YTIME",TRANSPORT SPECIFIC EQUATIONS
 Equation,EQDEMTRALL,qDemFinEneSubTransp,Compute final energy demand in transport ,"CYall,TRANSE,YTIME","allCy,TRANSE,YTIME",TRANSPORT SPECIFIC EQUATIONS
 Equation,EQDUMMYOBJ,qDummyObj,Define dummy objective function,"CYall,INDDOM,YTIME",,

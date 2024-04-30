@@ -166,7 +166,7 @@ QDemSub              ,QDemFinSubFuelSubSec        ,DSBS $(not TRANSE(DSBS)),INDU
 " VDemSub(runCy,DSBS,YTIME)"," VDemFinSubFuelSubSec(runCy,DSBS,YTIME)",DSBS $(not TRANSE(DSBS)),INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 qElecConsInd            ,qConsTotElecInd          ,,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 " vElecConsInd(runCy,YTIME)"," vConsTotElecInd(runCy,YTIME)",,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-qDemInd              ,QDemFinSubFuelInd         ,,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+qDemInd              ,qDemFinSubFuelInd         ,,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 " vDemInd(runCy,YTIME)"," vDemFinSubFuelInd(runCy,YTIME)",,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 QElecIndPrices           ,QPriceElecInd           ,,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 " VElecIndPrices(runCy,YTIME)"," VPriceElecInd(runCy,YTIME)",,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES

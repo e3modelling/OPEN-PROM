@@ -197,7 +197,7 @@ qDemFinEneSubTransp(allCy,TRANSE,YTIME)	                        "Compute final e
 *' ***  INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS EQUATIONS
 QDemFinSubFuelSubSec(allCy,DSBS,YTIME)                     "Compute total final demand (of substitutable fuels) per subsector"
 qConsTotElecInd(allCy,YTIME)                     "Compute Consumption of electricity in industrial sectors"
-QDemFinSubFuelInd(allCy,YTIME)                          "Copmpute total final demand (of substitutable fuels) in industrial sectors"
+qDemFinSubFuelInd(allCy,YTIME)                          "Copmpute total final demand (of substitutable fuels) in industrial sectors"
 QPriceElecInd(allCy,YTIME)                   "Compute electricity industry prices"
 QElecConsHeatPla(allCy,DSBS,YTIME)            "Compute electricity consumed in heatpump plants"
 QConsFuel(allCy,DSBS,EF,YTIME)                "Compute fuel consumption"
