@@ -105,7 +105,7 @@ QConsElecNonSubIndTert              !! VConsElecNonSubIndTert(runCy,INDDOM,YTIME
 QConsRemSubEquipSubSec              !! VConsRemSubEquipSubSec(runCy,DSBS,EF,YTIME)
 QDemFinSubFuelSubSec                !! VDemFinSubFuelSubSec(runCy,DSBS,YTIME)
 qConsTotElecInd                     !! vConsTotElecInd(runCy,YTIME)
-QDemFinSubFuelInd                   !! vDemFinSubFuelInd(runCy,YTIME)
+qDemFinSubFuelInd                   !! vDemFinSubFuelInd(runCy,YTIME)
 QPriceElecInd                       !! VPriceElecInd(runCy,YTIME)
 QConsFuel                           !! VConsFuel(runCy,DSBS,EF,YTIME)
 QIndxElecIndPrices                  !! VIndxElecIndPrices(runCy,YTIME)
