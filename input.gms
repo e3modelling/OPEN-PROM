@@ -9,7 +9,7 @@ $include "./iPop.csvr"
 $offdelim
 ;
 table iActv(YTIME,allCy,SBS) "Sector activity (various)"
-                              !! main sectors (Billion USD$2015) 
+                              !! main sectors (Billion US$2015) 
                               !! bunkers and households (1)
                               !! transport (Gpkm, or Gvehkm or Gtkm)
 $ondelim
@@ -501,7 +501,7 @@ OI.STE1AH2F 2.27889 68.3668         20  0.5
 OI.HEATPUMP 1.21884 2.66781         20  1.68
 ;
 
-* Coverting EUR05 to USD2015
+* Coverting EUR05 to US2015
 iDataIndTechnology(INDSE,EF,"IC") = iDataIndTechnology(INDSE,EF,"IC") * 1.3;
 iDataIndTechnology(INDSE,EF,"FC") = iDataIndTechnology(INDSE,EF,"FC") * 1.3;
 iDataIndTechnology(INDSE,EF,"VC") = iDataIndTechnology(INDSE,EF,"VC") * 1.3;
@@ -597,7 +597,7 @@ HOU.STE2BMS  0.296442 1.00489 2.37209 20  0.816667
 HOU.HEATPUMP 0.432    12.9254         20  1.848
 ;
 
-* Coverting EUR05 to USD2015
+* Coverting EUR05 to US2015
 iDataDomTech(DOMSE,EF,"IC") = iDataDomTech(DOMSE,EF,"IC") * 1.3;
 iDataDomTech(DOMSE,EF,"FC") = iDataDomTech(DOMSE,EF,"FC") * 1.3;
 iDataDomTech(DOMSE,EF,"VC") = iDataDomTech(DOMSE,EF,"VC") * 1.3;
@@ -625,7 +625,7 @@ NEN.NGS 0.18088 0.9044  2.37209 20  0.8
 NEN.OGS 0.18088 1.36    2.37209 20  0.8
 ;
 
-* Converting EUR05 to USD2015
+* Converting EUR05 to US2015
 iDataNonEneSec(NENSE,EF,"IC") = iDataNonEneSec(NENSE,EF,"IC") * 1.3;
 iDataNonEneSec(NENSE,EF,"FC") = iDataNonEneSec(NENSE,EF,"FC") * 1.3;
 iDataNonEneSec(NENSE,EF,"VC") = iDataNonEneSec(NENSE,EF,"VC") * 1.3;
@@ -833,13 +833,13 @@ $offdelim
 iResMargTotAvailCap(runCy,PGRES,YTIME)$an(YTIME) = iResTotCapMxmLoad(runCy,PGRES,YTIME);
 $offtext
 
-table iVarCost(PGALL,YTIME)             "Variable gross cost other than fuel per Plant Type (USD$2015/MWh)"
+table iVarCost(PGALL,YTIME)             "Variable gross cost other than fuel per Plant Type (US$2015/MWh)"
 $ondelim
 $include"./iVarCost.csv"
 $offdelim
 ;
 
-table iFixOandMCost(PGALL,YTIME)    "Fixed O&M Gross Cost per Plant Type (USD$2015/KW)"
+table iFixOandMCost(PGALL,YTIME)    "Fixed O&M Gross Cost per Plant Type (US$2015/KW)"
 $ondelim
 $include"./iFixOandMCost.csv"
 $offdelim
@@ -912,7 +912,7 @@ iFinEneCons(runCy,EFS,YTIME) = sum(INDDOM,
                        sum(TRANSE,
                          sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(TRANSE,EF) $(not plugin(EF)) ), iFuelConsPerFueSub(runCy,TRANSE,EF,YTIME)));
 
-table iGrossCapCosSubRen(PGALL,YTIME)             "Gross Capital Cost per Plant Type with subsidy for renewables (kUSD$2015/KW)"
+table iGrossCapCosSubRen(PGALL,YTIME)             "Gross Capital Cost per Plant Type with subsidy for renewables (kUS$2015/KW)"
 $ondelim
 $include"./iGrossCapCosSubRen.csv"
 $offdelim
@@ -1403,7 +1403,7 @@ STE1AH2F.2020  1.09263 19.35       2.44861       0.829672
 STE1AH2F.2050  1.06425 19.35       2.23212       0.829672
 ;
 
-* Converting EUR2005 to USD2015
+* Converting EUR2005 to US2015
 iDataChpPowGen(EF,YTIME,"IC") = iDataChpPowGen(EF,YTIME,"IC") * 1.3;
 iDataChpPowGen(EF,YTIME,"FC") = iDataChpPowGen(EF,YTIME,"FC") * 1.3;
 iDataChpPowGen(EF,YTIME,"VOM") = iDataChpPowGen(EF,YTIME,"VOM") * 1.3;
