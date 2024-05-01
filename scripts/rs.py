@@ -121,12 +121,12 @@ def main():
             lines = read_main_log(selected_subfolder)
             country_year_status = parse_main_log(lines)
             df = create_dataframe(country_year_status)
+            df.pop(df.columns[-1])  # Remove the last column for pending runs
             plot_heatmap(df, plot_title=selected_subfolder)  # Pass the subfolder name as plot title
         else:
             print("No subfolders found in the 'runs' directory.")
             return
     else:
-        print("Normal mode")
         subfolders = list_subfolders()
         if subfolders:
             print("Choose a subfolder from the following list:")
@@ -137,6 +137,7 @@ def main():
             print(f"Selected subfolder: {selected_subfolder}\n")
             lines = read_main_log(selected_subfolder)
             country_year_status = parse_main_log(lines)
+            # Check if the run is pending
             df = create_dataframe(country_year_status)
             plot_heatmap(df, plot_title=selected_subfolder)  # Pass the subfolder name as plot title
         else:
