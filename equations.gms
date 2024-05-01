@@ -1044,8 +1044,8 @@ QConsElec(allCy,DSBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' * INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 
 *' This equation computes the consumption/demand of non-substitutable electricity for subsectors of INDUSTRY and DOMESTIC in the "typical useful energy demand equation".
-*' The main explanatory variables are activity indicators of each subsector and electricity prices per subsector. Corresponding elasticities are applied for activity indicators
-*' and electricity prices.  
+*' The main explanatory variables are activity indicators of each subsector and electricity prices per subsector. Corresponding elasticities are applied for the activity indicators
+*' and the electricity prices.  
 
 
 QConsElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
@@ -1062,10 +1062,10 @@ QConsElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                 )      ]$iActv(YTIME-1,allCy,INDDOM);
 
 
-*' This equation determines the consumption of the remaining substitutable equipment of each energy form per each demand subsector (excluding TRANSPORT).
+*' This equation determines the consumption/capacity of the remaining substitutable equipment of each energy form per each demand subsector (excluding TRANSPORT).
 *' The "remaining" equipment is computed based on the past value of consumption (energy form, subsector) and the lifetime of the technology (energy form) for each subsector.  
 *' For the electricity energy form, the non substitutable consumption is subtracted.
-*' This equation expresses the "typical useful energy demand equation" where the main explanatory variables are activity indicators and fuel prices.
+*' This equation is in the from of the "typical useful energy demand equation" where the main explanatory variables are activity indicators and fuel prices.
 
 QConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF) $runCy(allCy))..
          VConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)
@@ -1081,8 +1081,8 @@ QConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SE
                )  ]$(iActv(YTIME-1,allCy,DSBS));
 
 
-*' This equation computes the useful energy demand in each demand subsector (excluding TRANSPORT). This demand is potentially "satisfied" by multiple energy forms/fuels (substitutable demand).
-*' The equation follows the "typical useful energy demand" format where the main explanatory variables are activity indicators and average "weighted" fuel prices.
+*' This equation computes the useful/final energy demand in each demand subsector (excluding TRANSPORT) - substitutable. 
+*' The equation follows the "typical useful energy demand" format where the main explanatory variables are activity indicators and average "weighted" fuel prices for each subsector.
 
 QDemFinSubFuelSubSec(allCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $runCy(allCy))..
          VDemFinSubFuelSubSec(allCy,DSBS,YTIME)
@@ -1098,9 +1098,9 @@ QDemFinSubFuelSubSec(allCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $runCy(a
                 )  ]$iActv(YTIME-1,allCy,DSBS)
 ;
 
-*' This equation calculates the total consumption of electricity in industrial sectors. The consumption is obtained by summing up the electricity
-*' consumption in each industrial subsector, excluding substitutable electricity. This equation provides an aggregate measure of electricity consumption
-*' in the industrial sectors, considering only non-substitutable electricity.
+*' This equation calculates the total consumption of non-substitutable electricity in the aggregated INDUSTRY sector. The consumption is obtained by summing up the 
+*' consumption of non-substitable electricity of each industrial subsector. 
+
 qConsTotElecInd(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          vConsTotElecInd(allCy,YTIME)
          =E=
@@ -1109,6 +1109,10 @@ qConsTotElecInd(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' This equation calculates the total final demand for substitutable fuels in industrial sectors. The total demand is obtained by summing up the
 *' final demand for substitutable fuels across various industrial subsectors. This equation provides a comprehensive view of the total demand for
 *' substitutable fuels within the industrial sectors, aggregated across individual subsectors.
+
+* MARO
+*' This equation computes the total useful/final energy demand (substitutable) in the aggregated INDUSTRY sector. The consumption is obtained by summing up the 
+*' consumption of energy demand of each industrial subsector.
 qDemFinSubFuelInd(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         vDemFinSubFuelInd(allCy,YTIME)=E= SUM(INDSE,VDemFinSubFuelSubSec(allCy,INDSE,YTIME));
 
@@ -1119,7 +1123,9 @@ qDemFinSubFuelInd(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' for the specific characteristics of these facilities. This equation ensures that the derived electricity industry prices align with the estimated index and
 *' technical constraints, providing a realistic representation of the electricity market in the industrial sector.
 
-
+* MARO
+*' This equation computes the electricity price index based on the estimated electricity price index and the maximum electricity price index. If the estimated value
+*' exceeds the maximum electricity price index, the value will be set to the maximum electricity price index.
 
 QPriceElecInd(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VPriceElecInd(allCy,YTIME) =E=
@@ -1132,6 +1138,11 @@ QPriceElecInd(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' taken into account. The result is the total fuel consumption in each demand subsector, providing a comprehensive measure of the energy consumption pattern.
 *' This equation offers a comprehensive view of fuel consumption, considering both traditional fuel sources and the additional electricity consumption
 *' associated with heat pump plants.
+
+* MARO
+*' This equation calculates the total consumption of each energy form (excluding HEATPUMP as an energy form) per demand subsector (excluding TRANSPORT). 
+*' For all energy forms, except electricity, this is equal to the computed total consumption per energy form. Specifically for electricity, the electrical consumption
+*' of heat plants (heatpumps) is added to the computed total consumption of electricity.
 
 
 QConsFuel(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF) $(not HEATPUMP(EF)) $runCy(allCy))..
@@ -1147,7 +1158,8 @@ QConsFuel(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,E
 *' historical changes in fuel prices, providing a more dynamic estimation of the electricity index. This equation provides a method to estimate the electricity index
 *' based on historical fuel price trends, allowing for a more flexible and responsive representation of industry price dynamics.
 
-
+* MARO
+*' This equation computes the estimation of the electricity price index, based on value of the index on the the previous year
 QIndxElecIndPrices(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VIndxElecIndPrices(allCy,YTIME)
                  =E=
