@@ -2,8 +2,6 @@ import os
 import time
 import re
 import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
 from colorama import Fore, Style
 
 #def select_folders(base_path):

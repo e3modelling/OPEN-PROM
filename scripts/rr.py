@@ -175,11 +175,9 @@ def create_dataframe(country_year_status, pending_run=False):
         # Transpose DataFrame to use years as columns
         df = df.T
         df = df.astype(int)
-
         # Exclude the last year if the run is pending
-        if pending_run:
-            df = df.iloc[:, :-1]
-
+        if pending_run == True:
+            df.pop(df.columns[-1])
         return df
     else:
         print("No data found in the log file.")
@@ -215,7 +213,7 @@ def main():
     loops over the selected subfolders.
     """
     parser = argparse.ArgumentParser(description='Visualize run success statuses for selected subfolders.')
-    parser.add_argument('-q', '--subfolders', action='store_true', help='automatically visualize the newest subfolder')
+    parser.add_argument('-q', '--quick', action='store_true', help='automatically visualize the newest subfolder')
     args = parser.parse_args()
 
     # The path to the "scripts" directory where the script is located
@@ -258,7 +256,9 @@ def main():
         if df is None or df.empty:
             print(f"No valid data found in the log file for subfolder: {selected_subfolder}")
             continue
-
+        
+        if args.subfolders:  
+            df.pop(df.columns[-1])  # Remove the last column for pending runs
         plot_heatmap(df, idx, folder_name)
 
     plt.show()
