@@ -46,12 +46,7 @@ reportPrice <- function(regs) {
   #fix units from toe to kwh
   ENERDATA_Industrial <- ENERDATA_Industrial / 11630
   ENERDATA_Residential <- ENERDATA_Residential / 11630
-  #fix units from $15 to $05
-  ENERDATA_Industrial <- ENERDATA_Industrial * 1.2136
-  ENERDATA_Residential <- ENERDATA_Residential * 1.2136
-  #fix units from $2005 to Euro2005
-  ENERDATA_Industrial <- ENERDATA_Industrial / 1.24
-  ENERDATA_Residential <- ENERDATA_Residential / 1.24
+
   
   # complete names
   getItems(ENERDATA_Industrial, 3) <- "Electricity prices Industrial"
