@@ -60,6 +60,14 @@ TUR
 GBR
 USA
 ELL
+LAM
+OAS
+SSA
+EUR
+NEU
+MEA
+REF
+CAZ
 /
 
 runCy(allCy) Countries for which the model is running

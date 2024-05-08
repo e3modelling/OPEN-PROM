@@ -28,8 +28,8 @@ if (!is.null(DevMode) && DevMode == 0) {
 } else if (!is.null(DevMode) && DevMode == 1) {
     library(mrprom)
     print( paste("Generating development mode data with mrprom ver.", packageVersion("mrprom")) )
-    fname <- paste0("rev0",dev,"_a9c72a01_open_prom.tgz") # file name
-    retrieveData("OPEN_PROM",puc=F,renv=F,regionmapping = "regionmappingOPDEV2.csv",dev=dev)
+    fname <- paste0("rev0",dev,"_h12_open_prom.tgz") # file name
+    retrieveData("OPEN_PROM",puc=F,renv=F,regionmapping = "h12.csv",dev=dev)
     file.copy(paste0(getConfig("outputfolder"),"/",fname),fname)
 
 } else if (!is.null(DevMode) && DevMode == 2) {

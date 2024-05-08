@@ -102,7 +102,7 @@ $setGlobal WriteGDX on
 *' *** Generate input data?
 $setGlobal GenerateInput on !! can be overwritten if VS Code Tasks are used
 
-$setGlobal fCountries 'MAR,IND,USA,EGY,RWO' !! can be overwritten if VS Code Tasks are used
+$setGlobal fCountries 'LAM,OAS,SSA,EUR,NEU,MEA,REF,CAZ,CHA,IND,JPN,USA' !! can be overwritten if VS Code Tasks are used
 
 $setGlobal fCountryList %countries%
 
