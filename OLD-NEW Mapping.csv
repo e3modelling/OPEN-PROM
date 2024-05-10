@@ -116,8 +116,8 @@ QElecPriIndResNoCliPol       ,QPriceElecIndResNoCliPol      ,ESET,Power Generati
 " VElecPriIndResNoCliPol(runCy,ESET,YTIME)"," VPriceElecIndResNoCliPol(runCy,ESET,YTIME)",ESET,Power Generation
 qShortPowGenCost          ,qCostPowGenAvgShrt         ,ESET,Power Generation
 " vAvgPowerGenCostShoTrm(runCy,ESET,YTIME)"," vCostPowGenAvgShrt(runCy,ESET,YTIME)",ESET,Power Generation
-QPassCarsLft            ,QLftPc               ,"(DSBS,EF)$(sameas(DSBS,""PC"") $SECTTECH(DSBS,EF))",Transport
-" VLifeTimeTech(runCy,DSBS,EF,YTIME)"," VLftPc(runCy,DSBS,EF,YTIME)","(DSBS,EF)$(sameas(DSBS,""PC"") $SECTTECH(DSBS,EF))",Transport
+QPassCarsLft            ,QLft               ,"(DSBS,EF)$(sameas(DSBS,""PC"") $SECTTECH(DSBS,EF))",Transport
+" VLifeTimeTech(runCy,DSBS,EF,YTIME)"," VLft(runCy,DSBS,EF,YTIME)","(DSBS,EF)$(sameas(DSBS,""PC"") $SECTTECH(DSBS,EF))",Transport
 QGoodsTranspActiv         ,QActivGoodsTransp         ,TRANSE$(TRANG(TRANSE)),Transport
 " VGoodsTranspActiv(runCy,TRANSE,YTIME)"," VActivGoodsTransp(runCy,TRANSE,YTIME)",TRANSE$(TRANG(TRANSE)),Transport
 QGapTranspActiv          ,QGapTranspActiv          ,TRANSE,Transport
@@ -154,8 +154,8 @@ QScrap               ,QNumPcScrap            ,,Transport
 " VScrap(runCy,YTIME)"," VNumPcScrap(runCy,YTIME)",,Transport
 QLevl               ,QPcOwnPcLevl            ,,Transport
 " VLamda(runCy,YTIME)"," VPcOwnPcLevl(runCy,YTIME)",,Transport
-QScrRate              ,QScrRatePc             ,,Transport
-" VScrRate(runCy,YTIME)"," VScrRatePc(runCy,YTIME)",,Transport
+QScrRate              ,QRateScrPc             ,,Transport
+" VScrRate(runCy,YTIME)"," VRateScrPc(runCy,YTIME)",,Transport
 QElecConsAll            ,QConsElec             ,DSBS,Transport
 " VElecConsAll(runCy,DSBS,YTIME)"," VConsElec(runCy,DSBS,YTIME)",DSBS,Transport
 QElecConsNonSub          ,QConsElecNonSubIndTert       ,INDOM,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES

@@ -181,8 +181,8 @@ QNewRegPcYearly(allCy,YTIME)                               "Compute new registra
 QActivPassTrnsp(allCy,TRANSE,YTIME)                        "Compute passenger transport acitivity"
 QNumPcScrap(allCy,YTIME)                                   "Compute scrapped passenger cars"
 QPcOwnPcLevl(allCy,YTIME)                                  "Compute ratio of car ownership over saturation car ownership"
-QScrRatePc(allCy,YTIME)                                    "Compute passenger cars scrapping rate"
-QLftPc(allCy,DSBS,EF,YTIME)	                               "Compute the lifetime of passenger cars" 	
+QRateScrPc(allCy,YTIME)                                    "Compute passenger cars scrapping rate"
+QLft(allCy,DSBS,EF,YTIME)	                               "Compute the lifetime of passenger cars" 	
 QActivGoodsTransp(allCy,TRANSE,YTIME)                      "Compute goods transport activity"
 QGapTranspActiv(allCy,TRANSE,YTIME)	                       "Compute the gap in transport activity"	
 QConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)	           "Compute Specific Fuel Consumption"
@@ -340,11 +340,11 @@ VActivPassTrnsp(allCy,TRANSE,YTIME)                        "Passenger transport 
                                                                 !! - Activity for passenger cars is measured in (000)km
                                                                 !! - Activity for all other passenger transportation modes is measured in Gpkm
 VPriceFuelAvgSub(allCy,DSBS,YTIME)                         "Average fuel prices per subsector (k$2015/toe)"
-VScrRatePc(allCy,YTIME)                                    "Scrapping rate of passenger cars (1)"
+VRateScrPc(allCy,YTIME)                                    "Scrapping rate of passenger cars (1)"
 VConsElec(allCy,DSBS,YTIME)                                "Electricity demand per final sector (Mtoe)"
 VConsFuel(allCy,DSBS,EF,YTIME)                             "Consumption of fuels in each demand subsector, excluding heat from heatpumps (Mtoe)"
 VDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)             "Final energy demand in transport subsectors per fuel (Mtoe)"
-VLftPc(allCy,DSBS,EF,YTIME)                                "Lifetime of technologies (years)"
+VLft(allCy,DSBS,EF,YTIME)                                  "Lifetime of technologies (years)"
 
 *' *** Transport Variables
 VActivGoodsTransp(allCy,TRANSE,YTIME)	                   "Goods transport acitivity (Gtkm)"	

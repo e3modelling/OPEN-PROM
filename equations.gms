@@ -758,10 +758,10 @@ qCostPowGenAvgShrt(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 
 *' This equation calculates the lifetime of passenger cars based on the scrapping rate of passenger cars. The lifetime is inversely proportional to the scrapping rate,
 *' meaning that as the scrapping rate increases, the lifetime of passenger cars decreases.
-QLftPc(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $sameas(DSBS,"PC") $SECTTECH(DSBS,EF) $runCy(allCy))..
-         VLftPc(allCy,DSBS,EF,YTIME)
+QLft(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $sameas(DSBS,"PC") $SECTTECH(DSBS,EF) $runCy(allCy))..
+         VLft(allCy,DSBS,EF,YTIME)
                  =E=
-         1/VScrRatePc(allCy,YTIME);
+         1/VRateScrPc(allCy,YTIME);
 
 *' This equation calculates the activity for goods transport, considering different types of goods transport such as trucks and other freight transport.
 *' The activity is influenced by factors such as GDP, population, fuel prices, and elasticities. The equation includes terms for trucks and other
@@ -806,15 +806,15 @@ QGapTranspActiv(allCy,TRANSE,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          +
          (
          ( [VActivPassTrnsp(allCy,TRANSE,YTIME)/
-         (sum((TTECH)$SECTTECH(TRANSE,TTECH),VLftPc(allCy,TRANSE,TTECH,YTIME-1))/TECHS(TRANSE))] +
+         (sum((TTECH)$SECTTECH(TRANSE,TTECH),VLft(allCy,TRANSE,TTECH,YTIME-1))/TECHS(TRANSE))] +
           SQRT( SQR([VActivPassTrnsp(allCy,TRANSE,YTIME)/
-          (sum((TTECH)$SECTTECH(TRANSE,TTECH),VLftPc(allCy,TRANSE,TTECH,YTIME-1))/TECHS(TRANSE))]) + SQR(1e-4) ) )/2
+          (sum((TTECH)$SECTTECH(TRANSE,TTECH),VLft(allCy,TRANSE,TTECH,YTIME-1))/TECHS(TRANSE))]) + SQR(1e-4) ) )/2
          )$(TRANP(TRANSE) $(not sameas(TRANSE,"PC")))
          +
          (
          ( [VActivGoodsTransp(allCy,TRANSE,YTIME)/
-         (sum((EF)$SECTTECH(TRANSE,EF),VLftPc(allCy,TRANSE,EF,YTIME-1))/TECHS(TRANSE))] + SQRT( SQR([VActivGoodsTransp(allCy,TRANSE,YTIME)/
-          (sum((EF)$SECTTECH(TRANSE,EF),VLftPc(allCy,TRANSE,EF,YTIME-1))/TECHS(TRANSE))]) + SQR(1e-4) ) )/2
+         (sum((EF)$SECTTECH(TRANSE,EF),VLft(allCy,TRANSE,EF,YTIME-1))/TECHS(TRANSE))] + SQRT( SQR([VActivGoodsTransp(allCy,TRANSE,YTIME)/
+          (sum((EF)$SECTTECH(TRANSE,EF),VLft(allCy,TRANSE,EF,YTIME-1))/TECHS(TRANSE))]) + SQR(1e-4) ) )/2
          )$TRANG(TRANSE);
 
 *' This equation calculates the specific fuel consumption for a given technology, subsector, energy form, and time. The specific fuel consumption depends on various factors,
@@ -836,9 +836,9 @@ QCostTranspPerMeanConsSize(allCy,TRANSE,RCon,TTECH,YTIME)$(TIME(YTIME) $SECTTECH
          =E=
                        (
                          (
-                           (iDisc(allCy,TRANSE,YTIME)*exp(iDisc(allCy,TRANSE,YTIME)*VLftPc(allCy,TRANSE,TTECH,YTIME)))
+                           (iDisc(allCy,TRANSE,YTIME)*exp(iDisc(allCy,TRANSE,YTIME)*VLft(allCy,TRANSE,TTECH,YTIME)))
                            /
-                           (exp(iDisc(allCy,TRANSE,YTIME)*VLftPc(allCy,TRANSE,TTECH,YTIME)) - 1)
+                           (exp(iDisc(allCy,TRANSE,YTIME)*VLft(allCy,TRANSE,TTECH,YTIME)) - 1)
                          ) * iCapCostTech(allCy,TRANSE,TTECH,YTIME)  * iCGI(allCy,YTIME)
                          + iFixOMCostTech(allCy,TRANSE,TTECH,YTIME)  +
                          (
@@ -899,12 +899,12 @@ QConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)$(TIME(YTIME) $SECTTECH(TRAN
          VConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME-1) *
          (
                  (
-                     ((VLftPc(allCy,TRANSE,TTECH,YTIME-1)-1)/VLftPc(allCy,TRANSE,TTECH,YTIME-1))
+                     ((VLft(allCy,TRANSE,TTECH,YTIME-1)-1)/VLft(allCy,TRANSE,TTECH,YTIME-1))
                       *(iAvgVehCapLoadFac(allCy,TRANSE,"CAP",YTIME-1)*iAvgVehCapLoadFac(allCy,TRANSE,"LF",YTIME-1))
                       /(iAvgVehCapLoadFac(allCy,TRANSE,"CAP",YTIME)*iAvgVehCapLoadFac(allCy,TRANSE,"LF",YTIME))
                  )$(not sameas(TRANSE,"PC"))
                  +
-                 (1 - VScrRatePc(allCy,YTIME))$sameas(TRANSE,"PC")
+                 (1 - VRateScrPc(allCy,YTIME))$sameas(TRANSE,"PC")
          )
          +
          VShareTechSectoral(allCy,TRANSE,TTECH,YTIME) *
@@ -1009,7 +1009,7 @@ QActivPassTrnsp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANP(TRANSE) $runCy(allCy))..
 QNumPcScrap(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VNumPcScrap(allCy,YTIME)
                  =E=
-         VScrRatePc(allCy,YTIME) * VStockPcYearly(allCy,YTIME-1);
+         VRateScrPc(allCy,YTIME) * VStockPcYearly(allCy,YTIME-1);
 
 *' This equation calculates the ratio of car ownership over the saturation car ownership level. The calculation is based on a Gompertz function,
 *' taking into account the stock of passenger cars, the population, and the market saturation level from the previous year. This ratio provides
@@ -1022,11 +1022,11 @@ QPcOwnPcLevl(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' This equation calculates the scrapping rate of passenger cars. The scrapping rate is influenced by the ratio of Gross Domestic Product (GDP) to the population,
 *' reflecting economic and demographic factors. The scrapping rate from the previous year is also considered, allowing for a dynamic estimation of the passenger
 *' cars scrapping rate over time.
-QScrRatePc(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VScrRatePc(allCy,YTIME)
+QRateScrPc(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VRateScrPc(allCy,YTIME)
                   =E=
          [(iGDP(YTIME,allCy)/iPop(YTIME,allCy)) / (iGDP(YTIME-1,allCy)/iPop(YTIME-1,allCy))]**0.5
-         * VScrRatePc(allCy,YTIME-1);
+         * VRateScrPc(allCy,YTIME-1);
 
 
 *' This equation establishes a common variable (with arguments) for the electricity consumption per demand subsector of INDUSTRY, [DOMESTIC/TERTIARY/RESIDENTIAL] and TRANSPORT.
@@ -1070,7 +1070,7 @@ QConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SE
          VConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)
                  =E=
          [
-         (VLftPc(allCy,DSBS,EF,YTIME)-1)/VLftPc(allCy,DSBS,EF,YTIME)
+         (VLft(allCy,DSBS,EF,YTIME)-1)/VLft(allCy,DSBS,EF,YTIME)
          * (VConsFuelInclHP(allCy,DSBS,EF,YTIME-1) - (VConsElecNonSubIndTert(allCy,DSBS,YTIME-1)$(ELCEF(EF) $INDDOM(DSBS)) + 0$(not (ELCEF(EF) $INDDOM(DSBS)))))
          * (iActv(YTIME,allCy,DSBS)/iActv(YTIME-1,allCy,DSBS))**iElastA(allCy,DSBS,"a",YTIME)
          * (VPriceFuelSubCarVal(allCy,DSBS,EF,YTIME)/VPriceFuelSubCarVal(allCy,DSBS,EF,YTIME-1))**iElastA(allCy,DSBS,"b1",YTIME)
@@ -1208,9 +1208,9 @@ QCostTech(allCy,DSBS,rCon,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon)
 QCostTechIntrm(allCy,DSBS,rCon,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) $SECTTECH(DSBS,EF) $runCy(allCy))..
          VCostTechIntrm(allCy,DSBS,rCon,EF,YTIME) =E=
                   ( (( (iDisc(allCy,DSBS,YTIME)$(not CHP(EF)) + iDisc(allCy,"PG",YTIME)$CHP(EF)) !! in case of chp plants we use the discount rate of power generation sector
-                       * exp((iDisc(allCy,DSBS,YTIME)$(not CHP(EF)) + iDisc(allCy,"PG",YTIME)$CHP(EF))*VLftPc(allCy,DSBS,EF,YTIME))
+                       * exp((iDisc(allCy,DSBS,YTIME)$(not CHP(EF)) + iDisc(allCy,"PG",YTIME)$CHP(EF))*VLft(allCy,DSBS,EF,YTIME))
                      )
-                      / (exp((iDisc(allCy,DSBS,YTIME)$(not CHP(EF)) + iDisc(allCy,"PG",YTIME)$CHP(EF))*VLftPc(allCy,DSBS,EF,YTIME))- 1)
+                      / (exp((iDisc(allCy,DSBS,YTIME)$(not CHP(EF)) + iDisc(allCy,"PG",YTIME)$CHP(EF))*VLft(allCy,DSBS,EF,YTIME))- 1)
                     ) * iCapCostTech(allCy,DSBS,EF,YTIME) * iCGI(allCy,YTIME)
                     +
                     iFixOMCostTech(allCy,DSBS,EF,YTIME)/1000
@@ -1220,9 +1220,9 @@ QCostTechIntrm(allCy,DSBS,rCon,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(
                   )$INDDOM(DSBS)
                  +
                   ( (( iDisc(allCy,DSBS,YTIME)
-                       * exp(iDisc(allCy,DSBS,YTIME)*VLftPc(allCy,DSBS,EF,YTIME))
+                       * exp(iDisc(allCy,DSBS,YTIME)*VLft(allCy,DSBS,EF,YTIME))
                      )
-                      / (exp(iDisc(allCy,DSBS,YTIME)*VLftPc(allCy,DSBS,EF,YTIME))- 1)
+                      / (exp(iDisc(allCy,DSBS,YTIME)*VLft(allCy,DSBS,EF,YTIME))- 1)
                     ) * iCapCostTech(allCy,DSBS,EF,YTIME) * iCGI(allCy,YTIME)
                     +
                     iFixOMCostTech(allCy,DSBS,EF,YTIME)/1000

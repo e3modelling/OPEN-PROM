@@ -76,7 +76,7 @@ qCostPowGenAvgShrt                  !! vCostPowGenAvgShrt(runCy,ESET,YTIME)
 
 *' * Transport *
 
-QLftPc                              !! VLftPc(runCy,DSBS,EF,YTIME)
+QLft                                !! VLft(runCy,DSBS,EF,YTIME)
 QActivGoodsTransp                   !! VActivGoodsTransp(runCy,TRANSE,YTIME)
 QGapTranspActiv                     !! VGapTranspActiv(runCy,TRANSE,YTIME)
 QConsSpecificFuel                   !! VConsSpecificFuel(runCy,TRANSE,TTECH,EF,YTIME)
@@ -95,7 +95,7 @@ QNewRegPcYearly                     !! VNewRegPcYearly(runCy,YTIME)
 QActivPassTrnsp                     !! VActivPassTrnsp(runCy,TRANSE,YTIME)
 QNumPcScrap                         !! VNumPcScrap(runCy,YTIME)
 QPcOwnPcLevl                        !! VPcOwnPcLevl(runCy,YTIME)
-QScrRatePc                          !! VScrRatePc(runCy,YTIME)
+QRateScrPc                          !! VRateScrPc(runCy,YTIME)
 QConsElec                           !! VConsElec(runCy,DSBS,YTIME)
 
 
@@ -232,11 +232,11 @@ VPriceElecInd.FX(runCy,YTIME)$TFIRST(YTIME) = iElecIndex(runCy,YTIME);
 
 VCostTechIntrm.l(runCy,DSBS,rcon,EF,YTIME) = 0.1;
 
-VLftPc.l(runCy,DSBS,EF,YTIME)= 0.1;
-VLftPc.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF)  $(not  TRANSE(DSBS)) $(not sameas(DSBS,"PC"))) = iTechLft(runCy,DSBS,EF,YTIME);
-VLftPc.FX(runCy,TRANSE,TTECH,YTIME)$(SECTTECH(TRANSE,TTECH) $(not sameas(TRANSE,"PC"))) = iTechLft(runCy,TRANSE,TTECH,YTIME);
-VLftPc.FX(runCy,DSBS,EF,YTIME)$(not SECTTECH(DSBS,EF))=0;
-VLftPc.FX(runCy,"PC",TTECH,YTIME)$( (not AN(YTIME)) $SECTTECH("PC",TTECH))=10;
+VLft.l(runCy,DSBS,EF,YTIME)= 0.1;
+VLft.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF)  $(not  TRANSE(DSBS)) $(not sameas(DSBS,"PC"))) = iTechLft(runCy,DSBS,EF,YTIME);
+VLft.FX(runCy,TRANSE,TTECH,YTIME)$(SECTTECH(TRANSE,TTECH) $(not sameas(TRANSE,"PC"))) = iTechLft(runCy,TRANSE,TTECH,YTIME);
+VLft.FX(runCy,DSBS,EF,YTIME)$(not SECTTECH(DSBS,EF))=0;
+VLft.FX(runCy,"PC",TTECH,YTIME)$( (not AN(YTIME)) $SECTTECH("PC",TTECH))=10;
 
 VSortTechVarCost.l(runCy,DSBS,rCon,YTIME) = 0.1;
 
@@ -281,9 +281,9 @@ VPotRenSuppCurve.FX(runCy,PGRENEF, YTIME) $(NOT AN(YTIME)) = iMinRenPotential(ru
 VPotRenCurr.l(runCy,PGRENEF, YTIME) $(AN(YTIME)) = 1000;
 VPotRenCurr.FX(runCy,PGRENEF, YTIME) $(NOT AN(YTIME)) = iMinRenPotential(runCy,PGRENEF,YTIME);
 
-VScrRatePc.l(runCy,YTIME)=0.1;
-VScrRatePc.UP(runCy,YTIME) = 1;
-VScrRatePc.FX(runCy,"%fBaseY%") = 0.1; 
+VRateScrPc.l(runCy,YTIME)=0.1;
+VRateScrPc.UP(runCy,YTIME) = 1;
+VRateScrPc.FX(runCy,"%fBaseY%") = 0.1; 
 
 VCostTranspPerMeanConsSize.l(runCy,TRANSE,RCon,TTECH,YTIME)=0.1;
 

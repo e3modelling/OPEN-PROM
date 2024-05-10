@@ -219,8 +219,8 @@ VGapFinalDem,VConsRemSubEquipSubSec,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
 VConsElecNonSubIndTert,iActv,,INDDOM
 VConsRemSubEquipSubSec,iActv,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
 VConsRemSubEquipSubSec,VConsFuelInclHP-1,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
-VConsRemSubEquipSubSec,VLftPc,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
-VConsRemSubEquipSubSec,VLftPc-1,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
+VConsRemSubEquipSubSec,VLft,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
+VConsRemSubEquipSubSec,VLft-1,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
 VConsRemSubEquipSubSec,VConsElecNonSubIndTert-1,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
 VConsRemSubEquipSubSec,VPriceFuelSubCarVal,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
 VPriceFuelSubSecCHP,VPriceFuelSubCarVal,VCostTechIntrm,DSBS $(not TRANSE(DSBS))
@@ -232,12 +232,12 @@ VShareTechNewEquip,VCostTech,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
 VShareTechNewEquip,VSortTechVarCost,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
 VSortTechVarCost,VCostTechMatFac,VShareTechNewEquip,DSBS $(not TRANSE(DSBS))
 VCostTech,VCostTechIntrm,VShareTechNewEquip,DSBS $(not TRANSE(DSBS))
-VCostTechIntrm,VLftPc,VCostTech,DSBS $(not TRANSE(DSBS))
-VLftPc,VScrRatePc,VCostTechIntrm,
-VLftPc,VScrRatePc,VGapTranspActiv,
-VLftPc,VScrRatePc,VCostTranspPerMeanConsSize,
-VLftPc,VScrRatePc,VConsTechTranspSectoral,
-VLftPc,VScrRatePc,VConsRemSubEquipSubSec,
+VCostTechIntrm,VLft,VCostTech,DSBS $(not TRANSE(DSBS))
+VLft,VRateScrPc,VCostTechIntrm,
+VLft,VRateScrPc,VGapTranspActiv,
+VLft,VRateScrPc,VCostTranspPerMeanConsSize,
+VLft,VRateScrPc,VConsTechTranspSectoral,
+VLft,VRateScrPc,VConsRemSubEquipSubSec,
 VOutTransfTherm,VProdElec,,
 VInpTransfTherm,VProdElec,,
 VCapElecCHP,VConsFuel,VCapElecNonCHP,
@@ -340,7 +340,7 @@ VGapTranspActiv,VActivPassTrnsp,,
 VConsSpecificFuel,VPriceFuelSubCarVal,VCostTranspPerMeanConsSize,
 VConsSpecificFuel,VPriceFuelSubCarVal,VConsTechTranspSectoral,
 VCostTranspPerMeanConsSize,VConsSpecificFuel,VCostTranspPerVeh,
-VCostTranspPerMeanConsSize,VLftPc,VCostTranspPerVeh,
+VCostTranspPerMeanConsSize,VLft,VCostTranspPerVeh,
 VCostTranspPerMeanConsSize,VPriceFuelSubCarVal,VCostTranspPerVeh,
 VCostTranspPerMeanConsSize,VRenValue,VCostTranspPerVeh,
 VCostTranspPerVeh,VCostTranspPerMeanConsSize,,

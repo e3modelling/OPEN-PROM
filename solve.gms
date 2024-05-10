@@ -11,7 +11,7 @@
 VStockPcYearly.FX(runCy,YTIME)$TIME(YTIME) = VStockPcYearly.L(runCy,YTIME)$TIME(YTIME);
 VMEPcGdp.FX(runCy,YTIME)$TIME(YTIME) = VMEPcGdp.L(runCy,YTIME)$TIME(YTIME);
 VPriceFuelAvgSub.FX(runCy,DSBS,YTIME)$TIME(YTIME) = VPriceFuelAvgSub.L(runCy,DSBS,YTIME)$TIME(YTIME);
-VScrRatePc.FX(runCy,YTIME)$TIME(YTIME) = VScrRatePc.L(runCy,YTIME)$TIME(YTIME);
+VRateScrPc.FX(runCy,YTIME)$TIME(YTIME) = VRateScrPc.L(runCy,YTIME)$TIME(YTIME);
 VActivGoodsTransp.FX(runCy,TRANSE,YTIME)$TIME(YTIME) = VActivGoodsTransp.L(runCy,TRANSE,YTIME)$TIME(YTIME);
 VConsSpecificFuel.FX(runCy,TRANSE,TTECH,EF,YTIME)$TIME(YTIME) = VConsSpecificFuel.L(runCy,TRANSE,TTECH,EF,YTIME)$TIME(YTIME);
 VConsTechTranspSectoral.FX(runCy,TRANSE,TTECH,EF,YTIME)$TIME(YTIME) = VConsTechTranspSectoral.L(runCy,TRANSE,TTECH,EF,YTIME)$TIME(YTIME);

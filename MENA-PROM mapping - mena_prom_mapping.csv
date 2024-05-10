@@ -191,7 +191,7 @@ Equation,EQGICP,QConsGrssInlNotEneBranch,Compute gross inland consumption not in
 Equation,EQIMPO_TZ,QImp,Compute fake imports,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
 Equation,EQL,QPcOwnPcLevl,Compute ratio of car ownership over saturation car ownership,"CYall,YTIME","allCy,YTIME",Transport
 Equation,EQLAMBDA,QLambda,Compute Lambda parameter,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Equation,EQLFT,QLftPc,Compute the lifetime of passenger cars ,"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",TRANSPORT SPECIFIC EQUATIONS
+Equation,EQLFT,QLft,Compute the lifetime of passenger cars ,"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",TRANSPORT SPECIFIC EQUATIONS
 Equation,EQLOADF,QLoadFacDom,Compute load factor of entire domestic system,"CYrun,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQLOS,QLossesDistr,Compute distribution losses,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
 Equation,EQLTAC,QCostPowGenAvgLng,Compute long term power generation cost,"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
@@ -226,7 +226,7 @@ Equation,EQPRODCOSTZZ,QCostProdTeCHPreReplac,Compute production cost of technolo
 Equation,EQPRODCOSTZZ1,QCostProdTeCHPreReplacAvail,Compute production cost of technology  used in premature replacement including plant availability rate,"CYALL,PGALL,PGALL2,YTIME","allCy,PGALL,PGALL2,YTIME",POWER GENERATION SECTOR
 Equation,EQREFCAP,QCapRef,Compute refineries capacity,"CYall,YTIME","allCy,YTIME",REST OF ENERGY BALANCE SECTORS
 Equation,EQRESSHARE,QShareRenGrossProd,Compute the share of renewables in gross electricity production for subsdidized renewables,"CYALL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Equation,EQSCR,QScrRatePc,Compute passenger cars scrapping rate,"CYall,YTIME","allCy,YTIME",Transport
+Equation,EQSCR,QRateScrPc,Compute passenger cars scrapping rate,"CYall,YTIME","allCy,YTIME",Transport
 Equation,EQSCRAP,QNumPcScrap,Compute scrapped passenger cars (in million vehicles),"CYall,YTIME","allCy,YTIME",Transport
 Equation,EQSFC,QConsSpecificFuel,Compute Specific Fuel Consumption,"CYall,TRANSE,TTECH,EF,YTIME","allCy,TRANSE,TTECH,EF,YTIME",TRANSPORT SPECIFIC EQUATIONS
 Equation,EQSHCAP,QSharePowPlaNewEq,Compute the power plant share in new equipment,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
@@ -297,7 +297,7 @@ Parameter,kappa,iPriceReform,Price reformation,"CYall,SBS,EF,YTIME","allCy,SBS,E
 Parameter,KAPPA1,iDataPriceReform,Price reformation,"CYall,AGSECT,EF,YTIME","allCy,AGSECT,EF,YTIME",POWER GENERATION SECTOR
 Variable,L,VPcOwnPcLevl,Ratio of car ownership over saturation car ownership (1),"CYall,YTIME","allCy,YTIME",TRANSPORT SECTOR VARIABLES
 Variable,LAMBDA,VLambda,Parameter for load curve construction,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Variable,LFT,VLftPc,Lifetime of technologies (years),"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",PRICES
+Variable,LFT,VLft,Lifetime of technologies (years),"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",PRICES
 Parameter,LOADF,iLoadFacElecDem,Load factor of electricity demand per sector,"CYaLL,DSBS,YTIME","allCy,DSBS,YTIME",Power Generation Parameters
 Variable,LOADFALL,VLoadFacDom,"""Electricity load factor for entire domestic system""","CYaLL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Variable,LOS,VLossesDistr,Distribution losses (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
@@ -402,7 +402,7 @@ Variable,RESVAL,VRenValue,Renewable value (US$2015/KWh),YTIME,YTIME,Possitive Va
 Parameter,RTORF,iResTransfOutputRefineries,Residual in Transformation Output from Refineries (Mtoe),"CYall,EF,YTIME","EF,YTIME",Supply Side Specific Parameters
 Parameter,S,iSigma,S parameters of Gompertz function for passenger cars vehicle km (1),"CYall,SG","allCy,SG",TRANSPORT SECTOR VARIABLES
 Parameter,SAT,iPassCarsMarkSat,Passenger cars market saturation [1],CYall,allCy,Transport Sector specific Parameters
-Variable,SCR,VScrRatePc,Scrapping rate of passenger cars (1),"CYall,YTIME","allCy,YTIME",TRANSPORT SECTOR VARIABLES
+Variable,SCR,VRateScrPc,Scrapping rate of passenger cars (1),"CYall,YTIME","allCy,YTIME",TRANSPORT SECTOR VARIABLES
 Variable,SCRAP,VNumPcScrap,Scrapped passenger cars (million vehicles),"CYall,YTIME","allCy,YTIME",TRANSPORT SECTOR VARIABLES
 Variable,SFC,VConsSpecificFuel,Specific Fuel Consumption (),"CYall,TRANSE,TTECH,EF,YTIME","allCy,TRANSE,TTECH,EF,YTIME",TRANSPORT SECTOR VARIABLES
 Variable,SHCAP,VSharePowPlaNewEq,Power plant share in new equipment (1),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
