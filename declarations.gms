@@ -188,7 +188,7 @@ QGapTranspActiv(allCy,TRANSE,YTIME)	                       "Compute the gap in t
 QConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)	           "Compute Specific Fuel Consumption"
 QCostTranspPerMeanConsSize(allCy,TRANSE,RCon,TTECH,YTIME)  "Compute transportation cost per mean and consumer size in KUS$2015 per vehicle"
 QTechSortVarCost(allCy,TRANSE,Rcon,YTIME)	               "Compute technology sorting based on variable cost"	
-QShareTechSectoral(allCy,TRANSE,EF,YTIME)	               "Compute technology sorting based on variable cost and new equipment"	
+QShareTechTr(allCy,TRANSE,EF,YTIME)	               "Compute technology sorting based on variable cost and new equipment"	
 QCostTranspPerVeh(allCy,TRANSE,RCon,TTECH,YTIME)	       "Compute transportation cost per mean and consumer size in KUS$2015 per vehicle"
 QCostTranspMatFac(allCy,TRANSE,RCon,TTECH,YTIME)	       "Compute transportation cost including maturity factor"	
 QConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)	   "Compute consumption of each technology in transport sectors"
@@ -360,7 +360,7 @@ VCostTranspPerMeanConsSize(allCy,TRANSE,RCon,TTECH,YTIME)  "Transportation cost 
 VCostTranspPerVeh(allCy,TRANSE,RCon,TTECH,YTIME)	       "Transportation cost per mean and consumer size (KUS$2015/vehicle)"
 VCostTranspMatFac(allCy,TRANSE,RCon,TTECH,YTIME)	       "Transportation cost including maturity factor (KUS$2015/vehicle)"	
 VTechSortVarCost(allCy,TRANSE,Rcon,YTIME)	               "Technology sorting based on variable cost (1)"	
-VShareTechSectoral(allCy,TRANSE,EF,YTIME)	               "Technology share in new equipment (1)"	
+VShareTechTr(allCy,TRANSE,EF,YTIME)	               "Technology share in new equipment (1)"	
 VConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)	   "Consumption of each technology and subsector (Mtoe)"
 vDemFinEneSubTransp(allCy,TRANSE,YTIME)	                   "Final energy demand in transport subsectors (Mtoe)"				
 *' ***  INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES

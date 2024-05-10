@@ -881,8 +881,8 @@ QTechSortVarCost(allCy,TRANSE,rCon,YTIME)$(TIME(YTIME) $(ord(rCon) le iNcon(TRAN
 *' This equation calculates the share of each technology in the total sectoral use. It takes into account factors such as the maturity factor,
 *' cumulative distribution function of consumer size groups, transportation cost per mean and consumer size, distribution function of consumer
 *' size groups, and technology sorting based on variable cost. The result is a dimensionless value representing the share of each technology in the total sectoral use.
-QShareTechSectoral(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runCy(allCy))..
-         VShareTechSectoral(allCy,TRANSE,TTECH,YTIME)
+QShareTechTr(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runCy(allCy))..
+         VShareTechTr(allCy,TRANSE,TTECH,YTIME)
          =E=
          iMatrFactor(allCy,TRANSE,TTECH,YTIME) / iCumDistrFuncConsSize(allCy,TRANSE)
          * sum( Rcon$(ord(Rcon) le iNcon(TRANSE)+1),
@@ -907,7 +907,7 @@ QConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)$(TIME(YTIME) $SECTTECH(TRAN
                  (1 - VRateScrPc(allCy,YTIME))$sameas(TRANSE,"PC")
          )
          +
-         VShareTechSectoral(allCy,TRANSE,TTECH,YTIME) *
+         VShareTechTr(allCy,TRANSE,TTECH,YTIME) *
          (
                  VConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)$(not PLUGIN(TTECH))
                  +

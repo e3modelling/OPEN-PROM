@@ -132,8 +132,8 @@ QTranspCostMatFac         ,QCostTranspMatFac         ,"(TRANSE,TTECH)$SECTTECH(T
 " VTranspCostMatFac(runCy,TRANSE,RCon,TTECH,YTIME) "," VCostTranspMatFac(runCy,TRANSE,RCon,TTECH,YTIME) ","(TRANSE,TTECH)$SECTTECH(TRANSE,TTECH)",Transport
 QTechSortVarCost          ,QTechSortVarCost          ,TRANSE,Transport
 " VTechSortVarCost(runCy,TRANSE,rCon,YTIME)"," VTechSortVarCost(runCy,TRANSE,rCon,YTIME)",TRANSE,Transport
-QTechSortVarCostNewEquip      ,QShareTechSectoral         ,"(TRANSE,TTECH)$SECTTECH(TRANSE,TTECH)",Transport
-" VTechSortVarCostNewEquip(runCy,TRANSE,TTECH,YTIME)"," VShareTechSectoral(runCy,TRANSE,TTECH,YTIME)","(TRANSE,TTECH)$SECTTECH(TRANSE,TTECH)",Transport
+QTechSortVarCostNewEquip      ,QShareTechTr         ,"(TRANSE,TTECH)$SECTTECH(TRANSE,TTECH)",Transport
+" VTechSortVarCostNewEquip(runCy,TRANSE,TTECH,YTIME)"," VShareTechTr(runCy,TRANSE,TTECH,YTIME)","(TRANSE,TTECH)$SECTTECH(TRANSE,TTECH)",Transport
 QConsEachTechTransp        ,QConsTechTranspSectoral      ,"(TRANSE,TTECH,EF)$(SECTTECH(TRANSE,EF) $TTECHtoEF(TTECH,EF))",Transport
 " VConsEachTechTransp(runCy,TRANSE,TTECH,EF,YTIME)"," VConsTechTranspSectoral(runCy,TRANSE,TTECH,EF,YTIME)","(TRANSE,TTECH,EF)$(SECTTECH(TRANSE,EF) $TTECHtoEF(TTECH,EF))",Transport
 QFinEneDemTranspPerFuel      ,QDemFinEneTranspPerFuel      ,"(TRANSE,EF)$(SECTTECH(TRANSE,EF))",Transport

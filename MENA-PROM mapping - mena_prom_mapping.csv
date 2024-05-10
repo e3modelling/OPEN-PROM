@@ -235,7 +235,7 @@ Equation,EQSHCAPNOCCS,QShareNewTechNoCCS,Compute SHRCAP excluding CCS,"CYall,PGA
 Equation,EQSHLOAD,QSortPlantDispatch,Compute Power plants sorting according to variable cost  to decide the plant dispatching ,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Equation,EQSHLOADS,QElecPeakLoads,Compute Electricity peak loads,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQSHR,QShareTechNewEquip,Compute technology share in new equipment,"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
-Equation,EQSHRTR,QShareTechSectoral,Compute the share of each technology in total sectoral use,"CYall,TRANSE,EF,YTIME","allCy,TRANSE,EF,YTIME",TRANSPORT SPECIFIC EQUATIONS
+Equation,EQSHRTR,QShareTechTr,Compute the share of each technology in total sectoral use,"CYall,TRANSE,EF,YTIME","allCy,TRANSE,EF,YTIME",TRANSPORT SPECIFIC EQUATIONS
 Equation,EQSTAC,qCostPowGenAvgShrt,Compute short term power generation cost,"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
 Equation,EQSTAC_INT_PRICE,qCostPowGenShortIntPri,Compute short term power generation cost of technologies including international Prices of main fuels ,"CYALL,PGALL,ESET,YTIME","allCy,PGALL,ESET,YTIME",POWER GENERATION SECTOR
 Equation,EQSU,QSortTechVarCost,Compute Technology sorting based on variable cost,"CYall,DSBS,Rcon,YTIME","allCy,DSBS,rCon,YTIME",
@@ -414,7 +414,7 @@ Variable,SHLOADS,VElecPeakLoads,Electricity peak loads (GW),"CYall,YTIME","allCy
 Variable,SHR,VShareTechNewEquip,Technology share in new equipment (1),"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Parameter,SHRHPELC,iShrHeatPumpElecCons,Share of heat pump electricity consumption in total substitutable electricity (1),"CYall,SBS","allCy,SBS",Common parameters for all Demand Subsectors
 Parameter,SHRNSE,iShrNonSubElecInTotElecDem,Share of non substitutable electricity in total electricity demand per subsector (1),"CYall,SBS","allCy,SBS",Common parameters for all Demand Subsectors
-Variable,SHRTR,VShareTechSectoral,Technology share in new equipment,"CYall,TRANSE,EF,YTIME","allCy,TRANSE,EF,YTIME",TRANSPORT SECTOR VARIABLES
+Variable,SHRTR,VShareTechTr,Technology share in new equipment,"CYall,TRANSE,EF,YTIME","allCy,TRANSE,EF,YTIME",TRANSPORT SECTOR VARIABLES
 Variable,STAC,vCostPowGenAvgShrt,Short-term average power generation cost (US$2015/kWh),"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
 Variable,STAC_INT_PRICE,vCostPowGenShortIntPri,Short term power generation cost of technologies including international Prices of main fuels (kUS$2015/toe),"CYALL,PGALL,ESET,YTIME","allCy,PGALL,ESET,YTIME",POWER GENERATION SECTOR
 Parameter,STT,iCumDistrFuncConsSize,Cummulative distribution function of consumer size groups (1),"CYall,DSBS","allCy,DSBS",Macro economic indicators
