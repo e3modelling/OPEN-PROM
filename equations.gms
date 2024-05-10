@@ -1159,7 +1159,8 @@ QConsFuel(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,E
 *' based on historical fuel price trends, allowing for a more flexible and responsive representation of industry price dynamics.
 
 * MARO
-*' This equation computes the estimation of the electricity price index, based on value of the index on the the previous year
+*' This equation computes the estimation of the electricity price index, based on value of the index on the the previous year and on the
+*' historical ratios of electricity price to the average energy form price in the other industrial sectors.
 QIndxElecIndPrices(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VIndxElecIndPrices(allCy,YTIME)
                  =E=
@@ -1176,7 +1177,8 @@ QIndxElecIndPrices(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' price for CHP sales) from the overall fuel price for the subsector. Additionally, the equation includes a square root term to handle complex computations related to the
 *' difference in fuel prices. This equation provides insights into the cost considerations for fuel in the context of CHP plants, considering various economic and technical parameters.
 
-
+* MARO - CHECK
+*' This equation calculates the fuel prices per subsector and energy form/fuel, 
 QPriceFuelSubSecCHP(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS))  $SECTTECH(DSBS,EF) $runCy(allCy))..
         VPriceFuelSubSecCHP(allCy,DSBS,EF,YTIME)
                 =E=   
