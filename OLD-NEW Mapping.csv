@@ -45,8 +45,8 @@ QProdCostTechPreReplac       ,QCostProdTeCHPreReplac       ,PGALL,Power Generati
 " VProdCostTechPreReplac(runCy,PGALL,YTIME)"," VCostProdTeCHPreReplac(runCy,PGALL,YTIME)",PGALL,Power Generation
 QProdCostTechPreReplacAvail    ,QCostProdTeCHPreReplacAvail    ,"PGALL,PGALL2",Power Generation
 " VProdCostTechPreReplacAvail(runCy,PGALL,PGALL2,YTIME)"," VCostProdTeCHPreReplacAvail(runCy,PGALL,PGALL2,YTIME)","PGALL,PGALL2",Power Generation
-QEndogScrapIndex          ,QIndexEndogScrap          ,PGALL,Power Generation
-" VEndogScrapIndex(runCy,PGALL,YTIME)"," VIndexEndogScrap(runCy,PGALL,YTIME)",PGALL,Power Generation
+QEndogScrapIndex          ,QIndxEndogScrap          ,PGALL,Power Generation
+" VEndogScrapIndex(runCy,PGALL,YTIME)"," VIndxEndogScrap(runCy,PGALL,YTIME)",PGALL,Power Generation
 QElecGenNoChp           ,QCapElecNonCHP           ,,Power Generation
 " VElecGenNoChp(runCy,YTIME)"," VCapElecNonCHP(runCy,YTIME)",,Power Generation
 QGapPowerGenCap          ,QGapGenCapPowerDiff        ,,Power Generation
@@ -162,8 +162,8 @@ QElecConsNonSub          ,QConsElecNonSubIndTert       ,INDOM,INDUSTRY - DOMESTI
 " VElecNonSub(runCy,INDDOM,YTIME)"," VConsElecNonSubIndTert(runCy,INDDOM,YTIME)",INDOM,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 QConsOfRemSubEquip         ,QConsRemSubEquipSubSec       ,"(DSBS,EF)$(not TRANSE(DSBS)) $SECTTECH(DSBS,EF)",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 " VConsRemSubEquip(runCy,DSBS,EF,YTIME)"," VConsRemSubEquipSubSec(runCy,DSBS,EF,YTIME)","(DSBS,EF)$(not TRANSE(DSBS)) $SECTTECH(DSBS,EF)",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-QDemSub              ,QDemFinSubFuelSubSec        ,DSBS $(not TRANSE(DSBS)),INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-" VDemSub(runCy,DSBS,YTIME)"," VDemFinSubFuelSubSec(runCy,DSBS,YTIME)",DSBS $(not TRANSE(DSBS)),INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+QDemSub              ,QDemFinSubFuelSubsec        ,DSBS $(not TRANSE(DSBS)),INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+" VDemSub(runCy,DSBS,YTIME)"," VDemFinSubFuelSubsec(runCy,DSBS,YTIME)",DSBS $(not TRANSE(DSBS)),INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 qElecConsInd            ,qConsTotElecInd          ,,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 " vElecConsInd(runCy,YTIME)"," vConsTotElecInd(runCy,YTIME)",,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 qDemInd              ,qDemFinSubFuelInd         ,,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
@@ -174,8 +174,8 @@ QFuelCons             ,QConsFuel             ,"(DSBS,EF)$(not TRANSE(DSBS)) $SEC
 " VConsFuel(runCy,DSBS,EF,YTIME)"," VConsFuel(runCy,DSBS,EF,YTIME)","(DSBS,EF)$(not TRANSE(DSBS)) $SECTTECH(DSBS,EF) $(not HEATPUMP(EF)))",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 QElecIndPricesEst         ,QIndxElecIndPrices         ,,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 " VElecIndPricesEst(runCy,YTIME)"," VIndxElecIndPrices(runCy,YTIME)",,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-QFuePriSubChp           ,QPriceFuelSubSecCHP        ,"(DSBS,EF)$((not TRANSE(DSBS))  $SECTTECH(DSBS,EF) )",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-" VFuePriSubChp(runCy,DSBS,EF,YTIME)"," VPriceFuelSubSecCHP(runCy,DSBS,EF,YTIME)","(DSBS,EF)$((not TRANSE(DSBS))  $SECTTECH(DSBS,EF) )",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+QFuePriSubChp           ,QPriceFuelSubsecCHP        ,"(DSBS,EF)$((not TRANSE(DSBS))  $SECTTECH(DSBS,EF) )",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+" VFuePriSubChp(runCy,DSBS,EF,YTIME)"," VPriceFuelSubsecCHP(runCy,DSBS,EF,YTIME)","(DSBS,EF)$((not TRANSE(DSBS))  $SECTTECH(DSBS,EF) )",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 QElecProdCosChp          ,QCostElecProdCHP          ,"(DSBS,CHP)$(INDDOM(DSBS))",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 " VElecProdCostChp(runCy,DSBS,CHP,YTIME)"," VCostElecProdCHP(runCy,DSBS,CHP,YTIME)","(DSBS,CHP)$(INDDOM(DSBS))",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 QTechCost             ,QCostTech             ,DSBS $(not TRANSE(DSBS)),INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
@@ -258,8 +258,8 @@ qTotCo2AllCoun          ,qGrnnHsEmisCO2EquivAllCntr     ,,EMISSIONS CONSTRAINTS
  vTotCo2AllCoun(YTIME) , vGrnnHsEmisCO2EquivAllCntr(YTIME) ,,EMISSIONS CONSTRAINTS
 qHouseExpEne            ,qExpendHouseEne          ,,EMISSIONS CONSTRAINTS
 " vHouseExpEne(runCy,YTIME)"," vExpendHouseEne(runCy,YTIME)",,EMISSIONS CONSTRAINTS
-QFuelPriSubSepCarbVal       ,QPriceFuelSubCarVal        ,"(SBS,EF)$$(SECTTECH(SBS,EF)$(not sameas(""NUC"",EF)))",EMISSIONS CONSTRAINTS
-" VFuelPriceSub(runCy,SBS,EF,YTIME)"," VPriceFuelSubCarVal(runCy,SBS,EF,YTIME)","(SBS,EF)$$(SECTTECH(SBS,EF)$(not sameas(""NUC"",EF)))",EMISSIONS CONSTRAINTS
+QFuelPriSubSepCarbVal       ,QPriceFuelSubsecCarVal        ,"(SBS,EF)$$(SECTTECH(SBS,EF)$(not sameas(""NUC"",EF)))",EMISSIONS CONSTRAINTS
+" VFuelPriceSub(runCy,SBS,EF,YTIME)"," VPriceFuelSubsecCarVal(runCy,SBS,EF,YTIME)","(SBS,EF)$$(SECTTECH(SBS,EF)$(not sameas(""NUC"",EF)))",EMISSIONS CONSTRAINTS
 QFuelPriSepCarbon         ,QPriceFuelSepCarbonWght      ,"(DSBS,EF)$(SECTTECH(DSBS,EF)",EMISSIONS CONSTRAINTS
 " VFuelPriMultWgt(runCy,DSBS,EF,YTIME)"," VPriceFuelSepCarbonWght(runCy,DSBS,EF,YTIME)","(DSBS,EF)$(SECTTECH(DSBS,EF)",EMISSIONS CONSTRAINTS
 QAvgFuelPriSub           ,QPriceFuelAvgSub          ,DSBS,EMISSIONS CONSTRAINTS

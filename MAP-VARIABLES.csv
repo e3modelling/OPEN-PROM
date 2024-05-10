@@ -1,13 +1,13 @@
 item,from,to,set
-VDemFinSubFuelSubSec,VDemFinSubFuelSubSec-1,VGapFinalDem,DSBS $(not TRANSE(DSBS))
-VDemFinSubFuelSubSec,iActv,VGapFinalDem,DSBS $(not TRANSE(DSBS))
-VDemFinSubFuelSubSec,VPriceFuelAvgSub,VGapFinalDem,DSBS $(not TRANSE(DSBS))
-VPriceFuelAvgSub,VPriceFuelSepCarbonWght,VDemFinSubFuelSubSec,DSBS
-VPriceFuelSepCarbonWght,VPriceFuelSubCarVal,VPriceFuelAvgSub,
-VPriceFuelSubCarVal,VPriceFuelSubCarVal-1,VPriceFuelSepCarbonWght,"SBS $( not (ELCEF(EF) or HEATPUMP(EF) or ALTEF(EF))) $(not sameas(""NUC"",EF)))"
-VPriceFuelSubCarVal,VPriceElecIndResConsu,,SBS $(ELCEF(EF) or HEATPUMP(EF))
-VPriceElecIndResConsu,VPriceFuelSubCarVal-1,VPriceFuelSubCarVal,SBS $(ELCEF(EF) or HEATPUMP(EF))
-VPriceElecIndResConsu,VCostPowGenAvgLng,VPriceFuelSubCarVal,SBS $(ELCEF(EF) or HEATPUMP(EF))
+VDemFinSubFuelSubsec,VDemFinSubFuelSubsec-1,VGapFinalDem,DSBS $(not TRANSE(DSBS))
+VDemFinSubFuelSubsec,iActv,VGapFinalDem,DSBS $(not TRANSE(DSBS))
+VDemFinSubFuelSubsec,VPriceFuelAvgSub,VGapFinalDem,DSBS $(not TRANSE(DSBS))
+VPriceFuelAvgSub,VPriceFuelSepCarbonWght,VDemFinSubFuelSubsec,DSBS
+VPriceFuelSepCarbonWght,VPriceFuelSubsecCarVal,VPriceFuelAvgSub,
+VPriceFuelSubsecCarVal,VPriceFuelSubsecCarVal-1,VPriceFuelSepCarbonWght,"SBS $( not (ELCEF(EF) or HEATPUMP(EF) or ALTEF(EF))) $(not sameas(""NUC"",EF)))"
+VPriceFuelSubsecCarVal,VPriceElecIndResConsu,,SBS $(ELCEF(EF) or HEATPUMP(EF))
+VPriceElecIndResConsu,VPriceFuelSubsecCarVal-1,VPriceFuelSubsecCarVal,SBS $(ELCEF(EF) or HEATPUMP(EF))
+VPriceElecIndResConsu,VCostPowGenAvgLng,VPriceFuelSubsecCarVal,SBS $(ELCEF(EF) or HEATPUMP(EF))
 VCostPowGenAvgLng,VProdElec,VPriceElecIndResConsu,
 VCostPowGenAvgLng,VProdElecCHP,VPriceElecIndResConsu,
 VCostPowGenAvgLng,VCostPowGenLngTechNoCp,VPriceElecIndResConsu,
@@ -79,7 +79,7 @@ VProdElecCHP,VConsFuel,VInpTransfTherm,
 VProdElecCHP,VProdElec,VOutTransfTherm,
 VProdElecCHP,VDemElecTot,VOutTransfTherm,
 VProdElecCHP,VConsFuel,VOutTransfTherm,
-VCostPowGenLngTechNoCp,VPriceFuelSubCarVal,VCostPowGenAvgLng,
+VCostPowGenLngTechNoCp,VPriceFuelSubsecCarVal,VCostPowGenAvgLng,
 VCostPowGenLngTechNoCp,VCstCO2SeqCsts,VCostPowGenAvgLng,
 VCostPowGenLngTechNoCp,VCarVal,VCostPowGenAvgLng,
 VDemElecTot,VConsFinEneCountry,VBaseLoadMax,
@@ -167,7 +167,7 @@ VLossesDistr,VConsFinEneCountry,VConsGrssInlNotEneBranch,
 VLossesDistr,VConsFinNonEne,VConsGrssInlNotEneBranch,
 VLossesDistr,VConsFinEneCountry,VConsFiEneSec,
 VLossesDistr,VConsFinNonEne,VConsFiEneSec,
-VCostElecProdCHP,VPriceFuelSubCarVal,,
+VCostElecProdCHP,VPriceFuelSubsecCarVal,,
 VCostElecProdCHP,VPriceElecInd,,
 VBaseLoad,VBaseLoadMax,VProdReqTotElec,
 VBaseLoad,VBsldEst,VProdReqTotElec,
@@ -197,12 +197,12 @@ VProdEstElecCHP,VConsFuel,VProdElecNonCHP,
 VProdEstElecCHP,VPriceElecInd,VProdElecNonCHP,
 VProdEstElecCHP,VDemElecTot,VProdElecNonCHP,
 VCapElec,VCapElec2-1,VCapElec2,
-VCapElec,VIndexEndogScrap,VCapElec2,
+VCapElec,VIndxEndogScrap,VCapElec2,
 VCapElec,VSharePowPlaNewEq,VCapElec2,
 VCapElec,VGapGenCapPowerDiff,VCapElec2,
 VCapElec,VShareNewTechNoCCS,VCapElec2,
 VCapElec,VCapElec2-1,VGapGenCapPowerDiff,
-VCapElec,VIndexEndogScrap,VGapGenCapPowerDiff,
+VCapElec,VIndxEndogScrap,VGapGenCapPowerDiff,
 VCapElec,VSharePowPlaNewEq,VGapGenCapPowerDiff,
 VCapElec,VGapGenCapPowerDiff,VGapGenCapPowerDiff,
 VCapElec,VShareNewTechNoCCS,VGapGenCapPowerDiff,
@@ -214,7 +214,7 @@ VConsFuelInclHP,VGapFinalDem,VConsFuel,DSBS $(not TRANSE(DSBS))
 VConsFuelInclHP,VConsRemSubEquipSubSec,VConsFuel,DSBS $(not TRANSE(DSBS))
 VConsFuelInclHP,VShareTechNewEquip,VConsFuel,DSBS $(not TRANSE(DSBS))
 VConsFuelInclHP,VConsElecNonSubIndTert,VConsFuel,DSBS $(not TRANSE(DSBS))
-VGapFinalDem,VDemFinSubFuelSubSec,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
+VGapFinalDem,VDemFinSubFuelSubsec,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
 VGapFinalDem,VConsRemSubEquipSubSec,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
 VConsElecNonSubIndTert,iActv,,INDDOM
 VConsRemSubEquipSubSec,iActv,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
@@ -222,10 +222,10 @@ VConsRemSubEquipSubSec,VConsFuelInclHP-1,VConsFuelInclHP,DSBS $(not TRANSE(DSBS)
 VConsRemSubEquipSubSec,VLft,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
 VConsRemSubEquipSubSec,VLft-1,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
 VConsRemSubEquipSubSec,VConsElecNonSubIndTert-1,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
-VConsRemSubEquipSubSec,VPriceFuelSubCarVal,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
-VPriceFuelSubSecCHP,VPriceFuelSubCarVal,VCostTechIntrm,DSBS $(not TRANSE(DSBS))
-VPriceFuelSubSecCHP,VPriceElecInd,VCostTechIntrm,DSBS $(not TRANSE(DSBS))
-VCostTechIntrm,VPriceFuelSubSecCHP,VCostTech,DSBS $(not TRANSE(DSBS))
+VConsRemSubEquipSubSec,VPriceFuelSubsecCarVal,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
+VPriceFuelSubsecCHP,VPriceFuelSubsecCarVal,VCostTechIntrm,DSBS $(not TRANSE(DSBS))
+VPriceFuelSubsecCHP,VPriceElecInd,VCostTechIntrm,DSBS $(not TRANSE(DSBS))
+VCostTechIntrm,VPriceFuelSubsecCHP,VCostTech,DSBS $(not TRANSE(DSBS))
 VCostTech,VCostTechIntrm,VCostTechMatFac,DSBS $(not TRANSE(DSBS))
 VCostTechMatFac,VCostTech,VSortTechVarCost,DSBS $(not TRANSE(DSBS))
 VShareTechNewEquip,VCostTech,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
@@ -250,7 +250,7 @@ VCapElecCHP,VConsFuel,VProdReqElec,
 VCapElecCHP,VPriceElecInd,VProdReqElec,
 VGapGenCapPowerDiff,VCapElec2-1,VCapElec,
 VGapGenCapPowerDiff,VCapElecNonCHP,VCapElec,
-VGapGenCapPowerDiff,VIndexEndogScrap,VCapElec,
+VGapGenCapPowerDiff,VIndxEndogScrap,VCapElec,
 VBsldEst,VConsElec,VBaseLoad,
 VBsldEst,VImpNetEneBrnch,VBaseLoad,
 VBsldEst,VLossesDistr,VBaseLoad,
@@ -267,7 +267,7 @@ VLoadFacDom,VDemFinEneTranspPerFuel,VPeakLoad,
 VCapElecTot,VCapElecTotEst,VCapElecNonCHP,
 VCapElecTot,VCapElecTotEst,VCapElecTotEst+1,
 VCapElecTot,VCapElecTotEst,VCapElecNonCHP,
-VCostAvgPowGenLonNoClimPol,VPriceFuelSubCarVal,VCostPowGenLonNoClimPol,
+VCostAvgPowGenLonNoClimPol,VPriceFuelSubsecCarVal,VCostPowGenLonNoClimPol,
 VCostAvgPowGenLonNoClimPol,VCarVal,VCostPowGenLonNoClimPol,
 VCostAvgPowGenLonNoClimPol,VCstCO2SeqCsts,VCostPowGenLonNoClimPol,
 VCostPowGenLonNoClimPol,VProdElec,VPriceElecIndResNoCliPol,
@@ -276,20 +276,20 @@ VCostPowGenLonNoClimPol,VCostElcAvgProdCHP,VPriceElecIndResNoCliPol,
 VCostPowGenLonNoClimPol,VProdElecCHP,VPriceElecIndResNoCliPol,
 VCostPowGenLonNoClimPol,VDemElecTot,VPriceElecIndResNoCliPol,
 VPriceElecIndResNoCliPol,VCostPowGenLonNoClimPol,vExpendHouseEne,
-VPriceElecIndResNoCliPol,VPriceFuelSubCarVal,vExpendHouseEne,
+VPriceElecIndResNoCliPol,VPriceFuelSubsecCarVal,vExpendHouseEne,
 VPotRenCurr,VPotRenMaxAllow,VRenTechMatMult,
 VPotRenMaxAllow,VPotRenSuppCurve,VPotRenCurr,
 VPotRenSuppCurve,VCarVal,VPotRenMaxAllow,
 VRenTechMatMult,VPotRenCurr,VScalWeibullSum,
 VRenTechMatMult,VCapElec2,VScalWeibullSum,
 VCostHourProdInvDec,VRenValue,VCostHourProdInvDecNoCCS,
-VCostHourProdInvDec,VPriceFuelSubCarVal,VCostHourProdInvDecNoCCS,
+VCostHourProdInvDec,VPriceFuelSubsecCarVal,VCostHourProdInvDecNoCCS,
 VCostHourProdInvDec,VCarVal,VCostHourProdInvDecNoCCS,
 VCostHourProdInvDec,VRenValue,VCostProdSpecTech,
-VCostHourProdInvDec,VPriceFuelSubCarVal,VCostProdSpecTech,
+VCostHourProdInvDec,VPriceFuelSubsecCarVal,VCostProdSpecTech,
 VCostHourProdInvDec,VCarVal,VCostProdSpecTech,
 VCostHourProdInvDec,VRenValue,VScalWeibullSum,
-VCostHourProdInvDec,VPriceFuelSubCarVal,VScalWeibullSum,
+VCostHourProdInvDec,VPriceFuelSubsecCarVal,VScalWeibullSum,
 VCostHourProdInvDec,VCarVal,VScalWeibullSum,
 VCostHourProdInvDecNoCCS,VShareNewTechNoCCS,VScalWeibullSum,
 VCostHourProdInvDecNoCCS,VCostHourProdInvDec,VScalWeibullSum,
@@ -311,18 +311,18 @@ VShareNewTechCCS,VCostProdSpecTech,VShareNewTechNoCCS,
 VShareNewTechCCS,VCostProdSpecTech,VCostHourProdInvDecNoCCS,
 VShareNewTechNoCCS,VShareNewTechCCS,VCostHourProdInvDecNoCCS,
 VShareNewTechNoCCS,VShareNewTechCCS,VCapElec,
-VCostVarTech,VPriceFuelSubCarVal,VCostVarTechNotPGSCRN,
+VCostVarTech,VPriceFuelSubsecCarVal,VCostVarTechNotPGSCRN,
 VCostVarTech,VCstCO2SeqCsts,VCostVarTechNotPGSCRN,
 VCostVarTech,VCarVal,VCostVarTechNotPGSCRN,
-VCostVarTechNotPGSCRN,VCostVarTech,VIndexEndogScrap,
-VIndexEndogScrap,VCostVarTechNotPGSCRN,VGapGenCapPowerDiff,
-VIndexEndogScrap,VCostProdTeCHPreReplacAvail,VGapGenCapPowerDiff,
-VIndexEndogScrap,VCostVarTechNotPGSCRN,VCapElec,
-VIndexEndogScrap,VCostProdTeCHPreReplacAvail,VCapElec,
-VCostVarTech,VPriceFuelSubCarVal,VCostProdTeCHPreReplacAvail,
+VCostVarTechNotPGSCRN,VCostVarTech,VIndxEndogScrap,
+VIndxEndogScrap,VCostVarTechNotPGSCRN,VGapGenCapPowerDiff,
+VIndxEndogScrap,VCostProdTeCHPreReplacAvail,VGapGenCapPowerDiff,
+VIndxEndogScrap,VCostVarTechNotPGSCRN,VCapElec,
+VIndxEndogScrap,VCostProdTeCHPreReplacAvail,VCapElec,
+VCostVarTech,VPriceFuelSubsecCarVal,VCostProdTeCHPreReplacAvail,
 VCostVarTech,VCstCO2SeqCsts,VCostProdTeCHPreReplacAvail,
 VCostVarTech,VCarVal,VCostProdTeCHPreReplacAvail,
-VCostVarTech,VPriceFuelSubCarVal,VCostVarTechElec,
+VCostVarTech,VPriceFuelSubsecCarVal,VCostVarTechElec,
 VCostVarTech,VCstCO2SeqCsts,VCostVarTechElec,
 VCostVarTech,VCarVal,VCostVarTechElec,
 VNewCapElec,VCapElec2-1,VCFAvgRen,
@@ -337,10 +337,10 @@ VActivGoodsTransp,VPriceFuelAvgSub,VGapTranspActiv,
 VGapTranspActiv,VActivGoodsTransp,,
 VGapTranspActiv,VNewRegPcYearly,,
 VGapTranspActiv,VActivPassTrnsp,,
-VConsSpecificFuel,VPriceFuelSubCarVal,VCostTranspPerMeanConsSize,
-VConsSpecificFuel,VPriceFuelSubCarVal,VConsTechTranspSectoral,
+VConsSpecificFuel,VPriceFuelSubsecCarVal,VCostTranspPerMeanConsSize,
+VConsSpecificFuel,VPriceFuelSubsecCarVal,VConsTechTranspSectoral,
 VCostTranspPerMeanConsSize,VConsSpecificFuel,VCostTranspPerVeh,
 VCostTranspPerMeanConsSize,VLft,VCostTranspPerVeh,
-VCostTranspPerMeanConsSize,VPriceFuelSubCarVal,VCostTranspPerVeh,
+VCostTranspPerMeanConsSize,VPriceFuelSubsecCarVal,VCostTranspPerVeh,
 VCostTranspPerMeanConsSize,VRenValue,VCostTranspPerVeh,
 VCostTranspPerVeh,VCostTranspPerMeanConsSize,,

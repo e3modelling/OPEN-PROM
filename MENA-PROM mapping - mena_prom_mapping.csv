@@ -75,7 +75,7 @@ Parameter,DDEMSE,iTotFinEneDemSubBaseYr,Total Final Energy Demand per subsector 
 Parameter,DELCINDEX,iElecIndex,Electricity Index (1),"CYall,YTIME","allCy,YTIME",Prices
 Variable,DEMCOST,VCostTechIntrm,Intermediate technology cost (KUS$2015/toe),"CYall,DSBS,Rcon,EF,YTIME","allCy,DSBS,rcon,EF,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,DEMCOST1,VCostTech,Technology cost ( KUS$2015/toe),"CYall,DSBS,Rcon,EF,YTIME","allCy,DSBS,Rcon,EF,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-Variable,DEMSE,VDemFinSubFuelSubSec,Total final demand (of substitutable fuels) per subsector (Mtoe),"CYall,DSBS,YTIME","allCy,DSBS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+Variable,DEMSE,VDemFinSubFuelSubsec,Total final demand (of substitutable fuels) per subsector (Mtoe),"CYall,DSBS,YTIME","allCy,DSBS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,DEMSEIND,vDemFinSubFuelInd,Total final demand (of substitutable fuels) in industrial sectors (Mtoe),"CYALL,YTIME","allCy, YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,DEMTR,VDemFinEneTranspPerFuel,Final energy demand in transport subsectors per fuel (Mtoe),"CYall,TRANSE,EF,YTIME","allCy,TRANSE,EF,YTIME",TRANSPORT SECTOR VARIABLES
 Variable,DEMTRALL,vDemFinEneSubTransp,Final energy demand in transport subsectors (Mtoe),"CYall,TRANSE,YTIME","allCy,TRANSE,YTIME",TRANSPORT SECTOR VARIABLES
@@ -166,7 +166,7 @@ Equation,EQCOSTTR,QCostTranspPerMeanConsSize,Compute transportation cost per mea
 Equation,EQCOSTTR1,QCostTranspPerVeh,Compute transportation cost per mean and consumer size in KUS$2015 per vehicle,"CYALL,TRANSE,RCon,TTECH,YTIME","allCy,TRANSE,RCon,TTECH,YTIME",TRANSPORT SPECIFIC EQUATIONS
 Equation,EQDEMCOST,QCostTechIntrm,Compute  technology cost including lifetime,"CYall,DSBS,Rcon,EF,YTIME","allCy,DSBS,rCon,EF,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQDEMCOST1,QCostTech,Compute technology cost ,"CYall,DSBS,Rcon,EF,YTIME","allCy,DSBS,Rcon,EF,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
-Equation,EQDEMSE,QDemFinSubFuelSubSec,Compute for total final demand (of substitutable fuels) per subsector ,"CYall,DSBS,YTIME","allCy,DSBS,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
+Equation,EQDEMSE,QDemFinSubFuelSubsec,Compute for total final demand (of substitutable fuels) per subsector ,"CYall,DSBS,YTIME","allCy,DSBS,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQDEMSEIND,qDemFinSubFuelInd,Compute total final demand (of substitutable fuels) in industrial sectors ,"CYALL,YTIME","allCy, YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQDEMTR,QDemFinEneTranspPerFuel,Compute final energy demand in transport per fuel,"CYall,TRANSE,EF,YTIME","allCy,TRANSE,EF,YTIME",TRANSPORT SPECIFIC EQUATIONS
 Equation,EQDEMTRALL,qDemFinEneSubTransp,Compute final energy demand in transport ,"CYall,TRANSE,YTIME","allCy,TRANSE,YTIME",TRANSPORT SPECIFIC EQUATIONS
@@ -213,10 +213,10 @@ Equation,EQPOTREN,QPotRenCurr,Compute current renewable potential ,"CYall,PGRENE
 Equation,EQPOTRENMAXC,QPotRenMaxAllow,Compute maximum allowed renewable potential ,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
 Equation,EQPOTRENMINC,qPotRenMinAllow,Compute minimum allowed renewable potential ,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
 Equation,EQPOTRENT,QPotRenSuppCurve,Compute renewable potential supply curve,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
-Equation,EQPP,QPriceFuelSubCarVal,"Compute fuel prices per subsector and fuel, separate carbon value in each sector","CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",POWER GENERATION SECTOR
+Equation,EQPP,QPriceFuelSubsecCarVal,"Compute fuel prices per subsector and fuel, separate carbon value in each sector","CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",POWER GENERATION SECTOR
 Equation,EQPPA,QPriceFuelAvgSub,Compute average fuel price per subsector ,"CYall,DSBS,YTIME","allCy,DSBS,YTIME",PRICES EQUATIONS
 Equation,EQPPROD,QProdPrimary,Compute primary production,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
-Equation,EQPPSU,QPriceFuelSubSecCHP,Compute fuel prices per subsector and fuel especially for chp plants,"(CYall,DSBS,EF,YTIME)","allCy,DSBS,EF,YTIME",Variable prices
+Equation,EQPPSU,QPriceFuelSubsecCHP,Compute fuel prices per subsector and fuel especially for chp plants,"(CYall,DSBS,EF,YTIME)","allCy,DSBS,EF,YTIME",Variable prices
 Equation,EQPPW,QPriceFuelSepCarbonWght,Compute fuel prices per subsector and fuel multiplied by weights separate carbon value in each sector ,"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",PRICES EQUATIONS
 Equation,EQPRODCOST,QCostHourProdInvDec,Compute hourly production cost used in investment decisions,"CYALL,PGALL,HOUR,YTIME","allCy,PGALL,HOUR,YTIME",POWER GENERATION SECTOR
 Equation,EQPRODCOSTC,qCostHourProdInvCCS,Compute hourly production cost used in investment decisions taking into account CCS acceptance,"CYALL,PGALL,HOUR,YTIME","allCy,PGALL,HOUR,YTIME",POWER GENERATION SECTOR
@@ -265,7 +265,7 @@ Equation,EQVARCOSTPG,QCostVarTech,Compute variable cost of technology ,"CYall,PG
 Equation,EQVARCOSTPG1,QCostVarTechNotPGSCRN,Compute variable cost of technology excluding PGSCRN,"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Equation,EQVARCOSTPG2,QCostVarTechElec,Compute variable cost of technology ,"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Equation,EQVEH,QStockPcYearly,Compute stock of passenger cars (in million vehicles),"CYall,YTIME","allCy,YTIME",Transport
-Equation,EQZZ,QIndexEndogScrap,Compute endogenous scrapping index ,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
+Equation,EQZZ,QIndxEndogScrap,Compute endogenous scrapping index ,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 scalar,exogCV,sExogCarbValue,switch for exogenous carbon value (0=exogenous 1=endogenous) /1/,,,
 Parameter,exogCVp,iCarbValYrExog,Carbon value for each year when it is exogenous (US$2015/tn CO2),ytime,"allCy,ytime",Reguala Falsi Parameters
 Variable,EXPO_TZ,VExp,Exports fake (Mtoe) ,"CYall,EFS,YTIME","allCy,EFS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
@@ -374,12 +374,12 @@ Variable,POTRENMAXC,VPotRenMaxAllow,Maximum allowed renewable potential (GW),"CY
 Parameter,POTRENMIN,iMinRenPotential,Minimum renewable potential (GW),"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",Power Generation Parameters
 Variable,POTRENMINC,vPotRenMinAllow,Minimum allowed renewable potential (GW),"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
 Variable,POTRENT,VPotRenSuppCurve,Renewable potential supply curve,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
-Variable,PP,VPriceFuelSubCarVal,Fuel prices per subsector and fuel (kUS$2015/toe),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",PRICES
+Variable,PP,VPriceFuelSubsecCarVal,Fuel prices per subsector and fuel (kUS$2015/toe),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",PRICES
 Variable,PP_NOCV,VFuelPriSubNoCarb,Fuel prices per subsector and fuel  without carbon value (kUS$2015/toe),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",Prices
 Variable,PPA,VPriceFuelAvgSub,Average fuel prices per subsector (kUS$2015/toe),"CYall,DSBS,YTIME","allCy,TRANSE,YTIME",PRICES
 Variable,PPROD,VProdPrimary,Primary Production (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",
 Parameter,PPRODRES,iResHcNgOilPrProd,"Residuals for Hard Coal, Natural Gas and Oil Primary Production (1)","CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
-Variable,PPSU,VPriceFuelSubSecCHP,Fuel prices per subsector and fuel for CHP plants (kUS$2015/toe),"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",PRICES
+Variable,PPSU,VPriceFuelSubsecCHP,Fuel prices per subsector and fuel for CHP plants (kUS$2015/toe),"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",PRICES
 Variable,PPW,VPriceFuelSepCarbonWght,Fuel prices per subsector and fuel  mutliplied by weights (kUS$2015/toe),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",PRICES
 Variable,PRODCOST,VCostHourProdInvDec,Hourly production cost of technology (US$2015/KWh),"CYall,PGALL,HOUR,YTIME","allCy,PGALL,HOUR,YTIME",POWER GENERATION SECTOR
 Variable,PRODCOSTC,vCostHourProdInvCCS,Hourly production cost of technology (US$2015/KWh),"CYall,PGALL,HOUR,YTIME","allCy,PGALL,HOUR,YTIME",POWER GENERATION SECTOR
@@ -496,7 +496,7 @@ Parameter,Xm,iAnnCons,"Annual consumption by the consumer size smallest, modal, 
 Parameter,Xn,iAnnCons,"Annual consumption by the consumer size smallest, modal, largest (average for all countries)  !! For passenger cars (Million km/vehicle)
                                                  !! For other passenger tranportation modes (Mpkm/vehicle)
                                                  !! For goods transport, (Mtkm/vehicle)","CYall,SBS","allCy,DSBS,conSet",Macro economic indicators
-Variable,ZZ,VIndexEndogScrap,Index used for endogenous power plants scrapping,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
+Variable,ZZ,VIndxEndogScrap,Index used for endogenous power plants scrapping,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Parameter,REPELCP,unused,,,,
 Parameter,PGCHP,unused,,,,
 Parameter,PG_CHPCAPAC,unused,,,,
