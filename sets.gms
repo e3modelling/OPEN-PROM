@@ -39,34 +39,6 @@ SVK
 SVN
 SWE
 USA
-RAS 
-MAR
-RWO
-REU
-REP
-RAF
-RLA
-ARG
-OCE
-BRA
-CAN
-EGY
-*EST
-NSI
-IDN
-IRN
-ISR
-KOR
-*LVA
-*LTU
-*LUX
-MEX
-NGA
-RUS
-SAU
-ZAF
-TUN
-TUR
 /
 
 runCy(allCy) Countries for which the model is running
