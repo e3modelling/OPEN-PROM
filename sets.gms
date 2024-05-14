@@ -6,7 +6,6 @@ allCy    Countries for which the model is applied
 LAM
 OAS
 SSA
-EUR
 NEU
 MEA
 REF
