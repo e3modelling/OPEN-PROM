@@ -213,7 +213,7 @@ def main():
     loops over the selected subfolders.
     """
     parser = argparse.ArgumentParser(description='Visualize run success statuses for selected subfolders.')
-    parser.add_argument('-q', '--quick', action='store_true', help='automatically visualize the newest subfolder')
+    parser.add_argument('-q', '--subfolders', action='store_true', help='manually select subfolders for visualization')
     args = parser.parse_args()
 
     # The path to the "scripts" directory where the script is located

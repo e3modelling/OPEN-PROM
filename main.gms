@@ -34,6 +34,7 @@
 *' * Pot: Potential
 *' * Tr: Transport
 *' * Ind: Industry
+*' * Indx: Index
 *' * Inv: Investment
 *' * Dom: Domestic
 *' * Dec: Decision
@@ -64,7 +65,8 @@
 *' * NAP: National Allocation Plan
 *' * Carb: Carbon
 *' * Val: Value
-*' * Sub: Subsector
+*' * Subsec: Subsector
+*' * Sub: Substitutable
 *' * Avg: Average
 *' * Consu: Consumers
 *' @stop The following code will be ignored by goxygen until the next identifier.
