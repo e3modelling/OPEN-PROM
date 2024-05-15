@@ -19,7 +19,7 @@ for (arg in args) {
 if (!is.null(DevMode) && DevMode == 0) {
     library(mrprom)
     print( paste("Generating research mode data with mrprom ver.", packageVersion("mrprom")) )
-    fname <- paste0("rev0",dev,"_1f966d19_open_prom.tgz") # file name
+    fname <- paste0("rev0",dev,"_d9e03f92_open_prom.tgz") # file name
     # run the fullOPEN-PROM function generating the whole input dataset of OPEN-PROM
     # retrieveData contains a call to fullOPEN-PROM
     retrieveData("OPEN_PROM",puc=F,renv=F,regionmapping = "regionmappingOPDEV3.csv",dev=dev)
@@ -28,8 +28,8 @@ if (!is.null(DevMode) && DevMode == 0) {
 } else if (!is.null(DevMode) && DevMode == 1) {
     library(mrprom)
     print( paste("Generating development mode data with mrprom ver.", packageVersion("mrprom")) )
-    fname <- paste0("rev0",dev,"_d9e03f92_open_prom.tgz") # file name
-    retrieveData("OPEN_PROM",puc=F,renv=F,regionmapping = "regionmappingOPDEV3.csv",dev=dev)
+    fname <- paste0("rev0",dev,"_a9c72a01_open_prom.tgz") # file name
+    retrieveData("OPEN_PROM",puc=F,renv=F,regionmapping = "regionmappingOPDEV2.csv",dev=dev)
     file.copy(paste0(getConfig("outputfolder"),"/",fname),fname)
 
 } else if (!is.null(DevMode) && DevMode == 2) {
