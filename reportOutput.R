@@ -6,6 +6,41 @@ library(tidyr)
 library(utils)
 library(mrprom)
 library(stringr)
+library(jsonlite)
+library(reticulate)
+if (any("runs" %in% dir())){
+# Check which Python environment reticulate is using
+py_config()
+
+# Execute the Python script and capture its output
+python_output <- tryCatch(
+  {
+    py_run_file("./scripts/reporting.py")
+  },
+  error = function(e) {
+    message("Error executing Python script:")
+    message(e)
+    NULL
+  }
+)
+
+selected_scenario <- python_output$path[[1]][[2]][1]
+selected_scenario <- gsub("\\\\", "/", selected_scenario)
+setwd(selected_scenario)
+print('Output:')
+print(selected_scenario)
+}
+
+# Install necessary Python packages if not already installed
+if (!py_module_available("seaborn")) {
+  py_install("seaborn", use_python = FALSE)
+}
+if (!py_module_available("colorama")) {
+  py_install("colorama", use_python = FALSE)
+}
+if (!py_module_available("pandas")) {
+  py_install("pandas", use_python = FALSE)
+}
 
 # region mapping used for aggregating validation data (e.g. ENERDATA)
 mapping <- jsonlite::read_json("metadata.json")[["Model Information"]][["Region Mapping"]][[1]]
@@ -22,12 +57,7 @@ setConfig(regionmapping = mapping)
 
 # read MENA-PROM mapping, will use it to choose the correct variables from MENA
 map <- read.csv("MENA-PROM mapping - mena_prom_mapping.csv")
-
 scenario_name <- basename(getwd())
-#scenario_name <- str_match(scenario_name, "\\s*(.*?)\\s*_")[,1]
-#scenario_name <- str_sub(scenario_name, 1, - 2)
-#if (is.na(scenario_name)) scenario_name <- "default"
-
 #output <- NULL
 #output <- mbind(output, reportGDP(runCY))
 reportFinalEnergy(runCY,rmap)
