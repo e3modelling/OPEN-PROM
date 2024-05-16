@@ -23,12 +23,12 @@ python_output <- tryCatch(
     NULL
   }
 )
+selected_scenario <- as.data.frame(python_output$path)
+selected_scenario <- selected_scenario[,seq(2,length(selected_scenario),2)]
+#selected_scenario <- python_output$path[[1]][[2]][1]
+#selected_scenario <- gsub("\\\\", "/", selected_scenario)
+#setwd(selected_scenario)
 
-selected_scenario <- python_output$path[[1]][[2]][1]
-selected_scenario <- gsub("\\\\", "/", selected_scenario)
-setwd(selected_scenario)
-print('Output:')
-print(selected_scenario)
 }
 
 # Install necessary Python packages if not already installed
@@ -45,23 +45,36 @@ if (!py_module_available("pandas")) {
 # region mapping used for aggregating validation data (e.g. ENERDATA)
 mapping <- jsonlite::read_json("metadata.json")[["Model Information"]][["Region Mapping"]][[1]]
 
-source("reportPrice.R")
-source("reportEmissions.R")
-source("reportACTV.R")
-source("reportGDP.R")
-source("reportFinalEnergy.R")
+for (i in 1 : length(selected_scenario))
+{
+    x <- selected_scenario[, i ]
+    x <- gsub("\\\\", "/", x)
+    setwd(x)
 
-runCY <- readGDX('./blabla.gdx', "runCYL") # read model regions, model reporting should contain only these
-rmap <- toolGetMapping(mapping, "regional", where = "mrprom")
-setConfig(regionmapping = mapping)
+    source("reportPrice.R")
+    source("reportEmissions.R")
+    source("reportACTV.R")
+    source("reportGDP.R")
+    source("reportFinalEnergy.R")
 
-# read MENA-PROM mapping, will use it to choose the correct variables from MENA
-map <- read.csv("MENA-PROM mapping - mena_prom_mapping.csv")
-scenario_name <- basename(getwd())
-#output <- NULL
-#output <- mbind(output, reportGDP(runCY))
-reportFinalEnergy(runCY,rmap)
-#reportGDP(runCY)
-#reportACTV(runCY)
-reportEmissions(runCY)
-#reportPrice(runCY)
+    runCY <- readGDX('./blabla.gdx', "runCYL") # read model regions, model reporting should contain only these
+    rmap <- toolGetMapping(mapping, "regional", where = "mrprom")
+    setConfig(regionmapping = mapping)
+
+    # read MENA-PROM mapping, will use it to choose the correct variables from MENA
+    map <- read.csv("MENA-PROM mapping - mena_prom_mapping.csv")
+    scenario_name <- basename(getwd())
+    
+    #output <- NULL
+    #output <- mbind(output, reportGDP(runCY))
+    reportFinalEnergy(runCY,rmap)
+    #reportGDP(runCY)
+    #reportACTV(runCY)
+    reportEmissions(runCY)
+    #reportPrice(runCY)
+
+    reporting <- read.report("reporting.mif")
+    setwd("..")
+    write.report(reporting, file="compareScenarios.mif", append = TRUE)
+}
+
