@@ -33,13 +33,13 @@ selected_scenario <- selected_scenario[,seq(2,length(selected_scenario),2)]
 
 # Install necessary Python packages if not already installed
 if (!py_module_available("seaborn")) {
-  py_install("seaborn", use_python = FALSE)
+  py_install("seaborn", use_python = TRUE)
 }
 if (!py_module_available("colorama")) {
-  py_install("colorama", use_python = FALSE)
+  py_install("colorama", use_python = TRUE)
 }
 if (!py_module_available("pandas")) {
-  py_install("pandas", use_python = FALSE)
+  py_install("pandas", use_python = TRUE)
 }
 
 # region mapping used for aggregating validation data (e.g. ENERDATA)
@@ -82,4 +82,3 @@ for (i in 1 : length(selected_scenario))
     }
    
 }
-
