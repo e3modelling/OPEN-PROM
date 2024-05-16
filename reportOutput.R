@@ -44,10 +44,10 @@ if (!py_module_available("pandas")) {
 
 # region mapping used for aggregating validation data (e.g. ENERDATA)
 mapping <- jsonlite::read_json("metadata.json")[["Model Information"]][["Region Mapping"]][[1]]
-
+selected_scenario<-as.data.frame(selected_scenario)
 for (i in 1 : length(selected_scenario))
 {
-    x <- selected_scenario[, i ]
+    x <- selected_scenario[1, i]
     x <- gsub("\\\\", "/", x)
     setwd(x)
 
@@ -75,6 +75,11 @@ for (i in 1 : length(selected_scenario))
 
     reporting <- read.report("reporting.mif")
     setwd("..")
-    write.report(reporting, file="compareScenarios.mif", append = TRUE)
+    if (length(selected_scenario) > 1) {
+     write.report(reporting, file="compareScenarios2.mif", append = TRUE)
+    } else {
+    write.report(reporting, file="reporting2.mif", append = TRUE)
+    }
+   
 }
 

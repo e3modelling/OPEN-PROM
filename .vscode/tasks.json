@@ -90,7 +90,7 @@
         {
             "label": "COMPARE SCENARIOS",
             "type": "shell",
-            "command": "python ./scripts/kiki.py ",
+            "command": "Rscript reportOutput.R",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
