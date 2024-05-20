@@ -172,7 +172,8 @@ def main_loop(base_path, check_interval=1.5, max_no_update_intervals=3):
         print("No pending runs found.")
         return
 
-    print(f"Monitoring pending run in folder: {pending_folder}")
+    pending_folder_name = os.path.basename(pending_folder)
+    print(f"Monitoring pending run in folder: {pending_folder_name}")
 
     consecutive_no_update_intervals = 0
 
@@ -192,7 +193,8 @@ def main_loop(base_path, check_interval=1.5, max_no_update_intervals=3):
                 consecutive_no_update_intervals += 1
                 continue
 
-            plot_heatmap(df, pending_folder)
+            plot_title = pending_folder_name  # Use folder name as plot title
+            plot_heatmap(df, plot_title)
             plt.pause(0.1)
             consecutive_no_update_intervals = 0  # Reset the counter since there's an update
         except Exception as e:
@@ -200,8 +202,8 @@ def main_loop(base_path, check_interval=1.5, max_no_update_intervals=3):
 
         time.sleep(check_interval)
 
-    print(f"No new data received after {max_no_update_intervals} intervals. Plot window will remain open until closed by the user.")
     plt.show()  # Display the last plot indefinitely until the user closes the window
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Real-time monitoring of pending runs.')
