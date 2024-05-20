@@ -148,18 +148,23 @@ def plot_heatmap(df, plot_title):
     if df is not None:
         cmap = sns.color_palette(["red", "green"])
 
-        plt.figure(figsize=(10, max(6, len(df) * 0.2)))
+        # Clear the current figure
+        plt.clf()
+
+        # Plot the heatmap
         sns.heatmap(df, cmap=cmap, annot=False, linewidths=.5, linecolor='black', vmin=0, vmax=1, cbar=False)
 
         plt.title(plot_title)
         plt.xlabel('Year')
         plt.ylabel('Country')
 
-        plt.show(block=False)
+        # Show the updated plot
+        plt.draw()
+        plt.pause(0.1)
     else:
         print("DataFrame is empty.")
 
-def main_loop(base_path, check_interval=1.5):
+def main_loop(base_path, check_interval=1.5, max_no_update_intervals=3):
     subfolder_status_list = check_files_and_list_subfolders(base_path)
     pending_folder = find_pending_run(subfolder_status_list)
 
@@ -169,7 +174,9 @@ def main_loop(base_path, check_interval=1.5):
 
     print(f"Monitoring pending run in folder: {pending_folder}")
 
-    while True:
+    consecutive_no_update_intervals = 0
+
+    while consecutive_no_update_intervals < max_no_update_intervals:
         try:
             lines = read_main_log(pending_folder)
             if not lines:
@@ -182,14 +189,19 @@ def main_loop(base_path, check_interval=1.5):
             df = create_dataframe(country_year_status, pending_run)
             if df is None or df.empty:
                 print(f"No valid data found in the log file for subfolder: {pending_folder}")
+                consecutive_no_update_intervals += 1
                 continue
 
             plot_heatmap(df, pending_folder)
             plt.pause(0.1)
+            consecutive_no_update_intervals = 0  # Reset the counter since there's an update
         except Exception as e:
             print(f"Error processing tasks: {e}")
 
         time.sleep(check_interval)
+
+    print(f"No new data received after {max_no_update_intervals} intervals. Plot window will remain open until closed by the user.")
+    plt.show()  # Display the last plot indefinitely until the user closes the window
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Real-time monitoring of pending runs.')
