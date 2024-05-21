@@ -87,5 +87,19 @@
             }
         },
 
+        {
+            "label": "OPEN-PROM LIVE",
+            "type": "shell",
+            "command": "python ./scripts/R-live.py",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "focus": true
+            }
+        },
+
     ]
 }
