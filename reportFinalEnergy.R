@@ -58,6 +58,28 @@ reportFinalEnergy <- function(regs,rmap) {
   # write data in mif file
   write.report(v[intersect(getRegions(v),regs),,],file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario=scenario_name)
   
+  # map of IEA and balance fuel
+  map_IEA <- toolGetMapping(name = "IEA_projections.csv",
+                                 type = "sectoral",
+                                 where = "mrprom")
+  
+  IEA_all_dataset <- readSource("IEA_Energy_Projections_Balances", subtype = "all")
+  year_IEA <- Reduce(intersect, list(getYears(MENA_EDS_VFeCons,as.integer=TRUE),getYears(IEA_all_dataset,as.integer=TRUE),getYears(VConsFinEneCountry,as.integer=TRUE)))
+  IEA_Balances <- IEA_all_dataset[,year_IEA,"STEPS"][,,map_IEA[!is.na(map_IEA[,2]),2]][,,map_IEA[!is.na(map_IEA[,2]),3]]
+  IEA_Balances <- as.quitte(IEA_Balances)
+  #add a column with the fuels that match each variable of IEA
+  names(map_IEA) <- sub("PRODUCT", "product", names(map_IEA))
+  IEA_FC <- left_join(IEA_Balances, map_IEA, by = "product")
+  IEA_FC["variable"] <- IEA_FC["OPEN.PROM"]
+  IEA_FC <- filter(IEA_FC, period %in% year_IEA)
+  IEA_FC <- select(IEA_FC , -c("OPEN.PROM","FLOW","product","flow"))
+  IEA_FC <- as.quitte(IEA_FC)
+  IEA_FC <- unique(IEA_FC)
+  IEA_FC <- as.magpie(IEA_FC)
+  IEA_FC[is.na(IEA_FC)] <- 0
+  IEA_FC <- toolAggregate(IEA_FC, rel = rmap)
+  # write data in mif file
+  write.report(IEA_FC[intersect(getRegions(IEA_FC),regs),,],file="reporting.mif",model="IEA",unit="Mtoe",append=TRUE,scenario=scenario_name)
   
   # Final Energy | "TRANSE" | "INDSE" | "DOMSE" | "NENSE"
   
@@ -187,7 +209,7 @@ reportFinalEnergy <- function(regs,rmap) {
     write.report(enerdata_by_sector[intersect(getRegions(enerdata_by_sector),regs),year,],file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario=scenario_name)
     
     #Final Energy enerdata
-    FE_ener <- dimSums(FuelCons_enerdata, dim = 3, na.rm = TRUE)
+    FE_ener <- dimSums(enerdata_by_sector, dim = 3, na.rm = TRUE)
     getItems(FE_ener, 3) <- paste0("Final Energy ", sector[y])
     
     # write data in mif file
