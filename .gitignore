@@ -19,3 +19,4 @@ regionmappingOP.csv
 /default*
 metadata.json
 /doc
+*.pyc

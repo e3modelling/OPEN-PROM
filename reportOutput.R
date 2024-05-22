@@ -6,32 +6,87 @@ library(tidyr)
 library(utils)
 library(mrprom)
 library(stringr)
+library(jsonlite)
+library(reticulate)
 
-# region mapping used for aggregating validation data (e.g. ENERDATA)
+# Define the runpath variable
+runpath <- NULL
+
+if (is.null(runpath)) {
+  if (any("runs" %in% dir())) {
+    # Check which Python environment reticulate is using
+    py_config()
+  
+    # Execute the Python script and capture its output
+    python_output <- tryCatch(
+      {
+        py_run_file("./scripts/reporting.py")
+      },
+      error = function(e) {
+        message("Error executing Python script:")
+        message(e)
+        NULL
+      }
+    )
+  
+    if (!is.null(python_output)) {
+      runpath <- as.data.frame(python_output$path)
+      runpath <- runpath[, seq(2, length(runpath), 2)]
+    } else {
+      stop("Python script execution failed. Please run the following command in the terminal and provide the run path manually:\nRscript reportOutput.R runname_blabla\nor open the script and paste the run path(s) in the code, then run Rscript reportOutput.R again.")
+    }
+  } else {
+    stop("Runs directory not found. Please provide the run path manually by setting the 'runpath' variable in the script.")
+  }
+}
+
+# Install necessary Python packages if not already installed
+if (!py_module_available("seaborn")) {
+  py_install("seaborn", use_python = TRUE)
+}
+if (!py_module_available("colorama")) {
+  py_install("colorama", use_python = TRUE)
+}
+if (!py_module_available("pandas")) {
+  py_install("pandas", use_python = TRUE)
+}
+
+# Region mapping used for aggregating validation data (e.g. ENERDATA)
 mapping <- jsonlite::read_json("metadata.json")[["Model Information"]][["Region Mapping"]][[1]]
+runpath <- as.data.frame(runpath)
 
-source("reportPrice.R")
-source("reportEmissions.R")
-source("reportACTV.R")
-source("reportGDP.R")
-source("reportFinalEnergy.R")
+for (i in 1:length(runpath)) {
+  x <- runpath[1, i]
+  x <- gsub("\\\\", "/", x)
+  setwd(x)
 
-runCY <- readGDX('./blabla.gdx', "runCYL") # read model regions, model reporting should contain only these
-rmap <- toolGetMapping(mapping, "regional", where = "mrprom")
-setConfig(regionmapping = mapping)
+  source("reportPrice.R")
+  source("reportEmissions.R")
+  source("reportACTV.R")
+  source("reportGDP.R")
+  source("reportFinalEnergy.R")
 
-# read MENA-PROM mapping, will use it to choose the correct variables from MENA
-map <- read.csv("MENA-PROM mapping - mena_prom_mapping.csv")
+  runCY <- readGDX('./blabla.gdx', "runCYL") # read model regions, model reporting should contain only these
+  rmap <- toolGetMapping(mapping, "regional", where = "mrprom")
+  setConfig(regionmapping = mapping)
 
-scenario_name <- basename(getwd())
-#scenario_name <- str_match(scenario_name, "\\s*(.*?)\\s*_")[,1]
-#scenario_name <- str_sub(scenario_name, 1, - 2)
-#if (is.na(scenario_name)) scenario_name <- "default"
+  # Read MENA-PROM mapping, will use it to choose the correct variables from MENA
+  map <- read.csv("MENA-PROM mapping - mena_prom_mapping.csv")
+  scenario_name <- basename(getwd())
 
-#output <- NULL
-#output <- mbind(output, reportGDP(runCY))
-reportFinalEnergy(runCY,rmap)
-#reportGDP(runCY)
-#reportACTV(runCY)
-reportEmissions(runCY)
-#reportPrice(runCY)
+  #output <- NULL
+  #output <- mbind(output, reportGDP(runCY))
+  reportFinalEnergy(runCY, rmap)
+  reportEmissions(runCY)
+  #reportGDP(runCY)
+  #reportACTV(runCY)
+  #reportPrice(runCY)
+
+  reporting <- read.report("reporting.mif")
+  setwd("..")
+  if (length(runpath) > 1) {
+    write.report(reporting, file="compareScenarios2.mif", append=TRUE)
+  } else {
+    write.report(reporting, file="reporting2.mif", append=TRUE)
+  }
+}

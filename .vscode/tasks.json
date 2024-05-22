@@ -87,5 +87,33 @@
             }
         },
 
+        {
+            "label": "COMPARE SCENARIOS",
+            "type": "shell",
+            "command": "Rscript reportOutput.R",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "focus": true
+            }
+        },
+
+        {
+            "label": "OPEN-PROM LIVE",
+            "type": "shell",
+            "command": "python ./scripts/R-live.py",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "focus": true
+            }
+        },
+
     ]
 }
