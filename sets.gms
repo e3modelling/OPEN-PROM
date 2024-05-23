@@ -1,65 +1,87 @@
 sets
 
 ***        Geographic Coverage      *
-allCy    Countries for which the model is applied
+allCy    "All Countries Used in the Model"
 /
-RAS       REST OF ASIA
-MAR       MOROCCO
-RWO
-REU
-REP
-RAF
-RLA
-ARG
-OCE
+LAM
+OAS
+SSA
+NEU
+MEA
+REF
+CAZ
 AUT
 BEL
-BRA
 BGR
-CAN
 CHA
-HRV
 CYP
 CZE
+DEU
 DNK
-EGY
-*EST
+ESP
+ELL
 FIN
 FRA
-DEU
+GBR
 GRC
+HRV
 HUN
-NSI
 IND
-IDN
-IRN
 IRL
-ISR
 ITA
 JPN
-KOR
-*LVA
-*LTU
-*LUX
 MLT
-MEX
 NLD
-NGA
 POL
 PRT
 ROU
-RUS
-SAU
 SVK
 SVN
-ZAF
-ESP
 SWE
-TUN
-TUR
-GBR
 USA
+MAR
+EGY
+RWO
+/
+
+resCy "Countries for Research Mode"
+/
+LAM
+OAS
+SSA
+NEU
+MEA
+REF
+CAZ
+AUT
+BEL
+BGR
+CHA
+CYP
+CZE
+DEU
+DNK
+ESP
 ELL
+FIN
+FRA
+GBR
+GRC
+HRV
+HUN
+IND
+IRL
+ITA
+JPN
+MLT
+NLD
+POL
+PRT
+ROU
+SVK
+SVN
+SWE
+USA
 /
 
 runCy(allCy) Countries for which the model is running
@@ -71,9 +93,9 @@ runCyL(allCy) Countries for which the model is running (used in countries loop)
 %fCountries%
 /;
 
-* runCy is equal to allCy on research mode
-runCy(allCy)$(%DevMode% = 0) = allCy(allCy) ;
-runCyL(allCy)$(%DevMode% = 0) = allCy(allCy) ;
+* runCy is equal to resCy on research mode
+runCy(allCy)$(%DevMode% = 0) = resCy(allCy) ;
+runCyL(allCy)$(%DevMode% = 0) = resCy(allCy) ;
 
 sets
 ***        Model Time Horizon       *
