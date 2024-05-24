@@ -27,7 +27,7 @@ $ondelim
 $include "./iElastA.csv"
 $offdelim
 ;
-iElastA(runCy,SBS,ETYPES,YTIME) = iElastA("MAR",SBS,ETYPES,YTIME);
+iElastA(runCy,SBS,ETYPES,YTIME) = iElastA("ELL",SBS,ETYPES,YTIME);
 $ELSE.calib
 variable iElastA(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)";
 table iElastAL(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)"
@@ -35,7 +35,7 @@ $ondelim
 $include "./iElastA.csv"
 $offdelim
 ;
-iElastA.L(runCy,SBS,ETYPES,YTIME) = iElastAL("MAR",SBS,ETYPES,YTIME);
+iElastA.L(runCy,SBS,ETYPES,YTIME) = iElastAL("ELL",SBS,ETYPES,YTIME);
 iElastA.LO(runCy,SBS,ETYPES,YTIME) = -2;
 iElastA.UP(runCy,SBS,ETYPES,YTIME) = 6;
 $ENDIF.calib
@@ -105,11 +105,8 @@ iCo2EmiFac(runCy,SBS,EF,YTIME) = iCo2EmiFacAllSbs(EF);
 iCo2EmiFac(runCy,"IS","HCL",YTIME)   = iCo2EmiFacAllSbs("SLD"); !! This is the assignment for coke
 table iDataPassCars(allCy,GompSet1,Gompset2)        "Initial Data for Passenger Cars ()"
           scr
-RWO.PC    0.0200641155285507
 CHA.PC    0.0201531648401507
-EGY.PC    0.0201531648401507
 IND.PC    0.0201531648401507
-MAR.PC    0.0201531648401507
 USA.PC    0.0418811968705786
 ;
 
@@ -646,29 +643,19 @@ iDataNonEneSec(NENSE,EF,"VC") = iDataNonEneSec(NENSE,EF,"VC") * 1.3;
 * author=giannou
 table iIndCharData(allCy,INDSE,Indu_Scon_Set)               "Industry sector charactetistics (various)"
          BASE           SHR_NSE   SH_HPELC
-RAS.IS   0.4397         0.7       0.00001
-RAS.NF   0              0.95      0.00001
-RAS.CH   0.1422         0.95      0.00001
-RAS.BM   2.1062         0.95      0.00001
-RAS.PP   0              0.95      0.00001
-RAS.FD   0.6641         0.95      0.00001
-RAS.TX   0.0638         0.95      0.00001
-RAS.EN   1.6664         0.95      0.00001
-RAS.OE   0.00000001     0.95      0.00001
-RAS.OI   1.5161         0.95      0.00001
-MAR.IS   0.4397         0.7       0.00001
-MAR.NF   0              0.95      0.00001
-MAR.CH   0.1422         0.95      0.00001
-MAR.BM   2.1062         0.95      0.00001
-MAR.PP   0              0.95      0.00001
-MAR.FD   0.6641         0.95      0.00001
-MAR.TX   0.0638         0.95      0.00001
-MAR.EN   1.6664         0.95      0.00001
-MAR.OE   0.00000001     0.95      0.00001
-MAR.OI   1.5161         0.95      0.00001
+ELL.IS   0.4397         0.7       0.00001
+ELL.NF   0              0.95      0.00001
+ELL.CH   0.1422         0.95      0.00001
+ELL.BM   2.1062         0.95      0.00001
+ELL.PP   0              0.95      0.00001
+ELL.FD   0.6641         0.95      0.00001
+ELL.TX   0.0638         0.95      0.00001
+ELL.EN   1.6664         0.95      0.00001
+ELL.OE   0.00000001     0.95      0.00001
+ELL.OI   1.5161         0.95      0.00001
 ;
 
-iIndChar(runCy,INDSE,Indu_Scon_Set) = iIndCharData("MAR",INDSE,Indu_Scon_Set);
+iIndChar(runCy,INDSE,Indu_Scon_Set) = iIndCharData("ELL",INDSE,Indu_Scon_Set);
 table iInitConsSubAndInitShaNonSubElec(DOMSE,Indu_Scon_Set)      "Initial Consumption per Subsector and Initial Shares of Non Substitutable Electricity in Total Electricity Demand (Mtoe)"
      BASE   SHR_NSE SH_HPELC
 SE   1.8266 0.9     0.00001
