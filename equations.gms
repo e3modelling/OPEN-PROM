@@ -1825,4 +1825,16 @@ QPriceElecIndResConsu(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..  !! The e
         );
 
 *' * Define dummy objective function
+$IFTHEN.calib %Calibration% == off
 qDummyObj.. vDummyObj =e= 1;
+$ELSE.calib
+***qDummyObj$(TIME(YTIME)).. vDummyObj =e= 1/SQRT(SQR(54.77-SUM(DSBS$SECTTECH(DSBS,EF),SUM(EF$SECTTECH(DSBS,EF),VConsFuelInclHP(("DEU",DSBS,EF,YTIME))))));
+***qDummyObj$(TIME(YTIME)).. vDummyObj =e= 1/SQRT(SQR(54.77-SUM(DSBS$SECTTECH(DSBS,EF),SUM(EF$SECTTECH(DSBS,EF),VConsFuelInclHP("DEU",DSBS,EF,YTIME)))));
+qDummyObj(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy))).. vDummyObj =e=
+
+(1/SQRT(SQR(SUM(SECTTECH(DSBS,EF)$(INDSE(DSBS)),iFuelConsPerFueSub(allCy,DSBS,EF,YTIME))-SUM(SECTTECH(DSBS,EF)$(INDSE(DSBS)),VConsFuelInclHP(allCy,DSBS,EF,YTIME))))) +
+(1/SQRT(SQR(SUM(SECTTECH(DSBS,EF)$(DOMSE(DSBS)),iFuelConsPerFueSub(allCy,DSBS,EF,YTIME))-SUM(SECTTECH(DSBS,EF)$(DOMSE(DSBS)),VConsFuelInclHP(allCy,DSBS,EF,YTIME)))))+
+(1/SQRT(SQR(SUM(SECTTECH(DSBS,EF)$(NENSE(DSBS)),iFuelConsPerFueSub(allCy,DSBS,EF,YTIME))-SUM(SECTTECH(DSBS,EF)$(NENSE(DSBS)),VConsFuelInclHP(allCy,DSBS,EF,YTIME)))))+
+***1/SQRT(SQR(SUM(SECTTECH(DSBS,EF)$(TRANSE(DSBS)),iFuelConsPerFueSub(allCy,DSBS,EF,YTIME))-SUM(SECTTECH(DSBS,EF)$(TRANSE(DSBS)),VDemFinEneTranspPerFuel(allCy,DSBS,EF,YTIME))))+
+0;
+$ENDIF.calib

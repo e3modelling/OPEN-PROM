@@ -21,13 +21,25 @@ $ondelim
 $include "./iTransChar.csv"
 $offdelim
 ;
+$IFTHEN.calib %Calibration% == off
 table iElastA(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)"
 $ondelim
 $include "./iElastA.csv"
 $offdelim
 ;
-
 iElastA(runCy,SBS,ETYPES,YTIME) = iElastA("MAR",SBS,ETYPES,YTIME);
+$ELSE.calib
+variable iElastA(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)";
+table iElastAL(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)"
+$ondelim
+$include "./iElastA.csv"
+$offdelim
+;
+iElastA.L(runCy,SBS,ETYPES,YTIME) = iElastAL("MAR",SBS,ETYPES,YTIME);
+iElastA.LO(runCy,SBS,ETYPES,YTIME) = -2;
+iElastA.UP(runCy,SBS,ETYPES,YTIME) = 6;
+$ENDIF.calib
+
 
 table iElastNonSubElecData(SBS,ETYPES,YTIME) "Elasticities of Non Substitutable Electricity (1)"
 $ondelim
@@ -884,6 +896,7 @@ $offdelim
 iTransfOutputRef(runCy,EFS,YTIME)$(not An(YTIME)) = iDataTransfOutputRef(runCy,EFS,YTIME);
 iFuelConsTRANSE(runCy,TRANSE,EF,YTIME)$(SECTTECH(TRANSE,EF) $(iFuelConsTRANSE(runCy,TRANSE,EF,YTIME)<=0)) = 1e-6;
 iFuelConsPerFueSub(runCy,TRANSE,EF,YTIME) = iFuelConsTRANSE(runCy,TRANSE,EF,YTIME);
+iFuelConsPerFueSub(runCy,TRANSE,EF,"2021") = iFuelConsPerFueSub(runCy,TRANSE,EF,"2020");
 table iFuelConsINDSE(allCy,INDSE,EF,YTIME)	 "Fuel consumption of industry subsector (Mtoe)"
 $ondelim
 $include"./iFuelConsINDSE.csv"
