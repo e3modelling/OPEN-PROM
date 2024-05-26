@@ -62,7 +62,7 @@ createRunFolder <- function(scenario = "default") {
   file.copy("conopt.opt", to = runfolder)
   file.copy("metadata.json", to = runfolder)
   file.copy("data", to = runfolder, recursive = TRUE)
-
+  file.copy("input.gdx", to = runfolder)
   # switch to the run folder
   setwd(runfolder)
 

@@ -96,9 +96,9 @@ $offOrder
 *' *** GAMS "flags" definitions
 *' 
 *' *** Calibration
-$setGlobal Calibration off
+$setGlobal Calibration on
 *' *** Maximum number of solver attempts
-$evalGlobal SolverTryMax 4
+$evalGlobal SolverTryMax 12
 *' *** Setting research mode (0) or development mode (1) to modify settings and parameters accordingly
 $setGlobal DevMode 0 !! can be overwritten if VS Code Tasks are used
 *' *** Write a GDX file with all data at the end of the run
@@ -106,7 +106,7 @@ $setGlobal WriteGDX on
 *' *** Generate input data?
 $setGlobal GenerateInput on !! can be overwritten if VS Code Tasks are used
 
-$setGlobal fCountries 'DEU' !! can be overwritten if VS Code Tasks are used
+$setGlobal fCountries 'MAR,IND,USA,EGY,RWO' !! can be overwritten if VS Code Tasks are used
 
 $setGlobal fCountryList %countries%
 

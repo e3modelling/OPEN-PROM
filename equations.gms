@@ -1278,7 +1278,7 @@ QConsFuelInclHP(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(
          VConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)+
          (VShareTechNewEquip(allCy,DSBS,EF,YTIME)*VGapFinalDem(allCy,DSBS,YTIME))
 *'        $(VGapFinalDem.L(allCy,DSBS,YTIME)>0)
-         + (VConsElecNonSubIndTert(allCy,DSBS,YTIME))$(INDDOM(DSBS) and ELCEF(EF));
+         + (VConsElecNonSubIndTert(allCy,DSBS,YTIME))$(INDDOM(DSBS) $(ELCEF(EF)));
 
 *' This equation calculates the variable, including fuel electricity production cost per CHP plant and demand sector, taking into account the variable cost (other than fuel)
 *' per CHP type and the summation of fuel-related costs for each energy form . The calculation involves fuel prices, CO2 emission factors, boiler efficiency, electricity
@@ -1832,9 +1832,15 @@ $ELSE.calib
 ***qDummyObj$(TIME(YTIME)).. vDummyObj =e= 1/SQRT(SQR(54.77-SUM(DSBS$SECTTECH(DSBS,EF),SUM(EF$SECTTECH(DSBS,EF),VConsFuelInclHP("DEU",DSBS,EF,YTIME)))));
 qDummyObj(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy))).. vDummyObj =e=
 
-(1/SQRT(SQR(SUM(SECTTECH(DSBS,EF)$(INDSE(DSBS)),iFuelConsPerFueSub(allCy,DSBS,EF,YTIME))-SUM(SECTTECH(DSBS,EF)$(INDSE(DSBS)),VConsFuelInclHP(allCy,DSBS,EF,YTIME))))) +
-(1/SQRT(SQR(SUM(SECTTECH(DSBS,EF)$(DOMSE(DSBS)),iFuelConsPerFueSub(allCy,DSBS,EF,YTIME))-SUM(SECTTECH(DSBS,EF)$(DOMSE(DSBS)),VConsFuelInclHP(allCy,DSBS,EF,YTIME)))))+
-(1/SQRT(SQR(SUM(SECTTECH(DSBS,EF)$(NENSE(DSBS)),iFuelConsPerFueSub(allCy,DSBS,EF,YTIME))-SUM(SECTTECH(DSBS,EF)$(NENSE(DSBS)),VConsFuelInclHP(allCy,DSBS,EF,YTIME)))))+
-***1/SQRT(SQR(SUM(SECTTECH(DSBS,EF)$(TRANSE(DSBS)),iFuelConsPerFueSub(allCy,DSBS,EF,YTIME))-SUM(SECTTECH(DSBS,EF)$(TRANSE(DSBS)),VDemFinEneTranspPerFuel(allCy,DSBS,EF,YTIME))))+
+SQRT(SUM(SECTTECH(DSBS,EF)$(INDDOM(DSBS)), SQR(iFuelConsPerFueSub(allCy,DSBS,EF,YTIME)-VConsFuelInclHP(allCy,DSBS,EF,YTIME))) )+ !!$(iFuelConsPerFueSub(allCy,DSBS,EF,YTIME)$(not TRANSE(DSBS)))+
+SQRT(SUM(SECTTECH(TRANSE,EF), SQR(VDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)-iFuelConsPerFueSub(allCy,TRANSE,EF,YTIME))))+ !! + $iFuelConsPerFueSub(allCy,DSBS,EF,YTIME)+
+*SUM(SECTTECH(DSBS,EF)$(DOMSE(DSBS)),SQRT(SQR(iFuelConsPerFueSub(allCy,DSBS,EF,YTIME)-VConsFuelInclHP(allCy,DSBS,EF,YTIME))))+
+*SUM(SECTTECH(DSBS,EF)$(NENSE(DSBS)),SQRT(SQR(iFuelConsPerFueSub(allCy,DSBS,EF,YTIME)-VConsFuelInclHP(allCy,DSBS,EF,YTIME))))+
 0;
+
+*SQRT(SQR(SUM(SECTTECH(DSBS,EF)$(INDSE(DSBS)),iFuelConsPerFueSub(allCy,DSBS,EF,YTIME))-SUM(SECTTECH(DSBS,EF)$(INDSE(DSBS)),VConsFuelInclHP(allCy,DSBS,EF,YTIME))))+
+*SQRT(SQR(SUM(SECTTECH(DSBS,EF)$(DOMSE(DSBS)),iFuelConsPerFueSub(allCy,DSBS,EF,YTIME))-SUM(SECTTECH(DSBS,EF)$(DOMSE(DSBS)),VConsFuelInclHP(allCy,DSBS,EF,YTIME))))+
+*SQRT(SQR(SUM(SECTTECH(DSBS,EF)$(NENSE(DSBS)),iFuelConsPerFueSub(allCy,DSBS,EF,YTIME))-SUM(SECTTECH(DSBS,EF)$(NENSE(DSBS)),VConsFuelInclHP(allCy,DSBS,EF,YTIME))))+
+***1/SQRT(SQR(SUM(SECTTECH(DSBS,EF)$(TRANSE(DSBS)),iFuelConsPerFueSub(allCy,DSBS,EF,YTIME))-SUM(SECTTECH(DSBS,EF)$(TRANSE(DSBS)),VDemFinEneTranspPerFuel(allCy,DSBS,EF,YTIME))))+
+*0;
 $ENDIF.calib
