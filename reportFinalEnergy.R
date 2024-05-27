@@ -32,7 +32,8 @@ reportFinalEnergy <- function(regs,rmap) {
   
   #filter ENERDATA by consumption
   consumption_ENERDATA <- readSource("ENERDATA", subtype =  "consumption", convert = TRUE)
-  
+  own_use_enerdata <- readSource("ENERDATA", subtype =  "own", convert = TRUE)
+  own_use_enerdata <- own_use_enerdata[,,"Electricity own use of energy industries.Mtoe"]
   # map of enerdata and balance fuel
   map_enerdata <- toolGetMapping(name = "enerdata-by-fuel.csv",
                                  type = "sectoral",
@@ -42,6 +43,7 @@ reportFinalEnergy <- function(regs,rmap) {
   year <- Reduce(intersect, list(getYears(MENA_EDS_VFeCons,as.integer=TRUE),getYears(consumption_ENERDATA,as.integer=TRUE),getYears(VConsFinEneCountry,as.integer=TRUE)))
   #keep the variables from the map
   consumption_ENERDATA_variables <- consumption_ENERDATA[, year, map_enerdata[, 1]]
+  consumption_ENERDATA_variables[,,"Electricity final consumption.Mtoe"] <- consumption_ENERDATA_variables[,,"Electricity final consumption.Mtoe"] - ifelse(is.na(own_use_enerdata[,year,]), 0, own_use_enerdata[,year,])
   consumption_ENERDATA_variables <- as.quitte(consumption_ENERDATA_variables)
   names(map_enerdata) <- sub("ENERDATA", "variable", names(map_enerdata))
   #remove units
@@ -190,7 +192,122 @@ reportFinalEnergy <- function(regs,rmap) {
     write.report(by_energy_form_mena[menaregs,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario=scenario_name)
     
     #filter IFuelCons by subtype enerdata
-    FuelCons_enerdata <- calcOutput(type = "IFuelCons", subtype = sector[y], aggregate = TRUE)
+    #FuelCons_enerdata <- calcOutput(type = "IFuelCons", subtype = sector[y], aggregate = TRUE)
+    
+    
+    ###  USE READSOURCE INSTEAD CALCOUTPUT
+    
+    # load data source (ENERDATA)
+    subtp <- sector[y]
+    x <- readSource("ENERDATA", "consumption", convert = TRUE)
+    
+    # filter years
+    fStartHorizon <- readEvalGlobal(system.file(file.path("extdata", "main.gms"), package = "mrprom"))["fStartHorizon"]
+    lastYear <- sub("y", "", tail(sort(getYears(x)), 1))
+    x <- x[, c(fStartHorizon:lastYear), ]
+    
+    # load current OPENPROM set configuration
+    sets <- toolreadSets(system.file(file.path("extdata", "sets.gms"), package = "mrprom"), subtp)
+    sets <- unlist(strsplit(sets[, 1], ","))
+    
+    # use enerdata-openprom mapping to extract correct data from source
+    map_fc <- toolGetMapping(name = "prom-enerdata-fucon-mapping.csv",
+                          type = "sectoral",
+                          where = "mrprom")
+    maps <- map_fc
+    ## filter mapping to keep only XXX sectors
+    map_fc <- filter(map_fc, map_fc[, "SBS"] %in% sets)
+    ## ..and only items that have an enerdata-prom mapping
+    enernames <- unique(map_fc[!is.na(map_fc[, "ENERDATA"]), "ENERDATA"])
+    map_fc <- map_fc[map_fc[, "ENERDATA"] %in% enernames, ]
+    ## filter data to keep only XXX data
+    enernames <- unique(map_fc[!is.na(map_fc[, "ENERDATA"]), "ENERDATA"])
+    x <- x[, , enernames]
+    ## for oil, rename unit from Mt to Mtoe
+    if (any(grepl("oil", getItems(x, 3.1)) & grepl("Mt$", getNames(x)))) {
+      tmp <- x[, , "Mt"]
+      getItems(tmp, 3.2) <- "Mtoe"
+      x <- mbind(x[, , "Mtoe"], tmp)
+      map_fc[["ENERDATA"]] <-  sub(".Mt$", ".Mtoe", map_fc[["ENERDATA"]])
+    }
+    
+    ## rename variables to openprom names
+    out <- NULL
+    ## rename variables from ENERDATA to openprom names
+    ff <- paste(map_fc[, 2], map_fc[, 3], sep = ".")
+    iii <- 0
+    ### add a dummy dimension to data because mapping has 3 dimensions, and data only 2
+    for (ii in map_fc[, "ENERDATA"]) {
+      iii <- iii + 1
+      out <- mbind(out, setNames(add_dimension(x[, , ii], dim = 3.2), paste0(ff[iii], ".", sub("^.*.\\.", "", getNames(x[, , ii])))))
+    }
+    x <- out
+    
+    if (subtp == "TRANSE") {
+      
+      a <- readSource("IRF", subtype = "total-van,-pickup,-lorry-and-road-tractor-traffic")
+      #million motor vehicle km/yr
+      a2 <- readSource("IRF", subtype = "passenger-car-traffic")
+      #million motor vehicle km/yr
+      a3 <- readSource("IRF", subtype = "bus-and-motor-coach-traffic")
+      #million motor vehicle km/yr
+      a4 <- readSource("ENERDATA", subtype =  "diesel")
+      a4 <- a4[, , "Diesel final consumption of transport (excl biodiesel)"][, , "Mtoe"]
+      #Mtoe, Millions of tonnes of oil equivalent
+      a5 <- readSource("ENERDATA", subtype =  "total")
+      a5 <- a5[, , "Total energy final consumption of transport"][, , "Mtoe"]
+      #Mtoe, Millions of tonnes of oil equivalent
+      
+      a <- a[, Reduce(intersect, list(getYears(a), getYears(a2), getYears(a3), getYears(a4), getYears(a5))), ]#million motor vehicle km/yr
+      a2 <- a2[, Reduce(intersect, list(getYears(a), getYears(a2), getYears(a3), getYears(a4), getYears(a5))), ]#million motor vehicle km/yr
+      a3 <- a3[, Reduce(intersect, list(getYears(a), getYears(a2), getYears(a3), getYears(a4), getYears(a5))), ]#million motor vehicle km/yr
+      a4 <- a4[, Reduce(intersect, list(getYears(a), getYears(a2), getYears(a3), getYears(a4), getYears(a5))), ]#Mtoe
+      a5 <- a5[, Reduce(intersect, list(getYears(a), getYears(a2), getYears(a3), getYears(a4), getYears(a5))), ]#Mtoe
+      
+      #total-van,-pickup,-lorry-and-road-tractor-traffic^2 / Total energy final consumption of transport
+      out1 <- ((a4 * a4) / a5)
+      #passenger-car-traffic / (total-van,-pickup,-lorry-and-road-tractor-traffic + bus-and-motor-coach-traffic)
+      out2 <- (a2 / (a + a3))
+      x2 <- out1 * out2
+      x2 <- collapseNames(x2)
+      getNames(x2) <- "PC.GDO.Mtoe"
+      getSets(x2) <- c("region", "period", "variable", "new", "unit")
+      x <- mbind(x[, intersect(getYears(x), getYears(x2)), ], x2[, intersect(getYears(x), getYears(x2)), ])
+      
+      a6 <- readSource("IRF", subtype = "inland-surface-passenger-transport-by-rail")
+      #million pKm/yr
+      a7 <- readSource("IRF", subtype = "inland-surface-freight-transport-by-rail")
+      #million tKm/yr
+      a6 <- a6[, Reduce(intersect, list(getYears(a6), getYears(a7), getYears(x))), ]
+      a7 <- a7[, Reduce(intersect, list(getYears(a6), getYears(a7), getYears(x))), ]
+      x <- x[, Reduce(intersect, list(getYears(a6), getYears(a7), getYears(x))), ]
+      
+      #inland-surface-passenger-transport-by-rail / total inland-surface transport-by-rail
+      x[, , "PT.GDO.Mtoe"] <- x[, , "PT.GDO.Mtoe"] * (a6 / (a6 + a7))
+      #inland-surface-freight-transport-by-rail / total inland-surface
+      x[, , "GT.GDO.Mtoe"] <- x[, , "GT.GDO.Mtoe"] * (a7 / (a6 + a7))
+      
+      x[, , "PT.ELC.Mtoe"] <- x[, , "PT.ELC.Mtoe"] * (a6 / (a6 + a7))
+      x[, , "GT.ELC.Mtoe"] <- x[, , "GT.ELC.Mtoe"] * (a7 / (a6 + a7))
+      
+      
+      a8 <- readSource("IRF", subtype = "passenger-car-traffic")
+      #million pKm/yr
+      a9 <- readSource("IRF", subtype = "inland-surface-freight-transport-by-road")
+      #million tKm/yr
+      a8 <- a8[, Reduce(intersect, list(getYears(a8), getYears(a9), getYears(x))), ]
+      a9 <- a9[, Reduce(intersect, list(getYears(a8), getYears(a9), getYears(x))), ]
+      x <- x[, Reduce(intersect, list(getYears(a8), getYears(a9), getYears(x))), ]
+      
+      #inland-surface-freight-transport-by-road / total inland-surface-transport-by-road
+      
+      #x[, , "PC.GDO.Mtoe"] <- x[, , "PC.GDO.Mtoe"] * (a8 / (a8 + a9))
+      x[, , "GU.GDO.Mtoe"] <- x[, , "GU.GDO.Mtoe"] * (a9 / (a8 + a9))
+    }
+    
+    x[is.na(x)] <- 10^-6
+    
+    FuelCons_enerdata <- x
     
     year <- Reduce(intersect, list(getYears(FCONS_by_sector_MENA,as.integer=TRUE),getYears(FCONS_by_sector_open,as.integer=TRUE),getYears(FuelCons_enerdata,as.integer=TRUE)))
     FuelCons_enerdata <- FuelCons_enerdata[,year,]
@@ -199,6 +316,8 @@ reportFinalEnergy <- function(regs,rmap) {
     
     map_subsectors_ener$EF = paste(map_subsectors_ener$SBS, "Mtoe",map_subsectors_ener$EF, sep=".")
     #filter to have only the variables which are in enerdata
+    FuelCons_enerdata <- as.quitte(FuelCons_enerdata)
+    FuelCons_enerdata <- as.magpie(FuelCons_enerdata)
     map_subsectors_ener <- map_subsectors_ener %>% filter(EF %in% getItems(FuelCons_enerdata,3))
     
     # aggregate from enerdata fuels to subsectors
