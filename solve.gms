@@ -1,4 +1,3 @@
-execute_loadpoint 'input.gdx';
     sModelStat = 100;
     loop rcc$(rcc.val <= sSolverTryMax) do !! start inner iteration loop (solver attempts)
         if sModelStat gt 2 then

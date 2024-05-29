@@ -510,6 +510,7 @@ VLambda.L(runCy,YTIME)=0.21;
 VProdReqTotElec.fx(runCy,"%fBaseY%")=sum(pgall,VProdElec.L(runCy,pgall,"%fBaseY%"));
 
 openprom.optfile=1;
+execute_loadpoint 'input.gdx';
 loop an do !! start outer iteration loop (time steps)
    s = s + 1;
    TIME(YTIME) = NO;
