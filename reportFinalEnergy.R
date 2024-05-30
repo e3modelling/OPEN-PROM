@@ -357,4 +357,90 @@ reportFinalEnergy <- function(regs,rmap) {
     write.report(enerdata_by_energy_form[intersect(getRegions(enerdata_by_energy_form),regs),year,],file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario=scenario_name)
     
   }
+  
+  # Add IEA data from world balances
+  
+  IEA <- NULL
+  map_IEA <- maps %>% drop_na(IEA)
+  IEA_WB <- NULL
+  #the map has a column SBS which corresponds to flow of IEA
+  for (ii in unique(map_IEA[, "flow"])) {
+    d <- readSource("IEA", subtype = as.character(ii))
+    d <- d / 1000 #ktoe to mtoe
+    d <- as.quitte(d)
+    #each flow has some products as it is the EF column of map
+    m <- filter(map_IEA, map_IEA[["flow"]] == ii)
+    #for each product of IEA data
+    region <- NULL
+    period <- NULL
+
+    qb <- filter(d, product %in% m[, 4])
+    qb <- select((qb), c(region, period, value, product, flow))
+    
+    if (ii == "MARBUNK") {
+      qb["value"] <- - qb["value"]
+    }
+
+    qb <- filter(qb, qb[["period"]] %in% fStartHorizon : tail(qb[["period"]]))
+    IEA_WB <- rbind(IEA_WB, qb)
+  }
+  
+  IEA_WB["unit"] <- "Mtoe"
+  
+  
+  names(map_IEA) <- gsub("IEA", "product", names(map_IEA))
+  IEA_change_names <- left_join(IEA_WB, map_IEA, by = c("product", "flow"))
+  
+  IEA_data_WB <- select((IEA_change_names), c(region, period, value, SBS, EF, unit))
+  
+  names(IEA_data_WB) <- gsub("SBS", "variable", names(IEA_data_WB))
+  names(IEA_data_WB) <- gsub("EF", "new", names(IEA_data_WB))
+  
+  IEA_data_WB <- as.quitte(IEA_data_WB)
+  IEA_data_WB <- as.magpie(IEA_data_WB)
+  
+  map_subsectors_ener2 <- sets10
+  #filter to have only the variables which are in enerdata
+  map_subsectors_ener2 <- map_subsectors_ener2 %>% filter(EF %in% getItems(IEA_data_WB,3.3))
+  
+  map_subsectors_ener <- sets4
+  
+  map_subsectors_ener$EF = paste(map_subsectors_ener$SBS, "Mtoe",map_subsectors_ener$EF, sep=".")
+  map_subsectors_ener <- map_subsectors_ener %>% filter(EF %in% getItems(IEA_data_WB,3))
+  
+  year <- Reduce(intersect, list(getYears(FCONS_by_sector_MENA,as.integer=TRUE),getYears(FCONS_by_sector_open,as.integer=TRUE),getYears(IEA_data_WB,as.integer=TRUE)))
+  IEA_data_WB <- IEA_data_WB[,year,]
+  
+  # aggregate from IEA fuels to subsectors
+  IEA_by_sector <- toolAggregate(IEA_data_WB[,,as.character(unique(map_subsectors_ener$EF))],dim=3,rel=map_subsectors_ener,from="EF",to="SBS")
+  getItems(IEA_by_sector, 3) <- paste0("Final Energy ", sector[y]," ", getItems(IEA_by_sector, 3))
+  
+  # write data in mif file
+  write.report(IEA_by_sector[intersect(getRegions(IEA_by_sector),regs),year,],file="reporting.mif",model="IEA_WB",unit="Mtoe",append=TRUE,scenario=scenario_name)
+  
+  #Final Energy IEA
+  FE_IEA <- dimSums(IEA_by_sector, dim = 3, na.rm = TRUE)
+  getItems(FE_IEA, 3) <- paste0("Final Energy ", sector[y])
+  
+  # write data in mif file
+  write.report(FE_IEA[intersect(getRegions(FE_IEA),regs),year,],file="reporting.mif",model="IEA_WB",unit="Mtoe",append=TRUE,scenario=scenario_name)
+  
+  #Aggregate model IEA by subsector and by energy form
+  IEA_by_EF_and_sector <- toolAggregate(IEA_data_WB[,year,as.character(unique(map_subsectors_ener2$EF))],dim=3.3,rel=map_subsectors_ener2,from="EF",to="EFA")
+  
+  #IEA by subsector and by energy form
+  IEA_by_subsector_by_energy_form <- IEA_by_EF_and_sector
+  IEA_by_subsector_by_energy_form <- dimSums(IEA_by_subsector_by_energy_form, 3.2, na.rm = TRUE)
+  getItems(IEA_by_subsector_by_energy_form, 3.1) <- paste0("Final Energy ", sector[y]," ", getItems(IEA_by_subsector_by_energy_form, 3.1))
+  
+  # write data in mif file
+  write.report(IEA_by_subsector_by_energy_form[intersect(getRegions(IEA_by_subsector_by_energy_form),regs),year,],file="reporting.mif",model="IEA_WB",unit="Mtoe",append=TRUE,scenario=scenario_name)
+  
+  #Aggregate model IEA by energy form
+  IEA_by_energy_form <- dimSums(IEA_by_EF_and_sector, 3.1, na.rm = TRUE)
+  getItems(IEA_by_energy_form,3) <- paste0("Final Energy ", sector[y]," ", getItems(IEA_by_energy_form, 3.2))
+  
+  # write data in mif file
+  write.report(IEA_by_energy_form[intersect(getRegions(IEA_by_energy_form),regs),year,],file="reporting.mif",model="IEA_WB",unit="Mtoe",append=TRUE,scenario=scenario_name)
+  
 }
