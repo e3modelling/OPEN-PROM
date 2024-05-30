@@ -12,7 +12,8 @@ def list_subfolders():
     based on their modification times.
     """
     runs_dir = "runs"
-    subfolders = [(f.name, f.stat().st_mtime) for f in sorted(os.scandir(runs_dir), key=lambda x: x.stat().st_mtime, reverse=False) if f.is_dir()]
+    subfolders = [(f.name, f.stat().st_mtime) for f in sorted(os.scandir(runs_dir), key=lambda x: x.stat().st_birthtime, reverse=False) if f.is_dir()]
+   
     return subfolders
 
 def read_main_log(subfolder):
