@@ -107,16 +107,18 @@ def read_main_log(subfolder):
 def parse_main_log(lines):
     year_pattern = re.compile(r'an\s*=\s*(\d+)')
     country_pattern = re.compile(r'runCyL\s*=\s*([A-Z]+)')
-    status_pattern = re.compile(r'\*\* Optimal solution')
+    reading_solution_pattern = re.compile(r'--- Reading solution for model openprom')
+    optimal_solution_pattern = re.compile(r'\*\* Optimal solution')
+    feasible_solution_pattern = re.compile(r'\*\* Feasible solution')
 
     country_year_status = {}
     current_year = None
     current_country = None
 
-    for line in lines:
+    for line_num, line in enumerate(lines):
         year_match = re.search(year_pattern, line)
         country_match = re.search(country_pattern, line)
-        status_match = re.search(status_pattern, line)
+        reading_solution_match = re.search(reading_solution_pattern, line)
 
         if year_match:
             current_year = int(year_match.group(1))
@@ -124,12 +126,31 @@ def parse_main_log(lines):
             current_country = country_match.group(1)
             if current_country not in country_year_status:
                 country_year_status[current_country] = {}
-        if status_match:
-            current_status = 1 if status_match else 0
 
-            if current_year and current_country:
-                country_year_status[current_country][current_year] = current_status
+        if reading_solution_match:
+            
+            start_line = max(0, line_num - 5)
+            relevant_lines = lines[start_line:line_num]
 
+            success_found = False
+            for relevant_line in relevant_lines:
+                optimal_solution_match = re.search(optimal_solution_pattern, relevant_line)
+                feasible_solution_match = re.search(feasible_solution_pattern, relevant_line)
+
+                if optimal_solution_match:
+                    success_found = True
+                    country_year_status[current_country][current_year] = 1
+                    break
+                elif feasible_solution_match:
+                    success_found = True
+                    if current_country not in country_year_status or current_year not in country_year_status[current_country]:
+                        country_year_status[current_country][current_year] = 2
+                    break
+
+            if not success_found:
+                if current_country not in country_year_status or current_year not in country_year_status[current_country]:
+                    country_year_status[current_country][current_year] = 0
+                    
     return country_year_status
 
 def create_dataframe(country_year_status, pending_run=False):
@@ -147,13 +168,13 @@ def create_dataframe(country_year_status, pending_run=False):
 
 def plot_heatmap(df, plot_title):
     if df is not None:
-        cmap = sns.color_palette(["red", "green"])
+        cmap = sns.color_palette(["red", "green", "orange"])
 
         # Clear the current figure
         plt.clf()
-
-        # Plot the heatmap
-        sns.heatmap(df, cmap=cmap, annot=False, linewidths=.5, linecolor='black', vmin=0, vmax=1, cbar=False)
+      
+      
+        sns.heatmap(df, cmap=cmap, annot=False, linewidths=.5, linecolor='black', vmin=0, vmax=2, cbar=False)
 
         plt.title(plot_title)
         plt.xlabel('Year')
@@ -165,7 +186,7 @@ def plot_heatmap(df, plot_title):
     else:
         print("DataFrame is empty.")
 
-def main_loop(base_path, check_interval=1.5, max_no_update_intervals=3):
+def main_loop(base_path, check_interval=1.5, max_no_update_intervals=4):
     subfolder_status_list = check_files_and_list_subfolders(base_path)
     pending_folder = find_pending_run(subfolder_status_list)
 

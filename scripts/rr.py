@@ -155,9 +155,8 @@ def parse_main_log(lines):
                 country_year_status[current_country] = {}
 
         if reading_solution_match:
-            reading_solution_found = True
             # Start processing lines up to 10 lines above the reading solution line
-            start_line = max(0, line_num - 10)
+            start_line = max(0, line_num - 5)
             relevant_lines = lines[start_line:line_num]
 
             success_found = False
@@ -178,7 +177,7 @@ def parse_main_log(lines):
             if not success_found:
                 if current_country not in country_year_status or current_year not in country_year_status[current_country]:
                     country_year_status[current_country][current_year] = 0
-                    
+
     return country_year_status
 
 def create_dataframe(country_year_status, pending_run=False):
