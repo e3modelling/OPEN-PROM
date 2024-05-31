@@ -19,7 +19,6 @@ def check_files_and_list_subfolders(base_path):
 
     max_status_length = 35  # Maximum length for the status message
     max_year_length = 4  # Maximum length for the year
-    max_horizon_length = 4  # Maximum length for the horizon
 
     current_time = time.time()
     max_modification_threshold = 120  # 120 seconds threshold for max modification time
@@ -191,7 +190,6 @@ def create_dataframe(country_year_status, pending_run=False):
     if country_year_status:       
         # Create DataFrame directly from country_year_status dictionary
         df = pd.DataFrame(country_year_status).fillna(0)
-        print(df)
         # Reindex rows to use country names
         df.index.name = 'Country'
         # Transpose DataFrame to use years as columns

@@ -15,7 +15,6 @@ def check_files_and_list_subfolders(base_path):
 
     max_status_length = 35
     max_year_length = 4
-    max_horizon_length = 4
 
     current_time = time.time()
     max_modification_threshold = 120
