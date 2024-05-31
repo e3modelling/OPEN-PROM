@@ -1,0 +1,51 @@
+name: Test OPEN-PROM Model Run
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  test-model:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup GAMS
+        run: |
+          $url = "https://d37drm4t2jghv5.cloudfront.net/distributions/45.7.0/windows/windows_x64_64.exe"
+          $installer = "gams_installer.exe"
+          Invoke-WebRequest -Uri $url -OutFile $installer
+          Start-Process $installer -ArgumentList "/silent" -NoNewWindow -Wait
+          Remove-Item $installer
+          $env:Path += ";C:\GAMS\45"
+          [Environment]::SetEnvironmentVariable("Path", $env:Path, [EnvironmentVariableTarget]::Machine)
+          echo $env:Path
+
+      - name: Setup GAMS License
+        env:
+          LICENSE: ${{ secrets.GAMS_LICENSE }}
+          
+        run: |
+          $licenseFile = "C:\GAMS\45\gamslice.txt"
+          New-Item -ItemType Directory -Force -Path "C:\GAMS\45"
+          Set-Content -Path $licenseFile -Value $env:LICENSE
+
+      - name: Download Datasets
+        run: |
+          @"
+          print("Getting data for GitHub Action")
+          url <- 'https://drive.usercontent.google.com/uc?id=1u6Gx0w7HDiZlmJE4H7xauT28w1qvH6cm&export=download'
+          fname <- 'ghaction_data.tgz'
+          download.file(url, fname, mode="wb")
+          utils::untar(fname, exdir = "./data")
+          "@ | Out-File -FilePath dl_data.R
+
+          RScript dl_data.R
+          
+      - name: Test Model Run
+        run: |
+          & "C:\GAMS\45\gams.exe" main.gms --DevMode=0 --GenerateInput=off --fEndY=2050 -Idir=./data

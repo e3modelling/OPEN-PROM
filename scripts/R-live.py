@@ -1,48 +1,24 @@
 import os
-import time
 import re
+import time
+import argparse
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 from colorama import Fore, Style
 
-#def select_folders(base_path):
-   # """
-    #This function's input is the folder path. It finds the desired directory, scans it,
-    #presents a subfolder list sorted by modification time (newest to oldest).
-    #Lastly, it returns a list of strings with all the subfolders.
-    #"""
-
-    #runs_path = os.path.join(base_path, "runs")
-    #subfolders = [f.path for f in os.scandir(runs_path) if f.is_dir()]
-
-    # Create a list of tuples containing subfolder path and its modification time
-    #subfolder_modification_times = [(folder, os.path.getmtime(folder)) for folder in subfolders]
-
-    # Sort the list of tuples based on modification time (newest to oldest)
-    #subfolder_modification_times.sort(key=lambda x: x[1], reverse=True)
-
-    # Extract the folder paths from the sorted list
-    #subfolders = [folder for folder, _ in subfolder_modification_times]
-
-    #print(Fore.YELLOW + "Recently started runs might be listed as FAILED, wait 15 seconds before running the script for recently started runs.")
-    #print("Checking all subfolders..." + Style.RESET_ALL)
-
-    #return subfolders
-
 def check_files_and_list_subfolders(base_path):
-    """
-    This function checks each subfolder for necessary files and generates a list of subfolders with color-coded status.
-    It also includes information about failed subfolders, their horizon, and the last year they ran.
-    """
     runs_path = os.path.join(base_path, "runs")
     subfolders = [f.path for f in os.scandir(runs_path) if f.is_dir()]
 
     max_folder_name_length = max([len(folder.split(os.sep)[-1]) for folder in subfolders])
 
-    max_status_length = 35  # Maximum length for the status message
-    max_year_length = 4  # Maximum length for the year
+    max_status_length = 35
+    max_year_length = 4
+    max_horizon_length = 4
 
     current_time = time.time()
-    max_modification_threshold = 120  # 120 seconds threshold for max modification time
+    max_modification_threshold = 120
     max_modification_time = current_time - max_modification_threshold
 
     subfolder_status_list = []
@@ -52,7 +28,6 @@ def check_files_and_list_subfolders(base_path):
         main_lst_path = os.path.join(folder, "main.lst")
         main_log_path = os.path.join(folder, "main.log")
 
-        # Split the path and isolate folder name for printing
         folder_name = folder.split(os.sep)[-1]
 
         status = ""
@@ -108,36 +83,18 @@ def check_files_and_list_subfolders(base_path):
 
         subfolder_status_list.append((f"{color} {folder_name:<{max_folder_name_length}} {status}{Style.RESET_ALL}", folder))
 
-    # Sort the subfolders list based on their modification time
     subfolder_status_list.sort(key=lambda x: os.path.getmtime(x[1]), reverse=False)
 
     return subfolder_status_list
 
-def list_subfolders(subfolder_status_list):
-    """
-    Input: subfolder_status_list - List of tuples containing color-coded folder status and folder path
-    Output: Displays the list of subfolders with color-coded status, with reversed numbering.
-    """
-    if subfolder_status_list:
-        print(Fore.YELLOW + "Recently started runs might be listed as FAILED, wait 15 seconds before running the script for recently started runs.")
-        print("Checking all subfolders..." + Style.RESET_ALL)
-
-    
-        for idx, (subfolder_status, _) in enumerate(subfolder_status_list, 1):
-            print(f"{len(subfolder_status_list) - idx + 1:2}. {subfolder_status}")  # Adjust the numbering
-        return subfolder_status_list
-    else:
-        print("No subfolders found in the 'runs' directory.")
-        return []
-
+def find_pending_run(subfolder_status_list):
+    for status, folder in subfolder_status_list:
+        if "Status: PENDING" in status:
+            return folder
+    return None
 
 def read_main_log(subfolder):
-    """
-    Input: subfolder - Name of the subfolder within the "runs" directory.
-    Output: The content of the main.log file located in the specified subfolder, returned as a list of strings
-    representing each line of the file.
-    """
-    main_log_path = os.path.join("runs", subfolder, "main.log")
+    main_log_path = os.path.join(subfolder, "main.log")
     if os.path.exists(main_log_path):
         with open(main_log_path, 'r') as file:
             lines = file.readlines()
@@ -147,11 +104,6 @@ def read_main_log(subfolder):
         return []
 
 def parse_main_log(lines):
-    """
-    Input: lines - List of strings representing the content of the main.log file.
-    Output: A dictionary where keys are country names and values are dictionaries mapping years
-    to run success statuses (1 for success, 0 for failure).
-    """
     year_pattern = re.compile(r'an\s*=\s*(\d+)')
     country_pattern = re.compile(r'runCyL\s*=\s*([A-Z]+)')
     status_pattern = re.compile(r'\*\* Optimal solution')
@@ -169,48 +121,96 @@ def parse_main_log(lines):
             current_year = int(year_match.group(1))
         if country_match:
             current_country = country_match.group(1)
+            if current_country not in country_year_status:
+                country_year_status[current_country] = {}
         if status_match:
             current_status = 1 if status_match else 0
 
             if current_year and current_country:
-                country_year_status.setdefault(current_country, {})[current_year] = current_status
+                country_year_status[current_country][current_year] = current_status
 
     return country_year_status
 
-def create_dataframe(country_year_status):
-    """
-    Input: country_year_status - Dictionary where keys are country names and values are dictionaries mapping years
-    to run success statuses.
-    Output: A pandas DataFrame where rows represent countries, columns represent years, and cell values represent
-    run success statuses (1 for success, 0 for failure).
-    """
+def create_dataframe(country_year_status, pending_run=False):
     if country_year_status:
-        # Create DataFrame directly from country_year_status dictionary
         df = pd.DataFrame(country_year_status).fillna(0)
-        # Reindex rows to use country names
         df.index.name = 'Country'
-        # Transpose DataFrame to use years as columns
         df = df.T
         df = df.astype(int)
+        if pending_run:
+            df.pop(df.columns[-1])
         return df
     else:
         print("No data found in the log file.")
         return None
 
-def main():
-    """
-    This function initializes all the functions of the script and
-    loops over the selected subfolders.
-    """
+def plot_heatmap(df, plot_title):
+    if df is not None:
+        cmap = sns.color_palette(["red", "green"])
 
-    # The path to the "scripts" directory where the script is located
+        # Clear the current figure
+        plt.clf()
+
+        # Plot the heatmap
+        sns.heatmap(df, cmap=cmap, annot=False, linewidths=.5, linecolor='black', vmin=0, vmax=1, cbar=False)
+
+        plt.title(plot_title)
+        plt.xlabel('Year')
+        plt.ylabel('Country')
+
+        # Show the updated plot
+        plt.draw()
+        plt.pause(0.1)
+    else:
+        print("DataFrame is empty.")
+
+def main_loop(base_path, check_interval=1.5, max_no_update_intervals=3):
+    subfolder_status_list = check_files_and_list_subfolders(base_path)
+    pending_folder = find_pending_run(subfolder_status_list)
+
+    if not pending_folder:
+        print("No pending runs found.")
+        return
+
+    pending_folder_name = os.path.basename(pending_folder)
+    print(f"Monitoring pending run in folder: {pending_folder_name}")
+
+    consecutive_no_update_intervals = 0
+
+    while consecutive_no_update_intervals < max_no_update_intervals:
+        try:
+            lines = read_main_log(pending_folder)
+            if not lines:
+                print(f"No data found in the log file for subfolder: {pending_folder}")
+                continue
+
+            country_year_status = parse_main_log(lines)
+            pending_run = True
+
+            df = create_dataframe(country_year_status, pending_run)
+            if df is None or df.empty:
+                print(f"No valid data found in the log file for subfolder: {pending_folder}")
+                consecutive_no_update_intervals += 1
+                continue
+
+            plot_title = pending_folder_name  # Use folder name as plot title
+            plot_heatmap(df, plot_title)
+            plt.pause(0.1)
+            consecutive_no_update_intervals = 0  # Reset the counter since there's an update
+        except Exception as e:
+            print(f"Error processing tasks: {e}")
+
+        time.sleep(check_interval)
+
+    plt.show()  # Display the last plot indefinitely until the user closes the window
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Real-time monitoring of pending runs.')
+    parser.add_argument('-i', '--interval', type=float, default=1.5, help='Check interval in seconds')
+    args = parser.parse_args()
+
     script_directory = os.path.dirname(os.path.abspath(__file__))
-
-    # The base path to the "OPEN-PROM" directory
     base_path = os.path.abspath(os.path.join(script_directory, ".."))
 
-    subfolder_status_list = check_files_and_list_subfolders(base_path)
-    list_subfolders(subfolder_status_list)
-    
-if __name__ == "__main__":
-    main()
+    main_loop(base_path, args.interval)
