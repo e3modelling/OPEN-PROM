@@ -1,6 +1,6 @@
 ### Script for OPEN-PROM model execution and other associated tasks.
 
-withRunFolder = TRUE # Set to FALSE to disable model run folder creation and file copying
+withRunFolder = F # Set to FALSE to disable model run folder creation and file copying
 withUpload = TRUE # Set to FALSE to disable model run upload to Google Drive
 
 ### Define function that saves model metadata into a JSON file.

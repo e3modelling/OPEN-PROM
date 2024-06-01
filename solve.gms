@@ -7,6 +7,8 @@
         endif;
     endloop;    !! close inner iteration loop (solver attempts)
 
+    handles(runCyL) = openprom.handle;
+
 * Fix values of variables for the next time step
 VStockPcYearly.FX(runCy,YTIME)$TIME(YTIME) = VStockPcYearly.L(runCy,YTIME)$TIME(YTIME);
 VMEPcGdp.FX(runCy,YTIME)$TIME(YTIME) = VMEPcGdp.L(runCy,YTIME)$TIME(YTIME);
@@ -45,7 +47,22 @@ VOutTransfRefSpec.FX(runCy,EFS,YTIME)$(TIME(YTIME) $EFtoEFA(EFS,"LQD")) = VOutTr
 VConsFuelInclHP.FX(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF)) = VConsFuelInclHP.L(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF));
 VExp.FX(runCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS)) = VExp.L(runCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS));
 VConsGrssInlNotEneBranch.FX(runCy,EFS,YTIME)$TIME(YTIME) =  VConsGrssInlNotEneBranch.L(runCy,EFS,YTIME)$TIME(YTIME);
+
 endloop;  !! close countries loop
+
+repeat
+
+loop runCyL do
+    openprom.handle = handles(runCyL);
+    execute_loadhandle openprom;
+    display$handledelete(handles(runCy))'trouble deleting handles';
+    handles(runCyL) = 0;    !! indicate that we have loaded the solution
+endloop;
+display$readyCollect(handles) 'Waiting for next instance to complete';
+until card(handles) = 0 or timeelapsed > 10 ;  !! wait until all models are loaded
+
 endloop;  !! close outer iteration loop (time steps)
+
+
 
 $if %WriteGDX% == on execute_unload "blabla.gdx";
