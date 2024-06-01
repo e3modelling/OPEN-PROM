@@ -80,6 +80,10 @@ option limrow = 0;
 option savepoint = 0;
 *' *** Print solution in .lst file (on/off)
 option solprint = off;
+*' *** Setting CONOPT4 the model solver
+option solver = CONOPT4;
+*' *** Setting the number of threads to utilize multi-threading execution
+option threads = 20;
 
 *' *** "dollar" ($) commands section: define GAMS flags & code control & compilation-time options
 *  *** onDollar activates printing of the $commands to .lst file
