@@ -50,7 +50,7 @@ VConsGrssInlNotEneBranch.FX(runCy,EFS,YTIME)$TIME(YTIME) =  VConsGrssInlNotEneBr
 
 endloop;  !! close countries loop
 
-* Deleting multi-threading handles
+* Deleting multi-threading handles on every time step
 repeat
 loop runCyL$handleCollect(handles(runCyL)) do
     display$handledelete(handles(runCyL))'trouble deleting handles';

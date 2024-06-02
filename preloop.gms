@@ -511,7 +511,6 @@ VProdReqTotElec.fx(runCy,"%fBaseY%")=sum(pgall,VProdElec.L(runCy,pgall,"%fBaseY%
 
 openprom.optfile=1;
 openprom.solveLink = 6; !! Enable multi-threading execution (set equal to 6)
-openprom.solveOpt = 0;
 
 Parameters handles(allCy) 'model handles';
 
