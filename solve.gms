@@ -58,8 +58,6 @@ loop runCyL$handleCollect(handles(runCyL)) do
 endloop;
 until card(handles) = 0 or timeelapsed > 20 ;
 
-s = s + 1; !! moved increment at end of loop for debugging purposes
-
 endloop;  !! close outer iteration loop (time steps)
 
 
