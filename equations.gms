@@ -366,7 +366,7 @@ QRenTechMatMult(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QScalWeibullSum(allCy,PGALL,YTIME)$((not CCS(PGALL)) $TIME(YTIME) $runCy(allCy))..
          VScalWeibullSum(allCy,PGALL,YTIME) 
          =E=
-              iMatFacPlaAvailCap(allCy,PGALL,YTIME) * VRenTechMatMult(allCy,PGALL,YTIME)*
+              VWPGC(allCy,PGALL,YTIME)*iMatFacPlaAvailCap(allCy,PGALL,YTIME) * VRenTechMatMult(allCy,PGALL,YTIME)*
               sum(HOUR,
                  (VCostHourProdInvDec(allCy,PGALL,HOUR,YTIME)$(not NOCCS(PGALL))
                  +
@@ -427,7 +427,7 @@ QCapElec2(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QCostVarTechElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VCostVarTechElec(allCy,PGALL,YTIME)
          =E=  
-          iMatureFacPlaDisp(allCy,PGALL,YTIME)*VCostVarTech(allCy,PGALL,YTIME)**(-2);
+          VWPGD(allCy,PGALL,YTIME)*iMatureFacPlaDisp(allCy,PGALL,YTIME)*VCostVarTech(allCy,PGALL,YTIME)**(-2);
 
 *' Compute the electricity peak loads of each region,
 *' as a sum of the variable costs of all power plant technologies.
@@ -769,7 +769,7 @@ QLft(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $sameas(DSBS,"PC") $SECTTECH(DSBS,EF) $ru
 QActivGoodsTransp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANG(TRANSE) $runCy(allCy))..
          VActivGoodsTransp(allCy,TRANSE,YTIME)
                  =E=
-         (
+         SUM(SECTTECH(TRANSE,EF), VW(allCy,TRANSE,EF,YTIME))*((
           VActivGoodsTransp(allCy,TRANSE,YTIME-1)
            * [(iGDP(YTIME,allCy)/iPop(YTIME,allCy))/(iGDP(YTIME-1,allCy)/iPop(YTIME-1,allCy))]**iElastA(allCy,TRANSE,"a",YTIME)
            * (iPop(YTIME,allCy)/iPop(YTIME-1,allCy))
@@ -793,7 +793,7 @@ QActivGoodsTransp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANG(TRANSE) $runCy(allCy))
                     (iCGI(allCy,YTIME)**(1/6))]**(iElastA(allCy,TRANSE,"c3",YTIME)*iFPDL(TRANSE,KPDL))
                  )
            * (VActivGoodsTransp(allCy,"GU",YTIME)/VActivGoodsTransp(allCy,"GU",YTIME-1))**iElastA(allCy,TRANSE,"c4",YTIME)
-         )$(not sameas(TRANSE,"GU"));                      !!other freight transport
+         )$(not sameas(TRANSE,"GU")));                      !!other freight transport
 
 *' This equation calculates the gap in transport activity, which represents the activity that needs to be filled by new technologies.
 *' The gap is calculated separately for passenger cars, other passenger transportation modes, and goods transport. The equation involves
@@ -869,7 +869,7 @@ QCostTranspPerVeh(allCy,TRANSE,rCon,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,T
 QCostTranspMatFac(allCy,TRANSE,RCon,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $(ord(rCon) le iNcon(TRANSE)+1) $runCy(allCy))..
          VCostTranspMatFac(allCy,TRANSE,RCon,TTECH,YTIME) 
          =E=
-         iMatrFactor(allCy,TRANSE,TTECH,YTIME) * VCostTranspPerVeh(allCy,TRANSE,rCon,TTECH,YTIME);
+         VW(allCy,TRANSE,TTECH,YTIME)*iMatrFactor(allCy,TRANSE,TTECH,YTIME) * VCostTranspPerVeh(allCy,TRANSE,rCon,TTECH,YTIME);
 
 *' This equation calculates the technology sorting based on variable cost. It involves the summation of transportation costs, including the maturity factor,
 *' for each technology and subsector. The result is a variable representing the technology sorting based on variable cost.
@@ -884,7 +884,7 @@ QTechSortVarCost(allCy,TRANSE,rCon,YTIME)$(TIME(YTIME) $(ord(rCon) le iNcon(TRAN
 QShareTechTr(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runCy(allCy))..
          VShareTechTr(allCy,TRANSE,TTECH,YTIME)
          =E=
-         iMatrFactor(allCy,TRANSE,TTECH,YTIME) / iCumDistrFuncConsSize(allCy,TRANSE)
+         VW(allCy,TRANSE,TTECH,YTIME)*iMatrFactor(allCy,TRANSE,TTECH,YTIME) / iCumDistrFuncConsSize(allCy,TRANSE)
          * sum( Rcon$(ord(Rcon) le iNcon(TRANSE)+1),
                 VCostTranspPerVeh(allCy,TRANSE,RCon,TTECH,YTIME)
                 * iDisFunConSize(allCy,TRANSE,RCon) / VTechSortVarCost(allCy,TRANSE,RCon,YTIME)
@@ -944,7 +944,7 @@ qDemFinEneSubTransp(allCy,TRANSE,YTIME)$(TIME(YTIME) $runCy(allCy))..
 QMEPcGdp(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VMEPcGdp(allCy,YTIME)
                  =E=
-         iTransChar(allCy,"RES_MEXTV",YTIME) * VMEPcGdp(allCy,YTIME-1) *
+         SUM(SECTTECH("PC",EF), VW(allCy,"PC",EF,YTIME))*iTransChar(allCy,"RES_MEXTV",YTIME) * VMEPcGdp(allCy,YTIME-1) *
          [(iGDP(YTIME,allCy)/iPop(YTIME,allCy)) / (iGDP(YTIME-1,allCy)/iPop(YTIME-1,allCy))] ** iElastA(allCy,"PC","a",YTIME);
 
 *' This equation calculates the market extension of passenger cars that is independent of GDP. It involves various parameters such as transportation characteristics,
@@ -978,7 +978,7 @@ QNewRegPcYearly(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QActivPassTrnsp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANP(TRANSE) $runCy(allCy))..
          VActivPassTrnsp(allCy,TRANSE,YTIME)
                  =E=
-         (  !! passenger cars
+         SUM(SECTTECH(TRANSE,EF), VW(allCy,TRANSE,EF,YTIME))*((  !! passenger cars
             VActivPassTrnsp(allCy,TRANSE,YTIME-1) *
            (VPriceFuelAvgSub(allCy,TRANSE,YTIME)/VPriceFuelAvgSub(allCy,TRANSE,YTIME-1))**iElastA(allCy,TRANSE,"b1",YTIME) *
            (VPriceFuelAvgSub(allCy,TRANSE,YTIME-1)/VPriceFuelAvgSub(allCy,TRANSE,YTIME-2))**iElastA(allCy,TRANSE,"b2",YTIME) *
@@ -1002,7 +1002,7 @@ QActivPassTrnsp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANP(TRANSE) $runCy(allCy))..
                     VPriceFuelAvgSub(allCy,TRANSE,YTIME-(ord(kpdl)+1)))/
                     (iCGI(allCy,YTIME)**(1/6))]**(iElastA(allCy,TRANSE,"c3",YTIME)*iFPDL(TRANSE,KPDL))
                  )
-         )$(NOT (sameas(TRANSE,"PC") or sameas(TRANSE,"PA")));
+         )$(NOT (sameas(TRANSE,"PC") or sameas(TRANSE,"PA"))));
 
 *' This equation calculates the number of scrapped passenger cars based on the scrapping rate and the stock of passenger cars from the previous year.
 *' The scrapping rate represents the proportion of cars that are retired from the total stock, and it influences the annual number of cars taken out of service.
@@ -1069,7 +1069,7 @@ QConsElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF) $runCy(allCy))..
          VConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)
                  =E=
-         [
+         SUM(SECTTECH(DSBS,EF), VW(allCy,DSBS,EF,YTIME))*([
          (VLft(allCy,DSBS,EF,YTIME)-1)/VLft(allCy,DSBS,EF,YTIME)
          * (VConsFuelInclHP(allCy,DSBS,EF,YTIME-1) - (VConsElecNonSubIndTert(allCy,DSBS,YTIME-1)$(ELCEF(EF) $INDDOM(DSBS)) + 0$(not (ELCEF(EF) $INDDOM(DSBS)))))
          * (iActv(YTIME,allCy,DSBS)/iActv(YTIME-1,allCy,DSBS))**iElastA(allCy,DSBS,"a",YTIME)
@@ -1077,7 +1077,7 @@ QConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SE
          * (VPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-1)/VPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-2))**iElastA(allCy,DSBS,"b2",YTIME)
          * prod(KPDL,
                  (VPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-ord(KPDL))/VPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-(ord(KPDL)+1)))**(iElastA(allCy,DSBS,"c",YTIME)*iFPDL(DSBS,KPDL))
-               )  ]$(iActv(YTIME-1,allCy,DSBS));
+               )  ]$(iActv(YTIME-1,allCy,DSBS)));
 
 
 *' This equation computes the useful energy demand in each demand subsector (excluding TRANSPORT). This demand is potentially "satisfied" by multiple energy forms/fuels (substitutable demand).
@@ -1086,7 +1086,7 @@ QConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SE
 QDemFinSubFuelSubsec(allCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $runCy(allCy))..
          VDemFinSubFuelSubsec(allCy,DSBS,YTIME)
                  =E=
-         [
+         SUM(SECTTECH(DSBS,EF), VW(allCy,DSBS,EF,YTIME))*([
          VDemFinSubFuelSubsec(allCy,DSBS,YTIME-1)
          * ( iActv(YTIME,allCy,DSBS)/iActv(YTIME-1,allCy,DSBS) )**iElastA(allCy,DSBS,"a",YTIME)
          * ( VPriceFuelAvgSub(allCy,DSBS,YTIME)/VPriceFuelAvgSub(allCy,DSBS,YTIME-1) )**iElastA(allCy,DSBS,"b1",YTIME)
@@ -1094,7 +1094,7 @@ QDemFinSubFuelSubsec(allCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $runCy(a
          * prod(KPDL,
                   ( (VPriceFuelAvgSub(allCy,DSBS,YTIME-ord(KPDL))/VPriceFuelAvgSub(allCy,DSBS,YTIME-(ord(KPDL)+1)))/(iCGI(allCy,YTIME)**(1/6))
                   )**( iElastA(allCy,DSBS,"c",YTIME)*iFPDL(DSBS,KPDL))
-                )  ]$iActv(YTIME-1,allCy,DSBS)
+                )  ]$iActv(YTIME-1,allCy,DSBS))
 ;
 
 *' This equation calculates the total consumption of electricity in industrial sectors. The consumption is obtained by summing up the electricity
@@ -1239,7 +1239,7 @@ QCostTechIntrm(allCy,DSBS,rCon,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(
 QCostTechMatFac(allCy,DSBS,rCon,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) $SECTTECH(DSBS,EF) $runCy(allCy))..
         VCostTechMatFac(allCy,DSBS,rCon,EF,YTIME) 
                                                =E=
-        iMatrFactor(allCy,DSBS,EF,YTIME) * VCostTech(allCy,DSBS,rCon,EF,YTIME) ;
+        VW(allCy,DSBS,EF,YTIME)*iMatrFactor(allCy,DSBS,EF,YTIME) * VCostTech(allCy,DSBS,rCon,EF,YTIME) ;
 
 *' This equation calculates the technology sorting based on variable cost . It is determined by summing the technology cost,
 *' including the maturity factor , for each energy form and technology within the specified subsector 
@@ -1264,7 +1264,7 @@ QGapFinalDem(allCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $runCy(allCy))..
 *' size groups, and technology sorting.
 QShareTechNewEquip(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $SECTTECH(DSBS,EF) $(not TRANSE(DSBS)) $runCy(allCy))..
          VShareTechNewEquip(allCy,DSBS,EF,YTIME) =E=
-         iMatrFactor(allCy,DSBS,EF,YTIME) / iCumDistrFuncConsSize(allCy,DSBS) *
+         VW(allCy,DSBS,EF,YTIME)*iMatrFactor(allCy,DSBS,EF,YTIME) / iCumDistrFuncConsSize(allCy,DSBS) *
          sum(rCon$(ord(rCon) le iNcon(DSBS)+1),
                   VCostTech(allCy,DSBS,rCon,EF,YTIME)
                   * iDisFunConSize(allCy,DSBS,rCon)/VSortTechVarCost(allCy,DSBS,rCon,YTIME));
@@ -1829,7 +1829,7 @@ $IFTHEN.calib %Calibration% == off
 qDummyObj.. vDummyObj =e= 1;
 $ELSE.calib
 qDummyObj(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy))).. vDummyObj =e=
-SQRT(SUM(SECTTECH(DSBS,EF)$(INDSE(DSBS)), SQR(iFuelConsPerFueSub(allCy,DSBS,EF,YTIME)-VConsFuelInclHP(allCy,DSBS,EF,YTIME))) ) +
-SQRT(SUM(SECTTECH(TRANSE,EF), SQR(VDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)-iFuelConsPerFueSub(allCy,TRANSE,EF,YTIME)))) +
+SQRT(SUM(SECTTECH(DSBS,EF)$(INDDOM(DSBS)), SQR(VConsFuelInclHP.l(allCy,DSBS,EF,YTIME)-VConsFuelInclHP(allCy,DSBS,EF,YTIME)))) +
+SQRT(SUM(SECTTECH(TRANSE,EF), SQR(VDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)-VDemFinEneTranspPerFuel.l(allCy,TRANSE,EF,YTIME)))) +
 0;
 $ENDIF.calib

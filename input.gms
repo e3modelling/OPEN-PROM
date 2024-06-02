@@ -21,24 +21,24 @@ $ondelim
 $include "./iTransChar.csv"
 $offdelim
 ;
-$IFTHEN.calib %Calibration% == off
+*$IFTHEN.calib %Calibration% == off
 table iElastA(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)"
 $ondelim
 $include "./iElastA.csv"
 $offdelim
 ;
 iElastA(runCy,SBS,ETYPES,YTIME) = iElastA("ELL",SBS,ETYPES,YTIME);
-$ELSE.calib
-variable iElastA(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)";
-table iElastAL(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)"
-$ondelim
-$include "./iElastA.csv"
-$offdelim
-;
-iElastA.L(runCy,SBS,ETYPES,YTIME) = iElastAL("ELL",SBS,ETYPES,YTIME);
-iElastA.LO(runCy,SBS,ETYPES,YTIME) = -2;
-iElastA.UP(runCy,SBS,ETYPES,YTIME) = 6;
-$ENDIF.calib
+*$ELSE.calib
+*variable iElastA(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)";
+*table iElastAL(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)"
+*$ondelim
+*$include "./iElastA.csv"
+*$offdelim
+*;
+*iElastA.L(runCy,SBS,ETYPES,YTIME) = iElastAL("ELL",SBS,ETYPES,YTIME);
+*iElastA.LO(runCy,SBS,ETYPES,YTIME) = -2;
+*iElastA.UP(runCy,SBS,ETYPES,YTIME) = 6;
+*$ENDIF.calib
 
 
 table iElastNonSubElecData(SBS,ETYPES,YTIME) "Elasticities of Non Substitutable Electricity (1)"

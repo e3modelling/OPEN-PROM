@@ -423,7 +423,6 @@ VCstCO2SeqCsts(allCy,YTIME)	                               "Cost curve for CO2 s
 vGrnnHsEmisCO2EquivAllCntr(YTIME)	                       "Total CO2eq GHG emissions in all countries (1)"
 VGrnnHsEmisCO2Equiv(NAP,YTIME)	                           "Total CO2eq GHG emissions in all countries per NAP sector (1)"	
 vExpendHouseEne(allCy,YTIME)	                           "Households expenditures on energy (billions)"
-
 *' *** Miscellaneous
 vDummyObj                                                  "Dummy maximisation variable (1)"
 ;
@@ -431,6 +430,9 @@ vDummyObj                                                  "Dummy maximisation v
 Positive Variables
 VCarVal(allCy,NAP,YTIME)                                   "Carbon prices for all countries (US$2015/tn CO2)"
 VRenValue(YTIME)                                           "Renewable value (US$2015/KWh)"
+VW(allCy,SBS,EF,YTIME)
+VWPGC(allCy,PGALL,YTIME)
+VWPGD(allCy,PGALL,YTIME)
 ;
 
 Scalars
