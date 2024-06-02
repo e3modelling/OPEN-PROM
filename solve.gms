@@ -6,7 +6,7 @@
             sModelStat = openprom.modelstat;
         endif;
     endloop;    !! close inner iteration loop (solver attempts)
-
+    
     handles(runCyL) = openprom.handle;
 
 * Fix values of variables for the next time step
@@ -50,19 +50,17 @@ VConsGrssInlNotEneBranch.FX(runCy,EFS,YTIME)$TIME(YTIME) =  VConsGrssInlNotEneBr
 
 endloop;  !! close countries loop
 
+* Deleting multi-threading handles
 repeat
-
-loop runCyL do
-    openprom.handle = handles(runCyL);
-    execute_loadhandle openprom;
-    display$handledelete(handles(runCy))'trouble deleting handles';
-    handles(runCyL) = 0;    !! indicate that we have loaded the solution
+loop runCyL$handleCollect(handles(runCyL)) do
+    display$handledelete(handles(runCyL))'trouble deleting handles';
+    handles(runCyL) = 0;   
 endloop;
-display$readyCollect(handles) 'Waiting for next instance to complete';
-until card(handles) = 0 or timeelapsed > 10 ;  !! wait until all models are loaded
+until card(handles) = 0 or timeelapsed > 20 ;
+
+s = s + 1; !! moved increment at end of loop for debugging purposes
 
 endloop;  !! close outer iteration loop (time steps)
-
 
 
 $if %WriteGDX% == on execute_unload "blabla.gdx";
