@@ -81,7 +81,7 @@ reportFinalEnergy <- function(regs,rmap) {
   IEA_FC[is.na(IEA_FC)] <- 0
   IEA_FC <- toolAggregate(IEA_FC, rel = rmap)
   # write data in mif file
-  write.report(IEA_FC[intersect(getRegions(IEA_FC),regs),,],file="reporting.mif",model="IEA",unit="Mtoe",append=TRUE,scenario=scenario_name)
+  write.report(IEA_FC[intersect(getRegions(IEA_FC),regs),,],file="reporting.mif",model="IEA_projections",unit="Mtoe",append=TRUE,scenario=scenario_name)
   
   # Final Energy | "TRANSE" | "INDSE" | "DOMSE" | "NENSE"
   
