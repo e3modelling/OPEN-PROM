@@ -67,3 +67,18 @@ Green color indicates success, while red color indicates failure.
         `python .\scripts\rs.py  -q`
 3. Note: Utilizing the quick execution command, the scripts automaticaly select the most recent subfolders. \
 ***The scripts run automatically and no further user inputs are required.***
+
+## Instructions on how to run the python script `R-live.py`
+
+**Description:**\
+This script provides real-time monitoring of pending runs. \
+ Initialize the GAMS run and the run the script via the command prompt\
+ or in the explorer tab in the TASK RUNNER section press the OPEN-PROM LIVE button.
+
+ **Instructions:**
+1. The necessary libraries must be installed.\
+    Type:\
+            `pip install pandas seaborn matplotlib colorama`
+2. To run the script itself just type `python .\scripts\R-live.py `.
+
+***The script runs automatically and no further user inputs are required.***
