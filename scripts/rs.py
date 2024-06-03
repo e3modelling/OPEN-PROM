@@ -8,11 +8,11 @@ import matplotlib.pyplot as plt
 def list_subfolders():
     """
     Input: None
-    Output: A list of tuples containing subfolder names and their corresponding modification times, sorted in reverse chronological order
-    based on their modification times.
+    Output: A list of tuples containing subfolder names and their corresponding creation times, sorted in reverse chronological order
+    based on their creation times.
     """
     runs_dir = "runs"
-    subfolders = [(f.name, f.stat().st_mtime) for f in sorted(os.scandir(runs_dir), key=lambda x: x.stat().st_birthtime, reverse=False) if f.is_dir()]
+    subfolders = [(f.name, os.path.getctime(f.path)) for f in sorted(os.scandir(runs_dir), key=lambda x: os.path.getctime(x.path), reverse=False) if f.is_dir()]
    
     return subfolders
 

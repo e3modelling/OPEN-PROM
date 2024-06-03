@@ -85,7 +85,7 @@ def check_files_and_list_subfolders(base_path):
         subfolder_status_list.append((f"{color} {folder_name:<{max_folder_name_length}} {status}{Style.RESET_ALL}", folder))
 
     # Sort the subfolders list based on their creation time
-    subfolder_status_list.sort(key=lambda x: os.stat(x[1]).st_birthtime, reverse=False)
+    subfolder_status_list.sort(key=lambda x: os.path.getctime(x[1]), reverse=False)
 
     return subfolder_status_list
 
