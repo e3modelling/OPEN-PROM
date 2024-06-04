@@ -1,12 +1,11 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
-    // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
         {
             "label": "OPEN-PROM DEV",
             "type": "shell",
-            "command": "Rscript start.R task=0",
+            "command": "cmd",
+            "args": ["/c", "Rscript start.R task=0 && python ./scripts/compress.py"],
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -16,11 +15,11 @@
                 "focus": true
             }
         },
-
         {
             "label": "OPEN-PROM DEV NEW DATA",
             "type": "shell",
-            "command": "Rscript start.R task=1",
+            "command": "cmd",
+            "args": ["/c", "Rscript start.R task=1 && python ./scripts/compress.py"],
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -30,11 +29,11 @@
                 "focus": true
             }
         },
-
         {
             "label": "OPEN-PROM RESEARCH",
             "type": "shell",
-            "command": "Rscript start.R task=2",
+            "command": "cmd",
+            "args": ["/c", "Rscript start.R task=2 && python ./scripts/compress.py"],
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -44,11 +43,11 @@
                 "focus": true
             }
         },
-               
         {
             "label": "OPEN-PROM RESEARCH NEW DATA",
             "type": "shell",
-            "command": "Rscript start.R task=3",
+            "command": "cmd",
+            "args": ["/c", "Rscript start.R task=3 && python ./scripts/compress.py"],
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -58,7 +57,6 @@
                 "focus": true
             }
         },
-
         {
             "label": "REPORTING",
             "type": "shell",
@@ -72,7 +70,6 @@
                 "focus": true
             }
         },
-
         {
             "label": "SCENTOOL",
             "type": "shell",
@@ -86,7 +83,6 @@
                 "focus": true
             }
         },
-
         {
             "label": "COMPARE SCENARIOS",
             "type": "shell",
@@ -100,7 +96,6 @@
                 "focus": true
             }
         },
-
         {
             "label": "OPEN-PROM LIVE",
             "type": "shell",
@@ -113,7 +108,6 @@
             "presentation": {
                 "focus": true
             }
-        },
-
+        }
     ]
 }
