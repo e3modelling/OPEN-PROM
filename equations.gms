@@ -769,7 +769,7 @@ QLft(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $sameas(DSBS,"PC") $SECTTECH(DSBS,EF) $ru
 QActivGoodsTransp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANG(TRANSE) $runCy(allCy))..
          VActivGoodsTransp(allCy,TRANSE,YTIME)
                  =E=
-         SUM(SECTTECH(TRANSE,EF), VW(allCy,TRANSE,EF,YTIME))*((
+         VWTAG(allCy,TRANSE,YTIME)*((
           VActivGoodsTransp(allCy,TRANSE,YTIME-1)
            * [(iGDP(YTIME,allCy)/iPop(YTIME,allCy))/(iGDP(YTIME-1,allCy)/iPop(YTIME-1,allCy))]**iElastA(allCy,TRANSE,"a",YTIME)
            * (iPop(YTIME,allCy)/iPop(YTIME-1,allCy))
@@ -869,7 +869,7 @@ QCostTranspPerVeh(allCy,TRANSE,rCon,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,T
 QCostTranspMatFac(allCy,TRANSE,RCon,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $(ord(rCon) le iNcon(TRANSE)+1) $runCy(allCy))..
          VCostTranspMatFac(allCy,TRANSE,RCon,TTECH,YTIME) 
          =E=
-         VW(allCy,TRANSE,TTECH,YTIME)*iMatrFactor(allCy,TRANSE,TTECH,YTIME) * VCostTranspPerVeh(allCy,TRANSE,rCon,TTECH,YTIME);
+         VWTF(allCy,TRANSE,TTECH,YTIME)*iMatrFactor(allCy,TRANSE,TTECH,YTIME) * VCostTranspPerVeh(allCy,TRANSE,rCon,TTECH,YTIME);
 
 *' This equation calculates the technology sorting based on variable cost. It involves the summation of transportation costs, including the maturity factor,
 *' for each technology and subsector. The result is a variable representing the technology sorting based on variable cost.
@@ -884,7 +884,7 @@ QTechSortVarCost(allCy,TRANSE,rCon,YTIME)$(TIME(YTIME) $(ord(rCon) le iNcon(TRAN
 QShareTechTr(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runCy(allCy))..
          VShareTechTr(allCy,TRANSE,TTECH,YTIME)
          =E=
-         VW(allCy,TRANSE,TTECH,YTIME)*iMatrFactor(allCy,TRANSE,TTECH,YTIME) / iCumDistrFuncConsSize(allCy,TRANSE)
+         VWTT(allCy,TRANSE,TTECH,YTIME)*iMatrFactor(allCy,TRANSE,TTECH,YTIME) / iCumDistrFuncConsSize(allCy,TRANSE)
          * sum( Rcon$(ord(Rcon) le iNcon(TRANSE)+1),
                 VCostTranspPerVeh(allCy,TRANSE,RCon,TTECH,YTIME)
                 * iDisFunConSize(allCy,TRANSE,RCon) / VTechSortVarCost(allCy,TRANSE,RCon,YTIME)
@@ -944,7 +944,7 @@ qDemFinEneSubTransp(allCy,TRANSE,YTIME)$(TIME(YTIME) $runCy(allCy))..
 QMEPcGdp(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VMEPcGdp(allCy,YTIME)
                  =E=
-         SUM(SECTTECH("PC",EF), VW(allCy,"PC",EF,YTIME))*iTransChar(allCy,"RES_MEXTV",YTIME) * VMEPcGdp(allCy,YTIME-1) *
+         VWMPG(allCy,YTIME)*iTransChar(allCy,"RES_MEXTV",YTIME) * VMEPcGdp(allCy,YTIME-1) *
          [(iGDP(YTIME,allCy)/iPop(YTIME,allCy)) / (iGDP(YTIME-1,allCy)/iPop(YTIME-1,allCy))] ** iElastA(allCy,"PC","a",YTIME);
 
 *' This equation calculates the market extension of passenger cars that is independent of GDP. It involves various parameters such as transportation characteristics,
@@ -978,7 +978,7 @@ QNewRegPcYearly(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QActivPassTrnsp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANP(TRANSE) $runCy(allCy))..
          VActivPassTrnsp(allCy,TRANSE,YTIME)
                  =E=
-         SUM(SECTTECH(TRANSE,EF), VW(allCy,TRANSE,EF,YTIME))*((  !! passenger cars
+         VWTAP(allCy,TRANSE,YTIME)*((  !! passenger cars
             VActivPassTrnsp(allCy,TRANSE,YTIME-1) *
            (VPriceFuelAvgSub(allCy,TRANSE,YTIME)/VPriceFuelAvgSub(allCy,TRANSE,YTIME-1))**iElastA(allCy,TRANSE,"b1",YTIME) *
            (VPriceFuelAvgSub(allCy,TRANSE,YTIME-1)/VPriceFuelAvgSub(allCy,TRANSE,YTIME-2))**iElastA(allCy,TRANSE,"b2",YTIME) *
@@ -1069,7 +1069,7 @@ QConsElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF) $runCy(allCy))..
          VConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)
                  =E=
-         SUM(SECTTECH(DSBS,EF), VW(allCy,DSBS,EF,YTIME))*([
+         VWCRS(allCy,DSBS,EF,YTIME)*([
          (VLft(allCy,DSBS,EF,YTIME)-1)/VLft(allCy,DSBS,EF,YTIME)
          * (VConsFuelInclHP(allCy,DSBS,EF,YTIME-1) - (VConsElecNonSubIndTert(allCy,DSBS,YTIME-1)$(ELCEF(EF) $INDDOM(DSBS)) + 0$(not (ELCEF(EF) $INDDOM(DSBS)))))
          * (iActv(YTIME,allCy,DSBS)/iActv(YTIME-1,allCy,DSBS))**iElastA(allCy,DSBS,"a",YTIME)
@@ -1086,7 +1086,7 @@ QConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SE
 QDemFinSubFuelSubsec(allCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $runCy(allCy))..
          VDemFinSubFuelSubsec(allCy,DSBS,YTIME)
                  =E=
-         SUM(SECTTECH(DSBS,EF), VW(allCy,DSBS,EF,YTIME))*([
+         VWDFS(allCy,DSBS,YTIME)*([
          VDemFinSubFuelSubsec(allCy,DSBS,YTIME-1)
          * ( iActv(YTIME,allCy,DSBS)/iActv(YTIME-1,allCy,DSBS) )**iElastA(allCy,DSBS,"a",YTIME)
          * ( VPriceFuelAvgSub(allCy,DSBS,YTIME)/VPriceFuelAvgSub(allCy,DSBS,YTIME-1) )**iElastA(allCy,DSBS,"b1",YTIME)
@@ -1239,7 +1239,7 @@ QCostTechIntrm(allCy,DSBS,rCon,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(
 QCostTechMatFac(allCy,DSBS,rCon,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) $SECTTECH(DSBS,EF) $runCy(allCy))..
         VCostTechMatFac(allCy,DSBS,rCon,EF,YTIME) 
                                                =E=
-        VW(allCy,DSBS,EF,YTIME)*iMatrFactor(allCy,DSBS,EF,YTIME) * VCostTech(allCy,DSBS,rCon,EF,YTIME) ;
+        VWCT(allCy,DSBS,EF,YTIME)*iMatrFactor(allCy,DSBS,EF,YTIME) * VCostTech(allCy,DSBS,rCon,EF,YTIME) ;
 
 *' This equation calculates the technology sorting based on variable cost . It is determined by summing the technology cost,
 *' including the maturity factor , for each energy form and technology within the specified subsector 

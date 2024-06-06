@@ -430,9 +430,17 @@ vDummyObj                                                  "Dummy maximisation v
 Positive Variables
 VCarVal(allCy,NAP,YTIME)                                   "Carbon prices for all countries (US$2015/tn CO2)"
 VRenValue(YTIME)                                           "Renewable value (US$2015/KWh)"
-VW(allCy,SBS,EF,YTIME)
-VWPGC(allCy,PGALL,YTIME)
-VWPGD(allCy,PGALL,YTIME)
+VW(allCy,SBS,EF,YTIME)                                     "QShareTechNewEquip"
+VWPGC(allCy,PGALL,YTIME)                                   "QScalWeibullSum"
+VWPGD(allCy,PGALL,YTIME)                                   "QCostVarTechElec"
+VWTAG(allCy,TRANSE,YTIME)                                  "QActivGoodsTransp"
+VWMPG(allCy,YTIME)                                         "QMEPcGdp"
+VWTF(allCy,TRANSE,TTECH,YTIME)                             "QCostTranspMatFac"
+VWTT(allCy,TRANSE,TTECH,YTIME)                             "QShareTechTr"
+VWTAP(allCy,TRANSE,YTIME)                                  "QActivPassTrnsp"
+VWCRS(allCy,DSBS,EF,YTIME)                                 "QConsRemSubEquipSubSec"
+VWDFS(allCy,DSBS,YTIME)                                    "QDemFinSubFuelSubsec"
+VWCT(allCy,DSBS,EF,YTIME)                                  "QCostTechMatFac"
 ;
 
 Scalars
