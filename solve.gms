@@ -3,11 +3,13 @@
     loop rcc$(rcc.val <= sSolverTryMax) do !! start inner iteration loop (solver attempts)
         if sModelStat gt 2 then
             solve openprom using nlp maximizing vDummyObj;
+            handles(runCyL) = openprom.handle;
             sModelStat = openprom.modelstat;
         endif;
     endloop;    !! close inner iteration loop (solver attempts)
     
-    handles(runCyL) = openprom.handle;
+    display handles;
+    display openprom.modelstat, openprom.solvestat;
 
 * Fix values of variables for the next time step
 VStockPcYearly.FX(runCy,YTIME)$TIME(YTIME) = VStockPcYearly.L(runCy,YTIME)$TIME(YTIME);

@@ -81,7 +81,7 @@ option savepoint = 0;
 *' *** Print solution in .lst file (on/off)
 option solprint = off;
 *' *** Setting CONOPT4 as the model solver
-option solver = CONOPT4;
+option nlp = CONOPT4;
 *' *** Setting the number of threads to utilize multi-threading execution
 option threads = 20;
 
