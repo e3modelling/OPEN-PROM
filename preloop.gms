@@ -510,7 +510,7 @@ VLambda.L(runCy,YTIME)=0.21;
 VProdReqTotElec.fx(runCy,"%fBaseY%")=sum(pgall,VProdElec.L(runCy,pgall,"%fBaseY%"));
 
 openprom.optfile=1;
-openprom.solveLink = 6; !! Enable multi-threading execution (set equal to 6)
+openprom.solveLink = 7; !! Enable multi-threading execution (set equal to 6 or 7)
 
 Parameters handles(allCy) 'model handles';
 
