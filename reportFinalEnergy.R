@@ -444,5 +444,48 @@ reportFinalEnergy <- function(regs,rmap) {
     write.report(IEA_by_energy_form[intersect(getRegions(IEA_by_energy_form),regs),year,],file="reporting.mif",model="IEA_WB",unit="Mtoe",append=TRUE,scenario=scenario_name)
     
   }
+  #### Add IEA Total
+  map_IEA_Total <- toolGetMapping(name = "IEA-by-fuel.csv",
+                                 type = "sectoral",
+                                 where = "mrprom")
+  map_IEA_Total <- map_IEA_Total %>% drop_na("product")
+  map_IEA_Total <- map_IEA_Total %>% select(-"X")
+  IEA_Total <- NULL
+  for (ii in unique(map_IEA_Total[, "flow"])) {
+    d <- readSource("IEA", subtype = as.character(ii))
+    d <- d / 1000 #ktoe to mtoe
+    d <- as.quitte(d)
+    #each flow has some products as it is the EF column of map
+    m <- filter(map_IEA_Total, map_IEA_Total[["flow"]] == ii)
+    #for each product of IEA data
+    region <- NULL
+    period <- NULL
+    
+    qb <- filter(d, product %in% m[["product"]])
+    qb <- select((qb), c(region, period, value, product, flow))
+    
+    qb <- filter(qb, qb[["period"]] %in% fStartHorizon : max(qb[["period"]]))
+    IEA_Total <- rbind(IEA_Total, qb)
+  }
+  
+  magpie_IEA_Total <- as.quitte(IEA_Total) %>% as.magpie()
+  # choose years that both models have
+  year <- Reduce(intersect, list(getYears(MENA_EDS_VFeCons,as.integer=TRUE),getYears(magpie_IEA_Total,as.integer=TRUE),getYears(VConsFinEneCountry,as.integer=TRUE)))
+  
+  consumption_IEA_variables <- as.quitte(IEA_Total)
+
+  #add a column with the fuels that match each variable of enerdata
+  IEA_Balances_Total <- left_join(consumption_IEA_variables, map_IEA_Total, by = c("product", "flow"))
+  IEA_Balances_Total["variable"] <- paste0("Final Energy ", IEA_Balances_Total$fuel)
+  IEA_Balances_Total["unit"] <- "Mtoe"
+  IEA_Balances_Total <- IEA_Balances_Total[, c(1, 2, 3, 4, 5, 6, 9)]
+  IEA_Balances_Total <- filter(IEA_Balances_Total, period %in% year)
+  IEA_Balances_Total <- as.quitte(IEA_Balances_Total)
+  IEA_Balances_Total <- as.magpie(IEA_Balances_Total)
+  IEA_Balances_Total[is.na(IEA_Balances_Total)] <- 0
+  IEA_Balances_Total <- toolAggregate(IEA_Balances_Total, rel = rmap)
+  
+  # write data in mif file
+  write.report(IEA_Balances_Total[intersect(getRegions(IEA_Balances_Total),regs),,],file="reporting.mif",model="IEA_Total",unit="Mtoe",append=TRUE,scenario=scenario_name)
   
 }
