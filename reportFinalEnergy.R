@@ -521,18 +521,18 @@ reportFinalEnergy <- function(regs,rmap) {
     #filter to have only the variables which are in enerdata
     map_subsectors_Navigate2 <- map_subsectors_Navigate2 %>% filter(EF %in% getItems(x,3.3))
     
-    map_subsectors_IEA <- map_subsectors_IEA_by_sector
+    map_subsectors_Navigate <- map_subsectors_IEA_by_sector
     
-    map_subsectors_IEA$EF = paste(map_subsectors_IEA$SBS, "Mtoe",map_subsectors_IEA$EF, sep=".")
+    map_subsectors_Navigate$EF = paste(map_subsectors_Navigate$SBS, "Mtoe",map_subsectors_Navigate$EF, sep=".")
     x <- as.quitte(x)
     x <- as.magpie(x)
-    map_subsectors_IEA <- map_subsectors_IEA %>% filter(EF %in% getItems(x,3))
+    map_subsectors_Navigate <- map_subsectors_Navigate %>% filter(EF %in% getItems(x,3))
     
     year <- Reduce(intersect, list(getYears(FCONS_by_sector_open,as.integer=TRUE),getYears(x,as.integer=TRUE)))
     x <- x[,year,]
     
     # aggregate from Navigate fuels to subsectors
-    Navigate_by_sector <- toolAggregate(x[,,as.character(unique(map_subsectors_IEA$EF))],dim=3,rel=map_subsectors_IEA,from="EF",to="SBS")
+    Navigate_by_sector <- toolAggregate(x[,,as.character(unique(map_subsectors_Navigate$EF))],dim=3,rel=map_subsectors_Navigate,from="EF",to="SBS")
     getItems(Navigate_by_sector, 3) <- paste0("Final Energy ", sector[y]," ", getItems(Navigate_by_sector, 3))
     
     # write data in mif file
