@@ -1,15 +1,15 @@
 
     sModelStat = 100;
-    loop rcc$(rcc.val <= sSolverTryMax) do !! start inner iteration loop (solver attempts)
+    loop rcc$(rcc.val <= sSolverTryMax) do !! start inner iteration loop (solver attempts)       
         if sModelStat gt 2 then
+            display sModelStat, openprom.modelstat, openprom.solvestat; 
             solve openprom using nlp maximizing vDummyObj;
             handles(runCyL) = openprom.handle;
             sModelStat = openprom.modelstat;
+            display handles;
         endif;
     endloop;    !! close inner iteration loop (solver attempts)
-    
-    display handles;
-    display openprom.modelstat, openprom.solvestat;
+
 
 * Fix values of variables for the next time step
 VStockPcYearly.FX(runCy,YTIME)$TIME(YTIME) = VStockPcYearly.L(runCy,YTIME)$TIME(YTIME);
@@ -58,7 +58,7 @@ loop runCyL$handleCollect(handles(runCyL)) do
     display$handledelete(handles(runCyL))'trouble deleting handles';
     handles(runCyL) = 0;   
 endloop;
-until card(handles) = 0 or timeelapsed > 20 ;
+until card(handles) = 0 or timeelapsed > 5 ;
 
 endloop;  !! close outer iteration loop (time steps)
 
