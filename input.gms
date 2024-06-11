@@ -1034,10 +1034,17 @@ PGACGSL	20.00000,
 PGACGS	20.00000,
 PGAGGS	20.00000,
 PGAWNO	0.60000000/;
+$IFTHEN.calib %Calibration% == off
+parameter iMatureFacPlaDisp(allCy,PGALL,YTIME)	        "Maturity factor related to plant dispatching (1)";
 iMatureFacPlaDisp(runCy,PGALL,YTIME)$an(YTIME) = iDataMatureFacPlaDisp(PGALL);
+$ELSE.calib
+variable iMatureFacPlaDisp(allCy,PGALL,YTIME)	        "Maturity factor related to plant dispatching (1)";
+iMatureFacPlaDisp.L(runCy,PGALL,YTIME)$an(YTIME) = iDataMatureFacPlaDisp(PGALL);
+iMatureFacPlaDisp.LO(runCy,PGALL,YTIME)$an(YTIME) = 0;
+iMatureFacPlaDisp.UP(runCy,PGALL,YTIME)$an(YTIME) = 100;
+$ENDIF.calib
 
-iCO2CaptRate(runCy,PGALL,YTIME) = 0; 
-
+iCO2CaptRate(runCy,PGALL,YTIME) = 0;
 parameter iMxmShareChpElec "Maximum share of CHP electricity in a country (1)";
 iMxmShareChpElec(runCy,YTIME) = 0.1;
 
