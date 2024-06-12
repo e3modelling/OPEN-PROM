@@ -522,7 +522,9 @@ VWDFS.L(allCy,DSBS,YTIME) = 1 ;
 VWCT.L(allCy,DSBS,EF,YTIME) = 1 ;                                 
 
 openprom.optfile=1;
+
 execute_loadpoint 'input.gdx';
+
 openprom.solveLink = 7; !! Enable multi-threading execution (set equal to 6 or 7)
 
 Parameters handles(allCy) 'model handles';
