@@ -238,19 +238,19 @@ reportEmissions <- function(regs) {
   Navigate_CO2 <- Navigate_data[,,"Emissions|CO2"][,,"Mt CO2/yr"]
   getItems(Navigate_CO2, 3.3) <- paste0("Emissions")
   getItems(Navigate_CO2, 3.4) <- paste0("Mt CO2")
-  year <- Reduce(intersect, list(getYears(MENA_SUM,as.integer=TRUE),getYears(total_CO2,as.integer=TRUE),getYears(Navigate_CO2,as.integer=TRUE)))
+  year <- Reduce(intersect, list(getYears(total_CO2,as.integer=TRUE),getYears(Navigate_CO2,as.integer=TRUE)))
   write.report(Navigate_CO2[intersect(getRegions(Navigate_CO2),regs),year,],file="reporting.mif",model="Navigate",unit="Mt CO2",append=TRUE,scenario=scenario_name)
   
   Navigate_CH4 <- Navigate_data[,,"Emissions|CH4"][,,"Mt CH4/yr"]
   getItems(Navigate_CH4, 3.3) <- paste0("Emissions")
   getItems(Navigate_CH4, 3.4) <- paste0("Mt CH4")
-  year <- Reduce(intersect, list(getYears(MENA_SUM,as.integer=TRUE),getYears(total_CO2,as.integer=TRUE),getYears(Navigate_CH4,as.integer=TRUE)))
+  year <- Reduce(intersect, list(getYears(total_CO2,as.integer=TRUE),getYears(Navigate_CH4,as.integer=TRUE)))
   write.report(Navigate_CH4[intersect(getRegions(Navigate_CH4),regs),year,],file="reporting.mif",model="Navigate",unit="Mt CH4",append=TRUE,scenario=scenario_name)
   
   Navigate_NOx <- Navigate_data[,,"Emissions|NOx"][,,"Mt NO2/yr"]
   getItems(Navigate_NOx, 3.3) <- paste0("Emissions")
   getItems(Navigate_NOx, 3.4) <- paste0("Mt NO2")
-  year <- Reduce(intersect, list(getYears(MENA_SUM,as.integer=TRUE),getYears(total_CO2,as.integer=TRUE),getYears(Navigate_NOx,as.integer=TRUE)))
+  year <- Reduce(intersect, list(getYears(total_CO2,as.integer=TRUE),getYears(Navigate_NOx,as.integer=TRUE)))
   write.report(Navigate_NOx[intersect(getRegions(Navigate_NOx),regs),year,],file="reporting.mif",model="Navigate",unit="Mt NO2",append=TRUE,scenario=scenario_name)
 
   }
