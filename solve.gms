@@ -1,10 +1,14 @@
     sModelStat = 100;
-    loop rcc$(rcc.val <= sSolverTryMax) do !! start inner iteration loop (solver attempts)
+    loop rcc$(rcc.val <= sSolverTryMax) do !! start inner iteration loop (solver attempts)       
         if sModelStat gt 2 then
+            display sModelStat, openprom.modelstat, openprom.solvestat; 
             solve openprom using nlp minimizing vDummyObj;
+            handles(runCyL) = openprom.handle;
             sModelStat = openprom.modelstat;
+            display handles;
         endif;
     endloop;    !! close inner iteration loop (solver attempts)
+
 
 * Fix values of variables for the next time step
 VStockPcYearly.FX(runCy,YTIME)$TIME(YTIME) = VStockPcYearly.L(runCy,YTIME)$TIME(YTIME);
@@ -44,7 +48,18 @@ VOutTransfRefSpec.FX(runCy,EFS,YTIME)$(TIME(YTIME) $EFtoEFA(EFS,"LQD")) = VOutTr
 VConsFuelInclHP.FX(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF)) = VConsFuelInclHP.L(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF));
 VExp.FX(runCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS)) = VExp.L(runCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS));
 VConsGrssInlNotEneBranch.FX(runCy,EFS,YTIME)$TIME(YTIME) =  VConsGrssInlNotEneBranch.L(runCy,EFS,YTIME)$TIME(YTIME);
+
 endloop;  !! close countries loop
+
+* Deleting multi-threading handles on every time step
+repeat
+loop runCyL$handleCollect(handles(runCyL)) do
+    display$handledelete(handles(runCyL))'trouble deleting handles';
+    handles(runCyL) = 0;   
+endloop;
+until card(handles) = 0 or timeelapsed > 5 ;
+
 endloop;  !! close outer iteration loop (time steps)
+
 
 $if %WriteGDX% == on execute_unload "blabla.gdx";

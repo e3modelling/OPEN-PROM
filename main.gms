@@ -80,6 +80,10 @@ option limrow = 0;
 option savepoint = 0;
 *' *** Print solution in .lst file (on/off)
 option solprint = off;
+*' *** Setting CONOPT4 as the model solver
+option nlp = CONOPT4;
+*' *** Setting the number of threads to utilize multi-threading execution
+option threads = 20;
 
 *' *** "dollar" ($) commands section: define GAMS flags & code control & compilation-time options
 *  *** onDollar activates printing of the $commands to .lst file
@@ -101,8 +105,9 @@ $setGlobal Calibration on
 $evalGlobal SolverTryMax 12
 *' *** Setting research mode (0) or development mode (1) to modify settings and parameters accordingly
 $setGlobal DevMode 0 !! can be overwritten if VS Code Tasks are used
-*' *** Write a GDX file with all data at the end of the run
+*' *** Write a compressed GDX file with all data at the end of the run
 $setGlobal WriteGDX on
+$setEnv GDXCOMPRESS 1
 *' *** Generate input data?
 $setGlobal GenerateInput on !! can be overwritten if VS Code Tasks are used
 
