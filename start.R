@@ -166,5 +166,10 @@ if (!is.null(task) && task == 0) {
       if(withUpload) uploadToGDrive()
 
     }    
-}
 
+} else if (!is.null(task) && task == 4) {
+  
+  # Debugging mode
+  shell("gams main.gms -logOption 4 -Idir=./data 2>&1 | tee full.log")
+
+}
