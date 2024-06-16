@@ -27,7 +27,7 @@ saveMetadata<- function(DevMode) {
   # Save the appropriate region mapping for each type of run (Development / Research).
   if(DevMode == 0) {
     
-    model_info <- list('Region Mapping' = "regionmappingOP5.csv")
+    model_info <- list('Region Mapping' = "regionmappingOPDEV3.csv")
 
     } else if (DevMode == 1) {
 
@@ -48,7 +48,7 @@ saveMetadata<- function(DevMode) {
 createRunFolder <- function(scenario = "default") {
 
   # generate name of run folder
-  folderName <- paste(scenario, format(Sys.time(), "%d-%m-%Y_%H-%M-%S"), sep="_")
+  folderName <- paste(scenario, format(Sys.time(), "%Y-%m-%d_%H-%M-%S"), sep="_")
 
   # create run folder under /runs
   if (!file.exists("runs")) dir.create("runs")
