@@ -277,9 +277,7 @@ def main():
         if df is None or df.empty:
             print(f"No valid data found in the log file for subfolder: {selected_subfolder}")
             continue
-        
-        if args.subfolders:  
-            df.pop(df.columns[-1])  # Remove the last column for pending runs
+       
         plot_heatmap(df, idx, folder_name)
 
     plt.show()
