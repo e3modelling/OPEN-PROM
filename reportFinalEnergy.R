@@ -304,6 +304,11 @@ reportFinalEnergy <- function(regs,rmap) {
       
       #x[, , "PC.GDO.Mtoe"] <- x[, , "PC.GDO.Mtoe"] * (a8 / (a8 + a9))
       x[, , "GU.GDO.Mtoe"] <- x[, , "GU.GDO.Mtoe"] * (a9 / (a8 + a9))
+
+    l <- getNames(x) == "PA.KRS.Mt"
+    getNames(x)[l] <- "PA.KRS.Mtoe"
+    #from Mt to Mtoe
+    x[,,"PA.KRS.Mtoe"] <- x[,,"PA.KRS.Mtoe"] / 1.027
     }
     
     x[is.na(x)] <- 10^-6
