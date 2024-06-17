@@ -501,19 +501,19 @@ reportFinalEnergy <- function(regs,rmap) {
       select(-c("value.x", "value.y", "scenario"))
     
     
-    #take the mean value from the available models
-    x <- mutate(x, value = mean(value, na.rm = TRUE), .by = c("region", "period", "variable", "unit"))
-    #drop column model
-    x <- x %>% select(-c("model"))
-    #remove duplicates from data 
-    x <- distinct(x)
+    # #take the mean value from the available models
+    # x <- mutate(x, value = mean(value, na.rm = TRUE), .by = c("region", "period", "variable", "unit"))
+    # #drop column model
+    # x <- x %>% select(-c("model"))
+    # #remove duplicates from data 
+    # x <- distinct(x)
     
     #rename variables from Navigate to openprom names
     names(map_Navigate) <- gsub("Navigate", "variable", names(map_Navigate))
     x <- left_join(x, map_Navigate[,  c(2,3,6)], by = "variable")
     
     #drop variable names of navigate
-    x <- x[,c(1, 3, 4, 5, 6, 7)]
+    x <- select(x, -c("variable"))
     
     #rename columns of data
     names(x) <- gsub("SBS", "variable", names(x))
@@ -523,24 +523,41 @@ reportFinalEnergy <- function(regs,rmap) {
     # set NA to 0
     x[is.na(x)] <- 10^-6
     
-    
-    
     map_subsectors_Navigate2 <- sets10
     #filter to have only the variables which are in enerdata
-    map_subsectors_Navigate2 <- map_subsectors_Navigate2 %>% filter(EF %in% getItems(x,3.3))
+    map_subsectors_Navigate2 <- map_subsectors_Navigate2 %>% filter(EF %in% getItems(x,3.4))
+    #map_subsectors_Navigate2$EF = paste(map_subsectors_Navigate2$SBS, "Mtoe",map_subsectors_Navigate2$EF, sep=".")
     
     map_subsectors_Navigate <- map_subsectors_IEA_by_sector
     
     map_subsectors_Navigate$EF = paste(map_subsectors_Navigate$SBS, "Mtoe",map_subsectors_Navigate$EF, sep=".")
     x <- as.quitte(x)
     x <- as.magpie(x)
-    map_subsectors_Navigate <- map_subsectors_Navigate %>% filter(EF %in% getItems(x,3))
+    
+    # sector_fuel_navigate <- expand.grid(getItems(x,3.2), getItems(x,3.3), getItems(x,3.4))
+    # sector_fuel_navigate <- paste0(sector_fuel_navigate[["Var1"]],".",sector_fuel_navigate[["Var2"]],".",sector_fuel_navigate[["Var3"]])
+    
+    sector_navigate <- gsub("^[^.]+.","",getItems(x,3))
+    map_subsectors_Navigate <- map_subsectors_Navigate %>% filter(EF %in% sector_navigate)
     
     year <- Reduce(intersect, list(getYears(FCONS_by_sector_open,as.integer=TRUE),getYears(x,as.integer=TRUE)))
     x <- x[,year,]
     
     # aggregate from Navigate fuels to subsectors
-    Navigate_by_sector <- toolAggregate(x[,,as.character(unique(map_subsectors_Navigate$EF))],dim=3,rel=map_subsectors_Navigate,from="EF",to="SBS")
+    model_of_navigate <- getItems(x,3.1)
+    Navigate_by_sector <- NULL
+    Navigate_by_sector_by_model <- NULL
+    
+    for (navi_model in model_of_navigate) {
+      map_subsectors_Navigate3 <- map_subsectors_Navigate
+      map_subsectors_Navigate3[["EF"]] <- paste0(navi_model,".",map_subsectors_Navigate[["EF"]])
+      map_subsectors_Navigate3[["SBS"]] <- paste0(navi_model,".",map_subsectors_Navigate[["SBS"]])
+      map_subsectors_Navigate3 <- map_subsectors_Navigate3 %>% filter(EF %in% getItems(x[,,navi_model],3))
+      Navigate_by_sector_by_model <- toolAggregate(x[,,as.character(unique(map_subsectors_Navigate3$EF))],dim=c(3),rel=map_subsectors_Navigate3,from="EF",to="SBS")
+      Navigate_by_sector <- mbind(Navigate_by_sector, Navigate_by_sector_by_model)
+      }
+    Navigate_by_sector_by_model2 <- toolAggregate(x[,,as.character(unique(map_subsectors_Navigate2$EF))],dim=c(3.4),rel=map_subsectors_Navigate2,from="EF",to="EFA")
+     
     getItems(Navigate_by_sector, 3) <- paste0("Final Energy ", sector[y]," ", getItems(Navigate_by_sector, 3))
     
     # write data in mif file
