@@ -60,6 +60,20 @@
         },
 
         {
+            "label": "OPEN-PROM DEBUGGING",
+            "type": "shell",
+            "command": "Rscript start.R task=4",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "focus": true
+            }
+        },
+
+        {
             "label": "REPORTING",
             "type": "shell",
             "command": "Rscript reportOutput.R",
