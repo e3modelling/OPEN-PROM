@@ -509,6 +509,19 @@ VLambda.L(runCy,YTIME)=0.21;
 
 VProdReqTotElec.fx(runCy,"%fBaseY%")=sum(pgall,VProdElec.L(runCy,pgall,"%fBaseY%"));
 
+$IFTHEN.calib %Calibration% == off
+VW.FX(allCy,SBS,EF,YTIME) = 1 ;                                   
+VWPGC.FX(allCy,PGALL,YTIME) = 1 ;                                 
+VWPGD.FX(allCy,PGALL,YTIME) = 1 ;                                  
+VWTAG.FX(allCy,TRANSE,YTIME) = 1 ;                                
+VWMPG.FX(allCy,YTIME) = 1 ;                                       
+VWTF.FX(allCy,TRANSE,TTECH,YTIME) = 1 ;                           
+VWTT.FX(allCy,TRANSE,TTECH,YTIME) = 1 ;                            
+VWTAP.FX(allCy,TRANSE,YTIME) = 1 ;                                 
+VWCRS.FX(allCy,DSBS,EF,YTIME) = 1 ;                                
+VWDFS.FX(allCy,DSBS,YTIME) = 1 ;                                   
+VWCT.FX(allCy,DSBS,EF,YTIME) = 1 ;
+$ELSE.calib
 VW.L(allCy,SBS,EF,YTIME) = 1 ;                                   
 VWPGC.L(allCy,PGALL,YTIME) = 1 ;                                 
 VWPGD.L(allCy,PGALL,YTIME) = 1 ;                                  
@@ -520,6 +533,31 @@ VWTAP.L(allCy,TRANSE,YTIME) = 1 ;
 VWCRS.L(allCy,DSBS,EF,YTIME) = 1 ;                                
 VWDFS.L(allCy,DSBS,YTIME) = 1 ;                                   
 VWCT.L(allCy,DSBS,EF,YTIME) = 1 ;                                 
+
+VW.UP(allCy,SBS,EF,YTIME) = 3 ;                                   
+VWPGC.UP(allCy,PGALL,YTIME) = 3 ;                                 
+VWPGD.UP(allCy,PGALL,YTIME) = 3 ;                                  
+VWTAG.UP(allCy,TRANSE,YTIME) = 3 ;                                
+VWMPG.UP(allCy,YTIME) = 3 ;                                       
+VWTF.UP(allCy,TRANSE,TTECH,YTIME) = 3 ;                           
+VWTT.UP(allCy,TRANSE,TTECH,YTIME) = 3 ;                            
+VWTAP.UP(allCy,TRANSE,YTIME) = 3 ;                                 
+VWCRS.UP(allCy,DSBS,EF,YTIME) = 3 ;                                
+VWDFS.UP(allCy,DSBS,YTIME) = 3 ;                                   
+VWCT.UP(allCy,DSBS,EF,YTIME) = 3 ;
+
+VW.LO(allCy,SBS,EF,YTIME) = 0.1 ;                                   
+VWPGC.LO(allCy,PGALL,YTIME) = 0.1 ;                                 
+VWPGD.LO(allCy,PGALL,YTIME) = 0.1 ;                                  
+VWTAG.LO(allCy,TRANSE,YTIME) = 0.1 ;                                
+VWMPG.LO(allCy,YTIME) = 0.1 ;                                       
+VWTF.LO(allCy,TRANSE,TTECH,YTIME) = 0.1 ;                           
+VWTT.LO(allCy,TRANSE,TTECH,YTIME) = 0.1 ;                            
+VWTAP.LO(allCy,TRANSE,YTIME) = 0.1 ;                                 
+VWCRS.LO(allCy,DSBS,EF,YTIME) = 0.1 ;                                
+VWDFS.LO(allCy,DSBS,YTIME) = 0.1 ;                                   
+VWCT.LO(allCy,DSBS,EF,YTIME) = 0.1 ;  
+$ENDIF.calib
 
 openprom.optfile=1;
 
