@@ -522,7 +522,7 @@ VWDFS.L(allCy,DSBS,YTIME) = 1 ;
 VWCT.L(allCy,DSBS,EF,YTIME) = 1 ;                                 
 
 openprom.optfile=1;
-execute_loadpoint 'input.gdx';
+
 loop an do !! start outer iteration loop (time steps)
    s = s + 1;
    TIME(YTIME) = NO;
