@@ -98,7 +98,7 @@ $offOrder
 *' *** Calibration
 $setGlobal Calibration on
 *' *** Maximum number of solver attempts
-$evalGlobal SolverTryMax 12
+$evalGlobal SolverTryMax 15
 *' *** Setting research mode (0) or development mode (1) to modify settings and parameters accordingly
 $setGlobal DevMode 0 !! can be overwritten if VS Code Tasks are used
 *' *** Write a compressed GDX file with all data at the end of the run
@@ -115,7 +115,7 @@ $evalGlobal fPeriodOfYears 1
 
 $evalGlobal fStartHorizon 2010
 $evalGlobal fEndHorizon 2100
-$evalGlobal fEndY 2021
+$evalGlobal fEndY 2030
 $evalGlobal fStartY 2021
 $evalGlobal fBaseY %fStartY% - %fPeriodOfYears%
 
