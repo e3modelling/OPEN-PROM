@@ -546,17 +546,6 @@ VWCRS.UP(allCy,DSBS,EF,YTIME) = 3 ;
 VWDFS.UP(allCy,DSBS,YTIME) = 3 ;                                   
 VWCT.UP(allCy,DSBS,EF,YTIME) = 3 ;
 
-VW.LO(allCy,SBS,EF,YTIME) = 0.1 ;                                   
-VWPGC.LO(allCy,PGALL,YTIME) = 0.1 ;                                 
-VWPGD.LO(allCy,PGALL,YTIME) = 0.1 ;                                  
-VWTAG.LO(allCy,TRANSE,YTIME) = 0.1 ;                                
-VWMPG.LO(allCy,YTIME) = 0.1 ;                                       
-VWTF.LO(allCy,TRANSE,TTECH,YTIME) = 0.1 ;                           
-VWTT.LO(allCy,TRANSE,TTECH,YTIME) = 0.1 ;                            
-VWTAP.LO(allCy,TRANSE,YTIME) = 0.1 ;                                 
-VWCRS.LO(allCy,DSBS,EF,YTIME) = 0.1 ;                                
-VWDFS.LO(allCy,DSBS,YTIME) = 0.1 ;                                   
-VWCT.LO(allCy,DSBS,EF,YTIME) = 0.1 ;  
 $ENDIF.calib
 
 openprom.optfile=1;
