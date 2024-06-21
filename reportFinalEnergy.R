@@ -566,13 +566,16 @@ reportFinalEnergy <- function(regs,rmap) {
     # write data in mif file
     write.report(Navigate_by_sector[intersect(getRegions(Navigate_by_sector),regs),year,],file="reporting.mif",model="Navigate",unit="Mtoe",append=TRUE,scenario=scenario_name)
     
-    for (navi_model in getItems(Navigate_by_sector,3.1)) {
-      FE_Navigate <- dimSums(Navigate_by_sector[,,navi_model], dim = 3.2, na.rm = TRUE)
-      getItems(FE_Navigate, 3) <- paste0("Final Energy ", sector[y])
-      
-      # write data in mif file
-      write.report(FE_Navigate[intersect(getRegions(FE_Navigate),regs),year,],file="reporting.mif",model=navi_model,unit="Mtoe",append=TRUE,scenario=scenario_name)
-    }
+    # if (y %in% c(3, 4)) {
+    #   for (navi_model in getItems(Navigate_by_sector,3.1)) {
+    #     FE_Navigate <- dimSums(Navigate_by_sector[,,navi_model], dim = 3.2, na.rm = TRUE)
+    #     getItems(FE_Navigate, 3) <- paste0("Final Energy ", sector[y])
+    #     
+    #     # write data in mif file
+    #     write.report(FE_Navigate[intersect(getRegions(FE_Navigate),regs),year,],file="reporting.mif",model=navi_model,unit="Mtoe",append=TRUE,scenario=scenario_name)
+    #   }
+    # }
+
     #Final Energy Navigate
  
     #Aggregate model Navigate by subsector and by energy form
@@ -641,5 +644,72 @@ reportFinalEnergy <- function(regs,rmap) {
   
   # write data in mif file
   write.report(IEA_Balances_Total[intersect(getRegions(IEA_Balances_Total),regs),,],file="reporting.mif",model="IEA_Total",unit="Mtoe",append=TRUE,scenario=scenario_name)
+  
+  ########## Add Final Energy total to reporting Navigate
+  
+  map_Navigate_Total <- toolGetMapping(name = "Navigate-by-fuel.csv",
+                                  type = "sectoral",
+                                  where = "mrprom")
+  
+  map_Navigate_Total <- map_Navigate_Total %>% drop_na("Navigate")
+  
+  x1 <- readSource("Navigate", subtype = "SUP_NPi_Default", convert = TRUE)
+  x2 <- readSource("Navigate", subtype = "NAV_Dem-NPi-ref", convert = TRUE)
+  x3 <- readSource("Navigate", subtype = "NAV_Ind_NPi", convert = TRUE)
+  #keep common years that exist in the scenarios
+  x1 <- x1[, Reduce(intersect, list(getYears(x1), getYears(x2), getYears(x3))), ]#million motor vehicle km/yr
+  x2 <- x2[, Reduce(intersect, list(getYears(x1), getYears(x2), getYears(x3))), ]#million motor vehicle km/yr
+  x3 <- x3[, Reduce(intersect, list(getYears(x1), getYears(x2), getYears(x3))), ]#million motor vehicle km/yr
+ 
+  x <- mbind(x1, x2, x3)
+  
+  #EJ to Mtoe
+  x <- x * 23.8846
+  navigate_total <- x[,,map_Navigate_Total[,"Navigate"]]
+  # choose years that both models have
+  year <- Reduce(intersect, list(getYears(navigate_total,as.integer=TRUE),getYears(VConsFinEneCountry,as.integer=TRUE)))
+  
+  consumption_Navigate_variables <- as.quitte(navigate_total)
+  names(map_Navigate_Total) <- sub("Navigate", "variable", names(map_Navigate_Total))
+  
+  #add a column with the fuels that match each variable of enerdata
+  Navigate_Balances_Total <- left_join(consumption_Navigate_variables, map_Navigate_Total[,c(5 : 6)], by = c("variable"))
+  Navigate_Balances_Total["variable"] <- paste0("Final Energy ", Navigate_Balances_Total$fuel)
+  Navigate_Balances_Total["unit"] <- "Mtoe"
+  Navigate_Balances_Total <- Navigate_Balances_Total[, c(1, 2, 3, 4, 5, 6, 7)]
+  Navigate_Balances_Total <- filter(Navigate_Balances_Total, period %in% year)
+  Navigate_Balances_Total <- as.quitte(Navigate_Balances_Total)
+  Navigate_Balances_Total <- as.magpie(Navigate_Balances_Total)
+  Navigate_Balances_Total[is.na(Navigate_Balances_Total)] <- 0
+  
+  l <- getItems(Navigate_Balances_Total,3.3) == "Final Energy INDUSTRY TOTAL"
+  getItems(Navigate_Balances_Total,3.3)[l] <- paste0("Final Energy ", sector[2])
+  
+  l2 <- getItems(Navigate_Balances_Total,3.3) == "Final Energy TRANSPORTATION TOTAL"
+  getItems(Navigate_Balances_Total,3.3)[l2] <- paste0("Final Energy ", sector[1])
+  
+  l <- getItems(Navigate_Balances_Total,3.3) == "Final Energy NENSE1"
+  getItems(Navigate_Balances_Total,3.3)[l] <- paste0("Final Energy ", sector[4])
+  l <- getItems(Navigate_Balances_Total,3.3) == "Final Energy NENSE2"
+  getItems(Navigate_Balances_Total,3.3)[l] <- paste0("Final Energy ", sector[4])
+  
+  l <- getItems(Navigate_Balances_Total,3.3) == "Final Energy DOMSE1"
+  getItems(Navigate_Balances_Total,3.3)[l] <- paste0("Final Energy ", sector[3])
+  l <- getItems(Navigate_Balances_Total,3.3) == "Final Energy DOMSE2"
+  getItems(Navigate_Balances_Total,3.3)[l] <- paste0("Final Energy ", sector[3])
+  l <- getItems(Navigate_Balances_Total,3.3) == "Final Energy DOMSE3"
+  getItems(Navigate_Balances_Total,3.3)[l] <- paste0("Final Energy ", sector[3])
+  
+  qNavigate_Balances_Total <- as.quitte(Navigate_Balances_Total)
+  
+  qNavigate_Balances_Total <- mutate(qNavigate_Balances_Total, value = sum(value, na.rm = TRUE), .by = c("model", "scenario", "region", "variable", "unit", "period"))
+  qNavigate_Balances_Total <- distinct(qNavigate_Balances_Total)
+  
+  Navigate_Balances_Total <- as.quitte(qNavigate_Balances_Total) %>% as.magpie()
+  
+  Navigate_Balances_Total <- toolAggregate(Navigate_Balances_Total, rel = rmap)
+  
+  # write data in mif file
+  write.report(Navigate_Balances_Total[intersect(getRegions(Navigate_Balances_Total),regs),,],file="reporting.mif",model="Navigate_Total",unit="Mtoe",append=TRUE,scenario=scenario_name)
   
 }
