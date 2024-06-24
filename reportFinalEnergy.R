@@ -657,9 +657,9 @@ reportFinalEnergy <- function(regs,rmap) {
   x2 <- readSource("Navigate", subtype = "NAV_Dem-NPi-ref", convert = TRUE)
   x3 <- readSource("Navigate", subtype = "NAV_Ind_NPi", convert = TRUE)
   #keep common years that exist in the scenarios
-  x1 <- x1[, Reduce(intersect, list(getYears(x1), getYears(x2), getYears(x3))), ]#million motor vehicle km/yr
-  x2 <- x2[, Reduce(intersect, list(getYears(x1), getYears(x2), getYears(x3))), ]#million motor vehicle km/yr
-  x3 <- x3[, Reduce(intersect, list(getYears(x1), getYears(x2), getYears(x3))), ]#million motor vehicle km/yr
+  x1 <- x1[, Reduce(intersect, list(getYears(x1), getYears(x2), getYears(x3))), ]
+  x2 <- x2[, Reduce(intersect, list(getYears(x1), getYears(x2), getYears(x3))), ]
+  x3 <- x3[, Reduce(intersect, list(getYears(x1), getYears(x2), getYears(x3))), ]
  
   x <- mbind(x1, x2, x3)
   
