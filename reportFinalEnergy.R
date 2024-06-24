@@ -503,13 +503,6 @@ reportFinalEnergy <- function(regs,rmap) {
       select(-c("value.x", "value.y", "scenario"))
     
     
-    # #take the mean value from the available models
-    # x <- mutate(x, value = mean(value, na.rm = TRUE), .by = c("region", "period", "variable", "unit"))
-    # #drop column model
-    # x <- x %>% select(-c("model"))
-    # #remove duplicates from data 
-    # x <- distinct(x)
-    
     #rename variables from Navigate to openprom names
     names(map_Navigate) <- gsub("Navigate", "variable", names(map_Navigate))
     x <- left_join(x, map_Navigate[,  c(2,3,6)], by = "variable")
@@ -536,9 +529,7 @@ reportFinalEnergy <- function(regs,rmap) {
     x <- as.quitte(x)
     x <- as.magpie(x)
     
-    # sector_fuel_navigate <- expand.grid(getItems(x,3.2), getItems(x,3.3), getItems(x,3.4))
-    # sector_fuel_navigate <- paste0(sector_fuel_navigate[["Var1"]],".",sector_fuel_navigate[["Var2"]],".",sector_fuel_navigate[["Var3"]])
-    
+    #take data after first dot
     sector_navigate <- gsub("^[^.]+.","",getItems(x,3))
     map_subsectors_Navigate <- map_subsectors_Navigate %>% filter(EF %in% sector_navigate)
     
@@ -549,7 +540,7 @@ reportFinalEnergy <- function(regs,rmap) {
     model_of_navigate <- getItems(x,3.1)
     Navigate_by_sector <- NULL
     Navigate_by_sector_by_model <- NULL
-    
+    #make aggregation for each model
     for (navi_model in model_of_navigate) {
       map_subsectors_Navigate3 <- map_subsectors_Navigate
       map_subsectors_Navigate3[["EF"]] <- paste0(navi_model,".",map_subsectors_Navigate[["EF"]])
@@ -566,18 +557,6 @@ reportFinalEnergy <- function(regs,rmap) {
     # write data in mif file
     write.report(Navigate_by_sector[intersect(getRegions(Navigate_by_sector),regs),year,],file="reporting.mif",model="Navigate",unit="Mtoe",append=TRUE,scenario=scenario_name)
     
-    # if (y %in% c(3, 4)) {
-    #   for (navi_model in getItems(Navigate_by_sector,3.1)) {
-    #     FE_Navigate <- dimSums(Navigate_by_sector[,,navi_model], dim = 3.2, na.rm = TRUE)
-    #     getItems(FE_Navigate, 3) <- paste0("Final Energy ", sector[y])
-    #     
-    #     # write data in mif file
-    #     write.report(FE_Navigate[intersect(getRegions(FE_Navigate),regs),year,],file="reporting.mif",model=navi_model,unit="Mtoe",append=TRUE,scenario=scenario_name)
-    #   }
-    # }
-
-    #Final Energy Navigate
- 
     #Aggregate model Navigate by subsector and by energy form
     Navigate_by_EF_and_sector <- toolAggregate(x[,,as.character(unique(map_subsectors_Navigate2$EF))],dim=c(3.4),rel=map_subsectors_Navigate2,from="EF",to="EFA")
     
@@ -646,13 +625,13 @@ reportFinalEnergy <- function(regs,rmap) {
   write.report(IEA_Balances_Total[intersect(getRegions(IEA_Balances_Total),regs),,],file="reporting.mif",model="IEA_Total",unit="Mtoe",append=TRUE,scenario=scenario_name)
   
   ########## Add Final Energy total to reporting Navigate
-  
+  #Map Final Energy Navigate
   map_Navigate_Total <- toolGetMapping(name = "Navigate-by-fuel.csv",
                                   type = "sectoral",
                                   where = "mrprom")
   
   map_Navigate_Total <- map_Navigate_Total %>% drop_na("Navigate")
-  
+  #filter Navigate by scenarios
   x1 <- readSource("Navigate", subtype = "SUP_NPi_Default", convert = TRUE)
   x2 <- readSource("Navigate", subtype = "NAV_Dem-NPi-ref", convert = TRUE)
   x3 <- readSource("Navigate", subtype = "NAV_Ind_NPi", convert = TRUE)
@@ -665,44 +644,47 @@ reportFinalEnergy <- function(regs,rmap) {
   
   #EJ to Mtoe
   x <- x * 23.8846
+  ## filter data to keep only Navigate map variables
   navigate_total <- x[,,map_Navigate_Total[,"Navigate"]]
   # choose years that both models have
   year <- Reduce(intersect, list(getYears(navigate_total,as.integer=TRUE),getYears(VConsFinEneCountry,as.integer=TRUE)))
   
-  consumption_Navigate_variables <- as.quitte(navigate_total)
+  Navigate_Balances_Total <- as.quitte(navigate_total)
   names(map_Navigate_Total) <- sub("Navigate", "variable", names(map_Navigate_Total))
   
-  #add a column with the fuels that match each variable of enerdata
-  Navigate_Balances_Total <- left_join(consumption_Navigate_variables, map_Navigate_Total[,c(5 : 6)], by = c("variable"))
-  Navigate_Balances_Total["variable"] <- paste0("Final Energy ", Navigate_Balances_Total$fuel)
+  #add a column with the fuels that match each variable of Navigate
+  Navigate_Balances_Total <- left_join(Navigate_Balances_Total, map_Navigate_Total, by = c("variable"))
+  #drop column variable and rename column fuel
+  Navigate_Balances_Total <- select(Navigate_Balances_Total, -"variable")
+  names(Navigate_Balances_Total) <- sub("fuel", "variable", names(Navigate_Balances_Total))
+  
+  #EJ to Mtoe
   Navigate_Balances_Total["unit"] <- "Mtoe"
-  Navigate_Balances_Total <- Navigate_Balances_Total[, c(1, 2, 3, 4, 5, 6, 7)]
+  # choose common years that navigate and OPEN-PROM models have
   Navigate_Balances_Total <- filter(Navigate_Balances_Total, period %in% year)
-  Navigate_Balances_Total <- as.quitte(Navigate_Balances_Total)
-  Navigate_Balances_Total <- as.magpie(Navigate_Balances_Total)
+  
+  Navigate_Balances_Total <- as.quitte(Navigate_Balances_Total) %>% as.magpie()
   Navigate_Balances_Total[is.na(Navigate_Balances_Total)] <- 0
   
-  l <- getItems(Navigate_Balances_Total,3.3) == "Final Energy INDUSTRY TOTAL"
-  getItems(Navigate_Balances_Total,3.3)[l] <- paste0("Final Energy ", sector[2])
-  
-  l2 <- getItems(Navigate_Balances_Total,3.3) == "Final Energy TRANSPORTATION TOTAL"
-  getItems(Navigate_Balances_Total,3.3)[l2] <- paste0("Final Energy ", sector[1])
-  
-  l <- getItems(Navigate_Balances_Total,3.3) == "Final Energy NENSE1"
+  #Rename sector NENSE 
+  #add Final Energy|Non-Energy Use and Final Energy|Bunkers
+  l <- getItems(Navigate_Balances_Total,3.3) == "NENSE1"
   getItems(Navigate_Balances_Total,3.3)[l] <- paste0("Final Energy ", sector[4])
-  l <- getItems(Navigate_Balances_Total,3.3) == "Final Energy NENSE2"
+  l <- getItems(Navigate_Balances_Total,3.3) == "NENSE2"
   getItems(Navigate_Balances_Total,3.3)[l] <- paste0("Final Energy ", sector[4])
-  
-  l <- getItems(Navigate_Balances_Total,3.3) == "Final Energy DOMSE1"
+  #Rename sector DOMSE
+  #add Final Energy|Commercial, Final Energy|Residential, Final Energy|Agriculture
+  l <- getItems(Navigate_Balances_Total,3.3) == "DOMSE1"
   getItems(Navigate_Balances_Total,3.3)[l] <- paste0("Final Energy ", sector[3])
-  l <- getItems(Navigate_Balances_Total,3.3) == "Final Energy DOMSE2"
+  l <- getItems(Navigate_Balances_Total,3.3) == "DOMSE2"
   getItems(Navigate_Balances_Total,3.3)[l] <- paste0("Final Energy ", sector[3])
-  l <- getItems(Navigate_Balances_Total,3.3) == "Final Energy DOMSE3"
+  l <- getItems(Navigate_Balances_Total,3.3) == "DOMSE3"
   getItems(Navigate_Balances_Total,3.3)[l] <- paste0("Final Energy ", sector[3])
   
   qNavigate_Balances_Total <- as.quitte(Navigate_Balances_Total)
-  
+  #take the sum of each subsector(for DOMSE and NENSE)
   qNavigate_Balances_Total <- mutate(qNavigate_Balances_Total, value = sum(value, na.rm = TRUE), .by = c("model", "scenario", "region", "variable", "unit", "period"))
+  #remove duplicates
   qNavigate_Balances_Total <- distinct(qNavigate_Balances_Total)
   
   Navigate_Balances_Total <- as.quitte(qNavigate_Balances_Total) %>% as.magpie()
