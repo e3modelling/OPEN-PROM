@@ -2,6 +2,7 @@
 
 withRunFolder = TRUE # Set to FALSE to disable model run folder creation and file copying
 withUpload = TRUE # Set to FALSE to disable model run upload to Google Drive
+uploadGDX = FALSE # Set to TRUE to include GDX files in the uploaded archive
 
 ### Define function that saves model metadata into a JSON file.
 
@@ -81,10 +82,17 @@ uploadToGDrive <- function() {
   
   # Create tgz archive with the files of each model run
   all_files <- list.files(folder_path, recursive = TRUE, all.files = TRUE)
-  files_to_archive <- all_files[!grepl("\\.gdx$", all_files, ignore.case = TRUE)]
+
+  # Include GDX files based on user preference
+  if(uploadGDX) {
+    files_to_archive <- all_files
+  } else {
+    files_to_archive <- all_files[!grepl("\\.gdx$", all_files, ignore.case = TRUE)]
+  }
+
   tar(tarfile = archive_name, files = files_to_archive, compression = "gzip", tar = "internal")
   
-  # Upload the file to Google Drive
+  # Upload the archive to Google Drive
   # Ensure googledrive is authenticated here
   # Using exception handling to deal with errors
   tryCatch({
