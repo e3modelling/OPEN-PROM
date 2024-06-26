@@ -13,7 +13,7 @@ reportFinalEnergy <- function(regs,rmap) {
   
   # aggregate from PROM fuels to reporting fuel categories
   VConsFinEneCountry <- toolAggregate(VConsFinEneCountry[ , , unique(sets$EF)], dim = 3, rel = sets, from = "EF", to = "BAL")
-  getItems(VConsFinEneCountry, 3) <- paste0("Final Energy ", getItems(VConsFinEneCountry, 3))
+  getItems(VConsFinEneCountry, 3) <- paste0("Final Energy|", getItems(VConsFinEneCountry, 3))
   
   # add model MENA_EDS data (choosing the correct variable from MENA by use of the MENA-PROM mapping)
   # Total final energy consumnption (Mtoe)
@@ -28,7 +28,7 @@ reportFinalEnergy <- function(regs,rmap) {
   MENA_EDS_VFeCons <- toolAggregate(MENA_EDS_VFeCons[,years,unique(sets$EF)],dim=3,rel=sets,from="EF",to="BAL")
   
   # complete names
-  getItems(MENA_EDS_VFeCons, 3) <- paste0("Final Energy ", getItems(MENA_EDS_VFeCons, 3))
+  getItems(MENA_EDS_VFeCons, 3) <- paste0("Final Energy|", getItems(MENA_EDS_VFeCons, 3))
   
   # country aggregation
   MENA_EDS_VFeCons <- toolAggregate(MENA_EDS_VFeCons, rel = rmap, partrel = TRUE)
@@ -68,7 +68,7 @@ reportFinalEnergy <- function(regs,rmap) {
   
   # add a column with the fuels that match each variable of enerdata
   v <- left_join(consumption_ENERDATA_variables, map_enerdata, by = "variable")
-  v["variable"] <- paste0("Final Energy ", v$fuel)
+  v["variable"] <- paste0("Final Energy|", v$fuel)
   v <- filter(v, period %in% years)
   v <- select(v , -c("fuel"))
   v <- as.quitte(v)
@@ -122,6 +122,7 @@ reportFinalEnergy <- function(regs,rmap) {
   
   # OPEN-PROM sectors
   sector <- c("TRANSE", "INDSE", "DOMSE", "NENSE")
+  sector_name <- c("Transportation", "Industry", "Tertiary", "Non Energy and Bunkers")
   
   # variables of OPEN-PROM related to sectors
   blabla_var <- c("VDemFinEneTranspPerFuel", "VConsFuel", "VConsFuel", "VConsFuel")
@@ -147,7 +148,7 @@ reportFinalEnergy <- function(regs,rmap) {
     
     # aggregate from PROM fuels to subsectors
     FCONS_by_sector_open <- toolAggregate(FCONS_by_sector_and_EF_open[,,unique(map_subsectors$EF)],dim=3,rel=map_subsectors,from="EF",to="SBS")
-    getItems(FCONS_by_sector_open, 3) <- paste0("Final Energy ", sector[y]," ", getItems(FCONS_by_sector_open, 3))
+    getItems(FCONS_by_sector_open, 3) <- paste0("Final Energy|", sector_name[y],"|", getItems(FCONS_by_sector_open, 3))
     
     # add model MENA_EDS data (choosing the correct variable from MENA by use of the MENA-PROM mapping)
     FCONS_by_sector_and_EF_MENA_EDS <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == blabla_var[y], "MENA.EDS"])
@@ -158,7 +159,7 @@ reportFinalEnergy <- function(regs,rmap) {
     
     # aggregate from PROM fuels to subsectors
     FCONS_by_sector_MENA <- toolAggregate(FCONS_by_sector_and_EF_MENA_EDS[,,unique(map_subsectors$EF)],dim=3,rel=map_subsectors,from="EF",to="SBS")
-    getItems(FCONS_by_sector_MENA, 3) <- paste0("Final Energy ", sector[y]," ", getItems(FCONS_by_sector_MENA, 3))
+    getItems(FCONS_by_sector_MENA, 3) <- paste0("Final Energy|", sector_name[y],"|", getItems(FCONS_by_sector_MENA, 3))
     
     # country aggregation
     FCONS_by_sector_MENA <- toolAggregate(FCONS_by_sector_MENA, rel = rmap, partrel = TRUE)
@@ -169,9 +170,9 @@ reportFinalEnergy <- function(regs,rmap) {
     
     # Final Energy by sector 
     sector_open <- dimSums(FCONS_by_sector_open, dim = 3, na.rm = TRUE)
-    getItems(sector_open, 3) <- paste0("Final Energy ", sector[y])
+    getItems(sector_open, 3) <- paste0("Final Energy|", sector_name[y])
     sector_mena <- dimSums(FCONS_by_sector_MENA, dim = 3, na.rm = TRUE)
-    getItems(sector_mena, 3) <- paste0("Final Energy ", sector[y])
+    getItems(sector_mena, 3) <- paste0("Final Energy|", sector_name[y])
     
     # write data in mif file
     write.report(sector_open[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario=scenario_name)
@@ -203,11 +204,11 @@ reportFinalEnergy <- function(regs,rmap) {
     
     # sector by subsector and by energy form form OPEN-PROM
     open_by_subsector_by_energy_form <- by_energy_form_and_by_subsector_open
-    getItems(open_by_subsector_by_energy_form, 3.1) <- paste0("Final Energy ", sector[y]," ", getItems(open_by_subsector_by_energy_form, 3.1))
+    getItems(open_by_subsector_by_energy_form, 3.1) <- paste0("Final Energy|", sector_name[y],"|", getItems(open_by_subsector_by_energy_form, 3.1))
     
     # sector by subsector and by energy form MENA_EDS
     mena_by_subsector_by_energy_form <- by_energy_form_and_by_subsector_mena
-    getItems(mena_by_subsector_by_energy_form, 3.1) <- paste0("Final Energy ", sector[y]," ", getItems(mena_by_subsector_by_energy_form, 3.1))
+    getItems(mena_by_subsector_by_energy_form, 3.1) <- paste0("Final Energy|", sector_name[y],"|", getItems(mena_by_subsector_by_energy_form, 3.1))
     
     # country aggregation
     mena_by_subsector_by_energy_form <- toolAggregate(mena_by_subsector_by_energy_form, rel = rmap, partrel = TRUE)
@@ -218,9 +219,9 @@ reportFinalEnergy <- function(regs,rmap) {
     
     # sector_by_energy_form
     by_energy_form_open <- dimSums(by_energy_form_and_by_subsector_open, 3.1, na.rm = TRUE)
-    getItems(by_energy_form_open,3.1) <- paste0("Final Energy ", sector[y]," ", getItems(by_energy_form_open, 3.1))
+    getItems(by_energy_form_open,3.1) <- paste0("Final Energy|", sector_name[y],"|", getItems(by_energy_form_open, 3.1))
     by_energy_form_mena <- dimSums(by_energy_form_and_by_subsector_mena,3.1, na.rm = TRUE)
-    getItems(by_energy_form_mena, 3.1) <- paste0("Final Energy ", sector[y]," ", getItems(by_energy_form_mena, 3.1))
+    getItems(by_energy_form_mena, 3.1) <- paste0("Final Energy|", sector_name[y],"|", getItems(by_energy_form_mena, 3.1))
     
     # country aggregation
     by_energy_form_mena <- toolAggregate(by_energy_form_mena, rel = rmap, partrel = TRUE)
@@ -377,7 +378,7 @@ reportFinalEnergy <- function(regs,rmap) {
     
     # aggregate from enerdata fuels to subsectors
     enerdata_by_sector <- toolAggregate(FuelCons_enerdata[,,as.character(unique(map_subsectors_ener$EF))],dim=3,rel=map_subsectors_ener,from="EF",to="SBS")
-    getItems(enerdata_by_sector, 3) <- paste0("Final Energy ", sector[y]," ", getItems(enerdata_by_sector, 3))
+    getItems(enerdata_by_sector, 3) <- paste0("Final Energy|", sector_name[y],"|", getItems(enerdata_by_sector, 3))
     
     # country aggregation
     enerdata_by_sector <- toolAggregate(enerdata_by_sector, rel = rmap)
@@ -387,7 +388,7 @@ reportFinalEnergy <- function(regs,rmap) {
     
     # Final Energy enerdata
     FE_ener <- dimSums(enerdata_by_sector, dim = 3, na.rm = TRUE)
-    getItems(FE_ener, 3) <- paste0("Final Energy ", sector[y])
+    getItems(FE_ener, 3) <- paste0("Final Energy|", sector_name[y])
     
     # write data in mif file
     write.report(FE_ener[intersect(getRegions(FE_ener),regs),year,],file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario=scenario_name)
@@ -402,7 +403,7 @@ reportFinalEnergy <- function(regs,rmap) {
     # enerdata by subsector and by energy form
     enerdata_by_subsector_by_energy_form <- enerdata_by_EF_and_sector
     enerdata_by_subsector_by_energy_form <- dimSums(enerdata_by_subsector_by_energy_form, 3.2, na.rm = TRUE)
-    getItems(enerdata_by_subsector_by_energy_form, 3.1) <- paste0("Final Energy ", sector[y]," ", getItems(enerdata_by_subsector_by_energy_form, 3.1))
+    getItems(enerdata_by_subsector_by_energy_form, 3.1) <- paste0("Final Energy|", sector_name[y],"|", getItems(enerdata_by_subsector_by_energy_form, 3.1))
     
     # country aggregation
     enerdata_by_subsector_by_energy_form <- toolAggregate(enerdata_by_subsector_by_energy_form, rel = rmap)
@@ -412,7 +413,7 @@ reportFinalEnergy <- function(regs,rmap) {
     
     # Aggregate model enerdata by energy form
     enerdata_by_energy_form <- dimSums(enerdata_by_EF_and_sector, 3.1, na.rm = TRUE)
-    getItems(enerdata_by_energy_form,3) <- paste0("Final Energy ", sector[y]," ", getItems(enerdata_by_energy_form, 3.2))
+    getItems(enerdata_by_energy_form,3) <- paste0("Final Energy|", sector_name[y],"|", getItems(enerdata_by_energy_form, 3.2))
    
     # country aggregation
     enerdata_by_energy_form <- toolAggregate(enerdata_by_energy_form, rel = rmap)
@@ -477,7 +478,7 @@ reportFinalEnergy <- function(regs,rmap) {
     
     # aggregate from IEA fuels to subsectors
     IEA_by_sector <- toolAggregate(IEA_data_WB[,,as.character(unique(map_subsectors_IEA$EF))],dim=3,rel=map_subsectors_IEA,from="EF",to="SBS")
-    getItems(IEA_by_sector, 3) <- paste0("Final Energy ", sector[y]," ", getItems(IEA_by_sector, 3))
+    getItems(IEA_by_sector, 3) <- paste0("Final Energy|", sector_name[y],"|", getItems(IEA_by_sector, 3))
     
     # country aggregation
     IEA_by_sector <- toolAggregate(IEA_by_sector, rel = rmap)
@@ -487,7 +488,7 @@ reportFinalEnergy <- function(regs,rmap) {
     
     #Final Energy IEA
     FE_IEA <- dimSums(IEA_by_sector, dim = 3, na.rm = TRUE)
-    getItems(FE_IEA, 3) <- paste0("Final Energy ", sector[y])
+    getItems(FE_IEA, 3) <- paste0("Final Energy|", sector_name[y])
     
     # write data in mif file
     write.report(FE_IEA[intersect(getRegions(FE_IEA),regs),year,],file="reporting.mif",model="IEA_WB",unit="Mtoe",append=TRUE,scenario=scenario_name)
@@ -498,7 +499,7 @@ reportFinalEnergy <- function(regs,rmap) {
     # IEA by subsector and by energy form
     IEA_by_subsector_by_energy_form <- IEA_by_EF_and_sector
     IEA_by_subsector_by_energy_form <- dimSums(IEA_by_subsector_by_energy_form, 3.2, na.rm = TRUE)
-    getItems(IEA_by_subsector_by_energy_form, 3.1) <- paste0("Final Energy ", sector[y]," ", getItems(IEA_by_subsector_by_energy_form, 3.1))
+    getItems(IEA_by_subsector_by_energy_form, 3.1) <- paste0("Final Energy|", sector_name[y],"|", getItems(IEA_by_subsector_by_energy_form, 3.1))
     
     # country aggregation
     IEA_by_subsector_by_energy_form <- toolAggregate(IEA_by_subsector_by_energy_form, rel = rmap)
@@ -508,7 +509,7 @@ reportFinalEnergy <- function(regs,rmap) {
     
     # Aggregate model IEA by energy form
     IEA_by_energy_form <- dimSums(IEA_by_EF_and_sector, 3.1, na.rm = TRUE)
-    getItems(IEA_by_energy_form,3) <- paste0("Final Energy ", sector[y]," ", getItems(IEA_by_energy_form, 3.2))
+    getItems(IEA_by_energy_form,3) <- paste0("Final Energy|", sector_name[y],"|", getItems(IEA_by_energy_form, 3.2))
     
     # country aggregation
     IEA_by_energy_form <- toolAggregate(IEA_by_energy_form, rel = rmap)
@@ -623,7 +624,7 @@ reportFinalEnergy <- function(regs,rmap) {
         }
       }
      
-    getItems(Navigate_by_sector, 3.2) <- paste0("Final Energy ", sector[y]," ", getItems(Navigate_by_sector, 3.2))
+    getItems(Navigate_by_sector, 3.2) <- paste0("Final Energy|", sector_name[y],"|", getItems(Navigate_by_sector, 3.2))
     
     # country aggregation
     Navigate_by_sector <- toolAggregate(Navigate_by_sector, rel = rmap)
@@ -639,7 +640,7 @@ reportFinalEnergy <- function(regs,rmap) {
     Navigate_by_subsector_by_energy_form <- dimSums(Navigate_by_subsector_by_energy_form, 3.2, na.rm = TRUE)
     Navigate_by_subsector_by_energy_form <- collapseDim(Navigate_by_subsector_by_energy_form,3.2)
     
-    getItems(Navigate_by_subsector_by_energy_form, 3.2) <- paste0("Final Energy ", sector[y]," ", getItems(Navigate_by_subsector_by_energy_form, 3.2))
+    getItems(Navigate_by_subsector_by_energy_form, 3.2) <- paste0("Final Energy|", sector_name[y],"|", getItems(Navigate_by_subsector_by_energy_form, 3.2))
 
     # country aggregation
     Navigate_by_subsector_by_energy_form <- toolAggregate(Navigate_by_subsector_by_energy_form, rel = rmap)
@@ -651,7 +652,7 @@ reportFinalEnergy <- function(regs,rmap) {
     Navigate_by_energy_form6 <- Navigate_by_EF_and_sector
     Navigate_by_energy_form6 <- collapseDim(Navigate_by_energy_form6,3.3)
     
-    getItems(Navigate_by_energy_form6,3.2) <- paste0("Final Energy ", sector[y]," ", getItems(Navigate_by_energy_form6, 3.2))
+    getItems(Navigate_by_energy_form6,3.2) <- paste0("Final Energy|", sector_name[y],"|", getItems(Navigate_by_energy_form6, 3.2))
     
     # country aggregation
     Navigate_by_energy_form6 <- toolAggregate(Navigate_by_energy_form6, rel = rmap)
@@ -697,7 +698,7 @@ reportFinalEnergy <- function(regs,rmap) {
 
   # add a column with the fuels that match each variable of enerdata
   IEA_Balances_Total <- left_join(consumption_IEA_variables, map_IEA_Total, by = c("product", "flow"))
-  IEA_Balances_Total["variable"] <- paste0("Final Energy ", IEA_Balances_Total$fuel)
+  IEA_Balances_Total["variable"] <- paste0("Final Energy|", IEA_Balances_Total$fuel)
   IEA_Balances_Total["unit"] <- "Mtoe"
   IEA_Balances_Total <- IEA_Balances_Total[, c(1, 2, 3, 4, 5, 6, 9)]
   IEA_Balances_Total <- filter(IEA_Balances_Total, period %in% year)
@@ -762,19 +763,19 @@ reportFinalEnergy <- function(regs,rmap) {
   
   # add Final Energy|Non-Energy Use and Final Energy|Bunkers
   l <- getItems(Navigate_Balances_Total,3.3) == "NENSE1"
-  getItems(Navigate_Balances_Total,3.3)[l] <- paste0("Final Energy ", sector[4])
+  getItems(Navigate_Balances_Total,3.3)[l] <- paste0("Final Energy|", sector_name[4])
   l <- getItems(Navigate_Balances_Total,3.3) == "NENSE2"
-  getItems(Navigate_Balances_Total,3.3)[l] <- paste0("Final Energy ", sector[4])
+  getItems(Navigate_Balances_Total,3.3)[l] <- paste0("Final Energy|", sector_name[4])
   
   # Rename sector DOMSE
   
   # add Final Energy|Commercial, Final Energy|Residential, Final Energy|Agriculture
   l <- getItems(Navigate_Balances_Total,3.3) == "DOMSE1"
-  getItems(Navigate_Balances_Total,3.3)[l] <- paste0("Final Energy ", sector[3])
+  getItems(Navigate_Balances_Total,3.3)[l] <- paste0("Final Energy|", sector_name[3])
   l <- getItems(Navigate_Balances_Total,3.3) == "DOMSE2"
-  getItems(Navigate_Balances_Total,3.3)[l] <- paste0("Final Energy ", sector[3])
+  getItems(Navigate_Balances_Total,3.3)[l] <- paste0("Final Energy|", sector_name[3])
   l <- getItems(Navigate_Balances_Total,3.3) == "DOMSE3"
-  getItems(Navigate_Balances_Total,3.3)[l] <- paste0("Final Energy ", sector[3])
+  getItems(Navigate_Balances_Total,3.3)[l] <- paste0("Final Energy|", sector_name[3])
   qNavigate_Balances_Total <- as.quitte(Navigate_Balances_Total)
   
   # take the sum of each subsector(for DOMSE and NENSE)
