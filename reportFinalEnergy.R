@@ -140,7 +140,7 @@ reportFinalEnergy <- function(regs,rmap) {
     
     if (sector[y] == "DOMSE") {
       sets13 <- filter(sets4, EF != "")
-      sets13 <- sets13 %>% filter(EF %in% getItems(var_gdx[,,sets6[, 1]],3.2))
+      #sets13 <- sets13 %>% filter(EF %in% getItems(var_gdx[,,sets6[, 1]],3.2))
       map_subsectors <- sets13 %>% filter(SBS %in% as.character(sets6[, 1]))
     }
     
@@ -285,79 +285,40 @@ reportFinalEnergy <- function(regs,rmap) {
     
     if (subtp == "TRANSE") {
       
-      a <- readSource("IRF", subtype = "total-van,-pickup,-lorry-and-road-tractor-traffic")
-      
-      # million motor vehicle km/yr
-      a2 <- readSource("IRF", subtype = "passenger-car-traffic")
-      
-      # million motor vehicle km/yr
-      a3 <- readSource("IRF", subtype = "bus-and-motor-coach-traffic")
-      
-      # million motor vehicle km/yr
-      a4 <- readSource("ENERDATA", subtype =  "diesel")
-      a4 <- a4[, , "Diesel final consumption of transport (excl biodiesel)"][, , "Mtoe"]
-      
-      # Mtoe, Millions of tonnes of oil equivalent
-      a5 <- readSource("ENERDATA", subtype =  "total")
-      a5 <- a5[, , "Total energy final consumption of transport"][, , "Mtoe"]
-
-      a <- a[, Reduce(intersect, list(getYears(a), getYears(a2), getYears(a3), getYears(a4), getYears(a5))), ]#million motor vehicle km/yr
-      a2 <- a2[, Reduce(intersect, list(getYears(a), getYears(a2), getYears(a3), getYears(a4), getYears(a5))), ]#million motor vehicle km/yr
-      a3 <- a3[, Reduce(intersect, list(getYears(a), getYears(a2), getYears(a3), getYears(a4), getYears(a5))), ]#million motor vehicle km/yr
-      a4 <- a4[, Reduce(intersect, list(getYears(a), getYears(a2), getYears(a3), getYears(a4), getYears(a5))), ]#Mtoe
-      a5 <- a5[, Reduce(intersect, list(getYears(a), getYears(a2), getYears(a3), getYears(a4), getYears(a5))), ]#Mtoe
-      
-      # total-van,-pickup,-lorry-and-road-tractor-traffic^2 / Total energy final consumption of transport
-      out1 <- ((a4 * a4) / a5)
-      
-      # passenger-car-traffic / (total-van,-pickup,-lorry-and-road-tractor-traffic + bus-and-motor-coach-traffic)
-      out2 <- (a2 / (a + a3))
-      x2 <- out1 * out2
-      x2 <- collapseNames(x2)
-      getNames(x2) <- "PC.GDO.Mtoe"
-      getSets(x2) <- c("region", "period", "variable", "new", "unit")
-      x <- mbind(x[, intersect(getYears(x), getYears(x2)), ], x2[, intersect(getYears(x), getYears(x2)), ])
-      
       a6 <- readSource("IRF", subtype = "inland-surface-passenger-transport-by-rail")
-      
-      # million pKm/yr
+      #million pKm/yr
       a7 <- readSource("IRF", subtype = "inland-surface-freight-transport-by-rail")
-      
-      # million tKm/yr
+      #million tKm/yr
       a6 <- a6[, Reduce(intersect, list(getYears(a6), getYears(a7), getYears(x))), ]
       a7 <- a7[, Reduce(intersect, list(getYears(a6), getYears(a7), getYears(x))), ]
       x <- x[, Reduce(intersect, list(getYears(a6), getYears(a7), getYears(x))), ]
       
-      # inland-surface-passenger-transport-by-rail / total inland-surface transport-by-rail
+      #inland-surface-passenger-transport-by-rail / total inland-surface transport-by-rail
       x[, , "PT.GDO.Mtoe"] <- x[, , "PT.GDO.Mtoe"] * (a6 / (a6 + a7))
-      
-      # inland-surface-freight-transport-by-rail / total inland-surface
+      #inland-surface-freight-transport-by-rail / total inland-surface
       x[, , "GT.GDO.Mtoe"] <- x[, , "GT.GDO.Mtoe"] * (a7 / (a6 + a7))
       
       x[, , "PT.ELC.Mtoe"] <- x[, , "PT.ELC.Mtoe"] * (a6 / (a6 + a7))
       x[, , "GT.ELC.Mtoe"] <- x[, , "GT.ELC.Mtoe"] * (a7 / (a6 + a7))
       
-      # million pKm/yr
+      
       a8 <- readSource("IRF", subtype = "passenger-car-traffic")
-      
-      # million tKm/yr
+      #million pKm/yr
       a9 <- readSource("IRF", subtype = "inland-surface-freight-transport-by-road")
-      
+      #million tKm/yr
       a8 <- a8[, Reduce(intersect, list(getYears(a8), getYears(a9), getYears(x))), ]
       a9 <- a9[, Reduce(intersect, list(getYears(a8), getYears(a9), getYears(x))), ]
       x <- x[, Reduce(intersect, list(getYears(a8), getYears(a9), getYears(x))), ]
       
-      # inland-surface-freight-transport-by-road / total inland-surface-transport-by-road
+      #inland-surface-freight-transport-by-road / total inland-surface-transport-by-road
       
-      # x[, , "PC.GDO.Mtoe"] <- x[, , "PC.GDO.Mtoe"] * (a8 / (a8 + a9))
+      x[, , "PC.GDO.Mtoe"] <- x[, , "PC.GDO.Mtoe"] * (a8 / (a8 + a9))
       x[, , "GU.GDO.Mtoe"] <- x[, , "GU.GDO.Mtoe"] * (a9 / (a8 + a9))
       
       l <- getNames(x) == "PA.KRS.Mt"
       getNames(x)[l] <- "PA.KRS.Mtoe"
-      
-      # from Mt to Mtoe
+      #from Mt to Mtoe
       x[,,"PA.KRS.Mtoe"] <- x[,,"PA.KRS.Mtoe"] / 1.027
-
     }
     
     x[is.na(x)] <- 10^-6
