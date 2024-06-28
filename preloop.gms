@@ -510,17 +510,23 @@ VLambda.L(runCy,YTIME)=0.21;
 VProdReqTotElec.fx(runCy,"%fBaseY%")=sum(pgall,VProdElec.L(runCy,pgall,"%fBaseY%"));
 
 $IFTHEN.calib %Calibration% == off
-VW.FX(allCy,SBS,EF,YTIME) = 1 ;                                   
-VWPGC.FX(allCy,PGALL,YTIME) = 1 ;                                 
-VWPGD.FX(allCy,PGALL,YTIME) = 1 ;                                  
-VWTAG.FX(allCy,TRANSE,YTIME) = 1 ;                                
-VWMPG.FX(allCy,YTIME) = 1 ;                                       
-VWTF.FX(allCy,TRANSE,TTECH,YTIME) = 1 ;                           
-VWTT.FX(allCy,TRANSE,TTECH,YTIME) = 1 ;                            
-VWTAP.FX(allCy,TRANSE,YTIME) = 1 ;                                 
-VWCRS.FX(allCy,DSBS,EF,YTIME) = 1 ;                                
-VWDFS.FX(allCy,DSBS,YTIME) = 1 ;                                   
-VWCT.FX(allCy,DSBS,EF,YTIME) = 1 ;
+$GDXIN input.gdx
+   
+execute_load 'input.gdx', VW=VW, VWPGC=VWPGC, VWPGD=VWPGD, VWTAG=VWTAG, VWMPG=VWMPG, VWTF=VWTF, VWTT=VWTT, VWTAP=VWTAP, VWCRS=VWCRS, VWDFS=VWDFS, VWCT=VWCT;
+   
+* Close the GDX file
+$GDXIN
+VW.FX(allCy,SBS,EF,YTIME) = VW.L(allCy,SBS,EF,YTIME) ;                                   
+VWPGC.FX(allCy,PGALL,YTIME) = VWPGC.L(allCy,PGALL,YTIME) ;                                 
+VWPGD.FX(allCy,PGALL,YTIME) = VWPGD.L(allCy,PGALL,YTIME) ;                                  
+VWTAG.FX(allCy,TRANSE,YTIME) = VWTAG.L(allCy,TRANSE,YTIME) ;                                
+VWMPG.FX(allCy,YTIME) = VWMPG.L(allCy,YTIME) ;                                       
+VWTF.FX(allCy,TRANSE,TTECH,YTIME) = VWTF.L(allCy,TRANSE,TTECH,YTIME) ;                           
+VWTT.FX(allCy,TRANSE,TTECH,YTIME) = VWTT.L(allCy,TRANSE,TTECH,YTIME) ;                            
+VWTAP.FX(allCy,TRANSE,YTIME) = VWTAP.L(allCy,TRANSE,YTIME) ;                                 
+VWCRS.FX(allCy,DSBS,EF,YTIME) = VWCRS.L(allCy,DSBS,EF,YTIME) ;                                
+VWDFS.FX(allCy,DSBS,YTIME) = VWDFS.L(allCy,DSBS,YTIME) ;                                   
+VWCT.FX(allCy,DSBS,EF,YTIME) = VWCT.L(allCy,DSBS,EF,YTIME) ;
 $ELSE.calib
 VW.L(allCy,SBS,EF,YTIME) = 1 ;                                   
 VWPGC.L(allCy,PGALL,YTIME) = 1 ;                                 
