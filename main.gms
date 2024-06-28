@@ -126,6 +126,7 @@ $elseif.loadData %DevMode% == 1 $call "RScript ./loadMadratData.R DevMode=1"
 $elseif.loadData %DevMode% == 2 $call "RScript ./loadMadratData.R DevMode=2"
 $endif.loadData
 $endif.genInp
+file fStat /'modelstat.txt'/; 
 
 $include sets.gms
 $include declarations.gms
