@@ -111,7 +111,7 @@ Parameter,ELASTGAS,iNatGasPriProElst,Natural Gas primary production elasticity r
 Parameter,ELASTNSE,iElastNonSubElec,,"CYall,SBS,ETYPES,YTIME","allCy,SBS,ETYPES,YTIME",Macro economic indicators
 Parameter,ELC_IMPORTS,iElecImp,Electricity Imports (1),"CYALL,YTIME","allCy,YTIME",Reguala Falsi Parameters
 Variable,ELCALL,VConsElec,Electricity demand per final sector (Mtoe),"CYall,DSBS,YTIME","allCy,DSBS,YTIME",POWER GENERATION SECTOR
-Variable,ELCCHP_EST,VProdEstElecCHP,Estimate the electricity of CHP Plants,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Variable,ELCCHP_EST,VProdElecEstCHP,Estimate the electricity of CHP Plants,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Variable,ELCDEMAND,VDemElecTot,Total electricity demand (TWh),"CYall,YTIME","allCy,YTIME",Power Generation
 Variable,ELCHEATPUMP,VElecConsHeatPla,Electricity consumed in heatpump plants (Mtoe),"CYall,DSBS,YTIME","allCy, DSBS, YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,ELCINDEX,VPriceElecInd,Electricity index - a function of industry price (1),"CYall,YTIME","allCy,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
@@ -172,7 +172,7 @@ Equation,EQDEMTR,QDemFinEneTranspPerFuel,Compute final energy demand in transpor
 Equation,EQDEMTRALL,qDemFinEneSubTransp,Compute final energy demand in transport ,"CYall,TRANSE,YTIME","allCy,TRANSE,YTIME",TRANSPORT SPECIFIC EQUATIONS
 Equation,EQDUMMYOBJ,qDummyObj,Define dummy objective function,"CYall,INDDOM,YTIME",,
 Equation,EQELCALL,QConsElec,Compute electricity consumption per final demand sector,"CYall,DSBS,YTIME","allCy,DSBS,YTIME",Power Generation
-Equation,EQELCCHP_EST,QProdEstElecCHP,Compute estimated electricity of CHP Plants,"CYALL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Equation,EQELCCHP_EST,QProdElecEstCHP,Compute estimated electricity of CHP Plants,"CYALL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQELCDEMAND,QDemElecTot,Compute electricity final demand,"CYall,YTIME","allCy,YTIME",Power Generation
 Equation,EQELCHEATPUMP,QElecConsHeatPla,Compute electricity consumed in heatpump plants (Mtoe),"CYall,DSBS,YTIME","allCy, DSBS, YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQELCINDEX,QPriceElecInd,Compute electricity index,"CYall,YTIME","allCy,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS
@@ -256,8 +256,8 @@ Equation,EQTOTCAP,QCapElecTot,Compute total electricity generation capacity,"CYa
 Equation,EQTOTCAP_EST,QCapElecTotEst,Compute estimated total electricity generation capacity,"CYall,YTIME","CYall,YTIME",POWER GENERATION SECTOR
 Equation,EQTOTCAPNCHP,QCapElecNonCHP,Compute total electricity generation capacity excluding CHP plants,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQTOTOT,QOutTotTransf,Compute total transformation output,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
-Equation,EQTOTPROD,QProdReqTotElec,Compute total required electricity production,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Equation,EQTOTPRODCHP,QProdReqElec,Compute total required electricity production ,"CYALL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Equation,EQTOTPROD,QProdElecReqTot,Compute total required electricity production,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Equation,EQTOTPRODCHP,QProdElecReqCHP,Compute total required electricity production ,"CYALL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQTRANS,QTransfers,Compute transfers,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
 Equation,EQU,QCostTechMatFac,Compute the technology cost including the maturity factor per technology and subsector,"CYall,DSBS,Rcon,EF,YTIME","allCy,DSBS,rCon,EF,YTIME",TRANSPORT SPECIFIC EQUATIONS
 Equation,EQUTR,QCostTranspMatFac,Compute transportation cost including maturity factor,"CYALL,TRANSE,RCon,TTECH,YTIME","allCy,TRANSE,RCon,TTECH,YTIME",TRANSPORT SPECIFIC EQUATIONS
@@ -461,8 +461,8 @@ Variable,TOTCAP,VCapElecTot,Total electricity generation capacity (GW),"CYall,YT
 Variable,TOTCAP_EST,VCapElecTotEst,Estimated Total electricity generation capacity (GW),"CYall,YTIME","CYall,YTIME",POWER GENERATION SECTOR
 Variable,TOTCAPNCHP,VCapElecNonCHP,Total electricity generation capacity excluding CHP ( GW),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Variable,TOTOT,VOutTotTransf,Total transformation output (Mtoe),"CYall,EFS,YTIME ","allCy,EFS,YTIME ",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-Variable,TOTPROD,VProdReqTotElec,Total required electricity production (TWh),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Variable,TOTPRODCHP,VProdReqElec,Total estimated CHP electricity production (TWh),"CYALL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Variable,TOTPROD,VProdElecReqTot,Total required electricity production (TWh),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Variable,TOTPRODCHP,VProdElecReqCHP,Total estimated CHP electricity production (TWh),"CYALL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Parameter,TRADBMS,iExogDemOfBiomass,DEMAND OF TRADITIONAL BIOMASS-EXOGENOUSLY DEFINED,"CYALL,SBS,YTIME","allCy,DOMSE,YTIME",Common parameters for all Demand Subsectors
 Variable,TRANS,VTransfers,Transfers (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",
 Parameter,Trans_ELSH,iPlugHybrFractOfMileage,"Plug in hybrid fraction of mileage covered by electricity, residualls on GDP-Depnd car market ext (1)","ELSH_SET,YTIME","allCy,ELSH_SET,YTIME",Parameters for data transfering
