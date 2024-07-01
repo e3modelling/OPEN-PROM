@@ -1,4 +1,6 @@
 # This script generates a mif file for comparison of OPEN-PROM data with MENA-EDS and ENERDATA
+
+# Load necessary libraries
 library(dplyr)
 library(gdx)
 library(quitte)
@@ -9,30 +11,33 @@ library(stringr)
 library(jsonlite)
 library(reticulate)
 
+# Function to install Python packages if not available
+installPythonPackages <- function(packages) {
+  for (pkg in packages) {
+    if (!py_module_available(pkg)) {
+      py_install(pkg, use_python = TRUE)
+    }
+  }
+}
+
 # Check if command line arguments are provided
 args <- commandArgs(trailingOnly = TRUE)
 
 # Check if the user provided a path as an argument
 if (length(args) > 0) {
-  runpath <- args[1]  # Assuming the first argument is the runpath
+  runpath <- args[1]  # If the first argument is the runpath
 } else {
   runpath <- NULL
 }
 
+# Main script logic starts here
+
+# Define the runpath variable if not provided via command line
 if (is.null(runpath)) {
   if (any("runs" %in% dir())) {
     # Check which Python environment reticulate is using
     py_config()
-    # Install necessary Python packages if not already installed
-    if (!py_module_available("seaborn")) {
-      py_install("seaborn", use_python = TRUE)
-    }
-    if (!py_module_available("colorama")) {
-      py_install("colorama", use_python = TRUE)
-    }
-    if (!py_module_available("pandas")) {
-      py_install("pandas", use_python = TRUE)
-    }
+    installPythonPackages(c("seaborn", "colorama", "pandas"))
     # Execute the Python script and capture its output
     python_output <- tryCatch(
       {
@@ -71,7 +76,22 @@ for (i in 1:length(runpath)) {
   source("reportGDP.R")
   source("reportFinalEnergy.R")
 
-  runCY <- readGDX('./blabla.gdx', "runCYL") # read model regions, model reporting should contain only these
+  # Add error handling for GDX file reading
+  runCY <- tryCatch(
+    {
+      readGDX('./blabla.gdx', "runCYL") # read model regions, model reporting should contain only these
+    },
+    error = function(e) {
+      message("Error reading GDX file at path: ", x)
+      message(e)
+      NULL
+    }
+  )
+  
+  if (is.null(runCY)) {
+    next  # Skip to the next runpath if the GDX file could not be read
+  }
+  
   rmap <- toolGetMapping(mapping, "regional", where = "mrprom")
   setConfig(regionmapping = mapping)
 
