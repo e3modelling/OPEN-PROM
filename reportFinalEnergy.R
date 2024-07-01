@@ -526,7 +526,7 @@ reportFinalEnergy <- function(regs,rmap) {
     # if SUP_NPi_Default has NA take the value of the second scenario
     x <- full_join(x[which(x[,2] == "SUP_NPi_Default"),], x[which(x[,2] != "SUP_NPi_Default"),], by = c("model", "scenario", "region", "period", "variable", "unit")) %>%
       mutate(value = ifelse(is.na(value.x), value.y, value.x)) %>%
-      select(-c("value.x", "value.y", "scenario"))
+      select(-c("value.x", "value.y"))
     
     
     # rename variables from Navigate to openprom names
@@ -547,49 +547,27 @@ reportFinalEnergy <- function(regs,rmap) {
     map_subsectors_Navigate2 <- sets10
     
     # filter to have only the variables which are in enerdata
-    map_subsectors_Navigate2 <- map_subsectors_Navigate2 %>% filter(EF %in% getItems(x,3.4))
-    map_subsectors_Navigate <- map_subsectors_IEA_by_sector
-    
-    map_subsectors_Navigate$EF = paste(map_subsectors_Navigate$SBS, "Mtoe",map_subsectors_Navigate$EF, sep=".")
+    map_subsectors_Navigate2 <- map_subsectors_Navigate2 %>% filter(EF %in% getItems(x,3.5))
     x <- as.quitte(x)
     x <- as.magpie(x)
-    
-    # take data after first dot
-    sector_navigate <- gsub("^[^.]+.","",getItems(x,3))
-    map_subsectors_Navigate <- map_subsectors_Navigate %>% filter(EF %in% sector_navigate)
     
     year <- Reduce(intersect, list(getYears(FCONS_by_sector_open,as.integer=TRUE),getYears(x,as.integer=TRUE)))
     x <- x[,year,]
     
-    # aggregate from Navigate fuels to subsectors
-    model_of_navigate <- getItems(x,3.1)
-    Navigate_by_sector <- NULL
-    Navigate_by_sector_by_model <- NULL
-    
-    # make aggregation for each model, aggregate from PROM fuels to subsectors
-    for (navi_model in model_of_navigate) {
-      map_subsectors_Navigate3 <- map_subsectors_Navigate
-      map_subsectors_Navigate3[["EF"]] <- paste0(navi_model,".",map_subsectors_Navigate[["EF"]])
-      map_subsectors_Navigate3[["SBS"]] <- paste0(navi_model,".",map_subsectors_Navigate[["SBS"]])
-      map_subsectors_Navigate3 <- map_subsectors_Navigate3 %>% filter(EF %in% getItems(x[,,navi_model],3))
-      if (nrow(map_subsectors_Navigate3) != 0) {
-        Navigate_by_sector_by_model <- toolAggregate(x[,,as.character(unique(map_subsectors_Navigate3$EF))],dim=c(3),rel=map_subsectors_Navigate3,from="EF",to="SBS")
-        Navigate_by_sector <- mbind(Navigate_by_sector, Navigate_by_sector_by_model)
-        }
-      }
-     
-    getItems(Navigate_by_sector, 3.2) <- paste0("Final Energy|", sector_name[y],"|", getItems(Navigate_by_sector, 3.2))
+    Navigate_by_sector <- dimSums(x, dim = 3.5)
+
+    getItems(Navigate_by_sector, 3.3) <- paste0("Final Energy|", sector_name[y],"|", getItems(Navigate_by_sector, 3.3))
     
     # country aggregation
     Navigate_by_sector <- toolAggregate(Navigate_by_sector, rel = rmap)
     
-    # write data in mif file, sector INDSE works without aggregation in the next step
-    if (!(sector[y] %in% c("INDSE", "DOMSE"))) {
-      write.report(Navigate_by_sector[intersect(getRegions(Navigate_by_sector),regs),year,],file="reporting.mif",model="Navigate",unit="Mtoe",append=TRUE,scenario=scenario_name)
+    # write data in mif file, sector INDSE, works without aggregation in the next step
+    if (!(sector[y] %in% c("INDSE"))) {
+      write.report(Navigate_by_sector[intersect(getRegions(Navigate_by_sector),regs),year,],file="reporting.mif",append=TRUE)
     }
     
     # Aggregate model Navigate by subsector and by energy form
-    Navigate_by_EF_and_sector <- toolAggregate(x[,,as.character(unique(map_subsectors_Navigate2$EF))],dim=c(3.4),rel=map_subsectors_Navigate2,from="EF",to="EFA")
+    Navigate_by_EF_and_sector <- toolAggregate(x[,,as.character(unique(map_subsectors_Navigate2$EF))],dim=c(3.5),rel=map_subsectors_Navigate2,from="EF",to="EFA")
     
     # Navigate by subsector and by energy form
     Navigate_by_subsector_by_energy_form <- Navigate_by_EF_and_sector
@@ -607,15 +585,14 @@ reportFinalEnergy <- function(regs,rmap) {
     
     # Aggregate model Navigate by energy form
     Navigate_by_energy_form6 <- Navigate_by_EF_and_sector
-    Navigate_by_energy_form6 <- collapseDim(Navigate_by_energy_form6,3.3)
     
-    getItems(Navigate_by_energy_form6,3.2) <- paste0("Final Energy|", sector_name[y],"|", getItems(Navigate_by_energy_form6, 3.2))
+    getItems(Navigate_by_energy_form6,3.3) <- paste0("Final Energy|", sector_name[y],"|", getItems(Navigate_by_energy_form6, 3.3))
     
     # country aggregation
     Navigate_by_energy_form6 <- toolAggregate(Navigate_by_energy_form6, rel = rmap)
     
     # write data in mif file
-    write.report(Navigate_by_energy_form6[intersect(getRegions(Navigate_by_energy_form6),regs),year,],file="reporting.mif",model="Navigate",unit="Mtoe",append=TRUE,scenario=scenario_name)
+    write.report(Navigate_by_energy_form6[intersect(getRegions(Navigate_by_energy_form6),regs),year,],file="reporting.mif",append=TRUE)
     
   }
   
@@ -729,6 +706,6 @@ reportFinalEnergy <- function(regs,rmap) {
   Navigate_Balances_Total[is.na(Navigate_Balances_Total)] <- 0
   
   # write data in mif file
-  write.report(Navigate_Balances_Total[intersect(getRegions(Navigate_Balances_Total),regs),,],file="reporting.mif",model="Navigate_Total",unit="Mtoe",append=TRUE,scenario=scenario_name)
+  write.report(Navigate_Balances_Total[intersect(getRegions(Navigate_Balances_Total),regs),,],file="reporting.mif",append=TRUE)
   
 }
