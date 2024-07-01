@@ -4,9 +4,15 @@ loop rcc$(rcc.val <= sSolverTryMax) do !! start inner iteration loop (solver att
         solve openprom using nlp maximizing vDummyObj;
         sModelStat = openprom.modelstat;
     endif;
-endloop;    !! close inner iteration loop (solver attempts)
-put fStat; 
-put "Model Status: ", sModelStat /; 
+endloop;  !! close inner iteration loop (solver attempts)
+
+!! Output model status and corresponding year
+loop YTIME$(TIME(YTIME)) do
+    put fStat;
+    put "Model Status:", sModelStat:0:2, " Year:", YTIME.tl /;
+endloop;
+*put fStat; 
+*put "Model Status: ", sModelStat /; 
  
 * Fix values of variables for the next time step
 VStockPcYearly.FX(runCy,YTIME)$TIME(YTIME) = VStockPcYearly.L(runCy,YTIME)$TIME(YTIME);
