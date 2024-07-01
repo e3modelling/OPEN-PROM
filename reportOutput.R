@@ -9,14 +9,30 @@ library(stringr)
 library(jsonlite)
 library(reticulate)
 
-# Define the runpath variable
-runpath <- NULL
+# Check if command line arguments are provided
+args <- commandArgs(trailingOnly = TRUE)
+
+# Check if the user provided a path as an argument
+if (length(args) > 0) {
+  runpath <- args[1]  # Assuming the first argument is the runpath
+} else {
+  runpath <- NULL
+}
 
 if (is.null(runpath)) {
   if (any("runs" %in% dir())) {
     # Check which Python environment reticulate is using
     py_config()
-  
+    # Install necessary Python packages if not already installed
+    if (!py_module_available("seaborn")) {
+      py_install("seaborn", use_python = TRUE)
+    }
+    if (!py_module_available("colorama")) {
+      py_install("colorama", use_python = TRUE)
+    }
+    if (!py_module_available("pandas")) {
+      py_install("pandas", use_python = TRUE)
+    }
     # Execute the Python script and capture its output
     python_output <- tryCatch(
       {
@@ -38,17 +54,6 @@ if (is.null(runpath)) {
   } else {
     stop("Runs directory not found. Please provide the run path manually by setting the 'runpath' variable in the script.")
   }
-}
-
-# Install necessary Python packages if not already installed
-if (!py_module_available("seaborn")) {
-  py_install("seaborn", use_python = TRUE)
-}
-if (!py_module_available("colorama")) {
-  py_install("colorama", use_python = TRUE)
-}
-if (!py_module_available("pandas")) {
-  py_install("pandas", use_python = TRUE)
 }
 
 # Region mapping used for aggregating validation data (e.g. ENERDATA)
