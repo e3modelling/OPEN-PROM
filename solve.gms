@@ -6,12 +6,6 @@ loop rcc$(rcc.val <= sSolverTryMax) do !! start inner iteration loop (solver att
     endif;
 endloop;  !! close inner iteration loop (solver attempts)
 
-!! Output model status and corresponding year
-*loop YTIME$(TIME(YTIME)) do
-*    put fStat;
-*    put "Model Status:", sModelStat:0:2, " Year:", YTIME.tl /;
-*endloop;
-
 !! Output model status, country, and corresponding year
 loop allCy$runCy(allCy) do
     loop YTIME$(TIME(YTIME)) do
@@ -19,6 +13,7 @@ loop allCy$runCy(allCy) do
         put "Country:", allCy.tl, " Model Status:", sModelStat:0:2, " Year:", YTIME.tl /;
     endloop;
 endloop;
+
 * Fix values of variables for the next time step
 VStockPcYearly.FX(runCy,YTIME)$TIME(YTIME) = VStockPcYearly.L(runCy,YTIME)$TIME(YTIME);
 VMEPcGdp.FX(runCy,YTIME)$TIME(YTIME) = VMEPcGdp.L(runCy,YTIME)$TIME(YTIME);
