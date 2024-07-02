@@ -1,11 +1,18 @@
+sModelStat = 100;
+loop rcc$(rcc.val <= sSolverTryMax) do !! start inner iteration loop (solver attempts)
+    if sModelStat gt 2 then
+        solve openprom using nlp maximizing vDummyObj;
+        sModelStat = openprom.modelstat;
+    endif;
+endloop;  !! close inner iteration loop (solver attempts)
 
-    sModelStat = 100;
-    loop rcc$(rcc.val <= sSolverTryMax) do !! start inner iteration loop (solver attempts)
-        if sModelStat gt 2 then
-            solve openprom using nlp maximizing vDummyObj;
-            sModelStat = openprom.modelstat;
-        endif;
-    endloop;    !! close inner iteration loop (solver attempts)
+!! Output model status, country, and corresponding year
+loop allCy$runCy(allCy) do
+    loop YTIME$(TIME(YTIME)) do
+        put fStat;
+        put "Country:", allCy.tl, " Model Status:", sModelStat:0:2, " Year:", YTIME.tl /;
+    endloop;
+endloop;
 
 * Fix values of variables for the next time step
 VStockPcYearly.FX(runCy,YTIME)$TIME(YTIME) = VStockPcYearly.L(runCy,YTIME)$TIME(YTIME);
@@ -47,5 +54,5 @@ VExp.FX(runCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS)) = VExp.L(runCy,EFS,YTIME)$(TI
 VConsGrssInlNotEneBranch.FX(runCy,EFS,YTIME)$TIME(YTIME) =  VConsGrssInlNotEneBranch.L(runCy,EFS,YTIME)$TIME(YTIME);
 endloop;  !! close countries loop
 endloop;  !! close outer iteration loop (time steps)
-
+putclose fStat;
 $if %WriteGDX% == on execute_unload "blabla.gdx";

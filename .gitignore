@@ -21,3 +21,4 @@ metadata.json
 /doc
 *.pyc
 config.json
+modelstat.txt
