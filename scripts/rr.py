@@ -120,6 +120,14 @@ def parse_modelstat(modelstat_path):
                     if country not in country_year_status:
                         country_year_status[country] = {}
                     country_year_status[country][year] = 2  # Feasible solution
+                else:
+                    match = re.search(r'Country:(\w+)\s+Model Status:(\d+\.\d+)\s+Year:(\d{4})', line)
+                    if match:
+                        country = match.group(1)
+                        year = int(match.group(3))
+                        if country not in country_year_status:
+                            country_year_status[country] = {}
+                        country_year_status[country][year] = 0  # Failure or infeasible solution
     except Exception as e:
         print(f"Error parsing {modelstat_path}: {str(e)}")
         return None
@@ -159,7 +167,7 @@ def plot_heatmap(df, fig_num, plot_title):
     columns represent years, and color indicates run success (green for optimal solution, orange for feasible solution, red for failure).
     """
     if df is not None:
-        # Define custom color palette (red, orange, green)
+        # Define custom color palette (red for failure/infeasible, green for optimal, orange for feasible)
         cmap = sns.color_palette(["red", "green", "orange"])
 
         # Create the heatmap without annotations
