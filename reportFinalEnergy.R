@@ -30,6 +30,10 @@ reportFinalEnergy <- function(regs,rmap) {
   # complete names
   getItems(MENA_EDS_VFeCons, 3) <- paste0("Final Energy|", getItems(MENA_EDS_VFeCons, 3))
   
+  l <- getNames(VConsFinEneCountry) == "Final Energy|Total"
+  getNames(VConsFinEneCountry)[l] <- "Final Energy"
+  getNames(MENA_EDS_VFeCons)[l] <- "Final Energy"
+  
   # write data in mif file
   write.report(VConsFinEneCountry[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",scenario=scenario_name)
   write.report(MENA_EDS_VFeCons[menaregs,years,],file="reporting.mif",model="MENA-EDS",unit="Mtoe",append=TRUE,scenario=scenario_name)
@@ -72,6 +76,9 @@ reportFinalEnergy <- function(regs,rmap) {
   v <- as.magpie(v)
   v[is.na(v)] <- 0
   v <- toolAggregate(v, rel = rmap)
+  
+  l <- getNames(v) == "Final Energy|Total.Mtoe"
+  getNames(v)[l] <- "Final Energy.Mtoe"
   
   # write data in mif file
   write.report(v[intersect(getRegions(v),regs),,],file="reporting.mif",model="ENERDATA",unit="Mtoe",append=TRUE,scenario=scenario_name)
@@ -119,7 +126,7 @@ reportFinalEnergy <- function(regs,rmap) {
   
   # OPEN-PROM sectors
   sector <- c("TRANSE", "INDSE", "DOMSE", "NENSE")
-  sector_name <- c("Transportation", "Industry", "Tertiary", "Non Energy and Bunkers")
+  sector_name <- c("Transportation", "Industry", "Residential and Commercial", "Non Energy and Bunkers")
   
   # variables of OPEN-PROM related to sectors
   blabla_var <- c("VDemFinEneTranspPerFuel", "VConsFuel", "VConsFuel", "VConsFuel")
@@ -579,10 +586,6 @@ reportFinalEnergy <- function(regs,rmap) {
     # country aggregation
     Navigate_by_subsector_by_energy_form <- toolAggregate(Navigate_by_subsector_by_energy_form, rel = rmap)
     
-    # write data in mif file
-    #the energy forms are calculated by variable in the next step and by aggegation
-    #write.report(Navigate_by_subsector_by_energy_form[intersect(getRegions(Navigate_by_subsector_by_energy_form),regs),year,],file="reporting.mif",model="Navigate",unit="Mtoe",append=TRUE,scenario=scenario_name)
-    
     # Aggregate model Navigate by energy form
     Navigate_by_energy_form6 <- Navigate_by_EF_and_sector
     
@@ -640,6 +643,9 @@ reportFinalEnergy <- function(regs,rmap) {
   IEA_Balances_Total <- as.magpie(IEA_Balances_Total)
   IEA_Balances_Total[is.na(IEA_Balances_Total)] <- 0
   IEA_Balances_Total <- toolAggregate(IEA_Balances_Total, rel = rmap)
+  
+  l <- getNames(IEA_Balances_Total) == "Final Energy|Total.Mtoe"
+  getNames(IEA_Balances_Total)[l] <- "Final Energy.Mtoe"
   
   # write data in mif file
   write.report(IEA_Balances_Total[intersect(getRegions(IEA_Balances_Total),regs),,],file="reporting.mif",model="IEA_Total",unit="Mtoe",append=TRUE,scenario=scenario_name)
