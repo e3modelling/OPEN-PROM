@@ -1,5 +1,7 @@
 ### Script for OPEN-PROM model execution and other associated tasks.
+library(jsonlite)
 
+# Various flags used to modify script behavior
 withRunFolder = TRUE # Set to FALSE to disable model run folder creation and file copying
 withUpload = TRUE # Set to FALSE to disable model run upload to Google Drive
 uploadGDX = FALSE # Set to TRUE to include GDX files in the uploaded archive
@@ -7,7 +9,6 @@ uploadGDX = FALSE # Set to TRUE to include GDX files in the uploaded archive
 ### Define function that saves model metadata into a JSON file.
 
 saveMetadata<- function(DevMode) {
-  library(jsonlite)
 
   # Gather Git information with system calls
   commit_author <- system("git log -1 --format=%an", intern = TRUE)
@@ -60,13 +61,12 @@ createRunFolder <- function(scenario = "default") {
   file.copy(grep(".gms$",dir(), value = TRUE), to = runfolder)
   file.copy(grep(".csv$",dir(), value = TRUE), to = runfolder)
   file.copy(grep("*.R$",dir(), value = TRUE), to = runfolder)
+  file.copy(grep("*.json$",dir(), value = TRUE), to = runfolder)
   file.copy("conopt.opt", to = runfolder)
-  file.copy("metadata.json", to = runfolder)
   file.copy("data", to = runfolder, recursive = TRUE)
   file.copy("input.gdx", to = runfolder)
   # switch to the run folder
   setwd(runfolder)
-
 }
 
 ### Define a function that archives and uploads each model run to Google Drive
@@ -102,6 +102,18 @@ uploadToGDrive <- function() {
       
       }, error = function(e) {
       cat("An error occurred during file upload: ", e$message, "\n")
+
+      # In case upload fails, try copying archive to local Google Drive folder 
+      if (file.exists('config.json')) {
+
+        config <- fromJSON('config.json')
+        model_runs_path <- config$model_runs_path
+        destination_path <- file.path(model_runs_path, basename(archive_name))
+        file.copy(archive_name, destination_path, overwrite = TRUE)
+        cat("File copied successfully to", destination_path, "\n")
+
+      }
+
   })
   
   # Delete the archive if it exists
