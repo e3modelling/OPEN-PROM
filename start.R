@@ -125,6 +125,16 @@ uploadToGDrive <- function() {
 
 ### Executing the VS Code tasks
 
+# Optionally setting a custom GAMS path
+if (file.exists('config.json')) {
+        config <- fromJSON('config.json')
+        gams_path <- config$gams_path
+        gams <- paste0(gams_path,'gams')
+
+} else {
+  gams <- 'gams'
+}
+
 # Parsing the command line argument
 args <- commandArgs(trailingOnly = TRUE)
 task <- NULL
@@ -144,7 +154,7 @@ if (!is.null(task) && task == 0) {
     saveMetadata(DevMode = 1)
     if(withRunFolder) createRunFolder("DEV")
 
-    shell("gams main.gms --DevMode=1 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log")
+    shell(paste0(gams,' main.gms --DevMode=1 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log'))
 
     if(withRunFolder && withUpload) uploadToGDrive()
 
