@@ -102,6 +102,12 @@ reportFinalEnergy <- function(regs) {
     open_by_subsector_by_energy_form <- by_energy_form_and_by_subsector_open
     getItems(open_by_subsector_by_energy_form, 3.1) <- paste0("Final Energy|", sector_name[y],"|", getItems(open_by_subsector_by_energy_form, 3.1))
     
+    # remove . from magpie object
+    open_by_subsector_by_energy_form <- as.quitte(open_by_subsector_by_energy_form)
+    open_by_subsector_by_energy_form[["TRANSE"]] <- paste0(open_by_subsector_by_energy_form[["TRANSE"]], " ", open_by_subsector_by_energy_form[["EF"]])
+    open_by_subsector_by_energy_form <- select(open_by_subsector_by_energy_form, -c("EF"))
+    open_by_subsector_by_energy_form <- as.quitte(open_by_subsector_by_energy_form) %>% as.magpie()
+    
     # write data in mif file
     write.report(open_by_subsector_by_energy_form[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario=scenario_name)
      
