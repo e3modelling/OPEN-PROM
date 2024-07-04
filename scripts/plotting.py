@@ -44,6 +44,18 @@ def plot_comparison(merged_df, country, sector):
     plt.tight_layout()
     plt.show()
 
+def save_sorted_differences(merged_df, file_path):
+    """Save the sorted differences to an Excel file."""
+    # Take the absolute value of the differences
+    merged_df['Difference'] = merged_df['Difference'].abs()
+    # Filter out zero differences
+    non_zero_differences = merged_df[merged_df['Difference'] != 0]
+    # Sort by the differences in descending order
+    sorted_df = non_zero_differences.sort_values(by='Difference', ascending=False)
+    # Save to Excel
+    sorted_df.to_excel(file_path, index=False)
+
+
 def main():
     # Load the Excel file
     excel_file_path = r"C:\Users\plesias\Desktop\VCapElec-VCapElec2.xlsx"
@@ -58,6 +70,10 @@ def main():
     
     # Save the comparison to a CSV file
     merged_df.to_csv('comparison_v_cap_elec.csv', index=False)
+    
+    # Save the sorted differences to an Excel file
+    output_excel_path = 'sorted_differences.xlsx'
+    save_sorted_differences(merged_df, output_excel_path)
     
     # Prompt the user for inputs and plot the comparison
     country = input("Enter the country: ")
