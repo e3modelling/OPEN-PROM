@@ -76,7 +76,7 @@ for (i in 1:length(runpath)) {
 
   #output <- NULL
   #output <- mbind(output, reportGDP(runCY))
-  reportFinalEnergy(runCY, rmap)
+  reportFinalEnergy(runCY)
   reportEmissions(runCY)
   #reportGDP(runCY)
   #reportACTV(runCY)
