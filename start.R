@@ -131,7 +131,7 @@ if (file.exists('config.json')) {
         gams_path <- config$gams_path
 
         # Checking if the specified path exists and is a directory
-        if(file.exists(gams_path) && file.info(gams_path)$isdir) {
+        if(!is.null(gams_path) && file.exists(gams_path) && file.info(gams_path)$isdir) {
           gams <- paste0(gams_path,'gams')
 
         } else {
