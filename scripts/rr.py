@@ -46,10 +46,21 @@ def check_files_and_list_subfolders(base_path):
                 status = f"Missing: main.lst or modelstat.txt  Status: PENDING".ljust(max_status_length)
                 color = Fore.BLUE
         else:
-            with open(main_gms_path, "r") as gms_file:
-                gms_content = gms_file.readlines()
-                end_horizon_line = next((line for line in gms_content if "$evalGlobal fEndY" in line), None)
-                end_horizon_year = end_horizon_line.split()[-1]
+            end_horizon_year = None
+            if os.path.exists(modelstat_path):
+                with open(modelstat_path, "r") as file:
+                    lines = file.readlines()
+                    optimal_pattern = re.compile(r'Country:(\w+)\s+Model Status:2\.00\s+Year:(\d{4})')
+                    for line in lines:
+                        optimal_match = re.search(optimal_pattern, line)
+                        if optimal_match:
+                            end_horizon_year = optimal_match.group(2)
+                            break
+            if not end_horizon_year:
+                with open(main_gms_path, "r") as gms_file:
+                    gms_content = gms_file.readlines()
+                    end_horizon_line = next((line for line in gms_content if "$evalGlobal fEndY" in line), None)
+                    end_horizon_year = end_horizon_line.split()[-1]
 
             country_year_status = parse_modelstat(modelstat_path)
 
