@@ -58,13 +58,14 @@ tryCatch({
       } else {
         stop("Runs directory not found. Please provide the run path manually by setting the 'runpath' variable in the script.")
       }
-    },
+    }
+  },
     error = function(e) {
             message("Python script execution failed. Please run the following command in the terminal and provide the run path manually:\nRscript reportOutput.R runname_blabla\nor open the script and paste the run path(s) in the code, then run Rscript reportOutput.R again.")
             message(e)
             NULL
     }
-  })
+  )
 
   # Region mapping used for aggregating validation data (e.g. ENERDATA)
   mapping <- jsonlite::read_json("metadata.json")[["Model Information"]][["Region Mapping"]][[1]]
