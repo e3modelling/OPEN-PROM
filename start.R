@@ -129,9 +129,19 @@ uploadToGDrive <- function() {
 if (file.exists('config.json')) {
         config <- fromJSON('config.json')
         gams_path <- config$gams_path
-        gams <- paste0(gams_path,'gams')
+
+        # Checking if the specified path exists and is a directory
+        if(file.exists(gams_path) && file.info(gams_path)$isdir) {
+          gams <- paste0(gams_path,'gams')
+
+        } else {
+          cat("The specified custom GAMS path is not valid. Using the default path. ")
+          gams <- 'gams'
+        }
 
 } else {
+
+# Use the default gams command if config.json doesn't exist.
   gams <- 'gams'
 }
 
@@ -164,7 +174,7 @@ if (!is.null(task) && task == 0) {
     saveMetadata(DevMode = 1)
     if(withRunFolder) createRunFolder("DEVNEWDATA")
 
-    shell("gams main.gms --DevMode=1 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 | tee full.log")
+    shell(paste0(gams,' main.gms --DevMode=1 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 | tee full.log'))
 
     if(withRunFolder) {
       file.copy("data", to = '../../', recursive = TRUE) # Copying generated data to parent folder for future runs
@@ -178,7 +188,7 @@ if (!is.null(task) && task == 0) {
     saveMetadata(DevMode = 0)
     if(withRunFolder) createRunFolder("RES")
 
-    shell("gams main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log")
+    shell(paste0(gams,' main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log'))
 
     if(withRunFolder && withUpload) uploadToGDrive()
 
@@ -188,7 +198,7 @@ if (!is.null(task) && task == 0) {
     saveMetadata(DevMode = 0)
     if(withRunFolder) createRunFolder("RESNEWDATA")
 
-    shell("gams main.gms --DevMode=0 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 | tee full.log")
+    shell(paste0(gams,' main.gms --DevMode=0 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 | tee full.log'))
 
     if(withRunFolder) {
       file.copy("data", to = '../../', recursive = TRUE)
@@ -200,6 +210,6 @@ if (!is.null(task) && task == 0) {
 } else if (!is.null(task) && task == 4) {
   
   # Debugging mode
-  shell("gams main.gms -logOption 4 -Idir=./data 2>&1 | tee full.log")
+  shell(paste0(gams,' main.gms -logOption 4 -Idir=./data 2>&1 | tee full.log'))
 
 }
