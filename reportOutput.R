@@ -99,13 +99,22 @@ for (i in 1:length(runpath)) {
 
 if (add_fullVALIDATION_mif == TRUE) {
   setwd("..")
+  files <- list.files(pattern="mif")
+  files <- as.data.frame(files)
+  vals <- interaction(files$files)
+  opts <- as.character(unique(vals))
+  print_choices <- print(opts)
+  print("Select mif VALIDATION")
+  choice <- gms::getLine()
+  mif_fullVALIDATION <- files[unique(vals) %in% opts[as.integer(choice)],]
+  
   if (length(runpath) > 1) {
     write.report(reporting_run, file="compareScenarios_added_validation.mif", append=TRUE)
-    reporting_fullVALIDATION <- read.report("reporting.mif")
+    reporting_fullVALIDATION <- read.report(mif_fullVALIDATION)
     write.report(reporting_fullVALIDATION, file="compareScenarios_added_validation.mif", append=TRUE)
   } else {
     write.report(reporting_run, file="reporting_added_validation.mif", append=TRUE)
-    reporting_fullVALIDATION <- read.report("reporting.mif")
+    reporting_fullVALIDATION <- read.report(mif_fullVALIDATION)
     write.report(reporting_fullVALIDATION, file="reporting_added_validation.mif", append=TRUE)
   }
 }
