@@ -109,9 +109,10 @@ uploadToGDrive <- function() {
         config <- fromJSON('config.json')
         model_runs_path <- config$model_runs_path
         destination_path <- file.path(model_runs_path, basename(archive_name))
-        file.copy(archive_name, destination_path, overwrite = TRUE)
-        cat("File copied successfully to", destination_path, "\n")
 
+        if( file.copy(archive_name, destination_path, overwrite = TRUE) ) {
+          cat("File copied successfully to", destination_path, "\n")
+        } 
       }
 
   })
