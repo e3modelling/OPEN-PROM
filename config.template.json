@@ -1,0 +1,4 @@
+{
+    "model_runs_path": "local\\path\\to\\model\\runs",
+    "gams_path": "path\\to\\gams\\folder\\including\\trailing\\slash\\"
+}

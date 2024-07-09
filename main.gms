@@ -101,8 +101,9 @@ $setGlobal Calibration on
 $evalGlobal SolverTryMax 12
 *' *** Setting research mode (0) or development mode (1) to modify settings and parameters accordingly
 $setGlobal DevMode 0 !! can be overwritten if VS Code Tasks are used
-*' *** Write a GDX file with all data at the end of the run
+*' *** Write a compressed GDX file with all data at the end of the run
 $setGlobal WriteGDX on
+$setEnv GDXCOMPRESS 1
 *' *** Generate input data?
 $setGlobal GenerateInput on !! can be overwritten if VS Code Tasks are used
 
