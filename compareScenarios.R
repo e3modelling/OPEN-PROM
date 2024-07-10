@@ -13,6 +13,7 @@ read_and_process_report <- function(base_path, scenario_name) {
 
 # Main script
 compareScenarios <- function(base_path) {
+  library(magclass)
   setwd(base_path)
   
   # List all subdirectories in the "runs" directory
