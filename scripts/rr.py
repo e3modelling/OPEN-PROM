@@ -64,7 +64,8 @@ def check_files_and_list_subfolders(base_path):
                     with open(modelstat_path, "r") as modelstat_file:
                         modelstat_lines = modelstat_file.readlines()
                         if modelstat_lines:
-                            year = modelstat_lines[-1].strip().rjust(max_year_length)
+                            last_modelstat_line = modelstat_lines[-1].strip()
+                            year = last_modelstat_line.split()[-1].replace("Year:", "").strip().rjust(max_year_length)
 
                 if any("an =" in line for line in last_lines):
                     for line in last_lines:
