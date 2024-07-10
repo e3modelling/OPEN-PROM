@@ -17,7 +17,9 @@ def check_files_and_list_subfolders(base_path):
 
     max_folder_name_length = max([len(folder.split(os.sep)[-1]) for folder in subfolders])
 
-    max_status_length = 60  # Maximum length for the status message
+    max_status_length = 35  # Maximum length for the status message
+    max_year_length = 4  # Maximum length for the year
+
     current_time = time.time()
     max_modification_threshold = 120  # 120 seconds threshold for max modification time
     max_modification_time = current_time - max_modification_threshold
@@ -27,7 +29,8 @@ def check_files_and_list_subfolders(base_path):
     for folder in subfolders:
         main_gms_path = os.path.join(folder, "main.gms")
         main_lst_path = os.path.join(folder, "main.lst")
-        modelstat_path = os.path.join(folder, "modelstat.txt")
+        main_log_path = os.path.join(folder, "main.log")
+        modelstat_path = os.path.join(folder, "modelstat.txt")  # Added line
 
         # Split the path and isolate folder name for printing
         folder_name = folder.split(os.sep)[-1]
@@ -38,38 +41,57 @@ def check_files_and_list_subfolders(base_path):
         if not os.path.exists(main_gms_path):
             status = f"Missing: main.gms  Status: NOT A RUN".ljust(max_status_length)
             color = Fore.RED
-        elif not os.path.exists(main_lst_path) or not os.path.exists(modelstat_path):
+        elif not os.path.exists(main_lst_path) or not os.path.exists(main_log_path):
             if current_time > max_modification_time:
-                status = f"main.lst or modelstat.txt missing -> FAILED".ljust(max_status_length)
+                status = f"main.lst or main.log missing -> FAILED".ljust(max_status_length)
                 color = Fore.RED
             else:
-                status = f"Missing: main.lst or modelstat.txt  Status: PENDING".ljust(max_status_length)
+                status = f"Missing: main.lst or main.log  Status: PENDING".ljust(max_status_length)
                 color = Fore.BLUE
         else:
-            end_horizon_year = None
-            if os.path.exists(modelstat_path):
-                with open(modelstat_path, "r") as file:
-                    lines = file.readlines()
-                    optimal_pattern = re.compile(r'Country:(\w+)\s+Model Status:2\.00\s+Year:(\d{4})')
-                    for line in lines:
-                        optimal_match = re.search(optimal_pattern, line)
-                        if optimal_match:
-                            end_horizon_year = optimal_match.group(2)
-                            break
-            if not end_horizon_year:
-                with open(main_gms_path, "r") as gms_file:
-                    gms_content = gms_file.readlines()
-                    end_horizon_line = next((line for line in gms_content if "$evalGlobal fEndY" in line), None)
-                    end_horizon_year = end_horizon_line.split()[-1]
+            with open(main_gms_path, "r") as gms_file:
+                gms_content = gms_file.readlines()
+                end_horizon_line = next((line for line in gms_content if "$evalGlobal fEndY" in line), None)
+                end_horizon_year = end_horizon_line.split()[-1]
 
-            country_year_status = parse_modelstat(modelstat_path)
+            with open(main_log_path, "r") as file:
+                last_lines = file.readlines()[-65:]
+                year = None
+                running_year = None
 
-            if country_year_status:
-                max_year = max(max(years.keys()) for years in country_year_status.values() if years)
-                status = f"Status: COMPLETED  Year: {max_year if max_year else ''}".ljust(max_status_length)
-            else:
-                status = f"modelstat.txt -> FAILED Status: FAILED     Year: {end_horizon_year if end_horizon_year else ''}".ljust(max_status_length)
-                color = Fore.RED
+                # Check if modelstat.txt exists and read the last year
+                if os.path.exists(modelstat_path):  # Added block
+                    with open(modelstat_path, "r") as modelstat_file:
+                        modelstat_lines = modelstat_file.readlines()
+                        if modelstat_lines:
+                            year = modelstat_lines[-1].strip().rjust(max_year_length)
+
+                if any("an =" in line for line in last_lines):
+                    for line in last_lines:
+                        if "an =" in line and year is None:  # Only assign if year is not set by modelstat.txt
+                            year = line.split("=")[1].strip().rjust(max_year_length)
+
+                for line in reversed(last_lines):
+                    if "an =" in line:
+                        running_year = line.split("=")[1].strip().rjust(max_year_length)
+                        break
+
+                time_difference = current_time - os.path.getmtime(main_log_path)
+
+                modification_threshold = 15
+
+                if any("*** Status: Normal completion" in line for line in last_lines) and time_difference > max_modification_threshold and time_difference > modification_threshold:
+                    status = f"Missing: NONE      Status: COMPLETED  Year: {year}  Horizon: {end_horizon_year}".ljust(max_status_length)
+                elif any("*** Status: Normal completion" in line for line in last_lines) and time_difference > modification_threshold:
+                    status = f"Missing: NONE      Status: COMPLETED  Year: {year}  Horizon: {end_horizon_year}".ljust(max_status_length)
+                elif  any("*** Status: Normal completion" in line for line in last_lines) and time_difference < modification_threshold:
+                    status = f"Missing: NONE      Status: COMPLETED  Year: {year}  Horizon: {end_horizon_year}".ljust(max_status_length)
+                elif time_difference < modification_threshold and not any("*** Status: Normal completion" in line for line in last_lines):
+                    status = f"Missing: NONE      Status: PENDING    Running_Year: {running_year}  Horizon: {end_horizon_year}".ljust(max_status_length)
+                    color = Fore.BLUE
+                else:
+                    status = f"main.log -> FAILED Status: FAILED     Year: {year}  Horizon: {end_horizon_year}".ljust(max_status_length)
+                    color = Fore.RED
 
         subfolder_status_list.append((f"{color} {folder_name:<{max_folder_name_length}} {status}{Style.RESET_ALL}", folder))
 
