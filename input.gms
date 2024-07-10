@@ -36,8 +36,8 @@ $include "./iElastA.csv"
 $offdelim
 ;
 iElastA.L(runCy,SBS,ETYPES,YTIME) = iElastAL("ELL",SBS,ETYPES,YTIME);
-iElastA.LO(runCy,SBS,ETYPES,YTIME) = -2;
-iElastA.UP(runCy,SBS,ETYPES,YTIME) = 6;
+iElastA.LO(runCy,SBS,ETYPES,YTIME) = -10;
+iElastA.UP(runCy,SBS,ETYPES,YTIME) = 10;
 $ENDIF.calib
 
 
@@ -883,7 +883,6 @@ $offdelim
 iTransfOutputRef(runCy,EFS,YTIME)$(not An(YTIME)) = iDataTransfOutputRef(runCy,EFS,YTIME);
 iFuelConsTRANSE(runCy,TRANSE,EF,YTIME)$(SECTTECH(TRANSE,EF) $(iFuelConsTRANSE(runCy,TRANSE,EF,YTIME)<=0)) = 1e-6;
 iFuelConsPerFueSub(runCy,TRANSE,EF,YTIME) = iFuelConsTRANSE(runCy,TRANSE,EF,YTIME);
-iFuelConsPerFueSub(runCy,TRANSE,EF,"2021") = iFuelConsPerFueSub(runCy,TRANSE,EF,"2020");
 table iFuelConsINDSE(allCy,INDSE,EF,YTIME)	 "Fuel consumption of industry subsector (Mtoe)"
 $ondelim
 $include"./iFuelConsINDSE.csv"
@@ -1040,7 +1039,7 @@ iMatureFacPlaDisp(runCy,PGALL,YTIME)$an(YTIME) = iDataMatureFacPlaDisp(PGALL);
 $ELSE.calib
 variable iMatureFacPlaDisp(allCy,PGALL,YTIME)	        "Maturity factor related to plant dispatching (1)";
 iMatureFacPlaDisp.L(runCy,PGALL,YTIME)$an(YTIME) = iDataMatureFacPlaDisp(PGALL);
-iMatureFacPlaDisp.LO(runCy,PGALL,YTIME)$an(YTIME) = 0;
+iMatureFacPlaDisp.LO(runCy,PGALL,YTIME)$an(YTIME) = -10;
 iMatureFacPlaDisp.UP(runCy,PGALL,YTIME)$an(YTIME) = 100;
 $ENDIF.calib
 
@@ -1334,8 +1333,8 @@ $ELSE.calib
 variable iMatrFactor(allCy,SBS,EF,YTIME)       "Maturity factor per technology and subsector for all countries (1)";
 iMatrFactor.L(runCy,SBS,EF,YTIME) = iMatrFactorData(SBS,EF,YTIME);                                          
 iMatrFactor.L(runCy,SBS,EF,YTIME)$(iMatrFactor.L(runCy,SBS,EF,YTIME)=0) = 0.000001;
-iMatrFactor.LO(runCy,SBS,EF,YTIME) = 0;                                          
-iMatrFactor.UP(runCy,SBS,EF,YTIME) = 1;
+iMatrFactor.LO(runCy,SBS,EF,YTIME) = -10;                                          
+iMatrFactor.UP(runCy,SBS,EF,YTIME) = 100;
 $ENDIF.calib
 ** Industry
 iShrNonSubElecInTotElecDem(runCy,INDSE)  = iIndChar(runCy,INDSE,"SHR_NSE");
