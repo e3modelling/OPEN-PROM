@@ -15,6 +15,9 @@ add_fullVALIDATION_mif = TRUE
 # Define the runpath variable
 runpath <- NULL
 
+print("Write the name of mif file")
+mif_name <- gms::getLine()
+
 if (is.null(runpath)) {
   if (any("runs" %in% dir())) {
     # Check which Python environment reticulate is using
@@ -88,11 +91,11 @@ for (i in 1:length(runpath)) {
   reporting <- read.report("reporting.mif")
   setwd("..")
   if (length(runpath) > 1) {
-    write.report(reporting, file="compareScenarios2.mif", append=TRUE)
-    reporting_run <- read.report("compareScenarios2.mif")
+    write.report(reporting, file = paste0(mif_name,".mif"), append=TRUE)
+    reporting_run <- read.report(paste0(mif_name,".mif"))
   } else {
-    write.report(reporting, file="reporting2.mif", append=TRUE)
-    reporting_run <- read.report("reporting2.mif")
+    write.report(reporting, file = paste0(mif_name,".mif"), append=TRUE)
+    reporting_run <- read.report(paste0(mif_name,".mif"))
   }
 }
 
@@ -109,12 +112,12 @@ if (add_fullVALIDATION_mif == TRUE) {
   mif_fullVALIDATION <- files[unique(vals) %in% opts[as.integer(choice)],]
   
   if (length(runpath) > 1) {
-    write.report(reporting_run, file="compareScenarios_added_validation.mif", append=TRUE)
+    write.report(reporting_run, file = paste0(mif_name,"_with_validation",".mif"), append=TRUE)
     reporting_fullVALIDATION <- read.report(mif_fullVALIDATION)
-    write.report(reporting_fullVALIDATION, file="compareScenarios_added_validation.mif", append=TRUE)
+    write.report(reporting_fullVALIDATION, file = paste0(mif_name,"_with_validation",".mif"), append=TRUE)
   } else {
-    write.report(reporting_run, file="reporting_added_validation.mif", append=TRUE)
+    write.report(reporting_run, file = paste0(mif_name,"_with_validation",".mif"), append=TRUE)
     reporting_fullVALIDATION <- read.report(mif_fullVALIDATION)
-    write.report(reporting_fullVALIDATION, file="reporting_added_validation.mif", append=TRUE)
+    write.report(reporting_fullVALIDATION, file = paste0(mif_name,"_with_validation",".mif"), append=TRUE)
   }
 }
