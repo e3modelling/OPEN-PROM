@@ -3,7 +3,7 @@ library(jsonlite)
 
 # Various flags used to modify script behavior
 withRunFolder = TRUE # Set to FALSE to disable model run folder creation and file copying
-withUpload = TRUE # Set to FALSE to disable model run upload to Google Drive
+withUpload = F # Set to FALSE to disable model run upload to Google Drive
 uploadGDX = FALSE # Set to TRUE to include GDX files in the uploaded archive
 
 ### Define function that saves model metadata into a JSON file.
@@ -124,21 +124,43 @@ uploadToGDrive <- function() {
   
 }
 
+# Function that sets the scenario name
+setScenarioName <- function(scen_default) {
+
+  # Reading the scenario name from config file
+  if (file.exists('config.json')) {
+    config <- fromJSON('config.json')
+    scen_config <- config$scenario_name
+
+  }
+  # Checking if the scenario name is NULL or empty string
+  if(!is.null(scen_config) && nzchar(trimws(scen_config)) ) {
+    scen <- scen_config
+  
+  } else {
+    # If the config scenario name is not valid, get the default one
+    scen <- scen_default
+    
+  }
+  
+  return(scen)
+}
+
 ### Executing the VS Code tasks
 
 # Optionally setting a custom GAMS path
 if (file.exists('config.json')) {
-        config <- fromJSON('config.json')
-        gams_path <- config$gams_path
+  config <- fromJSON('config.json')
+  gams_path <- config$gams_path
 
-        # Checking if the specified path exists and is a directory
-        if(!is.null(gams_path) && file.exists(gams_path) && file.info(gams_path)$isdir) {
-          gams <- paste0(gams_path,'gams')
+  # Checking if the specified path exists and is a directory
+  if(!is.null(gams_path) && file.exists(gams_path) && file.info(gams_path)$isdir) {
+    gams <- paste0(gams_path,'gams')
 
-        } else {
-          cat("The specified custom GAMS path is not valid. Using the default path. ")
-          gams <- 'gams'
-        }
+  } else {
+    cat("The specified custom GAMS path is not valid. Using the default path. ")
+    gams <- 'gams'
+  }
 
 } else {
 
@@ -163,7 +185,7 @@ if (!is.null(task) && task == 0) {
 
     # Running task OPEN-PROM DEV
     saveMetadata(DevMode = 1)
-    if(withRunFolder) createRunFolder("DEV")
+    if(withRunFolder) createRunFolder(setScenarioName("DEV"))
 
     shell(paste0(gams,' main.gms --DevMode=1 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log'))
 
