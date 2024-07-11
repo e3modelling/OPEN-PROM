@@ -3,7 +3,7 @@ library(jsonlite)
 
 # Various flags used to modify script behavior
 withRunFolder = TRUE # Set to FALSE to disable model run folder creation and file copying
-withUpload = F # Set to FALSE to disable model run upload to Google Drive
+withUpload = TRUE # Set to FALSE to disable model run upload to Google Drive
 uploadGDX = FALSE # Set to TRUE to include GDX files in the uploaded archive
 
 ### Define function that saves model metadata into a JSON file.
