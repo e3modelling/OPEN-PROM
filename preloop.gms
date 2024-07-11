@@ -527,6 +527,7 @@ VWTAP.FX(allCy,TRANSE,YTIME) = VWTAP.L(allCy,TRANSE,YTIME) ;
 VWCRS.FX(allCy,DSBS,EF,YTIME) = VWCRS.L(allCy,DSBS,EF,YTIME) ;                                
 VWDFS.FX(allCy,DSBS,YTIME) = VWDFS.L(allCy,DSBS,YTIME) ;                                   
 VWCT.FX(allCy,DSBS,EF,YTIME) = VWCT.L(allCy,DSBS,EF,YTIME) ;
+VWCENS.FX(allCy,INDDOM,YTIME) = VWCENS.L(allCy,INDDOM,YTIME) ;
 $ELSE.calib
 VW.L(allCy,SBS,EF,YTIME) = 1 ;                                   
 VWPGC.L(allCy,PGALL,YTIME) = 1 ;                                 
@@ -538,7 +539,8 @@ VWTT.L(allCy,TRANSE,TTECH,YTIME) = 1 ;
 VWTAP.L(allCy,TRANSE,YTIME) = 1 ;                                 
 VWCRS.L(allCy,DSBS,EF,YTIME) = 1 ;                                
 VWDFS.L(allCy,DSBS,YTIME) = 1 ;                                   
-VWCT.L(allCy,DSBS,EF,YTIME) = 1 ;                                 
+VWCT.L(allCy,DSBS,EF,YTIME) = 1 ; 
+VWCENS.L(allCy,INDDOM,YTIME) = 1 ;                                
 
 VW.UP(allCy,SBS,EF,YTIME) = 3 ;                                   
 VWPGC.UP(allCy,PGALL,YTIME) = 3 ;                                 
@@ -551,6 +553,7 @@ VWTAP.UP(allCy,TRANSE,YTIME) = 3 ;
 VWCRS.UP(allCy,DSBS,EF,YTIME) = 3 ;                                
 VWDFS.UP(allCy,DSBS,YTIME) = 3 ;                                   
 VWCT.UP(allCy,DSBS,EF,YTIME) = 3 ;
+VWCENS.UP(allCy,INDDOM,YTIME) = 3 ;
 
 $ENDIF.calib
 

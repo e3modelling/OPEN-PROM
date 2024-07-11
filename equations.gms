@@ -1050,7 +1050,7 @@ QConsElec(allCy,DSBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QConsElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VConsElecNonSubIndTert(allCy,INDDOM,YTIME)
                  =E=
-         [
+         VWCENS(allCy,INDDOM,YTIME)*([
          VConsElecNonSubIndTert(allCy,INDDOM,YTIME-1) * ( iActv(YTIME,allCy,INDDOM)/iActv(YTIME-1,allCy,INDDOM) )**
          iElastNonSubElec(allCy,INDDOM,"a",YTIME)
          * ( VPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME)/VPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-1) )**iElastNonSubElec(allCy,INDDOM,"b1",YTIME)
@@ -1058,7 +1058,7 @@ QConsElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          * prod(KPDL,
                   ( VPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-ord(KPDL))/VPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-(ord(KPDL)+1))
                   )**( iElastNonSubElec(allCy,INDDOM,"c",YTIME)*iFPDL(INDDOM,KPDL))
-                )      ]$iActv(YTIME-1,allCy,INDDOM);
+                )      ]$iActv(YTIME-1,allCy,INDDOM));
 
 
 *' This equation determines the consumption of the remaining substitutable equipment of each energy form per each demand subsector (excluding TRANSPORT).

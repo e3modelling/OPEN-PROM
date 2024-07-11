@@ -441,6 +441,7 @@ VWTAP(allCy,TRANSE,YTIME)                                  "QActivPassTrnsp"
 VWCRS(allCy,DSBS,EF,YTIME)                                 "QConsRemSubEquipSubSec"
 VWDFS(allCy,DSBS,YTIME)                                    "QDemFinSubFuelSubsec"
 VWCT(allCy,DSBS,EF,YTIME)                                  "QCostTechMatFac"
+VWCENS(allCy,INDDOM,YTIME)                                 "QConsElecNonSubIndTert"
 ;
 
 Scalars
