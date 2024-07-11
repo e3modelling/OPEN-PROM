@@ -109,9 +109,10 @@ uploadToGDrive <- function() {
         config <- fromJSON('config.json')
         model_runs_path <- config$model_runs_path
         destination_path <- file.path(model_runs_path, basename(archive_name))
-        file.copy(archive_name, destination_path, overwrite = TRUE)
-        cat("File copied successfully to", destination_path, "\n")
 
+        if( file.copy(archive_name, destination_path, overwrite = TRUE) ) {
+          cat("File copied successfully to", destination_path, "\n")
+        } 
       }
 
   })
@@ -124,6 +125,26 @@ uploadToGDrive <- function() {
 }
 
 ### Executing the VS Code tasks
+
+# Optionally setting a custom GAMS path
+if (file.exists('config.json')) {
+        config <- fromJSON('config.json')
+        gams_path <- config$gams_path
+
+        # Checking if the specified path exists and is a directory
+        if(!is.null(gams_path) && file.exists(gams_path) && file.info(gams_path)$isdir) {
+          gams <- paste0(gams_path,'gams')
+
+        } else {
+          cat("The specified custom GAMS path is not valid. Using the default path. ")
+          gams <- 'gams'
+        }
+
+} else {
+
+# Use the default gams command if config.json doesn't exist.
+  gams <- 'gams'
+}
 
 # Parsing the command line argument
 args <- commandArgs(trailingOnly = TRUE)
@@ -144,7 +165,7 @@ if (!is.null(task) && task == 0) {
     saveMetadata(DevMode = 1)
     if(withRunFolder) createRunFolder("DEV")
 
-    shell("gams main.gms --DevMode=1 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log")
+    shell(paste0(gams,' main.gms --DevMode=1 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log'))
 
     if(withRunFolder && withUpload) uploadToGDrive()
 
@@ -154,7 +175,7 @@ if (!is.null(task) && task == 0) {
     saveMetadata(DevMode = 1)
     if(withRunFolder) createRunFolder("DEVNEWDATA")
 
-    shell("gams main.gms --DevMode=1 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 | tee full.log")
+    shell(paste0(gams,' main.gms --DevMode=1 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 | tee full.log'))
 
     if(withRunFolder) {
       file.copy("data", to = '../../', recursive = TRUE) # Copying generated data to parent folder for future runs
@@ -168,7 +189,7 @@ if (!is.null(task) && task == 0) {
     saveMetadata(DevMode = 0)
     if(withRunFolder) createRunFolder("RES")
 
-    shell("gams main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log")
+    shell(paste0(gams,' main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log'))
 
     if(withRunFolder && withUpload) uploadToGDrive()
 
@@ -178,7 +199,7 @@ if (!is.null(task) && task == 0) {
     saveMetadata(DevMode = 0)
     if(withRunFolder) createRunFolder("RESNEWDATA")
 
-    shell("gams main.gms --DevMode=0 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 | tee full.log")
+    shell(paste0(gams,' main.gms --DevMode=0 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 | tee full.log'))
 
     if(withRunFolder) {
       file.copy("data", to = '../../', recursive = TRUE)
@@ -190,6 +211,6 @@ if (!is.null(task) && task == 0) {
 } else if (!is.null(task) && task == 4) {
   
   # Debugging mode
-  shell("gams main.gms -logOption 4 -Idir=./data 2>&1 | tee full.log")
+  shell(paste0(gams,' main.gms -logOption 4 -Idir=./data 2>&1 | tee full.log'))
 
 }
