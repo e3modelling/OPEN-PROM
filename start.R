@@ -124,23 +124,26 @@ uploadToGDrive <- function() {
   
 }
 
-# Function that sets the scenario name
+### Define a function that returns the scenario name
 setScenarioName <- function(scen_default) {
 
+  scen_config <- NULL
   # Reading the scenario name from config file
   if (file.exists('config.json')) {
     config <- fromJSON('config.json')
     scen_config <- config$scenario_name
-
   }
+
   # Checking if the scenario name is NULL or empty string
   if(!is.null(scen_config) && nzchar(trimws(scen_config)) ) {
     scen <- scen_config
   
   } else {
     # If the config scenario name is not valid, get the default one
+    # as specified in each VS Code task, e.g. DEV, DEVNEWDATA etc
+    cat("Invalid scenario name or missing config file, setting default name.\n")
     scen <- scen_default
-    
+
   }
   
   return(scen)
@@ -158,7 +161,7 @@ if (file.exists('config.json')) {
     gams <- paste0(gams_path,'gams')
 
   } else {
-    cat("The specified custom GAMS path is not valid. Using the default path. ")
+    cat("The specified custom GAMS path is not valid. Using the default path.\n")
     gams <- 'gams'
   }
 
@@ -195,7 +198,7 @@ if (!is.null(task) && task == 0) {
 
     # Running task OPEN-PROM DEV NEW DATA
     saveMetadata(DevMode = 1)
-    if(withRunFolder) createRunFolder("DEVNEWDATA")
+    if(withRunFolder) createRunFolder(setScenarioName("DEVNEWDATA"))
 
     shell(paste0(gams,' main.gms --DevMode=1 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 | tee full.log'))
 
@@ -209,7 +212,7 @@ if (!is.null(task) && task == 0) {
     
     # Running task OPEN-PROM RESEARCH
     saveMetadata(DevMode = 0)
-    if(withRunFolder) createRunFolder("RES")
+    if(withRunFolder) createRunFolder(setScenarioName("RES"))
 
     shell(paste0(gams,' main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log'))
 
@@ -219,7 +222,7 @@ if (!is.null(task) && task == 0) {
     
     # Running task OPEN-PROM RESEARCH NEW DATA
     saveMetadata(DevMode = 0)
-    if(withRunFolder) createRunFolder("RESNEWDATA")
+    if(withRunFolder) createRunFolder(setScenarioName("RESNEWDATA"))
 
     shell(paste0(gams,' main.gms --DevMode=0 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 | tee full.log'))
 
