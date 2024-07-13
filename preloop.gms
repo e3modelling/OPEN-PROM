@@ -512,7 +512,7 @@ VProdElecReqTot.fx(runCy,"%fBaseY%")=sum(pgall,VProdElec.L(runCy,pgall,"%fBaseY%
 $IFTHEN.calib %Calibration% == off
 $GDXIN input.gdx
    
-execute_load 'input.gdx', VW=VW, VWPGC=VWPGC, VWPGD=VWPGD, VWTAG=VWTAG, VWMPG=VWMPG, VWTF=VWTF, VWTT=VWTT, VWTAP=VWTAP, VWCRS=VWCRS, VWDFS=VWDFS, VWCT=VWCT;
+execute_load 'input.gdx', VW=VW, VWPGC=VWPGC, VWPGD=VWPGD, VWTAG=VWTAG, VWMPG=VWMPG, VWTF=VWTF, VWTT=VWTT, VWTAP=VWTAP, VWCRS=VWCRS, VWDFS=VWDFS, VWCT=VWCT, VWCENS=VWCENS;
    
 * Close the GDX file
 $GDXIN
