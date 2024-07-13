@@ -9,6 +9,9 @@ library(stringr)
 library(jsonlite)
 library(reticulate)
 
+# add mif from fullVALIDATION
+add_fullVALIDATION_mif = TRUE
+
 # Define the runpath variable
 runpath <- NULL
 
@@ -76,7 +79,7 @@ for (i in 1:length(runpath)) {
 
   #output <- NULL
   #output <- mbind(output, reportGDP(runCY))
-  reportFinalEnergy(runCY, rmap)
+  reportFinalEnergy(runCY)
   reportEmissions(runCY)
   #reportGDP(runCY)
   #reportACTV(runCY)
@@ -85,8 +88,19 @@ for (i in 1:length(runpath)) {
   reporting <- read.report("reporting.mif")
   setwd("..")
   if (length(runpath) > 1) {
-    write.report(reporting, file="compareScenarios2.mif", append=TRUE)
+    write.report(reporting, file = "compareScenarios2.mif", append=TRUE)
+    reporting_run <- read.report("compareScenarios2.mif")
   } else {
-    write.report(reporting, file="reporting2.mif", append=TRUE)
+    file.remove("reporting2.mif")
+    write.report(reporting, file = "reporting2.mif", append=TRUE)
+    reporting_run <- read.report("reporting2.mif")
   }
+}
+
+if (add_fullVALIDATION_mif == TRUE) {
+  setwd("..")
+  file.remove("reporting_with_validation.mif")
+  write.report(reporting_run, file = paste0("reporting_with_validation.mif"), append=TRUE)
+  reporting_fullVALIDATION <- read.report("reporting.mif")
+  write.report(reporting_fullVALIDATION, file = "reporting_with_validation.mif", append=TRUE)
 }
