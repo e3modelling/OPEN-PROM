@@ -56,7 +56,7 @@ VWTAP.FX(runCy,TRANSE,YTIME)$TIME(YTIME) = VWTAP.L(runCy,TRANSE,YTIME)$TIME(YTIM
 VWCRS.FX(runCy,DSBS,EF,YTIME)$TIME(YTIME) = VWCRS.L(runCy,DSBS,EF,YTIME)$TIME(YTIME);                                 
 VWDFS.FX(runCy,DSBS,YTIME)$TIME(YTIME) = VWDFS.L(runCy,DSBS,YTIME)$TIME(YTIME);                                   
 VWCT.FX(runCy,DSBS,EF,YTIME)$TIME(YTIME) = VWCT.L(runCy,DSBS,EF,YTIME)$TIME(YTIME);
-VWCENS.FX(runCy,INDDOM,YTIME)$TIME(YTIME) = VWCENS.FX(runCy,INDDOM,YTIME)$TIME(YTIME);
+VWCENS.FX(runCy,INDDOM,YTIME)$TIME(YTIME) = VWCENS.L(runCy,INDDOM,YTIME)$TIME(YTIME);
 endloop;  !! close countries loop
 endloop;  !! close outer iteration loop (time steps)
 
