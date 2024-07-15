@@ -1,5 +1,6 @@
 # Load necessary libraries/functions
 library(gms)
+library(magclass)
 
 # Function to read and process reportOutput.R
 read_and_process_report <- function(base_path, scenario_name) {
@@ -11,9 +12,8 @@ read_and_process_report <- function(base_path, scenario_name) {
   return(reporting)
 }
 
-# Main script
+# Function to compare scenarios for a given base path
 compareScenarios <- function(base_path) {
-  library(magclass)
   setwd(base_path)
   
   # List all subdirectories in the "runs" directory
@@ -26,14 +26,14 @@ compareScenarios <- function(base_path) {
   dirs <- dirs[dir.exists(dirs)]
   
   # Prompt user to select scenarios to compare
-  cat("Available scenarios:\n")
+  cat("Available scenarios in", base_path, ":\n")
   for (i in seq_along(dirs)) {
     cat(i, ": ", basename(dirs[i]), "\n")
   }
   
   choices <- readline(prompt = "Enter scenario numbers separated by commas (e.g., 1,2): ")
   choices <- unlist(strsplit(choices, ","))
-
+  
   # Validate user input
   choices <- as.integer(choices)
   choices <- choices[choices >= 1 & choices <= length(dirs)]
@@ -56,22 +56,32 @@ compareScenarios <- function(base_path) {
     all_reporting[[scenario_name]] <- reporting
   }
   
-  # Combine all reporting data into a single report
-  combined_report <- do.call(rbind, all_reporting)
-  
-  # Write the combined report to compareScenarios.mif file
-  write.report(combined_report, file = "compareScenarios.mif", append = FALSE)
-  
-  cat("Comparison report generated: compareScenarios.mif\n")
+  return(all_reporting)
 }
 
 # Command-line argument handling
 args <- commandArgs(trailingOnly = TRUE)
 
 if (length(args) == 0) {
-  cat("Please provide the base path as a command-line argument.\n")
-  cat("Example usage: Rscript compareScenarios.R /path/to/base_directory\n")
+  cat("Please provide at least one base path as a command-line argument.\n")
+  cat("Example usage: Rscript compareScenarios.R /path/to/base_directory1 /path/to/base_directory2\n")
 } else {
-  base_path <- args[1]
-  compareScenarios(base_path)
+  all_reports <- list()
+  
+  # Loop through each provided base path
+  for (base_path in args) {
+    cat("Processing base path:", base_path, "\n")
+    reports <- compareScenarios(base_path)
+    
+    # Merge the reports from different base paths
+    all_reports <- c(all_reports, reports)
+  }
+  
+  # Combine all reporting data into a single report
+  combined_report <- do.call(rbind, all_reports)
+  
+  # Write the combined report to compareScenarios.mif file
+  write.report(combined_report, file = "compareScenarios.mif", append = FALSE)
+  
+  cat("Comparison report generated: compareScenarios.mif\n")
 }
