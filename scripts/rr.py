@@ -7,6 +7,36 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from colorama import Fore, Style
 
+def parse_modelstat(lines):
+    """
+    Parses the modelstat.txt file for country-year success statuses.
+    """
+    country_year_status = {}
+    year_pattern = re.compile(r'an\s*=\s*(\d+)')
+    country_pattern = re.compile(r'runCyL\s*=\s*([A-Z]+)')
+    solution_pattern = re.compile(r'--- Solution status\s*=\s*(\d+)')
+
+    current_country = None
+    current_year = None
+
+    for line in lines:
+        year_match = re.search(year_pattern, line)
+        country_match = re.search(country_pattern, line)
+        solution_match = re.search(solution_pattern, line)
+
+        if year_match:
+            current_year = int(year_match.group(1))
+        if country_match:
+            current_country = country_match.group(1)
+            if current_country not in country_year_status:
+                country_year_status[current_country] = {}
+        if solution_match:
+            solution_status = int(solution_match.group(1))
+            if current_country and current_year:
+                country_year_status[current_country][current_year] = solution_status
+
+    return country_year_status
+
 def check_files_and_list_subfolders(base_path, flag=False):
     """
     This function checks each subfolder for necessary files and generates a list of subfolders with color-coded status.
@@ -49,58 +79,54 @@ def check_files_and_list_subfolders(base_path, flag=False):
                 status = f"Missing: main.lst or main.log  Status: PENDING".ljust(max_status_length)
                 color = Fore.BLUE
         else:
-            with open(main_gms_path, "r") as gms_file:
-                gms_content = gms_file.readlines()
-                end_horizon_line = next((line for line in gms_content if "$evalGlobal fEndY" in line), None)
-                end_horizon_year = end_horizon_line.split()[-1]
+            if flag and os.path.exists(modelstat_path):
+                with open(modelstat_path, "r") as file:
+                    lines = file.readlines()
+                country_year_status = parse_modelstat(lines)
+            else:
+                with open(main_gms_path, "r") as gms_file:
+                    gms_content = gms_file.readlines()
+                    end_horizon_line = next((line for line in gms_content if "$evalGlobal fEndY" in line), None)
+                    end_horizon_year = end_horizon_line.split()[-1]
 
-            with open(main_log_path, "r") as file:
-                last_lines = file.readlines()[-65:]
-                year = None
-                running_year = None
+                with open(main_log_path, "r") as file:
+                    last_lines = file.readlines()[-65:]
+                    year = None
+                    running_year = None
 
-                # Check if modelstat.txt exists and read the last year
-                if os.path.exists(modelstat_path):  # Added block
-                    flag = True
-                    with open(modelstat_path, "r") as modelstat_file:
-                        modelstat_lines = modelstat_file.readlines()
-                        if modelstat_lines:
-                            last_modelstat_line = modelstat_lines[-1].strip()
-                            year = last_modelstat_line.split()[-1].replace("Year:", "").strip().rjust(max_year_length)
+                    if any("an =" in line for line in last_lines):
+                        for line in last_lines:
+                            if "an =" in line:
+                                year = line.split("=")[1].strip().rjust(max_year_length)
 
-                if any("an =" in line for line in last_lines):
-                    for line in last_lines:
-                        if "an =" in line and year is None:  # Only assign if year is not set by modelstat.txt
-                            year = line.split("=")[1].strip().rjust(max_year_length)
+                    for line in reversed(last_lines):
+                        if "an =" in line:
+                            running_year = line.split("=")[1].strip().rjust(max_year_length)
+                            break
 
-                for line in reversed(last_lines):
-                    if "an =" in line:
-                        running_year = line.split("=")[1].strip().rjust(max_year_length)
-                        break
+                    time_difference = current_time - os.path.getmtime(main_log_path)
 
-                time_difference = current_time - os.path.getmtime(main_log_path)
+                    modification_threshold = 15
 
-                modification_threshold = 15
-
-                if any("*** Status: Normal completion" in line for line in last_lines) and time_difference > max_modification_threshold and time_difference > modification_threshold:
-                    status = f"Missing: NONE      Status: COMPLETED  Year: {year}  Horizon: {end_horizon_year}".ljust(max_status_length)
-                elif any("*** Status: Normal completion" in line for line in last_lines) and time_difference > modification_threshold:
-                    status = f"Missing: NONE      Status: COMPLETED  Year: {year}  Horizon: {end_horizon_year}".ljust(max_status_length)
-                elif  any("*** Status: Normal completion" in line for line in last_lines) and time_difference < modification_threshold:
-                    status = f"Missing: NONE      Status: COMPLETED  Year: {year}  Horizon: {end_horizon_year}".ljust(max_status_length)
-                elif time_difference < modification_threshold and not any("*** Status: Normal completion" in line for line in last_lines):
-                    status = f"Missing: NONE      Status: PENDING    Running_Year: {running_year}  Horizon: {end_horizon_year}".ljust(max_status_length)
-                    color = Fore.BLUE
-                else:
-                    status = f"main.log -> FAILED Status: FAILED     Year: {year}  Horizon: {end_horizon_year}".ljust(max_status_length)
-                    color = Fore.RED
+                    if any("*** Status: Normal completion" in line for line in last_lines) and time_difference > max_modification_threshold and time_difference > modification_threshold:
+                        status = f"Missing: NONE      Status: COMPLETED  Year: {year}  Horizon: {end_horizon_year}".ljust(max_status_length)
+                    elif any("*** Status: Normal completion" in line for line in last_lines) and time_difference > modification_threshold:
+                        status = f"Missing: NONE      Status: COMPLETED  Year: {year}  Horizon: {end_horizon_year}".ljust(max_status_length)
+                    elif  any("*** Status: Normal completion" in line for line in last_lines) and time_difference < modification_threshold:
+                        status = f"Missing: NONE      Status: COMPLETED  Year: {year}  Horizon: {end_horizon_year}".ljust(max_status_length)
+                    elif time_difference < modification_threshold and not any("*** Status: Normal completion" in line for line in last_lines):
+                        status = f"Missing: NONE      Status: PENDING    Running_Year: {running_year}  Horizon: {end_horizon_year}".ljust(max_status_length)
+                        color = Fore.BLUE
+                    else:
+                        status = f"main.log -> FAILED Status: FAILED     Year: {year}  Horizon: {end_horizon_year}".ljust(max_status_length)
+                        color = Fore.RED
 
         subfolder_status_list.append((f"{color} {folder_name:<{max_folder_name_length}} {status}{Style.RESET_ALL}", folder))
 
-    # Sort the subfolders list based on their creation time in ascending order
+    # Sort the subfolders list based on their creation time
     subfolder_status_list.sort(key=lambda x: os.path.getctime(x[1]), reverse=False)
 
-    return subfolder_status_list, flag
+    return subfolder_status_list
 
 def list_subfolders(subfolder_status_list):
     """
@@ -118,56 +144,6 @@ def list_subfolders(subfolder_status_list):
     else:
         print("No subfolders found in the 'runs' directory.")
         return []
-
-def parse_modelstat(modelstat_path):
-    """
-    Input: modelstat_path - Path to the modelstat.txt file
-    Output: A dictionary where keys are country names and values are dictionaries mapping years
-    to run success statuses (1 for optimal solution, 2 for feasible solution, 0 for failure).
-    Returns None if the file does not exist or cannot be read.
-    """
-    country_year_status = {}
-
-    if not os.path.exists(modelstat_path):
-        print(f"Error: {modelstat_path} not found.")
-        return None
-
-    try:
-        with open(modelstat_path, "r") as file:
-            lines = file.readlines()
-
-            optimal_pattern = re.compile(r'Country:(\w+)\s+Model Status:2\.00\s+Year:(\d{4})')
-            feasible_pattern = re.compile(r'Country:(\w+)\s+Model Status:6\.00\s+Year:(\d{4})')
-
-            for line in lines:
-                optimal_match = re.search(optimal_pattern, line)
-                feasible_match = re.search(feasible_pattern, line)
-
-                if optimal_match:
-                    country = optimal_match.group(1)
-                    year = int(optimal_match.group(2))
-                    if country not in country_year_status:
-                        country_year_status[country] = {}
-                    country_year_status[country][year] = 1  # Optimal solution
-                elif feasible_match:
-                    country = feasible_match.group(1)
-                    year = int(feasible_match.group(2))
-                    if country not in country_year_status:
-                        country_year_status[country] = {}
-                    country_year_status[country][year] = 2  # Feasible solution
-                else:
-                    match = re.search(r'Country:(\w+)\s+Model Status:(\d+\.\d+)\s+Year:(\d{4})', line)
-                    if match:
-                        country = match.group(1)
-                        year = int(match.group(3))
-                        if country not in country_year_status:
-                            country_year_status[country] = {}
-                        country_year_status[country][year] = 0  # Failure or infeasible solution
-    except Exception as e:
-        print(f"Error parsing {modelstat_path}: {str(e)}")
-        return None
-
-    return country_year_status
 
 def read_main_log(subfolder):
     """
@@ -247,14 +223,14 @@ def create_dataframe(country_year_status, pending_run=False):
     Output: A pandas DataFrame where rows represent countries, columns represent years, and cell values represent
     run success statuses.
     """
-    if country_year_status:
+    if country_year_status:       
         # Create DataFrame directly from country_year_status dictionary
         df = pd.DataFrame(country_year_status).fillna(0)
         # Reindex rows to use country names
         df.index.name = 'Country'
         # Transpose DataFrame to use years as columns
         df = df.T
-        df = df.astype(int)
+        df = df.astype(int)        
         # Exclude the last year if the run is pending
         if pending_run == True:
             df.pop(df.columns[-1])
@@ -294,6 +270,7 @@ def main():
     """
     parser = argparse.ArgumentParser(description='Visualize run success statuses for selected subfolders.')
     parser.add_argument('-q', '--subfolders', action='store_true', help='manually select subfolders for visualization')
+    parser.add_argument('-f', '--flag', action='store_true', help='use the modelstat.txt file for parsing')
     args = parser.parse_args()
 
     # The path to the "scripts" directory where the script is located
@@ -301,10 +278,8 @@ def main():
 
     # The base path to the "OPEN-PROM" directory
     base_path = os.path.abspath(os.path.join(script_directory, ".."))
-    # Check if flag is True.
-    flag = False
 
-    subfolder_status_list, flag = check_files_and_list_subfolders(base_path, flag=flag)
+    subfolder_status_list = check_files_and_list_subfolders(base_path, flag=args.flag)
     selected_subfolders = []
 
     if args.subfolders:
@@ -323,32 +298,23 @@ def main():
         selected_subfolders = [subfolder_status_list[len(subfolder_status_list) - choice] for choice in choices]
         print(f"Selected subfolders: {[subfolder for _, subfolder in selected_subfolders]}\n")
 
-    for idx, (subfolder_status, folder_path) in enumerate(selected_subfolders, 1):
-        folder_name = folder_path.split(os.sep)[-1]
-        plot_title = f"{folder_name}"
-        print(f"\nPlotting visualization for subfolder {idx}/{len(selected_subfolders)}: {folder_name}")
-        
-        if flag == True:
-            country_year_status = parse_modelstat(os.path.join(folder_path, "modelstat.txt"))
-            pending_run = not os.path.exists(os.path.join(folder_path, "main.lst"))
+    for idx, (subfolder_status, selected_subfolder) in enumerate(selected_subfolders, 1):
+        folder_name = selected_subfolder.split(os.sep)[-1]  # Extract folder name
+        lines = read_main_log(selected_subfolder) if not args.flag else parse_modelstat(os.path.join(selected_subfolder, "modelstat.txt"))
+        if not lines:
+            print(f"No data found in the log file for subfolder: {selected_subfolder}")
+            continue
+        country_year_status = parse_main_log(lines) if not args.flag else parse_modelstat(lines)
 
-            df = create_dataframe(country_year_status, pending_run=pending_run)
-        else:
-            lines = read_main_log(folder_path)
-            if not lines:
-                print(f"No data found in the log file for subfolder: {folder_path}")
-                continue
-            country_year_status = parse_main_log(lines)
+        # Check if the run is pending
+        pending_run = "Status: PENDING" in subfolder_status
 
-            # Check if the run is pending
-            pending_run = "Status: PENDING" in subfolder_status
-
-            df = create_dataframe(country_year_status, pending_run)
-            if df is None or df.empty:
-                print(f"No valid data found in the log file for subfolder: {folder_path}")
-                continue
-        
-        plot_heatmap(df, fig_num=idx, plot_title=plot_title)
+        df = create_dataframe(country_year_status, pending_run)
+        if df is None or df.empty:
+            print(f"No valid data found in the log file for subfolder: {selected_subfolder}")
+            continue
+       
+        plot_heatmap(df, idx, folder_name)
 
     plt.show()
 
