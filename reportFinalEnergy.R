@@ -119,4 +119,22 @@ reportFinalEnergy <- function(regs) {
     write.report(by_energy_form_open[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario=scenario_name)
      
   }
+  
+  # add model OPEN-PROM data electricity generation plants capacity
+  VCapElec <- readGDX('./blabla.gdx', "VCapElec", field = 'l')[regs, , ]
+  VCapElec <-as.quitte(VCapElec) %>% as.magpie()
+  getItems(VCapElec, 3) <- paste0("Installed capacity|", getItems(VCapElec, 3))
+  
+  # write data in mif file
+  write.report(VCapElec[,,],file="reporting.mif",model="OPEN-PROM",append=TRUE,unit="GW",scenario=scenario_name)
+  
+  
+  # Installed capacity Total
+  VCapElec_total <- dimSums(VCapElec, dim = 3, na.rm = TRUE)
+  
+  getItems(VCapElec_total, 3) <- paste0("Installed capacity")
+  
+  # write data in mif file
+  write.report(VCapElec_total[,,],file="reporting.mif",append=TRUE,model="OPEN-PROM",unit="GW",scenario=scenario_name)
+  
 }
