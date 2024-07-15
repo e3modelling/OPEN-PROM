@@ -1,5 +1,6 @@
 {
     "model_runs_path": "local\\path\\to\\model\\runs",
     "gams_path": "path\\to\\gams\\folder\\including\\trailing\\slash\\",
-    "scenario_name": "SCEN"
+    "scenario_name": "SCEN",
+    "description": "Default model run description."
 }
