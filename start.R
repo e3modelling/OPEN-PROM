@@ -124,21 +124,46 @@ uploadToGDrive <- function() {
   
 }
 
+### Define a function that returns the scenario name
+setScenarioName <- function(scen_default) {
+
+  scen_config <- NULL
+  # Reading the scenario name from config file
+  if (file.exists('config.json')) {
+    config <- fromJSON('config.json')
+    scen_config <- config$scenario_name
+  }
+
+  # Checking if the scenario name is NULL or empty string
+  if(!is.null(scen_config) && nzchar(trimws(scen_config)) ) {
+    scen <- scen_config
+  
+  } else {
+    # If the config scenario name is not valid, get the default one
+    # as specified in each VS Code task, e.g. DEV, DEVNEWDATA etc
+    cat("Invalid scenario name or missing config file, setting default name.\n")
+    scen <- scen_default
+
+  }
+  
+  return(scen)
+}
+
 ### Executing the VS Code tasks
 
 # Optionally setting a custom GAMS path
 if (file.exists('config.json')) {
-        config <- fromJSON('config.json')
-        gams_path <- config$gams_path
+  config <- fromJSON('config.json')
+  gams_path <- config$gams_path
 
-        # Checking if the specified path exists and is a directory
-        if(!is.null(gams_path) && file.exists(gams_path) && file.info(gams_path)$isdir) {
-          gams <- paste0(gams_path,'gams')
+  # Checking if the specified path exists and is a directory
+  if(!is.null(gams_path) && file.exists(gams_path) && file.info(gams_path)$isdir) {
+    gams <- paste0(gams_path,'gams')
 
-        } else {
-          cat("The specified custom GAMS path is not valid. Using the default path. ")
-          gams <- 'gams'
-        }
+  } else {
+    cat("The specified custom GAMS path is not valid. Using the default path.\n")
+    gams <- 'gams'
+  }
 
 } else {
 
@@ -163,7 +188,7 @@ if (!is.null(task) && task == 0) {
 
     # Running task OPEN-PROM DEV
     saveMetadata(DevMode = 1)
-    if(withRunFolder) createRunFolder("DEV")
+    if(withRunFolder) createRunFolder(setScenarioName("DEV"))
 
     shell(paste0(gams,' main.gms --DevMode=1 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log'))
 
@@ -173,7 +198,7 @@ if (!is.null(task) && task == 0) {
 
     # Running task OPEN-PROM DEV NEW DATA
     saveMetadata(DevMode = 1)
-    if(withRunFolder) createRunFolder("DEVNEWDATA")
+    if(withRunFolder) createRunFolder(setScenarioName("DEVNEWDATA"))
 
     shell(paste0(gams,' main.gms --DevMode=1 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 | tee full.log'))
 
@@ -187,7 +212,7 @@ if (!is.null(task) && task == 0) {
     
     # Running task OPEN-PROM RESEARCH
     saveMetadata(DevMode = 0)
-    if(withRunFolder) createRunFolder("RES")
+    if(withRunFolder) createRunFolder(setScenarioName("RES"))
 
     shell(paste0(gams,' main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log'))
 
@@ -197,7 +222,7 @@ if (!is.null(task) && task == 0) {
     
     # Running task OPEN-PROM RESEARCH NEW DATA
     saveMetadata(DevMode = 0)
-    if(withRunFolder) createRunFolder("RESNEWDATA")
+    if(withRunFolder) createRunFolder(setScenarioName("RESNEWDATA"))
 
     shell(paste0(gams,' main.gms --DevMode=0 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 | tee full.log'))
 

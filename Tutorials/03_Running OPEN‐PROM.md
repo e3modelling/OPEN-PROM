@@ -26,6 +26,9 @@ After running this command, you must authorize the Tidyverse API Packages to acc
 ## Setting a Custom GAMS Path
 In some cases, it is beneficial to install multiple versions of GAMS, for testing and debugging purposes. For example, you can execute the model with both GAMS version 45 and 46, and compare the results. To specify the GAMS version that is used while executing the model, you can add the associated directory path to the `"gams_path"` parameter of the configuration file. To avoid errors, please remember to include a trailing slash, e.g. `C:\GAMS\45\`.
 
+## Setting a Custom Scenario Name
+Running various different scenarios is a fundamental aspect of integrated assessment modelling, with the purpose of comparing alternative decarbonization pathways and exploring greenhouse gas emissions trajectories. You can easily specify the scenario name of your preference, by setting the `"scenario_name"` parameter in the configuration file. This scenario name will be used in the model run folders that were mentioned previously.
+
 # Testing the Model with Dummy Data
 As mentioned in Tutorial 02, OPEN-PROM utilizes some proprietary data sources that can't be publicly shared. Regardless of that, you can still run and experiment with the model, even if you don't have access to the aforementioned data. You simply need to download [OPEN-PROM v1.0.0](https://github.com/e3modelling/OPEN-PROM/releases/tag/v1.0.0), and make sure you have recent versions of GAMS and the R language installed on your computer. Afterwards, you simply need to open a terminal window and execute the following command:  
 
