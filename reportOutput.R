@@ -113,7 +113,7 @@ tryCatch({
   #output <- mbind(output, reportGDP(runCY))
   reportFinalEnergy(runCY)
   reportEmissions(runCY)
-  reportEmissions(SE)
+  reportSE(runCY)
   #reportGDP(runCY)
   #reportACTV(runCY)
   #reportPrice(runCY)

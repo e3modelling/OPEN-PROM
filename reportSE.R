@@ -1,7 +1,7 @@
 reportSE <- function(regs) {
   
   # add model OPEN-PROM data electricity production
-  VProdElec <- readGDX('./blabla.gdx', "VProdElec", field = 'l')[regs, , ]
+  VProdElec <- readGDX('./blabla.gdx', "VProdElec", field = 'l')[regs, , ] * 1000 #convert to GWh
   # map of enerdata, OPEN-PROM, elec prod
   map_reporting <- toolGetMapping(name = "enerdata-elec-prod.csv",
                                   type = "sectoral",
