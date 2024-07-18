@@ -17,7 +17,7 @@ saveMetadata<- function(DevMode) {
   commit_date <- system("git log -1 --format=%ad", intern = TRUE)
   branch_name <- system("git rev-parse --abbrev-ref HEAD", intern = TRUE)
   
-  # Organize information into a list
+  # Organize Git information into a list
   git_info <- list(
     "Author" = commit_author,
     "Commit Hash" = commit_hash,
@@ -29,12 +29,32 @@ saveMetadata<- function(DevMode) {
   # Save the appropriate region mapping for each type of run (Development / Research).
   if(DevMode == 0) {
     
-    model_info <- list('Region Mapping' = "regionmappingOPDEV3.csv")
+    mapping <- "regionmappingOPDEV3.csv"
 
-    } else if (DevMode == 1) {
+  } else if (DevMode == 1) {
 
-      model_info <- list('Region Mapping' = "regionmappingOPDEV2.csv")
-    }
+    mapping <- "regionmappingOPDEV2.csv"
+  }
+
+  # Get the model run description from config file
+  run_desc <- NULL
+  if (file.exists('config.json')) {
+    config <- fromJSON('config.json')
+    desc_config <- config$description
+  }
+
+  if(!is.null(desc_config) && nzchar(trimws(desc_config)) ) {
+    run_desc <- desc_config
+
+  } else {
+    run_desc <- "Default model run description."
+  }
+
+  # Collect model information in a list
+  model_info <- list(
+    "Region Mapping" = mapping,
+    "Run Description" = run_desc
+  )
 
   # Convert to JSON and save to file
   data_to_save <- list("Git Information" = git_info, "Model Information" = model_info)
@@ -124,21 +144,46 @@ uploadToGDrive <- function() {
   
 }
 
+### Define a function that returns the scenario name
+setScenarioName <- function(scen_default) {
+
+  scen_config <- NULL
+  # Reading the scenario name from config file
+  if (file.exists('config.json')) {
+    config <- fromJSON('config.json')
+    scen_config <- config$scenario_name
+  }
+
+  # Checking if the scenario name is NULL or empty string
+  if(!is.null(scen_config) && nzchar(trimws(scen_config)) ) {
+    scen <- scen_config
+  
+  } else {
+    # If the config scenario name is not valid, get the default one
+    # as specified in each VS Code task, e.g. DEV, DEVNEWDATA etc
+    cat("Invalid scenario name or missing config file, setting default name.\n")
+    scen <- scen_default
+
+  }
+  
+  return(scen)
+}
+
 ### Executing the VS Code tasks
 
 # Optionally setting a custom GAMS path
 if (file.exists('config.json')) {
-        config <- fromJSON('config.json')
-        gams_path <- config$gams_path
+  config <- fromJSON('config.json')
+  gams_path <- config$gams_path
 
-        # Checking if the specified path exists and is a directory
-        if(!is.null(gams_path) && file.exists(gams_path) && file.info(gams_path)$isdir) {
-          gams <- paste0(gams_path,'gams')
+  # Checking if the specified path exists and is a directory
+  if(!is.null(gams_path) && file.exists(gams_path) && file.info(gams_path)$isdir) {
+    gams <- paste0(gams_path,'gams')
 
-        } else {
-          cat("The specified custom GAMS path is not valid. Using the default path. ")
-          gams <- 'gams'
-        }
+  } else {
+    cat("The specified custom GAMS path is not valid. Using the default path.\n")
+    gams <- 'gams'
+  }
 
 } else {
 
@@ -163,7 +208,7 @@ if (!is.null(task) && task == 0) {
 
     # Running task OPEN-PROM DEV
     saveMetadata(DevMode = 1)
-    if(withRunFolder) createRunFolder("DEV")
+    if(withRunFolder) createRunFolder(setScenarioName("DEV"))
 
     shell(paste0(gams,' main.gms --DevMode=1 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log'))
 
@@ -173,7 +218,7 @@ if (!is.null(task) && task == 0) {
 
     # Running task OPEN-PROM DEV NEW DATA
     saveMetadata(DevMode = 1)
-    if(withRunFolder) createRunFolder("DEVNEWDATA")
+    if(withRunFolder) createRunFolder(setScenarioName("DEVNEWDATA"))
 
     shell(paste0(gams,' main.gms --DevMode=1 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 | tee full.log'))
 
@@ -187,7 +232,7 @@ if (!is.null(task) && task == 0) {
     
     # Running task OPEN-PROM RESEARCH
     saveMetadata(DevMode = 0)
-    if(withRunFolder) createRunFolder("RES")
+    if(withRunFolder) createRunFolder(setScenarioName("RES"))
 
     shell(paste0(gams,' main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log'))
 
@@ -197,7 +242,7 @@ if (!is.null(task) && task == 0) {
     
     # Running task OPEN-PROM RESEARCH NEW DATA
     saveMetadata(DevMode = 0)
-    if(withRunFolder) createRunFolder("RESNEWDATA")
+    if(withRunFolder) createRunFolder(setScenarioName("RESNEWDATA"))
 
     shell(paste0(gams,' main.gms --DevMode=0 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 | tee full.log'))
 
