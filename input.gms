@@ -651,11 +651,17 @@ HOU  11.511 0.9     0.00001
 AG   0.2078 0.9     0.00001
 ;
 
+table iElcNetImpShare(allCy,SUPOTH,YTIME)	          "Ratio of electricity imports in total final demand (1)"
+$ondelim
+$include "./iElcNetImpShare.csv"
+$offdelim
+;
+
 iShrHeatPumpElecCons(runCy,INDSE) = iIndChar(runCy,INDSE,"SH_HPELC");
 iShrHeatPumpElecCons(runCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(DOMSE,"SH_HPELC");
 iExogDemOfBiomass(runCy,DOMSE,YTIME) = 0;
 *iElastCO2Seq(runCy,CO2SEQELAST) = iCO2SeqData(CO2SEQELAST,"%fBaseY%");
-iRatioImpFinElecDem(runCy,YTIME)$an(YTIME) = iSuppRefCapacity(runCy,"ELC_IMP",YTIME);
+iRatioImpFinElecDem(runCy,YTIME)$an(YTIME) = iElcNetImpShare(runCy,"ELC_IMP",YTIME);
 iFuelExprts(runCy,EFS,YTIME) = iSuppExports(runCy,EFS,YTIME);
 iRatePriProTotPriNeeds(runCy,PPRODEF,YTIME) = iSuppRatePrimProd(runCy,PPRODEF,YTIME);
 iResHcNgOilPrProd(runCy,"HCL",YTIME)$an(YTIME)   = iSupResRefCapacity(runCy,"HCL_PPROD",YTIME);
