@@ -17,8 +17,8 @@ QBslMaxmLoad            ,QBaseLoadMax            ,,Power Generation
 " VBslMaxmLoad(runCy,YTIME)"," VBaseLoadMax(runCy,YTIME)",,Power Generation
 QElecBaseLoad           ,QBaseLoad             ,,Power Generation
 " VCorrBaseLoad(runCy,YTIME)"," VBaseLoad(runCy,YTIME)",,Power Generation
-QTotReqElecProd          ,QProdReqTotElec          ,,Power Generation
-" VTotReqElecProd(runCy,YTIME)"," VProdReqTotElec(runCy,YTIME)",,Power Generation
+QTotReqElecProd          ,QProdElecReqTot          ,,Power Generation
+" VTotReqElecProd(runCy,YTIME)"," VProdElecReqTot(runCy,YTIME)",,Power Generation
 QTotEstElecGenCap         ,QCapElecTotEst           ,,Power Generation
 " VTotElecGenCapEst(runCy,YTIME)"," VCapElecTotEst(runCy,YTIME)",,Power Generation
 QTotElecGenCap           ,QCapElecTot            ,,Power Generation
@@ -85,12 +85,12 @@ QOverallCap            ,QCapOverall            ,PGALL,Power Generation
 " VOverallCap(runCy,PGALL,YTIME)"," VCapOverall(runCy,PGALL,YTIME)",PGALL,Power Generation
 QScalFacPlantDispatch       ,QScalFacPlantDispatch       ,,Power Generation
  VScalFacPlaDisp, VScalFacPlaDisp,,Power Generation
-QElecChpPlants           ,QProdEstElecCHP          ,,Power Generation
-" VElecChpPlants(runCy,YTIME) "," VProdEstElecCHP(runCy,YTIME) ",,Power Generation
+QElecChpPlants           ,QProdElecEstCHP          ,,Power Generation
+" VElecChpPlants(runCy,YTIME) "," VProdElecEstCHP(runCy,YTIME) ",,Power Generation
 QNonChpElecProd          ,QProdElecNonCHP          ,,Power Generation
 " VNonChpElecProd(runCy,YTIME) "," VProdElecNonCHP(runCy,YTIME) ",,Power Generation
-QReqElecProd            ,QProdReqElec            ,,Power Generation
-" VReqElecProd(runCy,YTIME) "," VProdReqElec(runCy,YTIME) ",,Power Generation
+QReqElecProd            ,QProdElecReqCHP            ,,Power Generation
+" VReqElecProd(runCy,YTIME) "," VProdElecReqCHP(runCy,YTIME) ",,Power Generation
 QElecProdPowGenPlants       ,QProdElec             ,PGALL,Power Generation
 " VElecProd(runCy,PGALL,YTIME)"," VProdElec(runCy,PGALL,YTIME)",PGALL,Power Generation
 qSecContrTotChpProd        ,qSecContrTotCHPProd        ,"(INDDOM,CHP)$(SECTTECH(INDDOM,CHP))",Power Generation

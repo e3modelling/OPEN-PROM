@@ -1,13 +1,21 @@
-    sModelStat = 100;
-    loop rcc$(rcc.val <= sSolverTryMax) do !! start inner iteration loop (solver attempts)       
-        if sModelStat gt 2 then
-            display sModelStat, openprom.modelstat, openprom.solvestat; 
-            solve openprom using nlp minimizing vDummyObj;
-            handles(runCyL) = openprom.handle;
-            sModelStat = openprom.modelstat;
-            display handles;
-        endif;
-    endloop;    !! close inner iteration loop (solver attempts)
+sModelStat = 100;
+loop rcc$(rcc.val <= sSolverTryMax) do !! start inner iteration loop (solver attempts)
+    if sModelStat gt 2 then
+        display sModelStat, openprom.modelstat, openprom.solvestat; 
+        solve openprom using nlp maximizing vDummyObj;
+        handles(runCyL) = openprom.handle;
+        sModelStat = openprom.modelstat;
+        display handles;
+    endif;
+endloop;  !! close inner iteration loop (solver attempts)
+
+!! Output model status, country, and corresponding year
+loop allCy$runCy(allCy) do
+    loop YTIME$(TIME(YTIME)) do
+        put fStat;
+        put "Country:", allCy.tl, " Model Status:", sModelStat:0:2, " Year:", YTIME.tl /;
+    endloop;
+endloop;
 
 
 * Fix values of variables for the next time step
@@ -60,6 +68,5 @@ endloop;
 until card(handles) = 0 or timeelapsed > 5 ;
 
 endloop;  !! close outer iteration loop (time steps)
-
-
+putclose fStat;
 $if %WriteGDX% == on execute_unload "blabla.gdx";

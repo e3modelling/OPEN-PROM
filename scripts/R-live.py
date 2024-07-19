@@ -158,7 +158,7 @@ def create_dataframe(country_year_status, pending_run=False):
         df.index.name = 'Country'
         df = df.T
         df = df.astype(int)
-        if pending_run:
+        if pending_run == True:
             df.pop(df.columns[-1])
         return df
     else:
@@ -190,7 +190,19 @@ def main_loop(base_path, check_interval=1.5, max_no_update_intervals=4):
     pending_folder = find_pending_run(subfolder_status_list)
 
     if not pending_folder:
-        print("No pending runs found.")
+
+        print("No pending run found. Plotting the most recent completed run.")
+        if subfolder_status_list:
+            latest_subfolder = subfolder_status_list[-1][1]
+            folder_name = latest_subfolder.split(os.sep)[-1]
+            lines = read_main_log(latest_subfolder)
+            if lines:
+                country_year_status = parse_main_log(lines)
+                df = create_dataframe(country_year_status)
+                plot_heatmap(df, folder_name)
+                plt.show()
+            else:
+                print("No data found in the log file for the latest subfolder.")
         return
 
     pending_folder_name = os.path.basename(pending_folder)

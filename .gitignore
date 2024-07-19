@@ -20,4 +20,5 @@ regionmappingOP.csv
 metadata.json
 /doc
 *.pyc
-/225*
+config.json
+modelstat.txt
