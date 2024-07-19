@@ -17,7 +17,7 @@ saveMetadata<- function(DevMode) {
   commit_date <- system("git log -1 --format=%ad", intern = TRUE)
   branch_name <- system("git rev-parse --abbrev-ref HEAD", intern = TRUE)
   
-  # Organize information into a list
+  # Organize Git information into a list
   git_info <- list(
     "Author" = commit_author,
     "Commit Hash" = commit_hash,
@@ -29,12 +29,32 @@ saveMetadata<- function(DevMode) {
   # Save the appropriate region mapping for each type of run (Development / Research).
   if(DevMode == 0) {
     
-    model_info <- list('Region Mapping' = "regionmappingOPDEV3.csv")
+    mapping <- "regionmappingOPDEV3.csv"
 
-    } else if (DevMode == 1) {
+  } else if (DevMode == 1) {
 
-      model_info <- list('Region Mapping' = "regionmappingOPDEV2.csv")
-    }
+    mapping <- "regionmappingOPDEV2.csv"
+  }
+
+  # Get the model run description from config file
+  run_desc <- NULL
+  if (file.exists('config.json')) {
+    config <- fromJSON('config.json')
+    desc_config <- config$description
+  }
+
+  if(!is.null(desc_config) && nzchar(trimws(desc_config)) ) {
+    run_desc <- desc_config
+
+  } else {
+    run_desc <- "Default model run description."
+  }
+
+  # Collect model information in a list
+  model_info <- list(
+    "Region Mapping" = mapping,
+    "Run Description" = run_desc
+  )
 
   # Convert to JSON and save to file
   data_to_save <- list("Git Information" = git_info, "Model Information" = model_info)
