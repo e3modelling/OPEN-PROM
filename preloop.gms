@@ -540,20 +540,22 @@ VWTAP.L(allCy,TRANSE,YTIME) = 1 ;
 VWCRS.L(allCy,DSBS,EF,YTIME) = 1 ;                                
 VWDFS.L(allCy,DSBS,YTIME) = 1 ;                                   
 VWCT.L(allCy,DSBS,EF,YTIME) = 1 ; 
-VWCENS.L(allCy,INDDOM,YTIME) = 1 ;                                
+VWCENS.L(allCy,INDDOM,YTIME) = 1 ;  
+VWCSF.L(allCy,TRANSE,TTECH,EF,YTIME) = 1;                              
 
-VW.UP(allCy,SBS,EF,YTIME) = 3 ;                                   
-VWPGC.UP(allCy,PGALL,YTIME) = 3 ;                                 
-VWPGD.UP(allCy,PGALL,YTIME) = 3 ;                                  
-VWTAG.UP(allCy,TRANSE,YTIME) = 3 ;                                
-VWMPG.UP(allCy,YTIME) = 3 ;                                       
-VWTF.UP(allCy,TRANSE,TTECH,YTIME) = 3 ;                           
-VWTT.UP(allCy,TRANSE,TTECH,YTIME) = 3 ;                            
-VWTAP.UP(allCy,TRANSE,YTIME) = 3 ;                                 
-VWCRS.UP(allCy,DSBS,EF,YTIME) = 3 ;                                
-VWDFS.UP(allCy,DSBS,YTIME) = 3 ;                                   
-VWCT.UP(allCy,DSBS,EF,YTIME) = 3 ;
-VWCENS.UP(allCy,INDDOM,YTIME) = 3 ;
+VW.UP(allCy,SBS,EF,YTIME) = 10 ;                                   
+VWPGC.UP(allCy,PGALL,YTIME) = 10 ;                                 
+VWPGD.UP(allCy,PGALL,YTIME) = 10 ;                                  
+VWTAG.UP(allCy,TRANSE,YTIME) = 10 ;                                
+VWMPG.UP(allCy,YTIME) = 10 ;                                       
+VWTF.UP(allCy,TRANSE,TTECH,YTIME) = 10 ;                           
+VWTT.UP(allCy,TRANSE,TTECH,YTIME) = 10 ;                            
+VWTAP.UP(allCy,TRANSE,YTIME) = 10 ;                                 
+VWCRS.UP(allCy,DSBS,EF,YTIME) = 10 ;                                
+VWDFS.UP(allCy,DSBS,YTIME) = 10 ;                                   
+VWCT.UP(allCy,DSBS,EF,YTIME) = 10 ;
+VWCENS.UP(allCy,INDDOM,YTIME) = 10 ;
+VWCSF.L(allCy,TRANSE,TTECH,EF,YTIME) = 10;
 
 $ENDIF.calib
 
