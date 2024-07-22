@@ -1113,9 +1113,9 @@ loop SBS do
 endloop;
 
 iTotFinEneDemSubBaseYr(runCy,TRANSE,YTIME) = sum(EF$(SECTTECH(TRANSE,EF) $(not plugin(EF))), iFuelConsPerFueSub(runCy,TRANSE,EF,YTIME));
-iTotFinEneDemSubBaseYr(runCy,INDSE,YTIME)   = SUM(EF,iFuelConsPerFueSub(runCy,INDSE,EF,YTIME));
-iTotFinEneDemSubBaseYr(runCy,DOMSE,YTIME)   = SUM(EF,iFuelConsPerFueSub(runCy,DOMSE,EF,YTIME));
-iTotFinEneDemSubBaseYr(runCy,NENSE,YTIME)   = SUM(EF,iFuelConsPerFueSub(runCy,NENSE,EF,YTIME));
+iTotFinEneDemSubBaseYr(runCy,INDSE,YTIME)   = SUM(EF$(SECTTECH(INDSE,EF)),iFuelConsPerFueSub(runCy,INDSE,EF,YTIME));
+iTotFinEneDemSubBaseYr(runCy,DOMSE,YTIME)   = SUM(EF$(SECTTECH(DOMSE,EF)),iFuelConsPerFueSub(runCy,DOMSE,EF,YTIME));
+iTotFinEneDemSubBaseYr(runCy,NENSE,YTIME)   = SUM(EF$(SECTTECH(NENSE,EF)),iFuelConsPerFueSub(runCy,NENSE,EF,YTIME));
 
 
 iWgtSecAvgPriFueCons(runCy,TRANSE,EF)$(SECTTECH(TRANSE,EF) $(not plugin(EF)) ) = (iFuelConsPerFueSub(runCy,TRANSE,EF,"%fBaseY%") / iTotFinEneDemSubBaseYr(runCy,TRANSE,"%fBaseY%"))$iTotFinEneDemSubBaseYr(runCy,TRANSE,"%fBaseY%")
