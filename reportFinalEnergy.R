@@ -102,9 +102,9 @@ reportFinalEnergy <- function(regs) {
     open_by_subsector_by_energy_form <- by_energy_form_and_by_subsector_open
     getItems(open_by_subsector_by_energy_form, 3.1) <- paste0("Final Energy|", sector_name[y],"|", getItems(open_by_subsector_by_energy_form, 3.1))
     
-    # remove . from magpie object
+    # remove . from magpie object and replace with |
     open_by_subsector_by_energy_form <- as.quitte(open_by_subsector_by_energy_form)
-    open_by_subsector_by_energy_form[["TRANSE"]] <- paste0(open_by_subsector_by_energy_form[["TRANSE"]], " ", open_by_subsector_by_energy_form[["EF"]])
+    open_by_subsector_by_energy_form[[names(open_by_subsector_by_energy_form[, 8])]] <- paste0(open_by_subsector_by_energy_form[[names(open_by_subsector_by_energy_form[, 8])]], "|", open_by_subsector_by_energy_form[["EF"]])
     open_by_subsector_by_energy_form <- select(open_by_subsector_by_energy_form, -c("EF"))
     open_by_subsector_by_energy_form <- as.quitte(open_by_subsector_by_energy_form) %>% as.magpie()
     
@@ -118,5 +118,17 @@ reportFinalEnergy <- function(regs) {
     # write data in mif file
     write.report(by_energy_form_open[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario=scenario_name)
      
+    # per fuel
+    FCONS_per_fuel <- FCONS_by_sector_and_EF_open[,,sets6[,1]]
+    
+    # remove . from magpie object and replace with |
+    FCONS_per_fuel <- as.quitte(FCONS_per_fuel)
+    FCONS_per_fuel[[names(FCONS_per_fuel[, 8])]] <- paste0(FCONS_per_fuel[[names(FCONS_per_fuel[, 8])]], "|", FCONS_per_fuel[["EF"]])
+    FCONS_per_fuel <- select(FCONS_per_fuel, -c("EF"))
+    FCONS_per_fuel <- as.quitte(FCONS_per_fuel) %>% as.magpie()
+    getItems(FCONS_per_fuel, 3) <- paste0("Final Energy|", sector_name[y],"|", getItems(FCONS_per_fuel, 3))
+    
+    # write data in mif file
+    write.report(FCONS_per_fuel[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario=scenario_name)
   }
 }
