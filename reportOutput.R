@@ -85,6 +85,7 @@ tryCatch({
     source("reportGDP.R")
     source("reportFinalEnergy.R")
     source("reportSE.R")
+    source("reportPE.R")
   
     # Add error handling for GDX file reading
     runCY <- tryCatch(
@@ -114,6 +115,7 @@ tryCatch({
   reportFinalEnergy(runCY)
   reportEmissions(runCY)
   reportSE(runCY)
+  reportPE(runCY)
   #reportGDP(runCY)
   #reportACTV(runCY)
   #reportPrice(runCY)
