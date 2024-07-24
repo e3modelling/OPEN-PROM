@@ -56,6 +56,7 @@ QSortPlantDispatch                  !! VSortPlantDispatch(runCy,PGALL,YTIME)
 QNewCapElec                         !! VNewCapElec(runCy,PGALL,YTIME)
 QCFAvgRen                           !! VCFAvgRen(runCy,PGALL,YTIME)
 QCapOverall                         !! VCapOverall(runCy,PGALL,YTIME)
+QCapElecCHPTot
 QScalFacPlantDispatch               !! VScalFacPlaDisp
 QProdElecEstCHP                     !! VProdElecEstCHP(runCy,YTIME) 
 QProdElecNonCHP                     !! VProdElecNonCHP(runCy,YTIME) 
@@ -160,7 +161,7 @@ QCstCO2SeqCsts                      !! VCstCO2SeqCsts(runCy,YTIME)
 
 *' * EMISSIONS CONSTRAINTS *
 
-QGrnnHsEmisCO2Equiv                 !! VGrnnHsEmisCO2Equiv(NAP,YTIME)
+$IF %Calibration% == off QGrnnHsEmisCO2Equiv                 !! VGrnnHsEmisCO2Equiv(NAP,YTIME)
 $IF %Calibration% == off qGrnnHsEmisCO2EquivAllCntr          !! vGrnnHsEmisCO2EquivAllCntr(YTIME) 
 *qExpendHouseEne                     !! vExpendHouseEne(runCy,YTIME)
 
@@ -338,7 +339,7 @@ VDemElecTot.l(runCy,YTIME)=0.1;
 VDemElecTot.FX(runCy,YTIME)$(not An(YTIME)) =  1/0.086 * ( iFinEneCons(runCy,"ELC",YTIME) + sum(NENSE, iFuelConsPerFueSub(runCy,NENSE,"ELC",YTIME)) + iDistrLosses(runCy,"ELC",YTIME)
                                              + iTotEneBranchCons(runCy,"ELC",YTIME) - (iFuelImports(runCy,"ELC",YTIME)-iFuelExprts(runCy,"ELC",YTIME)));
 
-VRenTechMatMult.l(runCy,PGALL,YTIME)=0.1;
+
 
 VActivGoodsTransp.l(runCy,TRANSE,YTIME)=0.1;
 VActivGoodsTransp.FX(runCy,TRANG,YTIME)$(not An(YTIME)) = iActv(YTIME,runCy,TRANG);
@@ -463,7 +464,14 @@ VCapElecCHP.FX(runCy,CHP,YTIME)$(not An(YTIME)) = iHisChpGrCapData(runCy,CHP,YTI
 VSharePowPlaNewEq.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) )=0;
 
 VCapElec2.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = iInstCapPast(runCy,PGALL,YTIME);
-
+VRenTechMatMult.l(runCy,PGALL,YTIME)$DATAY(YTIME)=         1$(NOT PGREN(PGALL))
+         +
+         (
+           1/(1+exp(5*(
+                 sum(PGRENEF$PGALLtoPGRENEF(PGALL,PGRENEF),
+                 sum(PGALL2$(PGALLtoPGRENEF(PGALL2,PGRENEF) $PGREN(PGALL2)),
+                 VCapElec2.l(runCy,PGALL2,YTIME-1))/VPotRenCurr.l(runCy,PGRENEF,YTIME))-0.6)))
+           )$PGREN(PGALL);
 VCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  iInstCapPast(runCy,PGALL,YTIME);
 
 VCapOverall.FX(runCy,PGALL,YTIME)$TFIRST(YTIME) =  iInstCapPast(runCy,PGALL,YTIME)$TFIRST(YTIME);
@@ -510,7 +518,6 @@ VLambda.L(runCy,YTIME)=0.21;
 VProdElecReqTot.fx(runCy,"%fBaseY%")=sum(pgall,VProdElec.L(runCy,pgall,"%fBaseY%"));
 
 openprom.optfile=1;
-execute_loadpoint 'input.gdx';
 loop an do !! start outer iteration loop (time steps)
    s = s + 1;
    TIME(YTIME) = NO;

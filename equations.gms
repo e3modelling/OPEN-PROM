@@ -484,12 +484,14 @@ VCapElec2(allCy,pgall,ytime)$ (not PGREN(PGALL))
 VCapOverall(allCy,PGALL,YTIME-1)
 /VCFAvgRen(allCy,PGALL,YTIME-1))$PGREN(PGALL);
 
+QCapElecCHPTot(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+VCapElecCHPTot(allCy,PGALL,YTIME) =E= 
+sum(CHP$CHPtoEON(CHP,PGALL),VCapElecCHP(allCy,CHP,YTIME));
 *' This equation calculates the scaling factor for plant dispatching in a specific country , hour of the day,
 *' and time period . The scaling factor for determining the dispatch order of different power plants during a particular hour.
 QScalFacPlantDispatch(allCy,HOUR,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          sum(PGALL,
-                 (VCapOverall(allCy,PGALL,YTIME)+
-                 sum(CHP$CHPtoEON(CHP,PGALL),VCapElecCHP(allCy,CHP,YTIME)))*
+                 (VCapOverall(allCy,PGALL,YTIME)+VCapElecCHPTot(allCy,PGALL,YTIME)                 )*
                  exp(-VScalFacPlaDisp(allCy,HOUR,YTIME)/VSortPlantDispatch(allCy,PGALL,YTIME))
                  )
          =E=
