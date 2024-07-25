@@ -241,9 +241,9 @@ if (!is.null(task) && task == 0) {
 
     if(withReport) {
 
-      print(getwd()) 
       if(withRunFolder) setwd("../../") # Going back to root folder
-      shell("RScript ./reportOutput.R") # Execute the reporting script
+      cat("Executing the report output script\n")
+      shell("RScript ./reportOutput.R")
     } 
 
 } else if (!is.null(task) && task == 3) {
@@ -261,7 +261,12 @@ if (!is.null(task) && task == 0) {
 
     }    
 
-    if(withReport) source("./reportOutput.R")
+    if(withReport) {
+
+      if(withRunFolder) setwd("../../") # Going back to root folder
+      cat("Executing the report output script\n")
+      shell("RScript ./reportOutput.R")
+    } 
 
 } else if (!is.null(task) && task == 4) {
   
