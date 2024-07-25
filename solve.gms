@@ -1,4 +1,5 @@
     sModelStat = 100;
+$if %Calibration% == on execute_loadpoint 'input.gdx';
     loop rcc$(rcc.val <= sSolverTryMax) do !! start inner iteration loop (solver attempts)
         if sModelStat gt 2 then
             solve openprom using nlp minimizing vDummyObj;
