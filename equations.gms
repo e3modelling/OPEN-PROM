@@ -1470,7 +1470,7 @@ QInpTransfTherm(allCy,PGEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 
 
 QOutTransfTherm(allCy,TOCTEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VOutTransfTherm(allCy,TOCTEF,YTIME)
+         VOutTransfTherm(allCy,TOCTEF,YTIME)$(ELCEF(TOCTEF) or STEAM(TOCTEF))
              =E=
         (
              sum(PGALL$(not PGNUCL(PGALL)),VProdElec(allCy,PGALL,YTIME)) * sTWhToMtoe
