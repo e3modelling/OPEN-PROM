@@ -102,7 +102,7 @@ iCapCostTech(allCy,SBS,EF,YTIME)                "Capital Cost of technology (var
                                                     !! - For Domestic Sectors is expressed in kUS$2015/toe-year
 iDiffFuelsInSec(SBS)                            "auxiliary parameter holding the number of different fuels in a sector"
 iResElecIndex(allCy,YTIME)                      "Residual for electricity Index (1)"
-iElastNonSubElec(allCy,SBS,ETYPES,YTIME)        "Elasticities of Non Substitutable Electricity (1)"
+$IF %Calibration% == off iElastNonSubElec(allCy,SBS,ETYPES,YTIME)        "Elasticities of Non Substitutable Electricity (1)"
 iIndChar(allCy,INDSE,Indu_Scon_Set)             "Industry sector charactetistics (various)"
 iNetImp(allCy,EFS,YTIME)                        "Net imports (Mtoe)"
 iMxmShareChpElec(allCy,YTIME)	                "Maximum share of CHP electricity in a country (1)"
