@@ -41,6 +41,7 @@ def check_files_and_list_subfolders(base_path, flag=False):
     """
     This function checks each subfolder for necessary files and generates a list of subfolders with color-coded status.
     It also includes information about failed subfolders, their horizon, and the last year they ran.
+    Additionally, it adds a new column indicating the run type based on the calibration setting in the main.gms file.
     """
     runs_path = os.path.join(base_path, "runs")
     subfolders = [f.path for f in os.scandir(runs_path) if f.is_dir()]
@@ -67,6 +68,13 @@ def check_files_and_list_subfolders(base_path, flag=False):
 
         status = ""
         color = Fore.GREEN
+
+        # Determine the run type
+        run_type = "Run: Vanilla"  # Default value
+        if os.path.exists(main_gms_path):
+            with open(main_gms_path, 'r') as file:
+                if "$setGlobal Calibration on" in file.read():
+                    run_type = "Run: Calibration"
 
         if not os.path.exists(main_gms_path):
             status = f"Missing: main.gms  Status: NOT A RUN".ljust(max_status_length)
@@ -121,7 +129,7 @@ def check_files_and_list_subfolders(base_path, flag=False):
                         status = f"main.log -> FAILED Status: FAILED     Year: {year}  Horizon: {end_horizon_year}".ljust(max_status_length)
                         color = Fore.RED
 
-        subfolder_status_list.append((f"{color} {folder_name:<{max_folder_name_length}} {status}{Style.RESET_ALL}", folder))
+        subfolder_status_list.append((f"{color} {folder_name:<{max_folder_name_length}} {status} {run_type}{Style.RESET_ALL}", folder))
 
     # Sort the subfolders list based on their creation time
     subfolder_status_list.sort(key=lambda x: os.path.getctime(x[1]), reverse=False)
