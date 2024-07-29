@@ -81,7 +81,7 @@ def check_files_and_list_subfolders(base_path, flag=False):
             color = Fore.RED
         elif not os.path.exists(main_lst_path) or not os.path.exists(main_log_path):
             if current_time > max_modification_time:
-                status = f"main.lst or main.log missing -> FAILED".ljust(max_status_length)
+                status = f"main.lst or main.log missing -> FAILED Year: None  Horizon: None".ljust(max_status_length)
                 color = Fore.RED
             else:
                 status = f"Missing: main.lst or main.log  Status: PENDING".ljust(max_status_length)
@@ -117,16 +117,16 @@ def check_files_and_list_subfolders(base_path, flag=False):
                     modification_threshold = 15
 
                     if any("*** Status: Normal completion" in line for line in last_lines) and time_difference > max_modification_threshold and time_difference > modification_threshold:
-                        status = f"Missing: NONE Status: COMPLETED   Year: {year}  Horizon: {end_horizon_year}".ljust(max_status_length)
+                        status = f"Missing: NONE      Status: COMPLETED   Year: {year}  Horizon: {end_horizon_year}".ljust(max_status_length)
                     elif any("*** Status: Normal completion" in line for line in last_lines) and time_difference > modification_threshold:
-                        status = f"Missing: NONE Status: COMPLETED   Year: {year}  Horizon: {end_horizon_year}".ljust(max_status_length)
+                        status = f"Missing: NONE      Status: COMPLETED   Year: {year}  Horizon: {end_horizon_year}".ljust(max_status_length)
                     elif  any("*** Status: Normal completion" in line for line in last_lines) and time_difference < modification_threshold:
-                        status = f"Missing: NONE Status: COMPLETED   Year: {year}  Horizon: {end_horizon_year}".ljust(max_status_length)
+                        status = f"Missing: NONE      Status: COMPLETED   Year: {year}  Horizon: {end_horizon_year}".ljust(max_status_length)
                     elif time_difference < modification_threshold and not any("*** Status: Normal completion" in line for line in last_lines):
-                        status = f"Missing: NONE Status: PENDING    Running_Year: {running_year}  Horizon: {end_horizon_year}".ljust(max_status_length)
+                        status = f"Missing: NONE      Status: PENDING    Running_Year: {running_year}  Horizon: {end_horizon_year}".ljust(max_status_length)
                         color = Fore.BLUE
                     else:
-                        status = f"main.log -> FAILED Status: FAILED Year: {year}  Horizon: {end_horizon_year}".ljust(max_status_length)
+                        status = f"main.log -> FAILED Status: FAILED      Year: {year}  Horizon: {end_horizon_year}".ljust(max_status_length)
                         color = Fore.RED
 
         subfolder_status_list.append((f"{color} {folder_name:<{max_folder_name_length}} {status} {run_type}{Style.RESET_ALL}", folder))
