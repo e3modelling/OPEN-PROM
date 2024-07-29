@@ -1447,8 +1447,8 @@ QInpTransfNuclear(allCy,"NUC",YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' factor.For combined heat and power plants , the input is calculated as the sum of the consumption of fuels in various demand subsectors and the electricity
 *' production from the CHP plant . This sum is then divided by a factor based on the year to account for variations over time.The result represents
 *' the transformation input to thermal power plants in million tons of oil equivalent.
-QInpTransfTherm(allCy,PGEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VInpTransfTherm(allCy,PGEF,YTIME)
+QInpTransfTherm(allCy, PGEF, YTIME)$(TIME(YTIME) and runCy(allCy) and (ELCEF(PGEF) or STEAM(PGEF)))..
+         VInpTransfTherm(allCy, PGEF, YTIME)
              =E=
         sum(PGALL$(PGALLtoEF(PGALL,PGEF)$((not PGGEO(PGALL)) $(not PGNUCL(PGALL)))),
              VProdElec(allCy,PGALL,YTIME) * sTWhToMtoe /  iPlantEffByType(allCy,PGALL,YTIME))
@@ -1469,8 +1469,8 @@ QInpTransfTherm(allCy,PGEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 
 
 
-QOutTransfTherm(allCy,TOCTEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VOutTransfTherm(allCy,TOCTEF,YTIME)$(ELCEF(TOCTEF) or STEAM(TOCTEF))
+QOutTransfTherm(allCy, TOCTEF, YTIME)$(TIME(YTIME) and runCy(allCy) and TOCTEF(TOCTEF))..
+         VOutTransfTherm(allCy, TOCTEF, YTIME)
              =E=
         (
              sum(PGALL$(not PGNUCL(PGALL)),VProdElec(allCy,PGALL,YTIME)) * sTWhToMtoe
