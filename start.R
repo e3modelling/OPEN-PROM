@@ -241,9 +241,12 @@ if (!is.null(task) && task == 0) {
 
     if(withReport) {
 
+      run_path <- getwd()
       if(withRunFolder) setwd("../../") # Going back to root folder
       cat("Executing the report output script\n")
-      shell("RScript ./reportOutput.R")
+      report_cmd <- paste0("RScript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
+      print(report_cmd)
+      shell(report_cmd)
     } 
 
 } else if (!is.null(task) && task == 3) {
