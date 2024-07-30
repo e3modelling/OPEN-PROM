@@ -239,13 +239,12 @@ if (!is.null(task) && task == 0) {
 
     if(withRunFolder && withUpload) uploadToGDrive()
 
-    if(withReport) {
+    if(withRunFolder && withReport) {
 
       run_path <- getwd()
-      if(withRunFolder) setwd("../../") # Going back to root folder
+      setwd("../../") # Going back to root folder
       cat("Executing the report output script\n")
       report_cmd <- paste0("RScript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
-      print(report_cmd)
       shell(report_cmd)
     } 
 
@@ -264,11 +263,13 @@ if (!is.null(task) && task == 0) {
 
     }    
 
-    if(withReport) {
+    if(withRunFolder && withReport) {
 
-      if(withRunFolder) setwd("../../") # Going back to root folder
+      run_path <- getwd()
+      setwd("../../") # Going back to root folder
       cat("Executing the report output script\n")
-      shell("RScript ./reportOutput.R")
+      report_cmd <- paste0("RScript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
+      shell(report_cmd)
     } 
 
 } else if (!is.null(task) && task == 4) {
