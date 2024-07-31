@@ -4,6 +4,7 @@ library(jsonlite)
 # Various flags used to modify script behavior
 withRunFolder = TRUE # Set to FALSE to disable model run folder creation and file copying
 withUpload = TRUE # Set to FALSE to disable model run upload to Google Drive
+withReport = TRUE # Set to FALSE to disable the report output script execution (applicable to research mode only)
 uploadGDX = FALSE # Set to TRUE to include GDX files in the uploaded archive
 
 ### Define function that saves model metadata into a JSON file.
@@ -238,6 +239,15 @@ if (!is.null(task) && task == 0) {
 
     if(withRunFolder && withUpload) uploadToGDrive()
 
+    if(withRunFolder && withReport) {
+
+      run_path <- getwd()
+      setwd("../../") # Going back to root folder
+      cat("Executing the report output script\n")
+      report_cmd <- paste0("RScript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
+      shell(report_cmd)
+    } 
+
 } else if (!is.null(task) && task == 3) {
     
     # Running task OPEN-PROM RESEARCH NEW DATA
@@ -252,6 +262,15 @@ if (!is.null(task) && task == 0) {
       if(withUpload) uploadToGDrive()
 
     }    
+
+    if(withRunFolder && withReport) {
+
+      run_path <- getwd()
+      setwd("../../") # Going back to root folder
+      cat("Executing the report output script\n")
+      report_cmd <- paste0("RScript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
+      shell(report_cmd)
+    } 
 
 } else if (!is.null(task) && task == 4) {
   
