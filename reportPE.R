@@ -2,7 +2,6 @@ reportPE <- function(regs) {
   
   # add model OPEN-PROM data Primary production
   VProdPrimary <- readGDX('./blabla.gdx', "VProdPrimary", field = 'l')[regs, , ]
-  VProdPrimary <-as.quitte(VProdPrimary) %>% as.magpie()
   
   sets <- toolreadSets("sets.gms", "BALEF2EFS")
   sets[, 1] <- gsub("\"","",sets[, 1])
@@ -11,7 +10,7 @@ reportPE <- function(regs) {
   sets[["EF"]] <- sub("\\)","",sets[["EF"]])
   sets <- separate_rows(sets,EF)
   sets$BAL <- gsub("Gas fuels", "Gas", sets$BAL)
-  sets$BAL <- gsub("Hard coal", "Coal", sets$BAL)
+  sets$BAL <- gsub("Solids", "Coal", sets$BAL)
   sets$BAL <- gsub("Crude oil and Feedstocks", "Oil", sets$BAL)
   sets$BAL <- gsub("Nuclear heat", "Nuclear", sets$BAL)
   sets$BAL <- gsub("Solar energy", "Solar", sets$BAL)
