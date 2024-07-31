@@ -9,9 +9,9 @@ this task will run the model in development mode, i.e. using only the regions of
 
 * `OPEN-PROM DEV`: this task is identical to the previous, except the loading script is not executed. Therefore, it is assumed that all necessary datasets for the development mode are present in the `data` folder.
 
-* `OPEN-PROM RESEARCH NEW DATA`: this task will run the model in research mode, i.e. by including the entire region set, as defined in Tutorial 05. It should also be noted, that this task requires more than one hour to complete on a modern personal computer. In addition, the `mrprom` library will be used to generate new datasets.
+* `OPEN-PROM RESEARCH NEW DATA`: this task will run the model in research mode, i.e. by including the entire region set, as defined in Tutorial 05. It should also be noted, that this task requires more than one hour to complete on a modern personal computer. In addition, the `mrprom` library will be used to generate new datasets. After the model is executed, this mode also runs the `reportOutput.R` script, that generates a tabular dataset (MIF format) including final energy, primary energy, CO2 emissions etc. 
 
-* `OPEN-PROM RESEARCH`: this is identical to the previous task, without utilizing `mrprom` to generate new data. Hence, all necessary datasets for research mode should be available in the `data` folder.
+* `OPEN-PROM RESEARCH`: this is identical to the previous task, without utilizing `mrprom` to generate new data. Hence, all necessary datasets for research mode should be available in the `data` folder. Similarly to the previous task, this will also run the `reportOutput.R` script, after the model is executed.
 
 ## Creating a Configuration File
 Customization and flexibility is a priority during the development of OPEN-PROM, so we have included a configuration file that lets users change model settings. To create your own configuration file, please **make a copy** of the `config.template.json` file and rename it to `config.json`. Afterwards, you will be able to configure various settings, such as the custom GAMS system directory. 
