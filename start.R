@@ -3,7 +3,7 @@ library(jsonlite)
 
 # Various flags used to modify script behavior
 withRunFolder = TRUE # Set to FALSE to disable model run folder creation and file copying
-withUpload = TRUE # Set to FALSE to disable model run upload to Google Drive
+withSync = TRUE # Set to FALSE to disable model run sync to SharePoint
 withReport = TRUE # Set to FALSE to disable the report output script execution (applicable to research mode only)
 uploadGDX = FALSE # Set to TRUE to include GDX files in the uploaded archive
 
@@ -91,14 +91,9 @@ createRunFolder <- function(scenario = "default") {
 }
 
 ### Define a function that archives and uploads each model run to Google Drive
-uploadToGDrive <- function() {
-  if (!require(googledrive)) { 
-    install.packages("googledrive") # Install googledrive package if missing
-    library(googledrive)
-  }
+syncRun<- function() {
 
   folder_path <- getwd()
-  target_folder_id <- "1RrUGkOBx6e9FSVX9rdQnSZbjjWBmPJCc" # ID of the GDrive folder PROMETHEUS Model/Runs
   archive_name <- paste0(basename(folder_path), ".tgz")
   
   # Create tgz archive with the files of each model run
@@ -112,32 +107,19 @@ uploadToGDrive <- function() {
   }
 
   tar(tarfile = archive_name, files = files_to_archive, compression = "gzip", tar = "internal")
-  
-  # Upload the archive to Google Drive
-  # Ensure googledrive is authenticated here
-  # Using exception handling to deal with errors
-  tryCatch({
 
-      drive_auth()
-      drive_upload(media = archive_name, path = as_id(target_folder_id)) 
-      
-      }, error = function(e) {
-      cat("An error occurred during file upload: ", e$message, "\n")
+  # Copy the archive to the user-specified directory
+  if (file.exists('config.json')) {
 
-      # In case upload fails, try copying archive to local Google Drive folder 
-      if (file.exists('config.json')) {
+    config <- fromJSON('config.json')
+    model_runs_path <- config$model_runs_path
+    destination_path <- file.path(model_runs_path, basename(archive_name))
 
-        config <- fromJSON('config.json')
-        model_runs_path <- config$model_runs_path
-        destination_path <- file.path(model_runs_path, basename(archive_name))
+    if( file.copy(archive_name, destination_path, overwrite = TRUE) ) {
+      cat("File copied successfully to", destination_path, "\n")
+    } 
+  }
 
-        if( file.copy(archive_name, destination_path, overwrite = TRUE) ) {
-          cat("File copied successfully to", destination_path, "\n")
-        } 
-      }
-
-  })
-  
   # Delete the archive if it exists
   if (file.exists(archive_name)) {
     file.remove(archive_name)
@@ -213,7 +195,7 @@ if (!is.null(task) && task == 0) {
 
     shell(paste0(gams,' main.gms --DevMode=1 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log'))
 
-    if(withRunFolder && withUpload) uploadToGDrive()
+    if(withRunFolder && withSync) syncRun()
 
 } else if (!is.null(task) && task == 1) {
 
@@ -226,7 +208,7 @@ if (!is.null(task) && task == 0) {
     if(withRunFolder) {
       file.copy("data", to = '../../', recursive = TRUE) # Copying generated data to parent folder for future runs
       
-      if(withUpload) uploadToGDrive()
+      if(withSync) syncRun()
       }        
 
 } else if (!is.null(task) && task == 2) {
@@ -237,7 +219,7 @@ if (!is.null(task) && task == 0) {
 
     shell(paste0(gams,' main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log'))
 
-    if(withRunFolder && withUpload) uploadToGDrive()
+    if(withRunFolder && withSync) syncRun()
 
     if(withRunFolder && withReport) {
 
@@ -259,7 +241,7 @@ if (!is.null(task) && task == 0) {
     if(withRunFolder) {
       file.copy("data", to = '../../', recursive = TRUE)
 
-      if(withUpload) uploadToGDrive()
+      if(withSync) syncRun()
 
     }    
 
