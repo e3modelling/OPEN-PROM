@@ -311,7 +311,6 @@ VCostVarTechElec.l(runCy,PGALL,YTIME)=0.1;
 
 VElecPeakLoads.l(runCy,YTIME)=0.1;
 
-VNewCapElec.l(runCy,PGALL,YTIME)=0.1;
 VNewCapElec.FX(runCy,PGALL,"2011")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2011")- iInstCapPast(runCy,PGALL,"2010") +1E-10;
 VNewCapElec.FX(runCy,PGALL,"2012")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2012")- iInstCapPast(runCy,PGALL,"2011") +1E-10;
 VNewCapElec.FX(runCy,PGALL,"2013")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2013")- iInstCapPast(runCy,PGALL,"2012") +1E-10;

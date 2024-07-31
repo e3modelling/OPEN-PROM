@@ -40,23 +40,18 @@ iElastA.LO(runCy,SBS,ETYPES,YTIME) = -10;
 iElastA.UP(runCy,SBS,ETYPES,YTIME) = 10;
 $ENDIF.calib
 
-$IFTHEN.calib %Calibration% == off
 table iElastNonSubElecData(SBS,ETYPES,YTIME) "Elasticities of Non Substitutable Electricity (1)"
 $ondelim
 $include "./iElastNonSubElecData.csv"
 $offdelim
 ;
+$IFTHEN.calib %Calibration% == off
 iElastNonSubElec(runCy,SBS,ETYPES,YTIME) = iElastNonSubElecData(SBS,ETYPES,YTIME);
 $ELSE.calib
-variable iElastNonSubElec(allCy,SBS,ETYPES,YTIME) "Elasticities of Non Substitutable Electricity (1)";
-table iElastNonSubElecL(SBS,ETYPES,YTIME) "Elasticities of Non Substitutable Electricity (1)"
-$ondelim
-$include "./iElastNonSubElecData.csv"
-$offdelim
-;
-iElastNonSubElec.L(runCy,SBS,ETYPES,YTIME) = iElastNonSubElecL(SBS,ETYPES,YTIME);
+variable iElastNonSubElec(allCy,SBS,ETYPES,YTIME)        "Elasticities of Non Substitutable Electricity (1)";
+iElastNonSubElec.L(runCy,SBS,ETYPES,YTIME) = iElastNonSubElecData(SBS,ETYPES,YTIME);
 iElastNonSubElec.LO(runCy,SBS,ETYPES,YTIME) = -10;
-iElastNonSubElec.UP(runCy,SBS,ETYPES,YTIME) = 10;
+iElastNonSubElec.UP(runCy,SBS,ETYPES,YTIME) = 100;
 $ENDIF.calib
 
 parameter iNatGasPriProElst(allCy)	          "Natural Gas primary production elasticity related to gross inland consumption (1)" /
