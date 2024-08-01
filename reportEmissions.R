@@ -1,4 +1,5 @@
 reportEmissions <- function(regs) {
+  
   iCo2EmiFac <- readGDX('./blabla.gdx', "iCo2EmiFac")[regs, , ]
   VConsFuel <- readGDX('./blabla.gdx', "VConsFuel", field = 'l')[regs, , ]
   VInpTransfTherm <- readGDX('./blabla.gdx', "VInpTransfTherm", field = 'l')[regs, , ]
@@ -163,73 +164,10 @@ reportEmissions <- function(regs) {
   sum7 <- dimSums(sum7,dim=3, na.rm = TRUE)
   
   total_CO2 <- sum1 + sum2 + sum3 + sum4 + sum5 - sum6 + sum7
-  #total_CO2 <- sum1 + sum2 + sum3 + sum4 - sum6
   
-  getItems(total_CO2, 3) <- paste0("Emissions")
-  
-  #add model MENA_EDS data (choosing the correct variable from MENA by use of the MENA-PROM mapping)
-  MENA_iCo2EmiFac <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "iCo2EmiFac", "MENA.EDS"])
-  MENA_VConsFuel <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VConsFuel", "MENA.EDS"])
-  MENA_VTransfInThermPowPls <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VInpTransfTherm", "MENA.EDS"])
-  MENA_VTransfInputDHPlants <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VTransfInputDHPlants", "MENA.EDS"])
-  MENA_VEnCons <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VConsFiEneSec", "MENA.EDS"])
-  MENA_VDemTr <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VDemFinEneTranspPerFuel", "MENA.EDS"])
-  MENA_VElecProd <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VProdElec", "MENA.EDS"])
-  MENA_iPlantEffByType <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "iPlantEffByType", "MENA.EDS"])
-  MENA_iCO2CaptRate <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "iCO2CaptRate", "MENA.EDS"])
-  
-  MENA_sum1 <- MENA_iCo2EmiFac[,,INDDOM[, 1]] * MENA_VConsFuel[,,INDDOM[, 1]]
-  MENA_sum1 <- dimSums(MENA_sum1, 3, na.rm = TRUE)
-  
-  MENA_sum2 <- MENA_VTransfInThermPowPls[,,PGEF[,1]]*MENA_iCo2EmiFac[,,"PG"][,,PGEF[,1]]
-  MENA_sum2 <- dimSums(MENA_sum2, 3, na.rm = TRUE)
-  
-  MENA_sum3 <- MENA_VTransfInputDHPlants[,,] * MENA_iCo2EmiFac[,,"PG"][,,getItems(MENA_VTransfInputDHPlants,3)]
-  MENA_sum3 <- dimSums(MENA_sum3, 3, na.rm = TRUE)
-  
-  MENA_sum4 <- MENA_VEnCons * MENA_iCo2EmiFac[,,"PG"][,,getItems(MENA_VEnCons,3)]
-  MENA_sum4 <- dimSums(MENA_sum4, 3, na.rm = TRUE)
-  
-  MENA_sum5 <- MENA_VDemTr[,,map_TRANSECTOR[, 1]] * MENA_iCo2EmiFac[,,map_TRANSECTOR[, 1]]
-  MENA_sum5 <- dimSums(MENA_sum5, 3, na.rm = TRUE)
-  
-  MENA_var_16 <- MENA_VElecProd[,,CCS[,1]] * 0.086 / MENA_iPlantEffByType[,,CCS[,1]] * MENA_iCo2EmiFac[,,"PG"][,,CCS[,2]] * MENA_iCO2CaptRate[,,CCS[,1]]
-  MENA_sum6 <- dimSums(MENA_var_16,dim=3, na.rm = TRUE)
-  
-  MENA_sum7 <- MENA_iCo2EmiFac[,,SECTTECH2[,1]] * MENA_VConsFuel[,,SECTTECH2[,1]]
-  MENA_sum7 <- dimSums(MENA_sum7,dim=3, na.rm = TRUE)
-  
-  MENA_SUM <- MENA_sum1 + MENA_sum2 + MENA_sum3 + MENA_sum4 + MENA_sum5 - MENA_sum6 + MENA_sum7
-  #MENA_SUM <- MENA_sum1 + MENA_sum2 + MENA_sum3 + MENA_sum4 - MENA_sum6
-  
-  getItems(MENA_SUM, 3) <- paste0("Emissions")
-  
-  getRegions(MENA_SUM) <- sub("MOR", "MAR", getRegions(MENA_SUM))
-  # choose years and regions that both models have
-  years <- intersect(getYears(MENA_SUM,as.integer=TRUE),getYears(total_CO2,as.integer=TRUE))
-  mregs <- intersect(getRegions(MENA_SUM),regs)
-  getItems(MENA_SUM, 3.1) <- paste0("Emissions")
+  getItems(total_CO2, 3) <- paste0("Emissions|CO2")
   
   # write data in mif file
-  write.report(total_CO2[,,],file="reporting.mif",model="OPEN-PROM",unit="Mt CO2",append=TRUE,scenario=scenario_name)
-  write.report(MENA_SUM[mregs,years,],file="reporting.mif",model="MENA-EDS",unit="Mt CO2",append=TRUE,scenario=scenario_name)
-  
-  #filter ENERDATA by number 2
-  number_2 <- readSource("ENERDATA", "2", convert = TRUE)
-  CO2_emissions_ENERDATA <- number_2[,,"CO2 emissions from fuel combustion (sectoral approach).MtCO2"]
-  
-  year <- Reduce(intersect, list(getYears(MENA_SUM,as.integer=TRUE),getYears(total_CO2,as.integer=TRUE),getYears(CO2_emissions_ENERDATA,as.integer=TRUE)))
-  
-  getItems(CO2_emissions_ENERDATA, 3) <- paste0("Emissions")
-  # write data in mif file
-  write.report(CO2_emissions_ENERDATA[intersect(getRegions(CO2_emissions_ENERDATA),regs),year,],file="reporting.mif",model="ENERDATA",unit="Mt CO2",append=TRUE,scenario=scenario_name)
-  
-  EDGAR <- calcOutput(type = "CO2_emissions", aggregate = TRUE)
-  getItems(EDGAR, 3) <- paste0("Emissions")
-  write.report(EDGAR[intersect(getRegions(EDGAR),regs),c(year, 2022),],file="reporting.mif",model="EDGAR",unit="Mt CO2",append=TRUE,scenario=scenario_name)
-  
-  pik <- readSource("PIK", convert = TRUE)
-  pik <- pik[,,"Energy.MtCO2.CO2"]
-  getItems(pik, 3) <- paste0("Emissions")
-  write.report(pik[intersect(getRegions(pik),regs),c(year, 2022),],file="reporting.mif",model="PIK",unit="Mt CO2",append=TRUE,scenario=scenario_name)
-}
+  write.report(total_CO2[,,],file="reporting.mif",model="OPEN-PROM",unit = "Mt CO2/yr",append=TRUE,scenario=scenario_name)
+ 
+  }

@@ -99,8 +99,8 @@ QBaseLoad(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 
 *' This equation calculates the total required electricity production as a sum of the electricity peak load minus the corrected base load,
 *' multiplied by the exponential function of the parameter for load curve construction.
-QProdReqTotElec(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VProdReqTotElec(allCy,YTIME)
+QProdElecReqTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VProdElecReqTot(allCy,YTIME)
              =E=
          sum(HOUR, (VPeakLoad(allCy,YTIME)-VBaseLoad(allCy,YTIME))
                    * exp(-VLambda(allCy,YTIME)*(0.25+(ord(HOUR)-1)))
@@ -502,8 +502,8 @@ QScalFacPlantDispatch(allCy,HOUR,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' The estimation is based on the fuel consumption of CHP plants, their electricity prices, the maximum share of CHP electricity in total demand, and the overall
 *' electricity demand. The equation essentially estimates the electricity generation of CHP plants by considering their fuel consumption, electricity prices, and the maximum
 *' share of CHP electricity in total demand. The square root expression ensures that the estimated electricity generation remains non-negative.
-QProdEstElecCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VProdEstElecCHP(allCy,YTIME) 
+QProdElecEstCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VProdElecEstCHP(allCy,YTIME) 
          =E=
          ( (1/0.086 * sum((INDDOM,CHP),VConsFuel(allCy,INDDOM,CHP,YTIME)) * VPriceElecInd(allCy,YTIME)) + 
          iMxmShareChpElec(allCy,YTIME)*VDemElecTot(allCy,YTIME) - SQRT( SQR((1/0.086 * sum((INDDOM,CHP),VConsFuel(allCy,INDDOM,CHP,YTIME)) * 
@@ -517,14 +517,14 @@ QProdEstElecCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QProdElecNonCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VProdElecNonCHP(allCy,YTIME) 
          =E=
-  (VDemElecTot(allCy,YTIME) - VProdEstElecCHP(allCy,YTIME));  
+  (VDemElecTot(allCy,YTIME) - VProdElecEstCHP(allCy,YTIME));  
 
 *' This equation calculates the total required electricity production for a specific country and time period .
 *' The total required electricity production is the sum of electricity generation from different technologies, including CHP plants, across all hours of the day.
 *' The total required electricity production is the sum of the electricity generation from all CHP plants across all hours, considering the scaling factor for plant
 *' dispatching. 
-QProdReqElec(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-VProdReqElec(allCy,YTIME) 
+QProdElecReqCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+VProdElecReqCHP(allCy,YTIME) 
                    =E=
          sum(hour, sum(CHP,VCapElecCHP(allCy,CHP,YTIME)*exp(-VScalFacPlaDisp(allCy,HOUR,YTIME)/ 
          sum(pgall$chptoeon(chp,pgall),VSortPlantDispatch(allCy,PGALL,YTIME)))));
@@ -538,7 +538,7 @@ QProdElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VProdElec(allCy,PGALL,YTIME)
                  =E=
          VProdElecNonCHP(allCy,YTIME) /
-         (VProdReqTotElec(allCy,YTIME)- VProdReqElec(allCy,YTIME))
+         (VProdElecReqTot(allCy,YTIME)- VProdElecReqCHP(allCy,YTIME))
          * VCapElec2(allCy,PGALL,YTIME)* sum(HOUR, exp(-VScalFacPlaDisp(allCy,HOUR,YTIME)/VSortPlantDispatch(allCy,PGALL,YTIME)));
 
 *' This equation calculates the sector contribution to total Combined Heat and Power production . The contribution
@@ -1803,10 +1803,9 @@ QPriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $TIME(YTIME) $ru
           =E= 
         iWgtSecAvgPriFueCons(allCy,DSBS,EF) * VPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME);
 
-*' The equation calculates the average fuel price per subsector for a specific scenario, subsector, and year.
-*' The calculation involves summing the product of fuel prices per subsector and fuel and their corresponding weights
-*' for the specified scenario, subsector, and year.The equation is designed to compute the weighted average fuel price, considering
-*' different fuels within the subsector and their respective weights.
+*' The equation calculates the average fuel price per subsector. These average prices are used to further compute electricity prices in industry
+*' (using the OI "other industry" avg price), as well as the aggregate fuel demand (of substitutable fuels) per subsector.
+*' In the transport sector they feed into the calculation of the activity levels.
 QPriceFuelAvgSub(allCy,DSBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         VPriceFuelAvgSub(allCy,DSBS,YTIME)
                  =E=
