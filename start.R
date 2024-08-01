@@ -5,7 +5,7 @@ library(jsonlite)
 withRunFolder = TRUE # Set to FALSE to disable model run folder creation and file copying
 withUpload = TRUE # Set to FALSE to disable model run upload to Google Drive
 withReport = TRUE # Set to FALSE to disable the report output script execution (applicable to research mode only)
-uploadGDX = FALSE # Set to TRUE to include GDX files in the uploaded archive
+uploadGDX = TRUE # Set to TRUE to include GDX files in the uploaded archive
 
 ### Define function that saves model metadata into a JSON file.
 
