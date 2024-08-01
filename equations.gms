@@ -1788,10 +1788,9 @@ QPriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $TIME(YTIME) $ru
           =E= 
         iWgtSecAvgPriFueCons(allCy,DSBS,EF) * VPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME);
 
-*' The equation calculates the average fuel price per subsector for a specific scenario, subsector, and year.
-*' The calculation involves summing the product of fuel prices per subsector and fuel and their corresponding weights
-*' for the specified scenario, subsector, and year.The equation is designed to compute the weighted average fuel price, considering
-*' different fuels within the subsector and their respective weights.
+*' The equation calculates the average fuel price per subsector. These average prices are used to further compute electricity prices in industry
+*' (using the OI "other industry" avg price), as well as the aggregate fuel demand (of substitutable fuels) per subsector.
+*' In the transport sector they feed into the calculation of the activity levels.
 QPriceFuelAvgSub(allCy,DSBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         VPriceFuelAvgSub(allCy,DSBS,YTIME)
                  =E=

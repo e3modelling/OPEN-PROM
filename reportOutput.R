@@ -85,6 +85,7 @@ tryCatch({
     source("reportGDP.R")
     source("reportFinalEnergy.R")
     source("reportSE.R")
+    source("reportPE.R")
   
     # Add error handling for GDX file reading
     runCY <- tryCatch(
@@ -114,6 +115,7 @@ tryCatch({
   reportFinalEnergy(runCY)
   reportEmissions(runCY)
   reportSE(runCY)
+  reportPE(runCY)
   #reportGDP(runCY)
   #reportACTV(runCY)
   #reportPrice(runCY)
@@ -132,6 +134,6 @@ tryCatch({
 if (add_fullVALIDATION_mif == TRUE) {
   setwd("..")
   write.report(reporting_run, file = paste0("reporting_with_validation.mif"))
-  reporting_fullVALIDATION <- read.report("reporting.mif")
+  reporting_fullVALIDATION <- read.report("fullVALIDATION.mif")
   write.report(reporting_fullVALIDATION, file = "reporting_with_validation.mif", append=TRUE)
 }
