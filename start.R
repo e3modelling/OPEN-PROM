@@ -106,18 +106,31 @@ syncRun<- function() {
     files_to_archive <- all_files[!grepl("\\.gdx$", all_files, ignore.case = TRUE)]
   }
 
-  tar(tarfile = archive_name, files = files_to_archive, compression = "gzip", tar = "internal")
-
-  # Copy the archive to the user-specified directory
+  # Validate the model runs SharePoint path
   if (file.exists('config.json')) {
 
     config <- fromJSON('config.json')
     model_runs_path <- config$model_runs_path
-    destination_path <- file.path(model_runs_path, basename(archive_name))
 
-    if( file.copy(archive_name, destination_path, overwrite = TRUE) ) {
-      cat("File copied successfully to", destination_path, "\n")
-    } 
+    if(!is.null(model_runs_path) && file.exists(model_runs_path) && file.info(model_runs_path)$isdir) {
+     
+      # Copy the archive to the user-specified directory
+      tar(tarfile = archive_name, files = files_to_archive, compression = "gzip", tar = "internal")
+
+      destination_path <- file.path(model_runs_path, basename(archive_name))
+      if( file.copy(archive_name, destination_path, overwrite = TRUE) ) {
+        cat("File copied successfully to", destination_path, "\n")
+      } 
+
+    } else {
+      cat("Please enter a valid model runs SharePoint directory path.\n")
+      quit()      
+    }
+
+  } else if (!file.exists('config.json')) {
+
+    cat("Please create a configuration file (config.json).\n")
+    quit()
   }
 
   # Delete the archive if it exists
@@ -209,7 +222,7 @@ if (!is.null(task) && task == 0) {
       file.copy("data", to = '../../', recursive = TRUE) # Copying generated data to parent folder for future runs
       
       if(withSync) syncRun()
-      }        
+    }        
 
 } else if (!is.null(task) && task == 2) {
     
