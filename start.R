@@ -90,7 +90,7 @@ createRunFolder <- function(scenario = "default") {
   setwd(runfolder)
 }
 
-### Define a function that archives and uploads each model run to Google Drive
+### Define a function that archives and uploads each model run to a cloud
 syncRun<- function() {
 
   folder_path <- getwd()
