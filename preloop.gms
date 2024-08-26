@@ -497,9 +497,8 @@ VCostPowGenLngTechNoCp.L(runCy,PGALL,ESET,"%fBaseY%") = 0;
 VCostAvgPowGenLonNoClimPol.L(runCy,PGALL,ESET,"2010") = 0;
 VCostAvgPowGenLonNoClimPol.FX(runCy,PGALL,ESET,"%fBaseY%") = 0;
 
-VCarVal.fx(runCy,NAP,YTIME)$(not An(YTIME))=0;
-VCarVal.FX(runCy,"TRADE",YTIME)$an(YTIME) = sExogCarbValue*iCarbValYrExog(runCy,YTIME);
-VCarVal.FX(runCy,"NOTRADE",YTIME)$an(YTIME) =sExogCarbValue*iCarbValYrExog(runCy,YTIME);
+VCarVal.FX(runCy,"TRADE",YTIME) = sExogCarbValue*iCarbValYrExog(runCy,YTIME);
+VCarVal.FX(runCy,"NOTRADE",YTIME) =sExogCarbValue*iCarbValYrExog(runCy,YTIME);
 
 VCaptCummCO2.FX(runCy,YTIME)$(not an(YTIME)) = 0 ;
 
