@@ -18,6 +18,7 @@ saveMetadata<- function(DevMode) {
   commit_date <- system("git log -1 --format=%ad", intern = TRUE)
   branch_name <- system("git rev-parse --abbrev-ref HEAD", intern = TRUE)
   git_status <- system("git status -s", intern = TRUE)
+  system("git diff --output=git_diff.txt")
   
   if(length(git_status) == 0) git_status <- "There are no changes made."
   
@@ -88,6 +89,7 @@ createRunFolder <- function(scenario = "default") {
   file.copy(grep("*.R$",dir(), value = TRUE), to = runfolder)
   file.copy(grep("*.json$",dir(), value = TRUE), to = runfolder)
   file.copy("conopt.opt", to = runfolder)
+  file.copy("git_diff.txt", to = runfolder)  
   file.copy("data", to = runfolder, recursive = TRUE)
 
   # switch to the run folder
