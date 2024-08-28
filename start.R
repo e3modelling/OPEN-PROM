@@ -17,14 +17,18 @@ saveMetadata<- function(DevMode) {
   commit_comment <- system("git log -1 --format=%B", intern = TRUE)
   commit_date <- system("git log -1 --format=%ad", intern = TRUE)
   branch_name <- system("git rev-parse --abbrev-ref HEAD", intern = TRUE)
+  git_status <- system("git status -s", intern = TRUE)
+  
+  if(length(git_status) == 0) git_status <- "There are no changes made."
   
   # Organize Git information into a list
   git_info <- list(
     "Author" = commit_author,
-    "Commit Hash" = commit_hash,
+    "Branch Name" = branch_name,
     "Commit Comment" = commit_comment,
-    "Date" = commit_date,
-    "Branch Name" = branch_name
+    "Git Status" = git_status,
+    "Commit Hash" = commit_hash,
+    "Date" = commit_date
   )
  
   # Save the appropriate region mapping for each type of run (Development / Research).
