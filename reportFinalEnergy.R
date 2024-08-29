@@ -119,7 +119,7 @@ reportFinalEnergy <- function(regs) {
     write.report(by_energy_form_open[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario=scenario_name)
      
     # per fuel
-    FCONS_per_fuel <- FCONS_by_sector_and_EF_open[,,sets6[,1]]
+    FCONS_per_fuel <- FCONS_by_sector_and_EF_open[,,sets6[,1]][,,!(getItems(FCONS_by_sector_and_EF_open,3.2)) %in% (getItems(by_energy_form_and_by_subsector_open,3.2))]
     
     # remove . from magpie object and replace with |
     FCONS_per_fuel <- as.quitte(FCONS_per_fuel)
