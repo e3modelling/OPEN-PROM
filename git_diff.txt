@@ -1,0 +1,22 @@
+diff --git a/equations.gms b/equations.gms
+index 3bc4c40..7ce637f 100644
+--- a/equations.gms
++++ b/equations.gms
+@@ -802,7 +802,7 @@ QActivGoodsTransp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANG(TRANSE) $runCy(allCy))
+ QGapTranspActiv(allCy,TRANSE,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+          VGapTranspActiv(allCy,TRANSE,YTIME)
+                  =E=
+-         VNewRegPcYearly(allCy,YTIME)$sameas(TRANSE,"PC")
++         10E-6*(VNewRegPcYearly(allCy,YTIME)$sameas(TRANSE,"PC")
+          +
+          (
+          ( [VActivPassTrnsp(allCy,TRANSE,YTIME)/
+@@ -815,7 +815,7 @@ QGapTranspActiv(allCy,TRANSE,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+          ( [VActivGoodsTransp(allCy,TRANSE,YTIME)/
+          (sum((EF)$SECTTECH(TRANSE,EF),VLft(allCy,TRANSE,EF,YTIME-1))/TECHS(TRANSE))] + SQRT( SQR([VActivGoodsTransp(allCy,TRANSE,YTIME)/
+           (sum((EF)$SECTTECH(TRANSE,EF),VLft(allCy,TRANSE,EF,YTIME-1))/TECHS(TRANSE))]) + SQR(1e-4) ) )/2
+-         )$TRANG(TRANSE);
++         )$TRANG(TRANSE));
+ 
+ *' This equation calculates the specific fuel consumption for a given technology, subsector, energy form, and time. The specific fuel consumption depends on various factors,
+ *' including fuel prices and elasticities. The equation involves a product term over a set of Polynomial Distribution Lags and considers the elasticity of fuel prices.
