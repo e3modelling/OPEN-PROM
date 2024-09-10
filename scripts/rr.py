@@ -62,6 +62,7 @@ def check_files_and_list_subfolders(base_path, flag=False):
         main_lst_path = os.path.join(folder, "main.lst")
         main_log_path = os.path.join(folder, "main.log")
         modelstat_path = os.path.join(folder, "modelstat.txt")  # Added line
+        git_diff_path = os.path.join(folder, "git_diff.txt")  # Check for git_diff.txt file
 
         # Split the path and isolate folder name for printing
         folder_name = folder.split(os.sep)[-1]
@@ -75,6 +76,9 @@ def check_files_and_list_subfolders(base_path, flag=False):
             with open(main_gms_path, 'r') as file:
                 if "$setGlobal Calibration on" in file.read():
                     run_type = "Run: Calibration"
+
+        # Check for modification (presence of git_diff.txt)
+        modified_status = "Yes" if os.path.exists(git_diff_path) else "No"
 
         if not os.path.exists(main_gms_path):
             status = f"Missing: main.gms  Status: NOT A RUN".ljust(max_status_length)
@@ -129,7 +133,8 @@ def check_files_and_list_subfolders(base_path, flag=False):
                         status = f"main.log -> FAILED Status: FAILED      Year: {year}  Horizon: {end_horizon_year}".ljust(max_status_length)
                         color = Fore.RED
 
-        subfolder_status_list.append((f"{color} {folder_name:<{max_folder_name_length}} {status} {run_type}{Style.RESET_ALL}", folder))
+        # Include "Modified: Yes/No" in the status output
+        subfolder_status_list.append((f"{color} {folder_name:<{max_folder_name_length}} {status} {run_type} Modified: {modified_status}{Style.RESET_ALL}", folder))
 
     # Sort the subfolders list based on their creation time
     subfolder_status_list.sort(key=lambda x: os.path.getctime(x[1]), reverse=False)
