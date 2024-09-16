@@ -127,7 +127,7 @@ rCon         counter for the number of consumers              /0,1*19/
 nSet         auxiliary counter for the definition of Vr       /b1*b20/
 kpdl         counter for Polynomial Distribution Lag          /a1*a6/
 rc                                                            /1*3/
-rcc                                                           /1*12/
+rcc                                                           /1*18/
 
 
 ***       Sectoral Structure        *
@@ -629,7 +629,7 @@ SECTTECH(SBS,EF) Link between Model Subsectors and Fuels
 PC.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO,CHEVGSL,CHEVGDO)
 *PB.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO)
 GU.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO,CHEVGDO)
-(PT,GT).(GDO,ELC,MET)
+(PT,GT).(GDO,ELC)
 PA.(KRS)
 *(PN,GN).(GSL,GDO)
 GN.(GSL,GDO)
