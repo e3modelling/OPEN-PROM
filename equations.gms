@@ -348,7 +348,7 @@ QRenTechMatMult(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          1$(NOT PGREN(PGALL))
          +
          (
-           1/(1+exp(5*(
+           1/(1+exp(1*(
                  sum(PGRENEF$PGALLtoPGRENEF(PGALL,PGRENEF),
                  sum(PGALL2$(PGALLtoPGRENEF(PGALL2,PGRENEF) $PGREN(PGALL2)),
                  VCapElec2(allCy,PGALL2,YTIME-1))/VPotRenCurr(allCy,PGRENEF,YTIME))-0.6)))
@@ -1677,7 +1677,7 @@ QCaptCummCO2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QTrnsWghtLinToExp(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VTrnsWghtLinToExp(allCy,YTIME)
          =E=
-         1/(1+exp(-iElastCO2Seq(allCy,"mc_s")*( VCaptCummCO2(allCy,YTIME)/iElastCO2Seq(allCy,"pot")-iElastCO2Seq(allCy,"mc_m")))); 
+         0; 
 
 *' The equation calculates the cost curve for CO2 sequestration costs in Euro per ton of CO2 sequestered
 *' for a specific scenario and year. The cost curve is determined based on cumulative CO2 captured and
