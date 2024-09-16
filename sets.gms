@@ -132,16 +132,7 @@ rcc                                                           /1*12/
 
 ***       Sectoral Structure        *
 
-sct          Model Sectors
-/
-INDU   Industry
-TRAN   Transport
-TERT   Tertiary
-PSG    Power and Steam Generation
-BUN    Bunkers
-PCH    Petrochemical Industry
-OTHNEN Other non energy uses
-/
+
 
 ALLSBS   All sectors
 /
@@ -242,16 +233,6 @@ PG_SF6         "Electricity production, related with SF6"
 OI_SF6         "Other Industries activities, related with SF6"
 /
 
-SCTtoSBS(SCT, SBS)  Sectors to Subsectors
-/
-INDU.(IS,NF,CH,BM,PP,FD,EN,TX,OE,OI)
-TRAN.(PC,PT,PA,GU,GT,GN)
-TERT.(SE,AG,HOU)
-PSG.PG
-BUN.BU
-PCH.PCH
-OTHNEN.NEN
-/
 
 
 POLICIES_set
@@ -910,17 +891,6 @@ mc_m     value for the ratio of x to potential after which exponential is taking
 
 ETYPES           "Elasticities types"
 /a,b1,b2,b3,b4,b5,c,c1,c2,c3,c4,c5,aend,b3end,b4end/
-
-ELCPCHAR         "Factors controlling electricity price"
-/
-INDU     "Elecprice-eleccost in Industry"
-TERT     "Elecprice-eleccost in Tertiary"
-W_INDU   "Weight for production cost in industry"
-W_TERT   "Weight for production cost in tertiary"
-IND_RES  "Additive residual to electricity price for industry"
-TERT_RES  "Additive residual to electricity price for tertiary"
-VAT      "VAT"
-/
 
 ECONCHAR         "Technical - Economic characteristics for demand technologies"
 /
