@@ -59,6 +59,13 @@ reportFinalEnergy <- function(regs) {
       sets13 <- filter(sets4, EF != "")
       #sets13 <- sets13 %>% filter(EF %in% getItems(var_gdx[,,sets6[, 1]],3.2))
       map_subsectors <- sets13 %>% filter(SBS %in% as.character(sets6[, 1]))
+      DOMSE <- toolreadSets("sets.gms", "DOMSE")
+      DOMSE <- unlist(strsplit(DOMSE[, 1], ","))
+      DOMSE <- as.data.frame(DOMSE)
+      DOMSE[, 2] <- "BMSWAS"
+      DOMSE <- as.data.frame(DOMSE)
+      names(DOMSE) <- names(map_subsectors)
+      map_subsectors <- rbind(map_subsectors, DOMSE)
     }
     
     map_subsectors$EF = paste(map_subsectors$SBS, map_subsectors$EF, sep=".")

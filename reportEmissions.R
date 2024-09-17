@@ -10,6 +10,20 @@ reportEmissions <- function(regs) {
   iPlantEffByType <- readGDX('./blabla.gdx', "iPlantEffByType")[regs, , ]
   iCO2CaptRate <- readGDX('./blabla.gdx', "iCO2CaptRate")[regs, , ]
   
+  # Link between Model Subsectors and Fuels
+  sets4 <- toolreadSets("sets.gms", "SECTTECH")
+  sets4[6,] <- paste0(sets4[6,] , sets4[7,])
+  sets4 <- sets4[ - c(7),,drop = FALSE]
+  sets4[8,] <- paste0(sets4[8,] , sets4[9,], sets4[10,])
+  sets4 <- sets4[ - c(8, 9),,drop = FALSE]
+  sets4 <- separate_wider_delim(sets4,cols = 1, delim = ".", names = c("SBS","EF"))
+  sets4[["EF"]] <- sub("\\(","",sets4[["EF"]])
+  sets4[["EF"]] <- sub("\\)","",sets4[["EF"]])
+  sets4[["SBS"]] <- sub("\\(","",sets4[["SBS"]])
+  sets4[["SBS"]] <- sub("\\)","",sets4[["SBS"]])
+  sets4 <- separate_rows(sets4,EF)
+  sets4 <- separate_rows(sets4,SBS)
+  
   EFtoEFS <- toolreadSets("sets.gms", "EFtoEFS")
   EFtoEFS <- as.data.frame(EFtoEFS)
   EFtoEFS <- separate_wider_delim(EFtoEFS,cols = 1, delim = ".", names = c("EF","EFS"))
@@ -17,122 +31,57 @@ reportEmissions <- function(regs) {
   EFtoEFS[["EF"]] <- sub("\\)","",EFtoEFS[["EF"]])
   EFtoEFS <- EFtoEFS %>% separate_longer_delim(c(EF, EFS), delim = ",")
   
-  SECTTECH <- toolreadSets("sets.gms", "SECTTECH")
-  
-  SECTTECH <- SECTTECH[c(8,9,10), 1]
-  SECTTECH[1] <- gsub("\\.", ",", SECTTECH[1])
-  SECTTECH <- unlist(strsplit(SECTTECH, ","))
-  SECTTECH <- SECTTECH[c(4:29)]
-  SECTTECH <- gsub("\\(|\\)", "", SECTTECH)
-  SECTTECH <- as.data.frame(SECTTECH)
-  
-  SECTTECH <- SECTTECH %>% 
-    mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
-  
-  SECTTECH <- as.data.frame(SECTTECH)
-  
-  names(SECTTECH) <- sub("SECTTECH", "EF", names(SECTTECH))
-  qx <- left_join(SECTTECH, EFtoEFS, by = "EF")
-  qx <- select((qx), -c(EF))
-  
-  SECTTECH <- unique(qx)
-  names(SECTTECH) <- sub("EFS", "SECTTECH", names(SECTTECH))
-  
   IND <- toolreadSets("sets.gms", "INDDOM")
   IND <- unlist(strsplit(IND[, 1], ","))
   IND <- as.data.frame(IND)
-  INDDOM <- NULL
-  for (y in 1:nrow(IND)) {
-    p <- paste(IND[y,1], ".", SECTTECH[c(1:2, 4:12), 1])
-    p <- as.data.frame(p)
-    p <- p %>% 
-      mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
-    INDDOM <- rbind(INDDOM, p)
-  }
   
-  for (y in 11:nrow(IND)) {
-    p <- paste(IND[y,1], ".", SECTTECH[c(3, 13), 1])
-    p <- as.data.frame(p)
-    p <- p %>%
-      mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
-    INDDOM <- rbind(INDDOM, p)
-  }
+  map_INDDOM <- sets4 %>% filter(SBS %in% IND[,1])
   
-  INDDOM <- as.data.frame(INDDOM)
+  map_INDDOM <- filter(map_INDDOM, EF != "")
+  
+  qINDDOM <- left_join(map_INDDOM, EFtoEFS, by = "EF")
+  qINDDOM <- select((qINDDOM), -c(EF))
+  
+  qINDDOM <- unique(qINDDOM)
+  names(qINDDOM) <- sub("EFS", "SECTTECH", names(qINDDOM))
+  
+  qINDDOM <- paste0(qINDDOM[["SBS"]], ".", qINDDOM[["SECTTECH"]])
+  INDDOM <- as.data.frame(qINDDOM)
+  
+  DOMSE <- toolreadSets("sets.gms", "DOMSE")
+  DOMSE <- unlist(strsplit(DOMSE[, 1], ","))
+  DOMSE <- as.data.frame(DOMSE)
+  DOMSE <- paste0(DOMSE[["DOMSE"]], ".", "BMSWAS")
+  DOMSE <- as.data.frame(DOMSE)
+  names(DOMSE) <- names(INDDOM)
+  
+  INDDOM <- rbind(INDDOM, DOMSE)
   
   PGEF <- toolreadSets("sets.gms", "PGEF")
   PGEF <- as.data.frame(PGEF)
-  
+  # final consumption
   sum1 <- iCo2EmiFac[,,INDDOM[, 1]] * VConsFuel[,,INDDOM[, 1]]
   sum1 <- dimSums(sum1, 3, na.rm = TRUE)
-  
+  # input to power generation sector
   sum2 <- VInpTransfTherm[,,PGEF[,1]]*iCo2EmiFac[,,"PG"][,,PGEF[,1]]
   sum2 <- dimSums(sum2, 3, na.rm = TRUE)
-  
+  # input to district heating plants
   sum3 <- VTransfInputDHPlants * iCo2EmiFac[,,"PG"][,,getItems(VTransfInputDHPlants,3)]
   sum3 <- dimSums(sum3, 3, na.rm = TRUE)
-  
+  # consumption of energy branch
   sum4 <- VConsFiEneSec * iCo2EmiFac[,,"PG"][,,getItems(VConsFiEneSec,3)]
   sum4 <- dimSums(sum4, 3, na.rm = TRUE)
   
-  PC <- toolreadSets("sets.gms", "SECTTECH")
-  PC <- PC[1, 1]
-  PC <- regmatches(PC, gregexpr("(?<=\\().*?(?=\\))", PC, perl=T))[[1]]
-  PC <- unlist(strsplit(PC, ","))
-  PC <- as.data.frame(PC)
-  PC <- paste("PC", ".", PC[,1])
-  PC <- as.data.frame(PC)
-  PC <- PC %>% 
-    mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
-  GU <- toolreadSets("sets.gms", "SECTTECH")
-  GU <- GU[2, 1]
-  GU <- regmatches(GU, gregexpr("(?<=\\().*?(?=\\))", GU, perl=T))[[1]]
-  GU <- unlist(strsplit(GU, ","))
-  GU <- as.data.frame(GU)
-  GU <- paste("GU", ".", GU[,1])
-  GU <- as.data.frame(GU)
-  GU <- GU %>% 
-    mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
-  PT <- toolreadSets("sets.gms", "SECTTECH")
-  PT <- PT[3, 1]
-  PT <- regmatches(PT, gregexpr("(?<=\\().*?(?=\\))", PT, perl=T))[[1]]
-  PT <- unlist(strsplit(PT, ","))
-  PT <- as.data.frame(PT)
-  PT <- as.data.frame(PT[c(3:5),1])
-  PT <- paste("PT", ".", PT[,1])
-  PT <- as.data.frame(PT)
-  PT <- PT %>% 
-    mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
-  GT <- toolreadSets("sets.gms", "SECTTECH")
-  GT <- GT[3, 1]
-  GT <- regmatches(GT, gregexpr("(?<=\\().*?(?=\\))", GT, perl=T))[[1]]
-  GT <- unlist(strsplit(GT, ","))
-  GT <- as.data.frame(GT)
-  GT <- as.data.frame(GT[c(3:5),1])
-  GT <- paste("GT", ".", GT[,1])
-  GT <- as.data.frame(GT)
-  GT <- GT %>% 
-    mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
-  PA <- as.data.frame("PA.KRS")
-  GN <- toolreadSets("sets.gms", "SECTTECH")
-  GN <- GN[5, 1]
-  GN <- regmatches(GN, gregexpr("(?<=\\().*?(?=\\))", GN, perl=T))[[1]]
-  GN <- unlist(strsplit(GN, ","))
-  GN <- as.data.frame(GN)
-  GN <- paste("GN", ".", GN[,1])
-  GN <- as.data.frame(GN)
-  GN <- GN %>% 
-    mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
-  names(PC) <- "name"
-  names(PA) <- "name"
-  names(PT) <- "name"
-  names(GU) <- "name"
-  names(GT) <- "name"
-  names(GN) <- "name"
+  TRANSE <- toolreadSets("sets.gms", "TRANSE")
+  TRANSE <- unlist(strsplit(TRANSE[, 1], ","))
+  TRANSE <- as.data.frame(TRANSE)
   
-  map_TRANSECTOR <- rbind(PT,GT,PA,PC,GU,GN)
+  map_TRANSECTOR <- sets4 %>% filter(SBS %in% TRANSE[,1])
+  map_TRANSECTOR <- paste0(map_TRANSECTOR[["SBS"]], ".", map_TRANSECTOR[["EF"]])
+  map_TRANSECTOR <- as.data.frame(map_TRANSECTOR)
   
   sum5 <- VDemFinEneTranspPerFuel[,,map_TRANSECTOR[, 1]] * iCo2EmiFac[,,map_TRANSECTOR[, 1]]
+  # transport
   sum5 <- dimSums(sum5, 3, na.rm = TRUE)
   
   PGALLtoEF <- toolreadSets("sets.gms", "PGALLtoEF")
@@ -148,18 +97,13 @@ reportEmissions <- function(regs) {
   CCS <- PGALLtoEF[PGALLtoEF$PGALL %in% CCS$CCS, ]
   
   var_16 <- VProdElec[,,CCS[,1]] * 0.086 / iPlantEffByType[,,CCS[,1]] * iCo2EmiFac[,,"PG"][,,CCS[,2]] * iCO2CaptRate[,,CCS[,1]]
+  # CO2 captured by CCS plants in power generation
   sum6 <- dimSums(var_16,dim=3, na.rm = TRUE) 
   
-  SECTTECH2 <- toolreadSets("sets.gms", "SECTTECH")
-  SECTTECH2 <- SECTTECH2[11, 1]
-  SECTTECH2 <- regmatches(SECTTECH2, gregexpr("(?<=\\().*?(?=\\))", SECTTECH2, perl=T))[[1]]
-  SECTTECH2 <- unlist(strsplit(SECTTECH2, ","))
+  SECTTECH2 <- sets4 %>% filter(SBS %in% c("BU"))
+  SECTTECH2 <- paste0(SECTTECH2[["SBS"]], ".", SECTTECH2[["EF"]])
   SECTTECH2 <- as.data.frame(SECTTECH2)
-  SECTTECH2 <- paste("BU", ".", SECTTECH2[,1])
-  SECTTECH2 <- as.data.frame(SECTTECH2)
-  SECTTECH2 <- SECTTECH2 %>% 
-    mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
-  
+  # Bunkers
   sum7 <- iCo2EmiFac[,,SECTTECH2[,1]] * VConsFuel[,,SECTTECH2[,1]]
   sum7 <- dimSums(sum7,dim=3, na.rm = TRUE)
   
@@ -170,4 +114,21 @@ reportEmissions <- function(regs) {
   # write data in mif file
   write.report(total_CO2[,,],file="reporting.mif",model="OPEN-PROM",unit = "Mt CO2/yr",append=TRUE,scenario=scenario_name)
  
-  }
+  # Emi|CO2|Cumulated
+  
+  Cumulated <- as.quitte(total_CO2)
+  
+  Cumulated <- Cumulated %>% group_by(region) %>% mutate(value = cumsum(value))
+  
+  Cumulated <- as.data.frame(Cumulated)
+  
+  Cumulated <- as.quitte(Cumulated) %>% as.magpie()
+  
+  getItems(Cumulated, 3) <- paste0("Emi|CO2|Cumulated")
+  
+  Cumulated <- Cumulated /1000
+  
+  # write data in mif file
+  write.report(Cumulated,file="reporting.mif",model="OPEN-PROM",unit = "Gt CO2",append=TRUE,scenario=scenario_name)
+  
+   }
