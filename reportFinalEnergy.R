@@ -57,7 +57,6 @@ reportFinalEnergy <- function(regs) {
     
     if (sector[y] == "DOMSE") {
       sets13 <- filter(sets4, EF != "")
-      #sets13 <- sets13 %>% filter(EF %in% getItems(var_gdx[,,sets6[, 1]],3.2))
       map_subsectors <- sets13 %>% filter(SBS %in% as.character(sets6[, 1]))
       DOMSE <- toolreadSets("sets.gms", "DOMSE")
       DOMSE <- unlist(strsplit(DOMSE[, 1], ","))
