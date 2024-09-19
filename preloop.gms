@@ -536,8 +536,8 @@ VCostVarTechElec.scale(runCy,PGALL,YTIME)=max(VCostVarTechElec.l(runCy,PGALL,YTI
 QCostVarTechElec.scale(runCy,PGALL,YTIME)=max(VCostVarTechElec.l(runCy,PGALL,YTIME),1e-20);
 VNewInvElec.scale(runCy,YTIME)=VNewInvElec.l(runCy,YTIME);
 QNewInvElec.scale(runCy,YTIME)=VNewInvElec.l(runCy,YTIME);
-VActivPassTrnsp.scale(runCy,TRANP,YTIME)$(AN(YTIME) and not sameas(TRANP,"PC")) = VActivPassTrnsp.l(runCy,TRANP,YTIME);
-QActivPassTrnsp.scale(runCy,TRANP,YTIME)$(AN(YTIME) and not sameas(TRANP,"PC")) = VActivPassTrnsp.l(runCy,TRANP,YTIME);
+VActivPassTrnsp.scale(runCy,TRANP,YTIME)$(AN(YTIME) and not sameas(TRANP,"PC")) = max(VActivPassTrnsp.l(runCy,TRANP,YTIME),1e-20);
+QActivPassTrnsp.scale(runCy,TRANP,YTIME)$(AN(YTIME) and not sameas(TRANP,"PC")) = max(VActivPassTrnsp.l(runCy,TRANP,YTIME),1e-20);
 VCostTranspMatFac.scale(runCy,TRANSE,RCon,TTECH,YTIME)=max(VCostTranspMatFac.l(runCy,TRANSE,RCon,TTECH,YTIME),1e-20);
 QCostTranspMatFac.scale(runCy,TRANSE,RCon,TTECH,YTIME)=max(VCostTranspMatFac.l(runCy,TRANSE,RCon,TTECH,YTIME),1e-20);
 VTechSortVarCost.scale(runCy,TRANSE,Rcon,YTIME)=VTechSortVarCost.l(runCy,TRANSE,Rcon,YTIME);
@@ -548,6 +548,8 @@ VPriceFuelSepCarbonWght.scale(runCy,DSBS,EF,YTIME)=max(VPriceFuelSepCarbonWght.l
 QPriceFuelSepCarbonWght.scale(runCy,DSBS,EF,YTIME)=max(VPriceFuelSepCarbonWght.l(runCy,DSBS,EF,YTIME),1e-20);
 *VTrnsWghtLinToExp.scale(runCy,YTIME)=1.e-20;
 *QTrnsWghtLinToExp.scale(runCy,YTIME)=1.e-20;
+VCostVarTech.scale(runCy,PGALL,YTIME)=VCostVarTech.l(runCy,PGALL,YTIME);
+QCostVarTech.scale(runCy,PGALL,YTIME)=VCostVarTech.l(runCy,PGALL,YTIME);
 $ENDIF.calib
 
 loop an do !! start outer iteration loop (time steps)
