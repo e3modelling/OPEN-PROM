@@ -28,7 +28,7 @@ reportFinalEnergy <- function(regs) {
   sets4 <- toolreadSets("sets.gms", "SECTTECH")
   sets4[6,] <- paste0(sets4[6,] , sets4[7,])
   sets4 <- sets4[ - c(7),,drop = FALSE]
-  sets4[8,] <- paste0(sets4[8,] , sets4[9,], sets4[10,])
+  sets4[7,] <- paste0(sets4[7,] , sets4[8,], sets4[9,])
   sets4 <- sets4[ - c(8, 9),,drop = FALSE]
   sets4 <- separate_wider_delim(sets4,cols = 1, delim = ".", names = c("SBS","EF"))
   sets4[["EF"]] <- sub("\\(","",sets4[["EF"]])
@@ -37,6 +37,7 @@ reportFinalEnergy <- function(regs) {
   sets4[["SBS"]] <- sub("\\)","",sets4[["SBS"]])
   sets4 <- separate_rows(sets4,EF)
   sets4 <- separate_rows(sets4,SBS)
+  sets4 <- filter(sets4, EF != "")
   
   # OPEN-PROM sectors
   sector <- c("TRANSE", "INDSE", "DOMSE", "NENSE")
@@ -54,18 +55,6 @@ reportFinalEnergy <- function(regs) {
     FCONS_by_sector_and_EF_open <- var_gdx[,,sets6[, 1]]
     
     map_subsectors <- sets4 %>% filter(SBS %in% as.character(sets6[, 1]))
-    
-    if (sector[y] == "DOMSE") {
-      sets13 <- filter(sets4, EF != "")
-      map_subsectors <- sets13 %>% filter(SBS %in% as.character(sets6[, 1]))
-      DOMSE <- toolreadSets("sets.gms", "DOMSE")
-      DOMSE <- unlist(strsplit(DOMSE[, 1], ","))
-      DOMSE <- as.data.frame(DOMSE)
-      DOMSE[, 2] <- "BMSWAS"
-      DOMSE <- as.data.frame(DOMSE)
-      names(DOMSE) <- names(map_subsectors)
-      map_subsectors <- rbind(map_subsectors, DOMSE)
-    }
     
     map_subsectors$EF = paste(map_subsectors$SBS, map_subsectors$EF, sep=".")
     
@@ -96,8 +85,6 @@ reportFinalEnergy <- function(regs) {
     # Add electricity, Hydrogen, Biomass and Waste
     ELC <- toolreadSets("sets.gms", "ELCEF")
     sets5[nrow(sets5) + 1, ] <- ELC[1,1]
-    sets5[nrow(sets5) + 1, ] <- "H2F"
-    sets5[nrow(sets5) + 1, ] <- "BMSWAS"
     
     sets10 <- sets5 %>% filter(EF %in% getItems(var_gdx[,,sets6[, 1]],3.2))
     

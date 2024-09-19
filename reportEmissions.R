@@ -14,7 +14,7 @@ reportEmissions <- function(regs) {
   sets4 <- toolreadSets("sets.gms", "SECTTECH")
   sets4[6,] <- paste0(sets4[6,] , sets4[7,])
   sets4 <- sets4[ - c(7),,drop = FALSE]
-  sets4[8,] <- paste0(sets4[8,] , sets4[9,], sets4[10,])
+  sets4[7,] <- paste0(sets4[7,] , sets4[8,], sets4[9,])
   sets4 <- sets4[ - c(8, 9),,drop = FALSE]
   sets4 <- separate_wider_delim(sets4,cols = 1, delim = ".", names = c("SBS","EF"))
   sets4[["EF"]] <- sub("\\(","",sets4[["EF"]])
@@ -23,6 +23,7 @@ reportEmissions <- function(regs) {
   sets4[["SBS"]] <- sub("\\)","",sets4[["SBS"]])
   sets4 <- separate_rows(sets4,EF)
   sets4 <- separate_rows(sets4,SBS)
+  sets4 <- filter(sets4, EF != "")
   
   EFtoEFS <- toolreadSets("sets.gms", "EFtoEFS")
   EFtoEFS <- as.data.frame(EFtoEFS)
@@ -47,15 +48,6 @@ reportEmissions <- function(regs) {
   
   qINDDOM <- paste0(qINDDOM[["SBS"]], ".", qINDDOM[["SECTTECH"]])
   INDDOM <- as.data.frame(qINDDOM)
-  
-  DOMSE <- toolreadSets("sets.gms", "DOMSE")
-  DOMSE <- unlist(strsplit(DOMSE[, 1], ","))
-  DOMSE <- as.data.frame(DOMSE)
-  DOMSE <- paste0(DOMSE[["DOMSE"]], ".", "BMSWAS")
-  DOMSE <- as.data.frame(DOMSE)
-  names(DOMSE) <- names(INDDOM)
-  
-  INDDOM <- rbind(INDDOM, DOMSE)
   
   PGEF <- toolreadSets("sets.gms", "PGEF")
   PGEF <- as.data.frame(PGEF)
