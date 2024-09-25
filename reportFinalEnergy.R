@@ -19,10 +19,6 @@ reportFinalEnergy <- function(regs) {
   l <- getNames(VConsFinEneCountry) == "Final Energy|Total"
   getNames(VConsFinEneCountry)[l] <- "Final Energy"
   
-  VConsFinEneCountry_GLO <- dimSums(VConsFinEneCountry, 1)
-  getItems(VConsFinEneCountry_GLO, 1) <- "World"
-  VConsFinEneCountry <- mbind(VConsFinEneCountry, VConsFinEneCountry_GLO)
-  
   # write data in mif file
   write.report(VConsFinEneCountry[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",scenario=scenario_name)
   
@@ -66,10 +62,6 @@ reportFinalEnergy <- function(regs) {
     FCONS_by_sector_open <- toolAggregate(FCONS_by_sector_and_EF_open[,,unique(map_subsectors$EF)],dim=3,rel=map_subsectors,from="EF",to="SBS")
     getItems(FCONS_by_sector_open, 3) <- paste0("Final Energy|", sector_name[y],"|", getItems(FCONS_by_sector_open, 3))
     
-    FCONS_by_sector_open_GLO <- dimSums(FCONS_by_sector_open, 1)
-    getItems(FCONS_by_sector_open_GLO, 1) <- "World"
-    FCONS_by_sector_open <- mbind(FCONS_by_sector_open, FCONS_by_sector_open_GLO)
-    
     # write data in mif file
     write.report(FCONS_by_sector_open[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario=scenario_name)
     
@@ -109,20 +101,12 @@ reportFinalEnergy <- function(regs) {
     open_by_subsector_by_energy_form <- select(open_by_subsector_by_energy_form, -c("EF"))
     open_by_subsector_by_energy_form <- as.quitte(open_by_subsector_by_energy_form) %>% as.magpie()
     
-    open_by_subsector_by_energy_form_GLO <- dimSums(open_by_subsector_by_energy_form, 1)
-    getItems(open_by_subsector_by_energy_form_GLO, 1) <- "World"
-    open_by_subsector_by_energy_form <- mbind(open_by_subsector_by_energy_form, open_by_subsector_by_energy_form_GLO)
-    
     # write data in mif file
     write.report(open_by_subsector_by_energy_form[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario=scenario_name)
      
     # sector_by_energy_form
     by_energy_form_open <- dimSums(by_energy_form_and_by_subsector_open, 3.1, na.rm = TRUE)
     getItems(by_energy_form_open,3.1) <- paste0("Final Energy|", sector_name[y],"|", getItems(by_energy_form_open, 3.1))
-    
-    by_energy_form_open_GLO <- dimSums(by_energy_form_open, 1)
-    getItems(by_energy_form_open_GLO, 1) <- "World"
-    by_energy_form_open <- mbind(by_energy_form_open, by_energy_form_open_GLO)
     
     # write data in mif file
     write.report(by_energy_form_open[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario=scenario_name)
@@ -136,10 +120,6 @@ reportFinalEnergy <- function(regs) {
     FCONS_per_fuel <- select(FCONS_per_fuel, -c("EF"))
     FCONS_per_fuel <- as.quitte(FCONS_per_fuel) %>% as.magpie()
     getItems(FCONS_per_fuel, 3) <- paste0("Final Energy|", sector_name[y],"|", getItems(FCONS_per_fuel, 3))
-    
-    FCONS_per_fuel_GLO <- dimSums(FCONS_per_fuel, 1)
-    getItems(FCONS_per_fuel_GLO, 1) <- "World"
-    FCONS_per_fuel <- mbind(FCONS_per_fuel, FCONS_per_fuel_GLO)
     
     # write data in mif file
     write.report(FCONS_per_fuel[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario=scenario_name)

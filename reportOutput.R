@@ -131,6 +131,12 @@ tryCatch({
   }
 }
 
+  for (i in 1 : length(reporting_run)) {
+    add_region_GLO <- dimSums(reporting_run[[i]][[1]], 1)
+    getItems(add_region_GLO, 1) <- "World"
+    reporting_run[[i]][[1]] <- mbind(reporting_run[[i]][[1]], add_region_GLO)
+  }
+  
 if (add_fullVALIDATION_mif == TRUE) {
   setwd("..")
   write.report(reporting_run, file = paste0("reporting_with_validation.mif"))

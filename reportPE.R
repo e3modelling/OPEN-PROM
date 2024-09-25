@@ -23,10 +23,6 @@ reportPE <- function(regs) {
   l <- getNames(VProdPrimary) == "Primary Energy|Total"
   getNames(VProdPrimary)[l] <- "Primary Energy"
   
-  VProdPrimary_GLO <- dimSums(VProdPrimary, 1)
-  getItems(VProdPrimary_GLO, 1) <- "World"
-  VProdPrimary <- mbind(VProdPrimary, VProdPrimary_GLO)
-  
   # write data in mif file
   write.report(VProdPrimary[,,],file="reporting.mif",model="OPEN-PROM",append=TRUE,unit="Mtoe",scenario=scenario_name)
   
