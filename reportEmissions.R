@@ -101,12 +101,12 @@ reportEmissions <- function(regs) {
   
   total_CO2 <- sum1 + sum2 + sum3 + sum4 + sum5 - sum6 + sum7
   
-  getItems(total_CO2, 3) <- paste0("Emissions|CO2")
+  getItems(total_CO2, 3) <- "Emissions|CO2"
   
   # write data in mif file
   write.report(total_CO2[,,],file="reporting.mif",model="OPEN-PROM",unit = "Mt CO2/yr",append=TRUE,scenario=scenario_name)
  
-  # Emi|CO2|Cumulated
+  # Emissions|CO2|Cumulated
   
   Cumulated <- as.quitte(total_CO2)
   
@@ -116,7 +116,7 @@ reportEmissions <- function(regs) {
   
   Cumulated <- as.quitte(Cumulated) %>% as.magpie()
   
-  getItems(Cumulated, 3) <- paste0("Emi|CO2|Cumulated")
+  getItems(Cumulated, 3) <- "Emissions|CO2|Cumulated"
   
   Cumulated <- Cumulated /1000
   
