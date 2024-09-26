@@ -24,8 +24,7 @@ QPeakLoad                           !! VPeakLoad(runCy,YTIME)
 QBaseLoadMax                        !! VBaseLoadMax(runCy,YTIME)
 QBaseLoad                           !! VBaseLoad(runCy,YTIME)
 QProdElecReqTot                     !! VProdElecReqTot(runCy,YTIME)
-QCapElecTotEst                      !! VCapElecTotEst(runCy,YTIME)
-QCapElecTot                         !! VCapElecTot(runCy,YTIME)	
+QCapElecTotEst                      !! VCapElecTotEst(runCy,YTIME)	
 QCostHourProdInvDec                 !! VCostHourProdInvDec(runCy,PGALL,HOUR,YTIME)
 QCostHourProdInvDecNoCCS            !! VCostHourProdInvDecNoCCS(runCy,PGALL,HOUR,YTIME)
 QSensCCS                            !! VSensCCS(runCy,YTIME)
@@ -49,7 +48,6 @@ QScalWeibullSum                     !! VScalWeibullSum(runCy,PGALL,YTIME)
 QNewInvElec                         !! VNewInvElec(runCy,YTIME)
 QSharePowPlaNewEq                   !! VSharePowPlaNewEq(runCy,PGALL,YTIME)
 QCapElec                            !! VCapElec(runCy,PGALL,YTIME)
-QCapElec2                           !! VCapElec2(runCy,PGALL,YTIME)
 QCostVarTechElec                    !! VCostVarTechElec(runCy,PGALL,YTIME)
 QElecPeakLoads                      !! VElecPeakLoads(runCy,YTIME) 
 QSortPlantDispatch                  !! VSortPlantDispatch(runCy,PGALL,YTIME)
@@ -454,24 +452,23 @@ VBaseLoad.FX(runCy,YTIME)$(not An(YTIME)) = iPeakBsLoadBy(runCy,"BASELOAD");
 VPeakLoad.L(runCy,YTIME) = 1;
 VPeakLoad.FX(runCy,YTIME)$(datay(YTIME)) = VDemElecTot.l(runCy,YTIME)/(VLoadFacDom.l(runCy,YTIME)*8.76);
 
-VCapElecTot.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
+VCapElecTotEst.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
 
 VCapElecNonCHP.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
 
 VCapElecCHP.FX(runCy,CHP,YTIME)$(not An(YTIME)) = iHisChpGrCapData(runCy,CHP,YTIME);
 
 VSharePowPlaNewEq.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) )=0;
-
-VCapElec2.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = iInstCapPast(runCy,PGALL,YTIME);
+VCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  iInstCapPast(runCy,PGALL,YTIME);
 VRenTechMatMult.l(runCy,PGALL,YTIME)$DATAY(YTIME)=         1$(NOT PGREN(PGALL))
          +
          (
            1/(1+exp(5*(
                  sum(PGRENEF$PGALLtoPGRENEF(PGALL,PGRENEF),
                  sum(PGALL2$(PGALLtoPGRENEF(PGALL2,PGRENEF) $PGREN(PGALL2)),
-                 VCapElec2.l(runCy,PGALL2,YTIME-1))/VPotRenCurr.l(runCy,PGRENEF,YTIME))-0.6)))
+                 VCapElec.l(runCy,PGALL2,YTIME-1))/VPotRenCurr.l(runCy,PGRENEF,YTIME))-0.6)))
            )$PGREN(PGALL);
-VCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  iInstCapPast(runCy,PGALL,YTIME);
+
 
 VCapOverall.FX(runCy,PGALL,YTIME)$TFIRST(YTIME) =  iInstCapPast(runCy,PGALL,YTIME)$TFIRST(YTIME);
 
