@@ -6,7 +6,7 @@ Before using the `mrprom` package, you'll need to install a recent version of th
 
 ```
 options(repos = c(CRAN = "@CRAN@", pik = "https://rse.pik-potsdam.de/r/packages"))
-install.packages(devtools)
+install.packages("devtools")
 devtools::install_github("GAMS-dev/gdxrrw/gdxrrw")
 devtools::install_github("https://github.com/e3modelling/mrprom")
 ```
