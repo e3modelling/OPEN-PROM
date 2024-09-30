@@ -70,7 +70,7 @@ def create_fluctuation_map(df, large_fluctuations):
     fluctuation_map = pd.DataFrame(fluctuation_data)
 
     # Save fluctuation map to Excel on the Desktop
-    excel_path = "C:/Users/Plessias/Desktop/fluctuation_map.xlsx"
+    excel_path = "your/path/"
     fluctuation_map.to_excel(excel_path, index=False)
     print(f"Fluctuation map saved to {excel_path}")
 
@@ -104,5 +104,5 @@ def process_energy_data(file_path, threshold=0.2, visualize=False):
         plot_fluctuations(df, large_fluctuations)
 
 # Example of how to run the function
-file_path = "C:/Users/Plessias/OPEN-PROM/runs/Calib2_IND_remove_VCapElecTot_VCapElec_completely_2024-09-25_13-43-54/data/iMaxResPot.csv"  # Update with your actual file path
+file_path = "Update/with/your/actual/file/path"
 process_energy_data(file_path, threshold=0.2, visualize=True)  # Adjust threshold if needed
