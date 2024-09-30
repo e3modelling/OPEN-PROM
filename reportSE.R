@@ -20,7 +20,7 @@ reportSE <- function(regs) {
   # electricity production
   VProdElec_total <- dimSums(VProdElec, dim = 3, na.rm = TRUE)
   
-  getItems(VProdElec_total, 3) <- paste0("Secondary Energy|Electricity")
+  getItems(VProdElec_total, 3) <- "Secondary Energy|Electricity"
   
   # write data in mif file
   write.report(VProdElec_total[,,],file="reporting.mif",append=TRUE,model="OPEN-PROM",unit="TWh",scenario=scenario_name)
