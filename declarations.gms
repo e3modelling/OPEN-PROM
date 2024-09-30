@@ -259,12 +259,12 @@ QPriceFuelAvgSub(allCy,DSBS,YTIME)	                       "Compute average fuel 
 QPriceElecIndResConsu(allCy,ESET,YTIME)                    "Compute electricity price in Industrial and Residential Consumers"	
 *' *** Miscellaneous
 qDummyObj                                                  "Define dummy objective function"
-QCapElecCHPTot(allCy,PGALL,YTIME)
+*QCapElecCHPTot(allCy,PGALL,YTIME)
 ;
 
 
 Variables
-VCapElecCHPTot(allCy,PGALL,YTIME)
+*VCapElecCHPTot(allCy,PGALL,YTIME)
 *' *** Power Generation Variables
 VCapElecCHP(allCy,CHP,YTIME)	                           "Capacity of CHP Plants (GW)"
 VLambda(allCy,YTIME)	                                   "Parameter for load curve construction (1)"

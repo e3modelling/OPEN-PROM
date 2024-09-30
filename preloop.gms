@@ -54,7 +54,7 @@ QSortPlantDispatch                  !! VSortPlantDispatch(runCy,PGALL,YTIME)
 QNewCapElec                         !! VNewCapElec(runCy,PGALL,YTIME)
 QCFAvgRen                           !! VCFAvgRen(runCy,PGALL,YTIME)
 QCapOverall                         !! VCapOverall(runCy,PGALL,YTIME)
-QCapElecCHPTot
+*QCapElecCHPTot
 QScalFacPlantDispatch               !! VScalFacPlaDisp
 QProdElecEstCHP                     !! VProdElecEstCHP(runCy,YTIME) 
 QProdElecNonCHP                     !! VProdElecNonCHP(runCy,YTIME) 

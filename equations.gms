@@ -468,14 +468,15 @@ VCapElec(allCy,pgall,ytime)$ (not PGREN(PGALL))
 VCapOverall(allCy,PGALL,YTIME-1)
 /VCFAvgRen(allCy,PGALL,YTIME-1))$PGREN(PGALL);
 
-QCapElecCHPTot(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-VCapElecCHPTot(allCy,PGALL,YTIME) =E= 
-sum(CHP$CHPtoEON(CHP,PGALL),VCapElecCHP(allCy,CHP,YTIME));
+*QCapElecCHPTot(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+*VCapElecCHPTot(allCy,PGALL,YTIME) =E= 
+*sum(CHP$CHPtoEON(CHP,PGALL),VCapElecCHP(allCy,CHP,YTIME));
 *' This equation calculates the scaling factor for plant dispatching in a specific country , hour of the day,
 *' and time period . The scaling factor for determining the dispatch order of different power plants during a particular hour.
 QScalFacPlantDispatch(allCy,HOUR,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          sum(PGALL,
-                 (VCapOverall(allCy,PGALL,YTIME)+VCapElecCHPTot(allCy,PGALL,YTIME)                 )*
+                 (VCapOverall(allCy,PGALL,YTIME)+
+                 sum(CHP$CHPtoEON(CHP,PGALL),VCapElecCHP(allCy,CHP,YTIME)))*
                  exp(-VScalFacPlaDisp(allCy,HOUR,YTIME)/VSortPlantDispatch(allCy,PGALL,YTIME))
                  )
          =E=
@@ -1264,7 +1265,7 @@ QConsFuelInclHP(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(
          VConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)+
          (VShareTechNewEquip(allCy,DSBS,EF,YTIME)*VGapFinalDem(allCy,DSBS,YTIME))
 *'        $(VGapFinalDem.L(allCy,DSBS,YTIME)>0)
-         + (VConsElecNonSubIndTert(allCy,DSBS,YTIME))$(INDDOM(DSBS) $(ELCEF(EF)));
+         + (VConsElecNonSubIndTert(allCy,DSBS,YTIME))$(INDDOM(DSBS) and ELCEF(EF));
 
 *' This equation calculates the variable, including fuel electricity production cost per CHP plant and demand sector, taking into account the variable cost (other than fuel)
 *' per CHP type and the summation of fuel-related costs for each energy form . The calculation involves fuel prices, CO2 emission factors, boiler efficiency, electricity
