@@ -425,7 +425,7 @@ vDummyObj                                                  "Dummy maximisation v
 Positive Variables
 VCarVal(allCy,NAP,YTIME)                                   "Carbon prices for all countries (US$2015/tn CO2)"
 VRenValue(YTIME)                                           "Renewable value (US$2015/KWh)"
-VWCSF(allCy,TRANSE,TTECH,EF,YTIME)
+VWCSF(allCy,TRANSE,TTECH,EF,YTIME)                         "QConsSpecificFuel"
 VW(allCy,SBS,EF,YTIME)                                     "QShareTechNewEquip"
 VWPGC(allCy,PGALL,YTIME)                                   "QScalWeibullSum"
 VWPGD(allCy,PGALL,YTIME)                                   "QCostVarTechElec"
