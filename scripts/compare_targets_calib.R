@@ -125,7 +125,7 @@ names(compare_INDOM) <- sub("value.x","targets_vanilla", names(compare_INDOM))
 
 # difference between targets_vanilla and results_calib
 compare_INDOM <- compare_INDOM %>% mutate(targets_vanilla_results_calib = (100 * (abs(targets_vanilla - results_calib))) / (0.5 * (abs(targets_vanilla + results_calib)))) %>% 
-  filter(region == runCy[1] & period %in% an) %>% filter(targets_vanilla > 0.00001)
+  filter(region %in% runCy[1] & period %in% an) %>% filter(targets_vanilla > 0.00001)
 
 # take the column of the difference
 compare_INDOM <- compare_INDOM %>% select(region, period, SBS, EF, targets_vanilla_results_calib)
@@ -144,7 +144,7 @@ names(compare_TRANSE) <- sub("value.x","targets_vanilla", names(compare_TRANSE))
 
 # difference between targets_vanilla and results_calib
 compare_TRANSE <- compare_TRANSE %>% mutate(targets_vanilla_results_calib = (100 * (abs(targets_vanilla - results_calib))) / (0.5 * (abs(targets_vanilla + results_calib)))) %>% 
-  filter(region == runCy[1] & period %in% an) %>% filter(targets_vanilla > 0.00001)
+  filter(region %in% runCy[1] & period %in% an) %>% filter(targets_vanilla > 0.00001)
 
 # take the column of the difference
 compare_TRANSE <- compare_TRANSE %>% select(region, period, SBS, EF, targets_vanilla_results_calib)
