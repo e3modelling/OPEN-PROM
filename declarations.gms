@@ -334,6 +334,7 @@ VNewRegPcYearly(allCy,YTIME)                               "Passenger cars new r
 VNumPcScrap(allCy,YTIME)                                   "Scrapped passenger cars (million vehicles)"
 VActivPassTrnsp(allCy,TRANSE,YTIME)                        "Passenger transport acitivity (1)"
                                                                 !! - Activity for passenger cars is measured in (000)km
+                                                                !! - Activity for passenger aviation million passengers carried
                                                                 !! - Activity for all other passenger transportation modes is measured in Gpkm
 VPriceFuelAvgSub(allCy,DSBS,YTIME)                         "Average fuel prices per subsector (k$2015/toe)"
 VRateScrPc(allCy,YTIME)                                    "Scrapping rate of passenger cars (1)"
