@@ -1400,8 +1400,20 @@ parameter iCarbonPricesREMIND(YTIME) "Exogenous Carbon Prices from REMIND-MagPIE
 2100	518.313508804506
 /;
 
-* iCarbValYrExog(allCy,YTIME)$an(YTIME) = iEnvPolicies(allCy,"exogCV",YTIME);
-iCarbValYrExog(allCy,YTIME)$an(YTIME) = iCarbonPricesREMIND(YTIME); !! Testing the exogenous carbon prices from REMIND
+* iCarbValYrExog(allCy,YTIME)$an(YTIME) = iCarbonPricesREMIND(YTIME); !! Testing the exogenous carbon prices from REMIND
+
+* Setting the exogenous carbon price values based on the selected model scenario
+if %fScenario% eq 0 then
+     iCarbValYrExog(allCy,YTIME)$an(YTIME) = iEnvPolicies(allCy,"exogCV_NPi",YTIME);
+
+elseif %fScenario% eq 1 then
+     iCarbValYrExog(allCy,YTIME)$an(YTIME) = iEnvPolicies(allCy,"exogCV_1_5C",YTIME);
+
+elseif %fScenario% eq 2 then
+     iCarbValYrExog(allCy,YTIME)$an(YTIME) = iEnvPolicies(allCy,"exogCV_2C",YTIME);
+
+endif;
+
 
 table iMatrFactorData(SBS,EF,YTIME)       "Maturity factor per technology and subsector (1)"
 $ondelim
