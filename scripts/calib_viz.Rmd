@@ -4,6 +4,17 @@ output: flexdashboard::flex_dashboard
 runtime: shiny
 ---
 
+```{r}
+library(tidyverse)
+library(quitte)
+library(gdx) 
+library(plotly)
+
+gdx_ <- readGDX('../blabla.gdx', "iGDP")
+qx <- as.quitte(gdx_)
+
+```
+
 Inputs {.sidebar}
 -------------------------------------
 
@@ -17,6 +28,27 @@ Column
 ### Chart 1
     
 ```{r}
+
+# Filter for the specified region and remove rows with NA values in 'value'
+data_clean_mea <- qx %>%
+  filter(region == "CHA", !is.na(value))
+
+# Create the line plot
+fig <- plot_ly(data_clean_mea, 
+                x = ~period, 
+                y = ~value, 
+                type = 'scatter', 
+                mode = 'lines+markers', 
+                line = list(width = 2), 
+                marker = list(size = 10)) %>%
+      layout(title = "Line Plot of Value by Period for CHN Region",
+             xaxis = list(title = "Period"),
+             yaxis = list(title = "Value"))
+
+# Show the plot
+fig
+
+
 ```
     
 ### Chart 2
