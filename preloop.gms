@@ -159,9 +159,9 @@ QCstCO2SeqCsts                      !! VCstCO2SeqCsts(runCy,YTIME)
 
 *' * EMISSIONS CONSTRAINTS *
 
-$IF %Calibration% == off QGrnnHsEmisCO2Equiv                 !! VGrnnHsEmisCO2Equiv(NAP,YTIME)
-$IF %Calibration% == off qGrnnHsEmisCO2EquivAllCntr          !! vGrnnHsEmisCO2EquivAllCntr(YTIME) 
-*qExpendHouseEne                     !! vExpendHouseEne(runCy,YTIME)
+*QGrnnHsEmisCO2Equiv                 !! VGrnnHsEmisCO2Equiv(NAP,YTIME)
+*qGrnnHsEmisCO2EquivAllCntr          !! vGrnnHsEmisCO2EquivAllCntr(YTIME) 
+qExpendHouseEne                     !! vExpendHouseEne(runCy,YTIME)
 
 
 *' * Prices *
