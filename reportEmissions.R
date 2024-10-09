@@ -106,6 +106,89 @@ reportEmissions <- function(regs) {
   # write data in mif file
   write.report(total_CO2[,,],file="reporting.mif",model="OPEN-PROM",unit = "Mt CO2/yr",append=TRUE,scenario=scenario_name)
  
+  # Extra Emissions
+  # Emissions|CO2|Energy|Demand|Industry
+  INDSE <- toolreadSets("sets.gms", "INDSE") # Industrial SubSectors
+  INDSE <- unlist(strsplit(INDSE[, 1], ","))
+  INDSE <- as.data.frame(INDSE)
+  
+  map_INDSE <- sets4 %>% filter(SBS %in% INDSE[,1])
+  
+  map_INDSE <- filter(map_INDSE, EF != "")
+  
+  qINDSE <- left_join(map_INDSE, EFtoEFS, by = "EF")
+  qINDSE <- select((qINDSE), -c(EF))
+  
+  qINDSE <- unique(qINDSE)
+  names(qINDSE) <- sub("EFS", "SECTTECH", names(qINDSE))
+  
+  qINDSE <- paste0(qINDSE[["SBS"]], ".", qINDSE[["SECTTECH"]])
+  INDSE <- as.data.frame(qINDSE)
+  
+  # final consumption
+  sum_INDSE <- iCo2EmiFac[,,INDSE[, 1]] * VConsFuel[,,INDSE[, 1]]
+  sum_INDSE <- dimSums(sum_INDSE, 3, na.rm = TRUE)
+  
+  getItems(sum_INDSE, 3) <- "Emissions|CO2|Energy|Demand|Industry"
+  
+  # write data in mif file
+  write.report(sum_INDSE[,,],file="reporting.mif",model="OPEN-PROM",unit = "Mt CO2/yr",append=TRUE,scenario=scenario_name)
+  
+  # Emissions|CO2|Energy|Demand|Residential and Commercial
+  DOMSE <- toolreadSets("sets.gms", "DOMSE") # Tertiary SubSectors
+  DOMSE <- unlist(strsplit(DOMSE[, 1], ","))
+  DOMSE <- as.data.frame(DOMSE)
+  
+  map_DOMSE <- sets4 %>% filter(SBS %in% DOMSE[,1])
+  
+  map_DOMSE <- filter(map_DOMSE, EF != "")
+  
+  qDOMSE <- left_join(map_DOMSE, EFtoEFS, by = "EF")
+  qDOMSE <- select((qDOMSE), -c(EF))
+  
+  qDOMSE <- unique(qDOMSE)
+  names(qDOMSE) <- sub("EFS", "SECTTECH", names(qDOMSE))
+  
+  qDOMSE <- paste0(qDOMSE[["SBS"]], ".", qDOMSE[["SECTTECH"]])
+  DOMSE <- as.data.frame(qDOMSE)
+  
+  # final consumption
+  sum_DOMSE <- iCo2EmiFac[,,DOMSE[, 1]] * VConsFuel[,,DOMSE[, 1]]
+  sum_DOMSE <- dimSums(sum_DOMSE, 3, na.rm = TRUE)
+  
+  getItems(sum_DOMSE, 3) <- "Emissions|CO2|Energy|Demand|Residential and Commercial"
+  
+  # write data in mif file
+  write.report(sum_DOMSE[,,],file="reporting.mif",model="OPEN-PROM",unit = "Mt CO2/yr",append=TRUE,scenario=scenario_name)
+  
+  # Emissions|CO2|Energy|Demand|Transportation
+  sum_TRANSE <- sum5 # transport
+  
+  getItems(sum_TRANSE, 3) <- "Emissions|CO2|Energy|Demand|Transportation"
+  
+  # write data in mif file
+  write.report(sum_TRANSE[,,],file="reporting.mif",model="OPEN-PROM",unit = "Mt CO2/yr",append=TRUE,scenario=scenario_name)
+  
+  # Emissions|CO2|Energy|Demand|Bunkers
+  sum_Bunkers <- sum7 # Bunkers
+  
+  getItems(sum_Bunkers, 3) <- "Emissions|CO2|Energy|Demand|Bunkers"
+  
+  # write data in mif file
+  write.report(sum_Bunkers[,,],file="reporting.mif",model="OPEN-PROM",unit = "Mt CO2/yr",append=TRUE,scenario=scenario_name)
+  
+  # Emissions|CO2|Energy|Supply
+  # input to power generation sector, sum2
+  # input to district heating plants, sum3
+  # consumption of energy branch, sum4
+  # CO2 captured by CCS plants in power generation, sum6
+  sum_Supply <- sum2 + sum3 + sum4 - sum6
+  
+  getItems(sum_Supply, 3) <- "Emissions|CO2|Energy|Supply"
+
+  # write data in mif file
+  write.report(sum_Supply[,,],file="reporting.mif",model="OPEN-PROM",unit = "Mt CO2/yr",append=TRUE,scenario=scenario_name)
+  
   # Emissions|CO2|Cumulated
   
   Cumulated <- as.quitte(total_CO2)

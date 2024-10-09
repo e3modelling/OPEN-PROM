@@ -83,6 +83,7 @@ tryCatch({
     source("reportEmissions.R")
     source("reportACTV.R")
     source("reportGDP.R")
+    source("reportPOP.R")
     source("reportFinalEnergy.R")
     source("reportSE.R")
     source("reportPE.R")
@@ -116,7 +117,8 @@ tryCatch({
   reportEmissions(runCY)
   reportSE(runCY)
   reportPE(runCY)
-  #reportGDP(runCY)
+  reportGDP(runCY)
+  reportPOP(runCY)
   #reportACTV(runCY)
   #reportPrice(runCY)
 
