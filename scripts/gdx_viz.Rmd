@@ -13,6 +13,9 @@ library(plotly)
 gdx_ <- readGDX('../blabla.gdx', "iGDP")
 qx <- as.quitte(gdx_)
 
+# Read all symbols from GDX file
+gdx_info <- gdxInfo('../blabla.gdx', dump = FALSE, returnList = TRUE)
+
 ```
 
 Inputs {.sidebar}
