@@ -36,8 +36,30 @@ $include "./iElastA.csv"
 $offdelim
 ;
 iElastA.L(runCy,SBS,ETYPES,YTIME) = iElastAL("ELL",SBS,ETYPES,YTIME);
-iElastA.LO(runCy,SBS,ETYPES,YTIME) = -10;
-iElastA.UP(runCy,SBS,ETYPES,YTIME) = 10;
+iElastA.LO(runCy,SBS,"a",YTIME) = 0.001;
+iElastA.UP(runCy,SBS,"a",YTIME) = 10;
+iElastA.LO(runCy,SBS,"b1",YTIME) = -10;
+iElastA.UP(runCy,SBS,"b1",YTIME) = -0.001;
+iElastA.LO(runCy,SBS,"b2",YTIME) = -10;
+iElastA.UP(runCy,SBS,"b2",YTIME) = -0.001;
+iElastA.LO(runCy,SBS,"c",YTIME) = -10;
+iElastA.UP(runCy,SBS,"c",YTIME) = -0.001;
+iElastA.LO(runCy,SBS,"b3",YTIME) = -10;
+iElastA.UP(runCy,SBS,"b3",YTIME) = -0.001;
+iElastA.LO(runCy,SBS,"b4",YTIME) = -10;
+iElastA.UP(runCy,SBS,"b4",YTIME) = -0.001;
+iElastA.LO(runCy,SBS,"c1",YTIME) = -10;
+iElastA.UP(runCy,SBS,"c1",YTIME) = -0.001;
+iElastA.LO(runCy,SBS,"c2",YTIME) = -10;
+iElastA.UP(runCy,SBS,"c2",YTIME) = -0.001;
+iElastA.LO(runCy,SBS,"c3",YTIME) = -10;
+iElastA.UP(runCy,SBS,"c3",YTIME) = -0.001;
+iElastA.LO(runCy,SBS,"c4",YTIME) = -10;
+iElastA.UP(runCy,SBS,"c4",YTIME) = -0.001;
+iElastA.LO(runCy,SBS,"c4",YTIME) = -10;
+iElastA.UP(runCy,SBS,"c4",YTIME) = -0.001;
+iElastA.LO(runCy,SBS,"c5",YTIME) = -10;
+iElastA.UP(runCy,SBS,"c5",YTIME) = -0.001;
 $ENDIF.calib
 
 table iElastNonSubElecData(SBS,ETYPES,YTIME) "Elasticities of Non Substitutable Electricity (1)"
@@ -50,8 +72,14 @@ iElastNonSubElec(runCy,SBS,ETYPES,YTIME) = iElastNonSubElecData(SBS,ETYPES,YTIME
 $ELSE.calib
 variable iElastNonSubElec(allCy,SBS,ETYPES,YTIME)        "Elasticities of Non Substitutable Electricity (1)";
 iElastNonSubElec.L(runCy,SBS,ETYPES,YTIME) = iElastNonSubElecData(SBS,ETYPES,YTIME);
-iElastNonSubElec.LO(runCy,SBS,ETYPES,YTIME) = -10;
-iElastNonSubElec.UP(runCy,SBS,ETYPES,YTIME) = 100;
+iElastNonSubElec.LO(runCy,SBS,"a",YTIME) = 0.001;
+iElastNonSubElec.UP(runCy,SBS,"a",YTIME) = 10;
+iElastNonSubElec.LO(runCy,SBS,"b1",YTIME) = -10;
+iElastNonSubElec.UP(runCy,SBS,"b1",YTIME) = -0.001;
+iElastNonSubElec.LO(runCy,SBS,"b2",YTIME) = -10;
+iElastNonSubElec.UP(runCy,SBS,"b2",YTIME) = -0.001;
+iElastNonSubElec.LO(runCy,SBS,"c",YTIME) = -10;
+iElastNonSubElec.UP(runCy,SBS,"c",YTIME) = -0.001;
 $ENDIF.calib
 
 parameter iNatGasPriProElst(allCy)	          "Natural Gas primary production elasticity related to gross inland consumption (1)" /
