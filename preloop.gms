@@ -547,6 +547,22 @@ QPriceFuelSepCarbonWght.scale(runCy,DSBS,EF,YTIME)=max(VPriceFuelSepCarbonWght.l
 *QTrnsWghtLinToExp.scale(runCy,YTIME)=1.e-20;
 VCostVarTech.scale(runCy,PGALL,YTIME)=VCostVarTech.l(runCy,PGALL,YTIME);
 QCostVarTech.scale(runCy,PGALL,YTIME)=VCostVarTech.l(runCy,PGALL,YTIME);
+$ELSEIF.calib %Calibration% == off
+$GDXIN calib.gdx
+variable
+ViElastA(allCy,SBS,ETYPES,YTIME)
+ViElastNonSubElec(allCy,SBS,ETYPES,YTIME)
+ViMatureFacPlaDisp(allCy,PGALL,YTIME)
+ViMatrFactor(allCy,SBS,EF,YTIME)
+;
+execute_load 'calib.gdx', ViElastA=iElastA, ViElastNonSubElec=iElastNonSubElec, ViMatureFacPlaDisp=iMatureFacPlaDisp, ViMatrFactor=iMatrFactor;
+   
+* Close the GDX file
+$GDXIN
+iElastA(allCy,SBS,ETYPES,YTIME) = ViElastA.L(allCy,SBS,ETYPES,YTIME) ;                                   
+iElastNonSubElec(allCy,SBS,ETYPES,YTIME) = ViElastNonSubElec.L(allCy,SBS,ETYPES,YTIME) ;                                 
+iMatureFacPlaDisp(allCy,PGALL,YTIME) = ViMatureFacPlaDisp.L(allCy,PGALL,YTIME) ;                                  
+iMatrFactor(allCy,SBS,EF,YTIME) = ViMatrFactor.L(allCy,SBS,EF,YTIME) ;                                
 $ENDIF.calib
 
 loop an do !! start outer iteration loop (time steps)
