@@ -6,7 +6,7 @@ library(utils)
 library(mrprom)
 library(stringr)
 
-gdx <- "C:/Users/sioutas/github/open-prom-goxygen/OPEN-PROM/runs/USA"
+gdx <- "runs/CALUSA2100BOUNDS_2024-10-11_14-30-14"
 
 # Link between Model Subsectors and Fuels
 sets4 <- toolreadSets(system.file(file.path("extdata", "sets.gms"), package = "mrprom"), "SECTTECH")
@@ -34,14 +34,14 @@ sets4_INDSE <- filter(sets4, SBS %in% unique(INDSE[["INDSE"]]))
 sets4_INDSE[["EF"]] = paste(sets4_INDSE[["SBS"]], sets4_INDSE[["EF"]], sep=".")
 
 # Fuel consumption per fuel and subsector (Mtoe)
-iFuelConsPerFueSub <- readGDX(paste0(gdx, './blabla.gdx'), "iFuelConsPerFueSub")
+iFuelConsPerFueSub <- readGDX(paste0(gdx, '/blabla.gdx'), "iFuelConsPerFueSub")
 
 # Take the Fuels and sectors of INDSE
 iFuelConsPerFueSub_INDSE <- iFuelConsPerFueSub[,,sets4_INDSE[["EF"]]]
 iFuelConsPerFueSub_INDSE <- as.quitte(iFuelConsPerFueSub_INDSE)
 
 # Consumption of fuels in each demand subsector including heat from heatpumps (Mtoe)
-VConsFuelInclHP <- readGDX(paste0(gdx, './blabla.gdx'), "VConsFuelInclHP", field = 'l')
+VConsFuelInclHP <- readGDX(paste0(gdx, '/blabla.gdx'), "VConsFuelInclHP", field = 'l')
 
 # Take the Fuels and sectors of INDSE
 VConsFuelInclHP_INDSE <- VConsFuelInclHP[,,sets4_INDSE[["EF"]]]
@@ -92,7 +92,7 @@ map_TRANSECTOR <- sets4 %>% filter(SBS %in% TRANSE[,1])
 map_TRANSECTOR[["EF"]] = paste(map_TRANSECTOR[["SBS"]], map_TRANSECTOR[["EF"]], sep=".")
 
 # Final energy demand in transport subsectors per fuel (Mtoe)
-VDemFinEneTranspPerFuel <- readGDX(paste0(gdx, './blabla.gdx'), "VDemFinEneTranspPerFuel", field = 'l')
+VDemFinEneTranspPerFuel <- readGDX(paste0(gdx, '/blabla.gdx'), "VDemFinEneTranspPerFuel", field = 'l')
 
 # sectors and fuels of TRANSE
 VDemFinEneTranspPerFuel_TRANSE <- VDemFinEneTranspPerFuel[,,map_TRANSECTOR[["EF"]]]
@@ -114,9 +114,9 @@ compare_TRANSE <- left_join(iFuelConsPerFueSub_TRANSE, VDemFinEneTranspPerFuel_T
                                    "SBS", "EF", "period"))
 
 # for the country that calibration run
-runCy <- readGDX(paste0(gdx, './blabla.gdx'), "runCy")
+runCy <- readGDX(paste0(gdx, '/blabla.gdx'), "runCy")
 # years for which the model run
-an <- readGDX(paste0(gdx, './blabla.gdx'), "an")
+an <- readGDX(paste0(gdx, '/blabla.gdx'), "an")
 
 ### INDOM
 
@@ -135,7 +135,7 @@ compare_INDOM <- compare_INDOM %>%
   pivot_wider(names_from = period, values_from = targets_vanilla_results_calib)
 
 # write in csv
-write.csv(compare_INDOM, "results_INDOM.csv", row.names=FALSE)
+write.csv(compare_INDOM, paste0(gdx,"/results_INDDOM.csv"), row.names=FALSE)
 
 ### TRANSE
 
@@ -154,7 +154,7 @@ compare_TRANSE <- compare_TRANSE %>%
   pivot_wider(names_from = period, values_from = targets_vanilla_results_calib)
 
 # write in csv
-write.csv(compare_TRANSE, "results_TRANSE.csv", row.names=FALSE)
+write.csv(compare_TRANSE, paste0(gdx,"/results_TRANSE.csv"), row.names=FALSE)
 
 # to see the heatmap in excel
 # you select the values and then Home -> Conditional Formatting -> Color Scales and select a color
