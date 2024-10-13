@@ -39,7 +39,7 @@ QCostProdTeCHPreReplacAvail         !! VCostProdTeCHPreReplacAvail(runCy,PGALL,P
 QIndxEndogScrap                     !! VIndxEndogScrap(runCy,PGALL,YTIME)
 QCapElecNonCHP                      !! VCapElecNonCHP(runCy,YTIME)
 QGapGenCapPowerDiff                 !! VGapGenCapPowerDiff(runCy,YTIME)
-qScalWeibull                        !! vScalWeibull(runCy,PGALL,HOUR,YTIME) 
+*qScalWeibull                        !! vScalWeibull(runCy,PGALL,HOUR,YTIME) 
 QPotRenSuppCurve                    !! VPotRenSuppCurve(runCy,PGRENEF,YTIME)
 QPotRenMaxAllow                     !! VPotRenMaxAllow(runCy,PGRENEF,YTIME)
 qPotRenMinAllow                     !! vPotRenMinAllow(runCy,PGRENEF,YTIME)
@@ -158,14 +158,14 @@ QCstCO2SeqCsts                      !! VCstCO2SeqCsts(runCy,YTIME)
 
 *' * EMISSIONS CONSTRAINTS *
 
-*QGrnnHsEmisCO2Equiv                 !! VGrnnHsEmisCO2Equiv(NAP,YTIME)
-*qGrnnHsEmisCO2EquivAllCntr          !! vGrnnHsEmisCO2EquivAllCntr(YTIME) 
+QGrnnHsEmisCO2Equiv                 !! VGrnnHsEmisCO2Equiv(NAP,YTIME)
+qGrnnHsEmisCO2EquivAllCntr          !! vGrnnHsEmisCO2EquivAllCntr(YTIME) 
 qExpendHouseEne                     !! vExpendHouseEne(runCy,YTIME)
 
 
 *' * Prices *
 
-QPriceFuelSubsecCarVal                 !! VPriceFuelSubsecCarVal(runCy,SBS,EF,YTIME)
+QPriceFuelSubsecCarVal              !! VPriceFuelSubsecCarVal(runCy,SBS,EF,YTIME)
 QPriceFuelSepCarbonWght             !! VPriceFuelSepCarbonWght(runCy,DSBS,EF,YTIME)
 QPriceFuelAvgSub                    !! VPriceFuelAvgSub(runCy,DSBS,YTIME)
 QPriceElecIndResConsu               !! VPriceElecIndResConsu(runCy,ESET,YTIME)
@@ -506,64 +506,72 @@ VProdElecReqTot.fx(runCy,"%fBaseY%")=sum(pgall,VProdElec.L(runCy,pgall,"%fBaseY%
 $IFTHEN.calib %Calibration% == off
 $GDXIN input.gdx
    
-execute_load 'input.gdx', VW=VW, VWPGC=VWPGC, VWPGD=VWPGD, VWTAG=VWTAG, VWMPG=VWMPG, VWTF=VWTF, VWTT=VWTT, VWTAP=VWTAP, VWCRS=VWCRS, VWDFS=VWDFS, VWCT=VWCT, VWCENS=VWCENS, VWCSF=VWCSF;
+execute_load 'input.gdx', VW=VW, VWPGC=VWPGC, VWPGD=VWPGD, VWTAG=VWTAG, VWMPG=VWMPG, VWTF=VWTF, VWTT=VWTT, VWTAP=VWTAP, VWCRS=VWCRS, VWDFS=VWDFS, VWCT=VWCT, VWCENS=VWCENS, VWCSF=VWCSF, VWPID=VWPID, VWNCP=VWNCP;
    
 * Close the GDX file
 $GDXIN
-VW.FX(allCy,SBS,EF,YTIME) = VW.L(allCy,SBS,EF,YTIME) ;                                   
-VWPGC.FX(allCy,PGALL,YTIME) = VWPGC.L(allCy,PGALL,YTIME) ;                                 
-VWPGD.FX(allCy,PGALL,YTIME) = VWPGD.L(allCy,PGALL,YTIME) ;                                  
+VW.FX(allCy,SBS,EF,YTIME) = VW.L(allCy,SBS,EF,YTIME);                                   
+VWPGC.FX(allCy,TRANSE,RCon,TTECH,YTIME) = VWPGC.L(allCy,TRANSE,RCon,TTECH,YTIME);                                 
+VWPGD.FX(allCy,DSBS,EF,YTIME) = VWPGD.L(allCy,DSBS,EF,YTIME) ;                                  
 VWTAG.FX(allCy,TRANSE,YTIME) = VWTAG.L(allCy,TRANSE,YTIME) ;                                
 VWMPG.FX(allCy,YTIME) = VWMPG.L(allCy,YTIME) ;                                       
-VWTF.FX(allCy,TRANSE,TTECH,YTIME) = VWTF.L(allCy,TRANSE,TTECH,YTIME) ;                           
-VWTT.FX(allCy,TRANSE,TTECH,YTIME) = VWTT.L(allCy,TRANSE,TTECH,YTIME) ;                            
+VWTF.FX(allCy,EFS,YTIME) = VWTF.L(allCy,EFS,YTIME) ;                           
+VWTT.FX(allCy,PPRODEF,YTIME) = VWTT.L(allCy,PPRODEF,YTIME) ;                            
 VWTAP.FX(allCy,TRANSE,YTIME) = VWTAP.L(allCy,TRANSE,YTIME) ;                                 
 VWCRS.FX(allCy,DSBS,EF,YTIME) = VWCRS.L(allCy,DSBS,EF,YTIME) ;                                
 VWDFS.FX(allCy,DSBS,YTIME) = VWDFS.L(allCy,DSBS,YTIME) ;                                   
-VWCT.FX(allCy,DSBS,EF,YTIME) = VWCT.L(allCy,DSBS,EF,YTIME) ;
+VWCT.FX(allCy,YTIME) = VWCT.L(allCy,YTIME) ;
 VWCENS.FX(allCy,INDDOM,YTIME) = VWCENS.L(allCy,INDDOM,YTIME) ;
+VWPID.FX(allCy,PGALL,HOUR,YTIME) = VWPID.L(allCy,PGALL,HOUR,YTIME);
+VWNCP.FX(allCy,ESET,YTIME) = VWNCP.L(allCy,ESET,YTIME);
 $ELSE.calib
-VW.L(allCy,SBS,EF,YTIME) = 1 ;                                   
-VWPGC.L(allCy,PGALL,YTIME) = 1 ;                                 
-VWPGD.L(allCy,PGALL,YTIME) = 1 ;                                  
+VW.L(allCy,SBS,EF,YTIME)= 1 ;                                   
+VWPGC.L(allCy,TRANSE,RCon,TTECH,YTIME) = 1 ;                                 
+VWPGD.L(allCy,DSBS,EF,YTIME) = 1 ;                                  
 VWTAG.L(allCy,TRANSE,YTIME) = 1 ;                                
 VWMPG.L(allCy,YTIME) = 1 ;                                       
-VWTF.L(allCy,TRANSE,TTECH,YTIME) = 1 ;                           
-VWTT.L(allCy,TRANSE,TTECH,YTIME) = 1 ;                            
+VWTF.L(allCy,EFS,YTIME) = 1 ;                           
+VWTT.L(allCy,PPRODEF,YTIME) = 1 ;                            
 VWTAP.L(allCy,TRANSE,YTIME) = 1 ;                                 
 VWCRS.L(allCy,DSBS,EF,YTIME) = 1 ;                                
 VWDFS.L(allCy,DSBS,YTIME) = 1 ;                                   
-VWCT.L(allCy,DSBS,EF,YTIME) = 1 ; 
+VWCT.L(allCy,YTIME) = 1 ; 
 VWCENS.L(allCy,INDDOM,YTIME) = 1 ;  
-VWCSF.L(allCy,TRANSE,TTECH,EF,YTIME) = 1;                              
+VWCSF.L(allCy,TRANSE,TTECH,EF,YTIME) = 1;   
+VWPID.L(allCy,PGALL,HOUR,YTIME) = 1;
+VWNCP.L(allCy,ESET,YTIME) = 1;                      
 
-VW.UP(allCy,SBS,EF,YTIME) = 10 ;                                   
-VWPGC.UP(allCy,PGALL,YTIME) = 10 ;                                 
-VWPGD.UP(allCy,PGALL,YTIME) = 10 ;                                  
+VW.UP(allCy,SBS,EF,YTIME)= 10 ;                                   
+VWPGC.UP(allCy,TRANSE,RCon,TTECH,YTIME) = 10 ;                                 
+VWPGD.UP(allCy,DSBS,EF,YTIME) = 10 ;                                  
 VWTAG.UP(allCy,TRANSE,YTIME) = 10 ;                                
 VWMPG.UP(allCy,YTIME) = 10 ;                                       
-VWTF.UP(allCy,TRANSE,TTECH,YTIME) = 10 ;                           
-VWTT.UP(allCy,TRANSE,TTECH,YTIME) = 10 ;                            
+VWTF.UP(allCy,EFS,YTIME) = 10 ;                           
+VWTT.UP(allCy,PPRODEF,YTIME) = 10 ;                            
 VWTAP.UP(allCy,TRANSE,YTIME) = 10 ;                                 
 VWCRS.UP(allCy,DSBS,EF,YTIME) = 10 ;                                
 VWDFS.UP(allCy,DSBS,YTIME) = 10 ;                                   
-VWCT.UP(allCy,DSBS,EF,YTIME) = 10 ;
+VWCT.UP(allCy,YTIME) = 10 ;
 VWCENS.UP(allCy,INDDOM,YTIME) = 10 ;
 VWCSF.UP(allCy,TRANSE,TTECH,EF,YTIME) = 10;
+VWPID.UP(allCy,PGALL,HOUR,YTIME) = 10;
+VWNCP.UP(allCy,ESET,YTIME) = 10;
 
-VW.LO(allCy,SBS,EF,YTIME) = 1E-6 ;                                   
-VWPGC.LO(allCy,PGALL,YTIME) = 1E-6 ;                                 
-VWPGD.LO(allCy,PGALL,YTIME) = 1E-6 ;                                  
+VW.LO(allCy,SBS,EF,YTIME)= 1E-6 ;                                   
+VWPGC.LO(allCy,TRANSE,RCon,TTECH,YTIME)= 1E-6 ;                                 
+VWPGD.LO(allCy,DSBS,EF,YTIME) = 1E-6 ;                                  
 VWTAG.LO(allCy,TRANSE,YTIME) = 1E-6 ;                                
 VWMPG.LO(allCy,YTIME) = 1E-6 ;                                       
-VWTF.LO(allCy,TRANSE,TTECH,YTIME) = 1E-6 ;                           
-VWTT.LO(allCy,TRANSE,TTECH,YTIME) = 1E-6 ;                            
+VWTF.LO(allCy,EFS,YTIME) = 1E-6 ;                           
+VWTT.LO(allCy,PPRODEF,YTIME) = 1E-6 ;                            
 VWTAP.LO(allCy,TRANSE,YTIME) = 1E-6 ;                                 
 VWCRS.LO(allCy,DSBS,EF,YTIME) = 1E-6 ;                                
 VWDFS.LO(allCy,DSBS,YTIME) = 1E-6 ;                                   
-VWCT.LO(allCy,DSBS,EF,YTIME) = 1E-6 ;
+VWCT.LO(allCy,YTIME) = 1E-6 ;
 VWCENS.LO(allCy,INDDOM,YTIME) = 1E-6 ;
 VWCSF.LO(allCy,TRANSE,TTECH,EF,YTIME) = 1E-6;
+VWPID.LO(allCy,PGALL,HOUR,YTIME) = 1E-6;
+VWNCP.LO(allCy,ESET,YTIME) = 1E-6;
 
 $ENDIF.calib
 

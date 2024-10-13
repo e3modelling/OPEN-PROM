@@ -52,19 +52,20 @@ VOutTransfRefSpec.FX(runCy,EFS,YTIME)$(TIME(YTIME) $EFtoEFA(EFS,"LQD")) = VOutTr
 VConsFuelInclHP.FX(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF)) = VConsFuelInclHP.L(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF));
 VExp.FX(runCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS)) = VExp.L(runCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS));
 VConsGrssInlNotEneBranch.FX(runCy,EFS,YTIME)$TIME(YTIME) =  VConsGrssInlNotEneBranch.L(runCy,EFS,YTIME)$TIME(YTIME);
-VW.FX(runCy,SBS,EF,YTIME)$TIME(YTIME) = VW.L(runCy,SBS,EF,YTIME)$TIME(YTIME);
-VWPGC.FX(runCy,PGALL,YTIME)$TIME(YTIME) = VWPGC.L(runCy,PGALL,YTIME)$TIME(YTIME);                              
-VWPGD.FX(runCy,PGALL,YTIME)$TIME(YTIME) = VWPGD.L(runCy,PGALL,YTIME)$TIME(YTIME);                                  
-VWTAG.FX(runCy,TRANSE,YTIME)$TIME(YTIME) = VWTAG.L(runCy,TRANSE,YTIME)$TIME(YTIME);                                  
-VWMPG.FX(runCy,YTIME)$TIME(YTIME) = VWMPG.L(runCy,YTIME)$TIME(YTIME);                                         
-VWTF.FX(runCy,TRANSE,TTECH,YTIME)$TIME(YTIME) = VWTF.L(runCy,TRANSE,TTECH,YTIME)$TIME(YTIME);                             
-VWTT.FX(runCy,TRANSE,TTECH,YTIME)$TIME(YTIME) = VWTT.L(runCy,TRANSE,TTECH,YTIME)$TIME(YTIME);                            
-VWTAP.FX(runCy,TRANSE,YTIME)$TIME(YTIME) = VWTAP.L(runCy,TRANSE,YTIME)$TIME(YTIME);                                  
-VWCRS.FX(runCy,DSBS,EF,YTIME)$TIME(YTIME) = VWCRS.L(runCy,DSBS,EF,YTIME)$TIME(YTIME);                                 
-VWDFS.FX(runCy,DSBS,YTIME)$TIME(YTIME) = VWDFS.L(runCy,DSBS,YTIME)$TIME(YTIME);                                   
-VWCT.FX(runCy,DSBS,EF,YTIME)$TIME(YTIME) = VWCT.L(runCy,DSBS,EF,YTIME)$TIME(YTIME);
-VWCENS.FX(runCy,INDDOM,YTIME)$TIME(YTIME) = VWCENS.L(runCy,INDDOM,YTIME)$TIME(YTIME);
-VWCSF.FX(runCy,TRANSE,TTECH,EF,YTIME)$TIME(YTIME) = VWCSF.L(runCy,TRANSE,TTECH,EF,YTIME)$TIME(YTIME);
+VW.FX(allCy,SBS,EF,YTIME)$TIME(YTIME) = VW.L(allCy,SBS,EF,YTIME)$TIME(YTIME);                                   
+VWPGC.FX(allCy,TRANSE,RCon,TTECH,YTIME)$TIME(YTIME) = VWPGC.L(allCy,TRANSE,RCon,TTECH,YTIME)$TIME(YTIME);                                 
+VWPGD.FX(allCy,DSBS,EF,YTIME)$TIME(YTIME) = VWPGD.L(allCy,DSBS,EF,YTIME) $TIME(YTIME);                                  
+VWTAG.FX(allCy,TRANSE,YTIME)$TIME(YTIME) = VWTAG.L(allCy,TRANSE,YTIME) $TIME(YTIME);                                
+VWMPG.FX(allCy,YTIME)$TIME(YTIME) = VWMPG.L(allCy,YTIME) $TIME(YTIME);                                       
+VWTF.FX(allCy,EFS,YTIME)$TIME(YTIME) = VWTF.L(allCy,EFS,YTIME) $TIME(YTIME);                           
+VWTT.FX(allCy,PPRODEF,YTIME)$TIME(YTIME) = VWTT.L(allCy,PPRODEF,YTIME) $TIME(YTIME);                            
+VWTAP.FX(allCy,TRANSE,YTIME)$TIME(YTIME) = VWTAP.L(allCy,TRANSE,YTIME) $TIME(YTIME);                                 
+VWCRS.FX(allCy,DSBS,EF,YTIME)$TIME(YTIME) = VWCRS.L(allCy,DSBS,EF,YTIME) $TIME(YTIME);                                
+VWDFS.FX(allCy,DSBS,YTIME)$TIME(YTIME) = VWDFS.L(allCy,DSBS,YTIME) $TIME(YTIME);                                   
+VWCT.FX(allCy,YTIME)$TIME(YTIME) = VWCT.L(allCy,YTIME) $TIME(YTIME);
+VWCENS.FX(allCy,INDDOM,YTIME)$TIME(YTIME) = VWCENS.L(allCy,INDDOM,YTIME) $TIME(YTIME);
+VWPID.FX(allCy,PGALL,HOUR,YTIME)$TIME(YTIME) = VWPID.L(allCy,PGALL,HOUR,YTIME)$TIME(YTIME);
+VWNCP.FX(allCy,ESET,YTIME)$TIME(YTIME) = VWNCP.L(allCy,ESET,YTIME)$TIME(YTIME);
 endloop;  !! close countries loop
 endloop;  !! close outer iteration loop (time steps)
 putclose fStat;
