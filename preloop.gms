@@ -335,7 +335,7 @@ VDemElecTot.l(runCy,YTIME)=0.1;
 VDemElecTot.FX(runCy,YTIME)$(not An(YTIME)) =  1/0.086 * ( iFinEneCons(runCy,"ELC",YTIME) + sum(NENSE, iFuelConsPerFueSub(runCy,NENSE,"ELC",YTIME)) + iDistrLosses(runCy,"ELC",YTIME)
                                              + iTotEneBranchCons(runCy,"ELC",YTIME) - (iFuelImports(runCy,"ELC",YTIME)-iFuelExprts(runCy,"ELC",YTIME)));
 
-VRenTechMatMult.l(runCy,PGALL,YTIME)=0.1;
+VRenTechMatMult.l(runCy,PGALL,YTIME)=1;
 
 VActivGoodsTransp.l(runCy,TRANSE,YTIME)=0.1;
 VActivGoodsTransp.FX(runCy,TRANG,YTIME)$(not An(YTIME)) = iActv(YTIME,runCy,TRANG);
@@ -347,7 +347,7 @@ VRenValue.FX(YTIME) = 0 ;
 VCstCO2SeqCsts.l(runCy,YTIME)=1;
 *VCstCO2SeqCsts.FX(runCy,YTIME)$(not an(YTIME)) = iElastCO2Seq(allCy,"mc_b")
 
-VScalWeibullSum.l(runCy,PGALL,YTIME)=2;
+VScalWeibullSum.l(runCy,PGALL,YTIME)=2000;
 
 VCostHourProdInvDec.l(runCy,PGALL,HOUR,TT) = 0.0001;
 VCostHourProdInvDec.FX(runCy,PGALL,HOUR,YTIME)$((NOT AN(YTIME)))=0;
@@ -504,6 +504,40 @@ VLambda.L(runCy,YTIME)=0.21;
 VProdElecReqTot.fx(runCy,"%fBaseY%")=sum(pgall,VProdElec.L(runCy,pgall,"%fBaseY%"));
 
 openprom.optfile=1;
+
+openprom.scaleopt=1;
+
+VCostProdSpecTech.scale(runCy,PGALL,YTIME)=1e12;
+QCostProdSpecTech.scale(runCy,PGALL,YTIME)=VCostProdSpecTech.scale(runCy,PGALL,YTIME);
+VCostVarTechNotPGSCRN.scale(runCy,PGALL,YTIME)=1e6;
+QCostVarTechNotPGSCRN.scale(runCy,PGALL,YTIME)=VCostVarTechNotPGSCRN.scale(runCy,PGALL,YTIME);
+$ontext
+VScalFacPlaDisp.scale(runCy,HOUR,YTIME)=1e-11;
+QScalFacPlantDispatch.scale(runCy,HOUR,YTIME)=VScalFacPlaDisp.scale(runCy,HOUR,YTIME);
+VSortPlantDispatch.scale(runCy,PGALL,YTIME)=1e-11;
+QSortPlantDispatch.scale(runCy,PGALL,YTIME)=VSortPlantDispatch.scale(runCy,PGALL,YTIME);
+$offtext
+VCostVarTechElec.scale(runCy,PGALL,YTIME)=1e5;
+QCostVarTechElec.scale(runCy,PGALL,YTIME)=VCostVarTechElec.scale(runCy,PGALL,YTIME);
+VNewInvElec.scale(runCy,YTIME)=1e8;
+QNewInvElec.scale(runCy,YTIME)=VNewInvElec.scale(runCy,YTIME);
+*VActivPassTrnsp.scale(runCy,TRANP,YTIME)$(AN(YTIME) and not sameas(TRANP,"PC")) = max(VActivPassTrnsp.l(runCy,TRANP,YTIME),1e-20);
+*QActivPassTrnsp.scale(runCy,TRANP,YTIME)$(AN(YTIME) and not sameas(TRANP,"PC")) = max(VActivPassTrnsp.l(runCy,TRANP,YTIME),1e-20);
+VCostTranspMatFac.scale(runCy,TRANSE,RCon,TTECH,YTIME)=1e-7;
+QCostTranspMatFac.scale(runCy,TRANSE,RCon,TTECH,YTIME)=VCostTranspMatFac.scale(runCy,TRANSE,RCon,TTECH,YTIME);
+VTechSortVarCost.scale(runCy,TRANSE,Rcon,YTIME)=1e-8;
+QTechSortVarCost.scale(runCy,TRANSE,Rcon,YTIME)=VTechSortVarCost.scale(runCy,TRANSE,Rcon,YTIME);
+VShareTechTr.scale(runCy,TRANSE,EF2,YTIME)=1e-6;
+QShareTechTr.scale(runCy,TRANSE,EF2,YTIME)=VShareTechTr.scale(runCy,TRANSE,EF2,YTIME);
+VPriceFuelSepCarbonWght.scale(runCy,DSBS,EF,YTIME)=1e-6;
+QPriceFuelSepCarbonWght.scale(runCy,DSBS,EF,YTIME)=VPriceFuelSepCarbonWght.scale(runCy,DSBS,EF,YTIME);
+*VTrnsWghtLinToExp.scale(runCy,YTIME)=1.e-20;
+*QTrnsWghtLinToExp.scale(runCy,YTIME)=1.e-20;
+VCostVarTech.scale(runCy,PGALL,YTIME)=1e-5;
+QCostVarTech.scale(runCy,PGALL,YTIME)=VCostVarTech.scale(runCy,PGALL,YTIME);
+VScalWeibullSum.scale(runCy,PGALL,YTIME)=1e6;
+QScalWeibullSum.scale(runCy,PGALL,YTIME)=VScalWeibullSum.scale(runCy,PGALL,YTIME);
+
 loop an do !! start outer iteration loop (time steps)
    s = s + 1;
    TIME(YTIME) = NO;
