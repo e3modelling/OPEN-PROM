@@ -11,6 +11,15 @@ library(stringr)
 library(jsonlite)
 library(reticulate)
 
+source("reportPrice.R")
+source("reportEmissions.R")
+source("reportACTV.R")
+source("reportGDP.R")
+source("reportPOP.R")
+source("reportFinalEnergy.R")
+source("reportSE.R")
+source("reportPE.R")
+
 # add mif from fullVALIDATION
 add_fullVALIDATION_mif = TRUE
 
@@ -78,15 +87,6 @@ tryCatch({
     x <- runpath[1, i]
     x <- gsub("\\\\", "/", x)
     setwd(x)
-  
-    source("reportPrice.R")
-    source("reportEmissions.R")
-    source("reportACTV.R")
-    source("reportGDP.R")
-    source("reportPOP.R")
-    source("reportFinalEnergy.R")
-    source("reportSE.R")
-    source("reportPE.R")
   
     # Add error handling for GDX file reading
     runCY <- tryCatch(
