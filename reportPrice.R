@@ -34,8 +34,9 @@ reportPrice <- function(regs) {
   sets4 <- filter(sets4, EF != "")
   
   # OPEN-PROM sectors
-  sector <- c("TRANSE", "INDSE", "DOMSE", "NENSE")
-  sector_name <- c("Transportation", "Industry", "Residential and Commercial", "Non Energy and Bunkers")
+  sector <- c("TRANSE", "INDSE", "DOMSE", "NENSE", "PG")
+  sector_name <- c("Transportation", "Industry", "Residential and Commercial", "Non Energy and Bunkers",
+                   "Power and Steam Generation")
   
   iFuelPrice_total <- readGDX('./blabla.gdx', "iFuelPrice")[regs, , ]
   iFuelPrice_total_sum <- dimSums(iFuelPrice_total, 3, na.rm = TRUE)
@@ -54,8 +55,12 @@ reportPrice <- function(regs) {
   
   for (y in 1 : length(sector)) {
     # read GAMS set used for reporting of Final Energy different for each sector
-    sets6 <- toolreadSets("sets.gms", sector[y])
-    sets6 <- separate_rows(sets6, paste0(sector[y],"(DSBS)"))
+    sets6 <- NULL
+    # load current OPENPROM set configuration for each sector
+    try(sets6 <- toolreadSets("sets.gms", sector[y]))
+    try(sets6 <- separate_rows(sets6, paste0(sector[y],"(DSBS)")))
+    try(sets6 <- as.data.frame(sets6))
+    if (is.null(sets6[1,1])) sets6 <- sector[y]
     sets6 <- as.data.frame(sets6)
     
     map_subsectors <- sets4 %>% filter(SBS %in% as.character(sets6[, 1]))
@@ -219,57 +224,25 @@ reportPrice <- function(regs) {
     
     # filter data to choose correct (sub)sectors and fuels
     out <- NULL
-    for (i in c("NENSE", "DOMSE", "INDSE", "TRANSE", "PG")) { # define main OPEN-PROM sectors that we need data for
-      sets <- NULL
-      # load current OPENPROM set configuration for each sector
-      try(sets <- toolreadSets(system.file(file.path("extdata", "sets.gms"), package = "mrprom"), i))
-      try(sets <- unlist(strsplit(sets[, 1], ",")))
-      if (is.null(sets)) sets <- i
       
-      ## filter mapping to keep only i sectors
-      map <- filter(map0, map0[, "SBS"] %in% sets)
-      ## ..and only items that have an enerdata-prom mapping
-      enernames <- unique(map[!is.na(map[, "ENERDATA"]), "ENERDATA"])
-      map <- map[map[, "ENERDATA"] %in% enernames, ]
-      ## rename variables from ENERDATA to openprom names
-      ff <- paste(map[, 2], map[, 3], sep = ".")
-      iii <- 0
-      ### add a dummy dimension to data because mapping has 3 dimensions, and data only 2
-      for (ii in map[, "ENERDATA"]) {
-        iii <- iii + 1
-        out <- mbind(out, setNames(add_dimension(x[, , ii], dim = 3.2), paste0(ff[iii], ".", sub("^.*.\\.", "", getNames(x[, , ii])))))
-      }
+    ## filter mapping to keep only i sectors
+    map_enerdata <- filter(map0, map0[, "SBS"] %in% sets6[ ,1])
+    ## ..and only items that have an enerdata-prom mapping
+    enernames <- unique(map_enerdata[!is.na(map_enerdata[, "ENERDATA"]), "ENERDATA"])
+    map_enerdata <- map_enerdata[map_enerdata[, "ENERDATA"] %in% enernames, ]
+    ## rename variables from ENERDATA to openprom names
+    ff <- paste(map_enerdata[, 2], map_enerdata[, 3], sep = ".")
+    iii <- 0
+    ### add a dummy dimension to data because mapping has 3 dimensions, and data only 2
+    for (ii in map_enerdata[, "ENERDATA"]) {
+      iii <- iii + 1
+      out <- mbind(out, setNames(add_dimension(x[, , ii], dim = 3.2), paste0(ff[iii], ".", sub("^.*.\\.", "", getNames(x[, , ii])))))
     }
-    ### add new openprom names not existing in ENERDATA
-    out <- complete_magpie(out)
-    out[, , "HOU"] <- 2 * out[, , "IS"]
-    # AG/SE = HOU
-    # NEN = PCH
-    tmp <- out[, , "HOU"]
-    getNames(tmp) <- sub("HOU", "AG", getNames(tmp))
-    out <- mbind(out, tmp)
-    getNames(tmp) <- sub("AG", "SE", getNames(tmp))
-    out <- mbind(out, tmp)
-    tmp <- out[, , "PCH"]
-    getNames(tmp) <- sub("PCH", "NEN", getNames(tmp))
-    out <- mbind(out, tmp)
-    out[, , "OLQ"] <- out[, , "RFO"]
-    out <- collapseNames(out)
     
     # complete incomplete time series
     x <- as.quitte(out) %>%
       interpolate_missing_periods(period = getYears(out, as.integer = TRUE), expand.values = TRUE) %>%
       as.magpie()# %>%
-    tmp <- x[, , "LGN"]
-    getNames(tmp) <- gsub("LGN$", "STE1AB", getNames(tmp))
-    x <- mbind(x, tmp)
-    x[, , "STE1AB"] <- 300
-    getNames(tmp) <- gsub("STE1AB", "BMSWAS", getNames(tmp))
-    x <- mbind(x, tmp)
-    x[, , "BMSWAS"] <- 300
-    getNames(tmp) <- gsub("BMSWAS$", "STE2BMS", getNames(tmp))
-    x <- mbind(x, tmp)
-    x[, , "STE2BMS"] <- 300
     
     PRICE_by_sector_and_EF_enerdata <- x
     # complete names
@@ -305,8 +278,8 @@ reportPrice <- function(regs) {
     PRICE_total_ENERDATA_PROM_sector <- dimSums(PRICE_by_sector_and_EF_enerdata, na.rm = TRUE)
     
     # complete names
-    getItems(PRICE_by_EF_ENERDATA_PROM, 3) <- paste0("Price|Final Energy|", sector_name[y],"|", getItems(PRICE_by_EF_OPEN_PROM, 3))
-    getItems(PRICE_by_sector_ENERDATA_PROM, 3) <- paste0("Price|Final Energy|", sector_name[y],"|", getItems(PRICE_by_sector_OPEN_PROM, 3))
+    getItems(PRICE_by_EF_ENERDATA_PROM, 3) <- paste0("Price|Final Energy|", sector_name[y],"|", getItems(PRICE_by_EF_ENERDATA_PROM, 3))
+    getItems(PRICE_by_sector_ENERDATA_PROM, 3) <- paste0("Price|Final Energy|", sector_name[y],"|", getItems(PRICE_by_sector_ENERDATA_PROM, 3))
     getItems(PRICE_total_ENERDATA_PROM_sector, 3) <- paste0("Price|Final Energy|", sector_name[y])
     
     # write data in mif PRICE_by_EF_ENERDATA_PROM
@@ -314,7 +287,8 @@ reportPrice <- function(regs) {
     write.report(PRICE_by_sector_ENERDATA_PROM[, years_in_horizon, ], file = "reporting.mif", model = "ENERDATA", unit = "k$2015/toe",append = TRUE, scenario = "Validation")
     write.report(PRICE_total_ENERDATA_PROM_sector[, years_in_horizon, ], file = "reporting.mif", model = "ENERDATA", unit = "k$2015/toe",append = TRUE, scenario = "Validation")
     
-    fuels_enerdata <- dimSums(PRICE_by_sector_and_EF_enerdata, 3.1, na.rm = TRUE)
+    fuels_enerdata <- dimSums(x, 3.1, na.rm = TRUE)
+    fuels_enerdata <- dimSums(fuels_enerdata, 3.1, na.rm = TRUE)
     
     # Aggregate model by subsector and by energy form
     ef_toefa_map <- sets5 %>% filter(EF %in% as.character(getItems(fuels_enerdata,3)))
@@ -353,11 +327,11 @@ reportPrice <- function(regs) {
   elec_prices_MENA <- elec_prices_MENA[, c(fStartHorizon : lastYear), ] 
   
   #choose Industrial consumer /i/
-  MENA_Industrial <- elec_prices_MENA[,years,sets_i[1,1]]
+  MENA_Industrial <- elec_prices_MENA[,,sets_i[1,1]]
   # complete names
   getNames(MENA_Industrial) <- "Price|Final Energy|Industry|Electricity"
   #choose Residential consumer /r/
-  MENA_Residential <- elec_prices_MENA[,years,sets_r[1,1]]
+  MENA_Residential <- elec_prices_MENA[,,sets_r[1,1]]
   # complete names
   getNames(MENA_Residential) <- "Price|Final Energy|Residential|Electricity"
   #combine Industrial and Residential MENA
@@ -406,10 +380,8 @@ reportPrice <- function(regs) {
   write.report(elec_prices_ENERDATA[, years_in_horizon, ], file = "reporting.mif", model = "ENERDATA", unit = "US$2015/KWh",append = TRUE, scenario = "Validation")
   
   # Navigate
-  map_price_navigate <- c("Price|Final Energy|Industry|Electricity","Price|Final Energy|Residential|Electricity",
-                          "Price|Final Energy|Industry|Gases", "Price|Final Energy|Industry|Liquids",
-                          "Price|Final Energy|Industry|Solids", "Price|Final Energy|Residential and Commercial|Electricity",
-                          "Price|Final Energy|Transportation|Electricity")
+  map_price_navigate <- c("Price|Final Energy|Industry|Gases", "Price|Final Energy|Industry|Liquids",
+                          "Price|Final Energy|Industry|Solids", "Price|Final Energy|Transportation|Electricity")
   
   Navigate_p <- Navigate_Con_F_calc[,,map_price_navigate]
   
@@ -424,5 +396,43 @@ reportPrice <- function(regs) {
   Navigate_p <- Navigate_p * 1.087 * 41.868 / 1000 # US$2010/GJ to k$2015/toe
   
   write.report(Navigate_p[, years_in_horizon, ], file = "reporting.mif", append = TRUE)
+  
+  
+  # Navigate
+  map_price_navigate <- c("Price|Final Energy|Industry|Electricity","Price|Final Energy|Residential|Electricity",
+                          "Price|Final Energy|Residential and Commercial|Electricity")
+  
+  Navigate_p <- Navigate_Con_F_calc[,,map_price_navigate]
+  
+  Navigate_p <- as.quitte(Navigate_p) %>%
+    interpolate_missing_periods(period = getYears(Navigate_p,as.integer=TRUE)[1]:getYears(Navigate_p,as.integer=TRUE)[length(getYears(Navigate_p))], expand.values = TRUE)
+  
+  Navigate_p <- as.quitte(Navigate_p) %>% as.magpie()
+  years_in_horizon <-  horizon[horizon %in% getYears(Navigate_p, as.integer = TRUE)]
+  
+  getItems(Navigate_p, 3.4) <- "US$2015/KWh"
+  
+  Navigate_p <- Navigate_p * 1.087 / 277.778 # US$2010/GJ to US$2015/KWh
+  
+  write.report(Navigate_p[, years_in_horizon, ], file = "reporting.mif", append = TRUE)
+  
+  
+  
+  Navigate_p <- Navigate_Con_F_calc[,,"Price|Carbon"]
+  
+  Navigate_p <- as.quitte(Navigate_p) %>%
+    interpolate_missing_periods(period = getYears(Navigate_p,as.integer=TRUE)[1]:getYears(Navigate_p,as.integer=TRUE)[length(getYears(Navigate_p))], expand.values = TRUE)
+  
+  Navigate_p <- as.quitte(Navigate_p) %>% as.magpie()
+  years_in_horizon <-  horizon[horizon %in% getYears(Navigate_p, as.integer = TRUE)]
+  
+  getItems(Navigate_p, 3.4) <- "US$2015/tn CO2"
+  
+  Navigate_p <- Navigate_p * 1.087 # US$2010/t CO2 to US$2015/tn CO2
+  
+  write.report(Navigate_p[, years_in_horizon, ], file = "reporting.mif", append = TRUE)
+  
+  
+  
   
 }
