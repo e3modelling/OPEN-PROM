@@ -928,8 +928,8 @@ loop(PGALL,YTIME)$AN(YTIME) DO
          abort $(iGrossCapCosSubRen(PGALL,YTIME)<0) "CAPITAL COST IS NEGATIVE", iGrossCapCosSubRen
 ENDLOOP;
 
-*VCapElecTot.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
-*VCapElecTotEst.L(runCy,TT) = iResMargTotAvailCap(runCy,"TOT_CAP_RES",TT) * VCapElecTot.L(runCy,TT-1)
+*VCapElecTotEst.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
+*VCapElecTotEst.L(runCy,TT) = iResMargTotAvailCap(runCy,"TOT_CAP_RES",TT) * VCapElecTotEst.L(runCy,TT-1)
 *        * VPeakLoad.L(runCy,TT)/VPeakLoad.L(runCy,TT-1);
 table iDataElecSteamGen(allCy,PGOTH,YTIME)	          "Various Data related to electricity and steam generation (1)"
 $ondelim
@@ -1032,7 +1032,7 @@ PGASHYD	0.00050,
 PGAWND	0.60000,
 PGASOL	0.00050,
 PGADPV	0.00010,
-PGAOTHREN	0.00000,
+PGAOTHREN	0.0000001,
 PGANUC	1.00000,
 PGAPSS	20.00000,
 PGAPSSL	20.00000,

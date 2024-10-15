@@ -122,7 +122,6 @@ QPeakLoad(allCy,YTIME)	                                   "Compute elerctricity 
 QBaseLoadMax(allCy,YTIME) 	                               "Compute baseload corresponding to maximum load"
 QBaseLoad(allCy,YTIME)	                                   "Compute electricity base load"
 QShareNewTechCCS(allCy,PGALL,YTIME)	                       "Compute SHRCAP"	
-QCapElec2(allCy,PGALL,YTIME)	                           "Compute electricity generation capacity"
 QLambda(allCy,YTIME)	                                   "Compute Lambda parameter"	
 QScalFacPlantDispatch(allCy,HOUR,YTIME)                    "Compute the scaling factor for plant dispatching"	
 QPotRenCurr(allCy,PGRENEF,YTIME)	                       "Compute current renewable potential" 	
@@ -164,7 +163,6 @@ QCostVarTechNotPGSCRN(allCy,PGALL,YTIME)                   "Compute variable cos
 QCostVarTech(allCy,PGALL,YTIME)	                           "Compute variable cost of technology" 	
 QProdElecReqTot(allCy,YTIME)                               "Compute total required electricity production"
 QCapElecTotEst(allCy,YTIME)                                "Compute Estimated total electricity generation capacity"	
-QCapElecTot(allCy,YTIME)	                               "Compute total electricity generation capacity"
 QCostHourProdInvDec(allCy,PGALL,HOUR,YTIME)                "Compute hourly production cost used in investment decisions"
 QCostHourProdInvDecNoCCS(allCy,PGALL,HOUR,YTIME)           "Compute hourly production cost used in investment decisions"
 QSensCCS(allCy,YTIME)	                                   "Compute gamma parameter used in CCS/No CCS decision tree"
@@ -315,7 +313,6 @@ VCostProdTeCHPreReplac(allCy,PGALL,YTIME)                  "Production cost of t
 VIndxEndogScrap(allCy,PGALL,YTIME)	                       "Index used for endogenous power plants scrapping (1)"			
 VSensCCS(allCy,YTIME)	                                   "Variable that controlls the sensitivity of CCS acceptance (1)"			
 VBaseLoad(allCy,YTIME)	                                   "Corrected base load (GW)"
-VCapElec2(allCy,PGALL,YTIME)	                           "Electricity generation plants capacity (GW)"	
 VCapElecNonCHP(allCy,YTIME)	                               "Total electricity generation capacity excluding CHP (GW)"	
 VCostVarTech(allCy,PGALL,YTIME)	                           "Variable cost of technology (US$2015/KWh)"	
 VShareNewTechNoCCS(allCy,PGALL,YTIME)	                   "Power plant share in new equipment (1)"
@@ -324,7 +321,6 @@ VCostHourProdInvDecNoCCS(allCy,PGALL,HOUR,YTIME)           "Hourly production co
 VCostProdTeCHPreReplacAvail(allCy,PGALL,PGALL2,YTIME)	   "Production cost of technology used in premature replacement including plant availability rate (US$2015/KWh)"		
 VProdElecReqTot(allCy,YTIME)	                           "Total required electricity production (TWh)"	
 VCapElecTotEst(allCy,YTIME)	                               "Estimated Total electricity generation capacity (GW)"	
-VCapElecTot(allCy,YTIME)	                               "Total electricity generation capacity (GW)"	
 VConsFinEneCountry(allCy,EF,YTIME)                         "Total final energy consumnption (Mtoe)"
 VConsFinNonEne(allCy,EFS,YTIME)                            "Final non energy consumption (Mtoe)"
 VLossesDistr(allCy,EFS,YTIME)                              "Distribution losses (Mtoe)"
@@ -337,6 +333,7 @@ VNewRegPcYearly(allCy,YTIME)                               "Passenger cars new r
 VNumPcScrap(allCy,YTIME)                                   "Scrapped passenger cars (million vehicles)"
 VActivPassTrnsp(allCy,TRANSE,YTIME)                        "Passenger transport acitivity (1)"
                                                                 !! - Activity for passenger cars is measured in (000)km
+                                                                !! - Activity for passenger aviation million passengers carried
                                                                 !! - Activity for all other passenger transportation modes is measured in Gpkm
 VPriceFuelAvgSub(allCy,DSBS,YTIME)                         "Average fuel prices per subsector (k$2015/toe)"
 VRateScrPc(allCy,YTIME)                                    "Scrapping rate of passenger cars (1)"

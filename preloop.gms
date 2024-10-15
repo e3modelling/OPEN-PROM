@@ -24,8 +24,7 @@ QPeakLoad                           !! VPeakLoad(runCy,YTIME)
 QBaseLoadMax                        !! VBaseLoadMax(runCy,YTIME)
 QBaseLoad                           !! VBaseLoad(runCy,YTIME)
 QProdElecReqTot                     !! VProdElecReqTot(runCy,YTIME)
-QCapElecTotEst                      !! VCapElecTotEst(runCy,YTIME)
-QCapElecTot                         !! VCapElecTot(runCy,YTIME)	
+QCapElecTotEst                      !! VCapElecTotEst(runCy,YTIME)	
 QCostHourProdInvDec                 !! VCostHourProdInvDec(runCy,PGALL,HOUR,YTIME)
 QCostHourProdInvDecNoCCS            !! VCostHourProdInvDecNoCCS(runCy,PGALL,HOUR,YTIME)
 QSensCCS                            !! VSensCCS(runCy,YTIME)
@@ -49,7 +48,6 @@ QScalWeibullSum                     !! VScalWeibullSum(runCy,PGALL,YTIME)
 QNewInvElec                         !! VNewInvElec(runCy,YTIME)
 QSharePowPlaNewEq                   !! VSharePowPlaNewEq(runCy,PGALL,YTIME)
 QCapElec                            !! VCapElec(runCy,PGALL,YTIME)
-QCapElec2                           !! VCapElec2(runCy,PGALL,YTIME)
 QCostVarTechElec                    !! VCostVarTechElec(runCy,PGALL,YTIME)
 QElecPeakLoads                      !! VElecPeakLoads(runCy,YTIME) 
 QSortPlantDispatch                  !! VSortPlantDispatch(runCy,PGALL,YTIME)
@@ -160,8 +158,8 @@ QCstCO2SeqCsts                      !! VCstCO2SeqCsts(runCy,YTIME)
 
 *' * EMISSIONS CONSTRAINTS *
 
-QGrnnHsEmisCO2Equiv                 !! VGrnnHsEmisCO2Equiv(NAP,YTIME)
-qGrnnHsEmisCO2EquivAllCntr          !! vGrnnHsEmisCO2EquivAllCntr(YTIME) 
+*QGrnnHsEmisCO2Equiv                 !! VGrnnHsEmisCO2Equiv(NAP,YTIME)
+*qGrnnHsEmisCO2EquivAllCntr          !! vGrnnHsEmisCO2EquivAllCntr(YTIME) 
 qExpendHouseEne                     !! vExpendHouseEne(runCy,YTIME)
 
 
@@ -337,7 +335,7 @@ VDemElecTot.l(runCy,YTIME)=0.1;
 VDemElecTot.FX(runCy,YTIME)$(not An(YTIME)) =  1/0.086 * ( iFinEneCons(runCy,"ELC",YTIME) + sum(NENSE, iFuelConsPerFueSub(runCy,NENSE,"ELC",YTIME)) + iDistrLosses(runCy,"ELC",YTIME)
                                              + iTotEneBranchCons(runCy,"ELC",YTIME) - (iFuelImports(runCy,"ELC",YTIME)-iFuelExprts(runCy,"ELC",YTIME)));
 
-VRenTechMatMult.l(runCy,PGALL,YTIME)=0.1;
+VRenTechMatMult.l(runCy,PGALL,YTIME)=1;
 
 VActivGoodsTransp.l(runCy,TRANSE,YTIME)=0.1;
 VActivGoodsTransp.FX(runCy,TRANG,YTIME)$(not An(YTIME)) = iActv(YTIME,runCy,TRANG);
@@ -453,15 +451,13 @@ VBaseLoad.FX(runCy,YTIME)$(not An(YTIME)) = iPeakBsLoadBy(runCy,"BASELOAD");
 VPeakLoad.L(runCy,YTIME) = 1;
 VPeakLoad.FX(runCy,YTIME)$(datay(YTIME)) = VDemElecTot.l(runCy,YTIME)/(VLoadFacDom.l(runCy,YTIME)*8.76);
 
-VCapElecTot.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
+VCapElecTotEst.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
 
 VCapElecNonCHP.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
 
 VCapElecCHP.FX(runCy,CHP,YTIME)$(not An(YTIME)) = iHisChpGrCapData(runCy,CHP,YTIME);
 
 VSharePowPlaNewEq.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) )=0;
-
-VCapElec2.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = iInstCapPast(runCy,PGALL,YTIME);
 
 VCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  iInstCapPast(runCy,PGALL,YTIME);
 
