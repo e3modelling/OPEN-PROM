@@ -1,18 +1,37 @@
-sModelStat = 100;
-loop rcc$(rcc.val <= sSolverTryMax) do !! start inner iteration loop (solver attempts)
-    if sModelStat gt 2 then
-        solve openprom using nlp maximizing vDummyObj;
-        sModelStat = openprom.modelstat;
-    endif;
-endloop;  !! close inner iteration loop (solver attempts)
 
-!! Output model status, country, and corresponding year
+    sModelStat = 100;
+    loop rcc$(rcc.val <= sSolverTryMax) do !! start inner iteration loop (solver attempts)
+        if sModelStat gt 2 then
+            solve openprom using nlp minimizing vDummyObj;
+            sModelStat = openprom.modelstat;
+
+            !! Save the objective function value after solving for each country and year
+            loop allCy$runCy(allCy) do
+                loop YTIME$(TIME(YTIME)) do
+                    ODummyObj(allCy,YTIME)$TIME(YTIME) = vDummyObj.L;  !! Assign objective function value
+                endloop;
+            endloop;
+        endif;
+    endloop;
+
+!! Output model status, country, and corresponding year, and objective function value
 loop allCy$runCy(allCy) do
     loop YTIME$(TIME(YTIME)) do
         put fStat;
-        put "Country:", allCy.tl, " Model Status:", sModelStat:0:2, " Year:", YTIME.tl /;
-    endloop;
-endloop;
+        put "Country:", allCy.tl, " Model Status:", sModelStat:0:2, " Year:", YTIME.tl, " Objective Value:", ODummyObj(allCy,YTIME):12:4 /;
+
+        !! Write the same data to CSV
+        put fCSV;
+        put "Country:",allCy.tl,
+            "   Model Status:",sModelStat:0:2,
+            "   Year:",YTIME.tl,
+            "   Objective Value:",ODummyObj(allCy,YTIME):12:4,
+            "   VPriceElecInd:",VPriceElecInd.L(allCy,YTIME):12:4,
+            "   VCapElecTotEst:",VCapElecTotEst.L(allCy,YTIME):12:4,
+            "   VPeakLoad:",VPeakLoad.L(allCy,YTIME):12:4,
+            "   VCapElecNonCHP:",VCapElecNonCHP.L(allCy,YTIME):12:4 /;
+    endloop;  !! Close YTIME loop
+endloop;      !! Close allCy loop
 
 * Fix values of variables for the next time step
 VStockPcYearly.FX(runCy,YTIME)$TIME(YTIME) = VStockPcYearly.L(runCy,YTIME)$TIME(YTIME);
@@ -52,6 +71,10 @@ VConsFuelInclHP.FX(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTE
 VExp.FX(runCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS)) = VExp.L(runCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS));
 VConsGrssInlNotEneBranch.FX(runCy,EFS,YTIME)$TIME(YTIME) =  VConsGrssInlNotEneBranch.L(runCy,EFS,YTIME)$TIME(YTIME);
 endloop;  !! close countries loop
+* Export model results to GDX file
+execute_unload "outputData.gdx", ODummyObj, VPriceElecInd, VCapElecTotEst, VPeakLoad, VConsFuel, VCapElec, VConsFuel, VProdElec, VBaseLoad;
 endloop;  !! close outer iteration loop (time steps)
+* Close files after execution
 putclose fStat;
+putclose fCSV;
 $if %WriteGDX% == on execute_unload "blabla.gdx";
