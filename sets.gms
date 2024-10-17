@@ -3,7 +3,8 @@ sets
 ***        Geographic Coverage      *
 allCy    "All Countries Used in the Model"
 /
-LAM
+RLM
+BRA
 OAS
 SSA
 NEU
@@ -46,7 +47,8 @@ RWO
 
 resCy "Countries for Research Mode"
 /
-LAM
+RLM
+BRA
 OAS
 SSA
 NEU
