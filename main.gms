@@ -105,7 +105,7 @@ $setEnv GDXCOMPRESS 1
 *' *** Generate input data?
 $setGlobal GenerateInput on !! can be overwritten if VS Code Tasks are used
 
-$setGlobal fCountries 'MAR,IND,USA,EGY,RWO' !! can be overwritten if VS Code Tasks are used
+$setGlobal fCountries 'USA' !! can be overwritten if VS Code Tasks are used
 
 $setGlobal fCountryList %countries%
 
@@ -113,7 +113,7 @@ $evalGlobal fPeriodOfYears 1
 
 $evalGlobal fStartHorizon 2010
 $evalGlobal fEndHorizon 2100
-$evalGlobal fEndY 2100
+$evalGlobal fEndY 2030
 $evalGlobal fStartY 2021
 $evalGlobal fBaseY %fStartY% - %fPeriodOfYears%
 
@@ -129,9 +129,6 @@ $endif.genInp
 * Open file to write txt
 file fStat /'modelstat.txt'/; 
 fStat.ap = 1; 
-* Open file to write CSV
-file fCSV /'results.csv'/;
-fCSV.ap = 1; 
 
 $include sets.gms
 $include declarations.gms
