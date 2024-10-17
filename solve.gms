@@ -51,7 +51,7 @@ VExp.FX(runCyL,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS)) = VExp.L(runCyL,EFS,YTIME)$(
 VConsGrssInlNotEneBranch.FX(runCyL,EFS,YTIME)$TIME(YTIME) =  VConsGrssInlNotEneBranch.L(runCyL,EFS,YTIME)$TIME(YTIME);
 endloop;  !! close countries loop
 * Export model results to GDX file
-execute_unload "outputData.gdx", ODummyObj, VPriceElecInd, VCapElecTotEst, VPeakLoad, VConsFuel, VCapElec, VConsFuel, VProdElec, VBaseLoad;
+execute_unload "outputData.gdx", ODummyObj, VPriceElecInd, VCapElecTotEst, VPeakLoad, VConsFuel, VCapElec, VProdElec, VBaseLoad;
 endloop;  !! close outer iteration loop (time steps)
 putclose fStat;
 $if %WriteGDX% == on execute_unload "blabla.gdx";
