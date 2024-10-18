@@ -335,16 +335,19 @@ qPotRenMinAllow(allCy,PGRENEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' supply curve. This ratio is adjusted using a logistic function with parameters that influence the maturity of renewable technologies. If the technology is not
 *' renewable, the maturity multiplier is set to 1. The purpose is to model the maturity level of renewable technologies based on their
 *' planned capacities relative to the renewable potential supply curve.
+QRenTechMatMultExpr(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+VRenTechMatMultExpr(allCy,PGALL,YTIME)
+=E=
+                 sum(PGRENEF$PGALLtoPGRENEF(PGALL,PGRENEF),
+                 sum(PGALL2$(PGALLtoPGRENEF(PGALL2,PGRENEF) $PGREN(PGALL2)),
+                 VCapElec(allCy,PGALL2,YTIME-1))/VPotRenCurr(allCy,PGRENEF,YTIME))-0.6;
 QRenTechMatMult(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VRenTechMatMult(allCy,PGALL,YTIME)
           =E=
          1$(NOT PGREN(PGALL))
          +
          (
-           1/(1+exp(5*(
-                 sum(PGRENEF$PGALLtoPGRENEF(PGALL,PGRENEF),
-                 sum(PGALL2$(PGALLtoPGRENEF(PGALL2,PGRENEF) $PGREN(PGALL2)),
-                 VCapElec(allCy,PGALL2,YTIME-1))/VPotRenCurr(allCy,PGRENEF,YTIME))-0.6)))
+           1/(1+exp(5*VRenTechMatMultExpr(allCy,PGALL,YTIME)))
            )$PGREN(PGALL);  
 
 *' The equation calculates a temporary variable which is used to facilitate scaling in the Weibull equation. The scaling is influenced by three main factors:

@@ -108,6 +108,7 @@ iIndChar(allCy,INDSE,Indu_Scon_Set)             "Industry sector charactetistics
 iNetImp(allCy,EFS,YTIME)                        "Net imports (Mtoe)"
 iMxmShareChpElec(allCy,YTIME)	                "Maximum share of CHP electricity in a country (1)"
 iScaleEndogScrap(PGALL)                         "Scale parameter for endogenous scrapping applied to the sum of full costs (1)"
+ODummyObj                                       "Parameter saving objective function"
 ;
 
 
@@ -260,12 +261,14 @@ QPriceFuelAvgSub(allCy,DSBS,YTIME)	                       "Compute average fuel 
 QPriceElecIndResConsu(allCy,ESET,YTIME)                    "Compute electricity price in Industrial and Residential Consumers"	
 *' *** Miscellaneous
 qDummyObj                                                  "Define dummy objective function"
+QRenTechMatMultExpr(allCy,PGALL,YTIME)
 ;
 
 
 Variables
 
 *' *** Power Generation Variables
+VRenTechMatMultExpr(allCy,PGALL,YTIME)                     "Renewable power capacity over potential (1)"
 VCapElecCHP(allCy,CHP,YTIME)	                           "Capacity of CHP Plants (GW)"
 VLambda(allCy,YTIME)	                                   "Parameter for load curve construction (1)"
 VBsldEst(allCy,YTIME)	                                   "Estimated base load (GW)"	
