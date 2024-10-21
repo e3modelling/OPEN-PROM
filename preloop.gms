@@ -13,6 +13,7 @@ endloop;
 model openprom /
 
 *' * Power Generation *
+qScalFacPlantDispatchExpr
 QRenTechMatMultExpr                 !! VRenTechMatMultExpr(runCy,PGALL,YTIME)
 QPotRenCurr                         !! VPotRenCurr(runCy,PGRENEF,YTIME)
 QCapElecCHP                         !! VCapElecCHP(runCy,CHP,YTIME)

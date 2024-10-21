@@ -262,12 +262,14 @@ QPriceElecIndResConsu(allCy,ESET,YTIME)                    "Compute electricity 
 *' *** Miscellaneous
 qDummyObj                                                  "Define dummy objective function"
 QRenTechMatMultExpr(allCy,PGALL,YTIME)
+qScalFacPlantDispatchExpr(allCy,PGALL,HOUR,YTIME)
 ;
 
 
 Variables
 
 *' *** Power Generation Variables
+vScalFacPlantDispatchExpr(allCy,PGALL,HOUR,YTIME)
 VRenTechMatMultExpr(allCy,PGALL,YTIME)                     "Renewable power capacity over potential (1)"
 VCapElecCHP(allCy,CHP,YTIME)	                           "Capacity of CHP Plants (GW)"
 VLambda(allCy,YTIME)	                                   "Parameter for load curve construction (1)"

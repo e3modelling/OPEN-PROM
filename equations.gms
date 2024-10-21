@@ -473,6 +473,11 @@ VCapOverall(allCy,PGALL,YTIME-1)
 
 *' This equation calculates the scaling factor for plant dispatching in a specific country , hour of the day,
 *' and time period . The scaling factor for determining the dispatch order of different power plants during a particular hour.
+qScalFacPlantDispatchExpr(allCy,PGALL,HOUR,YTIME)$(TIME(YTIME)$(runCy(allCy))) ..
+vScalFacPlantDispatchExpr(allCy,PGALL,HOUR,YTIME)
+=E=
+-VScalFacPlaDisp(allCy,HOUR,YTIME)/VSortPlantDispatch(allCy,PGALL,YTIME);
+
 QScalFacPlantDispatch(allCy,HOUR,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          sum(PGALL,
                  (VCapOverall(allCy,PGALL,YTIME)+
