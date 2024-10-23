@@ -13,6 +13,7 @@ endloop;
 model openprom /
 
 *' * Power Generation *
+QCapElec2
 qScalFacPlantDispatchExpr
 QRenTechMatMultExpr                 !! VRenTechMatMultExpr(runCy,PGALL,YTIME)
 QPotRenCurr                         !! VPotRenCurr(runCy,PGRENEF,YTIME)
@@ -461,7 +462,7 @@ VCapElecCHP.FX(runCy,CHP,YTIME)$(not An(YTIME)) = iHisChpGrCapData(runCy,CHP,YTI
 VSharePowPlaNewEq.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) )=0;
 
 VCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  iInstCapPast(runCy,PGALL,YTIME);
-
+VCapElec2.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = iInstCapPast(runCy,PGALL,YTIME);
 VCapOverall.FX(runCy,PGALL,YTIME)$TFIRST(YTIME) =  iInstCapPast(runCy,PGALL,YTIME)$TFIRST(YTIME);
 
 VProdElec.FX(runCy,pgall,YTIME)$DATAY(YTIME)=iDataElecProd(runCy,pgall,YTIME)/1000;
