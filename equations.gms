@@ -101,9 +101,7 @@ QBaseLoad(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QProdElecReqTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VProdElecReqTot(allCy,YTIME)
              =E=
-         sum(HOUR, (VPeakLoad(allCy,YTIME)-VBaseLoad(allCy,YTIME))
-                   * exp(-VLambda(allCy,YTIME)*(0.25+(ord(HOUR)-1)))
-             ) + 9*VBaseLoad(allCy,YTIME);   
+        VDemElecTot(allCy,YTIME);   
 
 *' The equation calculates the estimated total electricity generation capacity by multiplying the previous year's total electricity generation capacity with
 *' the ratio of the current year's estimated electricity peak load to the previous year's electricity peak load. This provides an estimate of the required
@@ -474,15 +472,7 @@ VCapOverall(allCy,PGALL,YTIME-1)
 *' This equation calculates the scaling factor for plant dispatching in a specific country , hour of the day,
 *' and time period . The scaling factor for determining the dispatch order of different power plants during a particular hour.
 QScalFacPlantDispatch(allCy,HOUR,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         sum(PGALL,
-                 (VCapOverall(allCy,PGALL,YTIME)+
-                 sum(CHP$CHPtoEON(CHP,PGALL),VCapElecCHP(allCy,CHP,YTIME)))*
-                 exp(-VScalFacPlaDisp(allCy,HOUR,YTIME)/VSortPlantDispatch(allCy,PGALL,YTIME))
-                 )
-         =E=
-         (VPeakLoad(allCy,YTIME) - VBaseLoad(allCy,YTIME))
-         * exp(-VLambda(allCy,YTIME)*(0.25 + ord(HOUR)-1))
-         + VBaseLoad(allCy,YTIME);
+         VScalFacPlaDisp(allCy,HOUR,YTIME) =e= 1e-12*(0.25 + ord(HOUR)-1);
 
 *' This equation calculates the estimated electricity generation of Combined Heat and Power plantsin a specific countryand time period.
 *' The estimation is based on the fuel consumption of CHP plants, their electricity prices, the maximum share of CHP electricity in total demand, and the overall
