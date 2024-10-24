@@ -64,6 +64,7 @@ VWCT.FX(allCy,YTIME)$TIME(YTIME) = VWCT.L(allCy,YTIME) $TIME(YTIME);
 VWCENS.FX(allCy,INDDOM,YTIME)$TIME(YTIME) = VWCENS.L(allCy,INDDOM,YTIME) $TIME(YTIME);
 VWPID.FX(allCy,PGALL,HOUR,YTIME)$TIME(YTIME) = VWPID.L(allCy,PGALL,HOUR,YTIME)$TIME(YTIME);
 VWNCP.FX(allCy,ESET,YTIME)$TIME(YTIME) = VWNCP.L(allCy,ESET,YTIME)$TIME(YTIME);
+VCapElec2.FX(runCy,PGALL,YTIME)$TIME(YTIME) = VCapElec2.L(runCy,PGALL,YTIME)$TIME(YTIME);
 endloop;  !! close countries loop
 * Export model results to GDX file
 execute_unload "outputData.gdx", ODummyObj, VPriceElecInd, VCapElecTotEst, VPeakLoad, VConsFuel, VCapElec, VProdElec, VBaseLoad;

@@ -247,7 +247,9 @@ RENE_SUBS
 BIO_SUBS
 BIOM_SUBS
 SOLRES_SUBS
-exogCV
+exogCV_NPi
+exogCV_1_5C
+exogCV_2C
 /
 
 RegulaPolicies(POLICIES_set) Set of policies entering in the regula falsi loops
