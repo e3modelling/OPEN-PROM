@@ -48,4 +48,6 @@ jobs:
           
       - name: Test Model Run
         run: |
-          & "C:\GAMS\45\gams.exe" main.gms --DevMode=0 --GenerateInput=off --fEndY=2050 -Idir=./data
+          & "C:\GAMS\45\gams.exe" main.gms --DevMode=0 --GenerateInput=off --fEndY=2050 --fScenario=0 -Idir=./data
+          & "C:\GAMS\45\gams.exe" main.gms --DevMode=0 --GenerateInput=off --fEndY=2050 --fScenario=1 -Idir=./data
+          & "C:\GAMS\45\gams.exe" main.gms --DevMode=0 --GenerateInput=off --fEndY=2050 --fScenario=2 -Idir=./data
