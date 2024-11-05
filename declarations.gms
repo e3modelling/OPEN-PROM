@@ -108,6 +108,7 @@ iIndChar(allCy,INDSE,Indu_Scon_Set)             "Industry sector charactetistics
 iNetImp(allCy,EFS,YTIME)                        "Net imports (Mtoe)"
 iMxmShareChpElec(allCy,YTIME)	                "Maximum share of CHP electricity in a country (1)"
 iScaleEndogScrap(PGALL)                         "Scale parameter for endogenous scrapping applied to the sum of full costs (1)"
+ODummyObj                                       "Parameter saving objective function"
 ;
 
 
@@ -121,7 +122,8 @@ QLoadFacDom(allCy,YTIME)	                               "Compute load factor of 
 QPeakLoad(allCy,YTIME)	                                   "Compute elerctricity peak load"		
 QBaseLoadMax(allCy,YTIME) 	                               "Compute baseload corresponding to maximum load"
 QBaseLoad(allCy,YTIME)	                                   "Compute electricity base load"
-QShareNewTechCCS(allCy,PGALL,YTIME)	                       "Compute SHRCAP"	
+QShareNewTechCCS(allCy,PGALL,YTIME)	                       "Compute SHRCAP"
+QCapElec2(allCy,PGALL,YTIME)	                           "Compute electricity generation capacity"
 QLambda(allCy,YTIME)	                                   "Compute Lambda parameter"	
 QScalFacPlantDispatch(allCy,HOUR,YTIME)                    "Compute the scaling factor for plant dispatching"	
 QPotRenCurr(allCy,PGRENEF,YTIME)	                       "Compute current renewable potential" 	
@@ -260,12 +262,16 @@ QPriceFuelAvgSub(allCy,DSBS,YTIME)	                       "Compute average fuel 
 QPriceElecIndResConsu(allCy,ESET,YTIME)                    "Compute electricity price in Industrial and Residential Consumers"	
 *' *** Miscellaneous
 qDummyObj                                                  "Define dummy objective function"
+QRenTechMatMultExpr(allCy,PGALL,YTIME)
+qScalFacPlantDispatchExpr(allCy,PGALL,HOUR,YTIME)
 ;
 
 
 Variables
 
 *' *** Power Generation Variables
+vScalFacPlantDispatchExpr(allCy,PGALL,HOUR,YTIME)
+VRenTechMatMultExpr(allCy,PGALL,YTIME)                     "Renewable power capacity over potential (1)"
 VCapElecCHP(allCy,CHP,YTIME)	                           "Capacity of CHP Plants (GW)"
 VLambda(allCy,YTIME)	                                   "Parameter for load curve construction (1)"
 VBsldEst(allCy,YTIME)	                                   "Estimated base load (GW)"	
@@ -314,6 +320,7 @@ VCostProdTeCHPreReplac(allCy,PGALL,YTIME)                  "Production cost of t
 VIndxEndogScrap(allCy,PGALL,YTIME)	                       "Index used for endogenous power plants scrapping (1)"			
 VSensCCS(allCy,YTIME)	                                   "Variable that controlls the sensitivity of CCS acceptance (1)"			
 VBaseLoad(allCy,YTIME)	                                   "Corrected base load (GW)"
+VCapElec2(allCy,PGALL,YTIME)	                           "Electricity generation plants capacity (GW)"
 VCapElecNonCHP(allCy,YTIME)	                               "Total electricity generation capacity excluding CHP (GW)"	
 VCostVarTech(allCy,PGALL,YTIME)	                           "Variable cost of technology (US$2015/KWh)"	
 VShareNewTechNoCCS(allCy,PGALL,YTIME)	                   "Power plant share in new equipment (1)"
