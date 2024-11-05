@@ -60,7 +60,7 @@ reportPrice <- function(regs) {
     try(sets6 <- toolreadSets("sets.gms", sector[y]))
     try(sets6 <- separate_rows(sets6, paste0(sector[y],"(DSBS)")))
     try(sets6 <- as.data.frame(sets6))
-    if (is.null(sets6[1,1])) sets6 <- sector[y]
+    if (y == 5) sets6 <- sector[y]
     sets6 <- as.data.frame(sets6)
     
     map_subsectors <- sets4 %>% filter(SBS %in% as.character(sets6[, 1]))
@@ -128,6 +128,7 @@ reportPrice <- function(regs) {
     #add model MENA_EDS data (choosing the correct variable from MENA by use of the MENA-PROM mapping)
     #fix units from $2015/toe to k$2015/toe
     FuelPrice_MENA <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "iFuelPrice", "MENA.EDS"]) / 1000
+    FuelPrice_MENA <- FuelPrice_MENA[,, sets6[,1]]
     PRICE_by_sector_and_EF_MENA <- FuelPrice_MENA
     # fix wrong region names in MENA
     getRegions(PRICE_by_sector_and_EF_MENA) <- sub("MOR", "MAR", getRegions(PRICE_by_sector_and_EF_MENA)) # fix wrong region names in MENA
@@ -155,7 +156,7 @@ reportPrice <- function(regs) {
     PRICE_by_sector_and_EF_MENA <- as.quitte(PRICE_by_sector_and_EF_MENA) %>% as.magpie()
     
     # write data in mif file
-    write.report(PRICE_by_sector_and_EF_MENA[, years_in_horizon, ], file = "reporting.mif", model = "MENA-EDS", unit = "US$2015/KWh",append = TRUE, scenario = "Baseline")
+    write.report(PRICE_by_sector_and_EF_MENA[, years_in_horizon, ], file = "reporting.mif", model = "MENA-EDS", unit = "k$2015/toe",append = TRUE, scenario = "Baseline")
     
     # fix wrong region names in MENA
     getRegions(FuelPrice_MENA) <- sub("MOR", "MAR", getRegions(FuelPrice_MENA))
@@ -196,7 +197,7 @@ reportPrice <- function(regs) {
     getItems(fuels_EFtoEFA_mena, 3) <- paste0("Price|Final Energy|", sector_name[y],"|", getItems(fuels_EFtoEFA_mena, 3))
     
     # write data in mif file
-    write.report(fuels_EFtoEFA_mena[,years_in_horizon,],file="reporting.mif",model="OPEN-PROM",unit="k$2015/toe",append=TRUE,scenario="Baseline")
+    write.report(fuels_EFtoEFA_mena[,years_in_horizon,],file="reporting.mif",model="MENA-EDS",unit="k$2015/toe",append=TRUE,scenario="Baseline")
     
     fuel_map <- getItems(fuels_mena,3)[getItems(fuels_mena,3) %in% unique(sets$EF)]
     fuel_map <- drop_na(as.data.frame(fuel_map))
@@ -209,7 +210,7 @@ reportPrice <- function(regs) {
     
     
     #FuelPrice enerdata
-    x <- readSource("ENERDATA", "constant price", convert = TRUE)
+    x <- readSource("ENERDATA", "constant price", convert = TRUE)[,, sets6[,1]]
     x[x == 0] <- NA # set all zeros to NA because we deal with prices
     
     # filter years
@@ -309,14 +310,6 @@ reportPrice <- function(regs) {
     
   }
   
-  VCarVal <- readGDX('./blabla.gdx', "VCarVal")[regs, , ][,,"TRADE.l" ]
-  
-  # complete names
-  getItems(VCarVal, 3) <- "Price|Carbon"
-  
-  # write data in mif file
-  write.report(VCarVal[,,],file="reporting.mif",model="OPEN-PROM",unit="US$2015/tn CO2",append=TRUE,scenario=scenario_name)
-  
   # MENA
   #add model MENA_EDS data (choosing the correct variable from MENA by use of the MENA-PROM mapping)
   elec_prices_MENA <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "VPriceElecIndResConsu", "MENA.EDS"])
@@ -415,24 +408,5 @@ reportPrice <- function(regs) {
   Navigate_p <- Navigate_p * 1.087 / 277.778 # US$2010/GJ to US$2015/KWh
   
   write.report(Navigate_p[, years_in_horizon, ], file = "reporting.mif", append = TRUE)
-  
-  
-  
-  Navigate_p <- Navigate_Con_F_calc[,,"Price|Carbon"]
-  
-  Navigate_p <- as.quitte(Navigate_p) %>%
-    interpolate_missing_periods(period = getYears(Navigate_p,as.integer=TRUE)[1]:getYears(Navigate_p,as.integer=TRUE)[length(getYears(Navigate_p))], expand.values = TRUE)
-  
-  Navigate_p <- as.quitte(Navigate_p) %>% as.magpie()
-  years_in_horizon <-  horizon[horizon %in% getYears(Navigate_p, as.integer = TRUE)]
-  
-  getItems(Navigate_p, 3.4) <- "US$2015/tn CO2"
-  
-  Navigate_p <- Navigate_p * 1.087 # US$2010/t CO2 to US$2015/tn CO2
-  
-  write.report(Navigate_p[, years_in_horizon, ], file = "reporting.mif", append = TRUE)
-  
-  
-  
   
 }
