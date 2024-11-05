@@ -142,7 +142,7 @@ reportPrice <- function(regs) {
     PRICE_by_sector_and_EF_MENA <- as.quitte(PRICE_by_sector_and_EF_MENA) %>% as.magpie()
     years_in_horizon <-  horizon[horizon %in% getYears(PRICE_by_sector_and_EF_MENA, as.integer = TRUE)]
     
-    PRICE_by_sector_and_EF_MENA_GLO <- dimSums(PRICE_by_sector_and_EF_MENA, 1)
+    PRICE_by_sector_and_EF_MENA_GLO <- dimSums(PRICE_by_sector_and_EF_MENA, 1, na.rm = TRUE)
     getItems(PRICE_by_sector_and_EF_MENA_GLO, 1) <- "World"
     PRICE_by_sector_and_EF_MENA <- mbind(PRICE_by_sector_and_EF_MENA, PRICE_by_sector_and_EF_MENA_GLO)
     
@@ -170,7 +170,7 @@ reportPrice <- function(regs) {
     FuelPrice_MENA <- as.quitte(FuelPrice_MENA) %>% as.magpie()
     years_in_horizon <-  horizon[horizon %in% getYears(FuelPrice_MENA, as.integer = TRUE)]
     
-    FuelPrice_MENA_GLO <- dimSums(FuelPrice_MENA, 1)
+    FuelPrice_MENA_GLO <- dimSums(FuelPrice_MENA, 1, na.rm = TRUE)
     getItems(FuelPrice_MENA_GLO, 1) <- "World"
     FuelPrice_MENA <- mbind(FuelPrice_MENA, FuelPrice_MENA_GLO)
     
@@ -208,9 +208,8 @@ reportPrice <- function(regs) {
     # write data in mif file
     write.report(iFuelPrice_total_sector_mena[,years_in_horizon,],file="reporting.mif",model="MENA-EDS",unit="k$2015/toe",append=TRUE,scenario="Baseline")
     
-    
     #FuelPrice enerdata
-    x <- readSource("ENERDATA", "constant price", convert = TRUE)[,, sets6[,1]]
+    x <- readSource("ENERDATA", "constant price", convert = TRUE)
     x[x == 0] <- NA # set all zeros to NA because we deal with prices
     
     # filter years
@@ -264,19 +263,22 @@ reportPrice <- function(regs) {
     PRICE_by_sector_and_EF_enerdata <- as.quitte(PRICE_by_sector_and_EF_enerdata) %>% as.magpie()
     years_in_horizon <-  horizon[horizon %in% getYears(PRICE_by_sector_and_EF_enerdata, as.integer = TRUE)]
     
-    PRICE_by_sector_and_EF_enerdata_GLO <- dimSums(PRICE_by_sector_and_EF_enerdata, 1)
+    PRICE_by_sector_and_EF_enerdata_GLO <- dimSums(PRICE_by_sector_and_EF_enerdata, 1, na.rm = TRUE)
     getItems(PRICE_by_sector_and_EF_enerdata_GLO, 1) <- "World"
     PRICE_by_sector_and_EF_enerdata <- mbind(PRICE_by_sector_and_EF_enerdata, PRICE_by_sector_and_EF_enerdata_GLO)
     
     PRICE_by_sector_and_EF_enerdata <- PRICE_by_sector_and_EF_enerdata / 1000 # fix units to k$2015/toe
     
+    getItems(PRICE_by_sector_and_EF_enerdata,3.2) <- "k$2015/toe"
     # write data in mif file
     write.report(PRICE_by_sector_and_EF_enerdata[, years_in_horizon, ], file = "reporting.mif", model = "ENERDATA", unit = "k$2015/toe",append = TRUE, scenario = "Validation")
     
+    x <- collapseDim(x, dim = 3.2)
+    
     #aggregation by SECTOR and EF
-    PRICE_by_EF_ENERDATA_PROM <- dimSums(PRICE_by_sector_and_EF_enerdata, 3.1, na.rm = TRUE)
-    PRICE_by_sector_ENERDATA_PROM <- dimSums(PRICE_by_sector_and_EF_enerdata, 3.2, na.rm = TRUE)
-    PRICE_total_ENERDATA_PROM_sector <- dimSums(PRICE_by_sector_and_EF_enerdata, na.rm = TRUE)
+    PRICE_by_EF_ENERDATA_PROM <- dimSums(x, 3.1, na.rm = TRUE)
+    PRICE_by_sector_ENERDATA_PROM <- dimSums(x, 3.2, na.rm = TRUE)
+    PRICE_total_ENERDATA_PROM_sector <- dimSums(x, na.rm = TRUE)
     
     # complete names
     getItems(PRICE_by_EF_ENERDATA_PROM, 3) <- paste0("Price|Final Energy|", sector_name[y],"|", getItems(PRICE_by_EF_ENERDATA_PROM, 3))
@@ -284,12 +286,11 @@ reportPrice <- function(regs) {
     getItems(PRICE_total_ENERDATA_PROM_sector, 3) <- paste0("Price|Final Energy|", sector_name[y])
     
     # write data in mif PRICE_by_EF_ENERDATA_PROM
-    write.report(PRICE_by_EF_OPEN_PROM[, years_in_horizon, ], file = "reporting.mif", model = "ENERDATA", unit = "k$2015/toe",append = TRUE, scenario = "Validation")
+    write.report(PRICE_by_EF_ENERDATA_PROM[, years_in_horizon, ], file = "reporting.mif", model = "ENERDATA", unit = "k$2015/toe",append = TRUE, scenario = "Validation")
     write.report(PRICE_by_sector_ENERDATA_PROM[, years_in_horizon, ], file = "reporting.mif", model = "ENERDATA", unit = "k$2015/toe",append = TRUE, scenario = "Validation")
     write.report(PRICE_total_ENERDATA_PROM_sector[, years_in_horizon, ], file = "reporting.mif", model = "ENERDATA", unit = "k$2015/toe",append = TRUE, scenario = "Validation")
     
     fuels_enerdata <- dimSums(x, 3.1, na.rm = TRUE)
-    fuels_enerdata <- dimSums(fuels_enerdata, 3.1, na.rm = TRUE)
     
     # Aggregate model by subsector and by energy form
     ef_toefa_map <- sets5 %>% filter(EF %in% as.character(getItems(fuels_enerdata,3)))
@@ -336,7 +337,7 @@ reportPrice <- function(regs) {
   elec_prices_MENA <- as.quitte(elec_prices_MENA) %>% as.magpie()
   years_in_horizon <-  horizon[horizon %in% getYears(elec_prices_MENA, as.integer = TRUE)]
   
-  elec_prices_MENA_GLO <- dimSums(elec_prices_MENA, 1)
+  elec_prices_MENA_GLO <- dimSums(elec_prices_MENA, 1, na.rm = TRUE)
   getItems(elec_prices_MENA_GLO, 1) <- "World"
   elec_prices_MENA <- mbind(elec_prices_MENA, elec_prices_MENA_GLO)
   
@@ -365,7 +366,7 @@ reportPrice <- function(regs) {
   elec_prices_ENERDATA <- as.quitte(elec_prices_ENERDATA) %>% as.magpie()
   years_in_horizon <-  horizon[horizon %in% getYears(elec_prices_ENERDATA, as.integer = TRUE)]
   
-  elec_prices_ENERDATA_GLO <- dimSums(elec_prices_ENERDATA, 1)
+  elec_prices_ENERDATA_GLO <- dimSums(elec_prices_ENERDATA, 1, na.rm = TRUE)
   getItems(elec_prices_ENERDATA_GLO, 1) <- "World"
   elec_prices_ENERDATA <- mbind(elec_prices_ENERDATA, elec_prices_ENERDATA_GLO)
   
