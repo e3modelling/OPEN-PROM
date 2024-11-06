@@ -39,7 +39,15 @@ reportPrice <- function(regs) {
                    "Power and Steam Generation")
   
   iFuelPrice_total <- readGDX('./blabla.gdx', "iFuelPrice")[regs, , ]
-  iFuelPrice_total_sum <- dimSums(iFuelPrice_total, 3, na.rm = TRUE)
+  iFuelPrice_total <- as.quitte(iFuelPrice_total)
+  iFuelPrice_total <- iFuelPrice_total %>% mutate(value = mean(value, na.rm = TRUE), .by = c("model", "scenario",
+                                                                                             "region", "unit",
+                                                                                             "period", "variable"))
+  iFuelPrice_total <- select(iFuelPrice_total, "model", "scenario", "region", "variable", "unit", "period", "value")
+  iFuelPrice_total <- distinct(iFuelPrice_total)
+  iFuelPrice_total <- as.quitte(iFuelPrice_total) %>% as.magpie()
+  
+  iFuelPrice_total_sum <- iFuelPrice_total
   getItems(iFuelPrice_total_sum, 3) <- "Price|Final Energy"
   # write data in mif file
   write.report(iFuelPrice_total_sum[,,],file="reporting.mif",append=TRUE,model="OPEN-PROM",unit="k$2015/toe",scenario=scenario_name)
@@ -52,6 +60,29 @@ reportPrice <- function(regs) {
   sets[["EF"]] <- sub("\\)","",sets[["EF"]])
   sets <- separate_rows(sets,EF)
   sets$BAL <- gsub("Gas fuels", "Gases", sets$BAL)
+  
+  z <- NULL
+  
+  gdp <- calcOutput(type = "iGDP", aggregate = FALSE)
+  gdp <- as.quitte(gdp)
+  
+  names(gdp) <- sub("region", "ISO3.Code", names(gdp))
+  ## add mapping to gdp
+  gdp <- left_join(gdp, rmap, by = "ISO3.Code")
+  # take the sum of gdp of each region
+  gdp <- mutate(gdp, weights = sum(value, na.rm = TRUE), .by = c("Region.Code", "period"))
+  # compute weights by deviding the gdp of country with the sum of region
+  gdp["weights"] <- gdp["value"] / gdp["weights"]
+  # select period 2020 for the weights
+  gdp <- gdp %>% filter(period == 2020)
+  gdp <- gdp %>% select(c("ISO3.Code", "weights")) 
+  names(gdp) <- sub("ISO3.Code", "region", names(gdp))
+  names(gdp) <- sub("weights", "value", names(gdp))
+  gdp <- as.magpie(as.quitte(gdp))
+  gdp <- collapseDim(gdp,dim = 3.1)
+
+  rmap_world <- rmap
+  rmap_world[ ,4] <- "World"
   
   for (y in 1 : length(sector)) {
     # read GAMS set used for reporting of Final Energy different for each sector
@@ -82,9 +113,30 @@ reportPrice <- function(regs) {
     write.report(PRICE_by_sector_and_EF[,,],file="reporting.mif",model="OPEN-PROM",unit="k$2015/toe",append=TRUE,scenario=scenario_name)
     
     #aggregation by SECTOR and EF
-    PRICE_by_EF_OPEN_PROM <- dimSums(iFuelPrice, 3.1, na.rm = TRUE)
-    PRICE_by_sector_OPEN_PROM <- dimSums(iFuelPrice, 3.2, na.rm = TRUE)
-    PRICE_total_OPEN_PROM_sector <- dimSums(iFuelPrice, na.rm = TRUE)
+    
+    iFuelPrice2 <- as.quitte(iFuelPrice)
+    iFuelPrice2 <- iFuelPrice2 %>% mutate(value = mean(value, na.rm = TRUE), .by = c("model", "scenario",
+                                                                                               "region", "unit",
+                                                                                               "period", "variable","EF"))
+    iFuelPrice2 <- select(iFuelPrice2, "EF", "model", "scenario", "region", "variable", "unit", "period", "value")
+    iFuelPrice2 <- distinct(iFuelPrice2)
+    PRICE_by_EF_OPEN_PROM <- as.quitte(iFuelPrice2) %>% as.magpie()
+    
+    iFuelPrice3 <- as.quitte(iFuelPrice)
+    iFuelPrice3 <- iFuelPrice3 %>% mutate(value = mean(value, na.rm = TRUE), .by = c("model", "scenario",
+                                                                                     "region", "unit",
+                                                                                     "period", "variable","SBS"))
+    iFuelPrice3 <- select(iFuelPrice3, "SBS", "model", "scenario", "region", "variable", "unit", "period", "value")
+    iFuelPrice3 <- distinct(iFuelPrice3)
+    PRICE_by_sector_OPEN_PROM <- as.quitte(iFuelPrice3) %>% as.magpie()
+    
+    iFuelPrice4 <- as.quitte(iFuelPrice)
+    iFuelPrice4 <- iFuelPrice4 %>% mutate(value = mean(value, na.rm = TRUE), .by = c("model", "scenario",
+                                                                                     "region", "unit",
+                                                                                     "period", "variable"))
+    iFuelPrice4 <- select(iFuelPrice4, "model", "scenario", "region", "variable", "unit", "period", "value")
+    iFuelPrice4 <- distinct(iFuelPrice4)
+    PRICE_total_OPEN_PROM_sector <- as.quitte(iFuelPrice4) %>% as.magpie()
     
     # complete names
     getItems(PRICE_by_EF_OPEN_PROM, 3) <- paste0("Price|Final Energy|", sector_name[y],"|", getItems(PRICE_by_EF_OPEN_PROM, 3))
@@ -96,7 +148,7 @@ reportPrice <- function(regs) {
     write.report(PRICE_by_sector_OPEN_PROM[,,],file="reporting.mif",model="OPEN-PROM",unit="k$2015/toe",append=TRUE,scenario=scenario_name)
     write.report(PRICE_total_OPEN_PROM_sector[,,],file="reporting.mif",model="OPEN-PROM",unit="k$2015/toe",append=TRUE,scenario=scenario_name)
     
-    fuels <- dimSums(iFuelPrice, 3.1, na.rm = TRUE)
+    #fuels <- dimSums(iFuelPrice, 3.1, na.rm = TRUE)
     
     # Energy Forms Aggregations
     sets5 <- toolreadSets(system.file(file.path("extdata", "sets.gms"), package = "mrprom"), "EFtoEFA")
@@ -108,23 +160,23 @@ reportPrice <- function(regs) {
     sets5[["EF"]] <- sub("\\)", "", sets5[["EF"]])
     sets5 <- separate_rows(sets5, EF)
     
-    # Aggregate model by subsector and by energy form
-    ef_toefa_map <- sets5 %>% filter(EF %in% as.character(getItems(fuels,3)))
-    fuels_EFtoEFA <- toolAggregate(fuels[, , getItems(fuels,3)[getItems(fuels,3) %in% unique(sets5$EF)]], dim = 3, rel = ef_toefa_map, from = "EF", to = "EFA")
-    getItems(fuels_EFtoEFA, 3) <- paste0("Price|Final Energy|", sector_name[y],"|", getItems(fuels_EFtoEFA, 3))
-    
-    # write data in mif file
-    write.report(fuels_EFtoEFA[,,],file="reporting.mif",append=TRUE,model="OPEN-PROM",unit="k$2015/toe",scenario=scenario_name)
-    
-    fuel_map <- getItems(fuels,3)[getItems(fuels,3) %in% unique(sets$EF)]
-    fuel_map <- drop_na(as.data.frame(fuel_map))
-    # aggregate from PROM fuels to reporting fuel categories
-    iFuelPrice_total_sector <- toolAggregate(fuels[ , , fuel_map[,1]], dim = 3, rel = sets[sets$EF %in% fuel_map[,1],], from = "EF", to = "BAL")
-    getItems(iFuelPrice_total_sector, 3) <- paste0("Price|Final Energy|", sector_name[y],"|", getItems(iFuelPrice_total_sector, 3))
-    
-    # write data in mif file
-    write.report(iFuelPrice_total_sector[,,],append=TRUE,file="reporting.mif",model="OPEN-PROM",unit="k$2015/toe",scenario=scenario_name)
-    
+    # # Aggregate model by subsector and by energy form
+    # ef_toefa_map <- sets5 %>% filter(EF %in% as.character(getItems(fuels,3)))
+    # fuels_EFtoEFA <- toolAggregate(fuels[, , getItems(fuels,3)[getItems(fuels,3) %in% unique(sets5$EF)]], dim = 3, rel = ef_toefa_map, from = "EF", to = "EFA")
+    # getItems(fuels_EFtoEFA, 3) <- paste0("Price|Final Energy|", sector_name[y],"|", getItems(fuels_EFtoEFA, 3))
+    # 
+    # # write data in mif file
+    # write.report(fuels_EFtoEFA[,,],file="reporting.mif",append=TRUE,model="OPEN-PROM",unit="k$2015/toe",scenario=scenario_name)
+    # 
+    # fuel_map <- getItems(fuels,3)[getItems(fuels,3) %in% unique(sets$EF)]
+    # fuel_map <- drop_na(as.data.frame(fuel_map))
+    # # aggregate from PROM fuels to reporting fuel categories
+    # iFuelPrice_total_sector <- toolAggregate(fuels[ , , fuel_map[,1]], dim = 3, rel = sets[sets$EF %in% fuel_map[,1],], from = "EF", to = "BAL")
+    # getItems(iFuelPrice_total_sector, 3) <- paste0("Price|Final Energy|", sector_name[y],"|", getItems(iFuelPrice_total_sector, 3))
+    # 
+    # # write data in mif file
+    # write.report(iFuelPrice_total_sector[,,],append=TRUE,file="reporting.mif",model="OPEN-PROM",unit="k$2015/toe",scenario=scenario_name)
+    # 
     #add model MENA_EDS data (choosing the correct variable from MENA by use of the MENA-PROM mapping)
     #fix units from $2015/toe to k$2015/toe
     FuelPrice_MENA <- readSource("MENA_EDS", subtype =  map[map[["OPEN.PROM"]] == "iFuelPrice", "MENA.EDS"]) / 1000
@@ -141,10 +193,6 @@ reportPrice <- function(regs) {
     
     PRICE_by_sector_and_EF_MENA <- as.quitte(PRICE_by_sector_and_EF_MENA) %>% as.magpie()
     years_in_horizon <-  horizon[horizon %in% getYears(PRICE_by_sector_and_EF_MENA, as.integer = TRUE)]
-    
-    PRICE_by_sector_and_EF_MENA_GLO <- dimSums(PRICE_by_sector_and_EF_MENA, 1, na.rm = TRUE)
-    getItems(PRICE_by_sector_and_EF_MENA_GLO, 1) <- "World"
-    PRICE_by_sector_and_EF_MENA <- mbind(PRICE_by_sector_and_EF_MENA, PRICE_by_sector_and_EF_MENA_GLO)
     
     # complete names
     getItems(PRICE_by_sector_and_EF_MENA, 3.1) <- paste0("Price|Final Energy|", sector_name[y],"|", getItems(PRICE_by_sector_and_EF_MENA, 3.1))
@@ -170,14 +218,30 @@ reportPrice <- function(regs) {
     FuelPrice_MENA <- as.quitte(FuelPrice_MENA) %>% as.magpie()
     years_in_horizon <-  horizon[horizon %in% getYears(FuelPrice_MENA, as.integer = TRUE)]
     
-    FuelPrice_MENA_GLO <- dimSums(FuelPrice_MENA, 1, na.rm = TRUE)
-    getItems(FuelPrice_MENA_GLO, 1) <- "World"
-    FuelPrice_MENA <- mbind(FuelPrice_MENA, FuelPrice_MENA_GLO)
+    iFuelPrice2 <- as.quitte(FuelPrice_MENA)
+    iFuelPrice2 <- iFuelPrice2 %>% mutate(value = mean(value, na.rm = TRUE), .by = c("model", "scenario",
+                                                                                     "region", "unit",
+                                                                                     "period", "variable","ef"))
+    iFuelPrice2 <- select(iFuelPrice2, "ef", "model", "scenario", "region", "variable", "unit", "period", "value")
+    iFuelPrice2 <- distinct(iFuelPrice2)
+    PRICE_by_EF_MENA_PROM <- as.quitte(iFuelPrice2) %>% as.magpie()
     
-    #aggregation by SECTOR and EF
-    PRICE_by_EF_MENA_PROM <- dimSums(FuelPrice_MENA, 3.1, na.rm = TRUE)
-    PRICE_by_sector_MENA_PROM <- dimSums(FuelPrice_MENA, 3.2, na.rm = TRUE)
-    PRICE_total_MENA_sector <- dimSums(FuelPrice_MENA, na.rm = TRUE)
+    
+    iFuelPrice3 <- as.quitte(FuelPrice_MENA)
+    iFuelPrice3 <- iFuelPrice3 %>% mutate(value = mean(value, na.rm = TRUE), .by = c("model", "scenario",
+                                                                                     "region", "unit",
+                                                                                     "period", "variable","sbs"))
+    iFuelPrice3 <- select(iFuelPrice3, "sbs", "model", "scenario", "region", "variable", "unit", "period", "value")
+    iFuelPrice3 <- distinct(iFuelPrice3)
+    PRICE_by_sector_MENA_PROM <- as.quitte(iFuelPrice3) %>% as.magpie()
+    
+    iFuelPrice4 <- as.quitte(FuelPrice_MENA)
+    iFuelPrice4 <- iFuelPrice4 %>% mutate(value = mean(value, na.rm = TRUE), .by = c("model", "scenario",
+                                                                                     "region", "unit",
+                                                                                     "period", "variable"))
+    iFuelPrice4 <- select(iFuelPrice4, "model", "scenario", "region", "variable", "unit", "period", "value")
+    iFuelPrice4 <- distinct(iFuelPrice4)
+    PRICE_total_MENA_sector <- as.quitte(iFuelPrice4) %>% as.magpie()
     
     # complete names
     getItems(PRICE_by_EF_MENA_PROM, 3) <- paste0("Price|Final Energy|", sector_name[y],"|", getItems(PRICE_by_EF_MENA_PROM, 3))
@@ -189,27 +253,27 @@ reportPrice <- function(regs) {
     write.report(PRICE_by_sector_MENA_PROM[,years_in_horizon,],file="reporting.mif",model="MENA-EDS",unit="k$2015/toe",append=TRUE,scenario="Baseline")
     write.report(PRICE_total_MENA_sector[,years_in_horizon,],file="reporting.mif",model="MENA-EDS",unit="k$2015/toe",append=TRUE,scenario="Baseline")
     
-    fuels_mena <- dimSums(FuelPrice_MENA, 3.1, na.rm = TRUE)
-    
-    # Aggregate model by subsector and by energy form
-    ef_toefa_map <- sets5 %>% filter(EF %in% as.character(getItems(fuels_mena,3)))
-    fuels_EFtoEFA_mena <- toolAggregate(fuels_mena[, , getItems(fuels_mena,3)[getItems(fuels_mena,3) %in% unique(sets5$EF)]], dim = 3, rel = ef_toefa_map, from = "EF", to = "EFA")
-    getItems(fuels_EFtoEFA_mena, 3) <- paste0("Price|Final Energy|", sector_name[y],"|", getItems(fuels_EFtoEFA_mena, 3))
-    
-    # write data in mif file
-    write.report(fuels_EFtoEFA_mena[,years_in_horizon,],file="reporting.mif",model="MENA-EDS",unit="k$2015/toe",append=TRUE,scenario="Baseline")
-    
-    fuel_map <- getItems(fuels_mena,3)[getItems(fuels_mena,3) %in% unique(sets$EF)]
-    fuel_map <- drop_na(as.data.frame(fuel_map))
-    # aggregate from PROM fuels to reporting fuel categories
-    iFuelPrice_total_sector_mena <- toolAggregate(fuels_mena[ , , fuel_map[,1]], dim = 3, rel = sets[sets$EF %in% fuel_map[,1],], from = "EF", to = "BAL")
-    getItems(iFuelPrice_total_sector_mena, 3) <- paste0("Price|Final Energy|", sector_name[y],"|", getItems(iFuelPrice_total_sector_mena, 3))
-    
-    # write data in mif file
-    write.report(iFuelPrice_total_sector_mena[,years_in_horizon,],file="reporting.mif",model="MENA-EDS",unit="k$2015/toe",append=TRUE,scenario="Baseline")
+    # fuels_mena <- dimSums(FuelPrice_MENA, 3.1, na.rm = TRUE)
+    # 
+    # # Aggregate model by subsector and by energy form
+    # ef_toefa_map <- sets5 %>% filter(EF %in% as.character(getItems(fuels_mena,3)))
+    # fuels_EFtoEFA_mena <- toolAggregate(fuels_mena[, , getItems(fuels_mena,3)[getItems(fuels_mena,3) %in% unique(sets5$EF)]], dim = 3, rel = ef_toefa_map, from = "EF", to = "EFA")
+    # getItems(fuels_EFtoEFA_mena, 3) <- paste0("Price|Final Energy|", sector_name[y],"|", getItems(fuels_EFtoEFA_mena, 3))
+    # 
+    # # write data in mif file
+    # write.report(fuels_EFtoEFA_mena[,years_in_horizon,],file="reporting.mif",model="MENA-EDS",unit="k$2015/toe",append=TRUE,scenario="Baseline")
+    # 
+    # fuel_map <- getItems(fuels_mena,3)[getItems(fuels_mena,3) %in% unique(sets$EF)]
+    # fuel_map <- drop_na(as.data.frame(fuel_map))
+    # # aggregate from PROM fuels to reporting fuel categories
+    # iFuelPrice_total_sector_mena <- toolAggregate(fuels_mena[ , , fuel_map[,1]], dim = 3, rel = sets[sets$EF %in% fuel_map[,1],], from = "EF", to = "BAL")
+    # getItems(iFuelPrice_total_sector_mena, 3) <- paste0("Price|Final Energy|", sector_name[y],"|", getItems(iFuelPrice_total_sector_mena, 3))
+    # 
+    # # write data in mif file
+    # write.report(iFuelPrice_total_sector_mena[,years_in_horizon,],file="reporting.mif",model="MENA-EDS",unit="k$2015/toe",append=TRUE,scenario="Baseline")
     
     #FuelPrice enerdata
-    x <- readSource("ENERDATA", "constant price", convert = TRUE)
+    x <- readSource("ENERDATA", "constant price", convert = TRUE) / 1000 # fix units to k$2015/toe
     x[x == 0] <- NA # set all zeros to NA because we deal with prices
     
     # filter years
@@ -244,6 +308,12 @@ reportPrice <- function(regs) {
       interpolate_missing_periods(period = getYears(out, as.integer = TRUE), expand.values = TRUE) %>%
       as.magpie()# %>%
     
+    x[is.na(x)] <- 0.00000001
+    
+    add_region_GLO <- toolAggregate(x, weight = gdp, wdim = 1, rel = rmap_world, from = "ISO3.Code", to = "V4")
+    getItems(add_region_GLO, 1) <- "World"
+    x <- mbind(x, add_region_GLO)
+    
     PRICE_by_sector_and_EF_enerdata <- x
     # complete names
     getItems(PRICE_by_sector_and_EF_enerdata, 3.1) <- paste0("Price|Final Energy|", sector_name[y],"|", getItems(PRICE_by_sector_and_EF_enerdata, 3.1))
@@ -263,22 +333,36 @@ reportPrice <- function(regs) {
     PRICE_by_sector_and_EF_enerdata <- as.quitte(PRICE_by_sector_and_EF_enerdata) %>% as.magpie()
     years_in_horizon <-  horizon[horizon %in% getYears(PRICE_by_sector_and_EF_enerdata, as.integer = TRUE)]
     
-    PRICE_by_sector_and_EF_enerdata_GLO <- dimSums(PRICE_by_sector_and_EF_enerdata, 1, na.rm = TRUE)
-    getItems(PRICE_by_sector_and_EF_enerdata_GLO, 1) <- "World"
-    PRICE_by_sector_and_EF_enerdata <- mbind(PRICE_by_sector_and_EF_enerdata, PRICE_by_sector_and_EF_enerdata_GLO)
-    
-    PRICE_by_sector_and_EF_enerdata <- PRICE_by_sector_and_EF_enerdata / 1000 # fix units to k$2015/toe
-    
     getItems(PRICE_by_sector_and_EF_enerdata,3.2) <- "k$2015/toe"
     # write data in mif file
     write.report(PRICE_by_sector_and_EF_enerdata[, years_in_horizon, ], file = "reporting.mif", model = "ENERDATA", unit = "k$2015/toe",append = TRUE, scenario = "Validation")
     
     x <- collapseDim(x, dim = 3.2)
     
-    #aggregation by SECTOR and EF
-    PRICE_by_EF_ENERDATA_PROM <- dimSums(x, 3.1, na.rm = TRUE)
-    PRICE_by_sector_ENERDATA_PROM <- dimSums(x, 3.2, na.rm = TRUE)
-    PRICE_total_ENERDATA_PROM_sector <- dimSums(x, na.rm = TRUE)
+    iFuelPrice2 <- as.quitte(x)
+    iFuelPrice2 <- iFuelPrice2 %>% mutate(value = mean(value, na.rm = TRUE), .by = c("model", "scenario",
+                                                                                     "region", "unit",
+                                                                                     "period", "variable"))
+    iFuelPrice2 <- select(iFuelPrice2, "variable", "model", "scenario", "region", "variable", "unit", "period", "value")
+    iFuelPrice2 <- distinct(iFuelPrice2)
+    PRICE_by_EF_ENERDATA_PROM <- as.quitte(iFuelPrice2) %>% as.magpie()
+    
+    
+    iFuelPrice3 <- as.quitte(x)
+    iFuelPrice3 <- iFuelPrice3 %>% mutate(value = mean(value, na.rm = TRUE), .by = c("model", "scenario",
+                                                                                     "region", "unit",
+                                                                                     "period","new"))
+    iFuelPrice3 <- select(iFuelPrice3, "new", "model", "scenario", "region", "unit", "period", "value")
+    iFuelPrice3 <- distinct(iFuelPrice3)
+    PRICE_by_sector_ENERDATA_PROM <- as.quitte(iFuelPrice3) %>% as.magpie()
+    
+    iFuelPrice4 <- as.quitte(x)
+    iFuelPrice4 <- iFuelPrice4 %>% mutate(value = mean(value, na.rm = TRUE), .by = c("model", "scenario",
+                                                                                     "region", "unit",
+                                                                                     "period"))
+    iFuelPrice4 <- select(iFuelPrice4, "model", "scenario", "region", "unit", "period", "value")
+    iFuelPrice4 <- distinct(iFuelPrice4)
+    PRICE_total_ENERDATA_PROM_sector <- as.quitte(iFuelPrice4) %>% as.magpie()
     
     # complete names
     getItems(PRICE_by_EF_ENERDATA_PROM, 3) <- paste0("Price|Final Energy|", sector_name[y],"|", getItems(PRICE_by_EF_ENERDATA_PROM, 3))
@@ -290,26 +374,41 @@ reportPrice <- function(regs) {
     write.report(PRICE_by_sector_ENERDATA_PROM[, years_in_horizon, ], file = "reporting.mif", model = "ENERDATA", unit = "k$2015/toe",append = TRUE, scenario = "Validation")
     write.report(PRICE_total_ENERDATA_PROM_sector[, years_in_horizon, ], file = "reporting.mif", model = "ENERDATA", unit = "k$2015/toe",append = TRUE, scenario = "Validation")
     
-    fuels_enerdata <- dimSums(x, 3.1, na.rm = TRUE)
-    
-    # Aggregate model by subsector and by energy form
-    ef_toefa_map <- sets5 %>% filter(EF %in% as.character(getItems(fuels_enerdata,3)))
-    fuels_EFtoEFA_enerdata <- toolAggregate(fuels_enerdata[, , getItems(fuels_enerdata,3)[getItems(fuels_enerdata,3) %in% unique(sets5$EF)]], dim = 3, rel = ef_toefa_map, from = "EF", to = "EFA")
-    getItems(fuels_EFtoEFA_enerdata, 3) <- paste0("Price|Final Energy|", sector_name[y],"|", getItems(fuels_EFtoEFA_enerdata, 3))
-    
-    # write data in mif file
-    write.report(fuels_EFtoEFA_enerdata[, years_in_horizon, ], file = "reporting.mif", model = "ENERDATA", unit = "k$2015/toe",append = TRUE, scenario = "Validation")
-    
-    fuel_map <- getItems(fuels_enerdata,3)[getItems(fuels_enerdata,3) %in% unique(sets$EF)]
-    fuel_map <- drop_na(as.data.frame(fuel_map))
-    # aggregate from PROM fuels to reporting fuel categories
-    iFuelPrice_total_sector_enerdata <- toolAggregate(fuels_enerdata[ , , fuel_map[,1]], dim = 3, rel = sets[sets$EF %in% fuel_map[,1],], from = "EF", to = "BAL")
-    getItems(iFuelPrice_total_sector_enerdata, 3) <- paste0("Price|Final Energy|", sector_name[y],"|", getItems(iFuelPrice_total_sector_enerdata, 3))
-    
-    # write data in mif file
-    write.report(iFuelPrice_total_sector_enerdata[, years_in_horizon, ], file = "reporting.mif", model = "ENERDATA", unit = "k$2015/toe",append = TRUE, scenario = "Validation")
-    
+    z <- mbind(z, x)
+    # fuels_enerdata <- dimSums(x, 3.1, na.rm = TRUE)
+    # 
+    # # Aggregate model by subsector and by energy form
+    # ef_toefa_map <- sets5 %>% filter(EF %in% as.character(getItems(fuels_enerdata,3)))
+    # fuels_EFtoEFA_enerdata <- toolAggregate(fuels_enerdata[, , getItems(fuels_enerdata,3)[getItems(fuels_enerdata,3) %in% unique(sets5$EF)]], dim = 3, rel = ef_toefa_map, from = "EF", to = "EFA")
+    # getItems(fuels_EFtoEFA_enerdata, 3) <- paste0("Price|Final Energy|", sector_name[y],"|", getItems(fuels_EFtoEFA_enerdata, 3))
+    # 
+    # # write data in mif file
+    # write.report(fuels_EFtoEFA_enerdata[, years_in_horizon, ], file = "reporting.mif", model = "ENERDATA", unit = "k$2015/toe",append = TRUE, scenario = "Validation")
+    # 
+    # fuel_map <- getItems(fuels_enerdata,3)[getItems(fuels_enerdata,3) %in% unique(sets$EF)]
+    # fuel_map <- drop_na(as.data.frame(fuel_map))
+    # # aggregate from PROM fuels to reporting fuel categories
+    # iFuelPrice_total_sector_enerdata <- toolAggregate(fuels_enerdata[ , , fuel_map[,1]], dim = 3, rel = sets[sets$EF %in% fuel_map[,1],], from = "EF", to = "BAL")
+    # getItems(iFuelPrice_total_sector_enerdata, 3) <- paste0("Price|Final Energy|", sector_name[y],"|", getItems(iFuelPrice_total_sector_enerdata, 3))
+    # 
+    # # write data in mif file
+    # write.report(iFuelPrice_total_sector_enerdata[, years_in_horizon, ], file = "reporting.mif", model = "ENERDATA", unit = "k$2015/toe",append = TRUE, scenario = "Validation")
+    # 
   }
+  
+  #ENERDATA Price|Final Energy
+  z <- as.quitte(z)
+  z <- z %>% mutate(value = mean(value, na.rm = TRUE), .by = c("model", "scenario",
+                                                               "region", "unit",
+                                                               "period"))
+  
+  z <- select(z, "model", "scenario", "region", "unit", "period", "value")
+  z <- distinct(z)
+  z <- as.quitte(z) %>% as.magpie()
+
+  getItems(z, 3) <- "Price|Final Energy"
+  # write data in mif file
+  write.report(z[, years_in_horizon, ], file = "reporting.mif", model = "ENERDATA", unit = "k$2015/toe",append = TRUE, scenario = "Validation")
   
   # MENA
   #add model MENA_EDS data (choosing the correct variable from MENA by use of the MENA-PROM mapping)
@@ -337,10 +436,6 @@ reportPrice <- function(regs) {
   elec_prices_MENA <- as.quitte(elec_prices_MENA) %>% as.magpie()
   years_in_horizon <-  horizon[horizon %in% getYears(elec_prices_MENA, as.integer = TRUE)]
   
-  elec_prices_MENA_GLO <- dimSums(elec_prices_MENA, 1, na.rm = TRUE)
-  getItems(elec_prices_MENA_GLO, 1) <- "World"
-  elec_prices_MENA <- mbind(elec_prices_MENA, elec_prices_MENA_GLO)
-  
   elec_prices_MENA <- elec_prices_MENA * 1.231727 # Euro2005 to US$2015/KWh
   # write data in mif file
   write.report(elec_prices_MENA[, years_in_horizon, ], file = "reporting.mif", model = "MENA-EDS", unit = "US$2015/KWh",append = TRUE, scenario = "Baseline")
@@ -366,7 +461,8 @@ reportPrice <- function(regs) {
   elec_prices_ENERDATA <- as.quitte(elec_prices_ENERDATA) %>% as.magpie()
   years_in_horizon <-  horizon[horizon %in% getYears(elec_prices_ENERDATA, as.integer = TRUE)]
   
-  elec_prices_ENERDATA_GLO <- dimSums(elec_prices_ENERDATA, 1, na.rm = TRUE)
+  elec_prices_ENERDATA[is.na(elec_prices_ENERDATA)] <- 0.00000001
+  elec_prices_ENERDATA_GLO <- toolAggregate(elec_prices_ENERDATA, weight = gdp, dim =1, wdim = 1, rel = rmap_world, from = "ISO3.Code", to = "V4")
   getItems(elec_prices_ENERDATA_GLO, 1) <- "World"
   elec_prices_ENERDATA <- mbind(elec_prices_ENERDATA, elec_prices_ENERDATA_GLO)
   
