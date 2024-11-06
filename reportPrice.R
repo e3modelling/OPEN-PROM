@@ -156,6 +156,28 @@ reportPrice <- function(regs) {
     write.report(PRICE_by_sector_OPEN_PROM[,,],file="reporting.mif",model="OPEN-PROM",unit="k$2015/toe",append=TRUE,scenario=scenario_name)
     write.report(PRICE_total_OPEN_PROM_sector[,,],file="reporting.mif",model="OPEN-PROM",unit="k$2015/toe",append=TRUE,scenario=scenario_name)
     
+    #fuel categories
+
+    # aggregate from fuels to reporting fuel categories
+    sum_open_prom <- iFuelPrice
+    sum_open_prom <- as.quitte(sum_open_prom)
+    ## add mapping
+    sum_open_prom <- left_join(sum_open_prom, sets, by = "EF")
+    # take the mean
+    sum_open_prom <- mutate(sum_open_prom, value = mean(value, na.rm = TRUE), .by = c("model", "scenario", "region",
+                                                                      "unit","period","BAL" ))
+    sum_open_prom <- distinct(sum_open_prom)
+    sum_open_prom <- sum_open_prom %>% select(c("model","scenario","region","unit",
+                                "period","value","BAL")) 
+    sum_open_prom <- distinct(sum_open_prom)
+    sum_open_prom <- as.magpie(as.quitte(drop_na(sum_open_prom)))
+    
+    # complete names
+    getItems(sum_open_prom, 3) <- paste0("Price|Final Energy|", sector_name[y],"|", getItems(sum_open_prom, 3))
+    
+    # write data in mif file
+    write.report(sum_open_prom[,,],file="reporting.mif",model="OPEN-PROM",unit="k$2015/toe",append=TRUE,scenario=scenario_name)
+    
     #fuels <- dimSums(iFuelPrice, 3.1, na.rm = TRUE)
     
     # Energy Forms Aggregations
