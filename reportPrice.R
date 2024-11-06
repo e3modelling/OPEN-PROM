@@ -61,8 +61,6 @@ reportPrice <- function(regs) {
   sets <- separate_rows(sets,EF)
   sets$BAL <- gsub("Gas fuels", "Gases", sets$BAL)
   
-  z <- NULL
-  
   gdp <- calcOutput(type = "iGDP", aggregate = FALSE)
   gdp <- as.quitte(gdp)
   
@@ -84,6 +82,16 @@ reportPrice <- function(regs) {
   rmap_world <- rmap
   rmap_world[ ,4] <- "World"
   
+  sets <- toolreadSets(system.file(file.path("extdata", "sets.gms"), package = "mrprom"), "BALEF2EFS")
+  sets[, 1] <- gsub("\"", "", sets[, 1])
+  sets <- separate_wider_delim(sets,cols = 1, delim = ".", names = c("BAL", "EF"))
+  sets[["EF"]] <- sub("\\(", "", sets[["EF"]])
+  sets[["EF"]] <- sub("\\)", "", sets[["EF"]])
+  EF <- NULL
+  sets <- separate_rows(sets, EF)
+  sets[["BAL"]] <- gsub("Gas fuels", "Gases", sets[["BAL"]])
+  
+  z <- NULL
   for (y in 1 : length(sector)) {
     # read GAMS set used for reporting of Final Energy different for each sector
     sets6 <- NULL
@@ -394,6 +402,28 @@ reportPrice <- function(regs) {
     # # write data in mif file
     # write.report(iFuelPrice_total_sector_enerdata[, years_in_horizon, ], file = "reporting.mif", model = "ENERDATA", unit = "k$2015/toe",append = TRUE, scenario = "Validation")
     # 
+    
+    # aggregate from fuels to reporting fuel categories
+    sum_z <- x
+    sum_z <- as.quitte(sum_z)
+    names(sum_z) <- sub("new", "EF", names(sum_z))
+    ## add mapping
+    sum_z <- left_join(sum_z, sets, by = "EF")
+    # take the mean
+    sum_z <- mutate(sum_z, value = mean(value, na.rm = TRUE), .by = c("model", "scenario", "region",
+                                                                      "unit","period","BAL" ))
+    sum_z <- distinct(sum_z)
+    sum_z <- sum_z %>% select(c("model","scenario","region","unit",
+                                "period","value","BAL")) 
+    sum_z <- distinct(sum_z)
+    sum_z <- as.magpie(as.quitte(drop_na(sum_z)))
+    
+    # complete names
+    getItems(sum_z, 3) <- paste0("Price|Final Energy|", sector_name[y],"|", getItems(sum_z, 3))
+    
+    # write data in mif PRICE_by_EF_ENERDATA_PROM
+    write.report(sum_z[, years_in_horizon, ], file = "reporting.mif", model = "ENERDATA", unit = "k$2015/toe",append = TRUE, scenario = "Validation")
+    
   }
   
   #ENERDATA Price|Final Energy
