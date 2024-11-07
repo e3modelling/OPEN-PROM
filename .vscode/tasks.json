@@ -60,6 +60,20 @@
         },
 
         {
+            "label": "OPEN-PROM DEBUGGING",
+            "type": "shell",
+            "command": "Rscript start.R task=4",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "focus": true
+            }
+        },
+
+        {
             "label": "REPORTING",
             "type": "shell",
             "command": "Rscript reportOutput.R",
@@ -77,6 +91,34 @@
             "label": "SCENTOOL",
             "type": "shell",
             "command": "Rscript -e 'mip::scenTool()'",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "focus": true
+            }
+        },
+
+        {
+            "label": "COMPARE SCENARIOS",
+            "type": "shell",
+            "command": "Rscript reportOutput.R",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "focus": true
+            }
+        },
+
+        {
+            "label": "OPEN-PROM LIVE",
+            "type": "shell",
+            "command": "python ./scripts/R-live.py",
             "problemMatcher": [],
             "group": {
                 "kind": "build",

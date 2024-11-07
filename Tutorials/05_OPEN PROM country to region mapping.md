@@ -1,7 +1,7 @@
 Here is the proposed classification of world countries to OPEN-PROM native regions:
 
 (Custom native region codes are highlighted - for the rest of the countries their official 3-digit ISO Code will be used).
-Machine-readable mapping is found [here](https://github.com/e3modelling/mrprom/blob/main/inst/extdata/regional/regionmappingOP.csv)
+Machine-readable mapping is found [here](https://github.com/e3modelling/mrprom/blob/main/inst/extdata/regional/regionmappingOP5.csv)
 
 1.	Austria
 2.	Belgium
@@ -12,50 +12,47 @@ Machine-readable mapping is found [here](https://github.com/e3modelling/mrprom/b
 7.	Germany
 8.	Denmark
 9.	Spain
-10.	Estonia
-11.	Finland
-12.	France
-13.	United Kingdom
-14.	Greece
-15.	Hungary
-16.	Ireland
-17.	Italy
-18.	Lithuania
-19.	Luxembourg
-20.	Latvia
-21.	Malta
-22.	Netherlands
-23.	Poland
-24.	Portugal
-25.	Slovakia
-26.	Slovenia
-27.	Sweden
-28.	Romania
-29.	USA
-30.	Japan
-31.	Canada
-32.	Brazil
-33.	China /CHINA, MACAO, HONG KONG, TAIWAN/ `**CHA**`
-34.	India
-35.	South Korea
-36.	Indonesia
-37.	Mexico
-38.	Argentina
-39.	Turkey
-40.	Saudi Arabia
-41.	Oceania `**OCE**`
-42.	Russian federation
-43.	Iran
-44.	Nigeria
-45.	Rest of energy producing countries /ALGERIA, AZERBAIJAN, IRAQ, JORDAN, KUWAIT, LEBANON, LIBYAN ARAB JAMAHIRIYA, QATAR, SYRIAN ARAB REPUBLIC, UNITED ARAB EMIRATES, VENEZUELA, WESTERN SAHARA, YEMEN/ `**REP**`                       
-46.	South Africa
-47.	Rest of Europe 1 /NORWAY, SWITZERLAND, ICELAND, LIECHTENSTEIN/ `**NSI**`
-48.	Rest of Europe 2 /ALBANIA, ANDORRA, GREENLAND, VATICAN, SAN MARINO, SVALBARD AND JAN MAYEN, BELARUS, BOSNIA AND HERZEGOVINA, NORTH MACEDONIA, MOLDOVA, REPUBLIC OF MONACO, MONTENEGRO, SERBIA, UKRAINE/ `**REU**`        
-49.	Egypt
-50.	Morocco
-51.	Tunisia
-52.	Israel
-53.	Rest of Latin America `**RLA**`
-54.	Rest of Africa `**RAF**`
-55.	Rest of Asia `**RAS**`
-56.	Rest of world `**RWO**`
+10.	Finland
+11.	France
+12.	United Kingdom
+13.	Greece
+14.	Hungary
+15.	Ireland
+16.	Italy
+17.	Malta
+18.	Netherlands
+19.	Poland
+20.	Portugal
+21.	Slovakia
+22.	Slovenia
+23.	Sweden
+24.	Romania
+25.	USA
+26.	Japan
+27.	Canada
+28.	Brazil
+29.	China /CHINA, MACAO, HONG KONG, TAIWAN/ `**CHA**`
+30.	India
+31.	South Korea
+32.	Indonesia
+33.	Mexico
+34.	Argentina
+35.	Turkey
+36.	Saudi Arabia
+37.	Oceania `**OCE**`
+38.	Russian federation
+39.	Iran
+40.	Nigeria
+41.	Rest of energy producing countries /ALGERIA, AZERBAIJAN, IRAQ, JORDAN, KUWAIT, LEBANON, LIBYAN ARAB JAMAHIRIYA, QATAR, SYRIAN ARAB REPUBLIC, UNITED ARAB EMIRATES, VENEZUELA, WESTERN SAHARA, YEMEN/ `**REP**`                       
+42.	South Africa
+43.	Rest of Europe 1 /NORWAY, SWITZERLAND, ICELAND, LIECHTENSTEIN/ `**NSI**`
+44.	Rest of Europe 2 /ALBANIA, ANDORRA, GREENLAND, VATICAN, SAN MARINO, SVALBARD AND JAN MAYEN, BELARUS, BOSNIA AND HERZEGOVINA, NORTH MACEDONIA, MOLDOVA, REPUBLIC OF MONACO, MONTENEGRO, SERBIA, UKRAINE/ `**REU**`        
+45.	Egypt
+46.	Morocco
+47.	Tunisia
+48.	Israel
+49.	Rest of Latin America `**RLA**`
+50.	Rest of Africa `**RAF**`
+51.	Rest of Asia `**RAS**`
+52.	Rest of world `**RWO**`
+53.	Rest of EU27 /ESTONIA, LUXEMBOURG, LITHUANIA, LATVIA/ `**ELL**`

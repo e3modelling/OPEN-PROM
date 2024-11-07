@@ -1,65 +1,87 @@
 sets
 
 ***        Geographic Coverage      *
-allCy    Countries for which the model is applied
+allCy    "All Countries Used in the Model"
 /
-RAS       REST OF ASIA
-MAR       MOROCCO
-RWO
-REU
-REP
-RAF
-RLA
-ARG
-OCE
+LAM
+OAS
+SSA
+NEU
+MEA
+REF
+CAZ
 AUT
 BEL
-BRA
 BGR
-CAN
 CHA
-HRV
 CYP
 CZE
+DEU
 DNK
-EGY
-*EST
+ESP
+ELL
 FIN
 FRA
-DEU
+GBR
 GRC
+HRV
 HUN
-NSI
 IND
-IDN
-IRN
 IRL
-ISR
 ITA
 JPN
-KOR
-*LVA
-*LTU
-*LUX
 MLT
-MEX
 NLD
-NGA
 POL
 PRT
 ROU
-RUS
-SAU
 SVK
 SVN
-ZAF
-ESP
 SWE
-TUN
-TUR
-GBR
 USA
+MAR
+EGY
+RWO
+/
+
+resCy "Countries for Research Mode"
+/
+LAM
+OAS
+SSA
+NEU
+MEA
+REF
+CAZ
+AUT
+BEL
+BGR
+CHA
+CYP
+CZE
+DEU
+DNK
+ESP
 ELL
+FIN
+FRA
+GBR
+GRC
+HRV
+HUN
+IND
+IRL
+ITA
+JPN
+MLT
+NLD
+POL
+PRT
+ROU
+SVK
+SVN
+SWE
+USA
 /
 
 runCy(allCy) Countries for which the model is running
@@ -71,9 +93,9 @@ runCyL(allCy) Countries for which the model is running (used in countries loop)
 %fCountries%
 /;
 
-* runCy is equal to allCy on research mode
-runCy(allCy)$(%DevMode% = 0) = allCy(allCy) ;
-runCyL(allCy)$(%DevMode% = 0) = allCy(allCy) ;
+* runCy is equal to resCy on research mode
+runCy(allCy)$(%DevMode% = 0) = resCy(allCy) ;
+runCyL(allCy)$(%DevMode% = 0) = resCy(allCy) ;
 
 sets
 ***        Model Time Horizon       *
@@ -110,16 +132,7 @@ rcc                                                           /1*4/
 
 ***       Sectoral Structure        *
 
-sct          Model Sectors
-/
-INDU   Industry
-TRAN   Transport
-TERT   Tertiary
-PSG    Power and Steam Generation
-BUN    Bunkers
-PCH    Petrochemical Industry
-OTHNEN Other non energy uses
-/
+
 
 ALLSBS   All sectors
 /
@@ -220,16 +233,6 @@ PG_SF6         "Electricity production, related with SF6"
 OI_SF6         "Other Industries activities, related with SF6"
 /
 
-SCTtoSBS(SCT, SBS)  Sectors to Subsectors
-/
-INDU.(IS,NF,CH,BM,PP,FD,EN,TX,OE,OI)
-TRAN.(PC,PT,PA,GU,GT,GN)
-TERT.(SE,AG,HOU)
-PSG.PG
-BUN.BU
-PCH.PCH
-OTHNEN.NEN
-/
 
 
 POLICIES_set
@@ -244,7 +247,9 @@ RENE_SUBS
 BIO_SUBS
 BIOM_SUBS
 SOLRES_SUBS
-exogCV
+exogCV_NPi
+exogCV_1_5C
+exogCV_2C
 /
 
 RegulaPolicies(POLICIES_set) Set of policies entering in the regula falsi loops
@@ -888,17 +893,6 @@ mc_m     value for the ratio of x to potential after which exponential is taking
 
 ETYPES           "Elasticities types"
 /a,b1,b2,b3,b4,b5,c,c1,c2,c3,c4,c5,aend,b3end,b4end/
-
-ELCPCHAR         "Factors controlling electricity price"
-/
-INDU     "Elecprice-eleccost in Industry"
-TERT     "Elecprice-eleccost in Tertiary"
-W_INDU   "Weight for production cost in industry"
-W_TERT   "Weight for production cost in tertiary"
-IND_RES  "Additive residual to electricity price for industry"
-TERT_RES  "Additive residual to electricity price for tertiary"
-VAT      "VAT"
-/
 
 ECONCHAR         "Technical - Economic characteristics for demand technologies"
 /

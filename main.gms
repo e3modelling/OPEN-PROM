@@ -34,6 +34,7 @@
 *' * Pot: Potential
 *' * Tr: Transport
 *' * Ind: Industry
+*' * Indx: Index
 *' * Inv: Investment
 *' * Dom: Domestic
 *' * Dec: Decision
@@ -64,7 +65,8 @@
 *' * NAP: National Allocation Plan
 *' * Carb: Carbon
 *' * Val: Value
-*' * Sub: Subsector
+*' * Subsec: Subsector
+*' * Sub: Substitutable
 *' * Avg: Average
 *' * Consu: Consumers
 *' @stop The following code will be ignored by goxygen until the next identifier.
@@ -97,8 +99,9 @@ $offOrder
 $evalGlobal SolverTryMax 4
 *' *** Setting research mode (0) or development mode (1) to modify settings and parameters accordingly
 $setGlobal DevMode 0 !! can be overwritten if VS Code Tasks are used
-*' *** Write a GDX file with all data at the end of the run
+*' *** Write a compressed GDX file with all data at the end of the run
 $setGlobal WriteGDX on
+$setEnv GDXCOMPRESS 1
 *' *** Generate input data?
 $setGlobal GenerateInput on !! can be overwritten if VS Code Tasks are used
 
@@ -113,6 +116,7 @@ $evalGlobal fEndHorizon 2100
 $evalGlobal fEndY 2100
 $evalGlobal fStartY 2021
 $evalGlobal fBaseY %fStartY% - %fPeriodOfYears%
+$evalGlobal fScenario 0 !! Setting the model scenario: 0 is NPi_Default, 1 is 1.5C and 2 is 2C
 
 *** end of dollar commands section, no further flag definitions allowed 
 
@@ -123,6 +127,9 @@ $elseif.loadData %DevMode% == 1 $call "RScript ./loadMadratData.R DevMode=1"
 $elseif.loadData %DevMode% == 2 $call "RScript ./loadMadratData.R DevMode=2"
 $endif.loadData
 $endif.genInp
+* Open file to write txt
+file fStat /'modelstat.txt'/; 
+fStat.ap = 1; 
 
 $include sets.gms
 $include declarations.gms

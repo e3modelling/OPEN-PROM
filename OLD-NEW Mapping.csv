@@ -17,8 +17,8 @@ QBslMaxmLoad            ,QBaseLoadMax            ,,Power Generation
 " VBslMaxmLoad(runCy,YTIME)"," VBaseLoadMax(runCy,YTIME)",,Power Generation
 QElecBaseLoad           ,QBaseLoad             ,,Power Generation
 " VCorrBaseLoad(runCy,YTIME)"," VBaseLoad(runCy,YTIME)",,Power Generation
-QTotReqElecProd          ,QProdReqTotElec          ,,Power Generation
-" VTotReqElecProd(runCy,YTIME)"," VProdReqTotElec(runCy,YTIME)",,Power Generation
+QTotReqElecProd          ,QProdElecReqTot          ,,Power Generation
+" VTotReqElecProd(runCy,YTIME)"," VProdElecReqTot(runCy,YTIME)",,Power Generation
 QTotEstElecGenCap         ,QCapElecTotEst           ,,Power Generation
 " VTotElecGenCapEst(runCy,YTIME)"," VCapElecTotEst(runCy,YTIME)",,Power Generation
 QTotElecGenCap           ,QCapElecTot            ,,Power Generation
@@ -45,8 +45,8 @@ QProdCostTechPreReplac       ,QCostProdTeCHPreReplac       ,PGALL,Power Generati
 " VProdCostTechPreReplac(runCy,PGALL,YTIME)"," VCostProdTeCHPreReplac(runCy,PGALL,YTIME)",PGALL,Power Generation
 QProdCostTechPreReplacAvail    ,QCostProdTeCHPreReplacAvail    ,"PGALL,PGALL2",Power Generation
 " VProdCostTechPreReplacAvail(runCy,PGALL,PGALL2,YTIME)"," VCostProdTeCHPreReplacAvail(runCy,PGALL,PGALL2,YTIME)","PGALL,PGALL2",Power Generation
-QEndogScrapIndex          ,QIndexEndogScrap          ,PGALL,Power Generation
-" VEndogScrapIndex(runCy,PGALL,YTIME)"," VIndexEndogScrap(runCy,PGALL,YTIME)",PGALL,Power Generation
+QEndogScrapIndex          ,QIndxEndogScrap          ,PGALL,Power Generation
+" VEndogScrapIndex(runCy,PGALL,YTIME)"," VIndxEndogScrap(runCy,PGALL,YTIME)",PGALL,Power Generation
 QElecGenNoChp           ,QCapElecNonCHP           ,,Power Generation
 " VElecGenNoChp(runCy,YTIME)"," VCapElecNonCHP(runCy,YTIME)",,Power Generation
 QGapPowerGenCap          ,QGapGenCapPowerDiff        ,,Power Generation
@@ -85,12 +85,12 @@ QOverallCap            ,QCapOverall            ,PGALL,Power Generation
 " VOverallCap(runCy,PGALL,YTIME)"," VCapOverall(runCy,PGALL,YTIME)",PGALL,Power Generation
 QScalFacPlantDispatch       ,QScalFacPlantDispatch       ,,Power Generation
  VScalFacPlaDisp, VScalFacPlaDisp,,Power Generation
-QElecChpPlants           ,QProdEstElecCHP          ,,Power Generation
-" VElecChpPlants(runCy,YTIME) "," VProdEstElecCHP(runCy,YTIME) ",,Power Generation
+QElecChpPlants           ,QProdElecEstCHP          ,,Power Generation
+" VElecChpPlants(runCy,YTIME) "," VProdElecEstCHP(runCy,YTIME) ",,Power Generation
 QNonChpElecProd          ,QProdElecNonCHP          ,,Power Generation
 " VNonChpElecProd(runCy,YTIME) "," VProdElecNonCHP(runCy,YTIME) ",,Power Generation
-QReqElecProd            ,QProdReqElec            ,,Power Generation
-" VReqElecProd(runCy,YTIME) "," VProdReqElec(runCy,YTIME) ",,Power Generation
+QReqElecProd            ,QProdElecReqCHP            ,,Power Generation
+" VReqElecProd(runCy,YTIME) "," VProdElecReqCHP(runCy,YTIME) ",,Power Generation
 QElecProdPowGenPlants       ,QProdElec             ,PGALL,Power Generation
 " VElecProd(runCy,PGALL,YTIME)"," VProdElec(runCy,PGALL,YTIME)",PGALL,Power Generation
 qSecContrTotChpProd        ,qSecContrTotCHPProd        ,"(INDDOM,CHP)$(SECTTECH(INDDOM,CHP))",Power Generation
@@ -98,7 +98,6 @@ qSecContrTotChpProd        ,qSecContrTotCHPProd        ,"(INDDOM,CHP)$(SECTTECH(
 QElecProdChpPlants         ,QProdElecCHP            ,CHP,Power Generation
 " VChpElecProd(runCy,CHP,YTIME)"," VProdElecCHP(runCy,CHP,YTIME)",CHP,Power Generation
 qShareRenGrossElecProd       ,QShareRenGrossProd         ,,Power Generation
-" vResShareGrossElecProd(runCy,YTIME) "," VShareRenGrossProd(runCy,YTIME) ",,Power Generation
 QLonPowGenCostTechNoCp       ,QCostPowGenLngTechNoCp       ,"(PGALL,ESET)",Power Generation
 " VLongPowGenCost(runCy,PGALL,ESET,YTIME)"," VCostPowGenLngTechNoCp(runCy,PGALL,ESET,YTIME)","(PGALL,ESET)",Power Generation
 qLonMnmpowGenCost         ,qCostPowGenLonMin         ,PGALL,Power Generation
@@ -117,8 +116,8 @@ QElecPriIndResNoCliPol       ,QPriceElecIndResNoCliPol      ,ESET,Power Generati
 " VElecPriIndResNoCliPol(runCy,ESET,YTIME)"," VPriceElecIndResNoCliPol(runCy,ESET,YTIME)",ESET,Power Generation
 qShortPowGenCost          ,qCostPowGenAvgShrt         ,ESET,Power Generation
 " vAvgPowerGenCostShoTrm(runCy,ESET,YTIME)"," vCostPowGenAvgShrt(runCy,ESET,YTIME)",ESET,Power Generation
-QPassCarsLft            ,QLftPc               ,"(DSBS,EF)$(sameas(DSBS,""PC"") $SECTTECH(DSBS,EF))",Transport
-" VLifeTimeTech(runCy,DSBS,EF,YTIME)"," VLftPc(runCy,DSBS,EF,YTIME)","(DSBS,EF)$(sameas(DSBS,""PC"") $SECTTECH(DSBS,EF))",Transport
+QPassCarsLft            ,QLft               ,"(DSBS,EF)$(sameas(DSBS,""PC"") $SECTTECH(DSBS,EF))",Transport
+" VLifeTimeTech(runCy,DSBS,EF,YTIME)"," VLft(runCy,DSBS,EF,YTIME)","(DSBS,EF)$(sameas(DSBS,""PC"") $SECTTECH(DSBS,EF))",Transport
 QGoodsTranspActiv         ,QActivGoodsTransp         ,TRANSE$(TRANG(TRANSE)),Transport
 " VGoodsTranspActiv(runCy,TRANSE,YTIME)"," VActivGoodsTransp(runCy,TRANSE,YTIME)",TRANSE$(TRANG(TRANSE)),Transport
 QGapTranspActiv          ,QGapTranspActiv          ,TRANSE,Transport
@@ -133,8 +132,8 @@ QTranspCostMatFac         ,QCostTranspMatFac         ,"(TRANSE,TTECH)$SECTTECH(T
 " VTranspCostMatFac(runCy,TRANSE,RCon,TTECH,YTIME) "," VCostTranspMatFac(runCy,TRANSE,RCon,TTECH,YTIME) ","(TRANSE,TTECH)$SECTTECH(TRANSE,TTECH)",Transport
 QTechSortVarCost          ,QTechSortVarCost          ,TRANSE,Transport
 " VTechSortVarCost(runCy,TRANSE,rCon,YTIME)"," VTechSortVarCost(runCy,TRANSE,rCon,YTIME)",TRANSE,Transport
-QTechSortVarCostNewEquip      ,QShareTechSectoral         ,"(TRANSE,TTECH)$SECTTECH(TRANSE,TTECH)",Transport
-" VTechSortVarCostNewEquip(runCy,TRANSE,TTECH,YTIME)"," VShareTechSectoral(runCy,TRANSE,TTECH,YTIME)","(TRANSE,TTECH)$SECTTECH(TRANSE,TTECH)",Transport
+QTechSortVarCostNewEquip      ,QShareTechTr         ,"(TRANSE,TTECH)$SECTTECH(TRANSE,TTECH)",Transport
+" VTechSortVarCostNewEquip(runCy,TRANSE,TTECH,YTIME)"," VShareTechTr(runCy,TRANSE,TTECH,YTIME)","(TRANSE,TTECH)$SECTTECH(TRANSE,TTECH)",Transport
 QConsEachTechTransp        ,QConsTechTranspSectoral      ,"(TRANSE,TTECH,EF)$(SECTTECH(TRANSE,EF) $TTECHtoEF(TTECH,EF))",Transport
 " VConsEachTechTransp(runCy,TRANSE,TTECH,EF,YTIME)"," VConsTechTranspSectoral(runCy,TRANSE,TTECH,EF,YTIME)","(TRANSE,TTECH,EF)$(SECTTECH(TRANSE,EF) $TTECHtoEF(TTECH,EF))",Transport
 QFinEneDemTranspPerFuel      ,QDemFinEneTranspPerFuel      ,"(TRANSE,EF)$(SECTTECH(TRANSE,EF))",Transport
@@ -155,19 +154,19 @@ QScrap               ,QNumPcScrap            ,,Transport
 " VScrap(runCy,YTIME)"," VNumPcScrap(runCy,YTIME)",,Transport
 QLevl               ,QPcOwnPcLevl            ,,Transport
 " VLamda(runCy,YTIME)"," VPcOwnPcLevl(runCy,YTIME)",,Transport
-QScrRate              ,QScrRatePc             ,,Transport
-" VScrRate(runCy,YTIME)"," VScrRatePc(runCy,YTIME)",,Transport
+QScrRate              ,QRateScrPc             ,,Transport
+" VScrRate(runCy,YTIME)"," VRateScrPc(runCy,YTIME)",,Transport
 QElecConsAll            ,QConsElec             ,DSBS,Transport
 " VElecConsAll(runCy,DSBS,YTIME)"," VConsElec(runCy,DSBS,YTIME)",DSBS,Transport
 QElecConsNonSub          ,QConsElecNonSubIndTert       ,INDOM,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 " VElecNonSub(runCy,INDDOM,YTIME)"," VConsElecNonSubIndTert(runCy,INDDOM,YTIME)",INDOM,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 QConsOfRemSubEquip         ,QConsRemSubEquipSubSec       ,"(DSBS,EF)$(not TRANSE(DSBS)) $SECTTECH(DSBS,EF)",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 " VConsRemSubEquip(runCy,DSBS,EF,YTIME)"," VConsRemSubEquipSubSec(runCy,DSBS,EF,YTIME)","(DSBS,EF)$(not TRANSE(DSBS)) $SECTTECH(DSBS,EF)",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-QDemSub              ,QDemFinSubFuelSubSec        ,DSBS $(not TRANSE(DSBS)),INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-" VDemSub(runCy,DSBS,YTIME)"," VDemFinSubFuelSubSec(runCy,DSBS,YTIME)",DSBS $(not TRANSE(DSBS)),INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+QDemSub              ,QDemFinSubFuelSubsec        ,DSBS $(not TRANSE(DSBS)),INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+" VDemSub(runCy,DSBS,YTIME)"," VDemFinSubFuelSubsec(runCy,DSBS,YTIME)",DSBS $(not TRANSE(DSBS)),INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 qElecConsInd            ,qConsTotElecInd          ,,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 " vElecConsInd(runCy,YTIME)"," vConsTotElecInd(runCy,YTIME)",,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-qDemInd              ,QDemFinSubFuelInd         ,,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+qDemInd              ,qDemFinSubFuelInd         ,,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 " vDemInd(runCy,YTIME)"," vDemFinSubFuelInd(runCy,YTIME)",,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 QElecIndPrices           ,QPriceElecInd           ,,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 " VElecIndPrices(runCy,YTIME)"," VPriceElecInd(runCy,YTIME)",,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
@@ -175,8 +174,8 @@ QFuelCons             ,QConsFuel             ,"(DSBS,EF)$(not TRANSE(DSBS)) $SEC
 " VConsFuel(runCy,DSBS,EF,YTIME)"," VConsFuel(runCy,DSBS,EF,YTIME)","(DSBS,EF)$(not TRANSE(DSBS)) $SECTTECH(DSBS,EF) $(not HEATPUMP(EF)))",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 QElecIndPricesEst         ,QIndxElecIndPrices         ,,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 " VElecIndPricesEst(runCy,YTIME)"," VIndxElecIndPrices(runCy,YTIME)",,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-QFuePriSubChp           ,QPriceFuelSubSecCHP        ,"(DSBS,EF)$((not TRANSE(DSBS))  $SECTTECH(DSBS,EF) )",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-" VFuePriSubChp(runCy,DSBS,EF,YTIME)"," VPriceFuelSubSecCHP(runCy,DSBS,EF,YTIME)","(DSBS,EF)$((not TRANSE(DSBS))  $SECTTECH(DSBS,EF) )",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+QFuePriSubChp           ,QPriceFuelSubsecCHP        ,"(DSBS,EF)$((not TRANSE(DSBS))  $SECTTECH(DSBS,EF) )",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+" VFuePriSubChp(runCy,DSBS,EF,YTIME)"," VPriceFuelSubsecCHP(runCy,DSBS,EF,YTIME)","(DSBS,EF)$((not TRANSE(DSBS))  $SECTTECH(DSBS,EF) )",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 QElecProdCosChp          ,QCostElecProdCHP          ,"(DSBS,CHP)$(INDDOM(DSBS))",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 " VElecProdCostChp(runCy,DSBS,CHP,YTIME)"," VCostElecProdCHP(runCy,DSBS,CHP,YTIME)","(DSBS,CHP)$(INDDOM(DSBS))",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 QTechCost             ,QCostTech             ,DSBS $(not TRANSE(DSBS)),INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
@@ -259,8 +258,8 @@ qTotCo2AllCoun          ,qGrnnHsEmisCO2EquivAllCntr     ,,EMISSIONS CONSTRAINTS
  vTotCo2AllCoun(YTIME) , vGrnnHsEmisCO2EquivAllCntr(YTIME) ,,EMISSIONS CONSTRAINTS
 qHouseExpEne            ,qExpendHouseEne          ,,EMISSIONS CONSTRAINTS
 " vHouseExpEne(runCy,YTIME)"," vExpendHouseEne(runCy,YTIME)",,EMISSIONS CONSTRAINTS
-QFuelPriSubSepCarbVal       ,QPriceFuelSubCarVal        ,"(SBS,EF)$$(SECTTECH(SBS,EF)$(not sameas(""NUC"",EF)))",EMISSIONS CONSTRAINTS
-" VFuelPriceSub(runCy,SBS,EF,YTIME)"," VPriceFuelSubCarVal(runCy,SBS,EF,YTIME)","(SBS,EF)$$(SECTTECH(SBS,EF)$(not sameas(""NUC"",EF)))",EMISSIONS CONSTRAINTS
+QFuelPriSubSepCarbVal       ,QPriceFuelSubsecCarVal        ,"(SBS,EF)$$(SECTTECH(SBS,EF)$(not sameas(""NUC"",EF)))",EMISSIONS CONSTRAINTS
+" VFuelPriceSub(runCy,SBS,EF,YTIME)"," VPriceFuelSubsecCarVal(runCy,SBS,EF,YTIME)","(SBS,EF)$$(SECTTECH(SBS,EF)$(not sameas(""NUC"",EF)))",EMISSIONS CONSTRAINTS
 QFuelPriSepCarbon         ,QPriceFuelSepCarbonWght      ,"(DSBS,EF)$(SECTTECH(DSBS,EF)",EMISSIONS CONSTRAINTS
 " VFuelPriMultWgt(runCy,DSBS,EF,YTIME)"," VPriceFuelSepCarbonWght(runCy,DSBS,EF,YTIME)","(DSBS,EF)$(SECTTECH(DSBS,EF)",EMISSIONS CONSTRAINTS
 QAvgFuelPriSub           ,QPriceFuelAvgSub          ,DSBS,EMISSIONS CONSTRAINTS

@@ -9,7 +9,7 @@ $include "./iPop.csvr"
 $offdelim
 ;
 table iActv(YTIME,allCy,SBS) "Sector activity (various)"
-                              !! main sectors (Billion Euro05) 
+                              !! main sectors (Billion US$2015) 
                               !! bunkers and households (1)
                               !! transport (Gpkm, or Gvehkm or Gtkm)
 $ondelim
@@ -27,7 +27,7 @@ $include "./iElastA.csv"
 $offdelim
 ;
 
-iElastA(runCy,SBS,ETYPES,YTIME) = iElastA("MAR",SBS,ETYPES,YTIME);
+iElastA(runCy,SBS,ETYPES,YTIME) = iElastA("ELL",SBS,ETYPES,YTIME);
 
 table iElastNonSubElecData(SBS,ETYPES,YTIME) "Elasticities of Non Substitutable Electricity (1)"
 $ondelim
@@ -93,11 +93,8 @@ iCo2EmiFac(runCy,SBS,EF,YTIME) = iCo2EmiFacAllSbs(EF);
 iCo2EmiFac(runCy,"IS","HCL",YTIME)   = iCo2EmiFacAllSbs("SLD"); !! This is the assignment for coke
 table iDataPassCars(allCy,GompSet1,Gompset2)        "Initial Data for Passenger Cars ()"
           scr
-RWO.PC    0.0200641155285507
 CHA.PC    0.0201531648401507
-EGY.PC    0.0201531648401507
 IND.PC    0.0201531648401507
-MAR.PC    0.0201531648401507
 USA.PC    0.0418811968705786
 ;
 
@@ -500,6 +497,12 @@ OI.STE1AB   2.33335 67.1517 18.9767 25  0.37
 OI.STE1AH2F 2.27889 68.3668         20  0.5
 OI.HEATPUMP 1.21884 2.66781         20  1.68
 ;
+
+* Coverting EUR05 to US2015
+iDataIndTechnology(INDSE,EF,"IC") = iDataIndTechnology(INDSE,EF,"IC") * 1.3;
+iDataIndTechnology(INDSE,EF,"FC") = iDataIndTechnology(INDSE,EF,"FC") * 1.3;
+iDataIndTechnology(INDSE,EF,"VC") = iDataIndTechnology(INDSE,EF,"VC") * 1.3;
+
 table iDataDomTech(DOMSE,EF,ECONCHAR)                  "Technical lifetime of Industry (years)"
              IC       FC      VC      LFT USC
 SE.HCL       0.323544 10.88           20  0.7
@@ -590,6 +593,12 @@ HOU.STE2OGS  0.296442 1.00489 2.37209 20  0.896667
 HOU.STE2BMS  0.296442 1.00489 2.37209 20  0.816667
 HOU.HEATPUMP 0.432    12.9254         20  1.848
 ;
+
+* Coverting EUR05 to US2015
+iDataDomTech(DOMSE,EF,"IC") = iDataDomTech(DOMSE,EF,"IC") * 1.3;
+iDataDomTech(DOMSE,EF,"FC") = iDataDomTech(DOMSE,EF,"FC") * 1.3;
+iDataDomTech(DOMSE,EF,"VC") = iDataDomTech(DOMSE,EF,"VC") * 1.3;
+
 table iDataNonEneSec(NENSE,EF,ECONCHAR)                  "Technical data of non energy uses and bunkers (various)"
         IC      FC      VC      LFT USC
 PCH.HCL 0.26227 45.22   2.37209 20  0.65
@@ -612,33 +621,29 @@ NEN.OLQ 0.612   20.4    2.37209 20  0.72
 NEN.NGS 0.18088 0.9044  2.37209 20  0.8
 NEN.OGS 0.18088 1.36    2.37209 20  0.8
 ;
+
+* Converting EUR05 to US2015
+iDataNonEneSec(NENSE,EF,"IC") = iDataNonEneSec(NENSE,EF,"IC") * 1.3;
+iDataNonEneSec(NENSE,EF,"FC") = iDataNonEneSec(NENSE,EF,"FC") * 1.3;
+iDataNonEneSec(NENSE,EF,"VC") = iDataNonEneSec(NENSE,EF,"VC") * 1.3;
+
 * FIXME: check if country-specific data is needed; move to mrprom
 * author=giannou
 table iIndCharData(allCy,INDSE,Indu_Scon_Set)               "Industry sector charactetistics (various)"
          BASE           SHR_NSE   SH_HPELC
-RAS.IS   0.4397         0.7       0.00001
-RAS.NF   0              0.95      0.00001
-RAS.CH   0.1422         0.95      0.00001
-RAS.BM   2.1062         0.95      0.00001
-RAS.PP   0              0.95      0.00001
-RAS.FD   0.6641         0.95      0.00001
-RAS.TX   0.0638         0.95      0.00001
-RAS.EN   1.6664         0.95      0.00001
-RAS.OE   0.00000001     0.95      0.00001
-RAS.OI   1.5161         0.95      0.00001
-MAR.IS   0.4397         0.7       0.00001
-MAR.NF   0              0.95      0.00001
-MAR.CH   0.1422         0.95      0.00001
-MAR.BM   2.1062         0.95      0.00001
-MAR.PP   0              0.95      0.00001
-MAR.FD   0.6641         0.95      0.00001
-MAR.TX   0.0638         0.95      0.00001
-MAR.EN   1.6664         0.95      0.00001
-MAR.OE   0.00000001     0.95      0.00001
-MAR.OI   1.5161         0.95      0.00001
+ELL.IS   0.4397         0.7       0.00001
+ELL.NF   0              0.95      0.00001
+ELL.CH   0.1422         0.95      0.00001
+ELL.BM   2.1062         0.95      0.00001
+ELL.PP   0              0.95      0.00001
+ELL.FD   0.6641         0.95      0.00001
+ELL.TX   0.0638         0.95      0.00001
+ELL.EN   1.6664         0.95      0.00001
+ELL.OE   0.00000001     0.95      0.00001
+ELL.OI   1.5161         0.95      0.00001
 ;
 
-iIndChar(runCy,INDSE,Indu_Scon_Set) = iIndCharData("MAR",INDSE,Indu_Scon_Set);
+iIndChar(runCy,INDSE,Indu_Scon_Set) = iIndCharData("ELL",INDSE,Indu_Scon_Set);
 table iInitConsSubAndInitShaNonSubElec(DOMSE,Indu_Scon_Set)      "Initial Consumption per Subsector and Initial Shares of Non Substitutable Electricity in Total Electricity Demand (Mtoe)"
      BASE   SHR_NSE SH_HPELC
 SE   1.8266 0.9     0.00001
@@ -646,11 +651,17 @@ HOU  11.511 0.9     0.00001
 AG   0.2078 0.9     0.00001
 ;
 
+table iElcNetImpShare(allCy,SUPOTH,YTIME)	          "Ratio of electricity imports in total final demand (1)"
+$ondelim
+$include "./iElcNetImpShare.csv"
+$offdelim
+;
+
 iShrHeatPumpElecCons(runCy,INDSE) = iIndChar(runCy,INDSE,"SH_HPELC");
 iShrHeatPumpElecCons(runCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(DOMSE,"SH_HPELC");
 iExogDemOfBiomass(runCy,DOMSE,YTIME) = 0;
 *iElastCO2Seq(runCy,CO2SEQELAST) = iCO2SeqData(CO2SEQELAST,"%fBaseY%");
-iRatioImpFinElecDem(runCy,YTIME)$an(YTIME) = iSuppRefCapacity(runCy,"ELC_IMP",YTIME);
+iRatioImpFinElecDem(runCy,YTIME)$an(YTIME) = iElcNetImpShare(runCy,"ELC_IMP",YTIME);
 iFuelExprts(runCy,EFS,YTIME) = iSuppExports(runCy,EFS,YTIME);
 iRatePriProTotPriNeeds(runCy,PPRODEF,YTIME) = iSuppRatePrimProd(runCy,PPRODEF,YTIME);
 iResHcNgOilPrProd(runCy,"HCL",YTIME)$an(YTIME)   = iSupResRefCapacity(runCy,"HCL_PPROD",YTIME);
@@ -815,13 +826,13 @@ $offdelim
 iResMargTotAvailCap(runCy,PGRES,YTIME)$an(YTIME) = iResTotCapMxmLoad(runCy,PGRES,YTIME);
 $offtext
 
-table iVarCost(PGALL,YTIME)             "Variable gross cost other than fuel per Plant Type (Euro2005/KW)"
+table iVarCost(PGALL,YTIME)             "Variable gross cost other than fuel per Plant Type (US$2015/MWh)"
 $ondelim
 $include"./iVarCost.csv"
 $offdelim
 ;
 
-table iFixOandMCost(PGALL,YTIME)    "Fixed O&M Gross Cost per Plant Type (Euro2005/KW)"
+table iFixOandMCost(PGALL,YTIME)    "Fixed O&M Gross Cost per Plant Type (US$2015/KW)"
 $ondelim
 $include"./iFixOandMCost.csv"
 $offdelim
@@ -894,7 +905,7 @@ iFinEneCons(runCy,EFS,YTIME) = sum(INDDOM,
                        sum(TRANSE,
                          sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(TRANSE,EF) $(not plugin(EF)) ), iFuelConsPerFueSub(runCy,TRANSE,EF,YTIME)));
 
-table iGrossCapCosSubRen(PGALL,YTIME)             "Gross Capital Cost per Plant Type with subsidy for renewables (kEuro2005/KW)"
+table iGrossCapCosSubRen(PGALL,YTIME)             "Gross Capital Cost per Plant Type with subsidy for renewables (kUS$2015/KW)"
 $ondelim
 $include"./iGrossCapCosSubRen.csv"
 $offdelim
@@ -904,8 +915,8 @@ loop(PGALL,YTIME)$AN(YTIME) DO
          abort $(iGrossCapCosSubRen(PGALL,YTIME)<0) "CAPITAL COST IS NEGATIVE", iGrossCapCosSubRen
 ENDLOOP;
 
-*VCapElecTot.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
-*VCapElecTotEst.L(runCy,TT) = iResMargTotAvailCap(runCy,"TOT_CAP_RES",TT) * VCapElecTot.L(runCy,TT-1)
+*VCapElecTotEst.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
+*VCapElecTotEst.L(runCy,TT) = iResMargTotAvailCap(runCy,"TOT_CAP_RES",TT) * VCapElecTotEst.L(runCy,TT-1)
 *        * VPeakLoad.L(runCy,TT)/VPeakLoad.L(runCy,TT-1);
 table iDataElecSteamGen(allCy,PGOTH,YTIME)	          "Various Data related to electricity and steam generation (1)"
 $ondelim
@@ -1008,7 +1019,7 @@ PGASHYD	0.00050,
 PGAWND	0.60000,
 PGASOL	0.00050,
 PGADPV	0.00010,
-PGAOTHREN	0.00000,
+PGAOTHREN	0.0000001,
 PGANUC	1.00000,
 PGAPSS	20.00000,
 PGAPSSL	20.00000,
@@ -1023,7 +1034,7 @@ iCO2CaptRate(runCy,PGALL,YTIME) = 0;
 parameter iMxmShareChpElec "Maximum share of CHP electricity in a country (1)";
 iMxmShareChpElec(runCy,YTIME) = 0.1;
 
-iEffValueInEuro(runCy,SBS,YTIME)=0;
+iEffValueInDollars(runCy,SBS,YTIME)=0;
 iScenarioPri(WEF,"NOTRADE",YTIME)=0;
 
 * FIXME: Check if VAT (value added tax) rates are necessary for the model.
@@ -1072,7 +1083,7 @@ $offdelim
 ;
 iFuelImports(runCy,EFS,YTIME)$(not An(YTIME)) = iDataImports(runCy,EFS,YTIME);
 
-iNetImp(runCy,EFS,YTIME) = iDataImports(runCy,"ELC",YTIME);
+iNetImp(runCy,EFS,YTIME) = iDataImports(runCy,"ELC",YTIME)-iSuppExports(runCy,"ELC",YTIME);
 
 iGrosInlCons(runCy,EFS,YTIME) = iDataGrossInlCons(runCy,EFS,YTIME);
 iGrossInConsNoEneBra(runCy,EFS,YTIME) = iGrosInlCons(runCy,EFS,YTIME) + iTotEneBranchCons(runCy,EFS,YTIME)$EFtoEFA(EFS,"LQD")
@@ -1102,9 +1113,9 @@ loop SBS do
 endloop;
 
 iTotFinEneDemSubBaseYr(runCy,TRANSE,YTIME) = sum(EF$(SECTTECH(TRANSE,EF) $(not plugin(EF))), iFuelConsPerFueSub(runCy,TRANSE,EF,YTIME));
-iTotFinEneDemSubBaseYr(runCy,INDSE,YTIME)   = SUM(EF,iFuelConsPerFueSub(runCy,INDSE,EF,YTIME));
-iTotFinEneDemSubBaseYr(runCy,DOMSE,YTIME)   = SUM(EF,iFuelConsPerFueSub(runCy,DOMSE,EF,YTIME));
-iTotFinEneDemSubBaseYr(runCy,NENSE,YTIME)   = SUM(EF,iFuelConsPerFueSub(runCy,NENSE,EF,YTIME));
+iTotFinEneDemSubBaseYr(runCy,INDSE,YTIME)   = SUM(EF$(SECTTECH(INDSE,EF)),iFuelConsPerFueSub(runCy,INDSE,EF,YTIME));
+iTotFinEneDemSubBaseYr(runCy,DOMSE,YTIME)   = SUM(EF$(SECTTECH(DOMSE,EF)),iFuelConsPerFueSub(runCy,DOMSE,EF,YTIME));
+iTotFinEneDemSubBaseYr(runCy,NENSE,YTIME)   = SUM(EF$(SECTTECH(NENSE,EF)),iFuelConsPerFueSub(runCy,NENSE,EF,YTIME));
 
 
 iWgtSecAvgPriFueCons(runCy,TRANSE,EF)$(SECTTECH(TRANSE,EF) $(not plugin(EF)) ) = (iFuelConsPerFueSub(runCy,TRANSE,EF,"%fBaseY%") / iTotFinEneDemSubBaseYr(runCy,TRANSE,"%fBaseY%"))$iTotFinEneDemSubBaseYr(runCy,TRANSE,"%fBaseY%")
@@ -1295,7 +1306,19 @@ $include"./iEnvPolicies.csv"
 $offdelim
 ;
 
-iCarbValYrExog(allCy,YTIME)$an(YTIME) = iEnvPolicies(allCy,"exogCV",YTIME);
+* Setting the exogenous carbon price values based on the selected model scenario
+if %fScenario% eq 0 then
+     iCarbValYrExog(allCy,YTIME)$an(YTIME) = iEnvPolicies(allCy,"exogCV_NPi",YTIME);
+
+elseif %fScenario% eq 1 then
+     iCarbValYrExog(allCy,YTIME)$an(YTIME) = iEnvPolicies(allCy,"exogCV_1_5C",YTIME);
+
+elseif %fScenario% eq 2 then
+     iCarbValYrExog(allCy,YTIME)$an(YTIME) = iEnvPolicies(allCy,"exogCV_2C",YTIME);
+
+endif;
+
+
 table iMatrFactorData(SBS,EF,YTIME)       "Maturity factor per technology and subsector (1)"
 $ondelim
 $include"./iMatrFactorData.csv"
@@ -1384,6 +1407,12 @@ STE1AH2F.2010  1.16358 19.35   15  2.56461 0.8   0.829672
 STE1AH2F.2020  1.09263 19.35       2.44861       0.829672
 STE1AH2F.2050  1.06425 19.35       2.23212       0.829672
 ;
+
+* Converting EUR2005 to US2015
+iDataChpPowGen(EF,YTIME,"IC") = iDataChpPowGen(EF,YTIME,"IC") * 1.3;
+iDataChpPowGen(EF,YTIME,"FC") = iDataChpPowGen(EF,YTIME,"FC") * 1.3;
+iDataChpPowGen(EF,YTIME,"VOM") = iDataChpPowGen(EF,YTIME,"VOM") * 1.3;
+
 iInvCostChp(runCy,DSBS,CHP,YTIME) = iDataChpPowGen(CHP,"2010","IC");
 iFixOMCostPerChp(runCy,DSBS,CHP,YTIME) = iDataChpPowGen(CHP,"2010","FC");
 iVarCostChp(runCy,DSBS,CHP,YTIME) = iDataChpPowGen(CHP,"2010","VOM");

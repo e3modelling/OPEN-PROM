@@ -19,3 +19,7 @@ regionmappingOP.csv
 /default*
 metadata.json
 /doc
+*.pyc
+config.json
+modelstat.txt
+git_diff.txt
