@@ -11,15 +11,6 @@ library(stringr)
 library(jsonlite)
 library(reticulate)
 
-source("reportPrice.R")
-source("reportEmissions.R")
-source("reportACTV.R")
-source("reportGDP.R")
-source("reportPOP.R")
-source("reportFinalEnergy.R")
-source("reportSE.R")
-source("reportPE.R")
-
 # add mif from fullVALIDATION
 add_fullVALIDATION_mif = TRUE
 
@@ -131,7 +122,7 @@ tryCatch({
   reportPOP(runCY)
   reportPriceCarbon(runCY)
   #reportACTV(runCY)
-  #reportPrice(runCY)
+  reportPrice(runCY)
 
   reporting <- read.report("reporting.mif")
   setwd("..")
@@ -145,13 +136,18 @@ tryCatch({
 }
 
   for (i in 1 : length(reporting_run)) {
-    add_region_GLO <- dimSums(reporting_run[[i]][[1]]
-                              [,,!(getItems(reporting_run[[i]][[1]],3) %in% ("Price|Carbon (US$2015/tn CO2)"))], 1)
+    
+    z <- as.data.frame(getItems(reporting_run[[i]][[1]],3))
+    get_items <- z[grep("^Price", getItems(reporting_run[[i]][[1]],3)),1]
+    get_items_not <- z[!grepl("^Price", getItems(reporting_run[[i]][[1]],3)),1]
+    
+    add_region_GLO <- dimSums(reporting_run[[i]][[1]][,,get_items_not], 1, na.rm = TRUE)
+    
     getItems(add_region_GLO, 1) <- "World"
     gdp <- reporting_run[[i]][[1]][,,"GDP|PPP (billion US$2015/yr)"]
     rmap_world <- rmap
     rmap_world[ ,4] <- "World"
-    add_region_GLO_mean <- toolAggregate(reporting_run[[i]][[1]][,,"Price|Carbon (US$2015/tn CO2)"], weight = gdp, rel = rmap_world, from = "Region.Code", to = "V4")
+    add_region_GLO_mean <- toolAggregate(reporting_run[[i]][[1]][,,get_items], weight = gdp, rel = rmap_world, from = "Region.Code", to = "V4")
     getItems(add_region_GLO_mean, 1) <- "World"
     world_reg <- mbind(add_region_GLO, add_region_GLO_mean)
     reporting_run[[i]][[1]] <- mbind(reporting_run[[i]][[1]], world_reg)
