@@ -38,19 +38,6 @@ reportPrice <- function(regs) {
   sector_name <- c("Transportation", "Industry", "Residential and Commercial", "Non Energy and Bunkers",
                    "Power and Steam Generation")
   
-  iFuelPrice_total <- readGDX('./blabla.gdx', "iFuelPrice")[regs, , ]
-  iFuelPrice_total <- as.quitte(iFuelPrice_total)
-  iFuelPrice_total <- iFuelPrice_total %>% mutate(value = mean(value, na.rm = TRUE), .by = c("model", "scenario",
-                                                                                             "region", "unit",
-                                                                                             "period", "variable"))
-  iFuelPrice_total <- select(iFuelPrice_total, "model", "scenario", "region", "variable", "unit", "period", "value")
-  iFuelPrice_total <- distinct(iFuelPrice_total)
-  iFuelPrice_total <- as.quitte(iFuelPrice_total) %>% as.magpie()
-  
-  iFuelPrice_total_sum <- iFuelPrice_total
-  getItems(iFuelPrice_total_sum, 3) <- "Price|Final Energy"
-  # write data in mif file
-  write.report(iFuelPrice_total_sum[,,],file="reporting.mif",append=TRUE,model="OPEN-PROM",unit="k$2015/toe",scenario=scenario_name)
   
   # read GAMS set used for reporting of Final Energy
   sets <- toolreadSets("sets.gms", "BALEF2EFS")
@@ -60,27 +47,6 @@ reportPrice <- function(regs) {
   sets[["EF"]] <- sub("\\)","",sets[["EF"]])
   sets <- separate_rows(sets,EF)
   sets$BAL <- gsub("Gas fuels", "Gases", sets$BAL)
-  
-  gdp <- calcOutput(type = "iGDP", aggregate = FALSE)
-  gdp <- as.quitte(gdp)
-  
-  names(gdp) <- sub("region", "ISO3.Code", names(gdp))
-  ## add mapping to gdp
-  gdp <- left_join(gdp, rmap, by = "ISO3.Code")
-  # take the sum of gdp of each region
-  gdp <- mutate(gdp, weights = sum(value, na.rm = TRUE), .by = c("Region.Code", "period"))
-  # compute weights by deviding the gdp of country with the sum of region
-  gdp["weights"] <- gdp["value"] / gdp["weights"]
-  # select period 2020 for the weights
-  gdp <- gdp %>% filter(period == 2020)
-  gdp <- gdp %>% select(c("ISO3.Code", "weights")) 
-  names(gdp) <- sub("ISO3.Code", "region", names(gdp))
-  names(gdp) <- sub("weights", "value", names(gdp))
-  gdp <- as.magpie(as.quitte(gdp))
-  gdp <- collapseDim(gdp,dim = 3.1)
-
-  rmap_world <- rmap
-  rmap_world[ ,4] <- "World"
   
   sets <- toolreadSets(system.file(file.path("extdata", "sets.gms"), package = "mrprom"), "BALEF2EFS")
   sets[, 1] <- gsub("\"", "", sets[, 1])
@@ -105,8 +71,8 @@ reportPrice <- function(regs) {
     map_subsectors <- sets4 %>% filter(SBS %in% as.character(sets6[, 1]))
     map_subsectors$EF = paste(map_subsectors$SBS, map_subsectors$EF, sep=".")
     
-    #add model OPEN-PROM data iFuelPrice
-    iFuelPrice <- readGDX('./blabla.gdx', "iFuelPrice")[regs, , ][,,map_subsectors$EF]
+    #add model OPEN-PROM data VPriceFuelSubsecCarVal
+    iFuelPrice <- readGDX('./blabla.gdx', "VPriceFuelSubsecCarVal", field = "l")[regs, , ][,,map_subsectors$EF]
     PRICE_by_sector_and_EF <- iFuelPrice
     # complete names
     getItems(PRICE_by_sector_and_EF, 3.1) <- paste0("Price|Final Energy|", sector_name[y],"|", getItems(PRICE_by_sector_and_EF, 3.1))
@@ -118,7 +84,7 @@ reportPrice <- function(regs) {
     PRICE_by_sector_and_EF <- as.quitte(PRICE_by_sector_and_EF) %>% as.magpie()
     
     # write data in mif file
-    write.report(PRICE_by_sector_and_EF[,,],file="reporting.mif",model="OPEN-PROM",unit="k$2015/toe",append=TRUE,scenario=scenario_name)
+    write.report(PRICE_by_sector_and_EF[,,],file="reporting.mif",model="OPEN-PROM",unit="KUS$2015/toe",append=TRUE,scenario=scenario_name)
     
     #aggregation by SECTOR and EF
     
@@ -130,32 +96,12 @@ reportPrice <- function(regs) {
     iFuelPrice2 <- distinct(iFuelPrice2)
     PRICE_by_EF_OPEN_PROM <- as.quitte(iFuelPrice2) %>% as.magpie()
     
-    iFuelPrice3 <- as.quitte(iFuelPrice)
-    iFuelPrice3 <- iFuelPrice3 %>% mutate(value = mean(value, na.rm = TRUE), .by = c("model", "scenario",
-                                                                                     "region", "unit",
-                                                                                     "period", "variable","SBS"))
-    iFuelPrice3 <- select(iFuelPrice3, "SBS", "model", "scenario", "region", "variable", "unit", "period", "value")
-    iFuelPrice3 <- distinct(iFuelPrice3)
-    PRICE_by_sector_OPEN_PROM <- as.quitte(iFuelPrice3) %>% as.magpie()
-    
-    iFuelPrice4 <- as.quitte(iFuelPrice)
-    iFuelPrice4 <- iFuelPrice4 %>% mutate(value = mean(value, na.rm = TRUE), .by = c("model", "scenario",
-                                                                                     "region", "unit",
-                                                                                     "period", "variable"))
-    iFuelPrice4 <- select(iFuelPrice4, "model", "scenario", "region", "variable", "unit", "period", "value")
-    iFuelPrice4 <- distinct(iFuelPrice4)
-    PRICE_total_OPEN_PROM_sector <- as.quitte(iFuelPrice4) %>% as.magpie()
-    
     # complete names
     getItems(PRICE_by_EF_OPEN_PROM, 3) <- paste0("Price|Final Energy|", sector_name[y],"|", getItems(PRICE_by_EF_OPEN_PROM, 3))
-    getItems(PRICE_by_sector_OPEN_PROM, 3) <- paste0("Price|Final Energy|", sector_name[y],"|", getItems(PRICE_by_sector_OPEN_PROM, 3))
-    getItems(PRICE_total_OPEN_PROM_sector, 3) <- paste0("Price|Final Energy|", sector_name[y])
     
     # write data in mif file
-    write.report(PRICE_by_EF_OPEN_PROM[,,],file="reporting.mif",model="OPEN-PROM",unit="k$2015/toe",append=TRUE,scenario=scenario_name)
-    write.report(PRICE_by_sector_OPEN_PROM[,,],file="reporting.mif",model="OPEN-PROM",unit="k$2015/toe",append=TRUE,scenario=scenario_name)
-    write.report(PRICE_total_OPEN_PROM_sector[,,],file="reporting.mif",model="OPEN-PROM",unit="k$2015/toe",append=TRUE,scenario=scenario_name)
-    
+    write.report(PRICE_by_EF_OPEN_PROM[,,],file="reporting.mif",model="OPEN-PROM",unit="KUS$2015/toe",append=TRUE,scenario=scenario_name)
+      
     #fuel categories
 
     # aggregate from fuels to reporting fuel categories
@@ -176,7 +122,7 @@ reportPrice <- function(regs) {
     getItems(sum_open_prom, 3) <- paste0("Price|Final Energy|", sector_name[y],"|", getItems(sum_open_prom, 3))
     
     # write data in mif file
-    write.report(sum_open_prom[,,],file="reporting.mif",model="OPEN-PROM",unit="k$2015/toe",append=TRUE,scenario=scenario_name)
+    write.report(sum_open_prom[,,],file="reporting.mif",model="OPEN-PROM",unit="KUS$2015/toe",append=TRUE,scenario=scenario_name)
     
   }
 }
