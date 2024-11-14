@@ -118,6 +118,7 @@ $evalGlobal fEndHorizon 2100
 $evalGlobal fEndY 2030
 $evalGlobal fStartY 2021
 $evalGlobal fBaseY %fStartY% - %fPeriodOfYears%
+$evalGlobal fScenario 0 !! Setting the model scenario: 0 is NPi_Default, 1 is 1.5C and 2 is 2C
 
 *** end of dollar commands section, no further flag definitions allowed 
 
@@ -128,6 +129,7 @@ $elseif.loadData %DevMode% == 1 $call "RScript ./loadMadratData.R DevMode=1"
 $elseif.loadData %DevMode% == 2 $call "RScript ./loadMadratData.R DevMode=2"
 $endif.loadData
 $endif.genInp
+* Open file to write txt
 file fStat /'modelstat.txt'/; 
 fStat.ap = 1; 
 

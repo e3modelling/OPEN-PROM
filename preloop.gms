@@ -13,6 +13,8 @@ endloop;
 model openprom /
 
 *' * Power Generation *
+QCapElec2
+qScalFacPlantDispatchExpr
 QRenTechMatMultExpr                 !! VRenTechMatMultExpr(runCy,PGALL,YTIME)
 QPotRenCurr                         !! VPotRenCurr(runCy,PGRENEF,YTIME)
 QCapElecCHP                         !! VCapElecCHP(runCy,CHP,YTIME)
@@ -348,7 +350,7 @@ VRenValue.FX(YTIME) = 0 ;
 VCstCO2SeqCsts.l(runCy,YTIME)=1;
 *VCstCO2SeqCsts.FX(runCy,YTIME)$(not an(YTIME)) = iElastCO2Seq(allCy,"mc_b")
 
-VScalWeibullSum.l(runCy,PGALL,YTIME)=2;
+VScalWeibullSum.l(runCy,PGALL,YTIME)=2000;
 
 VCostHourProdInvDec.l(runCy,PGALL,HOUR,TT) = 0.0001;
 VCostHourProdInvDec.FX(runCy,PGALL,HOUR,YTIME)$((NOT AN(YTIME)))=0;
@@ -460,9 +462,7 @@ VCapElecCHP.FX(runCy,CHP,YTIME)$(not An(YTIME)) = iHisChpGrCapData(runCy,CHP,YTI
 
 VSharePowPlaNewEq.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) )=0;
 VCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  iInstCapPast(runCy,PGALL,YTIME);
-
-
-
+VCapElec2.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = iInstCapPast(runCy,PGALL,YTIME);
 VCapOverall.FX(runCy,PGALL,YTIME)$TFIRST(YTIME) =  iInstCapPast(runCy,PGALL,YTIME)$TFIRST(YTIME);
 
 VProdElec.FX(runCy,pgall,YTIME)$DATAY(YTIME)=iDataElecProd(runCy,pgall,YTIME)/1000;
@@ -509,37 +509,41 @@ VPriceFuelSepCarbonWght.l(runCy,DSBS,EF,YTIME)=0.1;
 VCostVarTechNotPGSCRN.l(runCy,PGALL,YTIME)=1e6;
 openprom.optfile=1;
 
-$IFTHEN.calib %Calibration% == on
 openprom.scaleopt=1;
 
-execute_loadpoint 'input.gdx';
-
-VCostProdSpecTech.scale(runCy,PGALL,YTIME)=VCostProdSpecTech.l(runCy,PGALL,YTIME);
-QCostProdSpecTech.scale(runCy,PGALL,YTIME)=VCostProdSpecTech.l(runCy,PGALL,YTIME);
-VCostVarTechNotPGSCRN.scale(runCy,PGALL,YTIME)=VCostVarTechNotPGSCRN.l(runCy,PGALL,YTIME);
-QCostVarTechNotPGSCRN.scale(runCy,PGALL,YTIME)=VCostVarTechNotPGSCRN.l(runCy,PGALL,YTIME);
-VScalFacPlaDisp.scale(runCy,HOUR,YTIME)=VScalFacPlaDisp.L(runCy,HOUR,YTIME);
-QScalFacPlantDispatch.scale(runCy,HOUR,YTIME)=VScalFacPlaDisp.L(runCy,HOUR,YTIME);
-VSortPlantDispatch.scale(runCy,PGALL,YTIME)=VSortPlantDispatch.l(runCy,PGALL,YTIME);
-QSortPlantDispatch.scale(runCy,PGALL,YTIME)=VSortPlantDispatch.l(runCy,PGALL,YTIME);
-VCostVarTechElec.scale(runCy,PGALL,YTIME)=max(VCostVarTechElec.l(runCy,PGALL,YTIME),1e-20);
-QCostVarTechElec.scale(runCy,PGALL,YTIME)=max(VCostVarTechElec.l(runCy,PGALL,YTIME),1e-20);
-VNewInvElec.scale(runCy,YTIME)=VNewInvElec.l(runCy,YTIME);
-QNewInvElec.scale(runCy,YTIME)=VNewInvElec.l(runCy,YTIME);
-VActivPassTrnsp.scale(runCy,TRANP,YTIME)$(AN(YTIME) and not sameas(TRANP,"PC")) = max(VActivPassTrnsp.l(runCy,TRANP,YTIME),1e-20);
-QActivPassTrnsp.scale(runCy,TRANP,YTIME)$(AN(YTIME) and not sameas(TRANP,"PC")) = max(VActivPassTrnsp.l(runCy,TRANP,YTIME),1e-20);
-VCostTranspMatFac.scale(runCy,TRANSE,RCon,TTECH,YTIME)=max(VCostTranspMatFac.l(runCy,TRANSE,RCon,TTECH,YTIME),1e-20);
-QCostTranspMatFac.scale(runCy,TRANSE,RCon,TTECH,YTIME)=max(VCostTranspMatFac.l(runCy,TRANSE,RCon,TTECH,YTIME),1e-20);
-VTechSortVarCost.scale(runCy,TRANSE,Rcon,YTIME)=VTechSortVarCost.l(runCy,TRANSE,Rcon,YTIME);
-QTechSortVarCost.scale(runCy,TRANSE,Rcon,YTIME)=VTechSortVarCost.l(runCy,TRANSE,Rcon,YTIME);
-VShareTechTr.scale(runCy,TRANSE,EF2,YTIME)=VShareTechTr.l(runCy,TRANSE,EF2,YTIME);
-QShareTechTr.scale(runCy,TRANSE,EF2,YTIME)=VShareTechTr.l(runCy,TRANSE,EF2,YTIME);
-VPriceFuelSepCarbonWght.scale(runCy,DSBS,EF,YTIME)=max(VPriceFuelSepCarbonWght.l(runCy,DSBS,EF,YTIME),1e-20);
-QPriceFuelSepCarbonWght.scale(runCy,DSBS,EF,YTIME)=max(VPriceFuelSepCarbonWght.l(runCy,DSBS,EF,YTIME),1e-20);
+VCostProdSpecTech.scale(runCy,PGALL,YTIME)=1e12;
+QCostProdSpecTech.scale(runCy,PGALL,YTIME)=VCostProdSpecTech.scale(runCy,PGALL,YTIME);
+VCostVarTechNotPGSCRN.scale(runCy,PGALL,YTIME)=1e6;
+QCostVarTechNotPGSCRN.scale(runCy,PGALL,YTIME)=VCostVarTechNotPGSCRN.scale(runCy,PGALL,YTIME);
+VScalFacPlaDisp.scale(runCy,HOUR,YTIME)=1e-11;
+QScalFacPlantDispatch.scale(runCy,HOUR,YTIME)=VScalFacPlaDisp.scale(runCy,HOUR,YTIME);
+$ontext
+VSortPlantDispatch.scale(runCy,PGALL,YTIME)=1e-11;
+QSortPlantDispatch.scale(runCy,PGALL,YTIME)=VSortPlantDispatch.scale(runCy,PGALL,YTIME);
+$offtext
+VCostVarTechElec.scale(runCy,PGALL,YTIME)=1e5;
+QCostVarTechElec.scale(runCy,PGALL,YTIME)=VCostVarTechElec.scale(runCy,PGALL,YTIME);
+VNewInvElec.scale(runCy,YTIME)=1e8;
+QNewInvElec.scale(runCy,YTIME)=VNewInvElec.scale(runCy,YTIME);
+*VActivPassTrnsp.scale(runCy,TRANP,YTIME)$(AN(YTIME) and not sameas(TRANP,"PC")) = max(VActivPassTrnsp.l(runCy,TRANP,YTIME),1e-20);
+*QActivPassTrnsp.scale(runCy,TRANP,YTIME)$(AN(YTIME) and not sameas(TRANP,"PC")) = max(VActivPassTrnsp.l(runCy,TRANP,YTIME),1e-20);
+VCostTranspMatFac.scale(runCy,TRANSE,RCon,TTECH,YTIME)=1e-7;
+QCostTranspMatFac.scale(runCy,TRANSE,RCon,TTECH,YTIME)=VCostTranspMatFac.scale(runCy,TRANSE,RCon,TTECH,YTIME);
+VTechSortVarCost.scale(runCy,TRANSE,Rcon,YTIME)=1e-8;
+QTechSortVarCost.scale(runCy,TRANSE,Rcon,YTIME)=VTechSortVarCost.scale(runCy,TRANSE,Rcon,YTIME);
+VShareTechTr.scale(runCy,TRANSE,EF2,YTIME)=1e-6;
+QShareTechTr.scale(runCy,TRANSE,EF2,YTIME)=VShareTechTr.scale(runCy,TRANSE,EF2,YTIME);
+VPriceFuelSepCarbonWght.scale(runCy,DSBS,EF,YTIME)=1e-6;
+QPriceFuelSepCarbonWght.scale(runCy,DSBS,EF,YTIME)=VPriceFuelSepCarbonWght.scale(runCy,DSBS,EF,YTIME);
 *VTrnsWghtLinToExp.scale(runCy,YTIME)=1.e-20;
 *QTrnsWghtLinToExp.scale(runCy,YTIME)=1.e-20;
-VCostVarTech.scale(runCy,PGALL,YTIME)=VCostVarTech.l(runCy,PGALL,YTIME);
-QCostVarTech.scale(runCy,PGALL,YTIME)=VCostVarTech.l(runCy,PGALL,YTIME);
+VCostVarTech.scale(runCy,PGALL,YTIME)=1e-5;
+QCostVarTech.scale(runCy,PGALL,YTIME)=VCostVarTech.scale(runCy,PGALL,YTIME);
+VScalWeibullSum.scale(runCy,PGALL,YTIME)=1e6;
+QScalWeibullSum.scale(runCy,PGALL,YTIME)=VScalWeibullSum.scale(runCy,PGALL,YTIME);
+
+$IFTHEN.calib %Calibration% == on
+execute_loadpoint 'input.gdx';
 $ELSEIF.calib %Calibration% == off
 $GDXIN calib.gdx
 variable
@@ -557,6 +561,7 @@ iElastNonSubElec(allCy,SBS,ETYPES,YTIME) = ViElastNonSubElec.L(allCy,SBS,ETYPES,
 iMatureFacPlaDisp(allCy,PGALL,YTIME) = ViMatureFacPlaDisp.L(allCy,PGALL,YTIME) ;                                  
 iMatrFactor(allCy,SBS,EF,YTIME) = ViMatrFactor.L(allCy,SBS,EF,YTIME) ;                                
 $ENDIF.calib
+
 
 loop an do !! start outer iteration loop (time steps)
    s = s + 1;
