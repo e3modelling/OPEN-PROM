@@ -51,7 +51,7 @@ QNewInvElec                         !! VNewInvElec(runCy,YTIME)
 QSharePowPlaNewEq                   !! VSharePowPlaNewEq(runCy,PGALL,YTIME)
 QCapElec                            !! VCapElec(runCy,PGALL,YTIME)
 QCostVarTechElec                    !! VCostVarTechElec(runCy,PGALL,YTIME)
-QElecPeakLoads                      !! VElecPeakLoads(runCy,YTIME) 
+QCostTechRegionAggr                      !! VCostTechRegionAggr(runCy,YTIME) 
 QSortPlantDispatch                  !! VSortPlantDispatch(runCy,PGALL,YTIME)
 QNewCapElec                         !! VNewCapElec(runCy,PGALL,YTIME)
 QCFAvgRen                           !! VCFAvgRen(runCy,PGALL,YTIME)
@@ -308,7 +308,7 @@ VNewInvElec.FX(runCy,YTIME)$(NOT AN(YTIME))=1;
 
 VCostVarTechElec.l(runCy,PGALL,YTIME)=0.1;
 
-VElecPeakLoads.l(runCy,YTIME)=0.1;
+VCostTechRegionAggr.l(runCy,YTIME)=0.1;
 
 VNewCapElec.FX(runCy,PGALL,"2011")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2011")- iInstCapPast(runCy,PGALL,"2010") +1E-10;
 VNewCapElec.FX(runCy,PGALL,"2012")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2012")- iInstCapPast(runCy,PGALL,"2011") +1E-10;
@@ -326,7 +326,7 @@ VCFAvgRen.l(runCy,PGALL,YTIME)=0.1;
 VCFAvgRen.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =iAvailRate(PGALL,YTIME);
 
 VSortPlantDispatch.lo(runCy,PGALL,YTIME)=1.E-12;
-VSortPlantDispatch.l(runCy,PGALL,YTIME)=VCostVarTechElec.L(runCy,PGALL,YTIME)/VElecPeakLoads.L(runCy,YTIME);
+VSortPlantDispatch.l(runCy,PGALL,YTIME)=VCostVarTechElec.L(runCy,PGALL,YTIME)/VCostTechRegionAggr.L(runCy,YTIME);
 
 VProdElecReqCHP.l(runCy,YTIME) = 0.01;
 
