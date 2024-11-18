@@ -51,7 +51,7 @@ QNewInvElec                         !! VNewInvElec(runCy,YTIME)
 QSharePowPlaNewEq                   !! VSharePowPlaNewEq(runCy,PGALL,YTIME)
 QCapElec                            !! VCapElec(runCy,PGALL,YTIME)
 QCostVarTechElec                    !! VCostVarTechElec(runCy,PGALL,YTIME)
-QCostTechRegionTot                      !! VCostTechRegionTot(runCy,YTIME) 
+QCostVarTechElecTot                 !! VCostVarTechElecTot(runCy,YTIME) 
 QSortPlantDispatch                  !! VSortPlantDispatch(runCy,PGALL,YTIME)
 QNewCapElec                         !! VNewCapElec(runCy,PGALL,YTIME)
 QCFAvgRen                           !! VCFAvgRen(runCy,PGALL,YTIME)
@@ -59,7 +59,7 @@ QCapOverall                         !! VCapOverall(runCy,PGALL,YTIME)
 QScalFacPlantDispatch               !! VScalFacPlaDisp
 QProdElecEstCHP                     !! VProdElecEstCHP(runCy,YTIME) 
 QProdElecNonCHP                     !! VProdElecNonCHP(runCy,YTIME) 
-QProdElecReqCHP                        !! VProdElecReqCHP(runCy,YTIME) 
+QProdElecReqCHP                     !! VProdElecReqCHP(runCy,YTIME) 
 QProdElec                           !! VProdElec(runCy,PGALL,YTIME)
 qSecContrTotCHPProd                 !! vSecContrTotCHPProd(runCy,INDDOM,CHP,YTIME)
 QProdElecCHP                        !! VProdElecCHP(runCy,CHP,YTIME)
@@ -162,12 +162,12 @@ QCstCO2SeqCsts                      !! VCstCO2SeqCsts(runCy,YTIME)
 
 *QGrnnHsEmisCO2Equiv                 !! VGrnnHsEmisCO2Equiv(NAP,YTIME)
 *qGrnnHsEmisCO2EquivAllCntr          !! vGrnnHsEmisCO2EquivAllCntr(YTIME) 
-qExpendHouseEne                     !! vExpendHouseEne(runCy,YTIME)
+qExpendHouseEne                      !! vExpendHouseEne(runCy,YTIME)
 
 
 *' * Prices *
 
-QPriceFuelSubsecCarVal                 !! VPriceFuelSubsecCarVal(runCy,SBS,EF,YTIME)
+QPriceFuelSubsecCarVal              !! VPriceFuelSubsecCarVal(runCy,SBS,EF,YTIME)
 QPriceFuelSepCarbonWght             !! VPriceFuelSepCarbonWght(runCy,DSBS,EF,YTIME)
 QPriceFuelAvgSub                    !! VPriceFuelAvgSub(runCy,DSBS,YTIME)
 QPriceElecIndResConsu               !! VPriceElecIndResConsu(runCy,ESET,YTIME)
@@ -308,7 +308,7 @@ VNewInvElec.FX(runCy,YTIME)$(NOT AN(YTIME))=1;
 
 VCostVarTechElec.l(runCy,PGALL,YTIME)=0.1;
 
-VCostTechRegionTot.l(runCy,YTIME)=0.1;
+VCostVarTechElecTot.l(runCy,YTIME)=0.1;
 
 VNewCapElec.FX(runCy,PGALL,"2011")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2011")- iInstCapPast(runCy,PGALL,"2010") +1E-10;
 VNewCapElec.FX(runCy,PGALL,"2012")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2012")- iInstCapPast(runCy,PGALL,"2011") +1E-10;
@@ -326,7 +326,7 @@ VCFAvgRen.l(runCy,PGALL,YTIME)=0.1;
 VCFAvgRen.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =iAvailRate(PGALL,YTIME);
 
 VSortPlantDispatch.lo(runCy,PGALL,YTIME)=1.E-12;
-VSortPlantDispatch.l(runCy,PGALL,YTIME)=VCostVarTechElec.L(runCy,PGALL,YTIME)/VCostTechRegionTot.L(runCy,YTIME);
+VSortPlantDispatch.l(runCy,PGALL,YTIME)=VCostVarTechElec.L(runCy,PGALL,YTIME)/VCostVarTechElecTot.L(runCy,YTIME);
 
 VProdElecReqCHP.l(runCy,YTIME) = 0.01;
 
