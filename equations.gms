@@ -427,8 +427,8 @@ QCostVarTechElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 
 *' Compute the electricity peak loads of each region,
 *' as a sum of the variable costs of all power plant technologies.
-QCostTechRegionAggr(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VCostTechRegionAggr(allCy,YTIME) 
+QCostTechRegionTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VCostTechRegionTot(allCy,YTIME) 
          =E= 
          sum(PGALL, VCostVarTechElec(allCy,PGALL,YTIME));     
 
@@ -439,7 +439,7 @@ QSortPlantDispatch(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                  =E=
          VCostVarTechElec(allCy,PGALL,YTIME)
          /
-         VCostTechRegionAggr(allCy,YTIME);  
+         VCostTechRegionTot(allCy,YTIME);  
 
 *' This equation calculates the variable representing the newly added electricity generation capacity for a specific renewable power plant 
 *' in a given country and time period. The calculation involves subtracting the planned electricity generation capacity in the current time period
