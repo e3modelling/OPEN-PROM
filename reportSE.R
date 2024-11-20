@@ -4,13 +4,28 @@ reportSE <- function(regs) {
   VProdElec <- readGDX('./blabla.gdx', "VProdElec", field = 'l')[regs, , ]
   VProdElec <-as.quitte(VProdElec) %>% as.magpie()
   
-  # map of enerdata, OPEN-PROM, elec prod
-  map_reporting <- toolGetMapping(name = "enerdata-elec-prod.csv",
-                                  type = "sectoral",
-                                  where = "mrprom")
+  PGALLtoEF <- toolreadSets("sets.gms", "PGALLtoEF")
+  PGALLtoEF <- separate_wider_delim(PGALLtoEF,cols = 1, delim = ".", names = c("PGALL","EF"))
+  PGALLtoEF[["EF"]] <- sub("\\(","",PGALLtoEF[["EF"]])
+  PGALLtoEF[["EF"]] <- sub("\\)","",PGALLtoEF[["EF"]])
+  PGALLtoEF <- separate_rows(PGALLtoEF, EF)
+  PGALLtoEF <- separate_rows(PGALLtoEF, PGALL)
+  PGALLtoEF <- filter(PGALLtoEF, EF != "")
+  PGALLtoEF <- filter(PGALLtoEF, PGALL != "")
+  PGALLtoEF$EF <- gsub("LGN", "Lignite", PGALLtoEF$EF)
+  PGALLtoEF$EF <- gsub("HCL", "Coal", PGALLtoEF$EF)
+  PGALLtoEF$EF <- gsub("RFO", "Residual Fuel Oil", PGALLtoEF$EF)
+  PGALLtoEF$EF <- gsub("GDO", "Oil", PGALLtoEF$EF)
+  PGALLtoEF$EF <- gsub("NGS", "Gas", PGALLtoEF$EF)
+  PGALLtoEF$EF <- gsub("BMSWAS", "Biomass", PGALLtoEF$EF)
+  PGALLtoEF$EF <- gsub("NUC", "Nuclear", PGALLtoEF$EF)
+  PGALLtoEF$EF <- gsub("HYD", "Hydro", PGALLtoEF$EF)
+  PGALLtoEF$EF <- gsub("WND", "Wind", PGALLtoEF$EF)
+  PGALLtoEF$EF <- gsub("SOL", "Solar", PGALLtoEF$EF)
+  PGALLtoEF$EF <- gsub("GEO", "Geothermal", PGALLtoEF$EF)
   
-  # aggregate from ENERDATA fuels to reporting fuel categories
-  VProdElec <- toolAggregate(VProdElec[,,map_reporting[["OPEN.PROM"]]], dim = 3.1,rel = map_reporting,from = "OPEN.PROM",to = "REPORTING")
+  # aggregateto reporting fuel categories
+  VProdElec <- toolAggregate(VProdElec[,,PGALLtoEF[["PGALL"]]], dim = 3,rel = PGALLtoEF,from = "PGALL", to = "EF")
   
   getItems(VProdElec, 3) <- paste0("Secondary Energy|Electricity|", getItems(VProdElec, 3))
   
