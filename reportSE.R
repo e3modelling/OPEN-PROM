@@ -12,7 +12,11 @@ reportSE <- function(regs) {
   PGALLtoEF <- separate_rows(PGALLtoEF, PGALL)
   PGALLtoEF <- filter(PGALLtoEF, EF != "")
   PGALLtoEF <- filter(PGALLtoEF, PGALL != "")
-  PGALLtoEF$EF <- gsub("LGN", "Lignite", PGALLtoEF$EF)
+  
+  add_LGN <- as.data.frame(PGALLtoEF[which(PGALLtoEF[, 2] == "LGN"), 1])
+  add_LGN["EF"] <- "Lignite"
+  
+  PGALLtoEF$EF <- gsub("LGN", "Coal", PGALLtoEF$EF)
   PGALLtoEF$EF <- gsub("HCL", "Coal", PGALLtoEF$EF)
   PGALLtoEF$EF <- gsub("RFO", "Residual Fuel Oil", PGALLtoEF$EF)
   PGALLtoEF$EF <- gsub("GDO", "Oil", PGALLtoEF$EF)
@@ -24,8 +28,15 @@ reportSE <- function(regs) {
   PGALLtoEF$EF <- gsub("SOL", "Solar", PGALLtoEF$EF)
   PGALLtoEF$EF <- gsub("GEO", "Geothermal", PGALLtoEF$EF)
   
-  # aggregateto reporting fuel categories
+  VProdElec_LGN <- VProdElec
+  # aggregate to reporting fuel categories
   VProdElec <- toolAggregate(VProdElec[,,PGALLtoEF[["PGALL"]]], dim = 3,rel = PGALLtoEF,from = "PGALL", to = "EF")
+  VProdElec_LGN <- toolAggregate(VProdElec_LGN[,,add_LGN[["PGALL"]]], dim = 3,rel = add_LGN,from = "PGALL", to = "EF")
+  
+  getItems(VProdElec_LGN, 3) <- paste0("Secondary Energy|Electricity|", getItems(VProdElec_LGN, 3))
+  
+  # write data in mif file
+  write.report(VProdElec_LGN[,,],file="reporting.mif",model="OPEN-PROM",append=TRUE,unit="GW",scenario=scenario_name)
   
   getItems(VProdElec, 3) <- paste0("Secondary Energy|Electricity|", getItems(VProdElec, 3))
   
