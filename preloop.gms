@@ -13,6 +13,8 @@ endloop;
 model openprom /
 
 *' * Power Generation *
+QCapElec2
+qScalFacPlantDispatchExpr
 QRenTechMatMultExpr                 !! VRenTechMatMultExpr(runCy,PGALL,YTIME)
 QPotRenCurr                         !! VPotRenCurr(runCy,PGRENEF,YTIME)
 QCapElecCHP                         !! VCapElecCHP(runCy,CHP,YTIME)
@@ -49,7 +51,7 @@ QNewInvElec                         !! VNewInvElec(runCy,YTIME)
 QSharePowPlaNewEq                   !! VSharePowPlaNewEq(runCy,PGALL,YTIME)
 QCapElec                            !! VCapElec(runCy,PGALL,YTIME)
 QCostVarTechElec                    !! VCostVarTechElec(runCy,PGALL,YTIME)
-QElecPeakLoads                      !! VElecPeakLoads(runCy,YTIME) 
+QCostVarTechElecTot                 !! VCostVarTechElecTot(runCy,YTIME) 
 QSortPlantDispatch                  !! VSortPlantDispatch(runCy,PGALL,YTIME)
 QNewCapElec                         !! VNewCapElec(runCy,PGALL,YTIME)
 QCFAvgRen                           !! VCFAvgRen(runCy,PGALL,YTIME)
@@ -57,7 +59,7 @@ QCapOverall                         !! VCapOverall(runCy,PGALL,YTIME)
 QScalFacPlantDispatch               !! VScalFacPlaDisp
 QProdElecEstCHP                     !! VProdElecEstCHP(runCy,YTIME) 
 QProdElecNonCHP                     !! VProdElecNonCHP(runCy,YTIME) 
-QProdElecReqCHP                        !! VProdElecReqCHP(runCy,YTIME) 
+QProdElecReqCHP                     !! VProdElecReqCHP(runCy,YTIME) 
 QProdElec                           !! VProdElec(runCy,PGALL,YTIME)
 qSecContrTotCHPProd                 !! vSecContrTotCHPProd(runCy,INDDOM,CHP,YTIME)
 QProdElecCHP                        !! VProdElecCHP(runCy,CHP,YTIME)
@@ -160,12 +162,12 @@ QCstCO2SeqCsts                      !! VCstCO2SeqCsts(runCy,YTIME)
 
 *QGrnnHsEmisCO2Equiv                 !! VGrnnHsEmisCO2Equiv(NAP,YTIME)
 *qGrnnHsEmisCO2EquivAllCntr          !! vGrnnHsEmisCO2EquivAllCntr(YTIME) 
-qExpendHouseEne                     !! vExpendHouseEne(runCy,YTIME)
+qExpendHouseEne                      !! vExpendHouseEne(runCy,YTIME)
 
 
 *' * Prices *
 
-QPriceFuelSubsecCarVal                 !! VPriceFuelSubsecCarVal(runCy,SBS,EF,YTIME)
+QPriceFuelSubsecCarVal              !! VPriceFuelSubsecCarVal(runCy,SBS,EF,YTIME)
 QPriceFuelSepCarbonWght             !! VPriceFuelSepCarbonWght(runCy,DSBS,EF,YTIME)
 QPriceFuelAvgSub                    !! VPriceFuelAvgSub(runCy,DSBS,YTIME)
 QPriceElecIndResConsu               !! VPriceElecIndResConsu(runCy,ESET,YTIME)
@@ -306,7 +308,7 @@ VNewInvElec.FX(runCy,YTIME)$(NOT AN(YTIME))=1;
 
 VCostVarTechElec.l(runCy,PGALL,YTIME)=0.1;
 
-VElecPeakLoads.l(runCy,YTIME)=0.1;
+VCostVarTechElecTot.l(runCy,YTIME)=0.1;
 
 VNewCapElec.FX(runCy,PGALL,"2011")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2011")- iInstCapPast(runCy,PGALL,"2010") +1E-10;
 VNewCapElec.FX(runCy,PGALL,"2012")$PGREN(PGALL) = iInstCapPast(runCy,PGALL,"2012")- iInstCapPast(runCy,PGALL,"2011") +1E-10;
@@ -324,7 +326,7 @@ VCFAvgRen.l(runCy,PGALL,YTIME)=0.1;
 VCFAvgRen.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =iAvailRate(PGALL,YTIME);
 
 VSortPlantDispatch.lo(runCy,PGALL,YTIME)=1.E-12;
-VSortPlantDispatch.l(runCy,PGALL,YTIME)=VCostVarTechElec.L(runCy,PGALL,YTIME)/VElecPeakLoads.L(runCy,YTIME);
+VSortPlantDispatch.l(runCy,PGALL,YTIME)=VCostVarTechElec.L(runCy,PGALL,YTIME)/VCostVarTechElecTot.L(runCy,YTIME);
 
 VProdElecReqCHP.l(runCy,YTIME) = 0.01;
 
@@ -347,7 +349,7 @@ VRenValue.FX(YTIME) = 0 ;
 VCstCO2SeqCsts.l(runCy,YTIME)=1;
 *VCstCO2SeqCsts.FX(runCy,YTIME)$(not an(YTIME)) = iElastCO2Seq(allCy,"mc_b")
 
-VScalWeibullSum.l(runCy,PGALL,YTIME)=2;
+VScalWeibullSum.l(runCy,PGALL,YTIME)=2000;
 
 VCostHourProdInvDec.l(runCy,PGALL,HOUR,TT) = 0.0001;
 VCostHourProdInvDec.FX(runCy,PGALL,HOUR,YTIME)$((NOT AN(YTIME)))=0;
@@ -460,7 +462,7 @@ VCapElecCHP.FX(runCy,CHP,YTIME)$(not An(YTIME)) = iHisChpGrCapData(runCy,CHP,YTI
 VSharePowPlaNewEq.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) )=0;
 
 VCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  iInstCapPast(runCy,PGALL,YTIME);
-
+VCapElec2.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = iInstCapPast(runCy,PGALL,YTIME);
 VCapOverall.FX(runCy,PGALL,YTIME)$TFIRST(YTIME) =  iInstCapPast(runCy,PGALL,YTIME)$TFIRST(YTIME);
 
 VProdElec.FX(runCy,pgall,YTIME)$DATAY(YTIME)=iDataElecProd(runCy,pgall,YTIME)/1000;
@@ -504,6 +506,40 @@ VLambda.L(runCy,YTIME)=0.21;
 VProdElecReqTot.fx(runCy,"%fBaseY%")=sum(pgall,VProdElec.L(runCy,pgall,"%fBaseY%"));
 
 openprom.optfile=1;
+
+openprom.scaleopt=1;
+
+VCostProdSpecTech.scale(runCy,PGALL,YTIME)=1e12;
+QCostProdSpecTech.scale(runCy,PGALL,YTIME)=VCostProdSpecTech.scale(runCy,PGALL,YTIME);
+VCostVarTechNotPGSCRN.scale(runCy,PGALL,YTIME)=1e6;
+QCostVarTechNotPGSCRN.scale(runCy,PGALL,YTIME)=VCostVarTechNotPGSCRN.scale(runCy,PGALL,YTIME);
+VScalFacPlaDisp.scale(runCy,HOUR,YTIME)=1e-11;
+QScalFacPlantDispatch.scale(runCy,HOUR,YTIME)=VScalFacPlaDisp.scale(runCy,HOUR,YTIME);
+$ontext
+VSortPlantDispatch.scale(runCy,PGALL,YTIME)=1e-11;
+QSortPlantDispatch.scale(runCy,PGALL,YTIME)=VSortPlantDispatch.scale(runCy,PGALL,YTIME);
+$offtext
+VCostVarTechElec.scale(runCy,PGALL,YTIME)=1e5;
+QCostVarTechElec.scale(runCy,PGALL,YTIME)=VCostVarTechElec.scale(runCy,PGALL,YTIME);
+VNewInvElec.scale(runCy,YTIME)=1e8;
+QNewInvElec.scale(runCy,YTIME)=VNewInvElec.scale(runCy,YTIME);
+*VActivPassTrnsp.scale(runCy,TRANP,YTIME)$(AN(YTIME) and not sameas(TRANP,"PC")) = max(VActivPassTrnsp.l(runCy,TRANP,YTIME),1e-20);
+*QActivPassTrnsp.scale(runCy,TRANP,YTIME)$(AN(YTIME) and not sameas(TRANP,"PC")) = max(VActivPassTrnsp.l(runCy,TRANP,YTIME),1e-20);
+VCostTranspMatFac.scale(runCy,TRANSE,RCon,TTECH,YTIME)=1e-7;
+QCostTranspMatFac.scale(runCy,TRANSE,RCon,TTECH,YTIME)=VCostTranspMatFac.scale(runCy,TRANSE,RCon,TTECH,YTIME);
+VTechSortVarCost.scale(runCy,TRANSE,Rcon,YTIME)=1e-8;
+QTechSortVarCost.scale(runCy,TRANSE,Rcon,YTIME)=VTechSortVarCost.scale(runCy,TRANSE,Rcon,YTIME);
+VShareTechTr.scale(runCy,TRANSE,EF2,YTIME)=1e-6;
+QShareTechTr.scale(runCy,TRANSE,EF2,YTIME)=VShareTechTr.scale(runCy,TRANSE,EF2,YTIME);
+VPriceFuelSepCarbonWght.scale(runCy,DSBS,EF,YTIME)=1e-6;
+QPriceFuelSepCarbonWght.scale(runCy,DSBS,EF,YTIME)=VPriceFuelSepCarbonWght.scale(runCy,DSBS,EF,YTIME);
+*VTrnsWghtLinToExp.scale(runCy,YTIME)=1.e-20;
+*QTrnsWghtLinToExp.scale(runCy,YTIME)=1.e-20;
+VCostVarTech.scale(runCy,PGALL,YTIME)=1e-5;
+QCostVarTech.scale(runCy,PGALL,YTIME)=VCostVarTech.scale(runCy,PGALL,YTIME);
+VScalWeibullSum.scale(runCy,PGALL,YTIME)=1e6;
+QScalWeibullSum.scale(runCy,PGALL,YTIME)=VScalWeibullSum.scale(runCy,PGALL,YTIME);
+
 loop an do !! start outer iteration loop (time steps)
    s = s + 1;
    TIME(YTIME) = NO;

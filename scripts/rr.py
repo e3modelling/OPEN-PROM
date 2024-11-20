@@ -102,17 +102,17 @@ def check_files_and_list_subfolders(base_path, flag=False):
                     end_horizon_year = end_horizon_line.split()[-1]
 
                 with open(main_log_path, "r") as file:
-                    last_lines = file.readlines()[-65:]
+                    last_lines = file.readlines()
                     year = None
                     running_year = None
 
-                    if any("an =" in line for line in last_lines):
+                    if any("--- LOOPS an =" in line for line in last_lines):
                         for line in last_lines:
-                            if "an =" in line:
+                            if "--- LOOPS an =" in line:
                                 year = line.split("=")[1].strip().rjust(max_year_length)
 
                     for line in reversed(last_lines):
-                        if "an =" in line:
+                        if "--- LOOPS an =" in line:
                             running_year = line.split("=")[1].strip().rjust(max_year_length)
                             break
 

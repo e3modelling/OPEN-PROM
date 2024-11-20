@@ -122,7 +122,8 @@ QLoadFacDom(allCy,YTIME)	                               "Compute load factor of 
 QPeakLoad(allCy,YTIME)	                                   "Compute elerctricity peak load"		
 QBaseLoadMax(allCy,YTIME) 	                               "Compute baseload corresponding to maximum load"
 QBaseLoad(allCy,YTIME)	                                   "Compute electricity base load"
-QShareNewTechCCS(allCy,PGALL,YTIME)	                       "Compute SHRCAP"	
+QShareNewTechCCS(allCy,PGALL,YTIME)	                       "Compute SHRCAP"
+QCapElec2(allCy,PGALL,YTIME)	                           "Compute electricity generation capacity"
 QLambda(allCy,YTIME)	                                   "Compute Lambda parameter"	
 QScalFacPlantDispatch(allCy,HOUR,YTIME)                    "Compute the scaling factor for plant dispatching"	
 QPotRenCurr(allCy,PGRENEF,YTIME)	                       "Compute current renewable potential" 	
@@ -147,7 +148,7 @@ QCFAvgRen(allCy,PGALL,YTIME)	                           "Compute the average cap
 QNewCapElec(allCy,PGALL,YTIME)	                           "Compute the new capacity added every year"	
 QSortPlantDispatch(allCy,PGALL,YTIME)	                   "Compute Power plants sorting according to variable cost to decide the plant dispatching" 	
 QCostVarTechElec(allCy,PGALL,YTIME)	                       "Compute variable cost of technology" 
-QElecPeakLoads(allCy,YTIME)	                               "Compute Electricity peak loads"	
+QCostVarTechElecTot(allCy,YTIME)	                               "Compute Electricity peak loads"	
 QCapElec(allCy,PGALL,YTIME)	                               "Compute electricity generation capacity"	
 QSharePowPlaNewEq(allCy,PGALL,YTIME)	                   "Compute the power plant share in new equipment"	
 QNewInvElec(allCy,YTIME)	                               "Compute for Power Plant new investment decision"		
@@ -262,12 +263,14 @@ QPriceElecIndResConsu(allCy,ESET,YTIME)                    "Compute electricity 
 *' *** Miscellaneous
 qDummyObj                                                  "Define dummy objective function"
 QRenTechMatMultExpr(allCy,PGALL,YTIME)
+qScalFacPlantDispatchExpr(allCy,PGALL,HOUR,YTIME)
 ;
 
 
 Variables
 
 *' *** Power Generation Variables
+vScalFacPlantDispatchExpr(allCy,PGALL,HOUR,YTIME)
 VRenTechMatMultExpr(allCy,PGALL,YTIME)                     "Renewable power capacity over potential (1)"
 VCapElecCHP(allCy,CHP,YTIME)	                           "Capacity of CHP Plants (GW)"
 VLambda(allCy,YTIME)	                                   "Parameter for load curve construction (1)"
@@ -302,7 +305,7 @@ VCostHourProdInvDec(allCy,PGALL,HOUR,YTIME)                "Hourly production co
 VProdElecEstCHP(allCy,YTIME)	                           "Estimate the electricity of CHP Plants (1)"	
 VCostProdSpecTech(allCy,PGALL,YTIME)	                   "Production cost of technology (US$2015/KWh)"
 VScalWeibullSum(allCy,PGALL,YTIME)	                       "Sum (over hours) of temporary variable facilitating the scaling in Weibull equation (1)"
-VElecPeakLoads(allCy,YTIME)	                               "Electricity peak loads (GW)"	
+VCostVarTechElecTot(allCy,YTIME)	                               "Electricity peak loads (GW)"	
 VCostVarTechElec(allCy,PGALL,YTIME)	                       "Variable cost of technology (US$2015/KWh)"	
 VNewInvElec(allCy,YTIME)	                               "Power plant sorting for new investment decision according to total cost (1)"	
 VSharePowPlaNewEq(allCy,PGALL,YTIME)	                   "Power plant share in new equipment (1)"	
@@ -317,6 +320,7 @@ VCostProdTeCHPreReplac(allCy,PGALL,YTIME)                  "Production cost of t
 VIndxEndogScrap(allCy,PGALL,YTIME)	                       "Index used for endogenous power plants scrapping (1)"			
 VSensCCS(allCy,YTIME)	                                   "Variable that controlls the sensitivity of CCS acceptance (1)"			
 VBaseLoad(allCy,YTIME)	                                   "Corrected base load (GW)"
+VCapElec2(allCy,PGALL,YTIME)	                           "Electricity generation plants capacity (GW)"
 VCapElecNonCHP(allCy,YTIME)	                               "Total electricity generation capacity excluding CHP (GW)"	
 VCostVarTech(allCy,PGALL,YTIME)	                           "Variable cost of technology (US$2015/KWh)"	
 VShareNewTechNoCCS(allCy,PGALL,YTIME)	                   "Power plant share in new equipment (1)"
