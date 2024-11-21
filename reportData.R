@@ -9,7 +9,7 @@ library(mrprom)
 openprom_p_variables <- gdxInfo("openprom_p.gdx",returnList=T,dump=F)
 blabla_variables <- list() 
 for (i in openprom_p_variables[["variables"]]) {
-  if (i %in% c("vTotFinEneConsAll","VTechCostIntrm", "VConsEachTechTransp", "vDummyObj")) next
+  if (i %in% c("vConsTotFinEne","VCostTechIntrm", "VConsTechTranspSectoral", "vDummyObj")) next
   blabla_variables[[i]] <- read.gdx('./blabla.gdx', i, field = 'l')
 }
 mena_prom_mapping <- read.csv("MENA-PROM mapping - mena_prom_mapping.csv")
@@ -71,7 +71,7 @@ var_gdp$variable <- "GDP|PPP"
 var_gdp$unit <- "billion US$2015/yr"
 var_gdp <- select(var_gdp, -data)
 
-var_demtr <- readGDX('./blabla.gdx', 'VDemTr', field = 'l')
+var_demtr <- readGDX('./blabla.gdx', 'VDemFinEneTranspPerFuel', field = 'l')
 var_demtr <- as.quitte(var_demtr)
 var_demtr$model <- "OPEN-PROM"
 var_demtr$unit <- "Mtoe"

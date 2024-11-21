@@ -1,6 +1,5 @@
 *.lst
 *.log
-*.R
 !loadMadratData.R
 !reportData.R
 *.ini
@@ -16,3 +15,11 @@ regionmappingOP.csv
 *.mif
 /data_report
 /data
+/runs
+/default*
+metadata.json
+/doc
+*.pyc
+config.json
+modelstat.txt
+git_diff.txt

@@ -1,51 +1,59 @@
-    openprom.optfile=1;
+
     sModelStat = 100;
     loop rcc$(rcc.val <= sSolverTryMax) do !! start inner iteration loop (solver attempts)
         if sModelStat ne 15 then
             solve openprom using cns;!! maximizing vDummyObj;
             sModelStat = openprom.modelstat;
+            ODummyObj(runCyL,YTIME)$TIME(YTIME) = vDummyObj.L;  !! Assign objective function value
         endif;
-    endloop;    !! close inner iteration loop (solver attempts)
+    endloop;
+
+
+put fStat;
+put "Country:", runCyL.tl, " Model Status:", sModelStat:0:2, " Year:", an.tl /;
     if sModelStat ne 15 then abort "Last iteration unsuccessful!"
     endif;
 * Fix values of variables for the next time step
-VNumVeh.FX(allCy,YTIME)$TIME(YTIME) = VNumVeh.L(allCy,YTIME)$TIME(YTIME);
-VMExtV.FX(allCy,YTIME)$TIME(YTIME) = VMExtV.L(allCy,YTIME)$TIME(YTIME);
-VFuelPriceAvg.FX(allCy,DSBS,YTIME)$TIME(YTIME) = VFuelPriceAvg.L(allCy,DSBS,YTIME)$TIME(YTIME);
-VScrRate.FX(allCy,YTIME)$TIME(YTIME) = VScrRate.L(allCy,YTIME)$TIME(YTIME);
-VGoodsTranspActiv.FX(allCy,TRANSE,YTIME)$TIME(YTIME) = VGoodsTranspActiv.L(allCy,TRANSE,YTIME)$TIME(YTIME);
-VSpecificFuelCons.FX(allCy,TRANSE,TTECH,EF,YTIME)$TIME(YTIME) = VSpecificFuelCons.L(allCy,TRANSE,TTECH,EF,YTIME)$TIME(YTIME);
-VConsEachTechTransp.FX(allCy,TRANSE,TTECH,EF,YTIME)$TIME(YTIME) = VConsEachTechTransp.L(allCy,TRANSE,TTECH,EF,YTIME)$TIME(YTIME);
-VElecNonSub.FX(allCy,DSBS,YTIME)$TIME(YTIME) = VElecNonSub.L(allCy,DSBS,YTIME)$TIME(YTIME);
-VDemSub.FX(allCy,DSBS,YTIME)$TIME(YTIME) = VDemSub.L(allCy,DSBS,YTIME)$TIME(YTIME);
-VFuelPriceSub.FX(allCy,SBS,EF,YTIME)$TIME(YTIME) = VFuelPriceSub.L(allCy,SBS,EF,YTIME)$TIME(YTIME);
-VFuelConsInclHP.FX(allCy,DSBS,EF,YTIME)$TIME(YTIME) = VFuelConsInclHP.L(allCy,DSBS,EF,YTIME)$TIME(YTIME);
-VTrnspActiv.FX(allCy,TRANSE,YTIME)$TIME(YTIME) = VTrnspActiv.L(allCy,TRANSE,YTIME)$TIME(YTIME);
-VLongAvgPowGenCost.FX(allCy,ESET,YTIME)$TIME(YTIME) = VLongAvgPowGenCost.L(allCy,ESET,YTIME)$TIME(YTIME);
-VElecIndPrices.FX(allCy,YTIME)$TIME(YTIME) = VElecIndPrices.L(allCy,YTIME)$TIME(YTIME);
-VTotElecGenCap.FX(allCy,YTIME)$TIME(YTIME) = VTotElecGenCap.L(allCy,YTIME)$TIME(YTIME);
-VLonPowGenCostNoClimPol.FX(allCy,ESET,YTIME)$TIME(YTIME) = VLonPowGenCostNoClimPol.L(allCy,ESET,YTIME)$TIME(YTIME);
-VElecPeakLoad.FX(allCy,YTIME)$TIME(YTIME) = VElecPeakLoad.L(allCy,YTIME)$TIME(YTIME);
-VOverallCap.FX(runCy,PGALL,YTIME)$TIME(YTIME) = VOverallCap.L(runCy,PGALL,YTIME)$TIME(YTIME);
-VConsFuel.FX(runCy,DSBS,EF,YTIME)$TIME(YTIME) = VConsFuel.L(runCy,DSBS,EF,YTIME)$TIME(YTIME);
-VEndogScrapIndex.FX(runCy,PGALL,YTIME)$TIME(YTIME) = VEndogScrapIndex.L(runCy,PGALL,YTIME)$TIME(YTIME);
-VElecGenPlantsCapac.FX(runCy,PGALL,YTIME)$TIME(YTIME) = VElecGenPlantsCapac.L(runCy,PGALL,YTIME)$TIME(YTIME);
-VElecGenPlanCap.FX(runCy,PGALL,YTIME)$TIME(YTIME) = VElecGenPlanCap.L(runCy,PGALL,YTIME)$TIME(YTIME);
-VNewCapYearly.FX(runCy,PGALL,YTIME)$TIME(YTIME) = VNewCapYearly.L(runCy,PGALL,YTIME)$TIME(YTIME);
-VAvgCapFacRes.FX(runCy,PGALL,YTIME)$TIME(YTIME) = VAvgCapFacRes.L(runCy,PGALL,YTIME)$TIME(YTIME);
-VCO2SeqCsts.FX(runCy,YTIME)$TIME(YTIME) = VCO2SeqCsts.L(runCy,YTIME)$TIME(YTIME);
-VCO2ElcHrgProd.FX(runCy,YTIME)$TIME(YTIME) = VCO2ElcHrgProd.L(runCy,YTIME)$TIME(YTIME);
-VCumCO2Capt.FX(runCy,YTIME)$TIME(YTIME) = VCumCO2Capt.L(runCy,YTIME)$TIME(YTIME);
-VRefCapacity.FX(runCy,YTIME)$TIME(YTIME) = VRefCapacity.L(runCy,YTIME)$TIME(YTIME);
-VTransfers.FX(runCy,EFS,YTIME)$TIME(YTIME) = VTransfers.L(runCy,EFS,YTIME)$TIME(YTIME);
-VTransfInputRefineries.FX(runCy,"CRO",YTIME)$(TIME(YTIME)) = VTransfInputRefineries.L(runCy,"CRO",YTIME)$(TIME(YTIME));
-VPrimProd.FX(runCy,PPRODEF,YTIME)$TIME(YTIME) = VPrimProd.L(runCy,PPRODEF,YTIME)$TIME(YTIME);
-VElecGenNoChp.FX(runCy,YTIME)$TIME(YTIME) = VElecGenNoChp.L(runCy,YTIME)$TIME(YTIME);
-VFeCons.FX(runCy,EFS,YTIME)$TIME(YTIME) = VFeCons.L(runCy,EFS,YTIME)$TIME(YTIME);
-VTransfOutputRefineries.FX(runCy,EFS,YTIME)$(TIME(YTIME) $EFtoEFA(EFS,"LQD")) = VTransfOutputRefineries.L(runCy,EFS,YTIME)$(TIME(YTIME) $EFtoEFA(EFS,"LQD"));
-VFuelConsInclHP.FX(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF)) = VFuelConsInclHP.L(runCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF));
-VExportsFake.FX(runCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS)) = VExportsFake.L(runCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS));
-VGrsInlConsNotEneBranch.FX(runCy,EFS,YTIME)$TIME(YTIME) =  VGrsInlConsNotEneBranch.L(runCy,EFS,YTIME)$TIME(YTIME);
+VStockPcYearly.FX(runCyL,YTIME)$TIME(YTIME) = VStockPcYearly.L(runCyL,YTIME)$TIME(YTIME);
+VMEPcGdp.FX(runCyL,YTIME)$TIME(YTIME) = VMEPcGdp.L(runCyL,YTIME)$TIME(YTIME);
+VPriceFuelAvgSub.FX(runCyL,DSBS,YTIME)$TIME(YTIME) = VPriceFuelAvgSub.L(runCyL,DSBS,YTIME)$TIME(YTIME);
+VRateScrPc.FX(runCyL,YTIME)$TIME(YTIME) = VRateScrPc.L(runCyL,YTIME)$TIME(YTIME);
+VActivGoodsTransp.FX(runCyL,TRANSE,YTIME)$TIME(YTIME) = VActivGoodsTransp.L(runCyL,TRANSE,YTIME)$TIME(YTIME);
+VConsSpecificFuel.FX(runCyL,TRANSE,TTECH,EF,YTIME)$TIME(YTIME) = VConsSpecificFuel.L(runCyL,TRANSE,TTECH,EF,YTIME)$TIME(YTIME);
+VConsTechTranspSectoral.FX(runCyL,TRANSE,TTECH,EF,YTIME)$TIME(YTIME) = VConsTechTranspSectoral.L(runCyL,TRANSE,TTECH,EF,YTIME)$TIME(YTIME);
+VConsElecNonSubIndTert.FX(runCyL,DSBS,YTIME)$TIME(YTIME) = VConsElecNonSubIndTert.L(runCyL,DSBS,YTIME)$TIME(YTIME);
+VDemFinSubFuelSubsec.FX(runCyL,DSBS,YTIME)$TIME(YTIME) = VDemFinSubFuelSubsec.L(runCyL,DSBS,YTIME)$TIME(YTIME);
+VPriceFuelSubsecCarVal.FX(runCyL,SBS,EF,YTIME)$TIME(YTIME) = VPriceFuelSubsecCarVal.L(runCyL,SBS,EF,YTIME)$TIME(YTIME);
+VConsFuelInclHP.FX(runCyL,DSBS,EF,YTIME)$TIME(YTIME) = VConsFuelInclHP.L(runCyL,DSBS,EF,YTIME)$TIME(YTIME);
+VActivPassTrnsp.FX(runCyL,TRANSE,YTIME)$TIME(YTIME) = VActivPassTrnsp.L(runCyL,TRANSE,YTIME)$TIME(YTIME);
+VCostPowGenAvgLng.FX(runCyL,ESET,YTIME)$TIME(YTIME) = VCostPowGenAvgLng.L(runCyL,ESET,YTIME)$TIME(YTIME);
+VPriceElecInd.FX(runCyL,YTIME)$TIME(YTIME) = VPriceElecInd.L(runCyL,YTIME)$TIME(YTIME);
+VCapElecTotEst.FX(runCyL,YTIME)$TIME(YTIME) = VCapElecTotEst.L(runCyL,YTIME)$TIME(YTIME);
+VCostPowGenLonNoClimPol.FX(runCyL,ESET,YTIME)$TIME(YTIME) = VCostPowGenLonNoClimPol.L(runCyL,ESET,YTIME)$TIME(YTIME);
+VPeakLoad.FX(runCyL,YTIME)$TIME(YTIME) = VPeakLoad.L(runCyL,YTIME)$TIME(YTIME);
+VCapOverall.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = VCapOverall.L(runCyL,PGALL,YTIME)$TIME(YTIME);
+VConsFuel.FX(runCyL,DSBS,EF,YTIME)$TIME(YTIME) = VConsFuel.L(runCyL,DSBS,EF,YTIME)$TIME(YTIME);
+VIndxEndogScrap.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = VIndxEndogScrap.L(runCyL,PGALL,YTIME)$TIME(YTIME);
+VCapElec.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = VCapElec.L(runCyL,PGALL,YTIME)$TIME(YTIME);
+VNewCapElec.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = VNewCapElec.L(runCyL,PGALL,YTIME)$TIME(YTIME);
+VCFAvgRen.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = VCFAvgRen.L(runCyL,PGALL,YTIME)$TIME(YTIME);
+VCstCO2SeqCsts.FX(runCyL,YTIME)$TIME(YTIME) = VCstCO2SeqCsts.L(runCyL,YTIME)$TIME(YTIME);
+VCapCO2ElecHydr.FX(runCyL,YTIME)$TIME(YTIME) = VCapCO2ElecHydr.L(runCyL,YTIME)$TIME(YTIME);
+VCaptCummCO2.FX(runCyL,YTIME)$TIME(YTIME) = VCaptCummCO2.L(runCyL,YTIME)$TIME(YTIME);
+VCapRef.FX(runCyL,YTIME)$TIME(YTIME) = VCapRef.L(runCyL,YTIME)$TIME(YTIME);
+VTransfers.FX(runCyL,EFS,YTIME)$TIME(YTIME) = VTransfers.L(runCyL,EFS,YTIME)$TIME(YTIME);
+VInputTransfRef.FX(runCyL,"CRO",YTIME)$(TIME(YTIME)) = VInputTransfRef.L(runCyL,"CRO",YTIME)$(TIME(YTIME));
+VProdPrimary.FX(runCyL,PPRODEF,YTIME)$TIME(YTIME) = VProdPrimary.L(runCyL,PPRODEF,YTIME)$TIME(YTIME);
+VCapElecNonCHP.FX(runCyL,YTIME)$TIME(YTIME) = VCapElecNonCHP.L(runCyL,YTIME)$TIME(YTIME);
+VConsFinEneCountry.FX(runCyL,EFS,YTIME)$TIME(YTIME) = VConsFinEneCountry.L(runCyL,EFS,YTIME)$TIME(YTIME);
+VOutTransfRefSpec.FX(runCyL,EFS,YTIME)$(TIME(YTIME) $EFtoEFA(EFS,"LQD")) = VOutTransfRefSpec.L(runCyL,EFS,YTIME)$(TIME(YTIME) $EFtoEFA(EFS,"LQD"));
+VConsFuelInclHP.FX(runCyL,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF)) = VConsFuelInclHP.L(runCyL,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF));
+VExp.FX(runCyL,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS)) = VExp.L(runCyL,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS));
+VConsGrssInlNotEneBranch.FX(runCyL,EFS,YTIME)$TIME(YTIME) =  VConsGrssInlNotEneBranch.L(runCyL,EFS,YTIME)$TIME(YTIME);
+VCapElec2.FX(runCy,PGALL,YTIME)$TIME(YTIME) = VCapElec2.L(runCy,PGALL,YTIME)$TIME(YTIME);
+endloop;  !! close countries loop
+* Export model results to GDX file
+execute_unload "outputData.gdx", ODummyObj, VPriceElecInd, VCapElecTotEst, VPeakLoad, VConsFuel, VCapElec, VProdElec, VBaseLoad;
 endloop;  !! close outer iteration loop (time steps)
-
+putclose fStat;
 $if %WriteGDX% == on execute_unload "blabla.gdx";
