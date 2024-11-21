@@ -517,10 +517,8 @@ VCostVarTechNotPGSCRN.scale(runCy,PGALL,YTIME)=1e6;
 QCostVarTechNotPGSCRN.scale(runCy,PGALL,YTIME)=VCostVarTechNotPGSCRN.scale(runCy,PGALL,YTIME);
 VScalFacPlaDisp.scale(runCy,HOUR,YTIME)=1e-11;
 QScalFacPlantDispatch.scale(runCy,HOUR,YTIME)=VScalFacPlaDisp.scale(runCy,HOUR,YTIME);
-$ontext
-VSortPlantDispatch.scale(runCy,PGALL,YTIME)=1e-11;
+VSortPlantDispatch.scale(runCy,PGALL,YTIME)=1e-10;
 QSortPlantDispatch.scale(runCy,PGALL,YTIME)=VSortPlantDispatch.scale(runCy,PGALL,YTIME);
-$offtext
 VCostVarTechElec.scale(runCy,PGALL,YTIME)=1e5;
 QCostVarTechElec.scale(runCy,PGALL,YTIME)=VCostVarTechElec.scale(runCy,PGALL,YTIME);
 VNewInvElec.scale(runCy,YTIME)=1e8;
