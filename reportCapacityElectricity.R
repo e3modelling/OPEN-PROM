@@ -1,8 +1,7 @@
-reportSE <- function(regs) {
+reportCapacityElectricity <- function(regs) {
   
-  # add model OPEN-PROM data electricity production
-  VProdElec <- readGDX('./blabla.gdx', "VProdElec", field = 'l')[regs, , ]
-  VProdElec <-as.quitte(VProdElec) %>% as.magpie()
+  # add model OPEN-PROM data electricity capacity
+  VCapElec2 <- readGDX('./blabla.gdx', "VCapElec2", field = 'l')[regs, , ]
   
   PGALLtoEF <- toolreadSets("sets.gms", "PGALLtoEF")
   PGALLtoEF <- separate_wider_delim(PGALLtoEF,cols = 1, delim = ".", names = c("PGALL","EF"))
@@ -28,27 +27,27 @@ reportSE <- function(regs) {
   PGALLtoEF$EF <- gsub("SOL", "Solar", PGALLtoEF$EF)
   PGALLtoEF$EF <- gsub("GEO", "Geothermal", PGALLtoEF$EF)
   
-  VProdElec_LGN <- VProdElec
+  VCapElec2_LGN <- VCapElec2
   # aggregate to reporting fuel categories
-  VProdElec <- toolAggregate(VProdElec[,,PGALLtoEF[["PGALL"]]], dim = 3,rel = PGALLtoEF,from = "PGALL", to = "EF")
-  VProdElec_LGN <- toolAggregate(VProdElec_LGN[,,add_LGN[["PGALL"]]], dim = 3,rel = add_LGN,from = "PGALL", to = "EF")
+  VCapElec2 <- toolAggregate(VCapElec2[,,PGALLtoEF[["PGALL"]]], dim = 3,rel = PGALLtoEF,from = "PGALL", to = "EF")
+  VCapElec2_LGN <- toolAggregate(VCapElec2_LGN[,,add_LGN[["PGALL"]]], dim = 3,rel = add_LGN,from = "PGALL", to = "EF")
   
-  getItems(VProdElec_LGN, 3) <- paste0("Secondary Energy|Electricity|", getItems(VProdElec_LGN, 3))
+  getItems(VCapElec2, 3) <- paste0("Capacity|Electricity|", getItems(VCapElec2, 3))
   
-  # write data in mif file
-  write.report(VProdElec_LGN[,,],file="reporting.mif",model="OPEN-PROM",append=TRUE,unit="TWh",scenario=scenario_name)
-  
-  getItems(VProdElec, 3) <- paste0("Secondary Energy|Electricity|", getItems(VProdElec, 3))
+  getItems(VCapElec2_LGN, 3) <- paste0("Capacity|Electricity|", getItems(VCapElec2_LGN, 3))
   
   # write data in mif file
-  write.report(VProdElec[,,],file="reporting.mif",model="OPEN-PROM",append=TRUE,unit="TWh",scenario=scenario_name)
+  write.report(VCapElec2_LGN[,,],file="reporting.mif",model="OPEN-PROM",append=TRUE,unit="GW",scenario=scenario_name)
+  
+  # write data in mif file
+  write.report(VCapElec2[,,],file="reporting.mif",model="OPEN-PROM",append=TRUE,unit="GW",scenario=scenario_name)
   
   # electricity production
-  VProdElec_total <- dimSums(VProdElec, dim = 3, na.rm = TRUE)
+  VCapElec2_total <- dimSums(VCapElec2, dim = 3, na.rm = TRUE)
   
-  getItems(VProdElec_total, 3) <- "Secondary Energy|Electricity"
+  getItems(VCapElec2_total, 3) <- "Capacity|Electricity"
   
   # write data in mif file
-  write.report(VProdElec_total[,,],file="reporting.mif",append=TRUE,model="OPEN-PROM",unit="TWh",scenario=scenario_name)
+  write.report(VCapElec2_total[,,],file="reporting.mif",append=TRUE,model="OPEN-PROM",unit="GW",scenario=scenario_name)
   
-  }
+}
