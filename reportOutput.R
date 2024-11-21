@@ -23,6 +23,7 @@ source("reportFinalEnergy.R")
 source("reportSE.R")
 source("reportPE.R")
 source("reportPriceCarbon.R")
+source("reportCapacityElectricity.R")
 
 # Function to install Python packages if not available
 installPythonPackages <- function(packages) {
@@ -123,6 +124,7 @@ tryCatch({
   reportPriceCarbon(runCY)
   #reportACTV(runCY)
   reportPrice(runCY)
+  reportCapacityElectricity(runCY)
 
   reporting <- read.report("reporting.mif")
   setwd("..")
