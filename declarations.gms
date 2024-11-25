@@ -108,6 +108,7 @@ iIndChar(allCy,INDSE,Indu_Scon_Set)             "Industry sector charactetistics
 iNetImp(allCy,EFS,YTIME)                        "Net imports (Mtoe)"
 iMxmShareChpElec(allCy,YTIME)	                "Maximum share of CHP electricity in a country (1)"
 iScaleEndogScrap(PGALL)                         "Scale parameter for endogenous scrapping applied to the sum of full costs (1)"
+iInpTransfTherm(allCy,EFS,YTIME)                "Historic data of VInpTransfTherm (Transformation input to thermal power plants) (Mtoe)"
 ODummyObj                                       "Parameter saving objective function"
 ;
 
