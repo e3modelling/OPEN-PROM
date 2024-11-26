@@ -1306,6 +1306,12 @@ $include"./iEnvPolicies.csv"
 $offdelim
 ;
 
+table iInpTransfTherm(allCy,EFS,YTIME) "Historic data of VInpTransfTherm (Transformation input to thermal power plants) (Mtoe)"
+$ondelim
+$include"./iInpTransfTherm.csv"
+$offdelim
+;
+
 * Setting the exogenous carbon price values based on the selected model scenario
 if %fScenario% eq 0 then
      iCarbValYrExog(allCy,YTIME)$an(YTIME) = iEnvPolicies(allCy,"exogCV_NPi",YTIME);
