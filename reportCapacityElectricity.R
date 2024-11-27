@@ -3,17 +3,13 @@ reportCapacityElectricity <- function(regs) {
   # add model OPEN-PROM data electricity capacity
   VCapElec2 <- readGDX('./blabla.gdx', "VCapElec2", field = 'l')[regs, , ]
   
-  PGALLtoEF <- toolreadSets("sets.gms", "PGALLtoEF")
-  PGALLtoEF <- separate_wider_delim(PGALLtoEF,cols = 1, delim = ".", names = c("PGALL","EF"))
-  PGALLtoEF[["EF"]] <- sub("\\(","",PGALLtoEF[["EF"]])
-  PGALLtoEF[["EF"]] <- sub("\\)","",PGALLtoEF[["EF"]])
-  PGALLtoEF <- separate_rows(PGALLtoEF, EF)
-  PGALLtoEF <- separate_rows(PGALLtoEF, PGALL)
-  PGALLtoEF <- filter(PGALLtoEF, EF != "")
-  PGALLtoEF <- filter(PGALLtoEF, PGALL != "")
+  PGALLtoEF <- toolGetMapping(name = "PGALLtoEF.csv",
+                              type = "blabla_export",
+                              where = "mrprom")
   
   add_LGN <- as.data.frame(PGALLtoEF[which(PGALLtoEF[, 2] == "LGN"), 1])
   add_LGN["EF"] <- "Lignite"
+  names(add_LGN) <- c("PGALL", "EF")
   
   PGALLtoEF$EF <- gsub("LGN", "Coal", PGALLtoEF$EF)
   PGALLtoEF$EF <- gsub("HCL", "Coal", PGALLtoEF$EF)

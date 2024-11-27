@@ -9,24 +9,14 @@ library(stringr)
 gdx <- "C:/Users/sioutas/github/open-prom-goxygen/OPEN-PROM/runs/USA"
 
 # Link between Model Subsectors and Fuels
-sets4 <- toolreadSets(system.file(file.path("extdata", "sets.gms"), package = "mrprom"), "SECTTECH")
-sets4[6,] <- paste0(sets4[6,] , sets4[7,])
-sets4 <- sets4[ - c(7),,drop = FALSE]
-sets4[7,] <- paste0(sets4[7,] , sets4[8,], sets4[9,])
-sets4 <- sets4[ - c(8, 9),,drop = FALSE]
-sets4 <- separate_wider_delim(sets4,cols = 1, delim = ".", names = c("SBS","EF"))
-sets4[["EF"]] <- sub("\\(","",sets4[["EF"]])
-sets4[["EF"]] <- sub("\\)","",sets4[["EF"]])
-sets4[["SBS"]] <- sub("\\(","",sets4[["SBS"]])
-sets4[["SBS"]] <- sub("\\)","",sets4[["SBS"]])
-sets4 <- separate_rows(sets4,EF)
-sets4 <- separate_rows(sets4,SBS)
-sets4 <- filter(sets4, EF != "")
+sets4 <- toolGetMapping(name = "SECTTECH.csv",
+                        type = "blabla_export",
+                        where = "mrprom")
 
 # Industrial SubSectors
-INDSE <- toolreadSets(system.file(file.path("extdata", "sets.gms"), package = "mrprom"), "INDSE")
-INDSE <- unlist(strsplit(INDSE[, 1], ","))
-INDSE <- as.data.frame(INDSE)
+INDSE <- toolGetMapping(name = "INDSE.csv",
+                        type = "blabla_export",
+                        where = "mrprom")
 
 # Take the Fuels of INDSE
 sets4_INDSE <- filter(sets4, SBS %in% unique(INDSE[["INDSE"]]))
@@ -55,9 +45,9 @@ compare_INDSE <- left_join(iFuelConsPerFueSub_INDSE, VConsFuelInclHP_INDSE,
                                 "SBS", "EF", "period"))
 
 # Tertiary SubSectors
-DOMSE <- toolreadSets(system.file(file.path("extdata", "sets.gms"), package = "mrprom"), "DOMSE")
-DOMSE <- unlist(strsplit(DOMSE[, 1], ","))
-DOMSE <- as.data.frame(DOMSE)
+DOMSE <- toolGetMapping(name = "DOMSE.csv",
+                        type = "blabla_export",
+                        where = "mrprom")
 
 # Take the Fuels of DOMSE
 sets4_DOMSE <- filter(sets4, SBS %in% unique(DOMSE[["DOMSE"]]))
@@ -82,9 +72,9 @@ compare_DOMSE <- left_join(iFuelConsPerFueSub_DOMSE, VConsFuelInclHP_DOMSE,
 compare_INDOM <- rbind(compare_INDSE, compare_DOMSE)
 
 # All Transport Subsectors
-TRANSE <- toolreadSets(system.file(file.path("extdata", "sets.gms"), package = "mrprom"), "TRANSE")
-TRANSE <- unlist(strsplit(TRANSE[, 1], ","))
-TRANSE <- as.data.frame(TRANSE)
+TRANSE <- toolGetMapping(name = "TRANSE.csv",
+                        type = "blabla_export",
+                        where = "mrprom")
 
 # Take the Fuels of Transport
 map_TRANSECTOR <- sets4 %>% filter(SBS %in% TRANSE[,1])

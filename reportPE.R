@@ -3,13 +3,11 @@ reportPE <- function(regs) {
   # add model OPEN-PROM data Primary production
   VProdPrimary <- readGDX('./blabla.gdx', "VProdPrimary", field = 'l')[regs, , ]
   
-  sets <- toolreadSets("sets.gms", "BALEF2EFS")
-  sets[, 1] <- gsub("\"","",sets[, 1])
-  sets <- separate_wider_delim(sets,cols = 1, delim = ".", names = c("BAL","EF"))
-  sets[["EF"]] <- sub("\\(","",sets[["EF"]])
-  sets[["EF"]] <- sub("\\)","",sets[["EF"]])
-  sets <- separate_rows(sets,EF)
-  sets$BAL <- gsub("Gas fuels", "Gas", sets$BAL)
+  sets <- toolGetMapping(name = "BALEF2EFS.csv",
+                         type = "blabla_export",
+                         where = "mrprom")
+  names(sets) <- c("BAL", "EF")
+  sets[["BAL"]] <- gsub("Gas fuels", "Gases", sets[["BAL"]])
   sets$BAL <- gsub("Solids", "Coal", sets$BAL)
   sets$BAL <- gsub("Crude oil and Feedstocks", "Oil", sets$BAL)
   sets$BAL <- gsub("Nuclear heat", "Nuclear", sets$BAL)

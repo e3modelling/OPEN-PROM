@@ -11,30 +11,17 @@ reportEmissions <- function(regs) {
   iCO2CaptRate <- readGDX('./blabla.gdx', "iCO2CaptRate")[regs, , ]
   
   # Link between Model Subsectors and Fuels
-  sets4 <- toolreadSets("sets.gms", "SECTTECH")
-  sets4[6,] <- paste0(sets4[6,] , sets4[7,])
-  sets4 <- sets4[ - c(7),,drop = FALSE]
-  sets4[7,] <- paste0(sets4[7,] , sets4[8,], sets4[9,])
-  sets4 <- sets4[ - c(8, 9),,drop = FALSE]
-  sets4 <- separate_wider_delim(sets4,cols = 1, delim = ".", names = c("SBS","EF"))
-  sets4[["EF"]] <- sub("\\(","",sets4[["EF"]])
-  sets4[["EF"]] <- sub("\\)","",sets4[["EF"]])
-  sets4[["SBS"]] <- sub("\\(","",sets4[["SBS"]])
-  sets4[["SBS"]] <- sub("\\)","",sets4[["SBS"]])
-  sets4 <- separate_rows(sets4,EF)
-  sets4 <- separate_rows(sets4,SBS)
-  sets4 <- filter(sets4, EF != "")
+  sets4 <- toolGetMapping(name = "SECTTECH.csv",
+                          type = "blabla_export",
+                          where = "mrprom")
   
-  EFtoEFS <- toolreadSets("sets.gms", "EFtoEFS")
-  EFtoEFS <- as.data.frame(EFtoEFS)
-  EFtoEFS <- separate_wider_delim(EFtoEFS,cols = 1, delim = ".", names = c("EF","EFS"))
-  EFtoEFS[["EF"]] <- sub("\\(","",EFtoEFS[["EF"]])
-  EFtoEFS[["EF"]] <- sub("\\)","",EFtoEFS[["EF"]])
-  EFtoEFS <- EFtoEFS %>% separate_longer_delim(c(EF, EFS), delim = ",")
+  EFtoEFS <- toolGetMapping(name = "EFtoEFS.csv",
+                            type = "blabla_export",
+                            where = "mrprom")
   
-  IND <- toolreadSets("sets.gms", "INDDOM")
-  IND <- unlist(strsplit(IND[, 1], ","))
-  IND <- as.data.frame(IND)
+  IND <- toolGetMapping(name = "INDDOM.csv",
+                            type = "blabla_export",
+                            where = "mrprom")
   
   map_INDDOM <- sets4 %>% filter(SBS %in% IND[,1])
   
@@ -49,8 +36,10 @@ reportEmissions <- function(regs) {
   qINDDOM <- paste0(qINDDOM[["SBS"]], ".", qINDDOM[["SECTTECH"]])
   INDDOM <- as.data.frame(qINDDOM)
   
-  PGEF <- toolreadSets("sets.gms", "PGEF")
-  PGEF <- as.data.frame(PGEF)
+  PGEF <- toolGetMapping(name = "PGEF.csv",
+                         type = "blabla_export",
+                         where = "mrprom")
+  
   # final consumption
   sum1 <- iCo2EmiFac[,,INDDOM[, 1]] * VConsFuel[,,INDDOM[, 1]]
   sum1 <- dimSums(sum1, 3, na.rm = TRUE)
@@ -64,9 +53,9 @@ reportEmissions <- function(regs) {
   sum4 <- VConsFiEneSec * iCo2EmiFac[,,"PG"][,,getItems(VConsFiEneSec,3)]
   sum4 <- dimSums(sum4, 3, na.rm = TRUE)
   
-  TRANSE <- toolreadSets("sets.gms", "TRANSE")
-  TRANSE <- unlist(strsplit(TRANSE[, 1], ","))
-  TRANSE <- as.data.frame(TRANSE)
+  TRANSE <- toolGetMapping(name = "TRANSE.csv",
+                         type = "blabla_export",
+                         where = "mrprom")
   
   map_TRANSECTOR <- sets4 %>% filter(SBS %in% TRANSE[,1])
   map_TRANSECTOR <- paste0(map_TRANSECTOR[["SBS"]], ".", map_TRANSECTOR[["EF"]])
@@ -76,15 +65,13 @@ reportEmissions <- function(regs) {
   # transport
   sum5 <- dimSums(sum5, 3, na.rm = TRUE)
   
-  PGALLtoEF <- toolreadSets("sets.gms", "PGALLtoEF")
-  PGALLtoEF <- as.data.frame(PGALLtoEF)
-  PGALLtoEF <- separate_wider_delim(PGALLtoEF,cols = 1, delim = ".", names = c("PGALL","EF"))
-  PGALLtoEF[["PGALL"]] <- sub("\\(","",PGALLtoEF[["PGALL"]])
-  PGALLtoEF[["PGALL"]] <- sub("\\)","",PGALLtoEF[["PGALL"]])
-  PGALLtoEF <- separate_rows(PGALLtoEF,PGALL)
+  PGALLtoEF <- toolGetMapping(name = "PGALLtoEF.csv",
+                              type = "blabla_export",
+                              where = "mrprom")
   
-  CCS <- toolreadSets("sets.gms", "CCS")
-  CCS <- as.data.frame(CCS)
+  CCS <- toolGetMapping(name = "CCS.csv",
+                        type = "blabla_export",
+                        where = "mrprom")
   
   CCS <- PGALLtoEF[PGALLtoEF$PGALL %in% CCS$CCS, ]
   
@@ -108,9 +95,9 @@ reportEmissions <- function(regs) {
  
   # Extra Emissions
   # Emissions|CO2|Energy|Demand|Industry
-  INDSE <- toolreadSets("sets.gms", "INDSE") # Industrial SubSectors
-  INDSE <- unlist(strsplit(INDSE[, 1], ","))
-  INDSE <- as.data.frame(INDSE)
+  INDSE <- toolGetMapping(name = "INDSE.csv",
+                          type = "blabla_export",
+                          where = "mrprom")
   
   map_INDSE <- sets4 %>% filter(SBS %in% INDSE[,1])
   
@@ -135,9 +122,9 @@ reportEmissions <- function(regs) {
   write.report(sum_INDSE[,,],file="reporting.mif",model="OPEN-PROM",unit = "Mt CO2/yr",append=TRUE,scenario=scenario_name)
   
   # Emissions|CO2|Energy|Demand|Residential and Commercial
-  DOMSE <- toolreadSets("sets.gms", "DOMSE") # Tertiary SubSectors
-  DOMSE <- unlist(strsplit(DOMSE[, 1], ","))
-  DOMSE <- as.data.frame(DOMSE)
+  DOMSE <- toolGetMapping(name = "DOMSE.csv",
+                          type = "blabla_export",
+                          where = "mrprom")
   
   map_DOMSE <- sets4 %>% filter(SBS %in% DOMSE[,1])
   
