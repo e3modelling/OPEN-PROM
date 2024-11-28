@@ -9,14 +9,11 @@ library(stringr)
 gdx <- "C:/Users/sioutas/github/open-prom-goxygen/OPEN-PROM/runs/USA"
 
 # Link between Model Subsectors and Fuels
-sets4 <- toolGetMapping(name = "SECTTECH.csv",
-                        type = "blabla_export",
-                        where = "mrprom")
+sets4 <- readGDX('./blabla.gdx', "SECTTECH")
 
 # Industrial SubSectors
-INDSE <- toolGetMapping(name = "INDSE.csv",
-                        type = "blabla_export",
-                        where = "mrprom")
+INDSE <- readGDX('./blabla.gdx', "INDSE")
+INDSE <- as.data.frame(INDSE)
 
 # Take the Fuels of INDSE
 sets4_INDSE <- filter(sets4, SBS %in% unique(INDSE[["INDSE"]]))
@@ -45,9 +42,8 @@ compare_INDSE <- left_join(iFuelConsPerFueSub_INDSE, VConsFuelInclHP_INDSE,
                                 "SBS", "EF", "period"))
 
 # Tertiary SubSectors
-DOMSE <- toolGetMapping(name = "DOMSE.csv",
-                        type = "blabla_export",
-                        where = "mrprom")
+DOMSE <- readGDX('./blabla.gdx', "DOMSE")
+DOMSE <- as.data.frame(DOMSE)
 
 # Take the Fuels of DOMSE
 sets4_DOMSE <- filter(sets4, SBS %in% unique(DOMSE[["DOMSE"]]))
@@ -72,9 +68,8 @@ compare_DOMSE <- left_join(iFuelConsPerFueSub_DOMSE, VConsFuelInclHP_DOMSE,
 compare_INDOM <- rbind(compare_INDSE, compare_DOMSE)
 
 # All Transport Subsectors
-TRANSE <- toolGetMapping(name = "TRANSE.csv",
-                        type = "blabla_export",
-                        where = "mrprom")
+TRANSE <- readGDX('./blabla.gdx', "TRANSE")
+TRANSE <- as.data.frame(TRANSE)
 
 # Take the Fuels of Transport
 map_TRANSECTOR <- sets4 %>% filter(SBS %in% TRANSE[,1])

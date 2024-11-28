@@ -4,9 +4,8 @@ reportSE <- function(regs) {
   VProdElec <- readGDX('./blabla.gdx', "VProdElec", field = 'l')[regs, , ]
   VProdElec <-as.quitte(VProdElec) %>% as.magpie()
   
-  PGALLtoEF <- toolGetMapping(name = "PGALLtoEF.csv",
-                              type = "blabla_export",
-                              where = "mrprom")
+  PGALLtoEF <- readGDX('./blabla.gdx', "PGALLtoEF")
+  names(PGALLtoEF) <- c("PGALL", "EF")
   
   add_LGN <- as.data.frame(PGALLtoEF[which(PGALLtoEF[, 2] == "LGN"), 1])
   add_LGN["EF"] <- "Lignite"

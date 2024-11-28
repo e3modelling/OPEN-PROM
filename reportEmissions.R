@@ -11,17 +11,13 @@ reportEmissions <- function(regs) {
   iCO2CaptRate <- readGDX('./blabla.gdx', "iCO2CaptRate")[regs, , ]
   
   # Link between Model Subsectors and Fuels
-  sets4 <- toolGetMapping(name = "SECTTECH.csv",
-                          type = "blabla_export",
-                          where = "mrprom")
   
-  EFtoEFS <- toolGetMapping(name = "EFtoEFS.csv",
-                            type = "blabla_export",
-                            where = "mrprom")
+  sets4 <- readGDX('./blabla.gdx', "SECTTECH")
   
-  IND <- toolGetMapping(name = "INDDOM.csv",
-                            type = "blabla_export",
-                            where = "mrprom")
+  EFtoEFS <- readGDX('./blabla.gdx', "EFtoEFS")
+  
+  IND <- readGDX('./blabla.gdx', "INDDOM")
+  IND <- as.data.frame(IND)
   
   map_INDDOM <- sets4 %>% filter(SBS %in% IND[,1])
   
@@ -36,9 +32,8 @@ reportEmissions <- function(regs) {
   qINDDOM <- paste0(qINDDOM[["SBS"]], ".", qINDDOM[["SECTTECH"]])
   INDDOM <- as.data.frame(qINDDOM)
   
-  PGEF <- toolGetMapping(name = "PGEF.csv",
-                         type = "blabla_export",
-                         where = "mrprom")
+  PGEF <- readGDX('./blabla.gdx', "PGEF")
+  PGEF <- as.data.frame(PGEF)
   
   # final consumption
   sum1 <- iCo2EmiFac[,,INDDOM[, 1]] * VConsFuel[,,INDDOM[, 1]]
@@ -53,9 +48,8 @@ reportEmissions <- function(regs) {
   sum4 <- VConsFiEneSec * iCo2EmiFac[,,"PG"][,,getItems(VConsFiEneSec,3)]
   sum4 <- dimSums(sum4, 3, na.rm = TRUE)
   
-  TRANSE <- toolGetMapping(name = "TRANSE.csv",
-                         type = "blabla_export",
-                         where = "mrprom")
+  TRANSE <- readGDX('./blabla.gdx', "TRANSE")
+  TRANSE <- as.data.frame(TRANSE)
   
   map_TRANSECTOR <- sets4 %>% filter(SBS %in% TRANSE[,1])
   map_TRANSECTOR <- paste0(map_TRANSECTOR[["SBS"]], ".", map_TRANSECTOR[["EF"]])
@@ -65,13 +59,12 @@ reportEmissions <- function(regs) {
   # transport
   sum5 <- dimSums(sum5, 3, na.rm = TRUE)
   
-  PGALLtoEF <- toolGetMapping(name = "PGALLtoEF.csv",
-                              type = "blabla_export",
-                              where = "mrprom")
+  PGALLtoEF <- readGDX('./blabla.gdx', "PGALLtoEF")
+  PGALLtoEF <- as.data.frame(PGALLtoEF)
+  names(PGALLtoEF) <- c("PGALL", "EF")
   
-  CCS <- toolGetMapping(name = "CCS.csv",
-                        type = "blabla_export",
-                        where = "mrprom")
+  CCS <- readGDX('./blabla.gdx', "CCS")
+  CCS <- as.data.frame(CCS)
   
   CCS <- PGALLtoEF[PGALLtoEF$PGALL %in% CCS$CCS, ]
   
@@ -95,9 +88,9 @@ reportEmissions <- function(regs) {
  
   # Extra Emissions
   # Emissions|CO2|Energy|Demand|Industry
-  INDSE <- toolGetMapping(name = "INDSE.csv",
-                          type = "blabla_export",
-                          where = "mrprom")
+  
+  INDSE <- readGDX('./blabla.gdx', "INDSE")
+  INDSE <- as.data.frame(INDSE)
   
   map_INDSE <- sets4 %>% filter(SBS %in% INDSE[,1])
   
@@ -122,9 +115,9 @@ reportEmissions <- function(regs) {
   write.report(sum_INDSE[,,],file="reporting.mif",model="OPEN-PROM",unit = "Mt CO2/yr",append=TRUE,scenario=scenario_name)
   
   # Emissions|CO2|Energy|Demand|Residential and Commercial
-  DOMSE <- toolGetMapping(name = "DOMSE.csv",
-                          type = "blabla_export",
-                          where = "mrprom")
+  
+  DOMSE <- readGDX('./blabla.gdx', "DOMSE")
+  DOMSE <- as.data.frame(DOMSE)
   
   map_DOMSE <- sets4 %>% filter(SBS %in% DOMSE[,1])
   

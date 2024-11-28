@@ -81,8 +81,6 @@ tryCatch({
     }
   )
 
-  # Region mapping used for aggregating validation data (e.g. ENERDATA)
-  mapping <- jsonlite::read_json("metadata.json")[["Model Information"]][["Region Mapping"]][[1]]
   runpath <- as.data.frame(runpath)
   
   for (i in 1:length(runpath)) {
@@ -106,6 +104,8 @@ tryCatch({
       next  # Skip to the next runpath if the GDX file could not be read
     }
     
+    # Region mapping used for aggregating validation data (e.g. ENERDATA)
+    mapping <- jsonlite::read_json("metadata.json")[["Model Information"]][["Region Mapping"]][[1]]
     rmap <- toolGetMapping(mapping, "regional", where = "mrprom")
     setConfig(regionmapping = mapping)
   

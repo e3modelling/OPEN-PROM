@@ -1,9 +1,8 @@
 reportFinalEnergy <- function(regs) {
   
   # read GAMS set used for reporting of Final Energy
-  sets <- toolGetMapping(name = "BALEF2EFS.csv",
-                         type = "blabla_export",
-                         where = "mrprom")
+  
+  sets <- readGDX('./blabla.gdx', "BALEF2EFS")
   names(sets) <- c("BAL", "EF")
   sets[["BAL"]] <- gsub("Gas fuels", "Gases", sets[["BAL"]])
   
@@ -23,9 +22,7 @@ reportFinalEnergy <- function(regs) {
   # Final Energy | "TRANSE" | "INDSE" | "DOMSE" | "NENSE"
   
   # Link between Model Subsectors and Fuels
-  sets4 <- toolGetMapping(name = "SECTTECH.csv",
-                          type = "blabla_export",
-                          where = "mrprom")
+  sets4 <- readGDX('./blabla.gdx', "SECTTECH")
   
   # OPEN-PROM sectors
   sector <- c("TRANSE", "INDSE", "DOMSE", "NENSE")
@@ -36,9 +33,9 @@ reportFinalEnergy <- function(regs) {
   
   for (y in 1 : length(sector)) {
     # read GAMS set used for reporting of Final Energy different for each sector
-    sets6 <- toolGetMapping(paste0(sector[y], ".csv"),
-                            type = "blabla_export",
-                            where = "mrprom")
+    sets6 <- readGDX('./blabla.gdx', sector[y])
+    sets6 <- as.data.frame(sets6)
+    names(sets6) <- sector[y]
     
     var_gdx <- readGDX('./blabla.gdx', blabla_var[y], field = 'l')[regs, , ]
     FCONS_by_sector_and_EF_open <- var_gdx[,,sets6[, 1]]
@@ -62,14 +59,12 @@ reportFinalEnergy <- function(regs) {
     write.report(sector_open[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario=scenario_name)
     
     # Energy Forms Aggregations
-    sets5 <- toolGetMapping(paste0("EFtoEFA.csv"),
-                            type = "blabla_export",
-                            where = "mrprom")
+    sets5 <- readGDX('./blabla.gdx', "EFtoEFA")
     
     # Add electricity, Hydrogen, Biomass and Waste
-    ELC <- toolGetMapping(paste0("ELCEF.csv"),
-                          type = "blabla_export",
-                          where = "mrprom")
+    ELC <- readGDX('./blabla.gdx', "ELCEF")
+    ELC <- as.data.frame(ELC)
+    names(ELC) <- "ELCEF"
     
     sets5[nrow(sets5) + 1, ] <- ELC[1,1]
     
