@@ -227,7 +227,7 @@ VPriceFuelSubsecCarVal.fx(runCy,INDDOM,"HEATPUMP",YTIME)$(SECTTECH(INDDOM,"HEATP
 VPriceFuelSubsecCarVal.fx(runCy,"H2P",EF,YTIME)$(SECTTECH("H2P",EF)$(not An(YTIME))) = VPriceFuelSubsecCarVal.l(runCy,"PG",EF,YTIME);
 VPriceFuelSubsecCarVal.fx(runCy,"H2P","ELC",YTIME)$(not An(YTIME))= VPriceFuelSubsecCarVal.l(runCy,"OI","ELC",YTIME);
 
-VPriceElecInd.l(runCy,YTIME)= 0.1;
+VPriceElecInd.l(runCy,YTIME)= 0.9;
 VPriceElecInd.FX(runCy,YTIME)$TFIRST(YTIME) = iElecIndex(runCy,YTIME);
 
 VCostTechIntrm.l(runCy,DSBS,rcon,EF,YTIME) = 0.1;
@@ -258,7 +258,7 @@ VConsElec.l(runCy,DSBS,YTIME)=0.1;
 VDemFinEneTranspPerFuel.FX(runCy,TRANSE,EF,YTIME) $(SECTTECH(TRANSE,EF) $(not An(YTIME))) = iFuelConsPerFueSub(runCy,TRANSE,EF,YTIME);
 VDemFinEneTranspPerFuel.FX(runCy,TRANSE,EF,YTIME)$(not SECTTECH(TRANSE,EF)) = 0;
 
-VLoadFacDom.l(runCy,YTIME)=0.1;
+VLoadFacDom.l(runCy,YTIME)=0.5;
 VLoadFacDom.FX(runCy,YTIME)$(datay(YTIME)) =
          (sum(INDDOM,VConsFuel.l(runCy,INDDOM,"ELC",YTIME)) + sum(TRANSE, VDemFinEneTranspPerFuel.l(runCy,TRANSE,"ELC",YTIME)))/
          (sum(INDDOM,VConsFuel.l(runCy,INDDOM,"ELC",YTIME)/iLoadFacElecDem(INDDOM)) + sum(TRANSE, VDemFinEneTranspPerFuel.l(runCy,TRANSE,"ELC",YTIME)/
@@ -325,15 +325,15 @@ VNewCapElec.FX(runCy,"PGLHYD",YTIME)$TFIRST(YTIME) = +1E-10;
 VCFAvgRen.l(runCy,PGALL,YTIME)=0.1;
 VCFAvgRen.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =iAvailRate(PGALL,YTIME);
 
-VSortPlantDispatch.lo(runCy,PGALL,YTIME)=1.E-12;
-VSortPlantDispatch.l(runCy,PGALL,YTIME)=VCostVarTechElec.L(runCy,PGALL,YTIME)/VCostVarTechElecTot.L(runCy,YTIME);
+VSortPlantDispatch.lo(runCy,PGALL,YTIME)=1.E-13;
+*VSortPlantDispatch.l(runCy,PGALL,YTIME)=VCostVarTechElec.L(runCy,PGALL,YTIME)/VCostVarTechElecTot.L(runCy,YTIME);
 
 VProdElecReqCHP.l(runCy,YTIME) = 0.01;
 
-VScalFacPlaDisp.L(runCy,HOUR,YTIME) = 1.e-20;
+*VScalFacPlaDisp.L(runCy,HOUR,YTIME) = 1.e-20;
 VScalFacPlaDisp.LO(runCy, HOUR, YTIME)=-1;
 
-VDemElecTot.l(runCy,YTIME)=0.1;
+VDemElecTot.l(runCy,YTIME)=10;
 VDemElecTot.FX(runCy,YTIME)$(not An(YTIME)) =  1/0.086 * ( iFinEneCons(runCy,"ELC",YTIME) + sum(NENSE, iFuelConsPerFueSub(runCy,NENSE,"ELC",YTIME)) + iDistrLosses(runCy,"ELC",YTIME)
                                              + iTotEneBranchCons(runCy,"ELC",YTIME) - (iFuelImports(runCy,"ELC",YTIME)-iFuelExprts(runCy,"ELC",YTIME)));
 
@@ -463,7 +463,7 @@ VSharePowPlaNewEq.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) )=0;
 
 VCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  iInstCapPast(runCy,PGALL,YTIME);
 VCapElec2.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = iInstCapPast(runCy,PGALL,YTIME);
-VCapOverall.FX(runCy,PGALL,YTIME)$TFIRST(YTIME) =  iInstCapPast(runCy,PGALL,YTIME)$TFIRST(YTIME);
+VCapOverall.FX(runCy,PGALL,"%fBaseY%") =  iInstCapPast(runCy,PGALL,"%fBaseY%");
 
 VProdElec.FX(runCy,pgall,YTIME)$DATAY(YTIME)=iDataElecProd(runCy,pgall,YTIME)/1000;
 
