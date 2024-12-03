@@ -4,18 +4,13 @@ reportSE <- function(regs) {
   VProdElec <- readGDX('./blabla.gdx', "VProdElec", field = 'l')[regs, , ]
   VProdElec <-as.quitte(VProdElec) %>% as.magpie()
   
-  PGALLtoEF <- toolreadSets("sets.gms", "PGALLtoEF")
-  PGALLtoEF <- separate_wider_delim(PGALLtoEF,cols = 1, delim = ".", names = c("PGALL","EF"))
-  PGALLtoEF[["EF"]] <- sub("\\(","",PGALLtoEF[["EF"]])
-  PGALLtoEF[["EF"]] <- sub("\\)","",PGALLtoEF[["EF"]])
-  PGALLtoEF <- separate_rows(PGALLtoEF, EF)
-  PGALLtoEF <- separate_rows(PGALLtoEF, PGALL)
-  PGALLtoEF <- filter(PGALLtoEF, EF != "")
-  PGALLtoEF <- filter(PGALLtoEF, PGALL != "")
+  PGALLtoEF <- readGDX('./blabla.gdx', "PGALLtoEF")
+  names(PGALLtoEF) <- c("PGALL", "EF")
   
   add_LGN <- as.data.frame(PGALLtoEF[which(PGALLtoEF[, 2] == "LGN"), 1])
   add_LGN["EF"] <- "Lignite"
-  
+  names(add_LGN) <- c("PGALL","EF")
+    
   PGALLtoEF$EF <- gsub("LGN", "Coal", PGALLtoEF$EF)
   PGALLtoEF$EF <- gsub("HCL", "Coal", PGALLtoEF$EF)
   PGALLtoEF$EF <- gsub("RFO", "Residual Fuel Oil", PGALLtoEF$EF)

@@ -48,7 +48,7 @@ QDemElecTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
              =E=
          1/sTWhToMtoe *
          ( VConsFinEneCountry(allCy,"ELC",YTIME) + VConsFinNonEne(allCy,"ELC",YTIME) + VLossesDistr(allCy,"ELC",YTIME)
-           + VConsFiEneSec(allCy,"ELC",YTIME) - iNetImp(allCy,"ELC",YTIME)
+           + VConsFiEneSec(allCy,"ELC",YTIME) - VImpNetEneBrnch(allCy,"ELC",YTIME)
          );
 
 *' This equation computes the estimated base load as a quantity dependent on the electricity demand per final sector,
@@ -121,18 +121,18 @@ QCostHourProdInvDec(allCy,PGALL,HOUR,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VCostHourProdInvDec(allCy,PGALL,HOUR,YTIME)
                   =E=
                   
-                    ( ( iDisc(allCy,"PG",YTIME) * exp(iDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL))
+                    ( ( iDisc(allCy,"PG",YTIME-1) * exp(iDisc(allCy,"PG",YTIME-1)*iTechLftPlaType(allCy,PGALL))
                         / (exp(iDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL)) -1))
-                      * iGrossCapCosSubRen(PGALL,YTIME)* 1E3 * iCGI(allCy,YTIME)  + iFixOandMCost(PGALL,YTIME)
-                    )/iAvailRate(PGALL,YTIME) / (1000*(ord(HOUR)-1+0.25))
-                    + iVarCost(PGALL,YTIME)/1E3 + (VRenValue(YTIME)*8.6e-5)$( not ( PGREN(PGALL) 
+                      * iGrossCapCosSubRen(PGALL,YTIME-1)* 1E3 * iCGI(allCy,YTIME-1)  + iFixOandMCost(PGALL,YTIME-1)
+                    )/iAvailRate(PGALL,YTIME-1) / (1000*(ord(HOUR)-1+0.25))
+                    + iVarCost(PGALL,YTIME-1)/1E3 + (VRenValue(YTIME-1)*8.6e-5)$( not ( PGREN(PGALL) 
                     $(not sameas("PGASHYD",PGALL)) $(not sameas("PGSHYD",PGALL)) $(not sameas("PGLHYD",PGALL)) ))
-                    + sum(PGEF$PGALLtoEF(PGALL,PGEF), (VPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)+
-                        iCO2CaptRate(allCy,PGALL,YTIME)*VCstCO2SeqCsts(allCy,YTIME)*1e-3*
-                    iCo2EmiFac(allCy,"PG",PGEF,YTIME)
-                         +(1-iCO2CaptRate(allCy,PGALL,YTIME))*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME)*
-                         (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(allCy,NAP,YTIME))))
-                         *sTWhToMtoe/iPlantEffByType(allCy,PGALL,YTIME))$(not PGREN(PGALL));
+                    + sum(PGEF$PGALLtoEF(PGALL,PGEF), (VPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME-1)+
+                        iCO2CaptRate(allCy,PGALL,YTIME-1)*VCstCO2SeqCsts(allCy,YTIME-1)*1e-3*
+                    iCo2EmiFac(allCy,"PG",PGEF,YTIME-1)
+                         +(1-iCO2CaptRate(allCy,PGALL,YTIME-1))*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME-1)*
+                         (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(allCy,NAP,YTIME-1))))
+                         *sTWhToMtoe/iPlantEffByType(allCy,PGALL,YTIME-1))$(not PGREN(PGALL));
 
 *' The equation calculates the hourly production cost for
 *' a given technology without carbon capture and storage investments. 
@@ -1062,7 +1062,7 @@ QConsElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          * prod(KPDL,
                   ( VPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-ord(KPDL))/VPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-(ord(KPDL)+1))
                   )**( iElastNonSubElec(allCy,INDDOM,"c",YTIME)*iFPDL(INDDOM,KPDL))
-                )      ]$iActv(YTIME-1,allCy,INDDOM);
+                )      ]$iActv(YTIME-1,allCy,INDDOM)+0;
 
 
 *' This equation determines the consumption of the remaining substitutable equipment of each energy form per each demand subsector (excluding TRANSPORT).
@@ -1098,7 +1098,7 @@ QDemFinSubFuelSubsec(allCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $runCy(a
          * prod(KPDL,
                   ( (VPriceFuelAvgSub(allCy,DSBS,YTIME-ord(KPDL))/VPriceFuelAvgSub(allCy,DSBS,YTIME-(ord(KPDL)+1)))/(iCGI(allCy,YTIME)**(1/6))
                   )**( iElastA(allCy,DSBS,"c",YTIME)*iFPDL(DSBS,KPDL))
-                )  ]$iActv(YTIME-1,allCy,DSBS)
+                )  ]$iActv(YTIME-1,allCy,DSBS)+0
 ;
 
 *' This equation calculates the total consumption of electricity in industrial sectors. The consumption is obtained by summing up the electricity
@@ -1126,7 +1126,7 @@ qDemFinSubFuelInd(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 
 QPriceElecInd(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VPriceElecInd(allCy,YTIME) =E=
-        ( VIndxElecIndPrices(allCy,YTIME) + sElecToSteRatioChp - SQRT( SQR(VIndxElecIndPrices(allCy,YTIME)-sElecToSteRatioChp) + SQR(1E-4) ) )/2;
+        ( VIndxElecIndPrices(allCy,YTIME) + sElecToSteRatioChp - SQRT( SQR(VIndxElecIndPrices(allCy,YTIME)-sElecToSteRatioChp)  ) )/2;
 
 *' This equation calculates the total fuel consumption in each demand subsector, excluding heat from heat pumps. The fuel consumption is measured
 *' in million tons of oil equivalent and is influenced by two main components: the consumption of fuels in each demand subsector, including
@@ -1392,12 +1392,12 @@ QCapRef(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          [
          iResRefCapacity(allCy,YTIME) * VCapRef(allCy,YTIME-1)
          *
-         (1$(ord(YTIME) le 16) +
+         (1$(ord(YTIME) le 10) +
          (prod(rc,
          (sum(EFS$EFtoEFA(EFS,"LQD"),VConsFinEneCountry(allCy,EFS,YTIME-(ord(rc)+1)))/sum(EFS$EFtoEFA(EFS,"LQD"),VConsFinEneCountry(allCy,EFS,YTIME-(ord(rc)+2))))**(0.5/(ord(rc)+1)))
          )
-         $(ord(YTIME) gt 16)
-         )     ] $iRefCapacity(allCy,"%fStartHorizon%");
+         $(ord(YTIME) gt 10)
+         )     ] $iRefCapacity(allCy,"%fStartHorizon%")+0;
 
 *' The equation calculates the transformation output from refineries for a specific energy form 
 *' in a given scenario and year. The output is computed based on a residual factor, the previous year's output, and the
@@ -1415,7 +1415,7 @@ QOutTransfRefSpec(allCy,EFS,YTIME)$(TIME(YTIME) $EFtoEFA(EFS,"LQD") $runCy(allCy
              (
                 sum(EF$EFtoEFA(EF,"LQD"),VConsFinEneCountry(allCy,EF,YTIME-1))/sum(EF$EFtoEFA(EF,"LQD"),VConsFinEneCountry(allCy,EF,YTIME-2))
              )$(not (TFIRST(YTIME-1) or TFIRST(YTIME-2)))
-           )**(0.7)  ]$iRefCapacity(allCy,"%fStartHorizon%"); 
+           )**(0.7)  ]$iRefCapacity(allCy,"%fStartHorizon%")+0; 
 
 *' The equation calculates the transformation input to refineries for the energy form Crude Oil
 *' in a specific scenario and year. The input is computed based on the previous year's input to refineries, multiplied by the ratio of the transformation
@@ -1427,7 +1427,7 @@ QInputTransfRef(allCy,"CRO",YTIME)$(TIME(YTIME) $runCy(allCy))..
          [
          VInputTransfRef(allCy,"CRO",YTIME-1) *
          sum(EFS$EFtoEFA(EFS,"LQD"), VOutTransfRefSpec(allCy,EFS,YTIME)) /
-         sum(EFS$EFtoEFA(EFS,"LQD"), VOutTransfRefSpec(allCy,EFS,YTIME-1))  ]$iRefCapacity(allCy,"%fStartHorizon%");                   
+         sum(EFS$EFtoEFA(EFS,"LQD"), VOutTransfRefSpec(allCy,EFS,YTIME-1))  ]$iRefCapacity(allCy,"%fStartHorizon%")+0;                   
 
 *' The equation calculates the transformation output from nuclear plants for electricity production 
 *' in a specific scenario and year. The output is computed as the sum of electricity production from all nuclear power plants in the given
