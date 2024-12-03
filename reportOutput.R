@@ -147,9 +147,11 @@ tryCatch({
     
     getItems(add_region_GLO, 1) <- "World"
     gdp <- reporting_run[[i]][[1]][,,"GDP|PPP (billion US$2015/yr)"]
-    rmap_world <- rmap
-    rmap_world[ ,4] <- "World"
-    add_region_GLO_mean <- toolAggregate(reporting_run[[i]][[1]][,,get_items], weight = gdp, rel = rmap_world, from = "Region.Code", to = "V4")
+    rmap_world <- getRegions(reporting_run[[i]][[1]])
+    rmap_world <- as.data.frame(rmap_world)
+    names(rmap_world) <- "Region.Code"
+    rmap_world[ ,2] <- "World"
+    add_region_GLO_mean <- toolAggregate(reporting_run[[i]][[1]][,,get_items], weight = gdp, rel = rmap_world, from = "Region.Code", to = "V2")
     getItems(add_region_GLO_mean, 1) <- "World"
     world_reg <- mbind(add_region_GLO, add_region_GLO_mean)
     reporting_run[[i]][[1]] <- mbind(reporting_run[[i]][[1]], world_reg)

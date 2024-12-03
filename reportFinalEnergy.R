@@ -1,13 +1,10 @@
 reportFinalEnergy <- function(regs) {
   
   # read GAMS set used for reporting of Final Energy
-  sets <- toolreadSets("sets.gms", "BALEF2EFS")
-  sets[, 1] <- gsub("\"","",sets[, 1])
-  sets <- separate_wider_delim(sets,cols = 1, delim = ".", names = c("BAL","EF"))
-  sets[["EF"]] <- sub("\\(","",sets[["EF"]])
-  sets[["EF"]] <- sub("\\)","",sets[["EF"]])
-  sets <- separate_rows(sets,EF)
-  sets$BAL <- gsub("Gas fuels", "Gases", sets$BAL)
+  
+  sets <- readGDX('./blabla.gdx', "BALEF2EFS")
+  names(sets) <- c("BAL", "EF")
+  sets[["BAL"]] <- gsub("Gas fuels", "Gases", sets[["BAL"]])
   
   # add model OPEN-PROM data Total final energy consumnption (Mtoe)
   VConsFinEneCountry <- readGDX('./blabla.gdx', "VConsFinEneCountry", field = 'l')[regs, , ]
@@ -25,19 +22,7 @@ reportFinalEnergy <- function(regs) {
   # Final Energy | "TRANSE" | "INDSE" | "DOMSE" | "NENSE"
   
   # Link between Model Subsectors and Fuels
-  sets4 <- toolreadSets("sets.gms", "SECTTECH")
-  sets4[6,] <- paste0(sets4[6,] , sets4[7,])
-  sets4 <- sets4[ - c(7),,drop = FALSE]
-  sets4[7,] <- paste0(sets4[7,] , sets4[8,], sets4[9,])
-  sets4 <- sets4[ - c(8, 9),,drop = FALSE]
-  sets4 <- separate_wider_delim(sets4,cols = 1, delim = ".", names = c("SBS","EF"))
-  sets4[["EF"]] <- sub("\\(","",sets4[["EF"]])
-  sets4[["EF"]] <- sub("\\)","",sets4[["EF"]])
-  sets4[["SBS"]] <- sub("\\(","",sets4[["SBS"]])
-  sets4[["SBS"]] <- sub("\\)","",sets4[["SBS"]])
-  sets4 <- separate_rows(sets4,EF)
-  sets4 <- separate_rows(sets4,SBS)
-  sets4 <- filter(sets4, EF != "")
+  sets4 <- readGDX('./blabla.gdx', "SECTTECH")
   
   # OPEN-PROM sectors
   sector <- c("TRANSE", "INDSE", "DOMSE", "NENSE")
@@ -48,9 +33,10 @@ reportFinalEnergy <- function(regs) {
   
   for (y in 1 : length(sector)) {
     # read GAMS set used for reporting of Final Energy different for each sector
-    sets6 <- toolreadSets("sets.gms", sector[y])
-    sets6 <- separate_rows(sets6, paste0(sector[y],"(DSBS)"))
+    sets6 <- readGDX('./blabla.gdx', sector[y])
     sets6 <- as.data.frame(sets6)
+    names(sets6) <- sector[y]
+    
     var_gdx <- readGDX('./blabla.gdx', blabla_var[y], field = 'l')[regs, , ]
     FCONS_by_sector_and_EF_open <- var_gdx[,,sets6[, 1]]
     
@@ -73,17 +59,13 @@ reportFinalEnergy <- function(regs) {
     write.report(sector_open[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario=scenario_name)
     
     # Energy Forms Aggregations
-    sets5 <- toolreadSets("sets.gms", "EFtoEFA")
-    sets5[5,] <- paste0(sets5[5,] , sets5[6,])
-    sets5 <- sets5[ - 6,]
-    sets5 <- as.data.frame(sets5)
-    sets5 <- separate_wider_delim(sets5,cols = 1, delim = ".", names = c("EF","EFA"))
-    sets5[["EF"]] <- sub("\\(","",sets5[["EF"]])
-    sets5[["EF"]] <- sub("\\)","",sets5[["EF"]])
-    sets5 <- separate_rows(sets5,EF)
+    sets5 <- readGDX('./blabla.gdx', "EFtoEFA")
     
     # Add electricity, Hydrogen, Biomass and Waste
-    ELC <- toolreadSets("sets.gms", "ELCEF")
+    ELC <- readGDX('./blabla.gdx', "ELCEF")
+    ELC <- as.data.frame(ELC)
+    names(ELC) <- "ELCEF"
+    
     sets5[nrow(sets5) + 1, ] <- ELC[1,1]
     
     sets10 <- sets5 %>% filter(EF %in% getItems(var_gdx[,,sets6[, 1]],3.2))
