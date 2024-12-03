@@ -1825,4 +1825,4 @@ QPriceElecIndResConsu(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..  !! The e
         );
 
 *' * Define dummy objective function
-qDummyObj.. vDummyObj =e= 1;
+*qDummyObj.. vDummyObj =e= 1;

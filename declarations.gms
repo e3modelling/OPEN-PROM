@@ -262,7 +262,7 @@ QPriceFuelSepCarbonWght(allCy,SBS,EF,YTIME)	               "Compute fuel prices 
 QPriceFuelAvgSub(allCy,DSBS,YTIME)	                       "Compute average fuel price per subsector" 	
 QPriceElecIndResConsu(allCy,ESET,YTIME)                    "Compute electricity price in Industrial and Residential Consumers"	
 *' *** Miscellaneous
-qDummyObj                                                  "Define dummy objective function"
+*qDummyObj                                                  "Define dummy objective function"
 QRenTechMatMultExpr(allCy,PGALL,YTIME)
 qScalFacPlantDispatchExpr(allCy,PGALL,HOUR,YTIME)
 ;
@@ -430,7 +430,7 @@ VGrnnHsEmisCO2Equiv(NAP,YTIME)	                           "Total CO2eq GHG emiss
 vExpendHouseEne(allCy,YTIME)	                           "Households expenditures on energy (billions)"
 
 *' *** Miscellaneous
-vDummyObj                                                  "Dummy maximisation variable (1)"
+*vDummyObj                                                  "Dummy maximisation variable (1)"
 ;
 
 Positive Variables
