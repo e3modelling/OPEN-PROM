@@ -9,23 +9,10 @@ library(stringr)
 gdx <- "C:/Users/sioutas/github/open-prom-goxygen/OPEN-PROM/runs/USA"
 
 # Link between Model Subsectors and Fuels
-sets4 <- toolreadSets(system.file(file.path("extdata", "sets.gms"), package = "mrprom"), "SECTTECH")
-sets4[6,] <- paste0(sets4[6,] , sets4[7,])
-sets4 <- sets4[ - c(7),,drop = FALSE]
-sets4[7,] <- paste0(sets4[7,] , sets4[8,], sets4[9,])
-sets4 <- sets4[ - c(8, 9),,drop = FALSE]
-sets4 <- separate_wider_delim(sets4,cols = 1, delim = ".", names = c("SBS","EF"))
-sets4[["EF"]] <- sub("\\(","",sets4[["EF"]])
-sets4[["EF"]] <- sub("\\)","",sets4[["EF"]])
-sets4[["SBS"]] <- sub("\\(","",sets4[["SBS"]])
-sets4[["SBS"]] <- sub("\\)","",sets4[["SBS"]])
-sets4 <- separate_rows(sets4,EF)
-sets4 <- separate_rows(sets4,SBS)
-sets4 <- filter(sets4, EF != "")
+sets4 <- readGDX('./blabla.gdx', "SECTTECH")
 
 # Industrial SubSectors
-INDSE <- toolreadSets(system.file(file.path("extdata", "sets.gms"), package = "mrprom"), "INDSE")
-INDSE <- unlist(strsplit(INDSE[, 1], ","))
+INDSE <- readGDX('./blabla.gdx', "INDSE")
 INDSE <- as.data.frame(INDSE)
 
 # Take the Fuels of INDSE
@@ -55,8 +42,7 @@ compare_INDSE <- left_join(iFuelConsPerFueSub_INDSE, VConsFuelInclHP_INDSE,
                                 "SBS", "EF", "period"))
 
 # Tertiary SubSectors
-DOMSE <- toolreadSets(system.file(file.path("extdata", "sets.gms"), package = "mrprom"), "DOMSE")
-DOMSE <- unlist(strsplit(DOMSE[, 1], ","))
+DOMSE <- readGDX('./blabla.gdx', "DOMSE")
 DOMSE <- as.data.frame(DOMSE)
 
 # Take the Fuels of DOMSE
@@ -82,8 +68,7 @@ compare_DOMSE <- left_join(iFuelConsPerFueSub_DOMSE, VConsFuelInclHP_DOMSE,
 compare_INDOM <- rbind(compare_INDSE, compare_DOMSE)
 
 # All Transport Subsectors
-TRANSE <- toolreadSets(system.file(file.path("extdata", "sets.gms"), package = "mrprom"), "TRANSE")
-TRANSE <- unlist(strsplit(TRANSE[, 1], ","))
+TRANSE <- readGDX('./blabla.gdx', "TRANSE")
 TRANSE <- as.data.frame(TRANSE)
 
 # Take the Fuels of Transport
