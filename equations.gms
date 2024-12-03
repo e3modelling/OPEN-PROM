@@ -6,11 +6,10 @@
 *' Equation format: "typical useful energy demand equation"
 *' The main explanatory variables (drivers) are activity indicators (economic activity) and corresponding energy costs.
 *' The type of "demand" is computed based on its past value, the ratio of the current and past activity indicators (with the corresponding elasticity), 
-*' and the ratio of lagged energy costs (with the corresponding elasticities). This type of equation captures both short term and long term reactions to energy costs.  
+*' and the ratio of lagged energy costs (with the corresponding elasticities). This type of equation captures both short term and long term reactions to energy costs. 
 
-
+$if %RUN_POWER_GENERATION% == yes
 *' Power Generation
-
 
 *' This equation computes the current renewable potential, which is the average of the maximum allowed renewable potential and the minimum renewable potential
 *' for a given power generation sector and energy form in a specific time period. The result is the current renewable potential in gigawatts (GW). 
@@ -755,6 +754,8 @@ qCostPowGenAvgShrt(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          )
          /VDemElecTot(allCy,YTIME);
 
+
+$if %RUN_TRANSPORT% == yes
 *' * Transport
 
 *' This equation calculates the lifetime of passenger cars based on the scrapping rate of passenger cars. The lifetime is inversely proportional to the scrapping rate,
@@ -1041,6 +1042,7 @@ QConsElec(allCy,DSBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          sum(INDDOM $SAMEAS(INDDOM,DSBS), VConsFuel(allCy,INDDOM,"ELC",YTIME)) + sum(TRANSE $SAMEAS(TRANSE,DSBS), VDemFinEneTranspPerFuel(allCy,TRANSE,"ELC",YTIME));
 
 
+$if %RUN_INDUSTRY% == yes
 *' * INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 
 *' This equation computes the consumption/demand of non-substitutable electricity for subsectors of INDUSTRY and DOMESTIC in the "typical useful energy demand equation".
@@ -1315,6 +1317,8 @@ QCostVarAvgElecProd(allCy,CHP,YTIME)$(TIME(YTIME) $runCy(allCy)) ..
          *VCostProdCHPDem(allCy,INDDOM,CHP,YTIME)))
          $SUM(INDDOM2,VConsFuel.L(allCy,INDDOM2,CHP,YTIME-1))+0$(NOT SUM(INDDOM2,VConsFuel.L(allCy,INDDOM2,CHP,YTIME-1)));
 
+
+$if %RUN_REST_OF_ENERGY% == yes
 *' * REST OF ENERGY BALANCE SECTORS
 
 *' The equation computes the total final energy consumption in million tonnes of oil equivalent for each country ,
@@ -1646,6 +1650,8 @@ QConsFiEneSec(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
             )$TOCTEF(EFS)
          );                              
 
+
+$if %RUN_CO2% == yes
 *' * CO2 SEQUESTRATION COST CURVES
 
 *' The equation calculates the CO2 captured by electricity and hydrogen production plants
@@ -1692,6 +1698,7 @@ QCstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
        VTrnsWghtLinToExp(allCy,YTIME)*(iElastCO2Seq(allCy,"mc_c")*exp(iElastCO2Seq(allCy,"mc_d")*VCaptCummCO2(allCy,YTIME)));           
 
 
+$if %RUN_EMISSIONS% == yes
 *' * EMISSIONS CONSTRAINTS 
 
 *' The equation computes the total CO2 equivalent greenhouse gas emissions in all countries
@@ -1749,6 +1756,8 @@ qExpendHouseEne(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                  1000-iCo2EmiFac(allCy,"PG",EF,YTIME)*sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(allCy,NAP,YTIME))/1000)))
                                           +VPriceElecIndResNoCliPol(allCy,"R",YTIME)*VConsElecNonSubIndTert(allCy,"HOU",YTIME)/sTWhToMtoe;         
 
+
+$if %RUN_PRICES% == yes
 *' * Prices
 
 *' The equation computes fuel prices per subsector and fuel with separate carbon values in
@@ -1823,6 +1832,7 @@ QPriceElecIndResConsu(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..  !! The e
              )$(not TFIRST(YTIME-1))
            )$RSET(ESET)
         );
+
 
 *' * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;

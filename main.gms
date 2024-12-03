@@ -127,10 +127,39 @@ $elseif.loadData %DevMode% == 1 $call "RScript ./loadMadratData.R DevMode=1"
 $elseif.loadData %DevMode% == 2 $call "RScript ./loadMadratData.R DevMode=2"
 $endif.loadData
 $endif.genInp
+
 * Open file to write txt
 file fStat /'modelstat.txt'/; 
 fStat.ap = 1; 
 
+**MODULE SWITCHES**
+$set RUN_POWER_GENERATION yes
+$set RUN_TRANSPORT no
+$set RUN_INDUSTRY no
+$set RUN_REST_OF_ENERGY no
+$set RUN_CO2 no
+$set RUN_EMISSIONS no
+$set RUN_PRICES no
+
+** Failsafe in case a module is not defined.
+$if not set RUN_POWER_GENERATION $set RUN_POWER_GENERATION yes
+$if not set RUN_TRANSPORT $set RUN_TRANSPORT yes
+$if not set RUN_INDUSTRY $set RUN_INDUSTRY yes
+$if not set RUN_REST_OF_ENERGY $set RUN_REST_OF_ENERGY yes
+$if not set RUN_CO2 $set RUN_CO2 yes
+$if not set RUN_EMISSIONS $set RUN_EMISSIONS yes
+$if not set RUN_PRICES $set RUN_PRICES yes
+
+**VALIDATION CHECKS**
+$if %RUN_POWER_GENERATION% == yes $log "Power Generation module is active." $endif
+$if %RUN_TRANSPORT% == yes $log "Transport module is active." $endif
+$if %RUN_INDUSTRY% == yes $log "Industry module is active." $endif
+$if %RUN_REST_OF_ENERGY% == yes $log "Rest Of Energy Balance Sectors module is active." $endif
+$if %RUN_CO2% == yes $log "CO2 Sequestration Cost Curves module is active." $endif
+$if %RUN_EMISSIONS% == yes $log "Emissions module is active." $endif
+$if %RUN_PRICES% == yes $log "Prices module is active." $endif
+
+**MODEL FILES**
 $include sets.gms
 $include declarations.gms
 $include input.gms
