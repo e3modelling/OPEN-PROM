@@ -9,7 +9,7 @@
 *' and the ratio of lagged energy costs (with the corresponding elasticities). This type of equation captures both short term and long term reactions to energy costs. 
 
 *' Power Generation
-
+$ifthen %RUN_POWER_GENERATION% == yes
 *' This equation computes the current renewable potential, which is the average of the maximum allowed renewable potential and the minimum renewable potential
 *' for a given power generation sector and energy form in a specific time period. The result is the current renewable potential in gigawatts (GW). 
 QPotRenCurr(allCy,PGRENEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
@@ -752,10 +752,11 @@ qCostPowGenAvgShrt(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          sum(CHP, VCostVarAvgElecProd(allCy,CHP,YTIME)*VProdElecCHP(allCy,CHP,YTIME))
          )
          /VDemElecTot(allCy,YTIME);
+$endif
 
 
 *' * Transport
-
+$ifthen %RUN_TRANSPORT% == yes
 *' This equation calculates the lifetime of passenger cars based on the scrapping rate of passenger cars. The lifetime is inversely proportional to the scrapping rate,
 *' meaning that as the scrapping rate increases, the lifetime of passenger cars decreases.
 QLft(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $sameas(DSBS,"PC") $SECTTECH(DSBS,EF) $runCy(allCy))..
@@ -1039,9 +1040,10 @@ QConsElec(allCy,DSBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
              =E=
          sum(INDDOM $SAMEAS(INDDOM,DSBS), VConsFuel(allCy,INDDOM,"ELC",YTIME)) + sum(TRANSE $SAMEAS(TRANSE,DSBS), VDemFinEneTranspPerFuel(allCy,TRANSE,"ELC",YTIME));
 
+$endif
 
 *' * INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-
+$ifthen %RUN_INDUSTRY% == yes
 *' This equation computes the consumption/demand of non-substitutable electricity for subsectors of INDUSTRY and DOMESTIC in the "typical useful energy demand equation".
 *' The main explanatory variables are activity indicators of each subsector and electricity prices per subsector. Corresponding elasticities are applied for activity indicators
 *' and electricity prices.  
@@ -1313,10 +1315,10 @@ QCostVarAvgElecProd(allCy,CHP,YTIME)$(TIME(YTIME) $runCy(allCy)) ..
          (sum(INDDOM, VConsFuel(allCy,INDDOM,CHP,YTIME-1)/SUM(INDDOM2,VConsFuel(allCy,INDDOM2,CHP,YTIME-1))
          *VCostProdCHPDem(allCy,INDDOM,CHP,YTIME)))
          $SUM(INDDOM2,VConsFuel.L(allCy,INDDOM2,CHP,YTIME-1))+0$(NOT SUM(INDDOM2,VConsFuel.L(allCy,INDDOM2,CHP,YTIME-1)));
-
+$endif
 
 *' * REST OF ENERGY BALANCE SECTORS
-
+$ifthen %RUN_REST_OF_ENERGY% == yes
 *' The equation computes the total final energy consumption in million tonnes of oil equivalent for each country ,
 *' energy form sector, and time period. The total final energy consumption is calculated as the sum of final energy consumption in the
 *' Industry and Tertiary sectors and the sum of final energy demand in all transport subsectors. The consumption is determined by the 
@@ -1645,10 +1647,10 @@ QConsFiEneSec(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
               VConsFinEneCountry(allCy,EFS,YTIME) + VConsFinNonEne(allCy,EFS,YTIME) + VLossesDistr(allCy,EFS,YTIME)
             )$TOCTEF(EFS)
          );                              
-
+$endif
 
 *' * CO2 SEQUESTRATION COST CURVES
-
+$ifthen %RUN_CO2% == yes
 *' The equation calculates the CO2 captured by electricity and hydrogen production plants
 *' in million tons of CO2 for a specific scenario and year. The CO2 capture is determined by summing 
 *' the product of electricity production from plants with carbon capture and storage, the conversion
@@ -1691,10 +1693,10 @@ QCstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VCstCO2SeqCsts(allCy,YTIME) =E=
        (1-VTrnsWghtLinToExp(allCy,YTIME))*(iElastCO2Seq(allCy,"mc_a")*VCaptCummCO2(allCy,YTIME)+iElastCO2Seq(allCy,"mc_b"))+
        VTrnsWghtLinToExp(allCy,YTIME)*(iElastCO2Seq(allCy,"mc_c")*exp(iElastCO2Seq(allCy,"mc_d")*VCaptCummCO2(allCy,YTIME)));           
-
+$endif
 
 *' * EMISSIONS CONSTRAINTS 
-
+$ifthen %RUN_EMISSIONS% == yes
 *' The equation computes the total CO2 equivalent greenhouse gas emissions in all countries
 *' per National Allocation Plan (NAP) sector for a specific year. The result represents the 
 *' sum of CO2 emissions for each NAP sector across all countries.The equation involves several components:
@@ -1749,10 +1751,10 @@ qExpendHouseEne(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                  SUM(DSBS$HOU(DSBS),SUM(EF$SECTTECH(dSBS,EF),VConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)*(VPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME)-iEffValueInDollars(allCy,DSBS,YTIME)/
                  1000-iCo2EmiFac(allCy,"PG",EF,YTIME)*sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(allCy,NAP,YTIME))/1000)))
                                           +VPriceElecIndResNoCliPol(allCy,"R",YTIME)*VConsElecNonSubIndTert(allCy,"HOU",YTIME)/sTWhToMtoe;         
-
+$endif
 
 *' * Prices
-
+$ifthen %RUN_PRICES% == yes
 *' The equation computes fuel prices per subsector and fuel with separate carbon values in
 *' each sector for a specific scenario, subsector, fuel, and year.The equation considers various scenarios based
 *' on the type of fuel and whether it is subject to changes in carbon values. It incorporates factors such as carbon emission factors
@@ -1825,7 +1827,7 @@ QPriceElecIndResConsu(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..  !! The e
              )$(not TFIRST(YTIME-1))
            )$RSET(ESET)
         );
-
+$endif
 
 *' * Define dummy objective function
 qDummyObj.. vDummyObj =e= 1;

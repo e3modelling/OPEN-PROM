@@ -133,13 +133,13 @@ file fStat /'modelstat.txt'/;
 fStat.ap = 1; 
 
 **MODULE SWITCHES**
-$setGlobal RUN_POWER_GENERATION yes
+$setGlobal RUN_POWER_GENERATION no
 $setGlobal RUN_TRANSPORT no
 $setGlobal RUN_INDUSTRY no
 $setGlobal RUN_REST_OF_ENERGY no
 $setGlobal RUN_CO2 no
 $setGlobal RUN_EMISSIONS no
-$setGlobal RUN_PRICES no
+$setGlobal RUN_PRICES yes
 
 ** Failsafe in case a module is not defined.
 $if not set RUN_POWER_GENERATION $setGlobal RUN_POWER_GENERATION yes
