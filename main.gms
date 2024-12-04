@@ -133,22 +133,22 @@ file fStat /'modelstat.txt'/;
 fStat.ap = 1; 
 
 **MODULE SWITCHES**
-$set RUN_POWER_GENERATION yes
-$set RUN_TRANSPORT no
-$set RUN_INDUSTRY no
-$set RUN_REST_OF_ENERGY no
-$set RUN_CO2 no
-$set RUN_EMISSIONS no
-$set RUN_PRICES no
+$setGlobal RUN_POWER_GENERATION yes
+$setGlobal RUN_TRANSPORT no
+$setGlobal RUN_INDUSTRY no
+$setGlobal RUN_REST_OF_ENERGY no
+$setGlobal RUN_CO2 no
+$setGlobal RUN_EMISSIONS no
+$setGlobal RUN_PRICES no
 
 ** Failsafe in case a module is not defined.
-$if not set RUN_POWER_GENERATION $set RUN_POWER_GENERATION yes
-$if not set RUN_TRANSPORT $set RUN_TRANSPORT yes
-$if not set RUN_INDUSTRY $set RUN_INDUSTRY yes
-$if not set RUN_REST_OF_ENERGY $set RUN_REST_OF_ENERGY yes
-$if not set RUN_CO2 $set RUN_CO2 yes
-$if not set RUN_EMISSIONS $set RUN_EMISSIONS yes
-$if not set RUN_PRICES $set RUN_PRICES yes
+$if not set RUN_POWER_GENERATION $setGlobal RUN_POWER_GENERATION yes
+$if not set RUN_TRANSPORT $setGlobal RUN_TRANSPORT yes
+$if not set RUN_INDUSTRY $setGlobal RUN_INDUSTRY yes
+$if not set RUN_REST_OF_ENERGY $setGlobal RUN_REST_OF_ENERGY yes
+$if not set RUN_CO2 $setGlobal RUN_CO2 yes
+$if not set RUN_EMISSIONS $setGlobal RUN_EMISSIONS yes
+$if not set RUN_PRICES $setGlobal RUN_PRICES yes
 
 **VALIDATION CHECKS**
 $if %RUN_POWER_GENERATION% == yes $log "Power Generation module is active." $endif

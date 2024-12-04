@@ -12,7 +12,7 @@ endloop;
 
 model openprom /
 
-$if %RUN_POWER_GENERATION% == yes
+$ifthen %RUN_POWER_GENERATION% == yes
 *' * Power Generation *
 QCapElec2                           !! VCapElec2(allCy,PGALL,YTIME)
 qScalFacPlantDispatchExpr           !! vScalFacPlantDispatchExpr(allCy,PGALL,HOUR,YTIME)
@@ -73,8 +73,9 @@ QCostAvgPowGenLonNoClimPol          !! VCostAvgPowGenLonNoClimPol(runCy,PGALL,ES
 QCostPowGenLonNoClimPol             !! VCostPowGenLonNoClimPol(runCy,ESET,YTIME)
 QPriceElecIndResNoCliPol            !! VPriceElecIndResNoCliPol(runCy,ESET,YTIME)
 qCostPowGenAvgShrt                  !! vCostPowGenAvgShrt(runCy,ESET,YTIME)
+$endif
 
-$if %RUN_TRANSPORT% == yes
+$ifthen %RUN_TRANSPORT% == yes
 *' * Transport *
 QLft                                !! VLft(runCy,DSBS,EF,YTIME)
 QActivGoodsTransp                   !! VActivGoodsTransp(runCy,TRANSE,YTIME)
@@ -97,8 +98,9 @@ QNumPcScrap                         !! VNumPcScrap(runCy,YTIME)
 QPcOwnPcLevl                        !! VPcOwnPcLevl(runCy,YTIME)
 QRateScrPc                          !! VRateScrPc(runCy,YTIME)
 QConsElec                           !! VConsElec(runCy,DSBS,YTIME)
+$endif
 
-$if %RUN_INDUSTRY% == yes
+$ifthen %RUN_INDUSTRY% == yes
 *' * INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES *
 QConsElecNonSubIndTert              !! VConsElecNonSubIndTert(runCy,INDDOM,YTIME)
 QConsRemSubEquipSubSec              !! VConsRemSubEquipSubSec(runCy,DSBS,EF,YTIME)
@@ -120,8 +122,9 @@ QConsFuelInclHP                     !! VConsFuelInclHP(runCy,DSBS,EF,YTIME)
 QCostProdCHPDem                     !! VCostProdCHPDem(runCy,DSBS,CHP,YTIME)
 QCostElcAvgProdCHP                  !! VCostElcAvgProdCHP(runCy,CHP,YTIME)
 QCostVarAvgElecProd                 !! VCostVarAvgElecProd(runCy,CHP,YTIME)
+$endif
 
-$if %RUN_REST_OF_ENERGY% == yes
+$ifthen %RUN_REST_OF_ENERGY% == yes
 *' * REST OF ENERGY BALANCE SECTORS *
 QConsFinEneCountry                  !! VConsFinEneCountry(runCy,EFS,YTIME)
 qConsTotFinEne                      !! vConsTotFinEne(YTIME)
@@ -146,26 +149,30 @@ QExp                                !! VExp(runCy,EFS,YTIME)
 QImp                                !! VImp(runCy,EFS,YTIME)
 QImpNetEneBrnch                     !! VImpNetEneBrnch(runCy,EFS,YTIME)
 QConsFiEneSec                       !! VConsFiEneSec(runCy,EFS,YTIME)
+$endif
 
-$if %RUN_CO2% == yes
+$ifthen %RUN_CO2% == yes
 *' * CO2 SEQUESTRATION COST CURVES *
 QCapCO2ElecHydr                     !! VCapCO2ElecHydr(runCy,YTIME)
 QCaptCummCO2                        !! VCaptCummCO2(runCy,YTIME)
 QTrnsWghtLinToExp                   !! VTrnsWghtLinToExp(runCy,YTIME)
 QCstCO2SeqCsts                      !! VCstCO2SeqCsts(runCy,YTIME)
+$endif
 
-$if %RUN_EMISSIONS% == yes
+$ifthen %RUN_EMISSIONS% == yes
 *' * EMISSIONS CONSTRAINTS *
 *QGrnnHsEmisCO2Equiv                !! VGrnnHsEmisCO2Equiv(NAP,YTIME)
 *qGrnnHsEmisCO2EquivAllCntr         !! vGrnnHsEmisCO2EquivAllCntr(YTIME) 
 qExpendHouseEne                     !! vExpendHouseEne(runCy,YTIME)
+$endif
 
-$if %RUN_PRICES% == yes
+$ifthen %RUN_PRICES% == yes
 *' * Prices *
 QPriceFuelSubsecCarVal              !! VPriceFuelSubsecCarVal(runCy,SBS,EF,YTIME)
 QPriceFuelSepCarbonWght             !! VPriceFuelSepCarbonWght(runCy,DSBS,EF,YTIME)
 QPriceFuelAvgSub                    !! VPriceFuelAvgSub(runCy,DSBS,YTIME)
 QPriceElecIndResConsu               !! VPriceElecIndResConsu(runCy,ESET,YTIME)
+$endif
 
 qDummyObj
 /;
@@ -190,7 +197,7 @@ iDataPassCars(runCy,"PC","MEXTV") = 0.01;
 *---
 iFinEneConsPrevYear(runCy,EFS,YTIME)$(not An(YTIME)) = iFinEneCons(runCy,EFS,YTIME);
 
-$if %RUN_POWER_GENERATION% == yes
+$ifthen %RUN_POWER_GENERATION% == yes
 *---
 VSensCCS.l(runCy,YTIME)=1;
 *---
@@ -326,8 +333,9 @@ QCostVarTech.scale(runCy,PGALL,YTIME)=VCostVarTech.scale(runCy,PGALL,YTIME);
 VScalWeibullSum.scale(runCy,PGALL,YTIME)=1e6;
 QScalWeibullSum.scale(runCy,PGALL,YTIME)=VScalWeibullSum.scale(runCy,PGALL,YTIME);
 *---
+$endif
 
-$if %RUN_TRANSPORT% == yes
+$ifthen %RUN_TRANSPORT% == yes
 *---
 VShareTechTr.FX(runCy,TRANSE,EF2,YTIME)$(not An(YTIME)) = iFuelConsTRANSE(runCy,TRANSE,EF2,YTIME)/sum(EF$(SECTTECH(TRANSE,EF)),iFuelConsTRANSE(runCy,TRANSE,EF,YTIME)); 
 VShareTechTr.FX(runCy,TRANSE,TTECH,YTIME)$( SECTTECH(TRANSE,TTECH) $(not AN(YTIME))) = 0;
@@ -350,6 +358,7 @@ VLft.FX(runCy,DSBS,EF,YTIME)$(not SECTTECH(DSBS,EF))=0;
 VLft.FX(runCy,"PC",TTECH,YTIME)$( (not AN(YTIME)) $SECTTECH("PC",TTECH))=10;
 *---
 VConsElec.l(runCy,DSBS,YTIME)=0.1;
+VConsElec.FX(runCy,DSBS,YTIME)$(not AN(YTIME)) = 0.1;
 *---
 VTechSortVarCost.l(runCy,TRANSE,Rcon,YTIME)=0.1;
 VTechSortVarCost.lo(runCy,TRANSE,Rcon,YTIME)=1e-20;
@@ -398,8 +407,9 @@ QTechSortVarCost.scale(runCy,TRANSE,Rcon,YTIME)=VTechSortVarCost.scale(runCy,TRA
 VShareTechTr.scale(runCy,TRANSE,EF2,YTIME)=1e-6;
 QShareTechTr.scale(runCy,TRANSE,EF2,YTIME)=VShareTechTr.scale(runCy,TRANSE,EF2,YTIME);
 *---
+$endif
 
-$if %RUN_INDUSTRY% == yes
+$ifthen %RUN_INDUSTRY% == yes
 *---
 VPriceElecInd.l(runCy,YTIME)= 0.9;
 VPriceElecInd.FX(runCy,YTIME)$TFIRST(YTIME) = iElecIndex(runCy,YTIME);
@@ -408,13 +418,11 @@ VCostTechIntrm.l(runCy,DSBS,rcon,EF,YTIME) = 0.1;
 *---
 VSortTechVarCost.l(runCy,DSBS,rCon,YTIME) = 0.00000001;
 *---
-VConsFuel.l(runCy,DSBS,EF,YTIME)=0.0000000001;
-VConsFuel.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $(not HEATPUMP(EF)) $(not TRANSE(DSBS)) $(not An(YTIME))) = iFuelConsPerFueSub(runCy,DSBS,EF,YTIME);
-*---
 VShareTechNewEquip.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF)$(not An(YTIME))) = 0;
 *---
+$endif
 
-$if %RUN_REST_OF_ENERGY% == yes
+$ifthen %RUN_REST_OF_ENERGY% == yes
 *---
 VCapRef.l(runCy,YTIME)=0.1;
 VCapRef.FX(runCy,YTIME)$(not An(YTIME)) = iRefCapacity(runCy,YTIME);
@@ -459,8 +467,9 @@ VInpTransfNuclear.FX(runCy,EFS,YTIME)$(not sameas("NUC",EFS)) = 0;
 VInpTransfTherm.FX(runCy,EFS,YTIME)$(not PGEF(EFS)) = 0;
 VInpTransfTherm.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iInpTransfTherm(runCy,EFS,YTIME);
 *---
+$endif
 
-$if %RUN_CO2% == yes
+$ifthen %RUN_CO2% == yes
 *---
 VCstCO2SeqCsts.l(runCy,YTIME)=1;
 *VCstCO2SeqCsts.FX(runCy,YTIME)$(not an(YTIME)) = iElastCO2Seq(allCy,"mc_b")
@@ -472,8 +481,9 @@ VCaptCummCO2.FX(runCy,YTIME)$(not an(YTIME)) = 0 ;
 *VTrnsWghtLinToExp.scale(runCy,YTIME)=1.e-20;
 *QTrnsWghtLinToExp.scale(runCy,YTIME)=1.e-20;
 *---
+$endif
 
-$if %RUN_PRICES% == yes
+$ifthen %RUN_PRICES% == yes
 *---
 VPriceFuelAvgSub.L(runCy,DSBS,YTIME) = 0.1;
 VPriceFuelAvgSub.FX(runCy,DSBS,YTIME)$(not An(YTIME)) = sum(EF$SECTTECH(DSBS,EF), iWgtSecAvgPriFueCons(runCy,DSBS,EF) * iFuelPrice(runCy,DSBS,EF,YTIME));
@@ -481,12 +491,16 @@ VPriceFuelAvgSub.FX(runCy,DSBS,YTIME)$(not An(YTIME)) = sum(EF$SECTTECH(DSBS,EF)
 VPriceFuelSepCarbonWght.scale(runCy,DSBS,EF,YTIME)=1e-6;
 QPriceFuelSepCarbonWght.scale(runCy,DSBS,EF,YTIME)=VPriceFuelSepCarbonWght.scale(runCy,DSBS,EF,YTIME);
 *---
+$endif
 
 *'                **Interdependent Variables**
 VDemFinEneTranspPerFuel.FX(runCy,TRANSE,EF,YTIME) $(SECTTECH(TRANSE,EF) $(not An(YTIME))) = iFuelConsPerFueSub(runCy,TRANSE,EF,YTIME);
 VDemFinEneTranspPerFuel.FX(runCy,TRANSE,EF,YTIME)$(not SECTTECH(TRANSE,EF)) = 0;
 *---
 VLoadFacDom.l(runCy,YTIME)=0.5;
+*---
+VConsFuel.l(runCy,DSBS,EF,YTIME)=0.0000000001;
+VConsFuel.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $(not HEATPUMP(EF)) $(not TRANSE(DSBS)) $(not An(YTIME))) = iFuelConsPerFueSub(runCy,DSBS,EF,YTIME);
 VLoadFacDom.FX(runCy,YTIME)$(datay(YTIME)) =
          (sum(INDDOM,VConsFuel.l(runCy,INDDOM,"ELC",YTIME)) + sum(TRANSE, VDemFinEneTranspPerFuel.l(runCy,TRANSE,"ELC",YTIME)))/
          (sum(INDDOM,VConsFuel.l(runCy,INDDOM,"ELC",YTIME)/iLoadFacElecDem(INDDOM)) + sum(TRANSE, VDemFinEneTranspPerFuel.l(runCy,TRANSE,"ELC",YTIME)/
