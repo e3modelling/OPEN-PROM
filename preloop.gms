@@ -357,9 +357,6 @@ VLft.FX(runCy,TRANSE,TTECH,YTIME)$(SECTTECH(TRANSE,TTECH) $(not sameas(TRANSE,"P
 VLft.FX(runCy,DSBS,EF,YTIME)$(not SECTTECH(DSBS,EF))=0;
 VLft.FX(runCy,"PC",TTECH,YTIME)$( (not AN(YTIME)) $SECTTECH("PC",TTECH))=10;
 *---
-VConsElec.l(runCy,DSBS,YTIME)=0.1;
-VConsElec.FX(runCy,DSBS,YTIME)$(not AN(YTIME)) = 0.1;
-*---
 VTechSortVarCost.l(runCy,TRANSE,Rcon,YTIME)=0.1;
 VTechSortVarCost.lo(runCy,TRANSE,Rcon,YTIME)=1e-20;
 *---
@@ -511,6 +508,9 @@ VPeakLoad.FX(runCy,YTIME)$(datay(YTIME)) = VDemElecTot.l(runCy,YTIME)/(VLoadFacD
 *---
 VRenValue.l(YTIME)=1;
 VRenValue.FX(YTIME) = 0 ;
+*---
+VConsElec.l(runCy,DSBS,YTIME)=0.1;
+VConsElec.FX(runCy,DSBS,YTIME)$(not AN(YTIME)) = 0.1;
 *---
 VFuelPriSubNoCarb.FX(runCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF) $(not HEATPUMP(EF))  $(not An(YTIME))) = iFuelPrice(runCy,SBS,EF,YTIME);
 VFuelPriSubNoCarb.FX(runCy,SBS,ALTEF,YTIME)$(SECTTECH(SBS,ALTEF) $(not An(YTIME))) = sum(EF$ALTMAP(SBS,ALTEF,EF),iFuelPrice(runCy,SBS,EF,YTIME));
