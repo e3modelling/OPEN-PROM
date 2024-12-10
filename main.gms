@@ -137,3 +137,4 @@ $include input.gms
 $include equations.gms
 $include preloop.gms
 $include solve.gms
+$include postsolve.gms
