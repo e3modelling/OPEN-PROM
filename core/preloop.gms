@@ -10,11 +10,7 @@ loop DSBS do
    endloop;
 endloop;
 
-model openprom /
-
-qDummyObj
-
-/;
+model openprom / all /;
 
 option iPop:2:0:6;
 display iPop;
