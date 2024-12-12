@@ -136,10 +136,10 @@ fStat.ap = 1;
 $setGlobal PowerGeneration legacy
 $setGlobal Transport legacy
 $setGlobal Industry legacy
-*$setGlobal RUN_REST_OF_ENERGY legacy
-*$setGlobal RUN_CO2 legacy
-*$setGlobal RUN_EMISSIONS legacy
-*$setGlobal RUN_PRICES legacy
+$setGlobal RestOfEnergy legacy
+$setGlobal CO2 legacy
+$setGlobal Emissions legacy
+$setGlobal Prices legacy
 
 ** CORE MODEL FILES **
 *' SETS
