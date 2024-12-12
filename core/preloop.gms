@@ -24,7 +24,7 @@ display iVarCostTech;
 *'                *VARIABLE INITIALISATION*
 *---
 * Load common shared data
-execute_loadpoint 'common_data.gdx';
+*execute_loadpoint 'common_data.gdx';
 *---
 iPassCarsMarkSat(runCy) = 0.7; 
 *---
