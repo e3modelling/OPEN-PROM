@@ -1,33 +1,6 @@
 *' @title Transport Preloop
 *' @code
 
-model openprom /
-
-*' * Transport *
-QLft                                !! VLft(runCy,DSBS,EF,YTIME)
-QActivGoodsTransp                   !! VActivGoodsTransp(runCy,TRANSE,YTIME)
-QGapTranspActiv                     !! VGapTranspActiv(runCy,TRANSE,YTIME)
-QConsSpecificFuel                   !! VConsSpecificFuel(runCy,TRANSE,TTECH,EF,YTIME)
-QCostTranspPerMeanConsSize          !! VCostTranspPerMeanConsSize(runCy,TRANSE,rCon,TTECH,YTIME)
-QCostTranspPerVeh                   !! VCostTranspPerVeh(runCy,TRANSE,rCon,TTECH,YTIME)
-QCostTranspMatFac                   !! VCostTranspMatFac(runCy,TRANSE,RCon,TTECH,YTIME) 
-QTechSortVarCost                    !! VTechSortVarCost(runCy,TRANSE,rCon,YTIME)
-QShareTechTr                        !! VShareTechTr(runCy,TRANSE,TTECH,YTIME)
-QConsTechTranspSectoral             !! VConsTechTranspSectoral(runCy,TRANSE,TTECH,EF,YTIME)
-QDemFinEneTranspPerFuel             !! VDemFinEneTranspPerFuel(runCy,TRANSE,EF,YTIME)
-qDemFinEneSubTransp                 !! vDemFinEneSubTransp(runCy,TRANSE,YTIME)
-QMEPcGdp                            !! VMEPcGdp(runCy,YTIME)
-QMEPcNonGdp                         !! VMEPcNonGdp(runCy,YTIME)
-QStockPcYearly                      !! VStockPcYearly(runCy,YTIME)
-QNewRegPcYearly                     !! VNewRegPcYearly(runCy,YTIME)
-QActivPassTrnsp                     !! VActivPassTrnsp(runCy,TRANSE,YTIME)
-QNumPcScrap                         !! VNumPcScrap(runCy,YTIME)
-QPcOwnPcLevl                        !! VPcOwnPcLevl(runCy,YTIME)
-QRateScrPc                          !! VRateScrPc(runCy,YTIME)
-QConsElec                           !! VConsElec(runCy,DSBS,YTIME)
-
-/;
-
 *'                *VARIABLE INITIALISATION*
 
 *---
