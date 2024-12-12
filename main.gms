@@ -103,7 +103,7 @@ $setGlobal DevMode 0 !! can be overwritten if VS Code Tasks are used
 $setGlobal WriteGDX on
 $setEnv GDXCOMPRESS 1
 *' *** Generate input data?
-$setGlobal GenerateInput on !! can be overwritten if VS Code Tasks are used
+$setGlobal GenerateInput off !! can be overwritten if VS Code Tasks are used
 
 $setGlobal fCountries 'MAR,IND,USA,EGY,RWO' !! can be overwritten if VS Code Tasks are used
 
@@ -133,95 +133,35 @@ file fStat /'modelstat.txt'/;
 fStat.ap = 1; 
 
 **MODULE SWITCHES**
-$setGlobal RUN_POWER_GENERATION yes
-$setGlobal RUN_TRANSPORT no
-$setGlobal RUN_INDUSTRY no
-$setGlobal RUN_REST_OF_ENERGY no
-$setGlobal RUN_CO2 no
-$setGlobal RUN_EMISSIONS no
-$setGlobal RUN_PRICES no
-
-** Failsafe in case a module is not defined.
-$ifthen not set RUN_POWER_GENERATION $setGlobal RUN_POWER_GENERATION yes
-$endif
-$ifthen not set RUN_TRANSPORT $setGlobal RUN_TRANSPORT yes 
-$endif
-$ifthen not set RUN_INDUSTRY $setGlobal RUN_INDUSTRY yes 
-$endif
-$ifthen not set RUN_REST_OF_ENERGY $setGlobal RUN_REST_OF_ENERGY yes 
-$endif
-$ifthen not set RUN_CO2 $setGlobal RUN_CO2 yes 
-$endif
-$ifthen not set RUN_EMISSIONS $setGlobal RUN_EMISSIONS yes 
-$endif
-$ifthen not set RUN_PRICES $setGlobal RUN_PRICES yes 
-$endif
-
-**VALIDATION CHECKS**
-$ifthen %RUN_POWER_GENERATION% == yes $log "Power Generation module is active." 
-$endif
-$ifthen %RUN_TRANSPORT% == yes $log "Transport module is active." 
-$endif
-$ifthen %RUN_INDUSTRY% == yes $log "Industry module is active." 
-$endif
-$ifthen %RUN_REST_OF_ENERGY% == yes $log "Rest Of Energy Balance Sectors module is active." 
-$endif
-$ifthen %RUN_CO2% == yes $log "CO2 Sequestration Cost Curves module is active." 
-$endif
-$ifthen %RUN_EMISSIONS% == yes $log "Emissions module is active." 
-$endif
-$ifthen %RUN_PRICES% == yes $log "Prices module is active." 
-$endif
+$setGlobal PowerGeneration legacy
+*$setGlobal RUN_TRANSPORT no
+*$setGlobal RUN_INDUSTRY no
+*$setGlobal RUN_REST_OF_ENERGY no
+*$setGlobal RUN_CO2 no
+*$setGlobal RUN_EMISSIONS no
+*$setGlobal RUN_PRICES no
 
 ** CORE MODEL FILES **
-$include sets.gms
-$include declarations.gms
-$include input.gms
-$include equations.gms
-$include preloop.gms
+*' SETS
+$include "./core/sets.gms";
 
-** MODULE-SPECIFIC INCLUSIONS **
-$ifthen %RUN_POWER_GENERATION% == yes
-    $include "./modules/01_PowerGeneration/declarations.gms";
-    $include "./modules/01_PowerGeneration/equations.gms";
-    $include "./modules/01_PowerGeneration/preloop.gms";
-$endif
+*' DECLARATIONS
+$include    "./core/declarations.gms";
+$batinclude "./modules/include.gms"    declarations
 
-$ifthen %RUN_TRANSPORT% == yes
-    $include "./modules/02_Transport/declarations.gms";
-    $include "./modules/02_Transport/equations.gms";
-    $include "./modules/02_Transport/preloop.gms";
-$endif
+*' INPUTS
+$include "./core/input.gms";
 
-$ifthen %RUN_INDUSTRY% == yes
-    $include "./modules/03_Industry/declarations.gms";
-    $include "./modules/03_Industry/equations.gms";
-    $include "./modules/03_Industry/preloop.gms";
-$endif
+*' EQUATIONS
+$include    "./core/equations.gms";
+$batinclude "./modules/include.gms"    equations
 
-$ifthen %RUN_REST_OF_ENERGY% == yes
-    $include "./modules/04_RestOfEnergy/declarations.gms";
-    $include "./modules/04_RestOfEnergy/equations.gms";
-    $include "./modules/04_RestOfEnergy/preloop.gms";
-$endif
+*' PRELOOP
+$include    "./core/preloop.gms";
+$batinclude "./modules/include.gms"    preloop
 
-$ifthen %RUN_CO2% == yes
-    $include "./modules/05_CO2/declarations.gms";
-    $include "./modules/05_CO2/equations.gms";
-    $include "./modules/05_CO2/preloop.gms";
-$endif
+*' SOLVE
+$include    "./core/solve.gms";
 
-$ifthen %RUN_EMISSIONS% == yes
-    $include "./modules/06_Emissions/declarations.gms";
-    $include "./modules/06_Emissions/equations.gms";
-    $include "./modules/06_Emissions/preloop.gms";
-$endif
-
-$ifthen %RUN_PRICES% == yes
-    $include "./modules/07_Prices/declarations.gms";
-    $include "./modules/07_Prices/equations.gms";
-    $include "./modules/07_Prices/preloop.gms";
-$endif
-
-** SOLVE THE MODEL **
-$include solve.gms
+*' POSTSOLVE
+$batinclude "./modules/include.gms"    postsolve
