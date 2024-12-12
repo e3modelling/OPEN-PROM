@@ -132,10 +132,10 @@ $endif.genInp
 file fStat /'modelstat.txt'/; 
 fStat.ap = 1; 
 
-**MODULE SWITCHES**
+**MODULE REALIZATIONS SWITCHES**
 $setGlobal PowerGeneration legacy
 $setGlobal Transport legacy
-*$setGlobal Industry legacy
+$setGlobal Industry legacy
 *$setGlobal RUN_REST_OF_ENERGY legacy
 *$setGlobal RUN_CO2 legacy
 *$setGlobal RUN_EMISSIONS legacy
