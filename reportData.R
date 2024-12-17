@@ -9,7 +9,7 @@ library(mrprom)
 openprom_p_variables <- gdxInfo("openprom_p.gdx",returnList=T,dump=F)
 blabla_variables <- list() 
 for (i in openprom_p_variables[["variables"]]) {
-  if (i %in% c("vConsTotFinEne","VCostTechIntrm", "VConsTechTranspSectoral", "vDummyObj")) next
+  if (i %in% c("vConsTotFinEne","VCostTechIntrm", "VConsTechTranspSectoral")) next
   blabla_variables[[i]] <- read.gdx('./blabla.gdx', i, field = 'l')
 }
 mena_prom_mapping <- read.csv("MENA-PROM mapping - mena_prom_mapping.csv")
