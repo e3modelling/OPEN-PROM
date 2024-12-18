@@ -34,7 +34,7 @@ QCapElecCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' and the ratio of the differences in electricity demand and corrected base load to the difference between peak load and corrected base load. It plays a role in shaping
 *' the load curve for effective electricity demand modeling.
 QLambda(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         (1 - exp( -VLambda(allCy,YTIME)*sGwToTwhPerYear))  / (0.0001+VLambda(allCy,YTIME))
+         (1 - exp( -VLambda(allCy,YTIME)*sGwToTwhPerYear))  / (VLambda(allCy,YTIME))
              =E=
          (VDemElecTot(allCy,YTIME) - sGwToTwhPerYear*VBaseLoad(allCy,YTIME))
          / (VPeakLoad(allCy,YTIME) - VBaseLoad(allCy,YTIME));
@@ -121,18 +121,18 @@ QCostHourProdInvDec(allCy,PGALL,HOUR,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VCostHourProdInvDec(allCy,PGALL,HOUR,YTIME)
                   =E=
                   
-                    ( ( iDisc(allCy,"PG",YTIME-1) * exp(iDisc(allCy,"PG",YTIME-1)*iTechLftPlaType(allCy,PGALL))
-                        / (exp(iDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL)) -1))
-                      * iGrossCapCosSubRen(PGALL,YTIME-1)* 1E3 * iCGI(allCy,YTIME-1)  + iFixOandMCost(PGALL,YTIME-1)
-                    )/iAvailRate(PGALL,YTIME-1) / (1000*(ord(HOUR)-1+0.25))
-                    + iVarCost(PGALL,YTIME-1)/1E3 + (VRenValue(YTIME-1)*8.6e-5)$( not ( PGREN(PGALL) 
+                    ( ( iDisc(allCy,"PG",YTIME-4) * exp(iDisc(allCy,"PG",YTIME-4)*iTechLftPlaType(allCy,PGALL))
+                        / (exp(iDisc(allCy,"PG",YTIME-4)*iTechLftPlaType(allCy,PGALL)) -1))
+                      * iGrossCapCosSubRen(PGALL,YTIME-4)* 1E3 * iCGI(allCy,YTIME-4)  + iFixOandMCost(PGALL,YTIME-4)
+                    )/iAvailRate(PGALL,YTIME-4) / (1000*(ord(HOUR)-1+0.25))
+                    + iVarCost(PGALL,YTIME-4)/1E3 + (VRenValue(YTIME)*8.6e-5)$( not ( PGREN(PGALL) 
                     $(not sameas("PGASHYD",PGALL)) $(not sameas("PGSHYD",PGALL)) $(not sameas("PGLHYD",PGALL)) ))
-                    + sum(PGEF$PGALLtoEF(PGALL,PGEF), (VPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME-1)+
-                        iCO2CaptRate(allCy,PGALL,YTIME-1)*VCstCO2SeqCsts(allCy,YTIME-1)*1e-3*
-                    iCo2EmiFac(allCy,"PG",PGEF,YTIME-1)
-                         +(1-iCO2CaptRate(allCy,PGALL,YTIME-1))*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME-1)*
-                         (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(allCy,NAP,YTIME-1))))
-                         *sTWhToMtoe/iPlantEffByType(allCy,PGALL,YTIME-1))$(not PGREN(PGALL));
+                    + sum(PGEF$PGALLtoEF(PGALL,PGEF), (VPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME-4)+
+                        iCO2CaptRate(allCy,PGALL,YTIME-4)*VCstCO2SeqCsts(allCy,YTIME-4)*1e-3*
+                    iCo2EmiFac(allCy,"PG",PGEF,YTIME-4)
+                         +(1-iCO2CaptRate(allCy,PGALL,YTIME-4))*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME-4)*
+                         (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(allCy,NAP,YTIME-4))))
+                         *sTWhToMtoe/iPlantEffByType(allCy,PGALL,YTIME-4))$(not PGREN(PGALL));
 
 *' The equation calculates the hourly production cost for
 *' a given technology without carbon capture and storage investments. 
@@ -347,7 +347,7 @@ QRenTechMatMult(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          1$(NOT PGREN(PGALL))
          +
          (
-           1/(1+exp(5*VRenTechMatMultExpr(allCy,PGALL,YTIME)))
+           1/(1+exp(9*VRenTechMatMultExpr(allCy,PGALL,YTIME)))
            )$PGREN(PGALL);  
 
 *' The equation calculates a temporary variable which is used to facilitate scaling in the Weibull equation. The scaling is influenced by three main factors:
