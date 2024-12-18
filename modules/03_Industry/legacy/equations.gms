@@ -68,16 +68,20 @@ QDemFinSubFuelSubsec(allCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $runCy(a
 *' This equation calculates the total consumption of electricity in industrial sectors. The consumption is obtained by summing up the electricity
 *' consumption in each industrial subsector, excluding substitutable electricity. This equation provides an aggregate measure of electricity consumption
 *' in the industrial sectors, considering only non-substitutable electricity.
+$ontext
 qConsTotElecInd(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          vConsTotElecInd(allCy,YTIME)
          =E=
          SUM(INDSE,VConsElecNonSubIndTert(allCy,INDSE,YTIME));       
+$offtext
 
 *' This equation calculates the total final demand for substitutable fuels in industrial sectors. The total demand is obtained by summing up the
 *' final demand for substitutable fuels across various industrial subsectors. This equation provides a comprehensive view of the total demand for
 *' substitutable fuels within the industrial sectors, aggregated across individual subsectors.
+$ontext
 qDemFinSubFuelInd(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         vDemFinSubFuelInd(allCy,YTIME)=E= SUM(INDSE,VDemFinSubFuelSubsec(allCy,INDSE,YTIME));
+$offtext
 
 *' This equation determines the electricity industry prices based on an estimated electricity index and a technical maximum of the electricity to steam ratio
 *' in Combined Heat and Power plants. The industry prices are calculated as a function of the estimated electricity index and the specified maximum

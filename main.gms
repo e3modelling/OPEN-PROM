@@ -165,3 +165,6 @@ $include    "./core/solve.gms";
 
 *' POSTSOLVE
 $batinclude "./modules/include.gms"    postsolve
+
+*' POSTSOLVE CORE
+$include    "./core/postsolve.gms";

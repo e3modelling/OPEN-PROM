@@ -187,10 +187,12 @@ QDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,EF)
 
 *' This equation calculates the final energy demand in different transport subsectors by summing up the final energy demand for each energy form within
 *' each transport subsector. The result is expressed in million tonnes of oil equivalent.
+$ontext
 qDemFinEneSubTransp(allCy,TRANSE,YTIME)$(TIME(YTIME) $runCy(allCy))..
          vDemFinEneSubTransp(allCy,TRANSE,YTIME)
                  =E=
          sum(EF,VDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME));
+$offtext
 
 *' This equation calculates the GDP-dependent market extension of passenger cars. It takes into account transportation characteristics, the GDP-dependent market
 *' extension from the previous year, and the ratio of GDP to population for the current and previous years. The elasticity parameter (a) influences the sensitivity

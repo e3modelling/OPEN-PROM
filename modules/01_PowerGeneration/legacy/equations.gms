@@ -157,10 +157,12 @@ QSensCCS(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' The production cost is modified based on the sensitivity of CCS acceptance. The sensitivity is used as an exponent
 *' to adjust the original production cost for power generation plants during each hour and for the specified year .
 *' This adjustment reflects the impact of CCS acceptance on the production cost.
+$ontext
 qCostHourProdInvCCS(allCy,PGALL,HOUR,YTIME)$(TIME(YTIME) $(CCS(PGALL) or NOCCS(PGALL)) $runCy(allCy)) ..
          vCostHourProdInvCCS(allCy,PGALL,HOUR,YTIME) 
          =E=
           VCostHourProdInvDec(allCy,PGALL,HOUR,YTIME)**(-VSensCCS(allCy,YTIME));
+$offtext
 
 *' The equation calculates the production cost of a technology for a specific power plant and year. 
 *' The equation involves the hourly production cost of the technology
@@ -288,12 +290,14 @@ QGapGenCapPowerDiff(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' costs are raised to the power of -6, and the result is used as a scaling factor
 *' in the Weibull equation. The equation captures the cost-related considerations 
 *' in determining the scaling factor for the Weibull equation based on the production costs of different technologies.
+$ontext
 qScalWeibull(allCy,PGALL,HOUR,YTIME)$((not CCS(PGALL))$TIME(YTIME) $runCy(allCy))..
           vScalWeibull(allCy,PGALL,HOUR,YTIME) 
          =E=
          (VCostHourProdInvDec(allCy,PGALL,HOUR,YTIME)$(not NOCCS(PGALL))
          +
           VCostHourProdInvDecNoCCS(allCy,PGALL,HOUR,YTIME)$NOCCS(PGALL))**(-6);     
+$offtext
 
 *' The equation calculates the renewable potential supply curve for a specified year. Including:
 *' The minimum renewable potential for the given renewable energy form and country in the specified year.
@@ -480,10 +484,13 @@ VCapOverall(allCy,PGALL,YTIME-1)
 
 *' This equation calculates the scaling factor for plant dispatching in a specific country , hour of the day,
 *' and time period . The scaling factor for determining the dispatch order of different power plants during a particular hour.
+$ontext
 qScalFacPlantDispatchExpr(allCy,PGALL,HOUR,YTIME)$(TIME(YTIME)$(runCy(allCy))) ..
 vScalFacPlantDispatchExpr(allCy,PGALL,HOUR,YTIME)
 =E=
 -VScalFacPlaDisp(allCy,HOUR,YTIME)/VSortPlantDispatch(allCy,PGALL,YTIME);
+$offtext
+
 
 QScalFacPlantDispatch(allCy,HOUR,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          sum(PGALL,
@@ -544,10 +551,12 @@ QProdElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' is calculated by dividing the fuel consumption of the specific industrial sector for CHP by the total fuel consumption of CHP across all industrial
 *' sectors. The result represents the proportion of CHP production attributable to the specified industrial sector. The denominator has a small constant
 *' (1e-6) added to avoid division by zero.
+$ontext
 qSecContrTotCHPProd(allCy,INDDOM,CHP,YTIME)$(TIME(YTIME) $SECTTECH(INDDOM,CHP) $runCy(allCy))..
          vSecContrTotCHPProd(allCy,INDDOM,CHP,YTIME) 
           =E=
          VConsFuel(allCy,INDDOM,CHP,YTIME)/(1e-6+SUM(INDDOM2,VConsFuel(allCy,INDDOM2,CHP,YTIME)));
+$offtext
 
 *' This equation calculates the electricity production from Combined Heat and Power plants . The electricity production is computed
 *' for a specific country , CHP technology , and time period.The electricity production from CHP plants is computed by taking the
@@ -588,6 +597,7 @@ QCostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' costs, and variable costs, considering factors such as discount rates, technological lifetimes, and subsidies. The resulting cost is adjusted based on the
 *' availability rate and conversion factors. This equation provides insight into the minimum cost associated with power generation technologies, excluding climate
 *' policy-related costs, and uses a consistent conversion factor for power capacity.
+$ontext
 qCostPowGenLonMin(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 
          vCostPowGenLonMin(allCy,PGALL,YTIME)
@@ -607,11 +617,13 @@ qCostPowGenLonMin(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                  (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(allCy,NAP,YTIME))))
 
                  *sTWhToMtoe/iPlantEffByType(allCy,PGALL,YTIME)));   
+$offtext
 
 *' This equation calculates the long-term power generation cost of technologies, including international prices of main fuels. It involves summing the variable costs
 *' associated with each power generation plant and energy form, taking into account international prices of main fuels. The result is the long-term power generation
 *' cost per unit of electricity produced in the given time period. The equation also includes factors such as discount rates, plant availability rates, and the gross
 *' capital cost per plant type with subsidies for renewables.
+$ontext
 qCostPowGenLongIntPri(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 
          vCostPowGenLongIntPri(allCy,PGALL,ESET,YTIME)
@@ -632,11 +644,12 @@ qCostPowGenLongIntPri(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                  (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(allCy,NAP,YTIME))))
 
                  *sTWhToMtoe/iPlantEffByType(allCy,PGALL,YTIME))); 
-
+$offtext
 
 *' This equation calculates the short-term power generation cost of technologies, including international prices of main fuels. It involves summing the variable
 *' costs associated with each power generation plant and energy form, taking into account international prices of main fuels. The result is the short-term power
 *' generation cost per unit of electricity produced in the given time period.
+$ontext
 qCostPowGenShortIntPri(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 
          vCostPowGenShortIntPri(allCy,PGALL,ESET,YTIME)
@@ -652,6 +665,7 @@ qCostPowGenShortIntPri(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                  (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(allCy,NAP,YTIME))))
 
                  *sTWhToMtoe/iPlantEffByType(allCy,PGALL,YTIME)));    
+$offtext
 
 *' This equation computes the long-term average power generation cost. It involves summing the long-term average power generation costs for different power generation
 *' plants and energy forms, considering the specific characteristics and costs associated with each. The result is the average power generation cost per unit of
@@ -733,6 +747,7 @@ QPriceElecIndResNoCliPol(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..   !! T
 *' This equation computes the short-term average power generation cost. It involves summing the variable production costs for different power generation plants and
 *' energy forms, considering the specific characteristics and costs associated with each. The result is the average power generation cost per unit of electricity
 *' consumed in the given time period.
+$ontext
 qCostPowGenAvgShrt(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 
         vCostPowGenAvgShrt(allCy,ESET,YTIME)
@@ -752,3 +767,4 @@ qCostPowGenAvgShrt(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          sum(CHP, VCostVarAvgElecProd(allCy,CHP,YTIME)*VProdElecCHP(allCy,CHP,YTIME))
          )
          /VDemElecTot(allCy,YTIME);
+$offtext

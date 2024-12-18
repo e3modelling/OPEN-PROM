@@ -26,8 +26,10 @@ QConsFinEneCountry(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' The equation computes the total final energy consumption in million tonnes of oil equivalent 
 *' for all countries at a specific time period. This is achieved by summing the final energy consumption for each energy
 *' form sector across all countries.
+$ontext
 qConsTotFinEne(YTIME)$(TIME(YTIME))..
          vConsTotFinEne(YTIME) =E= sum((allCy,EFS), VConsFinEneCountry(allCy,EFS,YTIME) );     
+$offtext
 
 *' The equation computes the final non-energy consumption in million tonnes of oil equivalent
 *' for a given energy form sector. The calculation involves summing the consumption of fuels in each non-energy and bunkers

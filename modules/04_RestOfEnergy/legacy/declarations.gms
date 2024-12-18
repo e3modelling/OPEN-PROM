@@ -3,7 +3,7 @@
 
 Equations
 *' *** REST OF ENERGY BALANCE SECTORS EQUATIONS
-qConsTotFinEne(YTIME)                                      "Compute total final energy consumption in ALL countries"
+*qConsTotFinEne(YTIME)                                      "Compute total final energy consumption in ALL countries"
 QOutTransfDhp(allCy,EFS,YTIME)                             "Compute the transformation output from district heating plants"
 QCapRef(allCy,YTIME)	                                   "Compute refineries capacity"
 QOutTransfRefSpec(allCy,EFS,YTIME)	                       "Compute the transformation output from refineries"
@@ -23,7 +23,7 @@ QImp(allCy,EFS,YTIME)	                                   "Compute fake imports"
 
 Variables
 *' *** REST OF ENERGY BALANCE SECTORS VARIABLES
-vConsTotFinEne(YTIME)                                      "Total final energy Consumption in ALL COUNTRIES (Mtoe)"
+*vConsTotFinEne(YTIME)                                      "Total final energy Consumption in ALL COUNTRIES (Mtoe)"
 VOutTransfDhp(allCy,EFS,YTIME)                             "Transformation output from District Heating Plants (Mtoe)"
 VCapRef(allCy,YTIME)	                                   "Refineries capacity (Million barrels/day)"
 VOutTransfRefSpec(allCy,EFS,YTIME)	                       "Transformation output from refineries (Mtoe)"

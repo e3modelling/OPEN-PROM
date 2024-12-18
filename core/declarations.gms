@@ -133,9 +133,9 @@ QLft(allCy,DSBS,EF,YTIME)	                               "Compute the lifetime o
 *' * INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES *
 QConsFuel(allCy,DSBS,EF,YTIME)                             "Compute fuel consumption"
 QConsElecNonSubIndTert(allCy,INDDOM,YTIME)	               "Compute non-substituable electricity consumption in Industry and Tertiary"
-qConsTotElecInd(allCy,YTIME)                               "Compute Consumption of electricity in industrial sectors"
+*qConsTotElecInd(allCy,YTIME)                               "Compute Consumption of electricity in industrial sectors"
 QDemFinSubFuelSubsec(allCy,DSBS,YTIME)                     "Compute total final demand (of substitutable fuels) per subsector"
-qDemFinSubFuelInd(allCy,YTIME)                             "Copmpute total final demand (of substitutable fuels) in industrial sectors"
+*qDemFinSubFuelInd(allCy,YTIME)                             "Copmpute total final demand (of substitutable fuels) in industrial sectors"
 QPriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)                   "Compute fuel prices per subsector and fuel especially for chp plants"
 QConsFuelInclHP(allCy,DSBS,EF,YTIME)                       "Equation for fuel consumption in Mtoe (including heat from heatpumps)"
 QConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)	               "Equation for consumption of remaining substitutble equipment"
@@ -161,7 +161,7 @@ QPriceFuelAvgSub(allCy,DSBS,YTIME)	                       "Compute average fuel 
 QCstCO2SeqCsts(allCy,YTIME)	                               "Compute cost curve for CO2 sequestration costs" 
 
 *' *** Miscellaneous
-qDummyObj                                                  "Define dummy objective function"
+*qDummyObj                                                  "Define dummy objective function"
 
 ;
 
@@ -186,9 +186,9 @@ VLft(allCy,DSBS,EF,YTIME)                                  "Lifetime of technolo
 *' * INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES *
 VConsFuel(allCy,DSBS,EF,YTIME)                             "Consumption of fuels in each demand subsector, excluding heat from heatpumps (Mtoe)"
 VConsElecNonSubIndTert(allCy,DSBS,YTIME)                   "Consumption of non-substituable electricity in Industry and Tertiary (Mtoe)"
-vConsTotElecInd(allCy,YTIME)                               "Total Consumption of Electricity in industrial sectors (Mtoe)"
+*vConsTotElecInd(allCy,YTIME)                               "Total Consumption of Electricity in industrial sectors (Mtoe)"
 VDemFinSubFuelSubsec(allCy,DSBS,YTIME)                     "Total final demand (of substitutable fuels) per subsector (Mtoe)"
-vDemFinSubFuelInd(allCy,YTIME)                             "Total final demand (of substitutable fuels) in industrial sectors (Mtoe)"
+*vDemFinSubFuelInd(allCy,YTIME)                             "Total final demand (of substitutable fuels) in industrial sectors (Mtoe)"
 VPriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)                   "Fuel prices per subsector and fuel for CHP plants (kUS$2015/toe)"
 VConsFuelInclHP(allCy,DSBS,EF,YTIME)                       "Consumption of fuels in each demand subsector including heat from heatpumps (Mtoe)"
 VConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)                "Consumption of remaining substitutable equipment (Mtoe)"
@@ -214,7 +214,7 @@ VPriceFuelAvgSub(allCy,DSBS,YTIME)                         "Average fuel prices 
 VCstCO2SeqCsts(allCy,YTIME)	                               "Cost curve for CO2 sequestration costs (US$2015/tn of CO2 sequestrated)"
 
 *' *** Miscellaneous
-vDummyObj                                                  "Dummy maximisation variable (1)"
+*vDummyObj                                                  "Dummy maximisation variable (1)"
 VFuelPriSubNoCarb(allCy,SBS,EF,YTIME)	                   "Fuel prices per subsector and fuel  without carbon value (kUS$2015/toe)"
 VElecConsHeatPla(allCy,DSBS,YTIME)                         "Electricity consumed in heatpump plants (Mtoe)"
 ;

@@ -21,14 +21,14 @@ VShareNewTechNoCCS.L(runCy,PGALL,TT)=0.1;
 VShareNewTechNoCCS.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) )=0;
 VShareNewTechNoCCS.FX(runCy,PGALL,YTIME)$(AN(YTIME) $(NOT NOCCS(PGALL)) )=0;
 *---
-vCostHourProdInvCCS.L(runCy,PGALL,HOUR,TT)=0.1;
+*vCostHourProdInvCCS.L(runCy,PGALL,HOUR,TT)=0.1;
 *---
 VShareNewTechCCS.L(runCy,PGALL,TT)=0.1;
 VShareNewTechCCS.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) )=0;
 VShareNewTechCCS.FX(runCy,PGALL,YTIME)$(AN(YTIME) $(NOT CCS(PGALL)))=0;
 *---
-VCostHourProdInvDecNoCCS.L(runCy,PGALL,HOUR,TT) = VShareNewTechNoCCS.L(runCy,PGALL,TT)*vCostHourProdInvCCS.L(runCy,PGALL,HOUR,TT)+
-         sum(CCS$CCS_NOCCS(CCS,PGALL), VShareNewTechCCS.L(runCy,CCS,TT)*vCostHourProdInvCCS.L(runCy,CCS,HOUR,TT));
+VCostHourProdInvDecNoCCS.L(runCy,PGALL,HOUR,TT) = VShareNewTechNoCCS.L(runCy,PGALL,TT)*0.1 +
+         sum(CCS$CCS_NOCCS(CCS,PGALL), VShareNewTechCCS.L(runCy,CCS,TT)*0.1);
 *---
 VNewInvElec.l(runCy,YTIME)=0.1;
 VNewInvElec.FX(runCy,YTIME)$(NOT AN(YTIME))=1;
@@ -88,8 +88,8 @@ VIndxEndogScrap.FX(runCy,PGSCRN,YTIME) = 1;            !! premature replacement 
 VCostPowGenLonNoClimPol.L(runCy,ESET,"2010") = 0;
 VCostPowGenLonNoClimPol.l(runCy,ESET,"%fBaseY%") = 0;
 *---
-vCostPowGenAvgShrt.L(runCy,ESET,"2010") = 0;
-vCostPowGenAvgShrt.L(runCy,ESET,"%fBaseY%") = 0;
+*vCostPowGenAvgShrt.L(runCy,ESET,"2010") = 0;
+*vCostPowGenAvgShrt.L(runCy,ESET,"%fBaseY%") = 0;
 *---
 VCostPowGenLngTechNoCp.L(runCy,PGALL,ESET,"2010") = 0;
 VCostPowGenLngTechNoCp.L(runCy,PGALL,ESET,"%fBaseY%") = 0;
