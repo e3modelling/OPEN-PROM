@@ -416,7 +416,6 @@ VImpNetEneBrnch(allCy,EFS,YTIME)	                       "Net Imports (Mtoe)"
 *' *** Prices Variables
 VPriceElecIndResConsu(allCy,ESET,YTIME)	                   "Electricity price to Industrial and Residential Consumers (US$2015/KWh)"
 VPriceFuelSepCarbonWght(allCy,SBS,EF,YTIME)	               "Fuel prices per subsector and fuel  mutliplied by weights (kUS$2015/toe)"	
-VAvgPowerGenLongTrm(allCy,ESET,YTIME)	                   "Long-term average power generation cost (US$2015/kWh)"	 
 VFuelPriSubNoCarb(allCy,SBS,EF,YTIME)	                   "Fuel prices per subsector and fuel  without carbon value (kUS$2015/toe)"	
 *' *** CO2 SEQUESTRATION COST CURVES VARIABLES
 VCapCO2ElecHydr(allCy,YTIME)	                           "CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
@@ -445,7 +444,7 @@ sGwToTwhPerYear    "convert GW mean power into TWh/y" /8.76/
 s                  "time step iterator" /0/
 sSolverTryMax      "maximum attempts to solve each time step" /%SolverTryMax%/
 sModelStat         "helper parameter for solver status"
-sExogCarbValue	   "switch for exogenous carbon value (0=endogenous 1=exogenous)" /1/
+sExogCarbValue	   "switch for exogenous carbon value (0=endogenous 1=exogenous)" /0/
 iFracElecPriChp    "Fraction of Electricity Price at which a CHP sells electricity to network" /0.3/
 cy                 "country iterator" /0/
 ;
