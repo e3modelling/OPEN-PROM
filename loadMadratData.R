@@ -34,7 +34,7 @@ if (!is.null(DevMode) && DevMode == 0) {
 
 } else if (!is.null(DevMode) && DevMode == 2) {
     print("Getting data for test mode")
-    url <- 'https://drive.usercontent.google.com/u/0/uc?id=1YTO3jaqFbZJ5x_J2JfSsVYljXtHBHk0p&export=download'
+    url <- 'https://drive.google.com/uc?export=download&id=1ssazH3nto87DW8VRsb0DzL9rt3aXOKn-'
     fname <- 'dummy_data.tgz' 
     download.file(url, fname, mode="wb")
 }
