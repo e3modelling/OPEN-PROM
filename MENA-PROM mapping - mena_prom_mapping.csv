@@ -410,7 +410,7 @@ Variable,SHCAPCCS,VShareNewTechCCS,Power plant share in new equipment,"CYall,PGA
 Variable,SHCAPNOCCS,VShareNewTechNoCCS,Power plant share in new equipment,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Parameter,SHIOTH,REMOVED FROM OPEN-PROM,"Share of fuels in transformation input to Gasworks, Blast Furnances, Briquetting plants in base year","CYall,EF","allCy,EF",Supply Side Specific Parameters
 Variable,SHLOAD,VSortPlantDispatch,Power plants sorting according to variable cost to decide the plant dispatching (1),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
-Variable,SHLOADS,VElecPeakLoads,Electricity peak loads (GW),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Variable,SHLOADS,VCostVarTechElecTot,Electricity peak loads (GW),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Variable,SHR,VShareTechNewEquip,Technology share in new equipment (1),"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Parameter,SHRHPELC,iShrHeatPumpElecCons,Share of heat pump electricity consumption in total substitutable electricity (1),"CYall,SBS","allCy,SBS",Common parameters for all Demand Subsectors
 Parameter,SHRNSE,iShrNonSubElecInTotElecDem,Share of non substitutable electricity in total electricity demand per subsector (1),"CYall,SBS","allCy,SBS",Common parameters for all Demand Subsectors
