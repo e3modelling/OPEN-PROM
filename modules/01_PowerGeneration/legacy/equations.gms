@@ -328,10 +328,11 @@ QPotRenMaxAllow(allCy,PGRENEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' The minimum renewable potential for the specified renewable energy form and country in the given year.
 *' The minimum allowed renewable potential is computed as the average between the calculated renewable potential supply curve and the minimum renewable potential.
 *' This formulation ensures that the potential does not fall below the minimum allowed value.
+$ontext
 qPotRenMinAllow(allCy,PGRENEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..  
          vPotRenMinAllow(allCy,PGRENEF,YTIME) =E=
          ( VPotRenSuppCurve(allCy,PGRENEF,YTIME) + iMinRenPotential(allCy,PGRENEF,YTIME))/2;
-
+$offtext
 *' The equation calculates a maturity multiplier for renewable technologies. If the technology is renewable , the multiplier is determined
 *' based on an exponential function that involves the ratio of the planned electricity generation capacities of renewable technologies to the renewable potential
 *' supply curve. This ratio is adjusted using a logistic function with parameters that influence the maturity of renewable technologies. If the technology is not
