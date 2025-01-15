@@ -3,6 +3,3 @@
 
 * Emissions Module
 
-
-* Export model results to GDX file
-*execute_unload "outputData.gdx", ODummyObj, VPriceElecInd, VCapElecTotEst, VPeakLoad, VConsFuel, VCapElec, VProdElec, VBaseLoad;
