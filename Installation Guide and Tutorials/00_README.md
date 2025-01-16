@@ -1,5 +1,13 @@
 Welcome to the OPEN-PROM tutorial!
 
+OPEN-PROM ("open PROMETHEUS") is an energy-economy model currently under development; the present version is based on MENA-EDS ENERGY MODEL v4.0 (c) E3Modelling 2020.
+
+Extensive documentation of the PROMETHEUS model (on which both MENA-EDS and OPEN-PROM are based) can be found here: https://e3modelling.com/modelling-tools/prometheus/
+
+OPEN-PROM is written in GAMS (*G*eneral *A*lgebraic *M*odelling *S*ystem https://gams.com/) and its main file is `main.gms`.
+
+
+
 The contents of the tutorial are listed on the left (in "Tutorials" folder).
 
 Necessary software: GAMS (required); R (required), Git (optional), GAMS Studio/VS Code (optional)
@@ -8,8 +16,8 @@ Model users: Install GAMS and R (if you haven't done so already), add them to yo
 
 Model developers: Install GAMS and R (if you haven't done so already), add them to your PATH variable, and then proceed with Tutorial 00
 
-Regionalization of OPEN-PROM
-Here is the proposed classification of world countries to OPEN-PROM native regions:
+***Regionalization of OPEN-PROM***
+The following section outlines the current regionalization of the OPEN-PROM model.
 
 (Custom native region codes are highlighted - for the rest of the countries their official 3-digit ISO Code will be used).
 Machine-readable mapping is found [here](https://github.com/e3modelling/mrprom/blob/main/inst/extdata/regional/regionmappingOP5.csv)
@@ -68,7 +76,11 @@ Machine-readable mapping is found [here](https://github.com/e3modelling/mrprom/b
 52.	Rest of world `**RWO**`
 53.	Rest of EU27 /ESTONIA, LUXEMBOURG, LITHUANIA, LATVIA/ `**ELL**`
 
+***Overview of the tutorials***
+
 A quick overview of the Tutorials contents:
+
+The first three tutorials are dedicated to installing all the software and libraries necessary for the proper functioning of the model.
 
  - ***01_Git and VS Code Settings:***
 
@@ -80,6 +92,8 @@ A quick overview of the Tutorials contents:
  - ***03_Loading Input Data Files with MrPROM:***
 
     A brief guide about loading real input data files to the OPEN-PROM model using the dedicated tool mrprom developed in R (Mr PROM).
+
+The following set of guides include the first running of the models and further tutorials for setting up the model.
 
 - ***04_First OPEN‐PROM running:***
 
@@ -94,6 +108,8 @@ A quick overview of the Tutorials contents:
 
     Explanatory document about the countries and regions mapping used in the model and guide for change the regionalization (Work in progress)
 
+The following tutorials focus on debugging the model and streamlining your workflow with GAMS, Git, and GitHub. They include an overview of common GAMS error codes and their resolution, troubleshooting steps for Git and Visual Studio Code integration, and an automated approach to managing GitHub issues through code comments.
+
 - ***07_GAMS error codes:***
 
     Contains examples or GAMS errors, as well as a URL redirecting you to the official GAMS error codes documentation.
@@ -105,17 +121,9 @@ A quick overview of the Tutorials contents:
 
     A brief guide about automatically creating new Github issues, by adding a specifically formatted type of comment in your code.
 
-- ***10_Set up Github Actions for GAMS code using GAMS Engine:***
-
-    Basic steps to properly set up Github Actions running GAMS code.
 
 
 
 
 
-OPEN-PROM ("open PROMETHEUS") is an energy-economy model currently under development; the present version is based on MENA-EDS ENERGY MODEL v4.0 (c) E3Modelling 2020.
-
-Extensive documentation of the PROMETHEUS model (on which both MENA-EDS and OPEN-PROM are based) can be found here: https://e3modelling.com/modelling-tools/prometheus/
-
-OPEN-PROM is written in GAMS (*G*eneral *A*lgebraic *M*odelling *S*ystem https://gams.com/) and its main file is `main.gms`.
 
