@@ -114,6 +114,7 @@ A brief description of how to execute OPEN-PROM, including the order of script e
 A guide to the countries and regions mapping used in the model and instructions for changing the regionalization. (Work in progress.)
 
 Tutorials for Debugging and Streamlining Workflow:
+
 - ***07_GAMS error codes:***
 Examples of GAMS errors, with a URL redirecting you to the official GAMS error codes documentation.
 

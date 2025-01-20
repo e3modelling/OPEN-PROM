@@ -1,4 +1,3 @@
-Work in Progress: here it can be included a tutorial about how to change regionalization (if useful)
 Here is the proposed classification of world countries to OPEN-PROM native regions:
 
 (Custom native region codes are highlighted - for the rest of the countries their official 3-digit ISO Code will be used).

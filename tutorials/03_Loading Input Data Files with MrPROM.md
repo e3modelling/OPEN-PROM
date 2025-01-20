@@ -5,8 +5,7 @@ You can move directly to Tutorial named 03_First OPEN-PROM running if you want t
 In this installation guide, you will find a brief guide about loading input data files to the OPEN-PROM model. This is accomplished by utilizing the complementary [`mrprom`](https://github.com/e3modelling/mrprom) R package, that is also developed by E3-Modelling.
 
 ## Installing Necessary Software and Libraries
-Before using the `mrprom` package, you'll need to install a recent version of the R language, available for [download here](https://www.r-project.org/), as well as Rtools (software that allows compilation of R packages from source code), available [here](https://cran.r-project.org/bin/windows/Rtools/). Make sure to install both in folders that do not require admin priviledges! Furthermore, R and Rtools should be added to the PATH variable of your OS, so check the instructions for [Windows](https://www.bbminfo.com/r/r-programming-environment-setup.php) and [Linux](https://www.digitalocean.com/community/tutorials/how-to-view-and-update-the-linux-path-environment-variable), respectively. 
-
+Before using the `mrprom` package, you'll need to install a recent version of the R language, available for [download here](https://www.r-project.org/), as well as Rtools (software that allows compilation of R packages from source code), available [here](https://cran.r-project.org/bin/windows/Rtools/). Make sure to install both in folders that do not require admin priviledges! Furthermore, R and Rtools should be added to the PATH variable of your OS, so check the instructions for [Windows](https://www.bbminfo.com/r/r-programming-environment-setup.php) and [Linux](https://www.digitalocean.com/community/tutorials/how-to-view-and-update-the-linux-path-environment-variable), respectively. Please be sure that the library reticulate is installed in R.
 
 
 After making sure that R is correctly set up on your system, launch the R console and execute the following commands:

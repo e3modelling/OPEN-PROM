@@ -1,7 +1,8 @@
 # Purpose: learning to Run the OPEN-PROM Model with real data
-As it will be mentioned in Tutorial 04, OPEN-PROM utilizes some proprietary data sources that can't be publicly shared.  The following section will guide you through the steps to create a configuration file, adjust the necessary settings, and execute the model using real data. 
+Before starting this tutorial you need to complete first the tutorial 03_Loading Input Data files in order to set the input data for running the models. This guide is needed to run the model with real data. You can move directly to Tutorial named 04_First OPEN-PROM running if you want to test the model with dummy data and come back later here.
 
-The following steps are identical to the ones described in Tutorial 04_First OPEN-PROM running
+# Warning
+The following steps to create the configuration file, adjust the necessary settings, are identical to the ones described in Tutorial 04_First OPEN-PROM running
 
 ## Step 1: Creating a Configuration File
 Customization and flexibility is a priority during the development of OPEN-PROM, so we have included a configuration file that lets users change model settings. To create your own configuration file, please **make a copy** of the `config.template.json` file and rename it to `config.json`. Afterwards, you will be able to configure various settings, such as the custom GAMS system directory. It is not needed to delete the `config.template.json`because it is not read by the model because it is excluded in a specific file.
@@ -30,14 +31,13 @@ this task will run the model in development mode, i.e. using only the regions of
 
 * `OPEN-PROM RESEARCH`: this is identical to the previous task, without utilizing `mrprom` to generate new data. Hence, all necessary datasets for research mode should be available in the `data` folder. Similarly to the previous task, this will also run the `reportOutput.R` script, after the model is executed.
 
-Other functionalitiesuseful in coadiuvating the running of the model in the Task Runner are:
+Other functionalities useful in coadiuvating the running of the model in the Task Runner are:
 
-* `REPORTING`:a tool to report the output of the models
-* `SCENTOOL`:a tool to analyse and validate the model. In particular, scentool() is a function that reads the mif file
-* `COMPARE SCENARIOS`:a tool to compare multiple scenarios obtained with the model
+* `REPORTING`: a tool to report the output of the models
+* `SCENTOOL`: a tool to analyse and validate the model. In particular, scentool() is a function that reads the mif file
+* `COMPARE SCENARIOS`: a tool to compare multiple scenarios obtained with the model
 * `OPEN-PROM LIVE`: a tool to follow live the running of the model
 
-To be sure that the additional functionalities work properly please be sure to have installed the last version of Python and the following libraries: colorama, contourpy, cycler, fonttools, kiwisolver, matplotlib numpy packaging pandas pillow pyparsing python-dateutil pytz seaborn six tzdata
+ Please double check to have installed the last version of Python and the following libraries: colorama, contourpy, cycler, fonttools, kiwisolver, matplotlib numpy packaging pandas pillow pyparsing python-dateutil pytz seaborn six tzdata
 
-# Running and Testing the Model with Dummy Data
-For testing the model with dummy data, please refer to the previous guide named 04_First OPEN-PROM running
+
