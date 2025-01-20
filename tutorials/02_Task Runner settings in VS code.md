@@ -1,4 +1,4 @@
-# Task Runner Tutorial
+## Task Runner Settings in VS code
 
 **Objective:**
 

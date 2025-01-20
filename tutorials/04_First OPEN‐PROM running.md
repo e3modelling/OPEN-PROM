@@ -1,4 +1,6 @@
-# Purpose: learning to Run the OPEN-PROM Model with dummy data
+## First OPEN-PROM run with dummy data
+
+**Objective:**
  OPEN-PROM utilizes some proprietary data sources that can't be publicly shared. To run the OPEN-PROM model for the first time, you can use dummy data to test its functionality and ensure everything is set up correctly. This allows you to familiarize yourself with the model’s structure, configuration, and output without needing access to proprietary data. The following section will guide you through the steps to create a configuration file, adjust the necessary settings, and execute the model using dummy data. This will provide you with a clear understanding of how the model operates and allow you to begin experimenting with its features.
 
 ## 1st step: download the tag version of the model
@@ -10,7 +12,7 @@ Customization and flexibility is a priority during the development of OPEN-PROM,
 ## 3rd step: Creating and Syncing Run Folders in the Configuration File
 Every model run started by the aforementioned tasks, will be saved as a subfolder in the `/runs` folder. In case you want to temporarily disable this feature, you can open the `start.R` script, and set the `withRunFolder` flag equal to `FALSE`. Additionally, if you are part of E3Modelling, every individual model run stored in `/runs` will also be synced with the company cloud storage (SharePoint). You can specify the SharePoint path of your preference in the `"model_runs_path"` parameter of the configuration file. Finally, in case you want to disable this feature, you can set the `withSync` flag equal to `FALSE`.
 
-## 4rd step: Setting a Custom GAMS Path
+## 4th step: Setting a Custom GAMS Path
 In some cases, it is beneficial to install multiple versions of GAMS, for testing and debugging purposes. For example, you can execute the model with both GAMS version 45 and 46, and compare the results. To specify the GAMS version that is used while executing the model, you can add the associated directory path to the `"gams_path"` parameter of the configuration file. To avoid errors, please remember to include a trailing slash, e.g. `C:\GAMS\45\`.
 
 ## 5th step: Setting a Custom Scenario Name
