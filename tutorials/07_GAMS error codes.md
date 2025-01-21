@@ -1,4 +1,4 @@
-# GAMS Troubleshooting Guide (Debugging a GAMS Run)
+## GAMS Errors (Debugging a GAMS Run)
 
 **Objective:**
 

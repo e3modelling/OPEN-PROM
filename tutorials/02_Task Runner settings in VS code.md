@@ -1,11 +1,13 @@
-# Task Runner Tutorial
+## Task Runner Settings in VS code
+
+This guide is designed for advanced users, though the model can still be utilized without Git or Visual Studio Code.
 
 **Objective:**
 
-Learn how to install the Task Runner extension in VS Code. This allows to quickly execute tasks by creating and using buttons similar to the ones found in other programs (e.g. GAMS Studio). These buttons can streamline your workflow, whether for development or research, by automating tasks. You'll also learn about development and research modes, and their computational requirements.
+Learn how to install the Task Runner extension in VS Code. This allows to quickly execute tasks by creating and using buttons similar to the ones found in other programs (e.g. GAMS Studio). These buttons can streamline your workflow, whether for development or research, by automating tasks. You'll also learn about development and research modes, and their computational requirements. 
 
-**Warning:**
-It is recommended to follow this tutorial after completing Tutorial 00 and having cloned the repository, and added all necessary extensions.
+**Note:**
+It is recommended to follow this tutorial after completing Tutorial 01 and having cloned the repository, and added all necessary extensions.
 
 ## Step-by-Step Guide
 

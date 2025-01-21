@@ -1,3 +1,7 @@
+##  Creating new issues from comments coding etiquette
+
+**Objective:** 
+
 In this tutorial, you can find instructions about automatically creating new issues, by adding a specifically formatted type of comment on your code. This helps us streamline our workflow, and keep track of bugs and other problems. Let's check a simple example, that will help us understand this easily:
 
 ```

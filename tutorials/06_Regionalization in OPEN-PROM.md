@@ -1,6 +1,8 @@
+## Regionalization in OPEN-PROM
+
 Here is the proposed classification of world countries to OPEN-PROM native regions:
 
-(Custom native region codes are highlighted - for the rest of the countries their official 3-digit ISO Code will be used).
+Custom native region codes are highlighted - for the rest of the countries their official 3-digit ISO Code will be used.
 Machine-readable mapping is found [here](https://github.com/e3modelling/mrprom/blob/main/inst/extdata/regional/regionmappingOP5.csv)
 
 1.	Austria
