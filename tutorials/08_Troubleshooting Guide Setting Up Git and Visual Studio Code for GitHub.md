@@ -4,7 +4,7 @@
 
 Encountering issues during the setup process of Git and Visual Studio Code for GitHub is common. Follow these simple steps to troubleshoot and resolve common problems.
 
-**Warning:**
+**Note:**
 It is recommended to follow the tutorial 07_GAMS error codes for errors relating to running the GAMS model.
 
 ## Issue 1: Git Installation Failure

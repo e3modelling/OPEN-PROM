@@ -1,4 +1,4 @@
-##  Creating new issues from code comments
+##  Creating new issues from comments coding etiquette
 
 **Objective:** 
 

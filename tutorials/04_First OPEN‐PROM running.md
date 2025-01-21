@@ -3,7 +3,7 @@
 **Objective:**
  OPEN-PROM utilizes some proprietary data sources that can't be publicly shared. To run the OPEN-PROM model for the first time, you can use dummy data to test its functionality and ensure everything is set up correctly. This allows you to familiarize yourself with the model’s structure, configuration, and output without needing access to proprietary data. The following section will guide you through the steps to create a configuration file, adjust the necessary settings, and execute the model using dummy data. This will provide you with a clear understanding of how the model operates and allow you to begin experimenting with its features.
 
-## 1nd step: Creating a Configuration File
+## 1st step: Creating a Configuration File
 Customization and flexibility is a priority during the development of OPEN-PROM, so we have included a configuration file that lets users change model settings. To create your own configuration file, please **make a copy** of the `config.template.json` file and rename it to `config.json`. Afterwards, you will be able to configure various settings, such as the custom GAMS system directory. 
 
 ## 2nd step: Creating and Syncing Run Folders in the Configuration File

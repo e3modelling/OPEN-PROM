@@ -1,4 +1,4 @@
-# A Comprehensive Guide to the OPEN-PROM Modular Model
+## A Comprehensive Guide to the OPEN-PROM Modular Model
 
 This tutorial provides a detailed walkthrough of the **OPEN-PROM model**, an open-source version of the PROMETHEUS world energy model developed by E3-Modelling. By following this guide, users will understand the structure, functionality, and operation of the model, enabling them to explore energy scenarios and contribute to its development.
 
