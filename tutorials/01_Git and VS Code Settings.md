@@ -1,6 +1,6 @@
 ## Setting Up Git and VS Code for GitHub: A Step-by-Step Guide
 
-This guide is designed for advanced use, though the model can still be utilized without Git or Visual Studio Code.
+This guide is designed for advanced users, though the model can still be utilized without Git or Visual Studio Code.
 
 **Objective:**
 
@@ -15,7 +15,6 @@ Before diving into the setup process, let's clarify some key terms you'll encoun
 
 - **Git:**
 Git is a distributed version control system that allows multiple developers to collaborate on projects efficiently. It tracks changes to files, maintains a history of revisions, and facilitates collaboration through features like branching and merging.
-bla bla
 
 - **GitHub:**
 GitHub is a web-based platform built on top of Git, providing hosting for software development projects. It offers features such as repository hosting, code review, issue tracking, and project management. GitHub is widely used by developers and organizations for open-source and private projects alike.
