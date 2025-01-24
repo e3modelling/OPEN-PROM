@@ -572,6 +572,12 @@ VMEPcNonGdp.L(runCy,YTIME)$(An(YTIME))
 iTransChar(runCy,"RES_MEXTF",YTIME) * iSigma(runCy,"S1") * EXP(iSigma(runCy,"S2") * EXP(iSigma(runCy,"S3") * VPcOwnPcLevl.L(runCy,YTIME))) *
 VStockPcYearly.L(runCy,YTIME-1) / (iPop(YTIME-1,runCy) * 1000);
 
+*QMEPcGdp
+VMEPcGdp.L(runCy,YTIME)$(An(YTIME))
+        =
+iTransChar(runCy,"RES_MEXTV",YTIME) * VMEPcGdp.L(runCy,YTIME-1) *
+[(iGDP(YTIME,runCy)/iPop(YTIME,runCy)) / (iGDP(YTIME-1,runCy)/iPop(YTIME-1,runCy))] ** iElastA(runCy,"PC","a",YTIME);
+
 *QStockPcYearly
 VStockPcYearly.L(runCy,YTIME)$(An(YTIME))
         =
@@ -635,8 +641,8 @@ prod(kpdl,
 )$(NOT (sameas(TRANSE,"PC") or sameas(TRANSE,"PA")));         
 
 *QActivGoodsTransp
-    VActivGoodsTransp.L(runCy,TRANG,YTIME)$(An(YTIME)$(sameas(TRANG,"GU")))
-            =
+VActivGoodsTransp.L(runCy,TRANG,YTIME)$(An(YTIME)$(sameas(TRANG,"GU")))
+        =
     (
     VActivGoodsTransp.L(runCy,TRANG,YTIME-1)
     * [(iGDP(YTIME,runCy)/iPop(YTIME,runCy))/(iGDP(YTIME-1,runCy)/iPop(YTIME-1,runCy))]**iElastA(runCy,TRANG,"a",YTIME)
@@ -647,10 +653,11 @@ prod(kpdl,
             [(VPriceFuelAvgSub.L(runCy,TRANG,YTIME-ord(kpdl))/
             VPriceFuelAvgSub.L(runCy,TRANG,YTIME-(ord(kpdl)+1)))/
             (iCGI(runCy,YTIME)**(1/6))]**(iElastA(runCy,TRANG,"c3",YTIME)*iFPDL(TRANG,KPDL))
-            )
+        )
     );        !!trucks
-        VActivGoodsTransp.L(runCy,TRANG,YTIME)$(An(YTIME)$(not sameas(TRANG,"GU")))
-            =
+
+VActivGoodsTransp.L(runCy,TRANG,YTIME)$(An(YTIME)$(not sameas(TRANG,"GU")))
+        =
     (
     VActivGoodsTransp.L(runCy,TRANG,YTIME-1)
     * [(iGDP(YTIME,runCy)/iPop(YTIME,runCy))/(iGDP(YTIME-1,runCy)/iPop(YTIME-1,runCy))]**iElastA(runCy,TRANG,"a",YTIME)
@@ -660,11 +667,9 @@ prod(kpdl,
             [(VPriceFuelAvgSub.L(runCy,TRANG,YTIME-ord(kpdl))/
             VPriceFuelAvgSub.L(runCy,TRANG,YTIME-(ord(kpdl)+1)))/
             (iCGI(runCy,YTIME)**(1/6))]**(iElastA(runCy,TRANG,"c3",YTIME)*iFPDL(TRANG,KPDL))
-            )
+        )  
     * (VActivGoodsTransp.L(runCy,"GU",YTIME)/VActivGoodsTransp.L(runCy,"GU",YTIME-1))**iElastA(runCy,TRANG,"c4",YTIME)
     );                      !!other freight transport 
-
-
 
 *QGapTranspActiv
 VGapTranspActiv.L(runCy,TRANSE,YTIME)$(An(YTIME))
@@ -780,6 +785,10 @@ VDemFinEneTranspPerFuel.L(runCy,TRANSE,EF,YTIME)$(An(YTIME))
         =
 sum((TTECH)$(SECTTECH(TRANSE,TTECH) $TTECHtoEF(TTECH,EF) ), VConsTechTranspSectoral.L(runCy,TRANSE,TTECH,EF,YTIME)); 
 
+*qDemFinEneSubTransp
+vDemFinEneSubTransp.L(runCy,TRANSE,YTIME)$(An(YTIME))
+                 =
+         sum(EF,VDemFinEneTranspPerFuel.L(runCy,TRANSE,EF,YTIME));
 
 *QConsElecNonSubIndTert
     VConsElecNonSubIndTert.L(runCy,INDDOM,YTIME)$(An(YTIME))
@@ -1151,6 +1160,11 @@ VShareNewTechCCS.L(runCy,PGALL,YTIME)$(An(YTIME)) =
 + sum(PGALL2$CCS_NOCCS(PGALL,PGALL2),VCostProdSpecTech.L(runCy,PGALL2,YTIME))
 );
 
+*QShareNewTechNoCCS (wrong place!!!!!!)
+VShareNewTechNoCCS.L(runCy,PGALL,YTIME)$(An(YTIME)) 
+=
+1 - sum(CCS$CCS_NOCCS(CCS,PGALL), VShareNewTechCCS.L(runCy,CCS,YTIME));
+
 *QCostHourProdInvDecNoCCS
 VCostHourProdInvDecNoCCS.L(runCy,PGALL,HOUR,YTIME)$(An(YTIME)) =
 VShareNewTechNoCCS.L(runCy,PGALL,YTIME)*VCostHourProdInvDec.L(runCy,PGALL,HOUR,YTIME)+
@@ -1216,6 +1230,11 @@ sum(PGALL, (iPlantDecomSched(runCy,PGALL,YTIME)-iDecInvPlantSched(runCy,PGALL,YT
 + Sum(PGALL$PGSCRN(PGALL), (VCapElec.L(runCy,PGALL,YTIME-1)-iPlantDecomSched(runCy,PGALL,YTIME))/
 iTechLftPlaType(runCy,PGALL))
 ) -0) + SQR(1e-10) ) )/2;
+
+*QPotRenSuppCurve (wrong place!!!!!!)
+VPotRenSuppCurve.L(runCy,PGRENEF,YTIME)$(An(YTIME)) =
+iMinRenPotential(runCy,PGRENEF,YTIME) +(VCarVal.L(runCy,"Trade",YTIME))/(70)*
+(iMaxRenPotential(runCy,PGRENEF,YTIME)-iMinRenPotential(runCy,PGRENEF,YTIME));
 
 *QPotRenMaxAllow
 VPotRenMaxAllow.L(runCy,PGRENEF,YTIME)$(An(YTIME)) =
@@ -1465,17 +1484,7 @@ VConsGrssInl.L(runCy,EFS,YTIME)$(An(YTIME))
 VConsFinEneCountry.L(runCy,EFS,YTIME) + VConsFiEneSec.L(runCy,EFS,YTIME) + VConsFinNonEne.L(runCy,EFS,YTIME) + VInpTotTransf.L(runCy,EFS,YTIME) - VOutTotTransf.L(runCy,EFS,YTIME) +
 VLossesDistr.L(runCy,EFS,YTIME) - VTransfers.L(runCy,EFS,YTIME); 
 
-*QShareNewTechNoCCS
-VShareNewTechNoCCS.L(runCy,PGALL,YTIME)$(An(YTIME)) 
-=
-1 - sum(CCS$CCS_NOCCS(CCS,PGALL), VShareNewTechCCS.L(runCy,CCS,YTIME));
 
-
-
-*QPotRenSuppCurve
-VPotRenSuppCurve.L(runCy,PGRENEF,YTIME)$(An(YTIME)) =
-iMinRenPotential(runCy,PGRENEF,YTIME) +(VCarVal.L(runCy,"Trade",YTIME))/(70)*
-(iMaxRenPotential(runCy,PGRENEF,YTIME)-iMinRenPotential(runCy,PGRENEF,YTIME));
 
 
 
@@ -1564,22 +1573,10 @@ VPriceElecIndResNoCliPol.L(runCy,ESET,YTIME)$(An(YTIME))
     )$RSET(ESET)
 );
 
-*QMEPcGdp
-VMEPcGdp.L(runCy,YTIME)$(An(YTIME))
-        =
-iTransChar(runCy,"RES_MEXTV",YTIME) * VMEPcGdp.L(runCy,YTIME-1) *
-[(iGDP(YTIME,runCy)/iPop(YTIME,runCy)) / (iGDP(YTIME-1,runCy)/iPop(YTIME-1,runCy))] ** iElastA(runCy,"PC","a",YTIME);
-
-
-
-
-
-       
-      
-
-
-
-
+*QImpNetEneBrnch
+VImpNetEneBrnch.L(runCy,EFS,YTIME)$(An(YTIME))
+                 =
+VImp.L(runCy,EFS,YTIME) - VExp.L(runCy,EFS,YTIME);
 
 *QCapCO2ElecHydr
 VCapCO2ElecHydr.L(runCy,YTIME)$(An(YTIME))
