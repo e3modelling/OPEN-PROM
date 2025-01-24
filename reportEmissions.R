@@ -157,6 +157,18 @@ reportEmissions <- function(regs) {
   # write data in mif file
   write.report(sum_Bunkers[,,],file="reporting.mif",model="OPEN-PROM",unit = "Mt CO2/yr",append=TRUE,scenario=scenario_name)
   
+  # Emissions|CO2|Energy|Demand
+  # Emissions|CO2|Energy|Demand|Bunkers, sum_Bunkers
+  # Emissions|CO2|Energy|Demand|Transportation, sum_TRANSE
+  # Emissions|CO2|Energy|Demand|Residential and Commercial, sum_DOMSE
+  # Emissions|CO2|Energy|Demand|Industry, sum_INDSE
+  sum_Demand <- sum_Bunkers + sum_TRANSE + sum_DOMSE + sum_INDSE
+  
+  getItems(sum_Demand, 3) <- "Emissions|CO2|Energy|Demand"
+  
+  # write data in mif file
+  write.report(sum_Demand[,,],file="reporting.mif",model="OPEN-PROM",unit = "Mt CO2/yr",append=TRUE,scenario=scenario_name)
+  
   # Emissions|CO2|Energy|Supply
   # input to power generation sector, sum2
   # input to district heating plants, sum3
@@ -168,6 +180,17 @@ reportEmissions <- function(regs) {
 
   # write data in mif file
   write.report(sum_Supply[,,],file="reporting.mif",model="OPEN-PROM",unit = "Mt CO2/yr",append=TRUE,scenario=scenario_name)
+  
+  # Emissions|CO2|Energy
+  # Emissions|CO2|Energy|Demand, sum_Demand
+  # Emissions|CO2|Energy|Supply, sum_Supply
+  
+  sum_Energy <- sum_Demand + sum_Supply
+  
+  getItems(sum_Energy, 3) <- "Emissions|CO2|Energy"
+  
+  # write data in mif file
+  write.report(sum_Energy[,,],file="reporting.mif",model="OPEN-PROM",unit = "Mt CO2/yr",append=TRUE,scenario=scenario_name)
   
   # Emissions|CO2|Cumulated
   
