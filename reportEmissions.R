@@ -181,6 +181,17 @@ reportEmissions <- function(regs) {
   # write data in mif file
   write.report(sum_Supply[,,],file="reporting.mif",model="OPEN-PROM",unit = "Mt CO2/yr",append=TRUE,scenario=scenario_name)
   
+  # Emissions|CO2|Energy
+  # Emissions|CO2|Energy|Demand, sum_Demand
+  # Emissions|CO2|Energy|Supply, sum_Supply
+  
+  sum_Energy <- sum_Demand + sum_Supply
+  
+  getItems(sum_Energy, 3) <- "Emissions|CO2|Energy"
+  
+  # write data in mif file
+  write.report(sum_Energy[,,],file="reporting.mif",model="OPEN-PROM",unit = "Mt CO2/yr",append=TRUE,scenario=scenario_name)
+  
   # Emissions|CO2|Cumulated
   
   Cumulated <- as.quitte(total_CO2)
