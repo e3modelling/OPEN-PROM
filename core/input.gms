@@ -980,6 +980,13 @@ $offdelim
 ;
 
 iMatFacPlaAvailCap(runCy,CCS,YTIME)$an(YTIME)  =0;
+
+table iMatureFacPlaDisp(allCy,PGALL,YTIME)	 "Maturity factor related to plant dispatching (1)"
+$ondelim
+$include"./iMatureFacPlaDisp.csv"
+$offdelim
+;
+
 parameter
 iDataMatureFacPlaDisp(PGALL) /
 *CTHLGN	20.00000,
@@ -1027,6 +1034,7 @@ PGACGSL	20.00000,
 PGACGS	20.00000,
 PGAGGS	20.00000,
 PGAWNO	0.60000000/;
+
 iMatureFacPlaDisp(runCy,PGALL,YTIME)$an(YTIME) = iDataMatureFacPlaDisp(PGALL);
 
 iCO2CaptRate(runCy,PGALL,YTIME) = 0; 
