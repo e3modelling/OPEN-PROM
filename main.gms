@@ -103,7 +103,7 @@ $setGlobal DevMode 0 !! can be overwritten if VS Code Tasks are used
 $setGlobal WriteGDX on
 $setEnv GDXCOMPRESS 1
 *' *** Generate input data?
-$setGlobal GenerateInput on !! can be overwritten if VS Code Tasks are used
+$setGlobal GenerateInput off !! can be overwritten if VS Code Tasks are used
 
 $setGlobal fCountries 'MAR,IND,USA,EGY,RWO' !! can be overwritten if VS Code Tasks are used
 
@@ -127,15 +127,46 @@ $elseif.loadData %DevMode% == 1 $call "RScript ./loadMadratData.R DevMode=1"
 $elseif.loadData %DevMode% == 2 $call "RScript ./loadMadratData.R DevMode=2"
 $endif.loadData
 $endif.genInp
+
 * Open file to write txt
 file fStat /'modelstat.txt'/; 
 fStat.ap = 1; 
 
-$include sets.gms
-$include declarations.gms
-$include input.gms
-$include equations.gms
-$include preloop.gms
-$include presolve.gms
-$include solve.gms
-$include postsolve.gms
+**MODULE REALIZATIONS SWITCHES**
+$setGlobal PowerGeneration legacy
+$setGlobal Transport legacy
+$setGlobal Industry legacy
+$setGlobal RestOfEnergy legacy
+$setGlobal CO2 legacy
+$setGlobal Emissions legacy
+$setGlobal Prices legacy
+
+** CORE MODEL FILES **
+*' SETS
+$include "./core/sets.gms";
+
+*' DECLARATIONS
+$include    "./core/declarations.gms";
+$batinclude "./modules/include.gms"    declarations
+
+*' INPUTS
+$include "./core/input.gms";
+
+*' EQUATIONS
+$include    "./core/equations.gms";
+$batinclude "./modules/include.gms"    equations
+
+*' PRELOOP
+$include    "./core/preloop.gms";
+$batinclude "./modules/include.gms"    preloop
+
+**$include presolve.gms
+
+*' SOLVE
+$include    "./core/solve.gms";
+
+*' POSTSOLVE
+$batinclude "./modules/include.gms"    postsolve
+
+*' POSTSOLVE CORE
+$include    "./core/postsolve.gms";

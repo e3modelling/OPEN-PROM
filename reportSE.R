@@ -23,6 +23,12 @@ reportSE <- function(regs) {
   PGALLtoEF$EF <- gsub("SOL", "Solar", PGALLtoEF$EF)
   PGALLtoEF$EF <- gsub("GEO", "Geothermal", PGALLtoEF$EF)
   
+  VProdElec_without_aggr <- VProdElec
+  getItems(VProdElec_without_aggr, 3) <- paste0("Secondary Energy|Electricity|", getItems(VProdElec_without_aggr, 3))
+  
+  # write data in mif file
+  write.report(VProdElec_without_aggr[,,],file="reporting.mif",model="OPEN-PROM",append=TRUE,unit="TWh",scenario=scenario_name)
+  
   VProdElec_LGN <- VProdElec
   # aggregate to reporting fuel categories
   VProdElec <- toolAggregate(VProdElec[,,PGALLtoEF[["PGALL"]]], dim = 3,rel = PGALLtoEF,from = "PGALL", to = "EF")
