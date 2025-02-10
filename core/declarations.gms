@@ -58,7 +58,7 @@ iAvgVehCapLoadFac(allCy,TRANSE,TRANSUSE,YTIME)	           "Average capacity/vehi
 iUtilRateChpPlants(allCy,CHP,YTIME)	                       "Utilisation rate of CHP Plants (1)"	
 iHydrogenPri(allCy,SBS,YTIME)	                           "Total Hydrogen Cost Per Sector (US$2015/toe)"
 iTechLft(allCy,SBS,EF,YTIME)	                           "Technical Lifetime. For passenger cars it is a variable (1)"
-iSpeFuelConsCostBy(allCy,SBS,TTECH,EF)	                   "Specific fuel consumption cost in Base year (ktoe/Gpkm or ktoe/Gtkm or ktoe/Gvkm)"	
+iSpeFuelConsCostBy(allCy,SBS,TTECH,EF,YTIME)	           "Specific fuel consumption cost in Base year (ktoe/Gpkm or ktoe/Gtkm or ktoe/Gvkm)"	
 iShrNonSubElecInTotElecDem(allCy,SBS)	                   "Share of non substitutable electricity in total electricity demand per subsector (1)"
 iElecIndex(allCy,YTIME)	                                   "Electricity Index (1)"	
 iExogDemOfBiomass(allCy,SBS,YTIME)	                       "Demand of tranditional biomass defined exogenously ()"	
