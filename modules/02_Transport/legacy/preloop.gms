@@ -65,3 +65,5 @@ QTechSortVarCost.scale(runCy,TRANSE,Rcon,YTIME)=VTechSortVarCost.scale(runCy,TRA
 VShareTechTr.scale(runCy,TRANSE,EF2,YTIME)=1e-6;
 QShareTechTr.scale(runCy,TRANSE,EF2,YTIME)=VShareTechTr.scale(runCy,TRANSE,EF2,YTIME);
 *---
+VCostTranspPerVeh.scale(runCy,TRANSE,RCon,TTECH,YTIME)=1e-12;
+QCostTranspPerVeh.scale(runCy,TRANSE,RCon,TTECH,YTIME)=VCostTranspPerVeh.scale(runCy,TRANSE,RCon,TTECH,YTIME);

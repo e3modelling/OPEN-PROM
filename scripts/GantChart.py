@@ -4,14 +4,14 @@ import matplotlib.dates as mdates
 
 # Sample data
 events = [
-    ("Modularization", "M35", "M43"),
+    ("Modularization", "M19", "M27"),
     ("Scenario/sensitivity/uncertainty analyses", "M35", "M43"),
     ("Soft-coupling with other models (WP4)", "M10", "M43"),
-    ("Output Routines/Dashboards", "M15", "M20"),
-    ("Validation against AR6", "M22", "M27"),
+    ("Output Routines/Dashboards", "M28", "M35"),
+    ("Validation against AR6", "M27", "M34"),
     ("Policy Scenarios", "M18", "M23"),
-    ("Validate Reference Scenario", "M17", "M18"),
-    ("Hindcasting", "M17", "M18"),
+    ("Validate Reference Scenario", "M37", "M38"),
+    ("Hindcasting", "M37", "M38"),
     ("Calibration", "M13", "M16"),
     ("Extend Time Horizon to 2100", "M6", "M14"),
     ("Input Data Generation", "M5", "M43"),
@@ -45,7 +45,7 @@ for idx, (event, start, end) in enumerate(zip(events, start_dates, end_dates)):
     ax.barh(idx, (end - start).days, left=start, height=0.6, label=event[0], align='center')
 
 # Add a vertical line for the present time at month 24
-present_time = month_to_date(24)
+present_time = month_to_date(29)
 ax.axvline(x=present_time, color='black', linestyle='--', linewidth=1.5, label='Present Time (M24)')
 
 # Customize the appearance

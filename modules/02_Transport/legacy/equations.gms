@@ -115,7 +115,7 @@ QCostTranspPerMeanConsSize(allCy,TRANSE,RCon,TTECH,YTIME)$(TIME(YTIME) $SECTTECH
 QCostTranspPerVeh(allCy,TRANSE,rCon,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $(ord(rCon) le iNcon(TRANSE)+1) $runCy(allCy))..
          VCostTranspPerVeh(allCy,TRANSE,rCon,TTECH,YTIME)
          =E=
-         VCostTranspPerMeanConsSize(allCy,TRANSE,rCon,TTECH,YTIME)**(-4);
+         VCostTranspPerMeanConsSize(allCy,TRANSE,rCon,TTECH,YTIME)**(-1);
 
 *' This equation calculates the transportation cost, including the maturity factor. It involves multiplying the maturity factor for a specific technology
 *' and subsector by the transportation cost per vehicle for the mean and consumer size. The result is a variable representing the transportation cost,
