@@ -134,12 +134,12 @@ fStat.ap = 1;
 
 **MODULE REALIZATIONS SWITCHES**
 $setGlobal PowerGeneration legacy
-$setGlobal Transport legacy
-$setGlobal Industry legacy
-$setGlobal RestOfEnergy legacy
-$setGlobal CO2 legacy
-$setGlobal Emissions legacy
-$setGlobal Prices legacy
+$setGlobal Transport       legacy
+$setGlobal Industry        legacy
+$setGlobal RestOfEnergy    legacy
+$setGlobal CO2             legacy
+$setGlobal Emissions       legacy
+$setGlobal Prices          legacy
 
 ** CORE MODEL FILES **
 *' SETS
