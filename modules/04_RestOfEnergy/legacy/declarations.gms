@@ -19,6 +19,7 @@ QConsGrssInl(allCy,EFS,YTIME)	                           "Compute gross inland c
 QProdPrimary(allCy,EFS,YTIME)	                           "Compute primary production"
 QExp(allCy,EFS,YTIME)	                                   "Compute fake exports"
 QImp(allCy,EFS,YTIME)	                                   "Compute fake imports"
+QConsElec(allCy,DSBS,YTIME)                                "Compute electricity consumption per final demand sector"
 ;
 
 Variables
@@ -39,4 +40,5 @@ VConsGrssInl(allCy,EFS,YTIME)	                           "Gross Inland Consumpti
 VProdPrimary(allCy,EFS,YTIME)	                           "Primary Production (Mtoe)"
 VExp(allCy,EFS,YTIME)                        	           "Exports fake (Mtoe)"
 VImp(allCy,EFS,YTIME)             	                       "Fake Imports for all fuels except natural gas (Mtoe)"
+VConsElec(allCy,DSBS,YTIME)                                "Electricity demand per final sector (Mtoe)"
 ;

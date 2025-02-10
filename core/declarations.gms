@@ -125,11 +125,6 @@ QProdElecCHP(allCy,CHP,YTIME)	                           "Compute electricity pr
 QProdElecReqTot(allCy,YTIME)                               "Compute total required electricity production"
 QCostPowGenAvgLng(allCy,ESET,YTIME)	                       "Compute long term power generation cost"
 
-*' * Transport *
-QDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)	           "Compute final energy demand in transport per fuel"
-QConsElec(allCy,DSBS,YTIME)                                "Compute electricity consumption per final demand sector"
-QLft(allCy,DSBS,EF,YTIME)	                               "Compute the lifetime of passenger cars" 
-
 *' * INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES *
 QConsFuel(allCy,DSBS,EF,YTIME)                             "Compute fuel consumption"
 QConsElecNonSubIndTert(allCy,INDDOM,YTIME)	               "Compute non-substituable electricity consumption in Industry and Tertiary"
@@ -152,14 +147,6 @@ QConsFinEneCountry(allCy,EFS,YTIME)                        "Compute total final 
 QConsFinNonEne(allCy,EFS,YTIME)                            "Compute final non-energy consumption"
 QLossesDistr(allCy,EFS,YTIME)                              "Compute distribution losses"
 
-*' * Prices *
-QPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)                 "Compute fuel prices per subsector and fuel, separate carbon value in each sector"
-QPriceElecIndResConsu(allCy,ESET,YTIME)                    "Compute electricity price in Industrial and Residential Consumers"
-QPriceFuelAvgSub(allCy,DSBS,YTIME)	                       "Compute average fuel price per subsector" 	
-
-*' *** CO2 SEQUESTRATION COST CURVES EQUATIONS
-QCstCO2SeqCsts(allCy,YTIME)	                               "Compute cost curve for CO2 sequestration costs" 
-
 *' *** Miscellaneous
 *qDummyObj                                                  "Define dummy objective function"
 
@@ -177,11 +164,6 @@ VProdElec(allCy,PGALL,YTIME)                               "Electricity producti
 VProdElecCHP(allCy,CHP,YTIME)	                           "CHP electricity production (TWh)"
 VProdElecReqTot(allCy,YTIME)	                           "Total required electricity production (TWh)"
 VCostPowGenAvgLng(allCy,ESET,YTIME)	                       "Long-term average power generation cost (US$2015/kWh)"
-
-*' * Transport *
-VDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)             "Final energy demand in transport subsectors per fuel (Mtoe)"
-VConsElec(allCy,DSBS,YTIME)                                "Electricity demand per final sector (Mtoe)"
-VLft(allCy,DSBS,EF,YTIME)                                  "Lifetime of technologies (years)"
 
 *' * INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES *
 VConsFuel(allCy,DSBS,EF,YTIME)                             "Consumption of fuels in each demand subsector, excluding heat from heatpumps (Mtoe)"
@@ -204,14 +186,6 @@ VTransfInputDHPlants(allCy,EFS,YTIME)                      "Transformation input
 VConsFinEneCountry(allCy,EF,YTIME)                         "Total final energy consumnption (Mtoe)"
 VConsFinNonEne(allCy,EFS,YTIME)                            "Final non energy consumption (Mtoe)"
 VLossesDistr(allCy,EFS,YTIME)                              "Distribution losses (Mtoe)"
-
-*' * Prices *
-VPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)                 "Fuel prices per subsector and fuel (k$2015/toe)"
-VPriceElecIndResConsu(allCy,ESET,YTIME)	                   "Electricity price to Industrial and Residential Consumers (US$2015/KWh)"
-VPriceFuelAvgSub(allCy,DSBS,YTIME)                         "Average fuel prices per subsector (k$2015/toe)"
-
-*' *** CO2 SEQUESTRATION COST CURVES VARIABLES
-VCstCO2SeqCsts(allCy,YTIME)	                               "Cost curve for CO2 sequestration costs (US$2015/tn of CO2 sequestrated)"
 
 *' *** Miscellaneous
 *vDummyObj                                                  "Dummy maximisation variable (1)"
