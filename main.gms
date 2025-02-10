@@ -132,7 +132,7 @@ $endif.genInp
 file fStat /'modelstat.txt'/; 
 fStat.ap = 1; 
 
-**MODULE REALIZATIONS SWITCHES**
+**MODULE REALIZATION SWITCHES**
 $setGlobal PowerGeneration legacy
 $setGlobal Transport       legacy
 $setGlobal Industry        legacy
@@ -160,7 +160,12 @@ $batinclude "./modules/include.gms"    equations
 $include    "./core/preloop.gms";
 $batinclude "./modules/include.gms"    preloop
 
-**$include presolve.gms
+*' LOOP
+$include    "./core/loop.gms";
+
+*' PRESOLVE
+$include    "./core/presolve.gms";
+$batinclude "./modules/include.gms"    presolve
 
 *' SOLVE
 $include    "./core/solve.gms";

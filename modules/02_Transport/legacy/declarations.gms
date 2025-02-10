@@ -12,7 +12,7 @@ QCostTranspMatFac(allCy,TRANSE,RCon,TTECH,YTIME)	       "Compute transportation 
 QTechSortVarCost(allCy,TRANSE,Rcon,YTIME)	               "Compute technology sorting based on variable cost"
 QShareTechTr(allCy,TRANSE,EF,YTIME)	                       "Compute technology sorting based on variable cost and new equipment"
 QConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)	   "Compute consumption of each technology in transport sectors"
-*qDemFinEneSubTransp(allCy,TRANSE,YTIME)	                   "Compute final energy demand in transport"
+*qDemFinEneSubTransp(allCy,TRANSE,YTIME)	               "Compute final energy demand in transport"
 QMEPcGdp(allCy,YTIME)                                      "Compute passenger cars market extension (GDP dependent)"
 QMEPcNonGdp(allCy,YTIME)                                   "Compute passenger cars market extension (GDP independent)"
 QStockPcYearly(allCy,YTIME)                                "Compute stock of passenger cars (in million vehicles)"

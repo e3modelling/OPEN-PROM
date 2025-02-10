@@ -4,6 +4,7 @@
 $Ifi "%phase%" == "declarations" $include "./modules/01_PowerGeneration/legacy/declarations.gms"
 $Ifi "%phase%" == "equations"    $include "./modules/01_PowerGeneration/legacy/equations.gms"
 $Ifi "%phase%" == "preloop"      $include "./modules/01_PowerGeneration/legacy/preloop.gms"
+$Ifi "%phase%" == "presolve"     $include "./modules/01_PowerGeneration/legacy/presolve.gms"
 $Ifi "%phase%" == "postsolve"    $include "./modules/01_PowerGeneration/legacy/postsolve.gms"
 *######################## R SECTION END (PHASES) ###############################
 

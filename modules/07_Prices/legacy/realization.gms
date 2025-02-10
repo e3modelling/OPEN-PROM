@@ -4,6 +4,7 @@
 $Ifi "%phase%" == "declarations" $include "./modules/07_Prices/legacy/declarations.gms"
 $Ifi "%phase%" == "equations"    $include "./modules/07_Prices/legacy/equations.gms"
 $Ifi "%phase%" == "preloop"      $include "./modules/07_Prices/legacy/preloop.gms"
+$Ifi "%phase%" == "presolve"     $include "./modules/07_Prices/legacy/presolve.gms"
 $Ifi "%phase%" == "postsolve"    $include "./modules/07_Prices/legacy/postsolve.gms"
 *######################## R SECTION END (PHASES) ###############################
 
