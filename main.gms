@@ -136,5 +136,6 @@ $include declarations.gms
 $include input.gms
 $include equations.gms
 $include preloop.gms
+$include presolve.gms
 $include solve.gms
 $include postsolve.gms

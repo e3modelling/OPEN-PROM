@@ -108,6 +108,7 @@ iPassCarsMarkSat(runCy) = iDataPassCars(runCy,"PC","SAT");
 iGdpPassCarsMarkExt(runCy) = iDataPassCars(runCy,"PC","MEXTV");
 iPassCarsScrapRate(runCy)  = iDataPassCars(runCy,"PC", "SCR");
 
+$ontext
 parameter iInitSpecFuelConsData(TRANSE,TTECH,EF)        "Initial Specific fuel consumption ()" /
 PC.LPG.LPG	65.88
 PC.GSL.GSL	73.2
@@ -151,10 +152,17 @@ GN.GSL.GSL	22.8
 GN.GDO.GDO	15.2
 GN.H2F.H2F	8.14286
 /;
+$offtext
+
+table iInitSpecFuelConsData(TRANSE,TTECH,EF,YTIME)        "Initial Specific fuel consumption ()"
+$ondelim
+$include "./iInitSpecFuelConsData.csv"
+$offdelim
+;
 
 table iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,YTIME)        "Initial Specific fuel consumption for all countries ()";
-iInitSpecFuelCons(runCy,TRANSE,TTECH,EF,YTIME) = iInitSpecFuelConsData(TRANSE,TTECH,EF) ; 
-iSpeFuelConsCostBy(runCy,TRANSE,TTECH,EF) = iInitSpecFuelCons(runCy,TRANSE,TTECH,EF,"2017");
+iInitSpecFuelCons(runCy,TRANSE,TTECH,EF,YTIME) = iInitSpecFuelConsData(TRANSE,TTECH,EF,YTIME) ; 
+iSpeFuelConsCostBy(runCy,TRANSE,TTECH,EF,YTIME) = iInitSpecFuelCons(runCy,TRANSE,TTECH,EF,YTIME);
 
 parameter iElaSubData(DSBS)       "Elasticities by subsector (1)" /
 PCH	2
