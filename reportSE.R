@@ -26,8 +26,9 @@ reportSE <- function(regs) {
   VProdElec_without_aggr <- VProdElec
   getItems(VProdElec_without_aggr, 3) <- paste0("Secondary Energy|Electricity|", getItems(VProdElec_without_aggr, 3))
   
-  # write data in mif file
-  write.report(VProdElec_without_aggr[,,],file="reporting.mif",model="OPEN-PROM",append=TRUE,unit="TWh",scenario=scenario_name)
+  magpie_object <- NULL
+  VProdElec_without_aggr <- add_dimension(VProdElec_without_aggr, dim = 3.2, add = "unit", nm = "TWh")
+  magpie_object <- mbind(magpie_object, VProdElec_without_aggr)
   
   VProdElec_LGN <- VProdElec
   # aggregate to reporting fuel categories
@@ -36,20 +37,21 @@ reportSE <- function(regs) {
   
   getItems(VProdElec_LGN, 3) <- paste0("Secondary Energy|Electricity|", getItems(VProdElec_LGN, 3))
   
-  # write data in mif file
-  write.report(VProdElec_LGN[,,],file="reporting.mif",model="OPEN-PROM",append=TRUE,unit="TWh",scenario=scenario_name)
+  VProdElec_LGN <- add_dimension(VProdElec_LGN, dim = 3.2, add = "unit", nm = "TWh")
+  magpie_object <- mbind(magpie_object, VProdElec_LGN)
   
   getItems(VProdElec, 3) <- paste0("Secondary Energy|Electricity|", getItems(VProdElec, 3))
   
-  # write data in mif file
-  write.report(VProdElec[,,],file="reporting.mif",model="OPEN-PROM",append=TRUE,unit="TWh",scenario=scenario_name)
+  VProdElec <- add_dimension(VProdElec, dim = 3.2, add = "unit", nm = "TWh")
+  magpie_object <- mbind(magpie_object, VProdElec)
   
   # electricity production
   VProdElec_total <- dimSums(VProdElec, dim = 3, na.rm = TRUE)
   
   getItems(VProdElec_total, 3) <- "Secondary Energy|Electricity"
   
-  # write data in mif file
-  write.report(VProdElec_total[,,],file="reporting.mif",append=TRUE,model="OPEN-PROM",unit="TWh",scenario=scenario_name)
+  VProdElec_total <- add_dimension(VProdElec_total, dim = 3.2, add = "unit", nm = "TWh")
+  magpie_object <- mbind(magpie_object, VProdElec_total)
   
+  return(magpie_object)
   }

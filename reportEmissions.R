@@ -83,9 +83,10 @@ reportEmissions <- function(regs) {
   
   getItems(total_CO2, 3) <- "Emissions|CO2"
   
-  # write data in mif file
-  write.report(total_CO2[,,],file="reporting.mif",model="OPEN-PROM",unit = "Mt CO2/yr",append=TRUE,scenario=scenario_name)
- 
+  magpie_object <- NULL
+  total_CO2 <- add_dimension(total_CO2, dim = 3.2, add = "unit", nm = "Mt CO2/yr")
+  magpie_object <- mbind(magpie_object, total_CO2)
+  
   # Extra Emissions
   # Emissions|CO2|Energy|Demand|Industry
   
@@ -111,8 +112,8 @@ reportEmissions <- function(regs) {
   
   getItems(sum_INDSE, 3) <- "Emissions|CO2|Energy|Demand|Industry"
   
-  # write data in mif file
-  write.report(sum_INDSE[,,],file="reporting.mif",model="OPEN-PROM",unit = "Mt CO2/yr",append=TRUE,scenario=scenario_name)
+  sum_INDSE <- add_dimension(sum_INDSE, dim = 3.2, add = "unit", nm = "Mt CO2/yr")
+  magpie_object <- mbind(magpie_object, sum_INDSE)
   
   # Emissions|CO2|Energy|Demand|Residential and Commercial
   
@@ -138,24 +139,24 @@ reportEmissions <- function(regs) {
   
   getItems(sum_DOMSE, 3) <- "Emissions|CO2|Energy|Demand|Residential and Commercial"
   
-  # write data in mif file
-  write.report(sum_DOMSE[,,],file="reporting.mif",model="OPEN-PROM",unit = "Mt CO2/yr",append=TRUE,scenario=scenario_name)
+  sum_DOMSE <- add_dimension(sum_DOMSE, dim = 3.2, add = "unit", nm = "Mt CO2/yr")
+  magpie_object <- mbind(magpie_object, sum_DOMSE)
   
-  # Emissions|CO2|Energy|Demand|Transportation
+   # Emissions|CO2|Energy|Demand|Transportation
   sum_TRANSE <- sum5 # transport
   
   getItems(sum_TRANSE, 3) <- "Emissions|CO2|Energy|Demand|Transportation"
   
-  # write data in mif file
-  write.report(sum_TRANSE[,,],file="reporting.mif",model="OPEN-PROM",unit = "Mt CO2/yr",append=TRUE,scenario=scenario_name)
+  sum_TRANSE <- add_dimension(sum_TRANSE, dim = 3.2, add = "unit", nm = "Mt CO2/yr")
+  magpie_object <- mbind(magpie_object, sum_TRANSE)
   
   # Emissions|CO2|Energy|Demand|Bunkers
   sum_Bunkers <- sum7 # Bunkers
   
   getItems(sum_Bunkers, 3) <- "Emissions|CO2|Energy|Demand|Bunkers"
   
-  # write data in mif file
-  write.report(sum_Bunkers[,,],file="reporting.mif",model="OPEN-PROM",unit = "Mt CO2/yr",append=TRUE,scenario=scenario_name)
+  sum_Bunkers <- add_dimension(sum_Bunkers, dim = 3.2, add = "unit", nm = "Mt CO2/yr")
+  magpie_object <- mbind(magpie_object, sum_Bunkers)
   
   # Emissions|CO2|Energy|Demand
   # Emissions|CO2|Energy|Demand|Bunkers, sum_Bunkers
@@ -166,8 +167,8 @@ reportEmissions <- function(regs) {
   
   getItems(sum_Demand, 3) <- "Emissions|CO2|Energy|Demand"
   
-  # write data in mif file
-  write.report(sum_Demand[,,],file="reporting.mif",model="OPEN-PROM",unit = "Mt CO2/yr",append=TRUE,scenario=scenario_name)
+  sum_Demand <- add_dimension(sum_Demand, dim = 3.2, add = "unit", nm = "Mt CO2/yr")
+  magpie_object <- mbind(magpie_object, sum_Demand)
   
   # Emissions|CO2|Energy|Supply
   # input to power generation sector, sum2
@@ -178,8 +179,8 @@ reportEmissions <- function(regs) {
   
   getItems(sum_Supply, 3) <- "Emissions|CO2|Energy|Supply"
 
-  # write data in mif file
-  write.report(sum_Supply[,,],file="reporting.mif",model="OPEN-PROM",unit = "Mt CO2/yr",append=TRUE,scenario=scenario_name)
+  sum_Supply <- add_dimension(sum_Supply, dim = 3.2, add = "unit", nm = "Mt CO2/yr")
+  magpie_object <- mbind(magpie_object, sum_Supply)
   
   # Emissions|CO2|Energy
   # Emissions|CO2|Energy|Demand, sum_Demand
@@ -189,8 +190,8 @@ reportEmissions <- function(regs) {
   
   getItems(sum_Energy, 3) <- "Emissions|CO2|Energy"
   
-  # write data in mif file
-  write.report(sum_Energy[,,],file="reporting.mif",model="OPEN-PROM",unit = "Mt CO2/yr",append=TRUE,scenario=scenario_name)
+  sum_Energy <- add_dimension(sum_Energy, dim = 3.2, add = "unit", nm = "Mt CO2/yr")
+  magpie_object <- mbind(magpie_object, sum_Energy)
   
   # Emissions|CO2|Cumulated
   
@@ -206,7 +207,8 @@ reportEmissions <- function(regs) {
   
   Cumulated <- Cumulated /1000
   
-  # write data in mif file
-  write.report(Cumulated,file="reporting.mif",model="OPEN-PROM",unit = "Gt CO2",append=TRUE,scenario=scenario_name)
+  Cumulated <- add_dimension(Cumulated, dim = 3.2, add = "unit", nm = "Gt CO2")
+  magpie_object <- mbind(magpie_object, Cumulated)
   
+  return(magpie_object)
    }
