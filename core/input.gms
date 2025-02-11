@@ -979,7 +979,7 @@ $include"./iMatFacPlaAvailCap.csv"
 $offdelim
 ;
 
-iMatFacPlaAvailCap(runCy,CCS,YTIME)$an(YTIME)  =0;
+iMatFacPlaAvailCap(runCy,CCS,YTIME)$an(YTIME)  =50;
 
 table iMatureFacPlaDisp(allCy,PGALL,YTIME)	 "Maturity factor related to plant dispatching (1)"
 $ondelim
@@ -987,7 +987,7 @@ $include"./iMatureFacPlaDisp.csv"
 $offdelim
 ;
 
-iCO2CaptRate(runCy,PGALL,YTIME) = 0; 
+iCO2CaptRate(runCy,PGALL,YTIME) = 2; 
 
 parameter iMxmShareChpElec "Maximum share of CHP electricity in a country (1)";
 iMxmShareChpElec(runCy,YTIME) = 0.1;
