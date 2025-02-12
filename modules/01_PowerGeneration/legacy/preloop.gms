@@ -3,6 +3,9 @@
 
 *'                *VARIABLE INITIALISATION*
 *---
+VCostPowGenAvgLng.L(runCy,ESET,"2010") = 0;
+VCostPowGenAvgLng.L(runCy,ESET,"%fBaseY%") = 0;
+*---
 VSensCCS.l(runCy,YTIME)=1;
 *---
 VCostProdSpecTech.lo(runCy,PGALL2,YTIME)=0.00000001;
@@ -125,4 +128,25 @@ QCostVarTech.scale(runCy,PGALL,YTIME)=VCostVarTech.scale(runCy,PGALL,YTIME);
 *---
 VScalWeibullSum.scale(runCy,PGALL,YTIME)=1e6;
 QScalWeibullSum.scale(runCy,PGALL,YTIME)=VScalWeibullSum.scale(runCy,PGALL,YTIME);
+*---
+VLoadFacDom.l(runCy,YTIME)=0.5;
+VLoadFacDom.FX(runCy,YTIME)$(datay(YTIME)) =
+         (sum(INDDOM,VConsFuel.l(runCy,INDDOM,"ELC",YTIME)) + sum(TRANSE, VDemFinEneTranspPerFuel.l(runCy,TRANSE,"ELC",YTIME)))/
+         (sum(INDDOM,VConsFuel.l(runCy,INDDOM,"ELC",YTIME)/iLoadFacElecDem(INDDOM)) + sum(TRANSE, VDemFinEneTranspPerFuel.l(runCy,TRANSE,"ELC",YTIME)/
+         iLoadFacElecDem(TRANSE)));
+*---
+VDemElecTot.l(runCy,YTIME)=10;
+VDemElecTot.FX(runCy,YTIME)$(not An(YTIME)) =  1/0.086 * ( iFinEneCons(runCy,"ELC",YTIME) + sum(NENSE, iFuelConsPerFueSub(runCy,NENSE,"ELC",YTIME)) + iDistrLosses(runCy,"ELC",YTIME)
+                                             + iTotEneBranchCons(runCy,"ELC",YTIME) - (iFuelImports(runCy,"ELC",YTIME)-iFuelExprts(runCy,"ELC",YTIME)));
+*---
+VPeakLoad.L(runCy,YTIME) = 1;
+VPeakLoad.FX(runCy,YTIME)$(datay(YTIME)) = VDemElecTot.l(runCy,YTIME)/(VLoadFacDom.l(runCy,YTIME)*8.76);
+*---
+VProdElec.FX(runCy,pgall,YTIME)$DATAY(YTIME)=iDataElecProd(runCy,pgall,YTIME)/1000;
+*---
+VProdElecReqTot.fx(runCy,"%fBaseY%")=sum(pgall,VProdElec.L(runCy,pgall,"%fBaseY%"));
+*---
+VElecConsHeatPla.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = iFuelConsPerFueSub(runCy,INDDOM,"ELC",YTIME)*(1-iShrNonSubElecInTotElecDem(runCy,INDDOM))*iShrHeatPumpElecCons(runCy,INDDOM);
+* Compute electricity consumed in heatpump plants, QElecConsHeatPla(runCy,INDDOM,YTIME)$time(ytime).
+VElecConsHeatPla.FX(runCy,INDDOM,YTIME) = 1E-7;
 *---

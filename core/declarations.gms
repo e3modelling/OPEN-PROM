@@ -113,84 +113,16 @@ ODummyObj                                                  "Parameter saving obj
 ;
 
 Equations
-*'                **Interdependent Equations**
-
-*' * Power Generation *
-QLoadFacDom(allCy,YTIME)	                               "Compute load factor of entire domestic system"
-QPeakLoad(allCy,YTIME)	                                   "Compute elerctricity peak load"	
-QPriceElecIndResNoCliPol(allCy,ESET,YTIME)                 "Compute electricity price in Industrial and Residential Consumers excluding climate policies"
-QDemElecTot(allCy,YTIME)                                   "Compute total electricity demand"
-QProdElec(allCy,PGALL,YTIME)                               "Compute electricity production from power generation plants"
-QProdElecCHP(allCy,CHP,YTIME)	                           "Compute electricity production from CHP plants" 
-QProdElecReqTot(allCy,YTIME)                               "Compute total required electricity production"
-QCostPowGenAvgLng(allCy,ESET,YTIME)	                       "Compute long term power generation cost"
-
-*' * INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES *
-QConsFuel(allCy,DSBS,EF,YTIME)                             "Compute fuel consumption"
-QConsElecNonSubIndTert(allCy,INDDOM,YTIME)	               "Compute non-substituable electricity consumption in Industry and Tertiary"
-*qConsTotElecInd(allCy,YTIME)                               "Compute Consumption of electricity in industrial sectors"
-QDemFinSubFuelSubsec(allCy,DSBS,YTIME)                     "Compute total final demand (of substitutable fuels) per subsector"
-*qDemFinSubFuelInd(allCy,YTIME)                             "Copmpute total final demand (of substitutable fuels) in industrial sectors"
-QPriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)                   "Compute fuel prices per subsector and fuel especially for chp plants"
-QConsFuelInclHP(allCy,DSBS,EF,YTIME)                       "Equation for fuel consumption in Mtoe (including heat from heatpumps)"
-QConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)	               "Equation for consumption of remaining substitutble equipment"
-QPriceElecInd(allCy,YTIME)                                 "Compute electricity industry prices"
-QCostElcAvgProdCHP(allCy,CHP,YTIME)                        "Compute Average Electricity production cost per CHP plant"
-QCostVarAvgElecProd(allCy,CHP,YTIME)                       "Compute Average variable including fuel electricity production cost per CHP plant"
-
-*' *** REST OF ENERGY BALANCE SECTORS VARIABLES
-QImpNetEneBrnch(allCy,EFS,YTIME)	                       "Compute net imports"
-QConsFiEneSec(allCy,EFS,YTIME)	                           "Compute energy branch final consumption"
-QInpTransfTherm(allCy,EFS,YTIME)	                       "Compute transformation input to power plants"	
-QTransfInputDHPlants(allCy,EFS,YTIME)                      "Compute the transformation input to distrcit heating plants"
-QConsFinEneCountry(allCy,EFS,YTIME)                        "Compute total final energy consumption"
-QConsFinNonEne(allCy,EFS,YTIME)                            "Compute final non-energy consumption"
-QLossesDistr(allCy,EFS,YTIME)                              "Compute distribution losses"
 
 *' *** Miscellaneous
 *qDummyObj                                                  "Define dummy objective function"
-
 ;
 
 Variables
 *'                **Interdependent Variables**
 
-*' * Power Generation *
-VLoadFacDom(allCy,YTIME)                                   "Electricity load factor for entire domestic system"	
-VPeakLoad(allCy,YTIME)	                                   "Electricity peak load (GW)"	
-VPriceElecIndResNoCliPol(allCy,ESET,YTIME)                 "Electricity price to Industrial and Residential Consumers (US$2015/KWh)"
-VDemElecTot(allCy,YTIME)                                   "Total electricity demand (TWh)"
-VProdElec(allCy,PGALL,YTIME)                               "Electricity production (TWh)"	
-VProdElecCHP(allCy,CHP,YTIME)	                           "CHP electricity production (TWh)"
-VProdElecReqTot(allCy,YTIME)	                           "Total required electricity production (TWh)"
-VCostPowGenAvgLng(allCy,ESET,YTIME)	                       "Long-term average power generation cost (US$2015/kWh)"
-
-*' * INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES *
-VConsFuel(allCy,DSBS,EF,YTIME)                             "Consumption of fuels in each demand subsector, excluding heat from heatpumps (Mtoe)"
-VConsElecNonSubIndTert(allCy,DSBS,YTIME)                   "Consumption of non-substituable electricity in Industry and Tertiary (Mtoe)"
-*vConsTotElecInd(allCy,YTIME)                               "Total Consumption of Electricity in industrial sectors (Mtoe)"
-VDemFinSubFuelSubsec(allCy,DSBS,YTIME)                     "Total final demand (of substitutable fuels) per subsector (Mtoe)"
-*vDemFinSubFuelInd(allCy,YTIME)                             "Total final demand (of substitutable fuels) in industrial sectors (Mtoe)"
-VPriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)                   "Fuel prices per subsector and fuel for CHP plants (kUS$2015/toe)"
-VConsFuelInclHP(allCy,DSBS,EF,YTIME)                       "Consumption of fuels in each demand subsector including heat from heatpumps (Mtoe)"
-VConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)                "Consumption of remaining substitutable equipment (Mtoe)"
-VPriceElecInd(allCy,YTIME)                                 "Electricity index - a function of industry price (1)"
-VCostElcAvgProdCHP(allCy,CHP,YTIME)                        "Average Electricity production cost per CHP plant (US$2015/KWh)"
-VCostVarAvgElecProd(allCy,CHP,YTIME)                       "Average variable including fuel electricity production cost per CHP plant (US$2015/KWh)"
-
-*' *** REST OF ENERGY BALANCE SECTORS VARIABLES
-VImpNetEneBrnch(allCy,EFS,YTIME)	                       "Net Imports (Mtoe)"
-VConsFiEneSec(allCy,EFS,YTIME)                             "Final consumption in energy sector (Mtoe)"
-VInpTransfTherm(allCy,EFS,YTIME)	                       "Transformation input to thermal power plants (Mtoe)"
-VTransfInputDHPlants(allCy,EFS,YTIME)                      "Transformation input to District Heating Plants (Mtoe)"
-VConsFinEneCountry(allCy,EF,YTIME)                         "Total final energy consumnption (Mtoe)"
-VConsFinNonEne(allCy,EFS,YTIME)                            "Final non energy consumption (Mtoe)"
-VLossesDistr(allCy,EFS,YTIME)                              "Distribution losses (Mtoe)"
-
 *' *** Miscellaneous
 *vDummyObj                                                  "Dummy maximisation variable (1)"
-VFuelPriSubNoCarb(allCy,SBS,EF,YTIME)	                   "Fuel prices per subsector and fuel  without carbon value (kUS$2015/toe)"
-VElecConsHeatPla(allCy,DSBS,YTIME)                         "Electricity consumed in heatpump plants (Mtoe)"
 ;
 
 Positive Variables

@@ -7,7 +7,7 @@ QCapCO2ElecHydr(allCy,YTIME)	                           "Compute CO2 captured by
 QCaptCummCO2(allCy,YTIME)	                               "Compute cumulative CO2 captured (Mtn of CO2)"
 QTrnsWghtLinToExp(allCy,YTIME)	                           "Transtition weight for shifting from linear to exponential CO2 sequestration cost curve"
 
-*'                **Interdependent Variables**
+*'                **Interdependent Equations**
 QCstCO2SeqCsts(allCy,YTIME)	                               "Compute cost curve for CO2 sequestration costs" 
 ;
 

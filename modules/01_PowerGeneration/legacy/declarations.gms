@@ -53,7 +53,16 @@ QCostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME)	           "Compute long term pow
 *qCostPowGenShortIntPri(allCy,PGALL,ESET,YTIME)             "Compute short term power generation cost of technologies including international Prices of main fuels"
 QCostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)	       "Compute long term average power generation cost excluding climate policies"		
 QCostPowGenLonNoClimPol(allCy,ESET,YTIME)                  "Compute long term power generation cost excluding climate policies"	
-*qCostPowGenAvgShrt(allCy,ESET,YTIME)	                   "Compute short term power generation cost"		
+*qCostPowGenAvgShrt(allCy,ESET,YTIME)	                   "Compute short term power generation cost"
+
+*'                **Interdependent Equations**
+QLoadFacDom(allCy,YTIME)	                               "Compute load factor of entire domestic system"
+QPeakLoad(allCy,YTIME)	                                   "Compute elerctricity peak load"	
+QDemElecTot(allCy,YTIME)                                   "Compute total electricity demand"
+QProdElec(allCy,PGALL,YTIME)                               "Compute electricity production from power generation plants"
+QProdElecCHP(allCy,CHP,YTIME)	                           "Compute electricity production from CHP plants" 
+QProdElecReqTot(allCy,YTIME)                               "Compute total required electricity production"
+QCostPowGenAvgLng(allCy,ESET,YTIME)	                       "Compute long term power generation cost"
 ;
 
 Variables
@@ -108,5 +117,17 @@ VCostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME)	           "Long-term average pow
 *vCostPowGenShortIntPri(allCy,PGALL,ESET,YTIME)             "Short term power generation cost of technologies including international Prices of main fuels (kUS$2015/toe)"
 VCostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)	       "Long-term average power generation cost excluding climate policies(US$2015/kWh)" 	
 VCostPowGenLonNoClimPol(allCy,ESET,YTIME)                  "Long-term average power generation cost  excluding climate policies (US$2015/kWh)"	
-*vCostPowGenAvgShrt(allCy,ESET,YTIME)                       "Short-term average power generation cost (US$2015/kWh)"		
+*vCostPowGenAvgShrt(allCy,ESET,YTIME)                       "Short-term average power generation cost (US$2015/kWh)"
+
+*'                **Interdependent Variables**	
+VLoadFacDom(allCy,YTIME)                                   "Electricity load factor for entire domestic system"	
+VPeakLoad(allCy,YTIME)	                                   "Electricity peak load (GW)"	
+VDemElecTot(allCy,YTIME)                                   "Total electricity demand (TWh)"
+VProdElec(allCy,PGALL,YTIME)                               "Electricity production (TWh)"	
+VProdElecCHP(allCy,CHP,YTIME)	                           "CHP electricity production (TWh)"
+VProdElecReqTot(allCy,YTIME)	                           "Total required electricity production (TWh)"
+VCostPowGenAvgLng(allCy,ESET,YTIME)	                       "Long-term average power generation cost (US$2015/kWh)"
+
+*' *** Miscellaneous
+VElecConsHeatPla(allCy,DSBS,YTIME)                         "Electricity consumed in heatpump plants (Mtoe)"
 ;

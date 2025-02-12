@@ -83,19 +83,6 @@ qDemFinSubFuelInd(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         vDemFinSubFuelInd(allCy,YTIME)=E= SUM(INDSE,VDemFinSubFuelSubsec(allCy,INDSE,YTIME));
 $offtext
 
-*' This equation determines the electricity industry prices based on an estimated electricity index and a technical maximum of the electricity to steam ratio
-*' in Combined Heat and Power plants. The industry prices are calculated as a function of the estimated electricity index and the specified maximum
-*' electricity to steam ratio. The equation ensures that the electricity industry prices remain within a realistic range, considering the technical constraints
-*' of CHP plants. It involves the estimated electricity index, and a technical maximum of the electricity to steam ratio in CHP plants is incorporated to account
-*' for the specific characteristics of these facilities. This equation ensures that the derived electricity industry prices align with the estimated index and
-*' technical constraints, providing a realistic representation of the electricity market in the industrial sector.
-
-
-
-QPriceElecInd(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VPriceElecInd(allCy,YTIME) =E=
-        ( VIndxElecIndPrices(allCy,YTIME) + sElecToSteRatioChp - SQRT( SQR(VIndxElecIndPrices(allCy,YTIME)-sElecToSteRatioChp)  ) )/2;
-
 *' This equation calculates the total fuel consumption in each demand subsector, excluding heat from heat pumps. The fuel consumption is measured
 *' in million tons of oil equivalent and is influenced by two main components: the consumption of fuels in each demand subsector, including
 *' heat from heat pumps, and the electricity consumed in heat pump plants.The equation uses the fuel consumption data for each demand subsector,
@@ -127,22 +114,6 @@ QIndxElecIndPrices(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         (VPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-2)/VPriceFuelAvgSub(allCy,"OI",YTIME-2)))**(0.3) *
         ((VPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-2)/VPriceFuelAvgSub(allCy,"OI",YTIME-2))/
         (VPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-3)/VPriceFuelAvgSub(allCy,"OI",YTIME-3)))**(0.3);
-
-*' This equation calculates the fuel prices per subsector and fuel, specifically for Combined Heat and Power (CHP) plants, considering the profit earned from
-*' electricity sales. The equation incorporates various factors such as the base fuel price, renewable value, variable cost of technology, useful energy conversion
-*' factor, and the fraction of electricity price at which a CHP plant sells electricity to the network.
-*' The fuel price for CHP plants is determined by subtracting the relevant components for CHP plants (fuel price for electricity generation and a fraction of electricity
-*' price for CHP sales) from the overall fuel price for the subsector. Additionally, the equation includes a square root term to handle complex computations related to the
-*' difference in fuel prices. This equation provides insights into the cost considerations for fuel in the context of CHP plants, considering various economic and technical parameters.
-
-
-QPriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS))  $SECTTECH(DSBS,EF) $runCy(allCy))..
-        VPriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)
-                =E=   
-             (((VPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME) + (VRenValue(YTIME)/1000)$(not RENEF(EF))+iVarCostTech(allCy,DSBS,EF,YTIME)/1000)/iUsfEneConvSubTech(allCy,DSBS,EF,YTIME)- 
-               (0$(not CHP(EF)) + (VPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME)*iFracElecPriChp*VPriceElecInd(allCy,YTIME))$CHP(EF)))  + SQRT( SQR(((VPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME)+iVarCostTech(allCy,DSBS,EF,YTIME)/1000)/iUsfEneConvSubTech(allCy,DSBS,EF,YTIME)- 
-              (0$(not CHP(EF)) + (VPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME)*iFracElecPriChp*VPriceElecInd(allCy,YTIME))$CHP(EF))))  ) )/2;
-
 
 *' The equation computes the electricity production cost per Combined Heat and Power plant for a specific demand sector within a given subsector.
 *' The cost is determined based on various factors, including the discount rate, technical lifetime of CHP plants, capital cost, fixed O&M cost, availability rate,
