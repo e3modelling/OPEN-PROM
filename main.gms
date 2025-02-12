@@ -116,7 +116,7 @@ $evalGlobal fEndHorizon 2100
 $evalGlobal fEndY 2100
 $evalGlobal fStartY 2021
 $evalGlobal fBaseY %fStartY% - %fPeriodOfYears%
-$evalGlobal fScenario 0 !! Setting the model scenario: 0 is NPi_Default, 1 is 1.5C and 2 is 2C
+$evalGlobal fScenario 1 !! Setting the model scenario: 0 is NPi_Default, 1 is 1.5C and 2 is 2C
 
 *** end of dollar commands section, no further flag definitions allowed 
 
@@ -133,10 +133,10 @@ file fStat /'modelstat.txt'/;
 fStat.ap = 1; 
 
 **MODULE REALIZATION SWITCHES**
-$setGlobal PowerGeneration  legacy
 $setGlobal Transport        legacy
 $setGlobal Industry         legacy
 $setGlobal RestOfEnergy     legacy
+$setGlobal PowerGeneration  legacy
 $setGlobal CO2              legacy
 $setGlobal Emissions        legacy
 $setGlobal Prices           legacy

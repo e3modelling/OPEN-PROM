@@ -118,14 +118,17 @@ Equations
 *' *** Miscellaneous
 *qDummyObj                                                  "Define dummy objective function"
 ;
+$offtext
 
 Variables
 *'                **Interdependent Variables**
 
 *' *** Miscellaneous
 *vDummyObj                                                  "Dummy maximisation variable (1)"
+*' *** Miscellaneous
+VElecConsHeatPla(allCy,DSBS,YTIME)                         "Electricity consumed in heatpump plants (Mtoe)"
 ;
-$offtext
+
 
 Positive Variables
 VCarVal(allCy,NAP,YTIME)                                   "Carbon prices for all countries (US$2015/tn CO2)"

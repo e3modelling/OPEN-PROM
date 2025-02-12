@@ -127,7 +127,4 @@ VProdElec(allCy,PGALL,YTIME)                               "Electricity producti
 VProdElecCHP(allCy,CHP,YTIME)	                           "CHP electricity production (TWh)"
 VProdElecReqTot(allCy,YTIME)	                           "Total required electricity production (TWh)"
 VCostPowGenAvgLng(allCy,ESET,YTIME)	                       "Long-term average power generation cost (US$2015/kWh)"
-
-*' *** Miscellaneous
-VElecConsHeatPla(allCy,DSBS,YTIME)                         "Electricity consumed in heatpump plants (Mtoe)"
 ;
