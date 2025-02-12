@@ -722,29 +722,6 @@ QCostPowGenLonNoClimPol(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          )
 /(VDemElecTot(allCy,YTIME));  
 
-*' Compute electricity price in Industrial and Residential Consumers excluding climate policies by multiplying the Factors affecting electricity prices to consumers by the sum of 
-*' Fuel prices per subsector and fuel multiplied by the TWh to Mtoe conversion factor adding the Factors affecting electricity prices to consumers and the Long-term average power 
-*' generation cost  excluding climate policies for Electricity of Other Industrial sectors and for Electricity for Households .
-QPriceElecIndResNoCliPol(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..   !! The electricity price is based on previous year's production costs
-        VPriceElecIndResNoCliPol(allCy,ESET,YTIME)
-                 =E=
-        (1 + iVAT(allCy, YTIME)) *
-        (
-           (
-             (VPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)*sTWhToMtoe)$TFIRST(YTIME-1) +
-             (
-               VCostPowGenLonNoClimPol(allCy,"i",YTIME-1) 
-              )$(not TFIRST(YTIME-1))
-           )$ISET(ESET)
-        +
-           (
-             (VPriceFuelSubsecCarVal(allCy,"HOU","ELC",YTIME-1)*sTWhToMtoe)$TFIRST(YTIME-1) +
-             (
-                VCostPowGenLonNoClimPol(allCy,"r",YTIME-1) 
-             )$(not TFIRST(YTIME-1))
-           )$RSET(ESET)
-        );
-
 *' This equation computes the short-term average power generation cost. It involves summing the variable production costs for different power generation plants and
 *' energy forms, considering the specific characteristics and costs associated with each. The result is the average power generation cost per unit of electricity
 *' consumed in the given time period.
