@@ -112,6 +112,7 @@ iInpTransfTherm(allCy,EFS,YTIME)                           "Historic data of VIn
 ODummyObj                                                  "Parameter saving objective function"
 ;
 
+$ontext
 Equations
 
 *' *** Miscellaneous
@@ -124,6 +125,7 @@ Variables
 *' *** Miscellaneous
 *vDummyObj                                                  "Dummy maximisation variable (1)"
 ;
+$offtext
 
 Positive Variables
 VCarVal(allCy,NAP,YTIME)                                   "Carbon prices for all countries (US$2015/tn CO2)"
