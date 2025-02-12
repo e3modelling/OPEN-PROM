@@ -115,17 +115,22 @@ tryCatch({
   
   #output <- NULL
   #output <- mbind(output, reportGDP(runCY))
-  reportFinalEnergy(runCY)
-  reportEmissions(runCY)
-  reportSE(runCY)
-  reportPE(runCY)
-  reportGDP(runCY)
-  reportPOP(runCY)
-  reportPriceCarbon(runCY)
+  FE <- reportFinalEnergy(runCY)
+  EMI <- reportEmissions(runCY)
+  SE <- reportSE(runCY)
+  PE <- reportPE(runCY)
+  GDP <- reportGDP(runCY)
+  POP <- reportPOP(runCY)
+  PCar <- reportPriceCarbon(runCY)
   #reportACTV(runCY)
-  reportPrice(runCY)
-  reportCapacityElectricity(runCY)
-
+  Price <- reportPrice(runCY)
+  CapElec <- reportCapacityElectricity(runCY)
+  
+  magpie_reporting <- mbind(FE, EMI, SE, PE, GDP, POP, PCar, Price, CapElec)
+  
+  # write data in mif file
+  write.report(magpie_reporting,file="reporting.mif",model="OPEN-PROM",scenario=scenario_name)
+  
   reporting <- read.report("reporting.mif")
   setwd("..")
   if (length(runpath) > 1) {

@@ -16,10 +16,13 @@ reportFinalEnergy <- function(regs) {
   l <- getNames(VConsFinEneCountry) == "Final Energy|Total"
   getNames(VConsFinEneCountry)[l] <- "Final Energy"
   
-  # write data in mif file
-  write.report(VConsFinEneCountry[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",scenario=scenario_name)
+  VConsFinEneCountry <- add_dimension(VConsFinEneCountry, dim = 3.2, add = "unit", nm = "Mtoe")
   
-  # Final Energy | "TRANSE" | "INDSE" | "DOMSE" | "NENSE"
+  magpie_object <- NULL
+  
+  magpie_object <- mbind(magpie_object, VConsFinEneCountry)
+  
+ # Final Energy | "TRANSE" | "INDSE" | "DOMSE" | "NENSE"
   
   # Link between Model Subsectors and Fuels
   sets4 <- readGDX('./blabla.gdx', "SECTTECH")
@@ -48,15 +51,16 @@ reportFinalEnergy <- function(regs) {
     FCONS_by_sector_open <- toolAggregate(FCONS_by_sector_and_EF_open[,,unique(map_subsectors$EF)],dim=3,rel=map_subsectors,from="EF",to="SBS")
     getItems(FCONS_by_sector_open, 3) <- paste0("Final Energy|", sector_name[y],"|", getItems(FCONS_by_sector_open, 3))
     
-    # write data in mif file
-    write.report(FCONS_by_sector_open[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario=scenario_name)
+    FCONS_by_sector_open <- add_dimension(FCONS_by_sector_open, dim = 3.2, add = "unit", nm = "Mtoe")
+    
+    magpie_object <- mbind(magpie_object, FCONS_by_sector_open)
     
     # Final Energy by sector 
     sector_open <- dimSums(FCONS_by_sector_open, dim = 3, na.rm = TRUE)
     getItems(sector_open, 3) <- paste0("Final Energy|", sector_name[y])
     
-    # write data in mif file
-    write.report(sector_open[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario=scenario_name)
+    sector_open <- add_dimension(sector_open, dim = 3.2, add = "unit", nm = "Mtoe")
+    magpie_object <- mbind(magpie_object, sector_open)
     
     # Energy Forms Aggregations
     sets5 <- readGDX('./blabla.gdx', "EFtoEFA")
@@ -93,16 +97,16 @@ reportFinalEnergy <- function(regs) {
     open_by_subsector_by_energy_form <- select(open_by_subsector_by_energy_form, -c("EF"))
     open_by_subsector_by_energy_form <- as.quitte(open_by_subsector_by_energy_form) %>% as.magpie()
     
-    # write data in mif file
-    write.report(open_by_subsector_by_energy_form[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario=scenario_name)
-     
+    open_by_subsector_by_energy_form <- add_dimension(open_by_subsector_by_energy_form, dim = 3.2, add = "unit", nm = "Mtoe")
+    magpie_object <- mbind(magpie_object, open_by_subsector_by_energy_form)
+    
     # sector_by_energy_form
     by_energy_form_open <- dimSums(by_energy_form_and_by_subsector_open, 3.1, na.rm = TRUE)
     getItems(by_energy_form_open,3.1) <- paste0("Final Energy|", sector_name[y],"|", getItems(by_energy_form_open, 3.1))
     
-    # write data in mif file
-    write.report(by_energy_form_open[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario=scenario_name)
-     
+    by_energy_form_open <- add_dimension(by_energy_form_open, dim = 3.2, add = "unit", nm = "Mtoe")
+    magpie_object <- mbind(magpie_object, by_energy_form_open)
+    
     # per fuel
     FCONS_per_fuel <- FCONS_by_sector_and_EF_open[,,sets6[,1]][,,!(getItems(FCONS_by_sector_and_EF_open,3.2)) %in% (getItems(by_energy_form_and_by_subsector_open,3.2))]
     
@@ -113,7 +117,8 @@ reportFinalEnergy <- function(regs) {
     FCONS_per_fuel <- as.quitte(FCONS_per_fuel) %>% as.magpie()
     getItems(FCONS_per_fuel, 3) <- paste0("Final Energy|", sector_name[y],"|", getItems(FCONS_per_fuel, 3))
     
-    # write data in mif file
-    write.report(FCONS_per_fuel[,,],file="reporting.mif",model="OPEN-PROM",unit="Mtoe",append=TRUE,scenario=scenario_name)
+    FCONS_per_fuel <- add_dimension(FCONS_per_fuel, dim = 3.2, add = "unit", nm = "Mtoe")
+    magpie_object <- mbind(magpie_object, FCONS_per_fuel)
   }
+  return(magpie_object)
 }
