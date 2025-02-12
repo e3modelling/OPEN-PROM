@@ -5,7 +5,9 @@ reportPriceCarbon <- function(regs) {
   # complete names
   getItems(VCarVal, 3) <- "Price|Carbon"
   
-  # write data in mif file
-  write.report(VCarVal[,,],file="reporting.mif",model="OPEN-PROM",unit="US$2015/tn CO2",append=TRUE,scenario=scenario_name)
+  magpie_object <- NULL
+  VCarVal <- add_dimension(VCarVal, dim = 3.2, add = "unit", nm = "US$2015/tn CO2")
+  magpie_object <- mbind(magpie_object, VCarVal)
   
+  return(magpie_object)
 }

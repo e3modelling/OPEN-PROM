@@ -31,18 +31,20 @@ reportCapacityElectricity <- function(regs) {
   
   getItems(VCapElec2_LGN, 3) <- paste0("Capacity|Electricity|", getItems(VCapElec2_LGN, 3))
   
-  # write data in mif file
-  write.report(VCapElec2_LGN[,,],file="reporting.mif",model="OPEN-PROM",append=TRUE,unit="GW",scenario=scenario_name)
+  magpie_object <- NULL
+  VCapElec2_LGN <- add_dimension(VCapElec2_LGN, dim = 3.2, add = "unit", nm = "GW")
+  magpie_object <- mbind(magpie_object, VCapElec2_LGN)
   
-  # write data in mif file
-  write.report(VCapElec2[,,],file="reporting.mif",model="OPEN-PROM",append=TRUE,unit="GW",scenario=scenario_name)
+  VCapElec2 <- add_dimension(VCapElec2, dim = 3.2, add = "unit", nm = "GW")
+  magpie_object <- mbind(magpie_object, VCapElec2)
   
   # electricity production
   VCapElec2_total <- dimSums(VCapElec2, dim = 3, na.rm = TRUE)
   
   getItems(VCapElec2_total, 3) <- "Capacity|Electricity"
   
-  # write data in mif file
-  write.report(VCapElec2_total[,,],file="reporting.mif",append=TRUE,model="OPEN-PROM",unit="GW",scenario=scenario_name)
+  VCapElec2_total <- add_dimension(VCapElec2_total, dim = 3.2, add = "unit", nm = "GW")
+  magpie_object <- mbind(magpie_object, VCapElec2_total)
   
+  return(magpie_object)
 }

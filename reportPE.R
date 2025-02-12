@@ -19,7 +19,9 @@ reportPE <- function(regs) {
   l <- getNames(VProdPrimary) == "Primary Energy|Total"
   getNames(VProdPrimary)[l] <- "Primary Energy"
   
-  # write data in mif file
-  write.report(VProdPrimary[,,],file="reporting.mif",model="OPEN-PROM",append=TRUE,unit="Mtoe",scenario=scenario_name)
+  magpie_object <- NULL
+  VProdPrimary <- add_dimension(VProdPrimary, dim = 3.2, add = "unit", nm = "Mtoe")
+  magpie_object <- mbind(magpie_object, VProdPrimary)
   
+  return(magpie_object)
 }
