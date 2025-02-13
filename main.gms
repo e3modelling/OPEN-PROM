@@ -137,6 +137,7 @@ $setGlobal Transport        legacy
 $setGlobal Industry         legacy
 $setGlobal RestOfEnergy     legacy
 $setGlobal PowerGeneration  legacy
+$setGlobal Hydrogen         legacy
 $setGlobal CO2              legacy
 $setGlobal Emissions        legacy
 $setGlobal Prices           legacy
@@ -151,6 +152,7 @@ $batinclude "./modules/include.gms"    declarations
 
 *' INPUTS
 $include "./core/input.gms";
+*$batinclude "./modules/input.gms"    input
 
 *' EQUATIONS
 $include    "./core/equations.gms";
