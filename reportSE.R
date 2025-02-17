@@ -127,7 +127,7 @@ reportSE <- function(regs) {
   colors_vars <- colors_vars[order(colors_vars[["V1"]]), ]
   
   #filter data by variables and max period
-  data <- filter(pq,variable%in%colors_vars[,1],period<max(an))
+  data <- filter(pq,variable%in%colors_vars[,1],period<=max(an))
   
   #order variables to match colors
   data <- data %>% arrange(as.character(variable))
@@ -147,7 +147,7 @@ reportSE <- function(regs) {
   miss_vars_sol <- miss_vars_sol[order(miss_vars_sol[["V1"]]), ]
   
   #filter data by variables and max period
-  data2 <- filter(pq,variable%in%miss_vars_sol[,1],period<max(an))
+  data2 <- filter(pq,variable%in%miss_vars_sol[,1],period<=max(an))
   
   #order variables to match colors
   data2 <- data2 %>% arrange(as.character(variable))
@@ -167,7 +167,7 @@ reportSE <- function(regs) {
   miss_vars_wind <- miss_vars_wind[order(miss_vars_wind[["V1"]]), ]
   
   #filter data by variables and max period
-  data3 <- filter(pq,variable%in%miss_vars_wind[,1],period<max(an))
+  data3 <- filter(pq,variable%in%miss_vars_wind[,1],period<=max(an))
   
   #order variables to match colors
   data3 <- data3 %>% arrange(as.character(variable))
