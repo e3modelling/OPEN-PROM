@@ -64,6 +64,7 @@ reportSE <- function(regs) {
              scale_color_manual(values = as.character(colors_vars[,3]), limits = as.character(colors_vars[,1])) + 
              geom_bar(stat = "identity",aes(fill=variable) ) + 
              facet_wrap("region",scales = "free_y") +
+             labs(x="period", y=paste0("Secondary Energy|Electricity"," ",unique(data[["unit"]]))) +
              theme_bw()+
              theme(text = element_text(size = 4),
                    strip.text.x = element_text(margin = margin(0.05,0,0.05,0, "cm")),
