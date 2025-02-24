@@ -76,7 +76,7 @@ VTariffH2Infr.FX(runCy,INFRTECH,YTIME) $(not An(YTIME)) = 1e-5;
 VPriceH2Infr.L(runCy,SBS,YTIME) = 2;
 VPriceH2Infr.FX(runCy,SBS,YTIME)  $(not An(YTIME)) = 1e-5;
 *---
-VH2InfrArea.l(runCy,ytime) = 10;
+VH2InfrArea.l(runCy,YTIME) = 10;
 *-----------------------------------------------------------------------
 *' *** Miscellaneous
 *---

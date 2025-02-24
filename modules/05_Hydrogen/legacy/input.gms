@@ -122,7 +122,7 @@ endloop;
 *---
 parameter iCostAvgWeight(allCy,YTIME)                "Weight for pricing in average cost or in marginal cost";
 iCostAvgWeight(runCy,YTIME) = 1;
-loop ytime$(an(ytime) $(not sameas("2006",ytime))) do
+loop YTIME$(An(YTIME) $(not sameas("2006",YTIME))) do
          iCostAvgWeight(runCy,YTIME) = -1/19+iCostAvgWeight(runCy,YTIME-1);
 endloop;
 *---
