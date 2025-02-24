@@ -80,14 +80,14 @@ VH2InfrArea.l(cyall,ytime) = 10;
 *-----------------------------------------------------------------------
 *' *** Miscellaneous
 *---
-VDemH2Req.FX(cyrun,"2005") = sum(H2TECH, VProdH2.L(cyrun,H2TECH,"2005"));
-VDemH2Req.L(CYall,YTIME) = 2;
-VDemH2Req.FX(CYall,YTIME)$(not An(YTIME)) = 1e-5;
+VDemTotH2.FX(cyrun,"2005") = sum(H2TECH, VProdH2.L(cyrun,H2TECH,"2005"));
+VDemTotH2.L(CYall,YTIME) = 2;
+VDemTotH2.FX(CYall,YTIME)$(not An(YTIME)) = 1e-5;
 *---
 VProdCapH2Tech.L(CYall,h2tech, YTIME) = 2;
 VProdCapH2Tech.FX(CYall,h2tech, YTIME)$(not An(YTIME)) = 1e-5;
 *-----------------------------------------------------------------------
-VDemTotH2.FX(cyrun,SBS, "2005") = VDemH2Req.L(cyrun,"2005");
-VDemTotH2.FX(CYall,SBS,YTIME)$(not An(YTIME)) = 1e-5;
-*VDemTotH2.L(CYall,SBS, YTIME) = 2;
+VDemSecH2.FX(cyrun,SBS, "2005") = VDemTotH2.L(cyrun,"2005");
+VDemSecH2.FX(CYall,SBS,YTIME)$(not An(YTIME)) = 1e-5;
+*VDemSecH2.L(CYall,SBS, YTIME) = 2;
 *---

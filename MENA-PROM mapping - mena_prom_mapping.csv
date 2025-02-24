@@ -544,8 +544,8 @@ Variable,H2TECH_CAP,VProdCapH2Tech,"Production capacity by H2 production technol
 Variable,H2TECH_SCRAP,VCapScrapH2ProdTech,"Decommissioning of capacity by H2 production technology","CYall, H2TECH, YTIME",,Hydrogen Module
 Variable,H2TECH_SCRPM,VPremRepH2Prod,"Premature replacement of H2 production technologies","CYall, H2TECH, YTIME",,Hydrogen Module
 Variable,H2TECH_SCRV,VScrapLftH2Prod,"Scrapping of equipment due to lifetime (normal scrapping)","CYall, H2TECH, YTIME",,Hydrogen Module
-Variable,TOTH2DEMAND,VDemH2Req,"Hydrogen production requirement in Mtoe for meeting final demand","CYall, YTIME",,Hydrogen Module
-Variable,H2TECH_DEMAND,VDemTotH2,"Demand for H2 by sector in mtoe","CYall, SBS, YTIME",,Hydrogen Module
+Variable,TOTH2DEMAND,VDemTotH2,"Hydrogen production requirement in Mtoe for meeting final demand","CYall, YTIME",,Hydrogen Module
+Variable,H2TECH_DEMAND,VDemSecH2,"Demand for H2 by sector in mtoe","CYall, SBS, YTIME",,Hydrogen Module
 Variable,H2TECH_GAP,VDemGapH2,"Demand for H2 to be covered by new equipment in mtoe","CYall, YTIME",,Hydrogen Module
 Variable,H2TECH_PCOST,VCostProdH2Tech,"Hydrogen production cost per technology in Euro per toe of hydrogen","CYall, H2TECH, YTIME",,Hydrogen Module
 Variable,H2TECH_VCOST,VCostVarProdH2Tech,"Variable cost (including fuel cost) for hydrogen production by technology in Euro per toe","CYall, H2TECH, YTIME",,Hydrogen Module
