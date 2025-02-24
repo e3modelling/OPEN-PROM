@@ -1,3 +1,134 @@
 *' @title Hydrogen input
 *' @code
 
+parameter iWBLGammaH2Prod(CYall,YTIME)           "Parameter for acceptance in new investments used in weibull function in production shares";
+iWBLGammaH2Prod(CYall,YTIME) = 4;
+*---
+parameter iProdLftH2(H2TECH)                     "Lifetime of hydrogen production technologies in years";
+iProdLftH2(H2TECH)=H2TECH_DATA(H2TECH,"LFT");
+*---
+parameter iCaptRateH2Prod(CYall,H2TECH,YTIME)    "CO2 capture rate of hydrogen production technologies (for those which are equipped with CCS facility)";
+iCaptRateH2Prod(CYall,H2TECH,YTIME)=H2TECH_DATA(H2TECH,"CR");
+*---
+parameter iH2Adopt(CYall,ARELAST,YTIME)          "Parameters controlling the speed and the year of taking off the transition to hydrogen economy";
+iH2Adopt(CYall,"b",YTIME)=H2INFR_OTHER(CYall,"b");
+iH2Adopt(CYall,"mid",YTIME)=H2INFR_OTHER(CYall,"mid");
+*---
+parameter iTranspLftH2(INFRTECH)                 "Technical lifetime of infrastructure technologies";
+iTranspLftH2(INFRTECH)=H2INFRA_DATA(INFRTECH,"LFT");
+*---
+parameter iCostCapH2Prod(CYall,H2TECH,YTIME)     "Capital cost of hydrogen production technologies in Euro per Nm3 of hydrogen";
+iCostCapH2Prod(CYall,H2TECH,"2000")=H2TECH_DATA(H2TECH,"IC_00");
+iCostCapH2Prod(CYall,H2TECH,"2025")=H2TECH_DATA(H2TECH,"IC_25");
+iCostCapH2Prod(CYall,H2TECH,"2050")=H2TECH_DATA(H2TECH,"IC_50");
+iCostCapH2Prod(CYall,H2TECH,YTIME1)=(iCostCapH2Prod(CYall,H2TECH,"2025")-iCostCapH2Prod(CYall,H2TECH,"2000"))/(2025-2000)*(YTIME1.VAL-2000)+iCostCapH2Prod(CYall,H2TECH,"2000");
+iCostCapH2Prod(CYall,H2TECH,YTIME2)=(iCostCapH2Prod(CYall,H2TECH,"2050")-iCostCapH2Prod(CYall,H2TECH,"2025"))/(2050-2025)*(YTIME2.VAL-2025)+iCostCapH2Prod(CYall,H2TECH,"2025");
+*---
+parameter iCostFOMH2Prod(CYall,H2TECH,YTIME)     "Fixed operating and maintenance costs of hydrogen production technologies in Euro per Nm3 of hydrogen";
+iCostFOMH2Prod(CYall,H2TECH,"2000")=H2TECH_DATA(H2TECH,"FC_00");
+iCostFOMH2Prod(CYall,H2TECH,"2025")=H2TECH_DATA(H2TECH,"FC_25");
+iCostFOMH2Prod(CYall,H2TECH,"2050")=H2TECH_DATA(H2TECH,"FC_50");
+iCostFOMH2Prod(CYall,H2TECH,YTIME1)=(iCostFOMH2Prod(CYall,H2TECH,"2025")-iCostFOMH2Prod(CYall,H2TECH,"2000"))/(2025-2000)*(YTIME1.VAL-2000)+iCostFOMH2Prod(CYall,H2TECH,"2000");
+iCostFOMH2Prod(CYall,H2TECH,YTIME2)=(iCostFOMH2Prod(CYall,H2TECH,"2050")-iCostFOMH2Prod(CYall,H2TECH,"2025"))/(2050-2025)*(YTIME2.VAL-2025)+iCostFOMH2Prod(CYall,H2TECH,"2025");
+*---
+parameter iCostVOMH2Prod(CYall,H2TECH,YTIME)     "Variable operating and maintenance costs of hydrogen production technologies in Euro per toe of hydrogen";
+iCostVOMH2Prod(CYall,H2TECH,"2000")=H2TECH_DATA(H2TECH,"VC_00");
+iCostVOMH2Prod(CYall,H2TECH,"2025")=H2TECH_DATA(H2TECH,"VC_25");
+iCostVOMH2Prod(CYall,H2TECH,"2050")=H2TECH_DATA(H2TECH,"VC_50");
+iCostVOMH2Prod(CYall,H2TECH,YTIME1)=(iCostVOMH2Prod(CYall,H2TECH,"2025")-iCostVOMH2Prod(CYall,H2TECH,"2000"))/(2025-2000)*(YTIME1.VAL-2000)+iCostVOMH2Prod(CYall,H2TECH,"2000");
+iCostVOMH2Prod(CYall,H2TECH,YTIME2)=(iCostVOMH2Prod(CYall,H2TECH,"2050")-iCostVOMH2Prod(CYall,H2TECH,"2025"))/(2050-2025)*(YTIME2.VAL-2025)+iCostVOMH2Prod(CYall,H2TECH,"2025");
+*---
+parameter iAvailH2Prod(H2TECH,YTIME)             "Availability of hydrogen production technologies";
+iAvailH2Prod(H2TECH,"2000")=H2TECH_DATA(H2TECH,"AVAIL_00");
+iAvailH2Prod(H2TECH,"2025")=H2TECH_DATA(H2TECH,"AVAIL_25");
+iAvailH2Prod(H2TECH,"2050")=H2TECH_DATA(H2TECH,"AVAIL_50");
+iAvailH2Prod(H2TECH,YTIME1)=(iAvailH2Prod(H2TECH,"2025")-iAvailH2Prod(H2TECH,"2000"))/(2025-2000)*(YTIME1.VAL-2000)+iAvailH2Prod(H2TECH,"2000");
+iAvailH2Prod(H2TECH,YTIME2)=(iAvailH2Prod(H2TECH,"2050")-iAvailH2Prod(H2TECH,"2025"))/(2050-2025)*(YTIME2.VAL-2025)+iAvailH2Prod(H2TECH,"2025");
+*---
+parameter iEffH2Prod(CYall,H2TECH,YTIME)         "Efficiency of hydrogen production technologies";
+iEffH2Prod(CYall,H2TECH,"2000")=H2TECH_DATA(H2TECH,"EFF_00");
+iEffH2Prod(CYall,H2TECH,"2025")=H2TECH_DATA(H2TECH,"EFF_25");
+iEffH2Prod(CYall,H2TECH,"2050")=H2TECH_DATA(H2TECH,"EFF_50");
+iEffH2Prod(CYall,H2TECH,YTIME1)=(iEffH2Prod(CYall,H2TECH,"2025")-iEffH2Prod(CYall,H2TECH,"2000"))/(2025-2000)*(YTIME1.VAL-2000)+iEffH2Prod(CYall,H2TECH,"2000");
+iEffH2Prod(CYall,H2TECH,YTIME2)=(iEffH2Prod(CYall,H2TECH,"2050")-iEffH2Prod(CYall,H2TECH,"2025"))/(2050-2025)*(YTIME2.VAL-2025)+iEffH2Prod(CYall,H2TECH,"2025");
+*---
+parameter iCostInvH2Transp(CYall,INFRTECH,YTIME)  "Investment cost of infrastructure technology";
+                                                   !! - Turnpike pipeline in Euro per km
+                                                   !! - Low pressure urban pipeline in Euro per km
+                                                   !! - Medium pressure ring in Euro per km
+                                                   !! - Service stations connection lines in Euro per km
+                                                   !! - Gaseous hydrogen service stations in Euro per toe per year
+iCostInvH2Transp(CYall,INFRTECH,"2000")=H2INFRA_DATA(INFRTECH,"IC_00");
+iCostInvH2Transp(CYall,INFRTECH,"2025")=H2INFRA_DATA(INFRTECH,"IC_25");
+iCostInvH2Transp(CYall,INFRTECH,"2050")=H2INFRA_DATA(INFRTECH,"IC_50");
+iCostInvH2Transp(CYall,INFRTECH,YTIME1)=(iCostInvH2Transp(CYall,INFRTECH,"2025")-iCostInvH2Transp(CYall,INFRTECH,"2000"))/(2025-2000)*(YTIME1.VAL-2000)+iCostInvH2Transp(CYall,INFRTECH,"2000");
+iCostInvH2Transp(CYall,INFRTECH,YTIME2)=(iCostInvH2Transp(CYall,INFRTECH,"2050")-iCostInvH2Transp(CYall,INFRTECH,"2025"))/(2050-2025)*(YTIME2.VAL-2025)+iCostInvH2Transp(CYall,INFRTECH,"2025");
+*---
+parameter iEffH2Transp(CYall,INFRTECH,YTIME)      "Efficiency of hydrogen transportation per infrastructure technology";
+iEffH2Transp(CYall,INFRTECH,"2000")=H2INFRA_DATA(INFRTECH,"EFF_00");
+iEffH2Transp(CYall,INFRTECH,"2025")=H2INFRA_DATA(INFRTECH,"EFF_25");
+iEffH2Transp(CYall,INFRTECH,"2050")=H2INFRA_DATA(INFRTECH,"EFF_50");
+iEffH2Transp(CYall,INFRTECH,YTIME1)=(iEffH2Transp(CYall,INFRTECH,"2025")-iEffH2Transp(CYall,INFRTECH,"2000"))/(2025-2000)*(YTIME1.VAL-2000)+iEffH2Transp(CYall,INFRTECH,"2000");
+iEffH2Transp(CYall,INFRTECH,YTIME2)=(iEffH2Transp(CYall,INFRTECH,"2050")-iEffH2Transp(CYall,INFRTECH,"2025"))/(2050-2025)*(YTIME2.VAL-2025)+iEffH2Transp(CYall,INFRTECH,"2025");
+*---
+parameter iConsSelfH2Transp(CYall,INFRTECH,YTIME)  "Self consumption of infrastructure technology rate";
+iConsSelfH2Transp(CYall,INFRTECH,"2000")=H2INFRA_DATA(INFRTECH,"SELF_00");
+iConsSelfH2Transp(CYall,INFRTECH,"2025")=H2INFRA_DATA(INFRTECH,"SELF_25");
+iConsSelfH2Transp(CYall,INFRTECH,"2050")=H2INFRA_DATA(INFRTECH,"SELF_50");
+iConsSelfH2Transp(CYall,INFRTECH,YTIME1)=(iConsSelfH2Transp(CYall,INFRTECH,"2025")-iConsSelfH2Transp(CYall,INFRTECH,"2000"))/(2025-2000)*(YTIME1.VAL-2000)+iConsSelfH2Transp(CYall,INFRTECH,"2000");
+iConsSelfH2Transp(CYall,INFRTECH,YTIME2)=(iConsSelfH2Transp(CYall,INFRTECH,"2050")-iConsSelfH2Transp(CYall,INFRTECH,"2025"))/(2050-2025)*(YTIME2.VAL-2025)+iConsSelfH2Transp(CYall,INFRTECH,"2025");
+*---
+parameter iAvailRateH2Transp(INFRTECH,YTIME)       "Availability rate of infrastructure technology";
+iAvailRateH2Transp(INFRTECH,"2000")=H2INFRA_DATA(INFRTECH,"AVAIL_00");
+iAvailRateH2Transp(INFRTECH,"2025")=H2INFRA_DATA(INFRTECH,"AVAIL_25");
+iAvailRateH2Transp(INFRTECH,"2050")=H2INFRA_DATA(INFRTECH,"AVAIL_50");
+iAvailRateH2Transp(INFRTECH,YTIME1)=(iAvailRateH2Transp(INFRTECH,"2025")-iAvailRateH2Transp(INFRTECH,"2000"))/(2025-2000)*(YTIME1.VAL-2000)+iAvailRateH2Transp(INFRTECH,"2000");
+iAvailRateH2Transp(INFRTECH,YTIME2)=(iAvailRateH2Transp(INFRTECH,"2050")-iAvailRateH2Transp(INFRTECH,"2025"))/(2050-2025)*(YTIME2.VAL-2025)+iAvailRateH2Transp(INFRTECH,"2025");
+*---
+parameter iCostInvFOMH2(INFRTECH,YTIME)            "Annual fixed O&M cost as percentage of total investment cost";
+iCostInvFOMH2(INFRTECH,"2000")=H2INFRA_DATA(INFRTECH,"FC_00");
+iCostInvFOMH2(INFRTECH,"2025")=H2INFRA_DATA(INFRTECH,"FC_25");
+iCostInvFOMH2(INFRTECH,"2050")=H2INFRA_DATA(INFRTECH,"FC_50");
+iCostInvFOMH2(INFRTECH,YTIME1)=(iCostInvFOMH2(INFRTECH,"2025")-iCostInvFOMH2(INFRTECH,"2000"))/(2025-2000)*(YTIME1.VAL-2000)+iCostInvFOMH2(INFRTECH,"2000");
+iCostInvFOMH2(INFRTECH,YTIME2)=(iCostInvFOMH2(INFRTECH,"2050")-iCostInvFOMH2(INFRTECH,"2025"))/(2050-2025)*(YTIME2.VAL-2025)+iCostInvFOMH2(INFRTECH,"2025");
+*---
+parameter iCostInvVOMH2(INFRTECH,YTIME)            "Annual variable O&M cost as percentage of total investment cost";
+iCostInvVOMH2(INFRTECH,"2000")=H2INFRA_DATA(INFRTECH,"VC_00");
+iCostInvVOMH2(INFRTECH,"2025")=H2INFRA_DATA(INFRTECH,"VC_25");
+iCostInvVOMH2(INFRTECH,"2050")=H2INFRA_DATA(INFRTECH,"VC_50");
+iCostInvVOMH2(INFRTECH,YTIME1)=(iCostInvVOMH2(INFRTECH,"2025")-iCostInvVOMH2(INFRTECH,"2000"))/(2025-2000)*(YTIME1.VAL-2000)+iCostInvVOMH2(INFRTECH,"2000");
+iCostInvVOMH2(INFRTECH,YTIME2)=(iCostInvVOMH2(INFRTECH,"2050")-iCostInvVOMH2(INFRTECH,"2025"))/(2050-2025)*(YTIME2.VAL-2025)+iCostInvVOMH2(INFRTECH,"2025");
+*---
+parameter iPipeH2Transp(INFRTECH)                   "Kilometers of pipelines required per toe of delivered hydrogen (based on stylized model)";
+iPipeH2Transp(INFRTECH) =  H2INFRA_DATA(INFRTECH,"H2KMTOE");
+
+parameter iKmFactH2Transp(CYall,INFRTECH)           "Km needed for a given infrastructure assuming that its required infrastructure has been arleady installed";
+iKmFactH2Transp(CYall,INFRTECH) = sum(alllabels$INFRTECHLAB(INFRTECH,alllabels), H2INFR_OTHER(CYall,alllabels));
+
+parameter iPolH2AreaMax(CYall)                      "Policy parameter defining the percentage of the country area supplied by hydrogen at the end of the horizon period [0...1]";
+iPolH2AreaMax(CYall) = H2INFR_OTHER(CYall,"MAXAREA");
+
+parameter iHabAreaCountry(CYall)                    "Inhabitable land in a country";
+iHabAreaCountry(CYall) = H2INFR_OTHER(CYall,"AREA");
+*---
+parameter iEffNetH2Transp(CYall,INFRTECH,YTIME)     "Total efficiency of the distribution network until the <infrtech> node";
+iEffNetH2Transp(CYall,INFRTECH,YTIME) = iEffH2Transp(CYall,INFRTECH,YTIME)*(1-iConsSelfH2Transp(CYall,INFRTECH,YTIME));
+*---
+loop H2EFFLOOP do
+  loop INFRTECH2$H2NETWORK(INFRTECH2,H2EFFLOOP) do
+         iEffNetH2Transp(CYall,H2EFFLOOP,YTIME) =  iEffNetH2Transp(CYall,INFRTECH2,YTIME)*iEffH2Transp(CYall,H2EFFLOOP,YTIME);
+  endloop;
+endloop;
+*---
+parameter iCostAvgWeight(CYALL,YTIME)                "Weight for pricing in average cost or in marginal cost";
+iCostAvgWeight(CYALL,YTIME) = 1;
+loop ytime$(an(ytime) $(not sameas("2006",ytime))) do
+         iCostAvgWeight(CYALL,YTIME) = -1/19+iCostAvgWeight(CYALL,YTIME-1);
+endloop;
+*---
+$ontext
+*        Calibration parameters
+parameter iWBLShareH2Prod(CYall,H2TECH,YTIME)             "Parameter for controlling the weibull function for calculating the shares in new market";
+parameter iWBLPremRepH2Prod(CYall,H2TECH,YTIME)           "Parameter for controlling the premature replacement of technology";
+$offtext
+*---
