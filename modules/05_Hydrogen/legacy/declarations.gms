@@ -8,7 +8,6 @@ VProdH2(allCy, H2TECH, YTIME)                   "Hydrogen Production by technolo
 VCapScrapH2ProdTech(allCy, H2TECH, YTIME)       "Decommissioning of capacity by H2 production technology"
 VPremRepH2Prod(allCy, H2TECH, YTIME)            "Premature replacement of H2 production technologies"
 VScrapLftH2Prod(allCy, H2TECH, YTIME)           "Scrapping of equipment due to lifetime (normal scrapping)"
-VDemSecH2(allCy, SBS, YTIME)                    "Demand for H2 by sector in mtoe"
 VDemGapH2(allCy, YTIME)                         "Demand for H2 to be covered by new equipment in mtoe"
 VCostProdH2Tech(allCy, H2TECH, YTIME)           "Hydrogen production cost per technology in Euro per toe of hydrogen"
 VCostVarProdH2Tech(allCy, H2TECH, YTIME)        "Variable cost (including fuel cost) for hydrogen production by technology in Euro per toe"
@@ -37,6 +36,7 @@ VCostTotH2(allCy, SBS, YTIME)                   "Total Hydrogen Cost Per Sector 
 *' *** Miscellaneous
 VDemTotH2(allCy, YTIME)                         "Hydrogen production requirement in Mtoe for meeting final demand"
 VProdCapH2Tech(allCy, H2TECH, YTIME)            "Production capacity by H2 production technology"
+VDemSecH2(allCy, SBS, YTIME)                    "Demand for H2 by sector in mtoe"
 ;
 
 Equations
