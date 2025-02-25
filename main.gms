@@ -144,15 +144,16 @@ $setGlobal Prices           legacy
 
 ** CORE MODEL FILES **
 *' SETS
-$include "./core/sets.gms";
+$include    "./core/sets.gms";
+$batinclude "./modules/sets.gms"       sets
 
 *' DECLARATIONS
 $include    "./core/declarations.gms";
 $batinclude "./modules/include.gms"    declarations
 
 *' INPUTS
-$include "./core/input.gms";
-*$batinclude "./modules/input.gms"    input
+$include    "./core/input.gms";
+$batinclude "./modules/input.gms"      input
 
 *' EQUATIONS
 $include    "./core/equations.gms";
