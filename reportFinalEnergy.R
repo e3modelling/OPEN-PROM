@@ -5,6 +5,7 @@ reportFinalEnergy <- function(regs) {
   sets <- readGDX('./blabla.gdx', "BALEF2EFS")
   names(sets) <- c("BAL", "EF")
   sets[["BAL"]] <- gsub("Gas fuels", "Gases", sets[["BAL"]])
+  sets[["BAL"]] <- gsub("Steam", "Heat", sets[["BAL"]])
   
   # add model OPEN-PROM data Total final energy consumnption (Mtoe)
   VConsFinEneCountry <- readGDX('./blabla.gdx', "VConsFinEneCountry", field = 'l')[regs, , ]
@@ -21,6 +22,80 @@ reportFinalEnergy <- function(regs) {
   magpie_object <- NULL
   
   magpie_object <- mbind(magpie_object, VConsFinEneCountry)
+  
+  library(ggplot2)
+  
+  #filter period by last year of the model
+  an <- readGDX('./blabla.gdx', "an", field = 'l')
+  
+  .toolgeom_bar <- function(data, colors_vars) {
+    return(ggplot(data,aes(y=value,x=period, color=variable)) +
+             scale_fill_manual(values = as.character(colors_vars[,3]), limits = as.character(colors_vars[,1])) + 
+             scale_color_manual(values = as.character(colors_vars[,3]), limits = as.character(colors_vars[,1])) + 
+             geom_bar(stat = "identity",aes(fill=variable) ) + 
+             facet_wrap("region",scales = "free_y") +
+             labs(x="period", y=paste0("Final Energy"," ",unique(data[["unit"]]))) +
+             theme_bw()+
+             theme(text = element_text(size = 4),
+                   strip.text.x = element_text(margin = margin(0.05,0,0.05,0, "cm")),
+                   axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), 
+                   aspect.ratio = 1.5/2,plot.title = element_text(size = 4),
+                   legend.key.size = unit(0.5, "cm"),
+                   legend.key.width = unit(0.5, "cm")))
+  }
+  
+  pq <- as.quitte(magpie_object)
+  pq <- select(pq, -c("variable"))
+  names(pq) <- sub("EF", "variable", names(pq))
+  vars <- c(
+    "Final Energy|Solids" ,
+    "Final Energy|Hydrogen" ,
+    "Final Energy|Gases",
+    "Final Energy|Electricity",
+    "Final Energy|Liquids",
+    "Final Energy|Heat",
+    "Final Energy|Biomass",
+    NULL)
+  
+  
+  #Read csv to map variables with colors
+  colors <- read.csv(system.file(package="mip",file.path("extdata","plotstyle.csv")))
+  
+  #Split by semicolon
+  split_text <- strsplit(as.character(colors$X.legend.color.marker.linestyle), split = ";")
+  
+  #Convert the list into a data frame
+  colors <- do.call(bind_rows, lapply(split_text, function(x) as.data.frame(t(x))))
+  
+  #map variables with colors
+  colors_vars <- filter(colors,V1%in%vars)
+  var_miss <- as.data.frame(vars)
+  
+  #add missing colors
+  V1 <- as.character(filter(var_miss,!(vars%in%colors[,"V1"]))[["vars"]])
+  V2 <- c("Biomass")
+  V3 <- c("#00b219")
+  V4 <- rep(NA)
+  V5 <- rep(NA)
+  
+  miss_vars <- data.frame(V1, V2, V3, V4, V5)
+  
+  #add missing colors to dataset
+  colors_vars <- rbind(colors_vars, miss_vars)
+  
+  #order colors to match variables
+  colors_vars <- colors_vars[order(colors_vars[["V1"]]), ]
+  
+  #filter data by variables and max period
+  data <- filter(pq,variable%in%colors_vars[,1],period<=max(an))
+  
+  #order variables to match colors
+  data <- data %>% arrange(as.character(variable))
+  
+  #FE plots per fuel
+  #create geom_bar
+  .toolgeom_bar(data, colors_vars)
+  ggsave("FE_fuels.png", units="in", width=5.5, height=4, dpi=1200)
   
  # Final Energy | "TRANSE" | "INDSE" | "DOMSE" | "NENSE"
   
@@ -120,5 +195,56 @@ reportFinalEnergy <- function(regs) {
     FCONS_per_fuel <- add_dimension(FCONS_per_fuel, dim = 3.2, add = "unit", nm = "Mtoe")
     magpie_object <- mbind(magpie_object, FCONS_per_fuel)
   }
+  
+  vars_sectors <- c(
+    "Final Energy|Industry" ,
+    "Final Energy|Transportation" ,
+    "Final Energy|Residential and Commercial",
+    "Final Energy|Non Energy and Bunkers",
+    NULL)
+  
+  pq <- as.quitte(magpie_object[,,vars_sectors])
+  pq <- select(pq, -c("variable"))
+  names(pq) <- sub("EF", "variable", names(pq))
+
+  #Read csv to map variables with colors
+  colors <- read.csv(system.file(package="mip",file.path("extdata","plotstyle.csv")))
+  
+  #Split by semicolon
+  split_text <- strsplit(as.character(colors$X.legend.color.marker.linestyle), split = ";")
+  
+  #Convert the list into a data frame
+  colors <- do.call(bind_rows, lapply(split_text, function(x) as.data.frame(t(x))))
+  
+  #map variables with colors
+  colors_vars <- filter(colors,V1%in%vars_sectors)
+  var_miss <- as.data.frame(vars_sectors)
+  
+  #add missing colors
+  V1 <- as.character(filter(var_miss,!(vars_sectors%in%colors[,"V1"]))[["vars_sectors"]])
+  V2 <- c("Non Energy and Bunkers")
+  V3 <- c("yellow")
+  V4 <- rep(NA)
+  V5 <- rep(NA)
+  
+  miss_vars <- data.frame(V1, V2, V3, V4, V5)
+  
+  #add missing colors to dataset
+  colors_vars <- rbind(colors_vars, miss_vars)
+  
+  #order colors to match variables
+  colors_vars <- colors_vars[order(colors_vars[["V1"]]), ]
+  
+  #filter data by variables and max period
+  data <- filter(pq,variable%in%colors_vars[,1],period<=max(an))
+  
+  #order variables to match colors
+  data <- data %>% arrange(as.character(variable))
+  
+  #FE plots per sector
+  #create geom_bar
+  .toolgeom_bar(data, colors_vars)
+  ggsave("FE_sectors.png", units="in", width=5.5, height=4, dpi=1200)
+  
   return(magpie_object)
 }
