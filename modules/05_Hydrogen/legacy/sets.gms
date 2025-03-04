@@ -74,7 +74,7 @@ H2SBS(SBS) final demand sectors consuming hydrogen for energy purposes
 PG,IS,NF,BM,CH,PP,EN,TX,FD,OE,OI,SE,AG,HOU,PC,GU,PA,PT,GT
 /
 *---
-H2INFRSBS(INFRTECH,SBS) infrustructure required by demand sector)
+H2INFRSBS(INFRTECH,SBS) infrustructure required by demand sector
 /
 TPIPA.(PG,IS,NF,BM,CH,PP,EN,TX,FD,OE,OI,SE,AG,HOU,PC,GU,PA,PT,GT)
 LPIPU.(SE,AG,HOU)

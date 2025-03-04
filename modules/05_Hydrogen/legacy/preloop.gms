@@ -3,9 +3,9 @@
 
 *'                *VARIABLE INITIALISATION*
 *---
-VCostTotH2.FX(runCy,TRANSE,"2005") = EFPRICE(runCy,TRANSE,"H2F","2005"); !! *Needs to be renamed (EFPRICE). Cannot find it in PROMETHEUS model.
-VCostTotH2.FX(runCy,"PG","2005") = EFPRICE(runCy,"PG","H2F","2005"); !! *Needs to be renamed (EFPRICE).
-VCostTotH2.FX(runCy,INDDOM,"2005") = EFPRICE(runCy,INDDOM,"STE1AH2F","2005"); !! *Needs to be renamed (EFPRICE).
+VCostTotH2.FX(runCy,TRANSE,"2005") = iFuelPrice(runCy,TRANSE,"H2F","2005"); 
+VCostTotH2.FX(runCy,"PG","2005") = iFuelPrice(runCy,"PG","H2F","2005"); 
+VCostTotH2.FX(runCy,INDDOM,"2005") = iFuelPrice(runCy,INDDOM,"STE1AH2F","2005"); 
 VCostTotH2.FX(runCy,SBS,YTIME)$(not An(YTIME)) = 1e-5;
 VCostTotH2.L(runCy,SBS,YTIME) = 2;
 *---
@@ -76,7 +76,7 @@ VTariffH2Infr.FX(runCy,INFRTECH,YTIME) $(not An(YTIME)) = 1e-5;
 VPriceH2Infr.L(runCy,SBS,YTIME) = 2;
 VPriceH2Infr.FX(runCy,SBS,YTIME)  $(not An(YTIME)) = 1e-5;
 *---
-VH2InfrArea.l(runCy,YTIME) = 10;
+VH2InfrArea.L(runCy,YTIME) = 10;
 *-----------------------------------------------------------------------
 *' *** Miscellaneous
 *---
@@ -86,8 +86,8 @@ VDemTotH2.FX(runCy,YTIME)$(not An(YTIME)) = 1e-5;
 *---
 VProdCapH2Tech.L(runCy,h2tech, YTIME) = 2;
 VProdCapH2Tech.FX(runCy,h2tech, YTIME)$(not An(YTIME)) = 1e-5;
-*-----------------------------------------------------------------------
+*---
 VDemSecH2.FX(runCy,SBS, "2005") = VDemTotH2.L(runCy,"2005");
 VDemSecH2.FX(runCy,SBS,YTIME)$(not An(YTIME)) = 1e-5;
 *VDemSecH2.L(runCy,SBS, YTIME) = 2;
-*---
+*-----------------------------------------------------------------------
