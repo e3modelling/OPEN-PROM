@@ -36,6 +36,7 @@ reportPrice <- function(regs) {
   sets <- readGDX('./blabla.gdx', "BALEF2EFS")
   names(sets) <- c("BAL", "EF")
   sets[["BAL"]] <- gsub("Gas fuels", "Gases", sets[["BAL"]])
+  sets[["BAL"]] <- gsub("Steam", "Heat", sets[["BAL"]])
   
   z <- NULL
   for (y in 1 : length(sector)) {
@@ -85,6 +86,14 @@ reportPrice <- function(regs) {
     # aggregate from fuels to reporting fuel categories
     sum_open_prom <- iFuelPrice
     sum_open_prom <- as.quitte(sum_open_prom)
+    
+    # Energy Forms Aggregations
+    EFtoEFA <- readGDX('./blabla.gdx', "EFtoEFA")
+    EFtoEFA <- EFtoEFA[grep("^STE", EFtoEFA[,1]),]
+    EFtoEFA[,2] <- "Heat"
+    names(EFtoEFA) <- sub("EFA", "BAL", names(EFtoEFA))
+    sets <- rbind(sets, EFtoEFA)
+    
     ## add mapping
     sum_open_prom <- left_join(sum_open_prom, sets, by = "EF")
     # take the mean
