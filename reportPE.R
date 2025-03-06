@@ -11,6 +11,7 @@ reportPE <- function(regs) {
   sets$BAL <- gsub("Nuclear heat", "Nuclear", sets$BAL)
   sets$BAL <- gsub("Solar energy", "Solar", sets$BAL)
   sets$BAL <- gsub("Geothermal heat", "Geothermal", sets$BAL)
+  sets[["BAL"]] <- gsub("Steam", "Heat", sets[["BAL"]])
   
   # aggregate from PROM fuels to reporting fuel categories
   VProdPrimary <- toolAggregate(VProdPrimary[ , , unique(sets$EF)], dim = 3, rel = sets, from = "EF", to = "BAL")
