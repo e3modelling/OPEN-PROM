@@ -1,6 +1,25 @@
 *' @title Hydrogen input
 *' @code
 
+*---
+table iH2Production(allCy,EF,YTIME)	 "Data for Hydrogen production"
+$ondelim
+$include"./iH2Production.csv"
+$offdelim
+;
+*---
+table iH2Parameters(allCy,EF,YTIME)	 ""
+$ondelim
+$include"./iH2Parameters.csv"
+$offdelim
+;
+*---
+table iH2InfrastructureCapCosts(allCy,EF,YTIME)	 ""
+$ondelim
+$include"./iH2InfrastructureCapCosts.csv"
+$offdelim
+;
+*---
 parameter iWBLGammaH2Prod(allCy,YTIME)           "Parameter for acceptance in new investments used in weibull function in production shares";
 iWBLGammaH2Prod(runCy,YTIME) = 4;
 *---

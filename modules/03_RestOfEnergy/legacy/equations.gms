@@ -48,7 +48,9 @@ QConsFinNonEne(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QLossesDistr(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VLossesDistr(allCy,EFS,YTIME)
              =E=
-         (iRateLossesFinCons(allCy,EFS,YTIME) * (VConsFinEneCountry(allCy,EFS,YTIME) + VConsFinNonEne(allCy,EFS,YTIME)))$(not H2EF(EFS));  
+         (iRateLossesFinCons(allCy,EFS,YTIME) * (VConsFinEneCountry(allCy,EFS,YTIME) + VConsFinNonEne(allCy,EFS,YTIME)))$(not H2EF(EFS))
+         +
+         (  VDemTotH2(allCy,YTIME) - sum(SBS$H2SBS(SBS), VDemSecH2(allCy,SBS,YTIME)))$H2EF(EFS);  
 
 *' The equation calculates the transformation output from district heating plants .
 *' This transformation output is determined by summing over different demand sectors and district heating systems 
