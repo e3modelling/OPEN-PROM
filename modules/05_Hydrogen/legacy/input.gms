@@ -34,7 +34,7 @@ iH2Adopt(runCy,"b",YTIME)=iH2Parameters(runCy,"b");
 iH2Adopt(runCy,"mid",YTIME)=iH2Parameters(runCy,"mid");
 *---
 parameter iTranspLftH2(INFRTECH)                 "Technical lifetime of infrastructure technologies";
-iTranspLftH2(INFRTECH)=H2INFRA_DATA(INFRTECH,"LFT");
+iTranspLftH2(INFRTECH)=iH2InfrastructureCapCosts(INFRTECH,"LFT");
 *---
 parameter iCostCapH2Prod(allCy,H2TECH,YTIME)     "Capital cost of hydrogen production technologies in Euro per Nm3 of hydrogen";
 iCostCapH2Prod(runCy,H2TECH,"2000")=iH2Production(H2TECH,"IC_00");
