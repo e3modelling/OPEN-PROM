@@ -559,11 +559,11 @@ Variable,H2PCOST,VCostAvgProdH2,"Average production cost of hydrogen in Euro per
 Variable,H2AREA,VH2InfrArea,"Number of stylised areas covered by H2 infrastructure","CYall, YTIME",,Hydrogen Module
 Variable,H2DELIV,VDelivH2InfrTech,"Hydrogen delivered by infrastructure technology in Mtoe","CYall, INFRTECH, YTIME",,Hydrogen Module
 Variable,H2DELIV_GAP,VInvNewReqH2Infra,"New infrastructure requirements in Mtoe of delivered hydrogen","CYall, INFRTECH, YTIME",,Hydrogen Module
-Variable,H2TRANSP_NEWCAP,VCostInvTechH2Infr,"Required capacity to meet the new infrastructure requirements
+Variable,H2TRANSP_NEWCAP,VH2Pipe,"Required capacity to meet the new infrastructure requirements
                                                     !! - km of pipelines
                                                     !! - number of service stations","CYall, INFRTECH, YTIME",,Hydrogen Module
-Variable,H2TRANSP_ICOST,VCostInvCummH2Transp,"Investment cost of infrastructure by technology in Million Euros (MEuro) for meeting the new infrastructure requirements","CYall, INFRTECH, YTIME",,Hydrogen Module
-Variable,H2TRANSP_ACCOST,VH2Pipe,"Average cost of infrastructure Euro per toe","CYall, INFRTECH, YTIME",,Hydrogen Module
+Variable,H2TRANSP_ICOST,VCostInvTechH2Infr,"Investment cost of infrastructure by technology in Million Euros (MEuro) for meeting the new infrastructure requirements","CYall, INFRTECH, YTIME",,Hydrogen Module
+Variable,H2TRANSP_ACCOST,VCostInvCummH2Transp,"Average cost of infrastructure Euro per toe","CYall, INFRTECH, YTIME",,Hydrogen Module
 Variable,H2TRANSP_MCOST,VCostTechH2Infr,"Marginal cost by infrastructure technology in Euro","CYall, INFRTECH, YTIME",,Hydrogen Module
 Variable,H2TRANSP_TARIFF,VTariffH2Infr,"Tarrif paid by the final consumer for using the specific infrastructure technology in Euro per toe annual","CYall, INFRTECH, YTIME",,Hydrogen Module
 Variable,H2TRANSP_PRICE,VPriceH2Infr,"Hydrogen distribution and storage price paid by final consumer in Euro per toe annual","CYall, SBS, YTIME",,Hydrogen Module
