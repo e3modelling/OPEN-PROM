@@ -1,7 +1,7 @@
 *' @title Equations of OPEN-PROMs Hydrogen
 *' @code
 
-QDemTotH2(allCy,YTIME)$TIME(YTIME $(runCy(allCy)))..
+QDemTotH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VDemTotH2(allCy,YTIME)
                  =E=
          sum(SBS$H2SBS(SBS), VDemSecH2(allCy,SBS, YTIME)/
@@ -10,7 +10,7 @@ QDemTotH2(allCy,YTIME)$TIME(YTIME $(runCy(allCy)))..
 ;
 
 
-QScrapLftH2Prod(allCy,H2TECH,YTIME)$TIME(YTIME $(runCy(allCy)))..
+QScrapLftH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         VScrapLftH2Prod(allCy,H2TECH,YTIME)
          =E=
         (
@@ -20,7 +20,7 @@ QScrapLftH2Prod(allCy,H2TECH,YTIME)$TIME(YTIME $(runCy(allCy)))..
 ;
 
 
-QPremRepH2Prod(allCy,H2TECH,YTIME)$TIME(YTIME $(runCy(allCy)))..
+QPremRepH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VPremRepH2Prod(allCy,H2TECH,YTIME)
          =E=
          1-
@@ -43,14 +43,14 @@ QPremRepH2Prod(allCy,H2TECH,YTIME)$TIME(YTIME $(runCy(allCy)))..
 ;
 
 
-QCapScrapH2ProdTech(allCy,H2TECH,YTIME)$TIME(YTIME $(runCy(allCy)))..
+QCapScrapH2ProdTech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VCapScrapH2ProdTech(allCy,H2TECH,YTIME)
          =E=
          1-(1-VScrapLftH2Prod(allCy,h2tech,YTIME))*(1-VPremRepH2Prod(allCy,h2tech,YTIME))
 ;
 
 
-QDemGapH2(allCy, YTIME)$TIME(YTIME $(runCy(allCy)))..
+QDemGapH2(allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VDemGapH2(allCy, YTIME)
                  =E=
          ( VDemTotH2(allCy,YTIME) - sum(H2TECH,(1-VCapScrapH2ProdTech(allCy,h2tech,YTIME))*VProdH2(allCy,h2tech,YTIME-1))
@@ -60,7 +60,7 @@ QDemGapH2(allCy, YTIME)$TIME(YTIME $(runCy(allCy)))..
 ;
 
 
-QCostProdH2Tech(allCy,H2TECH,YTIME)$TIME(YTIME $(runCy(allCy)))..
+QCostProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VCostProdH2Tech(allCy,H2TECH,YTIME)
          =E=
          (iDisc(allCy,"H2P",YTIME)*exp(iDisc(allCy,"H2P",YTIME)* iProdLftH2(H2TECH))/(exp(iDisc(allCy,"H2P",YTIME)*iProdLftH2(H2TECH))-1)*
@@ -69,7 +69,7 @@ QCostProdH2Tech(allCy,H2TECH,YTIME)$TIME(YTIME $(runCy(allCy)))..
 ;
 
 
-QCostVarProdH2Tech(allCy,H2TECH,YTIME)$TIME(YTIME $(runCy(allCy)))..
+QCostVarProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VCostVarProdH2Tech(allCy,H2TECH,YTIME)
          =E=
          sum(EF$H2TECHEFtoEF(H2TECH,EF), (VPriceFuelSubsecCarVal(allCy,"H2P",EF,YTIME)*1e3+
@@ -85,7 +85,7 @@ QCostVarProdH2Tech(allCy,H2TECH,YTIME)$TIME(YTIME $(runCy(allCy)))..
 ;
 
 
-QAcceptCCSH2Tech(allCy,YTIME)$TIME(YTIME $(runCy(allCy)))..
+QAcceptCCSH2Tech(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VAcceptCCSH2Tech(allCy,YTIME)
          =E=
          iWBLGammaH2Prod(allCy,YTIME)*5+25*EXP(-0.06*((sum(NAP$NAPtoALLSBS(NAP,"H2P"),VCarVal(NAP,YTIME-1)))))
@@ -127,7 +127,7 @@ QCostProdCCSNoCCSH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME) $H2NOCCS(H2TECH) $(runC
 ;
 
 
-QGapShareH2Tech2(allCy,H2TECH,YTIME)$TIME(YTIME $(runCy(allCy)))..
+QGapShareH2Tech2(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         VGapShareH2Tech2(allCy,H2TECH,YTIME)
              =E=
          (
@@ -141,7 +141,7 @@ QGapShareH2Tech2(allCy,H2TECH,YTIME)$TIME(YTIME $(runCy(allCy)))..
 ;
 
 
-QGapShareH2Tech1(allCy,H2TECH,YTIME)$TIME(YTIME $(runCy(allCy)))..
+QGapShareH2Tech1(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         VGapShareH2Tech1(allCy,H2TECH,YTIME)
          =E=
          (VGapShareH2Tech2(allCy,H2TECH,YTIME)$((not H2CCS(H2TECH)) $(not H2NOCCS(H2TECH)))
@@ -151,14 +151,14 @@ QGapShareH2Tech1(allCy,H2TECH,YTIME)$TIME(YTIME $(runCy(allCy)))..
 ;
 
 
-QProdH2(allCy,H2TECH,YTIME)$TIME(YTIME $(runCy(allCy)))..
+QProdH2(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VProdH2(allCy,h2tech,YTIME)
          =E=
          (1-VCapScrapH2ProdTech(allCy,H2TECH,YTIME))*VProdH2(allCy,H2TECH,YTIME-1)+ VGapShareH2Tech1(allCy,H2TECH,YTIME)*VDemGapH2(allCy,YTIME)
 ;
 
 
-QCostAvgProdH2(allCy,YTIME)$TIME(YTIME $(runCy(allCy)))..
+QCostAvgProdH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VCostAvgProdH2(allCy,YTIME)
          =E=
          sum(H2TECH, VProdH2(allCy,H2TECH,YTIME)*VCostProdH2Tech(allCy,H2TECH,YTIME))/sum(H2TECH,VProdH2(allCy,H2TECH,YTIME))
@@ -190,7 +190,7 @@ QConsFuelH2Prod(allCy,EF,YTIME)$(TIME(YTIME) $H2PRODEF(EF) $(runCy(allCy)))..
 //
 
 
-QH2InfrArea(allCy,YTIME)$TIME(YTIME $(runCy(allCy)))..
+QH2InfrArea(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VH2InfrArea(allCy,YTIME)
          =E=
          0.001+iPolH2AreaMax(allCy)/(1 + exp( -iH2Adopt(allCy,"B",YTIME)*( VDemTotH2(allCy,YTIME)/(iHabAreaCountry(allCy)/sAreaStyle*0.275)- iH2Adopt(allCy,"MID",YTIME))))
@@ -198,7 +198,7 @@ QH2InfrArea(allCy,YTIME)$TIME(YTIME $(runCy(allCy)))..
 ;
 
 
-QDelivH2InfrTech(allCy,INFRTECH,YTIME)$TIME(YTIME $(runCy(allCy)))..
+QDelivH2InfrTech(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         VDelivH2InfrTech(allCy,INFRTECH,YTIME)
          =E=
          (
@@ -214,7 +214,7 @@ QDelivH2InfrTech(allCy,INFRTECH,YTIME)$TIME(YTIME $(runCy(allCy)))..
 ;
 
 
-QInvNewReqH2Infra(allCy,INFRTECH,YTIME)$TIME(YTIME $(runCy(allCy)))..
+QInvNewReqH2Infra(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VInvNewReqH2Infra(allCy,INFRTECH,YTIME)
          =E=
          ( VDelivH2InfrTech(allCy,INFRTECH,YTIME)-VDelivH2InfrTech(allCy,INFRTECH,YTIME-1)
@@ -223,7 +223,7 @@ QInvNewReqH2Infra(allCy,INFRTECH,YTIME)$TIME(YTIME $(runCy(allCy)))..
 ;
 
 
-QH2Pipe(allCy,INFRTECH,YTIME)$TIME(YTIME $(runCy(allCy)))..
+QH2Pipe(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VH2Pipe(allCy,INFRTECH,YTIME)
          =E=
          (  55*VInvNewReqH2Infra(allCy,INFRTECH,YTIME)/(1e-3*sDelivH2Turnpike))$sameas("TPIPA",INFRTECH)  // turnpike pipeline km
@@ -238,7 +238,7 @@ QH2Pipe(allCy,INFRTECH,YTIME)$TIME(YTIME $(runCy(allCy)))..
 ;
 
 
-QCostInvTechH2Infr(allCy,INFRTECH,YTIME)$TIME(YTIME $(runCy(allCy)))..
+QCostInvTechH2Infr(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VCostInvTechH2Infr(allCy,INFRTECH,YTIME)
          =E=
          1e-6*(iCostInvH2Transp(allCy,INFRTECH,YTIME)/VH2InfrArea(allCy,YTIME)*VCostInvTechH2Infr(allCy,INFRTECH,YTIME))$(sameas("TPIPA",INFRTECH))
@@ -249,7 +249,7 @@ QCostInvTechH2Infr(allCy,INFRTECH,YTIME)$TIME(YTIME $(runCy(allCy)))..
 ;
 
 
-QCostTechH2Infr(allCy,INFRTECH,YTIME)$TIME(YTIME $(runCy(allCy)))..
+QCostTechH2Infr(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VCostTechH2Infr(allCy,INFRTECH,YTIME)
          =E=
          ((iDisc(allCy,"H2INFR",YTIME)*exp(iDisc(allCy,"H2INFR",YTIME)* iTranspLftH2(INFRTECH))/(exp(iDisc(allCy,"H2INFR",YTIME)* iTranspLftH2(INFRTECH))-1))
@@ -268,7 +268,7 @@ QCostTechH2Infr(allCy,INFRTECH,YTIME)$TIME(YTIME $(runCy(allCy)))..
 ;
 
 
-QCostInvCummH2Transp(allCy,INFRTECH,YTIME)$TIME(YTIME $(runCy(allCy)))..
+QCostInvCummH2Transp(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VCostInvCummH2Transp(allCy,INFRTECH,YTIME) 
          =E=
          sum(YYTIME$(an(YYTIME) $(ord(YYTIME)<=ord(YTIME))),
@@ -280,7 +280,7 @@ QCostInvCummH2Transp(allCy,INFRTECH,YTIME)$TIME(YTIME $(runCy(allCy)))..
 ;
 
 
-QTariffH2Infr(allCy,INFRTECH,YTIME)$TIME(YTIME $(runCy(allCy)))..
+QTariffH2Infr(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VTariffH2Infr(allCy,INFRTECH,YTIME)
          =E=
          iCostAvgWeight(allCy,YTIME)* VH2Pipe(allCy,INFRTECH,YTIME)
