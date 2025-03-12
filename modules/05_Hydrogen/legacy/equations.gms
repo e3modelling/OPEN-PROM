@@ -222,9 +222,9 @@ QInvNewReqH2Infra(allCy,INFRTECH,YTIME)$TIME(YTIME $(runCy(allCy)))..
           SQRT( SQR(VDelivH2InfrTech(allCy,INFRTECH,YTIME)-VDelivH2InfrTech(allCy,INFRTECH,YTIME-1)+0) + SQR(1e-4) ) )/2
 ;
 
-!!!!!!!!!!!!
+
 QH2Pipe(allCy,INFRTECH,YTIME)$TIME(YTIME $(runCy(allCy)))..
-         VCostInvTechH2Infr(allCy,INFRTECH,YTIME)
+         VH2Pipe(allCy,INFRTECH,YTIME)
          =E=
          (  55*VInvNewReqH2Infra(allCy,INFRTECH,YTIME)/(1e-3*sDelivH2Turnpike))$sameas("TPIPA",INFRTECH)  // turnpike pipeline km
          +
@@ -239,7 +239,7 @@ QH2Pipe(allCy,INFRTECH,YTIME)$TIME(YTIME $(runCy(allCy)))..
 
 
 QCostInvTechH2Infr(allCy,INFRTECH,YTIME)$TIME(YTIME $(runCy(allCy)))..
-         VCostInvCummH2Transp(allCy,INFRTECH,YTIME)
+         VCostInvTechH2Infr(allCy,INFRTECH,YTIME)
          =E=
          1e-6*(iCostInvH2Transp(allCy,INFRTECH,YTIME)/VH2InfrArea(allCy,YTIME)*VCostInvTechH2Infr(allCy,INFRTECH,YTIME))$(sameas("TPIPA",INFRTECH))
          +
@@ -269,7 +269,7 @@ QCostTechH2Infr(allCy,INFRTECH,YTIME)$TIME(YTIME $(runCy(allCy)))..
 
 
 QCostInvCummH2Transp(allCy,INFRTECH,YTIME)$TIME(YTIME $(runCy(allCy)))..
-         VH2Pipe(allCy,INFRTECH,YTIME) 
+         VCostInvCummH2Transp(allCy,INFRTECH,YTIME) 
          =E=
          sum(YYTIME$(an(YYTIME) $(ord(YYTIME)<=ord(YTIME))),
 
@@ -279,7 +279,7 @@ QCostInvCummH2Transp(allCy,INFRTECH,YTIME)$TIME(YTIME $(runCy(allCy)))..
          sum(YYTIME$(an(YYTIME) $(ord(YYTIME)<=ord(YTIME))),VInvNewReqH2Infra(allCy,INFRTECH,YYTIME))
 ;
 
-!!!!!!!!!!!!
+
 QTariffH2Infr(allCy,INFRTECH,YTIME)$TIME(YTIME $(runCy(allCy)))..
          VTariffH2Infr(allCy,INFRTECH,YTIME)
          =E=

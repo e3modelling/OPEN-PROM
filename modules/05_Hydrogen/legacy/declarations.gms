@@ -23,11 +23,11 @@ VCostAvgProdH2(allCy, YTIME)                    "Average production cost of hydr
 VH2InfrArea(allCy, YTIME)                       "Number of stylised areas covered by H2 infrastructure"
 VDelivH2InfrTech(allCy, INFRTECH, YTIME)        "Hydrogen delivered by infrastructure technology in Mtoe"
 VInvNewReqH2Infra(allCy, INFRTECH, YTIME)       "New infrastructure requirements in Mtoe of delivered hydrogen"
-VCostInvTechH2Infr(allCy, INFRTECH, YTIME)      "Required capacity to meet the new infrastructure requirements"
+VH2Pipe(allCy, INFRTECH, YTIME)                 "Required capacity to meet the new infrastructure requirements"
                                                     !! - km of pipelines
                                                     !! - number of service stations
-VCostInvCummH2Transp(allCy, INFRTECH, YTIME)    "Investment cost of infrastructure by technology in Million Euros (MEuro) for meeting the new infrastructure requirements"
-VH2Pipe(allCy, INFRTECH, YTIME)                 "Average cost of infrastructure Euro per toe"
+VCostInvTechH2Infr(allCy, INFRTECH, YTIME)      "Investment cost of infrastructure by technology in Million Euros (MEuro) for meeting the new infrastructure requirements"
+VCostInvCummH2Transp(allCy, INFRTECH, YTIME)    "Average cost of infrastructure Euro per toe"
 VCostTechH2Infr(allCy, INFRTECH, YTIME)         "Marginal cost by infrastructure technology in Euro"
 VTariffH2Infr(allCy, INFRTECH, YTIME)           "Tarrif paid by the final consumer for using the specific infrastructure technology in Euro per toe annual"
 VPriceH2Infr(allCy, SBS, YTIME)                 "Hydrogen distribution and storage price paid by final consumer in Euro per toe annual"
