@@ -5,8 +5,7 @@ QDemTotH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VDemTotH2(allCy,YTIME)
                  =E=
          sum(SBS$H2SBS(SBS), VDemSecH2(allCy,SBS, YTIME)/
-         prod(INFRTECH$H2INFRSBS(INFRTECH,SBS) , iEffH2Transp(allCy,INFRTECH,YTIME)*(1-iConsSelfH2Transp(allCy,INFRTECH,YTIME))
-         ))  // increase the demand due to transportation losses
+         prod(INFRTECH$H2INFRSBS(INFRTECH,SBS) , iEffH2Transp(allCy,INFRTECH,YTIME)*(1-iConsSelfH2Transp(allCy,INFRTECH,YTIME))))  !! increase the demand due to transportation losses
 ;
 
 
@@ -78,7 +77,7 @@ QCostVarProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 
             (1-iCaptRateH2Prod(allCy,H2TECH,YTIME))*iCo2EmiFac(allCy,"H2P",EF,YTIME)*
 
-            (sum(NAP$NAPtoALLSBS(NAP,"H2P"),VCarVal(NAP,YTIME))))
+            (sum(NAP$NAPtoALLSBS(NAP,"H2P"),VCarVal(allCy,NAP,YTIME))))
 
             /iEffH2Prod(allCy,H2TECH,YTIME)
             )$(not H2TECHREN(H2TECH))
@@ -88,7 +87,7 @@ QCostVarProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QAcceptCCSH2Tech(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VAcceptCCSH2Tech(allCy,YTIME)
          =E=
-         iWBLGammaH2Prod(allCy,YTIME)*5+25*EXP(-0.06*((sum(NAP$NAPtoALLSBS(NAP,"H2P"),VCarVal(NAP,YTIME-1)))))
+         iWBLGammaH2Prod(allCy,YTIME)*5+25*EXP(-0.06*((sum(NAP$NAPtoALLSBS(NAP,"H2P"),VCarVal(allCy,NAP,YTIME -1)))))
 ;
 
 
@@ -185,9 +184,9 @@ QConsFuelH2Prod(allCy,EF,YTIME)$(TIME(YTIME) $H2PRODEF(EF) $(runCy(allCy)))..
 ;
 
 
-//
-//                               B. Hydrogen Infrustructure
-//
+!!
+!!                               B. Hydrogen Infrustructure
+!!
 
 
 QH2InfrArea(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
@@ -203,7 +202,7 @@ QDelivH2InfrTech(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          =E=
          (
          (    sum(SBS$(H2INFRSBS(INFRTECH,SBS) $SECTTECH(SBS,"H2F")), VDemSecH2(allCy,SBS, YTIME))/
-            (iEffH2Transp(allCy,INFRTECH,YTIME)*(1-iConsSelfH2Transp(allCy,INFRTECH,YTIME))) )$H2INFRDNODES(INFRTECH)  // for final demand nodes
+            (iEffH2Transp(allCy,INFRTECH,YTIME)*(1-iConsSelfH2Transp(allCy,INFRTECH,YTIME))) )$H2INFRDNODES(INFRTECH)  !! for final demand nodes
 
          +
 
@@ -226,15 +225,15 @@ QInvNewReqH2Infra(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QH2Pipe(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VH2Pipe(allCy,INFRTECH,YTIME)
          =E=
-         (  55*VInvNewReqH2Infra(allCy,INFRTECH,YTIME)/(1e-3*sDelivH2Turnpike))$sameas("TPIPA",INFRTECH)  // turnpike pipeline km
+         (  55*VInvNewReqH2Infra(allCy,INFRTECH,YTIME)/(1e-3*sDelivH2Turnpike))$sameas("TPIPA",INFRTECH)  !! turnpike pipeline km
          +
-         (iPipeH2Transp(INFRTECH)*1e6*VInvNewReqH2Infra(allCy,INFRTECH,YTIME))$(sameas("LPIPU",INFRTECH) or sameas("HPIPI",INFRTECH)) //Low pressure urban pipelines km and industrial pipelines km
+         (iPipeH2Transp(INFRTECH)*1e6*VInvNewReqH2Infra(allCy,INFRTECH,YTIME))$(sameas("LPIPU",INFRTECH) or sameas("HPIPI",INFRTECH)) !!Low pressure urban pipelines km and industrial pipelines km
          +
-         (sLenH2StationConn*VCostInvTechH2Infr(allCy,"SSGG",YTIME))$sameas("MPIPS",INFRTECH)   // Pipelines connecting hydrogen service stations with the ring km
+         (sLenH2StationConn*VCostInvTechH2Infr(allCy,"SSGG",YTIME))$sameas("MPIPS",INFRTECH)   !! Pipelines connecting hydrogen service stations with the ring km
          +
-         (sum(INFRTECH2$H2NETWORK(INFRTECH,INFRTECH2),VCostInvTechH2Infr(allCy,INFRTECH2,YTIME)*iKmFactH2Transp(allCy,INFRTECH2)))$(sameas("MPIPU",INFRTECH)  or sameas("HPIPU",INFRTECH)) // Ring pipeline in km and high pressure pipelines km
+         (sum(INFRTECH2$H2NETWORK(INFRTECH,INFRTECH2),VCostInvTechH2Infr(allCy,INFRTECH2,YTIME)*iKmFactH2Transp(allCy,INFRTECH2)))$(sameas("MPIPU",INFRTECH)  or sameas("HPIPU",INFRTECH)) !! Ring pipeline in km and high pressure pipelines km
          +
-         (VInvNewReqH2Infra(allCy,INFRTECH,YTIME)/sSalesH2Station*1E3)$sameas("SSGG",INFRTECH)   // Number of new service stations to be built to meet the demand
+         (VInvNewReqH2Infra(allCy,INFRTECH,YTIME)/sSalesH2Station*1E3)$sameas("SSGG",INFRTECH)   !! Number of new service stations to be built to meet the demand
 ;
 
 
@@ -245,7 +244,7 @@ QCostInvTechH2Infr(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          +
          1e-6*(iCostInvH2Transp(allCy,INFRTECH,YTIME)/VH2InfrArea(allCy,YTIME)*VCostInvTechH2Infr(allCy,INFRTECH,YTIME))$(PIPES(INFRTECH) $(not sameas("TPIPA",INFRTECH)))
          +
-         (iCostInvH2Transp(allCy,INFRTECH,YTIME)*VInvNewReqH2Infra(allCy,INFRTECH,YTIME))$(sameas("SSGG",INFRTECH)) //Service stations investment cost
+         (iCostInvH2Transp(allCy,INFRTECH,YTIME)*VInvNewReqH2Infra(allCy,INFRTECH,YTIME))$(sameas("SSGG",INFRTECH)) !!Service stations investment cost
 ;
 
 

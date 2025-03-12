@@ -2,19 +2,19 @@
 *' @code
 
 *---
-table iH2Production(allCy,EF,YTIME)	 "Data for Hydrogen production"
+table iH2Production(EF,YTIME)	 "Data for Hydrogen production"
 $ondelim
 $include"./iH2Production.csv"
 $offdelim
 ;
 *---
-table iH2Parameters(allCy,EF,YTIME)	 "Data for Hydrogen Parameters"
+table iH2Parameters(allCy,EF)	 "Data for Hydrogen Parameters"
 $ondelim
 $include"./iH2Parameters.csv"
 $offdelim
 ;
 *---
-table iH2InfrastructureCapCosts(allCy,EF,YTIME)	 "Data for Hydrogen Infrastructure Costs"
+table iH2InfrastructureCapCosts(EF,YTIME)	 "Data for Hydrogen Infrastructure Costs"
 $ondelim
 $include"./iH2InfrastructureCapCosts.csv"
 $offdelim
