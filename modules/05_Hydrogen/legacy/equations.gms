@@ -130,10 +130,12 @@ QGapShareH2Tech2(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         VGapShareH2Tech2(allCy,H2TECH,YTIME)
              =E=
          (
-         iWBLShareH2Prod(allCy,H2TECH,YTIME) *  (VCostProdH2Tech(allCy,H2TECH,YTIME)$(not H2NOCCS(H2TECH)) + VCostProdCCSNoCCSH2Prod(allCy,H2TECH,YTIME)$H2NOCCS(H2TECH))**(-iWBLGammaH2Prod(allCy,YTIME))
+*         iWBLShareH2Prod(allCy,H2TECH,YTIME) * 
+         (VCostProdH2Tech(allCy,H2TECH,YTIME)$(not H2NOCCS(H2TECH)) + VCostProdCCSNoCCSH2Prod(allCy,H2TECH,YTIME)$H2NOCCS(H2TECH))**(-iWBLGammaH2Prod(allCy,YTIME))
          /
          sum(H2TECH2$(not H2CCS(H2TECH2)) ,
-                 iWBLShareH2Prod(allCy,H2TECH2,YTIME) *  (VCostProdH2Tech(allCy,H2TECH2,YTIME)$(not H2NOCCS(H2TECH2)) + VCostProdCCSNoCCSH2Prod(allCy,H2TECH2,YTIME)$H2NOCCS(H2TECH2))**(-iWBLGammaH2Prod(allCy,YTIME)))
+*         iWBLShareH2Prod(allCy,H2TECH2,YTIME) * 
+         (VCostProdH2Tech(allCy,H2TECH2,YTIME)$(not H2NOCCS(H2TECH2)) + VCostProdCCSNoCCSH2Prod(allCy,H2TECH2,YTIME)$H2NOCCS(H2TECH2))**(-iWBLGammaH2Prod(allCy,YTIME)))
          )$(not H2CCS(H2TECH))
          +
          sum(H2NOCCS$H2CCS_NOCCS(H2TECH,H2NOCCS), VGapShareH2Tech2(allCy,H2NOCCS,YTIME))$H2CCS(H2TECH)
