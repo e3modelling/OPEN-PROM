@@ -41,40 +41,19 @@ iTranspLftH2(INFRTECH,YTIME)=iH2InfrCapCosts("LFT",INFRTECH,YTIME);
 *---
 parameter iCostCapH2Prod(allCy,H2TECH,YTIME)     "Capital cost of hydrogen production technologies in Euro per Nm3 of hydrogen";
 iCostCapH2Prod(runCy,H2TECH,YTIME)=iH2Production("IC",H2TECH,YTIME);
-*iCostCapH2Prod(runCy,H2TECH,YTIME)$(not An(YTIME))=iH2Production("IC",H2TECH,YTIME);
-*iCostCapH2Prod(runCy,H2TECH,"2000")=iH2Production(H2TECH,"IC_00");
-*iCostCapH2Prod(runCy,H2TECH,"2025")=iH2Production(H2TECH,"IC_25");
-*iCostCapH2Prod(runCy,H2TECH,"2050")=iH2Production(H2TECH,"IC_50");
-*iCostCapH2Prod(runCy,H2TECH,YTIME)=(iCostCapH2Prod(runCy,H2TECH,"2025")-iCostCapH2Prod(runCy,H2TECH,"2000"))/(2025-2000)*(YTIME.VAL-2000)+iCostCapH2Prod(runCy,H2TECH,"2000");
 *---
 parameter iCostFOMH2Prod(allCy,H2TECH,YTIME)     "Fixed operating and maintenance costs of hydrogen production technologies in Euro per Nm3 of hydrogen";
 iCostFOMH2Prod(runCy,H2TECH,YTIME)=iH2Production("FC",H2TECH,YTIME);
-*iCostFOMH2Prod(runCy,H2TECH,"2000")=iH2Production(H2TECH,"FC_00");
-*iCostFOMH2Prod(runCy,H2TECH,"2025")=iH2Production(H2TECH,"FC_25");
-*iCostFOMH2Prod(runCy,H2TECH,"2050")=iH2Production(H2TECH,"FC_50");
-*iCostFOMH2Prod(runCy,H2TECH,YTIME)=(iCostFOMH2Prod(runCy,H2TECH,"2025")-iCostFOMH2Prod(runCy,H2TECH,"2000"))/(2025-2000)*(YTIME.VAL-2000)+iCostFOMH2Prod(runCy,H2TECH,"2000");
 *---
 parameter iCostVOMH2Prod(allCy,H2TECH,YTIME)     "Variable operating and maintenance costs of hydrogen production technologies in Euro per toe of hydrogen";
 iCostVOMH2Prod(runCy,H2TECH,YTIME)=iH2Production("VC",H2TECH,YTIME);
-*iCostVOMH2Prod(runCy,H2TECH,"2000")=iH2Production(H2TECH,"VC_00");
-*iCostVOMH2Prod(runCy,H2TECH,"2025")=iH2Production(H2TECH,"VC_25");
-*iCostVOMH2Prod(runCy,H2TECH,"2050")=iH2Production(H2TECH,"VC_50");
-*iCostVOMH2Prod(runCy,H2TECH,YTIME)=(iCostVOMH2Prod(runCy,H2TECH,"2025")-iCostVOMH2Prod(runCy,H2TECH,"2000"))/(2025-2000)*(YTIME.VAL-2000)+iCostVOMH2Prod(runCy,H2TECH,"2000");
 *---
 parameter iAvailH2Prod(H2TECH,YTIME)             "Availability of hydrogen production technologies";
 iAvailH2Prod(H2TECH,YTIME)=iH2Production("AVAIL",H2TECH,YTIME);
-*iAvailH2Prod(H2TECH,"2000")=iH2Production(H2TECH,"AVAIL_00");
-*iAvailH2Prod(H2TECH,"2025")=iH2Production(H2TECH,"AVAIL_25");
-*iAvailH2Prod(H2TECH,"2050")=iH2Production(H2TECH,"AVAIL_50");
-*iAvailH2Prod(H2TECH,YTIME)=(iAvailH2Prod(H2TECH,"2025")-iAvailH2Prod(H2TECH,"2000"))/(2025-2000)*(YTIME.VAL-2000)+iAvailH2Prod(H2TECH,"2000");
 *---
 parameter iEffH2Prod(allCy,H2TECH,YTIME)         "Efficiency of hydrogen production technologies";
 iEffH2Prod(runCy,H2TECH,YTIME)=iH2Production("EFF",H2TECH,YTIME);
 display iEffH2Prod;
-*iEffH2Prod(runCy,H2TECH,"2000")=iH2Production(H2TECH,"EFF_00");
-*iEffH2Prod(runCy,H2TECH,"2025")=iH2Production(H2TECH,"EFF_25");
-*iEffH2Prod(runCy,H2TECH,"2050")=iH2Production(H2TECH,"EFF_50");
-*iEffH2Prod(runCy,H2TECH,YTIME)=(iEffH2Prod(runCy,H2TECH,"2025")-iEffH2Prod(runCy,H2TECH,"2000"))/(2025-2000)*(YTIME.VAL-2000)+iEffH2Prod(runCy,H2TECH,"2000");
 *---
 parameter iCostInvH2Transp(allCy,INFRTECH,YTIME)  "Investment cost of infrastructure technology";
                                                    !! - Turnpike pipeline in Euro per km
@@ -83,55 +62,31 @@ parameter iCostInvH2Transp(allCy,INFRTECH,YTIME)  "Investment cost of infrastruc
                                                    !! - Service stations connection lines in Euro per km
                                                    !! - Gaseous hydrogen service stations in Euro per toe per year
 iCostInvH2Transp(runCy,INFRTECH,YTIME)=iH2InfrCapCosts("IC",INFRTECH,YTIME);
-*iCostInvH2Transp(runCy,INFRTECH,"2000")=iH2InfrCapCosts(INFRTECH,"IC_00");
-*iCostInvH2Transp(runCy,INFRTECH,"2025")=iH2InfrCapCosts(INFRTECH,"IC_25");
-*iCostInvH2Transp(runCy,INFRTECH,"2050")=iH2InfrCapCosts(INFRTECH,"IC_50");
-*iCostInvH2Transp(runCy,INFRTECH,YTIME)=(iCostInvH2Transp(runCy,INFRTECH,"2025")-iCostInvH2Transp(runCy,INFRTECH,"2000"))/(2025-2000)*(YTIME.VAL-2000)+iCostInvH2Transp(runCy,INFRTECH,"2000");
 *---
 parameter iEffH2Transp(allCy,INFRTECH,YTIME)      "Efficiency of hydrogen transportation per infrastructure technology";
 iEffH2Transp(runCy,INFRTECH,YTIME)=iH2InfrCapCosts("EFF",INFRTECH,YTIME);
-*iEffH2Transp(runCy,INFRTECH,"2000")=iH2InfrCapCosts(INFRTECH,"EFF_00");
-*iEffH2Transp(runCy,INFRTECH,"2025")=iH2InfrCapCosts(INFRTECH,"EFF_25");
-*iEffH2Transp(runCy,INFRTECH,"2050")=iH2InfrCapCosts(INFRTECH,"EFF_50");
-*iEffH2Transp(runCy,INFRTECH,YTIME)=(iEffH2Transp(runCy,INFRTECH,"2025")-iEffH2Transp(runCy,INFRTECH,"2000"))/(2025-2000)*(YTIME.VAL-2000)+iEffH2Transp(runCy,INFRTECH,"2000");
 *---
 parameter iConsSelfH2Transp(allCy,INFRTECH,YTIME)  "Self consumption of infrastructure technology rate";
 iConsSelfH2Transp(runCy,INFRTECH,YTIME)=iH2InfrCapCosts("SELF",INFRTECH,YTIME);
-*iConsSelfH2Transp(runCy,INFRTECH,"2000")=iH2InfrCapCosts(INFRTECH,"SELF_00");
-*iConsSelfH2Transp(runCy,INFRTECH,"2025")=iH2InfrCapCosts(INFRTECH,"SELF_25");
-*iConsSelfH2Transp(runCy,INFRTECH,"2050")=iH2InfrCapCosts(INFRTECH,"SELF_50");
-*iConsSelfH2Transp(runCy,INFRTECH,YTIME)=(iConsSelfH2Transp(runCy,INFRTECH,"2025")-iConsSelfH2Transp(runCy,INFRTECH,"2000"))/(2025-2000)*(YTIME.VAL-2000)+iConsSelfH2Transp(runCy,INFRTECH,"2000");
 *---
 parameter iAvailRateH2Transp(INFRTECH,YTIME)       "Availability rate of infrastructure technology";
 iAvailRateH2Transp(INFRTECH,YTIME)=iH2InfrCapCosts("AVAIL",INFRTECH,YTIME);
-*iAvailRateH2Transp(INFRTECH,"2000")=iH2InfrCapCosts(INFRTECH,"AVAIL_00");
-*iAvailRateH2Transp(INFRTECH,"2025")=iH2InfrCapCosts(INFRTECH,"AVAIL_25");
-*iAvailRateH2Transp(INFRTECH,"2050")=iH2InfrCapCosts(INFRTECH,"AVAIL_50");
-*iAvailRateH2Transp(INFRTECH,YTIME)=(iAvailRateH2Transp(INFRTECH,"2025")-iAvailRateH2Transp(INFRTECH,"2000"))/(2025-2000)*(YTIME.VAL-2000)+iAvailRateH2Transp(INFRTECH,"2000");
 *---
 parameter iCostInvFOMH2(INFRTECH,YTIME)            "Annual fixed O&M cost as percentage of total investment cost";
 iCostInvFOMH2(INFRTECH,YTIME)=iH2InfrCapCosts("FC",INFRTECH,YTIME);
-*iCostInvFOMH2(INFRTECH,"2000")=iH2InfrCapCosts(INFRTECH,"FC_00");
-*iCostInvFOMH2(INFRTECH,"2025")=iH2InfrCapCosts(INFRTECH,"FC_25");
-*iCostInvFOMH2(INFRTECH,"2050")=iH2InfrCapCosts(INFRTECH,"FC_50");
-*iCostInvFOMH2(INFRTECH,YTIME)=(iCostInvFOMH2(INFRTECH,"2025")-iCostInvFOMH2(INFRTECH,"2000"))/(2025-2000)*(YTIME.VAL-2000)+iCostInvFOMH2(INFRTECH,"2000");
 *---
 parameter iCostInvVOMH2(INFRTECH,YTIME)            "Annual variable O&M cost as percentage of total investment cost";
 iCostInvVOMH2(INFRTECH,YTIME)=iH2InfrCapCosts("VC",INFRTECH,YTIME);
-*iCostInvVOMH2(INFRTECH,"2000")=iH2InfrCapCosts(INFRTECH,"VC_00");
-*iCostInvVOMH2(INFRTECH,"2025")=iH2InfrCapCosts(INFRTECH,"VC_25");
-*iCostInvVOMH2(INFRTECH,"2050")=iH2InfrCapCosts(INFRTECH,"VC_50");
-*iCostInvVOMH2(INFRTECH,YTIME)=(iCostInvVOMH2(INFRTECH,"2025")-iCostInvVOMH2(INFRTECH,"2000"))/(2025-2000)*(YTIME.VAL-2000)+iCostInvVOMH2(INFRTECH,"2000");
 *---
 parameter iPipeH2Transp(INFRTECH,YTIME)                   "Kilometers of pipelines required per toe of delivered hydrogen (based on stylized model)";
 iPipeH2Transp(INFRTECH,YTIME) =  iH2InfrCapCosts("H2KMTOE",INFRTECH,YTIME);
-
+*---
 parameter iKmFactH2Transp(allCy,INFRTECH)           "Km needed for a given infrastructure assuming that its required infrastructure has been arleady installed";
 iKmFactH2Transp(runCy,INFRTECH) = sum(ECONCHARHY$INFRTECHLAB(INFRTECH,ECONCHARHY), iH2Parameters(runCy,ECONCHARHY));
-
+*---
 parameter iPolH2AreaMax(allCy)                      "Policy parameter defining the percentage of the country area supplied by hydrogen at the end of the horizon period [0...1]";
 iPolH2AreaMax(runCy) = iH2Parameters(runCy,"MAXAREA");
-
+*---
 parameter iHabAreaCountry(allCy)                    "Inhabitable land in a country";
 iHabAreaCountry(runCy) = iH2Parameters(runCy,"AREA");
 *---

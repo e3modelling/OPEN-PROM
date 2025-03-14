@@ -1,4 +1,4 @@
-*' @description This is the legacy realization of the PowerGeneration module.
+*' @description This is the legacy realization of the Hydrogen module.
 
 *####################### R SECTION START (PHASES) ##############################
 $Ifi "%phase%" == "sets"         $include "./modules/05_Hydrogen/legacy/sets.gms"

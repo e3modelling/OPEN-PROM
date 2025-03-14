@@ -1,4 +1,4 @@
-*' @description This is the legacy realization of the PowerGeneration module.
+*' @description This is the legacy realization of the Emissions module.
 
 *####################### R SECTION START (PHASES) ##############################
 $Ifi "%phase%" == "declarations" $include "./modules/07_Emissions/legacy/declarations.gms"

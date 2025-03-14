@@ -1,4 +1,4 @@
-*' @description This is the legacy realization of the PowerGeneration module.
+*' @description This is the legacy realization of the Prices module.
 
 *####################### R SECTION START (PHASES) ##############################
 $Ifi "%phase%" == "declarations" $include "./modules/08_Prices/legacy/declarations.gms"
