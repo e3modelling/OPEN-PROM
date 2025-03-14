@@ -13,9 +13,9 @@ QScrapLftH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         VScrapLftH2Prod(allCy,H2TECH,YTIME)
          =E=
         (
-         VGapShareH2Tech1(allCy,H2TECH,YTIME-iProdLftH2(H2TECH))*VDemGapH2(allCy,YTIME-iProdLftH2(H2TECH))
+         VGapShareH2Tech1(allCy,H2TECH,YTIME-iProdLftH2(H2TECH,YTIME))*VDemGapH2(allCy,YTIME-iProdLftH2(H2TECH,YTIME))
          /VProdH2(allCy,H2TECH,YTIME-1)
-         )$(ord(YTIME)>17+iProdLftH2(H2TECH))
+         )$(ord(YTIME)>17+iProdLftH2(H2TECH,YTIME))
 ;
 
 
@@ -27,7 +27,7 @@ QPremRepH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
           VCostVarProdH2Tech(allCy,H2TECH,YTIME)**(-iWBLGammaH2Prod(allCy,YTIME))
          /
          (
-           iWBLPremRepH2Prod(allCy,H2TECH,YTIME)*
+*           iWBLPremRepH2Prod(allCy,H2TECH,YTIME)*
            (sum(H2TECH2,
                          VGapShareH2Tech1(allCy,H2TECH2,YTIME)*(1/iAvailH2Prod(H2TECH,YTIME)*VCostProdH2Tech(allCy,H2TECH2,YTIME)
                                                          +(1-1/iAvailH2Prod(H2TECH,YTIME))*VCostVarProdH2Tech(allCy,H2TECH2,YTIME)))
@@ -62,7 +62,7 @@ QDemGapH2(allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QCostProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VCostProdH2Tech(allCy,H2TECH,YTIME)
          =E=
-         (iDisc(allCy,"H2P",YTIME)*exp(iDisc(allCy,"H2P",YTIME)* iProdLftH2(H2TECH))/(exp(iDisc(allCy,"H2P",YTIME)*iProdLftH2(H2TECH))-1)*
+         (iDisc(allCy,"H2P",YTIME)*exp(iDisc(allCy,"H2P",YTIME)* iProdLftH2(H2TECH,YTIME))/(exp(iDisc(allCy,"H2P",YTIME)*iProdLftH2(H2TECH,YTIME))-1)*
          iCostCapH2Prod(allCy,H2TECH,YTIME)+iCostFOMH2Prod(allCy,H2TECH,YTIME))/257/365*1000000/iAvailH2Prod(H2TECH,YTIME) +
          iCostVOMH2Prod(allCy,H2TECH,YTIME) + VCostVarProdH2Tech(allCy,H2TECH,YTIME)
 ;
@@ -169,13 +169,13 @@ QCostAvgProdH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)$(TIME(YTIME) $H2TECHEFtoEF(H2TECH,EF) $(runCy(allCy)))..
          VConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)
          =E=
-         (VProdH2(allCy,H2TECH,YTIME)/iEffH2Prod(allCy,H2TECH,YTIME))$TFIRSTan(YTIME)
+         (VProdH2(allCy,H2TECH,YTIME)/iEffH2Prod(allCy,H2TECH,YTIME))$(ord(YTIME) = 1)
          +
          (
          VConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME-1)*
          (VProdH2(allCy,H2TECH,YTIME)/iEffH2Prod(allCy,H2TECH,YTIME))/
          (VProdH2(allCy,H2TECH,YTIME-1)/iEffH2Prod(allCy,H2TECH,YTIME-1))
-         )$(not TFIRSTan(YTIME))
+         )$(not (ord(YTIME) = 1))
 ;
 
 
@@ -229,7 +229,7 @@ QH2Pipe(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          =E=
          (  55*VInvNewReqH2Infra(allCy,INFRTECH,YTIME)/(1e-3*sDelivH2Turnpike))$sameas("TPIPA",INFRTECH)  !! turnpike pipeline km
          +
-         (iPipeH2Transp(INFRTECH)*1e6*VInvNewReqH2Infra(allCy,INFRTECH,YTIME))$(sameas("LPIPU",INFRTECH) or sameas("HPIPI",INFRTECH)) !!Low pressure urban pipelines km and industrial pipelines km
+         (iPipeH2Transp(INFRTECH,YTIME)*1e6*VInvNewReqH2Infra(allCy,INFRTECH,YTIME))$(sameas("LPIPU",INFRTECH) or sameas("HPIPI",INFRTECH)) !!Low pressure urban pipelines km and industrial pipelines km
          +
          (sLenH2StationConn*VCostInvTechH2Infr(allCy,"SSGG",YTIME))$sameas("MPIPS",INFRTECH)   !! Pipelines connecting hydrogen service stations with the ring km
          +
@@ -253,11 +253,11 @@ QCostInvTechH2Infr(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QCostTechH2Infr(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VCostTechH2Infr(allCy,INFRTECH,YTIME)
          =E=
-         ((iDisc(allCy,"H2INFR",YTIME)*exp(iDisc(allCy,"H2INFR",YTIME)* iTranspLftH2(INFRTECH))/(exp(iDisc(allCy,"H2INFR",YTIME)* iTranspLftH2(INFRTECH))-1))
+         ((iDisc(allCy,"H2INFR",YTIME)*exp(iDisc(allCy,"H2INFR",YTIME)* iTranspLftH2(INFRTECH,YTIME))/(exp(iDisc(allCy,"H2INFR",YTIME)* iTranspLftH2(INFRTECH,YTIME))-1))
          *
          VCostInvCummH2Transp(allCy,INFRTECH,YTIME)*(1+iCostInvFOMH2(INFRTECH,YTIME)))/iAvailRateH2Transp(INFRTECH,YTIME) + iCostInvVOMH2(INFRTECH,YTIME)
          *
-         (iDisc(allCy,"H2INFR",YTIME)*exp(iDisc(allCy,"H2INFR",YTIME)* iTranspLftH2(INFRTECH))/(exp(iDisc(allCy,"H2INFR",YTIME)* iTranspLftH2(INFRTECH))-1))*
+         (iDisc(allCy,"H2INFR",YTIME)*exp(iDisc(allCy,"H2INFR",YTIME)* iTranspLftH2(INFRTECH,YTIME))/(exp(iDisc(allCy,"H2INFR",YTIME)* iTranspLftH2(INFRTECH,YTIME))-1))*
          VCostInvCummH2Transp(allCy,INFRTECH,YTIME)
          +
          (
