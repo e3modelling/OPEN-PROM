@@ -21,6 +21,10 @@ VProdH2.FX(runCy,H2TECH,"2010") = 1e-7;
 VProdH2.L(runCy,h2tech, YTIME) = 2;
 VProdH2.FX(runCy,h2tech, YTIME)$(not An(YTIME)) = 1e-5;
 *---
+VDemTotH2.FX(runCy,"2010") = sum(H2TECH, VProdH2.L(runCy,H2TECH,"2010"));
+VDemTotH2.L(runCy,YTIME) = 2;
+VDemTotH2.FX(runCy,YTIME)$(not An(YTIME)) = 1e-5;
+*---
 VConsFuelTechH2Prod.FX(runCy,H2TECH,EF,"2010")$(H2TECHEFtoEF(H2TECH,EF)) = (VProdH2.L(runCy,H2TECH,"2010")/iEffH2Prod(runCy,H2TECH,"2010"));
 VConsFuelTechH2Prod.FX(runCy,H2TECH,EF,YTIME)$(not An(YTIME)$H2TECHEFtoEF(H2TECH,EF)) = 0;
 *---
@@ -80,14 +84,6 @@ VH2InfrArea.L(runCy,YTIME) = 10;
 *-----------------------------------------------------------------------
 *' *** Miscellaneous
 *---
-VDemTotH2.FX(runCy,"2010") = sum(H2TECH, VProdH2.L(runCy,H2TECH,"2010"));
-VDemTotH2.L(runCy,YTIME) = 2;
-VDemTotH2.FX(runCy,YTIME)$(not An(YTIME)) = 1e-5;
+VDemSecH2.FX(runCy,SBS,YTIME) = 1e-5;
 *---
-VProdCapH2Tech.L(runCy,h2tech, YTIME) = 2;
-VProdCapH2Tech.FX(runCy,h2tech, YTIME)$(not An(YTIME)) = 1e-5;
-*---
-VDemSecH2.FX(runCy,SBS, "2010") = VDemTotH2.L(runCy,"2010");
-VDemSecH2.FX(runCy,SBS,YTIME)$(not An(YTIME)) = 1e-5;
-*VDemSecH2.L(runCy,SBS, YTIME) = 2;
 *-----------------------------------------------------------------------

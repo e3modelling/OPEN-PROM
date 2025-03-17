@@ -80,7 +80,7 @@ QCostVarProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
             (sum(NAP$NAPtoALLSBS(NAP,"H2P"),VCarVal(allCy,NAP,YTIME))))
 
             /iEffH2Prod(allCy,H2TECH,YTIME)
-            )$(not H2TECHREN(H2TECH))
+            )!!$(not H2TECHREN(H2TECH))
 ;
 
 
@@ -165,7 +165,7 @@ QCostAvgProdH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          sum(H2TECH, VProdH2(allCy,H2TECH,YTIME)*VCostProdH2Tech(allCy,H2TECH,YTIME))/sum(H2TECH,VProdH2(allCy,H2TECH,YTIME))
 ;
 
-
+display iEffH2Prod;
 QConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)$(TIME(YTIME) $H2TECHEFtoEF(H2TECH,EF) $(runCy(allCy)))..
          VConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)
          =E=

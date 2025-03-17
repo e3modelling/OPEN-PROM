@@ -2,6 +2,7 @@
 *' @code
 
 Variables
+VDemTotH2(allCy, YTIME)                         "Hydrogen production requirement in Mtoe for meeting final demand"
 VGapShareH2Tech1(allCy, H2TECH, YTIME)          "Shares of H2 production technologies in new market competition 1"
 VGapShareH2Tech2(allCy, H2TECH, YTIME)          "Shares of H2 production technologies in new market competition 2"
 VProdH2(allCy, H2TECH, YTIME)                   "Hydrogen Production by technology in Mtoe"
@@ -34,13 +35,15 @@ VPriceH2Infr(allCy, SBS, YTIME)                 "Hydrogen distribution and stora
 VCostTotH2(allCy, SBS, YTIME)                   "Total Hydrogen Cost Per Sector in Euro per toe"
 
 *' *** Miscellaneous
-VDemTotH2(allCy, YTIME)                         "Hydrogen production requirement in Mtoe for meeting final demand"
-VProdCapH2Tech(allCy, H2TECH, YTIME)            "Production capacity by H2 production technology"
+*VProdCapH2Tech(allCy, H2TECH, YTIME)            "Production capacity by H2 production technology"
 VDemSecH2(allCy, SBS, YTIME)                    "Demand for H2 by sector in mtoe"
 ;
 
 Equations
 QDemTotH2(allCy, YTIME)                         "Equation for total hydrogen demand in a country in Mtoe"
+QGapShareH2Tech1(allCy, H2TECH, YTIME)          "Equation for calculating the shares of technologies in hydrogen gap using Weibull equations 1"
+QGapShareH2Tech2(allCy, H2TECH, YTIME)          "Equation for calculating the shares of technologies in hydrogen gap using Weibull equations 2"
+QProdH2(allCy, H2TECH, YTIME)                   "Equation for H2 production by technology"
 QCapScrapH2ProdTech(allCy, H2TECH, YTIME)       "Equation for decommissioning of capacity by H2 production technology"
 QPremRepH2Prod(allCy, H2TECH, YTIME)            "Equation for premature replacement of H2 production technologies"
 QScrapLftH2Prod(allCy, H2TECH, YTIME)           "Equation for scrapping of equipment due to lifetime (normal scrapping)"
@@ -50,25 +53,26 @@ QCostVarProdH2Tech(allCy, H2TECH, YTIME)        "Equation for variable cost (inc
 QShareCCSH2Prod(allCy, H2TECH, YTIME)           "Equation for share of CCS technology in the decision tree between CCS and no CCS"
 QShareNoCCSH2Prod(allCy, H2TECH, YTIME)         "Equation for share of technology without CCS in the decision tree between CCS and no CCS"
 QAcceptCCSH2Tech(allCy, YTIME)                  "Equation for acceptance in CCS technologies"
-QCostProdCCSNoCCSH2Prod(allCy, H2TECH, YTIME)   "Equation for calculating the production cost of the composite technology with and without CCS"
-QGapShareH2Tech1(allCy, H2TECH, YTIME)          "Equation for calculating the shares of technologies in hydrogen gap using Weibull equations 1"
-QGapShareH2Tech2(allCy, H2TECH, YTIME)          "Equation for calculating the shares of technologies in hydrogen gap using Weibull equations 2"
-QConsFuelTechH2Prod(allCy, H2TECH, EF, YTIME)   "Equation for fuel consumption by technology for hydrogen production"
 QConsFuelH2Prod(allCy, EF, YTIME)               "Equation for total fuel consumption for hydrogen production"
-QProdH2(allCy, H2TECH, YTIME)                   "Equation for H2 production by technology"
+QConsFuelTechH2Prod(allCy, H2TECH, EF, YTIME)   "Equation for fuel consumption by technology for hydrogen production"
+QCostProdCCSNoCCSH2Prod(allCy, H2TECH, YTIME)   "Equation for calculating the production cost of the composite technology with and without CCS"
 QCostAvgProdH2(allCy, YTIME)                    "Equation for average production cost of hydrogen in Euro per toe"
 
 *'                **Infrastructure Equations**
 QH2InfrArea(allCy, YTIME)                       "Equation for infrastructure area"
 QDelivH2InfrTech(allCy, INFRTECH, YTIME)        "Equation for hydrogen delivered by infrastructure technology in Mtoe"
 QInvNewReqH2Infra(allCy, INFRTECH, YTIME)       "Equation for calculating the new requirements in infrastructure in Mtoe"
+QH2Pipe(allCy, INFRTECH, YTIME)                 "Equation for km per pipeline"
 QCostInvTechH2Infr(allCy, INFRTECH, YTIME)      "Equation for infrastructure investment cost in Euro by technology"
 QCostInvCummH2Transp(allCy, INFRTECH, YTIME)    "Equation for cumulative investment cost by infrastructure technology"
-QH2Pipe(allCy, INFRTECH, YTIME)                 "Equation for km per pipeline"
 QCostTechH2Infr(allCy, INFRTECH, YTIME)         "Equation for marginal cost by infrastructure technology in Euro"
 QTariffH2Infr(allCy, INFRTECH, YTIME)           "Equation for calculating the tariff paid by the final consumer for using the specific infrastructure technology"
 QPriceH2Infr(allCy, SBS, YTIME)                 "Equation for calulcating the hydrogen storage and distribution price by final consumer"
 QCostTotH2(allCy, SBS, YTIME)                   "Equation of total hydrogen cost Per Sector"
+
+*' *** Miscellaneous
+*QProdCapH2Tech(allCy, H2TECH, YTIME)            "Equation for production capacity by H2 production technology"
+*QDemSecH2(allCy, SBS, YTIME)                    "Equation for demand of H2 by sector in mtoe"
 ;
 
 Scalars

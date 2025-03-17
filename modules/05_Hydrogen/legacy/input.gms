@@ -16,7 +16,7 @@ $offdelim
 ;
 display iH2Parameters;
 *---
-table iH2InfrCapCosts(ECONCHARHY,INFRTECH,YTIME)	           "Data for Hydrogen Infrastructure Costs"
+table iH2InfrCapCosts(ECONCHARHY,INFRTECH,YTIME)	          "Data for Hydrogen Infrastructure Costs"
 $ondelim
 $include"./iH2InfrCapCosts.csv"
 $offdelim
@@ -53,7 +53,6 @@ iAvailH2Prod(H2TECH,YTIME)=iH2Production("AVAIL",H2TECH,YTIME);
 *---
 parameter iEffH2Prod(allCy,H2TECH,YTIME)         "Efficiency of hydrogen production technologies";
 iEffH2Prod(runCy,H2TECH,YTIME)=iH2Production("EFF",H2TECH,YTIME);
-display iEffH2Prod;
 *---
 parameter iCostInvH2Transp(allCy,INFRTECH,YTIME)  "Investment cost of infrastructure technology";
                                                    !! - Turnpike pipeline in Euro per km

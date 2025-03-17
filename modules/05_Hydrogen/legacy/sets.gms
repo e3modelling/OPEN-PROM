@@ -7,19 +7,19 @@ H2TECH "Hydrogen production technologies"
 /
 gsr   "gas steam reforming"
 gss   "gas steam reforming with CCS"
-bpy   "biomass pyrolysis"
-sht   "solar thermochemical cycle"
-nht   "nuclear termochemical cycle"
+*bpy   "biomass pyrolysis"
+*sht   "solar thermochemical cycle"
+*nht   "nuclear termochemical cycle"
 weg   "water electrolysis from grid power"
-wen   "water electrolysis with nuclear"
-wew   "water electrolysis with wind"
-cgf   "coal gasification"
-cgs   "coal gasification with CCS"
-opo   "oil partial oxydation"
-ops   "oil partial oxydation with CCS"
-smr   "solar methane reforming"
-bgfs  "biomass gasification small scale"
-bgfl  "biomass gasification large scale"
+*wen   "water electrolysis with nuclear"
+*wew   "water electrolysis with wind"
+*cgf   "coal gasification"
+*cgs   "coal gasification with CCS"
+*opo   "oil partial oxydation"
+*ops   "oil partial oxydation with CCS"
+*smr   "solar methane reforming"
+*bgfs  "biomass gasification small scale"
+*bgfl  "biomass gasification large scale"
 bgfls "biomass gasification large scale with CCS"
 /
 *---
@@ -114,14 +114,14 @@ SSGG
 *---
 H2TECHEFtoEF(H2TECH,EF) "Mapping between production technologies and fuels"
 /
-(gsr,gss,smr).ngs
-(cgf,cgs).hcl
-(bpy,bgfs,bgfl,bgfls).BMSWAS
-sht.SOL
-(nht,wen).NUC
+(gsr,gss).ngs !! ,smr
+*(cgf,cgs).hcl
+(bgfls).BMSWAS !! bpy,bgfs,bgfl,
+*sht.SOL
+*(nht,wen).NUC
 weg.ELC
-wew.WND
-(opo,ops).RFO
+*wew.WND
+*(opo,ops).RFO
 /
 *---
 H2PRODEF(EF)               "Fuels used for hydrogen production"
@@ -136,41 +136,43 @@ wnd
 rfo
 /
 *---
+$ontext
 H2TECHREN(H2TECH)          "Renewable hydrogen production technologies"
 /
 sht
 wew
 /
+$offtext
 *---
 H2CCS(H2TECH)              "Hydrogen production technologies equipped with CCS facility"
 /
 gss   "gas steam reforming with CCS"
-cgs   "coal gasification with CCS"
-ops   "oil partial oxydation with CCS"
+*cgs   "coal gasification with CCS"
+*ops   "oil partial oxydation with CCS"
 bgfls "biomass gasification large scale with CCS"
 /
 *---
 H2NOCCS(H2TECH)            "Hydrogen production technologies without CCS but with corresponding option with CCS"
 /
 gsr
-cgf
-opo
-bgfl
+*cgf
+*opo
+*bgfl
 /
 *---
 H2CCS_NOCCS(H2TECH,H2TECH) "Mapping between hydrogen technologies with and without CCS facility"
 /
 gss.gsr
-cgs.cgf
-ops.opo
-bgfls.bgfl
+*cgs.cgf
+*ops.opo
+*bgfls.bgfl
 /
 *---
 H2TECHPM(H2TECH)           "Technologies for which premature replacement is active"
 /
 gsr
-cgf
-opo
+*cgf
+*opo
 /
 *---
 ARELAST                    "Set containing the names of the elasticities used in area covered by H2 logistic fucntion"
