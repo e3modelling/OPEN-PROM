@@ -8,41 +8,48 @@ VCostTotH2.FX(runCy,"PG","2010") = iFuelPrice(runCy,"PG","H2F","2010");
 VCostTotH2.FX(runCy,INDDOM,"2010") = iFuelPrice(runCy,INDDOM,"STE1AH2F","2010"); 
 VCostTotH2.FX(runCy,SBS,YTIME)$(not An(YTIME)) = 1e-5;
 VCostTotH2.L(runCy,SBS,YTIME) = 2;
+display VCostTotH2.L;
 *---
-VGapShareH2Tech1.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 0;
-VGapShareH2Tech1.L(runCy,h2tech, YTIME) = 2;
-VGapShareH2Tech1.FX(runCy,h2tech, YTIME)$(not An(YTIME)) = 1e-5;
+VGapShareH2Tech1.L(runCy,H2TECH,YTIME) = 2;
+VGapShareH2Tech1.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
+display VGapShareH2Tech1.L;
 *---
-VDemGapH2.FX(runCy,YTIME)$(not An(YTIME)) = 0 ;
-VDemGapH2.L(runCy, YTIME) = 2;
-VDemGapH2.FX(runCy, YTIME)$(not An(YTIME)) = 1e-5;
+VDemGapH2.L(runCy,YTIME) = 2;
+VDemGapH2.FX(runCy,YTIME)$(not An(YTIME)) = 1e-5;
+display VDemGapH2.L;
 *---
+VProdH2.L(runCy,H2TECH, YTIME) = 2;
+VProdH2.FX(runCy,H2TECH, YTIME)$(not An(YTIME)) = 1e-5;
 VProdH2.FX(runCy,H2TECH,"2010") = 1e-7;
-VProdH2.L(runCy,h2tech, YTIME) = 2;
-VProdH2.FX(runCy,h2tech, YTIME)$(not An(YTIME)) = 1e-5;
+display VProdH2.L;
 *---
-VDemTotH2.FX(runCy,"2010") = sum(H2TECH, VProdH2.L(runCy,H2TECH,"2010"));
 VDemTotH2.L(runCy,YTIME) = 2;
 VDemTotH2.FX(runCy,YTIME)$(not An(YTIME)) = 1e-5;
+VDemTotH2.FX(runCy,"2010") = sum(H2TECH, VProdH2.L(runCy,H2TECH,"2010"));
+display VDemTotH2.L;
 *---
-VConsFuelTechH2Prod.FX(runCy,H2TECH,EF,"2010")$(H2TECHEFtoEF(H2TECH,EF)) = (VProdH2.L(runCy,H2TECH,"2010")/iEffH2Prod(runCy,H2TECH,"2010"));
 VConsFuelTechH2Prod.FX(runCy,H2TECH,EF,YTIME)$(not An(YTIME)$H2TECHEFtoEF(H2TECH,EF)) = 0;
+VConsFuelTechH2Prod.FX(runCy,H2TECH,EF,"2010")$(H2TECHEFtoEF(H2TECH,EF)) = (VProdH2.L(runCy,H2TECH,"2010")/iEffH2Prod(runCy,H2TECH,"2010"));
+display iEffH2Prod;
+display VConsFuelTechH2Prod.L;
 *---
-VDelivH2InfrTech.FX(runCy,INFRTECH,"2010") = 0;
 VDelivH2InfrTech.L(runCy,INFRTECH,YTIME) = 2;
 VDelivH2InfrTech.FX(runCy,INFRTECH,YTIME)$(not An(YTIME)) = 1e-5;
+VDelivH2InfrTech.FX(runCy,INFRTECH,"2010") = 0;
+display VDelivH2InfrTech.L;
 *---
-VGapShareH2Tech2.FX(runCy,h2tech, YTIME)$(not An(YTIME)) = 1e-5;
-VGapShareH2Tech2.L(runCy,h2tech, YTIME) = 2;
+VGapShareH2Tech2.L(runCy,H2TECH,YTIME) = 2;
+VGapShareH2Tech2.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
 *---
-VCapScrapH2ProdTech.L(runCy,h2tech, YTIME) = 2;
-VCapScrapH2ProdTech.FX(runCy,h2tech, YTIME)$(not An(YTIME)) = 1e-5;
+VCapScrapH2ProdTech.L(runCy,H2TECH,YTIME) = 2;
+VCapScrapH2ProdTech.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
+display VCapScrapH2ProdTech.L;
 *---
-VPremRepH2Prod.L(runCy,h2tech, YTIME) = 2;
-VPremRepH2Prod.FX(runCy,h2tech, YTIME)$(not An(YTIME)) = 1e-5;
+VPremRepH2Prod.L(runCy,H2TECH,YTIME) = 2;
+VPremRepH2Prod.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
 *---
-VScrapLftH2Prod.L(runCy,h2tech, YTIME) = 2;
-VScrapLftH2Prod.FX(runCy,h2tech, YTIME)$(not An(YTIME)) = 1e-5;
+VScrapLftH2Prod.L(runCy,H2TECH,YTIME) = 2;
+VScrapLftH2Prod.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
 *---
 VCostProdH2Tech.L(runCy,H2TECH,YTIME) = 2;
 VCostProdH2Tech.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;

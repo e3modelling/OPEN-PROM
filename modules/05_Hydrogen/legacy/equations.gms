@@ -12,7 +12,7 @@ QDemTotH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QScrapLftH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         VScrapLftH2Prod(allCy,H2TECH,YTIME)
          =E=
-        (
+         (
          VGapShareH2Tech1(allCy,H2TECH,YTIME-iProdLftH2(H2TECH,YTIME))*VDemGapH2(allCy,YTIME-iProdLftH2(H2TECH,YTIME))
          /VProdH2(allCy,H2TECH,YTIME-1)
          )$(ord(YTIME)>17+iProdLftH2(H2TECH,YTIME))
@@ -45,16 +45,16 @@ QPremRepH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QCapScrapH2ProdTech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VCapScrapH2ProdTech(allCy,H2TECH,YTIME)
          =E=
-         1-(1-VScrapLftH2Prod(allCy,h2tech,YTIME))*(1-VPremRepH2Prod(allCy,h2tech,YTIME))
+         1-(1-VScrapLftH2Prod(allCy,H2TECH,YTIME))*(1-VPremRepH2Prod(allCy,H2TECH,YTIME))
 ;
 
 
 QDemGapH2(allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VDemGapH2(allCy, YTIME)
                  =E=
-         ( VDemTotH2(allCy,YTIME) - sum(H2TECH,(1-VCapScrapH2ProdTech(allCy,h2tech,YTIME))*VProdH2(allCy,h2tech,YTIME-1))
+         ( VDemTotH2(allCy,YTIME) - sum(H2TECH,(1-VCapScrapH2ProdTech(allCy,H2TECH,YTIME))*VProdH2(allCy,H2TECH,YTIME-1))
           + 0 +
-         SQRT( SQR(VDemTotH2(allCy,YTIME) - sum(H2TECH,(1-VCapScrapH2ProdTech(allCy,h2tech,YTIME))*VProdH2(allCy,h2tech,YTIME-1))-0) + SQR(1E-4) )
+         SQRT( SQR(VDemTotH2(allCy,YTIME) - sum(H2TECH,(1-VCapScrapH2ProdTech(allCy,H2TECH,YTIME))*VProdH2(allCy,H2TECH,YTIME-1))-0) + SQR(1E-4) )
          )/2
 ;
 
@@ -153,7 +153,7 @@ QGapShareH2Tech1(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 
 
 QProdH2(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VProdH2(allCy,h2tech,YTIME)
+         VProdH2(allCy,H2TECH,YTIME)
          =E=
          (1-VCapScrapH2ProdTech(allCy,H2TECH,YTIME))*VProdH2(allCy,H2TECH,YTIME-1)+ VGapShareH2Tech1(allCy,H2TECH,YTIME)*VDemGapH2(allCy,YTIME)
 ;
@@ -165,17 +165,17 @@ QCostAvgProdH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          sum(H2TECH, VProdH2(allCy,H2TECH,YTIME)*VCostProdH2Tech(allCy,H2TECH,YTIME))/sum(H2TECH,VProdH2(allCy,H2TECH,YTIME))
 ;
 
-display iEffH2Prod;
+
 QConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)$(TIME(YTIME) $H2TECHEFtoEF(H2TECH,EF) $(runCy(allCy)))..
          VConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)
          =E=
-         (VProdH2(allCy,H2TECH,YTIME)/iEffH2Prod(allCy,H2TECH,YTIME))$(ord(YTIME) = 1)
+         (VProdH2(allCy,H2TECH,YTIME)/iEffH2Prod(allCy,H2TECH,YTIME))$(sameas(YTIME,"2021"))
          +
          (
          VConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME-1)*
          (VProdH2(allCy,H2TECH,YTIME)/iEffH2Prod(allCy,H2TECH,YTIME))/
          (VProdH2(allCy,H2TECH,YTIME-1)/iEffH2Prod(allCy,H2TECH,YTIME-1))
-         )$(not (ord(YTIME) = 1))
+         )$(not sameas(YTIME,"2021"))
 ;
 
 
