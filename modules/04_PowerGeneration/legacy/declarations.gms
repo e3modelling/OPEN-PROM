@@ -54,6 +54,7 @@ QCostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME)	           "Compute long term pow
 QCostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)	       "Compute long term average power generation cost excluding climate policies"		
 QCostPowGenLonNoClimPol(allCy,ESET,YTIME)                  "Compute long term power generation cost excluding climate policies"	
 *qCostPowGenAvgShrt(allCy,ESET,YTIME)	                   "Compute short term power generation cost"
+QConsElec(allCy,DSBS,YTIME)                                "Compute electricity consumption per final demand sector"
 
 *'                **Interdependent Equations**
 QLoadFacDom(allCy,YTIME)	                               "Compute load factor of entire domestic system"
@@ -118,6 +119,7 @@ VCostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME)	           "Long-term average pow
 VCostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)	       "Long-term average power generation cost excluding climate policies(US$2015/kWh)" 	
 VCostPowGenLonNoClimPol(allCy,ESET,YTIME)                  "Long-term average power generation cost  excluding climate policies (US$2015/kWh)"	
 *vCostPowGenAvgShrt(allCy,ESET,YTIME)                      "Short-term average power generation cost (US$2015/kWh)"
+VConsElec(allCy,DSBS,YTIME)                                "Electricity demand per final sector (Mtoe)"
 
 *'                **Interdependent Variables**	
 VLoadFacDom(allCy,YTIME)                                   "Electricity load factor for entire domestic system"	

@@ -37,9 +37,6 @@ VOutTransfNuclear.FX(runCy,EFS,YTIME)$(not sameas("ELC",EFS)) = 0;
 *---
 VInpTransfNuclear.FX(runCy,EFS,YTIME)$(not sameas("NUC",EFS)) = 0;
 *---
-VConsElec.l(runCy,DSBS,YTIME)=0.1;
-VConsElec.FX(runCy,DSBS,YTIME)$(not AN(YTIME)) = 0.1;
-*---
 VConsFiEneSec.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iTotEneBranchCons(runCy,EFS,YTIME);
 *---
 VInpTransfTherm.FX(runCy,EFS,YTIME)$(not PGEF(EFS)) = 0;
