@@ -216,11 +216,11 @@ reportEmissions <- function(regs) {
   #filter period by last year of the model
   an <- readGDX('./blabla.gdx', "an", field = 'l')
   
-  .toolgeom_bar <- function(data, colors_vars) {
+  .toolgeom_area <- function(data, colors_vars) {
     return(ggplot(data,aes(y=value,x=period, color=variable)) +
              scale_fill_manual(values = as.character(colors_vars[,3]), limits = as.character(colors_vars[,1])) + 
              scale_color_manual(values = as.character(colors_vars[,3]), limits = as.character(colors_vars[,1])) + 
-             geom_bar(stat = "identity",aes(fill=variable) ) + 
+             geom_area(stat = "identity",aes(fill=variable) ) + 
              facet_wrap("region",scales = "free_y") +
              labs(x="period", y=paste0("Emissions|CO2"," ",unique(data[["unit"]]))) +
              theme_bw()+
@@ -247,16 +247,13 @@ reportEmissions <- function(regs) {
   
   #map variables with colors
   colors_vars <- filter(colors,V1%in%getItems(magpie_object,3.1))
-  var_miss <- as.data.frame(getItems(magpie_object,3.1))
-  
-  names(var_miss) <- "vars"
-  
+ 
   #add missing colors
-  V1 <- as.character(filter(var_miss,!(vars%in%colors[,"V1"]))[["vars"]])
-  V2 <- c("Bunkers","Demand","Supply","Energy","Cumulated")
-  V3 <- c("#DF0101","#FDBF6F","#661a00","#bcbc6d","violet")
-  V4 <- rep(NA, 5)
-  V5 <- rep(NA, 5)
+  V1 <- c("Emissions|CO2|Energy|Demand|Bunkers","Emissions|CO2|Energy|Supply","Emissions|CO2|Cumulated")
+  V2 <- c("Bunkers","Supply","Cumulated")
+  V3 <- c("#FDBF6F","#bcbc6d","#661a00")
+  V4 <- rep(NA, 3)
+  V5 <- rep(NA, 3)
   
   miss_vars <- data.frame(V1, V2, V3, V4, V5)
   
@@ -272,36 +269,23 @@ reportEmissions <- function(regs) {
   #order variables to match colors
   data <- data %>% arrange(as.character(variable))
   
-  emi_co2 <- filter(data,variable %in% "Emissions|CO2")
-  filter_colors <- filter(colors_vars,V1 %in% "Emissions|CO2")
+  #Demand_Supply graph
+  emi_co2 <- filter(data,variable %in% c("Emissions|CO2|Energy|Demand|Bunkers","Emissions|CO2|Energy|Demand|Industry",
+                                         "Emissions|CO2|Energy|Demand|Residential and Commercial","Emissions|CO2|Energy|Demand|Transportation",
+                                         "Emissions|CO2|Energy|Supply"))
+  filter_colors <- filter(colors_vars,V1 %in%c("Emissions|CO2|Energy|Demand|Bunkers","Emissions|CO2|Energy|Demand|Industry",
+                                               "Emissions|CO2|Energy|Demand|Residential and Commercial","Emissions|CO2|Energy|Demand|Transportation",
+                                               "Emissions|CO2|Energy|Supply"))
   #create geom_bar
-  .toolgeom_bar(emi_co2, filter_colors)
-  ggsave("Emissions_CO2.png", units="in", width=5.5, height=4, dpi=1200)
-  
-  emi_co2 <- filter(data,variable %in% c("Emissions|CO2|Energy|Demand","Emissions|CO2|Energy|Supply"))
-  filter_colors <- filter(colors_vars,V1 %in% c("Emissions|CO2|Energy|Demand","Emissions|CO2|Energy|Supply"))
-  #create geom_bar
-  .toolgeom_bar(emi_co2, filter_colors)
+  .toolgeom_area(emi_co2, filter_colors)
   ggsave("Demand_Supply_CO2.png", units="in", width=5.5, height=4, dpi=1200)
   
-  emi_co2 <- filter(data,variable %in% c("Emissions|CO2|Energy|Demand|Bunkers","Emissions|CO2|Energy|Demand|Industry",
-                                         "Emissions|CO2|Energy|Demand|Residential and Commercial","Emissions|CO2|Energy|Demand|Transportation"))
-  filter_colors <- filter(colors_vars,V1 %in%c("Emissions|CO2|Energy|Demand|Bunkers","Emissions|CO2|Energy|Demand|Industry",
-                                               "Emissions|CO2|Energy|Demand|Residential and Commercial","Emissions|CO2|Energy|Demand|Transportation"))
-  #create geom_bar
-  .toolgeom_bar(emi_co2, filter_colors)
-  ggsave("Demand_Sectors_CO2.png", units="in", width=5.5, height=4, dpi=1200)
   
-  emi_co2 <- filter(data,variable %in% c("Emissions|CO2|Energy"))
-  filter_colors <- filter(colors_vars,V1 %in% c("Emissions|CO2|Energy"))
-  #create geom_bar
-  .toolgeom_bar(emi_co2, filter_colors)
-  ggsave("Energy_CO2.png", units="in", width=5.5, height=4, dpi=1200)
-  
-  emi_co2 <- filter(data,variable %in% c("Emissions|CO2|Cumulated"))
+  #Cumulated graph
+  Cumulated_CO2 <- filter(data,variable %in% c("Emissions|CO2|Cumulated"))
   filter_colors <- filter(colors_vars,V1 %in% c("Emissions|CO2|Cumulated"))
   #create geom_bar
-  .toolgeom_bar(emi_co2, filter_colors)
+  .toolgeom_area(Cumulated_CO2, filter_colors)
   ggsave("Cumulated_CO2.png", units="in", width=5.5, height=4, dpi=1200)
   
   return(magpie_object)
