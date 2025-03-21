@@ -19,7 +19,7 @@ weg   "water electrolysis from grid power"
 *ops   "oil partial oxydation with CCS"
 *smr   "solar methane reforming"
 *bgfs  "biomass gasification small scale"
-*bgfl  "biomass gasification large scale"
+bgfl  "biomass gasification large scale"
 bgfls "biomass gasification large scale with CCS"
 /
 *---
@@ -116,7 +116,7 @@ H2TECHEFtoEF(H2TECH,EF) "Mapping between production technologies and fuels"
 /
 (gsr,gss).ngs !! ,smr
 *(cgf,cgs).hcl
-(bgfls).BMSWAS !! bpy,bgfs,bgfl,
+(bgfls,bgfl).BMSWAS !! bpy,bgfs,
 *sht.SOL
 *(nht,wen).NUC
 weg.ELC
@@ -157,7 +157,7 @@ H2NOCCS(H2TECH)            "Hydrogen production technologies without CCS but wit
 gsr
 *cgf
 *opo
-*bgfl
+bgfl
 /
 *---
 H2CCS_NOCCS(H2TECH,H2TECH) "Mapping between hydrogen technologies with and without CCS facility"
@@ -165,7 +165,7 @@ H2CCS_NOCCS(H2TECH,H2TECH) "Mapping between hydrogen technologies with and witho
 gss.gsr
 *cgs.cgf
 *ops.opo
-*bgfls.bgfl
+bgfls.bgfl
 /
 *---
 H2TECHPM(H2TECH)           "Technologies for which premature replacement is active"
