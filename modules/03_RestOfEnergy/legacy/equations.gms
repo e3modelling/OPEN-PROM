@@ -339,12 +339,3 @@ QConsFiEneSec(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
               VConsFinEneCountry(allCy,EFS,YTIME) + VConsFinNonEne(allCy,EFS,YTIME) + VLossesDistr(allCy,EFS,YTIME)
             )$TOCTEF(EFS)
          );                              
-
-*' This equation establishes a common variable (with arguments) for the electricity consumption per demand subsector of INDUSTRY, [DOMESTIC/TERTIARY/RESIDENTIAL] and TRANSPORT.
-*' The electricity consumption of the demand subsectors of INDUSTRY & [DOMESTIC/TERTIARY/RESIDENTIAL] is provided by the consumption of Electricity as a Fuel.
-*' The electricity consumption of the demand subsectors of TRANSPORT is provided by the Demand of Transport for Electricity as a Fuel.
-QConsElec(allCy,DSBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VConsElec(allCy,DSBS,YTIME)
-             =E=
-         sum(INDDOM $SAMEAS(INDDOM,DSBS), VConsFuel(allCy,INDDOM,"ELC",YTIME)) + sum(TRANSE $SAMEAS(TRANSE,DSBS), VDemFinEneTranspPerFuel(allCy,TRANSE,"ELC",YTIME));
-

@@ -146,3 +146,6 @@ VProdElec.FX(runCy,pgall,YTIME)$DATAY(YTIME)=iDataElecProd(runCy,pgall,YTIME)/10
 *---
 VProdElecReqTot.fx(runCy,"%fBaseY%")=sum(pgall,VProdElec.L(runCy,pgall,"%fBaseY%"));
 *---
+VConsElec.l(runCy,DSBS,YTIME)=0.1;
+VConsElec.FX(runCy,DSBS,YTIME)$(not AN(YTIME)) = 0.1;
+*---

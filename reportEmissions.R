@@ -210,5 +210,83 @@ reportEmissions <- function(regs) {
   Cumulated <- add_dimension(Cumulated, dim = 3.2, add = "unit", nm = "Gt CO2")
   magpie_object <- mbind(magpie_object, Cumulated)
   
+  #graph emissions
+  library(ggplot2)
+  
+  #filter period by last year of the model
+  an <- readGDX('./blabla.gdx', "an", field = 'l')
+  
+  .toolgeom_area <- function(data, colors_vars) {
+    return(ggplot(data,aes(y=value,x=period, color=variable)) +
+             scale_fill_manual(values = as.character(colors_vars[,3]), limits = as.character(colors_vars[,1])) + 
+             scale_color_manual(values = as.character(colors_vars[,3]), limits = as.character(colors_vars[,1])) + 
+             geom_area(stat = "identity",aes(fill=variable) ) + 
+             facet_wrap("region",scales = "free_y") +
+             labs(x="period", y=paste0("Emissions|CO2"," ",unique(data[["unit"]]))) +
+             theme_bw()+
+             theme(text = element_text(size = 4),
+                   strip.text.x = element_text(margin = margin(0.05,0,0.05,0, "cm")),
+                   axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), 
+                   aspect.ratio = 1.5/2,plot.title = element_text(size = 4),
+                   legend.key.size = unit(0.5, "cm"),
+                   legend.key.width = unit(0.5, "cm")))
+  }
+  
+  pq <- as.quitte(magpie_object)
+  pq <- select(pq, -c("variable"))
+  names(pq) <- sub("d3", "variable", names(pq))
+  
+  #Read csv to map variables with colors
+  colors <- read.csv(system.file(package="mip",file.path("extdata","plotstyle.csv")))
+  
+  #Split by semicolon
+  split_text <- strsplit(as.character(colors$X.legend.color.marker.linestyle), split = ";")
+  
+  #Convert the list into a data frame
+  colors <- do.call(bind_rows, lapply(split_text, function(x) as.data.frame(t(x))))
+  
+  #map variables with colors
+  colors_vars <- filter(colors,V1%in%getItems(magpie_object,3.1))
+ 
+  #add missing colors
+  V1 <- c("Emissions|CO2|Energy|Demand|Bunkers","Emissions|CO2|Energy|Supply","Emissions|CO2|Cumulated")
+  V2 <- c("Bunkers","Supply","Cumulated")
+  V3 <- c("#FDBF6F","#bcbc6d","#661a00")
+  V4 <- rep(NA, 3)
+  V5 <- rep(NA, 3)
+  
+  miss_vars <- data.frame(V1, V2, V3, V4, V5)
+  
+  #add missing colors to dataset
+  colors_vars <- rbind(colors_vars, miss_vars)
+  
+  #order colors to match variables
+  colors_vars <- colors_vars[order(colors_vars[["V1"]]), ]
+  
+  #filter data by variables and max period
+  data <- filter(pq,variable%in%colors_vars[,1],period<=max(an))
+  
+  #order variables to match colors
+  data <- data %>% arrange(as.character(variable))
+  
+  #Demand_Supply graph
+  emi_co2 <- filter(data,variable %in% c("Emissions|CO2|Energy|Demand|Bunkers","Emissions|CO2|Energy|Demand|Industry",
+                                         "Emissions|CO2|Energy|Demand|Residential and Commercial","Emissions|CO2|Energy|Demand|Transportation",
+                                         "Emissions|CO2|Energy|Supply"))
+  filter_colors <- filter(colors_vars,V1 %in%c("Emissions|CO2|Energy|Demand|Bunkers","Emissions|CO2|Energy|Demand|Industry",
+                                               "Emissions|CO2|Energy|Demand|Residential and Commercial","Emissions|CO2|Energy|Demand|Transportation",
+                                               "Emissions|CO2|Energy|Supply"))
+  #create geom_bar
+  .toolgeom_area(emi_co2, filter_colors)
+  ggsave("Demand_Supply_CO2.png", units="in", width=5.5, height=4, dpi=1200)
+  
+  
+  #Cumulated graph
+  Cumulated_CO2 <- filter(data,variable %in% c("Emissions|CO2|Cumulated"))
+  filter_colors <- filter(colors_vars,V1 %in% c("Emissions|CO2|Cumulated"))
+  #create geom_bar
+  .toolgeom_area(Cumulated_CO2, filter_colors)
+  ggsave("Cumulated_CO2.png", units="in", width=5.5, height=4, dpi=1200)
+  
   return(magpie_object)
    }

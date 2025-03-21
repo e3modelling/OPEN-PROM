@@ -722,6 +722,15 @@ QCostPowGenLonNoClimPol(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          )
 /(VDemElecTot(allCy,YTIME));  
 
+*' This equation establishes a common variable (with arguments) for the electricity consumption per demand subsector of INDUSTRY, [DOMESTIC/TERTIARY/RESIDENTIAL] and TRANSPORT.
+*' The electricity consumption of the demand subsectors of INDUSTRY & [DOMESTIC/TERTIARY/RESIDENTIAL] is provided by the consumption of Electricity as a Fuel.
+*' The electricity consumption of the demand subsectors of TRANSPORT is provided by the Demand of Transport for Electricity as a Fuel.
+QConsElec(allCy,DSBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VConsElec(allCy,DSBS,YTIME)
+             =E=
+         sum(INDDOM $SAMEAS(INDDOM,DSBS), VConsFuel(allCy,INDDOM,"ELC",YTIME)) + sum(TRANSE $SAMEAS(TRANSE,DSBS), VDemFinEneTranspPerFuel(allCy,TRANSE,"ELC",YTIME));
+
+
 *' This equation computes the short-term average power generation cost. It involves summing the variable production costs for different power generation plants and
 *' energy forms, considering the specific characteristics and costs associated with each. The result is the average power generation cost per unit of electricity
 *' consumed in the given time period.
