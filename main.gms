@@ -94,7 +94,10 @@ $onEmpty
 $offOrder
 
 *' *** GAMS "flags" definitions
-*' 
+*'
+*' *** Calibration
+$setGlobal Calibration off
+$setGlobal MatFacCalibration off
 *' *** Maximum number of solver attempts
 $evalGlobal SolverTryMax 4
 *' *** Setting research mode (0) or development mode (1) to modify settings and parameters accordingly

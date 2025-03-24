@@ -21,6 +21,8 @@ $ondelim
 $include "./iTransChar.csv"
 $offdelim
 ;
+
+$IFTHEN.calib %Calibration% == off
 table iElastA(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)"
 $ondelim
 $include "./iElastA.csv"
@@ -28,13 +30,59 @@ $offdelim
 ;
 
 iElastA(runCy,SBS,ETYPES,YTIME) = iElastA("ELL",SBS,ETYPES,YTIME);
+$ELSE.calib
+variable iElastA(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)";
+table iElastAL(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)"
+$ondelim
+$include "./iElastA.csv"
+$offdelim
+;
+iElastA.L(runCy,SBS,ETYPES,YTIME) = iElastAL("ELL",SBS,ETYPES,YTIME);
+iElastA.LO(runCy,SBS,"a",YTIME) = 0.001;
+iElastA.UP(runCy,SBS,"a",YTIME) = 5*iElastAL("ELL",SBS,"a",YTIME);
+iElastA.LO(runCy,SBS,"b1",YTIME) = -10;
+iElastA.UP(runCy,SBS,"b1",YTIME) = -0.001;
+iElastA.LO(runCy,SBS,"b2",YTIME) = -10;
+iElastA.UP(runCy,SBS,"b2",YTIME) = -0.001;
+iElastA.LO(runCy,SBS,"c",YTIME) = -10;
+iElastA.UP(runCy,SBS,"c",YTIME) = -0.001;
+iElastA.LO(runCy,SBS,"b3",YTIME) = -10;
+iElastA.UP(runCy,SBS,"b3",YTIME) = -0.001;
+iElastA.LO(runCy,SBS,"b4",YTIME) = -10;
+iElastA.UP(runCy,SBS,"b4",YTIME) = -0.001;
+iElastA.LO(runCy,SBS,"c1",YTIME) = -10;
+iElastA.UP(runCy,SBS,"c1",YTIME) = -0.001;
+iElastA.LO(runCy,SBS,"c2",YTIME) = -10;
+iElastA.UP(runCy,SBS,"c2",YTIME) = -0.001;
+iElastA.LO(runCy,SBS,"c3",YTIME) = -10;
+iElastA.UP(runCy,SBS,"c3",YTIME) = -0.001;
+iElastA.LO(runCy,SBS,"c4",YTIME) = -10;
+iElastA.UP(runCy,SBS,"c4",YTIME) = -0.001;
+iElastA.LO(runCy,SBS,"c4",YTIME) = -10;
+iElastA.UP(runCy,SBS,"c4",YTIME) = -0.001;
+iElastA.LO(runCy,SBS,"c5",YTIME) = -10;
+iElastA.UP(runCy,SBS,"c5",YTIME) = -0.001;
+$ENDIF.calib
 
 table iElastNonSubElecData(SBS,ETYPES,YTIME) "Elasticities of Non Substitutable Electricity (1)"
 $ondelim
 $include "./iElastNonSubElecData.csv"
 $offdelim
 ;
+$IFTHEN.calib %Calibration% == off
 iElastNonSubElec(runCy,SBS,ETYPES,YTIME) = iElastNonSubElecData(SBS,ETYPES,YTIME);
+$ELSE.calib
+variable iElastNonSubElec(allCy,SBS,ETYPES,YTIME)        "Elasticities of Non Substitutable Electricity (1)";
+iElastNonSubElec.L(runCy,SBS,ETYPES,YTIME) = iElastNonSubElecData(SBS,ETYPES,YTIME);
+iElastNonSubElec.LO(runCy,SBS,"a",YTIME) = 0.001;
+iElastNonSubElec.UP(runCy,SBS,"a",YTIME) = 10;
+iElastNonSubElec.LO(runCy,SBS,"b1",YTIME) = -10;
+iElastNonSubElec.UP(runCy,SBS,"b1",YTIME) = -0.001;
+iElastNonSubElec.LO(runCy,SBS,"b2",YTIME) = -10;
+iElastNonSubElec.UP(runCy,SBS,"b2",YTIME) = -0.001;
+iElastNonSubElec.LO(runCy,SBS,"c",YTIME) = -10;
+iElastNonSubElec.UP(runCy,SBS,"c",YTIME) = -0.001;
+$ENDIF.calib
 
 parameter iNatGasPriProElst(allCy)	          "Natural Gas primary production elasticity related to gross inland consumption (1)" /
 $ondelim
@@ -1289,9 +1337,18 @@ $include"./iMatrFactorData.csv"
 $offdelim
 ;
 
+$IFTHEN.calib %MatFacCalibration% == off
 parameter iMatrFactor(allCy,SBS,EF,YTIME)       "Maturity factor per technology and subsector for all countries (1)";
 iMatrFactor(runCy,SBS,EF,YTIME) = iMatrFactorData(SBS,EF,YTIME);                                          
 iMatrFactor(runCy,SBS,EF,YTIME)$(iMatrFactor(runCy,SBS,EF,YTIME)=0) = 0.000001;
+$ELSE.calib
+variable iMatrFactor(allCy,SBS,EF,YTIME)       "Maturity factor per technology and subsector for all countries (1)";
+iMatrFactor.L(runCy,SBS,EF,YTIME) = iMatrFactorData(SBS,EF,YTIME);                                          
+iMatrFactor.L(runCy,SBS,EF,YTIME)$(iMatrFactor.L(runCy,SBS,EF,YTIME)=0) = 0.000001;
+iMatrFactor.LO(runCy,SBS,EF,YTIME) = -10;                                          
+iMatrFactor.UP(runCy,SBS,EF,YTIME) = 100;
+$ENDIF.calib
+
 ** Industry
 iShrNonSubElecInTotElecDem(runCy,INDSE)  = iIndChar(runCy,INDSE,"SHR_NSE");
 iShrNonSubElecInTotElecDem(runCy,INDSE)$(iShrNonSubElecInTotElecDem(runCy,INDSE)>0.98) = 0.98;

@@ -9,6 +9,9 @@
 *' and the ratio of lagged energy costs (with the corresponding elasticities). This type of equation captures both short term and long term reactions to energy costs. 
 
 *' * Define dummy objective function
-$ontext
-qDummyObj.. vDummyObj =e= 1;
-$offtext
+$IFTHEN.calib %Calibration% == on
+qDummyObj(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy))).. vDummyObj =e=
+SQRT(SUM(SECTTECH(DSBS,EF)$(INDDOM(DSBS)), SQR(iFuelConsPerFueSub(allCy,DSBS,EF,YTIME)-VConsFuelInclHP(allCy,DSBS,EF,YTIME))) ) +
+SQRT(SUM(SECTTECH(TRANSE,EF), SQR(VDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)-iFuelConsPerFueSub(allCy,TRANSE,EF,YTIME)))) +
+0;
+$ENDIF.calib
