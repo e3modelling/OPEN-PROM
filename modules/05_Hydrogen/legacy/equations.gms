@@ -155,7 +155,7 @@ QGapShareH2Tech1(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QProdH2(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VProdH2(allCy,H2TECH,YTIME)
          =E=
-         (1-VCapScrapH2ProdTech(allCy,H2TECH,YTIME))*VProdH2(allCy,H2TECH,YTIME-1)+ VGapShareH2Tech1(allCy,H2TECH,YTIME)*VDemGapH2(allCy,YTIME)
+         0.0001+(1-VCapScrapH2ProdTech(allCy,H2TECH,YTIME))*VProdH2(allCy,H2TECH,YTIME-1)+ VGapShareH2Tech1(allCy,H2TECH,YTIME)*VDemGapH2(allCy,YTIME)
 ;
 
 
