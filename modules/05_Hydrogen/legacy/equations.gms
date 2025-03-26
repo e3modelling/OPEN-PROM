@@ -15,7 +15,7 @@ QScrapLftH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          (
          VGapShareH2Tech1(allCy,H2TECH,YTIME-iProdLftH2(H2TECH,YTIME))*VDemGapH2(allCy,YTIME-iProdLftH2(H2TECH,YTIME))
          /VProdH2(allCy,H2TECH,YTIME-1)
-         )$(ord(YTIME)>17+iProdLftH2(H2TECH,YTIME))
+         )$(ord(YTIME)>17+iProdLftH2(H2TECH,YTIME)) + 0.1
 ;
 
 
