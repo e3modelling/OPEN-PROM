@@ -38,7 +38,7 @@ jobs:
         run: |
           @"
           print("Getting data for GitHub Action")
-          url <- 'https://drive.usercontent.google.com/uc?id=1XGGqoHnoHPGjIfzwxzNw9Tw3_14siNe7&export=download'
+          url <- 'https://drive.usercontent.google.com/uc?id=1W4zjOQUqkYhVr__bUsq0ToR4HNwXnqnn&export=download'
           fname <- 'ghaction_data.tgz'
           download.file(url, fname, mode="wb")
           utils::untar(fname, exdir = "./data")
