@@ -880,7 +880,7 @@ $include"./iVarCost.csv"
 $offdelim
 ;
 
-table iFixOandMCost(PGALL,YTIME)    "Fixed O&M Gross Cost per Plant Type (US$2015/KW)"
+table iFixOandMCost(allCy,PGALL,YTIME)    "Fixed O&M Gross Cost per Plant Type (US$2015/KW)"
 $ondelim
 $include"./iFixOandMCost.csv"
 $offdelim
@@ -953,14 +953,14 @@ iFinEneCons(runCy,EFS,YTIME) = sum(INDDOM,
                        sum(TRANSE,
                          sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(TRANSE,EF) $(not plugin(EF)) ), iFuelConsPerFueSub(runCy,TRANSE,EF,YTIME)));
 
-table iGrossCapCosSubRen(PGALL,YTIME)             "Gross Capital Cost per Plant Type with subsidy for renewables (kUS$2015/KW)"
+table iGrossCapCosSubRen(allCy,PGALL,YTIME)             "Gross Capital Cost per Plant Type with subsidy for renewables (kUS$2015/KW)"
 $ondelim
 $include"./iGrossCapCosSubRen.csv"
 $offdelim
 ;
-iGrossCapCosSubRen(PGALL,YTIME) = iGrossCapCosSubRen(PGALL,YTIME)/1000;
-loop(PGALL,YTIME)$AN(YTIME) DO
-         abort $(iGrossCapCosSubRen(PGALL,YTIME)<0) "CAPITAL COST IS NEGATIVE", iGrossCapCosSubRen
+iGrossCapCosSubRen(runCy,PGALL,YTIME) = iGrossCapCosSubRen(runCy,PGALL,YTIME)/1000;
+loop(runCy,PGALL,YTIME)$AN(YTIME) DO
+         abort $(iGrossCapCosSubRen(runCy,PGALL,YTIME)<0) "CAPITAL COST IS NEGATIVE", iGrossCapCosSubRen
 ENDLOOP;
 
 *VCapElecTotEst.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
@@ -1395,13 +1395,13 @@ iTechLftPlaType(runCy,PGALL) = iDataTechLftPlaType(PGALL, "LFT");
 iEffDHPlants(runCy,EFS,YTIME)$(ord(YTIME)>(ordfirst-8))  = sum(PGEFS$sameas(EFS,PGEFS),iParDHEfficiency(PGEFS,"2010"));
 
 
-table iDataPlantEffByType(PGALL, YTIME)   "Data for plant efficiency per plant type"
+table iDataPlantEffByType(allCy,PGALL, YTIME)   "Data for plant efficiency per plant type"
 $ondelim
 $include "./iDataPlantEffByType.csv"
 $offdelim
 ;
 
-iPlantEffByType(runCy,PGALL,YTIME) = iDataPlantEffByType(PGALL, YTIME) ;
+iPlantEffByType(runCy,PGALL,YTIME) = iDataPlantEffByType(runCy,PGALL, YTIME) ;
 
 ** CHP economic and technical data initialisation for electricity production
 table iDataChpPowGen(EF,YTIME,CHPPGSET)   "Data for power generation costs (various)"
