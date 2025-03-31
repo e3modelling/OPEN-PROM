@@ -82,3 +82,49 @@ QPriceElecIndResConsu(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..  !! The e
              )$(not TFIRST(YTIME-1))
            )$RSET(ESET)
         );
+
+*' Compute electricity price in Industrial and Residential Consumers excluding climate policies by multiplying the Factors affecting electricity prices to consumers by the sum of 
+*' Fuel prices per subsector and fuel multiplied by the TWh to Mtoe conversion factor adding the Factors affecting electricity prices to consumers and the Long-term average power 
+*' generation cost  excluding climate policies for Electricity of Other Industrial sectors and for Electricity for Households .
+QPriceElecIndResNoCliPol(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..   !! The electricity price is based on previous year's production costs
+        VPriceElecIndResNoCliPol(allCy,ESET,YTIME)
+                 =E=
+        (1 + iVAT(allCy, YTIME)) *
+        (
+           (
+             (VPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)*sTWhToMtoe)$TFIRST(YTIME-1) +
+             (
+               VCostPowGenLonNoClimPol(allCy,"i",YTIME-1) 
+              )$(not TFIRST(YTIME-1))
+           )$ISET(ESET)
+        +
+           (
+             (VPriceFuelSubsecCarVal(allCy,"HOU","ELC",YTIME-1)*sTWhToMtoe)$TFIRST(YTIME-1) +
+             (
+                VCostPowGenLonNoClimPol(allCy,"r",YTIME-1) 
+             )$(not TFIRST(YTIME-1))
+           )$RSET(ESET)
+        );
+
+*' This equation calculates the fuel prices per subsector and fuel, specifically for Combined Heat and Power (CHP) plants, considering the profit earned from
+*' electricity sales. The equation incorporates various factors such as the base fuel price, renewable value, variable cost of technology, useful energy conversion
+*' factor, and the fraction of electricity price at which a CHP plant sells electricity to the network.
+*' The fuel price for CHP plants is determined by subtracting the relevant components for CHP plants (fuel price for electricity generation and a fraction of electricity
+*' price for CHP sales) from the overall fuel price for the subsector. Additionally, the equation includes a square root term to handle complex computations related to the
+*' difference in fuel prices. This equation provides insights into the cost considerations for fuel in the context of CHP plants, considering various economic and technical parameters.
+QPriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS))  $SECTTECH(DSBS,EF) $runCy(allCy))..
+        VPriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)
+                =E=   
+             (((VPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME) + (VRenValue(YTIME)/1000)$(not RENEF(EF))+iVarCostTech(allCy,DSBS,EF,YTIME)/1000)/iUsfEneConvSubTech(allCy,DSBS,EF,YTIME)- 
+               (0$(not CHP(EF)) + (VPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME)*iFracElecPriChp*VPriceElecInd(allCy,YTIME))$CHP(EF)))  + SQRT( SQR(((VPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME)+iVarCostTech(allCy,DSBS,EF,YTIME)/1000)/iUsfEneConvSubTech(allCy,DSBS,EF,YTIME)- 
+              (0$(not CHP(EF)) + (VPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME)*iFracElecPriChp*VPriceElecInd(allCy,YTIME))$CHP(EF))))  ) )/2;
+
+*' This equation determines the electricity industry prices based on an estimated electricity index and a technical maximum of the electricity to steam ratio
+*' in Combined Heat and Power plants. The industry prices are calculated as a function of the estimated electricity index and the specified maximum
+*' electricity to steam ratio. The equation ensures that the electricity industry prices remain within a realistic range, considering the technical constraints
+*' of CHP plants. It involves the estimated electricity index, and a technical maximum of the electricity to steam ratio in CHP plants is incorporated to account
+*' for the specific characteristics of these facilities. This equation ensures that the derived electricity industry prices align with the estimated index and
+*' technical constraints, providing a realistic representation of the electricity market in the industrial sector.
+QPriceElecInd(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VPriceElecInd(allCy,YTIME) =E=
+        ( VIndxElecIndPrices(allCy,YTIME) + sElecToSteRatioChp - SQRT( SQR(VIndxElecIndPrices(allCy,YTIME)-sElecToSteRatioChp)  ) )/2;

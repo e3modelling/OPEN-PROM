@@ -12,7 +12,7 @@ QCostTranspMatFac(allCy,TRANSE,RCon,TTECH,YTIME)	       "Compute transportation 
 QTechSortVarCost(allCy,TRANSE,Rcon,YTIME)	               "Compute technology sorting based on variable cost"
 QShareTechTr(allCy,TRANSE,EF,YTIME)	                       "Compute technology sorting based on variable cost and new equipment"
 QConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)	   "Compute consumption of each technology in transport sectors"
-*qDemFinEneSubTransp(allCy,TRANSE,YTIME)	                   "Compute final energy demand in transport"
+*qDemFinEneSubTransp(allCy,TRANSE,YTIME)	               "Compute final energy demand in transport"
 QMEPcGdp(allCy,YTIME)                                      "Compute passenger cars market extension (GDP dependent)"
 QMEPcNonGdp(allCy,YTIME)                                   "Compute passenger cars market extension (GDP independent)"
 QStockPcYearly(allCy,YTIME)                                "Compute stock of passenger cars (in million vehicles)"
@@ -21,6 +21,10 @@ QActivPassTrnsp(allCy,TRANSE,YTIME)                        "Compute passenger tr
 QNumPcScrap(allCy,YTIME)                                   "Compute scrapped passenger cars"
 QPcOwnPcLevl(allCy,YTIME)                                  "Compute ratio of car ownership over saturation car ownership"
 QRateScrPc(allCy,YTIME)                                    "Compute passenger cars scrapping rate"
+
+*'                **Interdependent Equations**
+QDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)	           "Compute final energy demand in transport per fuel"
+QLft(allCy,DSBS,EF,YTIME)	                               "Compute the lifetime of passenger cars" 
 ;
 
 Variables
@@ -40,7 +44,7 @@ VCostTranspMatFac(allCy,TRANSE,RCon,TTECH,YTIME)	       "Transportation cost inc
 VTechSortVarCost(allCy,TRANSE,Rcon,YTIME)	               "Technology sorting based on variable cost (1)"
 VShareTechTr(allCy,TRANSE,EF,YTIME)	                       "Technology share in new equipment (1)"
 VConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)	   "Consumption of each technology and subsector (Mtoe)"
-*vDemFinEneSubTransp(allCy,TRANSE,YTIME)	                   "Final energy demand in transport subsectors (Mtoe)"
+*vDemFinEneSubTransp(allCy,TRANSE,YTIME)	               "Final energy demand in transport subsectors (Mtoe)"
 VMEPcGdp(allCy,YTIME)                                      "Passenger cars market extension (GDP dependent)"
 VMEPcNonGdp(allCy,YTIME)                                   "Passenger cars market extension (GDP independent)"
 VStockPcYearly(allCy,YTIME)                                "Stock of passenger cars (million vehicles)"
@@ -53,4 +57,8 @@ VNumPcScrap(allCy,YTIME)                                   "Scrapped passenger c
 VPcOwnPcLevl(allCy,YTIME)                                  "Ratio of car ownership over saturation car ownership (1)"
 VRateScrPc(allCy,YTIME)                                    "Scrapping rate of passenger cars (1)"
 VConsElecNonSubIndTert(allCy,DSBS,YTIME)                   "Consumption of non-substituable electricity in Industry and Tertiary (Mtoe)"
+
+*'                **Interdependent Equations**
+VDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)             "Final energy demand in transport subsectors per fuel (Mtoe)"
+VLft(allCy,DSBS,EF,YTIME)                                  "Lifetime of technologies (years)"
 ;

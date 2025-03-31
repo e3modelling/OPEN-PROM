@@ -19,8 +19,9 @@ reportPrice <- function(regs) {
   #Combine Industrial and Residential OPEN-PROM
   elec_prices <- mbind(elec_prices_Industry, elec_prices_Residential)
   
-  # write data in mif file
-  write.report(elec_prices[,,],file="reporting.mif",model="OPEN-PROM",unit="US$2015/KWh",append=TRUE,scenario=scenario_name)
+  magpie_object <- NULL
+  elec_prices <- add_dimension(elec_prices, dim = 3.2, add = "unit", nm = "US$2015/KWh")
+  magpie_object <- mbind(magpie_object, elec_prices)
   
   # Link between Model Subsectors and Fuels
   sets4 <- readGDX('./blabla.gdx', "SECTTECH")
@@ -35,6 +36,7 @@ reportPrice <- function(regs) {
   sets <- readGDX('./blabla.gdx', "BALEF2EFS")
   names(sets) <- c("BAL", "EF")
   sets[["BAL"]] <- gsub("Gas fuels", "Gases", sets[["BAL"]])
+  sets[["BAL"]] <- gsub("Steam", "Heat", sets[["BAL"]])
   
   z <- NULL
   for (y in 1 : length(sector)) {
@@ -60,8 +62,8 @@ reportPrice <- function(regs) {
     PRICE_by_sector_and_EF <- select(PRICE_by_sector_and_EF, -c("variable","EF"))
     PRICE_by_sector_and_EF <- as.quitte(PRICE_by_sector_and_EF) %>% as.magpie()
     
-    # write data in mif file
-    write.report(PRICE_by_sector_and_EF[,,],file="reporting.mif",model="OPEN-PROM",unit="KUS$2015/toe",append=TRUE,scenario=scenario_name)
+    PRICE_by_sector_and_EF <- add_dimension(PRICE_by_sector_and_EF, dim = 3.2, add = "unit", nm = "KUS$2015/toe")
+    magpie_object <- mbind(magpie_object, PRICE_by_sector_and_EF)
     
     #aggregation by SECTOR and EF
     
@@ -76,14 +78,22 @@ reportPrice <- function(regs) {
     # complete names
     getItems(PRICE_by_EF_OPEN_PROM, 3) <- paste0("Price|Final Energy|", sector_name[y],"|", getItems(PRICE_by_EF_OPEN_PROM, 3))
     
-    # write data in mif file
-    write.report(PRICE_by_EF_OPEN_PROM[,,],file="reporting.mif",model="OPEN-PROM",unit="KUS$2015/toe",append=TRUE,scenario=scenario_name)
-      
+    PRICE_by_EF_OPEN_PROM <- add_dimension(PRICE_by_EF_OPEN_PROM, dim = 3.2, add = "unit", nm = "KUS$2015/toe")
+    magpie_object <- mbind(magpie_object, PRICE_by_EF_OPEN_PROM)
+    
     #fuel categories
 
     # aggregate from fuels to reporting fuel categories
     sum_open_prom <- iFuelPrice
     sum_open_prom <- as.quitte(sum_open_prom)
+    
+    # Energy Forms Aggregations
+    EFtoEFA <- readGDX('./blabla.gdx', "EFtoEFA")
+    EFtoEFA <- EFtoEFA[grep("^STE", EFtoEFA[,1]),]
+    EFtoEFA[,2] <- "Heat"
+    names(EFtoEFA) <- sub("EFA", "BAL", names(EFtoEFA))
+    sets <- rbind(sets, EFtoEFA)
+    
     ## add mapping
     sum_open_prom <- left_join(sum_open_prom, sets, by = "EF")
     # take the mean
@@ -98,8 +108,8 @@ reportPrice <- function(regs) {
     # complete names
     getItems(sum_open_prom, 3) <- paste0("Price|Final Energy|", sector_name[y],"|", getItems(sum_open_prom, 3))
     
-    # write data in mif file
-    write.report(sum_open_prom[,,],file="reporting.mif",model="OPEN-PROM",unit="KUS$2015/toe",append=TRUE,scenario=scenario_name)
-    
+    sum_open_prom <- add_dimension(sum_open_prom, dim = 3.2, add = "unit", nm = "KUS$2015/toe")
+    magpie_object <- mbind(magpie_object, sum_open_prom)
   }
+  return(magpie_object)
 }

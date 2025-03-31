@@ -11,6 +11,7 @@ reportPE <- function(regs) {
   sets$BAL <- gsub("Nuclear heat", "Nuclear", sets$BAL)
   sets$BAL <- gsub("Solar energy", "Solar", sets$BAL)
   sets$BAL <- gsub("Geothermal heat", "Geothermal", sets$BAL)
+  sets[["BAL"]] <- gsub("Steam", "Heat", sets[["BAL"]])
   
   # aggregate from PROM fuels to reporting fuel categories
   VProdPrimary <- toolAggregate(VProdPrimary[ , , unique(sets$EF)], dim = 3, rel = sets, from = "EF", to = "BAL")
@@ -19,7 +20,9 @@ reportPE <- function(regs) {
   l <- getNames(VProdPrimary) == "Primary Energy|Total"
   getNames(VProdPrimary)[l] <- "Primary Energy"
   
-  # write data in mif file
-  write.report(VProdPrimary[,,],file="reporting.mif",model="OPEN-PROM",append=TRUE,unit="Mtoe",scenario=scenario_name)
+  magpie_object <- NULL
+  VProdPrimary <- add_dimension(VProdPrimary, dim = 3.2, add = "unit", nm = "Mtoe")
+  magpie_object <- mbind(magpie_object, VProdPrimary)
   
+  return(magpie_object)
 }
