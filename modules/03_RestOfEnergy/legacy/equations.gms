@@ -21,7 +21,10 @@ QConsFinEneCountry(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
              sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(INDDOM,EF) ), VConsFuel(allCy,INDDOM,EF,YTIME)))
          +
          sum(TRANSE,
-             sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(TRANSE,EF)), VDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)));
+             sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(TRANSE,EF)), VDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)))
+         +
+         sum(EF$(sameas(EF, "H2") AND EFtoEFS(EF,EFS)), VDemTotH2(allCy,YTIME)) !! Here hydrogen is included as a part of the energy consumption.
+        ;
 
 *' The equation computes the total final energy consumption in million tonnes of oil equivalent 
 *' for all countries at a specific time period. This is achieved by summing the final energy consumption for each energy
@@ -207,7 +210,7 @@ QOutTotTransf(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VOutTotTransf(allCy,EFS,YTIME)
                  =E=
          VOutTransfTherm(allCy,EFS,YTIME) + VOutTransfDhp(allCy,EFS,YTIME) + VOutTransfNuclear(allCy,EFS,YTIME) +
-         VOutTransfRefSpec(allCy,EFS,YTIME);        !!+ TONEW(allCy,EFS,YTIME)
+         VOutTransfRefSpec(allCy,EFS,YTIME) + sum(EFS$(sameas(EFS, "H2") AND H2TECH), VProdH2(allCy,H2TECH,YTIME));        !!+ TONEW(allCy,EFS,YTIME)
 
 *' The equation calculates the transfers of a specific energy branch in a given scenario and year.
 *' The result is computed based on a complex formula that involves the previous year's transfers,
