@@ -39,6 +39,10 @@ These occur during the model compilation phase, to tackle them start by searchin
 
 **Solution:** This error indicates that a specific constraint in the model is infeasible. Check the constraints associated with the given identifier ('xxx') and revise them if necessary to ensure feasibility.
 
+## License Errors
+### Error: "The installed license is invalid" or "License has expired"
+Ensure that the gamslice.txt file inside the installation bin folder is correct and contains valid license information. Keep in mind that GAMS may not always read the licence file from the bin folder. Check the file path indicated in the error message to confirm which license file GAMS is referencing.
+
 ## General Troubleshooting Tips
 
 - **Check Log Files:** Review the GAMS log files for detailed error messages and diagnostic information.

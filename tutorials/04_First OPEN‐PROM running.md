@@ -1,3 +1,6 @@
+## Installing GAMS 
+Before starting, you'll need to install the GAMS library, available for [download here](https://www.gams.com/download/). Install GAMS in a directory that does not require administrative privileges for easier access. During installation, select the "Use advanced installation mode" option and tick the checkbox for "Add GAMS directory to PATH environment variable" checkbox. This step is important to ensure GAMS is accessible via your operating system's command line.
+
 ## First OPEN-PROM run with dummy data
 
 **Objective:**
