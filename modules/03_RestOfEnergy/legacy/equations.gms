@@ -210,7 +210,7 @@ QOutTotTransf(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VOutTotTransf(allCy,EFS,YTIME)
                  =E=
          VOutTransfTherm(allCy,EFS,YTIME) + VOutTransfDhp(allCy,EFS,YTIME) + VOutTransfNuclear(allCy,EFS,YTIME) +
-         VOutTransfRefSpec(allCy,EFS,YTIME) + sum(EFS$(sameas(EFS, "H2") AND H2TECH), VProdH2(allCy,H2TECH,YTIME));        !!+ TONEW(allCy,EFS,YTIME)
+         VOutTransfRefSpec(allCy,EFS,YTIME) +  sum(H2TECH$(sameas(EFS, "H2F")), VProdH2(allCy, H2TECH, YTIME));  !! Hydrogen production for EFS = "H2F" + TONEW(allCy,EFS,YTIME)
 
 *' The equation calculates the transfers of a specific energy branch in a given scenario and year.
 *' The result is computed based on a complex formula that involves the previous year's transfers,
