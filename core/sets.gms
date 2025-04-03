@@ -84,6 +84,11 @@ SWE
 USA
 /
 
+fscenario   "Model scenario used: 0 is NPi_Default, 1 is 1.5C and 2 is 2C"
+/
+%fScenario%
+/
+
 runCy(allCy) Countries for which the model is running
 /
 %fCountries%
