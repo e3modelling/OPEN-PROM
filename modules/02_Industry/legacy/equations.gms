@@ -88,7 +88,7 @@ QConsFuel(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,E
          VConsFuel(allCy,DSBS,EF,YTIME)
                  =E=
          VConsFuelInclHP(allCy,DSBS,EF,YTIME)$(not ELCEF(EF)) + 
-         (VConsFuelInclHP(allCy,DSBS,EF,YTIME) + VElecConsHeatPla(allCy,DSBS,YTIME))$ELCEF(EF) + VConsFuelH2Prod(allCy,EF,YTIME)$(H2PRODEF(EF)) ;
+         (VConsFuelInclHP(allCy,DSBS,EF,YTIME) + VElecConsHeatPla(allCy,DSBS,YTIME))$ELCEF(EF);
 
 *' This equation calculates the estimated electricity index of the industry price for a given year. The estimated index is derived by considering the historical
 *' trend of the electricity index, with a focus on the fuel prices in the industrial subsector. The equation utilizes the fuel prices for electricity generation,
