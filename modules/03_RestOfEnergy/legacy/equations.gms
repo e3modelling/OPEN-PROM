@@ -21,7 +21,10 @@ QConsFinEneCountry(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
              sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(INDDOM,EF) ), VConsFuel(allCy,INDDOM,EF,YTIME)))
          +
          sum(TRANSE,
-             sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(TRANSE,EF)), VDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)));
+             sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(TRANSE,EF)), VDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)))
+         +
+         sum(EF$(sameas(EF, "H2") AND EFtoEFS(EF,EFS)), VDemTotH2(allCy,YTIME)) !! Here hydrogen is included as a part of the energy consumption.
+        ;
 
 *' The equation computes the total final energy consumption in million tonnes of oil equivalent 
 *' for all countries at a specific time period. This is achieved by summing the final energy consumption for each energy
@@ -48,7 +51,9 @@ QConsFinNonEne(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QLossesDistr(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VLossesDistr(allCy,EFS,YTIME)
              =E=
-         (iRateLossesFinCons(allCy,EFS,YTIME) * (VConsFinEneCountry(allCy,EFS,YTIME) + VConsFinNonEne(allCy,EFS,YTIME)))$(not H2EF(EFS));  
+         (iRateLossesFinCons(allCy,EFS,YTIME) * (VConsFinEneCountry(allCy,EFS,YTIME) + VConsFinNonEne(allCy,EFS,YTIME)))$(not H2EF(EFS))
+         +
+         (  VDemTotH2(allCy,YTIME) - sum(SBS$H2SBS(SBS), VDemSecH2(allCy,SBS,YTIME)))$H2EF(EFS);  
 
 *' The equation calculates the transformation output from district heating plants .
 *' This transformation output is determined by summing over different demand sectors and district heating systems 
@@ -205,7 +210,7 @@ QOutTotTransf(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VOutTotTransf(allCy,EFS,YTIME)
                  =E=
          VOutTransfTherm(allCy,EFS,YTIME) + VOutTransfDhp(allCy,EFS,YTIME) + VOutTransfNuclear(allCy,EFS,YTIME) +
-         VOutTransfRefSpec(allCy,EFS,YTIME);        !!+ TONEW(allCy,EFS,YTIME)
+         VOutTransfRefSpec(allCy,EFS,YTIME) +  sum(H2TECH$(sameas(EFS, "H2F")), VProdH2(allCy, H2TECH, YTIME));  !! Hydrogen production for EFS = "H2F" + TONEW(allCy,EFS,YTIME)
 
 *' The equation calculates the transfers of a specific energy branch in a given scenario and year.
 *' The result is computed based on a complex formula that involves the previous year's transfers,

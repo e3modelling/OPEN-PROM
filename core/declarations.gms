@@ -112,19 +112,19 @@ iInpTransfTherm(allCy,EFS,YTIME)                           "Historic data of VIn
 ODummyObj                                                  "Parameter saving objective function"
 ;
 
-$ontext
+
 Equations
 
-*' *** Miscellaneous
-*qDummyObj                                                  "Define dummy objective function"
+*' *** Miscellaneous'
+qDummyObj                                                  "Define dummy objective function"
 ;
-$offtext
+
 
 Variables
 *'                **Interdependent Variables**
 
 *' *** Miscellaneous
-*vDummyObj                                                  "Dummy maximisation variable (1)"
+vDummyObj                                                  "Dummy maximisation variable (1)"
 *' *** Miscellaneous
 VElecConsHeatPla(allCy,DSBS,YTIME)                         "Electricity consumed in heatpump plants (Mtoe)"
 ;

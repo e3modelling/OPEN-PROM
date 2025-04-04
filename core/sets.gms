@@ -277,7 +277,7 @@ Trade.(FD,EN,TX,OE,OI,NF,CH,IS,BM,PP,PG,BM_CO2,H2P)
 NoTrade.(SE,AG,HOU,PC,PB,PT,PN,PA,GU,GT,GN,BU,PCH,NEN,LGN_PRD_CH4,HCL_PRD_CH4,GAS_PRD_CH4,TERT_CH4,TRAN_CH4,AG_CH4,SE_CH4,TRAN_N2O,TX_N2O,AG_N2O,OI_HFC,OI_PFC,NF_PFC,PG_SF6,OI_SF6)
 /
 
-DSBS(SBS)         All Demand Subsectors         /PC,PT,PA,GU,GT,GN, IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,SE,AG,HOU,PCH,NEN,BU/
+DSBS(SBS)         All Demand Subsectors         /PC,PT,PA,GU,GT,GN,IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,SE,AG,HOU,PCH,NEN,BU/
 TRANSE(DSBS)      All Transport Subsectors      /PC,PT,PA,GU,GT,GN/
 TRANS1(SBS)       All Transport Subsectors      /PC,PT,PA,GU,GT,GN/
 TRANP(TRANSE)     Passenger Transport           /PC,PT,PA/
