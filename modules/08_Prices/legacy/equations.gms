@@ -116,8 +116,8 @@ QPriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS))  $SECT
         VPriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)
                 =E=   
              (((VPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME) + (VRenValue(YTIME)/1000)$(not RENEF(EF))+iVarCostTech(allCy,DSBS,EF,YTIME)/1000)/iUsfEneConvSubTech(allCy,DSBS,EF,YTIME)- 
-               (0$(not CHP(EF)) + (VPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME)*iFracElecPriChp*VPriceElecInd(allCy,YTIME))$CHP(EF)))  + SQRT( SQR(((VPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME)+iVarCostTech(allCy,DSBS,EF,YTIME)/1000)/iUsfEneConvSubTech(allCy,DSBS,EF,YTIME)- 
-              (0$(not CHP(EF)) + (VPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME)*iFracElecPriChp*VPriceElecInd(allCy,YTIME))$CHP(EF))))  ) )/2;
+               (0$(not CHP(EF)) + (VPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME)*sFracElecPriChp*VPriceElecInd(allCy,YTIME))$CHP(EF)))  + SQRT( SQR(((VPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME)+iVarCostTech(allCy,DSBS,EF,YTIME)/1000)/iUsfEneConvSubTech(allCy,DSBS,EF,YTIME)- 
+              (0$(not CHP(EF)) + (VPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME)*sFracElecPriChp*VPriceElecInd(allCy,YTIME))$CHP(EF))))  ) )/2;
 
 *' This equation determines the electricity industry prices based on an estimated electricity index and a technical maximum of the electricity to steam ratio
 *' in Combined Heat and Power plants. The industry prices are calculated as a function of the estimated electricity index and the specified maximum
