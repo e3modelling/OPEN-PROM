@@ -1,5 +1,25 @@
 reportEmissions <- function(regs) {
   
+  Navigate_Emissions <- read.csv("data/NavigateEmissions.csv")
+  
+  fscenario <- readGDX('./blabla.gdx', "fscenario")
+  
+  Navigate_Emissions <- as.magpie(Navigate_Emissions)
+  
+  if (fscenario == 2) {
+    Navigate_Emissions <- Navigate_Emissions[,,"SUP_2C_Default"]
+  } else if (fscenario == 1) {
+    Navigate_Emissions <- Navigate_Emissions[,,"SUP_1p5C_Default"]
+  } else if (fscenario == 0) {
+    Navigate_Emissions <- Navigate_Emissions[,,"SUP_NPi_Default"]
+  }
+  
+  Navigate_Emissions <- collapseDim(Navigate_Emissions,3.1)
+  Navigate_Emissions <- collapseDim(Navigate_Emissions,3.1)
+  
+  remind_AFOLU_Industrial_Processes <- Navigate_Emissions[,,c("Emissions|CO2|AFOLU","Emissions|CO2|Industrial Processes")]
+  remind <- dimSums(remind_AFOLU_Industrial_Processes, 3, na.rm = TRUE)
+  
   iCo2EmiFac <- readGDX('./blabla.gdx', "iCo2EmiFac")[regs, , ]
   VConsFuel <- readGDX('./blabla.gdx', "VConsFuel", field = 'l')[regs, , ]
   VInpTransfTherm <- readGDX('./blabla.gdx', "VInpTransfTherm", field = 'l')[regs, , ]
@@ -79,13 +99,13 @@ reportEmissions <- function(regs) {
   sum7 <- iCo2EmiFac[,,SECTTECH2[,1]] * VConsFuel[,,SECTTECH2[,1]]
   sum7 <- dimSums(sum7,dim=3, na.rm = TRUE)
   
-  total_CO2 <- sum1 + sum2 + sum3 + sum4 + sum5 - sum6 + sum7
+  total_CO2 <- sum1 + sum2 + sum3 + sum4 + sum5 - sum6 + sum7 + remind
   
   getItems(total_CO2, 3) <- "Emissions|CO2"
   
   magpie_object <- NULL
   total_CO2 <- add_dimension(total_CO2, dim = 3.2, add = "unit", nm = "Mt CO2/yr")
-  magpie_object <- mbind(magpie_object, total_CO2)
+  magpie_object <- mbind(magpie_object, total_CO2, Navigate_Emissions)
   
   # Extra Emissions
   # Emissions|CO2|Energy|Demand|Industry
