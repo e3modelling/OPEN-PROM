@@ -508,3 +508,90 @@ Parameter,GHGELASTC,unused,,,,
 Parameter,NGSEXPRES,unused,,,,
 Parameter,SPG,unused,,,,
 Parameter,DISCOUNTED,unused,,,,
+Parameter,H2TECH_LFT,iProdLftH2,"Lifetime of hydrogen production technologies in years","H2TECH",,Hydrogen Module
+Parameter,H2TECH_CAPCOST,iCostCapH2Prod,"Capital cost of hydrogen production technologies in Euro per Nm3 of hydrogen","CYall,H2TECH,YTIME",,Hydrogen Module
+Parameter,H2TECH_FOM,iCostFOMH2Prod,"Fixed operating and maintenance costs of hydrogen production technologies in Euro per Nm3 of hydrogen","CYall,H2TECH,YTIME",,Hydrogen Module
+Parameter,H2TECH_AVAIL,iAvailH2Prod,"Availability of hydrogen production technologies","H2TECH,YTIME",,Hydrogen Module
+Parameter,H2TECH_VOM,iCostVOMH2Prod,"Variable operating and maintenance costs of hydrogen production technologies in Euro per toe of hydrogen","CYall,H2TECH,YTIME",,Hydrogen Module
+Parameter,H2TECH_EFF,iEffH2Prod,"Efficiency of hydrogen production technologies","CYall,H2TECH,YTIME",,Hydrogen Module
+Parameter,H2TECH_CR,iCaptRateH2Prod,"CO2 capture rate of hydrogen production technologies (for those which are equipped with CCS facility)","CYall,H2TECH,YTIME",,Hydrogen Module
+Parameter,H2PW,iWBLShareH2Prod,"Parameter for controlling the weibull function for calculating the shares in new market","CYall,H2TECH,YTIME",,Hydrogen Module
+Parameter,H2PRODGAMMA,iWBLGammaH2Prod,"Parameter for acceptance in new investments used in weibull function in production shares","CYall,YTIME",,Hydrogen Module
+Parameter,H2WPM,iWBLPremRepH2Prod,"Parameter for controlling the premature replacement of technology","CYall,H2TECH,YTIME",,Hydrogen Module
+Parameter,MAXAREA,iPolH2AreaMax,"Policy parameter defining the percentage of the country area supplied by hydrogen at the end of the horizon period [0...1]","CYall",,Hydrogen Module
+Parameter,AREA,iHabAreaCountry,"Inhabitable land in a country","CYall",,Hydrogen Module
+Parameter,AREAELAST,iH2Adopt,"Parameters controlling the speed and the year of taking off the transition to hydrogen economy","CYall,ARELAST,YTIME",,Hydrogen Module
+Parameter,H2TRANSP_EFF,iEffH2Transp,"Efficiency of hydrogen transportation per infrastructure technology","CYall,INFRTECH,YTIME",,Hydrogen Module
+Parameter,H2TRANSP_SELF,iConsSelfH2Transp,"Self consumption of infrastructure technology rate","CYall,INFRTECH,YTIME",,Hydrogen Module
+Parameter,H2TRANSP_EFAG,iEffNetH2Transp,"Total efficiency of the distribution network until the <infrtech> node","CYall,INFRTECH,YTIME",,Hydrogen Module
+Parameter,H2KMTOE,iPipeH2Transp,"Kilometers of pipelines required per toe of delivered hydrogen (based on stylized model)","INFRTECH",,Hydrogen Module
+Parameter,IFACT,iKmFactH2Transp,"Km needed for a given infrastructure assuming that its required infrastructure has been arleady installed","CYall,INFRTECH",,Hydrogen Module
+Parameter,H2ICOST,iCostInvH2Transp,"Investment cost of infrastructure technology
+                                                   !! - Turnpike pipeline in Euro per km
+                                                   !! - Low pressure urban pipeline in Euro per km
+                                                   !! - Medium pressure ring in Euro per km
+                                                   !! - Service stations connection lines in Euro per km
+                                                   !! - Gaseous hydrogen service stations in Euro per toe per year","CYall,INFRTECH,YTIME",,Hydrogen Module
+Parameter,H2TRANSP_LFT,iTranspLftH2,"Technical lifetime of infrastructure technologies","INFRTECH",,Hydrogen Module
+Parameter,H2TRANSP_AVAIL,iAvailRateH2Transp,"Availability rate of infrastructure technology","INFRTECH,YTIME",,Hydrogen Module
+Parameter,H2TRANSP_FOM,iCostInvFOMH2,"Annual fixed O&M cost as percentage of total investment cost","INFRTECH,YTIME",,Hydrogen Module
+Parameter,H2TRANSP_VOM,iCostInvVOMH2,"Annual variable O&M cost as percentage of total investment cost","INFRTECH,YTIME",,Hydrogen Module
+Parameter,WAC,iCostAvgWeight,"Weight for pricing in average cost or in marginal cost","CYALL,YTIME",,Hydrogen Module
+Variable,H2TECH_SH,VGapShareH2Tech1,"Shares of H2 production technologies in new market competition 1","CYall, H2TECH, YTIME",,Hydrogen Module
+Variable,H2TECH_SHT,VGapShareH2Tech2,"Shares of H2 production technologies in new market competition 2","CYall, H2TECH, YTIME",,Hydrogen Module
+Variable,H2TECH_PROD,VProdH2,"Hydrogen Production by technology in Mtoe","CYall, H2TECH, YTIME",,Hydrogen Module
+Variable,H2TECH_CAP,VProdCapH2Tech,"Production capacity by H2 production technology","CYall, H2TECH, YTIME",,Hydrogen Module
+Variable,H2TECH_SCRAP,VCapScrapH2ProdTech,"Decommissioning of capacity by H2 production technology","CYall, H2TECH, YTIME",,Hydrogen Module
+Variable,H2TECH_SCRPM,VPremRepH2Prod,"Premature replacement of H2 production technologies","CYall, H2TECH, YTIME",,Hydrogen Module
+Variable,H2TECH_SCRV,VScrapLftH2Prod,"Scrapping of equipment due to lifetime (normal scrapping)","CYall, H2TECH, YTIME",,Hydrogen Module
+Variable,TOTH2DEMAND,VDemTotH2,"Hydrogen production requirement in Mtoe for meeting final demand","CYall, YTIME",,Hydrogen Module
+Variable,H2TECH_DEMAND,VDemSecH2,"Demand for H2 by sector in mtoe","CYall, SBS, YTIME",,Hydrogen Module
+Variable,H2TECH_GAP,VDemGapH2,"Demand for H2 to be covered by new equipment in mtoe","CYall, YTIME",,Hydrogen Module
+Variable,H2TECH_PCOST,VCostProdH2Tech,"Hydrogen production cost per technology in Euro per toe of hydrogen","CYall, H2TECH, YTIME",,Hydrogen Module
+Variable,H2TECH_VCOST,VCostVarProdH2Tech,"Variable cost (including fuel cost) for hydrogen production by technology in Euro per toe","CYall, H2TECH, YTIME",,Hydrogen Module
+Variable,H2TECH_SHCAPCCS,VShareCCSH2Prod,"Share of CCS technology in the decision tree between CCS and no CCS","CYall, H2TECH, YTIME",,Hydrogen Module
+Variable,H2TECH_SHCAPNOCCS,VShareNoCCSH2Prod,"Share of technology without CCS in the decision tree between CCS and no CCS","CYall, H2TECH, YTIME",,Hydrogen Module
+Variable,H2TECH_H2CCSGAMMA,VAcceptCCSH2Tech,"Acceptance of investment in CCS technologies","CYall, YTIME",,Hydrogen Module
+Variable,H2TECH_FCONS,VConsFuelH2Prod,"Total fuel consumption for hydrogen production in Mtoe","CYall, EF, YTIME",,Hydrogen Module
+Variable,H2TECH_FCONSTECH,VConsFuelTechH2Prod,"Fuel consumption by hydrogen production technology in Mtoe","CYall, H2TECH, EF, YTIME",,Hydrogen Module
+Variable,H2PRODCOSTNOCCS,VCostProdCCSNoCCSH2Prod,"Production cost of the composite technology with and without CCS in Euro per toe","CYall, H2TECH, YTIME",,Hydrogen Module
+Variable,H2PCOST,VCostAvgProdH2,"Average production cost of hydrogen in Euro per toe","CYall, YTIME",,Hydrogen Module
+Variable,H2AREA,VH2InfrArea,"Number of stylised areas covered by H2 infrastructure","CYall, YTIME",,Hydrogen Module
+Variable,H2DELIV,VDelivH2InfrTech,"Hydrogen delivered by infrastructure technology in Mtoe","CYall, INFRTECH, YTIME",,Hydrogen Module
+Variable,H2DELIV_GAP,VInvNewReqH2Infra,"New infrastructure requirements in Mtoe of delivered hydrogen","CYall, INFRTECH, YTIME",,Hydrogen Module
+Variable,H2TRANSP_NEWCAP,VH2Pipe,"Required capacity to meet the new infrastructure requirements
+                                                    !! - km of pipelines
+                                                    !! - number of service stations","CYall, INFRTECH, YTIME",,Hydrogen Module
+Variable,H2TRANSP_ICOST,VCostInvTechH2Infr,"Investment cost of infrastructure by technology in Million Euros (MEuro) for meeting the new infrastructure requirements","CYall, INFRTECH, YTIME",,Hydrogen Module
+Variable,H2TRANSP_ACCOST,VCostInvCummH2Transp,"Average cost of infrastructure Euro per toe","CYall, INFRTECH, YTIME",,Hydrogen Module
+Variable,H2TRANSP_MCOST,VCostTechH2Infr,"Marginal cost by infrastructure technology in Euro","CYall, INFRTECH, YTIME",,Hydrogen Module
+Variable,H2TRANSP_TARIFF,VTariffH2Infr,"Tarrif paid by the final consumer for using the specific infrastructure technology in Euro per toe annual","CYall, INFRTECH, YTIME",,Hydrogen Module
+Variable,H2TRANSP_PRICE,VPriceH2Infr,"Hydrogen distribution and storage price paid by final consumer in Euro per toe annual","CYall, SBS, YTIME",,Hydrogen Module
+Variable,H2_PRICE,VCostTotH2,"Total Hydrogen Cost Per Sector in Euro per toe","CYall, SBS, YTIME",,Hydrogen Module
+Equation,EQTOTH2DEMAND,QDemTotH2,"Equation for total hydrogen demand in a country in Mtoe","CYall, YTIME",,Hydrogen Module
+Equation,EQH2TECH_SCRAP,QCapScrapH2ProdTech,"Equation for decommissioning of capacity by H2 production technology","CYall, H2TECH, YTIME",,Hydrogen Module
+Equation,EQH2TECH_SCRPM,QPremRepH2Prod,"Equation for premature replacement of H2 production technologies","CYall, H2TECH, YTIME",,Hydrogen Module
+Equation,EQH2TECH_SCRV,QScrapLftH2Prod,"Equation for scrapping of equipment due to lifetime (normal scrapping)","CYall, H2TECH, YTIME",,Hydrogen Module
+Equation,EQH2TECH_GAP,QDemGapH2,"Equation for gap in hydrogen demand","CYall, YTIME",,Hydrogen Module
+Equation,EQH2TECH_PCOST,QCostProdH2Tech,"Equation for hydrogen production cost per technology","CYall, H2TECH, YTIME",,Hydrogen Module
+Equation,EQH2TECH_VCOST,QCostVarProdH2Tech,"Equation for variable cost (including fuel cost) for hydrogen production by technology in Euro per toe","CYall, H2TECH, YTIME",,Hydrogen Module
+Equation,EQH2TECH_SHCAPCCS,QShareCCSH2Prod,"Equation for share of CCS technology in the decision tree between CCS and no CCS","CYall, H2TECH, YTIME",,Hydrogen Module
+Equation,EQH2TECH_SHCAPNOCCS,QShareNoCCSH2Prod,"Equation for share of technology without CCS in the decision tree between CCS and no CCS","CYall, H2TECH, YTIME",,Hydrogen Module
+Equation,EQH2TECH_H2CCSGAMMA,QAcceptCCSH2Tech,"Equation for acceptance in CCS technologies","CYall, YTIME",,Hydrogen Module
+Equation,EQH2PRODCOSTNOCCS,QCostProdCCSNoCCSH2Prod,"Equation for calculating the production cost of the composite technology with and without CCS","CYall, H2TECH, YTIME",,Hydrogen Module
+Equation,EQH2TECH_SH,QGapShareH2Tech1,"Equation for calculating the shares of technologies in hydrogen gap using Weibull equations 1","CYall, H2TECH, YTIME",,Hydrogen Module
+Equation,EQH2TECH_SHT,QGapShareH2Tech2,"Equation for calculating the shares of technologies in hydrogen gap using Weibull equations 2","CYall, H2TECH, YTIME",,Hydrogen Module
+Equation,EQH2TECH_FCONSTECH,QConsFuelTechH2Prod,"Equation for fuel consumption by technology for hydrogen production","CYall, H2TECH, EF, YTIME",,Hydrogen Module
+Equation,EQH2TECH_FCONS,QConsFuelH2Prod,"Equation for total fuel consumption for hydrogen production","CYall, EF, YTIME",,Hydrogen Module
+Equation,EQH2TECH_PROD,QProdH2,"Equation for H2 production by technology","CYall, H2TECH, YTIME",,Hydrogen Module
+Equation,EQH2PCOST,QCostAvgProdH2,"Equation for average production cost of hydrogen in Euro per toe","CYall, YTIME",,Hydrogen Module
+Equation,EQH2AREA,QH2InfrArea,"Equation for infrastructure area","CYall, YTIME",,Hydrogen Module
+Equation,EQH2DELIV,QDelivH2InfrTech,"Equation for hydrogen delivered by infrastructure technology in Mtoe","CYall, INFRTECH, YTIME",,Hydrogen Module
+Equation,EQH2DELIV_GAP,QInvNewReqH2Infra,"Equation for calculating the new requirements in infrastructure in Mtoe","CYall, INFRTECH, YTIME",,Hydrogen Module
+Equation,EQH2TRANSP_ICOST,QCostInvTechH2Infr,"Equation for infrastructure investment cost in Euro by technology","CYall, INFRTECH, YTIME",,Hydrogen Module
+Equation,EQH2TRANSP_ACCOST,QCostInvCummH2Transp,"Equation for cumulative investment cost by infrastructure technology","CYall, INFRTECH, YTIME",,Hydrogen Module
+Equation,EQH2TRANSP_NEWCAP,QH2Pipe,"Equation for km per pipeline","CYall, INFRTECH, YTIME",,Hydrogen Module
+Equation,EQH2TRANSP_MCOST,QCostTechH2Infr,"Equation for marginal cost by infrastructure technology in Euro","CYall, INFRTECH, YTIME",,Hydrogen Module
+Equation,EQH2TRANSP_TARIFF,QTariffH2Infr,"Equation for calculating the tariff paid by the final consumer for using the specific infrastructure technology","CYall, INFRTECH, YTIME",,Hydrogen Module
+Equation,EQH2TRANSP_PRICE,QPriceH2Infr,"Equation for calulcating the hydrogen storage and distribution price by final consumer","CYall, SBS, YTIME",,Hydrogen Module
+Equation,EQH2_PRICE,QCostTotH2,"Equation of total hydrogen cost Per Sector","CYall, SBS, YTIME",,Hydrogen Module

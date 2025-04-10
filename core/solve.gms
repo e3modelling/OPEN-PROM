@@ -12,15 +12,10 @@ loop an do !! start outer iteration loop (time steps)
       
     sModelStat = 100;
     loop rcc$(rcc.val <= sSolverTryMax) do !! start inner iteration loop (solver attempts)
-$IFTHEN.calib %Calibration% == on 
-        if sModelStat ne 2 then
+        if sModelStat gt 2 then
             solve openprom using nlp minimizing vDummyObj;
-$ELSE.calib
-        if sModelStat ne 16 then
-            solve openprom using cns;
-$ENDIF.calib
             sModelStat = openprom.modelstat;
-*            ODummyObj(runCyL,YTIME)$TIME(YTIME) = vDummyObj.L;  !! Assign objective function value
+            ODummyObj(runCyL,YTIME)$TIME(YTIME) = vDummyObj.L;  !! Assign objective function value
         endif;
     endloop;
 

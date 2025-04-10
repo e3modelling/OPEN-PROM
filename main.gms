@@ -140,20 +140,23 @@ $setGlobal Transport        legacy
 $setGlobal Industry         legacy
 $setGlobal RestOfEnergy     legacy
 $setGlobal PowerGeneration  legacy
+$setGlobal Hydrogen         legacy
 $setGlobal CO2              legacy
 $setGlobal Emissions        legacy
 $setGlobal Prices           legacy
 
 ** CORE MODEL FILES **
 *' SETS
-$include "./core/sets.gms";
+$include    "./core/sets.gms";
+$batinclude "./modules/include.gms"     sets
 
 *' DECLARATIONS
 $include    "./core/declarations.gms";
 $batinclude "./modules/include.gms"    declarations
 
 *' INPUTS
-$include "./core/input.gms";
+$include    "./core/input.gms";
+$batinclude "./modules/include.gms"    input
 
 *' EQUATIONS
 $include    "./core/equations.gms";
