@@ -9,6 +9,5 @@
 *' and the ratio of lagged energy costs (with the corresponding elasticities). This type of equation captures both short term and long term reactions to energy costs. 
 
 *' * Define dummy objective function
-$ontext
+
 qDummyObj.. vDummyObj =e= 1;
-$offtext
