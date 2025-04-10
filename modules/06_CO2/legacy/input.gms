@@ -12,6 +12,10 @@ mc_s	120,
 mc_m	1.013
 / ;
 *---
+Parameters
+iElastCO2Seq(allCy,CO2SEQELAST)	           "Elasticities for CO2 sequestration cost curve (1)"
+;
+*---
 iElastCO2Seq(runCy,CO2SEQELAST) = iCO2SeqData(CO2SEQELAST);
 *---
 *iElastCO2Seq(runCy,CO2SEQELAST) = iCO2SeqData(CO2SEQELAST,"%fBaseY%");

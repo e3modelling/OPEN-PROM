@@ -148,6 +148,24 @@ parameter iLoadFactorAdjMxm(VARIOUS_LABELS)    "Parameter for load factor adjust
 AMAXBASE 3,
 MAXLOADSH 0.45 / ;
 *---
+Parameters
+iBaseLoadShareDem(allCy,DSBS,YTIME)	                       "Baseload share of demand per sector (1)"
+iHisChpGrCapData(allCy,CHP,YTIME)	                       "Historical CHP  gross capacity data (GW)"
+iMinRenPotential(allCy,PGRENEF,YTIME)	                   "Minimum renewable potential (GW)"
+iPeakBsLoadBy(allCy,PGLOADTYPE)	                           "Peak and Base load for base year (GW)"
+iTotAvailCapBsYr(allCy)	                                   "Total installed available capacity in base year (GW)"
+iUtilRateChpPlants(allCy,CHP,YTIME)	                       "Utilisation rate of CHP Plants (1)"
+iMxmLoadFacElecDem(allCy,YTIME)	                           "Maximum load factor of electricity demand (1)"
+iBslCorrection(allCy,YTIME)	                               "Parameter of baseload correction (1)"
+iTechLftPlaType(allCy,PGALL)	                           "Technical Lifetime per plant type (year)"
+iScaleEndogScrap(PGALL)                                    "Scale parameter for endogenous scrapping applied to the sum of full costs (1)"
+iDecInvPlantSched(allCy,PGALL,YTIME)                       "Decided plant investment schedule (GW)"
+iPlantDecomSched(allCy,PGALL,YTIME)	                       "Decided plant decomissioning schedule (GW)"	
+iMaxRenPotential(allCy,PGRENEF,YTIME)	                   "Maximum enewable potential (GW)"
+iMxmShareChpElec(allCy,YTIME)	                           "Maximum share of CHP electricity in a country (1)"
+iMatureFacPlaDisp(allCy,PGALL,YTIME)	                   "Maturity factor related to plant dispatching (1)"
+;
+*---
 iBaseLoadShareDem(runCy,DSBS,YTIME)$an(YTIME)  = iLoadFactorAdj(DSBS);
 *---
 iDataElecAndSteamGen(runCy,CHP,YTIME) = 0 ;

@@ -8,6 +8,14 @@ $include"./iFuelPrice.csv"
 $offdelim
 ;
 *---
+Parameters
+iDiffFuelsInSec(SBS)                     "Auxiliary parameter holding the number of different fuels in a sector"
+iWgtSecAvgPriFueCons(allCy,SBS,EF)	      "Weights for sector's average price, based on fuel consumption (1)"
+iVAT(allCy,YTIME)                        "VAT (value added tax) rates (1)"
+iHydrogenPri(allCy,SBS,YTIME)	           "Total Hydrogen Cost Per Sector (US$2015/toe)"
+iElecIndex(allCy,YTIME)	                "Electricity Index (1)"
+;
+*---
 loop SBS do
          iDiffFuelsInSec(SBS) = 0;
          loop EF$(SECTTECH(SBS,EF) $(not plugin(EF)))  do

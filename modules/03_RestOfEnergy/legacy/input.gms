@@ -87,11 +87,28 @@ a3 1.000071707,
 a4 0.666634797,
 a5 0.33343691 /;
 *---
-parameter iParDHEfficiency(PGEFS,YTIME)                 "Parameter of  district heating Efficiency for all years (1)" ;
-*---
-parameter iSupTrnasfOutputRefineries(allCy,EF,YTIME)	     "Supplementary parameter for the transformation output from refineries (Mtoe)";
-*---
-parameter iSupResRefCapacity(allCy,SUPOTH,YTIME)	           "Supplementary Parameter for the residual in refineries Capacity (1)";
+Parameters
+iParDHEfficiency(PGEFS,YTIME)                     "Parameter of  district heating Efficiency for all years (1)"
+iSupTrnasfOutputRefineries(allCy,EF,YTIME)	      "Supplementary parameter for the transformation output from refineries (Mtoe)"
+iSupResRefCapacity(allCy,SUPOTH,YTIME)	          "Supplementary Parameter for the residual in refineries Capacity (1)"
+iTransfInputRef(allCy,EF,YTIME)	                  "Transformation Input in Refineries (Mtoe)"
+iTotEneBranchCons(allCy,EF,YTIME)	              "Total Energy Branch Consumption (Mtoe)"
+iTransfOutputRef(allCy,EF,YTIME)	              "Transformation Output from Refineries (Mtoe)"
+iRefCapacity(allCy,YTIME)	                      "Refineries Capacity (Million Barrels/day)"
+iGrosInlCons(allCy,EF,YTIME)	                  "Gross Inland Consumtpion (Mtoe)"
+iGrossInConsNoEneBra(allCy,EF,YTIME)	          "Gross Inland Consumption,excluding energy branch (Mtoe)"
+iFeedTransfr(allCy,EFS,YTIME)	                  "Feedstocks in Transfers (Mtoe)"
+iFuelPriPro(allCy,EF,YTIME)                 	  "Fuel Primary Production (Mtoe)"
+iEffDHPlants(allCy,EF,YTIME)                      "Efficiency of District Heating Plants (1)"
+iResRefCapacity(allCy,YTIME)	                  "Residual in Refineries Capacity (1)"
+iResTransfOutputRefineries(allCy,EF,YTIME)        "Residual in Transformation Output from Refineries (Mtoe)"
+iRateEneBranCons(allCy,EF,YTIME)	              "Rate of Energy Branch Consumption over total transformation output (1)"
+iRatePriProTotPriNeeds(allCy,EF,YTIME)	          "Rate of Primary Production in Total Primary Needs (1)"	
+iResHcNgOilPrProd(allCy,EF,YTIME)	              "Residuals for Hard Coal, Natural Gas and Oil Primary Production (1)"
+iRatioImpFinElecDem(allCy,YTIME)	              "Ratio of imports in final electricity demand (1)"	
+iElecImp(allCy,YTIME)	                          "Electricity Imports (1)"
+iInpTransfTherm(allCy,EFS,YTIME)                  "Historic data of VInpTransfTherm (Transformation input to thermal power plants) (Mtoe)"
+;
 *---
 iSupResRefCapacity(runCy,SUPOTH,YTIME) = 1;
 *---
