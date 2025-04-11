@@ -16,6 +16,8 @@ installPythonPackages <- function(packages) {
 
 
 getRunpath <- function() {
+  py_config()
+  installPythonPackages(c("seaborn", "colorama", "pandas"))
   python_output <- py_run_file("./scripts/reporting.py")
   runpath <- as.data.frame(python_output$path)
   runpath <- as.vector(runpath[, seq(2, length(runpath), 2)])
@@ -40,8 +42,8 @@ reportOutput <- function(
   print("Report generation completed.")
 }
 
-py_config()
-installPythonPackages(c("seaborn", "colorama", "pandas"))
 args <- commandArgs(trailingOnly = TRUE)
 runpath <- if (length(args) > 0) args[1] else getRunpath()
 mif_name <- if (length(args) > 1) args[2] else "reporting.mif"
+
+reportOutput(runpath = runpath, mif_name = mif_name)
