@@ -7,11 +7,11 @@ reportEmissions <- function(regs) {
   Navigate_Emissions <- as.magpie(Navigate_Emissions)
   
   if (fscenario == 2) {
-    Navigate_Emissions <- Navigate_Emissions[,,"SUP_2C_Default"]
+    Navigate_Emissions <- Navigate_Emissions[,,"SUP_2C_Default"][regs, , ]
   } else if (fscenario == 1) {
-    Navigate_Emissions <- Navigate_Emissions[,,"SUP_1p5C_Default"]
+    Navigate_Emissions <- Navigate_Emissions[,,"SUP_1p5C_Default"][regs, , ]
   } else if (fscenario == 0) {
-    Navigate_Emissions <- Navigate_Emissions[,,"SUP_NPi_Default"]
+    Navigate_Emissions <- Navigate_Emissions[,,"SUP_NPi_Default"][regs, , ]
   }
   
   Navigate_Emissions <- collapseDim(Navigate_Emissions,3.1)
