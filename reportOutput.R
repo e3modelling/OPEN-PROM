@@ -1,9 +1,6 @@
-# map <- read.csv("MENA-PROM mapping - mena_prom_mapping.csv") NOT USED?
-# rmap <- toolGetMapping(mapping, "regional", where = "mrprom") IS IT USED?
 # This script generates a mif file for comparison of OPEN-PROM data with MENA-EDS and ENERDATA
 library(madrat)
 library(gdx)
-library(ggplot2)
 library(openprom)
 library(tidyr)
 library(reticulate)
@@ -29,23 +26,22 @@ getRunpath <- function() {
 reportOutput <- function(
     runpath,
     mif_name,
-    path_fullValidation = NULL) {
+    aggregate = TRUE,
+    fullValidation = TRUE) {
   # Region mapping used for aggregating validation data (e.g. ENERDATA)
   mapping <- jsonlite::read_json("metadata.json")[["Model Information"]][["Region Mapping"]][[1]]
   setConfig(regionmapping = mapping)
 
   runCY <- readGDX(file.path(runpath, "blabla.gdx"), "runCYL")
-  convertGDXtoMIF(runpath, runCY, mif_name = mif_name)
-  # aggregateMIF(path_report = file.path(runpath, mif_name), path_save = "runs/reporting_with_validation.mif")
-
-  if (!is.null(path_fullValidation)) {
-    reporting_fullVALIDATION <- read.report(path_fullValidation)
-    write.report(reporting_fullVALIDATION, file = "runs/reporting_with_validation.mif", append = TRUE)
-  }
+  convertGDXtoMIF(runpath, runCY,
+    mif_name = mif_name, aggregate = aggregate,
+    fullValidation = fullValidation
+  )
   print("Report generation completed.")
 }
 
 py_config()
 installPythonPackages(c("seaborn", "colorama", "pandas"))
-runpath <- getRunpath()
-reportOutput(runpath, "new.mif")
+args <- commandArgs(trailingOnly = TRUE)
+runpath <- if (length(args) > 0) args[1] else getRunpath()
+mif_name <- if (length(args) > 1) args[2] else "reporting.mif"
