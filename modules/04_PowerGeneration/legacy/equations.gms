@@ -344,6 +344,9 @@ VRenTechMatMultExpr(allCy,PGALL,YTIME)
                  sum(PGRENEF$PGALLtoPGRENEF(PGALL,PGRENEF),
                  sum(PGALL2$(PGALLtoPGRENEF(PGALL2,PGRENEF) $PGREN(PGALL2)),
                  VCapElec2(allCy,PGALL2,YTIME-1))/VPotRenCurr(allCy,PGRENEF,YTIME))-0.6;
+
+
+
 QRenTechMatMult(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VRenTechMatMult(allCy,PGALL,YTIME)
           =E=
