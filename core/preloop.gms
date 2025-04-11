@@ -26,8 +26,6 @@ display iVarCostTech;
 * Load common shared data
 *execute_loadpoint 'common_data.gdx';
 *---
-iPassCarsMarkSat(runCy) = 0.7; 
-*---
 iTransChar(runCy,"RES_MEXTF",YTIME) = 0.04;
 iTransChar(runCy,"RES_MEXTV",YTIME) = 0.04;
 *---

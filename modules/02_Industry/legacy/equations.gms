@@ -220,7 +220,7 @@ QCostProdCHPDem(allCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS) $runCy(allCy)).
          iVarCostChp(allCy,DSBS,CHP,YTIME)/1E3
                     + sum(PGEF$CHPtoEF(CHP,PGEF), (VPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)+1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME)*
                          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(allCy,NAP,YTIME))))
-                         *sTWhToMtoe/(   iBoiEffChp(allCy,CHP,YTIME)*VPriceElecInd(allCy,YTIME)    ));
+                         *sTWhToMtoe/(iBoiEffChp(allCy,CHP,YTIME)*VPriceElecInd(allCy,YTIME)));
 
 *' The equation calculates the average electricity production cost per Combined Heat and Power plant .
 *' It involves a summation over demand subsectors . The average electricity production cost is determined by considering the electricity
