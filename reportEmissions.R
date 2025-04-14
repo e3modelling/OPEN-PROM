@@ -69,6 +69,7 @@ reportEmissions <- function(regs) {
   sum4 <- dimSums(sum4, 3, na.rm = TRUE)
   
   TRANSE <- readGDX('./blabla.gdx', "TRANSE")
+  TRANSE <- c(TRANSE, "PB", "PN")
   TRANSE <- as.data.frame(TRANSE)
   
   map_TRANSECTOR <- sets4 %>% filter(SBS %in% TRANSE[,1])

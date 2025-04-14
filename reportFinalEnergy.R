@@ -112,6 +112,9 @@ reportFinalEnergy <- function(regs) {
   for (y in 1 : length(sector)) {
     # read GAMS set used for reporting of Final Energy different for each sector
     sets6 <- readGDX('./blabla.gdx', sector[y])
+    if (sector[y] == "TRANSE") {
+      sets6 <- c(sets6, "PB", "PN")
+    }
     sets6 <- as.data.frame(sets6)
     names(sets6) <- sector[y]
     

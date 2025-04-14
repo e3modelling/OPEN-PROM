@@ -45,6 +45,9 @@ reportPrice <- function(regs) {
     # load current OPENPROM set configuration for each sector
     sets6 <- readGDX('./blabla.gdx', sector[y])
     if (length(sets6) == 0) sets6 <- sector[y]
+    if (sector[y] == "TRANSE") {
+      sets6 <- c(sets6, "PB", "PN")
+    }
     sets6 <- as.data.frame(sets6)
     
     map_subsectors <- sets4 %>% filter(SBS %in% as.character(sets6[, 1]))
