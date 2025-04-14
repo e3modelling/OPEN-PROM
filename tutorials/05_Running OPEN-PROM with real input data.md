@@ -21,7 +21,13 @@ In some cases, it is beneficial to install multiple versions of GAMS, for testin
 Running various different scenarios is a fundamental aspect of integrated assessment modelling, with the purpose of comparing alternative decarbonization pathways and exploring greenhouse gas emissions trajectories. You can easily specify the scenario name of your preference, by setting the `"scenario_name"` parameter in the configuration file. This scenario name will be used in the model run folders that were mentioned previously.
 
 # Final Step: Running the OPEN-PROM Model
-OPEN-PROM starts with  `main.gms`, the main file of the model. This file contains some GAMS internal settings, the basic model and scenario settings, as well as lists the files that GAMS will have to read and execute after `main.gms`. The model will start by typing `gams main.gms -Idir=./data` in the console, or using the task runner buttons in VS Code (more details below). If input data loading is activated, an R script will run before OPEN-PROM actually starts (more in Turorial 02). The function of this R script is to perform the input data calculations, using the R package [`mrprom`](https://github.com/e3modelling/mrprom).
+OPEN-PROM starts with  `main.gms`, the main file of the model. This file contains some GAMS internal settings, the basic model and scenario settings, as well as lists the files that GAMS will have to read and execute after `main.gms`. The model will start by typing `gams main.gms -Idir=./data` in the console, or using the task runner buttons in VS Code (more details below). If input data loading is activated, an R script will run before OPEN-PROM actually starts (more in Turorial 02). The function of this R script is to perform the input data calculations, using the R package [`mrprom`](https://github.com/e3modelling/mrprom). After an OPEM-PROM run is completed, the reportOutput.R script can be used to convert the model's output (blabla.gdx) into a MIF (Model Intercomparison Format) file. These files can represent either a single scenario run or multiple scenarios, enabling comparisons between different OPEM-PROM scenarios as well as scenarios from other models, if available.
+
+This script requires the [`openprom`](https://github.com/e3modelling/openprom) R package. To execute this script, ensure you have the openprom package installed by running the following command:
+
+```
+devtools::install_github("https://github.com/e3modelling/openprom")
+```
 
 ## Task Runner Buttons
 As mentioned in Tutorial 01, the model can be executed by utilizing the VS Code task runner. Here are the available options in detail:
