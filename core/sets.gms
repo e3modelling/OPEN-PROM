@@ -202,9 +202,9 @@ SE    "Services and Trade"
 AG    "Agriculture, Fishing, Forestry etc."
 HOU   "Households"
 PC    "Passenger Transport - Cars"
-*PB    "Passenger Transport - Busses"
+PB    "Passenger Transport - Busses"
 PT    "Passenger Transport - Rail"
-*PN    "Passenger Transport - Inland Navigation"
+PN    "Passenger Transport - Inland Navigation"
 PA    "Passenger Transport - Aviation"
 GU    "Goods Transport - Trucks"
 GT    "Goods Transport - Rail"
@@ -634,11 +634,11 @@ CHEVGDO
 SECTTECH(SBS,EF) Link between Model Subsectors and Fuels
 /
 PC.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO,CHEVGSL,CHEVGDO)
-*PB.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO)
+PB.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO)
 GU.(LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGDO,CHEVGDO) !! Removed GSL and PHEVGSL
 (PT,GT).(GDO,ELC,MET)
 PA.(KRS)
-*(PN,GN).(GSL,GDO)
+(PN).(GSL,GDO)
 GN.(GSL,GDO)
 (IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(LGN,HCL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC,STE1AL,
                                  STE1AH,STE1AD,STE1AR,STE1AG,STE1AB)
