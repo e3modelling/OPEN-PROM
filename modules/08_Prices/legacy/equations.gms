@@ -34,8 +34,8 @@ QPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF) $TIME(YTIME) $(not 
          )$(ELCEF(EF) or HEATPUMP(EF))
          +
          (
-                 iHydrogenPri(allCy,SBS,YTIME-1)$DSBS(SBS)
-         )$(H2EF(EF) or sameas("STE1AH2F",EF));
+            VCostAvgProdH2(allCy,YTIME)$DSBS(SBS)
+         )$(H2EF(EF) or sameas("H2F",EF));
 
 *' The equation calculates the fuel prices per subsector and fuel multiplied by weights
 *' considering separate carbon values in each sector. This equation is applied for a specific scenario, subsector, fuel, and year.
