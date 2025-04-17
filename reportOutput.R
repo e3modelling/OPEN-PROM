@@ -5,6 +5,7 @@ library(openprom)
 library(tidyr)
 library(reticulate)
 library(ggplot2)
+library(dplyr)
 
 installPythonPackages <- function(packages) {
   for (pkg in packages) {
@@ -13,7 +14,6 @@ installPythonPackages <- function(packages) {
     }
   }
 }
-
 
 getRunpath <- function() {
   py_config()
@@ -24,105 +24,55 @@ getRunpath <- function() {
   return(unlist(runpath, use.names = FALSE))
 }
 
+plotPDF <- function(report, save_pdf) {
+  plot_groups <- function(vars, name, ...) {
+    category <- strsplit(name, "\\|")[[1]][1] # e.g. Capacity
+    vars <- paste0(sub("\\|[^|]*$", "|", name), vars) # retrieve variable names
+    magpie_obj <- report[, , vars]
+    plot <- plotReport(magpie_obj, label = category, ...)
+    return(plot)
+  }
+
+  plot_mappings <- read.csv(system.file(package = "openprom", file.path("extdata", "plot_mapping.csv")))
+  # for each unique plot, use filter the magpie obj and plot its vars
+  plots_list <- plot_mappings %>%
+    group_by(Name) %>%
+    group_map(~ plot_groups(.x$Variables, .y$Name))
+
+  print(paste0("Saving pdf in ", save_pdf))
+  pdf(save_pdf, width = 10, height = 8)
+  for (plot in plots_list) print(plot)
+  invisible(dev.off())
+}
 
 reportOutput <- function(
     runpath,
     mif_name,
     aggregate = TRUE,
     fullValidation = TRUE,
-    plot_info = NULL) {
+    plot = NULL) {
   # Region mapping used for aggregating validation data (e.g. ENERDATA)
   mapping <- jsonlite::read_json("metadata.json")[["Model Information"]][["Region Mapping"]][[1]]
   setConfig(regionmapping = mapping)
 
-  runCY <- readGDX(file.path(runpath, "blabla.gdx"), "runCYL")
-  convertGDXtoMIF(runpath, runCY,
-    mif_name = mif_name, aggregate = aggregate,
-    fullValidation = fullValidation,
-    plot_info = plot_info
-  )
+  reports <- convertGDXtoMIF(runpath, mif_name = mif_name,
+    aggregate = aggregate, fullValidation = fullValidation)
   print("Report generation completed.")
+
+  if (!is.null(plot)) {
+    save_name <- file.path(runpath, plot)
+    mapply( # for each scenario, unpack the magpie obj and a pdf savename
+      function(report, save) {
+        plotPDF(report, save)
+      },
+      reports, save_name
+    )
+  }
 }
 
 args <- commandArgs(trailingOnly = TRUE)
 runpath <- if (length(args) > 0) args[1] else getRunpath()
 mif_name <- if (length(args) > 1) args[2] else "reporting.mif"
+plot_name <- if (length(args) > 2) args[3] else "plot.pdf"
 
-capacity_vars <- c(
-  "Capacity|Electricity|Solar",
-  "Capacity|Electricity|Oil",
-  "Capacity|Electricity|Wind",
-  "Capacity|Electricity|Coal",
-  "Capacity|Electricity|Gas",
-  "Capacity|Electricity|Nuclear",
-  "Capacity|Electricity|Biomass",
-  "Capacity|Electricity|Geothermal"
-)
-
-capacity_sol <- c(
-  "Capacity|Electricity|PGADPV",
-  "Capacity|Electricity|PGASOL",
-  "Capacity|Electricity|PGSOL"
-)
-
-capacity_wind <- c(
-  "Capacity|Electricity|PGAWND",
-  "Capacity|Electricity|PGAWNO",
-  "Capacity|Electricity|PGWND"
-)
-
-FE_vars <- c(
-  "Final Energy|Solids",
-  "Final Energy|Hydrogen",
-  "Final Energy|Gases",
-  "Final Energy|Electricity",
-  "Final Energy|Liquids",
-  "Final Energy|Heat",
-  "Final Energy|Biomass"
-)
-
-FE_industry <- c(
-  "Final Energy|Industry",
-  "Final Energy|Transportation",
-  "Final Energy|Residential and Commercial",
-  "Final Energy|Non Energy and Bunkers"
-)
-
-SE_vars <- c(
-  "Secondary Energy|Electricity|Solar",
-  "Secondary Energy|Electricity|Oil",
-  "Secondary Energy|Electricity|Wind",
-  "Secondary Energy|Electricity|Coal",
-  "Secondary Energy|Electricity|Gas",
-  "Secondary Energy|Electricity|Nuclear",
-  "Secondary Energy|Electricity|Biomass",
-  "Secondary Energy|Electricity|Geothermal"
-)
-
-SE_wind <- c(
-  "Secondary Energy|Electricity|PGAWND",
-  "Secondary Energy|Electricity|PGAWNO",
-  "Secondary Energy|Electricity|PGWND"
-)
-SE_sol <- c(
-  "Secondary Energy|Electricity|PGADPV",
-  "Secondary Energy|Electricity|PGASOL",
-  "Secondary Energy|Electricity|PGSOL"
-)
-
-Emissions_vars <- c(
-  "Emissions|CO2|Energy|Demand|Bunkers", "Emissions|CO2|Energy|Demand|Industry",
-  "Emissions|CO2|Energy|Demand|Residential and Commercial",
-  "Emissions|CO2|Energy|Demand|Transportation", "Emissions|CO2|Energy|Supply"
-)
-
-Emissions_cumulated <- c("Emissions|CO2|Cumulated")
-
-plot_info <- list(
-  "Capacity" = list(capacity_vars, capacity_wind, capacity_sol),
-  "Secondary Energy" = list(SE_vars, SE_wind, SE_sol),
-  "Final Energy" = list(FE_vars, FE_industry),
-  "Emissions" = list(Emissions_vars, Emissions_cumulated)
-)
-
-reportOutput(runpath = runpath, mif_name = mif_name, plot_info = plot_info)
+reportOutput(runpath = runpath, mif_name = mif_name, plot = plot_name)
