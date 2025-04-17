@@ -14,7 +14,7 @@ Parameters
 iTotFinEneDemSubBaseYr(allCy,SBS,YTIME)	                   "Total Final Energy Demand per subsector in Base year (Mtoe)"
 iExogDemOfBiomass(allCy,SBS,YTIME)	                       "Demand of tranditional biomass defined exogenously ()"
 iLifChpPla(allCy,DSBS,CHP)                                 "Technical Lifetime for CHP plants (years)"
-iElastNonSubElec(allCy,SBS,ETYPES,YTIME)                   "Elasticities of Non Substitutable Electricity (1)"
+$IF %Calibration% == off iElastNonSubElec(allCy,SBS,ETYPES,YTIME)                   "Elasticities of Non Substitutable Electricity (1)"
 iInvCostChp(allCy,DSBS,CHP,YTIME)                          "Capital Cost per CHP plant type (kUS$2015/KW)"
 iFixOMCostPerChp(allCy,DSBS,CHP,YTIME)                     "Fixed O&M cost per CHP plant type (US$2015/KW)"
 iAvailRateChp(allCy,DSBS,CHP)                              "Availability rate of CHP Plants ()"
@@ -31,7 +31,20 @@ iExogDemOfBiomass(runCy,DOMSE,YTIME) = 0;
 *---
 iLifChpPla(runCy,DSBS,CHP) = iDataChpPowGen(CHP,"2010","LFT");
 *---
+$IFTHEN.calib %Calibration% == off
 iElastNonSubElec(runCy,SBS,ETYPES,YTIME) = iElastNonSubElecData(SBS,ETYPES,YTIME);
+$ELSE.calib
+variable iElastNonSubElec(allCy,SBS,ETYPES,YTIME)        "Elasticities of Non Substitutable Electricity (1)";
+iElastNonSubElec.L(runCy,SBS,ETYPES,YTIME) = iElastNonSubElecData(SBS,ETYPES,YTIME);
+iElastNonSubElec.LO(runCy,SBS,"a",YTIME) = 0.001;
+iElastNonSubElec.UP(runCy,SBS,"a",YTIME) = 10;
+iElastNonSubElec.LO(runCy,SBS,"b1",YTIME) = -10;
+iElastNonSubElec.UP(runCy,SBS,"b1",YTIME) = -0.001;
+iElastNonSubElec.LO(runCy,SBS,"b2",YTIME) = -10;
+iElastNonSubElec.UP(runCy,SBS,"b2",YTIME) = -0.001;
+iElastNonSubElec.LO(runCy,SBS,"c",YTIME) = -10;
+iElastNonSubElec.UP(runCy,SBS,"c",YTIME) = -0.001;
+$ENDIF.calib
 *---
 iInvCostChp(runCy,DSBS,CHP,YTIME) = iDataChpPowGen(CHP,"2010","IC");
 *---
