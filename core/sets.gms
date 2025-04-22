@@ -132,7 +132,7 @@ rCon         counter for the number of consumers              /0,1*19/
 nSet         auxiliary counter for the definition of Vr       /b1*b20/
 kpdl         counter for Polynomial Distribution Lag          /a1*a6/
 rc                                                            /1*3/
-rcc                                                           /1*4/
+rcc                                                           /1*10/
 
 
 ***       Sectoral Structure        *
@@ -666,6 +666,7 @@ ATHHCL Advanced thermal monovalent hard coal
 ATHRFO Advanced thermal monovalent fuel oil
 ATHNGS Advanced thermal monovalent natural gas
 ATHBMSWAS Advanced thermal monovalent biomass and waste
+ATHBMCCS
 SUPCRL  Supercritical lignite
 SUPCR  Supercritical coal
 FBCLGN Fluidised bed lignite
@@ -713,6 +714,7 @@ PGAPSSL
 PGACGSL
 PGACGS
 PGAGGS
+ATHBMCCS
 /
 
 
@@ -723,6 +725,7 @@ SUPCR
 IGCCHCL
 IGCCLGN
 ACCGT
+ATHBMSWAS
 /
 
 CCS_NOCCS(PGALL,PGALL) mapping
@@ -732,6 +735,7 @@ PGAPSS.SUPCR
 PGACGSL.IGCCLGN
 PGACGS.IGCCHCL
 PGAGGS.ACCGT
+ATHBMCCS.ATHBMSWAS
 /
 
 CHP(EF)       CHP Plants
@@ -766,7 +770,7 @@ PGAWNO.WNO
 (PGSOL,PGASOL).SOL
 PGADPV.DPV
 (PGAOTHREN).OTHREN
-(CTHBMSWAS,ATHBMSWAS,IGCCBMS).BMSWAS
+(CTHBMSWAS,ATHBMSWAS,IGCCBMS,ATHBMCCS).BMSWAS
 /
 
 PGALLtoEF(PGALL,PGEF)     Correspondence between plants and energy forms
@@ -776,7 +780,7 @@ PGALLtoEF(PGALL,PGEF)     Correspondence between plants and energy forms
 (ATHRFO).RFO
 (AGTGDO).GDO
 (ATHNGS,CCCGT,ACCGT,AGTNGS,PGAGGS).NGS
-(CTHBMSWAS,ATHBMSWAS,IGCCBMS).BMSWAS
+(CTHBMSWAS,ATHBMSWAS,IGCCBMS,ATHBMCCS).BMSWAS
 (PGANUC).NUC
 (PGLHYD,PGSHYD,PGASHYD).HYD
 (PGWND,PGAWND,PGAWNO).WND
@@ -855,6 +859,7 @@ PGAGGS
 PGAWNO
 PGADPV
 PGAOTHREN
+ATHBMCCS
 /
 
 *           Emissions             *

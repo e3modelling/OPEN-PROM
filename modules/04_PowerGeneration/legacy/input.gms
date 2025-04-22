@@ -217,7 +217,7 @@ iMaxRenPotential(runCy,"DPV",YTIME)$AN(YTIME) = iCummMxmInstRenCap(runCy,"DPV",Y
 iMaxRenPotential(runCy,"BMSWAS",YTIME)$AN(YTIME) = iCummMxmInstRenCap(runCy,"BMSWAS",YTIME);
 iMaxRenPotential(runCy,"OTHREN",YTIME)$AN(YTIME) = iCummMxmInstRenCap(runCy,"OTHREN",YTIME);
 *---
-iMatFacPlaAvailCap(runCy,CCS,YTIME)$an(YTIME)  =0;
+iMatFacPlaAvailCap(runCy,CCS,YTIME)$an(YTIME)  =50;
 *---
 iMxmShareChpElec(runCy,YTIME) = 0.1;
 *---
