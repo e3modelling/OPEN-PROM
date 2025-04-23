@@ -75,8 +75,10 @@ SE      0.12
 AG      0.12
 HOU     0.175
 PC      0.175
+PB      0.12
 PT      0.08
 PA      0.12
+PN      0.12
 GU      0.12
 GT      0.08
 GN      0.12
@@ -563,9 +565,9 @@ iAnnCons(runCy,'PA','largest')=800000 * 300 * 1E-6;
 *---
 * Size will not play a role in buses, trains, ships and aircraft
 * Following values are given only for the sake of uniformity, but iDisFunConSize is not really calculated for non-road transport!
-iAnnConsPB(runCy,'PB',"smallest") = 20000 * 5 * 1E-6;
-iAnnConsPB(runCy,'PB',"modal") = 50000* 15 * 1E-6;
-iAnnConsPB(runCy,'PB',"largest") = 200000 * 50 * 1E-6;
+iAnnCons(runCy,'PB',"smallest") = 20000 * 5 * 1E-6;
+iAnnCons(runCy,'PB',"modal") = 50000 * 15 * 1E-6;
+iAnnCons(runCy,'PB',"largest") = 200000 * 50 * 1E-6;
 *---
 iAnnCons(runCy,'PT',"smallest") = 50000 * 50 * 1E-6;
 iAnnCons(runCy,'PT',"modal") = 200000 * 150 * 1e-6;
@@ -575,9 +577,9 @@ iAnnCons(runCy,'GT',"smallest") = 50000 * 20 * 1E-6;
 iAnnCons(runCy,'GT',"modal") = 200000 * 200 * 1e-6;
 iAnnCons(runCy,'GT',"largest") = 400000 * 500 * 1E-6;
 *---
-iAnnConsPN(runCy,'PN',"smallest") = 10000 * 50 * 1E-6;
-iAnnConsPN(runCy,'PN',"modal") = 50000 * 100 * 1e-6;
-iAnnConsPN(runCy,'PN',"largest") = 100000 * 500 * 1E-6;
+iAnnCons(runCy,'PN',"smallest") = 10000 * 50 * 1E-6;
+iAnnCons(runCy,'PN',"modal") = 50000 * 100 * 1e-6;
+iAnnCons(runCy,'PN',"largest") = 100000 * 500 * 1E-6;
 *---
 iAnnCons(runCy,'GN',"smallest") = 10000 * 20 * 1E-6;
 iAnnCons(runCy,'GN',"modal") = 50000 * 300 * 1e-6;
