@@ -20,7 +20,12 @@ QCapCO2ElecHydr(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          =E=
          sum(PGEF,sum(CCS$PGALLtoEF(CCS,PGEF),
                  VProdElec(allCy,CCS,YTIME)*sTWhToMtoe/iPlantEffByType(allCy,CCS,YTIME)*
-                 iCo2EmiFac(allCy,"PG",PGEF,YTIME)*iCO2CaptRate(allCy,CCS,YTIME)));
+                 iCo2EmiFac(allCy,"PG",PGEF,YTIME)*iCO2CaptRate(allCy,CCS,YTIME)))
+                + 
+         (sum(EF, sum(H2TECH$H2TECHEFtoEF(H2TECH,EF),
+               VConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)*iCo2EmiFac(allCy,"PG",EF,YTIME)*iCaptRateH2Prod(allCy,H2TECH,YTIME)))
+          )  ;    !! CO2 emissions captured by plants producing hydrogen
+
 
 *' The equation calculates the cumulative CO2 captured in million tons of CO2 for a given scenario and year.
 *' The cumulative CO2 captured at the current time period is determined by adding the CO2 captured by electricity and hydrogen production
