@@ -1,6 +1,6 @@
 *' @title Postsolve of OPEN-PROMs Hydrogen Module
 *' @code
-* Fix values of variables for the next time step
+*' @description* Fix values of variables for the next time step
 
 * Hydrogen Module
 *---

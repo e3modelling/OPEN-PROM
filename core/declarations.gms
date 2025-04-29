@@ -1,5 +1,6 @@
 *' @title Core Declarations
 *' @code
+
 Parameters
 iCGI(allCy,YTIME)                                          "Capital Goods Index (defined as CGI(Scenario)/CGI(Baseline)) (1)"
 iNPDL(SBS)                                                 "Number of Polynomial Distribution Lags (PDL) (1)"

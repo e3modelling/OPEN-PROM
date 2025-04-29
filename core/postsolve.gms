@@ -1,3 +1,5 @@
+*' @title postsolve
+*' @code
 endloop;  !! close countries loop
 * Export model results to GDX file
 execute_unload "outputData.gdx", ODummyObj, VCapElecTotEst, VPeakLoad, VConsFuel, VCapElec, VProdElec, VBaseLoad, VPriceFuelSubsecCarVal, VPriceElecIndResConsu;

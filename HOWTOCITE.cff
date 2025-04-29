@@ -6,23 +6,39 @@ authors:
     affiliation: "E3Modelling"
     email: giannousakis@e3modelling.com
 
+  - family-names: Panagiotis
+    given-names: Fragkos
+    affiliation: "E3Modelling"
+    email: plessias@e3modelling.com
+
   - family-names: Plessias
     given-names: Giorgos
     affiliation: "E3Modelling"
     email: plessias@e3modelling.com
 
-  - family-names: Tolios
-    given-names: Giannis
-    affiliation: "E3Modelling"
-    email: e3modelling.com
-
   - family-names: Sioutas
     given-names: Fotis
     affiliation: "E3Modelling"
     email: sioutas@e3modelling.com
+
+  - family-names: Baka
+    given-names: Maro
+    affiliation: "E3Modelling"
+    email: e3modelling.com
+
+  - family-names: Sechi
+    given-names: Sonja
+    affiliation: "E3Modelling"
+    email: e3modelling.com
+
+  - family-names: Michalis
+    given-names: Madinanos
+    affiliation: "E3Modelling"
+    email: e3modelling.com
+
 title: OPEN PROM
 version: 0.1
-date-released: 2024-05-13
+date-released: 2025-04-29
 repository-code: https://github.com/e3modelling/OPEN-PROM
 keywords:
   - prometheus

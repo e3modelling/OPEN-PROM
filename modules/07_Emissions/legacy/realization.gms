@@ -1,3 +1,5 @@
+*' @title Emissions realization
+*' @code
 *' @description This is the legacy realization of the Emissions module.
 
 *####################### R SECTION START (PHASES) ##############################

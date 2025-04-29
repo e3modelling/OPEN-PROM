@@ -1,7 +1,7 @@
 *' @title Emissions Constraints Declarations
 *' @code
 
-*Equations
+*' *Equations
 *' *** Emissions Constraints Equations
 *QGrnnHsEmisCO2Equiv(NAP,YTIME)	                           "Compute total CO2eq GHG emissions in all countries per NAP sector"
 *qGrnnHsEmisCO2EquivAllCntr(YTIME)	                       "Compute total CO2eq GHG emissions in all countries"

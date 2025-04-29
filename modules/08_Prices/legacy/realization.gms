@@ -1,3 +1,5 @@
+*' @title Prices realization
+*' @code
 *' @description This is the legacy realization of the Prices module.
 
 *####################### R SECTION START (PHASES) ##############################
