@@ -90,6 +90,6 @@ VPriceH2Infr.FX(runCy,SBS,YTIME)  $(not An(YTIME)) = 1e-5;
 *---
 VH2InfrArea.L(runCy,YTIME) = 10;
 *---
-VDemSecH2.FX(runCy,DSBS,YTIME)$(not An(YTIME)) = 1e-5;
-VDemSecH2.L(runCy,DSBS, YTIME) = 2;
+VDemSecH2.FX(runCy,SBS,YTIME)$(not An(YTIME)) = 1e-5;
+VDemSecH2.L(runCy,SBS, YTIME) = 2;
 *---

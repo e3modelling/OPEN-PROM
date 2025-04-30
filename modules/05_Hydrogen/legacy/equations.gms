@@ -6,17 +6,17 @@
 QDemTotH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VDemTotH2(allCy,YTIME)
                  =E=
-         sum(DSBS$SECTTECH(DSBS,"H2F"), VDemSecH2(allCy,DSBS, YTIME)/
-         prod(INFRTECH$H2INFRSBS(INFRTECH,DSBS) , iEffH2Transp(allCy,INFRTECH,YTIME)*(1-iConsSelfH2Transp(allCy,INFRTECH,YTIME))))  !! increase the demand due to transportation losses
+         sum(SBS$SECTTECH(SBS,"H2F"), VDemSecH2(allCy,SBS, YTIME)/
+         prod(INFRTECH$H2INFRSBS(INFRTECH,SBS) , iEffH2Transp(allCy,INFRTECH,YTIME)*(1-iConsSelfH2Transp(allCy,INFRTECH,YTIME))))  !! increase the demand due to transportation losses
 ;
 
 *' This equation calculates the sectoral hydrogen demand (VDemSecH2) for each demand subsector (DSBS), year, and region.
 *' It sums up hydrogen consumption from both industrial/tertiary sectors (using VConsFuel) and transport sectors (using VDemFinEneTranspPerFuel),
 *' ensuring each subsector receives only the relevant demand.
-QDemSecH2(allCy,DSBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VDemSecH2(allCy,DSBS,YTIME)
+QDemSecH2(allCy,SBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VDemSecH2(allCy,SBS,YTIME)
              =E=
-         sum(INDDOM $SAMEAS(INDDOM,DSBS), VConsFuel(allCy,INDDOM,"H2F",YTIME)) + sum(TRANSE $SAMEAS(TRANSE,DSBS), VDemFinEneTranspPerFuel(allCy,TRANSE,"H2F",YTIME));
+         sum(INDDOM $SAMEAS(INDDOM,SBS), VConsFuel(allCy,INDDOM,"H2F",YTIME)) + sum(TRANSE $SAMEAS(TRANSE,SBS), VDemFinEneTranspPerFuel(allCy,TRANSE,"H2F",YTIME));
 
 *' This equation defines the amount of hydrogen production capacity that is scrapped due to the expiration of the useful life of plants.
 *' It considers the remaining lifetime of hydrogen production facilities and the impact of past production gaps.
@@ -240,7 +240,7 @@ QDelivH2InfrTech(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         VDelivH2InfrTech(allCy,INFRTECH,YTIME)
          =E=
          (
-         (    sum(DSBS$(H2INFRSBS(INFRTECH,DSBS) $SECTTECH(DSBS,"H2F")), VDemSecH2(allCy,DSBS, YTIME))/
+         (    sum(SBS$(H2INFRSBS(INFRTECH,SBS) $SECTTECH(SBS,"H2F")), VDemSecH2(allCy,SBS, YTIME))/
             (iEffH2Transp(allCy,INFRTECH,YTIME)*(1-iConsSelfH2Transp(allCy,INFRTECH,YTIME))) )$H2INFRDNODES(INFRTECH)  !! for final demand nodes
 
          +
