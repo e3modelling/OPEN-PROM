@@ -633,8 +633,8 @@ CHEVGDO
 
 SECTTECH(SBS,EF) Link between Model Subsectors and Fuels
 /
-PC.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO,CHEVGSL,CHEVGDO)
-PB.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO)
+PC.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO,CHEVGSL,CHEVGDO,H2F)
+PB.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO,H2F)
 GU.(LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGDO,CHEVGDO) !! Removed GSL and PHEVGSL
 (PT,GT).(GDO,ELC,MET)
 PA.(KRS)
@@ -676,8 +676,8 @@ IGCCHCL Integrtaed gasification combine cycle hard coal
 IGCCBMS Integrated gasification combine cycle biomass
 CCCGT  Conventional combined cycle gas turbine
 ACCGT  Advanced combined cycle gas turbine
-*ACCHT  Advanced combined cycle hydrogen combustion turbine
-*ICEH2  Internal combustion engine powered by H2
+ACCHT  Advanced combined cycle hydrogen combustion turbine
+ICEH2  Internal combustion engine powered by H2
 *CGTGDO Conventional gas turbines (peak devices) diesel oil
 *CGTNGS Conventional gas turbines (peak devices) natural gas
 AGTGDO Advanced gas turbines (peak devices) diesel oil
@@ -786,7 +786,7 @@ PGALLtoEF(PGALL,PGEF)     Correspondence between plants and energy forms
 (PGWND,PGAWND,PGAWNO).WND
 (PGSOL,PGASOL,PGADPV).SOL
 (PGAOTHREN).GEO
-*(ACCHT,ICEH2,FC2).H2F
+(ACCHT,ICEH2).H2F !! ,FC2
 /
 
 CHPtoEF(EF,EF)           correspondence of CHP plant types to fuels
@@ -839,7 +839,7 @@ FBCHCL
 IGCCLGN
 IGCCHCL
 IGCCBMS
-*ACCHT,ICEH2
+ACCHT,ICEH2
 *FC1,FC2
 *PGNUC
 PGLHYD
