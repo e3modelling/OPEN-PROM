@@ -6,8 +6,8 @@
 QDemTotH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VDemTotH2(allCy,YTIME)
                  =E=
-         sum(SBS$SECTTECH(SBS,"H2F"), VDemSecH2(allCy,SBS, YTIME)/
-         prod(INFRTECH$H2INFRSBS(INFRTECH,SBS) , iEffH2Transp(allCy,INFRTECH,YTIME)*(1-iConsSelfH2Transp(allCy,INFRTECH,YTIME))))  !! increase the demand due to transportation losses
+         sum(DSBS$SECTTECH(DSBS,"H2F"), VDemSecH2(allCy,DSBS, YTIME)/
+         prod(INFRTECH$H2INFRSBS(INFRTECH,DSBS) , iEffH2Transp(allCy,INFRTECH,YTIME)*(1-iConsSelfH2Transp(allCy,INFRTECH,YTIME))))  !! increase the demand due to transportation losses
 ;
 
 *' This equation calculates the sectoral hydrogen demand (VDemSecH2) for each demand subsector (DSBS), year, and region.
@@ -240,7 +240,7 @@ QDelivH2InfrTech(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         VDelivH2InfrTech(allCy,INFRTECH,YTIME)
          =E=
          (
-         (    sum(SBS$(H2INFRSBS(INFRTECH,SBS) $SECTTECH(SBS,"H2F")), VDemSecH2(allCy,SBS, YTIME))/
+         (    sum(DSBS$(H2INFRSBS(INFRTECH,DSBS) $SECTTECH(DSBS,"H2F")), VDemSecH2(allCy,DSBS, YTIME))/
             (iEffH2Transp(allCy,INFRTECH,YTIME)*(1-iConsSelfH2Transp(allCy,INFRTECH,YTIME))) )$H2INFRDNODES(INFRTECH)  !! for final demand nodes
 
          +

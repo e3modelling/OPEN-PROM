@@ -3,7 +3,7 @@
 
 Variables
 VDemTotH2(allCy, YTIME)                         "Hydrogen production requirement in Mtoe for meeting final demand"
-VDemSecH2(allCy, SBS, YTIME)                    "Demand for H2 by sector in mtoe"
+VDemSecH2(allCy, DSBS, YTIME)                   "Demand for H2 by sector in mtoe"
 VGapShareH2Tech1(allCy, H2TECH, YTIME)          "Shares of H2 production technologies in new market competition 1"
 VGapShareH2Tech2(allCy, H2TECH, YTIME)          "Shares of H2 production technologies in new market competition 2"
 VProdH2(allCy, H2TECH, YTIME)                   "Hydrogen Production by technology in Mtoe"
