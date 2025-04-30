@@ -17,6 +17,7 @@ VActivPassTrnsp.l(runCy,TRANSE,YTIME) = 0.1;
 VActivPassTrnsp.FX(runCy,"PC",YTIME)$(not AN(YTIME)) = iTransChar(runCy,"KM_VEH",YTIME); 
 VActivPassTrnsp.FX(runCy,TRANP,YTIME) $(not AN(YTIME) and not sameas(TRANP,"PC")) = iActv(YTIME,runCy,TRANP); 
 VActivPassTrnsp.FX(runCy,TRANSE,YTIME)$(not TRANP(TRANSE)) = 0;
+*VActivPassTrnsp.LO(runCy,TRANSE,YTIME) = 0;
 *---
 VNewRegPcYearly.FX(runCy,YTIME)$(not an(ytime)) = iNewReg(runCy,YTIME);
 *---
@@ -29,9 +30,10 @@ VRateScrPc.FX(runCy,"%fBaseY%") = 0.1;
 *---
 VCostTranspPerMeanConsSize.l(runCy,TRANSE,RCon,TTECH,YTIME)=0.1;
 *---
-VActivGoodsTransp.l(runCy,TRANSE,YTIME)=0.1;
+VActivGoodsTransp.L(runCy,TRANSE,YTIME)=0.1;
 VActivGoodsTransp.FX(runCy,TRANG,YTIME)$(not An(YTIME)) = iActv(YTIME,runCy,TRANG);
 VActivGoodsTransp.FX(runCy,TRANSE,YTIME)$(not TRANG(TRANSE)) = 0;
+*VActivGoodsTransp.LO(runCy,TRANSE,YTIME) = 0;
 *---
 VPcOwnPcLevl.UP(runCy,YTIME) = 1;
 VPcOwnPcLevl.FX(runCy,YTIME)$((not An(YTIME)) $(ord(YTIME) gt 1) ) = (VStockPcYearly.l(runCy,YTIME-1) / (iPop(YTIME-1,runCy)*1000) /

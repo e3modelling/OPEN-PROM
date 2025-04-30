@@ -6,9 +6,17 @@
 QDemTotH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VDemTotH2(allCy,YTIME)
                  =E=
-         sum(SBS$H2SBS(SBS), VDemSecH2(allCy,SBS, YTIME)/
+         sum(SBS$SECTTECH(SBS,"H2F"), VDemSecH2(allCy,SBS, YTIME)/
          prod(INFRTECH$H2INFRSBS(INFRTECH,SBS) , iEffH2Transp(allCy,INFRTECH,YTIME)*(1-iConsSelfH2Transp(allCy,INFRTECH,YTIME))))  !! increase the demand due to transportation losses
 ;
+
+*' This equation calculates the sectoral hydrogen demand (VDemSecH2) for each demand subsector (DSBS), year, and region.
+*' It sums up hydrogen consumption from both industrial/tertiary sectors (using VConsFuel) and transport sectors (using VDemFinEneTranspPerFuel),
+*' ensuring each subsector receives only the relevant demand.
+QDemSecH2(allCy,DSBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VDemSecH2(allCy,DSBS,YTIME)
+             =E=
+         sum(INDDOM $SAMEAS(INDDOM,DSBS), VConsFuel(allCy,INDDOM,"H2F",YTIME)) + sum(TRANSE $SAMEAS(TRANSE,DSBS), VDemFinEneTranspPerFuel(allCy,TRANSE,"H2F",YTIME));
 
 *' This equation defines the amount of hydrogen production capacity that is scrapped due to the expiration of the useful life of plants.
 *' It considers the remaining lifetime of hydrogen production facilities and the impact of past production gaps.
@@ -329,7 +337,7 @@ QTariffH2Infr(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 
 *' This equation calculates the price of hydrogen based on infrastructure costs. It determines the price at which hydrogen
 *' can be delivered to end-users, including both the production cost and the infrastructure-related costs (transport, storage, etc.).
-QPriceH2Infr(allCy,SBS,YTIME)$(TIME(YTIME) $H2SBS(SBS) $(runCy(allCy)))..
+QPriceH2Infr(allCy,SBS,YTIME)$(TIME(YTIME) $SECTTECH(SBS,"H2F") $(runCy(allCy)))..
          VPriceH2Infr(allCy,SBS,YTIME)
          =E=
          sum(INFRTECH$H2INFRSBS(INFRTECH,SBS) , VTariffH2Infr(allCy,INFRTECH,YTIME))
@@ -338,7 +346,7 @@ QPriceH2Infr(allCy,SBS,YTIME)$(TIME(YTIME) $H2SBS(SBS) $(runCy(allCy)))..
 *' This equation calculates the total cost of hydrogen production, transportation, and distribution, integrating all the costs associated
 *' with hydrogen infrastructure and technology. It includes costs for producing hydrogen, investing in infrastructure, maintaining the infrastructure,
 *' and any operational costs related to hydrogen transportation and storage.
-QCostTotH2(allCy,SBS,YTIME)$(TIME(YTIME) $H2SBS(SBS) $(runCy(allCy)))..
+QCostTotH2(allCy,SBS,YTIME)$(TIME(YTIME) $SECTTECH(SBS,"H2F") $(runCy(allCy)))..
          VCostTotH2(allCy,SBS,YTIME)
          =E=
          VPriceH2Infr(allCy,SBS,YTIME)+VCostAvgProdH2(allCy,YTIME)

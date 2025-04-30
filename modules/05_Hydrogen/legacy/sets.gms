@@ -73,6 +73,7 @@ LPIPU
 SSGG
 /
 *---
+$ontext
 H2SBS(SBS)               "Final demand sectors consuming hydrogen for energy purposes"
 /
 PG
@@ -95,6 +96,7 @@ PA
 PT
 GT
 /
+$offtext
 *---
 H2INFRSBS(INFRTECH,SBS)  "Infrustructure required by demand sector"
 /

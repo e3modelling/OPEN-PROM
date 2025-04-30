@@ -19,6 +19,7 @@ VDemGapH2.FX(runCy,YTIME)$(not An(YTIME)) = 1e-5;
 display VDemGapH2.L;
 *---
 VProdH2.L(runCy,H2TECH, YTIME) = 2;
+VProdH2.LO(runCy,H2TECH, YTIME) = 0;
 VProdH2.FX(runCy,H2TECH, YTIME)$(not An(YTIME)) = 1e-5;
 VProdH2.FX(runCy,H2TECH,"2010") = 1e-7;
 display VProdH2.L;
@@ -88,9 +89,7 @@ VPriceH2Infr.L(runCy,SBS,YTIME) = 2;
 VPriceH2Infr.FX(runCy,SBS,YTIME)  $(not An(YTIME)) = 1e-5;
 *---
 VH2InfrArea.L(runCy,YTIME) = 10;
-*-----------------------------------------------------------------------
-*' *** Miscellaneous
 *---
-VDemSecH2.FX(runCy,SBS,YTIME) = 1e-5;
+VDemSecH2.FX(runCy,SBS,YTIME)$(not An(YTIME)) = 1e-5;
+VDemSecH2.L(runCy,SBS, YTIME) = 2;
 *---
-*-----------------------------------------------------------------------

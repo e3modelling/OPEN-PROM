@@ -78,6 +78,9 @@ VCapElecTotEst.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
 VCapElecNonCHP.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
 *---
 VCapElecCHP.FX(runCy,CHP,YTIME)$(not An(YTIME)) = iHisChpGrCapData(runCy,CHP,YTIME);
+*VCapElecCHP.LO(runCy,CHP,YTIME) = 1E-6;
+*---
+*VProdElecEstCHP.LO(runCy,YTIME) = 1E-6;
 *---
 VSharePowPlaNewEq.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) )=0;
 *---

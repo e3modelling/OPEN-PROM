@@ -22,8 +22,6 @@ QConsFinEneCountry(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          +
          sum(TRANSE,
              sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(TRANSE,EF)), VDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)))
-         +
-         sum(EF$(sameas(EF, "H2") AND EFtoEFS(EF,EFS)), VDemTotH2(allCy,YTIME)) !! Here hydrogen is included as a part of the energy consumption.
         ;
 
 *' The equation computes the total final energy consumption in million tonnes of oil equivalent 
@@ -53,7 +51,7 @@ QLossesDistr(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
              =E=
          (iRateLossesFinCons(allCy,EFS,YTIME) * (VConsFinEneCountry(allCy,EFS,YTIME) + VConsFinNonEne(allCy,EFS,YTIME)))$(not H2EF(EFS))
          +
-         (  VDemTotH2(allCy,YTIME) - sum(SBS$H2SBS(SBS), VDemSecH2(allCy,SBS,YTIME)))$H2EF(EFS);  
+         (VDemTotH2(allCy,YTIME) - sum(SBS$SECTTECH(SBS,"H2F"), VDemSecH2(allCy,SBS,YTIME)))$H2EF(EFS);  
 
 *' The equation calculates the transformation output from district heating plants .
 *' This transformation output is determined by summing over different demand sectors and district heating systems 

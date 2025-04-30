@@ -3,6 +3,7 @@
 
 Variables
 VDemTotH2(allCy, YTIME)                         "Hydrogen production requirement in Mtoe for meeting final demand"
+VDemSecH2(allCy, SBS, YTIME)                    "Demand for H2 by sector in mtoe"
 VGapShareH2Tech1(allCy, H2TECH, YTIME)          "Shares of H2 production technologies in new market competition 1"
 VGapShareH2Tech2(allCy, H2TECH, YTIME)          "Shares of H2 production technologies in new market competition 2"
 VProdH2(allCy, H2TECH, YTIME)                   "Hydrogen Production by technology in Mtoe"
@@ -36,11 +37,11 @@ VCostTotH2(allCy, SBS, YTIME)                   "Total Hydrogen Cost Per Sector 
 
 *' *** Miscellaneous
 *VProdCapH2Tech(allCy, H2TECH, YTIME)            "Production capacity by H2 production technology"
-VDemSecH2(allCy, SBS, YTIME)                    "Demand for H2 by sector in mtoe"
 ;
 
 Equations
 QDemTotH2(allCy, YTIME)                         "Equation for total hydrogen demand in a country in Mtoe"
+QDemSecH2(allCy,DSBS,YTIME)                     "Equation for calculating the demand for H2 by sector in mtoe"
 QGapShareH2Tech1(allCy, H2TECH, YTIME)          "Equation for calculating the shares of technologies in hydrogen gap using Weibull equations 1"
 QGapShareH2Tech2(allCy, H2TECH, YTIME)          "Equation for calculating the shares of technologies in hydrogen gap using Weibull equations 2"
 QProdH2(allCy, H2TECH, YTIME)                   "Equation for H2 production by technology"
