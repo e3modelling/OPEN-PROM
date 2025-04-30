@@ -202,9 +202,9 @@ SE    "Services and Trade"
 AG    "Agriculture, Fishing, Forestry etc."
 HOU   "Households"
 PC    "Passenger Transport - Cars"
-*PB    "Passenger Transport - Busses"
+PB    "Passenger Transport - Busses"
 PT    "Passenger Transport - Rail"
-*PN    "Passenger Transport - Inland Navigation"
+PN    "Passenger Transport - Inland Navigation"
 PA    "Passenger Transport - Aviation"
 GU    "Goods Transport - Trucks"
 GT    "Goods Transport - Rail"
@@ -277,10 +277,10 @@ Trade.(FD,EN,TX,OE,OI,NF,CH,IS,BM,PP,PG,BM_CO2,H2P)
 NoTrade.(SE,AG,HOU,PC,PB,PT,PN,PA,GU,GT,GN,BU,PCH,NEN,LGN_PRD_CH4,HCL_PRD_CH4,GAS_PRD_CH4,TERT_CH4,TRAN_CH4,AG_CH4,SE_CH4,TRAN_N2O,TX_N2O,AG_N2O,OI_HFC,OI_PFC,NF_PFC,PG_SF6,OI_SF6)
 /
 
-DSBS(SBS)         All Demand Subsectors         /PC,PT,PA,GU,GT,GN,IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,SE,AG,HOU,PCH,NEN,BU/
-TRANSE(DSBS)      All Transport Subsectors      /PC,PT,PA,GU,GT,GN/
-TRANS1(SBS)       All Transport Subsectors      /PC,PT,PA,GU,GT,GN/
-TRANP(TRANSE)     Passenger Transport           /PC,PT,PA/
+DSBS(SBS)         All Demand Subsectors         /PC,PT,PA,PB,PN,GU,GT,GN,IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,SE,AG,HOU,PCH,NEN,BU/
+TRANSE(DSBS)      All Transport Subsectors      /PC,PT,PA,PB,PN,GU,GT,GN/
+TRANS1(SBS)       All Transport Subsectors      /PC,PT,PA,PB,PN,GU,GT,GN/
+TRANP(TRANSE)     Passenger Transport           /PC,PT,PA,PB,PN/
 TRANG(TRANSE)     Goods Transport               /GU,GT,GN/
 
 INDSE(DSBS)       Industrial SubSectors         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI/
@@ -294,7 +294,7 @@ BUN(DSBS)         Bunkers                       /BU/
 
 INDDOM(DSBS)      Industry and Tertiary         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,SE,AG,HOU/
 * the following sets are used in price equation for electricity
-INDTRANS(SBS)     Industry and Transport        /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI ,PC,PT,PA,GU,GT, GN /
+INDTRANS(SBS)     Industry and Transport        /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI ,PC,PT,PA,PB,PN,GU,GT, GN /
 RESIDENT(SBS)     Residential                   /SE,AG,HOU/
 AGSECT            aggregate sectors             /INDSE1,DOMSE1,NENSE1,TRANS1,PG/
 
@@ -516,9 +516,9 @@ ALTEF(EF)        Alternative Fuels used in transport                 /BGDO,MET,E
 
 ALTMAP(SBS,EF,EF)    Fuels whose prices affect the prices of alternative fuels
 /
-(PC,GU,PT,GT,GN).MET.GDO
-(PC,GU,PT,GT,GN).ETH.GDO
-(PC,GU,GN).BGDO.GDO
+(PC,GU,PT,PB,GT,GN).MET.GDO
+(PC,GU,PT,PB,GT,GN).ETH.GDO
+(PC,GU,GN,PN).BGDO.GDO
 /
 
 
@@ -633,12 +633,12 @@ CHEVGDO
 
 SECTTECH(SBS,EF) Link between Model Subsectors and Fuels
 /
-PC.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO,CHEVGSL,CHEVGDO,H2F)
-*PB.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO)
-GU.(LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGDO,CHEVGDO,H2F) !! Removed GSL and PHEVGSL
+PC.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO,CHEVGSL,CHEVGDO)
+PB.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO)
+GU.(LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGDO,CHEVGDO) !! Removed GSL and PHEVGSL
 (PT,GT).(GDO,ELC,MET)
 PA.(KRS)
-*(PN,GN).(GSL,GDO)
+PN.(GSL,GDO)
 GN.(GSL,GDO)
 (IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(LGN,HCL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC,STE1AL,
                                  STE1AH,STE1AD,STE1AR,STE1AG,STE1AB,H2F)

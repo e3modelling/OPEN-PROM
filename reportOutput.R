@@ -1,10 +1,8 @@
 # This script generates a mif file for comparison of OPEN-PROM data with MENA-EDS and ENERDATA
 library(madrat)
-library(gdx)
 library(openprom)
-library(tidyr)
 library(reticulate)
-
+library(knitr)
 
 installPythonPackages <- function(packages) {
   for (pkg in packages) {
@@ -13,7 +11,6 @@ installPythonPackages <- function(packages) {
     }
   }
 }
-
 
 getRunpath <- function() {
   py_config()
@@ -24,26 +21,37 @@ getRunpath <- function() {
   return(unlist(runpath, use.names = FALSE))
 }
 
-
 reportOutput <- function(
     runpath,
     mif_name,
     aggregate = TRUE,
-    fullValidation = TRUE) {
+    fullValidation = TRUE,
+    plot_name = NULL) {
   # Region mapping used for aggregating validation data (e.g. ENERDATA)
   mapping <- jsonlite::read_json("metadata.json")[["Model Information"]][["Region Mapping"]][[1]]
   setConfig(regionmapping = mapping)
 
-  runCY <- readGDX(file.path(runpath, "blabla.gdx"), "runCYL")
-  convertGDXtoMIF(runpath, runCY,
-    mif_name = mif_name, aggregate = aggregate,
-    fullValidation = fullValidation
+  reports <- convertGDXtoMIF(runpath,
+    mif_name = mif_name,
+    aggregate = aggregate, fullValidation = fullValidation
   )
   print("Report generation completed.")
+
+  if (!is.null(plot_name)) {
+    save_names <- file.path(runpath, plot_name)
+    mapply( # for each scenario, unpack the magpie obj and a pdf savename
+      function(report, save) {
+        batchPlotReport(report = report, save_pdf = save)
+      },
+      reports, save_names
+    )
+  }
+  invisible(NULL)
 }
 
 args <- commandArgs(trailingOnly = TRUE)
 runpath <- if (length(args) > 0) args[1] else getRunpath()
 mif_name <- if (length(args) > 1) args[2] else "reporting.mif"
+plot_name <- if (length(args) > 2) args[3] else "plot.tex"
 
-reportOutput(runpath = runpath, mif_name = mif_name)
+reportOutput(runpath = runpath, mif_name = mif_name, plot_name = plot_name)

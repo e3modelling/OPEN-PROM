@@ -17,9 +17,9 @@ $offdelim
 table iCapDataLoadFacEachTransp(TRANSE,TRANSUSE)	 "Capacity data and Load factor for each transportation mode (passenger or tonnes/vehicle)"
      Cap  LF
 PC   2    
-*PB  40   0.4
+PB  40   0.4
 PT   300  0.4
-*PN  300  0.5
+PN  300  0.5
 PA   180  0.65
 GU   5    0.7
 GT   600  0.8
