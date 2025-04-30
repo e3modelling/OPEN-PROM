@@ -33,18 +33,18 @@ $include "./iElastA.csv"
 $offdelim
 ;
 iElastA.L(runCy,SBS,ETYPES,YTIME) = iElastAL("ELL",SBS,ETYPES,YTIME);
-iElastA.LO(runCy,SBS,"a",YTIME) = 0.001;
-iElastA.UP(runCy,SBS,"a",YTIME) = 5*iElastAL("ELL",SBS,"a",YTIME);
+iElastA.LO(runCy,SBS,"a",YTIME)  =  0.001;
+iElastA.UP(runCy,SBS,"a",YTIME)  =  5*iElastAL("ELL",SBS,"a",YTIME);
 iElastA.LO(runCy,SBS,"b1",YTIME) = -10;
 iElastA.UP(runCy,SBS,"b1",YTIME) = -0.001;
 iElastA.LO(runCy,SBS,"b2",YTIME) = -10;
 iElastA.UP(runCy,SBS,"b2",YTIME) = -0.001;
-iElastA.LO(runCy,SBS,"c",YTIME) = -10;
-iElastA.UP(runCy,SBS,"c",YTIME) = -0.001;
+iElastA.LO(runCy,SBS,"c",YTIME)  = -10;
+iElastA.UP(runCy,SBS,"c",YTIME)  = -0.001;
 iElastA.LO(runCy,SBS,"b3",YTIME) = -10;
 iElastA.UP(runCy,SBS,"b3",YTIME) = -0.001;
-iElastA.LO(runCy,SBS,"b4",YTIME) = -10;
-iElastA.UP(runCy,SBS,"b4",YTIME) = -0.001;
+iElastA.LO(runCy,SBS,"b4",YTIME) =  0.001;
+iElastA.UP(runCy,SBS,"b4",YTIME) =  10;
 iElastA.LO(runCy,SBS,"c1",YTIME) = -10;
 iElastA.UP(runCy,SBS,"c1",YTIME) = -0.001;
 iElastA.LO(runCy,SBS,"c2",YTIME) = -10;
