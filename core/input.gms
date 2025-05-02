@@ -107,7 +107,7 @@ RFO 3.207089028,
 OLQ 3.207089028,
 NGS 2.336234395,
 OGS 3.207089028,
-BMSWAS 0/;
+BMSWAS 4.1868/; !!100000×0.000041868
 *---
 iCo2EmiFac(runCy,SBS,EF,YTIME) = iCo2EmiFacAllSbs(EF);
 iCo2EmiFac(runCy,"IS","HCL",YTIME)   = iCo2EmiFacAllSbs("SLD"); !! This is the assignment for coke
