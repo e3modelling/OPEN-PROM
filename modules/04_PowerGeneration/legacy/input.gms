@@ -74,17 +74,41 @@ $include"./iMaxResPot.csv"
 $offdelim
 ;
 *---
-table iMatFacPlaAvailCap(allCy,PGALL,YTIME)	 "Maturity factor related to plant available capacity (1)"
+$IFTHEN.calib %Calibration% == MatCalibration
+variable iMatFacPlaAvailCap(allCy,PGALL,YTIME) "Maturity factor related to plant available capacity (1)";
+table iMatFacPlaAvailCapL(allCy,PGALL,YTIME) "Maturity factor related to plant available capacity (1)"
+$ondelim
+$include "./iMatFacPlaAvailCap.csv"
+$offdelim
+;
+iMatFacPlaAvailCap.L(runCy,PGALL,YTIME) = iMatFacPlaAvailCapL(runCy,PGALL,YTIME);
+iMatFacPlaAvailCap.LO(runCy, PGALL, YTIME) = 0.0001;
+iMatFacPlaAvailCap.UP(runCy, PGALL, YTIME) = 50;
+$ELSE.calib
+table iMatFacPlaAvailCap(allCy,PGALL,YTIME) "Maturity factor related to plant available capacity (1)"
 $ondelim
 $include"./iMatFacPlaAvailCap.csv"
 $offdelim
 ;
+$ENDIF.calib
 *---
-table iMatureFacPlaDisp(allCy,PGALL,YTIME)	 "Maturity factor related to plant dispatching (1)"
+$IFTHEN.calib %Calibration% == MatCalibration
+variable iMatureFacPlaDisp(allCy,PGALL,YTIME) "Maturity factor related to plant dispatching (1)";
+table iMatureFacPlaDispL(allCy,PGALL,YTIME) "Maturity factor related to plant dispatching (1)"
+$ondelim
+$include "./iMatureFacPlaDisp.csv"
+$offdelim
+;
+iMatureFacPlaDisp.L(runCy,PGALL,YTIME) = iMatureFacPlaDispL(runCy,PGALL,YTIME);
+iMatureFacPlaDisp.LO(runCy, PGALL, YTIME) = 0.0001;
+iMatureFacPlaDisp.UP(runCy, PGALL, YTIME) = 500; !!5 * iMatureFacPlaDispL("USA", PGALL, YTIME);
+$ELSE.calib
+table iMatureFacPlaDisp(allCy,PGALL,YTIME) "Maturity factor related to plant dispatching (1)"
 $ondelim
 $include"./iMatureFacPlaDisp.csv"
 $offdelim
 ;
+$ENDIF.calib
 *---
 parameter iScaleEndogScrap(PGALL) "Scale parameter for endogenous scrapping applied to the sum of full costs (1)";
 *---
@@ -163,7 +187,7 @@ iDecInvPlantSched(allCy,PGALL,YTIME)                       "Decided plant invest
 iPlantDecomSched(allCy,PGALL,YTIME)	                       "Decided plant decomissioning schedule (GW)"	
 iMaxRenPotential(allCy,PGRENEF,YTIME)	                   "Maximum enewable potential (GW)"
 iMxmShareChpElec(allCy,YTIME)	                           "Maximum share of CHP electricity in a country (1)"
-iMatureFacPlaDisp(allCy,PGALL,YTIME)	                   "Maturity factor related to plant dispatching (1)"
+!! iMatureFacPlaDisp(allCy,PGALL,YTIME)	                   "Maturity factor related to plant dispatching (1)"
 ;
 *---
 iBaseLoadShareDem(runCy,DSBS,YTIME)$an(YTIME)  = iLoadFactorAdj(DSBS);
@@ -217,7 +241,7 @@ iMaxRenPotential(runCy,"DPV",YTIME)$AN(YTIME) = iCummMxmInstRenCap(runCy,"DPV",Y
 iMaxRenPotential(runCy,"BMSWAS",YTIME)$AN(YTIME) = iCummMxmInstRenCap(runCy,"BMSWAS",YTIME);
 iMaxRenPotential(runCy,"OTHREN",YTIME)$AN(YTIME) = iCummMxmInstRenCap(runCy,"OTHREN",YTIME);
 *---
-iMatFacPlaAvailCap(runCy,CCS,YTIME)$an(YTIME)  =50;
+* iMatFacPlaAvailCap(runCy,CCS,YTIME)$an(YTIME)  =50;
 *---
 iMxmShareChpElec(runCy,YTIME) = 0.1;
 *---

@@ -96,8 +96,9 @@ $offOrder
 *' *** GAMS "flags" definitions
 *'
 *' *** Calibration
-$setGlobal Calibration off
+$setGlobal Calibration MatCalibration !! MatCalibration/Calibration/off
 $setGlobal MatFacCalibration off 
+$setGlobal useCalibData on
 *' *** Maximum number of solver attempts
 $evalGlobal SolverTryMax 4
 *' *** Setting research mode (0) or development mode (1) to modify settings and parameters accordingly
@@ -116,7 +117,7 @@ $evalGlobal fPeriodOfYears 1
 
 $evalGlobal fStartHorizon 2010
 $evalGlobal fEndHorizon 2100
-$evalGlobal fEndY 2100
+$evalGlobal fEndY 2021
 $evalGlobal fStartY 2021
 $evalGlobal fBaseY %fStartY% - %fPeriodOfYears%
 $evalGlobal fScenario 0 !! Setting the model scenario: 0 is NPi_Default, 1 is 1.5C and 2 is 2C

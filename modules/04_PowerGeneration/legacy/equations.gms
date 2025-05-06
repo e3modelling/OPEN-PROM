@@ -200,13 +200,17 @@ QShareNewTechNoCCS(allCy,PGALL,YTIME)$(TIME(YTIME) $NOCCS(PGALL) $runCy(allCy)).
 *' Compute the variable cost of each power plant technology for every region,
 *' By utilizing the gross cost, fuel prices, CO2 emission factors & capture, and plant efficiency. 
 QCostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
-         VCostVarTech(allCy,PGALL,YTIME) 
+        VCostVarTech(allCy,PGALL,YTIME) 
              =E=
-         (iVarCost(PGALL,YTIME)/1E3 + sum(PGEF$PGALLtoEF(PGALL,PGEF), (VPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)/1.2441+
-         iCO2CaptRate(allCy,PGALL,YTIME)*VCstCO2SeqCsts(allCy,YTIME)*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME)
-         + (1-iCO2CaptRate(allCy,PGALL,YTIME))*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME)
+        iVarCost(PGALL,YTIME)/1E3 + 
+        sum(
+          PGEF$PGALLtoEF(PGALL,PGEF),
+          (VPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)/1.2441 +
+          iCO2CaptRate(allCy,PGALL,YTIME)*VCstCO2SeqCsts(allCy,YTIME)*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME) +
+          (1-iCO2CaptRate(allCy,PGALL,YTIME))*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME)
           *(sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(allCy,NAP,YTIME))))
-          *sTWhToMtoe/iPlantEffByType(allCy,PGALL,YTIME))$(not PGREN(PGALL)));
+          *sTWhToMtoe/iPlantEffByType(allCy,PGALL,YTIME)
+        )$(not PGREN(PGALL));
 
 *' The equation calculates the variable for a specific
 *' power plant and year when the power plant is not subject to endogenous scrapping. The calculation involves raising the variable
@@ -429,7 +433,7 @@ QCapElec2(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QCostVarTechElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VCostVarTechElec(allCy,PGALL,YTIME)
          =E=  
-          iMatureFacPlaDisp(allCy,PGALL,YTIME)*VCostVarTech(allCy,PGALL,YTIME)**(-2);
+          iMatureFacPlaDisp(allCy,PGALL,YTIME)*VCostVarTech(allCy,PGALL,YTIME)**(-1);
 
 *' Compute the electricity peak loads of each region,
 *' as a sum of the variable costs of all power plant technologies.
@@ -546,9 +550,11 @@ VProdElecReqCHP(allCy,YTIME)
 QProdElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VProdElec(allCy,PGALL,YTIME)
                  =E=
-         VProdElecNonCHP(allCy,YTIME) /
-         (VProdElecReqTot(allCy,YTIME)- VProdElecReqCHP(allCy,YTIME))
-         * VCapElec2(allCy,PGALL,YTIME)* sum(HOUR, exp(-VScalFacPlaDisp(allCy,HOUR,YTIME)/VSortPlantDispatch(allCy,PGALL,YTIME)));
+         VProdElecNonCHP(allCy,YTIME) / (VProdElecReqTot(allCy,YTIME) - VProdElecReqCHP(allCy,YTIME))
+         * VCapElec2(allCy,PGALL,YTIME)
+         * sum(HOUR,
+          exp(-VScalFacPlaDisp(allCy,HOUR,YTIME)/VSortPlantDispatch(allCy,PGALL,YTIME))
+          );
 
 *' This equation calculates the sector contribution to total Combined Heat and Power production . The contribution
 *' is calculated for a specific country , industrial sector , CHP technology , and time period .The sector contribution
