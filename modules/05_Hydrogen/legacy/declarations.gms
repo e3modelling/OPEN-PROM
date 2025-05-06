@@ -73,7 +73,6 @@ QCostTotH2(allCy, SBS, YTIME)                   "Equation of total hydrogen cost
 
 *' *** Miscellaneous
 *QProdCapH2Tech(allCy, H2TECH, YTIME)            "Equation for production capacity by H2 production technology"
-*QDemSecH2(allCy, SBS, YTIME)                    "Equation for demand of H2 by sector in mtoe"
 ;
 
 Scalars

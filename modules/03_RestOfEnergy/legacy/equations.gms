@@ -178,7 +178,7 @@ QOutTransfTherm(allCy,TOCTEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
           sum(INDDOM,
           sum(CHP$SECTTECH(INDDOM,CHP), VConsFuel(allCy,INDDOM,CHP,YTIME)))+
           iRateEneBranCons(allCy,TOCTEF,YTIME)*(VConsFinEneCountry(allCy,TOCTEF,YTIME) + VConsFinNonEne(allCy,TOCTEF,YTIME) + VLossesDistr(allCy,TOCTEF,YTIME)) + 
-          VLossesDistr(allCy,TOCTEF,YTIME)                                                                                    
+          VLossesDistr(allCy,TOCTEF,YTIME)     !!!! wrong 2* VLossesDistr ????                                                                               
          )$STEAM(TOCTEF); 
             
 *' The equation calculates the total transformation input for a specific energy branch 

@@ -8,5 +8,5 @@ VInputTransfRef.FX(runCyL,"CRO",YTIME)$(TIME(YTIME)) = VInputTransfRef.L(runCyL,
 VProdPrimary.FX(runCyL,PPRODEF,YTIME)$TIME(YTIME) = VProdPrimary.L(runCyL,PPRODEF,YTIME)$TIME(YTIME);
 VConsFinEneCountry.FX(runCyL,EFS,YTIME)$TIME(YTIME) = VConsFinEneCountry.L(runCyL,EFS,YTIME)$TIME(YTIME);
 VOutTransfRefSpec.FX(runCyL,EFS,YTIME)$(TIME(YTIME) $EFtoEFA(EFS,"LQD")) = VOutTransfRefSpec.L(runCyL,EFS,YTIME)$(TIME(YTIME) $EFtoEFA(EFS,"LQD"));
-VExp.FX(runCyL,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS)) = VExp.L(runCyL,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS));
+*VExp.FX(runCyL,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS)) = VExp.L(runCyL,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS));
 VConsGrssInlNotEneBranch.FX(runCyL,EFS,YTIME)$TIME(YTIME) =  VConsGrssInlNotEneBranch.L(runCyL,EFS,YTIME)$TIME(YTIME);
