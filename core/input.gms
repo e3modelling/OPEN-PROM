@@ -110,7 +110,9 @@ OGS 3.207089028,
 BMSWAS 0/;
 *---
 iCo2EmiFac(runCy,SBS,EF,YTIME) = iCo2EmiFacAllSbs(EF);
-iCo2EmiFac(runCy,"IS","HCL",YTIME)   = iCo2EmiFacAllSbs("SLD"); !! This is the assignment for coke
+iCo2EmiFac(runCy,"IS","HCL",YTIME) = iCo2EmiFacAllSbs("SLD"); !! This is the assignment for coke
+iCo2EmiFac(runCy,"H2P","NGS",YTIME) = 3.107;
+iCo2EmiFac(runCy,"H2P","BMSWAS",YTIME) = 0.497;
 *---
 parameter iElaSubData(DSBS)       "Elasticities by subsector (1)" /
 PCH	2
