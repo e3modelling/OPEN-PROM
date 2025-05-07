@@ -3,10 +3,10 @@
 
 *'                *VARIABLE INITIALISATION*
 *---
+VCostTotH2.FX(runCy,SBS,YTIME)$(not An(YTIME)) = 1e-5;
 VCostTotH2.FX(runCy,TRANSE,"2010") = iFuelPrice(runCy,TRANSE,"H2F","2010"); 
 VCostTotH2.FX(runCy,"PG","2010") = iFuelPrice(runCy,"PG","H2F","2010"); 
 VCostTotH2.FX(runCy,INDDOM,"2010") = iFuelPrice(runCy,INDDOM,"STE1AH2F","2010"); 
-VCostTotH2.FX(runCy,SBS,YTIME)$(not An(YTIME)) = 1e-5;
 VCostTotH2.L(runCy,SBS,YTIME) = 2;
 display VCostTotH2.L;
 *---
@@ -21,12 +21,12 @@ display VDemGapH2.L;
 VProdH2.L(runCy,H2TECH, YTIME) = 2;
 VProdH2.LO(runCy,H2TECH, YTIME) = 0;
 VProdH2.FX(runCy,H2TECH, YTIME)$(not An(YTIME)) = 1e-5;
-VProdH2.FX(runCy,H2TECH,"2010") = 1e-7;
+*VProdH2.FX(runCy,H2TECH,"2010") = 1e-7;
 display VProdH2.L;
 *---
-VDemTotH2.L(runCy,YTIME) = 2;
-VDemTotH2.FX(runCy,YTIME)$(not An(YTIME)) = 1e-5;
-VDemTotH2.FX(runCy,"2010") = sum(H2TECH, VProdH2.L(runCy,H2TECH,"2010"));
+VDemTotH2.L(runCy,YTIME) = 0.5;
+*VDemTotH2.FX(runCy,YTIME)$(not An(YTIME)) = 1e-5;
+VDemTotH2.FX(runCy,YTIME)$(not An(YTIME)) = sum(H2TECH, VProdH2.L(runCy,H2TECH,YTIME));
 display VDemTotH2.L;
 *---
 VConsFuelTechH2Prod.FX(runCy,H2TECH,EF,YTIME)$(not An(YTIME)$H2TECHEFtoEF(H2TECH,EF)) = 0;
@@ -88,7 +88,7 @@ VTariffH2Infr.FX(runCy,INFRTECH,YTIME) $(not An(YTIME)) = 1e-5;
 VPriceH2Infr.L(runCy,SBS,YTIME) = 2;
 VPriceH2Infr.FX(runCy,SBS,YTIME)  $(not An(YTIME)) = 1e-5;
 *---
-VH2InfrArea.L(runCy,YTIME) = 10;
+VH2InfrArea.L(runCy,YTIME) = 0.001;
 *---
 VDemSecH2.FX(runCy,SBS,YTIME)$(not An(YTIME)) = 1e-5;
 VDemSecH2.L(runCy,SBS, YTIME) = 2;
