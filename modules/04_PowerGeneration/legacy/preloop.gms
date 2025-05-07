@@ -146,6 +146,7 @@ VPeakLoad.L(runCy,YTIME) = 1;
 VPeakLoad.FX(runCy,YTIME)$(datay(YTIME)) = VDemElecTot.l(runCy,YTIME)/(VLoadFacDom.l(runCy,YTIME)*8.76);
 *---
 VProdElec.FX(runCy,pgall,YTIME)$DATAY(YTIME)=iDataElecProd(runCy,pgall,YTIME)/1000;
+*VProdElec.FX(runCy,"CTHBMSWAS",YTIME)$DATAY(YTIME) = (VProdElec.L(runCy,"ATHBMSWAS",YTIME)$DATAY(YTIME))/2;
 *---
 VProdElecReqTot.fx(runCy,"%fBaseY%")=sum(pgall,VProdElec.L(runCy,pgall,"%fBaseY%"));
 *---
