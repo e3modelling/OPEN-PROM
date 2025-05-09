@@ -19,7 +19,7 @@ $ondelim
 $include "./iProdHistIS.csv"
 $offdelim
 
-Table iCapFacBaseYrIS(allCy, ISTECH_HIST, YTIME) "Historical capacity factor in the base year";
+Table iCapFacBaseYrIS(allCy, ISTECH_HIST, YTIME) "Historical capacity factor in the base year"; 
 $ondelim
 $include "./iCapFacBaseYrIS.csv"
 $offdelim
@@ -49,7 +49,7 @@ $ondelim
 $include "./iVarOMCostIS.csv"
 $offdelim
 
-Table iTechLftIS(allCy,ISTECH_ALL) "Technical Lifetime per plant type (years)";
+Table iTechLftIS(allCy, ISTECH_ALL) "Technical Lifetime per plant type (years)";
 $ondelim
 $include "./iTechLftIS.csv"
 $offdelim
