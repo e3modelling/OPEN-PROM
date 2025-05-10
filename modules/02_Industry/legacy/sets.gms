@@ -1,37 +1,47 @@
 *' @title Industry Sets
 *' @code
 
-*---
 sets
-ISTECHHIST   "Historical Existing IS routes"
+ISTECH_HIST   "Historical Existing IS routes"
     / 
-    bfbof   "blast furnace basic oxygen furnace"
-   dreaf   "direct reduction electric arc furnace fed by natural gas"
-   screaf   "scrap electric arc furnace"
+    BF_BOF
+    DR_EAF
+    SCRAP_EAF 
     /
-*---
-ISTECHNEW   "New IS routes"
-/
-   bfbofbat "best available tech blast furnace basic oxygen furnace"
-   dreafbat "best available tech direct reduction electric arc furnace fed ny natural gas"
-   screafbat   "best available tech scrap electric arc furnace"
-   h2dreaf "best available tech direct reduction electric arc furnace fed ny 100% hydrogen"
-   bfbofccs   "best available tech blast furnace basic oxygen furnace with CCS ammine based"
-   dreafccs "best available tech direct reduction electric arc furnace with CCS ammine based"
-/
-*---
 
-ISTECHHISTtoEF(ISTECHHIST,EF) "Mapping between IS technologies and fuels"
-/
-bfbof.(hcl, ngs, elc),
-dreaf.(ngs, elc),
-screaf.(elc, ngs)
-/
-*---
-ISTECHNEWHISTtoEF(ISTECHNEW,EF) "Mapping between IS technologies and fuels"
-/
-bfbofbat.(hcl, ngs, elc),
-dreafbat.(ngs, elc),
-screafbat.(elc, ngs)
-/
-*---
+ISTECH_NEW    "New IS routes (BAT, CCS, H₂‑DR)"
+    / 
+    BF_BOF_BAT 
+    DR_EAF_BAT
+    SCRAP_EAF_BAT
+    OSR_BOF
+    BF_BOF_CCS
+    DR_EAF_CCS
+    OSR_BOF_CCS
+    H2_DR_EAF 
+    /
+
+
+SECTTECH_IS(ISTECH,EF)  "Mapping of IS technologies to energy forms"
+    / 
+    BF_BOF.(LGN,HCL,CRO,LPG,GSL,KRS,GDO,RFO,OLQ,NGS,OGS,ELC,
+                     BMSWAS,STE1AL,STE1AH,STE1AD,STE1AR,STE1AG,STE1AB)
+    DR_EAF.(HCL,NGS,ELC)
+    SCRAP_EAF.(HCL,NGS,ELC)
+    OSR_BOF.(LGN,HCL,CRO,LPG,GSL,KRS,GDO,RFO,OLQ,NGS,OGS,ELC,
+                     BMSWAS,STE1AL,STE1AH,STE1AD,STE1AR,STE1AG,STE1AB)
+    BF_BOF_BAT.(LGN,HCL,CRO,LPG,GSL,KRS,GDO,RFO,OLQ,NGS,OGS,ELC,
+                     BMSWAS,STE1AL,STE1AH,STE1AD,STE1AR,STE1AG,STE1AB)
+    DR_EAF_BAT.(HCL,NGS,ELC)
+    SCRAP_EAF_BAT.(HCL,NGS,ELC,H2F)
+    OSR_BOF_BAT.(LGN,HCL,CRO,LPG,GSL,KRS,GDO,RFO,OLQ,NGS,OGS,ELC,
+                     BMSWAS,STE1AL,STE1AH,STE1AD,STE1AR,STE1AG,STE1AB)
+    BF_BOF_CCS.(LGN,HCL,CRO,LPG,GSL,KRS,GDO,RFO,OLQ,NGS,OGS,ELC,
+                     BMSWAS,STE1AL,STE1AH,STE1AD,STE1AR,STE1AG,STE1AB)
+    DR_EAF_CCS.(HCL,NGS,ELC,H2F)
+    OSR_BOF_CCS.(LGN,HCL,CRO,LPG,GSL,KRS,GDO,RFO,OLQ,NGS,OGS,ELC,
+                     BMSWAS,STE1AL,STE1AH,STE1AD,STE1AR,STE1AG,STE1AB)
+    H2_DR_EAF.(H2F,ELC,NGS,HCL,BMSWAS)
+    / 
+;
+
