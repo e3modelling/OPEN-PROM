@@ -1,47 +1,27 @@
 *' @title Industry Sets
 *' @code
 
+*---
 sets
 ISTECH_HIST   "Historical Existing IS routes"
     / 
-    BF_BOF
-    DR_EAF
-    SCRAP_EAF 
+    bf-bof   "blast furnace basic oxygen furnace"
+   dr-eaf   "direct reduction electric arc furnace"
+   scrap-eaf   "scrap electric arc furnace"
     /
+*---
+ISTECH_NEW   "New IS routes"
+/
+   bf-bof-bat "best available tech blast furnace basic oxygen furnace"
+   dr-eaf-bat "best available tech direct reduction electric arc furnace"
+   scrap-eaf   "best available tech scrap electric arc furnace"
+/
+*---
 
-ISTECH_NEW    "New IS routes (BAT, CCS, H₂‑DR)"
-    / 
-    BF_BOF_BAT 
-    DR_EAF_BAT
-    SCRAP_EAF_BAT
-    OSR_BOF
-    BF_BOF_CCS
-    DR_EAF_CCS
-    OSR_BOF_CCS
-    H2_DR_EAF 
-    /
-
-
-SECTTECH_IS(ISTECH,EF)  "Mapping of IS technologies to energy forms"
-    / 
-    BF_BOF.(LGN,HCL,CRO,LPG,GSL,KRS,GDO,RFO,OLQ,NGS,OGS,ELC,
-                     BMSWAS,STE1AL,STE1AH,STE1AD,STE1AR,STE1AG,STE1AB)
-    DR_EAF.(HCL,NGS,ELC)
-    SCRAP_EAF.(HCL,NGS,ELC)
-    OSR_BOF.(LGN,HCL,CRO,LPG,GSL,KRS,GDO,RFO,OLQ,NGS,OGS,ELC,
-                     BMSWAS,STE1AL,STE1AH,STE1AD,STE1AR,STE1AG,STE1AB)
-    BF_BOF_BAT.(LGN,HCL,CRO,LPG,GSL,KRS,GDO,RFO,OLQ,NGS,OGS,ELC,
-                     BMSWAS,STE1AL,STE1AH,STE1AD,STE1AR,STE1AG,STE1AB)
-    DR_EAF_BAT.(HCL,NGS,ELC)
-    SCRAP_EAF_BAT.(HCL,NGS,ELC,H2F)
-    OSR_BOF_BAT.(LGN,HCL,CRO,LPG,GSL,KRS,GDO,RFO,OLQ,NGS,OGS,ELC,
-                     BMSWAS,STE1AL,STE1AH,STE1AD,STE1AR,STE1AG,STE1AB)
-    BF_BOF_CCS.(LGN,HCL,CRO,LPG,GSL,KRS,GDO,RFO,OLQ,NGS,OGS,ELC,
-                     BMSWAS,STE1AL,STE1AH,STE1AD,STE1AR,STE1AG,STE1AB)
-    DR_EAF_CCS.(HCL,NGS,ELC,H2F)
-    OSR_BOF_CCS.(LGN,HCL,CRO,LPG,GSL,KRS,GDO,RFO,OLQ,NGS,OGS,ELC,
-                     BMSWAS,STE1AL,STE1AH,STE1AD,STE1AR,STE1AG,STE1AB)
-    H2_DR_EAF.(H2F,ELC,NGS,HCL,BMSWAS)
-    / 
-;
-
+ISTECHEFtoEF(ISTECH_HIST,EF) "Mapping between IS technologies and fuels"
+/
+bf-bof.(hcl, ngs),
+dr-eaf.(ngs),
+scrap-eaf.(elc)
+/
+*---
