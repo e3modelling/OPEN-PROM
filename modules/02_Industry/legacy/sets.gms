@@ -18,7 +18,7 @@ ISTECH_NEW   "New IS routes"
 /
 *---
 
-ISTECHEFtoEF(ISTECH_HIST,EF) "Mapping between IS technologies and fuels"
+ISTECH_HISTtoEF(ISTECH_HIST,EF) "Mapping between IS technologies and fuels"
 /
 bf-bof.(hcl, ngs),
 dr-eaf.(ngs),
