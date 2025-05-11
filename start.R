@@ -11,8 +11,6 @@ uploadGDX = FALSE # Set to TRUE to include GDX files in the uploaded archive
 
 saveMetadata<- function(DevMode) {
 
-saveMetadata<- function(DevMode) {
-
   # Gather Git information with system calls
   commit_author <- system("git log -1 --format=%an", intern = TRUE)
   commit_hash <- system("git log -1 --format=%H", intern = TRUE)
@@ -21,6 +19,9 @@ saveMetadata<- function(DevMode) {
   branch_name <- system("git rev-parse --abbrev-ref HEAD", intern = TRUE)
   git_status <- system("git status -s", intern = TRUE)
   system("git diff --output=git_diff.txt")
+  
+  if(length(git_status) == 0) git_status <- "There are no changes made."
+  
   
   if(length(git_status) == 0) git_status <- "There are no changes made."
   
@@ -34,12 +35,15 @@ saveMetadata<- function(DevMode) {
     "Date" = commit_date
   )
  
+ 
   # Save the appropriate region mapping for each type of run (Development / Research).
   if(DevMode == 0) {
     
     mapping <- "regionmappingOPDEV3.csv"
 
+
   } else if (DevMode == 1) {
+
 
     mapping <- "regionmappingOPDEV2.csv"
   }
@@ -48,9 +52,12 @@ saveMetadata<- function(DevMode) {
   run_desc <- NULL
   if (file.exists('config.json')) {
     config <- fromJSON('config.json')
+  if (file.exists('config.json')) {
+    config <- fromJSON('config.json')
     desc_config <- config$description
   }
 
+  if(!is.null(desc_config) && nzchar(trimws(desc_config)) ) {
   if(!is.null(desc_config) && nzchar(trimws(desc_config)) ) {
     run_desc <- desc_config
 
@@ -69,7 +76,9 @@ saveMetadata<- function(DevMode) {
   json_data <- toJSON(data_to_save, pretty = TRUE)
   write(json_data, file = "metadata.json")
   
+  
   cat("Metadata has been saved to metadata.json\n")
+  
   
 }
 
@@ -77,7 +86,9 @@ saveMetadata<- function(DevMode) {
 
 createRunFolder <- function(scenario = "default") {
 
+
   # generate name of run folder
+  folderName <- paste(scenario, format(Sys.time(), "%Y-%m-%d_%H-%M-%S"), sep="_")
   folderName <- paste(scenario, format(Sys.time(), "%Y-%m-%d_%H-%M-%S"), sep="_")
 
   # create run folder under /runs
@@ -90,17 +101,25 @@ createRunFolder <- function(scenario = "default") {
   file.copy(grep(".csv$",dir(), value = TRUE), to = runfolder)
   file.copy(grep("*.R$",dir(), value = TRUE), to = runfolder)
   file.copy(grep("*.json$",dir(), value = TRUE), to = runfolder)
+  file.copy(grep(".gms$",dir(), value = TRUE), to = runfolder)
+  file.copy(grep(".csv$",dir(), value = TRUE), to = runfolder)
+  file.copy(grep("*.R$",dir(), value = TRUE), to = runfolder)
+  file.copy(grep("*.json$",dir(), value = TRUE), to = runfolder)
   file.copy("conopt.opt", to = runfolder)
+  file.copy("git_diff.txt", to = runfolder)  
   file.copy("git_diff.txt", to = runfolder)  
   file.copy("data", to = runfolder, recursive = TRUE)
   file.copy("core", to = runfolder, recursive = TRUE)
   file.copy("modules", to = runfolder, recursive = TRUE)
+  
   
   # switch to the run folder
   setwd(runfolder)
 }
 
 ### Define a function that archives and uploads each model run to a cloud
+syncRun<- function() {
+
 syncRun<- function() {
 
   folder_path <- getwd()
@@ -111,6 +130,7 @@ syncRun<- function() {
 
   # Include GDX files based on user preference
   if(uploadGDX) {
+  if(uploadGDX) {
     files_to_archive <- all_files
   } else {
     files_to_archive <- all_files[!grepl("\\.gdx$", all_files, ignore.case = TRUE)]
@@ -120,8 +140,13 @@ syncRun<- function() {
   if (file.exists('config.json')) {
 
     config <- fromJSON('config.json')
+  if (file.exists('config.json')) {
+
+    config <- fromJSON('config.json')
     model_runs_path <- config$model_runs_path
 
+    if(!is.null(model_runs_path) && file.exists(model_runs_path) && file.info(model_runs_path)$isdir) {
+     
     if(!is.null(model_runs_path) && file.exists(model_runs_path) && file.info(model_runs_path)$isdir) {
      
       # Copy the archive to the user-specified directory
@@ -129,13 +154,20 @@ syncRun<- function() {
 
       destination_path <- file.path(model_runs_path, basename(archive_name))
       if( file.copy(archive_name, destination_path, overwrite = TRUE) ) {
+      if( file.copy(archive_name, destination_path, overwrite = TRUE) ) {
         cat("File copied successfully to", destination_path, "\n")
+      } 
+
       } 
 
     } else {
       cat("Please enter a valid model runs SharePoint directory path.\n")
       quit()      
+      quit()      
     }
+
+  } else if (!file.exists('config.json')) {
+
 
   } else if (!file.exists('config.json')) {
 
@@ -148,13 +180,17 @@ syncRun<- function() {
     file.remove(archive_name)
   }
   
+  
 }
 
 ### Define a function that returns the scenario name
 setScenarioName <- function(scen_default) {
 
+
   scen_config <- NULL
   # Reading the scenario name from config file
+  if (file.exists('config.json')) {
+    config <- fromJSON('config.json')
   if (file.exists('config.json')) {
     config <- fromJSON('config.json')
     scen_config <- config$scenario_name
@@ -162,7 +198,9 @@ setScenarioName <- function(scen_default) {
 
   # Checking if the scenario name is NULL or empty string
   if(!is.null(scen_config) && nzchar(trimws(scen_config)) ) {
+  if(!is.null(scen_config) && nzchar(trimws(scen_config)) ) {
     scen <- scen_config
+  
   
   } else {
     # If the config scenario name is not valid, get the default one
@@ -170,7 +208,9 @@ setScenarioName <- function(scen_default) {
     cat("Invalid scenario name or missing config file, setting default name.\n")
     scen <- scen_default
 
+
   }
+  
   
   return(scen)
 }
@@ -180,18 +220,28 @@ setScenarioName <- function(scen_default) {
 # Optionally setting a custom GAMS path
 if (file.exists('config.json')) {
   config <- fromJSON('config.json')
+if (file.exists('config.json')) {
+  config <- fromJSON('config.json')
   gams_path <- config$gams_path
 
   # Checking if the specified path exists and is a directory
   if(!is.null(gams_path) && file.exists(gams_path) && file.info(gams_path)$isdir) {
     gams <- paste0(gams_path,'gams')
 
+  if(!is.null(gams_path) && file.exists(gams_path) && file.info(gams_path)$isdir) {
+    gams <- paste0(gams_path,'gams')
+
   } else {
     cat("The specified custom GAMS path is not valid. Using the default path.\n")
     gams <- 'gams'
+    gams <- 'gams'
   }
 
+
 } else {
+
+# Use the default gams command if config.json doesn't exist.
+  gams <- 'gams'
 
 # Use the default gams command if config.json doesn't exist.
   gams <- 'gams'
@@ -204,6 +254,7 @@ task <- NULL
 for (arg in args) {
   key_value <- strsplit(arg, "=")[[1]]
   
+  
   if (key_value[1] == "task") {
     task <- as.numeric(key_value[2])
   }
@@ -215,7 +266,13 @@ if (!is.null(task) && task == 0) {
     # Running task OPEN-PROM DEV
     saveMetadata(DevMode = 1)
     if(withRunFolder) createRunFolder(setScenarioName("DEV"))
+if (!is.null(task) && task == 0) {
 
+    # Running task OPEN-PROM DEV
+    saveMetadata(DevMode = 1)
+    if(withRunFolder) createRunFolder(setScenarioName("DEV"))
+
+    shell(paste0(gams,' main.gms --DevMode=1 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log'))
     shell(paste0(gams,' main.gms --DevMode=1 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log'))
 
     if(withRunFolder && withSync) syncRun()
@@ -225,31 +282,46 @@ if (!is.null(task) && task == 0) {
     # Running task OPEN-PROM DEV NEW DATA
     saveMetadata(DevMode = 1)
     if(withRunFolder) createRunFolder(setScenarioName("DEVNEWDATA"))
+    if(withRunFolder && withSync) syncRun()
+
+} else if (!is.null(task) && task == 1) {
+
+    # Running task OPEN-PROM DEV NEW DATA
+    saveMetadata(DevMode = 1)
+    if(withRunFolder) createRunFolder(setScenarioName("DEVNEWDATA"))
 
     shell(paste0(gams,' main.gms --DevMode=1 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 | tee full.log'))
+    shell(paste0(gams,' main.gms --DevMode=1 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 | tee full.log'))
 
-  if (withRunFolder) {
-    file.copy("data", to = "../../", recursive = TRUE) # Copying generated data to parent folder for future runs
+    if(withRunFolder) {
+      file.copy("data", to = '../../', recursive = TRUE) # Copying generated data to parent folder for future runs
+      
+      if(withSync) syncRun()
+    }        
 
-    if (withSync) syncRun()
-  }
-} else if (task == 2) {
-  # Running task OPEN-PROM RESEARCH
-  saveMetadata(DevMode = 0)
-  if (withRunFolder) createRunFolder(setScenarioName("RES"))
+} else if (!is.null(task) && task == 2) {
+    
+    # Running task OPEN-PROM RESEARCH
+    saveMetadata(DevMode = 0)
+    if(withRunFolder) createRunFolder(setScenarioName("RES"))
 
-  shell(paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log"))
+    shell(paste0(gams,' main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log'))
 
     if(withRunFolder && withReport) {
+    if(withRunFolder && withReport) {
 
-  if (withRunFolder && withReport) {
-    run_path <- getwd()
-    setwd("../../") # Going back to root folder
-    cat("Executing the report output script\n")
-    report_cmd <- paste0("RScript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
-    shell(report_cmd)
-  }
-} else if (task == 3) {
+      run_path <- getwd()
+      setwd("../../") # Going back to root folder
+      cat("Executing the report output script\n")
+      report_cmd <- paste0("RScript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
+      shell(report_cmd)
+      setwd(run_path)
+    } 
+
+    if(withRunFolder && withSync) syncRun()
+
+} else if (!is.null(task) && task == 3) {
+    
     # Running task OPEN-PROM RESEARCH NEW DATA
     saveMetadata(DevMode = 0)
     if(withRunFolder) createRunFolder(setScenarioName("RESNEWDATA"))
@@ -274,9 +346,11 @@ if (!is.null(task) && task == 0) {
 
     if(withRunFolder && withSync) syncRun()
 
-} else if (task == 4) {
+} else if (!is.null(task) && task == 4) {
   
   # Debugging mode
+  shell(paste0(gams,' main.gms -logOption 4 -a=ce -Idir=./data 2>&1 | tee full.log'))
+
   shell(paste0(gams,' main.gms -logOption 4 -a=ce -Idir=./data 2>&1 | tee full.log'))
 
 }
