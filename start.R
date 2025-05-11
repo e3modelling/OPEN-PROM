@@ -278,6 +278,6 @@ if (!is.null(task) && task == 0) {
 } else if (!is.null(task) && task == 4) {
   
   # Debugging mode
-  shell(paste0(gams,' main.gms -logOption 4 -Idir=./data 2>&1 | tee full.log'))
+  shell(paste0(gams,' main.gms -logOption 4 -a=ce -Idir=./data 2>&1 | tee full.log'))
 
 }
