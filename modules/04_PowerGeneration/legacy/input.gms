@@ -82,8 +82,8 @@ $include "./iMatFacPlaAvailCap.csv"
 $offdelim
 ;
 iMatFacPlaAvailCap.L(runCy,PGALL,YTIME) = iMatFacPlaAvailCapL(runCy,PGALL,YTIME);
-iMatFacPlaAvailCap.LO(runCy, PGALL, YTIME) = 0.0001;
-iMatFacPlaAvailCap.UP(runCy, PGALL, YTIME) = 50;
+iMatFacPlaAvailCap.LO(runCy, PGALL, YTIME) = 0.00001;
+iMatFacPlaAvailCap.UP(runCy, PGALL, YTIME) = 60;
 $ELSE.calib
 table iMatFacPlaAvailCap(allCy,PGALL,YTIME) "Maturity factor related to plant available capacity (1)"
 $ondelim
@@ -100,8 +100,8 @@ $include "./iMatureFacPlaDisp.csv"
 $offdelim
 ;
 iMatureFacPlaDisp.L(runCy,PGALL,YTIME) = iMatureFacPlaDispL(runCy,PGALL,YTIME);
-iMatureFacPlaDisp.LO(runCy, PGALL, YTIME) = 0.0001;
-iMatureFacPlaDisp.UP(runCy, PGALL, YTIME) = 500; !!5 * iMatureFacPlaDispL("USA", PGALL, YTIME);
+iMatureFacPlaDisp.LO(runCy, PGALL, YTIME) = 0.00001;
+iMatureFacPlaDisp.UP(runCy, PGALL, YTIME) = 600; !!5 * iMatureFacPlaDispL("USA", PGALL, YTIME);
 $ELSE.calib
 table iMatureFacPlaDisp(allCy,PGALL,YTIME) "Maturity factor related to plant dispatching (1)"
 $ondelim

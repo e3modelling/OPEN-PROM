@@ -4,6 +4,7 @@
 Equations
 *' *** Power Generation
 QCapElec2(allCy,PGALL,YTIME)	                           "Compute electricity generation capacity"
+QCapElecNominal(allCy,PGALL,YTIME)	                     "Compute nominal electricity generation capacity"
 *qScalFacPlantDispatchExpr(allCy,PGALL,HOUR,YTIME)		   "Scaling factor for plant dispatching"		
 QRenTechMatMultExpr(allCy,PGALL,YTIME)                     "Renewable power capacity over potential (1)"
 QPotRenCurr(allCy,PGRENEF,YTIME)	                       "Compute current renewable potential"
@@ -69,8 +70,9 @@ QCostPowGenAvgLng(allCy,ESET,YTIME)	                       "Compute long term po
 Variables
 *' *** Power Generation Variables
 VCapElec2(allCy,PGALL,YTIME)	                           "Electricity generation plants capacity (GW)"
+VCapElecNominal(allCy,PGALL,YTIME)	                     "Nominal electricity generation plants capacity (GW)"
 *vScalFacPlantDispatchExpr(allCy,PGALL,HOUR,YTIME)         "Scaling factor for plant dispatching"
-VRenTechMatMultExpr(allCy,PGALL,YTIME)                     "Renewable power capacity over potential (1)"
+VRenTechMatMultExpr(allCy,PGALL,YTIME)                   "Renewable power capacity over potential (1)"
 VPotRenCurr(allCy,PGRENEF,YTIME)	                       "Current renewable potential (GW)"			
 VCapElecCHP(allCy,CHP,YTIME)	                           "Capacity of CHP Plants (GW)"
 VLambda(allCy,YTIME)	                                   "Parameter for load curve construction (1)"
