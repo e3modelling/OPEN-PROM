@@ -193,13 +193,13 @@ QCostAvgProdH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)$(TIME(YTIME) $H2TECHEFtoEF(H2TECH,EF) $(runCy(allCy)))..
          VConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)
          =E=
-         (VProdH2(allCy,H2TECH,YTIME)/iEffH2Prod(allCy,H2TECH,YTIME))$(sameas(YTIME,"2021"))
+         (VProdH2(allCy,H2TECH,YTIME)/iEffH2Prod(allCy,H2TECH,YTIME))$(sameas(YTIME,"%fBaseY%"))
          +
          (
          VConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME-1)*
          (VProdH2(allCy,H2TECH,YTIME)/iEffH2Prod(allCy,H2TECH,YTIME))/
          (VProdH2(allCy,H2TECH,YTIME-1)/iEffH2Prod(allCy,H2TECH,YTIME-1))
-         )$(not sameas(YTIME,"2021"))
+         )$(not sameas(YTIME,"%fBaseY%"))
 ;
 
 *' This equation aggregates the total fuel consumption across all hydrogen production technologies in the system,

@@ -36,7 +36,7 @@ iFinEneConsPrevYear(runCy,EFS,YTIME)$(not An(YTIME)) = iFinEneCons(runCy,EFS,YTI
 *'                **Interdependent Variables**
 
 *---
-VRenValue.l(YTIME)=1;
+VRenValue.L(YTIME) = 1;
 VRenValue.FX(YTIME) = 0 ;
 *---
 VElecConsHeatPla.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = iFuelConsPerFueSub(runCy,INDDOM,"ELC",YTIME)*(1-iShrNonSubElecInTotElecDem(runCy,INDDOM))*iShrHeatPumpElecCons(runCy,INDDOM);
@@ -44,7 +44,7 @@ VElecConsHeatPla.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = iFuelConsPerFueSub(run
 VElecConsHeatPla.FX(runCy,INDDOM,YTIME) = 1E-7;
 *---
 VCarVal.FX(runCy,"TRADE",YTIME) = sExogCarbValue*iCarbValYrExog(runCy,YTIME);
-VCarVal.FX(runCy,"NOTRADE",YTIME) =sExogCarbValue*iCarbValYrExog(runCy,YTIME);
+VCarVal.FX(runCy,"NOTRADE",YTIME) = sExogCarbValue*iCarbValYrExog(runCy,YTIME);
 *---
 openprom.optfile=1;
 *---
