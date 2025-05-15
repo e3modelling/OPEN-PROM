@@ -3,11 +3,11 @@
 
 *'                *VARIABLE INITIALISATION*
 *---
+VCostTotH2.L(runCy,SBS,YTIME) = 2;
 VCostTotH2.FX(runCy,TRANSE,"2010") = iFuelPrice(runCy,TRANSE,"H2F","2010"); 
 VCostTotH2.FX(runCy,"PG","2010") = iFuelPrice(runCy,"PG","H2F","2010"); 
 VCostTotH2.FX(runCy,INDDOM,"2010") = iFuelPrice(runCy,INDDOM,"STE1AH2F","2010"); 
 VCostTotH2.FX(runCy,SBS,YTIME)$(not An(YTIME)) = 1e-5;
-VCostTotH2.L(runCy,SBS,YTIME) = 2;
 display VCostTotH2.L;
 *---
 VGapShareH2Tech1.L(runCy,H2TECH,YTIME) = 2;

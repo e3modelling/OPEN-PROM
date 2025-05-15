@@ -26,5 +26,5 @@ date-released: 2024-05-13
 repository-code: https://github.com/e3modelling/OPEN-PROM
 keywords:
   - prometheus
-license: CC0
+license: GNU AGPLv3
 
