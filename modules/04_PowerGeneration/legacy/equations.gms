@@ -24,9 +24,11 @@ QPotRenCurr(allCy,PGRENEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QCapElecCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VCapElecCHP(allCy,CHP,YTIME)
          =E=
-         1/sTWhToMtoe * sum(INDDOM,VConsFuel(allCy,INDDOM,CHP,YTIME)) * VPriceElecInd(allCy,YTIME)/
-         sum(PGALL$CHPtoEON(CHP,PGALL),iAvailRate(PGALL,YTIME)) /
-         iUtilRateChpPlants(allCy,CHP,YTIME) /sGwToTwhPerYear;  
+         sum(INDDOM,VConsFuel(allCy,INDDOM,CHP,YTIME)) * 1/sTWhToMtoe *
+         VPriceElecInd(allCy,YTIME) / 
+         sum(PGALL$CHPtoEON(CHP,PGALL), iAvailRate(PGALL,YTIME)) / 
+         iUtilRateChpPlants(allCy,CHP,YTIME) /
+         sGwToTwhPerYear;  
 
 *' The "Lambda" parameter is computed in the context of electricity demand modeling. This formula captures the relationship between the load curve construction parameter
 *' and the ratio of the differences in electricity demand and corrected base load to the difference between peak load and corrected base load. It plays a role in shaping
@@ -121,18 +123,23 @@ QCostHourProdInvDec(allCy,PGALL,HOUR,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VCostHourProdInvDec(allCy,PGALL,HOUR,YTIME)
                   =E=
                   
-                    ( ( iDisc(allCy,"PG",YTIME-1) * exp(iDisc(allCy,"PG",YTIME-1)*iTechLftPlaType(allCy,PGALL))
-                        / (exp(iDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL)) -1))
-                      * iGrossCapCosSubRen(allCy,PGALL,YTIME-1)* 1E3 * iCGI(allCy,YTIME-1)  + iFixOandMCost(allCy,PGALL,YTIME-1)
-                    )/iAvailRate(PGALL,YTIME-1) / (1000*(ord(HOUR)-1+0.25))
-                    + iVarCost(PGALL,YTIME-1)/1E3 + (VRenValue(YTIME-1)*8.6e-5)$( not ( PGREN(PGALL) 
-                    $(not sameas("PGASHYD",PGALL)) $(not sameas("PGSHYD",PGALL)) $(not sameas("PGLHYD",PGALL)) ))
-                    + sum(PGEF$PGALLtoEF(PGALL,PGEF), (VPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME-1)+
-                        iCO2CaptRate(allCy,PGALL,YTIME-1)*VCstCO2SeqCsts(allCy,YTIME-1)*1e-3*
-                    iCo2EmiFac(allCy,"PG",PGEF,YTIME-1)
-                         +(1-iCO2CaptRate(allCy,PGALL,YTIME-1))*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME-1)*
-                         (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(allCy,NAP,YTIME-1))))
-                         *sTWhToMtoe/iPlantEffByType(allCy,PGALL,YTIME-1))$(not PGREN(PGALL));
+        ( 
+          ( 
+            iDisc(allCy,"PG",YTIME-1) * exp(iDisc(allCy,"PG",YTIME-1) * iTechLftPlaType(allCy,PGALL)) /
+            (exp(iDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL)) -1)
+          ) *
+          iGrossCapCosSubRen(allCy,PGALL,YTIME-1) * 1E3 * iCGI(allCy,YTIME-1)  + iFixOandMCost(allCy,PGALL,YTIME-1)
+        ) /
+        iAvailRate(PGALL,YTIME-1) / (1000*(ord(HOUR)-1+0.25))
+        + iVarCost(PGALL,YTIME-1) / 1E3 + 
+        (VRenValue(YTIME-1)*8.6e-5)$(not (PGREN(PGALL)$(not sameas("PGASHYD",PGALL)) $(not sameas("PGSHYD",PGALL)) $(not sameas("PGLHYD",PGALL)) )) +
+        sum(PGEF$PGALLtoEF(PGALL,PGEF), 
+          (VPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME-1) +
+          iCO2CaptRate(allCy,PGALL,YTIME-1) * VCstCO2SeqCsts(allCy,YTIME-1) * 1e-3 * iCo2EmiFac(allCy,"PG",PGEF,YTIME-1) +
+          (1-iCO2CaptRate(allCy,PGALL,YTIME-1)) * 1e-3 * iCo2EmiFac(allCy,"PG",PGEF,YTIME-1) *
+          (sum(NAP$NAPtoALLSBS(NAP,"PG"), VCarVal(allCy,NAP,YTIME-1)))
+          ) * sTWhToMtoe / iPlantEffByType(allCy,PGALL,YTIME-1)
+        )$(not PGREN(PGALL));
 
 *' The equation calculates the hourly production cost for
 *' a given technology without carbon capture and storage investments. 
@@ -269,7 +276,7 @@ QIndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(allC
 QCapElecNonCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       VCapElecNonCHP(allCy,YTIME)
           =E=
-      VCapElecTotEst(allCy,YTIME) - SUM(CHP,VCapElecCHP(allCy,CHP,YTIME)*0.85);      
+      VCapElecTotEst(allCy,YTIME) - SUM(CHP,VCapElecCHP(allCy,CHP,YTIME) * 0.85 * 0.5);      
 
 *' In essence, the equation evaluates the difference between the current and expected power generation capacity, accounting for various factors such as planned capacity,
 *' decommissioning schedules, and endogenous scrapping. The square root term introduces a degree of tolerance in the calculation.
@@ -278,19 +285,21 @@ QGapGenCapPowerDiff(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
             =E=
         (
           (
-            VCapElecNonCHP(allCy,YTIME) -
-            VCapElecNonCHP(allCy,YTIME-1) +
+            VCapElecNonCHP(allCy,YTIME) - VCapElecNonCHP(allCy,YTIME-1) +
             sum(PGALL, VCapElec2(allCy,PGALL,YTIME-1) * (1 - VIndxEndogScrap(allCy,PGALL,YTIME))) +
             sum(PGALL, (iPlantDecomSched(allCy,PGALL,YTIME) - iDecInvPlantSched(allCy,PGALL,YTIME)) * iAvailRate(PGALL,YTIME)) + 
             sum(PGALL$PGSCRN(PGALL),
               (VCapElec(allCy,PGALL,YTIME-1) - iPlantDecomSched(allCy,PGALL,YTIME) * iAvailRate(PGALL,YTIME)) /
               iTechLftPlaType(allCy,PGALL))
           ) + 0 +
-        SQRT( SQR(       (  VCapElecNonCHP(allCy,YTIME) - VCapElecNonCHP(allCy,YTIME-1) +
-        sum(PGALL,VCapElec2(allCy,PGALL,YTIME-1) * (1 - VIndxEndogScrap(allCy,PGALL,YTIME))) +
-          sum(PGALL, (iPlantDecomSched(allCy,PGALL,YTIME)-iDecInvPlantSched(allCy,PGALL,YTIME))*iAvailRate(PGALL,YTIME))
-          + Sum(PGALL$PGSCRN(PGALL), (VCapElec(allCy,PGALL,YTIME-1)-iPlantDecomSched(allCy,PGALL,YTIME)*iAvailRate(PGALL,YTIME))/
-          iTechLftPlaType(allCy,PGALL))
+          SQRT(SQR(
+          (
+            VCapElecNonCHP(allCy,YTIME) - VCapElecNonCHP(allCy,YTIME-1) +
+            sum(PGALL,VCapElec2(allCy,PGALL,YTIME-1) * (1 - VIndxEndogScrap(allCy,PGALL,YTIME))) +
+            sum(PGALL, (iPlantDecomSched(allCy,PGALL,YTIME) - iDecInvPlantSched(allCy,PGALL,YTIME)) * iAvailRate(PGALL,YTIME)) +
+            sum(PGALL$PGSCRN(PGALL), 
+              (VCapElec(allCy,PGALL,YTIME-1) - iPlantDecomSched(allCy,PGALL,YTIME) * iAvailRate(PGALL,YTIME)) /
+              iTechLftPlaType(allCy,PGALL))
        ) -0) + SQR(1e-10) ) 
        )/2;
 
@@ -409,9 +418,8 @@ QNewInvElec(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QSharePowPlaNewEq(allCy,PGALL,YTIME)$(TIME(YTIME) $runCy(allCy)) ..
         VSharePowPlaNewEq(allCy,PGALL,YTIME)
              =E=
-         ( VScalWeibullSum(allCy,PGALL,YTIME)/ VNewInvElec(allCy,YTIME))$(not CCS(PGALL))
-          +
-          sum(NOCCS$CCS_NOCCS(PGALL,NOCCS),VSharePowPlaNewEq(allCy,NOCCS,YTIME))$CCS(PGALL);
+        (VScalWeibullSum(allCy,PGALL,YTIME)/ VNewInvElec(allCy,YTIME))$(not CCS(PGALL)) +
+        sum(NOCCS$CCS_NOCCS(PGALL,NOCCS),VSharePowPlaNewEq(allCy,NOCCS,YTIME))$CCS(PGALL);
 
 *' This equation calculates the variable representing the electricity generation capacity for a specific power plant in a given country
 *' and time period. The calculation takes into account various factors related to new investments, decommissioning, and technology-specific parameters.
@@ -526,7 +534,7 @@ QScalFacPlantDispatch(allCy,HOUR,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         sum(PGALL,
           (
             VCapOverall(allCy,PGALL,YTIME) +
-            sum(CHP$CHPtoEON(CHP,PGALL), VCapElecCHP(allCy,CHP,YTIME) * 0.85) !!
+            sum(CHP$CHPtoEON(CHP,PGALL), VCapElecCHP(allCy,CHP,YTIME) * 0.85 * 0.5) !!
           ) *
           exp(-VScalFacPlaDisp(allCy,HOUR,YTIME) / VSortPlantDispatch(allCy,PGALL,YTIME))
         )
@@ -544,7 +552,7 @@ QProdElecEstCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
             =E=
         (
           (1/0.086 * sum((INDDOM,CHP), VConsFuel(allCy,INDDOM,CHP,YTIME)) * VPriceElecInd(allCy,YTIME)) + 
-          iMxmShareChpElec(allCy,YTIME)*VDemElecTot(allCy,YTIME) - 
+          iMxmShareChpElec(allCy,YTIME) * VDemElecTot(allCy,YTIME) - 
           SQRT( SQR((1/0.086 * sum((INDDOM,CHP), VConsFuel(allCy,INDDOM,CHP,YTIME)) * 
           VPriceElecInd(allCy,YTIME)) - 
           iMxmShareChpElec(allCy,YTIME)*VDemElecTot(allCy,YTIME)) + SQR(1E-4) ) 
@@ -568,7 +576,7 @@ QProdElecReqCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                 =E=
         sum(hour,
           sum(CHP, 
-            VCapElecCHP(allCy,CHP,YTIME) * 0.85 *
+            VCapElecCHP(allCy,CHP,YTIME) * 0.85 * 0.5 *
             exp(-VScalFacPlaDisp(allCy,HOUR,YTIME) / sum(pgall$chptoeon(chp,pgall), VSortPlantDispatch(allCy,PGALL,YTIME)))
           )
         );
