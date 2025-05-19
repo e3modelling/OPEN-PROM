@@ -74,9 +74,9 @@
         },
 
         {
-            "label": "REPORTING",
+            "label": "CALIBRATE",
             "type": "shell",
-            "command": "Rscript reportOutput.R",
+            "command": "Rscript start.R task=5",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -104,7 +104,7 @@
         {
             "label": "COMPARE SCENARIOS",
             "type": "shell",
-            "command": "Rscript reportOutput.R",
+            "command": "Rscript start task=5.R",
             "problemMatcher": [],
             "group": {
                 "kind": "build",

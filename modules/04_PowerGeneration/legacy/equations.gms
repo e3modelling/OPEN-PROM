@@ -276,7 +276,7 @@ QIndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(allC
 QCapElecNonCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       VCapElecNonCHP(allCy,YTIME)
           =E=
-      VCapElecTotEst(allCy,YTIME) - SUM(CHP,VCapElecCHP(allCy,CHP,YTIME) * 0.85 * 0.5);      
+      VCapElecTotEst(allCy,YTIME) - SUM(CHP,VCapElecCHP(allCy,CHP,YTIME) * 0.85);      
 
 *' In essence, the equation evaluates the difference between the current and expected power generation capacity, accounting for various factors such as planned capacity,
 *' decommissioning schedules, and endogenous scrapping. The square root term introduces a degree of tolerance in the calculation.
@@ -534,7 +534,7 @@ QScalFacPlantDispatch(allCy,HOUR,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         sum(PGALL,
           (
             VCapOverall(allCy,PGALL,YTIME) +
-            sum(CHP$CHPtoEON(CHP,PGALL), VCapElecCHP(allCy,CHP,YTIME) * 0.85 * 0.5) !!
+            sum(CHP$CHPtoEON(CHP,PGALL), VCapElecCHP(allCy,CHP,YTIME) * 0.85) !!
           ) *
           exp(-VScalFacPlaDisp(allCy,HOUR,YTIME) / VSortPlantDispatch(allCy,PGALL,YTIME))
         )
@@ -576,7 +576,7 @@ QProdElecReqCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                 =E=
         sum(hour,
           sum(CHP, 
-            VCapElecCHP(allCy,CHP,YTIME) * 0.85 * 0.5 *
+            VCapElecCHP(allCy,CHP,YTIME) * 0.85 * 
             exp(-VScalFacPlaDisp(allCy,HOUR,YTIME) / sum(pgall$chptoeon(chp,pgall), VSortPlantDispatch(allCy,PGALL,YTIME)))
           )
         );

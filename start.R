@@ -257,7 +257,7 @@ if (task == 0) {
   shell(
     paste0(
       gams,
-      " main.gms --DevMode=0 --Calibration=MatCalibration --fEndY=2021 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log"
+      " main.gms --DevMode=0 --Calibration=MatCalibration --fStartY=2021 --fEndY=2021 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log"
     )
   )
 
@@ -267,12 +267,4 @@ if (task == 0) {
   CalibratedParamsPath <- file.path(getwd(), CalibratedParams)
   newPath <- file.path(dirname(dirname(getwd())), "data", CalibratedParams)
   file.rename(CalibratedParamsPath, newPath)
-
-  if (withRunFolder && withReport) {
-    run_path <- getwd()
-    setwd("../../") # Going back to root folder
-    cat("Executing the report output script\n")
-    report_cmd <- paste0("RScript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
-    shell(report_cmd)
-  }
 }

@@ -16,27 +16,22 @@ SQRT(SUM(SECTTECH(DSBS,EF)$(INDDOM(DSBS)), SQR(iFuelConsPerFueSub(allCy,DSBS,EF,
 SQRT(SUM(SECTTECH(TRANSE,EF), SQR(VDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)-iFuelConsPerFueSub(allCy,TRANSE,EF,YTIME)))) +
 0;
 $ELSEIF.calib %Calibration% == MatCalibration
-qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy)).. vDummyObj =e=
-* VSharePowPlaNewEq
-SUM(
-  (PGALL),
-  SQR(
-    VProdElec(allCy, PGALL, YTIME) -
-    VProdElec(allCy, PGALL, YTIME-1)
-  ) 
-) + 
-SUM(
-  (PGALL),
-  SQR(
-    VcapElec(allCy, PGALL, YTIME) -
-    VcapElec(allCy, PGALL, YTIME-1)
-  )
-)
-;
+qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy)).. 
+  vDummyObj 
+      =e=
+  SUM(
+    (PGALL),
+    SQR(
+      VProdElec(allCy,PGALL,YTIME) - 
+      VProdElec(allCy,PGALL,YTIME-1)
+    ) 
+  ) + 
+  SUM(
+    (PGALL),
+    SQR(
+      VcapElec(allCy,PGALL,YTIME) - 
+      iInstCapPast(allCy,PGALL,YTIME) 
+    )
+  );
 $ELSE.calib qDummyObj.. vDummyObj =e= 1;
 $ENDIF.calib
-
-!!SUM(
-!!  (allcy, PGALL),
-!!  SQR(VProdElec(allCy,PGALL,"2022") - VProdElec(allCy,PGALL,"2021"))
-!!)
