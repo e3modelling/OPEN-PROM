@@ -5,7 +5,7 @@ library(jsonlite)
 withRunFolder = TRUE # Set to FALSE to disable model run folder creation and file copying
 withSync = TRUE # Set to FALSE to disable model run sync to SharePoint
 withReport = TRUE # Set to FALSE to disable the report output script execution (applicable to research mode only)
-uploadGDX = FALSE # Set to TRUE to include GDX files in the uploaded archive
+uploadGDX = TRUE # Set to TRUE to include GDX files in the uploaded archive
 
 ### Define function that saves model metadata into a JSON file.
 
@@ -240,8 +240,6 @@ if (!is.null(task) && task == 0) {
 
     shell(paste0(gams,' main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log'))
 
-    if(withRunFolder && withSync) syncRun()
-
     if(withRunFolder && withReport) {
 
       run_path <- getwd()
@@ -250,6 +248,8 @@ if (!is.null(task) && task == 0) {
       report_cmd <- paste0("RScript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
       shell(report_cmd)
     } 
+
+    if(withRunFolder && withSync) syncRun()
 
 } else if (!is.null(task) && task == 3) {
     
@@ -259,12 +259,7 @@ if (!is.null(task) && task == 0) {
 
     shell(paste0(gams,' main.gms --DevMode=0 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 | tee full.log'))
 
-    if(withRunFolder) {
-      file.copy("data", to = '../../', recursive = TRUE)
-
-      if(withSync) syncRun()
-
-    }    
+    if(withRunFolder) file.copy("data", to = '../../', recursive = TRUE)  
 
     if(withRunFolder && withReport) {
 
@@ -274,6 +269,8 @@ if (!is.null(task) && task == 0) {
       report_cmd <- paste0("RScript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
       shell(report_cmd)
     } 
+
+    if(withRunFolder && withSync) syncRun()
 
 } else if (!is.null(task) && task == 4) {
   
