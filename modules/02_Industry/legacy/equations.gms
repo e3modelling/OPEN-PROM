@@ -100,16 +100,11 @@ QIndxElecIndPrices(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         VIndxElecIndPrices(allCy,YTIME)
                 =E=
         VPriceElecInd(allCy,YTIME-1) * 
-        (
-          (
-            VPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)/VPriceFuelAvgSub(allCy,"OI",YTIME-1) /
-            VPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-2)/VPriceFuelAvgSub(allCy,"OI",YTIME-2)
-          ) ** (0.6) *
-          (
-            VPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-2)/VPriceFuelAvgSub(allCy,"OI",YTIME-2) /
-            VPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-3)/VPriceFuelAvgSub(allCy,"OI",YTIME-3) 
-          ) ** (0.4)
-        );
+        (VPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)/VPriceFuelAvgSub(allCy,"OI",YTIME-1)) ** (0.6) *
+        (VPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-2)/VPriceFuelAvgSub(allCy,"OI",YTIME-2)) ** (0.3) *
+        (VPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-3)/VPriceFuelAvgSub(allCy,"OI",YTIME-3)) ** (0.1)
+        
+        ;
 
 *' The equation computes the electricity production cost per Combined Heat and Power plant for a specific demand sector within a given subsector.
 *' The cost is determined based on various factors, including the discount rate, technical lifetime of CHP plants, capital cost, fixed O&M cost, availability rate,

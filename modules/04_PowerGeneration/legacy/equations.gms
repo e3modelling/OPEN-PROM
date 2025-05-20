@@ -551,12 +551,15 @@ QProdElecEstCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         VProdElecEstCHP(allCy,YTIME) 
             =E=
         (
-          (1/0.086 * sum((INDDOM,CHP), VConsFuel(allCy,INDDOM,CHP,YTIME)) * VPriceElecInd(allCy,YTIME)) + 
+          (1/0.086 * 
+          sum((INDDOM,CHP), VConsFuel(allCy,INDDOM,CHP,YTIME)) * VPriceElecInd(allCy,YTIME)) + 
           iMxmShareChpElec(allCy,YTIME) * VDemElecTot(allCy,YTIME) - 
+          
           SQRT( SQR((1/0.086 * sum((INDDOM,CHP), VConsFuel(allCy,INDDOM,CHP,YTIME)) * 
           VPriceElecInd(allCy,YTIME)) - 
-          iMxmShareChpElec(allCy,YTIME)*VDemElecTot(allCy,YTIME)) + SQR(1E-4) ) 
-        )/2;
+          iMxmShareChpElec(allCy,YTIME)*VDemElecTot(allCy,YTIME)) )  
+        )/2 +
+        SQR(1E-4);
 
 *' This equation calculates the non-Combined Heat and Power electricity production in a specific country and time period .
 *' It is essentially the difference between the total electricity demand and the estimated electricity generation from CHP plants .In summary,
