@@ -25,7 +25,7 @@ QCapElecCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VCapElecCHP(allCy,CHP,YTIME)
          =E=
          1/sTWhToMtoe * sum(INDDOM,VConsFuel(allCy,INDDOM,CHP,YTIME)) * VPriceElecInd(allCy,YTIME)/
-         sum(PGALL$CHPtoEON(CHP,PGALL),iAvailRate(PGALL,YTIME)) /
+         0.85 /
          iUtilRateChpPlants(allCy,CHP,YTIME) /sGwToTwhPerYear;  
 
 *' The "Lambda" parameter is computed in the context of electricity demand modeling. This formula captures the relationship between the load curve construction parameter
@@ -506,8 +506,8 @@ $offtext
 
 QScalFacPlantDispatch(allCy,HOUR,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          sum(PGALL,
-                 (VCapOverall(allCy,PGALL,YTIME)+
-                 sum(CHP$CHPtoEON(CHP,PGALL),VCapElecCHP(allCy,CHP,YTIME)))*
+                 (VCapOverall(allCy,PGALL,YTIME)
+                 )*
                  exp(-VScalFacPlaDisp(allCy,HOUR,YTIME)/VSortPlantDispatch(allCy,PGALL,YTIME))
                  )
          =E=
@@ -543,8 +543,7 @@ QProdElecNonCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QProdElecReqCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 VProdElecReqCHP(allCy,YTIME) 
                    =E=
-         sum(hour, sum(CHP,VCapElecCHP(allCy,CHP,YTIME)*exp(-VScalFacPlaDisp(allCy,HOUR,YTIME)/ 
-         sum(pgall$chptoeon(chp,pgall),VSortPlantDispatch(allCy,PGALL,YTIME)))));
+         sum(CHP,VProdElecCHP(allCy,CHP,YTIME));
 
 *' This equation calculates the electricity production from power generation plants for a specific country ,
 *' power generation plant type , and time period . The electricity production is determined based on the overall electricity
