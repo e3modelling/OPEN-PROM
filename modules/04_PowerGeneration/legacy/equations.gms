@@ -405,16 +405,23 @@ QSharePowPlaNewEq(allCy,PGALL,YTIME)$(TIME(YTIME) $runCy(allCy)) ..
 QCapElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VCapElec(allCy,PGALL,YTIME)
              =E=
-         (VCapElec2(allCy,PGALL,YTIME-1)*VIndxEndogScrap(allCy,PGALL,YTIME-1)
-          +(VSharePowPlaNewEq(allCy,PGALL,YTIME) * VGapGenCapPowerDiff(allCy,YTIME))$( (not CCS(PGALL)) AND (not NOCCS(PGALL)))
-          +(VSharePowPlaNewEq(allCy,PGALL,YTIME) * VShareNewTechNoCCS(allCy,PGALL,YTIME) * VGapGenCapPowerDiff(allCy,YTIME))$NOCCS(PGALL)
-          +(VSharePowPlaNewEq(allCy,PGALL,YTIME) * VShareNewTechNoCCS(allCy,PGALL,YTIME) * VGapGenCapPowerDiff(allCy,YTIME))$CCS(PGALL)
-          + iDecInvPlantSched(allCy,PGALL,YTIME) * iAvailRate(PGALL,YTIME)
-          - iPlantDecomSched(allCy,PGALL,YTIME) * iAvailRate(PGALL,YTIME)
-         )
-         - ((VCapElec(allCy,PGALL,YTIME-1)-iPlantDecomSched(allCy,PGALL,YTIME-1))* 
+         (VCapElec2(allCy,PGALL,YTIME-1)*VIndxEndogScrap(allCy,PGALL,YTIME-1) +
+          VNewCapElec(allCy,PGALL,YTIME) -
+          iPlantDecomSched(allCy,PGALL,YTIME) * iAvailRate(PGALL,YTIME)
+         ) -
+         ((VCapElec(allCy,PGALL,YTIME-1)-iPlantDecomSched(allCy,PGALL,YTIME-1))* 
          iAvailRate(PGALL,YTIME)*(1/iTechLftPlaType(allCy,PGALL)))$PGSCRN(PGALL);
 
+QNewCapElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+      VNewCapElec(allCy,PGALL,YTIME)
+          =E=
+      (
+        (VSharePowPlaNewEq(allCy,PGALL,YTIME) * VGapGenCapPowerDiff(allCy,YTIME))$( (not CCS(PGALL)) AND (not NOCCS(PGALL))) +
+        (VSharePowPlaNewEq(allCy,PGALL,YTIME) * VShareNewTechNoCCS(allCy,PGALL,YTIME) * VGapGenCapPowerDiff(allCy,YTIME))$NOCCS(PGALL) +
+        (VSharePowPlaNewEq(allCy,PGALL,YTIME) * VShareNewTechNoCCS(allCy,PGALL,YTIME) * VGapGenCapPowerDiff(allCy,YTIME))$CCS(PGALL) +
+        iDecInvPlantSched(allCy,PGALL,YTIME) * iAvailRate(PGALL,YTIME)
+      );
+  
 *' This equation calculates the variable representing the planned electricity generation capacity for a specific power plant  in a given country
 *' and time period. The calculation involves adjusting the actual electricity generation capacity by a small constant and the square
 *' root of the sum of the square of the capacity and a small constant. The purpose of this adjustment is likely to avoid numerical issues and ensure a positive value for
@@ -451,9 +458,10 @@ QSortPlantDispatch(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' in a given country and time period. The calculation involves subtracting the planned electricity generation capacity in the current time period
 *' from the planned capacity in the previous time period. The purpose of this equation is to quantify the increase in electricity generation capacity for renewable
 *' power plants on a yearly basis.
-QNewCapElec(allCy,PGALL,YTIME)$(PGREN(PGALL)$TIME(YTIME)$runCy(allCy))..
-         VNewCapElec(allCy,PGALL,YTIME) =e=
-VCapElec2(allCy,PGALL,YTIME)- VCapElec2(allCy,PGALL,YTIME-1);                       
+QNetNewCapElec(allCy,PGALL,YTIME)$(PGREN(PGALL)$TIME(YTIME)$runCy(allCy))..
+        VNetNewCapElec(allCy,PGALL,YTIME) 
+            =E=
+        VCapElec2(allCy,PGALL,YTIME)- VCapElec2(allCy,PGALL,YTIME-1);                       
 
 *' This equation calculates the variable representing the average capacity factor of renewable energy sources for a specific renewable power plant
 *' in a given country  and time period. The capacity factor is a measure of the actual electricity generation output relative to the maximum
@@ -463,17 +471,17 @@ VCapElec2(allCy,PGALL,YTIME)- VCapElec2(allCy,PGALL,YTIME-1);
 QCFAvgRen(allCy,PGALL,YTIME)$(PGREN(PGALL)$TIME(YTIME)$runCy(allCy))..
    VCFAvgRen(allCy,PGALL,YTIME)
       =E=
-    (iAvailRate(PGALL,YTIME)*VNewCapElec(allCy,PGALL,YTIME)+
-     iAvailRate(PGALL,YTIME-1)*VNewCapElec(allCy,PGALL,YTIME-1)+
-     iAvailRate(PGALL,YTIME-2)*VNewCapElec(allCy,PGALL,YTIME-2)+
-     iAvailRate(PGALL,YTIME-3)*VNewCapElec(allCy,PGALL,YTIME-3)+
-     iAvailRate(PGALL,YTIME-4)*VNewCapElec(allCy,PGALL,YTIME-4)+
-     iAvailRate(PGALL,YTIME-5)*VNewCapElec(allCy,PGALL,YTIME-5)+
-     iAvailRate(PGALL,YTIME-6)*VNewCapElec(allCy,PGALL,YTIME-6)+
-     iAvailRate(PGALL,YTIME-7)*VNewCapElec(allCy,PGALL,YTIME-7))/
-(VNewCapElec(allCy,PGALL,YTIME)+VNewCapElec(allCy,PGALL,YTIME-1)+VNewCapElec(allCy,PGALL,YTIME-2)+
-VNewCapElec(allCy,PGALL,YTIME-3)+VNewCapElec(allCy,PGALL,YTIME-4)+VNewCapElec(allCy,PGALL,YTIME-5)+
-VNewCapElec(allCy,PGALL,YTIME-6)+VNewCapElec(allCy,PGALL,YTIME-7));
+    (iAvailRate(PGALL,YTIME)*VNetNewCapElec(allCy,PGALL,YTIME)+
+     iAvailRate(PGALL,YTIME-1)*VNetNewCapElec(allCy,PGALL,YTIME-1)+
+     iAvailRate(PGALL,YTIME-2)*VNetNewCapElec(allCy,PGALL,YTIME-2)+
+     iAvailRate(PGALL,YTIME-3)*VNetNewCapElec(allCy,PGALL,YTIME-3)+
+     iAvailRate(PGALL,YTIME-4)*VNetNewCapElec(allCy,PGALL,YTIME-4)+
+     iAvailRate(PGALL,YTIME-5)*VNetNewCapElec(allCy,PGALL,YTIME-5)+
+     iAvailRate(PGALL,YTIME-6)*VNetNewCapElec(allCy,PGALL,YTIME-6)+
+     iAvailRate(PGALL,YTIME-7)*VNetNewCapElec(allCy,PGALL,YTIME-7))/
+(VNetNewCapElec(allCy,PGALL,YTIME)+VNetNewCapElec(allCy,PGALL,YTIME-1)+VNetNewCapElec(allCy,PGALL,YTIME-2)+
+VNetNewCapElec(allCy,PGALL,YTIME-3)+VNetNewCapElec(allCy,PGALL,YTIME-4)+VNetNewCapElec(allCy,PGALL,YTIME-5)+
+VNetNewCapElec(allCy,PGALL,YTIME-6)+VNetNewCapElec(allCy,PGALL,YTIME-7));
 
 *' This equation calculates the variable representing the overall capacity for a specific power plant in a given country and time period .
 *' The overall capacity is a composite measure that includes the existing capacity for non-renewable power plants and the expected capacity for renewable power plants based
@@ -482,7 +490,7 @@ QCapOverall(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
      VCapOverall(allCy,PGALL,YTIME)
      =E=
 VCapElec2(allCy,pgall,ytime)$ (not PGREN(PGALL))
-+VCFAvgRen(allCy,PGALL,YTIME-1)*(VNewCapElec(allCy,PGALL,YTIME)/iAvailRate(PGALL,YTIME)+
++VCFAvgRen(allCy,PGALL,YTIME-1)*(VNetNewCapElec(allCy,PGALL,YTIME)/iAvailRate(PGALL,YTIME)+
 VCapOverall(allCy,PGALL,YTIME-1)
 /VCFAvgRen(allCy,PGALL,YTIME-1))$PGREN(PGALL);
 

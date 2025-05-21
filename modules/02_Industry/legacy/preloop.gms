@@ -3,16 +3,16 @@
 
 *'                *VARIABLE INITIALISATION*
 *---
-VCostTechIntrm.l(runCy,DSBS,rcon,EF,YTIME) = 0.1;
+VCostTechIntrm.L(runCy,DSBS,rcon,EF,YTIME) = 0.1;
 *---
-VSortTechVarCost.l(runCy,DSBS,rCon,YTIME) = 0.00000001;
+VSortTechVarCost.L(runCy,DSBS,rCon,YTIME) = 0.00000001;
 *---
 VShareTechNewEquip.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF)$(not An(YTIME))) = 0;
 *---
-VConsFuel.l(runCy,DSBS,EF,YTIME)=0.0000000001;
+VConsFuel.L(runCy,DSBS,EF,YTIME) = 0.0000000001;
 VConsFuel.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $(not HEATPUMP(EF)) $(not TRANSE(DSBS)) $(not An(YTIME))) = iFuelConsPerFueSub(runCy,DSBS,EF,YTIME);
 *---
-VConsElecNonSubIndTert.l(runCy,DSBS,YTIME)=0.1;
+VConsElecNonSubIndTert.L(runCy,DSBS,YTIME)=0.1;
 VConsElecNonSubIndTert.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = iFuelConsPerFueSub(runCy,INDDOM,"ELC",YTIME) * iShrNonSubElecInTotElecDem(runCy,INDDOM);
 *---
 *vConsTotElecInd.FX(runCy,YTIME)$(not An(YTIME))= SUM(INDSE,VConsElecNonSubIndTert.l(runCy,INDSE,YTIME));
@@ -27,12 +27,10 @@ VDemFinSubFuelSubsec.FX(runCy,"HOU",YTIME)$(not An(YTIME)) = max(iTotFinEneDemSu
 VConsFuelInclHP.LO(runCy,DSBS,EF,YTIME) = 0;
 VConsFuelInclHP.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $(not TRANSE(DSBS)) $(not An(YTIME))) =
 (iFuelConsPerFueSub(runCy,DSBS,EF,YTIME))$((not ELCEF(EF)) $(not HEATPUMP(EF)))
-+(VElecConsHeatPla.l(runCy,DSBS,YTIME)*iUsfEneConvSubTech(runCy,DSBS,"HEATPUMP",YTIME))$HEATPUMP(EF)+
-(iFuelConsPerFueSub(runCy,DSBS,EF,YTIME)-VElecConsHeatPla.l(runCy,DSBS,YTIME))$ELCEF(EF)
-+1e-7$(H2EF(EF) or sameas("STE1AH2F",EF))
-;
++(VElecConsHeatPla.L(runCy,DSBS,YTIME)*iUsfEneConvSubTech(runCy,DSBS,"HEATPUMP",YTIME))$HEATPUMP(EF)+
+(iFuelConsPerFueSub(runCy,DSBS,EF,YTIME)-VElecConsHeatPla.L(runCy,DSBS,YTIME))$ELCEF(EF)
++1e-7$(H2EF(EF) or sameas("STE1AH2F",EF));
 *---
 VConsRemSubEquipSubSec.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $(not An(ytime))) =
-(VConsFuelInclHP.l(runCy ,DSBS,EF,YTIME) - (VConsElecNonSubIndTert.l(runCy,DSBS,YTIME)$(ELCEF(EF) $INDDOM(DSBS)) + 0$(not (ELCEF(EF) $INDDOM(DSBS)) )))
-;
+(VConsFuelInclHP.L(runCy ,DSBS,EF,YTIME) - (VConsElecNonSubIndTert.L(runCy,DSBS,YTIME)$(ELCEF(EF) $INDDOM(DSBS)) + 0$(not (ELCEF(EF) $INDDOM(DSBS)))));
 *---

@@ -3,14 +3,14 @@
 
 *'                *VARIABLE INITIALISATION*
 *---
-VCapRef.l(runCy,YTIME)=0.1;
+VCapRef.L(runCy,YTIME) = 0.1;
 VCapRef.FX(runCy,YTIME)$(not An(YTIME)) = iRefCapacity(runCy,YTIME);
 *---
-VOutTransfRefSpec.l(runCy,EFS,YTIME)=0.1;
+VOutTransfRefSpec.L(runCy,EFS,YTIME) = 0.1;
 VOutTransfRefSpec.FX(runCy,EFS,YTIME)$(EFtoEFA(EFS,"LQD") $(not An(YTIME))) = iTransfOutputRef(runCy,EFS,YTIME);
 VOutTransfRefSpec.FX(runCy,EFS,YTIME)$(not EFtoEFA(EFS,"LQD")) = 0;
 *---
-VConsGrssInlNotEneBranch.l(runCy,EFS,YTIME)=0.1;
+VConsGrssInlNotEneBranch.L(runCy,EFS,YTIME) = 0.1;
 VConsGrssInlNotEneBranch.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iGrossInConsNoEneBra(runCy,EFS,YTIME);
 *---
 VOutTransfTherm.FX(runCy,EFS,YTIME)$(not TOCTEF(EFS)) = 0;
