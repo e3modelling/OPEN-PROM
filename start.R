@@ -2,10 +2,10 @@
 library(jsonlite)
 
 # Various flags used to modify script behavior
-withRunFolder <- TRUE # Set to FALSE to disable model run folder creation and file copying
-withSync <- TRUE # Set to FALSE to disable model run sync to SharePoint
-withReport <- TRUE # Set to FALSE to disable the report output script execution (applicable to research mode only)
-uploadGDX <- FALSE # Set to TRUE to include GDX files in the uploaded archive
+withRunFolder = TRUE # Set to FALSE to disable model run folder creation and file copying
+withSync = TRUE # Set to FALSE to disable model run sync to SharePoint
+withReport = TRUE # Set to FALSE to disable the report output script execution (applicable to research mode only)
+uploadGDX = TRUE # Set to TRUE to include GDX files in the uploaded archive
 
 ### Define function that saves model metadata into a JSON file.
 
@@ -233,20 +233,42 @@ if (task == 0) {
 
   shell(paste0(gams, " main.gms --DevMode=0 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 | tee full.log"))
 
-  if (withRunFolder) {
-    file.copy("data", to = "../../", recursive = TRUE)
+    if(withRunFolder && withReport) {
 
-    if (withSync) syncRun()
-  }
+      run_path <- getwd()
+      setwd("../../") # Going back to root folder
+      cat("Executing the report output script\n")
+      report_cmd <- paste0("RScript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
+      shell(report_cmd)
+      setwd(run_path)
+    } 
 
-  if (withRunFolder && withReport) {
-    run_path <- getwd()
-    setwd("../../") # Going back to root folder
-    cat("Executing the report output script\n")
-    report_cmd <- paste0("RScript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
-    shell(report_cmd)
-  }
-} else if (task == 4) {
+    if(withRunFolder && withSync) syncRun()
+
+} else if (!is.null(task) && task == 3) {
+    
+    # Running task OPEN-PROM RESEARCH NEW DATA
+    saveMetadata(DevMode = 0)
+    if(withRunFolder) createRunFolder(setScenarioName("RESNEWDATA"))
+
+    shell(paste0(gams,' main.gms --DevMode=0 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 | tee full.log'))
+
+    if(withRunFolder) file.copy("data", to = '../../', recursive = TRUE)  
+
+    if(withRunFolder && withReport) {
+
+      run_path <- getwd()
+      setwd("../../") # Going back to root folder
+      cat("Executing the report output script\n")
+      report_cmd <- paste0("RScript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
+      shell(report_cmd)
+      setwd(run_path)
+    } 
+
+    if(withRunFolder && withSync) syncRun()
+
+} else if (!is.null(task) && task == 4) {
+  
   # Debugging mode
   shell(paste0(gams, " main.gms -logOption 4 -Idir=./data 2>&1 | tee full.log"))
 } else if (task == 5) {

@@ -120,7 +120,7 @@ $evalGlobal fEndHorizon 2100
 $evalGlobal fEndY 2025
 $evalGlobal fStartY 2021
 $evalGlobal fBaseY %fStartY% - %fPeriodOfYears%
-$evalGlobal fScenario 0 !! Setting the model scenario: 0 is NPi_Default, 1 is 1.5C and 2 is 2C
+$evalGlobal fScenario 1 !! Setting the model scenario: 0 is No carbon price, 1 is NPi_Default, 2 is 1.5C and 3 is 2C
 
 *** end of dollar commands section, no further flag definitions allowed 
 
