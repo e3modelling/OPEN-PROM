@@ -84,7 +84,7 @@ SWE
 USA
 /
 
-fscenario   "Model scenario used: 0 is NPi_Default, 1 is 1.5C and 2 is 2C"
+fscenario   "Model scenario used: 0 is No carbon price, 1 is NPi_Default, 2 is 1.5C and 3 is 2C"
 /
 %fScenario%
 /
