@@ -82,12 +82,12 @@ $include "./iMatFacPlaAvailCap.csv"
 $offdelim
 ;
 iMatFacPlaAvailCap.L(runCy,PGALL,YTIME) = iMatFacPlaAvailCapL(runCy,PGALL,YTIME);
-iMatFacPlaAvailCap.LO(runCy, PGALL, YTIME) = 0.00001;
-iMatFacPlaAvailCap.UP(runCy, PGALL, YTIME) = 60;
+iMatFacPlaAvailCap.LO(runCy, PGALL, YTIME) = 0.00000001;
+iMatFacPlaAvailCap.UP(runCy, PGALL, YTIME) = 40;
 $ELSE.calib
 table iMatFacPlaAvailCap(allCy,PGALL,YTIME) "Maturity factor related to plant available capacity (1)"
 $ondelim
-$include "./iMatFacPlaAvailCapCalib.csv"
+$include "./iMatFacPlaAvailCap.csv"
 $offdelim
 ;
 $ENDIF.calib
@@ -105,7 +105,7 @@ iMatureFacPlaDisp.UP(runCy, PGALL, YTIME) = 600; !!5 * iMatureFacPlaDispL("USA",
 $ELSE.calib
 table iMatureFacPlaDisp(allCy,PGALL,YTIME) "Maturity factor related to plant dispatching (1)"
 $ondelim
-$include"./iMatureFacPlaDispCalib.csv"
+$include"./iMatureFacPlaDisp.csv"
 $offdelim
 ;
 $ENDIF.calib
@@ -178,6 +178,7 @@ iHisChpGrCapData(allCy,CHP,YTIME)	                       "Historical CHP  gross 
 iMinRenPotential(allCy,PGRENEF,YTIME)	                   "Minimum renewable potential (GW)"
 iPeakBsLoadBy(allCy,PGLOADTYPE)	                           "Peak and Base load for base year (GW)"
 iTotAvailCapBsYr(allCy)	                                   "Total installed available capacity in base year (GW)"
+iTotAvailNomCapBsYr(allCy,YTIME)	                         "Total nominal available installed capacity in base year (GW)"
 iUtilRateChpPlants(allCy,CHP,YTIME)	                       "Utilisation rate of CHP Plants (1)"
 iMxmLoadFacElecDem(allCy,YTIME)	                           "Maximum load factor of electricity demand (1)"
 iBslCorrection(allCy,YTIME)	                               "Parameter of baseload correction (1)"
@@ -209,6 +210,7 @@ iMinRenPotential(runCy,"OTHREN",YTIME) = iCummMnmInstRenCap(runCy,"OTHREN",YTIME
 iPeakBsLoadBy(runCy,PGLOADTYPE) = sum(tfirst, iDataElecSteamGen(runCy,PGLOADTYPE,tfirst));
 *---
 iTotAvailCapBsYr(runCy) = sum(tfirst,iDataElecSteamGen(runCy,"TOTCAP",TFIRST))+sum(tfirst,iDataElecSteamGen(runCy,"CHP_CAP",TFIRST))*0.85;
+iTotAvailNomCapBsYr(runCy,YTIME)$datay(YTIME) = iDataElecSteamGen(runCy,"TOTNOMCAP",YTIME);
 *---
 iUtilRateChpPlants(runCy,CHP,YTIME) = 0.5;
 *---

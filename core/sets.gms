@@ -967,6 +967,7 @@ FEED_RES         "Residual for Feedstocks in Transfers"
 PGOTH            "Various data related to power generation plants"
 /
 TOTCAP           "Total Available capacity in Base Year (GW)"
+TOTNOMCAP        "Total Nominal Available capacity in Base Year (GW)"
 PEAKLOAD         "Peak Load in Base Year (GW)"
 BASELOAD         "Base Load in Base Year (GW)"
 NON_CHP_PER      "Non-CHP capacity (percentage of total (gross) capacity)"

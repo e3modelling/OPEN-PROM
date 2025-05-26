@@ -74,20 +74,6 @@
         },
 
         {
-            "label": "CALIBRATE",
-            "type": "shell",
-            "command": "Rscript start.R task=5",
-            "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "presentation": {
-                "focus": true
-            }
-        },
-
-        {
             "label": "SCENTOOL",
             "type": "shell",
             "command": "Rscript -e 'mip::scenTool()'",
@@ -104,7 +90,21 @@
         {
             "label": "COMPARE SCENARIOS",
             "type": "shell",
-            "command": "Rscript start task=5.R",
+            "command": "Rscript reportOutput.R",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "focus": true
+            }
+        },
+
+        {
+            "label": "CALIBRATE",
+            "type": "shell",
+            "command": "Rscript start.R task=6",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
