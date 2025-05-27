@@ -40,7 +40,7 @@ QCostVarTechElec(allCy,PGALL,YTIME)	                       "Compute variable cos
 QCostVarTechElecTot(allCy,YTIME)	                       "Compute Electricity peak loads"	
 QSortPlantDispatch(allCy,PGALL,YTIME)	                   "Compute Power plants sorting according to variable cost to decide the plant dispatching" 	
 QNewCapElec(allCy,PGALL,YTIME)	                           "Compute the new capacity added every year"
-QNetNewCapElec(allCy,PGALL,YTIME)	                        "Compute the yearly difference in installed capacity"		
+QNetNewCapElec(allCy,PGALL,YTIME)	                       "Compute the yearly difference in installed capacity"		
 QCFAvgRen(allCy,PGALL,YTIME)	                           "Compute the average capacity factor of RES"	
 QCapOverall(allCy,PGALL,YTIME)	                           "Compute overall capacity"
 QScalFacPlantDispatch(allCy,HOUR,YTIME)                    "Compute the scaling factor for plant dispatching"
@@ -56,15 +56,15 @@ QCostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)	       "Compute long term ave
 QCostPowGenLonNoClimPol(allCy,ESET,YTIME)                  "Compute long term power generation cost excluding climate policies"	
 *qCostPowGenAvgShrt(allCy,ESET,YTIME)	                   "Compute short term power generation cost"
 QConsElec(allCy,DSBS,YTIME)                                "Compute electricity consumption per final demand sector"
-
-*'                **Interdependent Equations**
 QLoadFacDom(allCy,YTIME)	                               "Compute load factor of entire domestic system"
 QPeakLoad(allCy,YTIME)	                                   "Compute elerctricity peak load"	
 QDemElecTot(allCy,YTIME)                                   "Compute total electricity demand"
-QProdElec(allCy,PGALL,YTIME)                               "Compute electricity production from power generation plants"
 QProdElecCHP(allCy,CHP,YTIME)	                           "Compute electricity production from CHP plants" 
 QProdElecReqTot(allCy,YTIME)                               "Compute total required electricity production"
-QCostPowGenAvgLng(allCy,ESET,YTIME)	                       "Compute long term power generation cost"
+
+*'                **Interdependent Equations**
+Q04ProdElec(allCy,PGALL,YTIME)                             "Compute electricity production from power generation plants"
+Q04CostPowGenAvgLng(allCy,ESET,YTIME)	                   "Compute long term power generation cost"
 ;
 
 Variables
@@ -105,7 +105,7 @@ VCapElec(allCy,PGALL,YTIME)	                               "Electricity generati
 VCostVarTechElec(allCy,PGALL,YTIME)	                       "Variable cost of technology (US$2015/KWh)"	
 VCostVarTechElecTot(allCy,YTIME)	                       "Electricity peak loads (GW)"	
 VSortPlantDispatch(allCy,PGALL,YTIME)	                   "Power plants sorting according to variable cost to decide the plant dispatching (1)"
-VNewCapElec(allCy,PGALL,YTIME)	                         "The new capacity added every year (MW)"	
+VNewCapElec(allCy,PGALL,YTIME)	                           "The new capacity added every year (MW)"	
 VNetNewCapElec(allCy,PGALL,YTIME)	                       "Yearly difference in installed capacity (MW)"	
 VCFAvgRen(allCy,PGALL,YTIME)	                           "The average capacity factor of RES (1)"
 VCapOverall(allCy,PGALL,YTIME)	                           "Overall Capacity (MW)"	
@@ -122,13 +122,13 @@ VCostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)	       "Long-term average pow
 VCostPowGenLonNoClimPol(allCy,ESET,YTIME)                  "Long-term average power generation cost  excluding climate policies (US$2015/kWh)"	
 *vCostPowGenAvgShrt(allCy,ESET,YTIME)                      "Short-term average power generation cost (US$2015/kWh)"
 VConsElec(allCy,DSBS,YTIME)                                "Electricity demand per final sector (Mtoe)"
-
-*'                **Interdependent Variables**	
 VLoadFacDom(allCy,YTIME)                                   "Electricity load factor for entire domestic system"	
-VPeakLoad(allCy,YTIME)	                                   "Electricity peak load (GW)"	
-VDemElecTot(allCy,YTIME)                                   "Total electricity demand (TWh)"
-VProdElec(allCy,PGALL,YTIME)                               "Electricity production (TWh)"	
 VProdElecCHP(allCy,CHP,YTIME)	                           "CHP electricity production (TWh)"
 VProdElecReqTot(allCy,YTIME)	                           "Total required electricity production (TWh)"
-VCostPowGenAvgLng(allCy,ESET,YTIME)	                       "Long-term average power generation cost (US$2015/kWh)"
+VPeakLoad(allCy,YTIME)	                                   "Electricity peak load (GW)"	
+VDemElecTot(allCy,YTIME)                                   "Total electricity demand (TWh)"
+
+*'                **Interdependent Variables**	
+VMVProdElec(allCy,PGALL,YTIME)                             "Electricity production (TWh)"	
+VMVCostPowGenAvgLng(allCy,ESET,YTIME)	                   "Long-term average power generation cost (US$2015/kWh)"
 ;

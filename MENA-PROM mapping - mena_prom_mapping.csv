@@ -122,7 +122,7 @@ Variable,ELCPRICE,VPriceElecIndResConsu,Electricity price to Industrial and Resi
 Variable,ELCPRICE_NOCV,VPriceElecIndResNoCliPol,Electricity price to Industrial and Residential Consumers (US$2015/KWh),"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
 Parameter,ELCPRICECHAR,iFacElecPriConsu,Factors affecting electricity prices to consumers,"CYall,ELCPCHAR,YTIME ","allCy,ELCPCHAR,YTIME",Prices
 Parameter,ElcpricecharPRN,iContrElecPrice,Parameters controlling electricity price,"ELCPCHAR,YTIME","allCy,ELCPCHAR,YTIME",Parameters for data transfering
-Variable,ELCPROD,VProdElec,Electricity production (TWh),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
+Variable,ELCPROD,VMVProdElec,Electricity production (TWh),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Parameter,ELSB,iElaSub,Elasticities by subsectors (1),"CYALL,DSBS","allCy,DSBS",
 Parameter,ELSH,iShareAnnMilePlugInHybrid,Share of annual mileage of a plug-in hybrid which is covered by electricity (1),"CYall,YTIME","CYall,YTIME",Transport Sector specific Parameters
 Parameter,EN_PRD_INDX,REMOVED FROM OPEN-PROM,Energy productivity index used in R&D scenarios,"CYall,SBS,YTIME",,Macro economic indicators
@@ -181,7 +181,7 @@ Equation,EQELCNS,Q02ConsElecNonSubIndTert,Compute non-substituable electricity c
 Equation,EQELCNSIND,q02ConsTotElecInd,Compute Consumption of electricity in industrial sectors ,"CYALL,YTIME","allCy,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQELCPRICE,QPriceElecIndResConsu,Compute electricity price in Industrial and Residential Consumers,"CYall,ESET,YTIME","allCy,ESET,YTIME",PRICES EQUATIONS
 Equation,EQELCPRICE_NOCV,QPriceElecIndResNoCliPol,Compute electricity price in Industrial and Residential Consumers excluding climate policies,"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
-Equation,EQELCPROD,QProdElec,Compute electricity production from power generation plants,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
+Equation,EQELCPROD,Q04ProdElec,Compute electricity production from power generation plants,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Equation,EQEXPO_TZ,QExp,Compute fake exports,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
 Equation,EQGAP,QGapFinalDem,"Compute the gap in final demand of industry, tertiary, non-energy uses and bubkers","CYall,DSBS,YTIME","allCy,DSBS,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQGAPE,QGapGenCapPowerDiff,Compute the gap in power generation capacity,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
@@ -194,7 +194,7 @@ Equation,EQLAMBDA,QLambda,Compute Lambda parameter,"CYall,YTIME","allCy,YTIME",P
 Equation,EQLFT,Q01Lft,Compute the lifetime of passenger cars ,"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",TRANSPORT SPECIFIC EQUATIONS
 Equation,EQLOADF,QLoadFacDom,Compute load factor of entire domestic system,"CYrun,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQLOS,Q03LossesDistr,Compute distribution losses,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
-Equation,EQLTAC,QCostPowGenAvgLng,Compute long term power generation cost,"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
+Equation,EQLTAC,Q04CostPowGenAvgLng,Compute long term power generation cost,"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
 Equation,EQLTAC_INT_PRICE,qCostPowGenLongIntPri,Compute long term power generation cost of technologies including international Prices of main fuels ,"CYALL,PGALL,ESET,YTIME","allCy,PGALL,ESET,YTIME",POWER GENERATION SECTOR
 Equation,EQLTAC_nocv,QCostPowGenLonNoClimPol,Compute long term power generation cost excluding climate policies,"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
 Equation,EQLTACMIN,qCostPowGenLonMin,Compute long-term minimum power generation cost,"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
@@ -208,7 +208,7 @@ Equation,EQNETIMP,Q03ImpNetEneBrnch,Compute net imports,"CYall,EFS,YTIME","allCy
 Equation,EQNEWREG,QNewRegPcYearly,Compute new registrations of passenger cars,"CYall,YTIME","allCy,YTIME",Transport
 Equation,EQNONCHPELCPROD,QProdElecNonCHP,Compute non CHP electricity production ,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Parameter,BASESHARE,iBaseLoadShareDem,Baseload share of demand per sector (1),"CYall,DSBS,YTIME","allCy,DSBS,YTIME",Power Generation Parameters
-Equation,EQPEAKLOAD,QPeakLoad,Compute elerctricity peak load,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Equation,EQ04PeakLoad,QPeakLoad,Compute elerctricity peak load,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQPOTREN,QPotRenCurr,Compute current renewable potential ,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",Power Generation
 Equation,EQPOTRENMAXC,QPotRenMaxAllow,Compute maximum allowed renewable potential ,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
 Equation,EQPOTRENMINC,qPotRenMinAllow,Compute minimum allowed renewable potential ,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
@@ -302,7 +302,7 @@ Parameter,LOADF,iLoadFacElecDem,Load factor of electricity demand per sector,"CY
 Variable,LOADFALL,VLoadFacDom,"""Electricity load factor for entire domestic system""","CYaLL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Variable,LOS,VMVLossesDistr,Distribution losses (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
 Variable,LTAC,VAvgPowerGenLongTrm,Long-term average power generation cost (US$2015/kWh),"CYall,ESET,YTIME ","allCy,ESET,YTIME",POWER GENERATION SECTOR
-Variable,LTAC,VCostPowGenAvgLng,Long-term average power generation cost (US$2015/kWh),"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
+Variable,LTAC,VMVCostPowGenAvgLng,Long-term average power generation cost (US$2015/kWh),"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
 Variable,LTAC_INT_PRICE,vCostPowGenLongIntPri,Long term power generation cost of technologies including international prices of main fuels (kUS$2015/toe),"CYALL,PGALL,ESET,YTIME","allCy,PGALL,ESET,YTIME",POWER GENERATION SECTOR
 Variable,LTAC_nocv,VCostPowGenLonNoClimPol,Long-term average power generation cost  excluding climate policies (US$2015/kWh),"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
 Variable,LTACMIN,vCostPowGenLonMin,Long-term minimum power generation cost (US$2015/kWh),"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR

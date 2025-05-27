@@ -71,14 +71,14 @@ QPriceElecIndResConsu(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..  !! The e
            (
              (VPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)*sTWhToMtoe)$TFIRST(YTIME-1) +
              (
-                VCostPowGenAvgLng(allCy,"i",YTIME-1)
+                VMVCostPowGenAvgLng(allCy,"i",YTIME-1)
               )$(not TFIRST(YTIME-1))
            )$ISET(ESET)
         +
            (
              (VPriceFuelSubsecCarVal(allCy,"HOU","ELC",YTIME-1)*sTWhToMtoe)$TFIRST(YTIME-1) +
              (
-               VCostPowGenAvgLng(allCy,"r",YTIME-1) 
+               VMVCostPowGenAvgLng(allCy,"r",YTIME-1) 
              )$(not TFIRST(YTIME-1))
            )$RSET(ESET)
         );

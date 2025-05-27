@@ -131,14 +131,14 @@ QInputTransfRef(allCy,"CRO",YTIME)$(TIME(YTIME) $runCy(allCy))..
 *' scenario and year, multiplied by the conversion factor from terawatt-hours to million tons of oil equivalent.
 *' The result represents the transformation output from nuclear plants for electricity production in million tons of oil equivalent.
 QOutTransfNuclear(allCy,"ELC",YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VOutTransfNuclear(allCy,"ELC",YTIME) =E=SUM(PGNUCL,VProdElec(allCy,PGNUCL,YTIME))*sTWhToMtoe;
+         VOutTransfNuclear(allCy,"ELC",YTIME) =E=SUM(PGNUCL,VMVProdElec(allCy,PGNUCL,YTIME))*sTWhToMtoe;
 
 *' The equation computes the transformation input to nuclear plants for a specific scenario and year.
 *' The input is calculated based on the sum of electricity production from all nuclear power plants in the given scenario and year, divided
 *' by the plant efficiency and multiplied by the conversion factor from terawatt-hours to million tons of oil equivalent (sTWhToMtoe).
 *' The result represents the transformation input to nuclear plants in million tons of oil equivalent.
 QInpTransfNuclear(allCy,"NUC",YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-        VInpTransfNuclear(allCy,"NUC",YTIME) =E=SUM(PGNUCL,VProdElec(allCy,PGNUCL,YTIME)/iPlantEffByType(allCy,PGNUCL,YTIME))*sTWhToMtoe;
+        VInpTransfNuclear(allCy,"NUC",YTIME) =E=SUM(PGNUCL,VMVProdElec(allCy,PGNUCL,YTIME)/iPlantEffByType(allCy,PGNUCL,YTIME))*sTWhToMtoe;
 
 *' The equation computes the transformation input to thermal power plants for a specific power generation form 
 *' in a given scenario and year. The input is calculated based on the following conditions:
@@ -152,10 +152,10 @@ Q03InpTransfTherm(allCy,PGEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VMVInpTransfTherm(allCy,PGEF,YTIME)
              =E=
         sum(PGALL$(PGALLtoEF(PGALL,PGEF)$((not PGGEO(PGALL)) $(not PGNUCL(PGALL)))),
-             VProdElec(allCy,PGALL,YTIME) * sTWhToMtoe /  iPlantEffByType(allCy,PGALL,YTIME))
+             VMVProdElec(allCy,PGALL,YTIME) * sTWhToMtoe /  iPlantEffByType(allCy,PGALL,YTIME))
         +
         sum(PGALL$(PGALLtoEF(PGALL,PGEF)$PGGEO(PGALL)),
-             VProdElec(allCy,PGALL,YTIME) * sTWhToMtoe / 0.15) 
+             VMVProdElec(allCy,PGALL,YTIME) * sTWhToMtoe / 0.15) 
         +
         sum(CHP$CHPtoEF(CHP,PGEF),  sum(INDDOM,VMVConsFue(allCy,INDDOM,CHP,YTIME))+sTWhToMtoe*VProdElecCHP(allCy,CHP,YTIME))/(0.8+0.1*(ord(YTIME)-10)/32);
 
@@ -171,7 +171,7 @@ QOutTransfTherm(allCy,TOCTEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VOutTransfTherm(allCy,TOCTEF,YTIME)
              =E=
         (
-             sum(PGALL$(not PGNUCL(PGALL)),VProdElec(allCy,PGALL,YTIME)) * sTWhToMtoe
+             sum(PGALL$(not PGNUCL(PGALL)),VMVProdElec(allCy,PGALL,YTIME)) * sTWhToMtoe
              +
              sum(CHP,VProdElecCHP(allCy,CHP,YTIME)*sTWhToMtoe)
          )$ELCEF(TOCTEF)

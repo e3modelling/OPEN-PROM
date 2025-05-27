@@ -3,8 +3,8 @@
 
 *'                *VARIABLE INITIALISATION*
 *---
-VCostPowGenAvgLng.L(runCy,ESET,"2010") = 0;
-VCostPowGenAvgLng.L(runCy,ESET,"%fBaseY%") = 0;
+VMVCostPowGenAvgLng.L(runCy,ESET,"2010") = 0;
+VMVCostPowGenAvgLng.L(runCy,ESET,"%fBaseY%") = 0;
 *---
 VSensCCS.L(runCy,YTIME) = 1;
 *---
@@ -135,9 +135,9 @@ VDemElecTot.FX(runCy,YTIME)$(not An(YTIME)) =  1/0.086 * ( iFinEneCons(runCy,"EL
 VPeakLoad.L(runCy,YTIME) = 1;
 VPeakLoad.FX(runCy,YTIME)$(datay(YTIME)) = VDemElecTot.L(runCy,YTIME)/(VLoadFacDom.L(runCy,YTIME)*8.76);
 *---
-VProdElec.FX(runCy,pgall,YTIME)$DATAY(YTIME)=iDataElecProd(runCy,pgall,YTIME)/1000;
+VMVProdElec.FX(runCy,pgall,YTIME)$DATAY(YTIME)=iDataElecProd(runCy,pgall,YTIME)/1000;
 *---
-VProdElecReqTot.FX(runCy,"%fBaseY%")=sum(pgall,VProdElec.L(runCy,pgall,"%fBaseY%"));
+VProdElecReqTot.FX(runCy,"%fBaseY%")=sum(pgall,VMVProdElec.L(runCy,pgall,"%fBaseY%"));
 *---
 VConsElec.L(runCy,DSBS,YTIME)=0.1;
 VConsElec.FX(runCy,DSBS,YTIME)$(not AN(YTIME)) = 0.1;

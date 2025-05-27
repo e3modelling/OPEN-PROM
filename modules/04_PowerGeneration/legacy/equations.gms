@@ -551,8 +551,8 @@ VProdElecReqCHP(allCy,YTIME)
 *' demand, the required electricity production, and the capacity of the power generation plants.The equation calculates the electricity production
 *' from power generation plants based on the proportion of electricity demand that needs to be met by power generation plants, considering their
 *' capacity and the scaling factor for dispatching.
-QProdElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VProdElec(allCy,PGALL,YTIME)
+Q04ProdElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VMVProdElec(allCy,PGALL,YTIME)
                  =E=
          VProdElecNonCHP(allCy,YTIME) /
          (VProdElecReqTot(allCy,YTIME)- VProdElecReqCHP(allCy,YTIME))
@@ -579,7 +579,7 @@ QProdElecCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VProdElecCHP(allCy,CHP,YTIME)
                  =E=
         sum(INDDOM,VMVConsFue(allCy,INDDOM,CHP,YTIME)) / SUM(chp2,sum(INDDOM,VMVConsFue(allCy,INDDOM,CHP2,YTIME)))*
-        (VDemElecTot(allCy,YTIME) - SUM(PGALL,VProdElec(allCy,PGALL,YTIME)));
+        (VDemElecTot(allCy,YTIME) - SUM(PGALL,VMVProdElec(allCy,PGALL,YTIME)));
 
 *' This equation calculates the long-term power generation cost of technologies excluding climate policies.
 *' The cost is computed for a specific country, power generation technology , energy sector, and time period.
@@ -682,11 +682,11 @@ $offtext
 *' This equation computes the long-term average power generation cost. It involves summing the long-term average power generation costs for different power generation
 *' plants and energy forms, considering the specific characteristics and costs associated with each. The result is the average power generation cost per unit of
 *' electricity consumed in the given time period.
-QCostPowGenAvgLng(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VCostPowGenAvgLng(allCy,ESET,YTIME)
+Q04CostPowGenAvgLng(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VMVCostPowGenAvgLng(allCy,ESET,YTIME)
                  =E=
          (
-         SUM(PGALL, VProdElec(allCy,PGALL,YTIME)*VCostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME))
+         SUM(PGALL, VMVProdElec(allCy,PGALL,YTIME)*VCostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME))
 
         +
          sum(CHP, VMVCostElcAvgProdCHP(allCy,CHP,YTIME)*VProdElecCHP(allCy,CHP,YTIME))
@@ -726,7 +726,7 @@ QCostPowGenLonNoClimPol(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VCostPowGenLonNoClimPol(allCy,ESET,YTIME)
                  =E=
          (
-         SUM(PGALL, (VProdElec(allCy,PGALL,YTIME))*VCostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME))
+         SUM(PGALL, (VMVProdElec(allCy,PGALL,YTIME))*VCostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME))
 
         +
          sum(CHP, VMVCostElcAvgProdCHP(allCy,CHP,YTIME)*VProdElecCHP(allCy,CHP,YTIME))
@@ -752,7 +752,7 @@ qCostPowGenAvgShrt(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                  =E=
         (
         sum(PGALL,
-        VProdElec(allCy,PGALL,YTIME)*
+        VMVProdElec(allCy,PGALL,YTIME)*
         (
         sum(PGEF$PGALLtoEF(PGALL,PGEF),
         (iVarCost(PGALL,YTIME)/1000+(VPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)/1.2441+

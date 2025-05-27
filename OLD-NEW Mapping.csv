@@ -91,8 +91,8 @@ QNonChpElecProd          ,QProdElecNonCHP          ,,Power Generation
 " VNonChpElecProd(runCy,YTIME) "," VProdElecNonCHP(runCy,YTIME) ",,Power Generation
 QReqElecProd            ,QProdElecReqCHP            ,,Power Generation
 " VReqElecProd(runCy,YTIME) "," VProdElecReqCHP(runCy,YTIME) ",,Power Generation
-QElecProdPowGenPlants       ,QProdElec             ,PGALL,Power Generation
-" VElecProd(runCy,PGALL,YTIME)"," VProdElec(runCy,PGALL,YTIME)",PGALL,Power Generation
+QElecProdPowGenPlants       ,Q04ProdElec             ,PGALL,Power Generation
+" VElecProd(runCy,PGALL,YTIME)"," VMVProdElec(runCy,PGALL,YTIME)",PGALL,Power Generation
 qSecContrTotChpProd        ,qSecContrTotCHPProd        ,"(INDDOM,CHP)$(SECTTECH(INDDOM,CHP))",Power Generation
 " vSecContrTotChpProd(runCy,INDDOM,CHP,YTIME)"," vSecContrTotCHPProd(runCy,INDDOM,CHP,YTIME)","(INDDOM,CHP)$(SECTTECH(INDDOM,CHP))",Power Generation
 QElecProdChpPlants         ,QProdElecCHP            ,CHP,Power Generation
@@ -106,8 +106,8 @@ qLongPowGenIntPri         ,qCostPowGenLongIntPri       ,"(PGALL,ESET)",Power Gen
 " vLongPowGenIntPri(runCy,PGALL,ESET,YTIME)"," vCostPowGenLongIntPri(runCy,PGALL,ESET,YTIME)","(PGALL,ESET)",Power Generation
 qShoPowGenIntPri          ,qCostPowGenShortIntPri       ,"(PGALL,ESET)",Power Generation
 " vShoPowGenIntPri(runCy,PGALL,ESET,YTIME)"," vCostPowGenShortIntPri(runCy,PGALL,ESET,YTIME)","(PGALL,ESET)",Power Generation
-QLongPowGenCost          ,QCostPowGenAvgLng         ,ESET,Power Generation
-" VLongAvgPowGenCost(runCy,ESET,YTIME)"," VCostPowGenAvgLng(runCy,ESET,YTIME)",ESET,Power Generation
+QLongPowGenCost          ,Q04CostPowGenAvgLng         ,ESET,Power Generation
+" VLongAvgPowGenCost(runCy,ESET,YTIME)"," VMVCostPowGenAvgLng(runCy,ESET,YTIME)",ESET,Power Generation
 QLonAvgPowGenCostNoClimPol     ,QCostAvgPowGenLonNoClimPol     ,"(PGALL,ESET)",Power Generation
 " VLonAvgPowGenCostNoClimPol(runCy,PGALL,ESET,YTIME)"," VCostAvgPowGenLonNoClimPol(runCy,PGALL,ESET,YTIME)","(PGALL,ESET)",Power Generation
 QLonPowGenCostNoClimPol      ,QCostPowGenLonNoClimPol      ,ESET,Power Generation
