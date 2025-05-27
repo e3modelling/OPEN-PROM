@@ -21,7 +21,7 @@ QConsFinEneCountry(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
              sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(INDDOM,EF) ), VConsFuel(allCy,INDDOM,EF,YTIME)))
          +
          sum(TRANSE,
-             sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(TRANSE,EF)), VDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)))
+             sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(TRANSE,EF)), VMVDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)))
          +
          sum(EF$(sameas(EF, "H2") AND EFtoEFS(EF,EFS)), VDemTotH2(allCy,YTIME)) !! Here hydrogen is included as a part of the energy consumption.
         ;

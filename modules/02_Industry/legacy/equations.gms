@@ -34,7 +34,7 @@ QConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SE
          VConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)
                  =E=
          [
-         (VLft(allCy,DSBS,EF,YTIME)-1)/VLft(allCy,DSBS,EF,YTIME)
+         (VMVLft(allCy,DSBS,EF,YTIME)-1)/VMVLft(allCy,DSBS,EF,YTIME)
          * (VConsFuelInclHP(allCy,DSBS,EF,YTIME-1) - (VConsElecNonSubIndTert(allCy,DSBS,YTIME-1)$(ELCEF(EF) $INDDOM(DSBS)) + 0$(not (ELCEF(EF) $INDDOM(DSBS)))))
          * (iActv(YTIME,allCy,DSBS)/iActv(YTIME-1,allCy,DSBS))**iElastA(allCy,DSBS,"a",YTIME)
          * (VPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME)/VPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-1))**iElastA(allCy,DSBS,"b1",YTIME)
@@ -139,9 +139,9 @@ QCostTech(allCy,DSBS,rCon,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon)
 QCostTechIntrm(allCy,DSBS,rCon,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) $SECTTECH(DSBS,EF) $runCy(allCy))..
          VCostTechIntrm(allCy,DSBS,rCon,EF,YTIME) =E=
                   ( (( (iDisc(allCy,DSBS,YTIME)$(not CHP(EF)) + iDisc(allCy,"PG",YTIME)$CHP(EF)) !! in case of chp plants we use the discount rate of power generation sector
-                       * exp((iDisc(allCy,DSBS,YTIME)$(not CHP(EF)) + iDisc(allCy,"PG",YTIME)$CHP(EF))*VLft(allCy,DSBS,EF,YTIME))
+                       * exp((iDisc(allCy,DSBS,YTIME)$(not CHP(EF)) + iDisc(allCy,"PG",YTIME)$CHP(EF))*VMVLft(allCy,DSBS,EF,YTIME))
                      )
-                      / (exp((iDisc(allCy,DSBS,YTIME)$(not CHP(EF)) + iDisc(allCy,"PG",YTIME)$CHP(EF))*VLft(allCy,DSBS,EF,YTIME))- 1)
+                      / (exp((iDisc(allCy,DSBS,YTIME)$(not CHP(EF)) + iDisc(allCy,"PG",YTIME)$CHP(EF))*VMVLft(allCy,DSBS,EF,YTIME))- 1)
                     ) * iCapCostTech(allCy,DSBS,EF,YTIME) * iCGI(allCy,YTIME)
                     +
                     iFixOMCostTech(allCy,DSBS,EF,YTIME)/1000
@@ -151,9 +151,9 @@ QCostTechIntrm(allCy,DSBS,rCon,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(
                   )$INDDOM(DSBS)
                  +
                   ( (( iDisc(allCy,DSBS,YTIME)
-                       * exp(iDisc(allCy,DSBS,YTIME)*VLft(allCy,DSBS,EF,YTIME))
+                       * exp(iDisc(allCy,DSBS,YTIME)*VMVLft(allCy,DSBS,EF,YTIME))
                      )
-                      / (exp(iDisc(allCy,DSBS,YTIME)*VLft(allCy,DSBS,EF,YTIME))- 1)
+                      / (exp(iDisc(allCy,DSBS,YTIME)*VMVLft(allCy,DSBS,EF,YTIME))- 1)
                     ) * iCapCostTech(allCy,DSBS,EF,YTIME) * iCGI(allCy,YTIME)
                     +
                     iFixOMCostTech(allCy,DSBS,EF,YTIME)/1000

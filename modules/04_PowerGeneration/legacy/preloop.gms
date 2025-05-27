@@ -124,8 +124,8 @@ QScalWeibullSum.scale(runCy,PGALL,YTIME)=VScalWeibullSum.scale(runCy,PGALL,YTIME
 *---
 VLoadFacDom.L(runCy,YTIME)=0.5;
 VLoadFacDom.FX(runCy,YTIME)$(datay(YTIME)) =
-         (sum(INDDOM,VConsFuel.L(runCy,INDDOM,"ELC",YTIME)) + sum(TRANSE, VDemFinEneTranspPerFuel.L(runCy,TRANSE,"ELC",YTIME)))/
-         (sum(INDDOM,VConsFuel.L(runCy,INDDOM,"ELC",YTIME)/iLoadFacElecDem(INDDOM)) + sum(TRANSE, VDemFinEneTranspPerFuel.L(runCy,TRANSE,"ELC",YTIME)/
+         (sum(INDDOM,VConsFuel.L(runCy,INDDOM,"ELC",YTIME)) + sum(TRANSE, VMVDemFinEneTranspPerFuel.L(runCy,TRANSE,"ELC",YTIME)))/
+         (sum(INDDOM,VConsFuel.L(runCy,INDDOM,"ELC",YTIME)/iLoadFacElecDem(INDDOM)) + sum(TRANSE, VMVDemFinEneTranspPerFuel.L(runCy,TRANSE,"ELC",YTIME)/
          iLoadFacElecDem(TRANSE)));
 *---
 VDemElecTot.L(runCy,YTIME)=10;

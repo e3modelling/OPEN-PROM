@@ -77,7 +77,7 @@ Variable,DEMCOST,VCostTechIntrm,Intermediate technology cost (KUS$2015/toe),"CYa
 Variable,DEMCOST1,VCostTech,Technology cost ( KUS$2015/toe),"CYall,DSBS,Rcon,EF,YTIME","allCy,DSBS,Rcon,EF,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,DEMSE,VDemFinSubFuelSubsec,Total final demand (of substitutable fuels) per subsector (Mtoe),"CYall,DSBS,YTIME","allCy,DSBS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,DEMSEIND,vDemFinSubFuelInd,Total final demand (of substitutable fuels) in industrial sectors (Mtoe),"CYALL,YTIME","allCy, YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-Variable,DEMTR,VDemFinEneTranspPerFuel,Final energy demand in transport subsectors per fuel (Mtoe),"CYall,TRANSE,EF,YTIME","allCy,TRANSE,EF,YTIME",TRANSPORT SECTOR VARIABLES
+Variable,DEMTR,VMVDemFinEneTranspPerFuel,Final energy demand in transport subsectors per fuel (Mtoe),"CYall,TRANSE,EF,YTIME","allCy,TRANSE,EF,YTIME",TRANSPORT SECTOR VARIABLES
 Variable,DEMTRALL,vDemFinEneSubTransp,Final energy demand in transport subsectors (Mtoe),"CYall,TRANSE,YTIME","allCy,TRANSE,YTIME",TRANSPORT SECTOR VARIABLES
 Parameter,DEXPO,iFuelExprts,Fuel Exports (Mtoe),"CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
 Parameter,DGIC,iGrosInlCons,Gross Inland Consumtpion (Mtoe),"CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
@@ -168,7 +168,7 @@ Equation,EQDEMCOST,QCostTechIntrm,Compute  technology cost including lifetime,"C
 Equation,EQDEMCOST1,QCostTech,Compute technology cost ,"CYall,DSBS,Rcon,EF,YTIME","allCy,DSBS,Rcon,EF,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQDEMSE,QDemFinSubFuelSubsec,Compute for total final demand (of substitutable fuels) per subsector ,"CYall,DSBS,YTIME","allCy,DSBS,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQDEMSEIND,qDemFinSubFuelInd,Compute total final demand (of substitutable fuels) in industrial sectors ,"CYALL,YTIME","allCy, YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
-Equation,EQDEMTR,QDemFinEneTranspPerFuel,Compute final energy demand in transport per fuel,"CYall,TRANSE,EF,YTIME","allCy,TRANSE,EF,YTIME",TRANSPORT SPECIFIC EQUATIONS
+Equation,EQDEMTR,Q01DemFinEneTranspPerFuel,Compute final energy demand in transport per fuel,"CYall,TRANSE,EF,YTIME","allCy,TRANSE,EF,YTIME",TRANSPORT SPECIFIC EQUATIONS
 Equation,EQDEMTRALL,qDemFinEneSubTransp,Compute final energy demand in transport ,"CYall,TRANSE,YTIME","allCy,TRANSE,YTIME",TRANSPORT SPECIFIC EQUATIONS
 Equation,EQDUMMYOBJ,qDummyObj,Define dummy objective function,"CYall,INDDOM,YTIME",,
 Equation,EQELCALL,QConsElec,Compute electricity consumption per final demand sector,"CYall,DSBS,YTIME","allCy,DSBS,YTIME",Power Generation
@@ -191,7 +191,7 @@ Equation,EQGICP,QConsGrssInlNotEneBranch,Compute gross inland consumption not in
 Equation,EQIMPO_TZ,QImp,Compute fake imports,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
 Equation,EQL,QPcOwnPcLevl,Compute ratio of car ownership over saturation car ownership,"CYall,YTIME","allCy,YTIME",Transport
 Equation,EQLAMBDA,QLambda,Compute Lambda parameter,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Equation,EQLFT,QLft,Compute the lifetime of passenger cars ,"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",TRANSPORT SPECIFIC EQUATIONS
+Equation,EQLFT,Q01Lft,Compute the lifetime of passenger cars ,"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",TRANSPORT SPECIFIC EQUATIONS
 Equation,EQLOADF,QLoadFacDom,Compute load factor of entire domestic system,"CYrun,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQLOS,QLossesDistr,Compute distribution losses,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
 Equation,EQLTAC,QCostPowGenAvgLng,Compute long term power generation cost,"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
@@ -297,7 +297,7 @@ Parameter,kappa,iPriceReform,Price reformation,"CYall,SBS,EF,YTIME","allCy,SBS,E
 Parameter,KAPPA1,iDataPriceReform,Price reformation,"CYall,AGSECT,EF,YTIME","allCy,AGSECT,EF,YTIME",POWER GENERATION SECTOR
 Variable,L,VPcOwnPcLevl,Ratio of car ownership over saturation car ownership (1),"CYall,YTIME","allCy,YTIME",TRANSPORT SECTOR VARIABLES
 Variable,LAMBDA,VLambda,Parameter for load curve construction,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Variable,LFT,VLft,Lifetime of technologies (years),"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",PRICES
+Variable,LFT,VMVLft,Lifetime of technologies (years),"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",PRICES
 Parameter,LOADF,iLoadFacElecDem,Load factor of electricity demand per sector,"CYaLL,DSBS,YTIME","allCy,DSBS,YTIME",Power Generation Parameters
 Variable,LOADFALL,VLoadFacDom,"""Electricity load factor for entire domestic system""","CYaLL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Variable,LOS,VLossesDistr,Distribution losses (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS

@@ -116,8 +116,8 @@ QElecPriIndResNoCliPol       ,QPriceElecIndResNoCliPol      ,ESET,Power Generati
 " VElecPriIndResNoCliPol(runCy,ESET,YTIME)"," VPriceElecIndResNoCliPol(runCy,ESET,YTIME)",ESET,Power Generation
 qShortPowGenCost          ,qCostPowGenAvgShrt         ,ESET,Power Generation
 " vAvgPowerGenCostShoTrm(runCy,ESET,YTIME)"," vCostPowGenAvgShrt(runCy,ESET,YTIME)",ESET,Power Generation
-QPassCarsLft            ,QLft               ,"(DSBS,EF)$(sameas(DSBS,""PC"") $SECTTECH(DSBS,EF))",Transport
-" VLifeTimeTech(runCy,DSBS,EF,YTIME)"," VLft(runCy,DSBS,EF,YTIME)","(DSBS,EF)$(sameas(DSBS,""PC"") $SECTTECH(DSBS,EF))",Transport
+QPassCarsLft            ,Q01Lft               ,"(DSBS,EF)$(sameas(DSBS,""PC"") $SECTTECH(DSBS,EF))",Transport
+" VLifeTimeTech(runCy,DSBS,EF,YTIME)"," VMVLft(runCy,DSBS,EF,YTIME)","(DSBS,EF)$(sameas(DSBS,""PC"") $SECTTECH(DSBS,EF))",Transport
 QGoodsTranspActiv         ,QActivGoodsTransp         ,TRANSE$(TRANG(TRANSE)),Transport
 " VGoodsTranspActiv(runCy,TRANSE,YTIME)"," VActivGoodsTransp(runCy,TRANSE,YTIME)",TRANSE$(TRANG(TRANSE)),Transport
 QGapTranspActiv          ,QGapTranspActiv          ,TRANSE,Transport
@@ -136,8 +136,8 @@ QTechSortVarCostNewEquip      ,QShareTechTr         ,"(TRANSE,TTECH)$SECTTECH(TR
 " VTechSortVarCostNewEquip(runCy,TRANSE,TTECH,YTIME)"," VShareTechTr(runCy,TRANSE,TTECH,YTIME)","(TRANSE,TTECH)$SECTTECH(TRANSE,TTECH)",Transport
 QConsEachTechTransp        ,QConsTechTranspSectoral      ,"(TRANSE,TTECH,EF)$(SECTTECH(TRANSE,EF) $TTECHtoEF(TTECH,EF))",Transport
 " VConsEachTechTransp(runCy,TRANSE,TTECH,EF,YTIME)"," VConsTechTranspSectoral(runCy,TRANSE,TTECH,EF,YTIME)","(TRANSE,TTECH,EF)$(SECTTECH(TRANSE,EF) $TTECHtoEF(TTECH,EF))",Transport
-QFinEneDemTranspPerFuel      ,QDemFinEneTranspPerFuel      ,"(TRANSE,EF)$(SECTTECH(TRANSE,EF))",Transport
-" VDemTr(runCy,TRANSE,EF,YTIME)"," VDemFinEneTranspPerFuel(runCy,TRANSE,EF,YTIME)","(TRANSE,EF)$(SECTTECH(TRANSE,EF))",Transport
+QFinEneDemTranspPerFuel      ,Q01DemFinEneTranspPerFuel      ,"(TRANSE,EF)$(SECTTECH(TRANSE,EF))",Transport
+" VDemTr(runCy,TRANSE,EF,YTIME)"," VMVDemFinEneTranspPerFuel(runCy,TRANSE,EF,YTIME)","(TRANSE,EF)$(SECTTECH(TRANSE,EF))",Transport
 qFinEneDemTransp          ,qDemFinEneSubTransp        ,TRANSE,Transport
 " vFinEneDemTranspSub(runCy,TRANSE,YTIME)"," vDemFinEneSubTransp(runCy,TRANSE,YTIME)",TRANSE,Transport
 QMExtV               ,QMEPcGdp              ,,Transport

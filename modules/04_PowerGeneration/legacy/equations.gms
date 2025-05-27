@@ -67,9 +67,9 @@ QBsldEst(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QLoadFacDom(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VLoadFacDom(allCy,YTIME)
              =E=
-         (sum(INDDOM,VConsFuel(allCy,INDDOM,"ELC",YTIME)) + sum(TRANSE, VDemFinEneTranspPerFuel(allCy,TRANSE,"ELC",YTIME)))/
+         (sum(INDDOM,VConsFuel(allCy,INDDOM,"ELC",YTIME)) + sum(TRANSE, VMVDemFinEneTranspPerFuel(allCy,TRANSE,"ELC",YTIME)))/
          (sum(INDDOM,VConsFuel(allCy,INDDOM,"ELC",YTIME)/iLoadFacElecDem(INDDOM)) + 
-         sum(TRANSE, VDemFinEneTranspPerFuel(allCy,TRANSE,"ELC",YTIME)/iLoadFacElecDem(TRANSE)));         
+         sum(TRANSE, VMVDemFinEneTranspPerFuel(allCy,TRANSE,"ELC",YTIME)/iLoadFacElecDem(TRANSE)));         
 
 *' The equation calculates the electricity peak load by dividing the total electricity demand by the load factor for the domestic sector and converting the result
 *' to gigawatts (GW) using the conversion factor. This provides an estimate of the maximum power demand during a specific time period, taking into account the domestic
@@ -739,7 +739,7 @@ QCostPowGenLonNoClimPol(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QConsElec(allCy,DSBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VConsElec(allCy,DSBS,YTIME)
              =E=
-         sum(INDDOM $SAMEAS(INDDOM,DSBS), VConsFuel(allCy,INDDOM,"ELC",YTIME)) + sum(TRANSE $SAMEAS(TRANSE,DSBS), VDemFinEneTranspPerFuel(allCy,TRANSE,"ELC",YTIME));
+         sum(INDDOM $SAMEAS(INDDOM,DSBS), VConsFuel(allCy,INDDOM,"ELC",YTIME)) + sum(TRANSE $SAMEAS(TRANSE,DSBS), VMVDemFinEneTranspPerFuel(allCy,TRANSE,"ELC",YTIME));
 
 
 *' This equation computes the short-term average power generation cost. It involves summing the variable production costs for different power generation plants and

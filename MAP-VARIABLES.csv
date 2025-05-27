@@ -131,7 +131,7 @@ VCstCO2SeqCsts,VCaptCummCO2,,
 VCaptCummCO2,VCapCO2ElecHydr,,
 VCapCO2ElecHydr,VProdElec,,
 VConsFinEneCountry,VConsFuel,VDemElecTot,EFS
-VConsFinEneCountry,VDemFinEneTranspPerFuel,VDemElecTot,EFS
+VConsFinEneCountry,VMVDemFinEneTranspPerFuel,VDemElecTot,EFS
 VConsFiEneSec,VOutTotTransf,VBsldEst,
 VConsFiEneSec,VProdPrimary,VBsldEst,
 VConsFiEneSec,VConsFinEneCountry,VBsldEst,
@@ -219,8 +219,8 @@ VGapFinalDem,VConsRemSubEquipSubSec,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
 VConsElecNonSubIndTert,iActv,,INDDOM
 VConsRemSubEquipSubSec,iActv,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
 VConsRemSubEquipSubSec,VConsFuelInclHP-1,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
-VConsRemSubEquipSubSec,VLft,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
-VConsRemSubEquipSubSec,VLft-1,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
+VConsRemSubEquipSubSec,VMVLft,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
+VConsRemSubEquipSubSec,VMVLft-1,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
 VConsRemSubEquipSubSec,VConsElecNonSubIndTert-1,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
 VConsRemSubEquipSubSec,VPriceFuelSubsecCarVal,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
 VPriceFuelSubsecCHP,VPriceFuelSubsecCarVal,VCostTechIntrm,DSBS $(not TRANSE(DSBS))
@@ -232,12 +232,12 @@ VShareTechNewEquip,VCostTech,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
 VShareTechNewEquip,VSortTechVarCost,VConsFuelInclHP,DSBS $(not TRANSE(DSBS))
 VSortTechVarCost,VCostTechMatFac,VShareTechNewEquip,DSBS $(not TRANSE(DSBS))
 VCostTech,VCostTechIntrm,VShareTechNewEquip,DSBS $(not TRANSE(DSBS))
-VCostTechIntrm,VLft,VCostTech,DSBS $(not TRANSE(DSBS))
-VLft,VRateScrPc,VCostTechIntrm,
-VLft,VRateScrPc,VGapTranspActiv,
-VLft,VRateScrPc,VCostTranspPerMeanConsSize,
-VLft,VRateScrPc,VConsTechTranspSectoral,
-VLft,VRateScrPc,VConsRemSubEquipSubSec,
+VCostTechIntrm,VMVLft,VCostTech,DSBS $(not TRANSE(DSBS))
+VMVLft,VRateScrPc,VCostTechIntrm,
+VMVLft,VRateScrPc,VGapTranspActiv,
+VMVLft,VRateScrPc,VCostTranspPerMeanConsSize,
+VMVLft,VRateScrPc,VConsTechTranspSectoral,
+VMVLft,VRateScrPc,VConsRemSubEquipSubSec,
 VOutTransfTherm,VProdElec,,
 VInpTransfTherm,VProdElec,,
 VCapElecCHP,VConsFuel,VCapElecNonCHP,
@@ -263,7 +263,7 @@ VCapElecTotEst,VCapElecTot-1,VCapElecTot,
 VCapElecNonCHP,VCapElecTot,VGapGenCapPowerDiff,
 VCapElecNonCHP,VCapElecCHP,VGapGenCapPowerDiff,
 VLoadFacDom,VConsFuel,VPeakLoad,
-VLoadFacDom,VDemFinEneTranspPerFuel,VPeakLoad,
+VLoadFacDom,VMVDemFinEneTranspPerFuel,VPeakLoad,
 VCapElecTot,VCapElecTotEst,VCapElecNonCHP,
 VCapElecTot,VCapElecTotEst,VCapElecTotEst+1,
 VCapElecTot,VCapElecTotEst,VCapElecNonCHP,
@@ -340,7 +340,7 @@ VGapTranspActiv,VActivPassTrnsp,,
 VConsSpecificFuel,VPriceFuelSubsecCarVal,VCostTranspPerMeanConsSize,
 VConsSpecificFuel,VPriceFuelSubsecCarVal,VConsTechTranspSectoral,
 VCostTranspPerMeanConsSize,VConsSpecificFuel,VCostTranspPerVeh,
-VCostTranspPerMeanConsSize,VLft,VCostTranspPerVeh,
+VCostTranspPerMeanConsSize,VMVLft,VCostTranspPerVeh,
 VCostTranspPerMeanConsSize,VPriceFuelSubsecCarVal,VCostTranspPerVeh,
 VCostTranspPerMeanConsSize,VRenValue,VCostTranspPerVeh,
 VCostTranspPerVeh,VCostTranspPerMeanConsSize,,
