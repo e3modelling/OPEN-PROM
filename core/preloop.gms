@@ -43,8 +43,8 @@ VElecConsHeatPla.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = iFuelConsPerFueSub(run
 * Compute electricity consumed in heatpump plants, QElecConsHeatPla(runCy,INDDOM,YTIME)$time(ytime).
 VElecConsHeatPla.FX(runCy,INDDOM,YTIME) = 1E-7;
 *---
-VCarVal.FX(runCy,"TRADE",YTIME) = sExogCarbValue*iCarbValYrExog(runCy,YTIME);
-VCarVal.FX(runCy,"NOTRADE",YTIME) = sExogCarbValue*iCarbValYrExog(runCy,YTIME);
+VCarVal.FX(runCy,"TRADE",YTIME) = iCarbValYrExog(runCy,YTIME);
+VCarVal.FX(runCy,"NOTRADE",YTIME) = iCarbValYrExog(runCy,YTIME);
 *---
 openprom.optfile=1;
 *---

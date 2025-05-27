@@ -799,11 +799,12 @@ $offdelim
 *---
 * Setting the exogenous carbon price values based on the selected model scenario
 if %fScenario% eq 0 then
-     iCarbValYrExog(allCy,YTIME)$an(YTIME) = iEnvPolicies(allCy,"exogCV_NPi",YTIME);
+     iCarbValYrExog(allCy,YTIME)$an(YTIME) = 0;
 elseif %fScenario% eq 1 then
-     iCarbValYrExog(allCy,YTIME)$an(YTIME) = iEnvPolicies(allCy,"exogCV_1_5C",YTIME);
-
+     iCarbValYrExog(allCy,YTIME)$an(YTIME) = iEnvPolicies(allCy,"exogCV_NPi",YTIME);
 elseif %fScenario% eq 2 then
+     iCarbValYrExog(allCy,YTIME)$an(YTIME) = iEnvPolicies(allCy,"exogCV_1_5C",YTIME);
+elseif %fScenario% eq 3 then
      iCarbValYrExog(allCy,YTIME)$an(YTIME) = iEnvPolicies(allCy,"exogCV_2C",YTIME);
 
 endif;

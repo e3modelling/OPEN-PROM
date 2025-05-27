@@ -247,6 +247,7 @@ if (!is.null(task) && task == 0) {
       cat("Executing the report output script\n")
       report_cmd <- paste0("RScript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
       shell(report_cmd)
+      setwd(run_path)
     } 
 
     if(withRunFolder && withSync) syncRun()
@@ -268,6 +269,7 @@ if (!is.null(task) && task == 0) {
       cat("Executing the report output script\n")
       report_cmd <- paste0("RScript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
       shell(report_cmd)
+      setwd(run_path)
     } 
 
     if(withRunFolder && withSync) syncRun()
