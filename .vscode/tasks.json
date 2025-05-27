@@ -104,7 +104,7 @@
         {
             "label": "CALIBRATE",
             "type": "shell",
-            "command": "Rscript start.R task=6",
+            "command": "Rscript start.R task=5",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
