@@ -366,7 +366,7 @@ QRenTechMatMultExpr(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
               VCapElec2(allCy,PGALL2,YTIME-1)
             ) / 
             VPotRenCurr(allCy,PGRENEF,YTIME)
-          )-0.6; !! what is this number?
+          )-0.6;
 
 
 
@@ -540,7 +540,8 @@ QScalFacPlantDispatch(allCy,HOUR,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         sum(PGALL,
           (
             VCapOverall(allCy,PGALL,YTIME) +
-            sum(CHP$CHPtoEON(CHP,PGALL), VCapElecCHP(allCy,CHP,YTIME) * 0.85) !!
+            !! Multiplying with a chp cf (0.85) to get effective capacity
+            sum(CHP$CHPtoEON(CHP,PGALL), VCapElecCHP(allCy,CHP,YTIME) * 0.85)
           ) *
           exp(-VScalFacPlaDisp(allCy,HOUR,YTIME) / VSortPlantDispatch(allCy,PGALL,YTIME))
         )
@@ -634,7 +635,7 @@ QProdElecCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' rate and conversion factors. The equation provides a comprehensive calculation of the long-term cost associated with power generation technologies,
 *' excluding climate policy-related costs.
 QCostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-      VCostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME) !! CHECK
+      VCostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME)
                  =E=
       (iDisc(allCy,"PG",YTIME)*EXP(iDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL)) /
       (EXP(iDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL))-1)*iGrossCapCosSubRen(allCy,PGALL,YTIME)*1000*iCGI(allCy,YTIME) +
@@ -744,7 +745,7 @@ QCostPowGenAvgLng(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' CO2 capture rates, and carbon prices. The equation incorporates a summation over different plant fuel types and considers the cost curve for CO2 sequestration.
 *' The final result is the average power generation cost per unit of electricity produced, taking into account various economic and technical parameters.
 QCostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VCostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME) !!CHECK
+         VCostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)
                  =E=
              (iDisc(allCy,"PG",YTIME)*EXP(iDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL)) /
              (EXP(iDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL))-1)*iGrossCapCosSubRen(allCy,PGALL,YTIME)*1000*iCGI(allCy,YTIME) +
