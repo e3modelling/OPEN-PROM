@@ -24,7 +24,7 @@ QPotRenCurr(allCy,PGRENEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QCapElecCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VCapElecCHP(allCy,CHP,YTIME)
          =E=
-         1/sTWhToMtoe * sum(INDDOM,VMVConsFue(allCy,INDDOM,CHP,YTIME)) * VPriceElecInd(allCy,YTIME)/
+         1/sTWhToMtoe * sum(INDDOM,VMVConsFue(allCy,INDDOM,CHP,YTIME)) * VMVPriceElecInd(allCy,YTIME)/
          sum(PGALL$CHPtoEON(CHP,PGALL),iAvailRate(PGALL,YTIME)) /
          iUtilRateChpPlants(allCy,CHP,YTIME) /sGwToTwhPerYear;  
 
@@ -125,8 +125,8 @@ QCostHourProdInvDec(allCy,PGALL,HOUR,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                     )/iAvailRate(PGALL,YTIME-1) / (1000*(ord(HOUR)-1+0.25))
                     + iVarCost(PGALL,YTIME-1)/1E3 + (VRenValue(YTIME-1)*8.6e-5)$( not ( PGREN(PGALL) 
                     $(not sameas("PGASHYD",PGALL)) $(not sameas("PGSHYD",PGALL)) $(not sameas("PGLHYD",PGALL)) ))
-                    + sum(PGEF$PGALLtoEF(PGALL,PGEF), (VPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME-1)+
-                        iCO2CaptRate(allCy,PGALL,YTIME-1)*VCstCO2SeqCsts(allCy,YTIME-1)*1e-3*
+                    + sum(PGEF$PGALLtoEF(PGALL,PGEF), (VMVPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME-1)+
+                        iCO2CaptRate(allCy,PGALL,YTIME-1)*VMVCstCO2SeqCsts(allCy,YTIME-1)*1e-3*
                     iCo2EmiFac(allCy,"PG",PGEF,YTIME-1)
                          +(1-iCO2CaptRate(allCy,PGALL,YTIME-1))*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME-1)*
                          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(allCy,NAP,YTIME-1))))
@@ -202,8 +202,8 @@ QShareNewTechNoCCS(allCy,PGALL,YTIME)$(TIME(YTIME) $NOCCS(PGALL) $runCy(allCy)).
 QCostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
          VCostVarTech(allCy,PGALL,YTIME) 
              =E=
-         (iVarCost(PGALL,YTIME)/1E3 + sum(PGEF$PGALLtoEF(PGALL,PGEF), (VPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)/1.2441+
-         iCO2CaptRate(allCy,PGALL,YTIME)*VCstCO2SeqCsts(allCy,YTIME)*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME)
+         (iVarCost(PGALL,YTIME)/1E3 + sum(PGEF$PGALLtoEF(PGALL,PGEF), (VMVPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)/1.2441+
+         iCO2CaptRate(allCy,PGALL,YTIME)*VMVCstCO2SeqCsts(allCy,YTIME)*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME)
          + (1-iCO2CaptRate(allCy,PGALL,YTIME))*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME)
           *(sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(allCy,NAP,YTIME))))
           *sTWhToMtoe/iPlantEffByType(allCy,PGALL,YTIME))$(not PGREN(PGALL)));
@@ -230,8 +230,8 @@ QCostProdTeCHPreReplac(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                             * iGrossCapCosSubRen(allCy,PGALL,YTIME)* 1E3 * iCGI(allCy,YTIME)  + 
                             iFixOandMCost(allCy,PGALL,YTIME))/(8760*iAvailRate(PGALL,YTIME))
                            + (iVarCost(PGALL,YTIME)/1E3 + sum(PGEF$PGALLtoEF(PGALL,PGEF), 
-                           (VPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)+
-                            iCO2CaptRate(allCy,PGALL,YTIME)*VCstCO2SeqCsts(allCy,YTIME)*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME) +
+                           (VMVPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)+
+                            iCO2CaptRate(allCy,PGALL,YTIME)*VMVCstCO2SeqCsts(allCy,YTIME)*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME) +
                              (1-iCO2CaptRate(allCy,PGALL,YTIME))*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME)*
                          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(allCy,NAP,YTIME))))
                                  *sTWhToMtoe/iPlantEffByType(allCy,PGALL,YTIME))$(not PGREN(PGALL)))
@@ -522,9 +522,9 @@ QScalFacPlantDispatch(allCy,HOUR,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QProdElecEstCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VProdElecEstCHP(allCy,YTIME) 
          =E=
-         ( (1/0.086 * sum((INDDOM,CHP),VMVConsFue(allCy,INDDOM,CHP,YTIME)) * VPriceElecInd(allCy,YTIME)) + 
+         ( (1/0.086 * sum((INDDOM,CHP),VMVConsFue(allCy,INDDOM,CHP,YTIME)) * VMVPriceElecInd(allCy,YTIME)) + 
          iMxmShareChpElec(allCy,YTIME)*VDemElecTot(allCy,YTIME) - SQRT( SQR((1/0.086 * sum((INDDOM,CHP),VMVConsFue(allCy,INDDOM,CHP,YTIME)) * 
-         VPriceElecInd(allCy,YTIME)) - 
+         VMVPriceElecInd(allCy,YTIME)) - 
          iMxmShareChpElec(allCy,YTIME)*VDemElecTot(allCy,YTIME)) + SQR(1E-4) ) )/2;
 
 *' This equation calculates the non-Combined Heat and Power electricity production in a specific country and time period .
@@ -596,8 +596,8 @@ QCostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
              iFixOandMCost(allCy,PGALL,YTIME))/iAvailRate(PGALL,YTIME)
               / (1000*(6$ISET(ESET)+4$RSET(ESET))) +
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
-                 (iVarCost(PGALL,YTIME)/1000+(VPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)/1.2441+
-                 iCO2CaptRate(allCy,PGALL,YTIME)*VCstCO2SeqCsts(allCy,YTIME)*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME) +
+                 (iVarCost(PGALL,YTIME)/1000+(VMVPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)/1.2441+
+                 iCO2CaptRate(allCy,PGALL,YTIME)*VMVCstCO2SeqCsts(allCy,YTIME)*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME) +
                  (1-iCO2CaptRate(allCy,PGALL,YTIME))*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME)*
                  (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(allCy,NAP,YTIME))))
                  *sTWhToMtoe/iPlantEffByType(allCy,PGALL,YTIME)));
@@ -620,9 +620,9 @@ qCostPowGenLonMin(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
              iFixOandMCost(allCy,PGALL,YTIME))/iAvailRate(PGALL,YTIME)
              / (1000*sGwToTwhPerYear) +
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
-                 (iVarCost(PGALL,YTIME)/1000+(VPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)/1.2441+
+                 (iVarCost(PGALL,YTIME)/1000+(VMVPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)/1.2441+
 
-                 iCO2CaptRate(allCy,PGALL,YTIME)*VCstCO2SeqCsts(allCy,YTIME)*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME) +
+                 iCO2CaptRate(allCy,PGALL,YTIME)*VMVCstCO2SeqCsts(allCy,YTIME)*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME) +
 
                  (1-iCO2CaptRate(allCy,PGALL,YTIME))*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME)*
 
@@ -649,7 +649,7 @@ qCostPowGenLongIntPri(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                  (iVarCost(PGALL,YTIME)/1000+((
   SUM(EF,sum(WEF$EFtoWEF("PG",EF,WEF), iPriceFuelsInt(WEF,YTIME))*sTWhToMtoe/1000*1.5))$(not PGREN(PGALL))    +
 
-                 iCO2CaptRate(allCy,PGALL,YTIME)*VCstCO2SeqCsts(allCy,YTIME)*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME) +
+                 iCO2CaptRate(allCy,PGALL,YTIME)*VMVCstCO2SeqCsts(allCy,YTIME)*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME) +
 
                  (1-iCO2CaptRate(allCy,PGALL,YTIME))*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME)*
 
@@ -670,7 +670,7 @@ qCostPowGenShortIntPri(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                  (iVarCost(PGALL,YTIME)/1000+((
   SUM(EF,sum(WEF$EFtoWEF("PG",EF,WEF), iPriceFuelsInt(WEF,YTIME))*sTWhToMtoe/1000*1.5))$(not PGREN(PGALL))    +
 
-                 iCO2CaptRate(allCy,PGALL,YTIME)*VCstCO2SeqCsts(allCy,YTIME)*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME) +
+                 iCO2CaptRate(allCy,PGALL,YTIME)*VMVCstCO2SeqCsts(allCy,YTIME)*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME) +
 
                  (1-iCO2CaptRate(allCy,PGALL,YTIME))*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME)*
 
@@ -708,10 +708,10 @@ QCostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy))).
              iFixOandMCost(allCy,PGALL,YTIME))/iAvailRate(PGALL,YTIME)
              / (1000*(7.25$ISET(ESET)+2.25$RSET(ESET))) +
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
-                 (iVarCost(PGALL,YTIME)/1000+((VPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)-iEffValueInDollars(allCy,"PG",ytime)/1000-iCo2EmiFac(allCy,"PG",PGEF,YTIME)*
+                 (iVarCost(PGALL,YTIME)/1000+((VMVPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)-iEffValueInDollars(allCy,"PG",ytime)/1000-iCo2EmiFac(allCy,"PG",PGEF,YTIME)*
                  sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(allCy,NAP,YTIME))/1000 )/1.2441+
 
-                 iCO2CaptRate(allCy,PGALL,YTIME)*VCstCO2SeqCsts(allCy,YTIME)*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME) +
+                 iCO2CaptRate(allCy,PGALL,YTIME)*VMVCstCO2SeqCsts(allCy,YTIME)*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME) +
 
                  (1-iCO2CaptRate(allCy,PGALL,YTIME))*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME)*
 
@@ -755,8 +755,8 @@ qCostPowGenAvgShrt(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         VMVProdElec(allCy,PGALL,YTIME)*
         (
         sum(PGEF$PGALLtoEF(PGALL,PGEF),
-        (iVarCost(PGALL,YTIME)/1000+(VPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)/1.2441+
-         iCO2CaptRate(allCy,PGALL,YTIME)*VCstCO2SeqCsts(allCy,YTIME)*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME) +
+        (iVarCost(PGALL,YTIME)/1000+(VMVPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)/1.2441+
+         iCO2CaptRate(allCy,PGALL,YTIME)*VMVCstCO2SeqCsts(allCy,YTIME)*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME) +
          (1-iCO2CaptRate(allCy,PGALL,YTIME))*1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME)*
          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(allCy,NAP,YTIME))))
                  *sTWhToMtoe/iPlantEffByType(allCy,PGALL,YTIME)))

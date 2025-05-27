@@ -66,7 +66,7 @@ $ontext
 qExpendHouseEne(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                  vExpendHouseEne(allCy,YTIME)
                  =E= 
-                 SUM(DSBS$HOU(DSBS),SUM(EF$SECTTECH(dSBS,EF),VMVConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)*(VPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME)-iEffValueInDollars(allCy,DSBS,YTIME)/
+                 SUM(DSBS$HOU(DSBS),SUM(EF$SECTTECH(dSBS,EF),VMVConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)*(VMVPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME)-iEffValueInDollars(allCy,DSBS,YTIME)/
                  1000-iCo2EmiFac(allCy,"PG",EF,YTIME)*sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(allCy,NAP,YTIME))/1000)))
-                                          +VPriceElecIndResNoCliPol(allCy,"R",YTIME)*VMVConsElecNonSubIndTert(allCy,"HOU",YTIME)/sTWhToMtoe;
+                                          +VMVPriceElecIndResNoCliPol(allCy,"R",YTIME)*VMVConsElecNonSubIndTert(allCy,"HOU",YTIME)/sTWhToMtoe;
 $offtext

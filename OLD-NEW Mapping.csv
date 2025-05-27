@@ -112,8 +112,8 @@ QLonAvgPowGenCostNoClimPol     ,QCostAvgPowGenLonNoClimPol     ,"(PGALL,ESET)",P
 " VLonAvgPowGenCostNoClimPol(runCy,PGALL,ESET,YTIME)"," VCostAvgPowGenLonNoClimPol(runCy,PGALL,ESET,YTIME)","(PGALL,ESET)",Power Generation
 QLonPowGenCostNoClimPol      ,QCostPowGenLonNoClimPol      ,ESET,Power Generation
 " VLonPowGenCostNoClimPol(runCy,ESET,YTIME)"," VCostPowGenLonNoClimPol(runCy,ESET,YTIME)",ESET,Power Generation
-QElecPriIndResNoCliPol       ,QPriceElecIndResNoCliPol      ,ESET,Power Generation
-" VElecPriIndResNoCliPol(runCy,ESET,YTIME)"," VPriceElecIndResNoCliPol(runCy,ESET,YTIME)",ESET,Power Generation
+QElecPriIndResNoCliPol       ,Q08PriceElecIndResNoCliPol      ,ESET,Power Generation
+" VElecPriIndResNoCliPol(runCy,ESET,YTIME)"," VMVPriceElecIndResNoCliPol(runCy,ESET,YTIME)",ESET,Power Generation
 qShortPowGenCost          ,qCostPowGenAvgShrt         ,ESET,Power Generation
 " vAvgPowerGenCostShoTrm(runCy,ESET,YTIME)"," vCostPowGenAvgShrt(runCy,ESET,YTIME)",ESET,Power Generation
 QPassCarsLft            ,Q01Lft               ,"(DSBS,EF)$(sameas(DSBS,""PC"") $SECTTECH(DSBS,EF))",Transport
@@ -168,14 +168,14 @@ qElecConsInd            ,q02ConsTotElecInd          ,,INDUSTRY - DOMESTIC - NON 
 " vElecConsInd(runCy,YTIME)"," VMvConsTotElecInd(runCy,YTIME)",,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 qDemInd              ,q02DemFinSubFuelInd         ,,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 " vDemInd(runCy,YTIME)"," VMvDemFinSubFuelInd(runCy,YTIME)",,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-QElecIndPrices           ,QPriceElecInd           ,,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-" VElecIndPrices(runCy,YTIME)"," VPriceElecInd(runCy,YTIME)",,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+QElecIndPrices           ,Q08PriceElecInd           ,,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+" VElecIndPrices(runCy,YTIME)"," VMVPriceElecInd(runCy,YTIME)",,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 QFuelCons             ,Q02ConsFuel             ,"(DSBS,EF)$(not TRANSE(DSBS)) $SECTTECH(DSBS,EF) $(not HEATPUMP(EF)))",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 " VMVConsFue(runCy,DSBS,EF,YTIME)"," VMVConsFue(runCy,DSBS,EF,YTIME)","(DSBS,EF)$(not TRANSE(DSBS)) $SECTTECH(DSBS,EF) $(not HEATPUMP(EF)))",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 QElecIndPricesEst         ,QIndxElecIndPrices         ,,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 " VElecIndPricesEst(runCy,YTIME)"," VIndxElecIndPrices(runCy,YTIME)",,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-QFuePriSubChp           ,QPriceFuelSubsecCHP        ,"(DSBS,EF)$((not TRANSE(DSBS))  $SECTTECH(DSBS,EF) )",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-" VFuePriSubChp(runCy,DSBS,EF,YTIME)"," VPriceFuelSubsecCHP(runCy,DSBS,EF,YTIME)","(DSBS,EF)$((not TRANSE(DSBS))  $SECTTECH(DSBS,EF) )",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+QFuePriSubChp           ,Q08PriceFuelSubsecCHP        ,"(DSBS,EF)$((not TRANSE(DSBS))  $SECTTECH(DSBS,EF) )",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+" VFuePriSubChp(runCy,DSBS,EF,YTIME)"," VMVPriceFuelSubsecCHP(runCy,DSBS,EF,YTIME)","(DSBS,EF)$((not TRANSE(DSBS))  $SECTTECH(DSBS,EF) )",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 QElecProdCosChp          ,QCostElecProdCHP          ,"(DSBS,CHP)$(INDDOM(DSBS))",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 " VElecProdCostChp(runCy,DSBS,CHP,YTIME)"," VCostElecProdCHP(runCy,DSBS,CHP,YTIME)","(DSBS,CHP)$(INDDOM(DSBS))",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 QTechCost             ,QCostTech             ,DSBS $(not TRANSE(DSBS)),INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
@@ -250,19 +250,19 @@ QCumCO2Capt            ,QCaptCummCO2            ,,CO2 SEQUESTRATION COST CURVES
 " VCumCO2Capt(runCy,YTIME)"," VCaptCummCO2(runCy,YTIME)",,CO2 SEQUESTRATION COST CURVES
 QWghtTrnstLinToExpo        ,QTrnsWghtLinToExp         ,,CO2 SEQUESTRATION COST CURVES
 " VWghtTrnstLnrToExpo(runCy,YTIME)"," VTrnsWghtLinToExp(runCy,YTIME)",,CO2 SEQUESTRATION COST CURVES
-QCstCO2SeqCsts           ,QCstCO2SeqCsts           ,,CO2 SEQUESTRATION COST CURVES
-" VCO2SeqCsts(runCy,YTIME)  "," VCstCO2SeqCsts(runCy,YTIME)    ",,CO2 SEQUESTRATION COST CURVES
+Q06CstCO2SeqCsts           ,Q06CstCO2SeqCsts           ,,CO2 SEQUESTRATION COST CURVES
+" VCO2SeqCsts(runCy,YTIME)  "," VMVCstCO2SeqCsts(runCy,YTIME)    ",,CO2 SEQUESTRATION COST CURVES
 QTotGhgEmisAllCountrNap      ,QGrnnHsEmisCO2Equiv        ,NAP,EMISSIONS CONSTRAINTS
 " VTotGhgEmisAllCountrNap(NAP,YTIME)"," VGrnnHsEmisCO2Equiv(NAP,YTIME)",NAP,EMISSIONS CONSTRAINTS
 qTotCo2AllCoun          ,qGrnnHsEmisCO2EquivAllCntr     ,,EMISSIONS CONSTRAINTS
  vTotCo2AllCoun(YTIME) , vGrnnHsEmisCO2EquivAllCntr(YTIME) ,,EMISSIONS CONSTRAINTS
 qHouseExpEne            ,qExpendHouseEne          ,,EMISSIONS CONSTRAINTS
 " vHouseExpEne(runCy,YTIME)"," vExpendHouseEne(runCy,YTIME)",,EMISSIONS CONSTRAINTS
-QFuelPriSubSepCarbVal       ,QPriceFuelSubsecCarVal        ,"(SBS,EF)$$(SECTTECH(SBS,EF)$(not sameas(""NUC"",EF)))",EMISSIONS CONSTRAINTS
-" VFuelPriceSub(runCy,SBS,EF,YTIME)"," VPriceFuelSubsecCarVal(runCy,SBS,EF,YTIME)","(SBS,EF)$$(SECTTECH(SBS,EF)$(not sameas(""NUC"",EF)))",EMISSIONS CONSTRAINTS
+QFuelPriSubSepCarbVal       ,Q08PriceFuelSubsecCarVal        ,"(SBS,EF)$$(SECTTECH(SBS,EF)$(not sameas(""NUC"",EF)))",EMISSIONS CONSTRAINTS
+" VFuelPriceSub(runCy,SBS,EF,YTIME)"," VMVPriceFuelSubsecCarVal(runCy,SBS,EF,YTIME)","(SBS,EF)$$(SECTTECH(SBS,EF)$(not sameas(""NUC"",EF)))",EMISSIONS CONSTRAINTS
 QFuelPriSepCarbon         ,QPriceFuelSepCarbonWght      ,"(DSBS,EF)$(SECTTECH(DSBS,EF)",EMISSIONS CONSTRAINTS
 " VFuelPriMultWgt(runCy,DSBS,EF,YTIME)"," VPriceFuelSepCarbonWght(runCy,DSBS,EF,YTIME)","(DSBS,EF)$(SECTTECH(DSBS,EF)",EMISSIONS CONSTRAINTS
-QAvgFuelPriSub           ,QPriceFuelAvgSub          ,DSBS,EMISSIONS CONSTRAINTS
-" VFuelPriceAvg(runCy,DSBS,YTIME)"," VPriceFuelAvgSub(runCy,DSBS,YTIME)",DSBS,EMISSIONS CONSTRAINTS
+QAvgFuelPriSub           ,Q08PriceFuelAvgSub          ,DSBS,EMISSIONS CONSTRAINTS
+" VFuelPriceAvg(runCy,DSBS,YTIME)"," VMVPriceFuelAvgSub(runCy,DSBS,YTIME)",DSBS,EMISSIONS CONSTRAINTS
 QElecPriIndResCons         ,QPriceElecIndResConsu       ,ESET,EMISSIONS CONSTRAINTS
 " VElecPriInduResConsu(runCy,ESET,YTIME)"," VPriceElecIndResConsu(runCy,ESET,YTIME)",ESET,EMISSIONS CONSTRAINTS

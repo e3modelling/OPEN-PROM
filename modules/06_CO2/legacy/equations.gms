@@ -53,7 +53,7 @@ QTrnsWghtLinToExp(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' representation of the relationship between cumulative CO2 captured and sequestration costs. This equation provides a dynamic and
 *' realistic approach to modeling CO2 sequestration costs, considering the cumulative CO2 captured and the associated elasticities
 *' for the cost curve. The result represents the cost of sequestering one ton of CO2 in the specified scenario and year.
-QCstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VCstCO2SeqCsts(allCy,YTIME) =E=
+Q06CstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VMVCstCO2SeqCsts(allCy,YTIME) =E=
        (1-VTrnsWghtLinToExp(allCy,YTIME))*(iElastCO2Seq(allCy,"mc_a")*VCaptCummCO2(allCy,YTIME)+iElastCO2Seq(allCy,"mc_b"))+
        VTrnsWghtLinToExp(allCy,YTIME)*(iElastCO2Seq(allCy,"mc_c")*exp(iElastCO2Seq(allCy,"mc_d")*VCaptCummCO2(allCy,YTIME)));           

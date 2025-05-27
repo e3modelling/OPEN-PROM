@@ -82,9 +82,9 @@ QCostProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QCostVarProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VCostVarProdH2Tech(allCy,H2TECH,YTIME)
          =E=
-         sum(EF$H2TECHEFtoEF(H2TECH,EF), (VPriceFuelSubsecCarVal(allCy,"H2P",EF,YTIME)*1e3+
+         sum(EF$H2TECHEFtoEF(H2TECH,EF), (VMVPriceFuelSubsecCarVal(allCy,"H2P",EF,YTIME)*1e3+
 
-            iCaptRateH2Prod(allCy,H2TECH,YTIME)*iCo2EmiFac(allCy,"H2P",EF,YTIME)*VCstCO2SeqCsts(allCy,YTIME)+
+            iCaptRateH2Prod(allCy,H2TECH,YTIME)*iCo2EmiFac(allCy,"H2P",EF,YTIME)*VMVCstCO2SeqCsts(allCy,YTIME)+
 
             (1-iCaptRateH2Prod(allCy,H2TECH,YTIME))*iCo2EmiFac(allCy,"H2P",EF,YTIME)*
 
@@ -298,7 +298,7 @@ QCostTechH2Infr(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          (
             iConsSelfH2Transp(allCy,INFRTECH,YTIME)*VInvNewReqH2Infra(allCy,INFRTECH,YTIME)*
             (VCostAvgProdH2(allCy,YTIME-1)$sameas("HPIPU",INFRTECH)+
-            VPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)*1e3)$sameas("SSGG",INFRTECH)
+            VMVPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)*1e3)$sameas("SSGG",INFRTECH)
          )$(sameas("SSGG",INFRTECH) or sameas("HPIPU",INFRTECH))
          /VInvNewReqH2Infra(allCy,INFRTECH,YTIME)
 ;
