@@ -16,7 +16,7 @@ jobs:
 
       - name: Setup GAMS
         run: |
-          $url = "https://d37drm4t2jghv5.cloudfront.net/distributions/45.7.0/windows/windows_x64_64.exe"
+          $url = "https://d37drm4t2jghv5.cloudfront.net/distributions/47.1.0/windows/windows_x64_64.exe"
           $installer = "gams_installer.exe"
           Invoke-WebRequest -Uri $url -OutFile $installer
           Start-Process $installer -ArgumentList "/silent" -NoNewWindow -Wait
@@ -38,7 +38,7 @@ jobs:
         run: |
           @"
           print("Getting data for GitHub Action")
-          url <- 'https://drive.usercontent.google.com/uc?id=1kVi9jrXiX73tarQVyK50Y_JU0LL56X4-&export=download'
+          url <- 'https://drive.usercontent.google.com/uc?id=1Hy0zhnHsouE25O9smP7u75X6l6uU2HIg&export=download'
           fname <- 'ghaction_data.tgz'
           download.file(url, fname, mode="wb")
           utils::untar(fname, exdir = "./data")
@@ -48,12 +48,12 @@ jobs:
           
       - name: Test Model Run - NPi Default Scenario
         run: |
-          & "C:\GAMS\45\gams.exe" main.gms --DevMode=0 --GenerateInput=off --fEndY=2050 --fScenario=0 -Idir=./data
+          & "C:\GAMS\45\gams.exe" main.gms --DevMode=0 --GenerateInput=off --fEndY=2050 --fScenario=1 -Idir=./data
 
       - name: Test Model Run - 1.5C Scenario
         run: |
-          & "C:\GAMS\45\gams.exe" main.gms --DevMode=0 --GenerateInput=off --fEndY=2050 --fScenario=1 -Idir=./data
+          & "C:\GAMS\45\gams.exe" main.gms --DevMode=0 --GenerateInput=off --fEndY=2050 --fScenario=2 -Idir=./data
           
       - name: Test Model Run - 2C Scenario
         run: |
-          & "C:\GAMS\45\gams.exe" main.gms --DevMode=0 --GenerateInput=off --fEndY=2050 --fScenario=2 -Idir=./data
+          & "C:\GAMS\45\gams.exe" main.gms --DevMode=0 --GenerateInput=off --fEndY=2050 --fScenario=3 -Idir=./data
