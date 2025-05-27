@@ -23,7 +23,7 @@ QPcOwnPcLevl(allCy,YTIME)                                  "Compute ratio of car
 QRateScrPc(allCy,YTIME)                                    "Compute passenger cars scrapping rate"
 
 *'                **Interdependent Equations**
-Q01DemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)	           "Compute final energy demand in transport per fuel"
+Q01DemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)	       "Compute final energy demand in transport per fuel"
 Q01Lft(allCy,DSBS,EF,YTIME)	                               "Compute the lifetime of passenger cars" 
 ;
 
@@ -56,9 +56,9 @@ VActivPassTrnsp(allCy,TRANSE,YTIME)                        "Passenger transport 
 VNumPcScrap(allCy,YTIME)                                   "Scrapped passenger cars (million vehicles)"
 VPcOwnPcLevl(allCy,YTIME)                                  "Ratio of car ownership over saturation car ownership (1)"
 VRateScrPc(allCy,YTIME)                                    "Scrapping rate of passenger cars (1)"
-VMVConsElecNonSubIndTert(allCy,DSBS,YTIME)                   "Consumption of non-substituable electricity in Industry and Tertiary (Mtoe)"
 
 *'                **Interdependent Equations**
-VMVDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)             "Final energy demand in transport subsectors per fuel (Mtoe)"
-VMVLft(allCy,DSBS,EF,YTIME)                                  "Lifetime of technologies (years)"
+VMVConsElecNonSubIndTert(allCy,DSBS,YTIME)                 "Consumption of non-substituable electricity in Industry and Tertiary (Mtoe)"
+VMVDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)           "Final energy demand in transport subsectors per fuel (Mtoe)"
+VMVLft(allCy,DSBS,EF,YTIME)                                "Lifetime of technologies (years)"
 ;
