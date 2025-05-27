@@ -56,7 +56,7 @@ VActivPassTrnsp(allCy,TRANSE,YTIME)                        "Passenger transport 
 VNumPcScrap(allCy,YTIME)                                   "Scrapped passenger cars (million vehicles)"
 VPcOwnPcLevl(allCy,YTIME)                                  "Ratio of car ownership over saturation car ownership (1)"
 VRateScrPc(allCy,YTIME)                                    "Scrapping rate of passenger cars (1)"
-VConsElecNonSubIndTert(allCy,DSBS,YTIME)                   "Consumption of non-substituable electricity in Industry and Tertiary (Mtoe)"
+VMVConsElecNonSubIndTert(allCy,DSBS,YTIME)                   "Consumption of non-substituable electricity in Industry and Tertiary (Mtoe)"
 
 *'                **Interdependent Equations**
 VMVDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)             "Final energy demand in transport subsectors per fuel (Mtoe)"

@@ -11,8 +11,8 @@ Parameter,AMAXBASE,iBslCorrection,Parameter of baseload correction,"CYaLL,YTIME"
 Parameter,APPROD,iRatePriProTotPriNeeds,Rate of Primary Production in Total Primary Needs (1),"CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
 Parameter,APRICE,-,"Alpha' Parameter, linking International Prices with Consumer Prices","CYall,SBS,EF,YTIME",,Macro economic and demographic
 Parameter,APricePRN,,Parameters linking world prices to domestic prices in equations (after 2005),"SBS,EF,YTIME",,Parameters for data transfering
-Variable,AVCHPCOST,VCostElcAvgProdCHP,Average Electricity production cost per CHP plant (US$2015/KWh),"CYall,CHP,YTIME","allCy,CHP,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-Variable,AVCHPVCOST,VCostVarAvgElecProd,"""Average variable including fuel electricity production cost per CHP plant (US$2015/KWh)","CYall,CHP,YTIME","allCy,CHP,YTIME",
+Variable,AVCHPCOST,VMVCostElcAvgProdCHP,Average Electricity production cost per CHP plant (US$2015/KWh),"CYall,CHP,YTIME","allCy,CHP,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+Variable,AVCHPVCOST,VMVCostVarAvgElecProd,"""Average variable including fuel electricity production cost per CHP plant (US$2015/KWh)","CYall,CHP,YTIME","allCy,CHP,YTIME",
 Variable,AVERAV,VCFAvgRen,"The average capacity factor of RES, availability of RES increases over the years, but not all their capacity can produce electricity at such high availabilities","CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Variable,BASEEST,VBsldEst,Estimated base load (GW),"CYall,YTIME","allCy,YTIME",
 Variable,BASELOAD,VBaseLoad,Corrected base load (GW),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
@@ -55,12 +55,12 @@ Variable,CO2EMISTOT,vGrnnHsEmisCO2EquivAllCntr,Total CO2eq GHG emissions in all 
 Variable,CO2SEQCOST,VCstCO2SeqCsts,Cost curve for CO2 sequestration costs (US$2015/tn of CO2 sequestrated),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Parameter,CO2SEQPARAM,iElastCO2Seq,Elasticities for CO2 sequestration cost curve,"CYall,CO2SEQELAST","allCy,CO2SEQELAST",Emission Related Parameters
 Variable,CO2SEQW,VTrnsWghtLinToExp,Weight for transtition from linear CO2 sequestration cost curve to exponential,"CYALL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Variable,CONSEF,VConsFuel,"Consumption of fuels in each demand subsector, excluding heat from heatpumps (Mtoe)","CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-Variable,CONSEF_BAR,VConsFuelInclHP,Consumption of fuels in each demand subsector including heat from heatpumps (Mtoe),"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+Variable,CONSEF,VMVConsFue,"Consumption of fuels in each demand subsector, excluding heat from heatpumps (Mtoe)","CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+Variable,CONSEF_BAR,VMVConsFuelInclHP,Consumption of fuels in each demand subsector including heat from heatpumps (Mtoe),"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Sets,CONSET,conSet,Consumer size groups related to space heating,,,
 Parameter,CONSIZE,iConsSizeDistHeat,Consumer sizes for district heating (1),,,
 Parameter,ConsizePRN,-,-,"CONSET,CONSIZE_set",-,
-Variable,CONSS,VConsRemSubEquipSubSec,Consumption of remaining substitutable equipment (Mtoe),"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+Variable,CONSS,VMVConsRemSubEquipSubSec,Consumption of remaining substitutable equipment (Mtoe),"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,CONTR,VConsTechTranspSectoral,Consumption of each technology and subsector (Mtoe),"CYall,TRANSE,TTECH,EF,YTIME","allCy,TRANSE,TTECH,EF,YTIME",TRANSPORT SECTOR VARIABLES
 Variable,COSTSUCAP,vScalWeibull,Temporary variable facilitating the scaling in Weibull equation,"CYall,PGALL,HOUR,YTIME","allCy,PGALL,HOUR,YTIME",POWER GENERATION SECTOR
 Variable,COSTSUCAP2,VScalWeibullSum,Sum (over hours) of temporary variable facilitating the scaling in Weibull equation (1),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
@@ -75,8 +75,8 @@ Parameter,DDEMSE,iTotFinEneDemSubBaseYr,Total Final Energy Demand per subsector 
 Parameter,DELCINDEX,iElecIndex,Electricity Index (1),"CYall,YTIME","allCy,YTIME",Prices
 Variable,DEMCOST,VCostTechIntrm,Intermediate technology cost (KUS$2015/toe),"CYall,DSBS,Rcon,EF,YTIME","allCy,DSBS,rcon,EF,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,DEMCOST1,VCostTech,Technology cost ( KUS$2015/toe),"CYall,DSBS,Rcon,EF,YTIME","allCy,DSBS,Rcon,EF,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-Variable,DEMSE,VDemFinSubFuelSubsec,Total final demand (of substitutable fuels) per subsector (Mtoe),"CYall,DSBS,YTIME","allCy,DSBS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-Variable,DEMSEIND,vDemFinSubFuelInd,Total final demand (of substitutable fuels) in industrial sectors (Mtoe),"CYALL,YTIME","allCy, YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+Variable,DEMSE,VMVDemFinSubFuelSubsec,Total final demand (of substitutable fuels) per subsector (Mtoe),"CYall,DSBS,YTIME","allCy,DSBS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+Variable,DEMSEIND,VMvDemFinSubFuelInd,Total final demand (of substitutable fuels) in industrial sectors (Mtoe),"CYALL,YTIME","allCy, YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,DEMTR,VMVDemFinEneTranspPerFuel,Final energy demand in transport subsectors per fuel (Mtoe),"CYall,TRANSE,EF,YTIME","allCy,TRANSE,EF,YTIME",TRANSPORT SECTOR VARIABLES
 Variable,DEMTRALL,vDemFinEneSubTransp,Final energy demand in transport subsectors (Mtoe),"CYall,TRANSE,YTIME","allCy,TRANSE,YTIME",TRANSPORT SECTOR VARIABLES
 Parameter,DEXPO,iFuelExprts,Fuel Exports (Mtoe),"CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
@@ -116,8 +116,8 @@ Variable,ELCDEMAND,VDemElecTot,Total electricity demand (TWh),"CYall,YTIME","all
 Variable,ELCHEATPUMP,VElecConsHeatPla,Electricity consumed in heatpump plants (Mtoe),"CYall,DSBS,YTIME","allCy, DSBS, YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,ELCINDEX,VPriceElecInd,Electricity index - a function of industry price (1),"CYall,YTIME","allCy,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,ELCINDEX_EST,VIndxElecIndPrices,Electricity index - a function of industry price - Estimate (1),"CYALL,YTIME","allCy, YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-Variable,ELCNS,VConsElecNonSubIndTert,Consumption of non-substituable electricity in Industry and Tertiary (Mtoe),"CYall,DSBS,YTIME","allCy,DSBS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-Variable,ELCNSIND,vConsTotElecInd,Total Consumption of Electricity in industrial sectors (Mtoe),"CYALL,YTIME","allCy,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+Variable,ELCNS,VMVConsElecNonSubIndTert,Consumption of non-substituable electricity in Industry and Tertiary (Mtoe),"CYall,DSBS,YTIME","allCy,DSBS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+Variable,ELCNSIND,VMvConsTotElecInd,Total Consumption of Electricity in industrial sectors (Mtoe),"CYALL,YTIME","allCy,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,ELCPRICE,VPriceElecIndResConsu,Electricity price to Industrial and Residential Consumers (US$2015/KWh),"CYall,ESET,YTIME","allCy,ESET,YTIME",VARIABLES
 Variable,ELCPRICE_NOCV,VPriceElecIndResNoCliPol,Electricity price to Industrial and Residential Consumers (US$2015/KWh),"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
 Parameter,ELCPRICECHAR,iFacElecPriConsu,Factors affecting electricity prices to consumers,"CYall,ELCPCHAR,YTIME ","allCy,ELCPCHAR,YTIME",Prices
@@ -131,8 +131,8 @@ Equation,EQACTVTRG,QActivGoodsTransp,Compute goods transport activity,"CYall,TRA
 Equation,EQACTVTRP,QActivPassTrnsp,Compute passenger transport activity,"CYall,TRANSE,YTIME","allCy,TRANSE,YTIME",Transport
 Equation,EQAFFORDABILITY,qExpendHouseEne,Compute households expenditures on energy,"CYALL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQALPHA,QScalFacPlantDispatch,Compute the scaling factor for plant dispatching,"CYall,HOUR,YTIME","allCy,HOUR,YTIME",POWER GENERATION SECTOR
-Equation,EQAVCHPCOST,QCostElcAvgProdCHP,Compute Average Electricity production cost per CHP plant,"CYall,CHP,YTIME","allCy,CHP,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
-Equation,EQAVCHPVCOST,QCostVarAvgElecProd,Compute Average variable including fuel electricity production cost per CHP plant ,"CYall,CHP,YTIME","allCy,CHP,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
+Equation,EQAVCHPCOST,Q02CostElcAvgProdCHP,Compute Average Electricity production cost per CHP plant,"CYall,CHP,YTIME","allCy,CHP,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
+Equation,EQAVCHPVCOST,Q02CostVarAvgElecProd,Compute Average variable including fuel electricity production cost per CHP plant ,"CYall,CHP,YTIME","allCy,CHP,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQAVERAV,QCFAvgRen,Compute the average capacity factor of RES,"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Equation,EQBASEEST,QBsldEst,Compute estimated base load,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQBASELOAD,QBaseLoad,Compute electricity base load,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
@@ -156,9 +156,9 @@ Equation,EQCO2EMISNAP,QGrnnHsEmisCO2Equiv,Compute total CO2eq GHG emissions in a
 Equation,EQCO2EMISTOT,qGrnnHsEmisCO2EquivAllCntr,Compute total CO2eq GHG emissions in all countries,YTIME,YTIME,POWER GENERATION SECTOR
 Equation,EQCO2SEQCOST,QCstCO2SeqCsts,Compute cost curve for CO2 sequestration costs in US$2015 per tn of CO2 sequestrated,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQCO2SEQW,QTrnsWghtLinToExp,Compute the transition weight from linear CO2 sequestration cost curve to exponential,"CYALL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Equation,EQCONSEF,QConsFuel,Compute fuel consumption (Mtoe),"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
-Equation,EQCONSEF_BAR,QConsFuelInclHP,Compute fuel consumption including heat from heatpumps,"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
-Equation,EQCONSS,QConsRemSubEquipSubSec,Compute consumption of remaining substitutble equipment,"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
+Equation,EQCONSEF,Q02ConsFuel,Compute fuel consumption (Mtoe),"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
+Equation,EQCONSEF_BAR,Q02ConsFuelInclHP,Compute fuel consumption including heat from heatpumps,"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
+Equation,EQCONSS,Q02ConsRemSubEquipSubSec,Compute consumption of remaining substitutble equipment,"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQCONTR,QConsTechTranspSectoral,Compute consumption of each technology in transport sectors,"CYall,TRANSE,TTECH,EF,YTIME","allCy,TRANSE,TTECH,EF,YTIME",TRANSPORT SPECIFIC EQUATIONS
 Equation,EQCOSTSUCAP,qScalWeibull,Compute temporary variable facilitating the scaling in Weibull equation,"CYALL,PGALL,HOUR,YTIME","allCy,PGALL,HOUR,YTIME",POWER GENERATION SECTOR
 Equation,EQCOSTSUCAP2,QScalWeibullSum,Compute sum (over hours) of temporary variable facilitating the scaling in Weibull equation,"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
@@ -166,8 +166,8 @@ Equation,EQCOSTTR,QCostTranspPerMeanConsSize,Compute transportation cost per mea
 Equation,EQCOSTTR1,QCostTranspPerVeh,Compute transportation cost per mean and consumer size in KUS$2015 per vehicle,"CYALL,TRANSE,RCon,TTECH,YTIME","allCy,TRANSE,RCon,TTECH,YTIME",TRANSPORT SPECIFIC EQUATIONS
 Equation,EQDEMCOST,QCostTechIntrm,Compute  technology cost including lifetime,"CYall,DSBS,Rcon,EF,YTIME","allCy,DSBS,rCon,EF,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQDEMCOST1,QCostTech,Compute technology cost ,"CYall,DSBS,Rcon,EF,YTIME","allCy,DSBS,Rcon,EF,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
-Equation,EQDEMSE,QDemFinSubFuelSubsec,Compute for total final demand (of substitutable fuels) per subsector ,"CYall,DSBS,YTIME","allCy,DSBS,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
-Equation,EQDEMSEIND,qDemFinSubFuelInd,Compute total final demand (of substitutable fuels) in industrial sectors ,"CYALL,YTIME","allCy, YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
+Equation,EQDEMSE,Q02DemFinSubFuelSubsec,Compute for total final demand (of substitutable fuels) per subsector ,"CYall,DSBS,YTIME","allCy,DSBS,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
+Equation,EQDEMSEIND,q02DemFinSubFuelInd,Compute total final demand (of substitutable fuels) in industrial sectors ,"CYALL,YTIME","allCy, YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQDEMTR,Q01DemFinEneTranspPerFuel,Compute final energy demand in transport per fuel,"CYall,TRANSE,EF,YTIME","allCy,TRANSE,EF,YTIME",TRANSPORT SPECIFIC EQUATIONS
 Equation,EQDEMTRALL,qDemFinEneSubTransp,Compute final energy demand in transport ,"CYall,TRANSE,YTIME","allCy,TRANSE,YTIME",TRANSPORT SPECIFIC EQUATIONS
 Equation,EQDUMMYOBJ,qDummyObj,Define dummy objective function,"CYall,INDDOM,YTIME",,
@@ -177,8 +177,8 @@ Equation,EQELCDEMAND,QDemElecTot,Compute electricity final demand,"CYall,YTIME",
 Equation,EQELCHEATPUMP,QElecConsHeatPla,Compute electricity consumed in heatpump plants (Mtoe),"CYall,DSBS,YTIME","allCy, DSBS, YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQELCINDEX,QPriceElecInd,Compute electricity index,"CYall,YTIME","allCy,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS
 Equation,EQELCINDEX_EST,QIndxElecIndPrices,Compute the estimated electricity Index of industry price,"CYALL,YTIME","allCy, YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
-Equation,EQELCNS,QConsElecNonSubIndTert,Compute non-substituable electricity consumption in Industry and Tertiary,"CYall,INDDOM,YTIME","allCy,INDDOM,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-Equation,EQELCNSIND,qConsTotElecInd,Compute Consumption of electricity in industrial sectors ,"CYALL,YTIME","allCy,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
+Equation,EQELCNS,Q02ConsElecNonSubIndTert,Compute non-substituable electricity consumption in Industry and Tertiary,"CYall,INDDOM,YTIME","allCy,INDDOM,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+Equation,EQELCNSIND,q02ConsTotElecInd,Compute Consumption of electricity in industrial sectors ,"CYALL,YTIME","allCy,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQELCPRICE,QPriceElecIndResConsu,Compute electricity price in Industrial and Residential Consumers,"CYall,ESET,YTIME","allCy,ESET,YTIME",PRICES EQUATIONS
 Equation,EQELCPRICE_NOCV,QPriceElecIndResNoCliPol,Compute electricity price in Industrial and Residential Consumers excluding climate policies,"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
 Equation,EQELCPROD,QProdElec,Compute electricity production from power generation plants,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
