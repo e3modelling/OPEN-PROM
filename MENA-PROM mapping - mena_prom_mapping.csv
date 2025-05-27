@@ -539,12 +539,12 @@ Parameter,H2TRANSP_VOM,iCostInvVOMH2,"Annual variable O&M cost as percentage of 
 Parameter,WAC,iCostAvgWeight,"Weight for pricing in average cost or in marginal cost","CYALL,YTIME",,Hydrogen Module
 Variable,H2TECH_SH,VGapShareH2Tech1,"Shares of H2 production technologies in new market competition 1","CYall, H2TECH, YTIME",,Hydrogen Module
 Variable,H2TECH_SHT,VGapShareH2Tech2,"Shares of H2 production technologies in new market competition 2","CYall, H2TECH, YTIME",,Hydrogen Module
-Variable,H2TECH_PROD,VProdH2,"Hydrogen Production by technology in Mtoe","CYall, H2TECH, YTIME",,Hydrogen Module
+Variable,H2TECH_PROD,VMVProdH2,"Hydrogen Production by technology in Mtoe","CYall, H2TECH, YTIME",,Hydrogen Module
 Variable,H2TECH_CAP,VProdCapH2Tech,"Production capacity by H2 production technology","CYall, H2TECH, YTIME",,Hydrogen Module
 Variable,H2TECH_SCRAP,VCapScrapH2ProdTech,"Decommissioning of capacity by H2 production technology","CYall, H2TECH, YTIME",,Hydrogen Module
 Variable,H2TECH_SCRPM,VPremRepH2Prod,"Premature replacement of H2 production technologies","CYall, H2TECH, YTIME",,Hydrogen Module
 Variable,H2TECH_SCRV,VScrapLftH2Prod,"Scrapping of equipment due to lifetime (normal scrapping)","CYall, H2TECH, YTIME",,Hydrogen Module
-Variable,TOTH2DEMAND,VDemTotH2,"Hydrogen production requirement in Mtoe for meeting final demand","CYall, YTIME",,Hydrogen Module
+Variable,TOTH2DEMAND,VMVDemTotH2,"Hydrogen production requirement in Mtoe for meeting final demand","CYall, YTIME",,Hydrogen Module
 Variable,H2TECH_DEMAND,VDemSecH2,"Demand for H2 by sector in mtoe","CYall, SBS, YTIME",,Hydrogen Module
 Variable,H2TECH_GAP,VDemGapH2,"Demand for H2 to be covered by new equipment in mtoe","CYall, YTIME",,Hydrogen Module
 Variable,H2TECH_PCOST,VCostProdH2Tech,"Hydrogen production cost per technology in Euro per toe of hydrogen","CYall, H2TECH, YTIME",,Hydrogen Module
@@ -553,7 +553,7 @@ Variable,H2TECH_SHCAPCCS,VShareCCSH2Prod,"Share of CCS technology in the decisio
 Variable,H2TECH_SHCAPNOCCS,VShareNoCCSH2Prod,"Share of technology without CCS in the decision tree between CCS and no CCS","CYall, H2TECH, YTIME",,Hydrogen Module
 Variable,H2TECH_H2CCSGAMMA,VAcceptCCSH2Tech,"Acceptance of investment in CCS technologies","CYall, YTIME",,Hydrogen Module
 Variable,H2TECH_FCONS,VConsFuelH2Prod,"Total fuel consumption for hydrogen production in Mtoe","CYall, EF, YTIME",,Hydrogen Module
-Variable,H2TECH_FCONSTECH,VConsFuelTechH2Prod,"Fuel consumption by hydrogen production technology in Mtoe","CYall, H2TECH, EF, YTIME",,Hydrogen Module
+Variable,H2TECH_FCONSTECH,VMVConsFuelTechH2Prod,"Fuel consumption by hydrogen production technology in Mtoe","CYall, H2TECH, EF, YTIME",,Hydrogen Module
 Variable,H2PRODCOSTNOCCS,VCostProdCCSNoCCSH2Prod,"Production cost of the composite technology with and without CCS in Euro per toe","CYall, H2TECH, YTIME",,Hydrogen Module
 Variable,H2PCOST,VCostAvgProdH2,"Average production cost of hydrogen in Euro per toe","CYall, YTIME",,Hydrogen Module
 Variable,H2AREA,VH2InfrArea,"Number of stylised areas covered by H2 infrastructure","CYall, YTIME",,Hydrogen Module
@@ -568,7 +568,7 @@ Variable,H2TRANSP_MCOST,VCostTechH2Infr,"Marginal cost by infrastructure technol
 Variable,H2TRANSP_TARIFF,VTariffH2Infr,"Tarrif paid by the final consumer for using the specific infrastructure technology in Euro per toe annual","CYall, INFRTECH, YTIME",,Hydrogen Module
 Variable,H2TRANSP_PRICE,VPriceH2Infr,"Hydrogen distribution and storage price paid by final consumer in Euro per toe annual","CYall, SBS, YTIME",,Hydrogen Module
 Variable,H2_PRICE,VCostTotH2,"Total Hydrogen Cost Per Sector in Euro per toe","CYall, SBS, YTIME",,Hydrogen Module
-Equation,EQTOTH2DEMAND,QDemTotH2,"Equation for total hydrogen demand in a country in Mtoe","CYall, YTIME",,Hydrogen Module
+Equation,EQTOTH2DEMAND,Q05DemTotH2,"Equation for total hydrogen demand in a country in Mtoe","CYall, YTIME",,Hydrogen Module
 Equation,EQH2TECH_SCRAP,QCapScrapH2ProdTech,"Equation for decommissioning of capacity by H2 production technology","CYall, H2TECH, YTIME",,Hydrogen Module
 Equation,EQH2TECH_SCRPM,QPremRepH2Prod,"Equation for premature replacement of H2 production technologies","CYall, H2TECH, YTIME",,Hydrogen Module
 Equation,EQH2TECH_SCRV,QScrapLftH2Prod,"Equation for scrapping of equipment due to lifetime (normal scrapping)","CYall, H2TECH, YTIME",,Hydrogen Module
@@ -581,9 +581,9 @@ Equation,EQH2TECH_H2CCSGAMMA,QAcceptCCSH2Tech,"Equation for acceptance in CCS te
 Equation,EQH2PRODCOSTNOCCS,QCostProdCCSNoCCSH2Prod,"Equation for calculating the production cost of the composite technology with and without CCS","CYall, H2TECH, YTIME",,Hydrogen Module
 Equation,EQH2TECH_SH,QGapShareH2Tech1,"Equation for calculating the shares of technologies in hydrogen gap using Weibull equations 1","CYall, H2TECH, YTIME",,Hydrogen Module
 Equation,EQH2TECH_SHT,QGapShareH2Tech2,"Equation for calculating the shares of technologies in hydrogen gap using Weibull equations 2","CYall, H2TECH, YTIME",,Hydrogen Module
-Equation,EQH2TECH_FCONSTECH,QConsFuelTechH2Prod,"Equation for fuel consumption by technology for hydrogen production","CYall, H2TECH, EF, YTIME",,Hydrogen Module
+Equation,EQH2TECH_FCONSTECH,Q05ConsFuelTechH2Prod,"Equation for fuel consumption by technology for hydrogen production","CYall, H2TECH, EF, YTIME",,Hydrogen Module
 Equation,EQH2TECH_FCONS,QConsFuelH2Prod,"Equation for total fuel consumption for hydrogen production","CYall, EF, YTIME",,Hydrogen Module
-Equation,EQH2TECH_PROD,QProdH2,"Equation for H2 production by technology","CYall, H2TECH, YTIME",,Hydrogen Module
+Equation,EQH2TECH_PROD,Q05ProdH2,"Equation for H2 production by technology","CYall, H2TECH, YTIME",,Hydrogen Module
 Equation,EQH2PCOST,QCostAvgProdH2,"Equation for average production cost of hydrogen in Euro per toe","CYall, YTIME",,Hydrogen Module
 Equation,EQH2AREA,QH2InfrArea,"Equation for infrastructure area","CYall, YTIME",,Hydrogen Module
 Equation,EQH2DELIV,QDelivH2InfrTech,"Equation for hydrogen delivered by infrastructure technology in Mtoe","CYall, INFRTECH, YTIME",,Hydrogen Module

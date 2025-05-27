@@ -2,10 +2,8 @@
 *' @code
 
 Variables
-VDemTotH2(allCy, YTIME)                         "Hydrogen production requirement in Mtoe for meeting final demand"
 VGapShareH2Tech1(allCy, H2TECH, YTIME)          "Shares of H2 production technologies in new market competition 1"
 VGapShareH2Tech2(allCy, H2TECH, YTIME)          "Shares of H2 production technologies in new market competition 2"
-VProdH2(allCy, H2TECH, YTIME)                   "Hydrogen Production by technology in Mtoe"
 VCapScrapH2ProdTech(allCy, H2TECH, YTIME)       "Decommissioning of capacity by H2 production technology"
 VPremRepH2Prod(allCy, H2TECH, YTIME)            "Premature replacement of H2 production technologies"
 VScrapLftH2Prod(allCy, H2TECH, YTIME)           "Scrapping of equipment due to lifetime (normal scrapping)"
@@ -16,7 +14,6 @@ VShareCCSH2Prod(allCy, H2TECH, YTIME)           "Share of CCS technology in the 
 VShareNoCCSH2Prod(allCy, H2TECH, YTIME)         "Share of technology without CCS in the decision tree between CCS and no CCS"
 VAcceptCCSH2Tech(allCy, YTIME)                  "Acceptance of investment in CCS technologies"
 VConsFuelH2Prod(allCy, EF, YTIME)               "Total fuel consumption for hydrogen production in Mtoe"
-VConsFuelTechH2Prod(allCy, H2TECH, EF, YTIME)   "Fuel consumption by hydrogen production technology in Mtoe"
 VCostProdCCSNoCCSH2Prod(allCy, H2TECH, YTIME)   "Production cost of the composite technology with and without CCS in Euro per toe"
 VCostAvgProdH2(allCy, YTIME)                    "Average production cost of hydrogen in Euro per toe"
 
@@ -35,15 +32,18 @@ VPriceH2Infr(allCy, SBS, YTIME)                 "Hydrogen distribution and stora
 VCostTotH2(allCy, SBS, YTIME)                   "Total Hydrogen Cost Per Sector in Euro per toe"
 
 *' *** Miscellaneous
-*VProdCapH2Tech(allCy, H2TECH, YTIME)            "Production capacity by H2 production technology"
+*VProdCapH2Tech(allCy, H2TECH, YTIME)           "Production capacity by H2 production technology"
 VDemSecH2(allCy, SBS, YTIME)                    "Demand for H2 by sector in mtoe"
+
+*'                **Interdependent Variables**	
+VMVDemTotH2(allCy, YTIME)                       "Hydrogen production requirement in Mtoe for meeting final demand"
+VMVProdH2(allCy, H2TECH, YTIME)                 "Hydrogen Production by technology in Mtoe"
+VMVConsFuelTechH2Prod(allCy, H2TECH, EF, YTIME) "Fuel consumption by hydrogen production technology in Mtoe"
 ;
 
 Equations
-QDemTotH2(allCy, YTIME)                         "Equation for total hydrogen demand in a country in Mtoe"
 QGapShareH2Tech1(allCy, H2TECH, YTIME)          "Equation for calculating the shares of technologies in hydrogen gap using Weibull equations 1"
 QGapShareH2Tech2(allCy, H2TECH, YTIME)          "Equation for calculating the shares of technologies in hydrogen gap using Weibull equations 2"
-QProdH2(allCy, H2TECH, YTIME)                   "Equation for H2 production by technology"
 QCapScrapH2ProdTech(allCy, H2TECH, YTIME)       "Equation for decommissioning of capacity by H2 production technology"
 QPremRepH2Prod(allCy, H2TECH, YTIME)            "Equation for premature replacement of H2 production technologies"
 QScrapLftH2Prod(allCy, H2TECH, YTIME)           "Equation for scrapping of equipment due to lifetime (normal scrapping)"
@@ -54,7 +54,6 @@ QShareCCSH2Prod(allCy, H2TECH, YTIME)           "Equation for share of CCS techn
 QShareNoCCSH2Prod(allCy, H2TECH, YTIME)         "Equation for share of technology without CCS in the decision tree between CCS and no CCS"
 QAcceptCCSH2Tech(allCy, YTIME)                  "Equation for acceptance in CCS technologies"
 QConsFuelH2Prod(allCy, EF, YTIME)               "Equation for total fuel consumption for hydrogen production"
-QConsFuelTechH2Prod(allCy, H2TECH, EF, YTIME)   "Equation for fuel consumption by technology for hydrogen production"
 QCostProdCCSNoCCSH2Prod(allCy, H2TECH, YTIME)   "Equation for calculating the production cost of the composite technology with and without CCS"
 QCostAvgProdH2(allCy, YTIME)                    "Equation for average production cost of hydrogen in Euro per toe"
 
@@ -73,6 +72,11 @@ QCostTotH2(allCy, SBS, YTIME)                   "Equation of total hydrogen cost
 *' *** Miscellaneous
 *QProdCapH2Tech(allCy, H2TECH, YTIME)            "Equation for production capacity by H2 production technology"
 *QDemSecH2(allCy, SBS, YTIME)                    "Equation for demand of H2 by sector in mtoe"
+
+*'                **Interdependent Equations**	
+Q05DemTotH2(allCy, YTIME)                        "Equation for total hydrogen demand in a country in Mtoe"
+Q05ProdH2(allCy, H2TECH, YTIME)                  "Equation for H2 production by technology"
+Q05ConsFuelTechH2Prod(allCy, H2TECH, EF, YTIME)  "Equation for fuel consumption by technology for hydrogen production"
 ;
 
 Scalars
