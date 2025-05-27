@@ -34,8 +34,8 @@ QCapElecCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QLambda(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          (1 - exp( -VLambda(allCy,YTIME)*sGwToTwhPerYear))  / (0.0001+VLambda(allCy,YTIME))
              =E=
-         (VDemElecTot(allCy,YTIME) - sGwToTwhPerYear*VBaseLoad(allCy,YTIME))
-         / (VPeakLoad(allCy,YTIME) - VBaseLoad(allCy,YTIME));
+         (VDemElecTot(allCy,YTIME) - sGwToTwhPerYear*VMVBaseLoad(allCy,YTIME))
+         / (VMVPeakLoad(allCy,YTIME) - VMVBaseLoad(allCy,YTIME));
 
 *' The equation calculates the total electricity demand by summing the components of final energy consumption in electricity, final non-energy consumption in electricity,
 *' distribution losses, and final consumption in the energy sector for electricity, and then subtracting net imports. The result is normalized using a conversion factor 
@@ -74,8 +74,8 @@ QLoadFacDom(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' The equation calculates the electricity peak load by dividing the total electricity demand by the load factor for the domestic sector and converting the result
 *' to gigawatts (GW) using the conversion factor. This provides an estimate of the maximum power demand during a specific time period, taking into account the domestic
 *' load factor.
-QPeakLoad(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VPeakLoad(allCy,YTIME)
+Q04PeakLoad(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VMVPeakLoad(allCy,YTIME)
              =E=
          VDemElecTot(allCy,YTIME)/(VLoadFacDom(allCy,YTIME)*sGwToTwhPerYear);
 
@@ -84,12 +84,12 @@ QPeakLoad(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QBaseLoadMax(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          (VDemElecTot(allCy,YTIME)-VBaseLoadMax(allCy,YTIME)*sGwToTwhPerYear)
              =E=
-         iMxmLoadFacElecDem(allCy,YTIME)*(VPeakLoad(allCy,YTIME)-VBaseLoadMax(allCy,YTIME))*sGwToTwhPerYear;  
+         iMxmLoadFacElecDem(allCy,YTIME)*(VMVPeakLoad(allCy,YTIME)-VBaseLoadMax(allCy,YTIME))*sGwToTwhPerYear;  
 
 *' This equation calculates the electricity base load utilizing exponential functions that include the estimated base load,
 *' the baseload corresponding to maximum load factor, and the parameter of baseload correction.
-QBaseLoad(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VBaseLoad(allCy,YTIME)
+Q04BaseLoad(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VMVBaseLoad(allCy,YTIME)
              =E=
          (1/(1+exp(iBslCorrection(allCy,YTIME)*(VBsldEst(allCy,YTIME)-VBaseLoadMax(allCy,YTIME)))))*VBsldEst(allCy,YTIME)
         +(1-1/(1+exp(iBslCorrection(allCy,YTIME)*(VBsldEst(allCy,YTIME)-VBaseLoadMax(allCy,YTIME)))))*VBaseLoadMax(allCy,YTIME);
@@ -99,17 +99,17 @@ QBaseLoad(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QProdElecReqTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VProdElecReqTot(allCy,YTIME)
              =E=
-         sum(HOUR, (VPeakLoad(allCy,YTIME)-VBaseLoad(allCy,YTIME))
+         sum(HOUR, (VMVPeakLoad(allCy,YTIME)-VMVBaseLoad(allCy,YTIME))
                    * exp(-VLambda(allCy,YTIME)*(0.25+(ord(HOUR)-1)))
-             ) + 9*VBaseLoad(allCy,YTIME);   
+             ) + 9*VMVBaseLoad(allCy,YTIME);   
 
 *' The equation calculates the estimated total electricity generation capacity by multiplying the previous year's total electricity generation capacity with
 *' the ratio of the current year's estimated electricity peak load to the previous year's electricity peak load. This provides an estimate of the required
 *' generation capacity based on the changes in peak load.
-QCapElecTotEst(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-        VCapElecTotEst(allCy,YTIME)
+Q04CapElecTotEst(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+        VMVCapElecTotEst(allCy,YTIME)
              =E=
-        VCapElecTotEst(allCy,YTIME-1) * VPeakLoad(allCy,YTIME)/VPeakLoad(allCy,YTIME-1);          
+        VMVCapElecTotEst(allCy,YTIME-1) * VMVPeakLoad(allCy,YTIME)/VMVPeakLoad(allCy,YTIME-1);          
 
 *' The equation calculates the hourly production cost of a power generation plant used in investment decisions. The cost is determined based on various factors,
 *' including the discount rate, gross capital cost, fixed operation and maintenance cost, availability rate, variable cost, renewable value, and fuel prices.
@@ -263,7 +263,7 @@ QIndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(allC
 QCapElecNonCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VCapElecNonCHP(allCy,YTIME)
           =E=
-VCapElecTotEst(allCy,YTIME) - SUM(CHP,VCapElecCHP(allCy,CHP,YTIME)*0.85);      
+VMVCapElecTotEst(allCy,YTIME) - SUM(CHP,VCapElecCHP(allCy,CHP,YTIME)*0.85);      
 
 *' In essence, the equation evaluates the difference between the current and expected power generation capacity, accounting for various factors such as planned capacity,
 *' decommissioning schedules, and endogenous scrapping. The square root term introduces a degree of tolerance in the calculation.
@@ -273,13 +273,13 @@ QGapGenCapPowerDiff(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
  (        (  VCapElecNonCHP(allCy,YTIME) - VCapElecNonCHP(allCy,YTIME-1) + sum(PGALL,VCapElec2(allCy,PGALL,YTIME-1) * 
  (1 - VIndxEndogScrap(allCy,PGALL,YTIME))) +
           sum(PGALL, (iPlantDecomSched(allCy,PGALL,YTIME)-iDecInvPlantSched(allCy,PGALL,YTIME))*iAvailRate(PGALL,YTIME))
-          + Sum(PGALL$PGSCRN(PGALL), (VCapElec(allCy,PGALL,YTIME-1)-iPlantDecomSched(allCy,PGALL,YTIME))/
+          + Sum(PGALL$PGSCRN(PGALL), (VMVCapElec(allCy,PGALL,YTIME-1)-iPlantDecomSched(allCy,PGALL,YTIME))/
           iTechLftPlaType(allCy,PGALL))
        )
   + 0 + SQRT( SQR(       (  VCapElecNonCHP(allCy,YTIME) - VCapElecNonCHP(allCy,YTIME-1) +
         sum(PGALL,VCapElec2(allCy,PGALL,YTIME-1) * (1 - VIndxEndogScrap(allCy,PGALL,YTIME))) +
           sum(PGALL, (iPlantDecomSched(allCy,PGALL,YTIME)-iDecInvPlantSched(allCy,PGALL,YTIME))*iAvailRate(PGALL,YTIME))
-          + Sum(PGALL$PGSCRN(PGALL), (VCapElec(allCy,PGALL,YTIME-1)-iPlantDecomSched(allCy,PGALL,YTIME))/
+          + Sum(PGALL$PGSCRN(PGALL), (VMVCapElec(allCy,PGALL,YTIME-1)-iPlantDecomSched(allCy,PGALL,YTIME))/
           iTechLftPlaType(allCy,PGALL))
        ) -0) + SQR(1e-10) ) )/2;
 
@@ -402,14 +402,14 @@ QSharePowPlaNewEq(allCy,PGALL,YTIME)$(TIME(YTIME) $runCy(allCy)) ..
 *' This equation calculates the variable representing the electricity generation capacity for a specific power plant in a given country
 *' and time period. The calculation takes into account various factors related to new investments, decommissioning, and technology-specific parameters.
 *' The equation aims to model the evolution of electricity generation capacity over time, considering new investments, decommissioning, and technology-specific parameters.
-QCapElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VCapElec(allCy,PGALL,YTIME)
+Q04CapElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VMVCapElec(allCy,PGALL,YTIME)
              =E=
          (VCapElec2(allCy,PGALL,YTIME-1)*VIndxEndogScrap(allCy,PGALL,YTIME-1) +
           VNewCapElec(allCy,PGALL,YTIME) -
           iPlantDecomSched(allCy,PGALL,YTIME) * iAvailRate(PGALL,YTIME)
          ) -
-         ((VCapElec(allCy,PGALL,YTIME-1)-iPlantDecomSched(allCy,PGALL,YTIME-1))* 
+         ((VMVCapElec(allCy,PGALL,YTIME-1)-iPlantDecomSched(allCy,PGALL,YTIME-1))* 
          iAvailRate(PGALL,YTIME)*(1/iTechLftPlaType(allCy,PGALL)))$PGSCRN(PGALL);
 
 QNewCapElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
@@ -429,7 +429,7 @@ QNewCapElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QCapElec2(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VCapElec2(allCy,PGALL,YTIME)
              =E=
-         ( VCapElec(allCy,PGALL,YTIME) + 1e-6 + SQRT( SQR(VCapElec(allCy,PGALL,YTIME)-1e-6) + SQR(1e-4) ) )/2;
+         ( VMVCapElec(allCy,PGALL,YTIME) + 1e-6 + SQRT( SQR(VMVCapElec(allCy,PGALL,YTIME)-1e-6) + SQR(1e-4) ) )/2;
 
 *' Compute the variable cost of each power plant technology for every region,
 *' by utilizing the maturity factor related to plant dispatching.
@@ -511,9 +511,9 @@ QScalFacPlantDispatch(allCy,HOUR,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                  exp(-VScalFacPlaDisp(allCy,HOUR,YTIME)/VSortPlantDispatch(allCy,PGALL,YTIME))
                  )
          =E=
-         (VPeakLoad(allCy,YTIME) - VBaseLoad(allCy,YTIME))
+         (VMVPeakLoad(allCy,YTIME) - VMVBaseLoad(allCy,YTIME))
          * exp(-VLambda(allCy,YTIME)*(0.25 + ord(HOUR)-1))
-         + VBaseLoad(allCy,YTIME);
+         + VMVBaseLoad(allCy,YTIME);
 
 *' This equation calculates the estimated electricity generation of Combined Heat and Power plantsin a specific countryand time period.
 *' The estimation is based on the fuel consumption of CHP plants, their electricity prices, the maximum share of CHP electricity in total demand, and the overall

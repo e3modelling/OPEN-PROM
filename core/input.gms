@@ -715,9 +715,9 @@ iEffValueInDollars(runCy,SBS,YTIME)=0;
 iScenarioPri(WEF,"NOTRADE",YTIME)=0;
 *---
 $ontext
-VCapElecTotEst.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
-VCapElecTotEst.L(runCy,TT) = iResMargTotAvailCap(runCy,"TOT_CAP_RES",TT) * VCapElecTotEst.L(runCy,TT-1)
-        * VPeakLoad.L(runCy,TT)/VPeakLoad.L(runCy,TT-1);
+VMVCapElecTotEst.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
+VMVCapElecTotEst.L(runCy,TT) = iResMargTotAvailCap(runCy,"TOT_CAP_RES",TT) * VMVCapElecTotEst.L(runCy,TT-1)
+        * VMVPeakLoad.L(runCy,TT)/VMVPeakLoad.L(runCy,TT-1);
 *---
 * FIXME: Check if iPriceReform is necessary for the model.
 * author=derevirn

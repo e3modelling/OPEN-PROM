@@ -11,16 +11,16 @@ QEstBaseLoad            ,QBsldEst              ,,Power Generation
 " VEstBaseLoad(runCy,YTIME)"," VBsldEst(runCy,YTIME)",,Power Generation
 QLoadFacDom            ,QLoadFacDom            ,,Power Generation
 " VLoadFacDom(runCy,YTIME)"," VLoadFacDom(runCy,YTIME)",,Power Generation
-QElecPeakLoad           ,QPeakLoad             ,,Power Generation
-" VElecPeakLoad(runCy,YTIME)"," VPeakLoad(runCy,YTIME)",,Power Generation
+QElecPeakLoad           ,Q04PeakLoad             ,,Power Generation
+" VElecPeakLoad(runCy,YTIME)"," VMVPeakLoad(runCy,YTIME)",,Power Generation
 QBslMaxmLoad            ,QBaseLoadMax            ,,Power Generation
 " VBslMaxmLoad(runCy,YTIME)"," VBaseLoadMax(runCy,YTIME)",,Power Generation
-QElecBaseLoad           ,QBaseLoad             ,,Power Generation
-" VCorrBaseLoad(runCy,YTIME)"," VBaseLoad(runCy,YTIME)",,Power Generation
+QElecBaseLoad           ,Q04BaseLoad             ,,Power Generation
+" VCorrBaseLoad(runCy,YTIME)"," VMVBaseLoad(runCy,YTIME)",,Power Generation
 QTotReqElecProd          ,QProdElecReqTot          ,,Power Generation
 " VTotReqElecProd(runCy,YTIME)"," VProdElecReqTot(runCy,YTIME)",,Power Generation
-QTotEstElecGenCap         ,QCapElecTotEst           ,,Power Generation
-" VTotElecGenCapEst(runCy,YTIME)"," VCapElecTotEst(runCy,YTIME)",,Power Generation
+QTotEstElecGenCap         ,Q04CapElecTotEst           ,,Power Generation
+" VTotElecGenCapEst(runCy,YTIME)"," VMVCapElecTotEst(runCy,YTIME)",,Power Generation
 QTotElecGenCap           ,QCapElecTot            ,,Power Generation
 " VTotElecGenCap(runCy,YTIME) "," VCapElecTot(runCy,YTIME) ",,Power Generation
 QHourProdCostInv          ,QCostHourProdInvDec        ,PGALL,Power Generation
@@ -67,8 +67,8 @@ QNewInvDecis            ,QNewInvElec            ,,Power Generation
 " VNewInvDecis(runCy,YTIME)"," VNewInvElec(runCy,YTIME)",,Power Generation
 QPowPlaShaNewEquip         ,QSharePowPlaNewEq         ,PGALL,Power Generation
 " VPowPlaShaNewEquip(runCy,PGALL,YTIME)"," VSharePowPlaNewEq(runCy,PGALL,YTIME)",PGALL,Power Generation
-QElecGenCapacity          ,QCapElec              ,PGALL,Power Generation
-" VElecGenPlantsCapac(runCy,PGALL,YTIME)"," VCapElec(runCy,PGALL,YTIME)",PGALL,Power Generation
+QElecGenCapacity          ,Q04CapElec              ,PGALL,Power Generation
+" VElecGenPlantsCapac(runCy,PGALL,YTIME)"," VMVCapElec(runCy,PGALL,YTIME)",PGALL,Power Generation
 QElecGenCap            ,QCapElec2             ,PGALL,Power Generation
 " VElecGenPlanCap(runCy,PGALL,YTIME)"," VCapElec2(runCy,PGALL,YTIME)",PGALL,Power Generation
 QVarCostTechnology         ,QCostVarTechElec          ,PGALL,Power Generation
@@ -264,5 +264,5 @@ QFuelPriSepCarbon         ,QPriceFuelSepCarbonWght      ,"(DSBS,EF)$(SECTTECH(DS
 " VFuelPriMultWgt(runCy,DSBS,EF,YTIME)"," VPriceFuelSepCarbonWght(runCy,DSBS,EF,YTIME)","(DSBS,EF)$(SECTTECH(DSBS,EF)",EMISSIONS CONSTRAINTS
 QAvgFuelPriSub           ,Q08PriceFuelAvgSub          ,DSBS,EMISSIONS CONSTRAINTS
 " VFuelPriceAvg(runCy,DSBS,YTIME)"," VMVPriceFuelAvgSub(runCy,DSBS,YTIME)",DSBS,EMISSIONS CONSTRAINTS
-QElecPriIndResCons         ,QPriceElecIndResConsu       ,ESET,EMISSIONS CONSTRAINTS
-" VElecPriInduResConsu(runCy,ESET,YTIME)"," VPriceElecIndResConsu(runCy,ESET,YTIME)",ESET,EMISSIONS CONSTRAINTS
+QElecPriIndResCons         ,Q08PriceElecIndResConsu       ,ESET,EMISSIONS CONSTRAINTS
+" VElecPriInduResConsu(runCy,ESET,YTIME)"," VMVPriceElecIndResConsu(runCy,ESET,YTIME)",ESET,EMISSIONS CONSTRAINTS

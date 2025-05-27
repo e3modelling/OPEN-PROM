@@ -10,9 +10,7 @@ QPotRenCurr(allCy,PGRENEF,YTIME)	                       "Compute current renewab
 QCapElecCHP(allCy,CHP,YTIME)                               "Compute CHP electric capacity"	
 QLambda(allCy,YTIME)	                                   "Compute Lambda parameter"
 QBsldEst(allCy,YTIME)	                                   "Compute estimated base load"
-QBaseLoadMax(allCy,YTIME) 	                               "Compute baseload corresponding to maximum load"
-QBaseLoad(allCy,YTIME)	                                   "Compute electricity base load"
-QCapElecTotEst(allCy,YTIME)                                "Compute Estimated total electricity generation capacity"	
+QBaseLoadMax(allCy,YTIME) 	                               "Compute baseload corresponding to maximum load"	
 QCostHourProdInvDec(allCy,PGALL,HOUR,YTIME)                "Compute hourly production cost used in investment decisions"
 QCostHourProdInvDecNoCCS(allCy,PGALL,HOUR,YTIME)           "Compute hourly production cost used in investment decisions"
 QSensCCS(allCy,YTIME)	                                   "Compute gamma parameter used in CCS/No CCS decision tree"
@@ -34,8 +32,7 @@ QPotRenMaxAllow(allCy,PGRENEF,YTIME)                       "Compute maximum allo
 QRenTechMatMult(allCy,PGALL,YTIME)	                       "Compute renewable technologies maturity multiplier"		 	
 QScalWeibullSum(allCy,PGALL,YTIME)	                       "Compute sum (over hours) of temporary variable facilitating the scaling in Weibull equation"
 QNewInvElec(allCy,YTIME)	                               "Compute for Power Plant new investment decision"		
-QSharePowPlaNewEq(allCy,PGALL,YTIME)	                   "Compute the power plant share in new equipment"	
-QCapElec(allCy,PGALL,YTIME)	                               "Compute electricity generation capacity"	
+QSharePowPlaNewEq(allCy,PGALL,YTIME)	                   "Compute the power plant share in new equipment"		
 QCostVarTechElec(allCy,PGALL,YTIME)	                       "Compute variable cost of technology" 
 QCostVarTechElecTot(allCy,YTIME)	                       "Compute Electricity peak loads"	
 QSortPlantDispatch(allCy,PGALL,YTIME)	                   "Compute Power plants sorting according to variable cost to decide the plant dispatching" 	
@@ -57,7 +54,6 @@ QCostPowGenLonNoClimPol(allCy,ESET,YTIME)                  "Compute long term po
 *qCostPowGenAvgShrt(allCy,ESET,YTIME)	                   "Compute short term power generation cost"
 QConsElec(allCy,DSBS,YTIME)                                "Compute electricity consumption per final demand sector"
 QLoadFacDom(allCy,YTIME)	                               "Compute load factor of entire domestic system"
-QPeakLoad(allCy,YTIME)	                                   "Compute elerctricity peak load"	
 QDemElecTot(allCy,YTIME)                                   "Compute total electricity demand"
 QProdElecCHP(allCy,CHP,YTIME)	                           "Compute electricity production from CHP plants" 
 QProdElecReqTot(allCy,YTIME)                               "Compute total required electricity production"
@@ -65,6 +61,10 @@ QProdElecReqTot(allCy,YTIME)                               "Compute total requir
 *'                **Interdependent Equations**
 Q04ProdElec(allCy,PGALL,YTIME)                             "Compute electricity production from power generation plants"
 Q04CostPowGenAvgLng(allCy,ESET,YTIME)	                   "Compute long term power generation cost"
+Q04CapElecTotEst(allCy,YTIME)                              "Compute Estimated total electricity generation capacity"
+Q04PeakLoad(allCy,YTIME)	                               "Compute elerctricity peak load"	
+Q04CapElec(allCy,PGALL,YTIME)	                           "Compute electricity generation capacity"
+Q04BaseLoad(allCy,YTIME)	                               "Compute electricity base load"
 ;
 
 Variables
@@ -77,8 +77,6 @@ VCapElecCHP(allCy,CHP,YTIME)	                           "Capacity of CHP Plants 
 VLambda(allCy,YTIME)	                                   "Parameter for load curve construction (1)"
 VBsldEst(allCy,YTIME)	                                   "Estimated base load (GW)"
 VBaseLoadMax(allCy,YTIME)	                               "Baseload corresponding to Maximum Load Factor (1)"
-VBaseLoad(allCy,YTIME)	                                   "Corrected base load (GW)"
-VCapElecTotEst(allCy,YTIME)	                               "Estimated Total electricity generation capacity (GW)"
 VCostHourProdInvDec(allCy,PGALL,HOUR,YTIME)                "Hourly production cost of technology (US$2015/KWh)"
 VCostHourProdInvDecNoCCS(allCy,PGALL,HOUR,YTIME)           "Hourly production cost of technology (US$2015/KWh)"	
 VSensCCS(allCy,YTIME)	                                   "Variable that controlls the sensitivity of CCS acceptance (1)"			
@@ -100,8 +98,7 @@ VPotRenMaxAllow(allCy,PGRENEF,YTIME)                       "Maximum allowed rene
 VRenTechMatMult(allCy,PGALL,YTIME)	                       "Renewable technologies maturity multiplier (1)"	
 VScalWeibullSum(allCy,PGALL,YTIME)	                       "Sum (over hours) of temporary variable facilitating the scaling in Weibull equation (1)"
 VNewInvElec(allCy,YTIME)	                               "Power plant sorting for new investment decision according to total cost (1)"	
-VSharePowPlaNewEq(allCy,PGALL,YTIME)	                   "Power plant share in new equipment (1)"	
-VCapElec(allCy,PGALL,YTIME)	                               "Electricity generation plants capacity (GW)"	
+VSharePowPlaNewEq(allCy,PGALL,YTIME)	                   "Power plant share in new equipment (1)"		
 VCostVarTechElec(allCy,PGALL,YTIME)	                       "Variable cost of technology (US$2015/KWh)"	
 VCostVarTechElecTot(allCy,YTIME)	                       "Electricity peak loads (GW)"	
 VSortPlantDispatch(allCy,PGALL,YTIME)	                   "Power plants sorting according to variable cost to decide the plant dispatching (1)"
@@ -125,10 +122,13 @@ VConsElec(allCy,DSBS,YTIME)                                "Electricity demand p
 VLoadFacDom(allCy,YTIME)                                   "Electricity load factor for entire domestic system"	
 VProdElecCHP(allCy,CHP,YTIME)	                           "CHP electricity production (TWh)"
 VProdElecReqTot(allCy,YTIME)	                           "Total required electricity production (TWh)"
-VPeakLoad(allCy,YTIME)	                                   "Electricity peak load (GW)"	
 VDemElecTot(allCy,YTIME)                                   "Total electricity demand (TWh)"
 
 *'                **Interdependent Variables**	
 VMVProdElec(allCy,PGALL,YTIME)                             "Electricity production (TWh)"	
 VMVCostPowGenAvgLng(allCy,ESET,YTIME)	                   "Long-term average power generation cost (US$2015/kWh)"
+VMVCapElecTotEst(allCy,YTIME)	                           "Estimated Total electricity generation capacity (GW)"
+VMVPeakLoad(allCy,YTIME)	                               "Electricity peak load (GW)"	
+VMVCapElec(allCy,PGALL,YTIME)	                           "Electricity generation plants capacity (GW)"
+VMVBaseLoad(allCy,YTIME)	                               "Corrected base load (GW)"
 ;

@@ -4,9 +4,9 @@
 Equations
 *' *** Prices
 QPriceFuelSepCarbonWght(allCy,SBS,EF,YTIME)	               "Compute fuel prices per subsector and fuel, separate carbon value in each sector"
-QPriceElecIndResConsu(allCy,ESET,YTIME)                    "Compute electricity price in Industrial and Residential Consumers"
 
 *'                **Interdependent Equations**
+Q08PriceElecIndResConsu(allCy,ESET,YTIME)                  "Compute electricity price in Industrial and Residential Consumers"
 Q08PriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)               "Compute fuel prices per subsector and fuel, separate carbon value in each sector"
 Q08PriceFuelAvgSub(allCy,DSBS,YTIME)	                   "Compute average fuel price per subsector" 	
 Q08PriceElecIndResNoCliPol(allCy,ESET,YTIME)               "Compute electricity price in Industrial and Residential Consumers excluding climate policies"
@@ -17,9 +17,9 @@ Q08PriceElecInd(allCy,YTIME)                               "Compute electricity 
 Variables
 *' *** Prices Variables
 VPriceFuelSepCarbonWght(allCy,SBS,EF,YTIME)	               "Fuel prices per subsector and fuel  mutliplied by weights (kUS$2015/toe)"
-VPriceElecIndResConsu(allCy,ESET,YTIME)	                   "Electricity price to Industrial and Residential Consumers (US$2015/KWh)"
 
 *'                **Interdependent Variables**
+VMVPriceElecIndResConsu(allCy,ESET,YTIME)	               "Electricity price to Industrial and Residential Consumers (US$2015/KWh)"
 VMVPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)               "Fuel prices per subsector and fuel (k$2015/toe)"
 VMVPriceFuelAvgSub(allCy,DSBS,YTIME)                       "Average fuel prices per subsector (k$2015/toe)"
 VMVPriceElecIndResNoCliPol(allCy,ESET,YTIME)               "Electricity price to Industrial and Residential Consumers (US$2015/KWh)"

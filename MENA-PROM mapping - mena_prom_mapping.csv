@@ -15,7 +15,7 @@ Variable,AVCHPCOST,VMVCostElcAvgProdCHP,Average Electricity production cost per 
 Variable,AVCHPVCOST,VMVCostVarAvgElecProd,"""Average variable including fuel electricity production cost per CHP plant (US$2015/KWh)","CYall,CHP,YTIME","allCy,CHP,YTIME",
 Variable,AVERAV,VCFAvgRen,"The average capacity factor of RES, availability of RES increases over the years, but not all their capacity can produce electricity at such high availabilities","CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Variable,BASEEST,VBsldEst,Estimated base load (GW),"CYall,YTIME","allCy,YTIME",
-Variable,BASELOAD,VBaseLoad,Corrected base load (GW),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Variable,BASELOAD,VMVBaseLoad,Corrected base load (GW),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Parameter,BOILEFF,iBoiEffChp,Boiler efficiency (typical) used in adjusting CHP efficiency (),"CYall,CHP,YTIME","allCy,CHP,YTIME",Power Generation Parameters
 Variable,CAPACITY,VCapElec2,Electricity generation plants capacity (GW),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Variable,CAPACITY2,VNewCapElec,The new capacity added every year (MW),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
@@ -118,7 +118,7 @@ Variable,ELCINDEX,VMVPriceElecInd,Electricity index - a function of industry pri
 Variable,ELCINDEX_EST,VIndxElecIndPrices,Electricity index - a function of industry price - Estimate (1),"CYALL,YTIME","allCy, YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,ELCNS,VMVConsElecNonSubIndTert,Consumption of non-substituable electricity in Industry and Tertiary (Mtoe),"CYall,DSBS,YTIME","allCy,DSBS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,ELCNSIND,VMvConsTotElecInd,Total Consumption of Electricity in industrial sectors (Mtoe),"CYALL,YTIME","allCy,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-Variable,ELCPRICE,VPriceElecIndResConsu,Electricity price to Industrial and Residential Consumers (US$2015/KWh),"CYall,ESET,YTIME","allCy,ESET,YTIME",VARIABLES
+Variable,ELCPRICE,VMVPriceElecIndResConsu,Electricity price to Industrial and Residential Consumers (US$2015/KWh),"CYall,ESET,YTIME","allCy,ESET,YTIME",VARIABLES
 Variable,ELCPRICE_NOCV,VMVPriceElecIndResNoCliPol,Electricity price to Industrial and Residential Consumers (US$2015/KWh),"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
 Parameter,ELCPRICECHAR,iFacElecPriConsu,Factors affecting electricity prices to consumers,"CYall,ELCPCHAR,YTIME ","allCy,ELCPCHAR,YTIME",Prices
 Parameter,ElcpricecharPRN,iContrElecPrice,Parameters controlling electricity price,"ELCPCHAR,YTIME","allCy,ELCPCHAR,YTIME",Parameters for data transfering
@@ -135,10 +135,10 @@ Equation,EQAVCHPCOST,Q02CostElcAvgProdCHP,Compute Average Electricity production
 Equation,EQAVCHPVCOST,Q02CostVarAvgElecProd,Compute Average variable including fuel electricity production cost per CHP plant ,"CYall,CHP,YTIME","allCy,CHP,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQAVERAV,QCFAvgRen,Compute the average capacity factor of RES,"CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Equation,EQBASEEST,QBsldEst,Compute estimated base load,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Equation,EQBASELOAD,QBaseLoad,Compute electricity base load,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Equation,EQBASELOAD,Q04BaseLoad,Compute electricity base load,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQCAPACITY,QCapElec2,Compute electricity generation capacity,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Equation,EQcapacity2,QNewCapElec,Compute the new capacity added every year,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
-Equation,EQCAPACITYT,QCapElec,Compute electricity generation capacity,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
+Equation,EQCAPACITYT,Q04CapElec,Compute electricity generation capacity,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Equation,eqcapall,QCapOverall,Compute overall capacity,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Equation,EQCCO2CAPT,QCaptCummCO2,Compute cumulative CO2 captured (Mtn of CO2),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQCCSGAMMA,QSensCCS,Compute gamma parameter used in CCS/No CCS decision tree,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
@@ -179,7 +179,7 @@ Equation,EQELCINDEX,Q08PriceElecInd,Compute electricity index,"CYall,YTIME","all
 Equation,EQELCINDEX_EST,QIndxElecIndPrices,Compute the estimated electricity Index of industry price,"CYALL,YTIME","allCy, YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
 Equation,EQELCNS,Q02ConsElecNonSubIndTert,Compute non-substituable electricity consumption in Industry and Tertiary,"CYall,INDDOM,YTIME","allCy,INDDOM,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Equation,EQELCNSIND,q02ConsTotElecInd,Compute Consumption of electricity in industrial sectors ,"CYALL,YTIME","allCy,YTIME",INDUSTRY - TERTIARY - NON ENERGY USES - BUNKERS EQUATIONS
-Equation,EQELCPRICE,QPriceElecIndResConsu,Compute electricity price in Industrial and Residential Consumers,"CYall,ESET,YTIME","allCy,ESET,YTIME",PRICES EQUATIONS
+Equation,EQELCPRICE,Q08PriceElecIndResConsu,Compute electricity price in Industrial and Residential Consumers,"CYall,ESET,YTIME","allCy,ESET,YTIME",PRICES EQUATIONS
 Equation,EQELCPRICE_NOCV,Q08PriceElecIndResNoCliPol,Compute electricity price in Industrial and Residential Consumers excluding climate policies,"CYall,ESET,YTIME","allCy,ESET,YTIME",POWER GENERATION SECTOR
 Equation,EQELCPROD,Q04ProdElec,Compute electricity production from power generation plants,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Equation,EQEXPO_TZ,QExp,Compute fake exports,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
@@ -208,7 +208,7 @@ Equation,EQNETIMP,Q03ImpNetEneBrnch,Compute net imports,"CYall,EFS,YTIME","allCy
 Equation,EQNEWREG,QNewRegPcYearly,Compute new registrations of passenger cars,"CYall,YTIME","allCy,YTIME",Transport
 Equation,EQNONCHPELCPROD,QProdElecNonCHP,Compute non CHP electricity production ,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Parameter,BASESHARE,iBaseLoadShareDem,Baseload share of demand per sector (1),"CYall,DSBS,YTIME","allCy,DSBS,YTIME",Power Generation Parameters
-Equation,EQ04PeakLoad,QPeakLoad,Compute elerctricity peak load,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
+Equation,EQ04PeakLoad,Q04PeakLoad,Compute elerctricity peak load,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQPOTREN,QPotRenCurr,Compute current renewable potential ,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",Power Generation
 Equation,EQPOTRENMAXC,QPotRenMaxAllow,Compute maximum allowed renewable potential ,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
 Equation,EQPOTRENMINC,qPotRenMinAllow,Compute minimum allowed renewable potential ,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
@@ -253,7 +253,7 @@ Equation,EQTONUC,QOutTransfNuclear,Compute transformation output from nuclear pl
 Equation,EQTOOTH,QTransfOutputPatFuel,"Compute the  transfomration output from patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works","CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
 Equation,EQTORF,QOutTransfRefSpec,Compute the transformation output from refineries,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
 Equation,EQTOTCAP,QCapElecTot,Compute total electricity generation capacity,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Equation,EQTOTCAP_EST,QCapElecTotEst,Compute estimated total electricity generation capacity,"CYall,YTIME","CYall,YTIME",POWER GENERATION SECTOR
+Equation,EQTOTCAP_EST,Q04CapElecTotEst,Compute estimated total electricity generation capacity,"CYall,YTIME","CYall,YTIME",POWER GENERATION SECTOR
 Equation,EQTOTCAPNCHP,QCapElecNonCHP,Compute total electricity generation capacity excluding CHP plants,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQTOTOT,QOutTotTransf,Compute total transformation output,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
 Equation,EQTOTPROD,QProdElecReqTot,Compute total required electricity production,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
@@ -327,7 +327,7 @@ Parameter,NPDL,iNPDL,Number of Polynomial Distribution Lags (PDL),SBS,SBS,Macro 
 Sets,Nset,nSet,auxiliary counter for the definition of Vr /b1*b20/,,,Auxiliary Counters
 Parameter,NUCRES,-,,"PGALL,YTIME",,
 Parameter,OILPDL,iPolDstrbtnLagCoeffPriOilPr,Polynomial Distribution Lag Coefficients for primary oil production (1),kpdl,kpdl,Parameter
-Variable,PEAKLOAD,VPeakLoad,Electricity peak load (GW),"CYall,YTIME",,POWER GENERATION SECTOR
+Variable,PEAKLOAD,VMVPeakLoad,Electricity peak load (GW),"CYall,YTIME",,POWER GENERATION SECTOR
 Parameter,PG_BASESH,iLoadFactorAdj,Parameters for load factor adjustment iBaseLoadShareDem,"DSBS,YTIME","allCy,DSBS,YTIME",Parameters for data transfering
 Parameter,PG_CHPCAPAC,iDataElecAndSteamGen,Data releated to electricity and steam generation (1),"CHP,YTIME","allCy,CHP,YTIME",Parameters for data transfering
 Parameter,PG_Cost,iDataPowGenCost,Power Generation data,"PGALL,PGECONCHAR","PGALL,PGECONCHAR",common data parameters
@@ -440,7 +440,7 @@ Parameter,Sup_TRANS,iSuppTransfers,Supplementary Parameter for Transfers (Mtoe),
 Variable,SUTR,VTechSortVarCost,Technology sorting based on variable cost,"CYall,TRANSE,Rcon,YTIME","allCy,TRANSE,Rcon,YTIME",TRANSPORT SECTOR VARIABLES
 Parameter,targetprice,iPriceTragets,Price Targets,"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",Emission Related Parameters
 Parameter,targetprice1,REMOVED FROM OPEN-PROM,Data Transfer for Price Targets,"CYall,AGSECT,EF,YTIME","allCy,AGSECT,EF,YTIME",Reguala Falsi Parameters
-Variable,TCAPACITY,VCapElec,Electricity generation plants capacity (GW),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
+Variable,TCAPACITY,VMVCapElec,Electricity generation plants capacity (GW),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Variable,TICT,VMVInpTransfTherm,Transformation input to thermal power plants (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,TIDH,VMVTransfInputDHPlants,Transformation input to District Heating Plants (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Parameter,TINEW,iTotInput,"TINEW(CYALL,EF,YTIME)=1E-7;","CYALL,EF,YTIME","allCy,EF,YTIME",Power Generation Parameters
@@ -458,7 +458,7 @@ Parameter,TOOTHRES,REMOVED FROM OPEN-PROM,"Transformation Output from Gasworks, 
 Variable,TORF,VOutTransfRefSpec,Transformation output from refineries (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Parameter,TOTAL_EF,iDiffFuelsInSec,Auxiliary parameter holding the number of different fuels in a sector,SBS,,
 Variable,TOTCAP,VCapElecTot,Total electricity generation capacity (GW),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Variable,TOTCAP_EST,VCapElecTotEst,Estimated Total electricity generation capacity (GW),"CYall,YTIME","CYall,YTIME",POWER GENERATION SECTOR
+Variable,TOTCAP_EST,VMVCapElecTotEst,Estimated Total electricity generation capacity (GW),"CYall,YTIME","CYall,YTIME",POWER GENERATION SECTOR
 Variable,TOTCAPNCHP,VCapElecNonCHP,Total electricity generation capacity excluding CHP ( GW),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Variable,TOTOT,VOutTotTransf,Total transformation output (Mtoe),"CYall,EFS,YTIME ","allCy,EFS,YTIME ",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,TOTPROD,VProdElecReqTot,Total required electricity production (TWh),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR

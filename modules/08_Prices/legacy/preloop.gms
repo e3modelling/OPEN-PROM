@@ -21,8 +21,8 @@ VMVPriceFuelSubsecCarVal.FX(runCy,INDDOM,"HEATPUMP",YTIME)$(SECTTECH(INDDOM,"HEA
 VMVPriceFuelSubsecCarVal.FX(runCy,"H2P",EF,YTIME)$(SECTTECH("H2P",EF)$(not An(YTIME))) = VMVPriceFuelSubsecCarVal.L(runCy,"PG",EF,YTIME);
 VMVPriceFuelSubsecCarVal.FX(runCy,"H2P","ELC",YTIME)$(not An(YTIME))= VMVPriceFuelSubsecCarVal.L(runCy,"OI","ELC",YTIME);
 *---
-VPriceElecIndResConsu.FX(runCy,"i",YTIME)$(not An(YTIME)) = VMVPriceFuelSubsecCarVal.L(runCy,"OI","ELC",YTIME)*sTWhToMtoe;
-VPriceElecIndResConsu.FX(runCy,"r",YTIME)$(not An(YTIME)) = VMVPriceFuelSubsecCarVal.L(runCy,"HOU","ELC",YTIME)*sTWhToMtoe;
+VMVPriceElecIndResConsu.FX(runCy,"i",YTIME)$(not An(YTIME)) = VMVPriceFuelSubsecCarVal.L(runCy,"OI","ELC",YTIME)*sTWhToMtoe;
+VMVPriceElecIndResConsu.FX(runCy,"r",YTIME)$(not An(YTIME)) = VMVPriceFuelSubsecCarVal.L(runCy,"HOU","ELC",YTIME)*sTWhToMtoe;
 *---
 VMVPriceFuelAvgSub.L(runCy,DSBS,YTIME) = 0.1;
 VMVPriceFuelAvgSub.FX(runCy,DSBS,YTIME)$(not An(YTIME)) = sum(EF$SECTTECH(DSBS,EF), iWgtSecAvgPriFueCons(runCy,DSBS,EF) * iFuelPrice(runCy,DSBS,EF,YTIME));
