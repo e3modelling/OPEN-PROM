@@ -85,7 +85,7 @@ $offtext
 *' This equation offers a comprehensive view of fuel consumption, considering both traditional fuel sources and the additional electricity consumption
 *' associated with heat pump plants.
 Q02ConsFuel(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF) $(not HEATPUMP(EF)) $runCy(allCy))..
-         VMVConsFue(allCy,DSBS,EF,YTIME)
+         VMVConsFuel(allCy,DSBS,EF,YTIME)
                  =E=
          VMVConsFuelInclHP(allCy,DSBS,EF,YTIME)$(not ELCEF(EF)) + 
          (VMVConsFuelInclHP(allCy,DSBS,EF,YTIME) + VElecConsHeatPla(allCy,DSBS,YTIME))$ELCEF(EF);
@@ -229,8 +229,8 @@ Q02CostElcAvgProdCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VMVCostElcAvgProdCHP(allCy,CHP,YTIME)
          =E=
 
-         (sum(INDDOM, VMVConsFue(allCy,INDDOM,CHP,YTIME-1)/SUM(INDDOM2,VMVConsFue(allCy,INDDOM2,CHP,YTIME-1))*VCostElecProdCHP(allCy,INDDOM,CHP,YTIME)))
-         $SUM(INDDOM2,VMVConsFue.L(allCy,INDDOM2,CHP,YTIME-1))+0$(NOT SUM(INDDOM2,VMVConsFue.L(allCy,INDDOM2,CHP,YTIME-1)));
+         (sum(INDDOM, VMVConsFuel(allCy,INDDOM,CHP,YTIME-1)/SUM(INDDOM2,VMVConsFuel(allCy,INDDOM2,CHP,YTIME-1))*VCostElecProdCHP(allCy,INDDOM,CHP,YTIME)))
+         $SUM(INDDOM2,VMVConsFuel.L(allCy,INDDOM2,CHP,YTIME-1))+0$(NOT SUM(INDDOM2,VMVConsFuel.L(allCy,INDDOM2,CHP,YTIME-1)));
 
 *' The equation computes the average variable cost, including fuel and electricity production cost, per Combined Heat and Power plant.
 *' The equation involves a summation over demand subsectors , where the variable cost per CHP plant is calculated based on fuel
@@ -240,6 +240,6 @@ Q02CostVarAvgElecProd(allCy,CHP,YTIME)$(TIME(YTIME) $runCy(allCy)) ..
          VMVCostVarAvgElecProd(allCy,CHP,YTIME)
          =E=
 
-         (sum(INDDOM, VMVConsFue(allCy,INDDOM,CHP,YTIME-1)/SUM(INDDOM2,VMVConsFue(allCy,INDDOM2,CHP,YTIME-1))
+         (sum(INDDOM, VMVConsFuel(allCy,INDDOM,CHP,YTIME-1)/SUM(INDDOM2,VMVConsFuel(allCy,INDDOM2,CHP,YTIME-1))
          *VCostProdCHPDem(allCy,INDDOM,CHP,YTIME)))
-         $SUM(INDDOM2,VMVConsFue.L(allCy,INDDOM2,CHP,YTIME-1))+0$(NOT SUM(INDDOM2,VMVConsFue.L(allCy,INDDOM2,CHP,YTIME-1)));
+         $SUM(INDDOM2,VMVConsFuel.L(allCy,INDDOM2,CHP,YTIME-1))+0$(NOT SUM(INDDOM2,VMVConsFuel.L(allCy,INDDOM2,CHP,YTIME-1)));

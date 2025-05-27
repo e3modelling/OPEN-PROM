@@ -9,8 +9,8 @@ VSortTechVarCost.L(runCy,DSBS,rCon,YTIME) = 0.00000001;
 *---
 VShareTechNewEquip.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF)$(not An(YTIME))) = 0;
 *---
-VMVConsFue.L(runCy,DSBS,EF,YTIME) = 0.0000000001;
-VMVConsFue.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $(not HEATPUMP(EF)) $(not TRANSE(DSBS)) $(not An(YTIME))) = iFuelConsPerFueSub(runCy,DSBS,EF,YTIME);
+VMVConsFuel.L(runCy,DSBS,EF,YTIME) = 0.0000000001;
+VMVConsFuel.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $(not HEATPUMP(EF)) $(not TRANSE(DSBS)) $(not An(YTIME))) = iFuelConsPerFueSub(runCy,DSBS,EF,YTIME);
 *---
 VMVConsElecNonSubIndTert.L(runCy,DSBS,YTIME)=0.1;
 VMVConsElecNonSubIndTert.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = iFuelConsPerFueSub(runCy,INDDOM,"ELC",YTIME) * iShrNonSubElecInTotElecDem(runCy,INDDOM);

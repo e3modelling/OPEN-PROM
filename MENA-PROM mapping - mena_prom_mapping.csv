@@ -55,7 +55,7 @@ Variable,CO2EMISTOT,vGrnnHsEmisCO2EquivAllCntr,Total CO2eq GHG emissions in all 
 Variable,CO2SEQCOST,VMVCstCO2SeqCsts,Cost curve for CO2 sequestration costs (US$2015/tn of CO2 sequestrated),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Parameter,CO2SEQPARAM,iElastCO2Seq,Elasticities for CO2 sequestration cost curve,"CYall,CO2SEQELAST","allCy,CO2SEQELAST",Emission Related Parameters
 Variable,CO2SEQW,VTrnsWghtLinToExp,Weight for transtition from linear CO2 sequestration cost curve to exponential,"CYALL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Variable,CONSEF,VMVConsFue,"Consumption of fuels in each demand subsector, excluding heat from heatpumps (Mtoe)","CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
+Variable,CONSEF,VMVConsFuel,"Consumption of fuels in each demand subsector, excluding heat from heatpumps (Mtoe)","CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,CONSEF_BAR,VMVConsFuelInclHP,Consumption of fuels in each demand subsector including heat from heatpumps (Mtoe),"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Sets,CONSET,conSet,Consumer size groups related to space heating,,,
 Parameter,CONSIZE,iConsSizeDistHeat,Consumer sizes for district heating (1),,,

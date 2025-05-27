@@ -38,7 +38,7 @@ VShareTechNewEquip(allCy,DSBS,EF,YTIME)                    "Technology share in 
 VCostProdCHPDem(allCy,DSBS,CHP,YTIME)                      "Variable including fuel electricity production cost per CHP plant and demand sector (US$2015/KWh)"
 
 *'                **Interdependent Variables**
-VMVConsFue(allCy,DSBS,EF,YTIME)                            "Consumption of fuels in each demand subsector, excluding heat from heatpumps (Mtoe)"
+VMVConsFuel(allCy,DSBS,EF,YTIME)                            "Consumption of fuels in each demand subsector, excluding heat from heatpumps (Mtoe)"
 VMVConsElecNonSubIndTert(allCy,DSBS,YTIME)                 "Consumption of non-substituable electricity in Industry and Tertiary (Mtoe)"
 *VMvConsTotElecInd(allCy,YTIME)                            "Total Consumption of Electricity in industrial sectors (Mtoe)"
 VMVDemFinSubFuelSubsec(allCy,DSBS,YTIME)                   "Total final demand (of substitutable fuels) per subsector (Mtoe)"

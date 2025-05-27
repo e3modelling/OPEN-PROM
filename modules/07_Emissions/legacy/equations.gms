@@ -33,7 +33,7 @@ QGrnnHsEmisCO2Equiv(NAP,YTIME)$(TIME(YTIME))..
         (
         sum(allCy,
                  sum((EFS,INDSE)$(SECTTECH(INDSE,EFS)  $NAPtoALLSBS(NAP,INDSE)),
-                      VMVConsFue(allCy,INDSE,EFS,YTIME) * iCo2EmiFac(allCy,INDSE,EFS,YTIME)) !! final consumption
+                      VMVConsFuel(allCy,INDSE,EFS,YTIME) * iCo2EmiFac(allCy,INDSE,EFS,YTIME)) !! final consumption
                 +
                  sum(PGEF, VMVInpTransfTherm(allCy,PGEF,YTIME)*iCo2EmiFac(allCy,"PG",PGEF,YTIME)$(not h2f1(pgef))) !! input to power generation sector
                  +

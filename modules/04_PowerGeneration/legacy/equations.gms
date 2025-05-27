@@ -24,7 +24,7 @@ QPotRenCurr(allCy,PGRENEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QCapElecCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VCapElecCHP(allCy,CHP,YTIME)
          =E=
-         1/sTWhToMtoe * sum(INDDOM,VMVConsFue(allCy,INDDOM,CHP,YTIME)) * VMVPriceElecInd(allCy,YTIME)/
+         1/sTWhToMtoe * sum(INDDOM,VMVConsFuel(allCy,INDDOM,CHP,YTIME)) * VMVPriceElecInd(allCy,YTIME)/
          sum(PGALL$CHPtoEON(CHP,PGALL),iAvailRate(PGALL,YTIME)) /
          iUtilRateChpPlants(allCy,CHP,YTIME) /sGwToTwhPerYear;  
 
@@ -67,8 +67,8 @@ QBsldEst(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QLoadFacDom(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VLoadFacDom(allCy,YTIME)
              =E=
-         (sum(INDDOM,VMVConsFue(allCy,INDDOM,"ELC",YTIME)) + sum(TRANSE, VMVDemFinEneTranspPerFuel(allCy,TRANSE,"ELC",YTIME)))/
-         (sum(INDDOM,VMVConsFue(allCy,INDDOM,"ELC",YTIME)/iLoadFacElecDem(INDDOM)) + 
+         (sum(INDDOM,VMVConsFuel(allCy,INDDOM,"ELC",YTIME)) + sum(TRANSE, VMVDemFinEneTranspPerFuel(allCy,TRANSE,"ELC",YTIME)))/
+         (sum(INDDOM,VMVConsFuel(allCy,INDDOM,"ELC",YTIME)/iLoadFacElecDem(INDDOM)) + 
          sum(TRANSE, VMVDemFinEneTranspPerFuel(allCy,TRANSE,"ELC",YTIME)/iLoadFacElecDem(TRANSE)));         
 
 *' The equation calculates the electricity peak load by dividing the total electricity demand by the load factor for the domestic sector and converting the result
@@ -522,8 +522,8 @@ QScalFacPlantDispatch(allCy,HOUR,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QProdElecEstCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VProdElecEstCHP(allCy,YTIME) 
          =E=
-         ( (1/0.086 * sum((INDDOM,CHP),VMVConsFue(allCy,INDDOM,CHP,YTIME)) * VMVPriceElecInd(allCy,YTIME)) + 
-         iMxmShareChpElec(allCy,YTIME)*VDemElecTot(allCy,YTIME) - SQRT( SQR((1/0.086 * sum((INDDOM,CHP),VMVConsFue(allCy,INDDOM,CHP,YTIME)) * 
+         ( (1/0.086 * sum((INDDOM,CHP),VMVConsFuel(allCy,INDDOM,CHP,YTIME)) * VMVPriceElecInd(allCy,YTIME)) + 
+         iMxmShareChpElec(allCy,YTIME)*VDemElecTot(allCy,YTIME) - SQRT( SQR((1/0.086 * sum((INDDOM,CHP),VMVConsFuel(allCy,INDDOM,CHP,YTIME)) * 
          VMVPriceElecInd(allCy,YTIME)) - 
          iMxmShareChpElec(allCy,YTIME)*VDemElecTot(allCy,YTIME)) + SQR(1E-4) ) )/2;
 
@@ -567,7 +567,7 @@ $ontext
 qSecContrTotCHPProd(allCy,INDDOM,CHP,YTIME)$(TIME(YTIME) $SECTTECH(INDDOM,CHP) $runCy(allCy))..
          vSecContrTotCHPProd(allCy,INDDOM,CHP,YTIME) 
           =E=
-         VMVConsFue(allCy,INDDOM,CHP,YTIME)/(1e-6+SUM(INDDOM2,VMVConsFue(allCy,INDDOM2,CHP,YTIME)));
+         VMVConsFuel(allCy,INDDOM,CHP,YTIME)/(1e-6+SUM(INDDOM2,VMVConsFuel(allCy,INDDOM2,CHP,YTIME)));
 $offtext
 
 *' This equation calculates the electricity production from Combined Heat and Power plants . The electricity production is computed
@@ -578,7 +578,7 @@ $offtext
 QProdElecCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VProdElecCHP(allCy,CHP,YTIME)
                  =E=
-        sum(INDDOM,VMVConsFue(allCy,INDDOM,CHP,YTIME)) / SUM(chp2,sum(INDDOM,VMVConsFue(allCy,INDDOM,CHP2,YTIME)))*
+        sum(INDDOM,VMVConsFuel(allCy,INDDOM,CHP,YTIME)) / SUM(chp2,sum(INDDOM,VMVConsFuel(allCy,INDDOM,CHP2,YTIME)))*
         (VDemElecTot(allCy,YTIME) - SUM(PGALL,VMVProdElec(allCy,PGALL,YTIME)));
 
 *' This equation calculates the long-term power generation cost of technologies excluding climate policies.
@@ -739,7 +739,7 @@ QCostPowGenLonNoClimPol(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QConsElec(allCy,DSBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VConsElec(allCy,DSBS,YTIME)
              =E=
-         sum(INDDOM $SAMEAS(INDDOM,DSBS), VMVConsFue(allCy,INDDOM,"ELC",YTIME)) + sum(TRANSE $SAMEAS(TRANSE,DSBS), VMVDemFinEneTranspPerFuel(allCy,TRANSE,"ELC",YTIME));
+         sum(INDDOM $SAMEAS(INDDOM,DSBS), VMVConsFuel(allCy,INDDOM,"ELC",YTIME)) + sum(TRANSE $SAMEAS(TRANSE,DSBS), VMVDemFinEneTranspPerFuel(allCy,TRANSE,"ELC",YTIME));
 
 
 *' This equation computes the short-term average power generation cost. It involves summing the variable production costs for different power generation plants and
