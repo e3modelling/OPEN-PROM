@@ -35,11 +35,11 @@ QGrnnHsEmisCO2Equiv(NAP,YTIME)$(TIME(YTIME))..
                  sum((EFS,INDSE)$(SECTTECH(INDSE,EFS)  $NAPtoALLSBS(NAP,INDSE)),
                       VMVConsFue(allCy,INDSE,EFS,YTIME) * iCo2EmiFac(allCy,INDSE,EFS,YTIME)) !! final consumption
                 +
-                 sum(PGEF, VInpTransfTherm(allCy,PGEF,YTIME)*iCo2EmiFac(allCy,"PG",PGEF,YTIME)$(not h2f1(pgef))) !! input to power generation sector
+                 sum(PGEF, VMVInpTransfTherm(allCy,PGEF,YTIME)*iCo2EmiFac(allCy,"PG",PGEF,YTIME)$(not h2f1(pgef))) !! input to power generation sector
                  +
-                 sum(EFS, VTransfInputDHPlants(allCy,EFS,YTIME)*iCo2EmiFac(allCy,"PG",EFS,YTIME)) !! input to district heating plants
+                 sum(EFS, VMVTransfInputDHPlants(allCy,EFS,YTIME)*iCo2EmiFac(allCy,"PG",EFS,YTIME)) !! input to district heating plants
                  +
-                 sum(EFS, VConsFiEneSec(allCy,EFS,YTIME)*iCo2EmiFac(allCy,"PG",EFS,YTIME)) !! consumption of energy branch
+                 sum(EFS, VMVConsFiEneSec(allCy,EFS,YTIME)*iCo2EmiFac(allCy,"PG",EFS,YTIME)) !! consumption of energy branch
 
                  -
                  sum(PGEF,sum(CCS$PGALLtoEF(CCS,PGEF),

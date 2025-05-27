@@ -198,18 +198,18 @@ QAvgElcProCostCHP         ,Q02CostElcAvgProdCHP         ,CHP,INDUSTRY - DOMESTIC
 " VAvgElcProCHP(runCy,CHP,YTIME)"," VMVCostElcAvgProdCHP(runCy,CHP,YTIME)",CHP,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 QAvgVarElecProd          ,Q02CostVarAvgElecProd        ,CHP,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 " VAvgVarProdCostCHP(runCy,CHP,YTIME)"," VMVCostVarAvgElecProd(runCy,CHP,YTIME)",CHP,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-QTotFinEneCons           ,QConsFinEneCountry         ,EFS,REST OF ENERGY BALANCE SECTORS
-" VFeCons(runCy,EFS,YTIME)"," VConsFinEneCountry(runCy,EFS,YTIME)",EFS,REST OF ENERGY BALANCE SECTORS
+QTotFinEneCons           ,Q03ConsFinEneCountry         ,EFS,REST OF ENERGY BALANCE SECTORS
+" VFeCons(runCy,EFS,YTIME)"," VMVConsFinEneCountry(runCy,EFS,YTIME)",EFS,REST OF ENERGY BALANCE SECTORS
 qTotFinEneConsAll         ,qConsTotFinEne           ,,REST OF ENERGY BALANCE SECTORS
  vTotFinEneConsAll(YTIME), vConsTotFinEne(YTIME),,REST OF ENERGY BALANCE SECTORS
-QFinNonEneCons           ,QConsFinNonEne           ,EFS,REST OF ENERGY BALANCE SECTORS
-" VFNonEnCons(runCy,EFS,YTIME)"," VConsFinNonEne(runCy,EFS,YTIME)",EFS,REST OF ENERGY BALANCE SECTORS
-QDistrLosses            ,QLossesDistr            ,EFS,REST OF ENERGY BALANCE SECTORS
-" VLosses(runCy,EFS,YTIME)"," VLossesDistr(runCy,EFS,YTIME)",EFS,REST OF ENERGY BALANCE SECTORS
+QFinNonEneCons           ,Q03ConsFinNonEne           ,EFS,REST OF ENERGY BALANCE SECTORS
+" VFNonEnCons(runCy,EFS,YTIME)"," VMVConsFinNonEne(runCy,EFS,YTIME)",EFS,REST OF ENERGY BALANCE SECTORS
+QDistrLosses            ,Q03LossesDistr            ,EFS,REST OF ENERGY BALANCE SECTORS
+" VLosses(runCy,EFS,YTIME)"," VMVLossesDistr(runCy,EFS,YTIME)",EFS,REST OF ENERGY BALANCE SECTORS
 QTranfOutputDHPlants        ,QOutTransfDhp           ,STEAM,REST OF ENERGY BALANCE SECTORS
 " VTransfOutputDHPlants(runCy,STEAM,YTIME)"," VOutTransfDhp(runCy,STEAM,YTIME)",STEAM,REST OF ENERGY BALANCE SECTORS
-QTransfInputDHPlants        ,QTransfInputDHPlants        ,EFS,REST OF ENERGY BALANCE SECTORS
-" VTransfInputDHPlants(runCy,EFS,YTIME)"," VTransfInputDHPlants(runCy,EFS,YTIME)",EFS,REST OF ENERGY BALANCE SECTORS
+Q03TransfInputDHPlants        ,Q03TransfInputDHPlants        ,EFS,REST OF ENERGY BALANCE SECTORS
+" VMVTransfInputDHPlants(runCy,EFS,YTIME)"," VMVTransfInputDHPlants(runCy,EFS,YTIME)",EFS,REST OF ENERGY BALANCE SECTORS
 QRefCapacity            ,QCapRef              ,,REST OF ENERGY BALANCE SECTORS
 " VRefCapacity(runCy,YTIME)"," VCapRef(runCy,YTIME)",,REST OF ENERGY BALANCE SECTORS
 QTranfOutputRefineries       ,QOutTransfRefSpec         ,"EFS$(EFtoEFA(EFS,""LQD""))",REST OF ENERGY BALANCE SECTORS
@@ -220,8 +220,8 @@ QTransfOutputNuclear        ,QOutTransfNuclear         ,"""ELC""",REST OF ENERGY
 " VTransfOutputNuclear(runCy,""ELC"",YTIME)"," VOutTransfNuclear(runCy,""ELC"",YTIME)","""ELC""",REST OF ENERGY BALANCE SECTORS
 QTransfInNuclear          ,QInpTransfNuclear         ,"""NUC""",REST OF ENERGY BALANCE SECTORS
 " VTransfInNuclear(runCy,""NUC"",YTIME)"," VInpTransfNuclear(runCy,""NUC"",YTIME)","""NUC""",REST OF ENERGY BALANCE SECTORS
-QTransfInPowerPls         ,QInpTransfTherm          ,PGEF,REST OF ENERGY BALANCE SECTORS
-" VTransfInThermPowPls(runCy,PGEF,YTIME)"," VInpTransfTherm(runCy,PGEF,YTIME)",PGEF,REST OF ENERGY BALANCE SECTORS
+QTransfInPowerPls         ,Q03InpTransfTherm          ,PGEF,REST OF ENERGY BALANCE SECTORS
+" VTransfInThermPowPls(runCy,PGEF,YTIME)"," VMVInpTransfTherm(runCy,PGEF,YTIME)",PGEF,REST OF ENERGY BALANCE SECTORS
 QTransfOutThermPP         ,QOutTransfTherm          ,TOCTEF,REST OF ENERGY BALANCE SECTORS
 " VTransfOutThermPP(runCy,TOCTEF,YTIME)"," VOutTransfTherm(runCy,TOCTEF,YTIME)",TOCTEF,REST OF ENERGY BALANCE SECTORS
 QTotTransfInput          ,QInpTotTransf           ,EFS,REST OF ENERGY BALANCE SECTORS
@@ -240,10 +240,10 @@ QFakeExp              ,QExp                ,EFS$(IMPEF(EFS)),REST OF ENERGY BALA
 " VExportsFake(runCy,EFS,YTIME)"," VExp(runCy,EFS,YTIME)",EFS$(IMPEF(EFS)),REST OF ENERGY BALANCE SECTORS
 QFakeImprts            ,QImp                ,EFS$(IMPEF(EFS)),REST OF ENERGY BALANCE SECTORS
 " VFkImpAllFuelsNotNatGas(runCy,EFS,YTIME)"," VImp(runCy,EFS,YTIME)",EFS$(IMPEF(EFS)),REST OF ENERGY BALANCE SECTORS
-QNetImports            ,QImpNetEneBrnch          ,EFS,REST OF ENERGY BALANCE SECTORS
-" VNetImports(runCy,EFS,YTIME)"," VImpNetEneBrnch(runCy,EFS,YTIME)",EFS,REST OF ENERGY BALANCE SECTORS
-QEneBrnchEneCons          ,QConsFiEneSec           ,EFS,REST OF ENERGY BALANCE SECTORS
-" VEnCons(runCy,EFS,YTIME)"," VConsFiEneSec(runCy,EFS,YTIME)",EFS,REST OF ENERGY BALANCE SECTORS
+QNetImports            ,Q03ImpNetEneBrnch          ,EFS,REST OF ENERGY BALANCE SECTORS
+" VNetImports(runCy,EFS,YTIME)"," VMVImpNetEneBrnch(runCy,EFS,YTIME)",EFS,REST OF ENERGY BALANCE SECTORS
+QEneBrnchEneCons          ,Q03ConsFiEneSec           ,EFS,REST OF ENERGY BALANCE SECTORS
+" VEnCons(runCy,EFS,YTIME)"," VMVConsFiEneSec(runCy,EFS,YTIME)",EFS,REST OF ENERGY BALANCE SECTORS
 QCO2ElcHrg             ,QCapCO2ElecHydr          ,,CO2 SEQUESTRATION COST CURVES
 " VCO2ElcHrgProd(runCy,YTIME)"," VCapCO2ElecHydr(runCy,YTIME)",,CO2 SEQUESTRATION COST CURVES
 QCumCO2Capt            ,QCaptCummCO2            ,,CO2 SEQUESTRATION COST CURVES

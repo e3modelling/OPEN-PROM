@@ -45,8 +45,8 @@ QDemElecTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VDemElecTot(allCy,YTIME)
              =E=
          1/sTWhToMtoe *
-         ( VConsFinEneCountry(allCy,"ELC",YTIME) + VConsFinNonEne(allCy,"ELC",YTIME) + VLossesDistr(allCy,"ELC",YTIME)
-           + VConsFiEneSec(allCy,"ELC",YTIME) - VImpNetEneBrnch(allCy,"ELC",YTIME)
+         ( VMVConsFinEneCountry(allCy,"ELC",YTIME) + VMVConsFinNonEne(allCy,"ELC",YTIME) + VMVLossesDistr(allCy,"ELC",YTIME)
+           + VMVConsFiEneSec(allCy,"ELC",YTIME) - VMVImpNetEneBrnch(allCy,"ELC",YTIME)
          );
 
 *' This equation computes the estimated base load as a quantity dependent on the electricity demand per final sector,
@@ -57,8 +57,8 @@ QBsldEst(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
              =E=
          (
              sum(DSBS, iBaseLoadShareDem(allCy,DSBS,YTIME)*VConsElec(allCy,DSBS,YTIME))*(1+iRateLossesFinCons(allCy,"ELC",YTIME))*
-             (1 - VImpNetEneBrnch(allCy,"ELC",YTIME)/(sum(DSBS, VConsElec(allCy,DSBS,YTIME))+VLossesDistr(allCy,"ELC",YTIME)))
-             + 0.5*VConsFiEneSec(allCy,"ELC",YTIME)
+             (1 - VMVImpNetEneBrnch(allCy,"ELC",YTIME)/(sum(DSBS, VConsElec(allCy,DSBS,YTIME))+VMVLossesDistr(allCy,"ELC",YTIME)))
+             + 0.5*VMVConsFiEneSec(allCy,"ELC",YTIME)
          ) / sTWhToMtoe / sGwToTwhPerYear;
 
 *' This equation calculates the load factor of the entire domestic system as a sum of consumption in each demand subsector

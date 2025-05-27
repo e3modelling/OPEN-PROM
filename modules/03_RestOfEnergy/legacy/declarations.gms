@@ -21,13 +21,13 @@ QExp(allCy,EFS,YTIME)	                                   "Compute fake exports"
 QImp(allCy,EFS,YTIME)	                                   "Compute fake imports"
 
 *'                **Interdependent Equations**
-QImpNetEneBrnch(allCy,EFS,YTIME)	                       "Compute net imports"
-QConsFiEneSec(allCy,EFS,YTIME)	                           "Compute energy branch final consumption"
-QInpTransfTherm(allCy,EFS,YTIME)	                       "Compute transformation input to power plants"	
-QTransfInputDHPlants(allCy,EFS,YTIME)                      "Compute the transformation input to distrcit heating plants"
-QConsFinEneCountry(allCy,EFS,YTIME)                        "Compute total final energy consumption"
-QConsFinNonEne(allCy,EFS,YTIME)                            "Compute final non-energy consumption"
-QLossesDistr(allCy,EFS,YTIME)                              "Compute distribution losses"
+Q03ImpNetEneBrnch(allCy,EFS,YTIME)	                       "Compute net imports"
+Q03ConsFiEneSec(allCy,EFS,YTIME)	                       "Compute energy branch final consumption"
+Q03InpTransfTherm(allCy,EFS,YTIME)	                       "Compute transformation input to power plants"	
+Q03TransfInputDHPlants(allCy,EFS,YTIME)                    "Compute the transformation input to distrcit heating plants"
+Q03ConsFinEneCountry(allCy,EFS,YTIME)                      "Compute total final energy consumption"
+Q03ConsFinNonEne(allCy,EFS,YTIME)                          "Compute final non-energy consumption"
+Q03LossesDistr(allCy,EFS,YTIME)                            "Compute distribution losses"
 ;
 
 Variables
@@ -50,11 +50,11 @@ VExp(allCy,EFS,YTIME)                        	           "Exports fake (Mtoe)"
 VImp(allCy,EFS,YTIME)             	                       "Fake Imports for all fuels except natural gas (Mtoe)"
 
 *'                **Interdependent Variables**
-VImpNetEneBrnch(allCy,EFS,YTIME)	                       "Net Imports (Mtoe)"
-VConsFiEneSec(allCy,EFS,YTIME)                             "Final consumption in energy sector (Mtoe)"
-VInpTransfTherm(allCy,EFS,YTIME)	                       "Transformation input to thermal power plants (Mtoe)"
-VTransfInputDHPlants(allCy,EFS,YTIME)                      "Transformation input to District Heating Plants (Mtoe)"
-VConsFinEneCountry(allCy,EF,YTIME)                         "Total final energy consumnption (Mtoe)"
-VConsFinNonEne(allCy,EFS,YTIME)                            "Final non energy consumption (Mtoe)"
-VLossesDistr(allCy,EFS,YTIME)                              "Distribution losses (Mtoe)"
+VMVImpNetEneBrnch(allCy,EFS,YTIME)	                       "Net Imports (Mtoe)"
+VMVConsFiEneSec(allCy,EFS,YTIME)                           "Final consumption in energy sector (Mtoe)"
+VMVInpTransfTherm(allCy,EFS,YTIME)	                       "Transformation input to thermal power plants (Mtoe)"
+VMVTransfInputDHPlants(allCy,EFS,YTIME)                    "Transformation input to District Heating Plants (Mtoe)"
+VMVConsFinEneCountry(allCy,EF,YTIME)                       "Total final energy consumnption (Mtoe)"
+VMVConsFinNonEne(allCy,EFS,YTIME)                          "Final non energy consumption (Mtoe)"
+VMVLossesDistr(allCy,EFS,YTIME)                            "Distribution losses (Mtoe)"
 ;

@@ -44,7 +44,7 @@ $include"./iSuppPrimProd.csv"
 $offdelim
 ;
 *---
-table iInpTransfTherm(allCy,EFS,YTIME) "Historic data of VInpTransfTherm (Transformation input to thermal power plants) (Mtoe)"
+table iInpTransfTherm(allCy,EFS,YTIME) "Historic data of VMVInpTransfTherm (Transformation input to thermal power plants) (Mtoe)"
 $ondelim
 $include"./iInpTransfTherm.csv"
 $offdelim
@@ -107,7 +107,7 @@ iRatePriProTotPriNeeds(allCy,EF,YTIME)	          "Rate of Primary Production in 
 iResHcNgOilPrProd(allCy,EF,YTIME)	              "Residuals for Hard Coal, Natural Gas and Oil Primary Production (1)"
 iRatioImpFinElecDem(allCy,YTIME)	              "Ratio of imports in final electricity demand (1)"	
 iElecImp(allCy,YTIME)	                          "Electricity Imports (1)"
-iInpTransfTherm(allCy,EFS,YTIME)                  "Historic data of VInpTransfTherm (Transformation input to thermal power plants) (Mtoe)"
+iInpTransfTherm(allCy,EFS,YTIME)                  "Historic data of VMVInpTransfTherm (Transformation input to thermal power plants) (Mtoe)"
 ;
 *---
 iSupResRefCapacity(runCy,SUPOTH,YTIME) = 1;
