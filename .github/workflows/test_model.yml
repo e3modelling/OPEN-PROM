@@ -21,7 +21,7 @@ jobs:
           Invoke-WebRequest -Uri $url -OutFile $installer
           Start-Process $installer -ArgumentList "/silent" -NoNewWindow -Wait
           Remove-Item $installer
-          $env:Path += ";C:\GAMS\45"
+          $env:Path += ";C:\GAMS\47"
           [Environment]::SetEnvironmentVariable("Path", $env:Path, [EnvironmentVariableTarget]::Machine)
           echo $env:Path
 
@@ -30,8 +30,8 @@ jobs:
           LICENSE: ${{ secrets.GAMS_LICENSE }}
           
         run: |
-          $licenseFile = "C:\GAMS\45\gamslice.txt"
-          New-Item -ItemType Directory -Force -Path "C:\GAMS\45"
+          $licenseFile = "C:\GAMS\47\gamslice.txt"
+          New-Item -ItemType Directory -Force -Path "C:\GAMS\47"
           Set-Content -Path $licenseFile -Value $env:LICENSE
 
       - name: Download Datasets
