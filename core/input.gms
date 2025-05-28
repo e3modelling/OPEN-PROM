@@ -17,46 +17,26 @@ $include "./iTransChar.csv"
 $offdelim
 ;
 *---
-$IFTHEN.calib %Calibration% == off
-table iElastA(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)"
-$ondelim
-$include "./iElastA.csv"
-$offdelim
-;
-*---
-iElastA(runCy,SBS,ETYPES,YTIME) = iElastA("ELL",SBS,ETYPES,YTIME);
-$ELSE.calib
+$IFTHEN.calib %Calibration% == Calibration
 variable iElastA(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)";
 table iElastAL(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)"
 $ondelim
 $include "./iElastA.csv"
 $offdelim
 ;
-iElastA.L(runCy,SBS,ETYPES,YTIME) = iElastAL("ELL",SBS,ETYPES,YTIME);
-iElastA.LO(runCy,SBS,"a",YTIME)  =  0.001;
-iElastA.UP(runCy,SBS,"a",YTIME)  =  5*iElastAL("ELL",SBS,"a",YTIME);
-iElastA.LO(runCy,SBS,"b1",YTIME) = -10;
-iElastA.UP(runCy,SBS,"b1",YTIME) = -0.001;
-iElastA.LO(runCy,SBS,"b2",YTIME) = -10;
-iElastA.UP(runCy,SBS,"b2",YTIME) = -0.001;
-iElastA.LO(runCy,SBS,"c",YTIME)  = -10;
-iElastA.UP(runCy,SBS,"c",YTIME)  = -0.001;
-iElastA.LO(runCy,SBS,"b3",YTIME) = -10;
-iElastA.UP(runCy,SBS,"b3",YTIME) = -0.001;
-iElastA.LO(runCy,SBS,"b4",YTIME) =  0.001;
-iElastA.UP(runCy,SBS,"b4",YTIME) =  10;
-iElastA.LO(runCy,SBS,"c1",YTIME) = -10;
-iElastA.UP(runCy,SBS,"c1",YTIME) = -0.001;
-iElastA.LO(runCy,SBS,"c2",YTIME) = -10;
-iElastA.UP(runCy,SBS,"c2",YTIME) = -0.001;
-iElastA.LO(runCy,SBS,"c3",YTIME) = -10;
-iElastA.UP(runCy,SBS,"c3",YTIME) = -0.001;
-iElastA.LO(runCy,SBS,"c4",YTIME) = -10;
-iElastA.UP(runCy,SBS,"c4",YTIME) = -0.001;
-iElastA.LO(runCy,SBS,"c4",YTIME) = -10;
-iElastA.UP(runCy,SBS,"c4",YTIME) = -0.001;
-iElastA.LO(runCy,SBS,"c5",YTIME) = -10;
-iElastA.UP(runCy,SBS,"c5",YTIME) = -0.001;
+iElastA.L(runCy, SBS, ETYPES, YTIME) = iElastAL("ELL", SBS, ETYPES, YTIME);
+iElastA.LO(runCy, SBS, posElast, YTIME) = 0.001;
+iElastA.UP(runCy, SBS, posElast, YTIME) = 5 * iElastAL("ELL", SBS, posElast, YTIME);
+iElastA.LO(runCy, SBS, negElast, YTIME) = -10;
+iElastA.UP(runCy, SBS, negElast, YTIME) = -0.001;
+
+$ELSE.calib
+table iElastA(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)"
+$ondelim
+$include "./iElastA.csv"
+$offdelim
+;
+iElastA(runCy,SBS,ETYPES,YTIME) = iElastA("ELL",SBS,ETYPES,YTIME);
 $ENDIF.calib
 *---
 parameter iDiscData(SBS) "Discount rates per subsector ()" /
