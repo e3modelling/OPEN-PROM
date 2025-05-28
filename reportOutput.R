@@ -1,8 +1,7 @@
 # This script generates a mif file for comparison of OPEN-PROM data with MENA-EDS and ENERDATA
 library(madrat)
-library(openprom)
+library(postprom)
 library(reticulate)
-library(knitr)
 
 installPythonPackages <- function(packages) {
   for (pkg in packages) {
