@@ -8,6 +8,12 @@ $include"./iFuelPrice.csv"
 $offdelim
 ;
 *---
+table iPricesMagpie(allCy,SBS,YTIME)	 "Prices of biomass per subsector (k$2015/toe)"
+$ondelim
+$include"./iPrices_magpie.csv"
+$offdelim
+;
+*---
 Parameters
 iDiffFuelsInSec(SBS)                     "Auxiliary parameter holding the number of different fuels in a sector"
 iWgtSecAvgPriFueCons(allCy,SBS,EF)	      "Weights for sector's average price, based on fuel consumption (1)"

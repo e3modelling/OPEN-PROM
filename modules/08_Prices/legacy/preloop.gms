@@ -7,7 +7,8 @@ VPriceFuelSepCarbonWght.scale(runCy,DSBS,EF,YTIME)=1e-6;
 QPriceFuelSepCarbonWght.scale(runCy,DSBS,EF,YTIME)=VPriceFuelSepCarbonWght.scale(runCy,DSBS,EF,YTIME);
 *---
 VPriceFuelSubsecCarVal.L(runCy,SBS,EF,YTIME) = 1.5;
-VPriceFuelSubsecCarVal.L(runCy,"PG",PGEF,YTIME)=1;
+VPriceFuelSubsecCarVal.L(runCy,"PG",PGEF,YTIME) = 1;
+VPriceFuelSubsecCarVal.L(runCy,SBS,"BMSWAS",YTIME) = iPricesMagpie(runCy,SBS,YTIME);
 VPriceFuelSubsecCarVal.FX(runCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF)$(not HEATPUMP(EF))$(not An(YTIME))) = iFuelPrice(runCy,SBS,EF,YTIME);
 VPriceFuelSubsecCarVal.FX(runCy,SBS,ALTEF,YTIME)$(SECTTECH(SBS,ALTEF)$(not An(YTIME))) = sum(EF$ALTMAP(SBS,ALTEF,EF),iFuelPrice(runCy,SBS,EF,YTIME));
 * FIXME: VPriceFuelSubsecCarVal (NUC/MET/ETH/BGDO) should be computed endogenously after startYear, and with mrprom before startYear
