@@ -100,8 +100,8 @@ $include "./iMatureFacPlaDisp.csv"
 $offdelim
 ;
 iMatureFacPlaDisp.L(runCy,PGALL,YTIME) = iMatureFacPlaDispL(runCy,PGALL,YTIME);
-iMatureFacPlaDisp.LO(runCy, PGALL, YTIME) = 0.00001;
-iMatureFacPlaDisp.UP(runCy, PGALL, YTIME) = 600; !!5 * iMatureFacPlaDispL("USA", PGALL, YTIME);
+iMatureFacPlaDisp.LO(runCy, PGALL, YTIME) = 1e-8;
+iMatureFacPlaDisp.UP(runCy, PGALL, YTIME) = 600;
 $ELSE.calib
 table iMatureFacPlaDisp(allCy,PGALL,YTIME) "Maturity factor related to plant dispatching (1)"
 $ondelim

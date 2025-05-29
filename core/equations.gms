@@ -23,7 +23,7 @@ qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
     (PGALL),
     SQR(
       VProdElec(allCy,PGALL,YTIME) - 
-      VProdElec(allCy,PGALL,YTIME-1)
+      iDataElecProd(allCy,PGALL,YTIME) / 1000
     ) 
   ) + 
   SUM(
