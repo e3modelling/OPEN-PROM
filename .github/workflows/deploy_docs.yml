@@ -13,6 +13,9 @@ jobs:
       - name: Checkout main branch (your repo)
         uses: actions/checkout@v3
 
+      - name: Install pandoc
+        run: sudo apt-get update && sudo apt-get install -y pandoc
+
       - name: Set up R
         uses: r-lib/actions/setup-r@v2
 
