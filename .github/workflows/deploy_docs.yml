@@ -19,7 +19,7 @@ jobs:
       - name: Install R dependencies
         run: |
           Rscript -e 'install.packages("remotes")'
-          Rscript -e 'remotes::install_github("e3modelling/gms")'
+          Rscript -e 'remotes::install_github("e3modelling/gms@master")'
           Rscript -e 'install.packages("goxygen")'
 
       - name: Generate docs in temporary folder
