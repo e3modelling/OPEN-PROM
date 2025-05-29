@@ -1,3 +1,10 @@
+name: Deploy R goxygen Docs to GitHub Pages
+
+on:
+  schedule:
+    - cron: '0 0 1 * *'   # Monthly schedule
+  workflow_dispatch:       # Manual trigger
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
