@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="generator" content="goxygen" />
+  <meta name="author" content="Fotis Sioutas" />
+  <meta name="author" content="Giannis Tolios" />
+  <meta name="author" content="Giorgos Plessias" />
+  <meta name="author" content="Anastasis Giannousakis" />
+<title>OPEN PROM –  6. CO2 module</title>
+<link rel="stylesheet" href="ming/style.css">
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS_CHTML-full"></script>
+<script type="text/x-mathjax-config">
+                    MathJax.Hub.Config({
+                      CommonHTML: { linebreaks: { automatic: true } },
+                      "HTML-CSS": { linebreaks: { automatic: true } },
+                             SVG: { linebreaks: { automatic: true } }
+                    });
+</script>
+</head>
+<body>
+<div class="header">
+      <div class="headerimg"><a href="index.htm"><img id="logo" src="images/logo.png" height="100" alt="model logo" /></a></div>
+    <div class="headertext">
+      <h1 id="mainheadertitle"><a href="https://github.com/e3modelling/OPEN-PROM">OPEN PROM</a></h1>
+      <h3>0.1</h3>
+      <div class="by">created with <a href="https://github.com/pik-piam/goxygen">goxygen</a> 1.4.6</div>
+    </div>
+</div>
+
+<div class="pagenav" id="pagenav">
+    <div class="dropdown">
+   <button class="dropbtn"> 6. CO2 module
+     <i class="fa fa-caret-down"></i>
+   </button>
+   <div id="mainnav" class="dropdown-content">
+   <a href='index.htm'>Overview</a>
+   <a href='core.htm'>core</a>
+   <a href='01_Transport.htm'> 1. Transport module</a>
+   <a href='02_Industry.htm'> 2. Industry module</a>
+   <a href='03_RestOfEnergy.htm'> 3. RestOfEnergy module</a>
+   <a href='04_PowerGeneration.htm'> 4. PowerGeneration module</a>
+   <a href='05_Hydrogen.htm'> 5. Hydrogen module</a>
+   <a href='06_CO2.htm'> 6. CO2 module</a>
+   <a href='08_Prices.htm'> 8. Prices module</a>
+   </div>
+  </div>
+  <div class="dropdown">
+   <button class="dropbtn">Contents
+     <i class="fa fa-caret-down"></i>
+   </button>
+   <div class="dropdown-content">
+   <ul>
+   <li><a href="#id-06_CO2" id="toc-id-06_CO2">CO2 module (06_CO2)</a>
+   <ul>
+   <li><a href="#description" id="toc-description">Description</a></li>
+   <li><a href="#interfaces" id="toc-interfaces">Interfaces</a>
+   <ul>
+   <li><a href="#input" id="toc-input">Input</a></li>
+   <li><a href="#output" id="toc-output">Output</a></li>
+   </ul></li>
+   <li><a href="#realizations" id="toc-realizations">Realizations</a>
+   <ul>
+   <li><a href="#a-legacy" id="toc-a-legacy">(A) legacy</a></li>
+   </ul></li>
+   <li><a href="#definitions" id="toc-definitions">Definitions</a>
+   <ul>
+   <li><a href="#objects" id="toc-objects">Objects</a></li>
+   <li><a href="#sets" id="toc-sets">Sets</a></li>
+   </ul></li>
+   <li><a href="#see-also" id="toc-see-also">See Also</a></li>
+   <li><a href="#references" id="toc-references">References</a></li>
+   </ul></li>
+   </ul>
+   </div>
+  </div>
+</div>
+
+<h1 id="id-06_CO2">CO2 module (06_CO2)</h1>
+<h2 id="description">Description</h2>
+<p>This is the CO2 module.</p>
+<h2 id="interfaces">Interfaces</h2>
+<figure>
+<img src="images/interfaces_CO2.png" style="width:100.0%;height:50.0%"
+alt="Interfaces to other modules" />
+<figcaption aria-hidden="true">Interfaces to other modules</figcaption>
+</figure>
+<h3 id="input">Input</h3>
+<table style="width:94%;">
+<caption>module inputs (A: legacy)</caption>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 44%" />
+<col style="width: 11%" />
+<col style="width: 5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"> </th>
+<th style="text-align: center;">Description</th>
+<th style="text-align: center;">Unit</th>
+<th style="text-align: center;">A</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">VMVConsFuelTechH2Prod<br />
+(allCy, H2TECH, EF, YTIME)</td>
+<td style="text-align: center;">Fuel consumption by hydrogen production
+technology in Mtoe</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VMVProdElec<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Electricity production</td>
+<td style="text-align: center;"><span
+class="math inline">\(TWh\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+</tbody>
+</table>
+<h3 id="output">Output</h3>
+<table style="width:79%;">
+<caption>module outputs</caption>
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 30%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"> </th>
+<th style="text-align: center;">Description</th>
+<th style="text-align: center;">Unit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">VMVCstCO2SeqCsts<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Cost curve for CO2 sequestration
+costs</td>
+<td style="text-align: center;"><span class="math inline">\(US\$2015/tn
+of CO2 sequestrated\)</span></td>
+</tr>
+</tbody>
+</table>
+<h2 id="realizations">Realizations</h2>
+<h3 id="a-legacy">(A) legacy</h3>
+<p>This is the legacy realization of the CO2 module.</p>
+<pre><code>Equations</code></pre>
+<p>*** CO2 SEQUESTRATION COST CURVES EQUATIONS</p>
+<pre><code>QCapCO2ElecHydr(allCy,YTIME)                               &quot;Compute CO2 captured by electricity and hydrogen production plants (Mtn CO2)&quot;
+QCaptCummCO2(allCy,YTIME)                                  &quot;Compute cumulative CO2 captured (Mtn of CO2)&quot;
+QTrnsWghtLinToExp(allCy,YTIME)                             &quot;Transtition weight for shifting from linear to exponential CO2 sequestration cost curve&quot;</code></pre>
+<p><strong>Interdependent Equations</strong></p>
+<pre><code>Q06CstCO2SeqCsts(allCy,YTIME)                                  &quot;Compute cost curve for CO2 sequestration costs&quot; 
+;
+Variables</code></pre>
+<p>*** CO2 SEQUESTRATION COST CURVES VARIABLES</p>
+<pre><code>VCapCO2ElecHydr(allCy,YTIME)                               &quot;CO2 captured by electricity and hydrogen production plants (Mtn CO2)&quot;
+VCaptCummCO2(allCy,YTIME)                                  &quot;Cumulative CO2 captured (Mtn CO2)&quot;
+VTrnsWghtLinToExp(allCy,YTIME)                             &quot;Weight for transtition from linear CO2 sequestration cost curve to exponential (1)&quot;</code></pre>
+<p><strong>Interdependent Variables</strong></p>
+<pre><code>VMVCstCO2SeqCsts(allCy,YTIME)                              &quot;Cost curve for CO2 sequestration costs (US$2015/tn of CO2 sequestrated)&quot;
+;</code></pre>
+<p>GENERAL INFORMATION Equation format: “typical useful energy demand
+equation” The main explanatory variables (drivers) are activity
+indicators (economic activity) and corresponding energy costs. The type
+of “demand” is computed based on its past value, the ratio of the
+current and past activity indicators (with the corresponding
+elasticity), and the ratio of lagged energy costs (with the
+corresponding elasticities). This type of equation captures both short
+term and long term reactions to energy costs. * CO2 SEQUESTRATION COST
+CURVES The equation calculates the CO2 captured by electricity and
+hydrogen production plants in million tons of CO2 for a specific
+scenario and year. The CO2 capture is determined by summing the product
+of electricity production from plants with carbon capture and storage,
+the conversion factor from terawatt-hours to million tons of oil
+equivalent (sTWhToMtoe), the plant efficiency, the CO2 emission factor,
+and the plant CO2 capture rate.</p>
+<pre><code>QCapCO2ElecHydr(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VCapCO2ElecHydr(allCy,YTIME)
+         =E=
+         sum(PGEF,sum(CCS$PGALLtoEF(CCS,PGEF),
+                 VMVProdElec(allCy,CCS,YTIME)*sTWhToMtoe/iPlantEffByType(allCy,CCS,YTIME)*
+                 iCo2EmiFac(allCy,&quot;PG&quot;,PGEF,YTIME)*iCO2CaptRate(allCy,CCS,YTIME)))
+                + 
+         (sum(EF, sum(H2TECH$H2TECHEFtoEF(H2TECH,EF),
+               VMVConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)*iCo2EmiFac(allCy,&quot;PG&quot;,EF,YTIME)*iCaptRateH2Prod(allCy,H2TECH,YTIME)))
+          )  ;    !! CO2 emissions captured by plants producing hydrogen</code></pre>
+<p>The equation calculates the cumulative CO2 captured in million tons
+of CO2 for a given scenario and year. The cumulative CO2 captured at the
+current time period is determined by adding the CO2 captured by
+electricity and hydrogen production plants to the cumulative CO2
+captured in the previous time period. This equation captures the ongoing
+total CO2 capture over time in the specified scenario.</p>
+<pre><code>QCaptCummCO2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VCaptCummCO2(allCy,YTIME) =E= VCaptCummCO2(allCy,YTIME-1)+VCapCO2ElecHydr(allCy,YTIME-1);   </code></pre>
+<p>The equation computes the transition weight from a linear to
+exponential CO2 sequestration cost curve for a specific scenario and
+year. The transition weight is determined based on the cumulative CO2
+captured and parameters defining the transition characteristics.The
+transition weight is calculated using a logistic function. This equation
+provides a mechanism to smoothly transition from a linear to exponential
+cost curve based on the cumulative CO2 captured, allowing for a
+realistic representation of the cost dynamics associated with CO2
+sequestration. The result represents the weight for the transition in
+the specified scenario and year.</p>
+<pre><code>QTrnsWghtLinToExp(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VTrnsWghtLinToExp(allCy,YTIME)
+         =E=
+         1/(1+exp(-iElastCO2Seq(allCy,&quot;mc_s&quot;)*( VCaptCummCO2(allCy,YTIME)/iElastCO2Seq(allCy,&quot;pot&quot;)-iElastCO2Seq(allCy,&quot;mc_m&quot;)))); </code></pre>
+<p>The equation calculates the cost curve for CO2 sequestration costs in
+Euro per ton of CO2 sequestered for a specific scenario and year. The
+cost curve is determined based on cumulative CO2 captured and
+elasticities for the CO2 sequestration cost curve.The equation is
+formulated to represent a flexible cost curve that can transition from
+linear to exponential. The transition is controlled by the weight for
+the transition from linear to exponential The cost curve is expressed as
+a combination of linear and exponential functions, allowing for a
+realistic. representation of the relationship between cumulative CO2
+captured and sequestration costs. This equation provides a dynamic and
+realistic approach to modeling CO2 sequestration costs, considering the
+cumulative CO2 captured and the associated elasticities for the cost
+curve. The result represents the cost of sequestering one ton of CO2 in
+the specified scenario and year.</p>
+<pre><code>Q06CstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VMVCstCO2SeqCsts(allCy,YTIME) =E=
+       (1-VTrnsWghtLinToExp(allCy,YTIME))*(iElastCO2Seq(allCy,&quot;mc_a&quot;)*VCaptCummCO2(allCy,YTIME)+iElastCO2Seq(allCy,&quot;mc_b&quot;))+
+       VTrnsWghtLinToExp(allCy,YTIME)*(iElastCO2Seq(allCy,&quot;mc_c&quot;)*exp(iElastCO2Seq(allCy,&quot;mc_d&quot;)*VCaptCummCO2(allCy,YTIME)));           </code></pre>
+<pre><code>parameter iCO2SeqData(CO2SEQELAST)         &quot;Data for CO2 sequestration (1)&quot; /
+POT 9175,
+mc_a    0.00125928,
+mc_b    6.6,
+mc_c    0.02,
+mc_d    0.000839237,
+mc_s    120,
+mc_m    1.013
+/ ;
+Parameters
+iElastCO2Seq(allCy,CO2SEQELAST)            &quot;Elasticities for CO2 sequestration cost curve (1)&quot;
+;
+iElastCO2Seq(runCy,CO2SEQELAST) = iCO2SeqData(CO2SEQELAST);</code></pre>
+<p><em>VARIABLE INITIALISATION</em></p>
+<pre><code>VMVCstCO2SeqCsts.L(runCy,YTIME)=1;
+VMVCstCO2SeqCsts.FX(runCy,YTIME)$(not an(YTIME)) = iElastCO2Seq(runCy,&quot;mc_b&quot;);
+VCapCO2ElecHydr.FX(runCy,YTIME)$(not An(YTIME)) = 0;
+VCaptCummCO2.FX(runCy,YTIME)$(not an(YTIME)) = 0 ;</code></pre>
+<blockquote>
+<p><strong>Limitations</strong> There are no known limitations.</p>
+</blockquote>
+<h2 id="definitions">Definitions</h2>
+<h3 id="objects">Objects</h3>
+<table style="width:89%;">
+<caption>module-internal objects (A: legacy)</caption>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 45%" />
+<col style="width: 9%" />
+<col style="width: 5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"> </th>
+<th style="text-align: center;">Description</th>
+<th style="text-align: center;">Unit</th>
+<th style="text-align: center;">A</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">iCO2SeqData<br />
+(CO2SEQELAST)</td>
+<td style="text-align: center;">Data for CO2 sequestration</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">iElastCO2Seq<br />
+(allCy, CO2SEQELAST)</td>
+<td style="text-align: center;">Elasticities for CO2 sequestration cost
+curve</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Q06CstCO2SeqCsts<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Compute cost curve for CO2 sequestration
+costs</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QCapCO2ElecHydr<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Compute CO2 captured by electricity and
+hydrogen production plants</td>
+<td style="text-align: center;"><span class="math inline">\(Mtn
+CO2\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QCaptCummCO2<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Compute cumulative CO2 captured</td>
+<td style="text-align: center;"><span class="math inline">\(Mtn of
+CO2\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QTrnsWghtLinToExp<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Transtition weight for shifting from
+linear to exponential CO2 sequestration cost curve</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VCapCO2ElecHydr<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">CO2 captured by electricity and hydrogen
+production plants</td>
+<td style="text-align: center;"><span class="math inline">\(Mtn
+CO2\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VCaptCummCO2<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Cumulative CO2 captured</td>
+<td style="text-align: center;"><span class="math inline">\(Mtn
+CO2\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VTrnsWghtLinToExp<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Weight for transtition from linear CO2
+sequestration cost curve to exponential</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sets">Sets</h3>
+<table style="width:76%;">
+<caption>sets in use</caption>
+<colgroup>
+<col style="width: 31%" />
+<col style="width: 44%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"> </th>
+<th style="text-align: center;">description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">allCy</td>
+<td style="text-align: center;">All Countries Used in the Model</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">an(ytime)</td>
+<td style="text-align: center;">Years for which the model is
+running</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">CCS(PGALL)</td>
+<td style="text-align: center;">Plants which can be equipped with
+CCS</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">CO2SEQELAST</td>
+<td style="text-align: center;">Elasticities for CO2 sequestration cost
+curve</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">EF</td>
+<td style="text-align: center;">Energy Forms</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">H2TECH</td>
+<td style="text-align: center;">Hydrogen production technologies</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">H2TECHEFtoEF(H2TECH, EF)</td>
+<td style="text-align: center;">Mapping between production technologies
+and fuels</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">PGALL</td>
+<td style="text-align: center;">Power Generation Plant Types</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">PGALLtoEF(PGALL, PGEF)</td>
+<td style="text-align: center;">Correspondence between plants and energy
+forms</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">PGEF(EFS)</td>
+<td style="text-align: center;">Energy forms used for power
+generation</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">runCy(allCy)</td>
+<td style="text-align: center;">Countries for which the model is
+running</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">runCyL(allCy)</td>
+<td style="text-align: center;">Countries for which the model is running
+(used in countries loop)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">SBS(ALLSBS)</td>
+<td style="text-align: center;">Model Subsectors</td>
+</tr>
+</tbody>
+</table>
+<h2 id="see-also">See Also</h2>
+<p><a href="04_PowerGeneration.htm">04_PowerGeneration</a>, <a
+href="05_Hydrogen.htm">05_Hydrogen</a></p>
+<h2 id="references">References</h2>
+<script>
+window.onscroll = function() {myFunction()};
+
+var navbar = document.getElementById("pagenav");
+var sticky = navbar.offsetTop;
+
+function myFunction() {
+  var currentScrollPos = window.pageYOffset;
+  if (window.pageYOffset >= sticky) {
+    if (prevScrollpos > currentScrollPos) {
+      document.getElementById("pagenav").style.top = "0";
+      document.getElementById("pagenav").style.position = "fixed";
+    } else {
+      document.getElementById("pagenav").style.top = "-50px";
+    }
+  } else {
+      document.getElementById("pagenav").style.position = "static";
+  }
+  prevScrollpos = currentScrollPos;
+}
+</script>
+</body>
+</html>

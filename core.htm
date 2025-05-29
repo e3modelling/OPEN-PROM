@@ -1,0 +1,1916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="generator" content="goxygen" />
+  <meta name="author" content="Fotis Sioutas" />
+  <meta name="author" content="Giannis Tolios" />
+  <meta name="author" content="Giorgos Plessias" />
+  <meta name="author" content="Anastasis Giannousakis" />
+<title>OPEN PROM – core</title>
+<link rel="stylesheet" href="ming/style.css">
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS_CHTML-full"></script>
+<script type="text/x-mathjax-config">
+                    MathJax.Hub.Config({
+                      CommonHTML: { linebreaks: { automatic: true } },
+                      "HTML-CSS": { linebreaks: { automatic: true } },
+                             SVG: { linebreaks: { automatic: true } }
+                    });
+</script>
+</head>
+<body>
+<div class="header">
+      <div class="headerimg"><a href="index.htm"><img id="logo" src="images/logo.png" height="100" alt="model logo" /></a></div>
+    <div class="headertext">
+      <h1 id="mainheadertitle"><a href="https://github.com/e3modelling/OPEN-PROM">OPEN PROM</a></h1>
+      <h3>0.1</h3>
+      <div class="by">created with <a href="https://github.com/pik-piam/goxygen">goxygen</a> 1.4.6</div>
+    </div>
+</div>
+
+<div class="pagenav" id="pagenav">
+    <div class="dropdown">
+   <button class="dropbtn">core
+     <i class="fa fa-caret-down"></i>
+   </button>
+   <div id="mainnav" class="dropdown-content">
+   <a href='index.htm'>Overview</a>
+   <a href='core.htm'>core</a>
+   <a href='01_Transport.htm'> 1. Transport module</a>
+   <a href='02_Industry.htm'> 2. Industry module</a>
+   <a href='03_RestOfEnergy.htm'> 3. RestOfEnergy module</a>
+   <a href='04_PowerGeneration.htm'> 4. PowerGeneration module</a>
+   <a href='05_Hydrogen.htm'> 5. Hydrogen module</a>
+   <a href='06_CO2.htm'> 6. CO2 module</a>
+   <a href='08_Prices.htm'> 8. Prices module</a>
+   </div>
+  </div>
+  <div class="dropdown">
+   <button class="dropbtn">Contents
+     <i class="fa fa-caret-down"></i>
+   </button>
+   <div class="dropdown-content">
+   <ul>
+   <li><a href="#id-core" id="toc-id-core">(core)</a>
+   <ul>
+   <li><a href="#interfaces" id="toc-interfaces">Interfaces</a>
+   <ul>
+   <li><a href="#input" id="toc-input">Input</a></li>
+   </ul></li>
+   <li><a href="#realizations" id="toc-realizations">Realizations</a>
+   <ul>
+   <li><a href="#a-core" id="toc-a-core">(A) core</a></li>
+   </ul></li>
+   <li><a href="#see-also" id="toc-see-also">See Also</a></li>
+   <li><a href="#references" id="toc-references">References</a></li>
+   </ul></li>
+   </ul>
+   </div>
+  </div>
+</div>
+
+<h1 id="id-core">(core)</h1>
+<h2 id="interfaces">Interfaces</h2>
+<figure>
+<img src="images/interfaces_core.png" style="width:100.0%;height:50.0%"
+alt="Interfaces to other modules" />
+<figcaption aria-hidden="true">Interfaces to other modules</figcaption>
+</figure>
+<h3 id="input">Input</h3>
+<table>
+<caption>module inputs</caption>
+<colgroup>
+<col style="width: 36%" />
+<col style="width: 41%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"> </th>
+<th style="text-align: center;">Description</th>
+<th style="text-align: center;">Unit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">VMVBaseLoad<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Corrected base load</td>
+<td style="text-align: center;"><span
+class="math inline">\(GW\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VMVCapElec<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Electricity generation plants
+capacity</td>
+<td style="text-align: center;"><span
+class="math inline">\(GW\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VMVCapElecTotEst<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Estimated Total electricity generation
+capacity</td>
+<td style="text-align: center;"><span
+class="math inline">\(GW\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VMVConsFuel<br />
+(allCy, DSBS, EF, YTIME)</td>
+<td style="text-align: center;">Consumption of fuels in each demand
+subsector, excluding heat from heatpumps</td>
+<td style="text-align: center;"><span
+class="math inline">\(Mtoe\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VMVConsFuelInclHP<br />
+(allCy, DSBS, EF, YTIME)</td>
+<td style="text-align: center;">Consumption of fuels in each demand
+subsector including heat from heatpumps</td>
+<td style="text-align: center;"><span
+class="math inline">\(Mtoe\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VMVDemFinEneTranspPerFuel<br />
+(allCy, TRANSE, EF, YTIME)</td>
+<td style="text-align: center;">Final energy demand in transport
+subsectors per fuel</td>
+<td style="text-align: center;"><span
+class="math inline">\(Mtoe\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VMVPeakLoad<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Electricity peak load</td>
+<td style="text-align: center;"><span
+class="math inline">\(GW\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VMVPriceElecIndResConsu<br />
+(allCy, ESET, YTIME)</td>
+<td style="text-align: center;">Electricity price to Industrial and
+Residential Consumers</td>
+<td style="text-align: center;"><span
+class="math inline">\(US\$2015/KWh\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VMVPriceFuelSubsecCarVal<br />
+(allCy, SBS, EF, YTIME)</td>
+<td style="text-align: center;">Fuel prices per subsector and fuel</td>
+<td style="text-align: center;"><span
+class="math inline">\(k\$2015/toe\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VMVProdElec<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Electricity production</td>
+<td style="text-align: center;"><span
+class="math inline">\(TWh\)</span></td>
+</tr>
+</tbody>
+</table>
+<h2 id="realizations">Realizations</h2>
+<h3 id="a-core">(A) core</h3>
+<pre><code>Parameters
+iCGI(allCy,YTIME)                                          &quot;Capital Goods Index (defined as CGI(Scenario)/CGI(Baseline)) (1)&quot;
+iNPDL(SBS)                                                 &quot;Number of Polynomial Distribution Lags (PDL) (1)&quot;
+iFPDL(SBS,KPDL)                                            &quot;Polynomial Distribution Lags (PDL) Coefficients per subsector (1)&quot;
+iPlantEffByType(allCy,PGALL,YTIME)                         &quot;Plant efficiency per plant type (1)&quot;
+iCo2EmiFac(allCy,SBS,EF,YTIME)                             &quot;CO2 emission factors per subsector (kgCO2/kgoe fuel burned)&quot;
+iNcon(SBS)                                                 &quot;Number of consumers (1)&quot;
+iDisFunConSize(allCy,DSBS,rCon)                            &quot;Distribution function of consumer size groups (1)&quot;
+iAnnCons(allCy,DSBS,conSet)                                &quot;Annual consumption of the smallest,modal,largest consumer, average for all countries (various)&quot;
+                                                                !! For passenger cars (Million km/vehicle)
+                                                                !! For other passenger tranportation modes (Mpkm/vehicle)
+                                                                !! For goods transport, (Mtkm/vehicle)  
+iCumDistrFuncConsSize(allCy,DSBS)                          &quot;Cummulative distribution function of consumer size groups (1)&quot;
+iRateLossesFinCons(allCy,EF,YTIME)                         &quot;Rate of losses over Available for Final Consumption (1)&quot;  
+iTransfInpGasworks(allCy,EF,YTIME)                         &quot;Transformation Input in Gasworks, Blast Furnances, Briquetting plants (Mtoe)&quot;
+iFuelExprts(allCy,EF,YTIME)                                &quot;Fuel Exports (Mtoe)&quot;    
+iSuppExports(allCy,EF,YTIME)                               &quot;Supplementary parameter for  exports (Mtoe)&quot;        
+iResMargTotAvailCap(allCy,PGRES,YTIME)                     &quot;Reserve margins on total available capacity and peak load (1)&quot;
+iPlantAvailRate(allCy,PGALL,YTIME)                         &quot;Plant availability rate (1)&quot;
+iCO2CaptRate(allCy,PGALL,YTIME)                            &quot;Plant CO2 capture rate (1)&quot;     
+iEffValueInDollars(allCy,SBS,YTIME)                        &quot;Efficiency value (US$2015/toe)&quot;
+iPriceTragets(allCy,SBS,EF,YTIME)                          &quot;Price Targets   (1)&quot;
+iPriceReform(allCy,SBS,EF,YTIME)                           &quot;Price reformation (1)&quot;
+iScenarioPri(WEF,NAP,YTIME)                                &quot;Scenario prices (KUS$2015/toe)&quot;     
+iResNonSubsElecDem(allCy,SBS,YTIME  )                      &quot;Residuals in Non Substitutable Electricity Demand   (1)&quot;    
+iResFuelConsPerSubAndFuel(allCy,SBS,EF,YTIME)              &quot;Residuals in fuel consumption per subsector and fuel (1)&quot;       
+iShrNonSubElecInTotElecDem(allCy,SBS)                      &quot;Share of non substitutable electricity in total electricity demand per subsector (1)&quot;       
+iFinEneConsPrevYear(allCy,EF,YTIME)                        &quot;Final energy consumption used for holding previous year results (Mtoe)&quot; 
+iCarbValYrExog(allCy,ytime)                                &quot;Carbon value for each year when it is exogenous (US$2015/tn CO2)&quot;
+iShrHeatPumpElecCons(allCy,SBS)                            &quot;Share of heat pump electricity consumption in total substitutable electricity (1)&quot;                                  
+iTranfOutGasworks(allCy,EF,YTIME)                          &quot;Transformation Output from Gasworks, Blast Furnances and Briquetting plants (Mtoe)&quot; 
+iDistrLosses(allCy,EF,YTIME)                               &quot;Distribution Losses (Mtoe)&quot;     
+iFinEneCons(allCy,EF,YTIME)                                &quot;Final energy consumption (Mtoe)&quot;        
+iFuelImports(allCy,EF,YTIME)                               &quot;Fuel Imports (Mtoe)&quot;                            
+iVarCostTech(allCy,SBS,EF,YTIME)                           &quot;Variable Cost of technology ()&quot;
+                                                                !! For transport (kUS$2015/vehicle)
+                                                                !! For Industrial sectors, except Iron and Steel (US$2015/toe-year)
+                                                                !! For Iron and Steel  (US$2015/tn-of-steel)
+                                                                !! For Domestic sectors  (US$2015/toe-year)
+iFixOMCostTech(allCy,SBS,EF,YTIME)                         &quot;Fixed O&amp;M cost of technology (US$2015/toe-year)&quot;                                   
+                                                                !! Fixed O&amp;M cost of technology for Transport (kUS$2015/vehicle)
+                                                                !! Fixed O&amp;M cost of technology for Industrial sectors-except Iron and Steel (US$2015/toe-year)&quot;                                            
+                                                                !! Fixed O&amp;M cost of technology for Iron and Steel (US$2015/tn-of-steel)&quot;                                          
+                                                                !! Fixed O&amp;M cost of technology for Domestic sectors (US$2015/toe-year)&quot;
+iUsfEneConvSubTech(allCy,SBS,EF,YTIME)                     &quot;Useful Energy Conversion Factor per subsector and technology (1)&quot;
+iCapCostTech(allCy,SBS,EF,YTIME)                           &quot;Capital Cost of technology (various)&quot;
+                                                                !! - For transport is expressed in kUS$2015 per vehicle
+                                                                !! - For Industrial sectors (except Iron and Steel) is expressed in kUS$2015/toe-year
+                                                                !! - For Iron and Steel is expressed in kUS$2015/tn-of-steel
+                                                                !! - For Domestic Sectors is expressed in kUS$2015/toe-year
+iResElecIndex(allCy,YTIME)                                 &quot;Residual for electricity Index (1)&quot;
+iIndChar(allCy,INDSE,Indu_Scon_Set)                        &quot;Industry sector charactetistics (various)&quot;
+iNetImp(allCy,EFS,YTIME)                                   &quot;Net imports (Mtoe)&quot;
+iFuelConsPerFueSub(allCy,SBS,EF,YTIME)                     &quot;Fuel consumption per fuel and subsector (Mtoe)&quot;
+ODummyObj                                                  &quot;Parameter saving objective function&quot;
+;
+Equations</code></pre>
+<p>*** Miscellaneous’</p>
+<pre><code>qDummyObj                                                  &quot;Define dummy objective function&quot;
+;
+Variables</code></pre>
+<p><strong>Interdependent Variables</strong> *** Miscellaneous</p>
+<pre><code>vDummyObj                                                  &quot;Dummy maximisation variable (1)&quot;
+VElecConsHeatPla(allCy,DSBS,YTIME)                         &quot;Electricity consumed in heatpump plants (Mtoe)&quot;
+;
+Positive Variables
+VCarVal(allCy,NAP,YTIME)                                   &quot;Carbon prices for all countries (US$2015/tn CO2)&quot;
+VRenValue(YTIME)                                           &quot;Renewable value (US$2015/KWh)&quot;
+;
+Scalars
+sTWhToMtoe                                                 &quot;TWh to Mtoe conversion factor&quot; /0.086/
+sElecToSteRatioChp                                         &quot;Technical maximum of electricity to steam ratio in CHP plants&quot; /1.15/
+sGwToTwhPerYear                                            &quot;convert GW mean power into TWh/y&quot; /8.76/
+s                                                          &quot;time step iterator&quot; /0/
+sSolverTryMax                                              &quot;maximum attempts to solve each time step&quot; /%SolverTryMax%/
+sModelStat                                                 &quot;helper parameter for solver status&quot;
+sFracElecPriChp                                            &quot;Fraction of Electricity Price at which a CHP sells electricity to network&quot; /0.3/
+cy                                                         &quot;country iterator&quot; /0/
+;</code></pre>
+<p>GENERAL INFORMATION Equation format: “typical useful energy demand
+equation” The main explanatory variables (drivers) are activity
+indicators (economic activity) and corresponding energy costs. The type
+of “demand” is computed based on its past value, the ratio of the
+current and past activity indicators (with the corresponding
+elasticity), and the ratio of lagged energy costs (with the
+corresponding elasticities). This type of equation captures both short
+term and long term reactions to energy costs. * Define dummy objective
+function</p>
+<pre><code>$IFTHEN.calib %Calibration% == on
+qDummyObj(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy))).. vDummyObj =e=
+SQRT(SUM(SECTTECH(DSBS,EF)$(INDDOM(DSBS)), SQR(iFuelConsPerFueSub(allCy,DSBS,EF,YTIME)-VMVConsFuelInclHP(allCy,DSBS,EF,YTIME))) ) +
+SQRT(SUM(SECTTECH(TRANSE,EF), SQR(VMVDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)-iFuelConsPerFueSub(allCy,TRANSE,EF,YTIME)))) +
+0;
+$ELSE.calib qDummyObj.. vDummyObj =e= 1;
+$ENDIF.calib</code></pre>
+<pre><code>table iActv(YTIME,allCy,SBS) &quot;Sector activity (various)&quot;
+                              !! main sectors (Billion US$2015) 
+                              !! bunkers and households (1)
+                              !! transport (Gpkm, or Gvehkm or Gtkm)
+$ondelim
+$include &quot;./iActv.csvr&quot;
+$offdelim
+;
+table iTransChar(allCy,TRANSPCHAR,YTIME) &quot;km per car, passengers per car and residuals for passenger cars market extension ()&quot;
+$ondelim
+$include &quot;./iTransChar.csv&quot;
+$offdelim
+;
+$IFTHEN.calib %Calibration% == off
+table iElastA(allCy,SBS,ETYPES,YTIME) &quot;Activity Elasticities per subsector (1)&quot;
+$ondelim
+$include &quot;./iElastA.csv&quot;
+$offdelim
+;
+iElastA(runCy,SBS,ETYPES,YTIME) = iElastA(&quot;ELL&quot;,SBS,ETYPES,YTIME);
+$ELSE.calib
+variable iElastA(allCy,SBS,ETYPES,YTIME) &quot;Activity Elasticities per subsector (1)&quot;;
+table iElastAL(allCy,SBS,ETYPES,YTIME) &quot;Activity Elasticities per subsector (1)&quot;
+$ondelim
+$include &quot;./iElastA.csv&quot;
+$offdelim
+;
+iElastA.L(runCy,SBS,ETYPES,YTIME) = iElastAL(&quot;ELL&quot;,SBS,ETYPES,YTIME);
+iElastA.LO(runCy,SBS,&quot;a&quot;,YTIME)  =  0.001;
+iElastA.UP(runCy,SBS,&quot;a&quot;,YTIME)  =  5*iElastAL(&quot;ELL&quot;,SBS,&quot;a&quot;,YTIME);
+iElastA.LO(runCy,SBS,&quot;b1&quot;,YTIME) = -10;
+iElastA.UP(runCy,SBS,&quot;b1&quot;,YTIME) = -0.001;
+iElastA.LO(runCy,SBS,&quot;b2&quot;,YTIME) = -10;
+iElastA.UP(runCy,SBS,&quot;b2&quot;,YTIME) = -0.001;
+iElastA.LO(runCy,SBS,&quot;c&quot;,YTIME)  = -10;
+iElastA.UP(runCy,SBS,&quot;c&quot;,YTIME)  = -0.001;
+iElastA.LO(runCy,SBS,&quot;b3&quot;,YTIME) = -10;
+iElastA.UP(runCy,SBS,&quot;b3&quot;,YTIME) = -0.001;
+iElastA.LO(runCy,SBS,&quot;b4&quot;,YTIME) =  0.001;
+iElastA.UP(runCy,SBS,&quot;b4&quot;,YTIME) =  10;
+iElastA.LO(runCy,SBS,&quot;c1&quot;,YTIME) = -10;
+iElastA.UP(runCy,SBS,&quot;c1&quot;,YTIME) = -0.001;
+iElastA.LO(runCy,SBS,&quot;c2&quot;,YTIME) = -10;
+iElastA.UP(runCy,SBS,&quot;c2&quot;,YTIME) = -0.001;
+iElastA.LO(runCy,SBS,&quot;c3&quot;,YTIME) = -10;
+iElastA.UP(runCy,SBS,&quot;c3&quot;,YTIME) = -0.001;
+iElastA.LO(runCy,SBS,&quot;c4&quot;,YTIME) = -10;
+iElastA.UP(runCy,SBS,&quot;c4&quot;,YTIME) = -0.001;
+iElastA.LO(runCy,SBS,&quot;c4&quot;,YTIME) = -10;
+iElastA.UP(runCy,SBS,&quot;c4&quot;,YTIME) = -0.001;
+iElastA.LO(runCy,SBS,&quot;c5&quot;,YTIME) = -10;
+iElastA.UP(runCy,SBS,&quot;c5&quot;,YTIME) = -0.001;
+$ENDIF.calib
+parameter iDiscData(SBS) &quot;Discount rates per subsector ()&quot; /
+PCH     0.12
+IS      0.12
+NF      0.12
+CH      0.12
+BM      0.12
+PP      0.12
+FD      0.12
+EN      0.12
+TX      0.12
+OE      0.12
+OI      0.12
+SE      0.12
+AG      0.12
+HOU     0.175
+PC      0.175
+PB      0.12
+PT      0.08
+PA      0.12
+PN      0.12
+GU      0.12
+GT      0.08
+GN      0.12
+BU      0.12
+NEN     0.08
+PG      0.1
+H2P     0.08
+H2INFR  0.08 
+/;
+parameter iDisc(allCy,SBS,YTIME) &quot;Discount rates per subsector for all countries ()&quot; ;
+iDisc(runCy,SBS,YTIME) = iDiscData(SBS);
+parameter iCo2EmiFacAllSbs(EF) &quot;CO2 emission factors (kgCO2/kgoe fuel burned)&quot; /
+LGN 4.15330622,
+HCL 3.941453651,
+SLD 4.438008647,
+GSL 2.872144882,
+GDO 3.068924588,
+LPG 2.612562612,
+KRS 2.964253636,
+RFO 3.207089028,
+OLQ 3.207089028,
+NGS 2.336234395,
+OGS 3.207089028,
+BMSWAS 0/;
+iCo2EmiFac(runCy,SBS,EF,YTIME) = iCo2EmiFacAllSbs(EF);
+iCo2EmiFac(runCy,&quot;IS&quot;,&quot;HCL&quot;,YTIME) = iCo2EmiFacAllSbs(&quot;SLD&quot;); !! This is the assignment for coke
+iCo2EmiFac(runCy,&quot;H2P&quot;,&quot;NGS&quot;,YTIME) = 3.107;
+iCo2EmiFac(runCy,&quot;H2P&quot;,&quot;BMSWAS&quot;,YTIME) = 0.497;
+parameter iElaSubData(DSBS)       &quot;Elasticities by subsector (1)&quot; /
+PCH 2
+IS  2.57
+NF  1.99
+CH  2.23
+BM  3.43
+PP  2.27
+FD  2.54
+EN  2.61
+TX  3.02
+OE  1.49
+OI  1.61
+SE  1.47
+AG  1.82
+HOU 2.41
+BU  2
+NEN 2
+/;
+parameter iConsSizeDistHeat(conSet)               &quot;Consumer sizes for district heating (1)&quot; /smallest 0.425506805,
+                                                                                             modal    0.595709528,
+                                                                                             largest 0.833993339/;
+table iRateLossesFinCons(allCy,EF,YTIME)               &quot;Rate of losses over Available for Final Consumption (1)&quot;
+$ondelim
+$include &quot;./iRateLossesFinCons.csv&quot;
+$offdelim
+;
+parameter iParDHEffData(PGEFS) &quot;Parameter of  district heating Efficiency (1)&quot; /
+HCL     0.76,
+LGN     0.75,
+GDO     0.78,
+RFO     0.78,
+OLQ     0.78,
+NGS     0.8,
+OGS     0.78,
+BMSWAS    0.76 
+/;
+$ontext
+table iSuppTransfInputPatFuel(EF,YTIME)            &quot;Supplementary Parameter for the transformation input to patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works (1)&quot;
+$ondelim
+$include &quot;./iSuppTransfInputPatFuel.csv&quot;
+$offdelim
+; 
+$offtext
+table iPriceFuelsIntBase(WEF,YTIME)            &quot;International Fuel Prices USED IN BASELINE SCENARIO ($2015/toe)&quot;
+$ondelim
+$include&quot;./iPriceFuelsIntBase.csv&quot;
+$offdelim
+;
+table iSuppExports(allCy,EF,YTIME)                   &quot;Supplementary parameter for  exports (Mtoe)&quot;      
+$ondelim
+$include&quot;./iSuppExports.csv&quot;
+$offdelim
+;
+parameter iImpExp(allCy,EFS,YTIME)                   &quot;Imports of exporting countries usually zero (1)&quot; ;
+iImpExp(runCy,EFS,YTIME)    = 0;
+table iDataTransTech (TRANSE, EF, ECONCHAR, YTIME) &quot;Technoeconomic characteristics of transport (various)&quot;
+$ondelim
+$include&quot;./iDataTransTech.csv&quot;
+$offdelim
+;
+table iDataIndTechnology(INDSE,EF,ECONCHAR)                  &quot;Technoeconomic characteristics of industry (various)&quot;
+            IC      FC      VC      LFT USC
+IS.HCL      0.32196 6.8     1.36    25  2.3255
+IS.LGN      0.48295 10.2    2.04    25  0.5
+IS.LPG      0.48295 10.2    2.04    25  0.72
+IS.KRS      0.48295 10.2    2.04    25  0.72
+IS.GDO      0.48295 10.2    2.04    25  0.72
+IS.RFO      0.48295 10.2    2.04    25  0.72
+IS.OLQ      0.48295 10.2    2.04    25  0.72
+IS.NGS      0.48295 10.2    2.04    25  0.8
+IS.OGS      0.48295 10.2    2.04    25  0.8
+IS.BMSWAS   0.48295 10.2    2.04    25  0.5
+IS.ELC      0.29367 6.8     1.36    25  5.74713
+IS.STE1AL   1.04547 17.284  17.68   25  0.35
+IS.STE1AH   1.04547 17.284  17.68   25  0.35
+IS.STE1AD   0.78340 23.3335 4.896   25  0.34
+IS.STE1AR   0.78340 23.3335 4.896   25  0.34
+IS.STE1AG   0.50901 12.9631 13.6    20  0.44
+IS.STE1AB   1.00334 28.8752 8.16    25  0.37
+IS.STE1AH2F 1.34817 40.4451         25  0.5
+IS.HEATPUMP 0.92974 19.3882 3.1021  25  1.848
+IS.H2F      1.04547 40.4451 17.68   25  5.74713
+NF.HCL      3.8528  63.036          30  0.5
+NF.LGN      3.8528  63.036          30  0.5
+NF.LPG      3.21067 63.036          30  0.72
+NF.KRS      3.21067 63.036          30  0.72
+NF.GDO      3.21067 63.036          30  0.72
+NF.RFO      3.21067 63.036          30  0.72
+NF.OLQ      3.21067 63.036          30  0.72
+NF.NGS      2.56853 63.036          30  0.8
+NF.OGS      2.56853 63.036          30  0.8
+NF.BMSWAS   3.8528  63.036          30  0.5
+NF.ELC      3.4     63.036          30  0.97
+NF.STE1AL   2.43133 40.1956 41.1163 25  0.35
+NF.STE1AH   2.43133 40.1956 41.1163 25  0.35
+NF.STE1AD   1.82186 54.264  11.386  25  0.34
+NF.STE1AR   1.82186 54.264  11.386  25  0.34
+NF.STE1AG   1.18376 30.1467 31.6279 20  0.44
+NF.STE1AB   2.33335 67.1517 18.9767 25  0.37
+NF.STE1AH2F 3.13528 94.0585         30  0.5
+NF.HEATPUMP 4.94477 119.819         30  1.848
+NF.H2F      4.94477 119.819 41.1163 30  1.848
+CH.HCL      0.53294 5.44            25  0.5
+CH.LGN      0.53294 5.44            25  0.5
+CH.LPG      0.44411 5.44            25  0.72
+CH.KRS      0.44411 5.44            25  0.72
+CH.GDO      0.44411 5.44            25  0.72
+CH.RFO      0.44411 5.44            25  0.72
+CH.OLQ      0.44411 5.44            25  0.72
+CH.NGS      0.35529 5.44            25  0.8
+CH.OGS      0.35529 5.44            25  0.8
+CH.BMSWAS   0.53294 5.44            25  0.5
+CH.ELC      0.476   5.44            25  0.97
+CH.STE1AL   2.43133 40.1956 41.1163 25  0.35
+CH.STE1AH   2.43133 40.1956 41.1163 25  0.35
+CH.STE1AD   1.82186 54.264  11.386  25  0.34
+CH.STE1AR   1.82186 54.264  11.386  25  0.34
+CH.STE1AG   1.18376 30.1467 31.6279 20  0.44
+CH.STE1AB   2.33335 67.1517 18.9767 25  0.37
+CH.STE1AH2F 3.13528 94.0585         25  0.5
+CH.HEATPUMP 0.68398 10.3404         25  1.848
+CH.H2F      3.13528 94.0585 41.1163 25  1.848
+BM.HCL      4.41477 3.2096          30  0.5
+BM.LGN      4.41477 3.2096          30  0.5
+BM.LPG      3.67898 3.2096          30  0.72
+BM.KRS      3.67898 3.2096          30  0.72
+BM.GDO      3.67898 3.2096          30  0.72
+BM.RFO      3.67898 3.2096          30  0.72
+BM.OLQ      3.67898 3.2096          30  0.72
+BM.NGS      2.94318 3.2096          30  0.8
+BM.OGS      2.94318 3.2096          30  0.8
+BM.BMSWAS   4.41477 3.2096          30  0.5
+BM.ELC      3.808   3.2096          30  0.97
+BM.STE1AL   2.43133 40.1956 41.1163 25  0.35
+BM.STE1AH   2.43133 40.1956 41.1163 25  0.35
+BM.STE1AD   1.82186 54.264  11.386  25  0.34
+BM.STE1AR   1.82186 54.264  11.386  25  0.34
+BM.STE1AG   1.18376 30.1467 31.6279 20  0.44
+BM.STE1AB   2.33335 67.1517 18.9767 25  0.37
+BM.STE1AH2F 3.13528 94.0585         30  0.5
+BM.HEATPUMP 5.66602 6.10081         30  1.848
+BM.H2F      5.66602 94.0585 41.1163 30  1.848
+PP.HCL      0.90179 1.632           25  0.5
+PP.LGN      0.90179 1.632           25  0.5
+PP.LPG      0.75149 1.632           25  0.72
+PP.KRS      0.75149 1.632           25  0.72
+PP.GDO      0.75149 1.632           25  0.72
+PP.RFO      0.75149 1.632           25  0.72
+PP.OLQ      0.75149 1.632           25  0.72
+PP.NGS      0.60119 1.632           25  0.8
+PP.OGS      0.60119 1.632           25  0.8
+PP.BMSWAS   0.90179 1.632           25  0.5
+PP.ELC      0.884   1.632           25  0.97
+PP.STE1AL   2.43133 40.1956 41.1163 25  0.35
+PP.STE1AH   2.43133 40.1956 41.1163 25  0.35
+PP.STE1AD   1.82186 54.264  11.386  25  0.34
+PP.STE1AR   1.82186 54.264  11.386  25  0.34
+PP.STE1AG   1.18376 30.1467 31.6279 20  0.44
+PP.STE1AB   2.33335 67.1517 18.9767 25  0.37
+PP.STE1AH2F 2.27889 68.3668         25  0.5
+PP.HEATPUMP 1.15738 3.10211         25  1.68
+PP.H2F      2.43133 68.3668 41.1163 25  1.68
+FD.HCL      0.63096 0.5372          25  0.5
+FD.LGN      0.63096 0.5372          25  0.5
+FD.LPG      0.42064 0.5372          25  0.72
+FD.KRS      0.42064 0.5372          25  0.72
+FD.GDO      0.42064 0.5372          25  0.72
+FD.RFO      0.42064 0.5372          25  0.72
+FD.OLQ      0.42064 0.5372          25  0.72
+FD.NGS      0.33651 0.5372          25  0.8
+FD.OGS      0.33651 0.5372          25  0.8
+FD.BMSWAS   0.63096 0.5372          25  0.5
+FD.ELC      0.476   0.5372          25  0.97
+FD.STE1AL   2.43133 40.1956 41.1163 25  0.35
+FD.STE1AH   2.43133 40.1956 41.1163 25  0.35
+FD.STE1AD   1.82186 54.264  11.386  25  0.34
+FD.STE1AR   1.82186 54.264  11.386  25  0.34
+FD.STE1AG   1.18376 30.1467 31.6279 20  0.44
+FD.STE1AB   2.33335 67.1517 18.9767 25  0.37
+FD.STE1AH2F 2.27889 68.3668         25  0.5
+FD.HEATPUMP 0.64783 1.02111         25  1.68
+FD.H2F      2.43133 68.3668 41.1163 25  1.68
+EN.HCL      1.00937 0.31769         25  0.5
+EN.LGN      1.00937 0.31769         25  0.5
+EN.LPG      0.84114 0.31769         25  0.72
+EN.KRS      0.84114 0.31769         25  0.72
+EN.GDO      0.84114 0.31769         25  0.72
+EN.RFO      0.84114 0.31769         25  0.72
+EN.OLQ      0.84114 0.31769         25  0.72
+EN.NGS      0.67291 0.31769         25  0.8
+EN.OGS      0.67291 0.31769         25  0.8
+EN.BMSWAS   1.00937 0.31769         25  0.5
+EN.ELC      0.748   0.31769         20  0.97
+EN.STE1AL   2.43133 40.1956 41.1163 25  0.35
+EN.STE1AH   2.43133 40.1956 41.1163 25  0.35
+EN.STE1AD   1.82186 54.264  11.386  25  0.34
+EN.STE1AR   1.82186 54.264  11.386  25  0.34
+EN.STE1AG   1.18376 30.1467 31.6279 20  0.44
+EN.STE1AB   2.33335 67.1517 18.9767 25  0.37
+EN.STE1AH2F 2.27889 68.3668         25  0.5
+EN.HEATPUMP 1.29545 0.60387         25  1.68
+EN.H2F      2.43133 68.3668 41.1163 25  1.68
+TX.HCL      0.67371 0.16959         20  0.5
+TX.LGN      0.67371 0.16959         20  0.5
+TX.LPG      0.44914 0.16959         20  0.72
+TX.KRS      0.44914 0.16959         20  0.72
+TX.GDO      0.44914 0.16959         20  0.72
+TX.RFO      0.44914 0.16959         20  0.72
+TX.OLQ      0.44914 0.16959         20  0.72
+TX.NGS      0.35931 0.16959         20  0.8
+TX.OGS      0.35931 0.16959         20  0.8
+TX.BMSWAS   0.476   0.16959         20  0.5
+TX.ELC      0.476   0.16959         20  0.97
+TX.STE1AL   2.43133 40.1956 41.1163 25  0.35
+TX.STE1AH   2.43133 40.1956 41.1163 25  0.35
+TX.STE1AD   1.82186 54.264  11.386  25  0.34
+TX.STE1AR   1.82186 54.264  11.386  25  0.34
+TX.STE1AG   1.18376 30.1467 31.6279 20  0.44
+TX.STE1AB   2.33335 67.1517 18.9767 25  0.37
+TX.STE1AH2F 2.27889 68.3668         20  0.5
+TX.HEATPUMP 0.69173 0.32236         20  1.68
+TX.H2F      2.43133 68.3668 41.1163 25  1.68
+OE.HCL      1.00937 0.31769         25  0.5
+OE.LGN      1.00937 0.31769         25  0.5
+OE.LPG      0.84114 0.31769         25  0.72
+OE.KRS      0.84114 0.31769         25  0.72
+OE.GDO      0.84114 0.31769         25  0.72
+OE.RFO      0.84114 0.31769         25  0.72
+OE.OLQ      0.84114 0.31769         25  0.72
+OE.NGS      0.67291 0.31769         25  0.8
+OE.OGS      0.67291 0.31769         25  0.8
+OE.BMSWAS   1.00937 0.31769         25  0.5
+OE.ELC      0.84114 0.31769         25  0.97
+OE.STE1AL   2.43133 40.1956 41.1163 25  0.35
+OE.STE1AH   2.43133 40.1956 41.1163 25  0.35
+OE.STE1AD   1.82186 54.264  11.386  25  0.34
+OE.STE1AR   1.82186 54.264  11.386  25  0.34
+OE.STE1AG   1.18376 30.1467 31.6279 20  0.44
+OE.STE1AB   2.33335 67.1517 18.9767 25  0.37
+OE.STE1AH2F 2.27889 68.3668         25  0.5
+OE.HEATPUMP 1.29545 0.60387         25  1.68
+OE.H2F      2.43133 68.3668 41.1163 25  1.68
+OI.HCL      0.94967 1.40352         20  0.5
+OI.LGN      0.94967 1.40352         20  0.5
+OI.LPG      0.79139 1.40352         20  0.72
+OI.KRS      0.79139 1.40352         20  0.72
+OI.GDO      0.79139 1.40352         20  0.72
+OI.RFO      0.79139 1.40352         20  0.72
+OI.OLQ      0.79139 1.40352         20  0.72
+OI.NGS      0.63311 1.40352         20  0.8
+OI.OGS      0.63311 1.40352         20  0.8
+OI.BMSWAS   0.94967 1.40352         20  0.5
+OI.ELC      0.68    1.40352         20  0.97
+OI.STE1AL   2.43133 40.1956 41.1163 25  0.35
+OI.STE1AH   2.43133 40.1956 41.1163 25  0.35
+OI.STE1AD   1.82186 54.264  11.386  25  0.34
+OI.STE1AR   1.82186 54.264  11.386  25  0.34
+OI.STE1AG   1.18376 30.1467 31.6279 20  0.44
+OI.STE1AB   2.33335 67.1517 18.9767 25  0.37
+OI.STE1AH2F 2.27889 68.3668         20  0.5
+OI.HEATPUMP 1.21884 2.66781         20  1.68
+OI.H2F      2.43133 68.3668 41.1163 25  1.68
+;
+iDataIndTechnology(INDSE,EF,&quot;IC&quot;) = iDataIndTechnology(INDSE,EF,&quot;IC&quot;) * 1.3;
+iDataIndTechnology(INDSE,EF,&quot;FC&quot;) = iDataIndTechnology(INDSE,EF,&quot;FC&quot;) * 1.3;
+iDataIndTechnology(INDSE,EF,&quot;VC&quot;) = iDataIndTechnology(INDSE,EF,&quot;VC&quot;) * 1.3;
+table iDataDomTech(DOMSE,EF,ECONCHAR)                  &quot;Technical lifetime of Industry (years)&quot;
+             IC       FC      VC      LFT USC
+SE.HCL       0.323544 10.88           20  0.7
+SE.LGN       0.323544 10.88           20  0.5
+SE.LPG       0.24888  10.88           20  0.8
+SE.GSL       0.323544 10.88           20  0.7
+SE.KRS       0.24888  10.88           20  0.8
+SE.GDO       0.24888  6.8             20  0.85
+SE.RFO       0.24888  10.88           20  0.8
+SE.OLQ       0.24888  10.88           20  0.8
+SE.NGS       0.2244   6.8             20  0.88
+SE.OGS       0.2244   10.88           20  0.8
+SE.SOL       0.86224  1.36            20  0.97
+SE.BMSWAS    0.323544 10.88           20  0.5
+SE.ELC       0.3      8.976           12  0.97
+SE.STE1AL    2.43133  40.1956 41.1163 30  0.375
+SE.STE1AH    2.43133  40.1956 41.1163 30  0.375
+SE.STE1AD    1.82186  54.264  11.386  30  0.3475
+SE.STE1AR    1.82186  54.264  11.386  30  0.3475
+SE.STE1AG    1.18376  30.1467 31.6279 25  0.485
+SE.STE1AB    2.33335  67.1517 18.9767 30  0.3975
+SE.STE1AH2F  2.68089  80.4266         20  0.465
+SE.STE2LGN   0.296442 1.00489 2.37209 20  0.816667
+SE.STE2OSL   0.296442 1.00489 2.37209 20  0.816667
+SE.STE2GDO   0.296442 1.00489 2.37209 20  0.856667
+SE.STE2RFO   0.296442 1.00489 2.37209 20  0.856667
+SE.STE2OLQ   0.296442 1.00489 2.37209 20  0.856667
+SE.STE2NGS   0.296442 1.00489 2.37209 20  0.896667
+SE.STE2OGS   0.296442 1.00489 2.37209 20  0.896667
+SE.STE2BMS   0.296442 1.00489 2.37209 20  0.816667
+SE.HEATPUMP  0.432    12.9254         20  1.848
+AG.HCL       0.323544 10.88           20  0.7
+AG.LGN       0.323544 10.88           20  0.5
+AG.LPG       0.24888  10.88           20  0.8
+AG.GSL       0.323544 10.88           20  0.7
+AG.KRS       0.24888  10.88           20  0.8
+AG.GDO       0.24888  6.8             20  0.85
+AG.RFO       0.24888  10.88           20  0.8
+AG.OLQ       0.24888  10.88           20  0.8
+AG.NGS       0.2244   6.8             20  0.88
+AG.OGS       0.2244   10.88           20  0.8
+AG.SOL       0.86224  1.36            20  0.97
+AG.BMSWAS    0.323544 10.88           20  0.5
+AG.ELC       0.3      8.976           12  0.97
+AG.STE1AL    2.43133  40.1956 41.1163 30  0.375
+AG.STE1AH    2.43133  40.1956 41.1163 30  0.375
+AG.STE1AD    1.82186  54.264  11.386  30  0.3475
+AG.STE1AR    1.82186  54.264  11.386  30  0.3475
+AG.STE1AG    1.18376  30.1467 31.6279 25  0.485
+AG.STE1AB    2.33335  67.1517 18.9767 30  0.3975
+AG.STE1AH2F  2.68089  80.4266         20  0.465
+AG.STE2LGN   0.296442 1.00489 2.37209 20  0.816667
+AG.STE2OSL   0.296442 1.00489 2.37209 20  0.816667
+AG.STE2GDO   0.296442 1.00489 2.37209 20  0.856667
+AG.STE2RFO   0.296442 1.00489 2.37209 20  0.856667
+AG.STE2OLQ   0.296442 1.00489 2.37209 20  0.856667
+AG.STE2NGS   0.296442 1.00489 2.37209 20  0.896667
+AG.STE2OGS   0.296442 1.00489 2.37209 20  0.896667
+AG.STE2BMS   0.296442 1.00489 2.37209 20  0.816667
+AG.HEATPUMP  0.432    12.9254         20  1.848
+HOU.HCL      0.323544 10.88           20  0.7
+HOU.LGN      0.323544 10.88           20  0.5
+HOU.LPG      0.24888  10.88           20  0.8
+HOU.GSL      0.323544 10.88           20  0.7
+HOU.KRS      0.24888  10.88           20  0.8
+HOU.GDO      0.24888  6.8             20  0.85
+HOU.RFO      0.24888  10.88           20  0.8
+HOU.OLQ      0.24888  10.88           20  0.8
+HOU.NGS      0.2244   6.8             20  0.88
+HOU.OGS      0.2244   10.88           20  0.8
+HOU.SOL      0.86224  1.36            20  0.97
+HOU.BMSWAS   0.323544 10.88           20  0.5
+HOU.ELC      0.3      8.976           12  0.97
+HOU.STE1AL   2.43133  40.1956 41.1163 30  0.375
+HOU.STE1AH   2.43133  40.1956 41.1163 30  0.375
+HOU.STE1AD   1.82186  54.264  11.386  30  0.3475
+HOU.STE1AR   1.82186  54.264  11.386  30  0.3475
+HOU.STE1AG   1.18376  30.1467 31.6279 25  0.485
+HOU.STE1AB   2.33335  67.1517 18.9767 30  0.3975
+HOU.STE1AH2F 2.68089  80.4266         20  0.465
+HOU.STE2LGN  0.296442 1.00489 2.37209 20  0.816667
+HOU.STE2OSL  0.296442 1.00489 2.37209 20  0.816667
+HOU.STE2GDO  0.296442 1.00489 2.37209 20  0.856667
+HOU.STE2RFO  0.296442 1.00489 2.37209 20  0.856667
+HOU.STE2OLQ  0.296442 1.00489 2.37209 20  0.856667
+HOU.STE2NGS  0.296442 1.00489 2.37209 20  0.896667
+HOU.STE2OGS  0.296442 1.00489 2.37209 20  0.896667
+HOU.STE2BMS  0.296442 1.00489 2.37209 20  0.816667
+HOU.HEATPUMP 0.432    12.9254         20  1.848
+;
+iDataDomTech(DOMSE,EF,&quot;IC&quot;) = iDataDomTech(DOMSE,EF,&quot;IC&quot;) * 1.3;
+iDataDomTech(DOMSE,EF,&quot;FC&quot;) = iDataDomTech(DOMSE,EF,&quot;FC&quot;) * 1.3;
+iDataDomTech(DOMSE,EF,&quot;VC&quot;) = iDataDomTech(DOMSE,EF,&quot;VC&quot;) * 1.3;
+table iDataNonEneSec(NENSE,EF,ECONCHAR)                  &quot;Technical data of non energy uses and bunkers (various)&quot;
+        IC      FC      VC      LFT USC
+PCH.HCL 0.26227 45.22   2.37209 20  0.65
+PCH.LGN 0.26227 47.6    2.37209 20  0.5
+PCH.LPG 0.18088 20.4    2.37209 20  0.72
+PCH.GDO 0.18088 9.044   2.37209 20  0.72
+PCH.RFO 0.18088 18.088  2.37209 20  0.72
+PCH.OLQ 0.18088 20.4    2.37209 20  0.72
+PCH.NGS 0.18088 0.9044  2.37209 20  0.8
+PCH.OGS 0.18088 1.36    2.37209 20  0.8
+BU.GDO  0.204   0.136           25  0.72
+BU.RFO  0.204   0.136           25  0.72
+BU.OLQ  0.136   6.8             25  0.72
+NEN.HCL 0.26227 45.22   2.37209 20  0.65
+NEN.LGN 0.26227 47.6    2.37209 20  0.5
+NEN.LPG 0.612   20.4    2.37209 20  0.72
+NEN.GDO 0.18088 9.044   2.37209 20  0.72
+NEN.RFO 0.18088 18.088  2.37209 20  0.72
+NEN.OLQ 0.612   20.4    2.37209 20  0.72
+NEN.NGS 0.18088 0.9044  2.37209 20  0.8
+NEN.OGS 0.18088 1.36    2.37209 20  0.8
+;
+iDataNonEneSec(NENSE,EF,&quot;IC&quot;) = iDataNonEneSec(NENSE,EF,&quot;IC&quot;) * 1.3;
+iDataNonEneSec(NENSE,EF,&quot;FC&quot;) = iDataNonEneSec(NENSE,EF,&quot;FC&quot;) * 1.3;
+iDataNonEneSec(NENSE,EF,&quot;VC&quot;) = iDataNonEneSec(NENSE,EF,&quot;VC&quot;) * 1.3;
+table iIndCharData(allCy,INDSE,Indu_Scon_Set)               &quot;Industry sector charactetistics (various)&quot;
+         BASE           SHR_NSE   SH_HPELC
+ELL.IS   0.4397         0.7       0.00001
+ELL.NF   0              0.95      0.00001
+ELL.CH   0.1422         0.95      0.00001
+ELL.BM   2.1062         0.95      0.00001
+ELL.PP   0              0.95      0.00001
+ELL.FD   0.6641         0.95      0.00001
+ELL.TX   0.0638         0.95      0.00001
+ELL.EN   1.6664         0.95      0.00001
+ELL.OE   0.00000001     0.95      0.00001
+ELL.OI   1.5161         0.95      0.00001
+;
+iIndChar(runCy,INDSE,Indu_Scon_Set) = iIndCharData(&quot;ELL&quot;,INDSE,Indu_Scon_Set);
+table iInitConsSubAndInitShaNonSubElec(DOMSE,Indu_Scon_Set)      &quot;Initial Consumption per Subsector and Initial Shares of Non Substitutable Electricity in Total Electricity Demand (Mtoe)&quot;
+     BASE   SHR_NSE SH_HPELC
+SE   1.8266 0.9     0.00001
+HOU  11.511 0.9     0.00001
+AG   0.2078 0.9     0.00001
+;
+iShrHeatPumpElecCons(runCy,INDSE) = iIndChar(runCy,INDSE,&quot;SH_HPELC&quot;);
+iShrHeatPumpElecCons(runCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(DOMSE,&quot;SH_HPELC&quot;);
+iFuelExprts(runCy,EFS,YTIME) = iSuppExports(runCy,EFS,YTIME);
+iNcon(TRANSE)$(sameas(TRANSE,&quot;PC&quot;) or sameas(TRANSE,&quot;GU&quot;)) = 10; !! 11 different consumer size groups for cars and trucks
+iNcon(TRANSE)$(not (sameas(TRANSE,&quot;PC&quot;) or sameas(TRANSE,&quot;GU&quot;))) = 1; !! 2 different consumer size groups for inland navigation, trains, busses and aviation
+iNcon(INDSE) = 10; !! 11 different consumer size groups for industrial sectors
+iNcon(DOMSE) = 10; !! 11 different consumer size groups for domestic and tertiary sectors
+iNcon(NENSE) = 10; !! 11 different consumer size groups for non energy uses
+iNcon(&quot;BU&quot;) = 2;   !! ... except bunkers .
+iAnnCons(runCy,&#39;PC&#39;,&#39;smallest&#39;)= 0.5 * 0.952 * iTransChar(runCy,&quot;KM_VEH&quot;,&quot;%fBaseY%&quot;) * 1000 * 1E-6;
+iAnnCons(runCy,&#39;PC&#39; ,&#39;modal&#39;)=0.952 * iTransChar(runCy,&quot;KM_VEH&quot;,&quot;%fBaseY%&quot;) * 1000 * 1E-6;
+iAnnCons(runCy,&#39;PC&#39; ,&#39;largest&#39;)= 4 * 0.952 * iTransChar(runCy,&quot;KM_VEH&quot;,&quot;%fBaseY%&quot;) * 1000 * 1E-6;
+iAnnCons(runCy,&#39;GU&#39;,&#39;smallest&#39;)=0.5 * 0.706 * iTransChar(runCy,&quot;KM_VEH_TRUCK&quot;,&quot;%fBaseY%&quot;)* 1000 * 2 / 3  * 1E-6;
+iAnnCons(runCy,&#39;GU&#39;,&#39;modal&#39;)=0.706 * iTransChar(runCy,&quot;KM_VEH_TRUCK&quot;,&quot;%fBaseY%&quot;) * 1000 * 2  * 1E-6;
+iAnnCons(runCy,&#39;GU&#39;,&#39;largest&#39;)=4 * 0.706 * iTransChar(runCy,&quot;KM_VEH_TRUCK&quot;,&quot;%fBaseY%&quot;) * 1000 * 2 * 10  * 1E-6;
+iAnnCons(runCy,&#39;PA&#39;,&#39;smallest&#39;)=40000 * 50 * 1E-6;
+iAnnCons(runCy,&#39;PA&#39;,&#39;modal&#39;)=400000 * 100 * 1E-6;
+iAnnCons(runCy,&#39;PA&#39;,&#39;largest&#39;)=800000 * 300 * 1E-6;
+iAnnCons(runCy,&#39;PB&#39;,&quot;smallest&quot;) = 20000 * 5 * 1E-6;
+iAnnCons(runCy,&#39;PB&#39;,&quot;modal&quot;) = 50000 * 15 * 1E-6;
+iAnnCons(runCy,&#39;PB&#39;,&quot;largest&quot;) = 200000 * 50 * 1E-6;
+iAnnCons(runCy,&#39;PT&#39;,&quot;smallest&quot;) = 50000 * 50 * 1E-6;
+iAnnCons(runCy,&#39;PT&#39;,&quot;modal&quot;) = 200000 * 150 * 1e-6;
+iAnnCons(runCy,&#39;PT&#39;,&quot;largest&quot;) = 400000 * 500 * 1E-6;
+iAnnCons(runCy,&#39;GT&#39;,&quot;smallest&quot;) = 50000 * 20 * 1E-6;
+iAnnCons(runCy,&#39;GT&#39;,&quot;modal&quot;) = 200000 * 200 * 1e-6;
+iAnnCons(runCy,&#39;GT&#39;,&quot;largest&quot;) = 400000 * 500 * 1E-6;
+iAnnCons(runCy,&#39;PN&#39;,&quot;smallest&quot;) = 10000 * 50 * 1E-6;
+iAnnCons(runCy,&#39;PN&#39;,&quot;modal&quot;) = 50000 * 100 * 1e-6;
+iAnnCons(runCy,&#39;PN&#39;,&quot;largest&quot;) = 100000 * 500 * 1E-6;
+iAnnCons(runCy,&#39;GN&#39;,&quot;smallest&quot;) = 10000 * 20 * 1E-6;
+iAnnCons(runCy,&#39;GN&#39;,&quot;modal&quot;) = 50000 * 300 * 1e-6;
+iAnnCons(runCy,&#39;GN&#39;,&quot;largest&quot;) = 100000 * 1000 * 1E-6;
+iAnnCons(runCy,INDSE,&quot;smallest&quot;) = 0.2  ;
+iAnnCons(runCy,INDSE,&quot;largest&quot;) = 0.9 ;
+iAnnCons(runCy,&quot;IS&quot;,&quot;modal&quot;) = 0.587;
+iAnnCons(runCy,INDSE,&quot;modal&quot;)$(not sameas(INDSE,&quot;IS&quot;)) = 0.487;
+iAnnCons(runCy,DOMSE,&quot;smallest&quot;) = iConsSizeDistHeat(&quot;smallest&quot;)  ;
+iAnnCons(runCy,DOMSE,&quot;largest&quot;) = iConsSizeDistHeat(&quot;largest&quot;) ;
+iAnnCons(runCy,DOMSE,&quot;modal&quot;) = iConsSizeDistHeat(&quot;modal&quot;);
+iAnnCons(runCy,NENSE,&quot;smallest&quot;) = 0.2  ;
+iAnnCons(runCy,NENSE,&quot;largest&quot;) = 0.9 ;
+iAnnCons(runCy,NENSE,&quot;modal&quot;) = 0.487 ;
+iAnnCons(runCy,&quot;BU&quot;,&quot;smallest&quot;) = 0.2 ;
+iAnnCons(runCy,&quot;BU&quot;,&quot;largest&quot;) = 1 ;
+iAnnCons(runCy,&quot;BU&quot;,&quot;modal&quot;) = 0.5 ;
+Loop (runCy,DSBS) DO
+     Loop rCon$(ord(rCon) le iNcon(DSBS)+1) DO
+          iDisFunConSize(runCy,DSBS,rCon) =
+                 Prod(nSet$(ord(Nset) le iNcon(DSBS)),ord(nSet))
+                 /
+                 (
+                  (
+                   Prod(nSet$(ord(nSet) le iNcon(DSBS)-(ord(rCon)-1)),ord(nSet))$(ord(rCon) lt iNcon(DSBS)+1)
+                       +1$(ord(rCon) eq iNcon(DSBS)+1)
+                   )
+                   *
+                   (
+                      Prod(nSet$(ord(nSet) le ord(rCon)-1),ord(nSet))$(ord(rCon) ne 1)+1$(ord(rCon) eq 1))
+                 )
+                 *
+                 Power(log(iAnnCons(runCy,DSBS,&quot;modal&quot;)/iAnnCons(runCy,DSBS,&quot;smallest&quot;)),ord(rCon)-1)
+                 *
+                 Power(log(iAnnCons(runCy,DSBS,&quot;largest&quot;)/iAnnCons(runCy,DSBS,&quot;modal&quot;)),iNcon(DSBS)-(ord(rCon)-1))
+                 /
+                (Power(log(iAnnCons(runCy,DSBS,&quot;largest&quot;)/iAnnCons(runCy,DSBS,&quot;smallest&quot;)),iNcon(DSBS)) )
+                *
+                iAnnCons(runCy,DSBS,&quot;smallest&quot;)*(iAnnCons(runCy,DSBS,&quot;largest&quot;)/iAnnCons(runCy,DSBS,&quot;smallest&quot;))**((ord(rCon)-1)/iNcon(DSBS))
+;
+     ENDLOOP;
+ENDLOOP;
+iCumDistrFuncConsSize(runCy,DSBS) = sum(rCon, iDisFunConSize(runCy,DSBS,rCon));
+iCGI(allCy,YTIME) = 1;
+$ontext
+table iResTotCapMxmLoad(allCy,PGRES,YTIME)              &quot;Residuals for total capacity and maximum load (1)&quot; 
+$ondelim
+$include&quot;./iResTotCapMxmLoad.csv&quot;
+$offdelim
+;
+iResMargTotAvailCap(runCy,PGRES,YTIME)$an(YTIME) = iResTotCapMxmLoad(runCy,PGRES,YTIME);
+table iDataOtherTransfOutput(allCy,EF,YTIME)        &quot;Data for Other transformation output  (Mtoe)&quot;
+$ondelim
+$include&quot;./iDataOtherTransfOutput.csv&quot;
+$offdelim
+;
+iTranfOutGasworks(runCy,EFS,YTIME)$(not An(YTIME)) = iDataOtherTransfOutput(runCy,EFS,YTIME);
+$offtext
+table iDataDistrLosses(allCy,EF,YTIME)      &quot;Data for Distribution Losses (Mtoe)&quot;
+$ondelim
+$include&quot;./iDataDistrLosses.csv&quot;
+$offdelim
+;
+iDistrLosses(runCy,EFS,YTIME) = iDataDistrLosses(runCy,EFS,YTIME);
+table iFuelConsTRANSE(allCy,TRANSE,EF,YTIME)     &quot;Fuel consumption (Mtoe)&quot;
+$ondelim
+$include&quot;./iFuelConsTRANSE.csv&quot;
+$offdelim
+;
+iFuelConsPerFueSub(runCy,TRANSE,EF,YTIME) = iFuelConsTRANSE(runCy,TRANSE,EF,YTIME);
+table iFuelConsINDSE(allCy,INDSE,EF,YTIME)   &quot;Fuel consumption of industry subsector (Mtoe)&quot;
+$ondelim
+$include&quot;./iFuelConsINDSE.csv&quot;
+$offdelim
+;
+iFuelConsINDSE(runCy,INDSE,EF,YTIME)$(SECTTECH(INDSE,EF) $(iFuelConsINDSE(runCy,INDSE,EF,YTIME)&lt;=0)) = 1e-6;
+table iFuelConsDOMSE(allCy,DOMSE,EF,YTIME)   &quot;Fuel consumption of domestic subsector (Mtoe)&quot;
+$ondelim
+$include&quot;./iFuelConsDOMSE.csv&quot;
+$offdelim
+;
+iFuelConsDOMSE(runCy,DOMSE,EF,YTIME)$(SECTTECH(DOMSE,EF) $(iFuelConsDOMSE(runCy,DOMSE,EF,YTIME)&lt;=0)) = 1e-6;
+table iFuelConsNENSE(allCy,NENSE,EF,YTIME)   &quot;Fuel consumption of non energy and bunkers (Mtoe)&quot;
+$ondelim
+$include&quot;./iFuelConsNENSE.csv&quot;
+$offdelim
+;
+iFuelConsNENSE(runCy,NENSE,EF,YTIME)$(SECTTECH(NENSE,EF) $(iFuelConsNENSE(runCy,NENSE,EF,YTIME)&lt;=0)) = 1e-6;
+iFuelConsPerFueSub(runCy,INDSE,EF,YTIME) = iFuelConsINDSE(runCy,INDSE,EF,YTIME);
+iFuelConsPerFueSub(runCy,DOMSE,EF,YTIME) = iFuelConsDOMSE(runCy,DOMSE,EF,YTIME);
+iFuelConsPerFueSub(runCy,NENSE,EF,YTIME) = iFuelConsNENSE(runCy,NENSE,EF,YTIME);
+iFinEneCons(runCy,EFS,YTIME) = sum(INDDOM,
+                         sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(INDDOM,EF)), iFuelConsPerFueSub(runCy,INDDOM,EF,YTIME)))
+                       +
+                       sum(TRANSE,
+                         sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(TRANSE,EF) $(not plugin(EF)) ), iFuelConsPerFueSub(runCy,TRANSE,EF,YTIME)));
+iCO2CaptRate(runCy,PGALL,YTIME) = 2; 
+iEffValueInDollars(runCy,SBS,YTIME)=0;
+iScenarioPri(WEF,&quot;NOTRADE&quot;,YTIME)=0;
+$ontext
+VMVCapElecTotEst.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
+VMVCapElecTotEst.L(runCy,TT) = iResMargTotAvailCap(runCy,&quot;TOT_CAP_RES&quot;,TT) * VMVCapElecTotEst.L(runCy,TT-1)
+        * VMVPeakLoad.L(runCy,TT)/VMVPeakLoad.L(runCy,TT-1);
+table iDataPriceReform(allCy,AGSECT,EF,YTIME)    &quot;Price reform (1)&quot;
+$ondelim
+$include&quot;./iDataPriceReform.csv&quot;
+$offdelim
+;
+iPriceReform(runCy,INDSE1(SBS),EF,YTIME)=iDataPriceReform(runCy,&quot;INDSE1&quot;,EF,YTIME) ;
+iPriceReform(runCy,DOMSE1(SBS),EF,YTIME)=iDataPriceReform(runCy,&quot;DOMSE1&quot;,EF,YTIME) ;
+iPriceReform(runCy,NENSE1(SBS),EF,YTIME)=iDataPriceReform(runCy,&quot;NENSE1&quot;,EF,YTIME) ;
+iPriceReform(runCy,TRANS1(SBS),EF,YTIME)=iDataPriceReform(runCy,&quot;TRANS1&quot;,EF,YTIME) ;
+iPriceReform(runCy,&quot;PG&quot;,EF,YTIME)=iDataPriceReform(runCy,&quot;INDSE1&quot;,EF,YTIME) ;
+$offtext
+table iDataImports(allCy,EF,YTIME)             &quot;Data for imports (Mtoe)&quot;
+$ondelim
+$include&quot;./iDataImports.csv&quot;
+$offdelim
+;
+iFuelImports(runCy,EFS,YTIME)$(not An(YTIME)) = iDataImports(runCy,EFS,YTIME);
+iNetImp(runCy,EFS,YTIME) = iDataImports(runCy,&quot;ELC&quot;,YTIME)-iSuppExports(runCy,&quot;ELC&quot;,YTIME);
+iResElecIndex(runCy,YTIME) = 1;
+$ontext
+table iResNonSubElec(allCy,INDSE,YTIME)  &quot;Residuals for non subsitutable electricity (1)&quot;
+$ondelim
+$include&quot;./iResNonSubElec.csv&quot;
+$offdelim
+;
+table iResNonSubElecCons(allCy,DOMSE,YTIME)  &quot;Residuals in Non Substitutable Electricity Consumption per substector (1)&quot;
+$ondelim
+$include&quot;./iResNonSubElecCons.csv&quot;
+$offdelim
+;
+iResNonSubsElecDem(runCy,INDSE,YTIME)$an(YTIME) = iResNonSubElec(runCy,INDSE,YTIME);
+iResNonSubsElecDem(runCy,DOMSE,YTIME)$an(YTIME) = iResNonSubElecCons(runCy,DOMSE,YTIME);
+table iResFuelConsSub(allCy,INDSE,EF,YTIME)  &quot;Residuals for fuel consumption per subsector (1)&quot;
+$ondelim
+$include&quot;./iResFuelConsSub.csv&quot;
+$offdelim
+;
+table iResFuelConsPerFuelAndSub(allCy,DOMSE,EF,YTIME)    &quot;Residuals in fuel consumption per fuel and subsector (1)&quot;
+$ondelim
+$include&quot;./iResFuelConsPerFuelAndSub.csv&quot;
+$offdelim
+;
+table iResInFuelConsPerFuelAndSub(allCy,NENSE,EF,YTIME)  &quot;Residuals in fuel consumption per fuel and subsector (1)&quot;
+$ondelim
+$include&quot;./iResInFuelConsPerFuelAndSub.csv&quot;
+$offdelim
+;
+iResFuelConsPerSubAndFuel(runCy,INDSE,EF,YTIME)$an(YTIME) = iResFuelConsSub(runCy,INDSE,EF,YTIME);
+iResFuelConsPerSubAndFuel(runCy,DOMSE,EF,YTIME)$an(YTIME) = iResFuelConsPerFuelAndSub(runCy,DOMSE,EF,YTIME);
+iResFuelConsPerSubAndFuel(runCy,NENSE,EF,YTIME)$an(YTIME) = iResInFuelConsPerFuelAndSub(runCy,NENSE,EF,YTIME);
+table iResTranspFuelConsSubTech(allCy,TRANSE,EF,YTIME)   &quot;Residual Transport on Specific Fuel Consumption per Subsector and Technology (1)&quot;
+$ondelim
+$include&quot;./iResTranspFuelConsSubTech.csv&quot;
+$offdelim
+;
+$offtext
+table iEnvPolicies(allCy,POLICIES_SET,YTIME) &quot;Environmental policies on emissions constraints  and subsidy on renewables (Mtn CO2)&quot;
+$ondelim
+$include&quot;./iEnvPolicies.csv&quot;
+$offdelim
+;
+if %fScenario% eq 0 then
+     iCarbValYrExog(allCy,YTIME)$an(YTIME) = 0;
+elseif %fScenario% eq 1 then
+     iCarbValYrExog(allCy,YTIME)$an(YTIME) = iEnvPolicies(allCy,&quot;exogCV_NPi&quot;,YTIME);
+elseif %fScenario% eq 2 then
+     iCarbValYrExog(allCy,YTIME)$an(YTIME) = iEnvPolicies(allCy,&quot;exogCV_1_5C&quot;,YTIME);
+elseif %fScenario% eq 3 then
+     iCarbValYrExog(allCy,YTIME)$an(YTIME) = iEnvPolicies(allCy,&quot;exogCV_2C&quot;,YTIME);
+endif;
+table iMatrFactorData(SBS,EF,YTIME)       &quot;Maturity factor per technology and subsector (1)&quot;
+$ondelim
+$include&quot;./iMatrFactorData.csv&quot;
+$offdelim
+;
+$IFTHEN.calib %MatFacCalibration% == off
+parameter iMatrFactor(allCy,SBS,EF,YTIME)       &quot;Maturity factor per technology and subsector for all countries (1)&quot;;
+iMatrFactor(runCy,SBS,EF,YTIME) = iMatrFactorData(SBS,EF,YTIME);                                          
+iMatrFactor(runCy,SBS,EF,YTIME)$(iMatrFactor(runCy,SBS,EF,YTIME)=0) = 0.000001;
+$ELSE.calib
+variable iMatrFactor(allCy,SBS,EF,YTIME)       &quot;Maturity factor per technology and subsector for all countries (1)&quot;;
+iMatrFactor.L(runCy,SBS,EF,YTIME) = iMatrFactorData(SBS,EF,YTIME);                                          
+iMatrFactor.L(runCy,SBS,EF,YTIME)$(iMatrFactor.L(runCy,SBS,EF,YTIME)=0) = 0.000001;
+iMatrFactor.LO(runCy,SBS,EF,YTIME) = -10;                                          
+iMatrFactor.UP(runCy,SBS,EF,YTIME) = 100;
+$ENDIF.calib
+iShrNonSubElecInTotElecDem(runCy,INDSE)  = iIndChar(runCy,INDSE,&quot;SHR_NSE&quot;);
+iShrNonSubElecInTotElecDem(runCy,INDSE)$(iShrNonSubElecInTotElecDem(runCy,INDSE)&gt;0.98) = 0.98;
+iShrNonSubElecInTotElecDem(runCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(DOMSE,&quot;SHR_NSE&quot;);
+iShrNonSubElecInTotElecDem(runCy,DOMSE)$(iShrNonSubElecInTotElecDem(runCy,DOMSE)&gt;0.98) = 0.98;
+iCapCostTech(runCy,TRANSE,EF,YTIME) = iDataTransTech(TRANSE,EF,&quot;IC&quot;,YTIME);
+iFixOMCostTech(runCy,TRANSE,EF,YTIME) = iDataTransTech(TRANSE,EF,&quot;FC&quot;,YTIME);
+iVarCostTech(runCy,TRANSE,EF,YTIME) = iDataTransTech(TRANSE,EF,&quot;VC&quot;,YTIME);
+iCapCostTech(runCy,INDSE,EF,YTIME) = iDataIndTechnology(INDSE,EF,&quot;IC&quot;);
+iFixOMCostTech(runCy,INDSE,EF,YTIME) = iDataIndTechnology(INDSE,EF,&quot;FC&quot;);
+iVarCostTech(runCy,INDSE,EF,YTIME) = iDataIndTechnology(INDSE,EF,&quot;VC&quot;);
+iUsfEneConvSubTech(runCy,INDSE,EF,YTIME)  = iDataIndTechnology(INDSE,EF,&quot;USC&quot;);
+iFixOMCostTech(runCy,DOMSE,EF,YTIME) = iDataDomTech(DOMSE,EF,&quot;FC&quot;);
+iVarCostTech(runCy,DOMSE,EF,YTIME) = iDataDomTech(DOMSE,EF,&quot;VC&quot;);
+iUsfEneConvSubTech(runCy,DOMSE,EF,YTIME) = iDataDomTech(DOMSE,EF,&quot;USC&quot;);
+iFixOMCostTech(runCy,NENSE,EF,YTIME)= iDataNonEneSec(NENSE,EF,&quot;FC&quot;);
+iVarCostTech(runCy,NENSE,EF,YTIME) = iDataNonEneSec(NENSE,EF,&quot;VC&quot;);
+iUsfEneConvSubTech(runCy,NENSE,EF,YTIME) = iDataNonEneSec(NENSE,EF,&quot;USC&quot;);
+table iDataPlantEffByType(allCy,PGALL, YTIME)   &quot;Data for plant efficiency per plant type&quot;
+$ondelim
+$include &quot;./iDataPlantEffByType.csv&quot;
+$offdelim
+;
+iPlantEffByType(runCy,PGALL,YTIME) = iDataPlantEffByType(runCy,PGALL, YTIME) ;
+$ontext
+EN_PRD_INDX(runCy,SBS,YTIME)$an(YTIME)=EN_PRD_INDX_PRN(runCy,SBS,YTIME);
+CCRES(PGALL,YTIME)$AN(YTIME)=CCRES_PRN(PGALL,YTIME)  ;
+FOMRES(PGALL,YTIME)$AN(YTIME)=FOMRES_PRN(PGALL,YTIME) ;
+VOMRES(PGALL,YTIME)$AN(YTIME)=VOMRES_PRN(PGALL,YTIME)  ;
+EFFRES(PGALL,YTIME)$AN(YTIME)=EFFRES_PRN(PGALL,YTIME);
+NUCRES(YTIME)$an(ytime)=NUCRES_PRN(&quot;RES&quot;,YTIME);
+iPlantEffByType(runCy,PGALL,YTIME)$(an(ytime) )= iPlantEffByType(runCy,PGALL,YTIME) / iEneProdRDscenarios(runCy,&quot;pg&quot;,ytime);
+iEffDHPlants(runCy,EF,YTIME)$(an(ytime) )= iEffDHPlants(runCy,EF,YTIME) / iEneProdRDscenarios(runCy,&quot;pg&quot;,ytime);
+iRateLossesFinCons(allCy,EFS, YTIME)$(iFinEneCons(allCy,EFS,YTIME)&gt;0 $(not an(ytime))) = iDistrLosses(allCy,EFS,YTIME) / iFinEneCons(allCy,EFS,YTIME);
+$offtext</code></pre>
+<ul>
+<li>Calculation of polynomial distribution lags coefficients</li>
+</ul>
+<pre><code>iNPDL(DSBS) = 6;
+loop DSBS do
+   loop KPDL$(ord(KPDL) le iNPDL(DSBS)) do
+         iFPDL(DSBS,KPDL) = 6 * (iNPDL(DSBS)+1-ord(KPDL)) * ord(KPDL)
+                           /
+                           (iNPDL(DSBS) * (iNPDL(DSBS)+1) * (iNPDL(DSBS)+2))
+   endloop;
+endloop;
+model openprom / all /;
+option iPop:2:0:6;
+display iPop;
+display iDisc;
+display TF;
+display TFIRST;
+display runCy;
+display iWgtSecAvgPriFueCons;
+display iVarCostTech;</code></pre>
+<p><em>VARIABLE INITIALISATION</em></p>
+<pre><code>iTransChar(runCy,&quot;RES_MEXTF&quot;,YTIME) = 0.04;
+iTransChar(runCy,&quot;RES_MEXTV&quot;,YTIME) = 0.04;
+iDataPassCars(runCy,&quot;PC&quot;,&quot;MEXTV&quot;) = 0.01;
+iFinEneConsPrevYear(runCy,EFS,YTIME)$(not An(YTIME)) = iFinEneCons(runCy,EFS,YTIME);</code></pre>
+<p><strong>Interdependent Variables</strong></p>
+<pre><code>VRenValue.L(YTIME) = 1;
+VRenValue.FX(YTIME) = 0 ;
+VElecConsHeatPla.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = iFuelConsPerFueSub(runCy,INDDOM,&quot;ELC&quot;,YTIME)*(1-iShrNonSubElecInTotElecDem(runCy,INDDOM))*iShrHeatPumpElecCons(runCy,INDDOM);
+VElecConsHeatPla.FX(runCy,INDDOM,YTIME) = 1E-7;
+VCarVal.FX(runCy,&quot;TRADE&quot;,YTIME) = iCarbValYrExog(runCy,YTIME);
+VCarVal.FX(runCy,&quot;NOTRADE&quot;,YTIME) = iCarbValYrExog(runCy,YTIME);
+openprom.optfile=1;
+openprom.scaleopt=1;</code></pre>
+<pre><code>
+hour            &quot;Segments of hours in a year (250,1250,...,8250)&quot; /h0*h8/
+conSet       Consumer size groups related to space heating
+/
+smallest
+modal
+largest
+/
+eSet         Electricity consumers used for average electricity price calculations /i,r/
+iSet(eSet)   Industrial consumer /i/
+rSet(eSet)   Residential consumer /r/
+rCon         counter for the number of consumers              /0,1*19/
+nSet         auxiliary counter for the definition of Vr       /b1*b20/
+kpdl         counter for Polynomial Distribution Lag          /a1*a6/
+rc                                                            /1*3/
+rcc                                                           /1*10/
+ALLSBS   All sectors
+/
+IS    &quot;Iron and Steel&quot;
+NF    &quot;Non Ferrous Metals&quot;
+CH    &quot;Chemicals&quot;
+BM    &quot;Non Metallic Minerals&quot;
+PP    &quot;Paper and Pulp&quot;
+FD    &quot;Food Drink and Tobacco&quot;
+EN    &quot;Engineering&quot;
+TX    &quot;Textiles&quot;
+OE    &quot;Ore Extraction&quot;
+OI    &quot;Other Industrial sectors&quot;
+SE    &quot;Services and Trade&quot;
+AG    &quot;Agriculture, Fishing, Forestry etc.&quot;
+HOU   &quot;Households&quot;
+PC    &quot;Passenger Transport - Cars&quot;
+PB    &quot;Passenger Transport - Busses&quot;
+PT    &quot;Passenger Transport - Rail&quot;
+PN    &quot;Passenger Transport - Inland Navigation&quot;
+PA    &quot;Passenger Transport - Aviation&quot;
+GU    &quot;Goods Transport - Trucks&quot;
+GT    &quot;Goods Transport - Rail&quot;
+GN    &quot;Goods Transport - Inland Navigation&quot;
+BU    &quot;Bunkers&quot;
+PCH   &quot;Petrochemicals Industry&quot;
+NEN   &quot;Other Non Energy Uses&quot;
+PG    &quot;Power and Steam Generation&quot;
+H2P   &quot;Hydrogen Production&quot;
+H2INFR &quot;Hydrogen storage and delivery&quot;
+LGN_PRD_CH4    &quot;Lignite Primary Production, related with CH4&quot;
+HCL_PRD_CH4    &quot;Hard coal primary production, related with CH4&quot;
+GAS_PRD_CH4    &quot;Natural gas primary production, related with CH4&quot;
+TERT_CH4       &quot;Natural gas distribution in tertiary, related with CH4&quot;
+TRAN_CH4       &quot;Gasoline in transport, related with CH4&quot;
+AG_CH4         &quot;Agriculture activities, related with CH4&quot;
+SE_CH4         &quot;Waste used in housing and water charges in services, related with CH4&quot;
+TRAN_N2O       &quot;Oil activities in transport, related with N2O&quot;
+TX_N2O         &quot;Textile activities, related with N2O&quot;
+AG_N2O         &quot;Agriculture activities, related with N2O&quot;
+OI_HFC         &quot;Other Industry activities, related with HFC&quot;
+OI_PFC         &quot;Semiconductor manufacturing, related with PFC&quot;
+NF_PFC         &quot;Aluminium production, related with PFC&quot;
+BM_CO2         &quot;Non metallic minerals production, related with CO2&quot;
+PG_SF6         &quot;Electricity production, related with SF6&quot;
+OI_SF6         &quot;Other Industries activities, related with SF6&quot;
+/
+SBS(ALLSBS)          Model Subsectors
+/
+IS    &quot;Iron and Steel&quot;
+NF    &quot;Non Ferrous Metals&quot;
+CH    &quot;Chemicals&quot;
+BM    &quot;Non Metallic Minerals&quot;
+PP    &quot;Paper and Pulp&quot;
+FD    &quot;Food Drink and Tobacco&quot;
+EN    &quot;Engineering&quot;
+TX    &quot;Textiles&quot;
+OE    &quot;Ore Extraction&quot;
+OI    &quot;Other Industrial sectors&quot;
+SE    &quot;Services and Trade&quot;
+AG    &quot;Agriculture, Fishing, Forestry etc.&quot;
+HOU   &quot;Households&quot;
+PC    &quot;Passenger Transport - Cars&quot;
+PB    &quot;Passenger Transport - Busses&quot;
+PT    &quot;Passenger Transport - Rail&quot;
+PN    &quot;Passenger Transport - Inland Navigation&quot;
+PA    &quot;Passenger Transport - Aviation&quot;
+GU    &quot;Goods Transport - Trucks&quot;
+GT    &quot;Goods Transport - Rail&quot;
+GN    &quot;Goods Transport - Inland Navigation&quot;
+BU    &quot;Bunkers&quot;
+PCH   &quot;Petrochemicals Industry&quot;
+NEN   &quot;Other Non Energy Uses&quot;
+PG    &quot;Power and Steam Generation&quot;
+H2P   &quot;Hydrogen production&quot;
+H2INFR &quot;Hydrogen storage and delivery&quot;
+/
+SCT_GHG(ALLSBS)      Aggregate Sectors used in non-energy related GHG emissions
+/
+LGN_PRD_CH4    &quot;Lignite Primary Production, related with CH4&quot;
+HCL_PRD_CH4    &quot;Hard coal primary production, related with CH4&quot;
+GAS_PRD_CH4    &quot;Natural gas primary production, related with CH4&quot;
+TERT_CH4       &quot;Natural gas distribution in tertiary, related with CH4&quot;
+TRAN_CH4       &quot;Gasoline in transport, related with CH4&quot;
+AG_CH4         &quot;Agriculture activities, related with CH4&quot;
+SE_CH4         &quot;Waste used in housing and water charges in services, related with CH4&quot;
+TRAN_N2O       &quot;Oil activities in transport, related with N2O&quot;
+TX_N2O         &quot;Textile activities, related with N2O&quot;
+AG_N2O         &quot;Agriculture activities, related with N2O&quot;
+OI_HFC         &quot;Other Industry activities, related with HFC&quot;
+OI_PFC         &quot;Semiconductor manufacturing, related with PFC&quot;
+NF_PFC         &quot;Aluminium production, related with PFC&quot;
+BM_CO2         &quot;Non metallic minerals production, related with CO2&quot;
+PG_SF6         &quot;Electricity production, related with SF6&quot;
+OI_SF6         &quot;Other Industries activities, related with SF6&quot;
+/
+POLICIES_set
+/
+TRADE
+NoTrade
+OPT
+REN
+EFF
+NONE
+RENE_SUBS
+BIO_SUBS
+BIOM_SUBS
+SOLRES_SUBS
+exogCV_NPi
+exogCV_1_5C
+exogCV_2C
+/
+RegulaPolicies(POLICIES_set) Set of policies entering in the regula falsi loops
+/ OPT           Carbon Value for Optimal CO2 permits allocation
+  TRADE         Carbon Value for Trade sectors
+  REN           Renewable value for renewable target in final demand
+  EFF           Efficiency value for energy savings in final demand
+  NONE          No policy
+/
+NAP(Policies_set) National Allocation Plan sector categories
+/
+Trade    Carbon Value for trading sectors
+NoTrade  Carbon Value for non-trading sectors
+/
+NAPtoALLSBS(NAP,ALLSBS) Energy sectors corresponding to NAP sectors
+/
+Trade.(FD,EN,TX,OE,OI,NF,CH,IS,BM,PP,PG,BM_CO2,H2P)
+NoTrade.(SE,AG,HOU,PC,PB,PT,PN,PA,GU,GT,GN,BU,PCH,NEN,LGN_PRD_CH4,HCL_PRD_CH4,GAS_PRD_CH4,TERT_CH4,TRAN_CH4,AG_CH4,SE_CH4,TRAN_N2O,TX_N2O,AG_N2O,OI_HFC,OI_PFC,NF_PFC,PG_SF6,OI_SF6)
+/
+DSBS(SBS)         All Demand Subsectors         /PC,PT,PA,PB,PN,GU,GT,GN,IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,SE,AG,HOU,PCH,NEN,BU/
+TRANSE(DSBS)      All Transport Subsectors      /PC,PT,PA,PB,PN,GU,GT,GN/
+TRANS1(SBS)       All Transport Subsectors      /PC,PT,PA,PB,PN,GU,GT,GN/
+TRANP(TRANSE)     Passenger Transport           /PC,PT,PA,PB,PN/
+TRANG(TRANSE)     Goods Transport               /GU,GT,GN/
+INDSE(DSBS)       Industrial SubSectors         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI/
+DOMSE(DSBS)       Tertiary SubSectors           /SE,AG,HOU/
+INDSE1(SBS)       Industrial SubSectors         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI/
+DOMSE1(SBS)       Tertiary SubSectors           /SE,AG,HOU/
+HOU(DSBS)         Households                     /HOU/
+NENSE(DSBS)       Non Energy and Bunkers        /PCH,NEN,BU/
+NENSE1(SBS)       Non Energy and Bunkers        /PCH,NEN,BU/
+BUN(DSBS)         Bunkers                       /BU/
+INDDOM(DSBS)      Industry and Tertiary         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,SE,AG,HOU/
+INDTRANS(SBS)     Industry and Transport        /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI ,PC,PT,PA,PB,PN,GU,GT, GN /
+RESIDENT(SBS)     Residential                   /SE,AG,HOU/
+AGSECT            aggregate sectors             /INDSE1,DOMSE1,NENSE1,TRANS1,PG/
+EF           Energy Forms
+/
+HCL     &quot;Hard Coal, Coke and Other Solids&quot;
+LGN     &quot;Lignite&quot;
+CRO     &quot;Crude Oil and Feedstocks&quot;
+LPG     &quot;Liquefied Petroleum Gas&quot;
+GSL     &quot;Gasoline&quot;
+KRS     &quot;Kerosene&quot;
+GDO     &quot;Diesel Oil&quot;
+RFO     &quot;Residual Fuel Oil&quot;
+OLQ     &quot;Other Liquids&quot;
+NGS     &quot;Natural Gas&quot;
+OGS     &quot;Other Gases&quot;
+NUC     &quot;Nuclear&quot;
+STE     &quot;Steam&quot;
+HYD     &quot;Hydro&quot;
+WND     &quot;Wind&quot;
+SOL     &quot;Solar&quot;
+BMSWAS  &quot;Biomass and Waste&quot;
+GEO     &quot;Geothermal and other renewable sources eg. Tidal, etc.&quot;
+MET     &quot;Methanol&quot;
+ETH     &quot;Ethanol&quot;
+BGDO    &quot;Biodiesel&quot;
+H2F     &quot;Hydrogen&quot;
+ELC     &quot;Electricity&quot;
+STE1AL  &quot;Steam produced from CHP advanced lgn&quot;
+STE1AH  &quot;Steam produced from CHP advanced hcl&quot;
+STE1AD  &quot;Steam produced from CHP advanced gdo&quot;
+STE1AR  &quot;Steam produced from CHP advanced rfo&quot;
+STE1AG  &quot;Steam produced from CHP advanced ngs&quot;
+STE1AB  &quot;Steam produced from CHP advanced bmswas&quot;
+STE1AH2F &quot;Steam produced from Hydrogen powered CHP fuel cells&quot;
+STE2LGN &quot;Steam coming from district heating plants burning lgn&quot;
+STE2OSL &quot;Steam produced from district heating plants burning hcl&quot;
+STE2GDO &quot;Steam produced from district heating plants burning gdo&quot;
+STE2RFO &quot;Steam produced from district heating plants burning rfo&quot;
+STE2OLQ &quot;Steam produced from district heating plants burning olq&quot;
+STE2NGS &quot;Steam produced from district heating plants burning ngs&quot;
+STE2OGS &quot;Steam produced from district heating plants burning ogs&quot;
+STE2BMS &quot;Steam produced from district heating plants burning bmswas&quot;
+PHEVGSL  &quot;Plug in Hybrid engine - gasoline&quot;
+PHEVGDO  &quot;Plug in Hybrid engine - diesel&quot;
+CHEVGSL  &quot;conventional Hybrid engine - gasoline&quot;
+CHEVGDO  &quot;conventional Hybrid engine - diesel&quot;
+SLD     &quot;Solid Fuels&quot;
+GAS     &quot;Gases&quot;
+LQD     &quot;All Liquids&quot;
+OLQT    &quot;All liquids but GDO, RFO, GSL&quot;
+REN     &quot;Renewables except Hydro&quot;
+NFF     &quot;Non Fossil Fuels&quot;
+NEF     &quot;New energy forms&quot;
+HEATPUMP &quot;Low enthalpy heat produced by heatpumps reducing the total final consumption of the sector&quot;
+/
+HEATPUMP(EF) Heatpumps are reducing the heat requirements of the sector but increasing electricity consumption
+/HEATPUMP/
+EFA(EF)          Aggregate Energy Forms
+/
+SLD   &quot;Solid Fuels&quot;
+LQD   &quot;Liquids&quot;
+OLQT  &quot;All liquids but GDO, RFO, GSL&quot;
+GAS   &quot;Gases&quot;
+REN   &quot;Renewables except Hydro&quot;
+STE   &quot;Steam&quot;
+NFF   &quot;Non Fossil Fuels&quot;
+NEF   &quot;New energy forms&quot;
+/
+REFORM(EF) FUELS CONSIDERED IN PRICE REFORM
+/
+CRO     &quot;Crude Oil and Feedstocks&quot;
+LPG     &quot;Liquefied Petroleum Gas&quot;
+GSL     &quot;Gasoline&quot;
+KRS     &quot;Kerosene&quot;
+GDO     &quot;Diesel Oil&quot;
+RFO     &quot;Residual Fuel Oil&quot;
+OLQ     &quot;Other Liquids&quot;
+NGS     &quot;Natural Gas&quot;
+OGS     &quot;Other Gases&quot;
+/
+REFORM1(EF) FUELS CONSIDERED IN PRICE REFORM
+/HCL
+LGN/
+RENEF(EF)        Renewable technologies in demand side
+/
+HYD     &quot;Hydro&quot;
+WND     &quot;Wind&quot;
+SOL     &quot;Solar&quot;
+BMSWAS  &quot;Biomass and Waste&quot;
+GEO     &quot;Geothermal and other renewable sources eg. Tidal, etc.&quot;
+BGDO    &quot;Biodiesel&quot;
+STE1AB  &quot;Steam produced from CHP advanced bmswas&quot;
+STE2BMS &quot;Steam produced from district heating plants burning bmswas&quot;
+/
+OIL(EF) Liquid fuels in private road transport
+/
+GSL     &quot;Gasoline&quot;
+GDO     &quot;Diesel Oil&quot;
+/
+EFtoEFA(EF,EFA)  Energy Forms Aggregations (for summary balance report)
+/
+(HCL,LGN).SLD
+(GSL,GDO,RFO,LPG,KRS,OLQ).LQD
+(LPG,KRS,OLQ).OLQT
+(NGS,OGS).GAS
+(STE1AL,STE1AH,STE1AD,STE1AR,STE1AG,STE1AB,STE1AH2F,STE2LGN,STE2OSL,STE2GDO,STE2RFO,STE2OLQ,
+ STE2NGS,STE2OGS,STE2BMS).STE
+(WND,SOL,GEO).REN
+(HYD,WND,SOL,GEO,NUC,BMSWAS).NFF
+(H2F,MET,ETH).NEF
+/
+WEF              Imported Energy Forms (affecting fuel prices)
+/
+WHCL    Imported Hard Coal
+WCOKE   Imported Coke
+WCRO    Imported Crude Oil
+WNGS    Imported Natural Gas
+WLGN    Lignite for Industry
+WGSL    Spot price of gasoline Rotterdam
+WGDO    Spot price of diesel Rotterdam
+WRFO    Spot price of heavy fuel oil Rotterdam
+/
+WEFMAP(EF,WEF)          Link between Imported Energy Forms and Energy Forms used in Model Subsectors
+/(LGN,STE1AL,STE2LGN).WLGN
+(HCL,STE1AH,STE2OSL).WHCL
+(NGS,OGS,STE1AG,STE2NGS,STE2OGS).WNGS
+HCL.WCOKE
+(GSL,KRS).WGSL
+(GDO,STE1AD,STE2GDO).WGDO
+(RFO,STE1AR,STE2RFO).WRFO
+(OLQ,LPG,STE2OLQ).WCRO
+/
+EFtoWEF(SBS,EF,WEF) Link between Imported Energy Forms and Energy Forms used in Model Subsectors
+EFS(EF)          Energy Forms used in Supply Side
+/
+LGN
+HCL
+CRO
+GSL
+GDO
+RFO
+LPG
+KRS
+OLQ
+NGS
+OGS
+NUC
+STE
+HYD
+BMSWAS
+SOL
+WND
+GEO
+ELC
+H2F
+MET
+ETH
+/
+EFtoEFS(EF,EFS)    Fuel Aggregation for Supply Side
+/
+LGN.LGN
+HCL.HCL
+CRO.CRO
+GSL.GSL
+GDO.GDO
+RFO.RFO
+LPG.LPG
+KRS.KRS
+OLQ.OLQ
+NGS.NGS
+OGS.OGS
+NUC.NUC
+(STE1AL,STE1AH,STE1AD,STE1AR,STE1AG,STE1AB,STE1AH2F,STE2LGN,STE2OSL,STE2GDO,STE2RFO,STE2OLQ,STE2NGS,STE2OGS,STE2BMS).STE
+HYD.HYD
+(BGDO,ETH,BMSWAS).BMSWAS
+SOL.SOL
+GEO.GEO
+WND.WND
+ELC.ELC
+MET.MET
+H2F.H2F
+/
+ELCEF(EF)        Electricity                                         /ELC/
+H2EF(EF)         Hydrogen                                            /H2F/
+STEAM(EFS)       Steam                                               /STE/
+TOCTEF(EFS)      Energy forms produced by power plants and boilers   /ELC,STE/
+ALTEF(EF)        Alternative Fuels used in transport                 /BGDO,MET,ETH/
+ALTMAP(SBS,EF,EF)    Fuels whose prices affect the prices of alternative fuels
+/
+(PC,GU,PT,PB,GT,GN).MET.GDO
+(PC,GU,PT,PB,GT,GN).ETH.GDO
+(PC,GU,GN,PN).BGDO.GDO
+/
+PGEF(EFS)        Energy forms used for power generation
+/
+LGN
+HCL
+GDO
+RFO
+OLQ
+NGS
+NUC
+HYD
+BMSWAS
+SOL
+GEO
+WND
+H2F
+/
+h2f1(pgef)
+/h2f/
+PPRODEF(EFS)     Fuels considered in primary production
+/
+LGN
+HCL
+CRO
+HYD
+BMSWAS
+NUC
+SOL
+GEO
+WND
+NGS
+/
+IMPEF(EFS)       Fuels considered in Imports and Exports
+/
+LGN
+HCL
+CRO
+GSL
+GDO
+RFO
+LPG
+KRS
+OLQ
+NGS
+OGS
+ELC
+/
+TEAALL              Technology progress (Demand Side)
+/
+ORD   Ordinary
+IMP   Improved
+/
+TTECH(EF)        Transport Technologies
+/
+GSL      &quot;Internal Combustion Engine fueled by Gasoline&quot;
+LPG      &quot;Internal Combustion Engine fueled by Liquified Petroleum Gas&quot;
+GDO      &quot;Internal Combustion Engine fueled by Diesel Oil&quot;
+NGS      &quot;Internal Combustion Engine fueled by Natural Gas&quot;
+ELC      &quot;Pure Electirc Engine&quot;
+KRS      &quot;Gas Turbine fueled by Kerosene&quot;
+ETH      &quot;Internal Combustion Engine fueled by Ethanol&quot;
+MET      &quot;Methanol (85% gasoline 15% methanol) coming either from ngs or bms&quot;
+BGDO     &quot;Biodiesel internal combustion engine&quot;
+PHEVGSL  &quot;Plug in Hybrid engine - gasoline&quot;
+PHEVGDO  &quot;Plug in Hybrid engine - diesel&quot;
+H2F      &quot;Fuel Cells: Hydrogen&quot;
+CHEVGSL  &quot;conventional Hybrid engine - gasoline&quot;
+CHEVGDO  &quot;conventional Hybrid engine - diesel&quot;
+/
+TTECHtoEF(TTECH,EF) Fuels consumed by transport technologies
+/
+GSL.GSL
+LPG.LPG
+GDO.GDO
+NGS.NGS
+ELC.ELC
+KRS.KRS
+ETH.ETH
+MET.MET
+BGDO.BGDO
+PHEVGSL.(GSL,ELC)
+PHEVGDO.(GDO,ELC)
+H2F.H2F
+CHEVGSL.GSL
+CHEVGDO.GDO
+/
+PLUGIN(EF) Plug-in hybrids
+/
+PHEVGSL
+PHEVGDO
+/
+CHYBV(EF) CONVENTIONAL hybrids
+/
+CHEVGSL
+CHEVGDO
+/
+SECTTECH(SBS,EF) Link between Model Subsectors and Fuels
+/
+PC.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO,CHEVGSL,CHEVGDO)
+PB.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO)
+GU.(LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGDO,CHEVGDO)
+(PT,GT).(GDO,ELC,MET)
+PA.(KRS)
+PN.(GSL,GDO)
+GN.(GSL,GDO)
+(IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(LGN,HCL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC,STE1AL,
+                                 STE1AH,STE1AD,STE1AR,STE1AG,STE1AB)
+(SE,HOU,AG).                    (LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC,STE1AL,
+                                 STE1AH,STE1AD,STE1AR,STE1AG,STE1AB,STE2LGN,STE2OSL,STE2GDO,STE2RFO,STE2OLQ,STE2NGS,
+                                 STE2OGS,STE2BMS, BMSWAS)
+BU.(GDO,RFO)
+(PCH,NEN).(LGN,HCL,GDO,RFO,LPG,OLQ,NGS,OGS)
+PG.(LGN,HCL,GDO,RFO,NGS,NUC,HYD,BMSWAS,SOL,GEO,WND)
+H2P.(HCL,RFO,NGS,NUC,BMSWAS,SOL,WND,ELC)
+/
+PGALL            Power Generation Plant Types
+/
+CTHBMSWAS Conventional thermal monovalent biomass and waste
+ATHLGN  Advanced thermal monovalent lignite
+ATHHCL Advanced thermal monovalent hard coal
+ATHRFO Advanced thermal monovalent fuel oil
+ATHNGS Advanced thermal monovalent natural gas
+ATHBMSWAS Advanced thermal monovalent biomass and waste
+ATHBMCCS
+SUPCRL  Supercritical lignite
+SUPCR  Supercritical coal
+FBCLGN Fluidised bed lignite
+FBCHCL Fluidised bed hard coal
+IGCCLGN Integrated gasification combine cycle lignite
+IGCCHCL Integrtaed gasification combine cycle hard coal
+IGCCBMS Integrated gasification combine cycle biomass
+CCCGT  Conventional combined cycle gas turbine
+ACCGT  Advanced combined cycle gas turbine
+AGTGDO Advanced gas turbines (peak devices) diesel oil
+AGTNGS Advanced gas turbines (peak devices) natural gas
+PGLHYD Large Hydro Plants
+PGSHYD Small Hydro Plants
+PGWND Wind Plants
+PGSOL Solar Photovoltaic Plants
+PGASHYD Advanced Small Hydro Plants
+PGAWND Advanced Wind Plants
+PGASOL Advanced Solar Thermal Plants
+PGADPV Advanced Building Integrated PV Plants
+PGAOTHREN Advanced geothermal Plants
+PGANUC New Nuclear Designs
+PGAPSS Supercritical coal with CCS
+PGAPSSL Supercritical lignite with CCS
+PGACGSL Integrated lignite gasification with CCS
+PGACGS Integrated coal gasification with CCS
+PGAGGS Gas turbine combined cycle with CCS
+PGAWNO Wind offshore
+/
+PGASOL(PGALL)
+/PGASOL/
+CCS(PGALL) Plants which can be equipped with CCS
+/
+PGAPSS
+PGAPSSL
+PGACGSL
+PGACGS
+PGAGGS
+ATHBMCCS
+/
+NOCCS(PGALL) Plants which can be equipped with CCS but they are not
+/
+SUPCRL
+SUPCR
+IGCCHCL
+IGCCLGN
+ACCGT
+ATHBMSWAS
+/
+CCS_NOCCS(PGALL,PGALL) mapping
+/
+PGAPSSL.SUPCRL
+PGAPSS.SUPCR
+PGACGSL.IGCCLGN
+PGACGS.IGCCHCL
+PGAGGS.ACCGT
+ATHBMCCS.ATHBMSWAS
+/
+CHP(EF)       CHP Plants
+/
+STE1AL,STE1AH,STE1AD,STE1AR,STE1AG,STE1AB
+/
+DH(EF)       District Heating
+/
+STE2LGN
+STE2OSL
+STE2GDO
+STE2RFO
+STE2OLQ
+STE2NGS
+STE2OGS
+STE2BMS
+/
+PGNUCL(PGALL)    Nuclear plants                            / PGANUC/
+PGREN(PGALL)     Renewable Plants                          /PGLHYD,PGSHYD,PGWND,PGSOL,PGASHYD,PGAWND,PGASOL,PGAOTHREN, PGAWNO, PGADPV/
+PGNREN(PGALL)    Advanced Renewable Plants potential      /PGASHYD,PGAWND,PGASOL,PGAOTHREN,PGAWNO,PGADPV,ATHBMSWAS,IGCCBMS/
+PGGEO(PGALL)     Geothermal Plants                        /PGAOTHREN/
+PGRENEF          Renewable energy forms in power generation  /LHYD,SHYD,WND,WNO,SOL,DPV,BMSWAS,OTHREN/
+PGALLtoPGRENEF(PGALL,PGRENEF)     Correspondence between renewable plants and renewable energy forms
+/
+PGLHYD.LHYD
+(PGSHYD,PGASHYD).SHYD
+(PGWND,PGAWND).WND
+PGAWNO.WNO
+(PGSOL,PGASOL).SOL
+PGADPV.DPV
+(PGAOTHREN).OTHREN
+(CTHBMSWAS,ATHBMSWAS,IGCCBMS,ATHBMCCS).BMSWAS
+/
+PGALLtoEF(PGALL,PGEF)     Correspondence between plants and energy forms
+/
+(ATHLGN,FBCLGN,IGCCLGN,SUPCRL,PGAPSSL,PGACGSL).LGN
+(ATHHCL,SUPCR,FBCHCL,IGCCHCL, PGAPSS, PGACGS).HCL
+(ATHRFO).RFO
+(AGTGDO).GDO
+(ATHNGS,CCCGT,ACCGT,AGTNGS,PGAGGS).NGS
+(CTHBMSWAS,ATHBMSWAS,IGCCBMS,ATHBMCCS).BMSWAS
+(PGANUC).NUC
+(PGLHYD,PGSHYD,PGASHYD).HYD
+(PGWND,PGAWND,PGAWNO).WND
+(PGSOL,PGASOL,PGADPV).SOL
+(PGAOTHREN).GEO
+/
+CHPtoEF(EF,EF)           correspondence of CHP plant types to fuels
+/
+(STE1AL).LGN
+(STE1AH).HCL
+(STE1AD).GDO
+(STE1AR).RFO
+(STE1AG).NGS
+(STE1AB).BMSWAS
+STE1AH2F.H2F
+/
+DHtoEF(EF,EF)          correspondence of district heating plant types to fuels
+/
+STE2LGN.LGN,
+STE2OSL.HCL,
+STE2GDO.GDO,
+STE2RFO.RFO,
+STE2OLQ.OLQ,
+STE2NGS.NGS,
+STE2OGS.OGS,
+STE2BMS.BMSWAS
+/
+CHPtoEON(EF,PGALL)       Mapping of chp technologies to elec-only technologies
+/
+STE1AL.SUPCRL,
+STE1AH.SUPCR,
+STE1AD.AGTGDO,
+STE1AR.ATHRFO,
+STE1AG.ACCGT,
+STE1AB.ATHBMSWAS
+/
+PGSCRN(PGALL)     New plants involved in endogenous scrapping (these plants are not scrapped)
+/
+ATHBMSWAS
+SUPCRL
+SUPCR
+FBCLGN
+FBCHCL
+IGCCLGN
+IGCCHCL
+IGCCBMS
+PGLHYD
+PGSHYD
+PGWND
+PGSOL
+PGASHYD
+PGAWND
+PGASOL
+PGANUC
+PGAPSS
+PGAPSSL
+PGACGSL
+PGACGS
+PGAGGS
+PGAWNO
+PGADPV
+PGAOTHREN
+ATHBMCCS
+/
+EMISS            &quot;Pollutant Emissions&quot;
+/
+CO2      &quot;Carbon dioxide&quot;
+CH4      &quot;Methanio&quot;
+N2O      &quot;Nitrogen dioxide&quot;
+HFC      &quot;Hydrofluorocarbons&quot;
+PFC      &quot;Perfluorinated Compounds &quot;
+SF6      &quot;Sulfur Hexafluoride&quot;
+/
+SCT_GHGtoEMISS(SCT_GHG,EMISS)  Mapping between sectors and emissions
+/
+(LGN_PRD_CH4,HCL_PRD_CH4,GAS_PRD_CH4,TERT_CH4,TRAN_CH4,AG_CH4,SE_CH4).CH4
+(TRAN_N2O,TX_N2O,AG_N2O).N2O
+(OI_PFC,NF_PFC).PFC
+OI_HFC.HFC
+BM_CO2.CO2
+(PG_SF6,OI_SF6).SF6
+/
+CO2SEQELAST Elasticities for CO2 sequestration cost curve
+/
+POT      MAXIMUM POTENTIAL
+mc_a     linear slope
+mc_b     initial cost at x=0
+mc_c
+mc_d
+mc_s     speed to transition to exponential
+mc_m     value for the ratio of x to potential after which exponential is taking over
+/
+ETYPES           &quot;Elasticities types&quot;
+/a,b1,b2,b3,b4,b5,c,c1,c2,c3,c4,c5,aend,b3end,b4end/
+ECONCHAR         &quot;Technical - Economic characteristics for demand technologies&quot;
+/
+IC       &quot;Capital Cost&quot;
+FC       &quot;Fixed O&amp;M Cost&quot;
+VC       &quot;Variable Cost&quot;
+LFT      &quot;Technical Lifetime&quot;
+USC   &quot;Useful Energy Conversion Factor&quot;
+/
+PGECONCHAR       &quot;Technical - economic characteristics for power generation plants&quot;
+/
+LFT
+/
+SG               &quot;S parameters in Gompertz function for passenger cars vehicle km&quot;
+/S1,S2,S3,SAT/
+TRANSPCHAR       &quot;Various transport data used in equations and post-solution calculations&quot;
+/
+KM_VEH           &quot;Thousands km per passenger car vehicle&quot;
+KM_VEH_TRUCK     &quot;Thousands km per truck vehicle&quot;
+OCCUP_CAR        &quot;Passengers per car (car occupancy rate)&quot;
+RES_MEXTV        &quot;Residual for controlling the GDP-Dependent market extension of passenger cars&quot;
+RES_MEXTF        &quot;Residual for controlling the GDP-Independent market extension of passenger cars&quot;
+/
+TRANSUSE         &quot;Usage (average) data concerning capacity and load factor&quot;
+/
+CAP              &quot;Capacity in tn/vehicle or passengers/vehicle&quot;
+LF               &quot;Load factor&quot;
+/
+TOCTSET          &quot;Total Transformation Output and Total District Heating Output&quot;
+/
+TOCT_ELC         &quot;Electricity Total Transformation Output in Mtoe&quot;
+TOCT_STE         &quot;Steam Total Transformation Output in Mtoe&quot;
+TONUC_ELC        &quot;Electricity production from nuclear plants in Mtoe&quot;
+TODH_STE         &quot;Steam produced from District Heating Plants in Mtoe&quot;
+/
+SUPOTH           &quot;Indicators related to supply side&quot;
+/
+REF_CAP          &quot;Refineries Capacity in Mbl/day&quot;
+REF_CAP_RES      &quot;Residuals of Refineries Capacity&quot;
+HCL_PPROD        &quot;Residual of Hard Coal Primary Production&quot;
+NGS_PPROD        &quot;Residual of Natural Gas Primary Production&quot;
+OIL_PPROD        &quot;Residual of Crude Oil Primary Production&quot;
+NGS_EXPORT       &quot;Residual of Natural Gas Exports&quot;
+ELC_IMP          &quot;Ratio of electricity imports to total final demand&quot;
+TIOTH_RES        &quot;Residual of Total Transformation Input in Gasworks, Blast Furnances, etc.&quot;
+TOOTH_RES        &quot;Residual of Total Transformation Output from Gasworks, etc.&quot;
+FEED_RES         &quot;Residual for Feedstocks in Transfers&quot;
+/
+PGOTH            &quot;Various data related to power generation plants&quot;
+/
+TOTCAP           &quot;Total Available capacity in Base Year (GW)&quot;
+PEAKLOAD         &quot;Peak Load in Base Year (GW)&quot;
+BASELOAD         &quot;Base Load in Base Year (GW)&quot;
+NON_CHP_PER      &quot;Non-CHP capacity (percentage of total (gross) capacity)&quot;
+CHP_CAP          &quot;CHP Capacity (gross) in GW&quot;
+CHP_ELC          &quot;CHP electricity&quot;
+STE1AL           &quot;Utilisation rate of Lignite powered advanced CHP&quot;
+STE1AH           &quot;Utilisation rate of Hard Coal powered advanced CHP&quot;
+STE1AD           &quot;Utilisation rate of Diesel Oil powered advanced CHP&quot;
+STE1AR           &quot;Utilisation rate of Fuel Oil powered advanced CHP&quot;
+STE1AG           &quot;Utilisation rate of Natural Gas powered advanced CHP&quot;
+STE1AB           &quot;Utilisation rate of Biomass-Waste powered advanced CHP&quot;
+STE1AH2F         &quot;Utilisation rate of HYDROGEN powered FUEL CELL CHP&quot;
+LGN
+HCL
+GDO
+RFO
+OLQ
+NGS
+OGS
+BMSWAS
+/
+PGLOADTYPE(PGOTH)   &quot;Peak and Base load of total electricity demand in GW&quot;
+/PEAKLOAD, BASELOAD/
+CHPSET(PGOTH)       &quot;Indicators related to CHP Production&quot;                       /NON_CHP_PER,CHP_CAP/
+PGEFS(PGOTH)        &quot;Fuels used as Input to District Heating&quot;                    /LGN,HCL,GDO,RFO,OLQ,NGS,OGS,BMSWAS/
+PG_CHP(PGOTH)/
+STE1AL,STE1AH,STE1AD,STE1AR,STE1AG,STE1AB,STE1AH2F/
+VARIOUS_LABELS /AMAXBASE, MAXLOADSH/
+PGRES
+/
+TOT_CAP_RES         &quot;Residual on Total Capacity (Reserve margin on capacity)&quot;
+BASE_LOAD_RES       &quot;Residual on Base Load &quot;
+MAX_LOAD_RES        &quot;Residual on Peak Load (Peak Load margin)&quot;
+/
+CHPRES_SET
+/
+CHP_CC           Capital cost RD residual adjustment
+CHP_FOM          FOM cost RD residual adjustment
+CHP_VOM          VOM cost RD residual adjustment
+/
+nucres_set
+/res/
+Gompset1 /PC/
+Gompset2 /s1,s2,s3,sat,mextv,scr /
+Indu_SCon_Set /Base, SHR_NSE, SH_HPELC/
+CHPPGSET /IC,FC,VOM,LFT,AVAIL,BOILEFF,MAXCHPSHARE/
+ELSH_SET /elsh/
+BALEF fuels in balance report
+/
+&quot;Total&quot;
+&quot;Solids&quot;
+&quot;Hard coal&quot;
+&quot;Lignite&quot;
+&quot;Crude oil and Feedstocks&quot;
+&quot;Liquids&quot;
+&quot;Liquified petroleum gas&quot;
+&quot;Gasoline&quot;
+&quot;Kerosene&quot;
+&quot;Diesel oil&quot;
+&quot;Fuel oil&quot;
+&quot;Other liquids&quot;
+&quot;Gas fuels&quot;
+&quot;Natural gas&quot;
+&quot;Derived gases&quot;
+&quot;Nuclear heat&quot;
+&quot;Steam&quot;
+&quot;Hydro&quot;
+&quot;Wind&quot;
+&quot;Solar energy&quot;
+&quot;Biomass&quot;
+&quot;Geothermal heat&quot;
+&quot;Methanol&quot;
+&quot;Hydrogen&quot;
+&quot;Electricity&quot;
+/
+biomass(balef)
+/&quot;biomass&quot;/
+TOTAL(BALEF)
+/&quot;TOTAL&quot;/
+BALEF2EFS(BALEF, EFS) Mapping from balance fuels to model fuels
+/
+&quot;Total&quot;.(HCL,LGN,CRO,LPG,GSL,KRS,GDO,RFO,OLQ,NGS,OGS,NUC,STE,HYD,WND,SOL,BMSWAS,GEO,MET,ETH,H2F,ELC)
+&quot;Solids&quot;.(HCL,LGN)
+&quot;Hard coal&quot;.HCL
+&quot;Lignite&quot;.LGN
+&quot;Crude oil and Feedstocks&quot;.CRO
+&quot;Liquids&quot;.(LPG,GSL,KRS,GDO,RFO,OLQ)
+&quot;Liquified petroleum gas&quot;.LPG
+&quot;Gasoline&quot;.GSL
+&quot;Kerosene&quot;.KRS
+&quot;Diesel oil&quot;.GDO
+&quot;Fuel oil&quot;.RFO
+&quot;Other liquids&quot;.OLQ
+&quot;Gas fuels&quot;.(NGS,OGS)
+&quot;Natural gas&quot;.NGS
+&quot;Derived gases&quot;.OGS
+&quot;Nuclear heat&quot;.NUC
+&quot;Steam&quot;.STE
+&quot;Hydro&quot;.HYD
+&quot;Wind&quot;.WND
+&quot;Solar energy&quot;.SOL
+&quot;Biomass&quot;.BMSWAS
+&quot;Geothermal heat&quot;.GEO
+&quot;Methanol&quot;.MET
+&quot;Hydrogen&quot;.H2F
+&quot;Electricity&quot;.ELC
+/
+alias(TT, ytime);</code></pre>
+<blockquote>
+<p><strong>Limitations</strong> There are no known limitations.</p>
+</blockquote>
+<h2 id="see-also">See Also</h2>
+<p><a href="01_Transport.htm">01_Transport</a>, <a
+href="02_Industry.htm">02_Industry</a>, <a
+href="04_PowerGeneration.htm">04_PowerGeneration</a>, <a
+href="08_Prices.htm">08_Prices</a></p>
+<h2 id="references">References</h2>
+<script>
+window.onscroll = function() {myFunction()};
+
+var navbar = document.getElementById("pagenav");
+var sticky = navbar.offsetTop;
+
+function myFunction() {
+  var currentScrollPos = window.pageYOffset;
+  if (window.pageYOffset >= sticky) {
+    if (prevScrollpos > currentScrollPos) {
+      document.getElementById("pagenav").style.top = "0";
+      document.getElementById("pagenav").style.position = "fixed";
+    } else {
+      document.getElementById("pagenav").style.top = "-50px";
+    }
+  } else {
+      document.getElementById("pagenav").style.position = "static";
+  }
+  prevScrollpos = currentScrollPos;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="generator" content="goxygen" />
+  <meta name="author" content="Fotis Sioutas" />
+  <meta name="author" content="Giannis Tolios" />
+  <meta name="author" content="Giorgos Plessias" />
+  <meta name="author" content="Anastasis Giannousakis" />
+<title>OPEN PROM –  5. Hydrogen module</title>
+<link rel="stylesheet" href="ming/style.css">
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS_CHTML-full"></script>
+<script type="text/x-mathjax-config">
+                    MathJax.Hub.Config({
+                      CommonHTML: { linebreaks: { automatic: true } },
+                      "HTML-CSS": { linebreaks: { automatic: true } },
+                             SVG: { linebreaks: { automatic: true } }
+                    });
+</script>
+</head>
+<body>
+<div class="header">
+      <div class="headerimg"><a href="index.htm"><img id="logo" src="images/logo.png" height="100" alt="model logo" /></a></div>
+    <div class="headertext">
+      <h1 id="mainheadertitle"><a href="https://github.com/e3modelling/OPEN-PROM">OPEN PROM</a></h1>
+      <h3>0.1</h3>
+      <div class="by">created with <a href="https://github.com/pik-piam/goxygen">goxygen</a> 1.4.6</div>
+    </div>
+</div>
+
+<div class="pagenav" id="pagenav">
+    <div class="dropdown">
+   <button class="dropbtn"> 5. Hydrogen module
+     <i class="fa fa-caret-down"></i>
+   </button>
+   <div id="mainnav" class="dropdown-content">
+   <a href='index.htm'>Overview</a>
+   <a href='core.htm'>core</a>
+   <a href='01_Transport.htm'> 1. Transport module</a>
+   <a href='02_Industry.htm'> 2. Industry module</a>
+   <a href='03_RestOfEnergy.htm'> 3. RestOfEnergy module</a>
+   <a href='04_PowerGeneration.htm'> 4. PowerGeneration module</a>
+   <a href='05_Hydrogen.htm'> 5. Hydrogen module</a>
+   <a href='06_CO2.htm'> 6. CO2 module</a>
+   <a href='08_Prices.htm'> 8. Prices module</a>
+   </div>
+  </div>
+  <div class="dropdown">
+   <button class="dropbtn">Contents
+     <i class="fa fa-caret-down"></i>
+   </button>
+   <div class="dropdown-content">
+   <ul>
+   <li><a href="#id-05_Hydrogen" id="toc-id-05_Hydrogen">Hydrogen module
+   (05_Hydrogen)</a>
+   <ul>
+   <li><a href="#description" id="toc-description">Description</a></li>
+   <li><a href="#interfaces" id="toc-interfaces">Interfaces</a>
+   <ul>
+   <li><a href="#input" id="toc-input">Input</a></li>
+   <li><a href="#output" id="toc-output">Output</a></li>
+   </ul></li>
+   <li><a href="#realizations" id="toc-realizations">Realizations</a>
+   <ul>
+   <li><a href="#a-legacy" id="toc-a-legacy">(A) legacy</a></li>
+   </ul></li>
+   <li><a href="#definitions" id="toc-definitions">Definitions</a>
+   <ul>
+   <li><a href="#objects" id="toc-objects">Objects</a></li>
+   <li><a href="#sets" id="toc-sets">Sets</a></li>
+   </ul></li>
+   <li><a href="#see-also" id="toc-see-also">See Also</a></li>
+   <li><a href="#references" id="toc-references">References</a></li>
+   </ul></li>
+   </ul>
+   </div>
+  </div>
+</div>
+
+<h1 id="id-05_Hydrogen">Hydrogen module (05_Hydrogen)</h1>
+<h2 id="description">Description</h2>
+<p>This is the Hydrogen module.</p>
+<h2 id="interfaces">Interfaces</h2>
+<figure>
+<img src="images/interfaces_Hydrogen.png"
+style="width:100.0%;height:50.0%" alt="Interfaces to other modules" />
+<figcaption aria-hidden="true">Interfaces to other modules</figcaption>
+</figure>
+<h3 id="input">Input</h3>
+<table>
+<caption>module inputs (A: legacy)</caption>
+<colgroup>
+<col style="width: 34%" />
+<col style="width: 40%" />
+<col style="width: 20%" />
+<col style="width: 5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"> </th>
+<th style="text-align: center;">Description</th>
+<th style="text-align: center;">Unit</th>
+<th style="text-align: center;">A</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">VMVCstCO2SeqCsts<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Cost curve for CO2 sequestration
+costs</td>
+<td style="text-align: center;"><span class="math inline">\(US\$2015/tn
+of CO2 sequestrated\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VMVPriceFuelSubsecCarVal<br />
+(allCy, SBS, EF, YTIME)</td>
+<td style="text-align: center;">Fuel prices per subsector and fuel</td>
+<td style="text-align: center;"><span
+class="math inline">\(k\$2015/toe\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+</tbody>
+</table>
+<h3 id="output">Output</h3>
+<table style="width:87%;">
+<caption>module outputs</caption>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 44%" />
+<col style="width: 9%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"> </th>
+<th style="text-align: center;">Description</th>
+<th style="text-align: center;">Unit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">VMVConsFuelTechH2Prod<br />
+(allCy, H2TECH, EF, YTIME)</td>
+<td style="text-align: center;">Fuel consumption by hydrogen production
+technology in Mtoe</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VMVDemTotH2<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Hydrogen production requirement in Mtoe
+for meeting final demand</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VMVProdH2<br />
+(allCy, H2TECH, YTIME)</td>
+<td style="text-align: center;">Hydrogen Production by technology in
+Mtoe</td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="realizations">Realizations</h2>
+<h3 id="a-legacy">(A) legacy</h3>
+<p>This is the legacy realization of the Hydrogen module.</p>
+<pre><code>sets
+H2TECH &quot;Hydrogen production technologies&quot;
+/
+gsr   &quot;gas steam reforming&quot;
+gss   &quot;gas steam reforming with CCS&quot;
+weg   &quot;water electrolysis from grid power&quot;
+bgfl  &quot;biomass gasification large scale&quot;
+bgfls &quot;biomass gasification large scale with CCS&quot;
+/
+INFRTECH                  &quot;Hydrogen storage and distribution technologies&quot;
+/
+tpipa &quot;turnpike pipeline used also as a storage medium&quot;
+hpipi &quot;high pressure for industry&quot;
+hpipu &quot;high pressure for urban&quot;
+mpipu &quot;medium pressure for urban&quot;
+lpipu &quot;low pressure for urban&quot;
+mpips &quot;medium pressure for service stations of length of 2km&quot;
+ssgg  &quot;service stations gaseous H2&quot;
+/
+PIPES(INFRTECH)            &quot;Pipelines&quot;
+/
+tpipa &quot;turnpike pipeline used also as a storage medium&quot;
+hpipi &quot;high pressure for industry&quot;
+hpipu &quot;high pressure for urban&quot;
+mpipu &quot;medium pressure for urban&quot;
+lpipu &quot;low pressure for urban&quot;
+mpips &quot;medium pressure for service stations&quot;
+/
+H2STATIONS(INFRTECH)       &quot;Service stations for hydrogen powered cars&quot;
+/
+ssgg &quot;service stations gas&quot;
+/
+INFRTECHtoEF(INFRTECH,EF)  &quot;Type of energy consumed onsite for the operation of the infrastructure technology&quot;
+/
+hpipu.h2f
+ssgg.elc
+/
+H2NETWORK(INFRTECH,INFRTECH)
+/
+TPIPA.(HPIPI,HPIPU)
+HPIPU.MPIPU
+MPIPU.(MPIPS,LPIPU)
+MPIPS.SSGG
+/
+H2EFFLOOP(INFRTECH)
+/
+HPIPI
+HPIPU
+MPIPU
+MPIPS
+LPIPU
+SSGG
+/
+H2SBS(SBS)               &quot;Final demand sectors consuming hydrogen for energy purposes&quot;
+/
+PG
+IS
+NF
+BM
+CH
+PP
+EN
+TX
+FD
+OE
+OI
+SE
+AG
+HOU
+PC
+GU
+PA
+PT
+GT
+/
+H2INFRSBS(INFRTECH,SBS)  &quot;Infrustructure required by demand sector&quot;
+/
+TPIPA.(PG,IS,NF,BM,CH,PP,EN,TX,FD,OE,OI,SE,AG,HOU,PC,GU,PA,PT,GT)
+LPIPU.(SE,AG,HOU)
+(SSGG,MPIPS).(PC,GU,PA,PT,GT)
+(MPIPU,HPIPU).(SE,AG,HOU,PC,GU,PA,PT,GT)
+HPIPI.(PG,IS,NF,BM,CH,PP,EN,TX,FD,OE,OI)
+/
+H2INFRDNODES(INFRTECH)
+/
+HPIPI
+LPIPU
+SSGG
+/
+H2TECHEFtoEF(H2TECH,EF) &quot;Mapping between production technologies and fuels&quot;
+/
+(gsr,gss).ngs !! ,smr
+(bgfls,bgfl).BMSWAS !! bpy,bgfs,
+weg.ELC
+/
+H2PRODEF(EF)               &quot;Fuels used for hydrogen production&quot;
+/
+ngs
+hcl
+bmswas
+sol
+nuc
+elc
+wnd
+rfo
+/
+$ontext
+H2TECHREN(H2TECH)          &quot;Renewable hydrogen production technologies&quot;
+/
+sht
+wew
+/
+$offtext
+H2CCS(H2TECH)              &quot;Hydrogen production technologies equipped with CCS facility&quot;
+/
+gss   &quot;gas steam reforming with CCS&quot;
+bgfls &quot;biomass gasification large scale with CCS&quot;
+/
+H2NOCCS(H2TECH)            &quot;Hydrogen production technologies without CCS but with corresponding option with CCS&quot;
+/
+gsr
+bgfl
+/
+H2CCS_NOCCS(H2TECH,H2TECH) &quot;Mapping between hydrogen technologies with and without CCS facility&quot;
+/
+gss.gsr
+bgfls.bgfl
+/
+H2TECHPM(H2TECH)           &quot;Technologies for which premature replacement is active&quot;
+/
+gsr
+/
+ARELAST                    &quot;Set containing the names of the elasticities used in area covered by H2 logistic fucntion&quot;
+/
+B        &quot;parameter controlling the speed to the transition to hydrogen economy&quot;
+mid      &quot;mid point after which the hydrogen economy is taking off&quot;
+/
+ECONCHARHY                 &quot;Technical - Economic characteristics for demand technologies Hydrogen&quot;
+/
+IC
+FC
+VC
+EFF
+SELF
+AVAIL
+LFT
+H2KMTOE
+mpips
+lpipu
+mpipu
+AREA
+MAXAREA
+B
+mid
+CR
+/
+INFRTECHLAB(INFRTECH,ECONCHARHY)
+/
+mpips.mpips
+lpipu.lpipu
+mpipu.mpipu
+/
+ALIAS (H2TECH2,H2TECH);
+ALIAS (INFRTECH3,INFRTECH2, INFRTECH);</code></pre>
+<pre><code>Variables
+VGapShareH2Tech1(allCy, H2TECH, YTIME)          &quot;Shares of H2 production technologies in new market competition 1&quot;
+VGapShareH2Tech2(allCy, H2TECH, YTIME)          &quot;Shares of H2 production technologies in new market competition 2&quot;
+VCapScrapH2ProdTech(allCy, H2TECH, YTIME)       &quot;Decommissioning of capacity by H2 production technology&quot;
+VPremRepH2Prod(allCy, H2TECH, YTIME)            &quot;Premature replacement of H2 production technologies&quot;
+VScrapLftH2Prod(allCy, H2TECH, YTIME)           &quot;Scrapping of equipment due to lifetime (normal scrapping)&quot;
+VDemGapH2(allCy, YTIME)                         &quot;Demand for H2 to be covered by new equipment in mtoe&quot;
+VCostProdH2Tech(allCy, H2TECH, YTIME)           &quot;Hydrogen production cost per technology in Euro per toe of hydrogen&quot;
+VCostVarProdH2Tech(allCy, H2TECH, YTIME)        &quot;Variable cost (including fuel cost) for hydrogen production by technology in Euro per toe&quot;
+VShareCCSH2Prod(allCy, H2TECH, YTIME)           &quot;Share of CCS technology in the decision tree between CCS and no CCS&quot;
+VShareNoCCSH2Prod(allCy, H2TECH, YTIME)         &quot;Share of technology without CCS in the decision tree between CCS and no CCS&quot;
+VAcceptCCSH2Tech(allCy, YTIME)                  &quot;Acceptance of investment in CCS technologies&quot;
+VConsFuelH2Prod(allCy, EF, YTIME)               &quot;Total fuel consumption for hydrogen production in Mtoe&quot;
+VCostProdCCSNoCCSH2Prod(allCy, H2TECH, YTIME)   &quot;Production cost of the composite technology with and without CCS in Euro per toe&quot;
+VCostAvgProdH2(allCy, YTIME)                    &quot;Average production cost of hydrogen in Euro per toe&quot;</code></pre>
+<p><strong>Infrastructure Variables</strong></p>
+<pre><code>VH2InfrArea(allCy, YTIME)                       &quot;Number of stylised areas covered by H2 infrastructure&quot;
+VDelivH2InfrTech(allCy, INFRTECH, YTIME)        &quot;Hydrogen delivered by infrastructure technology in Mtoe&quot;
+VInvNewReqH2Infra(allCy, INFRTECH, YTIME)       &quot;New infrastructure requirements in Mtoe of delivered hydrogen&quot;
+VH2Pipe(allCy, INFRTECH, YTIME)                 &quot;Required capacity to meet the new infrastructure requirements&quot;
+                                                    !! - km of pipelines
+                                                    !! - number of service stations
+VCostInvTechH2Infr(allCy, INFRTECH, YTIME)      &quot;Investment cost of infrastructure by technology in Million Euros (MEuro) for meeting the new infrastructure requirements&quot;
+VCostInvCummH2Transp(allCy, INFRTECH, YTIME)    &quot;Average cost of infrastructure Euro per toe&quot;
+VCostTechH2Infr(allCy, INFRTECH, YTIME)         &quot;Marginal cost by infrastructure technology in Euro&quot;
+VTariffH2Infr(allCy, INFRTECH, YTIME)           &quot;Tarrif paid by the final consumer for using the specific infrastructure technology in Euro per toe annual&quot;
+VPriceH2Infr(allCy, SBS, YTIME)                 &quot;Hydrogen distribution and storage price paid by final consumer in Euro per toe annual&quot;
+VCostTotH2(allCy, SBS, YTIME)                   &quot;Total Hydrogen Cost Per Sector in Euro per toe&quot;</code></pre>
+<p>*** Miscellaneous</p>
+<pre><code>VDemSecH2(allCy, SBS, YTIME)                    &quot;Demand for H2 by sector in mtoe&quot;</code></pre>
+<p><strong>Interdependent Variables</strong></p>
+<pre><code>VMVDemTotH2(allCy, YTIME)                       &quot;Hydrogen production requirement in Mtoe for meeting final demand&quot;
+VMVProdH2(allCy, H2TECH, YTIME)                 &quot;Hydrogen Production by technology in Mtoe&quot;
+VMVConsFuelTechH2Prod(allCy, H2TECH, EF, YTIME) &quot;Fuel consumption by hydrogen production technology in Mtoe&quot;
+;
+Equations
+QGapShareH2Tech1(allCy, H2TECH, YTIME)          &quot;Equation for calculating the shares of technologies in hydrogen gap using Weibull equations 1&quot;
+QGapShareH2Tech2(allCy, H2TECH, YTIME)          &quot;Equation for calculating the shares of technologies in hydrogen gap using Weibull equations 2&quot;
+QCapScrapH2ProdTech(allCy, H2TECH, YTIME)       &quot;Equation for decommissioning of capacity by H2 production technology&quot;
+QPremRepH2Prod(allCy, H2TECH, YTIME)            &quot;Equation for premature replacement of H2 production technologies&quot;
+QScrapLftH2Prod(allCy, H2TECH, YTIME)           &quot;Equation for scrapping of equipment due to lifetime (normal scrapping)&quot;
+QDemGapH2(allCy, YTIME)                         &quot;Equation for gap in hydrogen demand&quot;
+QCostProdH2Tech(allCy, H2TECH, YTIME)           &quot;Equation for hydrogen production cost per technology&quot;
+QCostVarProdH2Tech(allCy, H2TECH, YTIME)        &quot;Equation for variable cost (including fuel cost) for hydrogen production by technology in Euro per toe&quot;
+QShareCCSH2Prod(allCy, H2TECH, YTIME)           &quot;Equation for share of CCS technology in the decision tree between CCS and no CCS&quot;
+QShareNoCCSH2Prod(allCy, H2TECH, YTIME)         &quot;Equation for share of technology without CCS in the decision tree between CCS and no CCS&quot;
+QAcceptCCSH2Tech(allCy, YTIME)                  &quot;Equation for acceptance in CCS technologies&quot;
+QConsFuelH2Prod(allCy, EF, YTIME)               &quot;Equation for total fuel consumption for hydrogen production&quot;
+QCostProdCCSNoCCSH2Prod(allCy, H2TECH, YTIME)   &quot;Equation for calculating the production cost of the composite technology with and without CCS&quot;
+QCostAvgProdH2(allCy, YTIME)                    &quot;Equation for average production cost of hydrogen in Euro per toe&quot;</code></pre>
+<p><strong>Infrastructure Equations</strong></p>
+<pre><code>QH2InfrArea(allCy, YTIME)                       &quot;Equation for infrastructure area&quot;
+QDelivH2InfrTech(allCy, INFRTECH, YTIME)        &quot;Equation for hydrogen delivered by infrastructure technology in Mtoe&quot;
+QInvNewReqH2Infra(allCy, INFRTECH, YTIME)       &quot;Equation for calculating the new requirements in infrastructure in Mtoe&quot;
+QH2Pipe(allCy, INFRTECH, YTIME)                 &quot;Equation for km per pipeline&quot;
+QCostInvTechH2Infr(allCy, INFRTECH, YTIME)      &quot;Equation for infrastructure investment cost in Euro by technology&quot;
+QCostInvCummH2Transp(allCy, INFRTECH, YTIME)    &quot;Equation for cumulative investment cost by infrastructure technology&quot;
+QCostTechH2Infr(allCy, INFRTECH, YTIME)         &quot;Equation for marginal cost by infrastructure technology in Euro&quot;
+QTariffH2Infr(allCy, INFRTECH, YTIME)           &quot;Equation for calculating the tariff paid by the final consumer for using the specific infrastructure technology&quot;
+QPriceH2Infr(allCy, SBS, YTIME)                 &quot;Equation for calulcating the hydrogen storage and distribution price by final consumer&quot;
+QCostTotH2(allCy, SBS, YTIME)                   &quot;Equation of total hydrogen cost Per Sector&quot;</code></pre>
+<p>*** Miscellaneous <strong>Interdependent Equations</strong></p>
+<pre><code>Q05DemTotH2(allCy, YTIME)                        &quot;Equation for total hydrogen demand in a country in Mtoe&quot;
+Q05ProdH2(allCy, H2TECH, YTIME)                  &quot;Equation for H2 production by technology&quot;
+Q05ConsFuelTechH2Prod(allCy, H2TECH, EF, YTIME)  &quot;Equation for fuel consumption by technology for hydrogen production&quot;
+;
+Scalars
+sAreaStyle                                     &quot;stylised area in km2&quot; /3025/
+sSalesH2Station                                &quot;annual sales of a hydrogen service station in ktoe&quot; /2.26/
+sLenH2StationConn                              &quot;length of pipes connection service stations with the ring in km per station&quot; /2/
+sDelivH2Turnpike                               &quot;stylised annual hydrogen delivery in turnpike pipeline in ktoe&quot; /275/
+;</code></pre>
+<p>This equation calculates the total hydrogen demand in the system. It
+takes into account the overall need for hydrogen across sectors like
+transportation, industry, and power generation, adjusted for any
+transportation losses or distribution inefficiencies.</p>
+<pre><code>Q05DemTotH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VMVDemTotH2(allCy,YTIME)
+                 =E=
+         sum(SBS$H2SBS(SBS), VDemSecH2(allCy,SBS, YTIME)/
+         prod(INFRTECH$H2INFRSBS(INFRTECH,SBS) , iEffH2Transp(allCy,INFRTECH,YTIME)*(1-iConsSelfH2Transp(allCy,INFRTECH,YTIME))))  !! increase the demand due to transportation losses
+;</code></pre>
+<p>This equation defines the amount of hydrogen production capacity that
+is scrapped due to the expiration of the useful life of plants. It
+considers the remaining lifetime of hydrogen production facilities and
+the impact of past production gaps.</p>
+<pre><code>QScrapLftH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+        VScrapLftH2Prod(allCy,H2TECH,YTIME)
+         =E=
+         (
+         VGapShareH2Tech1(allCy,H2TECH,YTIME-iProdLftH2(H2TECH,YTIME))*VDemGapH2(allCy,YTIME-iProdLftH2(H2TECH,YTIME))
+         /VMVProdH2(allCy,H2TECH,YTIME-1)
+         )$(ord(YTIME)&gt;17+iProdLftH2(H2TECH,YTIME)) + 0.1
+;</code></pre>
+<p>This equation models the premature replacement of hydrogen production
+capacity. It adjusts for the need to replace aging or inefficient
+hydrogen production technologies before their expected end of life based
+on economic factors such as cost, technological progress, and demand
+shifts.</p>
+<pre><code>QPremRepH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VPremRepH2Prod(allCy,H2TECH,YTIME)
+         =E=
+         1-
+         (
+          VCostVarProdH2Tech(allCy,H2TECH,YTIME)**(-iWBLGammaH2Prod(allCy,YTIME))
+         /
+         (
+           (sum(H2TECH2,
+                         VGapShareH2Tech1(allCy,H2TECH2,YTIME)*(1/iAvailH2Prod(H2TECH,YTIME)*VCostProdH2Tech(allCy,H2TECH2,YTIME)
+                                                         +(1-1/iAvailH2Prod(H2TECH,YTIME))*VCostVarProdH2Tech(allCy,H2TECH2,YTIME)))
+                        -VGapShareH2Tech1(allCy,H2TECH,YTIME)*(1/iAvailH2Prod(H2TECH,YTIME)*VCostProdH2Tech(allCy,H2TECH,YTIME)
+                                                        +(1-1/iAvailH2Prod(H2TECH,YTIME))*VCostVarProdH2Tech(allCy,H2TECH,YTIME))
+           )**(-iWBLGammaH2Prod(allCy,YTIME))
+           +VCostVarProdH2Tech(allCy,H2TECH,YTIME)**(-iWBLGammaH2Prod(allCy,YTIME))
+         )
+         )$H2TECHPM(H2TECH)
+;</code></pre>
+<p>This equation calculates the total hydrogen production capacity that
+is scrapped as part of the premature replacement and normal plant life
+cycle. It links the scrapped capacity to the overall age distribution
+and retirement schedule of hydrogen production technologies.</p>
+<pre><code>QCapScrapH2ProdTech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VCapScrapH2ProdTech(allCy,H2TECH,YTIME)
+         =E=
+         1-(1-VScrapLftH2Prod(allCy,H2TECH,YTIME))*(1-VPremRepH2Prod(allCy,H2TECH,YTIME))
+;</code></pre>
+<p>The hydrogen demand gap equation defines the difference between the
+total hydrogen demand (calculated in Q05DemTotH2) and the actual
+hydrogen production capacity. It ensures that the gap value is
+non-negative, preventing overproduction or underproduction of
+hydrogen.</p>
+<pre><code>QDemGapH2(allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VDemGapH2(allCy, YTIME)
+                 =E=
+         ( VMVDemTotH2(allCy,YTIME) - sum(H2TECH,(1-VCapScrapH2ProdTech(allCy,H2TECH,YTIME))*VMVProdH2(allCy,H2TECH,YTIME-1))
+          + 0 +
+         SQRT( SQR(VMVDemTotH2(allCy,YTIME) - sum(H2TECH,(1-VCapScrapH2ProdTech(allCy,H2TECH,YTIME))*VMVProdH2(allCy,H2TECH,YTIME-1))-0) + SQR(1E-4) )
+         )/2
+;</code></pre>
+<p>This equation calculates the production costs of hydrogen, including
+both fixed costs (e.g., capital investment) and variable costs (e.g.,
+operational expenses). The costs are typically differentiated by
+hydrogen production technologies such as electrolysis, steam methane
+reforming (SMR), or coal gasification.</p>
+<pre><code>QCostProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VCostProdH2Tech(allCy,H2TECH,YTIME)
+         =E=
+         (iDisc(allCy,&quot;H2P&quot;,YTIME)*exp(iDisc(allCy,&quot;H2P&quot;,YTIME)* iProdLftH2(H2TECH,YTIME))/(exp(iDisc(allCy,&quot;H2P&quot;,YTIME)*iProdLftH2(H2TECH,YTIME))-1)*
+         iCostCapH2Prod(allCy,H2TECH,YTIME)+iCostFOMH2Prod(allCy,H2TECH,YTIME))/257/365*1000000/iAvailH2Prod(H2TECH,YTIME) +
+         iCostVOMH2Prod(allCy,H2TECH,YTIME) + VCostVarProdH2Tech(allCy,H2TECH,YTIME)
+;</code></pre>
+<p>This equation models the variable costs associated with hydrogen
+production, factoring in fuel prices (e.g., electricity or natural gas),
+CO₂ emission costs, and the efficiency of the production technology.
+This helps to understand the fluctuating costs based on market
+conditions.</p>
+<pre><code>QCostVarProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VCostVarProdH2Tech(allCy,H2TECH,YTIME)
+         =E=
+         sum(EF$H2TECHEFtoEF(H2TECH,EF), (VMVPriceFuelSubsecCarVal(allCy,&quot;H2P&quot;,EF,YTIME)*1e3+
+            iCaptRateH2Prod(allCy,H2TECH,YTIME)*iCo2EmiFac(allCy,&quot;H2P&quot;,EF,YTIME)*VMVCstCO2SeqCsts(allCy,YTIME)+
+            (1-iCaptRateH2Prod(allCy,H2TECH,YTIME))*iCo2EmiFac(allCy,&quot;H2P&quot;,EF,YTIME)*
+            (sum(NAP$NAPtoALLSBS(NAP,&quot;H2P&quot;),VCarVal(allCy,NAP,YTIME))))
+            /iEffH2Prod(allCy,H2TECH,YTIME)
+            )!!$(not H2TECHREN(H2TECH))
+;</code></pre>
+<p>This equation models the acceptance of carbon capture and storage
+(CCS) technologies in hydrogen production. It evaluates the economic
+feasibility of adding CCS to the hydrogen production process,
+considering cost, environmental policies, and technology readiness.</p>
+<pre><code>QAcceptCCSH2Tech(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VAcceptCCSH2Tech(allCy,YTIME)
+         =E=
+         iWBLGammaH2Prod(allCy,YTIME)*5+25*EXP(-0.06*((sum(NAP$NAPtoALLSBS(NAP,&quot;H2P&quot;),VCarVal(allCy,NAP,YTIME -1)))))
+;</code></pre>
+<p>This equation determines the share of hydrogen produced using CCS
+technologies compared to those produced without CCS. The share is
+calculated based on relative costs, technological feasibility, and
+policy incentives supporting CCS.</p>
+<pre><code>QShareCCSH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME) $H2CCS(H2TECH) $(runCy(allCy)))..
+         VShareCCSH2Prod(allCy,H2TECH,YTIME)
+         =E=
+                 1.5  *
+                 VCostProdH2Tech(allCy,H2TECH,YTIME)**(-VAcceptCCSH2Tech(allCy,YTIME)) /
+         (
+                 1.5  *
+                 VCostProdH2Tech(allCy,H2TECH,YTIME)**(-VAcceptCCSH2Tech(allCy,YTIME)) +
+                 sum(H2TECH2$H2CCS_NOCCS(H2TECH,H2TECH2),
+                 1  *
+                 VCostProdH2Tech(allCy,H2TECH2,YTIME)**(-VAcceptCCSH2Tech(allCy,YTIME)))
+         )
+;</code></pre>
+<p>Similar to QShareCCSH2Prod, this equation models the share of
+hydrogen produced without CCS technologies. It calculates the proportion
+of production from non-CCS methods like electrolysis or SMR without CO₂
+capture.</p>
+<pre><code>QShareNoCCSH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME) $H2NOCCS(H2TECH) $(runCy(allCy)))..
+         VShareNoCCSH2Prod(allCy,H2TECH,YTIME)
+         =E=
+         1 - sum(H2TECH2$H2CCS_NOCCS(H2TECH2,H2TECH)  , VShareCCSH2Prod(allCy,H2TECH2,YTIME) )
+;</code></pre>
+<p>This equation computes the weighted average production cost of
+hydrogen, incorporating both CCS and non-CCS production methods. It
+provides an overall cost perspective, helping to assess which production
+methods dominate the market based on cost-efficiency.</p>
+<pre><code>QCostProdCCSNoCCSH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME) $H2NOCCS(H2TECH) $(runCy(allCy))) ..
+         VCostProdCCSNoCCSH2Prod(allCy,H2TECH,YTIME)
+         =E=
+         VShareNoCCSH2Prod(allCy,H2TECH,YTIME)*VCostProdH2Tech(allCy,H2TECH,YTIME)+
+         sum(H2CCS$H2CCS_NOCCS(H2CCS,H2TECH), VShareCCSH2Prod(allCy,H2CCS,YTIME)*VCostProdH2Tech(allCy,H2CCS,YTIME))
+;</code></pre>
+<p>This equation calculates the market share of different hydrogen
+production technologies, considering factors like cost competitiveness,
+policy support, and fuel availability. It adjusts market shares based on
+technological performance and shifting cost dynamics.</p>
+<pre><code>QGapShareH2Tech2(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+        VGapShareH2Tech2(allCy,H2TECH,YTIME)
+             =E=
+         (
+         (VCostProdH2Tech(allCy,H2TECH,YTIME)$(not H2NOCCS(H2TECH)) + VCostProdCCSNoCCSH2Prod(allCy,H2TECH,YTIME)$H2NOCCS(H2TECH))**(-iWBLGammaH2Prod(allCy,YTIME))
+         /
+         sum(H2TECH2$(not H2CCS(H2TECH2)) ,
+         (VCostProdH2Tech(allCy,H2TECH2,YTIME)$(not H2NOCCS(H2TECH2)) + VCostProdCCSNoCCSH2Prod(allCy,H2TECH2,YTIME)$H2NOCCS(H2TECH2))**(-iWBLGammaH2Prod(allCy,YTIME)))
+         )$(not H2CCS(H2TECH))
+         +
+         sum(H2NOCCS$H2CCS_NOCCS(H2TECH,H2NOCCS), VGapShareH2Tech2(allCy,H2NOCCS,YTIME))$H2CCS(H2TECH)
+;</code></pre>
+<p>This equation further adjusts the market share of hydrogen
+technologies, particularly considering the relative competitiveness
+between CCS and non-CCS technologies. It helps to model the transition
+between different production technologies over time.</p>
+<pre><code>QGapShareH2Tech1(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+        VGapShareH2Tech1(allCy,H2TECH,YTIME)
+         =E=
+         (VGapShareH2Tech2(allCy,H2TECH,YTIME)$((not H2CCS(H2TECH)) $(not H2NOCCS(H2TECH)))
+          +
+         VGapShareH2Tech2(allCy,H2TECH,YTIME)*(VShareCCSH2Prod(allCy,H2TECH,YTIME)$H2CCS(H2TECH) +  VShareNoCCSH2Prod(allCy,H2TECH,YTIME)$H2NOCCS(H2TECH))
+         )
+;</code></pre>
+<p>This equation defines the actual hydrogen production levels,
+considering both scrapped capacity and the demand gap. It allocates
+production from different technologies to meet the overall demand,
+adjusting for changes in capacity and technology availability.</p>
+<pre><code>Q05ProdH2(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VMVProdH2(allCy,H2TECH,YTIME)
+         =E=
+         0.0001+(1-VCapScrapH2ProdTech(allCy,H2TECH,YTIME))*VMVProdH2(allCy,H2TECH,YTIME-1)+ VGapShareH2Tech1(allCy,H2TECH,YTIME)*VDemGapH2(allCy,YTIME)
+;</code></pre>
+<p>This equation calculates the average cost of hydrogen production
+across all technologies in the system. It accounts for varying costs of
+different technologies (e.g., electrolysis vs. SMR) to provide an
+overall assessment of hydrogen production cost.</p>
+<pre><code>QCostAvgProdH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VCostAvgProdH2(allCy,YTIME)
+         =E=
+         sum(H2TECH, VMVProdH2(allCy,H2TECH,YTIME)*VCostProdH2Tech(allCy,H2TECH,YTIME))/sum(H2TECH,VMVProdH2(allCy,H2TECH,YTIME))
+;</code></pre>
+<p>This equation calculates the fuel consumption for each hydrogen
+production technology, considering the efficiency of the technology and
+the amount of fuel required for producing a unit of hydrogen. It
+provides insight into fuel demand for hydrogen production.</p>
+<pre><code>Q05ConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)$(TIME(YTIME) $H2TECHEFtoEF(H2TECH,EF) $(runCy(allCy)))..
+         VMVConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)
+         =E=
+         (VMVProdH2(allCy,H2TECH,YTIME)/iEffH2Prod(allCy,H2TECH,YTIME))$(sameas(YTIME,&quot;%fBaseY%&quot;))
+         +
+         (
+         VMVConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME-1)*
+         (VMVProdH2(allCy,H2TECH,YTIME)/iEffH2Prod(allCy,H2TECH,YTIME))/
+         (VMVProdH2(allCy,H2TECH,YTIME-1)/iEffH2Prod(allCy,H2TECH,YTIME-1))
+         )$(not sameas(YTIME,&quot;%fBaseY%&quot;))
+;</code></pre>
+<p>This equation aggregates the total fuel consumption across all
+hydrogen production technologies in the system, summing up the fuel
+requirements from all sources. It helps track the total fuel demand for
+hydrogen production.</p>
+<pre><code>QConsFuelH2Prod(allCy,EF,YTIME)$(TIME(YTIME) $H2PRODEF(EF) $(runCy(allCy)))..
+         VConsFuelH2Prod(allCy,EF,YTIME)
+         =E=
+         sum(H2TECH$H2TECHEFtoEF(H2TECH,EF),VMVConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME))
+;
+!!
+!!                               B. Hydrogen Infrustructure
+!!</code></pre>
+<p>This equation models the expansion of hydrogen infrastructure (e.g.,
+pipelines, storage facilities) needed to support growing demand. It
+takes into account the projected growth in hydrogen production and
+distribution, ensuring that infrastructure expansion aligns with demand
+forecasts.</p>
+<pre><code>QH2InfrArea(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VH2InfrArea(allCy,YTIME)
+         =E=
+         0.001+iPolH2AreaMax(allCy)/(1 + exp( -iH2Adopt(allCy,&quot;B&quot;,YTIME)*( VMVDemTotH2(allCy,YTIME)/(iHabAreaCountry(allCy)/sAreaStyle*0.275)- iH2Adopt(allCy,&quot;MID&quot;,YTIME))))
+;</code></pre>
+<p>This equation represents the delivery or throughput capacity of
+hydrogen infrastructure technologies. It calculates the total amount of
+hydrogen that can be delivered through the infrastructure, considering
+factors such as efficiency and technological limits of the
+infrastructure components (e.g., pipelines, storage, etc.).</p>
+<pre><code>QDelivH2InfrTech(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+        VDelivH2InfrTech(allCy,INFRTECH,YTIME)
+         =E=
+         (
+         (    sum(SBS$(H2INFRSBS(INFRTECH,SBS) $SECTTECH(SBS,&quot;H2F&quot;)), VDemSecH2(allCy,SBS, YTIME))/
+            (iEffH2Transp(allCy,INFRTECH,YTIME)*(1-iConsSelfH2Transp(allCy,INFRTECH,YTIME))) )$H2INFRDNODES(INFRTECH)  !! for final demand nodes
+         +
+         sum(INFRTECH2$H2NETWORK(INFRTECH,INFRTECH2), VDelivH2InfrTech(allCy,INFRTECH2,YTIME)/(iEffH2Transp(allCy,INFRTECH,YTIME)*(1-iConsSelfH2Transp(allCy,INFRTECH,YTIME))))$(not H2INFRDNODES(INFRTECH))
+         )$iPolH2AreaMax(allCy)
+         +1e-7
+;</code></pre>
+<p>This equation determines the required new investment in hydrogen
+infrastructure to meet the demand or capacity requirements. It
+calculates the amount of investment needed to develop or upgrade the
+infrastructure technologies (like production, storage, and transport) to
+support future hydrogen use or capacity expansion.</p>
+<pre><code>QInvNewReqH2Infra(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VInvNewReqH2Infra(allCy,INFRTECH,YTIME)
+         =E=
+         ( VDelivH2InfrTech(allCy,INFRTECH,YTIME)-VDelivH2InfrTech(allCy,INFRTECH,YTIME-1)
+          + 0 + 
+          SQRT( SQR(VDelivH2InfrTech(allCy,INFRTECH,YTIME)-VDelivH2InfrTech(allCy,INFRTECH,YTIME-1)+0) + SQR(1e-4) ) )/2
+;</code></pre>
+<p>This equation focuses on the hydrogen transport capacity through
+pipelines. It calculates the amount of hydrogen that can be transported
+through the hydrogen pipeline system, considering factors such as pipe
+size, pressure, flow rate, and distance.</p>
+<pre><code>QH2Pipe(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VH2Pipe(allCy,INFRTECH,YTIME)
+         =E=
+         (55*VInvNewReqH2Infra(allCy,INFRTECH,YTIME)/(1e-3*sDelivH2Turnpike))$sameas(&quot;TPIPA&quot;,INFRTECH)  !! turnpike pipeline km
+         +
+         (iPipeH2Transp(INFRTECH,YTIME)*1e6*VInvNewReqH2Infra(allCy,INFRTECH,YTIME))$(sameas(&quot;LPIPU&quot;,INFRTECH) or sameas(&quot;HPIPI&quot;,INFRTECH)) !!Low pressure urban pipelines km and industrial pipelines km
+         +
+         (sLenH2StationConn*VCostInvTechH2Infr(allCy,&quot;SSGG&quot;,YTIME))$sameas(&quot;MPIPS&quot;,INFRTECH)   !! Pipelines connecting hydrogen service stations with the ring km
+         +
+         (sum(INFRTECH2$H2NETWORK(INFRTECH,INFRTECH2),VCostInvTechH2Infr(allCy,INFRTECH2,YTIME)*iKmFactH2Transp(allCy,INFRTECH2)))$(sameas(&quot;MPIPU&quot;,INFRTECH)  or sameas(&quot;HPIPU&quot;,INFRTECH)) !! Ring pipeline in km and high pressure pipelines km
+         +
+         (VInvNewReqH2Infra(allCy,INFRTECH,YTIME)/sSalesH2Station*1E3)$sameas(&quot;SSGG&quot;,INFRTECH)   !! Number of new service stations to be built to meet the demand
+;</code></pre>
+<p>This equation calculates the cost of investment in hydrogen
+infrastructure technologies. It includes the costs associated with
+deploying new infrastructure, such as the capital expenses required for
+construction, material procurement, and installation of technologies
+related to hydrogen production, storage, and distribution.</p>
+<pre><code>QCostInvTechH2Infr(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VCostInvTechH2Infr(allCy,INFRTECH,YTIME)
+         =E=
+         1e-6*(iCostInvH2Transp(allCy,INFRTECH,YTIME)/VH2InfrArea(allCy,YTIME)*VCostInvTechH2Infr(allCy,INFRTECH,YTIME))$(sameas(&quot;TPIPA&quot;,INFRTECH))
+         +
+         1e-6*(iCostInvH2Transp(allCy,INFRTECH,YTIME)/VH2InfrArea(allCy,YTIME)*VCostInvTechH2Infr(allCy,INFRTECH,YTIME))$(PIPES(INFRTECH) $(not sameas(&quot;TPIPA&quot;,INFRTECH)))
+         +
+         (iCostInvH2Transp(allCy,INFRTECH,YTIME)*VInvNewReqH2Infra(allCy,INFRTECH,YTIME))$(sameas(&quot;SSGG&quot;,INFRTECH)) !!Service stations investment cost
+;</code></pre>
+<p>This equation represents the cost of the hydrogen infrastructure
+technologies themselves, possibly including both capital and operational
+costs. It may consider costs for specific technologies used in hydrogen
+systems (e.g., electrolyzers, compressors, storage tanks, etc.) and
+their maintenance.</p>
+<pre><code>QCostTechH2Infr(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VCostTechH2Infr(allCy,INFRTECH,YTIME)
+         =E=
+         ((iDisc(allCy,&quot;H2INFR&quot;,YTIME)*exp(iDisc(allCy,&quot;H2INFR&quot;,YTIME)* iTranspLftH2(INFRTECH,YTIME))/(exp(iDisc(allCy,&quot;H2INFR&quot;,YTIME)* iTranspLftH2(INFRTECH,YTIME))-1))
+         *
+         VCostInvCummH2Transp(allCy,INFRTECH,YTIME)*(1+iCostInvFOMH2(INFRTECH,YTIME)))/iAvailRateH2Transp(INFRTECH,YTIME) + iCostInvVOMH2(INFRTECH,YTIME)
+         *
+         (iDisc(allCy,&quot;H2INFR&quot;,YTIME)*exp(iDisc(allCy,&quot;H2INFR&quot;,YTIME)* iTranspLftH2(INFRTECH,YTIME))/(exp(iDisc(allCy,&quot;H2INFR&quot;,YTIME)* iTranspLftH2(INFRTECH,YTIME))-1))*
+         VCostInvCummH2Transp(allCy,INFRTECH,YTIME)
+         +
+         (
+            iConsSelfH2Transp(allCy,INFRTECH,YTIME)*VInvNewReqH2Infra(allCy,INFRTECH,YTIME)*
+            (VCostAvgProdH2(allCy,YTIME-1)$sameas(&quot;HPIPU&quot;,INFRTECH)+
+            VMVPriceFuelSubsecCarVal(allCy,&quot;OI&quot;,&quot;ELC&quot;,YTIME-1)*1e3)$sameas(&quot;SSGG&quot;,INFRTECH)
+         )$(sameas(&quot;SSGG&quot;,INFRTECH) or sameas(&quot;HPIPU&quot;,INFRTECH))
+         /VInvNewReqH2Infra(allCy,INFRTECH,YTIME)
+;</code></pre>
+<p>This equation calculates the cumulative costs of investments in
+hydrogen transportation infrastructure over time. It tracks the total
+cost accumulated as new transportation infrastructure (such as
+pipelines, compressors, and distribution networks) is installed to meet
+demand.</p>
+<pre><code>QCostInvCummH2Transp(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VCostInvCummH2Transp(allCy,INFRTECH,YTIME) 
+         =E=
+         sum(YYTIME$(an(YYTIME) $(ord(YYTIME)&lt;=ord(YTIME))),
+                 VCostTechH2Infr(allCy,INFRTECH,YYTIME)*VInvNewReqH2Infra(allCy,INFRTECH,YYTIME)*exp(0.04*(ord(YTIME)-ord(YYTIME)))
+         )
+         /
+         sum(YYTIME$(an(YYTIME) $(ord(YYTIME)&lt;=ord(YTIME))),VInvNewReqH2Infra(allCy,INFRTECH,YYTIME))
+;</code></pre>
+<p>This equation defines the tariff or price structure for using the
+hydrogen infrastructure. It calculates the cost or fee associated with
+transporting hydrogen through the infrastructure, possibly taking into
+account the infrastructure’s capacity, usage, or maintenance costs. This
+fee is typically levied per unit of hydrogen transported.</p>
+<pre><code>QTariffH2Infr(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VTariffH2Infr(allCy,INFRTECH,YTIME)
+         =E=
+         iCostAvgWeight(allCy,YTIME)* VH2Pipe(allCy,INFRTECH,YTIME)
+         +
+         (1-iCostAvgWeight(allCy,YTIME))*VCostTechH2Infr(allCy,INFRTECH,YTIME)
+;</code></pre>
+<p>This equation calculates the price of hydrogen based on
+infrastructure costs. It determines the price at which hydrogen can be
+delivered to end-users, including both the production cost and the
+infrastructure-related costs (transport, storage, etc.).</p>
+<pre><code>QPriceH2Infr(allCy,SBS,YTIME)$(TIME(YTIME) $H2SBS(SBS) $(runCy(allCy)))..
+         VPriceH2Infr(allCy,SBS,YTIME)
+         =E=
+         sum(INFRTECH$H2INFRSBS(INFRTECH,SBS) , VTariffH2Infr(allCy,INFRTECH,YTIME))
+;</code></pre>
+<p>This equation calculates the total cost of hydrogen production,
+transportation, and distribution, integrating all the costs associated
+with hydrogen infrastructure and technology. It includes costs for
+producing hydrogen, investing in infrastructure, maintaining the
+infrastructure, and any operational costs related to hydrogen
+transportation and storage.</p>
+<pre><code>QCostTotH2(allCy,SBS,YTIME)$(TIME(YTIME) $H2SBS(SBS) $(runCy(allCy)))..
+         VCostTotH2(allCy,SBS,YTIME)
+         =E=
+         VPriceH2Infr(allCy,SBS,YTIME)+VCostAvgProdH2(allCy,YTIME)
+;</code></pre>
+<pre><code>table iH2Production(ECONCHARHY,H2TECH,YTIME)                  &quot;Data for Hydrogen production&quot;
+$ondelim
+$include&quot;./iH2Production.csv&quot;
+$offdelim
+;
+table iH2Parameters(allCy,ECONCHARHY)                         &quot;Data for Hydrogen Parameters&quot;
+$ondelim
+$include&quot;./iH2Parameters.csv&quot;
+$offdelim
+;
+table iH2InfrCapCosts(ECONCHARHY,INFRTECH,YTIME)              &quot;Data for Hydrogen Infrastructure Costs&quot;
+$ondelim
+$include&quot;./iH2InfrCapCosts.csv&quot;
+$offdelim
+;
+iH2Production(ECONCHARHY,&quot;bgfl&quot;,YTIME) = iH2Production(ECONCHARHY,&quot;bgfls&quot;,YTIME);
+Parameters
+iWBLGammaH2Prod(allCy,YTIME)            &quot;Parameter for acceptance in new investments used in weibull function in production shares&quot;
+iProdLftH2(H2TECH,YTIME)                &quot;Lifetime of hydrogen production technologies in years&quot;
+iCaptRateH2Prod(allCy,H2TECH,YTIME)     &quot;CO2 capture rate of hydrogen production technologies (for those which are equipped with CCS facility)&quot;
+iH2Adopt(allCy,ARELAST,YTIME)           &quot;Parameters controlling the speed and the year of taking off the transition to hydrogen economy&quot;
+iTranspLftH2(INFRTECH,YTIME)            &quot;Technical lifetime of infrastructure technologies&quot;
+iCostCapH2Prod(allCy,H2TECH,YTIME)      &quot;Capital cost of hydrogen production technologies in Euro per Nm3 of hydrogen&quot;
+iCostFOMH2Prod(allCy,H2TECH,YTIME)      &quot;Fixed operating and maintenance costs of hydrogen production technologies in Euro per Nm3 of hydrogen&quot;
+iCostVOMH2Prod(allCy,H2TECH,YTIME)      &quot;Variable operating and maintenance costs of hydrogen production technologies in Euro per toe of hydrogen&quot;
+iAvailH2Prod(H2TECH,YTIME)              &quot;Availability of hydrogen production technologies&quot;
+iEffH2Prod(allCy,H2TECH,YTIME)          &quot;Efficiency of hydrogen production technologies&quot;
+iCostInvH2Transp(allCy,INFRTECH,YTIME)  &quot;Investment cost of infrastructure technology&quot;
+                                                   !! - Turnpike pipeline in Euro per km
+                                                   !! - Low pressure urban pipeline in Euro per km
+                                                   !! - Medium pressure ring in Euro per km
+                                                   !! - Service stations connection lines in Euro per km
+                                                   !! - Gaseous hydrogen service stations in Euro per toe per year
+iEffH2Transp(allCy,INFRTECH,YTIME)      &quot;Efficiency of hydrogen transportation per infrastructure technology&quot;
+iConsSelfH2Transp(allCy,INFRTECH,YTIME) &quot;Self consumption of infrastructure technology rate&quot;
+iAvailRateH2Transp(INFRTECH,YTIME)      &quot;Availability rate of infrastructure technology&quot;
+iCostInvVOMH2(INFRTECH,YTIME)           &quot;Annual variable O&amp;M cost as percentage of total investment cost&quot;
+iCostInvFOMH2(INFRTECH,YTIME)           &quot;Annual fixed O&amp;M cost as percentage of total investment cost&quot;
+iPipeH2Transp(INFRTECH,YTIME)           &quot;Kilometers of pipelines required per toe of delivered hydrogen (based on stylized model)&quot;
+iKmFactH2Transp(allCy,INFRTECH)         &quot;Km needed for a given infrastructure assuming that its required infrastructure has been arleady installed&quot;
+iPolH2AreaMax(allCy)                    &quot;Policy parameter defining the percentage of the country area supplied by hydrogen at the end of the horizon period [0...1]&quot;
+iHabAreaCountry(allCy)                  &quot;Inhabitable land in a country&quot;
+iEffNetH2Transp(allCy,INFRTECH,YTIME)   &quot;Total efficiency of the distribution network until the &lt;infrtech&gt; node&quot;
+iCostAvgWeight(allCy,YTIME)             &quot;Weight for pricing in average cost or in marginal cost&quot;
+;
+iWBLGammaH2Prod(runCy,YTIME) = 4;
+iProdLftH2(H2TECH,YTIME)=iH2Production(&quot;LFT&quot;,H2TECH,YTIME);
+iCaptRateH2Prod(runCy,H2TECH,YTIME)=iH2Production(&quot;CR&quot;,H2TECH,YTIME);
+iH2Adopt(runCy,&quot;b&quot;,YTIME)=iH2Parameters(runCy,&quot;B&quot;);
+iH2Adopt(runCy,&quot;mid&quot;,YTIME)=iH2Parameters(runCy,&quot;mid&quot;);
+iTranspLftH2(INFRTECH,YTIME)=iH2InfrCapCosts(&quot;LFT&quot;,INFRTECH,YTIME);
+iCostCapH2Prod(runCy,H2TECH,YTIME)=iH2Production(&quot;IC&quot;,H2TECH,YTIME);
+iCostFOMH2Prod(runCy,H2TECH,YTIME)=iH2Production(&quot;FC&quot;,H2TECH,YTIME);
+iCostVOMH2Prod(runCy,H2TECH,YTIME)=iH2Production(&quot;VC&quot;,H2TECH,YTIME);
+iAvailH2Prod(H2TECH,YTIME)=iH2Production(&quot;AVAIL&quot;,H2TECH,YTIME);
+iEffH2Prod(runCy,H2TECH,YTIME)=iH2Production(&quot;EFF&quot;,H2TECH,YTIME);
+iCostInvH2Transp(runCy,INFRTECH,YTIME)=iH2InfrCapCosts(&quot;IC&quot;,INFRTECH,YTIME);
+iEffH2Transp(runCy,INFRTECH,YTIME)=iH2InfrCapCosts(&quot;EFF&quot;,INFRTECH,YTIME);
+iConsSelfH2Transp(runCy,INFRTECH,YTIME)=iH2InfrCapCosts(&quot;SELF&quot;,INFRTECH,YTIME);
+iAvailRateH2Transp(INFRTECH,YTIME)=iH2InfrCapCosts(&quot;AVAIL&quot;,INFRTECH,YTIME);
+iCostInvFOMH2(INFRTECH,YTIME)=iH2InfrCapCosts(&quot;FC&quot;,INFRTECH,YTIME);
+iCostInvVOMH2(INFRTECH,YTIME)=iH2InfrCapCosts(&quot;VC&quot;,INFRTECH,YTIME);
+iPipeH2Transp(INFRTECH,YTIME) =  iH2InfrCapCosts(&quot;H2KMTOE&quot;,INFRTECH,YTIME);
+iKmFactH2Transp(runCy,INFRTECH) = sum(ECONCHARHY$INFRTECHLAB(INFRTECH,ECONCHARHY), iH2Parameters(runCy,ECONCHARHY));
+iPolH2AreaMax(runCy) = iH2Parameters(runCy,&quot;MAXAREA&quot;);
+iHabAreaCountry(runCy) = iH2Parameters(runCy,&quot;AREA&quot;);
+iEffNetH2Transp(runCy,INFRTECH,YTIME) = iEffH2Transp(runCy,INFRTECH,YTIME)*(1-iConsSelfH2Transp(runCy,INFRTECH,YTIME));
+loop H2EFFLOOP do
+  loop INFRTECH2$H2NETWORK(INFRTECH2,H2EFFLOOP) do
+         iEffNetH2Transp(runCy,H2EFFLOOP,YTIME) =  iEffNetH2Transp(runCy,INFRTECH2,YTIME)*iEffH2Transp(runCy,H2EFFLOOP,YTIME);
+  endloop;
+endloop;
+iCostAvgWeight(runCy,YTIME) = 1;
+loop YTIME$(An(YTIME)) do
+         iCostAvgWeight(runCy,YTIME) = -1/19+iCostAvgWeight(runCy,YTIME-1);
+endloop;
+$ontext
+parameter iWBLShareH2Prod(allCy,H2TECH,YTIME)             &quot;Parameter for controlling the weibull function for calculating the shares in new market&quot;;
+parameter iWBLPremRepH2Prod(allCy,H2TECH,YTIME)           &quot;Parameter for controlling the premature replacement of technology&quot;;
+$offtext</code></pre>
+<p><em>VARIABLE INITIALISATION</em></p>
+<pre><code>VCostTotH2.L(runCy,SBS,YTIME) = 2;
+VCostTotH2.FX(runCy,TRANSE,&quot;2010&quot;) = iFuelPrice(runCy,TRANSE,&quot;H2F&quot;,&quot;2010&quot;); 
+VCostTotH2.FX(runCy,&quot;PG&quot;,&quot;2010&quot;) = iFuelPrice(runCy,&quot;PG&quot;,&quot;H2F&quot;,&quot;2010&quot;); 
+VCostTotH2.FX(runCy,INDDOM,&quot;2010&quot;) = iFuelPrice(runCy,INDDOM,&quot;STE1AH2F&quot;,&quot;2010&quot;); 
+VCostTotH2.FX(runCy,SBS,YTIME)$(not An(YTIME)) = 1e-5;
+display VCostTotH2.L;
+VGapShareH2Tech1.L(runCy,H2TECH,YTIME) = 2;
+VGapShareH2Tech1.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
+display VGapShareH2Tech1.L;
+VDemGapH2.L(runCy,YTIME) = 2;
+VDemGapH2.FX(runCy,YTIME)$(not An(YTIME)) = 1e-5;
+display VDemGapH2.L;
+VMVProdH2.L(runCy,H2TECH, YTIME) = 2;
+VMVProdH2.FX(runCy,H2TECH, YTIME)$(not An(YTIME)) = 1e-5;
+VMVProdH2.FX(runCy,H2TECH,&quot;2010&quot;) = 1e-7;
+display VMVProdH2.L;
+VMVDemTotH2.L(runCy,YTIME) = 2;
+VMVDemTotH2.FX(runCy,YTIME)$(not An(YTIME)) = 1e-5;
+VMVDemTotH2.FX(runCy,&quot;2010&quot;) = sum(H2TECH, VMVProdH2.L(runCy,H2TECH,&quot;2010&quot;));
+display VMVDemTotH2.L;
+VMVConsFuelTechH2Prod.FX(runCy,H2TECH,EF,YTIME)$(not An(YTIME)$H2TECHEFtoEF(H2TECH,EF)) = 0;
+VMVConsFuelTechH2Prod.FX(runCy,H2TECH,EF,&quot;2010&quot;)$(H2TECHEFtoEF(H2TECH,EF)) = (VMVProdH2.L(runCy,H2TECH,&quot;2010&quot;)/iEffH2Prod(runCy,H2TECH,&quot;2010&quot;));
+display iEffH2Prod;
+display VMVConsFuelTechH2Prod.L;
+VDelivH2InfrTech.L(runCy,INFRTECH,YTIME) = 2;
+VDelivH2InfrTech.FX(runCy,INFRTECH,YTIME)$(not An(YTIME)) = 1e-5;
+VDelivH2InfrTech.FX(runCy,INFRTECH,&quot;2010&quot;) = 0;
+display VDelivH2InfrTech.L;
+VGapShareH2Tech2.L(runCy,H2TECH,YTIME) = 2;
+VGapShareH2Tech2.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
+VCapScrapH2ProdTech.L(runCy,H2TECH,YTIME) = 2;
+VCapScrapH2ProdTech.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
+display VCapScrapH2ProdTech.L;
+VPremRepH2Prod.L(runCy,H2TECH,YTIME) = 2;
+VPremRepH2Prod.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
+VScrapLftH2Prod.L(runCy,H2TECH,YTIME) = 2;
+VScrapLftH2Prod.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
+VCostProdH2Tech.L(runCy,H2TECH,YTIME) = 2;
+VCostProdH2Tech.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
+VCostVarProdH2Tech.L(runCy,H2TECH,YTIME) = 2;
+VCostVarProdH2Tech.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
+VShareCCSH2Prod.L(runCy,H2TECH,YTIME) = 2;
+VShareCCSH2Prod.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
+VShareNoCCSH2Prod.L(runCy,H2TECH,YTIME) = 2;
+VShareNoCCSH2Prod.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
+VConsFuelH2Prod.L(runCy,EF,YTIME) = 2;
+VConsFuelH2Prod.FX(runCy,EF,YTIME)$(not An(YTIME)) = 1e-5;
+VCostProdCCSNoCCSH2Prod.L(runCy,H2TECH,YTIME) = 2;
+VCostProdCCSNoCCSH2Prod.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
+VCostAvgProdH2.L(runCy,YTIME) = 2;
+VCostAvgProdH2.FX(runCy,YTIME)$(not An(YTIME)) = 1e-5;
+VInvNewReqH2Infra.L(runCy,INFRTECH,YTIME) = 2;
+VInvNewReqH2Infra.FX(runCy,INFRTECH,YTIME)$(not An(YTIME)) = 1e-5;
+VCostInvTechH2Infr.L(runCy, INFRTECH,YTIME) = 2;
+VCostInvTechH2Infr.FX(runCy, INFRTECH,YTIME)$(not An(YTIME)) = 1e-5;
+VCostInvCummH2Transp.L(runCy,INFRTECH,YTIME) = 2;
+VCostInvCummH2Transp.FX(runCy,INFRTECH,YTIME)$(not An(YTIME)) = 1e-5;
+VTariffH2Infr.L(runCy,INFRTECH,YTIME) = 2;
+VTariffH2Infr.FX(runCy,INFRTECH,YTIME) $(not An(YTIME)) = 1e-5;
+VPriceH2Infr.L(runCy,SBS,YTIME) = 2;
+VPriceH2Infr.FX(runCy,SBS,YTIME)  $(not An(YTIME)) = 1e-5;
+VH2InfrArea.L(runCy,YTIME) = 10;</code></pre>
+<p>*** Miscellaneous</p>
+<pre><code>VDemSecH2.FX(runCy,SBS,YTIME) = 1e-5;</code></pre>
+<pre><code>VMVConsFuelTechH2Prod.FX(runCyL,H2TECH,EF,YTIME)$TIME(YTIME) = VMVConsFuelTechH2Prod.L(runCyL,H2TECH,EF,YTIME)$TIME(YTIME);
+VGapShareH2Tech1.FX(runCyL,H2TECH,YTIME)$TIME(YTIME) = VGapShareH2Tech1.L(runCyL,H2TECH,YTIME)$TIME(YTIME);
+VMVProdH2.FX(runCyL,H2TECH,YTIME)$TIME(YTIME) = VMVProdH2.L(runCyL,H2TECH,YTIME)$TIME(YTIME);
+VDemGapH2.FX(runCyL,YTIME)$TIME(YTIME) = VDemGapH2.L(runCyL,YTIME)$TIME(YTIME);
+VCostAvgProdH2.FX(runCyL,YTIME)$TIME(YTIME) = VCostAvgProdH2.L(runCyL,YTIME)$TIME(YTIME);
+VDelivH2InfrTech.FX(runCyL,INFRTECH,YTIME)$TIME(YTIME) = VDelivH2InfrTech.L(runCyL,INFRTECH,YTIME)$TIME(YTIME);</code></pre>
+<blockquote>
+<p><strong>Limitations</strong> There are no known limitations.</p>
+</blockquote>
+<h2 id="definitions">Definitions</h2>
+<h3 id="objects">Objects</h3>
+<table>
+<caption>module-internal objects (A: legacy)</caption>
+<colgroup>
+<col style="width: 34%" />
+<col style="width: 43%" />
+<col style="width: 17%" />
+<col style="width: 5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"> </th>
+<th style="text-align: center;">Description</th>
+<th style="text-align: center;">Unit</th>
+<th style="text-align: center;">A</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">iAvailH2Prod<br />
+(H2TECH, YTIME)</td>
+<td style="text-align: center;">Availability of hydrogen production
+technologies</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">iAvailRateH2Transp<br />
+(INFRTECH, YTIME)</td>
+<td style="text-align: center;">Availability rate of infrastructure
+technology</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">iCaptRateH2Prod<br />
+(allCy, H2TECH, YTIME)</td>
+<td style="text-align: center;">CO2 capture rate of hydrogen production
+technologies</td>
+<td style="text-align: center;"><span class="math inline">\(for those
+which are equipped with CCS facility\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">iConsSelfH2Transp<br />
+(allCy, INFRTECH, YTIME)</td>
+<td style="text-align: center;">Self consumption of infrastructure
+technology rate</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">iCostAvgWeight<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Weight for pricing in average cost or in
+marginal cost</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">iCostCapH2Prod<br />
+(allCy, H2TECH, YTIME)</td>
+<td style="text-align: center;">Capital cost of hydrogen production
+technologies in Euro per Nm3 of hydrogen</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">iCostFOMH2Prod<br />
+(allCy, H2TECH, YTIME)</td>
+<td style="text-align: center;">Fixed operating and maintenance costs of
+hydrogen production technologies in Euro per Nm3 of hydrogen</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">iCostInvFOMH2<br />
+(INFRTECH, YTIME)</td>
+<td style="text-align: center;">Annual fixed O&amp;M cost as percentage
+of total investment cost</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">iCostInvH2Transp<br />
+(allCy, INFRTECH, YTIME)</td>
+<td style="text-align: center;">Investment cost of infrastructure
+technology</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">iCostInvVOMH2<br />
+(INFRTECH, YTIME)</td>
+<td style="text-align: center;">Annual variable O&amp;M cost as
+percentage of total investment cost</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">iCostVOMH2Prod<br />
+(allCy, H2TECH, YTIME)</td>
+<td style="text-align: center;">Variable operating and maintenance costs
+of hydrogen production technologies in Euro per toe of hydrogen</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">iEffH2Prod<br />
+(allCy, H2TECH, YTIME)</td>
+<td style="text-align: center;">Efficiency of hydrogen production
+technologies</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">iEffH2Transp<br />
+(allCy, INFRTECH, YTIME)</td>
+<td style="text-align: center;">Efficiency of hydrogen transportation
+per infrastructure technology</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">iEffNetH2Transp<br />
+(allCy, INFRTECH, YTIME)</td>
+<td style="text-align: center;">Total efficiency of the distribution
+network until the <infrtech> node</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">iH2Adopt<br />
+(allCy, ARELAST, YTIME)</td>
+<td style="text-align: center;">Parameters controlling the speed and the
+year of taking off the transition to hydrogen economy</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">iH2InfrCapCosts<br />
+(ECONCHARHY, INFRTECH, YTIME)</td>
+<td style="text-align: center;">Data for Hydrogen Infrastructure
+Costs</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">iH2Parameters<br />
+(allCy, ECONCHARHY)</td>
+<td style="text-align: center;">Data for Hydrogen Parameters</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">iH2Production<br />
+(ECONCHARHY, H2TECH, YTIME)</td>
+<td style="text-align: center;">Data for Hydrogen production</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">iHabAreaCountry<br />
+(allCy)</td>
+<td style="text-align: center;">Inhabitable land in a country</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">iKmFactH2Transp<br />
+(allCy, INFRTECH)</td>
+<td style="text-align: center;">Km needed for a given infrastructure
+assuming that its required infrastructure has been arleady
+installed</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">iPipeH2Transp<br />
+(INFRTECH, YTIME)</td>
+<td style="text-align: center;">Kilometers of pipelines required per toe
+of delivered hydrogen</td>
+<td style="text-align: center;"><span class="math inline">\(based on
+stylized model\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">iPolH2AreaMax<br />
+(allCy)</td>
+<td style="text-align: center;">Policy parameter defining the percentage
+of the country area supplied by hydrogen at the end of the horizon
+period [0…1]</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">iProdLftH2<br />
+(H2TECH, YTIME)</td>
+<td style="text-align: center;">Lifetime of hydrogen production
+technologies in years</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">iTranspLftH2<br />
+(INFRTECH, YTIME)</td>
+<td style="text-align: center;">Technical lifetime of infrastructure
+technologies</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">iWBLGammaH2Prod<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Parameter for acceptance in new
+investments used in weibull function in production shares</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Q05ConsFuelTechH2Prod<br />
+(allCy, H2TECH, EF, YTIME)</td>
+<td style="text-align: center;">Equation for fuel consumption by
+technology for hydrogen production</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Q05DemTotH2<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Equation for total hydrogen demand in a
+country in Mtoe</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Q05ProdH2<br />
+(allCy, H2TECH, YTIME)</td>
+<td style="text-align: center;">Equation for H2 production by
+technology</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QAcceptCCSH2Tech<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Equation for acceptance in CCS
+technologies</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QCapScrapH2ProdTech<br />
+(allCy, H2TECH, YTIME)</td>
+<td style="text-align: center;">Equation for decommissioning of capacity
+by H2 production technology</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QConsFuelH2Prod<br />
+(allCy, EF, YTIME)</td>
+<td style="text-align: center;">Equation for total fuel consumption for
+hydrogen production</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QCostAvgProdH2<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Equation for average production cost of
+hydrogen in Euro per toe</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QCostInvCummH2Transp<br />
+(allCy, INFRTECH, YTIME)</td>
+<td style="text-align: center;">Equation for cumulative investment cost
+by infrastructure technology</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QCostInvTechH2Infr<br />
+(allCy, INFRTECH, YTIME)</td>
+<td style="text-align: center;">Equation for infrastructure investment
+cost in Euro by technology</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QCostProdCCSNoCCSH2Prod<br />
+(allCy, H2TECH, YTIME)</td>
+<td style="text-align: center;">Equation for calculating the production
+cost of the composite technology with and without CCS</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QCostProdH2Tech<br />
+(allCy, H2TECH, YTIME)</td>
+<td style="text-align: center;">Equation for hydrogen production cost
+per technology</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QCostTechH2Infr<br />
+(allCy, INFRTECH, YTIME)</td>
+<td style="text-align: center;">Equation for marginal cost by
+infrastructure technology in Euro</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QCostTotH2<br />
+(allCy, SBS, YTIME)</td>
+<td style="text-align: center;">Equation of total hydrogen cost Per
+Sector</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QCostVarProdH2Tech<br />
+(allCy, H2TECH, YTIME)</td>
+<td style="text-align: center;">Equation for variable cost (including
+fuel cost) for hydrogen production by technology in Euro per toe</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QDelivH2InfrTech<br />
+(allCy, INFRTECH, YTIME)</td>
+<td style="text-align: center;">Equation for hydrogen delivered by
+infrastructure technology in Mtoe</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QDemGapH2<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Equation for gap in hydrogen demand</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QGapShareH2Tech1<br />
+(allCy, H2TECH, YTIME)</td>
+<td style="text-align: center;">Equation for calculating the shares of
+technologies in hydrogen gap using Weibull equations 1</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QGapShareH2Tech2<br />
+(allCy, H2TECH, YTIME)</td>
+<td style="text-align: center;">Equation for calculating the shares of
+technologies in hydrogen gap using Weibull equations 2</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QH2InfrArea<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Equation for infrastructure area</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QH2Pipe<br />
+(allCy, INFRTECH, YTIME)</td>
+<td style="text-align: center;">Equation for km per pipeline</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QInvNewReqH2Infra<br />
+(allCy, INFRTECH, YTIME)</td>
+<td style="text-align: center;">Equation for calculating the new
+requirements in infrastructure in Mtoe</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QPremRepH2Prod<br />
+(allCy, H2TECH, YTIME)</td>
+<td style="text-align: center;">Equation for premature replacement of H2
+production technologies</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QPriceH2Infr<br />
+(allCy, SBS, YTIME)</td>
+<td style="text-align: center;">Equation for calulcating the hydrogen
+storage and distribution price by final consumer</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QScrapLftH2Prod<br />
+(allCy, H2TECH, YTIME)</td>
+<td style="text-align: center;">Equation for scrapping of equipment due
+to lifetime</td>
+<td style="text-align: center;"><span class="math inline">\(normal
+scrapping\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QShareCCSH2Prod<br />
+(allCy, H2TECH, YTIME)</td>
+<td style="text-align: center;">Equation for share of CCS technology in
+the decision tree between CCS and no CCS</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QShareNoCCSH2Prod<br />
+(allCy, H2TECH, YTIME)</td>
+<td style="text-align: center;">Equation for share of technology without
+CCS in the decision tree between CCS and no CCS</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QTariffH2Infr<br />
+(allCy, INFRTECH, YTIME)</td>
+<td style="text-align: center;">Equation for calculating the tariff paid
+by the final consumer for using the specific infrastructure
+technology</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">sAreaStyle</td>
+<td style="text-align: center;">stylised area in km2</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">sDelivH2Turnpike</td>
+<td style="text-align: center;">stylised annual hydrogen delivery in
+turnpike pipeline in ktoe</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">sLenH2StationConn</td>
+<td style="text-align: center;">length of pipes connection service
+stations with the ring in km per station</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">sSalesH2Station</td>
+<td style="text-align: center;">annual sales of a hydrogen service
+station in ktoe</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VAcceptCCSH2Tech<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Acceptance of investment in CCS
+technologies</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VCapScrapH2ProdTech<br />
+(allCy, H2TECH, YTIME)</td>
+<td style="text-align: center;">Decommissioning of capacity by H2
+production technology</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VConsFuelH2Prod<br />
+(allCy, EF, YTIME)</td>
+<td style="text-align: center;">Total fuel consumption for hydrogen
+production in Mtoe</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VCostAvgProdH2<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Average production cost of hydrogen in
+Euro per toe</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VCostInvCummH2Transp<br />
+(allCy, INFRTECH, YTIME)</td>
+<td style="text-align: center;">Average cost of infrastructure Euro per
+toe</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VCostInvTechH2Infr<br />
+(allCy, INFRTECH, YTIME)</td>
+<td style="text-align: center;">Investment cost of infrastructure by
+technology in Million Euros (MEuro) for meeting the new infrastructure
+requirements</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VCostProdCCSNoCCSH2Prod<br />
+(allCy, H2TECH, YTIME)</td>
+<td style="text-align: center;">Production cost of the composite
+technology with and without CCS in Euro per toe</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VCostProdH2Tech<br />
+(allCy, H2TECH, YTIME)</td>
+<td style="text-align: center;">Hydrogen production cost per technology
+in Euro per toe of hydrogen</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VCostTechH2Infr<br />
+(allCy, INFRTECH, YTIME)</td>
+<td style="text-align: center;">Marginal cost by infrastructure
+technology in Euro</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VCostTotH2<br />
+(allCy, SBS, YTIME)</td>
+<td style="text-align: center;">Total Hydrogen Cost Per Sector in Euro
+per toe</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VCostVarProdH2Tech<br />
+(allCy, H2TECH, YTIME)</td>
+<td style="text-align: center;">Variable cost (including fuel cost) for
+hydrogen production by technology in Euro per toe</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VDelivH2InfrTech<br />
+(allCy, INFRTECH, YTIME)</td>
+<td style="text-align: center;">Hydrogen delivered by infrastructure
+technology in Mtoe</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VDemGapH2<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Demand for H2 to be covered by new
+equipment in mtoe</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VDemSecH2<br />
+(allCy, SBS, YTIME)</td>
+<td style="text-align: center;">Demand for H2 by sector in mtoe</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VGapShareH2Tech1<br />
+(allCy, H2TECH, YTIME)</td>
+<td style="text-align: center;">Shares of H2 production technologies in
+new market competition 1</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VGapShareH2Tech2<br />
+(allCy, H2TECH, YTIME)</td>
+<td style="text-align: center;">Shares of H2 production technologies in
+new market competition 2</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VH2InfrArea<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Number of stylised areas covered by H2
+infrastructure</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VH2Pipe<br />
+(allCy, INFRTECH, YTIME)</td>
+<td style="text-align: center;">Required capacity to meet the new
+infrastructure requirements</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VInvNewReqH2Infra<br />
+(allCy, INFRTECH, YTIME)</td>
+<td style="text-align: center;">New infrastructure requirements in Mtoe
+of delivered hydrogen</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VPremRepH2Prod<br />
+(allCy, H2TECH, YTIME)</td>
+<td style="text-align: center;">Premature replacement of H2 production
+technologies</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VPriceH2Infr<br />
+(allCy, SBS, YTIME)</td>
+<td style="text-align: center;">Hydrogen distribution and storage price
+paid by final consumer in Euro per toe annual</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VScrapLftH2Prod<br />
+(allCy, H2TECH, YTIME)</td>
+<td style="text-align: center;">Scrapping of equipment due to
+lifetime</td>
+<td style="text-align: center;"><span class="math inline">\(normal
+scrapping\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VShareCCSH2Prod<br />
+(allCy, H2TECH, YTIME)</td>
+<td style="text-align: center;">Share of CCS technology in the decision
+tree between CCS and no CCS</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VShareNoCCSH2Prod<br />
+(allCy, H2TECH, YTIME)</td>
+<td style="text-align: center;">Share of technology without CCS in the
+decision tree between CCS and no CCS</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VTariffH2Infr<br />
+(allCy, INFRTECH, YTIME)</td>
+<td style="text-align: center;">Tarrif paid by the final consumer for
+using the specific infrastructure technology in Euro per toe annual</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sets">Sets</h3>
+<table style="width:81%;">
+<caption>sets in use</caption>
+<colgroup>
+<col style="width: 34%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"> </th>
+<th style="text-align: center;">description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">ALIAS</td>
+<td style="text-align: center;">(H2TECH2H2TECH)</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">allCy</td>
+<td style="text-align: center;">All Countries Used in the Model</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">an(ytime)</td>
+<td style="text-align: center;">Years for which the model is
+running</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">ARELAST</td>
+<td style="text-align: center;">Set containing the names of the
+elasticities used in area covered by H2 logistic fucntion</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">biomass(balef)</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">CCS(PGALL)</td>
+<td style="text-align: center;">Plants which can be equipped with
+CCS</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">ECONCHARHY</td>
+<td style="text-align: center;">Technical - Economic characteristics for
+demand technologies Hydrogen</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">EF</td>
+<td style="text-align: center;">Energy Forms</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">H2CCS(H2TECH)</td>
+<td style="text-align: center;">Hydrogen production technologies
+equipped with CCS facility</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">H2CCS_NOCCS(H2TECH, H2TECH)</td>
+<td style="text-align: center;">Mapping between hydrogen technologies
+with and without CCS facility</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">H2EFFLOOP(INFRTECH)</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">H2INFRDNODES(INFRTECH)</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">H2INFRSBS(INFRTECH, SBS)</td>
+<td style="text-align: center;">Infrustructure required by demand
+sector</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">H2NETWORK(INFRTECH, INFRTECH)</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">H2NOCCS(H2TECH)</td>
+<td style="text-align: center;">Hydrogen production technologies without
+CCS but with corresponding option with CCS</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">H2PRODEF(EF)</td>
+<td style="text-align: center;">Fuels used for hydrogen production</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">H2SBS(SBS)</td>
+<td style="text-align: center;">Final demand sectors consuming hydrogen
+for energy purposes</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">H2STATIONS(INFRTECH)</td>
+<td style="text-align: center;">Service stations for hydrogen powered
+cars</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">H2TECH</td>
+<td style="text-align: center;">Hydrogen production technologies</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">H2TECHEFtoEF(H2TECH, EF)</td>
+<td style="text-align: center;">Mapping between production technologies
+and fuels</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">H2TECHPM(H2TECH)</td>
+<td style="text-align: center;">Technologies for which premature
+replacement is active</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">HOU(DSBS)</td>
+<td style="text-align: center;">Households</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">INDDOM(DSBS)</td>
+<td style="text-align: center;">Industry and Tertiary</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">INFRTECH</td>
+<td style="text-align: center;">Hydrogen storage and distribution
+technologies</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">INFRTECHLAB(INFRTECH, ECONCHARHY)</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">INFRTECHtoEF(INFRTECH, EF)</td>
+<td style="text-align: center;">Type of energy consumed onsite for the
+operation of the infrastructure technology</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">NAP(Policies_set)</td>
+<td style="text-align: center;">National Allocation Plan sector
+categories</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">NAPtoALLSBS(NAP, ALLSBS)</td>
+<td style="text-align: center;">Energy sectors corresponding to NAP
+sectors</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">period(ytime)</td>
+<td style="text-align: center;">Model can also run for periods of
+years</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">PIPES(INFRTECH)</td>
+<td style="text-align: center;">Pipelines</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">runCy(allCy)</td>
+<td style="text-align: center;">Countries for which the model is
+running</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">runCyL(allCy)</td>
+<td style="text-align: center;">Countries for which the model is running
+(used in countries loop)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">SBS(ALLSBS)</td>
+<td style="text-align: center;">Model Subsectors</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">SECTTECH(SBS, EF)</td>
+<td style="text-align: center;">Link between Model Subsectors and
+Fuels</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">TRANSE(DSBS)</td>
+<td style="text-align: center;">All Transport Subsectors</td>
+</tr>
+</tbody>
+</table>
+<h2 id="see-also">See Also</h2>
+<p><a href="03_RestOfEnergy.htm">03_RestOfEnergy</a>, <a
+href="06_CO2.htm">06_CO2</a>, <a href="08_Prices.htm">08_Prices</a></p>
+<h2 id="references">References</h2>
+<script>
+window.onscroll = function() {myFunction()};
+
+var navbar = document.getElementById("pagenav");
+var sticky = navbar.offsetTop;
+
+function myFunction() {
+  var currentScrollPos = window.pageYOffset;
+  if (window.pageYOffset >= sticky) {
+    if (prevScrollpos > currentScrollPos) {
+      document.getElementById("pagenav").style.top = "0";
+      document.getElementById("pagenav").style.position = "fixed";
+    } else {
+      document.getElementById("pagenav").style.top = "-50px";
+    }
+  } else {
+      document.getElementById("pagenav").style.position = "static";
+  }
+  prevScrollpos = currentScrollPos;
+}
+</script>
+</body>
+</html>

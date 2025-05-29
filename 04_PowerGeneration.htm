@@ -1,0 +1,2784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="generator" content="goxygen" />
+  <meta name="author" content="Fotis Sioutas" />
+  <meta name="author" content="Giannis Tolios" />
+  <meta name="author" content="Giorgos Plessias" />
+  <meta name="author" content="Anastasis Giannousakis" />
+<title>OPEN PROM –  4. PowerGeneration module</title>
+<link rel="stylesheet" href="ming/style.css">
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS_CHTML-full"></script>
+<script type="text/x-mathjax-config">
+                    MathJax.Hub.Config({
+                      CommonHTML: { linebreaks: { automatic: true } },
+                      "HTML-CSS": { linebreaks: { automatic: true } },
+                             SVG: { linebreaks: { automatic: true } }
+                    });
+</script>
+</head>
+<body>
+<div class="header">
+      <div class="headerimg"><a href="index.htm"><img id="logo" src="images/logo.png" height="100" alt="model logo" /></a></div>
+    <div class="headertext">
+      <h1 id="mainheadertitle"><a href="https://github.com/e3modelling/OPEN-PROM">OPEN PROM</a></h1>
+      <h3>0.1</h3>
+      <div class="by">created with <a href="https://github.com/pik-piam/goxygen">goxygen</a> 1.4.6</div>
+    </div>
+</div>
+
+<div class="pagenav" id="pagenav">
+    <div class="dropdown">
+   <button class="dropbtn"> 4. PowerGeneration module
+     <i class="fa fa-caret-down"></i>
+   </button>
+   <div id="mainnav" class="dropdown-content">
+   <a href='index.htm'>Overview</a>
+   <a href='core.htm'>core</a>
+   <a href='01_Transport.htm'> 1. Transport module</a>
+   <a href='02_Industry.htm'> 2. Industry module</a>
+   <a href='03_RestOfEnergy.htm'> 3. RestOfEnergy module</a>
+   <a href='04_PowerGeneration.htm'> 4. PowerGeneration module</a>
+   <a href='05_Hydrogen.htm'> 5. Hydrogen module</a>
+   <a href='06_CO2.htm'> 6. CO2 module</a>
+   <a href='08_Prices.htm'> 8. Prices module</a>
+   </div>
+  </div>
+  <div class="dropdown">
+   <button class="dropbtn">Contents
+     <i class="fa fa-caret-down"></i>
+   </button>
+   <div class="dropdown-content">
+   <ul>
+   <li><a href="#id-04_PowerGeneration"
+   id="toc-id-04_PowerGeneration">PowerGeneration module
+   (04_PowerGeneration)</a>
+   <ul>
+   <li><a href="#description" id="toc-description">Description</a></li>
+   <li><a href="#interfaces" id="toc-interfaces">Interfaces</a>
+   <ul>
+   <li><a href="#input" id="toc-input">Input</a></li>
+   <li><a href="#output" id="toc-output">Output</a></li>
+   </ul></li>
+   <li><a href="#realizations" id="toc-realizations">Realizations</a>
+   <ul>
+   <li><a href="#a-legacy" id="toc-a-legacy">(A) legacy</a></li>
+   </ul></li>
+   <li><a href="#definitions" id="toc-definitions">Definitions</a>
+   <ul>
+   <li><a href="#objects" id="toc-objects">Objects</a></li>
+   <li><a href="#sets" id="toc-sets">Sets</a></li>
+   </ul></li>
+   <li><a href="#see-also" id="toc-see-also">See Also</a></li>
+   <li><a href="#references" id="toc-references">References</a></li>
+   </ul></li>
+   </ul>
+   </div>
+  </div>
+</div>
+
+<h1 id="id-04_PowerGeneration">PowerGeneration module
+(04_PowerGeneration)</h1>
+<h2 id="description">Description</h2>
+<p>This is the PowerGeneration module.</p>
+<h2 id="interfaces">Interfaces</h2>
+<figure>
+<img src="images/interfaces_PowerGeneration.png"
+style="width:100.0%;height:50.0%" alt="Interfaces to other modules" />
+<figcaption aria-hidden="true">Interfaces to other modules</figcaption>
+</figure>
+<h3 id="input">Input</h3>
+<table>
+<caption>module inputs (A: legacy)</caption>
+<colgroup>
+<col style="width: 34%" />
+<col style="width: 40%" />
+<col style="width: 20%" />
+<col style="width: 4%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"> </th>
+<th style="text-align: center;">Description</th>
+<th style="text-align: center;">Unit</th>
+<th style="text-align: center;">A</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">VMVConsFiEneSec<br />
+(allCy, EFS, YTIME)</td>
+<td style="text-align: center;">Final consumption in energy sector</td>
+<td style="text-align: center;"><span
+class="math inline">\(Mtoe\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VMVConsFinEneCountry<br />
+(allCy, EF, YTIME)</td>
+<td style="text-align: center;">Total final energy consumnption</td>
+<td style="text-align: center;"><span
+class="math inline">\(Mtoe\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VMVConsFinNonEne<br />
+(allCy, EFS, YTIME)</td>
+<td style="text-align: center;">Final non energy consumption</td>
+<td style="text-align: center;"><span
+class="math inline">\(Mtoe\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VMVConsFuel<br />
+(allCy, DSBS, EF, YTIME)</td>
+<td style="text-align: center;">Consumption of fuels in each demand
+subsector, excluding heat from heatpumps</td>
+<td style="text-align: center;"><span
+class="math inline">\(Mtoe\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VMVCostElcAvgProdCHP<br />
+(allCy, CHP, YTIME)</td>
+<td style="text-align: center;">Average Electricity production cost per
+CHP plant</td>
+<td style="text-align: center;"><span
+class="math inline">\(US\$2015/KWh\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VMVCstCO2SeqCsts<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Cost curve for CO2 sequestration
+costs</td>
+<td style="text-align: center;"><span class="math inline">\(US\$2015/tn
+of CO2 sequestrated\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VMVDemFinEneTranspPerFuel<br />
+(allCy, TRANSE, EF, YTIME)</td>
+<td style="text-align: center;">Final energy demand in transport
+subsectors per fuel</td>
+<td style="text-align: center;"><span
+class="math inline">\(Mtoe\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VMVImpNetEneBrnch<br />
+(allCy, EFS, YTIME)</td>
+<td style="text-align: center;">Net Imports</td>
+<td style="text-align: center;"><span
+class="math inline">\(Mtoe\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VMVLossesDistr<br />
+(allCy, EFS, YTIME)</td>
+<td style="text-align: center;">Distribution losses</td>
+<td style="text-align: center;"><span
+class="math inline">\(Mtoe\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VMVPriceElecInd<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Electricity index - a function of
+industry price</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VMVPriceFuelSubsecCarVal<br />
+(allCy, SBS, EF, YTIME)</td>
+<td style="text-align: center;">Fuel prices per subsector and fuel</td>
+<td style="text-align: center;"><span
+class="math inline">\(k\$2015/toe\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+</tbody>
+</table>
+<h3 id="output">Output</h3>
+<table style="width:99%;">
+<caption>module outputs</caption>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 44%" />
+<col style="width: 23%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"> </th>
+<th style="text-align: center;">Description</th>
+<th style="text-align: center;">Unit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">VMVBaseLoad<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Corrected base load</td>
+<td style="text-align: center;"><span
+class="math inline">\(GW\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VMVCapElec<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Electricity generation plants
+capacity</td>
+<td style="text-align: center;"><span
+class="math inline">\(GW\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VMVCapElecTotEst<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Estimated Total electricity generation
+capacity</td>
+<td style="text-align: center;"><span
+class="math inline">\(GW\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VMVCostPowGenAvgLng<br />
+(allCy, ESET, YTIME)</td>
+<td style="text-align: center;">Long-term average power generation
+cost</td>
+<td style="text-align: center;"><span
+class="math inline">\(US\$2015/kWh\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VMVPeakLoad<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Electricity peak load</td>
+<td style="text-align: center;"><span
+class="math inline">\(GW\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VMVProdElec<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Electricity production</td>
+<td style="text-align: center;"><span
+class="math inline">\(TWh\)</span></td>
+</tr>
+</tbody>
+</table>
+<h2 id="realizations">Realizations</h2>
+<h3 id="a-legacy">(A) legacy</h3>
+<p>This is the legacy realization of the PowerGeneration module.</p>
+<pre><code>Equations</code></pre>
+<p>*** Power Generation</p>
+<pre><code>QCapElec2(allCy,PGALL,YTIME)                               &quot;Compute electricity generation capacity&quot;
+QRenTechMatMultExpr(allCy,PGALL,YTIME)                     &quot;Renewable power capacity over potential (1)&quot;
+QPotRenCurr(allCy,PGRENEF,YTIME)                           &quot;Compute current renewable potential&quot;
+QCapElecCHP(allCy,CHP,YTIME)                               &quot;Compute CHP electric capacity&quot;  
+QLambda(allCy,YTIME)                                       &quot;Compute Lambda parameter&quot;
+QBsldEst(allCy,YTIME)                                      &quot;Compute estimated base load&quot;
+QBaseLoadMax(allCy,YTIME)                                  &quot;Compute baseload corresponding to maximum load&quot; 
+QCostHourProdInvDec(allCy,PGALL,HOUR,YTIME)                &quot;Compute hourly production cost used in investment decisions&quot;
+QCostHourProdInvDecNoCCS(allCy,PGALL,HOUR,YTIME)           &quot;Compute hourly production cost used in investment decisions&quot;
+QSensCCS(allCy,YTIME)                                      &quot;Compute gamma parameter used in CCS/No CCS decision tree&quot;
+QCostProdSpecTech(allCy,PGALL,YTIME)                       &quot;Compute production cost used in investment decisions&quot;
+QShareNewTechCCS(allCy,PGALL,YTIME)                        &quot;Compute SHRCAP&quot;
+QShareNewTechNoCCS(allCy,PGALL,YTIME)                      &quot;Compute SHRCAP excluding CCs&quot;
+QCostVarTech(allCy,PGALL,YTIME)                            &quot;Compute variable cost of technology&quot;    
+QCostVarTechNotPGSCRN(allCy,PGALL,YTIME)                   &quot;Compute variable cost of technology excluding PGSCRN&quot;   
+QCostProdTeCHPreReplac(allCy,PGALL,YTIME)                  &quot;Compute production cost of technology  used in premature replacement&quot;   
+QCostProdTeCHPreReplacAvail(allCy,PGALL,PGALL2,YTIME)      &quot;Compute production cost of technology  used in premature replacement including plant availability rate&quot; 
+QIndxEndogScrap(allCy,PGALL,YTIME)                         &quot;Compute endogenous scrapping index&quot;     
+QCapElecNonCHP(allCy,YTIME)                                &quot;Compute total electricity generation capacity excluding CHP plants&quot;
+QGapGenCapPowerDiff(allCy,YTIME)                           &quot;Compute the gap in power generation capacity&quot;       
+QPotRenSuppCurve(allCy,PGRENEF,YTIME)                      &quot;Compute renewable potential supply curve&quot;       
+QPotRenMaxAllow(allCy,PGRENEF,YTIME)                       &quot;Compute maximum allowed renewable potential&quot;
+QRenTechMatMult(allCy,PGALL,YTIME)                         &quot;Compute renewable technologies maturity multiplier&quot;         
+QScalWeibullSum(allCy,PGALL,YTIME)                         &quot;Compute sum (over hours) of temporary variable facilitating the scaling in Weibull equation&quot;
+QNewInvElec(allCy,YTIME)                                   &quot;Compute for Power Plant new investment decision&quot;        
+QSharePowPlaNewEq(allCy,PGALL,YTIME)                       &quot;Compute the power plant share in new equipment&quot;     
+QCostVarTechElec(allCy,PGALL,YTIME)                        &quot;Compute variable cost of technology&quot; 
+QCostVarTechElecTot(allCy,YTIME)                           &quot;Compute Electricity peak loads&quot; 
+QSortPlantDispatch(allCy,PGALL,YTIME)                      &quot;Compute Power plants sorting according to variable cost to decide the plant dispatching&quot;    
+QNewCapElec(allCy,PGALL,YTIME)                             &quot;Compute the new capacity added every year&quot;
+QNetNewCapElec(allCy,PGALL,YTIME)                          &quot;Compute the yearly difference in installed capacity&quot;        
+QCFAvgRen(allCy,PGALL,YTIME)                               &quot;Compute the average capacity factor of RES&quot; 
+QCapOverall(allCy,PGALL,YTIME)                             &quot;Compute overall capacity&quot;
+QScalFacPlantDispatch(allCy,HOUR,YTIME)                    &quot;Compute the scaling factor for plant dispatching&quot;
+QProdElecEstCHP(allCy,YTIME)                               &quot;Estimate the electricity of CHP Plants&quot; 
+QProdElecNonCHP(allCy,YTIME)                               &quot;Compute non CHP electricity production&quot;     
+QProdElecReqCHP(allCy,YTIME)                               &quot;Compute total estimated CHP electricity production&quot;     
+QCostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME)             &quot;Compute long term power generation cost of technologies excluding climate policies&quot; 
+QCostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)         &quot;Compute long term average power generation cost excluding climate policies&quot;     
+QCostPowGenLonNoClimPol(allCy,ESET,YTIME)                  &quot;Compute long term power generation cost excluding climate policies&quot; 
+QConsElec(allCy,DSBS,YTIME)                                &quot;Compute electricity consumption per final demand sector&quot;
+QLoadFacDom(allCy,YTIME)                                   &quot;Compute load factor of entire domestic system&quot;
+QDemElecTot(allCy,YTIME)                                   &quot;Compute total electricity demand&quot;
+QProdElecCHP(allCy,CHP,YTIME)                              &quot;Compute electricity production from CHP plants&quot; 
+QProdElecReqTot(allCy,YTIME)                               &quot;Compute total required electricity production&quot;</code></pre>
+<p><strong>Interdependent Equations</strong></p>
+<pre><code>Q04ProdElec(allCy,PGALL,YTIME)                             &quot;Compute electricity production from power generation plants&quot;
+Q04CostPowGenAvgLng(allCy,ESET,YTIME)                      &quot;Compute long term power generation cost&quot;
+Q04CapElecTotEst(allCy,YTIME)                              &quot;Compute Estimated total electricity generation capacity&quot;
+Q04PeakLoad(allCy,YTIME)                                   &quot;Compute elerctricity peak load&quot; 
+Q04CapElec(allCy,PGALL,YTIME)                              &quot;Compute electricity generation capacity&quot;
+Q04BaseLoad(allCy,YTIME)                                   &quot;Compute electricity base load&quot;
+;
+Variables</code></pre>
+<p>*** Power Generation Variables</p>
+<pre><code>VCapElec2(allCy,PGALL,YTIME)                               &quot;Electricity generation plants capacity (GW)&quot;
+VRenTechMatMultExpr(allCy,PGALL,YTIME)                     &quot;Renewable power capacity over potential (1)&quot;
+VPotRenCurr(allCy,PGRENEF,YTIME)                           &quot;Current renewable potential (GW)&quot;           
+VCapElecCHP(allCy,CHP,YTIME)                               &quot;Capacity of CHP Plants (GW)&quot;
+VLambda(allCy,YTIME)                                       &quot;Parameter for load curve construction (1)&quot;
+VBsldEst(allCy,YTIME)                                      &quot;Estimated base load (GW)&quot;
+VBaseLoadMax(allCy,YTIME)                                  &quot;Baseload corresponding to Maximum Load Factor (1)&quot;
+VCostHourProdInvDec(allCy,PGALL,HOUR,YTIME)                &quot;Hourly production cost of technology (US$2015/KWh)&quot;
+VCostHourProdInvDecNoCCS(allCy,PGALL,HOUR,YTIME)           &quot;Hourly production cost of technology (US$2015/KWh)&quot; 
+VSensCCS(allCy,YTIME)                                      &quot;Variable that controlls the sensitivity of CCS acceptance (1)&quot;          
+VCostProdSpecTech(allCy,PGALL,YTIME)                       &quot;Production cost of technology (US$2015/KWh)&quot;
+VShareNewTechCCS(allCy,PGALL,YTIME)                        &quot;Power plant share in new equipment (1)&quot;     
+VShareNewTechNoCCS(allCy,PGALL,YTIME)                      &quot;Power plant share in new equipment (1)&quot;
+VCostVarTech(allCy,PGALL,YTIME)                            &quot;Variable cost of technology (US$2015/KWh)&quot;  
+VCostVarTechNotPGSCRN(allCy,PGALL,YTIME)                   &quot;Variable cost of technology excluding PGSCRN (US$2015/KWh)&quot;
+VCostProdTeCHPreReplac(allCy,PGALL,YTIME)                  &quot;Production cost of technology used in premature replacement (US$2015/KWh)&quot;
+VCostProdTeCHPreReplacAvail(allCy,PGALL,PGALL2,YTIME)      &quot;Production cost of technology used in premature replacement including plant availability rate (US$2015/KWh)&quot;            
+VIndxEndogScrap(allCy,PGALL,YTIME)                         &quot;Index used for endogenous power plants scrapping (1)&quot;           
+VCapElecNonCHP(allCy,YTIME)                                &quot;Total electricity generation capacity excluding CHP (GW)&quot;   
+VGapGenCapPowerDiff(allCy,YTIME)                           &quot;Gap in total generation capacity to be filled by new equipment (GW)&quot;        
+VPotRenSuppCurve(allCy,PGRENEF,YTIME)                      &quot;Renewable potential supply curve    (1)&quot;
+VPotRenMaxAllow(allCy,PGRENEF,YTIME)                       &quot;Maximum allowed renewable potential (GW)&quot;
+VRenTechMatMult(allCy,PGALL,YTIME)                         &quot;Renewable technologies maturity multiplier (1)&quot; 
+VScalWeibullSum(allCy,PGALL,YTIME)                         &quot;Sum (over hours) of temporary variable facilitating the scaling in Weibull equation (1)&quot;
+VNewInvElec(allCy,YTIME)                                   &quot;Power plant sorting for new investment decision according to total cost (1)&quot;    
+VSharePowPlaNewEq(allCy,PGALL,YTIME)                       &quot;Power plant share in new equipment (1)&quot;     
+VCostVarTechElec(allCy,PGALL,YTIME)                        &quot;Variable cost of technology (US$2015/KWh)&quot;  
+VCostVarTechElecTot(allCy,YTIME)                           &quot;Electricity peak loads (GW)&quot;    
+VSortPlantDispatch(allCy,PGALL,YTIME)                      &quot;Power plants sorting according to variable cost to decide the plant dispatching (1)&quot;
+VNewCapElec(allCy,PGALL,YTIME)                             &quot;The new capacity added every year (MW)&quot; 
+VNetNewCapElec(allCy,PGALL,YTIME)                          &quot;Yearly difference in installed capacity (MW)&quot;   
+VCFAvgRen(allCy,PGALL,YTIME)                               &quot;The average capacity factor of RES (1)&quot;
+VCapOverall(allCy,PGALL,YTIME)                             &quot;Overall Capacity (MW)&quot;  
+VScalFacPlaDisp(allCy,HOUR,YTIME)                          &quot;Scaling factor for plant dispatching    (1)&quot;
+VProdElecEstCHP(allCy,YTIME)                               &quot;Estimate the electricity of CHP Plants (1)&quot; 
+VProdElecNonCHP(allCy,YTIME)                               &quot;Non CHP total electricity production (TWh)&quot;             
+VProdElecReqCHP(allCy,YTIME)                               &quot;Total estimated CHP electricity production (TWh)&quot;   
+VCostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME)             &quot;Long-term average power generation cost (US$2015/kWh)&quot;
+VCostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)         &quot;Long-term average power generation cost excluding climate policies(US$2015/kWh)&quot;    
+VCostPowGenLonNoClimPol(allCy,ESET,YTIME)                  &quot;Long-term average power generation cost  excluding climate policies (US$2015/kWh)&quot;  
+VConsElec(allCy,DSBS,YTIME)                                &quot;Electricity demand per final sector (Mtoe)&quot;
+VLoadFacDom(allCy,YTIME)                                   &quot;Electricity load factor for entire domestic system&quot; 
+VProdElecCHP(allCy,CHP,YTIME)                              &quot;CHP electricity production (TWh)&quot;
+VProdElecReqTot(allCy,YTIME)                               &quot;Total required electricity production (TWh)&quot;
+VDemElecTot(allCy,YTIME)                                   &quot;Total electricity demand (TWh)&quot;</code></pre>
+<p><strong>Interdependent Variables</strong></p>
+<pre><code>VMVProdElec(allCy,PGALL,YTIME)                             &quot;Electricity production (TWh)&quot;   
+VMVCostPowGenAvgLng(allCy,ESET,YTIME)                      &quot;Long-term average power generation cost (US$2015/kWh)&quot;
+VMVCapElecTotEst(allCy,YTIME)                              &quot;Estimated Total electricity generation capacity (GW)&quot;
+VMVPeakLoad(allCy,YTIME)                                   &quot;Electricity peak load (GW)&quot; 
+VMVCapElec(allCy,PGALL,YTIME)                              &quot;Electricity generation plants capacity (GW)&quot;
+VMVBaseLoad(allCy,YTIME)                                   &quot;Corrected base load (GW)&quot;
+;</code></pre>
+<p>GENERAL INFORMATION Equation format: “typical useful energy demand
+equation” The main explanatory variables (drivers) are activity
+indicators (economic activity) and corresponding energy costs. The type
+of “demand” is computed based on its past value, the ratio of the
+current and past activity indicators (with the corresponding
+elasticity), and the ratio of lagged energy costs (with the
+corresponding elasticities). This type of equation captures both short
+term and long term reactions to energy costs. Power Generation This
+equation computes the current renewable potential, which is the average
+of the maximum allowed renewable potential and the minimum renewable
+potential for a given power generation sector and energy form in a
+specific time period. The result is the current renewable potential in
+gigawatts (GW).</p>
+<pre><code>QPotRenCurr(allCy,PGRENEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VPotRenCurr(allCy,PGRENEF,YTIME) 
+         =E=
+         ( VPotRenMaxAllow(allCy,PGRENEF,YTIME) + iMinRenPotential(allCy,PGRENEF,YTIME))/2;</code></pre>
+<p>This equation computes the electric capacity of Combined Heat and
+Power (CHP) plants. The capacity is calculated in gigawatts (GW) and is
+based on several factors, including the consumption of fuel in the
+industrial sector, the electricity prices in the industrial sector, the
+availability rate of power generation plants, and the utilization rate
+of CHP plants. The result represents the electric capacity of CHP plants
+in GW.</p>
+<pre><code>QCapElecCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VCapElecCHP(allCy,CHP,YTIME)
+         =E=
+         1/sTWhToMtoe * sum(INDDOM,VMVConsFuel(allCy,INDDOM,CHP,YTIME)) * VMVPriceElecInd(allCy,YTIME)/
+         sum(PGALL$CHPtoEON(CHP,PGALL),iAvailRate(PGALL,YTIME)) /
+         iUtilRateChpPlants(allCy,CHP,YTIME) /sGwToTwhPerYear;  </code></pre>
+<p>The “Lambda” parameter is computed in the context of electricity
+demand modeling. This formula captures the relationship between the load
+curve construction parameter and the ratio of the differences in
+electricity demand and corrected base load to the difference between
+peak load and corrected base load. It plays a role in shaping the load
+curve for effective electricity demand modeling.</p>
+<pre><code>QLambda(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         (1 - exp( -VLambda(allCy,YTIME)*sGwToTwhPerYear))  / (0.0001+VLambda(allCy,YTIME))
+             =E=
+         (VDemElecTot(allCy,YTIME) - sGwToTwhPerYear*VMVBaseLoad(allCy,YTIME))
+         / (VMVPeakLoad(allCy,YTIME) - VMVBaseLoad(allCy,YTIME));</code></pre>
+<p>The equation calculates the total electricity demand by summing the
+components of final energy consumption in electricity, final non-energy
+consumption in electricity, distribution losses, and final consumption
+in the energy sector for electricity, and then subtracting net imports.
+The result is normalized using a conversion factor which converts
+terawatt-hours (TWh) to million tonnes of oil equivalent (Mtoe). The
+formula provides a comprehensive measure of the factors contributing to
+the total electricity demand.</p>
+<pre><code>QDemElecTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VDemElecTot(allCy,YTIME)
+             =E=
+         1/sTWhToMtoe *
+         ( VMVConsFinEneCountry(allCy,&quot;ELC&quot;,YTIME) + VMVConsFinNonEne(allCy,&quot;ELC&quot;,YTIME) + VMVLossesDistr(allCy,&quot;ELC&quot;,YTIME)
+           + VMVConsFiEneSec(allCy,&quot;ELC&quot;,YTIME) - VMVImpNetEneBrnch(allCy,&quot;ELC&quot;,YTIME)
+         );</code></pre>
+<p>This equation computes the estimated base load as a quantity
+dependent on the electricity demand per final sector, as well as the
+baseload share of demand per sector, the rate of losses for final
+Consumption, the net imports, distribution losses and final consumption
+in energy sector.</p>
+<pre><code>QBsldEst(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VBsldEst(allCy,YTIME)
+             =E=
+         (
+             sum(DSBS, iBaseLoadShareDem(allCy,DSBS,YTIME)*VConsElec(allCy,DSBS,YTIME))*(1+iRateLossesFinCons(allCy,&quot;ELC&quot;,YTIME))*
+             (1 - VMVImpNetEneBrnch(allCy,&quot;ELC&quot;,YTIME)/(sum(DSBS, VConsElec(allCy,DSBS,YTIME))+VMVLossesDistr(allCy,&quot;ELC&quot;,YTIME)))
+             + 0.5*VMVConsFiEneSec(allCy,&quot;ELC&quot;,YTIME)
+         ) / sTWhToMtoe / sGwToTwhPerYear;</code></pre>
+<p>This equation calculates the load factor of the entire domestic
+system as a sum of consumption in each demand subsector and the sum of
+energy demand in transport subsectors (electricity only). Those sums are
+also divided by the load factor of electricity demand per sector</p>
+<pre><code>QLoadFacDom(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VLoadFacDom(allCy,YTIME)
+             =E=
+         (sum(INDDOM,VMVConsFuel(allCy,INDDOM,&quot;ELC&quot;,YTIME)) + sum(TRANSE, VMVDemFinEneTranspPerFuel(allCy,TRANSE,&quot;ELC&quot;,YTIME)))/
+         (sum(INDDOM,VMVConsFuel(allCy,INDDOM,&quot;ELC&quot;,YTIME)/iLoadFacElecDem(INDDOM)) + 
+         sum(TRANSE, VMVDemFinEneTranspPerFuel(allCy,TRANSE,&quot;ELC&quot;,YTIME)/iLoadFacElecDem(TRANSE)));         </code></pre>
+<p>The equation calculates the electricity peak load by dividing the
+total electricity demand by the load factor for the domestic sector and
+converting the result to gigawatts (GW) using the conversion factor.
+This provides an estimate of the maximum power demand during a specific
+time period, taking into account the domestic load factor.</p>
+<pre><code>Q04PeakLoad(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VMVPeakLoad(allCy,YTIME)
+             =E=
+         VDemElecTot(allCy,YTIME)/(VLoadFacDom(allCy,YTIME)*sGwToTwhPerYear);</code></pre>
+<p>This equation calculates the baseload corresponding to maximum load
+by multiplying the maximum load factor of electricity demand to the
+electricity peak load, minus the baseload corresponding to maximum load
+factor.</p>
+<pre><code>QBaseLoadMax(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         (VDemElecTot(allCy,YTIME)-VBaseLoadMax(allCy,YTIME)*sGwToTwhPerYear)
+             =E=
+         iMxmLoadFacElecDem(allCy,YTIME)*(VMVPeakLoad(allCy,YTIME)-VBaseLoadMax(allCy,YTIME))*sGwToTwhPerYear;  </code></pre>
+<p>This equation calculates the electricity base load utilizing
+exponential functions that include the estimated base load, the baseload
+corresponding to maximum load factor, and the parameter of baseload
+correction.</p>
+<pre><code>Q04BaseLoad(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VMVBaseLoad(allCy,YTIME)
+             =E=
+         (1/(1+exp(iBslCorrection(allCy,YTIME)*(VBsldEst(allCy,YTIME)-VBaseLoadMax(allCy,YTIME)))))*VBsldEst(allCy,YTIME)
+        +(1-1/(1+exp(iBslCorrection(allCy,YTIME)*(VBsldEst(allCy,YTIME)-VBaseLoadMax(allCy,YTIME)))))*VBaseLoadMax(allCy,YTIME);</code></pre>
+<p>This equation calculates the total required electricity production as
+a sum of the electricity peak load minus the corrected base load,
+multiplied by the exponential function of the parameter for load curve
+construction.</p>
+<pre><code>QProdElecReqTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VProdElecReqTot(allCy,YTIME)
+             =E=
+         sum(HOUR, (VMVPeakLoad(allCy,YTIME)-VMVBaseLoad(allCy,YTIME))
+                   * exp(-VLambda(allCy,YTIME)*(0.25+(ord(HOUR)-1)))
+             ) + 9*VMVBaseLoad(allCy,YTIME);   </code></pre>
+<p>The equation calculates the estimated total electricity generation
+capacity by multiplying the previous year’s total electricity generation
+capacity with the ratio of the current year’s estimated electricity peak
+load to the previous year’s electricity peak load. This provides an
+estimate of the required generation capacity based on the changes in
+peak load.</p>
+<pre><code>Q04CapElecTotEst(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+        VMVCapElecTotEst(allCy,YTIME)
+             =E=
+        VMVCapElecTotEst(allCy,YTIME-1) * VMVPeakLoad(allCy,YTIME)/VMVPeakLoad(allCy,YTIME-1);          </code></pre>
+<p>The equation calculates the hourly production cost of a power
+generation plant used in investment decisions. The cost is determined
+based on various factors, including the discount rate, gross capital
+cost, fixed operation and maintenance cost, availability rate, variable
+cost, renewable value, and fuel prices. The production cost is
+normalized per unit of electricity generated (kEuro2005/kWh) and is
+considered for each hour of the day. The equation includes
+considerations for renewable plants (excluding certain types) and fossil
+fuel plants.</p>
+<pre><code>QCostHourProdInvDec(allCy,PGALL,HOUR,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VCostHourProdInvDec(allCy,PGALL,HOUR,YTIME)
+                  =E=
+                  
+                    ( ( iDisc(allCy,&quot;PG&quot;,YTIME-1) * exp(iDisc(allCy,&quot;PG&quot;,YTIME-1)*iTechLftPlaType(allCy,PGALL))
+                        / (exp(iDisc(allCy,&quot;PG&quot;,YTIME)*iTechLftPlaType(allCy,PGALL)) -1))
+                      * iGrossCapCosSubRen(allCy,PGALL,YTIME-1)* 1E3 * iCGI(allCy,YTIME-1)  + iFixOandMCost(allCy,PGALL,YTIME-1)
+                    )/iAvailRate(PGALL,YTIME-1) / (1000*(ord(HOUR)-1+0.25))
+                    + iVarCost(PGALL,YTIME-1)/1E3 + (VRenValue(YTIME-1)*8.6e-5)$( not ( PGREN(PGALL) 
+                    $(not sameas(&quot;PGASHYD&quot;,PGALL)) $(not sameas(&quot;PGSHYD&quot;,PGALL)) $(not sameas(&quot;PGLHYD&quot;,PGALL)) ))
+                    + sum(PGEF$PGALLtoEF(PGALL,PGEF), (VMVPriceFuelSubsecCarVal(allCy,&quot;PG&quot;,PGEF,YTIME-1)+
+                        iCO2CaptRate(allCy,PGALL,YTIME-1)*VMVCstCO2SeqCsts(allCy,YTIME-1)*1e-3*
+                    iCo2EmiFac(allCy,&quot;PG&quot;,PGEF,YTIME-1)
+                         +(1-iCO2CaptRate(allCy,PGALL,YTIME-1))*1e-3*iCo2EmiFac(allCy,&quot;PG&quot;,PGEF,YTIME-1)*
+                         (sum(NAP$NAPtoALLSBS(NAP,&quot;PG&quot;),VCarVal(allCy,NAP,YTIME-1))))
+                         *sTWhToMtoe/iPlantEffByType(allCy,PGALL,YTIME-1))$(not PGREN(PGALL));</code></pre>
+<p>The equation calculates the hourly production cost for a given
+technology without carbon capture and storage investments. The result is
+expressed in Euro per kilowatt-hour (Euro/KWh). The equation is based on
+the power plant’s share in new equipment and the hourly production cost
+of technology without CCS . Additionally, it considers the contribution
+of other technologies with CCS by summing their shares in new equipment
+multiplied by their respective hourly production costs. The equation
+reflects the cost dynamics associated with technology investments and
+provides insights into the hourly production cost for power generation
+without CCS.</p>
+<pre><code>QCostHourProdInvDecNoCCS(allCy,PGALL,HOUR,YTIME)$(TIME(YTIME) $NOCCS(PGALL) $runCy(allCy)) ..
+         VCostHourProdInvDecNoCCS(allCy,PGALL,HOUR,YTIME) =E=
+         VShareNewTechNoCCS(allCy,PGALL,YTIME)*VCostHourProdInvDec(allCy,PGALL,HOUR,YTIME)+
+         sum(CCS$CCS_NOCCS(CCS,PGALL), VShareNewTechCCS(allCy,CCS,YTIME)*VCostHourProdInvDec(allCy,CCS,HOUR,YTIME)); </code></pre>
+<p>The equation reflects a dynamic relationship where the sensitivity to
+CCS acceptance is influenced by the carbon prices of different
+countries. The result provides a measure of the sensitivity of CCS
+acceptance based on the carbon values in the previous year.</p>
+<pre><code>QSensCCS(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VSensCCS(allCy,YTIME) =E= 10+EXP(-0.06*((sum(NAP$NAPtoALLSBS(NAP,&quot;PG&quot;),VCarVal(allCy,NAP,YTIME-1)))));</code></pre>
+<p>The equation computes the hourly production cost used in investment
+decisions, taking into account the acceptance of Carbon Capture and
+Storage . The production cost is modified based on the sensitivity of
+CCS acceptance. The sensitivity is used as an exponent to adjust the
+original production cost for power generation plants during each hour
+and for the specified year . This adjustment reflects the impact of CCS
+acceptance on the production cost.</p>
+<pre><code>$ontext
+qCostHourProdInvCCS(allCy,PGALL,HOUR,YTIME)$(TIME(YTIME) $(CCS(PGALL) or NOCCS(PGALL)) $runCy(allCy)) ..
+         vCostHourProdInvCCS(allCy,PGALL,HOUR,YTIME) 
+         =E=
+          VCostHourProdInvDec(allCy,PGALL,HOUR,YTIME)**(-VSensCCS(allCy,YTIME));
+$offtext</code></pre>
+<p>The equation calculates the production cost of a technology for a
+specific power plant and year. The equation involves the hourly
+production cost of the technology and a sensitivity variable controlling
+carbon capture and storage acceptance. The summation over hours is
+weighted by the inverse of the technology’s hourly production cost
+raised to the power of minus one-fourth of the sensitivity variable.</p>
+<pre><code>QCostProdSpecTech(allCy,PGALL,YTIME)$(TIME(YTIME) $(CCS(PGALL) or NOCCS(PGALL)) $runCy(allCy)) ..
+         VCostProdSpecTech(allCy,PGALL,YTIME) 
+         =E=  
+         sum(HOUR,VCostHourProdInvDec(allCy,PGALL,HOUR,YTIME)**(-VSensCCS(allCy,YTIME))) ;</code></pre>
+<p>The equation calculates the power plant’s share in new equipment for
+a specific power plant and year when carbon capture and storage is
+implemented. The share is determined based on a formulation that
+considers the production costs of the technology. The numerator of the
+share calculation involves a factor of 1.1 multiplied by the production
+cost of the technology for the specific power plant and year. The
+denominator includes the sum of the numerator and the production costs
+of other power plant types without CCS.</p>
+<pre><code>QShareNewTechCCS(allCy,PGALL,YTIME)$(TIME(YTIME) $CCS(PGALL) $runCy(allCy))..
+         VShareNewTechCCS(allCy,PGALL,YTIME) =E=
+         1.1 *VCostProdSpecTech(allCy,PGALL,YTIME)
+         /(1.1*VCostProdSpecTech(allCy,PGALL,YTIME)
+           + sum(PGALL2$CCS_NOCCS(PGALL,PGALL2),VCostProdSpecTech(allCy,PGALL2,YTIME))
+           );         </code></pre>
+<p>The equation calculates the power plant’s share in new equipment for
+a specific power plant and year when carbon capture and storage is not
+implemented . The equation is based on the complementarity relationship,
+expressing that the power plant’s share in new equipment without CCS is
+equal to one minus the sum of the shares of power plants with CCS in the
+new equipment. The sum is taken over all power plants with CCS for the
+given power plant type and year .</p>
+<pre><code>QShareNewTechNoCCS(allCy,PGALL,YTIME)$(TIME(YTIME) $NOCCS(PGALL) $runCy(allCy))..
+         VShareNewTechNoCCS(allCy,PGALL,YTIME) 
+         =E= 
+         1 - sum(CCS$CCS_NOCCS(CCS,PGALL), VShareNewTechCCS(allCy,CCS,YTIME));</code></pre>
+<p>Compute the variable cost of each power plant technology for every
+region, By utilizing the gross cost, fuel prices, CO2 emission factors
+&amp; capture, and plant efficiency.</p>
+<pre><code>QCostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
+         VCostVarTech(allCy,PGALL,YTIME) 
+             =E=
+         (iVarCost(PGALL,YTIME)/1E3 + sum(PGEF$PGALLtoEF(PGALL,PGEF), (VMVPriceFuelSubsecCarVal(allCy,&quot;PG&quot;,PGEF,YTIME)/1.2441+
+         iCO2CaptRate(allCy,PGALL,YTIME)*VMVCstCO2SeqCsts(allCy,YTIME)*1e-3*iCo2EmiFac(allCy,&quot;PG&quot;,PGEF,YTIME)
+         + (1-iCO2CaptRate(allCy,PGALL,YTIME))*1e-3*iCo2EmiFac(allCy,&quot;PG&quot;,PGEF,YTIME)
+          *(sum(NAP$NAPtoALLSBS(NAP,&quot;PG&quot;),VCarVal(allCy,NAP,YTIME))))
+          *sTWhToMtoe/iPlantEffByType(allCy,PGALL,YTIME))$(not PGREN(PGALL)));</code></pre>
+<p>The equation calculates the variable for a specific power plant and
+year when the power plant is not subject to endogenous scrapping. The
+calculation involves raising the variable cost of the technology for the
+specified power plant and year to the power of -5.</p>
+<pre><code>QCostVarTechNotPGSCRN(allCy,PGALL,YTIME)$(time(YTIME) $(not PGSCRN(PGALL)) $runCy(allCy))..
+         VCostVarTechNotPGSCRN(allCy,PGALL,YTIME) 
+              =E=
+          VCostVarTech(allCy,PGALL,YTIME)**(-5);</code></pre>
+<p>The equation calculates the production cost of a technology for a
+specific power plant and year. The equation involves various factors,
+including discount rates, technical lifetime of the plant type, gross
+capital cost with subsidies for renewables, capital goods index, fixed
+operation and maintenance costs, plant availability rate, variable costs
+other than fuel, fuel prices, CO2 capture rates, cost curve for CO2
+sequestration costs, CO2 emission factors, carbon values, plant
+efficiency, and specific conditions excluding renewable power plants .
+The equation reflects the complex dynamics of calculating the production
+cost, considering both economic and technical parameters.</p>
+<pre><code>QCostProdTeCHPreReplac(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VCostProdTeCHPreReplac(allCy,PGALL,YTIME) =e=
+                        (
+                          ((iDisc(allCy,&quot;PG&quot;,YTIME) * exp(iDisc(allCy,&quot;PG&quot;,YTIME)*iTechLftPlaType(allCy,PGALL))/
+                          (exp(iDisc(allCy,&quot;PG&quot;,YTIME)*iTechLftPlaType(allCy,PGALL)) -1))
+                            * iGrossCapCosSubRen(allCy,PGALL,YTIME)* 1E3 * iCGI(allCy,YTIME)  + 
+                            iFixOandMCost(allCy,PGALL,YTIME))/(8760*iAvailRate(PGALL,YTIME))
+                           + (iVarCost(PGALL,YTIME)/1E3 + sum(PGEF$PGALLtoEF(PGALL,PGEF), 
+                           (VMVPriceFuelSubsecCarVal(allCy,&quot;PG&quot;,PGEF,YTIME)+
+                            iCO2CaptRate(allCy,PGALL,YTIME)*VMVCstCO2SeqCsts(allCy,YTIME)*1e-3*iCo2EmiFac(allCy,&quot;PG&quot;,PGEF,YTIME) +
+                             (1-iCO2CaptRate(allCy,PGALL,YTIME))*1e-3*iCo2EmiFac(allCy,&quot;PG&quot;,PGEF,YTIME)*
+                         (sum(NAP$NAPtoALLSBS(NAP,&quot;PG&quot;),VCarVal(allCy,NAP,YTIME))))
+                                 *sTWhToMtoe/iPlantEffByType(allCy,PGALL,YTIME))$(not PGREN(PGALL)))
+                         );</code></pre>
+<p>The equation calculates the production cost of a technology used in
+premature replacement, considering plant availability rates. The result
+is expressed in Euro per kilowatt-hour (Euro/KWh). The equation involves
+the production cost of the technology used in premature replacement
+without considering availability rates and incorporates adjustments
+based on the availability rates of two power plants .</p>
+<pre><code>QCostProdTeCHPreReplacAvail(allCy,PGALL,PGALL2,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VCostProdTeCHPreReplacAvail(allCy,PGALL,PGALL2,YTIME) =E=
+         iAvailRate(PGALL,YTIME)/iAvailRate(PGALL2,YTIME)*VCostProdTeCHPreReplac(allCy,PGALL,YTIME)+
+         VCostVarTech(allCy,PGALL,YTIME)*(1-iAvailRate(PGALL,YTIME)/iAvailRate(PGALL2,YTIME));  </code></pre>
+<p>The equation computes the endogenous scrapping index for power
+generation plants during the specified year . The index is calculated as
+the variable cost of technology excluding power plants flagged as not
+subject to scrapping divided by the sum of this variable cost and a
+scaled value based on the scale parameter for endogenous scrapping . The
+scale parameter is applied to the sum of full costs and raised to the
+power of -5. The resulting index is used to determine the endogenous
+scrapping of power plants.</p>
+<pre><code>QIndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(allCy))..
+         VIndxEndogScrap(allCy,PGALL,YTIME)
+                 =E=
+         VCostVarTechNotPGSCRN(allCy,PGALL,YTIME)/
+         (VCostVarTechNotPGSCRN(allCy,PGALL,YTIME)+(iScaleEndogScrap(PGALL)*
+         sum(PGALL2,VCostProdTeCHPreReplacAvail(allCy,PGALL,PGALL2,YTIME)))**(-5));</code></pre>
+<p>The equation calculates the total electricity generation capacity
+excluding Combined Heat and Power plants for a specified year . It is
+derived by subtracting the sum of the capacities of CHP plants
+multiplied by a factor of 0.85 (assuming an efficiency of 85%) from the
+total electricity generation capacity . This provides the total
+electricity generation capacity without considering the contribution of
+CHP plants.</p>
+<pre><code>QCapElecNonCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VCapElecNonCHP(allCy,YTIME)
+          =E=
+VMVCapElecTotEst(allCy,YTIME) - SUM(CHP,VCapElecCHP(allCy,CHP,YTIME)*0.85);      </code></pre>
+<p>In essence, the equation evaluates the difference between the current
+and expected power generation capacity, accounting for various factors
+such as planned capacity, decommissioning schedules, and endogenous
+scrapping. The square root term introduces a degree of tolerance in the
+calculation.</p>
+<pre><code>QGapGenCapPowerDiff(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VGapGenCapPowerDiff(allCy,YTIME)
+             =E=
+ (        (  VCapElecNonCHP(allCy,YTIME) - VCapElecNonCHP(allCy,YTIME-1) + sum(PGALL,VCapElec2(allCy,PGALL,YTIME-1) * 
+ (1 - VIndxEndogScrap(allCy,PGALL,YTIME))) +
+          sum(PGALL, (iPlantDecomSched(allCy,PGALL,YTIME)-iDecInvPlantSched(allCy,PGALL,YTIME))*iAvailRate(PGALL,YTIME))
+          + Sum(PGALL$PGSCRN(PGALL), (VMVCapElec(allCy,PGALL,YTIME-1)-iPlantDecomSched(allCy,PGALL,YTIME))/
+          iTechLftPlaType(allCy,PGALL))
+       )
+  + 0 + SQRT( SQR(       (  VCapElecNonCHP(allCy,YTIME) - VCapElecNonCHP(allCy,YTIME-1) +
+        sum(PGALL,VCapElec2(allCy,PGALL,YTIME-1) * (1 - VIndxEndogScrap(allCy,PGALL,YTIME))) +
+          sum(PGALL, (iPlantDecomSched(allCy,PGALL,YTIME)-iDecInvPlantSched(allCy,PGALL,YTIME))*iAvailRate(PGALL,YTIME))
+          + Sum(PGALL$PGSCRN(PGALL), (VMVCapElec(allCy,PGALL,YTIME-1)-iPlantDecomSched(allCy,PGALL,YTIME))/
+          iTechLftPlaType(allCy,PGALL))
+       ) -0) + SQR(1e-10) ) )/2;</code></pre>
+<p>The equation calculates a temporary variable that facilitates the
+scaling in the Weibull equation. The equation involves the hourly
+production costs of technology for power plants with carbon capture and
+storage and without CCS . The production costs are raised to the power
+of -6, and the result is used as a scaling factor in the Weibull
+equation. The equation captures the cost-related considerations in
+determining the scaling factor for the Weibull equation based on the
+production costs of different technologies.</p>
+<pre><code>$ontext
+qScalWeibull(allCy,PGALL,HOUR,YTIME)$((not CCS(PGALL))$TIME(YTIME) $runCy(allCy))..
+          vScalWeibull(allCy,PGALL,HOUR,YTIME) 
+         =E=
+         (VCostHourProdInvDec(allCy,PGALL,HOUR,YTIME)$(not NOCCS(PGALL))
+         +
+          VCostHourProdInvDecNoCCS(allCy,PGALL,HOUR,YTIME)$NOCCS(PGALL))**(-6);     
+$offtext</code></pre>
+<p>The equation calculates the renewable potential supply curve for a
+specified year. Including: The minimum renewable potential for the given
+renewable energy form and country in the specified year. The carbon
+price value associated with the country in the specified year for the
+purpose of renewable potential estimation, the “Trade” attribute refers
+to tradable permits (if carbon pricing exists in the form of an
+emissions trading scheme). The maximum renewable potential for the
+specified renewable energy form and country in the given year. The
+renewable potential supply curve is then calculated by linearly
+interpolating between the minimum and maximum renewable potentials based
+on the trade value. The trade value is normalized by dividing it by 70.
+The equation essentially defines a linear relationship between the trade
+value and the renewable potential within the specified range.</p>
+<pre><code>QPotRenSuppCurve(allCy,PGRENEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VPotRenSuppCurve(allCy,PGRENEF,YTIME) =E=
+         iMinRenPotential(allCy,PGRENEF,YTIME) +(VCarVal(allCy,&quot;Trade&quot;,YTIME))/(70)*
+         (iMaxRenPotential(allCy,PGRENEF,YTIME)-iMinRenPotential(allCy,PGRENEF,YTIME));</code></pre>
+<p>*The equation calculates the maximum allowed renewable potential for
+a specific renewable energy form and country in the given year .
+Including: VThe renewable potential supply curve for the specified
+renewable energy form, country, and year, as calculated in the previous
+equation. The maximum renewable potential for the specified renewable
+energy form and country in the given year. The maximum allowed renewable
+potential is computed as the average between the calculated renewable
+potential supply curve and the maximum renewable potential. This
+formulation ensures that the potential does not exceed the maximum
+allowed value.</p>
+<pre><code>QPotRenMaxAllow(allCy,PGRENEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..      
+         VPotRenMaxAllow(allCy,PGRENEF,YTIME) =E=
+         ( VPotRenSuppCurve(allCy,PGRENEF,YTIME)+ iMaxRenPotential(allCy,PGRENEF,YTIME))/2;</code></pre>
+<p>The equation calculates the minimum allowed renewable potential for a
+specific renewable energy form and country in the given year .
+Including: The renewable potential supply curve for the specified
+renewable energy form, country, and year, as calculated in a previous
+equation. The minimum renewable potential for the specified renewable
+energy form and country in the given year. The minimum allowed renewable
+potential is computed as the average between the calculated renewable
+potential supply curve and the minimum renewable potential. This
+formulation ensures that the potential does not fall below the minimum
+allowed value.</p>
+<pre><code>$ontext
+qPotRenMinAllow(allCy,PGRENEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..  
+         vPotRenMinAllow(allCy,PGRENEF,YTIME) =E=
+         ( VPotRenSuppCurve(allCy,PGRENEF,YTIME) + iMinRenPotential(allCy,PGRENEF,YTIME))/2;
+$offtext</code></pre>
+<p>The equation calculates a maturity multiplier for renewable
+technologies. If the technology is renewable , the multiplier is
+determined based on an exponential function that involves the ratio of
+the planned electricity generation capacities of renewable technologies
+to the renewable potential supply curve. This ratio is adjusted using a
+logistic function with parameters that influence the maturity of
+renewable technologies. If the technology is not renewable, the maturity
+multiplier is set to 1. The purpose is to model the maturity level of
+renewable technologies based on their planned capacities relative to the
+renewable potential supply curve.</p>
+<pre><code>QRenTechMatMultExpr(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+VRenTechMatMultExpr(allCy,PGALL,YTIME)
+=E=
+                 sum(PGRENEF$PGALLtoPGRENEF(PGALL,PGRENEF),
+                 sum(PGALL2$(PGALLtoPGRENEF(PGALL2,PGRENEF) $PGREN(PGALL2)),
+                 VCapElec2(allCy,PGALL2,YTIME-1))/VPotRenCurr(allCy,PGRENEF,YTIME))-0.6;
+QRenTechMatMult(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VRenTechMatMult(allCy,PGALL,YTIME)
+          =E=
+         1$(NOT PGREN(PGALL))
+         +
+         (
+           1/(1+exp(5*VRenTechMatMultExpr(allCy,PGALL,YTIME)))
+           )$PGREN(PGALL);  </code></pre>
+<p>The equation calculates a temporary variable which is used to
+facilitate scaling in the Weibull equation. The scaling is influenced by
+three main factors: Maturity Factor for Planned Available Capacity :
+This factor represents the material-specific influence on the planned
+available capacity for a power plant. It accounts for the capacity
+planning aspect of the power generation technology. Renewable
+Technologies Maturity Multiplier: This multiplier reflects the maturity
+level of renewable technologies. It adjusts the scaling based on how
+mature and established the renewable technology is, with a higher
+maturity leading to a larger multiplier. Hourly Production Costs : The
+summation involves the hourly production costs of the technology raised
+to the power of -6. This suggests that higher production costs
+contribute less to the overall scaling, emphasizing the importance of
+cost efficiency in the scaling process. The result is a combined measure
+that takes into account material factors, technology maturity, and cost
+efficiency in the context of the Weibull equation, providing a
+comprehensive basis for scaling considerations.</p>
+<pre><code>QScalWeibullSum(allCy,PGALL,YTIME)$((not CCS(PGALL)) $TIME(YTIME) $runCy(allCy))..
+         VScalWeibullSum(allCy,PGALL,YTIME) 
+         =E=
+              iMatFacPlaAvailCap(allCy,PGALL,YTIME) * VRenTechMatMult(allCy,PGALL,YTIME)*
+              sum(HOUR,
+                 (VCostHourProdInvDec(allCy,PGALL,HOUR,YTIME)$(not NOCCS(PGALL))
+                 +
+                 VCostHourProdInvDecNoCCS(allCy,PGALL,HOUR,YTIME)$NOCCS(PGALL)
+                 )**(-6)
+              ); 
+  </code></pre>
+<p>The equation calculates the variable representing the new investment
+decision for power plants in a given country and time period. It sums
+the values for all power plants that do not have carbon capture and
+storage technology . The values capture the scaling factors influenced
+by material-specific factors, renewable technology maturity, and cost
+efficiency considerations. Summing these values over relevant power
+plants provides an aggregated measure for informing new investment
+decisions, emphasizing factors such as technology readiness and economic
+viability.</p>
+<pre><code>QNewInvElec(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VNewInvElec(allCy,YTIME)
+             =E=
+         sum(PGALL$(not CCS(PGALL)),VScalWeibullSum(allCy,PGALL,YTIME));</code></pre>
+<p>The equation calculates the variable representing the power plant
+share in new equipment for a specific power plant in a given country and
+time period . The calculation depends on whether the power plant has
+carbon capture and storage technology . For power plants without CCS ,
+the share in new equipment is determined by the ratio of the value for
+the specific power plant to the overall new investment decision for
+power plants . This ratio provides a proportionate share of new
+equipment for each power plant, considering factors such as
+material-specific scaling and economic considerations.For power plants
+with CCS , the share is determined by summing the shares of
+corresponding power plants without CCS. This allows for the allocation
+of shares in new equipment for CCS and non-CCS versions of the same
+power plant.</p>
+<pre><code>QSharePowPlaNewEq(allCy,PGALL,YTIME)$(TIME(YTIME) $runCy(allCy)) ..
+        VSharePowPlaNewEq(allCy,PGALL,YTIME)
+             =E=
+         ( VScalWeibullSum(allCy,PGALL,YTIME)/ VNewInvElec(allCy,YTIME))$(not CCS(PGALL))
+          +
+          sum(NOCCS$CCS_NOCCS(PGALL,NOCCS),VSharePowPlaNewEq(allCy,NOCCS,YTIME))$CCS(PGALL);</code></pre>
+<p>This equation calculates the variable representing the electricity
+generation capacity for a specific power plant in a given country and
+time period. The calculation takes into account various factors related
+to new investments, decommissioning, and technology-specific parameters.
+The equation aims to model the evolution of electricity generation
+capacity over time, considering new investments, decommissioning, and
+technology-specific parameters.</p>
+<pre><code>Q04CapElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VMVCapElec(allCy,PGALL,YTIME)
+             =E=
+         (VCapElec2(allCy,PGALL,YTIME-1)*VIndxEndogScrap(allCy,PGALL,YTIME-1) +
+          VNewCapElec(allCy,PGALL,YTIME) -
+          iPlantDecomSched(allCy,PGALL,YTIME) * iAvailRate(PGALL,YTIME)
+         ) -
+         ((VMVCapElec(allCy,PGALL,YTIME-1)-iPlantDecomSched(allCy,PGALL,YTIME-1))* 
+         iAvailRate(PGALL,YTIME)*(1/iTechLftPlaType(allCy,PGALL)))$PGSCRN(PGALL);
+QNewCapElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+      VNewCapElec(allCy,PGALL,YTIME)
+          =E=
+      (
+        (VSharePowPlaNewEq(allCy,PGALL,YTIME) * VGapGenCapPowerDiff(allCy,YTIME))$( (not CCS(PGALL)) AND (not NOCCS(PGALL))) +
+        (VSharePowPlaNewEq(allCy,PGALL,YTIME) * VShareNewTechNoCCS(allCy,PGALL,YTIME) * VGapGenCapPowerDiff(allCy,YTIME))$NOCCS(PGALL) +
+        (VSharePowPlaNewEq(allCy,PGALL,YTIME) * VShareNewTechNoCCS(allCy,PGALL,YTIME) * VGapGenCapPowerDiff(allCy,YTIME))$CCS(PGALL) +
+        iDecInvPlantSched(allCy,PGALL,YTIME) * iAvailRate(PGALL,YTIME)
+      );
+  </code></pre>
+<p>This equation calculates the variable representing the planned
+electricity generation capacity for a specific power plant in a given
+country and time period. The calculation involves adjusting the actual
+electricity generation capacity by a small constant and the square root
+of the sum of the square of the capacity and a small constant. The
+purpose of this adjustment is likely to avoid numerical issues and
+ensure a positive value for the planned capacity.</p>
+<pre><code>QCapElec2(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VCapElec2(allCy,PGALL,YTIME)
+             =E=
+         ( VMVCapElec(allCy,PGALL,YTIME) + 1e-6 + SQRT( SQR(VMVCapElec(allCy,PGALL,YTIME)-1e-6) + SQR(1e-4) ) )/2;</code></pre>
+<p>Compute the variable cost of each power plant technology for every
+region, by utilizing the maturity factor related to plant
+dispatching.</p>
+<pre><code>QCostVarTechElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VCostVarTechElec(allCy,PGALL,YTIME)
+         =E=  
+          iMatureFacPlaDisp(allCy,PGALL,YTIME)*VCostVarTech(allCy,PGALL,YTIME)**(-2);</code></pre>
+<p>Compute the electricity peak loads of each region, as a sum of the
+variable costs of all power plant technologies.</p>
+<pre><code>QCostVarTechElecTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VCostVarTechElecTot(allCy,YTIME) 
+         =E= 
+         sum(PGALL, VCostVarTechElec(allCy,PGALL,YTIME));     </code></pre>
+<p>Compute power plant sorting to decide the plant dispatching. This is
+accomplished by dividing the variable cost by the peak loads.</p>
+<pre><code>QSortPlantDispatch(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VSortPlantDispatch(allCy,PGALL,YTIME)
+                 =E=
+         VCostVarTechElec(allCy,PGALL,YTIME)
+         /
+         VCostVarTechElecTot(allCy,YTIME);  </code></pre>
+<p>This equation calculates the variable representing the newly added
+electricity generation capacity for a specific renewable power plant in
+a given country and time period. The calculation involves subtracting
+the planned electricity generation capacity in the current time period
+from the planned capacity in the previous time period. The purpose of
+this equation is to quantify the increase in electricity generation
+capacity for renewable power plants on a yearly basis.</p>
+<pre><code>QNetNewCapElec(allCy,PGALL,YTIME)$(PGREN(PGALL)$TIME(YTIME)$runCy(allCy))..
+        VNetNewCapElec(allCy,PGALL,YTIME) 
+            =E=
+        VCapElec2(allCy,PGALL,YTIME)- VCapElec2(allCy,PGALL,YTIME-1);                       </code></pre>
+<p>This equation calculates the variable representing the average
+capacity factor of renewable energy sources for a specific renewable
+power plant in a given country and time period. The capacity factor is a
+measure of the actual electricity generation output relative to the
+maximum possible output.The calculation involves considering the
+availability rates for the renewable power plant in the current and
+seven previous time periods, as well as the newly added capacity in
+these periods. The average capacity factor is then computed as the
+weighted average of the availability rates over these eight periods.</p>
+<pre><code>QCFAvgRen(allCy,PGALL,YTIME)$(PGREN(PGALL)$TIME(YTIME)$runCy(allCy))..
+   VCFAvgRen(allCy,PGALL,YTIME)
+      =E=
+    (iAvailRate(PGALL,YTIME)*VNetNewCapElec(allCy,PGALL,YTIME)+
+     iAvailRate(PGALL,YTIME-1)*VNetNewCapElec(allCy,PGALL,YTIME-1)+
+     iAvailRate(PGALL,YTIME-2)*VNetNewCapElec(allCy,PGALL,YTIME-2)+
+     iAvailRate(PGALL,YTIME-3)*VNetNewCapElec(allCy,PGALL,YTIME-3)+
+     iAvailRate(PGALL,YTIME-4)*VNetNewCapElec(allCy,PGALL,YTIME-4)+
+     iAvailRate(PGALL,YTIME-5)*VNetNewCapElec(allCy,PGALL,YTIME-5)+
+     iAvailRate(PGALL,YTIME-6)*VNetNewCapElec(allCy,PGALL,YTIME-6)+
+     iAvailRate(PGALL,YTIME-7)*VNetNewCapElec(allCy,PGALL,YTIME-7))/
+(VNetNewCapElec(allCy,PGALL,YTIME)+VNetNewCapElec(allCy,PGALL,YTIME-1)+VNetNewCapElec(allCy,PGALL,YTIME-2)+
+VNetNewCapElec(allCy,PGALL,YTIME-3)+VNetNewCapElec(allCy,PGALL,YTIME-4)+VNetNewCapElec(allCy,PGALL,YTIME-5)+
+VNetNewCapElec(allCy,PGALL,YTIME-6)+VNetNewCapElec(allCy,PGALL,YTIME-7));</code></pre>
+<p>This equation calculates the variable representing the overall
+capacity for a specific power plant in a given country and time period .
+The overall capacity is a composite measure that includes the existing
+capacity for non-renewable power plants and the expected capacity for
+renewable power plants based on their average capacity factor.</p>
+<pre><code>QCapOverall(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+     VCapOverall(allCy,PGALL,YTIME)
+     =E=
+VCapElec2(allCy,pgall,ytime)$ (not PGREN(PGALL))
++VCFAvgRen(allCy,PGALL,YTIME-1)*(VNetNewCapElec(allCy,PGALL,YTIME)/iAvailRate(PGALL,YTIME)+
+VCapOverall(allCy,PGALL,YTIME-1)
+/VCFAvgRen(allCy,PGALL,YTIME-1))$PGREN(PGALL);</code></pre>
+<p>This equation calculates the scaling factor for plant dispatching in
+a specific country , hour of the day, and time period . The scaling
+factor for determining the dispatch order of different power plants
+during a particular hour.</p>
+<pre><code>$ontext
+qScalFacPlantDispatchExpr(allCy,PGALL,HOUR,YTIME)$(TIME(YTIME)$(runCy(allCy))) ..
+vScalFacPlantDispatchExpr(allCy,PGALL,HOUR,YTIME)
+=E=
+-VScalFacPlaDisp(allCy,HOUR,YTIME)/VSortPlantDispatch(allCy,PGALL,YTIME);
+$offtext
+QScalFacPlantDispatch(allCy,HOUR,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         sum(PGALL,
+                 (VCapOverall(allCy,PGALL,YTIME)+
+                 sum(CHP$CHPtoEON(CHP,PGALL),VCapElecCHP(allCy,CHP,YTIME)))*
+                 exp(-VScalFacPlaDisp(allCy,HOUR,YTIME)/VSortPlantDispatch(allCy,PGALL,YTIME))
+                 )
+         =E=
+         (VMVPeakLoad(allCy,YTIME) - VMVBaseLoad(allCy,YTIME))
+         * exp(-VLambda(allCy,YTIME)*(0.25 + ord(HOUR)-1))
+         + VMVBaseLoad(allCy,YTIME);</code></pre>
+<p>This equation calculates the estimated electricity generation of
+Combined Heat and Power plantsin a specific countryand time period. The
+estimation is based on the fuel consumption of CHP plants, their
+electricity prices, the maximum share of CHP electricity in total
+demand, and the overall electricity demand. The equation essentially
+estimates the electricity generation of CHP plants by considering their
+fuel consumption, electricity prices, and the maximum share of CHP
+electricity in total demand. The square root expression ensures that the
+estimated electricity generation remains non-negative.</p>
+<pre><code>QProdElecEstCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VProdElecEstCHP(allCy,YTIME) 
+         =E=
+         ( (1/0.086 * sum((INDDOM,CHP),VMVConsFuel(allCy,INDDOM,CHP,YTIME)) * VMVPriceElecInd(allCy,YTIME)) + 
+         iMxmShareChpElec(allCy,YTIME)*VDemElecTot(allCy,YTIME) - SQRT( SQR((1/0.086 * sum((INDDOM,CHP),VMVConsFuel(allCy,INDDOM,CHP,YTIME)) * 
+         VMVPriceElecInd(allCy,YTIME)) - 
+         iMxmShareChpElec(allCy,YTIME)*VDemElecTot(allCy,YTIME)) + SQR(1E-4) ) )/2;</code></pre>
+<p>This equation calculates the non-Combined Heat and Power electricity
+production in a specific country and time period . It is essentially the
+difference between the total electricity demand and the estimated
+electricity generation from CHP plants .In summary, the equation
+calculates the electricity production from technologies other than CHP
+by subtracting the estimated CHP electricity generation from the total
+electricity demand.</p>
+<pre><code>QProdElecNonCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VProdElecNonCHP(allCy,YTIME) 
+         =E=
+  (VDemElecTot(allCy,YTIME) - VProdElecEstCHP(allCy,YTIME));  </code></pre>
+<p>This equation calculates the total required electricity production
+for a specific country and time period . The total required electricity
+production is the sum of electricity generation from different
+technologies, including CHP plants, across all hours of the day. The
+total required electricity production is the sum of the electricity
+generation from all CHP plants across all hours, considering the scaling
+factor for plant dispatching.</p>
+<pre><code>QProdElecReqCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+VProdElecReqCHP(allCy,YTIME) 
+                   =E=
+         sum(hour, sum(CHP,VCapElecCHP(allCy,CHP,YTIME)*exp(-VScalFacPlaDisp(allCy,HOUR,YTIME)/ 
+         sum(pgall$chptoeon(chp,pgall),VSortPlantDispatch(allCy,PGALL,YTIME)))));</code></pre>
+<p>This equation calculates the electricity production from power
+generation plants for a specific country , power generation plant type ,
+and time period . The electricity production is determined based on the
+overall electricity demand, the required electricity production, and the
+capacity of the power generation plants.The equation calculates the
+electricity production from power generation plants based on the
+proportion of electricity demand that needs to be met by power
+generation plants, considering their capacity and the scaling factor for
+dispatching.</p>
+<pre><code>Q04ProdElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VMVProdElec(allCy,PGALL,YTIME)
+                 =E=
+         VProdElecNonCHP(allCy,YTIME) /
+         (VProdElecReqTot(allCy,YTIME)- VProdElecReqCHP(allCy,YTIME))
+         * VCapElec2(allCy,PGALL,YTIME)* sum(HOUR, exp(-VScalFacPlaDisp(allCy,HOUR,YTIME)/VSortPlantDispatch(allCy,PGALL,YTIME)));</code></pre>
+<p>This equation calculates the sector contribution to total Combined
+Heat and Power production . The contribution is calculated for a
+specific country , industrial sector , CHP technology , and time period
+.The sector contribution is calculated by dividing the fuel consumption
+of the specific industrial sector for CHP by the total fuel consumption
+of CHP across all industrial sectors. The result represents the
+proportion of CHP production attributable to the specified industrial
+sector. The denominator has a small constant (1e-6) added to avoid
+division by zero.</p>
+<pre><code>$ontext
+qSecContrTotCHPProd(allCy,INDDOM,CHP,YTIME)$(TIME(YTIME) $SECTTECH(INDDOM,CHP) $runCy(allCy))..
+         vSecContrTotCHPProd(allCy,INDDOM,CHP,YTIME) 
+          =E=
+         VMVConsFuel(allCy,INDDOM,CHP,YTIME)/(1e-6+SUM(INDDOM2,VMVConsFuel(allCy,INDDOM2,CHP,YTIME)));
+$offtext</code></pre>
+<p>This equation calculates the electricity production from Combined
+Heat and Power plants . The electricity production is computed for a
+specific country , CHP technology , and time period.The electricity
+production from CHP plants is computed by taking the ratio of the fuel
+consumption by the specified industrial sector for CHP technology to the
+total fuel consumption for all industrial sectors and CHP technologies.
+This ratio is then multiplied by the difference between total
+electricity demand and the sum of electricity production from all power
+generation plants. The result represents the portion of electricity
+production from CHP plants attributed to the specified CHP
+technology.</p>
+<pre><code>QProdElecCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VProdElecCHP(allCy,CHP,YTIME)
+                 =E=
+        sum(INDDOM,VMVConsFuel(allCy,INDDOM,CHP,YTIME)) / SUM(chp2,sum(INDDOM,VMVConsFuel(allCy,INDDOM,CHP2,YTIME)))*
+        (VDemElecTot(allCy,YTIME) - SUM(PGALL,VMVProdElec(allCy,PGALL,YTIME)));</code></pre>
+<p>This equation calculates the long-term power generation cost of
+technologies excluding climate policies. The cost is computed for a
+specific country, power generation technology , energy sector, and time
+period. The long-term power generation cost is computed as a combination
+of capital costs, operating and maintenance costs, and variable costs,
+considering factors such as discount rates, technological lifetimes, and
+subsidies. The resulting cost is adjusted based on the availability rate
+and conversion factors. The equation provides a comprehensive
+calculation of the long-term cost associated with power generation
+technologies, excluding climate policy-related costs.</p>
+<pre><code>QCostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VCostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME)
+                 =E=
+             (iDisc(allCy,&quot;PG&quot;,YTIME)*EXP(iDisc(allCy,&quot;PG&quot;,YTIME)*iTechLftPlaType(allCy,PGALL)) /
+             (EXP(iDisc(allCy,&quot;PG&quot;,YTIME)*iTechLftPlaType(allCy,PGALL))-1)*iGrossCapCosSubRen(allCy,PGALL,YTIME)*1000*iCGI(allCy,YTIME) +
+             iFixOandMCost(allCy,PGALL,YTIME))/iAvailRate(PGALL,YTIME)
+              / (1000*(6$ISET(ESET)+4$RSET(ESET))) +
+             sum(PGEF$PGALLTOEF(PGALL,PGEF),
+                 (iVarCost(PGALL,YTIME)/1000+(VMVPriceFuelSubsecCarVal(allCy,&quot;PG&quot;,PGEF,YTIME)/1.2441+
+                 iCO2CaptRate(allCy,PGALL,YTIME)*VMVCstCO2SeqCsts(allCy,YTIME)*1e-3*iCo2EmiFac(allCy,&quot;PG&quot;,PGEF,YTIME) +
+                 (1-iCO2CaptRate(allCy,PGALL,YTIME))*1e-3*iCo2EmiFac(allCy,&quot;PG&quot;,PGEF,YTIME)*
+                 (sum(NAP$NAPtoALLSBS(NAP,&quot;PG&quot;),VCarVal(allCy,NAP,YTIME))))
+                 *sTWhToMtoe/iPlantEffByType(allCy,PGALL,YTIME)));</code></pre>
+<p>This equation calculates the long-term minimum power generation cost
+for a specific country , power generation technology, and time period.
+The minimum cost is computed considering various factors, including
+discount rates, technological lifetimes, gross capital costs, fixed
+operating and maintenance costs, availability rates, variable costs,
+fuel prices, carbon capture rates, carbon capture and storage costs,
+carbon emission factors, and plant efficiency.The long-term minimum
+power generation cost is calculated as a combination of capital costs,
+operating and maintenance costs, and variable costs, considering factors
+such as discount rates, technological lifetimes, and subsidies. The
+resulting cost is adjusted based on the availability rate and conversion
+factors. This equation provides insight into the minimum cost associated
+with power generation technologies, excluding climate policy-related
+costs, and uses a consistent conversion factor for power capacity.</p>
+<pre><code>$ontext
+qCostPowGenLonMin(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         vCostPowGenLonMin(allCy,PGALL,YTIME)
+                 =E=
+             (iDisc(allCy,&quot;PG&quot;,YTIME)*EXP(iDisc(allCy,&quot;PG&quot;,YTIME)*iTechLftPlaType(allCy,PGALL)) /
+             (EXP(iDisc(allCy,&quot;PG&quot;,YTIME)*iTechLftPlaType(allCy,PGALL))-1)*iGrossCapCosSubRen(allCy,PGALL,YTIME)*1000*iCGI(allCy,YTIME) +
+             iFixOandMCost(allCy,PGALL,YTIME))/iAvailRate(PGALL,YTIME)
+             / (1000*sGwToTwhPerYear) +
+             sum(PGEF$PGALLTOEF(PGALL,PGEF),
+                 (iVarCost(PGALL,YTIME)/1000+(VMVPriceFuelSubsecCarVal(allCy,&quot;PG&quot;,PGEF,YTIME)/1.2441+
+                 iCO2CaptRate(allCy,PGALL,YTIME)*VMVCstCO2SeqCsts(allCy,YTIME)*1e-3*iCo2EmiFac(allCy,&quot;PG&quot;,PGEF,YTIME) +
+                 (1-iCO2CaptRate(allCy,PGALL,YTIME))*1e-3*iCo2EmiFac(allCy,&quot;PG&quot;,PGEF,YTIME)*
+                 (sum(NAP$NAPtoALLSBS(NAP,&quot;PG&quot;),VCarVal(allCy,NAP,YTIME))))
+                 *sTWhToMtoe/iPlantEffByType(allCy,PGALL,YTIME)));   
+$offtext</code></pre>
+<p>This equation calculates the long-term power generation cost of
+technologies, including international prices of main fuels. It involves
+summing the variable costs associated with each power generation plant
+and energy form, taking into account international prices of main fuels.
+The result is the long-term power generation cost per unit of
+electricity produced in the given time period. The equation also
+includes factors such as discount rates, plant availability rates, and
+the gross capital cost per plant type with subsidies for renewables.</p>
+<pre><code>$ontext
+qCostPowGenLongIntPri(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         vCostPowGenLongIntPri(allCy,PGALL,ESET,YTIME)
+                 =E=
+             (iDisc(allCy,&quot;PG&quot;,YTIME)*EXP(iDisc(allCy,&quot;PG&quot;,YTIME)*iTechLftPlaType(allCy,PGALL)) /
+             (EXP(iDisc(allCy,&quot;PG&quot;,YTIME)*iTechLftPlaType(allCy,PGALL))-1)*iGrossCapCosSubRen(allCy,PGALL,YTIME)/1.5*1000*iCGI(allCy,YTIME) +
+             iFixOandMCost(allCy,PGALL,YTIME))/iAvailRate(PGALL,YTIME)
+             / (1000*(7.25$ISET(ESET)+2.25$RSET(ESET))) +
+             sum(PGEF$PGALLTOEF(PGALL,PGEF),
+                 (iVarCost(PGALL,YTIME)/1000+((
+  SUM(EF,sum(WEF$EFtoWEF(&quot;PG&quot;,EF,WEF), iPriceFuelsInt(WEF,YTIME))*sTWhToMtoe/1000*1.5))$(not PGREN(PGALL))    +
+                 iCO2CaptRate(allCy,PGALL,YTIME)*VMVCstCO2SeqCsts(allCy,YTIME)*1e-3*iCo2EmiFac(allCy,&quot;PG&quot;,PGEF,YTIME) +
+                 (1-iCO2CaptRate(allCy,PGALL,YTIME))*1e-3*iCo2EmiFac(allCy,&quot;PG&quot;,PGEF,YTIME)*
+                 (sum(NAP$NAPtoALLSBS(NAP,&quot;PG&quot;),VCarVal(allCy,NAP,YTIME))))
+                 *sTWhToMtoe/iPlantEffByType(allCy,PGALL,YTIME))); 
+$offtext</code></pre>
+<p>This equation calculates the short-term power generation cost of
+technologies, including international prices of main fuels. It involves
+summing the variable costs associated with each power generation plant
+and energy form, taking into account international prices of main fuels.
+The result is the short-term power generation cost per unit of
+electricity produced in the given time period.</p>
+<pre><code>$ontext
+qCostPowGenShortIntPri(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         vCostPowGenShortIntPri(allCy,PGALL,ESET,YTIME)
+                 =E=
+             sum(PGEF$PGALLTOEF(PGALL,PGEF),
+                 (iVarCost(PGALL,YTIME)/1000+((
+  SUM(EF,sum(WEF$EFtoWEF(&quot;PG&quot;,EF,WEF), iPriceFuelsInt(WEF,YTIME))*sTWhToMtoe/1000*1.5))$(not PGREN(PGALL))    +
+                 iCO2CaptRate(allCy,PGALL,YTIME)*VMVCstCO2SeqCsts(allCy,YTIME)*1e-3*iCo2EmiFac(allCy,&quot;PG&quot;,PGEF,YTIME) +
+                 (1-iCO2CaptRate(allCy,PGALL,YTIME))*1e-3*iCo2EmiFac(allCy,&quot;PG&quot;,PGEF,YTIME)*
+                 (sum(NAP$NAPtoALLSBS(NAP,&quot;PG&quot;),VCarVal(allCy,NAP,YTIME))))
+                 *sTWhToMtoe/iPlantEffByType(allCy,PGALL,YTIME)));    
+$offtext</code></pre>
+<p>This equation computes the long-term average power generation cost.
+It involves summing the long-term average power generation costs for
+different power generation plants and energy forms, considering the
+specific characteristics and costs associated with each. The result is
+the average power generation cost per unit of electricity consumed in
+the given time period.</p>
+<pre><code>Q04CostPowGenAvgLng(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VMVCostPowGenAvgLng(allCy,ESET,YTIME)
+                 =E=
+         (
+         SUM(PGALL, VMVProdElec(allCy,PGALL,YTIME)*VCostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME))
+        +
+         sum(CHP, VMVCostElcAvgProdCHP(allCy,CHP,YTIME)*VProdElecCHP(allCy,CHP,YTIME))
+         )
+/VDemElecTot(allCy,YTIME); </code></pre>
+<p>The equation represents the long-term average power generation cost
+excluding climate policies. It calculates the cost in Euro2005 per
+kilowatt-hour (kWh) for a specific combination of parameters. The
+equation is composed of various factors, including discount rates,
+technical lifetime of the plant type, gross capital cost with subsidies
+for renewables, fixed operation and maintenance costs, plant
+availability rate, variable costs other than fuel, fuel prices,
+efficiency values, CO2 emission factors, CO2 capture rates, and carbon
+prices. The equation incorporates a summation over different plant fuel
+types and considers the cost curve for CO2 sequestration. The final
+result is the average power generation cost per unit of electricity
+produced, taking into account various economic and technical
+parameters.</p>
+<pre><code>QCostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VCostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)
+                 =E=
+             (iDisc(allCy,&quot;PG&quot;,YTIME)*EXP(iDisc(allCy,&quot;PG&quot;,YTIME)*iTechLftPlaType(allCy,PGALL)) /
+             (EXP(iDisc(allCy,&quot;PG&quot;,YTIME)*iTechLftPlaType(allCy,PGALL))-1)*iGrossCapCosSubRen(allCy,PGALL,YTIME)*1000*iCGI(allCy,YTIME) +
+             iFixOandMCost(allCy,PGALL,YTIME))/iAvailRate(PGALL,YTIME)
+             / (1000*(7.25$ISET(ESET)+2.25$RSET(ESET))) +
+             sum(PGEF$PGALLTOEF(PGALL,PGEF),
+                 (iVarCost(PGALL,YTIME)/1000+((VMVPriceFuelSubsecCarVal(allCy,&quot;PG&quot;,PGEF,YTIME)-iEffValueInDollars(allCy,&quot;PG&quot;,ytime)/1000-iCo2EmiFac(allCy,&quot;PG&quot;,PGEF,YTIME)*
+                 sum(NAP$NAPtoALLSBS(NAP,&quot;PG&quot;),VCarVal(allCy,NAP,YTIME))/1000 )/1.2441+
+                 iCO2CaptRate(allCy,PGALL,YTIME)*VMVCstCO2SeqCsts(allCy,YTIME)*1e-3*iCo2EmiFac(allCy,&quot;PG&quot;,PGEF,YTIME) +
+                 (1-iCO2CaptRate(allCy,PGALL,YTIME))*1e-3*iCo2EmiFac(allCy,&quot;PG&quot;,PGEF,YTIME)*
+                 (sum(NAP$NAPtoALLSBS(NAP,&quot;PG&quot;),VCarVal(allCy,NAP,YTIME))))
+                 *sTWhToMtoe/iPlantEffByType(allCy,PGALL,YTIME)));</code></pre>
+<p>Compute long term power generation cost excluding climate policies by
+summing the Electricity production multiplied by Long-term average power
+generation cost excluding climate policies added to the sum of Average
+Electricity production cost per CHP plant multiplied by the CHP
+electricity production and all of the above divided by the Total
+electricity demand.</p>
+<pre><code>QCostPowGenLonNoClimPol(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VCostPowGenLonNoClimPol(allCy,ESET,YTIME)
+                 =E=
+         (
+         SUM(PGALL, (VMVProdElec(allCy,PGALL,YTIME))*VCostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME))
+        +
+         sum(CHP, VMVCostElcAvgProdCHP(allCy,CHP,YTIME)*VProdElecCHP(allCy,CHP,YTIME))
+         )
+/(VDemElecTot(allCy,YTIME));  </code></pre>
+<p>This equation establishes a common variable (with arguments) for the
+electricity consumption per demand subsector of INDUSTRY,
+[DOMESTIC/TERTIARY/RESIDENTIAL] and TRANSPORT. The electricity
+consumption of the demand subsectors of INDUSTRY &amp;
+[DOMESTIC/TERTIARY/RESIDENTIAL] is provided by the consumption of
+Electricity as a Fuel. The electricity consumption of the demand
+subsectors of TRANSPORT is provided by the Demand of Transport for
+Electricity as a Fuel.</p>
+<pre><code>QConsElec(allCy,DSBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VConsElec(allCy,DSBS,YTIME)
+             =E=
+         sum(INDDOM $SAMEAS(INDDOM,DSBS), VMVConsFuel(allCy,INDDOM,&quot;ELC&quot;,YTIME)) + sum(TRANSE $SAMEAS(TRANSE,DSBS), VMVDemFinEneTranspPerFuel(allCy,TRANSE,&quot;ELC&quot;,YTIME));</code></pre>
+<p>This equation computes the short-term average power generation cost.
+It involves summing the variable production costs for different power
+generation plants and energy forms, considering the specific
+characteristics and costs associated with each. The result is the
+average power generation cost per unit of electricity consumed in the
+given time period.</p>
+<pre><code>$ontext
+qCostPowGenAvgShrt(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+        vCostPowGenAvgShrt(allCy,ESET,YTIME)
+                 =E=
+        (
+        sum(PGALL,
+        VMVProdElec(allCy,PGALL,YTIME)*
+        (
+        sum(PGEF$PGALLtoEF(PGALL,PGEF),
+        (iVarCost(PGALL,YTIME)/1000+(VMVPriceFuelSubsecCarVal(allCy,&quot;PG&quot;,PGEF,YTIME)/1.2441+
+         iCO2CaptRate(allCy,PGALL,YTIME)*VMVCstCO2SeqCsts(allCy,YTIME)*1e-3*iCo2EmiFac(allCy,&quot;PG&quot;,PGEF,YTIME) +
+         (1-iCO2CaptRate(allCy,PGALL,YTIME))*1e-3*iCo2EmiFac(allCy,&quot;PG&quot;,PGEF,YTIME)*
+         (sum(NAP$NAPtoALLSBS(NAP,&quot;PG&quot;),VCarVal(allCy,NAP,YTIME))))
+                 *sTWhToMtoe/iPlantEffByType(allCy,PGALL,YTIME)))
+        ))
+        +
+         sum(CHP, VMVCostVarAvgElecProd(allCy,CHP,YTIME)*VProdElecCHP(allCy,CHP,YTIME))
+         )
+         /VDemElecTot(allCy,YTIME);
+$offtext</code></pre>
+<pre><code>table iCummMnmInstRenCap(allCy,PGRENEF,YTIME)    &quot;Cummulative minimum potential installed Capacity for Renewables (GW)&quot;
+$ondelim
+$include&quot;./iMinResPot.csv&quot;
+$offdelim
+;
+table iInstCapPast(allCy,PGALL,YTIME)        &quot;Installed capacity past (GW)&quot;
+$ondelim
+$include&quot;./iInstCapPast.csv&quot;
+$offdelim
+;
+table iAvailRate(PGALL,YTIME)       &quot;Plant availability rate (1)&quot;
+$ondelim
+$include&quot;./iAvailRate.csv&quot;
+$offdelim
+;
+table iDataElecSteamGen(allCy,PGOTH,YTIME)            &quot;Various Data related to electricity and steam generation (1)&quot;
+$ondelim
+$include&quot;./iDataElecSteamGen.csv&quot;
+$offdelim
+;
+table iDataElecProd(allCy,PGALL,YTIME) &quot;Electricity production past years (GWh)&quot;
+$ondelim
+$include&quot;./iDataElecProd.csv&quot;
+$offdelim
+;
+table iDataTechLftPlaType(PGALL, PGECONCHAR) &quot;Data for power generation costs (various)&quot;
+$ondelim
+$include&quot;./iDataTechLftPlaType.csv&quot;
+$offdelim
+;
+table iGrossCapCosSubRen(allCy,PGALL,YTIME)             &quot;Gross Capital Cost per Plant Type with subsidy for renewables (kUS$2015/KW)&quot;
+$ondelim
+$include&quot;./iGrossCapCosSubRen.csv&quot;
+$offdelim
+;
+table iFixOandMCost(allCy,PGALL,YTIME)    &quot;Fixed O&amp;M Gross Cost per Plant Type (US$2015/KW)&quot;
+$ondelim
+$include&quot;./iFixOandMCost.csv&quot;
+$offdelim
+;
+table iVarCost(PGALL,YTIME)             &quot;Variable gross cost other than fuel per Plant Type (US$2015/MWh)&quot;
+$ondelim
+$include&quot;./iVarCost.csv&quot;
+$offdelim
+;
+table iInvPlants(allCy,PGALL,YTIME)             &quot;Investment Plants (MW)&quot;
+$ondelim
+$include&quot;./iInvPlants.csv&quot;
+$offdelim
+;
+table iDecomPlants(allCy,PGALL,YTIME)               &quot;Decomissioning Plants (MW)&quot;
+$ondelim
+$include&quot;./iDecomPlants.csv&quot;
+$offdelim
+;
+table iCummMxmInstRenCap(allCy,PGRENEF,YTIME)    &quot;Cummulative maximum potential installed Capacity for Renewables (GW)&quot;
+$ondelim
+$include&quot;./iMaxResPot.csv&quot;
+$offdelim
+;
+table iMatFacPlaAvailCap(allCy,PGALL,YTIME)  &quot;Maturity factor related to plant available capacity (1)&quot;
+$ondelim
+$include&quot;./iMatFacPlaAvailCap.csv&quot;
+$offdelim
+;
+table iMatureFacPlaDisp(allCy,PGALL,YTIME)   &quot;Maturity factor related to plant dispatching (1)&quot;
+$ondelim
+$include&quot;./iMatureFacPlaDisp.csv&quot;
+$offdelim
+;
+parameter iScaleEndogScrap(PGALL) &quot;Scale parameter for endogenous scrapping applied to the sum of full costs (1)&quot;;
+parameter iMxmShareChpElec &quot;Maximum share of CHP electricity in a country (1)&quot;;
+parameter iDataElecAndSteamGen(allCy,CHP,YTIME)  &quot;Data releated to electricity and steam generation&quot;;
+parameter iLoadFacElecDem(DSBS)    &quot;Load factor of electricity demand per sector (1)&quot; /
+IS  0.92,
+NF  0.94,
+CH  0.83,
+BM  0.82,
+PP  0.74,
+FD  0.65,
+EN  0.7,
+TX  0.61,
+OE  0.92,
+OI  0.67,
+SE  0.64,
+AG  0.52,
+HOU 0.72,
+PC  0.7,
+PB  0.7,
+PT  0.62,
+PN  0.7,
+PA  0.7,
+GU  0.7,
+GT  0.62,
+GN  0.7,
+BU  0.7,
+PCH 0.83,
+NEN 0.83 / ;
+parameter iLoadFactorAdj(DSBS)  &quot;Parameters for load factor adjustment iBaseLoadShareDem (1)&quot; /
+IS  0.9,
+NF  0.92,
+CH  0.78,
+BM  0.81,
+PP  0.91,
+FD  0.61,
+EN  0.65,
+TX  0.6,
+OE  0.9,
+OI  0.59,
+SE  0.58,
+AG  0.45,
+HOU 0.55,
+PC  0.43,
+PB  0.43,
+PT  0.29,
+PN  0.43,
+PA  0.43,
+GU  0.43,
+GT  0.29,
+GN  0.43,
+BU  0.43,
+PCH 0.78,
+NEN 0.78 / ;
+parameter iLoadFactorAdjMxm(VARIOUS_LABELS)    &quot;Parameter for load factor adjustment iMxmLoadFacElecDem (1)&quot; /
+AMAXBASE 3,
+MAXLOADSH 0.45 / ;
+Parameters
+iBaseLoadShareDem(allCy,DSBS,YTIME)                        &quot;Baseload share of demand per sector (1)&quot;
+iHisChpGrCapData(allCy,CHP,YTIME)                          &quot;Historical CHP  gross capacity data (GW)&quot;
+iMinRenPotential(allCy,PGRENEF,YTIME)                      &quot;Minimum renewable potential (GW)&quot;
+iPeakBsLoadBy(allCy,PGLOADTYPE)                            &quot;Peak and Base load for base year (GW)&quot;
+iTotAvailCapBsYr(allCy)                                    &quot;Total installed available capacity in base year (GW)&quot;
+iUtilRateChpPlants(allCy,CHP,YTIME)                        &quot;Utilisation rate of CHP Plants (1)&quot;
+iMxmLoadFacElecDem(allCy,YTIME)                            &quot;Maximum load factor of electricity demand (1)&quot;
+iBslCorrection(allCy,YTIME)                                &quot;Parameter of baseload correction (1)&quot;
+iTechLftPlaType(allCy,PGALL)                               &quot;Technical Lifetime per plant type (year)&quot;
+iScaleEndogScrap(PGALL)                                    &quot;Scale parameter for endogenous scrapping applied to the sum of full costs (1)&quot;
+iDecInvPlantSched(allCy,PGALL,YTIME)                       &quot;Decided plant investment schedule (GW)&quot;
+iPlantDecomSched(allCy,PGALL,YTIME)                        &quot;Decided plant decomissioning schedule (GW)&quot; 
+iMaxRenPotential(allCy,PGRENEF,YTIME)                      &quot;Maximum enewable potential (GW)&quot;
+iMxmShareChpElec(allCy,YTIME)                              &quot;Maximum share of CHP electricity in a country (1)&quot;
+iMatureFacPlaDisp(allCy,PGALL,YTIME)                       &quot;Maturity factor related to plant dispatching (1)&quot;
+;
+iBaseLoadShareDem(runCy,DSBS,YTIME)$an(YTIME)  = iLoadFactorAdj(DSBS);
+iDataElecAndSteamGen(runCy,CHP,YTIME) = 0 ;
+iHisChpGrCapData(runCy,CHP,YTIME) = iDataElecAndSteamGen(runCy,CHP,YTIME);
+iCummMnmInstRenCap(runCy,PGRENEF,YTIME)$(not iCummMnmInstRenCap(runCy,PGRENEF,YTIME)) = 1e-4;
+iMinRenPotential(runCy,&quot;LHYD&quot;,YTIME) = iCummMnmInstRenCap(runCy,&quot;LHYD&quot;,YTIME);
+iMinRenPotential(runCy,&quot;SHYD&quot;,YTIME) = iCummMnmInstRenCap(runCy,&quot;SHYD&quot;,YTIME);
+iMinRenPotential(runCy,&quot;WND&quot;,YTIME)  = iCummMnmInstRenCap(runCy,&quot;WND&quot;,YTIME);
+iMinRenPotential(runCy,&quot;WNO&quot;,YTIME)  = iCummMnmInstRenCap(runCy,&quot;WNO&quot;,YTIME);
+iMinRenPotential(runCy,&quot;SOL&quot;,YTIME)  = iCummMnmInstRenCap(runCy,&quot;SOL&quot;,YTIME);
+iMinRenPotential(runCy,&quot;DPV&quot;,YTIME)  = iCummMnmInstRenCap(runCy,&quot;DPV&quot;,YTIME);
+iMinRenPotential(runCy,&quot;BMSWAS&quot;,YTIME) = iCummMnmInstRenCap(runCy,&quot;BMSWAS&quot;,YTIME);
+iMinRenPotential(runCy,&quot;OTHREN&quot;,YTIME) = iCummMnmInstRenCap(runCy,&quot;OTHREN&quot;,YTIME);
+iPeakBsLoadBy(runCy,PGLOADTYPE) = sum(tfirst, iDataElecSteamGen(runCy,PGLOADTYPE,tfirst));
+iTotAvailCapBsYr(runCy) = sum(tfirst,iDataElecSteamGen(runCy,&quot;TOTCAP&quot;,TFIRST))+sum(tfirst,iDataElecSteamGen(runCy,&quot;CHP_CAP&quot;,TFIRST))*0.85;
+iUtilRateChpPlants(runCy,CHP,YTIME) = 0.5;
+iMxmLoadFacElecDem(runCy,YTIME)$an(YTIME) = iLoadFactorAdjMxm(&quot;MAXLOADSH&quot;);
+iBslCorrection(runCy,YTIME)$an(YTIME) = iLoadFactorAdjMxm(&quot;AMAXBASE&quot;);
+iTechLftPlaType(runCy,PGALL) = iDataTechLftPlaType(PGALL, &quot;LFT&quot;);
+iGrossCapCosSubRen(runCy,PGALL,YTIME) = iGrossCapCosSubRen(runCy,PGALL,YTIME)/1000;
+loop(runCy,PGALL,YTIME)$AN(YTIME) DO
+         abort $(iGrossCapCosSubRen(runCy,PGALL,YTIME)&lt;0) &quot;CAPITAL COST IS NEGATIVE&quot;, iGrossCapCosSubRen
+ENDLOOP;
+iScaleEndogScrap(PGALL) = 0.035;
+iDecInvPlantSched(runCy,PGALL,YTIME) = iInvPlants(runCy,PGALL,YTIME);
+iPlantDecomSched(runCy,PGALL,YTIME) = iDecomPlants(runCy,PGALL,YTIME);
+iCummMxmInstRenCap(runCy,PGRENEF,YTIME)$(not iCummMxmInstRenCap(runCy,PGRENEF,YTIME)) = 1e-4;
+iMaxRenPotential(runCy,&quot;LHYD&quot;,YTIME) = iCummMxmInstRenCap(runCy,&quot;LHYD&quot;,YTIME);
+iMaxRenPotential(runCy,&quot;SHYD&quot;,YTIME) = iCummMxmInstRenCap(runCy,&quot;SHYD&quot;,YTIME);
+iMaxRenPotential(runCy,&quot;WND&quot;,YTIME)$AN(YTIME) = iCummMxmInstRenCap(runCy,&quot;WND&quot;,YTIME);
+iMaxRenPotential(runCy,&quot;WNO&quot;,YTIME)$AN(YTIME) = iCummMxmInstRenCap(runCy,&quot;WNO&quot;,YTIME);
+iMaxRenPotential(runCy,&quot;SOL&quot;,YTIME)$AN(YTIME) = iCummMxmInstRenCap(runCy,&quot;SOL&quot;,YTIME);
+iMaxRenPotential(runCy,&quot;DPV&quot;,YTIME)$AN(YTIME) = iCummMxmInstRenCap(runCy,&quot;DPV&quot;,YTIME);
+iMaxRenPotential(runCy,&quot;BMSWAS&quot;,YTIME)$AN(YTIME) = iCummMxmInstRenCap(runCy,&quot;BMSWAS&quot;,YTIME);
+iMaxRenPotential(runCy,&quot;OTHREN&quot;,YTIME)$AN(YTIME) = iCummMxmInstRenCap(runCy,&quot;OTHREN&quot;,YTIME);
+iMatFacPlaAvailCap(runCy,CCS,YTIME)$an(YTIME)  =50;
+iMxmShareChpElec(runCy,YTIME) = 0.1;</code></pre>
+<p><em>VARIABLE INITIALISATION</em></p>
+<pre><code>VMVCostPowGenAvgLng.L(runCy,ESET,&quot;2010&quot;) = 0;
+VMVCostPowGenAvgLng.L(runCy,ESET,&quot;%fBaseY%&quot;) = 0;
+VSensCCS.L(runCy,YTIME) = 1;
+VCostProdSpecTech.LO(runCy,PGALL2,YTIME) = 0.00000001;
+VCostVarTech.L(runCy,PGALL,YTIME) = 0.1;
+VCostProdTeCHPreReplacAvail.L(runCy,PGALL,PGALL2,YTIME) = 0.1;
+VPotRenSuppCurve.L(runCy,PGRENEF,YTIME) = 0.1;
+VPotRenSuppCurve.FX(runCy,PGRENEF, YTIME) $(NOT AN(YTIME)) = iMinRenPotential(runCy,PGRENEF,YTIME);
+VPotRenCurr.L(runCy,PGRENEF, YTIME)$(AN(YTIME)) = 1000;
+VPotRenCurr.FX(runCy,PGRENEF, YTIME)$(NOT AN(YTIME)) = iMinRenPotential(runCy,PGRENEF,YTIME);
+VShareNewTechNoCCS.L(runCy,PGALL,TT)=0.1;
+VShareNewTechNoCCS.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME))) = 0;
+VShareNewTechNoCCS.FX(runCy,PGALL,YTIME)$(AN(YTIME) $(NOT NOCCS(PGALL))) = 0;
+VShareNewTechCCS.L(runCy,PGALL,TT) = 0.1;
+VShareNewTechCCS.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME))) = 0;
+VShareNewTechCCS.FX(runCy,PGALL,YTIME)$(AN(YTIME) $(NOT CCS(PGALL))) = 0;
+VCostHourProdInvDecNoCCS.L(runCy,PGALL,HOUR,TT) = VShareNewTechNoCCS.L(runCy,PGALL,TT)*0.1 + sum(CCS$CCS_NOCCS(CCS,PGALL), VShareNewTechCCS.L(runCy,CCS,TT)*0.1);
+VNewInvElec.L(runCy,YTIME) = 0.1;
+VNewInvElec.FX(runCy,YTIME)$(NOT AN(YTIME)) = 1;
+VCostVarTechElec.L(runCy,PGALL,YTIME) = 0.1;
+VCostVarTechElecTot.L(runCy,YTIME) = 0.1;
+alias(datay, dataylag)
+loop (runCy,PGALL,datay,dataylag)$(ord(datay) = ord(dataylag) + 1 and PGREN(PGALL)) DO
+  VNetNewCapElec.FX(runCy,PGALL,datay) = iInstCapPast(runCy,PGALL,datay) - iInstCapPast(runCy,PGALL,dataylag) + 1E-10;
+ENDLOOP;
+VNetNewCapElec.FX(runCy,&quot;PGLHYD&quot;,YTIME)$TFIRST(YTIME) = +1E-10;
+VCFAvgRen.L(runCy,PGALL,YTIME) = 0.1;
+VCFAvgRen.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = iAvailRate(PGALL,YTIME);
+VSortPlantDispatch.LO(runCy,PGALL,YTIME) = 1.E-13;
+VProdElecReqCHP.L(runCy,YTIME) = 0.01;
+VScalFacPlaDisp.LO(runCy, HOUR, YTIME) = -1;
+VRenTechMatMult.L(runCy,PGALL,YTIME) = 1;
+VScalWeibullSum.L(runCy,PGALL,YTIME) = 2000;
+VCostHourProdInvDec.L(runCy,PGALL,HOUR,TT) = 0.0001;
+VCostHourProdInvDec.FX(runCy,PGALL,HOUR,YTIME)$((NOT AN(YTIME))) = 0;
+VMVBaseLoad.L(runCy,YTIME) = 0.5;
+VMVBaseLoad.FX(runCy,YTIME)$(not An(YTIME)) = iPeakBsLoadBy(runCy,&quot;BASELOAD&quot;);
+VMVCapElecTotEst.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
+VCapElecNonCHP.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
+VCapElecCHP.FX(runCy,CHP,YTIME)$(not An(YTIME)) = iHisChpGrCapData(runCy,CHP,YTIME);
+VSharePowPlaNewEq.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) ) = 0;
+VMVCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  iInstCapPast(runCy,PGALL,YTIME);
+VCapElec2.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = iInstCapPast(runCy,PGALL,YTIME);
+VCapOverall.FX(runCy,PGALL,&quot;%fBaseY%&quot;) =  iInstCapPast(runCy,PGALL,&quot;%fBaseY%&quot;);
+VIndxEndogScrap.FX(runCy,PGALL,YTIME)$(not an(YTIME) ) = 1;
+VIndxEndogScrap.FX(runCy,PGSCRN,YTIME) = 1;            !! premature replacement it is not allowed for all new plants
+VCostPowGenLonNoClimPol.L(runCy,ESET,&quot;2010&quot;) = 0;
+VCostPowGenLonNoClimPol.L(runCy,ESET,&quot;%fBaseY%&quot;) = 0;
+VCostPowGenLngTechNoCp.L(runCy,PGALL,ESET,&quot;2010&quot;) = 0;
+VCostPowGenLngTechNoCp.L(runCy,PGALL,ESET,&quot;%fBaseY%&quot;) = 0;
+VCostAvgPowGenLonNoClimPol.L(runCy,PGALL,ESET,&quot;2010&quot;) = 0;
+VCostAvgPowGenLonNoClimPol.FX(runCy,PGALL,ESET,&quot;%fBaseY%&quot;) = 0;
+VLambda.LO(runCy,YTIME) = 0;
+VLambda.L(runCy,YTIME) = 0.21;
+VCostProdSpecTech.scale(runCy,PGALL,YTIME)=1e12;
+QCostProdSpecTech.scale(runCy,PGALL,YTIME)=VCostProdSpecTech.scale(runCy,PGALL,YTIME);
+VCostVarTechNotPGSCRN.scale(runCy,PGALL,YTIME)=1e6;
+QCostVarTechNotPGSCRN.scale(runCy,PGALL,YTIME)=VCostVarTechNotPGSCRN.scale(runCy,PGALL,YTIME);
+VScalFacPlaDisp.scale(runCy,HOUR,YTIME)=1e-11;
+QScalFacPlantDispatch.scale(runCy,HOUR,YTIME)=VScalFacPlaDisp.scale(runCy,HOUR,YTIME);
+$ontext
+VSortPlantDispatch.scale(runCy,PGALL,YTIME)=1e-11;
+QSortPlantDispatch.scale(runCy,PGALL,YTIME)=VSortPlantDispatch.scale(runCy,PGALL,YTIME);
+$offtext
+VCostVarTechElec.scale(runCy,PGALL,YTIME)=1e5;
+QCostVarTechElec.scale(runCy,PGALL,YTIME)=VCostVarTechElec.scale(runCy,PGALL,YTIME);
+VNewInvElec.scale(runCy,YTIME)=1e8;
+QNewInvElec.scale(runCy,YTIME)=VNewInvElec.scale(runCy,YTIME);
+VCostVarTech.scale(runCy,PGALL,YTIME)=1e-5;
+QCostVarTech.scale(runCy,PGALL,YTIME)=VCostVarTech.scale(runCy,PGALL,YTIME);
+VScalWeibullSum.scale(runCy,PGALL,YTIME)=1e6;
+QScalWeibullSum.scale(runCy,PGALL,YTIME)=VScalWeibullSum.scale(runCy,PGALL,YTIME);
+VLoadFacDom.L(runCy,YTIME)=0.5;
+VLoadFacDom.FX(runCy,YTIME)$(datay(YTIME)) =
+         (sum(INDDOM,VMVConsFuel.L(runCy,INDDOM,&quot;ELC&quot;,YTIME)) + sum(TRANSE, VMVDemFinEneTranspPerFuel.L(runCy,TRANSE,&quot;ELC&quot;,YTIME)))/
+         (sum(INDDOM,VMVConsFuel.L(runCy,INDDOM,&quot;ELC&quot;,YTIME)/iLoadFacElecDem(INDDOM)) + sum(TRANSE, VMVDemFinEneTranspPerFuel.L(runCy,TRANSE,&quot;ELC&quot;,YTIME)/
+         iLoadFacElecDem(TRANSE)));
+VDemElecTot.L(runCy,YTIME)=10;
+VDemElecTot.FX(runCy,YTIME)$(not An(YTIME)) =  1/0.086 * ( iFinEneCons(runCy,&quot;ELC&quot;,YTIME) + sum(NENSE, iFuelConsPerFueSub(runCy,NENSE,&quot;ELC&quot;,YTIME)) + iDistrLosses(runCy,&quot;ELC&quot;,YTIME)
+                                             + iTotEneBranchCons(runCy,&quot;ELC&quot;,YTIME) - (iFuelImports(runCy,&quot;ELC&quot;,YTIME)-iFuelExprts(runCy,&quot;ELC&quot;,YTIME)));
+VMVPeakLoad.L(runCy,YTIME) = 1;
+VMVPeakLoad.FX(runCy,YTIME)$(datay(YTIME)) = VDemElecTot.L(runCy,YTIME)/(VLoadFacDom.L(runCy,YTIME)*8.76);
+VMVProdElec.FX(runCy,pgall,YTIME)$DATAY(YTIME)=iDataElecProd(runCy,pgall,YTIME)/1000;
+VProdElecReqTot.FX(runCy,&quot;%fBaseY%&quot;)=sum(pgall,VMVProdElec.L(runCy,pgall,&quot;%fBaseY%&quot;));
+VConsElec.L(runCy,DSBS,YTIME)=0.1;
+VConsElec.FX(runCy,DSBS,YTIME)$(not AN(YTIME)) = 0.1;</code></pre>
+<blockquote>
+<p><strong>Limitations</strong> There are no known limitations.</p>
+</blockquote>
+<h2 id="definitions">Definitions</h2>
+<h3 id="objects">Objects</h3>
+<table>
+<caption>module-internal objects (A: legacy)</caption>
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 39%" />
+<col style="width: 20%" />
+<col style="width: 4%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"> </th>
+<th style="text-align: center;">Description</th>
+<th style="text-align: center;">Unit</th>
+<th style="text-align: center;">A</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">iAvailRate<br />
+(PGALL, YTIME)</td>
+<td style="text-align: center;">Plant availability rate</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">iBaseLoadShareDem<br />
+(allCy, DSBS, YTIME)</td>
+<td style="text-align: center;">Baseload share of demand per sector</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">iBslCorrection<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Parameter of baseload correction</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">iCummMnmInstRenCap<br />
+(allCy, PGRENEF, YTIME)</td>
+<td style="text-align: center;">Cummulative minimum potential installed
+Capacity for Renewables</td>
+<td style="text-align: center;"><span
+class="math inline">\(GW\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">iCummMxmInstRenCap<br />
+(allCy, PGRENEF, YTIME)</td>
+<td style="text-align: center;">Cummulative maximum potential installed
+Capacity for Renewables</td>
+<td style="text-align: center;"><span
+class="math inline">\(GW\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">iDataElecAndSteamGen<br />
+(allCy, CHP, YTIME)</td>
+<td style="text-align: center;">Data releated to electricity and steam
+generation</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">iDataElecProd<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Electricity production past years</td>
+<td style="text-align: center;"><span
+class="math inline">\(GWh\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">iDataElecSteamGen<br />
+(allCy, PGOTH, YTIME)</td>
+<td style="text-align: center;">Various Data related to electricity and
+steam generation</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">iDataTechLftPlaType<br />
+(PGALL, PGECONCHAR)</td>
+<td style="text-align: center;">Data for power generation costs</td>
+<td style="text-align: center;"><span
+class="math inline">\(various\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">iDecInvPlantSched<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Decided plant investment schedule</td>
+<td style="text-align: center;"><span
+class="math inline">\(GW\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">iDecomPlants<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Decomissioning Plants</td>
+<td style="text-align: center;"><span
+class="math inline">\(MW\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">iFixOandMCost<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Fixed O&amp;M Gross Cost per Plant
+Type</td>
+<td style="text-align: center;"><span
+class="math inline">\(US\$2015/KW\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">iGrossCapCosSubRen<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Gross Capital Cost per Plant Type with
+subsidy for renewables</td>
+<td style="text-align: center;"><span
+class="math inline">\(kUS\$2015/KW\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">iHisChpGrCapData<br />
+(allCy, CHP, YTIME)</td>
+<td style="text-align: center;">Historical CHP gross capacity data</td>
+<td style="text-align: center;"><span
+class="math inline">\(GW\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">iInstCapPast<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Installed capacity past</td>
+<td style="text-align: center;"><span
+class="math inline">\(GW\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">iInvPlants<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Investment Plants</td>
+<td style="text-align: center;"><span
+class="math inline">\(MW\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">iLoadFacElecDem<br />
+(DSBS)</td>
+<td style="text-align: center;">Load factor of electricity demand per
+sector</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">iLoadFactorAdj<br />
+(DSBS)</td>
+<td style="text-align: center;">Parameters for load factor adjustment
+iBaseLoadShareDem</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">iLoadFactorAdjMxm<br />
+(VARIOUS_LABELS)</td>
+<td style="text-align: center;">Parameter for load factor adjustment
+iMxmLoadFacElecDem</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">iMatFacPlaAvailCap<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Maturity factor related to plant
+available capacity</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">iMatureFacPlaDisp<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Maturity factor related to plant
+dispatching</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">iMaxRenPotential<br />
+(allCy, PGRENEF, YTIME)</td>
+<td style="text-align: center;">Maximum enewable potential</td>
+<td style="text-align: center;"><span
+class="math inline">\(GW\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">iMinRenPotential<br />
+(allCy, PGRENEF, YTIME)</td>
+<td style="text-align: center;">Minimum renewable potential</td>
+<td style="text-align: center;"><span
+class="math inline">\(GW\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">iMxmLoadFacElecDem<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Maximum load factor of electricity
+demand</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">iMxmShareChpElec</td>
+<td style="text-align: center;">Maximum share of CHP electricity in a
+country</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">iPeakBsLoadBy<br />
+(allCy, PGLOADTYPE)</td>
+<td style="text-align: center;">Peak and Base load for base year</td>
+<td style="text-align: center;"><span
+class="math inline">\(GW\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">iPlantDecomSched<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Decided plant decomissioning
+schedule</td>
+<td style="text-align: center;"><span
+class="math inline">\(GW\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">iScaleEndogScrap<br />
+(PGALL)</td>
+<td style="text-align: center;">Scale parameter for endogenous scrapping
+applied to the sum of full costs</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">iTechLftPlaType<br />
+(allCy, PGALL)</td>
+<td style="text-align: center;">Technical Lifetime per plant type</td>
+<td style="text-align: center;"><span
+class="math inline">\(year\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">iTotAvailCapBsYr<br />
+(allCy)</td>
+<td style="text-align: center;">Total installed available capacity in
+base year</td>
+<td style="text-align: center;"><span
+class="math inline">\(GW\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">iUtilRateChpPlants<br />
+(allCy, CHP, YTIME)</td>
+<td style="text-align: center;">Utilisation rate of CHP Plants</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">iVarCost<br />
+(PGALL, YTIME)</td>
+<td style="text-align: center;">Variable gross cost other than fuel per
+Plant Type</td>
+<td style="text-align: center;"><span
+class="math inline">\(US\$2015/MWh\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Q04BaseLoad<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Compute electricity base load</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Q04CapElec<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Compute electricity generation
+capacity</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Q04CapElecTotEst<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Compute Estimated total electricity
+generation capacity</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Q04CostPowGenAvgLng<br />
+(allCy, ESET, YTIME)</td>
+<td style="text-align: center;">Compute long term power generation
+cost</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Q04PeakLoad<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Compute elerctricity peak load</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Q04ProdElec<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Compute electricity production from
+power generation plants</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QBaseLoadMax<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Compute baseload corresponding to
+maximum load</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QBsldEst<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Compute estimated base load</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QCapElec2<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Compute electricity generation
+capacity</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QCapElecCHP<br />
+(allCy, CHP, YTIME)</td>
+<td style="text-align: center;">Compute CHP electric capacity</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QCapElecNonCHP<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Compute total electricity generation
+capacity excluding CHP plants</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QCapOverall<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Compute overall capacity</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QCFAvgRen<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Compute the average capacity factor of
+RES</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QConsElec<br />
+(allCy, DSBS, YTIME)</td>
+<td style="text-align: center;">Compute electricity consumption per
+final demand sector</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QCostAvgPowGenLonNoClimPol<br />
+(allCy, PGALL, ESET, YTIME)</td>
+<td style="text-align: center;">Compute long term average power
+generation cost excluding climate policies</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QCostHourProdInvDec<br />
+(allCy, PGALL, HOUR, YTIME)</td>
+<td style="text-align: center;">Compute hourly production cost used in
+investment decisions</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QCostHourProdInvDecNoCCS<br />
+(allCy, PGALL, HOUR, YTIME)</td>
+<td style="text-align: center;">Compute hourly production cost used in
+investment decisions</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QCostPowGenLngTechNoCp<br />
+(allCy, PGALL, ESET, YTIME)</td>
+<td style="text-align: center;">Compute long term power generation cost
+of technologies excluding climate policies</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QCostPowGenLonNoClimPol<br />
+(allCy, ESET, YTIME)</td>
+<td style="text-align: center;">Compute long term power generation cost
+excluding climate policies</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QCostProdSpecTech<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Compute production cost used in
+investment decisions</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QCostProdTeCHPreReplac<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Compute production cost of technology
+used in premature replacement</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QCostProdTeCHPreReplacAvail<br />
+(allCy, PGALL, PGALL2, YTIME)</td>
+<td style="text-align: center;">Compute production cost of technology
+used in premature replacement including plant availability rate</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QCostVarTech<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Compute variable cost of technology</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QCostVarTechElec<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Compute variable cost of technology</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QCostVarTechElecTot<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Compute Electricity peak loads</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QCostVarTechNotPGSCRN<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Compute variable cost of technology
+excluding PGSCRN</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QDemElecTot<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Compute total electricity demand</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QGapGenCapPowerDiff<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Compute the gap in power generation
+capacity</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QIndxEndogScrap<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Compute endogenous scrapping index</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QLambda<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Compute Lambda parameter</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QLoadFacDom<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Compute load factor of entire domestic
+system</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QNetNewCapElec<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Compute the yearly difference in
+installed capacity</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QNewCapElec<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Compute the new capacity added every
+year</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QNewInvElec<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Compute for Power Plant new investment
+decision</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QPotRenCurr<br />
+(allCy, PGRENEF, YTIME)</td>
+<td style="text-align: center;">Compute current renewable potential</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QPotRenMaxAllow<br />
+(allCy, PGRENEF, YTIME)</td>
+<td style="text-align: center;">Compute maximum allowed renewable
+potential</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QPotRenSuppCurve<br />
+(allCy, PGRENEF, YTIME)</td>
+<td style="text-align: center;">Compute renewable potential supply
+curve</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QProdElecCHP<br />
+(allCy, CHP, YTIME)</td>
+<td style="text-align: center;">Compute electricity production from CHP
+plants</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QProdElecEstCHP<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Estimate the electricity of CHP
+Plants</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QProdElecNonCHP<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Compute non CHP electricity
+production</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QProdElecReqCHP<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Compute total estimated CHP electricity
+production</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QProdElecReqTot<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Compute total required electricity
+production</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QRenTechMatMult<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Compute renewable technologies maturity
+multiplier</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QRenTechMatMultExpr<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Renewable power capacity over
+potential</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QScalFacPlantDispatch<br />
+(allCy, HOUR, YTIME)</td>
+<td style="text-align: center;">Compute the scaling factor for plant
+dispatching</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QScalWeibullSum<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Compute sum (over hours) of temporary
+variable facilitating the scaling in Weibull equation</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QSensCCS<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Compute gamma parameter used in CCS/No
+CCS decision tree</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QShareNewTechCCS<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Compute SHRCAP</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QShareNewTechNoCCS<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Compute SHRCAP excluding CCs</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">QSharePowPlaNewEq<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Compute the power plant share in new
+equipment</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">QSortPlantDispatch<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Compute Power plants sorting according
+to variable cost to decide the plant dispatching</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VBaseLoadMax<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Baseload corresponding to Maximum Load
+Factor</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VBsldEst<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Estimated base load</td>
+<td style="text-align: center;"><span
+class="math inline">\(GW\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VCapElec2<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Electricity generation plants
+capacity</td>
+<td style="text-align: center;"><span
+class="math inline">\(GW\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VCapElecCHP<br />
+(allCy, CHP, YTIME)</td>
+<td style="text-align: center;">Capacity of CHP Plants</td>
+<td style="text-align: center;"><span
+class="math inline">\(GW\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VCapElecNonCHP<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Total electricity generation capacity
+excluding CHP</td>
+<td style="text-align: center;"><span
+class="math inline">\(GW\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VCapOverall<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Overall Capacity</td>
+<td style="text-align: center;"><span
+class="math inline">\(MW\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VCFAvgRen<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">The average capacity factor of RES</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VConsElec<br />
+(allCy, DSBS, YTIME)</td>
+<td style="text-align: center;">Electricity demand per final sector</td>
+<td style="text-align: center;"><span
+class="math inline">\(Mtoe\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VCostAvgPowGenLonNoClimPol<br />
+(allCy, PGALL, ESET, YTIME)</td>
+<td style="text-align: center;">Long-term average power generation cost
+excluding climate policies(US$2015/kWh)</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VCostHourProdInvDec<br />
+(allCy, PGALL, HOUR, YTIME)</td>
+<td style="text-align: center;">Hourly production cost of
+technology</td>
+<td style="text-align: center;"><span
+class="math inline">\(US\$2015/KWh\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VCostHourProdInvDecNoCCS<br />
+(allCy, PGALL, HOUR, YTIME)</td>
+<td style="text-align: center;">Hourly production cost of
+technology</td>
+<td style="text-align: center;"><span
+class="math inline">\(US\$2015/KWh\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VCostPowGenLngTechNoCp<br />
+(allCy, PGALL, ESET, YTIME)</td>
+<td style="text-align: center;">Long-term average power generation
+cost</td>
+<td style="text-align: center;"><span
+class="math inline">\(US\$2015/kWh\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VCostPowGenLonNoClimPol<br />
+(allCy, ESET, YTIME)</td>
+<td style="text-align: center;">Long-term average power generation cost
+excluding climate policies</td>
+<td style="text-align: center;"><span
+class="math inline">\(US\$2015/kWh\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VCostProdSpecTech<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Production cost of technology</td>
+<td style="text-align: center;"><span
+class="math inline">\(US\$2015/KWh\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VCostProdTeCHPreReplac<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Production cost of technology used in
+premature replacement</td>
+<td style="text-align: center;"><span
+class="math inline">\(US\$2015/KWh\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VCostProdTeCHPreReplacAvail<br />
+(allCy, PGALL, PGALL2, YTIME)</td>
+<td style="text-align: center;">Production cost of technology used in
+premature replacement including plant availability rate</td>
+<td style="text-align: center;"><span
+class="math inline">\(US\$2015/KWh\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VCostVarTech<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Variable cost of technology</td>
+<td style="text-align: center;"><span
+class="math inline">\(US\$2015/KWh\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VCostVarTechElec<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Variable cost of technology</td>
+<td style="text-align: center;"><span
+class="math inline">\(US\$2015/KWh\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VCostVarTechElecTot<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Electricity peak loads</td>
+<td style="text-align: center;"><span
+class="math inline">\(GW\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VCostVarTechNotPGSCRN<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Variable cost of technology excluding
+PGSCRN</td>
+<td style="text-align: center;"><span
+class="math inline">\(US\$2015/KWh\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VDemElecTot<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Total electricity demand</td>
+<td style="text-align: center;"><span
+class="math inline">\(TWh\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VGapGenCapPowerDiff<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Gap in total generation capacity to be
+filled by new equipment</td>
+<td style="text-align: center;"><span
+class="math inline">\(GW\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VIndxEndogScrap<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Index used for endogenous power plants
+scrapping</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VLambda<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Parameter for load curve
+construction</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VLoadFacDom<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Electricity load factor for entire
+domestic system</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VNetNewCapElec<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Yearly difference in installed
+capacity</td>
+<td style="text-align: center;"><span
+class="math inline">\(MW\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VNewCapElec<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">The new capacity added every year</td>
+<td style="text-align: center;"><span
+class="math inline">\(MW\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VNewInvElec<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Power plant sorting for new investment
+decision according to total cost</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VPotRenCurr<br />
+(allCy, PGRENEF, YTIME)</td>
+<td style="text-align: center;">Current renewable potential</td>
+<td style="text-align: center;"><span
+class="math inline">\(GW\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VPotRenMaxAllow<br />
+(allCy, PGRENEF, YTIME)</td>
+<td style="text-align: center;">Maximum allowed renewable potential</td>
+<td style="text-align: center;"><span
+class="math inline">\(GW\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VPotRenSuppCurve<br />
+(allCy, PGRENEF, YTIME)</td>
+<td style="text-align: center;">Renewable potential supply curve
+(1)</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VProdElecCHP<br />
+(allCy, CHP, YTIME)</td>
+<td style="text-align: center;">CHP electricity production</td>
+<td style="text-align: center;"><span
+class="math inline">\(TWh\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VProdElecEstCHP<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Estimate the electricity of CHP
+Plants</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VProdElecNonCHP<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Non CHP total electricity
+production</td>
+<td style="text-align: center;"><span
+class="math inline">\(TWh\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VProdElecReqCHP<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Total estimated CHP electricity
+production</td>
+<td style="text-align: center;"><span
+class="math inline">\(TWh\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VProdElecReqTot<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Total required electricity
+production</td>
+<td style="text-align: center;"><span
+class="math inline">\(TWh\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VRenTechMatMult<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Renewable technologies maturity
+multiplier</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VRenTechMatMultExpr<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Renewable power capacity over
+potential</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VScalFacPlaDisp<br />
+(allCy, HOUR, YTIME)</td>
+<td style="text-align: center;">Scaling factor for plant dispatching
+(1)</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VScalWeibullSum<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Sum (over hours) of temporary variable
+facilitating the scaling in Weibull equation</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VSensCCS<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Variable that controlls the sensitivity
+of CCS acceptance</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VShareNewTechCCS<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Power plant share in new equipment</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VShareNewTechNoCCS<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Power plant share in new equipment</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VSharePowPlaNewEq<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Power plant share in new equipment</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VSortPlantDispatch<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Power plants sorting according to
+variable cost to decide the plant dispatching</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sets">Sets</h3>
+<table style="width:79%;">
+<caption>sets in use</caption>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"> </th>
+<th style="text-align: center;">description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">alias(TT, ytime)</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">allCy</td>
+<td style="text-align: center;">All Countries Used in the Model</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">an(ytime)</td>
+<td style="text-align: center;">Years for which the model is
+running</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">CCS(PGALL)</td>
+<td style="text-align: center;">Plants which can be equipped with
+CCS</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">CCS_NOCCS(PGALL, PGALL)</td>
+<td style="text-align: center;">mapping</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">CHP(EF)</td>
+<td style="text-align: center;">CHP Plants</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">CHPtoEON(EF, PGALL)</td>
+<td style="text-align: center;">Mapping of chp technologies to elec-only
+technologies</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">datay(ytime)</td>
+<td style="text-align: center;">Historical year before the base year of
+the model</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">DSBS(SBS)</td>
+<td style="text-align: center;">All Demand Subsectors</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">EF</td>
+<td style="text-align: center;">Energy Forms</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">EFS(EF)</td>
+<td style="text-align: center;">Energy Forms used in Supply Side</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">HOU(DSBS)</td>
+<td style="text-align: center;">Households</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">hour</td>
+<td style="text-align: center;">Segments of hours in a year
+(250,1250,…,8250)</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">INDDOM(DSBS)</td>
+<td style="text-align: center;">Industry and Tertiary</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">NAP(Policies_set)</td>
+<td style="text-align: center;">National Allocation Plan sector
+categories</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">NAPtoALLSBS(NAP, ALLSBS)</td>
+<td style="text-align: center;">Energy sectors corresponding to NAP
+sectors</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">NENSE(DSBS)</td>
+<td style="text-align: center;">Non Energy and Bunkers</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">NOCCS(PGALL)</td>
+<td style="text-align: center;">Plants which can be equipped with CCS
+but they are not</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">PGALL</td>
+<td style="text-align: center;">Power Generation Plant Types</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">PGALLtoEF(PGALL, PGEF)</td>
+<td style="text-align: center;">Correspondence between plants and energy
+forms</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">PGALLtoPGRENEF(PGALL, PGRENEF)</td>
+<td style="text-align: center;">Correspondence between renewable plants
+and renewable energy forms</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">PGECONCHAR</td>
+<td style="text-align: center;">Technical - economic characteristics for
+power generation plants</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">PGEF(EFS)</td>
+<td style="text-align: center;">Energy forms used for power
+generation</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">PGLOADTYPE(PGOTH)</td>
+<td style="text-align: center;">Peak and Base load of total electricity
+demand in GW</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">PGOTH</td>
+<td style="text-align: center;">Various data related to power generation
+plants</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">PGREN(PGALL)</td>
+<td style="text-align: center;">Renewable Plants</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">PGRENEF</td>
+<td style="text-align: center;">Renewable energy forms in power
+generation</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">PGSCRN(PGALL)</td>
+<td style="text-align: center;">New plants involved in endogenous
+scrapping (these plants are not scrapped)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">runCy(allCy)</td>
+<td style="text-align: center;">Countries for which the model is
+running</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">runCyL(allCy)</td>
+<td style="text-align: center;">Countries for which the model is running
+(used in countries loop)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">SBS(ALLSBS)</td>
+<td style="text-align: center;">Model Subsectors</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">time(ytime)</td>
+<td style="text-align: center;">Model time horizon used in equation
+definitions</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">TRANSE(DSBS)</td>
+<td style="text-align: center;">All Transport Subsectors</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VARIOUS_LABELS</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">ytime</td>
+<td style="text-align: center;">Model time horizon</td>
+</tr>
+</tbody>
+</table>
+<h2 id="see-also">See Also</h2>
+<p><a href="01_Transport.htm">01_Transport</a>, <a
+href="02_Industry.htm">02_Industry</a>, <a
+href="03_RestOfEnergy.htm">03_RestOfEnergy</a>, <a
+href="06_CO2.htm">06_CO2</a>, <a href="08_Prices.htm">08_Prices</a>, <a
+href="core.htm">core</a></p>
+<h2 id="references">References</h2>
+<script>
+window.onscroll = function() {myFunction()};
+
+var navbar = document.getElementById("pagenav");
+var sticky = navbar.offsetTop;
+
+function myFunction() {
+  var currentScrollPos = window.pageYOffset;
+  if (window.pageYOffset >= sticky) {
+    if (prevScrollpos > currentScrollPos) {
+      document.getElementById("pagenav").style.top = "0";
+      document.getElementById("pagenav").style.position = "fixed";
+    } else {
+      document.getElementById("pagenav").style.top = "-50px";
+    }
+  } else {
+      document.getElementById("pagenav").style.position = "static";
+  }
+  prevScrollpos = currentScrollPos;
+}
+</script>
+</body>
+</html>

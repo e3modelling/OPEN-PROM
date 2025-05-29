@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="generator" content="goxygen" />
+  <meta name="author" content="Fotis Sioutas" />
+  <meta name="author" content="Giannis Tolios" />
+  <meta name="author" content="Giorgos Plessias" />
+  <meta name="author" content="Anastasis Giannousakis" />
+<title>OPEN PROM – Overview</title>
+<link rel="stylesheet" href="ming/style.css">
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS_CHTML-full"></script>
+<script type="text/x-mathjax-config">
+                    MathJax.Hub.Config({
+                      CommonHTML: { linebreaks: { automatic: true } },
+                      "HTML-CSS": { linebreaks: { automatic: true } },
+                             SVG: { linebreaks: { automatic: true } }
+                    });
+</script>
+</head>
+<body>
+<div class="header">
+      <div class="headerimg"><a href="index.htm"><img id="logo" src="images/logo.png" height="100" alt="model logo" /></a></div>
+    <div class="headertext">
+      <h1 id="mainheadertitle"><a href="https://github.com/e3modelling/OPEN-PROM">OPEN PROM</a></h1>
+      <h3>0.1</h3>
+      <div class="by">created with <a href="https://github.com/pik-piam/goxygen">goxygen</a> 1.4.6</div>
+    </div>
+</div>
+
+<div class="pagenav" id="pagenav">
+    <div class="dropdown">
+   <button class="dropbtn">Overview
+     <i class="fa fa-caret-down"></i>
+   </button>
+   <div id="mainnav" class="dropdown-content">
+   <a href='index.htm'>Overview</a>
+   <a href='core.htm'>core</a>
+   <a href='01_Transport.htm'> 1. Transport module</a>
+   <a href='02_Industry.htm'> 2. Industry module</a>
+   <a href='03_RestOfEnergy.htm'> 3. RestOfEnergy module</a>
+   <a href='04_PowerGeneration.htm'> 4. PowerGeneration module</a>
+   <a href='05_Hydrogen.htm'> 5. Hydrogen module</a>
+   <a href='06_CO2.htm'> 6. CO2 module</a>
+   <a href='08_Prices.htm'> 8. Prices module</a>
+   </div>
+  </div>
+  <div class="dropdown">
+   <button class="dropbtn">Contents
+     <i class="fa fa-caret-down"></i>
+   </button>
+   <div class="dropdown-content">
+   <ul>
+   <li><a href="#main" id="toc-main">Main</a>
+   <ul>
+   <li><a href="#authors" id="toc-authors">Authors</a></li>
+   <li><a href="#how-to-cite" id="toc-how-to-cite">How to cite</a>
+   <ul>
+   <li><a href="#bibtex-format" id="toc-bibtex-format">Bibtex
+   format</a></li>
+   <li><a href="#citation-file-format"
+   id="toc-citation-file-format">Citation File Format</a></li>
+   </ul></li>
+   <li><a href="#references" id="toc-references">References</a></li>
+   </ul></li>
+   </ul>
+   </div>
+  </div>
+</div>
+
+<h1 id="main">Main</h1>
+<p>This is the OPEN-PROM model, the open version of the world energy
+model PROMETHEUS of E3-Modelling.</p>
+<p>*** preliminaries</p>
+<ul>
+<li>Coding Etiquette:</li>
+<li>Below, you’ll find the coding etiquette, a collection of conventions
+designed to streamline the development process and enhance code
+readability.</li>
+<li>Please uphold these standards as you code! The naming convention for
+objects in the code is established as follows:</li>
+<li>[ prefix ][ object type (e.g. Capacity, Cost, Share, etc.) ][ more
+specific information, if needed ][ object scope, e.g. Transport,
+Electricity, etc. ][ more specific information, if needed ]</li>
+<li>Example:</li>
+<li>[ Q/V/i ][ Cost/Cap/Dem/Cons/Price/etc. ][ Total ][ Elec/Tr/Ind/Dom
+][ etc. ]</li>
+<li>Q: Equation</li>
+<li>q: Equation whose main computed variable does not participate in
+more than one equation, thus has decreased impact on the model</li>
+<li>V: Variable, main variable computed by each equation</li>
+<li>v: Variable that does not participate in more than one equation,
+thus has decreased impact on the model</li>
+<li>i: Input, Inputs are datasets or constants that are exogenous to the
+model</li>
+<li>Cost: Cost</li>
+<li>Cap: Capacity</li>
+<li>Dem: Demand</li>
+<li>Pow: Power</li>
+<li>Prod: Production</li>
+<li>Cons: Consumption</li>
+<li>Gen: Generation</li>
+<li>Req: Required</li>
+<li>Price: Pri</li>
+<li>Fin: Final</li>
+<li>Ene: Energy</li>
+<li>Elec: Electricity</li>
+<li>Ren: Renwable</li>
+<li>Sec: Sector</li>
+<li>Contr: Contribution</li>
+<li>Curr: Current</li>
+<li>Pot: Potential</li>
+<li>Tr: Transport</li>
+<li>Ind: Industry</li>
+<li>Indx: Index</li>
+<li>Inv: Investment</li>
+<li>Dom: Domestic</li>
+<li>Dec: Decision</li>
+<li>Mat: Maturity</li>
+<li>Fac: Factor</li>
+<li>Mult: Multiplier</li>
+<li>Endog: Endogenous</li>
+<li>Exog: Exogenous</li>
+<li>Allow: Allowed</li>
+<li>Maxm: Maximum</li>
+<li>Mnm: Minimum</li>
+<li>Pc: Passenger Cars</li>
+<li>Cum: Cummulative</li>
+<li>Imp: Imports</li>
+<li>Exp: Exports</li>
+<li>Bsl: Base Load</li>
+<li>Tot: Total</li>
+<li>Tech: Technology</li>
+<li>Var: Variable</li>
+<li>Pol: Policy</li>
+<li>Chp: Combined Heat and Power plants</li>
+<li>Ccs: Carbon capture and storage</li>
+<li>Clim: Climate</li>
+<li>Est: Estimated</li>
+<li>Transf: Transformation</li>
+<li>Capt: Captured</li>
+<li>Seq: Sequestration</li>
+<li>NAP: National Allocation Plan</li>
+<li>Carb: Carbon</li>
+<li>Val: Value</li>
+<li>Subsec: Subsector</li>
+<li>Sub: Substitutable</li>
+<li>Avg: Average</li>
+<li>Consu: Consumers</li>
+</ul>
+<h2 id="authors">Authors</h2>
+<p>Anastasis Giannousakis <a href="mailto:giannousakis@e3modelling.com"
+class="email">giannousakis@e3modelling.com</a>, Giorgos Plessias <a
+href="mailto:plessias@e3modelling.com"
+class="email">plessias@e3modelling.com</a>, Giannis Tolios
+&lt;e3modelling.com&gt;, Fotis Sioutas <a
+href="mailto:sioutas@e3modelling.com"
+class="email">sioutas@e3modelling.com</a></p>
+<h2 id="how-to-cite">How to cite</h2>
+<p>Giannousakis A, Plessias G, Tolios G, Sioutas F (2024). “OPEN PROM.”
+Version: 0.1, <a href="https://github.com/e3modelling/OPEN-PROM"
+class="uri">https://github.com/e3modelling/OPEN-PROM</a>.</p>
+<h3 id="bibtex-format">Bibtex format</h3>
+<pre><code>@Misc{,
+  title = {OPEN PROM},
+  author = {Anastasis Giannousakis and Giorgos Plessias and Giannis Tolios and Fotis Sioutas},
+  date = {2024-05-13},
+  year = {2024},
+  url = {https://github.com/e3modelling/OPEN-PROM},
+  note = {Version: 0.1},
+}</code></pre>
+<h3 id="citation-file-format">Citation File Format</h3>
+<pre><code>cff-version: 1.0.3
+message: Hello
+authors:
+- family-names: Giannousakis
+  given-names: Anastasis
+  affiliation: E3Modelling
+  email: giannousakis@e3modelling.com
+- family-names: Plessias
+  given-names: Giorgos
+  affiliation: E3Modelling
+  email: plessias@e3modelling.com
+- family-names: Tolios
+  given-names: Giannis
+  affiliation: E3Modelling
+  email: e3modelling.com
+- family-names: Sioutas
+  given-names: Fotis
+  affiliation: E3Modelling
+  email: sioutas@e3modelling.com
+title: OPEN PROM
+version: &#39;0.1&#39;
+date-released: &#39;2024-05-13&#39;
+repository-code: https://github.com/e3modelling/OPEN-PROM
+keywords: prometheus
+license: GNU AGPLv3
+</code></pre>
+<h2 id="references">References</h2>
+<script>
+window.onscroll = function() {myFunction()};
+
+var navbar = document.getElementById("pagenav");
+var sticky = navbar.offsetTop;
+
+function myFunction() {
+  var currentScrollPos = window.pageYOffset;
+  if (window.pageYOffset >= sticky) {
+    if (prevScrollpos > currentScrollPos) {
+      document.getElementById("pagenav").style.top = "0";
+      document.getElementById("pagenav").style.position = "fixed";
+    } else {
+      document.getElementById("pagenav").style.top = "-50px";
+    }
+  } else {
+      document.getElementById("pagenav").style.position = "static";
+  }
+  prevScrollpos = currentScrollPos;
+}
+</script>
+</body>
+</html>
