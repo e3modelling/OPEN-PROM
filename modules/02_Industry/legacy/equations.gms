@@ -97,13 +97,14 @@ Q02ConsFuel(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS
 *' historical changes in fuel prices, providing a more dynamic estimation of the electricity index. This equation provides a method to estimate the electricity index
 *' based on historical fuel price trends, allowing for a more flexible and responsive representation of industry price dynamics.
 QIndxElecIndPrices(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VIndxElecIndPrices(allCy,YTIME)
-                 =E=
-         VMVPriceElecInd(allCy,YTIME-1) *
-        ((VMVPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)/VMVPriceFuelAvgSub(allCy,"OI",YTIME-1))/
-        (VMVPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-2)/VMVPriceFuelAvgSub(allCy,"OI",YTIME-2)))**(0.3) *
-        ((VMVPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-2)/VMVPriceFuelAvgSub(allCy,"OI",YTIME-2))/
-        (VMVPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-3)/VMVPriceFuelAvgSub(allCy,"OI",YTIME-3)))**(0.3);
+        VIndxElecIndPrices(allCy,YTIME)
+                =E=
+        VMVPriceElecInd(allCy,YTIME-1) * 
+        (VMVPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)/VMVPriceFuelAvgSub(allCy,"OI",YTIME-1)) ** (0.6) *
+        (VMVPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-2)/VMVPriceFuelAvgSub(allCy,"OI",YTIME-2)) ** (0.3) *
+        (VMVPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-3)/VMVPriceFuelAvgSub(allCy,"OI",YTIME-3)) ** (0.1)
+        
+        ;
 
 *' The equation computes the electricity production cost per Combined Heat and Power plant for a specific demand sector within a given subsector.
 *' The cost is determined based on various factors, including the discount rate, technical lifetime of CHP plants, capital cost, fixed O&M cost, availability rate,

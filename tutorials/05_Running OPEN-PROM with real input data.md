@@ -43,7 +43,7 @@ this task will run the model in development mode, i.e. using only the regions of
 
 Other functionalities useful in supporting and understanding the running and the results of the model in the Task Runner are:
 
-* `REPORTING`: a tool to report the output of the models
+* `CALIBRATE`: a tool to calibrate parameters of the model. Can be run after OPEN-PROM RESEARCH NEW DATA
 * `SCENTOOL`: a tool to analyse and validate the model. In particular, scentool() is a function that reads the mif file
 * `COMPARE SCENARIOS`: a tool to compare multiple scenarios obtained with the model
 * `OPEN-PROM LIVE`: a tool to follow live the running of the model

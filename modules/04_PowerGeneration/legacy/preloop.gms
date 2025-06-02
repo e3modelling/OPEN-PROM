@@ -48,8 +48,8 @@ VNetNewCapElec.FX(runCy,"PGLHYD",YTIME)$TFIRST(YTIME) = +1E-10;
 VCFAvgRen.L(runCy,PGALL,YTIME) = 0.1;
 VCFAvgRen.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = iAvailRate(PGALL,YTIME);
 *---
-VSortPlantDispatch.LO(runCy,PGALL,YTIME) = 1.E-13;
-*VSortPlantDispatch.l(runCy,PGALL,YTIME)=VCostVarTechElec.L(runCy,PGALL,YTIME)/VCostVarTechElecTot.L(runCy,YTIME);
+*VSortPlantDispatch.lo(runCy,PGALL,YTIME)=1e-10;
+VSortPlantDispatch.l(runCy,PGALL,YTIME)=VCostVarTechElec.L(runCy,PGALL,YTIME)/VCostVarTechElecTot.L(runCy,YTIME);
 *---
 VProdElecReqCHP.L(runCy,YTIME) = 0.01;
 *---
@@ -77,6 +77,7 @@ VSharePowPlaNewEq.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) ) = 0;
 VMVCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  iInstCapPast(runCy,PGALL,YTIME);
 VCapElec2.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = iInstCapPast(runCy,PGALL,YTIME);
 VCapOverall.FX(runCy,PGALL,"%fBaseY%") =  iInstCapPast(runCy,PGALL,"%fBaseY%");
+VCapElecNominal.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = iInstCapPast(runCy,PGALL,YTIME)/iAvailRate(PGALL,YTIME);
 *---
 VIndxEndogScrap.FX(runCy,PGALL,YTIME)$(not an(YTIME) ) = 1;
 VIndxEndogScrap.FX(runCy,PGSCRN,YTIME) = 1;            !! premature replacement it is not allowed for all new plants
@@ -102,13 +103,11 @@ QCostProdSpecTech.scale(runCy,PGALL,YTIME)=VCostProdSpecTech.scale(runCy,PGALL,Y
 VCostVarTechNotPGSCRN.scale(runCy,PGALL,YTIME)=1e6;
 QCostVarTechNotPGSCRN.scale(runCy,PGALL,YTIME)=VCostVarTechNotPGSCRN.scale(runCy,PGALL,YTIME);
 *---
-VScalFacPlaDisp.scale(runCy,HOUR,YTIME)=1e-11;
+VScalFacPlaDisp.scale(runCy,HOUR,YTIME)=1e-4;
 QScalFacPlantDispatch.scale(runCy,HOUR,YTIME)=VScalFacPlaDisp.scale(runCy,HOUR,YTIME);
 *---
-$ontext
-VSortPlantDispatch.scale(runCy,PGALL,YTIME)=1e-11;
+VSortPlantDispatch.scale(runCy,PGALL,YTIME)=1e-12;
 QSortPlantDispatch.scale(runCy,PGALL,YTIME)=VSortPlantDispatch.scale(runCy,PGALL,YTIME);
-$offtext
 *---
 VCostVarTechElec.scale(runCy,PGALL,YTIME)=1e5;
 QCostVarTechElec.scale(runCy,PGALL,YTIME)=VCostVarTechElec.scale(runCy,PGALL,YTIME);
