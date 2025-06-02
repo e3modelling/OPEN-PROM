@@ -29,7 +29,7 @@ qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
   SUM(
     (PGALL),
     SQR(
-      VcapElec(allCy,PGALL,YTIME) - 
+      MVCapElec(allCy,PGALL,YTIME) - 
       iInstCapPast(allCy,PGALL,YTIME) 
     )
   );

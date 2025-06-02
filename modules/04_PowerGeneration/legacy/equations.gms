@@ -437,7 +437,7 @@ Q04CapElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QCapElecNominal(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
           VCapElecNominal(allCy,PGALL,YTIME)
               =E=
-          VCapElec(allCy,PGALL,YTIME) / iAvailRate(PGALL,YTIME);
+          MVCapElec(allCy,PGALL,YTIME) / iAvailRate(PGALL,YTIME);
          
 QNewCapElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       VNewCapElec(allCy,PGALL,YTIME)
