@@ -1,8 +1,7 @@
 # This script generates a mif file for comparison of OPEN-PROM data with MENA-EDS and ENERDATA
 library(madrat)
-library(openprom)
+library(postprom)
 library(reticulate)
-library(knitr)
 
 installPythonPackages <- function(packages) {
   for (pkg in packages) {
@@ -35,15 +34,16 @@ reportOutput <- function(
     mif_name = mif_name,
     aggregate = aggregate, fullValidation = fullValidation
   )
+  metadata <- getMetadata(path = runpath)
   print("Report generation completed.")
 
   if (!is.null(plot_name)) {
     save_names <- file.path(runpath, plot_name)
     mapply( # for each scenario, unpack the magpie obj and a pdf savename
-      function(report, save) {
-        batchPlotReport(report = report, save_pdf = save)
+      function(report, metadata, save) {
+        batchPlotReport(report = report, metadata = metadata, save_pdf = save)
       },
-      reports, save_names
+      reports, metadata, save_names
     )
   }
   invisible(NULL)
