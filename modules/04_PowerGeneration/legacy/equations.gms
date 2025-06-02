@@ -10,13 +10,6 @@
 
 *' Power Generation
 
-*' This equation computes the current renewable potential, which is the average of the maximum allowed renewable potential and the minimum renewable potential
-*' for a given power generation sector and energy form in a specific time period. The result is the current renewable potential in gigawatts (GW). 
-QPotRenCurr(allCy,PGRENEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-
-         VPotRenCurr(allCy,PGRENEF,YTIME) 
-         =E=
-         ( VPotRenMaxAllow(allCy,PGRENEF,YTIME) + iMinRenPotential(allCy,PGRENEF,YTIME))/2;
 
 *' This equation computes the electric capacity of Combined Heat and Power (CHP) plants. The capacity is calculated in gigawatts (GW) and is based on several factors,
 *' including the consumption of fuel in the industrial sector, the electricity prices in the industrial sector, the availability rate of power
@@ -276,7 +269,7 @@ QIndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(allC
 QCapElecNonCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       VCapElecNonCHP(allCy,YTIME)
           =E=
-      VCapElecTotEst(allCy,YTIME) - SUM(CHP,VCapElecCHP(allCy,CHP,YTIME) * 0.85);      
+      VCapElecTotEst(allCy,YTIME) - 0*SUM(CHP,VCapElecCHP(allCy,CHP,YTIME) * 0.85);      
 
 *' In essence, the equation evaluates the difference between the current and expected power generation capacity, accounting for various factors such as planned capacity,
 *' decommissioning schedules, and endogenous scrapping. The square root term introduces a degree of tolerance in the calculation.
@@ -319,28 +312,6 @@ qScalWeibull(allCy,PGALL,HOUR,YTIME)$((not CCS(PGALL))$TIME(YTIME) $runCy(allCy)
           VCostHourProdInvDecNoCCS(allCy,PGALL,HOUR,YTIME)$NOCCS(PGALL))**(-6);     
 $offtext
 
-*' The equation calculates the renewable potential supply curve for a specified year. Including:
-*' The minimum renewable potential for the given renewable energy form and country in the specified year.
-*' The carbon price value associated with the country in the specified year for the purpose of renewable potential estimation,
-*' the "Trade" attribute refers to tradable permits (if carbon pricing exists in the form of an emissions trading scheme).
-*' The maximum renewable potential for the specified renewable energy form  and country in the given year.
-*' The renewable potential supply curve is then calculated by linearly interpolating between the minimum and maximum renewable potentials based on the trade value.
-*' The trade value is normalized by dividing it by 70. The equation essentially defines a linear relationship between the trade value and the renewable potential within
-*' the specified range.
-QPotRenSuppCurve(allCy,PGRENEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VPotRenSuppCurve(allCy,PGRENEF,YTIME) =E=
-         iMinRenPotential(allCy,PGRENEF,YTIME) +(VCarVal(allCy,"Trade",YTIME))/(70)*
-         (iMaxRenPotential(allCy,PGRENEF,YTIME)-iMinRenPotential(allCy,PGRENEF,YTIME));
-
-*' *The equation calculates the maximum allowed renewable potential for a specific renewable energy form and country in the
-*' given year . Including:
-*' VThe renewable potential supply curve for the specified renewable energy form, country, and year, as calculated in the previous equation.
-*' The maximum renewable potential for the specified renewable energy form and country in the given year.
-*' The maximum allowed renewable potential is computed as the average between the calculated renewable potential supply curve and the maximum renewable potential.
-*' This formulation ensures that the potential does not exceed the maximum allowed value. 
-QPotRenMaxAllow(allCy,PGRENEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..      
-         VPotRenMaxAllow(allCy,PGRENEF,YTIME) =E=
-         ( VPotRenSuppCurve(allCy,PGRENEF,YTIME)+ iMaxRenPotential(allCy,PGRENEF,YTIME))/2;
 
 *' The equation calculates the minimum allowed renewable potential for a specific renewable energy form and country 
 *' in the given year . Including:
@@ -360,24 +331,17 @@ $offtext
 *' planned capacities relative to the renewable potential supply curve.
 QRenTechMatMultExpr(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
           VRenTechMatMultExpr(allCy,PGALL,YTIME)
-                =E=
-          sum(PGRENEF$PGALLtoPGRENEF(PGALL,PGRENEF),
-            sum(PGALL2$(PGALLtoPGRENEF(PGALL2,PGRENEF) $PGREN(PGALL2)),
-              VCapElec2(allCy,PGALL2,YTIME-1)
-            ) / 
-            VPotRenCurr(allCy,PGRENEF,YTIME)
-          )-0.6;
-
-
+              =E=
+          (
+            VCapElecNominal(allCy,PGALL,YTIME-1) /
+            sum(PGALL2, VCapElecNominal(allCy,PGALL2,YTIME-1))
+          )
+          $(PGREN(PGALL));
 
 QRenTechMatMult(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VRenTechMatMult(allCy,PGALL,YTIME)
           =E=
-         1$(NOT PGREN(PGALL))
-         +
-         (
-           1/(1+exp(5*VRenTechMatMultExpr(allCy,PGALL,YTIME)))
-           )$PGREN(PGALL);  
+         2 / (1+exp(9*VRenTechMatMultExpr(allCy,PGALL,YTIME)));  
 
 *' The equation calculates a temporary variable which is used to facilitate scaling in the Weibull equation. The scaling is influenced by three main factors:
 *' Maturity Factor for Planned Available Capacity : This factor represents the material-specific influence on the planned available capacity for a power
@@ -396,7 +360,7 @@ QScalWeibullSum(allCy,PGALL,YTIME)$((not CCS(PGALL)) $TIME(YTIME) $runCy(allCy))
                  (VCostHourProdInvDec(allCy,PGALL,HOUR,YTIME)$(not NOCCS(PGALL))
                  +
                  VCostHourProdInvDecNoCCS(allCy,PGALL,HOUR,YTIME)$NOCCS(PGALL)
-                 )**(-6)
+                 )**(-1)
               ); 
   
 *' The equation calculates the variable representing the new investment decision for power plants in a given country and time period.

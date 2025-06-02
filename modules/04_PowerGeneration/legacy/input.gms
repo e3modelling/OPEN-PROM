@@ -175,7 +175,6 @@ MAXLOADSH 0.45 / ;
 Parameters
 iBaseLoadShareDem(allCy,DSBS,YTIME)	                       "Baseload share of demand per sector (1)"
 iHisChpGrCapData(allCy,CHP,YTIME)	                       "Historical CHP  gross capacity data (GW)"
-iMinRenPotential(allCy,PGRENEF,YTIME)	                   "Minimum renewable potential (GW)"
 iPeakBsLoadBy(allCy,PGLOADTYPE)	                           "Peak and Base load for base year (GW)"
 iTotAvailCapBsYr(allCy)	                                   "Total installed available capacity in base year (GW)"
 iTotAvailNomCapBsYr(allCy,YTIME)	                         "Total nominal available installed capacity in base year (GW)"
@@ -186,7 +185,6 @@ iTechLftPlaType(allCy,PGALL)	                           "Technical Lifetime per 
 iScaleEndogScrap(PGALL)                                    "Scale parameter for endogenous scrapping applied to the sum of full costs (1)"
 iDecInvPlantSched(allCy,PGALL,YTIME)                       "Decided plant investment schedule (GW)"
 iPlantDecomSched(allCy,PGALL,YTIME)	                       "Decided plant decomissioning schedule (GW)"	
-iMaxRenPotential(allCy,PGRENEF,YTIME)	                   "Maximum enewable potential (GW)"
 iMxmShareChpElec(allCy,YTIME)	                           "Maximum share of CHP electricity in a country (1)"
 !! iMatureFacPlaDisp(allCy,PGALL,YTIME)	                   "Maturity factor related to plant dispatching (1)"
 ;
@@ -198,14 +196,6 @@ iDataElecAndSteamGen(runCy,CHP,YTIME) = 0 ;
 iHisChpGrCapData(runCy,CHP,YTIME) = iDataElecAndSteamGen(runCy,CHP,YTIME);
 *---
 iCummMnmInstRenCap(runCy,PGRENEF,YTIME)$(not iCummMnmInstRenCap(runCy,PGRENEF,YTIME)) = 1e-4;
-iMinRenPotential(runCy,"LHYD",YTIME) = iCummMnmInstRenCap(runCy,"LHYD",YTIME);
-iMinRenPotential(runCy,"SHYD",YTIME) = iCummMnmInstRenCap(runCy,"SHYD",YTIME);
-iMinRenPotential(runCy,"WND",YTIME)  = iCummMnmInstRenCap(runCy,"WND",YTIME);
-iMinRenPotential(runCy,"WNO",YTIME)  = iCummMnmInstRenCap(runCy,"WNO",YTIME);
-iMinRenPotential(runCy,"SOL",YTIME)  = iCummMnmInstRenCap(runCy,"SOL",YTIME);
-iMinRenPotential(runCy,"DPV",YTIME)  = iCummMnmInstRenCap(runCy,"DPV",YTIME);
-iMinRenPotential(runCy,"BMSWAS",YTIME) = iCummMnmInstRenCap(runCy,"BMSWAS",YTIME);
-iMinRenPotential(runCy,"OTHREN",YTIME) = iCummMnmInstRenCap(runCy,"OTHREN",YTIME);
 *---
 iPeakBsLoadBy(runCy,PGLOADTYPE) = sum(tfirst, iDataElecSteamGen(runCy,PGLOADTYPE,tfirst));
 *---
@@ -231,19 +221,6 @@ iScaleEndogScrap(PGALL) = 0.035;
 iDecInvPlantSched(runCy,PGALL,YTIME) = iInvPlants(runCy,PGALL,YTIME);
 *---
 iPlantDecomSched(runCy,PGALL,YTIME) = iDecomPlants(runCy,PGALL,YTIME);
-*---
-iCummMxmInstRenCap(runCy,PGRENEF,YTIME)$(not iCummMxmInstRenCap(runCy,PGRENEF,YTIME)) = 1e-4;
-*---
-iMaxRenPotential(runCy,"LHYD",YTIME) = iCummMxmInstRenCap(runCy,"LHYD",YTIME);
-iMaxRenPotential(runCy,"SHYD",YTIME) = iCummMxmInstRenCap(runCy,"SHYD",YTIME);
-iMaxRenPotential(runCy,"WND",YTIME)$AN(YTIME) = iCummMxmInstRenCap(runCy,"WND",YTIME);
-iMaxRenPotential(runCy,"WNO",YTIME)$AN(YTIME) = iCummMxmInstRenCap(runCy,"WNO",YTIME);
-iMaxRenPotential(runCy,"SOL",YTIME)$AN(YTIME) = iCummMxmInstRenCap(runCy,"SOL",YTIME);
-iMaxRenPotential(runCy,"DPV",YTIME)$AN(YTIME) = iCummMxmInstRenCap(runCy,"DPV",YTIME);
-iMaxRenPotential(runCy,"BMSWAS",YTIME)$AN(YTIME) = iCummMxmInstRenCap(runCy,"BMSWAS",YTIME);
-iMaxRenPotential(runCy,"OTHREN",YTIME)$AN(YTIME) = iCummMxmInstRenCap(runCy,"OTHREN",YTIME);
-*---
-* iMatFacPlaAvailCap(runCy,CCS,YTIME)$an(YTIME)  =50;
 *---
 iMxmShareChpElec(runCy,YTIME) = 0.1;
 *---
