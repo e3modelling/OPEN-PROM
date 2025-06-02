@@ -6,10 +6,10 @@
 MVCstCO2SeqCsts.L(runCy,YTIME)=1;
 MVCstCO2SeqCsts.FX(runCy,YTIME)$(not an(YTIME)) = iElastCO2Seq(runCy,"mc_b");
 *---
-VCapCO2ElecHydr.FX(runCy,YTIME)$(not An(YTIME)) = 0;
+V06CapCO2ElecHydr.FX(runCy,YTIME)$(not An(YTIME)) = 0;
 *---
-VCaptCummCO2.FX(runCy,YTIME)$(not an(YTIME)) = 0 ;
+V06CaptCummCO2.FX(runCy,YTIME)$(not an(YTIME)) = 0 ;
 *---
-*VTrnsWghtLinToExp.scale(runCy,YTIME)=1.e-20;
-*QTrnsWghtLinToExp.scale(runCy,YTIME)=1.e-20;
+*V06TrnsWghtLinToExp.scale(runCy,YTIME)=1.e-20;
+*Q06TrnsWghtLinToExp.scale(runCy,YTIME)=1.e-20;
 *---

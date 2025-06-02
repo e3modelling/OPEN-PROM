@@ -3,8 +3,8 @@
 
 *'                *VARIABLE INITIALISATION*
 *---
-VPriceFuelSepCarbonWght.scale(runCy,DSBS,EF,YTIME)=1e-6;
-QPriceFuelSepCarbonWght.scale(runCy,DSBS,EF,YTIME)=VPriceFuelSepCarbonWght.scale(runCy,DSBS,EF,YTIME);
+V08PriceFuelSepCarbonWght.scale(runCy,DSBS,EF,YTIME)=1e-6;
+Q08PriceFuelSepCarbonWght.scale(runCy,DSBS,EF,YTIME)=V08PriceFuelSepCarbonWght.scale(runCy,DSBS,EF,YTIME);
 *---
 MVPriceFuelSubsecCarVal.L(runCy,SBS,EF,YTIME) = 1.5;
 MVPriceFuelSubsecCarVal.L(runCy,"PG",PGEF,YTIME)=1;
@@ -27,10 +27,10 @@ MVPriceElecIndResConsu.FX(runCy,"r",YTIME)$(not An(YTIME)) = MVPriceFuelSubsecCa
 MVPriceFuelAvgSub.L(runCy,DSBS,YTIME) = 0.1;
 MVPriceFuelAvgSub.FX(runCy,DSBS,YTIME)$(not An(YTIME)) = sum(EF$SECTTECH(DSBS,EF), iWgtSecAvgPriFueCons(runCy,DSBS,EF) * iFuelPrice(runCy,DSBS,EF,YTIME));
 *---
-VFuelPriSubNoCarb.FX(runCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF) $(not HEATPUMP(EF))  $(not An(YTIME))) = iFuelPrice(runCy,SBS,EF,YTIME);
-VFuelPriSubNoCarb.FX(runCy,SBS,ALTEF,YTIME)$(SECTTECH(SBS,ALTEF) $(not An(YTIME))) = sum(EF$ALTMAP(SBS,ALTEF,EF),iFuelPrice(runCy,SBS,EF,YTIME));
-VFuelPriSubNoCarb.FX(runCy,"PG","NUC",YTIME) = 0.025; !! fixed price for nuclear fuel to 25Euro/toe
-VFuelPriSubNoCarb.FX(runCy,INDDOM,"HEATPUMP",YTIME)$(SECTTECH(INDDOM,"HEATPUMP")$(not An(YTIME))) = iFuelPrice(runCy,INDDOM,"ELC",YTIME);
+V08FuelPriSubNoCarb.FX(runCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF) $(not HEATPUMP(EF))  $(not An(YTIME))) = iFuelPrice(runCy,SBS,EF,YTIME);
+V08FuelPriSubNoCarb.FX(runCy,SBS,ALTEF,YTIME)$(SECTTECH(SBS,ALTEF) $(not An(YTIME))) = sum(EF$ALTMAP(SBS,ALTEF,EF),iFuelPrice(runCy,SBS,EF,YTIME));
+V08FuelPriSubNoCarb.FX(runCy,"PG","NUC",YTIME) = 0.025; !! fixed price for nuclear fuel to 25Euro/toe
+V08FuelPriSubNoCarb.FX(runCy,INDDOM,"HEATPUMP",YTIME)$(SECTTECH(INDDOM,"HEATPUMP")$(not An(YTIME))) = iFuelPrice(runCy,INDDOM,"ELC",YTIME);
 *---
 MVPriceElecIndResNoCliPol.FX(runCy,"i",YTIME)$(not an(ytime)) = MVPriceFuelSubsecCarVal.L(runCy,"OI","ELC",YTIME)*0.086;
 MVPriceElecIndResNoCliPol.FX(runCy,"r",YTIME)$(not an(ytime)) = MVPriceFuelSubsecCarVal.L(runCy,"HOU","ELC",YTIME)*0.086;

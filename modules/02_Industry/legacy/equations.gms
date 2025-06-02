@@ -96,8 +96,8 @@ Q02ConsFuel(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS
 *' of fuel prices in the current and previous years, with a power of 0.3 applied to each ratio. This weighting factor introduces a gradual adjustment to reflect the
 *' historical changes in fuel prices, providing a more dynamic estimation of the electricity index. This equation provides a method to estimate the electricity index
 *' based on historical fuel price trends, allowing for a more flexible and responsive representation of industry price dynamics.
-QIndxElecIndPrices(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-        VIndxElecIndPrices(allCy,YTIME)
+Q02IndxElecIndPrices(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+        V02IndxElecIndPrices(allCy,YTIME)
                 =E=
         MVPriceElecInd(allCy,YTIME-1) * 
         (MVPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)/MVPriceFuelAvgSub(allCy,"OI",YTIME-1)) ** (0.6) *
@@ -111,8 +111,8 @@ QIndxElecIndPrices(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' variable cost, and fuel-related costs. The equation provides a comprehensive assessment of the overall expenses associated with electricity production from CHP
 *' plants, considering both the fixed and variable components, as well as factors such as carbon prices and CO2 emission factors.
 *' The resulting variable represents the electricity production cost per CHP plant and demand sector, expressed in Euro per kilowatt-hour (Euro/KWh).
-QCostElecProdCHP(allCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS) $runCy(allCy))..
-         VCostElecProdCHP(allCy,DSBS,CHP,YTIME)
+Q02CostElecProdCHP(allCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS) $runCy(allCy))..
+         V02CostElecProdCHP(allCy,DSBS,CHP,YTIME)
                  =E=
                     ( ( iDisc(allCy,"PG",YTIME) * exp(iDisc(allCy,"PG",YTIME)*iLifChpPla(allCy,DSBS,CHP))
                         / (exp(iDisc(allCy,"PG",YTIME)*iLifChpPla(allCy,DSBS,CHP)) -1))
@@ -127,18 +127,18 @@ QCostElecProdCHP(allCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS) $runCy(allCy))
 *' This cost estimation is based on an intermediate technology cost and the elasticity parameter associated with the given subsector.
 *' The intermediate technology cost is raised to the power of the elasticity parameter to determine the final technology cost. The equation
 *' provides a comprehensive assessment of the overall expenses associated with different technologies in the given subsector and consumer size group.
-QCostTech(allCy,DSBS,rCon,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) $SECTTECH(DSBS,EF) $runCy(allCy))..
-        VCostTech(allCy,DSBS,rCon,EF,YTIME) 
+Q02CostTech(allCy,DSBS,rCon,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) $SECTTECH(DSBS,EF) $runCy(allCy))..
+        V02CostTech(allCy,DSBS,rCon,EF,YTIME) 
                  =E= 
-                 VCostTechIntrm(allCy,DSBS,rCon,EF,YTIME)**(-iElaSub(allCy,DSBS)) ;   
+                 V02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME)**(-iElaSub(allCy,DSBS)) ;   
 
 *' The equation computes the intermediate technology cost, including the lifetime factor, for each technology, energy form, and consumer size group
 *' within the specified subsector. This cost estimation plays a crucial role in evaluating the overall expenses associated with adopting and implementing
 *' various technologies in the given subsector and consumer size group. The equation encompasses diverse parameters, such as discount rates, lifetime of 
 *' technologies, capital costs, fixed operation and maintenance costs, fuel prices, annual consumption rates, the number of consumers, the capital goods 
 *' index, and useful energy conversion factors.
-QCostTechIntrm(allCy,DSBS,rCon,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) $SECTTECH(DSBS,EF) $runCy(allCy))..
-         VCostTechIntrm(allCy,DSBS,rCon,EF,YTIME) =E=
+Q02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) $SECTTECH(DSBS,EF) $runCy(allCy))..
+         V02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME) =E=
                   ( (( (iDisc(allCy,DSBS,YTIME)$(not CHP(EF)) + iDisc(allCy,"PG",YTIME)$CHP(EF)) !! in case of chp plants we use the discount rate of power generation sector
                        * exp((iDisc(allCy,DSBS,YTIME)$(not CHP(EF)) + iDisc(allCy,"PG",YTIME)$CHP(EF))*MVLft(allCy,DSBS,EF,YTIME))
                      )
@@ -168,24 +168,24 @@ QCostTechIntrm(allCy,DSBS,rCon,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(
 *' This equation calculates the technology cost, including the maturity factor , for each energy form  and technology  within
 *' the specified subsector and consumer size group . The cost is determined by multiplying the maturity factor with the
 *' technology cost based on the given parameters.
-QCostTechMatFac(allCy,DSBS,rCon,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) $SECTTECH(DSBS,EF) $runCy(allCy))..
-        VCostTechMatFac(allCy,DSBS,rCon,EF,YTIME) 
+Q02CostTechMatFac(allCy,DSBS,rCon,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) $SECTTECH(DSBS,EF) $runCy(allCy))..
+        V02CostTechMatFac(allCy,DSBS,rCon,EF,YTIME) 
                                                =E=
-        iMatrFactor(allCy,DSBS,EF,YTIME) * VCostTech(allCy,DSBS,rCon,EF,YTIME) ;
+        iMatrFactor(allCy,DSBS,EF,YTIME) * V02CostTech(allCy,DSBS,rCon,EF,YTIME) ;
 
 *' This equation calculates the technology sorting based on variable cost . It is determined by summing the technology cost,
 *' including the maturity factor , for each energy form and technology within the specified subsector 
 *' and consumer size group. The sorting is conducted based on variable cost considerations.
-QSortTechVarCost(allCy,DSBS,rCon,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) $runCy(allCy))..
-        VSortTechVarCost(allCy,DSBS,rCon,YTIME)
+Q02SortTechVarCost(allCy,DSBS,rCon,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le iNcon(DSBS)+1) $runCy(allCy))..
+        V02SortTechVarCost(allCy,DSBS,rCon,YTIME)
                         =E=
-        sum((EF)$(SECTTECH(DSBS,EF) ),VCostTechMatFac(allCy,DSBS,rCon,EF,YTIME));
+        sum((EF)$(SECTTECH(DSBS,EF) ),V02CostTechMatFac(allCy,DSBS,rCon,EF,YTIME));
 
 *' This equation calculates the gap in final demand for industry, tertiary, non-energy uses, and bunkers.
 *' It is determined by subtracting the total final demand per subsector from the consumption of
 *' remaining substitutable equipment. The square root term is included to ensure a non-negative result.
-QGapFinalDem(allCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $runCy(allCy))..
-         VGapFinalDem(allCy,DSBS,YTIME)
+Q02GapFinalDem(allCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $runCy(allCy))..
+         V02GapFinalDem(allCy,DSBS,YTIME)
                  =E=
          (MVDemFinSubFuelSubsec(allCy,DSBS,YTIME) - sum(EF$SECTTECH(DSBS,EF), MVConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME))
          + SQRT( SQR(MVDemFinSubFuelSubsec(allCy,DSBS,YTIME) - sum(EF$SECTTECH(DSBS,EF), MVConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME))))) /2;
@@ -193,12 +193,12 @@ QGapFinalDem(allCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $runCy(allCy))..
 *' This equation calculates the technology share in new equipment based on factors such as maturity factor,
 *' cumulative distribution function of consumer size groups, number of consumers, technology cost, distribution function of consumer
 *' size groups, and technology sorting.
-QShareTechNewEquip(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $SECTTECH(DSBS,EF) $(not TRANSE(DSBS)) $runCy(allCy))..
-         VShareTechNewEquip(allCy,DSBS,EF,YTIME) =E=
+Q02ShareTechNewEquip(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $SECTTECH(DSBS,EF) $(not TRANSE(DSBS)) $runCy(allCy))..
+         V02ShareTechNewEquip(allCy,DSBS,EF,YTIME) =E=
          iMatrFactor(allCy,DSBS,EF,YTIME) / iCumDistrFuncConsSize(allCy,DSBS) *
          sum(rCon$(ord(rCon) le iNcon(DSBS)+1),
-                  VCostTech(allCy,DSBS,rCon,EF,YTIME)
-                  * iDisFunConSize(allCy,DSBS,rCon)/VSortTechVarCost(allCy,DSBS,rCon,YTIME));
+                  V02CostTech(allCy,DSBS,rCon,EF,YTIME)
+                  * iDisFunConSize(allCy,DSBS,rCon)/V02SortTechVarCost(allCy,DSBS,rCon,YTIME));
 
 *' This equation calculates the consumption of fuels in each demand subsector, including heat from heat pumps .
 *' It considers the consumption of remaining substitutable equipment, the technology share in new equipment, and the final demand
@@ -207,16 +207,16 @@ Q02ConsFuelInclHP(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTEC
          MVConsFuelInclHP(allCy,DSBS,EF,YTIME)
                  =E=
          MVConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)+
-         (VShareTechNewEquip(allCy,DSBS,EF,YTIME)*VGapFinalDem(allCy,DSBS,YTIME))
-*'        $(VGapFinalDem.L(allCy,DSBS,YTIME)>0)
+         (V02ShareTechNewEquip(allCy,DSBS,EF,YTIME)*V02GapFinalDem(allCy,DSBS,YTIME))
+*'        $(V02GapFinalDem.L(allCy,DSBS,YTIME)>0)
          + (MVConsElecNonSubIndTert(allCy,DSBS,YTIME))$(INDDOM(DSBS) and ELCEF(EF));
 
 *' This equation calculates the variable, including fuel electricity production cost per CHP plant and demand sector, taking into account the variable cost (other than fuel)
 *' per CHP type and the summation of fuel-related costs for each energy form . The calculation involves fuel prices, CO2 emission factors, boiler efficiency, electricity
 *' index, and carbon prices, adjusted by various factors. The equation uses these terms to calculate the variable, including fuel electricity production cost per CHP plant and
 *' demand sector. The result is expressed in Euro per kilowatt-hour (Euro/KWh). 
-QCostProdCHPDem(allCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS) $runCy(allCy))..
-         VCostProdCHPDem(allCy,DSBS,CHP,YTIME)
+Q02CostProdCHPDem(allCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS) $runCy(allCy))..
+         V02CostProdCHPDem(allCy,DSBS,CHP,YTIME)
                  =E=
          iVarCostChp(allCy,DSBS,CHP,YTIME)/1E3
                     + sum(PGEF$CHPtoEF(CHP,PGEF), (MVPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)+1e-3*iCo2EmiFac(allCy,"PG",PGEF,YTIME)*
@@ -230,7 +230,7 @@ Q02CostElcAvgProdCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          MVCostElcAvgProdCHP(allCy,CHP,YTIME)
          =E=
 
-         (sum(INDDOM, MVConsFuel(allCy,INDDOM,CHP,YTIME-1)/SUM(INDDOM2,MVConsFuel(allCy,INDDOM2,CHP,YTIME-1))*VCostElecProdCHP(allCy,INDDOM,CHP,YTIME)))
+         (sum(INDDOM, MVConsFuel(allCy,INDDOM,CHP,YTIME-1)/SUM(INDDOM2,MVConsFuel(allCy,INDDOM2,CHP,YTIME-1))*V02CostElecProdCHP(allCy,INDDOM,CHP,YTIME)))
          $SUM(INDDOM2,MVConsFuel.L(allCy,INDDOM2,CHP,YTIME-1))+0$(NOT SUM(INDDOM2,MVConsFuel.L(allCy,INDDOM2,CHP,YTIME-1)));
 
 *' The equation computes the average variable cost, including fuel and electricity production cost, per Combined Heat and Power plant.
@@ -242,5 +242,5 @@ Q02CostVarAvgElecProd(allCy,CHP,YTIME)$(TIME(YTIME) $runCy(allCy)) ..
          =E=
 
          (sum(INDDOM, MVConsFuel(allCy,INDDOM,CHP,YTIME-1)/SUM(INDDOM2,MVConsFuel(allCy,INDDOM2,CHP,YTIME-1))
-         *VCostProdCHPDem(allCy,INDDOM,CHP,YTIME)))
+         *V02CostProdCHPDem(allCy,INDDOM,CHP,YTIME)))
          $SUM(INDDOM2,MVConsFuel.L(allCy,INDDOM2,CHP,YTIME-1))+0$(NOT SUM(INDDOM2,MVConsFuel.L(allCy,INDDOM2,CHP,YTIME-1)));

@@ -3,11 +3,11 @@
 
 *'                *VARIABLE INITIALISATION*
 *---
-VCostTechIntrm.L(runCy,DSBS,rcon,EF,YTIME) = 0.1;
+V02CostTechIntrm.L(runCy,DSBS,rcon,EF,YTIME) = 0.1;
 *---
-VSortTechVarCost.L(runCy,DSBS,rCon,YTIME) = 0.00000001;
+V02SortTechVarCost.L(runCy,DSBS,rCon,YTIME) = 0.00000001;
 *---
-VShareTechNewEquip.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF)$(not An(YTIME))) = 0;
+V02ShareTechNewEquip.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF)$(not An(YTIME))) = 0;
 *---
 MVConsFuel.L(runCy,DSBS,EF,YTIME) = 0.0000000001;
 MVConsFuel.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $(not HEATPUMP(EF)) $(not TRANSE(DSBS)) $(not An(YTIME))) = iFuelConsPerFueSub(runCy,DSBS,EF,YTIME);

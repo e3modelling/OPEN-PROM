@@ -15,8 +15,8 @@
 *' the product of electricity production from plants with carbon capture and storage, the conversion
 *' factor from terawatt-hours to million tons of oil equivalent (sTWhToMtoe), the plant efficiency,
 *' the CO2 emission factor, and the plant CO2 capture rate. 
-QCapCO2ElecHydr(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VCapCO2ElecHydr(allCy,YTIME)
+Q06CapCO2ElecHydr(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         V06CapCO2ElecHydr(allCy,YTIME)
          =E=
          sum(PGEF,sum(CCS$PGALLtoEF(CCS,PGEF),
                  MVProdElec(allCy,CCS,YTIME)*sTWhToMtoe/iPlantEffByType(allCy,CCS,YTIME)*
@@ -31,8 +31,8 @@ QCapCO2ElecHydr(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' The cumulative CO2 captured at the current time period is determined by adding the CO2 captured by electricity and hydrogen production
 *' plants to the cumulative CO2 captured in the previous time period. This equation captures the ongoing total CO2 capture
 *' over time in the specified scenario.
-QCaptCummCO2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VCaptCummCO2(allCy,YTIME) =E= VCaptCummCO2(allCy,YTIME-1)+VCapCO2ElecHydr(allCy,YTIME-1);   
+Q06CaptCummCO2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         V06CaptCummCO2(allCy,YTIME) =E= V06CaptCummCO2(allCy,YTIME-1)+V06CapCO2ElecHydr(allCy,YTIME-1);   
 
 *' The equation computes the transition weight from a linear to exponential CO2 sequestration
 *' cost curve for a specific scenario and year. The transition weight is determined based on the cumulative CO2 captured
@@ -40,10 +40,10 @@ QCaptCummCO2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' This equation provides a mechanism to smoothly transition from a linear to exponential cost curve based on the cumulative CO2 captured, allowing
 *' for a realistic representation of the cost dynamics associated with CO2 sequestration. The result represents the weight for
 *' the transition in the specified scenario and year.
-QTrnsWghtLinToExp(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VTrnsWghtLinToExp(allCy,YTIME)
+Q06TrnsWghtLinToExp(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         V06TrnsWghtLinToExp(allCy,YTIME)
          =E=
-         1/(1+exp(-iElastCO2Seq(allCy,"mc_s")*( VCaptCummCO2(allCy,YTIME)/iElastCO2Seq(allCy,"pot")-iElastCO2Seq(allCy,"mc_m")))); 
+         1/(1+exp(-iElastCO2Seq(allCy,"mc_s")*( V06CaptCummCO2(allCy,YTIME)/iElastCO2Seq(allCy,"pot")-iElastCO2Seq(allCy,"mc_m")))); 
 
 *' The equation calculates the cost curve for CO2 sequestration costs in Euro per ton of CO2 sequestered
 *' for a specific scenario and year. The cost curve is determined based on cumulative CO2 captured and
@@ -55,5 +55,5 @@ QTrnsWghtLinToExp(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' for the cost curve. The result represents the cost of sequestering one ton of CO2 in the specified scenario and year.
 Q06CstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          MVCstCO2SeqCsts(allCy,YTIME) =E=
-       (1-VTrnsWghtLinToExp(allCy,YTIME))*(iElastCO2Seq(allCy,"mc_a")*VCaptCummCO2(allCy,YTIME)+iElastCO2Seq(allCy,"mc_b"))+
-       VTrnsWghtLinToExp(allCy,YTIME)*(iElastCO2Seq(allCy,"mc_c")*exp(iElastCO2Seq(allCy,"mc_d")*VCaptCummCO2(allCy,YTIME)));           
+       (1-V06TrnsWghtLinToExp(allCy,YTIME))*(iElastCO2Seq(allCy,"mc_a")*V06CaptCummCO2(allCy,YTIME)+iElastCO2Seq(allCy,"mc_b"))+
+       V06TrnsWghtLinToExp(allCy,YTIME)*(iElastCO2Seq(allCy,"mc_c")*exp(iElastCO2Seq(allCy,"mc_d")*V06CaptCummCO2(allCy,YTIME)));           

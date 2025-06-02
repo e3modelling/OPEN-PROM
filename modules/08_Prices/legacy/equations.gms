@@ -43,8 +43,8 @@ Q08PriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF) $TIME(YTIME) $(no
 *' and fuel. The weights are determined by the sector's average price, considering the specific fuel consumption for the given scenario, subsector, and fuel.
 *' This equation allows for a more nuanced calculation of fuel prices, taking into account the carbon values in each sector. The result represents the fuel
 *' prices per subsector and fuel, multiplied by the corresponding weights, and adjusted based on the specific carbon values in each sector.
-QPriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $TIME(YTIME) $runCy(allCy))..
-        VPriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)
+Q08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $TIME(YTIME) $runCy(allCy))..
+        V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)
           =E= 
         iWgtSecAvgPriFueCons(allCy,DSBS,EF) * MVPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME);
 
@@ -54,7 +54,7 @@ QPriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $TIME(YTIME) $ru
 Q08PriceFuelAvgSub(allCy,DSBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         MVPriceFuelAvgSub(allCy,DSBS,YTIME)
                  =E=
-         sum(EF$SECTTECH(DSBS,EF), VPriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME));         
+         sum(EF$SECTTECH(DSBS,EF), V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME));         
 
 *' The equation calculates the electricity price for industrial and residential consumers
 *' in a given scenario, energy set, and year. The electricity price is based on the previous year's production costs, incorporating
@@ -94,14 +94,14 @@ Q08PriceElecIndResNoCliPol(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..   !!
            (
              (MVPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)*sTWhToMtoe)$TFIRST(YTIME-1) +
              (
-               VCostPowGenLonNoClimPol(allCy,"i",YTIME-1) 
+               V04CostPowGenLonNoClimPol(allCy,"i",YTIME-1) 
               )$(not TFIRST(YTIME-1))
            )$ISET(ESET)
         +
            (
              (MVPriceFuelSubsecCarVal(allCy,"HOU","ELC",YTIME-1)*sTWhToMtoe)$TFIRST(YTIME-1) +
              (
-                VCostPowGenLonNoClimPol(allCy,"r",YTIME-1) 
+                V04CostPowGenLonNoClimPol(allCy,"r",YTIME-1) 
              )$(not TFIRST(YTIME-1))
            )$RSET(ESET)
         );
@@ -127,4 +127,4 @@ Q08PriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS))  $SE
 *' technical constraints, providing a realistic representation of the electricity market in the industrial sector.
 Q08PriceElecInd(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          MVPriceElecInd(allCy,YTIME) =E=
-        ( VIndxElecIndPrices(allCy,YTIME) + sElecToSteRatioChp - SQRT( SQR(VIndxElecIndPrices(allCy,YTIME)-sElecToSteRatioChp)  ) )/2;
+        ( V02IndxElecIndPrices(allCy,YTIME) + sElecToSteRatioChp - SQRT( SQR(V02IndxElecIndPrices(allCy,YTIME)-sElecToSteRatioChp)  ) )/2;
