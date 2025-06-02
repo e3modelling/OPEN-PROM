@@ -36,9 +36,9 @@ VCostTotH2(allCy, SBS, YTIME)                   "Total Hydrogen Cost Per Sector 
 VDemSecH2(allCy, SBS, YTIME)                    "Demand for H2 by sector in mtoe"
 
 *'                **Interdependent Variables**	
-VMVDemTotH2(allCy, YTIME)                       "Hydrogen production requirement in Mtoe for meeting final demand"
-VMVProdH2(allCy, H2TECH, YTIME)                 "Hydrogen Production by technology in Mtoe"
-VMVConsFuelTechH2Prod(allCy, H2TECH, EF, YTIME) "Fuel consumption by hydrogen production technology in Mtoe"
+MVDemTotH2(allCy, YTIME)                        "Hydrogen production requirement in Mtoe for meeting final demand"
+MVProdH2(allCy, H2TECH, YTIME)                  "Hydrogen Production by technology in Mtoe"
+MVConsFuelTechH2Prod(allCy, H2TECH, EF, YTIME)  "Fuel consumption by hydrogen production technology in Mtoe"
 ;
 
 Equations

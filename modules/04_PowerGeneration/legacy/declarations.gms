@@ -127,10 +127,10 @@ VProdElecReqTot(allCy,YTIME)	                           "Total required electric
 VDemElecTot(allCy,YTIME)                                   "Total electricity demand (TWh)"
 
 *'                **Interdependent Variables**	
-VMVProdElec(allCy,PGALL,YTIME)                             "Electricity production (TWh)"	
-VMVCostPowGenAvgLng(allCy,ESET,YTIME)	                   "Long-term average power generation cost (US$2015/kWh)"
-VMVCapElecTotEst(allCy,YTIME)	                           "Estimated Total electricity generation capacity (GW)"
-VMVPeakLoad(allCy,YTIME)	                               "Electricity peak load (GW)"	
-VMVCapElec(allCy,PGALL,YTIME)	                           "Electricity generation plants capacity (GW)"
-VMVBaseLoad(allCy,YTIME)	                               "Corrected base load (GW)"
+MVProdElec(allCy,PGALL,YTIME)                              "Electricity production (TWh)"	
+MVCostPowGenAvgLng(allCy,ESET,YTIME)	                   "Long-term average power generation cost (US$2015/kWh)"
+MVCapElecTotEst(allCy,YTIME)	                           "Estimated Total electricity generation capacity (GW)"
+MVPeakLoad(allCy,YTIME)	                                   "Electricity peak load (GW)"	
+MVCapElec(allCy,PGALL,YTIME)	                           "Electricity generation plants capacity (GW)"
+MVBaseLoad(allCy,YTIME)	                                   "Corrected base load (GW)"
 ;

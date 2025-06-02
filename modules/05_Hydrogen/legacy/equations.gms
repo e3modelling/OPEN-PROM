@@ -4,7 +4,7 @@
 *' This equation calculates the total hydrogen demand in the system. It takes into account the overall need for hydrogen
 *' across sectors like transportation, industry, and power generation, adjusted for any transportation losses or distribution inefficiencies.
 Q05DemTotH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VMVDemTotH2(allCy,YTIME)
+         MVDemTotH2(allCy,YTIME)
                  =E=
          sum(SBS$H2SBS(SBS), VDemSecH2(allCy,SBS, YTIME)/
          prod(INFRTECH$H2INFRSBS(INFRTECH,SBS) , iEffH2Transp(allCy,INFRTECH,YTIME)*(1-iConsSelfH2Transp(allCy,INFRTECH,YTIME))))  !! increase the demand due to transportation losses
@@ -17,7 +17,7 @@ QScrapLftH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          =E=
          (
          VGapShareH2Tech1(allCy,H2TECH,YTIME-iProdLftH2(H2TECH,YTIME))*VDemGapH2(allCy,YTIME-iProdLftH2(H2TECH,YTIME))
-         /VMVProdH2(allCy,H2TECH,YTIME-1)
+         /MVProdH2(allCy,H2TECH,YTIME-1)
          )$(ord(YTIME)>17+iProdLftH2(H2TECH,YTIME)) + 0.1
 ;
 
@@ -60,9 +60,9 @@ QCapScrapH2ProdTech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QDemGapH2(allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VDemGapH2(allCy, YTIME)
                  =E=
-         ( VMVDemTotH2(allCy,YTIME) - sum(H2TECH,(1-VCapScrapH2ProdTech(allCy,H2TECH,YTIME))*VMVProdH2(allCy,H2TECH,YTIME-1))
+         ( MVDemTotH2(allCy,YTIME) - sum(H2TECH,(1-VCapScrapH2ProdTech(allCy,H2TECH,YTIME))*MVProdH2(allCy,H2TECH,YTIME-1))
           + 0 +
-         SQRT( SQR(VMVDemTotH2(allCy,YTIME) - sum(H2TECH,(1-VCapScrapH2ProdTech(allCy,H2TECH,YTIME))*VMVProdH2(allCy,H2TECH,YTIME-1))-0) + SQR(1E-4) )
+         SQRT( SQR(MVDemTotH2(allCy,YTIME) - sum(H2TECH,(1-VCapScrapH2ProdTech(allCy,H2TECH,YTIME))*MVProdH2(allCy,H2TECH,YTIME-1))-0) + SQR(1E-4) )
          )/2
 ;
 
@@ -82,13 +82,13 @@ QCostProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QCostVarProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VCostVarProdH2Tech(allCy,H2TECH,YTIME)
          =E=
-         sum(EF$H2TECHEFtoEF(H2TECH,EF), (VMVPriceFuelSubsecCarVal(allCy,"H2P",EF,YTIME)*1e3+
+         sum(EF$H2TECHEFtoEF(H2TECH,EF), (MVPriceFuelSubsecCarVal(allCy,"H2P",EF,YTIME)*1e3+
 
-            iCaptRateH2Prod(allCy,H2TECH,YTIME)*iCo2EmiFac(allCy,"H2P",EF,YTIME)*VMVCstCO2SeqCsts(allCy,YTIME)+
+            iCaptRateH2Prod(allCy,H2TECH,YTIME)*iCo2EmiFac(allCy,"H2P",EF,YTIME)*MVCstCO2SeqCsts(allCy,YTIME)+
 
             (1-iCaptRateH2Prod(allCy,H2TECH,YTIME))*iCo2EmiFac(allCy,"H2P",EF,YTIME)*
 
-            (sum(NAP$NAPtoALLSBS(NAP,"H2P"),VCarVal(allCy,NAP,YTIME))))
+            (sum(NAP$NAPtoALLSBS(NAP,"H2P"),MVCarVal(allCy,NAP,YTIME))))
 
             /iEffH2Prod(allCy,H2TECH,YTIME)
             )!!$(not H2TECHREN(H2TECH))
@@ -100,7 +100,7 @@ QCostVarProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QAcceptCCSH2Tech(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VAcceptCCSH2Tech(allCy,YTIME)
          =E=
-         iWBLGammaH2Prod(allCy,YTIME)*5+25*EXP(-0.06*((sum(NAP$NAPtoALLSBS(NAP,"H2P"),VCarVal(allCy,NAP,YTIME -1)))))
+         iWBLGammaH2Prod(allCy,YTIME)*5+25*EXP(-0.06*((sum(NAP$NAPtoALLSBS(NAP,"H2P"),MVCarVal(allCy,NAP,YTIME -1)))))
 ;
 
 *' This equation determines the share of hydrogen produced using CCS technologies compared to those produced without CCS.
@@ -174,9 +174,9 @@ QGapShareH2Tech1(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' This equation defines the actual hydrogen production levels, considering both scrapped capacity and the demand gap.
 *' It allocates production from different technologies to meet the overall demand, adjusting for changes in capacity and technology availability.
 Q05ProdH2(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VMVProdH2(allCy,H2TECH,YTIME)
+         MVProdH2(allCy,H2TECH,YTIME)
          =E=
-         0.0001+(1-VCapScrapH2ProdTech(allCy,H2TECH,YTIME))*VMVProdH2(allCy,H2TECH,YTIME-1)+ VGapShareH2Tech1(allCy,H2TECH,YTIME)*VDemGapH2(allCy,YTIME)
+         0.0001+(1-VCapScrapH2ProdTech(allCy,H2TECH,YTIME))*MVProdH2(allCy,H2TECH,YTIME-1)+ VGapShareH2Tech1(allCy,H2TECH,YTIME)*VDemGapH2(allCy,YTIME)
 ;
 
 *' This equation calculates the average cost of hydrogen production across all technologies in the system.
@@ -184,21 +184,21 @@ Q05ProdH2(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QCostAvgProdH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VCostAvgProdH2(allCy,YTIME)
          =E=
-         sum(H2TECH, VMVProdH2(allCy,H2TECH,YTIME)*VCostProdH2Tech(allCy,H2TECH,YTIME))/sum(H2TECH,VMVProdH2(allCy,H2TECH,YTIME))
+         sum(H2TECH, MVProdH2(allCy,H2TECH,YTIME)*VCostProdH2Tech(allCy,H2TECH,YTIME))/sum(H2TECH,MVProdH2(allCy,H2TECH,YTIME))
 ;
 
 *' This equation calculates the fuel consumption for each hydrogen production technology, considering 
 *' the efficiency of the technology and the amount of fuel required for producing a unit of hydrogen. 
 *' It provides insight into fuel demand for hydrogen production.
 Q05ConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)$(TIME(YTIME) $H2TECHEFtoEF(H2TECH,EF) $(runCy(allCy)))..
-         VMVConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)
+         MVConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)
          =E=
-         (VMVProdH2(allCy,H2TECH,YTIME)/iEffH2Prod(allCy,H2TECH,YTIME))$(sameas(YTIME,"%fBaseY%"))
+         (MVProdH2(allCy,H2TECH,YTIME)/iEffH2Prod(allCy,H2TECH,YTIME))$(sameas(YTIME,"%fBaseY%"))
          +
          (
-         VMVConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME-1)*
-         (VMVProdH2(allCy,H2TECH,YTIME)/iEffH2Prod(allCy,H2TECH,YTIME))/
-         (VMVProdH2(allCy,H2TECH,YTIME-1)/iEffH2Prod(allCy,H2TECH,YTIME-1))
+         MVConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME-1)*
+         (MVProdH2(allCy,H2TECH,YTIME)/iEffH2Prod(allCy,H2TECH,YTIME))/
+         (MVProdH2(allCy,H2TECH,YTIME-1)/iEffH2Prod(allCy,H2TECH,YTIME-1))
          )$(not sameas(YTIME,"%fBaseY%"))
 ;
 
@@ -207,7 +207,7 @@ Q05ConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)$(TIME(YTIME) $H2TECHEFtoEF(H2TECH,E
 QConsFuelH2Prod(allCy,EF,YTIME)$(TIME(YTIME) $H2PRODEF(EF) $(runCy(allCy)))..
          VConsFuelH2Prod(allCy,EF,YTIME)
          =E=
-         sum(H2TECH$H2TECHEFtoEF(H2TECH,EF),VMVConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME))
+         sum(H2TECH$H2TECHEFtoEF(H2TECH,EF),MVConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME))
 ;
 
 
@@ -221,7 +221,7 @@ QConsFuelH2Prod(allCy,EF,YTIME)$(TIME(YTIME) $H2PRODEF(EF) $(runCy(allCy)))..
 QH2InfrArea(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VH2InfrArea(allCy,YTIME)
          =E=
-         0.001+iPolH2AreaMax(allCy)/(1 + exp( -iH2Adopt(allCy,"B",YTIME)*( VMVDemTotH2(allCy,YTIME)/(iHabAreaCountry(allCy)/sAreaStyle*0.275)- iH2Adopt(allCy,"MID",YTIME))))
+         0.001+iPolH2AreaMax(allCy)/(1 + exp( -iH2Adopt(allCy,"B",YTIME)*( MVDemTotH2(allCy,YTIME)/(iHabAreaCountry(allCy)/sAreaStyle*0.275)- iH2Adopt(allCy,"MID",YTIME))))
 
 ;
 
@@ -298,7 +298,7 @@ QCostTechH2Infr(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          (
             iConsSelfH2Transp(allCy,INFRTECH,YTIME)*VInvNewReqH2Infra(allCy,INFRTECH,YTIME)*
             (VCostAvgProdH2(allCy,YTIME-1)$sameas("HPIPU",INFRTECH)+
-            VMVPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)*1e3)$sameas("SSGG",INFRTECH)
+            MVPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)*1e3)$sameas("SSGG",INFRTECH)
          )$(sameas("SSGG",INFRTECH) or sameas("HPIPU",INFRTECH))
          /VInvNewReqH2Infra(allCy,INFRTECH,YTIME)
 ;

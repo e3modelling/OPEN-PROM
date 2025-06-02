@@ -4,7 +4,7 @@
 * Prices Module
 
 *---
-VMVPriceFuelAvgSub.FX(runCyL,DSBS,YTIME)$TIME(YTIME) = VMVPriceFuelAvgSub.L(runCyL,DSBS,YTIME)$TIME(YTIME);
-VMVPriceFuelSubsecCarVal.FX(runCyL,SBS,EF,YTIME)$TIME(YTIME) = VMVPriceFuelSubsecCarVal.L(runCyL,SBS,EF,YTIME)$TIME(YTIME);
-VMVPriceElecInd.FX(runCyL,YTIME)$TIME(YTIME) =  VMVPriceElecInd.L(runCyL,YTIME)$TIME(YTIME);
+MVPriceFuelAvgSub.FX(runCyL,DSBS,YTIME)$TIME(YTIME) = MVPriceFuelAvgSub.L(runCyL,DSBS,YTIME)$TIME(YTIME);
+MVPriceFuelSubsecCarVal.FX(runCyL,SBS,EF,YTIME)$TIME(YTIME) = MVPriceFuelSubsecCarVal.L(runCyL,SBS,EF,YTIME)$TIME(YTIME);
+MVPriceElecInd.FX(runCyL,YTIME)$TIME(YTIME) =  MVPriceElecInd.L(runCyL,YTIME)$TIME(YTIME);
 *---

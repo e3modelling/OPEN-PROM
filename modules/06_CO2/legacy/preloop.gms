@@ -3,8 +3,8 @@
 
 *'                *VARIABLE INITIALISATION*
 *---
-VMVCstCO2SeqCsts.L(runCy,YTIME)=1;
-VMVCstCO2SeqCsts.FX(runCy,YTIME)$(not an(YTIME)) = iElastCO2Seq(runCy,"mc_b");
+MVCstCO2SeqCsts.L(runCy,YTIME)=1;
+MVCstCO2SeqCsts.FX(runCy,YTIME)$(not an(YTIME)) = iElastCO2Seq(runCy,"mc_b");
 *---
 VCapCO2ElecHydr.FX(runCy,YTIME)$(not An(YTIME)) = 0;
 *---

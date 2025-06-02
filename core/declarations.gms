@@ -71,8 +71,8 @@ VElecConsHeatPla(allCy,DSBS,YTIME)                         "Electricity consumed
 ;
 
 Positive Variables
-VCarVal(allCy,NAP,YTIME)                                   "Carbon prices for all countries (US$2015/tn CO2)"
-VRenValue(YTIME)                                           "Renewable value (US$2015/KWh)"
+MVCarVal(allCy,NAP,YTIME)                                   "Carbon prices for all countries (US$2015/tn CO2)"
+MVRenValue(YTIME)                                           "Renewable value (US$2015/KWh)"
 ;
 
 Scalars

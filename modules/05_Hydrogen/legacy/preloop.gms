@@ -18,20 +18,20 @@ VDemGapH2.L(runCy,YTIME) = 2;
 VDemGapH2.FX(runCy,YTIME)$(not An(YTIME)) = 1e-5;
 display VDemGapH2.L;
 *---
-VMVProdH2.L(runCy,H2TECH, YTIME) = 2;
-VMVProdH2.FX(runCy,H2TECH, YTIME)$(not An(YTIME)) = 1e-5;
-VMVProdH2.FX(runCy,H2TECH,"2010") = 1e-7;
-display VMVProdH2.L;
+MVProdH2.L(runCy,H2TECH, YTIME) = 2;
+MVProdH2.FX(runCy,H2TECH, YTIME)$(not An(YTIME)) = 1e-5;
+MVProdH2.FX(runCy,H2TECH,"2010") = 1e-7;
+display MVProdH2.L;
 *---
-VMVDemTotH2.L(runCy,YTIME) = 2;
-VMVDemTotH2.FX(runCy,YTIME)$(not An(YTIME)) = 1e-5;
-VMVDemTotH2.FX(runCy,"2010") = sum(H2TECH, VMVProdH2.L(runCy,H2TECH,"2010"));
-display VMVDemTotH2.L;
+MVDemTotH2.L(runCy,YTIME) = 2;
+MVDemTotH2.FX(runCy,YTIME)$(not An(YTIME)) = 1e-5;
+MVDemTotH2.FX(runCy,"2010") = sum(H2TECH, MVProdH2.L(runCy,H2TECH,"2010"));
+display MVDemTotH2.L;
 *---
-VMVConsFuelTechH2Prod.FX(runCy,H2TECH,EF,YTIME)$(not An(YTIME)$H2TECHEFtoEF(H2TECH,EF)) = 0;
-VMVConsFuelTechH2Prod.FX(runCy,H2TECH,EF,"2010")$(H2TECHEFtoEF(H2TECH,EF)) = (VMVProdH2.L(runCy,H2TECH,"2010")/iEffH2Prod(runCy,H2TECH,"2010"));
+MVConsFuelTechH2Prod.FX(runCy,H2TECH,EF,YTIME)$(not An(YTIME)$H2TECHEFtoEF(H2TECH,EF)) = 0;
+MVConsFuelTechH2Prod.FX(runCy,H2TECH,EF,"2010")$(H2TECHEFtoEF(H2TECH,EF)) = (MVProdH2.L(runCy,H2TECH,"2010")/iEffH2Prod(runCy,H2TECH,"2010"));
 display iEffH2Prod;
-display VMVConsFuelTechH2Prod.L;
+display MVConsFuelTechH2Prod.L;
 *---
 VDelivH2InfrTech.L(runCy,INFRTECH,YTIME) = 2;
 VDelivH2InfrTech.FX(runCy,INFRTECH,YTIME)$(not An(YTIME)) = 1e-5;
