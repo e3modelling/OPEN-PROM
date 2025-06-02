@@ -3,8 +3,8 @@
 
 *'                *VARIABLE INITIALISATION*
 *---
-MVCostPowGenAvgLng.L(runCy,ESET,"2010") = 0;
-MVCostPowGenAvgLng.L(runCy,ESET,"%fBaseY%") = 0;
+VMCostPowGenAvgLng.L(runCy,ESET,"2010") = 0;
+VMCostPowGenAvgLng.L(runCy,ESET,"%fBaseY%") = 0;
 *---
 V04SensCCS.L(runCy,YTIME) = 1;
 *---
@@ -63,10 +63,10 @@ V04ScalWeibullSum.L(runCy,PGALL,YTIME) = 2000;
 V04CostHourProdInvDec.L(runCy,PGALL,HOUR,TT) = 0.0001;
 V04CostHourProdInvDec.FX(runCy,PGALL,HOUR,YTIME)$((NOT AN(YTIME))) = 0;
 *---
-MVBaseLoad.L(runCy,YTIME) = 0.5;
-MVBaseLoad.FX(runCy,YTIME)$(not An(YTIME)) = iPeakBsLoadBy(runCy,"BASELOAD");
+VMBaseLoad.L(runCy,YTIME) = 0.5;
+VMBaseLoad.FX(runCy,YTIME)$(not An(YTIME)) = iPeakBsLoadBy(runCy,"BASELOAD");
 *---
-MVCapElecTotEst.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
+VMCapElecTotEst.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
 *---
 V04CapElecNonCHP.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
 *---
@@ -74,7 +74,7 @@ V04CapElecCHP.FX(runCy,CHP,YTIME)$(not An(YTIME)) = iHisChpGrCapData(runCy,CHP,Y
 *---
 V04SharePowPlaNewEq.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) ) = 0;
 *---
-MVCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  iInstCapPast(runCy,PGALL,YTIME);
+VMCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  iInstCapPast(runCy,PGALL,YTIME);
 V04CapElec2.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = iInstCapPast(runCy,PGALL,YTIME);
 V04CapOverall.FX(runCy,PGALL,"%fBaseY%") =  iInstCapPast(runCy,PGALL,"%fBaseY%");
 V04CapElecNominal.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = iInstCapPast(runCy,PGALL,YTIME)/iAvailRate(PGALL,YTIME);
@@ -123,20 +123,20 @@ Q04ScalWeibullSum.scale(runCy,PGALL,YTIME)=V04ScalWeibullSum.scale(runCy,PGALL,Y
 *---
 V04LoadFacDom.L(runCy,YTIME)=0.5;
 V04LoadFacDom.FX(runCy,YTIME)$(datay(YTIME)) =
-         (sum(INDDOM,MVConsFuel.L(runCy,INDDOM,"ELC",YTIME)) + sum(TRANSE, MVDemFinEneTranspPerFuel.L(runCy,TRANSE,"ELC",YTIME)))/
-         (sum(INDDOM,MVConsFuel.L(runCy,INDDOM,"ELC",YTIME)/iLoadFacElecDem(INDDOM)) + sum(TRANSE, MVDemFinEneTranspPerFuel.L(runCy,TRANSE,"ELC",YTIME)/
+         (sum(INDDOM,VMConsFuel.L(runCy,INDDOM,"ELC",YTIME)) + sum(TRANSE, VMDemFinEneTranspPerFuel.L(runCy,TRANSE,"ELC",YTIME)))/
+         (sum(INDDOM,VMConsFuel.L(runCy,INDDOM,"ELC",YTIME)/iLoadFacElecDem(INDDOM)) + sum(TRANSE, VMDemFinEneTranspPerFuel.L(runCy,TRANSE,"ELC",YTIME)/
          iLoadFacElecDem(TRANSE)));
 *---
 V04DemElecTot.L(runCy,YTIME)=10;
 V04DemElecTot.FX(runCy,YTIME)$(not An(YTIME)) =  1/0.086 * ( iFinEneCons(runCy,"ELC",YTIME) + sum(NENSE, iFuelConsPerFueSub(runCy,NENSE,"ELC",YTIME)) + iDistrLosses(runCy,"ELC",YTIME)
                                              + iTotEneBranchCons(runCy,"ELC",YTIME) - (iFuelImports(runCy,"ELC",YTIME)-iFuelExprts(runCy,"ELC",YTIME)));
 *---
-MVPeakLoad.L(runCy,YTIME) = 1;
-MVPeakLoad.FX(runCy,YTIME)$(datay(YTIME)) = V04DemElecTot.L(runCy,YTIME)/(V04LoadFacDom.L(runCy,YTIME)*8.76);
+VMPeakLoad.L(runCy,YTIME) = 1;
+VMPeakLoad.FX(runCy,YTIME)$(datay(YTIME)) = V04DemElecTot.L(runCy,YTIME)/(V04LoadFacDom.L(runCy,YTIME)*8.76);
 *---
-MVProdElec.FX(runCy,pgall,YTIME)$DATAY(YTIME)=iDataElecProd(runCy,pgall,YTIME)/1000;
+VMProdElec.FX(runCy,pgall,YTIME)$DATAY(YTIME)=iDataElecProd(runCy,pgall,YTIME)/1000;
 *---
-V04ProdElecReqTot.FX(runCy,"%fBaseY%")=sum(pgall,MVProdElec.L(runCy,pgall,"%fBaseY%"));
+V04ProdElecReqTot.FX(runCy,"%fBaseY%")=sum(pgall,VMProdElec.L(runCy,pgall,"%fBaseY%"));
 *---
 V04ConsElec.L(runCy,DSBS,YTIME)=0.1;
 V04ConsElec.FX(runCy,DSBS,YTIME)$(not AN(YTIME)) = 0.1;

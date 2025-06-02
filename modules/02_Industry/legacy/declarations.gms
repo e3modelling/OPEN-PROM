@@ -38,13 +38,13 @@ V02ShareTechNewEquip(allCy,DSBS,EF,YTIME)                  "Technology share in 
 V02CostProdCHPDem(allCy,DSBS,CHP,YTIME)                    "Variable including fuel electricity production cost per CHP plant and demand sector (US$2015/KWh)"
 
 *'                **Interdependent Variables**
-MVConsFuel(allCy,DSBS,EF,YTIME)                            "Consumption of fuels in each demand subsector, excluding heat from heatpumps (Mtoe)"
-MVConsElecNonSubIndTert(allCy,DSBS,YTIME)                  "Consumption of non-substituable electricity in Industry and Tertiary (Mtoe)"
-*MvConsTotElecInd(allCy,YTIME)                             "Total Consumption of Electricity in industrial sectors (Mtoe)"
-MVDemFinSubFuelSubsec(allCy,DSBS,YTIME)                    "Total final demand (of substitutable fuels) per subsector (Mtoe)"
-*MvDemFinSubFuelInd(allCy,YTIME)                           "Total final demand (of substitutable fuels) in industrial sectors (Mtoe)"
-MVConsFuelInclHP(allCy,DSBS,EF,YTIME)                      "Consumption of fuels in each demand subsector including heat from heatpumps (Mtoe)"
-MVConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)               "Consumption of remaining substitutable equipment (Mtoe)"
-MVCostElcAvgProdCHP(allCy,CHP,YTIME)                       "Average Electricity production cost per CHP plant (US$2015/KWh)"
-MVCostVarAvgElecProd(allCy,CHP,YTIME)                      "Average variable including fuel electricity production cost per CHP plant (US$2015/KWh)"
+VMConsFuel(allCy,DSBS,EF,YTIME)                            "Consumption of fuels in each demand subsector, excluding heat from heatpumps (Mtoe)"
+VMConsElecNonSubIndTert(allCy,DSBS,YTIME)                  "Consumption of non-substituable electricity in Industry and Tertiary (Mtoe)"
+*vMConsTotElecInd(allCy,YTIME)                             "Total Consumption of Electricity in industrial sectors (Mtoe)"
+VMDemFinSubFuelSubsec(allCy,DSBS,YTIME)                    "Total final demand (of substitutable fuels) per subsector (Mtoe)"
+*vMDemFinSubFuelInd(allCy,YTIME)                           "Total final demand (of substitutable fuels) in industrial sectors (Mtoe)"
+VMConsFuelInclHP(allCy,DSBS,EF,YTIME)                      "Consumption of fuels in each demand subsector including heat from heatpumps (Mtoe)"
+VMConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)               "Consumption of remaining substitutable equipment (Mtoe)"
+VMCostElcAvgProdCHP(allCy,CHP,YTIME)                       "Average Electricity production cost per CHP plant (US$2015/KWh)"
+VMCostVarAvgElecProd(allCy,CHP,YTIME)                      "Average variable including fuel electricity production cost per CHP plant (US$2015/KWh)"
 ;

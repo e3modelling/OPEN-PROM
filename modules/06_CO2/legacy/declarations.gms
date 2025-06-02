@@ -18,5 +18,5 @@ V06CaptCummCO2(allCy,YTIME)	                               "Cumulative CO2 captu
 V06TrnsWghtLinToExp(allCy,YTIME)	                       "Weight for transtition from linear CO2 sequestration cost curve to exponential (1)"
 
 *'                **Interdependent Variables**
-MVCstCO2SeqCsts(allCy,YTIME)	                           "Cost curve for CO2 sequestration costs (US$2015/tn of CO2 sequestrated)"
+VMCstCO2SeqCsts(allCy,YTIME)	                           "Cost curve for CO2 sequestration costs (US$2015/tn of CO2 sequestrated)"
 ;

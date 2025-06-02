@@ -33,17 +33,17 @@ Q07GrnnHsEmisCO2Equiv(NAP,YTIME)$(TIME(YTIME))..
         (
         sum(allCy,
                  sum((EFS,INDSE)$(SECTTECH(INDSE,EFS)  $NAPtoALLSBS(NAP,INDSE)),
-                      MVConsFuel(allCy,INDSE,EFS,YTIME) * iCo2EmiFac(allCy,INDSE,EFS,YTIME)) !! final consumption
+                      VMConsFuel(allCy,INDSE,EFS,YTIME) * iCo2EmiFac(allCy,INDSE,EFS,YTIME)) !! final consumption
                 +
-                 sum(PGEF, MVInpTransfTherm(allCy,PGEF,YTIME)*iCo2EmiFac(allCy,"PG",PGEF,YTIME)$(not h2f1(pgef))) !! input to power generation sector
+                 sum(PGEF, VMInpTransfTherm(allCy,PGEF,YTIME)*iCo2EmiFac(allCy,"PG",PGEF,YTIME)$(not h2f1(pgef))) !! input to power generation sector
                  +
-                 sum(EFS, MVTransfInputDHPlants(allCy,EFS,YTIME)*iCo2EmiFac(allCy,"PG",EFS,YTIME)) !! input to district heating plants
+                 sum(EFS, VMTransfInputDHPlants(allCy,EFS,YTIME)*iCo2EmiFac(allCy,"PG",EFS,YTIME)) !! input to district heating plants
                  +
-                 sum(EFS, MVConsFiEneSec(allCy,EFS,YTIME)*iCo2EmiFac(allCy,"PG",EFS,YTIME)) !! consumption of energy branch
+                 sum(EFS, VMConsFiEneSec(allCy,EFS,YTIME)*iCo2EmiFac(allCy,"PG",EFS,YTIME)) !! consumption of energy branch
 
                  -
                  sum(PGEF,sum(CCS$PGALLtoEF(CCS,PGEF),
-                         MVProdElec(allCy,CCS,YTIME)*sTWhToMtoe/iPlantEffByType(allCy,CCS,YTIME)*
+                         VMProdElec(allCy,CCS,YTIME)*sTWhToMtoe/iPlantEffByType(allCy,CCS,YTIME)*
                          iCo2EmiFac(allCy,"PG",PGEF,YTIME)*iCO2CaptRate(allCy,CCS,YTIME)))));   !! CO2 captured by CCS plants in power generation
 $offtext
 
@@ -66,7 +66,7 @@ $ontext
 q07ExpendHouseEne(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                  v07ExpendHouseEne(allCy,YTIME)
                  =E= 
-                 SUM(DSBS$HOU(DSBS),SUM(EF$SECTTECH(dSBS,EF),MVConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)*(MVPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME)-iEffValueInDollars(allCy,DSBS,YTIME)/
+                 SUM(DSBS$HOU(DSBS),SUM(EF$SECTTECH(dSBS,EF),VMConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)*(VMPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME)-iEffValueInDollars(allCy,DSBS,YTIME)/
                  1000-iCo2EmiFac(allCy,"PG",EF,YTIME)*sum(NAP$NAPtoALLSBS(NAP,"PG"),MVCarVal(allCy,NAP,YTIME))/1000)))
-                                          +MVPriceElecIndResNoCliPol(allCy,"R",YTIME)*MVConsElecNonSubIndTert(allCy,"HOU",YTIME)/sTWhToMtoe;
+                                          +VMPriceElecIndResNoCliPol(allCy,"R",YTIME)*VMConsElecNonSubIndTert(allCy,"HOU",YTIME)/sTWhToMtoe;
 $offtext

@@ -58,7 +58,7 @@ V01PcOwnPcLevl(allCy,YTIME)                                "Ratio of car ownersh
 V01RateScrPc(allCy,YTIME)                                  "Scrapping rate of passenger cars (1)"
 
 *'                **Interdependent Equations**
-MVConsElecNonSubIndTert(allCy,DSBS,YTIME)                  "Consumption of non-substituable electricity in Industry and Tertiary (Mtoe)"
-MVDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)            "Final energy demand in transport subsectors per fuel (Mtoe)"
-MVLft(allCy,DSBS,EF,YTIME)                                 "Lifetime of technologies (years)"
+VMConsElecNonSubIndTert(allCy,DSBS,YTIME)                  "Consumption of non-substituable electricity in Industry and Tertiary (Mtoe)"
+VMDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)            "Final energy demand in transport subsectors per fuel (Mtoe)"
+VMLft(allCy,DSBS,EF,YTIME)                                 "Lifetime of technologies (years)"
 ;

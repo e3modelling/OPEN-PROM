@@ -4,7 +4,7 @@
 * CO2 Sequestration Module
 
 *---
-MVCstCO2SeqCsts.FX(runCyL,YTIME)$TIME(YTIME) = MVCstCO2SeqCsts.L(runCyL,YTIME)$TIME(YTIME);
+VMCstCO2SeqCsts.FX(runCyL,YTIME)$TIME(YTIME) = VMCstCO2SeqCsts.L(runCyL,YTIME)$TIME(YTIME);
 V06CapCO2ElecHydr.FX(runCyL,YTIME)$TIME(YTIME) = V06CapCO2ElecHydr.L(runCyL,YTIME)$TIME(YTIME);
 V06CaptCummCO2.FX(runCyL,YTIME)$TIME(YTIME) = V06CaptCummCO2.L(runCyL,YTIME)$TIME(YTIME);
 *---

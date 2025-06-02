@@ -1,6 +1,6 @@
 endloop;  !! close countries loop
 * Export model results to GDX file
-execute_unload "outputData.gdx", ODummyObj, MVCapElecTotEst, MVPeakLoad, MVConsFuel, MVCapElec, V04CapElecNominal, MVProdElec, MVBaseLoad, MVPriceFuelSubsecCarVal, MVPriceElecIndResConsu;
+execute_unload "outputData.gdx", ODummyObj, VMCapElecTotEst, VMPeakLoad, VMConsFuel, VMCapElec, V04CapElecNominal, VMProdElec, VMBaseLoad, VMPriceFuelSubsecCarVal, VMPriceElecIndResConsu;
 endloop;  !! close outer iteration loop (time steps)
 putclose fStat;
 $if %WriteGDX% == on execute_unload "blabla.gdx";

@@ -19,11 +19,11 @@ Q06CapCO2ElecHydr(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V06CapCO2ElecHydr(allCy,YTIME)
          =E=
          sum(PGEF,sum(CCS$PGALLtoEF(CCS,PGEF),
-                 MVProdElec(allCy,CCS,YTIME)*sTWhToMtoe/iPlantEffByType(allCy,CCS,YTIME)*
+                 VMProdElec(allCy,CCS,YTIME)*sTWhToMtoe/iPlantEffByType(allCy,CCS,YTIME)*
                  iCo2EmiFac(allCy,"PG",PGEF,YTIME)*iCO2CaptRate(allCy,CCS,YTIME)))
                 + 
          (sum(EF, sum(H2TECH$H2TECHEFtoEF(H2TECH,EF),
-               MVConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)*iCo2EmiFac(allCy,"PG",EF,YTIME)*iCaptRateH2Prod(allCy,H2TECH,YTIME)))
+               VMConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)*iCo2EmiFac(allCy,"PG",EF,YTIME)*iCaptRateH2Prod(allCy,H2TECH,YTIME)))
           )  ;    !! CO2 emissions captured by plants producing hydrogen
 
 
@@ -54,6 +54,6 @@ Q06TrnsWghtLinToExp(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' realistic approach to modeling CO2 sequestration costs, considering the cumulative CO2 captured and the associated elasticities
 *' for the cost curve. The result represents the cost of sequestering one ton of CO2 in the specified scenario and year.
 Q06CstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         MVCstCO2SeqCsts(allCy,YTIME) =E=
+         VMCstCO2SeqCsts(allCy,YTIME) =E=
        (1-V06TrnsWghtLinToExp(allCy,YTIME))*(iElastCO2Seq(allCy,"mc_a")*V06CaptCummCO2(allCy,YTIME)+iElastCO2Seq(allCy,"mc_b"))+
        V06TrnsWghtLinToExp(allCy,YTIME)*(iElastCO2Seq(allCy,"mc_c")*exp(iElastCO2Seq(allCy,"mc_d")*V06CaptCummCO2(allCy,YTIME)));           
