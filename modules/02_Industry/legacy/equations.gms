@@ -208,7 +208,6 @@ Q02ConsFuelInclHP(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTEC
                  =E=
          VMConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)+
          (V02ShareTechNewEquip(allCy,DSBS,EF,YTIME)*V02GapFinalDem(allCy,DSBS,YTIME))
-*'        $(V02GapFinalDem.L(allCy,DSBS,YTIME)>0)
          + (VMConsElecNonSubIndTert(allCy,DSBS,YTIME))$(INDDOM(DSBS) and ELCEF(EF));
 
 *' This equation calculates the variable, including fuel electricity production cost per CHP plant and demand sector, taking into account the variable cost (other than fuel)
