@@ -22,13 +22,6 @@ qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
   SUM(
     (PGALL),
     SQR(
-      VProdElec(allCy,PGALL,YTIME) - 
-      VProdElec(allCy,PGALL,YTIME-1)
-    ) 
-  ) + 
-  SUM(
-    (PGALL),
-    SQR(
       VcapElec(allCy,PGALL,YTIME) - 
       iInstCapPast(allCy,PGALL,YTIME) 
     )
