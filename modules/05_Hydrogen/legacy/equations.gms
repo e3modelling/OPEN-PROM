@@ -72,7 +72,7 @@ Q05DemGapH2(allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q05CostProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V05CostProdH2Tech(allCy,H2TECH,YTIME)
          =E=
-         (iDisc(allCy,"H2P",YTIME)*exp(iDisc(allCy,"H2P",YTIME)* iProdLftH2(H2TECH,YTIME))/(exp(iDisc(allCy,"H2P",YTIME)*iProdLftH2(H2TECH,YTIME))-1)*
+         (imDisc(allCy,"H2P",YTIME)*exp(imDisc(allCy,"H2P",YTIME)* iProdLftH2(H2TECH,YTIME))/(exp(imDisc(allCy,"H2P",YTIME)*iProdLftH2(H2TECH,YTIME))-1)*
          iCostCapH2Prod(allCy,H2TECH,YTIME)+iCostFOMH2Prod(allCy,H2TECH,YTIME))/257/365*1000000/iAvailH2Prod(H2TECH,YTIME) +
          iCostVOMH2Prod(allCy,H2TECH,YTIME) + V05CostVarProdH2Tech(allCy,H2TECH,YTIME)
 ;
@@ -288,11 +288,11 @@ Q05CostInvTechH2Infr(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q05CostTechH2Infr(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V05CostTechH2Infr(allCy,INFRTECH,YTIME)
          =E=
-         ((iDisc(allCy,"H2INFR",YTIME)*exp(iDisc(allCy,"H2INFR",YTIME)* iTranspLftH2(INFRTECH,YTIME))/(exp(iDisc(allCy,"H2INFR",YTIME)* iTranspLftH2(INFRTECH,YTIME))-1))
+         ((imDisc(allCy,"H2INFR",YTIME)*exp(imDisc(allCy,"H2INFR",YTIME)* iTranspLftH2(INFRTECH,YTIME))/(exp(imDisc(allCy,"H2INFR",YTIME)* iTranspLftH2(INFRTECH,YTIME))-1))
          *
          V05CostInvCummH2Transp(allCy,INFRTECH,YTIME)*(1+iCostInvFOMH2(INFRTECH,YTIME)))/iAvailRateH2Transp(INFRTECH,YTIME) + iCostInvVOMH2(INFRTECH,YTIME)
          *
-         (iDisc(allCy,"H2INFR",YTIME)*exp(iDisc(allCy,"H2INFR",YTIME)* iTranspLftH2(INFRTECH,YTIME))/(exp(iDisc(allCy,"H2INFR",YTIME)* iTranspLftH2(INFRTECH,YTIME))-1))*
+         (imDisc(allCy,"H2INFR",YTIME)*exp(imDisc(allCy,"H2INFR",YTIME)* iTranspLftH2(INFRTECH,YTIME))/(exp(imDisc(allCy,"H2INFR",YTIME)* iTranspLftH2(INFRTECH,YTIME))-1))*
          V05CostInvCummH2Transp(allCy,INFRTECH,YTIME)
          +
          (

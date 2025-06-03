@@ -114,7 +114,7 @@ iSupResRefCapacity(runCy,SUPOTH,YTIME) = 1;
 *---
 iSupTrnasfOutputRefineries(runCy,EF,YTIME) = 1;
 *---
-iParDHEfficiency(PGEFS,YTIME) = iParDHEffData(PGEFS) ;
+iParDHEfficiency(PGEFS,YTIME) = imParDHEffData(PGEFS) ;
 *---
 iTransfInputRef(runCy,EFS,YTIME)$(not An(YTIME)) = iDataTotTransfInputRef(runCy,EFS,YTIME);
 *---

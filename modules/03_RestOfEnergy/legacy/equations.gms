@@ -269,7 +269,7 @@ Q03ProdPrimary(allCy,PPRODEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          +(
            iResHcNgOilPrProd(allCy,PPRODEF,YTIME) *  iFuelPriPro(allCy,PPRODEF,YTIME) *
            prod(kpdl$(ord(kpdl) lt 5),
-                         (iPriceFuelsInt("WCRO",YTIME-(ord(kpdl)+1))/iPriceFuelsIntBase("WCRO",YTIME-(ord(kpdl)+1)))
+                         (iPriceFuelsInt("WCRO",YTIME-(ord(kpdl)+1))/imPriceFuelsIntBase("WCRO",YTIME-(ord(kpdl)+1)))
                          **(0.2*iPolDstrbtnLagCoeffPriOilPr(kpdl)))
          )$sameas(PPRODEF,"CRO")   ]$iRatePriProTotPriNeeds(allCy,PPRODEF,YTIME);   
 
@@ -308,7 +308,7 @@ Q03Imp(allCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS) $runCy(allCy))..
             V03ConsGrssInl(allCy,EFS,YTIME)+ V03Exp(allCy,EFS,YTIME) + VMConsFuel(allCy,"BU",EFS,YTIME)$SECTTECH("BU",EFS)
             - V03ProdPrimary(allCy,EFS,YTIME)
          )$(sameas(EFS,"NGS"))
-*         +iImpExp(allCy,"NGS",YTIME)$(sameas(EFS,"NGS"))
+*         +imImpExp(allCy,"NGS",YTIME)$(sameas(EFS,"NGS"))
          +
          (
             (1-iRatePriProTotPriNeeds(allCy,EFS,YTIME)) *

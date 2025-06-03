@@ -14,7 +14,7 @@ model openprom / all /;
 
 option iPop:2:0:6;
 display iPop;
-display iDisc;
+display imDisc;
 display TF;
 display TFIRST;
 display runCy;
@@ -26,8 +26,8 @@ display imVarCostTech;
 * Load common shared data
 *execute_loadpoint 'common_data.gdx';
 *---
-iTransChar(runCy,"RES_MEXTF",YTIME) = 0.04;
-iTransChar(runCy,"RES_MEXTV",YTIME) = 0.04;
+imTransChar(runCy,"RES_MEXTF",YTIME) = 0.04;
+imTransChar(runCy,"RES_MEXTV",YTIME) = 0.04;
 *---
 iDataPassCars(runCy,"PC","MEXTV") = 0.01;
 *---

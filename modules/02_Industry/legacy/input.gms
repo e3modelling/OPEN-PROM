@@ -56,5 +56,5 @@ iVarCostChp(runCy,DSBS,CHP,YTIME) = iDataChpPowGen(CHP,"2010","VOM");
 *---
 iBoiEffChp(runCy,CHP,YTIME) = iDataChpPowGen(CHP,"2010","BOILEFF");
 *---
-iElaSub(runCy,DSBS) = iElaSubData(DSBS);
+iElaSub(runCy,DSBS) = imElaSubData(DSBS);
 *---

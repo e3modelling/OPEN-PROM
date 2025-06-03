@@ -118,8 +118,8 @@ Q04CostHourProdInvDec(allCy,PGALL,HOUR,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                   
         ( 
           ( 
-            iDisc(allCy,"PG",YTIME-1) * exp(iDisc(allCy,"PG",YTIME-1) * iTechLftPlaType(allCy,PGALL)) /
-            (exp(iDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL)) -1)
+            imDisc(allCy,"PG",YTIME-1) * exp(imDisc(allCy,"PG",YTIME-1) * iTechLftPlaType(allCy,PGALL)) /
+            (exp(imDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL)) -1)
           ) *
           iGrossCapCosSubRen(allCy,PGALL,YTIME-1) * 1E3 * imCGI(allCy,YTIME-1)  + iFixOandMCost(allCy,PGALL,YTIME-1)
         ) /
@@ -231,8 +231,8 @@ Q04CostVarTechNotPGSCRN(allCy,PGALL,YTIME)$(time(YTIME) $(not PGSCRN(PGALL)) $ru
 Q04CostProdTeCHPreReplac(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V04CostProdTeCHPreReplac(allCy,PGALL,YTIME) =e=
                         (
-                          ((iDisc(allCy,"PG",YTIME) * exp(iDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL))/
-                          (exp(iDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL)) -1))
+                          ((imDisc(allCy,"PG",YTIME) * exp(imDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL))/
+                          (exp(imDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL)) -1))
                             * iGrossCapCosSubRen(allCy,PGALL,YTIME)* 1E3 * imCGI(allCy,YTIME)  + 
                             iFixOandMCost(allCy,PGALL,YTIME))/(8760*iAvailRate(PGALL,YTIME))
                            + (iVarCost(PGALL,YTIME)/1E3 + sum(PGEF$PGALLtoEF(PGALL,PGEF), 
@@ -602,8 +602,8 @@ Q04ProdElecCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04CostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       V04CostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME)
                  =E=
-      (iDisc(allCy,"PG",YTIME)*EXP(iDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL)) /
-      (EXP(iDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL))-1)*iGrossCapCosSubRen(allCy,PGALL,YTIME)*1000*imCGI(allCy,YTIME) +
+      (imDisc(allCy,"PG",YTIME)*EXP(imDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL)) /
+      (EXP(imDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL))-1)*iGrossCapCosSubRen(allCy,PGALL,YTIME)*1000*imCGI(allCy,YTIME) +
       iFixOandMCost(allCy,PGALL,YTIME)
       ) /iAvailRate(PGALL,YTIME)
               / (1000*(6$ISET(ESET)+4$RSET(ESET))) +
@@ -627,8 +627,8 @@ q04CostPowGenLonMin(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          v04CostPowGenLonMin(allCy,PGALL,YTIME)
                  =E=
 
-             (iDisc(allCy,"PG",YTIME)*EXP(iDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL)) /
-             (EXP(iDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL))-1)*iGrossCapCosSubRen(allCy,PGALL,YTIME)*1000*imCGI(allCy,YTIME) +
+             (imDisc(allCy,"PG",YTIME)*EXP(imDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL)) /
+             (EXP(imDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL))-1)*iGrossCapCosSubRen(allCy,PGALL,YTIME)*1000*imCGI(allCy,YTIME) +
              iFixOandMCost(allCy,PGALL,YTIME))/iAvailRate(PGALL,YTIME)
              / (1000*smGwToTwhPerYear) +
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
@@ -653,8 +653,8 @@ q04CostPowGenLongIntPri(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          v04CostPowGenLongIntPri(allCy,PGALL,ESET,YTIME)
                  =E=
 
-             (iDisc(allCy,"PG",YTIME)*EXP(iDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL)) /
-             (EXP(iDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL))-1)*iGrossCapCosSubRen(allCy,PGALL,YTIME)/1.5*1000*imCGI(allCy,YTIME) +
+             (imDisc(allCy,"PG",YTIME)*EXP(imDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL)) /
+             (EXP(imDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL))-1)*iGrossCapCosSubRen(allCy,PGALL,YTIME)/1.5*1000*imCGI(allCy,YTIME) +
              iFixOandMCost(allCy,PGALL,YTIME))/iAvailRate(PGALL,YTIME)
              / (1000*(7.25$ISET(ESET)+2.25$RSET(ESET))) +
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
@@ -712,8 +712,8 @@ Q04CostPowGenAvgLng(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04CostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V04CostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)
                  =E=
-             (iDisc(allCy,"PG",YTIME)*EXP(iDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL)) /
-             (EXP(iDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL))-1)*iGrossCapCosSubRen(allCy,PGALL,YTIME)*1000*imCGI(allCy,YTIME) +
+             (imDisc(allCy,"PG",YTIME)*EXP(imDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL)) /
+             (EXP(imDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL))-1)*iGrossCapCosSubRen(allCy,PGALL,YTIME)*1000*imCGI(allCy,YTIME) +
              iFixOandMCost(allCy,PGALL,YTIME))/iAvailRate(PGALL,YTIME)
              / (1000*(7.25$ISET(ESET)+2.25$RSET(ESET))) +
              sum(PGEF$PGALLTOEF(PGALL,PGEF),

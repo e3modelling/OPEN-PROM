@@ -2,7 +2,7 @@
 *' @code
 
 *---
-table iActv(YTIME,allCy,SBS) "Sector activity (various)"
+table imActv(YTIME,allCy,SBS) "Sector activity (various)"
                               !! main sectors (Billion US$2015) 
                               !! bunkers and households (1)
                               !! transport (Gpkm, or Gvehkm or Gtkm)
@@ -11,32 +11,32 @@ $include "./iActv.csvr"
 $offdelim
 ;
 *---
-table iTransChar(allCy,TRANSPCHAR,YTIME) "km per car, passengers per car and residuals for passenger cars market extension ()"
+table imTransChar(allCy,TRANSPCHAR,YTIME) "km per car, passengers per car and residuals for passenger cars market extension ()"
 $ondelim
 $include "./iTransChar.csv"
 $offdelim
 ;
 *---
 $IFTHEN.calib %Calibration% == Calibration
-variable iElastA(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)";
-table iElastAL(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)"
+variable imElastA(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)";
+table imElastAL(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)"
 $ondelim
 $include "./iElastA.csv"
 $offdelim
 ;
-iElastA.L(runCy, SBS, ETYPES, YTIME) = iElastAL("ELL", SBS, ETYPES, YTIME);
-iElastA.LO(runCy, SBS, posElast, YTIME) = 0.001;
-iElastA.UP(runCy, SBS, posElast, YTIME) = 5 * iElastAL("ELL", SBS, posElast, YTIME);
-iElastA.LO(runCy, SBS, negElast, YTIME) = -10;
-iElastA.UP(runCy, SBS, negElast, YTIME) = -0.001;
+imElastA.L(runCy, SBS, ETYPES, YTIME) = imElastAL("ELL", SBS, ETYPES, YTIME);
+imElastA.LO(runCy, SBS, posElast, YTIME) = 0.001;
+imElastA.UP(runCy, SBS, posElast, YTIME) = 5 * imElastAL("ELL", SBS, posElast, YTIME);
+imElastA.LO(runCy, SBS, negElast, YTIME) = -10;
+imElastA.UP(runCy, SBS, negElast, YTIME) = -0.001;
 
 $ELSE.calib
-table iElastA(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)"
+table imElastA(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)"
 $ondelim
 $include "./iElastA.csv"
 $offdelim
 ;
-iElastA(runCy,SBS,ETYPES,YTIME) = iElastA("ELL",SBS,ETYPES,YTIME);
+imElastA(runCy,SBS,ETYPES,YTIME) = imElastA("ELL",SBS,ETYPES,YTIME);
 $ENDIF.calib
 *---
 parameter iDiscData(SBS) "Discount rates per subsector ()" /
@@ -69,9 +69,9 @@ H2P     0.08
 H2INFR  0.08 
 /;
 *---
-parameter iDisc(allCy,SBS,YTIME) "Discount rates per subsector for all countries ()" ;
+parameter imDisc(allCy,SBS,YTIME) "Discount rates per subsector for all countries ()" ;
 *---
-iDisc(runCy,SBS,YTIME) = iDiscData(SBS);
+imDisc(runCy,SBS,YTIME) = iDiscData(SBS);
 *---
 * FIXME: Drive the emission factors with mrprom
 * author=giannou
@@ -94,7 +94,7 @@ imCo2EmiFac(runCy,"IS","HCL",YTIME) = iCo2EmiFacAllSbs("SLD"); !! This is the as
 imCo2EmiFac(runCy,"H2P","NGS",YTIME) = 3.107;
 imCo2EmiFac(runCy,"H2P","BMSWAS",YTIME) = 0.497;
 *---
-parameter iElaSubData(DSBS)       "Elasticities by subsector (1)" /
+parameter imElaSubData(DSBS)       "Elasticities by subsector (1)" /
 PCH	2
 IS	2.57
 NF	1.99
@@ -119,11 +119,11 @@ parameter iConsSizeDistHeat(conSet)               "Consumer sizes for district h
 *---
 table imRateLossesFinCons(allCy,EF,YTIME)               "Rate of losses over Available for Final Consumption (1)"
 $ondelim
-$include "./imRateLossesFinCons.csv"
+$include "./iRateLossesFinCons.csv"
 $offdelim
 ;
 *---
-parameter iParDHEffData(PGEFS) "Parameter of  district heating Efficiency (1)" /
+parameter imParDHEffData(PGEFS) "Parameter of  district heating Efficiency (1)" /
 HCL		0.76,
 LGN		0.75,
 GDO		0.78,
@@ -134,38 +134,30 @@ OGS		0.78,
 BMSWAS    0.76 
 /;
 *---
-$ontext
-table iSuppTransfInputPatFuel(EF,YTIME)            "Supplementary Parameter for the transformation input to patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works (1)"
-$ondelim
-$include "./iSuppTransfInputPatFuel.csv"
-$offdelim
-; 
-$offtext
-*---
-table iPriceFuelsIntBase(WEF,YTIME)	           "International Fuel Prices USED IN BASELINE SCENARIO ($2015/toe)"
+table imPriceFuelsIntBase(WEF,YTIME)	              "International Fuel Prices USED IN BASELINE SCENARIO ($2015/toe)"
 $ondelim
 $include"./iPriceFuelsIntBase.csv"
 $offdelim
 ;
 *---
-table iSuppExports(allCy,EF,YTIME)	                 "Supplementary parameter for  exports (Mtoe)"		
+table iSuppExports(allCy,EF,YTIME)	                   "Supplementary parameter for  exports (Mtoe)"		
 $ondelim
 $include"./iSuppExports.csv"
 $offdelim
 ;
 *---
-parameter iImpExp(allCy,EFS,YTIME)	                 "Imports of exporting countries usually zero (1)" ;
-iImpExp(runCy,EFS,YTIME)	= 0;
+parameter imImpExp(allCy,EFS,YTIME)	              "Imports of exporting countries usually zero (1)" ;
+imImpExp(runCy,EFS,YTIME) = 0;
 *---
 *Sources for vehicle lifetime:
 *US Department of Transportation, International Union of Railways, Statista, EU CORDIS
-table iDataTransTech (TRANSE, EF, ECONCHAR, YTIME) "Technoeconomic characteristics of transport (various)"
+table imDataTransTech (TRANSE, EF, ECONCHAR, YTIME)   "Technoeconomic characteristics of transport (various)"
 $ondelim
 $include"./iDataTransTech.csv"
 $offdelim
 ;
 *---
-table iDataIndTechnology(INDSE,EF,ECONCHAR)                  "Technoeconomic characteristics of industry (various)"
+table imDataIndTechnology(INDSE,EF,ECONCHAR)          "Technoeconomic characteristics of industry (various)"
             IC      FC      VC      LFT USC
 IS.HCL      0.32196 6.8     1.36    25  2.3255
 IS.LGN      0.48295 10.2    2.04    25  0.5
@@ -370,11 +362,11 @@ OI.H2F      2.43133 68.3668 41.1163 25  1.68
 ;
 *---
 * Coverting EUR05 to US2015
-iDataIndTechnology(INDSE,EF,"IC") = iDataIndTechnology(INDSE,EF,"IC") * 1.3;
-iDataIndTechnology(INDSE,EF,"FC") = iDataIndTechnology(INDSE,EF,"FC") * 1.3;
-iDataIndTechnology(INDSE,EF,"VC") = iDataIndTechnology(INDSE,EF,"VC") * 1.3;
+imDataIndTechnology(INDSE,EF,"IC") = imDataIndTechnology(INDSE,EF,"IC") * 1.3;
+imDataIndTechnology(INDSE,EF,"FC") = imDataIndTechnology(INDSE,EF,"FC") * 1.3;
+imDataIndTechnology(INDSE,EF,"VC") = imDataIndTechnology(INDSE,EF,"VC") * 1.3;
 *---
-table iDataDomTech(DOMSE,EF,ECONCHAR)                  "Technical lifetime of Industry (years)"
+table imDataDomTech(DOMSE,EF,ECONCHAR)                "Technical lifetime of Industry (years)"
              IC       FC      VC      LFT USC
 SE.HCL       0.323544 10.88           20  0.7
 SE.LGN       0.323544 10.88           20  0.5
@@ -466,11 +458,11 @@ HOU.HEATPUMP 0.432    12.9254         20  1.848
 ;
 *---
 * Coverting EUR05 to US2015
-iDataDomTech(DOMSE,EF,"IC") = iDataDomTech(DOMSE,EF,"IC") * 1.3;
-iDataDomTech(DOMSE,EF,"FC") = iDataDomTech(DOMSE,EF,"FC") * 1.3;
-iDataDomTech(DOMSE,EF,"VC") = iDataDomTech(DOMSE,EF,"VC") * 1.3;
+imDataDomTech(DOMSE,EF,"IC") = imDataDomTech(DOMSE,EF,"IC") * 1.3;
+imDataDomTech(DOMSE,EF,"FC") = imDataDomTech(DOMSE,EF,"FC") * 1.3;
+imDataDomTech(DOMSE,EF,"VC") = imDataDomTech(DOMSE,EF,"VC") * 1.3;
 *---
-table iDataNonEneSec(NENSE,EF,ECONCHAR)                  "Technical data of non energy uses and bunkers (various)"
+table imDataNonEneSec(NENSE,EF,ECONCHAR)              "Technical data of non energy uses and bunkers (various)"
         IC      FC      VC      LFT USC
 PCH.HCL 0.26227 45.22   2.37209 20  0.65
 PCH.LGN 0.26227 47.6    2.37209 20  0.5
@@ -494,13 +486,13 @@ NEN.OGS 0.18088 1.36    2.37209 20  0.8
 ;
 *---
 * Converting EUR05 to US2015
-iDataNonEneSec(NENSE,EF,"IC") = iDataNonEneSec(NENSE,EF,"IC") * 1.3;
-iDataNonEneSec(NENSE,EF,"FC") = iDataNonEneSec(NENSE,EF,"FC") * 1.3;
-iDataNonEneSec(NENSE,EF,"VC") = iDataNonEneSec(NENSE,EF,"VC") * 1.3;
+imDataNonEneSec(NENSE,EF,"IC") = imDataNonEneSec(NENSE,EF,"IC") * 1.3;
+imDataNonEneSec(NENSE,EF,"FC") = imDataNonEneSec(NENSE,EF,"FC") * 1.3;
+imDataNonEneSec(NENSE,EF,"VC") = imDataNonEneSec(NENSE,EF,"VC") * 1.3;
 *---
 * FIXME: check if country-specific data is needed; move to mrprom
 * author=giannou
-table iIndCharData(allCy,INDSE,Indu_Scon_Set)               "Industry sector charactetistics (various)"
+table iIndCharData(allCy,INDSE,Indu_Scon_Set)         "Industry sector charactetistics (various)"
          BASE           SHR_NSE   SH_HPELC
 ELL.IS   0.4397         0.7       0.00001
 ELL.NF   0              0.95      0.00001
@@ -527,55 +519,54 @@ iShrHeatPumpElecCons(runCy,INDSE) = iIndChar(runCy,INDSE,"SH_HPELC");
 iShrHeatPumpElecCons(runCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(DOMSE,"SH_HPELC");
 *---
 imFuelExprts(runCy,EFS,YTIME) = iSuppExports(runCy,EFS,YTIME);
-*iTransfInpGasworks(runCy,EFS,YTIME)= iSuppTransfInputPatFuel(EFS,YTIME);
 *---
 *Calculation of consumer size groups and their distribution function
-imNcon(TRANSE)$(sameas(TRANSE,"PC") or sameas(TRANSE,"GU")) = 10; !! 11 different consumer size groups for cars and trucks
+imNcon(TRANSE)$(sameas(TRANSE,"PC") or sameas(TRANSE,"GU")) = 10;      !! 11 different consumer size groups for cars and trucks
 imNcon(TRANSE)$(not (sameas(TRANSE,"PC") or sameas(TRANSE,"GU"))) = 1; !! 2 different consumer size groups for inland navigation, trains, busses and aviation
-imNcon(INDSE) = 10; !! 11 different consumer size groups for industrial sectors
-imNcon(DOMSE) = 10; !! 11 different consumer size groups for domestic and tertiary sectors
-imNcon(NENSE) = 10; !! 11 different consumer size groups for non energy uses
-imNcon("BU") = 2;   !! ... except bunkers .
+imNcon(INDSE) = 10;                                                    !! 11 different consumer size groups for industrial sectors
+imNcon(DOMSE) = 10;                                                    !! 11 different consumer size groups for domestic and tertiary sectors
+imNcon(NENSE) = 10;                                                    !! 11 different consumer size groups for non energy uses
+imNcon("BU") = 2;                                                      !! ... except bunkers .
 *---
 * 11 vehicle mileage groups
 * 0.952 turned out to be a (constant) ratio between modal and average mileage through iterations in Excel
 *---
-imAnnCons(runCy,'PC','smallest')= 0.5 * 0.952 * iTransChar(runCy,"KM_VEH","%fBaseY%") * 1000 * 1E-6;
-imAnnCons(runCy,'PC' ,'modal')=0.952 * iTransChar(runCy,"KM_VEH","%fBaseY%") * 1000 * 1E-6;
-imAnnCons(runCy,'PC' ,'largest')= 4 * 0.952 * iTransChar(runCy,"KM_VEH","%fBaseY%") * 1000 * 1E-6;
+imAnnCons(runCy,'PC','smallest') = 0.5 * 0.952 * imTransChar(runCy,"KM_VEH","%fBaseY%") * 1000 * 1E-6;
+imAnnCons(runCy,'PC' ,'modal') = 0.952 * imTransChar(runCy,"KM_VEH","%fBaseY%") * 1000 * 1E-6;
+imAnnCons(runCy,'PC' ,'largest') = 4 * 0.952 * imTransChar(runCy,"KM_VEH","%fBaseY%") * 1000 * 1E-6;
 *---
 * modal value is assumed to be 2 tonnes/vehicle, min = 1/3*modal and max = 10*modal tkm.
 * 0.706 is the constant ratio of modal/average tkm through iterations in Excel
 *---
-imAnnCons(runCy,'GU','smallest')=0.5 * 0.706 * iTransChar(runCy,"KM_VEH_TRUCK","%fBaseY%")* 1000 * 2 / 3  * 1E-6;
-imAnnCons(runCy,'GU','modal')=0.706 * iTransChar(runCy,"KM_VEH_TRUCK","%fBaseY%") * 1000 * 2  * 1E-6;
-imAnnCons(runCy,'GU','largest')=4 * 0.706 * iTransChar(runCy,"KM_VEH_TRUCK","%fBaseY%") * 1000 * 2 * 10  * 1E-6;
+imAnnCons(runCy,'GU','smallest') = 0.5 * 0.706 * imTransChar(runCy,"KM_VEH_TRUCK","%fBaseY%")* 1000 * 2 / 3  * 1E-6;
+imAnnCons(runCy,'GU','modal')    = 0.706 * imTransChar(runCy,"KM_VEH_TRUCK","%fBaseY%") * 1000 * 2  * 1E-6;
+imAnnCons(runCy,'GU','largest')  = 4 * 0.706 * imTransChar(runCy,"KM_VEH_TRUCK","%fBaseY%") * 1000 * 2 * 10  * 1E-6;
 *---
-imAnnCons(runCy,'PA','smallest')=40000 * 50 * 1E-6;
-imAnnCons(runCy,'PA','modal')=400000 * 100 * 1E-6;
-imAnnCons(runCy,'PA','largest')=800000 * 300 * 1E-6;
+imAnnCons(runCy,'PA','smallest') = 40000 * 50 * 1E-6;
+imAnnCons(runCy,'PA','modal')    = 400000 * 100 * 1E-6;
+imAnnCons(runCy,'PA','largest')  = 800000 * 300 * 1E-6;
 *---
 * Size will not play a role in buses, trains, ships and aircraft
 * Following values are given only for the sake of uniformity, but imDisFunConSize is not really calculated for non-road transport!
 imAnnCons(runCy,'PB',"smallest") = 20000 * 5 * 1E-6;
-imAnnCons(runCy,'PB',"modal") = 50000 * 15 * 1E-6;
-imAnnCons(runCy,'PB',"largest") = 200000 * 50 * 1E-6;
+imAnnCons(runCy,'PB',"modal")    = 50000 * 15 * 1E-6;
+imAnnCons(runCy,'PB',"largest")  = 200000 * 50 * 1E-6;
 *---
 imAnnCons(runCy,'PT',"smallest") = 50000 * 50 * 1E-6;
-imAnnCons(runCy,'PT',"modal") = 200000 * 150 * 1e-6;
-imAnnCons(runCy,'PT',"largest") = 400000 * 500 * 1E-6;
+imAnnCons(runCy,'PT',"modal")    = 200000 * 150 * 1e-6;
+imAnnCons(runCy,'PT',"largest")  = 400000 * 500 * 1E-6;
 *---
 imAnnCons(runCy,'GT',"smallest") = 50000 * 20 * 1E-6;
-imAnnCons(runCy,'GT',"modal") = 200000 * 200 * 1e-6;
-imAnnCons(runCy,'GT',"largest") = 400000 * 500 * 1E-6;
+imAnnCons(runCy,'GT',"modal")    = 200000 * 200 * 1e-6;
+imAnnCons(runCy,'GT',"largest")  = 400000 * 500 * 1E-6;
 *---
 imAnnCons(runCy,'PN',"smallest") = 10000 * 50 * 1E-6;
-imAnnCons(runCy,'PN',"modal") = 50000 * 100 * 1e-6;
-imAnnCons(runCy,'PN',"largest") = 100000 * 500 * 1E-6;
+imAnnCons(runCy,'PN',"modal")    = 50000 * 100 * 1e-6;
+imAnnCons(runCy,'PN',"largest")  = 100000 * 500 * 1E-6;
 *---
 imAnnCons(runCy,'GN',"smallest") = 10000 * 20 * 1E-6;
-imAnnCons(runCy,'GN',"modal") = 50000 * 300 * 1e-6;
-imAnnCons(runCy,'GN',"largest") = 100000 * 1000 * 1E-6;
+imAnnCons(runCy,'GN',"modal")    = 50000 * 300 * 1e-6;
+imAnnCons(runCy,'GN',"largest")  = 100000 * 1000 * 1E-6;
 imAnnCons(runCy,INDSE,"smallest") = 0.2  ;
 imAnnCons(runCy,INDSE,"largest") = 0.9 ;
 * assuming an average utilisation rate of 0.6 for iron & steel and 0.5 for other industry (see iterations in Excel):
@@ -587,7 +578,7 @@ imAnnCons(runCy,DOMSE,"largest") = iConsSizeDistHeat("largest") ;
 imAnnCons(runCy,DOMSE,"modal") = iConsSizeDistHeat("modal");
 *---
 imAnnCons(runCy,NENSE,"smallest") = 0.2  ;
-imAnnCons(runCy,NENSE,"largest") = 0.9 ;
+imAnnCons(runCy,NENSE,"largest")  = 0.9 ;
 * assuming an average utilisation rate of 0.5 for non-energy uses:
 imAnnCons(runCy,NENSE,"modal") = 0.487 ;
 *---
@@ -625,25 +616,7 @@ ENDLOOP;
 imCumDistrFuncConsSize(runCy,DSBS) = sum(rCon, imDisFunConSize(runCy,DSBS,rCon));
 imCGI(allCy,YTIME) = 1;
 *---
-$ontext
-table iResTotCapMxmLoad(allCy,PGRES,YTIME)              "Residuals for total capacity and maximum load (1)"	
-$ondelim
-$include"./iResTotCapMxmLoad.csv"
-$offdelim
-;
-*---
-iResMargTotAvailCap(runCy,PGRES,YTIME)$an(YTIME) = iResTotCapMxmLoad(runCy,PGRES,YTIME);
-*---
-table iDataOtherTransfOutput(allCy,EF,YTIME)	    "Data for Other transformation output  (Mtoe)"
-$ondelim
-$include"./iDataOtherTransfOutput.csv"
-$offdelim
-;
-*---
-iTranfOutGasworks(runCy,EFS,YTIME)$(not An(YTIME)) = iDataOtherTransfOutput(runCy,EFS,YTIME);
-$offtext
-*---
-table iDataDistrLosses(allCy,EF,YTIME)	    "Data for Distribution Losses (Mtoe)"
+table iDataDistrLosses(allCy,EF,YTIME)	     "Data for Distribution Losses (Mtoe)"
 $ondelim
 $include"./iDataDistrLosses.csv"
 $offdelim
@@ -651,14 +624,14 @@ $offdelim
 *---
 imDistrLosses(runCy,EFS,YTIME) = iDataDistrLosses(runCy,EFS,YTIME);
 *---
-table iFuelConsTRANSE(allCy,TRANSE,EF,YTIME)	 "Fuel consumption (Mtoe)"
+table iFuelConsTRANSE(allCy,TRANSE,EF,YTIME)	"Fuel consumption (Mtoe)"
 $ondelim
 $include"./iFuelConsTRANSE.csv"
 $offdelim
 ;
 *---
 imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME) = iFuelConsTRANSE(runCy,TRANSE,EF,YTIME);
-table iFuelConsINDSE(allCy,INDSE,EF,YTIME)	 "Fuel consumption of industry subsector (Mtoe)"
+table iFuelConsINDSE(allCy,INDSE,EF,YTIME)	"Fuel consumption of industry subsector (Mtoe)"
 $ondelim
 $include"./iFuelConsINDSE.csv"
 $offdelim
@@ -666,7 +639,7 @@ $offdelim
 *---
 iFuelConsINDSE(runCy,INDSE,EF,YTIME)$(SECTTECH(INDSE,EF) $(iFuelConsINDSE(runCy,INDSE,EF,YTIME)<=0)) = 1e-6;
 *---
-table iFuelConsDOMSE(allCy,DOMSE,EF,YTIME)	 "Fuel consumption of domestic subsector (Mtoe)"
+table iFuelConsDOMSE(allCy,DOMSE,EF,YTIME)	"Fuel consumption of domestic subsector (Mtoe)"
 $ondelim
 $include"./iFuelConsDOMSE.csv"
 $offdelim
@@ -674,7 +647,7 @@ $offdelim
 *---
 iFuelConsDOMSE(runCy,DOMSE,EF,YTIME)$(SECTTECH(DOMSE,EF) $(iFuelConsDOMSE(runCy,DOMSE,EF,YTIME)<=0)) = 1e-6;
 *---
-table iFuelConsNENSE(allCy,NENSE,EF,YTIME)	 "Fuel consumption of non energy and bunkers (Mtoe)"
+table iFuelConsNENSE(allCy,NENSE,EF,YTIME)	"Fuel consumption of non energy and bunkers (Mtoe)"
 $ondelim
 $include"./iFuelConsNENSE.csv"
 $offdelim
@@ -684,38 +657,15 @@ iFuelConsNENSE(runCy,NENSE,EF,YTIME)$(SECTTECH(NENSE,EF) $(iFuelConsNENSE(runCy,
 imFuelConsPerFueSub(runCy,INDSE,EF,YTIME) = iFuelConsINDSE(runCy,INDSE,EF,YTIME);
 imFuelConsPerFueSub(runCy,DOMSE,EF,YTIME) = iFuelConsDOMSE(runCy,DOMSE,EF,YTIME);
 imFuelConsPerFueSub(runCy,NENSE,EF,YTIME) = iFuelConsNENSE(runCy,NENSE,EF,YTIME);
-imFinEneCons(runCy,EFS,YTIME) = sum(INDDOM,
-                         sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(INDDOM,EF)), imFuelConsPerFueSub(runCy,INDDOM,EF,YTIME)))
+imFinEneCons(runCy,EFS,YTIME) = sum(INDDOM,sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(INDDOM,EF)), imFuelConsPerFueSub(runCy,INDDOM,EF,YTIME)))
                        +
-                       sum(TRANSE,
-                         sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(TRANSE,EF) $(not plugin(EF)) ), imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME)));
+                       sum(TRANSE,sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(TRANSE,EF) $(not plugin(EF)) ), imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME)));
 *---
 imCO2CaptRate(runCy,PGALL,YTIME) = 2; 
-imEffValueInDollars(runCy,SBS,YTIME)=0;
-iScenarioPri(WEF,"NOTRADE",YTIME)=0;
+imEffValueInDollars(runCy,SBS,YTIME) = 0;
+iScenarioPri(WEF,"NOTRADE",YTIME) = 0;
 *---
-$ontext
-VMCapElecTotEst.FX(runCy,YTIME)$(not An(YTIME)) = iTotAvailCapBsYr(runCy);
-VMCapElecTotEst.L(runCy,TT) = iResMargTotAvailCap(runCy,"TOT_CAP_RES",TT) * VMCapElecTotEst.L(runCy,TT-1)
-        * VMPeakLoad.L(runCy,TT)/VMPeakLoad.L(runCy,TT-1);
-*---
-* FIXME: Check if iPriceReform is necessary for the model.
-* author=derevirn
-table iDataPriceReform(allCy,AGSECT,EF,YTIME)	 "Price reform (1)"
-$ondelim
-$include"./iDataPriceReform.csv"
-$offdelim
-;
-*---
-* INSERT MECHANSIM FOR PRICE REFORM!!
-iPriceReform(runCy,INDSE1(SBS),EF,YTIME)=iDataPriceReform(runCy,"INDSE1",EF,YTIME) ;
-iPriceReform(runCy,DOMSE1(SBS),EF,YTIME)=iDataPriceReform(runCy,"DOMSE1",EF,YTIME) ;
-iPriceReform(runCy,NENSE1(SBS),EF,YTIME)=iDataPriceReform(runCy,"NENSE1",EF,YTIME) ;
-iPriceReform(runCy,TRANS1(SBS),EF,YTIME)=iDataPriceReform(runCy,"TRANS1",EF,YTIME) ;
-iPriceReform(runCy,"PG",EF,YTIME)=iDataPriceReform(runCy,"INDSE1",EF,YTIME) ;
-$offtext
-*---
-table iDataImports(allCy,EF,YTIME)	           "Data for imports (Mtoe)"
+table iDataImports(allCy,EF,YTIME)	          "Data for imports (Mtoe)"
 $ondelim
 $include"./iDataImports.csv"
 $offdelim
@@ -727,48 +677,6 @@ iNetImp(runCy,EFS,YTIME) = iDataImports(runCy,"ELC",YTIME)-iSuppExports(runCy,"E
 *---
 * Calculation of weights for sector average fuel price
 iResElecIndex(runCy,YTIME) = 1;
-*---
-$ontext
-* FIXME: Check if iResNonSubsElecDem, iResFuelConsPerSubAndFuel and iResTranspFuelConsSubTech are necessary for the model.
-* author=derevirn
-table iResNonSubElec(allCy,INDSE,YTIME)	 "Residuals for non subsitutable electricity (1)"
-$ondelim
-$include"./iResNonSubElec.csv"
-$offdelim
-;
-table iResNonSubElecCons(allCy,DOMSE,YTIME)	 "Residuals in Non Substitutable Electricity Consumption per substector (1)"
-$ondelim
-$include"./iResNonSubElecCons.csv"
-$offdelim
-;
-iResNonSubsElecDem(runCy,INDSE,YTIME)$an(YTIME) = iResNonSubElec(runCy,INDSE,YTIME);
-iResNonSubsElecDem(runCy,DOMSE,YTIME)$an(YTIME) = iResNonSubElecCons(runCy,DOMSE,YTIME);
-
-table iResFuelConsSub(allCy,INDSE,EF,YTIME)	 "Residuals for fuel consumption per subsector (1)"
-$ondelim
-$include"./iResFuelConsSub.csv"
-$offdelim
-;
-table iResFuelConsPerFuelAndSub(allCy,DOMSE,EF,YTIME)	 "Residuals in fuel consumption per fuel and subsector (1)"
-$ondelim
-$include"./iResFuelConsPerFuelAndSub.csv"
-$offdelim
-;
-table iResInFuelConsPerFuelAndSub(allCy,NENSE,EF,YTIME)	 "Residuals in fuel consumption per fuel and subsector (1)"
-$ondelim
-$include"./iResInFuelConsPerFuelAndSub.csv"
-$offdelim
-;
-iResFuelConsPerSubAndFuel(runCy,INDSE,EF,YTIME)$an(YTIME) = iResFuelConsSub(runCy,INDSE,EF,YTIME);
-iResFuelConsPerSubAndFuel(runCy,DOMSE,EF,YTIME)$an(YTIME) = iResFuelConsPerFuelAndSub(runCy,DOMSE,EF,YTIME);
-iResFuelConsPerSubAndFuel(runCy,NENSE,EF,YTIME)$an(YTIME) = iResInFuelConsPerFuelAndSub(runCy,NENSE,EF,YTIME);
-
-table iResTranspFuelConsSubTech(allCy,TRANSE,EF,YTIME)	 "Residual Transport on Specific Fuel Consumption per Subsector and Technology (1)"
-$ondelim
-$include"./iResTranspFuelConsSubTech.csv"
-$offdelim
-;
-$offtext
 *---
 **                   Power Generation
 table iEnvPolicies(allCy,POLICIES_SET,YTIME) "Environmental policies on emissions constraints  and subsidy on renewables (Mtn CO2)"
@@ -789,22 +697,22 @@ elseif %fScenario% eq 3 then
 
 endif;
 *---
-table iMatrFactorData(SBS,EF,YTIME)       "Maturity factor per technology and subsector (1)"
+table iMatrFactorData(SBS,EF,YTIME)          "Maturity factor per technology and subsector (1)"
 $ondelim
 $include"./iMatrFactorData.csv"
 $offdelim
 ;
 *---
 $IFTHEN.calib %MatFacCalibration% == off
-parameter iMatrFactor(allCy,SBS,EF,YTIME)       "Maturity factor per technology and subsector for all countries (1)";
-iMatrFactor(runCy,SBS,EF,YTIME) = iMatrFactorData(SBS,EF,YTIME);                                          
-iMatrFactor(runCy,SBS,EF,YTIME)$(iMatrFactor(runCy,SBS,EF,YTIME)=0) = 0.000001;
+parameter imMatrFactor(allCy,SBS,EF,YTIME)   "Maturity factor per technology and subsector for all countries (1)";
+imMatrFactor(runCy,SBS,EF,YTIME) = iMatrFactorData(SBS,EF,YTIME);                                          
+imMatrFactor(runCy,SBS,EF,YTIME)$(imMatrFactor(runCy,SBS,EF,YTIME)=0) = 0.000001;
 $ELSE.calib
-variable iMatrFactor(allCy,SBS,EF,YTIME)       "Maturity factor per technology and subsector for all countries (1)";
-iMatrFactor.L(runCy,SBS,EF,YTIME) = iMatrFactorData(SBS,EF,YTIME);                                          
-iMatrFactor.L(runCy,SBS,EF,YTIME)$(iMatrFactor.L(runCy,SBS,EF,YTIME)=0) = 0.000001;
-iMatrFactor.LO(runCy,SBS,EF,YTIME) = -10;                                          
-iMatrFactor.UP(runCy,SBS,EF,YTIME) = 100;
+variable imMatrFactor(allCy,SBS,EF,YTIME)    "Maturity factor per technology and subsector for all countries (1)";
+imMatrFactor.L(runCy,SBS,EF,YTIME) = iMatrFactorData(SBS,EF,YTIME);                                          
+imMatrFactor.L(runCy,SBS,EF,YTIME)$(imMatrFactor.L(runCy,SBS,EF,YTIME)=0) = 0.000001;
+imMatrFactor.LO(runCy,SBS,EF,YTIME) = -10;                                          
+imMatrFactor.UP(runCy,SBS,EF,YTIME) = 100;
 $ENDIF.calib
 *---
 ** Industry
@@ -816,25 +724,25 @@ imShrNonSubElecInTotElecDem(runCy,DOMSE)$(imShrNonSubElecInTotElecDem(runCy,DOMS
 **   Macroeconomic
 *---
 **  Transport Sector
-imCapCostTech(runCy,TRANSE,EF,YTIME) = iDataTransTech(TRANSE,EF,"IC",YTIME);
-imFixOMCostTech(runCy,TRANSE,EF,YTIME) = iDataTransTech(TRANSE,EF,"FC",YTIME);
-imVarCostTech(runCy,TRANSE,EF,YTIME) = iDataTransTech(TRANSE,EF,"VC",YTIME);
+imCapCostTech(runCy,TRANSE,EF,YTIME) = imDataTransTech(TRANSE,EF,"IC",YTIME);
+imFixOMCostTech(runCy,TRANSE,EF,YTIME) = imDataTransTech(TRANSE,EF,"FC",YTIME);
+imVarCostTech(runCy,TRANSE,EF,YTIME) = imDataTransTech(TRANSE,EF,"VC",YTIME);
 *---
 **  Industrial Sector
-imCapCostTech(runCy,INDSE,EF,YTIME) = iDataIndTechnology(INDSE,EF,"IC");
-imFixOMCostTech(runCy,INDSE,EF,YTIME) = iDataIndTechnology(INDSE,EF,"FC");
-imVarCostTech(runCy,INDSE,EF,YTIME) = iDataIndTechnology(INDSE,EF,"VC");
-imUsfEneConvSubTech(runCy,INDSE,EF,YTIME)  = iDataIndTechnology(INDSE,EF,"USC");
+imCapCostTech(runCy,INDSE,EF,YTIME) = imDataIndTechnology(INDSE,EF,"IC");
+imFixOMCostTech(runCy,INDSE,EF,YTIME) = imDataIndTechnology(INDSE,EF,"FC");
+imVarCostTech(runCy,INDSE,EF,YTIME) = imDataIndTechnology(INDSE,EF,"VC");
+imUsfEneConvSubTech(runCy,INDSE,EF,YTIME)  = imDataIndTechnology(INDSE,EF,"USC");
 *---
 **  Domestic Sector
-imFixOMCostTech(runCy,DOMSE,EF,YTIME) = iDataDomTech(DOMSE,EF,"FC");
-imVarCostTech(runCy,DOMSE,EF,YTIME) = iDataDomTech(DOMSE,EF,"VC");
-imUsfEneConvSubTech(runCy,DOMSE,EF,YTIME) = iDataDomTech(DOMSE,EF,"USC");
+imFixOMCostTech(runCy,DOMSE,EF,YTIME) = imDataDomTech(DOMSE,EF,"FC");
+imVarCostTech(runCy,DOMSE,EF,YTIME) = imDataDomTech(DOMSE,EF,"VC");
+imUsfEneConvSubTech(runCy,DOMSE,EF,YTIME) = imDataDomTech(DOMSE,EF,"USC");
 *---
 **  Non Energy Sector and Bunkers
-imFixOMCostTech(runCy,NENSE,EF,YTIME)= iDataNonEneSec(NENSE,EF,"FC");
-imVarCostTech(runCy,NENSE,EF,YTIME) = iDataNonEneSec(NENSE,EF,"VC");
-imUsfEneConvSubTech(runCy,NENSE,EF,YTIME) = iDataNonEneSec(NENSE,EF,"USC");
+imFixOMCostTech(runCy,NENSE,EF,YTIME)= imDataNonEneSec(NENSE,EF,"FC");
+imVarCostTech(runCy,NENSE,EF,YTIME) = imDataNonEneSec(NENSE,EF,"VC");
+imUsfEneConvSubTech(runCy,NENSE,EF,YTIME) = imDataNonEneSec(NENSE,EF,"USC");
 *---
 **  Power Generation
 *---
@@ -845,19 +753,4 @@ $offdelim
 ;
 *---
 imPlantEffByType(runCy,PGALL,YTIME) = iDataPlantEffByType(runCy,PGALL, YTIME) ;
-*---
-$ontext
-**  Policies for climate change and renewables
-**  Energy productivity indices and R&D indices
-EN_PRD_INDX(runCy,SBS,YTIME)$an(YTIME)=EN_PRD_INDX_PRN(runCy,SBS,YTIME);
-CCRES(PGALL,YTIME)$AN(YTIME)=CCRES_PRN(PGALL,YTIME)  ;
-FOMRES(PGALL,YTIME)$AN(YTIME)=FOMRES_PRN(PGALL,YTIME) ;
-VOMRES(PGALL,YTIME)$AN(YTIME)=VOMRES_PRN(PGALL,YTIME)  ;
-EFFRES(PGALL,YTIME)$AN(YTIME)=EFFRES_PRN(PGALL,YTIME);
-NUCRES(YTIME)$an(ytime)=NUCRES_PRN("RES",YTIME);
-* Update efficiencies according to energy productivity index
-imPlantEffByType(runCy,PGALL,YTIME)$(an(ytime) )= imPlantEffByType(runCy,PGALL,YTIME) / iEneProdRDscenarios(runCy,"pg",ytime);
-iEffDHPlants(runCy,EF,YTIME)$(an(ytime) )= iEffDHPlants(runCy,EF,YTIME) / iEneProdRDscenarios(runCy,"pg",ytime);
-imRateLossesFinCons(allCy,EFS, YTIME)$(imFinEneCons(allCy,EFS,YTIME)>0 $(not an(ytime))) = imDistrLosses(allCy,EFS,YTIME) / imFinEneCons(allCy,EFS,YTIME);
-$offtext
 *---

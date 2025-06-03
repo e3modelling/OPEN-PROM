@@ -1,6 +1,6 @@
 item,from,to,set
 VMVDemFinSubFuelSubsec,VMVDemFinSubFuelSubsec-1,V02GapFinalDem,DSBS $(not TRANSE(DSBS))
-VMVDemFinSubFuelSubsec,iActv,V02GapFinalDem,DSBS $(not TRANSE(DSBS))
+VMVDemFinSubFuelSubsec,imActv,V02GapFinalDem,DSBS $(not TRANSE(DSBS))
 VMVDemFinSubFuelSubsec,VMVPriceFuelAvgSub,V02GapFinalDem,DSBS $(not TRANSE(DSBS))
 VMVPriceFuelAvgSub,V08PriceFuelSepCarbonWght,VMVDemFinSubFuelSubsec,DSBS
 V08PriceFuelSepCarbonWght,VMVPriceFuelSubsecCarVal,VMVPriceFuelAvgSub,
@@ -216,8 +216,8 @@ VMVConsFuelInclHP,V02ShareTechNewEquip,VMVConsFuel,DSBS $(not TRANSE(DSBS))
 VMVConsFuelInclHP,VMVConsElecNonSubIndTert,VMVConsFuel,DSBS $(not TRANSE(DSBS))
 V02GapFinalDem,VMVDemFinSubFuelSubsec,VMVConsFuelInclHP,DSBS $(not TRANSE(DSBS))
 V02GapFinalDem,VMVConsRemSubEquipSubSec,VMVConsFuelInclHP,DSBS $(not TRANSE(DSBS))
-VMVConsElecNonSubIndTert,iActv,,INDDOM
-VMVConsRemSubEquipSubSec,iActv,VMVConsFuelInclHP,DSBS $(not TRANSE(DSBS))
+VMVConsElecNonSubIndTert,imActv,,INDDOM
+VMVConsRemSubEquipSubSec,imActv,VMVConsFuelInclHP,DSBS $(not TRANSE(DSBS))
 VMVConsRemSubEquipSubSec,VMVConsFuelInclHP-1,VMVConsFuelInclHP,DSBS $(not TRANSE(DSBS))
 VMVConsRemSubEquipSubSec,VMVLft,VMVConsFuelInclHP,DSBS $(not TRANSE(DSBS))
 VMVConsRemSubEquipSubSec,VMVLft-1,VMVConsFuelInclHP,DSBS $(not TRANSE(DSBS))
