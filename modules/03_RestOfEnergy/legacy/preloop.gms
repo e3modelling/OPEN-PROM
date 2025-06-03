@@ -24,11 +24,11 @@ V03Transfers.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iFeedTransfr(runCy,EFS,YTIME)
 *---
 V03ProdPrimary.FX(runCy,PPRODEF,YTIME)$(not An(YTIME)) = iFuelPriPro(runCy,PPRODEF,YTIME);
 *---
-V03Imp.FX(runCy,"NGS",YTIME)$(not An(YTIME)) = iFuelImports(runCy,"NGS",YTIME);
+V03Imp.FX(runCy,"NGS",YTIME)$(not An(YTIME)) = iMFuelImports(runCy,"NGS",YTIME);
 V03Imp.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
 *---
-V03Exp.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iFuelExprts(runCy,EFS,YTIME);
-V03Exp.FX(runCy,"NGS",YTIME)$(not An(YTIME)) = iFuelExprts(runCy,"NGS",YTIME);
+V03Exp.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iMFuelExprts(runCy,EFS,YTIME);
+V03Exp.FX(runCy,"NGS",YTIME)$(not An(YTIME)) = iMFuelExprts(runCy,"NGS",YTIME);
 V03Exp.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
 *---
 V03OutTransfDhp.FX(runCy,EFS,YTIME)$(not STEAM(EFS)) = 0;
@@ -42,7 +42,7 @@ VMConsFiEneSec.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iTotEneBranchCons(runCy,EFS
 VMInpTransfTherm.FX(runCy,EFS,YTIME)$(not PGEF(EFS)) = 0;
 VMInpTransfTherm.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iInpTransfTherm(runCy,EFS,YTIME);
 *---
-VMConsFinEneCountry.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iFinEneCons(runCy,EFS,YTIME);
+VMConsFinEneCountry.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iMFinEneCons(runCy,EFS,YTIME);
 *---
-VMLossesDistr.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iDistrLosses(runCy,EFS,YTIME);
+VMLossesDistr.FX(runCy,EFS,YTIME)$(not An(YTIME)) = iMDistrLosses(runCy,EFS,YTIME);
 *---

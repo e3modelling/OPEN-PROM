@@ -13,17 +13,17 @@
 *' The equation calculates the CO2 captured by electricity and hydrogen production plants
 *' in million tons of CO2 for a specific scenario and year. The CO2 capture is determined by summing 
 *' the product of electricity production from plants with carbon capture and storage, the conversion
-*' factor from terawatt-hours to million tons of oil equivalent (sTWhToMtoe), the plant efficiency,
+*' factor from terawatt-hours to million tons of oil equivalent (sMTWhToMtoe), the plant efficiency,
 *' the CO2 emission factor, and the plant CO2 capture rate. 
 Q06CapCO2ElecHydr(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V06CapCO2ElecHydr(allCy,YTIME)
          =E=
          sum(PGEF,sum(CCS$PGALLtoEF(CCS,PGEF),
-                 VMProdElec(allCy,CCS,YTIME)*sTWhToMtoe/iPlantEffByType(allCy,CCS,YTIME)*
-                 iCo2EmiFac(allCy,"PG",PGEF,YTIME)*iCO2CaptRate(allCy,CCS,YTIME)))
+                 VMProdElec(allCy,CCS,YTIME)*sMTWhToMtoe/iMPlantEffByType(allCy,CCS,YTIME)*
+                 iMCo2EmiFac(allCy,"PG",PGEF,YTIME)*iMCO2CaptRate(allCy,CCS,YTIME)))
                 + 
          (sum(EF, sum(H2TECH$H2TECHEFtoEF(H2TECH,EF),
-               VMConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)*iCo2EmiFac(allCy,"PG",EF,YTIME)*iCaptRateH2Prod(allCy,H2TECH,YTIME)))
+               VMConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)*iMCo2EmiFac(allCy,"PG",EF,YTIME)*iCaptRateH2Prod(allCy,H2TECH,YTIME)))
           )  ;    !! CO2 emissions captured by plants producing hydrogen
 
 

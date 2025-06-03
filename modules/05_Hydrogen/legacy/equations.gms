@@ -84,11 +84,11 @@ Q05CostVarProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          =E=
          sum(EF$H2TECHEFtoEF(H2TECH,EF), (VMPriceFuelSubsecCarVal(allCy,"H2P",EF,YTIME)*1e3+
 
-            iCaptRateH2Prod(allCy,H2TECH,YTIME)*iCo2EmiFac(allCy,"H2P",EF,YTIME)*VMCstCO2SeqCsts(allCy,YTIME)+
+            iCaptRateH2Prod(allCy,H2TECH,YTIME)*iMCo2EmiFac(allCy,"H2P",EF,YTIME)*VMCstCO2SeqCsts(allCy,YTIME)+
 
-            (1-iCaptRateH2Prod(allCy,H2TECH,YTIME))*iCo2EmiFac(allCy,"H2P",EF,YTIME)*
+            (1-iCaptRateH2Prod(allCy,H2TECH,YTIME))*iMCo2EmiFac(allCy,"H2P",EF,YTIME)*
 
-            (sum(NAP$NAPtoALLSBS(NAP,"H2P"),MVCarVal(allCy,NAP,YTIME))))
+            (sum(NAP$NAPtoALLSBS(NAP,"H2P"),VMCarVal(allCy,NAP,YTIME))))
 
             /iEffH2Prod(allCy,H2TECH,YTIME)
             )!!$(not H2TECHREN(H2TECH))
@@ -100,7 +100,7 @@ Q05CostVarProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q05AcceptCCSH2Tech(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V05AcceptCCSH2Tech(allCy,YTIME)
          =E=
-         iWBLGammaH2Prod(allCy,YTIME)*5+25*EXP(-0.06*((sum(NAP$NAPtoALLSBS(NAP,"H2P"),MVCarVal(allCy,NAP,YTIME -1)))))
+         iWBLGammaH2Prod(allCy,YTIME)*5+25*EXP(-0.06*((sum(NAP$NAPtoALLSBS(NAP,"H2P"),VMCarVal(allCy,NAP,YTIME -1)))))
 ;
 
 *' This equation determines the share of hydrogen produced using CCS technologies compared to those produced without CCS.

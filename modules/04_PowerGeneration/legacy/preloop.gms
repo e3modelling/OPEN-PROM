@@ -124,8 +124,8 @@ V04LoadFacDom.FX(runCy,YTIME)$(datay(YTIME)) =
          iLoadFacElecDem(TRANSE)));
 *---
 V04DemElecTot.L(runCy,YTIME)=10;
-V04DemElecTot.FX(runCy,YTIME)$(not An(YTIME)) =  1/0.086 * ( iFinEneCons(runCy,"ELC",YTIME) + sum(NENSE, iFuelConsPerFueSub(runCy,NENSE,"ELC",YTIME)) + iDistrLosses(runCy,"ELC",YTIME)
-                                             + iTotEneBranchCons(runCy,"ELC",YTIME) - (iFuelImports(runCy,"ELC",YTIME)-iFuelExprts(runCy,"ELC",YTIME)));
+V04DemElecTot.FX(runCy,YTIME)$(not An(YTIME)) =  1/0.086 * ( iMFinEneCons(runCy,"ELC",YTIME) + sum(NENSE, iMFuelConsPerFueSub(runCy,NENSE,"ELC",YTIME)) + iMDistrLosses(runCy,"ELC",YTIME)
+                                             + iTotEneBranchCons(runCy,"ELC",YTIME) - (iMFuelImports(runCy,"ELC",YTIME)-iMFuelExprts(runCy,"ELC",YTIME)));
 *---
 VMPeakLoad.L(runCy,YTIME) = 1;
 VMPeakLoad.FX(runCy,YTIME)$(datay(YTIME)) = V04DemElecTot.L(runCy,YTIME)/(V04LoadFacDom.L(runCy,YTIME)*8.76);

@@ -51,7 +51,7 @@ Q03ConsFinNonEne(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q03LossesDistr(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VMLossesDistr(allCy,EFS,YTIME)
              =E=
-         (iRateLossesFinCons(allCy,EFS,YTIME) * (VMConsFinEneCountry(allCy,EFS,YTIME) + VMConsFinNonEne(allCy,EFS,YTIME)))$(not H2EF(EFS))
+         (iMRateLossesFinCons(allCy,EFS,YTIME) * (VMConsFinEneCountry(allCy,EFS,YTIME) + VMConsFinNonEne(allCy,EFS,YTIME)))$(not H2EF(EFS))
          +
          (  VMDemTotH2(allCy,YTIME) - sum(SBS$H2SBS(SBS), V05DemSecH2(allCy,SBS,YTIME)))$H2EF(EFS);  
 
@@ -131,19 +131,19 @@ Q03InputTransfRef(allCy,"CRO",YTIME)$(TIME(YTIME) $runCy(allCy))..
 *' scenario and year, multiplied by the conversion factor from terawatt-hours to million tons of oil equivalent.
 *' The result represents the transformation output from nuclear plants for electricity production in million tons of oil equivalent.
 Q03OutTransfNuclear(allCy,"ELC",YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V03OutTransfNuclear(allCy,"ELC",YTIME) =E=SUM(PGNUCL,VMProdElec(allCy,PGNUCL,YTIME))*sTWhToMtoe;
+         V03OutTransfNuclear(allCy,"ELC",YTIME) =E=SUM(PGNUCL,VMProdElec(allCy,PGNUCL,YTIME))*sMTWhToMtoe;
 
 *' The equation computes the transformation input to nuclear plants for a specific scenario and year.
 *' The input is calculated based on the sum of electricity production from all nuclear power plants in the given scenario and year, divided
-*' by the plant efficiency and multiplied by the conversion factor from terawatt-hours to million tons of oil equivalent (sTWhToMtoe).
+*' by the plant efficiency and multiplied by the conversion factor from terawatt-hours to million tons of oil equivalent (sMTWhToMtoe).
 *' The result represents the transformation input to nuclear plants in million tons of oil equivalent.
 Q03InpTransfNuclear(allCy,"NUC",YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-        V03InpTransfNuclear(allCy,"NUC",YTIME) =E=SUM(PGNUCL,VMProdElec(allCy,PGNUCL,YTIME)/iPlantEffByType(allCy,PGNUCL,YTIME))*sTWhToMtoe;
+        V03InpTransfNuclear(allCy,"NUC",YTIME) =E=SUM(PGNUCL,VMProdElec(allCy,PGNUCL,YTIME)/iMPlantEffByType(allCy,PGNUCL,YTIME))*sMTWhToMtoe;
 
 *' The equation computes the transformation input to thermal power plants for a specific power generation form 
 *' in a given scenario and year. The input is calculated based on the following conditions:
 *' For conventional power plants that are not geothermal or nuclear, the transformation input is determined by the electricity production
-*' from the respective power plant multiplied by the conversion factor from terawatt-hours to million tons of oil equivalent (sTWhToMtoe), divided by the
+*' from the respective power plant multiplied by the conversion factor from terawatt-hours to million tons of oil equivalent (sMTWhToMtoe), divided by the
 *' plant efficiency.For geothermal power plants, the transformation input is based on the electricity production from the geothermal plant multiplied by the conversion
 *' factor.For combined heat and power plants , the input is calculated as the sum of the consumption of fuels in various demand subsectors and the electricity
 *' production from the CHP plant . This sum is then divided by a factor based on the year to account for variations over time.The result represents
@@ -152,12 +152,12 @@ Q03InpTransfTherm(allCy,PGEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VMInpTransfTherm(allCy,PGEF,YTIME)
              =E=
         sum(PGALL$(PGALLtoEF(PGALL,PGEF)$((not PGGEO(PGALL)) $(not PGNUCL(PGALL)))),
-             VMProdElec(allCy,PGALL,YTIME) * sTWhToMtoe /  iPlantEffByType(allCy,PGALL,YTIME))
+             VMProdElec(allCy,PGALL,YTIME) * sMTWhToMtoe /  iMPlantEffByType(allCy,PGALL,YTIME))
         +
         sum(PGALL$(PGALLtoEF(PGALL,PGEF)$PGGEO(PGALL)),
-             VMProdElec(allCy,PGALL,YTIME) * sTWhToMtoe / 0.15) 
+             VMProdElec(allCy,PGALL,YTIME) * sMTWhToMtoe / 0.15) 
         +
-        sum(CHP$CHPtoEF(CHP,PGEF),  sum(INDDOM,VMConsFuel(allCy,INDDOM,CHP,YTIME))+sTWhToMtoe*V04ProdElecCHP(allCy,CHP,YTIME))/(0.8+0.1*(ord(YTIME)-10)/32);
+        sum(CHP$CHPtoEF(CHP,PGEF),  sum(INDDOM,VMConsFuel(allCy,INDDOM,CHP,YTIME))+sMTWhToMtoe*V04ProdElecCHP(allCy,CHP,YTIME))/(0.8+0.1*(ord(YTIME)-10)/32);
 
 *' The equation calculates the transformation output from thermal power stations for a specific energy branch
 *' in a given scenario and year. The result is computed based on the following conditions: 
@@ -171,9 +171,9 @@ Q03OutTransfTherm(allCy,TOCTEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V03OutTransfTherm(allCy,TOCTEF,YTIME)
              =E=
         (
-             sum(PGALL$(not PGNUCL(PGALL)),VMProdElec(allCy,PGALL,YTIME)) * sTWhToMtoe
+             sum(PGALL$(not PGNUCL(PGALL)),VMProdElec(allCy,PGALL,YTIME)) * sMTWhToMtoe
              +
-             sum(CHP,V04ProdElecCHP(allCy,CHP,YTIME)*sTWhToMtoe)
+             sum(CHP,V04ProdElecCHP(allCy,CHP,YTIME)*sMTWhToMtoe)
          )$ELCEF(TOCTEF)
         +
         (                                                                                                         
@@ -280,7 +280,7 @@ Q03Exp(allCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS) $runCy(allCy))..
          V03Exp(allCy,EFS,YTIME)
                  =E=
          (
-                 iFuelExprts(allCy,EFS,YTIME)
+                 iMFuelExprts(allCy,EFS,YTIME)
          );
 
 *' The equation computes the fake imports for a specific energy branch 
