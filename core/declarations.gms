@@ -19,7 +19,7 @@ iIndChar(allCy,INDSE,Indu_Scon_Set)                        "Industry sector char
 iNetImp(allCy,EFS,YTIME)                                   "Net imports (Mtoe)"
 ODummyObj                                                  "Parameter saving objective function"
 
-*'                **Interdependent Variables**
+*'                **Interdependent Parameters**
 iMCGI(allCy,YTIME)                                         "Capital Goods Index (defined as CGI(Scenario)/CGI(Baseline)) (1)"
 iMFPDL(SBS,KPDL)                                           "Polynomial Distribution Lags (PDL) Coefficients per subsector (1)"
 iMPlantEffByType(allCy,PGALL,YTIME)                        "Plant efficiency per plant type (1)"
