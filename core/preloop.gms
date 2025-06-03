@@ -4,7 +4,7 @@
 iNPDL(DSBS) = 6;
 loop DSBS do
    loop KPDL$(ord(KPDL) le iNPDL(DSBS)) do
-         iMFPDL(DSBS,KPDL) = 6 * (iNPDL(DSBS)+1-ord(KPDL)) * ord(KPDL)
+         imFPDL(DSBS,KPDL) = 6 * (iNPDL(DSBS)+1-ord(KPDL)) * ord(KPDL)
                            /
                            (iNPDL(DSBS) * (iNPDL(DSBS)+1) * (iNPDL(DSBS)+2))
    endloop;
@@ -19,7 +19,7 @@ display TF;
 display TFIRST;
 display runCy;
 display iWgtSecAvgPriFueCons;
-display iMVarCostTech;
+display imVarCostTech;
 
 *'                *VARIABLE INITIALISATION*
 *---
@@ -31,20 +31,20 @@ iTransChar(runCy,"RES_MEXTV",YTIME) = 0.04;
 *---
 iDataPassCars(runCy,"PC","MEXTV") = 0.01;
 *---
-iFinEneConsPrevYear(runCy,EFS,YTIME)$(not An(YTIME)) = iMFinEneCons(runCy,EFS,YTIME);
+iFinEneConsPrevYear(runCy,EFS,YTIME)$(not An(YTIME)) = imFinEneCons(runCy,EFS,YTIME);
 
 *'                **Interdependent Variables**
 
 *---
-VMRenValue.L(YTIME) = 1;
-VMRenValue.FX(YTIME) = 0 ;
+VmRenValue.L(YTIME) = 1;
+VmRenValue.FX(YTIME) = 0 ;
 *---
-VMElecConsHeatPla.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = iMFuelConsPerFueSub(runCy,INDDOM,"ELC",YTIME)*(1-iMShrNonSubElecInTotElecDem(runCy,INDDOM))*iShrHeatPumpElecCons(runCy,INDDOM);
+VmElecConsHeatPla.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = imFuelConsPerFueSub(runCy,INDDOM,"ELC",YTIME)*(1-imShrNonSubElecInTotElecDem(runCy,INDDOM))*iShrHeatPumpElecCons(runCy,INDDOM);
 * Compute electricity consumed in heatpump plants, QElecConsHeatPla(runCy,INDDOM,YTIME)$time(ytime).
-VMElecConsHeatPla.FX(runCy,INDDOM,YTIME) = 1E-7;
+VmElecConsHeatPla.FX(runCy,INDDOM,YTIME) = 1E-7;
 *---
-VMCarVal.FX(runCy,"TRADE",YTIME) = iCarbValYrExog(runCy,YTIME);
-VMCarVal.FX(runCy,"NOTRADE",YTIME) = iCarbValYrExog(runCy,YTIME);
+VmCarVal.FX(runCy,"TRADE",YTIME) = iCarbValYrExog(runCy,YTIME);
+VmCarVal.FX(runCy,"NOTRADE",YTIME) = iCarbValYrExog(runCy,YTIME);
 *---
 openprom.optfile=1;
 *---

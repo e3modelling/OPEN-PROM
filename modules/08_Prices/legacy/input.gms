@@ -23,14 +23,14 @@ loop SBS do
          endloop;
 endloop;
 *---
-iWgtSecAvgPriFueCons(runCy,TRANSE,EF)$(SECTTECH(TRANSE,EF) $(not plugin(EF)) ) = (iMFuelConsPerFueSub(runCy,TRANSE,EF,"%fBaseY%") / iTotFinEneDemSubBaseYr(runCy,TRANSE,"%fBaseY%"))$iTotFinEneDemSubBaseYr(runCy,TRANSE,"%fBaseY%")
+iWgtSecAvgPriFueCons(runCy,TRANSE,EF)$(SECTTECH(TRANSE,EF) $(not plugin(EF)) ) = (imFuelConsPerFueSub(runCy,TRANSE,EF,"%fBaseY%") / iTotFinEneDemSubBaseYr(runCy,TRANSE,"%fBaseY%"))$iTotFinEneDemSubBaseYr(runCy,TRANSE,"%fBaseY%")
                                                + (1/iDiffFuelsInSec(TRANSE))$(not iTotFinEneDemSubBaseYr(runCy,TRANSE,"%fBaseY%"));
 *---
-iWgtSecAvgPriFueCons(runCy,NENSE,EF)$SECTTECH(NENSE,EF) = ( iMFuelConsPerFueSub(runCy,NENSE,EF,"%fBaseY%") / iTotFinEneDemSubBaseYr(runCy,NENSE,"%fBaseY%") )$iTotFinEneDemSubBaseYr(runCy,NENSE,"%fBaseY%")
+iWgtSecAvgPriFueCons(runCy,NENSE,EF)$SECTTECH(NENSE,EF) = ( imFuelConsPerFueSub(runCy,NENSE,EF,"%fBaseY%") / iTotFinEneDemSubBaseYr(runCy,NENSE,"%fBaseY%") )$iTotFinEneDemSubBaseYr(runCy,NENSE,"%fBaseY%")
                                              + (1/iDiffFuelsInSec(NENSE))$(not iTotFinEneDemSubBaseYr(runCy,NENSE,"%fBaseY%"));
 *---
-iWgtSecAvgPriFueCons(runCy,INDDOM,EF)$(SECTTECH(INDDOM,EF)$(not sameas(EF,"ELC"))) = ( iMFuelConsPerFueSub(runCy,INDDOM,EF,"%fBaseY%") / (iTotFinEneDemSubBaseYr(runCy,INDDOM,"%fBaseY%") - iMFuelConsPerFueSub(runCy,INDDOM,"ELC","%fBaseY%")) )$( iTotFinEneDemSubBaseYr(runCy,INDDOM,"%fBaseY%") - iMFuelConsPerFueSub(runCy,INDDOM,"ELC","%fBaseY%") )
-                                                                        + (1/(iDiffFuelsInSec(INDDOM)-1))$(not (iTotFinEneDemSubBaseYr(runCy,INDDOM,"%fBaseY%") - iMFuelConsPerFueSub(runCy,INDDOM,"ELC","%fBaseY%")));
+iWgtSecAvgPriFueCons(runCy,INDDOM,EF)$(SECTTECH(INDDOM,EF)$(not sameas(EF,"ELC"))) = ( imFuelConsPerFueSub(runCy,INDDOM,EF,"%fBaseY%") / (iTotFinEneDemSubBaseYr(runCy,INDDOM,"%fBaseY%") - imFuelConsPerFueSub(runCy,INDDOM,"ELC","%fBaseY%")) )$( iTotFinEneDemSubBaseYr(runCy,INDDOM,"%fBaseY%") - imFuelConsPerFueSub(runCy,INDDOM,"ELC","%fBaseY%") )
+                                                                        + (1/(iDiffFuelsInSec(INDDOM)-1))$(not (iTotFinEneDemSubBaseYr(runCy,INDDOM,"%fBaseY%") - imFuelConsPerFueSub(runCy,INDDOM,"ELC","%fBaseY%")));
 *---
 * Rescaling the weights
 iWgtSecAvgPriFueCons(runCy,SBS,EF)$(SECTTECH(SBS,EF) $sum(ef2$SECTTECH(SBS,EF),iWgtSecAvgPriFueCons(runCy,SBS,EF2))) = iWgtSecAvgPriFueCons(runCy,SBS,EF)/sum(ef2$SECTTECH(SBS,EF),iWgtSecAvgPriFueCons(runCy,SBS,EF2));

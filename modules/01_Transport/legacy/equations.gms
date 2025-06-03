@@ -32,7 +32,7 @@ Q01ActivGoodsTransp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANG(TRANSE) $runCy(allCy
            * prod(kpdl,
                   [(VMPriceFuelAvgSub(allCy,TRANSE,YTIME-ord(kpdl))/
                     VMPriceFuelAvgSub(allCy,TRANSE,YTIME-(ord(kpdl)+1)))/
-                    (iMCGI(allCy,YTIME)**(1/6))]**(iElastA(allCy,TRANSE,"c3",YTIME)*iMFPDL(TRANSE,KPDL))
+                    (imCGI(allCy,YTIME)**(1/6))]**(iElastA(allCy,TRANSE,"c3",YTIME)*imFPDL(TRANSE,KPDL))
                  )
          )$sameas(TRANSE,"GU")        !!trucks
          +
@@ -44,7 +44,7 @@ Q01ActivGoodsTransp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANG(TRANSE) $runCy(allCy
            * prod(kpdl,
                   [(VMPriceFuelAvgSub(allCy,TRANSE,YTIME-ord(kpdl))/
                     VMPriceFuelAvgSub(allCy,TRANSE,YTIME-(ord(kpdl)+1)))/
-                    (iMCGI(allCy,YTIME)**(1/6))]**(iElastA(allCy,TRANSE,"c3",YTIME)*iMFPDL(TRANSE,KPDL))
+                    (imCGI(allCy,YTIME)**(1/6))]**(iElastA(allCy,TRANSE,"c3",YTIME)*imFPDL(TRANSE,KPDL))
                  )
            * (V01ActivGoodsTransp(allCy,"GU",YTIME)/V01ActivGoodsTransp(allCy,"GU",YTIME-1))**iElastA(allCy,TRANSE,"c4",YTIME)
          )$(not sameas(TRANSE,"GU"));                      !!other freight transport
@@ -79,13 +79,13 @@ Q01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,E
          V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME-1) * prod(KPDL,
                      (
                         VMPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME-ord(KPDL))/VMPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME-(ord(KPDL)+1))
-                      )**(iElastA(allCy,TRANSE,"c5",YTIME)*iMFPDL(TRANSE,KPDL))
+                      )**(iElastA(allCy,TRANSE,"c5",YTIME)*imFPDL(TRANSE,KPDL))
           );
 
 *' This equation calculates the transportation cost per mean and consumer size in kEuro per vehicle. It involves several terms, including capital costs,
 *' variable costs, and fuel costs. The equation considers different technologies and their associated costs, as well as factors like the discount rate,
 *' specific fuel consumption, and annual .
-Q01CostTranspPerMeanConsSize(allCy,TRANSE,RCon,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $(ord(Rcon) le iMNcon(TRANSE)+1) $runCy(allCy))..
+Q01CostTranspPerMeanConsSize(allCy,TRANSE,RCon,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $(ord(Rcon) le imNcon(TRANSE)+1) $runCy(allCy))..
          V01CostTranspPerMeanConsSize(allCy,TRANSE,RCon,TTECH,YTIME)
          =E=
                        (
@@ -93,8 +93,8 @@ Q01CostTranspPerMeanConsSize(allCy,TRANSE,RCon,TTECH,YTIME)$(TIME(YTIME) $SECTTE
                            (iDisc(allCy,TRANSE,YTIME)*exp(iDisc(allCy,TRANSE,YTIME)*VMLft(allCy,TRANSE,TTECH,YTIME)))
                            /
                            (exp(iDisc(allCy,TRANSE,YTIME)*VMLft(allCy,TRANSE,TTECH,YTIME)) - 1)
-                         ) * iMCapCostTech(allCy,TRANSE,TTECH,YTIME)  * iMCGI(allCy,YTIME)
-                         + iMFixOMCostTech(allCy,TRANSE,TTECH,YTIME)  +
+                         ) * imCapCostTech(allCy,TRANSE,TTECH,YTIME)  * imCGI(allCy,YTIME)
+                         + imFixOMCostTech(allCy,TRANSE,TTECH,YTIME)  +
                          (
                            (sum(EF$TTECHtoEF(TTECH,EF),V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)*VMPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME)) )$(not PLUGIN(TTECH))
                            +
@@ -104,15 +104,15 @@ Q01CostTranspPerMeanConsSize(allCy,TRANSE,RCon,TTECH,YTIME)$(TIME(YTIME) $SECTTE
                              + iShareAnnMilePlugInHybrid(allCy,YTIME)*V01ConsSpecificFuel(allCy,TRANSE,TTECH,"ELC",YTIME)*VMPriceFuelSubsecCarVal(allCy,TRANSE,"ELC",YTIME)
                            )$PLUGIN(TTECH)
 
-                           + iMVarCostTech(allCy,TRANSE,TTECH,YTIME)
-                           + (VMRenValue(YTIME)/1000)$( not RENEF(TTECH))
+                           + imVarCostTech(allCy,TRANSE,TTECH,YTIME)
+                           + (VmRenValue(YTIME)/1000)$( not RENEF(TTECH))
                          )
-                         *  iMAnnCons(allCy,TRANSE,"smallest") * (iMAnnCons(allCy,TRANSE,"largest")/iMAnnCons(allCy,TRANSE,"smallest"))**((ord(Rcon)-1)/iMNcon(TRANSE))
+                         *  imAnnCons(allCy,TRANSE,"smallest") * (imAnnCons(allCy,TRANSE,"largest")/imAnnCons(allCy,TRANSE,"smallest"))**((ord(Rcon)-1)/imNcon(TRANSE))
                        );
 
 *' This equation calculates the transportation cost per mean and consumer size. It involves taking the inverse fourth power of the
 *' variable representing the transportation cost per mean and consumer size.
-Q01CostTranspPerVeh(allCy,TRANSE,rCon,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $(ord(rCon) le iMNcon(TRANSE)+1) $runCy(allCy))..
+Q01CostTranspPerVeh(allCy,TRANSE,rCon,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $(ord(rCon) le imNcon(TRANSE)+1) $runCy(allCy))..
          V01CostTranspPerVeh(allCy,TRANSE,rCon,TTECH,YTIME)
          =E=
          V01CostTranspPerMeanConsSize(allCy,TRANSE,rCon,TTECH,YTIME)**(-1);
@@ -120,14 +120,14 @@ Q01CostTranspPerVeh(allCy,TRANSE,rCon,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE
 *' This equation calculates the transportation cost, including the maturity factor. It involves multiplying the maturity factor for a specific technology
 *' and subsector by the transportation cost per vehicle for the mean and consumer size. The result is a variable representing the transportation cost,
 *' including the maturity factor.
-Q01CostTranspMatFac(allCy,TRANSE,RCon,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $(ord(rCon) le iMNcon(TRANSE)+1) $runCy(allCy))..
+Q01CostTranspMatFac(allCy,TRANSE,RCon,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $(ord(rCon) le imNcon(TRANSE)+1) $runCy(allCy))..
          V01CostTranspMatFac(allCy,TRANSE,RCon,TTECH,YTIME) 
          =E=
          iMatrFactor(allCy,TRANSE,TTECH,YTIME) * V01CostTranspPerVeh(allCy,TRANSE,rCon,TTECH,YTIME);
 
 *' This equation calculates the technology sorting based on variable cost. It involves the summation of transportation costs, including the maturity factor,
 *' for each technology and subsector. The result is a variable representing the technology sorting based on variable cost.
-Q01TechSortVarCost(allCy,TRANSE,rCon,YTIME)$(TIME(YTIME) $(ord(rCon) le iMNcon(TRANSE)+1) $runCy(allCy))..
+Q01TechSortVarCost(allCy,TRANSE,rCon,YTIME)$(TIME(YTIME) $(ord(rCon) le imNcon(TRANSE)+1) $runCy(allCy))..
          V01TechSortVarCost(allCy,TRANSE,rCon,YTIME)
                  =E=
          sum((TTECH)$SECTTECH(TRANSE,TTECH), V01CostTranspMatFac(allCy,TRANSE,rCon,TTECH,YTIME));
@@ -138,10 +138,10 @@ Q01TechSortVarCost(allCy,TRANSE,rCon,YTIME)$(TIME(YTIME) $(ord(rCon) le iMNcon(T
 Q01ShareTechTr(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runCy(allCy))..
          V01ShareTechTr(allCy,TRANSE,TTECH,YTIME)
          =E=
-         iMatrFactor(allCy,TRANSE,TTECH,YTIME) / iMCumDistrFuncConsSize(allCy,TRANSE)
-         * sum( Rcon$(ord(Rcon) le iMNcon(TRANSE)+1),
+         iMatrFactor(allCy,TRANSE,TTECH,YTIME) / imCumDistrFuncConsSize(allCy,TRANSE)
+         * sum( Rcon$(ord(Rcon) le imNcon(TRANSE)+1),
                 V01CostTranspPerVeh(allCy,TRANSE,RCon,TTECH,YTIME)
-                * iMDisFunConSize(allCy,TRANSE,RCon) / V01TechSortVarCost(allCy,TRANSE,RCon,YTIME)
+                * imDisFunConSize(allCy,TRANSE,RCon) / V01TechSortVarCost(allCy,TRANSE,RCon,YTIME)
               );
 
 *' This equation calculates the consumption of each technology in transport sectors. It considers various factors such as the lifetime of the technology,
@@ -256,7 +256,7 @@ Q01ActivPassTrnsp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANP(TRANSE) $runCy(allCy))
            prod(kpdl,
                   [(VMPriceFuelAvgSub(allCy,TRANSE,YTIME-ord(kpdl))/
                     VMPriceFuelAvgSub(allCy,TRANSE,YTIME-(ord(kpdl)+1)))/
-                    (iMCGI(allCy,YTIME)**(1/6))]**(iElastA(allCy,TRANSE,"c3",YTIME)*iMFPDL(TRANSE,KPDL))
+                    (imCGI(allCy,YTIME)**(1/6))]**(iElastA(allCy,TRANSE,"c3",YTIME)*imFPDL(TRANSE,KPDL))
                  )
          )$(NOT (sameas(TRANSE,"PC") or sameas(TRANSE,"PA")));
 

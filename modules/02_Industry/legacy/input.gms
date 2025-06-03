@@ -22,10 +22,10 @@ iVarCostChp(allCy,DSBS,CHP,YTIME)                          "Variable (other than
 iBoiEffChp(allCy,CHP,YTIME)                                "Boiler efficiency (typical) used in adjusting CHP efficiency ()"
 ;
 *---
-iTotFinEneDemSubBaseYr(runCy,TRANSE,YTIME) = sum(EF$(SECTTECH(TRANSE,EF) $(not plugin(EF))), iMFuelConsPerFueSub(runCy,TRANSE,EF,YTIME));
-iTotFinEneDemSubBaseYr(runCy,INDSE,YTIME)   = SUM(EF$(SECTTECH(INDSE,EF)),iMFuelConsPerFueSub(runCy,INDSE,EF,YTIME));
-iTotFinEneDemSubBaseYr(runCy,DOMSE,YTIME)   = SUM(EF$(SECTTECH(DOMSE,EF)),iMFuelConsPerFueSub(runCy,DOMSE,EF,YTIME));
-iTotFinEneDemSubBaseYr(runCy,NENSE,YTIME)   = SUM(EF$(SECTTECH(NENSE,EF)),iMFuelConsPerFueSub(runCy,NENSE,EF,YTIME));
+iTotFinEneDemSubBaseYr(runCy,TRANSE,YTIME) = sum(EF$(SECTTECH(TRANSE,EF) $(not plugin(EF))), imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME));
+iTotFinEneDemSubBaseYr(runCy,INDSE,YTIME)   = SUM(EF$(SECTTECH(INDSE,EF)),imFuelConsPerFueSub(runCy,INDSE,EF,YTIME));
+iTotFinEneDemSubBaseYr(runCy,DOMSE,YTIME)   = SUM(EF$(SECTTECH(DOMSE,EF)),imFuelConsPerFueSub(runCy,DOMSE,EF,YTIME));
+iTotFinEneDemSubBaseYr(runCy,NENSE,YTIME)   = SUM(EF$(SECTTECH(NENSE,EF)),imFuelConsPerFueSub(runCy,NENSE,EF,YTIME));
 *---
 iExogDemOfBiomass(runCy,DOMSE,YTIME) = 0;
 *---

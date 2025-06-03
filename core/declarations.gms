@@ -20,42 +20,42 @@ iNetImp(allCy,EFS,YTIME)                                   "Net imports (Mtoe)"
 ODummyObj                                                  "Parameter saving objective function"
 
 *'                **Interdependent Parameters**
-iMCGI(allCy,YTIME)                                         "Capital Goods Index (defined as CGI(Scenario)/CGI(Baseline)) (1)"
-iMFPDL(SBS,KPDL)                                           "Polynomial Distribution Lags (PDL) Coefficients per subsector (1)"
-iMPlantEffByType(allCy,PGALL,YTIME)                        "Plant efficiency per plant type (1)"
-iMCo2EmiFac(allCy,SBS,EF,YTIME)                            "CO2 emission factors per subsector (kgCO2/kgoe fuel burned)"
-iMNcon(SBS)                                                "Number of consumers (1)"
-iMDisFunConSize(allCy,DSBS,rCon)                           "Distribution function of consumer size groups (1)"
-iMAnnCons(allCy,DSBS,conSet)                               "Annual consumption of the smallest,modal,largest consumer, average for all countries (various)"
+imCGI(allCy,YTIME)                                         "Capital Goods Index (defined as CGI(Scenario)/CGI(Baseline)) (1)"
+imFPDL(SBS,KPDL)                                           "Polynomial Distribution Lags (PDL) Coefficients per subsector (1)"
+imPlantEffByType(allCy,PGALL,YTIME)                        "Plant efficiency per plant type (1)"
+imCo2EmiFac(allCy,SBS,EF,YTIME)                            "CO2 emission factors per subsector (kgCO2/kgoe fuel burned)"
+imNcon(SBS)                                                "Number of consumers (1)"
+imDisFunConSize(allCy,DSBS,rCon)                           "Distribution function of consumer size groups (1)"
+imAnnCons(allCy,DSBS,conSet)                               "Annual consumption of the smallest,modal,largest consumer, average for all countries (various)"
                                                                 !! For passenger cars (Million km/vehicle)
                                                                 !! For other passenger tranportation modes (Mpkm/vehicle)
                                                                 !! For goods transport, (Mtkm/vehicle)  
-iMCumDistrFuncConsSize(allCy,DSBS)                         "Cummulative distribution function of consumer size groups (1)"
-iMRateLossesFinCons(allCy,EF,YTIME)                        "Rate of losses over Available for Final Consumption (1)"  
-iMFuelExprts(allCy,EF,YTIME)	                           "Fuel Exports (Mtoe)"
-iMCO2CaptRate(allCy,PGALL,YTIME)	                       "Plant CO2 capture rate (1)"		
-iMEffValueInDollars(allCy,SBS,YTIME)	                   "Efficiency value (US$2015/toe)" 	
-iMShrNonSubElecInTotElecDem(allCy,SBS)	                   "Share of non substitutable electricity in total electricity demand per subsector (1)"		
-iMDistrLosses(allCy,EF,YTIME)	                           "Distribution Losses (Mtoe)"		
-iMFinEneCons(allCy,EF,YTIME)	                           "Final energy consumption (Mtoe)"		
-iMFuelImports(allCy,EF,YTIME)	                           "Fuel Imports (Mtoe)"							
-iMVarCostTech(allCy,SBS,EF,YTIME)	                       "Variable Cost of technology ()"
+imCumDistrFuncConsSize(allCy,DSBS)                         "Cummulative distribution function of consumer size groups (1)"
+imRateLossesFinCons(allCy,EF,YTIME)                        "Rate of losses over Available for Final Consumption (1)"  
+imFuelExprts(allCy,EF,YTIME)	                           "Fuel Exports (Mtoe)"
+imCO2CaptRate(allCy,PGALL,YTIME)	                       "Plant CO2 capture rate (1)"		
+imEffValueInDollars(allCy,SBS,YTIME)	                   "Efficiency value (US$2015/toe)" 	
+imShrNonSubElecInTotElecDem(allCy,SBS)	                   "Share of non substitutable electricity in total electricity demand per subsector (1)"		
+imDistrLosses(allCy,EF,YTIME)	                           "Distribution Losses (Mtoe)"		
+imFinEneCons(allCy,EF,YTIME)	                           "Final energy consumption (Mtoe)"		
+imFuelImports(allCy,EF,YTIME)	                           "Fuel Imports (Mtoe)"							
+imVarCostTech(allCy,SBS,EF,YTIME)	                       "Variable Cost of technology ()"
                                                                 !! For transport (kUS$2015/vehicle)
                                                                 !! For Industrial sectors, except Iron and Steel (US$2015/toe-year)
                                                                 !! For Iron and Steel  (US$2015/tn-of-steel)
                                                                 !! For Domestic sectors  (US$2015/toe-year)
-iMFixOMCostTech(allCy,SBS,EF,YTIME)                        "Fixed O&M cost of technology (US$2015/toe-year)"                                   
+imFixOMCostTech(allCy,SBS,EF,YTIME)                        "Fixed O&M cost of technology (US$2015/toe-year)"                                   
                                                                 !! Fixed O&M cost of technology for Transport (kUS$2015/vehicle)
                                                                 !! Fixed O&M cost of technology for Industrial sectors-except Iron and Steel (US$2015/toe-year)"                                            
                                                                 !! Fixed O&M cost of technology for Iron and Steel (US$2015/tn-of-steel)"                                          
                                                                 !! Fixed O&M cost of technology for Domestic sectors (US$2015/toe-year)"
-iMUsfEneConvSubTech(allCy,SBS,EF,YTIME)                    "Useful Energy Conversion Factor per subsector and technology (1)"
-iMCapCostTech(allCy,SBS,EF,YTIME)                          "Capital Cost of technology (various)"
+imUsfEneConvSubTech(allCy,SBS,EF,YTIME)                    "Useful Energy Conversion Factor per subsector and technology (1)"
+imCapCostTech(allCy,SBS,EF,YTIME)                          "Capital Cost of technology (various)"
                                                                 !! - For transport is expressed in kUS$2015 per vehicle
                                                                 !! - For Industrial sectors (except Iron and Steel) is expressed in kUS$2015/toe-year
                                                                 !! - For Iron and Steel is expressed in kUS$2015/tn-of-steel
                                                                 !! - For Domestic Sectors is expressed in kUS$2015/toe-year
-iMFuelConsPerFueSub(allCy,SBS,EF,YTIME)	                   "Fuel consumption per fuel and subsector (Mtoe)"
+imFuelConsPerFueSub(allCy,SBS,EF,YTIME)	                   "Fuel consumption per fuel and subsector (Mtoe)"
 ;
 
 Equations
@@ -68,21 +68,21 @@ Variables
 
 *' *** Miscellaneous
 vDummyObj                                                  "Dummy maximisation variable (1)"
-VMElecConsHeatPla(allCy,DSBS,YTIME)                        "Electricity consumed in heatpump plants (Mtoe)"
+VmElecConsHeatPla(allCy,DSBS,YTIME)                        "Electricity consumed in heatpump plants (Mtoe)"
 ;
 
 Positive Variables
-VMCarVal(allCy,NAP,YTIME)                                  "Carbon prices for all countries (US$2015/tn CO2)"
-VMRenValue(YTIME)                                          "Renewable value (US$2015/KWh)"
+VmCarVal(allCy,NAP,YTIME)                                  "Carbon prices for all countries (US$2015/tn CO2)"
+VmRenValue(YTIME)                                          "Renewable value (US$2015/KWh)"
 ;
 
 Scalars
-sMTWhToMtoe                                                "TWh to Mtoe conversion factor" /0.086/
-sMElecToSteRatioChp                                        "Technical maximum of electricity to steam ratio in CHP plants" /1.15/
-sMGwToTwhPerYear                                           "convert GW mean power into TWh/y" /8.76/
+smTWhToMtoe                                                "TWh to Mtoe conversion factor" /0.086/
+smElecToSteRatioChp                                        "Technical maximum of electricity to steam ratio in CHP plants" /1.15/
+smGwToTwhPerYear                                           "convert GW mean power into TWh/y" /8.76/
 sIter                                                      "time step iterator" /0/
 sSolverTryMax                                              "maximum attempts to solve each time step" /%SolverTryMax%/
 sModelStat                                                 "helper parameter for solver status"
-sMFracElecPriChp                                           "Fraction of Electricity Price at which a CHP sells electricity to network" /0.3/
+smFracElecPriChp                                           "Fraction of Electricity Price at which a CHP sells electricity to network" /0.3/
 sCY                                                        "country iterator" /0/
 ;

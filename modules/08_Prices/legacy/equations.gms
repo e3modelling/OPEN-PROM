@@ -20,7 +20,7 @@ Q08PriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF) $TIME(YTIME) $(no
          VMPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)
                  =E=
          (VMPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1) +
-          iMCo2EmiFac(allCy,SBS,EF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,SBS),(VMCarVal(allCy,NAP,YTIME)))/1000
+          imCo2EmiFac(allCy,SBS,EF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,SBS),(VmCarVal(allCy,NAP,YTIME)))/1000
          )$( not (ELCEF(EF) or HEATPUMP(EF) or ALTEF(EF)))
          +
          (
@@ -28,9 +28,9 @@ Q08PriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF) $TIME(YTIME) $(no
          )
          +
          (
-           ( VMPriceElecIndResConsu(allCy,"i",YTIME)$INDTRANS(SBS)+VMPriceElecIndResConsu(allCy,"r",YTIME)$RESIDENT(SBS))/sMTWhToMtoe
+           ( VMPriceElecIndResConsu(allCy,"i",YTIME)$INDTRANS(SBS)+VMPriceElecIndResConsu(allCy,"r",YTIME)$RESIDENT(SBS))/smTWhToMtoe
             +
-            ((iMEffValueInDollars(allCy,SBS,YTIME))/1000)$DSBS(SBS)
+            ((imEffValueInDollars(allCy,SBS,YTIME))/1000)$DSBS(SBS)
          )$(ELCEF(EF) or HEATPUMP(EF))
          +
          (
@@ -69,14 +69,14 @@ Q08PriceElecIndResConsu(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..  !! The
         (1 + iVAT(allCy,YTIME)) *
         (
            (
-             (VMPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)*sMTWhToMtoe)$TFIRST(YTIME-1) +
+             (VMPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
              (
                 VMCostPowGenAvgLng(allCy,"i",YTIME-1)
               )$(not TFIRST(YTIME-1))
            )$ISET(ESET)
         +
            (
-             (VMPriceFuelSubsecCarVal(allCy,"HOU","ELC",YTIME-1)*sMTWhToMtoe)$TFIRST(YTIME-1) +
+             (VMPriceFuelSubsecCarVal(allCy,"HOU","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
              (
                VMCostPowGenAvgLng(allCy,"r",YTIME-1) 
              )$(not TFIRST(YTIME-1))
@@ -92,14 +92,14 @@ Q08PriceElecIndResNoCliPol(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..   !!
         (1 + iVAT(allCy, YTIME)) *
         (
            (
-             (VMPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)*sMTWhToMtoe)$TFIRST(YTIME-1) +
+             (VMPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
              (
                V04CostPowGenLonNoClimPol(allCy,"i",YTIME-1) 
               )$(not TFIRST(YTIME-1))
            )$ISET(ESET)
         +
            (
-             (VMPriceFuelSubsecCarVal(allCy,"HOU","ELC",YTIME-1)*sMTWhToMtoe)$TFIRST(YTIME-1) +
+             (VMPriceFuelSubsecCarVal(allCy,"HOU","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
              (
                 V04CostPowGenLonNoClimPol(allCy,"r",YTIME-1) 
              )$(not TFIRST(YTIME-1))
@@ -115,9 +115,9 @@ Q08PriceElecIndResNoCliPol(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..   !!
 Q08PriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS))  $SECTTECH(DSBS,EF) $runCy(allCy))..
         VMPriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)
                 =E=   
-             (((VMPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME) + (VMRenValue(YTIME)/1000)$(not RENEF(EF))+iMVarCostTech(allCy,DSBS,EF,YTIME)/1000)/iMUsfEneConvSubTech(allCy,DSBS,EF,YTIME)- 
-               (0$(not CHP(EF)) + (VMPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME)*sMFracElecPriChp*VMPriceElecInd(allCy,YTIME))$CHP(EF)))  + SQRT( SQR(((VMPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME)+iMVarCostTech(allCy,DSBS,EF,YTIME)/1000)/iMUsfEneConvSubTech(allCy,DSBS,EF,YTIME)- 
-              (0$(not CHP(EF)) + (VMPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME)*sMFracElecPriChp*VMPriceElecInd(allCy,YTIME))$CHP(EF))))  ) )/2;
+             (((VMPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME) + (VmRenValue(YTIME)/1000)$(not RENEF(EF))+imVarCostTech(allCy,DSBS,EF,YTIME)/1000)/imUsfEneConvSubTech(allCy,DSBS,EF,YTIME)- 
+               (0$(not CHP(EF)) + (VMPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME)*smFracElecPriChp*VMPriceElecInd(allCy,YTIME))$CHP(EF)))  + SQRT( SQR(((VMPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME)+imVarCostTech(allCy,DSBS,EF,YTIME)/1000)/imUsfEneConvSubTech(allCy,DSBS,EF,YTIME)- 
+              (0$(not CHP(EF)) + (VMPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME)*smFracElecPriChp*VMPriceElecInd(allCy,YTIME))$CHP(EF))))  ) )/2;
 
 *' This equation determines the electricity industry prices based on an estimated electricity index and a technical maximum of the electricity to steam ratio
 *' in Combined Heat and Power plants. The industry prices are calculated as a function of the estimated electricity index and the specified maximum
@@ -127,4 +127,4 @@ Q08PriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS))  $SE
 *' technical constraints, providing a realistic representation of the electricity market in the industrial sector.
 Q08PriceElecInd(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VMPriceElecInd(allCy,YTIME) =E=
-        ( V02IndxElecIndPrices(allCy,YTIME) + sMElecToSteRatioChp - SQRT( SQR(V02IndxElecIndPrices(allCy,YTIME)-sMElecToSteRatioChp)  ) )/2;
+        ( V02IndxElecIndPrices(allCy,YTIME) + smElecToSteRatioChp - SQRT( SQR(V02IndxElecIndPrices(allCy,YTIME)-smElecToSteRatioChp)  ) )/2;

@@ -10,10 +10,10 @@ V02SortTechVarCost.L(runCy,DSBS,rCon,YTIME) = 0.00000001;
 V02ShareTechNewEquip.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF)$(not An(YTIME))) = 0;
 *---
 VMConsFuel.L(runCy,DSBS,EF,YTIME) = 0.0000000001;
-VMConsFuel.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $(not HEATPUMP(EF)) $(not TRANSE(DSBS)) $(not An(YTIME))) = iMFuelConsPerFueSub(runCy,DSBS,EF,YTIME);
+VMConsFuel.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $(not HEATPUMP(EF)) $(not TRANSE(DSBS)) $(not An(YTIME))) = imFuelConsPerFueSub(runCy,DSBS,EF,YTIME);
 *---
 VMConsElecNonSubIndTert.L(runCy,DSBS,YTIME)=0.1;
-VMConsElecNonSubIndTert.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = iMFuelConsPerFueSub(runCy,INDDOM,"ELC",YTIME) * iMShrNonSubElecInTotElecDem(runCy,INDDOM);
+VMConsElecNonSubIndTert.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = imFuelConsPerFueSub(runCy,INDDOM,"ELC",YTIME) * imShrNonSubElecInTotElecDem(runCy,INDDOM);
 *---
 *vMConsTotElecInd.FX(runCy,YTIME)$(not An(YTIME))= SUM(INDSE,VMConsElecNonSubIndTert.l(runCy,INDSE,YTIME));
 *---
@@ -24,9 +24,9 @@ VMDemFinSubFuelSubsec.FX(runCy,"HOU",YTIME)$(not An(YTIME)) = max(iTotFinEneDemS
 *vMDemFinSubFuelInd.FX(runCy,YTIME)$(not An(YTIME))= SUM(INDSE,VMDemFinSubFuelSubsec.L(runCy,INDSE,YTIME));
 *---
 VMConsFuelInclHP.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $(not TRANSE(DSBS)) $(not An(YTIME))) =
-(iMFuelConsPerFueSub(runCy,DSBS,EF,YTIME))$((not ELCEF(EF)) $(not HEATPUMP(EF)))
-+(VMElecConsHeatPla.L(runCy,DSBS,YTIME)*iMUsfEneConvSubTech(runCy,DSBS,"HEATPUMP",YTIME))$HEATPUMP(EF)+
-(iMFuelConsPerFueSub(runCy,DSBS,EF,YTIME)-VMElecConsHeatPla.L(runCy,DSBS,YTIME))$ELCEF(EF)
+(imFuelConsPerFueSub(runCy,DSBS,EF,YTIME))$((not ELCEF(EF)) $(not HEATPUMP(EF)))
++(VmElecConsHeatPla.L(runCy,DSBS,YTIME)*imUsfEneConvSubTech(runCy,DSBS,"HEATPUMP",YTIME))$HEATPUMP(EF)+
+(imFuelConsPerFueSub(runCy,DSBS,EF,YTIME)-VmElecConsHeatPla.L(runCy,DSBS,YTIME))$ELCEF(EF)
 +1e-7$(H2EF(EF) or sameas("STE1AH2F",EF));
 *---
 VMConsRemSubEquipSubSec.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $(not An(ytime))) =

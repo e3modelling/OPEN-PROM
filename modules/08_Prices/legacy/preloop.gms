@@ -21,8 +21,8 @@ VMPriceFuelSubsecCarVal.FX(runCy,INDDOM,"HEATPUMP",YTIME)$(SECTTECH(INDDOM,"HEAT
 VMPriceFuelSubsecCarVal.FX(runCy,"H2P",EF,YTIME)$(SECTTECH("H2P",EF)$(not An(YTIME))) = VMPriceFuelSubsecCarVal.L(runCy,"PG",EF,YTIME);
 VMPriceFuelSubsecCarVal.FX(runCy,"H2P","ELC",YTIME)$(not An(YTIME))= VMPriceFuelSubsecCarVal.L(runCy,"OI","ELC",YTIME);
 *---
-VMPriceElecIndResConsu.FX(runCy,"i",YTIME)$(not An(YTIME)) = VMPriceFuelSubsecCarVal.L(runCy,"OI","ELC",YTIME)*sMTWhToMtoe;
-VMPriceElecIndResConsu.FX(runCy,"r",YTIME)$(not An(YTIME)) = VMPriceFuelSubsecCarVal.L(runCy,"HOU","ELC",YTIME)*sMTWhToMtoe;
+VMPriceElecIndResConsu.FX(runCy,"i",YTIME)$(not An(YTIME)) = VMPriceFuelSubsecCarVal.L(runCy,"OI","ELC",YTIME)*smTWhToMtoe;
+VMPriceElecIndResConsu.FX(runCy,"r",YTIME)$(not An(YTIME)) = VMPriceFuelSubsecCarVal.L(runCy,"HOU","ELC",YTIME)*smTWhToMtoe;
 *---
 VMPriceFuelAvgSub.L(runCy,DSBS,YTIME) = 0.1;
 VMPriceFuelAvgSub.FX(runCy,DSBS,YTIME)$(not An(YTIME)) = sum(EF$SECTTECH(DSBS,EF), iWgtSecAvgPriFueCons(runCy,DSBS,EF) * iFuelPrice(runCy,DSBS,EF,YTIME));
@@ -39,8 +39,8 @@ VMPriceElecInd.L(runCy,YTIME)= 0.9;
 VMPriceElecInd.FX(runCy,YTIME)$TFIRST(YTIME) = iElecIndex(runCy,YTIME);
 *---
 VMPriceFuelSubsecCHP.FX(runCy,DSBS,EF,YTIME)$((not An(YTIME)) $(not TRANSE(DSBS))  $SECTTECH(DSBS,EF)) =
-(((VMPriceFuelSubsecCarVal.L(runCy,DSBS,EF,YTIME)+iMVarCostTech(runCy,DSBS,EF,YTIME)/1000)/iMUsfEneConvSubTech(runCy,DSBS,EF,YTIME)- 
-(0$(not CHP(EF)) + (VMPriceFuelSubsecCarVal.L(runCy,"OI","ELC",YTIME)*sMFracElecPriChp*iElecIndex(runCy,"2010"))$CHP(EF))) + (0.003) + 
-SQRT( SQR(((VMPriceFuelSubsecCarVal.L(runCy,DSBS,EF,YTIME)+iMVarCostTech(runCy,DSBS,EF,YTIME)/1000)/iMUsfEneConvSubTech(runCy,DSBS,EF,YTIME)- (0$(not CHP(EF)) + 
-(VMPriceFuelSubsecCarVal.L(runCy,"OI","ELC",YTIME)*sMFracElecPriChp*iElecIndex(runCy,"2010"))$CHP(EF)))-(0.003)) + SQR(1e-7) ) )/2;
+(((VMPriceFuelSubsecCarVal.L(runCy,DSBS,EF,YTIME)+imVarCostTech(runCy,DSBS,EF,YTIME)/1000)/imUsfEneConvSubTech(runCy,DSBS,EF,YTIME)- 
+(0$(not CHP(EF)) + (VMPriceFuelSubsecCarVal.L(runCy,"OI","ELC",YTIME)*smFracElecPriChp*iElecIndex(runCy,"2010"))$CHP(EF))) + (0.003) + 
+SQRT( SQR(((VMPriceFuelSubsecCarVal.L(runCy,DSBS,EF,YTIME)+imVarCostTech(runCy,DSBS,EF,YTIME)/1000)/imUsfEneConvSubTech(runCy,DSBS,EF,YTIME)- (0$(not CHP(EF)) + 
+(VMPriceFuelSubsecCarVal.L(runCy,"OI","ELC",YTIME)*smFracElecPriChp*iElecIndex(runCy,"2010"))$CHP(EF)))-(0.003)) + SQR(1e-7) ) )/2;
 *---

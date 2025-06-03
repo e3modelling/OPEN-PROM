@@ -89,10 +89,10 @@ NGS 2.336234395,
 OGS 3.207089028,
 BMSWAS 0/;
 *---
-iMCo2EmiFac(runCy,SBS,EF,YTIME) = iCo2EmiFacAllSbs(EF);
-iMCo2EmiFac(runCy,"IS","HCL",YTIME) = iCo2EmiFacAllSbs("SLD"); !! This is the assignment for coke
-iMCo2EmiFac(runCy,"H2P","NGS",YTIME) = 3.107;
-iMCo2EmiFac(runCy,"H2P","BMSWAS",YTIME) = 0.497;
+imCo2EmiFac(runCy,SBS,EF,YTIME) = iCo2EmiFacAllSbs(EF);
+imCo2EmiFac(runCy,"IS","HCL",YTIME) = iCo2EmiFacAllSbs("SLD"); !! This is the assignment for coke
+imCo2EmiFac(runCy,"H2P","NGS",YTIME) = 3.107;
+imCo2EmiFac(runCy,"H2P","BMSWAS",YTIME) = 0.497;
 *---
 parameter iElaSubData(DSBS)       "Elasticities by subsector (1)" /
 PCH	2
@@ -117,9 +117,9 @@ parameter iConsSizeDistHeat(conSet)               "Consumer sizes for district h
                                                                                              modal    0.595709528,
                                                                                              largest 0.833993339/;
 *---
-table iMRateLossesFinCons(allCy,EF,YTIME)               "Rate of losses over Available for Final Consumption (1)"
+table imRateLossesFinCons(allCy,EF,YTIME)               "Rate of losses over Available for Final Consumption (1)"
 $ondelim
-$include "./iMRateLossesFinCons.csv"
+$include "./imRateLossesFinCons.csv"
 $offdelim
 ;
 *---
@@ -526,104 +526,104 @@ AG   0.2078 0.9     0.00001
 iShrHeatPumpElecCons(runCy,INDSE) = iIndChar(runCy,INDSE,"SH_HPELC");
 iShrHeatPumpElecCons(runCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(DOMSE,"SH_HPELC");
 *---
-iMFuelExprts(runCy,EFS,YTIME) = iSuppExports(runCy,EFS,YTIME);
+imFuelExprts(runCy,EFS,YTIME) = iSuppExports(runCy,EFS,YTIME);
 *iTransfInpGasworks(runCy,EFS,YTIME)= iSuppTransfInputPatFuel(EFS,YTIME);
 *---
 *Calculation of consumer size groups and their distribution function
-iMNcon(TRANSE)$(sameas(TRANSE,"PC") or sameas(TRANSE,"GU")) = 10; !! 11 different consumer size groups for cars and trucks
-iMNcon(TRANSE)$(not (sameas(TRANSE,"PC") or sameas(TRANSE,"GU"))) = 1; !! 2 different consumer size groups for inland navigation, trains, busses and aviation
-iMNcon(INDSE) = 10; !! 11 different consumer size groups for industrial sectors
-iMNcon(DOMSE) = 10; !! 11 different consumer size groups for domestic and tertiary sectors
-iMNcon(NENSE) = 10; !! 11 different consumer size groups for non energy uses
-iMNcon("BU") = 2;   !! ... except bunkers .
+imNcon(TRANSE)$(sameas(TRANSE,"PC") or sameas(TRANSE,"GU")) = 10; !! 11 different consumer size groups for cars and trucks
+imNcon(TRANSE)$(not (sameas(TRANSE,"PC") or sameas(TRANSE,"GU"))) = 1; !! 2 different consumer size groups for inland navigation, trains, busses and aviation
+imNcon(INDSE) = 10; !! 11 different consumer size groups for industrial sectors
+imNcon(DOMSE) = 10; !! 11 different consumer size groups for domestic and tertiary sectors
+imNcon(NENSE) = 10; !! 11 different consumer size groups for non energy uses
+imNcon("BU") = 2;   !! ... except bunkers .
 *---
 * 11 vehicle mileage groups
 * 0.952 turned out to be a (constant) ratio between modal and average mileage through iterations in Excel
 *---
-iMAnnCons(runCy,'PC','smallest')= 0.5 * 0.952 * iTransChar(runCy,"KM_VEH","%fBaseY%") * 1000 * 1E-6;
-iMAnnCons(runCy,'PC' ,'modal')=0.952 * iTransChar(runCy,"KM_VEH","%fBaseY%") * 1000 * 1E-6;
-iMAnnCons(runCy,'PC' ,'largest')= 4 * 0.952 * iTransChar(runCy,"KM_VEH","%fBaseY%") * 1000 * 1E-6;
+imAnnCons(runCy,'PC','smallest')= 0.5 * 0.952 * iTransChar(runCy,"KM_VEH","%fBaseY%") * 1000 * 1E-6;
+imAnnCons(runCy,'PC' ,'modal')=0.952 * iTransChar(runCy,"KM_VEH","%fBaseY%") * 1000 * 1E-6;
+imAnnCons(runCy,'PC' ,'largest')= 4 * 0.952 * iTransChar(runCy,"KM_VEH","%fBaseY%") * 1000 * 1E-6;
 *---
 * modal value is assumed to be 2 tonnes/vehicle, min = 1/3*modal and max = 10*modal tkm.
 * 0.706 is the constant ratio of modal/average tkm through iterations in Excel
 *---
-iMAnnCons(runCy,'GU','smallest')=0.5 * 0.706 * iTransChar(runCy,"KM_VEH_TRUCK","%fBaseY%")* 1000 * 2 / 3  * 1E-6;
-iMAnnCons(runCy,'GU','modal')=0.706 * iTransChar(runCy,"KM_VEH_TRUCK","%fBaseY%") * 1000 * 2  * 1E-6;
-iMAnnCons(runCy,'GU','largest')=4 * 0.706 * iTransChar(runCy,"KM_VEH_TRUCK","%fBaseY%") * 1000 * 2 * 10  * 1E-6;
+imAnnCons(runCy,'GU','smallest')=0.5 * 0.706 * iTransChar(runCy,"KM_VEH_TRUCK","%fBaseY%")* 1000 * 2 / 3  * 1E-6;
+imAnnCons(runCy,'GU','modal')=0.706 * iTransChar(runCy,"KM_VEH_TRUCK","%fBaseY%") * 1000 * 2  * 1E-6;
+imAnnCons(runCy,'GU','largest')=4 * 0.706 * iTransChar(runCy,"KM_VEH_TRUCK","%fBaseY%") * 1000 * 2 * 10  * 1E-6;
 *---
-iMAnnCons(runCy,'PA','smallest')=40000 * 50 * 1E-6;
-iMAnnCons(runCy,'PA','modal')=400000 * 100 * 1E-6;
-iMAnnCons(runCy,'PA','largest')=800000 * 300 * 1E-6;
+imAnnCons(runCy,'PA','smallest')=40000 * 50 * 1E-6;
+imAnnCons(runCy,'PA','modal')=400000 * 100 * 1E-6;
+imAnnCons(runCy,'PA','largest')=800000 * 300 * 1E-6;
 *---
 * Size will not play a role in buses, trains, ships and aircraft
-* Following values are given only for the sake of uniformity, but iMDisFunConSize is not really calculated for non-road transport!
-iMAnnCons(runCy,'PB',"smallest") = 20000 * 5 * 1E-6;
-iMAnnCons(runCy,'PB',"modal") = 50000 * 15 * 1E-6;
-iMAnnCons(runCy,'PB',"largest") = 200000 * 50 * 1E-6;
+* Following values are given only for the sake of uniformity, but imDisFunConSize is not really calculated for non-road transport!
+imAnnCons(runCy,'PB',"smallest") = 20000 * 5 * 1E-6;
+imAnnCons(runCy,'PB',"modal") = 50000 * 15 * 1E-6;
+imAnnCons(runCy,'PB',"largest") = 200000 * 50 * 1E-6;
 *---
-iMAnnCons(runCy,'PT',"smallest") = 50000 * 50 * 1E-6;
-iMAnnCons(runCy,'PT',"modal") = 200000 * 150 * 1e-6;
-iMAnnCons(runCy,'PT',"largest") = 400000 * 500 * 1E-6;
+imAnnCons(runCy,'PT',"smallest") = 50000 * 50 * 1E-6;
+imAnnCons(runCy,'PT',"modal") = 200000 * 150 * 1e-6;
+imAnnCons(runCy,'PT',"largest") = 400000 * 500 * 1E-6;
 *---
-iMAnnCons(runCy,'GT',"smallest") = 50000 * 20 * 1E-6;
-iMAnnCons(runCy,'GT',"modal") = 200000 * 200 * 1e-6;
-iMAnnCons(runCy,'GT',"largest") = 400000 * 500 * 1E-6;
+imAnnCons(runCy,'GT',"smallest") = 50000 * 20 * 1E-6;
+imAnnCons(runCy,'GT',"modal") = 200000 * 200 * 1e-6;
+imAnnCons(runCy,'GT',"largest") = 400000 * 500 * 1E-6;
 *---
-iMAnnCons(runCy,'PN',"smallest") = 10000 * 50 * 1E-6;
-iMAnnCons(runCy,'PN',"modal") = 50000 * 100 * 1e-6;
-iMAnnCons(runCy,'PN',"largest") = 100000 * 500 * 1E-6;
+imAnnCons(runCy,'PN',"smallest") = 10000 * 50 * 1E-6;
+imAnnCons(runCy,'PN',"modal") = 50000 * 100 * 1e-6;
+imAnnCons(runCy,'PN',"largest") = 100000 * 500 * 1E-6;
 *---
-iMAnnCons(runCy,'GN',"smallest") = 10000 * 20 * 1E-6;
-iMAnnCons(runCy,'GN',"modal") = 50000 * 300 * 1e-6;
-iMAnnCons(runCy,'GN',"largest") = 100000 * 1000 * 1E-6;
-iMAnnCons(runCy,INDSE,"smallest") = 0.2  ;
-iMAnnCons(runCy,INDSE,"largest") = 0.9 ;
+imAnnCons(runCy,'GN',"smallest") = 10000 * 20 * 1E-6;
+imAnnCons(runCy,'GN',"modal") = 50000 * 300 * 1e-6;
+imAnnCons(runCy,'GN',"largest") = 100000 * 1000 * 1E-6;
+imAnnCons(runCy,INDSE,"smallest") = 0.2  ;
+imAnnCons(runCy,INDSE,"largest") = 0.9 ;
 * assuming an average utilisation rate of 0.6 for iron & steel and 0.5 for other industry (see iterations in Excel):
-iMAnnCons(runCy,"IS","modal") = 0.587;
-iMAnnCons(runCy,INDSE,"modal")$(not sameas(INDSE,"IS")) = 0.487;
+imAnnCons(runCy,"IS","modal") = 0.587;
+imAnnCons(runCy,INDSE,"modal")$(not sameas(INDSE,"IS")) = 0.487;
 *---
-iMAnnCons(runCy,DOMSE,"smallest") = iConsSizeDistHeat("smallest")  ;
-iMAnnCons(runCy,DOMSE,"largest") = iConsSizeDistHeat("largest") ;
-iMAnnCons(runCy,DOMSE,"modal") = iConsSizeDistHeat("modal");
+imAnnCons(runCy,DOMSE,"smallest") = iConsSizeDistHeat("smallest")  ;
+imAnnCons(runCy,DOMSE,"largest") = iConsSizeDistHeat("largest") ;
+imAnnCons(runCy,DOMSE,"modal") = iConsSizeDistHeat("modal");
 *---
-iMAnnCons(runCy,NENSE,"smallest") = 0.2  ;
-iMAnnCons(runCy,NENSE,"largest") = 0.9 ;
+imAnnCons(runCy,NENSE,"smallest") = 0.2  ;
+imAnnCons(runCy,NENSE,"largest") = 0.9 ;
 * assuming an average utilisation rate of 0.5 for non-energy uses:
-iMAnnCons(runCy,NENSE,"modal") = 0.487 ;
+imAnnCons(runCy,NENSE,"modal") = 0.487 ;
 *---
-iMAnnCons(runCy,"BU","smallest") = 0.2 ;
-iMAnnCons(runCy,"BU","largest") = 1 ;
-iMAnnCons(runCy,"BU","modal") = 0.5 ;
+imAnnCons(runCy,"BU","smallest") = 0.2 ;
+imAnnCons(runCy,"BU","largest") = 1 ;
+imAnnCons(runCy,"BU","modal") = 0.5 ;
 *---
 * Consumer size groups distribution function
 Loop (runCy,DSBS) DO
-     Loop rCon$(ord(rCon) le iMNcon(DSBS)+1) DO
-          iMDisFunConSize(runCy,DSBS,rCon) =
-                 Prod(nSet$(ord(Nset) le iMNcon(DSBS)),ord(nSet))
+     Loop rCon$(ord(rCon) le imNcon(DSBS)+1) DO
+          imDisFunConSize(runCy,DSBS,rCon) =
+                 Prod(nSet$(ord(Nset) le imNcon(DSBS)),ord(nSet))
                  /
                  (
                   (
-                   Prod(nSet$(ord(nSet) le iMNcon(DSBS)-(ord(rCon)-1)),ord(nSet))$(ord(rCon) lt iMNcon(DSBS)+1)
-                       +1$(ord(rCon) eq iMNcon(DSBS)+1)
+                   Prod(nSet$(ord(nSet) le imNcon(DSBS)-(ord(rCon)-1)),ord(nSet))$(ord(rCon) lt imNcon(DSBS)+1)
+                       +1$(ord(rCon) eq imNcon(DSBS)+1)
                    )
                    *
                    (
                       Prod(nSet$(ord(nSet) le ord(rCon)-1),ord(nSet))$(ord(rCon) ne 1)+1$(ord(rCon) eq 1))
                  )
                  *
-                 Power(log(iMAnnCons(runCy,DSBS,"modal")/iMAnnCons(runCy,DSBS,"smallest")),ord(rCon)-1)
+                 Power(log(imAnnCons(runCy,DSBS,"modal")/imAnnCons(runCy,DSBS,"smallest")),ord(rCon)-1)
                  *
-                 Power(log(iMAnnCons(runCy,DSBS,"largest")/iMAnnCons(runCy,DSBS,"modal")),iMNcon(DSBS)-(ord(rCon)-1))
+                 Power(log(imAnnCons(runCy,DSBS,"largest")/imAnnCons(runCy,DSBS,"modal")),imNcon(DSBS)-(ord(rCon)-1))
                  /
-                (Power(log(iMAnnCons(runCy,DSBS,"largest")/iMAnnCons(runCy,DSBS,"smallest")),iMNcon(DSBS)) )
+                (Power(log(imAnnCons(runCy,DSBS,"largest")/imAnnCons(runCy,DSBS,"smallest")),imNcon(DSBS)) )
                 *
-                iMAnnCons(runCy,DSBS,"smallest")*(iMAnnCons(runCy,DSBS,"largest")/iMAnnCons(runCy,DSBS,"smallest"))**((ord(rCon)-1)/iMNcon(DSBS))
+                imAnnCons(runCy,DSBS,"smallest")*(imAnnCons(runCy,DSBS,"largest")/imAnnCons(runCy,DSBS,"smallest"))**((ord(rCon)-1)/imNcon(DSBS))
 ;
      ENDLOOP;
 ENDLOOP;
 *---
-iMCumDistrFuncConsSize(runCy,DSBS) = sum(rCon, iMDisFunConSize(runCy,DSBS,rCon));
-iMCGI(allCy,YTIME) = 1;
+imCumDistrFuncConsSize(runCy,DSBS) = sum(rCon, imDisFunConSize(runCy,DSBS,rCon));
+imCGI(allCy,YTIME) = 1;
 *---
 $ontext
 table iResTotCapMxmLoad(allCy,PGRES,YTIME)              "Residuals for total capacity and maximum load (1)"	
@@ -649,7 +649,7 @@ $include"./iDataDistrLosses.csv"
 $offdelim
 ;
 *---
-iMDistrLosses(runCy,EFS,YTIME) = iDataDistrLosses(runCy,EFS,YTIME);
+imDistrLosses(runCy,EFS,YTIME) = iDataDistrLosses(runCy,EFS,YTIME);
 *---
 table iFuelConsTRANSE(allCy,TRANSE,EF,YTIME)	 "Fuel consumption (Mtoe)"
 $ondelim
@@ -657,7 +657,7 @@ $include"./iFuelConsTRANSE.csv"
 $offdelim
 ;
 *---
-iMFuelConsPerFueSub(runCy,TRANSE,EF,YTIME) = iFuelConsTRANSE(runCy,TRANSE,EF,YTIME);
+imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME) = iFuelConsTRANSE(runCy,TRANSE,EF,YTIME);
 table iFuelConsINDSE(allCy,INDSE,EF,YTIME)	 "Fuel consumption of industry subsector (Mtoe)"
 $ondelim
 $include"./iFuelConsINDSE.csv"
@@ -681,17 +681,17 @@ $offdelim
 ;
 *---
 iFuelConsNENSE(runCy,NENSE,EF,YTIME)$(SECTTECH(NENSE,EF) $(iFuelConsNENSE(runCy,NENSE,EF,YTIME)<=0)) = 1e-6;
-iMFuelConsPerFueSub(runCy,INDSE,EF,YTIME) = iFuelConsINDSE(runCy,INDSE,EF,YTIME);
-iMFuelConsPerFueSub(runCy,DOMSE,EF,YTIME) = iFuelConsDOMSE(runCy,DOMSE,EF,YTIME);
-iMFuelConsPerFueSub(runCy,NENSE,EF,YTIME) = iFuelConsNENSE(runCy,NENSE,EF,YTIME);
-iMFinEneCons(runCy,EFS,YTIME) = sum(INDDOM,
-                         sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(INDDOM,EF)), iMFuelConsPerFueSub(runCy,INDDOM,EF,YTIME)))
+imFuelConsPerFueSub(runCy,INDSE,EF,YTIME) = iFuelConsINDSE(runCy,INDSE,EF,YTIME);
+imFuelConsPerFueSub(runCy,DOMSE,EF,YTIME) = iFuelConsDOMSE(runCy,DOMSE,EF,YTIME);
+imFuelConsPerFueSub(runCy,NENSE,EF,YTIME) = iFuelConsNENSE(runCy,NENSE,EF,YTIME);
+imFinEneCons(runCy,EFS,YTIME) = sum(INDDOM,
+                         sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(INDDOM,EF)), imFuelConsPerFueSub(runCy,INDDOM,EF,YTIME)))
                        +
                        sum(TRANSE,
-                         sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(TRANSE,EF) $(not plugin(EF)) ), iMFuelConsPerFueSub(runCy,TRANSE,EF,YTIME)));
+                         sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(TRANSE,EF) $(not plugin(EF)) ), imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME)));
 *---
-iMCO2CaptRate(runCy,PGALL,YTIME) = 2; 
-iMEffValueInDollars(runCy,SBS,YTIME)=0;
+imCO2CaptRate(runCy,PGALL,YTIME) = 2; 
+imEffValueInDollars(runCy,SBS,YTIME)=0;
 iScenarioPri(WEF,"NOTRADE",YTIME)=0;
 *---
 $ontext
@@ -721,7 +721,7 @@ $include"./iDataImports.csv"
 $offdelim
 ;
 *---
-iMFuelImports(runCy,EFS,YTIME)$(not An(YTIME)) = iDataImports(runCy,EFS,YTIME);
+imFuelImports(runCy,EFS,YTIME)$(not An(YTIME)) = iDataImports(runCy,EFS,YTIME);
 *---
 iNetImp(runCy,EFS,YTIME) = iDataImports(runCy,"ELC",YTIME)-iSuppExports(runCy,"ELC",YTIME);
 *---
@@ -808,33 +808,33 @@ iMatrFactor.UP(runCy,SBS,EF,YTIME) = 100;
 $ENDIF.calib
 *---
 ** Industry
-iMShrNonSubElecInTotElecDem(runCy,INDSE)  = iIndChar(runCy,INDSE,"SHR_NSE");
-iMShrNonSubElecInTotElecDem(runCy,INDSE)$(iMShrNonSubElecInTotElecDem(runCy,INDSE)>0.98) = 0.98;
+imShrNonSubElecInTotElecDem(runCy,INDSE)  = iIndChar(runCy,INDSE,"SHR_NSE");
+imShrNonSubElecInTotElecDem(runCy,INDSE)$(imShrNonSubElecInTotElecDem(runCy,INDSE)>0.98) = 0.98;
 **Domestic - Tertiary
-iMShrNonSubElecInTotElecDem(runCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(DOMSE,"SHR_NSE");
-iMShrNonSubElecInTotElecDem(runCy,DOMSE)$(iMShrNonSubElecInTotElecDem(runCy,DOMSE)>0.98) = 0.98;
+imShrNonSubElecInTotElecDem(runCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(DOMSE,"SHR_NSE");
+imShrNonSubElecInTotElecDem(runCy,DOMSE)$(imShrNonSubElecInTotElecDem(runCy,DOMSE)>0.98) = 0.98;
 **   Macroeconomic
 *---
 **  Transport Sector
-iMCapCostTech(runCy,TRANSE,EF,YTIME) = iDataTransTech(TRANSE,EF,"IC",YTIME);
-iMFixOMCostTech(runCy,TRANSE,EF,YTIME) = iDataTransTech(TRANSE,EF,"FC",YTIME);
-iMVarCostTech(runCy,TRANSE,EF,YTIME) = iDataTransTech(TRANSE,EF,"VC",YTIME);
+imCapCostTech(runCy,TRANSE,EF,YTIME) = iDataTransTech(TRANSE,EF,"IC",YTIME);
+imFixOMCostTech(runCy,TRANSE,EF,YTIME) = iDataTransTech(TRANSE,EF,"FC",YTIME);
+imVarCostTech(runCy,TRANSE,EF,YTIME) = iDataTransTech(TRANSE,EF,"VC",YTIME);
 *---
 **  Industrial Sector
-iMCapCostTech(runCy,INDSE,EF,YTIME) = iDataIndTechnology(INDSE,EF,"IC");
-iMFixOMCostTech(runCy,INDSE,EF,YTIME) = iDataIndTechnology(INDSE,EF,"FC");
-iMVarCostTech(runCy,INDSE,EF,YTIME) = iDataIndTechnology(INDSE,EF,"VC");
-iMUsfEneConvSubTech(runCy,INDSE,EF,YTIME)  = iDataIndTechnology(INDSE,EF,"USC");
+imCapCostTech(runCy,INDSE,EF,YTIME) = iDataIndTechnology(INDSE,EF,"IC");
+imFixOMCostTech(runCy,INDSE,EF,YTIME) = iDataIndTechnology(INDSE,EF,"FC");
+imVarCostTech(runCy,INDSE,EF,YTIME) = iDataIndTechnology(INDSE,EF,"VC");
+imUsfEneConvSubTech(runCy,INDSE,EF,YTIME)  = iDataIndTechnology(INDSE,EF,"USC");
 *---
 **  Domestic Sector
-iMFixOMCostTech(runCy,DOMSE,EF,YTIME) = iDataDomTech(DOMSE,EF,"FC");
-iMVarCostTech(runCy,DOMSE,EF,YTIME) = iDataDomTech(DOMSE,EF,"VC");
-iMUsfEneConvSubTech(runCy,DOMSE,EF,YTIME) = iDataDomTech(DOMSE,EF,"USC");
+imFixOMCostTech(runCy,DOMSE,EF,YTIME) = iDataDomTech(DOMSE,EF,"FC");
+imVarCostTech(runCy,DOMSE,EF,YTIME) = iDataDomTech(DOMSE,EF,"VC");
+imUsfEneConvSubTech(runCy,DOMSE,EF,YTIME) = iDataDomTech(DOMSE,EF,"USC");
 *---
 **  Non Energy Sector and Bunkers
-iMFixOMCostTech(runCy,NENSE,EF,YTIME)= iDataNonEneSec(NENSE,EF,"FC");
-iMVarCostTech(runCy,NENSE,EF,YTIME) = iDataNonEneSec(NENSE,EF,"VC");
-iMUsfEneConvSubTech(runCy,NENSE,EF,YTIME) = iDataNonEneSec(NENSE,EF,"USC");
+imFixOMCostTech(runCy,NENSE,EF,YTIME)= iDataNonEneSec(NENSE,EF,"FC");
+imVarCostTech(runCy,NENSE,EF,YTIME) = iDataNonEneSec(NENSE,EF,"VC");
+imUsfEneConvSubTech(runCy,NENSE,EF,YTIME) = iDataNonEneSec(NENSE,EF,"USC");
 *---
 **  Power Generation
 *---
@@ -844,7 +844,7 @@ $include "./iDataPlantEffByType.csv"
 $offdelim
 ;
 *---
-iMPlantEffByType(runCy,PGALL,YTIME) = iDataPlantEffByType(runCy,PGALL, YTIME) ;
+imPlantEffByType(runCy,PGALL,YTIME) = iDataPlantEffByType(runCy,PGALL, YTIME) ;
 *---
 $ontext
 **  Policies for climate change and renewables
@@ -856,8 +856,8 @@ VOMRES(PGALL,YTIME)$AN(YTIME)=VOMRES_PRN(PGALL,YTIME)  ;
 EFFRES(PGALL,YTIME)$AN(YTIME)=EFFRES_PRN(PGALL,YTIME);
 NUCRES(YTIME)$an(ytime)=NUCRES_PRN("RES",YTIME);
 * Update efficiencies according to energy productivity index
-iMPlantEffByType(runCy,PGALL,YTIME)$(an(ytime) )= iMPlantEffByType(runCy,PGALL,YTIME) / iEneProdRDscenarios(runCy,"pg",ytime);
+imPlantEffByType(runCy,PGALL,YTIME)$(an(ytime) )= imPlantEffByType(runCy,PGALL,YTIME) / iEneProdRDscenarios(runCy,"pg",ytime);
 iEffDHPlants(runCy,EF,YTIME)$(an(ytime) )= iEffDHPlants(runCy,EF,YTIME) / iEneProdRDscenarios(runCy,"pg",ytime);
-iMRateLossesFinCons(allCy,EFS, YTIME)$(iMFinEneCons(allCy,EFS,YTIME)>0 $(not an(ytime))) = iMDistrLosses(allCy,EFS,YTIME) / iMFinEneCons(allCy,EFS,YTIME);
+imRateLossesFinCons(allCy,EFS, YTIME)$(imFinEneCons(allCy,EFS,YTIME)>0 $(not an(ytime))) = imDistrLosses(allCy,EFS,YTIME) / imFinEneCons(allCy,EFS,YTIME);
 $offtext
 *---
