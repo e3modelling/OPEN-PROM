@@ -48,15 +48,15 @@ jobs:
           
       - name: Test Model Run - NPi Default Scenario
         run: |
-          & "C:\GAMS\47\gams.exe" main.gms --DevMode=0 --GenerateInput=off --fEndY=2050 --logOption=0 --logFile=npi.log --fScenario=1 -Idir=./data
+          & "C:\GAMS\47\gams.exe" main.gms --DevMode=0 --GenerateInput=off --fEndY=2050 --logOption=0 --fScenario=1 -Idir=./data
       
       - name: Test Model Run - 1.5C Scenario
         run: |
-          & "C:\GAMS\47\gams.exe" main.gms --DevMode=0 --GenerateInput=off --fEndY=2050 --logOption=0 --logFile=1p5c.log --fScenario=2 -Idir=./data
+          & "C:\GAMS\47\gams.exe" main.gms --DevMode=0 --GenerateInput=off --fEndY=2050 --logOption=0 --fScenario=2 -Idir=./data
           
       - name: Test Model Run - 2C Scenario
         run: |
-          & "C:\GAMS\47\gams.exe" main.gms --DevMode=0 --GenerateInput=off --fEndY=2050 --logOption=0 --logFile=2c.log --fScenario=3 -Idir=./data
+          & "C:\GAMS\47\gams.exe" main.gms --DevMode=0 --GenerateInput=off --fEndY=2050 --logOption=0 --fScenario=3 -Idir=./data
 
       - name: Upload GAMS log files
         uses: actions/upload-artifact@v4
