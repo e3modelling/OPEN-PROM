@@ -23,13 +23,16 @@
 *' ----------------------
 *' 1. VARIABLE PREFIXES
 *' ----------------------
-*' The first two characters of a variable or input name encode its scope:
+*' The first two "fields" of an object (object = variable, equation, parameter, etc.) name encode its scope:
 *'
 *'   Vm : "Model-wide / Interdependent" Variable
 *'        -> Used across multiple modules
 *'
 *'   Vxx : "Module-specific" Variable
 *'        -> Used only within module 'xx', where 'xx' is a 2-digit identifier
+*'
+*'   V   : "Core-only" Variable
+*'        -> Used only inside the core 
 *'
 *' Example:
 *'   VmLft(allCy,DSBS,EF,YTIME)
