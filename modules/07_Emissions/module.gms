@@ -1,6 +1,6 @@
-*' @title PowerGeneration module
+*' @title Emissions module
 *'
-*' @description This is the PowerGeneration module.
+*' @description This is the Emissions module.
 
 *###################### R SECTION START (MODULETYPES) ##########################
 $Ifi "%Emissions%" == "legacy" $include "./modules/07_Emissions/legacy/realization.gms"

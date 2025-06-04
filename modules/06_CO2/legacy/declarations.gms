@@ -3,20 +3,20 @@
 
 Equations
 *' *** CO2 SEQUESTRATION COST CURVES EQUATIONS
-QCapCO2ElecHydr(allCy,YTIME)	                           "Compute CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
-QCaptCummCO2(allCy,YTIME)	                               "Compute cumulative CO2 captured (Mtn of CO2)"
-QTrnsWghtLinToExp(allCy,YTIME)	                           "Transtition weight for shifting from linear to exponential CO2 sequestration cost curve"
+Q06CapCO2ElecHydr(allCy,YTIME)	                           "Compute CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
+Q06CaptCummCO2(allCy,YTIME)	                               "Compute cumulative CO2 captured (Mtn of CO2)"
+Q06TrnsWghtLinToExp(allCy,YTIME)	                       "Transtition weight for shifting from linear to exponential CO2 sequestration cost curve"
 
 *'                **Interdependent Equations**
-QCstCO2SeqCsts(allCy,YTIME)	                               "Compute cost curve for CO2 sequestration costs" 
+Q06CstCO2SeqCsts(allCy,YTIME)	                           "Compute cost curve for CO2 sequestration costs" 
 ;
 
 Variables
 *' *** CO2 SEQUESTRATION COST CURVES VARIABLES
-VCapCO2ElecHydr(allCy,YTIME)	                           "CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
-VCaptCummCO2(allCy,YTIME)	                               "Cumulative CO2 captured (Mtn CO2)"
-VTrnsWghtLinToExp(allCy,YTIME)	                           "Weight for transtition from linear CO2 sequestration cost curve to exponential (1)"
+V06CapCO2ElecHydr(allCy,YTIME)	                           "CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
+V06CaptCummCO2(allCy,YTIME)	                               "Cumulative CO2 captured (Mtn CO2)"
+V06TrnsWghtLinToExp(allCy,YTIME)	                       "Weight for transtition from linear CO2 sequestration cost curve to exponential (1)"
 
 *'                **Interdependent Variables**
-VCstCO2SeqCsts(allCy,YTIME)	                               "Cost curve for CO2 sequestration costs (US$2015/tn of CO2 sequestrated)"
+VmCstCO2SeqCsts(allCy,YTIME)	                           "Cost curve for CO2 sequestration costs (US$2015/tn of CO2 sequestrated)"
 ;

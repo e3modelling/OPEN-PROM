@@ -4,21 +4,21 @@
 * Power Generation Module
 
 *---
-VCostPowGenAvgLng.FX(runCyL,ESET,YTIME)$TIME(YTIME) = VCostPowGenAvgLng.L(runCyL,ESET,YTIME)$TIME(YTIME);
-VCapElecTotEst.FX(runCyL,YTIME)$TIME(YTIME) = VCapElecTotEst.L(runCyL,YTIME)$TIME(YTIME);
-VCostPowGenLonNoClimPol.FX(runCyL,ESET,YTIME)$TIME(YTIME) = VCostPowGenLonNoClimPol.L(runCyL,ESET,YTIME)$TIME(YTIME);
-VPeakLoad.FX(runCyL,YTIME)$TIME(YTIME) = VPeakLoad.L(runCyL,YTIME)$TIME(YTIME);
-VCapOverall.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = VCapOverall.L(runCyL,PGALL,YTIME)$TIME(YTIME);
-VIndxEndogScrap.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = VIndxEndogScrap.L(runCyL,PGALL,YTIME)$TIME(YTIME);
-VCapElec.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = VCapElec.L(runCyL,PGALL,YTIME)$TIME(YTIME);
-VNewCapElec.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = VNewCapElec.L(runCyL,PGALL,YTIME)$TIME(YTIME);
-VNetNewCapElec.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = VNetNewCapElec.L(runCyL,PGALL,YTIME)$TIME(YTIME);
-VCFAvgRen.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = VCFAvgRen.L(runCyL,PGALL,YTIME)$TIME(YTIME);
-VCapElecNonCHP.FX(runCyL,YTIME)$TIME(YTIME) = VCapElecNonCHP.L(runCyL,YTIME)$TIME(YTIME);
-VCapElec2.FX(runCy,PGALL,YTIME)$TIME(YTIME) = VCapElec2.L(runCy,PGALL,YTIME)$TIME(YTIME);
-VCapElecNominal.FX(runCy,PGALL,YTIME)$TIME(YTIME) = VCapElecNominal.L(runCy,PGALL,YTIME)$TIME(YTIME);
+VmCostPowGenAvgLng.FX(runCyL,ESET,YTIME)$TIME(YTIME) = VmCostPowGenAvgLng.L(runCyL,ESET,YTIME)$TIME(YTIME);
+VmCapElecTotEst.FX(runCyL,YTIME)$TIME(YTIME) = VmCapElecTotEst.L(runCyL,YTIME)$TIME(YTIME);
+V04CostPowGenLonNoClimPol.FX(runCyL,ESET,YTIME)$TIME(YTIME) = V04CostPowGenLonNoClimPol.L(runCyL,ESET,YTIME)$TIME(YTIME);
+VmPeakLoad.FX(runCyL,YTIME)$TIME(YTIME) = VmPeakLoad.L(runCyL,YTIME)$TIME(YTIME);
+V04CapOverall.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = V04CapOverall.L(runCyL,PGALL,YTIME)$TIME(YTIME);
+V04IndxEndogScrap.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = V04IndxEndogScrap.L(runCyL,PGALL,YTIME)$TIME(YTIME);
+VmCapElec.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = VmCapElec.L(runCyL,PGALL,YTIME)$TIME(YTIME);
+V04NewCapElec.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = V04NewCapElec.L(runCyL,PGALL,YTIME)$TIME(YTIME);
+V04NetNewCapElec.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = V04NetNewCapElec.L(runCyL,PGALL,YTIME)$TIME(YTIME);
+V04CFAvgRen.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = V04CFAvgRen.L(runCyL,PGALL,YTIME)$TIME(YTIME);
+V04CapElecNonCHP.FX(runCyL,YTIME)$TIME(YTIME) = V04CapElecNonCHP.L(runCyL,YTIME)$TIME(YTIME);
+V04CapElec2.FX(runCy,PGALL,YTIME)$TIME(YTIME) = V04CapElec2.L(runCy,PGALL,YTIME)$TIME(YTIME);
+V04CapElecNominal.FX(runCy,PGALL,YTIME)$TIME(YTIME) = V04CapElecNominal.L(runCy,PGALL,YTIME)$TIME(YTIME);
 
 $ifthen.calib %Calibration% == MatCalibration
-iMatFacPlaAvailCap.FX(runCy,PGALL,YTIME) = iMatFacPlaAvailCap.L(runCy,PGALL,"%fEndY%");
-iMatureFacPlaDisp.FX(runCy,PGALL,YTIME) = iMatureFacPlaDisp.L(runCy,PGALL,"%fEndY%");
+i04MatFacPlaAvailCap.FX(runCy,PGALL,YTIME) = i04MatFacPlaAvailCap.L(runCy,PGALL,"%fEndY%");
+i04MatureFacPlaDisp.FX(runCy,PGALL,YTIME) = i04MatureFacPlaDisp.L(runCy,PGALL,"%fEndY%");
 $endif.calib
