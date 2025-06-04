@@ -29,8 +29,6 @@ V04CostHourProdInvDecNoCCS.L(runCy,PGALL,HOUR,TT) = V04ShareNewTechNoCCS.L(runCy
 V04NewInvElec.L(runCy,YTIME) = 0.1;
 V04NewInvElec.FX(runCy,YTIME)$(NOT AN(YTIME)) = 1;
 *---
-V04CostVarTechElec.L(runCy,PGALL,YTIME) = 0.1;
-*---
 alias(datay, dataylag)
 loop (runCy,PGALL,datay,dataylag)$(ord(datay) = ord(dataylag) + 1 and PGREN(PGALL)) DO
   V04NetNewCapElec.FX(runCy,PGALL,datay) = imInstCapPast(runCy,PGALL,datay) - imInstCapPast(runCy,PGALL,dataylag) + 1E-10;
@@ -85,9 +83,6 @@ Q04CostProdSpecTech.scale(runCy,PGALL,YTIME)=V04CostProdSpecTech.scale(runCy,PGA
 *---
 V04CostVarTechNotPGSCRN.scale(runCy,PGALL,YTIME)=1e6;
 Q04CostVarTechNotPGSCRN.scale(runCy,PGALL,YTIME)=V04CostVarTechNotPGSCRN.scale(runCy,PGALL,YTIME);
-*---
-V04CostVarTechElec.scale(runCy,PGALL,YTIME)=1e5;
-Q04CostVarTechElec.scale(runCy,PGALL,YTIME)=V04CostVarTechElec.scale(runCy,PGALL,YTIME);
 *---
 V04NewInvElec.scale(runCy,YTIME)=1e8;
 Q04NewInvElec.scale(runCy,YTIME)=V04NewInvElec.scale(runCy,YTIME);

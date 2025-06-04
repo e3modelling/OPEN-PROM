@@ -10,7 +10,6 @@
 
 *' Power Generation
 
-
 *' This equation computes the electric capacity of Combined Heat and Power (CHP) plants. The capacity is calculated in gigawatts (GW) and is based on several factors,
 *' including the consumption of fuel in the industrial sector, the electricity prices in the industrial sector, the availability rate of power
 *' generation plants, and the utilization rate of CHP plants. The result represents the electric capacity of CHP plants in GW.
@@ -370,13 +369,6 @@ Q04CapElec2(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
              =E=
          ( VmCapElec(allCy,PGALL,YTIME) + 1e-6 + SQRT( SQR(VmCapElec(allCy,PGALL,YTIME)-1e-6) + SQR(1e-4) ) )/2;
 
-*' Compute the variable cost of each power plant technology for every region,
-*' by utilizing the maturity factor related to plant dispatching.
-Q04CostVarTechElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-        V04CostVarTechElec(allCy,PGALL,YTIME)
-            =E=  
-        i04MatureFacPlaDisp(allCy,PGALL,YTIME)*V04CostVarTech(allCy,PGALL,YTIME)**(-1);
-
 *' This equation calculates the variable representing the newly added electricity generation capacity for a specific renewable power plant 
 *' in a given country and time period. The calculation involves subtracting the planned electricity generation capacity in the current time period
 *' from the planned capacity in the previous time period. The purpose of this equation is to quantify the increase in electricity generation capacity for renewable
@@ -440,8 +432,7 @@ Q04ProdElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04ProdElecCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         V04ProdElecCHP(allCy,CHP,YTIME)
                  =E=
-        sum(INDDOM,VmConsFuel(allCy,INDDOM,CHP,YTIME)) / SUM(chp2,sum(INDDOM,VmConsFuel(allCy,INDDOM,CHP2,YTIME)))*
-        (V04DemElecTot(allCy,YTIME) - SUM(PGALL,VmProdElec(allCy,PGALL,YTIME)));
+        sum(PGALL$(CHPtoEON(CHP, PGALL)), VmProdElec(allCy, PGALL, YTIME));
 
 *' This equation calculates the long-term power generation cost of technologies excluding climate policies.
 *' The cost is computed for a specific country, power generation technology , energy sector, and time period.
