@@ -23,7 +23,7 @@ Q06CapCO2ElecHydr(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                  imCo2EmiFac(allCy,"PG",PGEF,YTIME)*imCO2CaptRate(allCy,CCS,YTIME)))
                 + 
          (sum(EF, sum(H2TECH$H2TECHEFtoEF(H2TECH,EF),
-               VmConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)*imCo2EmiFac(allCy,"PG",EF,YTIME)*i05CaptRateH2Prod(allCy,H2TECH,YTIME)))
+               VmConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)*imCo2EmiFac(allCy,"H2P",EF,YTIME)*i05CaptRateH2Prod(allCy,H2TECH,YTIME)))
           )  ;    !! CO2 emissions captured by plants producing hydrogen
 
 
