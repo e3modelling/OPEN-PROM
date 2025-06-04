@@ -14,12 +14,6 @@ VCostVarTech.L(runCy,PGALL,YTIME) = 0.1;
 *---
 VCostProdTeCHPreReplacAvail.L(runCy,PGALL,PGALL2,YTIME) = 0.1;
 *---
-VPotRenSuppCurve.L(runCy,PGRENEF,YTIME) = 0.1;
-VPotRenSuppCurve.FX(runCy,PGRENEF, YTIME) $(NOT AN(YTIME)) = iMinRenPotential(runCy,PGRENEF,YTIME);
-*---
-VPotRenCurr.L(runCy,PGRENEF, YTIME)$(AN(YTIME)) = 1000;
-VPotRenCurr.FX(runCy,PGRENEF, YTIME)$(NOT AN(YTIME)) = iMinRenPotential(runCy,PGRENEF,YTIME);
-*---
 VShareNewTechNoCCS.L(runCy,PGALL,TT)=0.1;
 VShareNewTechNoCCS.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME))) = 0;
 VShareNewTechNoCCS.FX(runCy,PGALL,YTIME)$(AN(YTIME) $(NOT NOCCS(PGALL))) = 0;
@@ -59,6 +53,8 @@ VScalFacPlaDisp.LO(runCy, HOUR, YTIME) = -1;
 VRenTechMatMult.L(runCy,PGALL,YTIME) = 1;
 *---
 VScalWeibullSum.L(runCy,PGALL,YTIME) = 2000;
+*---
+VRenTechMatMultExpr.FX(runCy,PGALL,YTIME)$(not PGREN(PGALL)) = 0;
 *---
 VCostHourProdInvDec.L(runCy,PGALL,HOUR,TT) = 0.0001;
 VCostHourProdInvDec.FX(runCy,PGALL,HOUR,YTIME)$((NOT AN(YTIME))) = 0;
