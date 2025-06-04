@@ -4,9 +4,14 @@
 *' @code
 *' *** preliminaries 
 *' 
-*' * Coding Etiquette:
-*' * Below, you'll find the coding etiquette, a collection of conventions designed to streamline the development process and enhance code readability.
+*'==============================================================================*
+*'                            OPEN-PROM NAMING CONVENTION                       *
+*'==============================================================================*
+*' * Below, you'll find the coding naming convention, a collection of conventions designed to streamline the development process and enhance code readability.
 *' * Please uphold these standards as you code! The naming convention for objects in the code is established as follows:
+*'--------------------------*
+*'     CORE PRINCIPLES
+*'--------------------------*
 *' * [ prefix ][ object type (e.g. Capacity, Cost, Share, etc.) ][ more specific information, if needed ][ object scope, e.g. Transport, Electricity, etc. ][ more specific information, if needed ]
 *' * Example:
 *' * [ Q/V/i ][ Cost/Cap/Dem/Cons/Price/etc. ][ Total ][ Elec/Tr/Ind/Dom ][ etc. ]
@@ -15,6 +20,96 @@
 *' * V: Variable, main variable computed by each equation
 *' * v: Variable that does not participate in more than one equation, thus has decreased impact on the model
 *' * i: Input, Inputs are datasets or constants that are exogenous to the model
+*' ----------------------
+*' 1. VARIABLE PREFIXES
+*' ----------------------
+*' The first two characters of a variable or input name encode its scope:
+*'
+*'   Vm : "Model-wide / Interdependent" Variable
+*'        -> Used across multiple modules
+*'
+*'   Vxx : "Module-specific" Variable
+*'        -> Used only within module 'xx', where 'xx' is a 2-digit identifier
+*'
+*' Example:
+*'   VmLft(allCy,DSBS,EF,YTIME)
+*'     -> Lifetime of technologies, shared across modules
+*'
+*'   V01ActivGoodsTransp(allCy,TRANSE,YTIME)
+*'     -> Activity variable exclusive to Module 01_Transport
+*'
+*'----------------------
+*' 2. EQUATION PREFIXES
+*'----------------------
+*' All equations **must begin** with the exact 2-digit module code:
+*'
+*'   QxxEquationName(...)
+*'        → Where 'xx' is the module number (e.g., 01, 02, 03, ...)
+*'        → This ensures traceability of equations to their origin module
+*'
+*' Examples:
+*'   Q01RateScrPc(allCy,YTIME)
+*'     → Passenger car scrapping rate equation from 01_Transport
+*'
+*'-------------------------------------------------
+*' 3. INPUT PREFIXES (PARAMETERS, TABLES, SCALARS)
+*'-------------------------------------------------
+*' Inputs follow the same logic:
+*'
+*'   im : "Model-wide / Interdependent" Input
+*'        -> Declared in /core and used across modules
+*'
+*'   ixx : "Module-specific" Input
+*'        -> Exclusive to module 'xx'
+*'
+*' Examples:
+*'   imPriceFuelsInt(WEF,YTIME)
+*'     -> Fuel import prices, shared across model
+*'
+*'   imImpExp(allCy,EFS,YTIME)
+*'     -> imports of exporting countries, shared
+*'
+*'   i01PlugHybrFractOfMileage(ELSH_SET,YTIME)
+*'     -> PHEV mileage split, only used in Transport module
+*'
+*'   i01Pop(YTIME,allCy)
+*'     -> Population input for Transport module only
+*'
+*'------------------------------
+*' 4. MODULE NAMING CONVENTION
+*'------------------------------
+*' Each module is numbered and named as follows:
+*'
+*'   01_Transport
+*'   02_Industry
+*'   03_RestOfEnergy
+*'   04_PowerGeneration
+*'   05_Hydrogen
+*'   06_CO2
+*'   07_Emissions
+*'   08_Prices
+*' Prefixes (V01, i01, etc.) map directly to these numbers.
+*'----------------------------------------
+*' 5. INTERDEPENDENT VARIABLE/INPUT USAGE
+*'----------------------------------------
+*' Only use Vm / im prefixes if:
+*' - The variable/input is referenced or calculated across more than one module
+*' - There is logical dependency between modules (e.g. shared emissions factors,
+*'   activity drivers, prices, or capacity assumptions)
+*'
+*' Otherwise, keep the variable/input confined to its module with a Vxx / ixx prefix.
+*' -------------------------------
+*' 6. PRACTICAL NAMING EXAMPLES
+*' -------------------------------
+*' Interdependent Variable:
+*'    VmCO2Emissions(allCy,SECT,YTIME)       ! CO2 output, calculated across sectors
+*' Transport-specific Variable:
+*'    V01NewRegCar(allCy,CARTECH,YTIME)      ! New registrations in transport
+*' Core Input shared across modules:
+*'    imGDP(allCy,YTIME)                     ! GDP used by multiple modules
+*' Power Gen-only Input:
+*'    i04PlantLifetime(PGALL)                ! Power plant lifetime for investment
+
 *' * Cost: Cost
 *' * Cap: Capacity
 *' * Dem: Demand
@@ -69,6 +164,9 @@
 *' * Sub: Substitutable
 *' * Avg: Average
 *' * Consu: Consumers
+*'==============================================================================*
+*'                          END OF NAMING CONVENTION                            *
+*'==============================================================================*
 *' @stop The following code will be ignored by goxygen until the next identifier.
 *' *** Generating an execution profile
 option profile = 0;
