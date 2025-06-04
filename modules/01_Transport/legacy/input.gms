@@ -2,19 +2,19 @@
 *' @code
 
 *---
-table iGDP(YTIME,allCy) "GDP (billion US$2015)"
+table i01GDP(YTIME,allCy) "GDP (billion US$2015)"
 $ondelim
 $include "./iGDP.csvr"
 $offdelim
 ;
 *---
-table iPop(YTIME,allCy) "Population (billion)"
+table i01Pop(YTIME,allCy) "Population (billion)"
 $ondelim
 $include "./iPop.csvr"
 $offdelim
 ;
 *---
-table iCapDataLoadFacEachTransp(TRANSE,TRANSUSE)	 "Capacity data and Load factor for each transportation mode (passenger or tonnes/vehicle)"
+table i01CapDataLoadFacEachTransp(TRANSE,TRANSUSE)	 "Capacity data and Load factor for each transportation mode (passenger or tonnes/vehicle)"
      Cap  LF
 PC   2    
 PB  40   0.4
@@ -26,48 +26,22 @@ GT   600  0.8
 GN   1500 0.9 
 ;
 *---
-table iDataPassCars(allCy,GompSet1,Gompset2)        "Initial Data for Passenger Cars ()"
+table i01DataPassCars(allCy,GompSet1,Gompset2)          "Initial Data for Passenger Cars ()"
           scr
 CHA.PC    0.0201531648401507
 IND.PC    0.0201531648401507
 USA.PC    0.0418811968705786
 ;
 *---
-table iNewReg(allCy,YTIME) "new car registrations per year"
+table i01NewReg(allCy,YTIME)                            "new car registrations per year"
 $ondelim
 $include"./iNewReg.csv"
 $offdelim
 ;
 *---
-table iInitSpecFuelCons(allCy,TRANSE,TTECH,EF,YTIME)                 "Initial Specific fuel consumption for all countries ()";
+table i01InitSpecFuelCons(allCy,TRANSE,TTECH,EF,YTIME)  "Initial Specific fuel consumption for all countries ()";
 *---
-** CHP economic and technical data initialisation for electricity production
-table iDataChpPowGen(EF,YTIME,CHPPGSET)   "Data for power generation costs (various)"
-               IC      FC      LFT VOM     AVAIL BOILEFF
-STE1AL.2010    2.75    58.4621 35  5.19746 0.85  0.699301
-STE1AL.2020    2.75    52.9702     5.01869       0.699301
-STE1AL.2050    2.75    48.5081     3.3689        0.699301
-STE1AH.2010    2.2814  50.609  35  4.4306  0.85  0.746269
-STE1AH.2020    2.2814  43.5126     4.2842        0.746269
-STE1AH.2050    2.2814  37.7468     4.08204       0.746269
-STE1AD.2010    1.276   20.01   15  2.67042 0.29  0.813008
-STE1AD.2020    1.276   20.01       2.67042       0.813008
-STE1AD.2050    1.276   20.01       2.67042       0.813008
-STE1AR.2010    1.782   27.945  30  3.72938 0.8   0.78125
-STE1AR.2020    1.782   27.945      3.72938       0.78125
-STE1AR.2050    1.782   27.945      3.72938       0.78125
-STE1AG.2010    1.16358 19.35   25  2.56461 0.8   0.819672
-STE1AG.2020    1.09263 19.35       2.44861       0.819672
-STE1AG.2050    1.06425 19.35       2.23212       0.819672
-STE1AB.2010    3.2208  57.096  30  6.29638 0.85  0.746269
-STE1AB.2020    3.0866  54.717      6.05137       0.746269
-STE1AB.2050    2.8853  51.1485     5.61708       0.746269
-STE1AH2F.2010  1.16358 19.35   15  2.56461 0.8   0.829672
-STE1AH2F.2020  1.09263 19.35       2.44861       0.829672
-STE1AH2F.2050  1.06425 19.35       2.23212       0.829672
-;
-*---
-parameter iPlugHybrFractData(YTIME)  "Plug in hybrid fraction of mileage" /
+parameter i01PlugHybrFractData(YTIME)                   "Plug in hybrid fraction of mileage" /
 2010    0.5
 2011    0.504444
 2012    0.508889
@@ -162,7 +136,7 @@ parameter iPlugHybrFractData(YTIME)  "Plug in hybrid fraction of mileage" /
 /
 ;
 *---
-parameter iInitSpecFuelConsData(TRANSE,TTECH,EF)        "Initial Specific fuel consumption ()" /
+parameter i01InitSpecFuelConsData(TRANSE,TTECH,EF)      "Initial Specific fuel consumption ()" /
 PC.LPG.LPG	65.88
 PC.GSL.GSL	73.2
 PC.GDO.GDO	54.9
@@ -207,57 +181,50 @@ GN.H2F.H2F	8.14286
 /
 ;
 *---
+
 Parameters
-iPlugHybrFractOfMileage(ELSH_SET,YTIME)	                   "Plug in hybrid fraction of mileage covered by electricity, residualls on GDP-Depnd car market ext (1)"
-iSpeFuelConsCostBy(allCy,SBS,TTECH,EF)	                   "Specific fuel consumption cost in Base year (ktoe/Gpkm or ktoe/Gtkm or ktoe/Gvkm)"
-iSigma(allCy,SG)                                           "S parameters of Gompertz function for passenger cars vehicle km (1)"
-iGdpPassCarsMarkExt(allCy)	                             "GDP-dependent passenger cars market extension (GDP/capita)"
-iPassCarsScrapRate(allCy)	                             "Passenger cars scrapping rate (1)"
-iShareAnnMilePlugInHybrid(allCy,YTIME)	                   "Share of annual mileage of a plug-in hybrid which is covered by electricity (1)"
-iAvgVehCapLoadFac(allCy,TRANSE,TRANSUSE,YTIME)	         "Average capacity/vehicle and load factor (tn/veh or passenegers/veh)"
-iTechLft(allCy,SBS,EF,YTIME)	                             "Technical Lifetime. For passenger cars it is a variable (1)"
-iPassCarsMarkSat(allCy)	                                  "Passenger cars market saturation (1)"
+i01PlugHybrFractOfMileage(ELSH_SET,YTIME)	           "Plug in hybrid fraction of mileage covered by electricity, residualls on GDP-Depnd car market ext (1)"
+i01SpeFuelConsCostBy(allCy,SBS,TTECH,EF)	           "Specific fuel consumption cost in Base year (ktoe/Gpkm or ktoe/Gtkm or ktoe/Gvkm)"
+i01Sigma(allCy,SG)                                      "S parameters of Gompertz function for passenger cars vehicle km (1)"
+i01GdpPassCarsMarkExt(allCy)	                          "GDP-dependent passenger cars market extension (GDP/capita)"
+i01PassCarsScrapRate(allCy)	                          "Passenger cars scrapping rate (1)"
+i01ShareAnnMilePlugInHybrid(allCy,YTIME)	           "Share of annual mileage of a plug-in hybrid which is covered by electricity (1)"
+i01AvgVehCapLoadFac(allCy,TRANSE,TRANSUSE,YTIME)	      "Average capacity/vehicle and load factor (tn/veh or passenegers/veh)"
+i01TechLft(allCy,SBS,EF,YTIME)	                     "Technical Lifetime. For passenger cars it is a variable (1)"
+i01PassCarsMarkSat(allCy)	                          "Passenger cars market saturation (1)"
 ;
 *---
-iInitSpecFuelCons(runCy,TRANSE,TTECH,EF,YTIME) = iInitSpecFuelConsData(TRANSE,TTECH,EF) ; 
+i01InitSpecFuelCons(runCy,TRANSE,TTECH,EF,YTIME) = i01InitSpecFuelConsData(TRANSE,TTECH,EF) ; 
 *---
-iSpeFuelConsCostBy(runCy,TRANSE,TTECH,EF) = iInitSpecFuelCons(runCy,TRANSE,TTECH,EF,"2017");
+i01SpeFuelConsCostBy(runCy,TRANSE,TTECH,EF) = i01InitSpecFuelCons(runCy,TRANSE,TTECH,EF,"2017");
 *---
-iDataPassCars(runCy,"PC","S1") = 1.0;
-iDataPassCars(runCy,"PC","S2") = -0.01;
-iDataPassCars(runCy,"PC","S3") = 6.5;
+i01DataPassCars(runCy,"PC","S1") = 1.0;
+i01DataPassCars(runCy,"PC","S2") = -0.01;
+i01DataPassCars(runCy,"PC","S3") = 6.5;
 *---
-iSigma(runCy,"S1") = iDataPassCars(runCy,"PC","S1");
-iSigma(runCy,"S2") = iDataPassCars(runCy,"PC","S2");
-iSigma(runCy,"S3") = iDataPassCars(runCy,"PC","S3");
+i01Sigma(runCy,"S1") = i01DataPassCars(runCy,"PC","S1");
+i01Sigma(runCy,"S2") = i01DataPassCars(runCy,"PC","S2");
+i01Sigma(runCy,"S3") = i01DataPassCars(runCy,"PC","S3");
 *---
-* Converting EUR2005 to US2015
-iDataChpPowGen(EF,YTIME,"IC") = iDataChpPowGen(EF,YTIME,"IC") * 1.3;
-iDataChpPowGen(EF,YTIME,"FC") = iDataChpPowGen(EF,YTIME,"FC") * 1.3;
-iDataChpPowGen(EF,YTIME,"VOM") = iDataChpPowGen(EF,YTIME,"VOM") * 1.3;
-iPassCarsMarkSat(runCy) = iDataPassCars(runCy,"PC","SAT");
+i01PassCarsMarkSat(runCy) = i01DataPassCars(runCy,"PC","SAT");
 *---
-*iGdpPassCarsMarkExt(runCy) = iDataPassCars(runCy,"PC","MEXTV");
+imFuelConsTRANSE(runCy,TRANSE,EF,YTIME)$(SECTTECH(TRANSE,EF) $(imFuelConsTRANSE(runCy,TRANSE,EF,YTIME)<=0)) = 1e-6;
 *---
-*iPassCarsScrapRate(runCy)  = iDataPassCars(runCy,"PC", "SCR");
+i01PlugHybrFractOfMileage(ELSH_SET,YTIME) = i01PlugHybrFractData(YTIME);
 *---
-iFuelConsTRANSE(runCy,TRANSE,EF,YTIME)$(SECTTECH(TRANSE,EF) $(iFuelConsTRANSE(runCy,TRANSE,EF,YTIME)<=0)) = 1e-6;
+i01ShareAnnMilePlugInHybrid(runCy,YTIME)$an(YTIME) = i01PlugHybrFractOfMileage("ELSH",YTIME);
 *---
-iPlugHybrFractOfMileage(ELSH_SET,YTIME) = iPlugHybrFractData(YTIME);
-*---
-iShareAnnMilePlugInHybrid(runCy,YTIME)$an(YTIME) = iPlugHybrFractOfMileage("ELSH",YTIME);
-*---
-iAvgVehCapLoadFac(runCy,TRANSE,TRANSUSE,YTIME) = iCapDataLoadFacEachTransp(TRANSE,TRANSUSE);
+i01AvgVehCapLoadFac(runCy,TRANSE,TRANSUSE,YTIME) = i01CapDataLoadFacEachTransp(TRANSE,TRANSUSE);
 *---
 **  Transport Sector
-iTechLft(runCy,TRANSE,EF,YTIME) = iDataTransTech(TRANSE,EF,"LFT",YTIME);
+i01TechLft(runCy,TRANSE,EF,YTIME) = imDataTransTech(TRANSE,EF,"LFT",YTIME);
 *---
 **  Industrial Sector
-iTechLft(runCy,INDSE,EF,YTIME) = iDataIndTechnology(INDSE,EF,"LFT");
+i01TechLft(runCy,INDSE,EF,YTIME) = imDataIndTechnology(INDSE,EF,"LFT");
 *---
 **  Domestic Sector
-iTechLft(runCy,DOMSE,EF,YTIME) = iDataDomTech(DOMSE,EF,"LFT");
+i01TechLft(runCy,DOMSE,EF,YTIME) = imDataDomTech(DOMSE,EF,"LFT");
 *---
 **  Non Energy Sector and Bunkers
-iTechLft(runCy,NENSE,EF,YTIME) = iDataNonEneSec(NENSE,EF,"LFT");
+i01TechLft(runCy,NENSE,EF,YTIME) = imDataNonEneSec(NENSE,EF,"LFT");
 *---

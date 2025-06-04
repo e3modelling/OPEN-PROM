@@ -1,25 +1,62 @@
 cff-version: 1.0.3
-message: Hello
+message: 
 authors:
+
+  - family-names: Baka
+    given-names: Maro
+    affiliation: "E3Modelling-Ricardo"
+    email: Maro.Baka@ricardo.com
+
+  - family-names: Fragkos
+    given-names: Panagiotis
+    affiliation: "E3Modelling-Ricardo"
+    email: Panagiotis.Fragkos@ricardo.com
+
   - family-names: Giannousakis
     given-names: Anastasis
-    affiliation: "E3Modelling"
-    email: giannousakis@e3modelling.com
+    affiliation: "E3Modelling-Ricardo"
+    email: Anastasis.Giannousakis@ricardo.com
+
+  - family-names: Madianos
+    given-names: Michael
+    affiliation: "E3Modelling-Ricardo"
+    email: Michael.Madianos@ricardo.com
 
   - family-names: Plessias
     given-names: Giorgos
-    affiliation: "E3Modelling"
-    email: plessias@e3modelling.com
+    affiliation: "E3Modelling-Ricardo"
+    email: George.Plessias@ricardo.com
 
-  - family-names: Tolios
-    given-names: Giannis
-    affiliation: "E3Modelling"
-    email: e3modelling.com
+  - family-names: Pramangioulis
+    given-names: Dionysis
+    affiliation: "E3Modelling-Ricardo"
+    email: dionysis.pramangioulis@ricardo.com
+
+  - family-names: Sechi
+    given-names: Sonja
+    affiliation: "E3Modelling-Ricardo"
+    email: Sonja.Sechi@ricardo.com
 
   - family-names: Sioutas
     given-names: Fotis
-    affiliation: "E3Modelling"
-    email: sioutas@e3modelling.com
+    affiliation: "E3Modelling-Ricardo"
+    email: Fotis.Sioutas@ricardo.com
+
+  - family-names: Tsimpoukis
+    given-names: Alexandros
+    affiliation: "E3Modelling-Ricardo"
+    email: Alexandros.Tsimpoukis@ricardo.com
+
+  - family-names: Zisarou
+    given-names: Eleftheria
+    affiliation: "E3Modelling-Ricardo"
+    email: Eleftheria.Zisarou@ricardo.com
+
+  - family-names: Tolios
+    given-names: Giannis
+    affiliation: 
+    email: 
+
 title: OPEN PROM
 version: 0.1
 date-released: 2024-05-13
@@ -27,4 +64,3 @@ repository-code: https://github.com/e3modelling/OPEN-PROM
 keywords:
   - prometheus
 license: GNU AGPLv3
-
