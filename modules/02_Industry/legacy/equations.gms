@@ -14,16 +14,16 @@
 *' The main explanatory variables are activity indicators of each subsector and electricity prices per subsector. Corresponding elasticities are applied for activity indicators
 *' and electricity prices.
 Q02ConsElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VMConsElecNonSubIndTert(allCy,INDDOM,YTIME)
+         VmConsElecNonSubIndTert(allCy,INDDOM,YTIME)
                  =E=
          [
-         VMConsElecNonSubIndTert(allCy,INDDOM,YTIME-1) * ( imActv(YTIME,allCy,INDDOM)/imActv(YTIME-1,allCy,INDDOM) )**
-         iElastNonSubElec(allCy,INDDOM,"a",YTIME)
-         * ( VMPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME)/VMPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-1) )**iElastNonSubElec(allCy,INDDOM,"b1",YTIME)
-         * ( VMPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-1)/VMPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-2) )**iElastNonSubElec(allCy,INDDOM,"b2",YTIME)
+         VmConsElecNonSubIndTert(allCy,INDDOM,YTIME-1) * ( imActv(YTIME,allCy,INDDOM)/imActv(YTIME-1,allCy,INDDOM) )**
+         i02ElastNonSubElec(allCy,INDDOM,"a",YTIME)
+         * ( VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME)/VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-1) )**i02ElastNonSubElec(allCy,INDDOM,"b1",YTIME)
+         * ( VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-1)/VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-2) )**i02ElastNonSubElec(allCy,INDDOM,"b2",YTIME)
          * prod(KPDL,
-                  ( VMPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-ord(KPDL))/VMPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-(ord(KPDL)+1))
-                  )**( iElastNonSubElec(allCy,INDDOM,"c",YTIME)*imFPDL(INDDOM,KPDL))
+                  ( VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-ord(KPDL))/VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-(ord(KPDL)+1))
+                  )**( i02ElastNonSubElec(allCy,INDDOM,"c",YTIME)*imFPDL(INDDOM,KPDL))
                 )      ]$imActv(YTIME-1,allCy,INDDOM)+0;
 
 *' This equation determines the consumption of the remaining substitutable equipment of each energy form per each demand subsector (excluding TRANSPORT).
@@ -31,30 +31,30 @@ Q02ConsElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' For the electricity energy form, the non substitutable consumption is subtracted.
 *' This equation expresses the "typical useful energy demand equation" where the main explanatory variables are activity indicators and fuel prices.
 Q02ConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF) $runCy(allCy))..
-         VMConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)
+         VmConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)
                  =E=
          [
-         (VMLft(allCy,DSBS,EF,YTIME)-1)/VMLft(allCy,DSBS,EF,YTIME)
-         * (VMConsFuelInclHP(allCy,DSBS,EF,YTIME-1) - (VMConsElecNonSubIndTert(allCy,DSBS,YTIME-1)$(ELCEF(EF) $INDDOM(DSBS)) + 0$(not (ELCEF(EF) $INDDOM(DSBS)))))
+         (VmLft(allCy,DSBS,EF,YTIME)-1)/VmLft(allCy,DSBS,EF,YTIME)
+         * (VmConsFuelInclHP(allCy,DSBS,EF,YTIME-1) - (VmConsElecNonSubIndTert(allCy,DSBS,YTIME-1)$(ELCEF(EF) $INDDOM(DSBS)) + 0$(not (ELCEF(EF) $INDDOM(DSBS)))))
          * (imActv(YTIME,allCy,DSBS)/imActv(YTIME-1,allCy,DSBS))**imElastA(allCy,DSBS,"a",YTIME)
-         * (VMPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME)/VMPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-1))**imElastA(allCy,DSBS,"b1",YTIME)
-         * (VMPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-1)/VMPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-2))**imElastA(allCy,DSBS,"b2",YTIME)
+         * (VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME)/VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-1))**imElastA(allCy,DSBS,"b1",YTIME)
+         * (VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-1)/VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-2))**imElastA(allCy,DSBS,"b2",YTIME)
          * prod(KPDL,
-                 (VMPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-ord(KPDL))/VMPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-(ord(KPDL)+1)))**(imElastA(allCy,DSBS,"c",YTIME)*imFPDL(DSBS,KPDL))
+                 (VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-ord(KPDL))/VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-(ord(KPDL)+1)))**(imElastA(allCy,DSBS,"c",YTIME)*imFPDL(DSBS,KPDL))
                )  ]$(imActv(YTIME-1,allCy,DSBS));
 
 *' This equation computes the useful energy demand in each demand subsector (excluding TRANSPORT). This demand is potentially "satisfied" by multiple energy forms/fuels (substitutable demand).
 *' The equation follows the "typical useful energy demand" format where the main explanatory variables are activity indicators and average "weighted" fuel prices.
 Q02DemFinSubFuelSubsec(allCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $runCy(allCy))..
-         VMDemFinSubFuelSubsec(allCy,DSBS,YTIME)
+         VmDemFinSubFuelSubsec(allCy,DSBS,YTIME)
                  =E=
          [
-         VMDemFinSubFuelSubsec(allCy,DSBS,YTIME-1)
+         VmDemFinSubFuelSubsec(allCy,DSBS,YTIME-1)
          * ( imActv(YTIME,allCy,DSBS)/imActv(YTIME-1,allCy,DSBS) )**imElastA(allCy,DSBS,"a",YTIME)
-         * ( VMPriceFuelAvgSub(allCy,DSBS,YTIME)/VMPriceFuelAvgSub(allCy,DSBS,YTIME-1) )**imElastA(allCy,DSBS,"b1",YTIME)
-         * ( VMPriceFuelAvgSub(allCy,DSBS,YTIME-1)/VMPriceFuelAvgSub(allCy,DSBS,YTIME-2) )**imElastA(allCy,DSBS,"b2",YTIME)
+         * ( VmPriceFuelAvgSub(allCy,DSBS,YTIME)/VmPriceFuelAvgSub(allCy,DSBS,YTIME-1) )**imElastA(allCy,DSBS,"b1",YTIME)
+         * ( VmPriceFuelAvgSub(allCy,DSBS,YTIME-1)/VmPriceFuelAvgSub(allCy,DSBS,YTIME-2) )**imElastA(allCy,DSBS,"b2",YTIME)
          * prod(KPDL,
-                  ( (VMPriceFuelAvgSub(allCy,DSBS,YTIME-ord(KPDL))/VMPriceFuelAvgSub(allCy,DSBS,YTIME-(ord(KPDL)+1)))/(imCGI(allCy,YTIME)**(1/6))
+                  ( (VmPriceFuelAvgSub(allCy,DSBS,YTIME-ord(KPDL))/VmPriceFuelAvgSub(allCy,DSBS,YTIME-(ord(KPDL)+1)))/(imCGI(allCy,YTIME)**(1/6))
                   )**( imElastA(allCy,DSBS,"c",YTIME)*imFPDL(DSBS,KPDL))
                 )  ]$imActv(YTIME-1,allCy,DSBS)+0
 ;
@@ -64,9 +64,9 @@ Q02DemFinSubFuelSubsec(allCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $runCy
 *' in the industrial sectors, considering only non-substitutable electricity.
 $ontext
 q02ConsTotElecInd(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         vMConsTotElecInd(allCy,YTIME)
+         vmConsTotElecInd(allCy,YTIME)
          =E=
-         SUM(INDSE,VMConsElecNonSubIndTert(allCy,INDSE,YTIME));       
+         SUM(INDSE,VmConsElecNonSubIndTert(allCy,INDSE,YTIME));       
 $offtext
 
 *' This equation calculates the total final demand for substitutable fuels in industrial sectors. The total demand is obtained by summing up the
@@ -74,7 +74,7 @@ $offtext
 *' substitutable fuels within the industrial sectors, aggregated across individual subsectors.
 $ontext
 q02DemFinSubFuelInd(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-        vMDemFinSubFuelInd(allCy,YTIME)=E= SUM(INDSE,VMDemFinSubFuelSubsec(allCy,INDSE,YTIME));
+        vmDemFinSubFuelInd(allCy,YTIME)=E= SUM(INDSE,VmDemFinSubFuelSubsec(allCy,INDSE,YTIME));
 $offtext
 
 *' This equation calculates the total fuel consumption in each demand subsector, excluding heat from heat pumps. The fuel consumption is measured
@@ -85,10 +85,10 @@ $offtext
 *' This equation offers a comprehensive view of fuel consumption, considering both traditional fuel sources and the additional electricity consumption
 *' associated with heat pump plants.
 Q02ConsFuel(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF) $(not HEATPUMP(EF)) $runCy(allCy))..
-         VMConsFuel(allCy,DSBS,EF,YTIME)
+         VmConsFuel(allCy,DSBS,EF,YTIME)
                  =E=
-         VMConsFuelInclHP(allCy,DSBS,EF,YTIME)$(not ELCEF(EF)) + 
-         (VMConsFuelInclHP(allCy,DSBS,EF,YTIME) + VmElecConsHeatPla(allCy,DSBS,YTIME))$ELCEF(EF);
+         VmConsFuelInclHP(allCy,DSBS,EF,YTIME)$(not ELCEF(EF)) + 
+         (VmConsFuelInclHP(allCy,DSBS,EF,YTIME) + VmElecConsHeatPla(allCy,DSBS,YTIME))$ELCEF(EF);
 
 *' This equation calculates the estimated electricity index of the industry price for a given year. The estimated index is derived by considering the historical
 *' trend of the electricity index, with a focus on the fuel prices in the industrial subsector. The equation utilizes the fuel prices for electricity generation,
@@ -99,10 +99,10 @@ Q02ConsFuel(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS
 Q02IndxElecIndPrices(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         V02IndxElecIndPrices(allCy,YTIME)
                 =E=
-        VMPriceElecInd(allCy,YTIME-1) * 
-        (VMPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)/VMPriceFuelAvgSub(allCy,"OI",YTIME-1)) ** (0.6) *
-        (VMPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-2)/VMPriceFuelAvgSub(allCy,"OI",YTIME-2)) ** (0.3) *
-        (VMPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-3)/VMPriceFuelAvgSub(allCy,"OI",YTIME-3)) ** (0.1)
+        VmPriceElecInd(allCy,YTIME-1) * 
+        (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)/VmPriceFuelAvgSub(allCy,"OI",YTIME-1)) ** (0.6) *
+        (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-2)/VmPriceFuelAvgSub(allCy,"OI",YTIME-2)) ** (0.3) *
+        (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-3)/VmPriceFuelAvgSub(allCy,"OI",YTIME-3)) ** (0.1)
         
         ;
 
@@ -114,14 +114,14 @@ Q02IndxElecIndPrices(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q02CostElecProdCHP(allCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS) $runCy(allCy))..
          V02CostElecProdCHP(allCy,DSBS,CHP,YTIME)
                  =E=
-                    ( ( imDisc(allCy,"PG",YTIME) * exp(imDisc(allCy,"PG",YTIME)*iLifChpPla(allCy,DSBS,CHP))
-                        / (exp(imDisc(allCy,"PG",YTIME)*iLifChpPla(allCy,DSBS,CHP)) -1))
-                      * iInvCostChp(allCy,DSBS,CHP,YTIME)* 1000 * imCGI(allCy,YTIME)  + iFixOMCostPerChp(allCy,DSBS,CHP,YTIME)
-                    )/(iAvailRateChp(allCy,DSBS,CHP)*(smGwToTwhPerYear))/1000
-                    + iVarCostChp(allCy,DSBS,CHP,YTIME)/1000
-                    + sum(PGEF$CHPtoEF(CHP,PGEF), (VMPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)+0.001*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
+                    ( ( imDisc(allCy,"PG",YTIME) * exp(imDisc(allCy,"PG",YTIME)*i02LifChpPla(allCy,DSBS,CHP))
+                        / (exp(imDisc(allCy,"PG",YTIME)*i02LifChpPla(allCy,DSBS,CHP)) -1))
+                      * i02InvCostChp(allCy,DSBS,CHP,YTIME)* 1000 * imCGI(allCy,YTIME)  + i02FixOMCostPerChp(allCy,DSBS,CHP,YTIME)
+                    )/(i02AvailRateChp(allCy,DSBS,CHP)*(smGwToTwhPerYear))/1000
+                    + i02VarCostChp(allCy,DSBS,CHP,YTIME)/1000
+                    + sum(PGEF$CHPtoEF(CHP,PGEF), (VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)+0.001*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
                          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))))
-                         * smTWhToMtoe /  (iBoiEffChp(allCy,CHP,YTIME) * VMPriceElecInd(allCy,YTIME)) );        
+                         * smTWhToMtoe /  (i02BoiEffChp(allCy,CHP,YTIME) * VmPriceElecInd(allCy,YTIME)) );        
 
 *' The equation calculates the technology cost for each technology, energy form, and consumer size group within the specified subsector.
 *' This cost estimation is based on an intermediate technology cost and the elasticity parameter associated with the given subsector.
@@ -130,7 +130,7 @@ Q02CostElecProdCHP(allCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS) $runCy(allCy
 Q02CostTech(allCy,DSBS,rCon,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le imNcon(DSBS)+1) $SECTTECH(DSBS,EF) $runCy(allCy))..
         V02CostTech(allCy,DSBS,rCon,EF,YTIME) 
                  =E= 
-                 V02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME)**(-iElaSub(allCy,DSBS)) ;   
+                 V02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME)**(-i02ElaSub(allCy,DSBS)) ;   
 
 *' The equation computes the intermediate technology cost, including the lifetime factor, for each technology, energy form, and consumer size group
 *' within the specified subsector. This cost estimation plays a crucial role in evaluating the overall expenses associated with adopting and implementing
@@ -140,27 +140,27 @@ Q02CostTech(allCy,DSBS,rCon,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCo
 Q02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le imNcon(DSBS)+1) $SECTTECH(DSBS,EF) $runCy(allCy))..
          V02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME) =E=
                   ( (( (imDisc(allCy,DSBS,YTIME)$(not CHP(EF)) + imDisc(allCy,"PG",YTIME)$CHP(EF)) !! in case of chp plants we use the discount rate of power generation sector
-                       * exp((imDisc(allCy,DSBS,YTIME)$(not CHP(EF)) + imDisc(allCy,"PG",YTIME)$CHP(EF))*VMLft(allCy,DSBS,EF,YTIME))
+                       * exp((imDisc(allCy,DSBS,YTIME)$(not CHP(EF)) + imDisc(allCy,"PG",YTIME)$CHP(EF))*VmLft(allCy,DSBS,EF,YTIME))
                      )
-                      / (exp((imDisc(allCy,DSBS,YTIME)$(not CHP(EF)) + imDisc(allCy,"PG",YTIME)$CHP(EF))*VMLft(allCy,DSBS,EF,YTIME))- 1)
+                      / (exp((imDisc(allCy,DSBS,YTIME)$(not CHP(EF)) + imDisc(allCy,"PG",YTIME)$CHP(EF))*VmLft(allCy,DSBS,EF,YTIME))- 1)
                     ) * imCapCostTech(allCy,DSBS,EF,YTIME) * imCGI(allCy,YTIME)
                     +
                     imFixOMCostTech(allCy,DSBS,EF,YTIME)/1000
                     +
-                    VMPriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)
+                    VmPriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)
                     * imAnnCons(allCy,DSBS,"smallest") * (imAnnCons(allCy,DSBS,"largest")/imAnnCons(allCy,DSBS,"smallest"))**((ord(rCon)-1)/imNcon(DSBS))
                   )$INDDOM(DSBS)
                  +
                   ( (( imDisc(allCy,DSBS,YTIME)
-                       * exp(imDisc(allCy,DSBS,YTIME)*VMLft(allCy,DSBS,EF,YTIME))
+                       * exp(imDisc(allCy,DSBS,YTIME)*VmLft(allCy,DSBS,EF,YTIME))
                      )
-                      / (exp(imDisc(allCy,DSBS,YTIME)*VMLft(allCy,DSBS,EF,YTIME))- 1)
+                      / (exp(imDisc(allCy,DSBS,YTIME)*VmLft(allCy,DSBS,EF,YTIME))- 1)
                     ) * imCapCostTech(allCy,DSBS,EF,YTIME) * imCGI(allCy,YTIME)
                     +
                     imFixOMCostTech(allCy,DSBS,EF,YTIME)/1000
                     +
                     (
-                      (VMPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME)+imVarCostTech(allCy,DSBS,EF,YTIME)/1000)/imUsfEneConvSubTech(allCy,DSBS,EF,YTIME)
+                      (VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME)+imVarCostTech(allCy,DSBS,EF,YTIME)/1000)/imUsfEneConvSubTech(allCy,DSBS,EF,YTIME)
                     )
                     * imAnnCons(allCy,DSBS,"smallest") * (imAnnCons(allCy,DSBS,"largest")/imAnnCons(allCy,DSBS,"smallest"))**((ord(rCon)-1)/imNcon(DSBS))
                   )$NENSE(DSBS);  
@@ -187,8 +187,8 @@ Q02SortTechVarCost(allCy,DSBS,rCon,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord
 Q02GapFinalDem(allCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $runCy(allCy))..
          V02GapFinalDem(allCy,DSBS,YTIME)
                  =E=
-         (VMDemFinSubFuelSubsec(allCy,DSBS,YTIME) - sum(EF$SECTTECH(DSBS,EF), VMConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME))
-         + SQRT( SQR(VMDemFinSubFuelSubsec(allCy,DSBS,YTIME) - sum(EF$SECTTECH(DSBS,EF), VMConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME))))) /2;
+         (VmDemFinSubFuelSubsec(allCy,DSBS,YTIME) - sum(EF$SECTTECH(DSBS,EF), VmConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME))
+         + SQRT( SQR(VmDemFinSubFuelSubsec(allCy,DSBS,YTIME) - sum(EF$SECTTECH(DSBS,EF), VmConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME))))) /2;
 
 *' This equation calculates the technology share in new equipment based on factors such as maturity factor,
 *' cumulative distribution function of consumer size groups, number of consumers, technology cost, distribution function of consumer
@@ -204,11 +204,11 @@ Q02ShareTechNewEquip(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $SECTTECH(DSBS,EF) $(not 
 *' It considers the consumption of remaining substitutable equipment, the technology share in new equipment, and the final demand
 *' gap to be filled by new technologies. Additionally, non-substitutable electricity consumption in Industry and Tertiary sectors is included.
 Q02ConsFuelInclHP(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF) $runCy(allCy))..
-         VMConsFuelInclHP(allCy,DSBS,EF,YTIME)
+         VmConsFuelInclHP(allCy,DSBS,EF,YTIME)
                  =E=
-         VMConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)+
+         VmConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)+
          (V02ShareTechNewEquip(allCy,DSBS,EF,YTIME)*V02GapFinalDem(allCy,DSBS,YTIME))
-         + (VMConsElecNonSubIndTert(allCy,DSBS,YTIME))$(INDDOM(DSBS) and ELCEF(EF));
+         + (VmConsElecNonSubIndTert(allCy,DSBS,YTIME))$(INDDOM(DSBS) and ELCEF(EF));
 
 *' This equation calculates the variable, including fuel electricity production cost per CHP plant and demand sector, taking into account the variable cost (other than fuel)
 *' per CHP type and the summation of fuel-related costs for each energy form . The calculation involves fuel prices, CO2 emission factors, boiler efficiency, electricity
@@ -217,29 +217,29 @@ Q02ConsFuelInclHP(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTEC
 Q02CostProdCHPDem(allCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS) $runCy(allCy))..
          V02CostProdCHPDem(allCy,DSBS,CHP,YTIME)
                  =E=
-         iVarCostChp(allCy,DSBS,CHP,YTIME)/1E3
-                    + sum(PGEF$CHPtoEF(CHP,PGEF), (VMPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)+1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
+         i02VarCostChp(allCy,DSBS,CHP,YTIME)/1E3
+                    + sum(PGEF$CHPtoEF(CHP,PGEF), (VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)+1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
                          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))))
-                         *smTWhToMtoe/(iBoiEffChp(allCy,CHP,YTIME)*VMPriceElecInd(allCy,YTIME)));
+                         *smTWhToMtoe/(i02BoiEffChp(allCy,CHP,YTIME)*VmPriceElecInd(allCy,YTIME)));
 
 *' The equation calculates the average electricity production cost per Combined Heat and Power plant .
 *' It involves a summation over demand subsectors . The average electricity production cost is determined by considering the electricity
 *' production cost per CHP plant for each demand subsector. The result is expressed in Euro per kilowatt-hour (Euro/KWh).
 Q02CostElcAvgProdCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VMCostElcAvgProdCHP(allCy,CHP,YTIME)
+         VmCostElcAvgProdCHP(allCy,CHP,YTIME)
          =E=
 
-         (sum(INDDOM, VMConsFuel(allCy,INDDOM,CHP,YTIME-1)/SUM(INDDOM2,VMConsFuel(allCy,INDDOM2,CHP,YTIME-1))*V02CostElecProdCHP(allCy,INDDOM,CHP,YTIME)))
-         $SUM(INDDOM2,VMConsFuel.L(allCy,INDDOM2,CHP,YTIME-1))+0$(NOT SUM(INDDOM2,VMConsFuel.L(allCy,INDDOM2,CHP,YTIME-1)));
+         (sum(INDDOM, VmConsFuel(allCy,INDDOM,CHP,YTIME-1)/SUM(INDDOM2,VmConsFuel(allCy,INDDOM2,CHP,YTIME-1))*V02CostElecProdCHP(allCy,INDDOM,CHP,YTIME)))
+         $SUM(INDDOM2,VmConsFuel.L(allCy,INDDOM2,CHP,YTIME-1))+0$(NOT SUM(INDDOM2,VmConsFuel.L(allCy,INDDOM2,CHP,YTIME-1)));
 
 *' The equation computes the average variable cost, including fuel and electricity production cost, per Combined Heat and Power plant.
 *' The equation involves a summation over demand subsectors , where the variable cost per CHP plant is calculated based on fuel
 *' consumption and the variable cost of electricity production . The resulting average variable cost is expressed in Euro per kilowatt-hour (Euro/KWh).
 *' The conditional statement ensures that the denominator in the calculation is not zero, avoiding division by zero issues.
 Q02CostVarAvgElecProd(allCy,CHP,YTIME)$(TIME(YTIME) $runCy(allCy)) ..
-         VMCostVarAvgElecProd(allCy,CHP,YTIME)
+         VmCostVarAvgElecProd(allCy,CHP,YTIME)
          =E=
 
-         (sum(INDDOM, VMConsFuel(allCy,INDDOM,CHP,YTIME-1)/SUM(INDDOM2,VMConsFuel(allCy,INDDOM2,CHP,YTIME-1))
+         (sum(INDDOM, VmConsFuel(allCy,INDDOM,CHP,YTIME-1)/SUM(INDDOM2,VmConsFuel(allCy,INDDOM2,CHP,YTIME-1))
          *V02CostProdCHPDem(allCy,INDDOM,CHP,YTIME)))
-         $SUM(INDDOM2,VMConsFuel.L(allCy,INDDOM2,CHP,YTIME-1))+0$(NOT SUM(INDDOM2,VMConsFuel.L(allCy,INDDOM2,CHP,YTIME-1)));
+         $SUM(INDDOM2,VmConsFuel.L(allCy,INDDOM2,CHP,YTIME-1))+0$(NOT SUM(INDDOM2,VmConsFuel.L(allCy,INDDOM2,CHP,YTIME-1)));

@@ -17,10 +17,10 @@
 Q04CapElecCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V04CapElecCHP(allCy,CHP,YTIME)
          =E=
-         sum(INDDOM,VMConsFuel(allCy,INDDOM,CHP,YTIME)) * 1/smTWhToMtoe *
-         VMPriceElecInd(allCy,YTIME) / 
-         sum(PGALL$CHPtoEON(CHP,PGALL), iAvailRate(PGALL,YTIME)) / 
-         iUtilRateChpPlants(allCy,CHP,YTIME) /
+         sum(INDDOM,VmConsFuel(allCy,INDDOM,CHP,YTIME)) * 1/smTWhToMtoe *
+         VmPriceElecInd(allCy,YTIME) / 
+         sum(PGALL$CHPtoEON(CHP,PGALL), i04AvailRate(PGALL,YTIME)) / 
+         i04UtilRateChpPlants(allCy,CHP,YTIME) /
          smGwToTwhPerYear;  
 
 *' The "Lambda" parameter is computed in the context of electricity demand modeling. This formula captures the relationship between the load curve construction parameter
@@ -29,8 +29,8 @@ Q04CapElecCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04Lambda(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          (1 - exp( -V04Lambda(allCy,YTIME)*smGwToTwhPerYear))  / (0.0001+V04Lambda(allCy,YTIME))
              =E=
-         (V04DemElecTot(allCy,YTIME) - smGwToTwhPerYear*VMBaseLoad(allCy,YTIME))
-         / (VMPeakLoad(allCy,YTIME) - VMBaseLoad(allCy,YTIME));
+         (V04DemElecTot(allCy,YTIME) - smGwToTwhPerYear*VmBaseLoad(allCy,YTIME))
+         / (VmPeakLoad(allCy,YTIME) - VmBaseLoad(allCy,YTIME));
 
 *' The equation calculates the total electricity demand by summing the components of final energy consumption in electricity, final non-energy consumption in electricity,
 *' distribution losses, and final consumption in the energy sector for electricity, and then subtracting net imports. The result is normalized using a conversion factor 
@@ -40,8 +40,8 @@ Q04DemElecTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V04DemElecTot(allCy,YTIME)
              =E=
          1/smTWhToMtoe *
-         ( VMConsFinEneCountry(allCy,"ELC",YTIME) + VMConsFinNonEne(allCy,"ELC",YTIME) + VMLossesDistr(allCy,"ELC",YTIME)
-           + VMConsFiEneSec(allCy,"ELC",YTIME) - VMImpNetEneBrnch(allCy,"ELC",YTIME)
+         ( VmConsFinEneCountry(allCy,"ELC",YTIME) + VmConsFinNonEne(allCy,"ELC",YTIME) + VmLossesDistr(allCy,"ELC",YTIME)
+           + VmConsFiEneSec(allCy,"ELC",YTIME) - VmImpNetEneBrnch(allCy,"ELC",YTIME)
          );
 
 *' This equation computes the estimated base load as a quantity dependent on the electricity demand per final sector,
@@ -51,9 +51,9 @@ Q04BsldEst(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V04BsldEst(allCy,YTIME)
              =E=
          (
-             sum(DSBS, iBaseLoadShareDem(allCy,DSBS,YTIME)*V04ConsElec(allCy,DSBS,YTIME))*(1+imRateLossesFinCons(allCy,"ELC",YTIME))*
-             (1 - VMImpNetEneBrnch(allCy,"ELC",YTIME)/(sum(DSBS, V04ConsElec(allCy,DSBS,YTIME))+VMLossesDistr(allCy,"ELC",YTIME)))
-             + 0.5*VMConsFiEneSec(allCy,"ELC",YTIME)
+             sum(DSBS, i04BaseLoadShareDem(allCy,DSBS,YTIME)*V04ConsElec(allCy,DSBS,YTIME))*(1+imRateLossesFinCons(allCy,"ELC",YTIME))*
+             (1 - VmImpNetEneBrnch(allCy,"ELC",YTIME)/(sum(DSBS, V04ConsElec(allCy,DSBS,YTIME))+VmLossesDistr(allCy,"ELC",YTIME)))
+             + 0.5*VmConsFiEneSec(allCy,"ELC",YTIME)
          ) / smTWhToMtoe / smGwToTwhPerYear;
 
 *' This equation calculates the load factor of the entire domestic system as a sum of consumption in each demand subsector
@@ -62,17 +62,17 @@ Q04BsldEst(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04LoadFacDom(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V04LoadFacDom(allCy,YTIME)
              =E=
-         (sum(INDDOM,VMConsFuel(allCy,INDDOM,"ELC",YTIME)) + sum(TRANSE, VMDemFinEneTranspPerFuel(allCy,TRANSE,"ELC",YTIME))) /
+         (sum(INDDOM,VmConsFuel(allCy,INDDOM,"ELC",YTIME)) + sum(TRANSE, VmDemFinEneTranspPerFuel(allCy,TRANSE,"ELC",YTIME))) /
          (
-          sum(INDDOM,VMConsFuel(allCy,INDDOM,"ELC",YTIME)/iLoadFacElecDem(INDDOM)) + 
-          sum(TRANSE, VMDemFinEneTranspPerFuel(allCy,TRANSE,"ELC",YTIME)/iLoadFacElecDem(TRANSE))
+          sum(INDDOM,VmConsFuel(allCy,INDDOM,"ELC",YTIME)/i04LoadFacElecDem(INDDOM)) + 
+          sum(TRANSE, VmDemFinEneTranspPerFuel(allCy,TRANSE,"ELC",YTIME)/i04LoadFacElecDem(TRANSE))
         );         
 
 *' The equation calculates the electricity peak load by dividing the total electricity demand by the load factor for the domestic sector and converting the result
 *' to gigawatts (GW) using the conversion factor. This provides an estimate of the maximum power demand during a specific time period, taking into account the domestic
 *' load factor.
 Q04PeakLoad(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VMPeakLoad(allCy,YTIME)
+         VmPeakLoad(allCy,YTIME)
              =E=
          V04DemElecTot(allCy,YTIME)/(V04LoadFacDom(allCy,YTIME)*smGwToTwhPerYear);
 
@@ -81,32 +81,32 @@ Q04PeakLoad(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04BaseLoadMax(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          (V04DemElecTot(allCy,YTIME)-V04BaseLoadMax(allCy,YTIME)*smGwToTwhPerYear)
              =E=
-         iMxmLoadFacElecDem(allCy,YTIME)*(VMPeakLoad(allCy,YTIME)-V04BaseLoadMax(allCy,YTIME))*smGwToTwhPerYear;  
+         i04MxmLoadFacElecDem(allCy,YTIME)*(VmPeakLoad(allCy,YTIME)-V04BaseLoadMax(allCy,YTIME))*smGwToTwhPerYear;  
 
 *' This equation calculates the electricity base load utilizing exponential functions that include the estimated base load,
 *' the baseload corresponding to maximum load factor, and the parameter of baseload correction.
 Q04BaseLoad(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VMBaseLoad(allCy,YTIME)
+         VmBaseLoad(allCy,YTIME)
              =E=
-         (1/(1+exp(iBslCorrection(allCy,YTIME)*(V04BsldEst(allCy,YTIME)-V04BaseLoadMax(allCy,YTIME)))))*V04BsldEst(allCy,YTIME)
-        +(1-1/(1+exp(iBslCorrection(allCy,YTIME)*(V04BsldEst(allCy,YTIME)-V04BaseLoadMax(allCy,YTIME)))))*V04BaseLoadMax(allCy,YTIME);
+         (1/(1+exp(i04BslCorrection(allCy,YTIME)*(V04BsldEst(allCy,YTIME)-V04BaseLoadMax(allCy,YTIME)))))*V04BsldEst(allCy,YTIME)
+        +(1-1/(1+exp(i04BslCorrection(allCy,YTIME)*(V04BsldEst(allCy,YTIME)-V04BaseLoadMax(allCy,YTIME)))))*V04BaseLoadMax(allCy,YTIME);
 
 *' This equation calculates the total required electricity production as a sum of the electricity peak load minus the corrected base load,
 *' multiplied by the exponential function of the parameter for load curve construction.
 Q04ProdElecReqTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V04ProdElecReqTot(allCy,YTIME)
              =E=
-         sum(HOUR, (VMPeakLoad(allCy,YTIME)-VMBaseLoad(allCy,YTIME))
+         sum(HOUR, (VmPeakLoad(allCy,YTIME)-VmBaseLoad(allCy,YTIME))
                    * exp(-V04Lambda(allCy,YTIME)*(0.25+(ord(HOUR)-1)))
-             ) + 9*VMBaseLoad(allCy,YTIME);   
+             ) + 9*VmBaseLoad(allCy,YTIME);   
 
 *' The equation calculates the estimated total electricity generation capacity by multiplying the previous year's total electricity generation capacity with
 *' the ratio of the current year's estimated electricity peak load to the previous year's electricity peak load. This provides an estimate of the required
 *' generation capacity based on the changes in peak load.
 Q04CapElecTotEst(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-        VMCapElecTotEst(allCy,YTIME)
+        VmCapElecTotEst(allCy,YTIME)
              =E=
-        VMCapElecTotEst(allCy,YTIME-1) * VMPeakLoad(allCy,YTIME)/VMPeakLoad(allCy,YTIME-1);          
+        VmCapElecTotEst(allCy,YTIME-1) * VmPeakLoad(allCy,YTIME)/VmPeakLoad(allCy,YTIME-1);          
 
 *' The equation calculates the hourly production cost of a power generation plant used in investment decisions. The cost is determined based on various factors,
 *' including the discount rate, gross capital cost, fixed operation and maintenance cost, availability rate, variable cost, renewable value, and fuel prices.
@@ -118,17 +118,17 @@ Q04CostHourProdInvDec(allCy,PGALL,HOUR,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                   
         ( 
           ( 
-            imDisc(allCy,"PG",YTIME-1) * exp(imDisc(allCy,"PG",YTIME-1) * iTechLftPlaType(allCy,PGALL)) /
-            (exp(imDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL)) -1)
+            imDisc(allCy,"PG",YTIME-1) * exp(imDisc(allCy,"PG",YTIME-1) * i04TechLftPlaType(allCy,PGALL)) /
+            (exp(imDisc(allCy,"PG",YTIME)*i04TechLftPlaType(allCy,PGALL)) -1)
           ) *
-          iGrossCapCosSubRen(allCy,PGALL,YTIME-1) * 1E3 * imCGI(allCy,YTIME-1)  + iFixOandMCost(allCy,PGALL,YTIME-1)
+          i04GrossCapCosSubRen(allCy,PGALL,YTIME-1) * 1E3 * imCGI(allCy,YTIME-1)  + i04FixOandMCost(allCy,PGALL,YTIME-1)
         ) /
-        iAvailRate(PGALL,YTIME-1) / (1000*(ord(HOUR)-1+0.25))
-        + iVarCost(PGALL,YTIME-1) / 1E3 + 
+        i04AvailRate(PGALL,YTIME-1) / (1000*(ord(HOUR)-1+0.25))
+        + i04VarCost(PGALL,YTIME-1) / 1E3 + 
         (VmRenValue(YTIME-1)*8.6e-5)$(not (PGREN(PGALL)$(not sameas("PGASHYD",PGALL)) $(not sameas("PGSHYD",PGALL)) $(not sameas("PGLHYD",PGALL)) )) +
         sum(PGEF$PGALLtoEF(PGALL,PGEF), 
-          (VMPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME-1) +
-          imCO2CaptRate(allCy,PGALL,YTIME-1) * VMCstCO2SeqCsts(allCy,YTIME-1) * 1e-3 * imCo2EmiFac(allCy,"PG",PGEF,YTIME-1) +
+          (VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME-1) +
+          imCO2CaptRate(allCy,PGALL,YTIME-1) * VmCstCO2SeqCsts(allCy,YTIME-1) * 1e-3 * imCo2EmiFac(allCy,"PG",PGEF,YTIME-1) +
           (1-imCO2CaptRate(allCy,PGALL,YTIME-1)) * 1e-3 * imCo2EmiFac(allCy,"PG",PGEF,YTIME-1) *
           (sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME-1)))
           ) * smTWhToMtoe / imPlantEffByType(allCy,PGALL,YTIME-1)
@@ -204,11 +204,11 @@ Q04ShareNewTechNoCCS(allCy,PGALL,YTIME)$(TIME(YTIME) $NOCCS(PGALL) $runCy(allCy)
 Q04CostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
         V04CostVarTech(allCy,PGALL,YTIME) 
              =E=
-        iVarCost(PGALL,YTIME)/1E3 + 
+        i04VarCost(PGALL,YTIME)/1E3 + 
         sum(
           PGEF$PGALLtoEF(PGALL,PGEF),
-          (VMPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)/1.2441 +
-          imCO2CaptRate(allCy,PGALL,YTIME)*VMCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
+          (VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)/1.2441 +
+          imCO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
           (1-imCO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)
           *(sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))))
           *smTWhToMtoe/imPlantEffByType(allCy,PGALL,YTIME)
@@ -231,13 +231,13 @@ Q04CostVarTechNotPGSCRN(allCy,PGALL,YTIME)$(time(YTIME) $(not PGSCRN(PGALL)) $ru
 Q04CostProdTeCHPreReplac(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V04CostProdTeCHPreReplac(allCy,PGALL,YTIME) =e=
                         (
-                          ((imDisc(allCy,"PG",YTIME) * exp(imDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL))/
-                          (exp(imDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL)) -1))
-                            * iGrossCapCosSubRen(allCy,PGALL,YTIME)* 1E3 * imCGI(allCy,YTIME)  + 
-                            iFixOandMCost(allCy,PGALL,YTIME))/(8760*iAvailRate(PGALL,YTIME))
-                           + (iVarCost(PGALL,YTIME)/1E3 + sum(PGEF$PGALLtoEF(PGALL,PGEF), 
-                           (VMPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)+
-                            imCO2CaptRate(allCy,PGALL,YTIME)*VMCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
+                          ((imDisc(allCy,"PG",YTIME) * exp(imDisc(allCy,"PG",YTIME)*i04TechLftPlaType(allCy,PGALL))/
+                          (exp(imDisc(allCy,"PG",YTIME)*i04TechLftPlaType(allCy,PGALL)) -1))
+                            * i04GrossCapCosSubRen(allCy,PGALL,YTIME)* 1E3 * imCGI(allCy,YTIME)  + 
+                            i04FixOandMCost(allCy,PGALL,YTIME))/(8760*i04AvailRate(PGALL,YTIME))
+                           + (i04VarCost(PGALL,YTIME)/1E3 + sum(PGEF$PGALLtoEF(PGALL,PGEF), 
+                           (VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)+
+                            imCO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
                              (1-imCO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
                          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))))
                                  *smTWhToMtoe/imPlantEffByType(allCy,PGALL,YTIME))$(not PGREN(PGALL)))
@@ -249,8 +249,8 @@ Q04CostProdTeCHPreReplac(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' and incorporates adjustments based on the availability rates of two power plants .
 Q04CostProdTeCHPreReplacAvail(allCy,PGALL,PGALL2,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V04CostProdTeCHPreReplacAvail(allCy,PGALL,PGALL2,YTIME) =E=
-         iAvailRate(PGALL,YTIME)/iAvailRate(PGALL2,YTIME)*V04CostProdTeCHPreReplac(allCy,PGALL,YTIME)+
-         V04CostVarTech(allCy,PGALL,YTIME)*(1-iAvailRate(PGALL,YTIME)/iAvailRate(PGALL2,YTIME));  
+         i04AvailRate(PGALL,YTIME)/i04AvailRate(PGALL2,YTIME)*V04CostProdTeCHPreReplac(allCy,PGALL,YTIME)+
+         V04CostVarTech(allCy,PGALL,YTIME)*(1-i04AvailRate(PGALL,YTIME)/i04AvailRate(PGALL2,YTIME));  
 
 *' The equation computes the endogenous scrapping index for power generation plants  during the specified year .
 *' The index is calculated as the variable cost of technology excluding power plants flagged as not subject to scrapping 
@@ -260,7 +260,7 @@ Q04IndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(al
          V04IndxEndogScrap(allCy,PGALL,YTIME)
                  =E=
          V04CostVarTechNotPGSCRN(allCy,PGALL,YTIME)/
-         (V04CostVarTechNotPGSCRN(allCy,PGALL,YTIME)+(iScaleEndogScrap(PGALL)*
+         (V04CostVarTechNotPGSCRN(allCy,PGALL,YTIME)+(i04ScaleEndogScrap(PGALL)*
          sum(PGALL2,V04CostProdTeCHPreReplacAvail(allCy,PGALL,PGALL2,YTIME)))**(-5));
 
 *' The equation calculates the total electricity generation capacity excluding Combined Heat and Power plants for a specified year .
@@ -269,7 +269,7 @@ Q04IndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(al
 Q04CapElecNonCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       V04CapElecNonCHP(allCy,YTIME)
           =E=
-      VMCapElecTotEst(allCy,YTIME) - 0*SUM(CHP,V04CapElecCHP(allCy,CHP,YTIME) * 0.85);      
+      VmCapElecTotEst(allCy,YTIME) - 0*SUM(CHP,V04CapElecCHP(allCy,CHP,YTIME) * 0.85);      
 
 *' In essence, the equation evaluates the difference between the current and expected power generation capacity, accounting for various factors such as planned capacity,
 *' decommissioning schedules, and endogenous scrapping. The square root term introduces a degree of tolerance in the calculation.
@@ -280,19 +280,19 @@ Q04GapGenCapPowerDiff(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
           (
             V04CapElecNonCHP(allCy,YTIME) - V04CapElecNonCHP(allCy,YTIME-1) +
             sum(PGALL, V04CapElec2(allCy,PGALL,YTIME-1) * (1 - V04IndxEndogScrap(allCy,PGALL,YTIME))) +
-            sum(PGALL, (iPlantDecomSched(allCy,PGALL,YTIME) - iDecInvPlantSched(allCy,PGALL,YTIME)) * iAvailRate(PGALL,YTIME)) + 
+            sum(PGALL, (i04PlantDecomSched(allCy,PGALL,YTIME) - i04DecInvPlantSched(allCy,PGALL,YTIME)) * i04AvailRate(PGALL,YTIME)) + 
             sum(PGALL$PGSCRN(PGALL),
-              (VMCapElec(allCy,PGALL,YTIME-1) - iPlantDecomSched(allCy,PGALL,YTIME) * iAvailRate(PGALL,YTIME)) /
-              iTechLftPlaType(allCy,PGALL))
+              (VmCapElec(allCy,PGALL,YTIME-1) - i04PlantDecomSched(allCy,PGALL,YTIME) * i04AvailRate(PGALL,YTIME)) /
+              i04TechLftPlaType(allCy,PGALL))
           ) + 0 +
           SQRT(SQR(
           (
             V04CapElecNonCHP(allCy,YTIME) - V04CapElecNonCHP(allCy,YTIME-1) +
             sum(PGALL,V04CapElec2(allCy,PGALL,YTIME-1) * (1 - V04IndxEndogScrap(allCy,PGALL,YTIME))) +
-            sum(PGALL, (iPlantDecomSched(allCy,PGALL,YTIME) - iDecInvPlantSched(allCy,PGALL,YTIME)) * iAvailRate(PGALL,YTIME)) +
+            sum(PGALL, (i04PlantDecomSched(allCy,PGALL,YTIME) - i04DecInvPlantSched(allCy,PGALL,YTIME)) * i04AvailRate(PGALL,YTIME)) +
             sum(PGALL$PGSCRN(PGALL), 
-              (VMCapElec(allCy,PGALL,YTIME-1) - iPlantDecomSched(allCy,PGALL,YTIME) * iAvailRate(PGALL,YTIME)) /
-              iTechLftPlaType(allCy,PGALL))
+              (VmCapElec(allCy,PGALL,YTIME-1) - i04PlantDecomSched(allCy,PGALL,YTIME) * i04AvailRate(PGALL,YTIME)) /
+              i04TechLftPlaType(allCy,PGALL))
        ) -0) + SQR(1e-10) ) 
        )/2;
 
@@ -356,7 +356,7 @@ Q04RenTechMatMult(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04ScalWeibullSum(allCy,PGALL,YTIME)$((not CCS(PGALL)) $TIME(YTIME) $runCy(allCy))..
          V04ScalWeibullSum(allCy,PGALL,YTIME) 
          =E=
-              iMatFacPlaAvailCap(allCy,PGALL,YTIME) * V04RenTechMatMult(allCy,PGALL,YTIME)*
+              i04MatFacPlaAvailCap(allCy,PGALL,YTIME) * V04RenTechMatMult(allCy,PGALL,YTIME)*
               sum(HOUR,
                  (V04CostHourProdInvDec(allCy,PGALL,HOUR,YTIME)$(not NOCCS(PGALL))
                  +
@@ -390,19 +390,19 @@ Q04SharePowPlaNewEq(allCy,PGALL,YTIME)$(TIME(YTIME) $runCy(allCy)) ..
 *' and time period. The calculation takes into account various factors related to new investments, decommissioning, and technology-specific parameters.
 *' The equation aims to model the evolution of electricity generation capacity over time, considering new investments, decommissioning, and technology-specific parameters.
 Q04CapElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-        VMCapElec(allCy,PGALL,YTIME)
+        VmCapElec(allCy,PGALL,YTIME)
              =E=
          (V04CapElec2(allCy,PGALL,YTIME-1)*V04IndxEndogScrap(allCy,PGALL,YTIME-1) +
           V04NewCapElec(allCy,PGALL,YTIME) -
-          iPlantDecomSched(allCy,PGALL,YTIME) * iAvailRate(PGALL,YTIME)
+          i04PlantDecomSched(allCy,PGALL,YTIME) * i04AvailRate(PGALL,YTIME)
          ) -
-         ((VMCapElec(allCy,PGALL,YTIME-1)-iPlantDecomSched(allCy,PGALL,YTIME-1))* 
-         iAvailRate(PGALL,YTIME)*(1/iTechLftPlaType(allCy,PGALL)))$PGSCRN(PGALL);
+         ((VmCapElec(allCy,PGALL,YTIME-1)-i04PlantDecomSched(allCy,PGALL,YTIME-1))* 
+         i04AvailRate(PGALL,YTIME)*(1/i04TechLftPlaType(allCy,PGALL)))$PGSCRN(PGALL);
 
 Q04CapElecNominal(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
           V04CapElecNominal(allCy,PGALL,YTIME)
               =E=
-          VMCapElec(allCy,PGALL,YTIME) / iAvailRate(PGALL,YTIME);
+          VmCapElec(allCy,PGALL,YTIME) / i04AvailRate(PGALL,YTIME);
          
 Q04NewCapElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       V04NewCapElec(allCy,PGALL,YTIME)
@@ -411,7 +411,7 @@ Q04NewCapElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         (V04SharePowPlaNewEq(allCy,PGALL,YTIME) * V04GapGenCapPowerDiff(allCy,YTIME))$( (not CCS(PGALL)) AND (not NOCCS(PGALL))) +
         (V04SharePowPlaNewEq(allCy,PGALL,YTIME) * V04ShareNewTechNoCCS(allCy,PGALL,YTIME) * V04GapGenCapPowerDiff(allCy,YTIME))$NOCCS(PGALL) +
         (V04SharePowPlaNewEq(allCy,PGALL,YTIME) * V04ShareNewTechNoCCS(allCy,PGALL,YTIME) * V04GapGenCapPowerDiff(allCy,YTIME))$CCS(PGALL) +
-        iDecInvPlantSched(allCy,PGALL,YTIME) * iAvailRate(PGALL,YTIME)
+        i04DecInvPlantSched(allCy,PGALL,YTIME) * i04AvailRate(PGALL,YTIME)
       );
   
 *' This equation calculates the variable representing the planned electricity generation capacity for a specific power plant  in a given country
@@ -421,14 +421,14 @@ Q04NewCapElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04CapElec2(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V04CapElec2(allCy,PGALL,YTIME)
              =E=
-         ( VMCapElec(allCy,PGALL,YTIME) + 1e-6 + SQRT( SQR(VMCapElec(allCy,PGALL,YTIME)-1e-6) + SQR(1e-4) ) )/2;
+         ( VmCapElec(allCy,PGALL,YTIME) + 1e-6 + SQRT( SQR(VmCapElec(allCy,PGALL,YTIME)-1e-6) + SQR(1e-4) ) )/2;
 
 *' Compute the variable cost of each power plant technology for every region,
 *' by utilizing the maturity factor related to plant dispatching.
 Q04CostVarTechElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         V04CostVarTechElec(allCy,PGALL,YTIME)
             =E=  
-        iMatureFacPlaDisp(allCy,PGALL,YTIME)*V04CostVarTech(allCy,PGALL,YTIME)**(-1);
+        i04MatureFacPlaDisp(allCy,PGALL,YTIME)*V04CostVarTech(allCy,PGALL,YTIME)**(-1);
 
 *' Compute the electricity peak loads of each region,
 *' as a sum of the variable costs of all power plant technologies.
@@ -463,14 +463,14 @@ Q04NetNewCapElec(allCy,PGALL,YTIME)$(PGREN(PGALL)$TIME(YTIME)$runCy(allCy))..
 Q04CFAvgRen(allCy,PGALL,YTIME)$(PGREN(PGALL)$TIME(YTIME)$runCy(allCy))..
     V04CFAvgRen(allCy,PGALL,YTIME)
         =E=
-    (iAvailRate(PGALL,YTIME)*V04NetNewCapElec(allCy,PGALL,YTIME)+
-     iAvailRate(PGALL,YTIME-1)*V04NetNewCapElec(allCy,PGALL,YTIME-1)+
-     iAvailRate(PGALL,YTIME-2)*V04NetNewCapElec(allCy,PGALL,YTIME-2)+
-     iAvailRate(PGALL,YTIME-3)*V04NetNewCapElec(allCy,PGALL,YTIME-3)+
-     iAvailRate(PGALL,YTIME-4)*V04NetNewCapElec(allCy,PGALL,YTIME-4)+
-     iAvailRate(PGALL,YTIME-5)*V04NetNewCapElec(allCy,PGALL,YTIME-5)+
-     iAvailRate(PGALL,YTIME-6)*V04NetNewCapElec(allCy,PGALL,YTIME-6)+
-     iAvailRate(PGALL,YTIME-7)*V04NetNewCapElec(allCy,PGALL,YTIME-7)
+    (i04AvailRate(PGALL,YTIME)*V04NetNewCapElec(allCy,PGALL,YTIME)+
+     i04AvailRate(PGALL,YTIME-1)*V04NetNewCapElec(allCy,PGALL,YTIME-1)+
+     i04AvailRate(PGALL,YTIME-2)*V04NetNewCapElec(allCy,PGALL,YTIME-2)+
+     i04AvailRate(PGALL,YTIME-3)*V04NetNewCapElec(allCy,PGALL,YTIME-3)+
+     i04AvailRate(PGALL,YTIME-4)*V04NetNewCapElec(allCy,PGALL,YTIME-4)+
+     i04AvailRate(PGALL,YTIME-5)*V04NetNewCapElec(allCy,PGALL,YTIME-5)+
+     i04AvailRate(PGALL,YTIME-6)*V04NetNewCapElec(allCy,PGALL,YTIME-6)+
+     i04AvailRate(PGALL,YTIME-7)*V04NetNewCapElec(allCy,PGALL,YTIME-7)
     ) /
     (V04NetNewCapElec(allCy,PGALL,YTIME) + V04NetNewCapElec(allCy,PGALL,YTIME-1)+
     V04NetNewCapElec(allCy,PGALL,YTIME-2) + V04NetNewCapElec(allCy,PGALL,YTIME-3)+
@@ -487,7 +487,7 @@ Q04CapOverall(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04CapElec2(allCy,pgall,ytime)$ (not PGREN(PGALL)) +
     V04CFAvgRen(allCy,PGALL,YTIME-1) *
     (
-      V04NetNewCapElec(allCy,PGALL,YTIME) / iAvailRate(PGALL,YTIME) +
+      V04NetNewCapElec(allCy,PGALL,YTIME) / i04AvailRate(PGALL,YTIME) +
       V04CapOverall(allCy,PGALL,YTIME-1) / V04CFAvgRen(allCy,PGALL,YTIME-1)
     )$PGREN(PGALL);
 
@@ -511,9 +511,9 @@ Q04ScalFacPlantDispatch(allCy,HOUR,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
           exp(-V04ScalFacPlaDisp(allCy,HOUR,YTIME) / V04SortPlantDispatch(allCy,PGALL,YTIME))
         )
                 =E=
-        (VMPeakLoad(allCy,YTIME) - VMBaseLoad(allCy,YTIME))
+        (VmPeakLoad(allCy,YTIME) - VmBaseLoad(allCy,YTIME))
         * exp(-V04Lambda(allCy,YTIME)*(0.25 + ord(HOUR)-1))
-        + VMBaseLoad(allCy,YTIME);
+        + VmBaseLoad(allCy,YTIME);
 
 *' This equation calculates the estimated electricity generation of Combined Heat and Power plantsin a specific countryand time period.
 *' The estimation is based on the fuel consumption of CHP plants, their electricity prices, the maximum share of CHP electricity in total demand, and the overall
@@ -524,12 +524,12 @@ Q04ProdElecEstCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
             =E=
         (
           (1/0.086 * 
-          sum((INDDOM,CHP), VMConsFuel(allCy,INDDOM,CHP,YTIME)) * VMPriceElecInd(allCy,YTIME)) + 
-          iMxmShareChpElec(allCy,YTIME) * V04DemElecTot(allCy,YTIME) - 
+          sum((INDDOM,CHP), VmConsFuel(allCy,INDDOM,CHP,YTIME)) * VmPriceElecInd(allCy,YTIME)) + 
+          i04MxmShareChpElec(allCy,YTIME) * V04DemElecTot(allCy,YTIME) - 
           
-          SQRT( SQR((1/0.086 * sum((INDDOM,CHP), VMConsFuel(allCy,INDDOM,CHP,YTIME)) * 
-          VMPriceElecInd(allCy,YTIME)) - 
-          iMxmShareChpElec(allCy,YTIME)*V04DemElecTot(allCy,YTIME)) )  
+          SQRT( SQR((1/0.086 * sum((INDDOM,CHP), VmConsFuel(allCy,INDDOM,CHP,YTIME)) * 
+          VmPriceElecInd(allCy,YTIME)) - 
+          i04MxmShareChpElec(allCy,YTIME)*V04DemElecTot(allCy,YTIME)) )  
         )/2 +
         SQR(1E-4);
 
@@ -562,7 +562,7 @@ Q04ProdElecReqCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' from power generation plants based on the proportion of electricity demand that needs to be met by power generation plants, considering their
 *' capacity and the scaling factor for dispatching.
 Q04ProdElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-        VMProdElec(allCy,PGALL,YTIME)
+        VmProdElec(allCy,PGALL,YTIME)
                 =E=
         V04ProdElecNonCHP(allCy,YTIME) / (V04ProdElecReqTot(allCy,YTIME) - V04ProdElecReqCHP(allCy,YTIME)) *
         V04CapElec2(allCy,PGALL,YTIME) *
@@ -579,7 +579,7 @@ $ontext
 q04SecContrTotCHPProd(allCy,INDDOM,CHP,YTIME)$(TIME(YTIME) $SECTTECH(INDDOM,CHP) $runCy(allCy))..
          v04SecContrTotCHPProd(allCy,INDDOM,CHP,YTIME) 
           =E=
-         VMConsFuel(allCy,INDDOM,CHP,YTIME)/(1e-6+SUM(INDDOM2,VMConsFuel(allCy,INDDOM2,CHP,YTIME)));
+         VmConsFuel(allCy,INDDOM,CHP,YTIME)/(1e-6+SUM(INDDOM2,VmConsFuel(allCy,INDDOM2,CHP,YTIME)));
 $offtext
 
 *' This equation calculates the electricity production from Combined Heat and Power plants . The electricity production is computed
@@ -590,8 +590,8 @@ $offtext
 Q04ProdElecCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         V04ProdElecCHP(allCy,CHP,YTIME)
                  =E=
-        sum(INDDOM,VMConsFuel(allCy,INDDOM,CHP,YTIME)) / SUM(chp2,sum(INDDOM,VMConsFuel(allCy,INDDOM,CHP2,YTIME)))*
-        (V04DemElecTot(allCy,YTIME) - SUM(PGALL,VMProdElec(allCy,PGALL,YTIME)));
+        sum(INDDOM,VmConsFuel(allCy,INDDOM,CHP,YTIME)) / SUM(chp2,sum(INDDOM,VmConsFuel(allCy,INDDOM,CHP2,YTIME)))*
+        (V04DemElecTot(allCy,YTIME) - SUM(PGALL,VmProdElec(allCy,PGALL,YTIME)));
 
 *' This equation calculates the long-term power generation cost of technologies excluding climate policies.
 *' The cost is computed for a specific country, power generation technology , energy sector, and time period.
@@ -602,14 +602,14 @@ Q04ProdElecCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04CostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       V04CostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME)
                  =E=
-      (imDisc(allCy,"PG",YTIME)*EXP(imDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL)) /
-      (EXP(imDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL))-1)*iGrossCapCosSubRen(allCy,PGALL,YTIME)*1000*imCGI(allCy,YTIME) +
-      iFixOandMCost(allCy,PGALL,YTIME)
-      ) /iAvailRate(PGALL,YTIME)
+      (imDisc(allCy,"PG",YTIME)*EXP(imDisc(allCy,"PG",YTIME)*i04TechLftPlaType(allCy,PGALL)) /
+      (EXP(imDisc(allCy,"PG",YTIME)*i04TechLftPlaType(allCy,PGALL))-1)*i04GrossCapCosSubRen(allCy,PGALL,YTIME)*1000*imCGI(allCy,YTIME) +
+      i04FixOandMCost(allCy,PGALL,YTIME)
+      ) /i04AvailRate(PGALL,YTIME)
               / (1000*(6$ISET(ESET)+4$RSET(ESET))) +
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
-                 (iVarCost(PGALL,YTIME)/1000+(VMPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)/1.2441+
-                 imCO2CaptRate(allCy,PGALL,YTIME)*VMCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
+                 (i04VarCost(PGALL,YTIME)/1000+(VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)/1.2441+
+                 imCO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
                  (1-imCO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
                  (sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))))
                  *smTWhToMtoe/imPlantEffByType(allCy,PGALL,YTIME)));
@@ -627,14 +627,14 @@ q04CostPowGenLonMin(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          v04CostPowGenLonMin(allCy,PGALL,YTIME)
                  =E=
 
-             (imDisc(allCy,"PG",YTIME)*EXP(imDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL)) /
-             (EXP(imDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL))-1)*iGrossCapCosSubRen(allCy,PGALL,YTIME)*1000*imCGI(allCy,YTIME) +
-             iFixOandMCost(allCy,PGALL,YTIME))/iAvailRate(PGALL,YTIME)
+             (imDisc(allCy,"PG",YTIME)*EXP(imDisc(allCy,"PG",YTIME)*i04TechLftPlaType(allCy,PGALL)) /
+             (EXP(imDisc(allCy,"PG",YTIME)*i04TechLftPlaType(allCy,PGALL))-1)*i04GrossCapCosSubRen(allCy,PGALL,YTIME)*1000*imCGI(allCy,YTIME) +
+             i04FixOandMCost(allCy,PGALL,YTIME))/i04AvailRate(PGALL,YTIME)
              / (1000*smGwToTwhPerYear) +
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
-                 (iVarCost(PGALL,YTIME)/1000+(VMPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)/1.2441+
+                 (i04VarCost(PGALL,YTIME)/1000+(VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)/1.2441+
 
-                 imCO2CaptRate(allCy,PGALL,YTIME)*VMCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
+                 imCO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
 
                  (1-imCO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
 
@@ -653,15 +653,15 @@ q04CostPowGenLongIntPri(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          v04CostPowGenLongIntPri(allCy,PGALL,ESET,YTIME)
                  =E=
 
-             (imDisc(allCy,"PG",YTIME)*EXP(imDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL)) /
-             (EXP(imDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL))-1)*iGrossCapCosSubRen(allCy,PGALL,YTIME)/1.5*1000*imCGI(allCy,YTIME) +
-             iFixOandMCost(allCy,PGALL,YTIME))/iAvailRate(PGALL,YTIME)
+             (imDisc(allCy,"PG",YTIME)*EXP(imDisc(allCy,"PG",YTIME)*i04TechLftPlaType(allCy,PGALL)) /
+             (EXP(imDisc(allCy,"PG",YTIME)*i04TechLftPlaType(allCy,PGALL))-1)*i04GrossCapCosSubRen(allCy,PGALL,YTIME)/1.5*1000*imCGI(allCy,YTIME) +
+             i04FixOandMCost(allCy,PGALL,YTIME))/i04AvailRate(PGALL,YTIME)
              / (1000*(7.25$ISET(ESET)+2.25$RSET(ESET))) +
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
-                 (iVarCost(PGALL,YTIME)/1000+((
-  SUM(EF,sum(WEF$EFtoWEF("PG",EF,WEF), iPriceFuelsInt(WEF,YTIME))*smTWhToMtoe/1000*1.5))$(not PGREN(PGALL))    +
+                 (i04VarCost(PGALL,YTIME)/1000+((
+  SUM(EF,sum(WEF$EFtoWEF("PG",EF,WEF), imPriceFuelsInt(WEF,YTIME))*smTWhToMtoe/1000*1.5))$(not PGREN(PGALL))    +
 
-                 imCO2CaptRate(allCy,PGALL,YTIME)*VMCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
+                 imCO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
 
                  (1-imCO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
 
@@ -679,10 +679,10 @@ q04CostPowGenShortIntPri(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          v04CostPowGenShortIntPri(allCy,PGALL,ESET,YTIME)
                  =E=
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
-                 (iVarCost(PGALL,YTIME)/1000+((
-  SUM(EF,sum(WEF$EFtoWEF("PG",EF,WEF), iPriceFuelsInt(WEF,YTIME))*smTWhToMtoe/1000*1.5))$(not PGREN(PGALL))    +
+                 (i04VarCost(PGALL,YTIME)/1000+((
+  SUM(EF,sum(WEF$EFtoWEF("PG",EF,WEF), imPriceFuelsInt(WEF,YTIME))*smTWhToMtoe/1000*1.5))$(not PGREN(PGALL))    +
 
-                 imCO2CaptRate(allCy,PGALL,YTIME)*VMCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
+                 imCO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
 
                  (1-imCO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
 
@@ -695,11 +695,11 @@ $offtext
 *' plants and energy forms, considering the specific characteristics and costs associated with each. The result is the average power generation cost per unit of
 *' electricity consumed in the given time period.
 Q04CostPowGenAvgLng(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-        VMCostPowGenAvgLng(allCy,ESET,YTIME)
+        VmCostPowGenAvgLng(allCy,ESET,YTIME)
               =E=
         (
-          SUM(PGALL, VMProdElec(allCy,PGALL,YTIME) * V04CostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME)) +
-          sum(CHP, VMCostElcAvgProdCHP(allCy,CHP,YTIME) * V04ProdElecCHP(allCy,CHP,YTIME))
+          SUM(PGALL, VmProdElec(allCy,PGALL,YTIME) * V04CostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME)) +
+          sum(CHP, VmCostElcAvgProdCHP(allCy,CHP,YTIME) * V04ProdElecCHP(allCy,CHP,YTIME))
         ) / 
         V04DemElecTot(allCy,YTIME); 
 
@@ -712,15 +712,15 @@ Q04CostPowGenAvgLng(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04CostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V04CostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)
                  =E=
-             (imDisc(allCy,"PG",YTIME)*EXP(imDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL)) /
-             (EXP(imDisc(allCy,"PG",YTIME)*iTechLftPlaType(allCy,PGALL))-1)*iGrossCapCosSubRen(allCy,PGALL,YTIME)*1000*imCGI(allCy,YTIME) +
-             iFixOandMCost(allCy,PGALL,YTIME))/iAvailRate(PGALL,YTIME)
+             (imDisc(allCy,"PG",YTIME)*EXP(imDisc(allCy,"PG",YTIME)*i04TechLftPlaType(allCy,PGALL)) /
+             (EXP(imDisc(allCy,"PG",YTIME)*i04TechLftPlaType(allCy,PGALL))-1)*i04GrossCapCosSubRen(allCy,PGALL,YTIME)*1000*imCGI(allCy,YTIME) +
+             i04FixOandMCost(allCy,PGALL,YTIME))/i04AvailRate(PGALL,YTIME)
              / (1000*(7.25$ISET(ESET)+2.25$RSET(ESET))) +
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
-                 (iVarCost(PGALL,YTIME)/1000+((VMPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)-imEffValueInDollars(allCy,"PG",ytime)/1000-imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
+                 (i04VarCost(PGALL,YTIME)/1000+((VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)-imEffValueInDollars(allCy,"PG",ytime)/1000-imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
                  sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))/1000 )/1.2441+
 
-                 imCO2CaptRate(allCy,PGALL,YTIME)*VMCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
+                 imCO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
 
                  (1-imCO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
 
@@ -735,8 +735,8 @@ Q04CostPowGenLonNoClimPol(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V04CostPowGenLonNoClimPol(allCy,ESET,YTIME)
                  =E=
          (
-         SUM(PGALL, (VMProdElec(allCy,PGALL,YTIME))*V04CostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)) +
-         sum(CHP, VMCostElcAvgProdCHP(allCy,CHP,YTIME)*V04ProdElecCHP(allCy,CHP,YTIME))
+         SUM(PGALL, (VmProdElec(allCy,PGALL,YTIME))*V04CostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)) +
+         sum(CHP, VmCostElcAvgProdCHP(allCy,CHP,YTIME)*V04ProdElecCHP(allCy,CHP,YTIME))
          ) /
          (V04DemElecTot(allCy,YTIME));  
 
@@ -746,8 +746,8 @@ Q04CostPowGenLonNoClimPol(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04ConsElec(allCy,DSBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         V04ConsElec(allCy,DSBS,YTIME)
             =E=
-        sum(INDDOM $SAMEAS(INDDOM,DSBS), VMConsFuel(allCy,INDDOM,"ELC",YTIME)) + 
-        sum(TRANSE $SAMEAS(TRANSE,DSBS), VMDemFinEneTranspPerFuel(allCy,TRANSE,"ELC",YTIME));
+        sum(INDDOM $SAMEAS(INDDOM,DSBS), VmConsFuel(allCy,INDDOM,"ELC",YTIME)) + 
+        sum(TRANSE $SAMEAS(TRANSE,DSBS), VmDemFinEneTranspPerFuel(allCy,TRANSE,"ELC",YTIME));
 
 *' This equation computes the short-term average power generation cost. It involves summing the variable production costs for different power generation plants and
 *' energy forms, considering the specific characteristics and costs associated with each. The result is the average power generation cost per unit of electricity
@@ -759,17 +759,17 @@ q04CostPowGenAvgShrt(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                  =E=
         (
         sum(PGALL,
-        VMProdElec(allCy,PGALL,YTIME)*
+        VmProdElec(allCy,PGALL,YTIME)*
         (
         sum(PGEF$PGALLtoEF(PGALL,PGEF),
-        (iVarCost(PGALL,YTIME)/1000+(VMPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)/1.2441+
-         imCO2CaptRate(allCy,PGALL,YTIME)*VMCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
+        (i04VarCost(PGALL,YTIME)/1000+(VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)/1.2441+
+         imCO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
          (1-imCO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))))
                  *smTWhToMtoe/imPlantEffByType(allCy,PGALL,YTIME)))
         ))
         +
-         sum(CHP, VMCostVarAvgElecProd(allCy,CHP,YTIME)*V04ProdElecCHP(allCy,CHP,YTIME))
+         sum(CHP, VmCostVarAvgElecProd(allCy,CHP,YTIME)*V04ProdElecCHP(allCy,CHP,YTIME))
          )
          /V04DemElecTot(allCy,YTIME);
 $offtext

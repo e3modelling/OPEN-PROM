@@ -36,9 +36,9 @@ V05CostTotH2(allCy, SBS, YTIME)                   "Total Hydrogen Cost Per Secto
 V05DemSecH2(allCy, SBS, YTIME)                    "Demand for H2 by sector in mtoe"
 
 *'                **Interdependent Variables**	
-VMDemTotH2(allCy, YTIME)                          "Hydrogen production requirement in Mtoe for meeting final demand"
-VMProdH2(allCy, H2TECH, YTIME)                    "Hydrogen Production by technology in Mtoe"
-VMConsFuelTechH2Prod(allCy, H2TECH, EF, YTIME)    "Fuel consumption by hydrogen production technology in Mtoe"
+VmDemTotH2(allCy, YTIME)                          "Hydrogen production requirement in Mtoe for meeting final demand"
+VmProdH2(allCy, H2TECH, YTIME)                    "Hydrogen Production by technology in Mtoe"
+VmConsFuelTechH2Prod(allCy, H2TECH, EF, YTIME)    "Fuel consumption by hydrogen production technology in Mtoe"
 ;
 
 Equations
@@ -80,8 +80,8 @@ Q05ConsFuelTechH2Prod(allCy, H2TECH, EF, YTIME)   "Equation for fuel consumption
 ;
 
 Scalars
-sAreaStyle                                        "stylised area in km2" /3025/
-sSalesH2Station                                   "annual sales of a hydrogen service station in ktoe" /2.26/
-sLenH2StationConn                                 "length of pipes connection service stations with the ring in km per station" /2/
-sDelivH2Turnpike                                  "stylised annual hydrogen delivery in turnpike pipeline in ktoe" /275/
+s05AreaStyle                                      "stylised area in km2" /3025/
+s05SalesH2Station                                 "annual sales of a hydrogen service station in ktoe" /2.26/
+s05LenH2StationConn                               "length of pipes connection service stations with the ring in km per station" /2/
+s05DelivH2Turnpike                                "stylised annual hydrogen delivery in turnpike pipeline in ktoe" /275/
 ;

@@ -1,14 +1,14 @@
 Object type,MENA-EDS,OPEN-PROM,Explanation,Old sets,New sets,Sector
-Parameter,ACEN,iRateEneBranCons,Rate of Energy Branch Consumption over total transformation output (1),"CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
+Parameter,ACEN,i03RateEneBranCons,Rate of Energy Branch Consumption over total transformation output (1),"CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
 Parameter,ACTV,imActv,Various sector activity (1),"CYAll,SBS,YTIME","YTIME,allCy,SBS",Macro economic indicators
 Variable,ACTVTRG,V01ActivGoodsTransp,Goods transport acitivity (Gtkm),"CYall,TRANSE,YTIME","allCy,TRANSE,YTIME",TRANSPORT SECTOR VARIABLES
 Variable,ACTVTRP,V01ActivPassTrnsp,Passenger transport acitivity (1),"CYall,TRANSE,YTIME","allCy,TRANSE,YTIME",TRANSPORT SECTOR VARIABLES
-Parameter,AELCIMP,iRatioImpFinElecDem,Ratio of imports in final electricity demand (1),"CYall,YTIME","allCy,YTIME",Supply Side Specific Parameters
+Parameter,AELCIMP,i03RatioImpFinElecDem,Ratio of imports in final electricity demand (1),"CYall,YTIME","allCy,YTIME",Supply Side Specific Parameters
 Variable,AFFORDABILITY,v07ExpendHouseEne,Households expenditures on energy (billions),"CYALL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Parameter,ALOS,imRateLossesFinCons,Rate of losses over Available for Final Consumption,"CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
 Variable,ALPHA,V04ScalFacPlaDisp,Scaling factor for plant dispatching,"CYall,HOUR,YTIME","allCy,HOUR,YTIME",POWER GENERATION SECTOR
-Parameter,AMAXBASE,iBslCorrection,Parameter of baseload correction,"CYaLL,YTIME","allCy,YTIME",Power Generation Parameters
-Parameter,APPROD,iRatePriProTotPriNeeds,Rate of Primary Production in Total Primary Needs (1),"CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
+Parameter,AMAXBASE,i04BslCorrection,Parameter of baseload correction,"CYaLL,YTIME","allCy,YTIME",Power Generation Parameters
+Parameter,APPROD,i03RatePriProTotPriNeeds,Rate of Primary Production in Total Primary Needs (1),"CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
 Parameter,APRICE,-,"Alpha' Parameter, linking International Prices with Consumer Prices","CYall,SBS,EF,YTIME",,Macro economic and demographic
 Parameter,APricePRN,,Parameters linking world prices to domestic prices in equations (after 2005),"SBS,EF,YTIME",,Parameters for data transfering
 Variable,AVCHPCOST,VMVCostElcAvgProdCHP,Average Electricity production cost per CHP plant (US$2015/KWh),"CYall,CHP,YTIME","allCy,CHP,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
@@ -16,7 +16,7 @@ Variable,AVCHPVCOST,VMVCostVarAvgElecProd,"""Average variable including fuel ele
 Variable,AVERAV,V04CFAvgRen,"The average capacity factor of RES, availability of RES increases over the years, but not all their capacity can produce electricity at such high availabilities","CYALL,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Variable,BASEEST,V04BsldEst,Estimated base load (GW),"CYall,YTIME","allCy,YTIME",
 Variable,BASELOAD,VMVBaseLoad,Corrected base load (GW),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Parameter,BOILEFF,iBoiEffChp,Boiler efficiency (typical) used in adjusting CHP efficiency (),"CYall,CHP,YTIME","allCy,CHP,YTIME",Power Generation Parameters
+Parameter,BOILEFF,i02BoiEffChp,Boiler efficiency (typical) used in adjusting CHP efficiency (),"CYall,CHP,YTIME","allCy,CHP,YTIME",Power Generation Parameters
 Variable,CAPACITY,V04CapElec2,Electricity generation plants capacity (GW),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Variable,CAPACITY2,V04NewCapElec,The new capacity added every year (MW),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
 Variable,capall,V04CapOverall,Overall Capacity (MW),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
@@ -34,26 +34,26 @@ Variable,CF,VMVConsFinEneCountry,Total final energy consumnption (Mtoe),"CYall,E
 Variable,CFNEN,VMVConsFinNonEne,Final non energy consumption (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
 Variable,CFTOT,v03ConsTotFinEne,Total final energy Consumption in ALL COUNTRIES (Mtoe) ,YTIME,YTIME,INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Parameter,CGI,imCGI,Capital Goods Index (defined as CGI(Scenario)/CGI(Baseline)),"CYall,YTIME","allCy,YTIME",Macro economic indicators
-Parameter,CHPAVAIL,iAvailRateChp,Availability rate of CHP Plants (),"CYall,DSBS,CHP","allCy,DSBS,CHP",
+Parameter,CHPAVAIL,i02AvailRateChp,Availability rate of CHP Plants (),"CYall,DSBS,CHP","allCy,DSBS,CHP",
 Variable,CHPCAPAC,V04CapElecCHP,Capacity of CHP Plants (GW),"CYall,CHP,YTIME","allCy,CHP,YTIME",POWER GENERATION SECTOR
-Parameter,CHPCAPCOST,iInvCostChp,Capital Cost per CHP plant type (kUS$2015/KW),"CYall,DSBS,CHP,YTIME","allCy ,DSBS,CHP,YTIME",Power Generation Parameters
+Parameter,CHPCAPCOST,i02InvCostChp,Capital Cost per CHP plant type (kUS$2015/KW),"CYall,DSBS,CHP,YTIME","allCy ,DSBS,CHP,YTIME",Power Generation Parameters
 Variable,CHPCOST,V02CostElecProdCHP,Electricity production cost per CHP plant and demand sector (US$2015/KWh),"CYall,DSBS,CHP,YTIME","allCy,DSBS,CHP,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,CHPELCPROD,V04ProdElecCHP,CHP electricity production (TWh),"CYALL,CHP,YTIME","allCy,CHP,YTIME",POWER GENERATION SECTOR
-Parameter,CHPFIXCOST,iFixOMCostPerChp,Fixed O&M cost per CHP plant type (US$2015/KW),"CYall,DSBS,CHP,YTIME","allCy,DSBS,CHP,YTIME",
-Parameter,CHPLFT,iLifChpPla,Technical Lifetime for CHP plants (years),"CYall,DSBS,CHP","allCy,DSBS,CHP",Power Generation Parameters
-Parameter,CHPPG_Cost,iDataChpPowGen,Various data related to CHP power generation (various),"EF,CHPPGSET,YTIME","EF,YTIME,CHPPGSET",common data parameters
+Parameter,CHPFIXCOST,i02FixOMCostPerChp,Fixed O&M cost per CHP plant type (US$2015/KW),"CYall,DSBS,CHP,YTIME","allCy,DSBS,CHP,YTIME",
+Parameter,CHPLFT,i02LifChpPla,Technical Lifetime for CHP plants (years),"CYall,DSBS,CHP","allCy,DSBS,CHP",Power Generation Parameters
+Parameter,CHPPG_Cost,imDataChpPowGen,Various data related to CHP power generation (various),"EF,CHPPGSET,YTIME","EF,YTIME,CHPPGSET",common data parameters
 Parameter,CHPPRICE,iFracElecPriChp,Fraction of Electricity Price at which a CHP sells electricity to network (1),"CYall,YTIME",,Parameter Prices
-Parameter,CHPVARCOST,iVarCostChp,Variable (other than fuel) cost per CHP Type (Gross US$2015/KW),"CYall,DSBS,CHP,YTIME","allCy,DSBS,CHP,YTIME",Power Generation Parameters
+Parameter,CHPVARCOST,i02VarCostChp,Variable (other than fuel) cost per CHP Type (Gross US$2015/KW),"CYall,DSBS,CHP,YTIME","allCy,DSBS,CHP,YTIME",Power Generation Parameters
 Variable,CHPVCOST,V02CostProdCHPDem,Variable including fuel electricity production cost per CHP plant and demand sector (US$2015/KWh),"CYall,DSBS,CHP,YTIME","allCy,DSBS,CHP,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,CHPW,v04SecContrTotCHPProd,Contribution of each sector in total CHP production (1),"CYall,SBS,CHP,YTIME","allCy,SBS,CHP,YTIME",POWER GENERATION SECTOR
-Parameter,CO2_SEQ_DATA,iCO2SeqData,Data for CO2 sequestration ,"CO2SEQELAST,YTIME","allCy,CO2SEQELAST,YTIME",Parameters for data transfering
+Parameter,CO2_SEQ_DATA,i06CO2SeqData,Data for CO2 sequestration ,"CO2SEQELAST,YTIME","allCy,CO2SEQELAST,YTIME",Parameters for data transfering
 Variable,CO2CAPT,V06CapCO2ElecHydr,CO2 captured by electricity and hydrogen production plants (Mtn CO2),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Parameter,CO2EMFAC,imCo2EmiFac,CO2 emission factors (kgCO2/kgoe fuel burned),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",Emission Related Parameters
 Parameter,CO2emfac_PRN,iCo2EmiFacAllSbs,CO2 emission factors (kgCO2/kgoe fuel burned),"EF,YTIME","allCy,EF",Emission Related Parameters
 Variable,CO2EMISNAP,V07GrnnHsEmisCO2Equiv,Total CO2eq GHG emissions in all countries per NAP sector,"NAP,YTIME","NAP,YTIME",POWER GENERATION SECTOR
 Variable,CO2EMISTOT,v07GrnnHsEmisCO2EquivAllCntr,Total CO2eq GHG emissions in all countries (1),YTIME,YTIME,POWER GENERATION SECTOR
 Variable,CO2SEQCOST,VMVCstCO2SeqCsts,Cost curve for CO2 sequestration costs (US$2015/tn of CO2 sequestrated),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Parameter,CO2SEQPARAM,iElastCO2Seq,Elasticities for CO2 sequestration cost curve,"CYall,CO2SEQELAST","allCy,CO2SEQELAST",Emission Related Parameters
+Parameter,CO2SEQPARAM,i06ElastCO2Seq,Elasticities for CO2 sequestration cost curve,"CYall,CO2SEQELAST","allCy,CO2SEQELAST",Emission Related Parameters
 Variable,CO2SEQW,V06TrnsWghtLinToExp,Weight for transtition from linear CO2 sequestration cost curve to exponential,"CYALL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Variable,CONSEF,VMVConsFuel,"Consumption of fuels in each demand subsector, excluding heat from heatpumps (Mtoe)","CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,CONSEF_BAR,VMVConsFuelInclHP,Consumption of fuels in each demand subsector including heat from heatpumps (Mtoe),"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
@@ -67,12 +67,12 @@ Variable,COSTSUCAP2,V04ScalWeibullSum,Sum (over hours) of temporary variable fac
 Variable,COSTTR,V01CostTranspPerMeanConsSize,Transportation cost per mean and consumer size (KUS$2015/vehicle),"CYALL,TRANSE,RCon,TTECH,YTIME","allCy,TRANSE,RCon,TTECH,YTIME",TRANSPORT SECTOR VARIABLES
 Variable,COSTTR1,V01CostTranspPerVeh,Transportation cost per mean and consumer size (KUS$2015/vehicle),"CYALL,TRANSE,RCon,TTECH,YTIME","allCy,TRANSE,RCon,TTECH,YTIME",TRANSPORT SECTOR VARIABLES
 Variable,CVALL,VCarVal,Carbon value for all countries (US$2015/tn CO2),"CYALL,NAP,YTIME","allCy,NAP,YTIME",Positive Variable Main Objective
-Parameter,DCEN,iTotEneBranchCons,Total Energy Branch Consumption (Mtoe),"CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
+Parameter,DCEN,i03TotEneBranchCons,Total Energy Branch Consumption (Mtoe),"CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
 Parameter,DCF,imFinEneCons,Final energy consumption (Mtoe),"CYall,EF,YTIME","allCy,EFS,YTIME",Common parameters for all Demand Subsectors
-Parameter,DCHPCAPAC,iHisChpGrCapData,Historical CHP  gross capacity data (GW),"CYall,CHP,YTIME","allCy,CHP,YTIME",Power Generation Parameters
+Parameter,DCHPCAPAC,i04HisChpGrCapData,Historical CHP  gross capacity data (GW),"CYall,CHP,YTIME","allCy,CHP,YTIME",Power Generation Parameters
 Parameter,DCONSEF,imFuelConsPerFueSub,Fuel consumption per fuel and subsector (Mtoe),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",Common parameters for all Demand Subsectors
-Parameter,DDEMSE,iTotFinEneDemSubBaseYr,Total Final Energy Demand per subsector in Base year (Mtoe),"CYall,SBS,YTIME","allCy,SBS,YTIME",Common parameters for all Demand Subsectors
-Parameter,DELCINDEX,iElecIndex,Electricity Index (1),"CYall,YTIME","allCy,YTIME",Prices
+Parameter,DDEMSE,imTotFinEneDemSubBaseYr,Total Final Energy Demand per subsector in Base year (Mtoe),"CYall,SBS,YTIME","allCy,SBS,YTIME",Common parameters for all Demand Subsectors
+Parameter,DELCINDEX,i08ElecIndex,Electricity Index (1),"CYall,YTIME","allCy,YTIME",Prices
 Variable,DEMCOST,V02CostTechIntrm,Intermediate technology cost (KUS$2015/toe),"CYall,DSBS,Rcon,EF,YTIME","allCy,DSBS,rcon,EF,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,DEMCOST1,V02CostTech,Technology cost ( KUS$2015/toe),"CYall,DSBS,Rcon,EF,YTIME","allCy,DSBS,Rcon,EF,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,DEMSE,VMVDemFinSubFuelSubsec,Total final demand (of substitutable fuels) per subsector (Mtoe),"CYall,DSBS,YTIME","allCy,DSBS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
@@ -80,36 +80,36 @@ Variable,DEMSEIND,VMvDemFinSubFuelInd,Total final demand (of substitutable fuels
 Variable,DEMTR,VMVDemFinEneTranspPerFuel,Final energy demand in transport subsectors per fuel (Mtoe),"CYall,TRANSE,EF,YTIME","allCy,TRANSE,EF,YTIME",TRANSPORT SECTOR VARIABLES
 Variable,DEMTRALL,v01DemFinEneSubTransp,Final energy demand in transport subsectors (Mtoe),"CYall,TRANSE,YTIME","allCy,TRANSE,YTIME",TRANSPORT SECTOR VARIABLES
 Parameter,DEXPO,imFuelExprts,Fuel Exports (Mtoe),"CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
-Parameter,DGIC,iGrosInlCons,Gross Inland Consumtpion (Mtoe),"CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
-Parameter,DGICP,iGrossInConsNoEneBra,"Gross Inland Consumption,excluding energy branch (Mtoe)","CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
-Parameter,DH_Eff,iParDHEfficiency,Parameter of  district heating Efficiency ,"PGEFS,YTIME","PGEFS,YTIME",parameters
+Parameter,DGIC,i03GrosInlCons,Gross Inland Consumtpion (Mtoe),"CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
+Parameter,DGICP,i03GrossInConsNoEneBra,"Gross Inland Consumption,excluding energy branch (Mtoe)","CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
+Parameter,DH_Eff,i03ParDHEfficiency,Parameter of  district heating Efficiency ,"PGEFS,YTIME","PGEFS,YTIME",parameters
 Parameter,DIMPO,imFuelImports,Fuel Imports (Mtoe),"CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
 Parameter,DISCOUNT,imDisc,Discount rates per subsector (),"CYall,SBS,YTIME","allCy,SBS,YTIME",Macroeconomic indicators
 Parameter,DiscountPRN,-,-,"SBS,YTIME",-,
-Parameter,DLFT,iTechLft,Technical Lifetime. For passenger cars it is a variable (1),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",Common parameters for all Demand Subsectors
+Parameter,DLFT,i01TechLft,Technical Lifetime. For passenger cars it is a variable (1),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",Common parameters for all Demand Subsectors
 Parameter,DLOS,imDistrLosses,Distribution Losses (Mtoe),"CYall,EF,YTIME","allCy,EFS,YTIME",Supply Side Specific Parameters
-Parameter,DMEXTV,iGdpPassCarsMarkExt,GDP-dependent passenger cars market extension (GDP/capita),CYall,allCy,Transport Sector specific Parameters
+Parameter,DMEXTV,i01GdpPassCarsMarkExt,GDP-dependent passenger cars market extension (GDP/capita),CYall,allCy,Transport Sector specific Parameters
 Parameter,DNETIMP,iNetImp,Net imports (Mtoe),"CYall,EFS,YTIME","(allCy,EFS,YTIME",Supply Side Specific Parameters
 Parameter,Dom_FCon,iFuelConsDOMSE,Fuel consumption of domestic subsector (Mtoe),"DOMSE,EF,YTIME","allCy,DOMSE,EF,YTIME",Parameters for data transfering
 Parameter,Dom_RFCon,iResFuelConsPerFuelAndSub,Residuals in fuel consumption per fuel and subsector (1),"DOMSE,EF,YTIME","allCy,DOMSE,EF,YTIME",Parameters for data transfering
 Parameter,Dom_RNSE,iResNonSubElecCons,Residuals in Non Substitutable Electricity Consumption per substector,"DOMSE,YTIME","allCy,DOMSE,YTIME",Parameters for data transfering
 Parameter,Dom_SCon,iInitConsSubAndInitShaNonSubElec,Initial Consumption per Subsector and Initial Shares of Non Substitutable Electricity in Total Electricity Demand (Mtoe),"DOMSE,Indu_Scon_Set","allCy,DOMSE,Indu_Scon_Set",Parameters for data transfering
 Parameter,Dom_Tech,imDataDomTech,Technical lifetime of domestic sector (years),"DOMSE,EF,ECONCHAR","DOMSE,EF,ECONCHAR",common data parameters
-Parameter,DompricePRN,iFuelPrice,Prices of fuels per subsector ($2015/toe),"SBS,EF,YTIME","allCy,SBS,EF,YTIME",Parameters for data transfering
-Parameter,DPPROD,iFuelPriPro,Fuel Primary Production (Mtoe),"CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
-Parameter,DREFCAP,iRefCapacity,Refineries Capacity (Million Barrels/day),"CYall,YTIME",YTIME,Supply Side Specific Parameters
-Parameter,DSCR,iPassCarsScrapRate,Passenger cars scrapping rate (1),CYall,allCy,Transport Sector specific Parameters
-Parameter,DSFC,iSpeFuelConsCostBy,Specific fuel consumption cost in Base year (ktoe/Gpkm or ktoe/Gtkm or ktoe/Gvkm),"CYall,SBS,TTECH,EF","allCy,SBS,TTECH,EF",Transport Sector specific Parameters
+Parameter,DompricePRN,imFuelPrice,Prices of fuels per subsector ($2015/toe),"SBS,EF,YTIME","allCy,SBS,EF,YTIME",Parameters for data transfering
+Parameter,DPPROD,i03FuelPriPro,Fuel Primary Production (Mtoe),"CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
+Parameter,DREFCAP,i03RefCapacity,Refineries Capacity (Million Barrels/day),"CYall,YTIME",YTIME,Supply Side Specific Parameters
+Parameter,DSCR,i01PassCarsScrapRate,Passenger cars scrapping rate (1),CYall,allCy,Transport Sector specific Parameters
+Parameter,DSFC,i01SpeFuelConsCostBy,Specific fuel consumption cost in Base year (ktoe/Gpkm or ktoe/Gtkm or ktoe/Gvkm),"CYall,SBS,TTECH,EF","allCy,SBS,TTECH,EF",Transport Sector specific Parameters
 Parameter,DTIOTH,iTransfInpGasworks,"Transformation Input in Gasworks, Blast Furnances, Briquetting plants in Mtoe","CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
-Parameter,DTIRF,iTransfInputRef,Transformation Input in Refineries (Mtoe),"CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
+Parameter,DTIRF,i03TransfInputRef,Transformation Input in Refineries (Mtoe),"CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
 Parameter,DTOOTH,iTranfOutGasworks,"Transformation Output from Gasworks, Blast Furnances and Briquetting plants (Mtoe)","CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
-Parameter,DTORF,iTransfOutputRef,Transformation Output from Refineries (Mtoe),"CYall,EF,YTIME","allCy,EFS,YTIME",Supply Side Specific Parameters
+Parameter,DTORF,i03TransfOutputRef,Transformation Output from Refineries (Mtoe),"CYall,EF,YTIME","allCy,EFS,YTIME",Supply Side Specific Parameters
 Variable,DUMMYOBJ,vDummyObj,Dummy maximisation variable (1),-,-,-
 Parameter,EFPRICE,-,Consumer Prices of fuels per subsector (kUS$2015/toe),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",Macro economic indicators
 Parameter,ELASTA,imElastA,Activity Elasticities per subsector (1),"CYall,SBS,ETYPES,YTIME","allCy,SBS,ETYPES,YTIME",Common parameters for all Demand Subsectors
-Parameter,ELASTGAS,iNatGasPriProElst,Natural Gas primary production elasticity related to gross inland consumption,CYall,allCy,
-Parameter,ELASTNSE,iElastNonSubElec,,"CYall,SBS,ETYPES,YTIME","allCy,SBS,ETYPES,YTIME",Macro economic indicators
-Parameter,ELC_IMPORTS,iElecImp,Electricity Imports (1),"CYALL,YTIME","allCy,YTIME",Reguala Falsi Parameters
+Parameter,ELASTGAS,i03NatGasPriProElst,Natural Gas primary production elasticity related to gross inland consumption,CYall,allCy,
+Parameter,ELASTNSE,i02ElastNonSubElec,,"CYall,SBS,ETYPES,YTIME","allCy,SBS,ETYPES,YTIME",Macro economic indicators
+Parameter,ELC_IMPORTS,i03ElecImp,Electricity Imports (1),"CYALL,YTIME","allCy,YTIME",Reguala Falsi Parameters
 Variable,ELCALL,V04ConsElec,Electricity demand per final sector (Mtoe),"CYall,DSBS,YTIME","allCy,DSBS,YTIME",POWER GENERATION SECTOR
 Variable,ELCCHP_EST,V04ProdElecEstCHP,Estimate the electricity of CHP Plants,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Variable,ELCDEMAND,V04DemElecTot,Total electricity demand (TWh),"CYall,YTIME","allCy,YTIME",Power Generation
@@ -123,8 +123,8 @@ Variable,ELCPRICE_NOCV,VMVPriceElecIndResNoCliPol,Electricity price to Industria
 Parameter,ELCPRICECHAR,iFacElecPriConsu,Factors affecting electricity prices to consumers,"CYall,ELCPCHAR,YTIME ","allCy,ELCPCHAR,YTIME",Prices
 Parameter,ElcpricecharPRN,iContrElecPrice,Parameters controlling electricity price,"ELCPCHAR,YTIME","allCy,ELCPCHAR,YTIME",Parameters for data transfering
 Variable,ELCPROD,VMVProdElec,Electricity production (TWh),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
-Parameter,ELSB,iElaSub,Elasticities by subsectors (1),"CYALL,DSBS","allCy,DSBS",
-Parameter,ELSH,iShareAnnMilePlugInHybrid,Share of annual mileage of a plug-in hybrid which is covered by electricity (1),"CYall,YTIME","CYall,YTIME",Transport Sector specific Parameters
+Parameter,ELSB,i02ElaSub,Elasticities by subsectors (1),"CYALL,DSBS","allCy,DSBS",
+Parameter,ELSH,i01ShareAnnMilePlugInHybrid,Share of annual mileage of a plug-in hybrid which is covered by electricity (1),"CYall,YTIME","CYall,YTIME",Transport Sector specific Parameters
 Parameter,EN_PRD_INDX,REMOVED FROM OPEN-PROM,Energy productivity index used in R&D scenarios,"CYall,SBS,YTIME",,Macro economic indicators
 Parameter,EN_PRD_INDX_PRN,REMOVED FROM OPEN-PROM,Supplementary parameter for energy productivity index used in R&D scenarios,"CYall,SBS,YTIME",,Parameters 
 Equation,EQACTVTRG,Q01ActivGoodsTransp,Compute goods transport activity,"CYall,TRANSE,YTIME","allCy,TRANSE,YTIME",TRANSPORT SPECIFIC EQUATIONS
@@ -207,7 +207,7 @@ Equation,EQMFRENMULT,Q04RenTechMatMult,Compute renewable technologies maturity m
 Equation,EQNETIMP,Q03ImpNetEneBrnch,Compute net imports,"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
 Equation,EQNEWREG,Q01NewRegPcYearly,Compute new registrations of passenger cars,"CYall,YTIME","allCy,YTIME",Transport
 Equation,EQNONCHPELCPROD,Q04ProdElecNonCHP,Compute non CHP electricity production ,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Parameter,BASESHARE,iBaseLoadShareDem,Baseload share of demand per sector (1),"CYall,DSBS,YTIME","allCy,DSBS,YTIME",Power Generation Parameters
+Parameter,BASESHARE,i04BaseLoadShareDem,Baseload share of demand per sector (1),"CYall,DSBS,YTIME","allCy,DSBS,YTIME",Power Generation Parameters
 Equation,EQ04PeakLoad,Q04PeakLoad,Compute elerctricity peak load,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Equation,EQPOTREN,Q04PotRenCurr,Compute current renewable potential ,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",Power Generation
 Equation,EQPOTRENMAXC,Q04PotRenMaxAllow,Compute maximum allowed renewable potential ,"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
@@ -270,18 +270,18 @@ scalar,exogCV,sExogCarbValue,switch for exogenous carbon value (0=exogenous 1=en
 Parameter,exogCVp,iCarbValYrExog,Carbon value for each year when it is exogenous (US$2015/tn CO2),ytime,"allCy,ytime",Reguala Falsi Parameters
 Variable,EXPO_TZ,V03Exp,Exports fake (Mtoe) ,"CYall,EFS,YTIME","allCy,EFS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Parameter,FEEDRES,REMOVED FROM OPEN-PROM,Residual for Feedstocks in Transfers (Mtoe),"CYall,YTIME","allCy,YTIME",Supply Side Specific Parameters
-Parameter,FEEDTRANS,iFeedTransfr,Feedstocks in Transfers (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",Supply Side Specific Parameters
+Parameter,FEEDTRANS,i03FeedTransfr,Feedstocks in Transfers (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",Supply Side Specific Parameters
 Parameter,FIXCOST,imFixOMCostTech,Fixed O&M cost of technology (US$2015/toe-year),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",Common parameters for all Demand Subsectors
 Parameter,FOMRES,-,,"PGALL,YTIME",,
 Parameter,FPDL,imFPDL,Polynomial Distribution Lags (PDL) Coefficients per subsector (1),"SBS,KPDL","SBS,KPDL",Macro economic indicators
 Variable,GAP,V02GapFinalDem,Final Demand GAP to be filed by new technologies (Mtoe),"CYall,DSBS,YTIME","allCy,DSBS,YTIME",VARIABLES
 Variable,GAPE,V04GapGenCapPowerDiff,Gap in total generation capacity to be filled by new equipment (GW),"CYall,YTIME","allCy,YTIME",VARIABLES
 Variable,GAPTR,V01GapTranspActiv,Gap in transport activity to be filled by new technologies,"CYall,TRANSE,YTIME","allCy,TRANSE,YTIME",VARIABLES
-Parameter,GDP,iGDP,GDP (billion US$2015),"CYAll,YTIME","YTIME,allCy",Macro economic indicators
+Parameter,GDP,i01GDP,GDP (billion US$2015),"CYAll,YTIME","YTIME,allCy",Macro economic indicators
 Variable,GIC,V03ConsGrssInl,Gross Inland Consumption (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",Variables
 Variable,GICP,V03ConsGrssInlNotEneBranch,Gross Inland Consumption not including consumption of energy branch (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",Variables
-Parameter,H,iScaleEndogScrap,Scale parameter for endogenous scrapping applied to the sum of full costs,"PGALL,YTIME","allCy,PGALL,YTIME",Power Generation Parameters
-Parameter,H2_PRICE,iHydrogenPri,Total Hydrogen Cost Per Sector (US$2015/toe),"CYALL,SBS,YTIME ","allCy,SBS,YTIME",Power Generation Parameters
+Parameter,H,i04ScaleEndogScrap,Scale parameter for endogenous scrapping applied to the sum of full costs,"PGALL,YTIME","allCy,PGALL,YTIME",Power Generation Parameters
+Parameter,H2_PRICE,i08HydrogenPri,Total Hydrogen Cost Per Sector (US$2015/toe),"CYALL,SBS,YTIME ","allCy,SBS,YTIME",Power Generation Parameters
 Parameter,IMP_OF_EXP_COUNTRIES,imImpExp,Imports of exporting countries usually zero (1),"CYALL,EFS,YTIME","allCy,EFS,YTIME",PARAMEETERS RELATED TO THE NEW IMPORT MECHANISM (USED FOR NATURAL GAS IMPORTS+EXPORTS)
 Variable,IMPO_TZ,V03Imp,Fake Imports for all fuels except natural gas (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",Variables
 Parameter,Indu_FCon,iFuelConsINDSE,Fuel consumption of industry subsector (Mtoe),"INDSE,EF,YTIME","allCy,INDSE,EF,YTIME",PARAMETERS TRANSFORMATIONS AND CALCULATIONS
@@ -289,7 +289,7 @@ Parameter,Indu_RFCon,iResFuelConsSub,Residuals for fuel consumption per subsecto
 Parameter,Indu_RNSE,iResNonSubElec,Residuals for non subsitutable electricity,"INDSE,YTIME","allCy,INDSE,YTIME",Parameters for data transfering
 Parameter,Indu_SCon,iIndChar,Industry sector charactetistics (various),"INDSE,Indu_Scon_Set","INDSE,Indu_Scon_Set",Parameters for data transfering
 Parameter,Indu_Tech,imDataIndTechnology,Technoeconomic characteristics of industry (various),"INDSE,EF,ECONCHAR","INDSE,EF,ECONCHAR",common data parameters
-Parameter,INTPRICE,iPriceFuelsInt,International Fuel Prices ($2015/toe),"WEF,YTIME","WEF,YTIME",Prices
+Parameter,INTPRICE,imPriceFuelsInt,International Fuel Prices ($2015/toe),"WEF,YTIME","WEF,YTIME",Prices
 Parameter,INTPRICEB,imPriceFuelsIntBase,International Fuel Prices USED IN BASELINE SCENARIO ($2015/toe),"WEF,YTIME","WEF,YTIME",Prices
 Parameter,IntPriceBPRN,REMOVED FROM OPEN-PROM,,,,
 Parameter,IntPricePRN,REMOVED FROM OPEN-PROM,,,,
@@ -298,7 +298,7 @@ Parameter,KAPPA1,iDataPriceReform,Price reformation,"CYall,AGSECT,EF,YTIME","all
 Variable,L,V01PcOwnPcLevl,Ratio of car ownership over saturation car ownership (1),"CYall,YTIME","allCy,YTIME",TRANSPORT SECTOR VARIABLES
 Variable,LAMBDA,V04Lambda,Parameter for load curve construction,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Variable,LFT,VMVLft,Lifetime of technologies (years),"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",PRICES
-Parameter,LOADF,iLoadFacElecDem,Load factor of electricity demand per sector,"CYaLL,DSBS,YTIME","allCy,DSBS,YTIME",Power Generation Parameters
+Parameter,LOADF,i04LoadFacElecDem,Load factor of electricity demand per sector,"CYaLL,DSBS,YTIME","allCy,DSBS,YTIME",Power Generation Parameters
 Variable,LOADFALL,V04LoadFacDom,"""Electricity load factor for entire domestic system""","CYaLL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Variable,LOS,VMVLossesDistr,Distribution losses (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",REST OF ENERGY BALANCE SECTORS
 Variable,LTAC,VAvgPowerGenLongTrm,Long-term average power generation cost (US$2015/kWh),"CYall,ESET,YTIME ","allCy,ESET,YTIME",POWER GENERATION SECTOR
@@ -309,9 +309,9 @@ Variable,LTACMIN,v04CostPowGenLonMin,Long-term minimum power generation cost (US
 Variable,LTACNEW,V04CostPowGenLngTechNoCp,Long-term average power generation cost (US$2015/kWh),"CYall,PGALL,ESET,YTIME","allCy,PGALL,ESET,YTIME",POWER GENERATION SECTOR
 Variable,LTACNEW_nocv,V04CostAvgPowGenLonNoClimPol,Long-term average power generation cost excluding climate policies(US$2015/kWh) ,"CYall,PGALL,ESET,YTIME","allCy,PGALL,ESET,YTIME",POWER GENERATION SECTOR
 Variable,MAXBASE,V04BaseLoadMax,Baseload corresponding to Maximum Load Factor (1),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Parameter,MAXCHPSHARE,iMxmShareChpElec,Maximum share of CHP electricity in a country (1),"CYall,YTIME","allCy,YTIME",Power Generation Parameters
+Parameter,MAXCHPSHARE,i04MxmShareChpElec,Maximum share of CHP electricity in a country (1),"CYall,YTIME","allCy,YTIME",Power Generation Parameters
 Scalar,MAXELCINDEX,smElecToSteRatioChp,Technical maximum of electricity to steam ratio in CHP plants /1.15/,-,-,Reguala Falsi Parameters
-Parameter,MAXLOADSH,iMxmLoadFacElecDem,Maximum load factor of electricity demand,"CYaLL,YTIME","allCy,YTIME",Power Generation Parameters
+Parameter,MAXLOADSH,i04MxmLoadFacElecDem,Maximum load factor of electricity demand,"CYaLL,YTIME","allCy,YTIME",Power Generation Parameters
 Variable,MEXTF,V01MEPcNonGdp,Passenger cars market extension (GDP independent),"CYall,YTIME","allCy,YTIME",TRANSPORT SECTOR VARIABLES
 Variable,MEXTV,V01MEPcGdp,Passenger cars market extension (GDP dependent),"CYall,YTIME","allCy,YTIME",TRANSPORT SECTOR VARIABLES
 Parameter,MF,imMatrFactor,Maturity factor per technology and subsector (1),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",Common parameters for all Demand Subsectors
@@ -326,48 +326,48 @@ Variable,NONCHPELCPROD,V04ProdElecNonCHP,Non CHP total electricity production (T
 Parameter,NPDL,iNPDL,Number of Polynomial Distribution Lags (PDL),SBS,SBS,Macro economic indicators
 Sets,Nset,nSet,auxiliary counter for the definition of Vr /b1*b20/,,,Auxiliary Counters
 Parameter,NUCRES,-,,"PGALL,YTIME",,
-Parameter,OILPDL,iPolDstrbtnLagCoeffPriOilPr,Polynomial Distribution Lag Coefficients for primary oil production (1),kpdl,kpdl,Parameter
+Parameter,OILPDL,i03PolDstrbtnLagCoeffPriOilPr,Polynomial Distribution Lag Coefficients for primary oil production (1),kpdl,kpdl,Parameter
 Variable,PEAKLOAD,VMVPeakLoad,Electricity peak load (GW),"CYall,YTIME",,POWER GENERATION SECTOR
-Parameter,PG_BASESH,iLoadFactorAdj,Parameters for load factor adjustment iBaseLoadShareDem,"DSBS,YTIME","allCy,DSBS,YTIME",Parameters for data transfering
-Parameter,PG_CHPCAPAC,iDataElecAndSteamGen,Data releated to electricity and steam generation (1),"CHP,YTIME","allCy,CHP,YTIME",Parameters for data transfering
+Parameter,PG_BASESH,i04LoadFactorAdj,Parameters for load factor adjustment i04BaseLoadShareDem,"DSBS,YTIME","allCy,DSBS,YTIME",Parameters for data transfering
+Parameter,PG_CHPCAPAC,i04DataElecAndSteamGen,Data releated to electricity and steam generation (1),"CHP,YTIME","allCy,CHP,YTIME",Parameters for data transfering
 Parameter,PG_Cost,iDataPowGenCost,Power Generation data,"PGALL,PGECONCHAR","PGALL,PGECONCHAR",common data parameters
 Parameter,PG_LOADF,iPwrLoadFactorDem,Parameters for load factor adjustment (1),,,
 ,PG_MAXCHPSHARE,REMOVED FROM OPEN-PROM,,,,
-Parameter,PG_MAXLOADSH,iLoadFactorAdjMxm,Parameter for load factor adjustment iMxmLoadFacElecDem,"VARIOUS_LABELS,YTIME","allCy,YTIME",Parameters for data transfering
+Parameter,PG_MAXLOADSH,i04LoadFactorAdjMxm,Parameter for load factor adjustment i04MxmLoadFacElecDem,"VARIOUS_LABELS,YTIME","allCy,YTIME",Parameters for data transfering
 Parameter,PG_Mfc,iMatFacCap,Maturty factors on Capacity (1),"PGALL,YTIME","allCy,PGALL,YTIME",Parameters for data transfering
 Parameter,PG_Mfl,iMatureFacLoad,Maturty factors on Load (1),"PGALL,YTIME","allCy,PGALL,YTIME",Parameters for data transfering
-Parameter,PG_Oth,iDataElecSteamGen,Various Data releated to electricity and steam generation,"PGOTH,YTIME","PGOTH,YTIME",Parameters for data transfering
+Parameter,PG_Oth,i04DataElecSteamGen,Various Data releated to electricity and steam generation,"PGOTH,YTIME","PGOTH,YTIME",Parameters for data transfering
 Parameter,PG_PMR,REMOVED FROM OPEN-PROM,Premature replacement,"PGALL,PMR_SET",,Parameters for data transfering
 Parameter,PG_RENAVAIL,iSuppPlantCapFac,Availability Factors (1),"PGRENEF,YTIME","PGRENEF,YTIME",Declare Parameters for data transfering
-Parameter,PG_RencMAX,iCummMxmInstRenCap,Cummulative potential installed Capacity for Renewables (in GW) - maximum potential,"PGRENEF,YTIME","allCy,PGRENEF,YTIME",Parameters for data transfering
-Parameter,PG_RenCMIN,iCummMnmInstRenCap,Cummulative potential installed Capacity for Renewables (in GW) - minimum potential,"PGRENEF,YTIME","allCy,PGRENEF,YTIME",Parameters for data transfering
+Parameter,PG_RencMAX,i04CummMxmInstRenCap,Cummulative potential installed Capacity for Renewables (in GW) - maximum potential,"PGRENEF,YTIME","allCy,PGRENEF,YTIME",Parameters for data transfering
+Parameter,PG_RenCMIN,i04CummMnmInstRenCap,Cummulative potential installed Capacity for Renewables (in GW) - minimum potential,"PGRENEF,YTIME","allCy,PGRENEF,YTIME",Parameters for data transfering
 Parameter,PG_Res,iResTotCapMxmLoad,Residuals for total capacity and maximum load,"PGRES,YTIME","allCy,PGRES,YTIME",Parameters for data transfering
 Parameter,"PG1_Tech(PGALL,""2017"")",,Installed capacity (GW),"PGALL,PG1_set","allCy,PGALL,PG1_set",
-Parameter,"PG1_Tech(PGALL,""DEC_10"");",iDecomPlants,Decomissioning Plants (MW),"PGALL,PG1_set","allCy,PGALL,PG1_set",Parameters for data transfering
-Parameter,"PG1_Tech(PGALL,""INV_10"")",iInvPlants,Investment Plants (MW),"PGALL,PG1_set","allCy,PGALL,PG1_set",Parameters for data transfering
-Parameter,"PG1_Tech(PGALL,""PROD_09"")",iDataElecProd,Data for electricity production (GWh),,,
-Parameter,PGAVAIL,iAvailRate,Plant availability rate (1),"CYAll,PGALL,YTIME","PGALL,YTIME",
-Parameter,PGCAPBASE,iInstCapPast,Available installed capacity for past years (GW),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",Power Generation Parameters
+Parameter,"PG1_Tech(PGALL,""DEC_10"");",i04DecomPlants,Decomissioning Plants (MW),"PGALL,PG1_set","allCy,PGALL,PG1_set",Parameters for data transfering
+Parameter,"PG1_Tech(PGALL,""INV_10"")",i04InvPlants,Investment Plants (MW),"PGALL,PG1_set","allCy,PGALL,PG1_set",Parameters for data transfering
+Parameter,"PG1_Tech(PGALL,""PROD_09"")",i04DataElecProd,Data for electricity production (GWh),,,
+Parameter,PGAVAIL,i04AvailRate,Plant availability rate (1),"CYAll,PGALL,YTIME","PGALL,YTIME",
+Parameter,PGCAPBASE,imInstCapPast,Available installed capacity for past years (GW),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",Power Generation Parameters
 Parameter,PGCAPCOST,REMOVED FROM OPEN-PROM,Capital gross cost per plant type (kUS$2015/KW),"CYall,PGALL,YTIME","PGALL,YTIME",Power Generation Parameters
-Parameter,PGCAPCOST_BAR,iGrossCapCosSubRen,Gross Capital Cost per Plant Type with subsidy for renewables (kUS$2015/KW),"CYall,PGALL,YTIME","PGALL,YTIME",Power Generation Parameters
+Parameter,PGCAPCOST_BAR,i04GrossCapCosSubRen,Gross Capital Cost per Plant Type with subsidy for renewables (kUS$2015/KW),"CYall,PGALL,YTIME","PGALL,YTIME",Power Generation Parameters
 Parameter,PGCAPPAST,iDataInstCapElecFuel,Installed capacity (GW),"CYall,PGALL,PGCAPAST",,Power Generation Parameters
 Parameter,PGCR,imCO2CaptRate,Plant CO2 capture rate,"CYall,PGALL,YTIME","allCy,PGALL,YTIME",Power Generation Parameters
-Parameter,PGDCAP,iPlantDecomSched,Decided plant decomissioning schedule (GW),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",Power Generation Parameters
-Parameter,PGDHEFF,iEffDHPlants,Efficiency of District Heating Plants,"CYall,EF,YTIME","allCy,EF,YTIME",Power Generation Parameters
+Parameter,PGDCAP,i04PlantDecomSched,Decided plant decomissioning schedule (GW),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",Power Generation Parameters
+Parameter,PGDHEFF,i03EffDHPlants,Efficiency of District Heating Plants,"CYall,EF,YTIME","allCy,EF,YTIME",Power Generation Parameters
 Parameter,PGEFF,imPlantEffByType,Plant efficiency per plant type (1),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",Power Generation Parameters
-Parameter,pgelcprod,iDataElecProd,Electricity generation for past data for 1995 and 2000 (GWh),"CYall,PGALL,PGPRODPAST","allCy,PGALL,PGPRODPAST",Power Generation Parameters
-Parameter,PGFIXCOST,iFixOandMCost,Fixed O&M Gross Cost per Plant Type (US$2015/KW),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",Power Generation Parameters
-Parameter,PGICAP,iDecInvPlantSched,Decided plant investment schedule (GW),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",Power Generation Parameters
-Parameter,PGLFT,iTechLftPlaType,Technical Lifetime per plant type (year),"CYall,PGALL",PGALL,Power Generation Parameters
-Parameter,PGLOAD,iPeakBsLoadBy,Peak and Base load for base year (GW),"CYall,PGLOADTYPE","allCy,PGLOADTYPE",Power Generation Parameters
-Parameter,PGMFC,iMatFacPlaAvailCap,Maturity factor related to plant available capacity (1),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",Power Generation Parameters
-Parameter,PGMFL,iMatureFacPlaDisp,Maturity factor related to plant dispatching (1),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",Power Generation Parameters
+Parameter,pgelcprod,i04DataElecProd,Electricity generation for past data for 1995 and 2000 (GWh),"CYall,PGALL,PGPRODPAST","allCy,PGALL,PGPRODPAST",Power Generation Parameters
+Parameter,PGFIXCOST,i04FixOandMCost,Fixed O&M Gross Cost per Plant Type (US$2015/KW),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",Power Generation Parameters
+Parameter,PGICAP,i04DecInvPlantSched,Decided plant investment schedule (GW),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",Power Generation Parameters
+Parameter,PGLFT,i04TechLftPlaType,Technical Lifetime per plant type (year),"CYall,PGALL",PGALL,Power Generation Parameters
+Parameter,PGLOAD,i04PeakBsLoadBy,Peak and Base load for base year (GW),"CYall,PGLOADTYPE","allCy,PGLOADTYPE",Power Generation Parameters
+Parameter,PGMFC,i04MatFacPlaAvailCap,Maturity factor related to plant available capacity (1),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",Power Generation Parameters
+Parameter,PGMFL,i04MatureFacPlaDisp,Maturity factor related to plant dispatching (1),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",Power Generation Parameters
 Parameter,PGRESMAR,iResMargTotAvailCap,Reserve margins on total available capacity and peak load,"CYall,PGRES,YTIME","allCy,PGRES,YTIME",Power Generation Parameters
-Parameter,PGTOTCAP,iTotAvailCapBsYr,Total installed available capacity in base year (GW),CYall,allCy,Power Generation Parameters
-Parameter,PGUTIL,iUtilRateChpPlants,Utilisation rate of CHP Plants (1),"CYall,CHP,YTIME","allCy,CHP,YTIME",Power Generation Parameters
-Parameter,PGVARCOST,iVarCost,Variable gross cost other than fuel per Plant Type (US$2015/KW),"CYall,PGALL,YTIME","PGALL,YTIME",Power Generation Parameters
+Parameter,PGTOTCAP,i04TotAvailCapBsYr,Total installed available capacity in base year (GW),CYall,allCy,Power Generation Parameters
+Parameter,PGUTIL,i04UtilRateChpPlants,Utilisation rate of CHP Plants (1),"CYall,CHP,YTIME","allCy,CHP,YTIME",Power Generation Parameters
+Parameter,PGVARCOST,i04VarCost,Variable gross cost other than fuel per Plant Type (US$2015/KW),"CYall,PGALL,YTIME","PGALL,YTIME",Power Generation Parameters
 Parameter,POLICIES,iEnvPolicies,Environmental policies on emissions constraints  and subsidy on renewables (Mtn CO2),"POLICIES_SET,YTIME","POLICIES_SET,YTIME",common data parameters
-Parameter,POP,iPop,Population (billion),"CYAll,YTIME","YTIME,allCy",Macro economic indicators
+Parameter,POP,i01Pop,Population (billion),"CYAll,YTIME","YTIME,allCy",Macro economic indicators
 Variable,POTREN,V04PotRenCurr,Current renewable potential (GW),"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",Power Generation
 Parameter,POTRENMAX,iMaxRenPotential,Maximum enewable potential (GW ),"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",Power Generation Parameters
 Variable,POTRENMAXC,V04PotRenMaxAllow,Maximum allowed renewable potential (GW),"CYall,PGRENEF,YTIME","allCy,PGRENEF,YTIME",POWER GENERATION SECTOR
@@ -378,7 +378,7 @@ Variable,PP,VMVPriceFuelSubsecCarVal,Fuel prices per subsector and fuel (kUS$201
 Variable,PP_NOCV,V08FuelPriSubNoCarb,Fuel prices per subsector and fuel  without carbon value (kUS$2015/toe),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",Prices
 Variable,PPA,VMVPriceFuelAvgSub,Average fuel prices per subsector (kUS$2015/toe),"CYall,DSBS,YTIME","allCy,TRANSE,YTIME",PRICES
 Variable,PPROD,V03ProdPrimary,Primary Production (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",
-Parameter,PPRODRES,iResHcNgOilPrProd,"Residuals for Hard Coal, Natural Gas and Oil Primary Production (1)","CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
+Parameter,PPRODRES,i03ResHcNgOilPrProd,"Residuals for Hard Coal, Natural Gas and Oil Primary Production (1)","CYall,EF,YTIME","allCy,EF,YTIME",Supply Side Specific Parameters
 Variable,PPSU,VMVPriceFuelSubsecCHP,Fuel prices per subsector and fuel for CHP plants (kUS$2015/toe),"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",PRICES
 Variable,PPW,V08PriceFuelSepCarbonWght,Fuel prices per subsector and fuel  mutliplied by weights (kUS$2015/toe),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",PRICES
 Variable,PRODCOST,V04CostHourProdInvDec,Hourly production cost of technology (US$2015/KWh),"CYall,PGALL,HOUR,YTIME","allCy,PGALL,HOUR,YTIME",POWER GENERATION SECTOR
@@ -389,7 +389,7 @@ Variable,PRODCOSTZZ,V04CostProdTeCHPreReplac,Production cost of technology used 
 Variable,PRODCOSTZZ1,V04CostProdTeCHPreReplacAvail,Production cost of technology used in premature replacement including plant availability rate (US$2015/KWh),"CYALL,PGALL,PGALL2,YTIME","allCy,PGALL,PGALL2,YTIME",POWER GENERATION SECTOR
 Sets,Rcon,rCon,"counter for the number of consumers /0,1*19/",,,Auxiliary Counters
 Variable,REFCAP,V03CapRef,Refineries capacity (Million barrels/day),"CYall,YTIME","allCy,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-Parameter,REFCAPRES,iResRefCapacity,Residual in Refineries Capacity (1),"CYall,YTIME",YTIME,Supply Side Specific Parameters
+Parameter,REFCAPRES,i03ResRefCapacity,Residual in Refineries Capacity (1),"CYall,YTIME",YTIME,Supply Side Specific Parameters
 Parameter,RELCINDEX,iResElecIndex,Residual for electricity Index (1),"CYall,YTIME","allCy,YTIME",Prices
 Parameter,RESACTV,iResActiv,Residuals on transport activity (),"CYall,SBS,YTIME","allCy,TRANSE,YTIME",TRANSPORT SECTOR VARIABLES
 Parameter,RESCONSEF,iResFuelConsPerSubAndFuel,Residuals in fuel consumption per subsector and fuel,"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",Common parameters for all Demand Subsectors
@@ -399,9 +399,9 @@ Parameter,RESPRICE,unused,Residual' in Price Equations,"CYall,SBS,EF,YTIME",,Pri
 Parameter,ResPricePRN,unused,Residuals for domestic prices in equations (after 2005),"SBS,EF,YTIME",,Parameters for data transfering
 Parameter,RESSFC,REMOVED FROM OPEN-PROM,Residuals on specific fuel consumption cost,"CYall,TRANSE,TTECH,EF,YTIME","allCy,TRANSE,TTECH,EF,YTIME",Transport Sector specific Parameters
 Variable,RESVAL,VRenValue,Renewable value (US$2015/KWh),YTIME,YTIME,Possitive Varibale
-Parameter,RTORF,iResTransfOutputRefineries,Residual in Transformation Output from Refineries (Mtoe),"CYall,EF,YTIME","EF,YTIME",Supply Side Specific Parameters
-Parameter,S,iSigma,S parameters of Gompertz function for passenger cars vehicle km (1),"CYall,SG","allCy,SG",TRANSPORT SECTOR VARIABLES
-Parameter,SAT,iPassCarsMarkSat,Passenger cars market saturation [1],CYall,allCy,Transport Sector specific Parameters
+Parameter,RTORF,i03ResTransfOutputRefineries,Residual in Transformation Output from Refineries (Mtoe),"CYall,EF,YTIME","EF,YTIME",Supply Side Specific Parameters
+Parameter,S,i01Sigma,S parameters of Gompertz function for passenger cars vehicle km (1),"CYall,SG","allCy,SG",TRANSPORT SECTOR VARIABLES
+Parameter,SAT,i01PassCarsMarkSat,Passenger cars market saturation [1],CYall,allCy,Transport Sector specific Parameters
 Variable,SCR,V01RateScrPc,Scrapping rate of passenger cars (1),"CYall,YTIME","allCy,YTIME",TRANSPORT SECTOR VARIABLES
 Variable,SCRAP,V01NumPcScrap,Scrapped passenger cars (million vehicles),"CYall,YTIME","allCy,YTIME",TRANSPORT SECTOR VARIABLES
 Variable,SFC,V01ConsSpecificFuel,Specific Fuel Consumption (),"CYall,TRANSE,TTECH,EF,YTIME","allCy,TRANSE,TTECH,EF,YTIME",TRANSPORT SECTOR VARIABLES
@@ -420,23 +420,23 @@ Variable,STAC_INT_PRICE,v04CostPowGenShortIntPri,Short term power generation cos
 Parameter,STT,imCumDistrFuncConsSize,Cummulative distribution function of consumer size groups (1),"CYall,DSBS","allCy,DSBS",Macro economic indicators
 Variable,SU,V02SortTechVarCost,Technology sorting based on variable cost (1),"CYall,DSBS,Rcon,YTIME","allCy,DSBS,rCon,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,SUCAP,V04NewInvElec,Power plant sorting for new investment decision according to total cost (1),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Parameter,Sup_ACEN,iSupRateEneBranCons,Rate of Energy Branch Consumption over total transformation output of iRateEneBranCons (1),"EF,YTIME","EF,YTIME",Declare Parameters for data transfering
+Parameter,Sup_ACEN,i03SupRateEneBranCons,Rate of Energy Branch Consumption over total transformation output of i03RateEneBranCons (1),"EF,YTIME","EF,YTIME",Declare Parameters for data transfering
 Parameter,Sup_ALOS,REMOVED FROM OPEN-PROM,Supplementary parameter for Rate of losses over Available for Final Consumption,"EF,YTIME",,Parameters for data transfering
-Parameter,Sup_APPROD,iSuppRatePrimProd,Supplementary Parameter for iRatePrimProd (1),"EF,YTIME","allCy,EF,YTIME",Parameter for data transfering
-Parameter,Sup_CEN,iDataConsEneBranch,Data for Consumption of Energy Branch (Mtoe),"EF,YTIME","allCy,EF,YTIME",Parameters for data transfering
+Parameter,Sup_APPROD,i03SuppRatePrimProd,Supplementary Parameter for iRatePrimProd (1),"EF,YTIME","allCy,EF,YTIME",Parameter for data transfering
+Parameter,Sup_CEN,i03DataConsEneBranch,Data for Consumption of Energy Branch (Mtoe),"EF,YTIME","allCy,EF,YTIME",Parameters for data transfering
 Parameter,Sup_EXP,iSuppExports,Supplementary parameter for  exports (Mtoe),"EF,YTIME","allCy,EF,YTIME",Parameter for data transfering
-Parameter,Sup_GIC,iDataGrossInlCons,Data for Gross Inland Conusmption (Mtoe),"EF,YTIME","allCy,EF,YTIME",Parameters for data transfering
+Parameter,Sup_GIC,i03DataGrossInlCons,Data for Gross Inland Conusmption (Mtoe),"EF,YTIME","allCy,EF,YTIME",Parameters for data transfering
 Parameter,Sup_IMP,iDataImports,Data for imports (Mtoe),"EF,YTIME","allCy,EF,YTIME",Parameters for data transfering
 Parameter,Sup_LOS,iDataDistrLosses,Data for Distribution Losses (Mtoe),"EF,YTIME","allCy,EF,YTIME",Parameters for data transfering
-Parameter,Sup_PPROD,iSuppPrimProd,Supplementary Parameter for Primary Production (Mtoe),"EF,YTIME","allCy,EF,YTIME",Parameters for data transfering
-Parameter,Sup_ROTH,iSupResRefCapacity,Supplementary Parameter for the residual in refineries Capacity (1),"SUPOTH,YTIME","allCy,SUPOTH,YTIME",Parameters
-Parameter,Sup_RTORF,iSupTrnasfOutputRefineries,Supplementary parameter for the transformation output from refineries (Mtoe),"EF,YTIME","EF,YTIME",Parameters
-Parameter,Sup_SOTH,iSuppRefCapacity,Supplementary Parameter for Refineries Capacity (Million Barrels/day),"SUPOTH,YTIME","SUPOTH,YTIME",Parameters
+Parameter,Sup_PPROD,i03SuppPrimProd,Supplementary Parameter for Primary Production (Mtoe),"EF,YTIME","allCy,EF,YTIME",Parameters for data transfering
+Parameter,Sup_ROTH,i03SupResRefCapacity,Supplementary Parameter for the residual in refineries Capacity (1),"SUPOTH,YTIME","allCy,SUPOTH,YTIME",Parameters
+Parameter,Sup_RTORF,i03SupTrnasfOutputRefineries,Supplementary parameter for the transformation output from refineries (Mtoe),"EF,YTIME","EF,YTIME",Parameters
+Parameter,Sup_SOTH,i03SuppRefCapacity,Supplementary Parameter for Refineries Capacity (Million Barrels/day),"SUPOTH,YTIME","SUPOTH,YTIME",Parameters
 Parameter,Sup_TIOTH,iSuppTransfInputPatFuel,"Supplementary Parameter for the transformation input to patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works","EF,YTIME","EF,YTIME",Parameters
-Parameter,Sup_TIRF,iDataTotTransfInputRef,Total Transformation Input in Refineries (Mtoe),"EF,YTIME","allCy,EF,YTIME",Parameters for data transfering
+Parameter,Sup_TIRF,i03DataTotTransfInputRef,Total Transformation Input in Refineries (Mtoe),"EF,YTIME","allCy,EF,YTIME",Parameters for data transfering
 Parameter,Sup_TOOTH,iDataOtherTransfOutput,Data for Other transformation output ,"EF,YTIME","allCy,EF,YTIME",Parameters for data transfering
-Parameter,Sup_TORF,iDataTransfOutputRef,Data for the transformation Output from Refineries (Mtoe),"EF,YTIME","allCy,EF,YTIME",Parameters for data transfering
-Parameter,Sup_TRANS,iSuppTransfers,Supplementary Parameter for Transfers (Mtoe),"EFS,YTIME","allCy,EFS,YTIME",Supply side
+Parameter,Sup_TORF,i03DataTransfOutputRef,Data for the transformation Output from Refineries (Mtoe),"EF,YTIME","allCy,EF,YTIME",Parameters for data transfering
+Parameter,Sup_TRANS,i03SuppTransfers,Supplementary Parameter for Transfers (Mtoe),"EFS,YTIME","allCy,EFS,YTIME",Supply side
 Variable,SUTR,V01TechSortVarCost,Technology sorting based on variable cost,"CYall,TRANSE,Rcon,YTIME","allCy,TRANSE,Rcon,YTIME",TRANSPORT SECTOR VARIABLES
 Parameter,targetprice,iPriceTragets,Price Targets,"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",Emission Related Parameters
 Parameter,targetprice1,REMOVED FROM OPEN-PROM,Data Transfer for Price Targets,"CYall,AGSECT,EF,YTIME","allCy,AGSECT,EF,YTIME",Reguala Falsi Parameters
@@ -456,27 +456,27 @@ Variable,TONUC,V03OutTransfNuclear,Transformation output from nuclear plants (Mt
 Variable,TOOTH,REMOVED FROM OPEN-PROM,"Transformation output from patent fuel and briquetting plants,coke-oven plants,blast furnace plants and gas works","CYall,EF,YTIME","allCy,EF,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Parameter,TOOTHRES,REMOVED FROM OPEN-PROM,"Transformation Output from Gasworks, Blast Furnances, Briquetting plants Residual","CYall,YTIME","allCy,YTIME",Supply Side Specific Parameters
 Variable,TORF,V03OutTransfRefSpec,Transformation output from refineries (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-Parameter,TOTAL_EF,iDiffFuelsInSec,Auxiliary parameter holding the number of different fuels in a sector,SBS,,
+Parameter,TOTAL_EF,i08DiffFuelsInSec,Auxiliary parameter holding the number of different fuels in a sector,SBS,,
 Variable,TOTCAP,VCapElecTot,Total electricity generation capacity (GW),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Variable,TOTCAP_EST,VMVCapElecTotEst,Estimated Total electricity generation capacity (GW),"CYall,YTIME","CYall,YTIME",POWER GENERATION SECTOR
 Variable,TOTCAPNCHP,V04CapElecNonCHP,Total electricity generation capacity excluding CHP ( GW),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Variable,TOTOT,V03OutTotTransf,Total transformation output (Mtoe),"CYall,EFS,YTIME ","allCy,EFS,YTIME ",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Variable,TOTPROD,V04ProdElecReqTot,Total required electricity production (TWh),"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Variable,TOTPRODCHP,V04ProdElecReqCHP,Total estimated CHP electricity production (TWh),"CYALL,YTIME","allCy,YTIME",POWER GENERATION SECTOR
-Parameter,TRADBMS,iExogDemOfBiomass,DEMAND OF TRADITIONAL BIOMASS-EXOGENOUSLY DEFINED,"CYALL,SBS,YTIME","allCy,DOMSE,YTIME",Common parameters for all Demand Subsectors
+Parameter,TRADBMS,i02ExogDemOfBiomass,DEMAND OF TRADITIONAL BIOMASS-EXOGENOUSLY DEFINED,"CYALL,SBS,YTIME","allCy,DOMSE,YTIME",Common parameters for all Demand Subsectors
 Variable,TRANS,V03Transfers,Transfers (Mtoe),"CYall,EFS,YTIME","allCy,EFS,YTIME",
-Parameter,Trans_ELSH,iPlugHybrFractOfMileage,"Plug in hybrid fraction of mileage covered by electricity, residualls on GDP-Depnd car market ext (1)","ELSH_SET,YTIME","allCy,ELSH_SET,YTIME",Parameters for data transfering
+Parameter,Trans_ELSH,i01PlugHybrFractOfMileage,"Plug in hybrid fraction of mileage covered by electricity, residualls on GDP-Depnd car market ext (1)","ELSH_SET,YTIME","allCy,ELSH_SET,YTIME",Parameters for data transfering
 Parameter,Trans_FCon,iFuelCons,Fuel consumption (Mtoe),"TRANSE,EF,YTIME","allCy,TRANSE,EF,YTIME",Parameters for data transfering
-Parameter,Trans_Gomp,iDataPassCars,Initial Data for Passenger Cars (),"GompSet1,Gompset2","allCy,GompSet1,Gompset2",Parameters for data transfering
+Parameter,Trans_Gomp,i01DataPassCars,Initial Data for Passenger Cars (),"GompSet1,Gompset2","allCy,GompSet1,Gompset2",Parameters for data transfering
 Parameter,Trans_RSFC,iResTranspFuelConsSubTech,Residual Transport on Specific Fuel Consumption per Subsector and Technology,"TRANSE,EF,YTIME","allCy,TRANSE,EF,YTIME",Parameters for data transfering
-Parameter,Trans_SFC,iInitSpecFuelCons,Initial Specific fuel consumption (),"TRANSE,TTECH,EF,YTIME","TRANSE,TTECH,EF,YTIME",Parameters for data transfering
+Parameter,Trans_SFC,i01InitSpecFuelCons,Initial Specific fuel consumption (),"TRANSE,TTECH,EF,YTIME","TRANSE,TTECH,EF,YTIME",Parameters for data transfering
 Parameter,Trans_Tech,iCapCostTechTr,Capital Cost of technology for transport (kUS$2015/vehicle),"CYall,TRANSE,EF,YTIME","allCy,TRANSE,EF,YTIME",Common parameters for all Demand Subsectors
 Parameter,Trans_Tech,imDataTransTech,Technoeconomic characteristics of transport (various),"TRANSE,EF,ECONCHAR","TRANSE,EF,ECONCHAR",common data parameters
-Parameter,Trans_Use,iCapDataLoadFacEachTransp,Capacity data and Load factor for each transportation mode (passenger or tonnes/vehicle),"TRANSE,TRANSUSE","TRANSE,TRANSUSE",common data parameters
+Parameter,Trans_Use,i01CapDataLoadFacEachTransp,Capacity data and Load factor for each transportation mode (passenger or tonnes/vehicle),"TRANSE,TRANSUSE","TRANSE,TRANSUSE",common data parameters
 Parameter,TRANSCHAR,imTransChar,"km per car, passengers per car and residuals for passenger cars market extension ()","CYall,TRANSPCHAR,YTIME","allCy,TRANSPCHAR,YTIME",TRANSPORT SECTOR VARIABLES
 Variable,U,V02CostTechMatFac,Technology cost including maturity factor (KUS$2015/toe),"CYall,DSBS,Rcon,EF,YTIME","allCy,DSBS,rCon,EF,YTIME",INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 Parameter,UF,imUsfEneConvSubTech,Useful Energy Conversion Factor per subsector and technology (1),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",Common parameters for all Demand Subsectors
-Parameter,USETR,iAvgVehCapLoadFac,Average capacity/vehicle and load factor (tn/veh or passenegers/veh) ,"CYall,TRANSE,TRANSUSE,YTIME","allCy,TRANSE,TRANSUSE,YTIME",Transport Sector specific Parameters
+Parameter,USETR,i01AvgVehCapLoadFac,Average capacity/vehicle and load factor (tn/veh or passenegers/veh) ,"CYall,TRANSE,TRANSUSE,YTIME","allCy,TRANSE,TRANSUSE,YTIME",Transport Sector specific Parameters
 Variable,UTR,V01CostTranspMatFac,Transportation cost including maturity factor(KUS$2015/vehicle),"CYALL,TRANSE,RCon,TTECH,YTIME","allCy,TRANSE,RCon,TTECH,YTIME",TRANSPORT SECTOR VARIABLES
 Parameter,VARCOST,imVarCostTech,Variable Cost of technology (),"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",Common parameters for all Demand Subsectors
 Variable,VARCOSTPG,V04CostVarTech,Variable cost of technology (US$2015/KWh),"CYall,PGALL,YTIME","allCy,PGALL,YTIME",POWER GENERATION SECTOR
@@ -486,7 +486,7 @@ Parameter,VCF,iFinEneConsPrevYear,Final energy consumption used for holding prev
 Variable,VEH,V01StockPcYearly,Stock of passenger cars (million vehicles),"CYall,YTIME","allCy,YTIME",TRANSPORT SECTOR VARIABLES
 Parameter,VOMRES,-,,"PGALL,YTIME",,
 Parameter,Vr,imDisFunConSize,Distribution function of consumer size groups (1),"CYall,DSBS,Rcon","allCy, DSBS, RCon",Macro economic indicators
-Parameter,WPRICE,iWgtSecAvgPriFueCons,"Weights for sector's average price, based on fuel consumption (1)","CYall,SBS,EF","allCy,SBS,EF",Macro economic indicators
+Parameter,WPRICE,i08WgtSecAvgPriFueCons,"Weights for sector's average price, based on fuel consumption (1)","CYall,SBS,EF","allCy,SBS,EF",Macro economic indicators
 Parameter,X0,imAnnCons,"Annual consumption by the consumer size smallest, modal, largest (average for all countries)  !! For passenger cars (Million km/vehicle)
                                                  !! For other passenger tranportation modes (Mpkm/vehicle)
                                                  !! For goods transport, (Mtkm/vehicle)","CYall,SBS","allCy,DSBS,conSet",Macro economic indicators
@@ -508,35 +508,35 @@ Parameter,GHGELASTC,unused,,,,
 Parameter,NGSEXPRES,unused,,,,
 Parameter,SPG,unused,,,,
 Parameter,DISCOUNTED,unused,,,,
-Parameter,H2TECH_LFT,iProdLftH2,"Lifetime of hydrogen production technologies in years","H2TECH",,Hydrogen Module
-Parameter,H2TECH_CAPCOST,iCostCapH2Prod,"Capital cost of hydrogen production technologies in Euro per Nm3 of hydrogen","CYall,H2TECH,YTIME",,Hydrogen Module
-Parameter,H2TECH_FOM,iCostFOMH2Prod,"Fixed operating and maintenance costs of hydrogen production technologies in Euro per Nm3 of hydrogen","CYall,H2TECH,YTIME",,Hydrogen Module
-Parameter,H2TECH_AVAIL,iAvailH2Prod,"Availability of hydrogen production technologies","H2TECH,YTIME",,Hydrogen Module
-Parameter,H2TECH_VOM,iCostVOMH2Prod,"Variable operating and maintenance costs of hydrogen production technologies in Euro per toe of hydrogen","CYall,H2TECH,YTIME",,Hydrogen Module
-Parameter,H2TECH_EFF,iEffH2Prod,"Efficiency of hydrogen production technologies","CYall,H2TECH,YTIME",,Hydrogen Module
-Parameter,H2TECH_CR,iCaptRateH2Prod,"CO2 capture rate of hydrogen production technologies (for those which are equipped with CCS facility)","CYall,H2TECH,YTIME",,Hydrogen Module
+Parameter,H2TECH_LFT,i05ProdLftH2,"Lifetime of hydrogen production technologies in years","H2TECH",,Hydrogen Module
+Parameter,H2TECH_CAPCOST,i05CostCapH2Prod,"Capital cost of hydrogen production technologies in Euro per Nm3 of hydrogen","CYall,H2TECH,YTIME",,Hydrogen Module
+Parameter,H2TECH_FOM,i05CostFOMH2Prod,"Fixed operating and maintenance costs of hydrogen production technologies in Euro per Nm3 of hydrogen","CYall,H2TECH,YTIME",,Hydrogen Module
+Parameter,H2TECH_AVAIL,i05AvailH2Prod,"Availability of hydrogen production technologies","H2TECH,YTIME",,Hydrogen Module
+Parameter,H2TECH_VOM,i05CostVOMH2Prod,"Variable operating and maintenance costs of hydrogen production technologies in Euro per toe of hydrogen","CYall,H2TECH,YTIME",,Hydrogen Module
+Parameter,H2TECH_EFF,i05EffH2Prod,"Efficiency of hydrogen production technologies","CYall,H2TECH,YTIME",,Hydrogen Module
+Parameter,H2TECH_CR,i05CaptRateH2Prod,"CO2 capture rate of hydrogen production technologies (for those which are equipped with CCS facility)","CYall,H2TECH,YTIME",,Hydrogen Module
 Parameter,H2PW,iWBLShareH2Prod,"Parameter for controlling the weibull function for calculating the shares in new market","CYall,H2TECH,YTIME",,Hydrogen Module
-Parameter,H2PRODGAMMA,iWBLGammaH2Prod,"Parameter for acceptance in new investments used in weibull function in production shares","CYall,YTIME",,Hydrogen Module
+Parameter,H2PRODGAMMA,i05WBLGammaH2Prod,"Parameter for acceptance in new investments used in weibull function in production shares","CYall,YTIME",,Hydrogen Module
 Parameter,H2WPM,iWBLPremRepH2Prod,"Parameter for controlling the premature replacement of technology","CYall,H2TECH,YTIME",,Hydrogen Module
-Parameter,MAXAREA,iPolH2AreaMax,"Policy parameter defining the percentage of the country area supplied by hydrogen at the end of the horizon period [0...1]","CYall",,Hydrogen Module
-Parameter,AREA,iHabAreaCountry,"Inhabitable land in a country","CYall",,Hydrogen Module
-Parameter,AREAELAST,iH2Adopt,"Parameters controlling the speed and the year of taking off the transition to hydrogen economy","CYall,ARELAST,YTIME",,Hydrogen Module
-Parameter,H2TRANSP_EFF,iEffH2Transp,"Efficiency of hydrogen transportation per infrastructure technology","CYall,INFRTECH,YTIME",,Hydrogen Module
-Parameter,H2TRANSP_SELF,iConsSelfH2Transp,"Self consumption of infrastructure technology rate","CYall,INFRTECH,YTIME",,Hydrogen Module
-Parameter,H2TRANSP_EFAG,iEffNetH2Transp,"Total efficiency of the distribution network until the <infrtech> node","CYall,INFRTECH,YTIME",,Hydrogen Module
-Parameter,H2KMTOE,iPipeH2Transp,"Kilometers of pipelines required per toe of delivered hydrogen (based on stylized model)","INFRTECH",,Hydrogen Module
-Parameter,IFACT,iKmFactH2Transp,"Km needed for a given infrastructure assuming that its required infrastructure has been arleady installed","CYall,INFRTECH",,Hydrogen Module
-Parameter,H2ICOST,iCostInvH2Transp,"Investment cost of infrastructure technology
+Parameter,MAXAREA,i05PolH2AreaMax,"Policy parameter defining the percentage of the country area supplied by hydrogen at the end of the horizon period [0...1]","CYall",,Hydrogen Module
+Parameter,AREA,i05HabAreaCountry,"Inhabitable land in a country","CYall",,Hydrogen Module
+Parameter,AREAELAST,i05H2Adopt,"Parameters controlling the speed and the year of taking off the transition to hydrogen economy","CYall,ARELAST,YTIME",,Hydrogen Module
+Parameter,H2TRANSP_EFF,i05EffH2Transp,"Efficiency of hydrogen transportation per infrastructure technology","CYall,INFRTECH,YTIME",,Hydrogen Module
+Parameter,H2TRANSP_SELF,i05ConsSelfH2Transp,"Self consumption of infrastructure technology rate","CYall,INFRTECH,YTIME",,Hydrogen Module
+Parameter,H2TRANSP_EFAG,i05EffNetH2Transp,"Total efficiency of the distribution network until the <infrtech> node","CYall,INFRTECH,YTIME",,Hydrogen Module
+Parameter,H2KMTOE,i05PipeH2Transp,"Kilometers of pipelines required per toe of delivered hydrogen (based on stylized model)","INFRTECH",,Hydrogen Module
+Parameter,IFACT,i05KmFactH2Transp,"Km needed for a given infrastructure assuming that its required infrastructure has been arleady installed","CYall,INFRTECH",,Hydrogen Module
+Parameter,H2ICOST,i05CostInvH2Transp,"Investment cost of infrastructure technology
                                                    !! - Turnpike pipeline in Euro per km
                                                    !! - Low pressure urban pipeline in Euro per km
                                                    !! - Medium pressure ring in Euro per km
                                                    !! - Service stations connection lines in Euro per km
                                                    !! - Gaseous hydrogen service stations in Euro per toe per year","CYall,INFRTECH,YTIME",,Hydrogen Module
-Parameter,H2TRANSP_LFT,iTranspLftH2,"Technical lifetime of infrastructure technologies","INFRTECH",,Hydrogen Module
-Parameter,H2TRANSP_AVAIL,iAvailRateH2Transp,"Availability rate of infrastructure technology","INFRTECH,YTIME",,Hydrogen Module
-Parameter,H2TRANSP_FOM,iCostInvFOMH2,"Annual fixed O&M cost as percentage of total investment cost","INFRTECH,YTIME",,Hydrogen Module
-Parameter,H2TRANSP_VOM,iCostInvVOMH2,"Annual variable O&M cost as percentage of total investment cost","INFRTECH,YTIME",,Hydrogen Module
-Parameter,WAC,iCostAvgWeight,"Weight for pricing in average cost or in marginal cost","CYALL,YTIME",,Hydrogen Module
+Parameter,H2TRANSP_LFT,i05TranspLftH2,"Technical lifetime of infrastructure technologies","INFRTECH",,Hydrogen Module
+Parameter,H2TRANSP_AVAIL,i05AvailRateH2Transp,"Availability rate of infrastructure technology","INFRTECH,YTIME",,Hydrogen Module
+Parameter,H2TRANSP_FOM,i05CostInvFOMH2,"Annual fixed O&M cost as percentage of total investment cost","INFRTECH,YTIME",,Hydrogen Module
+Parameter,H2TRANSP_VOM,i05CostInvVOMH2,"Annual variable O&M cost as percentage of total investment cost","INFRTECH,YTIME",,Hydrogen Module
+Parameter,WAC,i05CostAvgWeight,"Weight for pricing in average cost or in marginal cost","CYALL,YTIME",,Hydrogen Module
 Variable,H2TECH_SH,V05GapShareH2Tech1,"Shares of H2 production technologies in new market competition 1","CYall, H2TECH, YTIME",,Hydrogen Module
 Variable,H2TECH_SHT,V05GapShareH2Tech2,"Shares of H2 production technologies in new market competition 2","CYall, H2TECH, YTIME",,Hydrogen Module
 Variable,H2TECH_PROD,VMVProdH2,"Hydrogen Production by technology in Mtoe","CYall, H2TECH, YTIME",,Hydrogen Module

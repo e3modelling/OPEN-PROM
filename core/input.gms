@@ -113,9 +113,12 @@ BU	2
 NEN	2
 /;
 *---
-parameter iConsSizeDistHeat(conSet)               "Consumer sizes for district heating (1)" /smallest 0.425506805,
-                                                                                             modal    0.595709528,
-                                                                                             largest 0.833993339/;
+parameter iConsSizeDistHeat(conSet)               "Consumer sizes for district heating (1)"
+/
+smallest 0.425506805,
+modal    0.595709528,
+largest  0.833993339
+/;
 *---
 table imRateLossesFinCons(allCy,EF,YTIME)               "Rate of losses over Available for Final Consumption (1)"
 $ondelim
@@ -123,16 +126,17 @@ $include "./iRateLossesFinCons.csv"
 $offdelim
 ;
 *---
-parameter imParDHEffData(PGEFS) "Parameter of  district heating Efficiency (1)" /
-HCL		0.76,
-LGN		0.75,
-GDO		0.78,
-RFO		0.78,
-OLQ		0.78,
-NGS		0.8,
-OGS		0.78,
-BMSWAS    0.76 
-/;
+table imInstCapPast(allCy,PGALL,YTIME)        "Installed capacity past (GW)"
+$ondelim
+$include"./iInstCapPast.csv"
+$offdelim
+;
+*---
+table imFuelPrice(allCy,SBS,EF,YTIME)	 "Prices of fuels per subsector (k$2015/toe)"
+$ondelim
+$include"./iFuelPrice.csv"
+$offdelim
+;
 *---
 table imPriceFuelsIntBase(WEF,YTIME)	              "International Fuel Prices USED IN BASELINE SCENARIO ($2015/toe)"
 $ondelim
@@ -146,8 +150,16 @@ $include"./iSuppExports.csv"
 $offdelim
 ;
 *---
+table imPriceFuelsInt(WEF,YTIME)                      "International Fuel Prices ($2015/toe)"
+$ondelim
+$include"./iPriceFuelsInt.csv"
+$offdelim
+;
+*---
 parameter imImpExp(allCy,EFS,YTIME)	              "Imports of exporting countries usually zero (1)" ;
 imImpExp(runCy,EFS,YTIME) = 0;
+*---
+parameter imTotFinEneDemSubBaseYr(allCy,SBS,YTIME)    "Total Final Energy Demand per subsector in Base year (Mtoe)";
 *---
 *Sources for vehicle lifetime:
 *US Department of Transportation, International Union of Railways, Statista, EU CORDIS
@@ -365,6 +377,37 @@ OI.H2F      2.43133 68.3668 41.1163 25  1.68
 imDataIndTechnology(INDSE,EF,"IC") = imDataIndTechnology(INDSE,EF,"IC") * 1.3;
 imDataIndTechnology(INDSE,EF,"FC") = imDataIndTechnology(INDSE,EF,"FC") * 1.3;
 imDataIndTechnology(INDSE,EF,"VC") = imDataIndTechnology(INDSE,EF,"VC") * 1.3;
+*---
+** CHP economic and technical data initialisation for electricity production
+table imDataChpPowGen(EF,YTIME,CHPPGSET)   "Data for power generation costs (various)"
+               IC      FC      LFT VOM     AVAIL BOILEFF
+STE1AL.2010    2.75    58.4621 35  5.19746 0.85  0.699301
+STE1AL.2020    2.75    52.9702     5.01869       0.699301
+STE1AL.2050    2.75    48.5081     3.3689        0.699301
+STE1AH.2010    2.2814  50.609  35  4.4306  0.85  0.746269
+STE1AH.2020    2.2814  43.5126     4.2842        0.746269
+STE1AH.2050    2.2814  37.7468     4.08204       0.746269
+STE1AD.2010    1.276   20.01   15  2.67042 0.29  0.813008
+STE1AD.2020    1.276   20.01       2.67042       0.813008
+STE1AD.2050    1.276   20.01       2.67042       0.813008
+STE1AR.2010    1.782   27.945  30  3.72938 0.8   0.78125
+STE1AR.2020    1.782   27.945      3.72938       0.78125
+STE1AR.2050    1.782   27.945      3.72938       0.78125
+STE1AG.2010    1.16358 19.35   25  2.56461 0.8   0.819672
+STE1AG.2020    1.09263 19.35       2.44861       0.819672
+STE1AG.2050    1.06425 19.35       2.23212       0.819672
+STE1AB.2010    3.2208  57.096  30  6.29638 0.85  0.746269
+STE1AB.2020    3.0866  54.717      6.05137       0.746269
+STE1AB.2050    2.8853  51.1485     5.61708       0.746269
+STE1AH2F.2010  1.16358 19.35   15  2.56461 0.8   0.829672
+STE1AH2F.2020  1.09263 19.35       2.44861       0.829672
+STE1AH2F.2050  1.06425 19.35       2.23212       0.829672
+;
+*---
+* Converting EUR2005 to US2015
+imDataChpPowGen(EF,YTIME,"IC")  = imDataChpPowGen(EF,YTIME,"IC") * 1.3;
+imDataChpPowGen(EF,YTIME,"FC")  = imDataChpPowGen(EF,YTIME,"FC") * 1.3;
+imDataChpPowGen(EF,YTIME,"VOM") = imDataChpPowGen(EF,YTIME,"VOM") * 1.3;
 *---
 table imDataDomTech(DOMSE,EF,ECONCHAR)                "Technical lifetime of Industry (years)"
              IC       FC      VC      LFT USC
@@ -624,13 +667,7 @@ $offdelim
 *---
 imDistrLosses(runCy,EFS,YTIME) = iDataDistrLosses(runCy,EFS,YTIME);
 *---
-table iFuelConsTRANSE(allCy,TRANSE,EF,YTIME)	"Fuel consumption (Mtoe)"
-$ondelim
-$include"./iFuelConsTRANSE.csv"
-$offdelim
-;
-*---
-imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME) = iFuelConsTRANSE(runCy,TRANSE,EF,YTIME);
+imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME) = i01FuelConsTRANSE(runCy,TRANSE,EF,YTIME);
 table iFuelConsINDSE(allCy,INDSE,EF,YTIME)	"Fuel consumption of industry subsector (Mtoe)"
 $ondelim
 $include"./iFuelConsINDSE.csv"

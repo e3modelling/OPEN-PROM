@@ -50,11 +50,11 @@ V03Exp(allCy,EFS,YTIME)                        	           "Exports fake (Mtoe)"
 V03Imp(allCy,EFS,YTIME)             	                   "Fake Imports for all fuels except natural gas (Mtoe)"
 
 *'                **Interdependent Variables**
-VMImpNetEneBrnch(allCy,EFS,YTIME)	                       "Net Imports (Mtoe)"
-VMConsFiEneSec(allCy,EFS,YTIME)                            "Final consumption in energy sector (Mtoe)"
-VMInpTransfTherm(allCy,EFS,YTIME)	                       "Transformation input to thermal power plants (Mtoe)"
-VMTransfInputDHPlants(allCy,EFS,YTIME)                     "Transformation input to District Heating Plants (Mtoe)"
-VMConsFinEneCountry(allCy,EF,YTIME)                        "Total final energy consumnption (Mtoe)"
-VMConsFinNonEne(allCy,EFS,YTIME)                           "Final non energy consumption (Mtoe)"
-VMLossesDistr(allCy,EFS,YTIME)                             "Distribution losses (Mtoe)"
+VmImpNetEneBrnch(allCy,EFS,YTIME)	                       "Net Imports (Mtoe)"
+VmConsFiEneSec(allCy,EFS,YTIME)                            "Final consumption in energy sector (Mtoe)"
+VmInpTransfTherm(allCy,EFS,YTIME)	                       "Transformation input to thermal power plants (Mtoe)"
+VmTransfInputDHPlants(allCy,EFS,YTIME)                     "Transformation input to District Heating Plants (Mtoe)"
+VmConsFinEneCountry(allCy,EF,YTIME)                        "Total final energy consumnption (Mtoe)"
+VmConsFinNonEne(allCy,EFS,YTIME)                           "Final non energy consumption (Mtoe)"
+VmLossesDistr(allCy,EFS,YTIME)                             "Distribution losses (Mtoe)"
 ;

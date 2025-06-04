@@ -19,11 +19,11 @@ Q06CapCO2ElecHydr(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V06CapCO2ElecHydr(allCy,YTIME)
          =E=
          sum(PGEF,sum(CCS$PGALLtoEF(CCS,PGEF),
-                 VMProdElec(allCy,CCS,YTIME)*smTWhToMtoe/imPlantEffByType(allCy,CCS,YTIME)*
+                 VmProdElec(allCy,CCS,YTIME)*smTWhToMtoe/imPlantEffByType(allCy,CCS,YTIME)*
                  imCo2EmiFac(allCy,"PG",PGEF,YTIME)*imCO2CaptRate(allCy,CCS,YTIME)))
                 + 
          (sum(EF, sum(H2TECH$H2TECHEFtoEF(H2TECH,EF),
-               VMConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)*imCo2EmiFac(allCy,"PG",EF,YTIME)*iCaptRateH2Prod(allCy,H2TECH,YTIME)))
+               VmConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)*imCo2EmiFac(allCy,"PG",EF,YTIME)*i05CaptRateH2Prod(allCy,H2TECH,YTIME)))
           )  ;    !! CO2 emissions captured by plants producing hydrogen
 
 
@@ -43,7 +43,7 @@ Q06CaptCummCO2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q06TrnsWghtLinToExp(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V06TrnsWghtLinToExp(allCy,YTIME)
          =E=
-         1/(1+exp(-iElastCO2Seq(allCy,"mc_s")*( V06CaptCummCO2(allCy,YTIME)/iElastCO2Seq(allCy,"pot")-iElastCO2Seq(allCy,"mc_m")))); 
+         1/(1+exp(-i06ElastCO2Seq(allCy,"mc_s")*( V06CaptCummCO2(allCy,YTIME)/i06ElastCO2Seq(allCy,"pot")-i06ElastCO2Seq(allCy,"mc_m")))); 
 
 *' The equation calculates the cost curve for CO2 sequestration costs in Euro per ton of CO2 sequestered
 *' for a specific scenario and year. The cost curve is determined based on cumulative CO2 captured and
@@ -54,6 +54,6 @@ Q06TrnsWghtLinToExp(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' realistic approach to modeling CO2 sequestration costs, considering the cumulative CO2 captured and the associated elasticities
 *' for the cost curve. The result represents the cost of sequestering one ton of CO2 in the specified scenario and year.
 Q06CstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VMCstCO2SeqCsts(allCy,YTIME) =E=
-       (1-V06TrnsWghtLinToExp(allCy,YTIME))*(iElastCO2Seq(allCy,"mc_a")*V06CaptCummCO2(allCy,YTIME)+iElastCO2Seq(allCy,"mc_b"))+
-       V06TrnsWghtLinToExp(allCy,YTIME)*(iElastCO2Seq(allCy,"mc_c")*exp(iElastCO2Seq(allCy,"mc_d")*V06CaptCummCO2(allCy,YTIME)));           
+         VmCstCO2SeqCsts(allCy,YTIME) =E=
+       (1-V06TrnsWghtLinToExp(allCy,YTIME))*(i06ElastCO2Seq(allCy,"mc_a")*V06CaptCummCO2(allCy,YTIME)+i06ElastCO2Seq(allCy,"mc_b"))+
+       V06TrnsWghtLinToExp(allCy,YTIME)*(i06ElastCO2Seq(allCy,"mc_c")*exp(i06ElastCO2Seq(allCy,"mc_d")*V06CaptCummCO2(allCy,YTIME)));           

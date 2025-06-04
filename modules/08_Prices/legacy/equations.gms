@@ -17,24 +17,24 @@
 *' efficiency values, and the total hydrogen cost per sector.The result of the equation is the fuel price per 
 *' subsector and fuel, adjusted based on changes in carbon values, electricity prices, efficiency, and hydrogen costs.
 Q08PriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF) $TIME(YTIME) $(not sameas("NUC",EF)) $runCy(allCy))..
-         VMPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)
+         VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)
                  =E=
-         (VMPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1) +
+         (VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1) +
           imCo2EmiFac(allCy,SBS,EF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,SBS),(VmCarVal(allCy,NAP,YTIME)))/1000
          )$( not (ELCEF(EF) or HEATPUMP(EF) or ALTEF(EF)))
          +
          (
-          VMPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1)$(DSBS(SBS))$ALTEF(EF)
+          VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1)$(DSBS(SBS))$ALTEF(EF)
          )
          +
          (
-           ( VMPriceElecIndResConsu(allCy,"i",YTIME)$INDTRANS(SBS)+VMPriceElecIndResConsu(allCy,"r",YTIME)$RESIDENT(SBS))/smTWhToMtoe
+           ( VmPriceElecIndResConsu(allCy,"i",YTIME)$INDTRANS(SBS)+VmPriceElecIndResConsu(allCy,"r",YTIME)$RESIDENT(SBS))/smTWhToMtoe
             +
             ((imEffValueInDollars(allCy,SBS,YTIME))/1000)$DSBS(SBS)
          )$(ELCEF(EF) or HEATPUMP(EF))
          +
          (
-                 iHydrogenPri(allCy,SBS,YTIME-1)$DSBS(SBS)
+                 i08HydrogenPri(allCy,SBS,YTIME-1)$DSBS(SBS)
          )$(H2EF(EF) or sameas("STE1AH2F",EF));
 
 *' The equation calculates the fuel prices per subsector and fuel multiplied by weights
@@ -46,13 +46,13 @@ Q08PriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF) $TIME(YTIME) $(no
 Q08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $TIME(YTIME) $runCy(allCy))..
         V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)
           =E= 
-        iWgtSecAvgPriFueCons(allCy,DSBS,EF) * VMPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME);
+        i08WgtSecAvgPriFueCons(allCy,DSBS,EF) * VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME);
 
 *' The equation calculates the average fuel price per subsector. These average prices are used to further compute electricity prices in industry
 *' (using the OI "other industry" avg price), as well as the aggregate fuel demand (of substitutable fuels) per subsector.
 *' In the transport sector they feed into the calculation of the activity levels.
 Q08PriceFuelAvgSub(allCy,DSBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-        VMPriceFuelAvgSub(allCy,DSBS,YTIME)
+        VmPriceFuelAvgSub(allCy,DSBS,YTIME)
                  =E=
          sum(EF$SECTTECH(DSBS,EF), V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME));         
 
@@ -64,21 +64,21 @@ Q08PriceFuelAvgSub(allCy,DSBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' factors affecting electricity prices, and long-term average power generation costs. It provides a comprehensive representation of the
 *' factors contributing to the electricity price for industrial and residential consumers in the specified scenario, energy set, and year.
 Q08PriceElecIndResConsu(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..  !! The electricity price is based on previous year's production costs
-        VMPriceElecIndResConsu(allCy,ESET,YTIME)
+        VmPriceElecIndResConsu(allCy,ESET,YTIME)
                  =E=
-        (1 + iVAT(allCy,YTIME)) *
+        (1 + i08VAT(allCy,YTIME)) *
         (
            (
-             (VMPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
+             (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
              (
-                VMCostPowGenAvgLng(allCy,"i",YTIME-1)
+                VmCostPowGenAvgLng(allCy,"i",YTIME-1)
               )$(not TFIRST(YTIME-1))
            )$ISET(ESET)
         +
            (
-             (VMPriceFuelSubsecCarVal(allCy,"HOU","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
+             (VmPriceFuelSubsecCarVal(allCy,"HOU","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
              (
-               VMCostPowGenAvgLng(allCy,"r",YTIME-1) 
+               VmCostPowGenAvgLng(allCy,"r",YTIME-1) 
              )$(not TFIRST(YTIME-1))
            )$RSET(ESET)
         );
@@ -87,19 +87,19 @@ Q08PriceElecIndResConsu(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..  !! The
 *' Fuel prices per subsector and fuel multiplied by the TWh to Mtoe conversion factor adding the Factors affecting electricity prices to consumers and the Long-term average power 
 *' generation cost  excluding climate policies for Electricity of Other Industrial sectors and for Electricity for Households .
 Q08PriceElecIndResNoCliPol(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..   !! The electricity price is based on previous year's production costs
-        VMPriceElecIndResNoCliPol(allCy,ESET,YTIME)
+        VmPriceElecIndResNoCliPol(allCy,ESET,YTIME)
                  =E=
-        (1 + iVAT(allCy, YTIME)) *
+        (1 + i08VAT(allCy, YTIME)) *
         (
            (
-             (VMPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
+             (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
              (
                V04CostPowGenLonNoClimPol(allCy,"i",YTIME-1) 
               )$(not TFIRST(YTIME-1))
            )$ISET(ESET)
         +
            (
-             (VMPriceFuelSubsecCarVal(allCy,"HOU","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
+             (VmPriceFuelSubsecCarVal(allCy,"HOU","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
              (
                 V04CostPowGenLonNoClimPol(allCy,"r",YTIME-1) 
              )$(not TFIRST(YTIME-1))
@@ -113,11 +113,11 @@ Q08PriceElecIndResNoCliPol(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..   !!
 *' price for CHP sales) from the overall fuel price for the subsector. Additionally, the equation includes a square root term to handle complex computations related to the
 *' difference in fuel prices. This equation provides insights into the cost considerations for fuel in the context of CHP plants, considering various economic and technical parameters.
 Q08PriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS))  $SECTTECH(DSBS,EF) $runCy(allCy))..
-        VMPriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)
+        VmPriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)
                 =E=   
-             (((VMPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME) + (VmRenValue(YTIME)/1000)$(not RENEF(EF))+imVarCostTech(allCy,DSBS,EF,YTIME)/1000)/imUsfEneConvSubTech(allCy,DSBS,EF,YTIME)- 
-               (0$(not CHP(EF)) + (VMPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME)*smFracElecPriChp*VMPriceElecInd(allCy,YTIME))$CHP(EF)))  + SQRT( SQR(((VMPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME)+imVarCostTech(allCy,DSBS,EF,YTIME)/1000)/imUsfEneConvSubTech(allCy,DSBS,EF,YTIME)- 
-              (0$(not CHP(EF)) + (VMPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME)*smFracElecPriChp*VMPriceElecInd(allCy,YTIME))$CHP(EF))))  ) )/2;
+             (((VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME) + (VmRenValue(YTIME)/1000)$(not RENEF(EF))+imVarCostTech(allCy,DSBS,EF,YTIME)/1000)/imUsfEneConvSubTech(allCy,DSBS,EF,YTIME)- 
+               (0$(not CHP(EF)) + (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME)*smFracElecPriChp*VmPriceElecInd(allCy,YTIME))$CHP(EF)))  + SQRT( SQR(((VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME)+imVarCostTech(allCy,DSBS,EF,YTIME)/1000)/imUsfEneConvSubTech(allCy,DSBS,EF,YTIME)- 
+              (0$(not CHP(EF)) + (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME)*smFracElecPriChp*VmPriceElecInd(allCy,YTIME))$CHP(EF))))  ) )/2;
 
 *' This equation determines the electricity industry prices based on an estimated electricity index and a technical maximum of the electricity to steam ratio
 *' in Combined Heat and Power plants. The industry prices are calculated as a function of the estimated electricity index and the specified maximum
@@ -126,5 +126,5 @@ Q08PriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS))  $SE
 *' for the specific characteristics of these facilities. This equation ensures that the derived electricity industry prices align with the estimated index and
 *' technical constraints, providing a realistic representation of the electricity market in the industrial sector.
 Q08PriceElecInd(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VMPriceElecInd(allCy,YTIME) =E=
+         VmPriceElecInd(allCy,YTIME) =E=
         ( V02IndxElecIndPrices(allCy,YTIME) + smElecToSteRatioChp - SQRT( SQR(V02IndxElecIndPrices(allCy,YTIME)-smElecToSteRatioChp)  ) )/2;
