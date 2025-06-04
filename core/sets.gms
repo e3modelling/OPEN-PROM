@@ -112,6 +112,10 @@ time(ytime)     Model time horizon used in equation definitions   /%fStartY%*%fE
 datay(ytime)    Historical year before the base year of the model /%fStartHorizon%*%fBaseY%/
 hour            "Segments of hours in a year (250,1250,...,8250)" /h0*h8/
 
+
+posElast / a /
+negElast / b1, b2, c, b3, b4, c1, c2, c3, c4, c5 /
+
 ***          Consumer Sizes         *
 
 conSet       Consumer size groups related to space heating
@@ -963,6 +967,7 @@ FEED_RES         "Residual for Feedstocks in Transfers"
 PGOTH            "Various data related to power generation plants"
 /
 TOTCAP           "Total Available capacity in Base Year (GW)"
+TOTNOMCAP        "Total Nominal Available capacity in Base Year (GW)"
 PEAKLOAD         "Peak Load in Base Year (GW)"
 BASELOAD         "Base Load in Base Year (GW)"
 NON_CHP_PER      "Non-CHP capacity (percentage of total (gross) capacity)"

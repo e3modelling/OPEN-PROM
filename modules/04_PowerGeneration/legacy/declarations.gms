@@ -4,9 +4,9 @@
 Equations
 *' *** Power Generation
 QCapElec2(allCy,PGALL,YTIME)	                           "Compute electricity generation capacity"
+QCapElecNominal(allCy,PGALL,YTIME)	                     "Compute nominal electricity generation capacity"
 *qScalFacPlantDispatchExpr(allCy,PGALL,HOUR,YTIME)		   "Scaling factor for plant dispatching"		
 QRenTechMatMultExpr(allCy,PGALL,YTIME)                     "Renewable power capacity over potential (1)"
-QPotRenCurr(allCy,PGRENEF,YTIME)	                       "Compute current renewable potential"
 QCapElecCHP(allCy,CHP,YTIME)                               "Compute CHP electric capacity"	
 QLambda(allCy,YTIME)	                                   "Compute Lambda parameter"
 QBsldEst(allCy,YTIME)	                                   "Compute estimated base load"
@@ -28,8 +28,6 @@ QIndxEndogScrap(allCy,PGALL,YTIME)	                       "Compute endogenous sc
 QCapElecNonCHP(allCy,YTIME)	                               "Compute total electricity generation capacity excluding CHP plants"
 QGapGenCapPowerDiff(allCy,YTIME)	                       "Compute the gap in power generation capacity"		
 *qScalWeibull(allCy,PGALL,HOUR,YTIME)                      "Compute temporary variable facilitating the scaling in Weibull equation"	
-QPotRenSuppCurve(allCy,PGRENEF,YTIME)	                   "Compute renewable potential supply curve"		
-QPotRenMaxAllow(allCy,PGRENEF,YTIME)                       "Compute maximum allowed renewable potential"
 *qPotRenMinAllow(allCy,PGRENEF,YTIME)	                   "Compute minimum allowed renewable potential" 
 QRenTechMatMult(allCy,PGALL,YTIME)	                       "Compute renewable technologies maturity multiplier"		 	
 QScalWeibullSum(allCy,PGALL,YTIME)	                       "Compute sum (over hours) of temporary variable facilitating the scaling in Weibull equation"
@@ -70,9 +68,9 @@ QCostPowGenAvgLng(allCy,ESET,YTIME)	                       "Compute long term po
 Variables
 *' *** Power Generation Variables
 VCapElec2(allCy,PGALL,YTIME)	                           "Electricity generation plants capacity (GW)"
+VCapElecNominal(allCy,PGALL,YTIME)	                     "Nominal electricity generation plants capacity (GW)"
 *vScalFacPlantDispatchExpr(allCy,PGALL,HOUR,YTIME)         "Scaling factor for plant dispatching"
-VRenTechMatMultExpr(allCy,PGALL,YTIME)                     "Renewable power capacity over potential (1)"
-VPotRenCurr(allCy,PGRENEF,YTIME)	                       "Current renewable potential (GW)"			
+VRenTechMatMultExpr(allCy,PGALL,YTIME)                   "Renewable power capacity over potential (1)"
 VCapElecCHP(allCy,CHP,YTIME)	                           "Capacity of CHP Plants (GW)"
 VLambda(allCy,YTIME)	                                   "Parameter for load curve construction (1)"
 VBsldEst(allCy,YTIME)	                                   "Estimated base load (GW)"
@@ -94,8 +92,6 @@ VIndxEndogScrap(allCy,PGALL,YTIME)	                       "Index used for endoge
 VCapElecNonCHP(allCy,YTIME)	                               "Total electricity generation capacity excluding CHP (GW)"	
 VGapGenCapPowerDiff(allCy,YTIME)	                       "Gap in total generation capacity to be filled by new equipment (GW)"		
 *vScalWeibull(allCy,PGALL,HOUR,YTIME)                      "Temporary variable facilitating the scaling in Weibull equation"	
-VPotRenSuppCurve(allCy,PGRENEF,YTIME)	                   "Renewable potential supply curve	(1)"
-VPotRenMaxAllow(allCy,PGRENEF,YTIME)                       "Maximum allowed renewable potential (GW)"
 *vPotRenMinAllow(allCy,PGRENEF,YTIME)	                   "Minimum allowed renewable potential (GW)"		
 VRenTechMatMult(allCy,PGALL,YTIME)	                       "Renewable technologies maturity multiplier (1)"	
 VScalWeibullSum(allCy,PGALL,YTIME)	                       "Sum (over hours) of temporary variable facilitating the scaling in Weibull equation (1)"

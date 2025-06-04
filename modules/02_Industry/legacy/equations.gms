@@ -97,13 +97,14 @@ QConsFuel(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,E
 *' historical changes in fuel prices, providing a more dynamic estimation of the electricity index. This equation provides a method to estimate the electricity index
 *' based on historical fuel price trends, allowing for a more flexible and responsive representation of industry price dynamics.
 QIndxElecIndPrices(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VIndxElecIndPrices(allCy,YTIME)
-                 =E=
-         VPriceElecInd(allCy,YTIME-1) *
-        ((VPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)/VPriceFuelAvgSub(allCy,"OI",YTIME-1))/
-        (VPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-2)/VPriceFuelAvgSub(allCy,"OI",YTIME-2)))**(0.3) *
-        ((VPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-2)/VPriceFuelAvgSub(allCy,"OI",YTIME-2))/
-        (VPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-3)/VPriceFuelAvgSub(allCy,"OI",YTIME-3)))**(0.3);
+        VIndxElecIndPrices(allCy,YTIME)
+                =E=
+        VPriceElecInd(allCy,YTIME-1) * 
+        (VPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)/VPriceFuelAvgSub(allCy,"OI",YTIME-1)) ** (0.6) *
+        (VPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-2)/VPriceFuelAvgSub(allCy,"OI",YTIME-2)) ** (0.3) *
+        (VPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-3)/VPriceFuelAvgSub(allCy,"OI",YTIME-3)) ** (0.1)
+        
+        ;
 
 *' The equation computes the electricity production cost per Combined Heat and Power plant for a specific demand sector within a given subsector.
 *' The cost is determined based on various factors, including the discount rate, technical lifetime of CHP plants, capital cost, fixed O&M cost, availability rate,
@@ -228,7 +229,6 @@ QCostProdCHPDem(allCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS) $runCy(allCy)).
 QCostElcAvgProdCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VCostElcAvgProdCHP(allCy,CHP,YTIME)
          =E=
-
          (sum(INDDOM, VConsFuel(allCy,INDDOM,CHP,YTIME-1)/SUM(INDDOM2,VConsFuel(allCy,INDDOM2,CHP,YTIME-1))*VCostElecProdCHP(allCy,INDDOM,CHP,YTIME)))
          $SUM(INDDOM2,VConsFuel.L(allCy,INDDOM2,CHP,YTIME-1))+0$(NOT SUM(INDDOM2,VConsFuel.L(allCy,INDDOM2,CHP,YTIME-1)));
 
@@ -239,7 +239,6 @@ QCostElcAvgProdCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 QCostVarAvgElecProd(allCy,CHP,YTIME)$(TIME(YTIME) $runCy(allCy)) ..
          VCostVarAvgElecProd(allCy,CHP,YTIME)
          =E=
-
          (sum(INDDOM, VConsFuel(allCy,INDDOM,CHP,YTIME-1)/SUM(INDDOM2,VConsFuel(allCy,INDDOM2,CHP,YTIME-1))
          *VCostProdCHPDem(allCy,INDDOM,CHP,YTIME)))
          $SUM(INDDOM2,VConsFuel.L(allCy,INDDOM2,CHP,YTIME-1))+0$(NOT SUM(INDDOM2,VConsFuel.L(allCy,INDDOM2,CHP,YTIME-1)));
