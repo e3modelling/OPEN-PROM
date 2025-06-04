@@ -181,12 +181,6 @@ GN.H2F.H2F	8.14286
 /
 ;
 *---
-table i01FuelConsTRANSE(allCy,TRANSE,EF,YTIME)	      "Fuel consumption (Mtoe)"
-$ondelim
-$include"./i01FuelConsTRANSE.csv"
-$offdelim
-;
-*---
 
 Parameters
 i01PlugHybrFractOfMileage(ELSH_SET,YTIME)	           "Plug in hybrid fraction of mileage covered by electricity, residualls on GDP-Depnd car market ext (1)"
@@ -214,7 +208,7 @@ i01Sigma(runCy,"S3") = i01DataPassCars(runCy,"PC","S3");
 *---
 i01PassCarsMarkSat(runCy) = i01DataPassCars(runCy,"PC","SAT");
 *---
-i01FuelConsTRANSE(runCy,TRANSE,EF,YTIME)$(SECTTECH(TRANSE,EF) $(i01FuelConsTRANSE(runCy,TRANSE,EF,YTIME)<=0)) = 1e-6;
+imFuelConsTRANSE(runCy,TRANSE,EF,YTIME)$(SECTTECH(TRANSE,EF) $(imFuelConsTRANSE(runCy,TRANSE,EF,YTIME)<=0)) = 1e-6;
 *---
 i01PlugHybrFractOfMileage(ELSH_SET,YTIME) = i01PlugHybrFractData(YTIME);
 *---

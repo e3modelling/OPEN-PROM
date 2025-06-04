@@ -667,7 +667,13 @@ $offdelim
 *---
 imDistrLosses(runCy,EFS,YTIME) = iDataDistrLosses(runCy,EFS,YTIME);
 *---
-imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME) = i01FuelConsTRANSE(runCy,TRANSE,EF,YTIME);
+table imFuelConsTRANSE(allCy,TRANSE,EF,YTIME)	      "Fuel consumption (Mtoe)"
+$ondelim
+$include"./iFuelConsTRANSE.csv"
+$offdelim
+;
+*---
+imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME) = imFuelConsTRANSE(runCy,TRANSE,EF,YTIME);
 table iFuelConsINDSE(allCy,INDSE,EF,YTIME)	"Fuel consumption of industry subsector (Mtoe)"
 $ondelim
 $include"./iFuelConsINDSE.csv"
