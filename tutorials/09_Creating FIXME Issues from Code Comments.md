@@ -10,7 +10,7 @@ In this tutorial, you can find instructions about automatically creating new iss
 VExportsFake.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
 VFkImpAllFuelsNotNatGas.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
 
-VScalFacPlaDisp.LO(runCy, HOUR, YTIME)=-1;
+V04ScalFacPlaDisp.LO(runCy, HOUR, YTIME)=-1;
 VLoadCurveConstr.LO(runCy,YTIME)=0;
 VLoadCurveConstr.L(runCy,YTIME)=0.01;
 ```

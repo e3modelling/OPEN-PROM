@@ -1,6 +1,6 @@
-*' @title PowerGeneration module
+*' @title Transport module
 *'
-*' @description This is the PowerGeneration module.
+*' @description This is the Transport module.
 
 *###################### R SECTION START (MODULETYPES) ##########################
 $Ifi "%Transport%" == "legacy" $include "./modules/01_Transport/legacy/realization.gms"
