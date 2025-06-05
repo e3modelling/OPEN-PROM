@@ -90,6 +90,6 @@ V05PriceH2Infr.FX(runCy,SBS,YTIME)  $(not An(YTIME)) = 1e-5;
 *---
 V05H2InfrArea.L(runCy,YTIME) = 0.001;
 *---
-V05DemSecH2.FX(runCy,SBS,YTIME)$(not An(YTIME)) = 1e-5;
-V05DemSecH2.L(runCy,SBS, YTIME) = 2;
+VmDemSecH2.FX(runCy,SBS,YTIME)$(not An(YTIME)) = 1e-5;
+VmDemSecH2.L(runCy,SBS, YTIME) = 2;
 *---
