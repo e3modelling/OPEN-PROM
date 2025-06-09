@@ -35,16 +35,18 @@ jobs:
           Set-Content -Path $licenseFile -Value $env:LICENSE
 
       - name: Download Datasets
+        env:
+          DATASET: ${{ secrets.DATASET }}
         run: |
           @"
           print("Getting data for GitHub Action")
-          url <- 'https://drive.usercontent.google.com/uc?id=1Hy0zhnHsouE25O9smP7u75X6l6uU2HIg&export=download'
+          url <- commandArgs(trailingOnly = TRUE)
           fname <- 'ghaction_data.tgz'
           download.file(url, fname, mode="wb")
           utils::untar(fname, exdir = "./data")
           "@ | Out-File -FilePath dl_data.R
 
-          RScript dl_data.R
+          RScript dl_data.R $env:DATASET
           
       - name: Test Model Run - NPi Default Scenario
         run: |
