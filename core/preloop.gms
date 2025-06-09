@@ -4,7 +4,7 @@
 iNPDL(DSBS) = 6;
 loop DSBS do
    loop KPDL$(ord(KPDL) le iNPDL(DSBS)) do
-         iFPDL(DSBS,KPDL) = 6 * (iNPDL(DSBS)+1-ord(KPDL)) * ord(KPDL)
+         imFPDL(DSBS,KPDL) = 6 * (iNPDL(DSBS)+1-ord(KPDL)) * ord(KPDL)
                            /
                            (iNPDL(DSBS) * (iNPDL(DSBS)+1) * (iNPDL(DSBS)+2))
    endloop;
@@ -12,39 +12,35 @@ endloop;
 
 model openprom / all /;
 
-option iPop:2:0:6;
-display iPop;
-display iDisc;
+option i01Pop:2:0:6;
+display i01Pop;
+display imDisc;
 display TF;
 display TFIRST;
 display runCy;
-display iWgtSecAvgPriFueCons;
-display iVarCostTech;
+display i08WgtSecAvgPriFueCons;
+display imVarCostTech;
 
 *'                *VARIABLE INITIALISATION*
+
 *---
-* Load common shared data
-*execute_loadpoint 'common_data.gdx';
+imTransChar(runCy,"RES_MEXTF",YTIME) = 0.04;
+imTransChar(runCy,"RES_MEXTV",YTIME) = 0.04;
 *---
-iTransChar(runCy,"RES_MEXTF",YTIME) = 0.04;
-iTransChar(runCy,"RES_MEXTV",YTIME) = 0.04;
+iFinEneConsPrevYear(runCy,EFS,YTIME)$(not An(YTIME)) = imFinEneCons(runCy,EFS,YTIME);
 *---
-iDataPassCars(runCy,"PC","MEXTV") = 0.01;
-*---
-iFinEneConsPrevYear(runCy,EFS,YTIME)$(not An(YTIME)) = iFinEneCons(runCy,EFS,YTIME);
 
 *'                **Interdependent Variables**
 
 *---
-VRenValue.L(YTIME) = 1;
-VRenValue.FX(YTIME) = 0 ;
+VmRenValue.FX(YTIME) = 0 ;
 *---
-VElecConsHeatPla.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = iFuelConsPerFueSub(runCy,INDDOM,"ELC",YTIME)*(1-iShrNonSubElecInTotElecDem(runCy,INDDOM))*iShrHeatPumpElecCons(runCy,INDDOM);
+VmElecConsHeatPla.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = imFuelConsPerFueSub(runCy,INDDOM,"ELC",YTIME)*(1-imShrNonSubElecInTotElecDem(runCy,INDDOM))*iShrHeatPumpElecCons(runCy,INDDOM);
 * Compute electricity consumed in heatpump plants, QElecConsHeatPla(runCy,INDDOM,YTIME)$time(ytime).
-VElecConsHeatPla.FX(runCy,INDDOM,YTIME) = 1E-7;
+VmElecConsHeatPla.FX(runCy,INDDOM,YTIME) = 1E-7;
 *---
-VCarVal.FX(runCy,"TRADE",YTIME) = iCarbValYrExog(runCy,YTIME);
-VCarVal.FX(runCy,"NOTRADE",YTIME) = iCarbValYrExog(runCy,YTIME);
+VmCarVal.FX(runCy,"TRADE",YTIME) = iCarbValYrExog(runCy,YTIME);
+VmCarVal.FX(runCy,"NOTRADE",YTIME) = iCarbValYrExog(runCy,YTIME);
 *---
 openprom.optfile=1;
 *---

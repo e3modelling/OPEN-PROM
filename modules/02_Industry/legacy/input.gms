@@ -2,59 +2,58 @@
 *' @code
 
 *---
-table iElastNonSubElecData(SBS,ETYPES,YTIME)               "Elasticities of Non Substitutable Electricity (1)"
+table i02ElastNonSubElecData(SBS,ETYPES,YTIME)             "Elasticities of Non Substitutable Electricity (1)"
 $ondelim
 $include "./iElastNonSubElecData.csv"
 $offdelim
 ;
 *---
-table iElaSub(allCy,DSBS)                                  "Elasticities by subsector for all countries (1)" ;
+table i02ElaSub(allCy,DSBS)                                "Elasticities by subsector for all countries (1)" ;
 *---
 Parameters
-iTotFinEneDemSubBaseYr(allCy,SBS,YTIME)	                   "Total Final Energy Demand per subsector in Base year (Mtoe)"
-iExogDemOfBiomass(allCy,SBS,YTIME)	                       "Demand of tranditional biomass defined exogenously ()"
-iLifChpPla(allCy,DSBS,CHP)                                 "Technical Lifetime for CHP plants (years)"
-$IF %Calibration% == off iElastNonSubElec(allCy,SBS,ETYPES,YTIME)                   "Elasticities of Non Substitutable Electricity (1)"
-iInvCostChp(allCy,DSBS,CHP,YTIME)                          "Capital Cost per CHP plant type (kUS$2015/KW)"
-iFixOMCostPerChp(allCy,DSBS,CHP,YTIME)                     "Fixed O&M cost per CHP plant type (US$2015/KW)"
-iAvailRateChp(allCy,DSBS,CHP)                              "Availability rate of CHP Plants ()"
-iVarCostChp(allCy,DSBS,CHP,YTIME)                          "Variable (other than fuel) cost per CHP Type (Gross US$2015/KW)"
-iBoiEffChp(allCy,CHP,YTIME)                                "Boiler efficiency (typical) used in adjusting CHP efficiency ()"
+i02ExogDemOfBiomass(allCy,SBS,YTIME)	                   "Demand of tranditional biomass defined exogenously ()"
+i02LifChpPla(allCy,DSBS,CHP)                               "Technical Lifetime for CHP plants (years)"
+$IF NOT %Calibration% == Calibration i02ElastNonSubElec(allCy,SBS,ETYPES,YTIME)                   "Elasticities of Non Substitutable Electricity (1)"
+i02InvCostChp(allCy,DSBS,CHP,YTIME)                        "Capital Cost per CHP plant type (kUS$2015/KW)"
+i02FixOMCostPerChp(allCy,DSBS,CHP,YTIME)                   "Fixed O&M cost per CHP plant type (US$2015/KW)"
+i02AvailRateChp(allCy,DSBS,CHP)                            "Availability rate of CHP Plants ()"
+i02VarCostChp(allCy,DSBS,CHP,YTIME)                        "Variable (other than fuel) cost per CHP Type (Gross US$2015/KW)"
+i02BoiEffChp(allCy,CHP,YTIME)                              "Boiler efficiency (typical) used in adjusting CHP efficiency ()"
 ;
 *---
-iTotFinEneDemSubBaseYr(runCy,TRANSE,YTIME) = sum(EF$(SECTTECH(TRANSE,EF) $(not plugin(EF))), iFuelConsPerFueSub(runCy,TRANSE,EF,YTIME));
-iTotFinEneDemSubBaseYr(runCy,INDSE,YTIME)   = SUM(EF$(SECTTECH(INDSE,EF)),iFuelConsPerFueSub(runCy,INDSE,EF,YTIME));
-iTotFinEneDemSubBaseYr(runCy,DOMSE,YTIME)   = SUM(EF$(SECTTECH(DOMSE,EF)),iFuelConsPerFueSub(runCy,DOMSE,EF,YTIME));
-iTotFinEneDemSubBaseYr(runCy,NENSE,YTIME)   = SUM(EF$(SECTTECH(NENSE,EF)),iFuelConsPerFueSub(runCy,NENSE,EF,YTIME));
+imTotFinEneDemSubBaseYr(runCy,TRANSE,YTIME)  = sum(EF$(SECTTECH(TRANSE,EF) $(not plugin(EF))), imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME));
+imTotFinEneDemSubBaseYr(runCy,INDSE,YTIME)   = SUM(EF$(SECTTECH(INDSE,EF)),imFuelConsPerFueSub(runCy,INDSE,EF,YTIME));
+imTotFinEneDemSubBaseYr(runCy,DOMSE,YTIME)   = SUM(EF$(SECTTECH(DOMSE,EF)),imFuelConsPerFueSub(runCy,DOMSE,EF,YTIME));
+imTotFinEneDemSubBaseYr(runCy,NENSE,YTIME)   = SUM(EF$(SECTTECH(NENSE,EF)),imFuelConsPerFueSub(runCy,NENSE,EF,YTIME));
 *---
-iExogDemOfBiomass(runCy,DOMSE,YTIME) = 0;
+i02ExogDemOfBiomass(runCy,DOMSE,YTIME) = 0;
 *---
-iLifChpPla(runCy,DSBS,CHP) = iDataChpPowGen(CHP,"2010","LFT");
+i02LifChpPla(runCy,DSBS,CHP) = imDataChpPowGen(CHP,"2010","LFT");
 *---
-$IFTHEN.calib %Calibration% == off
-iElastNonSubElec(runCy,SBS,ETYPES,YTIME) = iElastNonSubElecData(SBS,ETYPES,YTIME);
+$IFTHEN.calib %Calibration% == Calibration
+variable i02ElastNonSubElec(allCy,SBS,ETYPES,YTIME)        "Elasticities of Non Substitutable Electricity (1)";
+i02ElastNonSubElec.L(runCy,SBS,ETYPES,YTIME) = i02ElastNonSubElecData(SBS,ETYPES,YTIME);
+i02ElastNonSubElec.LO(runCy,SBS,"a",YTIME)   = 0.001;
+i02ElastNonSubElec.UP(runCy,SBS,"a",YTIME)   = 10;
+i02ElastNonSubElec.LO(runCy,SBS,"b1",YTIME)  = -10;
+i02ElastNonSubElec.UP(runCy,SBS,"b1",YTIME)  = -0.001;
+i02ElastNonSubElec.LO(runCy,SBS,"b2",YTIME)  = -10;
+i02ElastNonSubElec.UP(runCy,SBS,"b2",YTIME)  = -0.001;
+i02ElastNonSubElec.LO(runCy,SBS,"c",YTIME)   = -10;
+i02ElastNonSubElec.UP(runCy,SBS,"c",YTIME)   = -0.001;
 $ELSE.calib
-variable iElastNonSubElec(allCy,SBS,ETYPES,YTIME)        "Elasticities of Non Substitutable Electricity (1)";
-iElastNonSubElec.L(runCy,SBS,ETYPES,YTIME) = iElastNonSubElecData(SBS,ETYPES,YTIME);
-iElastNonSubElec.LO(runCy,SBS,"a",YTIME) = 0.001;
-iElastNonSubElec.UP(runCy,SBS,"a",YTIME) = 10;
-iElastNonSubElec.LO(runCy,SBS,"b1",YTIME) = -10;
-iElastNonSubElec.UP(runCy,SBS,"b1",YTIME) = -0.001;
-iElastNonSubElec.LO(runCy,SBS,"b2",YTIME) = -10;
-iElastNonSubElec.UP(runCy,SBS,"b2",YTIME) = -0.001;
-iElastNonSubElec.LO(runCy,SBS,"c",YTIME) = -10;
-iElastNonSubElec.UP(runCy,SBS,"c",YTIME) = -0.001;
+i02ElastNonSubElec(runCy,SBS,ETYPES,YTIME) = i02ElastNonSubElecData(SBS,ETYPES,YTIME);
 $ENDIF.calib
 *---
-iInvCostChp(runCy,DSBS,CHP,YTIME) = iDataChpPowGen(CHP,"2010","IC");
+i02InvCostChp(runCy,DSBS,CHP,YTIME)      = imDataChpPowGen(CHP,"2010","IC");
 *---
-iFixOMCostPerChp(runCy,DSBS,CHP,YTIME) = iDataChpPowGen(CHP,"2010","FC");
+i02FixOMCostPerChp(runCy,DSBS,CHP,YTIME) = imDataChpPowGen(CHP,"2010","FC");
 *---
-iAvailRateChp(runCy,DSBS,CHP) = iDataChpPowGen(CHP,"2010","AVAIL");
+i02AvailRateChp(runCy,DSBS,CHP)          = imDataChpPowGen(CHP,"2010","AVAIL");
 *---
-iVarCostChp(runCy,DSBS,CHP,YTIME) = iDataChpPowGen(CHP,"2010","VOM");
+i02VarCostChp(runCy,DSBS,CHP,YTIME)      = imDataChpPowGen(CHP,"2010","VOM");
 *---
-iBoiEffChp(runCy,CHP,YTIME) = iDataChpPowGen(CHP,"2010","BOILEFF");
+i02BoiEffChp(runCy,CHP,YTIME)            = imDataChpPowGen(CHP,"2010","BOILEFF");
 *---
-iElaSub(runCy,DSBS) = iElaSubData(DSBS);
+i02ElaSub(runCy,DSBS) = imElaSubData(DSBS);
 *---

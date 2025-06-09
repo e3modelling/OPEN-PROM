@@ -27,24 +27,24 @@
 *' and transformation across different subsectors. The result represents the overall CO2 emissions for each NAP sector across
 *' all countries for the specified year.
 $ontext
-QGrnnHsEmisCO2Equiv(NAP,YTIME)$(TIME(YTIME))..
-         VGrnnHsEmisCO2Equiv(NAP,YTIME)
+Q07GrnnHsEmisCO2Equiv(NAP,YTIME)$(TIME(YTIME))..
+         V07GrnnHsEmisCO2Equiv(NAP,YTIME)
           =E=
         (
         sum(allCy,
                  sum((EFS,INDSE)$(SECTTECH(INDSE,EFS)  $NAPtoALLSBS(NAP,INDSE)),
-                      VConsFuel(allCy,INDSE,EFS,YTIME) * iCo2EmiFac(allCy,INDSE,EFS,YTIME)) !! final consumption
+                      VmConsFuel(allCy,INDSE,EFS,YTIME) * imCo2EmiFac(allCy,INDSE,EFS,YTIME)) !! final consumption
                 +
-                 sum(PGEF, VInpTransfTherm(allCy,PGEF,YTIME)*iCo2EmiFac(allCy,"PG",PGEF,YTIME)$(not h2f1(pgef))) !! input to power generation sector
+                 sum(PGEF, VmInpTransfTherm(allCy,PGEF,YTIME)*imCo2EmiFac(allCy,"PG",PGEF,YTIME)$(not h2f1(pgef))) !! input to power generation sector
                  +
-                 sum(EFS, VTransfInputDHPlants(allCy,EFS,YTIME)*iCo2EmiFac(allCy,"PG",EFS,YTIME)) !! input to district heating plants
+                 sum(EFS, VmTransfInputDHPlants(allCy,EFS,YTIME)*imCo2EmiFac(allCy,"PG",EFS,YTIME)) !! input to district heating plants
                  +
-                 sum(EFS, VConsFiEneSec(allCy,EFS,YTIME)*iCo2EmiFac(allCy,"PG",EFS,YTIME)) !! consumption of energy branch
+                 sum(EFS, VmConsFiEneSec(allCy,EFS,YTIME)*imCo2EmiFac(allCy,"PG",EFS,YTIME)) !! consumption of energy branch
 
                  -
                  sum(PGEF,sum(CCS$PGALLtoEF(CCS,PGEF),
-                         VProdElec(allCy,CCS,YTIME)*sTWhToMtoe/iPlantEffByType(allCy,CCS,YTIME)*
-                         iCo2EmiFac(allCy,"PG",PGEF,YTIME)*iCO2CaptRate(allCy,CCS,YTIME)))));   !! CO2 captured by CCS plants in power generation
+                         VmProdElec(allCy,CCS,YTIME)*smTWhToMtoe/imPlantEffByType(allCy,CCS,YTIME)*
+                         imCo2EmiFac(allCy,"PG",PGEF,YTIME)*imCO2CaptRate(allCy,CCS,YTIME)))));   !! CO2 captured by CCS plants in power generation
 $offtext
 
 *' The equation computes the total CO2 equivalent greenhouse gas emissions in all countries for a specific year.
@@ -52,21 +52,21 @@ $offtext
 *' considering the total CO2 GHG emissions per NAP sectorfor each country. This equation provides a concise and systematic approach to aggregating
 *' greenhouse gas emissions at a global level, considering contributions from different sectors and countries. 
 $ontext
-qGrnnHsEmisCO2EquivAllCntr(YTIME)$(TIME(YTIME))..
+q07GrnnHsEmisCO2EquivAllCntr(YTIME)$(TIME(YTIME))..
 
-         vGrnnHsEmisCO2EquivAllCntr(YTIME) 
+         v07GrnnHsEmisCO2EquivAllCntr(YTIME) 
          =E=
-         sum(NAP, VGrnnHsEmisCO2Equiv(NAP,YTIME));
+         sum(NAP, V07GrnnHsEmisCO2Equiv(NAP,YTIME));
 $offtext
 
 *' Compute households expenditures on energy by utilizing the sum of consumption of remaining substitutable equipment multiplied by the fuel prices per subsector and fuel 
 *' minus the efficiency values divided by CO2 emission factors per subsector and multiplied by the sum of carbon prices for all countries and adding the Electricity price
 *' to Industrial and Residential Consumers multiplied by Consumption of non-substituable electricity in Industry and Tertiary divided by TWh to Mtoe conversion factor.
 $ontext
-qExpendHouseEne(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-                 vExpendHouseEne(allCy,YTIME)
+q07ExpendHouseEne(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+                 v07ExpendHouseEne(allCy,YTIME)
                  =E= 
-                 SUM(DSBS$HOU(DSBS),SUM(EF$SECTTECH(dSBS,EF),VConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)*(VPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME)-iEffValueInDollars(allCy,DSBS,YTIME)/
-                 1000-iCo2EmiFac(allCy,"PG",EF,YTIME)*sum(NAP$NAPtoALLSBS(NAP,"PG"),VCarVal(allCy,NAP,YTIME))/1000)))
-                                          +VPriceElecIndResNoCliPol(allCy,"R",YTIME)*VConsElecNonSubIndTert(allCy,"HOU",YTIME)/sTWhToMtoe;
+                 SUM(DSBS$HOU(DSBS),SUM(EF$SECTTECH(dSBS,EF),VmConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)*(VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME)-imEffValueInDollars(allCy,DSBS,YTIME)/
+                 1000-imCo2EmiFac(allCy,"PG",EF,YTIME)*sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))/1000)))
+                                          +VmPriceElecIndResNoCliPol(allCy,"R",YTIME)*VmConsElecNonSubIndTert(allCy,"HOU",YTIME)/smTWhToMtoe;
 $offtext
