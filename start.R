@@ -217,8 +217,6 @@ if (task == 0) {
 
   shell(paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log"))
 
-  if (withRunFolder && withSync) syncRun()
-
   if (withRunFolder && withReport) {
     run_path <- getwd()
     setwd("../../") # Going back to root folder
@@ -226,6 +224,9 @@ if (task == 0) {
     report_cmd <- paste0("RScript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
     shell(report_cmd)
   }
+
+  if (withRunFolder && withSync) syncRun()
+
 } else if (task == 3) {
     # Running task OPEN-PROM RESEARCH NEW DATA
     saveMetadata(DevMode = 0)
@@ -236,7 +237,6 @@ if (task == 0) {
     if(withRunFolder) file.copy("data", to = '../../', recursive = TRUE)  
 
     if(withRunFolder && withReport) {
-
       run_path <- getwd()
       setwd("../../") # Going back to root folder
       cat("Executing the report output script\n")
