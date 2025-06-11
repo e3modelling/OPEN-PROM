@@ -128,7 +128,7 @@ $offdelim
 *---
 table imInstCapPast(allCy,PGALL,YTIME)        "Installed capacity past (GW)"
 $ondelim
-$include"./iInstCapPast.csv"
+$include"./iInstCapPastNonCHP.csv"
 $offdelim
 ;
 *---

@@ -23,7 +23,8 @@ qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
     (PGALL),
     SQR(
       VmCapElec(allCy,PGALL,YTIME) - 
-      imInstCapPast(allCy,PGALL,YTIME) 
+      VmCapElec(allCy,PGALL,YTIME-1)
+*      imInstCapPast(allCy,PGALL,YTIME) 
     )
   );
 $ELSE.calib qDummyObj.. vDummyObj =e= 1;

@@ -22,7 +22,7 @@ $offdelim
 *---
 table i04DataElecProd(allCy,PGALL,YTIME)           "Electricity production past years (GWh)"
 $ondelim
-$include"./iDataElecProd.csv"
+$include"./iDataElecProdNonCHP.csv"
 $offdelim
 ;
 *---
