@@ -664,82 +664,81 @@ PGALL            Power Generation Plant Types
 *CTHHCL Conventional thermal monovalent hard coal
 *CTHRFO Conventional thermal monovalent fuel oil
 *CTHNGS Conventional thermal monovalent natural gas
-CTHBMSWAS Conventional thermal monovalent biomass and waste
+*CTHBMSWAS Conventional thermal monovalent biomass and waste
 ATHLGN  Advanced thermal monovalent lignite
-ATHHCL Advanced thermal monovalent hard coal
-ATHRFO Advanced thermal monovalent fuel oil
-ATHNGS Advanced thermal monovalent natural gas
+ATHCOAL Advanced thermal monovalent hard coal
+*ATHRFO Advanced thermal monovalent fuel oil
+ATHGAS Advanced thermal monovalent natural gas
 ATHBMSWAS Advanced thermal monovalent biomass and waste
-ATHBMCCS
-SUPCRL  Supercritical lignite
-SUPCR  Supercritical coal
-FBCLGN Fluidised bed lignite
-FBCHCL Fluidised bed hard coal
-IGCCLGN Integrated gasification combine cycle lignite
-IGCCHCL Integrtaed gasification combine cycle hard coal
-IGCCBMS Integrated gasification combine cycle biomass
-CCCGT  Conventional combined cycle gas turbine
-ACCGT  Advanced combined cycle gas turbine
+ATHBMSCCS
+*SUPCRL  Supercritical lignite
+*SUPCR  Supercritical coal
+*FBCLGN Fluidised bed lignite
+*FBCHCL Fluidised bed hard coal
+*IGCCLGN Integrated gasification combine cycle lignite
+*IGCCHCL Integrtaed gasification combine cycle hard coal
+*IGCCBMS Integrated gasification combine cycle biomass
+*CCCGT  Conventional combined cycle gas turbine
+*ACCGT  Advanced combined cycle gas turbine
 *ACCHT  Advanced combined cycle hydrogen combustion turbine
 *ICEH2  Internal combustion engine powered by H2
 *CGTGDO Conventional gas turbines (peak devices) diesel oil
 *CGTNGS Conventional gas turbines (peak devices) natural gas
-AGTGDO Advanced gas turbines (peak devices) diesel oil
-AGTNGS Advanced gas turbines (peak devices) natural gas
+ATHOIL Advanced gas turbines (peak devices) diesel oil
+*AGTNGS Advanced gas turbines (peak devices) natural gas
 *FC1  Fuel cells
 *FC2  Advanced Fuel cells
 *PGNUC Nuclear Plants
 PGLHYD Large Hydro Plants
 PGSHYD Small Hydro Plants
-PGWND Wind Plants
+PGAWND Wind Plants
 PGSOL Solar Photovoltaic Plants
-*PGOTHREN Other renewables mainly geothermal
-PGASHYD Advanced Small Hydro Plants
-PGAWND Advanced Wind Plants
-PGASOL Advanced Solar Thermal Plants
-PGADPV Advanced Building Integrated PV Plants
-PGAOTHREN Advanced geothermal Plants
+*PGASHYD Advanced Small Hydro Plants
+*PGAWND Advanced Wind Plants
+PGCSP Advanced Solar Thermal Plants
+*PGADPV Advanced Building Integrated PV Plants
+PGOTHREN Advanced geothermal Plants
 PGANUC New Nuclear Designs
-PGAPSS Supercritical coal with CCS
-PGAPSSL Supercritical lignite with CCS
-PGACGSL Integrated lignite gasification with CCS
-PGACGS Integrated coal gasification with CCS
-PGAGGS Gas turbine combined cycle with CCS
+ATHCOALCCS Supercritical coal with CCS
+ATHLGNCCS Supercritical lignite with CCS
+*PGACGSL Integrated lignite gasification with CCS
+*PGACGS Integrated coal gasification with CCS
+ATHGASCCS Gas turbine combined cycle with CCS
 PGAWNO Wind offshore
 /
 
-PGASOL(PGALL)
-/PGASOL/
+PGCSP(PGALL)
+/PGCSP/
 
 CCS(PGALL) Plants which can be equipped with CCS
 /
-PGAPSS
-PGAPSSL
-PGACGSL
-PGACGS
-PGAGGS
-ATHBMCCS
+ATHCOALCCS
+ATHLGNCCS
+*PGACGSL
+*PGACGS
+ATHGASCCS
+ATHBMSCCS
 /
 
 
 NOCCS(PGALL) Plants which can be equipped with CCS but they are not
 /
-SUPCRL
-SUPCR
-IGCCHCL
-IGCCLGN
-ACCGT
+*SUPCRL
+*SUPCR
+*IGCCHCL
+*IGCCLGN
+*ACCGT
 ATHBMSWAS
 /
 
 CCS_NOCCS(PGALL,PGALL) mapping
 /
-PGAPSSL.SUPCRL
-PGAPSS.SUPCR
-PGACGSL.IGCCLGN
-PGACGS.IGCCHCL
-PGAGGS.ACCGT
-ATHBMCCS.ATHBMSWAS
+*PGAPSSL.SUPCRL
+*ATHCOALCCS.SUPCR
+*PGACGSL.IGCCLGN
+*PGACGS.IGCCHCL
+*PGAGGS.ACCGT
+ATHBMSCCS.ATHBMSWAS
 /
 
 CHP(EF)       CHP Plants
@@ -760,36 +759,35 @@ STE2BMS
 /
 
 PGNUCL(PGALL)    Nuclear plants                            / PGANUC/
-PGREN(PGALL)     Renewable Plants                          /PGLHYD,PGSHYD,PGWND,PGSOL,PGASHYD,PGAWND,PGASOL,PGAOTHREN, PGAWNO, PGADPV/
-PGNREN(PGALL)    Advanced Renewable Plants potential      /PGASHYD,PGAWND,PGASOL,PGAOTHREN,PGAWNO,PGADPV,ATHBMSWAS,IGCCBMS/
-PGGEO(PGALL)     Geothermal Plants                        /PGAOTHREN/
+PGREN(PGALL)     Renewable Plants                          /PGLHYD,PGSHYD,PGAWND,PGSOL,PGCSP,PGOTHREN, PGAWNO/
+PGNREN(PGALL)    Advanced Renewable Plants potential      /PGCSP,PGOTHREN,PGAWNO,ATHBMSWAS/
+PGGEO(PGALL)     Geothermal Plants                        /PGOTHREN/
 PGRENEF          Renewable energy forms in power generation  /LHYD,SHYD,WND,WNO,SOL,DPV,BMSWAS,OTHREN/
 
 PGALLtoPGRENEF(PGALL,PGRENEF)     Correspondence between renewable plants and renewable energy forms
 /
 PGLHYD.LHYD
-(PGSHYD,PGASHYD).SHYD
-(PGWND,PGAWND).WND
+(PGSHYD).SHYD
+(PGAWND).WND
 PGAWNO.WNO
-(PGSOL,PGASOL).SOL
-PGADPV.DPV
-(PGAOTHREN).OTHREN
-(CTHBMSWAS,ATHBMSWAS,IGCCBMS,ATHBMCCS).BMSWAS
+(PGSOL,PGCSP).SOL
+*PGADPV.DPV
+(PGOTHREN).OTHREN
+(ATHBMSWAS,ATHBMSCCS).BMSWAS
 /
 
 PGALLtoEF(PGALL,PGEF)     Correspondence between plants and energy forms
 /
-(ATHLGN,FBCLGN,IGCCLGN,SUPCRL,PGAPSSL,PGACGSL).LGN
-(ATHHCL,SUPCR,FBCHCL,IGCCHCL, PGAPSS, PGACGS).HCL
-(ATHRFO).RFO
-(AGTGDO).GDO
-(ATHNGS,CCCGT,ACCGT,AGTNGS,PGAGGS).NGS
-(CTHBMSWAS,ATHBMSWAS,IGCCBMS,ATHBMCCS).BMSWAS
+(ATHLGN,ATHLGNCCS).LGN
+(ATHCOAL, ATHCOALCCS).HCL
+(ATHOIL).GDO
+(ATHGAS,ATHGASCCS).NGS
+(ATHBMSWAS,ATHBMSCCS).BMSWAS
 (PGANUC).NUC
-(PGLHYD,PGSHYD,PGASHYD).HYD
-(PGWND,PGAWND,PGAWNO).WND
-(PGSOL,PGASOL,PGADPV).SOL
-(PGAOTHREN).GEO
+(PGLHYD,PGSHYD).HYD
+(PGAWND,PGAWNO).WND
+(PGSOL,PGCSP).SOL
+(PGOTHREN).GEO
 *(ACCHT,ICEH2,FC2).H2F
 /
 
@@ -824,11 +822,11 @@ CHPtoEON(EF,PGALL)       Mapping of chp technologies to elec-only technologies
 *STE1CR.CTHRFO,
 *STE1CG.CTHNGS,
 *STE1CB.CTHBMSWAS,
-STE1AL.SUPCRL,
-STE1AH.SUPCR,
-STE1AD.AGTGDO,
-STE1AR.ATHRFO,
-STE1AG.ACCGT,
+STE1AL.ATHLGN,
+STE1AH.ATHCOAL,
+*STE1AD.ATHOIL,
+STE1AR.ATHOIL,
+STE1AG.ATHGAS,
 STE1AB.ATHBMSWAS
 *STE1AH2F.FC2
 /
@@ -836,34 +834,33 @@ STE1AB.ATHBMSWAS
 PGSCRN(PGALL)     New plants involved in endogenous scrapping (these plants are not scrapped)
 /
 ATHBMSWAS
-SUPCRL
-SUPCR
-FBCLGN
-FBCHCL
-IGCCLGN
-IGCCHCL
-IGCCBMS
+*SUPCRL
+*SUPCR
+*FBCLGN
+*FBCHCL
+*IGCCLGN
+*IGCCHCL
+*IGCCBMS
 *ACCHT,ICEH2
 *FC1,FC2
 *PGNUC
 PGLHYD
 PGSHYD
-PGWND
-PGSOL
-*PGOTHREN
-PGASHYD
 PGAWND
-PGASOL
+PGSOL
+*PGASHYD
+*PGAWND
+PGCSP
 PGANUC
-PGAPSS
-PGAPSSL
-PGACGSL
-PGACGS
-PGAGGS
+ATHCOALCCS
+ATHLGNCCS
+*PGACGSL
+*PGACGS
+ATHGASCCS
 PGAWNO
-PGADPV
-PGAOTHREN
-ATHBMCCS
+*PGADPV
+PGOTHREN
+ATHBMSCCS
 /
 
 *           Emissions             *
