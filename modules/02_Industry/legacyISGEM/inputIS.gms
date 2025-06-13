@@ -93,6 +93,13 @@ $offdelim
 
 * CO2 Emission Factor by Fuel (tCO2 per Mtoe).
 * This table specifies the amount of carbon dioxide emitted per unit of energy consumed from each fuel type.
+* ---
+* FUTURE INTEGRATION NOTE
+* The parameter 'iCo2EmFacIS' is defined locally for standalone development.
+* For the final merge with OPEN-PROM, this local definition must be deleted.
+* All equations (e.g., QISTotProdCost, QEmissionsIS) should then be updated to use
+* the main model's central parameter: 'imCo2EmiFac(allCy,"IS",EF,YTIME)'.
+* ---
 Parameter iCo2EmFacIS(allCy,EF,YTIME);
 $ondelim
 $include "./iCo2EmFacIS.csv"

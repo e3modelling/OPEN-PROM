@@ -47,10 +47,14 @@ QISTotProdCost(allCy,ISTECH_ALL,YTIME)$(runCy(allCy))..
     (VISAnnCapCost(allCy,ISTECH_ALL,YTIME) + iFixOMCostIS(allCy,ISTECH_ALL,YTIME)) / (iAvailRateIS(ISTECH_ALL,YTIME))
     + iVarOMCostIS(allCy,ISTECH_ALL,YTIME)
     + sum(EF,
-        ( (iSpecFuelConsIS_Hist(allCy,ISTECH_ALL,EF)$ISTECH_HIST(ISTECH_ALL)  ! iSpecFuelConsIS for historical existing technologies
-          + iSpecFuelConsIS_New(allCy,ISTECH_ALL,EF,YTIME)$ISTECH_NEW(ISTECH_ALL) ) ! iSpecFuelConsIS_New for new tech
+        ( (iSpecFuelConsIS_Hist(allCy,ISTECH_ALL,EF)$ISTECH_HIST(ISTECH_ALL)
+         + iSpecFuelConsIS_New(allCy,ISTECH_ALL,EF,YTIME)$ISTECH_NEW(ISTECH_ALL) )
         * VmPriceFuelSubsecCarVal(allCy,"IS",EF,YTIME)
-        + iCo2EmFacIS(allCy,EF,YTIME) * (imCO2CaptRate(allCy,ISTECH_ALL,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) + (1 - imCO2CaptRate(allCy,ISTECH_ALL,YTIME)) * sum(NAP, VmCarVal(allCy,NAP,YTIME))))  
+        )
+      + ( (iSpecFuelConsIS_Hist(allCy,ISTECH_ALL,EF)$ISTECH_HIST(ISTECH_ALL)
+         + iSpecFuelConsIS_New(allCy,ISTECH_ALL,EF,YTIME)$ISTECH_NEW(ISTECH_ALL) )
+        * iCo2EmFacIS(allCy,EF,YTIME) * (imCO2CaptRate(allCy,ISTECH_ALL,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) + (1 - imCO2CaptRate(allCy,ISTECH_ALL,YTIME)) * sum(NAP, VmCarVal(allCy,NAP,YTIME)))
+        )
     );
 
 * This equation computes the endogenous scrapping index for historical Iron and Steel plants.
@@ -86,7 +90,7 @@ QActivityISHist(allCy,ISTECH_HIST,YTIME)$(runCy(allCy))..
 * It's derived from the total production cost. A negative sign is used so that lower costs result in a higher utility value (more attractive).
 * Note: The maturity factor (iMatFacTechProd) is applied directly to the cost for new technologies to reflect cost reductions (assuming iMatFacTechProd is a cost-reducing factor, e.g., <1).
 QISInvCostTech(allCy,ISTECH_ALL,YTIME)$(runCy(allCy))..
-    VISUtility(allCy,ISTECH_ALL,YTIME) =E=
+    QISInvCostTech(allCy,ISTECH_ALL,YTIME) =E=
     - (VISTotProdCost(allCy,ISTECH_ALL,YTIME) * iMatFacTechProd(allCy,ISTECH_ALL,YTIME))$ISTECH_NEW(ISTECH_ALL)
     - VISTotProdCost(allCy,ISTECH_ALL,YTIME)$ISTECH_HIST(ISTECH_ALL);
     !! The maturity factor (iMatFacTechProd) is used directly as an input here, not dynamically evolving.
@@ -107,7 +111,7 @@ QNewInstalledCapacityIS(allCy,ISTECH_ALL,YTIME)$(runCy(allCy))..
     VNewInstalledCapacityIS(allCy,ISTECH_ALL,YTIME) =E=
     VGapISCapacity(allCy,YTIME)
     * (exp(iEIS_ChoiceSensitivity(allCy) * VISInvCostTech(allCy,ISTECH_ALL,YTIME))
-    / sum(ISTECH_ALL2, exp(iEIS_ChoiceSensitivity(allCy) * VISUtility(allCy,ISTECH_ALL2,YTIME))));
+    / sum(ISTECH_ALL2, exp(iEIS_ChoiceSensitivity(allCy) * QISInvCostTech(allCy,ISTECH_ALL2,YTIME))));
 
 
 * This equation calculates the total available installed capacity for new Iron and Steel technologies.
@@ -164,6 +168,7 @@ QFuelConsISNew(allCy,ISTECH_NEW,EF,YTIME)$(runCy(allCy))..
 
 * This equation computes the total Iron and Steel fuel demand for each fuel type.
 * It sums the fuel consumption from all historical technologies (VFuelConsISHist) and all new technologies (VFuelConsISNew) to provide the aggregate fuel consumption for the entire sector.
+* FUTURE INTEGRATION in OPEN PROM LINK TO MAIN ENERGY BALANCE e.g. eliminate IS
 QTotFuelConsIS(allCy,EF,YTIME)$(runCy(allCy))..
     VTotFuelConsIS(allCy,EF,YTIME) =E=
     sum(ISTECH_HIST, VFuelConsISHist(allCy,ISTECH_HIST,EF,YTIME))
