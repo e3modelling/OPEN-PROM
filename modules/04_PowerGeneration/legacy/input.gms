@@ -174,7 +174,6 @@ MAXLOADSH 0.45
 *---
 Parameters
 i04BaseLoadShareDem(allCy,DSBS,YTIME)	           "Baseload share of demand per sector (1)"
-i04HisChpGrCapData(allCy,CHP,YTIME)	               "Historical CHP  gross capacity data (GW)"
 i04PeakBsLoadBy(allCy,PGLOADTYPE)	               "Peak and Base load for base year (GW)"
 i04TotAvailCapBsYr(allCy)	                       "Total installed available capacity in base year (GW)"
 iTotAvailNomCapBsYr(allCy,YTIME)	               "Total nominal available installed capacity in base year (GW)"
@@ -192,8 +191,6 @@ i04MxmShareChpElec(allCy,YTIME)	                   "Maximum share of CHP electri
 i04BaseLoadShareDem(runCy,DSBS,YTIME)$an(YTIME)  = i04LoadFactorAdj(DSBS);
 *---
 i04DataElecAndSteamGen(runCy,CHP,YTIME) = 0 ;
-*---
-i04HisChpGrCapData(runCy,CHP,YTIME) = i04DataElecAndSteamGen(runCy,CHP,YTIME);
 *---
 i04CummMnmInstRenCap(runCy,PGRENEF,YTIME)$(not i04CummMnmInstRenCap(runCy,PGRENEF,YTIME)) = 1e-4;
 *---

@@ -5,11 +5,9 @@ Equations
 *' *** Power Generation
 Q04CapElec2(allCy,PGALL,YTIME)	                           "Compute electricity generation capacity"
 Q04CapElecNominal(allCy,PGALL,YTIME)	                   "Compute nominal electricity generation capacity"
-*q04ScalFacPlantDispatchExpr(allCy,PGALL,HOUR,YTIME)	   "Scaling factor for plant dispatching"		
 Q04RenTechMatMultExpr(allCy,PGALL,YTIME)                   "Renewable power capacity over potential (1)"
-Q04CapElecCHP(allCy,CHP,YTIME)                             "Compute CHP electric capacity"	
+*Q04CapElecCHP(allCy,CHP,YTIME)                             "Compute CHP electric capacity"	
 Q04BsldEst(allCy,YTIME)	                                   "Compute estimated base load"
-Q04BaseLoadMax(allCy,YTIME) 	                           "Compute baseload corresponding to maximum load"	
 Q04CostHourProdInvDec(allCy,PGALL,HOUR,YTIME)              "Compute hourly production cost used in investment decisions"
 Q04CostHourProdInvDecNoCCS(allCy,PGALL,HOUR,YTIME)         "Compute hourly production cost used in investment decisions"
 Q04SensCCS(allCy,YTIME)	                                   "Compute gamma parameter used in CCS/No CCS decision tree"
@@ -44,7 +42,7 @@ Q04CostPowGenLonNoClimPol(allCy,ESET,YTIME)                "Compute long term po
 *q04CostPowGenAvgShrt(allCy,ESET,YTIME)	                   "Compute short term power generation cost"
 Q04ConsElec(allCy,DSBS,YTIME)                              "Compute electricity consumption per final demand sector"
 Q04LoadFacDom(allCy,YTIME)                                 "Compute electricity load factor for entire domestic system"	
-Q04DemElecTot(allCy,YTIME)                                 "Compute total electricity demand (TWh)"
+*Q04DemElecTot(allCy,YTIME)                                 "Compute total electricity demand (TWh)"
 Q04ProdElecCHP(allCy,CHP,YTIME)                            "Compute CHP electricity production (TWh)"
 
 *'                **Interdependent Equations**
@@ -53,7 +51,6 @@ Q04CostPowGenAvgLng(allCy,ESET,YTIME)	                   "Compute long term powe
 Q04CapElecTotEst(allCy,YTIME)                              "Compute Estimated total electricity generation capacity"
 Q04PeakLoad(allCy,YTIME)	                               "Compute elerctricity peak load"	
 Q04CapElec(allCy,PGALL,YTIME)	                           "Compute electricity generation capacity"
-Q04BaseLoad(allCy,YTIME)	                               "Compute electricity base load"
 ;
 
 Variables
@@ -64,7 +61,6 @@ V04CapElecNominal(allCy,PGALL,YTIME)	                   "Nominal electricity gen
 V04RenTechMatMultExpr(allCy,PGALL,YTIME)                   "Renewable power capacity over potential (1)"
 V04CapElecCHP(allCy,CHP,YTIME)	                           "Capacity of CHP Plants (GW)"
 V04BsldEst(allCy,YTIME)	                                   "Estimated base load (GW)"
-V04BaseLoadMax(allCy,YTIME)	                               "Baseload corresponding to Maximum Load Factor (1)"
 V04CostHourProdInvDec(allCy,PGALL,HOUR,YTIME)              "Hourly production cost of technology (US$2015/KWh)"
 V04CostHourProdInvDecNoCCS(allCy,PGALL,HOUR,YTIME)         "Hourly production cost of technology (US$2015/KWh)"	
 V04SensCCS(allCy,YTIME)	                                   "Variable that controlls the sensitivity of CCS acceptance (1)"			
@@ -110,5 +106,4 @@ VmCostPowGenAvgLng(allCy,ESET,YTIME)	                   "Long-term average power
 VmCapElecTotEst(allCy,YTIME)	                           "Estimated Total electricity generation capacity (GW)"
 VmPeakLoad(allCy,YTIME)	                                   "Electricity peak load (GW)"	
 VmCapElec(allCy,PGALL,YTIME)	                           "Electricity generation plants capacity (GW)"
-VmBaseLoad(allCy,YTIME)	                                   "Corrected base load (GW)"
 ;

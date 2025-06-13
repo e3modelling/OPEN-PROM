@@ -59,14 +59,11 @@ V04RenTechMatMultExpr.FX(runCy,PGALL,YTIME)$(not PGREN(PGALL)) = 0;
 V04CostHourProdInvDec.L(runCy,PGALL,HOUR,TT) = 0.0001;
 V04CostHourProdInvDec.FX(runCy,PGALL,HOUR,YTIME)$((NOT AN(YTIME))) = 0;
 *---
-VmBaseLoad.L(runCy,YTIME) = 0.5;
-VmBaseLoad.FX(runCy,YTIME)$(not An(YTIME)) = i04PeakBsLoadBy(runCy,"BASELOAD");
-*---
 VmCapElecTotEst.FX(runCy,YTIME)$(not An(YTIME)) = i04TotAvailCapBsYr(runCy);
 *---
 V04CapElecNonCHP.FX(runCy,YTIME)$(not An(YTIME)) = i04TotAvailCapBsYr(runCy);
 *---
-V04CapElecCHP.FX(runCy,CHP,YTIME)$(not An(YTIME)) = i04HisChpGrCapData(runCy,CHP,YTIME);
+V04CapElecCHP.FX(runCy,CHP,YTIME)$(not An(YTIME)) = imInstCapPastCHP(runCy,CHP,YTIME);
 *---
 V04SharePowPlaNewEq.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) ) = 0;
 *---

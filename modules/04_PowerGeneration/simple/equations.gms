@@ -10,6 +10,7 @@
 
 *' Power Generation
 
+$ontext
 *' This equation computes the electric capacity of Combined Heat and Power (CHP) plants. The capacity is calculated in gigawatts (GW) and is based on several factors,
 *' including the consumption of fuel in the industrial sector, the electricity prices in the industrial sector, the availability rate of power
 *' generation plants, and the utilization rate of CHP plants. The result represents the electric capacity of CHP plants in GW.
@@ -21,11 +22,13 @@ Q04CapElecCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          sum(PGALL$CHPtoEON(CHP,PGALL), i04AvailRate(PGALL,YTIME)) / 
          i04UtilRateChpPlants(allCy,CHP,YTIME) /
          smGwToTwhPerYear;  
+$offtext
 
 *' The equation calculates the total electricity demand by summing the components of final energy consumption in electricity, final non-energy consumption in electricity,
 *' distribution losses, and final consumption in the energy sector for electricity, and then subtracting net imports. The result is normalized using a conversion factor 
 *' which converts terawatt-hours (TWh) to million tonnes of oil equivalent (Mtoe). The formula provides a comprehensive measure of the factors contributing
 *' to the total electricity demand.
+$ontext
 Q04DemElecTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V04DemElecTot(allCy,YTIME)
              =E=
@@ -33,6 +36,7 @@ Q04DemElecTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          ( VmConsFinEneCountry(allCy,"ELC",YTIME) + VmConsFinNonEne(allCy,"ELC",YTIME) + VmLossesDistr(allCy,"ELC",YTIME)
            + VmConsFiEneSec(allCy,"ELC",YTIME) - VmImpNetEneBrnch(allCy,"ELC",YTIME)
          );
+$offtext
 
 *' This equation computes the estimated base load as a quantity dependent on the electricity demand per final sector,
 *' as well as the baseload share of demand per sector, the rate of losses for final Consumption, the net imports,
@@ -64,22 +68,8 @@ Q04LoadFacDom(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04PeakLoad(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VmPeakLoad(allCy,YTIME)
              =E=
-         V04DemElecTot(allCy,YTIME)/(V04LoadFacDom(allCy,YTIME)*smGwToTwhPerYear);
-
-*' This equation calculates the baseload corresponding to maximum load by multiplying the maximum load factor of electricity demand
-*' to the electricity peak load, minus the baseload corresponding to maximum load factor.
-Q04BaseLoadMax(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         (V04DemElecTot(allCy,YTIME)-V04BaseLoadMax(allCy,YTIME)*smGwToTwhPerYear)
-             =E=
-         i04MxmLoadFacElecDem(allCy,YTIME)*(VmPeakLoad(allCy,YTIME)-V04BaseLoadMax(allCy,YTIME))*smGwToTwhPerYear;  
-
-*' This equation calculates the electricity base load utilizing exponential functions that include the estimated base load,
-*' the baseload corresponding to maximum load factor, and the parameter of baseload correction.
-Q04BaseLoad(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VmBaseLoad(allCy,YTIME)
-             =E=
-         (1/(1+exp(i04BslCorrection(allCy,YTIME)*(V04BsldEst(allCy,YTIME)-V04BaseLoadMax(allCy,YTIME)))))*V04BsldEst(allCy,YTIME)
-        +(1-1/(1+exp(i04BslCorrection(allCy,YTIME)*(V04BsldEst(allCy,YTIME)-V04BaseLoadMax(allCy,YTIME)))))*V04BaseLoadMax(allCy,YTIME);
+         V04DemElecTot(allCy,YTIME) /
+         (V04LoadFacDom(allCy,YTIME)*smGwToTwhPerYear);
 
 *' The equation calculates the estimated total electricity generation capacity by multiplying the previous year's total electricity generation capacity with
 *' the ratio of the current year's estimated electricity peak load to the previous year's electricity peak load. This provides an estimate of the required
@@ -217,9 +207,12 @@ Q04CostProdTeCHPreReplac(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' The equation involves the production cost of the technology used in premature replacement without considering availability rates 
 *' and incorporates adjustments based on the availability rates of two power plants .
 Q04CostProdTeCHPreReplacAvail(allCy,PGALL,PGALL2,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V04CostProdTeCHPreReplacAvail(allCy,PGALL,PGALL2,YTIME) =E=
-         i04AvailRate(PGALL,YTIME)/i04AvailRate(PGALL2,YTIME)*V04CostProdTeCHPreReplac(allCy,PGALL,YTIME)+
-         V04CostVarTech(allCy,PGALL,YTIME)*(1-i04AvailRate(PGALL,YTIME)/i04AvailRate(PGALL2,YTIME));  
+         V04CostProdTeCHPreReplacAvail(allCy,PGALL,PGALL2,YTIME) 
+                =E=
+         i04AvailRate(PGALL,YTIME) / i04AvailRate(PGALL2,YTIME) * 
+         V04CostProdTeCHPreReplac(allCy,PGALL,YTIME) +
+         V04CostVarTech(allCy,PGALL,YTIME) *
+         (1-i04AvailRate(PGALL,YTIME) / i04AvailRate(PGALL2,YTIME));  
 
 *' The equation computes the endogenous scrapping index for power generation plants  during the specified year .
 *' The index is calculated as the variable cost of technology excluding power plants flagged as not subject to scrapping 
@@ -238,7 +231,7 @@ Q04IndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(al
 Q04CapElecNonCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       V04CapElecNonCHP(allCy,YTIME)
           =E=
-      VmCapElecTotEst(allCy,YTIME) - 0*SUM(CHP,V04CapElecCHP(allCy,CHP,YTIME) * 0.85);      
+      VmCapElecTotEst(allCy,YTIME) - SUM(CHP,V04CapElecCHP(allCy,CHP,YTIME));      
 
 *' In essence, the equation evaluates the difference between the current and expected power generation capacity, accounting for various factors such as planned capacity,
 *' decommissioning schedules, and endogenous scrapping. The square root term introduces a degree of tolerance in the calculation.
@@ -333,17 +326,14 @@ Q04CapElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         VmCapElec(allCy,PGALL,YTIME)
              =E=
         (
-          (
-            V04CapElec2(allCy,PGALL,YTIME-1)*V04IndxEndogScrap(allCy,PGALL,YTIME-1) +
-            V04NewCapElec(allCy,PGALL,YTIME) -
-            i04PlantDecomSched(allCy,PGALL,YTIME) * i04AvailRate(PGALL,YTIME)
-          ) -
-          (
-            (VmCapElec(allCy,PGALL,YTIME-1)-i04PlantDecomSched(allCy,PGALL,YTIME-1)) * 
-            i04AvailRate(PGALL,YTIME)*(1/i04TechLftPlaType(allCy,PGALL))
-          )$PGSCRN(PGALL)
-        )$(not PGALLCHP(PGALL)) +
-        SUM(CHP$(CHPtoEON(CHP, PGALL)), V04CapElecCHP(allCy,CHP,YTIME));
+          V04CapElec2(allCy,PGALL,YTIME-1)*V04IndxEndogScrap(allCy,PGALL,YTIME-1) +
+          V04NewCapElec(allCy,PGALL,YTIME) -
+          i04PlantDecomSched(allCy,PGALL,YTIME) * i04AvailRate(PGALL,YTIME)
+        ) -
+        (
+          (VmCapElec(allCy,PGALL,YTIME-1)-i04PlantDecomSched(allCy,PGALL,YTIME-1)) * 
+          i04AvailRate(PGALL,YTIME)*(1/i04TechLftPlaType(allCy,PGALL))
+        )$PGSCRN(PGALL);
 
 Q04CapElecNominal(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
           V04CapElecNominal(allCy,PGALL,YTIME)
@@ -356,8 +346,8 @@ Q04NewCapElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       (
         (V04SharePowPlaNewEq(allCy,PGALL,YTIME) * V04GapGenCapPowerDiff(allCy,YTIME))$( (not CCS(PGALL)) AND (not NOCCS(PGALL))) +
         (V04SharePowPlaNewEq(allCy,PGALL,YTIME) * V04ShareNewTechNoCCS(allCy,PGALL,YTIME) * V04GapGenCapPowerDiff(allCy,YTIME))$NOCCS(PGALL) +
-        (V04SharePowPlaNewEq(allCy,PGALL,YTIME) * V04ShareNewTechNoCCS(allCy,PGALL,YTIME) * V04GapGenCapPowerDiff(allCy,YTIME))$CCS(PGALL) +
-        i04DecInvPlantSched(allCy,PGALL,YTIME) * i04AvailRate(PGALL,YTIME)
+        (V04SharePowPlaNewEq(allCy,PGALL,YTIME) * V04ShareNewTechNoCCS(allCy,PGALL,YTIME) * V04GapGenCapPowerDiff(allCy,YTIME))$CCS(PGALL)
+        +i04DecInvPlantSched(allCy,PGALL,YTIME) * i04AvailRate(PGALL,YTIME)
       );
   
 *' This equation calculates the variable representing the planned electricity generation capacity for a specific power plant  in a given country
@@ -421,8 +411,10 @@ Q04CapOverall(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' capacity and the scaling factor for dispatching.
 Q04ProdElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         VmProdElec(allCy,PGALL,YTIME)
-                =E=
-        V04CapElec2(allCy,PGALL,YTIME) * smGwToTwhPerYear;
+              =E=
+        (V04DemElecTot(allCy,YTIME) - sum(CHP, V04ProdElecCHP(allCy,CHP,YTIME))) /
+        sum(PGALL2, V04CapElec2(allCy,PGALL2,YTIME)) *
+        V04CapElec2(allCy,PGALL,YTIME);
 
 *' This equation calculates the electricity production from Combined Heat and Power plants . The electricity production is computed
 *' for a specific country , CHP technology , and time period.The electricity production from CHP plants is computed by taking the
@@ -432,7 +424,7 @@ Q04ProdElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04ProdElecCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         V04ProdElecCHP(allCy,CHP,YTIME)
                  =E=
-        sum(PGALL$(CHPtoEON(CHP, PGALL)), VmProdElec(allCy, PGALL, YTIME));
+        V04CapElecCHP(allCy,CHP,YTIME) * smGwToTwhPerYear;
 
 *' This equation calculates the long-term power generation cost of technologies excluding climate policies.
 *' The cost is computed for a specific country, power generation technology , energy sector, and time period.

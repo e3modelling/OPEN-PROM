@@ -126,9 +126,15 @@ $include "./iRateLossesFinCons.csv"
 $offdelim
 ;
 *---
-table imInstCapPast(allCy,PGALL,YTIME)        "Installed capacity past (GW)"
+table imInstCapPastNonCHP(allCy,PGALL,YTIME)        "Installed Non-CHP capacity past (GW)"
 $ondelim
 $include"./iInstCapPastNonCHP.csv"
+$offdelim
+;
+*---
+table imInstCapPastCHP(allCy,CHP,YTIME)        "Installed CHP capacity past (GW)"
+$ondelim
+$include"./iInstCapPastCHP.csv"
 $offdelim
 ;
 *---
