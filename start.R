@@ -11,6 +11,8 @@ uploadGDX = FALSE # Set to TRUE to include GDX files in the uploaded archive
 
 saveMetadata<- function(DevMode) {
 
+saveMetadata<- function(DevMode) {
+
   # Gather Git information with system calls
   commit_author <- system("git log -1 --format=%an", intern = TRUE)
   commit_hash <- system("git log -1 --format=%H", intern = TRUE)
@@ -226,33 +228,28 @@ if (!is.null(task) && task == 0) {
 
     shell(paste0(gams,' main.gms --DevMode=1 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 | tee full.log'))
 
-    if(withRunFolder) {
-      file.copy("data", to = '../../', recursive = TRUE) # Copying generated data to parent folder for future runs
-      
-      if(withSync) syncRun()
-    }        
+  if (withRunFolder) {
+    file.copy("data", to = "../../", recursive = TRUE) # Copying generated data to parent folder for future runs
 
-} else if (!is.null(task) && task == 2) {
-    
-    # Running task OPEN-PROM RESEARCH
-    saveMetadata(DevMode = 0)
-    if(withRunFolder) createRunFolder(setScenarioName("RES"))
+    if (withSync) syncRun()
+  }
+} else if (task == 2) {
+  # Running task OPEN-PROM RESEARCH
+  saveMetadata(DevMode = 0)
+  if (withRunFolder) createRunFolder(setScenarioName("RES"))
 
-    shell(paste0(gams,' main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log'))
-
-    if(withRunFolder && withSync) syncRun()
+  shell(paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log"))
 
     if(withRunFolder && withReport) {
 
-      run_path <- getwd()
-      setwd("../../") # Going back to root folder
-      cat("Executing the report output script\n")
-      report_cmd <- paste0("RScript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
-      shell(report_cmd)
-    } 
-
-} else if (!is.null(task) && task == 3) {
-    
+  if (withRunFolder && withReport) {
+    run_path <- getwd()
+    setwd("../../") # Going back to root folder
+    cat("Executing the report output script\n")
+    report_cmd <- paste0("RScript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
+    shell(report_cmd)
+  }
+} else if (task == 3) {
     # Running task OPEN-PROM RESEARCH NEW DATA
     saveMetadata(DevMode = 0)
     if(withRunFolder) createRunFolder(setScenarioName("RESNEWDATA"))
@@ -275,7 +272,9 @@ if (!is.null(task) && task == 0) {
       shell(report_cmd)
     } 
 
-} else if (!is.null(task) && task == 4) {
+    if(withRunFolder && withSync) syncRun()
+
+} else if (task == 4) {
   
   # Debugging mode
   shell(paste0(gams,' main.gms -logOption 4 -a=ce -Idir=./data 2>&1 | tee full.log'))
