@@ -35,25 +35,27 @@ jobs:
           Set-Content -Path $licenseFile -Value $env:LICENSE
 
       - name: Download Datasets
+        env:
+          DATASET: ${{ secrets.DATASET }}
         run: |
           @"
           print("Getting data for GitHub Action")
-          url <- 'https://drive.usercontent.google.com/uc?id=1Hy0zhnHsouE25O9smP7u75X6l6uU2HIg&export=download'
+          url <- commandArgs(trailingOnly = TRUE)
           fname <- 'ghaction_data.tgz'
           download.file(url, fname, mode="wb")
           utils::untar(fname, exdir = "./data")
           "@ | Out-File -FilePath dl_data.R
 
-          RScript dl_data.R
+          RScript dl_data.R $env:DATASET
           
       - name: Test Model Run - NPi Default Scenario
         run: |
-          & "C:\GAMS\47\gams.exe" main.gms --DevMode=0 --GenerateInput=off --fEndY=2050 --fScenario=1 -Idir=./data
+          & "C:\GAMS\47\gams.exe" main.gms lo 2 --DevMode=0 --GenerateInput=off --fEndY=2050 --fScenario=1 -Idir=./data
 
       - name: Test Model Run - 1.5C Scenario
         run: |
-          & "C:\GAMS\47\gams.exe" main.gms --DevMode=0 --GenerateInput=off --fEndY=2050 --fScenario=2 -Idir=./data
+          & "C:\GAMS\47\gams.exe" main.gms lo 2 --DevMode=0 --GenerateInput=off --fEndY=2050 --fScenario=2 -Idir=./data
           
       - name: Test Model Run - 2C Scenario
         run: |
-          & "C:\GAMS\47\gams.exe" main.gms --DevMode=0 --GenerateInput=off --fEndY=2050 --fScenario=3 -Idir=./data
+          & "C:\GAMS\47\gams.exe" main.gms lo 2 --DevMode=0 --GenerateInput=off --fEndY=2050 --fScenario=3 -Idir=./data
