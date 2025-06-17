@@ -112,13 +112,6 @@ Parameter imCO2CaptRate(allCy,ISTECH_ALL,YTIME);
 imCO2CaptRate(allCy,ISTECH_ALL,YTIME) = 0; ! Default value: 0% capture if not specified in an input file.
 ;
 
-* Plant Efficiency by Type (unitless).
-* This parameter defines how efficiently energy input is converted into steel output for various technologies.
-Parameter imPlantEffByType(allCy,ISTECH_ALL,YTIME);
-$ondelim
-$include "./imPlantEffByType.csv"
-$offdelim
-;
 
 * Maturity factor related to plant production/cost for new technologies (unitless).
 * This acts as a fixed multiplier on the cost of new technologies. A value of 1 means no adjustment; a value < 1 means a cost reduction (e.g., due to inherent maturity advantages).

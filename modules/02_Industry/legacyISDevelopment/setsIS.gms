@@ -18,17 +18,22 @@ ISTECHNEW   "New IS routes"
 /
 *---
 
-ISTECHHISTtoEF(ISTECHHIST,EF) "Mapping between IS technologies and fuels"
+ISTECHHISTtoEF(ISTECHHIST,EF) "Mapping between IS technologies and fuels, in principle we can add all the EF set defned in open prom as input"
 /
 bfbof.(hcl, ngs, elc),
 dreaf.(ngs, elc),
 screaf.(elc, ngs)
+
 /
 *---
-ISTECHNEWHISTtoEF(ISTECHNEW,EF) "Mapping between IS technologies and fuels"
+ISTECHNEWHISTtoEF(ISTECHNEW,EF) "Mapping between IS technologies and fuels, NEED TO BE UPDATE BUT IN THE INPUT WE PROVIDE ALL THE EF FOR EACH TECH"
 /
 bfbofbat.(hcl, ngs, elc),
 dreafbat.(ngs, elc),
 screafbat.(elc, ngs)
+h2dreaf.(h2,elc,ngs)
+ *bfbofccs.(hcl, ngs, elc),
+*dreafccs.(ngs, elc),
+
 /
 *---
