@@ -20,9 +20,21 @@ $include"./iDataElecSteamGen.csv"
 $offdelim
 ;
 *---
-table i04DataElecProd(allCy,PGALL,YTIME)           "Electricity production past years (GWh)"
+table i04DataElecProdNonCHP(allCy,PGALL,YTIME)           "Electricity Non-CHP production past years (GWh)"
 $ondelim
-$include"./iDataElecProd.csv"
+$include"./iDataElecProdNonCHP.csv"
+$offdelim
+;
+*---
+table i04DataElecProdCHP(allCy,CHP,YTIME)           "Electricity CHP production past years (GWh)"
+$ondelim
+$include"./iDataElecProdCHP.csv"
+$offdelim
+;
+*---
+table i04DemElecTot(allCy, YTIME)           "Electricity demand for china from MaGPie (TWh)"
+$ondelim
+$include"./iDemElecTot.csv"
 $offdelim
 ;
 *---
@@ -174,8 +186,6 @@ MAXLOADSH 0.45
 *---
 Parameters
 i04BaseLoadShareDem(allCy,DSBS,YTIME)	           "Baseload share of demand per sector (1)"
-i04PeakBsLoadBy(allCy,PGLOADTYPE)	               "Peak and Base load for base year (GW)"
-i04TotAvailCapBsYr(allCy)	                       "Total installed available capacity in base year (GW)"
 iTotAvailNomCapBsYr(allCy,YTIME)	               "Total nominal available installed capacity in base year (GW)"
 i04UtilRateChpPlants(allCy,CHP,YTIME)	           "Utilisation rate of CHP Plants (1)"
 i04MxmLoadFacElecDem(allCy,YTIME)	               "Maximum load factor of electricity demand (1)"
@@ -194,9 +204,6 @@ i04DataElecAndSteamGen(runCy,CHP,YTIME) = 0 ;
 *---
 i04CummMnmInstRenCap(runCy,PGRENEF,YTIME)$(not i04CummMnmInstRenCap(runCy,PGRENEF,YTIME)) = 1e-4;
 *---
-i04PeakBsLoadBy(runCy,PGLOADTYPE) = sum(TFIRST, i04DataElecSteamGen(runCy,PGLOADTYPE,TFIRST));
-*---
-i04TotAvailCapBsYr(runCy) = sum(TFIRST,i04DataElecSteamGen(runCy,"TOTCAP",TFIRST))+sum(TFIRST,i04DataElecSteamGen(runCy,"CHP_CAP",TFIRST))*0.85;
 iTotAvailNomCapBsYr(runCy,YTIME)$datay(YTIME) = i04DataElecSteamGen(runCy,"TOTNOMCAP",YTIME);
 *---
 i04UtilRateChpPlants(runCy,CHP,YTIME) = 0.5;

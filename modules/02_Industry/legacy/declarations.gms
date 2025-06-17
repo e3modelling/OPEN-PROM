@@ -11,7 +11,7 @@ Q02CostTechMatFac(allCy,DSBS,rCon,EF,YTIME)                "Compute the technolo
 Q02SortTechVarCost(allCy,DSBS,rCon,YTIME)                  "Compute Technology sorting based on variable cost"
 Q02GapFinalDem(allCy,DSBS,YTIME)                           "Compute the gap in final demand of industry, tertiary, non-energy uses and bunkers"
 Q02ShareTechNewEquip(allCy,DSBS,EF,YTIME)                  "Compute technology share in new equipment"
-Q02CostProdCHPDem(allCy,DSBS,CHP,YTIME)                    "Compute  variable including fuel electricity production cost per CHP plant and demand sector "
+*Q02CostProdCHPDem(allCy,DSBS,CHP,YTIME)                    "Compute  variable including fuel electricity production cost per CHP plant and demand sector "
 
 *'                **Interdependent Equations**
 Q02ConsFuel(allCy,DSBS,EF,YTIME)                           "Compute fuel consumption"
@@ -22,7 +22,7 @@ Q02DemFinSubFuelSubsec(allCy,DSBS,YTIME)                   "Compute total final 
 Q02ConsFuelInclHP(allCy,DSBS,EF,YTIME)                     "Equation for fuel consumption in Mtoe (including heat from heatpumps)"
 Q02ConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)	           "Equation for consumption of remaining substitutble equipment"
 Q02CostElcAvgProdCHP(allCy,CHP,YTIME)                      "Compute Average Electricity production cost per CHP plant"
-Q02CostVarAvgElecProd(allCy,CHP,YTIME)                     "Compute Average variable including fuel electricity production cost per CHP plant"
+*Q02CostVarAvgElecProd(allCy,CHP,YTIME)                     "Compute Average variable including fuel electricity production cost per CHP plant"
 ;
 
 Variables
