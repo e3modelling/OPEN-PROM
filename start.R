@@ -265,8 +265,9 @@ if (task == 0) {
 
   if (withRunFolder && withSync) syncRun()
 
-  CalibratedParams <- c("iMatFacPlaAvailCap.csv", "iMatureFacPlaDisp.csv")
+  CalibratedParams <- c("i04MatFacPlaAvailCap.csv", "i04MatureFacPlaDisp.csv")
+  newNames <- gsub("[0-9]", "", CalibratedParams) # remove numbers
   CalibratedParamsPath <- file.path(getwd(), CalibratedParams)
-  newPath <- file.path(dirname(dirname(getwd())), "data", CalibratedParams)
+  newPath <- file.path(dirname(dirname(getwd())), "data", newNames)
   file.rename(CalibratedParamsPath, newPath)
 }

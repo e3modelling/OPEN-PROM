@@ -28,7 +28,7 @@ $offtext
 *' distribution losses, and final consumption in the energy sector for electricity, and then subtracting net imports. The result is normalized using a conversion factor 
 *' which converts terawatt-hours (TWh) to million tonnes of oil equivalent (Mtoe). The formula provides a comprehensive measure of the factors contributing
 *' to the total electricity demand.
-$ontext
+
 Q04DemElecTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V04DemElecTot(allCy,YTIME)
              =E=
@@ -36,7 +36,6 @@ Q04DemElecTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          ( VmConsFinEneCountry(allCy,"ELC",YTIME) + VmConsFinNonEne(allCy,"ELC",YTIME) + VmLossesDistr(allCy,"ELC",YTIME)
            + VmConsFiEneSec(allCy,"ELC",YTIME) - VmImpNetEneBrnch(allCy,"ELC",YTIME)
          );
-$offtext
 
 *' This equation computes the estimated base load as a quantity dependent on the electricity demand per final sector,
 *' as well as the baseload share of demand per sector, the rate of losses for final Consumption, the net imports,

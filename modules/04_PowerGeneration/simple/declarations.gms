@@ -42,7 +42,7 @@ Q04CostPowGenLonNoClimPol(allCy,ESET,YTIME)                "Compute long term po
 *q04CostPowGenAvgShrt(allCy,ESET,YTIME)	                   "Compute short term power generation cost"
 Q04ConsElec(allCy,DSBS,YTIME)                              "Compute electricity consumption per final demand sector"
 Q04LoadFacDom(allCy,YTIME)                                 "Compute electricity load factor for entire domestic system"	
-*Q04DemElecTot(allCy,YTIME)                                 "Compute total electricity demand (TWh)"
+Q04DemElecTot(allCy,YTIME)                                 "Compute total electricity demand (TWh)"
 Q04ProdElecCHP(allCy,CHP,YTIME)                            "Compute CHP electricity production (TWh)"
 
 *'                **Interdependent Equations**
