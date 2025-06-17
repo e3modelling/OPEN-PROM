@@ -121,7 +121,7 @@ Q02CostElecProdCHP(allCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS) $runCy(allCy
                     + i02VarCostChp(allCy,DSBS,CHP,YTIME)/1000
                     + sum(PGEF$CHPtoEF(CHP,PGEF), (VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)+0.001*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
                          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))))
-                         * smTWhToMtoe /  (i02BoiEffChp(allCy,CHP,YTIME) * VmPriceElecInd(allCy,YTIME)) );        
+                         * smTWhToMtoe /  (i02BoiEffChp(allCy,CHP,YTIME) * (VmPriceElecInd(allCy,YTIME)) + 1e-4));        
 
 *' The equation calculates the technology cost for each technology, energy form, and consumer size group within the specified subsector.
 *' This cost estimation is based on an intermediate technology cost and the elasticity parameter associated with the given subsector.
@@ -210,6 +210,7 @@ Q02ConsFuelInclHP(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTEC
          (V02ShareTechNewEquip(allCy,DSBS,EF,YTIME)*V02GapFinalDem(allCy,DSBS,YTIME))
          + (VmConsElecNonSubIndTert(allCy,DSBS,YTIME))$(INDDOM(DSBS) and ELCEF(EF));
 
+$ontext
 *' This equation calculates the variable, including fuel electricity production cost per CHP plant and demand sector, taking into account the variable cost (other than fuel)
 *' per CHP type and the summation of fuel-related costs for each energy form . The calculation involves fuel prices, CO2 emission factors, boiler efficiency, electricity
 *' index, and carbon prices, adjusted by various factors. The equation uses these terms to calculate the variable, including fuel electricity production cost per CHP plant and
@@ -221,6 +222,7 @@ Q02CostProdCHPDem(allCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS) $runCy(allCy)
                     + sum(PGEF$CHPtoEF(CHP,PGEF), (VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)+1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
                          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))))
                          *smTWhToMtoe/(i02BoiEffChp(allCy,CHP,YTIME)*VmPriceElecInd(allCy,YTIME)));
+$offtext
 
 *' The equation calculates the average electricity production cost per Combined Heat and Power plant .
 *' It involves a summation over demand subsectors . The average electricity production cost is determined by considering the electricity
@@ -232,6 +234,7 @@ Q02CostElcAvgProdCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          (sum(INDDOM, VmConsFuel(allCy,INDDOM,CHP,YTIME-1)/SUM(INDDOM2,VmConsFuel(allCy,INDDOM2,CHP,YTIME-1))*V02CostElecProdCHP(allCy,INDDOM,CHP,YTIME)))
          $SUM(INDDOM2,VmConsFuel.L(allCy,INDDOM2,CHP,YTIME-1))+0$(NOT SUM(INDDOM2,VmConsFuel.L(allCy,INDDOM2,CHP,YTIME-1)));
 
+$ontext
 *' The equation computes the average variable cost, including fuel and electricity production cost, per Combined Heat and Power plant.
 *' The equation involves a summation over demand subsectors , where the variable cost per CHP plant is calculated based on fuel
 *' consumption and the variable cost of electricity production . The resulting average variable cost is expressed in Euro per kilowatt-hour (Euro/KWh).
@@ -243,3 +246,4 @@ Q02CostVarAvgElecProd(allCy,CHP,YTIME)$(TIME(YTIME) $runCy(allCy)) ..
          (sum(INDDOM, VmConsFuel(allCy,INDDOM,CHP,YTIME-1)/SUM(INDDOM2,VmConsFuel(allCy,INDDOM2,CHP,YTIME-1))
          *V02CostProdCHPDem(allCy,INDDOM,CHP,YTIME)))
          $SUM(INDDOM2,VmConsFuel.L(allCy,INDDOM2,CHP,YTIME-1))+0$(NOT SUM(INDDOM2,VmConsFuel.L(allCy,INDDOM2,CHP,YTIME-1)));
+$offtext

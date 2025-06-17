@@ -241,7 +241,7 @@ fStat.ap = 1;
 $setGlobal Transport        legacy
 $setGlobal Industry         legacy
 $setGlobal RestOfEnergy     legacy
-$setGlobal PowerGeneration  legacy
+$setGlobal PowerGeneration  simple
 $setGlobal Hydrogen         legacy
 $setGlobal CO2              legacy
 $setGlobal Emissions        legacy
