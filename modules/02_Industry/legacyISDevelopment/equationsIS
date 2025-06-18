@@ -87,7 +87,6 @@ QISInvCostTech(allCy,ISTECH_ALL,YTIME)$(runCy(allCy))..
     QISInvCostTech(allCy,ISTECH_ALL,YTIME) =E=
     - (VISTotProdCost(allCy,ISTECH_ALL,YTIME) * iMatFacTechProd(allCy,ISTECH_ALL,YTIME))$ISTECH_NEW(ISTECH_ALL)
     - VISTotProdCost(allCy,ISTECH_ALL,YTIME)$ISTECH_HIST(ISTECH_ALL);
-    !! The maturity factor (iMatFacTechProd) is used directly as an input here, not dynamically evolving.
 
 * This equation calculates the capacity gap in the Iron and Steel sector for each country and year.
 * This gap represents the amount of new installed capacity (in Mt/year) that needs to be added to meet the exogenous steel production demand (iProdDemandIS).
@@ -112,7 +111,8 @@ QNewInstalledCapacityIS(allCy,ISTECH_ALL,YTIME)$(runCy(allCy))..
 * including the retirement of plants at the end of their technical lifetime.
 QAvailCapISNew(allCy,ISTECH_NEW,YTIME)$(runCy(allCy))..
     VAvailCapISNew(allCy,ISTECH_NEW,YTIME) =E=
-     sum(YYTIME$( (YYTIME.val <= YTIME.val) and (YTIME.val < YYTIME.val + iTechLftIS(allCy,ISTECH_NEW)) ), VNewInstalledCapacityIS(allCy,ISTECH_NEW,YYTIME));
+     sum(YYTIME$( (YYTIME.val <= YTIME.val) and (YTIME.val < YYTIME.val + iTechLftIS(allCy,ISTECH_NEW)) ), 
+     VNewInstalledCapacityIS(allCy,ISTECH_NEW,YYTIME));
 
 * This equation limits the actual activity level (production of steel in Mt) for new technologies to their available installed capacity.
 * Similar to historical technologies, the model will determine the exact activity level up to this capacity limit based on the overall demand balance.

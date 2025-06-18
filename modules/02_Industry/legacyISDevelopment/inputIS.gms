@@ -1,6 +1,6 @@
 * ---
 * Iron and Steel Module: Input Data and Parameters
-* TABLE keyword needes to be checked for data loaded from CSVs,
+* TABLE keyword needes to be checked for data loaded from CSVs
 
 
 
