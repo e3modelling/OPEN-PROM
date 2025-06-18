@@ -32,11 +32,13 @@ $include"./iDataElecProdCHP.csv"
 $offdelim
 ;
 *---
+$ontext
 table i04DemElecTot(allCy, YTIME)           "Electricity demand for china from MaGPie (TWh)"
 $ondelim
 $include"./iDemElecTot.csv"
 $offdelim
 ;
+$offtext
 *---
 table i04DataTechLftPlaType(PGALL, PGECONCHAR)     "Data for power generation costs (various)"
 $ondelim
