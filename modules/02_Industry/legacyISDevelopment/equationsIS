@@ -48,7 +48,7 @@ QISTotProdCost(allCy,ISTECH_ALL,YTIME)$(runCy(allCy))..
         )
     );
 
-* This equation computes the endogenous scrapping index for historical Iron and Steel plants.
+* This equation computes the endogenous scrapping index for historical Iron and Steel plants. NEED TO BE DOUBLECHECK
 * This index determines the likelihood or fraction of historical capacity being prematurely decommissioned (i.e. scrapped) due to its non-competitiveness compared to other available technologies (both historical and new).
 * It is calculated as the inverse of the historical technology's total production cost (raised to the power of -5 to amplify differences but this need to be checked and calibrate - divided by the sum of this value and a scaled sum of total production costs for all technologies. A lower cost (higher inverse) leads to a higher index, meaning less scrapping.
 QIndxEndogScrapIS(allCy,ISTECH_HIST,YTIME)$(runCy(allCy))..
@@ -100,7 +100,7 @@ QGapISCapacity(allCy,YTIME)$(runCy(allCy))..
 
 * This equation calculates the newly installed Iron and Steel production capacity (in Mt/year) for each technology.
 * This represents the endogenous investment decision. The calculated capacity gap (VGapISCapacity) is distributed among all available technologies (ISTECH_ALL) using a multinomial logit-like function. THIS HAS TO BE CHECKED
-* This function incorporates a sensitivity parameter (iEIS_ChoiceSensitivity) that controls how strongly utility (derived from cost and maturity) influences market share. This approach introduces inertia and a smoother transition in technology adoption, rather than a pure cost-minimization.
+* This function incorporates a sensitivity parameter (iEIS_ChoiceSensitivity) that controls how strongly utility (derived from cost and maturity) influences market share.
 QNewInstalledCapacityIS(allCy,ISTECH_ALL,YTIME)$(runCy(allCy))..
     VNewInstalledCapacityIS(allCy,ISTECH_ALL,YTIME) =E=
     VGapISCapacity(allCy,YTIME)
@@ -108,11 +108,11 @@ QNewInstalledCapacityIS(allCy,ISTECH_ALL,YTIME)$(runCy(allCy))..
     / sum(ISTECH_ALL2, exp(iEIS_ChoiceSensitivity(allCy) * QISInvCostTech(allCy,ISTECH_ALL2,YTIME))));
 
 
-* This equation calculates the total available installed capacity for new Iron and Steel technologies.
-* It sums the newly installed capacity (VNewInstalledCapacityIS) for each new technology across all previous years up to the current year, providing the total operational capacity for these emerging technologies.
+* This equation calculates the total available capacity for new technologies,
+* including the retirement of plants at the end of their technical lifetime.
 QAvailCapISNew(allCy,ISTECH_NEW,YTIME)$(runCy(allCy))..
     VAvailCapISNew(allCy,ISTECH_NEW,YTIME) =E=
-    sum(YTIME2$(YTIME2 le YTIME), VNewInstalledCapacityIS(allCy,ISTECH_NEW,YTIME2));
+     sum(YYTIME$( (YYTIME.val <= YTIME.val) and (YTIME.val < YYTIME.val + iTechLftIS(allCy,ISTECH_NEW)) ), VNewInstalledCapacityIS(allCy,ISTECH_NEW,YYTIME));
 
 * This equation limits the actual activity level (production of steel in Mt) for new technologies to their available installed capacity.
 * Similar to historical technologies, the model will determine the exact activity level up to this capacity limit based on the overall demand balance.
