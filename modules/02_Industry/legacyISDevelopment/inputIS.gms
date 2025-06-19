@@ -80,19 +80,19 @@ iInitialCapacityTotal(allCy, ISTECH_HIST) =
     );
 
 
-* Elasticity of substitution/choice sensitivity in technology adoption.
+* Elasticity of substitution/c sensitivity in technology adoption. Name to be revised
 Parameter iEIS_ChoiceSensitivity(allCy) "Elasticity of substitution for technology choice";
 iEIS_ChoiceSensitivity(allCy) = 0.001; * Example value, needs calibration.
 
 
-* CO2 Capture Rate for specific technologies.
+* CO2 Capture Rate for specific technologies. Need to be included
 Parameter imCO2CaptRate(allCy,ISTECH_ALL,YTIME) "CO2 Capture Rate (unitless)";
 imCO2CaptRate(allCy,ISTECH_ALL,YTIME) = 0; * Default value: 0% capture.
 
 
 * Maturity factor for new technologies.
 Parameter iMatFacTechProd(allCy,ISTECH_ALL,YTIME) "Maturity factor on cost for new technologies";
-iMatFacTechProd(allCy,ISTECH_ALL,YTIME) = 1; * Default value: No cost adjustment.
+iMatFacTechProd(allCy,ISTECH_ALL,YTIME) = 1; 
 
 
 * Scale parameter for endogenous scrapping.
