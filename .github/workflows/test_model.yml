@@ -21,7 +21,7 @@ jobs:
           Invoke-WebRequest -Uri $url -OutFile $installer
           Start-Process $installer -ArgumentList "/silent" -NoNewWindow -Wait
           Remove-Item $installer
-          $env:Path += ";C:\GAMS\47"
+          $env:Path += ";C:\GAMS\48"
           [Environment]::SetEnvironmentVariable("Path", $env:Path, [EnvironmentVariableTarget]::Machine)
           echo $env:Path
 
@@ -30,8 +30,8 @@ jobs:
           LICENSE: ${{ secrets.GAMS_LICENSE }}
           
         run: |
-          $licenseFile = "C:\GAMS\47\gamslice.txt"
-          New-Item -ItemType Directory -Force -Path "C:\GAMS\47"
+          $licenseFile = "C:\GAMS\48\gamslice.txt"
+          New-Item -ItemType Directory -Force -Path "C:\GAMS\48"
           Set-Content -Path $licenseFile -Value $env:LICENSE
 
       - name: Download Datasets
@@ -50,12 +50,12 @@ jobs:
           
       - name: Test Model Run - NPi Default Scenario
         run: |
-          & "C:\GAMS\47\gams.exe" main.gms lo 2 --DevMode=0 --GenerateInput=off --fEndY=2050 --fScenario=1 -Idir=./data
+          & "C:\GAMS\48\gams.exe" main.gms lo 2 --DevMode=0 --GenerateInput=off --fEndY=2050 --fScenario=1 -Idir=./data
 
       - name: Test Model Run - 1.5C Scenario
         run: |
-          & "C:\GAMS\47\gams.exe" main.gms lo 2 --DevMode=0 --GenerateInput=off --fEndY=2050 --fScenario=2 -Idir=./data
+          & "C:\GAMS\48\gams.exe" main.gms lo 2 --DevMode=0 --GenerateInput=off --fEndY=2050 --fScenario=2 -Idir=./data
           
       - name: Test Model Run - 2C Scenario
         run: |
-          & "C:\GAMS\47\gams.exe" main.gms lo 2 --DevMode=0 --GenerateInput=off --fEndY=2050 --fScenario=3 -Idir=./data
+          & "C:\GAMS\48\gams.exe" main.gms lo 2 --DevMode=0 --GenerateInput=off --fEndY=2050 --fScenario=3 -Idir=./data
