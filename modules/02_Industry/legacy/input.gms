@@ -45,15 +45,15 @@ $ELSE.calib
 i02ElastNonSubElec(runCy,SBS,ETYPES,YTIME) = i02ElastNonSubElecData(SBS,ETYPES,YTIME);
 $ENDIF.calib
 *---
-i02InvCostChp(runCy,DSBS,CHP,YTIME)      = imDataChpPowGen(CHP,"IC","2010");
+i02InvCostChp(runCy,DSBS,CHP,YTIME)      = imDataChpPowGen(CHP,"IC",YTIME);
 *---
-i02FixOMCostPerChp(runCy,DSBS,CHP,YTIME) = imDataChpPowGen(CHP,"FC","2010");
+i02FixOMCostPerChp(runCy,DSBS,CHP,YTIME) = imDataChpPowGen(CHP,"FC",YTIME);
 *---
 i02AvailRateChp(runCy,DSBS,CHP)          = imDataChpPowGen(CHP,"AVAIL","2010");
 *---
-i02VarCostChp(runCy,DSBS,CHP,YTIME)      = imDataChpPowGen(CHP,"VOM","2010");
+i02VarCostChp(runCy,DSBS,CHP,YTIME)      = imDataChpPowGen(CHP,"VOM",YTIME);
 *---
-i02BoiEffChp(runCy,CHP,YTIME)            = imDataChpPowGen(CHP,"BOILEFF","2010");
+i02BoiEffChp(runCy,CHP,YTIME)            = imDataChpPowGen(CHP,"BOILEFF",YTIME);
 *---
 i02ElaSub(runCy,DSBS) = imElaSubData(DSBS);
 *---
