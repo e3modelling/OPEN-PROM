@@ -21,7 +21,7 @@ Q04CapElecCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VmPriceElecInd(allCy,YTIME) / 
          sum(PGALL$CHPtoEON(CHP,PGALL), i04AvailRate(PGALL,YTIME)) / 
          i04UtilRateChpPlants(allCy,CHP,YTIME) /
-         smGwToTwhPerYear;  
+         smGwToTwhPerYear(YTIME);  
 $offtext
 
 *' The equation calculates the total electricity demand by summing the components of final energy consumption in electricity, final non-energy consumption in electricity,
@@ -47,7 +47,7 @@ Q04BsldEst(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
              sum(DSBS, i04BaseLoadShareDem(allCy,DSBS,YTIME)*V04ConsElec(allCy,DSBS,YTIME))*(1+imRateLossesFinCons(allCy,"ELC",YTIME))*
              (1 - VmImpNetEneBrnch(allCy,"ELC",YTIME)/(sum(DSBS, V04ConsElec(allCy,DSBS,YTIME))+VmLossesDistr(allCy,"ELC",YTIME)))
              + 0.5*VmConsFiEneSec(allCy,"ELC",YTIME)
-         ) / smTWhToMtoe / smGwToTwhPerYear;
+         ) / smTWhToMtoe / smGwToTwhPerYear(YTIME);
 
 *' This equation calculates the load factor of the entire domestic system as a sum of consumption in each demand subsector
 *' and the sum of energy demand in transport subsectors (electricity only). Those sums are also divided by the load factor
@@ -68,7 +68,7 @@ Q04PeakLoad(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VmPeakLoad(allCy,YTIME)
              =E=
          V04DemElecTot(allCy,YTIME) /
-         (V04LoadFacDom(allCy,YTIME)*smGwToTwhPerYear);
+         (V04LoadFacDom(allCy,YTIME)*smGwToTwhPerYear(YTIME));
 
 *' The equation calculates the estimated total electricity generation capacity by multiplying the previous year's total electricity generation capacity with
 *' the ratio of the current year's estimated electricity peak load to the previous year's electricity peak load. This provides an estimate of the required
@@ -192,7 +192,7 @@ Q04CostProdTeCHPreReplac(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                           ((imDisc(allCy,"PG",YTIME) * exp(imDisc(allCy,"PG",YTIME)*i04TechLftPlaType(allCy,PGALL))/
                           (exp(imDisc(allCy,"PG",YTIME)*i04TechLftPlaType(allCy,PGALL)) -1))
                             * i04GrossCapCosSubRen(allCy,PGALL,YTIME)* 1E3 * imCGI(allCy,YTIME)  + 
-                            i04FixOandMCost(allCy,PGALL,YTIME))/(8760*i04AvailRate(PGALL,YTIME))
+                            i04FixOandMCost(allCy,PGALL,YTIME))/(smGwToTwhPerYear(YTIME)*1000*i04AvailRate(PGALL,YTIME))
                            + (i04VarCost(PGALL,YTIME)/1E3 + sum(PGEF$PGALLtoEF(PGALL,PGEF), 
                            (VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)+
                             imCO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
@@ -423,7 +423,7 @@ Q04ProdElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04ProdElecCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         V04ProdElecCHP(allCy,CHP,YTIME)
                  =E=
-        V04CapElecCHP(allCy,CHP,YTIME) * smGwToTwhPerYear;
+        V04CapElecCHP(allCy,CHP,YTIME) * smGwToTwhPerYear(YTIME);
 
 *' This equation calculates the long-term power generation cost of technologies excluding climate policies.
 *' The cost is computed for a specific country, power generation technology , energy sector, and time period.
