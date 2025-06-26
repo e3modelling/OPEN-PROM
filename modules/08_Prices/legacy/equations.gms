@@ -21,7 +21,7 @@ Q08PriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF) $TIME(YTIME) $(no
                  =E=
          (VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1) +
           imCo2EmiFac(allCy,SBS,EF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,SBS),(VmCarVal(allCy,NAP,YTIME)))/1000
-         )$( not (ELCEF(EF) or HEATPUMP(EF) or ALTEF(EF)))
+         )$( not (ELCEF(EF) or HEATPUMP(EF) or ALTEF(EF)) or H2EF(EF) or sameas("H2F",EF))
          +
          (
           VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1)$(DSBS(SBS))$ALTEF(EF)
