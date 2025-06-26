@@ -1,7 +1,7 @@
 *' @title INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS EQUATIONS postsolve
 * Fix values of variables for the next time step
 
-* Industry Module Module
+* Industry Module
 
 *---
 VmConsElecNonSubIndTert.FX(runCyL,DSBS,YTIME)$TIME(YTIME) = VmConsElecNonSubIndTert.L(runCyL,DSBS,YTIME)$TIME(YTIME);
