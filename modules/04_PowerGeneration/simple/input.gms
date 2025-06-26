@@ -222,7 +222,7 @@ loop(runCy,PGALL,YTIME)$AN(YTIME) DO
          abort $(i04GrossCapCosSubRen(runCy,PGALL,YTIME)<0) "CAPITAL COST IS NEGATIVE", i04GrossCapCosSubRen
 ENDLOOP;
 *---
-i04ScaleEndogScrap(PGALL) = 0.45/PGALL.len;
+i04ScaleEndogScrap(PGALL) = 0.65/PGALL.len;
 *---
 i04DecInvPlantSched(runCy,PGALL,YTIME) = i04InvPlants(runCy,PGALL,YTIME);
 *---
