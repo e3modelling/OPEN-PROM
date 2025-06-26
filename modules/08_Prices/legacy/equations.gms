@@ -46,7 +46,7 @@ Q08PriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF) $TIME(YTIME) $(no
 Q08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $TIME(YTIME) $runCy(allCy))..
         V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)
           =E= 
-        i08WgtSecAvgPriFueCons(allCy,DSBS,EF) * VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME);
+        i08WgtSecAvgPriFueCons(allCy,DSBS,EF,YTIME) * VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME);
 
 *' The equation calculates the average fuel price per subsector. These average prices are used to further compute electricity prices in industry
 *' (using the OI "other industry" avg price), as well as the aggregate fuel demand (of substitutable fuels) per subsector.
