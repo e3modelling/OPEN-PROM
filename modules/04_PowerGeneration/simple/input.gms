@@ -8,7 +8,7 @@ $include"./iMinResPot.csv"
 $offdelim
 ;
 *---
-table i04AvailRate(PGALL,YTIME)	                   "Plant availability rate (1)"
+table i04AvailRate(allCy,PGALL,YTIME)	                   "Plant availability rate (1)"
 $ondelim
 $include"./iAvailRate.csv"
 $offdelim
