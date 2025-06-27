@@ -107,8 +107,8 @@ Q02IndxElecIndPrices(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         ;
 
 *' The equation computes the electricity production cost per Combined Heat and Power plant for a specific demand sector within a given subsector.
-*' The cost is determined based on various factors, including the discount rate, technical lifetime of CHP plants, capital cost, fixed O&M cost, availability rate,
-*' variable cost, and fuel-related costs. The equation provides a comprehensive assessment of the overall expenses associated with electricity production from CHP
+*' The cost is determined based on various factors, including the discount rate, technical lifetime of CHP plants, capital cost (EUR/kW), fixed O&M cost (EUR/kW), availability rate,
+*' variable cost(EUR/MWh), and fuel-related costs. The equation provides a comprehensive assessment of the overall expenses associated with electricity production from CHP
 *' plants, considering both the fixed and variable components, as well as factors such as carbon prices and CO2 emission factors.
 *' The resulting variable represents the electricity production cost per CHP plant and demand sector, expressed in Euro per kilowatt-hour (Euro/KWh).
 Q02CostElecProdCHP(allCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS) $runCy(allCy))..
@@ -218,7 +218,7 @@ $ontext
 Q02CostProdCHPDem(allCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS) $runCy(allCy))..
          V02CostProdCHPDem(allCy,DSBS,CHP,YTIME)
                  =E=
-         i02VarCostChp(allCy,DSBS,CHP,YTIME)/1E3
+         i02VarCostChp(allCy,DSBS,CHP,YTIME)/1000
                     + sum(PGEF$CHPtoEF(CHP,PGEF), (VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)+1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
                          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))))
                          *smTWhToMtoe/(i02BoiEffChp(allCy,CHP,YTIME)*VmPriceElecInd(allCy,YTIME)));

@@ -28,7 +28,7 @@ imTotFinEneDemSubBaseYr(runCy,NENSE,YTIME)   = SUM(EF$(SECTTECH(NENSE,EF)),imFue
 *---
 i02ExogDemOfBiomass(runCy,DOMSE,YTIME) = 0;
 *---
-i02LifChpPla(runCy,DSBS,CHP) = imDataChpPowGen(CHP,"2010","LFT");
+i02LifChpPla(runCy,DSBS,CHP) = imDataChpPowGen(CHP,"LFT","2010");
 *---
 $IFTHEN.calib %Calibration% == Calibration
 variable i02ElastNonSubElec(allCy,SBS,ETYPES,YTIME)        "Elasticities of Non Substitutable Electricity (1)";
@@ -45,15 +45,15 @@ $ELSE.calib
 i02ElastNonSubElec(runCy,SBS,ETYPES,YTIME) = i02ElastNonSubElecData(SBS,ETYPES,YTIME);
 $ENDIF.calib
 *---
-i02InvCostChp(runCy,DSBS,CHP,YTIME)      = imDataChpPowGen(CHP,"2010","IC");
+i02InvCostChp(runCy,DSBS,CHP,YTIME)      = imDataChpPowGen(CHP,"IC",YTIME);
 *---
-i02FixOMCostPerChp(runCy,DSBS,CHP,YTIME) = imDataChpPowGen(CHP,"2010","FC");
+i02FixOMCostPerChp(runCy,DSBS,CHP,YTIME) = imDataChpPowGen(CHP,"FC",YTIME);
 *---
-i02AvailRateChp(runCy,DSBS,CHP)          = imDataChpPowGen(CHP,"2010","AVAIL");
+i02AvailRateChp(runCy,DSBS,CHP)          = imDataChpPowGen(CHP,"AVAIL","2010");
 *---
-i02VarCostChp(runCy,DSBS,CHP,YTIME)      = imDataChpPowGen(CHP,"2010","VOM");
+i02VarCostChp(runCy,DSBS,CHP,YTIME)      = imDataChpPowGen(CHP,"VOM",YTIME);
 *---
-i02BoiEffChp(runCy,CHP,YTIME)            = imDataChpPowGen(CHP,"2010","BOILEFF");
+i02BoiEffChp(runCy,CHP,YTIME)            = imDataChpPowGen(CHP,"BOILEFF",YTIME);
 *---
 i02ElaSub(runCy,DSBS) = imElaSubData(DSBS);
 *---
