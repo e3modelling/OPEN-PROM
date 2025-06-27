@@ -24,7 +24,7 @@ V04ShareNewTechCCS.L(runCy,PGALL,TT) = 0.1;
 V04ShareNewTechCCS.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME))) = 0;
 V04ShareNewTechCCS.FX(runCy,PGALL,YTIME)$(AN(YTIME) $(NOT CCS(PGALL))) = 0;
 *---
-V04CostHourProdInvDecNoCCS.L(runCy,PGALL,HOUR,TT) = V04ShareNewTechNoCCS.L(runCy,PGALL,TT)*0.1 + sum(CCS$CCS_NOCCS(CCS,PGALL), V04ShareNewTechCCS.L(runCy,CCS,TT)*0.1);
+V04CostHourProdInvDecNoCCS.L(runCy,PGALL,TT) = V04ShareNewTechNoCCS.L(runCy,PGALL,TT)*0.1 + sum(CCS$CCS_NOCCS(CCS,PGALL), V04ShareNewTechCCS.L(runCy,CCS,TT)*0.1);
 *---
 V04NewInvElec.L(runCy,YTIME) = 0.1;
 V04NewInvElec.FX(runCy,YTIME)$(NOT AN(YTIME)) = 1;
@@ -36,7 +36,7 @@ ENDLOOP;
 V04NetNewCapElec.FX(runCy,"PGLHYD",YTIME)$TFIRST(YTIME) = +1E-10;
 *---
 V04CFAvgRen.L(runCy,PGALL,YTIME) = 0.1;
-V04CFAvgRen.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = i04AvailRate(PGALL,YTIME);
+V04CFAvgRen.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = i04AvailRate(runCy,PGALL,YTIME);
 *---
 V04RenTechMatMult.L(runCy,PGALL,YTIME) = 1;
 *---
@@ -44,8 +44,8 @@ V04ScalWeibullSum.L(runCy,PGALL,YTIME) = 2000;
 *---
 V04RenTechMatMultExpr.FX(runCy,PGALL,YTIME)$(not PGREN(PGALL)) = 0;
 *---
-V04CostHourProdInvDec.L(runCy,PGALL,HOUR,TT) = 0.0001;
-V04CostHourProdInvDec.FX(runCy,PGALL,HOUR,YTIME)$((NOT AN(YTIME))) = 0;
+V04CostHourProdInvDec.L(runCy,PGALL,TT) = 0.0001;
+V04CostHourProdInvDec.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME))) = 0;
 *---
 VmCapElecTotEst.FX(runCy,YTIME)$(not An(YTIME)) = sum(PGALL,imInstCapPastNonCHP(runCy,PGALL,YTIME)) + sum(CHP,imInstCapPastCHP(runCy,CHP,YTIME));
 *---
@@ -61,7 +61,7 @@ VmCapElec.L(runCy,PGALL,YTIME)$AN(YTIME) = imInstCapPastNonCHP(runCy,PGALL,"2021
 V04CapElec2.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = imInstCapPastNonCHP(runCy,PGALL,YTIME);
 V04CapElec2.L(runCy,PGALL,YTIME)$AN(YTIME) = imInstCapPastNonCHP(runCy,PGALL,"2021");
 V04CapOverall.FX(runCy,PGALL,"%fBaseY%") =  imInstCapPastNonCHP(runCy,PGALL,"%fBaseY%");
-V04CapElecNominal.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = imInstCapPastNonCHP(runCy,PGALL,YTIME)/i04AvailRate(PGALL,YTIME);
+V04CapElecNominal.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = imInstCapPastNonCHP(runCy,PGALL,YTIME) / i04AvailRate(runCy,PGALL,YTIME);
 *---
 V04IndxEndogScrap.FX(runCy,PGALL,YTIME)$(not an(YTIME) ) = 1;
 V04IndxEndogScrap.FX(runCy,PGSCRN,YTIME) = 1;            !! premature replacement it is not allowed for all new plants
