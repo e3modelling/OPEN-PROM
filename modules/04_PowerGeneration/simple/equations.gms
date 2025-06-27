@@ -178,7 +178,7 @@ Q04CostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
 Q04CostVarTechNotPGSCRN(allCy,PGALL,YTIME)$(time(YTIME) $(not PGSCRN(PGALL)) $runCy(allCy))..
          V04CostVarTechNotPGSCRN(allCy,PGALL,YTIME) 
               =E=
-          V04CostVarTech(allCy,PGALL,YTIME)**(-5);
+          V04CostVarTech(allCy,PGALL,YTIME)**(-2);
 
 *' The equation calculates the production cost of a technology 
 *' for a specific power plant and year. The equation involves various factors, including discount rates, technical
@@ -222,7 +222,7 @@ Q04IndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(al
                  =E=
          V04CostVarTechNotPGSCRN(allCy,PGALL,YTIME)/
          (V04CostVarTechNotPGSCRN(allCy,PGALL,YTIME)+(i04ScaleEndogScrap(PGALL)*
-         sum(PGALL2,V04CostProdTeCHPreReplacAvail(allCy,PGALL,PGALL2,YTIME)))**(-5));
+         sum(PGALL2,V04CostProdTeCHPreReplacAvail(allCy,PGALL,PGALL2,YTIME)))**(-2));
 
 *' The equation calculates the total electricity generation capacity excluding Combined Heat and Power plants for a specified year .
 *' It is derived by subtracting the sum of the capacities of CHP plants multiplied by a factor of 0.85 (assuming an efficiency of 85%) from the
