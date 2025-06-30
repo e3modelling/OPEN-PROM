@@ -21,14 +21,14 @@ Q04CapElecCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VmPriceElecInd(allCy,YTIME) / 
          sum(PGALL$CHPtoEON(CHP,PGALL), i04AvailRate(PGALL,YTIME)) / 
          i04UtilRateChpPlants(allCy,CHP,YTIME) /
-         smGwToTwhPerYear;  
+         smGwToTwhPerYear(YTIME);  
 
 * Lambda (λₜ) defines the exponential decay rate of the peak load over time.
 * It is calibrated to match total electricity production given peak and base load levels.
 * The equation ensures (by integrating) 
 * that the area under the decaying load curve equals total electricity demand.
 Q04Lambda(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         (1 - exp( -V04Lambda(allCy,YTIME)*smGwToTwhPerYear))  / (0.0001+V04Lambda(allCy,YTIME))
+         (1 - exp( -V04Lambda(allCy,YTIME)*smGwToTwhPerYear(YTIME)))  / (0.0001+V04Lambda(allCy,YTIME))
              =E=
          (V04DemElecTot(allCy,YTIME) - smGwToTwhPerYear*VmBaseLoad(allCy,YTIME))
          / (VmPeakLoad(allCy,YTIME) - VmBaseLoad(allCy,YTIME));
@@ -75,14 +75,14 @@ Q04LoadFacDom(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04PeakLoad(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VmPeakLoad(allCy,YTIME)
              =E=
-         V04DemElecTot(allCy,YTIME)/(V04LoadFacDom(allCy,YTIME)*smGwToTwhPerYear);
+         V04DemElecTot(allCy,YTIME)/(V04LoadFacDom(allCy,YTIME)*smGwToTwhPerYear(YTIME));
 
 *' This equation calculates the baseload corresponding to maximum load by multiplying the maximum load factor of electricity demand
 *' to the electricity peak load, minus the baseload corresponding to maximum load factor.
 Q04BaseLoadMax(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         (V04DemElecTot(allCy,YTIME)-V04BaseLoadMax(allCy,YTIME)*smGwToTwhPerYear)
+         (V04DemElecTot(allCy,YTIME)-V04BaseLoadMax(allCy,YTIME)*smGwToTwhPerYear(YTIME))
              =E=
-         i04MxmLoadFacElecDem(allCy,YTIME)*(VmPeakLoad(allCy,YTIME)-V04BaseLoadMax(allCy,YTIME))*smGwToTwhPerYear;  
+         i04MxmLoadFacElecDem(allCy,YTIME)*(VmPeakLoad(allCy,YTIME)-V04BaseLoadMax(allCy,YTIME))*smGwToTwhPerYear(YTIME);  
 
 *' This equation calculates the electricity base load utilizing exponential functions that include the estimated base load,
 *' the baseload corresponding to maximum load factor, and the parameter of baseload correction.
@@ -235,7 +235,7 @@ Q04CostProdTeCHPreReplac(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                           ((imDisc(allCy,"PG",YTIME) * exp(imDisc(allCy,"PG",YTIME)*i04TechLftPlaType(allCy,PGALL))/
                           (exp(imDisc(allCy,"PG",YTIME)*i04TechLftPlaType(allCy,PGALL)) -1))
                             * i04GrossCapCosSubRen(allCy,PGALL,YTIME)* 1E3 * imCGI(allCy,YTIME)  + 
-                            i04FixOandMCost(allCy,PGALL,YTIME))/(8760*i04AvailRate(PGALL,YTIME))
+                            i04FixOandMCost(allCy,PGALL,YTIME))/(smGwToTwhPerYear(YTIME)*1000*i04AvailRate(PGALL,YTIME))
                            + (i04VarCost(PGALL,YTIME)/1E3 + sum(PGEF$PGALLtoEF(PGALL,PGEF), 
                            (VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)+
                             imCO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
@@ -631,7 +631,7 @@ q04CostPowGenLonMin(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
              (imDisc(allCy,"PG",YTIME)*EXP(imDisc(allCy,"PG",YTIME)*i04TechLftPlaType(allCy,PGALL)) /
              (EXP(imDisc(allCy,"PG",YTIME)*i04TechLftPlaType(allCy,PGALL))-1)*i04GrossCapCosSubRen(allCy,PGALL,YTIME)*1000*imCGI(allCy,YTIME) +
              i04FixOandMCost(allCy,PGALL,YTIME))/i04AvailRate(PGALL,YTIME)
-             / (1000*smGwToTwhPerYear) +
+             / (1000*smGwToTwhPerYear(YTIME)) +
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
                  (i04VarCost(PGALL,YTIME)/1000+(VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)/1.2441+
 
