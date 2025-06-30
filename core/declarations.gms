@@ -56,6 +56,7 @@ imCapCostTech(allCy,SBS,EF,YTIME)                          "Capital Cost of tech
                                                                 !! - For Iron and Steel is expressed in kUS$2015/tn-of-steel
                                                                 !! - For Domestic Sectors is expressed in kUS$2015/toe-year
 imFuelConsPerFueSub(allCy,SBS,EF,YTIME)	                   "Fuel consumption per fuel and subsector (Mtoe)"
+smGwToTwhPerYear(YTIME)                                    "convert GW mean power into TWh/y, depending on whether it's a leap year"
 ;
 
 Equations
@@ -79,7 +80,6 @@ VmRenValue(YTIME)                                          "Renewable value (US$
 Scalars
 smTWhToMtoe                                                "TWh to Mtoe conversion factor" /0.086/
 smElecToSteRatioChp                                        "Technical maximum of electricity to steam ratio in CHP plants" /1.15/
-smGwToTwhPerYear                                           "convert GW mean power into TWh/y" /8.76/
 sIter                                                      "time step iterator" /0/
 sSolverTryMax                                              "maximum attempts to solve each time step" /%SolverTryMax%/
 sModelStat                                                 "helper parameter for solver status"
