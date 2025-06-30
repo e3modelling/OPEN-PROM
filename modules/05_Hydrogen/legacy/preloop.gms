@@ -18,13 +18,13 @@ V05DemGapH2.L(runCy,YTIME) = 2;
 V05DemGapH2.FX(runCy,YTIME)$(not An(YTIME)) = 1e-5;
 display V05DemGapH2.L;
 *---
-VmProdH2.L(runCy,H2TECH, YTIME) = 2;
+VmProdH2.L(runCy,H2TECH, YTIME) = 0.5;
 VmProdH2.LO(runCy,H2TECH, YTIME) = 0;
 VmProdH2.FX(runCy,H2TECH, YTIME)$(not An(YTIME)) = 1e-5;
 *VmProdH2.FX(runCy,H2TECH,"2010") = 1e-7;
 display VmProdH2.L;
 *---
-VmDemTotH2.L(runCy,YTIME) = 0.5;
+VmDemTotH2.L(runCy,YTIME) = 2;
 *VmDemTotH2.FX(runCy,YTIME)$(not An(YTIME)) = 1e-5;
 VmDemTotH2.FX(runCy,YTIME)$(not An(YTIME)) = sum(H2TECH, VmProdH2.L(runCy,H2TECH,YTIME));
 display VmDemTotH2.L;

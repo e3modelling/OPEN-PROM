@@ -26,7 +26,7 @@ Q05ScrapLftH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          (
          V05GapShareH2Tech1(allCy,H2TECH,YTIME-i05ProdLftH2(H2TECH,YTIME))*V05DemGapH2(allCy,YTIME-i05ProdLftH2(H2TECH,YTIME))
          /VmProdH2(allCy,H2TECH,YTIME-1)
-         )$(ord(YTIME)>17+i05ProdLftH2(H2TECH,YTIME)) + 0.1
+         )$(ord(YTIME)>11+i05ProdLftH2(H2TECH,YTIME)) !!+ 0.1
 ;
 
 *' This equation models the premature replacement of hydrogen production capacity. It adjusts for the need to replace aging
@@ -49,7 +49,7 @@ Q05PremRepH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                                                         +(1-1/i05AvailH2Prod(H2TECH,YTIME))*V05CostVarProdH2Tech(allCy,H2TECH,YTIME))
            )**(-i05WBLGammaH2Prod(allCy,YTIME))
 
-           +V05CostVarProdH2Tech(allCy,H2TECH,YTIME)**(-i05WBLGammaH2Prod(allCy,YTIME))
+           + V05CostVarProdH2Tech(allCy,H2TECH,YTIME)**(-i05WBLGammaH2Prod(allCy,YTIME))
          )
          )$H2TECHPM(H2TECH)
 ;
@@ -60,7 +60,7 @@ Q05PremRepH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q05CapScrapH2ProdTech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V05CapScrapH2ProdTech(allCy,H2TECH,YTIME)
          =E=
-         1-(1-V05ScrapLftH2Prod(allCy,H2TECH,YTIME))*(1-V05PremRepH2Prod(allCy,H2TECH,YTIME))
+         1-(1-V05ScrapLftH2Prod(allCy,H2TECH,YTIME))+(1-V05PremRepH2Prod(allCy,H2TECH,YTIME))
 ;
 
 *' The hydrogen demand gap equation defines the difference between the total hydrogen demand (calculated in Q05DemTotH2) and
@@ -99,7 +99,7 @@ Q05CostVarProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
             (sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME))))
 
             /i05EffH2Prod(allCy,H2TECH,YTIME)
-            )!!$(not H2TECHREN(H2TECH))
+            )$(H2TECHPM(H2TECH))
 ;
 
 *' This equation models the acceptance of carbon capture and storage (CCS) technologies in hydrogen production. 
@@ -184,7 +184,7 @@ Q05GapShareH2Tech1(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q05ProdH2(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VmProdH2(allCy,H2TECH,YTIME)
          =E=
-         0.0001+(1-V05CapScrapH2ProdTech(allCy,H2TECH,YTIME))*VmProdH2(allCy,H2TECH,YTIME-1)+ V05GapShareH2Tech1(allCy,H2TECH,YTIME)*V05DemGapH2(allCy,YTIME)
+         (1-V05CapScrapH2ProdTech(allCy,H2TECH,YTIME))*VmProdH2(allCy,H2TECH,YTIME-1)+ V05GapShareH2Tech1(allCy,H2TECH,YTIME)*V05DemGapH2(allCy,YTIME)
 ;
 
 *' This equation calculates the average cost of hydrogen production across all technologies in the system.
