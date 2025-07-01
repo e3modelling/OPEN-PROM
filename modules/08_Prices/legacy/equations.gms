@@ -16,7 +16,7 @@
 *' carbon values for all countries, electricity prices to industrial and residential consumers,
 *' efficiency values, and the total hydrogen cost per sector.The result of the equation is the fuel price per 
 *' subsector and fuel, adjusted based on changes in carbon values, electricity prices, efficiency, and hydrogen costs.
-Q08PriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF) $TIME(YTIME) $(not sameas("NUC",EF)) $runCy(allCy))..
+Q08PriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF) $TIME(YTIME) $(not sameas("BMSWAS",EF)) $(not sameas("NUC",EF)) $runCy(allCy))..
          VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)
                  =E=
          (VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1) +
