@@ -2,10 +2,9 @@
 *' @code
 
 
-* ---
-* HISTORICAL TECHNOLOGIES, Calibration of the historical years/base year in terms of production and fuel consumption of the existing routes BF-BOF, DR-EAF. scrap-EAF
-* ---
 
+* HISTORICAL TECHNOLOGIES, Calibration of the historical years/base year in terms of production and fuel consumption of the existing routes BF-BOF, DR-EAF. scrap-EAF
+*probably we can add an equation to check if the production of the 3 existing routes is equal to the total production included in the iProdDemandIs
 * This equation calculates the initial installed capacity for each existing historical technology in the base year.
 * It calculate the actual installed capacity (in Mt/year) as the total steel production demanded in the base year (this has to be changed with all the historical years) for the sector and dividing it by the historical capacity factor specific to each technology for that year.
 * This establishes the starting point for tracking the capacity of historical assets/vintage.
@@ -14,9 +13,8 @@ QInitialCapISHist(allCy,ISTECH_HIST,YTIME)$(runCy(allCy) and YTIME eq '2019')..
     iProdHistIS(allCy, ISTECH_HIST, YTIME) * (1 / iCapFacBaseYrIS(allCy,ISTECH_HIST,YTIME));
 
 
-* ---
-* ENDOGENOUS SCRAPPING AND COSTING LOGIC (Including CO2/Carbon Tax)
-* ---
+
+* ENDOGENOUS SCRAPPING AND COSTING LOGIC (Including CO2/Carbon Tax) too be revised
 
 * This equation calculates the annualized capital cost for Iron and Steel technologies.
 * It converts the upfront capital investment (iCapCosIS, adjusted by capital goods index imCGI) into an equivalent annual cost over the technical lifetime (iTechLftIS) of the technology, using a discount rate (imDisc).
@@ -48,7 +46,7 @@ QISTotProdCost(allCy,ISTECH_ALL,YTIME)$(runCy(allCy))..
         )
     );
 
-* This equation computes the endogenous scrapping index for historical Iron and Steel plants. NEED TO BE DOUBLECHECK
+* This equation computes the endogenous scrapping index for historical Iron and Steel plants. NEED TO BE DOUBLECHECKED
 * This index determines the likelihood or fraction of historical capacity being prematurely decommissioned (i.e. scrapped) due to its non-competitiveness compared to other available technologies (both historical and new).
 * It is calculated as the inverse of the historical technology's total production cost (raised to the power of -5 to amplify differences but this need to be checked and calibrate - divided by the sum of this value and a scaled sum of total production costs for all technologies. A lower cost (higher inverse) leads to a higher index, meaning less scrapping.
 QIndxEndogScrapIS(allCy,ISTECH_HIST,YTIME)$(runCy(allCy))..

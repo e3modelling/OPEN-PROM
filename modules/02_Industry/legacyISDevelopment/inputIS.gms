@@ -25,7 +25,7 @@ $include "./iCapFacBaseYrIS.csv"
 $offdelim
 
 
-* Decommissioning Schedule Input 
+* Decommissioning Plants Schedule as announced in country/regional plans 
 * External Calculation. It provides the exact amount of historical capacity to decommission each year.
 Table iDecomScheduleIS(allCy, ISTECH_HIST, YTIME) "Exogenous decommissioning schedule (Mt/year)";
 $ondelim
@@ -66,8 +66,6 @@ $ondelim
 $include "./iCo2EmFacIS.csv"
 $offdelim
 ;
-
-
 
 
 Parameter iInitialCapacityTotal(allCy, ISTECH_HIST) "Total installed capacity in base year (Mt)"; * This parameter will hold the total capacity stock in the base year.
