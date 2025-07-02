@@ -8,7 +8,7 @@ $include"./iMinResPot.csv"
 $offdelim
 ;
 *---
-table i04AvailRate(PGALL,YTIME)	                   "Plant availability rate (1)"
+table i04AvailRate(allCy,PGALL,YTIME)	                   "Plant availability rate (1)"
 $ondelim
 $include"./iAvailRate.csv"
 $offdelim
@@ -222,7 +222,7 @@ loop(runCy,PGALL,YTIME)$AN(YTIME) DO
          abort $(i04GrossCapCosSubRen(runCy,PGALL,YTIME)<0) "CAPITAL COST IS NEGATIVE", i04GrossCapCosSubRen
 ENDLOOP;
 *---
-i04ScaleEndogScrap(PGALL) = 0.035;
+i04ScaleEndogScrap(PGALL) = 0.65/PGALL.len;
 *---
 i04DecInvPlantSched(runCy,PGALL,YTIME) = i04InvPlants(runCy,PGALL,YTIME);
 *---
