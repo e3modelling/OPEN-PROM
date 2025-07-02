@@ -8,18 +8,18 @@
 
 
 * --- Demand and Historical Production Inputs ---
-Table iProdDemandIS(allCy, YTIME) "Exogenous annual steel demand projections (Mt)";
+Table iProdDemandIS(allCy, YTIME) "Exogenous annual steel demand projections (Mt)"
 $ondelim
 $include "./iProdDemandIS.csv"
 $offdelim
 
 * Historical production and capacity factor, used to calculate the initial capacity stock once.
-Table iProdHistIS(allCy, ISTECH_HIST, YTIME) "Historical annual steel production (Mt)";
+Table iProdHistIS(allCy, ISTECH_HIST, YTIME) "Historical annual steel production (Mt)"
 $ondelim
 $include "./iProdHistIS.csv"
 $offdelim
 
-Table iCapFacBaseYrIS(allCy, ISTECH_HIST, YTIME) "Historical capacity factor in the base year"; 
+Table iCapFacBaseYrIS(allCy, ISTECH_HIST, YTIME) "Historical capacity factor in the base year"
 $ondelim
 $include "./iCapFacBaseYrIS.csv"
 $offdelim
@@ -27,48 +27,48 @@ $offdelim
 
 * Decommissioning Plants Schedule as announced in country/regional plans 
 * External Calculation. It provides the exact amount of historical capacity to decommission each year.
-Table iDecomScheduleIS(allCy, ISTECH_HIST, YTIME) "Exogenous decommissioning schedule (Mt/year)";
+Table iDecomScheduleIS(allCy, ISTECH_HIST, YTIME) "Exogenous decommissioning schedule (Mt/year)"
 $ondelim
 $include "./iDecomScheduleIS.csv"
 $offdelim
 
 
 * Technology Cost and Performance Inputs 
-Table iCapCosIS(allCy,ISTECH_ALL,YTIME) "Capital Cost for new technology routes (kEuro/Mt/year capacity)";
+Table iCapCosIS(allCy,ISTECH_ALL,YTIME) "Capital Cost for new technology routes (kEuro/Mt/year capacity)"
 $ondelim
-$include "./iCapCosIS.csv"
+$include "./iCapCpstIS.csv"
 $offdelim
 
-Table iFixOMCostIS(allCy,ISTECH_ALL,YTIME) "Fixed O&M Cost per new technology type (kEuro/Mt/year capacity)";
+Table iFixOMCostIS(allCy,ISTECH_ALL,YTIME) "Fixed O&M Cost per new technology type (kEuro/Mt/year capacity)"
 $ondelim
 $include "./iFixOMCostIS.csv"
 $offdelim
 
-Table iVarOMCostIS(allCy,ISTECH_ALL,YTIME) "Variable O&M Cost per Plant Type (kEuro/Mt of steel)";
+Table iVarOMCostIS(allCy,ISTECH_ALL,YTIME) "Variable O&M Cost per Plant Type (kEuro/Mt of steel)"
 $ondelim
 $include "./iVarOMCostIS.csv"
 $offdelim
 
-Table iTechLftIS(allCy, ISTECH_ALL) "Technical Lifetime per plant type (years)";
+Table iTechLftIS(allCy, ISTECH_ALL) "Technical Lifetime per plant type (years)"
 $ondelim
 $include "./iTechLftIS.csv"
 $offdelim
 
-Table iAvailRateIS(ISTECH_ALL,YTIME) "Plant availability rate (unitless)";
+Table iAvailRateIS(ISTECH_ALL,YTIME) "Plant availability rate (unitless)"
 $ondelim
 $include "./iAvailRateIS.csv"
 $offdelim
 
 
 * Emissions. this needs to be eliminated once the module is linked to the entire industry
-Table iCo2EmFacIS(allCy,EF,YTIME) "CO2 Emission Factor by Fuel (tCO2 per Mtoe)";
+Table iCo2EmFacIS(allCy,EF,YTIME) "CO2 Emission Factor by Fuel (tCO2 per Mtoe)"
 $ondelim
 $include "./iCo2EmFacIS.csv"
 $offdelim
 ;
 
 
-Parameter iInitialCapacityTotal(allCy, ISTECH_HIST) "Total installed capacity in base year (Mt)"; * This parameter will hold the total capacity stock in the base year.
+Parameter iInitialCapacityTotal(allCy, ISTECH_HIST) "Total installed capacity in base year (Mt)"; !! This parameter will hold the total capacity stock in the base year.
 
 * This calculation runs once during model setup. It sums up all historical vintages (calculated from production and capacity factor) to get the total stock value
 * needed for the recursive capacity equation.
