@@ -6,7 +6,6 @@ Equations
 Q04CapElec2(allCy,PGALL,YTIME)	                           "Compute electricity generation capacity"
 Q04CapElecNominal(allCy,PGALL,YTIME)	                   "Compute nominal electricity generation capacity"
 Q04RenTechMatMultExpr(allCy,PGALL,YTIME)                   "Renewable power capacity over potential (1)"
-*Q04CapElecCHP(allCy,CHP,YTIME)                             "Compute CHP electric capacity"	
 Q04BsldEst(allCy,YTIME)	                                   "Compute estimated base load"
 Q04CostHourProdInvDec(allCy,PGALL,YTIME)                    "Compute production cost used in investment decisions"
 Q04CostHourProdInvDecNoCCS(allCy,PGALL,YTIME)               "Compute production cost used in investment decisions"
@@ -42,8 +41,12 @@ Q04CostPowGenLonNoClimPol(allCy,ESET,YTIME)                "Compute long term po
 *q04CostPowGenAvgShrt(allCy,ESET,YTIME)	                   "Compute short term power generation cost"
 Q04ConsElec(allCy,DSBS,YTIME)                              "Compute electricity consumption per final demand sector"
 Q04LoadFacDom(allCy,YTIME)                                 "Compute electricity load factor for entire domestic system"	
+$ifthen.calib %Calibration% == off
 Q04DemElecTot(allCy,YTIME)                                 "Compute total electricity demand (TWh)"
+*Q04CapElecCHP(allCy,CHP,YTIME)                             "Compute CHP electric capacity"	
+$endif.calib
 Q04ProdElecCHP(allCy,CHP,YTIME)                            "Compute CHP electricity production (TWh)"
+Q04ProdElecEstCHP(allCy,CHP,YTIME)	                           "Estimate the electricity of CHP Plants"	
 
 *'                **Interdependent Equations**
 Q04ProdElec(allCy,PGALL,YTIME)                             "Compute electricity production from power generation plants"
@@ -99,6 +102,7 @@ V04LoadFacDom(allCy,YTIME)                                 "Electricity load fac
 V04ProdElecCHP(allCy,CHP,YTIME)	                           "CHP electricity production (TWh)"
 V04ProdElecReqTot(allCy,YTIME)	                           "Total required electricity production (TWh)"
 V04DemElecTot(allCy,YTIME)                                 "Total electricity demand (TWh)"
+V04ProdElecEstCHP(allCy,CHP,YTIME)	                           "Estimate the electricity of CHP Plants (1)"	
 
 *'                **Interdependent Variables**	
 VmProdElec(allCy,PGALL,YTIME)                              "Electricity production (TWh)"	

@@ -84,6 +84,7 @@ createRunFolder <- function(scenario = "default") {
   file.copy("conopt.opt", to = runfolder)
   file.copy("git_diff.txt", to = runfolder)
   file.copy("data", to = runfolder, recursive = TRUE)
+  file.copy("targets", to = runfolder, recursive = TRUE)
   file.copy("core", to = runfolder, recursive = TRUE)
   file.copy("modules", to = runfolder, recursive = TRUE)
 
@@ -207,7 +208,7 @@ if (task == 0) {
 
   if (withRunFolder) {
     file.copy("data", to = "../../", recursive = TRUE) # Copying generated data to parent folder for future runs
-
+    file.copy("targets", to = "../../", recursive = TRUE)
     if (withSync) syncRun()
   }
 } else if (task == 2) {
@@ -234,7 +235,8 @@ if (task == 0) {
 
     shell(paste0(gams,' main.gms --DevMode=0 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 | tee full.log'))
 
-    if(withRunFolder) file.copy("data", to = '../../', recursive = TRUE)  
+    if(withRunFolder) file.copy("data", to = '../../', recursive = TRUE)
+    if(withRunFolder) file.copy("targets", to = '../../', recursive = TRUE) 
 
     if(withRunFolder && withReport) {
 
@@ -260,7 +262,7 @@ if (task == 0) {
   shell(
     paste0(
       gams,
-      " main.gms --DevMode=0 --Calibration=MatCalibration --fStartY=2021 --fEndY=2021 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log"
+      " main.gms --DevMode=0 --Calibration=MatCalibration --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log"
     )
   )
 
