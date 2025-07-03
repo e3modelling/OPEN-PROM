@@ -22,8 +22,8 @@ qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
   SUM(
     (PGALL),
     SQR(
-      VmCapElec(allCy,PGALL,YTIME) - 
-      imInstCapPastNonCHP(allCy,PGALL,YTIME) 
+      V04SharePowPlaNewEq(allCy,PGALL,YTIME) - 
+      t04SharePowPlaNewEq(allCy,PGALL,YTIME)
     )
   );
 $ELSE.calib qDummyObj.. vDummyObj =e= 1;
