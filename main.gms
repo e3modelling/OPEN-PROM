@@ -174,13 +174,13 @@
 *' *** Generating an execution profile
 option profile = 0;
 *' *** Number of columns that are listed for each variable in the column listing
-option limcol = 1000;
+option limcol = 0;
 *' *** Number of rows that are listed for each equation in the equation listing
-option limrow = 1000;
+option limrow = 0;
 *' *** Save a GDX file after each solve, containing all computed variables (0 off, 1 on)
 option savepoint = 0;
 *' *** Print solution in .lst file (on/off)
-option solprint = on;
+option solprint = off;
 
 *' *** "dollar" ($) commands section: define GAMS flags & code control & compilation-time options
 *  *** onDollar activates printing of the $commands to .lst file
@@ -202,7 +202,7 @@ $setGlobal MatFacCalibration off
 $setGlobal useCalibData on
 
 *' *** MAgPIE link
-$setglobal link2MAgPIE off  !! on or off for soft link with MAgPIE
+$setglobal link2MAgPIE off  !! on or off For soft link with MAgPIE
 
 *' *** Maximum number of solver attempts
 $evalGlobal SolverTryMax 4
@@ -222,7 +222,7 @@ $evalGlobal fPeriodOfYears 1
 
 $evalGlobal fStartHorizon 2010
 $evalGlobal fEndHorizon 2100
-$evalGlobal fEndY 2021
+$evalGlobal fEndY 2100
 $evalGlobal fStartY 2021
 $evalGlobal fBaseY %fStartY% - %fPeriodOfYears%
 $evalGlobal fScenario 1 !! Setting the model scenario: 0 is No carbon price, 1 is NPi_Default, 2 is 1.5C and 3 is 2C
