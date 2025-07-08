@@ -3,7 +3,7 @@ library(jsonlite)
 
 # Various flags used to modify script behavior
 withRunFolder <- TRUE # Set to FALSE to disable model run folder creation and file copying
-withSync <- FALSE # Set to FALSE to disable model run sync to SharePoint
+withSync <- TRUE # Set to FALSE to disable model run sync to SharePoint
 withReport <- TRUE # Set to FALSE to disable the report output script execution (applicable to research mode only)
 uploadGDX <- TRUE # Set to TRUE to include GDX files in the uploaded archive
 
