@@ -10,6 +10,28 @@
 
 *' Power Generation
 
+*' This equation calculates the estimated electricity generation of Combined Heat and Power plantsin a specific countryand time period.
+*' The estimation is based on the fuel consumption of CHP plants, their electricity prices, the maximum share of CHP electricity in total demand, and the overall
+*' electricity demand. The equation essentially estimates the electricity generation of CHP plants by considering their fuel consumption, electricity prices, and the maximum
+*' share of CHP electricity in total demand. The square root expression ensures that the estimated electricity generation remains non-negative.
+Q04ProdElecEstCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+        V04ProdElecEstCHP(allCy,CHP,YTIME) 
+            =E=
+        (
+          (
+            1/smTWhToMtoe * 
+            sum((INDDOM), VmConsFuel(allCy,INDDOM,CHP,YTIME)) *
+            VmPriceElecInd(allCy,YTIME)
+          ) + 
+          i04MxmShareChpElec(allCy,YTIME) * V04DemElecTot(allCy,YTIME) - 
+          
+          SQRT( SQR((1/smTWhToMtoe * sum((INDDOM), VmConsFuel(allCy,INDDOM,CHP,YTIME)) * 
+          VmPriceElecInd(allCy,YTIME)) - 
+          i04MxmShareChpElec(allCy,YTIME)*V04DemElecTot(allCy,YTIME)) )  
+        )/2 +
+        SQR(1E-4);
+
+$ifthen.calib %Calibration% == off
 $ontext
 *' This equation computes the electric capacity of Combined Heat and Power (CHP) plants. The capacity is calculated in gigawatts (GW) and is based on several factors,
 *' including the consumption of fuel in the industrial sector, the electricity prices in the industrial sector, the availability rate of power
@@ -19,7 +41,7 @@ Q04CapElecCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          =E=
          sum(INDDOM,VmConsFuel(allCy,INDDOM,CHP,YTIME)) * 1/smTWhToMtoe *
          VmPriceElecInd(allCy,YTIME) / 
-         sum(PGALL$CHPtoEON(CHP,PGALL), i04AvailRate(PGALL,YTIME)) / 
+         sum(PGALL$CHPtoEON(CHP,PGALL), i04AvailRate(allCY,PGALL,YTIME)) / 
          i04UtilRateChpPlants(allCy,CHP,YTIME) /
          smGwToTwhPerYear(YTIME);  
 $offtext
@@ -28,7 +50,6 @@ $offtext
 *' distribution losses, and final consumption in the energy sector for electricity, and then subtracting net imports. The result is normalized using a conversion factor 
 *' which converts terawatt-hours (TWh) to million tonnes of oil equivalent (Mtoe). The formula provides a comprehensive measure of the factors contributing
 *' to the total electricity demand.
-
 Q04DemElecTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V04DemElecTot(allCy,YTIME)
              =E=
@@ -36,7 +57,7 @@ Q04DemElecTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          ( VmConsFinEneCountry(allCy,"ELC",YTIME) + VmConsFinNonEne(allCy,"ELC",YTIME) + VmLossesDistr(allCy,"ELC",YTIME)
            + VmConsFiEneSec(allCy,"ELC",YTIME) - VmImpNetEneBrnch(allCy,"ELC",YTIME)
          );
-
+$endif.calib
 *' This equation computes the estimated base load as a quantity dependent on the electricity demand per final sector,
 *' as well as the baseload share of demand per sector, the rate of losses for final Consumption, the net imports,
 *' distribution losses and final consumption in energy sector.
@@ -330,8 +351,10 @@ Q04CapElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
           i04PlantDecomSched(allCy,PGALL,YTIME) * i04AvailRate(allCy,PGALL,YTIME)
         ) -
         (
-          (VmCapElec(allCy,PGALL,YTIME-1)-i04PlantDecomSched(allCy,PGALL,YTIME-1)) * 
-          i04AvailRate(allCy,PGALL,YTIME)*(1/i04TechLftPlaType(allCy,PGALL))
+          (
+            VmCapElec(allCy,PGALL,YTIME-1) - 
+            i04PlantDecomSched(allCy,PGALL,YTIME-1) * i04AvailRate(allCy,PGALL,YTIME)
+          ) * (1/i04TechLftPlaType(allCy,PGALL))
         )$PGSCRN(PGALL);
 
 Q04CapElecNominal(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
@@ -411,7 +434,7 @@ Q04CapOverall(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04ProdElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         VmProdElec(allCy,PGALL,YTIME)
               =E=
-        (V04DemElecTot(allCy,YTIME) - sum(CHP, V04ProdElecCHP(allCy,CHP,YTIME))) /
+        (V04DemElecTot(allCy,YTIME) - sum(CHP, V04ProdElecEstCHP(allCy,CHP,YTIME))) /
         sum(PGALL2, V04CapElec2(allCy,PGALL2,YTIME)) *
         V04CapElec2(allCy,PGALL,YTIME);
 
@@ -454,7 +477,7 @@ Q04CostPowGenAvgLng(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
               =E=
         (
           SUM(PGALL, VmProdElec(allCy,PGALL,YTIME) * V04CostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME)) +
-          sum(CHP, VmCostElcAvgProdCHP(allCy,CHP,YTIME) * V04ProdElecCHP(allCy,CHP,YTIME))
+          sum(CHP, VmCostElcAvgProdCHP(allCy,CHP,YTIME) * V04ProdElecEstCHP(allCy,CHP,YTIME))
         ) / 
         V04DemElecTot(allCy,YTIME); 
 
@@ -491,7 +514,7 @@ Q04CostPowGenLonNoClimPol(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                  =E=
          (
          SUM(PGALL, (VmProdElec(allCy,PGALL,YTIME))*V04CostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)) +
-         sum(CHP, VmCostElcAvgProdCHP(allCy,CHP,YTIME)*V04ProdElecCHP(allCy,CHP,YTIME))
+         sum(CHP, VmCostElcAvgProdCHP(allCy,CHP,YTIME)*V04ProdElecEstCHP(allCy,CHP,YTIME))
          ) /
          (V04DemElecTot(allCy,YTIME));  
 
