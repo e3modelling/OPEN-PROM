@@ -1,6 +1,15 @@
 *' @title Prices Inputs
 *' @code
 
+
+*---
+$IFTHEN %link2MAgPIE% == on
+table iPricesMagpie(allCy,SBS,YTIME)	"Prices of biomass per subsector (k$2015/toe)"
+$ondelim
+$include "./iPrices_magpie.csv"
+$offdelim
+;
+$ENDIF
 *---
 Parameters
 i08DiffFuelsInSec(SBS)                   "Auxiliary parameter holding the number of different fuels in a sector"
