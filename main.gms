@@ -200,6 +200,10 @@ $offOrder
 $setGlobal Calibration off !! MatCalibration/Calibration/off
 $setGlobal MatFacCalibration off 
 $setGlobal useCalibData on
+
+*' *** MAgPIE link
+$setglobal link2MAgPIE off  !! on or off For soft link with MAgPIE
+
 *' *** Maximum number of solver attempts
 $evalGlobal SolverTryMax 4
 *' *** Setting research mode (0) or development mode (1) to modify settings and parameters accordingly
