@@ -32,13 +32,19 @@ $include"./iDataElecProdCHP.csv"
 $offdelim
 ;
 *---
-$ontext
-table i04DemElecTot(allCy, YTIME)           "Electricity demand for china from MaGPie (TWh)"
+$ifthen.calib %Calibration% == MatCalibration
+table t04DemElecTot(allCy, YTIME)                   "Secondary energy electricity - target demand (TWh)"
 $ondelim
-$include"./iDemElecTot.csv"
+$include "../targets/tDemand.csv"
 $offdelim
 ;
-$offtext
+*---
+table t04SharePowPlaNewEq(allCy,PGALL,YTIME)    "Ratio of newly added capacity smoothed over 10-year period ()"
+$ondelim
+$include "../targets/tShares.csv"
+$offdelim
+;
+$endif.calib
 *---
 table i04DataTechLftPlaType(PGALL, PGECONCHAR)     "Data for power generation costs (various)"
 $ondelim
