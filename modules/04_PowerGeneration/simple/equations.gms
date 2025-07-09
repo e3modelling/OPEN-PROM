@@ -186,7 +186,7 @@ Q04CostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
         i04VarCost(PGALL,YTIME)/1E3 + 
         sum(
           PGEF$PGALLtoEF(PGALL,PGEF),
-          (VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)/1.2441 +
+          (VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME) +
           imCO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
           (1-imCO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)
           *(sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))))
@@ -195,7 +195,7 @@ Q04CostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
 
 *' The equation calculates the variable for a specific
 *' power plant and year when the power plant is not subject to endogenous scrapping. The calculation involves raising the variable
-*' cost of the technology for the specified power plant and year to the power of -5.
+*' cost of the technology for the specified power plant and year to the power of -2.
 Q04CostVarTechNotPGSCRN(allCy,PGALL,YTIME)$(time(YTIME) $(not PGSCRN(PGALL)) $runCy(allCy))..
          V04CostVarTechNotPGSCRN(allCy,PGALL,YTIME) 
               =E=
@@ -237,7 +237,7 @@ Q04CostProdTeCHPreReplacAvail(allCy,PGALL,PGALL2,YTIME)$(TIME(YTIME)$(runCy(allC
 *' The equation computes the endogenous scrapping index for power generation plants  during the specified year .
 *' The index is calculated as the variable cost of technology excluding power plants flagged as not subject to scrapping 
 *' divided by the sum of this variable cost and a scaled value based on the scale parameter for endogenous scrapping . The scale
-*' parameter is applied to the sum of full costs and raised to the power of -5. The resulting index is used to determine the endogenous scrapping of power plants.
+*' parameter is applied to the sum of full costs and raised to the power of -2. The resulting index is used to determine the endogenous scrapping of power plants.
 Q04IndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(allCy))..
          V04IndxEndogScrap(allCy,PGALL,YTIME)
                  =E=
