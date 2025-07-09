@@ -116,7 +116,7 @@ Q02CostElecProdCHP(allCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS) $runCy(allCy
                  =E=
                     ( ( imDisc(allCy,"PG",YTIME) * exp(imDisc(allCy,"PG",YTIME)*i02LifChpPla(allCy,DSBS,CHP))
                         / (exp(imDisc(allCy,"PG",YTIME)*i02LifChpPla(allCy,DSBS,CHP)) -1))
-                      * i02InvCostChp(allCy,DSBS,CHP,YTIME)* 1000 * imCGI(allCy,YTIME)  + i02FixOMCostPerChp(allCy,DSBS,CHP,YTIME)
+                      * i02InvCostChp(allCy,DSBS,CHP,YTIME) * imCGI(allCy,YTIME)  + i02FixOMCostPerChp(allCy,DSBS,CHP,YTIME)
                     )/(i02AvailRateChp(allCy,DSBS,CHP)*(smGwToTwhPerYear(YTIME)))/1000
                     + i02VarCostChp(allCy,DSBS,CHP,YTIME)/1000
                     + sum(PGEF$CHPtoEF(CHP,PGEF), (VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)+0.001*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
