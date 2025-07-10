@@ -20,7 +20,7 @@ Q04ProdElecEstCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         (
           (
             1/smTWhToMtoe * 
-            sum((INDDOM), VmConsFuel(allCy,INDDOM,CHP,YTIME)) *
+            sum(INDDOM, VmConsFuel(allCy,INDDOM,CHP,YTIME)) *
             VmPriceElecInd(allCy,YTIME)
           ) + 
           i04MxmShareChpElec(allCy,YTIME) * V04DemElecTot(allCy,YTIME) - 
@@ -477,9 +477,9 @@ Q04CostPowGenAvgLng(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
               =E=
         (
           SUM(PGALL, VmProdElec(allCy,PGALL,YTIME) * V04CostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME)) +
-          sum(CHP, VmCostElcAvgProdCHP(allCy,CHP,YTIME) * V04ProdElecEstCHP(allCy,CHP,YTIME))
+          0*sum(CHP, VmCostElcAvgProdCHP(allCy,CHP,YTIME) * V04ProdElecEstCHP(allCy,CHP,YTIME))
         ) / 
-        V04DemElecTot(allCy,YTIME); 
+        (V04DemElecTot(allCy,YTIME) - sum(CHP,V04ProdElecEstCHP(allCy,CHP,YTIME))); 
 
 *' The equation represents the long-term average power generation cost excluding climate policies.
 *' It calculates the cost in Euro2005 per kilowatt-hour (kWh) for a specific combination of parameters. The equation is composed 
@@ -514,9 +514,9 @@ Q04CostPowGenLonNoClimPol(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                  =E=
          (
          SUM(PGALL, (VmProdElec(allCy,PGALL,YTIME))*V04CostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)) +
-         sum(CHP, VmCostElcAvgProdCHP(allCy,CHP,YTIME)*V04ProdElecEstCHP(allCy,CHP,YTIME))
+         0*sum(CHP, VmCostElcAvgProdCHP(allCy,CHP,YTIME)*V04ProdElecEstCHP(allCy,CHP,YTIME))
          ) /
-         (V04DemElecTot(allCy,YTIME));  
+         (V04DemElecTot(allCy,YTIME) - sum(CHP,V04ProdElecEstCHP(allCy,CHP,YTIME)));  
 
 *' This equation establishes a common variable (with arguments) for the electricity consumption per demand subsector of INDUSTRY, [DOMESTIC/TERTIARY/RESIDENTIAL] and TRANSPORT.
 *' The electricity consumption of the demand subsectors of INDUSTRY & [DOMESTIC/TERTIARY/RESIDENTIAL] is provided by the consumption of Electricity as a Fuel.
