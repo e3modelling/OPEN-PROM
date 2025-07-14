@@ -60,29 +60,28 @@ Q08PriceFuelAvgSub(allCy,DSBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                  =E=
          sum(EF$SECTTECH(DSBS,EF), V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME));         
 
-*' The equation calculates the electricity price for industrial and residential consumers
-*' in a given scenario, energy set, and year. The electricity price is based on the previous year's production costs, incorporating
-*' various factors such as fuel prices, factors affecting electricity prices to consumers, and long-term average
-*' power generation costs. The equation is structured to handle different energy sets. It calculates the electricity
-*' price for industrial consumers and residential consumers separately. The electricity price is influenced by fuel prices,
-*' factors affecting electricity prices, and long-term average power generation costs. It provides a comprehensive representation of the
-*' factors contributing to the electricity price for industrial and residential consumers in the specified scenario, energy set, and year.
-Q08PriceElecIndResConsu(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..  !! The electricity price is based on previous year's production costs
-        VmPriceElecIndResConsu(allCy,ESET,YTIME)
+*' Calculates electricity price for industrial and residential consumers
+*' using previous year's fuel prices. For the first year, the price is directly based on fuel data.
+*' For later years, the price is scaled using a ratio of 2021 electricity price to 2021 average generation cost
+*' to ensure smoothness between historical and non-historical years.
+Q08PriceElecIndResConsu(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+        VmPriceElecIndResConsu(allCy,ESET,YTIME) !!Cost final electricity
                  =E=
         (1 + i08VAT(allCy,YTIME)) *
         (
            (
-             (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
-             (
-                VmCostPowGenAvgLng(allCy,"i",YTIME-1)
-              )$(not TFIRST(YTIME-1))
+            (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
+            (
+              VmPriceElecIndResConsu(allCy,"i","%fStartY%") / VmCostPowGenAvgLng(allCy, "%fStartY%") *
+              VmCostPowGenAvgLng(allCy,YTIME-1) !!Cost secondary energy electricity
+            )$(not TFIRST(YTIME-1))
            )$ISET(ESET)
         +
            (
              (VmPriceFuelSubsecCarVal(allCy,"HOU","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
              (
-               VmCostPowGenAvgLng(allCy,"r",YTIME-1) 
+               VmPriceElecIndResConsu(allCy,"r","%fStartY%") / VmCostPowGenAvgLng(allCy, "%fStartY%") *
+               VmCostPowGenAvgLng(allCy,YTIME-1) 
              )$(not TFIRST(YTIME-1))
            )$RSET(ESET)
         );

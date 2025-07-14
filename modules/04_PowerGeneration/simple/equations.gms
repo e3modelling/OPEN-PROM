@@ -454,16 +454,16 @@ Q04ProdElecCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' considering factors such as discount rates, technological lifetimes, and subsidies. The resulting cost is adjusted based on the availability
 *' rate and conversion factors. The equation provides a comprehensive calculation of the long-term cost associated with power generation technologies,
 *' excluding climate policy-related costs.
-Q04CostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-      V04CostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME)
+Q04CostPowGenLngTechNoCp(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+      V04CostPowGenLngTechNoCp(allCy,PGALL,YTIME)
                  =E=
       (imDisc(allCy,"PG",YTIME)*EXP(imDisc(allCy,"PG",YTIME)*i04TechLftPlaType(allCy,PGALL)) /
       (EXP(imDisc(allCy,"PG",YTIME)*i04TechLftPlaType(allCy,PGALL))-1)*i04GrossCapCosSubRen(allCy,PGALL,YTIME)*1000*imCGI(allCy,YTIME) +
       i04FixOandMCost(allCy,PGALL,YTIME)
       ) /i04AvailRate(allCy,PGALL,YTIME)
-              / (1000*(6$ISET(ESET)+4$RSET(ESET))) +
+              / (1000*smGwToTwhPerYear(YTIME)) +
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
-                 (i04VarCost(PGALL,YTIME)/1000+(VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)/1.2441+
+                 (i04VarCost(PGALL,YTIME)/1000+(VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)+
                  imCO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
                  (1-imCO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
                  (sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))))
@@ -472,11 +472,11 @@ Q04CostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' This equation computes the long-term average power generation cost. It involves summing the long-term average power generation costs for different power generation
 *' plants and energy forms, considering the specific characteristics and costs associated with each. The result is the average power generation cost per unit of
 *' electricity consumed in the given time period.
-Q04CostPowGenAvgLng(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-        VmCostPowGenAvgLng(allCy,ESET,YTIME)
+Q04CostPowGenAvgLng(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+        VmCostPowGenAvgLng(allCy,YTIME)
               =E=
         (
-          SUM(PGALL, VmProdElec(allCy,PGALL,YTIME) * V04CostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME)) +
+          SUM(PGALL, VmProdElec(allCy,PGALL,YTIME) * V04CostPowGenLngTechNoCp(allCy,PGALL,YTIME)) +
           0*sum(CHP, VmCostElcAvgProdCHP(allCy,CHP,YTIME) * V04ProdElecEstCHP(allCy,CHP,YTIME))
         ) / 
         (V04DemElecTot(allCy,YTIME) - sum(CHP,V04ProdElecEstCHP(allCy,CHP,YTIME))); 
@@ -488,22 +488,20 @@ Q04CostPowGenAvgLng(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' CO2 capture rates, and carbon prices. The equation incorporates a summation over different plant fuel types and considers the cost curve for CO2 sequestration.
 *' The final result is the average power generation cost per unit of electricity produced, taking into account various economic and technical parameters.
 Q04CostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V04CostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)
+        V04CostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)
                  =E=
-             (imDisc(allCy,"PG",YTIME)*EXP(imDisc(allCy,"PG",YTIME)*i04TechLftPlaType(allCy,PGALL)) /
-             (EXP(imDisc(allCy,"PG",YTIME)*i04TechLftPlaType(allCy,PGALL))-1)*i04GrossCapCosSubRen(allCy,PGALL,YTIME)*1000*imCGI(allCy,YTIME) +
-             i04FixOandMCost(allCy,PGALL,YTIME))/i04AvailRate(allCy,PGALL,YTIME)
-             / (1000*(7.25$ISET(ESET)+2.25$RSET(ESET))) +
+        (imDisc(allCy,"PG",YTIME)*EXP(imDisc(allCy,"PG",YTIME)*i04TechLftPlaType(allCy,PGALL)) /
+        (EXP(imDisc(allCy,"PG",YTIME)*i04TechLftPlaType(allCy,PGALL))-1)*i04GrossCapCosSubRen(allCy,PGALL,YTIME)*1000*imCGI(allCy,YTIME) +
+        i04FixOandMCost(allCy,PGALL,YTIME)
+        )/i04AvailRate(allCy,PGALL,YTIME)
+             / (1000*smGwToTwhPerYear(YTIME)*(0.75$ISET(ESET)+0.25$RSET(ESET))) +
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
-                 (i04VarCost(PGALL,YTIME)/1000+((VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)-imEffValueInDollars(allCy,"PG",ytime)/1000-imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
-                 sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))/1000 )/1.2441+
-
+                 (i04VarCost(PGALL,YTIME)/1000+((VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)-
+                 imEffValueInDollars(allCy,"PG",ytime)/1000-imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
+                 sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))/1000 )+
                  imCO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
-
                  (1-imCO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
-
                  (sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))))
-
                  *smTWhToMtoe/imPlantEffByType(allCy,PGALL,YTIME)));
 
 *' Compute long term power generation cost excluding climate policies by summing the Electricity production multiplied by Long-term average power generation cost excluding 
