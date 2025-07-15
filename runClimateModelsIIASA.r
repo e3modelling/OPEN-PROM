@@ -13,7 +13,7 @@ setEnvironmentVariables <- function(model) {
     Sys.setenv(CICEROSCM_WORKER_NUMBER = "4")
     Sys.setenv(CICEROSCM_WORKER_ROOT_DIR = tempdir())
   } else if (model == "magicc") {
-    rootDefault <- normalizePath(file.path(scriptDir, "climate-assessment", "magicc-files"))
+    rootDefault <- file.path(scriptDir, "climate-assessment", "magicc-files")
     rootDir <- Sys.getenv("MAGICC_ROOT_FILES_DIR", unset = rootDefault)
     Sys.setenv(MAGICC_ROOT_FILES_DIR = rootDir)
     Sys.setenv(MAGICC_EXECUTABLE_7 = file.path(rootDir, "bin", "magicc"))
@@ -95,9 +95,10 @@ runAssessment <- function(model, emissionsFile, outputDir) {
 
 # ------------------- Load and Compare Results ----------------------
 
-loadResults <- function(outputDir, emissionsFile) {
+loadResults <- function(model, emissionsFile, outputDir) {
   base <- tools::file_path_sans_ext(basename(emissionsFile))
   fileOut <- file.path(outputDir, paste0(base, "_alloutput.xlsx"))
+  config <- getModelConfig(model, emissionsFile, outputDir)
   
   if (!file.exists(fileOut)) {
     stop("Missing output file: ", fileOut)
@@ -105,10 +106,9 @@ loadResults <- function(outputDir, emissionsFile) {
   
   outputFile <- read_excel(fileOut)
   output <- as.quitte(outputFile) %>% as.magpie()
-  
-  expectedFile <- file.path(scriptDir, "climate-assessment", "tests", "test-data", "expected-output-wg3", "two_ips_climate_cicero.xlsx")
-  tempExpected <- read_excel(expectedFile)
-  expected <- as.quitte(tempExpected) %>% as.magpie()
+
+  expectedFile <- read_excel(config$expectedOutputFile)
+  expected <- as.quitte(expectedFile) %>% as.magpie()
   
   list(output = output, expected = expected)
 }
@@ -157,25 +157,47 @@ visualizeOutput <- function(output, defaultOutput = NULL) {
 # ------------------- Main Entrypoint ----------------------
 scriptDir <- "C:/Users/at39/2-Models"
 
+# Define CLI options
 optionList <- list(
-  make_option("--model", type = "character", default = "ciceroscm"),
-  make_option("--emissions", type = "character"),
-  make_option("--output", type = "character")
+  make_option("--model", type = "character", default = "ciceroscm",
+              help = "Climate model to run (magicc or ciceroscm)"),
+  make_option("--runFolder", type = "character", default = "daily_npi",
+              help = "Name of the scenario (subfolder) under runs/ containing emissions file"),
+  make_option("--emissions", type = "character", default = NULL,
+              help = "Optional: custom path to emissions CSV"),
+  make_option("--output", type = "character", default = NULL,
+              help = "Optional: custom path to output directory")
 )
 
 opt <- parse_args(OptionParser(option_list = optionList))
 
-if (!is.null(opt$model) && !is.null(opt$emissions) && !is.null(opt$output)) {
-  runAssessment(opt$model, opt$emissions, opt$output)
-} else {
-  cat("⚙️ No CLI args, using defaults...\n")
-  model <- "ciceroscm"
+# Apply defaults if model or run-folder missing
+if (is.null(opt$model) || is.null(opt$`run-folder`)) {
+  cat("No --model or --runFolder provided. Using defaults: model = 'ciceroscm', runFolder = 'daily_npi'\n")
+  model <- "magicc"
   runFolder <- "daily_npi"
-  emissions <- normalizePath(file.path(scriptDir, "OPEN-PROM", "runs", runFolder, "emissions.csv"))
-  output <- normalizePath(file.path(scriptDir,"OPEN-PROM", "runs", runFolder, paste0("EmissionsOutput-", model)))
-  
-  runAssessment(model, emissions, output)
-  
-  results <- loadResults(output, emissions)
-  visualizeOutput(results$output, results$expected)
+} else {
+  model <- opt$model
+  runFolder <- opt$runFolder
 }
+
+if (is.null(opt$emissions)) {
+  emissions <- normalizePath(file.path(scriptDir, "OPEN-PROM", "runs", runFolder, "emissions.csv"))
+} else {
+  emissions <- normalizePath(opt$emissions)
+}
+
+if (is.null(opt$output)) {
+  output <- normalizePath(file.path(scriptDir, "OPEN-PROM", "runs", runFolder, paste0("EmissionsOutput-", model)))
+} else {
+  output <- normalizePath(opt$output)
+}
+
+if (!dir.exists(output)) {
+  dir.create(output, recursive = TRUE)
+}
+
+runAssessment(model, emissions, output)
+
+results <- loadResults(model, emissions, output)
+visualizeOutput(results$output, results$expected)
