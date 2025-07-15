@@ -2,10 +2,10 @@
 library(jsonlite)
 
 # Various flags used to modify script behavior
-withRunFolder = TRUE # Set to FALSE to disable model run folder creation and file copying
-withSync = TRUE # Set to FALSE to disable model run sync to SharePoint
-withReport = TRUE # Set to FALSE to disable the report output script execution (applicable to research mode only)
-uploadGDX = TRUE # Set to TRUE to include GDX files in the uploaded archive
+withRunFolder <- TRUE # Set to FALSE to disable model run folder creation and file copying
+withSync <- TRUE # Set to FALSE to disable model run sync to SharePoint
+withReport <- TRUE # Set to FALSE to disable the report output script execution (applicable to research mode only)
+uploadGDX <- TRUE # Set to TRUE to include GDX files in the uploaded archive
 
 ### Define function that saves model metadata into a JSON file.
 
@@ -84,6 +84,7 @@ createRunFolder <- function(scenario = "default") {
   file.copy("conopt.opt", to = runfolder)
   file.copy("git_diff.txt", to = runfolder)
   file.copy("data", to = runfolder, recursive = TRUE)
+  file.copy("targets", to = runfolder, recursive = TRUE)
   file.copy("core", to = runfolder, recursive = TRUE)
   file.copy("modules", to = runfolder, recursive = TRUE)
 
@@ -207,7 +208,7 @@ if (task == 0) {
 
   if (withRunFolder) {
     file.copy("data", to = "../../", recursive = TRUE) # Copying generated data to parent folder for future runs
-
+    file.copy("targets", to = "../../", recursive = TRUE)
     if (withSync) syncRun()
   }
 } else if (task == 2) {
@@ -226,30 +227,41 @@ if (task == 0) {
     shell(report_cmd)
     setwd(run_path)
   }
-   if (withRunFolder && withSync) syncRun()
+  if (withRunFolder && withSync) syncRun()
 } else if (task == 3) {
-    # Running task OPEN-PROM RESEARCH NEW DATA
-    saveMetadata(DevMode = 0)
-    if(withRunFolder) createRunFolder(setScenarioName("RESNEWDATA"))
+  # Running task OPEN-PROM RESEARCH NEW DATA
+  saveMetadata(DevMode = 0)
+  if (withRunFolder) createRunFolder(setScenarioName("RESNEWDATA"))
 
-    shell(paste0(gams,' main.gms --DevMode=0 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 | tee full.log'))
+  # NEW DATA & CALIBRATE
+  shell(
+    paste0(
+      gams,
+      " main.gms --WriteGDX=off --DevMode=0 --fScenario=4 --GenerateInput=on --Calibration=MatCalibration -logOption 4 -Idir=./data 2>&1 | tee full.log"
+    )
+  )
+  CalibratedParams <- c("i04MatFacPlaAvailCap.csv", "i04MatureFacPlaDisp.csv")
+  newNames <- gsub("[0-9]", "", CalibratedParams) # remove numbers
+  CalibratedParamsPath <- file.path(getwd(), CalibratedParams)
+  newPath <- file.path(getwd(), "data", newNames)
+  s <- file.rename(CalibratedParamsPath, newPath)
 
-    if(withRunFolder) file.copy("data", to = '../../', recursive = TRUE)  
+  # RESEARCH
+  shell(paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log"))
+  if (withRunFolder) file.copy("data", to = "../../", recursive = TRUE)
+  if (withRunFolder) file.copy("targets", to = "../../", recursive = TRUE)
 
-    if(withRunFolder && withReport) {
+  if (withRunFolder && withReport) {
+    run_path <- getwd()
+    setwd("../../") # Going back to root folder
+    cat("Executing the report output script\n")
+    report_cmd <- paste0("RScript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
+    shell(report_cmd)
+    setwd(run_path)
+  }
 
-      run_path <- getwd()
-      setwd("../../") # Going back to root folder
-      cat("Executing the report output script\n")
-      report_cmd <- paste0("RScript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
-      shell(report_cmd)
-      setwd(run_path)
-    } 
-
-    if(withRunFolder && withSync) syncRun()
-
+  if (withRunFolder && withSync) syncRun()
 } else if (task == 4) {
-  
   # Debugging mode
   shell(paste0(gams, " main.gms -logOption 4 -Idir=./data 2>&1 | tee full.log"))
 } else if (task == 5) {
@@ -260,7 +272,7 @@ if (task == 0) {
   shell(
     paste0(
       gams,
-      " main.gms --DevMode=0 --Calibration=MatCalibration --fStartY=2021 --fEndY=2021 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log"
+      " main.gms --DevMode=0 --Calibration=MatCalibration --fScenario=4 -logOption 4 -Idir=./data 2>&1 | tee full.log"
     )
   )
 
