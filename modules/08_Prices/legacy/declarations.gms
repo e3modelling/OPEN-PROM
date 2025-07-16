@@ -21,7 +21,6 @@ V08PriceFuelSepCarbonWght(allCy,SBS,EF,YTIME)	           "Fuel prices per subsec
 *'                **Interdependent Variables**
 VmPriceElecIndResConsu(allCy,ESET,YTIME)	               "Electricity price to Industrial and Residential Consumers (US$2015/KWh)"
 VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)                "Fuel prices per subsector and fuel (k$2015/toe)"
-VmCarValCalFac(allCy,SBS,YTIME)                           "Calibration factor for the carbon values in each fuel"
 VmPriceFuelAvgSub(allCy,DSBS,YTIME)                        "Average fuel prices per subsector (k$2015/toe)"
 VmPriceElecIndResNoCliPol(allCy,ESET,YTIME)                "Electricity price to Industrial and Residential Consumers (US$2015/KWh)"
 VmPriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)                  "Fuel prices per subsector and fuel for CHP plants (kUS$2015/toe)"
