@@ -6,25 +6,12 @@ library(stringr)
 library(magclass)
 library(quitte)
 
-# ------------------- Environment Variables ----------------------
-
-setEnvironmentVariables <- function(model) {
-  if (model == "ciceroscm") {
-    Sys.setenv(CICEROSCM_WORKER_NUMBER = "4")
-    Sys.setenv(CICEROSCM_WORKER_ROOT_DIR = tempdir())
-  } else if (model == "magicc") {
-    rootDefault <- file.path(scriptDir, "climate-assessment", "magicc-files")
-    rootDir <- Sys.getenv("MAGICC_ROOT_FILES_DIR", unset = rootDefault)
-    Sys.setenv(MAGICC_ROOT_FILES_DIR = rootDir)
-    Sys.setenv(MAGICC_EXECUTABLE_7 = file.path(rootDir, "bin", "magicc"))
-    Sys.setenv(MAGICC_WORKER_NUMBER = "4")
-    Sys.setenv(MAGICC_WORKER_ROOT_DIR = tempdir())
-    
-    cat("🔧 MAGICC root directory:", rootDir, "\n")
-    cat("🔧 MAGICC executable:", Sys.getenv("MAGICC_EXECUTABLE_7"), "\n")
-  }
+# --- Convert Windows-style path to WSL-compatible path ---
+to_wsl_path <- function(path) {
+  path <- normalizePath(path, winslash = "/", mustWork = FALSE)
+  # Convert "C:/Users/..." → "/mnt/c/Users/..."
+  gsub("^([A-Za-z]):", "/mnt/\\L\\1", path, perl = TRUE)
 }
-
 # ------------------- Model Configuration ----------------------
 
 getModelConfig <- function(model, emissionsFile, outputDir) {
@@ -32,22 +19,22 @@ getModelConfig <- function(model, emissionsFile, outputDir) {
     probFile <- file.path(scriptDir, "climate-assessment", "data", "cicero", "subset_cscm_configfile.json")
     expectedFile <- file.path(scriptDir, "climate-assessment", "tests", "test-data", "expected-output-wg3", "two_ips_climate_cicero.xlsx")
     version <- "v2019vCH4"
+    venvActivate<- file.path(scriptDir, "climate-assessment",".venv-new","Scripts","activate.bat")
+    script <- file.path(scriptDir, "climate-assessment","scripts","run_workflow.py")
   } else if (model == "magicc") {
-    root <- Sys.getenv("MAGICC_ROOT_FILES_DIR")
-    probFile <- file.path(root, "magicc-ar6-0fd0f62-f023edb-drawnset", "0fd0f62-derived-metrics-id-f023edb-drawnset.json")
+    probFile <- to_wsl_path(file.path(scriptDir,"climate-assessment","magicc-files", "0fd0f62-derived-metrics-id-f023edb-drawnset.json"))
     expectedFile <- file.path(scriptDir, "climate-assessment", "tests", "test-data", "expected-output-wg3", "two_ips_climate_magicc.xlsx")
     version <- "v7.5.3"
+    venvActivate<- to_wsl_path(file.path(scriptDir, "climate-assessment",".venv","bin","python"))
+    script <- to_wsl_path(file.path(scriptDir, "climate-assessment","scripts","run_workflow.py"))
   } else {
     stop("Unsupported model")
   }
-
-  venvActivate<- file.path(scriptDir, "climate-assessment",".venv-new","Scripts","activate.bat")
-  script <- file.path(scriptDir, "climate-assessment","scripts","run_workflow.py")
   
   list(
     modelVersion = version,
-    probabilisticFile = normalizePath(probFile),
-    expectedOutputFile = normalizePath(expectedFile),
+    probabilisticFile = probFile,
+    expectedOutputFile = expectedFile,
     emissionsFile = emissionsFile,
     outputDir = outputDir,
     venvActivate = venvActivate,
@@ -58,23 +45,24 @@ getModelConfig <- function(model, emissionsFile, outputDir) {
 # ------------------- Main Workflow Runner ----------------------
 
 runAssessment <- function(model, emissionsFile, outputDir) {
-  setEnvironmentVariables(model)
+  #setEnvironmentVariables(model)
   config <- getModelConfig(model, emissionsFile, outputDir)
   venvActivate <- config$venvActivate
   script <- config$script
   modelVersion <- config$modelVersion
-  probFile <- config$probabilisticFile
-  
+  probFile <- config$probabilisticFile 
   numCfgs <- 600
   scenarioBatchSize <- 20
-  infillingDb <- normalizePath(file.path(
+
+  infillingDb <- file.path(
     scriptDir, "climate-assessment", "data",
     "1652361598937-ar6_emissions_vetted_infillerdatabase_10.5281-zenodo.6390768.csv"
-  ))
-  
+  )
+ 
   cat("Running", toupper(model), "model assessment...\n")
 
   # Create the command
+if (model == "ciceroscm") {
   cmd <- sprintf(
     '"%s" && python "%s" "%s" "%s" --model "%s" --model-version "%s" --num-cfgs %s --probabilistic-file "%s" --infilling-database "%s" --scenario-batch-size "%s"',
     venvActivate,
@@ -86,10 +74,33 @@ runAssessment <- function(model, emissionsFile, outputDir) {
     numCfgs,
     probFile,
     infillingDb,
-  scenarioBatchSize
+    scenarioBatchSize
   )
-
-  # Run the command
+  } else if (model == "magicc") {
+  # Use paste and shQuote instead of sprintf
+  # sprintf escapes the quotes (") with backslashes (\") because it's assembling a string that will be passed as a single argument to another command like system().
+  # Example=--model \"magicc\" 
+  cmd <- paste(
+  'wsl',
+  'bash -c',
+  shQuote(
+    paste(
+      venvActivate,
+      script,
+      to_wsl_path(emissionsFile),
+      to_wsl_path(outputDir),
+      '--model', model,
+      '--model-version',modelVersion,
+      '--num-cfgs',numCfgs,
+      '--probabilistic-file',probFile,
+      '--infilling-database',to_wsl_path(infillingDb)
+    )
+  )
+)
+  print(cmd)
+  } else {
+    stop("Unsupported model")
+  }
   system(cmd)
 }
 
@@ -115,7 +126,7 @@ loadResults <- function(model, emissionsFile, outputDir) {
 
 # ------------------- Plotting ----------------------
 
-visualizeOutput <- function(output, defaultOutput = NULL) {
+visualizeOutput <- function(outputDir,output, defaultOutput = NULL) {
   cat("Plotting median global surface temperature\n")
 
   var <- grep("\\|Surface Temperature \\(GSAT).*50", getItems(output, dim = 3), value = TRUE)
@@ -148,16 +159,21 @@ visualizeOutput <- function(output, defaultOutput = NULL) {
   # Clean up year (since it's in yXXXX format)
   allDfs$Year <- as.numeric(gsub("y", "", allDfs$Year))
 
-  ggplot(allDfs, aes(x = Year, y = Temperature, color = Scenario, linetype = Scenario)) +
+  p <- ggplot(allDfs, aes(x = Year, y = Temperature, color = Scenario, linetype = Scenario)) +
     geom_line(size = 1.2) +
     labs(title = "Global warming above the 1850–1900 mean",
-         y = "°C", x = "Year", color = "Scenario", linetype = "Scenario") + theme_minimal() 
+         y = "°C", x = "Year", color = "Scenario", linetype = "Scenario") + theme_minimal()
+  print(p)
+  plotOut <- file.path(outputDir, "Global_Mean_Temperature.png")
+  ggsave(filename = plotOut, plot = p, width = 10, height = 6, dpi = 300)
 }
 
 # ------------------- Main Entrypoint ----------------------
 scriptDir <- "C:/Users/at39/2-Models"
 
 # Define CLI options
+# Example paths 
+#
 optionList <- list(
   make_option("--model", type = "character", default = "ciceroscm",
               help = "Climate model to run (magicc or ciceroscm)"),
@@ -174,7 +190,7 @@ opt <- parse_args(OptionParser(option_list = optionList))
 # Apply defaults if model or run-folder missing
 if (is.null(opt$model) || is.null(opt$`run-folder`)) {
   cat("No --model or --runFolder provided. Using defaults: model = 'ciceroscm', runFolder = 'daily_npi'\n")
-  model <- "magicc"
+  model <- "ciceroscm"
   runFolder <- "daily_npi"
 } else {
   model <- opt$model
@@ -200,4 +216,4 @@ if (!dir.exists(output)) {
 runAssessment(model, emissions, output)
 
 results <- loadResults(model, emissions, output)
-visualizeOutput(results$output, results$expected)
+visualizeOutput(output,results$output, results$expected)
