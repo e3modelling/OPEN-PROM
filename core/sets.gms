@@ -109,7 +109,7 @@ an(ytime)       Years for which the model is running              /%fStartY%*%fE
 period(ytime)   Model can also run for periods of years
 tFirst(ytime)   Base year                                         /%fBaseY%/
 time(ytime)     Model time horizon used in equation definitions   /%fStartY%*%fEndY%/
-datay(ytime)    Historical year before the base year of the model /%fStartHorizon%*%fBaseY%/
+datay(ytime)    Historical years before the start year of the model /%fStartHorizon%*%fBaseY%/
 hour            "Segments of hours in a year (250,1250,...,8250)" /h0*h8/
 
 

@@ -46,7 +46,8 @@ Q04DemElecTot(allCy,YTIME)                                 "Compute total electr
 *Q04CapElecCHP(allCy,CHP,YTIME)                             "Compute CHP electric capacity"	
 $endif.calib
 Q04ProdElecCHP(allCy,CHP,YTIME)                            "Compute CHP electricity production (TWh)"
-Q04ProdElecEstCHP(allCy,CHP,YTIME)	                           "Estimate the electricity of CHP Plants"	
+Q04ProdElecEstCHP(allCy,CHP,YTIME)	                       "Estimate the electricity of CHP Plants"	
+Q04CapexFixCostPG(allCy,PGALL,YTIME)                       "Computes the capex and fixed costs of any power generation technology"
 
 *'                **Interdependent Equations**
 Q04ProdElec(allCy,PGALL,YTIME)                             "Compute electricity production from power generation plants"
@@ -102,7 +103,8 @@ V04LoadFacDom(allCy,YTIME)                                 "Electricity load fac
 V04ProdElecCHP(allCy,CHP,YTIME)	                           "CHP electricity production (TWh)"
 V04ProdElecReqTot(allCy,YTIME)	                           "Total required electricity production (TWh)"
 V04DemElecTot(allCy,YTIME)                                 "Total electricity demand (TWh)"
-V04ProdElecEstCHP(allCy,CHP,YTIME)	                           "Estimate the electricity of CHP Plants (1)"	
+V04ProdElecEstCHP(allCy,CHP,YTIME)	                       "Estimate the electricity of CHP Plants (1)"	
+V04CapexFixCostPG(allCy,PGALL,YTIME)                       "Capex and fixed costs of any power generation technology (US$2015/kW)"
 
 *'                **Interdependent Variables**	
 VmProdElec(allCy,PGALL,YTIME)                              "Electricity production (TWh)"	

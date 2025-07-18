@@ -120,3 +120,7 @@ V04ProdElecReqTot.FX(runCy,"%fBaseY%")=sum(pgall,VmProdElec.L(runCy,pgall,"%fBas
 V04ConsElec.L(runCy,DSBS,YTIME)=0.1;
 V04ConsElec.FX(runCy,DSBS,YTIME)$(not AN(YTIME)) = 0.1;
 *---
+V04CapexFixCostPG.FX(runCy,PGALL,YTIME)$(DATAY(YTIME)) = (imDisc(runCy,"PG",YTIME) * exp(imDisc(runCy,"PG",YTIME) * i04TechLftPlaType(runCy,PGALL))
+          / (exp(imDisc(runCy,"PG",YTIME) * i04TechLftPlaType(runCy,PGALL)) -1))
+          * i04GrossCapCosSubRen(runCy,PGALL,YTIME) * 1000 * imCGI(runCy,YTIME)
+          + i04FixOandMCost(runCy,PGALL,YTIME);
