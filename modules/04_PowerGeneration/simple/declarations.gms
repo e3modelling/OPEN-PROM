@@ -100,7 +100,6 @@ V04CostPowGenLonNoClimPol(allCy,ESET,YTIME)                "Long-term average po
 V04ConsElec(allCy,DSBS,YTIME)                              "Electricity demand per final sector (Mtoe)"
 V04LoadFacDom(allCy,YTIME)                                 "Electricity load factor for entire domestic system"	
 V04ProdElecCHP(allCy,CHP,YTIME)	                           "CHP electricity production (TWh)"
-V04ProdElecReqTot(allCy,YTIME)	                           "Total required electricity production (TWh)"
 V04DemElecTot(allCy,YTIME)                                 "Total electricity demand (TWh)"
 V04ProdElecEstCHP(allCy,CHP,YTIME)	                           "Estimate the electricity of CHP Plants (1)"	
 

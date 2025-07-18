@@ -24,8 +24,13 @@ $ENDIF
          VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)
                  =E=
          (VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1) +
-           sum(NAP$NAPtoALLSBS(NAP,SBS),(VmCarVal(allCy,NAP,YTIME)*imCo2EmiFac(allCy,SBS,EF,YTIME) - VmCarVal(allCy,NAP,YTIME-1)*imCo2EmiFac(allCy,SBS,EF,YTIME-1)))/1000
-         )$( not (ELCEF(EF) or HEATPUMP(EF) or ALTEF(EF)))
+           sum(NAP$NAPtoALLSBS(NAP,SBS),(VmCarVal(allCy,NAP,YTIME)*imCo2EmiFac(allCy,SBS,EF,YTIME) - VmCarVal(allCy,NAP,YTIME-1)*imCo2EmiFac(allCy,SBS,EF,YTIME-1)))
+           /1000
+         )$(DSBS(SBS))$(not (ELCEF(EF) or HEATPUMP(EF) or ALTEF(EF) or H2EF(EF) or sameas("STE1AH2F",EF)))
+         +
+         (
+            VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1)- (sum(NAP$NAPtoALLSBS(NAP,SBS),(VmCarVal(allCy,NAP,YTIME-1)*imCo2EmiFac(allCy,SBS,EF,YTIME-1)))/1000)$TFIRST(YTIME-1)
+         )$sameas(SBS,"PG") 
          +
          (
           VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1)$(DSBS(SBS))$ALTEF(EF)
