@@ -2,12 +2,6 @@
 *' @code
 
 *---
-table i04CummMnmInstRenCap(allCy,PGRENEF,YTIME)	   "Cummulative minimum potential installed Capacity for Renewables (GW)"
-$ondelim
-$include"./iMinResPot.csv"
-$offdelim
-;
-*---
 table i04AvailRate(allCy,PGALL,YTIME)	                   "Plant availability rate (1)"
 $ondelim
 $include"./iAvailRate.csv"
@@ -79,12 +73,6 @@ $offdelim
 table i04DecomPlants(allCy,PGALL,YTIME)	           "Decomissioning Plants (MW)"
 $ondelim
 $include"./iDecomPlants.csv"
-$offdelim
-;
-*---
-table i04CummMxmInstRenCap(allCy,PGRENEF,YTIME)	   "Cummulative maximum potential installed Capacity for Renewables (GW)"
-$ondelim
-$include"./iMaxResPot.csv"
 $offdelim
 ;
 *---
@@ -209,8 +197,6 @@ i04MxmShareChpElec(allCy,YTIME)	                   "Maximum share of CHP electri
 i04BaseLoadShareDem(runCy,DSBS,YTIME)$an(YTIME)  = i04LoadFactorAdj(DSBS);
 *---
 i04DataElecAndSteamGen(runCy,CHP,YTIME) = 0 ;
-*---
-i04CummMnmInstRenCap(runCy,PGRENEF,YTIME)$(not i04CummMnmInstRenCap(runCy,PGRENEF,YTIME)) = 1e-4;
 *---
 iTotAvailNomCapBsYr(runCy,YTIME)$datay(YTIME) = i04DataElecSteamGen(runCy,"TOTNOMCAP",YTIME);
 *---
