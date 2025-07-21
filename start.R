@@ -237,7 +237,7 @@ if (task == 0) {
   shell(
     paste0(
       gams,
-      " main.gms --WriteGDX=off --DevMode=0 --GenerateInput=on --Calibration=MatCalibration -logOption 4 -Idir=./data 2>&1 | tee full.log"
+      " main.gms --WriteGDX=off --DevMode=0 --fScenario=4 --GenerateInput=on --Calibration=MatCalibration -logOption 4 -Idir=./data 2>&1 | tee full.log"
     )
   )
   CalibratedParams <- c("i04MatFacPlaAvailCap.csv", "i04MatureFacPlaDisp.csv")
@@ -272,7 +272,7 @@ if (task == 0) {
   shell(
     paste0(
       gams,
-      " main.gms --DevMode=0 --Calibration=MatCalibration -logOption 4 -Idir=./data 2>&1 | tee full.log"
+      " main.gms --DevMode=0 --Calibration=MatCalibration --fScenario=4 -logOption 4 -Idir=./data 2>&1 | tee full.log"
     )
   )
 

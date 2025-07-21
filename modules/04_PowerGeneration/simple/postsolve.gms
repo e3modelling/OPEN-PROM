@@ -21,5 +21,5 @@ V04CapexFixCostPG.FX(runCy,PGALL,YTIME)$TIME(YTIME) = V04CapexFixCostPG.L(runCy,
 
 $ifthen.calib %Calibration% == MatCalibration
 i04MatFacPlaAvailCap.FX(runCy,PGALL,YTIME)$TIME(YTIME) = i04MatFacPlaAvailCap.L(runCy,PGALL,YTIME)$TIME(YTIME);
-i04MatureFacPlaDisp.FX(runCy,PGALL,YTIME) = i04MatureFacPlaDisp.L(runCy,PGALL,"%fEndY%");
+i04MatureFacPlaDisp.FX(runCy,PGALL,YTIME)$TIME(YTIME) = i04MatureFacPlaDisp.L(runCy,PGALL,"%fEndY%")$TIME(YTIME);
 $endif.calib
