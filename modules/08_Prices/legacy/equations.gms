@@ -42,7 +42,7 @@ $ENDIF
          )$(sameas ("H2P",SBS))
          +
          (
-            V05CostAvgProdH2(allCy,YTIME)$DSBS(SBS)
+            V05CostAvgProdH2(allCy,YTIME)$DSBS(SBS)/1000
          )$(H2EF(EF) or sameas("H2F",EF));
 
 *' The equation calculates the fuel prices per subsector and fuel multiplied by weights
