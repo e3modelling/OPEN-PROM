@@ -35,8 +35,8 @@ V08FuelPriSubNoCarb.FX(runCy,SBS,ALTEF,YTIME)$(SECTTECH(SBS,ALTEF) $(not An(YTIM
 V08FuelPriSubNoCarb.FX(runCy,"PG","NUC",YTIME) = 0.025; !! fixed price for nuclear fuel to 25Euro/toe
 V08FuelPriSubNoCarb.FX(runCy,INDDOM,"HEATPUMP",YTIME)$(SECTTECH(INDDOM,"HEATPUMP")$(not An(YTIME))) = imFuelPrice(runCy,INDDOM,"ELC",YTIME);
 *---
-VmPriceElecIndResNoCliPol.FX(runCy,"i",YTIME)$(not an(ytime)) = VmPriceFuelSubsecCarVal.L(runCy,"OI","ELC",YTIME)*0.086;
-VmPriceElecIndResNoCliPol.FX(runCy,"r",YTIME)$(not an(ytime)) = VmPriceFuelSubsecCarVal.L(runCy,"HOU","ELC",YTIME)*0.086;
+VmPriceElecIndResNoCliPol.FX(runCy,"i",YTIME)$(not an(ytime)) = VmPriceFuelSubsecCarVal.L(runCy,"OI","ELC",YTIME) * smTWhToMtoe;
+VmPriceElecIndResNoCliPol.FX(runCy,"r",YTIME)$(not an(ytime)) = VmPriceFuelSubsecCarVal.L(runCy,"HOU","ELC",YTIME) * smTWhToMtoe;
 *---
 VmPriceElecInd.L(runCy,YTIME)= 0.9;
 VmPriceElecInd.FX(runCy,YTIME)$TFIRST(YTIME) = i08ElecIndex(runCy,YTIME);
