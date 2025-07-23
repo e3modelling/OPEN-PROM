@@ -162,7 +162,7 @@ visualizeOutput <- function(outputDir,output, defaultOutput = NULL) {
   p <- ggplot(allDfs, aes(x = Year, y = Temperature, color = Scenario, linetype = Scenario)) +
     geom_line(size = 1.2) +
     labs(title = "Global warming above the 1850–1900 mean",
-         y = "°C", x = "Year", color = "Scenario", linetype = "Scenario") + theme_minimal()
+         y = "°C", x = "Year", color = "Scenario", linetype = "Scenario") + theme_bw()
   print(p)
   plotOut <- file.path(outputDir, "Global_Mean_Temperature.png")
   ggsave(filename = plotOut, plot = p, width = 10, height = 6, dpi = 300)
