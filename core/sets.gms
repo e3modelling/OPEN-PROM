@@ -125,11 +125,11 @@ modal
 largest
 /
 
-eSet         Electricity consumers used for average electricity price calculations /i,r/
+eSet         Electricity consumers used for average electricity price calculations /i,r,c,t/
 iSet(eSet)   Industrial consumer /i/
 rSet(eSet)   Residential consumer /r/
-
-
+cSet(eSet)   Commercial consumer /c/
+tSet(eSet)   Transport consumer /t/
 ***       Auxiliary Counters        *
 
 rCon         counter for the number of consumers              /0,1*19/
@@ -298,10 +298,6 @@ NENSE1(SBS)       Non Energy and Bunkers        /PCH,NEN,BU/
 BUN(DSBS)         Bunkers                       /BU/
 
 INDDOM(DSBS)      Industry and Tertiary         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,SE,AG,HOU/
-* the following sets are used in price equation for electricity
-INDTRANS(SBS)     Industry and Transport        /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI ,PC,PT,PA,PB,PN,GU,GT, GN /
-RESIDENT(SBS)     Residential                   /SE,AG,HOU/
-AGSECT            aggregate sectors             /INDSE1,DOMSE1,NENSE1,TRANS1,PG/
 
 *         Energy Forms            *
 

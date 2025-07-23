@@ -37,7 +37,11 @@ $ENDIF
          )
          +
          (
-           ( VmPriceElecIndResConsu(allCy,"i",YTIME)$INDTRANS(SBS)+VmPriceElecIndResConsu(allCy,"r",YTIME)$RESIDENT(SBS))/smTWhToMtoe
+           ( VmPriceElecIndResConsu(allCy,"i",YTIME)$INDSE1(SBS)+
+             VmPriceElecIndResConsu(allCy,"r",YTIME)$DOMSE1(SBS) +
+             VmPriceElecIndResConsu(allCy,"t",YTIME)$TRANS1(SBS) +
+             VmPriceElecIndResConsu(allCy,"c",YTIME)$DOMSE1(SBS)
+            )/smTWhToMtoe
             +
             ((imEffValueInDollars(allCy,SBS,YTIME))/1000)$DSBS(SBS)
          )$(ELCEF(EF) or HEATPUMP(EF))
@@ -80,7 +84,7 @@ Q08PriceElecIndResConsu(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
               VmPriceElecIndResConsu(allCy,"i","%fStartY%") / VmCostPowGenAvgLng(allCy, "%fStartY%") *
               VmCostPowGenAvgLng(allCy,YTIME-1) !!Cost secondary energy electricity
             )$(not TFIRST(YTIME-1))
-           )$ISET(ESET)
+           )$sameas(ESET,"i") 
         +
            (
              (VmPriceFuelSubsecCarVal(allCy,"HOU","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
@@ -88,7 +92,23 @@ Q08PriceElecIndResConsu(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                VmPriceElecIndResConsu(allCy,"r","%fStartY%") / VmCostPowGenAvgLng(allCy, "%fStartY%") *
                VmCostPowGenAvgLng(allCy,YTIME-1) 
              )$(not TFIRST(YTIME-1))
-           )$RSET(ESET)
+           )$sameas(ESET,"r") 
+        +
+           (
+             (VmPriceFuelSubsecCarVal(allCy,"PC","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
+             (
+               VmPriceElecIndResConsu(allCy,"t","%fStartY%") / VmCostPowGenAvgLng(allCy, "%fStartY%") *
+               VmCostPowGenAvgLng(allCy,YTIME-1) 
+             )$(not TFIRST(YTIME-1))
+           )$sameas(ESET,"t") 
+        +
+           (
+             (VmPriceFuelSubsecCarVal(allCy,"SE","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
+             (
+               VmPriceElecIndResConsu(allCy,"c","%fStartY%") / VmCostPowGenAvgLng(allCy, "%fStartY%") *
+               VmCostPowGenAvgLng(allCy,YTIME-1) 
+             )$(not TFIRST(YTIME-1))
+           )$sameas(ESET,"c") 
         );
 
 *' Compute electricity price in Industrial and Residential Consumers excluding climate policies by multiplying the Factors affecting electricity prices to consumers by the sum of 

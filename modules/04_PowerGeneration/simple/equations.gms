@@ -494,7 +494,7 @@ Q04CostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy))
         (EXP(imDisc(allCy,"PG",YTIME)*i04TechLftPlaType(allCy,PGALL))-1)*i04GrossCapCosSubRen(allCy,PGALL,YTIME)*1000*imCGI(allCy,YTIME) +
         i04FixOandMCost(allCy,PGALL,YTIME)
         )/i04AvailRate(allCy,PGALL,YTIME)
-             / (1000*smGwToTwhPerYear(YTIME)*(0.75$ISET(ESET)+0.25$RSET(ESET))) +
+             / (1000*smGwToTwhPerYear(YTIME)*(0.75$ISET(ESET)+0.25$RSET(ESET) + 0.5$CSET(ESET) + 0.5$(TSET(ESET)))) +
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
                  (i04VarCost(PGALL,YTIME)/1000+((VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)-
                  imEffValueInDollars(allCy,"PG",ytime)/1000-imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
