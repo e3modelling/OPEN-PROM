@@ -6,9 +6,6 @@
 *---
 i01PassCarsMarkSat(runCy) = 0.7 ; 
 *---
-V01ShareTechTr.FX(runCy,TRANSE,EF2,YTIME)$(not An(YTIME)) = imFuelConsTRANSE(runCy,TRANSE,EF2,YTIME)/sum(EF$(SECTTECH(TRANSE,EF)),imFuelConsTRANSE(runCy,TRANSE,EF,YTIME)); 
-V01ShareTechTr.FX(runCy,TRANSE,TTECH,YTIME)$( SECTTECH(TRANSE,TTECH) $(not AN(YTIME))) = 0;
-*---
 V01StockPcYearly.UP(runCy,YTIME) = 10000; !! upper bound of V01StockPcYearly is 10000 million vehicles
 V01StockPcYearly.L(runCy,YTIME) = 0.1;
 V01StockPcYearly.FX(runCy,YTIME)$(not An(YTIME)) = imActv(YTIME,runCy,"PC");

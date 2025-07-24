@@ -170,12 +170,12 @@ Q01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)$(TIME(YTIME) $SECTTECH(TR
          )/1000
          * V01GapTranspActiv(allCy,TRANSE,YTIME) *
          (
-                 (
-                  (i01AvgVehCapLoadFac(allCy,TRANSE,"CAP",YTIME-1)*i01AvgVehCapLoadFac(allCy,TRANSE,"LF",YTIME-1))
-                  / (i01AvgVehCapLoadFac(allCy,TRANSE,"CAP",YTIME)*i01AvgVehCapLoadFac(allCy,TRANSE,"LF",YTIME))
-                 )$(not sameas(TRANSE,"PC"))
-                 +
-                 (V01ActivPassTrnsp(allCy,TRANSE,YTIME))$sameas(TRANSE,"PC")
+          (
+          (i01AvgVehCapLoadFac(allCy,TRANSE,"CAP",YTIME-1)*i01AvgVehCapLoadFac(allCy,TRANSE,"LF",YTIME-1))
+          / (i01AvgVehCapLoadFac(allCy,TRANSE,"CAP",YTIME)*i01AvgVehCapLoadFac(allCy,TRANSE,"LF",YTIME))
+          )$(not sameas(TRANSE,"PC"))
+          +
+          (V01ActivPassTrnsp(allCy,TRANSE,YTIME))$sameas(TRANSE,"PC")
          );
 
 *' This equation calculates the final energy demand in transport for each fuel within a specific transport subsector.

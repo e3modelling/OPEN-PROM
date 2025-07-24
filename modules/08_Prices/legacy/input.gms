@@ -12,11 +12,11 @@ $offdelim
 $ENDIF
 *---
 Parameters
-i08DiffFuelsInSec(SBS)                   "Auxiliary parameter holding the number of different fuels in a sector"
-i08WgtSecAvgPriFueCons(allCy,SBS,EF)	 "Weights for sector's average price, based on fuel consumption (1)"
-i08VAT(allCy,YTIME)                      "VAT (value added tax) rates (1)"
-i08HydrogenPri(allCy,SBS,YTIME)	      "Total Hydrogen Cost Per Sector (US$2015/toe)"
-i08ElecIndex(allCy,YTIME)	           "Electricity Index (1)"
+i08DiffFuelsInSec(SBS)                    "Auxiliary parameter holding the number of different fuels in a sector"
+i08WgtSecAvgPriFueCons(allCy,SBS,EF)	    "Weights for sector's average price, based on fuel consumption (1)"
+i08VAT(allCy,YTIME)                       "VAT (value added tax) rates (1)"
+i08HydrogenPri(allCy,SBS,YTIME)	          "Total Hydrogen Cost Per Sector (US$2015/toe)"
+i08ElecIndex(allCy,YTIME)	                "Electricity Index (1)"
 ;
 *---
 loop SBS do
