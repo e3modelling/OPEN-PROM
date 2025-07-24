@@ -293,12 +293,15 @@ DOMSE(DSBS)       Tertiary SubSectors           /SE,AG,HOU/
 INDSE1(SBS)       Industrial SubSectors         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI/
 DOMSE1(SBS)       Tertiary SubSectors           /SE,AG,HOU/
 HOU(DSBS)         Households                     /HOU/
+
 NENSE(DSBS)       Non Energy and Bunkers        /PCH,NEN,BU/
 NENSE1(SBS)       Non Energy and Bunkers        /PCH,NEN,BU/
 BUN(DSBS)         Bunkers                       /BU/
 
 INDDOM(DSBS)      Industry and Tertiary         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,SE,AG,HOU/
-
+* Pricing sets
+HOU1(SBS)         Households                     /HOU/
+SERV(SBS)         Services                       /SE,AG/
 *         Energy Forms            *
 
 EF           Energy Forms
@@ -639,18 +642,15 @@ PB.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO)
 GU.(LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGDO,CHEVGDO) !! Removed GSL and PHEVGSL
 (PT,GT).(GDO,ELC,MET)
 PA.(KRS)
-PN.(GSL,GDO)
-GN.(GSL,GDO)
+(PN,GN).(GSL,GDO)
 (IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(LGN,HCL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC,STE1AL,
-                                 STE1AH,STE1AD,STE1AG,STE1AB)
-(SE,HOU,AG).                    (LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC,STE1AL,
-                                 STE1AH,STE1AD,STE1AG,STE1AB,STE2LGN,STE2OSL,STE2GDO,STE2RFO,STE2OLQ,STE2NGS,
-                                 STE2OGS,STE2BMS, BMSWAS)
-
-*BU.(GDO,RFO,OLQ)
+                                 STE1AH,STE1AD,STE1AG)
+(HOU, AG).                      (LPG,KRS,GDO,NGS,OGS,BMSWAS,ELC,STE2LGN,STE2OSL,STE2GDO,STE2NGS,
+                                 STE2BMS)
+(SE).                           (LPG,KRS,NGS,OGS,ELC)
 BU.(GDO,RFO)
-(PCH,NEN).(LGN,HCL,GDO,RFO,LPG,OLQ,NGS,OGS)
-PG.(LGN,HCL,GDO,RFO,NGS,NUC,HYD,BMSWAS,SOL,GEO,WND)
+(PCH,NEN).(LGN,HCL,GDO,RFO,LPG,NGS,OGS)
+PG.(LGN,HCL,GDO,RFO,NGS,OGS,NUC,HYD,BMSWAS,SOL,GEO,WND)
 H2P.(HCL,RFO,NGS,NUC,BMSWAS,SOL,WND,ELC)
 /
 

@@ -38,9 +38,9 @@ $ENDIF
          +
          (
            ( VmPriceElecIndResConsu(allCy,"i",YTIME)$INDSE1(SBS)+
-             VmPriceElecIndResConsu(allCy,"r",YTIME)$DOMSE1(SBS) +
+             VmPriceElecIndResConsu(allCy,"r",YTIME)$HOU1(SBS) +
              VmPriceElecIndResConsu(allCy,"t",YTIME)$TRANS1(SBS) +
-             VmPriceElecIndResConsu(allCy,"c",YTIME)$DOMSE1(SBS)
+             VmPriceElecIndResConsu(allCy,"c",YTIME)$SERV(SBS)
             )/smTWhToMtoe
             +
             ((imEffValueInDollars(allCy,SBS,YTIME))/1000)$DSBS(SBS)
