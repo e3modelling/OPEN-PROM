@@ -299,7 +299,7 @@ NENSE1(SBS)       Non Energy and Bunkers        /PCH,NEN,BU/
 BUN(DSBS)         Bunkers                       /BU/
 
 INDDOM(DSBS)      Industry and Tertiary         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,SE,AG,HOU/
-* Pricing sets
+* The following sets are used in price equation for electricity
 HOU1(SBS)         Households                     /HOU/
 SERV(SBS)         Services                       /SE,AG/
 *         Energy Forms            *
