@@ -125,11 +125,11 @@ modal
 largest
 /
 
-eSet         Electricity consumers used for average electricity price calculations /i,r/
+eSet         Electricity consumers used for average electricity price calculations /i,r,c,t/
 iSet(eSet)   Industrial consumer /i/
 rSet(eSet)   Residential consumer /r/
-
-
+cSet(eSet)   Commercial consumer /c/
+tSet(eSet)   Transport consumer /t/
 ***       Auxiliary Counters        *
 
 rCon         counter for the number of consumers              /0,1*19/
@@ -293,16 +293,15 @@ DOMSE(DSBS)       Tertiary SubSectors           /SE,AG,HOU/
 INDSE1(SBS)       Industrial SubSectors         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI/
 DOMSE1(SBS)       Tertiary SubSectors           /SE,AG,HOU/
 HOU(DSBS)         Households                     /HOU/
+
 NENSE(DSBS)       Non Energy and Bunkers        /PCH,NEN,BU/
 NENSE1(SBS)       Non Energy and Bunkers        /PCH,NEN,BU/
 BUN(DSBS)         Bunkers                       /BU/
 
 INDDOM(DSBS)      Industry and Tertiary         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,SE,AG,HOU/
-* the following sets are used in price equation for electricity
-INDTRANS(SBS)     Industry and Transport        /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI ,PC,PT,PA,PB,PN,GU,GT, GN /
-RESIDENT(SBS)     Residential                   /SE,AG,HOU/
-AGSECT            aggregate sectors             /INDSE1,DOMSE1,NENSE1,TRANS1,PG/
-
+* The following sets are used in price equation for electricity
+HOU1(SBS)         Households                     /HOU/
+SERV(SBS)         Services                       /SE,AG/
 *         Energy Forms            *
 
 EF           Energy Forms
@@ -649,7 +648,6 @@ PA.(KRS)
 (HOU, AG).                      (LPG,KRS,GDO,NGS,OGS,BMSWAS,ELC,STE2LGN,STE2OSL,STE2GDO,STE2NGS,
                                  STE2BMS)
 (SE).                           (LPG,KRS,NGS,OGS,ELC)
-*BU.(GDO,RFO,OLQ)
 BU.(GDO,RFO)
 (PCH,NEN).(LGN,HCL,GDO,RFO,LPG,NGS,OGS)
 PG.(LGN,HCL,GDO,RFO,NGS,OGS,NUC,HYD,BMSWAS,SOL,GEO,WND)

@@ -39,8 +39,6 @@ $include"./iNewReg.csv"
 $offdelim
 ;
 *---
-table i01InitSpecFuelCons(allCy,TRANSE,TTECH,EF,YTIME)  "Initial Specific fuel consumption for all countries ()";
-*---
 parameter i01PlugHybrFractData(YTIME)                   "Plug in hybrid fraction of mileage" /
 2010    0.5
 2011    0.504444
@@ -194,9 +192,7 @@ i01TechLft(allCy,SBS,EF,YTIME)	                     "Technical Lifetime. For pas
 i01PassCarsMarkSat(allCy)	                          "Passenger cars market saturation (1)"
 ;
 *---
-i01InitSpecFuelCons(runCy,TRANSE,TTECH,EF,YTIME) = i01InitSpecFuelConsData(TRANSE,TTECH,EF) ; 
-*---
-i01SpeFuelConsCostBy(runCy,TRANSE,TTECH,EF) = i01InitSpecFuelCons(runCy,TRANSE,TTECH,EF,"2017");
+i01SpeFuelConsCostBy(runCy,TRANSE,TTECH,EF) = i01InitSpecFuelConsData(TRANSE,TTECH,EF);
 *---
 i01DataPassCars(runCy,"PC","S1") = 1.0;
 i01DataPassCars(runCy,"PC","S2") = -0.01;
