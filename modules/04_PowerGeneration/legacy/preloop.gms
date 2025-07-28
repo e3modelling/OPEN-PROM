@@ -3,9 +3,6 @@
 
 *'                *VARIABLE INITIALISATION*
 *---
-VmCostPowGenAvgLng.L(runCy,ESET,"2010") = 0;
-VmCostPowGenAvgLng.L(runCy,ESET,"%fBaseY%") = 0;
-*---
 V04SensCCS.L(runCy,YTIME) = 1;
 *---
 V04CostProdSpecTech.LO(runCy,PGALL2,YTIME) = 0.00000001;
@@ -80,9 +77,6 @@ V04CostPowGenLonNoClimPol.L(runCy,ESET,"%fBaseY%") = 0;
 *---
 *v04CostPowGenAvgShrt.L(runCy,ESET,"2010") = 0;
 *v04CostPowGenAvgShrt.L(runCy,ESET,"%fBaseY%") = 0;
-*---
-V04CostPowGenLngTechNoCp.L(runCy,PGALL,ESET,"2010") = 0;
-V04CostPowGenLngTechNoCp.L(runCy,PGALL,ESET,"%fBaseY%") = 0;
 *---
 V04CostAvgPowGenLonNoClimPol.L(runCy,PGALL,ESET,"2010") = 0;
 V04CostAvgPowGenLonNoClimPol.FX(runCy,PGALL,ESET,"%fBaseY%") = 0;
