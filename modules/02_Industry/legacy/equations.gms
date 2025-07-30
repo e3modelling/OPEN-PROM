@@ -17,7 +17,7 @@ Q02ConsElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VmConsElecNonSubIndTert(allCy,INDDOM,YTIME)
                  =E=
          [
-         VmConsElecNonSubIndTert(allCy,INDDOM,YTIME-1) * ( imActv(YTIME,allCy,INDDOM)/imActv(YTIME-1,allCy,INDDOM) )**
+         VmConsElecNonSubIndTert(allCy,INDDOM,YTIME-1) * ( imActv(YTIME,allCy,INDDOM) )**
          i02ElastNonSubElec(allCy,INDDOM,"a",YTIME)
          * ( VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME)/VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-1) )**i02ElastNonSubElec(allCy,INDDOM,"b1",YTIME)
          * ( VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-1)/VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-2) )**i02ElastNonSubElec(allCy,INDDOM,"b2",YTIME)
@@ -36,7 +36,7 @@ Q02ConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $
          [
          (VmLft(allCy,DSBS,EF,YTIME)-1)/VmLft(allCy,DSBS,EF,YTIME)
          * (VmConsFuelInclHP(allCy,DSBS,EF,YTIME-1) - (VmConsElecNonSubIndTert(allCy,DSBS,YTIME-1)$(ELCEF(EF) $INDDOM(DSBS)) + 0$(not (ELCEF(EF) $INDDOM(DSBS)))))
-         * (imActv(YTIME,allCy,DSBS)/imActv(YTIME-1,allCy,DSBS))**imElastA(allCy,DSBS,"a",YTIME)
+         * (imActv(YTIME,allCy,DSBS))**imElastA(allCy,DSBS,"a",YTIME)
          * (VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME)/VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-1))**imElastA(allCy,DSBS,"b1",YTIME)
          * (VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-1)/VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-2))**imElastA(allCy,DSBS,"b2",YTIME)
          * prod(KPDL,
@@ -50,7 +50,7 @@ Q02DemFinSubFuelSubsec(allCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $runCy
                  =E=
          [
          VmDemFinSubFuelSubsec(allCy,DSBS,YTIME-1)
-         * ( imActv(YTIME,allCy,DSBS)/imActv(YTIME-1,allCy,DSBS) )**imElastA(allCy,DSBS,"a",YTIME)
+         * ( imActv(YTIME,allCy,DSBS) )**imElastA(allCy,DSBS,"a",YTIME)
          * ( VmPriceFuelAvgSub(allCy,DSBS,YTIME)/VmPriceFuelAvgSub(allCy,DSBS,YTIME-1) )**imElastA(allCy,DSBS,"b1",YTIME)
          * ( VmPriceFuelAvgSub(allCy,DSBS,YTIME-1)/VmPriceFuelAvgSub(allCy,DSBS,YTIME-2) )**imElastA(allCy,DSBS,"b2",YTIME)
          * prod(KPDL,
