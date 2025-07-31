@@ -217,7 +217,7 @@ Q03OutTotTransf(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' and specific conditions for the energy branch "CRO" (crop residues). The outcome represents the transfers in million tons of oil equivalent.
 Q03Transfers(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V03Transfers(allCy,EFS,YTIME) =E=
-         (( (V03Transfers(allCy,EFS,YTIME-1)*VmConsFinEneCountry(allCy,EFS,YTIME)/VmConsFinEneCountry(allCy,EFS,YTIME-1))$EFTOEFA(EFS,"LQD")+
+         (( (V03Transfers(allCy,EFS,YTIME-1)*VmConsFinEneCountry(allCy,EFS,YTIME)/(VmConsFinEneCountry(allCy,EFS,YTIME-1) + 0.0001))$EFTOEFA(EFS,"LQD")+
           (
                  V03Transfers(allCy,"CRO",YTIME-1)*SUM(EFS2$EFTOEFA(EFS2,"LQD"),V03Transfers(allCy,EFS2,YTIME))/
                  SUM(EFS2$EFTOEFA(EFS2,"LQD"),V03Transfers(allCy,EFS2,YTIME-1)))$sameas(EFS,"CRO")   )$(i03FeedTransfr(allCy,EFS,"%fStartHorizon%"))$(NOT sameas("OLQ",EFS)) 
