@@ -19,8 +19,6 @@ i02FixOMCostPerChp(allCy,DSBS,CHP,YTIME)                   "Fixed O&M cost per C
 i02AvailRateChp(allCy,DSBS,CHP)                            "Availability rate of CHP Plants ()"
 i02VarCostChp(allCy,DSBS,CHP,YTIME)                        "Variable (other than fuel) cost per CHP Type (Gross US$2015/KW)"
 i02BoiEffChp(allCy,CHP,YTIME)                              "Boiler efficiency (typical) used in adjusting CHP efficiency ()"
-i02numtechnologiesUsingEF(DSBS,EF)
-i02Share(allCy,DSBS,ITECH,EF,YTIME)
 ;
 *---
 imTotFinEneDemSubBaseYr(runCy,TRANSE,YTIME)  = sum(EF$(TECHtoEF(TECH,EF)$SECTTECH(TRANSE,TECH)$(not plugin(EF))), imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME));
@@ -59,14 +57,3 @@ i02BoiEffChp(runCy,CHP,YTIME)            = imDataChpPowGen(CHP,"BOILEFF",YTIME);
 *---
 i02ElaSub(runCy,DSBS) = imElaSubData(DSBS);
 *---
-loop(DSBS,
-    i02numtechnologiesUsingEF(DSBS,EF) = 0;
-    
-    loop(EF,
-        loop(TECH$(TECHtoEF(ITECH, EF) and SECTTECH(DSBS, ITECH)),
-            i02numtechnologiesUsingEF(DSBS,EF) = i02numtechnologiesUsingEF(DSBS,EF) + 1;
-        );
-    );
-);
-
-* Change with this sum(ITECH$(ITECHtoEF(ITECH,EF)$SECTTECH(DSBS,ITECH)), )

@@ -38,7 +38,7 @@ Q02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS))
 * This equation computes the useful energy covered by the remaining equipment
 Q02DemUsefulSubsecRemTech(allCy,DSBS,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS))$runCy(allCy))..
         V02DemUsefulSubsecRemTech(allCy,DSBS,YTIME) =E=
-        SUM(ITECH$SECTTECH(DSBS,ITECH),V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) * imUsfEneConvSubTech(runCy,INDSE,ITECH,YTIME) * i02Util(allCy,DSBS,ITECH,YTIME));
+        SUM(ITECH$SECTTECH(DSBS,ITECH),V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) * imUsfEneConvSubTech(runCy,INDSE,ITECH,YTIME) * iutil(allCy,DSBS,ITECH,YTIME));
 
 
 *' This equation calculates the gap in useful energy demand for industry, tertiary, non-energy uses, and bunkers.
@@ -69,7 +69,7 @@ Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS))$SECTTECH(
         * exp((imDisc(allCy,DSBS,YTIME)$(not CHP(ITECH)) + imDisc(allCy,"PG",YTIME)$CHP(ITECH)) * VmLft(allCy,DSBS,ITECH,YTIME)))
         /(exp((imDisc(allCy,DSBS,YTIME)$(not CHP(ITECH)) + imDisc(allCy,"PG",YTIME)$CHP(ITECH)) * VmLft(allCy,DSBS,ITECH,YTIME)) - 1)) 
         * imCapCostTech(allCy,DSBS,ITECH,YTIME) * imCGI(allCy,YTIME)
-        + imFixOMCostTech(allCy,DSBS,ITECH,YTIME)/smUnitToKUnit; !! divide with utilization rate or with efficiency as well???? depends on the CapCostTech parameter
+        + imFixOMCostTech(allCy,DSBS,ITECH,YTIME)/sUnitToKUnit; !! divide with utilization rate or with efficiency as well???? depends on the CapCostTech parameter
 
 
 
@@ -83,12 +83,12 @@ Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS))$SECTTECH(
 *' NEW SET TECHEF
 Q02VarCostTech(allCy,DSBS,rCon,ITECH,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS))$(ord(rCon) le imNcon(DSBS)+1)$SECTTECH(DSBS,ITECH)$runCy(allCy))..
          V02VarCostTech(allCy,DSBS,rCon,ITECH,YTIME) =E=
-        ((((sum(EF$ITECHtoEF(ITECH,EF),i02Share(allCy,DSBS,ITECH,EF,YTIME) * (VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME) + (VmRenValue(YTIME))$(not RENEF(EF) and not NENSE(DSBS))/smUnitToKUnit))
-                + (imVarCostTech(allCy,DSBS,ITECH,YTIME))/smUnitToKUnit)
+        ((((sum(EF$ITECHtoEF(ITECH,EF),i02Share(allCy,DSBS,ITECH,EF,YTIME) * (VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME) + (VmRenValue(YTIME))$(not RENEF(EF) and not NENSE(DSBS))/sUnitToKUnit))
+                + (imVarCostTech(allCy,DSBS,ITECH,YTIME))/sUnitToKUnit)
         / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME)
         - (0$(not CHP(ITECH)) + (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME)*smFracElecPriChp*VmPriceElecInd(allCy,YTIME))$CHP(ITECH)))
-        + SQRT(SQR(((sum(EF$ITECHtoEF(ITECH,EF),i02Share(allCy,DSBS,ITECH,EF,YTIME) * (VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME) + (VmRenValue(YTIME))$(not RENEF(EF) and not NENSE(DSBS))/smUnitToKUnit))
-                + (imVarCostTech(allCy,DSBS,ITECH,YTIME))/smUnitToKUnit)
+        + SQRT(SQR(((sum(EF$ITECHtoEF(ITECH,EF),i02Share(allCy,DSBS,ITECH,EF,YTIME) * (VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME) + (VmRenValue(YTIME))$(not RENEF(EF) and not NENSE(DSBS))/sUnitToKUnit))
+                + (imVarCostTech(allCy,DSBS,ITECH,YTIME))/sUnitToKUnit)
         / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME)
         - (0$(not CHP(ITECH)) + (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME)*smFracElecPriChp*VmPriceElecInd(allCy,YTIME))$CHP(ITECH))))))/2          
         * imAnnCons(allCy,DSBS,"smallest") * (imAnnCons(allCy,DSBS,"largest")/imAnnCons(allCy,DSBS,"smallest"))**((ord(rCon)-1)/imNcon(DSBS)));
@@ -110,7 +110,7 @@ Q02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $SECTTECH(DSBS,I
 Q02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS))$runCy(allCy))..
         V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) =E= 
         V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) 
-        + (V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME) * V02GapUsefulDemSubsec(allCy,DSBS,YTIME)) / (imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME) * i02Util(allCy,DSBS,ITECH,YTIME));
+        + (V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME) * V02GapUsefulDemSubsec(allCy,DSBS,YTIME)) / (imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME) * iutil(allCy,DSBS,ITECH,YTIME));
         
 *' This equation computes the consumption/demand of non-substitutable electricity for subsectors of INDUSTRY and DOMESTIC in the "typical useful energy demand equation".
 *' The main explanatory variables are activity indicators of each subsector and electricity prices per subsector. Corresponding elasticities are applied for activity indicators
@@ -140,7 +140,7 @@ Q02FinalElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' OLD VARIABLE: VmConsElecNonSubIndTert(allCy,INDDOM,YTIME) --> NEW VARIABLE:VmUsefulElecNonSubIndTert(allCy,DSBS,YTIME)
 Q02ConsFuel(allCy,DSBS,EF,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS))$runCy(allCy))..
          VmConsFuel(allCy,DSBS,EF,YTIME) =E=
-         sum(ITECH$(ITECHtoEF(ITECH,EF)$SECTTECH(DSBS,ITECH)),i02Share(allCy,DSBS,ITECH,EF,YTIME) * V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) * i02Util(allCy,DSBS,ITECH,YTIME))
+         sum(ITECH$(ITECHtoEF(ITECH,EF)$SECTTECH(DSBS,ITECH)),i02Share(allCy,DSBS,ITECH,EF,YTIME) * V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) * iutil(allCy,DSBS,ITECH,YTIME))
          + VmFinalElecNonSubIndTert(allCy,INDDOM,YTIME)$(INDDOM(DSBS) and ELCEF(EF))
          + VmElecConsHeatPla(allCy,DSBS,YTIME)$ELCEF(EF);
 

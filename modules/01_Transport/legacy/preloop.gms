@@ -6,7 +6,7 @@
 *---
 i01PassCarsMarkSat(runCy) = 0.7 ; 
 *---
-V01ShareTechTr.FX(runCy,TRANSE,EF2,YTIME)$(not An(YTIME)) = imFuelConsTRANSE(runCy,TRANSE,EF2,YTIME)/sum(EF$(SECTTECH(TRANSE,EF)),imFuelConsTRANSE(runCy,TRANSE,EF,YTIME)); 
+V01ShareTechTr.FX(runCy,TRANSE,EF2,YTIME)$(not An(YTIME)) = imFuelConsTRANSE(runCy,TRANSE,EF2,YTIME)/sum(EF$(SECTTECH(TRANSE,TTECH))$TTECHtoEF(TTECH,EF),imFuelConsTRANSE(runCy,TRANSE,EF,YTIME)); 
 V01ShareTechTr.FX(runCy,TRANSE,TTECH,YTIME)$( SECTTECH(TRANSE,TTECH) $(not AN(YTIME))) = 0;
 *---
 V01StockPcYearly.UP(runCy,YTIME) = 10000; !! upper bound of V01StockPcYearly is 10000 million vehicles
@@ -51,7 +51,7 @@ V01MEPcGdp.FX(runCy,YTIME)$(not An(YTIME)) = i01DataPassCars(runCy,"PC","MEXTV")
 *---
 V01GapTranspActiv.FX(runCy,TRANSE,YTIME)$(not AN(YTIME))=0;
 *---
-V01ConsSpecificFuel.FX(runCy,TRANSE,TTECH,EF,"%fBaseY%")$(SECTTECH(TRANSE,EF) ) = i01SpeFuelConsCostBy(runCy,TRANSE,TTECH,EF);
+V01ConsSpecificFuel.FX(runCy,TRANSE,TTECH,EF,"%fBaseY%")$(SECTTECH(TRANSE,TTECH)$TTECHtoEF(TTECH,EF) ) = i01SpeFuelConsCostBy(runCy,TRANSE,TTECH,EF);
 *---
 V01ConsTechTranspSectoral.FX(runCy,TRANSE,TTECH,EF,YTIME)$(SECTTECH(TRANSE,TTECH)  $(not PLUGIN(TTECH)) $TTECHtoEF(TTECH,EF) $(not AN(YTIME))) = imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME); 
 V01ConsTechTranspSectoral.FX(runCy,TRANSE,TTECH,EF,YTIME)$(SECTTECH(TRANSE,TTECH)  $PLUGIN(TTECH) $(not AN(YTIME))) = 0;
@@ -72,12 +72,13 @@ Q01ShareTechTr.scale(runCy,TRANSE,EF2,YTIME)=V01ShareTechTr.scale(runCy,TRANSE,E
 V01CostTranspPerVeh.scale(runCy,TRANSE,RCon,TTECH,YTIME)=1e-12;
 Q01CostTranspPerVeh.scale(runCy,TRANSE,RCon,TTECH,YTIME)=V01CostTranspPerVeh.scale(runCy,TRANSE,RCon,TTECH,YTIME);
 *---
-VmDemFinEneTranspPerFuel.FX(runCy,TRANSE,EF,YTIME) $(SECTTECH(TRANSE,EF) $(not An(YTIME))) = imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME);
-VmDemFinEneTranspPerFuel.FX(runCy,TRANSE,EF,YTIME)$(not SECTTECH(TRANSE,EF)) = 0;
+VmDemFinEneTranspPerFuel.FX(runCy,TRANSE,EF,YTIME) $(SECTTECH(TRANSE,TTECH) $TTECHtoEF(TTECH,EF) $(not An(YTIME))) = imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME);
+VmDemFinEneTranspPerFuel.FX(runCy,TRANSE,EF,YTIME)$(not SECTTECH(TRANSE,TTECH)$$TTECHtoEF(TTECH,EF)) = 0;
 *---
-VmLft.L(runCy,DSBS,EF,YTIME)= 0.1;
-VmLft.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF)  $(not  TRANSE(DSBS)) $(not sameas(DSBS,"PC"))) = i01TechLft(runCy,DSBS,EF,YTIME);
+* SOME NEED TO BE MOVED TO INDUSTRY
+VmLft.L(runCy,DSBS,TTECH,YTIME)= 0.1;
+VmLft.FX(runCy,DSBS,TECH,YTIME)$(SECTTECH(DSBS,TECH)  $(not  TRANSE(DSBS)) $(not sameas(DSBS,"PC"))) = i01TechLft(runCy,DSBS,EF,YTIME);
 VmLft.FX(runCy,TRANSE,TTECH,YTIME)$(SECTTECH(TRANSE,TTECH) $(not sameas(TRANSE,"PC"))) = i01TechLft(runCy,TRANSE,TTECH,YTIME);
-VmLft.FX(runCy,DSBS,EF,YTIME)$(not SECTTECH(DSBS,EF)) = 0;
+VmLft.FX(runCy,DSBS,TTECH,YTIME)$(not SECTTECH(DSBS,TECH)) = 0;
 VmLft.FX(runCy,"PC",TTECH,YTIME)$( (not AN(YTIME)) $SECTTECH("PC",TTECH)) = 10;
 *---

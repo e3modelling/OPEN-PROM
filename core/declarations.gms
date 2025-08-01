@@ -39,18 +39,18 @@ imShrNonSubElecInTotElecDem(allCy,SBS)	                   "Share of non substitu
 imDistrLosses(allCy,EF,YTIME)	                           "Distribution Losses (Mtoe)"		
 imFinEneCons(allCy,EF,YTIME)	                           "Final energy consumption (Mtoe)"		
 imFuelImports(allCy,EF,YTIME)	                           "Fuel Imports (Mtoe)"							
-imVarCostTech(allCy,SBS,EF,YTIME)	                       "Variable Cost of technology ()"
+imVarCostTech(allCy,SBS,TECH,YTIME)	                       "Variable Cost of technology ()"
                                                                 !! For transport (kUS$2015/vehicle)
                                                                 !! For Industrial sectors, except Iron and Steel (US$2015/toe-year)
                                                                 !! For Iron and Steel  (US$2015/tn-of-steel)
                                                                 !! For Domestic sectors  (US$2015/toe-year)
-imFixOMCostTech(allCy,SBS,EF,YTIME)                        "Fixed O&M cost of technology (US$2015/toe-year)"                                   
+imFixOMCostTech(allCy,SBS,TECH,YTIME)                        "Fixed O&M cost of technology (US$2015/toe-year)"                                   
                                                                 !! Fixed O&M cost of technology for Transport (kUS$2015/vehicle)
                                                                 !! Fixed O&M cost of technology for Industrial sectors-except Iron and Steel (US$2015/toe-year)"                                            
                                                                 !! Fixed O&M cost of technology for Iron and Steel (US$2015/tn-of-steel)"                                          
                                                                 !! Fixed O&M cost of technology for Domestic sectors (US$2015/toe-year)"
-imUsfEneConvSubTech(allCy,SBS,EF,YTIME)                    "Useful Energy Conversion Factor per subsector and technology (1)"
-imCapCostTech(allCy,SBS,EF,YTIME)                          "Capital Cost of technology (various)"
+imUsfEneConvSubTech(allCy,SBS,TECH,YTIME)                    "Useful Energy Conversion Factor per subsector and technology (1)"
+imCapCostTech(allCy,SBS,TECH,YTIME)                          "Capital Cost of technology (various)"
                                                                 !! - For transport is expressed in kUS$2015 per vehicle
                                                                 !! - For Industrial sectors (except Iron and Steel) is expressed in kUS$2015/toe-year
                                                                 !! - For Iron and Steel is expressed in kUS$2015/tn-of-steel
@@ -85,4 +85,5 @@ sSolverTryMax                                              "maximum attempts to 
 sModelStat                                                 "helper parameter for solver status"
 smFracElecPriChp                                           "Fraction of Electricity Price at which a CHP sells electricity to network" /0.3/
 sCY                                                        "country iterator" /0/
+sUnitToKUnit                                               "units to Kilo units conversion" /1000/
 ;

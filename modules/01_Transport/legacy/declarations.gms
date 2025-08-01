@@ -59,5 +59,5 @@ V01RateScrPc(allCy,YTIME)                                  "Scrapping rate of pa
 
 *'                **Interdependent Equations**
 VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)            "Final energy demand in transport subsectors per fuel (Mtoe)"
-VmLft(allCy,DSBS,EF,YTIME)                                 "Lifetime of technologies (years)"
+VmLft(allCy,DSBS,TECH,YTIME)                                 "Lifetime of technologies (years)"
 ;

@@ -350,11 +350,11 @@ STE2OLQ "Steam produced from district heating plants burning olq"
 STE2NGS "Steam produced from district heating plants burning ngs"
 STE2OGS "Steam produced from district heating plants burning ogs"
 STE2BMS "Steam produced from district heating plants burning bmswas"
-PHEVGSL  "Plug in Hybrid engine - gasoline"
-PHEVGDO  "Plug in Hybrid engine - diesel"
+*PHEVGSL  "Plug in Hybrid engine - gasoline"
+*PHEVGDO  "Plug in Hybrid engine - diesel"
 *hybrid cars with gasoline and diesel
-CHEVGSL  "conventional Hybrid engine - gasoline"
-CHEVGDO  "conventional Hybrid engine - diesel"
+*CHEVGSL  "conventional Hybrid engine - gasoline"
+*CHEVGDO  "conventional Hybrid engine - diesel"
 
 * Aggregate Fuels
 SLD     "Solid Fuels"
@@ -586,79 +586,248 @@ ORD   Ordinary
 IMP   Improved
 /
 
-TTECH(EF)        Transport Technologies
+TECH      Technologies
 /
-GSL      "Internal Combustion Engine fueled by Gasoline"
-LPG      "Internal Combustion Engine fueled by Liquified Petroleum Gas"
-GDO      "Internal Combustion Engine fueled by Diesel Oil"
-NGS      "Internal Combustion Engine fueled by Natural Gas"
-ELC      "Pure Electirc Engine"
-KRS      "Gas Turbine fueled by Kerosene"
-ETH      "Internal Combustion Engine fueled by Ethanol"
-MET      "Methanol (85% gasoline 15% methanol) coming either from ngs or bms"
-BGDO     "Biodiesel internal combustion engine"
-PHEVGSL  "Plug in Hybrid engine - gasoline"
-PHEVGDO  "Plug in Hybrid engine - diesel"
-H2F      "Fuel Cells: Hydrogen"
-CHEVGSL  "conventional Hybrid engine - gasoline"
-CHEVGDO  "conventional Hybrid engine - diesel"
+TGSL      "Internal Combustion Engine fueled by Gasoline"
+TLPG      "Internal Combustion Engine fueled by Liquified Petroleum Gas"
+TGDO      "Internal Combustion Engine fueled by Diesel Oil"
+TNGS      "Internal Combustion Engine fueled by Natural Gas"
+TELC      "Pure Electirc Engine"
+TKRS      "Gas Turbine fueled by Kerosene"
+TETH      "Internal Combustion Engine fueled by Ethanol"
+TMET      "Methanol (85% gasoline 15% methanol) coming either from ngs or bms"
+TBGDO     "Biodiesel internal combustion engine"
+TPHEVGSL  "Plug in Hybrid engine - gasoline"
+TPHEVGDO  "Plug in Hybrid engine - diesel"
+TH2F      "Fuel Cells: Hydrogen"
+TCHEVGSL  "conventional Hybrid engine - gasoline"
+TCHEVGDO  "conventional Hybrid engine - diesel"
+* Industrial Technologies (only add those not already in Transport)
+* GDO,LPG,KRS,NGS,ELC already exist in TRANSPORT technologies
+TLGN
+THCL
+TRFO
+TOLQ
+TOGS
+TSTE1AL
+TSTE1AH
+TSTE1AD
+TSTE1AG
+TSTE1AB
+* Domestic Technologies (only add those not already in Transport & Industry)
+* LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC,STE1AL,STE1AH,STE1AD,STE1AG,STE1AB already exist in TRANSPORT or INDUSTRY technologies
+TSTE2LGN
+TSTE2OSL
+TSTE2GDO
+TSTE2RFO
+TSTE2OLQ
+TSTE2NGS
+TSTE2OGS
+TSTE2BMS
+TBMSWAS
+* Non-Energy and Bunkers Technologies (only add those not already in Transport & Industry & Domestic)
+* GDO,RFO,LGN,HCL,GDO,LPG,OLQ,NGS,OGS already exist
+* Power Generation Technologies
+PGTLGN
+PGTHCL 
+PGTGDO
+PGTRFO
+PGTNGS
+PGTNUC
+PGTHYD
+PGTBMSWAS
+PGTSOL
+PGTGEO
+PGTWND
+* Hydrogen Production Technologies
+HPTHCL
+HPTRFO
+HPTNGS
+HPTNUC
+HPTBMSWAS
+HPTSOL
+HPTWND
+HPTELC
 /
 
+TTECH(TECH)      Transport Technologies
+/
+TGSL      "Internal Combustion Engine fueled by Gasoline"
+TLPG      "Internal Combustion Engine fueled by Liquified Petroleum Gas"
+TGDO      "Internal Combustion Engine fueled by Diesel Oil"
+TNGS      "Internal Combustion Engine fueled by Natural Gas"
+TELC      "Pure Electirc Engine"
+TKRS      "Gas Turbine fueled by Kerosene"
+TETH      "Internal Combustion Engine fueled by Ethanol"
+TMET      "Methanol (85% gasoline 15% methanol) coming either from ngs or bms"
+TBGDO     "Biodiesel internal combustion engine"
+TPHEVGSL  "Plug in Hybrid engine - gasoline"
+TPHEVGDO  "Plug in Hybrid engine - diesel"
+TH2F      "Fuel Cells: Hydrogen"
+TCHEVGSL  "conventional Hybrid engine - gasoline"
+TCHEVGDO  "conventional Hybrid engine - diesel"
+/
+
+ITECH      Industrial - Domestic - Non-energy & Bunkers Technologies 
+/
+TGDO
+TLPG
+TKRS  
+TNGS
+TELC    
+TLGN
+THCL
+TRFO
+TOLQ
+TOGS
+TSTE1AL
+TSTE1AH
+TSTE1AD
+TSTE1AG
+TSTE1AB
+* Domestic Technologies (only add those not already in Industry)
+TGSL
+TSTE2LGN
+TSTE2OSL
+TSTE2GDO
+TSTE2RFO
+TSTE2OLQ
+TSTE2NGS
+TSTE2OGS
+TSTE2BMS
+TBMSWAS
+/
+
+TECHtoEF (TECH,EF) Fuels consumed by technologies
+/
+TGSL.GSL
+TLPG.LPG
+TGDO.GDO
+TNGS.NGS
+TELC.ELC
+TKRS.KRS
+TETH.ETH
+TMET.MET
+TBGDO.BGDO
+*TPHEVGSL.(GSL,ELC)
+*TPHEVGDO.(GDO,ELC)
+TH2F.H2F
+TCHEVGSL.GSL
+TCHEVGDO.GDO
+TGDO.GDO
+TLPG.LPG
+TKRS.KRS  
+TNGS.NGS
+TELC.ELC    
+TLGN.LGN
+THCL.HCL
+TRFO.RFO
+TOLQ.OLQ
+TOGS.OGS
+TSTE1AL.STE1AL
+TSTE1AH.STE1AH
+TSTE1AD.STE1AD
+TSTE1AG.STE1AG
+TSTE1AB.STE1AB
+* Domestic Technologies (only add those not already in Transport & Industry)
+* LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC,STE1AL,STE1AH,STE1AD,STE1AG,STE1AB already exist in TRANSPORT or INDUSTRY technologies
+TGSL.GSL
+TSTE2LGN.STE2LGN
+TSTE2OSL.STE2OSL
+TSTE2GDO.STE2GDO
+TSTE2RFO.STE2RFO
+TSTE2OLQ.STE2OLQ
+TSTE2NGS.STE2NGS
+TSTE2OGS.STE2OGS
+TSTE2BMS.STE2BMS
+TBMSWAS.BMSWAS
+/
 TTECHtoEF(TTECH,EF) Fuels consumed by transport technologies
 /
-GSL.GSL
-LPG.LPG
-GDO.GDO
-NGS.NGS
-ELC.ELC
-KRS.KRS
-ETH.ETH
-MET.MET
-BGDO.BGDO
-PHEVGSL.(GSL,ELC)
-PHEVGDO.(GDO,ELC)
-H2F.H2F
-CHEVGSL.GSL
-CHEVGDO.GDO
+TGSL.GSL
+TLPG.LPG
+TGDO.GDO
+TNGS.NGS
+TELC.ELC
+TKRS.KRS
+TETH.ETH
+TMET.MET
+TBGDO.BGDO
+TPHEVGSL.(GSL,ELC)
+TPHEVGDO.(GDO,ELC)
+TH2F.H2F
+TCHEVGSL.GSL
+TCHEVGDO.GDO
+/
+
+ITECHtoEF(ITECH,EF) Fuels consumed by industrial technologies
+/
+TGDO.GDO
+TLPG.LPG
+TKRS.KRS  
+TNGS.NGS
+TELC.ELC    
+TLGN.LGN
+THCL.HCL
+TRFO.RFO
+TOLQ.OLQ
+TOGS.OGS
+TSTE1AL.STE1AL
+TSTE1AH.STE1AH
+TSTE1AD.STE1AD
+TSTE1AG.STE1AG
+TSTE1AB.STE1AB
+* Domestic Technologies (only add those not already in Transport & Industry)
+* LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC,STE1AL,STE1AH,STE1AD,STE1AG,STE1AB already exist in TRANSPORT or INDUSTRY technologies
+TGSL.GSL
+TSTE2LGN.STE2LGN
+TSTE2OSL.STE2OSL
+TSTE2GDO.STE2GDO
+TSTE2RFO.STE2RFO
+TSTE2OLQ.STE2OLQ
+TSTE2NGS.STE2NGS
+TSTE2OGS.STE2OGS
+TSTE2BMS.STE2BMS
+TBMSWAS.BMSWAS
 /
 
 
-PLUGIN(EF) Plug-in hybrids
+PLUGIN(TTECH) Plug-in hybrids
 /
-PHEVGSL
-PHEVGDO
-/
-
-CHYBV(EF) CONVENTIONAL hybrids
-/
-CHEVGSL
-CHEVGDO
+TPHEVGSL
+TPHEVGDO
 /
 
-SECTTECH(SBS,EF) Link between Model Subsectors and Fuels
+CHYBV(TTECH) CONVENTIONAL hybrids
 /
-PC.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO,CHEVGSL,CHEVGDO)
-PB.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO)
-GU.(LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGDO,CHEVGDO) !! Removed GSL and PHEVGSL
-(PT,GT).(GDO,ELC,MET)
-PA.(KRS)
-PN.(GSL,GDO)
-GN.(GSL,GDO)
-(IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(LGN,HCL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC,STE1AL,
-                                 STE1AH,STE1AD,STE1AG,STE1AB)
-(SE,HOU,AG).                    (LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC,STE1AL,
-                                 STE1AH,STE1AD,STE1AG,STE1AB,STE2LGN,STE2OSL,STE2GDO,STE2RFO,STE2OLQ,STE2NGS,
-                                 STE2OGS,STE2BMS, BMSWAS)
+TCHEVGSL
+TCHEVGDO
+/
+
+SECTTECH(SBS,TECH) Link between Model Subsectors and Fuels
+/
+PC.(TGSL,TLPG,TGDO,TNGS,TELC,TETH,TMET,TBGDO,TPHEVGSL,TPHEVGDO,TCHEVGSL,TCHEVGDO)
+PB.(TGSL,TLPG,TGDO,TNGS,TELC,TETH,TMET,TBGDO,TPHEVGSL,TPHEVGDO)
+GU.(TLPG,TGDO,TNGS,TELC,TETH,TMET,TBGDO,TPHEVGDO,TCHEVGDO) !! Removed GSL and PHEVGSL
+(PT,GT).(TGDO,TELC,TMET)
+PA.(TKRS)
+PN.(TGSL,TGDO)
+GN.(TGSL,TGDO)
+(IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(TLGN,THCL,TGDO,TRFO,TLPG,TKRS,TOLQ,TNGS,TOGS,TELC,TSTE1AL,
+                                 TSTE1AH,TSTE1AD,TSTE1AG,TSTE1AB)
+(SE,HOU,AG).                    (TLGN,THCL,TGSL,TGDO,TRFO,TLPG,TKRS,TOLQ,TNGS,TOGS,TELC,TSTE1AL,
+                                 TSTE1AH,TSTE1AD,TSTE1AG,TSTE1AB,TSTE2LGN,TSTE2OSL,TSTE2GDO,TSTE2RFO,TSTE2OLQ,TSTE2NGS,
+                                 TSTE2OGS,TSTE2BMS, TBMSWAS)
 
 *BU.(GDO,RFO,OLQ)
-BU.(GDO,RFO)
-(PCH,NEN).(LGN,HCL,GDO,RFO,LPG,OLQ,NGS,OGS)
-PG.(LGN,HCL,GDO,RFO,NGS,NUC,HYD,BMSWAS,SOL,GEO,WND)
-H2P.(HCL,RFO,NGS,NUC,BMSWAS,SOL,WND,ELC)
+BU.(TGDO,TRFO)
+(PCH,NEN).(TLGN,THCL,TGDO,TRFO,TLPG,TOLQ,TNGS,TOGS)
+PG.(PGTLGN,PGTHCL,PGTGDO,PGTRFO,PGTNGS,PGTNUC,PGTHYD,PGTBMSWAS,PGTSOL,PGTGEO,PGTWND)
+H2P.(HPTHCL,HPTRFO,HPTNGS,HPTNUC,HPTBMSWAS,HPTSOL,HPTWND,HPTELC)
 /
 
 
-PGALL            Power Generation Plant Types
+PGALL            Power Generation Plant Types !! Maybe these should be the power generation technologies?
 /
 *CTHLGN Conventional thermal monovalent lignite
 *CTHHCL Conventional thermal monovalent hard coal
@@ -744,6 +913,11 @@ ATHBMSCCS.ATHBMSWAS
 CHP(EF)       CHP Plants
 /
 STE1AL,STE1AH,STE1AD,STE1AG,STE1AB
+/
+
+TCHP(TECH)       CHP Plants
+/
+TSTE1AL,TSTE1AH,TSTE1AD,TSTE1AG,TSTE1AB
 /
 
 DH(EF)       District Heating
