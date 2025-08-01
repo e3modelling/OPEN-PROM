@@ -26,13 +26,6 @@ GT   600  0.8
 GN   1500 0.9 
 ;
 *---
-table i01DataPassCars(allCy,GompSet1,Gompset2)          "Initial Data for Passenger Cars ()"
-          scr
-CHA.PC    0.0201531648401507
-IND.PC    0.0201531648401507
-USA.PC    0.0418811968705786
-;
-*---
 table i01NewReg(allCy,YTIME)                            "new car registrations per year"
 $ondelim
 $include"./iNewReg.csv"
@@ -183,26 +176,20 @@ GN.H2F.H2F	8.14286
 Parameters
 i01PlugHybrFractOfMileage(ELSH_SET,YTIME)	           "Plug in hybrid fraction of mileage covered by electricity, residualls on GDP-Depnd car market ext (1)"
 i01SpeFuelConsCostBy(allCy,SBS,TTECH,EF)	           "Specific fuel consumption cost in Base year (ktoe/Gpkm or ktoe/Gtkm or ktoe/Gvkm)"
-i01Sigma(allCy,SG)                                      "S parameters of Gompertz function for passenger cars vehicle km (1)"
 i01GdpPassCarsMarkExt(allCy)	                          "GDP-dependent passenger cars market extension (GDP/capita)"
 i01PassCarsScrapRate(allCy)	                          "Passenger cars scrapping rate (1)"
 i01ShareAnnMilePlugInHybrid(allCy,YTIME)	           "Share of annual mileage of a plug-in hybrid which is covered by electricity (1)"
 i01AvgVehCapLoadFac(allCy,TRANSE,TRANSUSE,YTIME)	      "Average capacity/vehicle and load factor (tn/veh or passenegers/veh)"
 i01TechLft(allCy,SBS,EF,YTIME)	                     "Technical Lifetime. For passenger cars it is a variable (1)"
-i01PassCarsMarkSat(allCy)	                          "Passenger cars market saturation (1)"
+i01PassCarsMarkSat(allCy)	                          "Passenger cars ownership saturation threshold (1)"
+i01PCGDPSatThresh(allCy)	                           "Passenger cars GDP per capita saturation threshold (US$2015)"
+i01GDPperCapita(YTIME,allCy)
 ;
 *---
 i01SpeFuelConsCostBy(runCy,TRANSE,TTECH,EF) = i01InitSpecFuelConsData(TRANSE,TTECH,EF);
 *---
-i01DataPassCars(runCy,"PC","S1") = 1.0;
-i01DataPassCars(runCy,"PC","S2") = -0.01;
-i01DataPassCars(runCy,"PC","S3") = 6.5;
-*---
-i01Sigma(runCy,"S1") = i01DataPassCars(runCy,"PC","S1");
-i01Sigma(runCy,"S2") = i01DataPassCars(runCy,"PC","S2");
-i01Sigma(runCy,"S3") = i01DataPassCars(runCy,"PC","S3");
-*---
-i01PassCarsMarkSat(runCy) = i01DataPassCars(runCy,"PC","SAT");
+i01PCGDPSatThresh(runCy) = 50000;
+i01PassCarsMarkSat(runCy) = 0.7;
 *---
 imFuelConsTRANSE(runCy,TRANSE,EF,YTIME)$(SECTTECH(TRANSE,EF) $(imFuelConsTRANSE(runCy,TRANSE,EF,YTIME)<=0)) = 1e-6;
 *---
@@ -224,3 +211,4 @@ i01TechLft(runCy,DOMSE,EF,YTIME) = imDataDomTech(DOMSE,EF,"LFT");
 **  Non Energy Sector and Bunkers
 i01TechLft(runCy,NENSE,EF,YTIME) = imDataNonEneSec(NENSE,EF,"LFT");
 *---
+i01GDPperCapita(YTIME,runCy) = i01GDP(YTIME,runCy) / i01Pop(YTIME,runCy);
