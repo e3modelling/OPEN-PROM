@@ -34,20 +34,23 @@ Q01ActivGoodsTransp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANG(TRANSE) $runCy(allCy
                     VmPriceFuelAvgSub(allCy,TRANSE,YTIME-(ord(kpdl)+1)))/
                     (imCGI(allCy,YTIME)**(1/6))]**(imElastA(allCy,TRANSE,"c3",YTIME)*imFPDL(TRANSE,KPDL))
                  )
-         )$sameas(TRANSE,"GU")        !!trucks
-         +
+         )$sameas(TRANSE,"GU") +      !!trucks
          (
-           V01ActivGoodsTransp(allCy,TRANSE,YTIME-1)
-           * [(i01GDP(YTIME,allCy)/i01Pop(YTIME,allCy))/(i01GDP(YTIME-1,allCy)/i01Pop(YTIME-1,allCy))]**imElastA(allCy,TRANSE,"a",YTIME)
-           * (VmPriceFuelAvgSub(allCy,TRANSE,YTIME)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1))**imElastA(allCy,TRANSE,"c1",YTIME)
-           * (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2))**imElastA(allCy,TRANSE,"c2",YTIME)
-           * prod(kpdl,
-                  [(VmPriceFuelAvgSub(allCy,TRANSE,YTIME-ord(kpdl))/
-                    VmPriceFuelAvgSub(allCy,TRANSE,YTIME-(ord(kpdl)+1)))/
-                    (imCGI(allCy,YTIME)**(1/6))]**(imElastA(allCy,TRANSE,"c3",YTIME)*imFPDL(TRANSE,KPDL))
-                 )
-           * (V01ActivGoodsTransp(allCy,"GU",YTIME)/V01ActivGoodsTransp(allCy,"GU",YTIME-1))**imElastA(allCy,TRANSE,"c4",YTIME)
-         )$(not sameas(TRANSE,"GU"));                      !!other freight transport
+            V01ActivGoodsTransp(allCy,TRANSE,YTIME-1) *
+            [i01GDPperCapita(YTIME,allCy) / i01GDPperCapita(YTIME-1,allCy)]**imElastA(allCy,TRANSE,"a",YTIME) *
+            (VmPriceFuelAvgSub(allCy,TRANSE,YTIME) / VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1))**imElastA(allCy,TRANSE,"c1",YTIME) *
+            (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2))**imElastA(allCy,TRANSE,"c2",YTIME) *
+            prod(kpdl,
+              [
+                (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-ord(kpdl)) / VmPriceFuelAvgSub(allCy,TRANSE,YTIME-(ord(kpdl)+1))) /
+                (imCGI(allCy,YTIME)**(1/6))
+              ]**(imElastA(allCy,TRANSE,"c3",YTIME)*imFPDL(TRANSE,KPDL))
+            ) *
+            (
+              (V01ActivGoodsTransp(allCy,"GU",YTIME) + 1e6) / 
+              (V01ActivGoodsTransp(allCy,"GU",YTIME-1) + 1e6)
+            )**imElastA(allCy,TRANSE,"c4",YTIME)
+          )$(not sameas(TRANSE,"GU"));        !!other freight transport
 
 *' This equation calculates the gap in transport activity, which represents the activity that needs to be filled by new technologies.
 *' The gap is calculated separately for passenger cars, other passenger transportation modes, and goods transport. The equation involves
@@ -56,19 +59,30 @@ Q01ActivGoodsTransp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANG(TRANSE) $runCy(allCy
 Q01GapTranspActiv(allCy,TRANSE,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V01GapTranspActiv(allCy,TRANSE,YTIME)
                  =E=
-         V01NewRegPcYearly(allCy,YTIME)$sameas(TRANSE,"PC")
-         +
+         V01NewRegPcYearly(allCy,YTIME)$sameas(TRANSE,"PC") +
          (
-         ( [V01ActivPassTrnsp(allCy,TRANSE,YTIME) - V01ActivPassTrnsp(allCy,TRANSE,YTIME-1) + V01ActivPassTrnsp(allCy,TRANSE,YTIME-1)/
-         (sum((TTECH)$SECTTECH(TRANSE,TTECH),VmLft(allCy,TRANSE,TTECH,YTIME-1))/TECHS(TRANSE))] +
-          SQRT( SQR([V01ActivPassTrnsp(allCy,TRANSE,YTIME) - V01ActivPassTrnsp(allCy,TRANSE,YTIME-1) + V01ActivPassTrnsp(allCy,TRANSE,YTIME-1)/
-          (sum((TTECH)$SECTTECH(TRANSE,TTECH),VmLft(allCy,TRANSE,TTECH,YTIME-1))/TECHS(TRANSE))]) + SQR(1e-4) ) )/2
-         )$(TRANP(TRANSE) $(not sameas(TRANSE,"PC")))
-         +
+          ( 
+            [
+              V01ActivPassTrnsp(allCy,TRANSE,YTIME) - 
+              V01ActivPassTrnsp(allCy,TRANSE,YTIME-1) + 
+              V01ActivPassTrnsp(allCy,TRANSE,YTIME-1) /
+              (sum((TTECH)$SECTTECH(TRANSE,TTECH), VmLft(allCy,TRANSE,TTECH,YTIME-1)) / TECHS(TRANSE))
+            ] +
+            SQRT( SQR([V01ActivPassTrnsp(allCy,TRANSE,YTIME) - V01ActivPassTrnsp(allCy,TRANSE,YTIME-1) + V01ActivPassTrnsp(allCy,TRANSE,YTIME-1)/
+            (sum((TTECH)$SECTTECH(TRANSE,TTECH),VmLft(allCy,TRANSE,TTECH,YTIME-1))/TECHS(TRANSE))]) + SQR(1e-4) ) 
+          )/2
+         )$(TRANP(TRANSE) $(not sameas(TRANSE,"PC"))) +
          (
-         ( [V01ActivGoodsTransp(allCy,TRANSE,YTIME) - V01ActivGoodsTransp(allCy,TRANSE,YTIME-1) + V01ActivGoodsTransp(allCy,TRANSE,YTIME-1)/
-         (sum((EF)$SECTTECH(TRANSE,EF),VmLft(allCy,TRANSE,EF,YTIME-1))/TECHS(TRANSE))] + SQRT( SQR([V01ActivGoodsTransp(allCy,TRANSE,YTIME) - V01ActivGoodsTransp(allCy,TRANSE,YTIME-1) + V01ActivGoodsTransp(allCy,TRANSE,YTIME-1)/
-          (sum((EF)$SECTTECH(TRANSE,EF),VmLft(allCy,TRANSE,EF,YTIME-1))/TECHS(TRANSE))]) + SQR(1e-4) ) )/2
+          ( 
+            [
+              V01ActivGoodsTransp(allCy,TRANSE,YTIME) - 
+              V01ActivGoodsTransp(allCy,TRANSE,YTIME-1) + 
+              V01ActivGoodsTransp(allCy,TRANSE,YTIME-1) /
+              (sum(EF$SECTTECH(TRANSE,EF),VmLft(allCy,TRANSE,EF,YTIME-1))/TECHS(TRANSE))
+            ] + 
+            SQRT( SQR([V01ActivGoodsTransp(allCy,TRANSE,YTIME) - V01ActivGoodsTransp(allCy,TRANSE,YTIME-1) + V01ActivGoodsTransp(allCy,TRANSE,YTIME-1)/
+            (sum((EF)$SECTTECH(TRANSE,EF),VmLft(allCy,TRANSE,EF,YTIME-1))/TECHS(TRANSE))]) + SQR(1e-4) ) 
+          )/2
          )$TRANG(TRANSE);
 
 *' This equation calculates the specific fuel consumption for a given technology, subsector, energy form, and time. The specific fuel consumption depends on various factors,
@@ -150,35 +164,44 @@ Q01ShareTechTr(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $r
 *' average capacity per vehicle, load factor, scrapping rate, and specific fuel consumption. The equation also takes into account the technology's variable
 *' cost for new equipment and the gap in transport activity to be filled by new technologies. The result is expressed in million tonnes of oil equivalent.
 Q01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $TTECHtoEF(TTECH,EF) $runCy(allCy))..
-      V01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)
-              =E=
-      V01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME-1) *
+    V01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)
+            =E=
+    V01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME-1) *
+    (
       (
+        (VmLft(allCy,TRANSE,TTECH,YTIME-1)-1) / 
+        VmLft(allCy,TRANSE,TTECH,YTIME-1) *
+        i01AvgVehCapLoadFac(allCy,TRANSE,"CAP",YTIME-1) *
+        i01AvgVehCapLoadFac(allCy,TRANSE,"LF",YTIME-1) /
+        i01AvgVehCapLoadFac(allCy,TRANSE,"CAP",YTIME) /
+        i01AvgVehCapLoadFac(allCy,TRANSE,"LF",YTIME)
+      )$(not sameas(TRANSE,"PC")) +
+      (
+        1 - V01RateScrPc(allCy,YTIME)
+      )$sameas(TRANSE,"PC")
+    ) +
+    V01ShareTechTr(allCy,TRANSE,TTECH,YTIME) *
+    (
+      V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)$(not PLUGIN(TTECH)) +
+      ( 
         (
-          ((VmLft(allCy,TRANSE,TTECH,YTIME-1)-1)/VmLft(allCy,TRANSE,TTECH,YTIME-1))
-          *(i01AvgVehCapLoadFac(allCy,TRANSE,"CAP",YTIME-1)*i01AvgVehCapLoadFac(allCy,TRANSE,"LF",YTIME-1))
-          /(i01AvgVehCapLoadFac(allCy,TRANSE,"CAP",YTIME)*i01AvgVehCapLoadFac(allCy,TRANSE,"LF",YTIME))
-        )$(not sameas(TRANSE,"PC"))
-        +
-        (1 - V01RateScrPc(allCy,YTIME))$sameas(TRANSE,"PC")
-      )
-      +
-      V01ShareTechTr(allCy,TRANSE,TTECH,YTIME) *
+          (1-i01ShareAnnMilePlugInHybrid(allCy,YTIME)) *
+          V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)
+        )$(not sameas("ELC",EF)) +
+        i01ShareAnnMilePlugInHybrid(allCy,YTIME) *
+        V01ConsSpecificFuel(allCy,TRANSE,TTECH,"ELC",YTIME)
+      )$PLUGIN(TTECH)
+    )/1000 *
+    V01GapTranspActiv(allCy,TRANSE,YTIME) *
+    (
       (
-      V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)$(not PLUGIN(TTECH))
-      +
-      ( ((1-i01ShareAnnMilePlugInHybrid(allCy,YTIME))*V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME))$(not sameas("ELC",EF))
-        + i01ShareAnnMilePlugInHybrid(allCy,YTIME)*V01ConsSpecificFuel(allCy,TRANSE,TTECH,"ELC",YTIME))$PLUGIN(TTECH)
-      )/1000
-      * V01GapTranspActiv(allCy,TRANSE,YTIME) *
-      (
-      (
-      (i01AvgVehCapLoadFac(allCy,TRANSE,"CAP",YTIME-1)*i01AvgVehCapLoadFac(allCy,TRANSE,"LF",YTIME-1))
-      / (i01AvgVehCapLoadFac(allCy,TRANSE,"CAP",YTIME)*i01AvgVehCapLoadFac(allCy,TRANSE,"LF",YTIME))
-      )$(not sameas(TRANSE,"PC"))
-      +
+        i01AvgVehCapLoadFac(allCy,TRANSE,"CAP",YTIME-1) *
+        i01AvgVehCapLoadFac(allCy,TRANSE,"LF",YTIME-1) /
+        i01AvgVehCapLoadFac(allCy,TRANSE,"CAP",YTIME) /
+        i01AvgVehCapLoadFac(allCy,TRANSE,"LF",YTIME)
+      )$(not sameas(TRANSE,"PC")) +
       (V01ActivPassTrnsp(allCy,TRANSE,YTIME))$sameas(TRANSE,"PC")
-      );
+    );
 
 *' This equation calculates the final energy demand in transport for each fuel within a specific transport subsector.
 *' It sums up the consumption of each technology and subsector for the given fuel. The result is expressed in million tonnes of oil equivalent.
@@ -203,7 +226,7 @@ $offtext
 Q01StockSaturation(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         V01StockSaturation(allCy,YTIME)
                 =E=
-        1 / (1 + exp(5 * (i01GDPperCapita(YTIME,allCy)/i01PCGDPSatThresh(allCy) - 1))) *
+        1 / (1 + exp(5 * (i01GDPperCapita(YTIME,allCy) / i01PCGDPSatThresh(allCy) - 1))) *
         1 / (1 + exp(10 * (V01PcOwnPcLevl(allCy,YTIME) / i01PassCarsMarkSat(allCy) - 0.7)));
 
 *' This equation computes the total stock of passenger cars (in millions).
