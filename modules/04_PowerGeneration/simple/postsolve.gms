@@ -4,7 +4,7 @@
 * Power Generation Module
 
 *---
-VmCostPowGenAvgLng.FX(runCyL,ESET,YTIME)$TIME(YTIME) = VmCostPowGenAvgLng.L(runCyL,ESET,YTIME)$TIME(YTIME);
+VmCostPowGenAvgLng.FX(runCyL,YTIME)$TIME(YTIME) = VmCostPowGenAvgLng.L(runCyL,YTIME)$TIME(YTIME);
 VmCapElecTotEst.FX(runCyL,YTIME)$TIME(YTIME) = VmCapElecTotEst.L(runCyL,YTIME)$TIME(YTIME);
 V04CostPowGenLonNoClimPol.FX(runCyL,ESET,YTIME)$TIME(YTIME) = V04CostPowGenLonNoClimPol.L(runCyL,ESET,YTIME)$TIME(YTIME);
 VmPeakLoad.FX(runCyL,YTIME)$TIME(YTIME) = VmPeakLoad.L(runCyL,YTIME)$TIME(YTIME);
