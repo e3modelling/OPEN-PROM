@@ -106,7 +106,7 @@ Q04CapElecTotEst(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04CostHourProdInvDec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V04CostHourProdInvDec(allCy,PGALL,YTIME)
                   =E=         
-        V04CapexFixCostPG(allCy,PGALL,YTIME-1) / i04AvailRate(allCy,PGALL,YTIME-1) / (smGwToTwhPerYear(YTIME)*1000)
+        V04CapexRESRate(allCy,PGALL,YTIME) * V04CapexFixCostPG(allCy,PGALL,YTIME-1) / i04AvailRate(allCy,PGALL,YTIME-1) / (smGwToTwhPerYear(YTIME)*1000)
         + i04VarCost(PGALL,YTIME-1) / 1E3 + 
         (VmRenValue(YTIME-1)*8.6e-5)$(not (PGREN(PGALL)$(not sameas("PGASHYD",PGALL)) $(not sameas("PGSHYD",PGALL)) $(not sameas("PGLHYD",PGALL)) )) +
         sum(PGEF$PGALLtoEF(PGALL,PGEF), 
@@ -203,8 +203,8 @@ Q04CostVarTechNotPGSCRN(allCy,PGALL,YTIME)$(time(YTIME) $(not PGSCRN(PGALL)) $ru
 Q04CostProdTeCHPreReplac(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V04CostProdTeCHPreReplac(allCy,PGALL,YTIME) =e=
                         (
-                          V04CapexFixCostPG(allCy,PGALL,YTIME) / (smGwToTwhPerYear(YTIME)*1000*i04AvailRate(allCy,PGALL,YTIME))
-                          + (i04VarCost(PGALL,YTIME)/1E3 + sum(PGEF$PGALLtoEF(PGALL,PGEF), 
+                          V04CapexFixCostPG(allCy,PGALL,YTIME) * V04CapexRESRate(allCy,PGALL,YTIME) / (smGwToTwhPerYear(YTIME)*1000*i04AvailRate(allCy,PGALL,YTIME))
+                           + (i04VarCost(PGALL,YTIME)/1E3 + sum(PGEF$PGALLtoEF(PGALL,PGEF), 
                            (VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)+
                             imCO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
                              (1-imCO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
@@ -277,16 +277,28 @@ Q04RenTechMatMultExpr(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
           V04RenTechMatMultExpr(allCy,PGALL,YTIME)
               =E=
           (
-            V04CapElecNominal(allCy,PGALL,YTIME-1) /
-            sum(PGALL2, V04CapElecNominal(allCy,PGALL2,YTIME-1))
+            VmCapElec(allCy,PGALL,YTIME-1) /
+            sum(PGALL2, VmCapElec(allCy,PGALL2,YTIME-1))
           )
-          $(PGREN(PGALL));
+          $(PGREN(PGALL))
+;
 
 Q04RenTechMatMult(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V04RenTechMatMult(allCy,PGALL,YTIME)
           =E=
-         2 / (1+exp(9*V04RenTechMatMultExpr(allCy,PGALL,YTIME)));  
+         2 / (1+exp(9*V04RenTechMatMultExpr(allCy,PGALL,YTIME)))
+;
 
+*' Calculates the share of all the unflexible RES penetration into the mixture, and specifically how much above a given threshold it is.
+Q04ShareMixWndSol(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+          V04ShareMixWndSol(allCy,YTIME)
+              =E=
+            (
+              ((sum(PGALL$(PGRENSW(PGALL)), VmCapElec(allCy,PGALL,YTIME-1)) /
+            sum(PGALL, VmCapElec(allCy,PGALL,YTIME-1)))
+              )
+            )
+; 
 *' The equation calculates a temporary variable which is used to facilitate scaling in the Weibull equation. The scaling is influenced by three main factors:
 *' Maturity Factor for Planned Available Capacity : This factor represents the material-specific influence on the planned available capacity for a power
 *' plant. It accounts for the capacity planning aspect of the power generation technology.
@@ -447,13 +459,10 @@ Q04ProdElecCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04CostPowGenLngTechNoCp(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       V04CostPowGenLngTechNoCp(allCy,PGALL,YTIME)
                  =E=
-      (imDisc(allCy,"PG",YTIME)*EXP(imDisc(allCy,"PG",YTIME)*i04TechLftPlaType(allCy,PGALL)) /
-      (EXP(imDisc(allCy,"PG",YTIME)*i04TechLftPlaType(allCy,PGALL))-1)*i04GrossCapCosSubRen(allCy,PGALL,YTIME)*1000*imCGI(allCy,YTIME) +
-      i04FixOandMCost(allCy,PGALL,YTIME)
-      ) /i04AvailRate(allCy,PGALL,YTIME)
-              / (1000*smGwToTwhPerYear(YTIME)) +
-             sum(PGEF$PGALLTOEF(PGALL,PGEF),
-                 (i04VarCost(PGALL,YTIME)/1000+(VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)+
+      V04CapexFixCostPG(allCy,PGALL,YTIME) * V04CapexRESRate(allCy,PGALL,YTIME) / i04AvailRate(allCy,PGALL,YTIME)
+      / (1000*(smGwToTwhPerYear(YTIME))) +
+      sum(PGEF$PGALLTOEF(PGALL,PGEF),
+                 (i04VarCost(PGALL,YTIME)/1000+(VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)/1.2441+
                  imCO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
                  (1-imCO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
                  (sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))))
@@ -480,15 +489,12 @@ Q04CostPowGenAvgLng(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04CostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         V04CostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)
                  =E=
-        (imDisc(allCy,"PG",YTIME)*EXP(imDisc(allCy,"PG",YTIME)*i04TechLftPlaType(allCy,PGALL)) /
-        (EXP(imDisc(allCy,"PG",YTIME)*i04TechLftPlaType(allCy,PGALL))-1)*i04GrossCapCosSubRen(allCy,PGALL,YTIME)*1000*imCGI(allCy,YTIME) +
-        i04FixOandMCost(allCy,PGALL,YTIME)
-        )/i04AvailRate(allCy,PGALL,YTIME)
-             / (1000*smGwToTwhPerYear(YTIME)*(0.75$ISET(ESET)+0.25$RSET(ESET) + 0.5$CSET(ESET) + 0.5$(TSET(ESET)))) +
-             sum(PGEF$PGALLTOEF(PGALL,PGEF),
-                 (i04VarCost(PGALL,YTIME)/1000+((VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)-
-                 imEffValueInDollars(allCy,"PG",ytime)/1000-imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
-                 sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))/1000 )+
+             V04CapexFixCostPG(allCy,PGALL,YTIME) * V04CapexRESRate(allCy,PGALL,YTIME) / i04AvailRate(allCy,PGALL,YTIME)
+             / (1000*(smGwToTwhPerYear(YTIME)*(0.75$ISET(ESET)+0.25$RSET(ESET) + 0.5$CSET(ESET) + 0.5$(TSET(ESET)))))
+             + sum(PGEF$PGALLTOEF(PGALL,PGEF),
+                 (i04VarCost(PGALL,YTIME)/1000+((VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)-imEffValueInDollars(allCy,"PG",ytime)/1000-imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
+                 sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))/1000 )/1.2441+
+
                  imCO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
                  (1-imCO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
                  (sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))))
@@ -526,3 +532,12 @@ Q04CapexFixCostPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
           )
           * i04GrossCapCosSubRen(allCy,PGALL,YTIME) * 1000 * imCGI(allCy,YTIME)
           + i04FixOandMCost(allCy,PGALL,YTIME);
+
+
+Q04CapexRESRate(allCy,PGALL,YTIME)$(TIME(YTIME) and runCy(allCy))..
+    V04CapexRESRate(allCy,PGALL,YTIME)
+        =E=
+        (
+          1 + (V04ShareMixWndSol(allCy,YTIME)$PGRENSW(PGALL)) ** 1.3
+        )
+;
