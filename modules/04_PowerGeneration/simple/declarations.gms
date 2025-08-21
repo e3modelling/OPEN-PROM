@@ -118,5 +118,4 @@ VmCapElec(allCy,PGALL,YTIME)	                           "Electricity generation 
 ;
 
 Scalars
-S04CapexBessRate                                            "The power expressing the rate of the increase in the solar & wind CAPEX because of storage need" /1.3/
-S04CapexBessThres                                           "The threshold in the solar & wind participation in the mix, above which storage is needed" /0.5/
+S04CapexBessRate                                            "The power expressing the rate of the increase in the solar & wind CAPEX because of storage need and grid upgrade" /1.3/

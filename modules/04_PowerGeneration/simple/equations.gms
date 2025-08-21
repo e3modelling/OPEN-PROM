@@ -533,11 +533,12 @@ Q04CapexFixCostPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
           * i04GrossCapCosSubRen(allCy,PGALL,YTIME) * 1000 * imCGI(allCy,YTIME)
           + i04FixOandMCost(allCy,PGALL,YTIME);
 
-
+*' This equation estimates the factor increasing the CAPEX of new RES (unflexible) capacity installation due to simultaneous need for grind upgrade and storage, 
+*' for each region (country) and year. This factor depends on the existing RES (unflexible) penetration in the electriciy mixture.
 Q04CapexRESRate(allCy,PGALL,YTIME)$(TIME(YTIME) and runCy(allCy))..
     V04CapexRESRate(allCy,PGALL,YTIME)
         =E=
         (
-          1 + (V04ShareMixWndSol(allCy,YTIME)$PGRENSW(PGALL)) ** 1.3
+          1 + (V04ShareMixWndSol(allCy,YTIME)$PGRENSW(PGALL)) ** S04CapexBessRate
         )
 ;
