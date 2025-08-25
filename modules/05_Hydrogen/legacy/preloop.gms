@@ -30,8 +30,8 @@ VmDemTotH2.L(runCy,YTIME) = 2;
 VmDemTotH2.FX(runCy,YTIME)$(not An(YTIME)) = sum(H2TECH, VmProdH2.L(runCy,H2TECH,YTIME));
 display VmDemTotH2.L;
 *---
-VmConsFuelTechH2Prod.FX(runCy,H2TECH,EF,YTIME)$(not An(YTIME)$H2TECHEFtoEF(H2TECH,EF)) = 0;
-VmConsFuelTechH2Prod.FX(runCy,H2TECH,EF,"2010")$(H2TECHEFtoEF(H2TECH,EF)) = (VmProdH2.L(runCy,H2TECH,"2010")/i05EffH2Prod(runCy,H2TECH,"2010"));
+VmConsFuelTechH2Prod.FX(runCy,H2TECH,EF,YTIME)$(not An(YTIME)$H2TECHEFtoEF(H2TECH,EF)) = 0.001;
+VmConsFuelTechH2Prod.L(runCy,H2TECH,EF,"2020")$(H2TECHEFtoEF(H2TECH,EF)) = (VmProdH2.L(runCy,H2TECH,"2020")/i05EffH2Prod(runCy,H2TECH,"2020"));
 display i05EffH2Prod;
 display VmConsFuelTechH2Prod.L;
 *---
