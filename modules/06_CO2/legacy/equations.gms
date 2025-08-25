@@ -57,3 +57,20 @@ Q06CstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VmCstCO2SeqCsts(allCy,YTIME) =E=
        (1-V06TrnsWghtLinToExp(allCy,YTIME))*(i06ElastCO2Seq(allCy,"mc_a")*V06CaptCummCO2(allCy,YTIME)+i06ElastCO2Seq(allCy,"mc_b"))+
        V06TrnsWghtLinToExp(allCy,YTIME)*(i06ElastCO2Seq(allCy,"mc_c")*exp(i06ElastCO2Seq(allCy,"mc_d")*V06CaptCummCO2(allCy,YTIME)));           
+
+Q06DACProfRate(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         V06DACProfRate(allCy,YTIME)
+         =E=
+          
+
+Q06DACNewCapFac(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         V06DACNewCapFac(allCy,YTIME)
+         =E=
+          (
+            (exp(a * V06DACProfRate(allCy,YTIME) - 1)) /
+            (exp(a * S06DACProfRateMax - 1))
+          ) *
+          (S06DACNewCapFacMax - S06DACNewCapFacMin) +
+          S06DACNewCapFacMin
+;
+
