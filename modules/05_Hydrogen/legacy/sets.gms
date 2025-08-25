@@ -13,8 +13,8 @@ gss   "gas steam reforming with CCS"
 weg   "water electrolysis from grid power"
 *wen   "water electrolysis with nuclear"
 *wew   "water electrolysis with wind"
-*cgf   "coal gasification"
-*cgs   "coal gasification with CCS"
+cgf   "coal gasification"
+cgs   "coal gasification with CCS"
 *opo   "oil partial oxydation"
 *ops   "oil partial oxydation with CCS"
 *smr   "solar methane reforming"
@@ -117,7 +117,7 @@ SSGG
 H2TECHEFtoEF(H2TECH,EF) "Mapping between production technologies and fuels"
 /
 (gsr,gss).ngs !! ,smr
-*(cgf,cgs).hcl
+(cgf,cgs).hcl
 (bgfls,bgfl).BMSWAS !! bpy,bgfs,
 *sht.SOL
 *(nht,wen).NUC
@@ -149,7 +149,7 @@ $offtext
 H2CCS(H2TECH)              "Hydrogen production technologies equipped with CCS facility"
 /
 gss   "gas steam reforming with CCS"
-*cgs   "coal gasification with CCS"
+cgs   "coal gasification with CCS"
 *ops   "oil partial oxydation with CCS"
 bgfls "biomass gasification large scale with CCS"
 /
@@ -157,7 +157,7 @@ bgfls "biomass gasification large scale with CCS"
 H2NOCCS(H2TECH)            "Hydrogen production technologies without CCS but with corresponding option with CCS"
 /
 gsr
-*cgf
+cgf
 *opo
 bgfl
 /
@@ -165,7 +165,7 @@ bgfl
 H2CCS_NOCCS(H2TECH,H2TECH) "Mapping between hydrogen technologies with and without CCS facility"
 /
 gss.gsr
-*cgs.cgf
+cgs.cgf
 *ops.opo
 bgfls.bgfl
 /
@@ -173,7 +173,7 @@ bgfls.bgfl
 H2TECHPM(H2TECH)           "Technologies for which premature replacement is active"
 /
 gsr
-*cgf
+cgf
 *opo
 /
 *---
