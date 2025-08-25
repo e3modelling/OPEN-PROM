@@ -90,10 +90,10 @@ Q01GapTranspActiv(allCy,TRANSE,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,EF) $TTECHtoEF(TTECH,EF) $runCy(allCy))..
          V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)
                  =E=
-         V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME-1) * prod(KPDL,
-                     (
-                        VmPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME-ord(KPDL))/VmPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME-(ord(KPDL)+1))
-                      )**(imElastA(allCy,TRANSE,"c5",YTIME)*imFPDL(TRANSE,KPDL))
+        V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME-1) * prod(KPDL,
+        (
+          VmPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME-ord(KPDL))/VmPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME-(ord(KPDL)+1))
+        )**(imElastA(allCy,TRANSE,"c5",YTIME)*imFPDL(TRANSE,KPDL))
           );
 
 *' This equation calculates the transportation cost per mean and consumer size in kEuro per vehicle. It involves several terms, including capital costs,
@@ -137,7 +137,7 @@ Q01CostTranspPerVeh(allCy,TRANSE,rCon,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE
 Q01CostTranspMatFac(allCy,TRANSE,RCon,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $(ord(rCon) le imNcon(TRANSE)+1) $runCy(allCy))..
          V01CostTranspMatFac(allCy,TRANSE,RCon,TTECH,YTIME) 
          =E=
-         imMatrFactor(allCy,TRANSE,TTECH,YTIME) * V01CostTranspPerVeh(allCy,TRANSE,rCon,TTECH,YTIME);
+         imMatrFactor(allCy,TRANSE,TTECH,YTIME) /imMatrFactor(allCy,TRANSE,TTECH,YTIME) * V01CostTranspPerVeh(allCy,TRANSE,rCon,TTECH,YTIME);
 
 *' This equation calculates the technology sorting based on variable cost. It involves the summation of transportation costs, including the maturity factor,
 *' for each technology and subsector. The result is a variable representing the technology sorting based on variable cost.
@@ -152,7 +152,7 @@ Q01TechSortVarCost(allCy,TRANSE,rCon,YTIME)$(TIME(YTIME) $(ord(rCon) le imNcon(T
 Q01ShareTechTr(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runCy(allCy))..
         V01ShareTechTr(allCy,TRANSE,TTECH,YTIME)
             =E=
-        imMatrFactor(allCy,TRANSE,TTECH,YTIME) / 
+        imMatrFactor(allCy,TRANSE,TTECH,YTIME) / imMatrFactor(allCy,TRANSE,TTECH,YTIME) / 
         imCumDistrFuncConsSize(allCy,TRANSE) *
         sum(Rcon$(ord(Rcon) le imNcon(TRANSE)+1),
           V01CostTranspPerVeh(allCy,TRANSE,RCon,TTECH,YTIME) *
@@ -238,17 +238,21 @@ Q01StockSaturation(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q01StockPcYearly(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       V01StockPcYearly(allCy,YTIME)
             =E=
-      V01StockPcYearly(allCy,YTIME-1) + 
-      [
-        (V01NewRegPcYearly(allCy,"%fBaseY%") - V01NumPcScrap(allCy,"%fBaseY%")) /
-        (i01Pop("%fBaseY%",allCy) * 1000)  *
-        V01StockSaturation(allCy,YTIME) / V01StockSaturation(allCy,"%fBaseY%") *
-        (
-          i01GDPperCapita(YTIME,allCy) / 
-          i01GDPperCapita(YTIME-1,allCy)
-        ) ** imElastA(allCy,"PC","a",YTIME)
-      ] * 
-      (i01Pop(YTIME,allCy)*1000);
+      V01PcOwnPcLevl(allCy,YTIME) * 
+      (i01Pop(YTIME,allCy) * 1000)
+      ;
+
+*      V01StockPcYearly(allCy,YTIME-1) + 
+*      [
+*        (V01NewRegPcYearly(allCy,"%fBaseY%") - V01NumPcScrap(allCy,"%fBaseY%")) /
+*        (i01Pop("%fBaseY%",allCy) * 1000)  *
+*        V01StockSaturation(allCy,YTIME) / V01StockSaturation(allCy,"%fBaseY%") *
+*        (
+*          i01GDPperCapita(YTIME,allCy) / 
+*          i01GDPperCapita(YTIME-1,allCy)
+*        ) ** imElastA(allCy,"PC","a",YTIME)
+*      ] * 
+*      (i01Pop(YTIME,allCy)*1000);
 
 *' This equation calculates the new registrations of passenger cars for a given year. It considers the market extension due to GDP-dependent and independent factors.
 *' The new registrations are influenced by the population, GDP, and the number of scrapped vehicles from the previous year.
@@ -302,10 +306,14 @@ Q01NumPcScrap(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' It is used as an input to a saturation function (sigmoid-like) that limits car stock growth 
 *' as ownership approaches the saturation threshold.
 Q01PcOwnPcLevl(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V01PcOwnPcLevl(allCy,YTIME)
-                 =E=
-        V01StockPcYearly(allCy,YTIME-1) /
-        (i01Pop(YTIME-1,allCy) * 1000);
+        V01PcOwnPcLevl(allCy,YTIME)
+              =E=
+        i01PassCarsMarkSat(allCy) *
+        EXP(
+          -i01Sigma(allCy,"S1") *
+          EXP(-i01Sigma(allCy,"S2") * i01GDPperCapita(YTIME,allCy) / 10000)
+        )
+        ;
 
 *' This equation calculates the scrapping rate of passenger cars. The scrapping rate is influenced by the ratio of Gross Domestic Product (GDP) to the population,
 *' reflecting economic and demographic factors. The scrapping rate from the previous year is also considered, allowing for a dynamic estimation of the passenger
