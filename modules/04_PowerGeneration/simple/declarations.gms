@@ -46,7 +46,10 @@ Q04DemElecTot(allCy,YTIME)                                 "Compute total electr
 *Q04CapElecCHP(allCy,CHP,YTIME)                             "Compute CHP electric capacity"	
 $endif.calib
 Q04ProdElecCHP(allCy,CHP,YTIME)                            "Compute CHP electricity production (TWh)"
-Q04ProdElecEstCHP(allCy,CHP,YTIME)	                           "Estimate the electricity of CHP Plants"	
+Q04ProdElecEstCHP(allCy,CHP,YTIME)	                       "Estimate the electricity of CHP Plants"	
+Q04CapexFixCostPG(allCy,PGALL,YTIME)                       "Computes the capex and fixed costs of any power generation technology"
+Q04ShareMixWndSol(allCy,YTIME)                             "Computes the participation of solar and wind in the energy mixture (%)"
+Q04CapexRESRate(allCy,PGALL,YTIME)                         "Estimates a multiplying factor expressing the extra grid and storage costs for RES implementation according to the RES penetration in the mixture"
 
 *'                **Interdependent Equations**
 Q04ProdElec(allCy,PGALL,YTIME)                             "Compute electricity production from power generation plants"
@@ -101,7 +104,10 @@ V04ConsElec(allCy,DSBS,YTIME)                              "Electricity demand p
 V04LoadFacDom(allCy,YTIME)                                 "Electricity load factor for entire domestic system"	
 V04ProdElecCHP(allCy,CHP,YTIME)	                           "CHP electricity production (TWh)"
 V04DemElecTot(allCy,YTIME)                                 "Total electricity demand (TWh)"
-V04ProdElecEstCHP(allCy,CHP,YTIME)	                           "Estimate the electricity of CHP Plants (1)"	
+V04ProdElecEstCHP(allCy,CHP,YTIME)	                       "Estimate the electricity of CHP Plants (1)"	
+V04CapexFixCostPG(allCy,PGALL,YTIME)                       "CAPEX and fixed costs of any power generation technology (US$2015/kW)"
+V04ShareMixWndSol(allCy,YTIME)                             "The participation of solar and wind in the energy mixture(%)"
+V04CapexRESRate(allCy,PGALL,YTIME)                         "Multiplying factor expressing the extra grid and storage costs for RES implementation according to the RES penetration in the mixture"
 
 *'                **Interdependent Variables**	
 VmProdElec(allCy,PGALL,YTIME)                              "Electricity production (TWh)"	
@@ -110,3 +116,6 @@ VmCapElecTotEst(allCy,YTIME)	                           "Estimated Total electri
 VmPeakLoad(allCy,YTIME)	                                   "Electricity peak load (GW)"	
 VmCapElec(allCy,PGALL,YTIME)	                           "Electricity generation plants capacity (GW)"
 ;
+
+Scalars
+S04CapexBessRate                                            "The power expressing the rate of the increase in the solar & wind CAPEX because of storage need and grid upgrade" /1.3/
