@@ -58,11 +58,29 @@ Q06CstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
        (1-V06TrnsWghtLinToExp(allCy,YTIME))*(i06ElastCO2Seq(allCy,"mc_a")*V06CaptCummCO2(allCy,YTIME)+i06ElastCO2Seq(allCy,"mc_b"))+
        V06TrnsWghtLinToExp(allCy,YTIME)*(i06ElastCO2Seq(allCy,"mc_c")*exp(i06ElastCO2Seq(allCy,"mc_d")*V06CaptCummCO2(allCy,YTIME)));           
 
+*' The equation calculates the CAPEX and the Fixed Costs of DAC capacity, also taking into account its discount rate and life expectancy, 
+*' for each region (country) and year.
+Q06CapexFixCostDAC(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         V06CapexFixCostDAC(allCy,YTIME)
+                  =E=         
+          (
+            imDisc(allCy,"DAC",YTIME) * exp(imDisc(allCy,"DAC",YTIME) * i06DACLft(allCy))
+            / (exp(imDisc(allCy,"DAC",YTIME) * i06DACLft(allCy)) -1)
+          )
+          * i06GrossCapDAC(allCy,YTIME) * 1000 * imCGI(allCy,YTIME)
+          + i06FixOandMDAC(allCy,YTIME)
+;
+
+*' The equation estimates the profitability of DAC capacity, calculating the rate between levelized costs (CAPEX, fixed and electricity needs)
+*' and revenues/avoided costs (carbon values, carbon subsidies) regionally.
 Q06DACProfRate(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V06DACProfRate(allCy,YTIME)
          =E=
-          
+          (sum(NAP$NAPtoALLSBS(NAP,"DAC"),VmCarVal(allCy,NAP,YTIME)) + i06DACSubs(allCy,YTIME)) / 
+          (V06CapexFixCostDAC(allCy,YTIME)  + i06DACSpecElec(allCy,YTIME))
+;
 
+*' The equation estimates the annual increase rate of DAC capacity regionally.
 Q06DACNewCapFac(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V06DACNewCapFac(allCy,YTIME)
          =E=
@@ -74,3 +92,16 @@ Q06DACNewCapFac(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
           S06DACNewCapFacMin
 ;
 
+*' The equation calculates the DAC installed capacity annually and regionally.
+Q06DACCap(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         V06DACCap(allCy,YTIME)
+         =E=
+          V06DACCap(allCy,YTIME-1) * (1 + V06DACNewCapFac(allCy,YTIME))
+;
+
+*' The equation calculates the electricity consumed by the DAC installed capacity annually and regionally.
+Q06DACElec(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         V06DACElec(allCy,YTIME)
+         =E=
+          V06DACCap(allCy,YTIME) * i06DACSpecElec(allCy,YTIME)
+;
