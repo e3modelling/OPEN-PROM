@@ -37,7 +37,7 @@ V01PcOwnPcLevl.UP(runCy,YTIME) = 2;
 *V01PcOwnPcLevl.FX(runCy,YTIME)$((not An(YTIME)) $(ord(YTIME) gt 1) ) = V01StockPcYearly.L(runCy,YTIME-1) / (i01Pop(YTIME-1,runCy)*1000) ;
 V01PcOwnPcLevl.FX(runCy,YTIME)$(not An(YTIME)) = V01StockPcYearly.L(runCy,YTIME) / (i01Pop(YTIME,runCy) * 1000) ;
 *---
-i01Sigma(runCy,"S2") = 0.2;
+i01Sigma(runCy,"S2") = 0.5;
 i01Sigma(runCy,"S1") = -log(V01PcOwnPcLevl.L(runCy,"%fBaseY%") / i01PassCarsMarkSat(runCy)) * EXP(i01Sigma(runCy,"S2") * i01GDPperCapita("%fBaseY%",runCy) / 10000);
 *---
 V01StockSaturation.FX(runCy,YTIME)$((not An(YTIME)) $(ord(YTIME) gt 1)  ) = 
