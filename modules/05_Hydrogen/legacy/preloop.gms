@@ -4,9 +4,9 @@
 *'                *VARIABLE INITIALISATION*
 *---
 V05CostTotH2.L(runCy,SBS,YTIME) = 2;
-V05CostTotH2.FX(runCy,TRANSE,"2010") = imFuelPrice(runCy,TRANSE,"H2F","2010"); 
-V05CostTotH2.FX(runCy,"PG","2010") = imFuelPrice(runCy,"PG","H2F","2010"); 
-V05CostTotH2.FX(runCy,INDDOM,"2010") = imFuelPrice(runCy,INDDOM,"STE1AH2F","2010"); 
+V05CostTotH2.FX(runCy,TRANSE,"2020") = imFuelPrice(runCy,TRANSE,"H2F","2020"); 
+V05CostTotH2.FX(runCy,"PG","2020") = imFuelPrice(runCy,"PG","H2F","2020"); 
+V05CostTotH2.FX(runCy,INDDOM,"2020") = imFuelPrice(runCy,INDDOM,"STE1AH2F","2020"); 
 V05CostTotH2.FX(runCy,SBS,YTIME)$(not An(YTIME)) = 1e-5;
 display V05CostTotH2.L;
 *---
@@ -22,7 +22,7 @@ display V05DemGapH2.L;
 VmProdH2.L(runCy,H2TECH, YTIME) = 0.5;
 VmProdH2.LO(runCy,H2TECH, YTIME) = 0;
 VmProdH2.FX(runCy,H2TECH, YTIME)$(not An(YTIME)) = 1e-5;
-*VmProdH2.FX(runCy,H2TECH,"2010") = 1e-7;
+*VmProdH2.FX(runCy,H2TECH,"2020") = 1e-7;
 display VmProdH2.L;
 *---
 VmDemTotH2.L(runCy,YTIME) = 2;
@@ -30,14 +30,14 @@ VmDemTotH2.L(runCy,YTIME) = 2;
 VmDemTotH2.FX(runCy,YTIME)$(not An(YTIME)) = sum(H2TECH, VmProdH2.L(runCy,H2TECH,YTIME));
 display VmDemTotH2.L;
 *---
-VmConsFuelTechH2Prod.FX(runCy,H2TECH,EF,YTIME)$(not An(YTIME)$H2TECHEFtoEF(H2TECH,EF)) = 0.001;
+VmConsFuelTechH2Prod.L(runCy,H2TECH,EF,YTIME)$(not An(YTIME)$H2TECHEFtoEF(H2TECH,EF)) = 0;
 VmConsFuelTechH2Prod.L(runCy,H2TECH,EF,"2020")$(H2TECHEFtoEF(H2TECH,EF)) = (VmProdH2.L(runCy,H2TECH,"2020")/i05EffH2Prod(runCy,H2TECH,"2020"));
 display i05EffH2Prod;
 display VmConsFuelTechH2Prod.L;
 *---
 V05DelivH2InfrTech.L(runCy,INFRTECH,YTIME) = 2;
 V05DelivH2InfrTech.FX(runCy,INFRTECH,YTIME)$(not An(YTIME)) = 1e-5;
-V05DelivH2InfrTech.FX(runCy,INFRTECH,"2010") = 0;
+V05DelivH2InfrTech.FX(runCy,INFRTECH,"2020") = 0;
 display V05DelivH2InfrTech.L;
 *---
 V05GapShareH2Tech2.L(runCy,H2TECH,YTIME) = 2;
