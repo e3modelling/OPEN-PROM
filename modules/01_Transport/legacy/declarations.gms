@@ -38,7 +38,7 @@ V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)	       "Specific Fuel Consumpti
                                                                 !! SFC for other passsenger transportation modes (ktoe/Gpkm)
                                                                 !! SFC for trucks is measured (ktoe/Gtkm)
 V01CostTranspPerMeanConsSize(allCy,TRANSE,RCon,TTECH,YTIME)"Transportation cost per mean and consumer size (KUS$2015/vehicle)"
-V01CostTranspPerVeh(allCy,TRANSE,RCon,TTECH,YTIME)	       "Transportation cost per mean and consumer size (KUS$2015/vehicle)"
+V01CostTranspPerVeh(allCy,TRANSE,RCon,TTECH,YTIME)	       "Transportation cost per mean and consumer size (KUS$2015/vehicle)"!!
 V01CostTranspMatFac(allCy,TRANSE,RCon,TTECH,YTIME)	       "Transportation cost including maturity factor (KUS$2015/vehicle)"
 V01TechSortVarCost(allCy,TRANSE,Rcon,YTIME)	               "Technology sorting based on variable cost (1)"
 V01ShareTechTr(allCy,TRANSE,EF,YTIME)	                   "Technology share in new equipment (1)"
@@ -47,7 +47,7 @@ V01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)	   "Consumption of each t
 V01StockSaturation(allCy,YTIME)                            "Passenger cars market extension saturation ()"
 V01StockPcYearly(allCy,YTIME)                              "Stock of passenger cars (million vehicles)"
 V01NewRegPcYearly(allCy,YTIME)                             "Passenger cars new registrations (million vehicles)"
-V01ActivPassTrnsp(allCy,TRANSE,YTIME)                      "Passenger transport acitivity (1)"
+V01ActivPassTrnsp(allCy,TRANSE,YTIME)                      "Passenger transport activity (1)"
                                                                 !! - Activity for passenger cars is measured in (000)km
                                                                 !! - Activity for passenger aviation million passengers carried
                                                                 !! - Activity for all other passenger transportation modes is measured in Gpkm

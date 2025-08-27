@@ -22,7 +22,7 @@ $IFTHEN %link2MAgPIE% == on
 $ENDIF
    $(not sameas("NUC",EF)) $runCy(allCy))..
          VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)
-                 =E=
+                =E=
          (VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1) +
            sum(NAP$NAPtoALLSBS(NAP,SBS),(VmCarVal(allCy,NAP,YTIME)*imCo2EmiFac(allCy,SBS,EF,YTIME) - VmCarVal(allCy,NAP,YTIME-1)*imCo2EmiFac(allCy,SBS,EF,YTIME-1)))
            /1000
