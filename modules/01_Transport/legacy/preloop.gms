@@ -4,9 +4,6 @@
 *'                *VARIABLE INITIALISATION*
 
 *---
-i01PassCarsMarkSat(runCy) = 0.7 ; 
-i01PCGDPSatThresh(runCy) = 50000;
-*---
 V01StockPcYearly.L(runCy,YTIME) = 0.1;
 V01StockPcYearly.FX(runCy,YTIME)$(not An(YTIME)) = imActv(YTIME,runCy,"PC");
 *---
@@ -32,16 +29,12 @@ V01ActivGoodsTransp.L(runCy,TRANSE,YTIME) = 0.1;
 V01ActivGoodsTransp.FX(runCy,TRANG,YTIME)$(not An(YTIME)) = imActv(YTIME,runCy,TRANG);
 V01ActivGoodsTransp.FX(runCy,TRANSE,YTIME)$(not TRANG(TRANSE)) = 0;
 *---
-V01PcOwnPcLevl.UP(runCy,YTIME) = 2;
+V01PcOwnPcLevl.UP(runCy,YTIME) = i01PassCarsMarkSat(runCy);
 *V01PcOwnPcLevl.FX(runCy,YTIME)$((not An(YTIME)) $(ord(YTIME) gt 1) ) = V01StockPcYearly.L(runCy,YTIME-1) / (i01Pop(YTIME-1,runCy)*1000) ;
 V01PcOwnPcLevl.FX(runCy,YTIME)$(not An(YTIME)) = V01StockPcYearly.L(runCy,YTIME) / (i01Pop(YTIME,runCy) * 1000) ;
 *---
 i01Sigma(runCy,"S2") = 0.5;
 i01Sigma(runCy,"S1") = -log(V01PcOwnPcLevl.L(runCy,"%fBaseY%") / i01PassCarsMarkSat(runCy)) * EXP(i01Sigma(runCy,"S2") * i01GDPperCapita("%fBaseY%",runCy) / 10000);
-*---
-V01StockSaturation.FX(runCy,YTIME)$((not An(YTIME)) $(ord(YTIME) gt 1)  ) = 
-1 / (1 + exp(5 * (i01GDPperCapita(YTIME,runCy)/i01PCGDPSatThresh(runCY) - 1))) *
-1 / (1 + exp(10 * (V01PcOwnPcLevl.L(runCy,YTIME)/ i01PassCarsMarkSat(runCy) - 0.7)));
 *---
 V01GapTranspActiv.FX(runCy,TRANSE,YTIME)$(not AN(YTIME))=0;
 *---

@@ -182,15 +182,13 @@ i01ShareAnnMilePlugInHybrid(allCy,YTIME)	           "Share of annual mileage of 
 i01AvgVehCapLoadFac(allCy,TRANSE,TRANSUSE,YTIME)	      "Average capacity/vehicle and load factor (tn/veh or passenegers/veh)"
 i01TechLft(allCy,SBS,EF,YTIME)	                     "Technical Lifetime. For passenger cars it is a variable (1)"
 i01PassCarsMarkSat(allCy)	                          "Passenger cars ownership saturation threshold (1)"
-i01PCGDPSatThresh(allCy)	                           "Passenger cars GDP per capita saturation threshold (US$2015)"
 i01GDPperCapita(YTIME,allCy)
 i01Sigma(allCy,SG)                                   "S parameters of Gompertz function for passenger cars vehicle km (1)"
 ;
 *---
 i01SpeFuelConsCostBy(runCy,TRANSE,TTECH,EF) = i01InitSpecFuelConsData(TRANSE,TTECH,EF);
 *---
-i01PCGDPSatThresh(runCy) = 50000;
-i01PassCarsMarkSat(runCy) = 1.;
+i01PassCarsMarkSat(runCy) = 0.7;
 *---
 imFuelConsTRANSE(runCy,TRANSE,EF,YTIME)$(SECTTECH(TRANSE,EF) $(imFuelConsTRANSE(runCy,TRANSE,EF,YTIME)<=0)) = 1e-6;
 *---
