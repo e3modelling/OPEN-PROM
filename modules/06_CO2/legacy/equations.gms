@@ -64,8 +64,8 @@ Q06CapexFixCostDAC(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V06CapexFixCostDAC(allCy,YTIME)
                   =E=         
           (
-            imDisc(allCy,"DAC",YTIME) * exp(imDisc(allCy,"DAC",YTIME) * i06DACLft(allCy))
-            / (exp(imDisc(allCy,"DAC",YTIME) * i06DACLft(allCy)) -1)
+            imDisc(allCy,"DAC",YTIME) * exp(imDisc(allCy,"DAC",YTIME) * i06LftDAC(allCy))
+            / (exp(imDisc(allCy,"DAC",YTIME) * i06LftDAC(allCy)) -1)
           )
           * i06GrossCapDAC(allCy,YTIME) * 1000 * imCGI(allCy,YTIME)
           + i06FixOandMDAC(allCy,YTIME)
@@ -73,35 +73,35 @@ Q06CapexFixCostDAC(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 
 *' The equation estimates the profitability of DAC capacity, calculating the rate between levelized costs (CAPEX, fixed and electricity needs)
 *' and revenues/avoided costs (carbon values, carbon subsidies) regionally.
-Q06DACProfRate(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V06DACProfRate(allCy,YTIME)
+Q06ProfRateDAC(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         V06ProfRateDAC(allCy,YTIME)
          =E=
-          (sum(NAP$NAPtoALLSBS(NAP,"DAC"),VmCarVal(allCy,NAP,YTIME)) + i06DACSubs(allCy,YTIME)) / 
-          (V06CapexFixCostDAC(allCy,YTIME)  + i06DACSpecElec(allCy,YTIME))
+          (sum(NAP$NAPtoALLSBS(NAP,"DAC"),VmCarVal(allCy,NAP,YTIME)) + i06SubsDAC(allCy,YTIME)) / 
+          (V06CapexFixCostDAC(allCy,YTIME)  + i06SpecElecDAC(allCy,YTIME))
 ;
 
 *' The equation estimates the annual increase rate of DAC capacity regionally.
-Q06DACNewCapFac(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V06DACNewCapFac(allCy,YTIME)
+Q06CapFacNewDAC(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         V06CapFacNewDAC(allCy,YTIME)
          =E=
           (
-            (exp(a * V06DACProfRate(allCy,YTIME) - 1)) /
-            (exp(a * S06DACProfRateMax - 1))
+            ((exp(S06MatFacDAC * V06ProfRateDAC(allCy,YTIME) - 1)) /
+           exp(S06MatFacDAC * S06ProfRateMaxDAC - 1))
           ) *
-          (S06DACNewCapFacMax - S06DACNewCapFacMin) +
-          S06DACNewCapFacMin
+          (S06CapFacMaxNewDAC - S06CapFacMinNewDAC) +
+          S06CapFacMinNewDAC
 ;
 
 *' The equation calculates the DAC installed capacity annually and regionally.
-Q06DACCap(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V06DACCap(allCy,YTIME)
+Q06CapDAC(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         V06CapDAC(allCy,YTIME)
          =E=
-          V06DACCap(allCy,YTIME-1) * (1 + V06DACNewCapFac(allCy,YTIME))
+          V06CapDAC(allCy,YTIME-1) * (1 + V06CapFacNewDAC(allCy,YTIME))
 ;
 
 *' The equation calculates the electricity consumed by the DAC installed capacity annually and regionally.
-Q06DACElec(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V06DACElec(allCy,YTIME)
+Q06ElecDAC(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         V06ElecDAC(allCy,YTIME)
          =E=
-          V06DACCap(allCy,YTIME) * i06DACSpecElec(allCy,YTIME)
+          V06CapDAC(allCy,YTIME) * i06SpecElecDAC(allCy,YTIME)
 ;

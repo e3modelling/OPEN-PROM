@@ -219,6 +219,7 @@ NEN   "Other Non Energy Uses"
 PG    "Power and Steam Generation"
 H2P   "Hydrogen production"
 H2INFR "Hydrogen storage and delivery"
+DAC   "Direct Air Capture"
 /
 
 
