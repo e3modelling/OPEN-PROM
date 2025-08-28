@@ -4,10 +4,10 @@
 *'                *VARIABLE INITIALISATION*
 *---
 V05CostTotH2.L(runCy,SBS,YTIME) = 2;
-V05CostTotH2.FX(runCy,TRANSE,"%fBaseY%") = imFuelPrice(runCy,TRANSE,"H2F","%fBaseY%"); 
-V05CostTotH2.FX(runCy,"PG","%fBaseY%") = imFuelPrice(runCy,"PG","H2F","%fBaseY%"); 
-V05CostTotH2.FX(runCy,INDDOM,"%fBaseY%") = imFuelPrice(runCy,INDDOM,"STE1AH2F","%fBaseY%"); 
-V05CostTotH2.FX(runCy,SBS,YTIME)$(not An(YTIME)) = 1e-5;
+V05CostTotH2.FX(runCy,TRANSE,YTIME)$(not An(YTIME)) = imFuelPrice(runCy,TRANSE,"H2F",YTIME)$(not An(YTIME)); 
+V05CostTotH2.FX(runCy,"PG",YTIME)$(not An(YTIME))   = imFuelPrice(runCy,"PG","H2F",YTIME)$(not An(YTIME)); 
+V05CostTotH2.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = imFuelPrice(runCy,INDDOM,"STE1AH2F",YTIME)$(not An(YTIME)); 
+*V05CostTotH2.FX(runCy,SBS,YTIME)$(not An(YTIME)) = 1e-5;
 display V05CostTotH2.L;
 *---
 V05GapShareH2Tech1.L(runCy,H2TECH,YTIME) = 2;
