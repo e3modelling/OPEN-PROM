@@ -52,7 +52,7 @@ i05EffNetH2Transp(allCy,INFRTECH,YTIME)     "Total efficiency of the distributio
 i05CostAvgWeight(allCy,YTIME)               "Weight for pricing in average cost or in marginal cost"
 ;
 *---
-i05WBLGammaH2Prod(runCy,YTIME) = 4;
+i05WBLGammaH2Prod(runCy,YTIME) = 1;
 *---
 i05ProdLftH2(H2TECH,YTIME) = i05H2Production("LFT",H2TECH,YTIME);
 *---

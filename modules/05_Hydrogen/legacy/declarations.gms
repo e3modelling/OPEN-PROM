@@ -33,12 +33,12 @@ V05CostTotH2(allCy, SBS, YTIME)                   "Total Hydrogen Cost Per Secto
 
 *' *** Miscellaneous
 *V05ProdCapH2Tech(allCy, H2TECH, YTIME)           "Production capacity by H2 production technology"
-V05DemSecH2(allCy, SBS, YTIME)                    "Demand for H2 by sector in mtoe"
 
 *'                **Interdependent Variables**	
 VmDemTotH2(allCy, YTIME)                          "Hydrogen production requirement in Mtoe for meeting final demand"
 VmProdH2(allCy, H2TECH, YTIME)                    "Hydrogen Production by technology in Mtoe"
 VmConsFuelTechH2Prod(allCy, H2TECH, EF, YTIME)    "Fuel consumption by hydrogen production technology in Mtoe"
+VmDemSecH2(allCy, SBS, YTIME)                     "Demand for H2 by sector in mtoe"
 ;
 
 Equations
@@ -71,12 +71,12 @@ Q05CostTotH2(allCy, SBS, YTIME)                   "Equation of total hydrogen co
 
 *' *** Miscellaneous
 *Q05ProdCapH2Tech(allCy, H2TECH, YTIME)           "Equation for production capacity by H2 production technology"
-*Q05DemSecH2(allCy, SBS, YTIME)                   "Equation for demand of H2 by sector in mtoe"
 
 *'                **Interdependent Equations**	
 Q05DemTotH2(allCy, YTIME)                         "Equation for total hydrogen demand in a country in Mtoe"
 Q05ProdH2(allCy, H2TECH, YTIME)                   "Equation for H2 production by technology"
 Q05ConsFuelTechH2Prod(allCy, H2TECH, EF, YTIME)   "Equation for fuel consumption by technology for hydrogen production"
+Q05DemSecH2(allCy, SBS, YTIME)                    "Equation for demand of H2 by sector in mtoe"
 ;
 
 Scalars

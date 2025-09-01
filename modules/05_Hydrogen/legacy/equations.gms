@@ -6,9 +6,17 @@
 Q05DemTotH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VmDemTotH2(allCy,YTIME)
                  =E=
-         sum(SBS$H2SBS(SBS), V05DemSecH2(allCy,SBS, YTIME)/
+         sum(SBS$SECTTECH(SBS,"H2F"), VmDemSecH2(allCy,SBS, YTIME)/
          prod(INFRTECH$H2INFRSBS(INFRTECH,SBS) , i05EffH2Transp(allCy,INFRTECH,YTIME)*(1-i05ConsSelfH2Transp(allCy,INFRTECH,YTIME))))  !! increase the demand due to transportation losses
 ;
+
+*' This equation calculates the sectoral hydrogen demand (VmDemSecH2) for each demand subsector (DSBS), year, and region.
+*' It sums up hydrogen consumption from both industrial/tertiary sectors (using VmConsFuel) and transport sectors (using VmDemFinEneTranspPerFuel),
+*' ensuring each subsector receives only the relevant demand.
+Q05DemSecH2(allCy,SBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VmDemSecH2(allCy,SBS,YTIME)
+             =E=
+         sum(INDDOM $SAMEAS(INDDOM,SBS), VmConsFuel(allCy,INDDOM,"H2F",YTIME)) + sum(TRANSE $SAMEAS(TRANSE,SBS), VmDemFinEneTranspPerFuel(allCy,TRANSE,"H2F",YTIME));
 
 *' This equation defines the amount of hydrogen production capacity that is scrapped due to the expiration of the useful life of plants.
 *' It considers the remaining lifetime of hydrogen production facilities and the impact of past production gaps.
@@ -18,7 +26,7 @@ Q05ScrapLftH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          (
          V05GapShareH2Tech1(allCy,H2TECH,YTIME-i05ProdLftH2(H2TECH,YTIME))*V05DemGapH2(allCy,YTIME-i05ProdLftH2(H2TECH,YTIME))
          /VmProdH2(allCy,H2TECH,YTIME-1)
-         )$(ord(YTIME)>17+i05ProdLftH2(H2TECH,YTIME)) + 0.1
+         )$(ord(YTIME)>11+i05ProdLftH2(H2TECH,YTIME)) !!+ 0.1
 ;
 
 *' This equation models the premature replacement of hydrogen production capacity. It adjusts for the need to replace aging
@@ -41,7 +49,7 @@ Q05PremRepH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                                                         +(1-1/i05AvailH2Prod(H2TECH,YTIME))*V05CostVarProdH2Tech(allCy,H2TECH,YTIME))
            )**(-i05WBLGammaH2Prod(allCy,YTIME))
 
-           +V05CostVarProdH2Tech(allCy,H2TECH,YTIME)**(-i05WBLGammaH2Prod(allCy,YTIME))
+           + V05CostVarProdH2Tech(allCy,H2TECH,YTIME)**(-i05WBLGammaH2Prod(allCy,YTIME))
          )
          )$H2TECHPM(H2TECH)
 ;
@@ -52,7 +60,9 @@ Q05PremRepH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q05CapScrapH2ProdTech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V05CapScrapH2ProdTech(allCy,H2TECH,YTIME)
          =E=
-         1-(1-V05ScrapLftH2Prod(allCy,H2TECH,YTIME))*(1-V05PremRepH2Prod(allCy,H2TECH,YTIME))
+* FIXME: Add premature replacement to the equation Q05CapScrapH2ProdTech.
+* author=redmonkeycloud
+         1-(1-V05ScrapLftH2Prod(allCy,H2TECH,YTIME))!!*(1-V05PremRepH2Prod(allCy,H2TECH,YTIME))
 ;
 
 *' The hydrogen demand gap equation defines the difference between the total hydrogen demand (calculated in Q05DemTotH2) and
@@ -60,9 +70,9 @@ Q05CapScrapH2ProdTech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q05DemGapH2(allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V05DemGapH2(allCy, YTIME)
                  =E=
-         ( VmDemTotH2(allCy,YTIME) - sum(H2TECH,(1-V05CapScrapH2ProdTech(allCy,H2TECH,YTIME))*VmProdH2(allCy,H2TECH,YTIME-1))
+         (( VmDemTotH2(allCy,YTIME) - sum(H2TECH,(1-V05CapScrapH2ProdTech(allCy,H2TECH,YTIME))*VmProdH2(allCy,H2TECH,YTIME-1)))
           + 0 +
-         SQRT( SQR(VmDemTotH2(allCy,YTIME) - sum(H2TECH,(1-V05CapScrapH2ProdTech(allCy,H2TECH,YTIME))*VmProdH2(allCy,H2TECH,YTIME-1))-0) + SQR(1E-4) )
+         SQRT( SQR(VmDemTotH2(allCy,YTIME) - sum(H2TECH,(1-V05CapScrapH2ProdTech(allCy,H2TECH,YTIME))*VmProdH2(allCy,H2TECH,YTIME-1))-0))
          )/2
 ;
 
@@ -73,7 +83,7 @@ Q05CostProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V05CostProdH2Tech(allCy,H2TECH,YTIME)
          =E=
          (imDisc(allCy,"H2P",YTIME)*exp(imDisc(allCy,"H2P",YTIME)* i05ProdLftH2(H2TECH,YTIME))/(exp(imDisc(allCy,"H2P",YTIME)*i05ProdLftH2(H2TECH,YTIME))-1)*
-         i05CostCapH2Prod(allCy,H2TECH,YTIME)+i05CostFOMH2Prod(allCy,H2TECH,YTIME))/257/365*1000000/i05AvailH2Prod(H2TECH,YTIME) +
+         i05CostCapH2Prod(allCy,H2TECH,YTIME)+i05CostFOMH2Prod(allCy,H2TECH,YTIME))/i05AvailH2Prod(H2TECH,YTIME) +
          i05CostVOMH2Prod(allCy,H2TECH,YTIME) + V05CostVarProdH2Tech(allCy,H2TECH,YTIME)
 ;
 
@@ -91,7 +101,7 @@ Q05CostVarProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
             (sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME))))
 
             /i05EffH2Prod(allCy,H2TECH,YTIME)
-            )!!$(not H2TECHREN(H2TECH))
+            )$(H2TECHPM(H2TECH))
 ;
 
 *' This equation models the acceptance of carbon capture and storage (CCS) technologies in hydrogen production. 
@@ -176,7 +186,7 @@ Q05GapShareH2Tech1(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q05ProdH2(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VmProdH2(allCy,H2TECH,YTIME)
          =E=
-         0.0001+(1-V05CapScrapH2ProdTech(allCy,H2TECH,YTIME))*VmProdH2(allCy,H2TECH,YTIME-1)+ V05GapShareH2Tech1(allCy,H2TECH,YTIME)*V05DemGapH2(allCy,YTIME)
+         (1-V05CapScrapH2ProdTech(allCy,H2TECH,YTIME))*VmProdH2(allCy,H2TECH,YTIME-1)+ V05GapShareH2Tech1(allCy,H2TECH,YTIME)*V05DemGapH2(allCy,YTIME)
 ;
 
 *' This equation calculates the average cost of hydrogen production across all technologies in the system.
@@ -221,7 +231,7 @@ Q05ConsFuelH2Prod(allCy,EF,YTIME)$(TIME(YTIME) $H2PRODEF(EF) $(runCy(allCy)))..
 Q05H2InfrArea(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V05H2InfrArea(allCy,YTIME)
          =E=
-         0.001+i05PolH2AreaMax(allCy)/(1 + exp( -i05H2Adopt(allCy,"B",YTIME)*( VmDemTotH2(allCy,YTIME)/(i05HabAreaCountry(allCy)/s05AreaStyle*0.275)- i05H2Adopt(allCy,"MID",YTIME))))
+          i05PolH2AreaMax(allCy)/(1 + exp( -i05H2Adopt(allCy,"B",YTIME)*( VmDemTotH2(allCy,YTIME)/(i05HabAreaCountry(allCy)/s05AreaStyle*0.275)- i05H2Adopt(allCy,"MID",YTIME))))
 
 ;
 
@@ -232,7 +242,7 @@ Q05DelivH2InfrTech(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         V05DelivH2InfrTech(allCy,INFRTECH,YTIME)
          =E=
          (
-         (    sum(SBS$(H2INFRSBS(INFRTECH,SBS) $SECTTECH(SBS,"H2F")), V05DemSecH2(allCy,SBS, YTIME))/
+         (    sum(SBS$(H2INFRSBS(INFRTECH,SBS) $SECTTECH(SBS,"H2F")), VmDemSecH2(allCy,SBS, YTIME))/
             (i05EffH2Transp(allCy,INFRTECH,YTIME)*(1-i05ConsSelfH2Transp(allCy,INFRTECH,YTIME))) )$H2INFRDNODES(INFRTECH)  !! for final demand nodes
 
          +
@@ -329,7 +339,7 @@ Q05TariffH2Infr(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 
 *' This equation calculates the price of hydrogen based on infrastructure costs. It determines the price at which hydrogen
 *' can be delivered to end-users, including both the production cost and the infrastructure-related costs (transport, storage, etc.).
-Q05PriceH2Infr(allCy,SBS,YTIME)$(TIME(YTIME) $H2SBS(SBS) $(runCy(allCy)))..
+Q05PriceH2Infr(allCy,SBS,YTIME)$(TIME(YTIME) $SECTTECH(SBS,"H2F") $(runCy(allCy)))..
          V05PriceH2Infr(allCy,SBS,YTIME)
          =E=
          sum(INFRTECH$H2INFRSBS(INFRTECH,SBS) , V05TariffH2Infr(allCy,INFRTECH,YTIME))
@@ -338,7 +348,7 @@ Q05PriceH2Infr(allCy,SBS,YTIME)$(TIME(YTIME) $H2SBS(SBS) $(runCy(allCy)))..
 *' This equation calculates the total cost of hydrogen production, transportation, and distribution, integrating all the costs associated
 *' with hydrogen infrastructure and technology. It includes costs for producing hydrogen, investing in infrastructure, maintaining the infrastructure,
 *' and any operational costs related to hydrogen transportation and storage.
-Q05CostTotH2(allCy,SBS,YTIME)$(TIME(YTIME) $H2SBS(SBS) $(runCy(allCy)))..
+Q05CostTotH2(allCy,SBS,YTIME)$(TIME(YTIME) $SECTTECH(SBS,"H2F") $(runCy(allCy)))..
          V05CostTotH2(allCy,SBS,YTIME)
          =E=
          V05PriceH2Infr(allCy,SBS,YTIME)+V05CostAvgProdH2(allCy,YTIME)

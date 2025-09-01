@@ -11,6 +11,7 @@ V01ActivPassTrnsp.L(runCy,TRANSE,YTIME) = 0.1;
 V01ActivPassTrnsp.FX(runCy,"PC",YTIME)$(not AN(YTIME)) = imTransChar(runCy,"KM_VEH",YTIME); 
 V01ActivPassTrnsp.FX(runCy,TRANP,YTIME) $(not AN(YTIME) and not sameas(TRANP,"PC")) = imActv(YTIME,runCy,TRANP); 
 V01ActivPassTrnsp.FX(runCy,TRANSE,YTIME)$(not TRANP(TRANSE)) = 0;
+*VActivPassTrnsp.LO(runCy,TRANSE,YTIME) = 0;
 *---
 V01NewRegPcYearly.FX(runCy,YTIME)$(not an(ytime)) = i01NewReg(runCy,YTIME);
 *---
@@ -28,6 +29,7 @@ V01CostTranspPerMeanConsSize.L(runCy,TRANSE,RCon,TTECH,YTIME) = 0.1;
 V01ActivGoodsTransp.L(runCy,TRANSE,YTIME) = 0.1;
 V01ActivGoodsTransp.FX(runCy,TRANG,YTIME)$(not An(YTIME)) = imActv(YTIME,runCy,TRANG);
 V01ActivGoodsTransp.FX(runCy,TRANSE,YTIME)$(not TRANG(TRANSE)) = 0;
+*VActivGoodsTransp.LO(runCy,TRANSE,YTIME) = 0;
 *---
 V01PcOwnPcLevl.UP(runCy,YTIME) = i01PassCarsMarkSat(runCy);
 *V01PcOwnPcLevl.FX(runCy,YTIME)$((not An(YTIME)) $(ord(YTIME) gt 1) ) = V01StockPcYearly.L(runCy,YTIME-1) / (i01Pop(YTIME-1,runCy)*1000) ;
