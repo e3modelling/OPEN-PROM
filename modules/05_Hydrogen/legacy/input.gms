@@ -20,7 +20,7 @@ $include"./iH2InfrCapCosts.csv"
 $offdelim
 ;
 *---
-i05H2Production(ECONCHARHY,"bgfl",YTIME) = i05H2Production(ECONCHARHY,"bgfls",YTIME);
+*i05H2Production(ECONCHARHY,"bgfl",YTIME) = i05H2Production(ECONCHARHY,"bgfls",YTIME);
 *---
 Parameters
 i05WBLGammaH2Prod(allCy,YTIME)              "Parameter for acceptance in new investments used in weibull function in production shares"
