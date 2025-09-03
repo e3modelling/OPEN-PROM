@@ -726,7 +726,8 @@ elseif %fScenario% eq 2 then
      iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"exogCV_1_5C",YTIME);
 elseif %fScenario% eq 3 then
      iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"exogCV_2C",YTIME);
-
+elseif %fScenario% eq 4 then
+     iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"exogCV_Calib",YTIME);
 endif;
 *---
 table iMatrFactorData(DSBS,TECH,YTIME)          "Maturity factor per technology and subsector (1)"
@@ -741,7 +742,7 @@ imMatrFactor(runCy,DSBS,TECH,YTIME) = iMatrFactorData(DSBS,TECH,YTIME);
 imMatrFactor(runCy,DSBS,TECH,YTIME)$(imMatrFactor(runCy,DSBS,TECH,YTIME)=0) = 0.000001;
 $ELSE.calib
 variable imMatrFactor(allCy,DSBS,TECH,YTIME)    "Maturity factor per technology and subsector for all countries (1)";
-imMatrFactor.L(runCy,DSBS,TECH,YTIME) = iMatrFactorData(DSBS,TECH,YTIME);                                          
+imMatrFactor.L(runCy,DSBS,TECH,YTIME) = iMatrFactorData(DSBS,TECH,YTIME) + 1e-6;                                          
 imMatrFactor.L(runCy,DSBS,EF,YTIME)$(imMatrFactor.L(runCy,DSBS,TECH,YTIME)=0) = 0.000001;
 imMatrFactor.LO(runCy,DSBS,EF,YTIME) = -10;                                          
 imMatrFactor.UP(runCy,DSBS,EF,YTIME) = 100;

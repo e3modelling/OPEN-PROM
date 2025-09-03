@@ -109,7 +109,7 @@ an(ytime)       Years for which the model is running              /%fStartY%*%fE
 period(ytime)   Model can also run for periods of years
 tFirst(ytime)   Base year                                         /%fBaseY%/
 time(ytime)     Model time horizon used in equation definitions   /%fStartY%*%fEndY%/
-datay(ytime)    Historical year before the base year of the model /%fStartHorizon%*%fBaseY%/
+datay(ytime)    Historical years before the start year of the model /%fStartHorizon%*%fBaseY%/
 hour            "Segments of hours in a year (250,1250,...,8250)" /h0*h8/
 
 
@@ -125,11 +125,11 @@ modal
 largest
 /
 
-eSet         Electricity consumers used for average electricity price calculations /i,r/
+eSet         Electricity consumers used for average electricity price calculations /i,r,c,t/
 iSet(eSet)   Industrial consumer /i/
 rSet(eSet)   Residential consumer /r/
-
-
+cSet(eSet)   Commercial consumer /c/
+tSet(eSet)   Transport consumer /t/
 ***       Auxiliary Counters        *
 
 rCon         counter for the number of consumers              /0,1*19/
@@ -259,6 +259,7 @@ SOLRES_SUBS
 exogCV_NPi
 exogCV_1_5C
 exogCV_2C
+exogCV_Calib
 /
 
 RegulaPolicies(POLICIES_set) Set of policies entering in the regula falsi loops
@@ -292,16 +293,15 @@ DOMSE(DSBS)       Tertiary SubSectors           /SE,AG,HOU/
 INDSE1(SBS)       Industrial SubSectors         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI/
 DOMSE1(SBS)       Tertiary SubSectors           /SE,AG,HOU/
 HOU(DSBS)         Households                     /HOU/
+
 NENSE(DSBS)       Non Energy and Bunkers        /PCH,NEN,BU/
 NENSE1(SBS)       Non Energy and Bunkers        /PCH,NEN,BU/
 BUN(DSBS)         Bunkers                       /BU/
 
 INDDOM(DSBS)      Industry and Tertiary         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,SE,AG,HOU/
-* the following sets are used in price equation for electricity
-INDTRANS(SBS)     Industry and Transport        /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI ,PC,PT,PA,PB,PN,GU,GT, GN /
-RESIDENT(SBS)     Residential                   /SE,AG,HOU/
-AGSECT            aggregate sectors             /INDSE1,DOMSE1,NENSE1,TRANS1,PG/
-
+* The following sets are used in price equation for electricity
+HOU1(SBS)         Households                     /HOU/
+SERV(SBS)         Services                       /SE,AG/
 *         Energy Forms            *
 
 EF           Energy Forms
@@ -806,18 +806,22 @@ TCHEVGDO
 
 SECTTECH(DSBS,TECH) Link between Model Demand Subsectors and Technologies
 /
-PC.(TGSL,TLPG,TGDO,TNGS,TELC,TETH,TMET,TBGDO,TPHEVGSL,TPHEVGDO,TCHEVGSL,TCHEVGDO)
-PB.(TGSL,TLPG,TGDO,TNGS,TELC,TETH,TMET,TBGDO,TPHEVGSL,TPHEVGDO)
-GU.(TLPG,TGDO,TNGS,TELC,TETH,TMET,TBGDO,TPHEVGDO,TCHEVGDO) !! Removed GSL and PHEVGSL
-(PT,GT).(TGDO,TELC,TMET)
+*PC.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO,CHEVGSL,CHEVGDO)
+*PB.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO)
+*GU.(LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGDO,CHEVGDO)
+*(PT,GT).(GDO,ELC,MET)
+PC.(TGSL,TLPG,TGDO,TNGS,TELC,TPHEVGSL,TPHEVGDO,TCHEVGSL,TCHEVGDO)
+PB.(TLPG,TGDO,TNGS,TELC,TPHEVGDO)
+GU.(TLPG,TGDO,TNGS,TELC,TPHEVGDO,TCHEVGDO) !! Removed GSL and PHEVGSL
+(PT,GT).(TGDO,TELC)
 PA.(TKRS)
 PN.(TGSL,TGDO)
 GN.(TGSL,TGDO)
 (IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(TLGN,THCL,TGDO,TRFO,TLPG,TKRS,TOLQ,TNGS,TOGS,TELC,TSTE1AL,
-                                 TSTE1AH,TSTE1AD,TSTE1AG,TSTE1AB)
-(SE,HOU,AG).                    (TLGN,THCL,TGSL,TGDO,TRFO,TLPG,TKRS,TOLQ,TNGS,TOGS,TELC,TSTE1AL,
-                                 TSTE1AH,TSTE1AD,TSTE1AG,TSTE1AB,TSTE2LGN,TSTE2OSL,TSTE2GDO,TSTE2RFO,TSTE2OLQ,TSTE2NGS,
-                                 TSTE2OGS,TSTE2BMS, TBMSWAS)
+                                 TSTE1AH,TSTE1AD,TSTE1AG)
+(HOU,AG).(TLPG,TKRS,TGDO,TNGS,TOGS,TBMSWAS,TELC,TSTE2LGN,TSTE2OSL,TSTE2GDO,TSTE2NGS,
+                                 TSTE2BMS)
+SE.(TLPG,TKRS,TNGS,TOGS,TELC)
 
 *BU.(GDO,RFO,OLQ)
 BU.(TGDO,TRFO)
@@ -828,7 +832,7 @@ BU.(TGDO,TRFO)
 
 SECtoEF(SBS,EF) Link between Model Subsectors and Energy FORMS
 /
-PG.(LGN,HCL,GDO,RFO,NGS,NUC,HYD,BMSWAS,SOL,GEO,WND)
+PG.(LGN,HCL,GDO,RFO,NGS,OGS,NUC,HYD,BMSWAS,SOL,GEO,WND)
 H2P.(HCL,RFO,NGS,NUC,BMSWAS,SOL,WND,ELC)
 /
 
@@ -939,6 +943,7 @@ STE2BMS
 
 PGNUCL(PGALL)    Nuclear plants                            / PGANUC/
 PGREN(PGALL)     Renewable Plants                          /PGLHYD,PGSHYD,PGAWND,PGSOL,PGCSP,PGOTHREN, PGAWNO/
+PGRENSW(PGALL)   Solar and wind Plants                     /PGSOL,PGCSP,PGAWND,PGAWNO/
 PGNREN(PGALL)    Advanced Renewable Plants potential      /PGCSP,PGOTHREN,PGAWNO,ATHBMSWAS/
 PGGEO(PGALL)     Geothermal Plants                        /PGOTHREN/
 PGRENEF          Renewable energy forms in power generation  /LHYD,SHYD,WND,WNO,SOL,DPV,BMSWAS,OTHREN/
@@ -1097,8 +1102,8 @@ PGECONCHAR       "Technical - economic characteristics for power generation plan
 LFT
 /
 
-SG               "S parameters in Gompertz function for passenger cars vehicle km"
-/S1,S2,S3,SAT/
+SG               "S parameters in Gompertz function for passenger cars per capita"
+/S1,S2/
 
 TRANSPCHAR       "Various transport data used in equations and post-solution calculations"
 /

@@ -13,8 +13,6 @@ Q01TechSortVarCost(allCy,TRANSE,Rcon,YTIME)	               "Compute technology s
 Q01ShareTechTr(allCy,TRANSE,TECH,YTIME)	                   "Compute technology sorting based on variable cost and new equipment"
 Q01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)	   "Compute consumption of each technology in transport sectors"
 *q01DemFinEneSubTransp(allCy,TRANSE,YTIME)	               "Compute final energy demand in transport"
-Q01MEPcGdp(allCy,YTIME)                                    "Compute passenger cars market extension (GDP dependent)"
-Q01MEPcNonGdp(allCy,YTIME)                                 "Compute passenger cars market extension (GDP independent)"
 Q01StockPcYearly(allCy,YTIME)                              "Compute stock of passenger cars (in million vehicles)"
 Q01NewRegPcYearly(allCy,YTIME)                             "Compute new registrations of passenger cars"
 Q01ActivPassTrnsp(allCy,TRANSE,YTIME)                      "Compute passenger transport acitivity"
@@ -39,17 +37,15 @@ V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)	       "Specific Fuel Consumpti
                                                                 !! SFC for other passsenger transportation modes (ktoe/Gpkm)
                                                                 !! SFC for trucks is measured (ktoe/Gtkm)
 V01CostTranspPerMeanConsSize(allCy,TRANSE,RCon,TTECH,YTIME)"Transportation cost per mean and consumer size (KUS$2015/vehicle)"
-V01CostTranspPerVeh(allCy,TRANSE,RCon,TTECH,YTIME)	       "Transportation cost per mean and consumer size (KUS$2015/vehicle)"
+V01CostTranspPerVeh(allCy,TRANSE,RCon,TTECH,YTIME)	       "Transportation cost per mean and consumer size (KUS$2015/vehicle)"!!
 V01CostTranspMatFac(allCy,TRANSE,RCon,TTECH,YTIME)	       "Transportation cost including maturity factor (KUS$2015/vehicle)"
 V01TechSortVarCost(allCy,TRANSE,Rcon,YTIME)	               "Technology sorting based on variable cost (1)"
 V01ShareTechTr(allCy,TRANSE,TECH,YTIME)	                   "Technology share in new equipment (1)"
 V01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)	   "Consumption of each technology and subsector (Mtoe)"
 *v01DemFinEneSubTransp(allCy,TRANSE,YTIME)	               "Final energy demand in transport subsectors (Mtoe)"
-V01MEPcGdp(allCy,YTIME)                                    "Passenger cars market extension (GDP dependent)"
-V01MEPcNonGdp(allCy,YTIME)                                 "Passenger cars market extension (GDP independent)"
 V01StockPcYearly(allCy,YTIME)                              "Stock of passenger cars (million vehicles)"
 V01NewRegPcYearly(allCy,YTIME)                             "Passenger cars new registrations (million vehicles)"
-V01ActivPassTrnsp(allCy,TRANSE,YTIME)                      "Passenger transport acitivity (1)"
+V01ActivPassTrnsp(allCy,TRANSE,YTIME)                      "Passenger transport activity (1)"
                                                                 !! - Activity for passenger cars is measured in (000)km
                                                                 !! - Activity for passenger aviation million passengers carried
                                                                 !! - Activity for all other passenger transportation modes is measured in Gpkm

@@ -20,7 +20,7 @@ Q04ProdElecEstCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         (
           (
             1/smTWhToMtoe * 
-            sum((INDDOM), VmConsFuel(allCy,INDDOM,CHP,YTIME)) *
+            sum(INDDOM, VmConsFuel(allCy,INDDOM,CHP,YTIME)) *
             VmPriceElecInd(allCy,YTIME)
           ) + 
           i04MxmShareChpElec(allCy,YTIME) * V04DemElecTot(allCy,YTIME) - 
@@ -106,14 +106,7 @@ Q04CapElecTotEst(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04CostHourProdInvDec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V04CostHourProdInvDec(allCy,PGALL,YTIME)
                   =E=         
-        ( 
-          ( 
-            imDisc(allCy,"PG",YTIME-1) * exp(imDisc(allCy,"PG",YTIME-1) * i04TechLftPlaType(allCy,PGALL)) /
-            (exp(imDisc(allCy,"PG",YTIME)*i04TechLftPlaType(allCy,PGALL)) -1)
-          ) *
-          i04GrossCapCosSubRen(allCy,PGALL,YTIME-1) * 1E3 * imCGI(allCy,YTIME-1)  + i04FixOandMCost(allCy,PGALL,YTIME-1)
-        ) /
-        i04AvailRate(allCy,PGALL,YTIME-1) / 8760
+        V04CapexRESRate(allCy,PGALL,YTIME) * V04CapexFixCostPG(allCy,PGALL,YTIME-1) / i04AvailRate(allCy,PGALL,YTIME-1) / (smGwToTwhPerYear(YTIME)*1000)
         + i04VarCost(PGALL,YTIME-1) / 1E3 + 
         (VmRenValue(YTIME-1)*8.6e-5)$(not (PGREN(PGALL)$(not sameas("PGASHYD",PGALL)) $(not sameas("PGSHYD",PGALL)) $(not sameas("PGLHYD",PGALL)) )) +
         sum(PGEF$PGALLtoEF(PGALL,PGEF), 
@@ -210,10 +203,7 @@ Q04CostVarTechNotPGSCRN(allCy,PGALL,YTIME)$(time(YTIME) $(not PGSCRN(PGALL)) $ru
 Q04CostProdTeCHPreReplac(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V04CostProdTeCHPreReplac(allCy,PGALL,YTIME) =e=
                         (
-                          ((imDisc(allCy,"PG",YTIME) * exp(imDisc(allCy,"PG",YTIME)*i04TechLftPlaType(allCy,PGALL))/
-                          (exp(imDisc(allCy,"PG",YTIME)*i04TechLftPlaType(allCy,PGALL)) -1))
-                            * i04GrossCapCosSubRen(allCy,PGALL,YTIME)* 1E3 * imCGI(allCy,YTIME)  + 
-                            i04FixOandMCost(allCy,PGALL,YTIME))/(smGwToTwhPerYear(YTIME)*1000*i04AvailRate(allCy,PGALL,YTIME))
+                          V04CapexFixCostPG(allCy,PGALL,YTIME) * V04CapexRESRate(allCy,PGALL,YTIME) / (smGwToTwhPerYear(YTIME)*1000*i04AvailRate(allCy,PGALL,YTIME))
                            + (i04VarCost(PGALL,YTIME)/1E3 + sum(PGEF$PGALLtoEF(PGALL,PGEF), 
                            (VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)+
                             imCO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
@@ -287,16 +277,28 @@ Q04RenTechMatMultExpr(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
           V04RenTechMatMultExpr(allCy,PGALL,YTIME)
               =E=
           (
-            V04CapElecNominal(allCy,PGALL,YTIME-1) /
-            sum(PGALL2, V04CapElecNominal(allCy,PGALL2,YTIME-1))
+            VmCapElec(allCy,PGALL,YTIME-1) /
+            sum(PGALL2, VmCapElec(allCy,PGALL2,YTIME-1))
           )
-          $(PGREN(PGALL));
+          $(PGREN(PGALL))
+;
 
 Q04RenTechMatMult(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V04RenTechMatMult(allCy,PGALL,YTIME)
           =E=
-         2 / (1+exp(9*V04RenTechMatMultExpr(allCy,PGALL,YTIME)));  
+         2 / (1+exp(9*V04RenTechMatMultExpr(allCy,PGALL,YTIME)))
+;
 
+*' Calculates the share of all the unflexible RES penetration into the mixture, and specifically how much above a given threshold it is.
+Q04ShareMixWndSol(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+          V04ShareMixWndSol(allCy,YTIME)
+              =E=
+            (
+              ((sum(PGALL$(PGRENSW(PGALL)), VmCapElec(allCy,PGALL,YTIME-1)) /
+            sum(PGALL, VmCapElec(allCy,PGALL,YTIME-1)))
+              )
+            )
+; 
 *' The equation calculates a temporary variable which is used to facilitate scaling in the Weibull equation. The scaling is influenced by three main factors:
 *' Maturity Factor for Planned Available Capacity : This factor represents the material-specific influence on the planned available capacity for a power
 *' plant. It accounts for the capacity planning aspect of the power generation technology.
@@ -454,15 +456,12 @@ Q04ProdElecCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' considering factors such as discount rates, technological lifetimes, and subsidies. The resulting cost is adjusted based on the availability
 *' rate and conversion factors. The equation provides a comprehensive calculation of the long-term cost associated with power generation technologies,
 *' excluding climate policy-related costs.
-Q04CostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-      V04CostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME)
+Q04CostPowGenLngTechNoCp(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+      V04CostPowGenLngTechNoCp(allCy,PGALL,YTIME)
                  =E=
-      (imDisc(allCy,"PG",YTIME)*EXP(imDisc(allCy,"PG",YTIME)*i04TechLftPlaType(allCy,PGALL)) /
-      (EXP(imDisc(allCy,"PG",YTIME)*i04TechLftPlaType(allCy,PGALL))-1)*i04GrossCapCosSubRen(allCy,PGALL,YTIME)*1000*imCGI(allCy,YTIME) +
-      i04FixOandMCost(allCy,PGALL,YTIME)
-      ) /i04AvailRate(allCy,PGALL,YTIME)
-              / (1000*(6$ISET(ESET)+4$RSET(ESET))) +
-             sum(PGEF$PGALLTOEF(PGALL,PGEF),
+      V04CapexFixCostPG(allCy,PGALL,YTIME) * V04CapexRESRate(allCy,PGALL,YTIME) / i04AvailRate(allCy,PGALL,YTIME)
+      / (1000*(smGwToTwhPerYear(YTIME))) +
+      sum(PGEF$PGALLTOEF(PGALL,PGEF),
                  (i04VarCost(PGALL,YTIME)/1000+(VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)/1.2441+
                  imCO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
                  (1-imCO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
@@ -472,14 +471,14 @@ Q04CostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' This equation computes the long-term average power generation cost. It involves summing the long-term average power generation costs for different power generation
 *' plants and energy forms, considering the specific characteristics and costs associated with each. The result is the average power generation cost per unit of
 *' electricity consumed in the given time period.
-Q04CostPowGenAvgLng(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-        VmCostPowGenAvgLng(allCy,ESET,YTIME)
+Q04CostPowGenAvgLng(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+        VmCostPowGenAvgLng(allCy,YTIME)
               =E=
         (
-          SUM(PGALL, VmProdElec(allCy,PGALL,YTIME) * V04CostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME)) +
-          sum(CHP, VmCostElcAvgProdCHP(allCy,CHP,YTIME) * V04ProdElecEstCHP(allCy,CHP,YTIME))
+          SUM(PGALL, VmProdElec(allCy,PGALL,YTIME) * V04CostPowGenLngTechNoCp(allCy,PGALL,YTIME)) +
+          0*sum(CHP, VmCostElcAvgProdCHP(allCy,CHP,YTIME) * V04ProdElecEstCHP(allCy,CHP,YTIME))
         ) / 
-        V04DemElecTot(allCy,YTIME); 
+        (V04DemElecTot(allCy,YTIME) - sum(CHP,V04ProdElecEstCHP(allCy,CHP,YTIME))); 
 
 *' The equation represents the long-term average power generation cost excluding climate policies.
 *' It calculates the cost in Euro2005 per kilowatt-hour (kWh) for a specific combination of parameters. The equation is composed 
@@ -488,22 +487,17 @@ Q04CostPowGenAvgLng(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' CO2 capture rates, and carbon prices. The equation incorporates a summation over different plant fuel types and considers the cost curve for CO2 sequestration.
 *' The final result is the average power generation cost per unit of electricity produced, taking into account various economic and technical parameters.
 Q04CostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V04CostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)
+        V04CostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)
                  =E=
-             (imDisc(allCy,"PG",YTIME)*EXP(imDisc(allCy,"PG",YTIME)*i04TechLftPlaType(allCy,PGALL)) /
-             (EXP(imDisc(allCy,"PG",YTIME)*i04TechLftPlaType(allCy,PGALL))-1)*i04GrossCapCosSubRen(allCy,PGALL,YTIME)*1000*imCGI(allCy,YTIME) +
-             i04FixOandMCost(allCy,PGALL,YTIME))/i04AvailRate(allCy,PGALL,YTIME)
-             / (1000*(7.25$ISET(ESET)+2.25$RSET(ESET))) +
-             sum(PGEF$PGALLTOEF(PGALL,PGEF),
+             V04CapexFixCostPG(allCy,PGALL,YTIME) * V04CapexRESRate(allCy,PGALL,YTIME) / i04AvailRate(allCy,PGALL,YTIME)
+             / (1000*(smGwToTwhPerYear(YTIME)*(0.75$ISET(ESET)+0.25$RSET(ESET) + 0.5$CSET(ESET) + 0.5$(TSET(ESET)))))
+             + sum(PGEF$PGALLTOEF(PGALL,PGEF),
                  (i04VarCost(PGALL,YTIME)/1000+((VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)-imEffValueInDollars(allCy,"PG",ytime)/1000-imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
                  sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))/1000 )/1.2441+
 
                  imCO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
-
                  (1-imCO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
-
                  (sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))))
-
                  *smTWhToMtoe/imPlantEffByType(allCy,PGALL,YTIME)));
 
 *' Compute long term power generation cost excluding climate policies by summing the Electricity production multiplied by Long-term average power generation cost excluding 
@@ -514,9 +508,9 @@ Q04CostPowGenLonNoClimPol(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                  =E=
          (
          SUM(PGALL, (VmProdElec(allCy,PGALL,YTIME))*V04CostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)) +
-         sum(CHP, VmCostElcAvgProdCHP(allCy,CHP,YTIME)*V04ProdElecEstCHP(allCy,CHP,YTIME))
+         0*sum(CHP, VmCostElcAvgProdCHP(allCy,CHP,YTIME)*V04ProdElecEstCHP(allCy,CHP,YTIME))
          ) /
-         (V04DemElecTot(allCy,YTIME));  
+         (V04DemElecTot(allCy,YTIME) - sum(CHP,V04ProdElecEstCHP(allCy,CHP,YTIME)));  
 
 *' This equation establishes a common variable (with arguments) for the electricity consumption per demand subsector of INDUSTRY, [DOMESTIC/TERTIARY/RESIDENTIAL] and TRANSPORT.
 *' The electricity consumption of the demand subsectors of INDUSTRY & [DOMESTIC/TERTIARY/RESIDENTIAL] is provided by the consumption of Electricity as a Fuel.
@@ -526,3 +520,25 @@ Q04ConsElec(allCy,DSBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
             =E=
         sum(INDDOM $SAMEAS(INDDOM,DSBS), VmConsFuel(allCy,INDDOM,"ELC",YTIME)) + 
         sum(TRANSE $SAMEAS(TRANSE,DSBS), VmDemFinEneTranspPerFuel(allCy,TRANSE,"ELC",YTIME));
+
+*' This equation calculates the CAPEX and the Fixed Costs of each power generation unit, taking into account its discount rate and life expectancy, 
+*' for each region (country) and year.
+Q04CapexFixCostPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         V04CapexFixCostPG(allCy,PGALL,YTIME)
+                  =E=         
+          ( 
+            imDisc(allCy,"PG",YTIME) * exp(imDisc(allCy,"PG",YTIME) * i04TechLftPlaType(allCy,PGALL))
+            / (exp(imDisc(allCy,"PG",YTIME) * i04TechLftPlaType(allCy,PGALL)) -1)
+          )
+          * i04GrossCapCosSubRen(allCy,PGALL,YTIME) * 1000 * imCGI(allCy,YTIME)
+          + i04FixOandMCost(allCy,PGALL,YTIME);
+
+*' This equation estimates the factor increasing the CAPEX of new RES (unflexible) capacity installation due to simultaneous need for grind upgrade and storage, 
+*' for each region (country) and year. This factor depends on the existing RES (unflexible) penetration in the electriciy mixture.
+Q04CapexRESRate(allCy,PGALL,YTIME)$(TIME(YTIME) and runCy(allCy))..
+    V04CapexRESRate(allCy,PGALL,YTIME)
+        =E=
+        (
+          1 + (V04ShareMixWndSol(allCy,YTIME)$PGRENSW(PGALL)) ** S04CapexBessRate
+        )
+;

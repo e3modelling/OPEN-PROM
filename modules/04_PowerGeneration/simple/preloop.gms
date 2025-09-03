@@ -3,8 +3,8 @@
 
 *'                *VARIABLE INITIALISATION*
 *---
-VmCostPowGenAvgLng.L(runCy,ESET,"2010") = 0;
-VmCostPowGenAvgLng.L(runCy,ESET,"%fBaseY%") = 0;
+VmCostPowGenAvgLng.L(runCy,"2010") = 0;
+VmCostPowGenAvgLng.L(runCy,"%fBaseY%") = 0;
 *---
 V04SensCCS.L(runCy,YTIME) = 1;
 *---
@@ -40,8 +40,6 @@ V04CFAvgRen.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = i04AvailRate(runCy,PGALL,YTIME)
 *---
 V04RenTechMatMult.L(runCy,PGALL,YTIME) = 1;
 *---
-V04ScalWeibullSum.L(runCy,PGALL,YTIME) = 2000;
-*---
 V04RenTechMatMultExpr.FX(runCy,PGALL,YTIME)$(not PGREN(PGALL)) = 0;
 *---
 V04CostHourProdInvDec.L(runCy,PGALL,TT) = 0.0001;
@@ -72,8 +70,8 @@ V04CostPowGenLonNoClimPol.L(runCy,ESET,"%fBaseY%") = 0;
 *v04CostPowGenAvgShrt.L(runCy,ESET,"2010") = 0;
 *v04CostPowGenAvgShrt.L(runCy,ESET,"%fBaseY%") = 0;
 *---
-V04CostPowGenLngTechNoCp.L(runCy,PGALL,ESET,"2010") = 0;
-V04CostPowGenLngTechNoCp.L(runCy,PGALL,ESET,"%fBaseY%") = 0;
+V04CostPowGenLngTechNoCp.L(runCy,PGALL,"2010") = 0;
+V04CostPowGenLngTechNoCp.L(runCy,PGALL,"%fBaseY%") = 0;
 *---
 V04CostAvgPowGenLonNoClimPol.L(runCy,PGALL,ESET,"2010") = 0;
 V04CostAvgPowGenLonNoClimPol.FX(runCy,PGALL,ESET,"%fBaseY%") = 0;
@@ -115,8 +113,14 @@ VmProdElec.FX(runCy,pgall,YTIME)$DATAY(YTIME) = i04DataElecProdNonCHP(runCy,pgal
 V04ProdElecCHP.FX(runCy,CHP,YTIME)$DATAY(YTIME) = i04DataElecProdCHP(runCy,CHP,YTIME)/1000;
 V04ProdElecEstCHP.FX(runCy,CHP,YTIME)$DATAY(YTIME) = i04DataElecProdCHP(runCy,CHP,YTIME)/1000;
 *---
-V04ProdElecReqTot.FX(runCy,"%fBaseY%")=sum(pgall,VmProdElec.L(runCy,pgall,"%fBaseY%"));
-*---
 V04ConsElec.L(runCy,DSBS,YTIME)=0.1;
 V04ConsElec.FX(runCy,DSBS,YTIME)$(not AN(YTIME)) = 0.1;
 *---
+V04CapexFixCostPG.FX(runCy,PGALL,YTIME)$(DATAY(YTIME)) = (imDisc(runCy,"PG",YTIME) * exp(imDisc(runCy,"PG",YTIME) * i04TechLftPlaType(runCy,PGALL))
+          / (exp(imDisc(runCy,"PG",YTIME) * i04TechLftPlaType(runCy,PGALL)) -1))
+          * i04GrossCapCosSubRen(runCy,PGALL,YTIME) * 1000 * imCGI(runCy,YTIME)
+          + i04FixOandMCost(runCy,PGALL,YTIME);
+*---
+V04ShareMixWndSol.L(runCy,YTIME)$(DATAY(YTIME)) = sum(PGALL$(PGRENSW(PGALL)), VmCapElec.L(runCy,PGALL,YTIME)) / sum(PGALL2, VmCapElec.L(runCy,PGALL2,YTIME));
+*---
+V04CapexRESRate.L(runCy,PGALL,YTIME)=1;

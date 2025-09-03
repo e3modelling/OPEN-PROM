@@ -32,7 +32,7 @@ Q04NetNewCapElec(allCy,PGALL,YTIME)	                       "Compute the yearly d
 Q04CFAvgRen(allCy,PGALL,YTIME)	                           "Compute the average capacity factor of RES"	
 Q04CapOverall(allCy,PGALL,YTIME)	                       "Compute overall capacity"
 *q04SecContrTotCHPProd(allCy,SBS,CHP,YTIME)                "Compute sector contribution to total CHP production"		
-Q04CostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME)	       "Compute long term power generation cost of technologies excluding climate policies"	
+Q04CostPowGenLngTechNoCp(allCy,PGALL,YTIME)	       "Compute long term power generation cost of technologies excluding climate policies"	
 *q04CostPowGenLonMin(allCy,PGALL,YTIME)	                   "Long-term minimum power generation cost"	
 *q04CostPowGenLongIntPri(allCy,PGALL,ESET,YTIME)           "Compute long term power generation cost of technologies including international Prices of main fuels"
 *q04CostPowGenShortIntPri(allCy,PGALL,ESET,YTIME)          "Compute short term power generation cost of technologies including international Prices of main fuels"
@@ -46,11 +46,14 @@ Q04DemElecTot(allCy,YTIME)                                 "Compute total electr
 *Q04CapElecCHP(allCy,CHP,YTIME)                             "Compute CHP electric capacity"	
 $endif.calib
 Q04ProdElecCHP(allCy,CHP,YTIME)                            "Compute CHP electricity production (TWh)"
-Q04ProdElecEstCHP(allCy,CHP,YTIME)	                           "Estimate the electricity of CHP Plants"	
+Q04ProdElecEstCHP(allCy,CHP,YTIME)	                       "Estimate the electricity of CHP Plants"	
+Q04CapexFixCostPG(allCy,PGALL,YTIME)                       "Computes the capex and fixed costs of any power generation technology"
+Q04ShareMixWndSol(allCy,YTIME)                             "Computes the participation of solar and wind in the energy mixture (%)"
+Q04CapexRESRate(allCy,PGALL,YTIME)                         "Estimates a multiplying factor expressing the extra grid and storage costs for RES implementation according to the RES penetration in the mixture"
 
 *'                **Interdependent Equations**
 Q04ProdElec(allCy,PGALL,YTIME)                             "Compute electricity production from power generation plants"
-Q04CostPowGenAvgLng(allCy,ESET,YTIME)	                   "Compute long term power generation cost"
+Q04CostPowGenAvgLng(allCy,YTIME)	                   "Compute long term power generation cost"
 Q04CapElecTotEst(allCy,YTIME)                              "Compute Estimated total electricity generation capacity"
 Q04PeakLoad(allCy,YTIME)	                               "Compute elerctricity peak load"	
 Q04CapElec(allCy,PGALL,YTIME)	                           "Compute electricity generation capacity"
@@ -90,7 +93,7 @@ V04NetNewCapElec(allCy,PGALL,YTIME)	                       "Yearly difference in
 V04CFAvgRen(allCy,PGALL,YTIME)	                           "The average capacity factor of RES (1)"
 V04CapOverall(allCy,PGALL,YTIME)	                       "Overall Capacity (MW)"	
 *v04SecContrTotCHPProd(allCy,SBS,CHP,YTIME)                "Contribution of each sector in total CHP production (1)"	
-V04CostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME)	       "Long-term average power generation cost (US$2015/kWh)"
+V04CostPowGenLngTechNoCp(allCy,PGALL,YTIME)	       "Long-term average power generation cost (US$2015/kWh)"
 *v04CostPowGenLonMin(allCy,PGALL,YTIME)	                   "Long-term minimum power generation cost (US$2015/kWh)"		
 *v04CostPowGenLongIntPri(allCy,PGALL,ESET,YTIME)           "Long term power generation cost of technologies including international prices of main fuels (kUS$2015/toe)"
 *v04CostPowGenShortIntPri(allCy,PGALL,ESET,YTIME)          "Short term power generation cost of technologies including international Prices of main fuels (kUS$2015/toe)"
@@ -100,14 +103,19 @@ V04CostPowGenLonNoClimPol(allCy,ESET,YTIME)                "Long-term average po
 V04ConsElec(allCy,DSBS,YTIME)                              "Electricity demand per final sector (Mtoe)"
 V04LoadFacDom(allCy,YTIME)                                 "Electricity load factor for entire domestic system"	
 V04ProdElecCHP(allCy,CHP,YTIME)	                           "CHP electricity production (TWh)"
-V04ProdElecReqTot(allCy,YTIME)	                           "Total required electricity production (TWh)"
 V04DemElecTot(allCy,YTIME)                                 "Total electricity demand (TWh)"
-V04ProdElecEstCHP(allCy,CHP,YTIME)	                           "Estimate the electricity of CHP Plants (1)"	
+V04ProdElecEstCHP(allCy,CHP,YTIME)	                       "Estimate the electricity of CHP Plants (1)"	
+V04CapexFixCostPG(allCy,PGALL,YTIME)                       "CAPEX and fixed costs of any power generation technology (US$2015/kW)"
+V04ShareMixWndSol(allCy,YTIME)                             "The participation of solar and wind in the energy mixture(%)"
+V04CapexRESRate(allCy,PGALL,YTIME)                         "Multiplying factor expressing the extra grid and storage costs for RES implementation according to the RES penetration in the mixture"
 
 *'                **Interdependent Variables**	
 VmProdElec(allCy,PGALL,YTIME)                              "Electricity production (TWh)"	
-VmCostPowGenAvgLng(allCy,ESET,YTIME)	                   "Long-term average power generation cost (US$2015/kWh)"
+VmCostPowGenAvgLng(allCy,YTIME)	                   "Long-term average power generation cost (US$2015/kWh)"
 VmCapElecTotEst(allCy,YTIME)	                           "Estimated Total electricity generation capacity (GW)"
 VmPeakLoad(allCy,YTIME)	                                   "Electricity peak load (GW)"	
 VmCapElec(allCy,PGALL,YTIME)	                           "Electricity generation plants capacity (GW)"
 ;
+
+Scalars
+S04CapexBessRate                                            "The power expressing the rate of the increase in the solar & wind CAPEX because of storage need and grid upgrade" /1.3/
