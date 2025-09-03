@@ -38,9 +38,7 @@ V04NetNewCapElec.FX(runCy,"PGLHYD",YTIME)$TFIRST(YTIME) = +1E-10;
 V04CFAvgRen.L(runCy,PGALL,YTIME) = 0.1;
 V04CFAvgRen.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = i04AvailRate(runCy,PGALL,YTIME);
 *---
-V04RenTechMatMult.L(runCy,PGALL,YTIME) = 1;
-*---
-V04RenTechMatMultExpr.FX(runCy,PGALL,YTIME)$(not PGREN(PGALL)) = 0;
+V0ShareSatPG.FX(runCy,PGALL,YTIME)$ (not PGREN(PGALL))= 1;
 *---
 V04CostHourProdInvDec.L(runCy,PGALL,TT) = 0.0001;
 V04CostHourProdInvDec.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME))) = 0;
