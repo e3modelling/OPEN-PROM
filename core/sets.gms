@@ -638,10 +638,14 @@ CHEVGDO
 
 SECTTECH(SBS,EF) Link between Model Subsectors and Fuels
 /
-PC.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO,CHEVGSL,CHEVGDO)
-PB.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO)
-GU.(LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGDO,CHEVGDO) !! Removed GSL and PHEVGSL
-(PT,GT).(GDO,ELC,MET)
+*PC.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO,CHEVGSL,CHEVGDO)
+*PB.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO)
+*GU.(LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGDO,CHEVGDO)
+*(PT,GT).(GDO,ELC,MET)
+PC.(GSL,LPG,GDO,NGS,ELC,PHEVGSL,PHEVGDO,CHEVGSL,CHEVGDO)
+PB.(LPG,GDO,NGS,ELC,PHEVGDO)
+GU.(LPG,GDO,NGS,ELC,PHEVGDO,CHEVGDO)
+(PT,GT).(GDO,ELC)
 PA.(KRS)
 (PN,GN).(GSL,GDO)
 (IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(LGN,HCL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC,STE1AL,
@@ -917,8 +921,8 @@ PGECONCHAR       "Technical - economic characteristics for power generation plan
 LFT
 /
 
-SG               "S parameters in Gompertz function for passenger cars vehicle km"
-/S1,S2,S3,SAT/
+SG               "S parameters in Gompertz function for passenger cars per capita"
+/S1,S2/
 
 TRANSPCHAR       "Various transport data used in equations and post-solution calculations"
 /
