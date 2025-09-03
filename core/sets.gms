@@ -400,18 +400,7 @@ REFORM1(EF) FUELS CONSIDERED IN PRICE REFORM
 /HCL
 LGN/
 
-RENEF(EF)        Renewable technologies in demand side
-/
-HYD     "Hydro"
-WND     "Wind"
-SOL     "Solar"
-BMSWAS  "Biomass and Waste"
-GEO     "Geothermal and other renewable sources eg. Tidal, etc."
-BGDO    "Biodiesel"
-*STE1CB  "Steam produced from CHP conventional bmswas"
-STE1AB  "Steam produced from CHP advanced bmswas"
-STE2BMS "Steam produced from district heating plants burning bmswas"
-/
+
 
 OIL(EF) Liquid fuels in private road transport
 /
@@ -457,7 +446,7 @@ HCL.WCOKE
 
 /
 
-EFtoWEF(SBS,EF,WEF) Link between Imported Energy Forms and Energy Forms used in Model Subsectors
+EFtoWEF(DSBS,EF,WEF) Link between Imported Energy Forms and Energy Forms used in Model Subsectors
 
 
 EFS(EF)          Energy Forms used in Supply Side
@@ -627,27 +616,31 @@ TSTE2BMS
 TBMSWAS
 * Non-Energy and Bunkers Technologies (only add those not already in Transport & Industry & Domestic)
 * GDO,RFO,LGN,HCL,GDO,LPG,OLQ,NGS,OGS already exist
+* NOT USED
+TSTE1AR
+TSTE1AH2F
+THEATPUMP
 * Power Generation Technologies
-PGTLGN
-PGTHCL 
-PGTGDO
-PGTRFO
-PGTNGS
-PGTNUC
-PGTHYD
-PGTBMSWAS
-PGTSOL
-PGTGEO
-PGTWND
+*PGTLGN
+*PGTHCL 
+*PGTGDO
+*PGTRFO
+*PGTNGS
+*PGTNUC
+*PGTHYD
+*PGTBMSWAS
+*PGTSOL
+*PGTGEO
+*PGTWND
 * Hydrogen Production Technologies
-HPTHCL
-HPTRFO
-HPTNGS
-HPTNUC
-HPTBMSWAS
-HPTSOL
-HPTWND
-HPTELC
+*HPTHCL
+*HPTRFO
+*HPTNGS
+*HPTNUC
+*HPTBMSWAS
+*HPTSOL
+*HPTWND
+*HPTELC
 /
 
 TTECH(TECH)      Transport Technologies
@@ -668,7 +661,7 @@ TCHEVGSL  "conventional Hybrid engine - gasoline"
 TCHEVGDO  "conventional Hybrid engine - diesel"
 /
 
-ITECH      Industrial - Domestic - Non-energy & Bunkers Technologies 
+ITECH(TECH)      Industrial - Domestic - Non-energy & Bunkers Technologies 
 /
 TGDO
 TLPG
@@ -698,6 +691,19 @@ TSTE2BMS
 TBMSWAS
 /
 
+RENEF(TECH)        Renewable technologies in demand side !! Should these remain in EF?
+/
+*HYD     "Hydro"
+*WND     "Wind"
+*SOL     "Solar"
+TBMSWAS  "Biomass and Waste"
+*GEO     "Geothermal and other renewable sources eg. Tidal, etc."
+TBGDO    "Biodiesel"
+*STE1CB  "Steam produced from CHP conventional bmswas"
+TSTE1AB  "Steam produced from CHP advanced bmswas"
+TSTE2BMS "Steam produced from district heating plants burning bmswas"
+/
+
 TECHtoEF (TECH,EF) Fuels consumed by technologies
 /
 TGSL.GSL
@@ -709,16 +715,11 @@ TKRS.KRS
 TETH.ETH
 TMET.MET
 TBGDO.BGDO
-*TPHEVGSL.(GSL,ELC)
-*TPHEVGDO.(GDO,ELC)
+TPHEVGSL.(GSL,ELC)
+TPHEVGDO.(GDO,ELC)
 TH2F.H2F
 TCHEVGSL.GSL
-TCHEVGDO.GDO
-TGDO.GDO
-TLPG.LPG
-TKRS.KRS  
-TNGS.NGS
-TELC.ELC    
+TCHEVGDO.GDO     
 TLGN.LGN
 THCL.HCL
 TRFO.RFO
@@ -731,7 +732,6 @@ TSTE1AG.STE1AG
 TSTE1AB.STE1AB
 * Domestic Technologies (only add those not already in Transport & Industry)
 * LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC,STE1AL,STE1AH,STE1AD,STE1AG,STE1AB already exist in TRANSPORT or INDUSTRY technologies
-TGSL.GSL
 TSTE2LGN.STE2LGN
 TSTE2OSL.STE2OSL
 TSTE2GDO.STE2GDO
@@ -792,19 +792,19 @@ TBMSWAS.BMSWAS
 /
 
 
-PLUGIN(TTECH) Plug-in hybrids
+PLUGIN(TECH) Plug-in hybrids
 /
 TPHEVGSL
 TPHEVGDO
 /
 
-CHYBV(TTECH) CONVENTIONAL hybrids
+CHYBV(TECH) CONVENTIONAL hybrids
 /
 TCHEVGSL
 TCHEVGDO
 /
 
-SECTTECH(SBS,TECH) Link between Model Subsectors and Fuels
+SECTTECH(DSBS,TECH) Link between Model Demand Subsectors and Technologies
 /
 PC.(TGSL,TLPG,TGDO,TNGS,TELC,TETH,TMET,TBGDO,TPHEVGSL,TPHEVGDO,TCHEVGSL,TCHEVGDO)
 PB.(TGSL,TLPG,TGDO,TNGS,TELC,TETH,TMET,TBGDO,TPHEVGSL,TPHEVGDO)
@@ -822,10 +822,15 @@ GN.(TGSL,TGDO)
 *BU.(GDO,RFO,OLQ)
 BU.(TGDO,TRFO)
 (PCH,NEN).(TLGN,THCL,TGDO,TRFO,TLPG,TOLQ,TNGS,TOGS)
-PG.(PGTLGN,PGTHCL,PGTGDO,PGTRFO,PGTNGS,PGTNUC,PGTHYD,PGTBMSWAS,PGTSOL,PGTGEO,PGTWND)
-H2P.(HPTHCL,HPTRFO,HPTNGS,HPTNUC,HPTBMSWAS,HPTSOL,HPTWND,HPTELC)
+*PG.(PGTLGN,PGTHCL,PGTGDO,PGTRFO,PGTNGS,PGTNUC,PGTHYD,PGTBMSWAS,PGTSOL,PGTGEO,PGTWND)
+*H2P.(HPTHCL,HPTRFO,HPTNGS,HPTNUC,HPTBMSWAS,HPTSOL,HPTWND,HPTELC)
 /
 
+SECtoEF(SBS,EF) Link between Model Subsectors and Energy FORMS
+/
+PG.(LGN,HCL,GDO,RFO,NGS,NUC,HYD,BMSWAS,SOL,GEO,WND)
+H2P.(HCL,RFO,NGS,NUC,BMSWAS,SOL,WND,ELC)
+/
 
 PGALL            Power Generation Plant Types !! Maybe these should be the power generation technologies?
 /
@@ -1278,19 +1283,22 @@ alias(EF, EF2);
 * this alias is used in alternative transport fuels price calculations
 alias(PGALL2,PGALL);
 *this alias is used in plant dispatching equation
+alias(ITECH,ITECH2)
 
 
 scalar TF order of base year in set ytime;
 TF=sum((TFIRST,ytime), ord(ytime)$TFIRST(ytime));
 
 * Allocate imported fuels to fuels used in demand subsectors
-EFtoWEF(SBS,EF,WEF)=NO;
+EFtoWEF(DSBS,EF,WEF)=NO;
 loop WEF do
   loop EF$WEFMAP(EF,WEF) do
-    loop SBS$SECTTECH(SBS,EF) do
-         if not sameas(WEF,"WCOKE") then
-             EFtoWEF(SBS,EF,WEF)=yes;
-         endif;
+    loop TECH$TECHtoEF(TECH,EF) do
+      loop DSBS$SECTTECH(DSBS,TECH) do
+          if not sameas(WEF,"WCOKE") then
+             EFtoWEF(DSBS,EF,WEF)=yes;
+          endif;
+      endloop;
     endloop;
   endloop;
 endloop;
@@ -1302,7 +1310,7 @@ Parameter TECHS(DSBS) Number of technologies in transport subsectors;
 
 loop DSBS$TRANSE(DSBS) do
      TECHS(DSBS)=0;
-     loop EF$SECTTECH(DSBS,EF) do
+     loop TECH$SECTTECH(DSBS,TECH) do
        TECHS(DSBS) = TECHS(DSBS)+1;
      endloop;
 endloop;
@@ -1318,3 +1326,11 @@ ALIAS (YYTIME2,ytime);
 scalar ordfirst /0/;
 ordfirst=sum((ytime,YYTIME2)$((ord(ytime)<=ord(YYTIME2)) $TFIRST(YYTIME2)),1);
 
+
+loop TECH do
+    loop DSBS$SECTTECH(DSBS,TECH) do
+        loop EF$TECHtoEF(TECH,EF) do
+            SECtoEF(DSBS,EF) = yes;
+        endloop;
+    endloop;
+endloop;

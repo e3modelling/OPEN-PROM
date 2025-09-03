@@ -408,7 +408,7 @@ SE.TRFO       0.24888  10.88           20  0.8
 SE.TOLQ       0.24888  10.88           20  0.8
 SE.TNGS       0.2244   6.8             20  0.88
 SE.TOGS       0.2244   10.88           20  0.8
-SE.TSOL       0.86224  1.36            20  0.97
+*SE.PGTSOL     0.86224  1.36            20  0.97
 SE.TBMSWAS    0.323544 10.88           20  0.5
 SE.TELC       0.3      8.976           12  0.97
 SE.TSTE1AL    2.43133  40.1956 41.1163 30  0.375
@@ -437,7 +437,7 @@ AG.TRFO       0.24888  10.88           20  0.8
 AG.TOLQ       0.24888  10.88           20  0.8
 AG.TNGS       0.2244   6.8             20  0.88
 AG.TOGS       0.2244   10.88           20  0.8
-AG.TSOL       0.86224  1.36            20  0.97
+*AG.PGTSOL     0.86224  1.36            20  0.97
 AG.TBMSWAS    0.323544 10.88           20  0.5
 AG.TELC       0.3      8.976           12  0.97
 AG.TSTE1AL    2.43133  40.1956 41.1163 30  0.375
@@ -466,7 +466,7 @@ HOU.TRFO      0.24888  10.88           20  0.8
 HOU.TOLQ      0.24888  10.88           20  0.8
 HOU.TNGS      0.2244   6.8             20  0.88
 HOU.TOGS      0.2244   10.88           20  0.8
-HOU.TSOL      0.86224  1.36            20  0.97
+*HOU.PGTSOL    0.86224  1.36            20  0.97
 HOU.TBMSWAS   0.323544 10.88           20  0.5
 HOU.TELC      0.3      8.976           12  0.97
 HOU.TSTE1AL   2.43133  40.1956 41.1163 30  0.375
@@ -667,7 +667,7 @@ $include"./iFuelConsINDSE.csv"
 $offdelim
 ;
 *---
-iFuelConsINDSE(runCy,INDSE,EF,YTIME)$(SECTTECH(INDSE,TECH)$TECHtoEF(TECH,EF) $(iFuelConsINDSE(runCy,INDSE,EF,YTIME)<=0)) = 1e-6;
+iFuelConsINDSE(runCy,INDSE,EF,YTIME)$(SECtoEF(INDSE,EF) $(iFuelConsINDSE(runCy,INDSE,EF,YTIME)<=0)) = 1e-6;
 *---
 table iFuelConsDOMSE(allCy,DOMSE,EF,YTIME)	"Fuel consumption of domestic subsector (Mtoe)"
 $ondelim
@@ -675,7 +675,7 @@ $include"./iFuelConsDOMSE.csv"
 $offdelim
 ;
 *---
-iFuelConsDOMSE(runCy,DOMSE,EF,YTIME)$(SECTTECH(DOMSE,TECH)$TECHtoEF(TECH,EF) $(iFuelConsDOMSE(runCy,DOMSE,EF,YTIME)<=0)) = 1e-6;
+iFuelConsDOMSE(runCy,DOMSE,EF,YTIME)$(SECtoEF(DOMSE,EF) $(iFuelConsDOMSE(runCy,DOMSE,EF,YTIME)<=0)) = 1e-6;
 *---
 table iFuelConsNENSE(allCy,NENSE,EF,YTIME)	"Fuel consumption of non energy and bunkers (Mtoe)"
 $ondelim
@@ -683,13 +683,15 @@ $include"./iFuelConsNENSE.csv"
 $offdelim
 ;
 *---
-iFuelConsNENSE(runCy,NENSE,EF,YTIME)$(SECTTECH(NENSE,TECH)$TECHtoEF(TECH,EF) $(iFuelConsNENSE(runCy,NENSE,EF,YTIME)<=0)) = 1e-6;
+iFuelConsNENSE(runCy,NENSE,EF,YTIME)$(SECtoEF(NENSE,EF) $(iFuelConsNENSE(runCy,NENSE,EF,YTIME)<=0)) = 1e-6;
 imFuelConsPerFueSub(runCy,INDSE,EF,YTIME) = iFuelConsINDSE(runCy,INDSE,EF,YTIME);
 imFuelConsPerFueSub(runCy,DOMSE,EF,YTIME) = iFuelConsDOMSE(runCy,DOMSE,EF,YTIME);
 imFuelConsPerFueSub(runCy,NENSE,EF,YTIME) = iFuelConsNENSE(runCy,NENSE,EF,YTIME);
-imFinEneCons(runCy,EFS,YTIME) = sum(INDDOM,sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(INDDOM,TECH)$TECHtoEF(TECH,EF)), imFuelConsPerFueSub(runCy,INDDOM,EF,YTIME)))
-                       +
-                       sum(TRANSE,sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(TRANSE,TECH)$TECHtoEF(TECH,EF) $(not plugin(TECH)) ), imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME)));
+* NEED TO CHECK IF CORRECT
+imFinEneCons(runCy,EFS,YTIME) =
+     sum((INDDOM,EF)$(EFtoEFS(EF,EFS) and sum(TECH$(SECTTECH(INDDOM,TECH) and TECHtoEF(TECH,EF)),1)),imFuelConsPerFueSub(runCy,INDDOM,EF,YTIME))
+     +
+     sum((TRANSE,EF)$(EFtoEFS(EF,EFS) and sum(TECH$(SECTTECH(TRANSE,TECH) and TECHtoEF(TECH,EF)$(not plugin(TECH))),1)), imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME));
 *---
 imCO2CaptRate(runCy,PGALL,YTIME) = 0.1; 
 imEffValueInDollars(runCy,SBS,YTIME) = 0;
@@ -727,22 +729,22 @@ elseif %fScenario% eq 3 then
 
 endif;
 *---
-table iMatrFactorData(SBS,EF,YTIME)          "Maturity factor per technology and subsector (1)"
+table iMatrFactorData(DSBS,TECH,YTIME)          "Maturity factor per technology and subsector (1)"
 $ondelim
 $include"./iMatrFactorData.csv"
 $offdelim
 ;
 *---
 $IFTHEN.calib %MatFacCalibration% == off
-parameter imMatrFactor(allCy,SBS,EF,YTIME)   "Maturity factor per technology and subsector for all countries (1)";
-imMatrFactor(runCy,SBS,EF,YTIME) = iMatrFactorData(SBS,EF,YTIME);                                          
-imMatrFactor(runCy,SBS,EF,YTIME)$(imMatrFactor(runCy,SBS,EF,YTIME)=0) = 0.000001;
+parameter imMatrFactor(allCy,DSBS,TECH,YTIME)   "Maturity factor per technology and subsector for all countries (1)";
+imMatrFactor(runCy,DSBS,TECH,YTIME) = iMatrFactorData(DSBS,TECH,YTIME);                                          
+imMatrFactor(runCy,DSBS,TECH,YTIME)$(imMatrFactor(runCy,DSBS,TECH,YTIME)=0) = 0.000001;
 $ELSE.calib
-variable imMatrFactor(allCy,SBS,EF,YTIME)    "Maturity factor per technology and subsector for all countries (1)";
-imMatrFactor.L(runCy,SBS,EF,YTIME) = iMatrFactorData(SBS,EF,YTIME);                                          
-imMatrFactor.L(runCy,SBS,EF,YTIME)$(imMatrFactor.L(runCy,SBS,EF,YTIME)=0) = 0.000001;
-imMatrFactor.LO(runCy,SBS,EF,YTIME) = -10;                                          
-imMatrFactor.UP(runCy,SBS,EF,YTIME) = 100;
+variable imMatrFactor(allCy,DSBS,TECH,YTIME)    "Maturity factor per technology and subsector for all countries (1)";
+imMatrFactor.L(runCy,DSBS,TECH,YTIME) = iMatrFactorData(DSBS,TECH,YTIME);                                          
+imMatrFactor.L(runCy,DSBS,EF,YTIME)$(imMatrFactor.L(runCy,DSBS,TECH,YTIME)=0) = 0.000001;
+imMatrFactor.LO(runCy,DSBS,EF,YTIME) = -10;                                          
+imMatrFactor.UP(runCy,DSBS,EF,YTIME) = 100;
 $ENDIF.calib
 *---
 ** Industry

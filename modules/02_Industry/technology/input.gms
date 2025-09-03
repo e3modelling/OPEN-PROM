@@ -19,16 +19,23 @@ i02FixOMCostPerChp(allCy,DSBS,CHP,YTIME)                   "Fixed O&M cost per C
 i02AvailRateChp(allCy,DSBS,CHP)                            "Availability rate of CHP Plants ()"
 i02VarCostChp(allCy,DSBS,CHP,YTIME)                        "Variable (other than fuel) cost per CHP Type (Gross US$2015/KW)"
 i02BoiEffChp(allCy,CHP,YTIME)                              "Boiler efficiency (typical) used in adjusting CHP efficiency ()"
+i02util(allCy,DSBS,ITECH,YTIME)                              "Utilization rate of technologies"
+i02numtechnologiesUsingEF(DSBS,EF)
+i02Share(allCy,DSBS,ITECH,EF,YTIME)  
 ;
 *---
-imTotFinEneDemSubBaseYr(runCy,TRANSE,YTIME)  = sum(EF$(TECHtoEF(TECH,EF)$SECTTECH(TRANSE,TECH)$(not plugin(EF))), imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME));
-imTotFinEneDemSubBaseYr(runCy,INDSE,YTIME)   = SUM(EF$(TECHtoEF(TECH,EF)$SECTTECH(INDSE,TECH)),imFuelConsPerFueSub(runCy,INDSE,EF,YTIME));
-imTotFinEneDemSubBaseYr(runCy,DOMSE,YTIME)   = SUM(EF$(TECHtoEF(TECH,EF)$SECTTECH(DOMSE,TECH)),imFuelConsPerFueSub(runCy,DOMSE,EF,YTIME));
-imTotFinEneDemSubBaseYr(runCy,NENSE,YTIME)   = SUM(EF$(TECHtoEF(TECH,EF)$SECTTECH(NENSE,TECH)),imFuelConsPerFueSub(runCy,NENSE,EF,YTIME));
+imTotFinEneDemSubBaseYr(runCy,TRANSE,YTIME)  = sum(EF$SECtoEF(TRANSE,EF), imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME));
+imTotFinEneDemSubBaseYr(runCy,INDSE,YTIME)   = SUM(EF$SECtoEF(INDSE,EF),imFuelConsPerFueSub(runCy,INDSE,EF,YTIME));
+imTotFinEneDemSubBaseYr(runCy,DOMSE,YTIME)   = SUM(EF$SECtoEF(DOMSE,EF),imFuelConsPerFueSub(runCy,DOMSE,EF,YTIME));
+imTotFinEneDemSubBaseYr(runCy,NENSE,YTIME)   = SUM(EF$SECtoEF(NENSE,EF),imFuelConsPerFueSub(runCy,NENSE,EF,YTIME));
 *---
 i02ExogDemOfBiomass(runCy,DOMSE,YTIME) = 0;
 *---
 i02LifChpPla(runCy,DSBS,CHP) = imDataChpPowGen(CHP,"LFT","2010");
+*---
+i02util(runCy,DSBS,ITECH,YTIME) = 1;
+*---
+i02Share(runCy,DSBS,ITECH,EF,YTIME) = 1; !! (To be included in mrprom when mix of fuels for technologies)
 *---
 $IFTHEN.calib %Calibration% == Calibration
 variable i02ElastNonSubElec(allCy,SBS,ETYPES,YTIME)        "Elasticities of Non Substitutable Electricity (1)";
@@ -57,3 +64,6 @@ i02BoiEffChp(runCy,CHP,YTIME)            = imDataChpPowGen(CHP,"BOILEFF",YTIME);
 *---
 i02ElaSub(runCy,DSBS) = imElaSubData(DSBS);
 *---
+
+alias(ITECH,ITECH2);
+i02numtechnologiesUsingEF(DSBS,EF)=sum(ITECH2$(ITECHtoEF(ITECH2,EF)$SECTTECH(DSBS,ITECH2)),1);

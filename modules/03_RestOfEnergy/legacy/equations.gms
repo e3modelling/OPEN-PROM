@@ -18,10 +18,10 @@ Q03ConsFinEneCountry(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VmConsFinEneCountry(allCy,EFS,YTIME)
              =E=
          sum(INDDOM,
-             sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(INDDOM,EF) ), VmConsFuel(allCy,INDDOM,EF,YTIME)))
+             sum(EF$(EFtoEFS(EF,EFS) $SECtoEF(INDDOM,EF) ), VmConsFuel(allCy,INDDOM,EF,YTIME)))
          +
          sum(TRANSE,
-             sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(TRANSE,EF)), VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)))
+             sum(EF$(EFtoEFS(EF,EFS) $SECtoEF(TRANSE,EF)), VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)))
          +
          sum(EF$(sameas(EF, "H2") AND EFtoEFS(EF,EFS)), VmDemTotH2(allCy,YTIME)) !! Here hydrogen is included as a part of the energy consumption.
         ;
@@ -42,7 +42,7 @@ Q03ConsFinNonEne(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VmConsFinNonEne(allCy,EFS,YTIME)
              =E=
          sum(NENSE$(not sameas("BU",NENSE)),
-             sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(NENSE,EF) ), VmConsFuel(allCy,NENSE,EF,YTIME)));  
+             sum(EF$(EFtoEFS(EF,EFS) $SECtoEF(NENSE,EF) ), VmConsFuel(allCy,NENSE,EF,YTIME)));  
 
 *' The equation computes the distribution losses in million tonnes of oil equivalent for a given energy form sector.
 *' The losses are determined by the rate of losses over available for final consumption multiplied by the sum of total final energy
@@ -64,7 +64,7 @@ Q03OutTransfDhp(allCy,STEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V03OutTransfDhp(allCy,STEAM,YTIME)
              =E=
          sum(DOMSE,
-             sum(DH$(EFtoEFS(DH,STEAM) $SECTTECH(DOMSE,DH)), VmConsFuel(allCy,DOMSE,DH,YTIME)));
+             sum(DH$(EFtoEFS(DH,STEAM) $SECtoEF(DOMSE,DH)), VmConsFuel(allCy,DOMSE,DH,YTIME)));
 
 *' The equation calculates the transformation input to district heating plants.
 *' This transformation input is determined by summing over different district heating systems that correspond to the
@@ -76,7 +76,7 @@ Q03TransfInputDHPlants(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VmTransfInputDHPlants(allCy,EFS,YTIME)
              =E=
          sum(DH$DHtoEF(DH,EFS),
-             sum(DOMSE$SECTTECH(DOMSE,DH),VmConsFuel(allCy,DOMSE,DH,YTIME)) / i03EffDHPlants(allCy,EFS,YTIME));
+             sum(DOMSE$SECtoEF(DOMSE,DH),VmConsFuel(allCy,DOMSE,DH,YTIME)) / i03EffDHPlants(allCy,EFS,YTIME));
 
 *' The equation calculates the refineries' capacity for a given scenario and year.
 *' The calculation is based on a residual factor, the previous year's capacity, and a production scaling
@@ -178,7 +178,7 @@ Q03OutTransfTherm(allCy,TOCTEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         +
         (                                                                                                         
           sum(INDDOM,
-          sum(CHP$SECTTECH(INDDOM,CHP), VmConsFuel(allCy,INDDOM,CHP,YTIME)))+
+          sum(CHP$SECtoEF(INDDOM,CHP), VmConsFuel(allCy,INDDOM,CHP,YTIME)))+
           i03RateEneBranCons(allCy,TOCTEF,YTIME)*(VmConsFinEneCountry(allCy,TOCTEF,YTIME) + VmConsFinNonEne(allCy,TOCTEF,YTIME) + VmLossesDistr(allCy,TOCTEF,YTIME)) + 
           VmLossesDistr(allCy,TOCTEF,YTIME)                                                                                    
          )$STEAM(TOCTEF); 
@@ -299,20 +299,20 @@ Q03Imp(allCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS) $runCy(allCy))..
          )$ELCEF(EFS)
          +
          (
-            V03ConsGrssInl(allCy,EFS,YTIME)+ V03Exp(allCy,EFS,YTIME) + VmConsFuel(allCy,"BU",EFS,YTIME)$SECTTECH("BU",EFS)
+            V03ConsGrssInl(allCy,EFS,YTIME)+ V03Exp(allCy,EFS,YTIME) + VmConsFuel(allCy,"BU",EFS,YTIME)$SECtoEF("BU",EFS)
             - V03ProdPrimary(allCy,EFS,YTIME)
          )$(sameas(EFS,"CRO"))
 
          +
          (
-            V03ConsGrssInl(allCy,EFS,YTIME)+ V03Exp(allCy,EFS,YTIME) + VmConsFuel(allCy,"BU",EFS,YTIME)$SECTTECH("BU",EFS)
+            V03ConsGrssInl(allCy,EFS,YTIME)+ V03Exp(allCy,EFS,YTIME) + VmConsFuel(allCy,"BU",EFS,YTIME)$SECtoEF("BU",EFS)
             - V03ProdPrimary(allCy,EFS,YTIME)
          )$(sameas(EFS,"NGS"))
 *         +imImpExp(allCy,"NGS",YTIME)$(sameas(EFS,"NGS"))
          +
          (
             (1-i03RatePriProTotPriNeeds(allCy,EFS,YTIME)) *
-            (V03ConsGrssInl(allCy,EFS,YTIME) + V03Exp(allCy,EFS,YTIME) + VmConsFuel(allCy,"BU",EFS,YTIME)$SECTTECH("BU",EFS) )
+            (V03ConsGrssInl(allCy,EFS,YTIME) + V03Exp(allCy,EFS,YTIME) + VmConsFuel(allCy,"BU",EFS,YTIME)$SECtoEF("BU",EFS) )
          )$(not (ELCEF(EFS) or sameas(EFS,"NGS") or sameas(EFS,"CRO")));
 
 *' The equation computes the net imports for a specific energy branch 

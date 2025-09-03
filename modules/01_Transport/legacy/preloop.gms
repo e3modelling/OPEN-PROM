@@ -6,8 +6,8 @@
 *---
 i01PassCarsMarkSat(runCy) = 0.7 ; 
 *---
-V01ShareTechTr.FX(runCy,TRANSE,EF2,YTIME)$(not An(YTIME)) = imFuelConsTRANSE(runCy,TRANSE,EF2,YTIME)/sum(EF$(SECTTECH(TRANSE,TTECH))$TTECHtoEF(TTECH,EF),imFuelConsTRANSE(runCy,TRANSE,EF,YTIME)); 
-V01ShareTechTr.FX(runCy,TRANSE,TTECH,YTIME)$( SECTTECH(TRANSE,TTECH) $(not AN(YTIME))) = 0;
+* V01ShareTechTr.FX(runCy,TRANSE,EF2,YTIME)$(not An(YTIME)) = imFuelConsTRANSE(runCy,TRANSE,EF2,YTIME)/sum(EF$(SECTTECH(TRANSE,TTECH))$TTECHtoEF(TTECH,EF),imFuelConsTRANSE(runCy,TRANSE,EF,YTIME)); 
+* V01ShareTechTr.FX(runCy,TRANSE,TTECH,YTIME)$( SECTTECH(TRANSE,TTECH) $(not AN(YTIME))) = 0;
 *---
 V01StockPcYearly.UP(runCy,YTIME) = 10000; !! upper bound of V01StockPcYearly is 10000 million vehicles
 V01StockPcYearly.L(runCy,YTIME) = 0.1;
@@ -66,19 +66,19 @@ Q01CostTranspMatFac.scale(runCy,TRANSE,RCon,TTECH,YTIME)=V01CostTranspMatFac.sca
 V01TechSortVarCost.scale(runCy,TRANSE,Rcon,YTIME)=1e-8;
 Q01TechSortVarCost.scale(runCy,TRANSE,Rcon,YTIME)=V01TechSortVarCost.scale(runCy,TRANSE,Rcon,YTIME);
 *---
-V01ShareTechTr.scale(runCy,TRANSE,EF2,YTIME)=1e-6;
-Q01ShareTechTr.scale(runCy,TRANSE,EF2,YTIME)=V01ShareTechTr.scale(runCy,TRANSE,EF2,YTIME);
+V01ShareTechTr.scale(runCy,TRANSE,TTECH,YTIME)=1e-6;
+Q01ShareTechTr.scale(runCy,TRANSE,TTECH,YTIME)=V01ShareTechTr.scale(runCy,TRANSE,TTECH,YTIME);
 *---
 V01CostTranspPerVeh.scale(runCy,TRANSE,RCon,TTECH,YTIME)=1e-12;
 Q01CostTranspPerVeh.scale(runCy,TRANSE,RCon,TTECH,YTIME)=V01CostTranspPerVeh.scale(runCy,TRANSE,RCon,TTECH,YTIME);
 *---
-VmDemFinEneTranspPerFuel.FX(runCy,TRANSE,EF,YTIME) $(SECTTECH(TRANSE,TTECH) $TTECHtoEF(TTECH,EF) $(not An(YTIME))) = imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME);
-VmDemFinEneTranspPerFuel.FX(runCy,TRANSE,EF,YTIME)$(not SECTTECH(TRANSE,TTECH)$$TTECHtoEF(TTECH,EF)) = 0;
+VmDemFinEneTranspPerFuel.FX(runCy,TRANSE,EF,YTIME) $(SECtoEF(TRANSE,EF) $(not An(YTIME))) = imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME);
+VmDemFinEneTranspPerFuel.FX(runCy,TRANSE,EF,YTIME)$(not SECtoEF(TRANSE,EF)) = 0;
 *---
 * SOME NEED TO BE MOVED TO INDUSTRY
 VmLft.L(runCy,DSBS,TTECH,YTIME)= 0.1;
-VmLft.FX(runCy,DSBS,TECH,YTIME)$(SECTTECH(DSBS,TECH)  $(not  TRANSE(DSBS)) $(not sameas(DSBS,"PC"))) = i01TechLft(runCy,DSBS,EF,YTIME);
+VmLft.FX(runCy,DSBS,TECH,YTIME)$(SECTTECH(DSBS,TECH) $(not  TRANSE(DSBS)) $(not sameas(DSBS,"PC"))) = i01TechLft(runCy,DSBS,TECH,YTIME);
 VmLft.FX(runCy,TRANSE,TTECH,YTIME)$(SECTTECH(TRANSE,TTECH) $(not sameas(TRANSE,"PC"))) = i01TechLft(runCy,TRANSE,TTECH,YTIME);
-VmLft.FX(runCy,DSBS,TTECH,YTIME)$(not SECTTECH(DSBS,TECH)) = 0;
+VmLft.FX(runCy,DSBS,TECH,YTIME)$(not SECTTECH(DSBS,TECH)) = 0;
 VmLft.FX(runCy,"PC",TTECH,YTIME)$( (not AN(YTIME)) $SECTTECH("PC",TTECH)) = 10;
 *---

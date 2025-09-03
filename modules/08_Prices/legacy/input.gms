@@ -21,22 +21,22 @@ i08ElecIndex(allCy,YTIME)	           "Electricity Index (1)"
 *---
 loop SBS do
          i08DiffFuelsInSec(SBS) = 0;
-         loop EF$(SECTTECH(SBS,EF) $(not plugin(EF)))  do
+         loop EF$(SECtoEF(SBS,EF))  do
               i08DiffFuelsInSec(SBS) = i08DiffFuelsInSec(SBS)+1;
          endloop;
 endloop;
 *---
-i08WgtSecAvgPriFueCons(runCy,TRANSE,EF)$(SECTTECH(TRANSE,EF) $(not plugin(EF)) ) = (imFuelConsPerFueSub(runCy,TRANSE,EF,"%fBaseY%") / imTotFinEneDemSubBaseYr(runCy,TRANSE,"%fBaseY%"))$imTotFinEneDemSubBaseYr(runCy,TRANSE,"%fBaseY%")
+i08WgtSecAvgPriFueCons(runCy,TRANSE,EF)$SECtoEF(TRANSE,EF) = (imFuelConsPerFueSub(runCy,TRANSE,EF,"%fBaseY%") / imTotFinEneDemSubBaseYr(runCy,TRANSE,"%fBaseY%"))$imTotFinEneDemSubBaseYr(runCy,TRANSE,"%fBaseY%")
                                                + (1/i08DiffFuelsInSec(TRANSE))$(not imTotFinEneDemSubBaseYr(runCy,TRANSE,"%fBaseY%"));
 *---
-i08WgtSecAvgPriFueCons(runCy,NENSE,EF)$SECTTECH(NENSE,EF) = ( imFuelConsPerFueSub(runCy,NENSE,EF,"%fBaseY%") / imTotFinEneDemSubBaseYr(runCy,NENSE,"%fBaseY%") )$imTotFinEneDemSubBaseYr(runCy,NENSE,"%fBaseY%")
+i08WgtSecAvgPriFueCons(runCy,NENSE,EF)$SECtoEF(NENSE,EF) = ( imFuelConsPerFueSub(runCy,NENSE,EF,"%fBaseY%") / imTotFinEneDemSubBaseYr(runCy,NENSE,"%fBaseY%") )$imTotFinEneDemSubBaseYr(runCy,NENSE,"%fBaseY%")
                                              + (1/i08DiffFuelsInSec(NENSE))$(not imTotFinEneDemSubBaseYr(runCy,NENSE,"%fBaseY%"));
 *---
-i08WgtSecAvgPriFueCons(runCy,INDDOM,EF)$(SECTTECH(INDDOM,EF)$(not sameas(EF,"ELC"))) = ( imFuelConsPerFueSub(runCy,INDDOM,EF,"%fBaseY%") / (imTotFinEneDemSubBaseYr(runCy,INDDOM,"%fBaseY%") - imFuelConsPerFueSub(runCy,INDDOM,"ELC","%fBaseY%")) )$( imTotFinEneDemSubBaseYr(runCy,INDDOM,"%fBaseY%") - imFuelConsPerFueSub(runCy,INDDOM,"ELC","%fBaseY%") )
+i08WgtSecAvgPriFueCons(runCy,INDDOM,EF)$(SECtoEF(INDDOM,EF)$(not sameas(EF,"ELC"))) = ( imFuelConsPerFueSub(runCy,INDDOM,EF,"%fBaseY%") / (imTotFinEneDemSubBaseYr(runCy,INDDOM,"%fBaseY%") - imFuelConsPerFueSub(runCy,INDDOM,"ELC","%fBaseY%")) )$( imTotFinEneDemSubBaseYr(runCy,INDDOM,"%fBaseY%") - imFuelConsPerFueSub(runCy,INDDOM,"ELC","%fBaseY%") )
                                                                         + (1/(i08DiffFuelsInSec(INDDOM)-1))$(not (imTotFinEneDemSubBaseYr(runCy,INDDOM,"%fBaseY%") - imFuelConsPerFueSub(runCy,INDDOM,"ELC","%fBaseY%")));
 *---
 * Rescaling the weights
-i08WgtSecAvgPriFueCons(runCy,SBS,EF)$(SECTTECH(SBS,EF) $sum(ef2$SECTTECH(SBS,EF),i08WgtSecAvgPriFueCons(runCy,SBS,EF2))) = i08WgtSecAvgPriFueCons(runCy,SBS,EF)/sum(ef2$SECTTECH(SBS,EF),i08WgtSecAvgPriFueCons(runCy,SBS,EF2));
+i08WgtSecAvgPriFueCons(runCy,SBS,EF)$(SECtoEF(SBS,EF) $sum(ef2$SECtoEF(SBS,EF),i08WgtSecAvgPriFueCons(runCy,SBS,EF2))) = i08WgtSecAvgPriFueCons(runCy,SBS,EF)/sum(ef2$SECtoEF(SBS,EF),i08WgtSecAvgPriFueCons(runCy,SBS,EF2));
 *---
 * FIXME: Check if VAT (value added tax) rates are necessary for the model.
 i08VAT(runCy, YTIME) = 0;

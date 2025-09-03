@@ -11,8 +11,8 @@ Q02CapCostTech(allCy,DSBS,ITECH,YTIME)                     "Compute capital cost
 Q02VarCostTech(allCy,DSBS,rCon,ITECH,YTIME)                "Compute variable cost of each technology per subsector (useful)"
 Q02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME)         "Compute share of each technology in gap of useful energy"
 Q02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)              "Compute equipment capacity of each technology in each subsector"
-Q02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME)             "Compute non-substitutable useful electricity"
-Q02FinalElecNonSubIndTert(allCy,INDDOM,YTIME)              "Compute final energy of non-substitutable electricity"
+Q02UsefulElecNonSubIndTert(allCy,DSBS,YTIME)             "Compute non-substitutable useful electricity"
+Q02FinalElecNonSubIndTert(allCy,DSBS,YTIME)              "Compute final energy of non-substitutable electricity"
 
 Q02IndxElecIndPrices(allCy,YTIME)                          "Compute Electricity index - a function of industry price - Estimate"
 Q02CostElecProdCHP(allCy,DSBS,CHP,YTIME)                   "Compute Cost of electricity production by CHP - NEEDED?"
@@ -32,8 +32,8 @@ V02CapCostTech(allCy,DSBS,ITECH,YTIME)                     "capital cost of each
 V02VarCostTech(allCy,DSBS,rCon,ITECH,YTIME)                "variable cost of each technology per subsector (useful)"
 V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME)         "share of each technology in gap of useful energy"
 V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)              "equipment capacity of each technology in each subsector"
-V02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME)             "non-substitutable useful electricity"
-V02FinalElecNonSubIndTert(allCy,INDDOM,YTIME)              "final energy of non-substitutable electricity"
+V02UsefulElecNonSubIndTert(allCy,DSBS,YTIME)             "non-substitutable useful electricity"
+V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)              "final energy of non-substitutable electricity"
 
 V02IndxElecIndPrices(allCy,YTIME)                          "Electricity index - a function of industry price - Estimate"
 V02CostElecProdCHP(allCy,DSBS,CHP,YTIME)                   "Cost of electricity production by CHP - NEEDED?"

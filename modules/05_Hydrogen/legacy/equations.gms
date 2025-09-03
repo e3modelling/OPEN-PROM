@@ -232,7 +232,7 @@ Q05DelivH2InfrTech(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         V05DelivH2InfrTech(allCy,INFRTECH,YTIME)
          =E=
          (
-         (    sum(SBS$(H2INFRSBS(INFRTECH,SBS) $SECTTECH(SBS,"H2F")), V05DemSecH2(allCy,SBS, YTIME))/
+         (    sum(SBS$(H2INFRSBS(INFRTECH,SBS) $SECtoEF(SBS,"H2F")), V05DemSecH2(allCy,SBS, YTIME))/
             (i05EffH2Transp(allCy,INFRTECH,YTIME)*(1-i05ConsSelfH2Transp(allCy,INFRTECH,YTIME))) )$H2INFRDNODES(INFRTECH)  !! for final demand nodes
 
          +

@@ -190,7 +190,7 @@ i01GdpPassCarsMarkExt(allCy)	                          "GDP-dependent passenger 
 i01PassCarsScrapRate(allCy)	                          "Passenger cars scrapping rate (1)"
 i01ShareAnnMilePlugInHybrid(allCy,YTIME)	           "Share of annual mileage of a plug-in hybrid which is covered by electricity (1)"
 i01AvgVehCapLoadFac(allCy,TRANSE,TRANSUSE,YTIME)	      "Average capacity/vehicle and load factor (tn/veh or passenegers/veh)"
-i01TechLft(allCy,SBS,EF,YTIME)	                     "Technical Lifetime. For passenger cars it is a variable (1)"
+i01TechLft(allCy,SBS,TECH,YTIME)	                     "Technical Lifetime. For passenger cars it is a variable (1)"
 i01PassCarsMarkSat(allCy)	                          "Passenger cars market saturation (1)"
 ;
 *---
@@ -208,7 +208,7 @@ i01Sigma(runCy,"S3") = i01DataPassCars(runCy,"PC","S3");
 *---
 i01PassCarsMarkSat(runCy) = i01DataPassCars(runCy,"PC","SAT");
 *---
-imFuelConsTRANSE(runCy,TRANSE,EF,YTIME)$(SECTTECH(TRANSE,EF) $(imFuelConsTRANSE(runCy,TRANSE,EF,YTIME)<=0)) = 1e-6;
+imFuelConsTRANSE(runCy,TRANSE,EF,YTIME)$(SECtoEF(TRANSE,EF) $(imFuelConsTRANSE(runCy,TRANSE,EF,YTIME)<=0)) = 1e-6;
 *---
 i01PlugHybrFractOfMileage(ELSH_SET,YTIME) = i01PlugHybrFractData(YTIME);
 *---
@@ -217,14 +217,14 @@ i01ShareAnnMilePlugInHybrid(runCy,YTIME)$an(YTIME) = i01PlugHybrFractOfMileage("
 i01AvgVehCapLoadFac(runCy,TRANSE,TRANSUSE,YTIME) = i01CapDataLoadFacEachTransp(TRANSE,TRANSUSE);
 *---
 **  Transport Sector
-i01TechLft(runCy,TRANSE,EF,YTIME) = imDataTransTech(TRANSE,EF,"LFT",YTIME);
+i01TechLft(runCy,TRANSE,TTECH,YTIME) = imDataTransTech(TRANSE,TTECH,"LFT",YTIME);
 *---
 **  Industrial Sector
-i01TechLft(runCy,INDSE,EF,YTIME) = imDataIndTechnology(INDSE,EF,"LFT");
+i01TechLft(runCy,INDSE,ITECH,YTIME) = imDataIndTechnology(INDSE,ITECH,"LFT");
 *---
 **  Domestic Sector
-i01TechLft(runCy,DOMSE,EF,YTIME) = imDataDomTech(DOMSE,EF,"LFT");
+i01TechLft(runCy,DOMSE,ITECH,YTIME) = imDataDomTech(DOMSE,ITECH,"LFT");
 *---
 **  Non Energy Sector and Bunkers
-i01TechLft(runCy,NENSE,EF,YTIME) = imDataNonEneSec(NENSE,EF,"LFT");
+i01TechLft(runCy,NENSE,ITECH,YTIME) = imDataNonEneSec(NENSE,ITECH,"LFT");
 *---
