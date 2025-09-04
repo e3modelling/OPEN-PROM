@@ -3,11 +3,11 @@
 
 *'                *VARIABLE INITIALISATION*
 *---
-V05CostTotH2.L(runCy,SBS,YTIME) = 2;
-V05CostTotH2.FX(runCy,TRANSE,YTIME)$(not An(YTIME)) = imFuelPrice(runCy,TRANSE,"H2F",YTIME)$(not An(YTIME)); 
-V05CostTotH2.FX(runCy,"PG",YTIME)$(not An(YTIME))   = imFuelPrice(runCy,"PG","H2F",YTIME)$(not An(YTIME)); 
-V05CostTotH2.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = imFuelPrice(runCy,INDDOM,"STE1AH2F",YTIME)$(not An(YTIME)); 
-display V05CostTotH2.L;
+*V05CostTotH2.L(runCy,SBS,YTIME) = 2;
+*V05CostTotH2.FX(runCy,TRANSE,YTIME)$(not An(YTIME)) = imFuelPrice(runCy,TRANSE,"H2F",YTIME)$(not An(YTIME)); 
+*V05CostTotH2.FX(runCy,"PG",YTIME)$(not An(YTIME))   = imFuelPrice(runCy,"PG","H2F",YTIME)$(not An(YTIME)); 
+*V05CostTotH2.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = imFuelPrice(runCy,INDDOM,"STE1AH2F",YTIME)$(not An(YTIME)); 
+*display V05CostTotH2.L;
 *---
 V05GapShareH2Tech1.L(runCy,H2TECH,YTIME) = 2;
 V05GapShareH2Tech1.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
@@ -32,10 +32,10 @@ VmConsFuelTechH2Prod.L(runCy,H2TECH,EF,"%fBaseY%")$(H2TECHEFtoEF(H2TECH,EF)) = (
 display i05EffH2Prod;
 display VmConsFuelTechH2Prod.L;
 *---
-V05DelivH2InfrTech.L(runCy,INFRTECH,YTIME) = 2;
-V05DelivH2InfrTech.FX(runCy,INFRTECH,YTIME)$(not An(YTIME)) = 1e-5;
-V05DelivH2InfrTech.FX(runCy,INFRTECH,"%fBaseY%") = 0;
-display V05DelivH2InfrTech.L;
+*V05DelivH2InfrTech.L(runCy,INFRTECH,YTIME) = 2;
+*V05DelivH2InfrTech.FX(runCy,INFRTECH,YTIME)$(not An(YTIME)) = 1e-5;
+*V05DelivH2InfrTech.FX(runCy,INFRTECH,"%fBaseY%") = 0;
+*display V05DelivH2InfrTech.L;
 *---
 V05GapShareH2Tech2.L(runCy,H2TECH,YTIME) = 2;
 V05GapShareH2Tech2.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
@@ -71,22 +71,22 @@ V05CostProdCCSNoCCSH2Prod.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
 V05CostAvgProdH2.L(runCy,YTIME) = 2;
 V05CostAvgProdH2.FX(runCy,YTIME)$(not An(YTIME)) = 1e-5;
 *---
-V05InvNewReqH2Infra.L(runCy,INFRTECH,YTIME) = 2;
-V05InvNewReqH2Infra.FX(runCy,INFRTECH,YTIME)$(not An(YTIME)) = 1e-5;
+*V05InvNewReqH2Infra.L(runCy,INFRTECH,YTIME) = 2;
+*V05InvNewReqH2Infra.FX(runCy,INFRTECH,YTIME)$(not An(YTIME)) = 1e-5;
 *---
-V05CostInvTechH2Infr.L(runCy, INFRTECH,YTIME) = 2;
-V05CostInvTechH2Infr.FX(runCy, INFRTECH,YTIME)$(not An(YTIME)) = 1e-5;
+*V05CostInvTechH2Infr.L(runCy, INFRTECH,YTIME) = 2;
+*V05CostInvTechH2Infr.FX(runCy, INFRTECH,YTIME)$(not An(YTIME)) = 1e-5;
 *---
-V05CostInvCummH2Transp.L(runCy,INFRTECH,YTIME) = 2;
-V05CostInvCummH2Transp.FX(runCy,INFRTECH,YTIME)$(not An(YTIME)) = 1e-5;
+*V05CostInvCummH2Transp.L(runCy,INFRTECH,YTIME) = 2;
+*V05CostInvCummH2Transp.FX(runCy,INFRTECH,YTIME)$(not An(YTIME)) = 1e-5;
 *---
-V05TariffH2Infr.L(runCy,INFRTECH,YTIME) = 2;
-V05TariffH2Infr.FX(runCy,INFRTECH,YTIME) $(not An(YTIME)) = 1e-5;
+*V05TariffH2Infr.L(runCy,INFRTECH,YTIME) = 2;
+*V05TariffH2Infr.FX(runCy,INFRTECH,YTIME) $(not An(YTIME)) = 1e-5;
 *---
-V05PriceH2Infr.L(runCy,SBS,YTIME) = 2;
-V05PriceH2Infr.FX(runCy,SBS,YTIME)  $(not An(YTIME)) = 1e-5;
+*V05PriceH2Infr.L(runCy,SBS,YTIME) = 2;
+*V05PriceH2Infr.FX(runCy,SBS,YTIME)  $(not An(YTIME)) = 1e-5;
 *---
-V05H2InfrArea.L(runCy,YTIME) = 0.001;
+*V05H2InfrArea.L(runCy,YTIME) = 0.001;
 *---
 VmDemSecH2.L(runCy,SBS, YTIME) = 2;
 VmDemSecH2.FX(runCy,SBS,YTIME)$(not An(YTIME)) = 1e-5;

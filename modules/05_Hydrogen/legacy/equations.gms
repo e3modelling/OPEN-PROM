@@ -220,7 +220,7 @@ Q05ConsFuelH2Prod(allCy,EF,YTIME)$(TIME(YTIME) $H2PRODEF(EF) $(runCy(allCy)))..
          sum(H2TECH$H2TECHEFtoEF(H2TECH,EF),VmConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME))
 ;
 
-
+$ontext
 !!
 !!                               B. Hydrogen Infrustructure
 !!
@@ -353,3 +353,4 @@ Q05CostTotH2(allCy,SBS,YTIME)$(TIME(YTIME) $SECTTECH(SBS,"H2F") $(runCy(allCy)))
          =E=
          V05PriceH2Infr(allCy,SBS,YTIME)+V05CostAvgProdH2(allCy,YTIME)
 ;
+$offtext
