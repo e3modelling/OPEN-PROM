@@ -20,6 +20,11 @@ $include"./iH2InfrCapCosts.csv"
 $offdelim
 ;
 *---
+table iTechShareH2Prod(H2TECH,YTIME)	                      "Data for Hydrogen Infrastructure Costs"
+$ondelim
+$include"./iWBLShareH2Prod.csv"
+$offdelim
+;
 *i05H2Production(ECONCHARHY,"bgfl",YTIME) = i05H2Production(ECONCHARHY,"bgfls",YTIME);
 *---
 Parameters
@@ -50,7 +55,10 @@ i05PolH2AreaMax(allCy)                      "Policy parameter defining the perce
 i05HabAreaCountry(allCy)                    "Inhabitable land in a country"
 i05EffNetH2Transp(allCy,INFRTECH,YTIME)     "Total efficiency of the distribution network until the <infrtech> node"
 i05CostAvgWeight(allCy,YTIME)               "Weight for pricing in average cost or in marginal cost"
+iWBLShareH2Prod(allCy,H2TECH,YTIME)         "Maturity factors for H2 technologies"
 ;
+*---
+iWBLShareH2Prod(runCy,H2TECH,YTIME) = iTechShareH2Prod(H2TECH,YTIME);
 *---
 i05WBLGammaH2Prod(runCy,YTIME) = 1;
 *---

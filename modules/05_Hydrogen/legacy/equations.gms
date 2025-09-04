@@ -119,17 +119,17 @@ Q05ShareCCSH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME) $H2CCS(H2TECH) $(runCy(allCy)
          V05ShareCCSH2Prod(allCy,H2TECH,YTIME)
          =E=
                  1.5  *
-*         iWBLShareH2Prod(allCy,H2TECH,YTIME) *
+         iWBLShareH2Prod(allCy,H2TECH,YTIME) *
                  V05CostProdH2Tech(allCy,H2TECH,YTIME)**(-V05AcceptCCSH2Tech(allCy,YTIME)) /
          (
                  1.5  *
-*         iWBLShareH2Prod(allCy,H2TECH,YTIME) *
+         iWBLShareH2Prod(allCy,H2TECH,YTIME) *
                  V05CostProdH2Tech(allCy,H2TECH,YTIME)**(-V05AcceptCCSH2Tech(allCy,YTIME)) +
 
                  sum(H2TECH2$H2CCS_NOCCS(H2TECH,H2TECH2),
 
                  1  *
-*         iWBLShareH2Prod(allCy,H2TECH2,YTIME) *
+         iWBLShareH2Prod(allCy,H2TECH2,YTIME) *
                  V05CostProdH2Tech(allCy,H2TECH2,YTIME)**(-V05AcceptCCSH2Tech(allCy,YTIME)))
          )
 ;
@@ -158,11 +158,11 @@ Q05GapShareH2Tech2(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         V05GapShareH2Tech2(allCy,H2TECH,YTIME)
              =E=
          (
-*         iWBLShareH2Prod(allCy,H2TECH,YTIME) * 
+         iWBLShareH2Prod(allCy,H2TECH,YTIME) * 
          (V05CostProdH2Tech(allCy,H2TECH,YTIME)$(not H2NOCCS(H2TECH)) + V05CostProdCCSNoCCSH2Prod(allCy,H2TECH,YTIME)$H2NOCCS(H2TECH))**(-i05WBLGammaH2Prod(allCy,YTIME))
          /
          sum(H2TECH2$(not H2CCS(H2TECH2)) ,
-*         iWBLShareH2Prod(allCy,H2TECH2,YTIME) * 
+         iWBLShareH2Prod(allCy,H2TECH2,YTIME) * 
          (V05CostProdH2Tech(allCy,H2TECH2,YTIME)$(not H2NOCCS(H2TECH2)) + V05CostProdCCSNoCCSH2Prod(allCy,H2TECH2,YTIME)$H2NOCCS(H2TECH2))**(-i05WBLGammaH2Prod(allCy,YTIME)))
          )$(not H2CCS(H2TECH))
          +
