@@ -83,7 +83,7 @@ V04CapElecNonCHP(allCy,YTIME)	                           "Total electricity gene
 V04GapGenCapPowerDiff(allCy,YTIME)	                       "Gap in total generation capacity to be filled by new equipment (GW)"		
 *v04ScalWeibull(allCy,PGALL,HOUR,YTIME)                    "Temporary variable facilitating the scaling in Weibull equation"	
 *v04PotRenMinAllow(allCy,PGRENEF,YTIME)	                   "Minimum allowed renewable potential (GW)"		
-V0ShareSatPG(allCy,PGALL,YTIME)	                           "Saturation for electricity mixture penetration of RES technologies"	
+V04ShareSatPG(allCy,PGALL,YTIME)	                           "Saturation for electricity mixture penetration of RES technologies"	
 V04ScalWeibullSum(allCy,PGALL,YTIME)	                   "Sum (over hours) of temporary variable facilitating the scaling in Weibull equation (1)"
 V04NewInvElec(allCy,YTIME)	                               "Power plant sorting for new investment decision according to total cost (1)"	
 V04SharePowPlaNewEq(allCy,PGALL,YTIME)	                   "Power plant share in new equipment (1)"			

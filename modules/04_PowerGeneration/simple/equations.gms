@@ -272,15 +272,15 @@ Q04GapGenCapPowerDiff(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04ShareTechPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
           V04ShareTechPG(allCy,PGALL,YTIME)
               =E=
-            VmCapElec(allCy,PGALL,YTIME-1) /
-            sum(PGALL2, VmCapElec(allCy,PGALL2,YTIME-1))
+            VmCapElec(allCy,PGALL,YTIME) /
+            sum(PGALL2, VmCapElec(allCy,PGALL2,YTIME))
 ;
 
 *'Sigmoid function used as a saturation mechanism for electricity mixture penetration of RES technologies.
 Q04ShareSatPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(PGREN(PGALL)))..
-         V0ShareSatPG(allCy,PGALL,YTIME)
+         V04ShareSatPG(allCy,PGALL,YTIME)
           =E=
-         (2 / (1+exp(9*V04ShareTechPG(allCy,PGALL,YTIME))))
+         (2 / (1+exp(9*V04ShareTechPG(allCy,PGALL,YTIME-1))))
 ;
 
 *' Calculates the share of all the unflexible RES penetration into the mixture, and specifically how much above a given threshold it is.
