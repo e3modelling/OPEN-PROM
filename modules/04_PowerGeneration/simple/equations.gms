@@ -305,7 +305,7 @@ Q04ShareMixWndSol(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04ScalWeibullSum(allCy,PGALL,YTIME)$((not CCS(PGALL)) $TIME(YTIME) $runCy(allCy))..
          V04ScalWeibullSum(allCy,PGALL,YTIME) 
          =E=
-              i04MatFacPlaAvailCap(allCy,PGALL,YTIME) * V0ShareSatPG(allCy,PGALL,YTIME)*
+              i04MatFacPlaAvailCap(allCy,PGALL,YTIME) * V04ShareSatPG(allCy,PGALL,YTIME)*
               (
                  (V04CostHourProdInvDec(allCy,PGALL,YTIME)$(not NOCCS(PGALL))
                  +
