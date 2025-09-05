@@ -268,25 +268,19 @@ Q04GapGenCapPowerDiff(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
        ) -0) + SQR(1e-10) ) 
        )/2;
 
-*' The equation calculates a maturity multiplier for renewable technologies. If the technology is renewable , the multiplier is determined
-*' based on an exponential function that involves the ratio of the planned electricity generation capacities of renewable technologies to the renewable potential
-*' supply curve. This ratio is adjusted using a logistic function with parameters that influence the maturity of renewable technologies. If the technology is not
-*' renewable, the maturity multiplier is set to 1. The purpose is to model the maturity level of renewable technologies based on their
-*' planned capacities relative to the renewable potential supply curve.
-Q04RenTechMatMultExpr(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-          V04RenTechMatMultExpr(allCy,PGALL,YTIME)
+*' Share of all technologies in the electricity mixture.
+Q04ShareTechPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+          V04ShareTechPG(allCy,PGALL,YTIME)
               =E=
-          (
-            VmCapElec(allCy,PGALL,YTIME-1) /
-            sum(PGALL2, VmCapElec(allCy,PGALL2,YTIME-1))
-          )
-          $(PGREN(PGALL))
+            VmCapElec(allCy,PGALL,YTIME) /
+            sum(PGALL2, VmCapElec(allCy,PGALL2,YTIME))
 ;
 
-Q04RenTechMatMult(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V04RenTechMatMult(allCy,PGALL,YTIME)
+*'Sigmoid function used as a saturation mechanism for electricity mixture penetration of RES technologies.
+Q04ShareSatPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(PGREN(PGALL)))..
+         V04ShareSatPG(allCy,PGALL,YTIME)
           =E=
-         2 / (1+exp(9*V04RenTechMatMultExpr(allCy,PGALL,YTIME)))
+         (2 / (1+exp(9*V04ShareTechPG(allCy,PGALL,YTIME-1))))
 ;
 
 *' Calculates the share of all the unflexible RES penetration into the mixture, and specifically how much above a given threshold it is.
@@ -311,7 +305,7 @@ Q04ShareMixWndSol(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04ScalWeibullSum(allCy,PGALL,YTIME)$((not CCS(PGALL)) $TIME(YTIME) $runCy(allCy))..
          V04ScalWeibullSum(allCy,PGALL,YTIME) 
          =E=
-              i04MatFacPlaAvailCap(allCy,PGALL,YTIME) * V04RenTechMatMult(allCy,PGALL,YTIME)*
+              i04MatFacPlaAvailCap(allCy,PGALL,YTIME) * V04ShareSatPG(allCy,PGALL,YTIME)*
               (
                  (V04CostHourProdInvDec(allCy,PGALL,YTIME)$(not NOCCS(PGALL))
                  +
