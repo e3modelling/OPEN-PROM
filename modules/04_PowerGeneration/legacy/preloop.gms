@@ -122,6 +122,7 @@ VmPeakLoad.L(runCy,YTIME) = 1;
 VmPeakLoad.FX(runCy,YTIME)$(datay(YTIME)) = V04DemElecTot.L(runCy,YTIME)/(V04LoadFacDom.L(runCy,YTIME)*8.76);
 *---
 VmProdElec.FX(runCy,pgall,YTIME)$DATAY(YTIME)=i04DataElecProd(runCy,pgall,YTIME)/1000;
+*VmProdElec.FX(runCy,"CTHBMSWAS",YTIME)$DATAY(YTIME) = (VmProdElec.L(runCy,"ATHBMSWAS",YTIME)$DATAY(YTIME))/2;
 *---
 V04ProdElecReqTot.FX(runCy,"%fBaseY%")=sum(pgall,VmProdElec.L(runCy,pgall,"%fBaseY%"));
 *---

@@ -648,7 +648,7 @@ GU.(LPG,GDO,NGS,ELC,PHEVGDO,CHEVGDO)
 PA.(KRS)
 (PN,GN).(GSL,GDO)
 (IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(LGN,HCL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC,STE1AL,
-                                 STE1AH,STE1AD,STE1AG)
+                                 STE1AH,STE1AD,STE1AG,H2F)
 (HOU, AG).                      (LPG,KRS,GDO,NGS,OGS,BMSWAS,ELC,STE2LGN,STE2OSL,STE2GDO,STE2NGS,
                                  STE2BMS)
 (SE).                           (LPG,KRS,NGS,OGS,ELC)

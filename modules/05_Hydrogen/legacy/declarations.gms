@@ -17,6 +17,7 @@ V05ConsFuelH2Prod(allCy, EF, YTIME)               "Total fuel consumption for hy
 V05CostProdCCSNoCCSH2Prod(allCy, H2TECH, YTIME)   "Production cost of the composite technology with and without CCS in Euro per toe"
 V05CostAvgProdH2(allCy, YTIME)                    "Average production cost of hydrogen in Euro per toe"
 
+$ontext
 *'                **Infrastructure Variables**
 V05H2InfrArea(allCy, YTIME)                       "Number of stylised areas covered by H2 infrastructure"
 V05DelivH2InfrTech(allCy, INFRTECH, YTIME)        "Hydrogen delivered by infrastructure technology in Mtoe"
@@ -33,12 +34,13 @@ V05CostTotH2(allCy, SBS, YTIME)                   "Total Hydrogen Cost Per Secto
 
 *' *** Miscellaneous
 *V05ProdCapH2Tech(allCy, H2TECH, YTIME)           "Production capacity by H2 production technology"
-V05DemSecH2(allCy, SBS, YTIME)                    "Demand for H2 by sector in mtoe"
+$offtext
 
 *'                **Interdependent Variables**	
 VmDemTotH2(allCy, YTIME)                          "Hydrogen production requirement in Mtoe for meeting final demand"
 VmProdH2(allCy, H2TECH, YTIME)                    "Hydrogen Production by technology in Mtoe"
 VmConsFuelTechH2Prod(allCy, H2TECH, EF, YTIME)    "Fuel consumption by hydrogen production technology in Mtoe"
+VmDemSecH2(allCy, SBS, YTIME)                     "Demand for H2 by sector in mtoe"
 ;
 
 Equations
@@ -57,6 +59,7 @@ Q05ConsFuelH2Prod(allCy, EF, YTIME)               "Equation for total fuel consu
 Q05CostProdCCSNoCCSH2Prod(allCy, H2TECH, YTIME)   "Equation for calculating the production cost of the composite technology with and without CCS"
 Q05CostAvgProdH2(allCy, YTIME)                    "Equation for average production cost of hydrogen in Euro per toe"
 
+$ontext
 *'                **Infrastructure Equations**
 Q05H2InfrArea(allCy, YTIME)                       "Equation for infrastructure area"
 Q05DelivH2InfrTech(allCy, INFRTECH, YTIME)        "Equation for hydrogen delivered by infrastructure technology in Mtoe"
@@ -71,12 +74,12 @@ Q05CostTotH2(allCy, SBS, YTIME)                   "Equation of total hydrogen co
 
 *' *** Miscellaneous
 *Q05ProdCapH2Tech(allCy, H2TECH, YTIME)           "Equation for production capacity by H2 production technology"
-*Q05DemSecH2(allCy, SBS, YTIME)                   "Equation for demand of H2 by sector in mtoe"
-
+$offtext
 *'                **Interdependent Equations**	
 Q05DemTotH2(allCy, YTIME)                         "Equation for total hydrogen demand in a country in Mtoe"
 Q05ProdH2(allCy, H2TECH, YTIME)                   "Equation for H2 production by technology"
 Q05ConsFuelTechH2Prod(allCy, H2TECH, EF, YTIME)   "Equation for fuel consumption by technology for hydrogen production"
+Q05DemSecH2(allCy, SBS, YTIME)                    "Equation for demand of H2 by sector in mtoe"
 ;
 
 Scalars

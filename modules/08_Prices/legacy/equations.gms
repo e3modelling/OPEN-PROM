@@ -26,7 +26,7 @@ $ENDIF
          (VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1) +
            sum(NAP$NAPtoALLSBS(NAP,SBS),(VmCarVal(allCy,NAP,YTIME)*imCo2EmiFac(allCy,SBS,EF,YTIME) - VmCarVal(allCy,NAP,YTIME-1)*imCo2EmiFac(allCy,SBS,EF,YTIME-1)))
            /1000
-         )$(DSBS(SBS))$(not (ELCEF(EF) or HEATPUMP(EF) or ALTEF(EF) or H2EF(EF) or sameas("STE1AH2F",EF)))
+         )$(DSBS(SBS))$(not (ELCEF(EF) or HEATPUMP(EF) or ALTEF(EF) or H2EF(EF) or sameas("STE1AH2F",EF) or H2EF(EF) or sameas("H2F",EF)))
          +
          (
             VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1)- (sum(NAP$NAPtoALLSBS(NAP,SBS),(VmCarVal(allCy,NAP,YTIME-1)*imCo2EmiFac(allCy,SBS,EF,YTIME-1)))/1000)$TFIRST(YTIME-1)
@@ -47,8 +47,12 @@ $ENDIF
          )$(ELCEF(EF) or HEATPUMP(EF))
          +
          (
-                 i08HydrogenPri(allCy,SBS,YTIME-1)$DSBS(SBS)
-         )$(H2EF(EF) or sameas("STE1AH2F",EF));
+            ( VmPriceElecIndResConsu(allCy,"i",YTIME)/smTWhToMtoe)
+         )$(sameas ("H2P",SBS))
+         +
+         (
+            7.5*V05CostAvgProdH2(allCy,YTIME)$DSBS(SBS)/1000
+         )$(H2EF(EF) or sameas("H2F",EF));
 
 *' The equation calculates the fuel prices per subsector and fuel multiplied by weights
 *' considering separate carbon values in each sector. This equation is applied for a specific scenario, subsector, fuel, and year.
