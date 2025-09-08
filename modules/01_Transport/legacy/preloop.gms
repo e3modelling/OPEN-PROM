@@ -18,18 +18,20 @@ V01TechSortVarCost.LO(runCy,TRANSE,Rcon,YTIME) = 1e-20;
 V01TechSortVarCost.L(runCy,TRANSE,Rcon,YTIME) = 0.1;
 *---
 V01RateScrPc.UP(runCy,YTIME) = 1;
-V01RateScrPc.l(runCy,YTIME) = 0.03;
-V01RateScrPc.FX(runCy,"%fBaseY%") = 0.03; 
+V01RateScrPc.l(runCy,YTIME) = 0.08;
+V01RateScrPc.FX(runCy,"%fBaseY%") = 0.08; 
 *---
 V01NumPcScrap.FX(runCy,"%fBaseY%") = V01RateScrPc.L(runCy,"%fBaseY%") * V01StockPcYearly.L(runCy,"%fBaseY%"); 
 *---
 V01CostTranspPerMeanConsSize.L(runCy,TRANSE,RCon,TTECH,YTIME) = 0.1;
 *---
+V01StockPcYearlyTech.FX(runCy,TTECH,"%fBaseY%") = i01StockPC(runCy,TTECH,"%fBaseY%");
+*---
 V01ActivGoodsTransp.L(runCy,TRANSE,YTIME) = 0.1;
 V01ActivGoodsTransp.FX(runCy,TRANG,YTIME)$(not An(YTIME)) = imActv(YTIME,runCy,TRANG);
 V01ActivGoodsTransp.FX(runCy,TRANSE,YTIME)$(not TRANG(TRANSE)) = 0;
 *---
-V01PcOwnPcLevl.UP(runCy,YTIME) = i01PassCarsMarkSat(runCy);
+V01PcOwnPcLevl.UP(runCy,YTIME) = 2*i01PassCarsMarkSat(runCy);
 *V01PcOwnPcLevl.FX(runCy,YTIME)$((not An(YTIME)) $(ord(YTIME) gt 1) ) = V01StockPcYearly.L(runCy,YTIME-1) / (i01Pop(YTIME-1,runCy)*1000) ;
 V01PcOwnPcLevl.FX(runCy,YTIME)$(not An(YTIME)) = V01StockPcYearly.L(runCy,YTIME) / (i01Pop(YTIME,runCy) * 1000) ;
 *---
@@ -38,7 +40,8 @@ i01Sigma(runCy,"S1") = -log(V01PcOwnPcLevl.L(runCy,"%fBaseY%") / i01PassCarsMark
 *---
 V01GapTranspActiv.FX(runCy,TRANSE,YTIME)$(not AN(YTIME))=0;
 *---
-V01ConsSpecificFuel.FX(runCy,TRANSE,TTECH,EF,"%fBaseY%")$(SECTTECH(TRANSE,EF) ) = i01SpeFuelConsCostBy(runCy,TRANSE,TTECH,EF);
+V01ConsSpecificFuel.FX(runCy,TRANSE,TTECH,EF,"%fBaseY%")$(not sameas(TRANSE,"PC")$SECTTECH(TRANSE,EF)) = i01InitSpecFuelConsData(TRANSE,TTECH,EF);
+V01ConsSpecificFuel.FX(runCy,TRANSE,TTECH,EF,"%fBaseY%")$(sameas(TRANSE,"PC")$SECTTECH(TRANSE,EF)) = i01SFCPC(runCy,TTECH,EF,"%fBaseY%");
 *---
 V01ConsTechTranspSectoral.FX(runCy,TRANSE,TTECH,EF,YTIME)$(SECTTECH(TRANSE,TTECH)  $(not PLUGIN(TTECH)) $TTECHtoEF(TTECH,EF) $(not AN(YTIME))) = imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME); 
 V01ConsTechTranspSectoral.FX(runCy,TRANSE,TTECH,EF,YTIME)$(SECTTECH(TRANSE,TTECH)  $PLUGIN(TTECH) $(not AN(YTIME))) = 0;

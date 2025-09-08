@@ -231,6 +231,14 @@ Q01StockPcYearly(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       V01PcOwnPcLevl(allCy,YTIME) * 
       (i01Pop(YTIME,allCy) * 1000);
 
+Q01StockPcYearlyTech(allCy,TTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+      V01StockPcYearlyTech(allCy,TTECH,YTIME)
+            =E=
+      V01StockPcYearlyTech(allCy,TTECH,YTIME-1) * 
+      (1 - V01RateScrPc(allCy,YTIME)) +
+      V01ShareTechTr(allCy,"PC",TTECH,YTIME) *
+      V01GapTranspActiv(allCy,"PC",YTIME);
+
 *' This equation calculates the new registrations of passenger cars for a given year. It considers the market extension due to GDP-dependent and independent factors.
 *' The new registrations are influenced by the population, GDP, and the number of scrapped vehicles from the previous year.
 Q01NewRegPcYearly(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..

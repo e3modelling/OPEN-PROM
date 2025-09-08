@@ -1015,24 +1015,9 @@ BASE_LOAD_RES       "Residual on Base Load "
 MAX_LOAD_RES        "Residual on Peak Load (Peak Load margin)"
 /
 
-
-CHPRES_SET
-/
-CHP_CC           Capital cost RD residual adjustment
-CHP_FOM          FOM cost RD residual adjustment
-CHP_VOM          VOM cost RD residual adjustment
-/
-
-nucres_set
-/res/
-
-Gompset1 /PC/
-Gompset2 /s1,s2,s3,sat,mextv,scr /
 Indu_SCon_Set /Base, SHR_NSE, SH_HPELC/
 
 CHPPGSET /IC,FC,VOM,LFT,AVAIL,BOILEFF,MAXCHPSHARE/
-
-ELSH_SET /elsh/
 
 BALEF fuels in balance report
 /

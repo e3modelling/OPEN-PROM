@@ -14,7 +14,8 @@ Q01ShareTechTr(allCy,TRANSE,EF,YTIME)	                   "Compute technology sor
 Q01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)	   "Compute consumption of each technology in transport sectors"
 *q01DemFinEneSubTransp(allCy,TRANSE,YTIME)	               "Compute final energy demand in transport"
 Q01StockPcYearly(allCy,YTIME)                              "Compute stock of passenger cars (in million vehicles)"
-Q01NewRegPcYearly(allCy,YTIME)                             "Compute new registrations of passenger cars"
+Q01StockPcYearlyTech(allCy,TTECH,YTIME)                    "Compute stock of passenger cars (in million vehicles)"
+Q01NewRegPcYearly(allCy,YTIME)                             "Compute new registrations of passenger cars per technology"
 Q01ActivPassTrnsp(allCy,TRANSE,YTIME)                      "Compute passenger transport acitivity"
 Q01NumPcScrap(allCy,YTIME)                                 "Compute scrapped passenger cars"
 Q01PcOwnPcLevl(allCy,YTIME)                                "Compute ratio of car ownership over saturation car ownership"
@@ -44,6 +45,7 @@ V01ShareTechTr(allCy,TRANSE,EF,YTIME)	                   "Technology share in ne
 V01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)	   "Consumption of each technology and subsector (Mtoe)"
 *v01DemFinEneSubTransp(allCy,TRANSE,YTIME)	               "Final energy demand in transport subsectors (Mtoe)"
 V01StockPcYearly(allCy,YTIME)                              "Stock of passenger cars (million vehicles)"
+V01StockPcYearlyTech(allCy,TTECH,YTIME)                    "stock of passenger cars per technology (in million vehicles)"
 V01NewRegPcYearly(allCy,YTIME)                             "Passenger cars new registrations (million vehicles)"
 V01ActivPassTrnsp(allCy,TRANSE,YTIME)                      "Passenger transport activity (1)"
                                                                 !! - Activity for passenger cars is measured in (000)km

@@ -32,6 +32,12 @@ $include"./iNewReg.csv"
 $offdelim
 ;
 *---
+table i01StockPC(allCy,TTECH,YTIME)                     "Car stock per technology (million vehicles)"
+$ondelim
+$include"./iStockPC.csv"
+$offdelim
+;
+*---
 parameter i01PlugHybrFractData(YTIME)                   "Plug in hybrid fraction of mileage" /
 2010    0.5
 2011    0.504444
@@ -127,22 +133,13 @@ parameter i01PlugHybrFractData(YTIME)                   "Plug in hybrid fraction
 /
 ;
 *---
-parameter i01InitSpecFuelConsData(TRANSE,TTECH,EF)      "Initial Specific fuel consumption ()" /
-PC.LPG.LPG	65.88
-PC.GSL.GSL	73.2
-PC.GDO.GDO	54.9
-PC.NGS.NGS	84.3391
-PC.MET.MET	71.84
-PC.ETH.ETH	102.1
-PC.BGDO.BGDO	54.9
-PC.H2F.H2F	24.15
-PC.ELC.ELC	20.496
-PC.PHEVGSL.GSL	43.92
-PC.PHEVGSL.ELC	20.496
-PC.PHEVGDO.GDO	32.94
-PC.PHEVGDO.ELC	20.496
-PC.CHEVGSL.GSL	45.384
-PC.CHEVGDO.GDO	40.8456
+table i01SFCPC(allCy,TTECH,EF,YTIME)                     "Initial Specific fuel consumption (toe/vkm)"
+$ondelim
+$include"./iSFC.csv"
+$offdelim
+;
+*---
+parameter i01InitSpecFuelConsData(TRANSE,TTECH,EF)      "Initial Specific fuel consumption (toe/vkm)" /
 PT.GDO.GDO	18.6313
 PT.MET.MET	12.6
 PT.H2F.H2F	8.9
@@ -174,8 +171,6 @@ GN.H2F.H2F	8.14286
 *---
 
 Parameters
-i01PlugHybrFractOfMileage(ELSH_SET,YTIME)	           "Plug in hybrid fraction of mileage covered by electricity, residualls on GDP-Depnd car market ext (1)"
-i01SpeFuelConsCostBy(allCy,SBS,TTECH,EF)	           "Specific fuel consumption cost in Base year (ktoe/Gpkm or ktoe/Gtkm or ktoe/Gvkm)"
 i01GdpPassCarsMarkExt(allCy)	                          "GDP-dependent passenger cars market extension (GDP/capita)"
 i01PassCarsScrapRate(allCy)	                          "Passenger cars scrapping rate (1)"
 i01ShareAnnMilePlugInHybrid(allCy,YTIME)	           "Share of annual mileage of a plug-in hybrid which is covered by electricity (1)"
@@ -186,15 +181,11 @@ i01GDPperCapita(YTIME,allCy)
 i01Sigma(allCy,SG)                                   "S parameters of Gompertz function for passenger cars vehicle km (1)"
 ;
 *---
-i01SpeFuelConsCostBy(runCy,TRANSE,TTECH,EF) = i01InitSpecFuelConsData(TRANSE,TTECH,EF);
-*---
 i01PassCarsMarkSat(runCy) = 0.7;
 *---
 imFuelConsTRANSE(runCy,TRANSE,EF,YTIME)$(SECTTECH(TRANSE,EF) $(imFuelConsTRANSE(runCy,TRANSE,EF,YTIME)<=0)) = 1e-6;
 *---
-i01PlugHybrFractOfMileage(ELSH_SET,YTIME) = i01PlugHybrFractData(YTIME);
-*---
-i01ShareAnnMilePlugInHybrid(runCy,YTIME)$an(YTIME) = i01PlugHybrFractOfMileage("ELSH",YTIME);
+i01ShareAnnMilePlugInHybrid(runCy,YTIME)$an(YTIME) = i01PlugHybrFractData(YTIME);
 *---
 i01AvgVehCapLoadFac(runCy,TRANSE,TRANSUSE,YTIME) = i01CapDataLoadFacEachTransp(TRANSE,TRANSUSE);
 *---

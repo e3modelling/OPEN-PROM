@@ -72,6 +72,7 @@ H2INFR  0.08
 parameter imDisc(allCy,SBS,YTIME) "Discount rates per subsector for all countries ()" ;
 *---
 imDisc(runCy,SBS,YTIME) = iDiscData(SBS);
+imDisc(runCy,"PC",YTIME) = 0.11;
 *---
 * FIXME: Drive the emission factors with mrprom
 * author=giannou
