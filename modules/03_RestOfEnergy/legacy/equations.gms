@@ -329,14 +329,17 @@ Q03ImpNetEneBrnch(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q03ConsFiEneSec(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VmConsFiEneSec(allCy,EFS,YTIME)
                  =E=
-         i03RateEneBranCons(allCy,EFS,YTIME) *
+            i03RateEneBranCons(allCy,EFS,YTIME) *
          (
            (
               V03OutTotTransf(allCy,EFS,YTIME) +
               V03ProdPrimary(allCy,EFS,YTIME)$(sameas(EFS,"CRO") or sameas(EFS,"NGS"))
-            )$(not TOCTEF(EFS))
-            +
-            (
+           )$(not TOCTEF(EFS))
+           +
+           (
               VmConsFinEneCountry(allCy,EFS,YTIME) + VmConsFinNonEne(allCy,EFS,YTIME) + VmLossesDistr(allCy,EFS,YTIME)
-            )$TOCTEF(EFS)
-         );                              
+              
+            + sum(EF$(H2PRODEF(EF) and EFtoEFS(EF,EFS)),
+                  V05ConsFuelH2Prod(allCy,EF,YTIME))
+           )$TOCTEF(EFS)
+         );                                 
