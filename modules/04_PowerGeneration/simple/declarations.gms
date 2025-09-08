@@ -5,7 +5,7 @@ Equations
 *' *** Power Generation
 Q04CapElec2(allCy,PGALL,YTIME)	                           "Compute electricity generation capacity"
 Q04CapElecNominal(allCy,PGALL,YTIME)	                   "Compute nominal electricity generation capacity"
-Q04RenTechMatMultExpr(allCy,PGALL,YTIME)                   "Renewable power capacity over potential (1)"
+Q04ShareTechPG(allCy,PGALL,YTIME)                          "Share of all technologies in the electricity mixture"
 Q04BsldEst(allCy,YTIME)	                                   "Compute estimated base load"
 Q04CostHourProdInvDec(allCy,PGALL,YTIME)                    "Compute production cost used in investment decisions"
 Q04CostHourProdInvDecNoCCS(allCy,PGALL,YTIME)               "Compute production cost used in investment decisions"
@@ -23,7 +23,7 @@ Q04CapElecNonCHP(allCy,YTIME)	                           "Compute total electric
 Q04GapGenCapPowerDiff(allCy,YTIME)	                       "Compute the gap in power generation capacity"		
 *q04ScalWeibull(allCy,PGALL,HOUR,YTIME)                    "Compute temporary variable facilitating the scaling in Weibull equation"	
 *q04PotRenMinAllow(allCy,PGRENEF,YTIME)	                   "Compute minimum allowed renewable potential" 
-Q04RenTechMatMult(allCy,PGALL,YTIME)	                   "Compute renewable technologies maturity multiplier"		 	
+Q04ShareSatPG(allCy,PGALL,YTIME)	                       "Saturation mechanism for electricity mixture penetration of RES technologies"		 	
 Q04ScalWeibullSum(allCy,PGALL,YTIME)	                   "Compute sum (over hours) of temporary variable facilitating the scaling in Weibull equation"
 Q04NewInvElec(allCy,YTIME)	                               "Compute for Power Plant new investment decision"		
 Q04SharePowPlaNewEq(allCy,PGALL,YTIME)	                   "Compute the power plant share in new equipment"	
@@ -46,7 +46,10 @@ Q04DemElecTot(allCy,YTIME)                                 "Compute total electr
 *Q04CapElecCHP(allCy,CHP,YTIME)                             "Compute CHP electric capacity"	
 $endif.calib
 Q04ProdElecCHP(allCy,CHP,YTIME)                            "Compute CHP electricity production (TWh)"
-Q04ProdElecEstCHP(allCy,CHP,YTIME)	                           "Estimate the electricity of CHP Plants"	
+Q04ProdElecEstCHP(allCy,CHP,YTIME)	                       "Estimate the electricity of CHP Plants"	
+Q04CapexFixCostPG(allCy,PGALL,YTIME)                       "Computes the capex and fixed costs of any power generation technology"
+Q04ShareMixWndSol(allCy,YTIME)                             "Computes the participation of solar and wind in the energy mixture (%)"
+Q04CapexRESRate(allCy,PGALL,YTIME)                         "Estimates a multiplying factor expressing the extra grid and storage costs for RES implementation according to the RES penetration in the mixture"
 
 *'                **Interdependent Equations**
 Q04ProdElec(allCy,PGALL,YTIME)                             "Compute electricity production from power generation plants"
@@ -61,7 +64,7 @@ Variables
 V04CapElec2(allCy,PGALL,YTIME)	                           "Electricity generation plants capacity (GW)"
 V04CapElecNominal(allCy,PGALL,YTIME)	                   "Nominal electricity generation plants capacity (GW)"
 *v04ScalFacPlantDispatchExpr(allCy,PGALL,HOUR,YTIME)       "Scaling factor for plant dispatching"
-V04RenTechMatMultExpr(allCy,PGALL,YTIME)                   "Renewable power capacity over potential (1)"
+V04ShareTechPG(allCy,PGALL,YTIME)                          "Share of all technologies in the electricity mixture"
 V04CapElecCHP(allCy,CHP,YTIME)	                           "Capacity of CHP Plants (GW)"
 V04BsldEst(allCy,YTIME)	                                   "Estimated base load (GW)"
 V04CostHourProdInvDec(allCy,PGALL,YTIME)                    "Production cost of technology (US$2015/KWh)"
@@ -80,7 +83,7 @@ V04CapElecNonCHP(allCy,YTIME)	                           "Total electricity gene
 V04GapGenCapPowerDiff(allCy,YTIME)	                       "Gap in total generation capacity to be filled by new equipment (GW)"		
 *v04ScalWeibull(allCy,PGALL,HOUR,YTIME)                    "Temporary variable facilitating the scaling in Weibull equation"	
 *v04PotRenMinAllow(allCy,PGRENEF,YTIME)	                   "Minimum allowed renewable potential (GW)"		
-V04RenTechMatMult(allCy,PGALL,YTIME)	                   "Renewable technologies maturity multiplier (1)"	
+V04ShareSatPG(allCy,PGALL,YTIME)	                           "Saturation for electricity mixture penetration of RES technologies"	
 V04ScalWeibullSum(allCy,PGALL,YTIME)	                   "Sum (over hours) of temporary variable facilitating the scaling in Weibull equation (1)"
 V04NewInvElec(allCy,YTIME)	                               "Power plant sorting for new investment decision according to total cost (1)"	
 V04SharePowPlaNewEq(allCy,PGALL,YTIME)	                   "Power plant share in new equipment (1)"			
@@ -101,7 +104,10 @@ V04ConsElec(allCy,DSBS,YTIME)                              "Electricity demand p
 V04LoadFacDom(allCy,YTIME)                                 "Electricity load factor for entire domestic system"	
 V04ProdElecCHP(allCy,CHP,YTIME)	                           "CHP electricity production (TWh)"
 V04DemElecTot(allCy,YTIME)                                 "Total electricity demand (TWh)"
-V04ProdElecEstCHP(allCy,CHP,YTIME)	                           "Estimate the electricity of CHP Plants (1)"	
+V04ProdElecEstCHP(allCy,CHP,YTIME)	                       "Estimate the electricity of CHP Plants (1)"	
+V04CapexFixCostPG(allCy,PGALL,YTIME)                       "CAPEX and fixed costs of any power generation technology (US$2015/kW)"
+V04ShareMixWndSol(allCy,YTIME)                             "The participation of solar and wind in the energy mixture(%)"
+V04CapexRESRate(allCy,PGALL,YTIME)                         "Multiplying factor expressing the extra grid and storage costs for RES implementation according to the RES penetration in the mixture"
 
 *'                **Interdependent Variables**	
 VmProdElec(allCy,PGALL,YTIME)                              "Electricity production (TWh)"	
@@ -110,3 +116,6 @@ VmCapElecTotEst(allCy,YTIME)	                           "Estimated Total electri
 VmPeakLoad(allCy,YTIME)	                                   "Electricity peak load (GW)"	
 VmCapElec(allCy,PGALL,YTIME)	                           "Electricity generation plants capacity (GW)"
 ;
+
+Scalars
+S04CapexBessRate                                            "The power expressing the rate of the increase in the solar & wind CAPEX because of storage need and grid upgrade" /1.3/

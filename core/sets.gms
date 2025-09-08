@@ -109,7 +109,7 @@ an(ytime)       Years for which the model is running              /%fStartY%*%fE
 period(ytime)   Model can also run for periods of years
 tFirst(ytime)   Base year                                         /%fBaseY%/
 time(ytime)     Model time horizon used in equation definitions   /%fStartY%*%fEndY%/
-datay(ytime)    Historical year before the base year of the model /%fStartHorizon%*%fBaseY%/
+datay(ytime)    Historical years before the start year of the model /%fStartHorizon%*%fBaseY%/
 hour            "Segments of hours in a year (250,1250,...,8250)" /h0*h8/
 
 
@@ -637,14 +637,18 @@ CHEVGDO
 
 SECTTECH(SBS,EF) Link between Model Subsectors and Fuels
 /
-PC.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO,CHEVGSL,CHEVGDO)
-PB.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO)
-GU.(LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGDO,CHEVGDO) !! Removed GSL and PHEVGSL
-(PT,GT).(GDO,ELC,MET)
+*PC.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO,CHEVGSL,CHEVGDO)
+*PB.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO)
+*GU.(LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGDO,CHEVGDO)
+*(PT,GT).(GDO,ELC,MET)
+PC.(GSL,LPG,GDO,NGS,ELC,PHEVGSL,PHEVGDO,CHEVGSL,CHEVGDO)
+PB.(LPG,GDO,NGS,ELC,PHEVGDO)
+GU.(LPG,GDO,NGS,ELC,PHEVGDO,CHEVGDO)
+(PT,GT).(GDO,ELC)
 PA.(KRS)
 (PN,GN).(GSL,GDO)
 (IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(LGN,HCL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC,STE1AL,
-                                 STE1AH,STE1AD,STE1AG)
+                                 STE1AH,STE1AD,STE1AG,H2F)
 (HOU, AG).                      (LPG,KRS,GDO,NGS,OGS,BMSWAS,ELC,STE2LGN,STE2OSL,STE2GDO,STE2NGS,
                                  STE2BMS)
 (SE).                           (LPG,KRS,NGS,OGS,ELC)
@@ -757,6 +761,7 @@ STE2BMS
 
 PGNUCL(PGALL)    Nuclear plants                            / PGANUC/
 PGREN(PGALL)     Renewable Plants                          /PGLHYD,PGSHYD,PGAWND,PGSOL,PGCSP,PGOTHREN, PGAWNO/
+PGRENSW(PGALL)   Solar and wind Plants                     /PGSOL,PGCSP,PGAWND,PGAWNO/
 PGNREN(PGALL)    Advanced Renewable Plants potential      /PGCSP,PGOTHREN,PGAWNO,ATHBMSWAS/
 PGGEO(PGALL)     Geothermal Plants                        /PGOTHREN/
 PGRENEF          Renewable energy forms in power generation  /LHYD,SHYD,WND,WNO,SOL,DPV,BMSWAS,OTHREN/
@@ -915,8 +920,8 @@ PGECONCHAR       "Technical - economic characteristics for power generation plan
 LFT
 /
 
-SG               "S parameters in Gompertz function for passenger cars vehicle km"
-/S1,S2,S3,SAT/
+SG               "S parameters in Gompertz function for passenger cars per capita"
+/S1,S2/
 
 TRANSPCHAR       "Various transport data used in equations and post-solution calculations"
 /
