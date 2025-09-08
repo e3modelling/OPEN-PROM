@@ -20,7 +20,12 @@ $include"./iH2InfrCapCosts.csv"
 $offdelim
 ;
 *---
-i05H2Production(ECONCHARHY,"bgfl",YTIME) = i05H2Production(ECONCHARHY,"bgfls",YTIME);
+table iTechShareH2Prod(H2TECH,YTIME)	                      "Data for Hydrogen Infrastructure Costs"
+$ondelim
+$include"./iWBLShareH2Prod.csv"
+$offdelim
+;
+*i05H2Production(ECONCHARHY,"bgfl",YTIME) = i05H2Production(ECONCHARHY,"bgfls",YTIME);
 *---
 Parameters
 i05WBLGammaH2Prod(allCy,YTIME)              "Parameter for acceptance in new investments used in weibull function in production shares"
@@ -50,9 +55,12 @@ i05PolH2AreaMax(allCy)                      "Policy parameter defining the perce
 i05HabAreaCountry(allCy)                    "Inhabitable land in a country"
 i05EffNetH2Transp(allCy,INFRTECH,YTIME)     "Total efficiency of the distribution network until the <infrtech> node"
 i05CostAvgWeight(allCy,YTIME)               "Weight for pricing in average cost or in marginal cost"
+iWBLShareH2Prod(allCy,H2TECH,YTIME)         "Maturity factors for H2 technologies"
 ;
 *---
-i05WBLGammaH2Prod(runCy,YTIME) = 4;
+iWBLShareH2Prod(runCy,H2TECH,YTIME) = iTechShareH2Prod(H2TECH,YTIME);
+*---
+i05WBLGammaH2Prod(runCy,YTIME) = 1;
 *---
 i05ProdLftH2(H2TECH,YTIME) = i05H2Production("LFT",H2TECH,YTIME);
 *---
