@@ -18,8 +18,8 @@ V01TechSortVarCost.LO(runCy,TRANSE,Rcon,YTIME) = 1e-20;
 V01TechSortVarCost.L(runCy,TRANSE,Rcon,YTIME) = 0.1;
 *---
 V01RateScrPc.UP(runCy,YTIME) = 1;
-V01RateScrPc.l(runCy,YTIME) = 0.08;
-V01RateScrPc.FX(runCy,"%fBaseY%") = 0.08; 
+V01RateScrPc.l(runCy,YTIME) = 0.06;
+V01RateScrPc.FX(runCy,"%fBaseY%") = 0.06; 
 *---
 V01NumPcScrap.FX(runCy,"%fBaseY%") = V01RateScrPc.L(runCy,"%fBaseY%") * V01StockPcYearly.L(runCy,"%fBaseY%"); 
 *---
@@ -69,5 +69,5 @@ VmLft.L(runCy,DSBS,EF,YTIME)= 0.1;
 VmLft.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF)  $(not  TRANSE(DSBS)) $(not sameas(DSBS,"PC"))) = i01TechLft(runCy,DSBS,EF,YTIME);
 VmLft.FX(runCy,TRANSE,TTECH,YTIME)$(SECTTECH(TRANSE,TTECH) $(not sameas(TRANSE,"PC"))) = i01TechLft(runCy,TRANSE,TTECH,YTIME);
 VmLft.FX(runCy,DSBS,EF,YTIME)$(not SECTTECH(DSBS,EF)) = 0;
-VmLft.FX(runCy,"PC",TTECH,YTIME)$( (not AN(YTIME)) $SECTTECH("PC",TTECH)) = 10;
+VmLft.FX(runCy,"PC",TTECH,YTIME)$( (not AN(YTIME)) $SECTTECH("PC",TTECH)) = 1/V01RateScrPc.L(runCy,YTIME);
 *---

@@ -193,7 +193,7 @@ Q01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)$(TIME(YTIME) $SECTTECH(TR
         i01ShareAnnMilePlugInHybrid(allCy,YTIME) *
         V01ConsSpecificFuel(allCy,TRANSE,TTECH,"ELC",YTIME)
       )$PLUGIN(TTECH)
-    )/1000 *
+    ) / 1000 *
     V01GapTranspActiv(allCy,TRANSE,YTIME) *
     (
       (
@@ -310,4 +310,4 @@ Q01RateScrPc(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         (
           i01GDPperCapita(YTIME,allCy) / 
           i01GDPperCapita(YTIME-1,allCy)
-        ) ** imElastA(allCy,"PC","a",YTIME);
+        ) ** 0.1;
