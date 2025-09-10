@@ -13,7 +13,7 @@ V05CostVarProdH2Tech(allCy, H2TECH, YTIME)        "Variable cost (including fuel
 V05ShareCCSH2Prod(allCy, H2TECH, YTIME)           "Share of CCS technology in the decision tree between CCS and no CCS"
 V05ShareNoCCSH2Prod(allCy, H2TECH, YTIME)         "Share of technology without CCS in the decision tree between CCS and no CCS"
 V05AcceptCCSH2Tech(allCy, YTIME)                  "Acceptance of investment in CCS technologies"
-V05ConsFuelH2Prod(allCy, EF, YTIME)               "Total fuel consumption for hydrogen production in Mtoe"
+VmConsFuelH2Prod(allCy, EF, YTIME)               "Total fuel consumption for hydrogen production in Mtoe"
 V05CostProdCCSNoCCSH2Prod(allCy, H2TECH, YTIME)   "Production cost of the composite technology with and without CCS in Euro per toe"
 V05CostAvgProdH2(allCy, YTIME)                    "Average production cost of hydrogen in Euro per toe"
 
