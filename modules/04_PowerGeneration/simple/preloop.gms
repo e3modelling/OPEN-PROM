@@ -38,8 +38,6 @@ V04NetNewCapElec.FX(runCy,"PGLHYD",YTIME)$TFIRST(YTIME) = +1E-10;
 V04CFAvgRen.L(runCy,PGALL,YTIME) = 0.1;
 V04CFAvgRen.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = i04AvailRate(runCy,PGALL,YTIME);
 *---
-V0ShareSatPG.FX(runCy,PGALL,YTIME)$ (not PGREN(PGALL))= 1;
-*---
 V04CostHourProdInvDec.L(runCy,PGALL,TT) = 0.0001;
 V04CostHourProdInvDec.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME))) = 0;
 *---
@@ -58,6 +56,10 @@ V04CapElec2.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = imInstCapPastNonCHP(runCy,PGALL
 V04CapElec2.L(runCy,PGALL,YTIME)$AN(YTIME) = imInstCapPastNonCHP(runCy,PGALL,"2021");
 V04CapOverall.FX(runCy,PGALL,"%fBaseY%") =  imInstCapPastNonCHP(runCy,PGALL,"%fBaseY%");
 V04CapElecNominal.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = imInstCapPastNonCHP(runCy,PGALL,YTIME) / i04AvailRate(runCy,PGALL,YTIME);
+*---
+V04ShareTechPG.FX(runCy,PGALL,YTIME)$(DATAY(YTIME)) = VmCapElec.L(runCy,PGALL,YTIME) /
+            sum(PGALL2, VmCapElec.L(runCy,PGALL2,YTIME));
+V04ShareSatPG.FX(runCy,PGALL,YTIME-1)$ (not PGREN(PGALL))= 1;
 *---
 V04IndxEndogScrap.FX(runCy,PGALL,YTIME)$(not an(YTIME) ) = 1;
 V04IndxEndogScrap.FX(runCy,PGSCRN,YTIME) = 1;            !! premature replacement it is not allowed for all new plants
