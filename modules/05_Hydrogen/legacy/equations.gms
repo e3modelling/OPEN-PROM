@@ -215,7 +215,7 @@ Q05ConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)$(TIME(YTIME) $H2TECHEFtoEF(H2TECH,E
 *' This equation aggregates the total fuel consumption across all hydrogen production technologies in the system,
 *' summing up the fuel requirements from all sources. It helps track the total fuel demand for hydrogen production.
 Q05ConsFuelH2Prod(allCy,EF,YTIME)$(TIME(YTIME) $H2PRODEF(EF) $(runCy(allCy)))..
-         V05ConsFuelH2Prod(allCy,EF,YTIME)
+         VmConsFuelH2Prod(allCy,EF,YTIME)
          =E=
          sum(H2TECH$H2TECHEFtoEF(H2TECH,EF),VmConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME))
 ;
