@@ -188,6 +188,7 @@ NF_PFC         "Aluminium production, related with PFC"
 BM_CO2         "Non metallic minerals production, related with CO2"
 PG_SF6         "Electricity production, related with SF6"
 OI_SF6         "Other Industries activities, related with SF6"
+DAC            "Direct Air Capture"
 /
 
 SBS(ALLSBS)          Model Subsectors
@@ -219,7 +220,7 @@ NEN   "Other Non Energy Uses"
 PG    "Power and Steam Generation"
 H2P   "Hydrogen production"
 H2INFR "Hydrogen storage and delivery"
-DAC   "Direct Air Capture"
+DAC    "Direct Air Capture"
 /
 
 
@@ -283,7 +284,7 @@ Trade.(FD,EN,TX,OE,OI,NF,CH,IS,BM,PP,PG,BM_CO2,H2P)
 NoTrade.(SE,AG,HOU,PC,PB,PT,PN,PA,GU,GT,GN,BU,PCH,NEN,LGN_PRD_CH4,HCL_PRD_CH4,GAS_PRD_CH4,TERT_CH4,TRAN_CH4,AG_CH4,SE_CH4,TRAN_N2O,TX_N2O,AG_N2O,OI_HFC,OI_PFC,NF_PFC,PG_SF6,OI_SF6)
 /
 
-DSBS(SBS)         All Demand Subsectors         /PC,PT,PA,PB,PN,GU,GT,GN,IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,SE,AG,HOU,PCH,NEN,BU/
+DSBS(SBS)         All Demand Subsectors         /PC,PT,PA,PB,PN,GU,GT,GN,IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,SE,AG,HOU,PCH,NEN,BU,DAC/
 TRANSE(DSBS)      All Transport Subsectors      /PC,PT,PA,PB,PN,GU,GT,GN/
 TRANS1(SBS)       All Transport Subsectors      /PC,PT,PA,PB,PN,GU,GT,GN/
 TRANP(TRANSE)     Passenger Transport           /PC,PT,PA,PB,PN/
@@ -356,6 +357,9 @@ PHEVGDO  "Plug in Hybrid engine - diesel"
 *hybrid cars with gasoline and diesel
 CHEVGSL  "conventional Hybrid engine - gasoline"
 CHEVGDO  "conventional Hybrid engine - diesel"
+HTDAC   "High-Temperature DAC"
+LTDAC   "Low-Temperature DAC"
+EWDAC   "Enhanced-Weathering DAC"
 
 * Aggregate Fuels
 SLD     "Solid Fuels"
@@ -605,6 +609,14 @@ CHEVGSL  "conventional Hybrid engine - gasoline"
 CHEVGDO  "conventional Hybrid engine - diesel"
 /
 
+DACTECH(EF)
+/
+HTDAC
+LTDAC
+EWDAC
+/
+
+
 TTECHtoEF(TTECH,EF) Fuels consumed by transport technologies
 /
 GSL.GSL
@@ -657,6 +669,7 @@ BU.(GDO,RFO)
 (PCH,NEN).(LGN,HCL,GDO,RFO,LPG,NGS,OGS)
 PG.(LGN,HCL,GDO,RFO,NGS,OGS,NUC,HYD,BMSWAS,SOL,GEO,WND)
 H2P.(HCL,RFO,NGS,NUC,BMSWAS,SOL,WND,ELC)
+DAC.(HTDAC,LTDAC,EWDAC)
 /
 
 

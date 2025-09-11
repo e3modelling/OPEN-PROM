@@ -12,10 +12,30 @@ mc_d	0.000839237,
 mc_s	120,
 mc_m	1.013
 / ;
+
+i06CapexDAC(DACTECH)                        ""
+/
+HTDAC	1490,
+LTDAC	85,
+EWDAC	400,
+/ ;
+
+i06FixO%MDAC(DACTECH)
+/
+HTDAC	160,
+LTDAC	51,
+EWDAC	600,
+/ ;
 *---
 Parameters
 i06ElastCO2Seq(allCy,CO2SEQELAST)	       "Elasticities for CO2 sequestration cost curve (1)"
 ;
 *---
 i06ElastCO2Seq(runCy,CO2SEQELAST) = i06CO2SeqData(CO2SEQELAST);
+*---
+i06GrossCapDAC(runCy,DACTECH,YTIME) = i06CapexDAC(DACTECH);
+*---
+i06FixOandMDAC(runCy,DACTECH,YTIME) = i06FixO$MDAC(DACTECH);
+*---
+i06LftDAC(runCy,DACTECH,YTIME) = i06LftDAC(DACTECH);
 *---

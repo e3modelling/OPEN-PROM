@@ -60,12 +60,12 @@ Q06CstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 
 *' The equation calculates the CAPEX and the Fixed Costs of DAC capacity, also taking into account its discount rate and life expectancy, 
 *' for each region (country) and year.
-Q06CapexFixCostDAC(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+Q06CapexFixCostDAC(allCy,SBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V06CapexFixCostDAC(allCy,YTIME)
                   =E=         
           (
-            imDisc(allCy,"DAC",YTIME) * exp(imDisc(allCy,"DAC",YTIME) * i06LftDAC(allCy))
-            / (exp(imDisc(allCy,"DAC",YTIME) * i06LftDAC(allCy)) -1)
+            imDisc(allCy,"DAC",YTIME) * exp(imDisc(allCy,"DAC",YTIME) * i06LftDAC(allCy,YTIME))
+            / (exp(imDisc(allCy,"DAC",YTIME) * i06LftDAC(allCy,YTIME)) -1)
           )
           * i06GrossCapDAC(allCy,YTIME) * 1000 * imCGI(allCy,YTIME)
           + i06FixOandMDAC(allCy,YTIME)
