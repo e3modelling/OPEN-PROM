@@ -1092,6 +1092,8 @@ alias(EF, EF2);
 alias(PGALL2,PGALL);
 *this alias is used in plant dispatching equation
 
+* This alias is used in tech share equation
+alias(TTECH2,TTECH)
 
 scalar TF order of base year in set ytime;
 TF=sum((TFIRST,ytime), ord(ytime)$TFIRST(ytime));
