@@ -609,7 +609,7 @@ CHEVGSL  "conventional Hybrid engine - gasoline"
 CHEVGDO  "conventional Hybrid engine - diesel"
 /
 
-DACTECH(EF)
+DACTECH(EF)     DAC Technologies
 /
 HTDAC
 LTDAC
@@ -669,7 +669,8 @@ BU.(GDO,RFO)
 (PCH,NEN).(LGN,HCL,GDO,RFO,LPG,NGS,OGS)
 PG.(LGN,HCL,GDO,RFO,NGS,OGS,NUC,HYD,BMSWAS,SOL,GEO,WND)
 H2P.(HCL,RFO,NGS,NUC,BMSWAS,SOL,WND,ELC)
-DAC.(HTDAC,LTDAC,EWDAC)
+DAC.(ELC,NGS)
+*DAC.(HTDAC,LTDAC,EWDAC)
 /
 
 

@@ -66,7 +66,8 @@ BU      0.12
 NEN     0.08
 PG      0.1
 H2P     0.08
-H2INFR  0.08 
+H2INFR  0.08
+DAC     0.08 
 /;
 *---
 parameter imDisc(allCy,SBS,YTIME) "Discount rates per subsector for all countries ()" ;
@@ -557,6 +558,7 @@ imNcon(INDSE) = 10;                                                    !! 11 dif
 imNcon(DOMSE) = 10;                                                    !! 11 different consumer size groups for domestic and tertiary sectors
 imNcon(NENSE) = 10;                                                    !! 11 different consumer size groups for non energy uses
 imNcon("BU") = 2;                                                      !! ... except bunkers .
+imNcon("DAC") = 1;                                                      !! 
 *---
 * 11 vehicle mileage groups
 * 0.952 turned out to be a (constant) ratio between modal and average mileage through iterations in Excel
@@ -615,6 +617,10 @@ imAnnCons(runCy,NENSE,"modal") = 0.487 ;
 imAnnCons(runCy,"BU","smallest") = 0.2 ;
 imAnnCons(runCy,"BU","largest") = 1 ;
 imAnnCons(runCy,"BU","modal") = 0.5 ;
+
+imAnnCons(runCy,"DAC","smallest") = 0.2 ;
+imAnnCons(runCy,"DAC","largest") = 1 ;
+imAnnCons(runCy,"DAC","modal") = 0.5 ;
 *---
 * Consumer size groups distribution function
 Loop (runCy,DSBS) DO

@@ -6,11 +6,13 @@ Equations
 Q06CapCO2ElecHydr(allCy,YTIME)	                           "Compute CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
 Q06CaptCummCO2(allCy,YTIME)	                               "Compute cumulative CO2 captured (Mtn of CO2)"
 Q06TrnsWghtLinToExp(allCy,YTIME)	                       "Transtition weight for shifting from linear to exponential CO2 sequestration cost curve"
-Q06CapexFixCostDAC(allCy,YTIME)                            "Calculates the CAPEX and the Fixed Costs of DAC capacity regionally"
+Q06CapexFixCostDAC(allCy,DACTECH,YTIME)                    "Calculates the CAPEX and the Fixed Costs of DAC capacity regionally"
 Q06ProfRateDAC(allCy,YTIME)                                "Computes the annual profitability rate of DAC including the lifecycle costs and revenues regionally"
+$ontext
 Q06CapFacNewDAC(allCy,YTIME)                               "Computes the factor expressing the annual increase in the installed capacity of DAC regionally"
 Q06CapDAC(allCy,YTIME)                                     "Computes the DAC installed capacity annually and regionally"
 Q06ElecDAC(allCy,YTIME)                                    "Computes the annual electricity consumed in DAC regionally"
+$offtext
 
 *'                **Interdependent Equations**
 Q06CstCO2SeqCsts(allCy,YTIME)	                           "Compute cost curve for CO2 sequestration costs" 
@@ -21,7 +23,7 @@ Variables
 V06CapCO2ElecHydr(allCy,YTIME)	                           "CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
 V06CaptCummCO2(allCy,YTIME)	                               "Cumulative CO2 captured (Mtn CO2)"
 V06TrnsWghtLinToExp(allCy,YTIME)	                       "Weight for transtition from linear CO2 sequestration cost curve to exponential (1)"
-V06CapexFixCostDAC(allCy,YTIME)                            "Regional CAPEX and the Fixed Costs of DAC capacity"
+V06CapexFixCostDAC(allCy,DACTECH,YTIME)                    "Regional CAPEX and the Fixed Costs of DAC capacity"
 V06ProfRateDAC(allCy,YTIME)                                "The annual profitability rate of DAC including the lifecycle costs and revenues regionally"
 V06CapFacNewDAC(allCy,YTIME)                               "Factor expressing the annual increase in the installed capacity of DAC regionally"
 V06CapDAC(allCy,YTIME)                                     "DAC regional installed capacity"
