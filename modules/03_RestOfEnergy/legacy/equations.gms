@@ -22,8 +22,6 @@ Q03ConsFinEneCountry(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          +
          sum(TRANSE,
              sum(EF$(EFtoEFS(EF,EFS) $SECtoEF(TRANSE,EF)), VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)))
-         +
-         sum(EF$(sameas(EF, "H2") AND EFtoEFS(EF,EFS)), VmDemTotH2(allCy,YTIME)) !! Here hydrogen is included as a part of the energy consumption.
         ;
 
 *' The equation computes the total final energy consumption in million tonnes of oil equivalent 
@@ -53,7 +51,7 @@ Q03LossesDistr(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
              =E=
          (imRateLossesFinCons(allCy,EFS,YTIME) * (VmConsFinEneCountry(allCy,EFS,YTIME) + VmConsFinNonEne(allCy,EFS,YTIME)))$(not H2EF(EFS))
          +
-         (  VmDemTotH2(allCy,YTIME) - sum(SBS$H2SBS(SBS), V05DemSecH2(allCy,SBS,YTIME)))$H2EF(EFS);  
+         (VmDemTotH2(allCy,YTIME) - sum(SBS$SECTTECH(SBS,"H2F"), VmDemSecH2(allCy,SBS,YTIME)))$H2EF(EFS);  
 
 *' The equation calculates the transformation output from district heating plants .
 *' This transformation output is determined by summing over different demand sectors and district heating systems 
@@ -219,7 +217,7 @@ Q03OutTotTransf(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' and specific conditions for the energy branch "CRO" (crop residues). The outcome represents the transfers in million tons of oil equivalent.
 Q03Transfers(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V03Transfers(allCy,EFS,YTIME) =E=
-         (( (V03Transfers(allCy,EFS,YTIME-1)*VmConsFinEneCountry(allCy,EFS,YTIME)/VmConsFinEneCountry(allCy,EFS,YTIME-1))$EFTOEFA(EFS,"LQD")+
+         (( (V03Transfers(allCy,EFS,YTIME-1)*VmConsFinEneCountry(allCy,EFS,YTIME)/(VmConsFinEneCountry(allCy,EFS,YTIME-1) + 0.0001))$EFTOEFA(EFS,"LQD")+
           (
                  V03Transfers(allCy,"CRO",YTIME-1)*SUM(EFS2$EFTOEFA(EFS2,"LQD"),V03Transfers(allCy,EFS2,YTIME))/
                  SUM(EFS2$EFTOEFA(EFS2,"LQD"),V03Transfers(allCy,EFS2,YTIME-1)))$sameas(EFS,"CRO")   )$(i03FeedTransfr(allCy,EFS,"%fStartHorizon%"))$(NOT sameas("OLQ",EFS)) 
