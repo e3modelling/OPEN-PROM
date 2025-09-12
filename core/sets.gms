@@ -678,6 +678,7 @@ TSTE1AH
 TSTE1AD
 TSTE1AG
 TSTE1AB
+TH2F
 * Domestic Technologies (only add those not already in Industry)
 TGSL
 TSTE2LGN
@@ -777,6 +778,7 @@ TSTE1AH.STE1AH
 TSTE1AD.STE1AD
 TSTE1AG.STE1AG
 TSTE1AB.STE1AB
+TH2F.H2F
 * Domestic Technologies (only add those not already in Transport & Industry)
 * LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC,STE1AL,STE1AH,STE1AD,STE1AG,STE1AB already exist in TRANSPORT or INDUSTRY technologies
 TGSL.GSL
