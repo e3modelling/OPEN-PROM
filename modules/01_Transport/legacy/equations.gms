@@ -258,8 +258,8 @@ Q01ActivPassTrnsp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANP(TRANSE) $runCy(allCy))
         V01ActivPassTrnsp(allCy,TRANSE,YTIME-1) *
         (VmPriceFuelAvgSub(allCy,TRANSE,YTIME)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1))**imElastA(allCy,TRANSE,"b1",YTIME) *
         (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2))**imElastA(allCy,TRANSE,"b2",YTIME) *
-        [(V01StockPcYearly(allCy,YTIME-1)/(i01Pop(YTIME-1,allCy)*1000))/(V01StockPcYearly(allCy,YTIME)/(i01Pop(YTIME,allCy)*1000))]**imElastA(allCy,TRANSE,"b3",YTIME) *
-        [(i01GDP(YTIME,allCy)/i01Pop(YTIME,allCy))/(i01GDP(YTIME-1,allCy)/i01Pop(YTIME-1,allCy))]**imElastA(allCy,TRANSE,"b4",YTIME)
+        [V01PcOwnPcLevl(allCy,YTIME)/V01PcOwnPcLevl(allCy,YTIME-1)]**imElastA(allCy,TRANSE,"b3",YTIME) *
+        [i01GDPperCapita(YTIME,allCy)/i01GDPperCapita(YTIME-1,allCy)]**0.02
       )$sameas(TRANSE,"PC") +
       (  !! passenger aviation
         V01ActivPassTrnsp(allCy,TRANSE,YTIME-1) *

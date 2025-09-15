@@ -5,7 +5,7 @@ Equations
 *' *** Transport
 Q01ActivGoodsTransp(allCy,TRANSE,YTIME)                    "Compute goods transport activity"
 Q01GapTranspActiv(allCy,TRANSE,YTIME)	                   "Compute the gap in transport activity"
-Q01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)	       "Compute Specific Fuel Consumption"
+*Q01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)	       "Compute Specific Fuel Consumption"
 Q01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME)    "Compute transportation cost per mean in KUS$2015 per vehicle"
 Q01ShareTechTr(allCy,TRANSE,EF,YTIME)	                   "Compute technology sorting based on variable cost and new equipment"
 Q01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)	   "Compute consumption of each technology in transport sectors"
@@ -43,7 +43,7 @@ V01StockPcYearly(allCy,YTIME)                              "Stock of passenger c
 V01StockPcYearlyTech(allCy,TTECH,YTIME)                    "stock of passenger cars per technology (in million vehicles)"
 V01NewRegPcYearly(allCy,YTIME)                             "Passenger cars new registrations (million vehicles)"
 V01ActivPassTrnsp(allCy,TRANSE,YTIME)                      "Passenger transport activity (1)"
-                                                                !! - Activity for passenger cars is measured in (000)km
+                                                                !! - Activity for passenger cars is measured in (000)km per vehicle
                                                                 !! - Activity for passenger aviation million passengers carried
                                                                 !! - Activity for all other passenger transportation modes is measured in Gpkm
 V01NumPcScrap(allCy,YTIME)                                 "Scrapped passenger cars (million vehicles)"

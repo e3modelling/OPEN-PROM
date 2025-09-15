@@ -16,7 +16,7 @@ $offdelim
 *---
 table i01CapDataLoadFacEachTransp(TRANSE,TRANSUSE)	 "Capacity data and Load factor for each transportation mode (passenger or tonnes/vehicle)"
      Cap  LF
-PC   2    
+PC   4    0.5
 PB  40   0.4
 PT   300  0.4
 PN  300  0.5
@@ -144,7 +144,8 @@ PT.GDO.GDO	18.6313
 PT.MET.MET	12.6
 PT.H2F.H2F	8.9
 PT.ELC.ELC	2.73638
-PA.H2F.H2F	21.7
+*PA.H2F.H2F	21.7
+PA.KRS.KRS	27.85
 GU.LPG.LPG	54.1073
 GU.GSL.GSL	60.1192
 GU.GDO.GDO	45.0894

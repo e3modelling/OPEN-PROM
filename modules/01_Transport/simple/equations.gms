@@ -25,8 +25,8 @@ Q01ActivGoodsTransp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANG(TRANSE) $runCy(allCy
                  =E=
          (
           V01ActivGoodsTransp(allCy,TRANSE,YTIME-1)
-           * [i01GDPperCapita(YTIME,allCy)/i01GDPperCapita(YTIME-1,allCy)]**imElastA(allCy,TRANSE,"a",YTIME)
-           * (i01Pop(YTIME,allCy)/i01Pop(YTIME-1,allCy))
+           * [i01GDPperCapita(YTIME,allCy)/i01GDPperCapita(YTIME-1,allCy)]**0.5 !!imElastA(allCy,TRANSE,"a",YTIME)
+           * (i01Pop(YTIME,allCy)/i01Pop(YTIME-1,allCy)) ** 1
            * (VmPriceFuelAvgSub(allCy,TRANSE,YTIME)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1))**imElastA(allCy,TRANSE,"c1",YTIME)
            * (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2))**imElastA(allCy,TRANSE,"c2",YTIME)
            * prod(kpdl,
@@ -47,8 +47,8 @@ Q01ActivGoodsTransp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANG(TRANSE) $runCy(allCy
               ]**(imElastA(allCy,TRANSE,"c3",YTIME)*imFPDL(TRANSE,KPDL))
             ) *
             (
-              (V01ActivGoodsTransp(allCy,"GU",YTIME) + 1e6) / 
-              (V01ActivGoodsTransp(allCy,"GU",YTIME-1) + 1e6)
+              (V01ActivGoodsTransp(allCy,"GU",YTIME) + 1e-6) / 
+              (V01ActivGoodsTransp(allCy,"GU",YTIME-1) + 1e-6)
             )**imElastA(allCy,TRANSE,"c4",YTIME)
           )$(not sameas(TRANSE,"GU"));        !!other freight transport
 
@@ -85,6 +85,7 @@ Q01GapTranspActiv(allCy,TRANSE,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
           )/2
          )$TRANG(TRANSE);
 
+$ontext
 *' This equation calculates the specific fuel consumption for a given technology, subsector, energy form, and time. The specific fuel consumption depends on various factors,
 *' including fuel prices and elasticities. The equation involves a product term over a set of Polynomial Distribution Lags and considers the elasticity of fuel prices.
 Q01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,EF) $TTECHtoEF(TTECH,EF) $runCy(allCy))..
@@ -97,6 +98,7 @@ Q01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,E
             VmPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME-(ord(KPDL)+1))
           )**(imElastA(allCy,TRANSE,"c5",YTIME)*imFPDL(TRANSE,KPDL))
         );
+$offtext
 
 Q01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runCy(allCy))..
     V01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)
@@ -130,7 +132,7 @@ Q01CostFuel(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runC
     + imVarCostTech(allCy,TRANSE,TTECH,YTIME)
     + (VmRenValue(YTIME)/1000)$( not RENEF(TTECH)) 
     ) *
-    15000 * 1e-6;
+    V01ActivPassTrnsp(allCy,TRANSE,YTIME) * 1e-3;
 
 *' This equation calculates the transportation cost per mean and consumer size in kEuro per vehicle. It involves several terms, including capital costs,
 *' variable costs, and fuel costs. The equation considers different technologies and their associated costs, as well as factors like the discount rate,
@@ -251,8 +253,8 @@ Q01ActivPassTrnsp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANP(TRANSE) $runCy(allCy))
         V01ActivPassTrnsp(allCy,TRANSE,YTIME-1) *
         (VmPriceFuelAvgSub(allCy,TRANSE,YTIME)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1))**imElastA(allCy,TRANSE,"b1",YTIME) *
         (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2))**imElastA(allCy,TRANSE,"b2",YTIME) *
-        [(V01StockPcYearly(allCy,YTIME-1)/(i01Pop(YTIME-1,allCy)*1000))/(V01StockPcYearly(allCy,YTIME)/(i01Pop(YTIME,allCy)*1000))]**imElastA(allCy,TRANSE,"b3",YTIME) *
-        [(i01GDP(YTIME,allCy)/i01Pop(YTIME,allCy))/(i01GDP(YTIME-1,allCy)/i01Pop(YTIME-1,allCy))]**imElastA(allCy,TRANSE,"b4",YTIME)
+        [(V01StockPcYearly(allCy,YTIME)/(i01Pop(YTIME,allCy)*1000))/(V01PcOwnPcLevl(allCy,YTIME-1))]**imElastA(allCy,TRANSE,"b3",YTIME) *
+        [i01GDPperCapita(YTIME,allCy) / i01GDPperCapita(YTIME-1,allCy)] ** 0.2 !!imElastA(allCy,TRANSE,"b4",YTIME)
       )$sameas(TRANSE,"PC") +
       (  !! passenger aviation
         V01ActivPassTrnsp(allCy,TRANSE,YTIME-1) *
