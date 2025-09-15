@@ -192,7 +192,7 @@ Q03InpTotTransf(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                  =E=
         (
             VmInpTransfTherm(allCy,EFS,YTIME) + VmTransfInputDHPlants(allCy,EFS,YTIME) + V03InpTransfNuclear(allCy,EFS,YTIME) +
-             V03InputTransfRef(allCy,EFS,YTIME)     !!$H2PRODEF(EFS)
+             V03InputTransfRef(allCy,EFS,YTIME) + sum(EF$(H2PRODEF(EF) and EFtoEFS(EF,EFS)),VmConsFuelH2Prod(allCy,EF,YTIME))
         )$(not sameas(EFS,"OGS"))
         +
         (
@@ -329,14 +329,19 @@ Q03ImpNetEneBrnch(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q03ConsFiEneSec(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VmConsFiEneSec(allCy,EFS,YTIME)
                  =E=
-         i03RateEneBranCons(allCy,EFS,YTIME) *
+            i03RateEneBranCons(allCy,EFS,YTIME) *
          (
            (
               V03OutTotTransf(allCy,EFS,YTIME) +
               V03ProdPrimary(allCy,EFS,YTIME)$(sameas(EFS,"CRO") or sameas(EFS,"NGS"))
-            )$(not TOCTEF(EFS))
-            +
-            (
+           )$(not TOCTEF(EFS))
+           +
+           (
               VmConsFinEneCountry(allCy,EFS,YTIME) + VmConsFinNonEne(allCy,EFS,YTIME) + VmLossesDistr(allCy,EFS,YTIME)
-            )$TOCTEF(EFS)
-         );                              
+           )$TOCTEF(EFS)
+           )
+           + 
+           (
+              sum(EF$(H2PRODEF(EF) and EFtoEFS(EF,EFS)),VmConsFuelH2Prod(allCy,EF,YTIME))
+           )$TOCTEF(EFS)
+         ;                                 
