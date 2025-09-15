@@ -7,7 +7,7 @@ Q06CapCO2ElecHydr(allCy,YTIME)	                           "Compute CO2 captured 
 Q06CaptCummCO2(allCy,YTIME)	                               "Compute cumulative CO2 captured (Mtn of CO2)"
 Q06TrnsWghtLinToExp(allCy,YTIME)	                       "Transtition weight for shifting from linear to exponential CO2 sequestration cost curve"
 Q06CapexFixCostDAC(allCy,DACTECH,YTIME)                    "Calculates the CAPEX and the Fixed Costs of DAC capacity regionally"
-Q06ProfRateDAC(allCy,YTIME)                                "Computes the annual profitability rate of DAC including the lifecycle costs and revenues regionally"
+Q06ProfRateDAC(allCy,DACTECH,YTIME)                        "Computes the annual profitability rate of DAC including the lifecycle costs and revenues regionally"
 $ontext
 Q06CapFacNewDAC(allCy,YTIME)                               "Computes the factor expressing the annual increase in the installed capacity of DAC regionally"
 Q06CapDAC(allCy,YTIME)                                     "Computes the DAC installed capacity annually and regionally"
@@ -24,7 +24,7 @@ V06CapCO2ElecHydr(allCy,YTIME)	                           "CO2 captured by elect
 V06CaptCummCO2(allCy,YTIME)	                               "Cumulative CO2 captured (Mtn CO2)"
 V06TrnsWghtLinToExp(allCy,YTIME)	                       "Weight for transtition from linear CO2 sequestration cost curve to exponential (1)"
 V06CapexFixCostDAC(allCy,DACTECH,YTIME)                    "Regional CAPEX and the Fixed Costs of DAC capacity"
-V06ProfRateDAC(allCy,YTIME)                                "The annual profitability rate of DAC including the lifecycle costs and revenues regionally"
+V06ProfRateDAC(allCy,DACTECH,YTIME)                        "The annual profitability rate of DAC including the lifecycle costs and revenues regionally"
 V06CapFacNewDAC(allCy,YTIME)                               "Factor expressing the annual increase in the installed capacity of DAC regionally"
 V06CapDAC(allCy,YTIME)                                     "DAC regional installed capacity"
 V06ElecDAC(allCy,YTIME)                                    "Annual electricity consumed in DAC regionally"
