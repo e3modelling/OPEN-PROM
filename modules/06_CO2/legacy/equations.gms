@@ -77,15 +77,15 @@ Q06ProfRateDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V06ProfRateDAC(allCy,DACTECH,YTIME)
          =E=
           (sum(NAP$NAPtoALLSBS(NAP,"DAC"),VmCarVal(allCy,NAP,YTIME)) + i06SubsDAC(allCy,DACTECH,YTIME)) / 
-          (i06FixOandMDAC(allCy,DACTECH,YTIME)  + i06SpecElecDAC(allCy,DACTECH,YTIME))
+          (V06CapexFixCostDAC(allCy,DACTECH,YTIME) + i06SpecElecDAC(allCy,DACTECH,YTIME) * VmPriceElecIndResConsu(allCy,"i",YTIME-1) + i06SpecHeatDAC(allCy,DACTECH,YTIME) * VmPriceFuelSubsecCHP(allCy,"IS","NGS",YTIME-1) / 0.85)
 ;
-$ontext
+
 *' The equation estimates the annual increase rate of DAC capacity regionally.
-Q06CapFacNewDAC(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V06CapFacNewDAC(allCy,YTIME)
+Q06CapFacNewDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         V06CapFacNewDAC(allCy,DACTECH,YTIME)
          =E=
           (
-            ((exp(S06MatFacDAC * V06ProfRateDAC(allCy,YTIME) - 1)) /
+            ((exp(S06MatFacDAC * V06ProfRateDAC(allCy,DACTECH,YTIME) - 1)) /
            exp(S06MatFacDAC * S06ProfRateMaxDAC - 1))
           ) *
           (S06CapFacMaxNewDAC - S06CapFacMinNewDAC) +
@@ -93,16 +93,15 @@ Q06CapFacNewDAC(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 ;
 
 *' The equation calculates the DAC installed capacity annually and regionally.
-Q06CapDAC(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V06CapDAC(allCy,YTIME)
+Q06CapDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         V06CapDAC(allCy,DACTECH,YTIME)
          =E=
-          V06CapDAC(allCy,YTIME-1) * (1 + V06CapFacNewDAC(allCy,YTIME))
+          V06CapDAC(allCy,DACTECH,YTIME-1) * (1 + V06CapFacNewDAC(allCy,DACTECH,YTIME))
 ;
 
 *' The equation calculates the electricity consumed by the DAC installed capacity annually and regionally.
-Q06ElecDAC(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V06ElecDAC(allCy,YTIME)
+Q06ElecDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         V06ElecDAC(allCy,DACTECH,YTIME)
          =E=
-          V06CapDAC(allCy,YTIME) * i06SpecElecDAC(allCy,YTIME)
+          V06CapDAC(allCy,DACTECH,YTIME) * i06SpecElecDAC(allCy,DACTECH,YTIME)
 ;
-$offtext

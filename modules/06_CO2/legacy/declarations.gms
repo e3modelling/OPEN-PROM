@@ -8,11 +8,9 @@ Q06CaptCummCO2(allCy,YTIME)	                               "Compute cumulative C
 Q06TrnsWghtLinToExp(allCy,YTIME)	                       "Transtition weight for shifting from linear to exponential CO2 sequestration cost curve"
 Q06CapexFixCostDAC(allCy,DACTECH,YTIME)                    "Calculates the CAPEX and the Fixed Costs of DAC capacity regionally"
 Q06ProfRateDAC(allCy,DACTECH,YTIME)                        "Computes the annual profitability rate of DAC including the lifecycle costs and revenues regionally"
-$ontext
-Q06CapFacNewDAC(allCy,YTIME)                               "Computes the factor expressing the annual increase in the installed capacity of DAC regionally"
-Q06CapDAC(allCy,YTIME)                                     "Computes the DAC installed capacity annually and regionally"
-Q06ElecDAC(allCy,YTIME)                                    "Computes the annual electricity consumed in DAC regionally"
-$offtext
+Q06CapFacNewDAC(allCy,DACTECH,YTIME)                       "Computes the factor expressing the annual increase in the installed capacity of DAC regionally"
+Q06CapDAC(allCy,DACTECH,YTIME)                             "Computes the DAC installed capacity annually and regionally"
+Q06ElecDAC(allCy,DACTECH,YTIME)                                    "Computes the annual electricity consumed in DAC regionally"
 
 *'                **Interdependent Equations**
 Q06CstCO2SeqCsts(allCy,YTIME)	                           "Compute cost curve for CO2 sequestration costs" 
@@ -25,9 +23,9 @@ V06CaptCummCO2(allCy,YTIME)	                               "Cumulative CO2 captu
 V06TrnsWghtLinToExp(allCy,YTIME)	                       "Weight for transtition from linear CO2 sequestration cost curve to exponential (1)"
 V06CapexFixCostDAC(allCy,DACTECH,YTIME)                    "Regional CAPEX and the Fixed Costs of DAC capacity"
 V06ProfRateDAC(allCy,DACTECH,YTIME)                        "The annual profitability rate of DAC including the lifecycle costs and revenues regionally"
-V06CapFacNewDAC(allCy,YTIME)                               "Factor expressing the annual increase in the installed capacity of DAC regionally"
-V06CapDAC(allCy,YTIME)                                     "DAC regional installed capacity"
-V06ElecDAC(allCy,YTIME)                                    "Annual electricity consumed in DAC regionally"
+V06CapFacNewDAC(allCy,DACTECH,YTIME)                       "Factor expressing the annual increase in the installed capacity of DAC regionally"
+V06CapDAC(allCy,DACTECH,YTIME)                             "DAC regional installed capacity"
+V06ElecDAC(allCy,DACTECH,YTIME)                                    "Annual electricity consumed in DAC regionally"
 
 *'                **Interdependent Variables**
 VmCstCO2SeqCsts(allCy,YTIME)	                           "Cost curve for CO2 sequestration costs (US$2015/tn of CO2 sequestrated)"
