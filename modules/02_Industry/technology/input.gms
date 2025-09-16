@@ -19,9 +19,9 @@ i02FixOMCostPerChp(allCy,DSBS,CHP,YTIME)                   "Fixed O&M cost per C
 i02AvailRateChp(allCy,DSBS,CHP)                            "Availability rate of CHP Plants ()"
 i02VarCostChp(allCy,DSBS,CHP,YTIME)                        "Variable (other than fuel) cost per CHP Type (Gross US$2015/KW)"
 i02BoiEffChp(allCy,CHP,YTIME)                              "Boiler efficiency (typical) used in adjusting CHP efficiency ()"
-i02util(allCy,DSBS,ITECH,YTIME)                              "Utilization rate of technologies"
-i02numtechnologiesUsingEF(DSBS,EF)
-i02Share(allCy,DSBS,ITECH,EF,YTIME)  
+i02util(allCy,DSBS,ITECH,YTIME)                            "Utilization rate of technology"
+i02numtechnologiesUsingEF(DSBS,EF)                         "Number of technologues using an energy form"     
+i02Share(allCy,DSBS,ITECH,EF,YTIME)                        "Share of each energy form in a technology"
 ;
 *---
 imTotFinEneDemSubBaseYr(runCy,TRANSE,YTIME)  = sum(EF$SECtoEF(TRANSE,EF), imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME));

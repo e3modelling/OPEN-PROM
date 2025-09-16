@@ -13,7 +13,6 @@
 *' * INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
 *' This equation computes the useful energy demand in each demand subsector (excluding TRANSPORT). This demand is potentially "satisfied" by multiple energy forms/fuels (substitutable demand).
 *' The equation follows the "typical useful energy demand" format where the main explanatory variables are activity indicators and average "weighted" technology costs.
-
 *' OLD EQUATION: Q02DemFinSubFuelSubsec(allCy,DSBS,YTIME) --> NEW EQUATION:Q02DemUsefulSubsec
 *' OLD VARIABLE: VmDemFinSubFuelSubsec(allCy,DSBS,YTIME) --> NEW VARIABLE:VmDemUsefulSubsec
 *' Note: To check which cost should be used... (this VmPriceFuelAvgSub or another cost (weighted average per technology))
@@ -54,11 +53,7 @@ Q02GapUsefulDemSubsec(allCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $runCy(
 
 
 
-*' The equation computes the technology cost, including the lifetime factor, for each technology, and consumer size group
-*' within the specified subsector. This cost estimation plays a crucial role in evaluating the overall expenses associated with adopting and implementing
-*' various technologies in the given subsector and consumer size group. The equation encompasses diverse parameters, such as discount rates, lifetime of 
-*' technologies, capital costs, fixed operation and maintenance costs, fuel prices, annual consumption rates, the number of consumers, the capital goods 
-*' index, and useful energy conversion factors. ONLY CAPITAL COST COMPONENT
+*' The equation computes the capital cost and fixed O&M cost of each technology in each subsector
 *' OLD EQUATION: Q02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME) --> NEW EQUATION:Q02CapCostTech(allCy,DSBS,rCon,EF,YTIME)
 *' OLD VARIABLE: V02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME) --> NEW VARIABLE:V02CapCostTech(allCy,DSBS,rCon,EF,YTIME)
 *' Add parameter sUnitToKUnit = 1000
@@ -73,11 +68,7 @@ Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS))$SECTTECH(
 
 
 
-*' The equation computes the intermediate technology cost, including the lifetime factor, for each technology, energy form, and consumer size group
-*' within the specified subsector. This cost estimation plays a crucial role in evaluating the overall expenses associated with adopting and implementing
-*' various technologies in the given subsector and consumer size group. The equation encompasses diverse parameters, such as discount rates, lifetime of 
-*' technologies, capital costs, fixed operation and maintenance costs, fuel prices, annual consumption rates, the number of consumers, the capital goods 
-*' index, and useful energy conversion factors.
+*' The equation computes the variable cost (variable + fuel) of each technology in each subsector - to check about consumer sizes
 *' OLD EQUATION: Q02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME) --> NEW EQUATION:Q02VarCostTech(allCy,DSBS,rCon,ITECH,YTIME)
 *' OLD VARIABLE: V02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME) --> NEW VARIABLE:V02VarCostTech(allCy,DSBS,rCon,ITECH,YTIME)
 *' NEW SET TECHEF
