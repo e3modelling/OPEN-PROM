@@ -105,3 +105,10 @@ Q06ElecDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          =E=
           V06CapDAC(allCy,DACTECH,YTIME) * i06SpecElecDAC(allCy,DACTECH,YTIME)
 ;
+
+*' The equation calculates the Natural Gas consumed by the DAC installed capacity annually and regionally.
+Q06NGDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         V06NGDAC(allCy,DACTECH,YTIME)
+         =E=
+          V06CapDAC(allCy,DACTECH,YTIME) * i06SpecHeatDAC(allCy,DACTECH,YTIME) / 0.85
+;

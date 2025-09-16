@@ -10,7 +10,8 @@ Q06CapexFixCostDAC(allCy,DACTECH,YTIME)                    "Calculates the CAPEX
 Q06ProfRateDAC(allCy,DACTECH,YTIME)                        "Computes the annual profitability rate of DAC including the lifecycle costs and revenues regionally"
 Q06CapFacNewDAC(allCy,DACTECH,YTIME)                       "Computes the factor expressing the annual increase in the installed capacity of DAC regionally"
 Q06CapDAC(allCy,DACTECH,YTIME)                             "Computes the DAC installed capacity annually and regionally"
-Q06ElecDAC(allCy,DACTECH,YTIME)                                    "Computes the annual electricity consumed in DAC regionally"
+Q06ElecDAC(allCy,DACTECH,YTIME)                            "Computes the annual electricity consumed in DAC regionally"
+Q06NGDAC(allCy,DACTECH,YTIME)                              "Computes the annual Natural Gas consumed in DAC regionally"
 
 *'                **Interdependent Equations**
 Q06CstCO2SeqCsts(allCy,YTIME)	                           "Compute cost curve for CO2 sequestration costs" 
@@ -25,7 +26,8 @@ V06CapexFixCostDAC(allCy,DACTECH,YTIME)                    "Regional CAPEX and t
 V06ProfRateDAC(allCy,DACTECH,YTIME)                        "The annual profitability rate of DAC including the lifecycle costs and revenues regionally"
 V06CapFacNewDAC(allCy,DACTECH,YTIME)                       "Factor expressing the annual increase in the installed capacity of DAC regionally"
 V06CapDAC(allCy,DACTECH,YTIME)                             "DAC regional installed capacity"
-V06ElecDAC(allCy,DACTECH,YTIME)                                    "Annual electricity consumed in DAC regionally"
+V06ElecDAC(allCy,DACTECH,YTIME)                            "Annual electricity consumed in DAC regionally"
+V06NGDAC(allCy,DACTECH,YTIME)                              "Annual Natural Gas consumed in DAC regionally"
 
 *'                **Interdependent Variables**
 VmCstCO2SeqCsts(allCy,YTIME)	                           "Cost curve for CO2 sequestration costs (US$2015/tn of CO2 sequestrated)"

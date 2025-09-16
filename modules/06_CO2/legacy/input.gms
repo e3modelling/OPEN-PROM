@@ -15,7 +15,7 @@ mc_m	1.013
 
 parameter i06CapexDAC(DACTECH)               "CAPEX of each DAC technology ($/tCO2)"
 /
-HTDAC	1490,
+HTDAC	200,
 LTDAC	85,
 EWDAC	400
 / ;
