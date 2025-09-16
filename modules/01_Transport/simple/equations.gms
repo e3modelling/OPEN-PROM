@@ -119,20 +119,23 @@ Q01CostFuel(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runC
           VmPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME)
         ) 
       )$(not PLUGIN(TTECH)) +
-    (
-      sum(EF$(TTECHtoEF(TTECH,EF) $(not sameas("ELC",EF))),
-        (1-i01ShareAnnMilePlugInHybrid(allCy,YTIME)) *
-        V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME) *
-        VmPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME)
-      ) +
-      i01ShareAnnMilePlugInHybrid(allCy,YTIME) *
-      V01ConsSpecificFuel(allCy,TRANSE,TTECH,"ELC",YTIME) *
-      VmPriceFuelSubsecCarVal(allCy,TRANSE,"ELC",YTIME)
-    )$PLUGIN(TTECH)
-    + imVarCostTech(allCy,TRANSE,TTECH,YTIME)
-    + (VmRenValue(YTIME)/1000)$( not RENEF(TTECH)) 
+      (
+        sum(EF$(TTECHtoEF(TTECH,EF) $(not sameas("ELC",EF))),
+          (1-i01ShareAnnMilePlugInHybrid(allCy,YTIME)) *
+          V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME) *
+          VmPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME)
+        ) +
+        i01ShareAnnMilePlugInHybrid(allCy,YTIME) *
+        V01ConsSpecificFuel(allCy,TRANSE,TTECH,"ELC",YTIME) *
+        VmPriceFuelSubsecCarVal(allCy,TRANSE,"ELC",YTIME)
+      )$PLUGIN(TTECH) +
+      imVarCostTech(allCy,TRANSE,TTECH,YTIME) +
+      (VmRenValue(YTIME)/1000)$( not RENEF(TTECH)) 
     ) *
-    V01ActivPassTrnsp(allCy,TRANSE,YTIME) * 1e-3;
+    (
+      1e-3 * V01ActivPassTrnsp(allCy,TRANSE,YTIME)$sameas(TRANSE,"PC") +
+      imAnnCons(allCy,TRANSE,"modal")$(not sameas(TRANSE,"PC"))
+    );
 
 *' This equation calculates the transportation cost per mean and consumer size in kEuro per vehicle. It involves several terms, including capital costs,
 *' variable costs, and fuel costs. The equation considers different technologies and their associated costs, as well as factors like the discount rate,

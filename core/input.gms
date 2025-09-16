@@ -574,7 +574,7 @@ imAnnCons(runCy,'GU','modal')    = 0.706 * imTransChar(runCy,"KM_VEH_TRUCK","%fB
 imAnnCons(runCy,'GU','largest')  = 4 * 0.706 * imTransChar(runCy,"KM_VEH_TRUCK","%fBaseY%") * 1000 * 2 * 10  * 1E-6;
 *---
 imAnnCons(runCy,'PA','smallest') = 40000 * 50 * 1E-6;
-imAnnCons(runCy,'PA','modal')    = 400000 * 100 * 1E-6;
+imAnnCons(runCy,'PA','modal')    = 400000 * 1E-6;
 imAnnCons(runCy,'PA','largest')  = 800000 * 300 * 1E-6;
 *---
 * Size will not play a role in buses, trains, ships and aircraft
@@ -734,6 +734,7 @@ $ondelim
 $include"./iMatrFactorData.csv"
 $offdelim
 ;
+iMatrFactorData(SBS,EF,YTIME)$(TRANS1(SBS) or INDSE1(SBS) or DOMSE1(SBS)) = 1;
 *---
 $IFTHEN.calib %MatFacCalibration% == off
 parameter imMatrFactor(allCy,SBS,EF,YTIME)   "Maturity factor per technology and subsector for all countries (1)";

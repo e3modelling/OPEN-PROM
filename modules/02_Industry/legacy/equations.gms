@@ -33,15 +33,16 @@ Q02ConsElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q02ConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF) $runCy(allCy))..
          VmConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)
                  =E=
-         [
-         (VmLft(allCy,DSBS,EF,YTIME)-1)/VmLft(allCy,DSBS,EF,YTIME)
-         * (VmConsFuelInclHP(allCy,DSBS,EF,YTIME-1) - (VmConsElecNonSubIndTert(allCy,DSBS,YTIME-1)$(ELCEF(EF) $INDDOM(DSBS)) + 0$(not (ELCEF(EF) $INDDOM(DSBS)))))
-         * (imActv(YTIME,allCy,DSBS))**imElastA(allCy,DSBS,"a",YTIME)
-         * (VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME)/VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-1))**imElastA(allCy,DSBS,"b1",YTIME)
-         * (VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-1)/VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-2))**imElastA(allCy,DSBS,"b2",YTIME)
-         * prod(KPDL,
-                 (VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-ord(KPDL))/VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-(ord(KPDL)+1)))**(imElastA(allCy,DSBS,"c",YTIME)*imFPDL(DSBS,KPDL))
-               )  ]$(imActv(YTIME-1,allCy,DSBS));
+        [
+         (VmLft(allCy,DSBS,EF,YTIME)-1) / VmLft(allCy,DSBS,EF,YTIME) *
+         (VmConsFuelInclHP(allCy,DSBS,EF,YTIME-1) - (VmConsElecNonSubIndTert(allCy,DSBS,YTIME-1)$(ELCEF(EF) $INDDOM(DSBS)) + 0$(not (ELCEF(EF) $INDDOM(DSBS))))) *
+         (imActv(YTIME,allCy,DSBS))**imElastA(allCy,DSBS,"a",YTIME) *
+         (VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME)/VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-1))**imElastA(allCy,DSBS,"b1",YTIME) *
+         (VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-1)/VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-2))**imElastA(allCy,DSBS,"b2",YTIME) *
+         prod(KPDL,
+              (VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-ord(KPDL))/VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-(ord(KPDL)+1)))**(imElastA(allCy,DSBS,"c",YTIME)*imFPDL(DSBS,KPDL))
+         )  
+        ]$(imActv(YTIME-1,allCy,DSBS));
 
 *' This equation computes the useful energy demand in each demand subsector (excluding TRANSPORT). This demand is potentially "satisfied" by multiple energy forms/fuels (substitutable demand).
 *' The equation follows the "typical useful energy demand" format where the main explanatory variables are activity indicators and average "weighted" fuel prices.
@@ -103,7 +104,6 @@ Q02IndxElecIndPrices(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)/VmPriceFuelAvgSub(allCy,"OI",YTIME-1)) ** (0.6) *
         (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-2)/VmPriceFuelAvgSub(allCy,"OI",YTIME-2)) ** (0.3) *
         (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-3)/VmPriceFuelAvgSub(allCy,"OI",YTIME-3)) ** (0.1)
-        
         ;
 
 *' The equation computes the electricity production cost per Combined Heat and Power plant for a specific demand sector within a given subsector.
@@ -187,8 +187,11 @@ Q02SortTechVarCost(allCy,DSBS,rCon,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord
 Q02GapFinalDem(allCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $runCy(allCy))..
          V02GapFinalDem(allCy,DSBS,YTIME)
                  =E=
-         (VmDemFinSubFuelSubsec(allCy,DSBS,YTIME) - sum(EF$SECTTECH(DSBS,EF), VmConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME))
-         + SQRT( SQR(VmDemFinSubFuelSubsec(allCy,DSBS,YTIME) - sum(EF$SECTTECH(DSBS,EF), VmConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME))))) /2;
+         (
+          VmDemFinSubFuelSubsec(allCy,DSBS,YTIME) - 
+          sum(EF$SECTTECH(DSBS,EF), VmConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)) +
+          SQRT( SQR(VmDemFinSubFuelSubsec(allCy,DSBS,YTIME) - sum(EF$SECTTECH(DSBS,EF), VmConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME))))
+         ) /2;
 
 *' This equation calculates the technology share in new equipment based on factors such as maturity factor,
 *' cumulative distribution function of consumer size groups, number of consumers, technology cost, distribution function of consumer
@@ -206,7 +209,7 @@ Q02ShareTechNewEquip(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $SECTTECH(DSBS,EF) $(not 
 Q02ConsFuelInclHP(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF) $runCy(allCy))..
          VmConsFuelInclHP(allCy,DSBS,EF,YTIME)
                  =E=
-         VmConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)+
+         VmConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME) +
          (V02ShareTechNewEquip(allCy,DSBS,EF,YTIME)*V02GapFinalDem(allCy,DSBS,YTIME))
          + (VmConsElecNonSubIndTert(allCy,DSBS,YTIME))$(INDDOM(DSBS) and ELCEF(EF));
 
