@@ -20,7 +20,7 @@ Q02DemSubUsefulSubsec(allCy,DSBS,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS))$runCy(al
         V02DemSubUsefulSubsec(allCy,DSBS,YTIME) =E=
         [
         V02DemSubUsefulSubsec(allCy,DSBS,YTIME-1)
-        * (imActv(YTIME,allCy,DSBS)/imActv(YTIME-1,allCy,DSBS) )**imElastA(allCy,DSBS,"a",YTIME)
+        * imActv(YTIME,allCy,DSBS)**imElastA(allCy,DSBS,"a",YTIME)
         * (VmPriceFuelAvgSub(allCy,DSBS,YTIME)/VmPriceFuelAvgSub(allCy,DSBS,YTIME-1) )**imElastA(allCy,DSBS,"b1",YTIME)
         * (VmPriceFuelAvgSub(allCy,DSBS,YTIME-1)/VmPriceFuelAvgSub(allCy,DSBS,YTIME-2) )**imElastA(allCy,DSBS,"b2",YTIME)
         * prod(KPDL,
@@ -111,7 +111,7 @@ Q02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and TIME(YTI
 
 Q02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME) =E=
-         [V02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME-1) * (imActv(YTIME,allCy,INDDOM)/imActv(YTIME-1,allCy,INDDOM)) ** i02ElastNonSubElec(allCy,INDDOM,"a",YTIME)
+         [V02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME-1) * imActv(YTIME,allCy,INDDOM) ** i02ElastNonSubElec(allCy,INDDOM,"a",YTIME)
          * (VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME) / VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-1)) ** i02ElastNonSubElec(allCy,INDDOM,"b1",YTIME)
          * (VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-1) / VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-2)) ** i02ElastNonSubElec(allCy,INDDOM,"b2",YTIME)
          * prod(KPDL,
