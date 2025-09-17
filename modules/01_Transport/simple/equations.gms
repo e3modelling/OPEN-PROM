@@ -10,96 +10,82 @@
 
 *' * Transport
 
-*' This equation calculates the lifetime of passenger cars based on the scrapping rate of passenger cars. The lifetime is inversely proportional to the scrapping rate,
-*' meaning that as the scrapping rate increases, the lifetime of passenger cars decreases.
+*' This equation calculates the lifetime of passenger cars as the inverse of their scrapping rate.
 Q01Lft(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $sameas(DSBS,"PC") $SECTTECH(DSBS,EF) $runCy(allCy))..
-         VmLft(allCy,DSBS,EF,YTIME)
-                 =E=
-         1/V01RateScrPc(allCy,YTIME);
+      VmLft(allCy,DSBS,EF,YTIME)
+              =E=
+      1/V01RateScrPc(allCy,YTIME);
 
 *' This equation calculates the activity for goods transport, considering different types of goods transport such as trucks and other freight transport.
 *' The activity is influenced by factors such as GDP, population, fuel prices, and elasticities. The equation includes terms for trucks and other
 *' freight transport modes.
 Q01ActivGoodsTransp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANG(TRANSE) $runCy(allCy))..
-         V01ActivGoodsTransp(allCy,TRANSE,YTIME)
-                 =E=
-         (
-          V01ActivGoodsTransp(allCy,TRANSE,YTIME-1)
-           * [i01GDPperCapita(YTIME,allCy)/i01GDPperCapita(YTIME-1,allCy)]**0.5 !!imElastA(allCy,TRANSE,"a",YTIME)
-           * (i01Pop(YTIME,allCy)/i01Pop(YTIME-1,allCy)) ** 1
-           * (VmPriceFuelAvgSub(allCy,TRANSE,YTIME)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1))**imElastA(allCy,TRANSE,"c1",YTIME)
-           * (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2))**imElastA(allCy,TRANSE,"c2",YTIME)
-           * prod(kpdl,
-                  [(VmPriceFuelAvgSub(allCy,TRANSE,YTIME-ord(kpdl))/
-                    VmPriceFuelAvgSub(allCy,TRANSE,YTIME-(ord(kpdl)+1)))/
-                    (imCGI(allCy,YTIME)**(1/6))]**(imElastA(allCy,TRANSE,"c3",YTIME)*imFPDL(TRANSE,KPDL))
-                 )
-         )$sameas(TRANSE,"GU") +      !!trucks
-         (
-            V01ActivGoodsTransp(allCy,TRANSE,YTIME-1) *
-            [i01GDPperCapita(YTIME,allCy) / i01GDPperCapita(YTIME-1,allCy)]**imElastA(allCy,TRANSE,"a",YTIME) *
-            (VmPriceFuelAvgSub(allCy,TRANSE,YTIME) / VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1))**imElastA(allCy,TRANSE,"c1",YTIME) *
-            (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2))**imElastA(allCy,TRANSE,"c2",YTIME) *
-            prod(kpdl,
-              [
-                (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-ord(kpdl)) / VmPriceFuelAvgSub(allCy,TRANSE,YTIME-(ord(kpdl)+1))) /
-                (imCGI(allCy,YTIME)**(1/6))
-              ]**(imElastA(allCy,TRANSE,"c3",YTIME)*imFPDL(TRANSE,KPDL))
-            ) *
-            (
-              (V01ActivGoodsTransp(allCy,"GU",YTIME) + 1e-6) / 
-              (V01ActivGoodsTransp(allCy,"GU",YTIME-1) + 1e-6)
-            )**imElastA(allCy,TRANSE,"c4",YTIME)
-          )$(not sameas(TRANSE,"GU"));        !!other freight transport
+      V01ActivGoodsTransp(allCy,TRANSE,YTIME)
+              =E=
+      (
+      V01ActivGoodsTransp(allCy,TRANSE,YTIME-1)
+        * [i01GDPperCapita(YTIME,allCy)/i01GDPperCapita(YTIME-1,allCy)]**0.5 !!imElastA(allCy,TRANSE,"a",YTIME)
+        * (i01Pop(YTIME,allCy)/i01Pop(YTIME-1,allCy)) ** 1
+        * (VmPriceFuelAvgSub(allCy,TRANSE,YTIME)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1))**imElastA(allCy,TRANSE,"c1",YTIME)
+        * (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2))**imElastA(allCy,TRANSE,"c2",YTIME)
+        * prod(kpdl,
+              [(VmPriceFuelAvgSub(allCy,TRANSE,YTIME-ord(kpdl))/
+                VmPriceFuelAvgSub(allCy,TRANSE,YTIME-(ord(kpdl)+1)))/
+                (imCGI(allCy,YTIME)**(1/6))]**(imElastA(allCy,TRANSE,"c3",YTIME)*imFPDL(TRANSE,KPDL))
+          )
+      )$sameas(TRANSE,"GU") +      !!trucks
+      (
+        V01ActivGoodsTransp(allCy,TRANSE,YTIME-1) *
+        [i01GDPperCapita(YTIME,allCy) / i01GDPperCapita(YTIME-1,allCy)]**imElastA(allCy,TRANSE,"a",YTIME) *
+        (VmPriceFuelAvgSub(allCy,TRANSE,YTIME) / VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1))**imElastA(allCy,TRANSE,"c1",YTIME) *
+        (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2))**imElastA(allCy,TRANSE,"c2",YTIME) *
+        prod(kpdl,
+          [
+            (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-ord(kpdl)) / VmPriceFuelAvgSub(allCy,TRANSE,YTIME-(ord(kpdl)+1))) /
+            (imCGI(allCy,YTIME)**(1/6))
+          ]**(imElastA(allCy,TRANSE,"c3",YTIME)*imFPDL(TRANSE,KPDL))
+        ) *
+        (
+          (V01ActivGoodsTransp(allCy,"GU",YTIME) + 1e-6) / 
+          (V01ActivGoodsTransp(allCy,"GU",YTIME-1) + 1e-6)
+        )**imElastA(allCy,TRANSE,"c4",YTIME)
+      )$(not sameas(TRANSE,"GU"));        !!other freight transport
 
 *' This equation calculates the gap in transport activity, which represents the activity that needs to be filled by new technologies.
 *' The gap is calculated separately for passenger cars, other passenger transportation modes, and goods transport. The equation involves
 *' various terms, including the new registrations of passenger cars, the activity of passenger and goods transport, and considerations for
 *' different types of transportation modes.
 Q01GapTranspActiv(allCy,TRANSE,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V01GapTranspActiv(allCy,TRANSE,YTIME)
-                 =E=
-         V01NewRegPcYearly(allCy,YTIME)$sameas(TRANSE,"PC") +
-         (
-          ( 
-            [
-              V01ActivPassTrnsp(allCy,TRANSE,YTIME) - 
-              V01ActivPassTrnsp(allCy,TRANSE,YTIME-1) + 
-              V01ActivPassTrnsp(allCy,TRANSE,YTIME-1) /
-              (sum((TTECH)$SECTTECH(TRANSE,TTECH), VmLft(allCy,TRANSE,TTECH,YTIME-1)) / TECHS(TRANSE))
-            ] +
-            SQRT( SQR([V01ActivPassTrnsp(allCy,TRANSE,YTIME) - V01ActivPassTrnsp(allCy,TRANSE,YTIME-1) + V01ActivPassTrnsp(allCy,TRANSE,YTIME-1)/
-            (sum((TTECH)$SECTTECH(TRANSE,TTECH),VmLft(allCy,TRANSE,TTECH,YTIME-1))/TECHS(TRANSE))]) + SQR(1e-4) ) 
-          )/2
-         )$(TRANP(TRANSE) $(not sameas(TRANSE,"PC"))) +
-         (
-          ( 
-            [
-              V01ActivGoodsTransp(allCy,TRANSE,YTIME) - 
-              V01ActivGoodsTransp(allCy,TRANSE,YTIME-1) + 
-              V01ActivGoodsTransp(allCy,TRANSE,YTIME-1) /
-              (sum(EF$SECTTECH(TRANSE,EF),VmLft(allCy,TRANSE,EF,YTIME-1))/TECHS(TRANSE))
-            ] + 
-            SQRT( SQR([V01ActivGoodsTransp(allCy,TRANSE,YTIME) - V01ActivGoodsTransp(allCy,TRANSE,YTIME-1) + V01ActivGoodsTransp(allCy,TRANSE,YTIME-1)/
-            (sum((EF)$SECTTECH(TRANSE,EF),VmLft(allCy,TRANSE,EF,YTIME-1))/TECHS(TRANSE))]) + SQR(1e-4) ) 
-          )/2
-         )$TRANG(TRANSE);
+    V01GapTranspActiv(allCy,TRANSE,YTIME)
+            =E=
+    V01NewRegPcYearly(allCy,YTIME)$sameas(TRANSE,"PC") +
+    (
+      ( 
+        [
+          V01ActivPassTrnsp(allCy,TRANSE,YTIME) - 
+          V01ActivPassTrnsp(allCy,TRANSE,YTIME-1) + 
+          V01ActivPassTrnsp(allCy,TRANSE,YTIME-1) /
+          (sum((TTECH)$SECTTECH(TRANSE,TTECH), VmLft(allCy,TRANSE,TTECH,YTIME-1)) / TECHS(TRANSE))
+        ] +
+        SQRT( SQR([V01ActivPassTrnsp(allCy,TRANSE,YTIME) - V01ActivPassTrnsp(allCy,TRANSE,YTIME-1) + V01ActivPassTrnsp(allCy,TRANSE,YTIME-1)/
+        (sum((TTECH)$SECTTECH(TRANSE,TTECH),VmLft(allCy,TRANSE,TTECH,YTIME-1))/TECHS(TRANSE))]) + SQR(1e-4) ) 
+      )/2
+    )$(TRANP(TRANSE) $(not sameas(TRANSE,"PC"))) +
+    (
+      ( 
+        [
+          V01ActivGoodsTransp(allCy,TRANSE,YTIME) - 
+          V01ActivGoodsTransp(allCy,TRANSE,YTIME-1) + 
+          V01ActivGoodsTransp(allCy,TRANSE,YTIME-1) /
+          (sum(EF$SECTTECH(TRANSE,EF),VmLft(allCy,TRANSE,EF,YTIME-1))/TECHS(TRANSE))
+        ] + 
+        SQRT( SQR([V01ActivGoodsTransp(allCy,TRANSE,YTIME) - V01ActivGoodsTransp(allCy,TRANSE,YTIME-1) + V01ActivGoodsTransp(allCy,TRANSE,YTIME-1)/
+        (sum((EF)$SECTTECH(TRANSE,EF),VmLft(allCy,TRANSE,EF,YTIME-1))/TECHS(TRANSE))]) + SQR(1e-4) ) 
+      )/2
+    )$TRANG(TRANSE);
 
-$ontext
-*' This equation calculates the specific fuel consumption for a given technology, subsector, energy form, and time. The specific fuel consumption depends on various factors,
-*' including fuel prices and elasticities. The equation involves a product term over a set of Polynomial Distribution Lags and considers the elasticity of fuel prices.
-Q01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,EF) $TTECHtoEF(TTECH,EF) $runCy(allCy))..
-        V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)
-                 =E=
-        V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME-1) * 
-        prod(KPDL,
-          (
-            VmPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME-ord(KPDL)) /
-            VmPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME-(ord(KPDL)+1))
-          )**(imElastA(allCy,TRANSE,"c5",YTIME)*imFPDL(TRANSE,KPDL))
-        );
-$offtext
-
+*' This equation computes the annualized capital cost of new transport technologies by converting upfront investment costs 
+*' into equivalent annual payments. It applies the annuity factor to spread the capital cost over the technology’s lifetime.
 Q01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runCy(allCy))..
     V01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)
           =E=
@@ -109,6 +95,21 @@ Q01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTE
       (exp(imDisc(allCy,TRANSE,YTIME)*VmLft(allCy,TRANSE,TTECH,YTIME)) - 1)
     ) * imCapCostTech(allCy,TRANSE,TTECH,YTIME) * imCGI(allCy,YTIME);
 
+* -----------------------------------------------------------------------------
+* Q01CostFuel: Calculates the total fuel cost for transport technologies.
+* 
+* This equation includes:
+* - Specific Fuel consumption multiplied by fuel prices for each fuel type (EF).
+* - Special handling for plug-in hybrid technologies:
+*     - Non-electric portion weighted by (1 - share of electric mileage).
+*     - Electric portion weighted by share of electric mileage.
+* - Additional variable costs specific to the technology.
+* - Renewable value adjustment for non-renewable technologies.
+* 
+* The total cost is scaled by:
+* - Transport activity (in 1000 vehicle-km) for passenger cars.
+* - Annual consumption (Gpkm/Gtkm per transport unit) for other transport modes.
+* -----------------------------------------------------------------------------
 Q01CostFuel(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runCy(allCy))..
     V01CostFuel(allCy,TRANSE,TTECH,YTIME)
         =E=
@@ -137,9 +138,19 @@ Q01CostFuel(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runC
       imAnnCons(allCy,TRANSE,"modal")$(not sameas(TRANSE,"PC"))
     );
 
-*' This equation calculates the transportation cost per mean and consumer size in kEuro per vehicle. It involves several terms, including capital costs,
-*' variable costs, and fuel costs. The equation considers different technologies and their associated costs, as well as factors like the discount rate,
-*' specific fuel consumption, and annual .
+* -----------------------------------------------------------------------------
+* Q01CostTranspPerMeanConsSize: Calculates the total cost per transport unit.
+*
+* This equation sums up the following cost components for each transport 
+* technology and year:
+* - Annualized capital cost (V01CapCostAnnualized)
+* - Fixed operation and maintenance cost (imFixOMCostTech)
+* - Fuel cost (V01CostFuel)
+*
+* The result represents the total cost per mean consumption size:
+* - In k$US2015 per vehicle for passenger cars
+* - In k$US2015 per Gpkm or Gtkm for other transport modes
+* -----------------------------------------------------------------------------
 Q01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME)$SECTTECH(TRANSE,TTECH) $runCy(allCy))..
       V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME)
           =E=
@@ -147,9 +158,16 @@ Q01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME)$SECTTECH(TRA
       imFixOMCostTech(allCy,TRANSE,TTECH,YTIME) +
       V01CostFuel(allCy,TRANSE,TTECH,YTIME);
 
-*' This equation calculates the share of each technology in the total sectoral use. It takes into account factors such as the maturity factor,
-*' cumulative distribution function of consumer size groups, transportation cost per mean and consumer size, distribution function of consumer
-*' size groups, and technology sorting based on variable cost. The result is a dimensionless value representing the share of each technology in the total sectoral use.
+* -------------------------------------------------------------------------------
+* Q01ShareTechTr: Calculates the share of each transport technology in total sectoral use.
+*
+* Key components:
+* - imMatrFactor: Maturity factor of the technology, representing readiness or adoption potential.
+* - V01CostTranspPerMeanConsSize: Transportation cost per mean consumer size, reflecting cost efficiency.
+*
+* Result:
+* - V01ShareTechTr: Dimensionless value representing the share of each technology in total sectoral use.
+* -------------------------------------------------------------------------------
 Q01ShareTechTr(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runCy(allCy))..
         V01ShareTechTr(allCy,TRANSE,TTECH,YTIME)
             =E=
@@ -210,19 +228,12 @@ Q01DemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,E
             =E=
     sum((TTECH)$(SECTTECH(TRANSE,TTECH) $TTECHtoEF(TTECH,EF) ), V01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME));
 
-*' This equation calculates the final energy demand in different transport subsectors by summing up the final energy demand for each energy form within
-*' each transport subsector. The result is expressed in million tonnes of oil equivalent.
-$ontext
-q01DemFinEneSubTransp(allCy,TRANSE,YTIME)$(TIME(YTIME) $runCy(allCy))..
-         v01DemFinEneSubTransp(allCy,TRANSE,YTIME)
-                 =E=
-         sum(EF,VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME));
-$offtext
-
-*' This equation computes the total stock of passenger cars (in millions).
-*' The stock evolves from the previous year's level, adjusted by:
-*' - A saturation function that limits market expansion based on GDP per capita and ownership levels,
-*' - Annual population size (to scale per-capita changes to total stock).
+* -----------------------------------------------------------------------------
+* Q01StockPcYearly: Computes the total stock of passenger cars (in millions).
+*
+* This equation estimates the yearly stock of passenger cars for each country 
+* and year by applying a per-capita ownership level to the total population.
+* -----------------------------------------------------------------------------
 Q01StockPcYearly(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       V01StockPcYearly(allCy,YTIME)
             =E=
@@ -303,10 +314,10 @@ Q01NumPcScrap(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' reflecting economic and demographic factors. The scrapping rate from the previous year is also considered, allowing for a dynamic estimation of the passenger
 *' cars scrapping rate over time.
 Q01RateScrPc(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-        V01RateScrPc(allCy,YTIME)
-            =E=
-        V01RateScrPc(allCy,YTIME-1) *
-        (
-          i01GDPperCapita(YTIME,allCy) / 
-          i01GDPperCapita(YTIME-1,allCy)
-        ) ** 0.1;
+    V01RateScrPc(allCy,YTIME)
+        =E=
+    V01RateScrPc(allCy,YTIME-1) *
+    (
+      i01GDPperCapita(YTIME,allCy) /
+      i01GDPperCapita(YTIME-1,allCy)
+    ) ** 0.1;

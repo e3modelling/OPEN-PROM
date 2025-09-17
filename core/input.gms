@@ -523,21 +523,19 @@ imDataNonEneSec(NENSE,EF,"VC") = imDataNonEneSec(NENSE,EF,"VC") * 1.3;
 *---
 * FIXME: check if country-specific data is needed; move to mrprom
 * author=giannou
-table iIndCharData(allCy,INDSE,Indu_Scon_Set)         "Industry sector charactetistics (various)"
-         BASE           SHR_NSE   SH_HPELC
-ELL.IS   0.4397         0.7       0.00001
-ELL.NF   0              0.95      0.00001
-ELL.CH   0.1422         0.95      0.00001
-ELL.BM   2.1062         0.95      0.00001
-ELL.PP   0              0.95      0.00001
-ELL.FD   0.6641         0.95      0.00001
-ELL.TX   0.0638         0.95      0.00001
-ELL.EN   1.6664         0.95      0.00001
-ELL.OE   0.00000001     0.95      0.00001
-ELL.OI   1.5161         0.95      0.00001
+table iIndCharData(INDSE,Indu_Scon_Set)         "Industry sector charactetistics (various)"
+     BASE           SHR_NSE   SH_HPELC
+IS   0.4397         0.7       0.00001
+NF   0              0.85      0.00001
+CH   0.1422         0.95      0.00001
+BM   2.1062         0.95      0.00001
+PP   0              0.95      0.00001
+FD   0.6641         0.9       0.00001
+TX   0.0638         0.9       0.00001
+EN   1.6664         0.95      0.00001
+OE   0.00000001     0.95      0.00001
+OI   1.5161         0.9       0.00001
 ;
-*---
-iIndChar(runCy,INDSE,Indu_Scon_Set) = iIndCharData("ELL",INDSE,Indu_Scon_Set);
 *---
 table iInitConsSubAndInitShaNonSubElec(DOMSE,Indu_Scon_Set)      "Initial Consumption per Subsector and Initial Shares of Non Substitutable Electricity in Total Electricity Demand (Mtoe)"
      BASE   SHR_NSE SH_HPELC
@@ -546,7 +544,7 @@ HOU  11.511 0.9     0.00001
 AG   0.2078 0.9     0.00001
 ;
 *---
-iShrHeatPumpElecCons(runCy,INDSE) = iIndChar(runCy,INDSE,"SH_HPELC");
+iShrHeatPumpElecCons(runCy,INDSE) = iIndCharData(INDSE,"SH_HPELC");
 iShrHeatPumpElecCons(runCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(DOMSE,"SH_HPELC");
 *---
 imFuelExprts(runCy,EFS,YTIME) = iSuppExports(runCy,EFS,YTIME);
@@ -748,7 +746,7 @@ imMatrFactor.UP(runCy,SBS,EF,YTIME) = 100;
 $ENDIF.calib
 *---
 ** Industry
-imShrNonSubElecInTotElecDem(runCy,INDSE)  = iIndChar(runCy,INDSE,"SHR_NSE");
+imShrNonSubElecInTotElecDem(runCy,INDSE)  = iIndCharData(INDSE,"SHR_NSE");
 imShrNonSubElecInTotElecDem(runCy,INDSE)$(imShrNonSubElecInTotElecDem(runCy,INDSE)>0.98) = 0.98;
 **Domestic - Tertiary
 imShrNonSubElecInTotElecDem(runCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(DOMSE,"SHR_NSE");

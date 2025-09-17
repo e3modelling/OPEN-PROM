@@ -292,7 +292,7 @@ INDSE(DSBS)       Industrial SubSectors         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI/
 DOMSE(DSBS)       Tertiary SubSectors           /SE,AG,HOU/
 INDSE1(SBS)       Industrial SubSectors         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI/
 DOMSE1(SBS)       Tertiary SubSectors           /SE,AG,HOU/
-HOU(DSBS)         Households                     /HOU/
+HOU(DSBS)         Households                    /HOU/
 
 NENSE(DSBS)       Non Energy and Bunkers        /PCH,NEN,BU/
 NENSE1(SBS)       Non Energy and Bunkers        /PCH,NEN,BU/

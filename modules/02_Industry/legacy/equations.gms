@@ -14,17 +14,20 @@
 *' The main explanatory variables are activity indicators of each subsector and electricity prices per subsector. Corresponding elasticities are applied for activity indicators
 *' and electricity prices.
 Q02ConsElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VmConsElecNonSubIndTert(allCy,INDDOM,YTIME)
-                 =E=
-         [
-         VmConsElecNonSubIndTert(allCy,INDDOM,YTIME-1) * ( imActv(YTIME,allCy,INDDOM) )**
-         i02ElastNonSubElec(allCy,INDDOM,"a",YTIME)
-         * ( VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME)/VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-1) )**i02ElastNonSubElec(allCy,INDDOM,"b1",YTIME)
-         * ( VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-1)/VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-2) )**i02ElastNonSubElec(allCy,INDDOM,"b2",YTIME)
-         * prod(KPDL,
-                  ( VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-ord(KPDL))/VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-(ord(KPDL)+1))
-                  )**( i02ElastNonSubElec(allCy,INDDOM,"c",YTIME)*imFPDL(INDDOM,KPDL))
-                )      ]$imActv(YTIME-1,allCy,INDDOM)+0;
+    VmConsElecNonSubIndTert(allCy,INDDOM,YTIME)
+              =E=
+    [
+      VmConsElecNonSubIndTert(allCy,INDDOM,YTIME-1) * 
+      imActv(YTIME,allCy,INDDOM) ** i02ElastNonSubElec(allCy,INDDOM,"a",YTIME) *
+      (VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME) / VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-1))**i02ElastNonSubElec(allCy,INDDOM,"b1",YTIME) *
+      (VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-1) / VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-2))**i02ElastNonSubElec(allCy,INDDOM,"b2",YTIME) *
+      prod(KPDL,
+        (
+          VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-ord(KPDL)) /
+          VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-(ord(KPDL)+1))
+        )**(i02ElastNonSubElec(allCy,INDDOM,"c",YTIME)*imFPDL(INDDOM,KPDL))
+      )      
+    ]$imActv(YTIME-1,allCy,INDDOM)+0;
 
 *' This equation determines the consumption of the remaining substitutable equipment of each energy form per each demand subsector (excluding TRANSPORT).
 *' The "remaining" equipment is computed based on the past value of consumption (energy form, subsector) and the lifetime of the technology (energy form) for each subsector.  
@@ -40,7 +43,10 @@ Q02ConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $
          (VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME)/VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-1))**imElastA(allCy,DSBS,"b1",YTIME) *
          (VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-1)/VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-2))**imElastA(allCy,DSBS,"b2",YTIME) *
          prod(KPDL,
-              (VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-ord(KPDL))/VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-(ord(KPDL)+1)))**(imElastA(allCy,DSBS,"c",YTIME)*imFPDL(DSBS,KPDL))
+              (
+                VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-ord(KPDL)) /
+                VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-(ord(KPDL)+1))
+              )**(imElastA(allCy,DSBS,"c",YTIME)*imFPDL(DSBS,KPDL))
          )  
         ]$(imActv(YTIME-1,allCy,DSBS));
 
