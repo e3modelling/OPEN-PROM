@@ -192,7 +192,8 @@ Q03InpTotTransf(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                  =E=
         (
             VmInpTransfTherm(allCy,EFS,YTIME) + VmTransfInputDHPlants(allCy,EFS,YTIME) + V03InpTransfNuclear(allCy,EFS,YTIME) +
-             V03InputTransfRef(allCy,EFS,YTIME) + sum(EF$(H2PRODEF(EF) and EFtoEFS(EF,EFS)),VmConsFuelH2Prod(allCy,EF,YTIME))
+             V03InputTransfRef(allCy,EFS,YTIME) + sum(EF$(H2PRODEF(EF) and EFtoEFS(EF,EFS)),VmConsFuelH2Prod(allCy,EF,YTIME)) +
+             sum(EF$(DACTECHEF(EF) and EFtoEFS(EF,EFS)),VmConsFuelDACProd(allCy,EF,YTIME))
         )$(not sameas(EFS,"OGS"))
         +
         (
@@ -343,5 +344,9 @@ Q03ConsFiEneSec(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
            + 
            (
               sum(EF$(H2PRODEF(EF) and EFtoEFS(EF,EFS)),VmConsFuelH2Prod(allCy,EF,YTIME))
+           )$TOCTEF(EFS)
+           +
+           (
+            sum(EF$(DACTECHEF(EF) and EFtoEFS(EF,EFS)),VmConsFuelDACProd(allCy,EF,YTIME))
            )$TOCTEF(EFS)
          ;                                 

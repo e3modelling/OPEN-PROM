@@ -15,15 +15,15 @@ mc_m	1.013
 
 parameter i06CapexDAC(DACTECH)               "CAPEX of each DAC technology ($/tCO2)"
 /
-HTDAC	200,
-LTDAC	85,
+HTDAC	150,
+LTDAC	670,
 EWDAC	400
 / ;
 
 parameter i06FixCostDAC(DACTECH)             "Fixed and O&M costs of each DAC technology ($/tCO2)"
 /
-HTDAC	160,
-LTDAC	51,
+HTDAC	55,
+LTDAC	180,
 EWDAC	600
 / ;
 
@@ -43,14 +43,14 @@ EWDAC	0.01
 
 parameter i06ElNeedsDAC(DACTECH)               "Specific electricity needs of DAC technologies (MWh/tCO2)"
 /
-HTDAC	0.416667,
-LTDAC	2.7,
+HTDAC	0.3666666667,
+LTDAC	0.275,
 EWDAC	3
 / ;
 
 parameter i06HeatNeedsDAC(DACTECH)               "Specific heat needs of DAC technologies (MWh/tCO2)"
 /
-HTDAC	2.2222,
+HTDAC	1.4722222222,
 LTDAC	0,
 EWDAC	0
 / ;
@@ -58,8 +58,8 @@ EWDAC	0
 *---
 Parameters
 i06ElastCO2Seq(allCy,CO2SEQELAST)	       "Elasticities for CO2 sequestration cost curve (1)"
-i06GrossCapDAC(allCy,DACTECH,YTIME)	       "CAPEX of each DAC technology ($/tCO2)"
-i06FixOandMDAC(allCy,DACTECH,YTIME)        "Fixed and O&M costs of each DAC technology ($/tCO2)"
+i06GrossCapDAC(allCy,DACTECH)	           "CAPEX of each DAC technology ($/tCO2)"
+i06FixOandMDAC(allCy,DACTECH)              "Fixed and O&M costs of each DAC technology ($/tCO2)"
 i06LftDAC(allCy,DACTECH,YTIME)             "Lifetime of each DAC technology (years)"
 i06SubsDAC(allCy,DACTECH,YTIME)            "State subsidy for the carbon captured ($/tCO2)"
 i06SpecElecDAC(allCy,DACTECH,YTIME)        "Specific electricity needs of DAC technologies (MWh/tCO2)"
@@ -68,9 +68,9 @@ i06SpecHeatDAC(allCy,DACTECH,YTIME)        "Specific heat needs of DAC technolog
 *---
 i06ElastCO2Seq(runCy,CO2SEQELAST) = i06CO2SeqData(CO2SEQELAST);
 *---
-i06GrossCapDAC(runCy,DACTECH,YTIME) = i06CapexDAC(DACTECH);
+i06GrossCapDAC(runCy,DACTECH) = i06CapexDAC(DACTECH);
 *---
-i06FixOandMDAC(runCy,DACTECH,YTIME) = i06FixCostDAC(DACTECH);
+i06FixOandMDAC(runCy,DACTECH) = i06FixCostDAC(DACTECH);
 *---
 i06LftDAC(runCy,DACTECH,YTIME) = i06LftExpDAC(DACTECH);
 *---

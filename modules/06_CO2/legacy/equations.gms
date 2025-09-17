@@ -24,7 +24,12 @@ Q06CapCO2ElecHydr(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                 + 
          (sum(EF, sum(H2TECH$H2TECHEFtoEF(H2TECH,EF),
                VmConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)*imCo2EmiFac(allCy,"H2P",EF,YTIME)*i05CaptRateH2Prod(allCy,H2TECH,YTIME)))
-          )  ;    !! CO2 emissions captured by plants producing hydrogen
+          ) !! CO2 emissions captured by plants producing hydrogen
+                +
+            (
+              sum(DACTECH,V06CapDAC(allCy,DACTECH,YTIME)) / 1e6
+            )
+          ;   
 
 
 *' The equation calculates the cumulative CO2 captured in million tons of CO2 for a given scenario and year.
@@ -58,17 +63,25 @@ Q06CstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
        (1-V06TrnsWghtLinToExp(allCy,YTIME))*(i06ElastCO2Seq(allCy,"mc_a")*V06CaptCummCO2(allCy,YTIME)+i06ElastCO2Seq(allCy,"mc_b"))+
        V06TrnsWghtLinToExp(allCy,YTIME)*(i06ElastCO2Seq(allCy,"mc_c")*exp(i06ElastCO2Seq(allCy,"mc_d")*V06CaptCummCO2(allCy,YTIME)));           
 
+
+Q06GrossCapDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         V06GrossCapDAC(allCy,DACTECH,YTIME)
+                  =E=         
+          i06GrossCapDAC(allCy,DACTECH) * V06CapDAC(allCy,DACTECH,YTIME-1) ** (log(0.7)/log(2))
+;
+
+Q06FixOandMDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         V06FixOandMDAC(allCy,DACTECH,YTIME)
+                  =E=         
+          i06FixOandMDAC(allCy,DACTECH) * V06CapDAC(allCy,DACTECH,YTIME-1) ** (log(0.7)/log(2))
+;
+
 *' The equation calculates the CAPEX and the Fixed Costs of DAC capacity, also taking into account its discount rate and life expectancy, 
 *' for each region (country) and year.
 Q06CapexFixCostDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V06CapexFixCostDAC(allCy,DACTECH,YTIME)
                   =E=         
-          (
-            imDisc(allCy,"DAC",YTIME) * exp(imDisc(allCy,"H2P",YTIME) * i06LftDAC(allCy,DACTECH,YTIME))
-            / (exp(imDisc(allCy,"DAC",YTIME) * i06LftDAC(allCy,DACTECH,YTIME)) -1)
-          )
-          * i06GrossCapDAC(allCy,DACTECH,YTIME) * 1000 * imCGI(allCy,YTIME)
-          + i06FixOandMDAC(allCy,DACTECH,YTIME)
+          V06GrossCapDAC(allCy,DACTECH,YTIME) + V06FixOandMDAC(allCy,DACTECH,YTIME)
 ;
 
 *' The equation estimates the profitability of DAC capacity, calculating the rate between levelized costs (CAPEX, fixed and electricity needs)
@@ -77,7 +90,7 @@ Q06ProfRateDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V06ProfRateDAC(allCy,DACTECH,YTIME)
          =E=
           (sum(NAP$NAPtoALLSBS(NAP,"DAC"),VmCarVal(allCy,NAP,YTIME)) + i06SubsDAC(allCy,DACTECH,YTIME)) / 
-          (V06CapexFixCostDAC(allCy,DACTECH,YTIME) + VmCstCO2SeqCsts(allCy,YTIME) + i06SpecElecDAC(allCy,DACTECH,YTIME) * VmPriceElecIndResConsu(allCy,"i",YTIME-1) + i06SpecHeatDAC(allCy,DACTECH,YTIME) * VmPriceFuelSubsecCHP(allCy,"IS","NGS",YTIME-1) / 0.85)
+          (V06CapexFixCostDAC(allCy,DACTECH,YTIME) + VmCstCO2SeqCsts(allCy,YTIME-1) + i06SpecElecDAC(allCy,DACTECH,YTIME) * VmPriceElecIndResConsu(allCy,"i",YTIME-1) + i06SpecHeatDAC(allCy,DACTECH,YTIME) * VmPriceFuelSubsecCHP(allCy,"IS","NGS",YTIME-1) / 0.85)
 ;
 
 *' The equation estimates the annual increase rate of DAC capacity regionally.
@@ -99,16 +112,34 @@ Q06CapDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
           V06CapDAC(allCy,DACTECH,YTIME-1) * (1 + V06CapFacNewDAC(allCy,DACTECH,YTIME))
 ;
 
-*' The equation calculates the electricity consumed by the DAC installed capacity annually and regionally.
+*' The equation calculates the electricity consumed by the DAC installed capacity annually and regionally (MWh).
 Q06ElecDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V06ElecDAC(allCy,DACTECH,YTIME)
          =E=
           V06CapDAC(allCy,DACTECH,YTIME) * i06SpecElecDAC(allCy,DACTECH,YTIME)
 ;
 
-*' The equation calculates the Natural Gas consumed by the DAC installed capacity annually and regionally.
+*' The equation calculates the Natural Gas consumed by the DAC installed capacity annually and regionally (MWh).
 Q06NGDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V06NGDAC(allCy,DACTECH,YTIME)
          =E=
           V06CapDAC(allCy,DACTECH,YTIME) * i06SpecHeatDAC(allCy,DACTECH,YTIME) / 0.85
+;
+
+*' The equation calculates the fuels consumed by the DAC installed capacity annually and regionally.
+Q06ConsFuelTechDACProd(allCy,DACTECH,EF,YTIME)$(TIME(YTIME) $DACTECHEF(EF) $(runCy(allCy)))..
+         VmConsFuelTechDACProd(allCy,DACTECH,EF,YTIME)
+         =E=
+         (
+          V06NGDAC(allCy,DACTECH,YTIME)$(sameas(EF, 'ngs'))
+         + V06ElecDAC(allCy,DACTECH,YTIME)$(sameas(EF, 'elc'))
+         )
+         / 1e6
+         * smTWhToMtoe
+;
+
+Q06ConsFuelDACProd(allCy,EF,YTIME)$(TIME(YTIME) $DACTECHEF(EF) $(runCy(allCy)))..
+         VmConsFuelDACProd(allCy,EF,YTIME)
+         =E=
+         sum(DACTECH$DACTECHEFtoEF(DACTECH,EF),VmConsFuelTechDACProd(allCy,DACTECH,EF,YTIME))
 ;
