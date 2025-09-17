@@ -140,32 +140,32 @@ $offdelim
 ;
 *---
 parameter i01InitSpecFuelConsData(TRANSE,TTECH,EF)      "Initial Specific fuel consumption (toe/vkm)" /
-PT.GDO.GDO	18.6313
-PT.MET.MET	12.6
-PT.H2F.H2F	8.9
-PT.ELC.ELC	2.73638
-PA.H2F.H2F	21.7
-GU.LPG.LPG	54.1073
-GU.GSL.GSL	60.1192
-GU.GDO.GDO	45.0894
-GU.NGS.NGS	66
-GU.MET.MET	56.2
-GU.ETH.ETH	80
-GU.BGDO.BGDO	45.0894
-GU.H2F.H2F	13.5268
-GU.ELC.ELC	27.0536
-GU.PHEVGSL.GSL	34.4
-GU.PHEVGSL.ELC	21.8
-GU.PHEVGDO.GDO	27.0536
-GU.PHEVGDO.ELC	21.8
-GU.CHEVGDO.GDO	21.8
-GT.GDO.GDO	33.629
-GT.MET.MET	78
-GT.H2F.H2F	92
-GT.ELC.ELC	11.5245
-GN.GSL.GSL	22.8
-GN.GDO.GDO	15.2
-GN.H2F.H2F	8.14286
+PT.TGDO.GDO	18.6313
+PT.TMET.MET	12.6
+PT.TH2F.H2F	8.9
+PT.TELC.ELC	2.73638
+PA.TH2F.H2F	21.7
+GU.TLPG.LPG	54.1073
+GU.TGSL.GSL	60.1192
+GU.TGDO.GDO	45.0894
+GU.TNGS.NGS	66
+GU.TMET.MET	56.2
+GU.TETH.ETH	80
+GU.TBGDO.BGDO	45.0894
+GU.TH2F.H2F	13.5268
+GU.TELC.ELC	27.0536
+GU.TPHEVGSL.GSL	34.4
+GU.TPHEVGSL.ELC	21.8
+GU.TPHEVGDO.GDO	27.0536
+GU.TPHEVGDO.ELC	21.8
+GU.TCHEVGDO.GDO	21.8
+GT.TGDO.GDO	33.629
+GT.TMET.MET	78
+GT.TH2F.H2F	92
+GT.TELC.ELC	11.5245
+GN.TGSL.GSL	22.8
+GN.TGDO.GDO	15.2
+GN.TH2F.H2F	8.14286
 /
 ;
 *---
@@ -175,7 +175,7 @@ i01GdpPassCarsMarkExt(allCy)	                          "GDP-dependent passenger 
 i01PassCarsScrapRate(allCy)	                          "Passenger cars scrapping rate (1)"
 i01ShareAnnMilePlugInHybrid(allCy,YTIME)	           "Share of annual mileage of a plug-in hybrid which is covered by electricity (1)"
 i01AvgVehCapLoadFac(allCy,TRANSE,TRANSUSE,YTIME)	      "Average capacity/vehicle and load factor (tn/veh or passenegers/veh)"
-i01TechLft(allCy,SBS,EF,YTIME)	                     "Technical Lifetime. For passenger cars it is a variable (1)"
+i01TechLft(allCy,SBS,TECH,YTIME)	                     "Technical Lifetime. For passenger cars it is a variable (1)"
 i01PassCarsMarkSat(allCy)	                          "Passenger cars ownership saturation threshold (1)"
 i01GDPperCapita(YTIME,allCy)
 i01Sigma(allCy,SG)                                   "S parameters of Gompertz function for passenger cars vehicle km (1)"
@@ -183,22 +183,22 @@ i01Sigma(allCy,SG)                                   "S parameters of Gompertz f
 *---
 i01PassCarsMarkSat(runCy) = 0.7;
 *---
-imFuelConsTRANSE(runCy,TRANSE,EF,YTIME)$(SECTTECH(TRANSE,EF) $(imFuelConsTRANSE(runCy,TRANSE,EF,YTIME)<=0)) = 1e-6;
+imFuelConsTRANSE(runCy,TRANSE,EF,YTIME)$(SECtoEF(TRANSE,EF) $(imFuelConsTRANSE(runCy,TRANSE,EF,YTIME)<=0)) = 1e-6;
 *---
 i01ShareAnnMilePlugInHybrid(runCy,YTIME)$an(YTIME) = i01PlugHybrFractData(YTIME);
 *---
 i01AvgVehCapLoadFac(runCy,TRANSE,TRANSUSE,YTIME) = i01CapDataLoadFacEachTransp(TRANSE,TRANSUSE);
 *---
 **  Transport Sector
-i01TechLft(runCy,TRANSE,EF,YTIME) = imDataTransTech(TRANSE,EF,"LFT",YTIME);
+i01TechLft(runCy,TRANSE,TTECH,YTIME) = imDataTransTech(TRANSE,TTECH,"LFT",YTIME);
 *---
 **  Industrial Sector
-i01TechLft(runCy,INDSE,EF,YTIME) = imDataIndTechnology(INDSE,EF,"LFT");
+i01TechLft(runCy,INDSE,ITECH,YTIME) = imDataIndTechnology(INDSE,ITECH,"LFT");
 *---
 **  Domestic Sector
-i01TechLft(runCy,DOMSE,EF,YTIME) = imDataDomTech(DOMSE,EF,"LFT");
+i01TechLft(runCy,DOMSE,ITECH,YTIME) = imDataDomTech(DOMSE,ITECH,"LFT");
 *---
 **  Non Energy Sector and Bunkers
-i01TechLft(runCy,NENSE,EF,YTIME) = imDataNonEneSec(NENSE,EF,"LFT");
+i01TechLft(runCy,NENSE,ITECH,YTIME) = imDataNonEneSec(NENSE,ITECH,"LFT");
 *---
 i01GDPperCapita(YTIME,runCy) = i01GDP(YTIME,runCy) / i01Pop(YTIME,runCy);

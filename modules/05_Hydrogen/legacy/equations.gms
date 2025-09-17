@@ -6,7 +6,7 @@
 Q05DemTotH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VmDemTotH2(allCy,YTIME)
                  =E=
-         sum(SBS$SECTTECH(SBS,"H2F"), VmDemSecH2(allCy,SBS, YTIME)/
+         sum(SBS$SECtoEF(SBS,"H2F"), VmDemSecH2(allCy,SBS, YTIME)/
          prod(INFRTECH$H2INFRSBS(INFRTECH,SBS) , i05EffH2Transp(allCy,INFRTECH,YTIME)*(1-i05ConsSelfH2Transp(allCy,INFRTECH,YTIME))))  !! increase the demand due to transportation losses
 ;
 
@@ -215,7 +215,7 @@ Q05ConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)$(TIME(YTIME) $H2TECHEFtoEF(H2TECH,E
 *' This equation aggregates the total fuel consumption across all hydrogen production technologies in the system,
 *' summing up the fuel requirements from all sources. It helps track the total fuel demand for hydrogen production.
 Q05ConsFuelH2Prod(allCy,EF,YTIME)$(TIME(YTIME) $H2PRODEF(EF) $(runCy(allCy)))..
-         V05ConsFuelH2Prod(allCy,EF,YTIME)
+         VmConsFuelH2Prod(allCy,EF,YTIME)
          =E=
          sum(H2TECH$H2TECHEFtoEF(H2TECH,EF),VmConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME))
 ;
@@ -242,7 +242,7 @@ Q05DelivH2InfrTech(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         V05DelivH2InfrTech(allCy,INFRTECH,YTIME)
          =E=
          (
-         (    sum(SBS$(H2INFRSBS(INFRTECH,SBS) $SECTTECH(SBS,"H2F")), VmDemSecH2(allCy,SBS, YTIME))/
+         (    sum(SBS$(H2INFRSBS(INFRTECH,SBS) $SECTtoEF(SBS,"H2F")), VmDemSecH2(allCy,SBS, YTIME))/
             (i05EffH2Transp(allCy,INFRTECH,YTIME)*(1-i05ConsSelfH2Transp(allCy,INFRTECH,YTIME))) )$H2INFRDNODES(INFRTECH)  !! for final demand nodes
 
          +
