@@ -68,8 +68,8 @@ VmConsFuelH2Prod.FX(runCy,EF,YTIME)$(not An(YTIME)) = 1e-5;
 V05CostProdCCSNoCCSH2Prod.L(runCy,H2TECH,YTIME) = 2;
 V05CostProdCCSNoCCSH2Prod.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
 *---
-V05CostAvgProdH2.L(runCy,YTIME) = 2;
-V05CostAvgProdH2.FX(runCy,YTIME)$(not An(YTIME)) = 1e-5;
+VmCostAvgProdH2.L(runCy,YTIME) = 2;
+VmCostAvgProdH2.FX(runCy,YTIME)$(not An(YTIME)) = 1e-5;
 *---
 *V05InvNewReqH2Infra.L(runCy,INFRTECH,YTIME) = 2;
 *V05InvNewReqH2Infra.FX(runCy,INFRTECH,YTIME)$(not An(YTIME)) = 1e-5;

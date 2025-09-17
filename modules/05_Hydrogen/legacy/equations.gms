@@ -192,7 +192,7 @@ Q05ProdH2(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' This equation calculates the average cost of hydrogen production across all technologies in the system.
 *' It accounts for varying costs of different technologies (e.g., electrolysis vs. SMR) to provide an overall assessment of hydrogen production cost.
 Q05CostAvgProdH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V05CostAvgProdH2(allCy,YTIME)
+         VmCostAvgProdH2(allCy,YTIME)
          =E=
          sum(H2TECH, VmProdH2(allCy,H2TECH,YTIME)*V05CostProdH2Tech(allCy,H2TECH,YTIME))/sum(H2TECH,VmProdH2(allCy,H2TECH,YTIME))
 ;
@@ -307,7 +307,7 @@ Q05CostTechH2Infr(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          +
          (
             i05ConsSelfH2Transp(allCy,INFRTECH,YTIME)*V05InvNewReqH2Infra(allCy,INFRTECH,YTIME)*
-            (V05CostAvgProdH2(allCy,YTIME-1)$sameas("HPIPU",INFRTECH)+
+            (VmCostAvgProdH2(allCy,YTIME-1)$sameas("HPIPU",INFRTECH)+
             VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)*1e3)$sameas("SSGG",INFRTECH)
          )$(sameas("SSGG",INFRTECH) or sameas("HPIPU",INFRTECH))
          /V05InvNewReqH2Infra(allCy,INFRTECH,YTIME)
@@ -351,6 +351,6 @@ Q05PriceH2Infr(allCy,SBS,YTIME)$(TIME(YTIME) $SECTTECH(SBS,"H2F") $(runCy(allCy)
 Q05CostTotH2(allCy,SBS,YTIME)$(TIME(YTIME) $SECTTECH(SBS,"H2F") $(runCy(allCy)))..
          V05CostTotH2(allCy,SBS,YTIME)
          =E=
-         V05PriceH2Infr(allCy,SBS,YTIME)+V05CostAvgProdH2(allCy,YTIME)
+         V05PriceH2Infr(allCy,SBS,YTIME)+VmCostAvgProdH2(allCy,YTIME)
 ;
 $offtext
