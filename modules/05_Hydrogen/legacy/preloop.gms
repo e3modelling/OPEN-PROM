@@ -62,8 +62,8 @@ V05ShareCCSH2Prod.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
 V05ShareNoCCSH2Prod.L(runCy,H2TECH,YTIME) = 2;
 V05ShareNoCCSH2Prod.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
 *---
-V05ConsFuelH2Prod.L(runCy,EF,YTIME) = 2;
-V05ConsFuelH2Prod.FX(runCy,EF,YTIME)$(not An(YTIME)) = 1e-5;
+VmConsFuelH2Prod.L(runCy,EF,YTIME) = 2;
+VmConsFuelH2Prod.FX(runCy,EF,YTIME)$(not An(YTIME)) = 1e-5;
 *---
 V05CostProdCCSNoCCSH2Prod.L(runCy,H2TECH,YTIME) = 2;
 V05CostProdCCSNoCCSH2Prod.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
