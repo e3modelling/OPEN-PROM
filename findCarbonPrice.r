@@ -1,6 +1,20 @@
 # ============================================================
-# Compact iEnvPolicies tuner (same result, fewer knobs)
+# Find Optimal Carbon price to reach a certain carbon budget
 # ============================================================
+
+# This script provides a tuner for the iEnvPolicies input used by the OPEN-PROM model: 
+# it perturbs a baseline per-region policy time-series by a scalar alpha, runs the model, 
+# and searches for the alpha that yields a specified cumulative CO₂ budget (Gt CO₂).
+# Key features:
+# Wraps model execution (run_gams) and post-processing via postprom/gdx helpers to extract cumulative world CO₂ in 2050 (emissionsOPENPROM).
+# Applies a scalar multiplier to all year columns (applyAlpha) and writes final updated CSVs with optional timestamped backups (writeFinalPolicyFiles). 
+# Provides seeding/bracketing logic (alphaSeedLinear, autoBracketFromSeed) and a bisection solver (findAlphaForBudget) to find an alpha that meets the budgetTarget.
+
+# Dependencies: data.table, dplyr, tidyr, gdx, postprom and a working GAMS installation accessible via the gams command.
+# Typical workflow: 
+# 1) set budgetTarget, 
+# 2) ensure data/iEnvPolicies.csv and main.gms are present, 
+# 3) then run the script — it will probe the model, bracket a root, bisect to tolerance, and save the final scaled policy file.
 
 suppressPackageStartupMessages({
   library(data.table)
@@ -92,7 +106,7 @@ run_gams <- function(gms = "main.gms",
 emissionsOPENPROM <- function(envWide, yearCols, alpha,
                               dataDir = "data",
                               gms = "main.gms",
-                              gamsArgs = c("--DevMode=1", "--GenerateInput=off", "lo=4", "idir=./data"),
+                              gamsArgs = c("--DevMode=0", "--GenerateInput=off", "lo=4", "idir=./data"),
                               log = "full.log",
                               echo_on_success = FALSE) {
   canonicalCsv <- file.path(dataDir, "iEnvPolicies.csv")
@@ -121,19 +135,22 @@ emissionsOPENPROM <- function(envWide, yearCols, alpha,
 # ----------------------------
 # Seeding, bracketing, solving
 # ----------------------------
-alpha_seed_from_two_points <- function(alpha0, E0, alphar, Er, Etarget, shape = c("loglin","power")) {
-  shape <- match.arg(shape); stopifnot(E0 > 0, Er > 0, Etarget > 0)
-  if (shape == "loglin") {
-    k <- log(E0/Er) / (alphar - alpha0); if (!is.finite(k) || k == 0) stop("Bad log-linear seed.")
-    alpha0 - log(Etarget/E0) / k
-  } else {
-    if (alphar <= 0 || alpha0 <= 0) stop("Power-law needs positive alphas.")
-    eta <- log(E0/Er) / log(alphar/alpha0); if (!is.finite(eta) || eta == 0) stop("Bad power-law seed.")
-    alpha0 * (E0/Etarget)^(1/eta)
+
+ # linear interpolation
+alphaSeedLinear <- function(alpha0, E0, alphar, Er, Etarget, warn = TRUE, stopIfOutside = FALSE) {
+  stopifnot(alphar != alpha0, Er != E0)  # avoid divide-by-zero
+  # check Etarget range
+  Emin <- min(E0, Er)
+  Emax <- max(E0, Er)
+  if (Etarget < Emin || Etarget > Emax) {
+    msg <- sprintf("Etarget (%.3f) is outside range [%.3f, %.3f]", Etarget, Emin, Emax)
+    if (stopIfOutside) stop(msg)
+    if (warn) warning(msg)
   }
+  alpha0 + (Etarget - E0) * (alphar - alpha0) / (Er - E0)
 }
 
-auto_bracket_from_seed <- function(seedAlpha, budgetTarget, envWide, yearCols,
+autoBracketFromSeed <- function(seedAlpha, budgetTarget, envWide, yearCols,
                                    minAlpha = 0.0, maxAlpha = 5.0,
                                    expandFactor = 1.35, maxProbes = 20, verbose = TRUE) {
   if (verbose) message(sprintf("Seeding bracket near alpha ≈ %.4f", seedAlpha))
@@ -214,19 +231,21 @@ findAlphaForBudget <- function(envWide, yearCols, budgetTarget,
 # ----------------------------
 start_time <- Sys.time()
 
-budgetTarget <- 400  # Gt CO2
+budgetTarget <- 950  # Gt CO2
 envData <- readEnvPolicies(inputCsvPath)
 
 # ---- Option A (Seed from two points) ----
-# alpha0 <- 1.00; E0 <- 4315.367217
-# alphar <- 5.00; Er <- 3827.2786
-# seedAlpha <- alpha_seed_from_two_points(alpha0, E0, alphar, Er, Etarget = budgetTarget, shape = "loglin")
+alpha0 <- 1.00; E0 <- 1077.4702
+alphar <- 5.00; Er <- 860.540352
 
-# ---- Option B (fallback if you don't have reported points) ----
-seedAlpha <- 1.20
+# alphaSeedLinear interpolates the alpha from two points
+seedAlpha <- alphaSeedLinear(alpha0, E0, alphar, Er, Etarget = budgetTarget)
+
+# ---- Option B (fallback if you don't have reported points) - Alter manually ----
+# seedAlpha <- 5.00
 
 # Auto-bracket around the seed (runs a few probe simulations)
-brkt <- auto_bracket_from_seed(
+brkt <- autoBracketFromSeed(
   seedAlpha    = seedAlpha,
   budgetTarget = budgetTarget,
   envWide      = envData$envWide,
@@ -245,8 +264,8 @@ solveResult <- findAlphaForBudget(
   budgetTarget = budgetTarget,
   lowerAlpha   = brkt$lowerAlpha,
   upperAlpha   = brkt$upperAlpha,
-  eLow         = brkt$EL,   
-  eHigh        = brkt$EU,   
+  eLow         = brkt$EL,
+  eHigh        = brkt$EU,
   tolAlphaRel  = 1e-2,
   tolEmisAbs   = 1e-1,
   maxIter      = 60,
