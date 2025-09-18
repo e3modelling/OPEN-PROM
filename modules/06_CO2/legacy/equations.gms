@@ -67,21 +67,54 @@ Q06CstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q06GrossCapDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V06GrossCapDAC(allCy,DACTECH,YTIME)
                   =E=         
-          i06GrossCapDAC(allCy,DACTECH) * V06CapDAC(allCy,DACTECH,YTIME-1) ** (log(0.7)/log(2))
+          0.5 * 
+          (
+            (i06GrossCapDAC(allCy,DACTECH) * V06CapDAC(allCy,DACTECH,YTIME-1) ** (log(0.7)/log(2))) +
+            i06GrossCapDACMin(allCy,DACTECH) +
+            sqrt(
+              sqr(
+                (i06GrossCapDAC(allCy,DACTECH) * V06CapDAC(allCy,DACTECH,YTIME-1) ** (log(0.7)/log(2))) - i06GrossCapDACMin(allCy,DACTECH)
+              )
+            )
+          )
 ;
 
 Q06FixOandMDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V06FixOandMDAC(allCy,DACTECH,YTIME)
                   =E=         
-          i06FixOandMDAC(allCy,DACTECH) * V06CapDAC(allCy,DACTECH,YTIME-1) ** (log(0.7)/log(2))
+          0.5 * 
+          (
+            (i06FixOandMDAC(allCy,DACTECH) * V06CapDAC(allCy,DACTECH,YTIME-1) ** (log(0.7)/log(2))) +
+            i06FixOandMDACMin(allCy,DACTECH) +
+            sqrt(
+              sqr(
+                (i06FixOandMDAC(allCy,DACTECH) * V06CapDAC(allCy,DACTECH,YTIME-1) ** (log(0.7)/log(2))) - i06FixOandMDACMin(allCy,DACTECH)
+              )
+            )
+          )
 ;
 
-*' The equation calculates the CAPEX and the Fixed Costs of DAC capacity, also taking into account its discount rate and life expectancy, 
-*' for each region (country) and year.
-Q06CapexFixCostDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V06CapexFixCostDAC(allCy,DACTECH,YTIME)
+Q06VarCostDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         V06VarCostDAC(allCy,DACTECH,YTIME)
                   =E=         
-          V06GrossCapDAC(allCy,DACTECH,YTIME) + V06FixOandMDAC(allCy,DACTECH,YTIME)
+          0.5 * 
+          (
+            (i06VarCostDAC(allCy,DACTECH) * V06CapDAC(allCy,DACTECH,YTIME-1) ** (log(0.7)/log(2))) +
+            i06VarCostDACMin(allCy,DACTECH) +
+            sqrt(
+              sqr(
+                (i06VarCostDAC(allCy,DACTECH) * V06CapDAC(allCy,DACTECH,YTIME-1) ** (log(0.7)/log(2))) - i06VarCostDACMin(allCy,DACTECH)
+              )
+            )
+          )
+;
+
+*' The equation calculates the Levelized Costs of DAC capacity, also taking into account its discount rate and life expectancy, 
+*' for each region (country) and year.
+Q06LvlCostDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         V06LvlCostDAC(allCy,DACTECH,YTIME)
+                  =E=         
+          V06GrossCapDAC(allCy,DACTECH,YTIME) + V06FixOandMDAC(allCy,DACTECH,YTIME) +  V06VarCostDAC(allCy,DACTECH,YTIME)
 ;
 
 *' The equation estimates the profitability of DAC capacity, calculating the rate between levelized costs (CAPEX, fixed and electricity needs)
@@ -90,7 +123,7 @@ Q06ProfRateDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V06ProfRateDAC(allCy,DACTECH,YTIME)
          =E=
           (sum(NAP$NAPtoALLSBS(NAP,"DAC"),VmCarVal(allCy,NAP,YTIME)) + i06SubsDAC(allCy,DACTECH,YTIME)) / 
-          (V06CapexFixCostDAC(allCy,DACTECH,YTIME) + VmCstCO2SeqCsts(allCy,YTIME-1) + i06SpecElecDAC(allCy,DACTECH,YTIME) * VmPriceElecIndResConsu(allCy,"i",YTIME-1) + i06SpecHeatDAC(allCy,DACTECH,YTIME) * VmPriceFuelSubsecCHP(allCy,"IS","NGS",YTIME-1) / 0.85)
+          (V06LvlCostDAC(allCy,DACTECH,YTIME) + i06SpecElecDAC(allCy,DACTECH,YTIME) * VmPriceElecIndResConsu(allCy,"i",YTIME-1) + i06SpecHeatDAC(allCy,DACTECH,YTIME) * VmPriceFuelSubsecCHP(allCy,"IS","NGS",YTIME-1) / 0.85)
 ;
 
 *' The equation estimates the annual increase rate of DAC capacity regionally.

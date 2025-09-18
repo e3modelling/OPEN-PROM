@@ -7,7 +7,8 @@ Q06CaptCummCO2(allCy,YTIME)	                               "Compute cumulative C
 Q06TrnsWghtLinToExp(allCy,YTIME)	                       "Transtition weight for shifting from linear to exponential CO2 sequestration cost curve"
 Q06GrossCapDAC(allCy,DACTECH,YTIME)
 Q06FixOandMDAC(allCy,DACTECH,YTIME)
-Q06CapexFixCostDAC(allCy,DACTECH,YTIME)                    "Calculates the CAPEX and the Fixed Costs of DAC capacity regionally (US$2015/tCO2)"
+Q06LvlCostDAC(allCy,DACTECH,YTIME)                    "Calculates the CAPEX and the Fixed Costs of DAC capacity regionally (US$2015/tCO2)"
+Q06VarCostDAC(allCy,DACTECH,YTIME)
 Q06ProfRateDAC(allCy,DACTECH,YTIME)                        "Computes the annual profitability rate of DAC including the lifecycle costs and revenues regionally"
 Q06CapFacNewDAC(allCy,DACTECH,YTIME)                       "Computes the factor expressing the annual increase in the installed capacity of DAC regionally"
 Q06CapDAC(allCy,DACTECH,YTIME)                             "Computes the DAC installed capacity annually and regionally"
@@ -26,7 +27,8 @@ V06CaptCummCO2(allCy,YTIME)	                               "Cumulative CO2 captu
 V06TrnsWghtLinToExp(allCy,YTIME)	                       "Weight for transtition from linear CO2 sequestration cost curve to exponential (1)"
 V06GrossCapDAC(allCy,DACTECH,YTIME)
 V06FixOandMDAC(allCy,DACTECH,YTIME)
-V06CapexFixCostDAC(allCy,DACTECH,YTIME)                    "Regional CAPEX and the Fixed Costs of DAC capacity (US$2015/tCO2)"
+V06VarCostDAC(allCy,DACTECH,YTIME)
+V06LvlCostDAC(allCy,DACTECH,YTIME)                    "Regional CAPEX and the Fixed Costs of DAC capacity (US$2015/tCO2)"
 V06ProfRateDAC(allCy,DACTECH,YTIME)                        "The annual profitability rate of DAC including the lifecycle costs and revenues regionally"
 V06CapFacNewDAC(allCy,DACTECH,YTIME)                       "Factor expressing the annual increase in the installed capacity of DAC regionally"
 V06CapDAC(allCy,DACTECH,YTIME)                             "DAC regional installed capacity (tCO2)"
