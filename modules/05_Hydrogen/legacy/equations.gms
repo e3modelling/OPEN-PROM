@@ -26,7 +26,7 @@ Q05ScrapLftH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          (
          V05GapShareH2Tech1(allCy,H2TECH,YTIME-i05ProdLftH2(H2TECH,YTIME))*V05DemGapH2(allCy,YTIME-i05ProdLftH2(H2TECH,YTIME))
          /VmProdH2(allCy,H2TECH,YTIME-1)
-         )$(ord(YTIME)>11+i05ProdLftH2(H2TECH,YTIME)) !!+ 0.1
+         )$(ord(YTIME)>11+i05ProdLftH2(H2TECH,YTIME))
 ;
 
 *' This equation models the premature replacement of hydrogen production capacity. It adjusts for the need to replace aging

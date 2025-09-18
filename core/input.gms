@@ -691,7 +691,7 @@ imFinEneCons(runCy,EFS,YTIME) = sum(INDDOM,sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(IND
                        +
                        sum(TRANSE,sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(TRANSE,EF) $(not plugin(EF)) ), imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME)));
 *---
-imCO2CaptRate(runCy,PGALL,YTIME) = 0.1; 
+imCO2CaptRate(runCy,PGALL,YTIME) = 0.9; 
 imEffValueInDollars(runCy,SBS,YTIME) = 0;
 iScenarioPri(WEF,"NOTRADE",YTIME) = 0;
 *---
