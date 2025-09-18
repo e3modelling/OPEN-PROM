@@ -242,7 +242,7 @@ alphar <- 5.00; Er <- 860.540352
 seedAlpha <- alphaSeedLinear(alpha0, E0, alphar, Er, Etarget = budgetTarget)
 
 # ---- Option B (fallback if you don't have reported points) - Alter manually ----
-# seedAlpha <- 5.00
+seedAlpha <- 2.8
 
 # Auto-bracket around the seed (runs a few probe simulations)
 brkt <- autoBracketFromSeed(

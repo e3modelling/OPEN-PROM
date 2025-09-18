@@ -283,4 +283,23 @@ if (task == 0) {
   CalibratedParamsPath <- file.path(getwd(), CalibratedParams)
   newPath <- file.path(dirname(dirname(getwd())), "data", newNames)
   file.rename(CalibratedParamsPath, newPath)
+
+} else if (task == 6) {
+  # Running task OPEN-PROM CALIBRATE CARBON PRICES 
+  saveMetadata(DevMode = 0)
+  if (withRunFolder) createRunFolder(setScenarioName("CARBONPRICES"))
+
+  run_path <- getwd()
+  print(run_path)
+  report_cmd <- paste0("RScript ./findCarbonPrice.R ", run_path)
+  shell(report_cmd)
+
+  if (withRunFolder && withReport) {
+    setwd("../../") # Going back to root folder
+    cat("Executing the report output script\n")
+    report_cmd <- paste0("RScript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
+    shell(report_cmd)
+    setwd(run_path)
+  }
+  if (withRunFolder && withSync) syncRun()
 }
