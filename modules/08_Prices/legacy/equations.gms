@@ -16,7 +16,7 @@
 *' carbon values for all countries, electricity prices to industrial and residential consumers,
 *' efficiency values, and the total hydrogen cost per sector.The result of the equation is the fuel price per 
 *' subsector and fuel, adjusted based on changes in carbon values, electricity prices, efficiency, and hydrogen costs.
-Q08PriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF) $TIME(YTIME)
+Q08PriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)$(SECtoEF(SBS,EF) $TIME(YTIME)
 $IFTHEN %link2MAgPIE% == on 
    $(not sameas("BMSWAS",EF))
 $ENDIF
@@ -60,7 +60,7 @@ $ENDIF
 *' and fuel. The weights are determined by the sector's average price, considering the specific fuel consumption for the given scenario, subsector, and fuel.
 *' This equation allows for a more nuanced calculation of fuel prices, taking into account the carbon values in each sector. The result represents the fuel
 *' prices per subsector and fuel, multiplied by the corresponding weights, and adjusted based on the specific carbon values in each sector.
-Q08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $TIME(YTIME) $runCy(allCy))..
+Q08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)$(SECtoEF(DSBS,EF) $TIME(YTIME) $runCy(allCy))..
         V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)
           =E= 
         i08WgtSecAvgPriFueCons(allCy,DSBS,EF) * VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME);
@@ -71,7 +71,7 @@ Q08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $TIME(YTIME) $
 Q08PriceFuelAvgSub(allCy,DSBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         VmPriceFuelAvgSub(allCy,DSBS,YTIME)
                  =E=
-         sum(EF$SECTTECH(DSBS,EF), V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME));         
+         sum(EF$SECtoEF(DSBS,EF), V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME));         
 
 *' Calculates electricity price for industrial and residential consumers
 *' using previous year's fuel prices. For the first year, the price is directly based on fuel data.
@@ -144,13 +144,14 @@ Q08PriceElecIndResNoCliPol(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..   !!
 *' The fuel price for CHP plants is determined by subtracting the relevant components for CHP plants (fuel price for electricity generation and a fraction of electricity
 *' price for CHP sales) from the overall fuel price for the subsector. Additionally, the equation includes a square root term to handle complex computations related to the
 *' difference in fuel prices. This equation provides insights into the cost considerations for fuel in the context of CHP plants, considering various economic and technical parameters.
-Q08PriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS))$(not DSBS("DAC"))  $SECTTECH(DSBS,EF) $runCy(allCy))..
+$ontext
+Q08PriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS))  $SECTTECH(DSBS,EF) $runCy(allCy))..
         VmPriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)
                 =E=   
              (((VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME) + (VmRenValue(YTIME)/1000)$(not RENEF(EF))+imVarCostTech(allCy,DSBS,EF,YTIME)/1000)/imUsfEneConvSubTech(allCy,DSBS,EF,YTIME)- 
                (0$(not CHP(EF)) + (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME)*smFracElecPriChp*VmPriceElecInd(allCy,YTIME))$CHP(EF)))  + SQRT( SQR(((VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME)+imVarCostTech(allCy,DSBS,EF,YTIME)/1000)/imUsfEneConvSubTech(allCy,DSBS,EF,YTIME)- 
               (0$(not CHP(EF)) + (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME)*smFracElecPriChp*VmPriceElecInd(allCy,YTIME))$CHP(EF))))  ) )/2;
-
+$offtext
 *' This equation determines the electricity industry prices based on an estimated electricity index and a technical maximum of the electricity to steam ratio
 *' in Combined Heat and Power plants. The industry prices are calculated as a function of the estimated electricity index and the specified maximum
 *' electricity to steam ratio. The equation ensures that the electricity industry prices remain within a realistic range, considering the technical constraints

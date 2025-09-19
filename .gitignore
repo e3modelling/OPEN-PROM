@@ -15,6 +15,7 @@ regionmappingOP.csv
 *.mif
 /data_report
 /data
+/data2
 /targets
 /runs
 /default*

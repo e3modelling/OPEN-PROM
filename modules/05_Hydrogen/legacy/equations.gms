@@ -6,7 +6,7 @@
 Q05DemTotH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VmDemTotH2(allCy,YTIME)
                  =E=
-         sum(SBS$SECTTECH(SBS,"H2F"), VmDemSecH2(allCy,SBS, YTIME)/
+         sum(SBS$SECtoEF(SBS,"H2F"), VmDemSecH2(allCy,SBS, YTIME)/
          prod(INFRTECH$H2INFRSBS(INFRTECH,SBS) , i05EffH2Transp(allCy,INFRTECH,YTIME)*(1-i05ConsSelfH2Transp(allCy,INFRTECH,YTIME))))  !! increase the demand due to transportation losses
 ;
 
@@ -242,7 +242,7 @@ Q05DelivH2InfrTech(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         V05DelivH2InfrTech(allCy,INFRTECH,YTIME)
          =E=
          (
-         (    sum(SBS$(H2INFRSBS(INFRTECH,SBS) $SECTTECH(SBS,"H2F")), VmDemSecH2(allCy,SBS, YTIME))/
+         (    sum(SBS$(H2INFRSBS(INFRTECH,SBS) $SECTtoEF(SBS,"H2F")), VmDemSecH2(allCy,SBS, YTIME))/
             (i05EffH2Transp(allCy,INFRTECH,YTIME)*(1-i05ConsSelfH2Transp(allCy,INFRTECH,YTIME))) )$H2INFRDNODES(INFRTECH)  !! for final demand nodes
 
          +

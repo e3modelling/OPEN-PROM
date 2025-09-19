@@ -352,11 +352,11 @@ STE2OLQ "Steam produced from district heating plants burning olq"
 STE2NGS "Steam produced from district heating plants burning ngs"
 STE2OGS "Steam produced from district heating plants burning ogs"
 STE2BMS "Steam produced from district heating plants burning bmswas"
-PHEVGSL  "Plug in Hybrid engine - gasoline"
-PHEVGDO  "Plug in Hybrid engine - diesel"
+*PHEVGSL  "Plug in Hybrid engine - gasoline"
+*PHEVGDO  "Plug in Hybrid engine - diesel"
 *hybrid cars with gasoline and diesel
-CHEVGSL  "conventional Hybrid engine - gasoline"
-CHEVGDO  "conventional Hybrid engine - diesel"
+*CHEVGSL  "conventional Hybrid engine - gasoline"
+*CHEVGDO  "conventional Hybrid engine - diesel"
 HTDAC   "High-Temperature DAC"
 LTDAC   "Low-Temperature DAC"
 EWDAC   "Enhanced-Weathering DAC"
@@ -405,18 +405,7 @@ REFORM1(EF) FUELS CONSIDERED IN PRICE REFORM
 /HCL
 LGN/
 
-RENEF(EF)        Renewable technologies in demand side
-/
-HYD     "Hydro"
-WND     "Wind"
-SOL     "Solar"
-BMSWAS  "Biomass and Waste"
-GEO     "Geothermal and other renewable sources eg. Tidal, etc."
-BGDO    "Biodiesel"
-*STE1CB  "Steam produced from CHP conventional bmswas"
-STE1AB  "Steam produced from CHP advanced bmswas"
-STE2BMS "Steam produced from district heating plants burning bmswas"
-/
+
 
 OIL(EF) Liquid fuels in private road transport
 /
@@ -462,7 +451,7 @@ HCL.WCOKE
 
 /
 
-EFtoWEF(SBS,EF,WEF) Link between Imported Energy Forms and Energy Forms used in Model Subsectors
+EFtoWEF(DSBS,EF,WEF) Link between Imported Energy Forms and Energy Forms used in Model Subsectors
 
 
 EFS(EF)          Energy Forms used in Supply Side
@@ -591,22 +580,90 @@ ORD   Ordinary
 IMP   Improved
 /
 
-TTECH(EF)        Transport Technologies
+TECH      Technologies
 /
-GSL      "Internal Combustion Engine fueled by Gasoline"
-LPG      "Internal Combustion Engine fueled by Liquified Petroleum Gas"
-GDO      "Internal Combustion Engine fueled by Diesel Oil"
-NGS      "Internal Combustion Engine fueled by Natural Gas"
-ELC      "Pure Electirc Engine"
-KRS      "Gas Turbine fueled by Kerosene"
-ETH      "Internal Combustion Engine fueled by Ethanol"
-MET      "Methanol (85% gasoline 15% methanol) coming either from ngs or bms"
-BGDO     "Biodiesel internal combustion engine"
-PHEVGSL  "Plug in Hybrid engine - gasoline"
-PHEVGDO  "Plug in Hybrid engine - diesel"
-H2F      "Fuel Cells: Hydrogen"
-CHEVGSL  "conventional Hybrid engine - gasoline"
-CHEVGDO  "conventional Hybrid engine - diesel"
+TGSL      "Internal Combustion Engine fueled by Gasoline"
+TLPG      "Internal Combustion Engine fueled by Liquified Petroleum Gas"
+TGDO      "Internal Combustion Engine fueled by Diesel Oil"
+TNGS      "Internal Combustion Engine fueled by Natural Gas"
+TELC      "Pure Electirc Engine"
+TKRS      "Gas Turbine fueled by Kerosene"
+TETH      "Internal Combustion Engine fueled by Ethanol"
+TMET      "Methanol (85% gasoline 15% methanol) coming either from ngs or bms"
+TBGDO     "Biodiesel internal combustion engine"
+TPHEVGSL  "Plug in Hybrid engine - gasoline"
+TPHEVGDO  "Plug in Hybrid engine - diesel"
+TH2F      "Fuel Cells: Hydrogen"
+TCHEVGSL  "conventional Hybrid engine - gasoline"
+TCHEVGDO  "conventional Hybrid engine - diesel"
+* Industrial Technologies (only add those not already in Transport)
+* GDO,LPG,KRS,NGS,ELC already exist in TRANSPORT technologies
+TLGN
+THCL
+TRFO
+TOLQ
+TOGS
+TSTE1AL
+TSTE1AH
+TSTE1AD
+TSTE1AG
+TSTE1AB
+* Domestic Technologies (only add those not already in Transport & Industry)
+* LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC,STE1AL,STE1AH,STE1AD,STE1AG,STE1AB already exist in TRANSPORT or INDUSTRY technologies
+TSTE2LGN
+TSTE2OSL
+TSTE2GDO
+TSTE2RFO
+TSTE2OLQ
+TSTE2NGS
+TSTE2OGS
+TSTE2BMS
+TBMSWAS
+* Non-Energy and Bunkers Technologies (only add those not already in Transport & Industry & Domestic)
+* GDO,RFO,LGN,HCL,GDO,LPG,OLQ,NGS,OGS already exist
+* NOT USED
+TSTE1AR
+TSTE1AH2F
+THEATPUMP
+* Power Generation Technologies
+*PGTLGN
+*PGTHCL 
+*PGTGDO
+*PGTRFO
+*PGTNGS
+*PGTNUC
+*PGTHYD
+*PGTBMSWAS
+*PGTSOL
+*PGTGEO
+*PGTWND
+* Hydrogen Production Technologies
+*HPTHCL
+*HPTRFO
+*HPTNGS
+*HPTNUC
+*HPTBMSWAS
+*HPTSOL
+*HPTWND
+*HPTELC
+/
+
+TTECH(TECH)      Transport Technologies
+/
+TGSL      "Internal Combustion Engine fueled by Gasoline"
+TLPG      "Internal Combustion Engine fueled by Liquified Petroleum Gas"
+TGDO      "Internal Combustion Engine fueled by Diesel Oil"
+TNGS      "Internal Combustion Engine fueled by Natural Gas"
+TELC      "Pure Electirc Engine"
+TKRS      "Gas Turbine fueled by Kerosene"
+TETH      "Internal Combustion Engine fueled by Ethanol"
+TMET      "Methanol (85% gasoline 15% methanol) coming either from ngs or bms"
+TBGDO     "Biodiesel internal combustion engine"
+TPHEVGSL  "Plug in Hybrid engine - gasoline"
+TPHEVGDO  "Plug in Hybrid engine - diesel"
+TH2F      "Fuel Cells: Hydrogen"
+TCHEVGSL  "conventional Hybrid engine - gasoline"
+TCHEVGDO  "conventional Hybrid engine - diesel"
 /
 
 DACTECH(EF)     DAC Technologies
@@ -616,65 +673,186 @@ LTDAC
 EWDAC
 /
 
+ITECH(TECH)      Industrial - Domestic - Non-energy & Bunkers Technologies 
+/
+TGDO
+TLPG
+TKRS  
+TNGS
+TELC    
+TLGN
+THCL
+TRFO
+TOLQ
+TOGS
+TSTE1AL
+TSTE1AH
+TSTE1AD
+TSTE1AG
+TSTE1AB
+TH2F
+* Domestic Technologies (only add those not already in Industry)
+TGSL
+TSTE2LGN
+TSTE2OSL
+TSTE2GDO
+TSTE2RFO
+TSTE2OLQ
+TSTE2NGS
+TSTE2OGS
+TSTE2BMS
+TBMSWAS
+/
 
+RENEF(TECH)        Renewable technologies in demand side !! Should these remain in EF?
+/
+*HYD     "Hydro"
+*WND     "Wind"
+*SOL     "Solar"
+TBMSWAS  "Biomass and Waste"
+*GEO     "Geothermal and other renewable sources eg. Tidal, etc."
+TBGDO    "Biodiesel"
+*STE1CB  "Steam produced from CHP conventional bmswas"
+TSTE1AB  "Steam produced from CHP advanced bmswas"
+TSTE2BMS "Steam produced from district heating plants burning bmswas"
+/
+
+TECHtoEF (TECH,EF) Fuels consumed by technologies
+/
+TGSL.GSL
+TLPG.LPG
+TGDO.GDO
+TNGS.NGS
+TELC.ELC
+TKRS.KRS
+TETH.ETH
+TMET.MET
+TBGDO.BGDO
+TPHEVGSL.(GSL,ELC)
+TPHEVGDO.(GDO,ELC)
+TH2F.H2F
+TCHEVGSL.GSL
+TCHEVGDO.GDO     
+TLGN.LGN
+THCL.HCL
+TRFO.RFO
+TOLQ.OLQ
+TOGS.OGS
+TSTE1AL.STE1AL
+TSTE1AH.STE1AH
+TSTE1AD.STE1AD
+TSTE1AG.STE1AG
+TSTE1AB.STE1AB
+* Domestic Technologies (only add those not already in Transport & Industry)
+* LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC,STE1AL,STE1AH,STE1AD,STE1AG,STE1AB already exist in TRANSPORT or INDUSTRY technologies
+TSTE2LGN.STE2LGN
+TSTE2OSL.STE2OSL
+TSTE2GDO.STE2GDO
+TSTE2RFO.STE2RFO
+TSTE2OLQ.STE2OLQ
+TSTE2NGS.STE2NGS
+TSTE2OGS.STE2OGS
+TSTE2BMS.STE2BMS
+TBMSWAS.BMSWAS
+/
 TTECHtoEF(TTECH,EF) Fuels consumed by transport technologies
 /
-GSL.GSL
-LPG.LPG
-GDO.GDO
-NGS.NGS
-ELC.ELC
-KRS.KRS
-ETH.ETH
-MET.MET
-BGDO.BGDO
-PHEVGSL.(GSL,ELC)
-PHEVGDO.(GDO,ELC)
-H2F.H2F
-CHEVGSL.GSL
-CHEVGDO.GDO
+TGSL.GSL
+TLPG.LPG
+TGDO.GDO
+TNGS.NGS
+TELC.ELC
+TKRS.KRS
+TETH.ETH
+TMET.MET
+TBGDO.BGDO
+TPHEVGSL.(GSL,ELC)
+TPHEVGDO.(GDO,ELC)
+TH2F.H2F
+TCHEVGSL.GSL
+TCHEVGDO.GDO
+/
+
+ITECHtoEF(ITECH,EF) Fuels consumed by industrial technologies
+/
+TGDO.GDO
+TLPG.LPG
+TKRS.KRS  
+TNGS.NGS
+TELC.ELC    
+TLGN.LGN
+THCL.HCL
+TRFO.RFO
+TOLQ.OLQ
+TOGS.OGS
+TSTE1AL.STE1AL
+TSTE1AH.STE1AH
+TSTE1AD.STE1AD
+TSTE1AG.STE1AG
+TSTE1AB.STE1AB
+TH2F.H2F
+* Domestic Technologies (only add those not already in Transport & Industry)
+* LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC,STE1AL,STE1AH,STE1AD,STE1AG,STE1AB already exist in TRANSPORT or INDUSTRY technologies
+TGSL.GSL
+TSTE2LGN.STE2LGN
+TSTE2OSL.STE2OSL
+TSTE2GDO.STE2GDO
+TSTE2RFO.STE2RFO
+TSTE2OLQ.STE2OLQ
+TSTE2NGS.STE2NGS
+TSTE2OGS.STE2OGS
+TSTE2BMS.STE2BMS
+TBMSWAS.BMSWAS
 /
 
 
-PLUGIN(EF) Plug-in hybrids
+PLUGIN(TECH) Plug-in hybrids
 /
-PHEVGSL
-PHEVGDO
-/
-
-CHYBV(EF) CONVENTIONAL hybrids
-/
-CHEVGSL
-CHEVGDO
+TPHEVGSL
+TPHEVGDO
 /
 
-SECTTECH(SBS,EF) Link between Model Subsectors and Fuels
+CHYBV(TECH) CONVENTIONAL hybrids
+/
+TCHEVGSL
+TCHEVGDO
+/
+
+SECTTECH(DSBS,TECH) Link between Model Demand Subsectors and Technologies
 /
 *PC.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO,CHEVGSL,CHEVGDO)
 *PB.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO)
 *GU.(LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGDO,CHEVGDO)
 *(PT,GT).(GDO,ELC,MET)
-PC.(GSL,LPG,GDO,NGS,ELC,PHEVGSL,PHEVGDO,CHEVGSL,CHEVGDO)
-PB.(LPG,GDO,NGS,ELC,PHEVGDO)
-GU.(LPG,GDO,NGS,ELC,PHEVGDO,CHEVGDO)
-(PT,GT).(GDO,ELC)
-PA.(KRS)
-(PN,GN).(GSL,GDO)
-(IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(LGN,HCL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC,STE1AL,
-                                 STE1AH,STE1AD,STE1AG,H2F)
-(HOU, AG).                      (LPG,KRS,GDO,NGS,OGS,BMSWAS,ELC,STE2LGN,STE2OSL,STE2GDO,STE2NGS,
-                                 STE2BMS)
-(SE).                           (LPG,KRS,NGS,OGS,ELC)
-BU.(GDO,RFO)
-(PCH,NEN).(LGN,HCL,GDO,RFO,LPG,NGS,OGS)
+PC.(TGSL,TLPG,TGDO,TNGS,TELC,TPHEVGSL,TPHEVGDO,TCHEVGSL,TCHEVGDO)
+PB.(TLPG,TGDO,TNGS,TELC,TPHEVGDO)
+GU.(TLPG,TGDO,TNGS,TELC,TPHEVGDO,TCHEVGDO) !! Removed GSL and PHEVGSL
+(PT,GT).(TGDO,TELC)
+PA.(TKRS)
+PN.(TGSL,TGDO)
+GN.(TGSL,TGDO)
+(IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(TLGN,THCL,TGDO,TRFO,TLPG,TKRS,TOLQ,TNGS,TOGS,TELC,TSTE1AL,
+                                 TSTE1AH,TSTE1AD,TSTE1AG,TH2F)
+(HOU,AG).(TLPG,TKRS,TGDO,TNGS,TOGS,TBMSWAS,TELC,TSTE2LGN,TSTE2OSL,TSTE2GDO,TSTE2NGS,
+                                 TSTE2BMS)
+SE.(TLPG,TKRS,TNGS,TOGS,TELC)
+
+*BU.(GDO,RFO,OLQ)
+BU.(TGDO,TRFO)
+(PCH,NEN).(TLGN,THCL,TGDO,TRFO,TLPG,TOLQ,TNGS,TOGS)
+*PG.(PGTLGN,PGTHCL,PGTGDO,PGTRFO,PGTNGS,PGTNUC,PGTHYD,PGTBMSWAS,PGTSOL,PGTGEO,PGTWND)
+*H2P.(HPTHCL,HPTRFO,HPTNGS,HPTNUC,HPTBMSWAS,HPTSOL,HPTWND,HPTELC)
+/
+
+SECtoEF(SBS,EF) Link between Model Subsectors and Energy FORMS
+/
 PG.(LGN,HCL,GDO,RFO,NGS,OGS,NUC,HYD,BMSWAS,SOL,GEO,WND)
 H2P.(HCL,RFO,NGS,NUC,BMSWAS,SOL,WND,ELC)
 DAC.(ELC,NGS)
 *DAC.(HTDAC,LTDAC,EWDAC)
 /
 
-
-PGALL            Power Generation Plant Types
+PGALL            Power Generation Plant Types !! Maybe these should be the power generation technologies?
 /
 *CTHLGN Conventional thermal monovalent lignite
 *CTHHCL Conventional thermal monovalent hard coal
@@ -760,6 +938,11 @@ ATHBMSCCS.ATHBMSWAS
 CHP(EF)       CHP Plants
 /
 STE1AL,STE1AH,STE1AD,STE1AG,STE1AB
+/
+
+TCHP(TECH)       CHP Plants
+/
+TSTE1AL,TSTE1AH,TSTE1AD,TSTE1AG,TSTE1AB
 /
 
 DH(EF)       District Heating
@@ -1121,19 +1304,22 @@ alias(EF, EF2);
 * this alias is used in alternative transport fuels price calculations
 alias(PGALL2,PGALL);
 *this alias is used in plant dispatching equation
+alias(ITECH,ITECH2)
 
 
 scalar TF order of base year in set ytime;
 TF=sum((TFIRST,ytime), ord(ytime)$TFIRST(ytime));
 
 * Allocate imported fuels to fuels used in demand subsectors
-EFtoWEF(SBS,EF,WEF)=NO;
+EFtoWEF(DSBS,EF,WEF)=NO;
 loop WEF do
   loop EF$WEFMAP(EF,WEF) do
-    loop SBS$SECTTECH(SBS,EF) do
-         if not sameas(WEF,"WCOKE") then
-             EFtoWEF(SBS,EF,WEF)=yes;
-         endif;
+    loop TECH$TECHtoEF(TECH,EF) do
+      loop DSBS$SECTTECH(DSBS,TECH) do
+          if not sameas(WEF,"WCOKE") then
+             EFtoWEF(DSBS,EF,WEF)=yes;
+          endif;
+      endloop;
     endloop;
   endloop;
 endloop;
@@ -1145,7 +1331,7 @@ Parameter TECHS(DSBS) Number of technologies in transport subsectors;
 
 loop DSBS$TRANSE(DSBS) do
      TECHS(DSBS)=0;
-     loop EF$SECTTECH(DSBS,EF) do
+     loop TECH$SECTTECH(DSBS,TECH) do
        TECHS(DSBS) = TECHS(DSBS)+1;
      endloop;
 endloop;
@@ -1161,3 +1347,11 @@ ALIAS (YYTIME2,ytime);
 scalar ordfirst /0/;
 ordfirst=sum((ytime,YYTIME2)$((ord(ytime)<=ord(YYTIME2)) $TFIRST(YYTIME2)),1);
 
+
+loop TECH do
+    loop DSBS$SECTTECH(DSBS,TECH) do
+        loop EF$TECHtoEF(TECH,EF) do
+            SECtoEF(DSBS,EF) = yes;
+        endloop;
+    endloop;
+endloop;
