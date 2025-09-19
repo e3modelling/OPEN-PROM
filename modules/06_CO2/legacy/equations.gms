@@ -142,21 +142,8 @@ Q06CapFacNewDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q06CapDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V06CapDAC(allCy,DACTECH,YTIME)
          =E=
-          V06CapDAC(allCy,DACTECH,YTIME-1) * (1 + V06CapFacNewDAC(allCy,DACTECH,YTIME))
-;
-
-*' The equation calculates the electricity consumed by the DAC installed capacity annually and regionally (MWh).
-Q06ElecDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V06ElecDAC(allCy,DACTECH,YTIME)
-         =E=
-          V06CapDAC(allCy,DACTECH,YTIME) * i06SpecElecDAC(allCy,DACTECH,YTIME)
-;
-
-*' The equation calculates the Natural Gas consumed by the DAC installed capacity annually and regionally (MWh).
-Q06NGDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V06NGDAC(allCy,DACTECH,YTIME)
-         =E=
-          V06CapDAC(allCy,DACTECH,YTIME) * i06SpecHeatDAC(allCy,DACTECH,YTIME) / 0.85
+          V06CapDAC(allCy,DACTECH,YTIME-1) * (1 + V06CapFacNewDAC(allCy,DACTECH,YTIME)) +
+          i06SchedNewCapDAC(allCy,DACTECH,YTIME)
 ;
 
 *' The equation calculates the fuels consumed by the DAC installed capacity annually and regionally.
@@ -164,8 +151,8 @@ Q06ConsFuelTechDACProd(allCy,DACTECH,EF,YTIME)$(TIME(YTIME) $DACTECHEF(EF) $(run
          VmConsFuelTechDACProd(allCy,DACTECH,EF,YTIME)
          =E=
          (
-          V06NGDAC(allCy,DACTECH,YTIME)$(sameas(EF, 'ngs'))
-         + V06ElecDAC(allCy,DACTECH,YTIME)$(sameas(EF, 'elc')) 
+          (V06CapDAC(allCy,DACTECH,YTIME) * i06SpecHeatDAC(allCy,DACTECH,YTIME) / 0.85)$(sameas(EF, 'ngs')) +
+          (V06CapDAC(allCy,DACTECH,YTIME) * i06SpecElecDAC(allCy,DACTECH,YTIME))$(sameas(EF, 'elc')) 
          )
          / 1e6
          * smTWhToMtoe

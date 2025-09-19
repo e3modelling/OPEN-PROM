@@ -12,8 +12,6 @@ Q06VarCostDAC(allCy,DACTECH,YTIME)
 Q06ProfRateDAC(allCy,DACTECH,YTIME)                        "Computes the annual profitability rate of DAC including the lifecycle costs and revenues regionally"
 Q06CapFacNewDAC(allCy,DACTECH,YTIME)                       "Computes the factor expressing the annual increase in the installed capacity of DAC regionally"
 Q06CapDAC(allCy,DACTECH,YTIME)                             "Computes the DAC installed capacity annually and regionally"
-Q06ElecDAC(allCy,DACTECH,YTIME)                            "Computes the annual electricity consumed in DAC regionally (MWh)"
-Q06NGDAC(allCy,DACTECH,YTIME)                              "Computes the annual Natural Gas consumed in DAC regionally (MWh)"
 Q06ConsFuelTechDACProd(allCy,DACTECH,EF,YTIME)             "Computed the annual fuel demand in each DAC technology regionally (Mtoe)"
 Q06ConsFuelDACProd(allCy,EF,YTIME)                         "Computed the annual fuel demand in DAC regionally (Mtoe)"
 
@@ -32,8 +30,6 @@ V06LvlCostDAC(allCy,DACTECH,YTIME)                    "Regional CAPEX and the Fi
 V06ProfRateDAC(allCy,DACTECH,YTIME)                        "The annual profitability rate of DAC including the lifecycle costs and revenues regionally"
 V06CapFacNewDAC(allCy,DACTECH,YTIME)                       "Factor expressing the annual increase in the installed capacity of DAC regionally"
 V06CapDAC(allCy,DACTECH,YTIME)                             "DAC regional installed capacity (tCO2)"
-V06ElecDAC(allCy,DACTECH,YTIME)                            "Annual electricity consumed in DAC regionally (MWh)"
-V06NGDAC(allCy,DACTECH,YTIME)                              "Annual Natural Gas consumed in DAC regionally (MWh)"
 VmConsFuelTechDACProd(allCy,DACTECH,EF,YTIME)              "Annual fuel demand in each DAC technology regionally (Mtoe)"
 VmConsFuelDACProd(allCy,EF,YTIME)                          "Annual fuel demand in DAC regionally (Mtoe)"
 

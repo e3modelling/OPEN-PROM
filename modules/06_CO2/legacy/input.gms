@@ -84,6 +84,14 @@ LTDAC	0,
 EWDAC	0
 / ;
 
+parameter i06SchedNewCapDAC(allCy,DACTECH,YTIME)        "Scheduled new DAC capacity"
+/
+NEU.HTDAC.2022  4e4,
+USA.HTDAC.2025  1e6,
+LAM.HTDAC.2026  600,
+USA.HTDAC.2028  2e6
+/ ;
+
 *---
 Parameters
 i06ElastCO2Seq(allCy,CO2SEQELAST)	       "Elasticities for CO2 sequestration cost curve (1)"
