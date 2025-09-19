@@ -72,6 +72,7 @@ H2INFR  0.08
 parameter imDisc(allCy,SBS,YTIME) "Discount rates per subsector for all countries ()" ;
 *---
 imDisc(runCy,SBS,YTIME) = iDiscData(SBS);
+imDisc(runCy,"PC",YTIME) = 0.11;
 *---
 * FIXME: Drive the emission factors with mrprom
 * author=giannou
@@ -199,7 +200,7 @@ IS.TSTE1AG   1.18376 30.1467 31.6279 20  0.44
 IS.TSTE1AB   1.00334 28.8752 8.16    25  0.37
 IS.TSTE1AH2F 1.34817 40.4451         25  0.5
 IS.THEATPUMP 0.92974 19.3882 3.1021  25  1.848
-IS.TH2F      1.04547 40.4451 17.68   25  5.74713
+IS.TH2F      1.04547 40.4451 17.68   25  0.97
 NF.THCL      3.8528  63.036          30  0.5
 NF.TLGN      3.8528  63.036          30  0.5
 NF.TLPG      3.21067 63.036          30  0.72
@@ -279,7 +280,7 @@ PP.TSTE1AG   1.18376 30.1467 31.6279 20  0.44
 PP.TSTE1AB   2.33335 67.1517 18.9767 25  0.37
 PP.TSTE1AH2F 2.27889 68.3668         25  0.5
 PP.THEATPUMP 1.15738 3.10211         25  1.68
-PP.TH2F      2.43133 68.3668 41.1163 25  1.68
+PP.TH2F      2.43133 68.3668 41.1163 25  0.97
 FD.THCL      0.63096 0.5372          25  0.5
 FD.TLGN      0.63096 0.5372          25  0.5
 FD.TLPG      0.42064 0.5372          25  0.72
@@ -525,21 +526,19 @@ imDataNonEneSec(NENSE,TECH,"VC") = imDataNonEneSec(NENSE,TECH,"VC") * 1.3;
 *---
 * FIXME: check if country-specific data is needed; move to mrprom
 * author=giannou
-table iIndCharData(allCy,INDSE,Indu_Scon_Set)         "Industry sector charactetistics (various)"
-         BASE           SHR_NSE   SH_HPELC
-ELL.IS   0.4397         0.7       0.00001
-ELL.NF   0              0.95      0.00001
-ELL.CH   0.1422         0.95      0.00001
-ELL.BM   2.1062         0.95      0.00001
-ELL.PP   0              0.95      0.00001
-ELL.FD   0.6641         0.95      0.00001
-ELL.TX   0.0638         0.95      0.00001
-ELL.EN   1.6664         0.95      0.00001
-ELL.OE   0.00000001     0.95      0.00001
-ELL.OI   1.5161         0.95      0.00001
+table iIndCharData(INDSE,Indu_Scon_Set)         "Industry sector charactetistics (various)"
+     BASE           SHR_NSE   SH_HPELC
+IS   0.4397         0.7       0.00001
+NF   0              0.85      0.00001
+CH   0.1422         0.95      0.00001
+BM   2.1062         0.95      0.00001
+PP   0              0.95      0.00001
+FD   0.6641         0.9       0.00001
+TX   0.0638         0.9       0.00001
+EN   1.6664         0.95      0.00001
+OE   0.00000001     0.95      0.00001
+OI   1.5161         0.9       0.00001
 ;
-*---
-iIndChar(runCy,INDSE,Indu_Scon_Set) = iIndCharData("ELL",INDSE,Indu_Scon_Set);
 *---
 table iInitConsSubAndInitShaNonSubElec(DOMSE,Indu_Scon_Set)      "Initial Consumption per Subsector and Initial Shares of Non Substitutable Electricity in Total Electricity Demand (Mtoe)"
      BASE   SHR_NSE SH_HPELC
@@ -548,7 +547,7 @@ HOU  11.511 0.9     0.00001
 AG   0.2078 0.9     0.00001
 ;
 *---
-iShrHeatPumpElecCons(runCy,INDSE) = iIndChar(runCy,INDSE,"SH_HPELC");
+iShrHeatPumpElecCons(runCy,INDSE) = iIndCharData(INDSE,"SH_HPELC");
 iShrHeatPumpElecCons(runCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(DOMSE,"SH_HPELC");
 *---
 imFuelExprts(runCy,EFS,YTIME) = iSuppExports(runCy,EFS,YTIME);
@@ -576,7 +575,7 @@ imAnnCons(runCy,'GU','modal')    = 0.706 * imTransChar(runCy,"KM_VEH_TRUCK","%fB
 imAnnCons(runCy,'GU','largest')  = 4 * 0.706 * imTransChar(runCy,"KM_VEH_TRUCK","%fBaseY%") * 1000 * 2 * 10  * 1E-6;
 *---
 imAnnCons(runCy,'PA','smallest') = 40000 * 50 * 1E-6;
-imAnnCons(runCy,'PA','modal')    = 400000 * 100 * 1E-6;
+imAnnCons(runCy,'PA','modal')    = 400000 * 1E-6;
 imAnnCons(runCy,'PA','largest')  = 800000 * 300 * 1E-6;
 *---
 * Size will not play a role in buses, trains, ships and aircraft
@@ -738,6 +737,8 @@ $ondelim
 $include"./iMatrFactorData.csv"
 $offdelim
 ;
+iMatrFactorData(DSBS,TECH,YTIME)$(TRANSE(DSBS) or INDSE(DSBS) or DOMSE(DSBS)) = 1;
+iMatrFactorData(DSBS,TECH,YTIME)$(sameas(DSBS, "PC")$SECTTECH(DSBS,TECH)) = 1;
 *---
 $IFTHEN.calib %MatFacCalibration% == off
 parameter imMatrFactor(allCy,DSBS,TECH,YTIME)   "Maturity factor per technology and subsector for all countries (1)";
@@ -752,7 +753,7 @@ imMatrFactor.UP(runCy,DSBS,EF,YTIME) = 100;
 $ENDIF.calib
 *---
 ** Industry
-imShrNonSubElecInTotElecDem(runCy,INDSE)  = iIndChar(runCy,INDSE,"SHR_NSE");
+imShrNonSubElecInTotElecDem(runCy,INDSE)  = iIndCharData(INDSE,"SHR_NSE");
 imShrNonSubElecInTotElecDem(runCy,INDSE)$(imShrNonSubElecInTotElecDem(runCy,INDSE)>0.98) = 0.98;
 **Domestic - Tertiary
 imShrNonSubElecInTotElecDem(runCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(DOMSE,"SHR_NSE");
