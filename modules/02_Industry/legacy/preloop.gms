@@ -33,3 +33,6 @@ VmConsFuelInclHP.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $(not TRANSE(DSBS)) 
 VmConsRemSubEquipSubSec.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $(not An(ytime))) =
 (VmConsFuelInclHP.L(runCy ,DSBS,EF,YTIME) - (VmConsElecNonSubIndTert.L(runCy,DSBS,YTIME)$(ELCEF(EF) $INDDOM(DSBS)) + 0$(not (ELCEF(EF) $INDDOM(DSBS)))));
 *---
+V02GapFinalDem.scale(runCy,DSBS,YTIME) = 1e-8;
+Q02GapFinalDem.scale(runCy,DSBS,YTIME) = V02GapFinalDem.scale(runCy,DSBS,YTIME);
+*---

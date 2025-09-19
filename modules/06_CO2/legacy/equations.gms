@@ -165,7 +165,7 @@ Q06ConsFuelTechDACProd(allCy,DACTECH,EF,YTIME)$(TIME(YTIME) $DACTECHEF(EF) $(run
          =E=
          (
           V06NGDAC(allCy,DACTECH,YTIME)$(sameas(EF, 'ngs'))
-         + V06ElecDAC(allCy,DACTECH,YTIME)$(sameas(EF, 'elc'))
+         + V06ElecDAC(allCy,DACTECH,YTIME)$(sameas(EF, 'elc')) 
          )
          / 1e6
          * smTWhToMtoe

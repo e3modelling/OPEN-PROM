@@ -188,7 +188,8 @@ Q02GapFinalDem(allCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $runCy(allCy))
          V02GapFinalDem(allCy,DSBS,YTIME)
                  =E=
          (VmDemFinSubFuelSubsec(allCy,DSBS,YTIME) - sum(EF$SECTTECH(DSBS,EF), VmConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME))
-         + SQRT( SQR(VmDemFinSubFuelSubsec(allCy,DSBS,YTIME) - sum(EF$SECTTECH(DSBS,EF), VmConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME))))) /2;
+         + SQRT( SQR(VmDemFinSubFuelSubsec(allCy,DSBS,YTIME) - sum(EF$SECTTECH(DSBS,EF), VmConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME))))) /2
+         + 1e-8;
 
 *' This equation calculates the technology share in new equipment based on factors such as maturity factor,
 *' cumulative distribution function of consumer size groups, number of consumers, technology cost, distribution function of consumer
