@@ -6,7 +6,7 @@
 V08PriceFuelSepCarbonWght.scale(runCy,DSBS,EF,YTIME)=1e-6;
 Q08PriceFuelSepCarbonWght.scale(runCy,DSBS,EF,YTIME)=V08PriceFuelSepCarbonWght.scale(runCy,DSBS,EF,YTIME);
 *---
-VmPriceFuelSubsecCarVal.L(runCy,SBS,EF,YTIME) = 1.5;
+VmPriceFuelSubsecCarVal.L(runCy,SBS,EF,YTIME)$SECtoEF(SBS,EF) = 1.5;
 VmPriceFuelSubsecCarVal.L(runCy,"PG",PGEF,YTIME) = 1;
 VmPriceFuelSubsecCarVal.LO(runCy,SBS,"H2F",YTIME) = 1E-6;
 $IFTHEN %link2MAgPIE% == on 
