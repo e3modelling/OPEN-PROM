@@ -69,4 +69,5 @@ q07ExpendHouseEne(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                  SUM(DSBS$HOU(DSBS),SUM(EF$SECTTECH(dSBS,EF),VmConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)*(VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME)-imEffValueInDollars(allCy,DSBS,YTIME)/
                  1000-imCo2EmiFac(allCy,"PG",EF,YTIME)*sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))/1000)))
                                           +VmPriceElecIndResNoCliPol(allCy,"R",YTIME)*VmConsElecNonSubIndTert(allCy,"HOU",YTIME)/smTWhToMtoe;
+VmConsElecNonSubIndTert --> NO LONGER                                          
 $offtext

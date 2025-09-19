@@ -10,7 +10,7 @@ Q01CostTranspPerMeanConsSize(allCy,TRANSE,RCon,TTECH,YTIME)"Compute transportati
 Q01CostTranspPerVeh(allCy,TRANSE,RCon,TTECH,YTIME)	       "Compute transportation cost per mean and consumer size in KUS$2015 per vehicle"
 Q01CostTranspMatFac(allCy,TRANSE,RCon,TTECH,YTIME)	       "Compute transportation cost including maturity factor"
 Q01TechSortVarCost(allCy,TRANSE,Rcon,YTIME)	               "Compute technology sorting based on variable cost"
-Q01ShareTechTr(allCy,TRANSE,EF,YTIME)	                   "Compute technology sorting based on variable cost and new equipment"
+Q01ShareTechTr(allCy,TRANSE,TECH,YTIME)	                   "Compute technology sorting based on variable cost and new equipment"
 Q01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)	   "Compute consumption of each technology in transport sectors"
 *q01DemFinEneSubTransp(allCy,TRANSE,YTIME)	               "Compute final energy demand in transport"
 Q01StockPcYearly(allCy,YTIME)                              "Compute stock of passenger cars (in million vehicles)"
@@ -22,7 +22,7 @@ Q01RateScrPc(allCy,YTIME)                                  "Compute passenger ca
 
 *'                **Interdependent Equations**
 Q01DemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)	       "Compute final energy demand in transport per fuel"
-Q01Lft(allCy,DSBS,EF,YTIME)	                               "Compute the lifetime of passenger cars" 
+Q01Lft(allCy,DSBS,TECH,YTIME)	                               "Compute the lifetime of passenger cars" 
 ;
 
 Variables
@@ -40,7 +40,7 @@ V01CostTranspPerMeanConsSize(allCy,TRANSE,RCon,TTECH,YTIME)"Transportation cost 
 V01CostTranspPerVeh(allCy,TRANSE,RCon,TTECH,YTIME)	       "Transportation cost per mean and consumer size (KUS$2015/vehicle)"!!
 V01CostTranspMatFac(allCy,TRANSE,RCon,TTECH,YTIME)	       "Transportation cost including maturity factor (KUS$2015/vehicle)"
 V01TechSortVarCost(allCy,TRANSE,Rcon,YTIME)	               "Technology sorting based on variable cost (1)"
-V01ShareTechTr(allCy,TRANSE,EF,YTIME)	                   "Technology share in new equipment (1)"
+V01ShareTechTr(allCy,TRANSE,TECH,YTIME)	                   "Technology share in new equipment (1)"
 V01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)	   "Consumption of each technology and subsector (Mtoe)"
 *v01DemFinEneSubTransp(allCy,TRANSE,YTIME)	               "Final energy demand in transport subsectors (Mtoe)"
 V01StockPcYearly(allCy,YTIME)                              "Stock of passenger cars (million vehicles)"
@@ -55,5 +55,5 @@ V01RateScrPc(allCy,YTIME)                                  "Scrapping rate of pa
 
 *'                **Interdependent Equations**
 VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)            "Final energy demand in transport subsectors per fuel (Mtoe)"
-VmLft(allCy,DSBS,EF,YTIME)                                 "Lifetime of technologies (years)"
+VmLft(allCy,DSBS,TECH,YTIME)                                 "Lifetime of technologies (years)"
 ;
