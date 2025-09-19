@@ -55,3 +55,6 @@ $offtext
 *VmConsRemSubEquipSubSec.FX(runCy,DSBS,EF,YTIME)$(SECtoEF(DSBS,EF) $(not An(ytime))) =
 *(VmConsFuelInclHP.L(runCy ,DSBS,EF,YTIME) - (VmConsElecNonSubIndTert.L(runCy,DSBS,YTIME)$(ELCEF(EF) $INDDOM(DSBS)) + 0$(not (ELCEF(EF) $INDDOM(DSBS)))));
 *---
+V02VarCostTech.scale(runCy,DSBS,rCon,ITECH,YTIME) = 1e-9;
+Q02VarCostTech.scale(runCy,DSBS,rCon,ITECH,YTIME) = V02VarCostTech.scale(runCy,DSBS,rCon,ITECH,YTIME);
+*---

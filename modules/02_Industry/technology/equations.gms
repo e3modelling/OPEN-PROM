@@ -60,11 +60,12 @@ Q02GapUsefulDemSubsec(allCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $runCy(
 *' Check ITECH and CHPs
 Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
         V02CapCostTech(allCy,DSBS,ITECH,YTIME) =E=
-        (((imDisc(allCy,DSBS,YTIME)$(not TCHP(ITECH)) + imDisc(allCy,"PG",YTIME)$TCHP(ITECH)) !! in case of chp plants we use the discount rate of power generation sector
+        ((((imDisc(allCy,DSBS,YTIME)$(not TCHP(ITECH)) + imDisc(allCy,"PG",YTIME)$TCHP(ITECH)) !! in case of chp plants we use the discount rate of power generation sector
         * exp((imDisc(allCy,DSBS,YTIME)$(not TCHP(ITECH)) + imDisc(allCy,"PG",YTIME)$TCHP(ITECH)) * VmLft(allCy,DSBS,ITECH,YTIME)))
         /(exp((imDisc(allCy,DSBS,YTIME)$(not TCHP(ITECH)) + imDisc(allCy,"PG",YTIME)$TCHP(ITECH)) * VmLft(allCy,DSBS,ITECH,YTIME)) - 1)) 
         * imCapCostTech(allCy,DSBS,ITECH,YTIME) * imCGI(allCy,YTIME)
-        + imFixOMCostTech(allCy,DSBS,ITECH,YTIME)/sUnitToKUnit; !! divide with utilization rate or with efficiency as well???? depends on the CapCostTech parameter
+        + imFixOMCostTech(allCy,DSBS,ITECH,YTIME)/sUnitToKUnit)
+        /(imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME)); !! divide with utilization rate or with efficiency as well???? depends on the CapCostTech parameter
 
 
 
@@ -81,7 +82,7 @@ Q02VarCostTech(allCy,DSBS,rCon,ITECH,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS))$(or
         + SQRT(SQR(((sum(EF$ITECHtoEF(ITECH,EF),i02Share(allCy,DSBS,ITECH,EF,YTIME) * (VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME) + (VmRenValue(YTIME))$(not RENEF(ITECH) and not NENSE(DSBS))/sUnitToKUnit))
                 + (imVarCostTech(allCy,DSBS,ITECH,YTIME))/sUnitToKUnit)
         / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME)
-        - (0$(not TCHP(ITECH)) + (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME)*smFracElecPriChp*VmPriceElecInd(allCy,YTIME))$TCHP(ITECH))))))/2          
+        - (0$(not TCHP(ITECH)) + (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME)*smFracElecPriChp*VmPriceElecInd(allCy,YTIME))$TCHP(ITECH))))))/imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME)/2          
         * imAnnCons(allCy,DSBS,"smallest") * (imAnnCons(allCy,DSBS,"largest")/imAnnCons(allCy,DSBS,"smallest"))**((ord(rCon)-1)/imNcon(DSBS)));
 
 
@@ -94,7 +95,7 @@ Q02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $SECTTECH(DSBS,I
         imMatrFactor(allCy,DSBS,ITECH,YTIME) / imCumDistrFuncConsSize(allCy,DSBS) *
         sum(rCon$(ord(rCon) le imNcon(DSBS)+1),
                 ((V02CapCostTech(allCy,DSBS,ITECH,YTIME) + V02VarCostTech(allCy,DSBS,rCon,ITECH,YTIME))**(-i02ElaSub(allCy,DSBS)))
-                * imDisFunConSize(allCy,DSBS,rCon) / sum((ITECH2)$(SECTTECH(DSBS,ITECH2)),imMatrFactor(allCy,DSBS,ITECH,YTIME) * (((V02CapCostTech(allCy,DSBS,ITECH,YTIME) + V02VarCostTech(allCy,DSBS,rCon,ITECH,YTIME))**(-i02ElaSub(allCy,DSBS))))));
+                * imDisFunConSize(allCy,DSBS,rCon) / sum((ITECH2)$(SECTTECH(DSBS,ITECH2)),imMatrFactor(allCy,DSBS,ITECH2,YTIME) * (((V02CapCostTech(allCy,DSBS,ITECH2,YTIME) + V02VarCostTech(allCy,DSBS,rCon,ITECH2,YTIME))**(-i02ElaSub(allCy,DSBS))))));
 
 *' This equation computes the equipment capacity of each technology in each subsector
 *'Check if Tech exists in main.gms
