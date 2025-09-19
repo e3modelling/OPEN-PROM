@@ -23,7 +23,7 @@ Q03ConsFinEneCountry(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          sum(TRANSE,
              sum(EF$(EFtoEFS(EF,EFS) $SECtoEF(TRANSE,EF)), VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)))
         +
-            sum(EF$(DACTECHEF(EF) and EFtoEFS(EF,EFS)),VmConsFuelDACProd(allCy,EF,YTIME))
+         sum(EF$(EFtoEFS(EF,EFS) $SECtoEF("DAC",EF)),VmConsFuelDACProd(allCy,EF,YTIME))
         ;
 
 *' The equation computes the total final energy consumption in million tonnes of oil equivalent 

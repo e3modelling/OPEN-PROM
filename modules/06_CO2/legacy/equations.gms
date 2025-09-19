@@ -123,7 +123,7 @@ Q06ProfRateDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V06ProfRateDAC(allCy,DACTECH,YTIME)
          =E=
           (sum(NAP$NAPtoALLSBS(NAP,"DAC"),VmCarVal(allCy,NAP,YTIME)) + i06SubsDAC(allCy,DACTECH,YTIME)) / 
-          (V06LvlCostDAC(allCy,DACTECH,YTIME) + i06SpecElecDAC(allCy,DACTECH,YTIME) * VmPriceElecIndResConsu(allCy,"i",YTIME-1) + i06SpecHeatDAC(allCy,DACTECH,YTIME) * VmPriceFuelSubsecCHP(allCy,"IS","NGS",YTIME-1) / 0.85)
+          (V06LvlCostDAC(allCy,DACTECH,YTIME) + i06SpecElecDAC(allCy,DACTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1) + i06SpecHeatDAC(allCy,DACTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","NGS",YTIME-1) / 0.85)
 ;
 
 *' The equation estimates the annual increase rate of DAC capacity regionally.
@@ -147,7 +147,7 @@ Q06CapDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 ;
 
 *' The equation calculates the fuels consumed by the DAC installed capacity annually and regionally.
-Q06ConsFuelTechDACProd(allCy,DACTECH,EF,YTIME)$(TIME(YTIME) $DACTECHEF(EF) $(runCy(allCy)))..
+Q06ConsFuelTechDACProd(allCy,DACTECH,EF,YTIME)$(TIME(YTIME) $TECHtoEF(DACTECH,EF) $(runCy(allCy)))..
          VmConsFuelTechDACProd(allCy,DACTECH,EF,YTIME)
          =E=
          (
@@ -158,8 +158,8 @@ Q06ConsFuelTechDACProd(allCy,DACTECH,EF,YTIME)$(TIME(YTIME) $DACTECHEF(EF) $(run
          * smTWhToMtoe
 ;
 
-Q06ConsFuelDACProd(allCy,EF,YTIME)$(TIME(YTIME) $DACTECHEF(EF) $(runCy(allCy)))..
+Q06ConsFuelDACProd(allCy,EF,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
          VmConsFuelDACProd(allCy,EF,YTIME)
          =E=
-         sum(DACTECH$DACTECHEFtoEF(DACTECH,EF),VmConsFuelTechDACProd(allCy,DACTECH,EF,YTIME))
+         sum(DACTECH$TECHtoEF(DACTECH,EF),VmConsFuelTechDACProd(allCy,DACTECH,EF,YTIME))
 ;
