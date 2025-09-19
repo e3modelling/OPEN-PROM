@@ -35,3 +35,22 @@ V02UsefulElecNonSubIndTert.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = imFuelConsPe
 *---
 VmConsFuel.L(runCy,DSBS,EF,YTIME) = 1e-8;
 VmConsFuel.FX(runCy,DSBS,EF,YTIME)$((not HEATPUMP(EF)) and not TRANSE(DSBS) and not An(YTIME)) = sum(SECtoEF(DSBS,EF),imFuelConsPerFueSub(runCy,DSBS,EF,YTIME));
+*---
+*vmConsTotElecInd.FX(runCy,YTIME)$(not An(YTIME))= SUM(INDSE,VmConsElecNonSubIndTert.l(runCy,INDSE,YTIME));
+
+*vmDemFinSubFuelInd.FX(runCy,YTIME)$(not An(YTIME))= SUM(INDSE,VmDemFinSubFuelSubsec.L(runCy,INDSE,YTIME));
+*---
+$ontext
+VmConsFuelInclHP.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $(not TRANSE(DSBS)) $(not An(YTIME))) =
+(imFuelConsPerFueSub(runCy,DSBS,EF,YTIME))$((not ELCEF(EF)) $(not HEATPUMP(EF)))
++(VmElecConsHeatPla.L(runCy,DSBS,YTIME)*imUsfEneConvSubTech(runCy,DSBS,"HEATPUMP",YTIME))$HEATPUMP(EF)+
+(imFuelConsPerFueSub(runCy,DSBS,EF,YTIME)-VmElecConsHeatPla.L(runCy,DSBS,YTIME))$ELCEF(EF)
++1e-7$(H2EF(EF) or sameas("STE1AH2F",EF));
+$offtext
+*---
+*VmConsRemSubEquipSubSec.FX(runCy,DSBS,EF,YTIME)$(SECtoEF(DSBS,EF) $(not An(ytime))) =
+*(VmConsFuelInclHP.L(runCy ,DSBS,EF,YTIME) - (VmConsElecNonSubIndTert.L(runCy,DSBS,YTIME)$(ELCEF(EF) $INDDOM(DSBS)) + 0$(not (ELCEF(EF) $INDDOM(DSBS)))));
+*---
+V02VarCostTech.scale(runCy,DSBS,rCon,ITECH,YTIME) = 1e-9;
+Q02VarCostTech.scale(runCy,DSBS,rCon,ITECH,YTIME) = V02VarCostTech.scale(runCy,DSBS,rCon,ITECH,YTIME);
+*---
