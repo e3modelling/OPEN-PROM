@@ -95,7 +95,7 @@ Q02VarCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS))$SECTTECH
     ) +
     imVarCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit
   ) / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME) -
-  0*(
+  (
     VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME) *
     smFracElecPriChp *
     VmPriceElecInd(allCy,YTIME) 
