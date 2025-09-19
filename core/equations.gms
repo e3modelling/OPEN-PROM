@@ -12,8 +12,8 @@
 
 $IFTHEN.calib %Calibration% == Calibration
 qDummyObj(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy))).. vDummyObj =e=
-SQRT(SUM(SECTTECH(DSBS,EF)$(INDDOM(DSBS)), SQR(imFuelConsPerFueSub(allCy,DSBS,EF,YTIME)-VmConsFuelInclHP(allCy,DSBS,EF,YTIME))) ) +
-SQRT(SUM(SECTTECH(TRANSE,EF), SQR(VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)-imFuelConsPerFueSub(allCy,TRANSE,EF,YTIME)))) +
+SQRT(SUM((DSBS,TECH)$(SECTTECH(DSBS,TECH)and TECHtoEF(TECH,EF) and (INDDOM(DSBS))), SQR(imFuelConsPerFueSub(allCy,DSBS,EF,YTIME)-VmConsFuel(allCy,DSBS,EF,YTIME)))) +
+SQRT(SUM((DSBS,TECH)$(SECTTECH(DSBS,TECH)and TECHtoEF(TECH,EF) and (TRANSE(DSBS))), SQR(VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)-imFuelConsPerFueSub(allCy,TRANSE,EF,YTIME)))) +
 0;
 $ELSEIF.calib %Calibration% == MatCalibration
 qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy)).. 
