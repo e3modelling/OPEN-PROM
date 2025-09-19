@@ -13,7 +13,6 @@ V05GapShareH2Tech1.L(runCy,H2TECH,YTIME) = 2;
 V05GapShareH2Tech1.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
 display V05GapShareH2Tech1.L;
 *---
-V05DemGapH2.LO(runCy, YTIME) = 0 ;
 V05DemGapH2.L(runCy,YTIME) = 2;
 V05DemGapH2.FX(runCy,YTIME)$(not An(YTIME)) = 1e-5;
 display V05DemGapH2.L;

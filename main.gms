@@ -242,7 +242,7 @@ file fStat /'modelstat.txt'/;
 fStat.ap = 1; 
 
 **MODULE REALIZATION SWITCHES**
-$setGlobal Transport        legacy
+$setGlobal Transport        simple
 $setGlobal Industry         technology
 $setGlobal RestOfEnergy     legacy
 $setGlobal PowerGeneration  simple
