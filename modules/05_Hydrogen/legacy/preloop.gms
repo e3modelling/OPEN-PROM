@@ -15,7 +15,6 @@ display V05GapShareH2Tech1.L;
 *---
 V05DemGapH2.L(runCy,YTIME) = 2;
 V05DemGapH2.FX(runCy,YTIME)$(not An(YTIME)) = 0;
-V05DemGapH2.FX(runCy,YTIME)$(not An(YTIME)) = 0;
 display V05DemGapH2.L;
 *---
 VmProdH2.L(runCy,H2TECH, YTIME) = 0.5;
