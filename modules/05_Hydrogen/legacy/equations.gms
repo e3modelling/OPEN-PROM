@@ -27,13 +27,13 @@ Q05DemSecH2(allCy,SBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' This equation defines the amount of hydrogen production capacity that is scrapped due to the expiration of the useful life of plants.
 *' It considers the remaining lifetime of hydrogen production facilities and the impact of past production gaps.
 Q05ScrapLftH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V05ScrapLftH2Prod(allCy,H2TECH,YTIME)
-      =E=
-    (
-    V05GapShareH2Tech1(allCy,H2TECH,YTIME-i05ProdLftH2(H2TECH,YTIME)) *
-    V05DemGapH2(allCy,YTIME-i05ProdLftH2(H2TECH,YTIME)) /
-    VmProdH2(allCy,H2TECH,YTIME-1)
-    )$(ord(YTIME)>11+i05ProdLftH2(H2TECH,YTIME)) !!+ 0.1
+        V05ScrapLftH2Prod(allCy,H2TECH,YTIME)
+         =E=
+         (
+         V05GapShareH2Tech1(allCy,H2TECH,YTIME-i05ProdLftH2(H2TECH,YTIME)) *
+         V05DemGapH2(allCy,YTIME-i05ProdLftH2(H2TECH,YTIME)) /
+         (VmProdH2(allCy,H2TECH,YTIME-1) + 1e-6)
+         )$(ord(YTIME)>11+i05ProdLftH2(H2TECH,YTIME)) !!+ 0.1
 ;
 
 *' This equation models the premature replacement of hydrogen production capacity. It adjusts for the need to replace aging
@@ -57,7 +57,7 @@ Q05PremRepH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
            )**(-i05WBLGammaH2Prod(allCy,YTIME))
 
            + V05CostVarProdH2Tech(allCy,H2TECH,YTIME)**(-i05WBLGammaH2Prod(allCy,YTIME))
-         )
+         +1e-6)
          )$H2TECHPM(H2TECH)
 ;
 
@@ -89,7 +89,7 @@ Q05DemGapH2(allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
             (1-V05CapScrapH2ProdTech(allCy,H2TECH,YTIME)) *
             VmProdH2(allCy,H2TECH,YTIME-1)
           )
-    )) )/2
+    )) )/2 + 1e-6
 ;
 
 *' This equation calculates the production costs of hydrogen, including both fixed costs (e.g., capital investment) 
@@ -224,10 +224,10 @@ Q05ProdH2(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q05CostAvgProdH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCostAvgProdH2(allCy,YTIME)
         =E=
-    sum(H2TECH, 
-      (VmProdH2(allCy,H2TECH,YTIME) + 1e-6) *
+    (sum(H2TECH, 
+      (VmProdH2(allCy,H2TECH,YTIME) ) *
       V05CostProdH2Tech(allCy,H2TECH,YTIME)
-    ) /
+    )+ 1e-6) /
     (sum(H2TECH,VmProdH2(allCy,H2TECH,YTIME)) + 1e-6)
 ;
 
@@ -241,8 +241,8 @@ Q05ConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)$(TIME(YTIME) $H2TECHEFtoEF(H2TECH,E
          +
          (
          VmConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME-1)*
-         (VmProdH2(allCy,H2TECH,YTIME)/i05EffH2Prod(allCy,H2TECH,YTIME))/
-         (VmProdH2(allCy,H2TECH,YTIME-1)/i05EffH2Prod(allCy,H2TECH,YTIME-1))
+         (VmProdH2(allCy,H2TECH,YTIME)/i05EffH2Prod(allCy,H2TECH,YTIME)+ 1e-6)/
+         (VmProdH2(allCy,H2TECH,YTIME-1)/i05EffH2Prod(allCy,H2TECH,YTIME-1)+ 1e-6)
          )$(not sameas(YTIME,"%fBaseY%"))
 ;
 
