@@ -22,6 +22,8 @@ Q03ConsFinEneCountry(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          +
          sum(TRANSE,
              sum(EF$(EFtoEFS(EF,EFS) $SECtoEF(TRANSE,EF)), VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)))
+        +
+         sum(EF$(EFtoEFS(EF,EFS) $SECtoEF("DAC",EF)),VmConsFuelDACProd(allCy,EF,YTIME))
         ;
 
 *' The equation computes the total final energy consumption in million tonnes of oil equivalent 
@@ -192,8 +194,9 @@ Q03InpTotTransf(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                  =E=
         (
             VmInpTransfTherm(allCy,EFS,YTIME) + VmTransfInputDHPlants(allCy,EFS,YTIME) + V03InpTransfNuclear(allCy,EFS,YTIME) +
-             V03InputTransfRef(allCy,EFS,YTIME) + sum(EF$(H2PRODEF(EF) and EFtoEFS(EF,EFS)),VmConsFuelH2Prod(allCy,EF,YTIME))
+             V03InputTransfRef(allCy,EFS,YTIME) + sum(EF$(H2PRODEF(EF) and EFtoEFS(EF,EFS)),VmConsFuelH2Prod(allCy,EF,YTIME)
         )$(not sameas(EFS,"OGS"))
+        )
         +
         (
           V03OutTotTransf(allCy,EFS,YTIME) - VmConsFinEneCountry(allCy,EFS,YTIME) - VmConsFinNonEne(allCy,EFS,YTIME) - i03RateEneBranCons(allCy,EFS,YTIME)*

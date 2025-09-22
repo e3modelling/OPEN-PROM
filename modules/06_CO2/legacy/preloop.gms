@@ -13,3 +13,11 @@ V06CaptCummCO2.FX(runCy,YTIME)$(not an(YTIME)) = 0 ;
 *V06TrnsWghtLinToExp.scale(runCy,YTIME)=1.e-20;
 *Q06TrnsWghtLinToExp.scale(runCy,YTIME)=1.e-20;
 *---
+V06LvlCostDAC.FX(runCy,DACTECH,YTIME)$(not an(YTIME)) = 100;
+V06CapDAC.FX(runCy,DACTECH,YTIME)$(not an(YTIME)) = 1;
+$ontext
+V06CapDAC.FX("USA",DACTECH,"2025") = 1e6;
+V06CapDAC.FX("USA",DACTECH,"2028") = 3e6;
+V06CapDAC.FX("NEU",DACTECH,"2022") = 4e4;
+V06CapDAC.FX("LAM",DACTECH,"2026") = 600;
+$offtext

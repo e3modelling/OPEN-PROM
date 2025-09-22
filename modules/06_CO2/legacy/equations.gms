@@ -24,7 +24,12 @@ Q06CapCO2ElecHydr(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                 + 
          (sum(EF, sum(H2TECH$H2TECHEFtoEF(H2TECH,EF),
                VmConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)*imCo2EmiFac(allCy,"H2P",EF,YTIME)*i05CaptRateH2Prod(allCy,H2TECH,YTIME)))
-          )  ;    !! CO2 emissions captured by plants producing hydrogen
+          ) !! CO2 emissions captured by plants producing hydrogen
+                +
+            (
+              sum(DACTECH,V06CapDAC(allCy,DACTECH,YTIME)) / 1e6
+            )
+          ;   
 
 
 *' The equation calculates the cumulative CO2 captured in million tons of CO2 for a given scenario and year.
@@ -57,3 +62,107 @@ Q06CstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VmCstCO2SeqCsts(allCy,YTIME) =E=
        (1-V06TrnsWghtLinToExp(allCy,YTIME))*(i06ElastCO2Seq(allCy,"mc_a")*V06CaptCummCO2(allCy,YTIME)+i06ElastCO2Seq(allCy,"mc_b"))+
        V06TrnsWghtLinToExp(allCy,YTIME)*(i06ElastCO2Seq(allCy,"mc_c")*exp(i06ElastCO2Seq(allCy,"mc_d")*V06CaptCummCO2(allCy,YTIME)));           
+
+*' The equation calculates the CAPEX of each DAC technology, as it's affected by a learning curve.
+Q06GrossCapDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         V06GrossCapDAC(allCy,DACTECH,YTIME)
+                  =E=         
+          0.5 * 
+          (
+            (i06GrossCapDAC(allCy,DACTECH) * V06CapDAC(allCy,DACTECH,YTIME-1) ** (log(0.7)/log(2))) +
+            i06GrossCapDACMin(allCy,DACTECH) +
+            sqrt(
+              sqr(
+                (i06GrossCapDAC(allCy,DACTECH) * V06CapDAC(allCy,DACTECH,YTIME-1) ** (log(0.7)/log(2))) - i06GrossCapDACMin(allCy,DACTECH)
+              )
+            )
+          )
+;
+
+*' The equation calculates the fixed and O&M costs of each DAC technology, as they are affected by a learning curve.
+Q06FixOandMDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         V06FixOandMDAC(allCy,DACTECH,YTIME)
+                  =E=         
+          0.5 * 
+          (
+            (i06FixOandMDAC(allCy,DACTECH) * V06CapDAC(allCy,DACTECH,YTIME-1) ** (log(0.7)/log(2))) +
+            i06FixOandMDACMin(allCy,DACTECH) +
+            sqrt(
+              sqr(
+                (i06FixOandMDAC(allCy,DACTECH) * V06CapDAC(allCy,DACTECH,YTIME-1) ** (log(0.7)/log(2))) - i06FixOandMDACMin(allCy,DACTECH)
+              )
+            )
+          )
+;
+
+*' The equation calculates the variable costs of each DAC technology including the CO2 storage costs, as they are affected by a learning curve.
+Q06VarCostDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         V06VarCostDAC(allCy,DACTECH,YTIME)
+                  =E=         
+          0.5 * 
+          (
+            (i06VarCostDAC(allCy,DACTECH) * V06CapDAC(allCy,DACTECH,YTIME-1) ** (log(0.7)/log(2))) +
+            i06VarCostDACMin(allCy,DACTECH) +
+            sqrt(
+              sqr(
+                (i06VarCostDAC(allCy,DACTECH) * V06CapDAC(allCy,DACTECH,YTIME-1) ** (log(0.7)/log(2))) - i06VarCostDACMin(allCy,DACTECH)
+              )
+            )
+          )
+;
+
+*' The equation calculates the Levelized Costs of DAC capacity, also taking into account its discount rate and life expectancy, 
+*' for each region (country) and year.
+Q06LvlCostDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         V06LvlCostDAC(allCy,DACTECH,YTIME)
+                  =E=         
+          V06GrossCapDAC(allCy,DACTECH,YTIME) + V06FixOandMDAC(allCy,DACTECH,YTIME) +  V06VarCostDAC(allCy,DACTECH,YTIME)
+;
+
+*' The equation estimates the profitability of DAC capacity, calculating the rate between levelized costs (CAPEX, fixed and electricity needs)
+*' and revenues/avoided costs (carbon values, carbon subsidies) regionally.
+Q06ProfRateDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         V06ProfRateDAC(allCy,DACTECH,YTIME)
+         =E=
+          (sum(NAP$NAPtoALLSBS(NAP,"DAC"),VmCarVal(allCy,NAP,YTIME)) + i06SubsDAC(allCy,DACTECH,YTIME)) / 
+          (V06LvlCostDAC(allCy,DACTECH,YTIME) + i06SpecElecDAC(allCy,DACTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1) + i06SpecHeatDAC(allCy,DACTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","NGS",YTIME-1) / 0.85)
+;
+
+*' The equation estimates the annual increase rate of DAC capacity regionally.
+Q06CapFacNewDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         V06CapFacNewDAC(allCy,DACTECH,YTIME)
+         =E=
+          (
+            ((exp(S06MatFacDAC * V06ProfRateDAC(allCy,DACTECH,YTIME) - 1)) /
+           exp(S06MatFacDAC * S06ProfRateMaxDAC - 1))
+          ) *
+          (S06CapFacMaxNewDAC - S06CapFacMinNewDAC) +
+          S06CapFacMinNewDAC
+;
+
+*' The equation calculates the DAC installed capacity annually and regionally.
+Q06CapDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         V06CapDAC(allCy,DACTECH,YTIME)
+         =E=
+          V06CapDAC(allCy,DACTECH,YTIME-1) * (1 + V06CapFacNewDAC(allCy,DACTECH,YTIME)) +
+          i06SchedNewCapDAC(allCy,DACTECH,YTIME)
+;
+
+*' The equation calculates the different fuels consumed by the DAC installed capacity annually and regionally.
+Q06ConsFuelTechDACProd(allCy,DACTECH,EF,YTIME)$(TIME(YTIME) $TECHtoEF(DACTECH,EF) $(runCy(allCy)))..
+         VmConsFuelTechDACProd(allCy,DACTECH,EF,YTIME)
+         =E=
+         (
+          (V06CapDAC(allCy,DACTECH,YTIME) * i06SpecHeatDAC(allCy,DACTECH,YTIME) / 0.85)$(sameas(EF, 'ngs')) +
+          (V06CapDAC(allCy,DACTECH,YTIME) * i06SpecElecDAC(allCy,DACTECH,YTIME))$(sameas(EF, 'elc')) 
+         )
+         / 1e6
+         * smTWhToMtoe
+;
+
+*' The equation calculates the different fuels consumed by the DAC installed capacity annually and regionally.
+Q06ConsFuelDACProd(allCy,EF,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
+         VmConsFuelDACProd(allCy,EF,YTIME)
+         =E=
+         sum(DACTECH$TECHtoEF(DACTECH,EF),VmConsFuelTechDACProd(allCy,DACTECH,EF,YTIME))
+;
