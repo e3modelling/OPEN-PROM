@@ -13,14 +13,13 @@ V05GapShareH2Tech1.L(runCy,H2TECH,YTIME) = 2;
 V05GapShareH2Tech1.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
 display V05GapShareH2Tech1.L;
 *---
-V05DemGapH2.LO(runCy, YTIME) = 0 ;
 V05DemGapH2.L(runCy,YTIME) = 2;
 V05DemGapH2.FX(runCy,YTIME)$(not An(YTIME)) = 1e-5;
 display V05DemGapH2.L;
 *---
 VmProdH2.L(runCy,H2TECH, YTIME) = 0.5;
 VmProdH2.LO(runCy,H2TECH, YTIME) = 0;
-VmProdH2.FX(runCy,H2TECH, YTIME)$(not An(YTIME)) = 1e-5;
+VmProdH2.FX(runCy,H2TECH, YTIME)$(not An(YTIME)) = 1e-8;
 display VmProdH2.L;
 *---
 VmDemTotH2.L(runCy,YTIME) = 2;
@@ -90,4 +89,7 @@ VmCostAvgProdH2.FX(runCy,YTIME)$(not An(YTIME)) = 1e-5;
 *---
 VmDemSecH2.L(runCy,SBS, YTIME) = 2;
 VmDemSecH2.FX(runCy,SBS,YTIME)$(not An(YTIME)) = 1e-5;
+*---
+V05DemGapH2.scale(runCy,YTIME) = 1e-6;
+Q05DemGapH2.scale(runCy,YTIME) = V05DemGapH2.scale(runCy,YTIME);
 *---

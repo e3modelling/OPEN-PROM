@@ -214,7 +214,7 @@ $setEnv GDXCOMPRESS 1
 *' *** Generate input data?
 $setGlobal GenerateInput off !! can be overwritten if VS Code Tasks are used
 
-$setGlobal fCountries 'MAR,IND,USA,EGY,RWO' !! can be overwritten if VS Code Tasks are used
+$setGlobal fCountries 'OAS,USA' !! can be overwritten if VS Code Tasks are used
 
 $setGlobal fCountryList %countries%
 
@@ -242,8 +242,8 @@ file fStat /'modelstat.txt'/;
 fStat.ap = 1; 
 
 **MODULE REALIZATION SWITCHES**
-$setGlobal Transport        legacy
-$setGlobal Industry         legacy
+$setGlobal Transport        simple
+$setGlobal Industry         technology
 $setGlobal RestOfEnergy     legacy
 $setGlobal PowerGeneration  simple
 $setGlobal Hydrogen         legacy

@@ -5,11 +5,8 @@ Equations
 *' *** Transport
 Q01ActivGoodsTransp(allCy,TRANSE,YTIME)                    "Compute goods transport activity"
 Q01GapTranspActiv(allCy,TRANSE,YTIME)	                   "Compute the gap in transport activity"
-Q01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)	       "Compute Specific Fuel Consumption"
-Q01CostTranspPerMeanConsSize(allCy,TRANSE,RCon,TTECH,YTIME)"Compute transportation cost per mean and consumer size in KUS$2015 per vehicle"
-Q01CostTranspPerVeh(allCy,TRANSE,RCon,TTECH,YTIME)	       "Compute transportation cost per mean and consumer size in KUS$2015 per vehicle"
-Q01CostTranspMatFac(allCy,TRANSE,RCon,TTECH,YTIME)	       "Compute transportation cost including maturity factor"
-Q01TechSortVarCost(allCy,TRANSE,Rcon,YTIME)	               "Compute technology sorting based on variable cost"
+*Q01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)	       "Compute Specific Fuel Consumption"
+Q01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME)    "Compute transportation cost per mean in KUS$2015 per vehicle"
 Q01ShareTechTr(allCy,TRANSE,TECH,YTIME)	                   "Compute technology sorting based on variable cost and new equipment"
 Q01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)	   "Compute consumption of each technology in transport sectors"
 *q01DemFinEneSubTransp(allCy,TRANSE,YTIME)	               "Compute final energy demand in transport"
@@ -20,7 +17,8 @@ Q01ActivPassTrnsp(allCy,TRANSE,YTIME)                      "Compute passenger tr
 Q01NumPcScrap(allCy,YTIME)                                 "Compute scrapped passenger cars"
 Q01PcOwnPcLevl(allCy,YTIME)                                "Compute ratio of car ownership over saturation car ownership"
 Q01RateScrPc(allCy,YTIME)                                  "Compute passenger cars scrapping rate"
-
+Q01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)
+Q01CostFuel(allCy,TRANSE,TTECH,YTIME)
 *'                **Interdependent Equations**
 Q01DemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)	       "Compute final energy demand in transport per fuel"
 Q01Lft(allCy,DSBS,TECH,YTIME)	                               "Compute the lifetime of passenger cars" 
@@ -37,10 +35,7 @@ V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)	       "Specific Fuel Consumpti
                                                                 !! SFC for passenger cars (ktoe/Gkm)
                                                                 !! SFC for other passsenger transportation modes (ktoe/Gpkm)
                                                                 !! SFC for trucks is measured (ktoe/Gtkm)
-V01CostTranspPerMeanConsSize(allCy,TRANSE,RCon,TTECH,YTIME)"Transportation cost per mean and consumer size (KUS$2015/vehicle)"
-V01CostTranspPerVeh(allCy,TRANSE,RCon,TTECH,YTIME)	       "Transportation cost per mean and consumer size (KUS$2015/vehicle)"!!
-V01CostTranspMatFac(allCy,TRANSE,RCon,TTECH,YTIME)	       "Transportation cost including maturity factor (KUS$2015/vehicle)"
-V01TechSortVarCost(allCy,TRANSE,Rcon,YTIME)	               "Technology sorting based on variable cost (1)"
+V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME)    "Transportation cost per mean (KUS$2015/vehicle)"
 V01ShareTechTr(allCy,TRANSE,TECH,YTIME)	                   "Technology share in new equipment (1)"
 V01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)	   "Consumption of each technology and subsector (Mtoe)"
 *v01DemFinEneSubTransp(allCy,TRANSE,YTIME)	               "Final energy demand in transport subsectors (Mtoe)"
@@ -54,7 +49,8 @@ V01ActivPassTrnsp(allCy,TRANSE,YTIME)                      "Passenger transport 
 V01NumPcScrap(allCy,YTIME)                                 "Scrapped passenger cars (million vehicles)"
 V01PcOwnPcLevl(allCy,YTIME)                                "Ratio of car ownership over saturation car ownership (1)"
 V01RateScrPc(allCy,YTIME)                                  "Scrapping rate of passenger cars (1)"
-
+V01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)
+V01CostFuel(allCy,TRANSE,TTECH,YTIME)
 *'                **Interdependent Equations**
 VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)            "Final energy demand in transport subsectors per fuel (Mtoe)"
 VmLft(allCy,DSBS,TECH,YTIME)                                 "Lifetime of technologies (years)"

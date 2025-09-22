@@ -72,6 +72,7 @@ H2INFR  0.08
 parameter imDisc(allCy,SBS,YTIME) "Discount rates per subsector for all countries ()" ;
 *---
 imDisc(runCy,SBS,YTIME) = iDiscData(SBS);
+imDisc(runCy,"PC",YTIME) = 0.11;
 *---
 * FIXME: Drive the emission factors with mrprom
 * author=giannou
@@ -169,220 +170,223 @@ parameter imTotFinEneDemSubBaseYr(allCy,SBS,YTIME)    "Total Final Energy Demand
 *---
 *Sources for vehicle lifetime:
 *US Department of Transportation, International Union of Railways, Statista, EU CORDIS
-table imDataTransTech (TRANSE, EF, ECONCHAR, YTIME)   "Technoeconomic characteristics of transport (various)"
+table imDataTransTech (TRANSE, TECH, ECONCHAR, YTIME)   "Technoeconomic characteristics of transport (various)"
 $ondelim
 $include"./iDataTransTech.csv"
 $offdelim
 ;
 *---
-table imDataIndTechnology(INDSE,EF,ECONCHAR)          "Technoeconomic characteristics of industry (various)"
+table imDataIndTechnology(INDSE,TECH,ECONCHAR)          "Technoeconomic characteristics of industry (various)"
             IC      FC      VC      LFT USC
-IS.HCL      0.32196 6.8     1.36    25  2.3255
-IS.LGN      0.48295 10.2    2.04    25  0.5
-IS.LPG      0.48295 10.2    2.04    25  0.72
-IS.KRS      0.48295 10.2    2.04    25  0.72
-IS.GDO      0.48295 10.2    2.04    25  0.72
-IS.RFO      0.48295 10.2    2.04    25  0.72
-IS.OLQ      0.48295 10.2    2.04    25  0.72
-IS.NGS      0.48295 10.2    2.04    25  0.8
-IS.OGS      0.48295 10.2    2.04    25  0.8
-IS.BMSWAS   0.48295 10.2    2.04    25  0.5
-IS.ELC      0.29367 6.8     1.36    25  5.74713
-IS.STE1AL   1.04547 17.284  17.68   25  0.35
-IS.STE1AH   1.04547 17.284  17.68   25  0.35
-IS.STE1AD   0.78340 23.3335 4.896   25  0.34
-IS.STE1AR   0.78340 23.3335 4.896   25  0.34
-IS.STE1AG   0.50901 12.9631 13.6    20  0.44
-IS.STE1AB   1.00334 28.8752 8.16    25  0.37
-IS.STE1AH2F 1.34817 40.4451         25  0.5
-IS.HEATPUMP 0.92974 19.3882 3.1021  25  1.848
-IS.H2F      1.04547 40.4451 17.68   25  5.74713
-NF.HCL      3.8528  63.036          30  0.5
-NF.LGN      3.8528  63.036          30  0.5
-NF.LPG      3.21067 63.036          30  0.72
-NF.KRS      3.21067 63.036          30  0.72
-NF.GDO      3.21067 63.036          30  0.72
-NF.RFO      3.21067 63.036          30  0.72
-NF.OLQ      3.21067 63.036          30  0.72
-NF.NGS      2.56853 63.036          30  0.8
-NF.OGS      2.56853 63.036          30  0.8
-NF.BMSWAS   3.8528  63.036          30  0.5
-NF.ELC      3.4     63.036          30  0.97
-NF.STE1AL   2.43133 40.1956 41.1163 25  0.35
-NF.STE1AH   2.43133 40.1956 41.1163 25  0.35
-NF.STE1AD   1.82186 54.264  11.386  25  0.34
-NF.STE1AR   1.82186 54.264  11.386  25  0.34
-NF.STE1AG   1.18376 30.1467 31.6279 20  0.44
-NF.STE1AB   2.33335 67.1517 18.9767 25  0.37
-NF.STE1AH2F 3.13528 94.0585         30  0.5
-NF.HEATPUMP 4.94477 119.819         30  1.848
-NF.H2F      4.94477 119.819 41.1163 30  1.848
-CH.HCL      0.53294 5.44            25  0.5
-CH.LGN      0.53294 5.44            25  0.5
-CH.LPG      0.44411 5.44            25  0.72
-CH.KRS      0.44411 5.44            25  0.72
-CH.GDO      0.44411 5.44            25  0.72
-CH.RFO      0.44411 5.44            25  0.72
-CH.OLQ      0.44411 5.44            25  0.72
-CH.NGS      0.35529 5.44            25  0.8
-CH.OGS      0.35529 5.44            25  0.8
-CH.BMSWAS   0.53294 5.44            25  0.5
-CH.ELC      0.476   5.44            25  0.97
-CH.STE1AL   2.43133 40.1956 41.1163 25  0.35
-CH.STE1AH   2.43133 40.1956 41.1163 25  0.35
-CH.STE1AD   1.82186 54.264  11.386  25  0.34
-CH.STE1AR   1.82186 54.264  11.386  25  0.34
-CH.STE1AG   1.18376 30.1467 31.6279 20  0.44
-CH.STE1AB   2.33335 67.1517 18.9767 25  0.37
-CH.STE1AH2F 3.13528 94.0585         25  0.5
-CH.HEATPUMP 0.68398 10.3404         25  1.848
-CH.H2F      3.13528 94.0585 41.1163 25  1.848
-BM.HCL      4.41477 3.2096          30  0.5
-BM.LGN      4.41477 3.2096          30  0.5
-BM.LPG      3.67898 3.2096          30  0.72
-BM.KRS      3.67898 3.2096          30  0.72
-BM.GDO      3.67898 3.2096          30  0.72
-BM.RFO      3.67898 3.2096          30  0.72
-BM.OLQ      3.67898 3.2096          30  0.72
-BM.NGS      2.94318 3.2096          30  0.8
-BM.OGS      2.94318 3.2096          30  0.8
-BM.BMSWAS   4.41477 3.2096          30  0.5
-BM.ELC      3.808   3.2096          30  0.97
-BM.STE1AL   2.43133 40.1956 41.1163 25  0.35
-BM.STE1AH   2.43133 40.1956 41.1163 25  0.35
-BM.STE1AD   1.82186 54.264  11.386  25  0.34
-BM.STE1AR   1.82186 54.264  11.386  25  0.34
-BM.STE1AG   1.18376 30.1467 31.6279 20  0.44
-BM.STE1AB   2.33335 67.1517 18.9767 25  0.37
-BM.STE1AH2F 3.13528 94.0585         30  0.5
-BM.HEATPUMP 5.66602 6.10081         30  1.848
-BM.H2F      5.66602 94.0585 41.1163 30  1.848
-PP.HCL      0.90179 1.632           25  0.5
-PP.LGN      0.90179 1.632           25  0.5
-PP.LPG      0.75149 1.632           25  0.72
-PP.KRS      0.75149 1.632           25  0.72
-PP.GDO      0.75149 1.632           25  0.72
-PP.RFO      0.75149 1.632           25  0.72
-PP.OLQ      0.75149 1.632           25  0.72
-PP.NGS      0.60119 1.632           25  0.8
-PP.OGS      0.60119 1.632           25  0.8
-PP.BMSWAS   0.90179 1.632           25  0.5
-PP.ELC      0.884   1.632           25  0.97
-PP.STE1AL   2.43133 40.1956 41.1163 25  0.35
-PP.STE1AH   2.43133 40.1956 41.1163 25  0.35
-PP.STE1AD   1.82186 54.264  11.386  25  0.34
-PP.STE1AR   1.82186 54.264  11.386  25  0.34
-PP.STE1AG   1.18376 30.1467 31.6279 20  0.44
-PP.STE1AB   2.33335 67.1517 18.9767 25  0.37
-PP.STE1AH2F 2.27889 68.3668         25  0.5
-PP.HEATPUMP 1.15738 3.10211         25  1.68
-PP.H2F      2.43133 68.3668 41.1163 25  1.68
-FD.HCL      0.63096 0.5372          25  0.5
-FD.LGN      0.63096 0.5372          25  0.5
-FD.LPG      0.42064 0.5372          25  0.72
-FD.KRS      0.42064 0.5372          25  0.72
-FD.GDO      0.42064 0.5372          25  0.72
-FD.RFO      0.42064 0.5372          25  0.72
-FD.OLQ      0.42064 0.5372          25  0.72
-FD.NGS      0.33651 0.5372          25  0.8
-FD.OGS      0.33651 0.5372          25  0.8
-FD.BMSWAS   0.63096 0.5372          25  0.5
-FD.ELC      0.476   0.5372          25  0.97
-FD.STE1AL   2.43133 40.1956 41.1163 25  0.35
-FD.STE1AH   2.43133 40.1956 41.1163 25  0.35
-FD.STE1AD   1.82186 54.264  11.386  25  0.34
-FD.STE1AR   1.82186 54.264  11.386  25  0.34
-FD.STE1AG   1.18376 30.1467 31.6279 20  0.44
-FD.STE1AB   2.33335 67.1517 18.9767 25  0.37
-FD.STE1AH2F 2.27889 68.3668         25  0.5
-FD.HEATPUMP 0.64783 1.02111         25  1.68
-FD.H2F      2.43133 68.3668 41.1163 25  1.68
-EN.HCL      1.00937 0.31769         25  0.5
-EN.LGN      1.00937 0.31769         25  0.5
-EN.LPG      0.84114 0.31769         25  0.72
-EN.KRS      0.84114 0.31769         25  0.72
-EN.GDO      0.84114 0.31769         25  0.72
-EN.RFO      0.84114 0.31769         25  0.72
-EN.OLQ      0.84114 0.31769         25  0.72
-EN.NGS      0.67291 0.31769         25  0.8
-EN.OGS      0.67291 0.31769         25  0.8
-EN.BMSWAS   1.00937 0.31769         25  0.5
-EN.ELC      0.748   0.31769         20  0.97
-EN.STE1AL   2.43133 40.1956 41.1163 25  0.35
-EN.STE1AH   2.43133 40.1956 41.1163 25  0.35
-EN.STE1AD   1.82186 54.264  11.386  25  0.34
-EN.STE1AR   1.82186 54.264  11.386  25  0.34
-EN.STE1AG   1.18376 30.1467 31.6279 20  0.44
-EN.STE1AB   2.33335 67.1517 18.9767 25  0.37
-EN.STE1AH2F 2.27889 68.3668         25  0.5
-EN.HEATPUMP 1.29545 0.60387         25  1.68
-EN.H2F      2.43133 68.3668 41.1163 25  1.68
-TX.HCL      0.67371 0.16959         20  0.5
-TX.LGN      0.67371 0.16959         20  0.5
-TX.LPG      0.44914 0.16959         20  0.72
-TX.KRS      0.44914 0.16959         20  0.72
-TX.GDO      0.44914 0.16959         20  0.72
-TX.RFO      0.44914 0.16959         20  0.72
-TX.OLQ      0.44914 0.16959         20  0.72
-TX.NGS      0.35931 0.16959         20  0.8
-TX.OGS      0.35931 0.16959         20  0.8
-TX.BMSWAS   0.476   0.16959         20  0.5
-TX.ELC      0.476   0.16959         20  0.97
-TX.STE1AL   2.43133 40.1956 41.1163 25  0.35
-TX.STE1AH   2.43133 40.1956 41.1163 25  0.35
-TX.STE1AD   1.82186 54.264  11.386  25  0.34
-TX.STE1AR   1.82186 54.264  11.386  25  0.34
-TX.STE1AG   1.18376 30.1467 31.6279 20  0.44
-TX.STE1AB   2.33335 67.1517 18.9767 25  0.37
-TX.STE1AH2F 2.27889 68.3668         20  0.5
-TX.HEATPUMP 0.69173 0.32236         20  1.68
-TX.H2F      2.43133 68.3668 41.1163 25  1.68
-OE.HCL      1.00937 0.31769         25  0.5
-OE.LGN      1.00937 0.31769         25  0.5
-OE.LPG      0.84114 0.31769         25  0.72
-OE.KRS      0.84114 0.31769         25  0.72
-OE.GDO      0.84114 0.31769         25  0.72
-OE.RFO      0.84114 0.31769         25  0.72
-OE.OLQ      0.84114 0.31769         25  0.72
-OE.NGS      0.67291 0.31769         25  0.8
-OE.OGS      0.67291 0.31769         25  0.8
-OE.BMSWAS   1.00937 0.31769         25  0.5
-OE.ELC      0.84114 0.31769         25  0.97
-OE.STE1AL   2.43133 40.1956 41.1163 25  0.35
-OE.STE1AH   2.43133 40.1956 41.1163 25  0.35
-OE.STE1AD   1.82186 54.264  11.386  25  0.34
-OE.STE1AR   1.82186 54.264  11.386  25  0.34
-OE.STE1AG   1.18376 30.1467 31.6279 20  0.44
-OE.STE1AB   2.33335 67.1517 18.9767 25  0.37
-OE.STE1AH2F 2.27889 68.3668         25  0.5
-OE.HEATPUMP 1.29545 0.60387         25  1.68
-OE.H2F      2.43133 68.3668 41.1163 25  1.68
-OI.HCL      0.94967 1.40352         20  0.5
-OI.LGN      0.94967 1.40352         20  0.5
-OI.LPG      0.79139 1.40352         20  0.72
-OI.KRS      0.79139 1.40352         20  0.72
-OI.GDO      0.79139 1.40352         20  0.72
-OI.RFO      0.79139 1.40352         20  0.72
-OI.OLQ      0.79139 1.40352         20  0.72
-OI.NGS      0.63311 1.40352         20  0.8
-OI.OGS      0.63311 1.40352         20  0.8
-OI.BMSWAS   0.94967 1.40352         20  0.5
-OI.ELC      0.68    1.40352         20  0.97
-OI.STE1AL   2.43133 40.1956 41.1163 25  0.35
-OI.STE1AH   2.43133 40.1956 41.1163 25  0.35
-OI.STE1AD   1.82186 54.264  11.386  25  0.34
-OI.STE1AR   1.82186 54.264  11.386  25  0.34
-OI.STE1AG   1.18376 30.1467 31.6279 20  0.44
-OI.STE1AB   2.33335 67.1517 18.9767 25  0.37
-OI.STE1AH2F 2.27889 68.3668         20  0.5
-OI.HEATPUMP 1.21884 2.66781         20  1.68
-OI.H2F      2.43133 68.3668 41.1163 25  1.68
+*IS.THCL      0.32196 6.8     1.36    25  2.3255
+IS.THCL      0.32196 6.8     1.36    25  0.5
+IS.TLGN      0.48295 10.2    2.04    25  0.5
+IS.TLPG      0.48295 10.2    2.04    25  0.72
+IS.TKRS      0.48295 10.2    2.04    25  0.72
+IS.TGDO      0.48295 10.2    2.04    25  0.72
+IS.TRFO      0.48295 10.2    2.04    25  0.72
+IS.TOLQ      0.48295 10.2    2.04    25  0.72
+IS.TNGS      0.48295 10.2    2.04    25  0.8
+IS.TOGS      0.48295 10.2    2.04    25  0.8
+IS.TBMSWAS   0.48295 10.2    2.04    25  0.5
+* IS.TELC      0.29367 6.8     1.36    25  5.74713
+IS.TELC      0.29367 6.8     1.36    25  0.97
+IS.TSTE1AL   1.04547 17.284  17.68   25  0.35
+IS.TSTE1AH   1.04547 17.284  17.68   25  0.35
+IS.TSTE1AD   0.78340 23.3335 4.896   25  0.34
+IS.TSTE1AR   0.78340 23.3335 4.896   25  0.34
+*IS.TSTE1AG   0.50901 12.9631 13.6    20  0.44
+IS.TSTE1AG   1.18376 30.1467 31.6279 20  0.44
+IS.TSTE1AB   1.00334 28.8752 8.16    25  0.37
+IS.TSTE1AH2F 1.34817 40.4451         25  0.5
+IS.THEATPUMP 0.92974 19.3882 3.1021  25  1.848
+IS.TH2F      1.04547 40.4451 17.68   25  0.97
+NF.THCL      3.8528  63.036          30  0.5
+NF.TLGN      3.8528  63.036          30  0.5
+NF.TLPG      3.21067 63.036          30  0.72
+NF.TKRS      3.21067 63.036          30  0.72
+NF.TGDO      3.21067 63.036          30  0.72
+NF.TRFO      3.21067 63.036          30  0.72
+NF.TOLQ      3.21067 63.036          30  0.72
+NF.TNGS      2.56853 63.036          30  0.8
+NF.TOGS      2.56853 63.036          30  0.8
+NF.TBMSWAS   3.8528  63.036          30  0.5
+NF.TELC      3.4     63.036          30  0.97
+NF.TSTE1AL   2.43133 40.1956 41.1163 25  0.35
+NF.TSTE1AH   2.43133 40.1956 41.1163 25  0.35
+NF.TSTE1AD   1.82186 54.264  11.386  25  0.34
+NF.TSTE1AR   1.82186 54.264  11.386  25  0.34
+NF.TSTE1AG   1.18376 30.1467 31.6279 20  0.44
+NF.TSTE1AB   2.33335 67.1517 18.9767 25  0.37
+NF.TSTE1AH2F 3.13528 94.0585         30  0.5
+NF.THEATPUMP 4.94477 119.819         30  1.848
+NF.TH2F      4.94477 119.819 41.1163 30  0.97
+CH.THCL      0.53294 5.44            25  0.5
+CH.TLGN      0.53294 5.44            25  0.5
+CH.TLPG      0.44411 5.44            25  0.72
+CH.TKRS      0.44411 5.44            25  0.72
+CH.TGDO      0.44411 5.44            25  0.72
+CH.TRFO      0.44411 5.44            25  0.72
+CH.TOLQ      0.44411 5.44            25  0.72
+CH.TNGS      0.35529 5.44            25  0.8
+CH.TOGS      0.35529 5.44            25  0.8
+CH.TBMSWAS   0.53294 5.44            25  0.5
+CH.TELC      0.476   5.44            25  0.97
+CH.TSTE1AL   2.43133 40.1956 41.1163 25  0.35
+CH.TSTE1AH   2.43133 40.1956 41.1163 25  0.35
+CH.TSTE1AD   1.82186 54.264  11.386  25  0.34
+CH.TSTE1AR   1.82186 54.264  11.386  25  0.34
+CH.TSTE1AG   1.18376 30.1467 31.6279 20  0.44
+CH.TSTE1AB   2.33335 67.1517 18.9767 25  0.37
+CH.TSTE1AH2F 3.13528 94.0585         25  0.5
+CH.THEATPUMP 0.68398 10.3404         25  1.848
+CH.TH2F      3.13528 94.0585 41.1163 25  0.97
+BM.THCL      4.41477 3.2096          30  0.5
+BM.TLGN      4.41477 3.2096          30  0.5
+BM.TLPG      3.67898 3.2096          30  0.72
+BM.TKRS      3.67898 3.2096          30  0.72
+BM.TGDO      3.67898 3.2096          30  0.72
+BM.TRFO      3.67898 3.2096          30  0.72
+BM.TOLQ      3.67898 3.2096          30  0.72
+BM.TNGS      2.94318 3.2096          30  0.8
+BM.TOGS      2.94318 3.2096          30  0.8
+BM.TBMSWAS   4.41477 3.2096          30  0.5
+BM.TELC      3.808   3.2096          30  0.97
+BM.TSTE1AL   2.43133 40.1956 41.1163 25  0.35
+BM.TSTE1AH   2.43133 40.1956 41.1163 25  0.35
+BM.TSTE1AD   1.82186 54.264  11.386  25  0.34
+BM.TSTE1AR   1.82186 54.264  11.386  25  0.34
+BM.TSTE1AG   1.18376 30.1467 31.6279 20  0.44
+BM.TSTE1AB   2.33335 67.1517 18.9767 25  0.37
+BM.TSTE1AH2F 3.13528 94.0585         30  0.5
+BM.THEATPUMP 5.66602 6.10081         30  1.848
+BM.TH2F      5.66602 94.0585 41.1163 30  0.97
+PP.THCL      0.90179 1.632           25  0.5
+PP.TLGN      0.90179 1.632           25  0.5
+PP.TLPG      0.75149 1.632           25  0.72
+PP.TKRS      0.75149 1.632           25  0.72
+PP.TGDO      0.75149 1.632           25  0.72
+PP.TRFO      0.75149 1.632           25  0.72
+PP.TOLQ      0.75149 1.632           25  0.72
+PP.TNGS      0.60119 1.632           25  0.8
+PP.TOGS      0.60119 1.632           25  0.8
+PP.TBMSWAS   0.90179 1.632           25  0.5
+PP.TELC      0.884   1.632           25  0.97
+PP.TSTE1AL   2.43133 40.1956 41.1163 25  0.35
+PP.TSTE1AH   2.43133 40.1956 41.1163 25  0.35
+PP.TSTE1AD   1.82186 54.264  11.386  25  0.34
+PP.TSTE1AR   1.82186 54.264  11.386  25  0.34
+PP.TSTE1AG   1.18376 30.1467 31.6279 20  0.44
+PP.TSTE1AB   2.33335 67.1517 18.9767 25  0.37
+PP.TSTE1AH2F 2.27889 68.3668         25  0.5
+PP.THEATPUMP 1.15738 3.10211         25  1.68
+PP.TH2F      2.43133 68.3668 41.1163 25  0.97
+FD.THCL      0.63096 0.5372          25  0.5
+FD.TLGN      0.63096 0.5372          25  0.5
+FD.TLPG      0.42064 0.5372          25  0.72
+FD.TKRS      0.42064 0.5372          25  0.72
+FD.TGDO      0.42064 0.5372          25  0.72
+FD.TRFO      0.42064 0.5372          25  0.72
+FD.TOLQ      0.42064 0.5372          25  0.72
+FD.TNGS      0.33651 0.5372          25  0.8
+FD.TOGS      0.33651 0.5372          25  0.8
+FD.TBMSWAS   0.63096 0.5372          25  0.5
+FD.TELC      0.476   0.5372          25  0.97
+FD.TSTE1AL   2.43133 40.1956 41.1163 25  0.35
+FD.TSTE1AH   2.43133 40.1956 41.1163 25  0.35
+FD.TSTE1AD   1.82186 54.264  11.386  25  0.34
+FD.TSTE1AR   1.82186 54.264  11.386  25  0.34
+FD.TSTE1AG   1.18376 30.1467 31.6279 20  0.44
+FD.TSTE1AB   2.33335 67.1517 18.9767 25  0.37
+FD.TSTE1AH2F 2.27889 68.3668         25  0.5
+FD.THEATPUMP 0.64783 1.02111         25  1.68
+FD.TH2F      2.43133 68.3668 41.1163 25  0.97
+EN.THCL      1.00937 0.31769         25  0.5
+EN.TLGN      1.00937 0.31769         25  0.5
+EN.TLPG      0.84114 0.31769         25  0.72
+EN.TKRS      0.84114 0.31769         25  0.72
+EN.TGDO      0.84114 0.31769         25  0.72
+EN.TRFO      0.84114 0.31769         25  0.72
+EN.TOLQ      0.84114 0.31769         25  0.72
+EN.TNGS      0.67291 0.31769         25  0.8
+EN.TOGS      0.67291 0.31769         25  0.8
+EN.TBMSWAS   1.00937 0.31769         25  0.5
+EN.TELC      0.748   0.31769         20  0.97
+EN.TSTE1AL   2.43133 40.1956 41.1163 25  0.35
+EN.TSTE1AH   2.43133 40.1956 41.1163 25  0.35
+EN.TSTE1AD   1.82186 54.264  11.386  25  0.34
+EN.TSTE1AR   1.82186 54.264  11.386  25  0.34
+EN.TSTE1AG   1.18376 30.1467 31.6279 20  0.44
+EN.TSTE1AB   2.33335 67.1517 18.9767 25  0.37
+EN.TSTE1AH2F 2.27889 68.3668         25  0.5
+EN.THEATPUMP 1.29545 0.60387         25  1.68
+EN.TH2F      2.43133 68.3668 41.1163 25  0.97
+TX.THCL      0.67371 0.16959         20  0.5
+TX.TLGN      0.67371 0.16959         20  0.5
+TX.TLPG      0.44914 0.16959         20  0.72
+TX.TKRS      0.44914 0.16959         20  0.72
+TX.TGDO      0.44914 0.16959         20  0.72
+TX.TRFO      0.44914 0.16959         20  0.72
+TX.TOLQ      0.44914 0.16959         20  0.72
+TX.TNGS      0.35931 0.16959         20  0.8
+TX.TOGS      0.35931 0.16959         20  0.8
+TX.TBMSWAS   0.476   0.16959         20  0.5
+TX.TELC      0.476   0.16959         20  0.97
+TX.TSTE1AL   2.43133 40.1956 41.1163 25  0.35
+TX.TSTE1AH   2.43133 40.1956 41.1163 25  0.35
+TX.TSTE1AD   1.82186 54.264  11.386  25  0.34
+TX.TSTE1AR   1.82186 54.264  11.386  25  0.34
+TX.TSTE1AG   1.18376 30.1467 31.6279 20  0.44
+TX.TSTE1AB   2.33335 67.1517 18.9767 25  0.37
+TX.TSTE1AH2F 2.27889 68.3668         20  0.5
+TX.THEATPUMP 0.69173 0.32236         20  1.68
+TX.TH2F      2.43133 68.3668 41.1163 25  0.97
+OE.THCL      1.00937 0.31769         25  0.5
+OE.TLGN      1.00937 0.31769         25  0.5
+OE.TLPG      0.84114 0.31769         25  0.72
+OE.TKRS      0.84114 0.31769         25  0.72
+OE.TGDO      0.84114 0.31769         25  0.72
+OE.TRFO      0.84114 0.31769         25  0.72
+OE.TOLQ      0.84114 0.31769         25  0.72
+OE.TNGS      0.67291 0.31769         25  0.8
+OE.TOGS      0.67291 0.31769         25  0.8
+OE.TBMSWAS   1.00937 0.31769         25  0.5
+OE.TELC      0.84114 0.31769         25  0.97
+OE.TSTE1AL   2.43133 40.1956 41.1163 25  0.35
+OE.TSTE1AH   2.43133 40.1956 41.1163 25  0.35
+OE.TSTE1AD   1.82186 54.264  11.386  25  0.34
+OE.TSTE1AR   1.82186 54.264  11.386  25  0.34
+OE.TSTE1AG   1.18376 30.1467 31.6279 20  0.44
+OE.TSTE1AB   2.33335 67.1517 18.9767 25  0.37
+OE.TSTE1AH2F 2.27889 68.3668         25  0.5
+OE.THEATPUMP 1.29545 0.60387         25  1.68
+OE.TH2F      2.43133 68.3668 41.1163 25  0.97
+OI.THCL      0.94967 1.40352         20  0.5
+OI.TLGN      0.94967 1.40352         20  0.5
+OI.TLPG      0.79139 1.40352         20  0.72
+OI.TKRS      0.79139 1.40352         20  0.72
+OI.TGDO      0.79139 1.40352         20  0.72
+OI.TRFO      0.79139 1.40352         20  0.72
+OI.TOLQ      0.79139 1.40352         20  0.72
+OI.TNGS      0.63311 1.40352         20  0.8
+OI.TOGS      0.63311 1.40352         20  0.8
+OI.TBMSWAS   0.94967 1.40352         20  0.5
+OI.TELC      0.68    1.40352         20  0.97
+OI.TSTE1AL   2.43133 40.1956 41.1163 25  0.35
+OI.TSTE1AH   2.43133 40.1956 41.1163 25  0.35
+OI.TSTE1AD   1.82186 54.264  11.386  25  0.34
+OI.TSTE1AR   1.82186 54.264  11.386  25  0.34
+OI.TSTE1AG   1.18376 30.1467 31.6279 20  0.44
+OI.TSTE1AB   2.33335 67.1517 18.9767 25  0.37
+OI.TSTE1AH2F 2.27889 68.3668         20  0.5
+OI.THEATPUMP 1.21884 2.66781         20  1.68
+OI.TH2F      2.43133 68.3668 41.1163 25  0.97
 ;
 *---
 * Coverting EUR05 to US2015
-imDataIndTechnology(INDSE,EF,"IC") = imDataIndTechnology(INDSE,EF,"IC") * 1.3;
-imDataIndTechnology(INDSE,EF,"FC") = imDataIndTechnology(INDSE,EF,"FC") * 1.3;
-imDataIndTechnology(INDSE,EF,"VC") = imDataIndTechnology(INDSE,EF,"VC") * 1.3;
+imDataIndTechnology(INDSE,TECH,"IC") = imDataIndTechnology(INDSE,TECH,"IC") * 1.3;
+imDataIndTechnology(INDSE,TECH,"FC") = imDataIndTechnology(INDSE,TECH,"FC") * 1.3;
+imDataIndTechnology(INDSE,TECH,"VC") = imDataIndTechnology(INDSE,TECH,"VC") * 1.3;
 *---
 
 table imDataChpPowGen(EF,CHPPGSET,YTIME)   "Data for power generation costs (various)"
@@ -396,147 +400,145 @@ imDataChpPowGen(EF,"IC",YTIME)  = imDataChpPowGen(EF,"IC",YTIME) * 1.1;
 imDataChpPowGen(EF,"FC",YTIME)  = imDataChpPowGen(EF,"FC",YTIME) * 1.1;
 imDataChpPowGen(EF,"VOM",YTIME) = imDataChpPowGen(EF,"VOM",YTIME) * 1.1;
 *---
-table imDataDomTech(DOMSE,EF,ECONCHAR)                "Technical lifetime of Industry (years)"
+table imDataDomTech(DOMSE,TECH,ECONCHAR)                "Technical lifetime of Industry (years)"
              IC       FC      VC      LFT USC
-SE.HCL       0.323544 10.88           20  0.7
-SE.LGN       0.323544 10.88           20  0.5
-SE.LPG       0.24888  10.88           20  0.8
-SE.GSL       0.323544 10.88           20  0.7
-SE.KRS       0.24888  10.88           20  0.8
-SE.GDO       0.24888  6.8             20  0.85
-SE.RFO       0.24888  10.88           20  0.8
-SE.OLQ       0.24888  10.88           20  0.8
-SE.NGS       0.2244   6.8             20  0.88
-SE.OGS       0.2244   10.88           20  0.8
-SE.SOL       0.86224  1.36            20  0.97
-SE.BMSWAS    0.323544 10.88           20  0.5
-SE.ELC       0.3      8.976           12  0.97
-SE.STE1AL    2.43133  40.1956 41.1163 30  0.375
-SE.STE1AH    2.43133  40.1956 41.1163 30  0.375
-SE.STE1AD    1.82186  54.264  11.386  30  0.3475
-SE.STE1AR    1.82186  54.264  11.386  30  0.3475
-SE.STE1AG    1.18376  30.1467 31.6279 25  0.485
-SE.STE1AB    2.33335  67.1517 18.9767 30  0.3975
-SE.STE1AH2F  2.68089  80.4266         20  0.465
-SE.STE2LGN   0.296442 1.00489 2.37209 20  0.816667
-SE.STE2OSL   0.296442 1.00489 2.37209 20  0.816667
-SE.STE2GDO   0.296442 1.00489 2.37209 20  0.856667
-SE.STE2RFO   0.296442 1.00489 2.37209 20  0.856667
-SE.STE2OLQ   0.296442 1.00489 2.37209 20  0.856667
-SE.STE2NGS   0.296442 1.00489 2.37209 20  0.896667
-SE.STE2OGS   0.296442 1.00489 2.37209 20  0.896667
-SE.STE2BMS   0.296442 1.00489 2.37209 20  0.816667
-SE.HEATPUMP  0.432    12.9254         20  1.848
-AG.HCL       0.323544 10.88           20  0.7
-AG.LGN       0.323544 10.88           20  0.5
-AG.LPG       0.24888  10.88           20  0.8
-AG.GSL       0.323544 10.88           20  0.7
-AG.KRS       0.24888  10.88           20  0.8
-AG.GDO       0.24888  6.8             20  0.85
-AG.RFO       0.24888  10.88           20  0.8
-AG.OLQ       0.24888  10.88           20  0.8
-AG.NGS       0.2244   6.8             20  0.88
-AG.OGS       0.2244   10.88           20  0.8
-AG.SOL       0.86224  1.36            20  0.97
-AG.BMSWAS    0.323544 10.88           20  0.5
-AG.ELC       0.3      8.976           12  0.97
-AG.STE1AL    2.43133  40.1956 41.1163 30  0.375
-AG.STE1AH    2.43133  40.1956 41.1163 30  0.375
-AG.STE1AD    1.82186  54.264  11.386  30  0.3475
-AG.STE1AR    1.82186  54.264  11.386  30  0.3475
-AG.STE1AG    1.18376  30.1467 31.6279 25  0.485
-AG.STE1AB    2.33335  67.1517 18.9767 30  0.3975
-AG.STE1AH2F  2.68089  80.4266         20  0.465
-AG.STE2LGN   0.296442 1.00489 2.37209 20  0.816667
-AG.STE2OSL   0.296442 1.00489 2.37209 20  0.816667
-AG.STE2GDO   0.296442 1.00489 2.37209 20  0.856667
-AG.STE2RFO   0.296442 1.00489 2.37209 20  0.856667
-AG.STE2OLQ   0.296442 1.00489 2.37209 20  0.856667
-AG.STE2NGS   0.296442 1.00489 2.37209 20  0.896667
-AG.STE2OGS   0.296442 1.00489 2.37209 20  0.896667
-AG.STE2BMS   0.296442 1.00489 2.37209 20  0.816667
-AG.HEATPUMP  0.432    12.9254         20  1.848
-HOU.HCL      0.323544 10.88           20  0.7
-HOU.LGN      0.323544 10.88           20  0.5
-HOU.LPG      0.24888  10.88           20  0.8
-HOU.GSL      0.323544 10.88           20  0.7
-HOU.KRS      0.24888  10.88           20  0.8
-HOU.GDO      0.24888  6.8             20  0.85
-HOU.RFO      0.24888  10.88           20  0.8
-HOU.OLQ      0.24888  10.88           20  0.8
-HOU.NGS      0.2244   6.8             20  0.88
-HOU.OGS      0.2244   10.88           20  0.8
-HOU.SOL      0.86224  1.36            20  0.97
-HOU.BMSWAS   0.323544 10.88           20  0.5
-HOU.ELC      0.3      8.976           12  0.97
-HOU.STE1AL   2.43133  40.1956 41.1163 30  0.375
-HOU.STE1AH   2.43133  40.1956 41.1163 30  0.375
-HOU.STE1AD   1.82186  54.264  11.386  30  0.3475
-HOU.STE1AR   1.82186  54.264  11.386  30  0.3475
-HOU.STE1AG   1.18376  30.1467 31.6279 25  0.485
-HOU.STE1AB   2.33335  67.1517 18.9767 30  0.3975
-HOU.STE1AH2F 2.68089  80.4266         20  0.465
-HOU.STE2LGN  0.296442 1.00489 2.37209 20  0.816667
-HOU.STE2OSL  0.296442 1.00489 2.37209 20  0.816667
-HOU.STE2GDO  0.296442 1.00489 2.37209 20  0.856667
-HOU.STE2RFO  0.296442 1.00489 2.37209 20  0.856667
-HOU.STE2OLQ  0.296442 1.00489 2.37209 20  0.856667
-HOU.STE2NGS  0.296442 1.00489 2.37209 20  0.896667
-HOU.STE2OGS  0.296442 1.00489 2.37209 20  0.896667
-HOU.STE2BMS  0.296442 1.00489 2.37209 20  0.816667
-HOU.HEATPUMP 0.432    12.9254         20  1.848
+SE.THCL       0.323544 10.88           20  0.7
+SE.TLGN       0.323544 10.88           20  0.5
+SE.TLPG       0.24888  10.88           20  0.8
+SE.TGSL       0.323544 10.88           20  0.7
+SE.TKRS       0.24888  10.88           20  0.8
+SE.TGDO       0.24888  6.8             20  0.85
+SE.TRFO       0.24888  10.88           20  0.8
+SE.TOLQ       0.24888  10.88           20  0.8
+SE.TNGS       0.2244   6.8             20  0.88
+SE.TOGS       0.2244   10.88           20  0.8
+*SE.PGTSOL     0.86224  1.36            20  0.97
+SE.TBMSWAS    0.323544 10.88           20  0.5
+SE.TELC       0.3      8.976           12  0.97
+SE.TSTE1AL    2.43133  40.1956 41.1163 30  0.375
+SE.TSTE1AH    2.43133  40.1956 41.1163 30  0.375
+SE.TSTE1AD    1.82186  54.264  11.386  30  0.3475
+SE.TSTE1AR    1.82186  54.264  11.386  30  0.3475
+SE.TSTE1AG    1.18376  30.1467 31.6279 25  0.485
+SE.TSTE1AB    2.33335  67.1517 18.9767 30  0.3975
+SE.TSTE1AH2F  2.68089  80.4266         20  0.465
+SE.TSTE2LGN   0.296442 1.00489 2.37209 20  0.816667
+SE.TSTE2OSL   0.296442 1.00489 2.37209 20  0.816667
+SE.TSTE2GDO   0.296442 1.00489 2.37209 20  0.856667
+SE.TSTE2RFO   0.296442 1.00489 2.37209 20  0.856667
+SE.TSTE2OLQ   0.296442 1.00489 2.37209 20  0.856667
+SE.TSTE2NGS   0.296442 1.00489 2.37209 20  0.896667
+SE.TSTE2OGS   0.296442 1.00489 2.37209 20  0.896667
+SE.TSTE2BMS   0.296442 1.00489 2.37209 20  0.816667
+SE.THEATPUMP  0.432    12.9254         20  1.848
+AG.THCL       0.323544 10.88           20  0.7
+AG.TLGN       0.323544 10.88           20  0.5
+AG.TLPG       0.24888  10.88           20  0.8
+AG.TGSL       0.323544 10.88           20  0.7
+AG.TKRS       0.24888  10.88           20  0.8
+AG.TGDO       0.24888  6.8             20  0.85
+AG.TRFO       0.24888  10.88           20  0.8
+AG.TOLQ       0.24888  10.88           20  0.8
+AG.TNGS       0.2244   6.8             20  0.88
+AG.TOGS       0.2244   10.88           20  0.8
+*AG.PGTSOL     0.86224  1.36            20  0.97
+AG.TBMSWAS    0.323544 10.88           20  0.5
+AG.TELC       0.3      8.976           12  0.97
+AG.TSTE1AL    2.43133  40.1956 41.1163 30  0.375
+AG.TSTE1AH    2.43133  40.1956 41.1163 30  0.375
+AG.TSTE1AD    1.82186  54.264  11.386  30  0.3475
+AG.TSTE1AR    1.82186  54.264  11.386  30  0.3475
+AG.TSTE1AG    1.18376  30.1467 31.6279 25  0.485
+AG.TSTE1AB    2.33335  67.1517 18.9767 30  0.3975
+AG.TSTE1AH2F  2.68089  80.4266         20  0.465
+AG.TSTE2LGN   0.296442 1.00489 2.37209 20  0.816667
+AG.TSTE2OSL   0.296442 1.00489 2.37209 20  0.816667
+AG.TSTE2GDO   0.296442 1.00489 2.37209 20  0.856667
+AG.TSTE2RFO   0.296442 1.00489 2.37209 20  0.856667
+AG.TSTE2OLQ   0.296442 1.00489 2.37209 20  0.856667
+AG.TSTE2NGS   0.296442 1.00489 2.37209 20  0.896667
+AG.TSTE2OGS   0.296442 1.00489 2.37209 20  0.896667
+AG.TSTE2BMS   0.296442 1.00489 2.37209 20  0.816667
+AG.THEATPUMP  0.432    12.9254         20  1.848
+HOU.THCL      0.323544 10.88           20  0.7
+HOU.TLGN      0.323544 10.88           20  0.5
+HOU.TLPG      0.24888  10.88           20  0.8
+HOU.TGSL      0.323544 10.88           20  0.7
+HOU.TKRS      0.24888  10.88           20  0.8
+HOU.TGDO      0.24888  6.8             20  0.85
+HOU.TRFO      0.24888  10.88           20  0.8
+HOU.TOLQ      0.24888  10.88           20  0.8
+HOU.TNGS      0.2244   6.8             20  0.88
+HOU.TOGS      0.2244   10.88           20  0.8
+*HOU.PGTSOL    0.86224  1.36            20  0.97
+HOU.TBMSWAS   0.323544 10.88           20  0.5
+HOU.TELC      0.3      8.976           12  0.97
+HOU.TSTE1AL   2.43133  40.1956 41.1163 30  0.375
+HOU.TSTE1AH   2.43133  40.1956 41.1163 30  0.375
+HOU.TSTE1AD   1.82186  54.264  11.386  30  0.3475
+HOU.TSTE1AR   1.82186  54.264  11.386  30  0.3475
+HOU.TSTE1AG   1.18376  30.1467 31.6279 25  0.485
+HOU.TSTE1AB   2.33335  67.1517 18.9767 30  0.3975
+HOU.TSTE1AH2F 2.68089  80.4266         20  0.465
+HOU.TSTE2LGN  0.296442 1.00489 2.37209 20  0.816667
+HOU.TSTE2OSL  0.296442 1.00489 2.37209 20  0.816667
+HOU.TSTE2GDO  0.296442 1.00489 2.37209 20  0.856667
+HOU.TSTE2RFO  0.296442 1.00489 2.37209 20  0.856667
+HOU.TSTE2OLQ  0.296442 1.00489 2.37209 20  0.856667
+HOU.TSTE2NGS  0.296442 1.00489 2.37209 20  0.896667
+HOU.TSTE2OGS  0.296442 1.00489 2.37209 20  0.896667
+HOU.TSTE2BMS  0.296442 1.00489 2.37209 20  0.816667
+HOU.THEATPUMP 0.432    12.9254         20  1.848
 ;
 *---
 * Coverting EUR05 to US2015
-imDataDomTech(DOMSE,EF,"IC") = imDataDomTech(DOMSE,EF,"IC") * 1.3;
-imDataDomTech(DOMSE,EF,"FC") = imDataDomTech(DOMSE,EF,"FC") * 1.3;
-imDataDomTech(DOMSE,EF,"VC") = imDataDomTech(DOMSE,EF,"VC") * 1.3;
+imDataDomTech(DOMSE,TECH,"IC") = imDataDomTech(DOMSE,TECH,"IC") * 1.3;
+imDataDomTech(DOMSE,TECH,"FC") = imDataDomTech(DOMSE,TECH,"FC") * 1.3;
+imDataDomTech(DOMSE,TECH,"VC") = imDataDomTech(DOMSE,TECH,"VC") * 1.3;
 *---
-table imDataNonEneSec(NENSE,EF,ECONCHAR)              "Technical data of non energy uses and bunkers (various)"
+table imDataNonEneSec(NENSE,TECH,ECONCHAR)              "Technical data of non energy uses and bunkers (various)"
         IC      FC      VC      LFT USC
-PCH.HCL 0.26227 45.22   2.37209 20  0.65
-PCH.LGN 0.26227 47.6    2.37209 20  0.5
-PCH.LPG 0.18088 20.4    2.37209 20  0.72
-PCH.GDO 0.18088 9.044   2.37209 20  0.72
-PCH.RFO 0.18088 18.088  2.37209 20  0.72
-PCH.OLQ 0.18088 20.4    2.37209 20  0.72
-PCH.NGS 0.18088 0.9044  2.37209 20  0.8
-PCH.OGS 0.18088 1.36    2.37209 20  0.8
-BU.GDO  0.204   0.136           25  0.72
-BU.RFO  0.204   0.136           25  0.72
-BU.OLQ  0.136   6.8             25  0.72
-NEN.HCL 0.26227 45.22   2.37209 20  0.65
-NEN.LGN 0.26227 47.6    2.37209 20  0.5
-NEN.LPG 0.612   20.4    2.37209 20  0.72
-NEN.GDO 0.18088 9.044   2.37209 20  0.72
-NEN.RFO 0.18088 18.088  2.37209 20  0.72
-NEN.OLQ 0.612   20.4    2.37209 20  0.72
-NEN.NGS 0.18088 0.9044  2.37209 20  0.8
-NEN.OGS 0.18088 1.36    2.37209 20  0.8
+PCH.THCL 0.26227 45.22   2.37209 20  0.65
+PCH.TLGN 0.26227 47.6    2.37209 20  0.5
+PCH.TLPG 0.18088 20.4    2.37209 20  0.72
+PCH.TGDO 0.18088 9.044   2.37209 20  0.72
+PCH.TRFO 0.18088 18.088  2.37209 20  0.72
+PCH.TOLQ 0.18088 20.4    2.37209 20  0.72
+PCH.TNGS 0.18088 0.9044  2.37209 20  0.8
+PCH.TOGS 0.18088 1.36    2.37209 20  0.8
+BU.TGDO  0.204   0.136           25  0.72
+BU.TRFO  0.204   0.136           25  0.72
+BU.TOLQ  0.136   6.8             25  0.72
+NEN.THCL 0.26227 45.22   2.37209 20  0.65
+NEN.TLGN 0.26227 47.6    2.37209 20  0.5
+NEN.TLPG 0.612   20.4    2.37209 20  0.72
+NEN.TGDO 0.18088 9.044   2.37209 20  0.72
+NEN.TRFO 0.18088 18.088  2.37209 20  0.72
+NEN.TOLQ 0.612   20.4    2.37209 20  0.72
+NEN.TNGS 0.18088 0.9044  2.37209 20  0.8
+NEN.TOGS 0.18088 1.36    2.37209 20  0.8
 ;
 *---
 * Converting EUR05 to US2015
-imDataNonEneSec(NENSE,EF,"IC") = imDataNonEneSec(NENSE,EF,"IC") * 1.3;
-imDataNonEneSec(NENSE,EF,"FC") = imDataNonEneSec(NENSE,EF,"FC") * 1.3;
-imDataNonEneSec(NENSE,EF,"VC") = imDataNonEneSec(NENSE,EF,"VC") * 1.3;
+imDataNonEneSec(NENSE,TECH,"IC") = imDataNonEneSec(NENSE,TECH,"IC") * 1.3;
+imDataNonEneSec(NENSE,TECH,"FC") = imDataNonEneSec(NENSE,TECH,"FC") * 1.3;
+imDataNonEneSec(NENSE,TECH,"VC") = imDataNonEneSec(NENSE,TECH,"VC") * 1.3;
 *---
 * FIXME: check if country-specific data is needed; move to mrprom
 * author=giannou
-table iIndCharData(allCy,INDSE,Indu_Scon_Set)         "Industry sector charactetistics (various)"
-         BASE           SHR_NSE   SH_HPELC
-ELL.IS   0.4397         0.7       0.00001
-ELL.NF   0              0.95      0.00001
-ELL.CH   0.1422         0.95      0.00001
-ELL.BM   2.1062         0.95      0.00001
-ELL.PP   0              0.95      0.00001
-ELL.FD   0.6641         0.95      0.00001
-ELL.TX   0.0638         0.95      0.00001
-ELL.EN   1.6664         0.95      0.00001
-ELL.OE   0.00000001     0.95      0.00001
-ELL.OI   1.5161         0.95      0.00001
+table iIndCharData(INDSE,Indu_Scon_Set)         "Industry sector charactetistics (various)"
+     BASE           SHR_NSE   SH_HPELC
+IS   0.4397         0.7       0.00001
+NF   0              0.85      0.00001
+CH   0.1422         0.95      0.00001
+BM   2.1062         0.95      0.00001
+PP   0              0.95      0.00001
+FD   0.6641         0.9       0.00001
+TX   0.0638         0.9       0.00001
+EN   1.6664         0.95      0.00001
+OE   0.00000001     0.95      0.00001
+OI   1.5161         0.9       0.00001
 ;
-*---
-iIndChar(runCy,INDSE,Indu_Scon_Set) = iIndCharData("ELL",INDSE,Indu_Scon_Set);
 *---
 table iInitConsSubAndInitShaNonSubElec(DOMSE,Indu_Scon_Set)      "Initial Consumption per Subsector and Initial Shares of Non Substitutable Electricity in Total Electricity Demand (Mtoe)"
      BASE   SHR_NSE SH_HPELC
@@ -545,7 +547,7 @@ HOU  11.511 0.9     0.00001
 AG   0.2078 0.9     0.00001
 ;
 *---
-iShrHeatPumpElecCons(runCy,INDSE) = iIndChar(runCy,INDSE,"SH_HPELC");
+iShrHeatPumpElecCons(runCy,INDSE) = iIndCharData(INDSE,"SH_HPELC");
 iShrHeatPumpElecCons(runCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(DOMSE,"SH_HPELC");
 *---
 imFuelExprts(runCy,EFS,YTIME) = iSuppExports(runCy,EFS,YTIME);
@@ -573,7 +575,7 @@ imAnnCons(runCy,'GU','modal')    = 0.706 * imTransChar(runCy,"KM_VEH_TRUCK","%fB
 imAnnCons(runCy,'GU','largest')  = 4 * 0.706 * imTransChar(runCy,"KM_VEH_TRUCK","%fBaseY%") * 1000 * 2 * 10  * 1E-6;
 *---
 imAnnCons(runCy,'PA','smallest') = 40000 * 50 * 1E-6;
-imAnnCons(runCy,'PA','modal')    = 400000 * 100 * 1E-6;
+imAnnCons(runCy,'PA','modal')    = 400000 * 1E-6;
 imAnnCons(runCy,'PA','largest')  = 800000 * 300 * 1E-6;
 *---
 * Size will not play a role in buses, trains, ships and aircraft
@@ -667,7 +669,7 @@ $include"./iFuelConsINDSE.csv"
 $offdelim
 ;
 *---
-iFuelConsINDSE(runCy,INDSE,EF,YTIME)$(SECTTECH(INDSE,EF) $(iFuelConsINDSE(runCy,INDSE,EF,YTIME)<=0)) = 1e-6;
+iFuelConsINDSE(runCy,INDSE,EF,YTIME)$(SECtoEF(INDSE,EF) $(iFuelConsINDSE(runCy,INDSE,EF,YTIME)<=0)) = 1e-6;
 *---
 table iFuelConsDOMSE(allCy,DOMSE,EF,YTIME)	"Fuel consumption of domestic subsector (Mtoe)"
 $ondelim
@@ -675,7 +677,7 @@ $include"./iFuelConsDOMSE.csv"
 $offdelim
 ;
 *---
-iFuelConsDOMSE(runCy,DOMSE,EF,YTIME)$(SECTTECH(DOMSE,EF) $(iFuelConsDOMSE(runCy,DOMSE,EF,YTIME)<=0)) = 1e-6;
+iFuelConsDOMSE(runCy,DOMSE,EF,YTIME)$(SECtoEF(DOMSE,EF) $(iFuelConsDOMSE(runCy,DOMSE,EF,YTIME)<=0)) = 1e-6;
 *---
 table iFuelConsNENSE(allCy,NENSE,EF,YTIME)	"Fuel consumption of non energy and bunkers (Mtoe)"
 $ondelim
@@ -683,13 +685,15 @@ $include"./iFuelConsNENSE.csv"
 $offdelim
 ;
 *---
-iFuelConsNENSE(runCy,NENSE,EF,YTIME)$(SECTTECH(NENSE,EF) $(iFuelConsNENSE(runCy,NENSE,EF,YTIME)<=0)) = 1e-6;
+iFuelConsNENSE(runCy,NENSE,EF,YTIME)$(SECtoEF(NENSE,EF) $(iFuelConsNENSE(runCy,NENSE,EF,YTIME)<=0)) = 1e-6;
 imFuelConsPerFueSub(runCy,INDSE,EF,YTIME) = iFuelConsINDSE(runCy,INDSE,EF,YTIME);
 imFuelConsPerFueSub(runCy,DOMSE,EF,YTIME) = iFuelConsDOMSE(runCy,DOMSE,EF,YTIME);
 imFuelConsPerFueSub(runCy,NENSE,EF,YTIME) = iFuelConsNENSE(runCy,NENSE,EF,YTIME);
-imFinEneCons(runCy,EFS,YTIME) = sum(INDDOM,sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(INDDOM,EF)), imFuelConsPerFueSub(runCy,INDDOM,EF,YTIME)))
-                       +
-                       sum(TRANSE,sum(EF$(EFtoEFS(EF,EFS) $SECTTECH(TRANSE,EF) $(not plugin(EF)) ), imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME)));
+* NEED TO CHECK IF CORRECT
+imFinEneCons(runCy,EFS,YTIME) =
+     sum((INDDOM,EF)$(EFtoEFS(EF,EFS) and sum(TECH$(SECTTECH(INDDOM,TECH) and TECHtoEF(TECH,EF)),1)),imFuelConsPerFueSub(runCy,INDDOM,EF,YTIME))
+     +
+     sum((TRANSE,EF)$(EFtoEFS(EF,EFS) and sum(TECH$(SECTTECH(TRANSE,TECH) and TECHtoEF(TECH,EF)$(not plugin(TECH))),1)), imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME));
 *---
 imCO2CaptRate(runCy,PGALL,YTIME) = 0.9; 
 imEffValueInDollars(runCy,SBS,YTIME) = 0;
@@ -728,25 +732,28 @@ elseif %fScenario% eq 4 then
      iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"exogCV_Calib",YTIME);
 endif;
 *---
-table iMatrFactorData(SBS,EF,YTIME)          "Maturity factor per technology and subsector (1)"
+table iMatrFactorData(DSBS,TECH,YTIME)          "Maturity factor per technology and subsector (1)"
 $ondelim
 $include"./iMatrFactorData.csv"
 $offdelim
 ;
+iMatrFactorData(DSBS,TECH,YTIME)$(TRANSE(DSBS) or INDSE(DSBS) or DOMSE(DSBS)) = 1;
+iMatrFactorData(DSBS,TECH,YTIME)$(sameas(DSBS, "PC")$SECTTECH(DSBS,TECH)) = 1;
 *---
 $IFTHEN.calib %MatFacCalibration% == off
-parameter imMatrFactor(allCy,SBS,EF,YTIME)   "Maturity factor per technology and subsector for all countries (1)";
-imMatrFactor(runCy,SBS,EF,YTIME) = iMatrFactorData(SBS,EF,YTIME);                                          
-imMatrFactor(runCy,SBS,EF,YTIME)$(imMatrFactor(runCy,SBS,EF,YTIME)=0) = 0.000001;
+parameter imMatrFactor(allCy,DSBS,TECH,YTIME)   "Maturity factor per technology and subsector for all countries (1)";
+imMatrFactor(runCy,DSBS,TECH,YTIME) = iMatrFactorData(DSBS,TECH,YTIME);                                          
+imMatrFactor(runCy,DSBS,TECH,YTIME)$(imMatrFactor(runCy,DSBS,TECH,YTIME)=0) = 0.000001;
 $ELSE.calib
-variable imMatrFactor(allCy,SBS,EF,YTIME)    "Maturity factor per technology and subsector for all countries (1)";
-imMatrFactor.L(runCy,SBS,EF,YTIME) = iMatrFactorData(SBS,EF,YTIME) + 1e-6;                                          
-imMatrFactor.LO(runCy,SBS,EF,YTIME) = -10;                                          
-imMatrFactor.UP(runCy,SBS,EF,YTIME) = 100;
+variable imMatrFactor(allCy,DSBS,TECH,YTIME)    "Maturity factor per technology and subsector for all countries (1)";
+imMatrFactor.L(runCy,DSBS,TECH,YTIME) = iMatrFactorData(DSBS,TECH,YTIME) + 1e-6;                                          
+imMatrFactor.L(runCy,DSBS,EF,YTIME)$(imMatrFactor.L(runCy,DSBS,TECH,YTIME)=0) = 0.000001;
+imMatrFactor.LO(runCy,DSBS,EF,YTIME) = -10;                                          
+imMatrFactor.UP(runCy,DSBS,EF,YTIME) = 100;
 $ENDIF.calib
 *---
 ** Industry
-imShrNonSubElecInTotElecDem(runCy,INDSE)  = iIndChar(runCy,INDSE,"SHR_NSE");
+imShrNonSubElecInTotElecDem(runCy,INDSE)  = iIndCharData(INDSE,"SHR_NSE");
 imShrNonSubElecInTotElecDem(runCy,INDSE)$(imShrNonSubElecInTotElecDem(runCy,INDSE)>0.98) = 0.98;
 **Domestic - Tertiary
 imShrNonSubElecInTotElecDem(runCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(DOMSE,"SHR_NSE");
@@ -754,25 +761,25 @@ imShrNonSubElecInTotElecDem(runCy,DOMSE)$(imShrNonSubElecInTotElecDem(runCy,DOMS
 **   Macroeconomic
 *---
 **  Transport Sector
-imCapCostTech(runCy,TRANSE,EF,YTIME) = imDataTransTech(TRANSE,EF,"IC",YTIME);
-imFixOMCostTech(runCy,TRANSE,EF,YTIME) = imDataTransTech(TRANSE,EF,"FC",YTIME);
-imVarCostTech(runCy,TRANSE,EF,YTIME) = imDataTransTech(TRANSE,EF,"VC",YTIME);
+imCapCostTech(runCy,TRANSE,TECH,YTIME) = imDataTransTech(TRANSE,TECH,"IC",YTIME);
+imFixOMCostTech(runCy,TRANSE,TECH,YTIME) = imDataTransTech(TRANSE,TECH,"FC",YTIME);
+imVarCostTech(runCy,TRANSE,TECH,YTIME) = imDataTransTech(TRANSE,TECH,"VC",YTIME);
 *---
 **  Industrial Sector
-imCapCostTech(runCy,INDSE,EF,YTIME) = imDataIndTechnology(INDSE,EF,"IC");
-imFixOMCostTech(runCy,INDSE,EF,YTIME) = imDataIndTechnology(INDSE,EF,"FC");
-imVarCostTech(runCy,INDSE,EF,YTIME) = imDataIndTechnology(INDSE,EF,"VC");
-imUsfEneConvSubTech(runCy,INDSE,EF,YTIME)  = imDataIndTechnology(INDSE,EF,"USC");
+imCapCostTech(runCy,INDSE,TECH,YTIME) = imDataIndTechnology(INDSE,TECH,"IC");
+imFixOMCostTech(runCy,INDSE,TECH,YTIME) = imDataIndTechnology(INDSE,TECH,"FC");
+imVarCostTech(runCy,INDSE,TECH,YTIME) = imDataIndTechnology(INDSE,TECH,"VC");
+imUsfEneConvSubTech(runCy,INDSE,TECH,YTIME)  = imDataIndTechnology(INDSE,TECH,"USC");
 *---
 **  Domestic Sector
-imFixOMCostTech(runCy,DOMSE,EF,YTIME) = imDataDomTech(DOMSE,EF,"FC");
-imVarCostTech(runCy,DOMSE,EF,YTIME) = imDataDomTech(DOMSE,EF,"VC");
-imUsfEneConvSubTech(runCy,DOMSE,EF,YTIME) = imDataDomTech(DOMSE,EF,"USC");
+imFixOMCostTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,"FC");
+imVarCostTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,"VC");
+imUsfEneConvSubTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,"USC");
 *---
 **  Non Energy Sector and Bunkers
-imFixOMCostTech(runCy,NENSE,EF,YTIME)= imDataNonEneSec(NENSE,EF,"FC");
-imVarCostTech(runCy,NENSE,EF,YTIME) = imDataNonEneSec(NENSE,EF,"VC");
-imUsfEneConvSubTech(runCy,NENSE,EF,YTIME) = imDataNonEneSec(NENSE,EF,"USC");
+imFixOMCostTech(runCy,NENSE,TECH,YTIME)= imDataNonEneSec(NENSE,TECH,"FC");
+imVarCostTech(runCy,NENSE,TECH,YTIME) = imDataNonEneSec(NENSE,TECH,"VC");
+imUsfEneConvSubTech(runCy,NENSE,TECH,YTIME) = imDataNonEneSec(NENSE,TECH,"USC");
 *---
 **  Power Generation
 *---
