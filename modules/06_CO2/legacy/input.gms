@@ -87,8 +87,7 @@ EWDAC	0
 parameter i06SchedNewCapDAC(allCy,DACTECH,YTIME)        "Scheduled new DAC capacity"
 /
 NEU.LTDAC.2027  4e4,    !!Removr – Mongstad pilot / industrial‑scale projects
-NEU.LTDAC.2026  4e3,    !!Orca (Climeworks + Carbfix)
-NEU.LTDAC.2026  36e3,   !!Mammoth (Climeworks + Carbfix)
+NEU.LTDAC.2026  4e4,    !!Orca (Climeworks + Carbfix) + Mammoth (Climeworks + Carbfix)
 NEU.LTDAC.2028  1e5,    !!Removr + Carbfix (Large‑Scale Plant)
 NEU.LTDAC.2024  900,    !!Climeworks – Hinwil pilot, Switzerland
 USA.LTDAC.2023  1e3,    !!Global Thermostat – Commerce City, Colorado
@@ -98,7 +97,7 @@ USA.LTDAC.2026  5e5,    !!Stratos (1PointFive / Occidental) — Texas
 USA.HTDAC.2027  5e5,    !!Project Cypress (Climeworks + Heirloom + Battelle) — Louisiana
 USA.LTDAC.2027  5e5,    !!Project Cypress (Climeworks + Heirloom + Battelle) — Louisiana
 USA.LTDAC.2032  1e6,    !!HIF USA eFuels – Matagorda County, Texas
-USA.LTDAC.2035  1e6,    !!Project Bison – Wyoming (CarbonCapture Inc.)
+USA.LTDAC.2034  1e6,    !!Project Bison – Wyoming (CarbonCapture Inc.)
 USA.LTDAC.2035  1e6,    !!South Texas DAC Hub
 LAM.EWDAC.2024  5e5    !!South Texas DAC Hub
 / ;
