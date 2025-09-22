@@ -98,9 +98,10 @@ Q05DemGapH2(allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q05CostProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V05CostProdH2Tech(allCy,H2TECH,YTIME)
          =E=
-         (imDisc(allCy,"H2P",YTIME)*exp(imDisc(allCy,"H2P",YTIME)* i05ProdLftH2(H2TECH,YTIME))/(exp(imDisc(allCy,"H2P",YTIME)*i05ProdLftH2(H2TECH,YTIME))-1)*
-         i05CostCapH2Prod(allCy,H2TECH,YTIME)+i05CostFOMH2Prod(allCy,H2TECH,YTIME))/i05AvailH2Prod(H2TECH,YTIME) +
-         i05CostVOMH2Prod(allCy,H2TECH,YTIME) + 
+         ((imDisc(allCy,"H2P",YTIME)*exp(imDisc(allCy,"H2P",YTIME)* i05ProdLftH2(H2TECH,YTIME))/(exp(imDisc(allCy,"H2P",YTIME)*i05ProdLftH2(H2TECH,YTIME))-1)*
+         i05CostCapH2Prod(allCy,H2TECH,YTIME)+i05CostFOMH2Prod(allCy,H2TECH,YTIME))
+         /(i05AvailH2Prod(H2TECH,YTIME)*0.8 )+
+         i05CostVOMH2Prod(allCy,H2TECH,YTIME) )/0.000304/1000*1.31+ 
          sum(EF$H2TECHEFtoEF(H2TECH,EF), (VmPriceFuelSubsecCarVal(allCy,"H2P",EF,YTIME)*1e3+
 
             i05CaptRateH2Prod(allCy,H2TECH,YTIME)*imCo2EmiFac(allCy,"H2P",EF,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)+
@@ -224,10 +225,10 @@ Q05CostAvgProdH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCostAvgProdH2(allCy,YTIME)
         =E=
     sum(H2TECH, 
-      VmProdH2(allCy,H2TECH,YTIME) *
+      (VmProdH2(allCy,H2TECH,YTIME) + 1e-6) *
       V05CostProdH2Tech(allCy,H2TECH,YTIME)
     ) /
-    sum(H2TECH,VmProdH2(allCy,H2TECH,YTIME))
+    (sum(H2TECH,VmProdH2(allCy,H2TECH,YTIME)) + 1e-6)
 ;
 
 *' This equation calculates the fuel consumption for each hydrogen production technology, considering 
