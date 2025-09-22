@@ -63,7 +63,7 @@ Q06CstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
        (1-V06TrnsWghtLinToExp(allCy,YTIME))*(i06ElastCO2Seq(allCy,"mc_a")*V06CaptCummCO2(allCy,YTIME)+i06ElastCO2Seq(allCy,"mc_b"))+
        V06TrnsWghtLinToExp(allCy,YTIME)*(i06ElastCO2Seq(allCy,"mc_c")*exp(i06ElastCO2Seq(allCy,"mc_d")*V06CaptCummCO2(allCy,YTIME)));           
 
-
+*' The equation calculates the CAPEX of each DAC technology, as it's affected by a learning curve.
 Q06GrossCapDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V06GrossCapDAC(allCy,DACTECH,YTIME)
                   =E=         
@@ -79,6 +79,7 @@ Q06GrossCapDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
           )
 ;
 
+*' The equation calculates the fixed and O&M costs of each DAC technology, as they are affected by a learning curve.
 Q06FixOandMDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V06FixOandMDAC(allCy,DACTECH,YTIME)
                   =E=         
@@ -94,6 +95,7 @@ Q06FixOandMDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
           )
 ;
 
+*' The equation calculates the variable costs of each DAC technology including the CO2 storage costs, as they are affected by a learning curve.
 Q06VarCostDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V06VarCostDAC(allCy,DACTECH,YTIME)
                   =E=         
@@ -146,7 +148,7 @@ Q06CapDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
           i06SchedNewCapDAC(allCy,DACTECH,YTIME)
 ;
 
-*' The equation calculates the fuels consumed by the DAC installed capacity annually and regionally.
+*' The equation calculates the different fuels consumed by the DAC installed capacity annually and regionally.
 Q06ConsFuelTechDACProd(allCy,DACTECH,EF,YTIME)$(TIME(YTIME) $TECHtoEF(DACTECH,EF) $(runCy(allCy)))..
          VmConsFuelTechDACProd(allCy,DACTECH,EF,YTIME)
          =E=
@@ -158,6 +160,7 @@ Q06ConsFuelTechDACProd(allCy,DACTECH,EF,YTIME)$(TIME(YTIME) $TECHtoEF(DACTECH,EF
          * smTWhToMtoe
 ;
 
+*' The equation calculates the different fuels consumed by the DAC installed capacity annually and regionally.
 Q06ConsFuelDACProd(allCy,EF,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
          VmConsFuelDACProd(allCy,EF,YTIME)
          =E=
