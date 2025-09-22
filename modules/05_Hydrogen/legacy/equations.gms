@@ -110,7 +110,7 @@ Q05CostProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
             (sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME))))
 
             /i05EffH2Prod(allCy,H2TECH,YTIME)
-            )$(H2TECHPM(H2TECH))     
+            )  
 ;
 
 
@@ -128,17 +128,8 @@ Q05CostVarProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
             (sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME))))
 
             /i05EffH2Prod(allCy,H2TECH,YTIME)
-            )$(H2TECHPM(H2TECH))
+            )
 ;
-
-$ontext
-V05CostVarProdH2Tech → Euro per toe H₂ (per-output)
-VmPriceFuelSubsecCarVal → k$2015/toe fuel
-imCo2EmiFac → kg CO₂ / kgoe fuel
-VmCarVal, VmCstCO2SeqCsts → $2015 / tCO₂
-i05EffH2Prod → toe H₂ output / toe fuel input (dimensionless)
-i05CaptRateH2Prod → capture fraction (0–1)
-$offtext
 
 *' This equation models the acceptance of carbon capture and storage (CCS) technologies in hydrogen production. 
 *' It evaluates the economic feasibility of adding CCS to the hydrogen production process, considering cost, 
