@@ -15,7 +15,6 @@ iCarbValYrExog(allCy,ytime)	                               "Carbon value for eac
 iShrHeatPumpElecCons(allCy,SBS)	                           "Share of heat pump electricity consumption in total substitutable electricity (1)"						 			
 iTranfOutGasworks(allCy,EF,YTIME)	                       "Transformation Output from Gasworks, Blast Furnances and Briquetting plants (Mtoe)"	
 iResElecIndex(allCy,YTIME)                                 "Residual for electricity Index (1)"
-iIndChar(allCy,INDSE,Indu_Scon_Set)                        "Industry sector charactetistics (various)"
 iNetImp(allCy,EFS,YTIME)                                   "Net imports (Mtoe)"
 ODummyObj                                                  "Parameter saving objective function"
 

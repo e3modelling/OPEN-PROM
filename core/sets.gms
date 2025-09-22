@@ -294,7 +294,7 @@ INDSE(DSBS)       Industrial SubSectors         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI/
 DOMSE(DSBS)       Tertiary SubSectors           /SE,AG,HOU/
 INDSE1(SBS)       Industrial SubSectors         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI/
 DOMSE1(SBS)       Tertiary SubSectors           /SE,AG,HOU/
-HOU(DSBS)         Households                     /HOU/
+HOU(DSBS)         Households                    /HOU/
 
 NENSE(DSBS)       Non Energy and Bunkers        /PCH,NEN,BU/
 NENSE1(SBS)       Non Energy and Bunkers        /PCH,NEN,BU/
@@ -838,12 +838,11 @@ SECTTECH(DSBS,TECH) Link between Model Demand Subsectors and Technologies
 *GU.(LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGDO,CHEVGDO)
 *(PT,GT).(GDO,ELC,MET)
 PC.(TGSL,TLPG,TGDO,TNGS,TELC,TPHEVGSL,TPHEVGDO,TCHEVGSL,TCHEVGDO)
-PB.(TLPG,TGDO,TNGS,TELC,TPHEVGDO)
-GU.(TLPG,TGDO,TNGS,TELC,TPHEVGDO,TCHEVGDO) !! Removed GSL and PHEVGSL
+PB.(TLPG,TGDO,TNGS,TELC)
+GU.(TLPG,TGDO,TNGS,TELC,TCHEVGDO) !! Removed GSL and PHEVGSL
 (PT,GT).(TGDO,TELC)
 PA.(TKRS)
-PN.(TGSL,TGDO)
-GN.(TGSL,TGDO)
+(PN,GN).(TGDO)
 (IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(TLGN,THCL,TGDO,TRFO,TLPG,TKRS,TOLQ,TNGS,TOGS,TELC,TSTE1AL,
                                  TSTE1AH,TSTE1AD,TSTE1AG)
 (HOU,AG).(TLPG,TKRS,TGDO,TNGS,TOGS,TBMSWAS,TELC,TSTE2LGN,TSTE2OSL,TSTE2GDO,TSTE2NGS,
@@ -930,9 +929,9 @@ ATHBMSCCS
 
 NOCCS(PGALL) Plants which can be equipped with CCS but they are not
 /
-*SUPCRL
-*SUPCR
-*IGCCHCL
+ATHLGN
+ATHCOAL
+ATHGAS
 *IGCCLGN
 *ACCGT
 ATHBMSWAS
@@ -940,9 +939,9 @@ ATHBMSWAS
 
 CCS_NOCCS(PGALL,PGALL) mapping
 /
-*PGAPSSL.SUPCRL
-*ATHCOALCCS.SUPCR
-*PGACGSL.IGCCLGN
+ATHLGNCCS.ATHLGN
+ATHCOALCCS.ATHCOAL
+ATHGASCCS.ATHGAS
 *PGACGS.IGCCHCL
 *PGAGGS.ACCGT
 ATHBMSCCS.ATHBMSWAS
@@ -1226,24 +1225,9 @@ BASE_LOAD_RES       "Residual on Base Load "
 MAX_LOAD_RES        "Residual on Peak Load (Peak Load margin)"
 /
 
-
-CHPRES_SET
-/
-CHP_CC           Capital cost RD residual adjustment
-CHP_FOM          FOM cost RD residual adjustment
-CHP_VOM          VOM cost RD residual adjustment
-/
-
-nucres_set
-/res/
-
-Gompset1 /PC/
-Gompset2 /s1,s2,s3,sat,mextv,scr /
 Indu_SCon_Set /Base, SHR_NSE, SH_HPELC/
 
 CHPPGSET /IC,FC,VOM,LFT,AVAIL,BOILEFF,MAXCHPSHARE/
-
-ELSH_SET /elsh/
 
 BALEF fuels in balance report
 /
@@ -1319,6 +1303,8 @@ alias(PGALL2,PGALL);
 *this alias is used in plant dispatching equation
 alias(ITECH,ITECH2)
 
+* This alias is used in tech share equation
+alias(TTECH2,TTECH)
 
 scalar TF order of base year in set ytime;
 TF=sum((TFIRST,ytime), ord(ytime)$TFIRST(ytime));

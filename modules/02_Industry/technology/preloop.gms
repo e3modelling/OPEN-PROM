@@ -3,10 +3,9 @@
 
 *'                *VARIABLE INITIALISATION*
 *---
-V02UsefulElecNonSubIndTert.L(runCy,DSBS,YTIME)=0.1;
 V02UsefulElecNonSubIndTert.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = imFuelConsPerFueSub(runCy,INDDOM,"ELC",YTIME) * imShrNonSubElecInTotElecDem(runCy,INDDOM);
 
-* Needs to be divided with average efficiency
+* Needs to be divided with average efficiency --- WHICH ONE?
 V02DemSubUsefulSubsec.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = max(imTotFinEneDemSubBaseYr(runCy,INDDOM,YTIME) - V02UsefulElecNonSubIndTert.L(runCy,INDDOM,YTIME),1e-5);
 V02DemSubUsefulSubsec.FX(runCy,NENSE,YTIME)$(not An(YTIME)) = max(imTotFinEneDemSubBaseYr(runCy,NENSE,YTIME),1e-5);
 V02DemSubUsefulSubsec.FX(runCy,"HOU",YTIME)$(not An(YTIME)) = max(imTotFinEneDemSubBaseYr(runCy,"HOU",YTIME) - V02UsefulElecNonSubIndTert.L(runCy,"HOU",YTIME)-i02ExogDemOfBiomass(runCy,"HOU",YTIME),1e-5);
@@ -18,9 +17,7 @@ V02DemUsefulSubsecRemTech(allCy,DSBS,YTIME)
 V02GapUsefulDemSubsec(allCy,DSBS,YTIME)
 $offtext
 *---
-V02CapCostTech.L(runCy,DSBS,ITECH,YTIME) = 0.1;
-*---
-V02VarCostTech.L(runCy,DSBS,rcon,ITECH,YTIME) = 0.1;
+V02CostTech.L(runCy,DSBS,ITECH,YTIME) = 0.1;
 *---
 * Levels in other variables?
 $ontext
@@ -34,10 +31,9 @@ display V02EquipCapTechSubsec.L;
 
 *i02Share(runCy,DSBS,ITECH,EF,YTIME)$(SECTTECH(DSBS,ITECH) and ITECHtoEF(ITECH,EF)) = (imFuelConsPerFueSub(runCy,DSBS,EF,YTIME)/sum(ITECH2$(ITECHtoEF(ITECH2,EF)$SECTTECH(DSBS,ITECH2)),1)) / V02EquipCapTechSubsec(runCy,DSBS,ITECH,YTIME);
 *---
-V02UsefulElecNonSubIndTert.L(runCy,DSBS,YTIME)=0.1;
 V02UsefulElecNonSubIndTert.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = imFuelConsPerFueSub(runCy,INDDOM,"ELC",YTIME) * imShrNonSubElecInTotElecDem(runCy,INDDOM) / imUsfEneConvSubTech(runCy,INDDOM,"TELC",YTIME);
 *---
-VmConsFuel.L(runCy,DSBS,EF,YTIME) = 0.0000000001;
+VmConsFuel.L(runCy,DSBS,EF,YTIME) = 1e-8;
 VmConsFuel.FX(runCy,DSBS,EF,YTIME)$((not HEATPUMP(EF)) and not TRANSE(DSBS) and not An(YTIME)) = sum(SECtoEF(DSBS,EF),imFuelConsPerFueSub(runCy,DSBS,EF,YTIME));
 *---
 *vmConsTotElecInd.FX(runCy,YTIME)$(not An(YTIME))= SUM(INDSE,VmConsElecNonSubIndTert.l(runCy,INDSE,YTIME));
@@ -54,7 +50,3 @@ $offtext
 *---
 *VmConsRemSubEquipSubSec.FX(runCy,DSBS,EF,YTIME)$(SECtoEF(DSBS,EF) $(not An(ytime))) =
 *(VmConsFuelInclHP.L(runCy ,DSBS,EF,YTIME) - (VmConsElecNonSubIndTert.L(runCy,DSBS,YTIME)$(ELCEF(EF) $INDDOM(DSBS)) + 0$(not (ELCEF(EF) $INDDOM(DSBS)))));
-*---
-V02VarCostTech.scale(runCy,DSBS,rCon,ITECH,YTIME) = 1e-9;
-Q02VarCostTech.scale(runCy,DSBS,rCon,ITECH,YTIME) = V02VarCostTech.scale(runCy,DSBS,rCon,ITECH,YTIME);
-*---

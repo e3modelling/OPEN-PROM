@@ -16,7 +16,7 @@ $offdelim
 *---
 table i01CapDataLoadFacEachTransp(TRANSE,TRANSUSE)	 "Capacity data and Load factor for each transportation mode (passenger or tonnes/vehicle)"
      Cap  LF
-PC   2    
+PC   4    0.5
 PB  40   0.4
 PT   300  0.4
 PN  300  0.5
@@ -140,11 +140,17 @@ $offdelim
 ;
 *---
 parameter i01InitSpecFuelConsData(TRANSE,TTECH,EF)      "Initial Specific fuel consumption (toe/vkm)" /
-PT.TGDO.GDO	18.6313
+PT.TGDO.GDO	11.
 PT.TMET.MET	12.6
 PT.TH2F.H2F	8.9
-PT.TELC.ELC	2.73638
-PA.TH2F.H2F	21.7
+PT.TELC.ELC	7
+*PA.H2F.H2F	21.7
+PA.TKRS.KRS	27.85
+PN.TGDO.GDO  30.
+PB.TGDO.GDO  7.8
+PB.TNGS.NGS  5.6
+PB.TLPG.LPG  6.6
+PB.TELC.ELC  2.5
 GU.TLPG.LPG	54.1073
 GU.TGSL.GSL	60.1192
 GU.TGDO.GDO	45.0894
@@ -159,12 +165,12 @@ GU.TPHEVGSL.ELC	21.8
 GU.TPHEVGDO.GDO	27.0536
 GU.TPHEVGDO.ELC	21.8
 GU.TCHEVGDO.GDO	21.8
-GT.TGDO.GDO	33.629
+GT.TGDO.GDO	22.
 GT.TMET.MET	78
 GT.TH2F.H2F	92
-GT.TELC.ELC	11.5245
+GT.TELC.ELC	7.
 GN.TGSL.GSL	22.8
-GN.TGDO.GDO	15.2
+GN.TGDO.GDO	10.7
 GN.TH2F.H2F	8.14286
 /
 ;
