@@ -100,8 +100,19 @@ Q05CostProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          =E=
          (imDisc(allCy,"H2P",YTIME)*exp(imDisc(allCy,"H2P",YTIME)* i05ProdLftH2(H2TECH,YTIME))/(exp(imDisc(allCy,"H2P",YTIME)*i05ProdLftH2(H2TECH,YTIME))-1)*
          i05CostCapH2Prod(allCy,H2TECH,YTIME)+i05CostFOMH2Prod(allCy,H2TECH,YTIME))/i05AvailH2Prod(H2TECH,YTIME) +
-         i05CostVOMH2Prod(allCy,H2TECH,YTIME) + V05CostVarProdH2Tech(allCy,H2TECH,YTIME)
+         i05CostVOMH2Prod(allCy,H2TECH,YTIME) + 
+         sum(EF$H2TECHEFtoEF(H2TECH,EF), (VmPriceFuelSubsecCarVal(allCy,"H2P",EF,YTIME)*1e3+
+
+            i05CaptRateH2Prod(allCy,H2TECH,YTIME)*imCo2EmiFac(allCy,"H2P",EF,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)+
+
+            (1-i05CaptRateH2Prod(allCy,H2TECH,YTIME))*imCo2EmiFac(allCy,"H2P",EF,YTIME)*
+
+            (sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME))))
+
+            /i05EffH2Prod(allCy,H2TECH,YTIME)
+            )$(H2TECHPM(H2TECH))     
 ;
+
 
 *' This equation models the variable costs associated with hydrogen production, factoring in fuel prices (e.g., electricity or natural gas),
 *' CO₂ emission costs, and the efficiency of the production technology. This helps to understand the fluctuating costs based on market conditions.
@@ -119,6 +130,15 @@ Q05CostVarProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
             /i05EffH2Prod(allCy,H2TECH,YTIME)
             )$(H2TECHPM(H2TECH))
 ;
+
+$ontext
+V05CostVarProdH2Tech → Euro per toe H₂ (per-output)
+VmPriceFuelSubsecCarVal → k$2015/toe fuel
+imCo2EmiFac → kg CO₂ / kgoe fuel
+VmCarVal, VmCstCO2SeqCsts → $2015 / tCO₂
+i05EffH2Prod → toe H₂ output / toe fuel input (dimensionless)
+i05CaptRateH2Prod → capture fraction (0–1)
+$offtext
 
 *' This equation models the acceptance of carbon capture and storage (CCS) technologies in hydrogen production. 
 *' It evaluates the economic feasibility of adding CCS to the hydrogen production process, considering cost, 
@@ -210,7 +230,7 @@ Q05ProdH2(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' This equation calculates the average cost of hydrogen production across all technologies in the system.
 *' It accounts for varying costs of different technologies (e.g., electrolysis vs. SMR) to provide an overall assessment of hydrogen production cost.
 Q05CostAvgProdH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V05CostAvgProdH2(allCy,YTIME)
+    VmCostAvgProdH2(allCy,YTIME)
         =E=
     sum(H2TECH, 
       VmProdH2(allCy,H2TECH,YTIME) *
