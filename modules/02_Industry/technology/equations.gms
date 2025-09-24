@@ -60,7 +60,8 @@ Q02GapUsefulDemSubsec(allCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not 
       V02DemSubUsefulSubsec(allCy,DSBS,YTIME) -
       V02DemUsefulSubsecRemTech(allCy,DSBS,YTIME) +
       SQRT(SQR(V02DemSubUsefulSubsec(allCy,DSBS,YTIME) - V02DemUsefulSubsecRemTech(allCy,DSBS,YTIME)))
-    )/2;
+    )/2 + 1e-6
+;
 
 *' The equation computes the capital cost and fixed O&M cost of each technology in each subsector
 *' OLD EQUATION: Q02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME) --> NEW EQUATION:Q02CapCostTech(allCy,DSBS,rCon,EF,YTIME)

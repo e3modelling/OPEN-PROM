@@ -56,6 +56,7 @@ i05HabAreaCountry(allCy)                    "Inhabitable land in a country"
 i05EffNetH2Transp(allCy,INFRTECH,YTIME)     "Total efficiency of the distribution network until the <infrtech> node"
 i05CostAvgWeight(allCy,YTIME)               "Weight for pricing in average cost or in marginal cost"
 iWBLShareH2Prod(allCy,H2TECH,YTIME)         "Maturity factors for H2 technologies"
+iWBLPremRepH2Prod(allCy,H2TECH,YTIME)      "Maturity factors for premature replacement of H2 technologies"
 ;
 *---
 iWBLShareH2Prod(runCy,H2TECH,YTIME) = iTechShareH2Prod(H2TECH,YTIME);
@@ -102,6 +103,8 @@ i05PolH2AreaMax(runCy) = i05H2Parameters(runCy,"MAXAREA");
 i05HabAreaCountry(runCy) = i05H2Parameters(runCy,"AREA");
 *---
 i05EffNetH2Transp(runCy,INFRTECH,YTIME) = i05EffH2Transp(runCy,INFRTECH,YTIME)*(1-i05ConsSelfH2Transp(runCy,INFRTECH,YTIME));
+*---
+iWBLPremRepH2Prod(runCy,H2TECH,YTIME) = 0.1 ;
 *---
 loop H2EFFLOOP do
   loop INFRTECH2$H2NETWORK(INFRTECH2,H2EFFLOOP) do

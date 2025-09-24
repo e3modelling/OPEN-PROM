@@ -47,7 +47,7 @@ V05PremRepH2Prod.L(runCy,H2TECH,YTIME) = 2;
 V05PremRepH2Prod.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
 *---
 V05ScrapLftH2Prod.L(runCy,H2TECH,YTIME) = 2;
-V05ScrapLftH2Prod.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
+V05ScrapLftH2Prod.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1/i05ProdLftH2(H2TECH,YTIME);
 *---
 V05CostProdH2Tech.L(runCy,H2TECH,YTIME) = 2;
 V05CostProdH2Tech.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
