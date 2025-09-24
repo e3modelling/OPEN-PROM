@@ -16,13 +16,15 @@ mc_m	1.013
 parameter i06CapexDAC(DACTECH)                  "CAPEX of each DAC technology ($/tCO2)"
 /
 HTDAC	150,
+H2DAC   1500
 LTDAC	1300,
 EWDAC	400
 / ;
 
 parameter i06CapexDACMin(DACTECH)               "Minimum possible CAPEX of each DAC technology affected by learning curve ($/tCO2)"
 /
-HTDAC	68,
+HTDAC	120,
+H2DAC	68,
 LTDAC	68,
 EWDAC	68
 / ;
@@ -30,6 +32,7 @@ EWDAC	68
 parameter i06FixCostDAC(DACTECH)                "Fixed and O&M costs of each DAC technology ($/tCO2)"
 /
 HTDAC	55,
+H2DAC	80,
 LTDAC	180,
 EWDAC	600
 / ;
@@ -37,6 +40,7 @@ EWDAC	600
 parameter i06FixCostDACMin(DACTECH)             "Minimum possible Fixed and O&M costs of each DAC technology affected by learning curve ($/tCO2)"
 /
 HTDAC	40,
+H2DAC	40,
 LTDAC	30,
 EWDAC	30
 / ;
@@ -44,6 +48,7 @@ EWDAC	30
 parameter i06VarDACMin(DACTECH)                 "Minimum possible Variable and carbon storage costs of each DAC technology affected by learning curve ($/tCO2)"
 /
 HTDAC	94,
+H2DAC	94,
 LTDAC	320,
 EWDAC	200
 / ;
@@ -51,6 +56,7 @@ EWDAC	200
 parameter i06VarDAC(DACTECH)                    "Variable and carbon storage costs of each DAC technology ($/tCO2)"
 /
 HTDAC	115,
+H2DAC	115,
 LTDAC	370,
 EWDAC	130
 / ;
@@ -59,6 +65,7 @@ EWDAC	130
 parameter i06LftExpDAC(DACTECH)                 "Lifetime of each DAC technology (years)"
 /
 HTDAC	25,
+H2DAC	25,
 LTDAC	20,
 EWDAC	15
 / ;
@@ -66,6 +73,7 @@ EWDAC	15
 parameter i06SubsidDAC(DACTECH)                 "Specific electricity needs of DAC technologies (MWh/tCO2)"
 /
 HTDAC	0.01,
+H2DAC	0.01,
 LTDAC	0.01,
 EWDAC	0.01
 / ;
@@ -73,6 +81,7 @@ EWDAC	0.01
 parameter i06ElNeedsDAC(DACTECH)                "Specific electricity needs of DAC technologies (MWh/tCO2)"
 /
 HTDAC	0.3666666667,
+H2DAC	0.3666666667,
 LTDAC	0.275,
 EWDAC	3
 / ;
@@ -80,6 +89,7 @@ EWDAC	3
 parameter i06HeatNeedsDAC(DACTECH)               "Specific heat needs of DAC technologies (MWh/tCO2)"
 /
 HTDAC	1.4722222222,
+H2DAC	1.4722222222,
 LTDAC	0,
 EWDAC	0
 / ;
