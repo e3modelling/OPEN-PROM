@@ -14,12 +14,12 @@ V05GapShareH2Tech1.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
 display V05GapShareH2Tech1.L;
 *---
 V05DemGapH2.L(runCy,YTIME) = 2;
-V05DemGapH2.FX(runCy,YTIME)$(not An(YTIME)) = 1e-5;
+V05DemGapH2.FX(runCy,YTIME)$(not An(YTIME)) = 0;
 display V05DemGapH2.L;
 *---
 VmProdH2.L(runCy,H2TECH, YTIME) = 0.5;
 VmProdH2.LO(runCy,H2TECH, YTIME) = 0;
-VmProdH2.FX(runCy,H2TECH, YTIME)$(not An(YTIME)) = 1e-8;
+VmProdH2.FX(runCy,H2TECH, YTIME)$(not An(YTIME)) = 0;
 display VmProdH2.L;
 *---
 VmDemTotH2.L(runCy,YTIME) = 2;
@@ -67,8 +67,8 @@ VmConsFuelH2Prod.FX(runCy,EF,YTIME)$(not An(YTIME)) = 1e-5;
 V05CostProdCCSNoCCSH2Prod.L(runCy,H2TECH,YTIME) = 2;
 V05CostProdCCSNoCCSH2Prod.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
 *---
-V05CostAvgProdH2.L(runCy,YTIME) = 2;
-V05CostAvgProdH2.FX(runCy,YTIME)$(not An(YTIME)) = 1e-5;
+VmCostAvgProdH2.L(runCy,YTIME) = 2;
+VmCostAvgProdH2.FX(runCy,YTIME)$(not An(YTIME)) = 0;
 *---
 *V05InvNewReqH2Infra.L(runCy,INFRTECH,YTIME) = 2;
 *V05InvNewReqH2Infra.FX(runCy,INFRTECH,YTIME)$(not An(YTIME)) = 1e-5;
@@ -90,6 +90,6 @@ V05CostAvgProdH2.FX(runCy,YTIME)$(not An(YTIME)) = 1e-5;
 VmDemSecH2.L(runCy,SBS, YTIME) = 2;
 VmDemSecH2.FX(runCy,SBS,YTIME)$(not An(YTIME)) = 1e-5;
 *---
-V05DemGapH2.scale(runCy,YTIME) = 1e-6;
+V05DemGapH2.scale(runCy,YTIME) = 1e-10;
 Q05DemGapH2.scale(runCy,YTIME) = V05DemGapH2.scale(runCy,YTIME);
 *---

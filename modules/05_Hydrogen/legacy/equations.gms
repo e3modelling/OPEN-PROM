@@ -32,7 +32,7 @@ Q05ScrapLftH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     (
     V05GapShareH2Tech1(allCy,H2TECH,YTIME-i05ProdLftH2(H2TECH,YTIME)) *
     V05DemGapH2(allCy,YTIME-i05ProdLftH2(H2TECH,YTIME)) /
-    VmProdH2(allCy,H2TECH,YTIME-1)
+    (VmProdH2(allCy,H2TECH,YTIME-1) + 1e-6)
     )$(ord(YTIME)>11+i05ProdLftH2(H2TECH,YTIME)) !!+ 0.1
 ;
 
@@ -57,7 +57,7 @@ Q05PremRepH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
            )**(-i05WBLGammaH2Prod(allCy,YTIME))
 
            + V05CostVarProdH2Tech(allCy,H2TECH,YTIME)**(-i05WBLGammaH2Prod(allCy,YTIME))
-         )
+         + 1e-6)
          )$H2TECHPM(H2TECH)
 ;
 
@@ -89,7 +89,7 @@ Q05DemGapH2(allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
             (1-V05CapScrapH2ProdTech(allCy,H2TECH,YTIME)) *
             VmProdH2(allCy,H2TECH,YTIME-1)
           )
-    )) )/2
+    )) )/2 + 1e-6
 ;
 
 *' This equation calculates the production costs of hydrogen, including both fixed costs (e.g., capital investment) 
@@ -98,9 +98,16 @@ Q05DemGapH2(allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q05CostProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V05CostProdH2Tech(allCy,H2TECH,YTIME)
          =E=
-         (imDisc(allCy,"H2P",YTIME)*exp(imDisc(allCy,"H2P",YTIME)* i05ProdLftH2(H2TECH,YTIME))/(exp(imDisc(allCy,"H2P",YTIME)*i05ProdLftH2(H2TECH,YTIME))-1)*
-         i05CostCapH2Prod(allCy,H2TECH,YTIME)+i05CostFOMH2Prod(allCy,H2TECH,YTIME))/i05AvailH2Prod(H2TECH,YTIME) +
-         i05CostVOMH2Prod(allCy,H2TECH,YTIME) + V05CostVarProdH2Tech(allCy,H2TECH,YTIME)
+         ((imDisc(allCy,"H2P",YTIME)*exp(imDisc(allCy,"H2P",YTIME)* i05ProdLftH2(H2TECH,YTIME))/(exp(imDisc(allCy,"H2P",YTIME)*i05ProdLftH2(H2TECH,YTIME))-1)*
+         i05CostCapH2Prod(allCy,H2TECH,YTIME)+i05CostFOMH2Prod(allCy,H2TECH,YTIME))
+         /(i05AvailH2Prod(H2TECH,YTIME)*0.8 )+
+         i05CostVOMH2Prod(allCy,H2TECH,YTIME) )/0.000304/1000*1.31+
+         sum(EF$H2TECHEFtoEF(H2TECH,EF), (VmPriceFuelSubsecCarVal(allCy,"H2P",EF,YTIME)*1e3+
+            i05CaptRateH2Prod(allCy,H2TECH,YTIME)*imCo2EmiFac(allCy,"H2P",EF,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)+
+            (1-i05CaptRateH2Prod(allCy,H2TECH,YTIME))*imCo2EmiFac(allCy,"H2P",EF,YTIME)*
+            (sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME))))
+            /i05EffH2Prod(allCy,H2TECH,YTIME)
+            )  
 ;
 
 *' This equation models the variable costs associated with hydrogen production, factoring in fuel prices (e.g., electricity or natural gas),
@@ -109,15 +116,15 @@ Q05CostVarProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V05CostVarProdH2Tech(allCy,H2TECH,YTIME)
          =E=
          sum(EF$H2TECHEFtoEF(H2TECH,EF), (VmPriceFuelSubsecCarVal(allCy,"H2P",EF,YTIME)*1e3+
-
+ 
             i05CaptRateH2Prod(allCy,H2TECH,YTIME)*imCo2EmiFac(allCy,"H2P",EF,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)+
-
+ 
             (1-i05CaptRateH2Prod(allCy,H2TECH,YTIME))*imCo2EmiFac(allCy,"H2P",EF,YTIME)*
-
+ 
             (sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME))))
-
+ 
             /i05EffH2Prod(allCy,H2TECH,YTIME)
-            )$(H2TECHPM(H2TECH))
+            )
 ;
 
 *' This equation models the acceptance of carbon capture and storage (CCS) technologies in hydrogen production. 
@@ -210,13 +217,14 @@ Q05ProdH2(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' This equation calculates the average cost of hydrogen production across all technologies in the system.
 *' It accounts for varying costs of different technologies (e.g., electrolysis vs. SMR) to provide an overall assessment of hydrogen production cost.
 Q05CostAvgProdH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V05CostAvgProdH2(allCy,YTIME)
+    VmCostAvgProdH2(allCy,YTIME)
         =E=
-    sum(H2TECH, 
-      VmProdH2(allCy,H2TECH,YTIME) *
-      V05CostProdH2Tech(allCy,H2TECH,YTIME)
+    ( sum(H2TECH, 
+        VmProdH2(allCy,H2TECH,YTIME) *
+        V05CostProdH2Tech(allCy,H2TECH,YTIME)
+      ) + 1e-6
     ) /
-    sum(H2TECH,VmProdH2(allCy,H2TECH,YTIME))
+    (sum(H2TECH,VmProdH2(allCy,H2TECH,YTIME)) + 1e-6)
 ;
 
 *' This equation calculates the fuel consumption for each hydrogen production technology, considering 
@@ -225,12 +233,11 @@ Q05CostAvgProdH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q05ConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)$(TIME(YTIME) $H2TECHEFtoEF(H2TECH,EF) $(runCy(allCy)))..
          VmConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)
          =E=
-         (VmProdH2(allCy,H2TECH,YTIME)/i05EffH2Prod(allCy,H2TECH,YTIME))$(sameas(YTIME,"%fBaseY%"))
-         +
+         (VmProdH2(allCy,H2TECH,YTIME)/i05EffH2Prod(allCy,H2TECH,YTIME))$(sameas(YTIME,"%fBaseY%")) +
          (
          VmConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME-1)*
-         (VmProdH2(allCy,H2TECH,YTIME)/i05EffH2Prod(allCy,H2TECH,YTIME))/
-         (VmProdH2(allCy,H2TECH,YTIME-1)/i05EffH2Prod(allCy,H2TECH,YTIME-1))
+         (VmProdH2(allCy,H2TECH,YTIME)/i05EffH2Prod(allCy,H2TECH,YTIME) + 1e-6)/
+         (VmProdH2(allCy,H2TECH,YTIME-1)/i05EffH2Prod(allCy,H2TECH,YTIME-1) + 1e-6)
          )$(not sameas(YTIME,"%fBaseY%"))
 ;
 
@@ -329,7 +336,7 @@ Q05CostTechH2Infr(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          +
          (
             i05ConsSelfH2Transp(allCy,INFRTECH,YTIME)*V05InvNewReqH2Infra(allCy,INFRTECH,YTIME)*
-            (V05CostAvgProdH2(allCy,YTIME-1)$sameas("HPIPU",INFRTECH)+
+            (V,CostAvgProdH2(allCy,YTIME-1)$sameas("HPIPU",INFRTECH)+
             VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)*1e3)$sameas("SSGG",INFRTECH)
          )$(sameas("SSGG",INFRTECH) or sameas("HPIPU",INFRTECH))
          /V05InvNewReqH2Infra(allCy,INFRTECH,YTIME)
@@ -373,6 +380,6 @@ Q05PriceH2Infr(allCy,SBS,YTIME)$(TIME(YTIME) $SECTTECH(SBS,"H2F") $(runCy(allCy)
 Q05CostTotH2(allCy,SBS,YTIME)$(TIME(YTIME) $SECTTECH(SBS,"H2F") $(runCy(allCy)))..
          V05CostTotH2(allCy,SBS,YTIME)
          =E=
-         V05PriceH2Infr(allCy,SBS,YTIME)+V05CostAvgProdH2(allCy,YTIME)
+         V05PriceH2Infr(allCy,SBS,YTIME)+VmCostAvgProdH2(allCy,YTIME)
 ;
 $offtext

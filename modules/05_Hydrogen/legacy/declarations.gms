@@ -15,7 +15,7 @@ V05ShareNoCCSH2Prod(allCy, H2TECH, YTIME)         "Share of technology without C
 V05AcceptCCSH2Tech(allCy, YTIME)                  "Acceptance of investment in CCS technologies"
 VmConsFuelH2Prod(allCy, EF, YTIME)               "Total fuel consumption for hydrogen production in Mtoe"
 V05CostProdCCSNoCCSH2Prod(allCy, H2TECH, YTIME)   "Production cost of the composite technology with and without CCS in Euro per toe"
-V05CostAvgProdH2(allCy, YTIME)                    "Average production cost of hydrogen in Euro per toe"
+VmCostAvgProdH2(allCy, YTIME)                    "Average production cost of hydrogen in Euro per toe"
 
 $ontext
 *'                **Infrastructure Variables**
