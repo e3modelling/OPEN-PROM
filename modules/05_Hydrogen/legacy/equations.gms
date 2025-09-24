@@ -242,13 +242,9 @@ Q05CostAvgProdH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q05ConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)$(TIME(YTIME) $H2TECHEFtoEF(H2TECH,EF) $(runCy(allCy)))..
          VmConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)
          =E=
-         (VmProdH2(allCy,H2TECH,YTIME)/i05EffH2Prod(allCy,H2TECH,YTIME))$(sameas(YTIME,"%fBaseY%"))
-         +
-         (
-         VmConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME-1)*
-         (VmProdH2(allCy,H2TECH,YTIME)/i05EffH2Prod(allCy,H2TECH,YTIME)+ 1e-6)/
-         (VmProdH2(allCy,H2TECH,YTIME-1)/i05EffH2Prod(allCy,H2TECH,YTIME-1)+ 1e-6)
-         )$(not sameas(YTIME,"%fBaseY%"))
+*         VmConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME-1)+
+         VmProdH2(allCy,H2TECH,YTIME)/i05EffH2Prod(allCy,H2TECH,YTIME)!!-
+*         (VmProdH2(allCy,H2TECH,YTIME-1)/i05EffH2Prod(allCy,H2TECH,YTIME-1))
 ;
 
 *' This equation aggregates the total fuel consumption across all hydrogen production technologies in the system,
