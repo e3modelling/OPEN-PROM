@@ -17,7 +17,8 @@
 *' OLD VARIABLE: VmDemFinSubFuelSubsec(allCy,DSBS,YTIME) --> NEW VARIABLE:VmDemUsefulSubsec
 *' Note: To check which cost should be used... (this VmPriceFuelAvgSub or another cost (weighted average per technology))
 Q02DemSubUsefulSubsec(allCy,DSBS,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not sameas(DSBS,"DAC"))$runCy(allCy))..
-    V02DemSubUsefulSubsec(allCy,DSBS,YTIME) =E=
+    V02DemSubUsefulSubsec(allCy,DSBS,YTIME) 
+        =E=
     [
     V02DemSubUsefulSubsec(allCy,DSBS,YTIME-1) *
     imActv(YTIME,allCy,DSBS) ** imElastA(allCy,DSBS,"a",YTIME) *
@@ -60,7 +61,7 @@ Q02GapUsefulDemSubsec(allCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not 
       V02DemSubUsefulSubsec(allCy,DSBS,YTIME) -
       V02DemUsefulSubsecRemTech(allCy,DSBS,YTIME) +
       SQRT(SQR(V02DemSubUsefulSubsec(allCy,DSBS,YTIME) - V02DemUsefulSubsecRemTech(allCy,DSBS,YTIME)))
-    )/2 + 1e-6
+    )/2 + 1e-6 + 1e-6
 ;
 
 *' The equation computes the capital cost and fixed O&M cost of each technology in each subsector
@@ -79,7 +80,7 @@ Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not sa
       (exp((imDisc(allCy,DSBS,YTIME)$(not TCHP(ITECH)) + imDisc(allCy,"PG",YTIME)$TCHP(ITECH)) * VmLft(allCy,DSBS,ITECH,YTIME)) - 1)
     ) *
     imCapCostTech(allCy,DSBS,ITECH,YTIME) * imCGI(allCy,YTIME) +
-    imFixOMCostTech(allCy,DSBS,ITECH,YTIME)/sUnitToKUnit; !! divide with utilization rate or with efficiency as well???? depends on the CapCostTech parameter
+    imFixOMCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit; !! divide with utilization rate or with efficiency as well???? depends on the CapCostTech parameter
 
 *' The equation computes the variable cost (variable + fuel) of each technology in each subsector - to check about consumer sizes
 *' OLD EQUATION: Q02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME) --> NEW EQUATION:Q02VarCostTech(allCy,DSBS,rCon,ITECH,YTIME)
@@ -197,14 +198,23 @@ Q02IndxElecIndPrices(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q02CostElecProdCHP(allCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS) $runCy(allCy))..
     V02CostElecProdCHP(allCy,DSBS,CHP,YTIME)
         =E=
-    ( ( imDisc(allCy,"PG",YTIME) * exp(imDisc(allCy,"PG",YTIME)*i02LifChpPla(allCy,DSBS,CHP))
-        / (exp(imDisc(allCy,"PG",YTIME)*i02LifChpPla(allCy,DSBS,CHP)) -1))
-      * i02InvCostChp(allCy,DSBS,CHP,YTIME) * imCGI(allCy,YTIME)  + i02FixOMCostPerChp(allCy,DSBS,CHP,YTIME)
-    )/(i02AvailRateChp(allCy,DSBS,CHP)*(smGwToTwhPerYear(YTIME)) * 1000)
-    + i02VarCostChp(allCy,DSBS,CHP,YTIME)/1000
-    + sum(PGEF$CHPtoEF(CHP,PGEF), (VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)+0.001*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
-          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))))
-          * smTWhToMtoe /  (i02BoiEffChp(allCy,CHP,YTIME) * (VmPriceElecInd(allCy,YTIME)) + 1e-4));  
+    ( 
+      imDisc(allCy,"PG",YTIME) * 
+      exp(imDisc(allCy,"PG",YTIME) * i02LifChpPla(allCy,DSBS,CHP)) /
+      (exp(imDisc(allCy,"PG",YTIME) * i02LifChpPla(allCy,DSBS,CHP)) -1) *
+      i02InvCostChp(allCy,DSBS,CHP,YTIME) * imCGI(allCy,YTIME) + 
+      i02FixOMCostPerChp(allCy,DSBS,CHP,YTIME)
+    ) /
+    (i02AvailRateChp(allCy,DSBS,CHP) * (smGwToTwhPerYear(YTIME)) * 1000) +
+    i02VarCostChp(allCy,DSBS,CHP,YTIME) / 1000 +
+    sum(PGEF$CHPtoEF(CHP,PGEF),
+      (
+        VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME) +
+        1e-3 * imCo2EmiFac(allCy,"PG",PGEF,YTIME) *
+        sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))
+      ) * smTWhToMtoe /
+      (i02BoiEffChp(allCy,CHP,YTIME) * (VmPriceElecInd(allCy,YTIME)) + 1e-4)
+    );  
 
 *' The equation calculates the average electricity production cost per Combined Heat and Power plant .
 *' It involves a summation over demand subsectors . The average electricity production cost is determined by considering the electricity
@@ -212,5 +222,10 @@ Q02CostElecProdCHP(allCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS) $runCy(allCy
 Q02CostElcAvgProdCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCostElcAvgProdCHP(allCy,CHP,YTIME)
       =E=
-    (sum(INDDOM, VmConsFuel(allCy,INDDOM,CHP,YTIME-1)/SUM(INDDOM2,VmConsFuel(allCy,INDDOM2,CHP,YTIME-1))*V02CostElecProdCHP(allCy,INDDOM,CHP,YTIME)))
-    $SUM(INDDOM2,VmConsFuel.L(allCy,INDDOM2,CHP,YTIME-1))+0$(NOT SUM(INDDOM2,VmConsFuel.L(allCy,INDDOM2,CHP,YTIME-1)));
+    (
+      sum(INDDOM, 
+        VmConsFuel(allCy,INDDOM,CHP,YTIME-1) /
+        SUM(INDDOM2,VmConsFuel(allCy,INDDOM2,CHP,YTIME-1)) *
+        V02CostElecProdCHP(allCy,INDDOM,CHP,YTIME)
+      )
+    )$SUM(INDDOM2,VmConsFuel.L(allCy,INDDOM2,CHP,YTIME-1))+0$(NOT SUM(INDDOM2,VmConsFuel.L(allCy,INDDOM2,CHP,YTIME-1)));
