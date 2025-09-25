@@ -133,8 +133,8 @@ Q06CapFacNewDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V06CapFacNewDAC(allCy,DACTECH,YTIME)
          =E=
           (
-            ((exp(S06MatFacDAC * V06ProfRateDAC(allCy,DACTECH,YTIME) - 1)) /
-           exp(S06MatFacDAC * S06ProfRateMaxDAC - 1))
+            ((exp(i06MatFacDAC(DACTECH) * V06ProfRateDAC(allCy,DACTECH,YTIME) - 1)) /
+           exp(i06MatFacDAC(DACTECH) * S06ProfRateMaxDAC - 1))
           ) *
           (S06CapFacMaxNewDAC - S06CapFacMinNewDAC) +
           S06CapFacMinNewDAC

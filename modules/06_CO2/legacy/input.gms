@@ -13,10 +13,18 @@ mc_s	120,
 mc_m	1.013
 / ;
 
+parameter i06MatFacDAC(DACTECH)                 "Maturity factor of DAC technology expressing its elasticity in implementation regarding its financial sustainability"
+/
+HTDAC	0.51,
+H2DAC   0.41,
+LTDAC	0.37,
+EWDAC	0.44
+/ ;
+
 parameter i06CapexDAC(DACTECH)                  "CAPEX of each DAC technology ($/tCO2)"
 /
-HTDAC	150,
-H2DAC   1500
+HTDAC	400,
+H2DAC   1300
 LTDAC	1300,
 EWDAC	400
 / ;
