@@ -61,9 +61,8 @@ Q05PremRepH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                 (1-1/i05AvailH2Prod(H2TECH,YTIME)) * V05CostVarProdH2Tech(allCy,H2TECH,YTIME))
             )**(-i05WBLGammaH2Prod(allCy,YTIME))
 
-            + V05CostVarProdH2Tech(allCy,H2TECH,YTIME)**(-i05WBLGammaH2Prod(allCy,YTIME))
-          +1e-6
-          )
+           + V05CostVarProdH2Tech(allCy,H2TECH,YTIME)**(-i05WBLGammaH2Prod(allCy,YTIME))
+         + 1e-6)
          )$H2TECHPM(H2TECH)
 ;
 
@@ -101,22 +100,24 @@ Q05DemGapH2(allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' and variable costs (e.g., operational expenses). The costs are typically differentiated by hydrogen production 
 *' technologies such as electrolysis, steam methane reforming (SMR), or coal gasification.
 Q05CostProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V05CostProdH2Tech(allCy,H2TECH,YTIME)
-         =E=
-         ((imDisc(allCy,"H2P",YTIME)*exp(imDisc(allCy,"H2P",YTIME)* i05ProdLftH2(H2TECH,YTIME))/(exp(imDisc(allCy,"H2P",YTIME)*i05ProdLftH2(H2TECH,YTIME))-1)*
-         i05CostCapH2Prod(allCy,H2TECH,YTIME)+i05CostFOMH2Prod(allCy,H2TECH,YTIME))
-         /(i05AvailH2Prod(H2TECH,YTIME)*0.8 )+
-         i05CostVOMH2Prod(allCy,H2TECH,YTIME) )/0.000304/1000*1.31+ 
-         sum(EF$H2TECHEFtoEF(H2TECH,EF), (VmPriceFuelSubsecCarVal(allCy,"H2P",EF,YTIME)*1e3+
-
-            i05CaptRateH2Prod(allCy,H2TECH,YTIME)*imCo2EmiFac(allCy,"H2P",EF,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)+
-
-            (1-i05CaptRateH2Prod(allCy,H2TECH,YTIME))*imCo2EmiFac(allCy,"H2P",EF,YTIME)*
-
-            (sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME))))
-
-            /i05EffH2Prod(allCy,H2TECH,YTIME)
-            )  
+        V05CostProdH2Tech(allCy,H2TECH,YTIME)
+            =E=
+        (
+          (
+            imDisc(allCy,"H2P",YTIME) * 
+            exp(imDisc(allCy,"H2P",YTIME) * i05ProdLftH2(H2TECH,YTIME)) /
+            (exp(imDisc(allCy,"H2P",YTIME)*i05ProdLftH2(H2TECH,YTIME))-1) *
+            i05CostCapH2Prod(allCy,H2TECH,YTIME) +
+            i05CostFOMH2Prod(allCy,H2TECH,YTIME)
+          ) / i05AvailH2Prod(H2TECH,YTIME) +
+          i05CostVOMH2Prod(allCy,H2TECH,YTIME) 
+        )/0.000304/1000*(1.01 * 1.38) +
+        sum(EF$H2TECHEFtoEF(H2TECH,EF), (VmPriceFuelSubsecCarVal(allCy,"H2P",EF,YTIME)*1e3+
+          i05CaptRateH2Prod(allCy,H2TECH,YTIME)*imCo2EmiFac(allCy,"H2P",EF,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)+
+          (1-i05CaptRateH2Prod(allCy,H2TECH,YTIME))*imCo2EmiFac(allCy,"H2P",EF,YTIME)*
+          (sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME))))
+          /i05EffH2Prod(allCy,H2TECH,YTIME)
+        )  
 ;
 
 
@@ -126,13 +127,13 @@ Q05CostVarProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V05CostVarProdH2Tech(allCy,H2TECH,YTIME)
          =E=
          sum(EF$H2TECHEFtoEF(H2TECH,EF), (VmPriceFuelSubsecCarVal(allCy,"H2P",EF,YTIME)*1e3+
-
+ 
             i05CaptRateH2Prod(allCy,H2TECH,YTIME)*imCo2EmiFac(allCy,"H2P",EF,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)+
-
+ 
             (1-i05CaptRateH2Prod(allCy,H2TECH,YTIME))*imCo2EmiFac(allCy,"H2P",EF,YTIME)*
-
+ 
             (sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME))))
-
+ 
             /i05EffH2Prod(allCy,H2TECH,YTIME)
             )
 ;
@@ -229,10 +230,11 @@ Q05ProdH2(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q05CostAvgProdH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCostAvgProdH2(allCy,YTIME)
         =E=
-    (sum(H2TECH, 
-      (VmProdH2(allCy,H2TECH,YTIME) ) *
-      V05CostProdH2Tech(allCy,H2TECH,YTIME)
-    )+ 1e-6) /
+    ( sum(H2TECH, 
+        VmProdH2(allCy,H2TECH,YTIME) *
+        V05CostProdH2Tech(allCy,H2TECH,YTIME)
+      ) + 1e-6
+    ) /
     (sum(H2TECH,VmProdH2(allCy,H2TECH,YTIME)) + 1e-6)
 ;
 
@@ -242,9 +244,12 @@ Q05CostAvgProdH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q05ConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)$(TIME(YTIME) $H2TECHEFtoEF(H2TECH,EF) $(runCy(allCy)))..
          VmConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)
          =E=
-*         VmConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME-1)+
-         VmProdH2(allCy,H2TECH,YTIME)/i05EffH2Prod(allCy,H2TECH,YTIME)!!-
-*         (VmProdH2(allCy,H2TECH,YTIME-1)/i05EffH2Prod(allCy,H2TECH,YTIME-1))
+         (VmProdH2(allCy,H2TECH,YTIME)/i05EffH2Prod(allCy,H2TECH,YTIME))$(sameas(YTIME,"%fBaseY%")) +
+         (
+         VmConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME-1)*
+         (VmProdH2(allCy,H2TECH,YTIME)/i05EffH2Prod(allCy,H2TECH,YTIME) + 1e-6)/
+         (VmProdH2(allCy,H2TECH,YTIME-1)/i05EffH2Prod(allCy,H2TECH,YTIME-1) + 1e-6)
+         )$(not sameas(YTIME,"%fBaseY%"))
 ;
 
 *' This equation aggregates the total fuel consumption across all hydrogen production technologies in the system,

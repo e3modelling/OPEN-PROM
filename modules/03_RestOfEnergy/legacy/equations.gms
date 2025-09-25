@@ -157,7 +157,10 @@ Q03InpTransfTherm(allCy,PGEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         sum(PGALL$(PGALLtoEF(PGALL,PGEF)$PGGEO(PGALL)),
              VmProdElec(allCy,PGALL,YTIME) * smTWhToMtoe / 0.15) 
         +
-        sum(CHP$CHPtoEF(CHP,PGEF),  sum(INDDOM,VmConsFuel(allCy,INDDOM,CHP,YTIME))+smTWhToMtoe*V04ProdElecEstCHP(allCy,CHP,YTIME))/(0.8+0.1*(ord(YTIME)-10)/32);
+        sum(CHP$CHPtoEF(CHP,PGEF),
+          sum(INDDOM,VmConsFuel(allCy,INDDOM,CHP,YTIME)) +
+          smTWhToMtoe * V04ProdElecEstCHP(allCy,CHP,YTIME)
+        ) / (0.8+0.1*(ord(YTIME)-10)/32);
 
 *' The equation calculates the transformation output from thermal power stations for a specific energy branch
 *' in a given scenario and year. The result is computed based on the following conditions: 
