@@ -702,7 +702,7 @@ imFinEneCons(runCy,EFS,YTIME) =
      +
      sum((TRANSE,EF)$(EFtoEFS(EF,EFS) and sum(TECH$(SECTTECH(TRANSE,TECH) and TECHtoEF(TECH,EF)$(not plugin(TECH))),1)), imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME));
 *---
-imCO2CaptRate(runCy,PGALL,YTIME) = 0.9; 
+imCO2CaptRate(runCy,PGALL,YTIME) = 0.96; 
 imEffValueInDollars(runCy,SBS,YTIME) = 0;
 iScenarioPri(WEF,"NOTRADE",YTIME) = 0;
 *---

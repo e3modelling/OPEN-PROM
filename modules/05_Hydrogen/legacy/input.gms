@@ -66,6 +66,7 @@ i05WBLGammaH2Prod(runCy,YTIME) = 1;
 i05ProdLftH2(H2TECH,YTIME) = i05H2Production("LFT",H2TECH,YTIME);
 *---
 i05CaptRateH2Prod(runCy,H2TECH,YTIME) = i05H2Production("CR",H2TECH,YTIME);
+i05CaptRateH2Prod(runCy,H2CCS,YTIME) = 0.96;
 *---
 i05H2Adopt(runCy,"b",YTIME)   = i05H2Parameters(runCy,"B");
 i05H2Adopt(runCy,"mid",YTIME) = i05H2Parameters(runCy,"mid");
