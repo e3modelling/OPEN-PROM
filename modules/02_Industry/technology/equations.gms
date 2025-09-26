@@ -92,7 +92,8 @@ Q02VarCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not s
   (
     sum(EF$ITECHtoEF(ITECH,EF), 
       i02Share(allCy,DSBS,ITECH,EF,YTIME) *
-      VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME) +
+      VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME) - 
+      ((imCO2CaptRateIndustry(allCy,ITECH,YTIME)) * 1e-3 * imCo2EmiFac(allCy,DSBS,EF,YTIME) * (sum(NAP$NAPtoALLSBS(NAP,DSBS), VmCarVal(allCy,NAP,YTIME))))$CCSTECH(ITECH) +
       VmRenValue(YTIME)$(not RENEF(ITECH) and not NENSE(DSBS)) !! needs change of units
     ) +
     imVarCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit

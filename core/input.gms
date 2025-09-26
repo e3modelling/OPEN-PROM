@@ -182,6 +182,8 @@ table imDataIndTechnology(INDSE,TECH,ECONCHAR)          "Technoeconomic characte
             IC      FC      VC      LFT USC
 *IS.THCL      0.32196 6.8     1.36    25  2.3255
 IS.THCL      0.32196 6.8     1.36    25  0.5
+* The share for IS +8% CAPEX -8%OPEX
+IS.THCLCCS   0.34772 6.256   1.36    25  0.5
 IS.TLGN      0.48295 10.2    2.04    25  0.5
 IS.TLPG      0.48295 10.2    2.04    25  0.72
 IS.TKRS      0.48295 10.2    2.04    25  0.72
@@ -189,6 +191,8 @@ IS.TGDO      0.48295 10.2    2.04    25  0.72
 IS.TRFO      0.48295 10.2    2.04    25  0.72
 IS.TOLQ      0.48295 10.2    2.04    25  0.72
 IS.TNGS      0.48295 10.2    2.04    25  0.8
+* The share for IS +8% CAPEX -8%OPEX
+IS.TNGSCCS   0.52159 9.38    2.04    25  0.8
 IS.TOGS      0.48295 10.2    2.04    25  0.8
 IS.TBMSWAS   0.48295 10.2    2.04    25  0.5
 * IS.TELC      0.29367 6.8     1.36    25  5.74713
@@ -224,6 +228,8 @@ NF.TSTE1AH2F 3.13528 94.0585         30  0.5
 NF.THEATPUMP 4.94477 119.819         30  1.848
 NF.TH2F      4.94477 119.819 41.1163 30  0.97
 CH.THCL      0.53294 5.44            25  0.5
+* The share for CH +30% CAPEX 0%OPEX
+CH.THCLCCS   0.69282 5.44            25  0.5
 CH.TLGN      0.53294 5.44            25  0.5
 CH.TLPG      0.44411 5.44            25  0.72
 CH.TKRS      0.44411 5.44            25  0.72
@@ -231,6 +237,8 @@ CH.TGDO      0.44411 5.44            25  0.72
 CH.TRFO      0.44411 5.44            25  0.72
 CH.TOLQ      0.44411 5.44            25  0.72
 CH.TNGS      0.35529 5.44            25  0.8
+* The share for CH +30% CAPEX 0%OPEX
+CH.TNGSCCS   0.46188 5.44            25  0.8
 CH.TOGS      0.35529 5.44            25  0.8
 CH.TBMSWAS   0.53294 5.44            25  0.5
 CH.TELC      0.476   5.44            25  0.97
@@ -244,6 +252,8 @@ CH.TSTE1AH2F 3.13528 94.0585         25  0.5
 CH.THEATPUMP 0.68398 10.3404         25  1.848
 CH.TH2F      3.13528 94.0585 41.1163 25  0.97
 BM.THCL      4.41477 3.2096          30  0.5
+* The share for BM +19% CAPEX +20%OPEX
+BM.THCLCCS   5.25357 3.8515          30  0.5
 BM.TLGN      4.41477 3.2096          30  0.5
 BM.TLPG      3.67898 3.2096          30  0.72
 BM.TKRS      3.67898 3.2096          30  0.72
@@ -251,6 +261,8 @@ BM.TGDO      3.67898 3.2096          30  0.72
 BM.TRFO      3.67898 3.2096          30  0.72
 BM.TOLQ      3.67898 3.2096          30  0.72
 BM.TNGS      2.94318 3.2096          30  0.8
+* The share for BM +19% CAPEX +20%OPEX
+BM.TNGSCCS   3.50238 3.8515          30  0.8
 BM.TOGS      2.94318 3.2096          30  0.8
 BM.TBMSWAS   4.41477 3.2096          30  0.5
 BM.TELC      3.808   3.2096          30  0.97
@@ -745,6 +757,7 @@ $include"./iMatrFactorData.csv"
 $offdelim
 ;
 iMatrFactorData(DSBS,TECH,YTIME)$(TRANSE(DSBS) or INDSE(DSBS) or DOMSE(DSBS)) = 1;
+iMatrFactorData(DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and (INDSE(DSBS)) and CCSTECH(ITECH)) = 0.2;
 iMatrFactorData(DSBS,TECH,YTIME)$(sameas(DSBS, "PC")$SECTTECH(DSBS,TECH)) = 1;
 *---
 $IFTHEN.calib %MatFacCalibration% == off

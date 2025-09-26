@@ -29,7 +29,20 @@ Q06CapCO2ElecHydr(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
             (
               sum(DACTECH,V06CapDAC(allCy,DACTECH,YTIME)) / 1e6
             )
-          ;   
+**+ 
+**          (
+**            sum(DSBS,sum(CCSTECH$SECTTECH(DSBS,CCSTECH),sum(EF$ITECHtoEF(CCSTECH,EF),i02Share(allCy,DSBS,CCSTECH,EF,YTIME) * 1e-3 * V02EquipCapTechSubsec(allcy,DSBS,CCSTECH,YTIME) * i02util(allCy,DSBS,CCSTECH,YTIME) * imCO2CaptRateIndustry(allCy,CCSTECH,YTIME) * imCo2EmiFac(allCy,DSBS,EF,YTIME))))
+**          )       
+;   
+
+
+Q06CapCO2Ind(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         V06CapCO2Ind(allCy,YTIME)
+         =E=
+          (
+            sum(DSBS,sum(CCSTECH$SECTTECH(DSBS,CCSTECH),sum(EF$ITECHtoEF(CCSTECH,EF),i02Share(allCy,DSBS,CCSTECH,EF,YTIME) * V02EquipCapTechSubsec(allcy,DSBS,CCSTECH,YTIME) * i02util(allCy,DSBS,CCSTECH,YTIME) * imCO2CaptRateIndustry(allCy,CCSTECH,YTIME) * imCo2EmiFac(allCy,DSBS,EF,YTIME))))
+          )       
+;   
 
 
 *' The equation calculates the cumulative CO2 captured in million tons of CO2 for a given scenario and year.
@@ -37,7 +50,7 @@ Q06CapCO2ElecHydr(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' plants to the cumulative CO2 captured in the previous time period. This equation captures the ongoing total CO2 capture
 *' over time in the specified scenario.
 Q06CaptCummCO2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V06CaptCummCO2(allCy,YTIME) =E= V06CaptCummCO2(allCy,YTIME-1)+V06CapCO2ElecHydr(allCy,YTIME-1);   
+         V06CaptCummCO2(allCy,YTIME) =E= V06CaptCummCO2(allCy,YTIME-1) + V06CapCO2ElecHydr(allCy,YTIME-1) + V06CapCO2Ind(allCy,YTIME-1);   
 
 *' The equation computes the transition weight from a linear to exponential CO2 sequestration
 *' cost curve for a specific scenario and year. The transition weight is determined based on the cumulative CO2 captured

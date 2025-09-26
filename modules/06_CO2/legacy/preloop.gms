@@ -8,6 +8,8 @@ VmCstCO2SeqCsts.FX(runCy,YTIME)$(not an(YTIME)) = i06ElastCO2Seq(runCy,"mc_b");
 *---
 V06CapCO2ElecHydr.FX(runCy,YTIME)$(not An(YTIME)) = 0;
 *---
+V06CapCO2Ind.FX(runCy,YTIME)$(not An(YTIME)) = 0;
+*---
 V06CaptCummCO2.FX(runCy,YTIME)$(not an(YTIME)) = 0 ;
 *---
 *V06TrnsWghtLinToExp.scale(runCy,YTIME)=1.e-20;

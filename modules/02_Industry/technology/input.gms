@@ -22,6 +22,7 @@ i02BoiEffChp(allCy,CHP,YTIME)                              "Boiler efficiency (t
 i02util(allCy,DSBS,ITECH,YTIME)                            "Utilization rate of technology"
 i02numtechnologiesUsingEF(DSBS,EF)                         "Number of technologues using an energy form"     
 i02Share(allCy,DSBS,ITECH,EF,YTIME)                        "Share of each energy form in a technology"
+imCO2CaptRateIndustry(allCy,ITECH,YTIME)	               "Industry CO2 capture rate (1)"
 ;
 *---
 imTotFinEneDemSubBaseYr(runCy,TRANSE,YTIME)  = sum(EF$SECtoEF(TRANSE,EF), imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME));
@@ -64,6 +65,7 @@ i02BoiEffChp(runCy,CHP,YTIME)            = imDataChpPowGen(CHP,"BOILEFF",YTIME);
 *---
 i02ElaSub(runCy,DSBS) = imElaSubData(DSBS);
 *---
+imCO2CaptRateIndustry(runCy,CCSTECH,YTIME) = 0.9;
 
 alias(ITECH,ITECH2);
 i02numtechnologiesUsingEF(DSBS,EF)=sum(ITECH2$(ITECHtoEF(ITECH2,EF)$SECTTECH(DSBS,ITECH2)),1);
