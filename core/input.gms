@@ -694,6 +694,18 @@ $offdelim
 *---
 iFuelConsNENSE(runCy,NENSE,EF,YTIME)$(SECtoEF(NENSE,EF) $(iFuelConsNENSE(runCy,NENSE,EF,YTIME)<=0)) = 1e-6;
 imFuelConsPerFueSub(runCy,INDSE,EF,YTIME) = iFuelConsINDSE(runCy,INDSE,EF,YTIME);
+imFuelConsPerFueSub(runCy,INDSE,"STE1AG",YTIME) = iFuelConsINDSE(runCy,INDSE,"STE1AH",YTIME);
+imFuelConsPerFueSub(runCy,INDSE,"STE1AH",YTIME) = iFuelConsINDSE(runCy,INDSE,"STE1AG",YTIME);
+imFuelConsPerFueSub("IND",INDSE,"STE1AB",YTIME) = iFuelConsINDSE("IND",INDSE,"STE1AH",YTIME);
+imFuelConsPerFueSub("IND",INDSE,"STE1AH",YTIME) = iFuelConsINDSE("IND",INDSE,"STE1AB",YTIME);
+imFuelConsPerFueSub("CHA",INDSE,"STE1AH",YTIME) = iFuelConsINDSE("IND",INDSE,"STE1AH",YTIME);
+imFuelConsPerFueSub("CHA",INDSE,"STE1AG",YTIME) = iFuelConsINDSE("IND",INDSE,"STE1AG",YTIME);
+imFuelConsPerFueSub("OAS",INDSE,"STE1AH",YTIME) = iFuelConsINDSE("OAS",INDSE,"STE1AH",YTIME);
+imFuelConsPerFueSub("OAS",INDSE,"STE1AG",YTIME) = iFuelConsINDSE("OAS",INDSE,"STE1AG",YTIME);
+imFuelConsPerFueSub("POL",INDSE,"STE1AH",YTIME) = iFuelConsINDSE("POL",INDSE,"STE1AH",YTIME);
+imFuelConsPerFueSub("POL",INDSE,"STE1AG",YTIME) = iFuelConsINDSE("POL",INDSE,"STE1AG",YTIME);
+imFuelConsPerFueSub("LAM",INDSE,"STE1AB",YTIME) = iFuelConsINDSE("LAM",INDSE,"STE1AH",YTIME);
+imFuelConsPerFueSub("LAM",INDSE,"STE1AH",YTIME) = iFuelConsINDSE("LAM",INDSE,"STE1AB",YTIME);
 imFuelConsPerFueSub(runCy,DOMSE,EF,YTIME) = iFuelConsDOMSE(runCy,DOMSE,EF,YTIME);
 imFuelConsPerFueSub(runCy,NENSE,EF,YTIME) = iFuelConsNENSE(runCy,NENSE,EF,YTIME);
 * NEED TO CHECK IF CORRECT
@@ -702,7 +714,7 @@ imFinEneCons(runCy,EFS,YTIME) =
      +
      sum((TRANSE,EF)$(EFtoEFS(EF,EFS) and sum(TECH$(SECTTECH(TRANSE,TECH) and TECHtoEF(TECH,EF)$(not plugin(TECH))),1)), imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME));
 *---
-imCO2CaptRate(runCy,PGALL,YTIME) = 0.96; 
+imCO2CaptRate(runCy,PGALL,YTIME)$CCS(PGALL) = 0.96; 
 imEffValueInDollars(runCy,SBS,YTIME) = 0;
 iScenarioPri(WEF,"NOTRADE",YTIME) = 0;
 *---

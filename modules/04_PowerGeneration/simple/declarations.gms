@@ -43,9 +43,8 @@ Q04ConsElec(allCy,DSBS,YTIME)                              "Compute electricity 
 Q04LoadFacDom(allCy,YTIME)                                 "Compute electricity load factor for entire domestic system"	
 $ifthen.calib %Calibration% == off
 Q04DemElecTot(allCy,YTIME)                                 "Compute total electricity demand (TWh)"
-*Q04CapElecCHP(allCy,CHP,YTIME)                             "Compute CHP electric capacity"	
+Q04CapElecCHP(allCy,CHP,YTIME)                             "Compute CHP electric capacity"	
 $endif.calib
-Q04ProdElecCHP(allCy,CHP,YTIME)                            "Compute CHP electricity production (TWh)"
 Q04ProdElecEstCHP(allCy,CHP,YTIME)	                       "Estimate the electricity of CHP Plants"	
 Q04CapexFixCostPG(allCy,PGALL,YTIME)                       "Computes the capex and fixed costs of any power generation technology"
 Q04ShareMixWndSol(allCy,YTIME)                             "Computes the participation of solar and wind in the energy mixture (%)"
@@ -102,7 +101,6 @@ V04CostPowGenLonNoClimPol(allCy,ESET,YTIME)                "Long-term average po
 *v04CostPowGenAvgShrt(allCy,ESET,YTIME)                    "Short-term average power generation cost (US$2015/kWh)"
 V04ConsElec(allCy,DSBS,YTIME)                              "Electricity demand per final sector (Mtoe)"
 V04LoadFacDom(allCy,YTIME)                                 "Electricity load factor for entire domestic system"	
-V04ProdElecCHP(allCy,CHP,YTIME)	                           "CHP electricity production (TWh)"
 V04DemElecTot(allCy,YTIME)                                 "Total electricity demand (TWh)"
 V04ProdElecEstCHP(allCy,CHP,YTIME)	                       "Estimate the electricity of CHP Plants (1)"	
 V04CapexFixCostPG(allCy,PGALL,YTIME)                       "CAPEX and fixed costs of any power generation technology (US$2015/kW)"
