@@ -64,6 +64,8 @@ i02VarCostChp(runCy,DSBS,CHP,YTIME)      = imDataChpPowGen(CHP,"VOM",YTIME);
 i02BoiEffChp(runCy,CHP,YTIME)            = imDataChpPowGen(CHP,"BOILEFF",YTIME);
 *---
 i02ElaSub(runCy,DSBS) = imElaSubData(DSBS);
+i02ElaSub(runCy,DSBS) = 2; !!
+
 *---
 imCO2CaptRateIndustry(runCy,CCSTECH,YTIME) = 0.9;
 
