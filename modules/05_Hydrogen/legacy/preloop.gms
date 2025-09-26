@@ -53,7 +53,6 @@ V05CostProdH2Tech.L(runCy,H2TECH,YTIME) = 2;
 V05CostProdH2Tech.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
 *---
 V05CostVarProdH2Tech.L(runCy,H2TECH,YTIME) = 2;
-V05CostVarProdH2Tech.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
 *---
 V05ShareCCSH2Prod.L(runCy,H2TECH,YTIME) = 2;
 V05ShareCCSH2Prod.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
