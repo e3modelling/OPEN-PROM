@@ -47,7 +47,8 @@ $ENDIF
          )$(ELCEF(EF) or HEATPUMP(EF))
          +
          (
-            ( VmPriceElecIndResConsu(allCy,"i",YTIME)/smTWhToMtoe)
+            VmPriceFuelSubsecCarVal(allCy,"OI",EF,YTIME)$(not sameas("BMSWAS",EF)) +
+            VmPriceFuelSubsecCarVal(allCy,"AG",EF,YTIME)$(sameas("BMSWAS",EF))
          )$(sameas ("H2P",SBS))
          +
          (
