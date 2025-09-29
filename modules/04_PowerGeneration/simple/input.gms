@@ -35,7 +35,7 @@ $offdelim
 *---
 table t04SharePowPlaNewEq(allCy,PGALL,YTIME)    "Ratio of newly added capacity smoothed over 10-year period ()"
 $ondelim
-$include "../targets/tShares.csv"
+$include "../targets/tShares_ProdElec.csv"
 $offdelim
 ;
 $endif.calib
