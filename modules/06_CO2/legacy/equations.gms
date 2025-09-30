@@ -119,7 +119,7 @@ Q06LvlCostDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
           V06GrossCapDAC(allCy,DACTECH,YTIME) + V06FixOandMDAC(allCy,DACTECH,YTIME) +  V06VarCostDAC(allCy,DACTECH,YTIME)
 ;
 
-*' The equation estimates the profitability of DAC capacity, calculating the rate between levelized costs (CAPEX, fixed and electricity needs)
+*' The equation estimates the profitability of DAC capacity, calculating the rate between levelized costs (CAPEX, fixed and fuel needs)
 *' and revenues/avoided costs (carbon values, carbon subsidies) regionally.
 Q06ProfRateDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V06ProfRateDAC(allCy,DACTECH,YTIME)
@@ -128,7 +128,7 @@ Q06ProfRateDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
           (V06LvlCostDAC(allCy,DACTECH,YTIME) + i06SpecElecDAC(allCy,DACTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1) + i06SpecHeatDAC(allCy,DACTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","NGS",YTIME-1) / 0.85)
 ;
 
-*' The equation estimates the annual increase rate of DAC capacity regionally.
+*' The equation estimates the annual increase rate of DAC capacity regionally, according to the maturity and profitability of each technology.
 Q06CapFacNewDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V06CapFacNewDAC(allCy,DACTECH,YTIME)
          =E=
@@ -140,7 +140,8 @@ Q06CapFacNewDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
           S06CapFacMinNewDAC
 ;
 
-*' The equation calculates the DAC installed capacity annually and regionally.
+*' The equation calculates the DAC installed capacity annually and regionally,
+*' adding capacity based on the maturity of the technology, as well as given capacities of actual scheduled DAC units.
 Q06CapDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V06CapDAC(allCy,DACTECH,YTIME)
          =E=
