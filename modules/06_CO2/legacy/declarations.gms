@@ -2,7 +2,7 @@
 *' @code
 
 Equations
-Q06CapCO2ElecHydr(allCy,YTIME)	                           "Compute CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
+Q06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME)	                           "Compute CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
 Q06CaptCummCO2(allCy,YTIME)	                               "Compute cumulative CO2 captured (Mtn of CO2)"
 Q06TrnsWghtLinToExp(allCy,YTIME)	                       "Transtition weight for shifting from linear to exponential CO2 sequestration cost curve"
 Q06GrossCapDAC(allCy,DACTECH,YTIME)                        "Computes CAPEX of DAC technologies with learning curve"
@@ -21,8 +21,8 @@ Q06CstCO2SeqCsts(allCy,YTIME)	                           "Compute cost curve for
 ;
 
 Variables
-V06CapCO2ElecHydr(allCy,YTIME)	                           "CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
-V06CaptCummCO2(allCy,YTIME)	                               "Cumulative CO2 captured (Mtn CO2)"
+V06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME)	                "CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
+V06CaptCummCO2(allCy,YTIME)	                              "Cumulative CO2 captured (Mtn CO2)"
 V06TrnsWghtLinToExp(allCy,YTIME)	                       "Weight for transtition from linear CO2 sequestration cost curve to exponential (1)"
 V06GrossCapDAC(allCy,DACTECH,YTIME)                        "CAPEX of DAC technologies with learning curve"
 V06FixOandMDAC(allCy,DACTECH,YTIME)                        "Fixed and O&M costs of DAC technologies with learning curve"
@@ -39,6 +39,6 @@ VmCstCO2SeqCsts(allCy,YTIME)	                           "Cost curve for CO2 sequ
 ;
 
 Scalars
-S06ProfRateMaxDAC                                           "The maximum profitability rate of V06DACProfRate" /10/
-S06CapFacMaxNewDAC                                          "The maximum level of the V06DACNewCapFac" /1/
-S06CapFacMinNewDAC                                          "The minimum level of the V06DACNewCapFac" /0.03/
+S06ProfRateMaxDAC                                           "The maximum profitability rate of V06DACProfRate" /6/
+S06CapFacMaxNewDAC                                          "The maximum level of the V06DACNewCapFac" /0.10/
+S06CapFacMinNewDAC                                          "The minimum level of the V06DACNewCapFac" /0.07/

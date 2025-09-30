@@ -24,8 +24,8 @@ Q01ActivGoodsTransp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANG(TRANSE) $runCy(allCy
               =E=
       (
       V01ActivGoodsTransp(allCy,TRANSE,YTIME-1)
-        * [i01GDPperCapita(YTIME,allCy)/i01GDPperCapita(YTIME-1,allCy)]**0.5 !!imElastA(allCy,TRANSE,"a",YTIME)
-        * (i01Pop(YTIME,allCy)/i01Pop(YTIME-1,allCy)) ** 1
+        * [i01GDPperCapita(YTIME,allCy)/i01GDPperCapita(YTIME-1,allCy)] ** 0.4 !!imElastA(allCy,TRANSE,"a",YTIME)
+        * (i01Pop(YTIME,allCy)/i01Pop(YTIME-1,allCy)) ** 0.8
         * (VmPriceFuelAvgSub(allCy,TRANSE,YTIME)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1))**imElastA(allCy,TRANSE,"c1",YTIME)
         * (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2))**imElastA(allCy,TRANSE,"c2",YTIME)
         * prod(kpdl,
@@ -218,7 +218,7 @@ Q01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)$(TIME(YTIME) $SECTTECH(TR
         i01AvgVehCapLoadFac(allCy,TRANSE,"CAP",YTIME) /
         i01AvgVehCapLoadFac(allCy,TRANSE,"LF",YTIME)
       )$(not sameas(TRANSE,"PC")) +
-      (V01ActivPassTrnsp(allCy,TRANSE,YTIME))$sameas(TRANSE,"PC")
+      V01ActivPassTrnsp(allCy,TRANSE,YTIME)$sameas(TRANSE,"PC")
     );
 
 *' This equation calculates the final energy demand in transport for each fuel within a specific transport subsector.

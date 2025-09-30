@@ -5,20 +5,20 @@
 parameter i06CO2SeqData(CO2SEQELAST)	        "Data for CO2 sequestration (1)"
 /
 POT	9175,
-mc_a	0.00125928,
-mc_b	6.6,
+mc_a	0,
+mc_b	20,
 mc_c	0.02,
-mc_d	0.000839237,
+mc_d	2.5e3,
 mc_s	120,
 mc_m	1.013
 / ;
 
 parameter i06MatFacDAC(DACTECH)                 "Maturity factor of DAC technology expressing its elasticity in implementation regarding its financial sustainability"
 /
-HTDAC	0.48,
-H2DAC   0.38,
-LTDAC	0.35,
-EWDAC	0.41
+HTDAC	  0.59,
+H2DAC   0.37,
+LTDAC	  0.25,
+EWDAC	  0.45
 / ;
 
 parameter i06CapexDAC(DACTECH)                  "CAPEX of each DAC technology ($/tCO2)"

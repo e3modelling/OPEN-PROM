@@ -100,18 +100,18 @@ Q04CapElecTotEst(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' The production cost is normalized per unit of electricity generated (kEuro2005/kWh) and is considered for each hour of the day. The equation includes considerations
 *' for renewable plants (excluding certain types) and fossil fuel plants.
 Q04CostHourProdInvDec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V04CostHourProdInvDec(allCy,PGALL,YTIME)
-                  =E=         
-        V04CapexRESRate(allCy,PGALL,YTIME) * V04CapexFixCostPG(allCy,PGALL,YTIME-1) / i04AvailRate(allCy,PGALL,YTIME-1) / (smGwToTwhPerYear(YTIME)*1000)
-        + i04VarCost(PGALL,YTIME-1) / 1E3 + 
-        (VmRenValue(YTIME-1)*8.6e-5)$(not (PGREN(PGALL)$(not sameas("PGASHYD",PGALL)) $(not sameas("PGSHYD",PGALL)) $(not sameas("PGLHYD",PGALL)) )) +
-        sum(PGEF$PGALLtoEF(PGALL,PGEF), 
-          (VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME-1) +
-          imCO2CaptRate(allCy,PGALL,YTIME-1) * VmCstCO2SeqCsts(allCy,YTIME-1) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME-1) + 4.17$(sameas("BMSWAS", PGEF))) +
-          (1-imCO2CaptRate(allCy,PGALL,YTIME-1)) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME-1) + 4.17$(sameas("BMSWAS", PGEF)))*
-          (sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME-1)))
-          ) * smTWhToMtoe / imPlantEffByType(allCy,PGALL,YTIME-1)
-        )$(not PGREN(PGALL));
+    V04CostHourProdInvDec(allCy,PGALL,YTIME)
+              =E=         
+    V04CapexRESRate(allCy,PGALL,YTIME) * V04CapexFixCostPG(allCy,PGALL,YTIME-1) / i04AvailRate(allCy,PGALL,YTIME-1) / (smGwToTwhPerYear(YTIME)*1000)
+    + i04VarCost(PGALL,YTIME-1) / 1E3 + 
+    (VmRenValue(YTIME-1)*8.6e-5)$(not (PGREN(PGALL)$(not sameas("PGASHYD",PGALL)) $(not sameas("PGSHYD",PGALL)) $(not sameas("PGLHYD",PGALL)) )) +
+    sum(PGEF$PGALLtoEF(PGALL,PGEF), 
+      (VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME-1) +
+      V04CO2CaptRate(allCy,PGALL,YTIME-1) * VmCstCO2SeqCsts(allCy,YTIME-1) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME-1) + 4.17$(sameas("BMSWAS", PGEF))) +
+      (1-V04CO2CaptRate(allCy,PGALL,YTIME-1)) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME-1) + 4.17$(sameas("BMSWAS", PGEF)))*
+      (sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME-1)))
+      ) * smTWhToMtoe / imPlantEffByType(allCy,PGALL,YTIME-1)
+    )$(not PGREN(PGALL));
 
 *' The equation calculates the hourly production cost for
 *' a given technology without carbon capture and storage investments. 
@@ -179,8 +179,8 @@ Q04CostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
         sum(
           PGEF$PGALLtoEF(PGALL,PGEF),
           (VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME) +
-          imCO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
-          (1-imCO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)
+          V04CO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
+          (1-V04CO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)
           *(sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))))
           *smTWhToMtoe/imPlantEffByType(allCy,PGALL,YTIME)
         )$(not PGREN(PGALL));
@@ -205,8 +205,8 @@ Q04CostProdTeCHPreReplac(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                           V04CapexFixCostPG(allCy,PGALL,YTIME) * V04CapexRESRate(allCy,PGALL,YTIME) / (smGwToTwhPerYear(YTIME)*1000*i04AvailRate(allCy,PGALL,YTIME))
                            + (i04VarCost(PGALL,YTIME)/1E3 + sum(PGEF$PGALLtoEF(PGALL,PGEF), 
                            (VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)+
-                            imCO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
-                             (1-imCO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
+                            V04CO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
+                             (1-V04CO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
                          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))))
                                  *smTWhToMtoe/imPlantEffByType(allCy,PGALL,YTIME))$(not PGREN(PGALL)))
                          );
@@ -447,8 +447,8 @@ Q04CostPowGenLngTechNoCp(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       / (1000*(smGwToTwhPerYear(YTIME))) +
       sum(PGEF$PGALLTOEF(PGALL,PGEF),
                  (i04VarCost(PGALL,YTIME)/1000+(VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)/1.2441+
-                 imCO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
-                 (1-imCO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
+                 V04CO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
+                 (1-V04CO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
                  (sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))))
                  *smTWhToMtoe/imPlantEffByType(allCy,PGALL,YTIME)));
 
@@ -479,8 +479,8 @@ Q04CostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy))
                  (i04VarCost(PGALL,YTIME)/1000+((VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)-imEffValueInDollars(allCy,"PG",ytime)/1000-imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
                  sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))/1000 )/1.2441+
 
-                 imCO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
-                 (1-imCO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
+                 V04CO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
+                 (1-V04CO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
                  (sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))))
                  *smTWhToMtoe/imPlantEffByType(allCy,PGALL,YTIME)));
 
@@ -522,7 +522,18 @@ Q04CapexFixCostPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04CapexRESRate(allCy,PGALL,YTIME)$(TIME(YTIME) and runCy(allCy))..
     V04CapexRESRate(allCy,PGALL,YTIME)
         =E=
+    1 + (V04ShareMixWndSol(allCy,YTIME)$PGRENSW(PGALL)) ** S04CapexBessRate;
+
+Q04CO2CaptRate(allCy,PGALL,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
+    V04CO2CaptRate(allCy,PGALL,YTIME)
+        =E=
+    imCO2CaptRate(PGALL) /
+    (
+      1 + 
+      EXP(10 * 
         (
-          1 + (V04ShareMixWndSol(allCy,YTIME)$PGRENSW(PGALL)) ** S04CapexBessRate
-        )
-;
+          VmCstCO2SeqCsts(allCy,YTIME) / 
+        (sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME)) + 1) -1)
+      )
+    )
+    ;
