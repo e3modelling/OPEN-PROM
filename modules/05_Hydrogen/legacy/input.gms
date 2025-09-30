@@ -29,7 +29,7 @@ $offdelim
 Parameters
 i05WBLGammaH2Prod(allCy,YTIME)              "Parameter for acceptance in new investments used in weibull function in production shares"
 i05ProdLftH2(H2TECH,YTIME)                  "Lifetime of hydrogen production technologies in years"
-i05CaptRateH2Prod(allCy,H2TECH,YTIME)       "CO2 capture rate of hydrogen production technologies (for those which are equipped with CCS facility)"
+i05CaptRateH2Prod(H2TECH)       "CO2 capture rate of hydrogen production technologies (for those which are equipped with CCS facility)"
 i05H2Adopt(allCy,ARELAST,YTIME)             "Parameters controlling the speed and the year of taking off the transition to hydrogen economy"
 i05TranspLftH2(INFRTECH,YTIME)              "Technical lifetime of infrastructure technologies"
 i05CostCapH2Prod(allCy,H2TECH,YTIME)        "Capital cost of hydrogen production technologies in Euro per Nm3 of hydrogen"
@@ -66,11 +66,10 @@ i05ProdLftH2(H2TECH,YTIME) = i05H2Production("LFT",H2TECH,YTIME);
 i05ProdLftH2("wes",YTIME)  = i05H2Production("LFT","weg",YTIME);
 i05ProdLftH2("wew",YTIME)  = i05H2Production("LFT","weg",YTIME);
 *---
-i05CaptRateH2Prod(runCy,H2TECH,YTIME) = i05H2Production("CR",H2TECH,YTIME);
-i05CaptRateH2Prod(runCy,"wes",YTIME)  = i05H2Production("CR","weg",YTIME);
-i05CaptRateH2Prod(runCy,"wew",YTIME)  = i05H2Production("CR","weg",YTIME);
-i05CaptRateH2Prod(runCy,H2TECH,YTIME) = 0;
-i05CaptRateH2Prod(runCy,H2CCS,YTIME) = 0.96;
+i05CaptRateH2Prod(H2TECH) = i05H2Production("CR",H2TECH,"%fBaseY%");
+i05CaptRateH2Prod("wes")  = i05CaptRateH2Prod("weg");
+i05CaptRateH2Prod("wew")  = i05CaptRateH2Prod("weg");
+i05CaptRateH2Prod(H2TECH)$(not H2CCS(H2TECH)) = 0;
 *---
 i05H2Adopt(runCy,"b",YTIME)   = i05H2Parameters(runCy,"B");
 i05H2Adopt(runCy,"mid",YTIME) = i05H2Parameters(runCy,"mid");
