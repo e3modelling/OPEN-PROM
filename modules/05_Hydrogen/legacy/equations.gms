@@ -54,13 +54,13 @@ Q05PremRepH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
             iWBLPremRepH2Prod(allCy,H2TECH,YTIME) *
             (sum(H2TECH2,
                 V05GapShareH2Tech1(allCy,H2TECH2,YTIME)*
-                (1/i05AvailH2Prod(H2TECH,YTIME)*
+                (1/i05AvailH2Prod(allCy,H2TECH,YTIME)*
                 V05CostProdH2Tech(allCy,H2TECH2,YTIME) +
-                (1-1/i05AvailH2Prod(H2TECH,YTIME)) * V05CostVarProdH2Tech(allCy,H2TECH2,YTIME))) -
+                (1-1/i05AvailH2Prod(allCy,H2TECH,YTIME)) * V05CostVarProdH2Tech(allCy,H2TECH2,YTIME))) -
                 V05GapShareH2Tech1(allCy,H2TECH,YTIME) *
-                (1/i05AvailH2Prod(H2TECH,YTIME) *
+                (1/i05AvailH2Prod(allCy,H2TECH,YTIME) *
                 V05CostProdH2Tech(allCy,H2TECH,YTIME) +
-                (1-1/i05AvailH2Prod(H2TECH,YTIME)) * V05CostVarProdH2Tech(allCy,H2TECH,YTIME))
+                (1-1/i05AvailH2Prod(allCy,H2TECH,YTIME)) * V05CostVarProdH2Tech(allCy,H2TECH,YTIME))
             )**(-i05WBLGammaH2Prod(allCy,YTIME))
 
            + V05CostVarProdH2Tech(allCy,H2TECH,YTIME)**(-i05WBLGammaH2Prod(allCy,YTIME))
@@ -110,13 +110,16 @@ Q05CostProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       (exp(imDisc(allCy,"H2P",YTIME) * i05ProdLftH2(H2TECH,YTIME))-1) * 
       (i05CostCapH2Prod(allCy,H2TECH,YTIME) +
       i05CostFOMH2Prod(allCy,H2TECH,YTIME) +
-      i05CostVOMH2Prod(allCy,H2TECH,YTIME))
+      i05CostVOMH2Prod(allCy,H2TECH,YTIME)) +
+      (
+      (V04CapexFixCostPG(allCy,"PGSOL",YTIME))$sameas(H2TECH,"wes") + 
+      (V04CapexFixCostPG(allCy,"PGAWNO",YTIME))$sameas(H2TECH,"wew")
+      )
     ) / 
-    (i05AvailH2Prod(H2TECH,YTIME) * smGwToTwhPerYear(YTIME)  * smTWhToMtoe) /
+    (i05AvailH2Prod(allCy,H2TECH,YTIME) * smGwToTwhPerYear(YTIME) * smTWhToMtoe) /
     i05EffH2Prod(allCy,H2TECH,YTIME) +
     V05CostVarProdH2Tech(allCy,H2TECH,YTIME)  
 ;
-
 
 *' This equation models the variable costs associated with hydrogen production, factoring in fuel prices (e.g., electricity or natural gas),
 *' CO₂ emission costs, and the efficiency of the production technology. This helps to understand the fluctuating costs based on market conditions.
@@ -129,9 +132,11 @@ Q05CostVarProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         i05CaptRateH2Prod(allCy,H2TECH,YTIME) * (imCo2EmiFac(allCy,"H2P",EF,YTIME) + 4.17$(sameas("BMSWAS", EF))) * VmCstCO2SeqCsts(allCy,YTIME) +
         (1-i05CaptRateH2Prod(allCy,H2TECH,YTIME)) * (imCo2EmiFac(allCy,"H2P",EF,YTIME) + 4.17$(sameas("BMSWAS", EF))) *
         sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME))
-      ) /
-      i05EffH2Prod(allCy,H2TECH,YTIME)
-    )
+      ) 
+    )$(not H2TECHREN(H2TECH)) / i05EffH2Prod(allCy,H2TECH,YTIME) +
+    (i04VarCost("PGSOL",YTIME)/(smTWhToMtoe))$(sameas(H2TECH,"wes")) +
+    (i04VarCost("PGAWNO",YTIME)/(smTWhToMtoe))$(sameas(H2TECH,"wew"))
+    
 ;
 
 *' This equation models the acceptance of carbon capture and storage (CCS) technologies in hydrogen production. 

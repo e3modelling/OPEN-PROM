@@ -25,7 +25,6 @@ $ondelim
 $include"./iWBLShareH2Prod.csv"
 $offdelim
 ;
-*i05H2Production(ECONCHARHY,"bgfl",YTIME) = i05H2Production(ECONCHARHY,"bgfls",YTIME);
 *---
 Parameters
 i05WBLGammaH2Prod(allCy,YTIME)              "Parameter for acceptance in new investments used in weibull function in production shares"
@@ -36,7 +35,7 @@ i05TranspLftH2(INFRTECH,YTIME)              "Technical lifetime of infrastructur
 i05CostCapH2Prod(allCy,H2TECH,YTIME)        "Capital cost of hydrogen production technologies in Euro per Nm3 of hydrogen"
 i05CostFOMH2Prod(allCy,H2TECH,YTIME)        "Fixed operating and maintenance costs of hydrogen production technologies in Euro per Nm3 of hydrogen"
 i05CostVOMH2Prod(allCy,H2TECH,YTIME)        "Variable operating and maintenance costs of hydrogen production technologies in Euro per toe of hydrogen"
-i05AvailH2Prod(H2TECH,YTIME)                "Availability of hydrogen production technologies"
+i05AvailH2Prod(allCy,H2TECH,YTIME)          "Availability of hydrogen production technologies"
 i05EffH2Prod(allCy,H2TECH,YTIME)            "Efficiency of hydrogen production technologies"
 i05CostInvH2Transp(allCy,INFRTECH,YTIME)    "Investment cost of infrastructure technology"
                                                    !! - Turnpike pipeline in Euro per km
@@ -56,7 +55,7 @@ i05HabAreaCountry(allCy)                    "Inhabitable land in a country"
 i05EffNetH2Transp(allCy,INFRTECH,YTIME)     "Total efficiency of the distribution network until the <infrtech> node"
 i05CostAvgWeight(allCy,YTIME)               "Weight for pricing in average cost or in marginal cost"
 iWBLShareH2Prod(allCy,H2TECH,YTIME)         "Maturity factors for H2 technologies"
-iWBLPremRepH2Prod(allCy,H2TECH,YTIME)      "Maturity factors for premature replacement of H2 technologies"
+iWBLPremRepH2Prod(allCy,H2TECH,YTIME)       "Maturity factors for premature replacement of H2 technologies"
 ;
 *---
 iWBLShareH2Prod(runCy,H2TECH,YTIME) = iTechShareH2Prod(H2TECH,YTIME);
@@ -64,8 +63,12 @@ iWBLShareH2Prod(runCy,H2TECH,YTIME) = iTechShareH2Prod(H2TECH,YTIME);
 i05WBLGammaH2Prod(runCy,YTIME) = 1;
 *---
 i05ProdLftH2(H2TECH,YTIME) = i05H2Production("LFT",H2TECH,YTIME);
+i05ProdLftH2("wes",YTIME)  = i05H2Production("LFT","weg",YTIME);
+i05ProdLftH2("wew",YTIME)  = i05H2Production("LFT","weg",YTIME);
 *---
 i05CaptRateH2Prod(runCy,H2TECH,YTIME) = i05H2Production("CR",H2TECH,YTIME);
+i05CaptRateH2Prod(runCy,"wes",YTIME)  = i05H2Production("CR","weg",YTIME);
+i05CaptRateH2Prod(runCy,"wew",YTIME)  = i05H2Production("CR","weg",YTIME);
 i05CaptRateH2Prod(runCy,H2TECH,YTIME) = 0;
 i05CaptRateH2Prod(runCy,H2CCS,YTIME) = 0.96;
 *---
@@ -75,14 +78,24 @@ i05H2Adopt(runCy,"mid",YTIME) = i05H2Parameters(runCy,"mid");
 i05TranspLftH2(INFRTECH,YTIME) = i05H2InfrCapCosts("LFT",INFRTECH,YTIME);
 *---
 i05CostCapH2Prod(runCy,H2TECH,YTIME) = i05H2Production("IC",H2TECH,YTIME);
+i05CostCapH2Prod(runCy,"wes",YTIME)  = i05H2Production("IC","weg",YTIME);
+i05CostCapH2Prod(runCy,"wew",YTIME)  = i05H2Production("IC","weg",YTIME);
 *---
 i05CostFOMH2Prod(runCy,H2TECH,YTIME) = i05H2Production("FC",H2TECH,YTIME);
+i05CostFOMH2Prod(runCy,"wes",YTIME)  = i05H2Production("FC","weg",YTIME);
+i05CostFOMH2Prod(runCy,"wew",YTIME)  = i05H2Production("FC","weg",YTIME);
 *---
 i05CostVOMH2Prod(runCy,H2TECH,YTIME) = i05H2Production("VC",H2TECH,YTIME);
+i05CostVOMH2Prod(runCy,"wes",YTIME)  = i05H2Production("VC","weg",YTIME);
+i05CostVOMH2Prod(runCy,"wew",YTIME)  = i05H2Production("VC","weg",YTIME);
 *---
-i05AvailH2Prod(H2TECH,YTIME) = i05H2Production("AVAIL",H2TECH,YTIME);
+i05AvailH2Prod(runCy,H2TECH,YTIME) = i05H2Production("AVAIL",H2TECH,YTIME);
+i05AvailH2Prod(runCy,"wes",YTIME)  = min(i05AvailH2Prod(runCy,"weg",YTIME),i04AvailRate(runCy,"PGSOL",YTIME));
+i05AvailH2Prod(runCy,"wew",YTIME)  = min(i05AvailH2Prod(runCy,"weg",YTIME),i04AvailRate(runCy,"PGAWNO",YTIME));
 *---
 i05EffH2Prod(runCy,H2TECH,YTIME) = i05H2Production("EFF",H2TECH,YTIME);
+i05EffH2Prod(runCy,"wes",YTIME)  = i05H2Production("EFF","weg",YTIME);
+i05EffH2Prod(runCy,"wew",YTIME)  = i05H2Production("EFF","weg",YTIME);
 *---
 i05CostInvH2Transp(runCy,INFRTECH,YTIME) = i05H2InfrCapCosts("IC",INFRTECH,YTIME);
 *---
