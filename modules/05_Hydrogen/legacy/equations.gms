@@ -398,7 +398,7 @@ Q05CaptRateH2(allCy,H2TECH,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
         =E=
     i05CaptRateH2Prod(H2TECH) /
     (1 + 
-      EXP(20 * (
+      EXP(2 * (
         VmCstCO2SeqCsts(allCy,YTIME) /
         (sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME)) + 1)
         -1)
