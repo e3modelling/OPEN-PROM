@@ -17,8 +17,9 @@ DACTECHEFtoEF(DACTECH,EF)   "Mapping between DAC technologies and fuels"
 /
 $offtext
 *---
-CO2CAPTECH(SBS)           "Carbon capture subsectors" /
+CO2CAPTECH           "Carbon capture subsectors" /
 PG
 H2P
 DAC
+IND
 /
