@@ -118,8 +118,7 @@ Q05CostProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       (V04CapexFixCostPG(allCy,"PGAWNO",YTIME))$sameas(H2TECH,"wew")
       )
     ) / 
-    (i05AvailH2Prod(allCy,H2TECH,YTIME) * smGwToTwhPerYear(YTIME) * smTWhToMtoe) /
-    i05EffH2Prod(allCy,H2TECH,YTIME) +
+    (i05AvailH2Prod(allCy,H2TECH,YTIME) * smGwToTwhPerYear(YTIME) * smTWhToMtoe) +
     V05CostVarProdH2Tech(allCy,H2TECH,YTIME)  
 ;
 
