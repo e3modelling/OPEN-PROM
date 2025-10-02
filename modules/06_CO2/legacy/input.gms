@@ -8,7 +8,7 @@ POT	9175,
 mc_a	0,
 mc_b	20,
 mc_c	0.02,
-mc_d	2.5e3,
+mc_d	3e3,
 mc_s	120,
 mc_m	1.013
 / ;

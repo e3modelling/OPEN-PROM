@@ -160,6 +160,8 @@ H2TECHPM(H2TECH)           "Technologies for which premature replacement is acti
 /
 gsr
 cgf
+bgfl
+weg
 *opo
 /
 *---
