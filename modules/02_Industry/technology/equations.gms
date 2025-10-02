@@ -92,8 +92,10 @@ Q02VarCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not s
   (
     sum(EF$ITECHtoEF(ITECH,EF), 
       i02Share(allCy,DSBS,ITECH,EF,YTIME) *
-      VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME) - 
-      ((imCO2CaptRateIndustry(allCy,ITECH,YTIME)) * 1e-3 * imCo2EmiFac(allCy,DSBS,EF,YTIME) * (sum(NAP$NAPtoALLSBS(NAP,DSBS), VmCarVal(allCy,NAP,YTIME))))$CCSTECH(ITECH) +
+      VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME) +
+      imCO2CaptRateIndustry(allCy,ITECH,YTIME) * VmCstCO2SeqCsts(allCy,YTIME-1) * 1e-3 * (imCo2EmiFac(allCy,DSBS,EF,YTIME-1) + 4.17$(sameas("BMSWAS", EF)) + 4.17$(sameas("STE2BMS", EF))) +
+      (1-imCO2CaptRateIndustry(allCy,ITECH,YTIME)) * 1e-3 * (imCo2EmiFac(allCy,DSBS,EF,YTIME-1) + 4.17$(sameas("BMSWAS", EF)) + 4.17$(sameas("STE2BMS", EF))) *
+      (sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME-1))) +
       VmRenValue(YTIME)$(not RENEF(ITECH) and not NENSE(DSBS)) !! needs change of units
     ) +
     imVarCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit
@@ -175,6 +177,16 @@ Q02ConsFuel(allCy,DSBS,EF,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not sameas(D
     ) +
     V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(INDDOM(DSBS) and ELCEF(EF)) +
     VmElecConsHeatPla(allCy,DSBS,YTIME)$ELCEF(EF);
+
+*' Average efficiency of substitutable demand
+Q02IndAvrEffFinalUseful(allCy,DSBS,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not sameas(DSBS,"DAC"))$runCy(allCy))..
+    V02IndAvrEffFinalUseful(allCy,DSBS,YTIME)
+       =E=
+    V02DemSubUsefulSubsec(allCy,DSBS,YTIME)   
+    /
+    (sum(EF$SECtoEF(DSBS,EF),VmConsFuel(allCy,DSBS,EF,YTIME)) - (V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(INDDOM(DSBS)) +
+    VmElecConsHeatPla(allCy,DSBS,YTIME)))
+    ;
 
 *' This equation calculates the estimated electricity index of the industry price for a given year. The estimated index is derived by considering the historical
 *' trend of the electricity index, with a focus on the fuel prices in the industrial subsector. The equation utilizes the fuel prices for electricity generation,
