@@ -158,8 +158,9 @@ Q02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q02FinalElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V02FinalElecNonSubIndTert(allCy,INDDOM,YTIME) 
         =E=
-    V02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME) /
-    imUsfEneConvSubTech(allCy,INDDOM,"TELC",YTIME);
+    V02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME) / 0.97
+    !!imUsfEneConvSubTech(allCy,INDDOM,"TELC",YTIME)
+    ;
 
 *' This equation calculates the consumption of fuels in each demand subsector.
 *' It considers the consumption of remaining substitutable equipment, the technology share in new equipment, and the final demand
