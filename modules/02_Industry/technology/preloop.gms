@@ -46,6 +46,40 @@ VmConsFuel.FX(runCy,DSBS,EF,YTIME)$((not HEATPUMP(EF)) and not TRANSE(DSBS) and 
 
 *vmDemFinSubFuelInd.FX(runCy,YTIME)$(not An(YTIME))= SUM(INDSE,VmDemFinSubFuelSubsec.L(runCy,INDSE,YTIME));
 *---
+!!V02VarCostTech.FX(runCy,DSBS,ITECH,YTIME)$(not An(YTIME) and not TRANSE(DSBS) and not sameas(DSBS,"DAC") and SECTTECH(DSBS,ITECH)) = 0.0001;
+V02VarCostTech.FX(runCy,DSBS,ITECH,YTIME)$(not An(YTIME) and not TRANSE(DSBS) and not sameas(DSBS,"DAC") and SECTTECH(DSBS,ITECH)) = 
+  (
+    sum(EF$ITECHtoEF(ITECH,EF), 
+      i02Share(runCy,DSBS,ITECH,EF,YTIME) *
+      VmPriceFuelSubsecCarVal.L(runCy,DSBS,EF,YTIME) +
+      imCO2CaptRateIndustry(runCy,ITECH,YTIME) * VmCstCO2SeqCsts.L(runCy,YTIME-1) * 1e-3 * (imCo2EmiFac(runCy,DSBS,EF,YTIME-1) + 4.17$(sameas("BMSWAS", EF)) + 4.17$(sameas("STE2BMS", EF))) +
+      (1-imCO2CaptRateIndustry(runCy,ITECH,YTIME)) * 1e-3 * (imCo2EmiFac(runCy,DSBS,EF,YTIME-1) + 4.17$(sameas("BMSWAS", EF)) + 4.17$(sameas("STE2BMS", EF))) *
+      (sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal.L(runCy,NAP,YTIME-1))) +
+      VmRenValue.L(YTIME)$(not RENEF(ITECH) and not NENSE(DSBS)) !! needs change of units
+    ) +
+    imVarCostTech(runCy,DSBS,ITECH,YTIME) / sUnitToKUnit
+  ) / imUsfEneConvSubTech(runCy,DSBS,ITECH,YTIME) -
+  (
+    VmPriceFuelSubsecCarVal.L(runCy,"OI","ELC",YTIME) *
+    smFracElecPriChp *
+    VmPriceElecInd.L(runCy,YTIME) 
+    / imUsfEneConvSubTech(runCy,DSBS,ITECH,YTIME)
+  )$TCHP(ITECH);
+
+
+
+V02CapCostTech.FX(runCy,DSBS,ITECH,YTIME)$(not An(YTIME) and not TRANSE(DSBS) and not sameas(DSBS,"DAC") and SECTTECH(DSBS,ITECH)) = ((
+      (
+        (imDisc(runCy,DSBS,YTIME)$(not TCHP(ITECH)) + imDisc(runCy,"PG",YTIME)$TCHP(ITECH)) * !! in case of chp plants we use the discount rate of power generation sector
+        exp((imDisc(runCy,DSBS,YTIME)$(not TCHP(ITECH)) + imDisc(runCy,"PG",YTIME)$TCHP(ITECH)) * VmLft.L(runCy,DSBS,ITECH,YTIME))
+      ) /
+      (exp((imDisc(runCy,DSBS,YTIME)$(not TCHP(ITECH)) + imDisc(runCy,"PG",YTIME)$TCHP(ITECH)) * VmLft.L(runCy,DSBS,ITECH,YTIME)) - 1)
+    ) *
+    imCapCostTech(runCy,DSBS,ITECH,YTIME) * imCGI(runCy,YTIME) +
+    imFixOMCostTech(runCy,DSBS,ITECH,YTIME) / sUnitToKUnit)
+    / imUsfEneConvSubTech(runCy,DSBS,ITECH,YTIME);
+
+V02CostTech.FX(runCy,DSBS,ITECH,YTIME)$(not An(YTIME)) = V02VarCostTech.L(runCy,DSBS,ITECH,YTIME) + V02CapCostTech.L(runCy,DSBS,ITECH,YTIME);
 $ontext
 VmConsFuelInclHP.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $(not TRANSE(DSBS)) $(not An(YTIME))) =
 (imFuelConsPerFueSub(runCy,DSBS,EF,YTIME))$((not ELCEF(EF)) $(not HEATPUMP(EF)))

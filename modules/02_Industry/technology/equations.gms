@@ -34,8 +34,24 @@ Q02DemSubUsefulSubsec(allCy,DSBS,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not s
 Q02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and not TRANSE(DSBS) and not sameas(DSBS,"DAC"))$runCy(allCy))..
     V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) 
         =E=
-    V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME-1) *
-    (1-1/VmLft(allCy,DSBS,ITECH,YTIME));
+    V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME-1) * (1- 1/VmLft(allCy,DSBS,ITECH,YTIME) - V02PremScrpIndu(allCy,DSBS,ITECH,YTIME));
+
+
+Q02PremScrpIndu(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and not TRANSE(DSBS) and not sameas(DSBS,"DAC"))$runCy(allCy))..
+    V02PremScrpIndu(allCy,DSBS,ITECH,YTIME)
+        =E=
+    1 - (V02VarCostTech(allCy,DSBS,ITECH,YTIME-1) * i02util(allCy,DSBS,ITECH,YTIME-1)) ** (-2) /
+    (
+      (V02VarCostTech(allCy,DSBS,ITECH,YTIME-1) * i02util(allCy,DSBS,ITECH,YTIME-1)) ** (-2) +
+      0.1 *
+      (sum(ITECH2$(not sameas(ITECH2,ITECH) and SECTTECH(DSBS,ITECH2)),
+        V02CostTech(allCy,DSBS,ITECH2,YTIME-1) - (1 - i02util(allCy,DSBS,ITECH2,YTIME-1)) * V02VarCostTech(allCy,DSBS,ITECH2,YTIME-1))
+      )**(-2)
+    ) 
+   !!+ 1/VmLft(allCy,DSBS,ITECH,YTIME)
+   ;
+ 
+
 
 *'NEW EQUATION' - kind of --> substitutes Q02ConsRemSubEquipSubSec
 * This equation computes the useful energy covered by the remaining equipment
@@ -72,7 +88,7 @@ Q02GapUsefulDemSubsec(allCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not 
 Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not sameas(DSBS,"DAC"))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
     V02CapCostTech(allCy,DSBS,ITECH,YTIME) 
         =E=
-    (
+    ((
       (
         (imDisc(allCy,DSBS,YTIME)$(not TCHP(ITECH)) + imDisc(allCy,"PG",YTIME)$TCHP(ITECH)) * !! in case of chp plants we use the discount rate of power generation sector
         exp((imDisc(allCy,DSBS,YTIME)$(not TCHP(ITECH)) + imDisc(allCy,"PG",YTIME)$TCHP(ITECH)) * VmLft(allCy,DSBS,ITECH,YTIME))
@@ -80,7 +96,8 @@ Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not sa
       (exp((imDisc(allCy,DSBS,YTIME)$(not TCHP(ITECH)) + imDisc(allCy,"PG",YTIME)$TCHP(ITECH)) * VmLft(allCy,DSBS,ITECH,YTIME)) - 1)
     ) *
     imCapCostTech(allCy,DSBS,ITECH,YTIME) * imCGI(allCy,YTIME) +
-    imFixOMCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit; !! divide with utilization rate or with efficiency as well???? depends on the CapCostTech parameter
+    imFixOMCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit)
+    / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME); !! divide with utilization rate or with efficiency as well???? depends on the CapCostTech parameter
 
 *' The equation computes the variable cost (variable + fuel) of each technology in each subsector - to check about consumer sizes
 *' OLD EQUATION: Q02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME) --> NEW EQUATION:Q02VarCostTech(allCy,DSBS,rCon,ITECH,YTIME)
@@ -110,8 +127,8 @@ Q02VarCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not s
 Q02CostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
     V02CostTech(allCy,DSBS,ITECH,YTIME) 
         =E=
-    (V02CapCostTech(allCy,DSBS,ITECH,YTIME) / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME) +
-    V02VarCostTech(allCy,DSBS,ITECH,YTIME));
+    V02CapCostTech(allCy,DSBS,ITECH,YTIME)  +
+    V02VarCostTech(allCy,DSBS,ITECH,YTIME);
 
 *' This equation calculates the technology share in new equipment based on factors such as maturity factor,
 *' cumulative distribution function of consumer size groups, number of consumers, technology cost, distribution function of consumer
