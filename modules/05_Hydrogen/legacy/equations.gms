@@ -261,6 +261,9 @@ Q05ConsFuelH2Prod(allCy,EF,YTIME)$(TIME(YTIME) $H2PRODEF(EF) $(runCy(allCy)))..
     sum(H2TECH$H2TECHEFtoEF(H2TECH,EF),VmConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME))
 ;
 
+*' This equation models the carbon capture rate for hydrogen production technologies that incorporate CCS.
+*' It uses a logistic function to represent the adoption of CCS based on economic factors, such as
+*' the cost of CO₂ emissions and the value of carbon in the market. The capture rate increases as CCS becomes more economically viable.
 Q05CaptRateH2(allCy,H2TECH,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
     V05CaptRateH2(allCy,H2TECH,YTIME)
         =E=
