@@ -5,23 +5,29 @@ sets
 *---
 H2TECH "Hydrogen production technologies"
 /
-gsr   "gas steam reforming"
-gss   "gas steam reforming with CCS"
-*bpy   "biomass pyrolysis"
-*sht   "solar thermochemical cycle"
-*nht   "nuclear termochemical cycle"
-weg   "water electrolysis from grid power"
-*wen   "water electrolysis with nuclear"
-wew   "water electrolysis with wind"
-wes   "water electrolysis with solar"
-cgf   "coal gasification"
-cgs   "coal gasification with CCS"
-*opo   "oil partial oxydation"
-*ops   "oil partial oxydation with CCS"
-*smr   "solar methane reforming"
-*bgfs  "biomass gasification small scale"
-bgfl  "biomass gasification large scale"
-bgfls "biomass gasification large scale with CCS"
+gsr         "gas steam reforming"
+gss         "gas steam reforming with CCS"
+*bpy        "biomass pyrolysis"
+*sht        "solar thermochemical cycle"
+*nht        "nuclear termochemical cycle"
+weg         "water electrolysis from grid power"
+*wen        "water electrolysis with nuclear"
+wew         "water electrolysis with wind"
+wes         "water electrolysis with solar"
+cgf         "coal gasification"
+cgs         "coal gasification with CCS"
+*opo        "oil partial oxydation"
+*ops        "oil partial oxydation with CCS"
+*smr        "solar methane reforming"
+*bgfs       "biomass gasification small scale"
+bgfl        "biomass gasification large scale"
+bgfls       "biomass gasification large scale with CCS"
+amm_hb      "Ammonia synthesis via Haber-Bosch"
+amm_hb_ccs  "Ammonia synthesis via Haber-Bosch with CCS"
+amm_elec    "Electrochemical ammonia synthesis"
+amm_crk     "Ammonia cracking"
+*amm_comb   "Ammonia combustion"
+*amm_fc     "Ammonia fuel cell"
 /
 *---
 INFRTECH                  "Hydrogen storage and distribution technologies"
@@ -92,14 +98,21 @@ SSGG
 *---
 H2TECHEFtoEF(H2TECH,EF)   "Mapping between production technologies and fuels"
 /
-(gsr,gss).ngs !! ,smr
+(gsr,gss).ngs       !!,smr
 (cgf,cgs).hcl
-(bgfls,bgfl).BMSWAS !! bpy,bgfs,
-*sht.SOL
-*(nht,wen).NUC
+(bgfls,bgfl).BMSWAS !!,bpy,bgfs,
 weg.ELC
 wes.ELC
 wew.ELC
+amm_hb.h2f
+amm_bb_ccs.h2f
+amm_elec.ELC
+amm_crk.amm
+amm_crk.h2f
+*amm_comb.amm
+*amm_fc.amm
+*sht.SOL
+*(nht,wen).NUC
 *(opo,ops).RFO
 /
 *---
@@ -121,39 +134,45 @@ nuc
 elc
 wnd
 rfo
+h2f
+amm
 /
 *---
 
 H2TECHREN(H2TECH)          "Renewable hydrogen production technologies"
 /
-*sht
 wew
 wes
+amm_elec
+*sht
 /
 
 *---
 H2CCS(H2TECH)              "Hydrogen production technologies equipped with CCS facility"
 /
-gss   "gas steam reforming with CCS"
-cgs   "coal gasification with CCS"
-*ops   "oil partial oxydation with CCS"
-bgfls "biomass gasification large scale with CCS"
+gss         "gas steam reforming with CCS"
+cgs         "coal gasification with CCS"
+bgfls       "biomass gasification large scale with CCS"
+amm_hb_ccs  "Ammonia synthesis via Haber-Bosch with CCS"
+*ops        "oil partial oxydation with CCS"
 /
 *---
 H2NOCCS(H2TECH)            "Hydrogen production technologies without CCS but with corresponding option with CCS"
 /
 gsr
 cgf
-*opo
 bgfl
+amm_hb
+*opo
 /
 *---
 H2CCS_NOCCS(H2TECH,H2TECH) "Mapping between hydrogen technologies with and without CCS facility"
 /
 gss.gsr
 cgs.cgf
-*ops.opo
 bgfls.bgfl
+amm_hb_ccs.amm_hb
+*ops.opo
 /
 *---
 H2TECHPM(H2TECH)           "Technologies for which premature replacement is active"
@@ -162,6 +181,9 @@ gsr
 cgf
 bgfl
 weg
+amm_hb
+amm_elec
+amm_crk
 *opo
 /
 *---
