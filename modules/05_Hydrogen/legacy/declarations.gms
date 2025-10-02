@@ -2,6 +2,8 @@
 *' @code
 
 Variables
+
+*'                **Hydrogen Variables**
 V05GapShareH2Tech1(allCy, H2TECH, YTIME)          "Shares of H2 production technologies in new market competition 1"
 V05GapShareH2Tech2(allCy, H2TECH, YTIME)          "Shares of H2 production technologies in new market competition 2"
 V05CapScrapH2ProdTech(allCy, H2TECH, YTIME)       "Decommissioning of capacity by H2 production technology"
@@ -14,8 +16,79 @@ V05ShareCCSH2Prod(allCy, H2TECH, YTIME)           "Share of CCS technology in th
 V05ShareNoCCSH2Prod(allCy, H2TECH, YTIME)         "Share of technology without CCS in the decision tree between CCS and no CCS"
 V05AcceptCCSH2Tech(allCy, YTIME)                  "Acceptance of investment in CCS technologies"
 V05CostProdCCSNoCCSH2Prod(allCy, H2TECH, YTIME)   "Production cost of the composite technology with and without CCS in Euro per toe"
-VmCostAvgProdH2(allCy, YTIME)                    "Average production cost of hydrogen in Euro per toe"
-V05CaptRateH2(allCy,H2TECH,YTIME)
+VmCostAvgProdH2(allCy, YTIME)                     "Average production cost of hydrogen in Euro per toe"
+V05CaptRateH2(allCy,H2TECH,YTIME)                 "Capture rate of H2 production technology"
+
+*'                **Ammonia Variables**
+V05ProdAmmHB(allCy,YTIME)                         "Ammonia output from Haber-Bosch synthesis [kt NH3 or Mtoe]"
+V05ProdH2AmmHB(allCy,YTIME)                       "Hydrogen feedstock used in Haber-Bosch ammonia synthesis [kt H2 or Mtoe]"
+V05CostProdAmmHB(allCy,YTIME)                     "Total cost of ammonia production via Haber-Bosch synthesis [USD$K15/KW or MUSD or MEUR]"
+V05ProdAmmHBCCS(allCy,YTIME)                      "Ammonia output from Haber-Bosch synthesis with CCS [kt NH3 or Mtoe]"
+V05ProdH2AmmHBCCS(allCy,YTIME)                    "Hydrogen feedstock used in Haber-Bosch with CCS [kt H2 or Mtoe]"
+V05CostProdAmmHBCCS(allCy,YTIME)                  "Total cost of ammonia production via Haber-Bosch with CCS [USD$K15/KW or MUSD or MEUR]"
+V05ProdAmmElec(allCy,YTIME)                       "Ammonia output from electrochemical synthesis [kt NH3 or Mtoe]"
+V05ConsElecAmmElec(allCy,YTIME)                   "Electricity consumed in electrochemical ammonia synthesis [KWh or MWh]"
+V05CostProdAmmElec(allCy,YTIME)                   "Total cost of ammonia production via electrochemical synthesis [USD$K15/KW or MUSD or MEUR]"
+V05ProdAmmCrk(allCy,YTIME)                        "Hydrogen output from ammonia cracking [kt H2 or Mtoe]"
+V05FeedstockAmmCrk(allCy,YTIME)                   "Ammonia feedstock used in cracking process [kt NH3 or Mtoe]"
+V05CostProdAmmCrk(allCy,YTIME)                    "Total cost of hydrogen production via ammonia cracking [USD$K15/KW or MUSD or MEUR]"
+
+*'                **Interdependent Variables**	
+VmDemTotH2(allCy, YTIME)                          "Hydrogen production requirement in Mtoe for meeting final demand"
+VmProdH2(allCy, H2TECH, YTIME)                    "Hydrogen Production by technology in Mtoe"
+VmConsFuelTechH2Prod(allCy, H2TECH, EF, YTIME)    "Fuel consumption by hydrogen production technology in Mtoe"
+VmDemSecH2(allCy, SBS, YTIME)                     "Demand for H2 by sector in mtoe"
+VmCostAvgProdH2(allCy, YTIME)                     "Average production cost of hydrogen in Euro per toe"
+VmConsFuelH2Prod(allCy, EF, YTIME)                "Total fuel consumption for hydrogen production in Mtoe"
+;
+
+Equations
+
+*'                **Hydrogen Equations**
+Q05GapShareH2Tech1(allCy, H2TECH, YTIME)          "Equation for calculating the shares of technologies in hydrogen gap using Weibull equations 1"
+Q05GapShareH2Tech2(allCy, H2TECH, YTIME)          "Equation for calculating the shares of technologies in hydrogen gap using Weibull equations 2"
+Q05CapScrapH2ProdTech(allCy, H2TECH, YTIME)       "Equation for decommissioning of capacity by H2 production technology"
+Q05PremRepH2Prod(allCy, H2TECH, YTIME)            "Equation for premature replacement of H2 production technologies"
+Q05ScrapLftH2Prod(allCy, H2TECH, YTIME)           "Equation for scrapping of equipment due to lifetime (normal scrapping)"
+Q05DemGapH2(allCy, YTIME)                         "Equation for gap in hydrogen demand"
+Q05CostProdH2Tech(allCy, H2TECH, YTIME)           "Equation for hydrogen production cost per technology"
+Q05CostVarProdH2Tech(allCy, H2TECH, YTIME)        "Equation for variable cost (including fuel cost) for hydrogen production by technology in Euro per toe"
+Q05ShareCCSH2Prod(allCy, H2TECH, YTIME)           "Equation for share of CCS technology in the decision tree between CCS and no CCS"
+Q05ShareNoCCSH2Prod(allCy, H2TECH, YTIME)         "Equation for share of technology without CCS in the decision tree between CCS and no CCS"
+Q05AcceptCCSH2Tech(allCy, YTIME)                  "Equation for acceptance in CCS technologies"
+Q05ConsFuelH2Prod(allCy, EF, YTIME)               "Equation for total fuel consumption for hydrogen production"
+Q05CostProdCCSNoCCSH2Prod(allCy, H2TECH, YTIME)   "Equation for calculating the production cost of the composite technology with and without CCS"
+Q05CostAvgProdH2(allCy, YTIME)                    "Equation for average production cost of hydrogen in Euro per toe"
+Q05CaptRateH2(allCy,H2TECH,YTIME)                 "Equation for capture rate of H2 production technology"
+
+*'                **Ammonia Equations**
+Q05ProdAmmHB(allCy,YTIME)                         "Ammonia output from Haber-Bosch synthesis"
+Q05FeedstockAmmHB(allCy,YTIME)                    "Hydrogen feedstock requirement for Haber-Bosch ammonia synthesis"
+Q05CostProdAmmHB(allCy,YTIME)                     "Cost of ammonia production via Haber-Bosch synthesis"
+Q05ProdAmmHBCCS(allCy,YTIME)                      "Ammonia output from Haber-Bosch synthesis with CCS"
+Q05ProdH2AmmHBCCS(allCy,YTIME)                    "Hydrogen feedstock requirement for Haber-Bosch with CCS"
+Q05CostProdAmmHBCCS(allCy,YTIME)                  "Cost of ammonia production via Haber-Bosch with CCS"
+Q05ProdAmmElec(allCy,YTIME)                       "Ammonia output from electrochemical synthesis"
+Q05ConsElecAmmElec(allCy,YTIME)                   "Electricity consumption for electrochemical ammonia synthesis"
+Q05CostProdAmmElec(allCy,YTIME)                   "Cost of ammonia production via electrochemical synthesis"
+Q05ProdAmmCrk(allCy,YTIME)                        "Hydrogen output from ammonia cracking"
+Q05FeedstockAmmCrk(allCy,YTIME)                   "Ammonia feedstock requirement for cracking"
+Q05CostProdAmmCrk(allCy,YTIME)                    "Cost of hydrogen production via ammonia cracking"
+
+*'                **Interdependent Equations**	
+Q05DemTotH2(allCy, YTIME)                         "Equation for total hydrogen demand in a country in Mtoe"
+Q05ProdH2(allCy, H2TECH, YTIME)                   "Equation for H2 production by technology"
+Q05ConsFuelTechH2Prod(allCy, H2TECH, EF, YTIME)   "Equation for fuel consumption by technology for hydrogen production"
+Q05DemSecH2(allCy, SBS, YTIME)                    "Equation for demand of H2 by sector in mtoe"
+;
+
+Scalars
+s05AreaStyle                                      "stylised area in km2" /3025/
+s05SalesH2Station                                 "annual sales of a hydrogen service station in ktoe" /2.26/
+s05LenH2StationConn                               "length of pipes connection service stations with the ring in km per station" /2/
+s05DelivH2Turnpike                                "stylised annual hydrogen delivery in turnpike pipeline in ktoe" /275/
+;
+
 
 $ontext
 *'                **Infrastructure Variables**
@@ -34,34 +107,7 @@ V05CostTotH2(allCy, SBS, YTIME)                   "Total Hydrogen Cost Per Secto
 
 *' *** Miscellaneous
 *V05ProdCapH2Tech(allCy, H2TECH, YTIME)           "Production capacity by H2 production technology"
-$offtext
 
-*'                **Interdependent Variables**	
-VmDemTotH2(allCy, YTIME)                          "Hydrogen production requirement in Mtoe for meeting final demand"
-VmProdH2(allCy, H2TECH, YTIME)                    "Hydrogen Production by technology in Mtoe"
-VmConsFuelTechH2Prod(allCy, H2TECH, EF, YTIME)    "Fuel consumption by hydrogen production technology in Mtoe"
-VmDemSecH2(allCy, SBS, YTIME)                     "Demand for H2 by sector in mtoe"
-VmCostAvgProdH2(allCy, YTIME)                     "Average production cost of hydrogen in Euro per toe"
-VmConsFuelH2Prod(allCy, EF, YTIME)                "Total fuel consumption for hydrogen production in Mtoe"
-;
-
-Equations
-Q05GapShareH2Tech1(allCy, H2TECH, YTIME)          "Equation for calculating the shares of technologies in hydrogen gap using Weibull equations 1"
-Q05GapShareH2Tech2(allCy, H2TECH, YTIME)          "Equation for calculating the shares of technologies in hydrogen gap using Weibull equations 2"
-Q05CapScrapH2ProdTech(allCy, H2TECH, YTIME)       "Equation for decommissioning of capacity by H2 production technology"
-Q05PremRepH2Prod(allCy, H2TECH, YTIME)            "Equation for premature replacement of H2 production technologies"
-Q05ScrapLftH2Prod(allCy, H2TECH, YTIME)           "Equation for scrapping of equipment due to lifetime (normal scrapping)"
-Q05DemGapH2(allCy, YTIME)                         "Equation for gap in hydrogen demand"
-Q05CostProdH2Tech(allCy, H2TECH, YTIME)           "Equation for hydrogen production cost per technology"
-Q05CostVarProdH2Tech(allCy, H2TECH, YTIME)        "Equation for variable cost (including fuel cost) for hydrogen production by technology in Euro per toe"
-Q05ShareCCSH2Prod(allCy, H2TECH, YTIME)           "Equation for share of CCS technology in the decision tree between CCS and no CCS"
-Q05ShareNoCCSH2Prod(allCy, H2TECH, YTIME)         "Equation for share of technology without CCS in the decision tree between CCS and no CCS"
-Q05AcceptCCSH2Tech(allCy, YTIME)                  "Equation for acceptance in CCS technologies"
-Q05ConsFuelH2Prod(allCy, EF, YTIME)               "Equation for total fuel consumption for hydrogen production"
-Q05CostProdCCSNoCCSH2Prod(allCy, H2TECH, YTIME)   "Equation for calculating the production cost of the composite technology with and without CCS"
-Q05CostAvgProdH2(allCy, YTIME)                    "Equation for average production cost of hydrogen in Euro per toe"
-Q05CaptRateH2(allCy,H2TECH,YTIME)
-$ontext
 *'                **Infrastructure Equations**
 Q05H2InfrArea(allCy, YTIME)                       "Equation for infrastructure area"
 Q05DelivH2InfrTech(allCy, INFRTECH, YTIME)        "Equation for hydrogen delivered by infrastructure technology in Mtoe"
@@ -77,16 +123,3 @@ Q05CostTotH2(allCy, SBS, YTIME)                   "Equation of total hydrogen co
 *' *** Miscellaneous
 *Q05ProdCapH2Tech(allCy, H2TECH, YTIME)           "Equation for production capacity by H2 production technology"
 $offtext
-*'                **Interdependent Equations**	
-Q05DemTotH2(allCy, YTIME)                         "Equation for total hydrogen demand in a country in Mtoe"
-Q05ProdH2(allCy, H2TECH, YTIME)                   "Equation for H2 production by technology"
-Q05ConsFuelTechH2Prod(allCy, H2TECH, EF, YTIME)   "Equation for fuel consumption by technology for hydrogen production"
-Q05DemSecH2(allCy, SBS, YTIME)                    "Equation for demand of H2 by sector in mtoe"
-;
-
-Scalars
-s05AreaStyle                                      "stylised area in km2" /3025/
-s05SalesH2Station                                 "annual sales of a hydrogen service station in ktoe" /2.26/
-s05LenH2StationConn                               "length of pipes connection service stations with the ring in km per station" /2/
-s05DelivH2Turnpike                                "stylised annual hydrogen delivery in turnpike pipeline in ktoe" /275/
-;

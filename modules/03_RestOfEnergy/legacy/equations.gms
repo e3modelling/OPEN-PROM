@@ -239,7 +239,7 @@ Q03Transfers(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VmConsFinEneCountry(allCy,EFS,YTIME) + VmConsFinNonEne(allCy,EFS,YTIME) + V03InpTotTransf(allCy,EFS,YTIME) - V03OutTotTransf(allCy,EFS,YTIME) + VmLossesDistr(allCy,EFS,YTIME) - 
          V03Transfers(allCy,EFS,YTIME); 
 
-*' The equation calculates the gross inland consumptionfor a specific energy branch in a given scenario and year.
+*' The equation calculates the gross inland consumption for a specific energy branch in a given scenario and year.
 *' This is computed by summing various components, including total final energy consumption, final consumption in the energy sector, final non-energy consumption,
 *' total transformation input and output, distribution losses, and transfers. The result represents the gross inland consumption in million tons of oil equivalent.
 Q03ConsGrssInl(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
