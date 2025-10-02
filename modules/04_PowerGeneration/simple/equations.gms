@@ -528,12 +528,13 @@ Q04CO2CaptRate(allCy,PGALL,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
     V04CO2CaptRate(allCy,PGALL,YTIME)
         =E=
     imCO2CaptRate(PGALL) /
-    (
-      1 + 
-      EXP(2 * 
-        (
-          VmCstCO2SeqCsts(allCy,YTIME) / 
-        (sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME)) + 1) -1)
+     (1 + 
+      EXP(20 * (
+        ([VmCstCO2SeqCsts(allCy,YTIME) /
+        (sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME)) + 1)] + 2 -
+        [SQRT(SQR([VmCstCO2SeqCsts(allCy,YTIME) /
+        (sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME)) + 1)] - 2))])/2
+        -1)
       )
     )
     ;
