@@ -139,18 +139,20 @@ $include"./iSFC.csv"
 $offdelim
 ;
 *---
-parameter i01InitSpecFuelConsData(TRANSE,TTECH,EF)      "Initial Specific fuel consumption (toe/vkm)" /
+parameter i01InitSpecFuelConsData(TRANSE,TTECH,EF)      "Initial Specific fuel consumption PC: (ktoe/Gvkm)" /
 PT.TGDO.GDO	11.
 PT.TMET.MET	12.6
 PT.TH2F.H2F	8.9
 PT.TELC.ELC	7
 *PA.H2F.H2F	21.7
 PA.TKRS.KRS	27.85
-PN.TGDO.GDO  30.
+PN.TGDO.GDO  30
+PN.TH2F.H2F  43
 PB.TGDO.GDO  7.8
 PB.TNGS.NGS  5.6
 PB.TLPG.LPG  6.6
 PB.TELC.ELC  2.5
+PB.TH2F.H2F  4.3
 GU.TLPG.LPG	54.1073
 GU.TGSL.GSL	60.1192
 GU.TGDO.GDO	45.0894
@@ -199,7 +201,7 @@ i01AvgVehCapLoadFac(runCy,TRANSE,TRANSUSE,YTIME) = i01CapDataLoadFacEachTransp(T
 i01TechLft(runCy,TRANSE,TTECH,YTIME) = imDataTransTech(TRANSE,TTECH,"LFT",YTIME);
 *---
 **  Industrial Sector
-i01TechLft(runCy,INDSE,ITECH,YTIME) = imDataIndTechnology(INDSE,ITECH,"LFT")-8;
+i01TechLft(runCy,INDSE,ITECH,YTIME) = imDataIndTechnology(INDSE,ITECH,"LFT");
 *---
 **  Domestic Sector
 i01TechLft(runCy,DOMSE,ITECH,YTIME) = imDataDomTech(DOMSE,ITECH,"LFT");
