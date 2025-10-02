@@ -261,42 +261,58 @@ Q05ConsFuelH2Prod(allCy,EF,YTIME)$(TIME(YTIME) $H2PRODEF(EF) $(runCy(allCy)))..
     sum(H2TECH$H2TECHEFtoEF(H2TECH,EF),VmConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME))
 ;
 
+Q05CaptRateH2(allCy,H2TECH,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
+    V05CaptRateH2(allCy,H2TECH,YTIME)
+        =E=
+    i05CaptRateH2Prod(H2TECH) /
+    (1 + 
+      EXP(2 * (
+        VmCstCO2SeqCsts(allCy,YTIME) /
+        (sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME)) + 1)
+        -1)
+      )
+    )
+;
+
+
+
 !!
 !!                               B. Ammonia Equations
 !!
+
 
 *' Calculates the total ammonia output from the Haber-Bosch synthesis process. 
 *' The equation ensures that production is limited by both the available hydrogen feedstock
 *' and the maximum technical capacity of the plant. It incorporates the conversion efficiency,
 *' so only feasible amounts of ammonia are produced given the input resources and technology constraints.
 Q05ProdAmmHB(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    VmProdAmm(allCy,"amm_hb",YTIME)
+    V05ProdAmmHB(allCy,YTIME)
         =E=
     min(
-        VmProdH2(allCy,"amm_hb",YTIME) / i05EffAmmHB(allCy,YTIME),
-        i05MaxAmmCap(allCy,"amm_hb",YTIME)
-       )
+        V05ProdH2AmmHB(allCy,YTIME) / i05EffAmmHB(allCy,YTIME),
+        i05MaxAmmCapHB(allCy,YTIME)
+    )
 ;
 
 *' Links the hydrogen feedstock requirement directly to the planned ammonia output for the Haber-Bosch process.
 *' This equation guarantees that enough hydrogen is supplied to meet the ammonia production target, factoring in
 *' the process’s efficiency. It helps maintain a realistic material balance between input and output.
 Q05FeedstockAmmHB(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    VmProdH2(allCy,"amm_hb",YTIME)
-        =G=
-    VmProdAmm(allCy,"amm_hb",YTIME) * i05EffAmmHB(allCy,YTIME)
+    V05ProdH2AmmHB(allCy,YTIME)
+        =E=
+    V05ProdAmmHB(allCy,YTIME) * i05EffAmmHB(allCy,YTIME)
 ;
 
 *' Aggregates all relevant costs for producing ammonia via Haber-Bosch synthesis. This includes capital investment
 *' (spread over output via efficiency), ongoing operational expenses, and the costs of hydrogen and nitrogen feedstocks.
 *' The equation provides a comprehensive calculation of the unit cost of ammonia production, supporting economic analysis and optimization.
 Q05CostProdAmmHB(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V05CostProdAmm(allCy,"amm_hb",YTIME)
+    V05CostProdAmmHB(allCy,YTIME)
         =E=
       i05CapexAmmHB(allCy,YTIME) / i05EffAmmHB(allCy,YTIME)
     + i05OpexAmmHB(allCy,YTIME)
-    + i05FeedstockCostH2(allCy,YTIME) * VmProdH2(allCy,"amm_hb",YTIME)
-    + i05FeedstockCostN2(allCy,YTIME) * VmProdN2(allCy,"amm_hb",YTIME)
+    + i05FeedstockCostH2(allCy,YTIME) * V05ProdH2AmmHB(allCy,YTIME)
+    + i05FeedstockCostN2(allCy,YTIME) * V05ProdAmmHB(allCy,YTIME)
 ;
 
 *' Determines the ammonia output from the Haber-Bosch process when equipped with carbon capture and storage (CCS).
@@ -304,24 +320,34 @@ Q05CostProdAmmHB(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' additional technical limitations and requirements imposed by CCS integration, ensuring realistic modeling of
 *' advanced production pathways.
 Q05ProdAmmHBCCS(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    VmProdAmm(allCy,"amm_hb_ccs",YTIME)
+    V05ProdAmmHBCCS(allCy,YTIME)
         =E=
     min(
-        VmProdH2(allCy,"amm_hb_ccs",YTIME) / i05EffAmmHBCCS(allCy,YTIME),
-        i05MaxAmmCap(allCy,"amm_hb_ccs",YTIME)
+        V05ProdH2AmmHBCCS(allCy,YTIME) / i05EffAmmHBCCS(allCy,YTIME),
+        i05MaxAmmCap(allCy,YTIME)
        )
+;
+
+*' Calculates the hydrogen feedstock needed for ammonia production when using
+*' the Haber-Bosch process with carbon capture and storage (CCS).
+*' Similar to the standard Haber-Bosch feedstock equation, it ensures that 
+*' hydrogen supply meets production needs while accounting for the efficiency of the CCS-integrated process.  
+Q05ProdH2AmmHBCCS(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V05ProdH2AmmHBCCS(allCy,YTIME)
+        =E=
+    V05ProdAmmHBCCS(allCy,YTIME) * i05EffAmmHBCCS(allCy,YTIME)
 ;
 
 *' Calculates the full cost of ammonia production using Haber-Bosch with CCS. This equation includes capital
 *' and operational costs, feedstock expenses, and the extra costs associated with capturing and storing CO₂
 *' emissions. It enables comparison of conventional and low-carbon ammonia production routes.
 Q05CostProdAmmHBCCS(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V05CostProdAmm(allCy,"amm_hb_ccs",YTIME)
+    V05CostProdAmmHBCCS(allCy,YTIME)
         =E=
       i05CapexAmmHBCCS(allCy,YTIME) / i05EffAmmHBCCS(allCy,YTIME)
     + i05OpexAmmHBCCS(allCy,YTIME)
-    + i05FeedstockCostH2(allCy,YTIME) * VmProdH2(allCy,"amm_hb_ccs",YTIME)
-    + i05FeedstockCostN2(allCy,YTIME) * VmProdN2(allCy,"amm_hb_ccs",YTIME)
+    + i05FeedstockCostH2AmmHBCCS(allCy,YTIME) * V05ProdH2AmmHBCCS(allCy,YTIME)
+    + i05FeedstockCostN2AmmHBCCS(allCy,YTIME) * V05ProdAmmHBCCS(allCy,YTIME)
     + i05CCSCostAmmHB(allCy,YTIME)
 ;
 
@@ -329,73 +355,72 @@ Q05CostProdAmmHBCCS(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' The equation ensures that output is limited by both the available electricity and the maximum capacity
 *' of the electrochemical technology, reflecting the efficiency of the conversion process and technical constraints.
 Q05ProdAmmElec(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    VmProdAmm(allCy,"amm_elec",YTIME)
+    V05ProdAmmElec(allCy,YTIME)
         =E=
     min(
-        VmConsElecAmmElec(allCy,YTIME) / i05EffAmmElec(allCy,YTIME),
-        i05MaxAmmCap(allCy,"amm_elec",YTIME)
+        V05ConsElecAmmElec(allCy,YTIME) / i05EffAmmElec(allCy,YTIME),
+        i05MaxAmmCap(allCy,YTIME)
        )
+;
+
+*' Ensures that the supply of electricity matches the requirements for the targeted ammonia output in electrochemical
+*' synthesis. By linking electricity consumption to ammonia production via process efficiency, this equation maintains
+*' a realistic energy balance and supports resource planning.
+Q05ConsElecAmmElec(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V05ConsElecAmmElec(allCy,YTIME)
+        =E=
+    V05ProdAmmElec(allCy,YTIME) * i05EffAmmElec(allCy,YTIME)
 ;
 
 *' Calculates the total cost of ammonia produced by electrochemical methods. It sums capital and operational
 *' expenditures, the cost of electricity consumed, and the cost of nitrogen feedstock, providing a detailed 
 *' breakdown of production expenses for this emerging technology.
 Q05CostProdAmmElec(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V05CostProdAmm(allCy,"amm_elec",YTIME)
+    V05CostProdAmmElec(allCy,YTIME)
         =E=
       i05CapexAmmElec(allCy,YTIME) / i05EffAmmElec(allCy,YTIME)
     + i05OpexAmmElec(allCy,YTIME)
-    + i05FeedstockCostH2(allCy,YTIME) * VmProdH2(allCy,"amm_elec",YTIME)
-    + i05FeedstockCostN2(allCy,YTIME) * VmProdN2(allCy,"amm_elec",YTIME)
-    + VmConsElecAmmElec(allCy,YTIME) * VmPriceElecSubsecCarVal(allCy,"IND", "ELEC", YTIME) * 1e3
-;
-
-*' Ensures that the supply of electricity matches the requirements for the targeted ammonia output in electrochemical
-*' synthesis. By linking electricity consumption to ammonia production via process efficiency, this equation maintains
-*' a realistic energy balance and supports resource planning.
-Q05FeedstockAmmElec(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    VmConsElecAmmElec(allCy,YTIME)
-        =G=
-    VmProdAmm(allCy,"amm_elec",YTIME) * i05EffAmmElec(allCy,YTIME)
+    + i05FeedstockCostElecAmmElec(allCy,YTIME) * V05ConsElecAmmElec(allCy,YTIME)
+    + i05FeedstockCostN2AmmElec(allCy,YTIME)   * V05ProdAmmElec(allCy,YTIME)
+    + V05ConsElecAmmElec(allCy,YTIME) * VmPriceElecSubsecCarVal(allCy,"IND", "ELEC", YTIME) * 1e3
 ;
 
 *' Determines the amount of hydrogen produced from ammonia cracking. The equation uses the quantity of ammonia 
 *' input and the efficiency of the cracking process to calculate hydrogen output, supporting the modeling of 
 *' ammonia as a hydrogen carrier in energy systems.
 Q05ProdAmmCrk(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    VmProdH2(allCy,"amm_crk",YTIME)
+    V05ProdAmmCrk(allCy,YTIME)
         =E=
-    VmProdAmm(allCy,"amm_crk",YTIME) * i05EffAmmCrk(allCy,YTIME)
-;
-
-*' Computes the total cost of producing hydrogen via ammonia cracking. It includes capital and operational costs 
-*' as well as the cost of ammonia feedstock, enabling economic assessment of hydrogen supply chains that utilize
-*' ammonia as an intermediate.
-Q05CostProdAmmCrk(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V05CostProdAmm(allCy,"amm_crk",YTIME)
-        =E=
-      i05CapexAmmCrk(allCy,YTIME) / i05EffAmmCrk(allCy,YTIME)
-    + i05OpexAmmCrk(allCy,YTIME)
-    + i05FeedstockCostH2(allCy,YTIME) * VmProdH2(allCy,"amm_crk",YTIME)
-    + i05FeedstockCostN2(allCy,YTIME) * VmProdN2(allCy,"amm_crk",YTIME)
-    + i05FeedstockCostNH3(allCy,YTIME) * VmProdAmm(allCy,"amm_crk",YTIME)
+    V05FeedstockAmmCrk(allCy,YTIME) * i05EffAmmCrk(allCy,YTIME)
 ;
 
 *' Constrains the amount of ammonia available for cracking, ensuring that hydrogen production does not exceed the 
 *' supply of ammonia or the technical limits of the cracking process. This maintains consistency in material flows
 *' and prevents unrealistic outputs.
 Q05FeedstockAmmCrk(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    VmProdAmm(allCy,"amm_crk",YTIME)
-        =G=
-    VmProdH2(allCy,"amm_crk",YTIME) / i05EffAmmCrk(allCy,YTIME)
+    V05FeedstockAmmCrk(allCy,YTIME)
+        =E=
+    V05ProdAmmCrk(allCy,YTIME) / i05EffAmmCrk(allCy,YTIME)
+;
+
+*' Computes the total cost of producing hydrogen via ammonia cracking. It includes capital and operational costs 
+*' as well as the cost of ammonia feedstock, enabling economic assessment of hydrogen supply chains that utilize
+*' ammonia as an intermediate.
+Q05CostProdAmmCrk(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V05CostProdAmmCrk(allCy,YTIME)
+        =E=
+      i05CapexAmmCrk(allCy,YTIME) / i05EffAmmCrk(allCy,YTIME)
+    + i05OpexAmmCrk(allCy,YTIME)
+    + i05FeedstockCostAmmCrk(allCy,YTIME) * V05FeedstockAmmCrk(allCy,YTIME)
 ;
 
 
-$ontext
 !!
 !!                               C. Hydrogen Infrustructure
 !!
 
+
+$ontext
 *' This equation models the expansion of hydrogen infrastructure (e.g., pipelines, storage facilities)
 *' needed to support growing demand. It takes into account the projected growth in hydrogen production 
 *' and distribution, ensuring that infrastructure expansion aligns with demand forecasts.
@@ -525,16 +550,3 @@ Q05CostTotH2(allCy,SBS,YTIME)$(TIME(YTIME) $SECTTECH(SBS,"H2F") $(runCy(allCy)))
          V05PriceH2Infr(allCy,SBS,YTIME)+VmCostAvgProdH2(allCy,YTIME)
 ;
 $offtext
-
-Q05CaptRateH2(allCy,H2TECH,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
-    V05CaptRateH2(allCy,H2TECH,YTIME)
-        =E=
-    i05CaptRateH2Prod(H2TECH) /
-    (1 + 
-      EXP(2 * (
-        VmCstCO2SeqCsts(allCy,YTIME) /
-        (sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME)) + 1)
-        -1)
-      )
-    )
-    ;
