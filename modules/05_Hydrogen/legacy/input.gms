@@ -26,10 +26,17 @@ $include"./iWBLShareH2Prod.csv"
 $offdelim
 ;
 *---
+table i05NH3Production(ECONCHARHY,H2TECH,YTIME)             "Data for Hydrogen and Ammonia production"
+$ondelim
+$include "./i05NH3Production.csv"
+$offdelim
+;
+*---
 Parameters
+*--- Hydrogen-specific parameters
 i05WBLGammaH2Prod(allCy,YTIME)              "Parameter for acceptance in new investments used in weibull function in production shares"
 i05ProdLftH2(H2TECH,YTIME)                  "Lifetime of hydrogen production technologies in years"
-i05CaptRateH2Prod(H2TECH)       "CO2 capture rate of hydrogen production technologies (for those which are equipped with CCS facility)"
+i05CaptRateH2Prod(H2TECH)                   "CO2 capture rate of hydrogen production technologies (for those which are equipped with CCS facility)"
 i05H2Adopt(allCy,ARELAST,YTIME)             "Parameters controlling the speed and the year of taking off the transition to hydrogen economy"
 i05TranspLftH2(INFRTECH,YTIME)              "Technical lifetime of infrastructure technologies"
 i05CostCapH2Prod(allCy,H2TECH,YTIME)        "Capital cost of hydrogen production technologies in Euro per Nm3 of hydrogen"
@@ -56,6 +63,30 @@ i05EffNetH2Transp(allCy,INFRTECH,YTIME)     "Total efficiency of the distributio
 i05CostAvgWeight(allCy,YTIME)               "Weight for pricing in average cost or in marginal cost"
 iWBLShareH2Prod(allCy,H2TECH,YTIME)         "Maturity factors for H2 technologies"
 iWBLPremRepH2Prod(allCy,H2TECH,YTIME)       "Maturity factors for premature replacement of H2 technologies"
+
+*--- Ammonia-specific parameters
+i05MaxAmmCapHB(allCy,YTIME)                 "Max technical capacity for Haber-Bosch [NH3 Mtoe]"
+i05EffAmmHB(allCy,YTIME)                    "Efficiency of Haber-Bosch [toe/kt or Mtoe/kt]"
+i05CapexAmmHB(allCy,YTIME)                  "Capex for Haber-Bosch [USD$K15/KW]"
+i05OpexAmmHB(allCy,YTIME)                   "Opex for Haber-Bosch [USD$K15/KW]"
+i05FeedstockCostH2(allCy,YTIME)             "Hydrogen feedstock cost [USD$K15/KW]"
+i05FeedstockCostN2(allCy,YTIME)             "Nitrogen feedstock cost [USD$K15/KW]"
+i05MaxAmmCap(allCy,YTIME)                   "Max technical capacity for other ammonia technologies"
+i05EffAmmHBCCS(allCy,YTIME)                 "Efficiency of Haber-Bosch with CCS"
+i05CapexAmmHBCCS(allCy,YTIME)               "Capex for Haber-Bosch with CCS [USD$K15/KW]"
+i05OpexAmmHBCCS(allCy,YTIME)                "Opex for Haber-Bosch with CCS [USD$K15/KW]"
+i05FeedstockCostH2AmmHBCCS(allCy,YTIME)     "Hydrogen feedstock cost for CCS [USD$K15/KW]"
+i05FeedstockCostN2AmmHBCCS(allCy,YTIME)     "Nitrogen feedstock cost for CCS [USD$K15/KW]"
+i05CCSCostAmmHB(allCy,YTIME)                "CCS cost for Haber-Bosch with CCS [USD$K15/KW]"
+i05EffAmmElec(allCy,YTIME)                  "Efficiency of electrochemical ammonia synthesis"
+i05CapexAmmElec(allCy,YTIME)                "Capex for electrochemical ammonia synthesis [USD$K15/KW]"
+i05OpexAmmElec(allCy,YTIME)                 "Opex for electrochemical ammonia synthesis [USD$K15/KW]"
+i05FeedstockCostElecAmmElec(allCy,YTIME)    "Electricity feedstock cost for electrochemical synthesis [USD$K15/KW]"
+i05FeedstockCostN2AmmElec(allCy,YTIME)      "Nitrogen feedstock cost for electrochemical synthesis [USD$K15/KW]"
+i05EffAmmCrk(allCy,YTIME)                   "Efficiency of ammonia cracking"
+i05CapexAmmCrk(allCy,YTIME)                 "Capex for ammonia cracking [USD$K15/KW]"
+i05OpexAmmCrk(allCy,YTIME)                  "Opex for ammonia cracking [USD$K15/KW]"
+i05FeedstockCostAmmCrk(allCy,YTIME)         "Ammonia feedstock cost for cracking [USD$K15/KW]"
 ;
 *---
 iWBLShareH2Prod(runCy,H2TECH,YTIME) = iTechShareH2Prod(H2TECH,YTIME);
