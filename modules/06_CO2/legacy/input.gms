@@ -117,7 +117,25 @@ USA.LTDAC.2027  5e5,    !!Project Cypress (Climeworks + Heirloom + Battelle) —
 USA.LTDAC.2032  1e6,    !!HIF USA eFuels – Matagorda County, Texas
 USA.LTDAC.2034  1e6,    !!Project Bison – Wyoming (CarbonCapture Inc.)
 USA.LTDAC.2035  1e6,    !!South Texas DAC Hub
-LAM.EWDAC.2024  5e5     !!South Texas DAC Hub
+CHA.LTDAC.2026  1e6,    !!Possible
+CHA.H2DAC.2030  1e5,    !!Possible
+CHA.EWDAC.2030  1e6,    !!Possible
+OAS.LTDAC.2030  1e6,    !!Possible
+OAS.EWDAC.2035  1e5,    !!Possible
+DEU.LTDAC.2035  5e5,    !!Possible
+DEU.EWDAC.2035  5e5,    !!Possible
+FRA.LTDAC.2035  5e5,    !!Possible
+GBR.H2DAC.2035  5e5,    !!Possible
+IND.LTDAC.2026  1e6,    !!Possible
+IND.EWDAC.2030  1e6,    !!Possible
+JPN.H2DAC.2030  1e6,    !!Possible
+REF.LTDAC.2029  1e6,    !!Possible
+REF.EWDAC.2033  1e5,    !!Possible
+MEA.LTDAC.2031  1e5,    !!Possible
+MEA.EWDAC.2037  1e6,    !!Possible
+SSA.LTDAC.2032  1e6,    !!Possible
+SSA.EWDAC.2037  1e5,    !!Possible
+LAM.EWDAC.2024  5e5     
 / ;
 
 *---

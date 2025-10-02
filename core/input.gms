@@ -95,6 +95,7 @@ imCo2EmiFac(runCy,SBS,EF,YTIME) = iCo2EmiFacAllSbs(EF);
 imCo2EmiFac(runCy,"IS","HCL",YTIME) = iCo2EmiFacAllSbs("SLD"); !! This is the assignment for coke
 *imCo2EmiFac(runCy,"H2P","NGS",YTIME) = 3.107;
 imCo2EmiFac(runCy,SBS,EF,YTIME)$CHP(EF) = SUM(EF2$(CHPtoEF(EF,EF2)),imCo2EmiFac(runCy,SBS,EF2,YTIME));
+imCo2EmiFac(runCy,SBS,EF,YTIME)$DH(EF) = SUM(EF2$(DHtoEF(EF,EF2)),imCo2EmiFac(runCy,SBS,EF2,YTIME));
 *imCo2EmiFac(runCy,"H2P","BMSWAS",YTIME) = 0.497;
 *---
 parameter imElaSubData(DSBS)       "Elasticities by subsector (1)" /
@@ -428,7 +429,7 @@ SE.TNGS       0.2244   6.8             20  0.88
 SE.TOGS       0.2244   10.88           20  0.8
 *SE.PGTSOL     0.86224  1.36            20  0.97
 SE.TBMSWAS    0.323544 10.88           20  0.5
-SE.TELC       0.3      8.976           12  0.97
+SE.TELC       0.3      8.976           12  1.5
 SE.TSTE1AL    2.43133  40.1956 41.1163 30  0.375
 SE.TSTE1AH    2.43133  40.1956 41.1163 30  0.375
 SE.TSTE1AD    1.82186  54.264  11.386  30  0.3475
@@ -486,7 +487,7 @@ HOU.TNGS      0.2244   6.8             20  0.88
 HOU.TOGS      0.2244   10.88           20  0.8
 *HOU.PGTSOL    0.86224  1.36            20  0.97
 HOU.TBMSWAS   0.323544 10.88           20  0.5
-HOU.TELC      0.3      8.976           12  0.97
+HOU.TELC      0.3      8.976           12  1.5
 HOU.TSTE1AL   2.43133  40.1956 41.1163 30  0.375
 HOU.TSTE1AH   2.43133  40.1956 41.1163 30  0.375
 HOU.TSTE1AD   1.82186  54.264  11.386  30  0.3475
@@ -789,9 +790,11 @@ $ENDIF.calib
 *---
 ** Industry
 imShrNonSubElecInTotElecDem(runCy,INDSE)  = iIndCharData(INDSE,"SHR_NSE");
+imShrNonSubElecInTotElecDem(runCy,INDSE)  = iIndCharData(INDSE,"SHR_NSE") - 0.2;
 imShrNonSubElecInTotElecDem(runCy,INDSE)$(imShrNonSubElecInTotElecDem(runCy,INDSE)>0.98) = 0.98;
 **Domestic - Tertiary
 imShrNonSubElecInTotElecDem(runCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(DOMSE,"SHR_NSE");
+imShrNonSubElecInTotElecDem(runCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(DOMSE,"SHR_NSE") - 0.2;
 imShrNonSubElecInTotElecDem(runCy,DOMSE)$(imShrNonSubElecInTotElecDem(runCy,DOMSE)>0.98) = 0.98;
 **   Macroeconomic
 *---
@@ -816,6 +819,10 @@ imFixOMCostTech(runCy,NENSE,TECH,YTIME)= imDataNonEneSec(NENSE,TECH,"FC");
 imVarCostTech(runCy,NENSE,TECH,YTIME) = imDataNonEneSec(NENSE,TECH,"VC");
 imUsfEneConvSubTech(runCy,NENSE,TECH,YTIME) = imDataNonEneSec(NENSE,TECH,"USC");
 *---
+!!imUsfEneConvSubTech(runCy,INDSE,"THCL",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCL","USC") + 0.005 * (ord(YTIME)-11);
+imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCLCCS","USC") + 0.01 * (ord(YTIME)-11);
+imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$(ord(YTIME)>50)  = 0.9;
+
 **  Power Generation
 *---
 table iDataPlantEffByType(allCy,PGALL, YTIME)   "Data for plant efficiency per plant type"

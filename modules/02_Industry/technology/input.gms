@@ -51,6 +51,12 @@ i02ElastNonSubElec.LO(runCy,SBS,"c",YTIME)   = -10;
 i02ElastNonSubElec.UP(runCy,SBS,"c",YTIME)   = -0.001;
 $ELSE.calib
 i02ElastNonSubElec(runCy,SBS,ETYPES,YTIME) = i02ElastNonSubElecData(SBS,ETYPES,YTIME);
+i02ElastNonSubElec(runCy,SBS,"b1",YTIME) = i02ElastNonSubElecData(SBS,"b1",YTIME)/4;
+i02ElastNonSubElec(runCy,SBS,"b2",YTIME) = i02ElastNonSubElecData(SBS,"b2",YTIME)/4;
+i02ElastNonSubElec(runCy,SBS,"b3",YTIME) = i02ElastNonSubElecData(SBS,"b3",YTIME)/4;
+imElastA(allCy,DSBS,"b1",YTIME) = imElastA(allCy,DSBS,"b1",YTIME)/4;
+imElastA(allCy,DSBS,"b2",YTIME) = imElastA(allCy,DSBS,"b2",YTIME)/4;
+imElastA(allCy,DSBS,"c",YTIME) = imElastA(allCy,DSBS,"c",YTIME)/4;
 $ENDIF.calib
 *---
 i02InvCostChp(runCy,DSBS,CHP,YTIME)      = imDataChpPowGen(CHP,"IC",YTIME);
