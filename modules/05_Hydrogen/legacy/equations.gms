@@ -72,10 +72,10 @@ Q05PremRepH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' and normal plant life cycle. It links the scrapped capacity to the overall age distribution and retirement schedule of
 *' hydrogen production technologies.
 Q05CapScrapH2ProdTech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-        V05CapScrapH2ProdTech(allCy,H2TECH,YTIME)
-         =E=
-        V05ScrapLftH2Prod(allCy,H2TECH,YTIME)+
-        V05PremRepH2Prod(allCy,H2TECH,YTIME)
+    V05CapScrapH2ProdTech(allCy,H2TECH,YTIME)
+      =E=
+    V05ScrapLftH2Prod(allCy,H2TECH,YTIME) +
+    V05PremRepH2Prod(allCy,H2TECH,YTIME)
 ;
 
 *' The hydrogen demand gap equation defines the difference between the total hydrogen demand (calculated in Q05DemTotH2) and
