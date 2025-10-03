@@ -82,9 +82,6 @@ VmCostAvgProdH2.FX(runCy,YTIME)$(not An(YTIME)) = 0;
 *---
 *V05H2InfrArea.L(runCy,YTIME) = 0.001;
 *---
-VmDemSecH2.L(runCy,SBS, YTIME) = 2;
-VmDemSecH2.FX(runCy,SBS,YTIME)$(not An(YTIME)) = 1e-5;
-*---
 V05DemGapH2.scale(runCy,YTIME) = 1e-10;
 Q05DemGapH2.scale(runCy,YTIME) = V05DemGapH2.scale(runCy,YTIME);
 *---
