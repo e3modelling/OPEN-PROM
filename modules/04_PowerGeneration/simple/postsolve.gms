@@ -6,7 +6,6 @@
 *---
 VmCostPowGenAvgLng.FX(runCyL,YTIME)$TIME(YTIME) = VmCostPowGenAvgLng.L(runCyL,YTIME)$TIME(YTIME);
 VmCapElecTotEst.FX(runCyL,YTIME)$TIME(YTIME) = VmCapElecTotEst.L(runCyL,YTIME)$TIME(YTIME);
-V04CostPowGenLonNoClimPol.FX(runCyL,ESET,YTIME)$TIME(YTIME) = V04CostPowGenLonNoClimPol.L(runCyL,ESET,YTIME)$TIME(YTIME);
 VmPeakLoad.FX(runCyL,YTIME)$TIME(YTIME) = VmPeakLoad.L(runCyL,YTIME)$TIME(YTIME);
 V04CapOverall.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = V04CapOverall.L(runCyL,PGALL,YTIME)$TIME(YTIME);
 V04IndxEndogScrap.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = V04IndxEndogScrap.L(runCyL,PGALL,YTIME)$TIME(YTIME);
