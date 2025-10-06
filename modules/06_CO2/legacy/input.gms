@@ -8,7 +8,7 @@ POT	9175,
 mc_a	0,
 mc_b	20,
 mc_c	0.02,
-mc_d	3e3,
+mc_d	5e3,
 mc_s	120,
 mc_m	1.013
 / ;
@@ -102,8 +102,14 @@ LTDAC	0,
 EWDAC	0
 / ;
 
-parameter i06SchedNewCapDAC(allCy,DACTECH,YTIME)        "Scheduled new DAC capacity"
-/
+$ifthen.DACproj %fScenario% == 0
+parameter i06SchedNewCapDAC(allCy,DACTECH,YTIME)        "Scheduled new DAC capacity";
+i06SchedNewCapDAC(allCy,DACTECH,YTIME) = 0
+$elseif.DACproj %fScenario% == 1
+parameter i06SchedNewCapDAC(allCy,DACTECH,YTIME)        "Scheduled new DAC capacity";
+i06SchedNewCapDAC(allCy,DACTECH,YTIME) = 0
+$elseif.DACproj %fScenario% == 2
+parameter i06SchedNewCapDAC(allCy,DACTECH,YTIME)        "Scheduled new DAC capacity" /
 NEU.LTDAC.2027  4e4,    !!Removr – Mongstad pilot / industrial‑scale projects
 NEU.LTDAC.2026  4e4,    !!Orca (Climeworks + Carbfix) + Mammoth (Climeworks + Carbfix)
 NEU.LTDAC.2028  1e5,    !!Removr + Carbfix (Large‑Scale Plant)
@@ -125,18 +131,37 @@ OAS.EWDAC.2035  1e5,    !!Possible
 DEU.LTDAC.2035  5e5,    !!Possible
 DEU.EWDAC.2035  5e5,    !!Possible
 FRA.LTDAC.2035  5e5,    !!Possible
-GBR.H2DAC.2035  5e5,    !!Possible
+GBR.H2DAC.2035  5e4,    !!Possible
 IND.LTDAC.2026  1e6,    !!Possible
 IND.EWDAC.2030  1e6,    !!Possible
-JPN.H2DAC.2030  1e6,    !!Possible
+JPN.H2DAC.2030  1e5,    !!Possible
 REF.LTDAC.2029  1e6,    !!Possible
 REF.EWDAC.2033  1e5,    !!Possible
 MEA.LTDAC.2031  1e5,    !!Possible
 MEA.EWDAC.2037  1e6,    !!Possible
 SSA.LTDAC.2032  1e6,    !!Possible
 SSA.EWDAC.2037  1e5,    !!Possible
-LAM.EWDAC.2024  5e5     
-/ ;
+LAM.EWDAC.2024  5e5/
+$elseif.DACproj %fScenario% == 3
+parameter i06SchedNewCapDAC(allCy,DACTECH,YTIME)        "Scheduled new DAC capacity" /
+NEU.LTDAC.2027  4e4,    !!Removr – Mongstad pilot / industrial‑scale projects
+NEU.LTDAC.2026  4e4,    !!Orca (Climeworks + Carbfix) + Mammoth (Climeworks + Carbfix)
+NEU.LTDAC.2028  1e5,    !!Removr + Carbfix (Large‑Scale Plant)
+NEU.LTDAC.2024  900,    !!Climeworks – Hinwil pilot, Switzerland
+USA.LTDAC.2023  1e3,    !!Global Thermostat – Commerce City, Colorado
+USA.HTDAC.2024  1e3,    !!Heirloom – Tracy, California
+USA.LTDAC.2025  5e3,    !!Heimdal – Bantam, Oklahoma
+USA.LTDAC.2026  5e5,    !!Stratos (1PointFive / Occidental) — Texas
+USA.HTDAC.2027  5e5,    !!Project Cypress (Climeworks + Heirloom + Battelle) — Louisiana
+USA.LTDAC.2027  5e5,    !!Project Cypress (Climeworks + Heirloom + Battelle) — Louisiana
+USA.LTDAC.2032  1e6,    !!HIF USA eFuels – Matagorda County, Texas
+USA.LTDAC.2034  1e6,    !!Project Bison – Wyoming (CarbonCapture Inc.)
+USA.LTDAC.2035  1e6/    !!South Texas DAC Hub
+$elseif.DACproj %fScenario% == 4
+parameter i06SchedNewCapDAC(allCy,DACTECH,YTIME)        "Scheduled new DAC capacity";
+i06SchedNewCapDAC(allCy,DACTECH,YTIME) = 0
+$endIf.DACproj
+;
 
 *---
 Parameters
