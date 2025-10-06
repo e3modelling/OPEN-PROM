@@ -43,7 +43,7 @@ Q02PremScrpIndu(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and n
     1 - (V02VarCostTech(allCy,DSBS,ITECH,YTIME-1) * i02util(allCy,DSBS,ITECH,YTIME-1)) ** (-2) /
     (
       (V02VarCostTech(allCy,DSBS,ITECH,YTIME-1) * i02util(allCy,DSBS,ITECH,YTIME-1)) ** (-2) +
-      0.1 *
+      40 *
       (sum(ITECH2$(not sameas(ITECH2,ITECH) and SECTTECH(DSBS,ITECH2)),
         V02CostTech(allCy,DSBS,ITECH2,YTIME-1) - (1 - i02util(allCy,DSBS,ITECH2,YTIME-1)) * V02VarCostTech(allCy,DSBS,ITECH2,YTIME-1))
       )**(-2)
@@ -110,8 +110,8 @@ Q02VarCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not s
     sum(EF$ITECHtoEF(ITECH,EF), 
       i02Share(allCy,DSBS,ITECH,EF,YTIME) *
       VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME) +
-      imCO2CaptRateIndustry(allCy,ITECH,YTIME) * VmCstCO2SeqCsts(allCy,YTIME-1) * 1e-3 * (imCo2EmiFac(allCy,DSBS,EF,YTIME-1) + 4.17$(sameas("BMSWAS", EF)) + 4.17$(sameas("STE2BMS", EF))) +
-      (1-imCO2CaptRateIndustry(allCy,ITECH,YTIME)) * 1e-3 * (imCo2EmiFac(allCy,DSBS,EF,YTIME-1) + 4.17$(sameas("BMSWAS", EF)) + 4.17$(sameas("STE2BMS", EF))) *
+      imCO2CaptRateIndustry(allCy,ITECH,YTIME) * VmCstCO2SeqCsts(allCy,YTIME-1) * 1e-3 * imCo2EmiFac(allCy,DSBS,EF,YTIME-1)  +
+      (1-imCO2CaptRateIndustry(allCy,ITECH,YTIME)) * 1e-3 * imCo2EmiFac(allCy,DSBS,EF,YTIME-1)  *
       (sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME-1))) +
       VmRenValue(YTIME)$(not RENEF(ITECH) and not NENSE(DSBS)) !! needs change of units
     ) +

@@ -146,7 +146,7 @@ Q05CostVarProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q05AcceptCCSH2Tech(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V05AcceptCCSH2Tech(allCy,YTIME)
     =E=
-    i05WBLGammaH2Prod(allCy,YTIME)*5 +
+    i05WBLGammaH2Prod(allCy,YTIME)*2 +
     EXP(-0.06*((sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME -1)))))
 ;
 
