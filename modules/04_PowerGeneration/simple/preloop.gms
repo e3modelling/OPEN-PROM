@@ -12,7 +12,7 @@ V04CostProdSpecTech.LO(runCy,PGALL2,YTIME) = 0.00000001;
 *---
 V04CostVarTech.L(runCy,PGALL,YTIME) = 0.1;
 *---
-V04CostProdTeCHPreReplacAvail.L(runCy,PGALL,PGALL2,YTIME) = 0.1;
+V04CostProdTeCHPreReplac.L(runCy,PGALL,YTIME) = 0.1;
 *---
 V04ShareNewTechNoCCS.L(runCy,PGALL,TT)=0.1;
 V04ShareNewTechNoCCS.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME))) = 0;
@@ -25,9 +25,6 @@ V04ShareNewTechCCS.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME))) = 0;
 V04ShareNewTechCCS.FX(runCy,PGALL,YTIME)$(AN(YTIME) $(NOT CCS(PGALL))) = 0;
 *---
 V04CostHourProdInvDecNoCCS.L(runCy,PGALL,TT) = V04ShareNewTechNoCCS.L(runCy,PGALL,TT)*0.1 + sum(CCS$CCS_NOCCS(CCS,PGALL), V04ShareNewTechCCS.L(runCy,CCS,TT)*0.1);
-*---
-V04NewInvElec.L(runCy,YTIME) = 0.1;
-V04NewInvElec.FX(runCy,YTIME)$(NOT AN(YTIME)) = 1;
 *---
 alias(datay, dataylag)
 loop (runCy,PGALL,datay,dataylag)$(ord(datay) = ord(dataylag) + 1 and PGREN(PGALL)) DO
@@ -64,26 +61,13 @@ V04ShareSatPG.FX(runCy,PGALL,YTIME-1)$ (not PGREN(PGALL))= 1;
 V04IndxEndogScrap.FX(runCy,PGALL,YTIME)$(not an(YTIME) ) = 1;
 V04IndxEndogScrap.FX(runCy,PGSCRN,YTIME) = 1;            !! premature replacement it is not allowed for all new plants
 *---
-V04CostPowGenLonNoClimPol.L(runCy,ESET,"2010") = 0;
-V04CostPowGenLonNoClimPol.L(runCy,ESET,"%fBaseY%") = 0;
-*---
-*v04CostPowGenAvgShrt.L(runCy,ESET,"2010") = 0;
-*v04CostPowGenAvgShrt.L(runCy,ESET,"%fBaseY%") = 0;
-*---
-V04CostPowGenLngTechNoCp.L(runCy,PGALL,"2010") = 0;
-V04CostPowGenLngTechNoCp.L(runCy,PGALL,"%fBaseY%") = 0;
+V04ScalWeibullSum.L(runCy,PGALL,YTIME) = 1;
 *---
 V04CostAvgPowGenLonNoClimPol.L(runCy,PGALL,ESET,"2010") = 0;
 V04CostAvgPowGenLonNoClimPol.FX(runCy,PGALL,ESET,"%fBaseY%") = 0;
 *---
 V04CostProdSpecTech.scale(runCy,PGALL,YTIME)=1e12;
 Q04CostProdSpecTech.scale(runCy,PGALL,YTIME)=V04CostProdSpecTech.scale(runCy,PGALL,YTIME);
-*---
-V04CostVarTechNotPGSCRN.scale(runCy,PGALL,YTIME)=1e6;
-Q04CostVarTechNotPGSCRN.scale(runCy,PGALL,YTIME)=V04CostVarTechNotPGSCRN.scale(runCy,PGALL,YTIME);
-*---
-V04NewInvElec.scale(runCy,YTIME)=1e8;
-Q04NewInvElec.scale(runCy,YTIME)=V04NewInvElec.scale(runCy,YTIME);
 *---
 V04CostVarTech.scale(runCy,PGALL,YTIME)=1e-5;
 Q04CostVarTech.scale(runCy,PGALL,YTIME)=V04CostVarTech.scale(runCy,PGALL,YTIME);
