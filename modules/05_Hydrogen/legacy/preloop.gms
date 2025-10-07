@@ -52,8 +52,8 @@ V05CostProdCCSNoCCSH2Prod.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
 VmCostAvgProdH2.L(runCy,YTIME) = 2;
 VmCostAvgProdH2.FX(runCy,YTIME)$(not An(YTIME)) = 0;
 *---
-VmDemSecH2.L(runCy,SBS, YTIME) = 2;
-VmDemSecH2.FX(runCy,SBS,YTIME)$(not An(YTIME)) = 1e-5;
+*VmDemSecH2.L(runCy,SBS, YTIME) = 2;
+*VmDemSecH2.FX(runCy,SBS,YTIME)$(not An(YTIME)) = 1e-5;
 *---
 V05DemGapH2.scale(runCy,YTIME) = 1e-10;
 Q05DemGapH2.scale(runCy,YTIME) = V05DemGapH2.scale(runCy,YTIME);

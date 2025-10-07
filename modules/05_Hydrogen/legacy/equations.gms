@@ -49,37 +49,37 @@ $offtext
 *' or inefficient hydrogen production technologies before their expected end of life based on economic factors such as cost,
 *' technological progress, and demand shifts.
 Q05PremRepH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-        V05PremRepH2Prod(allCy,H2TECH,YTIME)
-            =E=
-        (
-          1 - 
-          V05CostVarProdH2Tech(allCy,H2TECH,YTIME)**(-i05WBLGammaH2Prod(allCy,YTIME)) /
-          (
-            iWBLPremRepH2Prod(allCy,H2TECH,YTIME) *
-            (sum(H2TECH2,
-                V05GapShareH2Tech1(allCy,H2TECH2,YTIME)*
-                (1/i05AvailH2Prod(allCy,H2TECH,YTIME)*
-                V05CostProdH2Tech(allCy,H2TECH2,YTIME) +
-                (1-1/i05AvailH2Prod(allCy,H2TECH,YTIME)) * V05CostVarProdH2Tech(allCy,H2TECH2,YTIME))) -
-                V05GapShareH2Tech1(allCy,H2TECH,YTIME) *
-                (1/i05AvailH2Prod(allCy,H2TECH,YTIME) *
-                V05CostProdH2Tech(allCy,H2TECH,YTIME) +
-                (1-1/i05AvailH2Prod(allCy,H2TECH,YTIME)) * V05CostVarProdH2Tech(allCy,H2TECH,YTIME))
-            )**(-i05WBLGammaH2Prod(allCy,YTIME))
+    V05PremRepH2Prod(allCy,H2TECH,YTIME)
+        =E=
+    (
+      1 - 
+      V05CostVarProdH2Tech(allCy,H2TECH,YTIME)**(-i05WBLGammaH2Prod(allCy,YTIME)) /
+      (
+        iWBLPremRepH2Prod(allCy,H2TECH,YTIME) *
+        (sum(H2TECH2,
+            V05GapShareH2Tech1(allCy,H2TECH2,YTIME)*
+            (1/i05AvailH2Prod(allCy,H2TECH,YTIME)*
+            V05CostProdH2Tech(allCy,H2TECH2,YTIME) +
+            (1-1/i05AvailH2Prod(allCy,H2TECH,YTIME)) * V05CostVarProdH2Tech(allCy,H2TECH2,YTIME))) -
+            V05GapShareH2Tech1(allCy,H2TECH,YTIME) *
+            (1/i05AvailH2Prod(allCy,H2TECH,YTIME) *
+            V05CostProdH2Tech(allCy,H2TECH,YTIME) +
+            (1-1/i05AvailH2Prod(allCy,H2TECH,YTIME)) * V05CostVarProdH2Tech(allCy,H2TECH,YTIME))
+        )**(-i05WBLGammaH2Prod(allCy,YTIME))
 
-           + V05CostVarProdH2Tech(allCy,H2TECH,YTIME)**(-i05WBLGammaH2Prod(allCy,YTIME))
-         + 1e-6)
-         )$H2TECHPM(H2TECH)
+        + V05CostVarProdH2Tech(allCy,H2TECH,YTIME)**(-i05WBLGammaH2Prod(allCy,YTIME))
+      + 1e-6)
+      )$H2TECHPM(H2TECH)
 ;
 
 *' This equation calculates the total hydrogen production capacity that is scrapped as part of the premature replacement
 *' and normal plant life cycle. It links the scrapped capacity to the overall age distribution and retirement schedule of
 *' hydrogen production technologies.
 Q05CapScrapH2ProdTech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-        V05CapScrapH2ProdTech(allCy,H2TECH,YTIME)
-         =E=
-        V05ScrapLftH2Prod(allCy,H2TECH,YTIME)+
-        V05PremRepH2Prod(allCy,H2TECH,YTIME)
+    V05CapScrapH2ProdTech(allCy,H2TECH,YTIME)
+      =E=
+    V05ScrapLftH2Prod(allCy,H2TECH,YTIME) +
+    V05PremRepH2Prod(allCy,H2TECH,YTIME)
 ;
 
 *' The hydrogen demand gap equation defines the difference between the total hydrogen demand (calculated in Q05DemTotH2) and
@@ -150,7 +150,7 @@ Q05CostVarProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q05AcceptCCSH2Tech(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V05AcceptCCSH2Tech(allCy,YTIME)
     =E=
-    i05WBLGammaH2Prod(allCy,YTIME)*5 +
+    i05WBLGammaH2Prod(allCy,YTIME)*2 +
     EXP(-0.06*((sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME -1)))))
 ;
 

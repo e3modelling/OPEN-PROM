@@ -159,7 +159,8 @@ Q06LvlCostDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         =E=         
     V06GrossCapDAC(allCy,DACTECH,YTIME) + 
     V06FixOandMDAC(allCy,DACTECH,YTIME) + 
-    V06VarCostDAC(allCy,DACTECH,YTIME)
+    V06VarCostDAC(allCy,DACTECH,YTIME) - 20 +
+    VmCstCO2SeqCsts(allCy,YTIME)
 ;
 
 *' The equation estimates the profitability of DAC capacity, calculating the rate between levelized costs (CAPEX, fixed and fuel needs)
@@ -211,7 +212,7 @@ Q06ConsFuelTechDACProd(allCy,DACTECH,EF,YTIME)$(TIME(YTIME) $TECHtoEF(DACTECH,EF
 
 *' The equation calculates the different fuels consumed by the DAC installed capacity annually and regionally.
 Q06ConsFuelDACProd(allCy,EF,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
-         VmConsFuelDACProd(allCy,EF,YTIME)
-         =E=
-         sum(DACTECH$TECHtoEF(DACTECH,EF),VmConsFuelTechDACProd(allCy,DACTECH,EF,YTIME))
+    VmConsFuelDACProd(allCy,EF,YTIME)
+        =E=
+    sum(DACTECH$TECHtoEF(DACTECH,EF),VmConsFuelTechDACProd(allCy,DACTECH,EF,YTIME))
 ;
