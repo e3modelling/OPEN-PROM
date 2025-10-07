@@ -235,11 +235,9 @@ Q04SharePowPlaNewEq(allCy,PGALL,YTIME)$(TIME(YTIME)$runCy(allCy)) ..
 Q04CapElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCapElec(allCy,PGALL,YTIME)
           =E=
-    (
       V04CapElec2(allCy,PGALL,YTIME-1) * V04IndxEndogScrap(allCy,PGALL,YTIME-1) +
       V04NewCapElec(allCy,PGALL,YTIME) -
-      i04PlantDecomSched(allCy,PGALL,YTIME) * i04AvailRate(allCy,PGALL,YTIME)
-    ) -
+      i04PlantDecomSched(allCy,PGALL,YTIME) * i04AvailRate(allCy,PGALL,YTIME) -
     (
       (
         VmCapElec(allCy,PGALL,YTIME-1) - 
@@ -368,7 +366,6 @@ Q04CO2CaptRate(allCy,PGALL,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
 Q04CCSRetroFit(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(NOCCS(PGALL)))..
     V04CCSRetroFit(allCy,PGALL,YTIME)
         =E=
-    1 - 
     V04CostVarTech(allCy,PGALL,YTIME) ** (-2) /
     (
       V04CostVarTech(allCy,PGALL,YTIME) ** (-2) +
@@ -376,6 +373,7 @@ Q04CCSRetroFit(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(NOCCS(PGALL)))..
       SUM(PGALL2$CCS_NOCCS(PGALL2,PGALL),
         (
           V04CostCapTech(allCy,PGALL2,YTIME) -
+          i04AvailRate(allCy,PGALL,YTIME) / i04AvailRate(allCy,PGALL2,YTIME) *
           V04CostCapTech(allCy,PGALL,YTIME) +
           V04CostVarTech(allCy,PGALL2,YTIME)
         ) ** (-2)

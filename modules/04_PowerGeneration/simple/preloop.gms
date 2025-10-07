@@ -55,9 +55,9 @@ V04CapElec2.L(runCy,PGALL,YTIME)$AN(YTIME) = imInstCapPastNonCHP(runCy,PGALL,"%f
 V04CapOverall.FX(runCy,PGALL,"%fBaseY%") =  imInstCapPastNonCHP(runCy,PGALL,"%fBaseY%");
 V04CapElecNominal.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = imInstCapPastNonCHP(runCy,PGALL,YTIME) / i04AvailRate(runCy,PGALL,YTIME);
 *---
-V04ShareTechPG.FX(runCy,PGALL,YTIME)$(DATAY(YTIME)) = VmCapElec.L(runCy,PGALL,YTIME) /
-            sum(PGALL2, VmCapElec.L(runCy,PGALL2,YTIME));
-V04ShareSatPG.FX(runCy,PGALL,YTIME-1)$ (not PGREN(PGALL))= 1;
+V04ShareTechPG.FX(runCy,PGALL,YTIME)$(DATAY(YTIME)) = 
+VmCapElec.L(runCy,PGALL,YTIME) / sum(PGALL2, VmCapElec.L(runCy,PGALL2,YTIME));
+V04ShareSatPG.FX(runCy,PGALL,YTIME)$(not PGREN(PGALL)) = 1;
 *---
 V04IndxEndogScrap.FX(runCy,PGALL,YTIME)$(not an(YTIME) ) = 1;
 V04IndxEndogScrap.FX(runCy,PGSCRN,YTIME) = 1;            !! premature replacement it is not allowed for all new plants
