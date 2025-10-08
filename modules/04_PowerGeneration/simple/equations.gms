@@ -237,9 +237,6 @@ Q04CapElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCapElec(allCy,PGALL,YTIME)
           =E=
     V04CapElec2(allCy,PGALL,YTIME-1) * (1 - V04ScrpRate(allCy,PGALL,YTIME-1)) +
-    SUM(PGALL2$CCS_NOCCS(PGALL,PGALL2),
-      (1 - V04CCSRetroFit(allCy,PGALL2,YTIME)) * VmCapElec(allCy,PGALL2,YTIME-1)
-    ) +
     V04NewCapElec(allCy,PGALL,YTIME) -
     i04PlantDecomSched(allCy,PGALL,YTIME) * i04AvailRate(allCy,PGALL,YTIME);
 
@@ -252,7 +249,10 @@ Q04NewCapElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04NewCapElec(allCy,PGALL,YTIME)
         =E=
     V04SharePowPlaNewEq(allCy,PGALL,YTIME) * V04GapGenCapPowerDiff(allCy,YTIME) +
-    i04DecInvPlantSched(allCy,PGALL,YTIME) * i04AvailRate(allCy,PGALL,YTIME);
+    i04DecInvPlantSched(allCy,PGALL,YTIME) * i04AvailRate(allCy,PGALL,YTIME) +
+    SUM(PGALL2$CCS_NOCCS(PGALL,PGALL2),
+      (1 - V04CCSRetroFit(allCy,PGALL2,YTIME)) * VmCapElec(allCy,PGALL2,YTIME-1)
+    );
   
 *' This equation calculates the variable representing the planned electricity generation capacity for a specific power plant  in a given country
 *' and time period. The calculation involves adjusting the actual electricity generation capacity by a small constant and the square
