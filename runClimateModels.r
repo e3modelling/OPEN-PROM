@@ -158,13 +158,19 @@ loadResults <- function(model, emissionsFile, outputDir) {
 
 # ------------------- Plotting ----------------------
 
-visualizeOutput <- function(outputDir,output, defaultOutput = NULL) {
+visualizeOutput <- function(outputDir,output, defaultOutput = NULL, modelName = NULL) {
   cat("Plotting median global surface temperature\n")
 
   var <- grep("\\|Surface Temperature \\(GSAT).*50", getItems(output, dim = 3), value = TRUE)
-  defaultVar <- grep("\\|Surface Temperature \\(GSAT).*50", getItems(defaultOutput, dim = 3), value = TRUE)
   scenario <- getItems(output, dim = "scenario")
-  defaultScenario <- getItems(defaultOutput, dim = "scenario")
+
+  # Apply a filter for only a model if that is requested.
+  keepPattern <- paste(modelName, collapse = "|")
+  keepVariables <- grep(keepPattern, getItems(defaultOutput, dim = 3), value = TRUE)
+  defaultOutputFiltered <- defaultOutput[, , keepVariables]
+  defaultScenario <- getItems(defaultOutputFiltered, dim = "scenario")
+  defaultVar <- grep("\\|Surface Temperature \\(GSAT).*50", getItems(defaultOutputFiltered, dim = 3), value = TRUE)
+
   
   # Validate existence of variable
   if (!var %in% getItems(output, dim = 3)) {
@@ -175,11 +181,11 @@ visualizeOutput <- function(outputDir,output, defaultOutput = NULL) {
   runDf <- as.data.frame(output["World", , var])
   runDf$Source <- scenario
   defaultDfs <- lapply(seq_along(defaultVar), function(i) {
-  df <- as.data.frame(defaultOutput["World", , defaultVar[i]])
+  df <- as.data.frame(defaultOutputFiltered["World", , defaultVar[i]])
   df$Source <- defaultScenario[i]
   return(df)
   })
-
+  
   # Combine all into one for ggplot
   allDfs <- rbind(runDf, do.call(rbind, defaultDfs))
 
@@ -187,6 +193,8 @@ visualizeOutput <- function(outputDir,output, defaultOutput = NULL) {
   names(allDfs)[names(allDfs) == "period"] <- "Year"
   names(allDfs)[names(allDfs) == "Value"] <- "Temperature"
   names(allDfs)[names(allDfs) == "Data2"] <- "Scenario"
+  names(allDfs)[names(allDfs) == "Data1"] <- "Model"
+
 
   # Clean up year (since it's in yXXXX format)
   allDfs$Year <- as.numeric(gsub("y", "", allDfs$Year))
@@ -222,8 +230,8 @@ opt <- parse_args(OptionParser(option_list = optionList))
 # Apply defaults if model or run-folder missing
 if (is.null(opt$model) || is.null(opt$`run-folder`)) {
   cat("No --model or --runFolder provided. Using defaults: model = 'ciceroscm', runFolder = 'daily_npi'\n")
-  model <- "ciceroscm"
-  runFolder <- "daily_npi"
+  model <- "magicc"
+  runFolder <- "Hydrogen_Cleanup_1p5C_updated_carbon_values_2025-10-06_17-23-21"
 } else {
   model <- opt$model
   runFolder <- opt$runFolder
@@ -248,4 +256,4 @@ if (!dir.exists(output)) {
 runAssessment(model, emissions, output)
 
 results <- loadResults(model, emissions, output)
-visualizeOutput(output,results$output, results$expected)
+visualizeOutput(output,results$output, results$expected, "REMIND-MAgPIE 3_2-4_6")

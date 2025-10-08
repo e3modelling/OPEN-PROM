@@ -12,9 +12,10 @@
 
 # Dependencies: data.table, dplyr, tidyr, gdx, postprom and a working GAMS installation accessible via the gams command.
 # Typical workflow: 
-# 1) set budgetTarget, 
+# 1) set budgetTarget - The budget target must take into account the emissions from the start of OPEN-PROM run, 
+#                       e.g., budget=EmissIPCC(2020-2100)+Emiss(2010-2020 of OPEN-PROM)
 # 2) ensure data/iEnvPolicies.csv and main.gms are present, 
-# 3) then run the script — it will probe the model, bracket a root, bisect to tolerance, and save the final scaled policy file.
+# 3) then run the script — it will probe the model, bracket a root, bisect to tolerance, and save the final scaled carbon prices file.
 
 suppressPackageStartupMessages({
   library(data.table)
@@ -56,8 +57,12 @@ readEnvPolicies <- function(csvPath = inputCsvPath) {
 
 applyAlpha <- function(envWide, yearCols, alpha) {
   x <- data.table::copy(envWide)
-  x[, (yearCols) := lapply(.SD, function(col) col * alpha), .SDcols = yearCols]
+  # Identify only year columns >= 2025
+  yearColsFuture <- yearCols[as.integer(yearCols) >= 2025]
+  # Apply scaling only to those columns
+  x[, (yearColsFuture) := lapply(.SD, function(col) col * alpha), .SDcols = yearColsFuture]
   x
+
 }
 
 writeFinalPolicyFiles <- function(envWide, yearCols, alphaFinal,
@@ -129,7 +134,7 @@ emissionsOPENPROM <- function(envWide, yearCols, alpha,
   getItems(addRegionGLO, 1) <- "World"
   emissionsWorld <- mbind(emissions, addRegionGLO)
 
-  as.numeric(emissionsWorld["World", 2050, "Emissions|CO2|Cumulated.Gt CO2"])
+  as.numeric(emissionsWorld["World", 2100, "Emissions|CO2|Cumulated.Gt CO2"])
 }
 
 # ----------------------------
@@ -231,18 +236,18 @@ findAlphaForBudget <- function(envWide, yearCols, budgetTarget,
 # ----------------------------
 start_time <- Sys.time()
 
-budgetTarget <- 950  # Gt CO2
+budgetTarget <- 1521  # Gt CO2
 envData <- readEnvPolicies(inputCsvPath)
 
 # ---- Option A (Seed from two points) ----
-alpha0 <- 1.00; E0 <- 1077.4702
-alphar <- 5.00; Er <- 860.540352
+# alpha0 <- 1.00; E0 <- 641.8802
+# alphar <- 5.00; Er <- 
 
 # alphaSeedLinear interpolates the alpha from two points
-seedAlpha <- alphaSeedLinear(alpha0, E0, alphar, Er, Etarget = budgetTarget)
+# seedAlpha <- alphaSeedLinear(alpha0, E0, alphar, Er, Etarget = budgetTarget)
 
 # ---- Option B (fallback if you don't have reported points) - Alter manually ----
-seedAlpha <- 2.8
+seedAlpha <- 0.5
 
 # Auto-bracket around the seed (runs a few probe simulations)
 brkt <- autoBracketFromSeed(
@@ -250,8 +255,8 @@ brkt <- autoBracketFromSeed(
   budgetTarget = budgetTarget,
   envWide      = envData$envWide,
   yearCols     = envData$yearCols,
-  minAlpha     = 1.0,
-  maxAlpha     = 5.0,
+  minAlpha     = 0.1,
+  maxAlpha     = 1.0,
   expandFactor = 1.35,
   maxProbes    = 12,
   verbose      = TRUE
