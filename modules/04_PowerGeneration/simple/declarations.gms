@@ -25,7 +25,6 @@ Q04CapOverall(allCy,PGALL,YTIME)	                       "Compute overall capacit
 *q04CostPowGenLongIntPri(allCy,PGALL,ESET,YTIME)           "Compute long term power generation cost of technologies including international Prices of main fuels"
 *q04CostPowGenShortIntPri(allCy,PGALL,ESET,YTIME)          "Compute short term power generation cost of technologies including international Prices of main fuels"
 *q04CostPowGenAvgShrt(allCy,ESET,YTIME)	                   "Compute short term power generation cost"
-Q04ConsElec(allCy,DSBS,YTIME)                              "Compute electricity consumption per final demand sector"
 Q04LoadFacDom(allCy,YTIME)                                 "Compute electricity load factor for entire domestic system"	
 $ifthen.calib %Calibration% == off
 Q04DemElecTot(allCy,YTIME)                                 "Compute total electricity demand (TWh)"
@@ -38,6 +37,7 @@ Q04CapexRESRate(allCy,PGALL,YTIME)                         "Estimates a multiply
 Q04CO2CaptRate(allCy,PGALL,YTIME)
 Q04CostCapTech(allCy,PGALL,YTIME)
 Q04CCSRetroFit(allCy,PGALL,YTIME)
+Q04ScrpRate(allCy,PGALL,YTIME)
 *'                **Interdependent Equations**
 Q04ProdElec(allCy,PGALL,YTIME)                             "Compute electricity production from power generation plants"
 Q04CostPowGenAvgLng(allCy,YTIME)	                   "Compute long term power generation cost"
@@ -73,7 +73,6 @@ V04CapOverall(allCy,PGALL,YTIME)	                       "Overall Capacity (MW)"
 *v04CostPowGenLongIntPri(allCy,PGALL,ESET,YTIME)           "Long term power generation cost of technologies including international prices of main fuels (kUS$2015/toe)"
 *v04CostPowGenShortIntPri(allCy,PGALL,ESET,YTIME)          "Short term power generation cost of technologies including international Prices of main fuels (kUS$2015/toe)"
 *v04CostPowGenAvgShrt(allCy,ESET,YTIME)                    "Short-term average power generation cost (US$2015/kWh)"
-V04ConsElec(allCy,DSBS,YTIME)                              "Electricity demand per final sector (Mtoe)"
 V04LoadFacDom(allCy,YTIME)                                 "Electricity load factor for entire domestic system"	
 V04DemElecTot(allCy,YTIME)                                 "Total electricity demand (TWh)"
 V04ProdElecEstCHP(allCy,CHP,YTIME)	                       "Estimate the electricity of CHP Plants (1)"	
@@ -83,6 +82,7 @@ V04CapexRESRate(allCy,PGALL,YTIME)                         "Multiplying factor e
 V04CO2CaptRate(allCy,PGALL,YTIME)
 V04CostCapTech(allCy,PGALL,YTIME)
 V04CCSRetroFit(allCy,PGALL,YTIME)
+V04ScrpRate(allCy,PGALL,YTIME)
 *'                **Interdependent Variables**	
 VmProdElec(allCy,PGALL,YTIME)                              "Electricity production (TWh)"	
 VmCostPowGenAvgLng(allCy,YTIME)	                   "Long-term average power generation cost (US$2015/kWh)"

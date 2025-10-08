@@ -46,8 +46,6 @@ V04CapElecNonCHP.FX(runCy,YTIME)$(not An(YTIME)) = sum(PGALL,imInstCapPastNonCHP
 V04CapElecCHP.FX(runCy,CHP,YTIME)$(not An(YTIME)) = imInstCapPastCHP(runCy,CHP,YTIME);
 *V04CapElecCHP.FX(runCy,CHP,YTIME)$(An(YTIME)) = imInstCapPastCHP(runCy,CHP,"%fBaseY%");
 *---
-V04SharePowPlaNewEq.FX(runCy,PGALL,YTIME)$(NOT AN(YTIME)) = 0;
-*---
 VmCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  imInstCapPastNonCHP(runCy,PGALL,YTIME);
 VmCapElec.L(runCy,PGALL,YTIME)$AN(YTIME) = imInstCapPastNonCHP(runCy,PGALL,"%fStartY%");
 V04CapElec2.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = imInstCapPastNonCHP(runCy,PGALL,YTIME);
@@ -86,8 +84,8 @@ VmProdElec.FX(runCy,pgall,YTIME)$DATAY(YTIME) = i04DataElecProdNonCHP(runCy,pgal
 *---
 V04ProdElecEstCHP.FX(runCy,CHP,YTIME)$DATAY(YTIME) = i04DataElecProdCHP(runCy,CHP,YTIME)/1000;
 *---
-V04ConsElec.L(runCy,DSBS,YTIME)=0.1;
-V04ConsElec.FX(runCy,DSBS,YTIME)$(not AN(YTIME)) = 0.1;
-*---
 V04ShareMixWndSol.L(runCy,YTIME)$(DATAY(YTIME)) = sum(PGALL$(PGRENSW(PGALL)), VmCapElec.L(runCy,PGALL,YTIME)) / sum(PGALL2, VmCapElec.L(runCy,PGALL2,YTIME));
 *---
+V04CCSRetroFit.FX(runCy,PGALL,YTIME)$(not AN(YTIME) or not NOCCS(PGALL)) = 1;
+*---
+V04ScrpRate.UP(runCy,PGALL,YTIME) = 1;

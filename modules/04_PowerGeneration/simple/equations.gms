@@ -164,22 +164,23 @@ Q04GapGenCapPowerDiff(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     (
       (
         V04CapElecNonCHP(allCy,YTIME) - V04CapElecNonCHP(allCy,YTIME-1) +
-        sum(PGALL, V04CapElec2(allCy,PGALL,YTIME-1) * (1 - V04IndxEndogScrap(allCy,PGALL,YTIME))) +
-        sum(PGALL, (i04PlantDecomSched(allCy,PGALL,YTIME) - i04DecInvPlantSched(allCy,PGALL,YTIME)) * i04AvailRate(allCy,PGALL,YTIME)) + 
-        sum(PGALL$PGSCRN(PGALL),
-          (VmCapElec(allCy,PGALL,YTIME-1) - i04PlantDecomSched(allCy,PGALL,YTIME) * i04AvailRate(allCy,PGALL,YTIME)) /
-          i04TechLftPlaType(allCy,PGALL))
-      ) + 0 +
+        sum(PGALL, 
+          V04CapElec2(allCy,PGALL,YTIME-1) * V04ScrpRate(allCy,PGALL,YTIME) -
+          VmCapElec(allCy,PGALL,YTIME-1) * (1 - V04CCSRetroFit(allCy,PGALL,YTIME)) +
+          (i04PlantDecomSched(allCy,PGALL,YTIME) - i04DecInvPlantSched(allCy,PGALL,YTIME)) * i04AvailRate(allCy,PGALL,YTIME)
+        ) 
+      ) +
       SQRT(SQR(
       (
         V04CapElecNonCHP(allCy,YTIME) - V04CapElecNonCHP(allCy,YTIME-1) +
-        sum(PGALL,V04CapElec2(allCy,PGALL,YTIME-1) * (1 - V04IndxEndogScrap(allCy,PGALL,YTIME))) +
-        sum(PGALL, (i04PlantDecomSched(allCy,PGALL,YTIME) - i04DecInvPlantSched(allCy,PGALL,YTIME)) * i04AvailRate(allCy,PGALL,YTIME)) +
-        sum(PGALL$PGSCRN(PGALL), 
-          (VmCapElec(allCy,PGALL,YTIME-1) - i04PlantDecomSched(allCy,PGALL,YTIME) * i04AvailRate(allCy,PGALL,YTIME)) /
-          i04TechLftPlaType(allCy,PGALL))
-      ) -0) + SQR(1e-10) ) 
-    )/2;
+        sum(PGALL,
+          V04CapElec2(allCy,PGALL,YTIME-1) * V04ScrpRate(allCy,PGALL,YTIME) -
+          VmCapElec(allCy,PGALL,YTIME-1) * (1 - V04CCSRetroFit(allCy,PGALL,YTIME)) +
+          (i04PlantDecomSched(allCy,PGALL,YTIME) - i04DecInvPlantSched(allCy,PGALL,YTIME)) * i04AvailRate(allCy,PGALL,YTIME)
+        )
+      ))
+      ) 
+    )/2 + 1e-6;
 
 *' Share of all technologies in the electricity mixture.
 Q04ShareTechPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
@@ -235,15 +236,12 @@ Q04SharePowPlaNewEq(allCy,PGALL,YTIME)$(TIME(YTIME)$runCy(allCy)) ..
 Q04CapElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCapElec(allCy,PGALL,YTIME)
           =E=
-      V04CapElec2(allCy,PGALL,YTIME-1) * V04IndxEndogScrap(allCy,PGALL,YTIME-1) +
-      V04NewCapElec(allCy,PGALL,YTIME) -
-      i04PlantDecomSched(allCy,PGALL,YTIME) * i04AvailRate(allCy,PGALL,YTIME) -
-    (
-      (
-        VmCapElec(allCy,PGALL,YTIME-1) - 
-        i04PlantDecomSched(allCy,PGALL,YTIME-1) * i04AvailRate(allCy,PGALL,YTIME)
-      ) * (1/i04TechLftPlaType(allCy,PGALL))
-    )$PGSCRN(PGALL);
+    V04CapElec2(allCy,PGALL,YTIME-1) * (1 - V04ScrpRate(allCy,PGALL,YTIME-1)) +
+    SUM(PGALL2$CCS_NOCCS(PGALL,PGALL2),
+      (1 - V04CCSRetroFit(allCy,PGALL2,YTIME)) * VmCapElec(allCy,PGALL2,YTIME-1)
+    ) +
+    V04NewCapElec(allCy,PGALL,YTIME) -
+    i04PlantDecomSched(allCy,PGALL,YTIME) * i04AvailRate(allCy,PGALL,YTIME);
 
 Q04CapElecNominal(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04CapElecNominal(allCy,PGALL,YTIME)
@@ -333,15 +331,6 @@ Q04CostPowGenAvgLng(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     ) / 
     (V04DemElecTot(allCy,YTIME) - sum(CHP,V04ProdElecEstCHP(allCy,CHP,YTIME))); 
 
-*' This equation establishes a common variable (with arguments) for the electricity consumption per demand subsector of INDUSTRY, [DOMESTIC/TERTIARY/RESIDENTIAL] and TRANSPORT.
-*' The electricity consumption of the demand subsectors of INDUSTRY & [DOMESTIC/TERTIARY/RESIDENTIAL] is provided by the consumption of Electricity as a Fuel.
-*' The electricity consumption of the demand subsectors of TRANSPORT is provided by the Demand of Transport for Electricity as a Fuel.
-Q04ConsElec(allCy,DSBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V04ConsElec(allCy,DSBS,YTIME)
-        =E=
-    sum(INDDOM $SAMEAS(INDDOM,DSBS), VmConsFuel(allCy,INDDOM,"ELC",YTIME)) + 
-    sum(TRANSE $SAMEAS(TRANSE,DSBS), VmDemFinEneTranspPerFuel(allCy,TRANSE,"ELC",YTIME));
-
 *' This equation estimates the factor increasing the CAPEX of new RES (unflexible) capacity installation due to simultaneous need for grind upgrade and storage, 
 *' for each region (country) and year. This factor depends on the existing RES (unflexible) penetration in the electriciy mixture.
 Q04CapexRESRate(allCy,PGALL,YTIME)$(TIME(YTIME) and runCy(allCy))..
@@ -369,7 +358,7 @@ Q04CCSRetroFit(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(NOCCS(PGALL)))..
     V04CostVarTech(allCy,PGALL,YTIME) ** (-2) /
     (
       V04CostVarTech(allCy,PGALL,YTIME) ** (-2) +
-      0.02 *
+      0.01 *
       SUM(PGALL2$CCS_NOCCS(PGALL2,PGALL),
         (
           V04CostCapTech(allCy,PGALL2,YTIME) -
@@ -379,3 +368,10 @@ Q04CCSRetroFit(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(NOCCS(PGALL)))..
         ) ** (-2)
       )
     );
+
+Q04ScrpRate(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V04ScrpRate(allCy,PGALL,YTIME)
+        =E=
+    1 / i04TechLftPlaType(allCy,PGALL) +
+    1 - V04IndxEndogScrap(allCy,PGALL,YTIME) +
+    (1 - V04CCSRetroFit(allCy,PGALL,YTIME))$NOCCS(PGALL);
