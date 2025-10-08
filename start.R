@@ -197,14 +197,7 @@ if (task == 0) {
   if (withRunFolder) createRunFolder(setScenarioName("DEV"))
 
   shell(paste0(gams, " main.gms --DevMode=1 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log"))
-  if (withRunFolder && withReport) {
-    run_path <- getwd()
-    setwd("../../") # Going back to root folder
-    cat("Executing the report output script\n")
-    report_cmd <- paste0("RScript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
-    shell(report_cmd)
-    setwd(run_path)
-  }
+
   if (withRunFolder && withSync) syncRun()
 } else if (task == 1) {
   # Running task OPEN-PROM DEV NEW DATA
