@@ -787,11 +787,10 @@ imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 50 and TRANSE(DSBS)) = 15;
 imMatrFactor("CHA",DSBS,"TELC",YTIME)$(ord(YTIME) > 11 and INDSE(DSBS)) = 2;
 imMatrFactor(runCy,DSBS,"TH2F",YTIME)$(ord(YTIME) < 21 and INDSE(DSBS)) = 0;
 imMatrFactor(runCy,DSBS,"TH2F",YTIME)$(ord(YTIME) > 21 and INDSE(DSBS)) = 2;
-imMatrFactor(runCy,DSBS,"TH2F",YTIME)$(ord(YTIME) > 40 and INDSE(DSBS)) = 6;
+imMatrFactor(runCy,DSBS,"TH2F",YTIME)$(ord(YTIME) > 40 and INDSE(DSBS)) = 2;
 $ELSE.calib
 variable imMatrFactor(allCy,DSBS,TECH,YTIME)    "Maturity factor per technology and subsector for all countries (1)";
 imMatrFactor.L(runCy,DSBS,TECH,YTIME) = iMatrFactorData(DSBS,TECH,YTIME) + 1e-6;                                          
-imMatrFactor.L(runCy,DSBS,EF,YTIME)$(imMatrFactor.L(runCy,DSBS,TECH,YTIME)=0) = 0.000001;
 imMatrFactor.LO(runCy,DSBS,EF,YTIME) = -10;                                          
 imMatrFactor.UP(runCy,DSBS,EF,YTIME) = 100;
 $ENDIF.calib

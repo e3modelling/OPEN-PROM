@@ -55,7 +55,7 @@ V04CapElecNominal.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = imInstCapPastNonCHP(runCy
 *---
 V04ShareTechPG.FX(runCy,PGALL,YTIME)$(DATAY(YTIME)) = 
 VmCapElec.L(runCy,PGALL,YTIME) / sum(PGALL2, VmCapElec.L(runCy,PGALL2,YTIME));
-V04ShareSatPG.FX(runCy,PGALL,YTIME)$(not PGREN(PGALL)) = 1;
+V04ShareSatPG.FX(runCy,PGALL,YTIME)$(not PGREN(PGALL) or not AN(YTIME)) = 1;
 *---
 V04IndxEndogScrap.FX(runCy,PGALL,YTIME)$(not an(YTIME) ) = 1;
 V04IndxEndogScrap.FX(runCy,PGSCRN,YTIME) = 1;            !! premature replacement it is not allowed for all new plants
@@ -80,9 +80,10 @@ $endif.calib
 VmPeakLoad.L(runCy,YTIME) = 1;
 VmPeakLoad.FX(runCy,YTIME)$(datay(YTIME)) = V04DemElecTot.L(runCy,YTIME)/(V04LoadFacDom.L(runCy,YTIME)*8.76);
 *---
-VmProdElec.FX(runCy,pgall,YTIME)$DATAY(YTIME) = i04DataElecProdNonCHP(runCy,pgall,YTIME)/1000;
+VmProdElec.L(runCy,pgall,YTIME) = 0.1;
+VmProdElec.FX(runCy,pgall,YTIME)$DATAY(YTIME) = i04DataElecProdNonCHP(runCy,pgall,YTIME) / 1000;
 *---
-V04ProdElecEstCHP.FX(runCy,CHP,YTIME)$DATAY(YTIME) = i04DataElecProdCHP(runCy,CHP,YTIME)/1000;
+V04ProdElecEstCHP.FX(runCy,CHP,YTIME)$DATAY(YTIME) = i04DataElecProdCHP(runCy,CHP,YTIME) / 1000;
 *---
 V04ShareMixWndSol.L(runCy,YTIME)$(DATAY(YTIME)) = sum(PGALL$(PGRENSW(PGALL)), VmCapElec.L(runCy,PGALL,YTIME)) / sum(PGALL2, VmCapElec.L(runCy,PGALL2,YTIME));
 *---

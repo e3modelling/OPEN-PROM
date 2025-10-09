@@ -15,23 +15,17 @@
 *' electricity demand. The equation essentially estimates the electricity generation of CHP plants by considering their fuel consumption, electricity prices, and the maximum
 *' share of CHP electricity in total demand. The square root expression ensures that the estimated electricity generation remains non-negative.
 Q04ProdElecEstCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-        V04ProdElecEstCHP(allCy,CHP,YTIME) 
-            =E=
-      (
-        (
-          (
-            1/smTWhToMtoe * 
-            sum(INDDOM, VmConsFuel(allCy,INDDOM,CHP,YTIME)) *
-            VmPriceElecInd(allCy,YTIME)
-          ) + 
-          i04MxmShareChpElec(allCy,YTIME) * V04DemElecTot(allCy,YTIME) - 
-          
-          SQRT( SQR((1/smTWhToMtoe * sum((INDDOM), VmConsFuel(allCy,INDDOM,CHP,YTIME)) * 
-          VmPriceElecInd(allCy,YTIME)) - 
-          i04MxmShareChpElec(allCy,YTIME)*V04DemElecTot(allCy,YTIME)) )  
-        )/2 +
-        SQR(1E-4)
-      );
+    V04ProdElecEstCHP(allCy,CHP,YTIME) 
+        =E=
+    (
+      1/smTWhToMtoe *
+      sum(INDDOM,VmConsFuel(allCy,INDDOM,CHP,YTIME)) * VmPriceElecInd(allCy,CHP,YTIME) + 
+      i04MxmShareChpElec(allCy,YTIME) * V04DemElecTot(allCy,YTIME) - 
+
+      SQRT( SQR((1/smTWhToMtoe * sum((INDDOM), VmConsFuel(allCy,INDDOM,CHP,YTIME)) * 
+      VmPriceElecInd(allCy,CHP,YTIME)) - 
+      i04MxmShareChpElec(allCy,YTIME) * V04DemElecTot(allCy,YTIME)))  
+    )/2 + SQR(1E-4);
 
 *' This equation computes the electric capacity of Combined Heat and Power (CHP) plants. The capacity is calculated in gigawatts (GW) and is based on several factors,
 *' including the consumption of fuel in the industrial sector, the electricity prices in the industrial sector, the availability rate of power
@@ -47,12 +41,12 @@ $ifthen.calib %Calibration% == off
 *' which converts terawatt-hours (TWh) to million tonnes of oil equivalent (Mtoe). The formula provides a comprehensive measure of the factors contributing
 *' to the total electricity demand.
 Q04DemElecTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V04DemElecTot(allCy,YTIME)
-             =E=
-         1/smTWhToMtoe *
-         ( VmConsFinEneCountry(allCy,"ELC",YTIME) + VmConsFinNonEne(allCy,"ELC",YTIME) + VmLossesDistr(allCy,"ELC",YTIME)
-           + VmConsFiEneSec(allCy,"ELC",YTIME) - VmImpNetEneBrnch(allCy,"ELC",YTIME)
-         );
+    V04DemElecTot(allCy,YTIME)
+        =E=
+    1/smTWhToMtoe *
+    ( VmConsFinEneCountry(allCy,"ELC",YTIME) + VmConsFinNonEne(allCy,"ELC",YTIME) + VmLossesDistr(allCy,"ELC",YTIME)
+      + VmConsFiEneSec(allCy,"ELC",YTIME) - VmImpNetEneBrnch(allCy,"ELC",YTIME)
+    );
 $endif.calib
 
 *' This equation calculates the load factor of the entire domestic system as a sum of consumption in each demand subsector
@@ -182,19 +176,6 @@ Q04GapGenCapPowerDiff(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       ) 
     )/2 + 1e-6;
 
-*' Share of all technologies in the electricity mixture.
-Q04ShareTechPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V04ShareTechPG(allCy,PGALL,YTIME)
-        =E=
-    VmCapElec(allCy,PGALL,YTIME) /
-    sum(PGALL2, VmCapElec(allCy,PGALL2,YTIME));
-
-*'Sigmoid function used as a saturation mechanism for electricity mixture penetration of RES technologies.
-Q04ShareSatPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(PGREN(PGALL)))..
-    V04ShareSatPG(allCy,PGALL,YTIME)
-        =E=
-    2 / (1+exp(9*V04ShareTechPG(allCy,PGALL,YTIME-1)));
-
 *' Calculates the share of all the unflexible RES penetration into the mixture, and specifically how much above a given threshold it is.
 Q04ShareMixWndSol(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04ShareMixWndSol(allCy,YTIME)
@@ -222,11 +203,11 @@ Q04SharePowPlaNewEq(allCy,PGALL,YTIME)$(TIME(YTIME)$runCy(allCy)) ..
     V04SharePowPlaNewEq(allCy,PGALL,YTIME)
         =E=
     i04MatFacPlaAvailCap(allCy,PGALL,YTIME) *
-    V04ShareSatPG(allCy,PGALL,YTIME) *
+    V04ShareSatPG(allCy,PGALL,YTIME-1) *
     V04CostHourProdInvDec(allCy,PGALL,YTIME-1) ** (-2) /
     SUM(PGALL2,
       i04MatFacPlaAvailCap(allCy,PGALL2,YTIME) *
-      V04ShareSatPG(allCy,PGALL2,YTIME) *
+      V04ShareSatPG(allCy,PGALL2,YTIME-1) *
       V04CostHourProdInvDec(allCy,PGALL2,YTIME-1) ** (-2)
     );
 
@@ -236,7 +217,7 @@ Q04SharePowPlaNewEq(allCy,PGALL,YTIME)$(TIME(YTIME)$runCy(allCy)) ..
 Q04CapElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCapElec(allCy,PGALL,YTIME)
           =E=
-    V04CapElec2(allCy,PGALL,YTIME-1) * (1 - V04ScrpRate(allCy,PGALL,YTIME-1)) +
+    V04CapElec2(allCy,PGALL,YTIME-1) * (1 - V04ScrpRate(allCy,PGALL,YTIME)) +
     V04NewCapElec(allCy,PGALL,YTIME) -
     i04PlantDecomSched(allCy,PGALL,YTIME) * i04AvailRate(allCy,PGALL,YTIME);
 
@@ -318,6 +299,19 @@ Q04ProdElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         =E=
     (V04DemElecTot(allCy,YTIME) - sum(CHP, V04ProdElecEstCHP(allCy,CHP,YTIME))) /
     sum(PGALL2, V04CapElec2(allCy,PGALL2,YTIME)) * V04CapElec2(allCy,PGALL,YTIME);
+
+*' Share of all technologies in the electricity mixture.
+Q04ShareTechPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V04ShareTechPG(allCy,PGALL,YTIME)
+        =E=
+    VmCapElec(allCy,PGALL,YTIME) /
+    sum(PGALL2, VmCapElec(allCy,PGALL2,YTIME));
+
+*'Sigmoid function used as a saturation mechanism for electricity mixture penetration of RES technologies.
+Q04ShareSatPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(PGREN(PGALL)))..
+    V04ShareSatPG(allCy,PGALL,YTIME)
+        =E=
+    2 / (1+exp(9*V04ShareTechPG(allCy,PGALL,YTIME)));
 
 *' This equation computes the long-term average power generation cost. It involves summing the long-term average power generation costs for different power generation
 *' plants and energy forms, considering the specific characteristics and costs associated with each. The result is the average power generation cost per unit of

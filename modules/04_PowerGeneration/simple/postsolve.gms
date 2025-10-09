@@ -20,6 +20,8 @@ V04CapexFixCostPG.FX(runCy,PGALL,YTIME)$TIME(YTIME) = V04CapexFixCostPG.L(runCy,
 V04ShareMixWndSol.FX(runCy,YTIME)$TIME(YTIME) = V04ShareMixWndSol.L(runCy,YTIME)$TIME(YTIME);
 V04CapexRESRate.FX(runCy,PGALL,YTIME)$TIME(YTIME) = V04CapexRESRate.L(runCy,PGALL,YTIME)$TIME(YTIME);
 V04ShareTechPG.FX(runCy,PGALL,YTIME)$TIME(YTIME) = V04ShareTechPG.L(runCy,PGALL,YTIME)$TIME(YTIME);
+V04ShareSatPG.FX(runCy,PGALL,YTIME)$TIME(YTIME) = V04ShareSatPG.L(runCy,PGALL,YTIME)$TIME(YTIME);
+V04CostHourProdInvDec.FX(runCy,PGALL,YTIME)$TIME(YTIME) = V04CostHourProdInvDec.L(runCy,PGALL,YTIME)$TIME(YTIME);
 
 $ifthen.calib %Calibration% == MatCalibration
 i04MatFacPlaAvailCap.FX(runCy,PGALL,YTIME)$TIME(YTIME) = i04MatFacPlaAvailCap.L(runCy,PGALL,YTIME)$TIME(YTIME);

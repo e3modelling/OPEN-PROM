@@ -28,8 +28,8 @@ Q04CapOverall(allCy,PGALL,YTIME)	                       "Compute overall capacit
 Q04LoadFacDom(allCy,YTIME)                                 "Compute electricity load factor for entire domestic system"	
 $ifthen.calib %Calibration% == off
 Q04DemElecTot(allCy,YTIME)                                 "Compute total electricity demand (TWh)"
-Q04CapElecCHP(allCy,CHP,YTIME)                             "Compute CHP electric capacity"	
 $endif.calib
+Q04CapElecCHP(allCy,CHP,YTIME)                             "Compute CHP electric capacity"	
 Q04ProdElecEstCHP(allCy,CHP,YTIME)	                       "Estimate the electricity of CHP Plants"	
 Q04CapexFixCostPG(allCy,PGALL,YTIME)                       "Computes the capex and fixed costs of any power generation technology"
 Q04ShareMixWndSol(allCy,YTIME)                             "Computes the participation of solar and wind in the energy mixture (%)"
