@@ -108,7 +108,7 @@ Q04CostHourProdInvDec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     sum(PGEF$PGALLtoEF(PGALL,PGEF), 
       (VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME-1) +
       V04CO2CaptRate(allCy,PGALL,YTIME-1) * VmCstCO2SeqCsts(allCy,YTIME-1) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME-1) + 4.17$(sameas("BMSWAS", PGEF))) +
-      (1-V04CO2CaptRate(allCy,PGALL,YTIME-1)) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME-1) + 4.17$(sameas("BMSWAS", PGEF)))*
+      (1-V04CO2CaptRate(allCy,PGALL,YTIME-1)) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME-1))*
       (sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME-1)))
       ) * smTWhToMtoe / imPlantEffByType(allCy,PGALL,YTIME-1)
     )$(not PGREN(PGALL));
