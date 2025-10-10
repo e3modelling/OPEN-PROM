@@ -35,7 +35,7 @@ $offdelim
 *---
 table t04SharePowPlaNewEq(allCy,PGALL,YTIME)    "Ratio of newly added capacity smoothed over 10-year period ()"
 $ondelim
-$include "../targets/tShares.csv"
+$include "../targets/tShares_ProdElec.csv"
 $offdelim
 ;
 $endif.calib
@@ -222,3 +222,4 @@ i04PlantDecomSched(runCy,PGALL,YTIME) = i04DecomPlants(runCy,PGALL,YTIME);
 *---
 i04MxmShareChpElec(runCy,YTIME) = 0.1;
 *---
+*i04MatFacPlaAvailCap(runCy,"ATHBMSWAS",YTIME) = 0.8;

@@ -25,18 +25,17 @@ $ondelim
 $include"./iWBLShareH2Prod.csv"
 $offdelim
 ;
-*i05H2Production(ECONCHARHY,"bgfl",YTIME) = i05H2Production(ECONCHARHY,"bgfls",YTIME);
 *---
 Parameters
 i05WBLGammaH2Prod(allCy,YTIME)              "Parameter for acceptance in new investments used in weibull function in production shares"
 i05ProdLftH2(H2TECH,YTIME)                  "Lifetime of hydrogen production technologies in years"
-i05CaptRateH2Prod(allCy,H2TECH,YTIME)       "CO2 capture rate of hydrogen production technologies (for those which are equipped with CCS facility)"
+i05CaptRateH2Prod(H2TECH)                   "CO2 capture rate of hydrogen production technologies (for those which are equipped with CCS facility)"
 i05H2Adopt(allCy,ARELAST,YTIME)             "Parameters controlling the speed and the year of taking off the transition to hydrogen economy"
 i05TranspLftH2(INFRTECH,YTIME)              "Technical lifetime of infrastructure technologies"
-i05CostCapH2Prod(allCy,H2TECH,YTIME)        "Capital cost of hydrogen production technologies in Euro per Nm3 of hydrogen"
-i05CostFOMH2Prod(allCy,H2TECH,YTIME)        "Fixed operating and maintenance costs of hydrogen production technologies in Euro per Nm3 of hydrogen"
-i05CostVOMH2Prod(allCy,H2TECH,YTIME)        "Variable operating and maintenance costs of hydrogen production technologies in Euro per toe of hydrogen"
-i05AvailH2Prod(H2TECH,YTIME)                "Availability of hydrogen production technologies"
+i05CostCapH2Prod(allCy,H2TECH,YTIME)        "Capital cost of hydrogen production technologies in US$2015 per kW output H2"
+i05CostFOMH2Prod(allCy,H2TECH,YTIME)        "Fixed operating and maintenance costs of hydrogen production technologies in US$2015 per kW output H2"
+i05CostVOMH2Prod(allCy,H2TECH,YTIME)        "Variable operating and maintenance costs of hydrogen production technologies in US$2015 per kW output H2"
+i05AvailH2Prod(allCy,H2TECH,YTIME)          "Availability of hydrogen production technologies"
 i05EffH2Prod(allCy,H2TECH,YTIME)            "Efficiency of hydrogen production technologies"
 i05CostInvH2Transp(allCy,INFRTECH,YTIME)    "Investment cost of infrastructure technology"
                                                    !! - Turnpike pipeline in Euro per km
@@ -56,6 +55,7 @@ i05HabAreaCountry(allCy)                    "Inhabitable land in a country"
 i05EffNetH2Transp(allCy,INFRTECH,YTIME)     "Total efficiency of the distribution network until the <infrtech> node"
 i05CostAvgWeight(allCy,YTIME)               "Weight for pricing in average cost or in marginal cost"
 iWBLShareH2Prod(allCy,H2TECH,YTIME)         "Maturity factors for H2 technologies"
+iWBLPremRepH2Prod(allCy,H2TECH,YTIME)       "Maturity factors for premature replacement of H2 technologies"
 ;
 *---
 iWBLShareH2Prod(runCy,H2TECH,YTIME) = iTechShareH2Prod(H2TECH,YTIME);
@@ -63,8 +63,13 @@ iWBLShareH2Prod(runCy,H2TECH,YTIME) = iTechShareH2Prod(H2TECH,YTIME);
 i05WBLGammaH2Prod(runCy,YTIME) = 1;
 *---
 i05ProdLftH2(H2TECH,YTIME) = i05H2Production("LFT",H2TECH,YTIME);
+i05ProdLftH2("wes",YTIME)  = i05H2Production("LFT","weg",YTIME);
+i05ProdLftH2("wew",YTIME)  = i05H2Production("LFT","weg",YTIME);
 *---
-i05CaptRateH2Prod(runCy,H2TECH,YTIME) = i05H2Production("CR",H2TECH,YTIME);
+i05CaptRateH2Prod(H2TECH) = i05H2Production("CR",H2TECH,"%fBaseY%");
+i05CaptRateH2Prod("wes")  = i05CaptRateH2Prod("weg");
+i05CaptRateH2Prod("wew")  = i05CaptRateH2Prod("weg");
+i05CaptRateH2Prod(H2TECH)$(not H2CCS(H2TECH)) = 0;
 *---
 i05H2Adopt(runCy,"b",YTIME)   = i05H2Parameters(runCy,"B");
 i05H2Adopt(runCy,"mid",YTIME) = i05H2Parameters(runCy,"mid");
@@ -72,14 +77,24 @@ i05H2Adopt(runCy,"mid",YTIME) = i05H2Parameters(runCy,"mid");
 i05TranspLftH2(INFRTECH,YTIME) = i05H2InfrCapCosts("LFT",INFRTECH,YTIME);
 *---
 i05CostCapH2Prod(runCy,H2TECH,YTIME) = i05H2Production("IC",H2TECH,YTIME);
+i05CostCapH2Prod(runCy,"wes",YTIME)  = i05H2Production("IC","weg",YTIME);
+i05CostCapH2Prod(runCy,"wew",YTIME)  = i05H2Production("IC","weg",YTIME);
 *---
 i05CostFOMH2Prod(runCy,H2TECH,YTIME) = i05H2Production("FC",H2TECH,YTIME);
+i05CostFOMH2Prod(runCy,"wes",YTIME)  = i05H2Production("FC","weg",YTIME);
+i05CostFOMH2Prod(runCy,"wew",YTIME)  = i05H2Production("FC","weg",YTIME);
 *---
 i05CostVOMH2Prod(runCy,H2TECH,YTIME) = i05H2Production("VC",H2TECH,YTIME);
+i05CostVOMH2Prod(runCy,"wes",YTIME)  = i05H2Production("VC","weg",YTIME);
+i05CostVOMH2Prod(runCy,"wew",YTIME)  = i05H2Production("VC","weg",YTIME);
 *---
-i05AvailH2Prod(H2TECH,YTIME) = i05H2Production("AVAIL",H2TECH,YTIME);
+i05AvailH2Prod(runCy,H2TECH,YTIME) = i05H2Production("AVAIL",H2TECH,YTIME);
+i05AvailH2Prod(runCy,"wes",YTIME)  = min(i05AvailH2Prod(runCy,"weg",YTIME),i04AvailRate(runCy,"PGSOL",YTIME));
+i05AvailH2Prod(runCy,"wew",YTIME)  = min(i05AvailH2Prod(runCy,"weg",YTIME),i04AvailRate(runCy,"PGAWNO",YTIME));
 *---
 i05EffH2Prod(runCy,H2TECH,YTIME) = i05H2Production("EFF",H2TECH,YTIME);
+i05EffH2Prod(runCy,"wes",YTIME)  = i05H2Production("EFF","weg",YTIME);
+i05EffH2Prod(runCy,"wew",YTIME)  = i05H2Production("EFF","weg",YTIME);
 *---
 i05CostInvH2Transp(runCy,INFRTECH,YTIME) = i05H2InfrCapCosts("IC",INFRTECH,YTIME);
 *---
@@ -102,6 +117,8 @@ i05PolH2AreaMax(runCy) = i05H2Parameters(runCy,"MAXAREA");
 i05HabAreaCountry(runCy) = i05H2Parameters(runCy,"AREA");
 *---
 i05EffNetH2Transp(runCy,INFRTECH,YTIME) = i05EffH2Transp(runCy,INFRTECH,YTIME)*(1-i05ConsSelfH2Transp(runCy,INFRTECH,YTIME));
+*---
+iWBLPremRepH2Prod(runCy,H2TECH,YTIME) = 0.1 ;
 *---
 loop H2EFFLOOP do
   loop INFRTECH2$H2NETWORK(INFRTECH2,H2EFFLOOP) do

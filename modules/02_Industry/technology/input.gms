@@ -22,6 +22,7 @@ i02BoiEffChp(allCy,CHP,YTIME)                              "Boiler efficiency (t
 i02util(allCy,DSBS,ITECH,YTIME)                            "Utilization rate of technology"
 i02numtechnologiesUsingEF(DSBS,EF)                         "Number of technologues using an energy form"     
 i02Share(allCy,DSBS,ITECH,EF,YTIME)                        "Share of each energy form in a technology"
+imCO2CaptRateIndustry(allCy,ITECH,YTIME)	               "Industry CO2 capture rate (1)"
 ;
 *---
 imTotFinEneDemSubBaseYr(runCy,TRANSE,YTIME)  = sum(EF$SECtoEF(TRANSE,EF), imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME));
@@ -50,6 +51,22 @@ i02ElastNonSubElec.LO(runCy,SBS,"c",YTIME)   = -10;
 i02ElastNonSubElec.UP(runCy,SBS,"c",YTIME)   = -0.001;
 $ELSE.calib
 i02ElastNonSubElec(runCy,SBS,ETYPES,YTIME) = i02ElastNonSubElecData(SBS,ETYPES,YTIME);
+$ontext()
+i02ElastNonSubElec(runCy,SBS,"a",YTIME) = 0 * i02ElastNonSubElecData(SBS,"a",YTIME)/4;
+i02ElastNonSubElec(runCy,SBS,"b1",YTIME) = 0 * i02ElastNonSubElecData(SBS,"b1",YTIME)/4;
+i02ElastNonSubElec(runCy,SBS,"b2",YTIME) = 0 * i02ElastNonSubElecData(SBS,"b2",YTIME)/4;
+i02ElastNonSubElec(runCy,SBS,"c",YTIME) = 0 * i02ElastNonSubElecData(SBS,"c",YTIME)/4;
+imElastA(allCy,DSBS,"b2",YTIME) = 0 * imElastA(allCy,DSBS,"b2",YTIME)/4;
+imElastA(allCy,DSBS,"c",YTIME) = 0 * imElastA(allCy,DSBS,"c",YTIME)/4;
+$offtext
+i02ElastNonSubElec(runCy,DOMSE,"a",YTIME) = i02ElastNonSubElecData(DOMSE,"a",YTIME)/4;
+*i02ElastNonSubElec(runCy,DOMSE,"b1",YTIME) = i02ElastNonSubElecData(SBS,"b1",YTIME)/4;
+*i02ElastNonSubElec(runCy,DOMSE,"b2",YTIME) = i02ElastNonSubElecData(SBS,"b2",YTIME)/4;
+*i02ElastNonSubElec(runCy,DOMSE,"c",YTIME) = i02ElastNonSubElecData(SBS,"c",YTIME)/4;
+imElastA(allCy,DOMSE,"a",YTIME) = imElastA(allCy,DOMSE,"a",YTIME)/4;
+imElastA(allCy,DOMSE,"b1",YTIME) = imElastA(allCy,DOMSE,"b1",YTIME)*1.5;
+imElastA(allCy,DOMSE,"b2",YTIME) = imElastA(allCy,DOMSE,"b1",YTIME)*1.5;
+imElastA(allCy,DOMSE,"c",YTIME) = imElastA(allCy,DOMSE,"b1",YTIME)*1.5;
 $ENDIF.calib
 *---
 i02InvCostChp(runCy,DSBS,CHP,YTIME)      = imDataChpPowGen(CHP,"IC",YTIME);
@@ -63,7 +80,10 @@ i02VarCostChp(runCy,DSBS,CHP,YTIME)      = imDataChpPowGen(CHP,"VOM",YTIME);
 i02BoiEffChp(runCy,CHP,YTIME)            = imDataChpPowGen(CHP,"BOILEFF",YTIME);
 *---
 i02ElaSub(runCy,DSBS) = imElaSubData(DSBS);
+i02ElaSub(runCy,DSBS) = 2; !!
+
 *---
+imCO2CaptRateIndustry(runCy,CCSTECH,YTIME) = 0.9;
 
 alias(ITECH,ITECH2);
 i02numtechnologiesUsingEF(DSBS,EF)=sum(ITECH2$(ITECHtoEF(ITECH2,EF)$SECTTECH(DSBS,ITECH2)),1);

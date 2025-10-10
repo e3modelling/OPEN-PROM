@@ -17,6 +17,7 @@
 Q04ProdElecEstCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         V04ProdElecEstCHP(allCy,CHP,YTIME) 
             =E=
+      1 *(
         (
           (
             1/smTWhToMtoe * 
@@ -29,23 +30,18 @@ Q04ProdElecEstCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
           VmPriceElecInd(allCy,YTIME)) - 
           i04MxmShareChpElec(allCy,YTIME)*V04DemElecTot(allCy,YTIME)) )  
         )/2 +
-        SQR(1E-4);
+        SQR(1E-4)
+      );
 
-$ifthen.calib %Calibration% == off
-$ontext
 *' This equation computes the electric capacity of Combined Heat and Power (CHP) plants. The capacity is calculated in gigawatts (GW) and is based on several factors,
 *' including the consumption of fuel in the industrial sector, the electricity prices in the industrial sector, the availability rate of power
 *' generation plants, and the utilization rate of CHP plants. The result represents the electric capacity of CHP plants in GW.
 Q04CapElecCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V04CapElecCHP(allCy,CHP,YTIME)
          =E=
-         sum(INDDOM,VmConsFuel(allCy,INDDOM,CHP,YTIME)) * 1/smTWhToMtoe *
-         VmPriceElecInd(allCy,YTIME) / 
-         sum(PGALL$CHPtoEON(CHP,PGALL), i04AvailRate(allCY,PGALL,YTIME)) / 
-         i04UtilRateChpPlants(allCy,CHP,YTIME) /
-         smGwToTwhPerYear(YTIME);  
-$offtext
+         V04ProdElecEstCHP(allCy,CHP,YTIME) / (1e3 * smGwToTwhPerYear(YTIME));  
 
+$ifthen.calib %Calibration% == off
 *' The equation calculates the total electricity demand by summing the components of final energy consumption in electricity, final non-energy consumption in electricity,
 *' distribution losses, and final consumption in the energy sector for electricity, and then subtracting net imports. The result is normalized using a conversion factor 
 *' which converts terawatt-hours (TWh) to million tonnes of oil equivalent (Mtoe). The formula provides a comprehensive measure of the factors contributing
@@ -104,18 +100,18 @@ Q04CapElecTotEst(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' The production cost is normalized per unit of electricity generated (kEuro2005/kWh) and is considered for each hour of the day. The equation includes considerations
 *' for renewable plants (excluding certain types) and fossil fuel plants.
 Q04CostHourProdInvDec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V04CostHourProdInvDec(allCy,PGALL,YTIME)
-                  =E=         
-        V04CapexRESRate(allCy,PGALL,YTIME) * V04CapexFixCostPG(allCy,PGALL,YTIME-1) / i04AvailRate(allCy,PGALL,YTIME-1) / (smGwToTwhPerYear(YTIME)*1000)
-        + i04VarCost(PGALL,YTIME-1) / 1E3 + 
-        (VmRenValue(YTIME-1)*8.6e-5)$(not (PGREN(PGALL)$(not sameas("PGASHYD",PGALL)) $(not sameas("PGSHYD",PGALL)) $(not sameas("PGLHYD",PGALL)) )) +
-        sum(PGEF$PGALLtoEF(PGALL,PGEF), 
-          (VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME-1) +
-          imCO2CaptRate(allCy,PGALL,YTIME-1) * VmCstCO2SeqCsts(allCy,YTIME-1) * 1e-3 * imCo2EmiFac(allCy,"PG",PGEF,YTIME-1) +
-          (1-imCO2CaptRate(allCy,PGALL,YTIME-1)) * 1e-3 * imCo2EmiFac(allCy,"PG",PGEF,YTIME-1) *
-          (sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME-1)))
-          ) * smTWhToMtoe / imPlantEffByType(allCy,PGALL,YTIME-1)
-        )$(not PGREN(PGALL));
+    V04CostHourProdInvDec(allCy,PGALL,YTIME)
+              =E=         
+    V04CapexRESRate(allCy,PGALL,YTIME) * V04CapexFixCostPG(allCy,PGALL,YTIME-1) / i04AvailRate(allCy,PGALL,YTIME-1) / (smGwToTwhPerYear(YTIME)*1000)
+    + i04VarCost(PGALL,YTIME-1) / 1E3 + 
+    (VmRenValue(YTIME-1)*8.6e-5)$(not (PGREN(PGALL)$(not sameas("PGASHYD",PGALL)) $(not sameas("PGSHYD",PGALL)) $(not sameas("PGLHYD",PGALL)) )) +
+    sum(PGEF$PGALLtoEF(PGALL,PGEF), 
+      (VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME-1) +
+      V04CO2CaptRate(allCy,PGALL,YTIME-1) * VmCstCO2SeqCsts(allCy,YTIME-1) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME-1) + 4.17$(sameas("BMSWAS", PGEF))) +
+      (1-V04CO2CaptRate(allCy,PGALL,YTIME-1)) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME-1))*
+      (sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME-1)))
+      ) * smTWhToMtoe / imPlantEffByType(allCy,PGALL,YTIME-1)
+    )$(not PGREN(PGALL));
 
 *' The equation calculates the hourly production cost for
 *' a given technology without carbon capture and storage investments. 
@@ -136,7 +132,10 @@ Q04CostHourProdInvDecNoCCS(allCy,PGALL,YTIME)$(TIME(YTIME) $NOCCS(PGALL) $runCy(
 *' The result provides a measure of the sensitivity of CCS acceptance
 *' based on the carbon values in the previous year.
 Q04SensCCS(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V04SensCCS(allCy,YTIME) =E= 10+EXP(-0.06*((sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME-1)))));
+         V04SensCCS(allCy,YTIME) 
+            =E= 
+          2;
+         !!10+EXP(-0.06*((sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME-1)))));
 
 *' The equation calculates the production cost of a technology for a specific power plant and year. 
 *' The equation involves the hourly production cost of the technology
@@ -180,8 +179,8 @@ Q04CostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
         sum(
           PGEF$PGALLtoEF(PGALL,PGEF),
           (VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME) +
-          imCO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
-          (1-imCO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)
+          V04CO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
+          (1-V04CO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)
           *(sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))))
           *smTWhToMtoe/imPlantEffByType(allCy,PGALL,YTIME)
         )$(not PGREN(PGALL));
@@ -206,8 +205,8 @@ Q04CostProdTeCHPreReplac(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                           V04CapexFixCostPG(allCy,PGALL,YTIME) * V04CapexRESRate(allCy,PGALL,YTIME) / (smGwToTwhPerYear(YTIME)*1000*i04AvailRate(allCy,PGALL,YTIME))
                            + (i04VarCost(PGALL,YTIME)/1E3 + sum(PGEF$PGALLtoEF(PGALL,PGEF), 
                            (VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)+
-                            imCO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
-                             (1-imCO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
+                            V04CO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
+                             (1-V04CO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
                          (sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))))
                                  *smTWhToMtoe/imPlantEffByType(allCy,PGALL,YTIME))$(not PGREN(PGALL)))
                          );
@@ -434,15 +433,6 @@ Q04ProdElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         sum(PGALL2, V04CapElec2(allCy,PGALL2,YTIME)) *
         V04CapElec2(allCy,PGALL,YTIME);
 
-*' This equation calculates the electricity production from Combined Heat and Power plants . The electricity production is computed
-*' for a specific country , CHP technology , and time period.The electricity production from CHP plants is computed by taking the
-*' ratio of the fuel consumption by the specified industrial sector for CHP technology to the total fuel consumption for all industrial sectors and CHP
-*' technologies. This ratio is then multiplied by the difference between total electricity demand and the sum of electricity production from all power
-*' generation plants. The result represents the portion of electricity production from CHP plants attributed to the specified CHP technology.
-Q04ProdElecCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-        V04ProdElecCHP(allCy,CHP,YTIME)
-                 =E=
-        V04CapElecCHP(allCy,CHP,YTIME) * smGwToTwhPerYear(YTIME);
 
 *' This equation calculates the long-term power generation cost of technologies excluding climate policies.
 *' The cost is computed for a specific country, power generation technology , energy sector, and time period.
@@ -457,8 +447,8 @@ Q04CostPowGenLngTechNoCp(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       / (1000*(smGwToTwhPerYear(YTIME))) +
       sum(PGEF$PGALLTOEF(PGALL,PGEF),
                  (i04VarCost(PGALL,YTIME)/1000+(VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)/1.2441+
-                 imCO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
-                 (1-imCO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
+                 V04CO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
+                 (1-V04CO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
                  (sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))))
                  *smTWhToMtoe/imPlantEffByType(allCy,PGALL,YTIME)));
 
@@ -489,8 +479,8 @@ Q04CostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy))
                  (i04VarCost(PGALL,YTIME)/1000+((VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)-imEffValueInDollars(allCy,"PG",ytime)/1000-imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
                  sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))/1000 )/1.2441+
 
-                 imCO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
-                 (1-imCO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
+                 V04CO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
+                 (1-V04CO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
                  (sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))))
                  *smTWhToMtoe/imPlantEffByType(allCy,PGALL,YTIME)));
 
@@ -532,7 +522,19 @@ Q04CapexFixCostPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04CapexRESRate(allCy,PGALL,YTIME)$(TIME(YTIME) and runCy(allCy))..
     V04CapexRESRate(allCy,PGALL,YTIME)
         =E=
-        (
-          1 + (V04ShareMixWndSol(allCy,YTIME)$PGRENSW(PGALL)) ** S04CapexBessRate
-        )
-;
+    1 + (V04ShareMixWndSol(allCy,YTIME)$PGRENSW(PGALL)) ** S04CapexBessRate;
+
+Q04CO2CaptRate(allCy,PGALL,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
+    V04CO2CaptRate(allCy,PGALL,YTIME)
+        =E=
+    imCO2CaptRate(PGALL) /
+     (1 + 
+      EXP(20 * (
+        ([VmCstCO2SeqCsts(allCy,YTIME) /
+        (sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME)) + 1)] + 2 -
+        [SQRT(SQR([VmCstCO2SeqCsts(allCy,YTIME) /
+        (sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME)) + 1)] - 2))])/2
+        -1)
+      )
+    )
+    ;
