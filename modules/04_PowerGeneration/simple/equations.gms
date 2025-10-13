@@ -15,23 +15,17 @@
 *' electricity demand. The equation essentially estimates the electricity generation of CHP plants by considering their fuel consumption, electricity prices, and the maximum
 *' share of CHP electricity in total demand. The square root expression ensures that the estimated electricity generation remains non-negative.
 Q04ProdElecEstCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-        V04ProdElecEstCHP(allCy,CHP,YTIME) 
-            =E=
-      1 *(
-        (
-          (
-            1/smTWhToMtoe * 
-            sum(INDDOM, VmConsFuel(allCy,INDDOM,CHP,YTIME)) *
-            VmPriceElecInd(allCy,YTIME)
-          ) + 
-          i04MxmShareChpElec(allCy,YTIME) * V04DemElecTot(allCy,YTIME) - 
-          
-          SQRT( SQR((1/smTWhToMtoe * sum((INDDOM), VmConsFuel(allCy,INDDOM,CHP,YTIME)) * 
-          VmPriceElecInd(allCy,YTIME)) - 
-          i04MxmShareChpElec(allCy,YTIME)*V04DemElecTot(allCy,YTIME)) )  
-        )/2 +
-        SQR(1E-4)
-      );
+    V04ProdElecEstCHP(allCy,CHP,YTIME) 
+        =E=
+    (
+      1/smTWhToMtoe *
+      sum(INDDOM,VmConsFuel(allCy,INDDOM,CHP,YTIME)) * VmPriceElecInd(allCy,YTIME) + 
+      i04MxmShareChpElec(allCy,YTIME) * V04DemElecTot(allCy,YTIME) - 
+
+      SQRT( SQR((1/smTWhToMtoe * sum((INDDOM), VmConsFuel(allCy,INDDOM,CHP,YTIME)) * 
+      VmPriceElecInd(allCy,YTIME)) - 
+      i04MxmShareChpElec(allCy,YTIME) * V04DemElecTot(allCy,YTIME)))  
+    )/2 + SQR(1E-4);
 
 *' This equation computes the electric capacity of Combined Heat and Power (CHP) plants. The capacity is calculated in gigawatts (GW) and is based on several factors,
 *' including the consumption of fuel in the industrial sector, the electricity prices in the industrial sector, the availability rate of power
@@ -91,9 +85,41 @@ Q04PeakLoad(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' the ratio of the current year's estimated electricity peak load to the previous year's electricity peak load. This provides an estimate of the required
 *' generation capacity based on the changes in peak load.
 Q04CapElecTotEst(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-        VmCapElecTotEst(allCy,YTIME)
-             =E=
-        VmCapElecTotEst(allCy,YTIME-1) * VmPeakLoad(allCy,YTIME)/VmPeakLoad(allCy,YTIME-1);          
+    VmCapElecTotEst(allCy,YTIME)
+          =E=
+    VmCapElecTotEst(allCy,YTIME-1) *
+    VmPeakLoad(allCy,YTIME) / VmPeakLoad(allCy,YTIME-1);          
+
+*' This equation calculates the CAPEX and the Fixed Costs of each power generation unit, taking into account its discount rate and life expectancy, 
+*' for each region (country) and year.
+Q04CapexFixCostPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V04CapexFixCostPG(allCy,PGALL,YTIME)
+        =E=         
+    ( 
+      imDisc(allCy,"PG",YTIME) * exp(imDisc(allCy,"PG",YTIME) * i04TechLftPlaType(allCy,PGALL))
+      / (exp(imDisc(allCy,"PG",YTIME) * i04TechLftPlaType(allCy,PGALL)) -1)
+    ) * i04GrossCapCosSubRen(allCy,PGALL,YTIME) * 1000 * imCGI(allCy,YTIME) +
+    i04FixOandMCost(allCy,PGALL,YTIME);
+
+Q04CostCapTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
+    V04CostCapTech(allCy,PGALL,YTIME) 
+        =E=
+    V04CapexRESRate(allCy,PGALL,YTIME) * V04CapexFixCostPG(allCy,PGALL,YTIME) / 
+    (i04AvailRate(allCy,PGALL,YTIME) * smGwToTwhPerYear(YTIME) * 1000);
+
+*' Compute the variable cost of each power plant technology for every region,
+*' By utilizing the gross cost, fuel prices, CO2 emission factors & capture, and plant efficiency. 
+Q04CostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
+    V04CostVarTech(allCy,PGALL,YTIME) 
+        =E=
+    i04VarCost(PGALL,YTIME) / 1e3 + 
+    (VmRenValue(YTIME) * 8.6e-5)$(not (PGREN(PGALL)$(not sameas("PGASHYD",PGALL)) $(not sameas("PGSHYD",PGALL)) $(not sameas("PGLHYD",PGALL)) )) +
+    sum(PGEF$PGALLtoEF(PGALL,PGEF), 
+      (VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME) +
+      (imCo2EmiFac(allCy,"PG",PGEF,YTIME-1) + 2.17$(sameas("BMSWAS", PGEF))) * 1e-3 * sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME-1)) +
+      V04CO2CaptRate(allCy,PGALL,YTIME-1) * (VmCstCO2SeqCsts(allCy,YTIME-1) - sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME-1))) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME-1) + 4.17$(sameas("BMSWAS", PGEF)) + 4.17$(sameas("STE2BMS",PGEF)))
+      ) * smTWhToMtoe / imPlantEffByType(allCy,PGALL,YTIME)
+    )$(not PGREN(PGALL));
 
 *' The equation calculates the hourly production cost of a power generation plant used in investment decisions. The cost is determined based on various factors,
 *' including the discount rate, gross capital cost, fixed operation and maintenance cost, availability rate, variable cost, renewable value, and fuel prices.

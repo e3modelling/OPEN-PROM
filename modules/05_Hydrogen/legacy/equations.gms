@@ -110,8 +110,7 @@ Q05CostProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       (exp(imDisc(allCy,"H2P",YTIME) * i05ProdLftH2(H2TECH,YTIME))-1) * 
       (
         i05CostCapH2Prod(allCy,H2TECH,YTIME) +
-        i05CostFOMH2Prod(allCy,H2TECH,YTIME) +
-        i05CostVOMH2Prod(allCy,H2TECH,YTIME)
+        i05CostFOMH2Prod(allCy,H2TECH,YTIME)
       ) +
       (
       (V04CapexFixCostPG(allCy,"PGSOL",YTIME))$sameas(H2TECH,"wes") + 
@@ -130,14 +129,13 @@ Q05CostVarProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     sum(EF$H2TECHEFtoEF(H2TECH,EF),
       (
         VmPriceFuelSubsecCarVal(allCy,"H2P",EF,YTIME) * 1e3 +
-        V05CaptRateH2(allCy,H2TECH,YTIME) * (imCo2EmiFac(allCy,"H2P",EF,YTIME) + 4.17$(sameas("BMSWAS", EF))) * VmCstCO2SeqCsts(allCy,YTIME) +
-        (1-V05CaptRateH2(allCy,H2TECH,YTIME)) * (imCo2EmiFac(allCy,"H2P",EF,YTIME)) *
-        sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME))
-      ) 
+        (imCo2EmiFac(allCy,"H2P",EF,YTIME-1) + 4.17$(sameas("BMSWAS", EF))) * sum(NAP$NAPtoALLSBS(NAP,"H2P"), VmCarVal(allCy,NAP,YTIME-1)) +
+        V05CaptRateH2(allCy,H2TECH,YTIME-1) * (VmCstCO2SeqCsts(allCy,YTIME-1) - sum(NAP$NAPtoALLSBS(NAP,"H2P"), VmCarVal(allCy,NAP,YTIME-1))) * (imCo2EmiFac(allCy,"H2P",EF,YTIME-1) + 4.17$(sameas("BMSWAS", EF)))
+      )
     )$(not H2TECHREN(H2TECH)) / i05EffH2Prod(allCy,H2TECH,YTIME) +
-    (i04VarCost("PGSOL",YTIME)/(smTWhToMtoe))$(sameas(H2TECH,"wes")) +
-    (i04VarCost("PGAWNO",YTIME)/(smTWhToMtoe))$(sameas(H2TECH,"wew"))
-    
+    i05CostVOMH2Prod(allCy,H2TECH,YTIME) +
+    (i04VarCost("PGSOL",YTIME) / (smTWhToMtoe))$(sameas(H2TECH,"wes")) +
+    (i04VarCost("PGAWNO",YTIME) / (smTWhToMtoe))$(sameas(H2TECH,"wew"))
 ;
 
 *' This equation models the acceptance of carbon capture and storage (CCS) technologies in hydrogen production. 
