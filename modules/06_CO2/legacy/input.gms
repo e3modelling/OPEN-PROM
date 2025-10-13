@@ -58,7 +58,7 @@ parameter i06VarDACMin(DACTECH)                 "Minimum possible Variable and c
 HTDAC	94,
 H2DAC	94,
 LTDAC	320,
-EWDAC	200
+EWDAC	130
 / ;
 
 parameter i06VarDAC(DACTECH)                    "Variable and carbon storage costs of each DAC technology ($/tCO2)"
@@ -66,7 +66,7 @@ parameter i06VarDAC(DACTECH)                    "Variable and carbon storage cos
 HTDAC	115,
 H2DAC	115,
 LTDAC	370,
-EWDAC	130
+EWDAC	200
 / ;
 
 
@@ -76,14 +76,6 @@ HTDAC	25,
 H2DAC	25,
 LTDAC	20,
 EWDAC	15
-/ ;
-
-parameter i06SubsidDAC(DACTECH)                 "Specific electricity needs of DAC technologies (MWh/tCO2)"
-/
-HTDAC	0.01,
-H2DAC	0.01,
-LTDAC	0.01,
-EWDAC	0.01
 / ;
 
 parameter i06ElNeedsDAC(DACTECH)                "Specific electricity needs of DAC technologies (MWh/tCO2)"
@@ -143,12 +135,12 @@ $endIf.DACproj
 *---
 Parameters
 i06ElastCO2Seq(allCy,CO2SEQELAST)	       "Elasticities for CO2 sequestration cost curve (1)"
-i06GrossCapDACMin(allCy,DACTECH)           "Minimum possible CAPEX of each DAC technology affected by learning curve ($/tCO2)"
-i06GrossCapDAC(allCy,DACTECH)	           "CAPEX of each DAC technology ($/tCO2)"
-i06VarCostDAC(allCy,DACTECH)               "Variable and carbon storage costs of each DAC technology ($/tCO2)"
-i06VarCostDACMin(allCy,DACTECH)            "Minimum possible Variable and carbon storage costs of each DAC technology affected by learning curve ($/tCO2)"
-i06FixOandMDAC(allCy,DACTECH)              "Fixed and O&M costs of each DAC technology ($/tCO2)"
-i06FixOandMDACMin(allCy,DACTECH)           "Minimum possible Fixed and O&M costs of each DAC technology affected by learning curve ($/tCO2)"
+i06GrossCapDACMin(DACTECH)           "Minimum possible CAPEX of each DAC technology affected by learning curve ($/tCO2)"
+i06GrossCapDAC(DACTECH)	           "CAPEX of each DAC technology ($/tCO2)"
+i06VarCostDAC(DACTECH)               "Variable and carbon storage costs of each DAC technology ($/tCO2)"
+i06VarCostDACMin(DACTECH)            "Minimum possible Variable and carbon storage costs of each DAC technology affected by learning curve ($/tCO2)"
+i06FixOandMDAC(DACTECH)              "Fixed and O&M costs of each DAC technology ($/tCO2)"
+i06FixOandMDACMin(DACTECH)           "Minimum possible Fixed and O&M costs of each DAC technology affected by learning curve ($/tCO2)"
 i06LftDAC(allCy,DACTECH,YTIME)             "Lifetime of each DAC technology (years)"
 i06SubsDAC(allCy,DACTECH,YTIME)            "State subsidy for the carbon captured ($/tCO2)"
 i06SpecElecDAC(allCy,DACTECH,YTIME)        "Specific electricity needs of DAC technologies (MWh/tCO2)"
@@ -157,21 +149,19 @@ i06SpecHeatDAC(allCy,DACTECH,YTIME)        "Specific heat needs of DAC technolog
 *---
 i06ElastCO2Seq(runCy,CO2SEQELAST) = i06CO2SeqData(CO2SEQELAST);
 *---
-i06GrossCapDACMin(runCy,DACTECH) = i06CapexDACMin(DACTECH);
+i06GrossCapDACMin(DACTECH) = i06CapexDACMin(DACTECH);
 *---
-i06GrossCapDAC(runCy,DACTECH) = i06CapexDAC(DACTECH);
+i06GrossCapDAC(DACTECH) = i06CapexDAC(DACTECH);
 *---
-i06VarCostDAC(runCy,DACTECH) = i06VarDAC(DACTECH);
+i06VarCostDAC(DACTECH) = i06VarDAC(DACTECH);
 *---
-i06VarCostDACMin(allCy,DACTECH) = i06VarDACMin(DACTECH);
+i06VarCostDACMin(DACTECH) = i06VarDACMin(DACTECH);
 *---
-i06FixOandMDACMin(allCy,DACTECH) = i06FixCostDACMin(DACTECH);
+i06FixOandMDACMin(DACTECH) = i06FixCostDACMin(DACTECH);
 *---
-i06FixOandMDAC(runCy,DACTECH) = i06FixCostDAC(DACTECH);
+i06FixOandMDAC(DACTECH) = i06FixCostDAC(DACTECH);
 *---
 i06LftDAC(runCy,DACTECH,YTIME) = i06LftExpDAC(DACTECH);
-*---
-i06SubsDAC(runCy,DACTECH,YTIME) = i06SubsidDAC(DACTECH);
 *---
 i06SpecElecDAC(runCy,DACTECH,YTIME) = i06ElNeedsDAC(DACTECH);
 *---
