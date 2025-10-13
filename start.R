@@ -35,7 +35,7 @@ saveMetadata <- function(DevMode) {
   if (DevMode == 0) {
     mapping <- "regionmappingOPDEV3.csv"
   } else if (DevMode == 1) {
-    mapping <- "regionmappingOPDEV2.csv"
+    mapping <- "regionmappingOPDEV4.csv"
   }
 
   # Get the model run description from config file
