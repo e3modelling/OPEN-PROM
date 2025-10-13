@@ -135,7 +135,7 @@ Q05CostVarProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       (
         VmPriceFuelSubsecCarVal(allCy,"H2P",EF,YTIME) * 1e3 +
         V05CaptRateH2(allCy,H2TECH,YTIME) * (imCo2EmiFac(allCy,"H2P",EF,YTIME) + 4.17$(sameas("BMSWAS", EF))) * VmCstCO2SeqCsts(allCy,YTIME) +
-        (1-V05CaptRateH2(allCy,H2TECH,YTIME)) * (imCo2EmiFac(allCy,"H2P",EF,YTIME) + 4.17$(sameas("BMSWAS", EF))) *
+        (1-V05CaptRateH2(allCy,H2TECH,YTIME)) * (imCo2EmiFac(allCy,"H2P",EF,YTIME)) *
         sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME))
       ) 
     )$(not H2TECHREN(H2TECH)) / i05EffH2Prod(allCy,H2TECH,YTIME) +
