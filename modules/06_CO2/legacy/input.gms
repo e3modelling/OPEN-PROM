@@ -8,7 +8,7 @@ POT	9175,
 mc_a	0,
 mc_b	20,
 mc_c	0.02,
-mc_d	3e3,
+mc_d	5e3,
 mc_s	120,
 mc_m	1.013
 / ;
@@ -102,8 +102,7 @@ LTDAC	0,
 EWDAC	0
 / ;
 
-parameter i06SchedNewCapDAC(allCy,DACTECH,YTIME)        "Scheduled new DAC capacity"
-/
+parameter i06SchedNewCapDAC(allCy,DACTECH,YTIME)        "Scheduled new DAC capacity" /
 NEU.LTDAC.2027  4e4,    !!Removr – Mongstad pilot / industrial‑scale projects
 NEU.LTDAC.2026  4e4,    !!Orca (Climeworks + Carbfix) + Mammoth (Climeworks + Carbfix)
 NEU.LTDAC.2028  1e5,    !!Removr + Carbfix (Large‑Scale Plant)
@@ -116,7 +115,8 @@ USA.HTDAC.2027  5e5,    !!Project Cypress (Climeworks + Heirloom + Battelle) —
 USA.LTDAC.2027  5e5,    !!Project Cypress (Climeworks + Heirloom + Battelle) — Louisiana
 USA.LTDAC.2032  1e6,    !!HIF USA eFuels – Matagorda County, Texas
 USA.LTDAC.2034  1e6,    !!Project Bison – Wyoming (CarbonCapture Inc.)
-USA.LTDAC.2035  1e6,    !!South Texas DAC Hub
+USA.LTDAC.2035  1e6     !!South Texas DAC Hub
+$ifthen.DACproj %fScenario% == 2
 CHA.LTDAC.2026  1e6,    !!Possible
 CHA.H2DAC.2030  1e5,    !!Possible
 CHA.EWDAC.2030  1e6,    !!Possible
@@ -125,18 +125,20 @@ OAS.EWDAC.2035  1e5,    !!Possible
 DEU.LTDAC.2035  5e5,    !!Possible
 DEU.EWDAC.2035  5e5,    !!Possible
 FRA.LTDAC.2035  5e5,    !!Possible
-GBR.H2DAC.2035  5e5,    !!Possible
+GBR.H2DAC.2035  5e4,    !!Possible
 IND.LTDAC.2026  1e6,    !!Possible
 IND.EWDAC.2030  1e6,    !!Possible
-JPN.H2DAC.2030  1e6,    !!Possible
+JPN.H2DAC.2030  1e5,    !!Possible
 REF.LTDAC.2029  1e6,    !!Possible
 REF.EWDAC.2033  1e5,    !!Possible
 MEA.LTDAC.2031  1e5,    !!Possible
 MEA.EWDAC.2037  1e6,    !!Possible
 SSA.LTDAC.2032  1e6,    !!Possible
 SSA.EWDAC.2037  1e5,    !!Possible
-LAM.EWDAC.2024  5e5     
-/ ;
+LAM.EWDAC.2024  5e5/;
+$else.DACproj
+/;
+$endIf.DACproj
 
 *---
 Parameters

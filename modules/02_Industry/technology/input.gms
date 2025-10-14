@@ -56,11 +56,17 @@ i02ElastNonSubElec(runCy,SBS,"a",YTIME) = 0 * i02ElastNonSubElecData(SBS,"a",YTI
 i02ElastNonSubElec(runCy,SBS,"b1",YTIME) = 0 * i02ElastNonSubElecData(SBS,"b1",YTIME)/4;
 i02ElastNonSubElec(runCy,SBS,"b2",YTIME) = 0 * i02ElastNonSubElecData(SBS,"b2",YTIME)/4;
 i02ElastNonSubElec(runCy,SBS,"c",YTIME) = 0 * i02ElastNonSubElecData(SBS,"c",YTIME)/4;
-imElastA(allCy,DSBS,"a",YTIME) = 0 * imElastA(allCy,DSBS,"a",YTIME)/4;
-imElastA(allCy,DSBS,"b1",YTIME) = 0 * imElastA(allCy,DSBS,"b1",YTIME)/4;
 imElastA(allCy,DSBS,"b2",YTIME) = 0 * imElastA(allCy,DSBS,"b2",YTIME)/4;
 imElastA(allCy,DSBS,"c",YTIME) = 0 * imElastA(allCy,DSBS,"c",YTIME)/4;
 $offtext
+i02ElastNonSubElec(runCy,DOMSE,"a",YTIME) = i02ElastNonSubElecData(DOMSE,"a",YTIME)/4;
+*i02ElastNonSubElec(runCy,DOMSE,"b1",YTIME) = i02ElastNonSubElecData(SBS,"b1",YTIME)/4;
+*i02ElastNonSubElec(runCy,DOMSE,"b2",YTIME) = i02ElastNonSubElecData(SBS,"b2",YTIME)/4;
+*i02ElastNonSubElec(runCy,DOMSE,"c",YTIME) = i02ElastNonSubElecData(SBS,"c",YTIME)/4;
+imElastA(allCy,DOMSE,"a",YTIME) = imElastA(allCy,DOMSE,"a",YTIME)/4;
+imElastA(allCy,DOMSE,"b1",YTIME) = imElastA(allCy,DOMSE,"b1",YTIME)*1.5;
+imElastA(allCy,DOMSE,"b2",YTIME) = imElastA(allCy,DOMSE,"b1",YTIME)*1.5;
+imElastA(allCy,DOMSE,"c",YTIME) = imElastA(allCy,DOMSE,"b1",YTIME)*1.5;
 $ENDIF.calib
 *---
 i02InvCostChp(runCy,DSBS,CHP,YTIME)      = imDataChpPowGen(CHP,"IC",YTIME);

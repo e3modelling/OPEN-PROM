@@ -16,7 +16,7 @@ jobs:
 
       - name: Setup GAMS
         run: |
-          $url = "https://d37drm4t2jghv5.cloudfront.net/distributions/48.1.0/windows/windows_x64_64.exe"
+          $url = "https://www.dropbox.com/scl/fi/rpy9ylitovj9njl8lyo0p/gams_installer.exe?rlkey=d4zfuyceji09dvor7hq54ichb&e=1&st=m9bd86wz&dl=1"
           $installer = "gams_installer.exe"
           Invoke-WebRequest -Uri $url -OutFile $installer
           Start-Process $installer -ArgumentList "/silent" -NoNewWindow -Wait

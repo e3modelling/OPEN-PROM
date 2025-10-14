@@ -116,6 +116,20 @@
         },
 
         {
+            "label": "CALIBRATE CARBON PRICES",
+            "type": "shell",
+            "command": "Rscript start.R task=6",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "focus": true
+            }
+        },
+
+        {
             "label": "OPEN-PROM LIVE",
             "type": "shell",
             "command": "python ./scripts/R-live.py",
