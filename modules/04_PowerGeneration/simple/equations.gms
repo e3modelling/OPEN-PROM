@@ -19,11 +19,11 @@ Q04ProdElecEstCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         =E=
     (
       1/smTWhToMtoe *
-      sum(INDDOM,VmConsFuel(allCy,INDDOM,CHP,YTIME)) * VmPriceElecInd(allCy,CHP,YTIME) + 
+      sum(INDDOM,VmConsFuel(allCy,INDDOM,CHP,YTIME)) * VmPriceElecInd(allCy,YTIME) + 
       i04MxmShareChpElec(allCy,YTIME) * V04DemElecTot(allCy,YTIME) - 
 
       SQRT( SQR((1/smTWhToMtoe * sum((INDDOM), VmConsFuel(allCy,INDDOM,CHP,YTIME)) * 
-      VmPriceElecInd(allCy,CHP,YTIME)) - 
+      VmPriceElecInd(allCy,YTIME)) - 
       i04MxmShareChpElec(allCy,YTIME) * V04DemElecTot(allCy,YTIME)))  
     )/2 + SQR(1E-4);
 
