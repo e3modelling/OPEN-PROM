@@ -47,13 +47,16 @@ $ENDIF
          )$(ELCEF(EF) or HEATPUMP(EF))
          +
          (
-            ( VmPriceElecIndResConsu(allCy,"i",YTIME)/smTWhToMtoe)
+            VmPriceFuelSubsecCarVal(allCy,"OI",EF,YTIME)$(not sameas("BMSWAS",EF)) +
+            VmPriceFuelSubsecCarVal(allCy,"AG",EF,YTIME)$(sameas("BMSWAS",EF))
          )$(sameas ("H2P",SBS))
          +
          (
-            7.5*V05CostAvgProdH2(allCy,YTIME)$DSBS(SBS)/1000
+            VmCostAvgProdH2(allCy,YTIME)$DSBS(SBS)/1000
          )$(H2EF(EF) or sameas("H2F",EF));
 
+
+$ontext
 *' The equation calculates the fuel prices per subsector and fuel multiplied by weights
 *' considering separate carbon values in each sector. This equation is applied for a specific scenario, subsector, fuel, and year.
 *' The calculation involves multiplying the sector's average price weight based on fuel consumption by the fuel price per subsector
@@ -61,17 +64,48 @@ $ENDIF
 *' This equation allows for a more nuanced calculation of fuel prices, taking into account the carbon values in each sector. The result represents the fuel
 *' prices per subsector and fuel, multiplied by the corresponding weights, and adjusted based on the specific carbon values in each sector.
 Q08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)$(SECtoEF(DSBS,EF) $TIME(YTIME) $runCy(allCy))..
-        V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)
-          =E= 
-        i08WgtSecAvgPriFueCons(allCy,DSBS,EF) * VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME);
+    V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)
+      =E= 
+    !!i08WgtSecAvgPriFueCons(allCy,DSBS,EF) * 
+    !!(
+    1e-2+
+      (
+        (VmConsFuel(allCy,DSBS,EF,YTIME) - V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$ELCEF(EF)) / 
+        (SUM(EF2,VmConsFuel(allCy,DSBS,EF2,YTIME)- V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$ELCEF(EF2)) )
+      )$INDSE(DSBS) *
+      VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME)
 
+      +
+      SUM(TRANSE$TRANSE(DSBS), 
+        VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME) /
+        1!!SUM(EF2,VmDemFinEneTranspPerFuel(allCy,TRANSE,EF2,YTIME))
+      )$TRANSE(DSBS)
+    ) *
+    VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME);
+$offtext
+
+Q08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)$(SECtoEF(DSBS,EF) $TIME(YTIME) $runCy(allCy))..
+V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)
+      =E=
+      1e-12 +
+      (
+        (VmConsFuel(allCy,DSBS,EF,YTIME) - V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$ELCEF(EF)) /
+        (SUM(EF2,VmConsFuel(allCy,DSBS,EF2,YTIME)- V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$ELCEF(EF2)) )
+      )$(INDDOM(DSBS) or NENSE(DSBS)) +   
+      SUM(TRANSE$(sameas(TRANSE,DSBS)),
+        VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME) /
+        (SUM(EF2$SECtoEF(TRANSE,EF2),VmDemFinEneTranspPerFuel(allCy,TRANSE,EF2,YTIME))+1e-12)
+      )
+;
 *' The equation calculates the average fuel price per subsector. These average prices are used to further compute electricity prices in industry
 *' (using the OI "other industry" avg price), as well as the aggregate fuel demand (of substitutable fuels) per subsector.
 *' In the transport sector they feed into the calculation of the activity levels.
 Q08PriceFuelAvgSub(allCy,DSBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-        VmPriceFuelAvgSub(allCy,DSBS,YTIME)
-                 =E=
-         sum(EF$SECtoEF(DSBS,EF), V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME));         
+    VmPriceFuelAvgSub(allCy,DSBS,YTIME)
+        =E=
+    sum(EF$SECtoEF(DSBS,EF), 
+      V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME-1) *
+      VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-1));         
 
 *' Calculates electricity price for industrial and residential consumers
 *' using previous year's fuel prices. For the first year, the price is directly based on fuel data.
@@ -113,29 +147,6 @@ Q08PriceElecIndResConsu(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                VmCostPowGenAvgLng(allCy,YTIME-1) 
              )$(not TFIRST(YTIME-1))
            )$sameas(ESET,"c") 
-        );
-
-*' Compute electricity price in Industrial and Residential Consumers excluding climate policies by multiplying the Factors affecting electricity prices to consumers by the sum of 
-*' Fuel prices per subsector and fuel multiplied by the TWh to Mtoe conversion factor adding the Factors affecting electricity prices to consumers and the Long-term average power 
-*' generation cost  excluding climate policies for Electricity of Other Industrial sectors and for Electricity for Households .
-Q08PriceElecIndResNoCliPol(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..   !! The electricity price is based on previous year's production costs
-        VmPriceElecIndResNoCliPol(allCy,ESET,YTIME)
-                 =E=
-        (1 + i08VAT(allCy, YTIME)) *
-        (
-           (
-             (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
-             (
-               V04CostPowGenLonNoClimPol(allCy,"i",YTIME-1) 
-              )$(not TFIRST(YTIME-1))
-           )$ISET(ESET)
-        +
-           (
-             (VmPriceFuelSubsecCarVal(allCy,"HOU","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
-             (
-                V04CostPowGenLonNoClimPol(allCy,"r",YTIME-1) 
-             )$(not TFIRST(YTIME-1))
-           )$RSET(ESET)
         );
 
 *' This equation calculates the fuel prices per subsector and fuel, specifically for Combined Heat and Power (CHP) plants, considering the profit earned from

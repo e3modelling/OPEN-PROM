@@ -188,6 +188,7 @@ NF_PFC         "Aluminium production, related with PFC"
 BM_CO2         "Non metallic minerals production, related with CO2"
 PG_SF6         "Electricity production, related with SF6"
 OI_SF6         "Other Industries activities, related with SF6"
+DAC            "Direct Air Capture"
 /
 
 SBS(ALLSBS)          Model Subsectors
@@ -219,6 +220,7 @@ NEN   "Other Non Energy Uses"
 PG    "Power and Steam Generation"
 H2P   "Hydrogen production"
 H2INFR "Hydrogen storage and delivery"
+DAC    "Direct Air Capture"
 /
 
 
@@ -278,11 +280,11 @@ NoTrade  Carbon Value for non-trading sectors
 
 NAPtoALLSBS(NAP,ALLSBS) Energy sectors corresponding to NAP sectors
 /
-Trade.(FD,EN,TX,OE,OI,NF,CH,IS,BM,PP,PG,BM_CO2,H2P)
-NoTrade.(SE,AG,HOU,PC,PB,PT,PN,PA,GU,GT,GN,BU,PCH,NEN,LGN_PRD_CH4,HCL_PRD_CH4,GAS_PRD_CH4,TERT_CH4,TRAN_CH4,AG_CH4,SE_CH4,TRAN_N2O,TX_N2O,AG_N2O,OI_HFC,OI_PFC,NF_PFC,PG_SF6,OI_SF6)
+Trade.(FD,EN,TX,OE,OI,NF,CH,IS,BM,PP,PG,BM_CO2,H2P,DAC)
+NoTrade.(SE,AG,HOU,PC,PB,PT,PN,PA,GU,GT,GN,BU,PCH,NEN,LGN_PRD_CH4,HCL_PRD_CH4,GAS_PRD_CH4,TERT_CH4,TRAN_CH4,AG_CH4,SE_CH4,TRAN_N2O,TX_N2O,AG_N2O,OI_HFC,OI_PFC,NF_PFC,PG_SF6,OI_SF6,DAC)
 /
 
-DSBS(SBS)         All Demand Subsectors         /PC,PT,PA,PB,PN,GU,GT,GN,IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,SE,AG,HOU,PCH,NEN,BU/
+DSBS(SBS)         All Demand Subsectors         /PC,PT,PA,PB,PN,GU,GT,GN,IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,SE,AG,HOU,PCH,NEN,BU,DAC/
 TRANSE(DSBS)      All Transport Subsectors      /PC,PT,PA,PB,PN,GU,GT,GN/
 TRANS1(SBS)       All Transport Subsectors      /PC,PT,PA,PB,PN,GU,GT,GN/
 TRANP(TRANSE)     Passenger Transport           /PC,PT,PA,PB,PN/
@@ -355,6 +357,10 @@ STE2BMS "Steam produced from district heating plants burning bmswas"
 *hybrid cars with gasoline and diesel
 *CHEVGSL  "conventional Hybrid engine - gasoline"
 *CHEVGDO  "conventional Hybrid engine - diesel"
+HTDAC   "High-Temperature DAC"
+H2DAC   "High-Temperature H2-fueled DAC"
+LTDAC   "Low-Temperature DAC"
+EWDAC   "Enhanced-Weathering DAC"
 
 * Aggregate Fuels
 SLD     "Solid Fuels"
@@ -593,8 +599,10 @@ TCHEVGSL  "conventional Hybrid engine - gasoline"
 TCHEVGDO  "conventional Hybrid engine - diesel"
 * Industrial Technologies (only add those not already in Transport)
 * GDO,LPG,KRS,NGS,ELC already exist in TRANSPORT technologies
+TNGSCCS
 TLGN
 THCL
+THCLCCS
 TRFO
 TOLQ
 TOGS
@@ -620,6 +628,11 @@ TBMSWAS
 TSTE1AR
 TSTE1AH2F
 THEATPUMP
+* DAC Technologies
+HTDAC
+H2DAC
+LTDAC
+EWDAC
 * Power Generation Technologies
 *PGTLGN
 *PGTHCL 
@@ -661,15 +674,25 @@ TCHEVGSL  "conventional Hybrid engine - gasoline"
 TCHEVGDO  "conventional Hybrid engine - diesel"
 /
 
+DACTECH(TECH)     DAC Technologies
+/
+HTDAC
+H2DAC
+LTDAC
+EWDAC
+/
+
 ITECH(TECH)      Industrial - Domestic - Non-energy & Bunkers Technologies 
 /
 TGDO
 TLPG
 TKRS  
 TNGS
+TNGSCCS
 TELC    
 TLGN
 THCL
+THCLCCS
 TRFO
 TOLQ
 TOGS
@@ -692,6 +715,12 @@ TSTE2BMS
 TBMSWAS
 /
 
+CCSTECH(ITECH)
+/
+TNGSCCS
+THCLCCS
+/
+
 RENEF(TECH)        Renewable technologies in demand side !! Should these remain in EF?
 /
 *HYD     "Hydro"
@@ -711,6 +740,7 @@ TGSL.GSL
 TLPG.LPG
 TGDO.GDO
 TNGS.NGS
+TNGSCCS.NGS
 TELC.ELC
 TKRS.KRS
 TETH.ETH
@@ -723,6 +753,7 @@ TCHEVGSL.GSL
 TCHEVGDO.GDO     
 TLGN.LGN
 THCL.HCL
+THCLCCS.HCL
 TRFO.RFO
 TOLQ.OLQ
 TOGS.OGS
@@ -742,6 +773,10 @@ TSTE2NGS.STE2NGS
 TSTE2OGS.STE2OGS
 TSTE2BMS.STE2BMS
 TBMSWAS.BMSWAS
+HTDAC.(NGS,ELC)
+H2DAC.(H2F,ELC)
+LTDAC.ELC
+EWDAC.ELC
 /
 TTECHtoEF(TTECH,EF) Fuels consumed by transport technologies
 /
@@ -767,9 +802,11 @@ TGDO.GDO
 TLPG.LPG
 TKRS.KRS  
 TNGS.NGS
+TNGSCCS.NGS
 TELC.ELC    
 TLGN.LGN
 THCL.HCL
+THCLCCS.HCL
 TRFO.RFO
 TOLQ.OLQ
 TOGS.OGS
@@ -793,6 +830,13 @@ TSTE2BMS.STE2BMS
 TBMSWAS.BMSWAS
 /
 
+DACTECHtoEF(DACTECH,EF)
+/
+HTDAC.(NGS,ELC)
+H2DAC.(H2F,ELC)
+LTDAC.ELC
+EWDAC.ELC
+/
 
 PLUGIN(TECH) Plug-in hybrids
 /
@@ -812,14 +856,15 @@ SECTTECH(DSBS,TECH) Link between Model Demand Subsectors and Technologies
 *PB.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO)
 *GU.(LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGDO,CHEVGDO)
 *(PT,GT).(GDO,ELC,MET)
-PC.(TGSL,TLPG,TGDO,TNGS,TELC,TPHEVGSL,TPHEVGDO,TCHEVGSL,TCHEVGDO)
-PB.(TLPG,TGDO,TNGS,TELC)
-GU.(TLPG,TGDO,TNGS,TELC,TCHEVGDO) !! Removed GSL and PHEVGSL
+PC.(TGSL,TLPG,TGDO,TNGS,TELC,TPHEVGSL,TPHEVGDO,TCHEVGSL,TCHEVGDO,TH2F)
+PB.(TLPG,TGDO,TNGS,TELC,TH2F)
+GU.(TLPG,TGDO,TNGS,TELC,TCHEVGDO,TH2F) !! Removed GSL and PHEVGSL
 (PT,GT).(TGDO,TELC)
 PA.(TKRS)
-(PN,GN).(TGDO)
+(PN,GN).(TGDO,TH2F)
 (IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(TLGN,THCL,TGDO,TRFO,TLPG,TKRS,TOLQ,TNGS,TOGS,TELC,TSTE1AL,
                                  TSTE1AH,TSTE1AD,TSTE1AG,TH2F)
+(IS,BM,CH).(TNGSCCS,THCLCCS)
 (HOU,AG).(TLPG,TKRS,TGDO,TNGS,TOGS,TBMSWAS,TELC,TSTE2LGN,TSTE2OSL,TSTE2GDO,TSTE2NGS,
                                  TSTE2BMS)
 SE.(TLPG,TKRS,TNGS,TOGS,TELC)
@@ -827,6 +872,7 @@ SE.(TLPG,TKRS,TNGS,TOGS,TELC)
 *BU.(GDO,RFO,OLQ)
 BU.(TGDO,TRFO)
 (PCH,NEN).(TLGN,THCL,TGDO,TRFO,TLPG,TOLQ,TNGS,TOGS)
+DAC.(HTDAC,H2DAC,LTDAC,EWDAC)
 *PG.(PGTLGN,PGTHCL,PGTGDO,PGTRFO,PGTNGS,PGTNUC,PGTHYD,PGTBMSWAS,PGTSOL,PGTGEO,PGTWND)
 *H2P.(HPTHCL,HPTRFO,HPTNGS,HPTNUC,HPTBMSWAS,HPTSOL,HPTWND,HPTELC)
 /
@@ -835,6 +881,7 @@ SECtoEF(SBS,EF) Link between Model Subsectors and Energy FORMS
 /
 PG.(LGN,HCL,GDO,RFO,NGS,OGS,NUC,HYD,BMSWAS,SOL,GEO,WND)
 H2P.(HCL,RFO,NGS,NUC,BMSWAS,SOL,WND,ELC)
+*DAC.(ELC,NGS)
 /
 
 PGALL            Power Generation Plant Types !! Maybe these should be the power generation technologies?

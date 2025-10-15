@@ -17,9 +17,16 @@ V01RateScrPc.UP(runCy,YTIME) = 1;
 V01RateScrPc.l(runCy,YTIME) = 0.06;
 V01RateScrPc.FX(runCy,"%fBaseY%") = 0.06; 
 *---
+V01RateScrPcTot.UP(runCy,TTECH,YTIME) = 1;
+V01RateScrPcTot.FX(runCy,TTECH,YTIME)$(not AN(YTIME)) = V01RateScrPc.L(runCy,YTIME);
+*---
+V01PremScrp.UP(runCy,TRANSE,TTECH,YTIME) = 1;
+V01PremScrp.lo(runCy,TRANSE,TTECH,YTIME) = 0;
+*---
 V01NumPcScrap.FX(runCy,"%fBaseY%") = V01RateScrPc.L(runCy,"%fBaseY%") * V01StockPcYearly.L(runCy,"%fBaseY%"); 
 *---
-V01CostTranspPerMeanConsSize.L(runCy,TRANSE,TTECH,YTIME)$SECTTECH(TRANSE,TTECH) = 1;
+V01CostTranspPerMeanConsSize.L(runCy,TRANSE,TTECH,YTIME)$SECTTECH(TRANSE,TTECH) = 1e-2;
+*V01CostTranspPerMeanConsSize.FX(runCy,TRANSE,TTECH,YTIME)$(not SECTTECH(TRANSE,TTECH)) = 0;
 *---
 V01StockPcYearlyTech.FX(runCy,TTECH,"%fBaseY%") = i01StockPC(runCy,TTECH,"%fBaseY%");
 *---
@@ -53,7 +60,8 @@ VmDemFinEneTranspPerFuel.FX(runCy,TRANSE,EF,YTIME) $(SECtoEF(TRANSE,EF) $(not An
 VmDemFinEneTranspPerFuel.FX(runCy,TRANSE,EF,YTIME)$(not SECtoEF(TRANSE,EF)) = 0;
 *---
 VmLft.L(runCy,DSBS,TTECH,YTIME) = 0.1;
-VmLft.FX(runCy,DSBS,TECH,YTIME)$(SECTTECH(DSBS,TECH)  $(not  TRANSE(DSBS)) $(not sameas(DSBS,"PC"))) = i01TechLft(runCy,DSBS,TECH,YTIME);
+VmLft.FX(runCy,DSBS,TECH,YTIME)$(SECTTECH(DSBS,TECH)  $(not  TRANSE(DSBS)) $(not sameas(DSBS,"PC"))$(not TCHP(TECH))) = i01TechLft(runCy,DSBS,TECH,YTIME);
+VmLft.FX(runCy,DSBS,TECH,YTIME)$(SECTTECH(DSBS,TECH)  $(not  TRANSE(DSBS)) $(not sameas(DSBS,"PC"))$TCHP(TECH)) = 12.5;
 VmLft.FX(runCy,TRANSE,TTECH,YTIME)$(SECTTECH(TRANSE,TTECH) $(not sameas(TRANSE,"PC"))) = i01TechLft(runCy,TRANSE,TTECH,YTIME);
 VmLft.FX(runCy,DSBS,TECH,YTIME)$(not SECTTECH(DSBS,TECH)) = 0;
 VmLft.FX(runCy,"PC",TTECH,YTIME)$( (not AN(YTIME)) $SECTTECH("PC",TTECH)) = 1/V01RateScrPc.L(runCy,YTIME);
