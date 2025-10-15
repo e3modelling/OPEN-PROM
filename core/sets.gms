@@ -329,6 +329,7 @@ GEO     "Geothermal and other renewable sources eg. Tidal, etc."
 MET     "Methanol"
 ETH     "Ethanol"
 BGDO    "Biodiesel"
+BGSL    "Biogasoline"
 H2F     "Hydrogen"
 ELC     "Electricity"
 *STE1CL  "Steam coming from CHP plants conventional lgn"
@@ -352,6 +353,7 @@ STE2OLQ "Steam produced from district heating plants burning olq"
 STE2NGS "Steam produced from district heating plants burning ngs"
 STE2OGS "Steam produced from district heating plants burning ogs"
 STE2BMS "Steam produced from district heating plants burning bmswas"
+STE2AH2F "Steam produced from district heating plants burning h2f"
 *PHEVGSL  "Plug in Hybrid engine - gasoline"
 *PHEVGDO  "Plug in Hybrid engine - diesel"
 *hybrid cars with gasoline and diesel
@@ -684,6 +686,7 @@ EWDAC
 
 ITECH(TECH)      Industrial - Domestic - Non-energy & Bunkers Technologies 
 /
+TBGDO
 TGDO
 TLPG
 TKRS  
@@ -798,6 +801,7 @@ TCHEVGDO.GDO
 
 ITECHtoEF(ITECH,EF) Fuels consumed by industrial technologies
 /
+TBGDO.BGDO
 TGDO.GDO
 TLPG.LPG
 TKRS.KRS  
@@ -862,8 +866,8 @@ GU.(TLPG,TGDO,TNGS,TELC,TCHEVGDO,TH2F) !! Removed GSL and PHEVGSL
 (PT,GT).(TGDO,TELC)
 PA.(TKRS)
 (PN,GN).(TGDO,TH2F)
-(IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(TLGN,THCL,TGDO,TRFO,TLPG,TKRS,TOLQ,TNGS,TOGS,TELC,TSTE1AL,
-                                 TSTE1AH,TSTE1AD,TSTE1AG,TH2F)
+(IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(TLGN,THCL,TGDO,TBGDO,TGSL,TRFO,TLPG,TKRS,TOLQ,TNGS,TOGS,TELC,TBMSWAS,
+                                TSTE1AL,TSTE1AH,TSTE1AD,TSTE1AG,TSTE1AB,TH2F)
 (IS,BM,CH).(TNGSCCS,THCLCCS)
 (HOU,AG).(TLPG,TKRS,TGDO,TNGS,TOGS,TBMSWAS,TELC,TSTE2LGN,TSTE2OSL,TSTE2GDO,TSTE2NGS,
                                  TSTE2BMS)

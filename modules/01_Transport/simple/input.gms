@@ -182,8 +182,6 @@ i01Sigma(allCy,SG)                                   "S parameters of Gompertz f
 *---
 i01PassCarsMarkSat(runCy) = 0.7;
 *---
-imFuelConsTRANSE(runCy,TRANSE,EF,YTIME)$(SECtoEF(TRANSE,EF) $(imFuelConsTRANSE(runCy,TRANSE,EF,YTIME)<=0)) = 1e-6;
-*---
 i01ShareAnnMilePlugInHybrid(runCy,YTIME)$an(YTIME) = i01PlugHybrFractData(YTIME);
 *---
 i01AvgVehCapLoadFac(runCy,TRANSE,TRANSUSE,YTIME) = i01CapDataLoadFacEachTransp(TRANSE,TRANSUSE);

@@ -402,8 +402,10 @@ OI.TH2F      2.43133 68.3668 41.1163 25  0.97
 imDataIndTechnology(INDSE,TECH,"IC") = imDataIndTechnology(INDSE,TECH,"IC") * 1.3;
 imDataIndTechnology(INDSE,TECH,"FC") = imDataIndTechnology(INDSE,TECH,"FC") * 1.3;
 imDataIndTechnology(INDSE,TECH,"VC") = imDataIndTechnology(INDSE,TECH,"VC") * 1.3;
-*---
 
+imDataIndTechnology(INDSE,"TBGDO",ECONCHAR) = imDataIndTechnology(INDSE,"TGDO",ECONCHAR);
+imDataIndTechnology(INDSE,"TBMSWAS",ECONCHAR) = imDataIndTechnology("IS","TBMSWAS",ECONCHAR);
+*---
 table imDataChpPowGen(EF,CHPPGSET,YTIME)   "Data for power generation costs (various)"
 $ondelim
 $include"./iChpPowGen.csv"
@@ -510,6 +512,7 @@ HOU.THEATPUMP 0.432    12.9254         20  1.848
 imDataDomTech(DOMSE,TECH,"IC") = imDataDomTech(DOMSE,TECH,"IC") * 1.3;
 imDataDomTech(DOMSE,TECH,"FC") = imDataDomTech(DOMSE,TECH,"FC") * 1.3;
 imDataDomTech(DOMSE,TECH,"VC") = imDataDomTech(DOMSE,TECH,"VC") * 1.3;
+imDataIndTechnology(INDSE,"TGSL",ECONCHAR) = imDataDomTech("SE","TGSL",ECONCHAR);
 *---
 table imDataNonEneSec(NENSE,TECH,ECONCHAR)              "Technical data of non energy uses and bunkers (various)"
         IC      FC      VC      LFT USC
@@ -676,51 +679,14 @@ $offdelim
 *---
 imDistrLosses(runCy,EFS,YTIME) = iDataDistrLosses(runCy,EFS,YTIME);
 *---
-table imFuelConsTRANSE(allCy,TRANSE,EF,YTIME)	      "Fuel consumption (Mtoe)"
+table imFuelCons(allCy,SBS,EF,YTIME)	      "Fuel consumption (Mtoe)"
 $ondelim
-$include"./iFuelConsTRANSE.csv"
+$include"./iFuelCons.csv"
 $offdelim
 ;
 *---
-imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME) = imFuelConsTRANSE(runCy,TRANSE,EF,YTIME);
-table iFuelConsINDSE(allCy,INDSE,EF,YTIME)	"Fuel consumption of industry subsector (Mtoe)"
-$ondelim
-$include"./iFuelConsINDSE.csv"
-$offdelim
-;
-*---
-iFuelConsINDSE(runCy,INDSE,EF,YTIME)$(SECtoEF(INDSE,EF) $(iFuelConsINDSE(runCy,INDSE,EF,YTIME)<=0)) = 1e-6;
-*---
-table iFuelConsDOMSE(allCy,DOMSE,EF,YTIME)	"Fuel consumption of domestic subsector (Mtoe)"
-$ondelim
-$include"./iFuelConsDOMSE.csv"
-$offdelim
-;
-*---
-iFuelConsDOMSE(runCy,DOMSE,EF,YTIME)$(SECtoEF(DOMSE,EF) $(iFuelConsDOMSE(runCy,DOMSE,EF,YTIME)<=0)) = 1e-6;
-*---
-table iFuelConsNENSE(allCy,NENSE,EF,YTIME)	"Fuel consumption of non energy and bunkers (Mtoe)"
-$ondelim
-$include"./iFuelConsNENSE.csv"
-$offdelim
-;
-*---
-iFuelConsNENSE(runCy,NENSE,EF,YTIME)$(SECtoEF(NENSE,EF) $(iFuelConsNENSE(runCy,NENSE,EF,YTIME)<=0)) = 1e-6;
-imFuelConsPerFueSub(runCy,INDSE,EF,YTIME) = iFuelConsINDSE(runCy,INDSE,EF,YTIME);
-imFuelConsPerFueSub(runCy,INDSE,"STE1AG",YTIME) = iFuelConsINDSE(runCy,INDSE,"STE1AH",YTIME);
-imFuelConsPerFueSub(runCy,INDSE,"STE1AH",YTIME) = iFuelConsINDSE(runCy,INDSE,"STE1AG",YTIME);
-imFuelConsPerFueSub("IND",INDSE,"STE1AB",YTIME) = iFuelConsINDSE("IND",INDSE,"STE1AH",YTIME);
-imFuelConsPerFueSub("IND",INDSE,"STE1AH",YTIME) = iFuelConsINDSE("IND",INDSE,"STE1AB",YTIME);
-imFuelConsPerFueSub("CHA",INDSE,"STE1AH",YTIME) = iFuelConsINDSE("IND",INDSE,"STE1AH",YTIME);
-imFuelConsPerFueSub("CHA",INDSE,"STE1AG",YTIME) = iFuelConsINDSE("IND",INDSE,"STE1AG",YTIME);
-imFuelConsPerFueSub("OAS",INDSE,"STE1AH",YTIME) = iFuelConsINDSE("OAS",INDSE,"STE1AH",YTIME);
-imFuelConsPerFueSub("OAS",INDSE,"STE1AG",YTIME) = iFuelConsINDSE("OAS",INDSE,"STE1AG",YTIME);
-imFuelConsPerFueSub("POL",INDSE,"STE1AH",YTIME) = iFuelConsINDSE("POL",INDSE,"STE1AH",YTIME);
-imFuelConsPerFueSub("POL",INDSE,"STE1AG",YTIME) = iFuelConsINDSE("POL",INDSE,"STE1AG",YTIME);
-imFuelConsPerFueSub("LAM",INDSE,"STE1AB",YTIME) = iFuelConsINDSE("LAM",INDSE,"STE1AH",YTIME);
-imFuelConsPerFueSub("LAM",INDSE,"STE1AH",YTIME) = iFuelConsINDSE("LAM",INDSE,"STE1AB",YTIME);
-imFuelConsPerFueSub(runCy,DOMSE,EF,YTIME) = iFuelConsDOMSE(runCy,DOMSE,EF,YTIME);
-imFuelConsPerFueSub(runCy,NENSE,EF,YTIME) = iFuelConsNENSE(runCy,NENSE,EF,YTIME);
+imFuelConsPerFueSub(runCy,SBS,EF,YTIME) = imFuelCons(runCy,SBS,EF,YTIME);
+imFuelConsPerFueSub(runCy,"BU",EF,YTIME) = -imFuelConsPerFueSub(runCy,"BU",EF,YTIME);
 * NEED TO CHECK IF CORRECT
 imFinEneCons(runCy,EFS,YTIME) =
      sum((INDDOM,EF)$(EFtoEFS(EF,EFS) and sum(TECH$(SECTTECH(INDDOM,TECH) and TECHtoEF(TECH,EF)),1)),imFuelConsPerFueSub(runCy,INDDOM,EF,YTIME))
@@ -870,3 +836,4 @@ imPlantEffByType(runCy,PGALL,YTIME) = iDataPlantEffByType(runCy,PGALL, YTIME) ;
 *---
 **   Conversion of GW mean power into TWh/y, depending on whether it's a leap year
 smGwToTwhPerYear(YTIME) = 8.76 + 0.024 $ (mod(YTIME.val,4) = 0 and mod (YTIME.val,100) <> 0);
+*--
