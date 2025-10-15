@@ -32,7 +32,7 @@ imAnnCons(allCy,DSBS,conSet)                               "Annual consumption o
 imCumDistrFuncConsSize(allCy,DSBS)                         "Cummulative distribution function of consumer size groups (1)"
 imRateLossesFinCons(allCy,EF,YTIME)                        "Rate of losses over Available for Final Consumption (1)"  
 imFuelExprts(allCy,EF,YTIME)	                           "Fuel Exports (Mtoe)"
-imCO2CaptRate(allCy,PGALL,YTIME)	                       "Plant CO2 capture rate (1)"		
+imCO2CaptRate(PGALL)	                                    "Plant CO2 capture rate (1)"		
 imEffValueInDollars(allCy,SBS,YTIME)	                   "Efficiency value (US$2015/toe)" 	
 imShrNonSubElecInTotElecDem(allCy,SBS)	                   "Share of non substitutable electricity in total electricity demand per subsector (1)"		
 imDistrLosses(allCy,EF,YTIME)	                           "Distribution Losses (Mtoe)"		

@@ -15,14 +15,18 @@
 *' Industry and Tertiary sectors and the sum of final energy demand in all transport subsectors. The consumption is determined by the 
 *' relevant link between model subsectors and fuels.
 Q03ConsFinEneCountry(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VmConsFinEneCountry(allCy,EFS,YTIME)
-             =E=
-         sum(INDDOM,
-             sum(EF$(EFtoEFS(EF,EFS) $SECtoEF(INDDOM,EF) ), VmConsFuel(allCy,INDDOM,EF,YTIME)))
-         +
-         sum(TRANSE,
-             sum(EF$(EFtoEFS(EF,EFS) $SECtoEF(TRANSE,EF)), VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)))
-        ;
+    VmConsFinEneCountry(allCy,EFS,YTIME)
+        =E=
+    sum(INDDOM,
+      sum(EF$(EFtoEFS(EF,EFS) $SECtoEF(INDDOM,EF) ), VmConsFuel(allCy,INDDOM,EF,YTIME))
+    ) +
+    sum(TRANSE,
+      sum(EF$(EFtoEFS(EF,EFS) $SECtoEF(TRANSE,EF)),
+        VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)
+      )
+    ) +
+    sum(EF$(EFtoEFS(EF,EFS) $SECtoEF("DAC",EF)),VmConsFuelDACProd(allCy,EF,YTIME))
+    ;
 
 *' The equation computes the total final energy consumption in million tonnes of oil equivalent 
 *' for all countries at a specific time period. This is achieved by summing the final energy consumption for each energy
@@ -155,7 +159,10 @@ Q03InpTransfTherm(allCy,PGEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         sum(PGALL$(PGALLtoEF(PGALL,PGEF)$PGGEO(PGALL)),
              VmProdElec(allCy,PGALL,YTIME) * smTWhToMtoe / 0.15) 
         +
-        sum(CHP$CHPtoEF(CHP,PGEF),  sum(INDDOM,VmConsFuel(allCy,INDDOM,CHP,YTIME))+smTWhToMtoe*V04ProdElecEstCHP(allCy,CHP,YTIME))/(0.8+0.1*(ord(YTIME)-10)/32);
+        sum(CHP$CHPtoEF(CHP,PGEF),
+          sum(INDDOM,VmConsFuel(allCy,INDDOM,CHP,YTIME)) +
+          smTWhToMtoe * V04ProdElecEstCHP(allCy,CHP,YTIME)
+        ) / (0.8+0.1*(ord(YTIME)-10)/32);
 
 *' The equation calculates the transformation output from thermal power stations for a specific energy branch
 *' in a given scenario and year. The result is computed based on the following conditions: 
@@ -192,7 +199,8 @@ Q03InpTotTransf(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                  =E=
         (
             VmInpTransfTherm(allCy,EFS,YTIME) + VmTransfInputDHPlants(allCy,EFS,YTIME) + V03InpTransfNuclear(allCy,EFS,YTIME) +
-             V03InputTransfRef(allCy,EFS,YTIME) + sum(EF$(H2PRODEF(EF) and EFtoEFS(EF,EFS)),VmConsFuelH2Prod(allCy,EF,YTIME))
+             V03InputTransfRef(allCy,EFS,YTIME) + sum(EF$(H2PRODEF(EF) and EFtoEFS(EF,EFS)),VmConsFuelH2Prod(allCy,EF,YTIME)
+        )
         )$(not sameas(EFS,"OGS"))
         +
         (

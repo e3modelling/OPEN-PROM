@@ -32,8 +32,12 @@ i08WgtSecAvgPriFueCons(runCy,TRANSE,EF)$SECtoEF(TRANSE,EF) = (imFuelConsPerFueSu
 i08WgtSecAvgPriFueCons(runCy,NENSE,EF)$SECtoEF(NENSE,EF) = ( imFuelConsPerFueSub(runCy,NENSE,EF,"%fBaseY%") / imTotFinEneDemSubBaseYr(runCy,NENSE,"%fBaseY%") )$imTotFinEneDemSubBaseYr(runCy,NENSE,"%fBaseY%")
                                              + (1/i08DiffFuelsInSec(NENSE))$(not imTotFinEneDemSubBaseYr(runCy,NENSE,"%fBaseY%"));
 *---
-i08WgtSecAvgPriFueCons(runCy,INDDOM,EF)$(SECtoEF(INDDOM,EF)$(not sameas(EF,"ELC"))) = ( imFuelConsPerFueSub(runCy,INDDOM,EF,"%fBaseY%") / (imTotFinEneDemSubBaseYr(runCy,INDDOM,"%fBaseY%") - imFuelConsPerFueSub(runCy,INDDOM,"ELC","%fBaseY%")) )$( imTotFinEneDemSubBaseYr(runCy,INDDOM,"%fBaseY%") - imFuelConsPerFueSub(runCy,INDDOM,"ELC","%fBaseY%") )
-                                                                        + (1/(i08DiffFuelsInSec(INDDOM)-1))$(not (imTotFinEneDemSubBaseYr(runCy,INDDOM,"%fBaseY%") - imFuelConsPerFueSub(runCy,INDDOM,"ELC","%fBaseY%")));
+i08WgtSecAvgPriFueCons(runCy,INDDOM,EF)$(SECtoEF(INDDOM,EF)) = 
+(
+  (imFuelConsPerFueSub(runCy,INDDOM,EF,"%fBaseY%") - (imShrNonSubElecInTotElecDem(runCy,INDDOM) * imFuelConsPerFueSub(runCy,INDDOM,"ELC","%fBaseY%"))$ELCEF(EF)) / 
+  (imTotFinEneDemSubBaseYr(runCy,INDDOM,"%fBaseY%") - imShrNonSubElecInTotElecDem(runCy,INDDOM) * imFuelConsPerFueSub(runCy,INDDOM,"ELC","%fBaseY%")) 
+)$(imTotFinEneDemSubBaseYr(runCy,INDDOM,"%fBaseY%") - imShrNonSubElecInTotElecDem(runCy,INDDOM) * imFuelConsPerFueSub(runCy,INDDOM,"ELC","%fBaseY%"))
++ (1/i08DiffFuelsInSec(INDDOM))$(not imTotFinEneDemSubBaseYr(runCy,INDDOM,"%fBaseY%") - imShrNonSubElecInTotElecDem(runCy,INDDOM) * imFuelConsPerFueSub(runCy,INDDOM,"ELC","%fBaseY%"));
 *---
 * Rescaling the weights
 i08WgtSecAvgPriFueCons(runCy,SBS,EF)$(SECtoEF(SBS,EF) $sum(ef2$SECtoEF(SBS,EF),i08WgtSecAvgPriFueCons(runCy,SBS,EF2))) = i08WgtSecAvgPriFueCons(runCy,SBS,EF)/sum(ef2$SECtoEF(SBS,EF),i08WgtSecAvgPriFueCons(runCy,SBS,EF2));

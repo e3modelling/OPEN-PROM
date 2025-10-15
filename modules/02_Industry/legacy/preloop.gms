@@ -5,11 +5,11 @@
 *---
 V02CostTechIntrm.L(runCy,DSBS,rcon,EF,YTIME) = 0.1;
 *---
-V02SortTechVarCost.L(runCy,DSBS,rCon,YTIME) = 0.00000001;
+V02SortTechVarCost.L(runCy,DSBS,rCon,YTIME) = 1e-8;
 *---
 V02ShareTechNewEquip.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF)$(not An(YTIME))) = 0;
 *---
-VmConsFuel.L(runCy,DSBS,EF,YTIME) = 0.0000000001;
+VmConsFuel.L(runCy,DSBS,EF,YTIME) = 1e-8;
 VmConsFuel.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $(not HEATPUMP(EF)) $(not TRANSE(DSBS)) $(not An(YTIME))) = imFuelConsPerFueSub(runCy,DSBS,EF,YTIME);
 *---
 VmConsElecNonSubIndTert.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = imFuelConsPerFueSub(runCy,INDDOM,"ELC",YTIME) * imShrNonSubElecInTotElecDem(runCy,INDDOM);
@@ -31,4 +31,7 @@ VmConsFuelInclHP.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $(not TRANSE(DSBS)) 
 *---
 VmConsRemSubEquipSubSec.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $(not An(ytime))) =
 (VmConsFuelInclHP.L(runCy ,DSBS,EF,YTIME) - (VmConsElecNonSubIndTert.L(runCy,DSBS,YTIME)$(ELCEF(EF) $INDDOM(DSBS)) + 0$(not (ELCEF(EF) $INDDOM(DSBS)))));
+*---
+V02GapFinalDem.scale(runCy,DSBS,YTIME) = 1e-8;
+Q02GapFinalDem.scale(runCy,DSBS,YTIME) = V02GapFinalDem.scale(runCy,DSBS,YTIME);
 *---

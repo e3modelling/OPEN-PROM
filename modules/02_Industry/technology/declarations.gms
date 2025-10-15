@@ -17,6 +17,8 @@ Q02FinalElecNonSubIndTert(allCy,DSBS,YTIME)                "Compute final energy
 
 Q02IndxElecIndPrices(allCy,YTIME)                          "Compute Electricity index - a function of industry price - Estimate"
 Q02CostElecProdCHP(allCy,DSBS,CHP,YTIME)                   "Compute Cost of electricity production by CHP - NEEDED?"
+Q02IndAvrEffFinalUseful(allCy,DSBS,YTIME)                  "Average Efficiency" 
+Q02PremScrpIndu(allCy,DSBS,ITECH,YTIME)                    "premature scrapping"
 
 *'                **Interdependent Equations**
 Q02ConsFuel(allCy,DSBS,EF,YTIME)                           "Compute fuel consumption of fuels in each subsector"
@@ -39,6 +41,8 @@ V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)                "final energy of non-
 
 V02IndxElecIndPrices(allCy,YTIME)                          "Electricity index - a function of industry price - Estimate"
 V02CostElecProdCHP(allCy,DSBS,CHP,YTIME)                   "Cost of electricity production by CHP - NEEDED?"
+V02IndAvrEffFinalUseful(allCy,DSBS,YTIME)                  "Average Efficiency" 
+V02PremScrpIndu(allCy,DSBS,ITECH,YTIME)                    "premature scrapping"
 *'                **Interdependent Variables**
 VmConsFuel(allCy,DSBS,EF,YTIME)                            "fuel consumption of fuels in each subsector"
 VmCostElcAvgProdCHP(allCy,CHP,YTIME)                       "Average Electricity production cost per CHP plant - NEEDED?"
