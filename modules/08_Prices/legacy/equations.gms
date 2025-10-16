@@ -149,29 +149,6 @@ Q08PriceElecIndResConsu(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
            )$sameas(ESET,"c") 
         );
 
-*' Compute electricity price in Industrial and Residential Consumers excluding climate policies by multiplying the Factors affecting electricity prices to consumers by the sum of 
-*' Fuel prices per subsector and fuel multiplied by the TWh to Mtoe conversion factor adding the Factors affecting electricity prices to consumers and the Long-term average power 
-*' generation cost  excluding climate policies for Electricity of Other Industrial sectors and for Electricity for Households .
-Q08PriceElecIndResNoCliPol(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..   !! The electricity price is based on previous year's production costs
-        VmPriceElecIndResNoCliPol(allCy,ESET,YTIME)
-                 =E=
-        (1 + i08VAT(allCy, YTIME)) *
-        (
-           (
-             (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
-             (
-               V04CostPowGenLonNoClimPol(allCy,"i",YTIME-1) 
-              )$(not TFIRST(YTIME-1))
-           )$ISET(ESET)
-        +
-           (
-             (VmPriceFuelSubsecCarVal(allCy,"HOU","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
-             (
-                V04CostPowGenLonNoClimPol(allCy,"r",YTIME-1) 
-             )$(not TFIRST(YTIME-1))
-           )$RSET(ESET)
-        );
-
 *' This equation calculates the fuel prices per subsector and fuel, specifically for Combined Heat and Power (CHP) plants, considering the profit earned from
 *' electricity sales. The equation incorporates various factors such as the base fuel price, renewable value, variable cost of technology, useful energy conversion
 *' factor, and the fraction of electricity price at which a CHP plant sells electricity to the network.
