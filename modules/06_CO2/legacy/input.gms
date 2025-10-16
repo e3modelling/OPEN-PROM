@@ -122,12 +122,12 @@ CHA.H2DAC.2030  1e5,    !!Possible
 CHA.EWDAC.2030  1e6,    !!Possible
 OAS.LTDAC.2030  1e6,    !!Possible
 OAS.EWDAC.2035  1e5,    !!Possible
-DEU.LTDAC.2035  5e5,    !!Possible
-DEU.EWDAC.2035  5e5,    !!Possible
-FRA.LTDAC.2035  5e5,    !!Possible
+DEU.LTDAC.2035  4e5,    !!Possible
+DEU.EWDAC.2035  2e5,    !!Possible
+FRA.LTDAC.2035  2e5,    !!Possible
 GBR.H2DAC.2035  5e4,    !!Possible
-IND.LTDAC.2026  1e6,    !!Possible
-IND.EWDAC.2030  1e6,    !!Possible
+IND.LTDAC.2026  7e5,    !!Possible
+IND.EWDAC.2030  7e5,    !!Possible
 JPN.H2DAC.2030  1e5,    !!Possible
 REF.LTDAC.2029  1e6,    !!Possible
 REF.EWDAC.2033  1e5,    !!Possible
