@@ -207,10 +207,12 @@ Q01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)$(TIME(YTIME) $SECTTECH(TR
     ) +
     V01ShareTechTr(allCy,TRANSE,TTECH,YTIME) *
     (
-      V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)$(not PLUGIN(TTECH)) +
+      (i01ShareTTechFuel(allCy,TRANSE,TTECH,EF) *
+      V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME))$(not PLUGIN(TTECH)) +
       ( 
         (
           (1-i01ShareAnnMilePlugInHybrid(allCy,YTIME)) *
+          i01ShareTTechFuel(allCy,TRANSE,TTECH,EF) *
           V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)
         )$(not sameas("ELC",EF)) +
         i01ShareAnnMilePlugInHybrid(allCy,YTIME) *
