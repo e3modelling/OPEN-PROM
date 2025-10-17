@@ -329,6 +329,7 @@ GEO     "Geothermal and other renewable sources eg. Tidal, etc."
 MET     "Methanol"
 ETH     "Ethanol"
 BGDO    "Biodiesel"
+BGSL    "Biogasoline"
 H2F     "Hydrogen"
 ELC     "Electricity"
 *STE1CL  "Steam coming from CHP plants conventional lgn"
@@ -352,6 +353,7 @@ STE2OLQ "Steam produced from district heating plants burning olq"
 STE2NGS "Steam produced from district heating plants burning ngs"
 STE2OGS "Steam produced from district heating plants burning ogs"
 STE2BMS "Steam produced from district heating plants burning bmswas"
+STE2AH2F "Steam produced from district heating plants burning h2f"
 *PHEVGSL  "Plug in Hybrid engine - gasoline"
 *PHEVGDO  "Plug in Hybrid engine - diesel"
 *hybrid cars with gasoline and diesel
@@ -684,6 +686,7 @@ EWDAC
 
 ITECH(TECH)      Industrial - Domestic - Non-energy & Bunkers Technologies 
 /
+TBGDO
 TGDO
 TLPG
 TKRS  
@@ -736,21 +739,21 @@ TSTE2BMS "Steam produced from district heating plants burning bmswas"
 
 TECHtoEF (TECH,EF) Fuels consumed by technologies
 /
-TGSL.GSL
+TGSL.(GSL,BGSL)
 TLPG.LPG
-TGDO.GDO
-TNGS.NGS
+TGDO.(GDO,BGDO,RFO)
+TNGS.(NGS,OGS)
 TNGSCCS.NGS
 TELC.ELC
 TKRS.KRS
 TETH.ETH
 TMET.MET
 TBGDO.BGDO
-TPHEVGSL.(GSL,ELC)
-TPHEVGDO.(GDO,ELC)
+TPHEVGSL.(GSL,BGSL,ELC)
+TPHEVGDO.(GDO,BGDO,ELC)
 TH2F.H2F
-TCHEVGSL.GSL
-TCHEVGDO.GDO     
+TCHEVGSL.(GSL,BGSL)
+TCHEVGDO.(GDO,BGDO)     
 TLGN.LGN
 THCL.HCL
 THCLCCS.HCL
@@ -780,24 +783,25 @@ EWDAC.ELC
 /
 TTECHtoEF(TTECH,EF) Fuels consumed by transport technologies
 /
-TGSL.GSL
+TGSL.(GSL,BGSL)
 TLPG.LPG
-TGDO.GDO
-TNGS.NGS
+TGDO.(GDO,BGDO,RFO)
+TNGS.(NGS,OGS)
 TELC.ELC
 TKRS.KRS
 TETH.ETH
 TMET.MET
 TBGDO.BGDO
-TPHEVGSL.(GSL,ELC)
-TPHEVGDO.(GDO,ELC)
+TPHEVGSL.(GSL,BGSL,ELC)
+TPHEVGDO.(GDO,BGDO,ELC)
 TH2F.H2F
-TCHEVGSL.GSL
-TCHEVGDO.GDO
+TCHEVGSL.(GSL,BGSL)
+TCHEVGDO.(GDO,BGDO)
 /
 
 ITECHtoEF(ITECH,EF) Fuels consumed by industrial technologies
 /
+TBGDO.BGDO
 TGDO.GDO
 TLPG.LPG
 TKRS.KRS  
@@ -857,13 +861,13 @@ SECTTECH(DSBS,TECH) Link between Model Demand Subsectors and Technologies
 *GU.(LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGDO,CHEVGDO)
 *(PT,GT).(GDO,ELC,MET)
 PC.(TGSL,TLPG,TGDO,TNGS,TELC,TPHEVGSL,TPHEVGDO,TCHEVGSL,TCHEVGDO,TH2F)
-PB.(TLPG,TGDO,TNGS,TELC,TH2F)
-GU.(TLPG,TGDO,TNGS,TELC,TCHEVGDO,TH2F) !! Removed GSL and PHEVGSL
+PB.(TLPG,TGSL,TGDO,TNGS,TELC,TH2F)
+GU.(TLPG,TGSL,TGDO,TNGS,TELC,TCHEVGDO,TH2F) !! Removed GSL and PHEVGSL
 (PT,GT).(TGDO,TELC)
 PA.(TKRS)
 (PN,GN).(TGDO,TH2F)
-(IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(TLGN,THCL,TGDO,TRFO,TLPG,TKRS,TOLQ,TNGS,TOGS,TELC,TSTE1AL,
-                                 TSTE1AH,TSTE1AD,TSTE1AG,TH2F)
+(IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(TLGN,THCL,TGDO,TGSL,TRFO,TLPG,TKRS,TOLQ,TNGS,TOGS,TELC,TBMSWAS,
+                                TSTE1AL,TSTE1AH,TSTE1AD,TSTE1AG,TSTE1AB,TH2F)
 (IS,BM,CH).(TNGSCCS,THCLCCS)
 (HOU,AG).(TLPG,TKRS,TGDO,TNGS,TOGS,TBMSWAS,TELC,TSTE2LGN,TSTE2OSL,TSTE2GDO,TSTE2NGS,
                                  TSTE2BMS)
@@ -1374,3 +1378,9 @@ loop TECH do
         endloop;
     endloop;
 endloop;
+SECtoEF(INDDOM, "BGSL") = no;
+SECtoEF(INDDOM, "BGDO") = no;
+SECtoEF(NENSE, "BGSL") = no;
+SECtoEF(NENSE, "BGDO") = no;
+*This is equivalent with the loop above
+*SECtoEF(DSBS, EF)$(sum(TECH, SECTTECH(DSBS, TECH) * TTECHtoEF(TECH, EF))) = yes;

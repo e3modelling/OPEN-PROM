@@ -39,7 +39,7 @@ display V02EquipCapTechSubsec.L;
 *---
 V02UsefulElecNonSubIndTert.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = imFuelConsPerFueSub(runCy,INDDOM,"ELC",YTIME) * imShrNonSubElecInTotElecDem(runCy,INDDOM) / imUsfEneConvSubTech(runCy,INDDOM,"TELC",YTIME);
 *---
-VmConsFuel.L(runCy,DSBS,EF,YTIME) = 1e-8;
+VmConsFuel.L(runCy,DSBS,EF,YTIME)$(not TRANSE(DSBS)) = 1e-8;
 VmConsFuel.FX(runCy,DSBS,EF,YTIME)$((not HEATPUMP(EF)) and not TRANSE(DSBS) and not An(YTIME)) = sum(SECtoEF(DSBS,EF),imFuelConsPerFueSub(runCy,DSBS,EF,YTIME));
 *---
 *vmConsTotElecInd.FX(runCy,YTIME)$(not An(YTIME))= SUM(INDSE,VmConsElecNonSubIndTert.l(runCy,INDSE,YTIME));
