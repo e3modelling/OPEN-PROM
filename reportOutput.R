@@ -27,8 +27,8 @@ reportOutput <- function(
     fullValidation = TRUE,
     plot_name = NULL) {
   # Region mapping used for aggregating validation data (e.g. ENERDATA)
-  mapping <- jsonlite::read_json("metadata.json")[["Model Information"]][["Region Mapping"]][[1]]
-  setConfig(regionmapping = mapping)
+ #  mapping <- jsonlite::read_json(paste0((runpath),"/metadata.json"))[["Model Information"]][["Region Mapping"]][[1]]
+ #  setConfig(regionmapping = mapping)
 
   reports <- convertGDXtoMIF(runpath,
     mif_name = mif_name,
