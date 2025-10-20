@@ -44,8 +44,11 @@ Q04DemElecTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04DemElecTot(allCy,YTIME)
         =E=
     1/smTWhToMtoe *
-    ( VmConsFinEneCountry(allCy,"ELC",YTIME) + VmConsFinNonEne(allCy,"ELC",YTIME) + VmLossesDistr(allCy,"ELC",YTIME)
-      + VmConsFiEneSec(allCy,"ELC",YTIME) - VmImpNetEneBrnch(allCy,"ELC",YTIME)
+    ( VmConsFinEneCountry(allCy,"ELC",YTIME) + 
+    VmConsFinNonEne(allCy,"ELC",YTIME) + 
+    VmLossesDistr(allCy,"ELC",YTIME) +
+    VmConsFiEneSec(allCy,"ELC",YTIME) - 
+    VmImpNetEneBrnch(allCy,"ELC",YTIME)
     );
 $endif.calib
 

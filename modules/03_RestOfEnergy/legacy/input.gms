@@ -20,9 +20,9 @@ $include"./iDataGrossInlCons.csv"
 $offdelim
 ;
 *---
-table i03DataConsEneBranch(allCy,EF,YTIME)	      "Data for Consumption of Energy Branch (Mtoe)"
+table i03DataOwnConsEne(allCy,EFS,EF,YTIME)	      "Data for Consumption of Energy Branch (Mtoe)"
 $ondelim
-$include"./iDataConsEneBranch.csv"
+$include"./iDataOwnConsEne.csv"
 $offdelim
 ;
 *---
@@ -127,7 +127,7 @@ i03ParDHEfficiency(PGEFS,YTIME) = i03ParDHEffData(PGEFS);
 *---
 i03TransfInputRef(runCy,EFS,YTIME)$(not An(YTIME)) = i03DataTotTransfInputRef(runCy,EFS,YTIME);
 *---
-i03TotEneBranchCons(runCy,EFS,YTIME) = i03DataConsEneBranch(runCy,EFS,YTIME);
+i03TotEneBranchCons(runCy,EFS,YTIME) = SUM(EF,i03DataOwnConsEne(runCy,EFS,EF,YTIME));
 *---
 i03TransfOutputRef(runCy,EFS,YTIME)$(not An(YTIME)) = i03DataTransfOutputRef(runCy,EFS,YTIME);
 *---
