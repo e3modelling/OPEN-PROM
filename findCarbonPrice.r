@@ -236,7 +236,8 @@ findAlphaForBudget <- function(envWide, yearCols, budgetTarget,
 # ----------------------------
 start_time <- Sys.time()
 
-budgetTarget <- 1521  # Gt CO2
+budgetTarget <- 756  # Gt CO2 for 1p5C 
+#budgetTarget <- 1521  # Gt CO2 for 2C 
 envData <- readEnvPolicies(inputCsvPath)
 
 # ---- Option A (Seed from two points) ----
@@ -247,7 +248,7 @@ envData <- readEnvPolicies(inputCsvPath)
 # seedAlpha <- alphaSeedLinear(alpha0, E0, alphar, Er, Etarget = budgetTarget)
 
 # ---- Option B (fallback if you don't have reported points) - Alter manually ----
-seedAlpha <- 0.5
+seedAlpha <- 1
 
 # Auto-bracket around the seed (runs a few probe simulations)
 brkt <- autoBracketFromSeed(
@@ -255,8 +256,8 @@ brkt <- autoBracketFromSeed(
   budgetTarget = budgetTarget,
   envWide      = envData$envWide,
   yearCols     = envData$yearCols,
-  minAlpha     = 0.1,
-  maxAlpha     = 1.0,
+  minAlpha     = 0.5,
+  maxAlpha     = 3.0,
   expandFactor = 1.35,
   maxProbes    = 12,
   verbose      = TRUE
