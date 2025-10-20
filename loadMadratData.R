@@ -50,5 +50,8 @@ if (!is.null(DevMode) && DevMode == 0) {
 # Extracting the CSV files into the data folder
 utils::untar(fname, exdir = "./data")
 
+if (!is.null(fnameTargets)) {
+  utils::untar(fnameTargets, exdir = "./targets")
+}
 # Extracting the CSV files into the targets folder
-utils::untar(fnameTargets, exdir = "./targets")
+
