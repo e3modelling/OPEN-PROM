@@ -37,7 +37,7 @@ VmCstCO2SeqCsts(allCy,YTIME)	                           "Cost curve for CO2 sequ
 ;
 
 Scalars
-S06ProfRateMaxDAC                                           "The maximum profitability rate of V06DACProfRate" /6/
-S06CapFacMaxNewDAC                                          "The maximum level of the V06DACNewCapFac" /0.10/
-S06CapFacMinNewDAC                                          "The minimum level of the V06DACNewCapFac" /0/
+S06ProfRateMaxDAC                                           "The maximum profitability rate of V06DACProfRate" /7.5/
+S06CapFacMaxNewDAC                                          "The maximum level of the V06DACNewCapFac" /0.11/
+S06CapFacMinNewDAC                                          "The minimum level of the V06DACNewCapFac" /0.05/
 ;
