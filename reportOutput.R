@@ -40,10 +40,8 @@ reportOutput <- function(
   metadata <- getMetadata(path = runpath)
   print("Report generation completed.")
   
-  print(reg_map)
   if (reg_map != "regionmappingOPDEV3.csv") {
     reports <- reports[[1]]
-    print(1)
   } else {
     # rename GLO to World
     reports <- lapply(reports, function(x) {
@@ -83,9 +81,8 @@ reportOutput <- function(
     reports_val <- add_columns(reports_val, addnm = setdiff(getYears(reportOPEN_PROM),getYears(reports_val)), dim = 2, fill = NA)
     reports_val <- reports_val[,getYears(reportOPEN_PROM),]
     reports <- mbind(reportOPEN_PROM, reports_val)
-    print(1)
+    reports <- list(reports)
     print(str(reports))
-    print(2)
   }
 
   if (!is.null(plot_name)) {
