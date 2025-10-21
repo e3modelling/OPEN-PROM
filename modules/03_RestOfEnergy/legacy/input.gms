@@ -38,21 +38,15 @@ $include"./iSuppTransfers.csv"
 $offdelim
 ;
 *---
-table i03SuppPrimProd(allCy,PPRODEF,YTIME)	      "Supplementary Parameter for Primary Production (Mtoe)"
+table i03PrimProd(allCy,EFS,YTIME)	              "Primary Production (Mtoe)"
 $ondelim
-$include"./iSuppPrimProd.csv"
+$include"./iPrimProd.csv"
 $offdelim
 ;
 *---
 table i03InpTransfTherm(allCy,EFS,YTIME)          "Historic data of VmInpTransfTherm (Transformation input to thermal power plants) (Mtoe)"
 $ondelim
 $include"./iInpTransfTherm.csv"
-$offdelim
-;
-*---
-table i03SupRateEneBranCons(allCy,EF,YTIME)	      "Rate of Energy Branch Consumption over total transformation output of i03RateEneBranCons (1)"
-$ondelim
-$include"./iSupRateEneBranCons.csv"
 $offdelim
 ;
 *---
@@ -107,7 +101,6 @@ i03RefCapacity(allCy,YTIME)	                      "Refineries Capacity (Million 
 i03GrosInlCons(allCy,EF,YTIME)	                  "Gross Inland Consumtpion (Mtoe)"
 i03GrossInConsNoEneBra(allCy,EF,YTIME)	          "Gross Inland Consumption,excluding energy branch (Mtoe)"
 i03FeedTransfr(allCy,EFS,YTIME)	                  "Feedstocks in Transfers (Mtoe)"
-i03FuelPriPro(allCy,EF,YTIME)                 	  "Fuel Primary Production (Mtoe)"
 i03EffDHPlants(allCy,EF,YTIME)                    "Efficiency of District Heating Plants (1)"
 i03ResRefCapacity(allCy,YTIME)	                  "Residual in Refineries Capacity (1)"
 i03ResTransfOutputRefineries(allCy,EF,YTIME)      "Residual in Transformation Output from Refineries (Mtoe)"
@@ -140,15 +133,13 @@ i03GrosInlCons(runCy,EFS,YTIME) + i03TotEneBranchCons(runCy,EFS,YTIME)$EFtoEFA(E
 *---
 i03FeedTransfr(runCy,EFS,YTIME) = i03SuppTransfers(runCy,EFS,YTIME);
 *---
-i03FuelPriPro(runCy,PPRODEF,YTIME) = i03SuppPrimProd(runCy,PPRODEF,YTIME);
-*---
-i03EffDHPlants(runCy,EFS,YTIME)$(ord(YTIME)>(ordfirst-8))  = sum(PGEFS$sameas(EFS,PGEFS),i03ParDHEfficiency(PGEFS,"2010"));
+i03EffDHPlants(runCy,EFS,YTIME)  = sum(PGEFS$sameas(EFS,PGEFS),i03ParDHEfficiency(PGEFS,"2010"));
 *---
 i03ResRefCapacity(runCy,YTIME) = i03SupResRefCapacity(runCy,"REF_CAP_RES",YTIME);
 *---
 i03ResTransfOutputRefineries(runCy,EFS,YTIME) = i03SupTrnasfOutputRefineries(runCy,EFS,YTIME);
 *---
-i03RateEneBranCons(runCy,EFS,YTIME) = i03SupRateEneBranCons(runCy,EFS,YTIME);
+i03RateEneBranCons(runCy,EFS,YTIME) = (i03TotEneBranchCons(runCy,EFS,YTIME) / i03PrimProd(runCy,EFS,YTIME))$(i03PrimProd(runCy,EFS,YTIME));
 *---
 i03RatePriProTotPriNeeds(runCy,PPRODEF,YTIME) = i03SuppRatePrimProd(runCy,PPRODEF,YTIME);
 *---
