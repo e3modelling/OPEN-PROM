@@ -25,17 +25,58 @@ reportOutput <- function(
     mif_name,
     aggregate = TRUE,
     fullValidation = TRUE,
-    plot_name = NULL) {
+    plot_name = NULL,
+    Validation_data_for_plots = TRUE) {
   # Region mapping used for aggregating validation data (e.g. ENERDATA)
- #  mapping <- jsonlite::read_json(paste0((runpath),"/metadata.json"))[["Model Information"]][["Region Mapping"]][[1]]
- #  setConfig(regionmapping = mapping)
+    reg_map <- jsonlite::read_json(paste0((runpath),"/metadata.json"))[["Model Information"]][["Region Mapping"]][[1]]
+  # setConfig(regionmapping = mapping)
 
   reports <- convertGDXtoMIF(runpath,
     mif_name = mif_name,
-    aggregate = aggregate, fullValidation = fullValidation
+    aggregate = aggregate, fullValidation = fullValidation, Validation_data_for_plots = Validation_data_for_plots
   )
   metadata <- getMetadata(path = runpath)
   print("Report generation completed.")
+  
+  if (reg_map != "regionmappingOPDEV3.csv") {
+    reports <- reports[[1]]
+  } else {
+    # rename GLO to World
+    reports <- lapply(reports, function(x) {
+      regions <- getRegions(x)
+      if ("GLO" %in% regions) {
+        getRegions(x)[regions == "GLO"] <- "World"
+      }
+      x
+    })
+    # do not take open-prom
+    reports_val <- reports[-1]
+    
+    region_sig <- function(x) paste(sort(getRegions(x)), collapse = "|")
+    sigs <- vapply(reports_val, region_sig, FUN.VALUE = character(1))
+    
+    # Find the most common region set
+    most_common_sig <- names(sort(table(sigs), decreasing = TRUE))[1]
+    
+    # Keep only magpie objects with that region set
+    same_region_list <- reports_val[sigs == most_common_sig]
+    
+    # Combine them
+    if (length(same_region_list) > 1) {
+      combined_all <- do.call(mbind, same_region_list)
+    } else if (length(same_region_list) == 1) {
+      combined_all <- same_region_list[[1]]
+    } else {
+      combined_all <- NULL
+      warning("No magpie objects with identical regions found.")
+    }
+    reports_val <- combined_all
+    reports_val <- as.quitte(reports_val) %>% as.magpie()
+    getItems(reports_val, 3.1) <- paste0(getItems(reports_val, 3.1), "|VAL")
+  }
+  
+  #mbind validation data and OPEN-PROM
+  reports2 <- mbind(reports[[1]], reports_val)
 
   if (!is.null(plot_name)) {
     save_names <- file.path(runpath, plot_name)
