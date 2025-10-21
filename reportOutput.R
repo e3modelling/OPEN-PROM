@@ -2,6 +2,8 @@
 library(madrat)
 library(postprom)
 library(reticulate)
+library(dplyr)
+library(quitte)
 
 installPythonPackages <- function(packages) {
   for (pkg in packages) {
@@ -38,8 +40,10 @@ reportOutput <- function(
   metadata <- getMetadata(path = runpath)
   print("Report generation completed.")
   
+  print(reg_map)
   if (reg_map != "regionmappingOPDEV3.csv") {
     reports <- reports[[1]]
+    print(1)
   } else {
     # rename GLO to World
     reports <- lapply(reports, function(x) {
@@ -73,10 +77,16 @@ reportOutput <- function(
     reports_val <- combined_all
     reports_val <- as.quitte(reports_val) %>% as.magpie()
     getItems(reports_val, 3.1) <- paste0(getItems(reports_val, 3.1), "|VAL")
+    
+    reportOPEN_PROM <- reports[[1]]
+    #mbind validation data and OPEN-PROM
+    reports_val <- add_columns(reports_val, addnm = setdiff(getYears(reportOPEN_PROM),getYears(reports_val)), dim = 2, fill = NA)
+    reports_val <- reports_val[,getYears(reportOPEN_PROM),]
+    reports <- mbind(reportOPEN_PROM, reports_val)
+    print(1)
+    print(str(reports))
+    print(2)
   }
-  
-  #mbind validation data and OPEN-PROM
-  reports2 <- mbind(reports[[1]], reports_val)
 
   if (!is.null(plot_name)) {
     save_names <- file.path(runpath, plot_name)
