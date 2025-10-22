@@ -38,7 +38,7 @@ $include"./iSuppTransfers.csv"
 $offdelim
 ;
 *---
-table i03PrimProd(allCy,EFS,YTIME)	              "Primary Production (Mtoe)"
+table i03PrimProd(allCy,PPRODEF,YTIME)	              "Primary Production (Mtoe)"
 $ondelim
 $include"./iPrimProd.csv"
 $offdelim
@@ -59,6 +59,42 @@ $offdelim
 table i03ElcNetImpShare(allCy,SUPOTH,YTIME)	      "Ratio of electricity imports in total final demand (1)"
 $ondelim
 $include "./iElcNetImpShare.csv"
+$offdelim
+;
+*---
+table i03OutTotTransfProcess(allCy,EFS,YTIME)	      ""	
+$ondelim
+$include"./iOutTotalTransfProcess.csv"
+$offdelim
+;
+*---
+table i03InpTotTransfProcess(allCy,EFS,YTIME)	      ""	
+$ondelim
+$include"./iInpTotalTransfProcess.csv"
+$offdelim
+;
+*---
+table i03InpCHPTransfProcess(allCy,EFS,YTIME)	      ""	
+$ondelim
+$include"./iInpCHPTransfProcess.csv"
+$offdelim
+;
+*---
+table i03OutCHPTransfProcess(allCy,EFS,YTIME)	      ""	
+$ondelim
+$include"./iOutCHPTransfProcess.csv"
+$offdelim
+;
+*---
+table i03InpDHPTransfProcess(allCy,EFS,YTIME)	      ""	
+$ondelim
+$include"./iInpDHPTransfProcess.csv"
+$offdelim
+;
+*---
+table i03OutDHPTransfProcess(allCy,EFS,YTIME)	      ""	
+$ondelim
+$include"./iOutDHPTransfProcess.csv"
 $offdelim
 ;
 *---
@@ -139,9 +175,16 @@ i03ResRefCapacity(runCy,YTIME) = i03SupResRefCapacity(runCy,"REF_CAP_RES",YTIME)
 *---
 i03ResTransfOutputRefineries(runCy,EFS,YTIME) = i03SupTrnasfOutputRefineries(runCy,EFS,YTIME);
 *---
-i03RateEneBranCons(runCy,EFS,YTIME) = (i03TotEneBranchCons(runCy,EFS,YTIME) / i03PrimProd(runCy,EFS,YTIME))$(i03PrimProd(runCy,EFS,YTIME));
-i03RateEneBranCons("MEA",EFS,YTIME) = i03RateEneBranCons("CHA",EFS,YTIME);
-i03RateEneBranCons(runCy,EFS,YTIME)$(not AN(YTIME)) = i03RateEneBranCons(runCy,EFS,"%fBaseY%");
+i03RateEneBranCons(runCy,EFS,YTIME) =  
+[
+  i03TotEneBranchCons(runCy,EFS,YTIME) /
+  (
+    i03OutTotTransfProcess(runCy,EFS,YTIME) +
+    SUM(PPRODEF$sameas(PPRODEF,EFS),i03PrimProd(runCy,PPRODEF,YTIME)) -
+    i03TotEneBranchCons(runCy,EFS,YTIME)$TOCTEF(EFS)
+  )
+]$i03OutTotTransfProcess(runCy,EFS,YTIME);
+i03RateEneBranCons(runCy,EFS,YTIME)$(AN(YTIME)) = i03RateEneBranCons(runCy,EFS,"%fBaseY%");
 *---
 i03RatePriProTotPriNeeds(runCy,PPRODEF,YTIME) = i03SuppRatePrimProd(runCy,PPRODEF,YTIME);
 *---

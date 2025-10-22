@@ -27,8 +27,6 @@ display imVarCostTech;
 imTransChar(runCy,"RES_MEXTF",YTIME) = 0.04;
 imTransChar(runCy,"RES_MEXTV",YTIME) = 0.04;
 *---
-iFinEneConsPrevYear(runCy,EFS,YTIME)$(not An(YTIME)) = imFinEneCons(runCy,EFS,YTIME);
-*---
 
 *'                **Interdependent Variables**
 

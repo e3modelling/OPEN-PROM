@@ -33,6 +33,8 @@ V03Exp.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
 *---
 V03OutTransfDhp.FX(runCy,EFS,YTIME)$(not STEAM(EFS)) = 0;
 *---
+V03OutTransfCHP.FX(runCy,EFS,YTIME)$(not STEAM(EFS)) = 0;
+*---
 VmConsFiEneSec.FX(runCy,EFS,YTIME)$(not An(YTIME)) = i03TotEneBranchCons(runCy,EFS,YTIME);
 *---
 VmInpTransfTherm.FX(runCy,EFS,YTIME)$(not PGEF(EFS)) = 0;
@@ -42,10 +44,14 @@ VmConsFinEneCountry.FX(runCy,EFS,YTIME)$(not An(YTIME)) = imFinEneCons(runCy,EFS
 *---
 VmLossesDistr.FX(runCy,EFS,YTIME)$(not An(YTIME)) = imDistrLosses(runCy,EFS,YTIME);
 *---
-VmTransfInputDHPlants.FX(runCy,EFS,YTIME)$(not AN(YTIME)) = 
-sum(DH$DHtoEF(DH,EFS),
-  sum(DOMSE$SECtoEF(DOMSE,DH),
-    VmConsFuel.L(runCy,DOMSE,DH,YTIME)
-  ) /
-  i03EffDHPlants(runCy,EFS,YTIME)
-);
+V03OutTotTransf.FX(runCy,EFS,YTIME)$(not AN(YTIME)) = i03OutTotTransfProcess(runCy,EFS,YTIME);
+*---
+V03InpTotTransf.FX(runCy,EFS,YTIME)$(not AN(YTIME)) = -i03InpTotTransfProcess(runCy,EFS,YTIME);
+*---
+V03OutTransfDhp.FX(runCy,EFS,YTIME)$(not AN(YTIME)) = i03OutDHPTransfProcess(runCy,EFS,YTIME);
+*---
+VmTransfInputDHPlants.FX(runCy,EFS,YTIME)$(not AN(YTIME)) = -i03InpDHPTransfProcess(runCy,EFS,YTIME);
+*---
+V03OutTransfCHP.FX(runCy,EFS,YTIME)$(not AN(YTIME)) = i03OutCHPTransfProcess(runCy,EFS,YTIME);
+*---
+VmTransfInputCHPlants.FX(runCy,EFS,YTIME)$(not AN(YTIME)) = -i03InpCHPTransfProcess(runCy,EFS,YTIME);

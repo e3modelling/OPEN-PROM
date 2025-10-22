@@ -548,6 +548,7 @@ h2f1(pgef)
 PPRODEF(EFS)     Fuels considered in primary production
 /
 LGN
+OLQ
 HCL
 CRO
 HYD
@@ -978,7 +979,7 @@ CHP(EF)       CHP Plants
 STE1AL,STE1AH,STE1AD,STE1AG,STE1AB
 /
 
-TCHP(TECH)       CHP Plants
+TCHP(ITECH)       CHP Plants
 /
 TSTE1AL,TSTE1AH,TSTE1AD,TSTE1AG,TSTE1AB
 /
