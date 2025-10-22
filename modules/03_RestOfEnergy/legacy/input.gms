@@ -141,6 +141,7 @@ i03ResTransfOutputRefineries(runCy,EFS,YTIME) = i03SupTrnasfOutputRefineries(run
 *---
 i03RateEneBranCons(runCy,EFS,YTIME) = (i03TotEneBranchCons(runCy,EFS,YTIME) / i03PrimProd(runCy,EFS,YTIME))$(i03PrimProd(runCy,EFS,YTIME));
 i03RateEneBranCons("MEA",EFS,YTIME) = i03RateEneBranCons("CHA",EFS,YTIME);
+i03RateEneBranCons("BGR",EFS,YTIME) = i03RateEneBranCons("CHA",EFS,YTIME);
 i03RateEneBranCons(runCy,EFS,YTIME)$(not AN(YTIME)) = i03RateEneBranCons(runCy,EFS,"%fBaseY%");
 *---
 i03RatePriProTotPriNeeds(runCy,PPRODEF,YTIME) = i03SuppRatePrimProd(runCy,PPRODEF,YTIME);
