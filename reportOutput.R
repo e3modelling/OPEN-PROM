@@ -40,15 +40,26 @@ reportOutput <- function(
   metadata <- getMetadata(path = runpath)
   print("Report generation completed.")
   
-  Val_Mif <- ValidationMif(runpath = runpath, reg_map = reg_map, Validation_data_for_plots = Validation_data_for_plots
+  Val_Mif <- ValidationMif(.path = runpath, reg_map = reg_map, Validation_data_for_plots = Validation_data_for_plots
   )
   
-  reportOPEN_PROM <- reports[[1]]
-  #mbind validation data and OPEN-PROM
-  Val_Mif <- add_columns(Val_Mif, addnm = setdiff(getYears(reportOPEN_PROM),getYears(Val_Mif)), dim = 2, fill = NA)
-  Val_Mif <- Val_Mif[,getYears(reportOPEN_PROM),]
-  reports <- mbind(reportOPEN_PROM, Val_Mif)
-  reports <- list(reports)
+  if (reg_map == "regionmappingOPDEV3.csv") {
+    reportOPEN_PROM <- reports[[1]]
+    #mbind validation data and OPEN-PROM
+    Val_Mif <- add_columns(Val_Mif, addnm = setdiff(getYears(reportOPEN_PROM),getYears(Val_Mif)), dim = 2, fill = NA)
+    Val_Mif <- Val_Mif[,getYears(reportOPEN_PROM),]
+    reports <- mbind(reportOPEN_PROM, Val_Mif)
+    reports <- list(reports)
+  } else {
+    dummy <- new.magpie(getRegions(reports[[1]]), getYears(reports[[1]]), c("Emissions|CO2|VAL",
+                                                                  "Final Energy|Transportation|VAL",
+                                                                  "Final Energy|Industry|VAL",
+                                                                  "Final Energy|VAL",
+                                                                  "Secondary Energy|Electricity|VAL",
+                                                                  "Capacity|Electricity|VAL"), fill = 0)
+    reports <- mbind(reports[[1]], dummy)
+    reports <- list(reports)
+  }
 
   if (!is.null(plot_name)) {
     save_names <- file.path(runpath, plot_name)
