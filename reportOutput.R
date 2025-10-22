@@ -43,7 +43,7 @@ reportOutput <- function(
   Val_Mif <- ValidationMif(.path = runpath, reg_map = reg_map, Validation_data_for_plots = Validation_data_for_plots
   )
   
-  if (reg_map == "regionmappingOPDEV3.csv") {
+  if (!is.null(Val_Mif)) {
     reportOPEN_PROM <- reports[[1]]
     #mbind validation data and OPEN-PROM
     Val_Mif <- add_columns(Val_Mif, addnm = setdiff(getYears(reportOPEN_PROM),getYears(Val_Mif)), dim = 2, fill = NA)
@@ -57,6 +57,7 @@ reportOutput <- function(
                                                                   "Final Energy|VAL",
                                                                   "Secondary Energy|Electricity|VAL",
                                                                   "Capacity|Electricity|VAL"), fill = 0)
+    dummy <- add_dimension(dummy, dim = 3.2, add = "unit", nm  = c("Mt CO2/yr","Mtoe","Mtoe","Mtoe","GW","GW"))
     reports <- mbind(reports[[1]], dummy)
     reports <- list(reports)
   }
@@ -78,4 +79,4 @@ runpath <- if (length(args) > 0) args[1] else getRunpath()
 mif_name <- if (length(args) > 1) args[2] else "reporting.mif"
 plot_name <- if (length(args) > 2) args[3] else "plot.tex"
 
-reportOutput(runpath = runpath, mif_name = mif_name, plot_name = plot_name)
+reportOutput(runpath = runpath, mif_name = mif_name, plot_name = plot_name, Validation_data_for_plots = TRUE)
