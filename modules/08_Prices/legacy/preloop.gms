@@ -11,7 +11,6 @@ VmPriceElecIndResConsu.FX(runCy,"r",YTIME)$(not An(YTIME)) = VmPriceFuelSubsecCa
 VmPriceElecIndResConsu.FX(runCy,"t",YTIME)$(not An(YTIME)) = VmPriceFuelSubsecCarVal.L(runCy,"PC","ELC",YTIME)*smTWhToMtoe;
 VmPriceElecIndResConsu.FX(runCy,"c",YTIME)$(not An(YTIME)) = VmPriceFuelSubsecCarVal.L(runCy,"SE","ELC",YTIME)*smTWhToMtoe;
 *---
-V08PriceFuelSepCarbonWght.L(runCy,DSBS,EF,YTIME) = 0.001;
 V08PriceFuelSepCarbonWght.FX(runCy,DSBS,EF,YTIME)$(not AN(YTIME)) = i08WgtSecAvgPriFueCons(runCy,DSBS,EF);
 *---
 VmPriceFuelAvgSub.L(runCy,DSBS,YTIME) = 0.001;

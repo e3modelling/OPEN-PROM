@@ -20,13 +20,13 @@ Q02DemSubUsefulSubsec(allCy,DSBS,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not s
     V02DemSubUsefulSubsec(allCy,DSBS,YTIME) 
         =E=
     [
-    V02DemSubUsefulSubsec(allCy,DSBS,YTIME-1) *
-    imActv(YTIME,allCy,DSBS) ** imElastA(allCy,DSBS,"a",YTIME) *
-    (VmPriceFuelAvgSub(allCy,DSBS,YTIME)/VmPriceFuelAvgSub(allCy,DSBS,YTIME-1) ) ** imElastA(allCy,DSBS,"b1",YTIME) *
-    (VmPriceFuelAvgSub(allCy,DSBS,YTIME-1)/VmPriceFuelAvgSub(allCy,DSBS,YTIME-2) ) ** imElastA(allCy,DSBS,"b2",YTIME) *
-    prod(KPDL,
-      ((VmPriceFuelAvgSub(allCy,DSBS,YTIME-ord(KPDL))/VmPriceFuelAvgSub(allCy,DSBS,YTIME-(ord(KPDL)+1)))/(imCGI(allCy,YTIME)**(1/6)))**( imElastA(allCy,DSBS,"c",YTIME)*imFPDL(DSBS,KPDL))
-    )
+      V02DemSubUsefulSubsec(allCy,DSBS,YTIME-1) *
+      imActv(YTIME,allCy,DSBS) ** imElastA(allCy,DSBS,"a",YTIME) *
+      (VmPriceFuelAvgSub(allCy,DSBS,YTIME)/VmPriceFuelAvgSub(allCy,DSBS,YTIME-1) ) ** imElastA(allCy,DSBS,"b1",YTIME) *
+      (VmPriceFuelAvgSub(allCy,DSBS,YTIME-1)/VmPriceFuelAvgSub(allCy,DSBS,YTIME-2) ) ** imElastA(allCy,DSBS,"b2",YTIME) *
+      prod(KPDL,
+        ((VmPriceFuelAvgSub(allCy,DSBS,YTIME-ord(KPDL))/VmPriceFuelAvgSub(allCy,DSBS,YTIME-(ord(KPDL)+1)))/(imCGI(allCy,YTIME)**(1/6)))**( imElastA(allCy,DSBS,"c",YTIME)*imFPDL(DSBS,KPDL))
+      )
     ]$imActv(YTIME-1,allCy,DSBS)
 ;
 *'NEW EQUATION'

@@ -37,6 +37,8 @@ $include "./iElastA.csv"
 $offdelim
 ;
 imElastA(runCy,SBS,ETYPES,YTIME) = imElastA("ELL",SBS,ETYPES,YTIME);
+imElastA(runCy,DSBS,"b1",YTIME)$(not TRANSE(DSBS)) = imElastA(runCy,DSBS,"b1",YTIME) / 4;
+imElastA(runCy,DSBS,"b2",YTIME)$(not TRANSE(DSBS)) = imElastA(runCy,DSBS,"b2",YTIME) / 4;
 $ENDIF.calib
 *---
 parameter iDiscData(SBS) "Discount rates per subsector ()" /
