@@ -196,3 +196,14 @@ i03RatioImpFinElecDem(runCy,YTIME)$an(YTIME) = i03ElcNetImpShare(runCy,"ELC_IMP"
 *---
 i03ElecImp(runCy,YTIME) = 0;
 *---
+VmConsFinNonEne.FX(runCy,EFS,YTIME)$(not AN(YTIME)) = 
+sum(NENSE$(not sameas("BU",NENSE)),
+  sum(EF$(EFtoEFS(EF,EFS) $SECtoEF(NENSE,EF) ), imFuelConsPerFueSub(runCy,NENSE,EF,YTIME))
+);
+*---
+imRateLossesFinCons(runCy,EFS,YTIME) = 
+[
+  imDistrLosses(runCy,EFS,YTIME) /
+  (imFinEneCons(runCy,EFS,YTIME) + VmConsFinNonEne.L(runCy,EFS,YTIME))
+]$(imFinEneCons(runCy,EFS,YTIME) + VmConsFinNonEne.L(runCy,EFS,YTIME));
+imRateLossesFinCons(runCy,EFS,YTIME)$AN(YTIME) = imRateLossesFinCons(runCy,EFS,"%fBaseY%")

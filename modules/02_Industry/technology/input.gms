@@ -23,6 +23,7 @@ i02util(allCy,DSBS,ITECH,YTIME)                            "Utilization rate of 
 i02numtechnologiesUsingEF(DSBS,EF)                         "Number of technologues using an energy form"     
 i02Share(allCy,DSBS,ITECH,EF,YTIME)                        "Share of each energy form in a technology"
 imCO2CaptRateIndustry(allCy,ITECH,YTIME)	               "Industry CO2 capture rate (1)"
+i02ScaleEndogScrap(DSBS)                            "Scale parameter for endogenous scrapping applied to the sum of full costs (1)"
 ;
 *---
 imTotFinEneDemSubBaseYr(runCy,TRANSE,YTIME)  = sum(EF$SECtoEF(TRANSE,EF), imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME));
@@ -82,6 +83,8 @@ i02BoiEffChp(runCy,CHP,YTIME)            = imDataChpPowGen(CHP,"BOILEFF",YTIME);
 i02ElaSub(runCy,DSBS) = imElaSubData(DSBS);
 i02ElaSub(runCy,DSBS) = 2; !!
 
+*---
+i02ScaleEndogScrap(DSBS)$(not TRANSE(DSBS) and not sameas("DAC",DSBS)) = 4./SUM(ITECH$SECTTECH(DSBS,ITECH),1);
 *---
 imCO2CaptRateIndustry(runCy,CCSTECH,YTIME) = 0.9;
 

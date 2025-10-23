@@ -112,8 +112,6 @@ $offdelim
 ;
 $ENDIF.calib
 *---
-parameter i04ScaleEndogScrap(PGALL)                "Scale parameter for endogenous scrapping applied to the sum of full costs (1)";
-*---
 parameter i04MxmShareChpElec                       "Maximum share of CHP electricity in a country (1)";
 *---
 parameter i04DataElecAndSteamGen(allCy,CHP,YTIME)  "Data releated to electricity and steam generation";
@@ -187,7 +185,7 @@ i04UtilRateChpPlants(allCy,CHP,YTIME)	           "Utilisation rate of CHP Plants
 i04MxmLoadFacElecDem(allCy,YTIME)	               "Maximum load factor of electricity demand (1)"
 i04BslCorrection(allCy,YTIME)	                   "Parameter of baseload correction (1)"
 i04TechLftPlaType(allCy,PGALL)	                   "Technical Lifetime per plant type (year)"
-i04ScaleEndogScrap(PGALL)                          "Scale parameter for endogenous scrapping applied to the sum of full costs (1)"
+i04ScaleEndogScrap                              "Scale parameter for endogenous scrapping applied to the sum of full costs (1)"
 i04DecInvPlantSched(allCy,PGALL,YTIME)             "Decided plant investment schedule (GW)"
 i04PlantDecomSched(allCy,PGALL,YTIME)	           "Decided plant decomissioning schedule (GW)"	
 i04MxmShareChpElec(allCy,YTIME)	                   "Maximum share of CHP electricity in a country (1)"
@@ -214,7 +212,7 @@ loop(runCy,PGALL,YTIME)$AN(YTIME) DO
          abort $(i04GrossCapCosSubRen(runCy,PGALL,YTIME)<0) "CAPITAL COST IS NEGATIVE", i04GrossCapCosSubRen
 ENDLOOP;
 *---
-i04ScaleEndogScrap(PGALL) = 0.65/PGALL.len;
+i04ScaleEndogScrap = 0.65 / card(PGALL);
 *---
 i04DecInvPlantSched(runCy,PGALL,YTIME) = i04InvPlants(runCy,PGALL,YTIME);
 *---

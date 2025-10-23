@@ -124,12 +124,6 @@ modal    0.595709528,
 largest  0.833993339
 /;
 *---
-table imRateLossesFinCons(allCy,EF,YTIME)               "Rate of losses over Available for Final Consumption (1)"
-$ondelim
-$include "./iRateLossesFinCons.csv"
-$offdelim
-;
-*---
 table imInstCapPastNonCHP(allCy,PGALL,YTIME)        "Installed Non-CHP capacity past (GW)"
 $ondelim
 $include"./iInstCapPastNonCHP.csv"
@@ -431,7 +425,7 @@ SE.TNGS       0.2244   6.8             20  0.88
 SE.TOGS       0.2244   10.88           20  0.8
 *SE.PGTSOL     0.86224  1.36            20  0.97
 SE.TBMSWAS    0.323544 10.88           20  0.5
-SE.TELC       0.3      8.976           12  1.5
+SE.TELC       0.3      8.976           12  0.97
 SE.TSTE1AL    2.43133  40.1956 41.1163 30  0.375
 SE.TSTE1AH    2.43133  40.1956 41.1163 30  0.375
 SE.TSTE1AD    1.82186  54.264  11.386  30  0.3475
@@ -489,7 +483,7 @@ HOU.TNGS      0.2244   6.8             20  0.88
 HOU.TOGS      0.2244   10.88           20  0.8
 *HOU.PGTSOL    0.86224  1.36            20  0.97
 HOU.TBMSWAS   0.323544 10.88           20  0.5
-HOU.TELC      0.3      8.976           12  1.5
+HOU.TELC      0.3      8.976           12  0.97
 HOU.TSTE1AL   2.43133  40.1956 41.1163 30  0.375
 HOU.TSTE1AH   2.43133  40.1956 41.1163 30  0.375
 HOU.TSTE1AD   1.82186  54.264  11.386  30  0.3475
@@ -526,6 +520,7 @@ PCH.TNGS 0.18088 0.9044  2.37209 20  0.8
 PCH.TOGS 0.18088 1.36    2.37209 20  0.8
 BU.TGDO  0.204   0.136           25  0.72
 BU.TRFO  0.204   0.136           25  0.72
+BU.TKRS  0.136   6.8             25  0.72
 BU.TOLQ  0.136   6.8             25  0.72
 NEN.THCL 0.26227 45.22   2.37209 20  0.65
 NEN.TLGN 0.26227 47.6    2.37209 20  0.5

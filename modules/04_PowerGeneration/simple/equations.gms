@@ -43,12 +43,13 @@ $ifthen.calib %Calibration% == off
 Q04DemElecTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04DemElecTot(allCy,YTIME)
         =E=
-    1/smTWhToMtoe *
-    ( VmConsFinEneCountry(allCy,"ELC",YTIME) + 
-    VmConsFinNonEne(allCy,"ELC",YTIME) + 
-    VmLossesDistr(allCy,"ELC",YTIME) +
-    VmConsFiEneSec(allCy,"ELC",YTIME) - 
-    VmImpNetEneBrnch(allCy,"ELC",YTIME)
+    1 / smTWhToMtoe *
+    ( 
+      VmConsFinEneCountry(allCy,"ELC",YTIME) + 
+      VmConsFinNonEne(allCy,"ELC",YTIME) + 
+      VmLossesDistr(allCy,"ELC",YTIME) +
+      VmConsFiEneSec(allCy,"ELC",YTIME) - 
+      VmImpNetEneBrnch(allCy,"ELC",YTIME)
     );
 $endif.calib
 
@@ -135,7 +136,7 @@ Q04IndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(al
     (
       V04CostVarTech(allCy,PGALL,YTIME)**(-2) +
       (
-        i04ScaleEndogScrap(PGALL) *
+        i04ScaleEndogScrap *
         sum(PGALL2,
           i04AvailRate(allCy,PGALL,YTIME) / i04AvailRate(allCy,PGALL2,YTIME) * 
           V04CostHourProdInvDec(allCy,PGALL,YTIME) +
