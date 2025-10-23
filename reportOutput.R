@@ -45,14 +45,25 @@ reportOutput <- function(
   metadata <- getMetadata(path = runpath)
   print("Report generation completed.")
   
-  Val_Mif <- ValidationMif(.path = runpath, reg_map = reg_map, Validation_data_for_plots = Validation_data_for_plots
+  Val_Mif <- ValidationMif(.path = runpath, Validation_data_for_plots = Validation_data_for_plots
   )
   
   if (!is.null(Val_Mif)) {
+    Val_Mif[Val_Mif==0]=NA
     reportOPEN_PROM <- reports[[1]]
     #mbind validation data and OPEN-PROM
+    val_years <- getYears(reportOPEN_PROM)
     Val_Mif <- add_columns(Val_Mif, addnm = setdiff(getYears(reportOPEN_PROM),getYears(Val_Mif)), dim = 2, fill = NA)
     Val_Mif <- Val_Mif[,getYears(reportOPEN_PROM),]
+    Val_Mif <- add_columns(Val_Mif, addnm = setdiff(getRegions(reportOPEN_PROM),getRegions(Val_Mif)), dim = 1, fill = NA)
+    Val_Mif <- Val_Mif[getRegions(reportOPEN_PROM),,]
+    
+    Val_Mif[,val_years,"Final Energy|Industry|VAL"] <- Val_Mif[,val_years,"Final Energy|Industry|VAL"] +
+      reportOPEN_PROM[,val_years,"Final Energy|Residential and Commercial"] + reportOPEN_PROM[,val_years,"Final Energy|Transportation"] +
+      reportOPEN_PROM[,val_years,"Final Energy|Non Energy and Bunkers"]
+    Val_Mif[,val_years,"Final Energy|Transportation|VAL"] <- Val_Mif[,val_years,"Final Energy|Transportation|VAL"] +
+      reportOPEN_PROM[,val_years,"Final Energy|Residential and Commercial"] + reportOPEN_PROM[,val_years,"Final Energy|Non Energy and Bunkers"]
+
     reports <- mbind(reportOPEN_PROM, Val_Mif)
     reports <- list(reports)
   } else {
@@ -61,7 +72,7 @@ reportOutput <- function(
                                                                   "Final Energy|Industry|VAL",
                                                                   "Final Energy|VAL",
                                                                   "Secondary Energy|Electricity|VAL",
-                                                                  "Capacity|Electricity|VAL"), fill = 0)
+                                                                  "Capacity|Electricity|VAL"), fill = NA)
     dummy <- add_dimension(dummy, dim = 3.2, add = "unit", nm  = c("Mt CO2/yr","Mtoe","Mtoe","Mtoe","GW","GW"))
     reports <- mbind(reports[[1]], dummy)
     reports <- list(reports)
