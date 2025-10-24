@@ -439,6 +439,7 @@ WLGN    Lignite for Industry
 WGSL    Spot price of gasoline Rotterdam
 WGDO    Spot price of diesel Rotterdam
 WRFO    Spot price of heavy fuel oil Rotterdam
+WH2F
 /
 
 WEFMAP(EF,WEF)          Link between Imported Energy Forms and Energy Forms used in Model Subsectors
@@ -451,7 +452,7 @@ HCL.WCOKE
 (GDO,STE1AD,STE2GDO).WGDO
 (RFO,STE2RFO).WRFO
 (OLQ,LPG,STE2OLQ).WCRO
-
+(STE1AH2F).WH2F
 /
 
 EFtoWEF(DSBS,EF,WEF) Link between Imported Energy Forms and Energy Forms used in Model Subsectors
@@ -616,6 +617,7 @@ TSTE1AH
 TSTE1AD
 TSTE1AG
 TSTE1AB
+TSTE1AH2F
 * Domestic Technologies (only add those not already in Transport & Industry)
 * LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC,STE1AL,STE1AH,STE1AD,STE1AG,STE1AB already exist in TRANSPORT or INDUSTRY technologies
 TSTE2LGN
@@ -631,7 +633,6 @@ TBMSWAS
 * GDO,RFO,LGN,HCL,GDO,LPG,OLQ,NGS,OGS already exist
 * NOT USED
 TSTE1AR
-TSTE1AH2F
 THEATPUMP
 * DAC Technologies
 HTDAC
@@ -707,6 +708,7 @@ TSTE1AH
 TSTE1AD
 TSTE1AG
 TSTE1AB
+TSTE1AH2F
 TH2F
 * Domestic Technologies (only add those not already in Industry)
 TGSL
@@ -768,6 +770,7 @@ TSTE1AH.STE1AH
 TSTE1AD.STE1AD
 TSTE1AG.STE1AG
 TSTE1AB.STE1AB
+TSTE1AH2F.STE1AH2F
 * Domestic Technologies (only add those not already in Transport & Industry)
 * LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC,STE1AL,STE1AH,STE1AD,STE1AG,STE1AB already exist in TRANSPORT or INDUSTRY technologies
 TSTE2LGN.STE2LGN
@@ -822,6 +825,7 @@ TSTE1AH.STE1AH
 TSTE1AD.STE1AD
 TSTE1AG.STE1AG
 TSTE1AB.STE1AB
+TSTE1AH2F.STE1AH2F
 TH2F.H2F
 * Domestic Technologies (only add those not already in Transport & Industry)
 * LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC,STE1AL,STE1AH,STE1AD,STE1AG,STE1AB already exist in TRANSPORT or INDUSTRY technologies
@@ -886,7 +890,7 @@ DAC.(HTDAC,H2DAC,LTDAC,EWDAC)
 
 SECtoEF(SBS,EF) Link between Model Subsectors and Energy FORMS
 /
-PG.(LGN,HCL,GDO,RFO,NGS,OGS,NUC,HYD,BMSWAS,SOL,GEO,WND)
+PG.(LGN,HCL,GDO,RFO,NGS,OGS,NUC,HYD,BMSWAS,SOL,GEO,WND,H2F)
 H2P.(HCL,RFO,NGS,NUC,BMSWAS,SOL,WND,ELC)
 *DAC.(ELC,NGS)
 /
@@ -938,6 +942,7 @@ ATHLGNCCS Supercritical lignite with CCS
 *PGACGS Integrated coal gasification with CCS
 ATHGASCCS Gas turbine combined cycle with CCS
 PGAWNO Wind offshore
+PGH2F
 /
 
 PGCSP(PGALL)
@@ -976,12 +981,12 @@ ATHBMSCCS.ATHBMSWAS
 
 CHP(EF)       CHP Plants
 /
-STE1AL,STE1AH,STE1AD,STE1AG,STE1AB
+STE1AL,STE1AH,STE1AD,STE1AG,STE1AB,STE1AH2F
 /
 
 TCHP(ITECH)       CHP Plants
 /
-TSTE1AL,TSTE1AH,TSTE1AD,TSTE1AG,TSTE1AB
+TSTE1AL,TSTE1AH,TSTE1AD,TSTE1AG,TSTE1AB,TSTE1AH2F
 /
 
 DH(EF)       District Heating
@@ -1025,6 +1030,7 @@ PGALLtoEF(PGALL,PGEF)     Correspondence between plants and energy forms
 (PGAWND,PGAWNO).WND
 (PGSOL,PGCSP).SOL
 (PGOTHREN).GEO
+(PGH2F).H2F
 *(ACCHT,ICEH2,FC2).H2F
 /
 
@@ -1063,6 +1069,7 @@ STE1AH.ATHCOAL,
 STE1AD.ATHOIL,
 STE1AG.ATHGAS,
 STE1AB.ATHBMSWAS
+STE1AH2F.PGH2F
 *STE1AH2F.FC2
 /
 
@@ -1096,6 +1103,7 @@ PGAWNO
 *PGADPV
 PGOTHREN
 ATHBMSCCS
+PGH2F
 /
 
 *           Emissions             *

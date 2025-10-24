@@ -7,6 +7,7 @@ $ondelim
 $include"./iAvailRate.csv"
 $offdelim
 ;
+i04AvailRate(allCy,"PGH2F",YTIME) = 0.9;
 *---
 table i04DataElecSteamGen(allCy,PGOTH,YTIME)	   "Various Data related to electricity and steam generation (1)"
 $ondelim
@@ -84,7 +85,7 @@ $include "./iMatFacPlaAvailCap.csv"
 $offdelim
 ;
 i04MatFacPlaAvailCap.L(runCy,PGALL,YTIME)    = i04MatFacPlaAvailCapL(runCy,PGALL,YTIME);
-i04MatFacPlaAvailCap.LO(runCy, PGALL, YTIME) = 0.00000001;
+i04MatFacPlaAvailCap.LO(runCy, PGALL, YTIME) = 1e-8;
 i04MatFacPlaAvailCap.UP(runCy, PGALL, YTIME) = 40;
 $ELSE.calib
 table i04MatFacPlaAvailCap(allCy,PGALL,YTIME)      "Maturity factor related to plant available capacity (1)"
@@ -205,6 +206,7 @@ i04MxmLoadFacElecDem(runCy,YTIME)$an(YTIME) = i04LoadFactorAdjMxm("MAXLOADSH");
 i04BslCorrection(runCy,YTIME)$an(YTIME) = i04LoadFactorAdjMxm("AMAXBASE");
 *---
 i04TechLftPlaType(runCy,PGALL) = i04DataTechLftPlaType(PGALL, "LFT");
+i04TechLftPlaType(runCy,"PGH2F") = 20;
 *---
 i04GrossCapCosSubRen(runCy,PGALL,YTIME) = i04GrossCapCosSubRen(runCy,PGALL,YTIME)/1000;
 *---
