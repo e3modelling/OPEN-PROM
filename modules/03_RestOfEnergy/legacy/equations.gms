@@ -88,11 +88,11 @@ Q03TransfInputDHPlants(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         i03EffDHPlants(allCy,EFS,YTIME)
     );
 
-Q03OutTransfCHP(allCy,STEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V03OutTransfCHP(allCy,STEAM,YTIME)
+Q03OutTransfCHP(allCy,TOCTEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V03OutTransfCHP(allCy,TOCTEF,YTIME)
         =E=
     sum(INDSE,
-      sum(CHP$(EFtoEFS(CHP,STEAM) $SECtoEF(INDSE,CHP)), VmConsFuel(allCy,INDSE,CHP,YTIME))
+      sum(CHP$(EFtoEFS(CHP,TOCTEF) $SECtoEF(INDSE,CHP)), VmConsFuel(allCy,INDSE,CHP,YTIME))
     );
 
 Q03TransfInputCHPlants(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
@@ -227,8 +227,8 @@ Q03OutTotTransf(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V03OutTotTransf(allCy,EFS,YTIME)
         =E=
     V03OutTransfTherm(allCy,EFS,YTIME) + 
-    V03OutTransfDhp(allCy,EFS,YTIME) + 
-    V03OutTransfCHP(allCy,EFS,YTIME) +
+    SUM(STEAM$sameas(STEAM,EFS),V03OutTransfDhp(allCy,STEAM,YTIME)) + 
+    SUM(TOCTEF$sameas(TOCTEF,EFS),V03OutTransfCHP(allCy,TOCTEF,YTIME)) +
     V03OutTransfRefSpec(allCy,EFS,YTIME) +  
     sum(H2TECH$(sameas(EFS, "H2F")), VmProdH2(allCy, H2TECH, YTIME));  !! Hydrogen production for EFS = "H2F" + TONEW(allCy,EFS,YTIME)
 

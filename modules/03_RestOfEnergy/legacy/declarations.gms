@@ -33,8 +33,8 @@ Q03LossesDistr(allCy,EFS,YTIME)                            "Compute distribution
 Variables
 *' *** REST OF ENERGY BALANCE SECTORS VARIABLES
 *v03ConsTotFinEne(YTIME)                                   "Total final energy Consumption in ALL COUNTRIES (Mtoe)"
-V03OutTransfDhp(allCy,EFS,YTIME)                           "Transformation output from District Heating Plants (Mtoe)"
-V03OutTransfCHP(allCy,EFS,YTIME)                            "Transformation output from CHP (Mtoe)"
+V03OutTransfDhp(allCy,STEAM,YTIME)                           "Transformation output from District Heating Plants (Mtoe)"
+V03OutTransfCHP(allCy,TOCTEF,YTIME)                            "Transformation output from CHP (Mtoe)"
 V03CapRef(allCy,YTIME)	                                   "Refineries capacity (Million barrels/day)"
 V03OutTransfRefSpec(allCy,EFS,YTIME)	                   "Transformation output from refineries (Mtoe)"
 V03InputTransfRef(allCy,EFS,YTIME)	                       "Transformation input to refineries (Mtoe)"
