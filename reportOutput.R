@@ -60,9 +60,10 @@ reportOutput <- function(
     
     Val_Mif[,val_years,"Final Energy|Industry|VAL"] <- Val_Mif[,val_years,"Final Energy|Industry|VAL"] +
       reportOPEN_PROM[,val_years,"Final Energy|Residential and Commercial"] + reportOPEN_PROM[,val_years,"Final Energy|Transportation"] +
-      reportOPEN_PROM[,val_years,"Final Energy|Non Energy and Bunkers"]
+      reportOPEN_PROM[,val_years,"Final Energy|Non Energy"] + reportOPEN_PROM[,val_years,"Final Energy|Bunkers"]
     Val_Mif[,val_years,"Final Energy|Transportation|VAL"] <- Val_Mif[,val_years,"Final Energy|Transportation|VAL"] +
-      reportOPEN_PROM[,val_years,"Final Energy|Residential and Commercial"] + reportOPEN_PROM[,val_years,"Final Energy|Non Energy and Bunkers"]
+      reportOPEN_PROM[,val_years,"Final Energy|Residential and Commercial"] + reportOPEN_PROM[,val_years,"Final Energy|Non Energy"] +
+      reportOPEN_PROM[,val_years,"Final Energy|Bunkers"]
 
     reports <- mbind(reportOPEN_PROM, Val_Mif)
     reports <- list(reports)
