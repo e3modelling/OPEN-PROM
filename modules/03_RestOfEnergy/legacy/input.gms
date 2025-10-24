@@ -127,7 +127,6 @@ BMSWAS    0.76
 *---
 
 Parameters
-i03ParDHEfficiency(PGEFS,YTIME)                   "Parameter of  district heating Efficiency for all years (1)"
 i03SupTrnasfOutputRefineries(allCy,EF,YTIME)	  "Supplementary parameter for the transformation output from refineries (Mtoe)"
 i03SupResRefCapacity(allCy,SUPOTH,YTIME)	      "Supplementary Parameter for the residual in refineries Capacity (1)"
 i03TransfInputRef(allCy,EF,YTIME)	              "Transformation Input in Refineries (Mtoe)"
@@ -152,8 +151,6 @@ i03SupResRefCapacity(runCy,SUPOTH,YTIME) = 1;
 *---
 i03SupTrnasfOutputRefineries(runCy,EF,YTIME) = 1;
 *---
-i03ParDHEfficiency(PGEFS,YTIME) = i03ParDHEffData(PGEFS);
-*---
 i03TransfInputRef(runCy,EFS,YTIME)$(not An(YTIME)) = i03DataTotTransfInputRef(runCy,EFS,YTIME);
 *---
 i03TotEneBranchCons(runCy,EFS,YTIME) = SUM(EF,i03DataOwnConsEne(runCy,EFS,EF,YTIME));
@@ -169,7 +166,7 @@ i03GrosInlCons(runCy,EFS,YTIME) + i03TotEneBranchCons(runCy,EFS,YTIME)$EFtoEFA(E
 *---
 i03FeedTransfr(runCy,EFS,YTIME) = i03SuppTransfers(runCy,EFS,YTIME);
 *---
-i03EffDHPlants(runCy,EFS,YTIME)  = sum(PGEFS$sameas(EFS,PGEFS),i03ParDHEfficiency(PGEFS,"2010"));
+i03EffDHPlants(runCy,EFS,YTIME)  = sum(PGEFS$sameas(EFS,PGEFS),i03ParDHEffData(PGEFS));
 *---
 i03ResRefCapacity(runCy,YTIME) = i03SupResRefCapacity(runCy,"REF_CAP_RES",YTIME);
 *---
@@ -206,4 +203,4 @@ imRateLossesFinCons(runCy,EFS,YTIME) =
   imDistrLosses(runCy,EFS,YTIME) /
   (imFinEneCons(runCy,EFS,YTIME) + VmConsFinNonEne.L(runCy,EFS,YTIME))
 ]$(imFinEneCons(runCy,EFS,YTIME) + VmConsFinNonEne.L(runCy,EFS,YTIME));
-imRateLossesFinCons(runCy,EFS,YTIME)$AN(YTIME) = imRateLossesFinCons(runCy,EFS,"%fBaseY%")
+imRateLossesFinCons(runCy,EFS,YTIME)$AN(YTIME) = imRateLossesFinCons(runCy,EFS,"%fBaseY%");
