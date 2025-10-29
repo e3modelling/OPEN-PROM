@@ -48,13 +48,10 @@ V04CapElecCHP.FX(runCy,CHP,YTIME)$(not An(YTIME)) = imInstCapPastCHP(runCy,CHP,Y
 *---
 VmCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  imInstCapPastNonCHP(runCy,PGALL,YTIME);
 VmCapElec.L(runCy,PGALL,YTIME)$AN(YTIME) = imInstCapPastNonCHP(runCy,PGALL,"%fStartY%");
-V04CapElec2.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = imInstCapPastNonCHP(runCy,PGALL,YTIME);
-V04CapElec2.L(runCy,PGALL,YTIME)$AN(YTIME) = imInstCapPastNonCHP(runCy,PGALL,"%fStartY%");
 V04CapOverall.FX(runCy,PGALL,"%fBaseY%") =  imInstCapPastNonCHP(runCy,PGALL,"%fBaseY%");
 V04CapElecNominal.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = imInstCapPastNonCHP(runCy,PGALL,YTIME) / i04AvailRate(runCy,PGALL,YTIME);
 *---
-V04ShareTechPG.FX(runCy,PGALL,YTIME)$(DATAY(YTIME)) = 
-VmCapElec.L(runCy,PGALL,YTIME) / sum(PGALL2, VmCapElec.L(runCy,PGALL2,YTIME));
+V04ShareTechPG.FX(runCy,PGALL,YTIME)$(DATAY(YTIME)) =  VmCapElec.L(runCy,PGALL,YTIME) / sum(PGALL2, VmCapElec.L(runCy,PGALL2,YTIME));
 V04ShareSatPG.FX(runCy,PGALL,YTIME)$(not PGREN(PGALL) or not AN(YTIME)) = 1;
 *---
 V04IndxEndogScrap.FX(runCy,PGALL,YTIME)$(not an(YTIME) ) = 1;

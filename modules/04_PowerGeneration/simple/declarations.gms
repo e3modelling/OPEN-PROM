@@ -3,16 +3,13 @@
 
 Equations
 *' *** Power Generation
-Q04CapElec2(allCy,PGALL,YTIME)	                           "Compute electricity generation capacity"
 Q04CapElecNominal(allCy,PGALL,YTIME)	                   "Compute nominal electricity generation capacity"
 Q04ShareTechPG(allCy,PGALL,YTIME)                          "Share of all technologies in the electricity mixture"
 Q04CostHourProdInvDec(allCy,PGALL,YTIME)                    "Compute production cost used in investment decisions"
-*q04CostHourProdInvCCS(allCy,PGALL,HOUR,YTIME)	           "Compute hourly production cost used in investment decisions taking into account CCS acceptance"
 Q04CostVarTech(allCy,PGALL,YTIME)	                       "Compute variable cost of technology" 	
 Q04IndxEndogScrap(allCy,PGALL,YTIME)	                   "Compute endogenous scrapping index" 	
 Q04CapElecNonCHP(allCy,YTIME)	                           "Compute total electricity generation capacity excluding CHP plants"
 Q04GapGenCapPowerDiff(allCy,YTIME)	                       "Compute the gap in power generation capacity"		
-*q04ScalWeibull(allCy,PGALL,HOUR,YTIME)                    "Compute temporary variable facilitating the scaling in Weibull equation"	
 *q04PotRenMinAllow(allCy,PGRENEF,YTIME)	                   "Compute minimum allowed renewable potential" 
 Q04ShareSatPG(allCy,PGALL,YTIME)	                       "Saturation mechanism for electricity mixture penetration of RES technologies"		 	
 Q04SharePowPlaNewEq(allCy,PGALL,YTIME)	                   "Compute the power plant share in new equipment"	
@@ -48,18 +45,14 @@ Q04CapElec(allCy,PGALL,YTIME)	                           "Compute electricity ge
 
 Variables
 *' *** Power Generation Variables
-V04CapElec2(allCy,PGALL,YTIME)	                           "Electricity generation plants capacity (GW)"
 V04CapElecNominal(allCy,PGALL,YTIME)	                   "Nominal electricity generation plants capacity (GW)"
-*v04ScalFacPlantDispatchExpr(allCy,PGALL,HOUR,YTIME)       "Scaling factor for plant dispatching"
 V04ShareTechPG(allCy,PGALL,YTIME)                          "Share of all technologies in the electricity mixture"
 V04CapElecCHP(allCy,CHP,YTIME)	                           "Capacity of CHP Plants (GW)"
 V04CostHourProdInvDec(allCy,PGALL,YTIME)                    "Production cost of technology (US$2015/KWh)"
-*v04CostHourProdInvCCS(allCy,PGALL,HOUR,YTIME)             "Hourly production cost of technology accounting for CCS acceptance (US$2015/KWh)"
 V04CostVarTech(allCy,PGALL,YTIME)	                       "Variable cost of technology (US$2015/KWh)"	
 V04IndxEndogScrap(allCy,PGALL,YTIME)	                   "Index used for endogenous power plants scrapping (1)"			
 V04CapElecNonCHP(allCy,YTIME)	                           "Total electricity generation capacity excluding CHP (GW)"	
 V04GapGenCapPowerDiff(allCy,YTIME)	                       "Gap in total generation capacity to be filled by new equipment (GW)"		
-*v04ScalWeibull(allCy,PGALL,HOUR,YTIME)                    "Temporary variable facilitating the scaling in Weibull equation"	
 *v04PotRenMinAllow(allCy,PGRENEF,YTIME)	                   "Minimum allowed renewable potential (GW)"		
 V04ShareSatPG(allCy,PGALL,YTIME)	                           "Saturation for electricity mixture penetration of RES technologies"	
 V04SharePowPlaNewEq(allCy,PGALL,YTIME)	                   "Power plant share in new equipment (1)"			

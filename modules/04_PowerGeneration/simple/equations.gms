@@ -122,7 +122,7 @@ Q04CostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
 *' for renewable plants (excluding certain types) and fossil fuel plants.
 Q04CostHourProdInvDec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04CostHourProdInvDec(allCy,PGALL,YTIME)
-              =E=         
+        =E=         
     V04CostCapTech(allCy,PGALL,YTIME) +
     V04CostVarTech(allCy,PGALL,YTIME);
 
@@ -153,7 +153,8 @@ Q04IndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(al
 Q04CapElecNonCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04CapElecNonCHP(allCy,YTIME)
         =E=
-    VmCapElecTotEst(allCy,YTIME) - SUM(CHP,V04CapElecCHP(allCy,CHP,YTIME));      
+    VmCapElecTotEst(allCy,YTIME) -
+    SUM(CHP,V04CapElecCHP(allCy,CHP,YTIME));      
 
 *' In essence, the equation evaluates the difference between the current and expected power generation capacity, accounting for various factors such as planned capacity,
 *' decommissioning schedules, and endogenous scrapping. The square root term introduces a degree of tolerance in the calculation.
@@ -164,7 +165,7 @@ Q04GapGenCapPowerDiff(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       (
         V04CapElecNonCHP(allCy,YTIME) - V04CapElecNonCHP(allCy,YTIME-1) +
         sum(PGALL, 
-          V04CapElec2(allCy,PGALL,YTIME-1) * V04ScrpRate(allCy,PGALL,YTIME) -
+          VmCapElec(allCy,PGALL,YTIME-1) * V04ScrpRate(allCy,PGALL,YTIME) -
           VmCapElec(allCy,PGALL,YTIME-1) * (1 - V04CCSRetroFit(allCy,PGALL,YTIME)) +
           (i04PlantDecomSched(allCy,PGALL,YTIME) - i04DecInvPlantSched(allCy,PGALL,YTIME)) * i04AvailRate(allCy,PGALL,YTIME)
         ) 
@@ -173,7 +174,7 @@ Q04GapGenCapPowerDiff(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       (
         V04CapElecNonCHP(allCy,YTIME) - V04CapElecNonCHP(allCy,YTIME-1) +
         sum(PGALL,
-          V04CapElec2(allCy,PGALL,YTIME-1) * V04ScrpRate(allCy,PGALL,YTIME) -
+          VmCapElec(allCy,PGALL,YTIME-1) * V04ScrpRate(allCy,PGALL,YTIME) -
           VmCapElec(allCy,PGALL,YTIME-1) * (1 - V04CCSRetroFit(allCy,PGALL,YTIME)) +
           (i04PlantDecomSched(allCy,PGALL,YTIME) - i04DecInvPlantSched(allCy,PGALL,YTIME)) * i04AvailRate(allCy,PGALL,YTIME)
         )
@@ -222,7 +223,7 @@ Q04SharePowPlaNewEq(allCy,PGALL,YTIME)$(TIME(YTIME)$runCy(allCy)) ..
 Q04CapElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCapElec(allCy,PGALL,YTIME)
           =E=
-    V04CapElec2(allCy,PGALL,YTIME-1) * (1 - V04ScrpRate(allCy,PGALL,YTIME)) +
+    VmCapElec(allCy,PGALL,YTIME-1) * (1 - V04ScrpRate(allCy,PGALL,YTIME)) +
     V04NewCapElec(allCy,PGALL,YTIME) -
     i04PlantDecomSched(allCy,PGALL,YTIME) * i04AvailRate(allCy,PGALL,YTIME);
 
@@ -239,15 +240,6 @@ Q04NewCapElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     SUM(PGALL2$CCS_NOCCS(PGALL,PGALL2),
       (1 - V04CCSRetroFit(allCy,PGALL2,YTIME)) * VmCapElec(allCy,PGALL2,YTIME-1)
     );
-  
-*' This equation calculates the variable representing the planned electricity generation capacity for a specific power plant  in a given country
-*' and time period. The calculation involves adjusting the actual electricity generation capacity by a small constant and the square
-*' root of the sum of the square of the capacity and a small constant. The purpose of this adjustment is likely to avoid numerical issues and ensure a positive value for
-*' the planned capacity.
-Q04CapElec2(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V04CapElec2(allCy,PGALL,YTIME)
-        =E=
-    ( VmCapElec(allCy,PGALL,YTIME) + 1e-6 + SQRT( SQR(VmCapElec(allCy,PGALL,YTIME)-1e-6) + SQR(1e-4) ) )/2;
 
 *' This equation calculates the variable representing the newly added electricity generation capacity for a specific renewable power plant 
 *' in a given country and time period. The calculation involves subtracting the planned electricity generation capacity in the current time period
@@ -256,7 +248,7 @@ Q04CapElec2(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04NetNewCapElec(allCy,PGALL,YTIME)$(PGREN(PGALL)$TIME(YTIME)$runCy(allCy))..
     V04NetNewCapElec(allCy,PGALL,YTIME) 
         =E=
-    V04CapElec2(allCy,PGALL,YTIME) - V04CapElec2(allCy,PGALL,YTIME-1);                       
+    VmCapElec(allCy,PGALL,YTIME) - VmCapElec(allCy,PGALL,YTIME-1);                       
 
 *' This equation calculates the variable representing the average capacity factor of renewable energy sources for a specific renewable power plant
 *' in a given country  and time period. The capacity factor is a measure of the actual electricity generation output relative to the maximum
@@ -287,7 +279,7 @@ Q04CFAvgRen(allCy,PGALL,YTIME)$(PGREN(PGALL)$TIME(YTIME)$runCy(allCy))..
 Q04CapOverall(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04CapOverall(allCy,PGALL,YTIME)
           =E=
-    V04CapElec2(allCy,pgall,ytime)$(not PGREN(PGALL)) +
+    VmCapElec(allCy,pgall,ytime)$(not PGREN(PGALL)) +
     V04CFAvgRen(allCy,PGALL,YTIME-1) *
     (
       V04NetNewCapElec(allCy,PGALL,YTIME) / i04AvailRate(allCy,PGALL,YTIME) +
@@ -303,7 +295,8 @@ Q04ProdElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmProdElec(allCy,PGALL,YTIME)
         =E=
     (V04DemElecTot(allCy,YTIME) - sum(CHP, V04ProdElecEstCHP(allCy,CHP,YTIME))) /
-    sum(PGALL2, V04CapElec2(allCy,PGALL2,YTIME)) * V04CapElec2(allCy,PGALL,YTIME);
+    sum(PGALL2, VmCapElec(allCy,PGALL2,YTIME)) *
+    VmCapElec(allCy,PGALL,YTIME);
 
 *' Share of all technologies in the electricity mixture.
 Q04ShareTechPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
