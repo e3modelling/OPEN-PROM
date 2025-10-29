@@ -14,8 +14,8 @@ V01ActivPassTrnsp.FX(runCy,TRANP,YTIME) $(not AN(YTIME) and not sameas(TRANP,"PC
 V01NewRegPcYearly.FX(runCy,YTIME)$(not an(ytime)) = i01NewReg(runCy,YTIME);
 *---
 V01RateScrPc.UP(runCy,YTIME) = 1;
-V01RateScrPc.l(runCy,YTIME) = 0.06;
-V01RateScrPc.FX(runCy,"%fBaseY%") = 0.06; 
+V01RateScrPc.l(runCy,YTIME) = 0.05;
+V01RateScrPc.FX(runCy,YTIME)$DATAY(YTIME) = 0.05; 
 *---
 V01RateScrPcTot.UP(runCy,TTECH,YTIME) = 1;
 V01RateScrPcTot.FX(runCy,TTECH,YTIME)$(not AN(YTIME)) = V01RateScrPc.L(runCy,YTIME);

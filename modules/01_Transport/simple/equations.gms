@@ -338,20 +338,17 @@ Q01RateScrPcTot(allCy,TTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V01RateScrPcTot(allCy,TTECH,YTIME)
         =E=
     V01RateScrPc(allCy,YTIME) +
-    V01PremScrp(allCy,"PC",TTECH,YTIME-1);
+    V01PremScrp(allCy,"PC",TTECH,YTIME);
     
 Q01PremScrp(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME)$SECTTECH(TRANSE,TTECH)$runCy(allCy))..
     V01PremScrp(allCy,TRANSE,TTECH,YTIME)
         =E=
-    (1 -
-      (V01CostFuel(allCy,TRANSE,TTECH,YTIME) + 1e-4) ** (-2) /
-      (
-        
-        (V01CostFuel(allCy,TRANSE,TTECH,YTIME) + 1e-4) ** (-2) +
-        0.1 * 
-        SUM(TTECH2$(not sameas(TTECH2,TTECH) and SECTTECH(TRANSE,TTECH2)),
-          (V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME) + 1e-4) ** (-2)
-        )
+    1 -
+    (V01CostFuel(allCy,TRANSE,TTECH,YTIME) + 1e-4) ** (-2) /
+    (
+      (V01CostFuel(allCy,TRANSE,TTECH,YTIME) + 1e-4) ** (-2) +
+      0.1 * 
+      SUM(TTECH2$(not sameas(TTECH2,TTECH) and SECTTECH(TRANSE,TTECH2)),
+        (V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME) + 1e-4) ** (-2)
       )
-    )
-    ;
+    );
