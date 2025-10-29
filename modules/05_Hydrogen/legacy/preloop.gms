@@ -38,8 +38,10 @@ display VmConsFuelTechH2Prod.L;
 V05GapShareH2Tech2.L(runCy,H2TECH,YTIME) = 2;
 V05GapShareH2Tech2.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
 *---
-V05CapScrapH2ProdTech.L(runCy,H2TECH,YTIME) = 2;
-V05CapScrapH2ProdTech.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
+*V05CapScrapH2ProdTech.L(runCy,H2TECH,YTIME) = 0.5;
+*V05CapScrapH2ProdTech.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
+V05CapScrapH2ProdTech.LO(runCy,H2TECH,YTIME) = 0;
+V05CapScrapH2ProdTech.UP(runCy,H2TECH,YTIME) = 1;
 display V05CapScrapH2ProdTech.L;
 *---
 V05ScrapLftH2Prod.L(runCy,H2TECH,YTIME) = 2;
@@ -85,3 +87,4 @@ VmCostAvgProdH2.FX(runCy,YTIME)$(not An(YTIME)) = 0;
 V05DemGapH2.scale(runCy,YTIME) = 1e-10;
 Q05DemGapH2.scale(runCy,YTIME) = V05DemGapH2.scale(runCy,YTIME);
 *---
+V05DemGapH2.LO(runCy,YTIME) = 0;
