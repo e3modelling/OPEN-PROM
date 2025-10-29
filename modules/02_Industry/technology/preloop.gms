@@ -63,11 +63,9 @@ V02VarCostTech.FX(runCy,DSBS,ITECH,YTIME)$(not An(YTIME) and not TRANSE(DSBS) an
   (
     VmPriceFuelSubsecCarVal.L(runCy,"OI","ELC",YTIME) *
     smFracElecPriChp *
-    VmPriceElecInd.L(runCy,YTIME) 
+    SUM(CHP$ITECHtoEF(ITECH,CHP),VmPriceElecInd.L(runCy,CHP,YTIME)) 
     / imUsfEneConvSubTech(runCy,DSBS,ITECH,YTIME)
   )$TCHP(ITECH);
-
-
 
 V02CapCostTech.FX(runCy,DSBS,ITECH,YTIME)$(not An(YTIME) and not TRANSE(DSBS) and not sameas(DSBS,"DAC") and SECTTECH(DSBS,ITECH)) = ((
       (

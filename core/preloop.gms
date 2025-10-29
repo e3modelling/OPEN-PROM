@@ -63,8 +63,11 @@ VmPriceFuelSubsecCarVal.FX(runCy,INDDOM,"HEATPUMP",YTIME)$(SECtoEF(INDDOM,"HEATP
 VmPriceFuelSubsecCarVal.FX(runCy,"H2P",EF,YTIME)$(SECtoEF("H2P",EF)$(not An(YTIME))) = VmPriceFuelSubsecCarVal.L(runCy,"PG",EF,YTIME);
 VmPriceFuelSubsecCarVal.FX(runCy,"H2P","ELC",YTIME)$(not An(YTIME))= VmPriceFuelSubsecCarVal.L(runCy,"OI","ELC",YTIME);
 *---
-VmPriceElecInd.L(runCy,YTIME)= 0.9;
-VmPriceElecInd.FX(runCy,YTIME)$TFIRST(YTIME) = i08ElecIndex(runCy,YTIME);
+VmPriceElecInd.FX(runCy,CHP,YTIME)$DATAY(YTIME) = 
+[
+  i04DataElecProdCHP(runCy,CHP,YTIME) / 1000 * smTWhToMtoe /
+  i03OutCHPTransfProcess(runCy,"STE",YTIME)
+]$i03OutCHPTransfProcess(runCy,"STE",YTIME);
 *---
 openprom.optfile=1;
 *---

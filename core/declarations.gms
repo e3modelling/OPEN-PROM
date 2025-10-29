@@ -77,7 +77,7 @@ VmRenValue(YTIME)                                          "Renewable value (US$
 
 Scalars
 smTWhToMtoe                                                "TWh to Mtoe conversion factor" /0.086/
-smElecToSteRatioChp                                        "Technical maximum of electricity to steam ratio in CHP plants" /0.9/
+smElecToSteRatioChp                                        "Technical maximum of electricity to steam ratio in CHP plants" /4/
 sIter                                                      "time step iterator" /0/
 sSolverTryMax                                              "maximum attempts to solve each time step" /%SolverTryMax%/
 sModelStat                                                 "helper parameter for solver status"

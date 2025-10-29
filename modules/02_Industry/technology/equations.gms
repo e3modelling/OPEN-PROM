@@ -118,14 +118,14 @@ Q02VarCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not s
   (
     VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME) *
     smFracElecPriChp *
-    VmPriceElecInd(allCy,YTIME) 
-    / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME)
+    SUM(CHP$ITECHtoEF(ITECH,CHP),VmPriceElecInd(allCy,CHP,YTIME)) /
+    imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME)
   )$TCHP(ITECH);
 
 Q02CostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
     V02CostTech(allCy,DSBS,ITECH,YTIME) 
         =E=
-    V02CapCostTech(allCy,DSBS,ITECH,YTIME)  +
+    V02CapCostTech(allCy,DSBS,ITECH,YTIME) +
     V02VarCostTech(allCy,DSBS,ITECH,YTIME);
 
 *' This equation calculates the technology share in new equipment based on factors such as maturity factor,
@@ -210,13 +210,13 @@ Q02IndAvrEffFinalUseful(allCy,DSBS,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not
 *' of fuel prices in the current and previous years, with a power of 0.3 applied to each ratio. This weighting factor introduces a gradual adjustment to reflect the
 *' historical changes in fuel prices, providing a more dynamic estimation of the electricity index. This equation provides a method to estimate the electricity index
 *' based on historical fuel price trends, allowing for a more flexible and responsive representation of industry price dynamics.
-Q02IndxElecIndPrices(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V02IndxElecIndPrices(allCy,YTIME)
+Q02IndxElecIndPrices(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V02IndxElecIndPrices(allCy,CHP,YTIME)
         =E=
-    VmPriceElecInd(allCy,YTIME-1) * 
-    (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)/VmPriceFuelAvgSub(allCy,"OI",YTIME-1)) ** (0.6) *
-    (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-2)/VmPriceFuelAvgSub(allCy,"OI",YTIME-2)) ** (0.3) *
-    (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-3)/VmPriceFuelAvgSub(allCy,"OI",YTIME-3)) ** (0.1)
+    VmPriceElecInd(allCy,CHP,YTIME-1) * 
+    (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)/VmPriceFuelAvgSub(allCy,"OI",YTIME-1)) ** (0.03) *
+    (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-2)/VmPriceFuelAvgSub(allCy,"OI",YTIME-2)) ** (0.02) *
+    (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-3)/VmPriceFuelAvgSub(allCy,"OI",YTIME-3)) ** (0.01)
     ;
 
 *' The equation computes the electricity production cost per Combined Heat and Power plant for a specific demand sector within a given subsector.
@@ -242,7 +242,7 @@ Q02CostElecProdCHP(allCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS) $runCy(allCy
         1e-3 * imCo2EmiFac(allCy,"PG",PGEF,YTIME) *
         sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))
       ) * smTWhToMtoe /
-      (i02BoiEffChp(allCy,CHP,YTIME) * (VmPriceElecInd(allCy,YTIME)) + 1e-4)
+      (i02BoiEffChp(allCy,CHP,YTIME) * (VmPriceElecInd(allCy,CHP,YTIME)) + 1e-4)
     );  
 
 *' The equation calculates the average electricity production cost per Combined Heat and Power plant .

@@ -15,8 +15,6 @@ Parameters
 i08DiffFuelsInSec(SBS)                    "Auxiliary parameter holding the number of different fuels in a sector"
 i08WgtSecAvgPriFueCons(allCy,SBS,EF)	    "Weights for sector's average price, based on fuel consumption (1)"
 i08VAT(allCy,YTIME)                       "VAT (value added tax) rates (1)"
-i08HydrogenPri(allCy,SBS,YTIME)	          "Total Hydrogen Cost Per Sector (US$2015/toe)"
-i08ElecIndex(allCy,YTIME)	                "Electricity Index (1)"
 ;
 *---
 loop SBS do
@@ -44,12 +42,6 @@ i08WgtSecAvgPriFueCons(runCy,SBS,EF)$(SECtoEF(SBS,EF) $sum(ef2$SECtoEF(SBS,EF),i
 *---
 * FIXME: Check if VAT (value added tax) rates are necessary for the model.
 i08VAT(runCy, YTIME) = 0;
-*---
-* FIXME: i08HydrogenPri should be computed with mrprom
-* author=giannou
-i08HydrogenPri(runCy,SBS,YTIME)=4.3;
-*---
-i08ElecIndex(runCy,YTIME) = 0.9;
 *---
 imFuelPrice(runCy,SBS,EF,YTIME) = imFuelPrice(runCy,SBS,EF,YTIME)/1000; !! change units $15 -> k$15
 imFuelPrice(runCy,"BU","KRS",YTIME) = imFuelPrice(runCy,"PA","KRS",YTIME);
