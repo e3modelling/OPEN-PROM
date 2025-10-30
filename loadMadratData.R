@@ -20,16 +20,16 @@ fnameTargets <- NULL
 if (!is.null(DevMode) && DevMode == 0) {
     library(mrprom)
     print( paste("Generating research mode data with mrprom ver.", packageVersion("mrprom")) )
-    fname <- paste0("rev0",dev,"_d9e03f92_open_prom.tgz") # file name
-    fnameTargets <- paste0("rev0",dev,"_d9e03f92_targets.tgz")
+    fname <- paste0("rev0",dev,"_dabc6ef9_open_prom.tgz") # file name
+    fnameTargets <- paste0("rev0",dev,"_dabc6ef9_targets.tgz")
     # run the fullOPEN-PROM function generating the whole input dataset of OPEN-PROM
     # retrieveData contains a call to fullOPEN-PROM
     
-    retrieveData("OPEN_PROM",puc=F,renv=F,regionmapping = "regionmappingOPDEV3.csv",dev=dev)
+    retrieveData("OPEN_PROM",puc=F,renv=F,regionmapping = "regionmappingOPDEV5.csv",dev=dev)
     # retrieve targets for calibration
     #setConfig(ignorecache = T)
     
-    retrieveData("TARGETS",puc=F,renv=F,regionmapping = "regionmappingOPDEV3.csv",dev=dev)
+    retrieveData("TARGETS",puc=F,renv=F,regionmapping = "regionmappingOPDEV5.csv",dev=dev)
     file.copy(paste0(getConfig("outputfolder"),"/",fname),fname)
     file.copy(paste0(getConfig("outputfolder"),"/",fnameTargets),fnameTargets)
     
