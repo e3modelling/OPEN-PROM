@@ -13,8 +13,6 @@ V03OutTransfRefSpec.FX(runCy,EFS,YTIME)$(not EFtoEFA(EFS,"LQD")) = 0;
 V03ConsGrssInlNotEneBranch.L(runCy,EFS,YTIME) = 0.1;
 V03ConsGrssInlNotEneBranch.FX(runCy,EFS,YTIME)$(not An(YTIME)) = i03GrossInConsNoEneBra(runCy,EFS,YTIME);
 *---
-V03OutTransfTherm.FX(runCy,EFS,YTIME)$(not TOCTEF(EFS)) = 0;
-*---
 V03InputTransfRef.FX(runCy,"CRO",YTIME)$(not An(YTIME)) = i03TransfInputRef(runCy,"CRO",YTIME);
 V03InputTransfRef.FX(runCy,EFS,YTIME)$(not sameas("CRO",EFS)) = 0;
 *---

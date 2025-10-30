@@ -25,8 +25,7 @@ Q03ConsFinEneCountry(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)
       )
     ) +
-    sum(EF$(EFtoEFS(EF,EFS) $SECtoEF("DAC",EF)),VmConsFuelDACProd(allCy,EF,YTIME))
-    ;
+    sum(EF$(EFtoEFS(EF,EFS) $SECtoEF("DAC",EF)),VmConsFuelDACProd(allCy,EF,YTIME));
 
 *' The equation computes the total final energy consumption in million tonnes of oil equivalent 
 *' for all countries at a specific time period. This is achieved by summing the final energy consumption for each energy
@@ -41,10 +40,11 @@ $offtext
 *' demand subsector based on the corresponding fuel aggregation for the supply side. This process is performed 
 *' for each time period.
 Q03ConsFinNonEne(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         VmConsFinNonEne(allCy,EFS,YTIME)
-             =E=
-         sum(NENSE$(not sameas("BU",NENSE)),
-             sum(EF$(EFtoEFS(EF,EFS) $SECtoEF(NENSE,EF) ), VmConsFuel(allCy,NENSE,EF,YTIME)));  
+    VmConsFinNonEne(allCy,EFS,YTIME)
+        =E=
+    sum(NENSE$(not sameas("BU",NENSE)),
+      sum(EF$(EFtoEFS(EF,EFS)$SECtoEF(NENSE,EF)), VmConsFuel(allCy,NENSE,EF,YTIME))
+    );  
 
 *' The equation computes the distribution losses in million tonnes of oil equivalent for a given energy form sector.
 *' The losses are determined by the rate of losses over available for final consumption multiplied by the sum of total final energy
@@ -110,17 +110,17 @@ Q03TransfInputCHPlants(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' influenced by the base year and the production scaling parameter. The result represents the refineries'
 *' capacity in million barrels per day (Million Barrels/day).
 Q03CapRef(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V03CapRef(allCy,YTIME)
-             =E=
-         [
-         i03ResRefCapacity(allCy,YTIME) * V03CapRef(allCy,YTIME-1)
-         *
-         (1$(ord(YTIME) le 10) +
-         (prod(rc,
-         (sum(EFS$EFtoEFA(EFS,"LQD"),VmConsFinEneCountry(allCy,EFS,YTIME-(ord(rc)+1)))/sum(EFS$EFtoEFA(EFS,"LQD"),VmConsFinEneCountry(allCy,EFS,YTIME-(ord(rc)+2))))**(0.5/(ord(rc)+1)))
-         )
-         $(ord(YTIME) gt 10)
-         )     ] $i03RefCapacity(allCy,"%fStartHorizon%")+0;
+    V03CapRef(allCy,YTIME)
+        =E=
+    [
+      i03ResRefCapacity(allCy,YTIME) * V03CapRef(allCy,YTIME-1) *
+      (1$(ord(YTIME) le 10) +
+      (prod(rc,
+      (sum(EFS$EFtoEFA(EFS,"LQD"),VmConsFinEneCountry(allCy,EFS,YTIME-(ord(rc)+1)))/sum(EFS$EFtoEFA(EFS,"LQD"),VmConsFinEneCountry(allCy,EFS,YTIME-(ord(rc)+2))))**(0.5/(ord(rc)+1)))
+      )
+      $(ord(YTIME) gt 10)
+      )     
+    ] $i03RefCapacity(allCy,"%fStartHorizon%")+0;
 
 *' The equation calculates the transformation output from refineries for a specific energy form 
 *' in a given scenario and year. The output is computed based on a residual factor, the previous year's output, and the
@@ -293,7 +293,7 @@ Q03ConsGrssInl(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' The result represents the primary production in million tons of oil equivalent.
 Q03ProdPrimary(allCy,PPRODEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V03ProdPrimary(allCy,PPRODEF,YTIME)
-            =E=  
+        =E=  
     [
       (
         i03RatePriProTotPriNeeds(allCy,PPRODEF,YTIME) *
