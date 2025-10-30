@@ -337,8 +337,8 @@ Q01RateScrPc(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q01RateScrPcTot(allCy,TTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V01RateScrPcTot(allCy,TTECH,YTIME)
         =E=
-    V01RateScrPc(allCy,YTIME) +
-    V01PremScrp(allCy,"PC",TTECH,YTIME);
+    1 - (1 - V01RateScrPc(allCy,YTIME)) *
+    (1 - V01PremScrp(allCy,"PC",TTECH,YTIME));
     
 Q01PremScrp(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME)$SECTTECH(TRANSE,TTECH)$runCy(allCy))..
     V01PremScrp(allCy,TRANSE,TTECH,YTIME)

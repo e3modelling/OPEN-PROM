@@ -73,8 +73,8 @@ Q05PremRepH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q05CapScrapH2ProdTech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V05CapScrapH2ProdTech(allCy,H2TECH,YTIME)
       =E=
-    V05ScrapLftH2Prod(allCy,H2TECH,YTIME) +
-    V05PremRepH2Prod(allCy,H2TECH,YTIME)
+    1- (1-V05ScrapLftH2Prod(allCy,H2TECH,YTIME)) *
+    (1-V05PremRepH2Prod(allCy,H2TECH,YTIME))
 ;
 
 *' The hydrogen demand gap equation defines the difference between the total hydrogen demand (calculated in Q05DemTotH2) and

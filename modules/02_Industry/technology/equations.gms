@@ -34,7 +34,8 @@ Q02DemSubUsefulSubsec(allCy,DSBS,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not s
 Q02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and not TRANSE(DSBS) and not sameas(DSBS,"DAC"))$runCy(allCy))..
     V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) 
         =E=
-    V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME-1) * (1- 1/VmLft(allCy,DSBS,ITECH,YTIME) - V02PremScrpIndu(allCy,DSBS,ITECH,YTIME));
+    V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME-1) * 
+    (1- (1 - 1/VmLft(allCy,DSBS,ITECH,YTIME))* (1- V02PremScrpIndu(allCy,DSBS,ITECH,YTIME)));
 
 
 Q02PremScrpIndu(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and not TRANSE(DSBS) and not sameas(DSBS,"DAC"))$runCy(allCy))..
@@ -111,7 +112,7 @@ Q02VarCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not s
       imCO2CaptRateIndustry(allCy,ITECH,YTIME) * VmCstCO2SeqCsts(allCy,YTIME-1) * 1e-3 * imCo2EmiFac(allCy,DSBS,EF,YTIME-1)  +
       (1-imCO2CaptRateIndustry(allCy,ITECH,YTIME)) * 1e-3 * imCo2EmiFac(allCy,DSBS,EF,YTIME-1)  *
       (sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME-1))) +
-      VmRenValue(YTIME)$(not RENEF(ITECH) and not NENSE(DSBS)) !! needs change of units
+      (VmRenValue(YTIME)/1000)$(not RENEF(ITECH) and not NENSE(DSBS)) !! needs change of units
     ) +
     imVarCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit
   ) / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME) -

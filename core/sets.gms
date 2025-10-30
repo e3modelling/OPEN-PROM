@@ -734,12 +734,26 @@ RENEF(TECH)        Renewable technologies in demand side !! Should these remain 
 *HYD     "Hydro"
 *WND     "Wind"
 *SOL     "Solar"
+TELC
+TPHEVGSL  "Plug in Hybrid engine - gasoline"
+TPHEVGDO  "Plug in Hybrid engine - diesel"
+TH2F      "Fuel Cells: Hydrogen"
+TCHEVGSL  "conventional Hybrid engine - gasoline"
+TCHEVGDO  "conventional Hybrid engine - diesel"
 TBMSWAS  "Biomass and Waste"
 *GEO     "Geothermal and other renewable sources eg. Tidal, etc."
 TBGDO    "Biodiesel"
 *STE1CB  "Steam produced from CHP conventional bmswas"
 TSTE1AB  "Steam produced from CHP advanced bmswas"
 TSTE2BMS "Steam produced from district heating plants burning bmswas"
+TNGSCCS
+THCLCCS
+TSTE1AH2F
+**
+HTDAC
+H2DAC
+LTDAC
+EWDAC
 /
 
 TECHtoEF (TECH,EF) Fuels consumed by technologies
@@ -1001,7 +1015,8 @@ STE2OGS
 STE2BMS
 /
 
-PGREN(PGALL)     Renewable Plants                          /PGLHYD,PGSHYD,PGAWND,PGSOL,PGCSP,PGOTHREN, PGAWNO/
+PGREN(PGALL)    REN PLANTS with Saturation                /PGLHYD,PGSHYD,PGAWND,PGSOL,PGCSP,PGOTHREN,PGAWNO/
+PGREN2(PGALL)     Renewable Plants                          /PGLHYD,PGSHYD,PGAWND,PGSOL,PGCSP,PGOTHREN,PGAWNO,PGANUC,ATHCOALCCS,ATHLGNCCS,ATHGASCCS,PGH2F/
 PGRENSW(PGALL)   Solar and wind Plants                     /PGSOL,PGCSP,PGAWND,PGAWNO/
 PGNREN(PGALL)    Advanced Renewable Plants potential      /PGCSP,PGOTHREN,PGAWNO,ATHBMSWAS/
 PGRENEF          Renewable energy forms in power generation  /LHYD,SHYD,WND,WNO,SOL,DPV,BMSWAS,OTHREN/
