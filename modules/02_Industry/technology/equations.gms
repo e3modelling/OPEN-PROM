@@ -35,7 +35,8 @@ Q02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITE
     V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) 
         =E=
     V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME-1) * 
-    (1- (1 - 1/VmLft(allCy,DSBS,ITECH,YTIME))* (1- V02PremScrpIndu(allCy,DSBS,ITECH,YTIME)));
+    (1 - 1/VmLft(allCy,DSBS,ITECH,YTIME)) *
+    (1- V02PremScrpIndu(allCy,DSBS,ITECH,YTIME));
 
 
 Q02PremScrpIndu(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and not TRANSE(DSBS) and not sameas(DSBS,"DAC"))$runCy(allCy))..
