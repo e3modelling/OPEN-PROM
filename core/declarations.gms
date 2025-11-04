@@ -60,13 +60,13 @@ smGwToTwhPerYear(YTIME)                                    "convert GW mean powe
 
 Equations
 *' *** Miscellaneous'
+Q00ElecConsHeatPla(allCy,INDDOM,YTIME)
 qDummyObj                                                  "Define dummy objective function"
 ;
 
 Variables
 *'                **Interdependent Variables**
 
-*' *** Miscellaneous
 *vDummyObj                                                  "Dummy maximisation variable (1)"
 VmElecConsHeatPla(allCy,DSBS,YTIME)                        "Electricity consumed in heatpump plants (Mtoe)"
 ;
