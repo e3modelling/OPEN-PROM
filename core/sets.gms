@@ -171,6 +171,7 @@ PCH   "Petrochemicals Industry"
 NEN   "Other Non Energy Uses"
 PG    "Power and Steam Generation"
 H2P   "Hydrogen Production"
+STEAMP "Steam Production"
 H2INFR "Hydrogen storage and delivery"
 LGN_PRD_CH4    "Lignite Primary Production, related with CH4"
 HCL_PRD_CH4    "Hard coal primary production, related with CH4"
@@ -219,6 +220,7 @@ PCH   "Petrochemicals Industry"
 NEN   "Other Non Energy Uses"
 PG    "Power and Steam Generation"
 H2P   "Hydrogen production"
+STEAMP "Steam Production"
 H2INFR "Hydrogen storage and delivery"
 DAC    "Direct Air Capture"
 /
@@ -280,7 +282,7 @@ NoTrade  Carbon Value for non-trading sectors
 
 NAPtoALLSBS(NAP,ALLSBS) Energy sectors corresponding to NAP sectors
 /
-Trade.(FD,EN,TX,OE,OI,NF,CH,IS,BM,PP,PG,BM_CO2,H2P,DAC)
+Trade.(FD,EN,TX,OE,OI,NF,CH,IS,BM,PP,PG,BM_CO2,H2P,STEAMP,DAC)
 NoTrade.(SE,AG,HOU,PC,PB,PT,PN,PA,GU,GT,GN,BU,PCH,NEN,LGN_PRD_CH4,HCL_PRD_CH4,GAS_PRD_CH4,TERT_CH4,TRAN_CH4,AG_CH4,SE_CH4,TRAN_N2O,TX_N2O,AG_N2O,OI_HFC,OI_PFC,NF_PFC,PG_SF6,OI_SF6,DAC)
 /
 
@@ -853,7 +855,8 @@ DAC.(HTDAC,H2DAC,LTDAC,EWDAC)
 SECtoEF(SBS,EF) Link between Model Subsectors and Energy FORMS
 /
 PG.(LGN,HCL,GDO,RFO,NGS,OGS,NUC,HYD,BMSWAS,SOL,GEO,WND,H2F)
-H2P.(HCL,RFO,NGS,NUC,BMSWAS,SOL,WND,ELC)
+H2P.(HCL,LGN,RFO,GDO,NGS,OGS,NUC,BMSWAS,SOL,WND,ELC)
+STEAMP.(HCL,LGN,GDO,RFO,NGS,OGS,NUC,BMSWAS,SOL,WND,ELC,H2F)
 *DAC.(ELC,NGS)
 /
 
@@ -1254,6 +1257,9 @@ alias(ITECH,ITECH2)
 
 * This alias is used in tech share equation
 alias(TTECH2,TTECH)
+
+*---
+ALIAS (TCHP2,TCHP);
 
 scalar TF order of base year in set ytime;
 TF=sum((TFIRST,ytime), ord(ytime)$TFIRST(ytime));

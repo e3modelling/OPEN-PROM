@@ -21,31 +21,32 @@ $IFTHEN %link2MAgPIE% == on
    $(not sameas("BMSWAS",EF))
 $ENDIF
    $(not sameas("NUC",EF)) $runCy(allCy))..
-         VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)
-                =E=
-         (VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1) +
-           sum(NAP$NAPtoALLSBS(NAP,SBS),(VmCarVal(allCy,NAP,YTIME)*imCo2EmiFac(allCy,SBS,EF,YTIME) - VmCarVal(allCy,NAP,YTIME-1)*imCo2EmiFac(allCy,SBS,EF,YTIME-1)))
-           /1000
-         )$(DSBS(SBS))$(not (ELCEF(EF) or HEATPUMP(EF) or ALTEF(EF) or H2EF(EF) or sameas("STE1AH2F",EF) or H2EF(EF) or sameas("H2F",EF))) +
-         (
-            VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1) -
-            (sum(NAP$NAPtoALLSBS(NAP,SBS),(VmCarVal(allCy,NAP,YTIME-1)*imCo2EmiFac(allCy,SBS,EF,YTIME-1)))/1000)$TFIRST(YTIME-1)
-         )$sameas(SBS,"PG") +
-          VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1)$(DSBS(SBS))$ALTEF(EF) +
-         (
-           ( VmPriceElecIndResConsu(allCy,"i",YTIME)$INDSE1(SBS)+
-             VmPriceElecIndResConsu(allCy,"r",YTIME)$HOU1(SBS) +
-             VmPriceElecIndResConsu(allCy,"t",YTIME)$TRANS1(SBS) +
-             VmPriceElecIndResConsu(allCy,"c",YTIME)$SERV(SBS)
-            )/smTWhToMtoe
-            +
-            ((imEffValueInDollars(allCy,SBS,YTIME))/1000)$DSBS(SBS)
-         )$(ELCEF(EF) or HEATPUMP(EF)) +
-         (
-            VmPriceFuelSubsecCarVal(allCy,"OI",EF,YTIME)$(not sameas("BMSWAS",EF)) +
-            VmPriceFuelSubsecCarVal(allCy,"AG",EF,YTIME)$(sameas("BMSWAS",EF))
-         )$(sameas ("H2P",SBS)) +
-         (VmCostAvgProdH2(allCy,YTIME)$DSBS(SBS)/1000)$(H2EF(EF) or sameas("H2F",EF));
+    VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)
+        =E=
+    (VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1) +
+      sum(NAP$NAPtoALLSBS(NAP,SBS),(VmCarVal(allCy,NAP,YTIME)*imCo2EmiFac(allCy,SBS,EF,YTIME) - VmCarVal(allCy,NAP,YTIME-1)*imCo2EmiFac(allCy,SBS,EF,YTIME-1)))
+      /1000
+    )$(DSBS(SBS))$(not (ELCEF(EF) or HEATPUMP(EF) or ALTEF(EF) or H2EF(EF) or sameas("STE1AH2F",EF) or H2EF(EF) or sameas("H2F",EF))) +
+    (
+      VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1) -
+      (sum(NAP$NAPtoALLSBS(NAP,SBS),(VmCarVal(allCy,NAP,YTIME-1)*imCo2EmiFac(allCy,SBS,EF,YTIME-1)))/1000)$TFIRST(YTIME-1)
+    )$sameas(SBS,"PG") +
+    VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1)$(DSBS(SBS))$ALTEF(EF) +
+    (
+      ( VmPriceElecIndResConsu(allCy,"i",YTIME)$INDSE1(SBS)+
+        VmPriceElecIndResConsu(allCy,"r",YTIME)$HOU1(SBS) +
+        VmPriceElecIndResConsu(allCy,"t",YTIME)$TRANS1(SBS) +
+        VmPriceElecIndResConsu(allCy,"c",YTIME)$SERV(SBS)
+      )/smTWhToMtoe
+      +
+      ((imEffValueInDollars(allCy,SBS,YTIME))/1000)$DSBS(SBS)
+    )$(ELCEF(EF) or HEATPUMP(EF)) +
+    (
+      VmPriceFuelSubsecCarVal(allCy,"OI",EF,YTIME)$(not sameas("BMSWAS",EF)) +
+      VmPriceFuelSubsecCarVal(allCy,"AG",EF,YTIME)$(sameas("BMSWAS",EF))
+    )$(sameas ("H2P",SBS) or sameas("STEAMP",SBS)) +
+    !!FIXME: REMOVE SAME AS H2FOR H2EF
+    (VmCostAvgProdH2(allCy,YTIME)$DSBS(SBS)/1000)$(H2EF(EF) or sameas("H2F",EF));
 
 
 $ontext

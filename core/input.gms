@@ -69,7 +69,8 @@ NEN     0.08
 PG      0.1
 H2P     0.08
 H2INFR  0.08
-DAC     0.08 
+DAC     0.08
+STEAMP  0.08
 /;
 *---
 parameter imDisc(allCy,SBS,YTIME) "Discount rates per subsector for all countries ()" ;

@@ -120,13 +120,7 @@ Q02VarCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not s
       (VmRenValue(YTIME)/1000)$(not RENEF(ITECH) and not NENSE(DSBS)) !! needs change of units
     ) +
     imVarCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit
-  ) / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME) -
-  (
-    VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME) *
-    smFracElecPriChp *
-    VmPriceElecInd(allCy,YTIME) /
-    imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME)
-  )$TCHP(ITECH);
+  ) / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME);
 
 Q02CostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
     V02CostTech(allCy,DSBS,ITECH,YTIME) 
