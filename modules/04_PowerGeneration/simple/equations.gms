@@ -35,7 +35,6 @@ Q04CapElecCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         =E=
     V04ProdElecEstCHP(allCy,CHP,YTIME) / (1e3 * smGwToTwhPerYear(YTIME));  
 
-$ifthen.calib %Calibration% == off
 *' The equation calculates the total electricity demand by summing the components of final energy consumption in electricity, final non-energy consumption in electricity,
 *' distribution losses, and final consumption in the energy sector for electricity, and then subtracting net imports. The result is normalized using a conversion factor 
 *' which converts terawatt-hours (TWh) to million tonnes of oil equivalent (Mtoe). The formula provides a comprehensive measure of the factors contributing
@@ -43,10 +42,13 @@ $ifthen.calib %Calibration% == off
 Q04DemElecTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04DemElecTot(allCy,YTIME)
         =E=
+$ifthen.calib %Calibration% == off
     1/smTWhToMtoe *
     ( VmConsFinEneCountry(allCy,"ELC",YTIME) + VmConsFinNonEne(allCy,"ELC",YTIME) + VmLossesDistr(allCy,"ELC",YTIME)
       + VmConsFiEneSec(allCy,"ELC",YTIME) - VmImpNetEneBrnch(allCy,"ELC",YTIME)
     );
+$ELSEIF.calib %Calibration% == MatCalibration
+    t04DemElecTot(allCy,YTIME);
 $endif.calib
 
 *' This equation calculates the load factor of the entire domestic system as a sum of consumption in each demand subsector

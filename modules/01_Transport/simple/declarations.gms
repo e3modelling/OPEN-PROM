@@ -5,8 +5,7 @@ Equations
 *' *** Transport
 Q01ActivGoodsTransp(allCy,TRANSE,YTIME)                    "Compute goods transport activity"
 Q01GapTranspActiv(allCy,TRANSE,YTIME)	                   "Compute the gap in transport activity"
-*Q01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)	       "Compute Specific Fuel Consumption"
-Q01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME)    "Compute transportation cost per mean in KUS$2015 per vehicle"
+Q01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME)     "Compute transportation cost per mean in KUS$2015 per vehicle"
 Q01ShareTechTr(allCy,TRANSE,TECH,YTIME)	                   "Compute technology sorting based on variable cost and new equipment"
 Q01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)	   "Compute consumption of each technology in transport sectors"
 *q01DemFinEneSubTransp(allCy,TRANSE,YTIME)	               "Compute final energy demand in transport"
@@ -23,7 +22,7 @@ Q01PremScrp(allCy,TRANSE,TTECH,YTIME)
 Q01RateScrPcTot(allCy,TTECH,YTIME)
 *'                **Interdependent Equations**
 Q01DemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)	       "Compute final energy demand in transport per fuel"
-Q01Lft(allCy,DSBS,TECH,YTIME)	                               "Compute the lifetime of passenger cars" 
+Q01Lft(allCy,DSBS,TECH,YTIME)	                           "Compute the lifetime of passenger cars" 
 ;
 
 Variables
@@ -33,11 +32,7 @@ V01GapTranspActiv(allCy,TRANSE,YTIME)	                   "Gap in transport activ
                                                                 !! Gap for passenger cars (million vehicles)
                                                                 !! Gap for all other passenger transportation modes (Gpkm)
                                                                 !! Gap for all goods transport is measured (Gtkm)
-V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)	       "Specific Fuel Consumption ()"
-                                                                !! SFC for passenger cars (ktoe/Gkm)
-                                                                !! SFC for other passsenger transportation modes (ktoe/Gpkm)
-                                                                !! SFC for trucks is measured (ktoe/Gtkm)
-V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME)    "Transportation cost per mean (KUS$2015/vehicle)"
+V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME)     "Transportation cost per mean (KUS$2015/vehicle)"
 V01ShareTechTr(allCy,TRANSE,TECH,YTIME)	                   "Technology share in new equipment (1)"
 V01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)	   "Consumption of each technology and subsector (Mtoe)"
 *v01DemFinEneSubTransp(allCy,TRANSE,YTIME)	               "Final energy demand in transport subsectors (Mtoe)"
@@ -51,11 +46,11 @@ V01ActivPassTrnsp(allCy,TRANSE,YTIME)                      "Passenger transport 
 V01NumPcScrap(allCy,YTIME)                                 "Scrapped passenger cars (million vehicles)"
 V01PcOwnPcLevl(allCy,YTIME)                                "Ratio of car ownership over saturation car ownership (1)"
 V01RateScrPc(allCy,YTIME)                                  "Scrapping rate of passenger cars (1)"
-V01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)
-V01CostFuel(allCy,TRANSE,TTECH,YTIME)
-V01PremScrp(allCy,TRANSE,TTECH,YTIME)
-V01RateScrPcTot(allCy,TTECH,YTIME)
+V01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)             "Annualized capital costs (KUS$2015/vehicle)"
+V01CostFuel(allCy,TRANSE,TTECH,YTIME)                      "Fuel costs (KUS$2015/vehicle)"
+V01PremScrp(allCy,TRANSE,TTECH,YTIME)                      "Premature scrapping costs (KUS$2015/vehicle)"
+V01RateScrPcTot(allCy,TTECH,YTIME)                         "Total scrapping rate of passenger cars (1)"
 *'                **Interdependent Equations**
 VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)            "Final energy demand in transport subsectors per fuel (Mtoe)"
-VmLft(allCy,DSBS,TECH,YTIME)                                 "Lifetime of technologies (years)"
+VmLft(allCy,DSBS,TECH,YTIME)                               "Lifetime of technologies (years)"
 ;

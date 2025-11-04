@@ -26,5 +26,5 @@ qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
       t04SharePowPlaNewEq(allCy,PGALL,YTIME)
     )
   );
-$ELSE.calib qDummyObj.. vDummyObj =e= 1;
+*$ELSE.calib qDummyObj.. vDummyObj =e= 1;
 $ENDIF.calib

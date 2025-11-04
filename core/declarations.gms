@@ -67,7 +67,7 @@ Variables
 *'                **Interdependent Variables**
 
 *' *** Miscellaneous
-vDummyObj                                                  "Dummy maximisation variable (1)"
+*vDummyObj                                                  "Dummy maximisation variable (1)"
 VmElecConsHeatPla(allCy,DSBS,YTIME)                        "Electricity consumed in heatpump plants (Mtoe)"
 ;
 

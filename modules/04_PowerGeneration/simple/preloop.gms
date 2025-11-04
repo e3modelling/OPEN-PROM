@@ -69,9 +69,7 @@ V04LoadFacDom.FX(runCy,YTIME)$(datay(YTIME)) =
          (sum(INDDOM,VmConsFuel.L(runCy,INDDOM,"ELC",YTIME)/i04LoadFacElecDem(INDDOM)) + sum(TRANSE, VmDemFinEneTranspPerFuel.L(runCy,TRANSE,"ELC",YTIME)/
          i04LoadFacElecDem(TRANSE)));
 *---
-$ifthen.calib %Calibration% == MatCalibration
-V04DemElecTot.FX(runCy,YTIME) = t04DemElecTot(runCy,YTIME);
-$else.calib
+$ifthen.calib %Calibration% == off
 V04DemElecTot.L(runCy,YTIME) = 10;
 V04DemElecTot.FX(runCy,YTIME)$(not An(YTIME)) =  1/0.086 * ( imFinEneCons(runCy,"ELC",YTIME) + sum(NENSE, imFuelConsPerFueSub(runCy,NENSE,"ELC",YTIME)) + imDistrLosses(runCy,"ELC",YTIME)
                                              + i03TotEneBranchCons(runCy,"ELC",YTIME) - (imFuelImports(runCy,"ELC",YTIME)-imFuelExprts(runCy,"ELC",YTIME)));

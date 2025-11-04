@@ -177,7 +177,11 @@ i01AvgVehCapLoadFac(allCy,TRANSE,TRANSUSE,YTIME)	      "Average capacity/vehicle
 i01TechLft(allCy,SBS,TECH,YTIME)	                     "Technical Lifetime. For passenger cars it is a variable (1)"
 i01PassCarsMarkSat(allCy)	                          "Passenger cars ownership saturation threshold (1)"
 i01GDPperCapita(YTIME,allCy)
-i01Sigma(allCy,SG)                                   "S parameters of Gompertz function for passenger cars vehicle km (1)"
+i01Sigma(allCy,SG)                                      "S parameters of Gompertz function for passenger cars vehicle km (1)"
+i01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)	      "Specific Fuel Consumption ()"
+                                                                !! SFC for passenger cars (ktoe/Gkm)
+                                                                !! SFC for other passsenger transportation modes (ktoe/Gpkm)
+                                                                !! SFC for trucks is measured (ktoe/Gtkm)
 ;
 *---
 i01PassCarsMarkSat(runCy) = 0.7;
