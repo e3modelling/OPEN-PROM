@@ -28,17 +28,18 @@ Q03ConsFinEneCountry(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     sum(EF$(EFtoEFS(EF,EFS) $SECtoEF("DAC",EF)),VmConsFuelDACProd(allCy,EF,YTIME))
     ;
 
-$ontext
+*' The equation computes the total state revenues from carbon taxes, as the product of all fuel consumption in all subsectors of the supply side,
+*' along with the relevant fuel emission factor, and the carbon tax posed regionally that year.
 Q03TotCarTax(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V03TotCarTax(allCy,YTIME)
         =E=
     sum(SBS,
         sum((EF, EFS)$EFtoEFS(EF, EFS),
-            VmConsFinEneCountry(allCy, EFS, YTIME)
-          * imCo2EmiFac(allCy, SBS, EF, YTIME)
+            VmConsFinEneCountry(allCy, EFS, YTIME) *
+            imCo2EmiFac(allCy, SBS, EF, YTIME) *
+            sum(NAP$NAPtoALLSBS(NAP,SBS),VmCarVal(allCy,NAP,YTIME))
         )
-    ) *
-      sum(NAP$NAPtoALLSBS(NAP,ALLSBS),VmCarVal(allCy,NAP,YTIME))
+    )      
     ;
 
 *' The equation computes the total final energy consumption in million tonnes of oil equivalent 
