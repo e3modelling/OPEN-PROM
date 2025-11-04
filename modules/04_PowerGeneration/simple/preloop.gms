@@ -39,12 +39,11 @@ V04CostHourProdInvDec.L(runCy,PGALL,YTIME) = 0.1;
 V04CostHourProdInvDec.FX(runCy,PGALL,YTIME)$(NOT AN(YTIME)) = 
 V04CostCapTech.L(runCy,PGALL,YTIME) + V04CostVarTech.L(runCy,PGALL,YTIME);
 *---
-VmCapElecTotEst.FX(runCy,YTIME)$(not An(YTIME)) = sum(PGALL,imInstCapPastNonCHP(runCy,PGALL,YTIME)) + sum(CHP,imInstCapPastCHP(runCy,CHP,YTIME));
+VmCapElecTotEst.FX(runCy,YTIME)$(not An(YTIME)) = sum(PGALL,imInstCapPastNonCHP(runCy,PGALL,YTIME)) + SUM(EF,imInstCapPastCHP(runCy,EF,YTIME));
 *---
 V04CapElecNonCHP.FX(runCy,YTIME)$(not An(YTIME)) = sum(PGALL,imInstCapPastNonCHP(runCy,PGALL,YTIME));
 *---
-V04CapElecCHP.FX(runCy,CHP,YTIME)$(not An(YTIME)) = imInstCapPastCHP(runCy,CHP,YTIME);
-*V04CapElecCHP.FX(runCy,CHP,YTIME)$(An(YTIME)) = imInstCapPastCHP(runCy,CHP,"%fBaseY%");
+V04CapElecCHP.FX(runCy,YTIME)$(not An(YTIME)) = SUM(EF,imInstCapPastCHP(runCy,EF,YTIME));
 *---
 VmCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  imInstCapPastNonCHP(runCy,PGALL,YTIME);
 VmCapElec.L(runCy,PGALL,YTIME)$AN(YTIME) = imInstCapPastNonCHP(runCy,PGALL,"%fStartY%");
@@ -83,7 +82,7 @@ VmPeakLoad.FX(runCy,YTIME)$(datay(YTIME)) = V04DemElecTot.L(runCy,YTIME)/(V04Loa
 VmProdElec.L(runCy,pgall,YTIME) = 0.1;
 VmProdElec.FX(runCy,pgall,YTIME)$DATAY(YTIME) = i04DataElecProdNonCHP(runCy,pgall,YTIME) / 1000;
 *---
-V04ProdElecEstCHP.FX(runCy,CHP,YTIME)$DATAY(YTIME) = i04DataElecProdCHP(runCy,CHP,YTIME) / 1000;
+V04ProdElecEstCHP.FX(runCy,YTIME)$DATAY(YTIME) = SUM(EF,i04DataElecProdCHP(runCy,EF,YTIME)) / 1000;
 *---
 V04ShareMixWndSol.L(runCy,YTIME)$(DATAY(YTIME)) = sum(PGALL$(PGRENSW(PGALL)), VmCapElec.L(runCy,PGALL,YTIME)) / sum(PGALL2, VmCapElec.L(runCy,PGALL2,YTIME));
 *---
@@ -95,7 +94,6 @@ VmInpTransfTherm.FX(runCy,PGEF,YTIME)$(not AN(YTIME)) =
 sum(PGALL$(PGALLtoEF(PGALL,PGEF)),
   VmProdElec.L(runCy,PGALL,YTIME) * smTWhToMtoe /  imPlantEffByType(runCy,PGALL,YTIME)
 ) +
-sum(CHP$CHPtoEF(CHP,PGEF),
-  sum(INDDOM,VmConsFuel.L(runCy,INDDOM,CHP,YTIME)) +
-  smTWhToMtoe * V04ProdElecEstCHP.L(runCy,CHP,YTIME)
-);
+sum(INDDOM,VmConsFuel.L(runCy,INDDOM,"STE",YTIME)) +
+smTWhToMtoe * V04ProdElecEstCHP.L(runCy,YTIME)
+;

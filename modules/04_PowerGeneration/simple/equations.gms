@@ -14,16 +14,16 @@
 *' The estimation is based on the fuel consumption of CHP plants, their electricity prices, the maximum share of CHP electricity in total demand, and the overall
 *' electricity demand. The equation essentially estimates the electricity generation of CHP plants by considering their fuel consumption, electricity prices, and the maximum
 *' share of CHP electricity in total demand. The square root expression ensures that the estimated electricity generation remains non-negative.
-Q04ProdElecEstCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V04ProdElecEstCHP(allCy,CHP,YTIME) 
+Q04ProdElecEstCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V04ProdElecEstCHP(allCy,YTIME) 
         =E=
     1/smTWhToMtoe *
     (  
-      V03OutTransfCHP(allCy,"STE",YTIME) * VmPriceElecInd(allCy,CHP,YTIME) + 
+      V03OutTransfCHP(allCy,"STE",YTIME) * VmPriceElecInd(allCy,YTIME) + 
       i04MxmShareChpElec(allCy,YTIME) * V04DemElecTot(allCy,YTIME) - 
 
       SQRT(SQR(
-        V03OutTransfCHP(allCy,"STE",YTIME) * VmPriceElecInd(allCy,CHP,YTIME) - 
+        V03OutTransfCHP(allCy,"STE",YTIME) * VmPriceElecInd(allCy,YTIME) - 
         i04MxmShareChpElec(allCy,YTIME) * V04DemElecTot(allCy,YTIME))
       )  
     )/2 + SQR(1E-4);
@@ -31,10 +31,10 @@ Q04ProdElecEstCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' This equation computes the electric capacity of Combined Heat and Power (CHP) plants. The capacity is calculated in gigawatts (GW) and is based on several factors,
 *' including the consumption of fuel in the industrial sector, the electricity prices in the industrial sector, the availability rate of power
 *' generation plants, and the utilization rate of CHP plants. The result represents the electric capacity of CHP plants in GW.
-Q04CapElecCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V04CapElecCHP(allCy,CHP,YTIME)
+Q04CapElecCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V04CapElecCHP(allCy,YTIME)
         =E=
-    V04ProdElecEstCHP(allCy,CHP,YTIME) / (1e3 * smGwToTwhPerYear(YTIME));  
+    V04ProdElecEstCHP(allCy,YTIME) / (1e3 * smGwToTwhPerYear(YTIME));  
 
 $ifthen.calib %Calibration% == off
 *' The equation calculates the total electricity demand by summing the components of final energy consumption in electricity, final non-energy consumption in electricity,
@@ -155,7 +155,7 @@ Q04CapElecNonCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04CapElecNonCHP(allCy,YTIME)
         =E=
     VmCapElecTotEst(allCy,YTIME) -
-    SUM(CHP,V04CapElecCHP(allCy,CHP,YTIME));      
+    V04CapElecCHP(allCy,YTIME);      
 
 *' In essence, the equation evaluates the difference between the current and expected power generation capacity, accounting for various factors such as planned capacity,
 *' decommissioning schedules, and endogenous scrapping. The square root term introduces a degree of tolerance in the calculation.
@@ -295,7 +295,7 @@ Q04CapOverall(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04ProdElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmProdElec(allCy,PGALL,YTIME)
         =E=
-    (V04DemElecTot(allCy,YTIME) - sum(CHP, V04ProdElecEstCHP(allCy,CHP,YTIME))) /
+    (V04DemElecTot(allCy,YTIME) - V04ProdElecEstCHP(allCy,YTIME)) /
     sum(PGALL2, VmCapElec(allCy,PGALL2,YTIME)) *
     VmCapElec(allCy,PGALL,YTIME);
 
@@ -320,9 +320,10 @@ Q04CostPowGenAvgLng(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         =E=
     (
       SUM(PGALL, VmProdElec(allCy,PGALL,YTIME) * V04CostHourProdInvDec(allCy,PGALL,YTIME)) +
-      0*sum(CHP, VmCostElcAvgProdCHP(allCy,CHP,YTIME) * V04ProdElecEstCHP(allCy,CHP,YTIME))
+      !! FIXME: TCHP IN elcAvgProd
+      0* VmCostElcAvgProdCHP(allCy,"TSTE1AH",YTIME) * V04ProdElecEstCHP(allCy,YTIME)
     ) / 
-    (V04DemElecTot(allCy,YTIME) - sum(CHP,V04ProdElecEstCHP(allCy,CHP,YTIME))); 
+    (V04DemElecTot(allCy,YTIME) - V04ProdElecEstCHP(allCy,YTIME)); 
 
 *' This equation estimates the factor increasing the CAPEX of new RES (unflexible) capacity installation due to simultaneous need for grind upgrade and storage, 
 *' for each region (country) and year. This factor depends on the existing RES (unflexible) penetration in the electriciy mixture.

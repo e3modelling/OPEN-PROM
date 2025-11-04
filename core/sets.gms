@@ -332,33 +332,6 @@ BGDO    "Biodiesel"
 BGSL    "Biogasoline"
 H2F     "Hydrogen"
 ELC     "Electricity"
-*STE1CL  "Steam coming from CHP plants conventional lgn"
-*STE1CH  "Steam produced from CHP conventional hcl"
-*STE1CD  "CHP conventional gdo"
-*STE1CR  "Steam produced from CHP conventional rfo"
-*STE1CG  "Steam produced from CHP conventional ngs"
-*STE1CB  "Steam produced from CHP conventional bmswas"
-STE1AL  "Steam produced from CHP advanced lgn"
-STE1AH  "Steam produced from CHP advanced hcl"
-STE1AD  "Steam produced from CHP advanced gdo"
-STE1AR  "Steam produced from CHP advanced rfo"
-STE1AG  "Steam produced from CHP advanced ngs"
-STE1AB  "Steam produced from CHP advanced bmswas"
-STE1AH2F "Steam produced from Hydrogen powered CHP fuel cells"
-STE2LGN "Steam coming from district heating plants burning lgn"
-STE2OSL "Steam produced from district heating plants burning hcl"
-STE2GDO "Steam produced from district heating plants burning gdo"
-STE2RFO "Steam produced from district heating plants burning rfo"
-STE2OLQ "Steam produced from district heating plants burning olq"
-STE2NGS "Steam produced from district heating plants burning ngs"
-STE2OGS "Steam produced from district heating plants burning ogs"
-STE2BMS "Steam produced from district heating plants burning bmswas"
-STE2AH2F "Steam produced from district heating plants burning h2f"
-*PHEVGSL  "Plug in Hybrid engine - gasoline"
-*PHEVGDO  "Plug in Hybrid engine - diesel"
-*hybrid cars with gasoline and diesel
-*CHEVGSL  "conventional Hybrid engine - gasoline"
-*CHEVGDO  "conventional Hybrid engine - diesel"
 HTDAC   "High-Temperature DAC"
 H2DAC   "High-Temperature H2-fueled DAC"
 LTDAC   "Low-Temperature DAC"
@@ -422,8 +395,6 @@ EFtoEFA(EF,EFA)  Energy Forms Aggregations (for summary balance report)
 (GSL,GDO,RFO,LPG,KRS,OLQ).LQD
 (LPG,KRS,OLQ).OLQT
 (NGS,OGS).GAS
-(STE1AL,STE1AH,STE1AD,STE1AG,STE1AB,STE1AH2F,STE2LGN,STE2OSL,STE2GDO,STE2RFO,STE2OLQ,
- STE2NGS,STE2OGS,STE2BMS).STE
 (WND,SOL,GEO).REN
 (HYD,WND,SOL,GEO,NUC,BMSWAS).NFF
 (H2F,MET,ETH).NEF
@@ -443,16 +414,16 @@ WH2F
 /
 
 WEFMAP(EF,WEF)          Link between Imported Energy Forms and Energy Forms used in Model Subsectors
-/(LGN,STE1AL,STE2LGN).WLGN
-(HCL,STE1AH,STE2OSL).WHCL
-*(GSL,GDO,RFO,OLQ,KRS,LPG,STE1AD,STE1AR,STE2GDO,STE2RFO,STE2OLQ).WCRO
-(NGS,OGS,STE1AG,STE2NGS,STE2OGS).WNGS
+/(LGN).WLGN
+(HCL).WHCL
+*(GSL,GDO,RFO,OLQ,KRS,LPG).WCRO
+(NGS,OGS).WNGS
 HCL.WCOKE
 (GSL,KRS).WGSL
-(GDO,STE1AD,STE2GDO).WGDO
-(RFO,STE2RFO).WRFO
-(OLQ,LPG,STE2OLQ).WCRO
-(STE1AH2F).WH2F
+(GDO).WGDO
+(RFO).WRFO
+(OLQ,LPG).WCRO
+*().WH2F
 /
 
 EFtoWEF(DSBS,EF,WEF) Link between Imported Energy Forms and Energy Forms used in Model Subsectors
@@ -500,7 +471,6 @@ OLQ.OLQ
 NGS.NGS
 OGS.OGS
 NUC.NUC
-(STE1AL,STE1AH,STE1AD,STE1AG,STE1AB,STE1AH2F,STE2LGN,STE2OSL,STE2GDO,STE2RFO,STE2OLQ,STE2NGS,STE2OGS,STE2BMS).STE
 HYD.HYD
 (BGDO,BGSL,ETH,BMSWAS).BMSWAS
 SOL.SOL
@@ -619,7 +589,7 @@ TSTE1AG
 TSTE1AB
 TSTE1AH2F
 * Domestic Technologies (only add those not already in Transport & Industry)
-* LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC,STE1AL,STE1AH,STE1AD,STE1AG,STE1AB already exist in TRANSPORT or INDUSTRY technologies
+* LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC already exist in TRANSPORT or INDUSTRY technologies
 TSTE2LGN
 TSTE2OSL
 TSTE2GDO
@@ -779,22 +749,12 @@ THCLCCS.HCL
 TRFO.RFO
 TOLQ.OLQ
 TOGS.OGS
-TSTE1AL.STE1AL
-TSTE1AH.STE1AH
-TSTE1AD.STE1AD
-TSTE1AG.STE1AG
-TSTE1AB.STE1AB
-TSTE1AH2F.STE1AH2F
+(TSTE1AL, TSTE1AH, TSTE1AD, TSTE1AG, TSTE1AB, TSTE1AH2F,
+TSTE2LGN, TSTE2OSL, TSTE2GDO, TSTE2RFO, TSTE2OLQ,
+TSTE2NGS, TSTE2OGS, TSTE2BMS).STE
 * Domestic Technologies (only add those not already in Transport & Industry)
-* LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC,STE1AL,STE1AH,STE1AD,STE1AG,STE1AB already exist in TRANSPORT or INDUSTRY technologies
-TSTE2LGN.STE2LGN
-TSTE2OSL.STE2OSL
-TSTE2GDO.STE2GDO
-TSTE2RFO.STE2RFO
-TSTE2OLQ.STE2OLQ
-TSTE2NGS.STE2NGS
-TSTE2OGS.STE2OGS
-TSTE2BMS.STE2BMS
+* LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC already exist in TRANSPORT or INDUSTRY technologies
+
 TBMSWAS.BMSWAS
 HTDAC.(NGS,ELC)
 H2DAC.(H2F,ELC)
@@ -834,24 +794,12 @@ THCLCCS.HCL
 TRFO.RFO
 TOLQ.OLQ
 TOGS.OGS
-TSTE1AL.STE1AL
-TSTE1AH.STE1AH
-TSTE1AD.STE1AD
-TSTE1AG.STE1AG
-TSTE1AB.STE1AB
-TSTE1AH2F.STE1AH2F
-TH2F.H2F
-* Domestic Technologies (only add those not already in Transport & Industry)
-* LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC,STE1AL,STE1AH,STE1AD,STE1AG,STE1AB already exist in TRANSPORT or INDUSTRY technologies
 TGSL.GSL
-TSTE2LGN.STE2LGN
-TSTE2OSL.STE2OSL
-TSTE2GDO.STE2GDO
-TSTE2RFO.STE2RFO
-TSTE2OLQ.STE2OLQ
-TSTE2NGS.STE2NGS
-TSTE2OGS.STE2OGS
-TSTE2BMS.STE2BMS
+(TSTE1AL, TSTE1AH, TSTE1AD, TSTE1AG, TSTE1AB, TSTE1AH2F, TSTE2LGN, 
+TSTE2OSL, TSTE2GDO, TSTE2RFO, TSTE2OLQ, TSTE2NGS, TSTE2OGS, TSTE2BMS).STE
+* Domestic Technologies (only add those not already in Transport & Industry)
+* LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC already exist in TRANSPORT or INDUSTRY technologies
+TH2F.H2F
 TBMSWAS.BMSWAS
 /
 
@@ -993,26 +941,20 @@ ATHGASCCS.ATHGAS
 ATHBMSCCS.ATHBMSWAS
 /
 
-CHP(EF)       CHP Plants
-/
-STE1AL,STE1AH,STE1AD,STE1AG,STE1AB,STE1AH2F
-/
-
 TCHP(ITECH)       CHP Plants
 /
 TSTE1AL,TSTE1AH,TSTE1AD,TSTE1AG,TSTE1AB,TSTE1AH2F
 /
 
-DH(EF)       District Heating
+TCHPTOEF(TCHP,EF)   Correspondence between chp plants and energy forms
 /
-STE2LGN
-STE2OSL
-STE2GDO
-STE2RFO
-STE2OLQ
-STE2NGS
-STE2OGS
-STE2BMS
+* FIXME: SHOULD BE MANY-TO-MANY MAPPING (OGS,RFO etc.)
+(TSTE1AL).LGN
+(TSTE1AH).HCL
+(TSTE1AD).GDO
+(TSTE1AG).NGS
+(TSTE1AB).BMSWAS
+(TSTE1AH2F).H2F
 /
 
 PGREN(PGALL)    REN PLANTS with Saturation                /PGLHYD,PGSHYD,PGAWND,PGSOL,PGCSP,PGOTHREN,PGAWNO/
@@ -1049,44 +991,6 @@ PGALLtoEF(PGALL,PGEF)     Correspondence between plants and energy forms
 *(ACCHT,ICEH2,FC2).H2F
 /
 
-CHPtoEF(EF,EF)           correspondence of CHP plant types to fuels
-/
-(STE1AL).LGN
-(STE1AH).HCL
-(STE1AD).GDO
-(STE1AG).NGS
-(STE1AB).BMSWAS
-(STE1AH2F).H2F
-/
-
-DHtoEF(EF,EF)          correspondence of district heating plant types to fuels
-/
-STE2LGN.LGN,
-STE2OSL.HCL,
-STE2GDO.GDO,
-STE2RFO.RFO,
-STE2OLQ.OLQ,
-STE2NGS.NGS,
-STE2OGS.OGS,
-STE2BMS.BMSWAS
-/
-
-CHPtoEON(EF,PGALL)       Mapping of chp technologies to elec-only technologies
-/
-*STE1CL.CTHLGN,
-*STE1CH.CTHHCL,
-*STE1CD.CGTGDO,
-*STE1CR.CTHRFO,
-*STE1CG.CTHNGS,
-*STE1CB.CTHBMSWAS,
-STE1AL.ATHLGN,
-STE1AH.ATHCOAL,
-STE1AD.ATHOIL,
-STE1AG.ATHGAS,
-STE1AB.ATHBMSWAS
-STE1AH2F.PGH2F
-*STE1AH2F.FC2
-/
 
 PGSCRN(PGALL)     New plants involved in endogenous scrapping (these plants are not scrapped)
 /
@@ -1234,13 +1138,13 @@ CHP_ELC          "CHP electricity"
 *STE1CR           "Utilisation rate of Fuel Oil powered conventional CHP"
 *STE1CG           "Utilisation rate of Natural Gas powered conventional CHP"
 *STE1CB           "Utilisation rate of Biomass-Waste powered conventional CHP"
-STE1AL           "Utilisation rate of Lignite powered advanced CHP"
-STE1AH           "Utilisation rate of Hard Coal powered advanced CHP"
-STE1AD           "Utilisation rate of Diesel Oil powered advanced CHP"
+TSTE1AL           "Utilisation rate of Lignite powered advanced CHP"
+TSTE1AH           "Utilisation rate of Hard Coal powered advanced CHP"
+TSTE1AD           "Utilisation rate of Diesel Oil powered advanced CHP"
 *STE1AR           "Utilisation rate of Fuel Oil powered advanced CHP"
-STE1AG           "Utilisation rate of Natural Gas powered advanced CHP"
-STE1AB           "Utilisation rate of Biomass-Waste powered advanced CHP"
-STE1AH2F         "Utilisation rate of HYDROGEN powered FUEL CELL CHP"
+TSTE1AG           "Utilisation rate of Natural Gas powered advanced CHP"
+TSTE1AB           "Utilisation rate of Biomass-Waste powered advanced CHP"
+TSTE1AH2F         "Utilisation rate of HYDROGEN powered FUEL CELL CHP"
 * The following fuels are related with district heating efficiency
 LGN
 HCL
@@ -1258,10 +1162,6 @@ PGLOADTYPE(PGOTH)   "Peak and Base load of total electricity demand in GW"
 CHPSET(PGOTH)       "Indicators related to CHP Production"                       /NON_CHP_PER,CHP_CAP/
 
 PGEFS(PGOTH)        "Fuels used as Input to District Heating"                    /LGN,HCL,GDO,RFO,OLQ,NGS,OGS,BMSWAS/
-
-PG_CHP(PGOTH)/
-*STE1CL,STE1CH,STE1CD,STE1CR,STE1CG,STE1CB,
-STE1AL,STE1AH,STE1AD,STE1AG,STE1AB,STE1AH2F/
 
 VARIOUS_LABELS /AMAXBASE, MAXLOADSH/
 
@@ -1387,7 +1287,6 @@ endloop;
 alias(NAP2,NAP);
 
 ALIAS (EFS2,EFS);
-ALIAS (CHP2,CHP);
 ALIAS (INDDOM2,INDDOM);
 ALIAS (YYTIME2,ytime);
 

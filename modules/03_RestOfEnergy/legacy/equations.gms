@@ -71,7 +71,7 @@ Q03OutTransfDhp(allCy,STEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V03OutTransfDhp(allCy,STEAM,YTIME)
         =E=
     sum(DOMSE,
-      sum(DH$(EFtoEFS(DH,STEAM) $SECtoEF(DOMSE,DH)), VmConsFuel(allCy,DOMSE,DH,YTIME))
+      VmConsFuel(allCy,DOMSE,"STE",YTIME)
     );
 
 *' The equation calculates the transformation input to district heating plants.
@@ -83,26 +83,24 @@ Q03OutTransfDhp(allCy,STEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q03TransfInputDHPlants(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmTransfInputDHPlants(allCy,EFS,YTIME)
         =E=
-    sum(DH$DHtoEF(DH,EFS),
-        sum(DOMSE$SECtoEF(DOMSE,DH),VmConsFuel(allCy,DOMSE,DH,YTIME)) /
-        i03EffDHPlants(allCy,EFS,YTIME)
-    );
+    sum(DOMSE$SECtoEF(DOMSE,"STE"),VmConsFuel(allCy,DOMSE,"STE",YTIME)) 
+    !! FIXME: disaggregate based on chp capacity
+*    / i03EffDHPlants(allCy,EFS,YTIME)
+;
 
 Q03OutTransfCHP(allCy,TOCTEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V03OutTransfCHP(allCy,TOCTEF,YTIME)
         =E=
-    sum(INDSE,
-      sum(CHP$(EFtoEFS(CHP,TOCTEF) $SECtoEF(INDSE,CHP)), VmConsFuel(allCy,INDSE,CHP,YTIME))
+    sum(INDSE$SECtoEF(INDSE,TOCTEF),
+      VmConsFuel(allCy,INDSE,TOCTEF,YTIME)
     );
 
 Q03TransfInputCHPlants(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmTransfInputCHPlants(allCy,EFS,YTIME)
         =E=
-    sum(CHP$CHPtoEF(CHP,EFS),
-      sum(INDSE$SECtoEF(INDSE,CHP),
-        VmConsFuel(allCy,INDSE,CHP,YTIME) /
-        SUM(TCHP$ITECHtoEF(TCHP,CHP), imUsfEneConvSubTech(allCy,INDSE,TCHP,YTIME))
-      )
+    sum(INDSE$SECtoEF(INDSE,"STE"),
+      VmConsFuel(allCy,INDSE,"STE",YTIME) /
+      SUM(TCHP$ITECHtoEF(TCHP,"STE"), imUsfEneConvSubTech(allCy,INDSE,TCHP,YTIME))
     );
 *' The equation calculates the refineries' capacity for a given scenario and year.
 *' The calculation is based on a residual factor, the previous year's capacity, and a production scaling
@@ -184,7 +182,7 @@ Q03OutTransfTherm(allCy,TOCTEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     smTWhToMtoe *
     (
       sum(PGALL,VmProdElec(allCy,PGALL,YTIME)) +
-      sum(CHP,V04ProdElecEstCHP(allCy,CHP,YTIME))
+      V04ProdElecEstCHP(allCy,YTIME)
     )$ELCEF(TOCTEF) +
     (                                                                                                         
       i03RateEneBranCons(allCy,TOCTEF,YTIME) *

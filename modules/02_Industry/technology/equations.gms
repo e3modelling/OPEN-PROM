@@ -124,7 +124,7 @@ Q02VarCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not s
   (
     VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME) *
     smFracElecPriChp *
-    SUM(CHP$ITECHtoEF(ITECH,CHP),VmPriceElecInd(allCy,CHP,YTIME)) /
+    VmPriceElecInd(allCy,YTIME) /
     imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME)
   )$TCHP(ITECH);
 
@@ -216,10 +216,10 @@ Q02IndAvrEffFinalUseful(allCy,DSBS,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not
 *' of fuel prices in the current and previous years, with a power of 0.3 applied to each ratio. This weighting factor introduces a gradual adjustment to reflect the
 *' historical changes in fuel prices, providing a more dynamic estimation of the electricity index. This equation provides a method to estimate the electricity index
 *' based on historical fuel price trends, allowing for a more flexible and responsive representation of industry price dynamics.
-Q02IndxElecIndPrices(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V02IndxElecIndPrices(allCy,CHP,YTIME)
+Q02IndxElecIndPrices(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V02IndxElecIndPrices(allCy,YTIME)
         =E=
-    VmPriceElecInd(allCy,CHP,YTIME-1) * 
+    VmPriceElecInd(allCy,YTIME-1) * 
     (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)/VmPriceFuelAvgSub(allCy,"OI",YTIME-1)) ** (0.03) *
     (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-2)/VmPriceFuelAvgSub(allCy,"OI",YTIME-2)) ** (0.02) *
     (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-3)/VmPriceFuelAvgSub(allCy,"OI",YTIME-3)) ** (0.01)
@@ -230,37 +230,41 @@ Q02IndxElecIndPrices(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' variable cost(EUR/MWh), and fuel-related costs. The equation provides a comprehensive assessment of the overall expenses associated with electricity production from CHP
 *' plants, considering both the fixed and variable components, as well as factors such as carbon prices and CO2 emission factors.
 *' The resulting variable represents the electricity production cost per CHP plant and demand sector, expressed in Euro per kilowatt-hour (Euro/KWh).
-Q02CostElecProdCHP(allCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS) $runCy(allCy))..
-    V02CostElecProdCHP(allCy,DSBS,CHP,YTIME)
+Q02CostElecProdCHP(allCy,DSBS,TCHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS) $runCy(allCy))..
+    V02CostElecProdCHP(allCy,DSBS,TCHP,YTIME)
         =E=
     ( 
       imDisc(allCy,"PG",YTIME) * 
-      exp(imDisc(allCy,"PG",YTIME) * i02LifChpPla(allCy,DSBS,CHP)) /
-      (exp(imDisc(allCy,"PG",YTIME) * i02LifChpPla(allCy,DSBS,CHP)) -1) *
-      i02InvCostChp(allCy,DSBS,CHP,YTIME) * imCGI(allCy,YTIME) + 
-      i02FixOMCostPerChp(allCy,DSBS,CHP,YTIME)
+      exp(imDisc(allCy,"PG",YTIME) * i02LifChpPla(allCy,DSBS,TCHP)) /
+      (exp(imDisc(allCy,"PG",YTIME) * i02LifChpPla(allCy,DSBS,TCHP)) -1) *
+      i02InvCostChp(allCy,DSBS,TCHP,YTIME) * imCGI(allCy,YTIME) + 
+      i02FixOMCostPerChp(allCy,DSBS,TCHP,YTIME)
     ) /
-    (i02AvailRateChp(allCy,DSBS,CHP) * (smGwToTwhPerYear(YTIME)) * 1000) +
-    i02VarCostChp(allCy,DSBS,CHP,YTIME) / 1000 +
-    sum(PGEF$CHPtoEF(CHP,PGEF),
+    (i02AvailRateChp(allCy,DSBS,TCHP) * (smGwToTwhPerYear(YTIME)) * 1000) +
+    i02VarCostChp(allCy,DSBS,TCHP,YTIME) / 1000
+
+$ontext
+!! FIXME
+    sum(PGEF$CHPtoEF(TCHP,PGEF),
       (
         VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME) +
         1e-3 * imCo2EmiFac(allCy,"PG",PGEF,YTIME) *
         sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))
       ) * smTWhToMtoe /
       (i02BoiEffChp(allCy,CHP,YTIME) * (VmPriceElecInd(allCy,CHP,YTIME)) + 1e-4)
-    );  
-
+    )  
+$offtext
+;
 *' The equation calculates the average electricity production cost per Combined Heat and Power plant .
 *' It involves a summation over demand subsectors . The average electricity production cost is determined by considering the electricity
 *' production cost per CHP plant for each demand subsector. The result is expressed in Euro per kilowatt-hour (Euro/KWh).
-Q02CostElcAvgProdCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    VmCostElcAvgProdCHP(allCy,CHP,YTIME)
+Q02CostElcAvgProdCHP(allCy,TCHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    VmCostElcAvgProdCHP(allCy,TCHP,YTIME)
       =E=
     (
       sum(INDDOM, 
-        VmConsFuel(allCy,INDDOM,CHP,YTIME-1) /
-        SUM(INDDOM2,VmConsFuel(allCy,INDDOM2,CHP,YTIME-1)) *
-        V02CostElecProdCHP(allCy,INDDOM,CHP,YTIME)
+        VmConsFuel(allCy,INDDOM,"STE",YTIME-1) /
+        SUM(INDDOM2,VmConsFuel(allCy,INDDOM2,"STE",YTIME-1)) *
+        V02CostElecProdCHP(allCy,INDDOM,TCHP,YTIME)
       )
-    )$SUM(INDDOM2,VmConsFuel.L(allCy,INDDOM2,CHP,YTIME-1))+0$(NOT SUM(INDDOM2,VmConsFuel.L(allCy,INDDOM2,CHP,YTIME-1)));
+    )$SUM(INDDOM2,VmConsFuel.L(allCy,INDDOM2,"STE",YTIME-1))+0$(NOT SUM(INDDOM2,VmConsFuel.L(allCy,INDDOM2,"STE",YTIME-1)));

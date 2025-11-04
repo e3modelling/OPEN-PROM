@@ -96,8 +96,6 @@ BMSWAS 0/;
 imCo2EmiFac(runCy,SBS,EF,YTIME) = iCo2EmiFacAllSbs(EF);
 imCo2EmiFac(runCy,"IS","HCL",YTIME) = iCo2EmiFacAllSbs("SLD"); !! This is the assignment for coke
 *imCo2EmiFac(runCy,"H2P","NGS",YTIME) = 3.107;
-imCo2EmiFac(runCy,SBS,EF,YTIME)$CHP(EF) = SUM(EF2$(CHPtoEF(EF,EF2)),imCo2EmiFac(runCy,SBS,EF2,YTIME));
-imCo2EmiFac(runCy,SBS,EF,YTIME)$DH(EF) = SUM(EF2$(DHtoEF(EF,EF2)),imCo2EmiFac(runCy,SBS,EF2,YTIME));
 *imCo2EmiFac(runCy,"H2P","BMSWAS",YTIME) = 0.497;
 *---
 parameter imElaSubData(DSBS)       "Elasticities by subsector (1)" /
@@ -132,7 +130,7 @@ $include"./iInstCapPastNonCHP.csv"
 $offdelim
 ;
 *---
-table imInstCapPastCHP(allCy,CHP,YTIME)        "Installed CHP capacity past (GW)"
+table imInstCapPastCHP(allCy,EF,YTIME)        "Installed CHP capacity past (GW)"
 $ondelim
 $include"./iInstCapPastCHP.csv"
 $offdelim
@@ -402,16 +400,16 @@ imDataIndTechnology(INDSE,TECH,"VC") = imDataIndTechnology(INDSE,TECH,"VC") * 1.
 imDataIndTechnology(INDSE,"TBGDO",ECONCHAR) = imDataIndTechnology(INDSE,"TGDO",ECONCHAR);
 imDataIndTechnology(INDSE,"TBMSWAS",ECONCHAR) = imDataIndTechnology("IS","TBMSWAS",ECONCHAR);
 *---
-table imDataChpPowGen(EF,CHPPGSET,YTIME)   "Data for power generation costs (various)"
+table imDataChpPowGen(TCHP,CHPPGSET,YTIME)   "Data for power generation costs (various)"
 $ondelim
 $include"./iChpPowGen.csv"
 $offdelim
 ;
 *---
 * Converting EUR2015 to US2015
-imDataChpPowGen(EF,"IC",YTIME)  = imDataChpPowGen(EF,"IC",YTIME) * 1.1;
-imDataChpPowGen(EF,"FC",YTIME)  = imDataChpPowGen(EF,"FC",YTIME) * 1.1;
-imDataChpPowGen(EF,"VOM",YTIME) = imDataChpPowGen(EF,"VOM",YTIME) * 1.1;
+imDataChpPowGen(TCHP,"IC",YTIME)  = imDataChpPowGen(TCHP,"IC",YTIME) * 1.1;
+imDataChpPowGen(TCHP,"FC",YTIME)  = imDataChpPowGen(TCHP,"FC",YTIME) * 1.1;
+imDataChpPowGen(TCHP,"VOM",YTIME) = imDataChpPowGen(TCHP,"VOM",YTIME) * 1.1;
 *---
 table imDataDomTech(DOMSE,TECH,ECONCHAR)                "Technical lifetime of Industry (years)"
              IC       FC      VC      LFT USC

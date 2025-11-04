@@ -161,9 +161,9 @@ $offtext
 *' of CHP plants. It involves the estimated electricity index, and a technical maximum of the electricity to steam ratio in CHP plants is incorporated to account
 *' for the specific characteristics of these facilities. This equation ensures that the derived electricity industry prices align with the estimated index and
 *' technical constraints, providing a realistic representation of the electricity market in the industrial sector.
-Q08PriceElecInd(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    VmPriceElecInd(allCy,CHP,YTIME) 
+Q08PriceElecInd(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    VmPriceElecInd(allCy,YTIME) 
         =E=
     (
-      V02IndxElecIndPrices(allCy,CHP,YTIME) + smElecToSteRatioChp - SQRT( SQR(V02IndxElecIndPrices(allCy,CHP,YTIME)-smElecToSteRatioChp))
+      V02IndxElecIndPrices(allCy,YTIME) + smElecToSteRatioChp - SQRT( SQR(V02IndxElecIndPrices(allCy,YTIME)-smElecToSteRatioChp))
     )/2;

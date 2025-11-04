@@ -21,7 +21,7 @@ $include"./iDataElecProdNonCHP.csv"
 $offdelim
 ;
 *---
-table i04DataElecProdCHP(allCy,CHP,YTIME)           "Electricity CHP production past years (GWh)"
+table i04DataElecProdCHP(allCy,EF,YTIME)           "Electricity CHP production past years (GWh)"
 $ondelim
 $include"./iDataElecProdCHP.csv"
 $offdelim
@@ -115,7 +115,7 @@ $ENDIF.calib
 *---
 parameter i04MxmShareChpElec                       "Maximum share of CHP electricity in a country (1)";
 *---
-parameter i04DataElecAndSteamGen(allCy,CHP,YTIME)  "Data releated to electricity and steam generation";
+parameter i04DataElecAndSteamGen(allCy,YTIME)  "Data releated to electricity and steam generation";
 *---
 parameter i04LoadFacElecDem(DSBS)                  "Load factor of electricity demand per sector (1)"
 /
@@ -182,7 +182,7 @@ MAXLOADSH 0.45
 Parameters
 i04BaseLoadShareDem(allCy,DSBS,YTIME)	           "Baseload share of demand per sector (1)"
 iTotAvailNomCapBsYr(allCy,YTIME)	               "Total nominal available installed capacity in base year (GW)"
-i04UtilRateChpPlants(allCy,CHP,YTIME)	           "Utilisation rate of CHP Plants (1)"
+i04UtilRateChpPlants(allCy,TCHP,YTIME)	           "Utilisation rate of CHP Plants (1)"
 i04MxmLoadFacElecDem(allCy,YTIME)	               "Maximum load factor of electricity demand (1)"
 i04BslCorrection(allCy,YTIME)	                   "Parameter of baseload correction (1)"
 i04TechLftPlaType(allCy,PGALL)	                   "Technical Lifetime per plant type (year)"
@@ -195,11 +195,11 @@ i04MxmShareChpElec(allCy,YTIME)	                   "Maximum share of CHP electri
 *---
 i04BaseLoadShareDem(runCy,DSBS,YTIME)$an(YTIME)  = i04LoadFactorAdj(DSBS);
 *---
-i04DataElecAndSteamGen(runCy,CHP,YTIME) = 0 ;
+i04DataElecAndSteamGen(runCy,YTIME) = 0 ;
 *---
 iTotAvailNomCapBsYr(runCy,YTIME)$datay(YTIME) = i04DataElecSteamGen(runCy,"TOTNOMCAP",YTIME);
 *---
-i04UtilRateChpPlants(runCy,CHP,YTIME) = 0.5;
+i04UtilRateChpPlants(runCy,TCHP,YTIME) = 0.5;
 *---
 i04MxmLoadFacElecDem(runCy,YTIME)$an(YTIME) = i04LoadFactorAdjMxm("MAXLOADSH");
 *---
