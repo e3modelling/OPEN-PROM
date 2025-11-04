@@ -868,6 +868,18 @@ $offdelim
 *---
 imPlantEffByType(runCy,PGALL,YTIME) = iDataPlantEffByType(runCy,PGALL, YTIME) ;
 *---
+parameter imCarVal(allCy,NAP,YTIME)     "Carbon prices for all countries (US$2015/tn CO2)";
+imCarVal(runCy,"TRADE",YTIME) = iCarbValYrExog(runCy,YTIME);
+imCarVal(runCy,"NOTRADE",YTIME) = iCarbValYrExog(runCy,YTIME);
+*---
+parameter imRenValue(YTIME)      "Renewable value (US$2015/KWh)";
+imRenValue(YTIME) = 0;
+*---
+parameter imElecConsHeatPla(allCy,DSBS,YTIME)    "Electricity consumed in heatpump plants (Mtoe)";
+imElecConsHeatPla(runCy,INDDOM,YTIME)$(not An(YTIME)) = imFuelConsPerFueSub(runCy,INDDOM,"ELC",YTIME)*(1-imShrNonSubElecInTotElecDem(runCy,INDDOM))*iShrHeatPumpElecCons(runCy,INDDOM);
+* Compute electricity consumed in heatpump plants, QElecConsHeatPla(runCy,INDDOM,YTIME)$time(ytime).
+imElecConsHeatPla(runCy,INDDOM,YTIME) = 1E-7;
+*---
 **   Conversion of GW mean power into TWh/y, depending on whether it's a leap year
 smGwToTwhPerYear(YTIME) = 8.76 + 0.024 $ (mod(YTIME.val,4) = 0 and mod (YTIME.val,100) <> 0);
 *---

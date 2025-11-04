@@ -60,21 +60,16 @@ smGwToTwhPerYear(YTIME)                                    "convert GW mean powe
 
 Equations
 *' *** Miscellaneous'
-Q00ElecConsHeatPla(allCy,INDDOM,YTIME)
 qDummyObj                                                  "Define dummy objective function"
 ;
 
+$ontext
 Variables
 *'                **Interdependent Variables**
 
-*vDummyObj                                                  "Dummy maximisation variable (1)"
-VmElecConsHeatPla(allCy,DSBS,YTIME)                        "Electricity consumed in heatpump plants (Mtoe)"
+vDummyObj                                                  "Dummy maximisation variable (1)"
 ;
-
-Positive Variables
-VmCarVal(allCy,NAP,YTIME)                                  "Carbon prices for all countries (US$2015/tn CO2)"
-VmRenValue(YTIME)                                          "Renewable value (US$2015/KWh)"
-;
+$offtext
 
 Scalars
 smTWhToMtoe                                                "TWh to Mtoe conversion factor" /0.086/

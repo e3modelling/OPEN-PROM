@@ -131,7 +131,7 @@ Q01CostFuel(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runC
         VmPriceFuelSubsecCarVal(allCy,TRANSE,"ELC",YTIME)
       )$PLUGIN(TTECH) +
       imVarCostTech(allCy,TRANSE,TTECH,YTIME) +
-      (VmRenValue(YTIME)/1000)$( not RENEF(TTECH)) 
+      (imRenValue(YTIME)/1000)$( not RENEF(TTECH)) 
     ) *
     (
       1e-3 * V01ActivPassTrnsp(allCy,TRANSE,YTIME)$sameas(TRANSE,"PC") + !! aviation should be divided by 1000

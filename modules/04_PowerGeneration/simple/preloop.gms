@@ -6,12 +6,12 @@
 V04CostVarTech.L(runCy,PGALL,YTIME) = 0.1;
 V04CostVarTech.FX(runCy,PGALL,YTIME)$(not AN(YTIME)) = 
     i04VarCost(PGALL,YTIME) / 1e3 + 
-    (VmRenValue.L(YTIME) * 8.6e-5)$(not (PGREN(PGALL)$(not sameas("PGASHYD",PGALL)) $(not sameas("PGSHYD",PGALL)) $(not sameas("PGLHYD",PGALL)) )) +
+    (imRenValue(YTIME) * 8.6e-5)$(not (PGREN(PGALL)$(not sameas("PGASHYD",PGALL)) $(not sameas("PGSHYD",PGALL)) $(not sameas("PGLHYD",PGALL)) )) +
     sum(PGEF$PGALLtoEF(PGALL,PGEF), 
       (VmPriceFuelSubsecCarVal.L(runCy,"PG",PGEF,YTIME) +
       imCO2CaptRate(PGALL) * VmCstCO2SeqCsts.L(runCy,YTIME) * 1e-3 * (imCo2EmiFac(runCy,"PG",PGEF,YTIME) + 4.17$(sameas("BMSWAS", PGEF))) +
       (1-imCO2CaptRate(PGALL)) * 1e-3 * (imCo2EmiFac(runCy,"PG",PGEF,YTIME) + 4.17$(sameas("BMSWAS", PGEF)))*
-      (sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal.L(runCy,NAP,YTIME)))
+      (sum(NAP$NAPtoALLSBS(NAP,"PG"), imCarVal(runCy,NAP,YTIME)))
       ) * smTWhToMtoe / imPlantEffByType(runCy,PGALL,YTIME)
     )$(not PGREN(PGALL));
 *---

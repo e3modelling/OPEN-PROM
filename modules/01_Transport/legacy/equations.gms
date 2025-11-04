@@ -110,7 +110,7 @@ Q01CostTranspPerMeanConsSize(allCy,TRANSE,RCon,TTECH,YTIME)$(TIME(YTIME) $SECTTE
         )$PLUGIN(TTECH)
 
         + imVarCostTech(allCy,TRANSE,TTECH,YTIME)
-        + (VmRenValue(YTIME)/1000)$( not RENEF(TTECH))
+        + (imRenValue(YTIME)/1000)$( not RENEF(TTECH))
       )
       *  imAnnCons(allCy,TRANSE,"smallest") * (imAnnCons(allCy,TRANSE,"largest")/imAnnCons(allCy,TRANSE,"smallest"))**((ord(Rcon)-1)/imNcon(TRANSE))
     );

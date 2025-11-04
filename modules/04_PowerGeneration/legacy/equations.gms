@@ -126,12 +126,12 @@ Q04CostHourProdInvDec(allCy,PGALL,HOUR,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         ) /
         i04AvailRate(PGALL,YTIME-1) / (1000*(ord(HOUR)-1+0.25))
         + i04VarCost(PGALL,YTIME-1) / 1E3 + 
-        (VmRenValue(YTIME-1)*8.6e-5)$(not (PGREN(PGALL)$(not sameas("PGASHYD",PGALL)) $(not sameas("PGSHYD",PGALL)) $(not sameas("PGLHYD",PGALL)) )) +
+        (imRenValue(YTIME-1)*8.6e-5)$(not (PGREN(PGALL)$(not sameas("PGASHYD",PGALL)) $(not sameas("PGSHYD",PGALL)) $(not sameas("PGLHYD",PGALL)) )) +
         sum(PGEF$PGALLtoEF(PGALL,PGEF), 
           (VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME-1) +
           imCO2CaptRate(allCy,PGALL,YTIME-1) * VmCstCO2SeqCsts(allCy,YTIME-1) * 1e-3 * imCo2EmiFac(allCy,"PG",PGEF,YTIME-1) +
           (1-imCO2CaptRate(allCy,PGALL,YTIME-1)) * 1e-3 * imCo2EmiFac(allCy,"PG",PGEF,YTIME-1) *
-          (sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME-1)))
+          (sum(NAP$NAPtoALLSBS(NAP,"PG"), imCarVal(allCy,NAP,YTIME-1)))
           ) * smTWhToMtoe / imPlantEffByType(allCy,PGALL,YTIME-1)
         )$(not PGREN(PGALL));
 
@@ -154,7 +154,7 @@ Q04CostHourProdInvDecNoCCS(allCy,PGALL,HOUR,YTIME)$(TIME(YTIME) $NOCCS(PGALL) $r
 *' The result provides a measure of the sensitivity of CCS acceptance
 *' based on the carbon values in the previous year.
 Q04SensCCS(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V04SensCCS(allCy,YTIME) =E= 10+EXP(-0.06*((sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME-1)))));
+         V04SensCCS(allCy,YTIME) =E= 10+EXP(-0.06*((sum(NAP$NAPtoALLSBS(NAP,"PG"),imCarVal(allCy,NAP,YTIME-1)))));
 
 *' The equation computes the hourly production cost used in investment decisions, taking into account the acceptance of Carbon Capture and Storage .
 *' The production cost is modified based on the sensitivity of CCS acceptance. The sensitivity is used as an exponent
@@ -211,7 +211,7 @@ Q04CostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
           (VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)/1.2441 +
           imCO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
           (1-imCO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)
-          *(sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))))
+          *(sum(NAP$NAPtoALLSBS(NAP,"PG"),imCarVal(allCy,NAP,YTIME))))
           *smTWhToMtoe/imPlantEffByType(allCy,PGALL,YTIME)
         )$(not PGREN(PGALL));
 
@@ -240,7 +240,7 @@ Q04CostProdTeCHPreReplac(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                            (VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)+
                             imCO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
                              (1-imCO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
-                         (sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))))
+                         (sum(NAP$NAPtoALLSBS(NAP,"PG"),imCarVal(allCy,NAP,YTIME))))
                                  *smTWhToMtoe/imPlantEffByType(allCy,PGALL,YTIME))$(not PGREN(PGALL)))
                          );
 
@@ -612,7 +612,7 @@ Q04CostPowGenLngTechNoCp(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                  (i04VarCost(PGALL,YTIME)/1000+(VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)/1.2441+
                  imCO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
                  (1-imCO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
-                 (sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))))
+                 (sum(NAP$NAPtoALLSBS(NAP,"PG"),imCarVal(allCy,NAP,YTIME))))
                  *smTWhToMtoe/imPlantEffByType(allCy,PGALL,YTIME)));
 
 *' This equation calculates the long-term minimum power generation cost for a specific country , power generation technology,
@@ -639,7 +639,7 @@ q04CostPowGenLonMin(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 
                  (1-imCO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
 
-                 (sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))))
+                 (sum(NAP$NAPtoALLSBS(NAP,"PG"),imCarVal(allCy,NAP,YTIME))))
 
                  *smTWhToMtoe/imPlantEffByType(allCy,PGALL,YTIME)));   
 $offtext
@@ -666,7 +666,7 @@ q04CostPowGenLongIntPri(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 
                  (1-imCO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
 
-                 (sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))))
+                 (sum(NAP$NAPtoALLSBS(NAP,"PG"),imCarVal(allCy,NAP,YTIME))))
 
                  *smTWhToMtoe/imPlantEffByType(allCy,PGALL,YTIME))); 
 $offtext
@@ -687,7 +687,7 @@ q04CostPowGenShortIntPri(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 
                  (1-imCO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
 
-                 (sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))))
+                 (sum(NAP$NAPtoALLSBS(NAP,"PG"),imCarVal(allCy,NAP,YTIME))))
 
                  *smTWhToMtoe/imPlantEffByType(allCy,PGALL,YTIME)));    
 $offtext
@@ -719,13 +719,13 @@ Q04CostAvgPowGenLonNoClimPol(allCy,PGALL,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy))
              / (1000*(7.25$ISET(ESET)+2.25$RSET(ESET))) +
              sum(PGEF$PGALLTOEF(PGALL,PGEF),
                  (i04VarCost(PGALL,YTIME)/1000+((VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)-imEffValueInDollars(allCy,"PG",ytime)/1000-imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
-                 sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))/1000 )/1.2441+
+                 sum(NAP$NAPtoALLSBS(NAP,"PG"),imCarVal(allCy,NAP,YTIME))/1000 )/1.2441+
 
                  imCO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
 
                  (1-imCO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
 
-                 (sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))))
+                 (sum(NAP$NAPtoALLSBS(NAP,"PG"),imCarVal(allCy,NAP,YTIME))))
 
                  *smTWhToMtoe/imPlantEffByType(allCy,PGALL,YTIME)));
 
@@ -766,7 +766,7 @@ q04CostPowGenAvgShrt(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         (i04VarCost(PGALL,YTIME)/1000+(VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME)/1.2441+
          imCO2CaptRate(allCy,PGALL,YTIME)*VmCstCO2SeqCsts(allCy,YTIME)*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME) +
          (1-imCO2CaptRate(allCy,PGALL,YTIME))*1e-3*imCo2EmiFac(allCy,"PG",PGEF,YTIME)*
-         (sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))))
+         (sum(NAP$NAPtoALLSBS(NAP,"PG"),imCarVal(allCy,NAP,YTIME))))
                  *smTWhToMtoe/imPlantEffByType(allCy,PGALL,YTIME)))
         ))
         +

@@ -28,13 +28,3 @@ qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
   );
 *$ELSE.calib qDummyObj.. vDummyObj =e= 1;
 $ENDIF.calib
-
-Q00ElecConsHeatPla(allCy,INDDOM,YTIME)$(TIME(YTIME) and runCy(allCy))..
-  VmElecConsHeatPla(allCy,INDDOM,YTIME) 
-    =E=
-    (
-    imFuelConsPerFueSub(allCy,INDDOM,"ELC",YTIME) *
-    (1-imShrNonSubElecInTotElecDem(allCy,INDDOM)) *
-    iShrHeatPumpElecCons(allCy,INDDOM)
-    )$(not An(YTIME)) +
-    1E-7;
