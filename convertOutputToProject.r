@@ -156,7 +156,7 @@ convertUnitsToExpected <- function(
 lapply(c("mrprom","madrat","readxl","dplyr","tidyr","quitte","postprom","gdx","openxlsx"), require, character.only = TRUE)
 
 # --- Read data ---
-dataMagpie <- read.report("C:\\Users\\at39\\2-Models\\OPEN-PROM\\runs\\1.5CnewCCSAndHydrogenCleanupNewCPrice_2025-10-14_16-32-21\\reporting.mif")
+dataMagpie <- read.report("C:\\Users\\at39\\2-Models\\OPEN-PROM\\runs\\RES1p5_2025_noscrap_2025-10-31_16-51-11\\reporting.mif")
 scenarioName <- names(dataMagpie)[1]
 modelName <- names(dataMagpie[[1]])[1]
 dataMagpie <- dataMagpie[[1]][[1]]
@@ -165,8 +165,7 @@ project <- read.csv("C:\\Users\\at39\\2-Models\\socdr-edition-3-template.csv")
 # --- Mapping ---
 map <- toolGetMapping(
   name = "prom-socdr-edition-3-template.csv",
-  type = "sectoral",
-  where = "mrprom"
+  where = "postprom"
 )
 
 # --- Extract variable names and units ---
@@ -251,6 +250,6 @@ allYears <- getYears(finalResults$object)
 tierMagpie <-new.magpie(cells = allRegions, years = allYears, names  = combinedVector, fill = 0)
 names(dimnames(tierMagpie))[3] <- "variable"
 
-finalDataMagpie <- mbind(finalResults$object,tierMagpie)
-
-write.report(finalDataMagpie,"outputForSODR-3.mif", model = modelName, scenario = scenarioName)
+#finalDataMagpie <- mbind(finalResults$object,tierMagpie)
+finalDataMagpie <- mbind(finalResults$object)
+write.report(finalDataMagpie,"outputForSODR-3.mif", model = "OPEN-PROM 2.0", scenario = "SoCDR_Ed3_HighestAmbition")
