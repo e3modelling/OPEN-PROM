@@ -13,9 +13,9 @@
 *' This equation calculates the lifetime of passenger cars based on the scrapping rate of passenger cars. The lifetime is inversely proportional to the scrapping rate,
 *' meaning that as the scrapping rate increases, the lifetime of passenger cars decreases.
 Q01Lft(allCy,DSBS,TTECH,YTIME)$(TIME(YTIME) $sameas(DSBS,"PC") $SECTTECH(DSBS,TTECH) $runCy(allCy))..
-         VmLft(allCy,DSBS,TTECH,YTIME)
-                 =E=
-         1/V01RateScrPc(allCy,YTIME);
+    VmLft(allCy,DSBS,TTECH,YTIME)
+        =E=
+    1 / V01RateScrPc(allCy,YTIME);
 
 *' This equation calculates the activity for goods transport, considering different types of goods transport such as trucks and other freight transport.
 *' The activity is influenced by factors such as GDP, population, fuel prices, and elasticities. The equation includes terms for trucks and other

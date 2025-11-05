@@ -27,8 +27,9 @@ Q05DemSecH2(allCy,SBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         =E=
     sum(INDDOM$SAMEAS(INDDOM,SBS), VmConsFuel(allCy,INDDOM,"H2F",YTIME)) +
     sum(TRANSE$SAMEAS(TRANSE,SBS), VmDemFinEneTranspPerFuel(allCy,TRANSE,"H2F",YTIME)) +
-    VmConsFuelDACProd(allCy,"H2F",YTIME)
-    ;
+    VmConsFuelDACProd(allCy,"H2F",YTIME)$sameas("DAC",SBS) +
+    !! Should we include CHPs also?
+    (smTWhToMtoe * VmProdElec(allCy,"PGH2F",YTIME) / imPlantEffByType(allCy,"PGH2F",YTIME))$sameas("PG",SBS);
 
 *' This equation defines the amount of hydrogen production capacity that is scrapped due to the expiration of the useful life of plants.
 *' It considers the remaining lifetime of hydrogen production facilities and the impact of past production gaps.
@@ -65,12 +66,10 @@ Q05PremRepH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
             (1/i05AvailH2Prod(allCy,H2TECH,YTIME) *
             V05CostProdH2Tech(allCy,H2TECH,YTIME) +
             (1-1/i05AvailH2Prod(allCy,H2TECH,YTIME)) * V05CostVarProdH2Tech(allCy,H2TECH,YTIME))
-        )**(-i05WBLGammaH2Prod(allCy,YTIME))
-
-        + V05CostVarProdH2Tech(allCy,H2TECH,YTIME)**(-i05WBLGammaH2Prod(allCy,YTIME))
-      + 1e-6)
-      )$H2TECHPM(H2TECH)
-;
+        )**(-i05WBLGammaH2Prod(allCy,YTIME)) +
+        V05CostVarProdH2Tech(allCy,H2TECH,YTIME)**(-i05WBLGammaH2Prod(allCy,YTIME)) + 1e-6
+      )
+    )$H2TECHPM(H2TECH);
 
 *' This equation calculates the total hydrogen production capacity that is scrapped as part of the premature replacement
 *' and normal plant life cycle. It links the scrapped capacity to the overall age distribution and retirement schedule of
@@ -78,8 +77,8 @@ Q05PremRepH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q05CapScrapH2ProdTech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V05CapScrapH2ProdTech(allCy,H2TECH,YTIME)
       =E=
-    V05ScrapLftH2Prod(allCy,H2TECH,YTIME) +
-    V05PremRepH2Prod(allCy,H2TECH,YTIME)
+    1- (1-V05ScrapLftH2Prod(allCy,H2TECH,YTIME)) *
+    (1-V05PremRepH2Prod(allCy,H2TECH,YTIME))
 ;
 
 *' The hydrogen demand gap equation defines the difference between the total hydrogen demand (calculated in Q05DemTotH2) and
@@ -139,8 +138,8 @@ Q05CostVarProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME))
       ) 
     )$(not H2TECHREN(H2TECH)) / i05EffH2Prod(allCy,H2TECH,YTIME) +
-    (i04VarCost("PGSOL",YTIME)/(smTWhToMtoe))$(sameas(H2TECH,"wes")) +
-    (i04VarCost("PGAWNO",YTIME)/(smTWhToMtoe))$(sameas(H2TECH,"wew"))
+    (i04VarCost("PGSOL",YTIME) / (smTWhToMtoe))$(sameas(H2TECH,"wes")) +
+    (i04VarCost("PGAWNO",YTIME) / (smTWhToMtoe))$(sameas(H2TECH,"wew"))
     
 ;
 
