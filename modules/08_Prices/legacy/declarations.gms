@@ -25,5 +25,5 @@ VmPriceFuelAvgSub(allCy,DSBS,YTIME)                        "Average fuel prices 
 VmPriceElecInd(allCy,YTIME)                                "Electricity index - a function of industry price (1)"
 
 *' *** Miscellaneous
-*V08FuelPriSubNoCarb(allCy,SBS,EF,YTIME)	                   "Fuel prices per subsector and fuel  without carbon value (kUS$2015/toe)"
+*V08FuelPriSubNoCarb(allCy,SBS,EF,YTIME)	               "Fuel prices per subsector and fuel  without carbon value (kUS$2015/toe)"
 ;
