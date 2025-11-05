@@ -1,18 +1,15 @@
 *' @title Core Declarations
 *' @code
 
+$IFTHEN.calib %Calibration% == MatCalibration
 Equations
-*' *** Miscellaneous'
 qDummyObj                                                  "Define dummy objective function"
 ;
-
-$ontext
+*---
 Variables
-*'                **Interdependent Variables**
-
 vDummyObj                                                  "Dummy maximisation variable (1)"
 ;
-$offtext
+$ENDIF.calib
 
 Scalars
 smTWhToMtoe                                                "TWh to Mtoe conversion factor" /0.086/

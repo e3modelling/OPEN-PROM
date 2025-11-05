@@ -3,7 +3,7 @@ endloop;  !! close countries loop
 $ifthen.calib %Calibration% == MatCalibration
 execute_unload "outputCalib.gdx", ODummyObj, VmCapElec, V04CapElecNominal, VmProdElec, V04ProdElecEstCHP, i04MatFacPlaAvailCap, i04MatureFacPlaDisp, V04SharePowPlaNewEq, t04SharePowPlaNewEq, V04ShareTechPG, V04CostHourProdInvDec, V04ShareSatPG, i04AvailRate, V04DemElecTot, t04DemElecTot,iCarbValYrExog;
 $else.calib
-execute_unload "outputData.gdx", ODummyObj, VmCapElecTotEst, VmPeakLoad, VmConsFuel, VmCapElec, V04CapElecNominal, VmProdElec, VmPriceFuelSubsecCarVal, VmPriceElecIndResConsu;
+execute_unload "outputData.gdx", VmCapElecTotEst, VmPeakLoad, VmConsFuel, VmCapElec, V04CapElecNominal, VmProdElec, VmPriceFuelSubsecCarVal, VmPriceElecIndResConsu;
 $endif.calib
 endloop;  !! close outer iteration loop (time steps)
 putclose fStat;

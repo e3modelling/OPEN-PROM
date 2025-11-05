@@ -9,13 +9,14 @@
 *' and the ratio of lagged energy costs (with the corresponding elasticities). This type of equation captures both short term and long term reactions to energy costs. 
 
 *' * Define dummy objective function
-
+$ontext
 $IFTHEN.calib %Calibration% == Calibration
 qDummyObj(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy))).. vDummyObj =e=
 SQRT(SUM((DSBS,TECH)$(SECTTECH(DSBS,TECH)and TECHtoEF(TECH,EF) and (INDDOM(DSBS))), SQR(imFuelConsPerFueSub(allCy,DSBS,EF,YTIME)-VmConsFuel(allCy,DSBS,EF,YTIME)))) +
 SQRT(SUM((DSBS,TECH)$(SECTTECH(DSBS,TECH)and TECHtoEF(TECH,EF) and (TRANSE(DSBS))), SQR(VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)-imFuelConsPerFueSub(allCy,TRANSE,EF,YTIME)))) +
 0;
-$ELSEIF.calib %Calibration% == MatCalibration
+$offtext
+$IFTHEN.calib %Calibration% == MatCalibration
 qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy)).. 
   vDummyObj 
       =E=
@@ -26,5 +27,4 @@ qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
       t04SharePowPlaNewEq(allCy,PGALL,YTIME)
     )
   );
-*$ELSE.calib qDummyObj.. vDummyObj =e= 1;
-$ENDIF.calib
+$ENDIF.calib  
