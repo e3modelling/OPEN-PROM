@@ -15,15 +15,13 @@ loop an do !! start outer iteration loop (time steps)
         if sModelStat gt 2 then
 $IFTHEN.calib %Calibration% == MatCalibration
             solve openprom using nlp minimizing vDummyObj;
-            sModelStat = openprom.modelstat;
             ODummyObj(runCyL,YTIME)$TIME(YTIME) = vDummyObj.L;  !! Assign objective function value
 $ELSE.calib
             solve openprom using cns;
-            sModelStat = openprom.modelstat;
 $ENDIF.calib
+            sModelStat = openprom.modelstat;
         endif;
     endloop;
-
 
 put fStat;
 put "Country:", runCyL.tl, " Model Status:", sModelStat:0:2, " Year:", an.tl /;

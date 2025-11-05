@@ -11,6 +11,11 @@ loop DSBS do
 endloop;
 
 model openprom / all /;
+file debug /debug.txt/;
+put debug;
+put "Number of variables: ", openprom.numvar:10:0 /;
+put "Number of equations: ", openprom.numequ:10:0 /;
+putclose debug;
 
 option i01Pop:2:0:6;
 display i01Pop;
