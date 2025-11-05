@@ -1,4 +1,3 @@
-# This script generates a mif file for comparison of OPEN-PROM data with MENA-EDS and ENERDATA
 library(madrat)
 library(postprom)
 library(reticulate)
