@@ -329,6 +329,7 @@ GEO     "Geothermal and other renewable sources eg. Tidal, etc."
 MET     "Methanol"
 ETH     "Ethanol"
 BGDO    "Biodiesel"
+BGSL    "Biogasoline"
 H2F     "Hydrogen"
 ELC     "Electricity"
 *STE1CL  "Steam coming from CHP plants conventional lgn"
@@ -352,6 +353,7 @@ STE2OLQ "Steam produced from district heating plants burning olq"
 STE2NGS "Steam produced from district heating plants burning ngs"
 STE2OGS "Steam produced from district heating plants burning ogs"
 STE2BMS "Steam produced from district heating plants burning bmswas"
+STE2AH2F "Steam produced from district heating plants burning h2f"
 *PHEVGSL  "Plug in Hybrid engine - gasoline"
 *PHEVGDO  "Plug in Hybrid engine - diesel"
 *hybrid cars with gasoline and diesel
@@ -437,6 +439,7 @@ WLGN    Lignite for Industry
 WGSL    Spot price of gasoline Rotterdam
 WGDO    Spot price of diesel Rotterdam
 WRFO    Spot price of heavy fuel oil Rotterdam
+WH2F
 /
 
 WEFMAP(EF,WEF)          Link between Imported Energy Forms and Energy Forms used in Model Subsectors
@@ -449,7 +452,7 @@ HCL.WCOKE
 (GDO,STE1AD,STE2GDO).WGDO
 (RFO,STE2RFO).WRFO
 (OLQ,LPG,STE2OLQ).WCRO
-
+(STE1AH2F).WH2F
 /
 
 EFtoWEF(DSBS,EF,WEF) Link between Imported Energy Forms and Energy Forms used in Model Subsectors
@@ -461,7 +464,9 @@ LGN
 HCL
 CRO
 GSL
+BGSL
 GDO
+BGDO
 RFO
 LPG
 KRS
@@ -497,7 +502,7 @@ OGS.OGS
 NUC.NUC
 (STE1AL,STE1AH,STE1AD,STE1AG,STE1AB,STE1AH2F,STE2LGN,STE2OSL,STE2GDO,STE2RFO,STE2OLQ,STE2NGS,STE2OGS,STE2BMS).STE
 HYD.HYD
-(BGDO,ETH,BMSWAS).BMSWAS
+(BGDO,BGSL,ETH,BMSWAS).BMSWAS
 SOL.SOL
 GEO.GEO
 WND.WND
@@ -544,6 +549,7 @@ h2f1(pgef)
 PPRODEF(EFS)     Fuels considered in primary production
 /
 LGN
+OLQ
 HCL
 CRO
 HYD
@@ -611,6 +617,7 @@ TSTE1AH
 TSTE1AD
 TSTE1AG
 TSTE1AB
+TSTE1AH2F
 * Domestic Technologies (only add those not already in Transport & Industry)
 * LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC,STE1AL,STE1AH,STE1AD,STE1AG,STE1AB already exist in TRANSPORT or INDUSTRY technologies
 TSTE2LGN
@@ -626,7 +633,6 @@ TBMSWAS
 * GDO,RFO,LGN,HCL,GDO,LPG,OLQ,NGS,OGS already exist
 * NOT USED
 TSTE1AR
-TSTE1AH2F
 THEATPUMP
 * DAC Technologies
 HTDAC
@@ -684,6 +690,7 @@ EWDAC
 
 ITECH(TECH)      Industrial - Domestic - Non-energy & Bunkers Technologies 
 /
+TBGDO
 TGDO
 TLPG
 TKRS  
@@ -701,6 +708,7 @@ TSTE1AH
 TSTE1AD
 TSTE1AG
 TSTE1AB
+TSTE1AH2F
 TH2F
 * Domestic Technologies (only add those not already in Industry)
 TGSL
@@ -726,31 +734,45 @@ RENEF(TECH)        Renewable technologies in demand side !! Should these remain 
 *HYD     "Hydro"
 *WND     "Wind"
 *SOL     "Solar"
+TELC
+TPHEVGSL  "Plug in Hybrid engine - gasoline"
+TPHEVGDO  "Plug in Hybrid engine - diesel"
+TH2F      "Fuel Cells: Hydrogen"
+TCHEVGSL  "conventional Hybrid engine - gasoline"
+TCHEVGDO  "conventional Hybrid engine - diesel"
 TBMSWAS  "Biomass and Waste"
 *GEO     "Geothermal and other renewable sources eg. Tidal, etc."
 TBGDO    "Biodiesel"
 *STE1CB  "Steam produced from CHP conventional bmswas"
 TSTE1AB  "Steam produced from CHP advanced bmswas"
 TSTE2BMS "Steam produced from district heating plants burning bmswas"
+TNGSCCS
+THCLCCS
+TSTE1AH2F
+**
+HTDAC
+H2DAC
+LTDAC
+EWDAC
 /
 
 TECHtoEF (TECH,EF) Fuels consumed by technologies
 /
-TGSL.GSL
+TGSL.(GSL,BGSL)
 TLPG.LPG
-TGDO.GDO
-TNGS.NGS
+TGDO.(GDO,BGDO,RFO)
+TNGS.(NGS,OGS)
 TNGSCCS.NGS
 TELC.ELC
 TKRS.KRS
 TETH.ETH
 TMET.MET
 TBGDO.BGDO
-TPHEVGSL.(GSL,ELC)
-TPHEVGDO.(GDO,ELC)
+TPHEVGSL.(GSL,BGSL,ELC)
+TPHEVGDO.(GDO,BGDO,ELC)
 TH2F.H2F
-TCHEVGSL.GSL
-TCHEVGDO.GDO     
+TCHEVGSL.(GSL,BGSL)
+TCHEVGDO.(GDO,BGDO)     
 TLGN.LGN
 THCL.HCL
 THCLCCS.HCL
@@ -762,6 +784,7 @@ TSTE1AH.STE1AH
 TSTE1AD.STE1AD
 TSTE1AG.STE1AG
 TSTE1AB.STE1AB
+TSTE1AH2F.STE1AH2F
 * Domestic Technologies (only add those not already in Transport & Industry)
 * LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC,STE1AL,STE1AH,STE1AD,STE1AG,STE1AB already exist in TRANSPORT or INDUSTRY technologies
 TSTE2LGN.STE2LGN
@@ -780,24 +803,25 @@ EWDAC.ELC
 /
 TTECHtoEF(TTECH,EF) Fuels consumed by transport technologies
 /
-TGSL.GSL
+TGSL.(GSL,BGSL)
 TLPG.LPG
-TGDO.GDO
-TNGS.NGS
+TGDO.(GDO,BGDO,RFO)
+TNGS.(NGS,OGS)
 TELC.ELC
 TKRS.KRS
 TETH.ETH
 TMET.MET
 TBGDO.BGDO
-TPHEVGSL.(GSL,ELC)
-TPHEVGDO.(GDO,ELC)
+TPHEVGSL.(GSL,BGSL,ELC)
+TPHEVGDO.(GDO,BGDO,ELC)
 TH2F.H2F
-TCHEVGSL.GSL
-TCHEVGDO.GDO
+TCHEVGSL.(GSL,BGSL)
+TCHEVGDO.(GDO,BGDO)
 /
 
 ITECHtoEF(ITECH,EF) Fuels consumed by industrial technologies
 /
+TBGDO.BGDO
 TGDO.GDO
 TLPG.LPG
 TKRS.KRS  
@@ -815,6 +839,7 @@ TSTE1AH.STE1AH
 TSTE1AD.STE1AD
 TSTE1AG.STE1AG
 TSTE1AB.STE1AB
+TSTE1AH2F.STE1AH2F
 TH2F.H2F
 * Domestic Technologies (only add those not already in Transport & Industry)
 * LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC,STE1AL,STE1AH,STE1AD,STE1AG,STE1AB already exist in TRANSPORT or INDUSTRY technologies
@@ -857,20 +882,20 @@ SECTTECH(DSBS,TECH) Link between Model Demand Subsectors and Technologies
 *GU.(LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGDO,CHEVGDO)
 *(PT,GT).(GDO,ELC,MET)
 PC.(TGSL,TLPG,TGDO,TNGS,TELC,TPHEVGSL,TPHEVGDO,TCHEVGSL,TCHEVGDO,TH2F)
-PB.(TLPG,TGDO,TNGS,TELC,TH2F)
-GU.(TLPG,TGDO,TNGS,TELC,TCHEVGDO,TH2F) !! Removed GSL and PHEVGSL
+PB.(TLPG,TGSL,TGDO,TNGS,TELC,TH2F)
+GU.(TLPG,TGSL,TGDO,TNGS,TELC,TCHEVGDO,TH2F) !! Removed GSL and PHEVGSL
 (PT,GT).(TGDO,TELC)
 PA.(TKRS)
 (PN,GN).(TGDO,TH2F)
-(IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(TLGN,THCL,TGDO,TRFO,TLPG,TKRS,TOLQ,TNGS,TOGS,TELC,TSTE1AL,
-                                 TSTE1AH,TSTE1AD,TSTE1AG,TH2F)
+(IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(TLGN,THCL,TGDO,TGSL,TRFO,TLPG,TKRS,TOLQ,TNGS,TOGS,TELC,TBMSWAS,
+                                TSTE1AL,TSTE1AH,TSTE1AD,TSTE1AG,TSTE1AB,TH2F)
 (IS,BM,CH).(TNGSCCS,THCLCCS)
 (HOU,AG).(TLPG,TKRS,TGDO,TNGS,TOGS,TBMSWAS,TELC,TSTE2LGN,TSTE2OSL,TSTE2GDO,TSTE2NGS,
                                  TSTE2BMS)
 SE.(TLPG,TKRS,TNGS,TOGS,TELC)
 
 *BU.(GDO,RFO,OLQ)
-BU.(TGDO,TRFO)
+BU.(TGDO,TRFO,TKRS)
 (PCH,NEN).(TLGN,THCL,TGDO,TRFO,TLPG,TOLQ,TNGS,TOGS)
 DAC.(HTDAC,H2DAC,LTDAC,EWDAC)
 *PG.(PGTLGN,PGTHCL,PGTGDO,PGTRFO,PGTNGS,PGTNUC,PGTHYD,PGTBMSWAS,PGTSOL,PGTGEO,PGTWND)
@@ -879,7 +904,7 @@ DAC.(HTDAC,H2DAC,LTDAC,EWDAC)
 
 SECtoEF(SBS,EF) Link between Model Subsectors and Energy FORMS
 /
-PG.(LGN,HCL,GDO,RFO,NGS,OGS,NUC,HYD,BMSWAS,SOL,GEO,WND)
+PG.(LGN,HCL,GDO,RFO,NGS,OGS,NUC,HYD,BMSWAS,SOL,GEO,WND,H2F)
 H2P.(HCL,RFO,NGS,NUC,BMSWAS,SOL,WND,ELC)
 *DAC.(ELC,NGS)
 /
@@ -931,6 +956,7 @@ ATHLGNCCS Supercritical lignite with CCS
 *PGACGS Integrated coal gasification with CCS
 ATHGASCCS Gas turbine combined cycle with CCS
 PGAWNO Wind offshore
+PGH2F
 /
 
 PGCSP(PGALL)
@@ -969,12 +995,12 @@ ATHBMSCCS.ATHBMSWAS
 
 CHP(EF)       CHP Plants
 /
-STE1AL,STE1AH,STE1AD,STE1AG,STE1AB
+STE1AL,STE1AH,STE1AD,STE1AG,STE1AB,STE1AH2F
 /
 
-TCHP(TECH)       CHP Plants
+TCHP(ITECH)       CHP Plants
 /
-TSTE1AL,TSTE1AH,TSTE1AD,TSTE1AG,TSTE1AB
+TSTE1AL,TSTE1AH,TSTE1AD,TSTE1AG,TSTE1AB,TSTE1AH2F
 /
 
 DH(EF)       District Heating
@@ -989,11 +1015,10 @@ STE2OGS
 STE2BMS
 /
 
-PGNUCL(PGALL)    Nuclear plants                            / PGANUC/
-PGREN(PGALL)     Renewable Plants                          /PGLHYD,PGSHYD,PGAWND,PGSOL,PGCSP,PGOTHREN, PGAWNO/
+PGREN(PGALL)    REN PLANTS with Saturation                /PGLHYD,PGSHYD,PGAWND,PGSOL,PGCSP,PGOTHREN,PGAWNO/
+PGREN2(PGALL)     Renewable Plants                          /PGLHYD,PGSHYD,PGAWND,PGSOL,PGCSP,PGOTHREN,PGAWNO,PGANUC,ATHCOALCCS,ATHLGNCCS,ATHGASCCS,PGH2F/
 PGRENSW(PGALL)   Solar and wind Plants                     /PGSOL,PGCSP,PGAWND,PGAWNO/
 PGNREN(PGALL)    Advanced Renewable Plants potential      /PGCSP,PGOTHREN,PGAWNO,ATHBMSWAS/
-PGGEO(PGALL)     Geothermal Plants                        /PGOTHREN/
 PGRENEF          Renewable energy forms in power generation  /LHYD,SHYD,WND,WNO,SOL,DPV,BMSWAS,OTHREN/
 
 PGALLtoPGRENEF(PGALL,PGRENEF)     Correspondence between renewable plants and renewable energy forms
@@ -1020,6 +1045,7 @@ PGALLtoEF(PGALL,PGEF)     Correspondence between plants and energy forms
 (PGAWND,PGAWNO).WND
 (PGSOL,PGCSP).SOL
 (PGOTHREN).GEO
+(PGH2F).H2F
 *(ACCHT,ICEH2,FC2).H2F
 /
 
@@ -1058,6 +1084,7 @@ STE1AH.ATHCOAL,
 STE1AD.ATHOIL,
 STE1AG.ATHGAS,
 STE1AB.ATHBMSWAS
+STE1AH2F.PGH2F
 *STE1AH2F.FC2
 /
 
@@ -1091,6 +1118,7 @@ PGAWNO
 *PGADPV
 PGOTHREN
 ATHBMSCCS
+PGH2F
 /
 
 *           Emissions             *
@@ -1283,18 +1311,19 @@ biomass(balef)
 
 TOTAL(BALEF)
 /"TOTAL"/
+
 BALEF2EFS(BALEF, EFS) Mapping from balance fuels to model fuels
 /
-"Total".(HCL,LGN,CRO,LPG,GSL,KRS,GDO,RFO,OLQ,NGS,OGS,NUC,STE,HYD,WND,SOL,BMSWAS,GEO,MET,ETH,H2F,ELC)
+"Total".(HCL,LGN,CRO,LPG,GSL,BGSL,KRS,GDO,BGDO,RFO,OLQ,NGS,OGS,NUC,STE,HYD,WND,SOL,BMSWAS,GEO,MET,ETH,H2F,ELC)
 "Solids".(HCL,LGN)
 "Hard coal".HCL
 "Lignite".LGN
 "Crude oil and Feedstocks".CRO
-"Liquids".(LPG,GSL,KRS,GDO,RFO,OLQ)
+"Liquids".(LPG,GSL,BGSL,KRS,GDO,BGDO,RFO,OLQ)
 "Liquified petroleum gas".LPG
-"Gasoline".GSL
+"Gasoline".(GSL,BGSL)
 "Kerosene".KRS
-"Diesel oil".GDO
+"Diesel oil".(GDO,BGDO)
 "Fuel oil".RFO
 "Other liquids".OLQ
 "Gas fuels".(NGS,OGS)
@@ -1374,3 +1403,9 @@ loop TECH do
         endloop;
     endloop;
 endloop;
+SECtoEF(INDDOM, "BGSL") = no;
+SECtoEF(INDDOM, "BGDO") = no;
+SECtoEF(NENSE, "BGSL") = no;
+SECtoEF(NENSE, "BGDO") = no;
+*This is equivalent with the loop above
+*SECtoEF(DSBS, EF)$(sum(TECH, SECTTECH(DSBS, TECH) * TTECHtoEF(TECH, EF))) = yes;

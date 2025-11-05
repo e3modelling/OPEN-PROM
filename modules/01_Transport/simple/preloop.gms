@@ -14,8 +14,8 @@ V01ActivPassTrnsp.FX(runCy,TRANP,YTIME) $(not AN(YTIME) and not sameas(TRANP,"PC
 V01NewRegPcYearly.FX(runCy,YTIME)$(not an(ytime)) = i01NewReg(runCy,YTIME);
 *---
 V01RateScrPc.UP(runCy,YTIME) = 1;
-V01RateScrPc.l(runCy,YTIME) = 0.06;
-V01RateScrPc.FX(runCy,"%fBaseY%") = 0.06; 
+V01RateScrPc.l(runCy,YTIME) = 0.05;
+V01RateScrPc.FX(runCy,YTIME)$DATAY(YTIME) = 0.05; 
 *---
 V01RateScrPcTot.UP(runCy,TTECH,YTIME) = 1;
 V01RateScrPcTot.FX(runCy,TTECH,YTIME)$(not AN(YTIME)) = V01RateScrPc.L(runCy,YTIME);
@@ -50,9 +50,6 @@ V01ConsTechTranspSectoral.FX(runCy,TRANSE,TTECH,EF,YTIME)$(SECTTECH(TRANSE,TTECH
 V01ConsTechTranspSectoral.FX(runCy,TRANSE,TTECH,EF,YTIME)$(SECTTECH(TRANSE,TTECH)  $PLUGIN(TTECH) $(not AN(YTIME))) = 0;
 V01ConsTechTranspSectoral.FX(runCy,TRANSE,TTECH,EF,YTIME)$(SECTTECH(TRANSE,TTECH)  $CHYBV(TTECH) $(not AN(YTIME))) = 0;
 *---
-*V01ActivPassTrnsp.scale(runCy,TRANP,YTIME)$(AN(YTIME) and not sameas(TRANP,"PC")) = max(V01ActivPassTrnsp.l(runCy,TRANP,YTIME),1e-20);
-*Q01ActivPassTrnsp.scale(runCy,TRANP,YTIME)$(AN(YTIME) and not sameas(TRANP,"PC")) = max(V01ActivPassTrnsp.l(runCy,TRANP,YTIME),1e-20);
-*---
 V01ShareTechTr.scale(runCy,TRANSE,TTECH,YTIME)=1e-6;
 Q01ShareTechTr.scale(runCy,TRANSE,TTECH,YTIME)=V01ShareTechTr.scale(runCy,TRANSE,TTECH,YTIME);
 *---
@@ -60,8 +57,8 @@ VmDemFinEneTranspPerFuel.FX(runCy,TRANSE,EF,YTIME) $(SECtoEF(TRANSE,EF) $(not An
 VmDemFinEneTranspPerFuel.FX(runCy,TRANSE,EF,YTIME)$(not SECtoEF(TRANSE,EF)) = 0;
 *---
 VmLft.L(runCy,DSBS,TTECH,YTIME) = 0.1;
-VmLft.FX(runCy,DSBS,TECH,YTIME)$(SECTTECH(DSBS,TECH)  $(not  TRANSE(DSBS)) $(not sameas(DSBS,"PC"))$(not TCHP(TECH))) = i01TechLft(runCy,DSBS,TECH,YTIME);
-VmLft.FX(runCy,DSBS,TECH,YTIME)$(SECTTECH(DSBS,TECH)  $(not  TRANSE(DSBS)) $(not sameas(DSBS,"PC"))$TCHP(TECH)) = 12.5;
+VmLft.FX(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH)  $(not  TRANSE(DSBS)) $(not sameas(DSBS,"PC"))$(not TCHP(ITECH))) = i01TechLft(runCy,DSBS,ITECH,YTIME);
+VmLft.FX(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH)  $(not  TRANSE(DSBS)) $(not sameas(DSBS,"PC"))$TCHP(ITECH)) = 12.5;
 VmLft.FX(runCy,TRANSE,TTECH,YTIME)$(SECTTECH(TRANSE,TTECH) $(not sameas(TRANSE,"PC"))) = i01TechLft(runCy,TRANSE,TTECH,YTIME);
 VmLft.FX(runCy,DSBS,TECH,YTIME)$(not SECTTECH(DSBS,TECH)) = 0;
 VmLft.FX(runCy,"PC",TTECH,YTIME)$( (not AN(YTIME)) $SECTTECH("PC",TTECH)) = 1/V01RateScrPc.L(runCy,YTIME);

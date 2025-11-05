@@ -52,4 +52,5 @@ i08HydrogenPri(runCy,SBS,YTIME)=4.3;
 i08ElecIndex(runCy,YTIME) = 0.9;
 *---
 imFuelPrice(runCy,SBS,EF,YTIME) = imFuelPrice(runCy,SBS,EF,YTIME)/1000; !! change units $15 -> k$15
+imFuelPrice(runCy,"BU","KRS",YTIME) = imFuelPrice(runCy,"PA","KRS",YTIME);
 *---

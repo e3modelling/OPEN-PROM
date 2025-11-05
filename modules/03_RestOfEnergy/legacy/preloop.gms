@@ -22,7 +22,7 @@ V03ConsGrssInl.FX(runCy,EFS,YTIME)$(not An(YTIME)) = i03GrosInlCons(runCy,EFS,YT
 *---
 V03Transfers.FX(runCy,EFS,YTIME)$(not An(YTIME)) = i03FeedTransfr(runCy,EFS,YTIME);
 *---
-V03ProdPrimary.FX(runCy,PPRODEF,YTIME)$(not An(YTIME)) = i03FuelPriPro(runCy,PPRODEF,YTIME);
+V03ProdPrimary.FX(runCy,PPRODEF,YTIME)$(not An(YTIME)) = i03PrimProd(runCy,PPRODEF,YTIME);
 *---
 V03Imp.FX(runCy,"NGS",YTIME)$(not An(YTIME)) = imFuelImports(runCy,"NGS",YTIME);
 V03Imp.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
@@ -30,12 +30,6 @@ V03Imp.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
 V03Exp.FX(runCy,EFS,YTIME)$(not An(YTIME)) = imFuelExprts(runCy,EFS,YTIME);
 V03Exp.FX(runCy,"NGS",YTIME)$(not An(YTIME)) = imFuelExprts(runCy,"NGS",YTIME);
 V03Exp.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
-*---
-V03OutTransfDhp.FX(runCy,EFS,YTIME)$(not STEAM(EFS)) = 0;
-*---
-V03OutTransfNuclear.FX(runCy,EFS,YTIME)$(not sameas("ELC",EFS)) = 0;
-*---
-V03InpTransfNuclear.FX(runCy,EFS,YTIME)$(not sameas("NUC",EFS)) = 0;
 *---
 VmConsFiEneSec.FX(runCy,EFS,YTIME)$(not An(YTIME)) = i03TotEneBranchCons(runCy,EFS,YTIME);
 *---
@@ -46,3 +40,14 @@ VmConsFinEneCountry.FX(runCy,EFS,YTIME)$(not An(YTIME)) = imFinEneCons(runCy,EFS
 *---
 VmLossesDistr.FX(runCy,EFS,YTIME)$(not An(YTIME)) = imDistrLosses(runCy,EFS,YTIME);
 *---
+V03OutTotTransf.FX(runCy,EFS,YTIME)$(not AN(YTIME)) = i03OutTotTransfProcess(runCy,EFS,YTIME);
+*---
+V03InpTotTransf.FX(runCy,EFS,YTIME)$(not AN(YTIME)) = -i03InpTotTransfProcess(runCy,EFS,YTIME);
+*---
+V03OutTransfDhp.FX(runCy,STEAM,YTIME)$(not AN(YTIME)) = i03OutDHPTransfProcess(runCy,STEAM,YTIME);
+*---
+VmTransfInputDHPlants.FX(runCy,EFS,YTIME)$(not AN(YTIME)) = -i03InpDHPTransfProcess(runCy,EFS,YTIME);
+*---
+V03OutTransfCHP.FX(runCy,TOCTEF,YTIME)$(not AN(YTIME)) = i03OutCHPTransfProcess(runCy,TOCTEF,YTIME);
+*---
+VmTransfInputCHPlants.FX(runCy,EFS,YTIME)$(not AN(YTIME)) = -i03InpCHPTransfProcess(runCy,EFS,YTIME);
