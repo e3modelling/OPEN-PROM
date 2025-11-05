@@ -319,9 +319,9 @@ Q04CostPowGenAvgLng(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCostPowGenAvgLng(allCy,YTIME)
         =E=
     (
-      SUM(PGALL, VmProdElec(allCy,PGALL,YTIME) * V04CostHourProdInvDec(allCy,PGALL,YTIME)) +
-      !! FIXME: TCHP IN elcAvgProd
-      0* VmCostElcAvgProdCHP(allCy,"TSTE1AH",YTIME) * V04ProdElecEstCHP(allCy,YTIME)
+      SUM(PGALL, VmProdElec(allCy,PGALL,YTIME) * V04CostHourProdInvDec(allCy,PGALL,YTIME))
+*FIXME: TCHP IN elcAvgProd
+* 0* VmCostElcAvgProdCHP(allCy,"TSTE",YTIME) * V04ProdElecEstCHP(allCy,YTIME)
     ) / 
     (V04DemElecTot(allCy,YTIME) - V04ProdElecEstCHP(allCy,YTIME)); 
 
@@ -369,3 +369,50 @@ Q04ScrpRate(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     1 - (1 - 1 / i04TechLftPlaType(allCy,PGALL)) * 
     V04IndxEndogScrap(allCy,PGALL,YTIME) *
     V04CCSRetroFit(allCy,PGALL,YTIME);
+
+$ontext
+
+*' The equation computes the electricity production cost per Combined Heat and Power plant for a specific demand sector within a given subsector.
+*' The cost is determined based on various factors, including the discount rate, technical lifetime of CHP plants, capital cost (EUR/kW), fixed O&M cost (EUR/kW), availability rate,
+*' variable cost(EUR/MWh), and fuel-related costs. The equation provides a comprehensive assessment of the overall expenses associated with electricity production from CHP
+*' plants, considering both the fixed and variable components, as well as factors such as carbon prices and CO2 emission factors.
+*' The resulting variable represents the electricity production cost per CHP plant and demand sector, expressed in Euro per kilowatt-hour (Euro/KWh).
+Q09CostElecProdCHP(allCy,DSBS,TCHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS) $runCy(allCy))..
+    V09CostElecProdCHP(allCy,DSBS,TCHP,YTIME)
+        =E=
+    ( 
+      imDisc(allCy,"PG",YTIME) * 
+      exp(imDisc(allCy,"PG",YTIME) * i02LifChpPla(allCy,DSBS,TCHP)) /
+      (exp(imDisc(allCy,"PG",YTIME) * i02LifChpPla(allCy,DSBS,TCHP)) -1) *
+      i02InvCostChp(allCy,DSBS,TCHP,YTIME) * imCGI(allCy,YTIME) + 
+      i02FixOMCostPerChp(allCy,DSBS,TCHP,YTIME)
+    ) /
+    (i02AvailRateChp(allCy,DSBS,TCHP) * (smGwToTwhPerYear(YTIME)) * 1000) +
+    i02VarCostChp(allCy,DSBS,TCHP,YTIME) / 1000
+
+
+!! FIXME
+    sum(PGEF$CHPtoEF(TCHP,PGEF),
+      (
+        VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME) +
+        1e-3 * imCo2EmiFac(allCy,"PG",PGEF,YTIME) *
+        sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))
+      ) * smTWhToMtoe /
+      (i02BoiEffChp(allCy,CHP,YTIME) * (VmPriceElecInd(allCy,CHP,YTIME)) + 1e-4)
+    )  
+
+;
+*' The equation calculates the average electricity production cost per Combined Heat and Power plant .
+*' It involves a summation over demand subsectors . The average electricity production cost is determined by considering the electricity
+*' production cost per CHP plant for each demand subsector. The result is expressed in Euro per kilowatt-hour (Euro/KWh).
+Q09CostElcAvgProdCHP(allCy,TCHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    VmCostElcAvgProdCHP(allCy,TCHP,YTIME)
+      =E=
+    (
+      sum(INDDOM, 
+        VmConsFuel(allCy,INDDOM,"STE",YTIME-1) /
+        SUM(INDDOM2,VmConsFuel(allCy,INDDOM2,"STE",YTIME-1)) *
+        V02CostElecProdCHP(allCy,INDDOM,TCHP,YTIME)
+      )
+    )$SUM(INDDOM2,VmConsFuel.L(allCy,INDDOM2,"STE",YTIME-1))+0$(NOT SUM(INDDOM2,VmConsFuel.L(allCy,INDDOM2,"STE",YTIME-1)));
+$offtext

@@ -113,18 +113,6 @@ a4 0.666634797,
 a5 0.33343691
 /;
 *---
-parameter i03ParDHEffData(PGEFS)                  "Parameter of  district heating Efficiency (1)" 
-/
-HCL		  0.76,
-LGN		  0.75,
-GDO		  0.78,
-RFO		  0.78,
-OLQ		  0.78,
-NGS		  0.8,
-OGS		  0.78,
-BMSWAS    0.76 
-/;
-*---
 
 Parameters
 i03SupTrnasfOutputRefineries(allCy,EF,YTIME)	  "Supplementary parameter for the transformation output from refineries (Mtoe)"
@@ -136,7 +124,6 @@ i03RefCapacity(allCy,YTIME)	                      "Refineries Capacity (Million 
 i03GrosInlCons(allCy,EF,YTIME)	                  "Gross Inland Consumtpion (Mtoe)"
 i03GrossInConsNoEneBra(allCy,EF,YTIME)	          "Gross Inland Consumption,excluding energy branch (Mtoe)"
 i03FeedTransfr(allCy,EFS,YTIME)	                  "Feedstocks in Transfers (Mtoe)"
-i03EffDHPlants(allCy,EF,YTIME)                    "Efficiency of District Heating Plants (1)"
 i03ResRefCapacity(allCy,YTIME)	                  "Residual in Refineries Capacity (1)"
 i03ResTransfOutputRefineries(allCy,EF,YTIME)      "Residual in Transformation Output from Refineries (Mtoe)"
 i03RateEneBranCons(allCy,EF,YTIME)	              "Rate of Energy Branch Consumption over total transformation output (1)"
@@ -165,8 +152,6 @@ i03GrosInlCons(runCy,EFS,YTIME) + i03TotEneBranchCons(runCy,EFS,YTIME)$EFtoEFA(E
 - i03TotEneBranchCons(runCy,EFS,YTIME)$(not EFtoEFA(EFS,"LQD"));
 *---
 i03FeedTransfr(runCy,EFS,YTIME) = i03SuppTransfers(runCy,EFS,YTIME);
-*---
-i03EffDHPlants(runCy,EFS,YTIME)  = sum(PGEFS$sameas(EFS,PGEFS),i03ParDHEffData(PGEFS));
 *---
 i03ResRefCapacity(runCy,YTIME) = i03SupResRefCapacity(runCy,"REF_CAP_RES",YTIME);
 *---

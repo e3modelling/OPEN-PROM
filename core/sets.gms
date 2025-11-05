@@ -584,27 +584,13 @@ THCLCCS
 TRFO
 TOLQ
 TOGS
-TSTE1AL
-TSTE1AH
-TSTE1AD
-TSTE1AG
-TSTE1AB
-TSTE1AH2F
+TSTE
 * Domestic Technologies (only add those not already in Transport & Industry)
 * LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC already exist in TRANSPORT or INDUSTRY technologies
-TSTE2LGN
-TSTE2OSL
-TSTE2GDO
-TSTE2RFO
-TSTE2OLQ
-TSTE2NGS
-TSTE2OGS
-TSTE2BMS
 TBMSWAS
 * Non-Energy and Bunkers Technologies (only add those not already in Transport & Industry & Domestic)
 * GDO,RFO,LGN,HCL,GDO,LPG,OLQ,NGS,OGS already exist
 * NOT USED
-TSTE1AR
 THEATPUMP
 * DAC Technologies
 HTDAC
@@ -675,23 +661,10 @@ THCLCCS
 TRFO
 TOLQ
 TOGS
-TSTE1AL
-TSTE1AH
-TSTE1AD
-TSTE1AG
-TSTE1AB
-TSTE1AH2F
+TSTE
 TH2F
 * Domestic Technologies (only add those not already in Industry)
 TGSL
-TSTE2LGN
-TSTE2OSL
-TSTE2GDO
-TSTE2RFO
-TSTE2OLQ
-TSTE2NGS
-TSTE2OGS
-TSTE2BMS
 TBMSWAS
 /
 
@@ -715,12 +688,8 @@ TCHEVGDO  "conventional Hybrid engine - diesel"
 TBMSWAS  "Biomass and Waste"
 *GEO     "Geothermal and other renewable sources eg. Tidal, etc."
 TBGDO    "Biodiesel"
-*STE1CB  "Steam produced from CHP conventional bmswas"
-TSTE1AB  "Steam produced from CHP advanced bmswas"
-TSTE2BMS "Steam produced from district heating plants burning bmswas"
 TNGSCCS
 THCLCCS
-TSTE1AH2F
 **
 HTDAC
 H2DAC
@@ -751,9 +720,7 @@ THCLCCS.HCL
 TRFO.RFO
 TOLQ.OLQ
 TOGS.OGS
-(TSTE1AL, TSTE1AH, TSTE1AD, TSTE1AG, TSTE1AB, TSTE1AH2F,
-TSTE2LGN, TSTE2OSL, TSTE2GDO, TSTE2RFO, TSTE2OLQ,
-TSTE2NGS, TSTE2OGS, TSTE2BMS).STE
+TSTE.STE
 * Domestic Technologies (only add those not already in Transport & Industry)
 * LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC already exist in TRANSPORT or INDUSTRY technologies
 
@@ -797,8 +764,7 @@ TRFO.RFO
 TOLQ.OLQ
 TOGS.OGS
 TGSL.GSL
-(TSTE1AL, TSTE1AH, TSTE1AD, TSTE1AG, TSTE1AB, TSTE1AH2F, TSTE2LGN, 
-TSTE2OSL, TSTE2GDO, TSTE2RFO, TSTE2OLQ, TSTE2NGS, TSTE2OGS, TSTE2BMS).STE
+TSTE.STE
 * Domestic Technologies (only add those not already in Transport & Industry)
 * LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC already exist in TRANSPORT or INDUSTRY technologies
 TH2F.H2F
@@ -837,11 +803,10 @@ GU.(TLPG,TGSL,TGDO,TNGS,TELC,TCHEVGDO,TH2F) !! Removed GSL and PHEVGSL
 (PT,GT).(TGDO,TELC)
 PA.(TKRS)
 (PN,GN).(TGDO,TH2F)
-(IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(TLGN,THCL,TGDO,TGSL,TRFO,TLPG,TKRS,TOLQ,TNGS,TOGS,TELC,TBMSWAS,
-                                TSTE1AL,TSTE1AH,TSTE1AD,TSTE1AG,TSTE1AB,TH2F)
+(IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(TLGN,THCL,TGDO,TGSL,TRFO,TLPG,TKRS,TOLQ,TNGS,TOGS,
+                                TELC,TBMSWAS,TSTE,TH2F)
 (IS,BM,CH).(TNGSCCS,THCLCCS)
-(HOU,AG).(TLPG,TKRS,TGDO,TNGS,TOGS,TBMSWAS,TELC,TSTE2LGN,TSTE2OSL,TSTE2GDO,TSTE2NGS,
-                                 TSTE2BMS)
+(HOU,AG).(TLPG,TKRS,TGDO,TNGS,TOGS,TBMSWAS,TELC,TSTE)
 SE.(TLPG,TKRS,TNGS,TOGS,TELC)
 
 *BU.(GDO,RFO,OLQ)
@@ -942,22 +907,6 @@ ATHGASCCS.ATHGAS
 *PGACGS.IGCCHCL
 *PGAGGS.ACCGT
 ATHBMSCCS.ATHBMSWAS
-/
-
-TCHP(ITECH)       CHP Plants
-/
-TSTE1AL,TSTE1AH,TSTE1AD,TSTE1AG,TSTE1AB,TSTE1AH2F
-/
-
-TCHPTOEF(TCHP,EF)   Correspondence between chp plants and energy forms
-/
-* FIXME: SHOULD BE MANY-TO-MANY MAPPING (OGS,RFO etc.)
-(TSTE1AL).LGN
-(TSTE1AH).HCL
-(TSTE1AD).GDO
-(TSTE1AG).NGS
-(TSTE1AB).BMSWAS
-(TSTE1AH2F).H2F
 /
 
 PGREN(PGALL)    REN PLANTS with Saturation                /PGLHYD,PGSHYD,PGAWND,PGSOL,PGCSP,PGOTHREN,PGAWNO/
@@ -1141,13 +1090,6 @@ CHP_ELC          "CHP electricity"
 *STE1CR           "Utilisation rate of Fuel Oil powered conventional CHP"
 *STE1CG           "Utilisation rate of Natural Gas powered conventional CHP"
 *STE1CB           "Utilisation rate of Biomass-Waste powered conventional CHP"
-TSTE1AL           "Utilisation rate of Lignite powered advanced CHP"
-TSTE1AH           "Utilisation rate of Hard Coal powered advanced CHP"
-TSTE1AD           "Utilisation rate of Diesel Oil powered advanced CHP"
-*STE1AR           "Utilisation rate of Fuel Oil powered advanced CHP"
-TSTE1AG           "Utilisation rate of Natural Gas powered advanced CHP"
-TSTE1AB           "Utilisation rate of Biomass-Waste powered advanced CHP"
-TSTE1AH2F         "Utilisation rate of HYDROGEN powered FUEL CELL CHP"
 * The following fuels are related with district heating efficiency
 LGN
 HCL
@@ -1163,8 +1105,6 @@ PGLOADTYPE(PGOTH)   "Peak and Base load of total electricity demand in GW"
 /PEAKLOAD, BASELOAD/
 
 CHPSET(PGOTH)       "Indicators related to CHP Production"                       /NON_CHP_PER,CHP_CAP/
-
-PGEFS(PGOTH)        "Fuels used as Input to District Heating"                    /LGN,HCL,GDO,RFO,OLQ,NGS,OGS,BMSWAS/
 
 VARIOUS_LABELS /AMAXBASE, MAXLOADSH/
 
@@ -1259,7 +1199,7 @@ alias(ITECH,ITECH2)
 alias(TTECH2,TTECH)
 
 *---
-ALIAS (TCHP2,TCHP);
+
 
 scalar TF order of base year in set ytime;
 TF=sum((TFIRST,ytime), ord(ytime)$TFIRST(ytime));

@@ -91,17 +91,12 @@ Q03TransfInputDHPlants(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q03OutTransfCHP(allCy,TOCTEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V03OutTransfCHP(allCy,TOCTEF,YTIME)
         =E=
-    sum(INDSE$SECtoEF(INDSE,TOCTEF),
-      VmConsFuel(allCy,INDSE,TOCTEF,YTIME)
-    );
+    VmDemTotSte(allCy,YTIME);
 
 Q03TransfInputCHPlants(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmTransfInputCHPlants(allCy,EFS,YTIME)
         =E=
-    sum(INDSE$SECtoEF(INDSE,"STE"),
-      VmConsFuel(allCy,INDSE,"STE",YTIME) /
-      SUM(TCHP$ITECHtoEF(TCHP,"STE"), imUsfEneConvSubTech(allCy,INDSE,TCHP,YTIME))
-    );
+    VmConsFuelSteProd(allCy,EFS,YTIME);
 *' The equation calculates the refineries' capacity for a given scenario and year.
 *' The calculation is based on a residual factor, the previous year's capacity, and a production scaling
 *' factor that takes into account the historical consumption trends for different energy forms. The scaling factor is

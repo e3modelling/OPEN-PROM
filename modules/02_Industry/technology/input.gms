@@ -16,7 +16,6 @@ i02LifChpPla(allCy,DSBS,TCHP)                               "Technical Lifetime 
 $IF NOT %Calibration% == Calibration i02ElastNonSubElec(allCy,SBS,ETYPES,YTIME)                   "Elasticities of Non Substitutable Electricity (1)"
 i02InvCostChp(allCy,DSBS,TCHP,YTIME)                        "Capital Cost per CHP plant type (US$2015/KW)"
 i02FixOMCostPerChp(allCy,DSBS,TCHP,YTIME)                   "Fixed O&M cost per CHP plant type (US$2015/KW)"
-i02AvailRateChp(allCy,DSBS,TCHP)                            "Availability rate of CHP Plants ()"
 i02VarCostChp(allCy,DSBS,TCHP,YTIME)                        "Variable (other than fuel) cost per CHP Type (Gross US$2015/KW)"
 i02BoiEffChp(allCy,TCHP,YTIME)                              "Boiler efficiency (typical) used in adjusting CHP efficiency ()"
 i02util(allCy,DSBS,ITECH,YTIME)                            "Utilization rate of technology"
@@ -57,8 +56,6 @@ $ENDIF.calib
 i02InvCostChp(runCy,DSBS,TCHP,YTIME)      = imDataChpPowGen(TCHP,"IC",YTIME);
 *---
 i02FixOMCostPerChp(runCy,DSBS,TCHP,YTIME) = imDataChpPowGen(TCHP,"FC",YTIME);
-*---
-i02AvailRateChp(runCy,DSBS,TCHP)          = imDataChpPowGen(TCHP,"AVAIL","2010");
 *---
 i02VarCostChp(runCy,DSBS,TCHP,YTIME)      = imDataChpPowGen(TCHP,"VOM",YTIME);
 *---
