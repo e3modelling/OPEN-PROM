@@ -895,9 +895,9 @@ imCarVal(runCy,"TRADE",YTIME) = iCarbValYrExog(runCy,YTIME);
 imCarVal(runCy,"NOTRADE",YTIME) = iCarbValYrExog(runCy,YTIME);
 *---
 parameter imRenValue(YTIME)      "Renewable value (US$2015/KWh)";
-imRenValue.FX(YTIME)$(ord(YTIME)<20) = 0 ;
-imRenValue.FX(YTIME)$(ord(YTIME)>=20 and ord(YTIME)<50) = (ord(YTIME)-20) * 100;
-imRenValue.FX(YTIME)$(ord(YTIME)>=40) = 2000;
+imRenValue(YTIME)$(ord(YTIME)<20) = 0 ;
+imRenValue(YTIME)$(ord(YTIME)>=20 and ord(YTIME)<50) = (ord(YTIME)-20) * 100;
+imRenValue(YTIME)$(ord(YTIME)>=40) = 2000;
 *---
 parameter imElecConsHeatPla(allCy,DSBS,YTIME)    "Electricity consumed in heatpump plants (Mtoe)";
 imElecConsHeatPla(runCy,INDDOM,YTIME)$(not An(YTIME)) = imFuelConsPerFueSub(runCy,INDDOM,"ELC",YTIME)*(1-imShrNonSubElecInTotElecDem(runCy,INDDOM))*iShrHeatPumpElecCons(runCy,INDDOM);
