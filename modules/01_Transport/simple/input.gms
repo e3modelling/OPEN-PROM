@@ -227,3 +227,7 @@ i01ShareTTechFuel(runCy,TRANSE,TTECH,EF)$(SECTTECH(TRANSE,TTECH) and not ((samea
   imFuelConsPerFueSub(runCy,TRANSE,EF,"%fBaseY%") /
   (SUM(EF2$TTECHtoEF(TTECH,EF2),imFuelConsPerFueSub(runCy,TRANSE,EF2,"%fBaseY%")))
  )$(SUM(EF2$TTECHtoEF(TTECH,EF2),imFuelConsPerFueSub(runCy,TRANSE,EF2,"%fBaseY%"))$(TTECHtoEF(TTECH,EF)));
+*---
+i01ConsSpecificFuel(runCy,TRANSE,TTECH,EF,YTIME)$(not sameas(TRANSE,"PC") and SECTTECH(TRANSE,TTECH) and TTECHtoEF(TTECH,EF)) = i01InitSpecFuelConsData(TRANSE,TTECH,EF);
+i01ConsSpecificFuel(runCy,TRANSE,TTECH,EF,YTIME)$(sameas(TRANSE,"PC") and SECTTECH(TRANSE,TTECH) and TTECHtoEF(TTECH,EF)) = i01SFCPC(runCy,TTECH,EF,YTIME);
+*---
