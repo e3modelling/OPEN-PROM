@@ -818,8 +818,8 @@ imVarCostTech(runCy,NENSE,TECH,YTIME) = imDataNonEneSec(NENSE,TECH,"VC");
 imUsfEneConvSubTech(runCy,NENSE,TECH,YTIME) = imDataNonEneSec(NENSE,TECH,"USC");
 *---
 !!imUsfEneConvSubTech(runCy,INDSE,"THCL",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCL","USC") + 0.005 * (ord(YTIME)-11);
-imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCLCCS","USC") + 0.01 * (ord(YTIME)-11);
-imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$(ord(YTIME)>50)  = 0.9;
+imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCLCCS","USC") + 0.005 * (ord(YTIME)-11);
+imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$(ord(YTIME)>50)  = 0.7;
 
 **  Power Generation
 *---
