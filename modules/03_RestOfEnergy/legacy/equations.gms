@@ -112,7 +112,7 @@ Q03OutTransfRefSpec(allCy,EFS,YTIME)$(TIME(YTIME) $EFtoEFA(EFS,"LQD") $runCy(all
              1$(TFIRST(YTIME-1) or TFIRST(YTIME-2))
              +
              (
-                sum(EF$EFtoEFA(EF,"LQD"),VmConsFinEneCountry(allCy,EF,YTIME-1))/sum(EF$EFtoEFA(EF,"LQD"),VmConsFinEneCountry(allCy,EF,YTIME-2))
+                sum(EFS2$EFtoEFA(EFS2,"LQD"),VmConsFinEneCountry(allCy,EFS2,YTIME-1))/sum(EFS2$EFtoEFA(EFS2,"LQD"),VmConsFinEneCountry(allCy,EFS2,YTIME-2))
              )$(not (TFIRST(YTIME-1) or TFIRST(YTIME-2)))
            )**(0.7)  ]$i03RefCapacity(allCy,"%fStartHorizon%")+0; 
 

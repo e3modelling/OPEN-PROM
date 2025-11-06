@@ -193,7 +193,7 @@ Q02ConsFuel(allCy,DSBS,EF,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not sameas(D
       V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) *
       i02util(allCy,DSBS,ITECH,YTIME)
     ) +
-    V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(INDDOM(DSBS) and ELCEF(EF)) +
+    sum(INDDOM$INDDOM(DSBS), V02FinalElecNonSubIndTert(allCy,INDDOM,YTIME))$ELCEF(EF) +
     imElecConsHeatPla(allCy,DSBS,YTIME)$ELCEF(EF);
 
 *' Average efficiency of substitutable demand
@@ -202,8 +202,11 @@ Q02IndAvrEffFinalUseful(allCy,DSBS,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not
        =E=
     V02DemSubUsefulSubsec(allCy,DSBS,YTIME)   
     /
-    (sum(EF$SECtoEF(DSBS,EF),VmConsFuel(allCy,DSBS,EF,YTIME)) - (V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(INDDOM(DSBS)) +
-    imElecConsHeatPla(allCy,DSBS,YTIME)))
+    (sum(EF$SECtoEF(DSBS,EF),VmConsFuel(allCy,DSBS,EF,YTIME)) - 
+    (
+      sum(INDDOM$INDDOM(DSBS), V02FinalElecNonSubIndTert(allCy,INDDOM,YTIME)) +
+      imElecConsHeatPla(allCy,DSBS,YTIME)
+    ))
     ;
 
 *' This equation calculates the estimated electricity index of the industry price for a given year. The estimated index is derived by considering the historical
