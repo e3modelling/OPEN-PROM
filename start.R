@@ -69,7 +69,7 @@ saveMetadata <- function(DevMode) {
 
 createRunFolder <- function(scenario = "default") {
   # generate name of run folder
-  folderName <- paste("new_map_4")
+  folderName <- paste(scenario, format(Sys.time(), "%Y-%m-%d_%H-%M-%S"), sep = "_")
 
   # create run folder under /runs
   if (!file.exists("runs")) dir.create("runs")
