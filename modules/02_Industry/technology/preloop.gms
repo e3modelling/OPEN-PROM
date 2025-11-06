@@ -17,6 +17,7 @@ V02DemUsefulSubsecRemTech(allCy,DSBS,YTIME)
 V02GapUsefulDemSubsec(allCy,DSBS,YTIME)
 $offtext
 *---
+V02CostTech.LO(runCy,DSBS,ITECH,YTIME) = 0;
 V02CostTech.L(runCy,DSBS,ITECH,YTIME) = 0.1;
 *---
 * Levels in other variables?
@@ -68,13 +69,7 @@ V02VarCostTech.FX(runCy,DSBS,ITECH,YTIME)$(not An(YTIME) and not TRANSE(DSBS) an
       VmRenValue.L(YTIME)$(not RENEF(ITECH) and not NENSE(DSBS)) !! needs change of units
     ) +
     imVarCostTech(runCy,DSBS,ITECH,YTIME) / sUnitToKUnit
-  ) / imUsfEneConvSubTech(runCy,DSBS,ITECH,YTIME) -
-  (
-    VmPriceFuelSubsecCarVal.L(runCy,"OI","ELC",YTIME) *
-    smFracElecPriChp *
-    VmPriceElecInd.L(runCy,YTIME) / 
-    imUsfEneConvSubTech(runCy,DSBS,ITECH,YTIME)
-  )$TSTEAM(ITECH);
+  ) / imUsfEneConvSubTech(runCy,DSBS,ITECH,YTIME);
 
 V02CapCostTech.FX(runCy,DSBS,ITECH,YTIME)$(not An(YTIME) and not TRANSE(DSBS) and not sameas(DSBS,"DAC") and SECTTECH(DSBS,ITECH)) = ((
       (
@@ -86,5 +81,5 @@ V02CapCostTech.FX(runCy,DSBS,ITECH,YTIME)$(not An(YTIME) and not TRANSE(DSBS) an
     imCapCostTech(runCy,DSBS,ITECH,YTIME) * imCGI(runCy,YTIME) +
     imFixOMCostTech(runCy,DSBS,ITECH,YTIME) / sUnitToKUnit)
     / imUsfEneConvSubTech(runCy,DSBS,ITECH,YTIME);
- 
-V02CostTech.FX(runCy,DSBS,ITECH,YTIME)$(not An(YTIME)) = V02VarCostTech.L(runCy,DSBS,ITECH,YTIME) + V02CapCostTech.L(runCy,DSBS,ITECH,YTIME);
+*---
+V02CostTech.FX(runCy,DSBS,ITECH,YTIME)$DATAY(YTIME) = V02VarCostTech.L(runCy,DSBS,ITECH,YTIME) + V02CapCostTech.L(runCy,DSBS,ITECH,YTIME);

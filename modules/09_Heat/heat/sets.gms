@@ -69,3 +69,5 @@ PGEFS(EFS)     "Fuels used as Input to District Heating"      /LGN,HCL,GDO,RFO,O
 ;
 *---
 ALIAS (TSTEAM2,TSTEAM);
+ALIAS (TCHP2,TCHP);
+ALIAS (TDHP2,TDHP);

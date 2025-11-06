@@ -35,7 +35,6 @@ imCO2CaptRate(PGALL)	                                    "Plant CO2 capture rate
 imEffValueInDollars(allCy,SBS,YTIME)	                   "Efficiency value (US$2015/toe)" 	
 imShrNonSubElecInTotElecDem(allCy,SBS)	                   "Share of non substitutable electricity in total electricity demand per subsector (1)"		
 imDistrLosses(allCy,EF,YTIME)	                           "Distribution Losses (Mtoe)"		
-imFinEneCons(allCy,EF,YTIME)	                           "Final energy consumption (Mtoe)"		
 imFuelImports(allCy,EF,YTIME)	                           "Fuel Imports (Mtoe)"							
 imVarCostTech(allCy,SBS,TECH,YTIME)	                       "Variable Cost of technology ()"
                                                                 !! For transport (kUS$2015/vehicle)
@@ -81,7 +80,7 @@ smElecToSteRatioChp                                        "Technical maximum of
 sIter                                                      "time step iterator" /0/
 sSolverTryMax                                              "maximum attempts to solve each time step" /%SolverTryMax%/
 sModelStat                                                 "helper parameter for solver status"
-smFracElecPriChp                                           "Fraction of Electricity Price at which a CHP sells electricity to network" /0/
+smFracElecPriChp                                           "Fraction of Electricity Price at which a CHP sells electricity to network" /0.2/
 sCY                                                        "country iterator" /0/
 sUnitToKUnit                                               "units to Kilo units conversion" /1000/
 ;

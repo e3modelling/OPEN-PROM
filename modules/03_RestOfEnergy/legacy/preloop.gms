@@ -34,7 +34,10 @@ VmConsFiEneSec.FX(runCy,EFS,YTIME)$(not An(YTIME)) = i03TotEneBranchCons(runCy,E
 VmInpTransfTherm.FX(runCy,EFS,YTIME)$(not PGEF(EFS)) = 0;
 VmInpTransfTherm.FX(runCy,EFS,YTIME)$(not An(YTIME)) = i03InpTransfTherm(runCy,EFS,YTIME);
 *---
-VmConsFinEneCountry.FX(runCy,EFS,YTIME)$(not An(YTIME)) = imFinEneCons(runCy,EFS,YTIME);
+VmConsFinEneCountry.FX(runCy,EFS,YTIME)$DATAY(YTIME) = 
+sum(DSBS$(not NENSE(DSBS)), 
+  imFuelConsPerFueSub(runCy,DSBS,EFS,YTIME)
+);
 *---
 VmLossesDistr.FX(runCy,EFS,YTIME)$(not An(YTIME)) = imDistrLosses(runCy,EFS,YTIME);
 *---

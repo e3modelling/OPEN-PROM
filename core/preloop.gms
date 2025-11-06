@@ -64,13 +64,13 @@ VmPriceFuelSubsecCarVal.FX(runCy,SBS,"MET",YTIME)$(not An(YTIME)) = 1; !! fixed 
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,"ETH",YTIME)$(not An(YTIME)) = 1; !! fixed price for ethanol
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,"BGDO",YTIME)$(not An(YTIME)) = 0.5; !! fixed price for biodiesel
 VmPriceFuelSubsecCarVal.FX(runCy,INDDOM,"HEATPUMP",YTIME)$(SECtoEF(INDDOM,"HEATPUMP")$(not An(YTIME))) = imFuelPrice(runCy,INDDOM,"ELC",YTIME);
-VmPriceFuelSubsecCarVal.FX(runCy,"H2P",EF,YTIME)$(SECtoEF("H2P",EF)$(not An(YTIME))) = imFuelPrice(runCy,"OI",EF,YTIME);
-VmPriceFuelSubsecCarVal.FX(runCy,"STEAMP",EF,YTIME)$(SECtoEF("STEAMP",EF)$(not An(YTIME))) = imFuelPrice(runCy,"OI",EF,YTIME);
+VmPriceFuelSubsecCarVal.FX(runCy,"H2P",EF,YTIME)$(SECtoEF("H2P",EF)$DATAY(YTIME)) = imFuelPrice(runCy,"OI",EF,YTIME);
+VmPriceFuelSubsecCarVal.FX(runCy,"STEAMP",EF,YTIME)$(SECtoEF("STEAMP",EF)$DATAY(YTIME)) = imFuelPrice(runCy,"OI",EF,YTIME);
 *---
 VmPriceElecInd.FX(runCy,YTIME)$DATAY(YTIME) = 
 [
-  SUM(EF,i04DataElecProdCHP(runCy,EF,YTIME)) / 1000 * smTWhToMtoe /
-  i03OutCHPTransfProcess(runCy,"STE",YTIME)
+  SUM(allCy,i03OutCHPTransfProcess(allCy,"ELC",YTIME)) /
+  SUM(allCy, i03OutCHPTransfProcess(allCy,"STE",YTIME))
 ]$i03OutCHPTransfProcess(runCy,"STE",YTIME);
 *---
 openprom.optfile=1;

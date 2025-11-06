@@ -24,9 +24,12 @@ $ENDIF
     VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)
         =E=
     (VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1) +
-      sum(NAP$NAPtoALLSBS(NAP,SBS),(VmCarVal(allCy,NAP,YTIME)*imCo2EmiFac(allCy,SBS,EF,YTIME) - VmCarVal(allCy,NAP,YTIME-1)*imCo2EmiFac(allCy,SBS,EF,YTIME-1)))
+      sum(NAP$NAPtoALLSBS(NAP,SBS),
+      VmCarVal(allCy,NAP,YTIME)*imCo2EmiFac(allCy,SBS,EF,YTIME) - 
+      VmCarVal(allCy,NAP,YTIME-1)*imCo2EmiFac(allCy,SBS,EF,YTIME-1)
+      )
       /1000
-    )$(DSBS(SBS))$(not (ELCEF(EF) or HEATPUMP(EF) or ALTEF(EF) or H2EF(EF) or sameas("STE1AH2F",EF) or H2EF(EF) or sameas("H2F",EF))) +
+    )$(DSBS(SBS))$(not (ELCEF(EF) or HEATPUMP(EF) or ALTEF(EF) or H2EF(EF) or sameas("STE",EF))) +
     (
       VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1) -
       (sum(NAP$NAPtoALLSBS(NAP,SBS),(VmCarVal(allCy,NAP,YTIME-1)*imCo2EmiFac(allCy,SBS,EF,YTIME-1)))/1000)$TFIRST(YTIME-1)
@@ -45,9 +48,8 @@ $ENDIF
       VmPriceFuelSubsecCarVal(allCy,"OI",EF,YTIME)$(not sameas("BMSWAS",EF)) +
       VmPriceFuelSubsecCarVal(allCy,"AG",EF,YTIME)$(sameas("BMSWAS",EF))
     )$(sameas ("H2P",SBS) or sameas("STEAMP",SBS)) +
-    !!FIXME: REMOVE SAME AS H2FOR H2EF
-    (VmCostAvgProdH2(allCy,YTIME)$DSBS(SBS)/1000)$(H2EF(EF) or sameas("H2F",EF));
-
+    (VmCostAvgProdH2(allCy,YTIME)$DSBS(SBS)/1000)$H2EF(EF) +
+    (VmCostAvgProdSte(allCy,YTIME)$DSBS(SBS))$sameas("STE",EF);
 
 $ontext
 *' The equation calculates the fuel prices per subsector and fuel multiplied by weights

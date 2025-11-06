@@ -69,11 +69,14 @@ $ifthen.calib %Calibration% == MatCalibration
 V04DemElecTot.FX(runCy,YTIME) = t04DemElecTot(runCy,YTIME);
 $else.calib
 V04DemElecTot.L(runCy,YTIME) = 10;
-V04DemElecTot.FX(runCy,YTIME)$(not An(YTIME)) = 
+V04DemElecTot.FX(runCy,YTIME)$DATAY(YTIME) = 
 1/smTWhToMtoe * 
-(imFinEneCons(runCy,"ELC",YTIME) + sum(NENSE, imFuelConsPerFueSub(runCy,NENSE,"ELC",YTIME)) + 
-imDistrLosses(runCy,"ELC",YTIME) + i03TotEneBranchCons(runCy,"ELC",YTIME) -
-(imFuelImports(runCy,"ELC",YTIME)- imFuelExprts(runCy,"ELC",YTIME)));
+(
+  sum(DSBS, imFuelConsPerFueSub(runCy,DSBS,"ELC",YTIME)) +
+  imDistrLosses(runCy,"ELC",YTIME) +
+  i03TotEneBranchCons(runCy,"ELC",YTIME) -
+  (imFuelImports(runCy,"ELC",YTIME)- imFuelExprts(runCy,"ELC",YTIME))
+);
 $endif.calib
 *---
 VmPeakLoad.L(runCy,YTIME) = 1;

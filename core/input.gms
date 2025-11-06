@@ -330,17 +330,6 @@ imDataIndTechnology(INDSE,"TBGDO",ECONCHAR) = imDataIndTechnology(INDSE,"TGDO",E
 imDataIndTechnology(INDSE,"TBMSWAS",ECONCHAR) = imDataIndTechnology("IS","TBMSWAS",ECONCHAR);
 imDataIndTechnology(INDSE,"TSTE",ECONCHAR) = imDataIndTechnology(INDSE,"THCL",ECONCHAR);
 *---
-table imDataChpPowGen(TCHP,CHPPGSET,YTIME)   "Data for power generation costs (various)"
-$ondelim
-$include"./iChpPowGen.csv"
-$offdelim
-;
-*---
-* Converting EUR2015 to US2015
-imDataChpPowGen(TCHP,"IC",YTIME)  = imDataChpPowGen(TCHP,"IC",YTIME) * 1.1;
-imDataChpPowGen(TCHP,"FC",YTIME)  = imDataChpPowGen(TCHP,"FC",YTIME) * 1.1;
-imDataChpPowGen(TCHP,"VOM",YTIME) = imDataChpPowGen(TCHP,"VOM",YTIME) * 1.1;
-*---
 table imDataDomTech(DOMSE,TECH,ECONCHAR)                "Technical lifetime of Industry (years)"
              IC       FC      VC      LFT USC
 SE.THCL       0.323544 10.88           20  0.7
@@ -569,11 +558,6 @@ $offdelim
 *---
 imFuelConsPerFueSub(runCy,SBS,EF,YTIME) = imFuelCons(runCy,SBS,EF,YTIME);
 imFuelConsPerFueSub(runCy,"BU",EF,YTIME) = -imFuelConsPerFueSub(runCy,"BU",EF,YTIME);
-* NEED TO CHECK IF CORRECT
-imFinEneCons(runCy,EFS,YTIME) =
-     sum((INDDOM,EF)$(EFtoEFS(EF,EFS) and sum(TECH$(SECTTECH(INDDOM,TECH) and TECHtoEF(TECH,EF)),1)),imFuelConsPerFueSub(runCy,INDDOM,EF,YTIME))
-     +
-     sum((TRANSE,EF)$(EFtoEFS(EF,EFS) and sum(TECH$(SECTTECH(TRANSE,TECH) and TECHtoEF(TECH,EF)$(not plugin(TECH))),1)), imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME));
 *---
 imCO2CaptRate(PGALL)$CCS(PGALL) = 0.90; 
 imEffValueInDollars(runCy,SBS,YTIME) = 0;

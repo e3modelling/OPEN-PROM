@@ -186,6 +186,6 @@ sum(NENSE$(not sameas("BU",NENSE)),
 imRateLossesFinCons(runCy,EFS,YTIME) = 
 [
   imDistrLosses(runCy,EFS,YTIME) /
-  (imFinEneCons(runCy,EFS,YTIME) + VmConsFinNonEne.L(runCy,EFS,YTIME))
-]$(imFinEneCons(runCy,EFS,YTIME) + VmConsFinNonEne.L(runCy,EFS,YTIME));
+  sum(DSBS, imFuelConsPerFueSub(runCy,DSBS,EFS,YTIME))
+]$sum(DSBS, imFuelConsPerFueSub(runCy,DSBS,EFS,YTIME));
 imRateLossesFinCons(runCy,EFS,YTIME)$AN(YTIME) = imRateLossesFinCons(runCy,EFS,"%fBaseY%");

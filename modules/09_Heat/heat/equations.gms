@@ -17,12 +17,14 @@ Q09DemTotSte(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         =E=
     sum(DSBS$(INDDOM(DSBS) or NENSE(DSBS)), 
       VmConsFuel(allCy,DSBS,"STE",YTIME)
-    ); !! FIXME: Add transportation losses and own consumption
+    ) +
+    VmConsFiEneSec(allCy,"STE",YTIME) +
+    VmLossesDistr(allCy,"STE",YTIME);
 
 Q09ScrapRate(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V09ScrapRate(allCy,TSTEAM,YTIME)
         =E=
-    1 - (1 - 1 / i09ProdLftSte(TSTEAM,YTIME)) *
+    1 - (1 - 1 / i09ProdLftSte(TSTEAM)) *
     V09ScrapRatePremature(allCy,TSTEAM,YTIME);
 
 Q09ProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
@@ -61,26 +63,26 @@ Q09CostVarProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         (1-V09CaptRateSte(allCy,TSTEAM,YTIME)) * 1e-3 * (imCo2EmiFac(allCy,"STEAMP",EF,YTIME)) *
         sum(NAP$NAPtoALLSBS(NAP,"STEAMP"),VmCarVal(allCy,NAP,YTIME))
       ) 
-    ) / 0.8 -!! FIXME: / imUsfEneConvSubTech(allCy,"OI",TSTEAM,YTIME) -
-    VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME) *
-    smFracElecPriChp *
-    VmPriceElecInd(allCy,YTIME) / 0.8 !! imUsfEneConvSubTech(allCy,"OI",TSTEAM,YTIME)
-  ;
+    ) / i09EffSteProd(TSTEAM,YTIME) +
+    i09CostVOMSteProd(TSTEAM,YTIME) -
+    (
+      VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME) *
+      smFracElecPriChp *
+      VmPriceElecInd(allCy,YTIME)
+    )$TCHP(TSTEAM);
 
 Q09CostCapProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V09CostCapProdSte(allCy,TSTEAM,YTIME)
         =E=
     (
       imDisc(allCy,"STEAMP",YTIME) * 
-      exp(imDisc(allCy,"STEAMP",YTIME)* i09ProdLftSte(TSTEAM,YTIME)) /
-      (exp(imDisc(allCy,"STEAMP",YTIME) * i09ProdLftSte(TSTEAM,YTIME))-1) * 
+      exp(imDisc(allCy,"STEAMP",YTIME)* i09ProdLftSte(TSTEAM)) /
+      (exp(imDisc(allCy,"STEAMP",YTIME) * i09ProdLftSte(TSTEAM))-1) * 
       (
         imDataIndTechnologyCHP("OI",TSTEAM,"IC") * imCGI(allCy,YTIME) +
-        imDataIndTechnologyCHP("OI",TSTEAM,"FC") / sUnitToKUnit +
-        i09CostVOMSteProd(allCy,TSTEAM,YTIME)
+        imDataIndTechnologyCHP("OI",TSTEAM,"FC") / sUnitToKUnit
       )
-    ) / 0.8 !! imUsfEneConvSubTech(allCy,"OI",TSTEAM,YTIME)
-    ;
+    ) / i09EffSteProd(TSTEAM,YTIME);
 
 Q09CostProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V09CostProdSte(allCy,TSTEAM,YTIME)
@@ -123,25 +125,27 @@ Q09CaptRateSte(allCy,TSTEAM,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
 Q09ScrapRatePremature(allCy,TSTEAM,YTIME)$(TIME(YTIME)$runCy(allCy))..
     V09ScrapRatePremature(allCy,TSTEAM,YTIME)
         =E=
-    1
-$ontext
     V09CostVarProdSte(allCy,TSTEAM,YTIME) ** (-2) /
     (
       V09CostVarProdSte(allCy,TSTEAM,YTIME) ** (-2) +
-      (
+      (( 
         i09ScaleEndogScrap *
-        sum(TSTEAM2$(not sameas(TSTEAM,TSTEAM2)),
-          V09CostProdSte(allCy,TSTEAM2,YTIME)
+        sum(TCHP2$(not sameas(TSTEAM,TCHP2)),
+          V09CostProdSte(allCy,TCHP2,YTIME)
         )
-      ) ** (-2)
-    )
-$offtext
-;
+      ) ** (-2))$TCHP(TSTEAM) +
+      (( 
+        i09ScaleEndogScrap *
+        sum(TDHP2$(not sameas(TSTEAM,TDHP2)),
+          V09CostProdSte(allCy,TDHP2,YTIME)
+        )
+      ) ** (-2))$TDHP(TSTEAM)
+    );
 
 Q09ConsFuelSteProd(allCy,EF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmConsFuelSteProd(allCy,EF,YTIME)
       =E=
     SUM(TSTEAM$TSTEAMTOEF(TSTEAM,EF),
-      VmProdSte(allCy,TSTEAM,YTIME) / i09EffSteProd(TSTEAM)
+      VmProdSte(allCy,TSTEAM,YTIME) / i09EffSteProd(TSTEAM,YTIME)
     )
 ;
