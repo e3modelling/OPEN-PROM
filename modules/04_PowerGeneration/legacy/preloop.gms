@@ -32,7 +32,7 @@ V04CostVarTechElecTot.L(runCy,YTIME) = 0.1;
 *---
 alias(datay, dataylag)
 loop (runCy,PGALL,datay,dataylag)$(ord(datay) = ord(dataylag) + 1 and PGREN(PGALL)) DO
-  V04NetNewCapElec.FX(runCy,PGALL,datay) = imInstCapPast(runCy,PGALL,datay) - imInstCapPast(runCy,PGALL,dataylag) + 1E-10;
+  V04NetNewCapElec.FX(runCy,PGALL,datay) = imInstCapPastNonCHP(runCy,PGALL,datay) - imInstCapPastNonCHP(runCy,PGALL,dataylag);
 ENDLOOP;
 V04NetNewCapElec.FX(runCy,"PGLHYD",YTIME)$TFIRST(YTIME) = +1E-10;
 *---
@@ -64,10 +64,10 @@ V04CapElecCHP.FX(runCy,CHP,YTIME)$(not An(YTIME)) = imInstCapPastCHP(runCy,CHP,Y
 *---
 V04SharePowPlaNewEq.FX(runCy,PGALL,YTIME)$((NOT AN(YTIME)) ) = 0;
 *---
-VmCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  imInstCapPast(runCy,PGALL,YTIME);
-V04CapElec2.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = imInstCapPast(runCy,PGALL,YTIME);
-V04CapOverall.FX(runCy,PGALL,"%fBaseY%") =  imInstCapPast(runCy,PGALL,"%fBaseY%");
-V04CapElecNominal.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = imInstCapPast(runCy,PGALL,YTIME)/i04AvailRate(PGALL,YTIME);
+VmCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  imInstCapPastNonCHP(runCy,PGALL,YTIME);
+V04CapElec2.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = imInstCapPastNonCHP(runCy,PGALL,YTIME);
+V04CapOverall.FX(runCy,PGALL,"%fBaseY%") =  imInstCapPastNonCHP(runCy,PGALL,"%fBaseY%");
+V04CapElecNominal.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = imInstCapPastNonCHP(runCy,PGALL,YTIME)/i04AvailRate(PGALL,YTIME);
 *---
 V04IndxEndogScrap.FX(runCy,PGALL,YTIME)$(not an(YTIME) ) = 1;
 V04IndxEndogScrap.FX(runCy,PGSCRN,YTIME) = 1;            !! premature replacement it is not allowed for all new plants

@@ -42,10 +42,13 @@ Q04CapElecCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04DemElecTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04DemElecTot(allCy,YTIME)
         =E=
-$ifthen.calib %Calibration% == off
-    1/smTWhToMtoe *
-    ( VmConsFinEneCountry(allCy,"ELC",YTIME) + VmConsFinNonEne(allCy,"ELC",YTIME) + VmLossesDistr(allCy,"ELC",YTIME)
-      + VmConsFiEneSec(allCy,"ELC",YTIME) - VmImpNetEneBrnch(allCy,"ELC",YTIME)
+    1 / smTWhToMtoe *
+    ( 
+      VmConsFinEneCountry(allCy,"ELC",YTIME) + 
+      VmConsFinNonEne(allCy,"ELC",YTIME) + 
+      VmLossesDistr(allCy,"ELC",YTIME) +
+      VmConsFiEneSec(allCy,"ELC",YTIME) - 
+      VmImpNetEneBrnch(allCy,"ELC",YTIME)
     );
 $ELSEIF.calib %Calibration% == MatCalibration
     t04DemElecTot(allCy,YTIME);
@@ -104,7 +107,7 @@ Q04CostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
     V04CostVarTech(allCy,PGALL,YTIME) 
         =E=
     i04VarCost(PGALL,YTIME) / 1e3 + 
-    (imRenValue(YTIME) * 8.6e-5)$(not (PGREN(PGALL)$(not sameas("PGASHYD",PGALL)) $(not sameas("PGSHYD",PGALL)) $(not sameas("PGLHYD",PGALL)) )) +
+    (VmRenValue(YTIME) * 8.6e-5)$(not (PGREN2(PGALL)$(not sameas("PGASHYD",PGALL)) $(not sameas("PGSHYD",PGALL)) $(not sameas("PGLHYD",PGALL)) )) +
     sum(PGEF$PGALLtoEF(PGALL,PGEF), 
       (VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME) +
       V04CO2CaptRate(allCy,PGALL,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME) + 4.17$(sameas("BMSWAS", PGEF))) +
@@ -134,12 +137,13 @@ Q04IndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(al
     (
       V04CostVarTech(allCy,PGALL,YTIME)**(-2) +
       (
-        i04ScaleEndogScrap(PGALL) *
-        sum(PGALL2,
-          i04AvailRate(allCy,PGALL,YTIME) / i04AvailRate(allCy,PGALL2,YTIME) * 
-          V04CostHourProdInvDec(allCy,PGALL,YTIME) +
-          (1-i04AvailRate(allCy,PGALL,YTIME) / i04AvailRate(allCy,PGALL2,YTIME)) *
-          V04CostVarTech(allCy,PGALL,YTIME)
+        i04ScaleEndogScrap *
+        sum(PGALL2$(not sameas(PGALL,PGALL2)),
+          !!i04AvailRate(allCy,PGALL2,YTIME) / i04AvailRate(allCy,PGALL,YTIME) * 
+          V04CostHourProdInvDec(allCy,PGALL2,YTIME) 
+          !!+
+          !!(1-i04AvailRate(allCy,PGALL2,YTIME) / i04AvailRate(allCy,PGALL,YTIME)) *
+          !!V04CostVarTech(allCy,PGALL2,YTIME)
         )
       )**(-2)
     );
@@ -368,6 +372,6 @@ Q04CCSRetroFit(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(NOCCS(PGALL)))..
 Q04ScrpRate(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04ScrpRate(allCy,PGALL,YTIME)
         =E=
-    1 / i04TechLftPlaType(allCy,PGALL) +
-    1 - V04IndxEndogScrap(allCy,PGALL,YTIME) +
-    (1 - V04CCSRetroFit(allCy,PGALL,YTIME))$NOCCS(PGALL);
+    1- (1-1 / i04TechLftPlaType(allCy,PGALL))* 
+    V04IndxEndogScrap(allCy,PGALL,YTIME) *
+    V04CCSRetroFit(allCy,PGALL,YTIME);

@@ -20,13 +20,13 @@ Q02DemSubUsefulSubsec(allCy,DSBS,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not s
     V02DemSubUsefulSubsec(allCy,DSBS,YTIME) 
         =E=
     [
-    V02DemSubUsefulSubsec(allCy,DSBS,YTIME-1) *
-    imActv(YTIME,allCy,DSBS) ** imElastA(allCy,DSBS,"a",YTIME) *
-    (VmPriceFuelAvgSub(allCy,DSBS,YTIME)/VmPriceFuelAvgSub(allCy,DSBS,YTIME-1) ) ** imElastA(allCy,DSBS,"b1",YTIME) *
-    (VmPriceFuelAvgSub(allCy,DSBS,YTIME-1)/VmPriceFuelAvgSub(allCy,DSBS,YTIME-2) ) ** imElastA(allCy,DSBS,"b2",YTIME) *
-    prod(KPDL,
-      ((VmPriceFuelAvgSub(allCy,DSBS,YTIME-ord(KPDL))/VmPriceFuelAvgSub(allCy,DSBS,YTIME-(ord(KPDL)+1)))/(imCGI(allCy,YTIME)**(1/6)))**( imElastA(allCy,DSBS,"c",YTIME)*imFPDL(DSBS,KPDL))
-    )
+      V02DemSubUsefulSubsec(allCy,DSBS,YTIME-1) *
+      imActv(YTIME,allCy,DSBS) ** imElastA(allCy,DSBS,"a",YTIME) *
+      (VmPriceFuelAvgSub(allCy,DSBS,YTIME)/VmPriceFuelAvgSub(allCy,DSBS,YTIME-1) ) ** imElastA(allCy,DSBS,"b1",YTIME) *
+      (VmPriceFuelAvgSub(allCy,DSBS,YTIME-1)/VmPriceFuelAvgSub(allCy,DSBS,YTIME-2) ) ** imElastA(allCy,DSBS,"b2",YTIME) *
+      prod(KPDL,
+        ((VmPriceFuelAvgSub(allCy,DSBS,YTIME-ord(KPDL))/VmPriceFuelAvgSub(allCy,DSBS,YTIME-(ord(KPDL)+1)))/(imCGI(allCy,YTIME)**(1/6)))**( imElastA(allCy,DSBS,"c",YTIME)*imFPDL(DSBS,KPDL))
+      )
     ]$imActv(YTIME-1,allCy,DSBS)
 ;
 *'NEW EQUATION'
@@ -34,7 +34,13 @@ Q02DemSubUsefulSubsec(allCy,DSBS,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not s
 Q02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and not TRANSE(DSBS) and not sameas(DSBS,"DAC"))$runCy(allCy))..
     V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) 
         =E=
-    V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME-1) * (1- 1/VmLft(allCy,DSBS,ITECH,YTIME) - V02PremScrpIndu(allCy,DSBS,ITECH,YTIME));
+    V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME-1) * 
+    V02RatioRem(allCy,DSBS,ITECH,YTIME);
+
+Q02RatioRem(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and not TRANSE(DSBS) and not sameas(DSBS,"DAC"))$runCy(allCy))..
+V02RatioRem(allCy,DSBS,ITECH,YTIME) 
+        =E=
+    ( (1 - 1/VmLft(allCy,DSBS,ITECH,YTIME))* (1 - V02PremScrpIndu(allCy,DSBS,ITECH,YTIME)));
 
 
 Q02PremScrpIndu(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and not TRANSE(DSBS) and not sameas(DSBS,"DAC"))$runCy(allCy))..
@@ -43,15 +49,13 @@ Q02PremScrpIndu(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and n
     1 - (V02VarCostTech(allCy,DSBS,ITECH,YTIME-1) * i02util(allCy,DSBS,ITECH,YTIME-1)) ** (-2) /
     (
       (V02VarCostTech(allCy,DSBS,ITECH,YTIME-1) * i02util(allCy,DSBS,ITECH,YTIME-1)) ** (-2) +
-      40 *
-      (sum(ITECH2$(not sameas(ITECH2,ITECH) and SECTTECH(DSBS,ITECH2)),
-        V02CostTech(allCy,DSBS,ITECH2,YTIME-1) - (1 - i02util(allCy,DSBS,ITECH2,YTIME-1)) * V02VarCostTech(allCy,DSBS,ITECH2,YTIME-1))
+      (
+        i02ScaleEndogScrap(DSBS) *
+        sum(ITECH2$(not sameas(ITECH2,ITECH) and SECTTECH(DSBS,ITECH2)),
+          V02CostTech(allCy,DSBS,ITECH2,YTIME-1) + V02VarCostTech(allCy,DSBS,ITECH2,YTIME-1)
+        )
       )**(-2)
-    ) 
-   !!+ 1/VmLft(allCy,DSBS,ITECH,YTIME)
-   ;
- 
-
+    );
 
 *'NEW EQUATION' - kind of --> substitutes Q02ConsRemSubEquipSubSec
 * This equation computes the useful energy covered by the remaining equipment
@@ -77,7 +81,7 @@ Q02GapUsefulDemSubsec(allCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not 
       V02DemSubUsefulSubsec(allCy,DSBS,YTIME) -
       V02DemUsefulSubsecRemTech(allCy,DSBS,YTIME) +
       SQRT(SQR(V02DemSubUsefulSubsec(allCy,DSBS,YTIME) - V02DemUsefulSubsecRemTech(allCy,DSBS,YTIME)))
-    )/2 + 1e-6 + 1e-6
+    )/2 + 1e-6
 ;
 
 *' The equation computes the capital cost and fixed O&M cost of each technology in each subsector
@@ -113,7 +117,7 @@ Q02VarCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not s
       imCO2CaptRateIndustry(allCy,ITECH,YTIME) * VmCstCO2SeqCsts(allCy,YTIME-1) * 1e-3 * imCo2EmiFac(allCy,DSBS,EF,YTIME-1)  +
       (1-imCO2CaptRateIndustry(allCy,ITECH,YTIME)) * 1e-3 * imCo2EmiFac(allCy,DSBS,EF,YTIME-1)  *
       (sum(NAP$NAPtoALLSBS(NAP,"PG"), imCarVal(allCy,NAP,YTIME-1))) +
-      imRenValue(YTIME)$(not RENEF(ITECH) and not NENSE(DSBS)) !! needs change of units
+      (imRenValue(YTIME)/1000)$(not RENEF(ITECH) and not NENSE(DSBS)) !! needs change of units
     ) +
     imVarCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit
   ) / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME) -
@@ -175,8 +179,8 @@ Q02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q02FinalElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V02FinalElecNonSubIndTert(allCy,INDDOM,YTIME) 
         =E=
-    V02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME) / 0.97
-    !!imUsfEneConvSubTech(allCy,INDDOM,"TELC",YTIME)
+    V02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME) / 
+    imUsfEneConvSubTech(allCy,INDDOM,"TELC",YTIME)
     ;
 
 *' This equation calculates the consumption of fuels in each demand subsector.

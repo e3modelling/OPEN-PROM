@@ -138,32 +138,46 @@ $ondelim
 $include"./iSFC.csv"
 $offdelim
 ;
+i01SFCPC(allCy,TTECH,"BGSL",YTIME) = i01SFCPC(allCy,TTECH,"GSL",YTIME);
+i01SFCPC(allCy,TTECH,"BGDO",YTIME) = i01SFCPC(allCy,TTECH,"GDO",YTIME);
+i01SFCPC(allCy,TTECH,"OGS",YTIME) = i01SFCPC(allCy,TTECH,"NGS",YTIME);
 *---
 parameter i01InitSpecFuelConsData(TRANSE,TTECH,EF)      "Initial Specific fuel consumption: (ktoe/Gvkm)" /
 PT.TGDO.GDO	11.
+PT.TGDO.BGDO	11.
 PT.TMET.MET	12.6
 PT.TH2F.H2F	8.9
 PT.TELC.ELC	7
 *PA.H2F.H2F	21.7
 PA.TKRS.KRS	20
 PN.TGDO.GDO  30
+PN.TGDO.BGDO  30
 PN.TH2F.H2F  43
 PB.TGDO.GDO  7.8
+PB.TGDO.BGDO  7.8
 PB.TNGS.NGS  5.6
+PB.TNGS.OGS  5.6
 PB.TLPG.LPG  6.6
 PB.TELC.ELC  2.5
 PB.TH2F.H2F  4.3
+GU.TGSL.GSL	6.0
+GU.TGSL.BGSL	6.0
 GU.TLPG.LPG	5.0
 GU.TGDO.GDO	4.0
+GU.TGDO.BGDO	4.0
 GU.TNGS.NGS	2.8
+GU.TNGS.OGS	2.8
 GU.TH2F.H2F	1.3
 GU.TELC.ELC	1.0
 GU.TCHEVGDO.GDO	2.7
 GT.TGDO.GDO	1.9
+GT.TGDO.BGDO	1.9
 GT.TH2F.H2F	1.5
 GT.TELC.ELC	1.9
 GN.TGSL.GSL	2.0
+GN.TGSL.BGSL	2.0
 GN.TGDO.GDO	2.5
+GN.TGDO.BGDO	2.5
 GN.TH2F.H2F	1.5
 /
 ;
@@ -178,6 +192,7 @@ i01TechLft(allCy,SBS,TECH,YTIME)	                     "Technical Lifetime. For p
 i01PassCarsMarkSat(allCy)	                          "Passenger cars ownership saturation threshold (1)"
 i01GDPperCapita(YTIME,allCy)
 i01Sigma(allCy,SG)                                      "S parameters of Gompertz function for passenger cars vehicle km (1)"
+i01ShareTTechFuel(allCy,TRANSE,TTECH,EF)
 i01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)	      "Specific Fuel Consumption ()"
                                                                 !! SFC for passenger cars (ktoe/Gkm)
                                                                 !! SFC for other passsenger transportation modes (ktoe/Gpkm)
@@ -186,9 +201,7 @@ i01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)	      "Specific Fuel Consumptio
 *---
 i01PassCarsMarkSat(runCy) = 0.7;
 *---
-imFuelConsTRANSE(runCy,TRANSE,EF,YTIME)$(SECtoEF(TRANSE,EF) $(imFuelConsTRANSE(runCy,TRANSE,EF,YTIME)<=0)) = 1e-6;
-*---
-i01ShareAnnMilePlugInHybrid(runCy,YTIME)$an(YTIME) = i01PlugHybrFractData(YTIME);
+i01ShareAnnMilePlugInHybrid(runCy,YTIME) = i01PlugHybrFractData(YTIME);
 *---
 i01AvgVehCapLoadFac(runCy,TRANSE,TRANSUSE,YTIME) = i01CapDataLoadFacEachTransp(TRANSE,TRANSUSE);
 *---
@@ -205,3 +218,12 @@ i01TechLft(runCy,DOMSE,ITECH,YTIME) = imDataDomTech(DOMSE,ITECH,"LFT");
 i01TechLft(runCy,NENSE,ITECH,YTIME) = imDataNonEneSec(NENSE,ITECH,"LFT");
 *---
 i01GDPperCapita(YTIME,runCy) = i01GDP(YTIME,runCy) / i01Pop(YTIME,runCy);
+*---
+*i01ShareTTechFuel(runCy,TRANSE,TTECH,EF,YTIME)$(SECTTECH(TRANSE,TTECH) and (sameas("TPHEVGSL",TTECH) or sameas("TPHEVGDO",TTECH)) and ELCEF(EF)) = i01ShareAnnMilePlugInHybrid(runCy,YTIME);
+i01ShareTTechFuel(runCy,TRANSE,TTECH,EF)$(SECTTECH(TRANSE,TTECH) and not ((sameas("TPHEVGSL",TTECH) or sameas("TPHEVGDO",TTECH)) and ELCEF(EF)))
+=
+*(1-i01ShareTTechFuel(runCy,TRANSE,TTECH,"ELC",YTIME)) * 
+(
+  imFuelConsPerFueSub(runCy,TRANSE,EF,"%fBaseY%") /
+  (SUM(EF2$TTECHtoEF(TTECH,EF2),imFuelConsPerFueSub(runCy,TRANSE,EF2,"%fBaseY%")))
+ )$(SUM(EF2$TTECHtoEF(TTECH,EF2),imFuelConsPerFueSub(runCy,TRANSE,EF2,"%fBaseY%"))$(TTECHtoEF(TTECH,EF)));

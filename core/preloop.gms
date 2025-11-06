@@ -32,10 +32,18 @@ display imVarCostTech;
 imTransChar(runCy,"RES_MEXTF",YTIME) = 0.04;
 imTransChar(runCy,"RES_MEXTV",YTIME) = 0.04;
 *---
-iFinEneConsPrevYear(runCy,EFS,YTIME)$(not An(YTIME)) = imFinEneCons(runCy,EFS,YTIME);
-*---
 
 *'                **Interdependent Variables**
+
+*---
+VmRenValue.FX(YTIME) = 0 ;
+*---
+VmElecConsHeatPla.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = imFuelConsPerFueSub(runCy,INDDOM,"ELC",YTIME)*(1-imShrNonSubElecInTotElecDem(runCy,INDDOM))*iShrHeatPumpElecCons(runCy,INDDOM);
+* Compute electricity consumed in heatpump plants, QElecConsHeatPla(runCy,INDDOM,YTIME)$time(ytime).
+VmElecConsHeatPla.FX(runCy,INDDOM,YTIME) = 1E-7;
+*---
+VmCarVal.FX(runCy,"TRADE",YTIME) = iCarbValYrExog(runCy,YTIME);
+VmCarVal.FX(runCy,"NOTRADE",YTIME) = iCarbValYrExog(runCy,YTIME);
 
 *---
 VmCstCO2SeqCsts.L(runCy,YTIME)=1;

@@ -207,10 +207,12 @@ Q01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)$(TIME(YTIME) $SECTTECH(TR
     ) +
     V01ShareTechTr(allCy,TRANSE,TTECH,YTIME) *
     (
-      i01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)$(not PLUGIN(TTECH)) +
+      (i01ShareTTechFuel(allCy,TRANSE,TTECH,EF) *
+      V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME))$(not PLUGIN(TTECH)) +
       ( 
         (
           (1-i01ShareAnnMilePlugInHybrid(allCy,YTIME)) *
+          i01ShareTTechFuel(allCy,TRANSE,TTECH,EF) *
           i01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)
         )$(not sameas("ELC",EF)) +
         i01ShareAnnMilePlugInHybrid(allCy,YTIME) *
@@ -335,21 +337,18 @@ Q01RateScrPc(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q01RateScrPcTot(allCy,TTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V01RateScrPcTot(allCy,TTECH,YTIME)
         =E=
-    V01RateScrPc(allCy,YTIME) +
-    V01PremScrp(allCy,"PC",TTECH,YTIME-1);
+    1 - (1 - V01RateScrPc(allCy,YTIME)) *
+    (1 - V01PremScrp(allCy,"PC",TTECH,YTIME));
     
 Q01PremScrp(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME)$SECTTECH(TRANSE,TTECH)$runCy(allCy))..
     V01PremScrp(allCy,TRANSE,TTECH,YTIME)
         =E=
-    (1 -
-      (V01CostFuel(allCy,TRANSE,TTECH,YTIME) + 1e-4) ** (-2) /
-      (
-        
-        (V01CostFuel(allCy,TRANSE,TTECH,YTIME) + 1e-4) ** (-2) +
-        0.1 * 
-        SUM(TTECH2$(not sameas(TTECH2,TTECH) and SECTTECH(TRANSE,TTECH2)),
-          (V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME) + 1e-4) ** (-2)
-        )
+    1 -
+    (V01CostFuel(allCy,TRANSE,TTECH,YTIME) + 1e-4) ** (-2) /
+    (
+      (V01CostFuel(allCy,TRANSE,TTECH,YTIME) + 1e-4) ** (-2) +
+      0.1 * 
+      SUM(TTECH2$(not sameas(TTECH2,TTECH) and SECTTECH(TRANSE,TTECH2)),
+        (V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME) + 1e-4) ** (-2)
       )
-    )
-    ;
+    );

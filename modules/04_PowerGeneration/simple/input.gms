@@ -7,6 +7,7 @@ $ondelim
 $include"./iAvailRate.csv"
 $offdelim
 ;
+i04AvailRate(allCy,"PGH2F",YTIME) = 0.9;
 *---
 table i04DataElecSteamGen(allCy,PGOTH,YTIME)	   "Various Data related to electricity and steam generation (1)"
 $ondelim
@@ -84,7 +85,7 @@ $include "./iMatFacPlaAvailCap.csv"
 $offdelim
 ;
 i04MatFacPlaAvailCap.L(runCy,PGALL,YTIME)    = i04MatFacPlaAvailCapL(runCy,PGALL,YTIME);
-i04MatFacPlaAvailCap.LO(runCy, PGALL, YTIME) = 0.00000001;
+i04MatFacPlaAvailCap.LO(runCy, PGALL, YTIME) = 1e-8;
 i04MatFacPlaAvailCap.UP(runCy, PGALL, YTIME) = 40;
 $ELSE.calib
 table i04MatFacPlaAvailCap(allCy,PGALL,YTIME)      "Maturity factor related to plant available capacity (1)"
@@ -111,8 +112,6 @@ $include"./iMatureFacPlaDisp.csv"
 $offdelim
 ;
 $ENDIF.calib
-*---
-parameter i04ScaleEndogScrap(PGALL)                "Scale parameter for endogenous scrapping applied to the sum of full costs (1)";
 *---
 parameter i04MxmShareChpElec                       "Maximum share of CHP electricity in a country (1)";
 *---
@@ -187,7 +186,7 @@ i04UtilRateChpPlants(allCy,CHP,YTIME)	           "Utilisation rate of CHP Plants
 i04MxmLoadFacElecDem(allCy,YTIME)	               "Maximum load factor of electricity demand (1)"
 i04BslCorrection(allCy,YTIME)	                   "Parameter of baseload correction (1)"
 i04TechLftPlaType(allCy,PGALL)	                   "Technical Lifetime per plant type (year)"
-i04ScaleEndogScrap(PGALL)                          "Scale parameter for endogenous scrapping applied to the sum of full costs (1)"
+i04ScaleEndogScrap                              "Scale parameter for endogenous scrapping applied to the sum of full costs (1)"
 i04DecInvPlantSched(allCy,PGALL,YTIME)             "Decided plant investment schedule (GW)"
 i04PlantDecomSched(allCy,PGALL,YTIME)	           "Decided plant decomissioning schedule (GW)"	
 i04MxmShareChpElec(allCy,YTIME)	                   "Maximum share of CHP electricity in a country (1)"
@@ -207,6 +206,7 @@ i04MxmLoadFacElecDem(runCy,YTIME)$an(YTIME) = i04LoadFactorAdjMxm("MAXLOADSH");
 i04BslCorrection(runCy,YTIME)$an(YTIME) = i04LoadFactorAdjMxm("AMAXBASE");
 *---
 i04TechLftPlaType(runCy,PGALL) = i04DataTechLftPlaType(PGALL, "LFT");
+i04TechLftPlaType(runCy,"PGH2F") = 20;
 *---
 i04GrossCapCosSubRen(runCy,PGALL,YTIME) = i04GrossCapCosSubRen(runCy,PGALL,YTIME)/1000;
 *---
@@ -214,7 +214,7 @@ loop(runCy,PGALL,YTIME)$AN(YTIME) DO
          abort $(i04GrossCapCosSubRen(runCy,PGALL,YTIME)<0) "CAPITAL COST IS NEGATIVE", i04GrossCapCosSubRen
 ENDLOOP;
 *---
-i04ScaleEndogScrap(PGALL) = 0.65/PGALL.len;
+i04ScaleEndogScrap = 2 / card(PGALL);
 *---
 i04DecInvPlantSched(runCy,PGALL,YTIME) = i04InvPlants(runCy,PGALL,YTIME);
 *---
