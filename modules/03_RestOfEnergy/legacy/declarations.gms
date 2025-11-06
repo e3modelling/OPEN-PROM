@@ -28,7 +28,8 @@ Q03TransfInputCHPlants(allCy,EFS,YTIME)
 Q03ConsFinEneCountry(allCy,EFS,YTIME)                      "Compute total final energy consumption"
 Q03ConsFinNonEne(allCy,EFS,YTIME)                          "Compute final non-energy consumption"
 Q03LossesDistr(allCy,EFS,YTIME)                            "Compute distribution losses"
-Q03TotCarTax(allCy,YTIME)                                  "Compute the total annual state revenues from carbon taxes per region (Millions US$2015)"
+Q03CarbTaxTot(allCy,YTIME)                                 "Compute the total annual state revenues from carbon taxes per region (Millions US$2015)"
+Q03SubsiStat(allCy,SBS,YTIME)                               ""
 ;
 
 Variables
@@ -48,7 +49,7 @@ V03ConsGrssInl(allCy,EFS,YTIME)	                           "Gross Inland Consump
 V03ProdPrimary(allCy,EFS,YTIME)	                           "Primary Production (Mtoe)"
 V03Exp(allCy,EFS,YTIME)                        	           "Exports fake (Mtoe)"
 V03Imp(allCy,EFS,YTIME)             	                   "Fake Imports for all fuels except natural gas (Mtoe)"
-V03TotCarTax(allCy,YTIME)                                  "Total annual state revenues from carbon taxes per region (Millions US$2015)"
+V03CarbTaxTot(allCy,YTIME)                                 "Total annual state revenues from carbon taxes per region (Millions US$2015)"
 
 *'                **Interdependent Variables**
 VmImpNetEneBrnch(allCy,EFS,YTIME)	                       "Net Imports (Mtoe)"
@@ -59,4 +60,5 @@ VmTransfInputCHPlants(allCy,EFS,YTIME)                    "Transformation input 
 VmConsFinEneCountry(allCy,EF,YTIME)                        "Total final energy consumnption (Mtoe)"
 VmConsFinNonEne(allCy,EFS,YTIME)                           "Final non energy consumption (Mtoe)"
 VmLossesDistr(allCy,EFS,YTIME)                             "Distribution losses (Mtoe)"
+VmSubsiStat(allCy,SBS,YTIME)                               "State subsidies per subsector (Millions US$2015)"
 ;

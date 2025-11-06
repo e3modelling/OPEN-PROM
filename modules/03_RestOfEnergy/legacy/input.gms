@@ -124,6 +124,13 @@ NGS		  0.8,
 OGS		  0.78,
 BMSWAS    0.76 
 /;
+
+parameter i03FacSubsiStat(SBS)                     "Sharing of parameters among subsetors of economy (needs to expand per region and year)"
+/
+HOU     1
+DAC     0
+H2P     0  
+/;
 *---
 
 Parameters

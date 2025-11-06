@@ -30,17 +30,22 @@ Q03ConsFinEneCountry(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 
 *' The equation computes the total state revenues from carbon taxes, as the product of all fuel consumption in all subsectors of the supply side,
 *' along with the relevant fuel emission factor, and the carbon tax posed regionally that year.
-Q03TotCarTax(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V03TotCarTax(allCy,YTIME)
+Q03CarbTaxTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V03CarbTaxTot(allCy,YTIME)
         =E=
-    sum(SBS,
-        sum((EF, EFS)$EFtoEFS(EF, EFS),
-            VmConsFinEneCountry(allCy, EFS, YTIME) *
-            imCo2EmiFac(allCy, SBS, EF, YTIME) *
-            sum(NAP$NAPtoALLSBS(NAP,SBS),VmCarVal(allCy,NAP,YTIME))
-        )
-    )      
+        sum(EF$EFS(EF),
+            VmConsFinEneCountry(allCy, EF, YTIME) *
+            imCo2EmiFac(allCy,"PG", EF, YTIME) *
+            sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))
+        )     
     ;
+
+Q03SubsiStat(allCy,SBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+      VmSubsiStat(allCy,SBS,YTIME)
+      =E=
+       V03CarbTaxTot(allCy,YTIME-1) * i03FacSubsiStat(SBS)
+    ;
+        
 
 *' The equation computes the total final energy consumption in million tonnes of oil equivalent 
 *' for all countries at a specific time period. This is achieved by summing the final energy consumption for each energy
