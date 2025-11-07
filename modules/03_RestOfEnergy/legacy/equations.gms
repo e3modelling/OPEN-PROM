@@ -40,12 +40,19 @@ Q03CarbTaxTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         )     
     ;
 
-Q03SubsiStat(allCy,SBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-      VmSubsiStat(allCy,SBS,YTIME)
+Q03SubsiStat(allCy,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+      VmSubsiStat(allCy,TECH,YTIME)
       =E=
-       V03CarbTaxTot(allCy,YTIME-1) * i03FacSubsiStat(SBS)
+       V03CarbTaxTot(allCy,YTIME-1) * i03FacSubsiStat(TECH)
     ;
-        
+
+Q03SubsiStatHou(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+      VmSubsiStatHou(allCy,YTIME)
+      =E=
+        V03CarbTaxTot(allCy,YTIME) -
+        sum(TECH,VmSubsiStat(allCy,TECH,YTIME)) -
+        sum(DACTECH,V06SubsiStatDAC(allCy,DACTECH,YTIME)) * 1e-6
+    ;       
 
 *' The equation computes the total final energy consumption in million tonnes of oil equivalent 
 *' for all countries at a specific time period. This is achieved by summing the final energy consumption for each energy

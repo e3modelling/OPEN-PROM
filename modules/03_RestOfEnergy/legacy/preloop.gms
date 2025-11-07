@@ -51,3 +51,7 @@ VmTransfInputDHPlants.FX(runCy,EFS,YTIME)$(not AN(YTIME)) = -i03InpDHPTransfProc
 V03OutTransfCHP.FX(runCy,TOCTEF,YTIME)$(not AN(YTIME)) = i03OutCHPTransfProcess(runCy,TOCTEF,YTIME);
 *---
 VmTransfInputCHPlants.FX(runCy,EFS,YTIME)$(not AN(YTIME)) = -i03InpCHPTransfProcess(runCy,EFS,YTIME);
+*---
+V03CarbTaxTot.FX(runCy,YTIME)$(not AN(YTIME)) = 0;
+*---
+VmSubsiStatHou.LO(allCy,YTIME) = 0;
