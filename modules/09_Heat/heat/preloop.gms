@@ -7,12 +7,13 @@ VmDemTotSte.FX(runCy,YTIME)$DATAY(YTIME) =
 SUM(DSBS, VmConsFuel.L(runCy,DSBS,"STE",YTIME)) +
 VmConsFiEneSec.L(runCy,"STE",YTIME) +
 VmLossesDistr.L(runCy,"STE",YTIME);
+*---
 * We account the steam production per chp plant based on a ratio of input transformation
 VmProdSte.L(runCy,TSTEAM,YTIME) = 1;
 VmProdSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) = 
 (
   SUM(EFS$TSTEAMTOEF(TSTEAM,EFS),i03InpCHPTransfProcess(runCy,EFS,YTIME) * i09EffSteProd(TSTEAM,YTIME)) /
-  SUM(EFS,i03InpCHPTransfProcess(runCy,EFS,YTIME) * i09EffSteProd(TSTEAM,YTIME)) * 
+  SUM(EFS$STEAMEF(EFS),i03InpCHPTransfProcess(runCy,EFS,YTIME) * i09EffSteProd(TSTEAM,YTIME)) * 
   (
     SUM(DSBS$(INDSE(DSBS) or NENSE(DSBS)), VmConsFuel.L(runCy,DSBS,"STE",YTIME)) +
     VmConsFiEneSec.L(runCy,"STE",YTIME) +
@@ -21,7 +22,7 @@ VmProdSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) =
 )$(TCHP(TSTEAM) and SUM(EFS,i03InpCHPTransfProcess(runCy,EFS,YTIME) * i09EffSteProd(TSTEAM,YTIME))) +
 (
   SUM(EFS$TSTEAMTOEF(TSTEAM,EFS),i03InpDHPTransfProcess(runCy,EFS,YTIME) * i09EffSteProd(TSTEAM,YTIME)) /
-  SUM(EFS,i03InpDHPTransfProcess(runCy,EFS,YTIME) * i09EffSteProd(TSTEAM,YTIME)) * 
+  SUM(EFS$STEAMEF(EFS),i03InpDHPTransfProcess(runCy,EFS,YTIME) * i09EffSteProd(TSTEAM,YTIME)) * 
   (
     SUM(DSBS$DOMSE(DSBS), VmConsFuel.L(runCy,DSBS,"STE",YTIME)) +
     VmLossesDistr.L(runCy,"STE",YTIME) / 2
@@ -66,7 +67,8 @@ V09CostCapProdSte.L(runCy,TSTEAM,YTIME) +
 V09CostVarProdSte.L(runCy,TSTEAM,YTIME);
 *---
 VmCostAvgProdSte.FX(runCy,YTIME)$DATAY(YTIME) = 0;
-
+*---
+VmConsFuelSteProd.FX(runCy,STEMODE,EFS,YTIME)$(not STEAMEF(EFS)) = 0;
 *--- LOWER BOUNDS
 V09CostVarProdSte.LO(runCy,TSTEAM,YTIME) = 0;
 V09CostCapProdSte.LO(runCy,TSTEAM,YTIME) = 0;
@@ -80,7 +82,7 @@ $ontext
 The following bounds produce infeseability errors: No superbasic variables
 
 VmProdSte.LO(runCy,TSTEAM,YTIME) = 0;
-VmConsFuelSteProd.LO(runCy,EF,YTIME) = 0;
+VmConsFuelSteProd.LO(runCy,EFS,YTIME) = 0;
 V09DemGapSte.LO(runCy,YTIME) = 0;
 VmDemTotSte.LO(runCy,YTIME) = 0;
 $offtext

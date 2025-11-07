@@ -31,8 +31,8 @@ V03Exp.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
 *---
 VmConsFiEneSec.FX(runCy,EFS,YTIME)$(not An(YTIME)) = i03TotEneBranchCons(runCy,EFS,YTIME);
 *---
-VmInpTransfTherm.FX(runCy,EFS,YTIME)$(not PGEF(EFS)) = 0;
-VmInpTransfTherm.FX(runCy,EFS,YTIME)$(not An(YTIME)) = i03InpTransfTherm(runCy,EFS,YTIME);
+* FIXME: UPDATE INPUTS
+VmInpTransfTherm.FX(runCy,EFS,YTIME)$DATAY(YTIME) = i03InpTransfTherm(runCy,EFS,YTIME);
 *---
 VmConsFinEneCountry.FX(runCy,EFS,YTIME)$DATAY(YTIME) = 
 sum(DSBS$(not NENSE(DSBS)), 

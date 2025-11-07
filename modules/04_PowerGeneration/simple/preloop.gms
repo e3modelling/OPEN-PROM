@@ -93,10 +93,9 @@ V04CCSRetroFit.FX(runCy,PGALL,YTIME)$(not AN(YTIME) or not NOCCS(PGALL)) = 1;
 *---
 V04ScrpRate.UP(runCy,PGALL,YTIME) = 1;
 *---
-VmInpTransfTherm.FX(runCy,PGEF,YTIME)$(not AN(YTIME)) = 
-sum(PGALL$(PGALLtoEF(PGALL,PGEF)),
-  VmProdElec.L(runCy,PGALL,YTIME) * smTWhToMtoe /  imPlantEffByType(runCy,PGALL,YTIME)
-) +
-sum(INDDOM,VmConsFuel.L(runCy,INDDOM,"STE",YTIME)) +
-smTWhToMtoe * V04ProdElecEstCHP.L(runCy,YTIME)
-;
+VmConsFuelElecProd.FX(runCy,EFS,YTIME)$(not PGEF(EFS)) = 0;
+VmConsFuelElecProd.FX(runCy,PGEF,YTIME)$DATAY(YTIME) = 
+SUM(PGALL$PGALLTOEF(PGALL,PGEF),
+  VmProdElec.L(runCy,PGALL,YTIME) * smTWhToMtoe / 
+  imPlantEffByType(runCy,PGALL,YTIME)
+);

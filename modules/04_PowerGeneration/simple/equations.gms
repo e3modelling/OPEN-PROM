@@ -370,8 +370,15 @@ Q04ScrpRate(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04IndxEndogScrap(allCy,PGALL,YTIME) *
     V04CCSRetroFit(allCy,PGALL,YTIME);
 
-$ontext
+Q04ConsFuelElecProd(allCy,PGEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    VmConsFuelElecProd(allCy,PGEF,YTIME)
+        =E=
+    SUM(PGALL$PGALLTOEF(PGALL,PGEF),
+      VmProdElec(allCy,PGALL,YTIME) * smTWhToMtoe / 
+      imPlantEffByType(allCy,PGALL,YTIME)
+    );
 
+$ontext
 *' The equation computes the electricity production cost per Combined Heat and Power plant for a specific demand sector within a given subsector.
 *' The cost is determined based on various factors, including the discount rate, technical lifetime of CHP plants, capital cost (EUR/kW), fixed O&M cost (EUR/kW), availability rate,
 *' variable cost(EUR/MWh), and fuel-related costs. The equation provides a comprehensive assessment of the overall expenses associated with electricity production from CHP

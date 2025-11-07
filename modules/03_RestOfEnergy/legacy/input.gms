@@ -180,12 +180,12 @@ i03ElecImp(runCy,YTIME) = 0;
 *---
 VmConsFinNonEne.FX(runCy,EFS,YTIME)$(not AN(YTIME)) = 
 sum(NENSE$(not sameas("BU",NENSE)),
-  sum(EF$(EFtoEFS(EF,EFS) $SECtoEF(NENSE,EF) ), imFuelConsPerFueSub(runCy,NENSE,EF,YTIME))
+  sum(EF$(EFtoEFS(EF,EFS) $SECtoEF(NENSE,EF)), imFuelConsPerFueSub(runCy,NENSE,EF,YTIME))
 );
 *---
 imRateLossesFinCons(runCy,EFS,YTIME) = 
 [
   imDistrLosses(runCy,EFS,YTIME) /
-  sum(DSBS, imFuelConsPerFueSub(runCy,DSBS,EFS,YTIME))
-]$sum(DSBS, imFuelConsPerFueSub(runCy,DSBS,EFS,YTIME));
+  (sum(DSBS, imFuelConsPerFueSub(runCy,DSBS,EFS,YTIME)) + i03PrimProd(runCy,"CRO",YTIME))
+]$(sum(DSBS, imFuelConsPerFueSub(runCy,DSBS,EFS,YTIME)) + i03PrimProd(runCy,"CRO",YTIME));
 imRateLossesFinCons(runCy,EFS,YTIME)$AN(YTIME) = imRateLossesFinCons(runCy,EFS,"%fBaseY%");

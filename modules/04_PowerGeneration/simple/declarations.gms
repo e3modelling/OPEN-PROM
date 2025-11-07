@@ -41,6 +41,7 @@ Q04CostPowGenAvgLng(allCy,YTIME)	                   "Compute long term power gen
 Q04CapElecTotEst(allCy,YTIME)                              "Compute Estimated total electricity generation capacity"
 Q04PeakLoad(allCy,YTIME)	                               "Compute elerctricity peak load"	
 Q04CapElec(allCy,PGALL,YTIME)	                           "Compute electricity generation capacity"
+Q04ConsFuelElecProd(allCy,EFS,YTIME)
 ;
 
 Variables
@@ -82,6 +83,7 @@ VmCostPowGenAvgLng(allCy,YTIME)	                   "Long-term average power gene
 VmCapElecTotEst(allCy,YTIME)	                           "Estimated Total electricity generation capacity (GW)"
 VmPeakLoad(allCy,YTIME)	                                   "Electricity peak load (GW)"	
 VmCapElec(allCy,PGALL,YTIME)	                           "Electricity generation plants capacity (GW)"
+VmConsFuelElecProd(allCy,EFS,YTIME)
 ;
 
 Scalars

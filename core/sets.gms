@@ -498,26 +498,10 @@ ALTMAP(SBS,EF,EF)    Fuels whose prices affect the prices of alternative fuels
 (PC,GU,GN,PN).BGDO.GDO
 /
 
+PGEF(EFS)        "Energy forms used for steam production"
 
-PGEF(EFS)        Energy forms used for power generation
-/
-LGN
-HCL
-GDO
-RFO
-OLQ
-NGS
-NUC
-HYD
-BMSWAS
-SOL
-GEO
-WND
-H2F
-/
-
-h2f1(pgef)
-/h2f/
+*h2f1(pgef)
+*/h2f/
 
 PPRODEF(EFS)     Fuels considered in primary production
 /
@@ -928,7 +912,7 @@ PGAWNO.WNO
 (ATHBMSWAS,ATHBMSCCS).BMSWAS
 /
 
-PGALLtoEF(PGALL,PGEF)     Correspondence between plants and energy forms
+PGALLtoEF(PGALL,EFS)     Correspondence between plants and energy forms
 /
 (ATHLGN,ATHLGNCCS).LGN
 (ATHCOAL, ATHCOALCCS).HCL
@@ -1255,3 +1239,4 @@ SECtoEF(NENSE, "BGSL") = no;
 SECtoEF(NENSE, "BGDO") = no;
 *This is equivalent with the loop above
 *SECtoEF(DSBS, EF)$(sum(TECH, SECTTECH(DSBS, TECH) * TTECHtoEF(TECH, EF))) = yes;
+PGEF(EFS) = yes$(sum(PGALL, PGALLTOEF(PGALL,EFS)));

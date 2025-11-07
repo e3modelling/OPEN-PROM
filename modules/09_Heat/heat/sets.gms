@@ -65,9 +65,13 @@ TSTE2OGS.OGS
 TSTE1AH2F.H2F
 /
 *---
-PGEFS(EFS)     "Fuels used as Input to District Heating"      /LGN,HCL,GDO,RFO,OLQ,NGS,OGS,BMSWAS/
+PGEFS(EFS)      "Fuels used as Input to District Heating"      /LGN,HCL,GDO,RFO,OLQ,NGS,OGS,BMSWAS/
+STEAMEF(EFS)     "Energy forms used for steam production"
+STEMODE         "Steam production modes"                       /CHP,DHP/
 ;
 *---
 ALIAS (TSTEAM2,TSTEAM);
 ALIAS (TCHP2,TCHP);
 ALIAS (TDHP2,TDHP);
+*---
+STEAMEF(EFS) = yes$(sum(TSTEAM, TSTEAMTOEF(TSTEAM,EFS)));

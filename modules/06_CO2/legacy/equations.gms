@@ -18,7 +18,7 @@
 Q06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME)
       =E=
-    (
+    (!! FIXME: REVISIT: should we add all supply sectors?
       sum(PGEF,
         sum(CCS$PGALLtoEF(CCS,PGEF),
           VmProdElec(allCy,CCS,YTIME) * smTWhToMtoe /

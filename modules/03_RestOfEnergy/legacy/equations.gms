@@ -55,7 +55,11 @@ Q03LossesDistr(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         =E=
     (
       imRateLossesFinCons(allCy,EFS,YTIME) * 
-      (VmConsFinEneCountry(allCy,EFS,YTIME) + VmConsFinNonEne(allCy,EFS,YTIME))
+      (
+        VmConsFinEneCountry(allCy,EFS,YTIME) + 
+        VmConsFinNonEne(allCy,EFS,YTIME) +
+        V03ProdPrimary(allCy,EFS,YTIME)$sameas(EFS,"CRO")
+      )
     )$(not H2EF(EFS)) +
     (
       VmDemTotH2(allCy,YTIME) -
@@ -96,7 +100,7 @@ Q03OutTransfCHP(allCy,TOCTEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q03TransfInputCHPlants(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmTransfInputCHPlants(allCy,EFS,YTIME)
         =E=
-    VmConsFuelSteProd(allCy,EFS,YTIME);
+    VmConsFuelSteProd(allCy,"DHP",EFS,YTIME);
 *' The equation calculates the refineries' capacity for a given scenario and year.
 *' The calculation is based on a residual factor, the previous year's capacity, and a production scaling
 *' factor that takes into account the historical consumption trends for different energy forms. The scaling factor is
@@ -159,9 +163,7 @@ Q03InputTransfRef(allCy,"CRO",YTIME)$(TIME(YTIME) $runCy(allCy))..
 Q03InpTransfTherm(allCy,PGEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmInpTransfTherm(allCy,PGEF,YTIME)
         =E=
-    sum(PGALL$(PGALLtoEF(PGALL,PGEF)),
-      VmProdElec(allCy,PGALL,YTIME) * smTWhToMtoe /  imPlantEffByType(allCy,PGALL,YTIME)
-    );
+    VmConsFuelElecProd(allCy,PGEF,YTIME);
 
 *' The equation calculates the transformation output from thermal power stations for a specific energy branch
 *' in a given scenario and year. The result is computed based on the following conditions: 
@@ -171,22 +173,14 @@ Q03InpTransfTherm(allCy,PGEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' If the energy branch is associated with steam, the transformation output is determined by the sum of the consumption of fuels in various demand
 *' subsectors, the rate of energy branch consumption over total transformation output, and losses.
 *' The result represents the transformation output from thermal power stations in million tons of oil equivalent.
-Q03OutTransfTherm(allCy,TOCTEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V03OutTransfTherm(allCy,TOCTEF,YTIME)
+Q03OutTransfTherm(allCy,"ELC",YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V03OutTransfTherm(allCy,"ELC",YTIME)
         =E=
     smTWhToMtoe *
     (
       sum(PGALL,VmProdElec(allCy,PGALL,YTIME)) +
       V04ProdElecEstCHP(allCy,YTIME)
-    )$ELCEF(TOCTEF) +
-    (                                                                                                         
-      i03RateEneBranCons(allCy,TOCTEF,YTIME) *
-      (
-        VmConsFinEneCountry(allCy,TOCTEF,YTIME) +
-        VmConsFinNonEne(allCy,TOCTEF,YTIME) + 
-        VmLossesDistr(allCy,TOCTEF,YTIME)
-      )                                                                                    
-    )$STEAM(TOCTEF); 
+    ); 
             
 *' The equation calculates the total transformation input for a specific energy branch 
 *' in a given scenario and year. The result is obtained by summing the transformation inputs from different sources, including
@@ -197,20 +191,11 @@ Q03OutTransfTherm(allCy,TOCTEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q03InpTotTransf(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V03InpTotTransf(allCy,EFS,YTIME)
         =E=
-    (
-      VmInpTransfTherm(allCy,EFS,YTIME) + 
-      VmTransfInputDHPlants(allCy,EFS,YTIME) + 
-      VmTransfInputCHPlants(allCy,EFS,YTIME) +
-      V03InputTransfRef(allCy,EFS,YTIME) + 
-      sum(EF$(H2PRODEF(EF) and EFtoEFS(EF,EFS)),VmConsFuelH2Prod(allCy,EF,YTIME))
-    )$(not sameas(EFS,"OGS")) +
-    (
-      V03OutTotTransf(allCy,EFS,YTIME) - 
-      VmConsFinEneCountry(allCy,EFS,YTIME) - 
-      VmConsFinNonEne(allCy,EFS,YTIME) - 
-      i03RateEneBranCons(allCy,EFS,YTIME) * V03OutTotTransf(allCy,EFS,YTIME) - 
-      VmLossesDistr(allCy,EFS,YTIME)
-    )$sameas(EFS,"OGS");            
+    VmConsFuelElecProd(allCy,EFS,YTIME) + 
+    VmConsFuelSteProd(allCy,"DHP",EFS,YTIME) + 
+    VmConsFuelSteProd(allCy,"CHP",EFS,YTIME) +
+    V03InputTransfRef(allCy,EFS,YTIME) + 
+    sum(EF$(H2PRODEF(EF) and EFtoEFS(EF,EFS)),VmConsFuelH2Prod(allCy,EF,YTIME));            
 
 *' The equation calculates the total transformation output for a specific energy branch in a given scenario and year.
 *' The result is obtained by summing the transformation outputs from different sources, including thermal power stations, District Heating Plants,
@@ -220,8 +205,7 @@ Q03OutTotTransf(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V03OutTotTransf(allCy,EFS,YTIME)
         =E=
     V03OutTransfTherm(allCy,EFS,YTIME) + 
-    SUM(STEAM$sameas(STEAM,EFS),V03OutTransfDhp(allCy,STEAM,YTIME)) + 
-    SUM(TOCTEF$sameas(TOCTEF,EFS),V03OutTransfCHP(allCy,TOCTEF,YTIME)) +
+    VmDemTotSte(allCy,YTIME)$STEAM(EFS) +
     V03OutTransfRefSpec(allCy,EFS,YTIME) +  
     sum(H2TECH$(sameas(EFS, "H2F")), VmProdH2(allCy, H2TECH, YTIME));  !! Hydrogen production for EFS = "H2F" + TONEW(allCy,EFS,YTIME)
 
