@@ -45,12 +45,11 @@ V04CapElecNonCHP.FX(runCy,YTIME)$(not An(YTIME)) = sum(PGALL,imInstCapPastNonCHP
 *---
 V04CapElecCHP.FX(runCy,YTIME)$(not An(YTIME)) = SUM(EF,imInstCapPastCHP(runCy,EF,YTIME));
 *---
+VmCapElec.L(runCy,PGALL,YTIME) = 1;
 VmCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  imInstCapPastNonCHP(runCy,PGALL,YTIME);
-VmCapElec.L(runCy,PGALL,YTIME)$AN(YTIME) = imInstCapPastNonCHP(runCy,PGALL,"%fStartY%");
-V04CapOverall.FX(runCy,PGALL,"%fBaseY%") =  imInstCapPastNonCHP(runCy,PGALL,"%fBaseY%");
 V04CapElecNominal.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = imInstCapPastNonCHP(runCy,PGALL,YTIME) / i04AvailRate(runCy,PGALL,YTIME);
 *---
-V04ShareTechPG.FX(runCy,PGALL,YTIME)$(DATAY(YTIME)) =  VmCapElec.L(runCy,PGALL,YTIME) / sum(PGALL2, VmCapElec.L(runCy,PGALL2,YTIME));
+V04ShareTechPG.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  VmCapElec.L(runCy,PGALL,YTIME) / sum(PGALL2, VmCapElec.L(runCy,PGALL2,YTIME));
 V04ShareSatPG.FX(runCy,PGALL,YTIME)$(not PGREN(PGALL) or not AN(YTIME)) = 1;
 *---
 V04IndxEndogScrap.FX(runCy,PGALL,YTIME)$(not an(YTIME) ) = 1;
@@ -82,16 +81,16 @@ $endif.calib
 VmPeakLoad.L(runCy,YTIME) = 1;
 VmPeakLoad.FX(runCy,YTIME)$(datay(YTIME)) = V04DemElecTot.L(runCy,YTIME)/(V04LoadFacDom.L(runCy,YTIME)*8.76);
 *---
-VmProdElec.L(runCy,pgall,YTIME) = 0.1;
+VmProdElec.L(runCy,pgall,YTIME) = 1;
 VmProdElec.FX(runCy,pgall,YTIME)$DATAY(YTIME) = i04DataElecProdNonCHP(runCy,pgall,YTIME) / 1000;
 *---
 V04ProdElecEstCHP.FX(runCy,YTIME)$DATAY(YTIME) = SUM(EF,i04DataElecProdCHP(runCy,EF,YTIME)) / 1000;
 *---
-V04ShareMixWndSol.L(runCy,YTIME)$(DATAY(YTIME)) = sum(PGALL$(PGRENSW(PGALL)), VmCapElec.L(runCy,PGALL,YTIME)) / sum(PGALL2, VmCapElec.L(runCy,PGALL2,YTIME));
+V04ShareMixWndSol.FX(runCy,YTIME)$DATAY(YTIME) = sum(PGALL$PGRENSW(PGALL), VmCapElec.L(runCy,PGALL,YTIME)) / sum(PGALL2, VmCapElec.L(runCy,PGALL2,YTIME));
 *---
 V04CCSRetroFit.FX(runCy,PGALL,YTIME)$(not AN(YTIME) or not NOCCS(PGALL)) = 1;
 *---
-V04ScrpRate.UP(runCy,PGALL,YTIME) = 1;
+
 *---
 VmConsFuelElecProd.FX(runCy,EFS,YTIME)$(not PGEF(EFS)) = 0;
 VmConsFuelElecProd.FX(runCy,PGEF,YTIME)$DATAY(YTIME) = 
@@ -99,3 +98,9 @@ SUM(PGALL$PGALLTOEF(PGALL,PGEF),
   VmProdElec.L(runCy,PGALL,YTIME) * smTWhToMtoe / 
   imPlantEffByType(runCy,PGALL,YTIME)
 );
+*---
+
+V04ShareTechPG.LO(runCy,PGALL,YTIME)$DATAY(YTIME) = 0;
+V04ShareTechPG.UP(runCy,PGALL,YTIME)$DATAY(YTIME) = 1;
+V04ScrpRate.UP(runCy,PGALL,YTIME) = 1;
+V04ScrpRate.LO(runCy,PGALL,YTIME) = 0;

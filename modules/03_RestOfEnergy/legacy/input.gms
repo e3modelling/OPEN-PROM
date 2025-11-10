@@ -20,7 +20,7 @@ $include"./iDataGrossInlCons.csv"
 $offdelim
 ;
 *---
-table i03DataOwnConsEne(allCy,EFS,EF,YTIME)	      "Data for Consumption of Energy Branch (Mtoe)"
+table i03DataOwnConsEne(allCy,EFS,YTIME)	      "Data for Consumption of Energy Branch (Mtoe)"
 $ondelim
 $include"./iDataOwnConsEne.csv"
 $offdelim
@@ -41,12 +41,6 @@ $offdelim
 table i03PrimProd(allCy,PPRODEF,YTIME)	              "Primary Production (Mtoe)"
 $ondelim
 $include"./iPrimProd.csv"
-$offdelim
-;
-*---
-table i03InpTransfTherm(allCy,EFS,YTIME)          "Historic data of VmInpTransfTherm (Transformation input to thermal power plants) (Mtoe)"
-$ondelim
-$include"./iInpTransfTherm.csv"
 $offdelim
 ;
 *---
@@ -131,7 +125,6 @@ i03RatePriProTotPriNeeds(allCy,EF,YTIME)	      "Rate of Primary Production in To
 i03ResHcNgOilPrProd(allCy,EF,YTIME)	              "Residuals for Hard Coal, Natural Gas and Oil Primary Production (1)"
 i03RatioImpFinElecDem(allCy,YTIME)	              "Ratio of imports in final electricity demand (1)"	
 i03ElecImp(allCy,YTIME)	                          "Electricity Imports (1)"
-i03InpTransfTherm(allCy,EFS,YTIME)                "Historic data of VmInpTransfTherm (Transformation input to thermal power plants) (Mtoe)"
 ;
 *---
 i03SupResRefCapacity(runCy,SUPOTH,YTIME) = 1;
@@ -140,7 +133,7 @@ i03SupTrnasfOutputRefineries(runCy,EF,YTIME) = 1;
 *---
 i03TransfInputRef(runCy,EFS,YTIME)$(not An(YTIME)) = i03DataTotTransfInputRef(runCy,EFS,YTIME);
 *---
-i03TotEneBranchCons(runCy,EFS,YTIME) = SUM(EF,i03DataOwnConsEne(runCy,EFS,EF,YTIME));
+i03TotEneBranchCons(runCy,EFS,YTIME) = i03DataOwnConsEne(runCy,EFS,YTIME);
 *---
 i03TransfOutputRef(runCy,EFS,YTIME)$(not An(YTIME)) = i03DataTransfOutputRef(runCy,EFS,YTIME);
 *---

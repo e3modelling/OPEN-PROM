@@ -4,9 +4,10 @@
 *'                *VARIABLE INITIALISATION*
 
 VmDemTotSte.FX(runCy,YTIME)$DATAY(YTIME) = 
-SUM(DSBS, VmConsFuel.L(runCy,DSBS,"STE",YTIME)) +
-VmConsFiEneSec.L(runCy,"STE",YTIME) +
-VmLossesDistr.L(runCy,"STE",YTIME);
+SUM(DSBS, imFuelConsPerFueSub(runCy,DSBS,"STE",YTIME)) +
+i03TotEneBranchCons(runCy,"STE",YTIME) +
+imDistrLosses(runCy,"STE",YTIME) +
+i03FeedTransfr(runCy,"STE",YTIME);
 *---
 * We account the steam production per chp plant based on a ratio of input transformation
 VmProdSte.L(runCy,TSTEAM,YTIME) = 1;
@@ -15,17 +16,19 @@ VmProdSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) =
   SUM(EFS$TSTEAMTOEF(TSTEAM,EFS),i03InpCHPTransfProcess(runCy,EFS,YTIME) * i09EffSteProd(TSTEAM,YTIME)) /
   SUM(EFS$STEAMEF(EFS),i03InpCHPTransfProcess(runCy,EFS,YTIME) * i09EffSteProd(TSTEAM,YTIME)) * 
   (
-    SUM(DSBS$(INDSE(DSBS) or NENSE(DSBS)), VmConsFuel.L(runCy,DSBS,"STE",YTIME)) +
-    VmConsFiEneSec.L(runCy,"STE",YTIME) +
-    VmLossesDistr.L(runCy,"STE",YTIME) / 2
+    SUM(DSBS$(INDSE(DSBS) or NENSE(DSBS)), imFuelConsPerFueSub(runCy,DSBS,"STE",YTIME)) +
+    i03TotEneBranchCons(runCy,"STE",YTIME) +
+    imDistrLosses(runCy,"STE",YTIME) / 2 +
+    i03FeedTransfr(runCy,"STE",YTIME) / 2
   )
 )$(TCHP(TSTEAM) and SUM(EFS,i03InpCHPTransfProcess(runCy,EFS,YTIME) * i09EffSteProd(TSTEAM,YTIME))) +
 (
   SUM(EFS$TSTEAMTOEF(TSTEAM,EFS),i03InpDHPTransfProcess(runCy,EFS,YTIME) * i09EffSteProd(TSTEAM,YTIME)) /
   SUM(EFS$STEAMEF(EFS),i03InpDHPTransfProcess(runCy,EFS,YTIME) * i09EffSteProd(TSTEAM,YTIME)) * 
   (
-    SUM(DSBS$DOMSE(DSBS), VmConsFuel.L(runCy,DSBS,"STE",YTIME)) +
-    VmLossesDistr.L(runCy,"STE",YTIME) / 2
+    SUM(DSBS$DOMSE(DSBS), imFuelConsPerFueSub(runCy,DSBS,"STE",YTIME)) +
+    imDistrLosses(runCy,"STE",YTIME) / 2 +
+    i03FeedTransfr(runCy,"STE",YTIME) / 2
   )
 )$(TDHP(TSTEAM) and SUM(EFS,i03InpDHPTransfProcess(runCy,EFS,YTIME) * i09EffSteProd(TSTEAM,YTIME)));
 *---
@@ -66,20 +69,21 @@ V09CostProdSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) =
 V09CostCapProdSte.L(runCy,TSTEAM,YTIME) +
 V09CostVarProdSte.L(runCy,TSTEAM,YTIME);
 *---
+VmCostAvgProdSte.L(runCy,YTIME) = 0.01;
 VmCostAvgProdSte.FX(runCy,YTIME)$DATAY(YTIME) = 0;
 *---
 VmConsFuelSteProd.FX(runCy,STEMODE,EFS,YTIME)$(not STEAMEF(EFS)) = 0;
 *--- LOWER BOUNDS
 V09CostVarProdSte.LO(runCy,TSTEAM,YTIME) = 0;
 V09CostCapProdSte.LO(runCy,TSTEAM,YTIME) = 0;
-V09CostProdSte.LO(runCy,TSTEAM,YTIME) = 0;
+V09CostProdSte.LO(runCy,TSTEAM,YTIME) = epsilon6;
 V09ScrapRate.LO(runCy,TSTEAM,YTIME) = 0;
 V09ScrapRatePremature.LO(runCy,TSTEAM,YTIME) = 0;
 V09GapShareSte.LO(runCy,TSTEAM,YTIME) = 0;
 V09CaptRateSte.LO(runCy,TSTEAM,YTIME) = 0;
-VmCostAvgProdSte.LO(runCy,YTIME) = 0;
+VmCostAvgProdSte.LO(runCy,YTIME) = epsilon6;
 $ontext
-The following bounds produce infeseability errors: No superbasic variables
+The following bounds produce infeseabilities: No superbasic variables
 
 VmProdSte.LO(runCy,TSTEAM,YTIME) = 0;
 VmConsFuelSteProd.LO(runCy,EFS,YTIME) = 0;

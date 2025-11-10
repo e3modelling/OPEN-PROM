@@ -19,7 +19,8 @@ Q09DemTotSte(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       VmConsFuel(allCy,DSBS,"STE",YTIME)
     ) +
     VmConsFiEneSec(allCy,"STE",YTIME) +
-    VmLossesDistr(allCy,"STE",YTIME);
+    VmLossesDistr(allCy,"STE",YTIME) +
+    V03Transfers(allCy,"STE",YTIME);
 
 Q09ScrapRate(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V09ScrapRate(allCy,TSTEAM,YTIME)

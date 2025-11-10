@@ -80,7 +80,8 @@ smElecToSteRatioChp                                        "Technical maximum of
 sIter                                                      "time step iterator" /0/
 sSolverTryMax                                              "maximum attempts to solve each time step" /%SolverTryMax%/
 sModelStat                                                 "helper parameter for solver status"
-smFracElecPriChp                                           "Fraction of Electricity Price at which a CHP sells electricity to network" /0.2/
+smFracElecPriChp                                           "Fraction of Electricity Price at which a CHP sells electricity to network" /0.1/
 sCY                                                        "country iterator" /0/
 sUnitToKUnit                                               "units to Kilo units conversion" /1000/
+epsilon6                                                    "A small number of magnitude 6" /1e-6/
 ;
