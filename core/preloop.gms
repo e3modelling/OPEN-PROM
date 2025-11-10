@@ -74,7 +74,10 @@ VmPriceElecInd.FX(runCy,YTIME)$DATAY(YTIME) =
   SUM(allCy, i03OutCHPTransfProcess(allCy,"STE",YTIME))
 ]$i03OutCHPTransfProcess(runCy,"STE",YTIME);
 *---
-VmLft.FX(runCy,DSBS,TECH,YTIME)$DATAY(YTIME) = i01TechLft(runCy,DSBS,TECH,YTIME);
+VmLft.L(runCy,DSBS,TTECH,YTIME) = 10;
+VmLft.FX(runCy,"PC",TTECH,YTIME)$(DATAY(YTIME) and SECTTECH("PC",TTECH)) = i01TechLft(runCy,"PC",TTECH,YTIME);
+VmLft.FX(runCy,DSBS,TECH,YTIME)$(SECTTECH(DSBS,TECH) and (not sameas(DSBS,"PC"))) = i01TechLft(runCy,DSBS,TECH,YTIME);
+VmLft.FX(runCy,DSBS,TECH,YTIME)$(not SECTTECH(DSBS,TECH)) = 0;
 *---
 openprom.optfile=1;
 *---

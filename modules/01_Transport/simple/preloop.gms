@@ -56,10 +56,3 @@ Q01ShareTechTr.scale(runCy,TRANSE,TTECH,YTIME)=V01ShareTechTr.scale(runCy,TRANSE
 VmDemFinEneTranspPerFuel.FX(runCy,TRANSE,EF,YTIME) $(SECtoEF(TRANSE,EF) $(not An(YTIME))) = imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME);
 VmDemFinEneTranspPerFuel.FX(runCy,TRANSE,EF,YTIME)$(not SECtoEF(TRANSE,EF)) = 0;
 *---
-VmLft.L(runCy,DSBS,TTECH,YTIME) = 0.1;
-VmLft.FX(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH)  $(not  TRANSE(DSBS)) $(not sameas(DSBS,"PC"))$(not TSTEAM(ITECH))) = i01TechLft(runCy,DSBS,ITECH,YTIME);
-VmLft.FX(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH)  $(not  TRANSE(DSBS)) $(not sameas(DSBS,"PC"))$TSTEAM(ITECH)) = 12.5;
-VmLft.FX(runCy,TRANSE,TTECH,YTIME)$(SECTTECH(TRANSE,TTECH) $(not sameas(TRANSE,"PC"))) = i01TechLft(runCy,TRANSE,TTECH,YTIME);
-VmLft.FX(runCy,DSBS,TECH,YTIME)$(not SECTTECH(DSBS,TECH)) = 0;
-VmLft.FX(runCy,"PC",TTECH,YTIME)$( (not AN(YTIME)) $SECTTECH("PC",TTECH)) = 1/V01RateScrPc.L(runCy,YTIME);
-*---
