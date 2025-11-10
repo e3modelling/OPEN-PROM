@@ -66,7 +66,7 @@ VmPriceFuelSubsecCarVal.FX(runCy,SBS,"BGDO",YTIME)$(not An(YTIME)) = 0.5; !! fix
 VmPriceFuelSubsecCarVal.FX(runCy,INDDOM,"HEATPUMP",YTIME)$(SECtoEF(INDDOM,"HEATPUMP")$(not An(YTIME))) = imFuelPrice(runCy,INDDOM,"ELC",YTIME);
 VmPriceFuelSubsecCarVal.FX(runCy,"H2P",EF,YTIME)$(SECtoEF("H2P",EF)$DATAY(YTIME)) = imFuelPrice(runCy,"OI",EF,YTIME);
 VmPriceFuelSubsecCarVal.FX(runCy,"STEAMP",EF,YTIME)$(SECtoEF("STEAMP",EF)$DATAY(YTIME)) = imFuelPrice(runCy,"OI",EF,YTIME);
-VmPriceFuelSubsecCarVal.FX(runCy,SBS,"STE",YTIME)$(SECtoEF(SBS,"STE") and DATAY(YTIME)) = 1;
+VmPriceFuelSubsecCarVal.FX(runCy,SBS,"STE",YTIME)$(SECtoEF(SBS,"STE") and DATAY(YTIME)) = imFuelPrice(runCy,"OI","ELC",YTIME);
 *---
 VmPriceElecInd.FX(runCy,YTIME)$DATAY(YTIME) = 
 [
