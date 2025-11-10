@@ -14,7 +14,7 @@
 Q01Lft(allCy,DSBS,TTECH,YTIME)$(TIME(YTIME) $sameas(DSBS,"PC") $SECTTECH(DSBS,TTECH) $runCy(allCy))..
       VmLft(allCy,DSBS,TTECH,YTIME)
               =E=
-      1/V01RateScrPc(allCy,YTIME);
+      1/V01RateScrPc(allCy,TTECH,YTIME);
 
 *' This equation calculates the activity for goods transport, considering different types of goods transport such as trucks and other freight transport.
 *' The activity is influenced by factors such as GDP, population, fuel prices, and elasticities. The equation includes terms for trucks and other
@@ -325,10 +325,10 @@ Q01PcOwnPcLevl(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' This equation calculates the scrapping rate of passenger cars. The scrapping rate is influenced by the ratio of Gross Domestic Product (GDP) to the population,
 *' reflecting economic and demographic factors. The scrapping rate from the previous year is also considered, allowing for a dynamic estimation of the passenger
 *' cars scrapping rate over time.
-Q01RateScrPc(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V01RateScrPc(allCy,YTIME)
+Q01RateScrPc(allCy,TTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V01RateScrPc(allCy,TTECH,YTIME)
         =E=
-    V01RateScrPc(allCy,YTIME-1) *
+    V01RateScrPc(allCy,TTECH,YTIME-1) *
     (
       i01GDPperCapita(YTIME,allCy) /
       i01GDPperCapita(YTIME-1,allCy)
@@ -337,7 +337,7 @@ Q01RateScrPc(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q01RateScrPcTot(allCy,TTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V01RateScrPcTot(allCy,TTECH,YTIME)
         =E=
-    1 - (1 - V01RateScrPc(allCy,YTIME)) *
+    1 - (1 - V01RateScrPc(allCy,TTECH,YTIME)) *
     (1 - V01PremScrp(allCy,"PC",TTECH,YTIME));
     
 Q01PremScrp(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME)$SECTTECH(TRANSE,TTECH)$runCy(allCy))..

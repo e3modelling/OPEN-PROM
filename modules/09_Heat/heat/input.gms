@@ -145,6 +145,7 @@ table imDataChpPowGen(TCHP,CHPPGSET,YTIME)   "Data for power generation costs (v
 $ondelim
 $include"./iChpPowGen.csv"
 $offdelim
+* FIXME: Data must be expanded to district heating also
 ;
 * Converting EUR2015 to US2015
 imDataChpPowGen(TCHP,"IC",YTIME)  = imDataChpPowGen(TCHP,"IC",YTIME) * 1.1;
