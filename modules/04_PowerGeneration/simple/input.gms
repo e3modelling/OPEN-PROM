@@ -182,7 +182,6 @@ MAXLOADSH 0.45
 Parameters
 i04BaseLoadShareDem(allCy,DSBS,YTIME)	           "Baseload share of demand per sector (1)"
 iTotAvailNomCapBsYr(allCy,YTIME)	               "Total nominal available installed capacity in base year (GW)"
-i04UtilRateChpPlants(allCy,TCHP,YTIME)	           "Utilisation rate of CHP Plants (1)"
 i04MxmLoadFacElecDem(allCy,YTIME)	               "Maximum load factor of electricity demand (1)"
 i04BslCorrection(allCy,YTIME)	                   "Parameter of baseload correction (1)"
 i04TechLftPlaType(allCy,PGALL)	                   "Technical Lifetime per plant type (year)"
@@ -198,8 +197,6 @@ i04BaseLoadShareDem(runCy,DSBS,YTIME)$an(YTIME)  = i04LoadFactorAdj(DSBS);
 i04DataElecAndSteamGen(runCy,YTIME) = 0 ;
 *---
 iTotAvailNomCapBsYr(runCy,YTIME)$datay(YTIME) = i04DataElecSteamGen(runCy,"TOTNOMCAP",YTIME);
-*---
-i04UtilRateChpPlants(runCy,TCHP,YTIME) = 0.5;
 *---
 i04MxmLoadFacElecDem(runCy,YTIME)$an(YTIME) = i04LoadFactorAdjMxm("MAXLOADSH");
 *---

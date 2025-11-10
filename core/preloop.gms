@@ -73,6 +73,8 @@ VmPriceElecInd.FX(runCy,YTIME)$DATAY(YTIME) =
   SUM(allCy, i03OutCHPTransfProcess(allCy,"STE",YTIME))
 ]$i03OutCHPTransfProcess(runCy,"STE",YTIME);
 *---
+VmLft.FX(runCy,DSBS,TECH,YTIME)$DATAY(YTIME) = i01TechLft(runCy,DSBS,TECH,YTIME);
+*---
 openprom.optfile=1;
 *---
 openprom.scaleopt=1;

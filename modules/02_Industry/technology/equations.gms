@@ -94,10 +94,10 @@ Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not sa
         =E=
     ((
       (
-        (imDisc(allCy,DSBS,YTIME)$(not TSTEAM(ITECH)) + imDisc(allCy,"PG",YTIME)$TSTEAM(ITECH)) * !! in case of chp plants we use the discount rate of power generation sector
-        exp((imDisc(allCy,DSBS,YTIME)$(not TSTEAM(ITECH)) + imDisc(allCy,"PG",YTIME)$TSTEAM(ITECH)) * VmLft(allCy,DSBS,ITECH,YTIME))
+        imDisc(allCy,DSBS,YTIME) * !! in case of chp plants we use the discount rate of power generation sector
+        exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME))
       ) /
-      (exp((imDisc(allCy,DSBS,YTIME)$(not TSTEAM(ITECH)) + imDisc(allCy,"PG",YTIME)$TSTEAM(ITECH)) * VmLft(allCy,DSBS,ITECH,YTIME)) - 1)
+      (exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME)) - 1)
     ) *
     imCapCostTech(allCy,DSBS,ITECH,YTIME) * imCGI(allCy,YTIME) +
     imFixOMCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit)
