@@ -54,7 +54,7 @@ VmConsFiEneSec(allCy,EFS,YTIME)                            "Final consumption in
 VmInpTransfTherm(allCy,EFS,YTIME)	                       "Transformation input to thermal power plants (Mtoe)"
 VmTransfInputDHPlants(allCy,EFS,YTIME)                     "Transformation input to District Heating Plants (Mtoe)"
 VmTransfInputCHPlants(allCy,EFS,YTIME)                    "Transformation input to CHPs (Mtoe)"
-VmConsFinEneCountry(allCy,EF,YTIME)                        "Total final energy consumnption (Mtoe)"
+VmConsFinEneCountry(allCy,EFS,YTIME)                        "Total final energy consumnption (Mtoe)"
 VmConsFinNonEne(allCy,EFS,YTIME)                           "Final non energy consumption (Mtoe)"
 VmLossesDistr(allCy,EFS,YTIME)                             "Distribution losses (Mtoe)"
 ;
