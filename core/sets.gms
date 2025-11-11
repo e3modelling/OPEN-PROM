@@ -9,6 +9,10 @@ SSA
 NEU
 MEA
 REF
+LTU
+EST
+LUX
+LVA
 CAZ
 AUT
 BEL
@@ -49,6 +53,10 @@ resCy "Countries for Research Mode"
 LAM
 OAS
 SSA
+EST
+LTU
+LUX
+LVA
 NEU
 MEA
 REF
@@ -62,7 +70,6 @@ CZE
 DEU
 DNK
 ESP
-ELL
 FIN
 FRA
 GBR
