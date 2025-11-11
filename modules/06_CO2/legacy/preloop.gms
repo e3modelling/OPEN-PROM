@@ -4,14 +4,14 @@
 *'                *VARIABLE INITIALISATION*
 *---
 !!VmCstCO2SeqCsts.L(runCy,YTIME)=1;
-!!VmCstCO2SeqCsts.FX(runCy,YTIME)$(not an(YTIME)) = i06ElastCO2Seq(runCy,"mc_b");
+!!VmCstCO2SeqCsts.FX(runCy,YTIME)$DATAY(YTIME) = i06ElastCO2Seq(runCy,"mc_b");
 *---
-V06CapCO2ElecHydr.FX(runCy,CO2CAPTECH,YTIME)$(not An(YTIME)) = 0;
+V06CapCO2ElecHydr.FX(runCy,CO2CAPTECH,YTIME)$DATAY(YTIME) = 0;
 *---
-V06CaptCummCO2.FX(runCy,YTIME)$(not an(YTIME)) = 0 ;
+V06CaptCummCO2.FX(runCy,YTIME)$DATAY(YTIME) = 0 ;
 *---
 *V06TrnsWghtLinToExp.scale(runCy,YTIME)=1.e-20;
 *Q06TrnsWghtLinToExp.scale(runCy,YTIME)=1.e-20;
 *---
-V06LvlCostDAC.FX(runCy,DACTECH,YTIME)$(not an(YTIME)) = 100;
-V06CapDAC.FX(runCy,DACTECH,YTIME)$(not an(YTIME)) = 1;
+V06LvlCostDAC.FX(runCy,DACTECH,YTIME)$DATAY(YTIME) = 100;
+V06CapDAC.FX(runCy,DACTECH,YTIME)$DATAY(YTIME) = 1;

@@ -3,9 +3,9 @@
  
 *'                *VARIABLE INITIALISATION*
 *---
-V02FinalElecNonSubIndTert.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = imFuelConsPerFueSub(runCy,INDDOM,"ELC",YTIME) * imShrNonSubElecInTotElecDem(runCy,INDDOM);
+V02FinalElecNonSubIndTert.FX(runCy,INDDOM,YTIME)$DATAY(YTIME) = imFuelConsPerFueSub(runCy,INDDOM,"ELC",YTIME) * imShrNonSubElecInTotElecDem(runCy,INDDOM);
 *---
-V02UsefulElecNonSubIndTert.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = V02FinalElecNonSubIndTert.L(runCy,INDDOM,YTIME) * imUsfEneConvSubTech(runCy,INDDOM,"TELC",YTIME);
+V02UsefulElecNonSubIndTert.FX(runCy,INDDOM,YTIME)$DATAY(YTIME) = V02FinalElecNonSubIndTert.L(runCy,INDDOM,YTIME) * imUsfEneConvSubTech(runCy,INDDOM,"TELC",YTIME);
 *----
 * Needs to be divided with average efficiency --- WHICH ONE?
  
@@ -34,27 +34,27 @@ V02EquipCapTechSubsec.FX(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and not A
 V02EquipCapTechSubsec.FX(runCy,DSBS,CCSTECH,YTIME)$(SECTTECH(DSBS,CCSTECH) and not An(YTIME)) = 0;
 display V02EquipCapTechSubsec.L;
  
-V02DemSubUsefulSubsec.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = SUM(ITECH$SECTTECH(INDDOM,ITECH),
+V02DemSubUsefulSubsec.FX(runCy,INDDOM,YTIME)$DATAY(YTIME) = SUM(ITECH$SECTTECH(INDDOM,ITECH),
       V02EquipCapTechSubsec.L(runCy,INDDOM,ITECH,YTIME) *
       imUsfEneConvSubTech(runCy,INDDOM,ITECH,YTIME) *
       i02util(runCy,INDDOM,ITECH,YTIME)
     );
-*V02DemSubUsefulSubsec.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = max(imTotFinEneDemSubBaseYr(runCy,INDDOM,YTIME) - V02UsefulElecNonSubIndTert.L(runCy,INDDOM,YTIME), 1e-5) * 0.5;
-V02DemSubUsefulSubsec.FX(runCy,NENSE,YTIME)$(not An(YTIME)) = max(imTotFinEneDemSubBaseYr(runCy,NENSE,YTIME),1e-5);
-*V02DemSubUsefulSubsec.FX(runCy,"HOU",YTIME)$(not An(YTIME)) = max(imTotFinEneDemSubBaseYr(runCy,"HOU",YTIME) - V02UsefulElecNonSubIndTert.L(runCy,"HOU",YTIME)-i02ExogDemOfBiomass(runCy,"HOU",YTIME),1e-5) * 0.8;
+*V02DemSubUsefulSubsec.FX(runCy,INDDOM,YTIME)$DATAY(YTIME) = max(imTotFinEneDemSubBaseYr(runCy,INDDOM,YTIME) - V02UsefulElecNonSubIndTert.L(runCy,INDDOM,YTIME), 1e-5) * 0.5;
+V02DemSubUsefulSubsec.FX(runCy,NENSE,YTIME)$DATAY(YTIME) = max(imTotFinEneDemSubBaseYr(runCy,NENSE,YTIME),1e-5);
+*V02DemSubUsefulSubsec.FX(runCy,"HOU",YTIME)$DATAY(YTIME) = max(imTotFinEneDemSubBaseYr(runCy,"HOU",YTIME) - V02UsefulElecNonSubIndTert.L(runCy,"HOU",YTIME)-i02ExogDemOfBiomass(runCy,"HOU",YTIME),1e-5) * 0.8;
  
  
  
 *i02Share(runCy,DSBS,ITECH,EF,YTIME)$(SECTTECH(DSBS,ITECH) and ITECHtoEF(ITECH,EF)) = (imFuelConsPerFueSub(runCy,DSBS,EF,YTIME)/sum(ITECH2$(ITECHtoEF(ITECH2,EF)$SECTTECH(DSBS,ITECH2)),1)) / V02EquipCapTechSubsec(runCy,DSBS,ITECH,YTIME);
 *---
-V02UsefulElecNonSubIndTert.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = imFuelConsPerFueSub(runCy,INDDOM,"ELC",YTIME) * imShrNonSubElecInTotElecDem(runCy,INDDOM) / imUsfEneConvSubTech(runCy,INDDOM,"TELC",YTIME);
+V02UsefulElecNonSubIndTert.FX(runCy,INDDOM,YTIME)$DATAY(YTIME) = imFuelConsPerFueSub(runCy,INDDOM,"ELC",YTIME) * imShrNonSubElecInTotElecDem(runCy,INDDOM) / imUsfEneConvSubTech(runCy,INDDOM,"TELC",YTIME);
 *---
 VmConsFuel.L(runCy,DSBS,EF,YTIME)$(not TRANSE(DSBS)) = 1e-8;
 VmConsFuel.FX(runCy,DSBS,EF,YTIME)$((not HEATPUMP(EF)) and not TRANSE(DSBS) and not An(YTIME)) = sum(SECtoEF(DSBS,EF),imFuelConsPerFueSub(runCy,DSBS,EF,YTIME));
 *---
-*vmConsTotElecInd.FX(runCy,YTIME)$(not An(YTIME))= SUM(INDSE,VmConsElecNonSubIndTert.l(runCy,INDSE,YTIME));
+*vmConsTotElecInd.FX(runCy,YTIME)$DATAY(YTIME)= SUM(INDSE,VmConsElecNonSubIndTert.l(runCy,INDSE,YTIME));
  
-*vmDemFinSubFuelInd.FX(runCy,YTIME)$(not An(YTIME))= SUM(INDSE,VmDemFinSubFuelSubsec.L(runCy,INDSE,YTIME));
+*vmDemFinSubFuelInd.FX(runCy,YTIME)$DATAY(YTIME)= SUM(INDSE,VmDemFinSubFuelSubsec.L(runCy,INDSE,YTIME));
 *---
 !!V02VarCostTech.FX(runCy,DSBS,ITECH,YTIME)$(not An(YTIME) and not TRANSE(DSBS) and not sameas(DSBS,"DAC") and SECTTECH(DSBS,ITECH)) = 0.0001;
 V02VarCostTech.FX(runCy,DSBS,ITECH,YTIME)$(not An(YTIME) and not TRANSE(DSBS) and not sameas(DSBS,"DAC") and SECTTECH(DSBS,ITECH)) =
@@ -89,4 +89,4 @@ V02CapCostTech.FX(runCy,DSBS,ITECH,YTIME)$(not An(YTIME) and not TRANSE(DSBS) an
     imFixOMCostTech(runCy,DSBS,ITECH,YTIME) / sUnitToKUnit)
     / imUsfEneConvSubTech(runCy,DSBS,ITECH,YTIME);
  
-V02CostTech.FX(runCy,DSBS,ITECH,YTIME)$(not An(YTIME)) = V02VarCostTech.L(runCy,DSBS,ITECH,YTIME) + V02CapCostTech.L(runCy,DSBS,ITECH,YTIME);
+V02CostTech.FX(runCy,DSBS,ITECH,YTIME)$DATAY(YTIME) = V02VarCostTech.L(runCy,DSBS,ITECH,YTIME) + V02CapCostTech.L(runCy,DSBS,ITECH,YTIME);
