@@ -131,7 +131,7 @@ TGSL      0
 TLPG      0
 TGDO      0
 TNGS      0
-TELC      0
+TELC      0.0001
 TKRS      0
 TETH      0
 TMET      0

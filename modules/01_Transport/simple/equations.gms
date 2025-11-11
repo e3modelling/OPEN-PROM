@@ -93,7 +93,10 @@ Q01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTE
       (imDisc(allCy,TRANSE,YTIME)*exp(imDisc(allCy,TRANSE,YTIME)*VmLft(allCy,TRANSE,TTECH,YTIME)))
       /
       (exp(imDisc(allCy,TRANSE,YTIME)*VmLft(allCy,TRANSE,TTECH,YTIME)) - 1)
-    ) * imCapCostTech(allCy,TRANSE,TTECH,YTIME) * imCGI(allCy,YTIME);
+    ) *
+    imCapCostTech(allCy,TRANSE,TTECH,YTIME) * (1 - imFacSubsiCapCostTech(TTECH)) *
+    imCGI(allCy,YTIME)
+;
 
 * -----------------------------------------------------------------------------
 * Q01CostFuel: Calculates the total fuel cost for transport technologies.

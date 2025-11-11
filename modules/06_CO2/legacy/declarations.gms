@@ -43,5 +43,4 @@ Scalars
 S06ProfRateMaxDAC                                           "The maximum profitability rate of V06DACProfRate" /7.5/
 S06CapFacMaxNewDAC                                          "The maximum level of the V06DACNewCapFac" /0.11/
 S06CapFacMinNewDAC                                          "The minimum level of the V06DACNewCapFac" /0.05/
-S06LftmDAC                                                  "The life expectancy of DAC technologies" /25/
 ;
