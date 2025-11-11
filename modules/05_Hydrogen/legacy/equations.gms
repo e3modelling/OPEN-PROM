@@ -290,10 +290,7 @@ Q05CaptRateH2(allCy,H2TECH,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
 Q05ProdAmmHB(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V05ProdAmmHB(allCy,YTIME)
         =E=
-    min(
-        V05ProdH2AmmHB(allCy,YTIME) / i05EffAmmHB(allCy,YTIME),
-        i05MaxAmmCapHB(allCy,YTIME)
-    )
+    V05ProdH2AmmHB(allCy,YTIME) / i05EffAmmHB(allCy,YTIME)
 ;
 
 *' Links the hydrogen feedstock requirement directly to the planned ammonia output for the Haber-Bosch process.
@@ -324,10 +321,7 @@ Q05CostProdAmmHB(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q05ProdAmmHBCCS(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V05ProdAmmHBCCS(allCy,YTIME)
         =E=
-    min(
-        V05ProdH2AmmHBCCS(allCy,YTIME) / i05EffAmmHBCCS(allCy,YTIME),
-        i05MaxAmmCap(allCy,YTIME)
-       )
+    V05ProdH2AmmHBCCS(allCy,YTIME) / i05EffAmmHBCCS(allCy,YTIME)
 ;
 
 *' Calculates the hydrogen feedstock needed for ammonia production when using
@@ -359,10 +353,7 @@ Q05CostProdAmmHBCCS(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q05ProdAmmElec(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V05ProdAmmElec(allCy,YTIME)
         =E=
-    min(
-        V05ConsElecAmmElec(allCy,YTIME) / i05EffAmmElec(allCy,YTIME),
-        i05MaxAmmCap(allCy,YTIME)
-       )
+    V05ConsElecAmmElec(allCy,YTIME) / i05EffAmmElec(allCy,YTIME)
 ;
 
 *' Ensures that the supply of electricity matches the requirements for the targeted ammonia output in electrochemical
@@ -415,140 +406,3 @@ Q05CostProdAmmCrk(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     + i05OpexAmmCrk(allCy,YTIME)
     + i05FeedstockCostAmmCrk(allCy,YTIME) * V05FeedstockAmmCrk(allCy,YTIME)
 ;
-
-
-!!
-!!                               C. Hydrogen Infrustructure
-!!
-
-
-$ontext
-*' This equation models the expansion of hydrogen infrastructure (e.g., pipelines, storage facilities)
-*' needed to support growing demand. It takes into account the projected growth in hydrogen production 
-*' and distribution, ensuring that infrastructure expansion aligns with demand forecasts.
-Q05H2InfrArea(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V05H2InfrArea(allCy,YTIME)
-         =E=
-          i05PolH2AreaMax(allCy)/(1 + exp( -i05H2Adopt(allCy,"B",YTIME)*( VmDemTotH2(allCy,YTIME)/(i05HabAreaCountry(allCy)/s05AreaStyle*0.275)- i05H2Adopt(allCy,"MID",YTIME))))
-
-;
-
-*' This equation represents the delivery or throughput capacity of hydrogen infrastructure technologies.
-*' It calculates the total amount of hydrogen that can be delivered through the infrastructure, considering
-*' factors such as efficiency and technological limits of the infrastructure components (e.g., pipelines, storage, etc.).
-Q05DelivH2InfrTech(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-        V05DelivH2InfrTech(allCy,INFRTECH,YTIME)
-         =E=
-         (
-         (    sum(SBS$(H2INFRSBS(INFRTECH,SBS) $SECTtoEF(SBS,"H2F")), VmDemSecH2(allCy,SBS, YTIME))/
-            (i05EffH2Transp(allCy,INFRTECH,YTIME)*(1-i05ConsSelfH2Transp(allCy,INFRTECH,YTIME))) )$H2INFRDNODES(INFRTECH)  !! for final demand nodes
-
-         +
-
-         sum(INFRTECH2$H2NETWORK(INFRTECH,INFRTECH2), V05DelivH2InfrTech(allCy,INFRTECH2,YTIME)/(i05EffH2Transp(allCy,INFRTECH,YTIME)*(1-i05ConsSelfH2Transp(allCy,INFRTECH,YTIME))))$(not H2INFRDNODES(INFRTECH))
-
-         )$i05PolH2AreaMax(allCy)
-         +1e-7
-;
-
-*' This equation determines the required new investment in hydrogen infrastructure to meet the demand or capacity requirements.
-*' It calculates the amount of investment needed to develop or upgrade the infrastructure technologies (like production, storage, and transport)
-*' to support future hydrogen use or capacity expansion.
-Q05InvNewReqH2Infra(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V05InvNewReqH2Infra(allCy,INFRTECH,YTIME)
-         =E=
-         ( V05DelivH2InfrTech(allCy,INFRTECH,YTIME)-V05DelivH2InfrTech(allCy,INFRTECH,YTIME-1)
-          + 0 + 
-          SQRT( SQR(V05DelivH2InfrTech(allCy,INFRTECH,YTIME)-V05DelivH2InfrTech(allCy,INFRTECH,YTIME-1)+0) + SQR(1e-4) ) )/2
-;
-
-*' This equation focuses on the hydrogen transport capacity through pipelines. It calculates the amount of hydrogen that can be
-*' transported through the hydrogen pipeline system, considering factors such as pipe size, pressure, flow rate, and distance.
-Q05H2Pipe(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V05H2Pipe(allCy,INFRTECH,YTIME)
-         =E=
-         (55*V05InvNewReqH2Infra(allCy,INFRTECH,YTIME)/(1e-3*s05DelivH2Turnpike))$sameas("TPIPA",INFRTECH)  !! turnpike pipeline km
-         +
-         (i05PipeH2Transp(INFRTECH,YTIME)*1e6*V05InvNewReqH2Infra(allCy,INFRTECH,YTIME))$(sameas("LPIPU",INFRTECH) or sameas("HPIPI",INFRTECH)) !!Low pressure urban pipelines km and industrial pipelines km
-         +
-         (s05LenH2StationConn*V05CostInvTechH2Infr(allCy,"SSGG",YTIME))$sameas("MPIPS",INFRTECH)   !! Pipelines connecting hydrogen service stations with the ring km
-         +
-         (sum(INFRTECH2$H2NETWORK(INFRTECH,INFRTECH2),V05CostInvTechH2Infr(allCy,INFRTECH2,YTIME)*i05KmFactH2Transp(allCy,INFRTECH2)))$(sameas("MPIPU",INFRTECH)  or sameas("HPIPU",INFRTECH)) !! Ring pipeline in km and high pressure pipelines km
-         +
-         (V05InvNewReqH2Infra(allCy,INFRTECH,YTIME)/s05SalesH2Station*1E3)$sameas("SSGG",INFRTECH)   !! Number of new service stations to be built to meet the demand
-;
-
-*' This equation calculates the cost of investment in hydrogen infrastructure technologies. It includes the costs associated with 
-*' deploying new infrastructure, such as the capital expenses required for construction, material procurement, and installation of
-*' technologies related to hydrogen production, storage, and distribution.
-Q05CostInvTechH2Infr(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V05CostInvTechH2Infr(allCy,INFRTECH,YTIME)
-         =E=
-         1e-6*(i05CostInvH2Transp(allCy,INFRTECH,YTIME)/V05H2InfrArea(allCy,YTIME)*V05CostInvTechH2Infr(allCy,INFRTECH,YTIME))$(sameas("TPIPA",INFRTECH))
-         +
-         1e-6*(i05CostInvH2Transp(allCy,INFRTECH,YTIME)/V05H2InfrArea(allCy,YTIME)*V05CostInvTechH2Infr(allCy,INFRTECH,YTIME))$(PIPES(INFRTECH) $(not sameas("TPIPA",INFRTECH)))
-         +
-         (i05CostInvH2Transp(allCy,INFRTECH,YTIME)*V05InvNewReqH2Infra(allCy,INFRTECH,YTIME))$(sameas("SSGG",INFRTECH)) !!Service stations investment cost
-;
-
-*' This equation represents the cost of the hydrogen infrastructure technologies themselves, possibly including both capital and operational costs.
-*' It may consider costs for specific technologies used in hydrogen systems (e.g., electrolyzers, compressors, storage tanks, etc.) and their maintenance.
-Q05CostTechH2Infr(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V05CostTechH2Infr(allCy,INFRTECH,YTIME)
-         =E=
-         ((imDisc(allCy,"H2INFR",YTIME)*exp(imDisc(allCy,"H2INFR",YTIME)* i05TranspLftH2(INFRTECH,YTIME))/(exp(imDisc(allCy,"H2INFR",YTIME)* i05TranspLftH2(INFRTECH,YTIME))-1))
-         *
-         V05CostInvCummH2Transp(allCy,INFRTECH,YTIME)*(1+i05CostInvFOMH2(INFRTECH,YTIME)))/i05AvailRateH2Transp(INFRTECH,YTIME) + i05CostInvVOMH2(INFRTECH,YTIME)
-         *
-         (imDisc(allCy,"H2INFR",YTIME)*exp(imDisc(allCy,"H2INFR",YTIME)* i05TranspLftH2(INFRTECH,YTIME))/(exp(imDisc(allCy,"H2INFR",YTIME)* i05TranspLftH2(INFRTECH,YTIME))-1))*
-         V05CostInvCummH2Transp(allCy,INFRTECH,YTIME)
-         +
-         (
-            i05ConsSelfH2Transp(allCy,INFRTECH,YTIME)*V05InvNewReqH2Infra(allCy,INFRTECH,YTIME)*
-            (VmCostAvgProdH2(allCy,YTIME-1)$sameas("HPIPU",INFRTECH)+
-            VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)*1e3)$sameas("SSGG",INFRTECH)
-         )$(sameas("SSGG",INFRTECH) or sameas("HPIPU",INFRTECH))
-         /V05InvNewReqH2Infra(allCy,INFRTECH,YTIME)
-;
-
-*' This equation calculates the cumulative costs of investments in hydrogen transportation infrastructure over time. 
-*' It tracks the total cost accumulated as new transportation infrastructure (such as pipelines, compressors, and distribution networks) is installed to meet demand.
-Q05CostInvCummH2Transp(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V05CostInvCummH2Transp(allCy,INFRTECH,YTIME) 
-         =E=
-         sum(YYTIME$(an(YYTIME) $(ord(YYTIME)<=ord(YTIME))),
-
-                 V05CostTechH2Infr(allCy,INFRTECH,YYTIME)*V05InvNewReqH2Infra(allCy,INFRTECH,YYTIME)*exp(0.04*(ord(YTIME)-ord(YYTIME)))
-         )
-         /
-         sum(YYTIME$(an(YYTIME) $(ord(YYTIME)<=ord(YTIME))),V05InvNewReqH2Infra(allCy,INFRTECH,YYTIME))
-;
-
-*' This equation defines the tariff or price structure for using the hydrogen infrastructure. It calculates the cost or
-*' fee associated with transporting hydrogen through the infrastructure, possibly taking into account the infrastructure’s
-*' capacity, usage, or maintenance costs. This fee is typically levied per unit of hydrogen transported.
-Q05TariffH2Infr(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V05TariffH2Infr(allCy,INFRTECH,YTIME)
-         =E=
-         i05CostAvgWeight(allCy,YTIME)* V05H2Pipe(allCy,INFRTECH,YTIME)
-         +
-         (1-i05CostAvgWeight(allCy,YTIME))*V05CostTechH2Infr(allCy,INFRTECH,YTIME)
-;
-
-*' This equation calculates the price of hydrogen based on infrastructure costs. It determines the price at which hydrogen
-*' can be delivered to end-users, including both the production cost and the infrastructure-related costs (transport, storage, etc.).
-Q05PriceH2Infr(allCy,SBS,YTIME)$(TIME(YTIME) $SECTTECH(SBS,"H2F") $(runCy(allCy)))..
-         V05PriceH2Infr(allCy,SBS,YTIME)
-         =E=
-         sum(INFRTECH$H2INFRSBS(INFRTECH,SBS) , V05TariffH2Infr(allCy,INFRTECH,YTIME))
-;
-
-*' This equation calculates the total cost of hydrogen production, transportation, and distribution, integrating all the costs associated
-*' with hydrogen infrastructure and technology. It includes costs for producing hydrogen, investing in infrastructure, maintaining the infrastructure,
-*' and any operational costs related to hydrogen transportation and storage.
-Q05CostTotH2(allCy,SBS,YTIME)$(TIME(YTIME) $SECTTECH(SBS,"H2F") $(runCy(allCy)))..
-         V05CostTotH2(allCy,SBS,YTIME)
-         =E=
-         V05PriceH2Infr(allCy,SBS,YTIME)+VmCostAvgProdH2(allCy,YTIME)
-;
-$offtext
