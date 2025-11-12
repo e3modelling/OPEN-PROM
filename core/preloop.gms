@@ -71,7 +71,7 @@ VmPriceFuelSubsecCarVal.FX(runCy,SBS,"STE",YTIME)$(SECtoEF(SBS,"STE") and DATAY(
 VmPriceElecInd.FX(runCy,YTIME)$DATAY(YTIME) = 
 [
   SUM(allCy,i03OutCHPTransfProcess(allCy,"ELC",YTIME)) /
-  SUM(allCy, i03OutCHPTransfProcess(allCy,"STE",YTIME))
+  SUM(allCy,i03OutCHPTransfProcess(allCy,"STE",YTIME))
 ]$i03OutCHPTransfProcess(runCy,"STE",YTIME);
 *---
 VmLft.L(runCy,DSBS,TTECH,YTIME) = 10;

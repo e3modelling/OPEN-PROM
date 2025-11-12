@@ -88,3 +88,7 @@ V05DemGapH2.scale(runCy,YTIME) = 1e-10;
 Q05DemGapH2.scale(runCy,YTIME) = V05DemGapH2.scale(runCy,YTIME);
 *---
 V05DemGapH2.LO(runCy,YTIME) = 0;
+*---
+V05PremRepH2Prod.FX(runCy,H2TECH,YTIME)$(not H2TECHPM(H2TECH)) = 1;
+*V05PremRepH2Prod.LO(runCy,H2TECH,YTIME) = 0;
+*V05PremRepH2Prod.UP(runCy,H2TECH,YTIME) = 1;

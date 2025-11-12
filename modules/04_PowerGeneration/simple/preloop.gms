@@ -3,6 +3,11 @@
 
 *'                *VARIABLE INITIALISATION*
 *---
+V04ShareTechPG.LO(runCy,PGALL,YTIME)$DATAY(YTIME) = 0;
+V04ShareTechPG.UP(runCy,PGALL,YTIME)$DATAY(YTIME) = 1;
+V04ScrpRate.UP(runCy,PGALL,YTIME) = 1;
+V04ScrpRate.LO(runCy,PGALL,YTIME) = 0;
+
 V04CostVarTech.L(runCy,PGALL,YTIME) = 0.1;
 V04CostVarTech.FX(runCy,PGALL,YTIME)$(not AN(YTIME)) = 
     i04VarCost(PGALL,YTIME) / 1e3 + 
@@ -100,7 +105,3 @@ SUM(PGALL$PGALLTOEF(PGALL,PGEF),
 );
 *---
 
-V04ShareTechPG.LO(runCy,PGALL,YTIME)$DATAY(YTIME) = 0;
-V04ShareTechPG.UP(runCy,PGALL,YTIME)$DATAY(YTIME) = 1;
-V04ScrpRate.UP(runCy,PGALL,YTIME) = 1;
-V04ScrpRate.LO(runCy,PGALL,YTIME) = 0;

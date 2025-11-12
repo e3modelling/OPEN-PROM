@@ -11,10 +11,10 @@
 *' * Transport
 
 *' This equation calculates the lifetime of passenger cars as the inverse of their scrapping rate.
-Q01Lft(allCy,DSBS,TTECH,YTIME)$(TIME(YTIME) $sameas(DSBS,"PC") $SECTTECH(DSBS,TTECH) $runCy(allCy))..
-      VmLft(allCy,DSBS,TTECH,YTIME)
-              =E=
-      1/V01RateScrPc(allCy,TTECH,YTIME);
+Q01Lft(allCy,"PC",TTECH,YTIME)$(TIME(YTIME) $SECTTECH("PC",TTECH) $runCy(allCy))..
+    VmLft(allCy,"PC",TTECH,YTIME)
+        =E=
+    1 / V01RateScrPc(allCy,TTECH,YTIME);
 
 *' This equation calculates the activity for goods transport, considering different types of goods transport such as trucks and other freight transport.
 *' The activity is influenced by factors such as GDP, population, fuel prices, and elasticities. The equation includes terms for trucks and other
@@ -162,8 +162,7 @@ Q01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME)$runCy(allCy)
         =E=
       V01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME) +
       imFixOMCostTech(allCy,TRANSE,TTECH,YTIME) +
-      V01CostFuel(allCy,TRANSE,TTECH,YTIME)
-    ;
+      V01CostFuel(allCy,TRANSE,TTECH,YTIME);
 
 * -------------------------------------------------------------------------------
 * Q01ShareTechTr: Calculates the share of each transport technology in total sectoral use.
@@ -235,7 +234,9 @@ Q01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)$(TIME(YTIME) $SECTTECH(TR
 Q01DemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)$(TIME(YTIME) $SECtoEF(TRANSE,EF) $runCy(allCy))..
     VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)
             =E=
-    sum((TTECH)$(SECTTECH(TRANSE,TTECH) $TTECHtoEF(TTECH,EF) ), V01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME));
+    sum(TTECH$(SECTTECH(TRANSE,TTECH) and TTECHtoEF(TTECH,EF)),
+      V01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)
+    );
 
 * -----------------------------------------------------------------------------
 * Q01StockPcYearly: Computes the total stock of passenger cars (in millions).
@@ -325,7 +326,7 @@ Q01PcOwnPcLevl(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' This equation calculates the scrapping rate of passenger cars. The scrapping rate is influenced by the ratio of Gross Domestic Product (GDP) to the population,
 *' reflecting economic and demographic factors. The scrapping rate from the previous year is also considered, allowing for a dynamic estimation of the passenger
 *' cars scrapping rate over time.
-Q01RateScrPc(allCy,TTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+Q01RateScrPc(allCy,TTECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH("PC",TTECH))..
     V01RateScrPc(allCy,TTECH,YTIME)
         =E=
     V01RateScrPc(allCy,TTECH,YTIME-1) *

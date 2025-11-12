@@ -36,7 +36,7 @@ sum(DSBS$(not NENSE(DSBS)),
   imFuelConsPerFueSub(runCy,DSBS,EFS,YTIME)
 );
 *---
-VmLossesDistr.FX(runCy,EFS,YTIME)$(not An(YTIME)) = imDistrLosses(runCy,EFS,YTIME);
+VmLossesDistr.FX(runCy,EFS,YTIME)$DATAY(YTIME) = imDistrLosses(runCy,EFS,YTIME);
 *---
 V03OutTotTransf.FX(runCy,EFS,YTIME)$(not AN(YTIME)) = i03OutTotTransfProcess(runCy,EFS,YTIME);
 *---

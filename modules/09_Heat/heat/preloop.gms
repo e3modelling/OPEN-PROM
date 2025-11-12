@@ -3,6 +3,31 @@
 
 *'                *VARIABLE INITIALISATION*
 
+*--- LOWER BOUNDS
+V09CostVarProdSte.LO(runCy,TSTEAM,YTIME) = 0;
+V09CostCapProdSte.LO(runCy,TSTEAM,YTIME) = 0;
+V09CostProdSte.LO(runCy,TSTEAM,YTIME) = epsilon6;
+V09ScrapRate.LO(runCy,TSTEAM,YTIME) = 0;
+V09ScrapRatePremature.LO(runCy,TSTEAM,YTIME) = 0;
+V09GapShareSte.LO(runCy,TSTEAM,YTIME) = 0;
+V09CaptRateSte.LO(runCy,TSTEAM,YTIME) = 0;
+VmCostAvgProdSte.LO(runCy,YTIME) = epsilon6;
+$ontext
+The following bounds produce infeseabilities: No superbasic variables
+
+VmProdSte.LO(runCy,TSTEAM,YTIME) = 0;
+VmConsFuelSteProd.LO(runCy,EFS,YTIME) = 0;
+V09DemGapSte.LO(runCy,YTIME) = 0;
+VmDemTotSte.LO(runCy,YTIME) = 0;
+$offtext
+
+*--- UPPER BOUNDS
+V09ScrapRate.UP(runCy,TSTEAM,YTIME) = 1;
+V09ScrapRatePremature.UP(runCy,TSTEAM,YTIME) = 1;
+V09GapShareSte.UP(runCy,TSTEAM,YTIME) = 1;
+V09CaptRateSte.UP(runCy,TSTEAM,YTIME) = 1;
+
+*---
 VmDemTotSte.FX(runCy,YTIME)$DATAY(YTIME) = 
 SUM(DSBS, imFuelConsPerFueSub(runCy,DSBS,"STE",YTIME)) +
 i03TotEneBranchCons(runCy,"STE",YTIME) +
@@ -73,26 +98,3 @@ VmCostAvgProdSte.L(runCy,YTIME) = 0.01;
 VmCostAvgProdSte.FX(runCy,YTIME)$DATAY(YTIME) = 0;
 *---
 VmConsFuelSteProd.FX(runCy,STEMODE,EFS,YTIME)$(not STEAMEF(EFS)) = 0;
-*--- LOWER BOUNDS
-V09CostVarProdSte.LO(runCy,TSTEAM,YTIME) = 0;
-V09CostCapProdSte.LO(runCy,TSTEAM,YTIME) = 0;
-V09CostProdSte.LO(runCy,TSTEAM,YTIME) = epsilon6;
-V09ScrapRate.LO(runCy,TSTEAM,YTIME) = 0;
-V09ScrapRatePremature.LO(runCy,TSTEAM,YTIME) = 0;
-V09GapShareSte.LO(runCy,TSTEAM,YTIME) = 0;
-V09CaptRateSte.LO(runCy,TSTEAM,YTIME) = 0;
-VmCostAvgProdSte.LO(runCy,YTIME) = epsilon6;
-$ontext
-The following bounds produce infeseabilities: No superbasic variables
-
-VmProdSte.LO(runCy,TSTEAM,YTIME) = 0;
-VmConsFuelSteProd.LO(runCy,EFS,YTIME) = 0;
-V09DemGapSte.LO(runCy,YTIME) = 0;
-VmDemTotSte.LO(runCy,YTIME) = 0;
-$offtext
-
-*--- UPPER BOUNDS
-V09ScrapRate.UP(runCy,TSTEAM,YTIME) = 1;
-V09ScrapRatePremature.UP(runCy,TSTEAM,YTIME) = 1;
-V09GapShareSte.UP(runCy,TSTEAM,YTIME) = 1;
-V09CaptRateSte.UP(runCy,TSTEAM,YTIME) = 1;

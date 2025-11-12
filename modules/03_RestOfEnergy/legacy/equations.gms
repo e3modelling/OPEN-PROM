@@ -87,10 +87,7 @@ Q03OutTransfDhp(allCy,STEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q03TransfInputDHPlants(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmTransfInputDHPlants(allCy,EFS,YTIME)
         =E=
-    sum(DOMSE$SECtoEF(DOMSE,"STE"),VmConsFuel(allCy,DOMSE,"STE",YTIME)) 
-    !! FIXME: disaggregate based on chp capacity
-*    / i03EffDHPlants(allCy,EFS,YTIME)
-;
+    VmConsFuelSteProd(allCy,"DHP",EFS,YTIME);
 
 Q03OutTransfCHP(allCy,TOCTEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V03OutTransfCHP(allCy,TOCTEF,YTIME)
@@ -100,7 +97,8 @@ Q03OutTransfCHP(allCy,TOCTEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q03TransfInputCHPlants(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmTransfInputCHPlants(allCy,EFS,YTIME)
         =E=
-    VmConsFuelSteProd(allCy,"DHP",EFS,YTIME);
+    VmConsFuelSteProd(allCy,"CHP",EFS,YTIME);
+
 *' The equation calculates the refineries' capacity for a given scenario and year.
 *' The calculation is based on a residual factor, the previous year's capacity, and a production scaling
 *' factor that takes into account the historical consumption trends for different energy forms. The scaling factor is
@@ -117,7 +115,7 @@ Q03CapRef(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       )
       $(ord(YTIME) gt 10)
       )     
-    ] $i03RefCapacity(allCy,"%fStartHorizon%")+0;
+    ]$i03RefCapacity(allCy,"%fStartHorizon%")+0;
 
 *' The equation calculates the transformation output from refineries for a specific energy form 
 *' in a given scenario and year. The output is computed based on a residual factor, the previous year's output, and the

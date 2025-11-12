@@ -614,8 +614,8 @@ TNGS      "Internal Combustion Engine fueled by Natural Gas"
 TELC      "Pure Electirc Engine"
 TKRS      "Gas Turbine fueled by Kerosene"
 TETH      "Internal Combustion Engine fueled by Ethanol"
-TMET      "Methanol (85% gasoline 15% methanol) coming either from ngs or bms"
-TBGDO     "Biodiesel internal combustion engine"
+*TMET      "Methanol (85% gasoline 15% methanol) coming either from ngs or bms"
+*TBGDO     "Biodiesel internal combustion engine"
 TPHEVGSL  "Plug in Hybrid engine - gasoline"
 TPHEVGDO  "Plug in Hybrid engine - diesel"
 TH2F      "Fuel Cells: Hydrogen"
@@ -724,8 +724,8 @@ TNGS.(NGS,OGS)
 TELC.ELC
 TKRS.KRS
 TETH.ETH
-TMET.MET
-TBGDO.BGDO
+*TMET.MET
+*TBGDO.BGDO
 TPHEVGSL.(GSL,BGSL,ELC)
 TPHEVGDO.(GDO,BGDO,ELC)
 TH2F.H2F
