@@ -21,7 +21,8 @@ alias(datay, dataylag)
 loop (runCy,PGALL,datay,dataylag)$(ord(datay) = ord(dataylag) + 1 and PGREN(PGALL)) DO
   V04NetNewCapElec.FX(runCy,PGALL,datay) = imInstCapPastNonCHP(runCy,PGALL,datay) - imInstCapPastNonCHP(runCy,PGALL,dataylag) + 1E-10;
 ENDLOOP;
-V04NetNewCapElec.FX(runCy,"PGLHYD",YTIME)$TFIRST(YTIME) = +1E-10;
+V04NetNewCapElec.FX(runCy,"PGLHYD",YTIME)$DATAY(YTIME) = +1E-10;
+V04NetNewCapElec.FX(runCy,PGALL,YTIME)$(not PGREN(PGALL)) = 0;
 *---
 V04CFAvgRen.L(runCy,PGALL,YTIME) = 0.1;
 V04CFAvgRen.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = i04AvailRate(runCy,PGALL,YTIME);
@@ -46,10 +47,12 @@ V04CapElecNonCHP.FX(runCy,YTIME)$DATAY(YTIME) = sum(PGALL,imInstCapPastNonCHP(ru
 V04CapElecCHP.FX(runCy,CHP,YTIME)$DATAY(YTIME) = imInstCapPastCHP(runCy,CHP,YTIME);
 *V04CapElecCHP.FX(runCy,CHP,YTIME)$(An(YTIME)) = imInstCapPastCHP(runCy,CHP,"%fBaseY%");
 *---
-VmCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  imInstCapPastNonCHP(runCy,PGALL,YTIME);
 VmCapElec.L(runCy,PGALL,YTIME)$AN(YTIME) = imInstCapPastNonCHP(runCy,PGALL,"%fStartY%");
-V04CapElec2.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = imInstCapPastNonCHP(runCy,PGALL,YTIME);
+VmCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  imInstCapPastNonCHP(runCy,PGALL,YTIME);
+
 V04CapElec2.L(runCy,PGALL,YTIME)$AN(YTIME) = imInstCapPastNonCHP(runCy,PGALL,"%fStartY%");
+V04CapElec2.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = imInstCapPastNonCHP(runCy,PGALL,YTIME);
+
 V04CapOverall.FX(runCy,PGALL,"%fBaseY%") =  imInstCapPastNonCHP(runCy,PGALL,"%fBaseY%");
 V04CapElecNominal.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = imInstCapPastNonCHP(runCy,PGALL,YTIME) / i04AvailRate(runCy,PGALL,YTIME);
 *---

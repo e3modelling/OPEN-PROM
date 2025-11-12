@@ -55,8 +55,8 @@ VmPriceFuelSubsecCarVal.FX(runCy,SBS,"MET",YTIME)$DATAY(YTIME) = 1; !! fixed pri
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,"ETH",YTIME)$DATAY(YTIME) = 1; !! fixed price for ethanol
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,"BGDO",YTIME)$DATAY(YTIME) = 0.5; !! fixed price for biodiesel
 VmPriceFuelSubsecCarVal.FX(runCy,INDDOM,"HEATPUMP",YTIME)$(SECtoEF(INDDOM,"HEATPUMP")$DATAY(YTIME)) = imFuelPrice(runCy,INDDOM,"ELC",YTIME);
-VmPriceFuelSubsecCarVal.FX(runCy,"H2P",EF,YTIME)$(SECtoEF("H2P",EF)$DATAY(YTIME)) = VmPriceFuelSubsecCarVal.L(runCy,"PG",EF,YTIME);
-VmPriceFuelSubsecCarVal.FX(runCy,"H2P","ELC",YTIME)$DATAY(YTIME)= VmPriceFuelSubsecCarVal.L(runCy,"OI","ELC",YTIME);
+VmPriceFuelSubsecCarVal.FX(runCy,"H2P",EF,YTIME)$(SECtoEF("H2P",EF)$DATAY(YTIME)) = imFuelPrice(runCy,"OI",EF,YTIME);
+VmPriceFuelSubsecCarVal.FX(runCy,"H2P",EF,YTIME)$(not SECtoEF("H2P",EF)) = 0;
 *---
 VmPriceElecInd.L(runCy,YTIME)= 0.9;
 VmPriceElecInd.FX(runCy,YTIME)$TFIRST(YTIME) = i08ElecIndex(runCy,YTIME);

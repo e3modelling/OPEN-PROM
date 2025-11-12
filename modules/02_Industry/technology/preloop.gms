@@ -16,6 +16,7 @@ V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)
 V02DemUsefulSubsecRemTech(allCy,DSBS,YTIME)
 V02GapUsefulDemSubsec(allCy,DSBS,YTIME)
 $offtext
+V02PremScrpIndu.FX(runCy,DSBS,ITECH,YTIME)$(TRANSE(DSBS) or sameas ("DAC",DSBS)) = 0;
 *---
 V02CostTech.L(runCy,DSBS,ITECH,YTIME) = 0.1;
 *---

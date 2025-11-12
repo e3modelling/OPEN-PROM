@@ -10,6 +10,7 @@
 *display V05CostTotH2.L;
 *---
 V05GapShareH2Tech1.L(runCy,H2TECH,YTIME) = 1;
+V05GapShareH2Tech1.FX(runCy,H2TECH,YTIME)$DATAY(YTIME) = 0;
 display V05GapShareH2Tech1.L;
 *---
 V05DemGapH2.L(runCy,YTIME) = 2;

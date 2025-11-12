@@ -11,8 +11,8 @@
 *' * Transport
 
 *' This equation calculates the lifetime of passenger cars as the inverse of their scrapping rate.
-Q01Lft(allCy,DSBS,TTECH,YTIME)$(TIME(YTIME) $sameas(DSBS,"PC") $SECTTECH(DSBS,TTECH) $runCy(allCy))..
-      VmLft(allCy,DSBS,TTECH,YTIME)
+Q01Lft(allCy,"PC",TTECH,YTIME)$(TIME(YTIME) $SECTTECH("PC",TTECH) $runCy(allCy))..
+      VmLft(allCy,"PC",TTECH,YTIME)
               =E=
       1/V01RateScrPc(allCy,YTIME);
 

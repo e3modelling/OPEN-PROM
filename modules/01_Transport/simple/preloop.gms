@@ -53,6 +53,10 @@ Q01ShareTechTr.scale(runCy,TRANSE,TTECH,YTIME)=V01ShareTechTr.scale(runCy,TRANSE
 VmDemFinEneTranspPerFuel.FX(runCy,TRANSE,EF,YTIME) $(SECtoEF(TRANSE,EF) $DATAY(YTIME)) = imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME);
 VmDemFinEneTranspPerFuel.FX(runCy,TRANSE,EF,YTIME)$(not SECtoEF(TRANSE,EF)) = 0;
 *---
+V01CapCostAnnualized.FX(runCy,TRANSE,TTECH,YTIME)$(DATAY(YTIME) or not SECTTECH(TRANSE,TTECH)) = 0;
+*---
+V01CostFuel.FX(runCy,TRANSE,TTECH,YTIME)$(not SECTTECH(TRANSE,TTECH)) = 0;
+*---
 VmLft.L(runCy,DSBS,TTECH,YTIME) = 0.1;
 VmLft.FX(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH)  $(not  TRANSE(DSBS)) $(not sameas(DSBS,"PC"))$(not TCHP(ITECH))) = i01TechLft(runCy,DSBS,ITECH,YTIME);
 VmLft.FX(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH)  $(not  TRANSE(DSBS)) $(not sameas(DSBS,"PC"))$TCHP(ITECH)) = 12.5;

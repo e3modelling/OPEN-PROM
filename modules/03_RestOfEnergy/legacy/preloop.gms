@@ -23,6 +23,7 @@ V03ConsGrssInl.FX(runCy,EFS,YTIME)$DATAY(YTIME) = i03GrosInlCons(runCy,EFS,YTIME
 V03Transfers.FX(runCy,EFS,YTIME)$DATAY(YTIME) = i03FeedTransfr(runCy,EFS,YTIME);
 *---
 V03ProdPrimary.FX(runCy,PPRODEF,YTIME)$DATAY(YTIME) = i03PrimProd(runCy,PPRODEF,YTIME);
+V03ProdPrimary.FX(runCy,EFS,YTIME)$(not PPRODEF(EFS)) = 0;
 *---
 V03Imp.FX(runCy,"NGS",YTIME)$DATAY(YTIME) = imFuelImports(runCy,"NGS",YTIME);
 V03Imp.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;

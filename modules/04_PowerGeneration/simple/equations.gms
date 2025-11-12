@@ -96,6 +96,7 @@ Q04CapexFixCostPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     ) * i04GrossCapCosSubRen(allCy,PGALL,YTIME) * 1000 * imCGI(allCy,YTIME) +
     i04FixOandMCost(allCy,PGALL,YTIME);
 
+*' This equation estimates a multiplying factor expressing the extra grid and storage costs for RES implementation according to the RES penetration in the mixture.
 Q04CostCapTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
     V04CostCapTech(allCy,PGALL,YTIME) 
         =E=
@@ -228,11 +229,16 @@ Q04CapElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04NewCapElec(allCy,PGALL,YTIME) -
     i04PlantDecomSched(allCy,PGALL,YTIME) * i04AvailRate(allCy,PGALL,YTIME);
 
+*' This equation calculates the variable representing the nominal electricity generation capacity for a specific power plant in a given country
+*' and time period. The nominal capacity is determined by dividing the actual electricity generation capacity by the availability rate of the power plant.
 Q04CapElecNominal(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04CapElecNominal(allCy,PGALL,YTIME)
         =E=
     VmCapElec(allCy,PGALL,YTIME) / i04AvailRate(allCy,PGALL,YTIME);
-         
+
+*' This equation calculates the variable representing the new capacity added for a specific power plant in a given country and time period.
+*' The calculation considers the share of the power plant in new equipment, the gap in generation capacity, decommissioning schedules, availability rates,
+*' and endogenous scrapping. The equation aims to model the addition of new capacity based on investment decisions and technology-specific factors.
 Q04NewCapElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04NewCapElec(allCy,PGALL,YTIME)
         =E=
