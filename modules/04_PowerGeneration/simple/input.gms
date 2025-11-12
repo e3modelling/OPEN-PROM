@@ -64,6 +64,7 @@ $ondelim
 $include"./iVarCost.csv"
 $offdelim
 ;
+i04VarCost(PGALL,YTIME) = i04VarCost(PGALL,YTIME) + 1e-3;
 *---
 table i04InvPlants(allCy,PGALL,YTIME)	           "Investment Plants (MW)"
 $ondelim
