@@ -6,12 +6,11 @@
 *--- LOWER BOUNDS
 V09CostVarProdSte.LO(runCy,TSTEAM,YTIME) = 0;
 V09CostCapProdSte.LO(runCy,TSTEAM,YTIME) = 0;
-V09CostProdSte.LO(runCy,TSTEAM,YTIME) = epsilon6;
 V09ScrapRate.LO(runCy,TSTEAM,YTIME) = 0;
 V09ScrapRatePremature.LO(runCy,TSTEAM,YTIME) = 0;
 V09GapShareSte.LO(runCy,TSTEAM,YTIME) = 0;
 V09CaptRateSte.LO(runCy,TSTEAM,YTIME) = 0;
-VmCostAvgProdSte.LO(runCy,YTIME) = epsilon6;
+
 $ontext
 The following bounds produce infeseabilities: No superbasic variables
 
@@ -65,10 +64,16 @@ V09CostCapProdSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) =
   exp(imDisc(runCy,"STEAMP",YTIME)* i09ProdLftSte(TSTEAM)) /
   (exp(imDisc(runCy,"STEAMP",YTIME) * i09ProdLftSte(TSTEAM))-1) * 
   (
-    imDataIndTechnologyCHP("OI",TSTEAM,"IC") * imCGI(runCy,YTIME) +
-    imDataIndTechnologyCHP("OI",TSTEAM,"FC") / sUnitToKUnit
+    i09CostInvCostSteProd(TSTEAM,YTIME) * imCGI(runCy,YTIME) +
+    i09CostFixOMSteProd(TSTEAM,YTIME)
   )
-) / i09EffSteProd(TSTEAM,YTIME);
+) / 
+(
+  i09EffSteProd(TSTEAM,YTIME) * 
+  i09AvailRateSteProd(TSTEAM,YTIME) * 
+  smGwToTwhPerYear(YTIME) * 
+  smTWhToMtoe * 1e3
+);
 *---
 V09CostVarProdSte.L(runCy,TSTEAM,YTIME) = 1;
 V09CostVarProdSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) =
@@ -82,19 +87,18 @@ sum(EF$TSTEAMTOEF(TSTEAM,EF),
     sum(NAP$NAPtoALLSBS(NAP,"STEAMP"),VmCarVal.L(runCy,NAP,YTIME))
   ) 
 ) / i09EffSteProd(TSTEAM,YTIME) +
-i09CostVOMSteProd(TSTEAM,YTIME) -
+i09CostVOMSteProd(TSTEAM,YTIME) * 1e-3 -
 (
   VmPriceFuelSubsecCarVal.L(runCy,"OI","ELC",YTIME) *
   smFracElecPriChp *
   VmPriceElecInd.L(runCy,YTIME)
 )$TCHP(TSTEAM);
 *---
-V09CostProdSte.L(runCy,TSTEAM,YTIME) = 1;
-V09CostProdSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) =
-V09CostCapProdSte.L(runCy,TSTEAM,YTIME) +
+V09CostProdSte.LO(runCy,TSTEAM,YTIME) = epsilon6;
+V09CostProdSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) = V09CostCapProdSte.L(runCy,TSTEAM,YTIME) +
 V09CostVarProdSte.L(runCy,TSTEAM,YTIME);
 *---
-VmCostAvgProdSte.L(runCy,YTIME) = 0.01;
+VmCostAvgProdSte.LO(runCy,YTIME) = epsilon6;
 VmCostAvgProdSte.FX(runCy,YTIME)$DATAY(YTIME) = 0;
 *---
 VmConsFuelSteProd.FX(runCy,STEMODE,EFS,YTIME)$(not STEAMEF(EFS)) = 0;

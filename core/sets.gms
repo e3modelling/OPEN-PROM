@@ -400,6 +400,7 @@ EFtoEFA(EF,EFA)  Energy Forms Aggregations (for summary balance report)
 (WND,SOL,GEO).REN
 (HYD,WND,SOL,GEO,NUC,BMSWAS).NFF
 (H2F,MET,ETH).NEF
+STE.STE
 /
 
 WEF              Imported Energy Forms (affecting fuel prices)

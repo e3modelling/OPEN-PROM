@@ -3,15 +3,15 @@
 
 Parameters
 *---
-i09ProdLftSte(TSTEAM)                  "Lifetime of steam production technologies in years"
+i09ProdLftSte(TSTEAM)                   "Lifetime of steam production technologies in years"
 i09CaptRateSteProd(TSTEAM)
 i09ScaleEndogScrap
-i09AvailRateChp(TCHP)                            "Availability rate of CHP Plants ()"
-i09CostVOMSteProd(TSTEAM,YTIME)
+i09AvailRateSteProd(TSTEAM,YTIME)       "Availability rate of STEAM Plants ()"
+i09CostVOMSteProd(TSTEAM,YTIME)         "Variable cost per steam plant type (US$2015/toe)"
 i09EffSteProd(TSTEAM,YTIME)
 i09ParDHEffData(PGEFS)
-i09InvCostChp(allCy,DSBS,TCHP,YTIME)             "Capital Cost per CHP plant type (US$2015/KW)"
-i09FixOMCostPerChp(allCy,DSBS,TCHP,YTIME)                   "Fixed O&M cost per CHP plant type (US$2015/KW)"
+i09CostInvCostSteProd(TSTEAM,YTIME)     "Capital Cost per steam plant type (US$2015/KW)"
+i09CostFixOMSteProd(TSTEAM,YTIME)       "Fixed O&M cost per steam plant type (US$2015/KW)"
 ;
 *---
 i09CaptRateSteProd(TSTEAM) = 0;
@@ -141,16 +141,11 @@ imDataIndTechnologyCHP(INDDOM,TSTEAM,"IC") = imDataIndTechnologyCHP(INDDOM,TSTEA
 imDataIndTechnologyCHP(INDDOM,TSTEAM,"FC") = imDataIndTechnologyCHP(INDDOM,TSTEAM,"FC") * 1.3;
 imDataIndTechnologyCHP(INDDOM,TSTEAM,"VC") = imDataIndTechnologyCHP(INDDOM,TSTEAM,"VC") * 1.3;
 *---
-table imDataChpPowGen(TCHP,CHPPGSET,YTIME)   "Data for power generation costs (various)"
+table imDataChpPowGen(TSTEAM,CHPPGSET,YTIME)   "Data for power generation costs (various)"
 $ondelim
 $include"./iChpPowGen.csv"
 $offdelim
-* FIXME: Data must be expanded to district heating also
 ;
-* Converting EUR2015 to US2015
-imDataChpPowGen(TCHP,"IC",YTIME)  = imDataChpPowGen(TCHP,"IC",YTIME) * 1.1;
-imDataChpPowGen(TCHP,"FC",YTIME)  = imDataChpPowGen(TCHP,"FC",YTIME) * 1.1;
-imDataChpPowGen(TCHP,"VOM",YTIME) = imDataChpPowGen(TCHP,"VOM",YTIME) * 1.1;
 *---
 parameter i09ParDHEffData(PGEFS)                  "Parameter of  district heating Efficiency (1)" 
 /
@@ -165,15 +160,15 @@ BMSWAS    0.76
 /
 ;
 *---
-i09ProdLftSte(TSTEAM) = 20$TDHP(TSTEAM) + SUM(TCHP$TCHP(TSTEAM),imDataChpPowGen(TCHP,"LFT","2010"));
+i09ProdLftSte(TSTEAM) = imDataChpPowGen(TSTEAM,"LFT","%fBaseY%");
 *---
-i09InvCostChp(runCy,DSBS,TCHP,YTIME)      = imDataChpPowGen(TCHP,"IC",YTIME);
+i09CostInvCostSteProd(TSTEAM,YTIME) = imDataChpPowGen(TSTEAM,"IC",YTIME);
 *---
-i09FixOMCostPerChp(runCy,DSBS,TCHP,YTIME) = imDataChpPowGen(TCHP,"FC",YTIME);
+i09CostFixOMSteProd(TSTEAM,YTIME) = imDataChpPowGen(TSTEAM,"FC",YTIME);
 *---
-i09CostVOMSteProd(TSTEAM,YTIME) = SUM(TCHP$sameas(TSTEAM,TCHP),imDataChpPowGen(TCHP,"VOM",YTIME));
+i09CostVOMSteProd(TSTEAM,YTIME) = imDataChpPowGen(TSTEAM,"VOM",YTIME);
 *---
-i09EffSteProd(TSTEAM,YTIME) = SUM(TCHP$sameas(TSTEAM,TCHP),imDataChpPowGen(TCHP,"BOILEFF",YTIME)) + SUM(PGEFS$TSTEAMTOEF(TSTEAM,PGEFS),i09ParDHEffData(PGEFS))$TDHP(TSTEAM);
+i09EffSteProd(TSTEAM,YTIME) = imDataChpPowGen(TSTEAM,"BOILEFF",YTIME);
 *---
-i09AvailRateChp(TCHP) = imDataChpPowGen(TCHP,"AVAIL","2010");
+i09AvailRateSteProd(TSTEAM,YTIME) = imDataChpPowGen(TSTEAM,"AVAIL",YTIME);
 !!FIXME : What is the diffecence between imDataChpPowGen vs imDataIndTechnologyCHP?

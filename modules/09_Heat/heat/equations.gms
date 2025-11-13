@@ -65,7 +65,7 @@ Q09CostVarProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         sum(NAP$NAPtoALLSBS(NAP,"STEAMP"),VmCarVal(allCy,NAP,YTIME))
       ) 
     ) / i09EffSteProd(TSTEAM,YTIME) +
-    i09CostVOMSteProd(TSTEAM,YTIME) -
+    i09CostVOMSteProd(TSTEAM,YTIME) * 1e-3 -
     (
       VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME) *
       smFracElecPriChp *
@@ -80,10 +80,16 @@ Q09CostCapProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       exp(imDisc(allCy,"STEAMP",YTIME)* i09ProdLftSte(TSTEAM)) /
       (exp(imDisc(allCy,"STEAMP",YTIME) * i09ProdLftSte(TSTEAM))-1) * 
       (
-        imDataIndTechnologyCHP("OI",TSTEAM,"IC") * imCGI(allCy,YTIME) +
-        imDataIndTechnologyCHP("OI",TSTEAM,"FC") / sUnitToKUnit
+        i09CostInvCostSteProd(TSTEAM,YTIME) * imCGI(allCy,YTIME) +
+        i09CostFixOMSteProd(TSTEAM,YTIME)
       )
-    ) / i09EffSteProd(TSTEAM,YTIME);
+    ) / 
+    (
+      i09EffSteProd(TSTEAM,YTIME) * 
+      i09AvailRateSteProd(TSTEAM,YTIME) * 
+      smGwToTwhPerYear(YTIME) * 
+      smTWhToMtoe * 1e3
+    );
 
 Q09CostProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V09CostProdSte(allCy,TSTEAM,YTIME)

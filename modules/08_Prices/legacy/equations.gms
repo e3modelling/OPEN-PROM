@@ -107,42 +107,39 @@ Q08PriceFuelAvgSub(allCy,DSBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' For later years, the price is scaled using a ratio of 2021 electricity price to 2021 average generation cost
 *' to ensure smoothness between historical and non-historical years.
 Q08PriceElecIndResConsu(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-        VmPriceElecIndResConsu(allCy,ESET,YTIME) !!Cost final electricity
-                 =E=
-        (1 + i08VAT(allCy,YTIME)) *
+    VmPriceElecIndResConsu(allCy,ESET,YTIME) !!Cost final electricity
+        =E=
+    (1 + i08VAT(allCy,YTIME)) *
+    (
+      (
+      (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
+      (
+        VmPriceElecIndResConsu(allCy,"i","%fStartY%") / VmCostPowGenAvgLng(allCy, "%fStartY%") *
+        VmCostPowGenAvgLng(allCy,YTIME-1) !!Cost secondary energy electricity
+      )$(not TFIRST(YTIME-1))
+      )$sameas(ESET,"i") +
+      (
+        (VmPriceFuelSubsecCarVal(allCy,"HOU","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
         (
-           (
-            (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
-            (
-              VmPriceElecIndResConsu(allCy,"i","%fStartY%") / VmCostPowGenAvgLng(allCy, "%fStartY%") *
-              VmCostPowGenAvgLng(allCy,YTIME-1) !!Cost secondary energy electricity
-            )$(not TFIRST(YTIME-1))
-           )$sameas(ESET,"i") 
-        +
-           (
-             (VmPriceFuelSubsecCarVal(allCy,"HOU","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
-             (
-               VmPriceElecIndResConsu(allCy,"r","%fStartY%") / VmCostPowGenAvgLng(allCy, "%fStartY%") *
-               VmCostPowGenAvgLng(allCy,YTIME-1) 
-             )$(not TFIRST(YTIME-1))
-           )$sameas(ESET,"r") 
-        +
-           (
-             (VmPriceFuelSubsecCarVal(allCy,"PC","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
-             (
-               VmPriceElecIndResConsu(allCy,"t","%fStartY%") / VmCostPowGenAvgLng(allCy, "%fStartY%") *
-               VmCostPowGenAvgLng(allCy,YTIME-1) 
-             )$(not TFIRST(YTIME-1))
-           )$sameas(ESET,"t") 
-        +
-           (
-             (VmPriceFuelSubsecCarVal(allCy,"SE","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
-             (
-               VmPriceElecIndResConsu(allCy,"c","%fStartY%") / VmCostPowGenAvgLng(allCy, "%fStartY%") *
-               VmCostPowGenAvgLng(allCy,YTIME-1) 
-             )$(not TFIRST(YTIME-1))
-           )$sameas(ESET,"c") 
-        );
+          VmPriceElecIndResConsu(allCy,"r","%fStartY%") / VmCostPowGenAvgLng(allCy, "%fStartY%") *
+          VmCostPowGenAvgLng(allCy,YTIME-1) 
+        )$(not TFIRST(YTIME-1))
+      )$sameas(ESET,"r") +
+      (
+        (VmPriceFuelSubsecCarVal(allCy,"PC","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
+        (
+          VmPriceElecIndResConsu(allCy,"t","%fStartY%") / VmCostPowGenAvgLng(allCy, "%fStartY%") *
+          VmCostPowGenAvgLng(allCy,YTIME-1) 
+        )$(not TFIRST(YTIME-1))
+      )$sameas(ESET,"t") +
+      (
+        (VmPriceFuelSubsecCarVal(allCy,"SE","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
+        (
+          VmPriceElecIndResConsu(allCy,"c","%fStartY%") / VmCostPowGenAvgLng(allCy, "%fStartY%") *
+          VmCostPowGenAvgLng(allCy,YTIME-1) 
+        )$(not TFIRST(YTIME-1))
+      )$sameas(ESET,"c") 
+    );
 
 *' This equation calculates the fuel prices per subsector and fuel, specifically for Combined Heat and Power (CHP) plants, considering the profit earned from
 *' electricity sales. The equation incorporates various factors such as the base fuel price, renewable value, variable cost of technology, useful energy conversion

@@ -6,13 +6,13 @@ sets
 *---
 TSTEAM "CHP & DHP plant technologies"
 /
-TSTE1AL           "Utilisation rate of Lignite powered advanced CHP"
-TSTE1AH           "Utilisation rate of Hard Coal powered advanced CHP"
-TSTE1AD           "Utilisation rate of Diesel Oil powered advanced CHP"
-*STE1AR           "Utilisation rate of Fuel Oil powered advanced CHP"
-TSTE1AG           "Utilisation rate of Natural Gas powered advanced CHP"
-TSTE1AB           "Utilisation rate of Biomass-Waste powered advanced CHP"
-TSTE1AH2F         "Utilisation rate of HYDROGEN powered FUEL CELL CHP"
+TSTE1AL           "Lignite powered advanced CHP"
+TSTE1AH           "Hard Coal powered advanced CHP"
+TSTE1AD           "Diesel Oil powered advanced CHP"
+*STE1AR           "Fuel Oil powered advanced CHP"
+TSTE1AG           "Natural Gas powered advanced CHP"
+TSTE1AB           "Biomass-Waste powered advanced CHP"
+TSTE1AH2F         "HYDROGEN powered FUEL CELL CHP"
 TSTE2LGN
 TSTE2OSL
 TSTE2GDO
