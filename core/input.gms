@@ -126,81 +126,6 @@ modal    0.595709528,
 largest  0.833993339
 /;
 *---
-parameter imFacSubsiCapCostTech(TECH)                     "State subsidy factor in technology capex"
-/
-TGSL      0
-TLPG      0
-TGDO      0
-TNGS      0
-TELC      0.5
-TKRS      0
-TETH      0
-TMET      0
-TBGDO     0
-TPHEVGSL  0
-TPHEVGDO  0
-TH2F      0
-TCHEVGSL  0
-TCHEVGDO  0
-* Industrial Technologies (only add those not already in Transport)
-* GDO,LPG,KRS,NGS,ELC already exist in TRANSPORT technologies
-TNGSCCS   0
-TLGN      0
-THCL      0
-THCLCCS   0
-TRFO      0
-TOLQ      0
-TOGS      0
-TSTE1AL   0
-TSTE1AH   0
-TSTE1AD   0
-TSTE1AG   0
-TSTE1AB   0
-TSTE1AH2F 0
-* Domestic Technologies (only add those not already in Transport & Industry)
-* LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC,STE1AL,STE1AH,STE1AD,STE1AG,STE1AB already exist in TRANSPORT or INDUSTRY technologies
-TSTE2LGN  0
-TSTE2OSL  0
-TSTE2GDO  0
-TSTE2RFO  0
-TSTE2OLQ  0
-TSTE2NGS  0
-TSTE2OGS  0
-TSTE2BMS  0
-TBMSWAS   0
-* Non-Energy and Bunkers Technologies (only add those not already in Transport & Industry & Domestic)
-* GDO,RFO,LGN,HCL,GDO,LPG,OLQ,NGS,OGS already exist
-* NOT USED
-TSTE1AR   0
-THEATPUMP 0
-* DAC Technologies
-HTDAC   0
-H2DAC   0.5
-LTDAC   0.5
-EWDAC   0.5
-* Power Generation Technologies
-*PGTLGN
-*PGTHCL 
-*PGTGDO
-*PGTRFO
-*PGTNGS
-*PGTNUC
-*PGTHYD
-*PGTBMSWAS
-*PGTSOL
-*PGTGEO
-*PGTWND
-* Hydrogen Production Technologies
-*HPTHCL
-*HPTRFO
-*HPTNGS
-*HPTNUC
-*HPTBMSWAS
-*HPTSOL
-*HPTWND
-*HPTELC
-/;
-*---
 table imInstCapPastNonCHP(allCy,PGALL,YTIME)        "Installed Non-CHP capacity past (GW)"
 $ondelim
 $include"./iInstCapPastNonCHP.csv"
@@ -858,6 +783,11 @@ imMatrFactor.L(runCy,DSBS,TECH,YTIME) = iMatrFactorData(DSBS,TECH,YTIME) + 1e-6;
 imMatrFactor.LO(runCy,DSBS,EF,YTIME) = -10;                                          
 imMatrFactor.UP(runCy,DSBS,EF,YTIME) = 100;
 $ENDIF.calib
+*---
+** State subsidy factor in technology capex
+parameter imFacSubsiCapCostTech(DSBS,TECH);
+imFacSubsiCapCostTech("PC","TELC") = 0.02;
+imFacSubsiCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 0.2;
 *---
 ** Industry
 imShrNonSubElecInTotElecDem(runCy,INDSE)  = iIndCharData(INDSE,"SHR_NSE");

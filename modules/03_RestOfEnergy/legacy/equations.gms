@@ -50,27 +50,31 @@ Q03SubsiStat(allCy,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 ;
 $offtext
 
-Q03SubCapCostTech(allCy,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-      VmSubsiCapCostTech(allCy,TECH,YTIME)
+Q03SubsiCapCostTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+      VmSubsiCapCostTech(allCy,DSBS,TECH,YTIME)
       =E=
-      sum(TTECH$TTECH(TECH),
-        sum(TRANSE,imCapCostTech(allCy,TRANSE,TECH,YTIME) * imFacSubsiCapCostTech(TECH)) * 1e-3 *
-          (V01StockPcYearlyTech(allCy,TTECH,YTIME) - V01StockPcYearlyTech(allCy,TTECH,YTIME-1)) * 1e6
-      )
+      (
+        (imCapCostTech(allCy,DSBS,TECH,YTIME) * imFacSubsiCapCostTech(DSBS,TECH)) * 1e-3 *
+        (V01StockPcYearlyTech(allCy,"TELC",YTIME) - V01StockPcYearlyTech(allCy,"TELC",YTIME-1)) * 1e6  
+      )$(TRANSE(DSBS) and sameas (TECH,"TELC"))
       +
       sum(DACTECH$DACTECH(TECH),
         V06GrossCapDAC(DACTECH,YTIME) * 1e-6 *
-        imFacSubsiCapCostTech(DACTECH) *
+        imFacSubsiCapCostTech("DAC",DACTECH) *
         (V06CapFacNewDAC(allCy,DACTECH,YTIME) * V06CapDAC(allCy,DACTECH,YTIME-1) + i06SchedNewCapDAC(allCy,DACTECH,YTIME)) *
         VmLft(allCy,"DAC",DACTECH,YTIME)
-      )
+      )$sameas (DSBS,"DAC")
 ;
 
 Q03SubsiStatHou(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       VmSubsiStatHou(allCy,YTIME)
       =E=
         V03CarbTaxTot(allCy,YTIME) -
-        sum(TECH,VmSubsiCapCostTech(allCy,TECH,YTIME))
+        sum(DSBS,
+          sum(TECH,
+            VmSubsiCapCostTech(allCy,DSBS,TECH,YTIME)
+          )
+        )
 ;       
 
 *' The equation computes the total final energy consumption in million tonnes of oil equivalent 

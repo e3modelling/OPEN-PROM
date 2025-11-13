@@ -31,7 +31,7 @@ Q03LossesDistr(allCy,EFS,YTIME)                            "Compute distribution
 Q03CarbTaxTot(allCy,YTIME)                                 "Compute the total annual state revenues from carbon taxes per region (Millions US$2015)"
 *'Q03SubsiStat(allCy,TECH,YTIME)                           ""
 Q03SubsiStatHou(allCy,YTIME)                               ""
-Q03SubCapCostTech(allCy,TECH,YTIME)                        ""
+Q03SubsiCapCostTech(allCy,DSBS,TECH,YTIME)                        ""
 ;
 
 Variables
@@ -63,6 +63,6 @@ VmConsFinEneCountry(allCy,EF,YTIME)                        "Total final energy c
 VmConsFinNonEne(allCy,EFS,YTIME)                           "Final non energy consumption (Mtoe)"
 VmLossesDistr(allCy,EFS,YTIME)                             "Distribution losses (Mtoe)"
 *'VmSubsiStat(allCy,TECH,YTIME)                            "State subsidies per subsector (Millions US$2015)"
-VmSubsiCapCostTech(allCy,TECH,YTIME)                       ""
+VmSubsiCapCostTech(allCy,DSBS,TECH,YTIME)                       ""
 VmSubsiStatHou(allCy,YTIME)                                "State subsidy in the price of residential electricity"
 ;

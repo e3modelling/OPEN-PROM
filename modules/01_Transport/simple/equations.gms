@@ -94,7 +94,7 @@ Q01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTE
       /
       (exp(imDisc(allCy,TRANSE,YTIME)*VmLft(allCy,TRANSE,TTECH,YTIME)) - 1)
     ) *
-    imCapCostTech(allCy,TRANSE,TTECH,YTIME) * (1 - imFacSubsiCapCostTech(TTECH)) *
+    imCapCostTech(allCy,TRANSE,TTECH,YTIME) * (1 - imFacSubsiCapCostTech(TRANSE,TTECH)) *
     imCGI(allCy,YTIME)
 ;
 

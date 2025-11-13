@@ -160,7 +160,7 @@ Q06VarCostDAC(DACTECH,YTIME)$(TIME(YTIME))..
 Q06LvlCostDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06LvlCostDAC(allCy,DACTECH,YTIME)
         =E=         
-    V06GrossCapDAC(DACTECH,YTIME) * (1 - imFacSubsiCapCostTech(DACTECH)) + 
+    V06GrossCapDAC(DACTECH,YTIME) * (1 - imFacSubsiCapCostTech("DAC",DACTECH)) + 
     V06FixOandMDAC(DACTECH,YTIME) + 
     V06VarCostDAC(DACTECH,YTIME) - 20 +
     i06SpecElecDAC(allCy,DACTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME) +
