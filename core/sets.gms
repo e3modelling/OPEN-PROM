@@ -304,6 +304,8 @@ INDDOM(DSBS)      Industry and Tertiary         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,S
 * The following sets are used in price equation for electricity
 HOU1(SBS)         Households                     /HOU/
 SERV(SBS)         Services                       /SE,AG/
+
+SSBS(SBS)         All Supply Subsectors         /PG,H2P,H2INFR/
 *         Energy Forms            *
 
 EF           Energy Forms
@@ -756,6 +758,37 @@ LTDAC
 EWDAC
 /
 
+STECH     "Technologies in supply side"
+/
+ATHLGN  Advanced thermal monovalent lignite
+ATHCOAL Advanced thermal monovalent hard coal
+ATHGAS Advanced thermal monovalent natural gas
+ATHBMSWAS Advanced thermal monovalent biomass and waste
+ATHBMSCCS
+ATHOIL Advanced gas turbines (peak devices) diesel oil
+PGLHYD Large Hydro Plants
+PGSHYD Small Hydro Plants
+PGAWND Wind Plants
+PGSOL Solar Photovoltaic Plants
+PGCSP Advanced Solar Thermal Plants
+PGOTHREN Advanced geothermal Plants
+PGANUC New Nuclear Designs
+ATHCOALCCS Supercritical coal with CCS
+ATHLGNCCS Supercritical lignite with CCS
+ATHGASCCS Gas turbine combined cycle with CCS
+PGAWNO Wind offshore
+PGH2F
+gsr   "gas steam reforming"
+gss   "gas steam reforming with CCS"
+weg   "water electrolysis from grid power"
+wew   "water electrolysis with wind"
+wes   "water electrolysis with solar"
+cgf   "coal gasification"
+cgs   "coal gasification with CCS"
+bgfl  "biomass gasification large scale"
+bgfls "biomass gasification large scale with CCS"
+/
+
 TECHtoEF (TECH,EF) Fuels consumed by technologies
 /
 TGSL.(GSL,BGSL)
@@ -875,6 +908,8 @@ TCHEVGSL
 TCHEVGDO
 /
 
+SSECTTECH(SSBS,STECH) "Link between Model Supply Subsectors and Technologies"
+
 SECTTECH(DSBS,TECH) Link between Model Demand Subsectors and Technologies
 /
 *PC.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO,CHEVGSL,CHEVGDO)
@@ -898,8 +933,6 @@ SE.(TLPG,TKRS,TNGS,TOGS,TELC)
 BU.(TGDO,TRFO,TKRS)
 (PCH,NEN).(TLGN,THCL,TGDO,TRFO,TLPG,TOLQ,TNGS,TOGS)
 DAC.(HTDAC,H2DAC,LTDAC,EWDAC)
-*PG.(PGTLGN,PGTHCL,PGTGDO,PGTRFO,PGTNGS,PGTNUC,PGTHYD,PGTBMSWAS,PGTSOL,PGTGEO,PGTWND)
-*H2P.(HPTHCL,HPTRFO,HPTNGS,HPTNUC,HPTBMSWAS,HPTSOL,HPTWND,HPTELC)
 /
 
 SECtoEF(SBS,EF) Link between Model Subsectors and Energy FORMS
@@ -909,7 +942,7 @@ H2P.(HCL,RFO,NGS,NUC,BMSWAS,SOL,WND,ELC)
 *DAC.(ELC,NGS)
 /
 
-PGALL            Power Generation Plant Types !! Maybe these should be the power generation technologies?
+PGALL(STECH)            Power Generation Plant Types !! Maybe these should be the power generation technologies?
 /
 *CTHLGN Conventional thermal monovalent lignite
 *CTHHCL Conventional thermal monovalent hard coal
@@ -958,9 +991,6 @@ ATHGASCCS Gas turbine combined cycle with CCS
 PGAWNO Wind offshore
 PGH2F
 /
-
-PGCSP(PGALL)
-/PGCSP/
 
 CCS(PGALL) Plants which can be equipped with CCS
 /
@@ -1409,3 +1439,5 @@ SECtoEF(NENSE, "BGSL") = no;
 SECtoEF(NENSE, "BGDO") = no;
 *This is equivalent with the loop above
 *SECtoEF(DSBS, EF)$(sum(TECH, SECTTECH(DSBS, TECH) * TTECHtoEF(TECH, EF))) = yes;
+
+SSECTTECH("PG",STECH) = yes$PGALL(STECH);

@@ -50,6 +50,7 @@ Q03SubsiStat(allCy,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 ;
 $offtext
 
+*' Subsidies in demand
 Q03SubsiCapCostTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       VmSubsiCapCostTech(allCy,DSBS,TECH,YTIME)
       =E=
@@ -57,6 +58,12 @@ Q03SubsiCapCostTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         (imCapCostTech(allCy,DSBS,TECH,YTIME) * imFacSubsiCapCostTech(DSBS,TECH)) * 1e-3 *
         (V01StockPcYearlyTech(allCy,"TELC",YTIME) - V01StockPcYearlyTech(allCy,"TELC",YTIME-1)) * 1e6  
       )$(TRANSE(DSBS) and sameas (TECH,"TELC"))
+      +
+      sum(ITECH$sameas(ITECH,TECH),
+        imCapCostTech(allCy,DSBS,ITECH,YTIME) * 1e3 * imFacSubsiCapCostTech(DSBS,TECH) *
+        (V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME) * V02GapUsefulDemSubsec(allCy,DSBS,YTIME)) / 
+        (imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME) * i02util(allCy,DSBS,ITECH,YTIME))
+      )$INDSE(DSBS)
       +
       sum(DACTECH$DACTECH(TECH),
         V06GrossCapDAC(DACTECH,YTIME) * 1e-6 *
@@ -66,14 +73,31 @@ Q03SubsiCapCostTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       )$sameas (DSBS,"DAC")
 ;
 
+Q03SubsiCapCostSupply(allCy,SSBS,STECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+      VmSubsiCapCostSupply(allCy,SSBS,STECH,YTIME)
+      =E=
+      sum(PGALL$sameas(PGALL,STECH),
+        i04GrossCapCosSubRen(allCy,PGALL,YTIME) *
+        V04NewCapElec(allCy,PGALL,YTIME) * 1e3 / i04AvailRate(allCy,PGALL,YTIME) *
+        imFacSubsiCapCostSupply(SSBS,STECH)
+      )$sameas(SSBS,"PG")
+      +
+      0 * sum(H2TECH$sameas(H2TECH,STECH),
+        i05CostCapH2Prod(allCy,H2TECH,YTIME) *
+        0 *
+        imFacSubsiCapCostSupply(SSBS,STECH)
+      )$sameas(SSBS,"H2P")
+;
+
 Q03SubsiStatHou(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       VmSubsiStatHou(allCy,YTIME)
       =E=
         V03CarbTaxTot(allCy,YTIME) -
-        sum(DSBS,
-          sum(TECH,
-            VmSubsiCapCostTech(allCy,DSBS,TECH,YTIME)
-          )
+        sum((DSBS,TECH)$SECTTECH(DSBS,TECH),
+          VmSubsiCapCostTech(allCy,DSBS,TECH,YTIME)
+        ) -
+        sum((SSBS,STECH)$SSECTTECH(SSBS,STECH),
+          VmSubsiCapCostSupply(allCy,SSBS,STECH,YTIME)
         )
 ;       
 

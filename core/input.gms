@@ -784,10 +784,14 @@ imMatrFactor.LO(runCy,DSBS,EF,YTIME) = -10;
 imMatrFactor.UP(runCy,DSBS,EF,YTIME) = 100;
 $ENDIF.calib
 *---
-** State subsidy factor in technology capex
+** State subsidy factor in technology capex (demand side)
 parameter imFacSubsiCapCostTech(DSBS,TECH);
-imFacSubsiCapCostTech("PC","TELC") = 0.02;
-imFacSubsiCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 0.2;
+imFacSubsiCapCostTech("PC","TELC") = 0;
+imFacSubsiCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 0;
+
+** State subsidy factor in technology capex (supply side)
+parameter imFacSubsiCapCostSupply(SSBS,STECH);
+imFacSubsiCapCostSupply("PG",PGREN) = 0.1;
 *---
 ** Industry
 imShrNonSubElecInTotElecDem(runCy,INDSE)  = iIndCharData(INDSE,"SHR_NSE");

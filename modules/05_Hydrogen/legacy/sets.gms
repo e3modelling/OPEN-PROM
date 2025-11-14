@@ -3,7 +3,7 @@
 
 sets
 *---
-H2TECH "Hydrogen production technologies"
+H2TECH(STECH) "Hydrogen production technologies"
 /
 gsr   "gas steam reforming"
 gss   "gas steam reforming with CCS"
@@ -130,10 +130,20 @@ H2TECHREN(H2TECH)          "Renewable hydrogen production technologies"
 wew
 wes
 /
-
 *---
 H2CCS(H2TECH)              "Hydrogen production technologies equipped with CCS facility"
 /
+gss   "gas steam reforming with CCS"
+cgs   "coal gasification with CCS"
+*ops   "oil partial oxydation with CCS"
+bgfls "biomass gasification large scale with CCS"
+/
+*---
+H2CCSREN(H2TECH)          "Renewable or CCS hydrogen production technologies"
+/
+*sht
+wew
+wes
 gss   "gas steam reforming with CCS"
 cgs   "coal gasification with CCS"
 *ops   "oil partial oxydation with CCS"
@@ -201,3 +211,4 @@ mpipu.mpipu
 ALIAS (H2TECH2,H2TECH);
 ALIAS (INFRTECH3,INFRTECH2, INFRTECH);
 *---
+SSECTTECH("H2P",STECH) = yes$H2TECH(STECH);

@@ -32,6 +32,7 @@ Q03CarbTaxTot(allCy,YTIME)                                 "Compute the total an
 *'Q03SubsiStat(allCy,TECH,YTIME)                           ""
 Q03SubsiStatHou(allCy,YTIME)                               ""
 Q03SubsiCapCostTech(allCy,DSBS,TECH,YTIME)                        ""
+Q03SubsiCapCostSupply(allCy,SSBS,STECH,YTIME)
 ;
 
 Variables
@@ -64,5 +65,6 @@ VmConsFinNonEne(allCy,EFS,YTIME)                           "Final non energy con
 VmLossesDistr(allCy,EFS,YTIME)                             "Distribution losses (Mtoe)"
 *'VmSubsiStat(allCy,TECH,YTIME)                            "State subsidies per subsector (Millions US$2015)"
 VmSubsiCapCostTech(allCy,DSBS,TECH,YTIME)                       ""
+VmSubsiCapCostSupply(allCy,SSBS,STECH,YTIME)
 VmSubsiStatHou(allCy,YTIME)                                "State subsidy in the price of residential electricity"
 ;

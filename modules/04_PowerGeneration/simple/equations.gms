@@ -88,11 +88,13 @@ Q04CapElecTotEst(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04CapexFixCostPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04CapexFixCostPG(allCy,PGALL,YTIME)
         =E=         
-    ( 
-      imDisc(allCy,"PG",YTIME) * exp(imDisc(allCy,"PG",YTIME) * i04TechLftPlaType(allCy,PGALL))
-      / (exp(imDisc(allCy,"PG",YTIME) * i04TechLftPlaType(allCy,PGALL)) -1)
-    ) * i04GrossCapCosSubRen(allCy,PGALL,YTIME) * 1000 * imCGI(allCy,YTIME) +
-    i04FixOandMCost(allCy,PGALL,YTIME);
+        ( 
+        imDisc(allCy,"PG",YTIME) * exp(imDisc(allCy,"PG",YTIME) * i04TechLftPlaType(allCy,PGALL))
+        / (exp(imDisc(allCy,"PG",YTIME) * i04TechLftPlaType(allCy,PGALL)) -1)
+        ) 
+        * i04GrossCapCosSubRen(allCy,PGALL,YTIME) * 1000 * (1 - imFacSubsiCapCostSupply("PG",PGALL)) * imCGI(allCy,YTIME) +
+        i04FixOandMCost(allCy,PGALL,YTIME)
+;
 
 Q04CostCapTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
     V04CostCapTech(allCy,PGALL,YTIME) 
