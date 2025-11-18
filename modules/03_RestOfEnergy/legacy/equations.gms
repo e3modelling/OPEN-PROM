@@ -51,7 +51,7 @@ Q03SubsiStat(allCy,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 $offtext
 
 *' Subsidies in demand
-Q03SubsiCapCostTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+Q03SubsiCapCostTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS,TECH))..
       VmSubsiCapCostTech(allCy,DSBS,TECH,YTIME)
       =E=
       (
@@ -78,7 +78,7 @@ Q03SubsiCapCostSupply(allCy,SSBS,STECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       =E=
       sum(PGALL$sameas(PGALL,STECH),
         i04GrossCapCosSubRen(allCy,PGALL,YTIME) *
-        V04NewCapElec(allCy,PGALL,YTIME) * 1e3 / i04AvailRate(allCy,PGALL,YTIME) *
+        !!V04NewCapElec(allCy,PGALL,YTIME) * 1e3 / i04AvailRate(allCy,PGALL,YTIME) *
         imFacSubsiCapCostSupply(SSBS,STECH)
       )$sameas(SSBS,"PG")
       +

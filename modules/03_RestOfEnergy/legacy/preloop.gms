@@ -54,4 +54,6 @@ VmTransfInputCHPlants.FX(runCy,EFS,YTIME)$(not AN(YTIME)) = -i03InpCHPTransfProc
 *---
 V03CarbTaxTot.FX(runCy,YTIME)$(not AN(YTIME)) = 0;
 *---
+VmSubsiCapCostTech.FX(runCy,DSBS,TECH,YTIME)$(not SECTTECH(DSBS,TECH)) = 0;
+*---
 VmSubsiStatHou.LO(allCy,YTIME) = 0;
