@@ -31,7 +31,7 @@ TSTE1AD           "Utilisation rate of Diesel Oil powered advanced CHP"
 *STE1AR           "Utilisation rate of Fuel Oil powered advanced CHP"
 TSTE1AG           "Utilisation rate of Natural Gas powered advanced CHP"
 TSTE1AB           "Utilisation rate of Biomass-Waste powered advanced CHP"
-TSTE1AH2F         "Utilisation rate of HYDROGEN powered FUEL CELL CHP"
+TSTE1AH2F         "Utilisation rate of Hydrogen powered fuel cell CHP"
 /
 
 TDHP(TSTEAM) "CHP plant technologies"

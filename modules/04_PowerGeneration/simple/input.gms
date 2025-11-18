@@ -78,6 +78,12 @@ $include"./iDecomPlants.csv"
 $offdelim
 ;
 *---
+table i03InpPGTransfProcess(allCy,EFS,YTIME)	      ""	
+$ondelim
+$include"./iInpPGTransfProcess.csv"
+$offdelim
+;
+*---
 $IFTHEN.calib %Calibration% == MatCalibration
 variable i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   "Maturity factor related to plant available capacity (1)";
 table i04MatFacPlaAvailCapL(allCy,PGALL,YTIME)     "Maturity factor related to plant available capacity (1)"
@@ -115,8 +121,6 @@ $offdelim
 $ENDIF.calib
 *---
 parameter i04MxmShareChpElec                       "Maximum share of CHP electricity in a country (1)";
-*---
-parameter i04DataElecAndSteamGen(allCy,YTIME)  "Data releated to electricity and steam generation";
 *---
 parameter i04LoadFacElecDem(DSBS)                  "Load factor of electricity demand per sector (1)"
 /
@@ -184,7 +188,6 @@ Parameters
 i04BaseLoadShareDem(allCy,DSBS,YTIME)	           "Baseload share of demand per sector (1)"
 iTotAvailNomCapBsYr(allCy,YTIME)	               "Total nominal available installed capacity in base year (GW)"
 i04MxmLoadFacElecDem(allCy,YTIME)	               "Maximum load factor of electricity demand (1)"
-i04BslCorrection(allCy,YTIME)	                   "Parameter of baseload correction (1)"
 i04TechLftPlaType(allCy,PGALL)	                   "Technical Lifetime per plant type (year)"
 i04ScaleEndogScrap                              "Scale parameter for endogenous scrapping applied to the sum of full costs (1)"
 i04DecInvPlantSched(allCy,PGALL,YTIME)             "Decided plant investment schedule (GW)"
@@ -195,13 +198,9 @@ i04MxmShareChpElec(allCy,YTIME)	                   "Maximum share of CHP electri
 *---
 i04BaseLoadShareDem(runCy,DSBS,YTIME)$an(YTIME)  = i04LoadFactorAdj(DSBS);
 *---
-i04DataElecAndSteamGen(runCy,YTIME) = 0 ;
-*---
 iTotAvailNomCapBsYr(runCy,YTIME)$datay(YTIME) = i04DataElecSteamGen(runCy,"TOTNOMCAP",YTIME);
 *---
 i04MxmLoadFacElecDem(runCy,YTIME)$an(YTIME) = i04LoadFactorAdjMxm("MAXLOADSH");
-*---
-i04BslCorrection(runCy,YTIME)$an(YTIME) = i04LoadFactorAdjMxm("AMAXBASE");
 *---
 i04TechLftPlaType(runCy,PGALL) = i04DataTechLftPlaType(PGALL, "LFT");
 i04TechLftPlaType(runCy,"PGH2F") = 20;

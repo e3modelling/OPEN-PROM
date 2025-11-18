@@ -8,14 +8,16 @@ i09CaptRateSteProd(TSTEAM)
 i09ScaleEndogScrap
 i09AvailRateSteProd(TSTEAM,YTIME)       "Availability rate of STEAM Plants ()"
 i09CostVOMSteProd(TSTEAM,YTIME)         "Variable cost per steam plant type (US$2015/toe)"
-i09EffSteProd(TSTEAM,YTIME)
+i09EffSteThrm(TSTEAM,YTIME)
+i09EffSteElc(TSTEAM,YTIME)
+i09PowToHeatRatio(TSTEAM,YTIME)
 i09ParDHEffData(PGEFS)
-i09CostInvCostSteProd(TSTEAM,YTIME)     "Capital Cost per steam plant type (US$2015/KW)"
-i09CostFixOMSteProd(TSTEAM,YTIME)       "Fixed O&M cost per steam plant type (US$2015/KW)"
+i09CostInvCostSteProd(TSTEAM,YTIME)     "Capital Cost per steam plant type (US$2015/(KWe or KWThrm) )"
+i09CostFixOMSteProd(TSTEAM,YTIME)       "Fixed O&M cost per steam plant type (US$2015/KW )"
 ;
 *---
 i09CaptRateSteProd(TSTEAM) = 0;
-i09ScaleEndogScrap = 10 / card(TSTEAM);
+i09ScaleEndogScrap = 15 / card(TSTEAM);
 *---
 table imDataIndTechnologyCHP(INDDOM,TSTEAM,ECONCHAR)          "Technoeconomic characteristics of industry (various)"
               IC      FC      VC      LFT USC
@@ -168,7 +170,11 @@ i09CostFixOMSteProd(TSTEAM,YTIME) = imDataChpPowGen(TSTEAM,"FC",YTIME);
 *---
 i09CostVOMSteProd(TSTEAM,YTIME) = imDataChpPowGen(TSTEAM,"VOM",YTIME);
 *---
-i09EffSteProd(TSTEAM,YTIME) = imDataChpPowGen(TSTEAM,"BOILEFF",YTIME);
+i09EffSteElc(TSTEAM,YTIME) = imDataChpPowGen(TSTEAM,"effElc",YTIME);
+i09EffSteThrm(TSTEAM,YTIME) = imDataChpPowGen(TSTEAM,"effThrm",YTIME);
 *---
 i09AvailRateSteProd(TSTEAM,YTIME) = imDataChpPowGen(TSTEAM,"AVAIL",YTIME);
-!!FIXME : What is the diffecence between imDataChpPowGen vs imDataIndTechnologyCHP?
+!!FIXME : What is the difference between imDataChpPowGen vs imDataIndTechnologyCHP?
+* author Michael
+*---
+i09PowToHeatRatio(TSTEAM,YTIME) = i09EffSteElc(TSTEAM,YTIME) / i09EffSteThrm(TSTEAM,YTIME);

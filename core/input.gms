@@ -161,6 +161,12 @@ $include"./iPriceFuelsInt.csv"
 $offdelim
 ;
 *---
+table imPriceElecInd(allCy,YTIME)                      "Electricity power to steam ratio"
+$ondelim
+$include"./iDataElecInd.csv"
+$offdelim
+;
+*---
 parameter imImpExp(allCy,EFS,YTIME)	              "Imports of exporting countries usually zero (1)" ;
 imImpExp(runCy,EFS,YTIME) = 0;
 *---

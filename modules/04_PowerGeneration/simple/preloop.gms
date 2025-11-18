@@ -94,7 +94,7 @@ V04ShareMixWndSol.FX(runCy,YTIME)$DATAY(YTIME) = sum(PGALL$PGRENSW(PGALL), VmCap
 *---
 V04CCSRetroFit.UP(runCy,PGALL,YTIME) = 1;
 V04CCSRetroFit.LO(runCy,PGALL,YTIME) = 0;
-V04CCSRetroFit.FX(runCy,PGALL,YTIME)$(not AN(YTIME) or not NOCCS(PGALL)) = 1;
+V04CCSRetroFit.FX(runCy,PGALL,YTIME)$(DATAY(YTIME) or not NOCCS(PGALL)) = 1;
 *---
 V04CO2CaptRate.UP(runCy,PGALL,YTIME) = 1;
 V04CO2CaptRate.LO(runCy,PGALL,YTIME) = 0;
@@ -106,4 +106,5 @@ SUM(PGALL$PGALLTOEF(PGALL,PGEF),
   imPlantEffByType(runCy,PGALL,YTIME)
 );
 *---
+VmConsFuelElecProd.FX(runCy,PGEF,YTIME)$DATAY(YTIME) = -i03InpPGTransfProcess(runCy,PGEF,YTIME);
 

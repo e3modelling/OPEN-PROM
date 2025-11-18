@@ -1104,7 +1104,7 @@ MAX_LOAD_RES        "Residual on Peak Load (Peak Load margin)"
 
 Indu_SCon_Set /Base, SHR_NSE, SH_HPELC/
 
-CHPPGSET /IC,FC,VOM,LFT,AVAIL,BOILEFF,MAXCHPSHARE/
+CHPPGSET /IC,FC,VOM,LFT,AVAIL,effElc,effThrm,MAXCHPSHARE/
 
 BALEF fuels in balance report
 /
