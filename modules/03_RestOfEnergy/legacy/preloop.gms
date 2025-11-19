@@ -56,4 +56,4 @@ V03CarbTaxTot.FX(runCy,YTIME)$(not AN(YTIME)) = 0;
 *---
 VmSubsiCapCostTech.FX(runCy,DSBS,TECH,YTIME)$(not SECTTECH(DSBS,TECH)) = 0;
 *---
-VmSubsiStatHou.LO(allCy,YTIME) = 0;
+!!VmSubsiStatHou.LO(runCy,YTIME) = -10 * V03CarbTaxTot.l(runCy,YTIME-1);
