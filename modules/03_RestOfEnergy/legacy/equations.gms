@@ -74,8 +74,8 @@ Q03LossesDistr(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q03OutTransfDhp(allCy,STEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V03OutTransfDhp(allCy,STEAM,YTIME)
         =E=
-    sum(DOMSE,
-      VmConsFuel(allCy,DOMSE,"STE",YTIME)
+    sum(TSTEAM$TDHP(TSTEAM),
+      VmProdSte(allCy,TSTEAM,YTIME)
     );
 
 *' The equation calculates the transformation input to district heating plants.
@@ -92,7 +92,10 @@ Q03TransfInputDHPlants(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q03OutTransfCHP(allCy,TOCTEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V03OutTransfCHP(allCy,TOCTEF,YTIME)
         =E=
-    VmDemTotSte(allCy,YTIME);
+    sum(TSTEAM$TCHP(TSTEAM),
+      VmProdSte(allCy,TSTEAM,YTIME)
+    )$sameas("STE",TOCTEF) +
+    (V04ProdElecEstCHP(allCy,YTIME) * smTWhToMtoe)$sameas("ELC",TOCTEF);
 
 Q03TransfInputCHPlants(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmTransfInputCHPlants(allCy,EFS,YTIME)
@@ -175,10 +178,8 @@ Q03OutTransfTherm(allCy,"ELC",YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V03OutTransfTherm(allCy,"ELC",YTIME)
         =E=
     smTWhToMtoe *
-    (
-      sum(PGALL,VmProdElec(allCy,PGALL,YTIME)) +
-      V04ProdElecEstCHP(allCy,YTIME)
-    ); 
+    sum(PGALL,VmProdElec(allCy,PGALL,YTIME))
+    ; 
             
 *' The equation calculates the total transformation input for a specific energy branch 
 *' in a given scenario and year. The result is obtained by summing the transformation inputs from different sources, including
@@ -202,7 +203,7 @@ Q03InpTotTransf(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q03OutTotTransf(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V03OutTotTransf(allCy,EFS,YTIME)
         =E=
-    V03OutTransfTherm(allCy,EFS,YTIME) + 
+    V03OutTransfTherm(allCy,"ELC",YTIME)$ELCEF(EFS) + 
     VmDemTotSte(allCy,YTIME)$STEAM(EFS) +
     V03OutTransfRefSpec(allCy,EFS,YTIME) +  
     sum(H2TECH$(sameas(EFS, "H2F")), VmProdH2(allCy, H2TECH, YTIME));  !! Hydrogen production for EFS = "H2F" + TONEW(allCy,EFS,YTIME)

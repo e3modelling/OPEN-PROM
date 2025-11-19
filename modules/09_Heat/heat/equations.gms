@@ -100,7 +100,8 @@ Q09CostAvgProdSte(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     sum(TSTEAM, 
       VmProdSte(allCy,TSTEAM,YTIME) *
       V09CostProdSte(allCy,TSTEAM,YTIME)
-    ) / sum(TSTEAM,VmProdSte(allCy,TSTEAM,YTIME));
+    ) / 
+    sum(TSTEAM,VmProdSte(allCy,TSTEAM,YTIME));
 
 Q09GapShareSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$runCy(allCy)) ..
     V09GapShareSte(allCy,TSTEAM,YTIME)
@@ -151,13 +152,25 @@ Q09ScrapRatePremature(allCy,TSTEAM,YTIME)$(TIME(YTIME)$runCy(allCy))..
 Q09ConsFuelSteProd(allCy,STEMODE,STEAMEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmConsFuelSteProd(allCy,STEMODE,STEAMEF,YTIME)
       =E=
+    VmConsFuelSteProd(allCy,STEMODE,STEAMEF,YTIME-1) +
+    SUM(TDHP$TSTEAMTOEF(TDHP,STEAMEF),
+      (
+        V09GapShareSte(allCy,TDHP,YTIME) * V09DemGapSte(allCy,YTIME) - 
+        V09ScrapRate(allCy,TDHP,YTIME) * VmProdSte(allCy,TDHP,YTIME-1)
+      ) / i09EffSteThrm(TDHP,YTIME)
+    )$sameas("DHP",STEMODE)
+
+$ontext
     (
       SUM(TCHP$TSTEAMTOEF(TCHP,STEAMEF),
-        VmProdSte(allCy,TCHP,YTIME) / (i09EffSteElc(TCHP,YTIME) + i09EffSteThrm(TCHP,YTIME))
+        VmProdSte(allCy,TCHP,YTIME) * (1 + VmPriceElecInd(allCy,YTIME)) / 
+        (i09EffSteThrm(TCHP,YTIME) + i09EffSteElc(TCHP,YTIME))
         !! FIXME: Should ElecInd be per TSTEAM?
         !!VmProdSte(allCy,TCHP,YTIME) * VmPriceElecInd(allCy,YTIME) / i09EffSteElc(TCHP,YTIME)
       )
     )$sameas("CHP",STEMODE) +
     SUM(TDHP$TSTEAMTOEF(TDHP,STEAMEF),
       VmProdSte(allCy,TDHP,YTIME) / i09EffSteThrm(TDHP,YTIME)
-    )$sameas("DHP",STEMODE);
+    )$sameas("DHP",STEMODE)
+$offtext
+;
