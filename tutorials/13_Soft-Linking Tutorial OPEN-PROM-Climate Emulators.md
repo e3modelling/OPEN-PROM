@@ -98,17 +98,31 @@ sudo apt install -y build-essential zlib1g-dev libncurses5-dev libgdbm-dev \
 #### Possible problem with installation
 If you encounter issues with missing dependencies or installation errors in WSL, e.g., "E: Unmet dependencies. Try 'apt --fix-broken install' with no packages (or specify a solution).", try to run the following commands to fix broken packages and reconfigure dpkg: 
 
+Please run these commands exactly:
 ```bash
-sudo mv /var/lib/dpkg/info/systemd.postinst /var/lib/dpkg/info/systemd.postinst.disabled
-sudo mv /var/lib/dpkg/info/systemd.postrm   /var/lib/dpkg/info/systemd.postrm.disabled 2>/dev/null
-sudo mv /var/lib/dpkg/info/systemd.preinst  /var/lib/dpkg/info/systemd.preinst.disabled 2>/dev/null
-sudo mv /var/lib/dpkg/info/systemd.prerm    /var/lib/dpkg/info/systemd.prerm.disabled 2>/dev/null
-sudo dpkg --configure -a --force-all
-sudo apt-get install -f
-sudo apt-get check
+# 1. Force remove the broken post-install script
+sudo mv /var/lib/dpkg/info/udev.postinst /var/lib/dpkg/info/udev.postinst.bak
+
+# 2. Force dpkg to mark udev as configured
+sudo dpkg --configure -a
+
+# 3. Hold it again to prevent future reconfiguration attempts
+sudo apt-mark hold udev
+
+# 4. Clean up and fix dependencies
+sudo apt --fix-broken install
+sudo apt clean
+sudo apt autoremove
+
+#After running those, check:
+dpkg -l | grep udev\
+# hi  udev   255.4-1ubuntu8.11   amd64   device manager for the Linux kernel
+sudo apt update
+sudo apt --fix-broken install
+#you should finally get:
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
 
 ```
-
 Then try again to install the dependencies with `sudo apt install -y ...` as shown above.
 
 ### Step 2: Install Python 3.11.9
