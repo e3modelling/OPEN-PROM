@@ -45,8 +45,8 @@ $ENDIF
       ((imEffValueInDollars(allCy,SBS,YTIME))/1000)$DSBS(SBS)
     )$(ELCEF(EF) or HEATPUMP(EF)) +
     (
-      VmPriceFuelSubsecCarVal(allCy,"OI",EF,YTIME)$(not sameas("BMSWAS",EF)) +
-      VmPriceFuelSubsecCarVal(allCy,"AG",EF,YTIME)$(sameas("BMSWAS",EF))
+      VmPriceFuelSubsecCarVal(allCy,"OI",EF,YTIME)$(not sameas("BMSWAS",EF) or not sameas("CRO",EF)) +
+      VmPriceFuelSubsecCarVal(allCy,"AG",EF,YTIME)$sameas("BMSWAS",EF)
     )$(sameas ("H2P",SBS) or sameas("STEAMP",SBS)) +
     (VmCostAvgProdH2(allCy,YTIME)$DSBS(SBS)/1000)$H2EF(EF) +
     (VmCostAvgProdSte(allCy,YTIME)$DSBS(SBS))$sameas("STE",EF);

@@ -53,13 +53,14 @@ Q09DemGapSte(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q09CostVarProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V09CostVarProdSte(allCy,TSTEAM,YTIME)
         =E=
-    sum(EF$TSTEAMTOEF(TSTEAM,EF),
-      (
-        VmPriceFuelSubsecCarVal(allCy,"STEAMP",EF,YTIME) +
+    sum(EFS$TSTEAMTOEF(TSTEAM,EFS),
+      ( 
+        i09ShareFuel(allCy,TSTEAM,EFS,"%fBaseY%") *
+        VmPriceFuelSubsecCarVal(allCy,"STEAMP",EFS,YTIME) +
         V09CaptRateSte(allCy,TSTEAM,YTIME) * 
-        (imCo2EmiFac(allCy,"STEAMP",EF,YTIME) + 4.17$(sameas("BMSWAS", EF))) * 
+        (imCo2EmiFac(allCy,"STEAMP",EFS,YTIME) + 4.17$(sameas("BMSWAS", EFS))) * 
         VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 +
-        (1-V09CaptRateSte(allCy,TSTEAM,YTIME)) * 1e-3 * (imCo2EmiFac(allCy,"STEAMP",EF,YTIME)) *
+        (1-V09CaptRateSte(allCy,TSTEAM,YTIME)) * 1e-3 * (imCo2EmiFac(allCy,"STEAMP",EFS,YTIME)) *
         sum(NAP$NAPtoALLSBS(NAP,"STEAMP"),VmCarVal(allCy,NAP,YTIME))
       ) 
     ) / i09EffSteThrm(TSTEAM,YTIME) +
@@ -152,25 +153,11 @@ Q09ScrapRatePremature(allCy,TSTEAM,YTIME)$(TIME(YTIME)$runCy(allCy))..
 Q09ConsFuelSteProd(allCy,STEMODE,STEAMEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmConsFuelSteProd(allCy,STEMODE,STEAMEF,YTIME)
       =E=
-    VmConsFuelSteProd(allCy,STEMODE,STEAMEF,YTIME-1) +
-    SUM(TDHP$TSTEAMTOEF(TDHP,STEAMEF),
-      (
-        V09GapShareSte(allCy,TDHP,YTIME) * V09DemGapSte(allCy,YTIME) - 
-        V09ScrapRate(allCy,TDHP,YTIME) * VmProdSte(allCy,TDHP,YTIME-1)
-      ) / i09EffSteThrm(TDHP,YTIME)
-    )$sameas("DHP",STEMODE)
-
-$ontext
-    (
-      SUM(TCHP$TSTEAMTOEF(TCHP,STEAMEF),
-        VmProdSte(allCy,TCHP,YTIME) * (1 + VmPriceElecInd(allCy,YTIME)) / 
-        (i09EffSteThrm(TCHP,YTIME) + i09EffSteElc(TCHP,YTIME))
-        !! FIXME: Should ElecInd be per TSTEAM?
-        !!VmProdSte(allCy,TCHP,YTIME) * VmPriceElecInd(allCy,YTIME) / i09EffSteElc(TCHP,YTIME)
-      )
-    )$sameas("CHP",STEMODE) +
-    SUM(TDHP$TSTEAMTOEF(TDHP,STEAMEF),
-      VmProdSte(allCy,TDHP,YTIME) / i09EffSteThrm(TDHP,YTIME)
-    )$sameas("DHP",STEMODE)
-$offtext
-;
+    SUM(TDHP$(TSTEAMTOEF(TDHP,STEAMEF)),
+      VmProdSte(allCy,TDHP,YTIME) *
+      i09ShareFuel(allCy,TDHP,STEAMEF,"%fBaseY%") / i09EffSteThrm(TDHP,YTIME)
+    )$sameas("DHP",STEMODE) +
+    SUM(TCHP$(TSTEAMTOEF(TCHP,STEAMEF)),
+      VmProdSte(allCy,TCHP,YTIME) *
+      i09ShareFuel(allCy,TCHP,STEAMEF,"%fBaseY%") / i09EffSteThrm(TCHP,YTIME)
+    )$sameas("CHP",STEMODE);
