@@ -73,6 +73,7 @@ VmPriceFuelSubsecCarVal.FX(runCy,SBS,"GEO",YTIME) = 0;
 *---
 VmPriceElecInd.FX(runCy,YTIME)$DATAY(YTIME) = imPriceElecInd(runCy,YTIME);
 *---
+VmLft.LO(runCy,DSBS,TTECH,YTIME) = 0;
 VmLft.L(runCy,DSBS,TTECH,YTIME) = 10;
 VmLft.FX(runCy,"PC",TTECH,YTIME)$(DATAY(YTIME) and SECTTECH("PC",TTECH)) = i01TechLft(runCy,"PC",TTECH,YTIME);
 VmLft.FX(runCy,DSBS,TECH,YTIME)$(SECTTECH(DSBS,TECH) and (not sameas(DSBS,"PC"))) = i01TechLft(runCy,DSBS,TECH,YTIME);

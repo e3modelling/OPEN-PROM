@@ -140,8 +140,7 @@ Q05AcceptCCSH2Tech(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V05AcceptCCSH2Tech(allCy,YTIME)
     =E=
     i05WBLGammaH2Prod(allCy,YTIME)*2 +
-    EXP(-0.06*((sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME -1)))))
-;
+    EXP(-0.06*((sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME -1)))));
 
 *' This equation determines the share of hydrogen produced using CCS technologies compared to those produced without CCS.
 *' The share is calculated based on relative costs, technological feasibility, and policy incentives supporting CCS.

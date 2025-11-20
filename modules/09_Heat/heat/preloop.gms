@@ -11,9 +11,6 @@ V09ScrapRatePremature.UP(runCy,TSTEAM,YTIME) = 1;
 V09GapShareSte.LO(runCy,TSTEAM,YTIME) = 0;
 V09GapShareSte.UP(runCy,TSTEAM,YTIME) = 1;
 *---
-V09CaptRateSte.LO(runCy,TSTEAM,YTIME) = 0;
-V09CaptRateSte.UP(runCy,TSTEAM,YTIME) = 1;
-*---
 V09ScrapRate.LO(runCy,TSTEAM,YTIME) = 0;
 V09ScrapRate.UP(runCy,TSTEAM,YTIME) = 1;
 *---
@@ -48,6 +45,8 @@ VmProdSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) =
   )
 )$(TDHP(TSTEAM) and SUM(EFS,i03InpDHPTransfProcess(runCy,EFS,YTIME) * i09EffSteThrm(TSTEAM,YTIME)));
 *---
+V09CaptRateSte.LO(runCy,TSTEAM,YTIME) = 0;
+V09CaptRateSte.UP(runCy,TSTEAM,YTIME) = 1;
 V09CaptRateSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) = i09CaptRateSteProd(TSTEAM);
 *---
 V09CostCapProdSte.LO(runCy,TSTEAM,YTIME) = 0;
@@ -68,7 +67,6 @@ V09CostCapProdSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) =
 );
 *---
 V09CostVarProdSte.LO(runCy,TSTEAM,YTIME) = epsilon6;
-*V09CostVarProdSte.L(runCy,TSTEAM,YTIME) = 1;
 V09CostVarProdSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) =
 sum(EF$TSTEAMTOEF(TSTEAM,EF),
   (
