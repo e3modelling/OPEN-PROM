@@ -56,11 +56,19 @@ Q03SubsiCapCostTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(
       =E=
       (
         (imCapCostTech(allCy,DSBS,TECH,YTIME) * imFacSubsiCapCostTech(DSBS,TECH)) * 1e-3 *
-        (V01StockPcYearlyTech(allCy,"TELC",YTIME) - V01StockPcYearlyTech(allCy,"TELC",YTIME-1)) * 1e6  
+        (V01StockPcYearlyTech(allCy,"TELC",YTIME) - V01StockPcYearlyTech(allCy,"TELC",YTIME-1)) * 1e6
+        +
+        imGrantCapCostTech(DSBS,TECH) * 1e-3 *
+        (V01StockPcYearlyTech(allCy,"TELC",YTIME) - V01StockPcYearlyTech(allCy,"TELC",YTIME-1)) * 1e6
       )$(TRANSE(DSBS) and sameas (TECH,"TELC"))
       +
       sum(ITECH$sameas(ITECH,TECH),
-        imCapCostTech(allCy,DSBS,ITECH,YTIME) * 1e3 * imFacSubsiCapCostTech(DSBS,TECH) *
+        imCapCostTech(allCy,DSBS,ITECH,YTIME) * 1e3 *
+        imFacSubsiCapCostTech(DSBS,TECH) *
+        (V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME) * V02GapUsefulDemSubsec(allCy,DSBS,YTIME)) / 
+        (imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME) * i02util(allCy,DSBS,ITECH,YTIME))
+        +
+        imGrantCapCostTech(DSBS,TECH) *
         (V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME) * V02GapUsefulDemSubsec(allCy,DSBS,YTIME)) / 
         (imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME) * i02util(allCy,DSBS,ITECH,YTIME))
       )$INDSE(DSBS)
@@ -70,27 +78,38 @@ Q03SubsiCapCostTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(
         imFacSubsiCapCostTech("DAC",DACTECH) *
         (V06CapFacNewDAC(allCy,DACTECH,YTIME) * V06CapDAC(allCy,DACTECH,YTIME-1) + i06SchedNewCapDAC(allCy,DACTECH,YTIME)) *
         VmLft(allCy,"DAC",DACTECH,YTIME)
+        +
+        imGrantCapCostTech(DSBS,TECH) * 1e-6 *
+        (V06CapFacNewDAC(allCy,DACTECH,YTIME) * V06CapDAC(allCy,DACTECH,YTIME-1) + i06SchedNewCapDAC(allCy,DACTECH,YTIME)) *
+        VmLft(allCy,"DAC",DACTECH,YTIME)
       )$sameas (DSBS,"DAC")
+      +
+      imSubsiCapCostFuel("HOU","ELC") * VmConsFuel(allCy,"HOU","ELC",YTIME)
 ;
 
 Q03SubsiCapCostSupply(allCy,SSBS,STECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       VmSubsiCapCostSupply(allCy,SSBS,STECH,YTIME)
       =E=
       sum(PGALL$sameas(PGALL,STECH),
-        i04GrossCapCosSubRen(allCy,PGALL,YTIME) *
-        V04NewCapElec(allCy,PGALL,YTIME) * 1e3 / i04AvailRate(allCy,PGALL,YTIME) *
-        imFacSubsiCapCostSupply(SSBS,STECH)
+        i04GrossCapCosSubRen(allCy,PGALL,YTIME) * imFacSubsiCapCostSupply(SSBS,STECH) *
+        V04NewCapElec(allCy,PGALL,YTIME) * 1e3 / i04AvailRate(allCy,PGALL,YTIME)
+        +
+        imGrantCapCostSupply(SSBS,STECH) *
+        V04NewCapElec(allCy,PGALL,YTIME) * 1e3 / i04AvailRate(allCy,PGALL,YTIME)
       )$sameas(SSBS,"PG")
       +
       0 * sum(H2TECH$sameas(H2TECH,STECH),
         i05CostCapH2Prod(allCy,H2TECH,YTIME) *
         0 *
         imFacSubsiCapCostSupply(SSBS,STECH)
+        +
+        imGrantCapCostSupply(SSBS,STECH) *
+        0
       )$sameas(SSBS,"H2P")
 ;
 
-Q03SubsiStatHou(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-      VmSubsiStatHou(allCy,YTIME)
+Q03NetSubsiTax(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+      VmNetSubsiTax(allCy,YTIME)
       =E=
         V03CarbTaxTot(allCy,YTIME) -
         sum((DSBS,TECH)$SECTTECH(DSBS,TECH),

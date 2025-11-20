@@ -54,11 +54,8 @@ $ENDIF
          (
             VmCostAvgProdH2(allCy,YTIME)$DSBS(SBS)/1000
          )$(H2EF(EF) or sameas("H2F",EF))
-         $$ontext
          -
-         (VmSubsiStatHou(allCy,YTIME) * 1e-3 / VmConsFuel(allCy,"HOU",EF,YTIME)
-         )$(sameas("HOU",SBS) and sameas("ELC",EF))
-         $$offtext
+         imSubsiCapCostFuel(SBS,EF)$(sameas("HOU",SBS) and sameas("ELC",EF))
          ;
 
 

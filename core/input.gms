@@ -788,10 +788,23 @@ $ENDIF.calib
 parameter imFacSubsiCapCostTech(DSBS,TECH);
 imFacSubsiCapCostTech("PC","TELC") = 0;
 imFacSubsiCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 0;
-
+*---
+** State granting in technology capex (demand side)
+parameter imGrantCapCostTech(DSBS,TECH);
+imGrantCapCostTech("PC","TELC") = 0.07;
+imGrantCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 0;
+*---
+** State subsidy in fuel cost
+parameter imSubsiCapCostFuel(SBS,EF);
+imSubsiCapCostFuel("HOU","ELC") = 0;
+*---
 ** State subsidy factor in technology capex (supply side)
 parameter imFacSubsiCapCostSupply(SSBS,STECH);
-imFacSubsiCapCostSupply("PG",PGREN) = 0.1;
+imFacSubsiCapCostSupply("PG",PGREN) = 0;
+*---
+** State granting in technology capex (supply side)
+parameter imGrantCapCostSupply(SSBS,STECH);
+imGrantCapCostSupply("PG",PGREN) = 0;
 *---
 ** Industry
 imShrNonSubElecInTotElecDem(runCy,INDSE)  = iIndCharData(INDSE,"SHR_NSE");

@@ -30,7 +30,7 @@ Q03ConsFinNonEne(allCy,EFS,YTIME)                          "Compute final non-en
 Q03LossesDistr(allCy,EFS,YTIME)                            "Compute distribution losses"
 Q03CarbTaxTot(allCy,YTIME)                                 "Compute the total annual state revenues from carbon taxes per region (Millions US$2015)"
 *'Q03SubsiStat(allCy,TECH,YTIME)                           ""
-Q03SubsiStatHou(allCy,YTIME)                               ""
+Q03NetSubsiTax(allCy,YTIME)                                "Computes the net difference between the cabon taxes and the green state grants and subsidies"
 Q03SubsiCapCostTech(allCy,DSBS,TECH,YTIME)                        ""
 Q03SubsiCapCostSupply(allCy,SSBS,STECH,YTIME)
 ;
@@ -66,5 +66,5 @@ VmLossesDistr(allCy,EFS,YTIME)                             "Distribution losses 
 *'VmSubsiStat(allCy,TECH,YTIME)                            "State subsidies per subsector (Millions US$2015)"
 VmSubsiCapCostTech(allCy,DSBS,TECH,YTIME)                       ""
 VmSubsiCapCostSupply(allCy,SSBS,STECH,YTIME)
-VmSubsiStatHou(allCy,YTIME)                                "State subsidy in the price of residential electricity"
+VmNetSubsiTax(allCy,YTIME)                                 "The net difference between the cabon taxes and the green state grants and subsidies"
 ;
