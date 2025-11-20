@@ -15,6 +15,7 @@ i09ParDHEffData(EFS)
 i09CostInvCostSteProd(TSTEAM,YTIME)     "Capital Cost per steam plant type (US$2015/(KWe or KWThrm) )"
 i09CostFixOMSteProd(TSTEAM,YTIME)       "Fixed O&M cost per steam plant type (US$2015/KW )"
 i09ShareFuel(allCy,TSTEAM,EFS,YTIME)
+;
 *---
 i09CaptRateSteProd(TSTEAM) = 0;
 i09ScaleEndogScrap = 15 / card(TSTEAM);
