@@ -145,7 +145,7 @@ i01SFCPC(allCy,TTECH,"OGS",YTIME) = i01SFCPC(allCy,TTECH,"NGS",YTIME);
 parameter i01InitSpecFuelConsData(TRANSE,TTECH,EF)      "Initial Specific fuel consumption: (ktoe/Gvkm)" /
 PT.TGDO.GDO	11.
 PT.TGDO.BGDO	11.
-PT.TMET.MET	12.6
+*PT.TMET.MET	12.6
 PT.TH2F.H2F	8.9
 PT.TELC.ELC	7
 *PA.H2F.H2F	21.7
@@ -203,6 +203,7 @@ i01AvgVehCapLoadFac(runCy,TRANSE,TRANSUSE,YTIME) = i01CapDataLoadFacEachTransp(T
 *---
 **  Transport Sector
 i01TechLft(runCy,TRANSE,TTECH,YTIME) = imDataTransTech(TRANSE,TTECH,"LFT",YTIME);
+i01TechLft(runCy,TRANSE,TTECH,YTIME) = 20;
 *---
 **  Industrial Sector
 i01TechLft(runCy,INDSE,ITECH,YTIME) = imDataIndTechnology(INDSE,ITECH,"LFT");

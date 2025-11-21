@@ -14,13 +14,12 @@
 *' This equation computes the electric capacity of Combined Heat and Power (CHP) plants. The capacity is calculated in gigawatts (GW) and is based on several factors,
 *' including the consumption of fuel in the industrial sector, the electricity prices in the industrial sector, the availability rate of power
 *' generation plants, and the utilization rate of CHP plants. The result represents the electric capacity of CHP plants in GW.
-Q04CapElecCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V04CapElecCHP(allCy,CHP,YTIME)
+Q04CapElecCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         V04CapElecCHP(allCy,YTIME)
          =E=
-         sum(INDDOM,VmConsFuel(allCy,INDDOM,CHP,YTIME)) * 1/smTWhToMtoe *
+         sum(INDDOM,VmConsFuel(allCy,INDDOM,"STE",YTIME)) * 1/smTWhToMtoe *
          VmPriceElecInd(allCy,YTIME) / 
-         sum(PGALL$CHPtoEON(CHP,PGALL), i04AvailRate(PGALL,YTIME)) / 
-         i04UtilRateChpPlants(allCy,CHP,YTIME) /
+         !!i04UtilRateChpPlants(allCy,TCHP,YTIME) /
          smGwToTwhPerYear(YTIME);  
 
 * Lambda (λₜ) defines the exponential decay rate of the peak load over time.
@@ -270,7 +269,7 @@ Q04IndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(al
 Q04CapElecNonCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       V04CapElecNonCHP(allCy,YTIME)
           =E=
-      VmCapElecTotEst(allCy,YTIME) - 0*SUM(CHP,V04CapElecCHP(allCy,CHP,YTIME) * 0.85);      
+      VmCapElecTotEst(allCy,YTIME) - 0*V04CapElecCHP(allCy,YTIME) * 0.85;      
 
 *' In essence, the equation evaluates the difference between the current and expected power generation capacity, accounting for various factors such as planned capacity,
 *' decommissioning schedules, and endogenous scrapping. The square root term introduces a degree of tolerance in the calculation.

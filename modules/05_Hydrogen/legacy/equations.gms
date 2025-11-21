@@ -24,8 +24,7 @@ Q05DemSecH2(allCy,SBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     sum(INDDOM$SAMEAS(INDDOM,SBS), VmConsFuel(allCy,INDDOM,"H2F",YTIME)) +
     sum(TRANSE$SAMEAS(TRANSE,SBS), VmDemFinEneTranspPerFuel(allCy,TRANSE,"H2F",YTIME)) +
     VmConsFuelDACProd(allCy,"H2F",YTIME)$sameas("DAC",SBS) +
-    !! Should we include CHPs also?
-    (smTWhToMtoe * VmProdElec(allCy,"PGH2F",YTIME) / imPlantEffByType(allCy,"PGH2F",YTIME))$sameas("PG",SBS);
+    VmConsFuelElecProd(allCy,"H2F",YTIME)$sameas("PG",SBS);
 
 *' This equation defines the amount of hydrogen production capacity that is scrapped due to the expiration of the useful life of plants.
 *' It considers the remaining lifetime of hydrogen production facilities and the impact of past production gaps.
@@ -45,27 +44,23 @@ $offtext
 *' This equation models the premature replacement of hydrogen production capacity. It adjusts for the need to replace aging
 *' or inefficient hydrogen production technologies before their expected end of life based on economic factors such as cost,
 *' technological progress, and demand shifts.
-Q05PremRepH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+Q05PremRepH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$H2TECHPM(H2TECH))..
     V05PremRepH2Prod(allCy,H2TECH,YTIME)
         =E=
+    V05CostVarProdH2Tech(allCy,H2TECH,YTIME)**(-i05WBLGammaH2Prod(allCy,YTIME)) /
     (
-      1 - 
-      V05CostVarProdH2Tech(allCy,H2TECH,YTIME)**(-i05WBLGammaH2Prod(allCy,YTIME)) /
+      iWBLPremRepH2Prod(allCy,H2TECH,YTIME) *
       (
-        iWBLPremRepH2Prod(allCy,H2TECH,YTIME) *
-        (sum(H2TECH2,
-            V05GapShareH2Tech1(allCy,H2TECH2,YTIME)*
-            (1/i05AvailH2Prod(allCy,H2TECH,YTIME)*
-            V05CostProdH2Tech(allCy,H2TECH2,YTIME) +
-            (1-1/i05AvailH2Prod(allCy,H2TECH,YTIME)) * V05CostVarProdH2Tech(allCy,H2TECH2,YTIME))) -
-            V05GapShareH2Tech1(allCy,H2TECH,YTIME) *
-            (1/i05AvailH2Prod(allCy,H2TECH,YTIME) *
-            V05CostProdH2Tech(allCy,H2TECH,YTIME) +
-            (1-1/i05AvailH2Prod(allCy,H2TECH,YTIME)) * V05CostVarProdH2Tech(allCy,H2TECH,YTIME))
-        )**(-i05WBLGammaH2Prod(allCy,YTIME)) +
-        V05CostVarProdH2Tech(allCy,H2TECH,YTIME)**(-i05WBLGammaH2Prod(allCy,YTIME)) + 1e-6
-      )
-    )$H2TECHPM(H2TECH);
+        sum(H2TECH2$(not sameas(H2TECH,H2TECH2)),
+          V05CostProdH2Tech(allCy,H2TECH2,YTIME)
+          !!V05GapShareH2Tech1(allCy,H2TECH2,YTIME)*
+          !!(1/i05AvailH2Prod(allCy,H2TECH,YTIME)*
+          !!V05CostProdH2Tech(allCy,H2TECH2,YTIME) +
+          !!(1-1/i05AvailH2Prod(allCy,H2TECH,YTIME)) * V05CostVarProdH2Tech(allCy,H2TECH2,YTIME))
+        )
+      )**(-i05WBLGammaH2Prod(allCy,YTIME)) +
+      V05CostVarProdH2Tech(allCy,H2TECH,YTIME)**(-i05WBLGammaH2Prod(allCy,YTIME))
+    );
 
 *' This equation calculates the total hydrogen production capacity that is scrapped as part of the premature replacement
 *' and normal plant life cycle. It links the scrapped capacity to the overall age distribution and retirement schedule of
@@ -73,9 +68,8 @@ Q05PremRepH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q05CapScrapH2ProdTech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V05CapScrapH2ProdTech(allCy,H2TECH,YTIME)
       =E=
-    1- (1-V05ScrapLftH2Prod(allCy,H2TECH,YTIME)) *
-    (1-V05PremRepH2Prod(allCy,H2TECH,YTIME))
-;
+    1 - (1-V05ScrapLftH2Prod(allCy,H2TECH,YTIME)) *
+    V05PremRepH2Prod(allCy,H2TECH,YTIME);
 
 *' The hydrogen demand gap equation defines the difference between the total hydrogen demand (calculated in Q05DemTotH2) and
 *' the actual hydrogen production capacity. It ensures that the gap value is non-negative, preventing overproduction or underproduction of hydrogen.
@@ -193,17 +187,15 @@ Q05CostProdCCSNoCCSH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME) $H2NOCCS(H2TECH) $(ru
 Q05GapShareH2Tech2(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V05GapShareH2Tech2(allCy,H2TECH,YTIME)
           =E=
-      (
+    (
       iWBLShareH2Prod(allCy,H2TECH,YTIME) * 
-      (V05CostProdH2Tech(allCy,H2TECH,YTIME)$(not H2NOCCS(H2TECH)) + V05CostProdCCSNoCCSH2Prod(allCy,H2TECH,YTIME)$H2NOCCS(H2TECH))**(-i05WBLGammaH2Prod(allCy,YTIME))
-      /
-      sum(H2TECH2$(not H2CCS(H2TECH2)) ,
+      (V05CostProdH2Tech(allCy,H2TECH,YTIME)$(not H2NOCCS(H2TECH)) + V05CostProdCCSNoCCSH2Prod(allCy,H2TECH,YTIME)$H2NOCCS(H2TECH))**(-i05WBLGammaH2Prod(allCy,YTIME)) /
+      sum(H2TECH2$(not H2CCS(H2TECH2)),
       iWBLShareH2Prod(allCy,H2TECH2,YTIME) * 
-      (V05CostProdH2Tech(allCy,H2TECH2,YTIME)$(not H2NOCCS(H2TECH2)) + V05CostProdCCSNoCCSH2Prod(allCy,H2TECH2,YTIME)$H2NOCCS(H2TECH2))**(-i05WBLGammaH2Prod(allCy,YTIME)))
-      )$(not H2CCS(H2TECH))
-      +
-      sum(H2NOCCS$H2CCS_NOCCS(H2TECH,H2NOCCS), V05GapShareH2Tech2(allCy,H2NOCCS,YTIME))$H2CCS(H2TECH)
-;
+      (V05CostProdH2Tech(allCy,H2TECH2,YTIME)$(not H2NOCCS(H2TECH2)) + V05CostProdCCSNoCCSH2Prod(allCy,H2TECH2,YTIME)$H2NOCCS(H2TECH2))**(-i05WBLGammaH2Prod(allCy,YTIME))
+      )
+    )$(not H2CCS(H2TECH)) +
+    sum(H2NOCCS$H2CCS_NOCCS(H2TECH,H2NOCCS), V05GapShareH2Tech2(allCy,H2NOCCS,YTIME))$H2CCS(H2TECH);
 
 *' This equation further adjusts the market share of hydrogen technologies, particularly considering 
 *' the relative competitiveness between CCS and non-CCS technologies. It helps to model the transition 
@@ -221,8 +213,7 @@ Q05ProdH2(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmProdH2(allCy,H2TECH,YTIME)
         =E=
     (1-V05CapScrapH2ProdTech(allCy,H2TECH,YTIME)) * VmProdH2(allCy,H2TECH,YTIME-1) +
-    V05GapShareH2Tech1(allCy,H2TECH,YTIME) * V05DemGapH2(allCy,YTIME)
-;
+    V05GapShareH2Tech1(allCy,H2TECH,YTIME) * V05DemGapH2(allCy,YTIME);
 
 *' This equation calculates the average cost of hydrogen production across all technologies in the system.
 *' It accounts for varying costs of different technologies (e.g., electrolysis vs. SMR) to provide an overall assessment of hydrogen production cost.
@@ -403,5 +394,4 @@ Q05CaptRateH2(allCy,H2TECH,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
         (sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME)) + 1)] - 2))])/2
         -1)
       )
-    )
-    ;
+    );

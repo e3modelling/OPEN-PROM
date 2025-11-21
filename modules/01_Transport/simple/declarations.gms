@@ -16,7 +16,7 @@ Q01NewRegPcYearly(allCy,YTIME)                             "Compute new registra
 Q01ActivPassTrnsp(allCy,TRANSE,YTIME)                      "Compute passenger transport acitivity"
 Q01NumPcScrap(allCy,YTIME)                                 "Compute scrapped passenger cars"
 Q01PcOwnPcLevl(allCy,YTIME)                                "Compute ratio of car ownership over saturation car ownership"
-Q01RateScrPc(allCy,YTIME)                                  "Compute passenger cars scrapping rate"
+Q01RateScrPc(allCy,TTECH,YTIME)                                  "Compute passenger cars scrapping rate"
 Q01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)
 Q01CostFuel(allCy,TRANSE,TTECH,YTIME)
 Q01PremScrp(allCy,TRANSE,TTECH,YTIME)
@@ -50,7 +50,7 @@ V01ActivPassTrnsp(allCy,TRANSE,YTIME)                      "Passenger transport 
                                                                 !! - Activity for all other passenger transportation modes is measured in Gpkm
 V01NumPcScrap(allCy,YTIME)                                 "Scrapped passenger cars (million vehicles)"
 V01PcOwnPcLevl(allCy,YTIME)                                "Ratio of car ownership over saturation car ownership (1)"
-V01RateScrPc(allCy,YTIME)                                  "Scrapping rate of passenger cars (1)"
+V01RateScrPc(allCy,TTECH,YTIME)                                  "Scrapping rate of passenger cars (1)"
 V01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)
 V01CostFuel(allCy,TRANSE,TTECH,YTIME)
 V01PremScrp(allCy,TRANSE,TTECH,YTIME)

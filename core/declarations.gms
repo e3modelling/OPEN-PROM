@@ -13,7 +13,6 @@ iResFuelConsPerSubAndFuel(allCy,SBS,EF,YTIME)	           "Residuals in fuel cons
 iCarbValYrExog(allCy,ytime)	                               "Carbon value for each year when it is exogenous (US$2015/tn CO2)"
 iShrHeatPumpElecCons(allCy,SBS)	                           "Share of heat pump electricity consumption in total substitutable electricity (1)"						 			
 iTranfOutGasworks(allCy,EF,YTIME)	                       "Transformation Output from Gasworks, Blast Furnances and Briquetting plants (Mtoe)"	
-iResElecIndex(allCy,YTIME)                                 "Residual for electricity Index (1)"
 iNetImp(allCy,EFS,YTIME)                                   "Net imports (Mtoe)"
 ODummyObj                                                  "Parameter saving objective function"
 
@@ -35,7 +34,6 @@ imCO2CaptRate(PGALL)	                                    "Plant CO2 capture rate
 imEffValueInDollars(allCy,SBS,YTIME)	                   "Efficiency value (US$2015/toe)" 	
 imShrNonSubElecInTotElecDem(allCy,SBS)	                   "Share of non substitutable electricity in total electricity demand per subsector (1)"		
 imDistrLosses(allCy,EF,YTIME)	                           "Distribution Losses (Mtoe)"		
-imFinEneCons(allCy,EF,YTIME)	                           "Final energy consumption (Mtoe)"		
 imFuelImports(allCy,EF,YTIME)	                           "Fuel Imports (Mtoe)"							
 imVarCostTech(allCy,SBS,TECH,YTIME)	                       "Variable Cost of technology ()"
                                                                 !! For transport (kUS$2015/vehicle)
@@ -77,11 +75,12 @@ VmRenValue(YTIME)                                          "Renewable value (US$
 
 Scalars
 smTWhToMtoe                                                "TWh to Mtoe conversion factor" /0.086/
-smElecToSteRatioChp                                        "Technical maximum of electricity to steam ratio in CHP plants" /0.9/
+smElecToSteRatioChp                                        "Technical maximum of electricity to steam ratio in CHP plants" /2.5/
 sIter                                                      "time step iterator" /0/
 sSolverTryMax                                              "maximum attempts to solve each time step" /%SolverTryMax%/
 sModelStat                                                 "helper parameter for solver status"
 smFracElecPriChp                                           "Fraction of Electricity Price at which a CHP sells electricity to network" /0/
 sCY                                                        "country iterator" /0/
 sUnitToKUnit                                               "units to Kilo units conversion" /1000/
+epsilon6                                                    "A small number of magnitude 6" /1e-6/
 ;

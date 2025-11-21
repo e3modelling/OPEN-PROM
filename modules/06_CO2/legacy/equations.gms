@@ -67,7 +67,7 @@ Q06CaptCummCO2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       =E= 
     V06CaptCummCO2(allCy,YTIME-1) +
     SUM(CO2CAPTECH,
-      V06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME-1)
+      V06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME)
     )
  ;   
 

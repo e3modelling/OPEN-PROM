@@ -18,9 +18,7 @@ V01NewRegPcYearly.FX(runCy,YTIME)$(not an(ytime)) = i01NewReg(runCy,YTIME);
 V01TechSortVarCost.LO(runCy,TRANSE,Rcon,YTIME) = 1e-20;
 V01TechSortVarCost.L(runCy,TRANSE,Rcon,YTIME) = 0.1;
 *---
-V01RateScrPc.UP(runCy,YTIME) = 1;
-V01RateScrPc.l(runCy,YTIME) = 0.06;
-V01RateScrPc.FX(runCy,"%fBaseY%") = 0.06; 
+V01RateScrPc.FX(runCy,YTIME)$DATAY(YTIME) = 1 / VmLft.L(runCy,DSBS,TTECH,YTIME);
 *---
 V01NumPcScrap.FX(runCy,"%fBaseY%") = V01RateScrPc.L(runCy,"%fBaseY%") * V01StockPcYearly.L(runCy,"%fBaseY%"); 
 *---
@@ -67,11 +65,6 @@ Q01CostTranspPerVeh.scale(runCy,TRANSE,RCon,TTECH,YTIME)=V01CostTranspPerVeh.sca
 *---
 VmDemFinEneTranspPerFuel.FX(runCy,TRANSE,EF,YTIME) $(SECtoEF(TRANSE,EF) $(not An(YTIME))) = imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME);
 VmDemFinEneTranspPerFuel.FX(runCy,TRANSE,EF,YTIME)$(not SECtoEF(TRANSE,EF)) = 0;
-*---
-* SOME NEED TO BE MOVED TO INDUSTRY
-VmLft.L(runCy,DSBS,TTECH,YTIME)= 0.1;
-VmLft.FX(runCy,DSBS,TECH,YTIME)$(SECTTECH(DSBS,TECH) $(not  TRANSE(DSBS)) $(not sameas(DSBS,"PC"))) = i01TechLft(runCy,DSBS,TECH,YTIME);
-VmLft.FX(runCy,TRANSE,TTECH,YTIME)$(SECTTECH(TRANSE,TTECH) $(not sameas(TRANSE,"PC"))) = i01TechLft(runCy,TRANSE,TTECH,YTIME);
-VmLft.FX(runCy,DSBS,TECH,YTIME)$(not SECTTECH(DSBS,TECH)) = 0;
-VmLft.FX(runCy,"PC",TTECH,YTIME)$( (not AN(YTIME)) $SECTTECH("PC",TTECH)) = 1/V01RateScrPc.L(runCy,YTIME);
-*---
+
+
+V01RateScrPc.UP(runCy,YTIME) = 1;
