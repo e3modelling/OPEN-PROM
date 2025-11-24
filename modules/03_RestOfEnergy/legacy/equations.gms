@@ -99,13 +99,12 @@ Q03SubsiCapCostSupply(allCy,SSBS,STECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         V04NewCapElec(allCy,PGALL,YTIME) * 1e3 / i04AvailRate(allCy,PGALL,YTIME)
       )$sameas(SSBS,"PG")
       +
-      0 * sum(H2TECH$sameas(H2TECH,STECH),
-        i05CostCapH2Prod(allCy,H2TECH,YTIME) *
-        0 *
+      sum(H2TECH$sameas(H2TECH,STECH),
+        V05CostProdH2Tech(allCy,H2TECH,YTIME) *
+        VmDemTotH2(allCy,YTIME) * V05ShareCCSH2Prod(allCy,H2TECH,YTIME) * V05ShareNoCCSH2Prod(allCy,H2TECH,YTIME) *
         imFacSubsiCapCostSupply(SSBS,STECH)
         +
-        imGrantCapCostSupply(SSBS,STECH) *
-        0
+        imGrantCapCostSupply(SSBS,STECH) * VmDemTotH2(allCy,YTIME)
       )$sameas(SSBS,"H2P")
 ;
 

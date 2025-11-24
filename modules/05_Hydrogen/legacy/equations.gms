@@ -97,22 +97,26 @@ Q05DemGapH2(allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q05CostProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V05CostProdH2Tech(allCy,H2TECH,YTIME)
         =E=
-    (
-      imDisc(allCy,"H2P",YTIME) * 
-      exp(imDisc(allCy,"H2P",YTIME)* i05ProdLftH2(H2TECH,YTIME)) /
-      (exp(imDisc(allCy,"H2P",YTIME) * i05ProdLftH2(H2TECH,YTIME))-1) * 
+    ( 
       (
-        (i05CostCapH2Prod(allCy,H2TECH,YTIME) - imGrantCapCostSupply("H2P",H2TECH)) * (1 - imFacSubsiCapCostSupply("H2P",H2TECH)) +
-        i05CostFOMH2Prod(allCy,H2TECH,YTIME) +
-        i05CostVOMH2Prod(allCy,H2TECH,YTIME)
-      ) +
-      (
-      (V04CapexFixCostPG(allCy,"PGSOL",YTIME))$sameas(H2TECH,"wes") + 
-      (V04CapexFixCostPG(allCy,"PGAWNO",YTIME))$sameas(H2TECH,"wew")
+        imDisc(allCy,"H2P",YTIME) * 
+        exp(imDisc(allCy,"H2P",YTIME)* i05ProdLftH2(H2TECH,YTIME)) /
+        (exp(imDisc(allCy,"H2P",YTIME) * i05ProdLftH2(H2TECH,YTIME))-1) * 
+        (
+          (i05CostCapH2Prod(allCy,H2TECH,YTIME) - imGrantCapCostSupply("H2P",H2TECH)) * (1 - imFacSubsiCapCostSupply("H2P",H2TECH)) +
+          i05CostFOMH2Prod(allCy,H2TECH,YTIME) +
+          i05CostVOMH2Prod(allCy,H2TECH,YTIME)
+        ) +
+        (
+        (V04CapexFixCostPG(allCy,"PGSOL",YTIME))$sameas(H2TECH,"wes") + 
+        (V04CapexFixCostPG(allCy,"PGAWNO",YTIME))$sameas(H2TECH,"wew")
+        )
       )
-    ) / 
-    (i05AvailH2Prod(allCy,H2TECH,YTIME) * smGwToTwhPerYear(YTIME) * smTWhToMtoe) +
-    V05CostVarProdH2Tech(allCy,H2TECH,YTIME)  
+      / 
+      (i05AvailH2Prod(allCy,H2TECH,YTIME) * smGwToTwhPerYear(YTIME) * smTWhToMtoe) +
+      V05CostVarProdH2Tech(allCy,H2TECH,YTIME)
+    ) * (1 - imFacSubsiCapCostSupply("H2P",H2TECH)) -
+    imGrantCapCostSupply("H2P",H2TECH)  
 ;
 
 *' This equation models the variable costs associated with hydrogen production, factoring in fuel prices (e.g., electricity or natural gas),

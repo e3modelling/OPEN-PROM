@@ -672,7 +672,7 @@ imFacSubsiCapCostSupply("H2P",H2TECH) = 0;
 ** State granting in technology capex (supply side)
 parameter imGrantCapCostSupply(SSBS,STECH);
 imGrantCapCostSupply("PG",PGREN) = 0;                       !! kUS$2015/kW
-imGrantCapCostSupply("H2P",H2TECH) = 0;                     !! US$2015/kW H2
+imGrantCapCostSupply("H2P",H2TECH) = 0;                     !! US$2015/toe H2
 *---
 ** Industry
 imShrNonSubElecInTotElecDem(runCy,INDSE)  = iIndCharData(INDSE,"SHR_NSE");
