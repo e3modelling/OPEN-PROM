@@ -104,7 +104,7 @@ Q06CstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     i06ElastCO2Seq(allCy,"mc_b") *
     exp(V06CaptCummCO2(allCy,YTIME) / i06ElastCO2Seq(allCy,"mc_d"));           
 
-*' The equation calculates the CAPEX of each DAC technology, as it's affected by a learning curve.
+*' The equation calculates the CAPEX of each DAC technology, as it's affected by a learning curve ($/tCO2).
 Q06GrossCapDAC(DACTECH,YTIME)$(TIME(YTIME))..
     V06GrossCapDAC(DACTECH,YTIME)
             =E=         

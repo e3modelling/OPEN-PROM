@@ -787,24 +787,28 @@ $ENDIF.calib
 ** State subsidy factor in technology capex (demand side)
 parameter imFacSubsiCapCostTech(DSBS,TECH);
 imFacSubsiCapCostTech("PC","TELC") = 0;
+imFacSubsiCapCostTech("CH","TELC") = 0;
 imFacSubsiCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 0;
 *---
 ** State granting in technology capex (demand side)
 parameter imGrantCapCostTech(DSBS,TECH);
-imGrantCapCostTech("PC","TELC") = 0.07;
-imGrantCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 0;
+imGrantCapCostTech("PC","TELC") = 0;                        !! kUS$2015 per vehicle
+imGrantCapCostTech("CH","TELC") = 0;                        !! kUS$2015/toe-year for Industry sectors
+imGrantCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 0;         !! US$2015/tCO2
 *---
 ** State subsidy in fuel cost
 parameter imSubsiCapCostFuel(SBS,EF);
-imSubsiCapCostFuel("HOU","ELC") = 0;
+imSubsiCapCostFuel("HOU","ELC") = 0;                        !!kUS$2015/toe
 *---
 ** State subsidy factor in technology capex (supply side)
 parameter imFacSubsiCapCostSupply(SSBS,STECH);
 imFacSubsiCapCostSupply("PG",PGREN) = 0;
+imFacSubsiCapCostSupply("H2P",H2TECH) = 0;
 *---
 ** State granting in technology capex (supply side)
 parameter imGrantCapCostSupply(SSBS,STECH);
-imGrantCapCostSupply("PG",PGREN) = 0;
+imGrantCapCostSupply("PG",PGREN) = 0;                       !! kUS$2015/kW
+imGrantCapCostSupply("H2P",H2TECH) = 0;                     !! US$2015/kW H2
 *---
 ** Industry
 imShrNonSubElecInTotElecDem(runCy,INDSE)  = iIndCharData(INDSE,"SHR_NSE");

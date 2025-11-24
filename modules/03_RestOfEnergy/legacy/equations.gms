@@ -50,7 +50,7 @@ Q03SubsiStat(allCy,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 ;
 $offtext
 
-*' Subsidies in demand
+*' Subsidies in demand (Millions US$2015)
 Q03SubsiCapCostTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS,TECH))..
       VmSubsiCapCostTech(allCy,DSBS,TECH,YTIME)
       =E=
@@ -87,6 +87,7 @@ Q03SubsiCapCostTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(
       imSubsiCapCostFuel("HOU","ELC") * VmConsFuel(allCy,"HOU","ELC",YTIME)
 ;
 
+*' Subsidies in supply (Millions US$2015)
 Q03SubsiCapCostSupply(allCy,SSBS,STECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       VmSubsiCapCostSupply(allCy,SSBS,STECH,YTIME)
       =E=
@@ -108,6 +109,8 @@ Q03SubsiCapCostSupply(allCy,SSBS,STECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       )$sameas(SSBS,"H2P")
 ;
 
+*'This equation calculated the difference between the state revenues by collected carbon taxes, and the green grants and subsidies given in
+*'both the supply and demant sectors.
 Q03NetSubsiTax(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       VmNetSubsiTax(allCy,YTIME)
       =E=

@@ -24,7 +24,7 @@ Variables
 V06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME)	               "CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
 V06CaptCummCO2(allCy,YTIME)	                               "Cumulative CO2 captured (Mtn CO2)"
 V06TrnsWghtLinToExp(allCy,YTIME)	                       "Weight for transtition from linear CO2 sequestration cost curve to exponential (1)"
-V06GrossCapDAC(DACTECH,YTIME)                              "CAPEX of DAC technologies with learning curve"
+V06GrossCapDAC(DACTECH,YTIME)                              "CAPEX of DAC technologies with learning curve ($/tCO2)"
 V06FixOandMDAC(DACTECH,YTIME)                              "Fixed and O&M costs of DAC technologies with learning curve"
 V06VarCostDAC(DACTECH,YTIME)                               "Variable costs of DAC technologies including carbon storage costs, with learning curve"
 V06LvlCostDAC(allCy,DACTECH,YTIME)                         "Regional CAPEX and the Fixed Costs of DAC capacity (US$2015/tCO2)"

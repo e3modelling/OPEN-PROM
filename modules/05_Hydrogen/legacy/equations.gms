@@ -108,7 +108,7 @@ Q05CostProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       exp(imDisc(allCy,"H2P",YTIME)* i05ProdLftH2(H2TECH,YTIME)) /
       (exp(imDisc(allCy,"H2P",YTIME) * i05ProdLftH2(H2TECH,YTIME))-1) * 
       (
-        i05CostCapH2Prod(allCy,H2TECH,YTIME) * (1 - imFacSubsiCapCostSupply("H2P",H2TECH)) +
+        (i05CostCapH2Prod(allCy,H2TECH,YTIME) - imGrantCapCostSupply("H2P",H2TECH)) * (1 - imFacSubsiCapCostSupply("H2P",H2TECH)) +
         i05CostFOMH2Prod(allCy,H2TECH,YTIME) +
         i05CostVOMH2Prod(allCy,H2TECH,YTIME)
       ) +
