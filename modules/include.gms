@@ -9,5 +9,6 @@ $include "./modules/05_Hydrogen/module.gms";
 $include "./modules/06_CO2/module.gms";
 $include "./modules/07_Emissions/module.gms";
 $include "./modules/08_Prices/module.gms";
+$include "./modules/09_Heat/module.gms";
 *######################## R SECTION END (MODULES) ##############################
 $offrecurse
