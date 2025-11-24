@@ -66,7 +66,7 @@ For this setup:
 Example:
 
 ```
-/mnt/c/Users/at39/Models/
+/mnt/c/Users/user/Models/
    ├── OPEN-PROM
    ├── climate-assessment
    └── other_models
@@ -95,6 +95,36 @@ sudo apt install -y build-essential zlib1g-dev libncurses5-dev libgdbm-dev \
 
 👉 Moves into your Linux home directory (`/home/<username>`) and then installs packages required to compile Python and run the tool (compilers, compression libraries, security libs, SQLite).
 
+#### Possible problem with installation
+If you encounter issues with missing dependencies or installation errors in WSL, e.g., "E: Unmet dependencies. Try 'apt --fix-broken install' with no packages (or specify a solution).", try to run the following commands to fix broken packages and reconfigure dpkg: 
+
+Please run these commands exactly:
+```bash
+# 1. Force remove the broken post-install script
+sudo mv /var/lib/dpkg/info/udev.postinst /var/lib/dpkg/info/udev.postinst.bak
+
+# 2. Force dpkg to mark udev as configured
+sudo dpkg --configure -a
+
+# 3. Hold it again to prevent future reconfiguration attempts
+sudo apt-mark hold udev
+
+# 4. Clean up and fix dependencies
+sudo apt --fix-broken install
+sudo apt clean
+sudo apt autoremove
+
+#After running those, check:
+dpkg -l | grep udev\
+# hi  udev   255.4-1ubuntu8.11   amd64   device manager for the Linux kernel
+sudo apt update
+sudo apt --fix-broken install
+#you should finally get:
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+
+```
+Then try again to install the dependencies with `sudo apt install -y ...` as shown above.
+
 ### Step 2: Install Python 3.11.9
 
 ```bash
@@ -117,12 +147,13 @@ python3.11 --version
 ```
 
 ### Step 3: Install Climate-Assessment
+👉 Navigate to the folder where you want to store the `climate-assessment` (adjust path to your own).
 
 ```bash
-cd /mnt/c/Users/at39/2-Models/climate-assessment
+cd /mnt/c/Users/user/Models
+git clone https://github.com/iiasa/climate-assessment.git
+cd climate-assessment
 ```
-
-👉 Navigate to the folder where `climate-assessment` is stored (adjust path to your own).
 
 #### Create Virtual Environment
 
@@ -153,6 +184,23 @@ pytest tests/integration -m "not nightly and not wg3"
 
 👉 Runs integration tests.
 ✅ Normal result: `4 failed, 151 passed, 17250 warnings`. (The failures are expected due to data dependencies.)
+
+#### Download MAGICC7 and configure files
+
+Next, download the MAGICC7 binary from this [link](https://magicc.org/download/magicc7) (registration may be required) and copy the files to a dedicated folder, e.g., `/mnt/c/Users/user/Models/climate-assessment/magicc-files/`. Also, download the probabilistic parameters file from [link](https://magicc.org/download/magicc7) and place it in the same folder.
+
+Finally, edit the `.env.sample` file in the `climate-assessment` folder to point to the MAGICC files and rename it to `.env`. Be careful to create the directories for the workers as specified below. Example configuration:
+
+```
+MAGICC_EXECUTABLE_7=/mnt/c/Users/User/Models/climate-assessment/magicc-files/bin/magicc
+
+# How many MAGICC workers can run in parallel?
+MAGICC_WORKER_NUMBER=8
+
+# Where should the MAGICC workers be located on the filesystem (you need about
+# 500Mb space per worker at the moment)
+MAGICC_WORKER_ROOT_DIR=/mnt/tmp/workers
+```
 
 ## 5. Linking OPEN-PROM and Climate-Assessment
 

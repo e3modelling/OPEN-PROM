@@ -33,7 +33,7 @@ saveMetadata <- function(DevMode) {
 
   # Save the appropriate region mapping for each type of run (Development / Research).
   if (DevMode == 0) {
-    mapping <- "regionmappingOPDEV3.csv"
+    mapping <- "regionmappingOPDEV5.csv"
   } else if (DevMode == 1) {
     mapping <- "regionmappingOPDEV4.csv"
   }

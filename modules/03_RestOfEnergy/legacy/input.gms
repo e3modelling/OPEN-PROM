@@ -20,7 +20,7 @@ $include"./iDataGrossInlCons.csv"
 $offdelim
 ;
 *---
-table i03DataOwnConsEne(allCy,EFS,EF,YTIME)	      "Data for Consumption of Energy Branch (Mtoe)"
+table i03DataOwnConsEne(allCy,EFS,YTIME)	      "Data for Consumption of Energy Branch (Mtoe)"
 $ondelim
 $include"./iDataOwnConsEne.csv"
 $offdelim
@@ -41,12 +41,6 @@ $offdelim
 table i03PrimProd(allCy,PPRODEF,YTIME)	              "Primary Production (Mtoe)"
 $ondelim
 $include"./iPrimProd.csv"
-$offdelim
-;
-*---
-table i03InpTransfTherm(allCy,EFS,YTIME)          "Historic data of VmInpTransfTherm (Transformation input to thermal power plants) (Mtoe)"
-$ondelim
-$include"./iInpTransfTherm.csv"
 $offdelim
 ;
 *---
@@ -113,93 +107,6 @@ a4 0.666634797,
 a5 0.33343691
 /;
 *---
-parameter i03ParDHEffData(PGEFS)                  "Parameter of  district heating Efficiency (1)" 
-/
-HCL		  0.76,
-LGN		  0.75,
-GDO		  0.78,
-RFO		  0.78,
-OLQ		  0.78,
-NGS		  0.8,
-OGS		  0.78,
-BMSWAS    0.76 
-/;
-
-parameter i03FacSubsiStat(TECH)                     "Sharing of parameters among subsetors of economy (needs to expand per region and year)"
-/
-TGSL      0
-TLPG      0
-TGDO      0
-TNGS      0
-TELC      0.0001
-TKRS      0
-TETH      0
-TMET      0
-TBGDO     0
-TPHEVGSL  0
-TPHEVGDO  0
-TH2F      0
-TCHEVGSL  0
-TCHEVGDO  0
-* Industrial Technologies (only add those not already in Transport)
-* GDO,LPG,KRS,NGS,ELC already exist in TRANSPORT technologies
-TNGSCCS   0
-TLGN      0
-THCL      0
-THCLCCS   0
-TRFO      0
-TOLQ      0
-TOGS      0
-TSTE1AL   0
-TSTE1AH   0
-TSTE1AD   0
-TSTE1AG   0
-TSTE1AB   0
-TSTE1AH2F 0
-* Domestic Technologies (only add those not already in Transport & Industry)
-* LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC,STE1AL,STE1AH,STE1AD,STE1AG,STE1AB already exist in TRANSPORT or INDUSTRY technologies
-TSTE2LGN  0
-TSTE2OSL  0
-TSTE2GDO  0
-TSTE2RFO  0
-TSTE2OLQ  0
-TSTE2NGS  0
-TSTE2OGS  0
-TSTE2BMS  0
-TBMSWAS   0
-* Non-Energy and Bunkers Technologies (only add those not already in Transport & Industry & Domestic)
-* GDO,RFO,LGN,HCL,GDO,LPG,OLQ,NGS,OGS already exist
-* NOT USED
-TSTE1AR   0
-THEATPUMP 0
-* DAC Technologies
-HTDAC   0.0001
-H2DAC   0.0001
-LTDAC   0.0001
-EWDAC   0.0001
-* Power Generation Technologies
-*PGTLGN
-*PGTHCL 
-*PGTGDO
-*PGTRFO
-*PGTNGS
-*PGTNUC
-*PGTHYD
-*PGTBMSWAS
-*PGTSOL
-*PGTGEO
-*PGTWND
-* Hydrogen Production Technologies
-*HPTHCL
-*HPTRFO
-*HPTNGS
-*HPTNUC
-*HPTBMSWAS
-*HPTSOL
-*HPTWND
-*HPTELC
-/;
-*---
 
 Parameters
 i03SupTrnasfOutputRefineries(allCy,EF,YTIME)	  "Supplementary parameter for the transformation output from refineries (Mtoe)"
@@ -211,7 +118,6 @@ i03RefCapacity(allCy,YTIME)	                      "Refineries Capacity (Million 
 i03GrosInlCons(allCy,EF,YTIME)	                  "Gross Inland Consumtpion (Mtoe)"
 i03GrossInConsNoEneBra(allCy,EF,YTIME)	          "Gross Inland Consumption,excluding energy branch (Mtoe)"
 i03FeedTransfr(allCy,EFS,YTIME)	                  "Feedstocks in Transfers (Mtoe)"
-i03EffDHPlants(allCy,EF,YTIME)                    "Efficiency of District Heating Plants (1)"
 i03ResRefCapacity(allCy,YTIME)	                  "Residual in Refineries Capacity (1)"
 i03ResTransfOutputRefineries(allCy,EF,YTIME)      "Residual in Transformation Output from Refineries (Mtoe)"
 i03RateEneBranCons(allCy,EF,YTIME)	              "Rate of Energy Branch Consumption over total transformation output (1)"
@@ -219,7 +125,6 @@ i03RatePriProTotPriNeeds(allCy,EF,YTIME)	      "Rate of Primary Production in To
 i03ResHcNgOilPrProd(allCy,EF,YTIME)	              "Residuals for Hard Coal, Natural Gas and Oil Primary Production (1)"
 i03RatioImpFinElecDem(allCy,YTIME)	              "Ratio of imports in final electricity demand (1)"	
 i03ElecImp(allCy,YTIME)	                          "Electricity Imports (1)"
-i03InpTransfTherm(allCy,EFS,YTIME)                "Historic data of VmInpTransfTherm (Transformation input to thermal power plants) (Mtoe)"
 ;
 *---
 i03SupResRefCapacity(runCy,SUPOTH,YTIME) = 1;
@@ -228,7 +133,7 @@ i03SupTrnasfOutputRefineries(runCy,EF,YTIME) = 1;
 *---
 i03TransfInputRef(runCy,EFS,YTIME)$(not An(YTIME)) = i03DataTotTransfInputRef(runCy,EFS,YTIME);
 *---
-i03TotEneBranchCons(runCy,EFS,YTIME) = SUM(EF,i03DataOwnConsEne(runCy,EFS,EF,YTIME));
+i03TotEneBranchCons(runCy,EFS,YTIME) = i03DataOwnConsEne(runCy,EFS,YTIME);
 *---
 i03TransfOutputRef(runCy,EFS,YTIME)$(not An(YTIME)) = i03DataTransfOutputRef(runCy,EFS,YTIME);
 *---
@@ -240,8 +145,6 @@ i03GrosInlCons(runCy,EFS,YTIME) + i03TotEneBranchCons(runCy,EFS,YTIME)$EFtoEFA(E
 - i03TotEneBranchCons(runCy,EFS,YTIME)$(not EFtoEFA(EFS,"LQD"));
 *---
 i03FeedTransfr(runCy,EFS,YTIME) = i03SuppTransfers(runCy,EFS,YTIME);
-*---
-i03EffDHPlants(runCy,EFS,YTIME)  = sum(PGEFS$sameas(EFS,PGEFS),i03ParDHEffData(PGEFS));
 *---
 i03ResRefCapacity(runCy,YTIME) = i03SupResRefCapacity(runCy,"REF_CAP_RES",YTIME);
 *---
@@ -270,12 +173,12 @@ i03ElecImp(runCy,YTIME) = 0;
 *---
 VmConsFinNonEne.FX(runCy,EFS,YTIME)$(not AN(YTIME)) = 
 sum(NENSE$(not sameas("BU",NENSE)),
-  sum(EF$(EFtoEFS(EF,EFS) $SECtoEF(NENSE,EF) ), imFuelConsPerFueSub(runCy,NENSE,EF,YTIME))
+  sum(EF$(EFtoEFS(EF,EFS) $SECtoEF(NENSE,EF)), imFuelConsPerFueSub(runCy,NENSE,EF,YTIME))
 );
 *---
 imRateLossesFinCons(runCy,EFS,YTIME) = 
 [
   imDistrLosses(runCy,EFS,YTIME) /
-  (imFinEneCons(runCy,EFS,YTIME) + VmConsFinNonEne.L(runCy,EFS,YTIME))
-]$(imFinEneCons(runCy,EFS,YTIME) + VmConsFinNonEne.L(runCy,EFS,YTIME));
+  (sum(DSBS, imFuelConsPerFueSub(runCy,DSBS,EFS,YTIME)) + i03PrimProd(runCy,"CRO",YTIME)$sameas("CRO",EFS))
+]$(sum(DSBS, imFuelConsPerFueSub(runCy,DSBS,EFS,YTIME)) + i03PrimProd(runCy,"CRO",YTIME)$sameas("CRO",EFS));
 imRateLossesFinCons(runCy,EFS,YTIME)$AN(YTIME) = imRateLossesFinCons(runCy,EFS,"%fBaseY%");

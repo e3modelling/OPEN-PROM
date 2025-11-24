@@ -31,8 +31,10 @@ python3.11 --version
 
 # Install climate-assesment tool
 
-# Change to installation directory. PLEASE CHANGE THE "at39/2-Models" to your folder "username/ModelFolder"
-cd /mnt/c/Users/at39/2-Models/climate-assessment
+# Change to installation directory. PLEASE CHANGE THE "User/Models" to your folder "username/ModelFolder"
+cd /mnt/c/Users/user/Models
+git clone https://github.com/iiasa/climate-assessment.git
+cd climate-assessment
 
 # Create and activate a virtual environment in Python
 python3.11 -m venv .venv

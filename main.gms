@@ -91,6 +91,7 @@
 *'   06_CO2
 *'   07_Emissions
 *'   08_Prices
+*'   09_Heat
 *' Prefixes (V01, i01, etc.) map directly to these numbers.
 *'----------------------------------------
 *' 5. INTERDEPENDENT VARIABLE/INPUT USAGE
@@ -250,6 +251,7 @@ $setGlobal Hydrogen         legacy
 $setGlobal CO2              legacy
 $setGlobal Emissions        legacy
 $setGlobal Prices           legacy
+$setGlobal Heat             heat
 
 ** CORE MODEL FILES **
 *' SETS

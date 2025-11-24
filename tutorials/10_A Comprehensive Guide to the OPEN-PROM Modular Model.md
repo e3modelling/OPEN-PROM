@@ -50,12 +50,12 @@ This contains the backbone of the model, structured as follows:
 ### 2.2 Modules Folder
 Each module focuses on a specific energy sector and is stored in a subfolder. The main subfolders include:
 
-1. **01_PowerGeneration**
-2. **02_Transport**
-3. **03_Industry**
-4. **04_RestOfEnergy**
-5. **05_CO2**
-6. **06_Emissions**
+1. **01_Transport**
+2. **02_Industry**
+3. **03_RestOfEnergy**
+4. **04_PowerGeneration**
+5. **05_Hydrogen**
+6. **06_CO2**
 7. **07_Prices**
 
 Each module folder contains:
