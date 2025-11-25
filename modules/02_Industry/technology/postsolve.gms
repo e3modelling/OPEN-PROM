@@ -15,9 +15,7 @@ V02ShareTechNewEquipUseful.FX(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME) = V02ShareTec
 V02EquipCapTechSubsec.FX(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME) = V02EquipCapTechSubsec.L(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME);  
 V02UsefulElecNonSubIndTert.FX(runCyL,INDDOM,YTIME)$TIME(YTIME) = V02UsefulElecNonSubIndTert.L(runCyL,INDDOM,YTIME)$TIME(YTIME);            
 V02FinalElecNonSubIndTert.FX(runCyL,INDDOM,YTIME)$TIME(YTIME) = V02FinalElecNonSubIndTert.L(runCyL,INDDOM,YTIME)$TIME(YTIME);                                      
-V02CostElecProdCHP.FX(runCyL,DSBS,CHP,YTIME)$TIME(YTIME) = V02CostElecProdCHP.L(runCyL,DSBS,CHP,YTIME)$TIME(YTIME);      
 VmConsFuel.FX(runCyL,DSBS,EF,YTIME)$TIME(YTIME) = VmConsFuel.L(runCyL,DSBS,EF,YTIME)$TIME(YTIME);       
-VmCostElcAvgProdCHP.FX(runCyL,CHP,YTIME)$TIME(YTIME) = VmCostElcAvgProdCHP.L(runCyL,CHP,YTIME)$TIME(YTIME);
 V02IndxElecIndPrices.FX(runCyL,YTIME)$TIME(YTIME) = V02IndxElecIndPrices.L(runCyL,YTIME)$TIME(YTIME);  
 V02PremScrpIndu.FX(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME) = V02PremScrpIndu.L(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME);
 *---

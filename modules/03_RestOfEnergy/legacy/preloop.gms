@@ -13,8 +13,6 @@ V03OutTransfRefSpec.FX(runCy,EFS,YTIME)$(not EFtoEFA(EFS,"LQD")) = 0;
 V03ConsGrssInlNotEneBranch.L(runCy,EFS,YTIME) = 0.1;
 V03ConsGrssInlNotEneBranch.FX(runCy,EFS,YTIME)$DATAY(YTIME) = i03GrossInConsNoEneBra(runCy,EFS,YTIME);
 *---
-V03OutTransfTherm.FX(runCy,EFS,YTIME)$(not TOCTEF(EFS)) = 0;
-*---
 V03InputTransfRef.FX(runCy,"CRO",YTIME)$DATAY(YTIME) = i03TransfInputRef(runCy,"CRO",YTIME);
 V03InputTransfRef.FX(runCy,EFS,YTIME)$(not sameas("CRO",EFS)) = 0;
 *---
@@ -34,10 +32,10 @@ V03Exp.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
 *---
 VmConsFiEneSec.FX(runCy,EFS,YTIME)$DATAY(YTIME) = i03TotEneBranchCons(runCy,EFS,YTIME);
 *---
-VmInpTransfTherm.FX(runCy,EFS,YTIME)$(not PGEF(EFS)) = 0;
-VmInpTransfTherm.FX(runCy,EFS,YTIME)$DATAY(YTIME) = i03InpTransfTherm(runCy,EFS,YTIME);
-*---
-VmConsFinEneCountry.FX(runCy,EFS,YTIME)$DATAY(YTIME) = imFinEneCons(runCy,EFS,YTIME);
+VmConsFinEneCountry.FX(runCy,EFS,YTIME)$DATAY(YTIME) = 
+sum(DSBS$(not NENSE(DSBS)), 
+  imFuelConsPerFueSub(runCy,DSBS,EFS,YTIME)
+);
 *---
 VmLossesDistr.FX(runCy,EFS,YTIME)$DATAY(YTIME) = imDistrLosses(runCy,EFS,YTIME);
 *---
@@ -52,3 +50,8 @@ VmTransfInputDHPlants.FX(runCy,EFS,YTIME)$DATAY(YTIME) = -i03InpDHPTransfProcess
 V03OutTransfCHP.FX(runCy,TOCTEF,YTIME)$DATAY(YTIME) = i03OutCHPTransfProcess(runCy,TOCTEF,YTIME);
 *---
 VmTransfInputCHPlants.FX(runCy,EFS,YTIME)$DATAY(YTIME) = -i03InpCHPTransfProcess(runCy,EFS,YTIME);
+*---
+VmInpTransfTherm.FX(runCy,EFS,YTIME)$(not PGEF(EFS)) = 0;
+VmInpTransfTherm.FX(runCy,PGEF,YTIME)$DATAY(YTIME) = -i03InpPGTransfProcess(runCy,PGEF,YTIME);
+*---
+V03OutTransfTherm.FX(runCy,ELCEF,YTIME)$DATAY(YTIME) = i03OutPGTransfProcess(runCy,ELCEF,YTIME);

@@ -94,10 +94,10 @@ Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not sa
         =E=
     ((
       (
-        (imDisc(allCy,DSBS,YTIME)$(not TCHP(ITECH)) + imDisc(allCy,"PG",YTIME)$TCHP(ITECH)) * !! in case of chp plants we use the discount rate of power generation sector
-        exp((imDisc(allCy,DSBS,YTIME)$(not TCHP(ITECH)) + imDisc(allCy,"PG",YTIME)$TCHP(ITECH)) * VmLft(allCy,DSBS,ITECH,YTIME))
+        imDisc(allCy,DSBS,YTIME) * !! in case of chp plants we use the discount rate of power generation sector
+        exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME))
       ) /
-      (exp((imDisc(allCy,DSBS,YTIME)$(not TCHP(ITECH)) + imDisc(allCy,"PG",YTIME)$TCHP(ITECH)) * VmLft(allCy,DSBS,ITECH,YTIME)) - 1)
+      (exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME)) - 1)
     ) *
     imCapCostTech(allCy,DSBS,ITECH,YTIME) * imCGI(allCy,YTIME) +
     imFixOMCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit)
@@ -120,18 +120,12 @@ Q02VarCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not s
       (imRenValue(YTIME)/1000)$(not RENEF(ITECH) and not NENSE(DSBS)) !! needs change of units
     ) +
     imVarCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit
-  ) / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME) -
-  (
-    VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME) *
-    smFracElecPriChp *
-    VmPriceElecInd(allCy,YTIME) 
-    / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME)
-  )$TCHP(ITECH);
+  ) / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME);
 
 Q02CostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
     V02CostTech(allCy,DSBS,ITECH,YTIME) 
         =E=
-    V02CapCostTech(allCy,DSBS,ITECH,YTIME)  +
+    V02CapCostTech(allCy,DSBS,ITECH,YTIME) +
     V02VarCostTech(allCy,DSBS,ITECH,YTIME);
 
 *' This equation calculates the technology share in new equipment based on factors such as maturity factor,
@@ -223,47 +217,6 @@ Q02IndxElecIndPrices(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V02IndxElecIndPrices(allCy,YTIME)
         =E=
     VmPriceElecInd(allCy,YTIME-1) * 
-    (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)/VmPriceFuelAvgSub(allCy,"OI",YTIME-1)) ** (0.6) *
-    (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-2)/VmPriceFuelAvgSub(allCy,"OI",YTIME-2)) ** (0.3) *
-    (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-3)/VmPriceFuelAvgSub(allCy,"OI",YTIME-3)) ** (0.1)
-    ;
-
-*' The equation computes the electricity production cost per Combined Heat and Power plant for a specific demand sector within a given subsector.
-*' The cost is determined based on various factors, including the discount rate, technical lifetime of CHP plants, capital cost (EUR/kW), fixed O&M cost (EUR/kW), availability rate,
-*' variable cost(EUR/MWh), and fuel-related costs. The equation provides a comprehensive assessment of the overall expenses associated with electricity production from CHP
-*' plants, considering both the fixed and variable components, as well as factors such as carbon prices and CO2 emission factors.
-*' The resulting variable represents the electricity production cost per CHP plant and demand sector, expressed in Euro per kilowatt-hour (Euro/KWh).
-Q02CostElecProdCHP(allCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS) $runCy(allCy))..
-    V02CostElecProdCHP(allCy,DSBS,CHP,YTIME)
-        =E=
-    ( 
-      imDisc(allCy,"PG",YTIME) * 
-      exp(imDisc(allCy,"PG",YTIME) * i02LifChpPla(allCy,DSBS,CHP)) /
-      (exp(imDisc(allCy,"PG",YTIME) * i02LifChpPla(allCy,DSBS,CHP)) -1) *
-      i02InvCostChp(allCy,DSBS,CHP,YTIME) * imCGI(allCy,YTIME) + 
-      i02FixOMCostPerChp(allCy,DSBS,CHP,YTIME)
-    ) /
-    (i02AvailRateChp(allCy,DSBS,CHP) * (smGwToTwhPerYear(YTIME)) * 1000) +
-    i02VarCostChp(allCy,DSBS,CHP,YTIME) / 1000 +
-    sum(PGEF$CHPtoEF(CHP,PGEF),
-      (
-        VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME) +
-        1e-3 * imCo2EmiFac(allCy,"PG",PGEF,YTIME) *
-        sum(NAP$NAPtoALLSBS(NAP,"PG"),imCarVal(allCy,NAP,YTIME))
-      ) * smTWhToMtoe /
-      (i02BoiEffChp(allCy,CHP,YTIME) * (VmPriceElecInd(allCy,YTIME)) + 1e-4)
-    );  
-
-*' The equation calculates the average electricity production cost per Combined Heat and Power plant .
-*' It involves a summation over demand subsectors . The average electricity production cost is determined by considering the electricity
-*' production cost per CHP plant for each demand subsector. The result is expressed in Euro per kilowatt-hour (Euro/KWh).
-Q02CostElcAvgProdCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    VmCostElcAvgProdCHP(allCy,CHP,YTIME)
-      =E=
-    (
-      sum(INDDOM, 
-        VmConsFuel(allCy,INDDOM,CHP,YTIME-1) /
-        SUM(INDDOM2,VmConsFuel(allCy,INDDOM2,CHP,YTIME-1)) *
-        V02CostElecProdCHP(allCy,INDDOM,CHP,YTIME)
-      )
-    )$SUM(INDDOM2,VmConsFuel.L(allCy,INDDOM2,CHP,YTIME-1))+0$(NOT SUM(INDDOM2,VmConsFuel.L(allCy,INDDOM2,CHP,YTIME-1)));
+    (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)/VmPriceFuelAvgSub(allCy,"OI",YTIME-1)) ** (0.02) *
+    (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-2)/VmPriceFuelAvgSub(allCy,"OI",YTIME-2)) ** (0.01) *
+    (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-3)/VmPriceFuelAvgSub(allCy,"OI",YTIME-3)) ** (0.01);
