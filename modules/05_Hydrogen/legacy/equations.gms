@@ -1,8 +1,9 @@
 *' @title Equations of OPEN-PROMs Hydrogen
 *' @code
 
-*' This equation calculates the total hydrogen demand in the system. It takes into account the overall need for hydrogen
-*' across sectors like transportation, industry, and power generation, adjusted for any transportation losses or distribution inefficiencies.
+*' This equation calculates the total hydrogen demand by aggregating the sectoral hydrogen demands from various subsectors.
+*' It considers the efficiency and self-consumption of hydrogen transportation infrastructure to determine the overall demand
+*' for hydrogen in the system.
 Q05DemTotH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmDemTotH2(allCy,YTIME)
                  =E=
@@ -12,12 +13,12 @@ Q05DemTotH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         i05EffH2Transp(allCy,INFRTECH,YTIME)*
         (1-i05ConsSelfH2Transp(allCy,INFRTECH,YTIME))
       )
-    )  !! increase the demand due to transportation losses
+    )
 ;
 
-*' This equation calculates the sectoral hydrogen demand (VmDemSecH2) for each demand subsector (DSBS), year, and region.
-*' It sums up hydrogen consumption from both industrial/tertiary sectors (using VmConsFuel) and transport sectors (using VmDemFinEneTranspPerFuel),
-*' ensuring each subsector receives only the relevant demand.
+*' This equation calculates the sectoral hydrogen demand for each subsector. It aggregates the hydrogen consumption from various sources,
+*' including fuel consumption, transportation energy demand, direct air capture production, and power generation.
+*' It helps in understanding the distribution of hydrogen demand across different sectors.
 Q05DemSecH2(allCy,SBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmDemSecH2(allCy,SBS,YTIME)
         =E=
@@ -25,10 +26,12 @@ Q05DemSecH2(allCy,SBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     sum(TRANSE$SAMEAS(TRANSE,SBS), VmDemFinEneTranspPerFuel(allCy,TRANSE,"H2F",YTIME)) +
     VmConsFuelDACProd(allCy,"H2F",YTIME)$sameas("DAC",SBS) +
     !! Should we include CHPs also?
-    (smTWhToMtoe * VmProdElec(allCy,"PGH2F",YTIME) / imPlantEffByType(allCy,"PGH2F",YTIME))$sameas("PG",SBS);
+    (smTWhToMtoe * VmProdElec(allCy,"PGH2F",YTIME) / imPlantEffByType(allCy,"PGH2F",YTIME))$sameas("PG",SBS)
+;
 
-*' This equation defines the amount of hydrogen production capacity that is scrapped due to the expiration of the useful life of plants.
-*' It considers the remaining lifetime of hydrogen production facilities and the impact of past production gaps.
+*' This equation calculates the scrapping of hydrogen production capacity due to the end of the plant's useful life.
+*' It determines the fraction of hydrogen production capacity that is retired each year based on the technology's lifespan.
+*' It helps in understanding the dynamics of hydrogen production capacity over time.
 Q05ScrapLftH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         V05ScrapLftH2Prod(allCy,H2TECH,YTIME)
          =E=
@@ -42,9 +45,9 @@ $ontext
 $offtext
 ;
 
-*' This equation models the premature replacement of hydrogen production capacity. It adjusts for the need to replace aging
-*' or inefficient hydrogen production technologies before their expected end of life based on economic factors such as cost,
-*' technological progress, and demand shifts.
+*' This equation calculates the premature replacement rate of hydrogen production capacity for each technology.
+*' It considers economic factors such as variable production costs and availability to determine the likelihood of replacing existing capacity before the end of its useful life.
+*' It helps in understanding the dynamics of hydrogen production capacity over time.
 Q05PremRepH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V05PremRepH2Prod(allCy,H2TECH,YTIME)
         =E=
@@ -67,9 +70,9 @@ Q05PremRepH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       )
     )$H2TECHPM(H2TECH);
 
-*' This equation calculates the total hydrogen production capacity that is scrapped as part of the premature replacement
-*' and normal plant life cycle. It links the scrapped capacity to the overall age distribution and retirement schedule of
-*' hydrogen production technologies.
+*' This equation calculates the total scrapped hydrogen production capacity for each technology. 
+*' It includes both scrapping due to the end of the plant's useful life and premature replacement based on economic factors.
+*' It helps in understanding the dynamics of hydrogen production capacity over time.
 Q05CapScrapH2ProdTech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V05CapScrapH2ProdTech(allCy,H2TECH,YTIME)
       =E=
@@ -77,8 +80,8 @@ Q05CapScrapH2ProdTech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     (1-V05PremRepH2Prod(allCy,H2TECH,YTIME))
 ;
 
-*' The hydrogen demand gap equation defines the difference between the total hydrogen demand (calculated in Q05DemTotH2) and
-*' the actual hydrogen production capacity. It ensures that the gap value is non-negative, preventing overproduction or underproduction of hydrogen.
+*' This equation calculates the hydrogen demand gap, which is the difference between total hydrogen demand
+*' and the available hydrogen production after accounting for scrapped capacity. It helps identify the shortfall in hydrogen supply that needs to be addressed.
 Q05DemGapH2(allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V05DemGapH2(allCy, YTIME)
                  =E=
@@ -97,9 +100,9 @@ Q05DemGapH2(allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     )) )/2 + 1e-6
 ;
 
-*' This equation calculates the production costs of hydrogen, including both fixed costs (e.g., capital investment) 
-*' and variable costs (e.g., operational expenses). The costs are typically differentiated by hydrogen production 
-*' technologies such as electrolysis, steam methane reforming (SMR), or coal gasification.
+*' This equation calculates the total production cost of hydrogen for each technology. It includes both fixed and variable costs associated with hydrogen production.
+*' The production cost is essential for determining the economic viability of different hydrogen production methods.
+*' It also accounts for renewable hydrogen production methods like wind electrolysis.
 Q05CostProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V05CostProdH2Tech(allCy,H2TECH,YTIME)
         =E=
@@ -121,8 +124,9 @@ Q05CostProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V05CostVarProdH2Tech(allCy,H2TECH,YTIME)  
 ;
 
-*' This equation models the variable costs associated with hydrogen production, factoring in fuel prices (e.g., electricity or natural gas),
-*' CO₂ emission costs, and the efficiency of the production technology. This helps to understand the fluctuating costs based on market conditions.
+*' This equation calculates the variable production cost of hydrogen for each technology. It includes costs related to fuel consumption,
+*' carbon emissions, and other operational expenses. The variable cost is essential for determining the economic viability of different hydrogen production methods.
+*' It also accounts for renewable hydrogen production methods like wind electrolysis.
 Q05CostVarProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V05CostVarProdH2Tech(allCy,H2TECH,YTIME)
         =E=
@@ -139,9 +143,9 @@ Q05CostVarProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     
 ;
 
-*' This equation models the acceptance of carbon capture and storage (CCS) technologies in hydrogen production. 
-*' It evaluates the economic feasibility of adding CCS to the hydrogen production process, considering cost, 
-*' environmental policies, and technology readiness.
+*' This equation models the acceptance level of carbon capture and storage (CCS) technologies in hydrogen production.
+*' It considers factors such as the production cost of hydrogen with CCS and the overall carbon pricing environment.
+*' The acceptance level influences the adoption rate of CCS technologies in the hydrogen production mix.
 Q05AcceptCCSH2Tech(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V05AcceptCCSH2Tech(allCy,YTIME)
     =E=
@@ -149,8 +153,9 @@ Q05AcceptCCSH2Tech(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     EXP(-0.06*((sum(NAP$NAPtoALLSBS(NAP,"H2P"),imCarVal(allCy,NAP,YTIME -1)))))
 ;
 
-*' This equation determines the share of hydrogen produced using CCS technologies compared to those produced without CCS.
-*' The share is calculated based on relative costs, technological feasibility, and policy incentives supporting CCS.
+*' This equation calculates the share of hydrogen production from technologies that utilize CCS.
+*' It determines the proportion of hydrogen produced using CCS technologies based on their costs and acceptance levels.
+*' It helps in understanding the market penetration of CCS in hydrogen production.
 Q05ShareCCSH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME) $H2CCS(H2TECH) $(runCy(allCy)))..
          V05ShareCCSH2Prod(allCy,H2TECH,YTIME)
          =E=
@@ -170,16 +175,18 @@ Q05ShareCCSH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME) $H2CCS(H2TECH) $(runCy(allCy)
          )
 ;
 
-*' Similar to Q05ShareCCSH2Prod, this equation models the share of hydrogen produced without CCS technologies.
-*' It calculates the proportion of production from non-CCS methods like electrolysis or SMR without CO₂ capture.
+*' This equation calculates the share of hydrogen production from technologies that do not utilize CCS.
+*' It complements the share of CCS technologies, ensuring that the total production share sums to one
+*' across all hydrogen production methods.
 Q05ShareNoCCSH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME) $H2NOCCS(H2TECH) $(runCy(allCy)))..
          V05ShareNoCCSH2Prod(allCy,H2TECH,YTIME)
          =E=
          1 - sum(H2TECH2$H2CCS_NOCCS(H2TECH2,H2TECH)  , V05ShareCCSH2Prod(allCy,H2TECH2,YTIME) )
 ;
 
-*' This equation computes the weighted average production cost of hydrogen, incorporating both CCS and non-CCS production methods.
-*' It provides an overall cost perspective, helping to assess which production methods dominate the market based on cost-efficiency.
+*' This equation calculates the cost of hydrogen production for technologies that do not utilize CCS.
+*' It combines the costs from both CCS and non-CCS technologies based on their respective shares in the overall hydrogen production mix.
+*' It helps in understanding the economic implications of choosing non-CCS methods for hydrogen production.
 Q05CostProdCCSNoCCSH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME) $H2NOCCS(H2TECH) $(runCy(allCy))) ..
          V05CostProdCCSNoCCSH2Prod(allCy,H2TECH,YTIME)
          =E=
@@ -187,9 +194,9 @@ Q05CostProdCCSNoCCSH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME) $H2NOCCS(H2TECH) $(ru
          sum(H2CCS$H2CCS_NOCCS(H2CCS,H2TECH), V05ShareCCSH2Prod(allCy,H2CCS,YTIME)*V05CostProdH2Tech(allCy,H2CCS,YTIME))
 ;
 
-*' This equation calculates the market share of different hydrogen production technologies, considering factors
-*' like cost competitiveness, policy support, and fuel availability. It adjusts market shares based on technological
-*' performance and shifting cost dynamics.
+*' This equation allocates the hydrogen production gap among different technologies based on their shares.
+*' It ensures that the production shortfall is distributed according to the capabilities and preferences for each technology.
+*' It considers both CCS and non-CCS technologies in the allocation.
 Q05GapShareH2Tech2(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V05GapShareH2Tech2(allCy,H2TECH,YTIME)
           =E=
@@ -205,9 +212,9 @@ Q05GapShareH2Tech2(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       sum(H2NOCCS$H2CCS_NOCCS(H2TECH,H2NOCCS), V05GapShareH2Tech2(allCy,H2NOCCS,YTIME))$H2CCS(H2TECH)
 ;
 
-*' This equation further adjusts the market share of hydrogen technologies, particularly considering 
-*' the relative competitiveness between CCS and non-CCS technologies. It helps to model the transition 
-*' between different production technologies over time.
+*' This equation allocates the hydrogen production gap among different technologies based on their market shares.
+*' It ensures that the production gap is filled by technologies according to their competitiveness and availability.
+*' It helps in balancing supply and demand in the hydrogen market.
 Q05GapShareH2Tech1(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V05GapShareH2Tech1(allCy,H2TECH,YTIME)
         =E=
@@ -255,6 +262,24 @@ Q05ConsFuelH2Prod(allCy,EF,YTIME)$(TIME(YTIME) $H2PRODEF(EF) $(runCy(allCy)))..
         =E=
     sum(H2TECH$H2TECHEFtoEF(H2TECH,EF),VmConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME))
 ;
+
+*' This equation models the carbon capture rate for hydrogen production technologies that utilize CCS.
+*' It calculates the proportion of CO₂ emissions captured during hydrogen production, influenced by economic and
+*' technological factors.
+Q05CaptRateH2(allCy,H2TECH,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
+    V05CaptRateH2(allCy,H2TECH,YTIME)
+        =E=
+    i05CaptRateH2Prod(H2TECH) /
+    (1 + 
+      EXP(20 * (
+        ([VmCstCO2SeqCsts(allCy,YTIME) /
+        (sum(NAP$NAPtoALLSBS(NAP,"H2P"),imCarVal(allCy,NAP,YTIME)) + 1)] + 2 -
+        [SQRT(SQR([VmCstCO2SeqCsts(allCy,YTIME) /
+        (sum(NAP$NAPtoALLSBS(NAP,"H2P"),imCarVal(allCy,NAP,YTIME)) + 1)] - 2))])/2
+        -1)
+      )
+    )
+    ;
 
 $ontext
 !!
@@ -390,18 +415,3 @@ Q05CostTotH2(allCy,SBS,YTIME)$(TIME(YTIME) $SECTTECH(SBS,"H2F") $(runCy(allCy)))
          V05PriceH2Infr(allCy,SBS,YTIME)+VmCostAvgProdH2(allCy,YTIME)
 ;
 $offtext
-
-Q05CaptRateH2(allCy,H2TECH,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
-    V05CaptRateH2(allCy,H2TECH,YTIME)
-        =E=
-    i05CaptRateH2Prod(H2TECH) /
-    (1 + 
-      EXP(20 * (
-        ([VmCstCO2SeqCsts(allCy,YTIME) /
-        (sum(NAP$NAPtoALLSBS(NAP,"H2P"),imCarVal(allCy,NAP,YTIME)) + 1)] + 2 -
-        [SQRT(SQR([VmCstCO2SeqCsts(allCy,YTIME) /
-        (sum(NAP$NAPtoALLSBS(NAP,"H2P"),imCarVal(allCy,NAP,YTIME)) + 1)] - 2))])/2
-        -1)
-      )
-    )
-    ;
