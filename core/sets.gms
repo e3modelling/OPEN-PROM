@@ -612,40 +612,40 @@ TCHEVGSL  "conventional Hybrid engine - gasoline"
 TCHEVGDO  "conventional Hybrid engine - diesel"
 * Industrial Technologies (only add those not already in Transport)
 * GDO,LPG,KRS,NGS,ELC already exist in TRANSPORT technologies
-TNGSCCS
-TLGN
-THCL
-THCLCCS
-TRFO
-TOLQ
-TOGS
-TSTE1AL
-TSTE1AH
-TSTE1AD
-TSTE1AG
-TSTE1AB
-TSTE1AH2F
+TNGSCCS "Natural Gas with Carbon Capture and Storage"
+TLGN     "Internal Combustion Engine fueled by Lignite"
+THCL    "Internal Combustion Engine fueled by Hard Coal"
+THCLCCS "Hard Coal with Carbon Capture and Storage"
+TRFO    "Internal Combustion Engine fueled by Residual Fuel Oil"
+TOLQ   "Internal Combustion Engine fueled by Other Liquids"
+TOGS  "Internal Combustion Engine fueled by Other Gases"
+TSTE1AL "Steam produced from CHP advanced lgn"
+TSTE1AH "Steam produced from CHP advanced hcl"
+TSTE1AD "Steam produced from CHP advanced gdo"
+TSTE1AG "Steam produced from CHP advanced ngs"
+TSTE1AB "Steam produced from CHP advanced bmswas"
+TSTE1AH2F "Steam produced from Hydrogen powered CHP fuel cells"
 * Domestic Technologies (only add those not already in Transport & Industry)
 * LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC,STE1AL,STE1AH,STE1AD,STE1AG,STE1AB already exist in TRANSPORT or INDUSTRY technologies
-TSTE2LGN
-TSTE2OSL
-TSTE2GDO
-TSTE2RFO
-TSTE2OLQ
-TSTE2NGS
-TSTE2OGS
-TSTE2BMS
-TBMSWAS
+TSTE2LGN "Steam coming from district heating plants burning lgn"
+TSTE2OSL "Steam produced from district heating plants burning hcl"
+TSTE2GDO "Steam produced from district heating plants burning gdo"
+TSTE2RFO "Steam produced from district heating plants burning rfo"
+TSTE2OLQ "Steam produced from district heating plants burning olq"
+TSTE2NGS "Steam produced from district heating plants burning ngs"
+TSTE2OGS "Steam produced from district heating plants burning ogs"
+TSTE2BMS "Steam produced from district heating plants burning bmswas"
+TBMSWAS "Biomass and Waste"
 * Non-Energy and Bunkers Technologies (only add those not already in Transport & Industry & Domestic)
 * GDO,RFO,LGN,HCL,GDO,LPG,OLQ,NGS,OGS already exist
 * NOT USED
-TSTE1AR
-THEATPUMP
+TSTE1AR "Steam produced from CHP advanced rfo"
+THEATPUMP "Heatpump technology reducing heat demand"
 * DAC Technologies
-HTDAC
-H2DAC
-LTDAC
-EWDAC
+HTDAC "High-Temperature DAC"
+H2DAC "High-Temperature H2-fueled DAC"
+LTDAC "Low-Temperature DAC"
+EWDAC "Enhanced-Weathering DAC"
 * Power Generation Technologies
 *PGTLGN
 *PGTHCL 
