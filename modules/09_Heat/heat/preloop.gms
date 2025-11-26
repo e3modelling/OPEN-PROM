@@ -77,7 +77,7 @@ sum(EF$TSTEAMTOEF(TSTEAM,EF),
     (imCo2EmiFac(runCy,"STEAMP",EF,YTIME) + 4.17$(sameas("BMSWAS", EF))) * 
     VmCstCO2SeqCsts.L(runCy,YTIME) * 1e-3 +
     (1-V09CaptRateSte.L(runCy,TSTEAM,YTIME)) * 1e-3 * (imCo2EmiFac(runCy,"STEAMP",EF,YTIME)) *
-    sum(NAP$NAPtoALLSBS(NAP,"STEAMP"),VmCarVal.L(runCy,NAP,YTIME))
+    sum(NAP$NAPtoALLSBS(NAP,"STEAMP"),imCarVal(runCy,NAP,YTIME))
   )
 ) / i09EffSteThrm(TSTEAM,YTIME) +
 i09CostVOMSteProd(TSTEAM,YTIME) * 1e-3 / smTWhToMtoe * VmPriceElecInd.L(runCy,YTIME) -

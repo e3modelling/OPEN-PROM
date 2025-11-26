@@ -54,7 +54,7 @@ imCapCostTech(allCy,SBS,TECH,YTIME)                          "Capital Cost of te
 imFuelConsPerFueSub(allCy,SBS,EF,YTIME)	                   "Fuel consumption per fuel and subsector (Mtoe)"
 smGwToTwhPerYear(YTIME)                                    "convert GW mean power into TWh/y, depending on whether it's a leap year"
 ;
-
+$IFTHEN.calib %Calibration% == MatCalibration
 Equations
 qDummyObj                                                  "Define dummy objective function"
 ;

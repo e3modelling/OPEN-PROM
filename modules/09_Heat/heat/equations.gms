@@ -61,7 +61,7 @@ Q09CostVarProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         (imCo2EmiFac(allCy,"STEAMP",EFS,YTIME) + 4.17$(sameas("BMSWAS", EFS))) * 
         VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 +
         (1-V09CaptRateSte(allCy,TSTEAM,YTIME)) * 1e-3 * (imCo2EmiFac(allCy,"STEAMP",EFS,YTIME)) *
-        sum(NAP$NAPtoALLSBS(NAP,"STEAMP"),VmCarVal(allCy,NAP,YTIME))
+        sum(NAP$NAPtoALLSBS(NAP,"STEAMP"),imCarVal(allCy,NAP,YTIME))
       ) 
     ) / i09EffSteThrm(TSTEAM,YTIME) +
     i09CostVOMSteProd(TSTEAM,YTIME) * 1e-3 / smTWhToMtoe * VmPriceElecInd(allCy,YTIME) -
@@ -121,9 +121,9 @@ Q09CaptRateSte(allCy,TSTEAM,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
     (1 + 
       EXP(20 * (
         ([VmCstCO2SeqCsts(allCy,YTIME) /
-        (sum(NAP$NAPtoALLSBS(NAP,"STEAMP"),VmCarVal(allCy,NAP,YTIME)) + 1)] + 2 -
+        (sum(NAP$NAPtoALLSBS(NAP,"STEAMP"),imCarVal(allCy,NAP,YTIME)) + 1)] + 2 -
         [SQRT(SQR([VmCstCO2SeqCsts(allCy,YTIME) /
-        (sum(NAP$NAPtoALLSBS(NAP,"STEAMP"),VmCarVal(allCy,NAP,YTIME)) + 1)] - 2))])/2
+        (sum(NAP$NAPtoALLSBS(NAP,"STEAMP"),imCarVal(allCy,NAP,YTIME)) + 1)] - 2))])/2
         -1)
       )
     );

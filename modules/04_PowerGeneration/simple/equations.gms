@@ -410,7 +410,7 @@ Q09CostElecProdCHP(allCy,DSBS,TCHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS) $runCy(allC
       (
         VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME) +
         1e-3 * imCo2EmiFac(allCy,"PG",PGEF,YTIME) *
-        sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))
+        sum(NAP$NAPtoALLSBS(NAP,"PG"),imCarVal(allCy,NAP,YTIME))
       ) * smTWhToMtoe /
       (i02BoiEffChp(allCy,CHP,YTIME) * (VmPriceElecInd(allCy,CHP,YTIME)) + 1e-4)
     )  
