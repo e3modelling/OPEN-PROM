@@ -198,17 +198,6 @@ Q06CapDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
           i06SchedNewCapDAC(allCy,DACTECH,YTIME)
 ;
 
-*' The equation calculates the annual state subsidy for DAC (US$2015).
-Q06SubsiStatDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-        V06SubsiStatDAC(allCy,DACTECH,YTIME)
-            =E=
-        (i06SubsiDAC(DACTECH) - 1) *
-        (sum(NAP$NAPtoALLSBS(NAP,"DAC"),VmCarVal(allCy,NAP,YTIME))) * 
-        (V06CapDAC(allCy,DACTECH,YTIME-1) * V06CapFacNewDAC(allCy,DACTECH,YTIME) +
-        i06SchedNewCapDAC(allCy,DACTECH,YTIME)) *
-        VmLft(allCy,"DAC",DACTECH,YTIME)
-;
-
 *' The equation calculates the different fuels consumed by the DAC installed capacity annually and regionally.
 Q06ConsFuelTechDACProd(allCy,DACTECH,EF,YTIME)$(TIME(YTIME) $TECHtoEF(DACTECH,EF) $(runCy(allCy)))..
          VmConsFuelTechDACProd(allCy,DACTECH,EF,YTIME)

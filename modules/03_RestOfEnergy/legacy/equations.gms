@@ -37,6 +37,9 @@ Q03CarbTaxTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
             VmConsFinEneCountry(allCy, EF, YTIME) *
             imCo2EmiFac(allCy,"PG", EF, YTIME) *
             sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))
+        ) -
+        SUM(CO2CAPTECH,
+        V06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME)
         )     
 ;
 
@@ -54,7 +57,7 @@ $offtext
 Q03SubsiCapCostTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS,TECH))..
       VmSubsiCapCostTech(allCy,DSBS,TECH,YTIME)
       =E=
-      (
+      ( !!Transport subsidies and grants
         (imCapCostTech(allCy,DSBS,TECH,YTIME) * imFacSubsiCapCostTech(DSBS,TECH)) * 1e-3 *
         (V01StockPcYearlyTech(allCy,"TELC",YTIME) - V01StockPcYearlyTech(allCy,"TELC",YTIME-1)) * 1e6
         +
@@ -62,7 +65,7 @@ Q03SubsiCapCostTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(
         (V01StockPcYearlyTech(allCy,"TELC",YTIME) - V01StockPcYearlyTech(allCy,"TELC",YTIME-1)) * 1e6
       )$(TRANSE(DSBS) and sameas (TECH,"TELC"))
       +
-      sum(ITECH$sameas(ITECH,TECH),
+      sum(ITECH$sameas(ITECH,TECH), !!Industry subsidies and grants
         imCapCostTech(allCy,DSBS,ITECH,YTIME) * 1e3 *
         imFacSubsiCapCostTech(DSBS,TECH) *
         (V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME) * V02GapUsefulDemSubsec(allCy,DSBS,YTIME)) / 
@@ -73,7 +76,7 @@ Q03SubsiCapCostTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(
         (imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME) * i02util(allCy,DSBS,ITECH,YTIME))
       )$INDSE(DSBS)
       +
-      sum(DACTECH$DACTECH(TECH),
+      sum(DACTECH$DACTECH(TECH), !!CDR subsidies and grants (V06GrossCapDAC is in annualized $/tCO2, so multiplied with lifetime)
         V06GrossCapDAC(DACTECH,YTIME) * 1e-6 *
         imFacSubsiCapCostTech("DAC",DACTECH) *
         (V06CapFacNewDAC(allCy,DACTECH,YTIME) * V06CapDAC(allCy,DACTECH,YTIME-1) + i06SchedNewCapDAC(allCy,DACTECH,YTIME)) *
@@ -84,7 +87,10 @@ Q03SubsiCapCostTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(
         VmLft(allCy,"DAC",DACTECH,YTIME)
       )$sameas (DSBS,"DAC")
       +
-      imSubsiCapCostFuel("HOU","ELC") * VmConsFuel(allCy,"HOU","ELC",YTIME)
+      imSubsiCapCostFuel("HOU","ELC") * VmConsFuel(allCy,"HOU","ELC",YTIME) !!Residential electricity subsidies
+      +
+      (imSubsiCapCostFuel(DSBS,"ELC") * VmConsFuel(allCy,DSBS,"ELC",YTIME)
+       )$INDSE(DSBS) !!Industrial electricity subsidies
 ;
 
 *' Subsidies in supply (Millions US$2015)
@@ -101,10 +107,11 @@ Q03SubsiCapCostSupply(allCy,SSBS,STECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       +
       sum(H2TECH$sameas(H2TECH,STECH),
         V05CostProdH2Tech(allCy,H2TECH,YTIME) *
-        VmDemTotH2(allCy,YTIME) * V05ShareCCSH2Prod(allCy,H2TECH,YTIME) * V05ShareNoCCSH2Prod(allCy,H2TECH,YTIME) *
+        VmDemTotH2(allCy,YTIME) * (1 - V05ShareCCSH2Prod(allCy,H2TECH,YTIME)) * (1 - V05ShareNoCCSH2Prod(allCy,H2TECH,YTIME)) *
         imFacSubsiCapCostSupply(SSBS,STECH)
         +
-        imGrantCapCostSupply(SSBS,STECH) * VmDemTotH2(allCy,YTIME)
+        VmDemTotH2(allCy,YTIME) * (1 - V05ShareCCSH2Prod(allCy,H2TECH,YTIME)) * (1 - V05ShareNoCCSH2Prod(allCy,H2TECH,YTIME)) *
+        imGrantCapCostSupply(SSBS,STECH)
       )$sameas(SSBS,"H2P")
 ;
 

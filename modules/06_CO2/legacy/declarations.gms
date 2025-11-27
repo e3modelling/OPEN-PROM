@@ -14,7 +14,6 @@ Q06CapFacNewDAC(allCy,DACTECH,YTIME)                       "Computes the factor 
 Q06CapDAC(allCy,DACTECH,YTIME)                             "Computes the DAC installed capacity annually and regionally"
 Q06ConsFuelTechDACProd(allCy,DACTECH,EF,YTIME)             "Computes the annual fuel demand in each DAC technology regionally (Mtoe)"
 Q06ConsFuelDACProd(allCy,EF,YTIME)                         "Computes the annual fuel demand in DAC regionally (Mtoe)"
-Q06SubsiStatDAC(allCy,DACTECH,YTIME)                       "Computes the amount used as a state subsidy for DAC capacity installed(Millions US$2015/tCO2)"
 
 *'                **Interdependent Equations**
 Q06CstCO2SeqCsts(allCy,YTIME)	                           "Compute cost curve for CO2 sequestration costs" 
@@ -31,7 +30,6 @@ V06LvlCostDAC(allCy,DACTECH,YTIME)                         "Regional CAPEX and t
 V06ProfRateDAC(allCy,DACTECH,YTIME)                        "The annual profitability rate of DAC including the lifecycle costs and revenues regionally"
 V06CapFacNewDAC(allCy,DACTECH,YTIME)                       "Factor expressing the annual increase in the installed capacity of DAC regionally"
 V06CapDAC(allCy,DACTECH,YTIME)                             "DAC regional installed capacity (tCO2)"
-V06SubsiStatDAC(allCy,DACTECH,YTIME)                       "The amount used as a state subsidy for DAC capacity installed (US$2015)"
 
 *'                **Interdependent Variables**
 VmCstCO2SeqCsts(allCy,YTIME)	                           "Cost curve for CO2 sequestration costs (US$2015/tn of CO2 sequestrated)"
