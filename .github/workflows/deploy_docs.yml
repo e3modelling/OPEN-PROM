@@ -10,29 +10,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout main branch (your repo)
+      - name: Checkout main branch
         uses: actions/checkout@v3
-
-      - name: Install pandoc
-        run: sudo apt-get update && sudo apt-get install -y pandoc
 
       - name: Set up R
         uses: r-lib/actions/setup-r@v2
 
-      - name: Clone gms repository (for dependencies)
-        run: git clone https://github.com/e3modelling/gms.git
-
       - name: Install R dependencies
         run: |
+          Rscript -e 'install.packages("remotes")'
+          Rscript -e 'remotes::install_github("e3modelling/gms")'
+          Rscript -e 'options(repos = c(CRAN = "@CRAN@", pik = "https://rse.pik-potsdam.de/r/packages"))'
           Rscript -e 'install.packages("goxygen")'
 
       - name: Generate docs in temporary folder
         run: |
-          Rscript -e 'goxygen::goxygen(path = ".", cff = "HOWTOCITE.cff", output = c("html"), includeCore = TRUE)'
+          mkdir -p temp_docs
+          Rscript -e 'goxygen::goxygen(
+            path = "temp_docs",
+            cff = "HOWTOCITE.cff",
+            output = c("html"),
+            includeCore = TRUE,
+            mainfile = "main.gms",
+            startType = "equations"
+          )'
 
       - name: Deploy to GitHub Pages (root of gh-pages)
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: ./doc/html
+          publish_dir: temp_docs/doc/html
