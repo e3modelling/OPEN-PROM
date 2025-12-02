@@ -641,7 +641,6 @@ EWDAC
 
 ITECH(TECH)      Industrial - Domestic - Non-energy & Bunkers Technologies 
 /
-TBGDO
 TGDO
 TLPG
 TKRS  
@@ -743,7 +742,6 @@ TCHEVGDO.(GDO,BGDO)
 
 ITECHtoEF(ITECH,EF) Fuels consumed by industrial technologies
 /
-TBGDO.BGDO
 TGDO.GDO
 TLPG.LPG
 TKRS.KRS  

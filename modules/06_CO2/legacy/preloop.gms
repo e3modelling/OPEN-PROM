@@ -15,3 +15,5 @@ V06CaptCummCO2.FX(runCy,YTIME)$(not an(YTIME)) = 0 ;
 *---
 V06LvlCostDAC.FX(runCy,DACTECH,YTIME)$(not an(YTIME)) = 100;
 V06CapDAC.FX(runCy,DACTECH,YTIME)$(not an(YTIME)) = 1;
+*---
+VmConsFuelTechDACProd.FX(runCy,DACTECH,EF,YTIME)$(not TECHtoEF(DACTECH,EF)) = 0;

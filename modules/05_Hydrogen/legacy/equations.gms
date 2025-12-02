@@ -23,7 +23,7 @@ Q05DemSecH2(allCy,SBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         =E=
     sum(INDDOM$SAMEAS(INDDOM,SBS), VmConsFuel(allCy,INDDOM,"H2F",YTIME)) +
     sum(TRANSE$SAMEAS(TRANSE,SBS), VmDemFinEneTranspPerFuel(allCy,TRANSE,"H2F",YTIME)) +
-    VmConsFuelDACProd(allCy,"H2F",YTIME)$sameas("DAC",SBS) +
+    SUM(DSBS$sameas("DAC",DSBS),VmConsFuel(allCy,DSBS,"H2F",YTIME)) +
     VmConsFuelElecProd(allCy,"H2F",YTIME)$sameas("PG",SBS);
 
 *' This equation defines the amount of hydrogen production capacity that is scrapped due to the expiration of the useful life of plants.
@@ -88,7 +88,7 @@ Q05DemGapH2(allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
             (1-V05CapScrapH2ProdTech(allCy,H2TECH,YTIME)) *
             VmProdH2(allCy,H2TECH,YTIME-1)
           )
-    )) )/2 + 1e-6
+    )) )/2
 ;
 
 *' This equation calculates the production costs of hydrogen, including both fixed costs (e.g., capital investment) 

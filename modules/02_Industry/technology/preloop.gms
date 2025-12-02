@@ -20,9 +20,10 @@ $offtext
 V02CostTech.LO(runCy,DSBS,ITECH,YTIME) = 0;
 V02CostTech.L(runCy,DSBS,ITECH,YTIME) = 0.1;
 *---
+V02ShareTechNewEquipUseful.LO(allCy,DSBS,ITECH,YTIME) = 0;
+*---
 * Levels in other variables?
 $ontext
-V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME)
 V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)
 $offtext
 *---
@@ -52,7 +53,7 @@ V02UsefulElecNonSubIndTert.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = imFuelConsPe
 *---
 VmConsFuel.LO(runCy,DSBS,EF,YTIME) = 0;
 VmConsFuel.L(runCy,DSBS,EF,YTIME) = 1;
-VmConsFuel.FX(runCy,DSBS,EF,YTIME)$(HEATPUMP(EF) or TRANSE(DSBS) or sameas("DAC", DSBS)) = 0;
+VmConsFuel.FX(runCy,DSBS,EF,YTIME)$(HEATPUMP(EF) or TRANSE(DSBS)) = 0;
 VmConsFuel.FX(runCy,DSBS,EF,YTIME)$(not HEATPUMP(EF) and not TRANSE(DSBS) and DATAY(YTIME)) = imFuelConsPerFueSub(runCy,DSBS,EF,YTIME);
 *---
 *vmConsTotElecInd.FX(runCy,YTIME)$(not An(YTIME))= SUM(INDSE,VmConsElecNonSubIndTert.l(runCy,INDSE,YTIME));

@@ -5,14 +5,15 @@
 *---
 V04ShareTechPG.LO(runCy,PGALL,YTIME)$DATAY(YTIME) = 0;
 V04ShareTechPG.UP(runCy,PGALL,YTIME)$DATAY(YTIME) = 1;
+*---
 V04ScrpRate.UP(runCy,PGALL,YTIME) = 1;
 V04ScrpRate.LO(runCy,PGALL,YTIME) = 0;
-
+*---
 V04CostVarTech.LO(runCy,PGALL,YTIME) = epsilon6;
 V04CostVarTech.L(runCy,PGALL,YTIME) = 0.1;
 V04CostVarTech.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = 
     i04VarCost(PGALL,YTIME) / 1e3 + 
-    (VmRenValue.L(YTIME) * 8.6e-5)$(not (PGREN(PGALL)$(not sameas("PGASHYD",PGALL)) $(not sameas("PGSHYD",PGALL)) $(not sameas("PGLHYD",PGALL)) )) +
+    (VmRenValue.L(YTIME) * 8.6e-5)$(not PGREN(PGALL)) +
     sum(PGEF$PGALLtoEF(PGALL,PGEF), 
       (VmPriceFuelSubsecCarVal.L(runCy,"PG",PGEF,YTIME) +
       imCO2CaptRate(PGALL) * VmCstCO2SeqCsts.L(runCy,YTIME) * 1e-3 * (imCo2EmiFac(runCy,"PG",PGEF,YTIME) + 4.17$(sameas("BMSWAS", PGEF))) +
@@ -23,11 +24,8 @@ V04CostVarTech.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =
 *---
 V04CapexRESRate.L(runCy,PGALL,YTIME)=1;
 *---
-alias(datay, dataylag)
-loop (runCy,PGALL,datay,dataylag)$(ord(datay) = ord(dataylag) + 1 and PGREN(PGALL)) DO
-  V04NetNewCapElec.FX(runCy,PGALL,datay) = imInstCapPastNonCHP(runCy,PGALL,datay) - imInstCapPastNonCHP(runCy,PGALL,dataylag) + 1E-10;
-ENDLOOP;
-V04NetNewCapElec.FX(runCy,"PGLHYD",YTIME)$TFIRST(YTIME) = +1E-10;
+V04NetNewCapElec.L(runCy,PGALL,YTIME) = 1;
+V04NetNewCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = imInstCapPastNonCHP(runCy,PGALL,YTIME) - imInstCapPastNonCHP(runCy,PGALL,YTIME);
 *---
 V04CFAvgRen.L(runCy,PGALL,YTIME) = 0.1;
 V04CFAvgRen.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = i04AvailRate(runCy,PGALL,YTIME);
@@ -52,6 +50,7 @@ V04CapElecNonCHP.FX(runCy,YTIME)$(not An(YTIME)) = sum(PGALL,imInstCapPastNonCHP
 *---
 V04CapElecCHP.FX(runCy,YTIME)$(not An(YTIME)) = SUM(EF,imInstCapPastCHP(runCy,EF,YTIME));
 *---
+VmCapElec.LO(runCy,PGALL,YTIME) = 0;
 VmCapElec.L(runCy,PGALL,YTIME) = 1;
 VmCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  imInstCapPastNonCHP(runCy,PGALL,YTIME);
 V04CapElecNominal.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = imInstCapPastNonCHP(runCy,PGALL,YTIME) / i04AvailRate(runCy,PGALL,YTIME);
@@ -62,8 +61,9 @@ V04ShareSatPG.FX(runCy,PGALL,YTIME)$(not PGREN(PGALL) or not AN(YTIME)) = 1;
 V04IndxEndogScrap.FX(runCy,PGALL,YTIME)$(not an(YTIME) ) = 1;
 V04IndxEndogScrap.FX(runCy,PGSCRN,YTIME) = 1;            !! premature replacement it is not allowed for all new plants
 *---
-V04LoadFacDom.L(runCy,YTIME)=0.5;
-V04LoadFacDom.FX(runCy,YTIME)$(datay(YTIME)) =
+V04LoadFacDom.LO(runCy,YTIME) = 0;
+V04LoadFacDom.L(runCy,YTIME) = 0.5;
+V04LoadFacDom.FX(runCy,YTIME)$datay(YTIME) =
          (sum(INDDOM,VmConsFuel.L(runCy,INDDOM,"ELC",YTIME)) + sum(TRANSE, VmDemFinEneTranspPerFuel.L(runCy,TRANSE,"ELC",YTIME)))/
          (sum(INDDOM,VmConsFuel.L(runCy,INDDOM,"ELC",YTIME)/i04LoadFacElecDem(INDDOM)) + sum(TRANSE, VmDemFinEneTranspPerFuel.L(runCy,TRANSE,"ELC",YTIME)/
          i04LoadFacElecDem(TRANSE)));
@@ -106,5 +106,8 @@ SUM(PGALL$PGALLTOEF(PGALL,PGEF),
   imPlantEffByType(runCy,PGALL,YTIME)
 );
 *---
+V04GapGenCapPowerDiff.LO(runCy,YTIME) = 0;
+*---
+V04NewCapElec.LO(runCy,PGALL,YTIME) = 0;
+*---
 VmConsFuelElecProd.FX(runCy,PGEF,YTIME)$DATAY(YTIME) = -i03InpPGTransfProcess(runCy,PGEF,YTIME);
-

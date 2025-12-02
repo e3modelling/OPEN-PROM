@@ -66,13 +66,13 @@ $offdelim
 ;
 i04VarCost(PGALL,YTIME) = i04VarCost(PGALL,YTIME) + 1e-3;
 *---
-table i04InvPlants(allCy,PGALL,YTIME)	           "Investment Plants (MW)"
+table i04DecInvPlantSched(allCy,PGALL,YTIME)	           "Investment Plants (MW)"
 $ondelim
 $include"./iInvPlants.csv"
 $offdelim
 ;
 *---
-table i04DecomPlants(allCy,PGALL,YTIME)	           "Decomissioning Plants (MW)"
+table i04PlantDecomSched(allCy,PGALL,YTIME)	           "Decomissioning Plants (MW)"
 $ondelim
 $include"./iDecomPlants.csv"
 $offdelim
@@ -219,8 +219,8 @@ ENDLOOP;
 *---
 i04ScaleEndogScrap = 2 / card(PGALL);
 *---
-i04DecInvPlantSched(runCy,PGALL,YTIME) = i04InvPlants(runCy,PGALL,YTIME);
-*---
-i04PlantDecomSched(runCy,PGALL,YTIME) = i04DecomPlants(runCy,PGALL,YTIME);
-*---
 i04MxmShareChpElec(runCy,YTIME) = 0.6;
+*---
+i04DecInvPlantSched(allCy,PGALL,YTIME)$(ord(YTIME) < 16) = 0;
+*---
+i04PlantDecomSched(allCy,PGALL,YTIME)$(ord(YTIME) < 16) = 0;

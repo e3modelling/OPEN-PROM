@@ -34,7 +34,7 @@ Q04ProdElecEstCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04CapElecCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04CapElecCHP(allCy,YTIME)
         =E=
-    V04ProdElecEstCHP(allCy,YTIME) / (1e3 * smGwToTwhPerYear(YTIME));  
+    V04ProdElecEstCHP(allCy,YTIME) / smGwToTwhPerYear(YTIME);  
 
 $ifthen.calib %Calibration% == off
 *' The equation calculates the total electricity demand by summing the components of final energy consumption in electricity, final non-energy consumption in electricity,
@@ -60,10 +60,13 @@ $endif.calib
 Q04LoadFacDom(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04LoadFacDom(allCy,YTIME)
         =E=
-    (sum(INDDOM,VmConsFuel(allCy,INDDOM,"ELC",YTIME)) + sum(TRANSE, VmDemFinEneTranspPerFuel(allCy,TRANSE,"ELC",YTIME))) /
     (
-    sum(INDDOM,VmConsFuel(allCy,INDDOM,"ELC",YTIME)/i04LoadFacElecDem(INDDOM)) + 
-    sum(TRANSE, VmDemFinEneTranspPerFuel(allCy,TRANSE,"ELC",YTIME)/i04LoadFacElecDem(TRANSE))
+      sum(INDDOM,VmConsFuel(allCy,INDDOM,"ELC",YTIME)) +
+      sum(TRANSE, VmDemFinEneTranspPerFuel(allCy,TRANSE,"ELC",YTIME))
+    ) /
+    (
+      sum(INDDOM,VmConsFuel(allCy,INDDOM,"ELC",YTIME)/i04LoadFacElecDem(INDDOM)) + 
+      sum(TRANSE, VmDemFinEneTranspPerFuel(allCy,TRANSE,"ELC",YTIME)/i04LoadFacElecDem(TRANSE))
     );         
 
 *' The equation calculates the electricity peak load by dividing the total electricity demand by the load factor for the domestic sector and converting the result
@@ -181,7 +184,7 @@ Q04GapGenCapPowerDiff(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         )
       ))
       ) 
-    )/2 + 1e-6;
+    )/2;
 
 *' Calculates the share of all the unflexible RES penetration into the mixture, and specifically how much above a given threshold it is.
 Q04ShareMixWndSol(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
@@ -224,9 +227,16 @@ Q04SharePowPlaNewEq(allCy,PGALL,YTIME)$(TIME(YTIME)$runCy(allCy)) ..
 Q04CapElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCapElec(allCy,PGALL,YTIME)
           =E=
-    VmCapElec(allCy,PGALL,YTIME-1) * (1 - V04ScrpRate(allCy,PGALL,YTIME)) +
-    V04NewCapElec(allCy,PGALL,YTIME) -
-    i04PlantDecomSched(allCy,PGALL,YTIME) * i04AvailRate(allCy,PGALL,YTIME);
+    [
+      VmCapElec(allCy,PGALL,YTIME-1) * (1 - V04ScrpRate(allCy,PGALL,YTIME)) +
+      V04NewCapElec(allCy,PGALL,YTIME) -
+      i04PlantDecomSched(allCy,PGALL,YTIME) * i04AvailRate(allCy,PGALL,YTIME) +
+    SQRT(SQR(
+      VmCapElec(allCy,PGALL,YTIME-1) * (1 - V04ScrpRate(allCy,PGALL,YTIME)) +
+      V04NewCapElec(allCy,PGALL,YTIME) -
+      i04PlantDecomSched(allCy,PGALL,YTIME) * i04AvailRate(allCy,PGALL,YTIME)
+    ))
+    ] / 2;
 
 Q04CapElecNominal(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04CapElecNominal(allCy,PGALL,YTIME)
@@ -240,7 +250,7 @@ Q04NewCapElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     i04DecInvPlantSched(allCy,PGALL,YTIME) * i04AvailRate(allCy,PGALL,YTIME) +
     SUM(PGALL2$CCS_NOCCS(PGALL,PGALL2),
       (1 - V04CCSRetroFit(allCy,PGALL2,YTIME)) * VmCapElec(allCy,PGALL2,YTIME-1)
-    );
+    )$CCS(PGALL);
 
 *' This equation calculates the variable representing the newly added electricity generation capacity for a specific renewable power plant 
 *' in a given country and time period. The calculation involves subtracting the planned electricity generation capacity in the current time period
@@ -271,7 +281,8 @@ Q04CFAvgRen(allCy,PGALL,YTIME)$(PGREN(PGALL)$TIME(YTIME)$runCy(allCy))..
     (V04NetNewCapElec(allCy,PGALL,YTIME) + V04NetNewCapElec(allCy,PGALL,YTIME-1)+
     V04NetNewCapElec(allCy,PGALL,YTIME-2) + V04NetNewCapElec(allCy,PGALL,YTIME-3)+
     V04NetNewCapElec(allCy,PGALL,YTIME-4) + V04NetNewCapElec(allCy,PGALL,YTIME-5)+
-    V04NetNewCapElec(allCy,PGALL,YTIME-6) + V04NetNewCapElec(allCy,PGALL,YTIME-7)
+    V04NetNewCapElec(allCy,PGALL,YTIME-6) + V04NetNewCapElec(allCy,PGALL,YTIME-7) +
+    epsilon6
     );
 
 *' This equation calculates the variable representing the overall capacity for a specific power plant in a given country and time period .
@@ -284,7 +295,7 @@ Q04CapOverall(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04CFAvgRen(allCy,PGALL,YTIME-1) *
     (
       V04NetNewCapElec(allCy,PGALL,YTIME) / i04AvailRate(allCy,PGALL,YTIME) +
-      V04CapOverall(allCy,PGALL,YTIME-1) / V04CFAvgRen(allCy,PGALL,YTIME-1)
+      V04CapOverall(allCy,PGALL,YTIME-1) / i04AvailRate(allCy,PGALL,YTIME-1) !! FIXME: instead of V04CFAvgRen
     )$PGREN(PGALL);
 
 *' This equation calculates the electricity production from power generation plants for a specific country ,
@@ -351,7 +362,7 @@ Q04CCSRetroFit(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(NOCCS(PGALL)))..
     V04CostVarTech(allCy,PGALL,YTIME) ** (-2) /
     (
       V04CostVarTech(allCy,PGALL,YTIME) ** (-2) +
-      0.01 *
+      0.1 *
       SUM(PGALL2$CCS_NOCCS(PGALL2,PGALL),
         (
           V04CostCapTech(allCy,PGALL2,YTIME) -

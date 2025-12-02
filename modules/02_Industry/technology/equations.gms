@@ -131,14 +131,14 @@ Q02CostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS))$SECTTECH(DSB
 *' This equation calculates the technology share in new equipment based on factors such as maturity factor,
 *' cumulative distribution function of consumer size groups, number of consumers, technology cost, distribution function of consumer
 *' size groups, and technology sorting.
-Q02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $SECTTECH(DSBS,ITECH) $(not TRANSE(DSBS) and not sameas(DSBS,"DAC")) $runCy(allCy))..
+Q02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$SECTTECH(DSBS,ITECH) $(not TRANSE(DSBS) and not sameas(DSBS,"DAC")) $runCy(allCy))..
     V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME) 
         =E=
     imMatrFactor(allCy,DSBS,ITECH,YTIME) *
-    V02CostTech(allCy,DSBS,ITECH,YTIME) ** (-i02ElaSub(allCy,DSBS)) /
+    V02CostTech(allCy,DSBS,ITECH,YTIME-1) ** (-i02ElaSub(allCy,DSBS)) /
     sum(ITECH2$(SECTTECH(DSBS,ITECH2)),
       imMatrFactor(allCy,DSBS,ITECH2,YTIME) *
-      V02CostTech(allCy,DSBS,ITECH2,YTIME) ** (-i02ElaSub(allCy,DSBS))
+      V02CostTech(allCy,DSBS,ITECH2,YTIME-1) ** (-i02ElaSub(allCy,DSBS))
     );
 
 *' This equation computes the equipment capacity of each technology in each subsector
@@ -183,7 +183,7 @@ Q02FinalElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' OLD EQUATION: Q02ConsFuelInclHP(allCy,DSBS,EF,YTIME) --> NEW EQUATION:Q02ConsFuelIncl(allCy,DSBS,EF,YTIME)
 
 *' OLD VARIABLE: VmConsElecNonSubIndTert(allCy,INDDOM,YTIME) --> NEW VARIABLE:VmUsefulElecNonSubIndTert(allCy,DSBS,YTIME)
-Q02ConsFuel(allCy,DSBS,EF,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not sameas(DSBS,"DAC"))$runCy(allCy))..
+Q02ConsFuel(allCy,DSBS,EF,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS))$runCy(allCy))..
     VmConsFuel(allCy,DSBS,EF,YTIME) 
         =E=
     sum(ITECH$(ITECHtoEF(ITECH,EF)$SECTTECH(DSBS,ITECH)),
@@ -192,17 +192,21 @@ Q02ConsFuel(allCy,DSBS,EF,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not sameas(D
       i02util(allCy,DSBS,ITECH,YTIME)
     ) +
     V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(INDDOM(DSBS) and ELCEF(EF)) +
-    VmElecConsHeatPla(allCy,DSBS,YTIME)$ELCEF(EF);
+    VmElecConsHeatPla(allCy,DSBS,YTIME)$ELCEF(EF) +
+    sum(DACTECH$TECHtoEF(DACTECH,EF),
+      VmConsFuelTechDACProd(allCy,DACTECH,EF,YTIME)
+    )$sameas("DAC",DSBS);
 
 *' Average efficiency of substitutable demand
 Q02IndAvrEffFinalUseful(allCy,DSBS,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not sameas(DSBS,"DAC"))$runCy(allCy))..
     V02IndAvrEffFinalUseful(allCy,DSBS,YTIME)
        =E=
-    V02DemSubUsefulSubsec(allCy,DSBS,YTIME)   
-    /
-    (sum(EF$SECtoEF(DSBS,EF),VmConsFuel(allCy,DSBS,EF,YTIME)) - (V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(INDDOM(DSBS)) +
-    VmElecConsHeatPla(allCy,DSBS,YTIME)))
-    ;
+    V02DemSubUsefulSubsec(allCy,DSBS,YTIME) /
+    (
+      sum(EF$SECtoEF(DSBS,EF),VmConsFuel(allCy,DSBS,EF,YTIME)) -
+      V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$INDDOM(DSBS) -
+      VmElecConsHeatPla(allCy,DSBS,YTIME)
+    );
 
 *' This equation calculates the estimated electricity index of the industry price for a given year. The estimated index is derived by considering the historical
 *' trend of the electricity index, with a focus on the fuel prices in the industrial subsector. The equation utilizes the fuel prices for electricity generation,

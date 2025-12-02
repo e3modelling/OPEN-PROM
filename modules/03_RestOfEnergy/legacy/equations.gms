@@ -17,15 +17,12 @@
 Q03ConsFinEneCountry(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmConsFinEneCountry(allCy,EFS,YTIME)
         =E=
-    sum(INDDOM,
-      sum(EF$(EFtoEFS(EF,EFS) $SECtoEF(INDDOM,EF) ), VmConsFuel(allCy,INDDOM,EF,YTIME))
+    sum((DSBS,EFS2)$(not TRANSE(DSBS) and SECtoEF(DSBS,EFS2)),
+      VmConsFuel(allCy,DSBS,EFS2,YTIME)
     ) +
-    sum(TRANSE,
-      sum(EF$(EFtoEFS(EF,EFS) $SECtoEF(TRANSE,EF)),
-        VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)
-      )
-    ) +
-    sum(EF$(EFtoEFS(EF,EFS) $SECtoEF("DAC",EF)),VmConsFuelDACProd(allCy,EF,YTIME));
+    sum((TRANSE,EFS2)$SECtoEF(TRANSE,EFS2),
+        VmDemFinEneTranspPerFuel(allCy,TRANSE,EFS2,YTIME)
+    );
 
 *' The equation computes the total final energy consumption in million tonnes of oil equivalent 
 *' for all countries at a specific time period. This is achieved by summing the final energy consumption for each energy

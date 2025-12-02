@@ -174,20 +174,18 @@ Q06ProfRateDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06ProfRateDAC(allCy,DACTECH,YTIME)
         =E=
     (i06SubsFacDAC(DACTECH) * sum(NAP$NAPtoALLSBS(NAP,"DAC"),VmCarVal(allCy,NAP,YTIME))) / 
-    V06LvlCostDAC(allCy,DACTECH,YTIME - 1)
-;
+    V06LvlCostDAC(allCy,DACTECH,YTIME - 1);
 
 *' The equation estimates the annual increase rate of DAC capacity regionally, according to the maturity and profitability of each technology.
 Q06CapFacNewDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V06CapFacNewDAC(allCy,DACTECH,YTIME)
-         =E=
-          (
-            (exp(i06MatFacDAC(DACTECH) * V06ProfRateDAC(allCy,DACTECH,YTIME) - 1)) /
-           (exp(i06MatFacDAC(DACTECH) * S06ProfRateMaxDAC - 1))
-          ) *
-          (S06CapFacMaxNewDAC - S06CapFacMinNewDAC) +
-          S06CapFacMinNewDAC
-;
+    V06CapFacNewDAC(allCy,DACTECH,YTIME)
+        =E=
+    (
+      (exp(i06MatFacDAC(DACTECH) * V06ProfRateDAC(allCy,DACTECH,YTIME) - 1)) /
+      (exp(i06MatFacDAC(DACTECH) * S06ProfRateMaxDAC - 1))
+    ) *
+    (S06CapFacMaxNewDAC - S06CapFacMinNewDAC) +
+    S06CapFacMinNewDAC;
 
 *' The equation calculates the DAC installed capacity annually and regionally,
 *' adding capacity based on the maturity of the technology, as well as given capacities of actual scheduled DAC units.
@@ -200,19 +198,10 @@ Q06CapDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 
 *' The equation calculates the different fuels consumed by the DAC installed capacity annually and regionally.
 Q06ConsFuelTechDACProd(allCy,DACTECH,EF,YTIME)$(TIME(YTIME) $TECHtoEF(DACTECH,EF) $(runCy(allCy)))..
-         VmConsFuelTechDACProd(allCy,DACTECH,EF,YTIME)
-         =E=
-         (
-          (V06CapDAC(allCy,DACTECH,YTIME) * i06SpecHeatDAC(allCy,DACTECH,YTIME) / 0.85)$(sameas(EF, 'ngs')) +
-          (V06CapDAC(allCy,DACTECH,YTIME) * i06SpecHeatDAC(allCy,DACTECH,YTIME) / 0.85)$(sameas(EF, 'H2F')) +
-          (V06CapDAC(allCy,DACTECH,YTIME) * i06SpecElecDAC(allCy,DACTECH,YTIME))$(sameas(EF, 'elc')) 
-         )
-         / 1e6
-;
-
-*' The equation calculates the different fuels consumed by the DAC installed capacity annually and regionally.
-Q06ConsFuelDACProd(allCy,EF,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
-    VmConsFuelDACProd(allCy,EF,YTIME)
-        =E=
-    sum(DACTECH$TECHtoEF(DACTECH,EF),VmConsFuelTechDACProd(allCy,DACTECH,EF,YTIME))
-;
+    VmConsFuelTechDACProd(allCy,DACTECH,EF,YTIME)
+      =E=
+    (
+      (V06CapDAC(allCy,DACTECH,YTIME) * i06SpecHeatDAC(allCy,DACTECH,YTIME) / 0.85)$(sameas(EF, 'ngs')) +
+      (V06CapDAC(allCy,DACTECH,YTIME) * i06SpecHeatDAC(allCy,DACTECH,YTIME) / 0.85)$(sameas(EF, 'H2F')) +
+      (V06CapDAC(allCy,DACTECH,YTIME) * i06SpecElecDAC(allCy,DACTECH,YTIME))$(sameas(EF, 'elc')) 
+    ) / 1e6;
