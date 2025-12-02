@@ -648,31 +648,80 @@ imMatrFactor.LO(runCy,DSBS,EF,YTIME) = -10;
 imMatrFactor.UP(runCy,DSBS,EF,YTIME) = 100;
 $ENDIF.calib
 *---
-** State subsidy factor in technology capex (demand side)
-parameter imFacSubsiCapCostTech(DSBS,TECH);
-imFacSubsiCapCostTech("PC","TELC") = 0;
-imFacSubsiCapCostTech("CH","TELC") = 0;
-imFacSubsiCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 0;
-*---
-** State granting in technology capex (demand side)
-parameter imGrantCapCostTech(DSBS,TECH);
-imGrantCapCostTech("PC","TELC") = 0;                        !! kUS$2015 per vehicle
-imGrantCapCostTech("CH","TELC") = 0;                        !! kUS$2015/toe-year for Industry sectors
-imGrantCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 0;         !! US$2015/tCO2
-*---
-** State subsidy in fuel cost
-parameter imSubsiCapCostFuel(SBS,EF);
-imSubsiCapCostFuel("HOU","ELC") = 0;                        !!kUS$2015/toe
-*---
-** State subsidy factor in technology capex (supply side)
-parameter imFacSubsiCapCostSupply(SSBS,STECH);
-imFacSubsiCapCostSupply("PG",PGREN) = 0;
-imFacSubsiCapCostSupply("H2P",H2TECH) = 0;
-*---
-** State granting in technology capex (supply side)
-parameter imGrantCapCostSupply(SSBS,STECH);
-imGrantCapCostSupply("PG",PGREN) = 0;                       !! kUS$2015/kW
-imGrantCapCostSupply("H2P",H2TECH) = 0;                     !! US$2015/toe H2
+parameters
+imFacSubsiCapCostTech(DSBS,TECH)                            !!State subsidy (%) factor in technology capex (demand side)
+imGrantCapCostTech(DSBS,TECH)                               !!State granting in technology capex (demand side)
+imSubsiCapCostFuel(SBS,EF)                                  !!State subsidy in fuel cost
+imFacSubsiCapCostSupply(SSBS,STECH)                         !!State subsidy (%) factor in technology capex (supply side)
+imGrantCapCostSupply(SSBS,STECH)                            !!State granting in technology capex (supply side)
+;
+
+if %fScenario% eq 0 then
+     imFacSubsiCapCostTech("PC","TELC") = 0;
+     imFacSubsiCapCostTech("CH","TELC") = 0;
+     imFacSubsiCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 0;
+     imGrantCapCostTech("PC","TELC") = 0;                        !!kUS$2015 per vehicle
+     imGrantCapCostTech("CH","TELC") = 0;                        !!kUS$2015/toe-year for Industry sectors
+     imGrantCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 0;         !!US$2015/tCO2
+     imSubsiCapCostFuel("HOU","ELC") = 0;                        !!kUS$2015/toe
+     imSubsiCapCostFuel(SBS,"ELC")$INDSE1(SBS) = 0;              !!kUS$2015/toe
+     imFacSubsiCapCostSupply("PG",PGREN) = 0;
+     imFacSubsiCapCostSupply("H2P",H2TECH) = 0;
+     imGrantCapCostSupply("PG",PGREN) = 0;                       !!kUS$2015/kW
+     imGrantCapCostSupply("H2P",H2TECH) = 0;                     !!US$2015/toe H2
+elseif %fScenario% eq 1 then
+     imFacSubsiCapCostTech("PC","TELC") = 0;
+     imFacSubsiCapCostTech("CH","TELC") = 0;
+     imFacSubsiCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 0;
+     imGrantCapCostTech("PC","TELC") = 1;                        !!kUS$2015 per vehicle
+     imGrantCapCostTech("CH","TELC") = 0;                        !!kUS$2015/toe-year for Industry sectors
+     imGrantCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 90;        !!US$2015/tCO2
+     imSubsiCapCostFuel("HOU","ELC") = 0;                        !!kUS$2015/toe
+     imSubsiCapCostFuel(SBS,"ELC")$INDSE1(SBS) = 0;              !!kUS$2015/toe
+     imFacSubsiCapCostSupply("PG",PGREN) = 0.1;
+     imFacSubsiCapCostSupply("H2P",H2TECH) = 0.2;
+     imGrantCapCostSupply("PG",PGREN) = 0;                       !!kUS$2015/kW
+     imGrantCapCostSupply("H2P",H2TECH) = 0;                     !!US$2015/toe H2
+elseif %fScenario% eq 2 then
+     imFacSubsiCapCostTech("PC","TELC") = 0;
+     imFacSubsiCapCostTech("CH","TELC") = 0.40;
+     imFacSubsiCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 0;
+     imGrantCapCostTech("PC","TELC") = 9;                        !!kUS$2015 per vehicle
+     imGrantCapCostTech("CH","TELC") = 0;                        !!kUS$2015/toe-year for Industry sectors
+     imGrantCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 90;        !!US$2015/tCO2
+     imSubsiCapCostFuel("HOU","ELC") = 0;                        !!kUS$2015/toe
+     imSubsiCapCostFuel(SBS,"ELC")$INDSE1(SBS) = 0;              !!kUS$2015/toe
+     imFacSubsiCapCostSupply("PG",PGREN) = 0.3;
+     imFacSubsiCapCostSupply("H2P",H2TECH) = 0.4;
+     imGrantCapCostSupply("PG",PGREN) = 0;                       !!kUS$2015/kW
+     imGrantCapCostSupply("H2P",H2TECH) = 0;                     !!US$2015/toe H2
+elseif %fScenario% eq 3 then
+     imFacSubsiCapCostTech("PC","TELC") = 0;
+     imFacSubsiCapCostTech("CH","TELC") = 0.10;
+     imFacSubsiCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 0;
+     imGrantCapCostTech("PC","TELC") = 7;                        !!kUS$2015 per vehicle
+     imGrantCapCostTech("CH","TELC") = 0;                        !!kUS$2015/toe-year for Industry sectors
+     imGrantCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 90;        !!US$2015/tCO2
+     imSubsiCapCostFuel("HOU","ELC") = 0;                        !!kUS$2015/toe
+     imSubsiCapCostFuel(SBS,"ELC")$INDSE1(SBS) = 0;              !!kUS$2015/toe
+     imFacSubsiCapCostSupply("PG",PGREN) = 0.3;
+     imFacSubsiCapCostSupply("H2P",H2TECH) = 0.3;
+     imGrantCapCostSupply("PG",PGREN) = 0;                       !!kUS$2015/kW
+     imGrantCapCostSupply("H2P",H2TECH) = 0;                     !!US$2015/toe H2
+elseif %fScenario% eq 4 then
+     imFacSubsiCapCostTech("PC","TELC") = 0;
+     imFacSubsiCapCostTech("CH","TELC") = 0;
+     imFacSubsiCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 0;
+     imGrantCapCostTech("PC","TELC") = 1;                        !!kUS$2015 per vehicle
+     imGrantCapCostTech("CH","TELC") = 0;                        !!kUS$2015/toe-year for Industry sectors
+     imGrantCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 90;        !!US$2015/tCO2
+     imSubsiCapCostFuel("HOU","ELC") = 0;                        !!kUS$2015/toe
+     imSubsiCapCostFuel(SBS,"ELC")$INDSE1(SBS) = 0;              !!kUS$2015/toe
+     imFacSubsiCapCostSupply("PG",PGREN) = 0.1;
+     imFacSubsiCapCostSupply("H2P",H2TECH) = 0.2;
+     imGrantCapCostSupply("PG",PGREN) = 0;                       !!kUS$2015/kW
+     imGrantCapCostSupply("H2P",H2TECH) = 0;                     !!US$2015/toe H2
+endif;
 *---
 ** Industry
 imShrNonSubElecInTotElecDem(runCy,INDSE)  = iIndCharData(INDSE,"SHR_NSE");

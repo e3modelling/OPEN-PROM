@@ -173,8 +173,8 @@ Q06LvlCostDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q06ProfRateDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06ProfRateDAC(allCy,DACTECH,YTIME)
         =E=
-    (sum(NAP$NAPtoALLSBS(NAP,"DAC"),VmCarVal(allCy,NAP,YTIME))) / 
-    V06LvlCostDAC(allCy,DACTECH,YTIME - 1)
+    (sum(NAP$NAPtoALLSBS(NAP,"DAC"),VmCarVal(allCy,NAP,YTIME))) / 1000
+    !! /    V06LvlCostDAC(allCy,DACTECH,YTIME - 1)
 ;
 
 *' The equation estimates the annual increase rate of DAC capacity regionally, according to the maturity and profitability of each technology.
