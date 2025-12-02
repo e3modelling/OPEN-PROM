@@ -20,7 +20,7 @@ Q08PriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)$(SECtoEF(SBS,EF) $TIME(YTIME)
 $IFTHEN %link2MAgPIE% == on 
    $(not sameas("BMSWAS",EF))
 $ENDIF
-   $(not sameas("NUC",EF)) $runCy(allCy))..
+   $(not sameas("NUC",EF) and not sameas(SBS,"DAC") and not EFA(EF) and not HEATPUMP(EF)) $runCy(allCy))..
     VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)
         =E=
     (VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1) +

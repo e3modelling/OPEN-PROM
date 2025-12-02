@@ -3,6 +3,7 @@
 
 *'                *VARIABLE INITIALISATION*
 *---
+V04CapOverall.FX(runCy,PGALL,"%fBaseY%") =  imInstCapPastNonCHP(runCy,PGALL,"%fBaseY%");
 V04ShareTechPG.LO(runCy,PGALL,YTIME)$DATAY(YTIME) = 0;
 V04ShareTechPG.UP(runCy,PGALL,YTIME)$DATAY(YTIME) = 1;
 V04ScrpRate.UP(runCy,PGALL,YTIME) = 1;

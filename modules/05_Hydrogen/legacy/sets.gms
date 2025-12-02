@@ -117,7 +117,6 @@ ngs
 hcl
 bmswas
 sol
-nuc
 elc
 wnd
 rfo
