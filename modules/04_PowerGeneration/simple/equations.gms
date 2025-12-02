@@ -269,34 +269,21 @@ Q04NetNewCapElec(allCy,PGALL,YTIME)$(PGREN(PGALL)$TIME(YTIME)$runCy(allCy))..
 Q04CFAvgRen(allCy,PGALL,YTIME)$(PGREN(PGALL)$TIME(YTIME)$runCy(allCy))..
     V04CFAvgRen(allCy,PGALL,YTIME)
         =E=
-    (i04AvailRate(allCy,PGALL,YTIME)*V04NetNewCapElec(allCy,PGALL,YTIME)+
-     i04AvailRate(allCy,PGALL,YTIME-1)*V04NetNewCapElec(allCy,PGALL,YTIME-1)+
-     i04AvailRate(allCy,PGALL,YTIME-2)*V04NetNewCapElec(allCy,PGALL,YTIME-2)+
-     i04AvailRate(allCy,PGALL,YTIME-3)*V04NetNewCapElec(allCy,PGALL,YTIME-3)+
-     i04AvailRate(allCy,PGALL,YTIME-4)*V04NetNewCapElec(allCy,PGALL,YTIME-4)+
-     i04AvailRate(allCy,PGALL,YTIME-5)*V04NetNewCapElec(allCy,PGALL,YTIME-5)+
-     i04AvailRate(allCy,PGALL,YTIME-6)*V04NetNewCapElec(allCy,PGALL,YTIME-6)+
-     i04AvailRate(allCy,PGALL,YTIME-7)*V04NetNewCapElec(allCy,PGALL,YTIME-7)
+    (i04AvailRate(allCy,PGALL,YTIME)*V04NewCapElec(allCy,PGALL,YTIME)+
+     i04AvailRate(allCy,PGALL,YTIME-1)*V04NewCapElec(allCy,PGALL,YTIME-1)+
+     i04AvailRate(allCy,PGALL,YTIME-2)*V04NewCapElec(allCy,PGALL,YTIME-2)+
+     i04AvailRate(allCy,PGALL,YTIME-3)*V04NewCapElec(allCy,PGALL,YTIME-3)+
+     i04AvailRate(allCy,PGALL,YTIME-4)*V04NewCapElec(allCy,PGALL,YTIME-4)+
+     i04AvailRate(allCy,PGALL,YTIME-5)*V04NewCapElec(allCy,PGALL,YTIME-5)+
+     i04AvailRate(allCy,PGALL,YTIME-6)*V04NewCapElec(allCy,PGALL,YTIME-6)+
+     i04AvailRate(allCy,PGALL,YTIME-7)*V04NewCapElec(allCy,PGALL,YTIME-7)
     ) /
-    (V04NetNewCapElec(allCy,PGALL,YTIME) + V04NetNewCapElec(allCy,PGALL,YTIME-1)+
-    V04NetNewCapElec(allCy,PGALL,YTIME-2) + V04NetNewCapElec(allCy,PGALL,YTIME-3)+
-    V04NetNewCapElec(allCy,PGALL,YTIME-4) + V04NetNewCapElec(allCy,PGALL,YTIME-5)+
-    V04NetNewCapElec(allCy,PGALL,YTIME-6) + V04NetNewCapElec(allCy,PGALL,YTIME-7) +
+    (V04NewCapElec(allCy,PGALL,YTIME) + V04NewCapElec(allCy,PGALL,YTIME-1)+
+    V04NewCapElec(allCy,PGALL,YTIME-2) + V04NewCapElec(allCy,PGALL,YTIME-3)+
+    V04NewCapElec(allCy,PGALL,YTIME-4) + V04NewCapElec(allCy,PGALL,YTIME-5)+
+    V04NewCapElec(allCy,PGALL,YTIME-6) + V04NewCapElec(allCy,PGALL,YTIME-7) +
     epsilon6
     );
-
-*' This equation calculates the variable representing the overall capacity for a specific power plant in a given country and time period .
-*' The overall capacity is a composite measure that includes the existing capacity for non-renewable power plants and the expected capacity for renewable power plants based
-*' on their average capacity factor.
-Q04CapOverall(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V04CapOverall(allCy,PGALL,YTIME)
-          =E=
-    VmCapElec(allCy,pgall,ytime)$(not PGREN(PGALL)) +
-    V04CFAvgRen(allCy,PGALL,YTIME-1) *
-    (
-      V04NetNewCapElec(allCy,PGALL,YTIME) / i04AvailRate(allCy,PGALL,YTIME) +
-      V04CapOverall(allCy,PGALL,YTIME-1) / i04AvailRate(allCy,PGALL,YTIME-1) !! FIXME: instead of V04CFAvgRen
-    )$PGREN(PGALL);
 
 *' This equation calculates the electricity production from power generation plants for a specific country ,
 *' power generation plant type , and time period . The electricity production is determined based on the overall electricity

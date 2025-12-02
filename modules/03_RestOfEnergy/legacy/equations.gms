@@ -17,11 +17,11 @@
 Q03ConsFinEneCountry(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmConsFinEneCountry(allCy,EFS,YTIME)
         =E=
-    sum((DSBS,EFS2)$(not TRANSE(DSBS) and SECtoEF(DSBS,EFS2)),
-      VmConsFuel(allCy,DSBS,EFS2,YTIME)
+    sum(DSBS$(SECtoEF(DSBS,EFS) and (INDDOM(DSBS) or sameas("DAC",DSBS))),
+      VmConsFuel(allCy,DSBS,EFS,YTIME)
     ) +
-    sum((TRANSE,EFS2)$SECtoEF(TRANSE,EFS2),
-        VmDemFinEneTranspPerFuel(allCy,TRANSE,EFS2,YTIME)
+    sum(TRANSE$SECtoEF(TRANSE,EFS),
+        VmDemFinEneTranspPerFuel(allCy,TRANSE,EFS,YTIME)
     );
 
 *' The equation computes the total final energy consumption in million tonnes of oil equivalent 
@@ -39,8 +39,8 @@ $offtext
 Q03ConsFinNonEne(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmConsFinNonEne(allCy,EFS,YTIME)
         =E=
-    sum(NENSE$(not sameas("BU",NENSE)),
-      sum(EF$(EFtoEFS(EF,EFS)$SECtoEF(NENSE,EF)), VmConsFuel(allCy,NENSE,EF,YTIME))
+    sum(NENSE$(SECtoEF(NENSE,EFS) and not sameas("BU",NENSE)),
+      VmConsFuel(allCy,NENSE,EFS,YTIME)
     );  
 
 *' The equation computes the distribution losses in million tonnes of oil equivalent for a given energy form sector.
@@ -353,8 +353,8 @@ Q03ConsFiEneSec(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         V03ProdPrimary(allCy,EFS,YTIME)$(sameas(EFS,"CRO") or sameas(EFS,"NGS"))
       )$(not TOCTEF(EFS)) +
       (
-        VmConsFinEneCountry(allCy,EFS,YTIME) + 
-        VmConsFinNonEne(allCy,EFS,YTIME) + 
+        VmConsFinEneCountry(allCy,EFS,YTIME) +
+        VmConsFinNonEne(allCy,EFS,YTIME) +
         VmLossesDistr(allCy,EFS,YTIME)
       )$TOCTEF(EFS)
     ) +

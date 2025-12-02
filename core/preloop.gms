@@ -49,8 +49,8 @@ VmCarVal.FX(runCy,"NOTRADE",YTIME) = iCarbValYrExog(runCy,YTIME);
 VmCstCO2SeqCsts.L(runCy,YTIME)=1;
 VmCstCO2SeqCsts.FX(runCy,YTIME)$(not an(YTIME)) = i06ElastCO2Seq(runCy,"mc_b");
 *---
-*VmPriceFuelSubsecCarVal.LO(runCy,SBS,"H2F",YTIME) = 1E-6;
-*VmPriceFuelSubsecCarVal.LO(runCy,SBS,"STE",YTIME) = 1E-6;
+VmPriceFuelSubsecCarVal.LO(runCy,SBS,"H2F",YTIME) = 0;
+VmPriceFuelSubsecCarVal.LO(runCy,SBS,"STE",YTIME) = 0;
 VmPriceFuelSubsecCarVal.L(runCy,SBS,EF,YTIME)$SECtoEF(SBS,EF) = 1.5;
 VmPriceFuelSubsecCarVal.L(runCy,"PG",PGEF,YTIME) = 1;
 VmPriceFuelSubsecCarVal.L(runCy,SBS,"STE",YTIME) = 1;
@@ -74,6 +74,7 @@ VmPriceFuelSubsecCarVal.FX(runCy,"STEAMP","CRO",YTIME)$(not DATAY(YTIME)) = imFu
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,"STE",YTIME)$(SECtoEF(SBS,"STE") and DATAY(YTIME)) = imFuelPrice(runCy,"OI","ELC",YTIME);
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,"STE",YTIME)$(not SECtoEF(SBS,"STE")) = 0;
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,"GEO",YTIME) = 0;
+VmPriceFuelSubsecCarVal.FX(runCy,"DAC",EF,YTIME)$DATAY(YTIME) = imFuelPrice(runCy,"OI","ELC",YTIME);
 *---
 VmPriceElecInd.FX(runCy,YTIME)$DATAY(YTIME) = imPriceElecInd(runCy,YTIME);
 *---
