@@ -572,9 +572,9 @@ imAnnCons(runCy,"BU","smallest") = 0.2 ;
 imAnnCons(runCy,"BU","largest") = 1 ;
 imAnnCons(runCy,"BU","modal") = 0.5 ;
 
-imAnnCons(runCy,"DAC","smallest") = 0.2 ;
-imAnnCons(runCy,"DAC","largest") = 1 ;
-imAnnCons(runCy,"DAC","modal") = 0.5 ;
+*imAnnCons(runCy,"DAC","smallest") = 0.2 ;
+*imAnnCons(runCy,"DAC","largest") = 1 ;
+*imAnnCons(runCy,"DAC","modal") = 0.5 ;
 *---
 * Consumer size groups distribution function
 Loop (runCy,DSBS) DO
