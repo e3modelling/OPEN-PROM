@@ -1,0 +1,272 @@
+/* latin */
+@font-face {
+  font-family: 'Abel';
+  font-style: normal;
+  font-weight: 400;
+  src: url('Abel.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin */
+@font-face {
+  font-family: 'Allerta Stencil';
+  font-style: normal;
+  font-weight: 400;
+  src: url('AllertaStencil.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 400;
+  src: url('RobotoMonoExt.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 400;
+  src:  url('RobotoMono.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+body {
+  font-family: 'Abel';
+  font-size: 20px;
+  margin: auto;
+  max-width: 1000px;
+}
+
+@media (max-width:600px) {
+  body {
+    font-size: 16px;
+  }
+}
+
+a {
+  color: #e29578;
+}
+
+a:visited{
+  color: #83c5be;
+}
+
+a:hover {
+  color: #006d77;
+}
+
+/* Style the header */
+.header {
+  font-family: 'Allerta Stencil';
+  text-align: center;
+  background: #006d77;
+  color: white;
+  min-height: 120px;
+}
+
+.headertext {
+  width: calc(100% - 200px);
+  height: 100%;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.header h1 a {
+  color: white;
+  text-decoration: none;
+}
+
+.header a:hover{
+  color: #e29578;
+}
+
+.headerimg {
+  height: 120px;
+  width: 160px;
+  border-radius: 0 90px 90px 0;
+  background: #ffffff;
+  display: inline-block;
+  float: left;
+}
+
+.headerimg img {
+  padding-top: 10px;
+  height: 100px;
+}
+
+/* Increase the font size of the h1 element */
+.header h1 {
+  font-size: 40px;
+  line-height: 1.1;
+  display: inline;
+}
+
+@media (max-width:600px) {
+  .header h1 {
+    font-size: 30px;
+  }
+}
+
+.header h3 {
+  padding: 8px;
+  font-size: 25px;
+  font-weight: 300;
+  display: inline;
+}
+
+@media (max-width:600px) {
+  .header h3 {
+    font-size: 20px;
+  }
+}
+
+.by {
+  font-size: 15px;
+}
+
+@media (max-width:600px) {
+  .by {
+    font-size: 12px;
+  }
+}
+
+.math.inline {
+  font-size: 16px;
+}
+
+/* Main column */
+.main {
+  flex: 100%;
+  background-color: white;
+  padding: 20px;
+}
+
+/* Page content */
+.content {
+  padding: 16px;
+}
+
+.pagenav {
+  font-family: 'Allerta Stencil';
+  background-color: #333;
+  max-width: 1000px;
+  border-radius: 0 0 20px 20px;
+  z-index: 1;
+  transition: top 0.3s;
+}
+
+.pagenav a {
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.dropdown .dropbtn {
+  font-size: 16px;
+  border: none;
+  outline: none;
+  color: white;
+  padding: 10px 16px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.dropdown:hover .dropbtn {
+  background-color: #e29578;
+}
+
+.dropdown {
+  display:	inline-block;
+	position:	relative;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+#mainnav {
+  column-count: 2;
+  column-gap: 5px;
+}
+
+.dropdown-content ul {
+  padding: 0;
+}
+
+.dropdown-content ul ul ul {
+  padding-left: 30px;
+}
+
+.dropdown-content ul a {
+  display: none;
+}
+
+.dropdown-content ul ul a {
+  display: block;
+}
+
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 4px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.dropdown-content a:hover {
+  background-color: #ffddd2; 
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+table {
+  max-width: 100%;
+}
+
+.odd {
+  background: #F8F6F6;
+}
+.even {
+  background: #DEDCDC;
+}
+    
+code {
+  font-family: 'Roboto Mono';
+  padding: 2px;
+}
+
+pre {
+  font-size: 80%;
+  background-color: #F8F6F6; 
+  padding: 10px;
+  overflow: auto;
+  border: 1px solid #DEDCDC;
+  border-radius: 5px;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+}
+
