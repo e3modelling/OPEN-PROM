@@ -1,7 +1,7 @@
-*' @title Heat module
+*' @title Curves module
 *'
-*' @description This is the Heat module.
+*' @description This is the Curves module for learning curves.
 
 *###################### R SECTION START (MODULETYPES) ##########################
-$Ifi "%Heat%" == "heat" $include "./modules/10_Curves/LearningCurves/realization.gms"
+$Ifi "%Curves%" == "LearningCurves" $include "./modules/10_Curves/LearningCurves/realization.gms"
 *###################### R SECTION END (MODULETYPES) ############################

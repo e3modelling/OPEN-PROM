@@ -1,4 +1,4 @@
-*' @description This is the heat realization of the Learning Curves module.
+*' @description This is the LearningCurves realization of the Curves module.
 
 *####################### R SECTION START (PHASES) ##############################
 $Ifi "%phase%" == "sets"         $include "./modules/10_Curves/LearningCurves/sets.gms"
