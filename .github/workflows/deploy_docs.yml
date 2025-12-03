@@ -4,7 +4,8 @@ on:
   schedule:
     - cron: '0 0 1 * *'   # Monthly schedule
   workflow_dispatch:       # Manual trigger
-
+permissions:
+  contents: write   
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -15,19 +16,37 @@ jobs:
 
       - name: Set up R
         uses: r-lib/actions/setup-r@v2
+      
+      - name: Install system dependencies for R packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libjpeg-dev libpng-dev
+
+      - name: Set up Pandoc
+        uses: r-lib/actions/setup-pandoc@v2
 
       - name: Install R dependencies
+        env:
+          GITHUB_PAT: ${{ secrets.gh_pat }}
         run: |
+          Rscript -e 'install.packages("remotes")'
           Rscript -e 'remotes::install_github("e3modelling/gms")'
           Rscript -e 'install.packages("goxygen")'
+          Rscript -e 'install.packages("qgraph")'
 
       - name: Generate docs in temporary folder
         run: |
-          Rscript -e 'goxygen::goxygen(path = "temp_docs", cff = "HOWTOCITE.cff", output = c("html"), includeCore = TRUE)'
+          Rscript -e 'goxygen::goxygen(path = ".", cff = "HOWTOCITE.cff", output = c("html"), includeCore = TRUE, mainfile = "main.gms", startType = "equations")'
+
+      - name: Copy images folder into html folder
+        run: |
+          mkdir -p doc/html/images
+          cp -r doc/images/* doc/html/images/
 
       - name: Deploy to GitHub Pages (root of gh-pages)
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: ./temp_docs/doc/html
+          publish_dir: ./doc/html
+          enable_jekyll: false
