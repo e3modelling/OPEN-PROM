@@ -20,11 +20,6 @@ i10LearnableFraction(LCTECH)        "Fraction of cost subject to learning curve 
 i10MinCostFraction(LCTECH)          "Minimum cost as fraction of initial cost (1)"
 ;
 *---
-*' Calculate learning curve parameters from learning rates
-*' With C(t) = (Cap(t)/Cap(t-1))^ε and LR = 1 - 2^(-ε)
-*' Solving for ε: ε = -log(1-LR) / log(2) (negative for cost reduction)
-i10AlphaLC(LCTECH) = -log(1 - i10LearningRate(LCTECH)) / log(2);
-*---
 i10LearningRate("PGSOL") = 0.20;    !! 20% cost reduction per doubling for Solar PV
 i10LearningRate("PGCSP") = 0.20;    !! 20% cost reduction per doubling for CSP
 i10LearningRate("PGAWND") = 0.10;   !! 10% cost reduction per doubling for Onshore Wind
@@ -48,3 +43,10 @@ i10MinCostFraction("PGAWNO") = 0.40;    !! Offshore wind cannot go below 40% of 
 *' Use the base year costs as the reference point for learning curves
 i10InitCostRefLC(allCy,LCTECH,YTIME)$TFIRST(YTIME) = i04GrossCapCosSubRen(allCy,LCTECH,YTIME);
 *---
+*' Calculate learning curve parameters from learning rates
+*' With C(t) = (Cap(t)/Cap(t-1))^ε and LR = 1 - 2^(-ε)
+*' Solving for ε: ε = -log(1-LR) / log(2) (negative for cost reduction)
+i10AlphaLC(LCTECH) = -log(1 - i10LearningRate(LCTECH)) / log(2);
+*---
+
+*' @stop

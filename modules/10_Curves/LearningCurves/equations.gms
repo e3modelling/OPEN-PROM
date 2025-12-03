@@ -17,13 +17,14 @@
 *' The cost multiplier applies only to the learnable portion of total costs.
 *' Final cost = [LearnableFraction × CostMultiplier + (1-LearnableFraction)] × InitialCost
 
-*' Learning curve cost multiplier equation
+*' Learning curve cost multiplier equation with numerical safeguards
 *' Timing: Cost multiplier for YTIME based on capacity growth in previous period (YTIME-1 vs YTIME-2)
 *' This reflects that learning happens from past experience and affects current period costs
+*' Safeguards: Add small epsilon to denominator to avoid division by zero
 Q10CostLC(LCTECH,YTIME)$(TIME(YTIME) and not TFIRST(YTIME) and not TFIRST(YTIME-1))..
     V10CostLC(LCTECH,YTIME)
         =E=
-    (V10CumCapGlobal(LCTECH,YTIME-1) / V10CumCapGlobal(LCTECH,YTIME-2)) ** i10AlphaLC(LCTECH);
+    (V10CumCapGlobal(LCTECH,YTIME-1) / (V10CumCapGlobal(LCTECH,YTIME-2) + 0.1)) ** i10AlphaLC(LCTECH);
 
 *' Global cumulative capacity tracking equation
 *' Tracks total cumulative capacity installations since base year
