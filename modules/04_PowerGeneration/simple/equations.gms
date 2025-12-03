@@ -85,7 +85,8 @@ Q04CapElecTotEst(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmPeakLoad(allCy,YTIME) / VmPeakLoad(allCy,YTIME-1);          
 
 *' This equation calculates the CAPEX and the Fixed Costs of each power generation unit, taking into account its discount rate and life expectancy, 
-*' for each region (country) and year. Learning curves applied only to CAPEX costs.
+*' for each region (country) and year. Learning curves applied only to CAPEX costs with cost breakdown.
+*' Formula: Cost = [LearnableFraction × CostMultiplier + (1-LearnableFraction)] × InitialCost
 Q04CapexFixCostPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04CapexFixCostPG(allCy,PGALL,YTIME)
         =E=         
@@ -93,7 +94,10 @@ Q04CapexFixCostPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       imDisc(allCy,"PG",YTIME) * exp(imDisc(allCy,"PG",YTIME) * i04TechLftPlaType(allCy,PGALL))
       / (exp(imDisc(allCy,"PG",YTIME) * i04TechLftPlaType(allCy,PGALL)) -1)
     ) * i04GrossCapCosSubRen(allCy,PGALL,YTIME) * 1000 * imCGI(allCy,YTIME) 
-    * (V10CostLC(PGALL,YTIME)$LCTECH(PGALL) + 1$(not LCTECH(PGALL))) +
+    * (
+        (i10LearnableFraction(PGALL) * V10CostLC(PGALL,YTIME) + (1 - i10LearnableFraction(PGALL)))$LCTECH(PGALL) 
+        + 1$(not LCTECH(PGALL))
+      ) +
     i04FixOandMCost(allCy,PGALL,YTIME);
 
 Q04CostCapTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..

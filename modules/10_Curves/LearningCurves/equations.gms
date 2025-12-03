@@ -5,12 +5,17 @@
 
 *' * Learning Curves module 
 
-*' This equation implements the learning curve for wind and solar technologies.
+*' This equation implements the learning curve for wind and solar technologies with stopping mechanism.
 *' The learning curve follows the equation: multiplier = (Cap_current / Cap_initial)^ε
 *' where ε is calculated from learning rate: ε = log(1-LR)/log(2)
 *' 
-*' The cost multiplier depends on global cumulative capacity deployment
-*' and is applied to existing PowerGeneration cost tables.
+*' STOPPING MECHANISM: Only a fraction of costs are subject to learning curves.
+*' - LearnableFraction: Technology-specific manufacturing costs that improve with experience
+*' - FixedFraction: Basic materials, labor, installation costs that remain constant
+*' - MinCostFraction: Absolute floor preventing unrealistic cost reductions
+*'
+*' The cost multiplier applies only to the learnable portion of total costs.
+*' Final cost = [LearnableFraction × CostMultiplier + (1-LearnableFraction)] × InitialCost
 
 *' Learning curve cost multiplier equation
 *' Timing: Cost multiplier for YTIME based on capacity growth in previous period (YTIME-1 vs YTIME-2)
