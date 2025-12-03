@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="generator" content="goxygen" />
+  <meta name="author" content="Giannis Tolios" />
+  <meta name="author" content="Eleftheria Zisarou" />
+  <meta name="author" content="Alexandros Tsimpoukis" />
+  <meta name="author" content="Fotis Sioutas" />
+  <meta name="author" content="Sonja Sechi" />
+  <meta name="author" content="Dionysis Pramangioulis" />
+  <meta name="author" content="Giorgos Plessias" />
+  <meta name="author" content="Michael Madianos" />
+  <meta name="author" content="Anastasis Giannousakis" />
+  <meta name="author" content="Panagiotis Fragkos" />
+  <meta name="author" content="Maro Baka" />
+<title>OPEN PROM –  8. Prices module</title>
+<link rel="stylesheet" href="ming/style.css">
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS_CHTML-full"></script>
+<script type="text/x-mathjax-config">
+                    MathJax.Hub.Config({
+                      CommonHTML: { linebreaks: { automatic: true } },
+                      "HTML-CSS": { linebreaks: { automatic: true } },
+                             SVG: { linebreaks: { automatic: true } }
+                    });
+</script>
+</head>
+<body>
+<div class="header">
+      <div class="headerimg"><a href="index.htm"><img id="logo" src="images/logo.png" height="100" alt="model logo" /></a></div>
+    <div class="headertext">
+      <h1 id="mainheadertitle"><a href="https://github.com/e3modelling/OPEN-PROM">OPEN PROM</a></h1>
+      <h3>0.1</h3>
+      <div class="by">created with <a href="https://github.com/pik-piam/goxygen">goxygen</a> 1.4.5</div>
+    </div>
+</div>
+
+<div class="pagenav" id="pagenav">
+    <div class="dropdown">
+   <button class="dropbtn"> 8. Prices module
+     <i class="fa fa-caret-down"></i>
+   </button>
+   <div id="mainnav" class="dropdown-content">
+   <a href='index.htm'>Overview</a>
+   <a href='core.htm'>core</a>
+   <a href='01_Transport.htm'> 1. Transport module</a>
+   <a href='02_Industry.htm'> 2. Industry module</a>
+   <a href='03_RestOfEnergy.htm'> 3. RestOfEnergy module</a>
+   <a href='04_PowerGeneration.htm'> 4. PowerGeneration module</a>
+   <a href='05_Hydrogen.htm'> 5. Hydrogen module</a>
+   <a href='06_CO2.htm'> 6. CO2 module</a>
+   <a href='08_Prices.htm'> 8. Prices module</a>
+   <a href='09_Heat.htm'> 9. Heat module</a>
+   </div>
+  </div>
+  <div class="dropdown">
+   <button class="dropbtn">Contents
+     <i class="fa fa-caret-down"></i>
+   </button>
+   <div class="dropdown-content">
+   <ul>
+   <li><a href="#id-08_Prices" id="toc-id-08_Prices">Prices module
+   (08_Prices)</a>
+   <ul>
+   <li><a href="#description" id="toc-description">Description</a></li>
+   <li><a href="#interfaces" id="toc-interfaces">Interfaces</a>
+   <ul>
+   <li><a href="#input" id="toc-input">Input</a></li>
+   <li><a href="#output" id="toc-output">Output</a></li>
+   </ul></li>
+   <li><a href="#realizations" id="toc-realizations">Realizations</a>
+   <ul>
+   <li><a href="#a-legacy" id="toc-a-legacy">(A) legacy</a></li>
+   </ul></li>
+   <li><a href="#definitions" id="toc-definitions">Definitions</a>
+   <ul>
+   <li><a href="#objects" id="toc-objects">Objects</a></li>
+   <li><a href="#sets" id="toc-sets">Sets</a></li>
+   </ul></li>
+   <li><a href="#see-also" id="toc-see-also">See Also</a></li>
+   <li><a href="#references" id="toc-references">References</a></li>
+   </ul></li>
+   </ul>
+   </div>
+  </div>
+</div>
+
+<h1 id="id-08_Prices">Prices module (08_Prices)</h1>
+<h2 id="description">Description</h2>
+<p>This is the Prices module.</p>
+<h2 id="interfaces">Interfaces</h2>
+<p><strong>Interface plot missing!</strong></p>
+<h3 id="input">Input</h3>
+<table style="width:100%;">
+<caption>module inputs (A: legacy)</caption>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 39%" />
+<col style="width: 22%" />
+<col style="width: 4%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"> </th>
+<th style="text-align: center;">Description</th>
+<th style="text-align: center;">Unit</th>
+<th style="text-align: center;">A</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">VmCarVal<br />
+(allCy, NAP, YTIME)</td>
+<td style="text-align: center;">Carbon prices for all countries</td>
+<td style="text-align: center;"><span class="math inline">\(US\$2015/tn
+CO2\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VmConsFuel<br />
+(allCy, DSBS, EF, YTIME)</td>
+<td style="text-align: center;">Consumption of fuels in each demand
+subsector, excluding heat from heatpumps</td>
+<td style="text-align: center;"><span
+class="math inline">\(Mtoe\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VmCostAvgProdH2<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Average production cost of hydrogen in
+Euro per toe</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VmCostAvgProdSte<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Average cost of steam production</td>
+<td style="text-align: center;"><span
+class="math inline">\(kUS\$2015/toe\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VmCostPowGenAvgLng<br />
+(allCy, ESET, YTIME)</td>
+<td style="text-align: center;">Long-term average power generation
+cost</td>
+<td style="text-align: center;"><span
+class="math inline">\(US\$2015/kWh\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VmDemFinEneTranspPerFuel<br />
+(allCy, TRANSE, EF, YTIME)</td>
+<td style="text-align: center;">Final energy demand in transport
+subsectors per fuel</td>
+<td style="text-align: center;"><span
+class="math inline">\(Mtoe\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+</tbody>
+</table>
+<h3 id="output">Output</h3>
+<table>
+<caption>module outputs</caption>
+<colgroup>
+<col style="width: 34%" />
+<col style="width: 43%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"> </th>
+<th style="text-align: center;">Description</th>
+<th style="text-align: center;">Unit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">VmPriceElecInd<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Electricity index - a function of
+industry price</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VmPriceElecIndResConsu<br />
+(allCy, ESET, YTIME)</td>
+<td style="text-align: center;">Electricity price to Industrial and
+Residential Consumers</td>
+<td style="text-align: center;"><span
+class="math inline">\(US\$2015/KWh\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VmPriceFuelAvgSub<br />
+(allCy, DSBS, YTIME)</td>
+<td style="text-align: center;">Average fuel prices per subsector</td>
+<td style="text-align: center;"><span
+class="math inline">\(k\$2015/toe\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VmPriceFuelSubsecCarVal<br />
+(allCy, SBS, EF, YTIME)</td>
+<td style="text-align: center;">Fuel prices per subsector and fuel</td>
+<td style="text-align: center;"><span
+class="math inline">\(k\$2015/toe\)</span></td>
+</tr>
+</tbody>
+</table>
+<h2 id="realizations">Realizations</h2>
+<h3 id="a-legacy">(A) legacy</h3>
+<p>This is the legacy realization of the Prices module.</p>
+<pre><code>Equations</code></pre>
+<p>*** Prices</p>
+<pre><code>Q08PriceFuelSepCarbonWght(allCy,SBS,EF,YTIME)              &quot;Compute fuel prices per subsector and fuel, separate carbon value in each sector&quot;</code></pre>
+<p><strong>Interdependent Equations</strong></p>
+<pre><code>Q08PriceElecIndResConsu(allCy,ESET,YTIME)                  &quot;Compute electricity price in Industrial and Residential Consumers&quot;
+Q08PriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)               &quot;Compute fuel prices per subsector and fuel, separate carbon value in each sector&quot;
+Q08PriceFuelAvgSub(allCy,DSBS,YTIME)                       &quot;Compute average fuel price per subsector&quot;   
+Q08PriceElecInd(allCy,YTIME)                               &quot;Compute electricity industry prices&quot;
+;
+Variables</code></pre>
+<p>*** Prices Variables</p>
+<pre><code>V08PriceFuelSepCarbonWght(allCy,SBS,EF,YTIME)              &quot;Fuel prices per subsector and fuel  mutliplied by weights (kUS$2015/toe)&quot;</code></pre>
+<p><strong>Interdependent Variables</strong></p>
+<pre><code>VmPriceElecIndResConsu(allCy,ESET,YTIME)                   &quot;Electricity price to Industrial and Residential Consumers (US$2015/KWh)&quot;
+VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)                &quot;Fuel prices per subsector and fuel (k$2015/toe)&quot;
+VmPriceFuelAvgSub(allCy,DSBS,YTIME)                        &quot;Average fuel prices per subsector (k$2015/toe)&quot;
+VmPriceElecInd(allCy,YTIME)                                &quot;Electricity index - a function of industry price (1)&quot;</code></pre>
+<p>*** Miscellaneous</p>
+<pre><code>V08FuelPriSubNoCarb(allCy,SBS,EF,YTIME)                    &quot;Fuel prices per subsector and fuel  without carbon value (kUS$2015/toe)&quot;
+;</code></pre>
+<p>GENERAL INFORMATION Equation format: “typical useful energy demand
+equation” The main explanatory variables (drivers) are activity
+indicators (economic activity) and corresponding energy costs. The type
+of “demand” is computed based on its past value, the ratio of the
+current and past activity indicators (with the corresponding
+elasticity), and the ratio of lagged energy costs (with the
+corresponding elasticities). This type of equation captures both short
+term and long term reactions to energy costs. * Prices The equation
+computes fuel prices per subsector and fuel with separate carbon values
+in each sector for a specific scenario, subsector, fuel, and year.The
+equation considers various scenarios based on the type of fuel and
+whether it is subject to changes in carbon values. It incorporates
+factors such as carbon emission factors carbon values for all countries,
+electricity prices to industrial and residential consumers, efficiency
+values, and the total hydrogen cost per sector.The result of the
+equation is the fuel price per subsector and fuel, adjusted based on
+changes in carbon values, electricity prices, efficiency, and hydrogen
+costs.</p>
+<pre><code>Q08PriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)$(SECtoEF(SBS,EF) $TIME(YTIME)
+$IFTHEN %link2MAgPIE% == on 
+   $(not sameas(&quot;BMSWAS&quot;,EF))
+$ENDIF
+   $(not sameas(&quot;NUC&quot;,EF)) $runCy(allCy))..
+    VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)
+        =E=
+    (VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1) +
+      sum(NAP$NAPtoALLSBS(NAP,SBS),
+      VmCarVal(allCy,NAP,YTIME)*imCo2EmiFac(allCy,SBS,EF,YTIME) - 
+      VmCarVal(allCy,NAP,YTIME-1)*imCo2EmiFac(allCy,SBS,EF,YTIME-1)
+      )
+      /1000
+    )$(DSBS(SBS))$(not (ELCEF(EF) or HEATPUMP(EF) or ALTEF(EF) or H2EF(EF) or sameas(&quot;STE&quot;,EF))) +
+    (
+      VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1)
+      !!We should account for carbon tax increase for the own consumption emissions
+    )$sameas(SBS,&quot;PG&quot;) +
+    VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1)$(DSBS(SBS))$ALTEF(EF) +
+    (
+      ( VmPriceElecIndResConsu(allCy,&quot;i&quot;,YTIME)$INDSE1(SBS)+
+        VmPriceElecIndResConsu(allCy,&quot;r&quot;,YTIME)$HOU1(SBS) +
+        VmPriceElecIndResConsu(allCy,&quot;t&quot;,YTIME)$TRANS1(SBS) +
+        VmPriceElecIndResConsu(allCy,&quot;c&quot;,YTIME)$SERV(SBS)
+      )/smTWhToMtoe
+      +
+      ((imEffValueInDollars(allCy,SBS,YTIME))/1000)$DSBS(SBS)
+    )$(ELCEF(EF) or HEATPUMP(EF)) +
+    (
+      VmPriceFuelSubsecCarVal(allCy,&quot;OI&quot;,EF,YTIME)$(not sameas(&quot;BMSWAS&quot;,EF) or not sameas(&quot;CRO&quot;,EF)) +
+      VmPriceFuelSubsecCarVal(allCy,&quot;AG&quot;,EF,YTIME)$sameas(&quot;BMSWAS&quot;,EF)
+    )$(sameas (&quot;H2P&quot;,SBS) or sameas(&quot;STEAMP&quot;,SBS)) +
+    (VmCostAvgProdH2(allCy,YTIME)$DSBS(SBS)/1000)$H2EF(EF) +
+    (VmCostAvgProdSte(allCy,YTIME)$DSBS(SBS))$sameas(&quot;STE&quot;,EF);
+$ontext</code></pre>
+<p>The equation calculates the fuel prices per subsector and fuel
+multiplied by weights considering separate carbon values in each sector.
+This equation is applied for a specific scenario, subsector, fuel, and
+year. The calculation involves multiplying the sector’s average price
+weight based on fuel consumption by the fuel price per subsector and
+fuel. The weights are determined by the sector’s average price,
+considering the specific fuel consumption for the given scenario,
+subsector, and fuel. This equation allows for a more nuanced calculation
+of fuel prices, taking into account the carbon values in each sector.
+The result represents the fuel prices per subsector and fuel, multiplied
+by the corresponding weights, and adjusted based on the specific carbon
+values in each sector.</p>
+<pre><code>Q08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)$(SECtoEF(DSBS,EF) $TIME(YTIME) $runCy(allCy))..
+    V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)
+      =E= 
+    !!i08WgtSecAvgPriFueCons(allCy,DSBS,EF) * 
+    !!(
+    1e-2+
+      (
+        (VmConsFuel(allCy,DSBS,EF,YTIME) - V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$ELCEF(EF)) / 
+        (SUM(EF2,VmConsFuel(allCy,DSBS,EF2,YTIME)- V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$ELCEF(EF2)) )
+      )$INDSE(DSBS) *
+      VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME)
+      +
+      SUM(TRANSE$TRANSE(DSBS), 
+        VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME) /
+        1!!SUM(EF2,VmDemFinEneTranspPerFuel(allCy,TRANSE,EF2,YTIME))
+      )$TRANSE(DSBS)
+    ) *
+    VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME);
+$offtext
+Q08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)$(SECtoEF(DSBS,EF) $TIME(YTIME) $runCy(allCy))..
+V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)
+      =E=
+      1e-12 +
+      (
+        (VmConsFuel(allCy,DSBS,EF,YTIME) - V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$ELCEF(EF)) /
+        (SUM(EF2,VmConsFuel(allCy,DSBS,EF2,YTIME)- V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$ELCEF(EF2)) )
+      )$(INDDOM(DSBS) or NENSE(DSBS)) +   
+      SUM(TRANSE$(sameas(TRANSE,DSBS)),
+        VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME) /
+        (SUM(EF2$SECtoEF(TRANSE,EF2),VmDemFinEneTranspPerFuel(allCy,TRANSE,EF2,YTIME))+1e-12)
+      )
+;</code></pre>
+<p>The equation calculates the average fuel price per subsector. These
+average prices are used to further compute electricity prices in
+industry (using the OI “other industry” avg price), as well as the
+aggregate fuel demand (of substitutable fuels) per subsector. In the
+transport sector they feed into the calculation of the activity
+levels.</p>
+<pre><code>Q08PriceFuelAvgSub(allCy,DSBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    VmPriceFuelAvgSub(allCy,DSBS,YTIME)
+        =E=
+    sum(EF$SECtoEF(DSBS,EF), 
+      V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME-1) *
+      VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-1));         </code></pre>
+<p>Calculates electricity price for industrial and residential consumers
+using previous year’s fuel prices. For the first year, the price is
+directly based on fuel data. For later years, the price is scaled using
+a ratio of 2021 electricity price to 2021 average generation cost to
+ensure smoothness between historical and non-historical years.</p>
+<pre><code>Q08PriceElecIndResConsu(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    VmPriceElecIndResConsu(allCy,ESET,YTIME) !!Cost final electricity
+        =E=
+    (1 + i08VAT(allCy,YTIME)) *
+    (
+      (
+      (VmPriceFuelSubsecCarVal(allCy,&quot;OI&quot;,&quot;ELC&quot;,YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
+      (
+        VmPriceElecIndResConsu(allCy,&quot;i&quot;,&quot;%fStartY%&quot;) / VmCostPowGenAvgLng(allCy, &quot;%fStartY%&quot;) *
+        VmCostPowGenAvgLng(allCy,YTIME-1) !!Cost secondary energy electricity
+      )$(not TFIRST(YTIME-1))
+      )$sameas(ESET,&quot;i&quot;) +
+      (
+        (VmPriceFuelSubsecCarVal(allCy,&quot;HOU&quot;,&quot;ELC&quot;,YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
+        (
+          VmPriceElecIndResConsu(allCy,&quot;r&quot;,&quot;%fStartY%&quot;) / VmCostPowGenAvgLng(allCy, &quot;%fStartY%&quot;) *
+          VmCostPowGenAvgLng(allCy,YTIME-1) 
+        )$(not TFIRST(YTIME-1))
+      )$sameas(ESET,&quot;r&quot;) +
+      (
+        (VmPriceFuelSubsecCarVal(allCy,&quot;PC&quot;,&quot;ELC&quot;,YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
+        (
+          VmPriceElecIndResConsu(allCy,&quot;t&quot;,&quot;%fStartY%&quot;) / VmCostPowGenAvgLng(allCy, &quot;%fStartY%&quot;) *
+          VmCostPowGenAvgLng(allCy,YTIME-1) 
+        )$(not TFIRST(YTIME-1))
+      )$sameas(ESET,&quot;t&quot;) +
+      (
+        (VmPriceFuelSubsecCarVal(allCy,&quot;SE&quot;,&quot;ELC&quot;,YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
+        (
+          VmPriceElecIndResConsu(allCy,&quot;c&quot;,&quot;%fStartY%&quot;) / VmCostPowGenAvgLng(allCy, &quot;%fStartY%&quot;) *
+          VmCostPowGenAvgLng(allCy,YTIME-1) 
+        )$(not TFIRST(YTIME-1))
+      )$sameas(ESET,&quot;c&quot;) 
+    );</code></pre>
+<p>This equation calculates the fuel prices per subsector and fuel,
+specifically for Combined Heat and Power (CHP) plants, considering the
+profit earned from electricity sales. The equation incorporates various
+factors such as the base fuel price, renewable value, variable cost of
+technology, useful energy conversion factor, and the fraction of
+electricity price at which a CHP plant sells electricity to the network.
+The fuel price for CHP plants is determined by subtracting the relevant
+components for CHP plants (fuel price for electricity generation and a
+fraction of electricity price for CHP sales) from the overall fuel price
+for the subsector. Additionally, the equation includes a square root
+term to handle complex computations related to the difference in fuel
+prices. This equation provides insights into the cost considerations for
+fuel in the context of CHP plants, considering various economic and
+technical parameters.</p>
+<pre><code>$ontext
+Q08PriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS))  $SECTTECH(DSBS,EF) $runCy(allCy))..
+        VmPriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)
+                =E=   
+             (((VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME) + (VmRenValue(YTIME)/1000)$(not RENEF(EF))+imVarCostTech(allCy,DSBS,EF,YTIME)/1000)/imUsfEneConvSubTech(allCy,DSBS,EF,YTIME)- 
+               (0$(not CHP(EF)) + (VmPriceFuelSubsecCarVal(allCy,&quot;OI&quot;,&quot;ELC&quot;,YTIME)*smFracElecPriChp*VmPriceElecInd(allCy,YTIME))$CHP(EF)))  + SQRT( SQR(((VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME)+imVarCostTech(allCy,DSBS,EF,YTIME)/1000)/imUsfEneConvSubTech(allCy,DSBS,EF,YTIME)- 
+              (0$(not CHP(EF)) + (VmPriceFuelSubsecCarVal(allCy,&quot;OI&quot;,&quot;ELC&quot;,YTIME)*smFracElecPriChp*VmPriceElecInd(allCy,YTIME))$CHP(EF))))  ) )/2;
+$offtext</code></pre>
+<p>This equation determines the electricity industry prices based on an
+estimated electricity index and a technical maximum of the electricity
+to steam ratio in Combined Heat and Power plants. The industry prices
+are calculated as a function of the estimated electricity index and the
+specified maximum electricity to steam ratio. The equation ensures that
+the electricity industry prices remain within a realistic range,
+considering the technical constraints of CHP plants. It involves the
+estimated electricity index, and a technical maximum of the electricity
+to steam ratio in CHP plants is incorporated to account for the specific
+characteristics of these facilities. This equation ensures that the
+derived electricity industry prices align with the estimated index and
+technical constraints, providing a realistic representation of the
+electricity market in the industrial sector.</p>
+<pre><code>Q08PriceElecInd(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    VmPriceElecInd(allCy,YTIME) 
+        =E=
+    (
+      V02IndxElecIndPrices(allCy,YTIME) + smElecToSteRatioChp - SQRT( SQR(V02IndxElecIndPrices(allCy,YTIME)-smElecToSteRatioChp))
+    )/2;</code></pre>
+<pre><code>$IFTHEN %link2MAgPIE% == on
+table iPricesMagpie(allCy,SBS,YTIME)    &quot;Prices of biomass per subsector (k$2015/toe)&quot;
+$ondelim
+$include &quot;./iPrices_magpie.csv&quot;
+$offdelim
+;
+$ENDIF
+Parameters
+i08DiffFuelsInSec(SBS)                    &quot;Auxiliary parameter holding the number of different fuels in a sector&quot;
+i08WgtSecAvgPriFueCons(allCy,SBS,EF)        &quot;Weights for sector&#39;s average price, based on fuel consumption (1)&quot;
+i08VAT(allCy,YTIME)                       &quot;VAT (value added tax) rates (1)&quot;
+;
+loop SBS do
+         i08DiffFuelsInSec(SBS) = 0;
+         loop EF$(SECtoEF(SBS,EF))  do
+              i08DiffFuelsInSec(SBS) = i08DiffFuelsInSec(SBS)+1;
+         endloop;
+endloop;
+i08WgtSecAvgPriFueCons(runCy,TRANSE,EF)$SECtoEF(TRANSE,EF) = (imFuelConsPerFueSub(runCy,TRANSE,EF,&quot;%fBaseY%&quot;) / imTotFinEneDemSubBaseYr(runCy,TRANSE,&quot;%fBaseY%&quot;))$imTotFinEneDemSubBaseYr(runCy,TRANSE,&quot;%fBaseY%&quot;)
+                                               + (1/i08DiffFuelsInSec(TRANSE))$(not imTotFinEneDemSubBaseYr(runCy,TRANSE,&quot;%fBaseY%&quot;));
+i08WgtSecAvgPriFueCons(runCy,NENSE,EF)$SECtoEF(NENSE,EF) = ( imFuelConsPerFueSub(runCy,NENSE,EF,&quot;%fBaseY%&quot;) / imTotFinEneDemSubBaseYr(runCy,NENSE,&quot;%fBaseY%&quot;) )$imTotFinEneDemSubBaseYr(runCy,NENSE,&quot;%fBaseY%&quot;)
+                                             + (1/i08DiffFuelsInSec(NENSE))$(not imTotFinEneDemSubBaseYr(runCy,NENSE,&quot;%fBaseY%&quot;));
+i08WgtSecAvgPriFueCons(runCy,INDDOM,EF)$(SECtoEF(INDDOM,EF)) = 
+(
+  (imFuelConsPerFueSub(runCy,INDDOM,EF,&quot;%fBaseY%&quot;) - (imShrNonSubElecInTotElecDem(runCy,INDDOM) * imFuelConsPerFueSub(runCy,INDDOM,&quot;ELC&quot;,&quot;%fBaseY%&quot;))$ELCEF(EF)) / 
+  (imTotFinEneDemSubBaseYr(runCy,INDDOM,&quot;%fBaseY%&quot;) - imShrNonSubElecInTotElecDem(runCy,INDDOM) * imFuelConsPerFueSub(runCy,INDDOM,&quot;ELC&quot;,&quot;%fBaseY%&quot;)) 
+)$(imTotFinEneDemSubBaseYr(runCy,INDDOM,&quot;%fBaseY%&quot;) - imShrNonSubElecInTotElecDem(runCy,INDDOM) * imFuelConsPerFueSub(runCy,INDDOM,&quot;ELC&quot;,&quot;%fBaseY%&quot;))
++ (1/i08DiffFuelsInSec(INDDOM))$(not imTotFinEneDemSubBaseYr(runCy,INDDOM,&quot;%fBaseY%&quot;) - imShrNonSubElecInTotElecDem(runCy,INDDOM) * imFuelConsPerFueSub(runCy,INDDOM,&quot;ELC&quot;,&quot;%fBaseY%&quot;));
+i08WgtSecAvgPriFueCons(runCy,SBS,EF)$(SECtoEF(SBS,EF) $sum(ef2$SECtoEF(SBS,EF),i08WgtSecAvgPriFueCons(runCy,SBS,EF2))) = i08WgtSecAvgPriFueCons(runCy,SBS,EF)/sum(ef2$SECtoEF(SBS,EF),i08WgtSecAvgPriFueCons(runCy,SBS,EF2));
+i08VAT(runCy, YTIME) = 0;
+imFuelPrice(runCy,SBS,EF,YTIME) = imFuelPrice(runCy,SBS,EF,YTIME)/1000; !! change units $15 -&gt; k$15
+imFuelPrice(runCy,&quot;BU&quot;,&quot;KRS&quot;,YTIME) = imFuelPrice(runCy,&quot;PA&quot;,&quot;KRS&quot;,YTIME);</code></pre>
+<p><em>VARIABLE INITIALISATION</em></p>
+<pre><code>VmPriceElecIndResConsu.FX(runCy,&quot;i&quot;,YTIME)$(not An(YTIME)) = VmPriceFuelSubsecCarVal.L(runCy,&quot;OI&quot;,&quot;ELC&quot;,YTIME)*smTWhToMtoe;
+VmPriceElecIndResConsu.FX(runCy,&quot;r&quot;,YTIME)$(not An(YTIME)) = VmPriceFuelSubsecCarVal.L(runCy,&quot;HOU&quot;,&quot;ELC&quot;,YTIME)*smTWhToMtoe;
+VmPriceElecIndResConsu.FX(runCy,&quot;t&quot;,YTIME)$(not An(YTIME)) = VmPriceFuelSubsecCarVal.L(runCy,&quot;PC&quot;,&quot;ELC&quot;,YTIME)*smTWhToMtoe;
+VmPriceElecIndResConsu.FX(runCy,&quot;c&quot;,YTIME)$(not An(YTIME)) = VmPriceFuelSubsecCarVal.L(runCy,&quot;SE&quot;,&quot;ELC&quot;,YTIME)*smTWhToMtoe;
+V08PriceFuelSepCarbonWght.FX(runCy,DSBS,EF,YTIME)$(not AN(YTIME)) = i08WgtSecAvgPriFueCons(runCy,DSBS,EF);
+VmPriceFuelAvgSub.L(runCy,DSBS,YTIME) = 0.001;
+VmPriceFuelAvgSub.FX(runCy,DSBS,YTIME)$DATAY(YTIME) = sum(EF$SECtoEF(DSBS,EF), i08WgtSecAvgPriFueCons(runCy,DSBS,EF) * imFuelPrice(runCy,DSBS,EF,YTIME));
+V08FuelPriSubNoCarb.FX(runCy,SBS,EF,YTIME)$(SECtoEF(SBS,EF) $(not HEATPUMP(EF))  $(not An(YTIME))) = imFuelPrice(runCy,SBS,EF,YTIME);
+V08FuelPriSubNoCarb.FX(runCy,SBS,ALTEF,YTIME)$(SECtoEF(SBS,ALTEF) $(not An(YTIME))) = sum(EF$ALTMAP(SBS,ALTEF,EF),imFuelPrice(runCy,SBS,EF,YTIME));
+V08FuelPriSubNoCarb.FX(runCy,&quot;PG&quot;,&quot;NUC&quot;,YTIME) = 0.025; !! fixed price for nuclear fuel to 25Euro/toe
+V08FuelPriSubNoCarb.FX(runCy,INDDOM,&quot;HEATPUMP&quot;,YTIME)$(SECtoEF(INDDOM,&quot;HEATPUMP&quot;)$(not An(YTIME))) = imFuelPrice(runCy,INDDOM,&quot;ELC&quot;,YTIME);
+$ontext
+VmPriceFuelSubsecCHP.FX(runCy,DSBS,EF,YTIME)$((not An(YTIME)) $(not TRANSE(DSBS))  $SECtoEF(DSBS,EF)) =
+(((VmPriceFuelSubsecCarVal.L(runCy,DSBS,EF,YTIME)+imVarCostTech(runCy,DSBS,EF,YTIME)/1000)/imUsfEneConvSubTech(runCy,DSBS,EF,YTIME)- 
+(0$(not CHP(EF)) + (VmPriceFuelSubsecCarVal.L(runCy,&quot;OI&quot;,&quot;ELC&quot;,YTIME)*smFracElecPriChp*i08ElecIndex(runCy,&quot;2010&quot;))$CHP(EF))) + (0.003) + 
+SQRT( SQR(((VmPriceFuelSubsecCarVal.L(runCy,DSBS,EF,YTIME)+imVarCostTech(runCy,DSBS,EF,YTIME)/1000)/imUsfEneConvSubTech(runCy,DSBS,EF,YTIME)- (0$(not CHP(EF)) + 
+(VmPriceFuelSubsecCarVal.L(runCy,&quot;OI&quot;,&quot;ELC&quot;,YTIME)*smFracElecPriChp*i08ElecIndex(runCy,&quot;2010&quot;))$CHP(EF)))-(0.003)) + SQR(1e-7) ) )/2;
+$offtext</code></pre>
+<blockquote>
+<p><strong>Limitations</strong> There are no known limitations.</p>
+</blockquote>
+<h2 id="definitions">Definitions</h2>
+<h3 id="objects">Objects</h3>
+<table>
+<caption>module-internal objects (A: legacy)</caption>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 39%" />
+<col style="width: 21%" />
+<col style="width: 4%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"> </th>
+<th style="text-align: center;">Description</th>
+<th style="text-align: center;">Unit</th>
+<th style="text-align: center;">A</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">i08DiffFuelsInSec<br />
+(SBS)</td>
+<td style="text-align: center;">Auxiliary parameter holding the number
+of different fuels in a sector</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">i08VAT<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">VAT (value added tax) rates</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">i08WgtSecAvgPriFueCons<br />
+(allCy, SBS, EF)</td>
+<td style="text-align: center;">Weights for sector’s average price,
+based on fuel consumption</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">iPricesMagpie<br />
+(allCy, SBS, YTIME)</td>
+<td style="text-align: center;">Prices of biomass per subsector</td>
+<td style="text-align: center;"><span
+class="math inline">\(k\$2015/toe\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Q08PriceElecInd<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Compute electricity industry prices</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Q08PriceElecIndResConsu<br />
+(allCy, ESET, YTIME)</td>
+<td style="text-align: center;">Compute electricity price in Industrial
+and Residential Consumers</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Q08PriceFuelAvgSub<br />
+(allCy, DSBS, YTIME)</td>
+<td style="text-align: center;">Compute average fuel price per
+subsector</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Q08PriceFuelSepCarbonWght<br />
+(allCy, SBS, EF, YTIME)</td>
+<td style="text-align: center;">Compute fuel prices per subsector and
+fuel, separate carbon value in each sector</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Q08PriceFuelSubsecCarVal<br />
+(allCy, SBS, EF, YTIME)</td>
+<td style="text-align: center;">Compute fuel prices per subsector and
+fuel, separate carbon value in each sector</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">V08FuelPriSubNoCarb<br />
+(allCy, SBS, EF, YTIME)</td>
+<td style="text-align: center;">Fuel prices per subsector and fuel
+without carbon value</td>
+<td style="text-align: center;"><span
+class="math inline">\(kUS\$2015/toe\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">V08PriceFuelSepCarbonWght<br />
+(allCy, SBS, EF, YTIME)</td>
+<td style="text-align: center;">Fuel prices per subsector and fuel
+mutliplied by weights</td>
+<td style="text-align: center;"><span
+class="math inline">\(kUS\$2015/toe\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sets">Sets</h3>
+<table style="width:72%;">
+<caption>sets in use</caption>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 44%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"> </th>
+<th style="text-align: center;">description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">allCy</td>
+<td style="text-align: center;">All Countries Used in the Model</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">ALTEF(EF)</td>
+<td style="text-align: center;">Alternative Fuels used in transport</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">ALTMAP(SBS, EF, EF)</td>
+<td style="text-align: center;">Fuels whose prices affect the prices of
+alternative fuels</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">biomass(balef)</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">DSBS(SBS)</td>
+<td style="text-align: center;">All Demand Subsectors</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">EF</td>
+<td style="text-align: center;">Energy Forms</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">ELCEF(EF)</td>
+<td style="text-align: center;">Electricity</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">H2EF(EF)</td>
+<td style="text-align: center;">Hydrogen</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">HEATPUMP(EF)</td>
+<td style="text-align: center;">Heatpumps are reducing the heat
+requirements of the sector but increasing electricity consumption</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">HOU</td>
+<td style="text-align: center;">11.511 0.9 0.00001</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">HOU1(SBS)</td>
+<td style="text-align: center;">Households</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">INDDOM(DSBS)</td>
+<td style="text-align: center;">Industry and Tertiary</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">INDSE1(SBS)</td>
+<td style="text-align: center;">Industrial SubSectors</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">NAP(Policies_set)</td>
+<td style="text-align: center;">National Allocation Plan sector
+categories</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">NAPtoALLSBS(NAP, ALLSBS)</td>
+<td style="text-align: center;">Energy sectors corresponding to NAP
+sectors</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">NENSE(DSBS)</td>
+<td style="text-align: center;">Non Energy and Bunkers</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">runCy(allCy)</td>
+<td style="text-align: center;">Countries for which the model is
+running</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">runCyL(allCy)</td>
+<td style="text-align: center;">Countries for which the model is running
+(used in countries loop)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">SBS(ALLSBS)</td>
+<td style="text-align: center;">Model Subsectors</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">SECtoEF(SBS, EF)</td>
+<td style="text-align: center;">Link between Model Subsectors and Energy
+FORMS</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">SERV(SBS)</td>
+<td style="text-align: center;">Services</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">TRANS1(SBS)</td>
+<td style="text-align: center;">All Transport Subsectors</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">TRANSE(DSBS)</td>
+<td style="text-align: center;">All Transport Subsectors</td>
+</tr>
+</tbody>
+</table>
+<h2 id="see-also">See Also</h2>
+<p><a href="01_Transport.htm">01_Transport</a>, <a
+href="02_Industry.htm">02_Industry</a>, <a
+href="04_PowerGeneration.htm">04_PowerGeneration</a>, <a
+href="05_Hydrogen.htm">05_Hydrogen</a>, <a href="06_CO2.htm">06_CO2</a>,
+<a href="09_Heat.htm">09_Heat</a>, <a href="core.htm">core</a></p>
+<h2 id="references">References</h2>
+<script>
+window.onscroll = function() {myFunction()};
+
+var navbar = document.getElementById("pagenav");
+var sticky = navbar.offsetTop;
+
+function myFunction() {
+  var currentScrollPos = window.pageYOffset;
+  if (window.pageYOffset >= sticky) {
+    if (prevScrollpos > currentScrollPos) {
+      document.getElementById("pagenav").style.top = "0";
+      document.getElementById("pagenav").style.position = "fixed";
+    } else {
+      document.getElementById("pagenav").style.top = "-50px";
+    }
+  } else {
+      document.getElementById("pagenav").style.position = "static";
+  }
+  prevScrollpos = currentScrollPos;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="generator" content="goxygen" />
+  <meta name="author" content="Giannis Tolios" />
+  <meta name="author" content="Eleftheria Zisarou" />
+  <meta name="author" content="Alexandros Tsimpoukis" />
+  <meta name="author" content="Fotis Sioutas" />
+  <meta name="author" content="Sonja Sechi" />
+  <meta name="author" content="Dionysis Pramangioulis" />
+  <meta name="author" content="Giorgos Plessias" />
+  <meta name="author" content="Michael Madianos" />
+  <meta name="author" content="Anastasis Giannousakis" />
+  <meta name="author" content="Panagiotis Fragkos" />
+  <meta name="author" content="Maro Baka" />
+<title>OPEN PROM –  2. Industry module</title>
+<link rel="stylesheet" href="ming/style.css">
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS_CHTML-full"></script>
+<script type="text/x-mathjax-config">
+                    MathJax.Hub.Config({
+                      CommonHTML: { linebreaks: { automatic: true } },
+                      "HTML-CSS": { linebreaks: { automatic: true } },
+                             SVG: { linebreaks: { automatic: true } }
+                    });
+</script>
+</head>
+<body>
+<div class="header">
+      <div class="headerimg"><a href="index.htm"><img id="logo" src="images/logo.png" height="100" alt="model logo" /></a></div>
+    <div class="headertext">
+      <h1 id="mainheadertitle"><a href="https://github.com/e3modelling/OPEN-PROM">OPEN PROM</a></h1>
+      <h3>0.1</h3>
+      <div class="by">created with <a href="https://github.com/pik-piam/goxygen">goxygen</a> 1.4.5</div>
+    </div>
+</div>
+
+<div class="pagenav" id="pagenav">
+    <div class="dropdown">
+   <button class="dropbtn"> 2. Industry module
+     <i class="fa fa-caret-down"></i>
+   </button>
+   <div id="mainnav" class="dropdown-content">
+   <a href='index.htm'>Overview</a>
+   <a href='core.htm'>core</a>
+   <a href='01_Transport.htm'> 1. Transport module</a>
+   <a href='02_Industry.htm'> 2. Industry module</a>
+   <a href='03_RestOfEnergy.htm'> 3. RestOfEnergy module</a>
+   <a href='04_PowerGeneration.htm'> 4. PowerGeneration module</a>
+   <a href='05_Hydrogen.htm'> 5. Hydrogen module</a>
+   <a href='06_CO2.htm'> 6. CO2 module</a>
+   <a href='08_Prices.htm'> 8. Prices module</a>
+   <a href='09_Heat.htm'> 9. Heat module</a>
+   </div>
+  </div>
+  <div class="dropdown">
+   <button class="dropbtn">Contents
+     <i class="fa fa-caret-down"></i>
+   </button>
+   <div class="dropdown-content">
+   <ul>
+   <li><a href="#id-02_Industry" id="toc-id-02_Industry">Industry module
+   (02_Industry)</a>
+   <ul>
+   <li><a href="#description" id="toc-description">Description</a></li>
+   <li><a href="#interfaces" id="toc-interfaces">Interfaces</a>
+   <ul>
+   <li><a href="#input" id="toc-input">Input</a></li>
+   <li><a href="#output" id="toc-output">Output</a></li>
+   </ul></li>
+   <li><a href="#realizations" id="toc-realizations">Realizations</a>
+   <ul>
+   <li><a href="#a-legacy" id="toc-a-legacy">(A) legacy</a></li>
+   <li><a href="#b-technology" id="toc-b-technology">(B)
+   technology</a></li>
+   </ul></li>
+   <li><a href="#definitions" id="toc-definitions">Definitions</a>
+   <ul>
+   <li><a href="#objects" id="toc-objects">Objects</a></li>
+   <li><a href="#sets" id="toc-sets">Sets</a></li>
+   </ul></li>
+   <li><a href="#see-also" id="toc-see-also">See Also</a></li>
+   <li><a href="#references" id="toc-references">References</a></li>
+   </ul></li>
+   </ul>
+   </div>
+  </div>
+</div>
+
+<h1 id="id-02_Industry">Industry module (02_Industry)</h1>
+<h2 id="description">Description</h2>
+<p>This is the Industry module.</p>
+<h2 id="interfaces">Interfaces</h2>
+<p><strong>Interface plot missing!</strong></p>
+<h3 id="input">Input</h3>
+<table>
+<caption>module inputs (A: legacy | B: technology)</caption>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 39%" />
+<col style="width: 20%" />
+<col style="width: 4%" />
+<col style="width: 4%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"> </th>
+<th style="text-align: center;">Description</th>
+<th style="text-align: center;">Unit</th>
+<th style="text-align: center;">A</th>
+<th style="text-align: center;">B</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">VmCarVal<br />
+(allCy, NAP, YTIME)</td>
+<td style="text-align: center;">Carbon prices for all countries</td>
+<td style="text-align: center;"><span class="math inline">\(US\$2015/tn
+CO2\)</span></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VmCstCO2SeqCsts<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Cost curve for CO2 sequestration
+costs</td>
+<td style="text-align: center;"><span class="math inline">\(US\$2015/tn
+of
+CO2
+sequestrated\)</span></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VmElecConsHeatPla<br />
+(allCy, DSBS, YTIME)</td>
+<td style="text-align: center;">Electricity consumed in heatpump
+plants</td>
+<td style="text-align: center;"><span
+class="math inline">\(Mtoe\)</span></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VmLft<br />
+(allCy, DSBS, TECH, YTIME)</td>
+<td style="text-align: center;">Lifetime of technologies</td>
+<td style="text-align: center;"><span
+class="math inline">\(years\)</span></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VmPriceElecInd<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Electricity index - a function of
+industry price</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VmPriceFuelAvgSub<br />
+(allCy, DSBS, YTIME)</td>
+<td style="text-align: center;">Average fuel prices per subsector</td>
+<td style="text-align: center;"><span
+class="math inline">\(k\$2015/toe\)</span></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VmPriceFuelSubsecCarVal<br />
+(allCy, SBS, EF, YTIME)</td>
+<td style="text-align: center;">Fuel prices per subsector and fuel</td>
+<td style="text-align: center;"><span
+class="math inline">\(k\$2015/toe\)</span></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VmRenValue<br />
+(YTIME)</td>
+<td style="text-align: center;">Renewable value</td>
+<td style="text-align: center;"><span
+class="math inline">\(US\$2015/KWh\)</span></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+</tbody>
+</table>
+<h3 id="output">Output</h3>
+<table>
+<caption>module outputs</caption>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 45%" />
+<col style="width: 23%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"> </th>
+<th style="text-align: center;">Description</th>
+<th style="text-align: center;">Unit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">VmConsFuel<br />
+(allCy, DSBS, EF, YTIME)</td>
+<td style="text-align: center;">Consumption of fuels in each demand
+subsector, excluding heat from heatpumps</td>
+<td style="text-align: center;"><span
+class="math inline">\(Mtoe\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VmCostElcAvgProdCHP<br />
+(allCy, CHP, YTIME)</td>
+<td style="text-align: center;">Average Electricity production cost per
+CHP plant</td>
+<td style="text-align: center;"><span
+class="math inline">\(US\$2015/KWh\)</span></td>
+</tr>
+</tbody>
+</table>
+<h2 id="realizations">Realizations</h2>
+<h3 id="a-legacy">(A) legacy</h3>
+<p>This is the legacy realization of the Industry module.</p>
+<pre><code>Equations</code></pre>
+<p>*** INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS EQUATIONS</p>
+<pre><code>Q02IndxElecIndPrices(allCy,YTIME)                          &quot;Compute Electricity index - a function of industry price - Estimate&quot;
+Q02CostElecProdCHP(allCy,DSBS,CHP,YTIME)                   &quot;Compute electricity production cost per CHP plant and demand sector&quot;
+Q02CostTech(allCy,DSBS,rCon,EF,YTIME)                      &quot;Compute technology cost&quot;
+Q02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME)                 &quot;Compute intermediate technology cost&quot;
+Q02CostTechMatFac(allCy,DSBS,rCon,EF,YTIME)                &quot;Compute the technology cost including the maturity factor per technology and subsector&quot;
+Q02SortTechVarCost(allCy,DSBS,rCon,YTIME)                  &quot;Compute Technology sorting based on variable cost&quot;
+Q02GapFinalDem(allCy,DSBS,YTIME)                           &quot;Compute the gap in final demand of industry, tertiary, non-energy uses and bunkers&quot;
+Q02ShareTechNewEquip(allCy,DSBS,EF,YTIME)                  &quot;Compute technology share in new equipment&quot;</code></pre>
+<p><strong>Interdependent Equations</strong></p>
+<pre><code>Q02ConsFuel(allCy,DSBS,EF,YTIME)                           &quot;Compute fuel consumption&quot;
+Q02ConsElecNonSubIndTert(allCy,INDDOM,YTIME)               &quot;Compute non-substituable electricity consumption in Industry and Tertiary&quot;
+Q02DemFinSubFuelSubsec(allCy,DSBS,YTIME)                   &quot;Compute total final demand (of substitutable fuels) per subsector&quot;
+Q02ConsFuelInclHP(allCy,DSBS,EF,YTIME)                     &quot;Equation for fuel consumption in Mtoe (including heat from heatpumps)&quot;
+Q02ConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)              &quot;Equation for consumption of remaining substitutble equipment&quot;
+Q02CostElcAvgProdCHP(allCy,CHP,YTIME)                      &quot;Compute Average Electricity production cost per CHP plant&quot;
+;
+Variables</code></pre>
+<p>*** INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES</p>
+<pre><code>V02IndxElecIndPrices(allCy,YTIME)                          &quot;Electricity index - a function of industry price - Estimate (1)&quot;
+V02CostElecProdCHP(allCy,DSBS,CHP,YTIME)                   &quot;Electricity production cost per CHP plant and demand sector (US$2015/KWh)&quot;
+V02CostTech(allCy,DSBS,rCon,EF,YTIME)                      &quot;Technology cost (KUS$2015/toe)&quot;
+V02CostTechIntrm(allCy,DSBS,rcon,EF,YTIME)                 &quot;Intermediate technology cost (KUS$2015/toe)&quot;
+V02CostTechMatFac(allCy,DSBS,rCon,EF,YTIME)                &quot;Technology cost including maturity factor (KUS$2015/toe)&quot;
+V02SortTechVarCost(allCy,DSBS,rCon,YTIME)                  &quot;Technology sorting based on variable cost (1)&quot;
+V02GapFinalDem(allCy,DSBS,YTIME)                           &quot;Final demand gap to be filed by new technologies (Mtoe)&quot;
+V02ShareTechNewEquip(allCy,DSBS,EF,YTIME)                  &quot;Technology share in new equipment (1)&quot;
+V02CostProdCHPDem(allCy,DSBS,CHP,YTIME)                    &quot;Variable including fuel electricity production cost per CHP plant and demand sector (US$2015/KWh)&quot;</code></pre>
+<p><strong>Interdependent Variables</strong></p>
+<pre><code>VmConsFuel(allCy,DSBS,EF,YTIME)                            &quot;Consumption of fuels in each demand subsector, excluding heat from heatpumps (Mtoe)&quot;
+VmConsElecNonSubIndTert(allCy,DSBS,YTIME)                  &quot;Consumption of non-substituable electricity in Industry and Tertiary (Mtoe)&quot;
+VmDemFinSubFuelSubsec(allCy,DSBS,YTIME)                    &quot;Total final demand (of substitutable fuels) per subsector (Mtoe)&quot;
+VmConsFuelInclHP(allCy,DSBS,EF,YTIME)                      &quot;Consumption of fuels in each demand subsector including heat from heatpumps (Mtoe)&quot;
+VmConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)               &quot;Consumption of remaining substitutable equipment (Mtoe)&quot;
+VmCostElcAvgProdCHP(allCy,CHP,YTIME)                       &quot;Average Electricity production cost per CHP plant (US$2015/KWh)&quot;
+VmCostVarAvgElecProd(allCy,CHP,YTIME)                      &quot;Average variable including fuel electricity production cost per CHP plant (US$2015/KWh)&quot;
+;</code></pre>
+<p>GENERAL INFORMATION Equation format: “typical useful energy demand
+equation” The main explanatory variables (drivers) are activity
+indicators (economic activity) and corresponding energy costs. The type
+of “demand” is computed based on its past value, the ratio of the
+current and past activity indicators (with the corresponding
+elasticity), and the ratio of lagged energy costs (with the
+corresponding elasticities). This type of equation captures both short
+term and long term reactions to energy costs. * INDUSTRY - DOMESTIC -
+NON ENERGY USES - BUNKERS VARIABLES This equation computes the
+consumption/demand of non-substitutable electricity for subsectors of
+INDUSTRY and DOMESTIC in the “typical useful energy demand equation”.
+The main explanatory variables are activity indicators of each subsector
+and electricity prices per subsector. Corresponding elasticities are
+applied for activity indicators and electricity prices.</p>
+<pre><code>Q02ConsElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    VmConsElecNonSubIndTert(allCy,INDDOM,YTIME)
+              =E=
+    [
+      VmConsElecNonSubIndTert(allCy,INDDOM,YTIME-1) * 
+      imActv(YTIME,allCy,INDDOM) ** i02ElastNonSubElec(allCy,INDDOM,&quot;a&quot;,YTIME) *
+      (VmPriceFuelSubsecCarVal(allCy,INDDOM,&quot;ELC&quot;,YTIME) / VmPriceFuelSubsecCarVal(allCy,INDDOM,&quot;ELC&quot;,YTIME-1))**i02ElastNonSubElec(allCy,INDDOM,&quot;b1&quot;,YTIME) *
+      (VmPriceFuelSubsecCarVal(allCy,INDDOM,&quot;ELC&quot;,YTIME-1) / VmPriceFuelSubsecCarVal(allCy,INDDOM,&quot;ELC&quot;,YTIME-2))**i02ElastNonSubElec(allCy,INDDOM,&quot;b2&quot;,YTIME) *
+      prod(KPDL,
+        (
+          VmPriceFuelSubsecCarVal(allCy,INDDOM,&quot;ELC&quot;,YTIME-ord(KPDL)) /
+          VmPriceFuelSubsecCarVal(allCy,INDDOM,&quot;ELC&quot;,YTIME-(ord(KPDL)+1))
+        )**(i02ElastNonSubElec(allCy,INDDOM,&quot;c&quot;,YTIME)*imFPDL(INDDOM,KPDL))
+      )      
+    ]$imActv(YTIME-1,allCy,INDDOM)+0;</code></pre>
+<p>This equation determines the consumption of the remaining
+substitutable equipment of each energy form per each demand subsector
+(excluding TRANSPORT). The “remaining” equipment is computed based on
+the past value of consumption (energy form, subsector) and the lifetime
+of the technology (energy form) for each subsector.<br />
+For the electricity energy form, the non substitutable consumption is
+subtracted. This equation expresses the “typical useful energy demand
+equation” where the main explanatory variables are activity indicators
+and fuel prices.</p>
+<pre><code>Q02ConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF) $runCy(allCy))..
+    VmConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)
+          =E=
+    [
+      (VmLft(allCy,DSBS,EF,YTIME)-1) / VmLft(allCy,DSBS,EF,YTIME) *
+      (
+        VmConsFuelInclHP(allCy,DSBS,EF,YTIME-1) -
+        VmConsElecNonSubIndTert(allCy,DSBS,YTIME-1)$(ELCEF(EF)$INDDOM(DSBS))
+      ) *
+      imActv(YTIME,allCy,DSBS) ** imElastA(allCy,DSBS,&quot;a&quot;,YTIME) *
+      (VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME) / VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-1)) ** imElastA(allCy,DSBS,&quot;b1&quot;,YTIME) *
+      (VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-1) / VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-2)) ** imElastA(allCy,DSBS,&quot;b2&quot;,YTIME) *
+      prod(KPDL,
+        (
+          VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-ord(KPDL)) /
+          VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-(ord(KPDL)+1))
+        ) ** (imElastA(allCy,DSBS,&quot;c&quot;,YTIME)*imFPDL(DSBS,KPDL))
+      )  
+    ]$(imActv(YTIME-1,allCy,DSBS));</code></pre>
+<p>This equation computes the useful energy demand in each demand
+subsector (excluding TRANSPORT). This demand is potentially “satisfied”
+by multiple energy forms/fuels (substitutable demand). The equation
+follows the “typical useful energy demand” format where the main
+explanatory variables are activity indicators and average “weighted”
+fuel prices.</p>
+<pre><code>Q02DemFinSubFuelSubsec(allCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $runCy(allCy))..
+      VmDemFinSubFuelSubsec(allCy,DSBS,YTIME)
+            =E=
+      [
+      VmDemFinSubFuelSubsec(allCy,DSBS,YTIME-1)
+      * imActv(YTIME,allCy,DSBS)**imElastA(allCy,DSBS,&quot;a&quot;,YTIME)
+      * (VmPriceFuelAvgSub(allCy,DSBS,YTIME)/VmPriceFuelAvgSub(allCy,DSBS,YTIME-1))**imElastA(allCy,DSBS,&quot;b1&quot;,YTIME)
+      * (VmPriceFuelAvgSub(allCy,DSBS,YTIME-1)/VmPriceFuelAvgSub(allCy,DSBS,YTIME-2))**imElastA(allCy,DSBS,&quot;b2&quot;,YTIME)
+      * prod(KPDL,
+              ( (VmPriceFuelAvgSub(allCy,DSBS,YTIME-ord(KPDL))/VmPriceFuelAvgSub(allCy,DSBS,YTIME-(ord(KPDL)+1)))/(imCGI(allCy,YTIME)**(1/6))
+              )**( imElastA(allCy,DSBS,&quot;c&quot;,YTIME)*imFPDL(DSBS,KPDL))
+            )  ]$imActv(YTIME-1,allCy,DSBS)+0
+;</code></pre>
+<p>This equation calculates the total consumption of electricity in
+industrial sectors. The consumption is obtained by summing up the
+electricity consumption in each industrial subsector, excluding
+substitutable electricity. This equation provides an aggregate measure
+of electricity consumption in the industrial sectors, considering only
+non-substitutable electricity.</p>
+<pre><code>$ontext
+q02ConsTotElecInd(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         vmConsTotElecInd(allCy,YTIME)
+         =E=
+         SUM(INDSE,VmConsElecNonSubIndTert(allCy,INDSE,YTIME));       
+$offtext</code></pre>
+<p>This equation calculates the total final demand for substitutable
+fuels in industrial sectors. The total demand is obtained by summing up
+the final demand for substitutable fuels across various industrial
+subsectors. This equation provides a comprehensive view of the total
+demand for substitutable fuels within the industrial sectors, aggregated
+across individual subsectors.</p>
+<pre><code>$ontext
+q02DemFinSubFuelInd(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+        vmDemFinSubFuelInd(allCy,YTIME)=E= SUM(INDSE,VmDemFinSubFuelSubsec(allCy,INDSE,YTIME));
+$offtext</code></pre>
+<p>This equation calculates the total fuel consumption in each demand
+subsector, excluding heat from heat pumps. The fuel consumption is
+measured in million tons of oil equivalent and is influenced by two main
+components: the consumption of fuels in each demand subsector, including
+heat from heat pumps, and the electricity consumed in heat pump
+plants.The equation uses the fuel consumption data for each demand
+subsector, considering both cases with and without heat pump influence.
+When heat pumps are involved, the electricity consumed in these plants
+is also taken into account. The result is the total fuel consumption in
+each demand subsector, providing a comprehensive measure of the energy
+consumption pattern. This equation offers a comprehensive view of fuel
+consumption, considering both traditional fuel sources and the
+additional electricity consumption associated with heat pump plants.</p>
+<pre><code>Q02ConsFuel(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF) $(not HEATPUMP(EF)) $runCy(allCy))..
+      VmConsFuel(allCy,DSBS,EF,YTIME)
+            =E=
+      VmConsFuelInclHP(allCy,DSBS,EF,YTIME) + 
+      VmElecConsHeatPla(allCy,DSBS,YTIME)$ELCEF(EF);</code></pre>
+<p>This equation calculates the estimated electricity index of the
+industry price for a given year. The estimated index is derived by
+considering the historical trend of the electricity index, with a focus
+on the fuel prices in the industrial subsector. The equation utilizes
+the fuel prices for electricity generation, both in the current and past
+years, and computes a weighted average based on the historical pattern.
+The estimated electricity index is influenced by the ratio of fuel
+prices in the current and previous years, with a power of 0.3 applied to
+each ratio. This weighting factor introduces a gradual adjustment to
+reflect the historical changes in fuel prices, providing a more dynamic
+estimation of the electricity index. This equation provides a method to
+estimate the electricity index based on historical fuel price trends,
+allowing for a more flexible and responsive representation of industry
+price dynamics.</p>
+<pre><code>Q02IndxElecIndPrices(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+      V02IndxElecIndPrices(allCy,YTIME)
+              =E=
+      VmPriceElecInd(allCy,YTIME-1) * 
+      (VmPriceFuelSubsecCarVal(allCy,&quot;OI&quot;,&quot;ELC&quot;,YTIME-1)/VmPriceFuelAvgSub(allCy,&quot;OI&quot;,YTIME-1)) ** (0.1) *
+      (VmPriceFuelSubsecCarVal(allCy,&quot;OI&quot;,&quot;ELC&quot;,YTIME-2)/VmPriceFuelAvgSub(allCy,&quot;OI&quot;,YTIME-2)) ** (0.05) *
+      (VmPriceFuelSubsecCarVal(allCy,&quot;OI&quot;,&quot;ELC&quot;,YTIME-3)/VmPriceFuelAvgSub(allCy,&quot;OI&quot;,YTIME-3)) ** (0.05)
+      ;</code></pre>
+<p>The equation computes the electricity production cost per Combined
+Heat and Power plant for a specific demand sector within a given
+subsector. The cost is determined based on various factors, including
+the discount rate, technical lifetime of CHP plants, capital cost
+(EUR/kW), fixed O&amp;M cost (EUR/kW), availability rate, variable
+cost(EUR/MWh), and fuel-related costs. The equation provides a
+comprehensive assessment of the overall expenses associated with
+electricity production from CHP plants, considering both the fixed and
+variable components, as well as factors such as carbon prices and CO2
+emission factors. The resulting variable represents the electricity
+production cost per CHP plant and demand sector, expressed in Euro per
+kilowatt-hour (Euro/KWh).</p>
+<pre><code>Q02CostElecProdCHP(allCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS) $runCy(allCy))..
+        V02CostElecProdCHP(allCy,DSBS,CHP,YTIME)
+              =E=
+        ( ( imDisc(allCy,&quot;PG&quot;,YTIME) * exp(imDisc(allCy,&quot;PG&quot;,YTIME)*i02LifChpPla(allCy,DSBS,CHP))
+            / (exp(imDisc(allCy,&quot;PG&quot;,YTIME)*i02LifChpPla(allCy,DSBS,CHP)) -1))
+          * i02InvCostChp(allCy,DSBS,CHP,YTIME) * imCGI(allCy,YTIME)  + i02FixOMCostPerChp(allCy,DSBS,CHP,YTIME)
+        )/(i02AvailRateChp(allCy,DSBS,CHP)*(smGwToTwhPerYear(YTIME)))/1000
+        + i02VarCostChp(allCy,DSBS,CHP,YTIME)/1000
+        + sum(PGEF$CHPtoEF(CHP,PGEF), (VmPriceFuelSubsecCarVal(allCy,&quot;PG&quot;,PGEF,YTIME)+0.001*imCo2EmiFac(allCy,&quot;PG&quot;,PGEF,YTIME)*
+              (sum(NAP$NAPtoALLSBS(NAP,&quot;PG&quot;),VmCarVal(allCy,NAP,YTIME))))
+              * smTWhToMtoe /  (i02BoiEffChp(allCy,CHP,YTIME) * (VmPriceElecInd(allCy,YTIME)) + 1e-4));        </code></pre>
+<p>The equation calculates the technology cost for each technology,
+energy form, and consumer size group within the specified subsector.
+This cost estimation is based on an intermediate technology cost and the
+elasticity parameter associated with the given subsector. The
+intermediate technology cost is raised to the power of the elasticity
+parameter to determine the final technology cost. The equation provides
+a comprehensive assessment of the overall expenses associated with
+different technologies in the given subsector and consumer size
+group.</p>
+<pre><code>Q02CostTech(allCy,DSBS,rCon,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS))$(not DSBS(&quot;DAC&quot;)) $(ord(rCon) le imNcon(DSBS)+1) $SECTTECH(DSBS,EF) $runCy(allCy))..
+        V02CostTech(allCy,DSBS,rCon,EF,YTIME) 
+              =E= 
+        V02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME)**(-i02ElaSub(allCy,DSBS)) ;   </code></pre>
+<p>The equation computes the intermediate technology cost, including the
+lifetime factor, for each technology, energy form, and consumer size
+group within the specified subsector. This cost estimation plays a
+crucial role in evaluating the overall expenses associated with adopting
+and implementing various technologies in the given subsector and
+consumer size group. The equation encompasses diverse parameters, such
+as discount rates, lifetime of technologies, capital costs, fixed
+operation and maintenance costs, fuel prices, annual consumption rates,
+the number of consumers, the capital goods index, and useful energy
+conversion factors.</p>
+<pre><code>Q02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le imNcon(DSBS)+1) $SECTTECH(DSBS,EF) $runCy(allCy))..
+    V02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME) 
+        =E=
+    ( (( (imDisc(allCy,DSBS,YTIME)$(not CHP(EF)) + imDisc(allCy,&quot;PG&quot;,YTIME)$CHP(EF)) !! in case of chp plants we use the discount rate of power generation sector
+          * exp((imDisc(allCy,DSBS,YTIME)$(not CHP(EF)) + imDisc(allCy,&quot;PG&quot;,YTIME)$CHP(EF))*VmLft(allCy,DSBS,EF,YTIME))
+        )
+        / (exp((imDisc(allCy,DSBS,YTIME)$(not CHP(EF)) + imDisc(allCy,&quot;PG&quot;,YTIME)$CHP(EF))*VmLft(allCy,DSBS,EF,YTIME))- 1)
+      ) * imCapCostTech(allCy,DSBS,EF,YTIME) * imCGI(allCy,YTIME)
+      +
+      imFixOMCostTech(allCy,DSBS,EF,YTIME)/1000
+      +
+      VmPriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)
+      * imAnnCons(allCy,DSBS,&quot;smallest&quot;) * (imAnnCons(allCy,DSBS,&quot;largest&quot;)/imAnnCons(allCy,DSBS,&quot;smallest&quot;))**((ord(rCon)-1)/imNcon(DSBS))
+    )$INDDOM(DSBS)
+    +
+    ( (( imDisc(allCy,DSBS,YTIME)
+          * exp(imDisc(allCy,DSBS,YTIME)*VmLft(allCy,DSBS,EF,YTIME))
+        )
+        / (exp(imDisc(allCy,DSBS,YTIME)*VmLft(allCy,DSBS,EF,YTIME))- 1)
+      ) * imCapCostTech(allCy,DSBS,EF,YTIME) * imCGI(allCy,YTIME)
+      +
+      imFixOMCostTech(allCy,DSBS,EF,YTIME)/1000
+      +
+      (
+        (VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME)+imVarCostTech(allCy,DSBS,EF,YTIME)/1000)/imUsfEneConvSubTech(allCy,DSBS,EF,YTIME)
+      )
+      * imAnnCons(allCy,DSBS,&quot;smallest&quot;) * (imAnnCons(allCy,DSBS,&quot;largest&quot;)/imAnnCons(allCy,DSBS,&quot;smallest&quot;))**((ord(rCon)-1)/imNcon(DSBS))
+    )$NENSE(DSBS);  </code></pre>
+<p>This equation calculates the technology cost, including the maturity
+factor , for each energy form and technology within the specified
+subsector and consumer size group . The cost is determined by
+multiplying the maturity factor with the technology cost based on the
+given parameters.</p>
+<pre><code>Q02CostTechMatFac(allCy,DSBS,rCon,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le imNcon(DSBS)+1) $SECTTECH(DSBS,EF) $runCy(allCy))..
+        V02CostTechMatFac(allCy,DSBS,rCon,EF,YTIME) 
+            =E=
+        imMatrFactor(allCy,DSBS,EF,YTIME) * V02CostTech(allCy,DSBS,rCon,EF,YTIME) ;</code></pre>
+<p>This equation calculates the technology sorting based on variable
+cost . It is determined by summing the technology cost, including the
+maturity factor , for each energy form and technology within the
+specified subsector and consumer size group. The sorting is conducted
+based on variable cost considerations.</p>
+<pre><code>Q02SortTechVarCost(allCy,DSBS,rCon,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $(ord(rCon) le imNcon(DSBS)+1) $runCy(allCy))..
+        V02SortTechVarCost(allCy,DSBS,rCon,YTIME)
+            =E=
+        sum((EF)$(SECTTECH(DSBS,EF) ),V02CostTechMatFac(allCy,DSBS,rCon,EF,YTIME));</code></pre>
+<p>This equation calculates the gap in final demand for industry,
+tertiary, non-energy uses, and bunkers. It is determined by subtracting
+the total final demand per subsector from the consumption of remaining
+substitutable equipment. The square root term is included to ensure a
+non-negative result.</p>
+<pre><code>Q02GapFinalDem(allCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $runCy(allCy))..
+         V02GapFinalDem(allCy,DSBS,YTIME)
+                =E=
+         (
+          VmDemFinSubFuelSubsec(allCy,DSBS,YTIME) - 
+          sum(EF$SECTTECH(DSBS,EF), VmConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)) +
+          SQRT( SQR(VmDemFinSubFuelSubsec(allCy,DSBS,YTIME) - sum(EF$SECTTECH(DSBS,EF), VmConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME))))
+         ) /2
+         + 1e-8;</code></pre>
+<p>This equation calculates the technology share in new equipment based
+on factors such as maturity factor, cumulative distribution function of
+consumer size groups, number of consumers, technology cost, distribution
+function of consumer size groups, and technology sorting.</p>
+<pre><code>Q02ShareTechNewEquip(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $SECTTECH(DSBS,EF) $(not TRANSE(DSBS))$(not DSBS(&quot;DAC&quot;)) $runCy(allCy))..
+         V02ShareTechNewEquip(allCy,DSBS,EF,YTIME) =E=
+         imMatrFactor(allCy,DSBS,EF,YTIME) / imCumDistrFuncConsSize(allCy,DSBS) *
+         sum(rCon$(ord(rCon) le imNcon(DSBS)+1),
+                  V02CostTech(allCy,DSBS,rCon,EF,YTIME)
+                  * imDisFunConSize(allCy,DSBS,rCon)/V02SortTechVarCost(allCy,DSBS,rCon,YTIME));</code></pre>
+<p>This equation calculates the consumption of fuels in each demand
+subsector, including heat from heat pumps . It considers the consumption
+of remaining substitutable equipment, the technology share in new
+equipment, and the final demand gap to be filled by new technologies.
+Additionally, non-substitutable electricity consumption in Industry and
+Tertiary sectors is included.</p>
+<pre><code>Q02ConsFuelInclHP(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $SECTTECH(DSBS,EF) $runCy(allCy))..
+         VmConsFuelInclHP(allCy,DSBS,EF,YTIME)
+                 =E=
+         VmConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME) +
+         (V02ShareTechNewEquip(allCy,DSBS,EF,YTIME) * V02GapFinalDem(allCy,DSBS,YTIME)) +
+         (VmConsElecNonSubIndTert(allCy,DSBS,YTIME))$(INDDOM(DSBS) and ELCEF(EF));
+$ontext</code></pre>
+<p>This equation calculates the variable, including fuel electricity
+production cost per CHP plant and demand sector, taking into account the
+variable cost (other than fuel) per CHP type and the summation of
+fuel-related costs for each energy form . The calculation involves fuel
+prices, CO2 emission factors, boiler efficiency, electricity index, and
+carbon prices, adjusted by various factors. The equation uses these
+terms to calculate the variable, including fuel electricity production
+cost per CHP plant and demand sector. The result is expressed in Euro
+per kilowatt-hour (Euro/KWh).</p>
+<pre><code>Q02CostProdCHPDem(allCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS) $runCy(allCy))..
+         V02CostProdCHPDem(allCy,DSBS,CHP,YTIME)
+                 =E=
+         i02VarCostChp(allCy,DSBS,CHP,YTIME)/1000
+                    + sum(PGEF$CHPtoEF(CHP,PGEF), (VmPriceFuelSubsecCarVal(allCy,&quot;PG&quot;,PGEF,YTIME)+1e-3*imCo2EmiFac(allCy,&quot;PG&quot;,PGEF,YTIME)*
+                         (sum(NAP$NAPtoALLSBS(NAP,&quot;PG&quot;),VmCarVal(allCy,NAP,YTIME))))
+                         *smTWhToMtoe/(i02BoiEffChp(allCy,CHP,YTIME)*VmPriceElecInd(allCy,YTIME)));
+$offtext</code></pre>
+<p>The equation calculates the average electricity production cost per
+Combined Heat and Power plant . It involves a summation over demand
+subsectors . The average electricity production cost is determined by
+considering the electricity production cost per CHP plant for each
+demand subsector. The result is expressed in Euro per kilowatt-hour
+(Euro/KWh).</p>
+<pre><code>Q02CostElcAvgProdCHP(allCy,CHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         VmCostElcAvgProdCHP(allCy,CHP,YTIME)
+         =E=
+         (sum(INDDOM, VmConsFuel(allCy,INDDOM,CHP,YTIME-1)/SUM(INDDOM2,VmConsFuel(allCy,INDDOM2,CHP,YTIME-1))*V02CostElecProdCHP(allCy,INDDOM,CHP,YTIME)))
+         $SUM(INDDOM2,VmConsFuel.L(allCy,INDDOM2,CHP,YTIME-1))+0$(NOT SUM(INDDOM2,VmConsFuel.L(allCy,INDDOM2,CHP,YTIME-1)));
+$ontext</code></pre>
+<p>The equation computes the average variable cost, including fuel and
+electricity production cost, per Combined Heat and Power plant. The
+equation involves a summation over demand subsectors , where the
+variable cost per CHP plant is calculated based on fuel consumption and
+the variable cost of electricity production . The resulting average
+variable cost is expressed in Euro per kilowatt-hour (Euro/KWh). The
+conditional statement ensures that the denominator in the calculation is
+not zero, avoiding division by zero issues.</p>
+<pre><code>Q02CostVarAvgElecProd(allCy,CHP,YTIME)$(TIME(YTIME) $runCy(allCy)) ..
+         VmCostVarAvgElecProd(allCy,CHP,YTIME)
+         =E=
+         (sum(INDDOM, VmConsFuel(allCy,INDDOM,CHP,YTIME-1)/SUM(INDDOM2,VmConsFuel(allCy,INDDOM2,CHP,YTIME-1))
+         *V02CostProdCHPDem(allCy,INDDOM,CHP,YTIME)))
+         $SUM(INDDOM2,VmConsFuel.L(allCy,INDDOM2,CHP,YTIME-1))+0$(NOT SUM(INDDOM2,VmConsFuel.L(allCy,INDDOM2,CHP,YTIME-1)));
+$offtext</code></pre>
+<pre><code>table i02ElastNonSubElecData(SBS,ETYPES,YTIME)             &quot;Elasticities of Non Substitutable Electricity (1)&quot;
+$ondelim
+$include &quot;./iElastNonSubElecData.csv&quot;
+$offdelim
+;
+table i02ElaSub(allCy,DSBS)                                &quot;Elasticities by subsector for all countries (1)&quot; ;
+Parameters
+i02ExogDemOfBiomass(allCy,SBS,YTIME)                       &quot;Demand of tranditional biomass defined exogenously ()&quot;
+i02LifChpPla(allCy,DSBS,CHP)                               &quot;Technical Lifetime for CHP plants (years)&quot;
+$IF NOT %Calibration% == Calibration i02ElastNonSubElec(allCy,SBS,ETYPES,YTIME)                   &quot;Elasticities of Non Substitutable Electricity (1)&quot;
+i02InvCostChp(allCy,DSBS,CHP,YTIME)                        &quot;Capital Cost per CHP plant type (US$2015/KW)&quot;
+i02FixOMCostPerChp(allCy,DSBS,CHP,YTIME)                   &quot;Fixed O&amp;M cost per CHP plant type (US$2015/KW)&quot;
+i02AvailRateChp(allCy,DSBS,CHP)                            &quot;Availability rate of CHP Plants ()&quot;
+i02VarCostChp(allCy,DSBS,CHP,YTIME)                        &quot;Variable (other than fuel) cost per CHP Type (Gross US$2015/KW)&quot;
+i02BoiEffChp(allCy,CHP,YTIME)                              &quot;Boiler efficiency (typical) used in adjusting CHP efficiency ()&quot;
+;
+imTotFinEneDemSubBaseYr(runCy,TRANSE,YTIME)  = sum(EF$(SECTTECH(TRANSE,EF) $(not plugin(EF))), imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME));
+imTotFinEneDemSubBaseYr(runCy,INDSE,YTIME)   = SUM(EF$(SECTTECH(INDSE,EF)),imFuelConsPerFueSub(runCy,INDSE,EF,YTIME));
+imTotFinEneDemSubBaseYr(runCy,DOMSE,YTIME)   = SUM(EF$(SECTTECH(DOMSE,EF)),imFuelConsPerFueSub(runCy,DOMSE,EF,YTIME));
+imTotFinEneDemSubBaseYr(runCy,NENSE,YTIME)   = SUM(EF$(SECTTECH(NENSE,EF)),imFuelConsPerFueSub(runCy,NENSE,EF,YTIME));
+i02ExogDemOfBiomass(runCy,DOMSE,YTIME) = 0;
+i02LifChpPla(runCy,DSBS,CHP) = imDataChpPowGen(CHP,&quot;LFT&quot;,&quot;2010&quot;);
+$IFTHEN.calib %Calibration% == Calibration
+variable i02ElastNonSubElec(allCy,SBS,ETYPES,YTIME)        &quot;Elasticities of Non Substitutable Electricity (1)&quot;;
+i02ElastNonSubElec.L(runCy,SBS,ETYPES,YTIME) = i02ElastNonSubElecData(SBS,ETYPES,YTIME);
+i02ElastNonSubElec.LO(runCy,SBS,&quot;a&quot;,YTIME)   = 0.001;
+i02ElastNonSubElec.UP(runCy,SBS,&quot;a&quot;,YTIME)   = 10;
+i02ElastNonSubElec.LO(runCy,SBS,&quot;b1&quot;,YTIME)  = -10;
+i02ElastNonSubElec.UP(runCy,SBS,&quot;b1&quot;,YTIME)  = -0.001;
+i02ElastNonSubElec.LO(runCy,SBS,&quot;b2&quot;,YTIME)  = -10;
+i02ElastNonSubElec.UP(runCy,SBS,&quot;b2&quot;,YTIME)  = -0.001;
+i02ElastNonSubElec.LO(runCy,SBS,&quot;c&quot;,YTIME)   = -10;
+i02ElastNonSubElec.UP(runCy,SBS,&quot;c&quot;,YTIME)   = -0.001;
+$ELSE.calib
+i02ElastNonSubElec(runCy,SBS,ETYPES,YTIME) = i02ElastNonSubElecData(SBS,ETYPES,YTIME);
+$ENDIF.calib
+i02InvCostChp(runCy,DSBS,CHP,YTIME)      = imDataChpPowGen(CHP,&quot;IC&quot;,YTIME);
+i02FixOMCostPerChp(runCy,DSBS,CHP,YTIME) = imDataChpPowGen(CHP,&quot;FC&quot;,YTIME);
+i02AvailRateChp(runCy,DSBS,CHP)          = imDataChpPowGen(CHP,&quot;AVAIL&quot;,&quot;2010&quot;);
+i02VarCostChp(runCy,DSBS,CHP,YTIME)      = imDataChpPowGen(CHP,&quot;VOM&quot;,YTIME);
+i02BoiEffChp(runCy,CHP,YTIME)            = imDataChpPowGen(CHP,&quot;BOILEFF&quot;,YTIME);
+i02ElaSub(runCy,DSBS) = imElaSubData(DSBS);</code></pre>
+<p><em>VARIABLE INITIALISATION</em></p>
+<pre><code>V02CostTechIntrm.L(runCy,DSBS,rcon,EF,YTIME) = 0.1;
+V02SortTechVarCost.L(runCy,DSBS,rCon,YTIME) = 1e-8;
+V02ShareTechNewEquip.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF)$(not An(YTIME))) = 0;
+VmConsFuel.L(runCy,DSBS,EF,YTIME) = 1e-8;
+VmConsFuel.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $(not HEATPUMP(EF)) $(not TRANSE(DSBS)) $(not An(YTIME))) = imFuelConsPerFueSub(runCy,DSBS,EF,YTIME);
+VmConsElecNonSubIndTert.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = imFuelConsPerFueSub(runCy,INDDOM,&quot;ELC&quot;,YTIME) * imShrNonSubElecInTotElecDem(runCy,INDDOM);
+VmDemFinSubFuelSubsec.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = max(imTotFinEneDemSubBaseYr(runCy,INDDOM,YTIME) - VmConsElecNonSubIndTert.L(runCy,INDDOM,YTIME),1e-5);
+VmDemFinSubFuelSubsec.FX(runCy,NENSE,YTIME)$(not An(YTIME)) = max(imTotFinEneDemSubBaseYr(runCy,NENSE,YTIME),1e-5);
+VmDemFinSubFuelSubsec.FX(runCy,&quot;HOU&quot;,YTIME)$(not An(YTIME)) = max(imTotFinEneDemSubBaseYr(runCy,&quot;HOU&quot;,YTIME) - VmConsElecNonSubIndTert.L(runCy,&quot;HOU&quot;,YTIME)-i02ExogDemOfBiomass(runCy,&quot;HOU&quot;,YTIME),1e-5);
+VmConsFuelInclHP.LO(runCy,DSBS,EF,YTIME) = 0;
+VmConsFuelInclHP.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $(not TRANSE(DSBS)) $(not An(YTIME))) =
+(imFuelConsPerFueSub(runCy,DSBS,EF,YTIME))$((not ELCEF(EF)) $(not HEATPUMP(EF)))
++(VmElecConsHeatPla.L(runCy,DSBS,YTIME)*imUsfEneConvSubTech(runCy,DSBS,&quot;HEATPUMP&quot;,YTIME))$HEATPUMP(EF)+
+(imFuelConsPerFueSub(runCy,DSBS,EF,YTIME)-VmElecConsHeatPla.L(runCy,DSBS,YTIME))$ELCEF(EF)
++ 0.1$(H2EF(EF) or sameas(&quot;STE1AH2F&quot;,EF));
+VmConsRemSubEquipSubSec.FX(runCy,DSBS,EF,YTIME)$(SECTTECH(DSBS,EF) $(not An(ytime))) =
+(VmConsFuelInclHP.L(runCy ,DSBS,EF,YTIME) - (VmConsElecNonSubIndTert.L(runCy,DSBS,YTIME)$(ELCEF(EF) $INDDOM(DSBS)) + 0$(not (ELCEF(EF) $INDDOM(DSBS)))));
+V02GapFinalDem.scale(runCy,DSBS,YTIME) = 1e-8;
+Q02GapFinalDem.scale(runCy,DSBS,YTIME) = V02GapFinalDem.scale(runCy,DSBS,YTIME);</code></pre>
+<blockquote>
+<p><strong>Limitations</strong> There are no known limitations.</p>
+</blockquote>
+<h3 id="b-technology">(B) technology</h3>
+<p>This is the legacy realization of the Industry module.</p>
+<pre><code>Equations</code></pre>
+<p>*** INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS EQUATIONS</p>
+<pre><code>Q02DemSubUsefulSubsec(allCy,DSBS,YTIME)                    &quot;Compute Demand for useful substitutable energy demand in each subsector&quot;
+Q02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)           &quot;Compute Remaining Equipment Capacity per Technology in each subsector (substitutable)&quot;
+Q02DemUsefulSubsecRemTech(allCy,DSBS,YTIME)                &quot;Compute Useful energy demand (substitutable) covered by remaining equipment&quot;
+Q02GapUsefulDemSubsec(allCy,DSBS,YTIME)                    &quot;Compute gap in useful energy demand per subsector&quot;
+Q02CapCostTech(allCy,DSBS,ITECH,YTIME)                     &quot;Compute capital cost of each technology per subsector (final)&quot;
+Q02VarCostTech(allCy,DSBS,ITECH,YTIME)                     &quot;Compute variable cost of each technology per subsector (final)&quot;
+Q02CostTech(allCy,DSBS,ITECH,YTIME)                        &quot;Compute total cost of each technology per subsector (useful)&quot;
+Q02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME)         &quot;Compute share of each technology in gap of useful energy&quot;
+Q02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)              &quot;Compute equipment capacity of each technology in each subsector&quot;
+Q02UsefulElecNonSubIndTert(allCy,DSBS,YTIME)               &quot;Compute non-substitutable useful electricity&quot;
+Q02FinalElecNonSubIndTert(allCy,DSBS,YTIME)                &quot;Compute final energy of non-substitutable electricity&quot;
+Q02IndxElecIndPrices(allCy,YTIME)                          &quot;Compute Electricity index - a function of industry price - Estimate&quot;
+Q02IndAvrEffFinalUseful(allCy,DSBS,YTIME)                  &quot;Average Efficiency&quot; 
+Q02PremScrpIndu(allCy,DSBS,ITECH,YTIME)                    &quot;premature scrapping&quot;
+Q02RatioRem(allCy,DSBS,ITECH,YTIME)</code></pre>
+<p><strong>Interdependent Equations</strong></p>
+<pre><code>Q02ConsFuel(allCy,DSBS,EF,YTIME)                           &quot;Compute fuel consumption of fuels in each subsector&quot;
+;
+Variables</code></pre>
+<p>*** INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES</p>
+<pre><code>V02DemSubUsefulSubsec(allCy,DSBS,YTIME)                    &quot;Demand for useful substitutable energy demand in each subsector&quot;
+V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)           &quot;Remaining Equipment Capacity per Technology in each subsector (substitutable)&quot;
+V02DemUsefulSubsecRemTech(allCy,DSBS,YTIME)                &quot;Useful energy demand (substitutable) covered by remaining equipment&quot;
+V02GapUsefulDemSubsec(allCy,DSBS,YTIME)                    &quot;gap in useful energy demand per subsector&quot;
+V02CapCostTech(allCy,DSBS,ITECH,YTIME)                     &quot;capital cost of each technology per subsector (final)&quot;
+V02VarCostTech(allCy,DSBS,ITECH,YTIME)                    &quot;variable cost of each technology per subsector (final)&quot;
+V02CostTech(allCy,DSBS,ITECH,YTIME)                        &quot;total cost of each technology per subsector (useful)&quot;
+V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME)         &quot;share of each technology in gap of useful energy&quot;
+V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)              &quot;equipment capacity of each technology in each subsector&quot;
+V02UsefulElecNonSubIndTert(allCy,DSBS,YTIME)               &quot;non-substitutable useful electricity&quot;
+V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)                &quot;final energy of non-substitutable electricity&quot;
+V02IndxElecIndPrices(allCy,YTIME)                          &quot;Electricity index - a function of industry price - Estimate&quot;
+V02IndAvrEffFinalUseful(allCy,DSBS,YTIME)                  &quot;Average Efficiency&quot; 
+V02PremScrpIndu(allCy,DSBS,ITECH,YTIME)                    &quot;premature scrapping&quot;
+V02RatioRem(allCy,DSBS,ITECH,YTIME)</code></pre>
+<p><strong>Interdependent Variables</strong></p>
+<pre><code>VmConsFuel(allCy,DSBS,EF,YTIME)                            &quot;fuel consumption of fuels in each subsector&quot;
+;</code></pre>
+<p>GENERAL INFORMATION Industrial and domestic energy demand is divided
+(TO DO) Equation format: “typical useful energy demand equation” The
+main explanatory variables (drivers) are activity indicators (economic
+activity) and corresponding energy costs. The type of “demand” is
+computed based on its past value, the ratio of the current and past
+activity indicators (with the corresponding elasticity), and the ratio
+of lagged energy costs (with the corresponding elasticities). This type
+of equation captures both short term and long term reactions to energy
+costs. * INDUSTRY - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES This
+equation computes the useful energy demand in each demand subsector
+(excluding TRANSPORT). This demand is potentially “satisfied” by
+multiple energy forms/fuels (substitutable demand). The equation follows
+the “typical useful energy demand” format where the main explanatory
+variables are activity indicators and average “weighted” technology
+costs. OLD EQUATION: Q02DemFinSubFuelSubsec(allCy,DSBS,YTIME) –&gt; NEW
+EQUATION:Q02DemUsefulSubsec OLD VARIABLE:
+VmDemFinSubFuelSubsec(allCy,DSBS,YTIME) –&gt; NEW
+VARIABLE:VmDemUsefulSubsec Note: To check which cost should be used…
+(this VmPriceFuelAvgSub or another cost (weighted average per
+technology))</p>
+<pre><code>Q02DemSubUsefulSubsec(allCy,DSBS,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not sameas(DSBS,&quot;DAC&quot;))$runCy(allCy))..
+    V02DemSubUsefulSubsec(allCy,DSBS,YTIME) 
+        =E=
+    [
+      V02DemSubUsefulSubsec(allCy,DSBS,YTIME-1) *
+      imActv(YTIME,allCy,DSBS) ** imElastA(allCy,DSBS,&quot;a&quot;,YTIME) *
+      (VmPriceFuelAvgSub(allCy,DSBS,YTIME)/VmPriceFuelAvgSub(allCy,DSBS,YTIME-1) ) ** imElastA(allCy,DSBS,&quot;b1&quot;,YTIME) *
+      (VmPriceFuelAvgSub(allCy,DSBS,YTIME-1)/VmPriceFuelAvgSub(allCy,DSBS,YTIME-2) ) ** imElastA(allCy,DSBS,&quot;b2&quot;,YTIME) *
+      prod(KPDL,
+        ((VmPriceFuelAvgSub(allCy,DSBS,YTIME-ord(KPDL))/VmPriceFuelAvgSub(allCy,DSBS,YTIME-(ord(KPDL)+1)))/(imCGI(allCy,YTIME)**(1/6)))**( imElastA(allCy,DSBS,&quot;c&quot;,YTIME)*imFPDL(DSBS,KPDL))
+      )
+    ]$imActv(YTIME-1,allCy,DSBS)
+;</code></pre>
+<p>NEW EQUATION’ This equation computes the remaining equipment capacity
+of each technology in each subsector in the beginning of the year YTIME
+based on the available capacity of the previous year</p>
+<pre><code>Q02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and not TRANSE(DSBS) and not sameas(DSBS,&quot;DAC&quot;))$runCy(allCy))..
+    V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) 
+        =E=
+    V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME-1) * 
+    V02RatioRem(allCy,DSBS,ITECH,YTIME);
+Q02RatioRem(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and not TRANSE(DSBS) and not sameas(DSBS,&quot;DAC&quot;))$runCy(allCy))..
+V02RatioRem(allCy,DSBS,ITECH,YTIME) 
+        =E=
+    ( (1 - 1/VmLft(allCy,DSBS,ITECH,YTIME))* (1 - V02PremScrpIndu(allCy,DSBS,ITECH,YTIME)));
+Q02PremScrpIndu(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and not TRANSE(DSBS) and not sameas(DSBS,&quot;DAC&quot;))$runCy(allCy))..
+    V02PremScrpIndu(allCy,DSBS,ITECH,YTIME)
+        =E=
+    1 - (V02VarCostTech(allCy,DSBS,ITECH,YTIME-1) * i02util(allCy,DSBS,ITECH,YTIME-1)) ** (-2) /
+    (
+      (V02VarCostTech(allCy,DSBS,ITECH,YTIME-1) * i02util(allCy,DSBS,ITECH,YTIME-1)) ** (-2) +
+      (
+        i02ScaleEndogScrap(DSBS) *
+        sum(ITECH2$(not sameas(ITECH2,ITECH) and SECTTECH(DSBS,ITECH2)),
+          V02CostTech(allCy,DSBS,ITECH2,YTIME-1) + V02VarCostTech(allCy,DSBS,ITECH2,YTIME-1)
+        )
+      )**(-2)
+    );</code></pre>
+<p>NEW EQUATION’ - kind of –&gt; substitutes
+Q02ConsRemSubEquipSubSec</p>
+<pre><code>Q02DemUsefulSubsecRemTech(allCy,DSBS,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not sameas(DSBS,&quot;DAC&quot;))$runCy(allCy))..
+    V02DemUsefulSubsecRemTech(allCy,DSBS,YTIME) 
+        =E=
+    SUM(ITECH$SECTTECH(DSBS,ITECH),
+      V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) *
+      imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME) *
+      i02util(allCy,DSBS,ITECH,YTIME)
+    );</code></pre>
+<p>This equation calculates the gap in useful energy demand for
+industry, tertiary, non-energy uses, and bunkers. It is determined by
+subtracting the useful energy demand that can be satisfied by existing
+equipment from the total useful energy demand per subsector. The square
+root term is included to ensure a non-negative result - if the result of
+the the subtraction is negative, the gap will take a zero value. OLD
+EQUATION: Q02GapFinalDem(allCy,DSBS,YTIME) –&gt; NEW
+EQUATION:Q02GapUsefulDemSubsec(allCy,DSBS,YTIME) OLD VARIABLE:
+V02GapFinalDem(allCy,DSBS,YTIME) –&gt; NEW
+VARIABLE:V02GapUsefulDemSubsec(allCy,DSBS,YTIME)</p>
+<pre><code>Q02GapUsefulDemSubsec(allCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not sameas(DSBS,&quot;DAC&quot;)) $runCy(allCy))..
+    V02GapUsefulDemSubsec(allCy,DSBS,YTIME) 
+        =E=
+    (
+      V02DemSubUsefulSubsec(allCy,DSBS,YTIME) -
+      V02DemUsefulSubsecRemTech(allCy,DSBS,YTIME) +
+      SQRT(SQR(V02DemSubUsefulSubsec(allCy,DSBS,YTIME) - V02DemUsefulSubsecRemTech(allCy,DSBS,YTIME)))
+    )/2 + 1e-6
+;</code></pre>
+<p>The equation computes the capital cost and fixed O&amp;M cost of each
+technology in each subsector OLD EQUATION:
+Q02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME) –&gt; NEW
+EQUATION:Q02CapCostTech(allCy,DSBS,rCon,EF,YTIME) OLD VARIABLE:
+V02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME) –&gt; NEW
+VARIABLE:V02CapCostTech(allCy,DSBS,rCon,EF,YTIME) Add parameter
+sUnitToKUnit = 1000 Check ITECH and CHPs</p>
+<pre><code>Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not sameas(DSBS,&quot;DAC&quot;))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
+    V02CapCostTech(allCy,DSBS,ITECH,YTIME) 
+        =E=
+    ((
+      (
+        imDisc(allCy,DSBS,YTIME) * !! in case of chp plants we use the discount rate of power generation sector
+        exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME))
+      ) /
+      (exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME)) - 1)
+    ) *
+    imCapCostTech(allCy,DSBS,ITECH,YTIME) * imCGI(allCy,YTIME) +
+    imFixOMCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit)
+    / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME); !! divide with utilization rate or with efficiency as well???? depends on the CapCostTech parameter</code></pre>
+<p>The equation computes the variable cost (variable + fuel) of each
+technology in each subsector - to check about consumer sizes OLD
+EQUATION: Q02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME) –&gt; NEW
+EQUATION:Q02VarCostTech(allCy,DSBS,rCon,ITECH,YTIME) OLD VARIABLE:
+V02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME) –&gt; NEW
+VARIABLE:V02VarCostTech(allCy,DSBS,rCon,ITECH,YTIME) NEW SET TECHEF</p>
+<pre><code>Q02VarCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not sameas(DSBS,&quot;DAC&quot;))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
+  V02VarCostTech(allCy,DSBS,ITECH,YTIME) 
+      =E=
+  (
+    sum(EF$ITECHtoEF(ITECH,EF), 
+      i02Share(allCy,DSBS,ITECH,EF,YTIME) *
+      VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME) +
+      imCO2CaptRateIndustry(allCy,ITECH,YTIME) * VmCstCO2SeqCsts(allCy,YTIME-1) * 1e-3 * imCo2EmiFac(allCy,DSBS,EF,YTIME-1)  +
+      (1-imCO2CaptRateIndustry(allCy,ITECH,YTIME)) * 1e-3 * imCo2EmiFac(allCy,DSBS,EF,YTIME-1)  *
+      (sum(NAP$NAPtoALLSBS(NAP,&quot;PG&quot;), VmCarVal(allCy,NAP,YTIME-1))) +
+      (VmRenValue(YTIME)/1000)$(not RENEF(ITECH) and not NENSE(DSBS)) !! needs change of units
+    ) +
+    imVarCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit
+  ) / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME);
+Q02CostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
+    V02CostTech(allCy,DSBS,ITECH,YTIME) 
+        =E=
+    V02CapCostTech(allCy,DSBS,ITECH,YTIME) +
+    V02VarCostTech(allCy,DSBS,ITECH,YTIME);</code></pre>
+<p>This equation calculates the technology share in new equipment based
+on factors such as maturity factor, cumulative distribution function of
+consumer size groups, number of consumers, technology cost, distribution
+function of consumer size groups, and technology sorting.</p>
+<pre><code>Q02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $SECTTECH(DSBS,ITECH) $(not TRANSE(DSBS) and not sameas(DSBS,&quot;DAC&quot;)) $runCy(allCy))..
+    V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME) 
+        =E=
+    imMatrFactor(allCy,DSBS,ITECH,YTIME) *
+    V02CostTech(allCy,DSBS,ITECH,YTIME) ** (-i02ElaSub(allCy,DSBS)) /
+    sum(ITECH2$(SECTTECH(DSBS,ITECH2)),
+      imMatrFactor(allCy,DSBS,ITECH2,YTIME) *
+      V02CostTech(allCy,DSBS,ITECH2,YTIME) ** (-i02ElaSub(allCy,DSBS))
+    );</code></pre>
+<p>This equation computes the equipment capacity of each technology in
+each subsector Check if Tech exists in main.gms</p>
+<pre><code>Q02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and TIME(YTIME)and not TRANSE(DSBS) and not sameas(DSBS,&quot;DAC&quot;) and runCy(allCy))..
+    V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) 
+        =E= 
+    V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) +
+    (V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME) * V02GapUsefulDemSubsec(allCy,DSBS,YTIME)) / 
+    (imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME) * i02util(allCy,DSBS,ITECH,YTIME));
+        </code></pre>
+<p>This equation computes the consumption/demand of non-substitutable
+electricity for subsectors of INDUSTRY and DOMESTIC in the “typical
+useful energy demand equation”. The main explanatory variables are
+activity indicators of each subsector and electricity prices per
+subsector. Corresponding elasticities are applied for activity
+indicators and electricity prices. OLD EQUATION:
+Q02ConsElecNonSubIndTert(allCy,INDDOM,YTIME) –&gt; NEW
+EQUATION:Q02UsefulElecNonSubIndTert(allCy,DSBS,YTIME) OLD VARIABLE:
+VmConsElecNonSubIndTert(allCy,INDDOM,YTIME) –&gt; NEW
+VARIABLE:V02UsefulElecNonSubIndTert(allCy,DSBS,YTIME)</p>
+<pre><code>Q02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME) 
+        =E=
+    [
+      V02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME-1) *
+      imActv(YTIME,allCy,INDDOM) ** i02ElastNonSubElec(allCy,INDDOM,&quot;a&quot;,YTIME) *
+      (VmPriceFuelSubsecCarVal(allCy,INDDOM,&quot;ELC&quot;,YTIME) / VmPriceFuelSubsecCarVal(allCy,INDDOM,&quot;ELC&quot;,YTIME-1)) ** i02ElastNonSubElec(allCy,INDDOM,&quot;b1&quot;,YTIME) *
+      (VmPriceFuelSubsecCarVal(allCy,INDDOM,&quot;ELC&quot;,YTIME-1) / VmPriceFuelSubsecCarVal(allCy,INDDOM,&quot;ELC&quot;,YTIME-2)) ** i02ElastNonSubElec(allCy,INDDOM,&quot;b2&quot;,YTIME) *
+      prod(KPDL,
+        (VmPriceFuelSubsecCarVal(allCy,INDDOM,&quot;ELC&quot;,YTIME-ord(KPDL)) / VmPriceFuelSubsecCarVal(allCy,INDDOM,&quot;ELC&quot;,YTIME-(ord(KPDL)+1))) ** (i02ElastNonSubElec(allCy,INDDOM,&quot;c&quot;,YTIME)*imFPDL(INDDOM,KPDL))
+      )
+    ]$imActv(YTIME-1,allCy,INDDOM);</code></pre>
+<p>NEW EQUATION - Useful Electricity to Final Electricity (Check if
+needed to add equipment of electricity)</p>
+<pre><code>Q02FinalElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V02FinalElecNonSubIndTert(allCy,INDDOM,YTIME) 
+        =E=
+    V02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME) / 
+    imUsfEneConvSubTech(allCy,INDDOM,&quot;TELC&quot;,YTIME)
+    ;</code></pre>
+<p>This equation calculates the consumption of fuels in each demand
+subsector. It considers the consumption of remaining substitutable
+equipment, the technology share in new equipment, and the final demand
+gap to be filled by new technologies. Additionally, non-substitutable
+electricity consumption in Industry and Tertiary sectors is included.
+OLD EQUATION: Q02ConsFuelInclHP(allCy,DSBS,EF,YTIME) –&gt; NEW
+EQUATION:Q02ConsFuelIncl(allCy,DSBS,EF,YTIME) OLD VARIABLE:
+VmConsElecNonSubIndTert(allCy,INDDOM,YTIME) –&gt; NEW
+VARIABLE:VmUsefulElecNonSubIndTert(allCy,DSBS,YTIME)</p>
+<pre><code>Q02ConsFuel(allCy,DSBS,EF,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not sameas(DSBS,&quot;DAC&quot;))$runCy(allCy))..
+    VmConsFuel(allCy,DSBS,EF,YTIME) 
+        =E=
+    sum(ITECH$(ITECHtoEF(ITECH,EF)$SECTTECH(DSBS,ITECH)),
+      i02Share(allCy,DSBS,ITECH,EF,YTIME) *
+      V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) *
+      i02util(allCy,DSBS,ITECH,YTIME)
+    ) +
+    V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(INDDOM(DSBS) and ELCEF(EF)) +
+    VmElecConsHeatPla(allCy,DSBS,YTIME)$ELCEF(EF);</code></pre>
+<p>Average efficiency of substitutable demand</p>
+<pre><code>Q02IndAvrEffFinalUseful(allCy,DSBS,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not sameas(DSBS,&quot;DAC&quot;))$runCy(allCy))..
+    V02IndAvrEffFinalUseful(allCy,DSBS,YTIME)
+       =E=
+    V02DemSubUsefulSubsec(allCy,DSBS,YTIME)   
+    /
+    (sum(EF$SECtoEF(DSBS,EF),VmConsFuel(allCy,DSBS,EF,YTIME)) - (V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(INDDOM(DSBS)) +
+    VmElecConsHeatPla(allCy,DSBS,YTIME)))
+    ;</code></pre>
+<p>This equation calculates the estimated electricity index of the
+industry price for a given year. The estimated index is derived by
+considering the historical trend of the electricity index, with a focus
+on the fuel prices in the industrial subsector. The equation utilizes
+the fuel prices for electricity generation, both in the current and past
+years, and computes a weighted average based on the historical pattern.
+The estimated electricity index is influenced by the ratio of fuel
+prices in the current and previous years, with a power of 0.3 applied to
+each ratio. This weighting factor introduces a gradual adjustment to
+reflect the historical changes in fuel prices, providing a more dynamic
+estimation of the electricity index. This equation provides a method to
+estimate the electricity index based on historical fuel price trends,
+allowing for a more flexible and responsive representation of industry
+price dynamics.</p>
+<pre><code>Q02IndxElecIndPrices(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V02IndxElecIndPrices(allCy,YTIME)
+        =E=
+    VmPriceElecInd(allCy,YTIME-1) * 
+    (VmPriceFuelSubsecCarVal(allCy,&quot;OI&quot;,&quot;ELC&quot;,YTIME-1)/VmPriceFuelAvgSub(allCy,&quot;OI&quot;,YTIME-1)) ** (0.02) *
+    (VmPriceFuelSubsecCarVal(allCy,&quot;OI&quot;,&quot;ELC&quot;,YTIME-2)/VmPriceFuelAvgSub(allCy,&quot;OI&quot;,YTIME-2)) ** (0.01) *
+    (VmPriceFuelSubsecCarVal(allCy,&quot;OI&quot;,&quot;ELC&quot;,YTIME-3)/VmPriceFuelAvgSub(allCy,&quot;OI&quot;,YTIME-3)) ** (0.01);</code></pre>
+<pre><code>table i02ElastNonSubElecData(SBS,ETYPES,YTIME)             &quot;Elasticities of Non Substitutable Electricity (1)&quot;
+$ondelim
+$include &quot;./iElastNonSubElecData.csv&quot;
+$offdelim
+;
+table i02ElaSub(allCy,DSBS)                                &quot;Elasticities by subsector for all countries (1)&quot; ;
+Parameters
+i02ExogDemOfBiomass(allCy,SBS,YTIME)                       &quot;Demand of tranditional biomass defined exogenously ()&quot;
+$IF NOT %Calibration% == Calibration i02ElastNonSubElec(allCy,SBS,ETYPES,YTIME)                   &quot;Elasticities of Non Substitutable Electricity (1)&quot;
+i02util(allCy,DSBS,ITECH,YTIME)                            &quot;Utilization rate of technology&quot;
+i02numtechnologiesUsingEF(DSBS,EF)                         &quot;Number of technologues using an energy form&quot;     
+i02Share(allCy,DSBS,ITECH,EF,YTIME)                        &quot;Share of each energy form in a technology&quot;
+imCO2CaptRateIndustry(allCy,ITECH,YTIME)                   &quot;Industry CO2 capture rate (1)&quot;
+i02ScaleEndogScrap(DSBS)                            &quot;Scale parameter for endogenous scrapping applied to the sum of full costs (1)&quot;
+;
+imTotFinEneDemSubBaseYr(runCy,TRANSE,YTIME)  = sum(EF$SECtoEF(TRANSE,EF), imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME));
+imTotFinEneDemSubBaseYr(runCy,INDSE,YTIME)   = SUM(EF$SECtoEF(INDSE,EF),imFuelConsPerFueSub(runCy,INDSE,EF,YTIME));
+imTotFinEneDemSubBaseYr(runCy,DOMSE,YTIME)   = SUM(EF$SECtoEF(DOMSE,EF),imFuelConsPerFueSub(runCy,DOMSE,EF,YTIME));
+imTotFinEneDemSubBaseYr(runCy,NENSE,YTIME)   = SUM(EF$SECtoEF(NENSE,EF),imFuelConsPerFueSub(runCy,NENSE,EF,YTIME));
+i02ExogDemOfBiomass(runCy,DOMSE,YTIME) = 0;
+i02util(runCy,DSBS,ITECH,YTIME) = 1;
+i02Share(runCy,DSBS,ITECH,EF,YTIME) = 1; !! (To be included in mrprom when mix of fuels for technologies)
+$IFTHEN.calib %Calibration% == Calibration
+variable i02ElastNonSubElec(allCy,SBS,ETYPES,YTIME)        &quot;Elasticities of Non Substitutable Electricity (1)&quot;;
+i02ElastNonSubElec.L(runCy,SBS,ETYPES,YTIME) = i02ElastNonSubElecData(SBS,ETYPES,YTIME);
+i02ElastNonSubElec.LO(runCy,SBS,&quot;a&quot;,YTIME)   = 0.001;
+i02ElastNonSubElec.UP(runCy,SBS,&quot;a&quot;,YTIME)   = 10;
+i02ElastNonSubElec.LO(runCy,SBS,&quot;b1&quot;,YTIME)  = -10;
+i02ElastNonSubElec.UP(runCy,SBS,&quot;b1&quot;,YTIME)  = -0.001;
+i02ElastNonSubElec.LO(runCy,SBS,&quot;b2&quot;,YTIME)  = -10;
+i02ElastNonSubElec.UP(runCy,SBS,&quot;b2&quot;,YTIME)  = -0.001;
+i02ElastNonSubElec.LO(runCy,SBS,&quot;c&quot;,YTIME)   = -10;
+i02ElastNonSubElec.UP(runCy,SBS,&quot;c&quot;,YTIME)   = -0.001;
+$ELSE.calib
+i02ElastNonSubElec(runCy,SBS,ETYPES,YTIME) = i02ElastNonSubElecData(SBS,ETYPES,YTIME);
+$ENDIF.calib
+i02ElaSub(runCy,DSBS) = imElaSubData(DSBS);
+i02ElaSub(runCy,DSBS) = 2; !!
+i02ScaleEndogScrap(DSBS)$(not TRANSE(DSBS) and not sameas(&quot;DAC&quot;,DSBS)) = 6./SUM(ITECH$SECTTECH(DSBS,ITECH),1);
+imCO2CaptRateIndustry(runCy,CCSTECH,YTIME) = 0.9;
+alias(ITECH,ITECH2);
+i02numtechnologiesUsingEF(DSBS,EF)=sum(ITECH2$(ITECHtoEF(ITECH2,EF)$SECTTECH(DSBS,ITECH2)),1);</code></pre>
+<pre><code> </code></pre>
+<p><em>VARIABLE INITIALISATION</em></p>
+<pre><code>V02FinalElecNonSubIndTert.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = imFuelConsPerFueSub(runCy,INDDOM,&quot;ELC&quot;,YTIME) * imShrNonSubElecInTotElecDem(runCy,INDDOM);
+V02UsefulElecNonSubIndTert.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = V02FinalElecNonSubIndTert.L(runCy,INDDOM,YTIME) * imUsfEneConvSubTech(runCy,INDDOM,&quot;TELC&quot;,YTIME);
+ 
+$ontext
+V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)
+V02DemUsefulSubsecRemTech(allCy,DSBS,YTIME)
+V02GapUsefulDemSubsec(allCy,DSBS,YTIME)
+$offtext
+V02CostTech.LO(runCy,DSBS,ITECH,YTIME) = 0;
+V02CostTech.L(runCy,DSBS,ITECH,YTIME) = 0.1;
+$ontext
+V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME)
+V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)
+$offtext
+alias(ITECH,ITECH2);
+V02EquipCapTechSubsec.FX(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and not An(YTIME) and not TRANSE(DSBS) and not CCSTECH(ITECH) and not sameas(ITECH,&quot;TELC&quot;)) = sum(EF$TECHtoEF(ITECH,EF), imFuelConsPerFueSub(runCy,DSBS,EF,YTIME)/sum(ITECH2$(TECHtoEF(ITECH2,EF) and SECTTECH(DSBS,ITECH2) and not CCSTECH(ITECH2)),1)) / i02Util(runCy,DSBS,ITECH,YTIME);
+!!V02EquipCapTechSubsec.FX(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and not An(YTIME) and not TRANSE(DSBS) and not CCSTECH(ITECH) and not sameas(ITECH,&quot;TELC&quot;)) = sum(EF$TECHtoEF(ITECH,EF),imFuelConsPerFueSub(runCy,DSBS,EF,YTIME)/ i02Util(runCy,DSBS,ITECH,YTIME));
+!!V02EquipCapTechSubsec.FX(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and not An(YTIME) and not TRANSE(DSBS) and not sameas(ITECH,&quot;TELC&quot;)) = sum(EF$TECHtoEF(ITECH,EF), imFuelConsPerFueSub(runCy,DSBS,EF,YTIME)/sum(ITECH2$(TECHtoEF(ITECH2,EF) and SECTTECH(DSBS,ITECH2)),1)) / i02Util(runCy,DSBS,ITECH,YTIME);
+V02EquipCapTechSubsec.FX(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and not An(YTIME) and not TRANSE(DSBS) and sameas(ITECH,&quot;TELC&quot;)) = sum(EF$TECHtoEF(ITECH,EF), imFuelConsPerFueSub(runCy,DSBS,&quot;ELC&quot;,YTIME) * (1-imShrNonSubElecInTotElecDem(runCy,DSBS))/sum(ITECH2$(TECHtoEF(ITECH2,EF)$SECTTECH(DSBS,ITECH2)),1)) / i02Util(runCy,DSBS,ITECH,YTIME);
+V02EquipCapTechSubsec.FX(runCy,DSBS,CCSTECH,YTIME)$(SECTTECH(DSBS,CCSTECH) and not An(YTIME)) = 0;
+display V02EquipCapTechSubsec.L;
+ 
+V02DemSubUsefulSubsec.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = SUM(ITECH$SECTTECH(INDDOM,ITECH),
+      V02EquipCapTechSubsec.L(runCy,INDDOM,ITECH,YTIME) *
+      imUsfEneConvSubTech(runCy,INDDOM,ITECH,YTIME) *
+      i02util(runCy,INDDOM,ITECH,YTIME)
+    );
+V02DemSubUsefulSubsec.FX(runCy,NENSE,YTIME)$(not An(YTIME)) = max(imTotFinEneDemSubBaseYr(runCy,NENSE,YTIME),1e-5);
+ 
+ 
+ 
+V02UsefulElecNonSubIndTert.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = imFuelConsPerFueSub(runCy,INDDOM,&quot;ELC&quot;,YTIME) * imShrNonSubElecInTotElecDem(runCy,INDDOM) / imUsfEneConvSubTech(runCy,INDDOM,&quot;TELC&quot;,YTIME);
+VmConsFuel.LO(runCy,DSBS,EF,YTIME) = 0;
+VmConsFuel.L(runCy,DSBS,EF,YTIME) = 1;
+VmConsFuel.FX(runCy,DSBS,EF,YTIME)$(HEATPUMP(EF) or TRANSE(DSBS) or sameas(&quot;DAC&quot;, DSBS)) = 0;
+VmConsFuel.FX(runCy,DSBS,EF,YTIME)$(not HEATPUMP(EF) and not TRANSE(DSBS) and DATAY(YTIME)) = imFuelConsPerFueSub(runCy,DSBS,EF,YTIME);
+ 
+!!V02VarCostTech.FX(runCy,DSBS,ITECH,YTIME)$(not An(YTIME) and not TRANSE(DSBS) and not sameas(DSBS,&quot;DAC&quot;) and SECTTECH(DSBS,ITECH)) = 0.0001;
+V02VarCostTech.FX(runCy,DSBS,ITECH,YTIME)$(not An(YTIME) and not TRANSE(DSBS) and not sameas(DSBS,&quot;DAC&quot;) and SECTTECH(DSBS,ITECH)) =
+  (
+    sum(EF$ITECHtoEF(ITECH,EF),
+      i02Share(runCy,DSBS,ITECH,EF,YTIME) *
+      VmPriceFuelSubsecCarVal.L(runCy,DSBS,EF,YTIME) +
+      imCO2CaptRateIndustry(runCy,ITECH,YTIME) * VmCstCO2SeqCsts.L(runCy,YTIME-1) * 1e-3 * (imCo2EmiFac(runCy,DSBS,EF,YTIME-1) + 4.17$(sameas(&quot;BMSWAS&quot;, EF))) +
+      (1-imCO2CaptRateIndustry(runCy,ITECH,YTIME)) * 1e-3 * (imCo2EmiFac(runCy,DSBS,EF,YTIME-1) + 4.17$(sameas(&quot;BMSWAS&quot;, EF))) *
+      (sum(NAP$NAPtoALLSBS(NAP,&quot;PG&quot;), VmCarVal.L(runCy,NAP,YTIME-1))) +
+      VmRenValue.L(YTIME)$(not RENEF(ITECH) and not NENSE(DSBS)) !! needs change of units
+    ) +
+    imVarCostTech(runCy,DSBS,ITECH,YTIME) / sUnitToKUnit
+  ) / imUsfEneConvSubTech(runCy,DSBS,ITECH,YTIME);
+V02CapCostTech.FX(runCy,DSBS,ITECH,YTIME)$(not An(YTIME) and not TRANSE(DSBS) and not sameas(DSBS,&quot;DAC&quot;) and SECTTECH(DSBS,ITECH)) = ((
+      (
+        (imDisc(runCy,DSBS,YTIME)$(not TSTEAM(ITECH)) + imDisc(runCy,&quot;PG&quot;,YTIME)$TSTEAM(ITECH)) * !! in case of chp plants we use the discount rate of power generation sector
+        exp((imDisc(runCy,DSBS,YTIME)$(not TSTEAM(ITECH)) + imDisc(runCy,&quot;PG&quot;,YTIME)$TSTEAM(ITECH)) * VmLft.L(runCy,DSBS,ITECH,YTIME))
+      ) /
+      (exp((imDisc(runCy,DSBS,YTIME)$(not TSTEAM(ITECH)) + imDisc(runCy,&quot;PG&quot;,YTIME)$TSTEAM(ITECH)) * VmLft.L(runCy,DSBS,ITECH,YTIME)) - 1)
+    ) *
+    imCapCostTech(runCy,DSBS,ITECH,YTIME) * imCGI(runCy,YTIME) +
+    imFixOMCostTech(runCy,DSBS,ITECH,YTIME) / sUnitToKUnit)
+    / imUsfEneConvSubTech(runCy,DSBS,ITECH,YTIME);
+V02CostTech.FX(runCy,DSBS,ITECH,YTIME)$DATAY(YTIME) = V02VarCostTech.L(runCy,DSBS,ITECH,YTIME) + V02CapCostTech.L(runCy,DSBS,ITECH,YTIME);</code></pre>
+<blockquote>
+<p><strong>Limitations</strong> There are no known limitations.</p>
+</blockquote>
+<h2 id="definitions">Definitions</h2>
+<h3 id="objects">Objects</h3>
+<table>
+<caption>module-internal objects (A: legacy | B: technology)</caption>
+<colgroup>
+<col style="width: 32%" />
+<col style="width: 37%" />
+<col style="width: 20%" />
+<col style="width: 4%" />
+<col style="width: 4%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"> </th>
+<th style="text-align: center;">Description</th>
+<th style="text-align: center;">Unit</th>
+<th style="text-align: center;">A</th>
+<th style="text-align: center;">B</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">i02AvailRateChp<br />
+(allCy, DSBS, CHP)</td>
+<td style="text-align: center;">Availability rate of CHP Plants</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">i02BoiEffChp<br />
+(allCy, CHP, YTIME)</td>
+<td style="text-align: center;">Boiler efficiency (typical) used in
+adjusting CHP efficiency</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">i02ElastNonSubElec<br />
+(allCy, SBS, ETYPES, YTIME)</td>
+<td style="text-align: center;">Elasticities of Non Substitutable
+Electricity</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">i02ElastNonSubElecData<br />
+(SBS, ETYPES, YTIME)</td>
+<td style="text-align: center;">Elasticities of Non Substitutable
+Electricity</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">i02ElaSub<br />
+(allCy, DSBS)</td>
+<td style="text-align: center;">Elasticities by subsector for all
+countries</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">i02ExogDemOfBiomass<br />
+(allCy, SBS, YTIME)</td>
+<td style="text-align: center;">Demand of tranditional biomass defined
+exogenously</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">i02FixOMCostPerChp<br />
+(allCy, DSBS, CHP, YTIME)</td>
+<td style="text-align: center;">Fixed O&amp;M cost per CHP plant
+type</td>
+<td style="text-align: center;"><span
+class="math inline">\(US\$2015/KW\)</span></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">i02InvCostChp<br />
+(allCy, DSBS, CHP, YTIME)</td>
+<td style="text-align: center;">Capital Cost per CHP plant type</td>
+<td style="text-align: center;"><span
+class="math inline">\(US\$2015/KW\)</span></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">i02LifChpPla<br />
+(allCy, DSBS, CHP)</td>
+<td style="text-align: center;">Technical Lifetime for CHP plants</td>
+<td style="text-align: center;"><span
+class="math inline">\(years\)</span></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">i02numtechnologiesUsingEF<br />
+(DSBS, EF)</td>
+<td style="text-align: center;">Number of technologues using an energy
+form</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">i02ScaleEndogScrap<br />
+(DSBS)</td>
+<td style="text-align: center;">Scale parameter for endogenous scrapping
+applied to the sum of full costs</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">i02Share<br />
+(allCy, DSBS, ITECH, EF, YTIME)</td>
+<td style="text-align: center;">Share of each energy form in a
+technology</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">i02util<br />
+(allCy, DSBS, ITECH, YTIME)</td>
+<td style="text-align: center;">Utilization rate of technology</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">i02VarCostChp<br />
+(allCy, DSBS, CHP, YTIME)</td>
+<td style="text-align: center;">Variable (other than fuel) cost per CHP
+Type</td>
+<td style="text-align: center;"><span class="math inline">\(Gross
+US\$2015/KW\)</span></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">imCO2CaptRateIndustry<br />
+(allCy, ITECH, YTIME)</td>
+<td style="text-align: center;">Industry CO2 capture rate</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Q02CapCostTech<br />
+(allCy, DSBS, ITECH, YTIME)</td>
+<td style="text-align: center;">Compute capital cost of each technology
+per subsector</td>
+<td style="text-align: center;"><span
+class="math inline">\(final\)</span></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Q02ConsElecNonSubIndTert<br />
+(allCy, INDDOM, YTIME)</td>
+<td style="text-align: center;">Compute non-substituable electricity
+consumption in Industry and Tertiary</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Q02ConsFuel<br />
+(allCy, DSBS, EF, YTIME)</td>
+<td style="text-align: center;">Compute fuel consumption</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Q02ConsFuelInclHP<br />
+(allCy, DSBS, EF, YTIME)</td>
+<td style="text-align: center;">Equation for fuel consumption in
+Mtoe</td>
+<td style="text-align: center;"><span class="math inline">\(including
+heat
+from
+heatpumps\)</span></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Q02ConsRemSubEquipSubSec<br />
+(allCy, DSBS, EF, YTIME)</td>
+<td style="text-align: center;">Equation for consumption of remaining
+substitutble equipment</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Q02CostElcAvgProdCHP<br />
+(allCy, CHP, YTIME)</td>
+<td style="text-align: center;">Compute Average Electricity production
+cost per CHP plant</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Q02CostElecProdCHP<br />
+(allCy, DSBS, CHP, YTIME)</td>
+<td style="text-align: center;">Compute electricity production cost per
+CHP plant and demand sector</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Q02CostTech<br />
+(allCy, DSBS, rCon, EF, YTIME)</td>
+<td style="text-align: center;">Compute technology cost</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Q02CostTechIntrm<br />
+(allCy, DSBS, rCon, EF, YTIME)</td>
+<td style="text-align: center;">Compute intermediate technology
+cost</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Q02CostTechMatFac<br />
+(allCy, DSBS, rCon, EF, YTIME)</td>
+<td style="text-align: center;">Compute the technology cost including
+the maturity factor per technology and subsector</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Q02DemFinSubFuelSubsec<br />
+(allCy, DSBS, YTIME)</td>
+<td style="text-align: center;">Compute total final demand (of
+substitutable fuels) per subsector</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Q02DemSubUsefulSubsec<br />
+(allCy, DSBS, YTIME)</td>
+<td style="text-align: center;">Compute Demand for useful substitutable
+energy demand in each subsector</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Q02DemUsefulSubsecRemTech<br />
+(allCy, DSBS, YTIME)</td>
+<td style="text-align: center;">Compute Useful energy demand
+(substitutable) covered by remaining equipment</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Q02EquipCapTechSubsec<br />
+(allCy, DSBS, ITECH, YTIME)</td>
+<td style="text-align: center;">Compute equipment capacity of each
+technology in each subsector</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Q02FinalElecNonSubIndTert<br />
+(allCy, DSBS, YTIME)</td>
+<td style="text-align: center;">Compute final energy of
+non-substitutable electricity</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Q02GapFinalDem<br />
+(allCy, DSBS, YTIME)</td>
+<td style="text-align: center;">Compute the gap in final demand of
+industry, tertiary, non-energy uses and bunkers</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Q02GapUsefulDemSubsec<br />
+(allCy, DSBS, YTIME)</td>
+<td style="text-align: center;">Compute gap in useful energy demand per
+subsector</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Q02IndAvrEffFinalUseful<br />
+(allCy, DSBS, YTIME)</td>
+<td style="text-align: center;">Average Efficiency</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Q02IndxElecIndPrices<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Compute Electricity index - a function
+of industry price - Estimate</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Q02PremScrpIndu<br />
+(allCy, DSBS, ITECH, YTIME)</td>
+<td style="text-align: center;">premature scrapping</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Q02RatioRem<br />
+(allCy, DSBS, ITECH, YTIME)</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Q02RemEquipCapTechSubsec<br />
+(allCy, DSBS, ITECH, YTIME)</td>
+<td style="text-align: center;">Compute Remaining Equipment Capacity per
+Technology in each subsector</td>
+<td style="text-align: center;"><span
+class="math inline">\(substitutable\)</span></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Q02ShareTechNewEquip<br />
+(allCy, DSBS, EF, YTIME)</td>
+<td style="text-align: center;">Compute technology share in new
+equipment</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Q02ShareTechNewEquipUseful<br />
+(allCy, DSBS, ITECH, YTIME)</td>
+<td style="text-align: center;">Compute share of each technology in gap
+of useful energy</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Q02SortTechVarCost<br />
+(allCy, DSBS, rCon, YTIME)</td>
+<td style="text-align: center;">Compute Technology sorting based on
+variable cost</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Q02UsefulElecNonSubIndTert<br />
+(allCy, DSBS, YTIME)</td>
+<td style="text-align: center;">Compute non-substitutable useful
+electricity</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Q02VarCostTech<br />
+(allCy, DSBS, ITECH, YTIME)</td>
+<td style="text-align: center;">Compute variable cost of each technology
+per subsector</td>
+<td style="text-align: center;"><span
+class="math inline">\(final\)</span></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">V02CapCostTech<br />
+(allCy, DSBS, ITECH, YTIME)</td>
+<td style="text-align: center;">capital cost of each technology per
+subsector</td>
+<td style="text-align: center;"><span
+class="math inline">\(final\)</span></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">V02CostElecProdCHP<br />
+(allCy, DSBS, CHP, YTIME)</td>
+<td style="text-align: center;">Electricity production cost per CHP
+plant and demand sector</td>
+<td style="text-align: center;"><span
+class="math inline">\(US\$2015/KWh\)</span></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">V02CostProdCHPDem<br />
+(allCy, DSBS, CHP, YTIME)</td>
+<td style="text-align: center;">Variable including fuel electricity
+production cost per CHP plant and demand sector</td>
+<td style="text-align: center;"><span
+class="math inline">\(US\$2015/KWh\)</span></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">V02CostTech<br />
+(allCy, DSBS, rCon, EF, YTIME)</td>
+<td style="text-align: center;">Technology cost</td>
+<td style="text-align: center;"><span
+class="math inline">\(KUS\$2015/toe\)</span></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">V02CostTechIntrm<br />
+(allCy, DSBS, rcon, EF, YTIME)</td>
+<td style="text-align: center;">Intermediate technology cost</td>
+<td style="text-align: center;"><span
+class="math inline">\(KUS\$2015/toe\)</span></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">V02CostTechMatFac<br />
+(allCy, DSBS, rCon, EF, YTIME)</td>
+<td style="text-align: center;">Technology cost including maturity
+factor</td>
+<td style="text-align: center;"><span
+class="math inline">\(KUS\$2015/toe\)</span></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">V02DemSubUsefulSubsec<br />
+(allCy, DSBS, YTIME)</td>
+<td style="text-align: center;">Demand for useful substitutable energy
+demand in each subsector</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">V02DemUsefulSubsecRemTech<br />
+(allCy, DSBS, YTIME)</td>
+<td style="text-align: center;">Useful energy demand (substitutable)
+covered by remaining equipment</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">V02EquipCapTechSubsec<br />
+(allCy, DSBS, ITECH, YTIME)</td>
+<td style="text-align: center;">equipment capacity of each technology in
+each subsector</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">V02FinalElecNonSubIndTert<br />
+(allCy, DSBS, YTIME)</td>
+<td style="text-align: center;">final energy of non-substitutable
+electricity</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">V02GapFinalDem<br />
+(allCy, DSBS, YTIME)</td>
+<td style="text-align: center;">Final demand gap to be filed by new
+technologies</td>
+<td style="text-align: center;"><span
+class="math inline">\(Mtoe\)</span></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">V02GapUsefulDemSubsec<br />
+(allCy, DSBS, YTIME)</td>
+<td style="text-align: center;">gap in useful energy demand per
+subsector</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">V02IndAvrEffFinalUseful<br />
+(allCy, DSBS, YTIME)</td>
+<td style="text-align: center;">Average Efficiency</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">V02IndxElecIndPrices<br />
+(allCy, YTIME)</td>
+<td style="text-align: center;">Electricity index - a function of
+industry price - Estimate</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">V02PremScrpIndu<br />
+(allCy, DSBS, ITECH, YTIME)</td>
+<td style="text-align: center;">premature scrapping</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">V02RatioRem<br />
+(allCy, DSBS, ITECH, YTIME)</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">V02RemEquipCapTechSubsec<br />
+(allCy, DSBS, ITECH, YTIME)</td>
+<td style="text-align: center;">Remaining Equipment Capacity per
+Technology in each subsector</td>
+<td style="text-align: center;"><span
+class="math inline">\(substitutable\)</span></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">V02ShareTechNewEquip<br />
+(allCy, DSBS, EF, YTIME)</td>
+<td style="text-align: center;">Technology share in new equipment</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">V02ShareTechNewEquipUseful<br />
+(allCy, DSBS, ITECH, YTIME)</td>
+<td style="text-align: center;">share of each technology in gap of
+useful energy</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">V02SortTechVarCost<br />
+(allCy, DSBS, rCon, YTIME)</td>
+<td style="text-align: center;">Technology sorting based on variable
+cost</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">V02UsefulElecNonSubIndTert<br />
+(allCy, DSBS, YTIME)</td>
+<td style="text-align: center;">non-substitutable useful
+electricity</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">V02VarCostTech<br />
+(allCy, DSBS, ITECH, YTIME)</td>
+<td style="text-align: center;">variable cost of each technology per
+subsector</td>
+<td style="text-align: center;"><span
+class="math inline">\(final\)</span></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VmConsElecNonSubIndTert<br />
+(allCy, DSBS, YTIME)</td>
+<td style="text-align: center;">Consumption of non-substituable
+electricity in Industry and Tertiary</td>
+<td style="text-align: center;"><span
+class="math inline">\(Mtoe\)</span></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VmConsFuelInclHP<br />
+(allCy, DSBS, EF, YTIME)</td>
+<td style="text-align: center;">Consumption of fuels in each demand
+subsector including heat from heatpumps</td>
+<td style="text-align: center;"><span
+class="math inline">\(Mtoe\)</span></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VmConsRemSubEquipSubSec<br />
+(allCy, DSBS, EF, YTIME)</td>
+<td style="text-align: center;">Consumption of remaining substitutable
+equipment</td>
+<td style="text-align: center;"><span
+class="math inline">\(Mtoe\)</span></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VmCostVarAvgElecProd<br />
+(allCy, CHP, YTIME)</td>
+<td style="text-align: center;">Average variable including fuel
+electricity production cost per CHP plant</td>
+<td style="text-align: center;"><span
+class="math inline">\(US\$2015/KWh\)</span></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VmDemFinSubFuelSubsec<br />
+(allCy, DSBS, YTIME)</td>
+<td style="text-align: center;">Total final demand (of substitutable
+fuels) per subsector</td>
+<td style="text-align: center;"><span
+class="math inline">\(Mtoe\)</span></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+<h3 id="sets">Sets</h3>
+<table style="width:72%;">
+<caption>sets in use</caption>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 44%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"> </th>
+<th style="text-align: center;">description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">alias(TT, ytime)</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">allCy</td>
+<td style="text-align: center;">All Countries Used in the Model</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">an(ytime)</td>
+<td style="text-align: center;">Years for which the model is
+running</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">biomass(balef)</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">CCSTECH(ITECH)</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">CHPPGSET</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">conSet</td>
+<td style="text-align: center;">Consumer size groups related to space
+heating</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">DOMSE(DSBS)</td>
+<td style="text-align: center;">Tertiary SubSectors</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">DSBS(SBS)</td>
+<td style="text-align: center;">All Demand Subsectors</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">EF</td>
+<td style="text-align: center;">Energy Forms</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">ELCEF(EF)</td>
+<td style="text-align: center;">Electricity</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">ETYPES</td>
+<td style="text-align: center;">Elasticities types</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">H2EF(EF)</td>
+<td style="text-align: center;">Hydrogen</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">HEATPUMP(EF)</td>
+<td style="text-align: center;">Heatpumps are reducing the heat
+requirements of the sector but increasing electricity consumption</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">HOU</td>
+<td style="text-align: center;">11.511 0.9 0.00001</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">INDDOM(DSBS)</td>
+<td style="text-align: center;">Industry and Tertiary</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">INDSE(DSBS)</td>
+<td style="text-align: center;">Industrial SubSectors</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">ITECH(TECH)</td>
+<td style="text-align: center;">Industrial - Domestic - Non-energy &amp;
+Bunkers Technologies</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">ITECHtoEF(ITECH, EF)</td>
+<td style="text-align: center;">Fuels consumed by industrial
+technologies</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">NAP(Policies_set)</td>
+<td style="text-align: center;">National Allocation Plan sector
+categories</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">NAPtoALLSBS(NAP, ALLSBS)</td>
+<td style="text-align: center;">Energy sectors corresponding to NAP
+sectors</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">NENSE(DSBS)</td>
+<td style="text-align: center;">Non Energy and Bunkers</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">PGEF(EFS)</td>
+<td style="text-align: center;">Energy forms used for steam
+production</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">rCon</td>
+<td style="text-align: center;">counter for the number of consumers</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">RENEF(TECH)</td>
+<td style="text-align: center;">Renewable technologies in demand
+side</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">runCy(allCy)</td>
+<td style="text-align: center;">Countries for which the model is
+running</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">runCyL(allCy)</td>
+<td style="text-align: center;">Countries for which the model is running
+(used in countries loop)</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">SBS(ALLSBS)</td>
+<td style="text-align: center;">Model Subsectors</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">SECtoEF(SBS, EF)</td>
+<td style="text-align: center;">Link between Model Subsectors and Energy
+FORMS</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">SECTTECH(DSBS, TECH)</td>
+<td style="text-align: center;">Link between Model Demand Subsectors and
+Technologies</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">TECH</td>
+<td style="text-align: center;">Technologies</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">TECHtoEF</td>
+<td style="text-align: center;">(TECHEF) Fuels consumed by
+technologies</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">TRANSE(DSBS)</td>
+<td style="text-align: center;">All Transport Subsectors</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">TSTEAM</td>
+<td style="text-align: center;">CHP &amp; DHP plant technologies</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">ytime</td>
+<td style="text-align: center;">Model time horizon</td>
+</tr>
+</tbody>
+</table>
+<h2 id="see-also">See Also</h2>
+<p><a href="01_Transport.htm">01_Transport</a>, <a
+href="03_RestOfEnergy.htm">03_RestOfEnergy</a>, <a
+href="04_PowerGeneration.htm">04_PowerGeneration</a>, <a
+href="05_Hydrogen.htm">05_Hydrogen</a>, <a href="06_CO2.htm">06_CO2</a>,
+<a href="08_Prices.htm">08_Prices</a>, <a
+href="09_Heat.htm">09_Heat</a>, <a href="core.htm">core</a></p>
+<h2 id="references">References</h2>
+<script>
+window.onscroll = function() {myFunction()};
+
+var navbar = document.getElementById("pagenav");
+var sticky = navbar.offsetTop;
+
+function myFunction() {
+  var currentScrollPos = window.pageYOffset;
+  if (window.pageYOffset >= sticky) {
+    if (prevScrollpos > currentScrollPos) {
+      document.getElementById("pagenav").style.top = "0";
+      document.getElementById("pagenav").style.position = "fixed";
+    } else {
+      document.getElementById("pagenav").style.top = "-50px";
+    }
+  } else {
+      document.getElementById("pagenav").style.position = "static";
+  }
+  prevScrollpos = currentScrollPos;
+}
+</script>
+</body>
+</html>

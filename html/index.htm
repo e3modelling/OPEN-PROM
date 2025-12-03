@@ -4,7 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="generator" content="goxygen" />
-<title>Model Documentation – Overview</title>
+  <meta name="author" content="Giannis Tolios" />
+  <meta name="author" content="Eleftheria Zisarou" />
+  <meta name="author" content="Alexandros Tsimpoukis" />
+  <meta name="author" content="Fotis Sioutas" />
+  <meta name="author" content="Sonja Sechi" />
+  <meta name="author" content="Dionysis Pramangioulis" />
+  <meta name="author" content="Giorgos Plessias" />
+  <meta name="author" content="Michael Madianos" />
+  <meta name="author" content="Anastasis Giannousakis" />
+  <meta name="author" content="Panagiotis Fragkos" />
+  <meta name="author" content="Maro Baka" />
+<title>OPEN PROM – Overview</title>
 <link rel="stylesheet" href="ming/style.css">
 <script async src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS_CHTML-full"></script>
 <script type="text/x-mathjax-config">
@@ -17,10 +28,10 @@
 </head>
 <body>
 <div class="header">
-      
+      <div class="headerimg"><a href="index.htm"><img id="logo" src="images/logo.png" height="100" alt="model logo" /></a></div>
     <div class="headertext">
-      <h1 id="mainheadertitle">Model Documentation</h1>
-      
+      <h1 id="mainheadertitle"><a href="https://github.com/e3modelling/OPEN-PROM">OPEN PROM</a></h1>
+      <h3>0.1</h3>
       <div class="by">created with <a href="https://github.com/pik-piam/goxygen">goxygen</a> 1.4.5</div>
     </div>
 </div>
@@ -32,6 +43,15 @@
    </button>
    <div id="mainnav" class="dropdown-content">
    <a href='index.htm'>Overview</a>
+   <a href='core.htm'>core</a>
+   <a href='01_Transport.htm'> 1. Transport module</a>
+   <a href='02_Industry.htm'> 2. Industry module</a>
+   <a href='03_RestOfEnergy.htm'> 3. RestOfEnergy module</a>
+   <a href='04_PowerGeneration.htm'> 4. PowerGeneration module</a>
+   <a href='05_Hydrogen.htm'> 5. Hydrogen module</a>
+   <a href='06_CO2.htm'> 6. CO2 module</a>
+   <a href='08_Prices.htm'> 8. Prices module</a>
+   <a href='09_Heat.htm'> 9. Heat module</a>
    </div>
   </div>
   <div class="dropdown">
@@ -40,8 +60,30 @@
    </button>
    <div class="dropdown-content">
    <ul>
-   <li><a href="#overview" id="toc-overview">Overview</a>
+   <li><a href="#main" id="toc-main">Main</a>
    <ul>
+   <li><a href="#input-prefixes-parameters-tables-scalars"
+   id="toc-input-prefixes-parameters-tables-scalars">3. INPUT PREFIXES
+   (PARAMETERS, TABLES, SCALARS)</a></li>
+   <li><a href="#interdependent-variableinput-usage"
+   id="toc-interdependent-variableinput-usage">5. INTERDEPENDENT
+   VARIABLE/INPUT USAGE</a></li>
+   <li><a
+   href="#otherwise-keep-the-variableinput-confined-to-its-module-with-a-vxx-ixx-prefix."
+   id="toc-otherwise-keep-the-variableinput-confined-to-its-module-with-a-vxx-ixx-prefix.">Otherwise,
+   keep the variable/input confined to its module with a Vxx / ixx
+   prefix.</a></li>
+   <li><a href="#practical-naming-examples"
+   id="toc-practical-naming-examples">6. PRACTICAL NAMING
+   EXAMPLES</a></li>
+   <li><a href="#authors" id="toc-authors">Authors</a></li>
+   <li><a href="#how-to-cite" id="toc-how-to-cite">How to cite</a>
+   <ul>
+   <li><a href="#bibtex-format" id="toc-bibtex-format">Bibtex
+   format</a></li>
+   <li><a href="#citation-file-format"
+   id="toc-citation-file-format">Citation File Format</a></li>
+   </ul></li>
    <li><a href="#references" id="toc-references">References</a></li>
    </ul></li>
    </ul>
@@ -49,7 +91,220 @@
   </div>
 </div>
 
-<h1 id="overview">Overview</h1>
+<h1 id="main">Main</h1>
+<p>This is the OPEN-PROM model, the open version of the world energy
+model PROMETHEUS of E3-Modelling.</p>
+<p>*** preliminaries</p>
+<p>==============================================================================<em>
+OPEN-PROM NAMING CONVENTION </em>
+==============================================================================<em>
+</em> Below, you’ll find the coding naming convention, a collection of
+conventions designed to streamline the development process and enhance
+code readability. * Please uphold these standards as you code! The
+naming convention for objects in the code is established as follows:
+————————–<em> CORE PRINCIPLES ————————–</em> * [ prefix ][ object type
+(e.g. Capacity, Cost, Share, etc.) ][ more specific information, if
+needed ][ object scope, e.g. Transport, Electricity, etc. ][ more
+specific information, if needed ] * Example: * [ Q/V/i ][
+Cost/Cap/Dem/Cons/Price/etc. ][ Total ][ Elec/Tr/Ind/Dom ][ etc. ] * Q:
+Equation * q: Equation whose main computed variable does not participate
+in more than one equation, thus has decreased impact on the model * V:
+Variable, main variable computed by each equation * v: Variable that
+does not participate in more than one equation, thus has decreased
+impact on the model * i: Input, Inputs are datasets or constants that
+are exogenous to the model ———————- 1. VARIABLE PREFIXES ———————- The
+first two “fields” of an object (object = variable, equation, parameter,
+etc.) name encode its scope:</p>
+<p>Vm : “Model-wide / Interdependent” Variable -&gt; Used across
+multiple modules</p>
+<p>Vxx : “Module-specific” Variable -&gt; Used only within module ‘xx’,
+where ‘xx’ is a 2-digit identifier</p>
+<p>V : “Core-only” Variable -&gt; Used only inside the core</p>
+<p>Example: VmLft(allCy,DSBS,EF,YTIME) -&gt; Lifetime of technologies,
+shared across modules</p>
+<p>V01ActivGoodsTransp(allCy,TRANSE,YTIME) -&gt; Activity variable
+exclusive to Module 01_Transport</p>
+<table style="width:32%;">
+<colgroup>
+<col style="width: 31%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">2. EQUATION PREFIXES</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">All equations <strong>must begin</strong>
+with the exact 2-digit module code:</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">QxxEquationName(…) → Where ‘xx’ is the
+module number (e.g., 01, 02, 03, …) → This ensures traceability of
+equations to their origin module</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Examples: Q01RateScrPc(allCy,YTIME) →
+Passenger car scrapping rate equation from 01_Transport</td>
+</tr>
+</tbody>
+</table>
+<h2 id="input-prefixes-parameters-tables-scalars">3. INPUT PREFIXES
+(PARAMETERS, TABLES, SCALARS)</h2>
+<p>Inputs follow the same logic:</p>
+<p>im : “Model-wide / Interdependent” Input -&gt; Declared in /core and
+used across modules</p>
+<p>ixx : “Module-specific” Input -&gt; Exclusive to module ‘xx’</p>
+<p>Examples: imPriceFuelsInt(WEF,YTIME) -&gt; Fuel import prices, shared
+across model</p>
+<p>imImpExp(allCy,EFS,YTIME) -&gt; imports of exporting countries,
+shared</p>
+<p>i01PlugHybrFractOfMileage(ELSH_SET,YTIME) -&gt; PHEV mileage split,
+only used in Transport module</p>
+<p>i01Pop(YTIME,allCy) -&gt; Population input for Transport module
+only</p>
+<table style="width:43%;">
+<colgroup>
+<col style="width: 43%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">4. MODULE NAMING CONVENTION</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Each module is numbered and named as
+follows:</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">01_Transport 02_Industry 03_RestOfEnergy
+04_PowerGeneration 05_Hydrogen 06_CO2 07_Emissions 08_Prices 09_Heat
+Prefixes (V01, i01, etc.) map directly to these numbers.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="interdependent-variableinput-usage">5. INTERDEPENDENT
+VARIABLE/INPUT USAGE</h2>
+<p>Only use Vm / im prefixes if: - The variable/input is referenced or
+calculated across more than one module - There is logical dependency
+between modules (e.g. shared emissions factors, activity drivers,
+prices, or capacity assumptions)</p>
+<h2
+id="otherwise-keep-the-variableinput-confined-to-its-module-with-a-vxx-ixx-prefix.">Otherwise,
+keep the variable/input confined to its module with a Vxx / ixx
+prefix.</h2>
+<h2 id="practical-naming-examples">6. PRACTICAL NAMING EXAMPLES</h2>
+<p>Interdependent Variable: VmCO2Emissions(allCy,SECT,YTIME) ! CO2
+output, calculated across sectors Transport-specific Variable:
+V01NewRegCar(allCy,CARTECH,YTIME) ! New registrations in transport Core
+Input shared across modules: imGDP(allCy,YTIME) ! GDP used by multiple
+modules Power Gen-only Input: i04PlantLifetime(PGALL) ! Power plant
+lifetime for investment * Cost: Cost * Cap: Capacity * Dem: Demand *
+Pow: Power * Prod: Production * Cons: Consumption * Gen: Generation *
+Req: Required * Price: Pri * Fin: Final * Ene: Energy * Elec:
+Electricity * Ren: Renewable * Sec: Sector * Contr: Contribution * Curr:
+Current * Pot: Potential * Tr: Transport * Ind: Industry * Indx: Index *
+Inv: Investment * Dom: Domestic * Dec: Decision * Mat: Maturity * Fac:
+Factor * Mult: Multiplier * Endog: Endogenous * Exog: Exogenous * Allow:
+Allowed * Maxm: Maximum * Mnm: Minimum * Pc: Passenger Cars * Cum:
+Cummulative * Imp: Imports * Exp: Exports * Bsl: Base Load * Tot: Total
+* Tech: Technology * Var: Variable * Pol: Policy * Chp: Combined Heat
+and Power plants * Ccs: Carbon capture and storage * Clim: Climate *
+Est: Estimated * Transf: Transformation * Capt: Captured * Seq:
+Sequestration * NAP: National Allocation Plan * Carb: Carbon * Val:
+Value * Subsec: Subsector * Sub: Substitutable * Avg: Average * Consu:
+Consumers
+==============================================================================<em>
+END OF NAMING CONVENTION </em>
+==============================================================================*</p>
+<h2 id="authors">Authors</h2>
+<p>Maro Baka <a href="mailto:Maro.Baka@ricardo.com"
+class="email">Maro.Baka@ricardo.com</a>, Panagiotis Fragkos <a
+href="mailto:Panagiotis.Fragkos@ricardo.com"
+class="email">Panagiotis.Fragkos@ricardo.com</a>, Anastasis Giannousakis
+<a href="mailto:Anastasis.Giannousakis@ricardo.com"
+class="email">Anastasis.Giannousakis@ricardo.com</a>, Michael Madianos
+<a href="mailto:Michael.Madianos@ricardo.com"
+class="email">Michael.Madianos@ricardo.com</a>, Giorgos Plessias <a
+href="mailto:George.Plessias@ricardo.com"
+class="email">George.Plessias@ricardo.com</a>, Dionysis Pramangioulis <a
+href="mailto:dionysis.pramangioulis@ricardo.com"
+class="email">dionysis.pramangioulis@ricardo.com</a>, Sonja Sechi <a
+href="mailto:Sonja.Sechi@ricardo.com"
+class="email">Sonja.Sechi@ricardo.com</a>, Fotis Sioutas <a
+href="mailto:Fotis.Sioutas@ricardo.com"
+class="email">Fotis.Sioutas@ricardo.com</a>, Alexandros Tsimpoukis <a
+href="mailto:Alexandros.Tsimpoukis@ricardo.com"
+class="email">Alexandros.Tsimpoukis@ricardo.com</a>, Eleftheria Zisarou
+<a href="mailto:Eleftheria.Zisarou@ricardo.com"
+class="email">Eleftheria.Zisarou@ricardo.com</a>, Giannis Tolios</p>
+<h2 id="how-to-cite">How to cite</h2>
+<p>Baka M, Fragkos P, Giannousakis A, Madianos M, Plessias G,
+Pramangioulis D, Sechi S, Sioutas F, Tsimpoukis A, Zisarou E, Tolios G
+(2024). “OPEN PROM - Version 0.1.”</p>
+<h3 id="bibtex-format">Bibtex format</h3>
+<pre><code>@Misc{,
+  title = {OPEN PROM - Version 0.1},
+  author = {Maro Baka and Panagiotis Fragkos and Anastasis Giannousakis and Michael Madianos and Giorgos Plessias and Dionysis Pramangioulis and Sonja Sechi and Fotis Sioutas and Alexandros Tsimpoukis and Eleftheria Zisarou and Giannis Tolios},
+  date = {2024-05-13},
+  year = {2024},
+}</code></pre>
+<h3 id="citation-file-format">Citation File Format</h3>
+<pre><code>cff-version: 1.0.3
+message: ~
+authors:
+- family-names: Baka
+  given-names: Maro
+  affiliation: E3Modelling-Ricardo
+  email: Maro.Baka@ricardo.com
+- family-names: Fragkos
+  given-names: Panagiotis
+  affiliation: E3Modelling-Ricardo
+  email: Panagiotis.Fragkos@ricardo.com
+- family-names: Giannousakis
+  given-names: Anastasis
+  affiliation: E3Modelling-Ricardo
+  email: Anastasis.Giannousakis@ricardo.com
+- family-names: Madianos
+  given-names: Michael
+  affiliation: E3Modelling-Ricardo
+  email: Michael.Madianos@ricardo.com
+- family-names: Plessias
+  given-names: Giorgos
+  affiliation: E3Modelling-Ricardo
+  email: George.Plessias@ricardo.com
+- family-names: Pramangioulis
+  given-names: Dionysis
+  affiliation: E3Modelling-Ricardo
+  email: dionysis.pramangioulis@ricardo.com
+- family-names: Sechi
+  given-names: Sonja
+  affiliation: E3Modelling-Ricardo
+  email: Sonja.Sechi@ricardo.com
+- family-names: Sioutas
+  given-names: Fotis
+  affiliation: E3Modelling-Ricardo
+  email: Fotis.Sioutas@ricardo.com
+- family-names: Tsimpoukis
+  given-names: Alexandros
+  affiliation: E3Modelling-Ricardo
+  email: Alexandros.Tsimpoukis@ricardo.com
+- family-names: Zisarou
+  given-names: Eleftheria
+  affiliation: E3Modelling-Ricardo
+  email: Eleftheria.Zisarou@ricardo.com
+- family-names: Tolios
+  given-names: Giannis
+  affiliation: ~
+  email: ~
+title: OPEN PROM
+version: &#39;0.1&#39;
+date-released: &#39;2024-05-13&#39;
+repository-code: https://github.com/e3modelling/OPEN-PROM
+keywords: prometheus
+license: GNU AGPLv3
+</code></pre>
 <h2 id="references">References</h2>
 <script>
 window.onscroll = function() {myFunction()};
