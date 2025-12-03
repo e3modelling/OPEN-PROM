@@ -13,12 +13,12 @@
 *' and is applied to existing PowerGeneration cost tables.
 
 *' Learning curve cost multiplier equation
-*' Correct formulation: C(t) = (Cap(t) / Cap(t-1))^ε
-*' Where LR = 1 - 2^(-ε), so ε = -log(LR) / log(2)
-Q10CostLC(LCTECH,YTIME)$(TIME(YTIME) and not TFIRST(YTIME))..
+*' Timing: Cost multiplier for YTIME based on capacity growth in previous period (YTIME-1 vs YTIME-2)
+*' This reflects that learning happens from past experience and affects current period costs
+Q10CostLC(LCTECH,YTIME)$(TIME(YTIME) and not TFIRST(YTIME) and not TFIRST(YTIME-1))..
     V10CostLC(LCTECH,YTIME)
         =E=
-    (V10CumCapGlobal(LCTECH,YTIME) / V10CumCapGlobal(LCTECH,YTIME-1)) ** i10AlphaLC(LCTECH);
+    (V10CumCapGlobal(LCTECH,YTIME-1) / V10CumCapGlobal(LCTECH,YTIME-2)) ** i10AlphaLC(LCTECH);
 
 *' Global cumulative capacity tracking equation
 *' Tracks total cumulative capacity installations since base year
