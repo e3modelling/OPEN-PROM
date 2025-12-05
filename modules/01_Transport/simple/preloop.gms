@@ -15,8 +15,8 @@ V01ActivPassTrnsp.L(runCy,TRANSE,YTIME) = 1;
 V01ActivPassTrnsp.FX(runCy,"PC",YTIME)$(not AN(YTIME)) = imTransChar(runCy,"KM_VEH",YTIME); 
 V01ActivPassTrnsp.FX(runCy,TRANP,YTIME) $(not AN(YTIME) and not sameas(TRANP,"PC")) = imActv(YTIME,runCy,TRANP); 
 *---
-V01NewRegPcYearly.LO(runCy,YTIME) = 0;
-V01NewRegPcYearly.FX(runCy,YTIME)$(not an(ytime)) = i01NewReg(runCy,YTIME);
+*V01NewRegPcYearly.LO(runCy,YTIME) = 0;
+V01NewRegPcYearly.FX(runCy,YTIME)$DATAY(ytime) = i01NewReg(runCy,YTIME);
 *---
 V01RateScrPc.UP(runCy,TTECH,YTIME) = 1;
 V01RateScrPc.LO(runCy,TTECH,YTIME) = 0;

@@ -110,11 +110,11 @@ VmPeakLoad.L(runCy,YTIME) = 1;
 VmPeakLoad.FX(runCy,YTIME)$(datay(YTIME)) = V04DemElecTot.L(runCy,YTIME)/(V04LoadFacDom.L(runCy,YTIME)*8.76);
 *---
 VmProdElec.LO(runCy,pgall,YTIME) = 0;
-VmProdElec.L(runCy,pgall,YTIME) = 1;
+VmProdElec.L(runCy,pgall,YTIME) = i04DataElecProdNonCHP(runCy,pgall,YTIME) / 1000;
 VmProdElec.FX(runCy,pgall,YTIME)$DATAY(YTIME) = i04DataElecProdNonCHP(runCy,pgall,YTIME) / 1000;
 *---
 V04ProdElecEstCHP.LO(runCy,YTIME) = 0;
-V04ProdElecEstCHP.L(runCy,YTIME) = 1;
+V04ProdElecEstCHP.L(runCy,YTIME) = SUM(EF,i04DataElecProdCHP(runCy,EF,YTIME)) / 1000;
 V04ProdElecEstCHP.FX(runCy,YTIME)$DATAY(YTIME) = SUM(EF,i04DataElecProdCHP(runCy,EF,YTIME)) / 1000;
 *---
 V04ShareMixWndSol.LO(runCy,YTIME) = 0;
@@ -122,6 +122,7 @@ V04ShareMixWndSol.UP(runCy,YTIME) = 1;
 V04ShareMixWndSol.FX(runCy,YTIME)$DATAY(YTIME) = sum(PGALL$PGRENSW(PGALL), VmCapElec.L(runCy,PGALL,YTIME)) / sum(PGALL2, VmCapElec.L(runCy,PGALL2,YTIME));
 *---
 VmCostPowGenAvgLng.LO(runCy,YTIME) = 0;
+VmCostPowGenAvgLng.L(runCy,YTIME) = 1;
 *---
 V04SharePowPlaNewEq.LO(runCy,PGALL,YTIME) = 0;
 V04SharePowPlaNewEq.UP(runCy,PGALL,YTIME) = 1;

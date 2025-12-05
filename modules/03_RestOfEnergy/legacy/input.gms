@@ -8,9 +8,9 @@ $include "./iSuppRefCapacity.csv"
 $offdelim
 ;
 *---
-table i03DataTransfOutputRef(allCy,EF,YTIME)	  "Data for Other transformation output  (Mtoe)"
+table i03TransfOutputRef(allCy,EF,YTIME)	  "Transformation Output from Refineries (Mtoe)"
 $ondelim
-$include"./iDataTransfOutputRef.csv"
+$include"./iOutREFINERTransfProcess.csv"
 $offdelim
 ;
 *---
@@ -134,8 +134,6 @@ i03SupTrnasfOutputRefineries(runCy,EF,YTIME) = 1;
 i03TransfInputRef(runCy,EFS,YTIME)$(not An(YTIME)) = i03DataTotTransfInputRef(runCy,EFS,YTIME);
 *---
 i03TotEneBranchCons(runCy,EFS,YTIME) = i03DataOwnConsEne(runCy,EFS,YTIME);
-*---
-i03TransfOutputRef(runCy,EFS,YTIME)$(not An(YTIME)) = i03DataTransfOutputRef(runCy,EFS,YTIME);
 *---
 i03RefCapacity(runCy,YTIME) = i03SuppRefCapacity(runCy,"REF_CAP",YTIME);
 *---

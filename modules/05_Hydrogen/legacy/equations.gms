@@ -219,13 +219,11 @@ Q05ProdH2(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q05CostAvgProdH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCostAvgProdH2(allCy,YTIME)
         =E=
-    ( sum(H2TECH, 
-        VmProdH2(allCy,H2TECH,YTIME) *
-        V05CostProdH2Tech(allCy,H2TECH,YTIME)
-      ) + 1e-6
+    sum(H2TECH, 
+      (VmProdH2(allCy,H2TECH,YTIME) + 1e-6) *
+      V05CostProdH2Tech(allCy,H2TECH,YTIME)
     ) /
-    (sum(H2TECH,VmProdH2(allCy,H2TECH,YTIME)) + 1e-6)
-;
+    sum(H2TECH,VmProdH2(allCy,H2TECH,YTIME) + 1e-6);
 
 *' This equation calculates the fuel consumption for each hydrogen production technology, considering 
 *' the efficiency of the technology and the amount of fuel required for producing a unit of hydrogen. 

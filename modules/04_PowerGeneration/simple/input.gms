@@ -97,31 +97,13 @@ $ondelim
 $include "./iMatFacPlaAvailCap.csv"
 $offdelim
 ;
-i04MatFacPlaAvailCap.L(runCy,PGALL,YTIME)    = i04MatFacPlaAvailCapL(runCy,PGALL,YTIME);
-i04MatFacPlaAvailCap.LO(runCy, PGALL, YTIME) = 1e-8;
-i04MatFacPlaAvailCap.UP(runCy, PGALL, YTIME) = 40;
+i04MatFacPlaAvailCap.LO(runCy, PGALL, YTIME) = 0;
+*i04MatFacPlaAvailCap.UP(runCy, PGALL, YTIME) = 40;
+i04MatFacPlaAvailCap.L(runCy,PGALL,YTIME)    = 1;
 $ELSE.calib
 table i04MatFacPlaAvailCap(allCy,PGALL,YTIME)      "Maturity factor related to plant available capacity (1)"
 $ondelim
 $include "./iMatFacPlaAvailCap.csv"
-$offdelim
-;
-$ENDIF.calib
-*---
-$IFTHEN.calib %Calibration% == MatCalibration
-variable i04MatureFacPlaDisp(allCy,PGALL,YTIME)    "Maturity factor related to plant dispatching (1)";
-table i04MatureFacPlaDispL(allCy,PGALL,YTIME)      "Maturity factor related to plant dispatching (1)"
-$ondelim
-$include "./iMatureFacPlaDisp.csv"
-$offdelim
-;
-i04MatureFacPlaDisp.L(runCy,PGALL,YTIME)    = i04MatureFacPlaDispL(runCy,PGALL,YTIME);
-i04MatureFacPlaDisp.LO(runCy, PGALL, YTIME) = 1e-8;
-i04MatureFacPlaDisp.UP(runCy, PGALL, YTIME) = 600;
-$ELSE.calib
-table i04MatureFacPlaDisp(allCy,PGALL,YTIME)       "Maturity factor related to plant dispatching (1)"
-$ondelim
-$include"./iMatureFacPlaDisp.csv"
 $offdelim
 ;
 $ENDIF.calib
@@ -199,7 +181,6 @@ i04ScaleEndogScrap                              "Scale parameter for endogenous 
 i04DecInvPlantSched(allCy,PGALL,YTIME)             "Decided plant investment schedule (GW)"
 i04PlantDecomSched(allCy,PGALL,YTIME)	           "Decided plant decomissioning schedule (GW)"	
 i04MxmShareChpElec(allCy,YTIME)	                   "Maximum share of CHP electricity in a country (1)"
-!! i04MatureFacPlaDisp(allCy,PGALL,YTIME)	       "Maturity factor related to plant dispatching (1)"
 ;
 *---
 i04BaseLoadShareDem(runCy,DSBS,YTIME)$an(YTIME)  = i04LoadFactorAdj(DSBS);

@@ -108,22 +108,27 @@ Q03CapRef(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V03CapRef(allCy,YTIME)
         =E=
     [
-      i03ResRefCapacity(allCy,YTIME) * V03CapRef(allCy,YTIME-1) *
-      (1$(ord(YTIME) le 10) +
-      (prod(rc,
-      (sum(EFS$EFtoEFA(EFS,"LQD"),VmConsFinEneCountry(allCy,EFS,YTIME-(ord(rc)+1)))/sum(EFS$EFtoEFA(EFS,"LQD"),VmConsFinEneCountry(allCy,EFS,YTIME-(ord(rc)+2))))**(0.5/(ord(rc)+1)))
-      )
-      $(ord(YTIME) gt 10)
+      i03ResRefCapacity(allCy,YTIME) * 
+      V03CapRef(allCy,YTIME-1) * 
+      (
+        1$(ord(YTIME) le 10) +
+        prod(rc,
+          (
+            sum(EFS$EFtoEFA(EFS,"LQD"),VmConsFinEneCountry(allCy,EFS,YTIME-(ord(rc)+1))) /
+            sum(EFS$EFtoEFA(EFS,"LQD"),VmConsFinEneCountry(allCy,EFS,YTIME-(ord(rc)+2)))
+          )**(0.5/(ord(rc)+1))
+        )$(ord(YTIME) gt 10)
       )     
-    ]$i03RefCapacity(allCy,"%fStartHorizon%")+0;
+    ]$i03RefCapacity(allCy,"%fStartHorizon%");
 
 *' The equation calculates the transformation output from refineries for a specific energy form 
 *' in a given scenario and year. The output is computed based on a residual factor, the previous year's output, and the
 *' change in refineries' capacity. The calculation includes considerations for the base year and adjusts the result accordingly.
 *' The result represents the transformation output from refineries for the specified energy form in million tons of oil equivalent.
-Q03OutTransfRefSpec(allCy,EFS,YTIME)$(TIME(YTIME) $EFtoEFA(EFS,"LQD") $runCy(allCy))..
+Q03OutTransfRefSpec(allCy,EFS,YTIME)$(TIME(YTIME)$runCy(allCy))..
     V03OutTransfRefSpec(allCy,EFS,YTIME)
         =E=
+    0$(not i03RefCapacity(allCy,"%fStartHorizon%")) +
     [
       i03ResTransfOutputRefineries(allCy,EFS,YTIME) * 
       V03OutTransfRefSpec(allCy,EFS,YTIME-1) *
@@ -175,8 +180,7 @@ Q03OutTransfTherm(allCy,"ELC",YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V03OutTransfTherm(allCy,"ELC",YTIME)
         =E=
     smTWhToMtoe *
-    sum(PGALL,VmProdElec(allCy,PGALL,YTIME))
-    ; 
+    sum(PGALL,VmProdElec(allCy,PGALL,YTIME)); 
             
 *' The equation calculates the total transformation input for a specific energy branch 
 *' in a given scenario and year. The result is obtained by summing the transformation inputs from different sources, including
