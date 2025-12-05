@@ -111,6 +111,7 @@ runCyL(allCy)$(%DevMode% = 0) = resCy(allCy) ;
 
 sets
 ***        Model Time Horizon       *
+vtime           "Years for which vintage capital stock is defined"  /%fVintageStartY%*%fEndY%/
 ytime           Model time horizon                                /%fStartHorizon%*%fEndHorizon%/
 an(ytime)       Years for which the model is running              /%fStartY%*%fEndY%/
 period(ytime)   Model can also run for periods of years
@@ -118,7 +119,7 @@ tFirst(ytime)   Base year                                         /%fBaseY%/
 time(ytime)     Model time horizon used in equation definitions   /%fStartY%*%fEndY%/
 datay(ytime)    Historical years before the start year of the model /%fStartHorizon%*%fBaseY%/
 hour            "Segments of hours in a year (250,1250,...,8250)" /h0*h8/
-
+VoY(vtime,ytime)
 
 posElast / a /
 negElast / b1, b2, c, b3, b4, c1, c2, c3, c4, c5 /
@@ -1248,3 +1249,6 @@ SECtoEF(NENSE, "BGDO") = no;
 *This is equivalent with the loop above
 *SECtoEF(DSBS, EF)$(sum(TECH, SECTTECH(DSBS, TECH) * TTECHtoEF(TECH, EF))) = yes;
 PGEF(EFS) = yes$(sum(PGALL, PGALLTOEF(PGALL,EFS)));
+
+VoY(vtime,ytime) = YES$(((ord(ytime)+50) >= ord(vtime)) AND ((ord(ytime)+50)-(ord(vtime)) <= 60) ); !! only operate within lifetime is considered 20 in this case
+!!Both 10 and 50 depend on the max technology lifetime

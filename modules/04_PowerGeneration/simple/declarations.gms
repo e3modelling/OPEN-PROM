@@ -35,6 +35,9 @@ Q04CO2CaptRate(allCy,PGALL,YTIME)
 Q04CostCapTech(allCy,PGALL,YTIME)
 Q04CCSRetroFit(allCy,PGALL,YTIME)
 Q04ScrpRate(allCy,PGALL,YTIME)
+QO4CapElecVintage(allCy,PGALL,VTIME,YTIME)
+Q04CapElecVintageTotal(allcy,PGALL,YTIME)
+Q04ScrapExtra(allCy,PGALL,YTIME)
 *'                **Interdependent Equations**
 Q04ProdElec(allCy,PGALL,YTIME)                             "Compute electricity production from power generation plants"
 Q04CostPowGenAvgLng(allCy,YTIME)	                   "Compute long term power generation cost"
@@ -42,6 +45,7 @@ Q04CapElecTotEst(allCy,YTIME)                              "Compute Estimated to
 Q04PeakLoad(allCy,YTIME)	                               "Compute elerctricity peak load"	
 Q04CapElec(allCy,PGALL,YTIME)	                           "Compute electricity generation capacity"
 Q04ConsFuelElecProd(allCy,EFS,YTIME)
+Q04ScrappingTotal(allCy,PGALL,YTIME)
 ;
 
 Variables
@@ -77,6 +81,9 @@ V04CO2CaptRate(allCy,PGALL,YTIME)
 V04CostCapTech(allCy,PGALL,YTIME)
 V04CCSRetroFit(allCy,PGALL,YTIME)
 V04ScrpRate(allCy,PGALL,YTIME)
+V04CapElecVintage(allCy,PGALL,VTIME,YTIME)
+V04CapElecVintageTotal(allcy,PGALL,YTIME)
+V04ScrappingTotal(allCy,PGALL,YTIME)
 *'                **Interdependent Variables**	
 VmProdElec(allCy,PGALL,YTIME)                              "Electricity production (TWh)"	
 VmCostPowGenAvgLng(allCy,YTIME)	                   "Long-term average power generation cost (US$2015/kWh)"

@@ -199,6 +199,8 @@ i04ScaleEndogScrap                              "Scale parameter for endogenous 
 i04DecInvPlantSched(allCy,PGALL,YTIME)             "Decided plant investment schedule (GW)"
 i04PlantDecomSched(allCy,PGALL,YTIME)	           "Decided plant decomissioning schedule (GW)"	
 i04MxmShareChpElec(allCy,YTIME)	                   "Maximum share of CHP electricity in a country (1)"
+i04SwitchPremScr(allCy,YTIME)
+i04SwitchRetro(allCY,YTIME)
 !! i04MatureFacPlaDisp(allCy,PGALL,YTIME)	       "Maturity factor related to plant dispatching (1)"
 ;
 *---
@@ -224,3 +226,6 @@ i04DecInvPlantSched(runCy,PGALL,YTIME) = i04InvPlants(runCy,PGALL,YTIME);
 i04PlantDecomSched(runCy,PGALL,YTIME) = i04DecomPlants(runCy,PGALL,YTIME);
 *---
 i04MxmShareChpElec(runCy,YTIME) = 0.6;
+
+i04SwitchPremScr(allCy,YTIME) = 0;
+i04SwitchRetro(allCY,YTIME) = 0;

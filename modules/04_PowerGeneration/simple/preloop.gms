@@ -108,3 +108,4 @@ SUM(PGALL$PGALLTOEF(PGALL,PGEF),
 *---
 VmConsFuelElecProd.FX(runCy,PGEF,YTIME)$DATAY(YTIME) = -i03InpPGTransfProcess(runCy,PGEF,YTIME);
 
+V04CapElecVintage.FX(runCy,PGALL,VTIME,YTIME)$(DATAY(YTIME) and (((ord(ytime)+50) >= ord(vtime)) AND ((ord(ytime)+50)-(ord(vtime)) <= i04TechLftPlaType(runCy,PGALL)))) = imInstCapPastNonCHP(runCy,PGALL,YTIME)/i04TechLftPlaType(runCy,PGALL); !!capacity divided by Lifetime

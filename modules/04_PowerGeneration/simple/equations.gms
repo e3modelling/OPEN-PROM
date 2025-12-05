@@ -89,7 +89,7 @@ Q04CapElecTotEst(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04CapexFixCostPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04CapexFixCostPG(allCy,PGALL,YTIME)
         =E=         
-    ( 
+    V04CapexRESRate(allCy,PGALL,YTIME) *( 
       imDisc(allCy,"PG",YTIME) * exp(imDisc(allCy,"PG",YTIME) * i04TechLftPlaType(allCy,PGALL))
       / (exp(imDisc(allCy,"PG",YTIME) * i04TechLftPlaType(allCy,PGALL)) -1)
     ) * i04GrossCapCosSubRen(allCy,PGALL,YTIME) * 1000 * imCGI(allCy,YTIME) +
@@ -98,7 +98,7 @@ Q04CapexFixCostPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04CostCapTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
     V04CostCapTech(allCy,PGALL,YTIME) 
         =E=
-    V04CapexRESRate(allCy,PGALL,YTIME) * V04CapexFixCostPG(allCy,PGALL,YTIME) / 
+     V04CapexFixCostPG(allCy,PGALL,YTIME) / 
     (i04AvailRate(allCy,PGALL,YTIME) * smGwToTwhPerYear(YTIME) * 1000);
 
 *' Compute the variable cost of each power plant technology for every region,
@@ -133,7 +133,7 @@ Q04CostHourProdInvDec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04IndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(allCy))..
     V04IndxEndogScrap(allCy,PGALL,YTIME)
         =E=
-    V04CostVarTech(allCy,PGALL,YTIME)**(-2) /
+    [V04CostVarTech(allCy,PGALL,YTIME)**(-2) /
     (
       V04CostVarTech(allCy,PGALL,YTIME)**(-2) +
       (
@@ -146,7 +146,7 @@ Q04IndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(al
           !!V04CostVarTech(allCy,PGALL2,YTIME)
         )
       )**(-2)
-    );
+    )]$i04SwitchPremScr(allCy,YTIME) + 1$(not i04SwitchPremScr(allCy,YTIME));
 
 *' The equation calculates the total electricity generation capacity excluding Combined Heat and Power plants for a specified year .
 *' It is derived by subtracting the sum of the capacities of CHP plants multiplied by a factor of 0.85 (assuming an efficiency of 85%) from the
@@ -242,6 +242,29 @@ Q04NewCapElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       (1 - V04CCSRetroFit(allCy,PGALL2,YTIME)) * VmCapElec(allCy,PGALL2,YTIME-1)
     );
 
+QO4CapElecVintage(allCy,PGALL,VTIME,YTIME)$(TIME(YTIME)$(runCY(allCY))$(((ord(ytime)+50) >= ord(vtime)) AND ((ord(ytime)+50)-(ord(vtime)) <= i04TechLftPlaType(allCy,PGALL))))..
+    V04CapElecVintage(allCy,PGALL,VTIME,YTIME)
+        =E=
+    (V04NewCapElec(allCy,PGALL,YTIME))$sameas(VTIME,YTIME) +
+    (V04CapElecVintage(allCy,PGALL,VTIME,YTIME-1))$(not sameas(VTIME,YTIME));
+
+Q04CapElecVintageTotal(allcy,PGALL,YTIME)$(TIME(YTIME)$(runCY(allCY)))..
+        V04CapElecVintageTotal(allcy,PGALL,YTIME)
+        =E= 
+    sum(vtime$(((ord(ytime)+50) >= ord(vtime)) AND ((ord(ytime)+50)-(ord(vtime)) <= i04TechLftPlaType(allCy,PGALL))),V04CapElecVintage(allCy,PGALL,VTIME,YTIME))
+    - i04PlantDecomSched(allCy,PGALL,YTIME) * i04AvailRate(allCy,PGALL,YTIME);
+
+Q04ScrappingTotal(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V04ScrappingTotal(allCy,PGALL,YTIME) 
+       =E=
+ !!  VmCapElec(allCy,PGALL,YTIME-1) * (V04ScrpRate(allCy,PGALL,YTIME)) 
+ !! +
+   i04PlantDecomSched(allCy,PGALL,YTIME) * i04AvailRate(allCy,PGALL,YTIME);
+Q04ScrapExtra(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCY(allCY)))..
+ !!   sum(vtime$(((ord(ytime)+50) >= ord(vtime)) AND ((ord(ytime)+50)-(ord(vtime)) <= i04TechLftPlaType(allCy,PGALL))),V04ScrapExtra(allCy,PGALL,VTIME,YTIME)*V04CapElecVintage(allCy,PGALL,VTIME,YTIME-1))
+    10 
+        =E=
+    10;
 *' This equation calculates the variable representing the newly added electricity generation capacity for a specific renewable power plant 
 *' in a given country and time period. The calculation involves subtracting the planned electricity generation capacity in the current time period
 *' from the planned capacity in the previous time period. The purpose of this equation is to quantify the increase in electricity generation capacity for renewable
@@ -348,7 +371,7 @@ Q04CO2CaptRate(allCy,PGALL,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
 Q04CCSRetroFit(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(NOCCS(PGALL)))..
     V04CCSRetroFit(allCy,PGALL,YTIME)
         =E=
-    V04CostVarTech(allCy,PGALL,YTIME) ** (-2) /
+    [V04CostVarTech(allCy,PGALL,YTIME) ** (-2) /
     (
       V04CostVarTech(allCy,PGALL,YTIME) ** (-2) +
       0.01 *
@@ -360,7 +383,7 @@ Q04CCSRetroFit(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(NOCCS(PGALL)))..
           V04CostVarTech(allCy,PGALL2,YTIME)
         ) ** (-2)
       )
-    );
+    )]$i04SwitchRetro(allCY,YTIME) + 1$(not i04SwitchRetro(allCY,YTIME));
 
 Q04ScrpRate(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04ScrpRate(allCy,PGALL,YTIME)
