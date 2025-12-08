@@ -21,7 +21,7 @@
 *' Timing: Cost multiplier for YTIME based on capacity growth in previous period (YTIME-1 vs YTIME-2)
 *' This reflects that learning happens from past experience and affects current period costs
 *' Safeguards: Add small epsilon to denominator to avoid division by zero
-Q10CostLC(LCTECH,YTIME)$(TIME(YTIME) and not TFIRST(YTIME) and not TFIRST(YTIME-1))..
+Q10CostLC(LCTECH,YTIME)$(TIME(YTIME) and ord(YTIME) >= 3)..
     VmCostLC(LCTECH,YTIME)
         =E=
     (V10CumCapGlobal(LCTECH,YTIME-1) / (V10CumCapGlobal(LCTECH,YTIME-2) + 0.1)) ** i10AlphaLC(LCTECH);
@@ -29,7 +29,7 @@ Q10CostLC(LCTECH,YTIME)$(TIME(YTIME) and not TFIRST(YTIME) and not TFIRST(YTIME-
 *' Global cumulative capacity tracking equation
 *' Tracks total cumulative capacity installations since base year
 *' Cumulative = Previous cumulative + New installations this period (converted MW to GW)
-Q10CumCapGlobal(LCTECH,YTIME)$(TIME(YTIME) and not TFIRST(YTIME))..
+Q10CumCapGlobal(LCTECH,YTIME)$(TIME(YTIME) and ord(YTIME) >= 2)..
     V10CumCapGlobal(LCTECH,YTIME)
         =E=
     V10CumCapGlobal(LCTECH,YTIME-1) + 
