@@ -13,11 +13,11 @@
 *' This prevents unrealistic cost reductions while maintaining learning benefits.
 
 Parameters
-i10AlphaLC(LCTECH)                  "Learning curve factor alpha for technology (1)"
-i10LearningRate(LCTECH)             "Learning rate for technology (1)" 
-i10InitCostRefLC(allCy,LCTECH,YTIME) "Initial cost reference for learning curves from PowerGeneration (kUS$2015/KW)"
-i10LearnableFraction(LCTECH)        "Fraction of cost subject to learning curve (1)"
-i10MinCostFraction(LCTECH)          "Minimum cost as fraction of initial cost (1)"
+i10AlphaLC(LCTECH)                    "Learning curve factor alpha for technology (1)"
+i10LearningRate(LCTECH)               "Learning rate for technology (1)" 
+i10InitCostRefLC(allCy,LCTECH,YTIME)  "Initial cost reference for learning curves from PowerGeneration (kUS$2015/KW)"
+i10LearnableFraction(LCTECH)          "Fraction of cost subject to learning curve (1)"
+i10MinCostFraction(LCTECH)            "Minimum cost as fraction of initial cost (1)"
 ;
 *---
 i10LearningRate("PGSOL") = 0.20;    !! 20% cost reduction per doubling for Solar PV
@@ -48,5 +48,3 @@ i10InitCostRefLC(allCy,LCTECH,YTIME)$TFIRST(YTIME) = i04GrossCapCosSubRen(allCy,
 *' Solving for ε: ε = -log(1-LR) / log(2) (negative for cost reduction)
 i10AlphaLC(LCTECH) = -log(1 - i10LearningRate(LCTECH)) / log(2);
 *---
-
-*' @stop

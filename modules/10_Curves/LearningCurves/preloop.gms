@@ -4,12 +4,11 @@
 *'                *VARIABLE INITIALISATION*
 
 *---
-*' Set bounds for cost multiplier with stopping mechanism (relaxed for stability)
-*' Lower bound ensures minimum cost floor is respected but not too restrictive
+*' Set bounds for cost multiplier with conservative values to avoid max() function
+*' Lower bound set to prevent excessive cost reductions while ensuring solver compatibility
+*' Using simple conservative bound instead of complex max() calculation
 *' Cost = (LearnableFraction * CostMultiplier + (1-LearnableFraction)) * InitialCost
-*' At minimum: CostMultiplier_min = (MinCostFraction - (1-LearnableFraction)) / LearnableFraction
-VmCostLC.LO(LCTECH,YTIME) = max(0.01, 
-    0.5 * (i10MinCostFraction(LCTECH) - (1 - i10LearnableFraction(LCTECH))) / i10LearnableFraction(LCTECH));
+VmCostLC.LO(LCTECH,YTIME) = 0.35;   !! Conservative 35% minimum cost multiplier (65% max reduction)
 VmCostLC.UP(LCTECH,YTIME) = 2.0;   !! Allow some cost increase for numerical stability
 *---
 *' Initialize cumulative capacity with historical data from base year  
