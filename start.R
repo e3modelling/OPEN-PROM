@@ -247,7 +247,7 @@ if (task == 0) {
       " main.gms -o mainCalib.lst --WriteGDX=off --DevMode=0 --fScenario=4 --GenerateInput=on --Calibration=MatCalibration -logOption 4 -Idir=./data 2>&1 | tee fullCalib.log"
     )
   )
-  CalibratedParams <- c("i04MatFacPlaAvailCap.csv", "i04MatureFacPlaDisp.csv")
+  CalibratedParams <- c("i04MatFacPlaAvailCap.csv")
   newNames <- gsub("[0-9]", "", CalibratedParams) # remove numbers
   CalibratedParamsPath <- file.path(getwd(), CalibratedParams)
   newPath <- file.path(getwd(), "data", newNames)
@@ -285,7 +285,7 @@ if (task == 0) {
 
   if (withRunFolder && withSync) syncRun()
 
-  CalibratedParams <- c("i04MatFacPlaAvailCap.csv", "i04MatureFacPlaDisp.csv")
+  CalibratedParams <- c("i04MatFacPlaAvailCap.csv")
   newNames <- gsub("[0-9]", "", CalibratedParams) # remove numbers
   CalibratedParamsPath <- file.path(getwd(), CalibratedParams)
   newPath <- file.path(dirname(dirname(getwd())), "data", newNames)
