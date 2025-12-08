@@ -39,7 +39,6 @@ i10MinCostFraction("PGCSP") = 0.35;     !! CSP cannot go below 35% of initial co
 i10MinCostFraction("PGAWND") = 0.40;    !! Onshore wind cannot go below 40% of initial cost  
 i10MinCostFraction("PGAWNO") = 0.40;    !! Offshore wind cannot go below 40% of initial cost
 *---
-*' Dynamically capture initial cost reference from PowerGeneration data
 *' Use the base year costs as the reference point for learning curves
 i10InitCostRefLC(allCy,LCTECH,YTIME)$TFIRST(YTIME) = i04GrossCapCosSubRen(allCy,LCTECH,YTIME);
 *---
