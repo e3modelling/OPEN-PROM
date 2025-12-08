@@ -95,7 +95,7 @@ Q04CapexFixCostPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       / (exp(imDisc(allCy,"PG",YTIME) * i04TechLftPlaType(allCy,PGALL)) -1)
     ) * i04GrossCapCosSubRen(allCy,PGALL,YTIME) * 1000 * imCGI(allCy,YTIME) 
     * (
-        sum(LCTECH$sameas(LCTECH,PGALL), i10LearnableFraction(LCTECH) * V10CostLC(LCTECH,YTIME) + (1 - i10LearnableFraction(LCTECH)))$LCTECH(PGALL)
+        sum(LCTECH$sameas(LCTECH,PGALL), i10LearnableFraction(LCTECH) * VmCostLC(LCTECH,YTIME) + (1 - i10LearnableFraction(LCTECH)))$LCTECH(PGALL)
         + 1$(not LCTECH(PGALL))
       ) +
     i04FixOandMCost(allCy,PGALL,YTIME);

@@ -22,7 +22,7 @@
 *' This reflects that learning happens from past experience and affects current period costs
 *' Safeguards: Add small epsilon to denominator to avoid division by zero
 Q10CostLC(LCTECH,YTIME)$(TIME(YTIME) and not TFIRST(YTIME) and not TFIRST(YTIME-1))..
-    V10CostLC(LCTECH,YTIME)
+    VmCostLC(LCTECH,YTIME)
         =E=
     (V10CumCapGlobal(LCTECH,YTIME-1) / (V10CumCapGlobal(LCTECH,YTIME-2) + 0.1)) ** i10AlphaLC(LCTECH);
 

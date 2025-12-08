@@ -8,7 +8,7 @@ Q10CumCapGlobal(LCTECH,YTIME)       "Global cumulative capacity calculation"
 ;
 
 Variables
-V10CostLC(LCTECH,YTIME)             "Learning curve cost multiplier (1)"
+VmCostLC(LCTECH,YTIME)             "Learning curve cost multiplier (1)"
 V10CumCapGlobal(LCTECH,YTIME)       "Global cumulative capacity (GW)"
 
 ;
