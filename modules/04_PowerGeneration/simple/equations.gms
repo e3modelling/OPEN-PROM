@@ -49,7 +49,7 @@ Q04DemElecTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       VmConsFinEneCountry(allCy,"ELC",YTIME) + 
       VmConsFinNonEne(allCy,"ELC",YTIME) + 
       VmLossesDistr(allCy,"ELC",YTIME) +
-      VmConsFiEneSec(allCy,"ELC",YTIME) - 
+      SUM(SSBS,VmConsFiEneSec(allCy,SSBS,"ELC",YTIME)) - 
       VmImpNetEneBrnch(allCy,"ELC",YTIME)
     );
 $endif.calib

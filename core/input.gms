@@ -2,7 +2,7 @@
 *' @code
 
 *---
-table imActv(YTIME,allCy,SBS) "Sector activity (various)"
+table imActv(YTIME,allCy,DSBS) "Sector activity (various)"
                               !! main sectors (Billion US$2015) 
                               !! bunkers and households (1)
                               !! transport (Gpkm, or Gvehkm or Gtkm)

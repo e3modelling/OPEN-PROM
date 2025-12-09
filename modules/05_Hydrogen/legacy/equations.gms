@@ -23,6 +23,7 @@ Q05DemSecH2(allCy,SBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         =E=
     sum(INDDOM$SAMEAS(INDDOM,SBS), VmConsFuel(allCy,INDDOM,"H2F",YTIME)) +
     sum(TRANSE$SAMEAS(TRANSE,SBS), VmDemFinEneTranspPerFuel(allCy,TRANSE,"H2F",YTIME)) +
+    !! FIXME: Add LQD,GAS,SLD sectors consumption too
     VmConsFuelDACProd(allCy,"H2F",YTIME)$sameas("DAC",SBS) +
     VmConsFuelElecProd(allCy,"H2F",YTIME)$sameas("PG",SBS);
 

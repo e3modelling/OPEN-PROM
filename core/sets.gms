@@ -197,6 +197,9 @@ BM_CO2         "Non metallic minerals production, related with CO2"
 PG_SF6         "Electricity production, related with SF6"
 OI_SF6         "Other Industries activities, related with SF6"
 DAC            "Direct Air Capture"
+LQD            "Liquids Production"
+SLD            "Solids Production"
+GAS            "Gases Production"
 /
 
 SBS(ALLSBS)          Model Subsectors
@@ -228,10 +231,12 @@ NEN   "Other Non Energy Uses"
 PG    "Power and Steam Generation"
 H2P   "Hydrogen production"
 STEAMP "Steam Production"
+LQD    "Liquids Production"
+SLD    "Solids Production"
+GAS    "Gases Production"
 H2INFR "Hydrogen storage and delivery"
 DAC    "Direct Air Capture"
 /
-
 
 SCT_GHG(ALLSBS)      Aggregate Sectors used in non-energy related GHG emissions
 /
@@ -313,6 +318,8 @@ INDDOM(DSBS)      Industry and Tertiary         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,S
 * The following sets are used in price equation for electricity
 HOU1(SBS)         Households                     /HOU/
 SERV(SBS)         Services                       /SE,AG/
+
+SSBS(SBS)         All Supply Subsectors         /PG,H2P,STEAMP,LQD,SLD,GAS,H2INFR/
 *         Energy Forms            *
 
 EF           Energy Forms
@@ -690,6 +697,37 @@ LTDAC
 EWDAC
 /
 
+STECH     "Technologies in supply side"
+/
+ATHLGN      "Advanced thermal monovalent lignite"
+ATHCOAL     "Advanced thermal monovalent hard coal"
+ATHGAS      "Advanced thermal monovalent natural gas"
+ATHBMSWAS   "Advanced thermal monovalent biomass and waste"
+ATHBMSCCS   "Advanced thermal monovalent biomass and waste with CCS"
+ATHOIL      "Advanced gas turbines (peak devices) diesel oil"
+PGLHYD      "Large Hydro Plants"
+PGSHYD      "Small Hydro Plants"
+PGAWND      "Wind Plants"
+PGSOL       "Solar Photovoltaic Plants"
+PGCSP       "Advanced Solar Thermal Plants"
+PGOTHREN    "Advanced geothermal Plants"
+PGANUC      "New Nuclear Designs"
+ATHCOALCCS  "Supercritical coal with CCS"
+ATHLGNCCS   "Supercritical lignite with CCS"
+ATHGASCCS   "Gas turbine combined cycle with CCS"
+PGAWNO      "Wind offshore"
+PGH2F       "Hydrogen Production"
+gsr         "gas steam reforming"
+gss         "gas steam reforming with CCS"
+weg         "water electrolysis from grid power"
+wew         "water electrolysis with wind"
+wes         "water electrolysis with solar"
+cgf         "coal gasification"
+cgs         "coal gasification with CCS"
+bgfl        "biomass gasification large scale"
+bgfls       "biomass gasification large scale with CCS"
+/
+
 TECHtoEF (TECH,EF) Fuels consumed by technologies
 /
 TGSL.(GSL,BGSL)
@@ -784,6 +822,8 @@ TCHEVGSL
 TCHEVGDO
 /
 
+SSECTTECH(SSBS,STECH) "Link between Model Supply Subsectors and Technologies"
+
 SECTTECH(DSBS,TECH) Link between Model Demand Subsectors and Technologies
 /
 *PC.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO,CHEVGSL,CHEVGDO)
@@ -806,8 +846,6 @@ SE.(TLPG,TKRS,TNGS,TOGS,TELC,TSTE)
 BU.(TGDO,TRFO,TKRS)
 (PCH,NEN).(TLGN,THCL,TGDO,TRFO,TLPG,TOLQ,TNGS,TOGS)
 DAC.(HTDAC,H2DAC,LTDAC,EWDAC)
-*PG.(PGTLGN,PGTHCL,PGTGDO,PGTRFO,PGTNGS,PGTNUC,PGTHYD,PGTBMSWAS,PGTSOL,PGTGEO,PGTWND)
-*H2P.(HPTHCL,HPTRFO,HPTNGS,HPTNUC,HPTBMSWAS,HPTSOL,HPTWND,HPTELC)
 /
 
 SECtoEF(SBS,EF) Link between Model Subsectors and Energy FORMS
@@ -815,10 +853,12 @@ SECtoEF(SBS,EF) Link between Model Subsectors and Energy FORMS
 PG.(LGN,HCL,GDO,RFO,NGS,OGS,NUC,HYD,BMSWAS,SOL,GEO,WND,H2F)
 H2P.(HCL,LGN,RFO,GDO,NGS,OGS,NUC,BMSWAS,SOL,WND,ELC)
 STEAMP.(HCL,LGN,GDO,RFO,LPG,KRS,NGS,OGS,OLQ,NUC,GEO,BMSWAS,ELC,H2F)
-*DAC.(ELC,NGS)
+SLD.(LGN,HCL,GSL,GDO,BGDO,RFO,OLQ,NGS,OGS,BMSWAS,SOL,CRO,LPG,KRS,ELC,STE)
+LQD.(LGN,HCL,GSL,GDO,BGDO,RFO,OLQ,NGS,OGS,BMSWAS,SOL,CRO,LPG,KRS,ELC,STE)
+GAS.(HCL,GSL,GDO,BGDO,RFO,OLQ,NGS,OGS,BMSWAS,SOL,CRO,LPG,KRS,ELC,STE)
 /
 
-PGALL            Power Generation Plant Types !! Maybe these should be the power generation technologies?
+PGALL(STECH)     Power Generation Plant Types
 /
 *CTHLGN Conventional thermal monovalent lignite
 *CTHHCL Conventional thermal monovalent hard coal
@@ -1247,4 +1287,5 @@ SECtoEF(NENSE, "BGSL") = no;
 SECtoEF(NENSE, "BGDO") = no;
 *This is equivalent with the loop above
 *SECtoEF(DSBS, EF)$(sum(TECH, SECTTECH(DSBS, TECH) * TTECHtoEF(TECH, EF))) = yes;
+SSECTTECH("PG",STECH) = yes$PGALL(STECH);
 PGEF(EFS) = yes$(sum(PGALL, PGALLTOEF(PGALL,EFS)));

@@ -2,7 +2,7 @@
 *' @code
 
 *---
-table i02ElastNonSubElecData(SBS,ETYPES,YTIME)             "Elasticities of Non Substitutable Electricity (1)"
+table i02ElastNonSubElecData(DSBS,ETYPES,YTIME)             "Elasticities of Non Substitutable Electricity (1)"
 $ondelim
 $include "./iElastNonSubElecData.csv"
 $offdelim
@@ -11,8 +11,8 @@ $offdelim
 table i02ElaSub(allCy,DSBS)                                "Elasticities by subsector for all countries (1)" ;
 *---
 Parameters
-i02ExogDemOfBiomass(allCy,SBS,YTIME)	                   "Demand of tranditional biomass defined exogenously ()"
-$IF NOT %Calibration% == Calibration i02ElastNonSubElec(allCy,SBS,ETYPES,YTIME)                   "Elasticities of Non Substitutable Electricity (1)"
+i02ExogDemOfBiomass(allCy,DSBS,YTIME)	                   "Demand of tranditional biomass defined exogenously ()"
+$IF NOT %Calibration% == Calibration i02ElastNonSubElec(allCy,DSBS,ETYPES,YTIME)                   "Elasticities of Non Substitutable Electricity (1)"
 i02util(allCy,DSBS,ITECH,YTIME)                            "Utilization rate of technology"
 i02numtechnologiesUsingEF(DSBS,EF)                         "Number of technologues using an energy form"     
 i02Share(allCy,DSBS,ITECH,EF,YTIME)                        "Share of each energy form in a technology"
@@ -32,18 +32,18 @@ i02util(runCy,DSBS,ITECH,YTIME) = 1;
 i02Share(runCy,DSBS,ITECH,EF,YTIME) = 1; !! (To be included in mrprom when mix of fuels for technologies)
 *---
 $IFTHEN.calib %Calibration% == Calibration
-variable i02ElastNonSubElec(allCy,SBS,ETYPES,YTIME)        "Elasticities of Non Substitutable Electricity (1)";
-i02ElastNonSubElec.L(runCy,SBS,ETYPES,YTIME) = i02ElastNonSubElecData(SBS,ETYPES,YTIME);
-i02ElastNonSubElec.LO(runCy,SBS,"a",YTIME)   = 0.001;
-i02ElastNonSubElec.UP(runCy,SBS,"a",YTIME)   = 10;
-i02ElastNonSubElec.LO(runCy,SBS,"b1",YTIME)  = -10;
-i02ElastNonSubElec.UP(runCy,SBS,"b1",YTIME)  = -0.001;
-i02ElastNonSubElec.LO(runCy,SBS,"b2",YTIME)  = -10;
-i02ElastNonSubElec.UP(runCy,SBS,"b2",YTIME)  = -0.001;
-i02ElastNonSubElec.LO(runCy,SBS,"c",YTIME)   = -10;
-i02ElastNonSubElec.UP(runCy,SBS,"c",YTIME)   = -0.001;
+variable i02ElastNonSubElec(allCy,DSBS,ETYPES,YTIME)        "Elasticities of Non Substitutable Electricity (1)";
+i02ElastNonSubElec.L(runCy,DSBS,ETYPES,YTIME) = i02ElastNonSubElecData(DSBS,ETYPES,YTIME);
+i02ElastNonSubElec.LO(runCy,DSBS,"a",YTIME)   = 0.001;
+i02ElastNonSubElec.UP(runCy,DSBS,"a",YTIME)   = 10;
+i02ElastNonSubElec.LO(runCy,DSBS,"b1",YTIME)  = -10;
+i02ElastNonSubElec.UP(runCy,DSBS,"b1",YTIME)  = -0.001;
+i02ElastNonSubElec.LO(runCy,DSBS,"b2",YTIME)  = -10;
+i02ElastNonSubElec.UP(runCy,DSBS,"b2",YTIME)  = -0.001;
+i02ElastNonSubElec.LO(runCy,DSBS,"c",YTIME)   = -10;
+i02ElastNonSubElec.UP(runCy,DSBS,"c",YTIME)   = -0.001;
 $ELSE.calib
-i02ElastNonSubElec(runCy,SBS,ETYPES,YTIME) = i02ElastNonSubElecData(SBS,ETYPES,YTIME);
+i02ElastNonSubElec(runCy,DSBS,ETYPES,YTIME) = i02ElastNonSubElecData(DSBS,ETYPES,YTIME);
 $ENDIF.calib
 *---
 i02ElaSub(runCy,DSBS) = imElaSubData(DSBS);

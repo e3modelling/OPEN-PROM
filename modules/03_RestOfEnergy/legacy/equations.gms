@@ -61,6 +61,7 @@ Q03LossesDistr(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         V03ProdPrimary(allCy,EFS,YTIME)$sameas(EFS,"CRO")
       )
     )$(not H2EF(EFS)) +
+    !! FIXME: Do we need to add LQD,GAS,SLD here too?
     (
       VmDemTotH2(allCy,YTIME) -
       sum(SBS$SECtoEF(SBS,"H2F"), VmDemSecH2(allCy,SBS,YTIME))
@@ -250,7 +251,7 @@ Q03ConsGrssInl(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V03ConsGrssInl(allCy,EFS,YTIME)
         =E=
     VmConsFinEneCountry(allCy,EFS,YTIME) + 
-    VmConsFiEneSec(allCy,EFS,YTIME) + 
+    SUM(SSBS,VmConsFiEneSec(allCy,SSBS,EFS,YTIME)) + 
     VmConsFinNonEne(allCy,EFS,YTIME) + 
     V03InpTotTransf(allCy,EFS,YTIME) - 
     V03OutTotTransf(allCy,EFS,YTIME) +
@@ -273,7 +274,10 @@ Q03ProdPrimary(allCy,PPRODEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     [
       (
         i03RatePriProTotPriNeeds(allCy,PPRODEF,YTIME) *
-        (V03ConsGrssInlNotEneBranch(allCy,PPRODEF,YTIME) +  VmConsFiEneSec(allCy,PPRODEF,YTIME))
+        (
+          V03ConsGrssInlNotEneBranch(allCy,PPRODEF,YTIME) +
+          SUM(SSBS,VmConsFiEneSec(allCy,SSBS,PPRODEF,YTIME))
+        )
       )$(not (sameas(PPRODEF,"CRO")or sameas(PPRODEF,"NGS"))) +
       (
         i03ResHcNgOilPrProd(allCy,PPRODEF,YTIME) * 
@@ -341,24 +345,20 @@ Q03ImpNetEneBrnch(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         =E=
     V03Imp(allCy,EFS,YTIME) - V03Exp(allCy,EFS,YTIME);
                                
-*' The equation calculates the final energy consumption in the energy sector.
+*' The equation calculates the final energy own consumption in the energy sector.
 *' It considers the rate of energy branch consumption over the total transformation output.
 *' The final consumption is determined based on the total transformation output and primary production for energy
 *' branches, excluding Oil, Coal, and Gas. The result, VmConsFiEneSec, represents the final consumption in million tons of
 *' oil equivalent for the specified scenario and year.
-Q03ConsFiEneSec(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    VmConsFiEneSec(allCy,EFS,YTIME)
+Q03ConsFiEneSec(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    VmConsFiEneSec(allCy,SSBS,EFS,YTIME)
         =E=
-    i03RateEneBranCons(allCy,EFS,YTIME) *
+    i03RateEneBranCons(allCy,SSBS,EFS,YTIME) *
     (
-      (
-        V03OutTotTransf(allCy,EFS,YTIME) +
-        V03ProdPrimary(allCy,EFS,YTIME)$(sameas(EFS,"CRO") or sameas(EFS,"NGS"))
-      )$(not TOCTEF(EFS)) +
-      (
-        VmConsFinEneCountry(allCy,EFS,YTIME) + 
-        VmConsFinNonEne(allCy,EFS,YTIME) + 
-        VmLossesDistr(allCy,EFS,YTIME)
-      )$TOCTEF(EFS)
-    ) +
-    sum(EF$(H2PRODEF(EF) and EFtoEFS(EF,EFS)), VmConsFuelH2Prod(allCy,EF,YTIME))$TOCTEF(EFS);                               
+      V03OutTransfTherm(allCy,"ELC",YTIME)$(sameas("PG",SSBS) and ELCEF(EFS))+
+      VmDemTotSte(allCy,YTIME)$(sameas("STEAMP",SSBS) and STEAM(EFS)) +
+      !!FIXME: Add all liquids
+      V03OutTransfRefSpec(allCy,EFS,YTIME)$sameas("LQD",SSBS) +  
+      VmDemTotH2(allCy,YTIME)$(sameas(EFS, "H2F") and sameas("H2P",SSBS)) +
+      V03ProdPrimary(allCy,EFS,YTIME)$(sameas(EFS,"CRO") or sameas(EFS,"NGS"))
+    );                               

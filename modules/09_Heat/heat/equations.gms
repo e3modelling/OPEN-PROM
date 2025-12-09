@@ -16,7 +16,7 @@ Q09DemTotSte(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmDemTotSte(allCy,YTIME)
         =E=
     sum(DSBS,VmConsFuel(allCy,DSBS,"STE",YTIME)) +
-    VmConsFiEneSec(allCy,"STE",YTIME) +
+    SUM(SSBS,VmConsFiEneSec(allCy,SSBS,"STE",YTIME)) +
     VmLossesDistr(allCy,"STE",YTIME) +
     V03Transfers(allCy,"STE",YTIME);
 

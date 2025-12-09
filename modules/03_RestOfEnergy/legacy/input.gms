@@ -8,7 +8,7 @@ $include "./iSuppRefCapacity.csv"
 $offdelim
 ;
 *---
-table i03DataTransfOutputRef(allCy,EF,YTIME)	  "Data for Other transformation output  (Mtoe)"
+table i03TransfOutputRef(allCy,EF,YTIME)	  "Data for transformation output for refineries (Mtoe)"
 $ondelim
 $include"./iDataTransfOutputRef.csv"
 $offdelim
@@ -20,7 +20,7 @@ $include"./iDataGrossInlCons.csv"
 $offdelim
 ;
 *---
-table i03DataOwnConsEne(allCy,EFS,YTIME)	      "Data for Consumption of Energy Branch (Mtoe)"
+table i03DataOwnConsEne(allCy,SSBS,EFS,YTIME)	      "Data for Consumption of Energy Branch (Mtoe)"
 $ondelim
 $include"./iDataOwnConsEne.csv"
 $offdelim
@@ -113,14 +113,13 @@ i03SupTrnasfOutputRefineries(allCy,EF,YTIME)	  "Supplementary parameter for the 
 i03SupResRefCapacity(allCy,SUPOTH,YTIME)	      "Supplementary Parameter for the residual in refineries Capacity (1)"
 i03TransfInputRef(allCy,EF,YTIME)	              "Transformation Input in Refineries (Mtoe)"
 i03TotEneBranchCons(allCy,EF,YTIME)	              "Total Energy Branch Consumption (Mtoe)"
-i03TransfOutputRef(allCy,EF,YTIME)	              "Transformation Output from Refineries (Mtoe)"
 i03RefCapacity(allCy,YTIME)	                      "Refineries Capacity (Million Barrels/day)"
 i03GrosInlCons(allCy,EF,YTIME)	                  "Gross Inland Consumtpion (Mtoe)"
 i03GrossInConsNoEneBra(allCy,EF,YTIME)	          "Gross Inland Consumption,excluding energy branch (Mtoe)"
 i03FeedTransfr(allCy,EFS,YTIME)	                  "Feedstocks in Transfers (Mtoe)"
 i03ResRefCapacity(allCy,YTIME)	                  "Residual in Refineries Capacity (1)"
 i03ResTransfOutputRefineries(allCy,EF,YTIME)      "Residual in Transformation Output from Refineries (Mtoe)"
-i03RateEneBranCons(allCy,EF,YTIME)	              "Rate of Energy Branch Consumption over total transformation output (1)"
+i03RateEneBranCons(allCy,SSBS,EF,YTIME)	              "Rate of Energy Branch Consumption over total transformation output (1)"
 i03RatePriProTotPriNeeds(allCy,EF,YTIME)	      "Rate of Primary Production in Total Primary Needs (1)"	
 i03ResHcNgOilPrProd(allCy,EF,YTIME)	              "Residuals for Hard Coal, Natural Gas and Oil Primary Production (1)"
 i03RatioImpFinElecDem(allCy,YTIME)	              "Ratio of imports in final electricity demand (1)"	
@@ -133,9 +132,7 @@ i03SupTrnasfOutputRefineries(runCy,EF,YTIME) = 1;
 *---
 i03TransfInputRef(runCy,EFS,YTIME)$(not An(YTIME)) = i03DataTotTransfInputRef(runCy,EFS,YTIME);
 *---
-i03TotEneBranchCons(runCy,EFS,YTIME) = i03DataOwnConsEne(runCy,EFS,YTIME);
-*---
-i03TransfOutputRef(runCy,EFS,YTIME)$(not An(YTIME)) = i03DataTransfOutputRef(runCy,EFS,YTIME);
+i03TotEneBranchCons(runCy,EFS,YTIME) = SUM(SSBS,i03DataOwnConsEne(runCy,SSBS,EFS,YTIME));
 *---
 i03RefCapacity(runCy,YTIME) = i03SuppRefCapacity(runCy,"REF_CAP",YTIME);
 *---
@@ -150,16 +147,27 @@ i03ResRefCapacity(runCy,YTIME) = i03SupResRefCapacity(runCy,"REF_CAP_RES",YTIME)
 *---
 i03ResTransfOutputRefineries(runCy,EFS,YTIME) = i03SupTrnasfOutputRefineries(runCy,EFS,YTIME);
 *---
-i03RateEneBranCons(runCy,EFS,YTIME) =  
+i03RateEneBranCons(runCy,SSBS,EFS,YTIME) =  0.1;
+
+$ontext
 [
-  i03TotEneBranchCons(runCy,EFS,YTIME) /
+  i03DataOwnConsEne(runCy,SSBS,EFS,YTIME) /
   (
-    i03OutTotTransfProcess(runCy,EFS,YTIME) +
-    SUM(PPRODEF$sameas(PPRODEF,EFS),i03PrimProd(runCy,PPRODEF,YTIME)) -
-    i03TotEneBranchCons(runCy,EFS,YTIME)$TOCTEF(EFS)
+    i03OutPGTransfProcess(runCy,"ELC",YTIME)$(sameas("PG",SSBS) and ELCEF(EFS)) +
+    (
+      SUM(DSBS,imFuelConsPerFueSub(runCy,DSBS,"STE",YTIME)) +
+      i03TotEneBranchCons(runCy,"STE",YTIME) +
+      imDistrLosses(runCy,"STE",YTIME) +
+      i03FeedTransfr(runCy,"STE",YTIME)
+    )$(sameas("STEAMP",SSBS) and STEAM(EFS)) +
+    !!FIXME: Add all liquids and hydrogen
+    i03TransfOutputRef(runCy,EFS,YTIME)$sameas("LQD",SSBS) +  
+    !!VmDemTotH2.L(runCy,YTIME)$(sameas(EFS, "H2F") and sameas("H2P",SSBS)) +
+    SUM(PPRODEF$sameas(PPRODEF,EFS),i03PrimProd(runCy,PPRODEF,YTIME))
   )
-]$i03OutTotTransfProcess(runCy,EFS,YTIME);
-i03RateEneBranCons(runCy,EFS,YTIME)$(AN(YTIME)) = i03RateEneBranCons(runCy,EFS,"%fBaseY%");
+];
+$offtext
+i03RateEneBranCons(runCy,SSBS,EFS,YTIME)$AN(YTIME) = i03RateEneBranCons(runCy,SSBS,EFS,"%fBaseY%");
 *---
 i03RatePriProTotPriNeeds(runCy,PPRODEF,YTIME) = i03SuppRatePrimProd(runCy,PPRODEF,YTIME);
 *---

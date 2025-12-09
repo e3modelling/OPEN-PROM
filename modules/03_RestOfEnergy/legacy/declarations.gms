@@ -21,7 +21,7 @@ Q03Imp(allCy,EFS,YTIME)	                                   "Compute fake imports
 
 *'                **Interdependent Equations**
 Q03ImpNetEneBrnch(allCy,EFS,YTIME)	                       "Compute net imports"
-Q03ConsFiEneSec(allCy,EFS,YTIME)	                       "Compute energy branch final consumption"
+Q03ConsFiEneSec(allCy,SSBS,EFS,YTIME)	                       "Compute energy branch final consumption"
 Q03InpTransfTherm(allCy,EFS,YTIME)	                       "Compute transformation input to power plants"	
 Q03TransfInputDHPlants(allCy,EFS,YTIME)                    "Compute the transformation input to distrcit heating plants"
 Q03TransfInputCHPlants(allCy,EFS,YTIME) 
@@ -50,7 +50,7 @@ V03Imp(allCy,EFS,YTIME)             	                   "Fake Imports for all fu
 
 *'                **Interdependent Variables**
 VmImpNetEneBrnch(allCy,EFS,YTIME)	                       "Net Imports (Mtoe)"
-VmConsFiEneSec(allCy,EFS,YTIME)                            "Final consumption in energy sector (Mtoe)"
+VmConsFiEneSec(allCy,SSBS,EFS,YTIME)                            "Final consumption in energy sector (Mtoe)"
 VmInpTransfTherm(allCy,EFS,YTIME)	                       "Transformation input to thermal power plants (Mtoe)"
 VmTransfInputDHPlants(allCy,EFS,YTIME)                     "Transformation input to District Heating Plants (Mtoe)"
 VmTransfInputCHPlants(allCy,EFS,YTIME)                    "Transformation input to CHPs (Mtoe)"

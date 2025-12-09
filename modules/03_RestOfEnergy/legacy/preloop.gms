@@ -29,7 +29,7 @@ V03Exp.FX(runCy,EFS,YTIME)$(not An(YTIME)) = imFuelExprts(runCy,EFS,YTIME);
 V03Exp.FX(runCy,"NGS",YTIME)$(not An(YTIME)) = imFuelExprts(runCy,"NGS",YTIME);
 V03Exp.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
 *---
-VmConsFiEneSec.FX(runCy,EFS,YTIME)$(not An(YTIME)) = i03TotEneBranchCons(runCy,EFS,YTIME);
+VmConsFiEneSec.FX(runCy,SSBS,EFS,YTIME)$DATAY(YTIME) = i03DataOwnConsEne(runCy,SSBS,EFS,YTIME);
 *---
 VmConsFinEneCountry.FX(runCy,EFS,YTIME)$DATAY(YTIME) = 
 sum(DSBS$(not NENSE(DSBS)), 
