@@ -19,7 +19,7 @@ fnameTargets <- NULL
 # Creating datasets for research and development mode
 if (!is.null(DevMode) && DevMode == 0) {
     library(mrprom)
-    print( paste("Generating research mode data with mrprom ver.", packageVersion("mrprom")) )
+    print( paste("Generating research mode data with mrprom ver.", installed.packages()["mrprom","Version"]) )
     fname <- paste0("rev0",dev,"_dabc6ef9_open_prom.tgz") # file name
     fnameTargets <- paste0("rev0",dev,"_dabc6ef9_targets.tgz")
     # run the fullOPEN-PROM function generating the whole input dataset of OPEN-PROM
@@ -35,7 +35,7 @@ if (!is.null(DevMode) && DevMode == 0) {
     
 } else if (!is.null(DevMode) && DevMode == 1) {
     library(mrprom)
-    print( paste("Generating development mode data with mrprom ver.", packageVersion("mrprom")) )
+    print( paste("Generating development mode data with mrprom ver.", installed.packages()["mrprom","Version"]) )
     fname <- paste0("rev0",dev,"_bdd58f98_open_prom.tgz") # file name
     retrieveData("OPEN_PROM",puc=F,renv=F,regionmapping = "regionmappingOPDEV4.csv",dev=dev)
     file.copy(paste0(getConfig("outputfolder"),"/",fname),fname)
