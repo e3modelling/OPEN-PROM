@@ -27,15 +27,15 @@ i10LearningRate("PGAWNO") = 0.10;   !! 10% cost reduction per doubling for Offsh
 *---
 *' Learnable fraction - what portion of total cost can be reduced by learning
 *' Typically manufacturing/technology costs (~60-80%) vs. fixed costs (materials, labor, grid connection)
-i10LearnableFraction("PGSOL") = 0.70;   !! 70% of solar PV costs subject to learning
-i10LearnableFraction("PGCSP") = 0.65;   !! 65% of CSP costs subject to learning  
+i10LearnableFraction("PGSOL") = 0.75;   !! 75% of solar PV costs subject to learning
+i10LearnableFraction("PGCSP") = 0.75;   !! 75% of CSP costs subject to learning  
 i10LearnableFraction("PGAWND") = 0.60;  !! 60% of onshore wind costs subject to learning
 i10LearnableFraction("PGAWNO") = 0.60;  !! 60% of offshore wind costs subject to learning
 *---
 *' Minimum cost floor - prevents unrealistic cost reductions
 *' Based on fundamental material and labor costs that cannot be reduced indefinitely
-i10MinCostFraction("PGSOL") = 0.30;     !! Solar PV cannot go below 30% of initial cost
-i10MinCostFraction("PGCSP") = 0.35;     !! CSP cannot go below 35% of initial cost
+i10MinCostFraction("PGSOL") = 0.25;     !! Solar PV cannot go below 25% of initial cost
+i10MinCostFraction("PGCSP") = 0.25;     !! CSP cannot go below 25% of initial cost
 i10MinCostFraction("PGAWND") = 0.40;    !! Onshore wind cannot go below 40% of initial cost  
 i10MinCostFraction("PGAWNO") = 0.40;    !! Offshore wind cannot go below 40% of initial cost
 *---
