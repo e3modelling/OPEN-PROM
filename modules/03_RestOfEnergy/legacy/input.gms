@@ -8,12 +8,6 @@ $include "./iSuppRefCapacity.csv"
 $offdelim
 ;
 *---
-table i03TransfOutputRef(allCy,EF,YTIME)	  "Data for transformation output for refineries (Mtoe)"
-$ondelim
-$include"./iDataTransfOutputRef.csv"
-$offdelim
-;
-*---
 table i03DataGrossInlCons(allCy,EF,YTIME)	      "Data for Gross Inland Conusmption (Mtoe)"
 $ondelim
 $include"./iDataGrossInlCons.csv"
@@ -56,9 +50,9 @@ $include "./iElcNetImpShare.csv"
 $offdelim
 ;
 *---
-table i03OutTotTransfProcess(allCy,EFS,YTIME)	      ""	
+table i03OutTotTransfProcess(allCy,SSBS,EFS,YTIME)	      ""	
 $ondelim
-$include"./iOutTotalTransfProcess.csv"
+$include"./iOutTransfProcess.csv"
 $offdelim
 ;
 *---

@@ -10,5 +10,7 @@ V03InputTransfRef.FX(runCyL,"CRO",YTIME)$(TIME(YTIME)) = V03InputTransfRef.L(run
 V03ProdPrimary.FX(runCyL,PPRODEF,YTIME)$TIME(YTIME) = V03ProdPrimary.L(runCyL,PPRODEF,YTIME)$TIME(YTIME);
 VmConsFinEneCountry.FX(runCyL,EFS,YTIME)$TIME(YTIME) = VmConsFinEneCountry.L(runCyL,EFS,YTIME)$TIME(YTIME);
 V03OutTransfRefSpec.FX(runCyL,EFS,YTIME)$(TIME(YTIME) $EFtoEFA(EFS,"LQD")) = V03OutTransfRefSpec.L(runCyL,EFS,YTIME)$(TIME(YTIME) $EFtoEFA(EFS,"LQD"));
+V03OutTransfGasses.FX(runCyL,EFS,YTIME)$TIME(YTIME) = V03OutTransfGasses.L(runCyL,EFS,YTIME)$TIME(YTIME);
+V03OutTransfSolids.FX(runCyL,EFS,YTIME)$TIME(YTIME) = V03OutTransfSolids.L(runCyL,EFS,YTIME)$TIME(YTIME);
 V03ConsGrssInlNotEneBranch.FX(runCyL,EFS,YTIME)$TIME(YTIME) =  V03ConsGrssInlNotEneBranch.L(runCyL,EFS,YTIME)$TIME(YTIME);
 *---

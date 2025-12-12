@@ -6,9 +6,15 @@
 V03CapRef.L(runCy,YTIME) = 0.1;
 V03CapRef.FX(runCy,YTIME)$(not An(YTIME)) = i03RefCapacity(runCy,YTIME);
 *---
-V03OutTransfRefSpec.L(runCy,EFS,YTIME) = 0.1;
-V03OutTransfRefSpec.FX(runCy,EFS,YTIME)$(EFtoEFA(EFS,"LQD") $(not An(YTIME))) = i03TransfOutputRef(runCy,EFS,YTIME);
-V03OutTransfRefSpec.FX(runCy,EFS,YTIME)$(not EFtoEFA(EFS,"LQD")) = 0;
+*V03OutTransfRefSpec.L(runCy,EFS,YTIME) = 0.1;
+V03OutTransfRefSpec.FX(runCy,EFS,YTIME)$(DATAY(YTIME) and SECtoEFPROD("LQD",EFS)) = i03OutTotTransfProcess(runCy,"LQD",EFS,YTIME);
+V03OutTransfRefSpec.FX(runCy,EFS,YTIME)$(not SECtoEFPROD("LQD",EFS)) = 0;
+*---
+V03OutTransfSolids.FX(runCy,EFS,YTIME)$(DATAY(YTIME) and SECtoEFPROD("SLD",EFS)) = i03OutTotTransfProcess(runCy,"SLD",EFS,YTIME);
+V03OutTransfSolids.FX(runCy,EFS,YTIME)$(not SECtoEFPROD("SLD",EFS)) = 0;
+*---
+V03OutTransfGasses.FX(runCy,EFS,YTIME)$(DATAY(YTIME) and SECtoEFPROD("GAS",EFS)) = i03OutTotTransfProcess(runCy,"GAS",EFS,YTIME);
+V03OutTransfGasses.FX(runCy,EFS,YTIME)$(not SECtoEFPROD("GAS",EFS)) = 0;
 *---
 V03ConsGrssInlNotEneBranch.L(runCy,EFS,YTIME) = 0.1;
 V03ConsGrssInlNotEneBranch.FX(runCy,EFS,YTIME)$(not An(YTIME)) = i03GrossInConsNoEneBra(runCy,EFS,YTIME);
@@ -38,7 +44,8 @@ sum(DSBS$(not NENSE(DSBS)),
 *---
 VmLossesDistr.FX(runCy,EFS,YTIME)$DATAY(YTIME) = imDistrLosses(runCy,EFS,YTIME);
 *---
-V03OutTotTransf.FX(runCy,EFS,YTIME)$(not AN(YTIME)) = i03OutTotTransfProcess(runCy,EFS,YTIME);
+V03OutTotTransf.FX(runCy,SSBS,EFS,YTIME)$(DATAY(YTIME) and SECtoEFPROD(SSBS,EFS)) = i03OutTotTransfProcess(runCy,SSBS,EFS,YTIME);
+V03OutTotTransf.FX(runCy,SSBS,EFS,YTIME)$(not SECtoEFPROD(SSBS,EFS)) = 0;
 *---
 V03InpTotTransf.FX(runCy,EFS,YTIME)$(not AN(YTIME)) = -i03InpTotTransfProcess(runCy,EFS,YTIME);
 *---

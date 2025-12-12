@@ -200,6 +200,7 @@ DAC            "Direct Air Capture"
 LQD            "Liquids Production"
 SLD            "Solids Production"
 GAS            "Gases Production"
+CHP
 /
 
 SBS(ALLSBS)          Model Subsectors
@@ -236,6 +237,7 @@ SLD    "Solids Production"
 GAS    "Gases Production"
 H2INFR "Hydrogen storage and delivery"
 DAC    "Direct Air Capture"
+CHP
 /
 
 SCT_GHG(ALLSBS)      Aggregate Sectors used in non-energy related GHG emissions
@@ -319,7 +321,7 @@ INDDOM(DSBS)      Industry and Tertiary         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,S
 HOU1(SBS)         Households                     /HOU/
 SERV(SBS)         Services                       /SE,AG/
 
-SSBS(SBS)         All Supply Subsectors         /PG,H2P,STEAMP,LQD,SLD,GAS,H2INFR/
+SSBS(SBS)         All Supply Subsectors         /PG,H2P,CHP,STEAMP,LQD,SLD,GAS,H2INFR/
 *         Energy Forms            *
 
 EF           Energy Forms
@@ -408,7 +410,7 @@ GDO     "Diesel Oil"
 EFtoEFA(EF,EFA)  Energy Forms Aggregations (for summary balance report)
 /
 (HCL,LGN).SLD
-(GSL,GDO,RFO,LPG,KRS,OLQ).LQD
+(CRO,GSL,GDO,RFO,LPG,KRS,OLQ).LQD
 (LPG,KRS,OLQ).OLQT
 (NGS,OGS).GAS
 (WND,SOL,GEO).REN
@@ -848,7 +850,7 @@ BU.(TGDO,TRFO,TKRS)
 DAC.(HTDAC,H2DAC,LTDAC,EWDAC)
 /
 
-SECtoEF(SBS,EF) Link between Model Subsectors and Energy FORMS
+SECtoEF(SBS,EF) Link between Model Subsectors and Energy Forms consumed
 /
 PG.(LGN,HCL,GDO,RFO,NGS,OGS,NUC,HYD,BMSWAS,SOL,GEO,WND,H2F)
 H2P.(HCL,LGN,RFO,GDO,NGS,OGS,NUC,BMSWAS,SOL,WND,ELC)
@@ -946,17 +948,14 @@ PGREN(PGALL)    REN PLANTS with Saturation                /PGLHYD,PGSHYD,PGAWND,
 PGREN2(PGALL)     Renewable Plants                          /PGLHYD,PGSHYD,PGAWND,PGSOL,PGCSP,PGOTHREN,PGAWNO,PGANUC,ATHCOALCCS,ATHLGNCCS,ATHGASCCS,PGH2F/
 PGRENSW(PGALL)   Solar and wind Plants                     /PGSOL,PGCSP,PGAWND,PGAWNO/
 PGNREN(PGALL)    Advanced Renewable Plants potential      /PGCSP,PGOTHREN,PGAWNO,ATHBMSWAS/
-PGRENEF          Renewable energy forms in power generation  /LHYD,SHYD,WND,WNO,SOL,DPV,BMSWAS,OTHREN/
+PGRENEF          Renewable energy forms in power generation  /HYD,WND,SOL,BMSWAS,GEO/
 
 PGALLtoPGRENEF(PGALL,PGRENEF)     Correspondence between renewable plants and renewable energy forms
 /
-PGLHYD.LHYD
-(PGSHYD).SHYD
-(PGAWND).WND
-PGAWNO.WNO
+(PGSHYD,PGLHYD).HYD
+(PGAWND,PGAWNO).WND
 (PGSOL,PGCSP).SOL
-*PGADPV.DPV
-(PGOTHREN).OTHREN
+PGOTHREN.GEO
 (ATHBMSWAS,ATHBMSCCS).BMSWAS
 /
 

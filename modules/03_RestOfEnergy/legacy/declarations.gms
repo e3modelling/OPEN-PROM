@@ -4,14 +4,16 @@
 Equations
 *' *** REST OF ENERGY BALANCE SECTORS EQUATIONS
 *q03ConsTotFinEne(YTIME)                                   "Compute total final energy consumption in ALL countries"
-Q03OutTransfDhp(allCy,EFS,YTIME)                           "Compute the transformation output from district heating plants"
-Q03OutTransfCHP(allCy,EFS,YTIME)                            "Compute the transformation output from CHP (Mtoe)"
+Q03OutTransfDhp(allCy,STEAM,YTIME)                           "Compute the transformation output from district heating plants"
+Q03OutTransfCHP(allCy,TOCTEF,YTIME)                            "Compute the transformation output from CHP (Mtoe)"
 Q03CapRef(allCy,YTIME)	                                   "Compute refineries capacity"
 Q03OutTransfRefSpec(allCy,EFS,YTIME)	                   "Compute the transformation output from refineries"
+Q03OutTransfGasses(allCy,EFS,YTIME)	
+Q03OutTransfSolids(allCy,EFS,YTIME)
 Q03InputTransfRef(allCy,EFS,YTIME)	                       "Compute the transformation input to refineries"
 Q03OutTransfTherm(allCy,ELCEF,YTIME)	                       "Compute transformation output from thermal power plants"
 Q03InpTotTransf(allCy,EFS,YTIME)	                       "Compute total transformation input"
-Q03OutTotTransf(allCy,EFS,YTIME)	                       "Compute total transformation output"
+Q03OutTotTransf(allCy,SSBS,EFS,YTIME)	                       "Compute total transformation output"
 Q03Transfers(allCy,EFS,YTIME)	                           "Compute transfers"
 Q03ConsGrssInlNotEneBranch(allCy,EFS,YTIME)	               "Compute gross inland consumption not including consumption of energy branch"
 Q03ConsGrssInl(allCy,EFS,YTIME)	                           "Compute gross inland consumption"
@@ -37,10 +39,12 @@ V03OutTransfDhp(allCy,STEAM,YTIME)                           "Transformation out
 V03OutTransfCHP(allCy,TOCTEF,YTIME)                            "Transformation output from CHP (Mtoe)"
 V03CapRef(allCy,YTIME)	                                   "Refineries capacity (Million barrels/day)"
 V03OutTransfRefSpec(allCy,EFS,YTIME)	                   "Transformation output from refineries (Mtoe)"
+V03OutTransfGasses(allCy,EFS,YTIME)	
+V03OutTransfSolids(allCy,EFS,YTIME)
 V03InputTransfRef(allCy,EFS,YTIME)	                       "Transformation input to refineries (Mtoe)"
 V03OutTransfTherm(allCy,ELCEF,YTIME)	                       "Transformation output from thermal power stations (Mtoe)"
 V03InpTotTransf(allCy,EFS,YTIME)	                       "Total transformation input (Mtoe)"
-V03OutTotTransf(allCy,EFS,YTIME)	                       "Total transformation output (Mtoe)"
+V03OutTotTransf(allCy,SSBS,EFS,YTIME)	                       "Total transformation output (Mtoe)"
 V03Transfers(allCy,EFS,YTIME)	                           "Transfers (Mtoe)"
 V03ConsGrssInlNotEneBranch(allCy,EFS,YTIME)	               "Gross Inland Consumption not including consumption of energy branch (Mtoe)"
 V03ConsGrssInl(allCy,EFS,YTIME)	                           "Gross Inland Consumption (Mtoe)"
