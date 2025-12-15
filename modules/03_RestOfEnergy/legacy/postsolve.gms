@@ -11,5 +11,4 @@ V03ProdPrimary.FX(runCyL,PPRODEF,YTIME)$TIME(YTIME) = V03ProdPrimary.L(runCyL,PP
 VmConsFinEneCountry.FX(runCyL,EFS,YTIME)$TIME(YTIME) = VmConsFinEneCountry.L(runCyL,EFS,YTIME)$TIME(YTIME);
 V03OutTransfRefSpec.FX(runCyL,EFS,YTIME)$(TIME(YTIME) $EFtoEFA(EFS,"LQD")) = V03OutTransfRefSpec.L(runCyL,EFS,YTIME)$(TIME(YTIME) $EFtoEFA(EFS,"LQD"));
 V03ConsGrssInlNotEneBranch.FX(runCyL,EFS,YTIME)$TIME(YTIME) =  V03ConsGrssInlNotEneBranch.L(runCyL,EFS,YTIME)$TIME(YTIME);
-V03CarbTaxTot.FX(runCy,YTIME)$TIME(YTIME) = V03CarbTaxTot.L(runCy,YTIME)$TIME(YTIME);
 *---

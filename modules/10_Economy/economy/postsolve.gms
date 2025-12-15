@@ -1,6 +1,8 @@
-*' @title Heat module postsolve
+*' @title Economy module postsolve
 * Fix values of variables for the next time step
 
-* Heat Module
+* Economy Module
 
+*---
+V10CarbTaxTot.FX(runCy,YTIME)$TIME(YTIME) = V10CarbTaxTot.L(runCy,YTIME)$TIME(YTIME);
 *---

@@ -28,11 +28,6 @@ Q03TransfInputCHPlants(allCy,EFS,YTIME)
 Q03ConsFinEneCountry(allCy,EFS,YTIME)                      "Compute total final energy consumption"
 Q03ConsFinNonEne(allCy,EFS,YTIME)                          "Compute final non-energy consumption"
 Q03LossesDistr(allCy,EFS,YTIME)                            "Compute distribution losses"
-Q03CarbTaxTot(allCy,YTIME)                                 "Compute the total annual state revenues from carbon taxes per region (Millions US$2015)"
-*'Q03SubsiStat(allCy,TECH,YTIME)                           ""
-Q03NetSubsiTax(allCy,YTIME)                                "Computes the net difference between the cabon taxes and the green state grants and subsidies"
-Q03SubsiCapCostTech(allCy,DSBS,TECH,YTIME)                        ""
-Q03SubsiCapCostSupply(allCy,SSBS,STECH,YTIME)
 ;
 
 Variables
@@ -52,7 +47,6 @@ V03ConsGrssInl(allCy,EFS,YTIME)	                           "Gross Inland Consump
 V03ProdPrimary(allCy,EFS,YTIME)	                           "Primary Production (Mtoe)"
 V03Exp(allCy,EFS,YTIME)                        	           "Exports fake (Mtoe)"
 V03Imp(allCy,EFS,YTIME)             	                   "Fake Imports for all fuels except natural gas (Mtoe)"
-V03CarbTaxTot(allCy,YTIME)                                 "Total annual state revenues from carbon taxes per region (Millions US$2015)"
 
 *'                **Interdependent Variables**
 VmImpNetEneBrnch(allCy,EFS,YTIME)	                       "Net Imports (Mtoe)"
@@ -63,8 +57,4 @@ VmTransfInputCHPlants(allCy,EFS,YTIME)                    "Transformation input 
 VmConsFinEneCountry(allCy,EF,YTIME)                        "Total final energy consumnption (Mtoe)"
 VmConsFinNonEne(allCy,EFS,YTIME)                           "Final non energy consumption (Mtoe)"
 VmLossesDistr(allCy,EFS,YTIME)                             "Distribution losses (Mtoe)"
-*'VmSubsiStat(allCy,TECH,YTIME)                            "State subsidies per subsector (Millions US$2015)"
-VmSubsiCapCostTech(allCy,DSBS,TECH,YTIME)                       ""
-VmSubsiCapCostSupply(allCy,SSBS,STECH,YTIME)
-VmNetSubsiTax(allCy,YTIME)                                 "The net difference between the cabon taxes and the green state grants and subsidies"
 ;

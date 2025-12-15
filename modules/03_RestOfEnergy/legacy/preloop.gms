@@ -50,10 +50,6 @@ V03OutTransfCHP.FX(runCy,TOCTEF,YTIME)$(not AN(YTIME)) = i03OutCHPTransfProcess(
 *---
 VmTransfInputCHPlants.FX(runCy,EFS,YTIME)$(not AN(YTIME)) = -i03InpCHPTransfProcess(runCy,EFS,YTIME);
 *---
-V03CarbTaxTot.FX(runCy,YTIME)$(not AN(YTIME)) = 0;
-*---
-VmSubsiCapCostTech.FX(runCy,DSBS,TECH,YTIME)$(not SECTTECH(DSBS,TECH)) = 0;
-*---
 !!VmSubsiStatHou.LO(runCy,YTIME) = -10 * V03CarbTaxTot.l(runCy,YTIME-1);
 *---
 VmInpTransfTherm.FX(runCy,EFS,YTIME)$(not PGEF(EFS)) = 0;
