@@ -523,6 +523,7 @@ PGEF(EFS)        "Energy forms used for steam production"
 PPRODEF(EFS)     Fuels considered in primary production
 /
 LGN
+BGDO
 OLQ
 HCL
 CRO

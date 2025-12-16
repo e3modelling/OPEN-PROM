@@ -32,7 +32,7 @@ $include"./iSuppTransfers.csv"
 $offdelim
 ;
 *---
-table i03PrimProd(allCy,PPRODEF,YTIME)	              "Primary Production (Mtoe)"
+table i03PrimProd(allCy,EFS,YTIME)	              "Primary Production (Mtoe)"
 $ondelim
 $include"./iPrimProd.csv"
 $offdelim
@@ -86,6 +86,12 @@ $include"./iOutDHPTransfProcess.csv"
 $offdelim
 ;
 *---
+table i03RateEneBranCons(allCy,SSBS,EFS,YTIME)	      "Rate of Energy Branch Consumption over total transformation output (1)"
+$ondelim
+$include"./iRatioBranchOwnCons.csv"
+$offdelim
+;
+*---
 parameter i03NatGasPriProElst(allCy)	          "Natural Gas primary production elasticity related to gross inland consumption (1)" /
 $ondelim
 $include "./iNatGasPriProElst.csv"
@@ -113,7 +119,6 @@ i03GrossInConsNoEneBra(allCy,EF,YTIME)	          "Gross Inland Consumption,exclu
 i03FeedTransfr(allCy,EFS,YTIME)	                  "Feedstocks in Transfers (Mtoe)"
 i03ResRefCapacity(allCy,YTIME)	                  "Residual in Refineries Capacity (1)"
 i03ResTransfOutputRefineries(allCy,EF,YTIME)      "Residual in Transformation Output from Refineries (Mtoe)"
-i03RateEneBranCons(allCy,SSBS,EF,YTIME)	              "Rate of Energy Branch Consumption over total transformation output (1)"
 i03RatePriProTotPriNeeds(allCy,EF,YTIME)	      "Rate of Primary Production in Total Primary Needs (1)"	
 i03ResHcNgOilPrProd(allCy,EF,YTIME)	              "Residuals for Hard Coal, Natural Gas and Oil Primary Production (1)"
 i03RatioImpFinElecDem(allCy,YTIME)	              "Ratio of imports in final electricity demand (1)"	
@@ -141,29 +146,9 @@ i03ResRefCapacity(runCy,YTIME) = i03SupResRefCapacity(runCy,"REF_CAP_RES",YTIME)
 *---
 i03ResTransfOutputRefineries(runCy,EFS,YTIME) = i03SupTrnasfOutputRefineries(runCy,EFS,YTIME);
 *---
-i03RateEneBranCons(runCy,SSBS,EFS,YTIME) =  0.1;
-
-$ontext
-[
-  i03DataOwnConsEne(runCy,SSBS,EFS,YTIME) /
-  (
-    i03OutPGTransfProcess(runCy,"ELC",YTIME)$(sameas("PG",SSBS) and ELCEF(EFS)) +
-    (
-      SUM(DSBS,imFuelConsPerFueSub(runCy,DSBS,"STE",YTIME)) +
-      i03TotEneBranchCons(runCy,"STE",YTIME) +
-      imDistrLosses(runCy,"STE",YTIME) +
-      i03FeedTransfr(runCy,"STE",YTIME)
-    )$(sameas("STEAMP",SSBS) and STEAM(EFS)) +
-    !!FIXME: Add all liquids and hydrogen
-    i03TransfOutputRef(runCy,EFS,YTIME)$sameas("LQD",SSBS) +  
-    !!VmDemTotH2.L(runCy,YTIME)$(sameas(EFS, "H2F") and sameas("H2P",SSBS)) +
-    SUM(PPRODEF$sameas(PPRODEF,EFS),i03PrimProd(runCy,PPRODEF,YTIME))
-  )
-];
-$offtext
 i03RateEneBranCons(runCy,SSBS,EFS,YTIME)$AN(YTIME) = i03RateEneBranCons(runCy,SSBS,EFS,"%fBaseY%");
 *---
-i03RatePriProTotPriNeeds(runCy,PPRODEF,YTIME) = i03SuppRatePrimProd(runCy,PPRODEF,YTIME);
+i03RatePriProTotPriNeeds(runCy,EFS,YTIME) = i03SuppRatePrimProd(runCy,EFS,YTIME);
 *---
 i03ResHcNgOilPrProd(runCy,"HCL",YTIME)$an(YTIME)   = i03SupResRefCapacity(runCy,"HCL_PPROD",YTIME);
 i03ResHcNgOilPrProd(runCy,"NGS",YTIME)$an(YTIME)   = i03SupResRefCapacity(runCy,"NGS_PPROD",YTIME);

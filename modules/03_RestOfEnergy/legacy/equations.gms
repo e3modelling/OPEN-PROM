@@ -128,6 +128,7 @@ Q03CapRef(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q03OutTransfRefSpec(allCy,EFS,YTIME)$(TIME(YTIME)$runCy(allCy)$SECtoEFPROD("LQD",EFS))..
     V03OutTransfRefSpec(allCy,EFS,YTIME)
         =E=
+    0$(not i03RefCapacity(allCy,"%fStartHorizon%")) + 
     [
       i03ResTransfOutputRefineries(allCy,EFS,YTIME) * 
       V03OutTransfRefSpec(allCy,EFS,YTIME-1) *
@@ -284,36 +285,36 @@ Q03ConsGrssInl(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' For Crude Oil primary production, the computation includes the rate of primary production in total primary needs, residuals for hard coal, natural gas, and oil
 *' primary production, the fuel primary production, and a product term involving the polynomial distribution lag coefficients for primary oil production.
 *' The result represents the primary production in million tons of oil equivalent.
-Q03ProdPrimary(allCy,PPRODEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V03ProdPrimary(allCy,PPRODEF,YTIME)
+Q03ProdPrimary(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V03ProdPrimary(allCy,EFS,YTIME)
         =E=  
     [
       (
-        i03RatePriProTotPriNeeds(allCy,PPRODEF,YTIME) *
+        i03RatePriProTotPriNeeds(allCy,EFS,YTIME) *
         (
-          V03ConsGrssInlNotEneBranch(allCy,PPRODEF,YTIME) +
-          SUM(SSBS,VmConsFiEneSec(allCy,SSBS,PPRODEF,YTIME))
+          V03ConsGrssInlNotEneBranch(allCy,EFS,YTIME) +
+          SUM(SSBS,VmConsFiEneSec(allCy,SSBS,EFS,YTIME))
         )
-      )$(not (sameas(PPRODEF,"CRO")or sameas(PPRODEF,"NGS"))) +
+      )$(not (sameas(EFS,"CRO") or sameas(EFS,"NGS"))) +
       (
-        i03ResHcNgOilPrProd(allCy,PPRODEF,YTIME) * 
-        V03ProdPrimary(allCy,PPRODEF,YTIME-1) *
+        i03ResHcNgOilPrProd(allCy,EFS,YTIME) * 
+        V03ProdPrimary(allCy,EFS,YTIME-1) *
         (
-          V03ConsGrssInlNotEneBranch(allCy,PPRODEF,YTIME) /
-          V03ConsGrssInlNotEneBranch(allCy,PPRODEF,YTIME-1)
+          V03ConsGrssInlNotEneBranch(allCy,EFS,YTIME) /
+          V03ConsGrssInlNotEneBranch(allCy,EFS,YTIME-1)
         ) ** i03NatGasPriProElst(allCy)
-      )$(sameas(PPRODEF,"NGS")) +
+      )$(sameas(EFS,"NGS")) +
       (
-        i03ResHcNgOilPrProd(allCy,PPRODEF,YTIME) * 
-        i03PrimProd(allCy,PPRODEF,YTIME) *
+        i03ResHcNgOilPrProd(allCy,EFS,YTIME) * 
+        i03PrimProd(allCy,EFS,YTIME) *
         prod(kpdl$(ord(kpdl) lt 5),
           (
             imPriceFuelsInt("WCRO",YTIME-(ord(kpdl)+1)) /
             imPriceFuelsIntBase("WCRO",YTIME-(ord(kpdl)+1))
           ) ** (0.2 * i03PolDstrbtnLagCoeffPriOilPr(kpdl))
         )
-      )$sameas(PPRODEF,"CRO")   
-    ]$i03RatePriProTotPriNeeds(allCy,PPRODEF,YTIME);   
+      )$sameas(EFS,"CRO")   
+    ]$i03RatePriProTotPriNeeds(allCy,EFS,YTIME);   
 
 *' The equation calculates the fake exports for a specific energy branch
 *' in a given scenario and year. The computation is based on the fuel exports for
@@ -332,7 +333,8 @@ Q03Imp(allCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS) $runCy(allCy))..
     V03Imp(allCy,EFS,YTIME)
         =E=
     (
-      i03RatioImpFinElecDem(allCy,YTIME) * (VmConsFinEneCountry(allCy,EFS,YTIME) + VmConsFinNonEne(allCy,EFS,YTIME)) +
+      i03RatioImpFinElecDem(allCy,YTIME) * 
+      (VmConsFinEneCountry(allCy,EFS,YTIME) + VmConsFinNonEne(allCy,EFS,YTIME)) +
       V03Exp(allCy,EFS,YTIME) +
       i03ElecImp(allCy,YTIME)
     )$ELCEF(EFS) +
@@ -368,11 +370,11 @@ Q03ImpNetEneBrnch(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' The final consumption is determined based on the total transformation output and primary production for energy
 *' branches, excluding Oil, Coal, and Gas. The result, VmConsFiEneSec, represents the final consumption in million tons of
 *' oil equivalent for the specified scenario and year.
-Q03ConsFiEneSec(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+Q03ConsFiEneSec(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECtoEF(SSBS,EFS))..
     VmConsFiEneSec(allCy,SSBS,EFS,YTIME)
         =E=
-    0*i03RateEneBranCons(allCy,SSBS,EFS,YTIME) *
+    i03RateEneBranCons(allCy,SSBS,EFS,YTIME) *
     (
-      SUM(EFS2, V03OutTotTransf(allCy,SSBS,EFS2,YTIME)) +
-      SUM(PPRODEF$SECtoEFPROD(SSBS,PPRODEF), V03ProdPrimary(allCy,PPRODEF,YTIME))
+      SUM(EFS2$SECtoEFPROD(SSBS,EFS2), V03OutTotTransf(allCy,SSBS,EFS2,YTIME)) +
+      SUM(EFS2$(SECtoEFPROD(SSBS,EFS2) and not PGRENEF(EFS2)), V03ProdPrimary(allCy,EFS2,YTIME))
     );                               

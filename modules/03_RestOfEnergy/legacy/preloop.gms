@@ -26,7 +26,7 @@ V03ConsGrssInl.FX(runCy,EFS,YTIME)$(not An(YTIME)) = i03GrosInlCons(runCy,EFS,YT
 *---
 V03Transfers.FX(runCy,EFS,YTIME)$(not An(YTIME)) = i03FeedTransfr(runCy,EFS,YTIME);
 *---
-V03ProdPrimary.FX(runCy,PPRODEF,YTIME)$(not An(YTIME)) = i03PrimProd(runCy,PPRODEF,YTIME);
+V03ProdPrimary.FX(runCy,EFS,YTIME)$(not An(YTIME)) = i03PrimProd(runCy,EFS,YTIME);
 *---
 V03Imp.FX(runCy,"NGS",YTIME)$(not An(YTIME)) = imFuelImports(runCy,"NGS",YTIME);
 V03Imp.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
@@ -35,7 +35,8 @@ V03Exp.FX(runCy,EFS,YTIME)$(not An(YTIME)) = imFuelExprts(runCy,EFS,YTIME);
 V03Exp.FX(runCy,"NGS",YTIME)$(not An(YTIME)) = imFuelExprts(runCy,"NGS",YTIME);
 V03Exp.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
 *---
-VmConsFiEneSec.FX(runCy,SSBS,EFS,YTIME)$DATAY(YTIME) = i03DataOwnConsEne(runCy,SSBS,EFS,YTIME);
+VmConsFiEneSec.FX(runCy,SSBS,EFS,YTIME)$(DATAY(YTIME) and SECtoEF(SSBS,EFS))= i03DataOwnConsEne(runCy,SSBS,EFS,YTIME);
+VmConsFiEneSec.FX(runCy,SSBS,EFS,YTIME)$(not SECtoEF(SSBS,EFS)) = 0;
 *---
 VmConsFinEneCountry.FX(runCy,EFS,YTIME)$DATAY(YTIME) = 
 sum(DSBS$(not NENSE(DSBS)), 
