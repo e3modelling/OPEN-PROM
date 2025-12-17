@@ -4,5 +4,5 @@
 * Economy Module
 
 *---
-V10CarbTaxTot.FX(runCy,YTIME)$TIME(YTIME) = V10CarbTaxTot.L(runCy,YTIME)$TIME(YTIME);
+V10SubsiTot.FX(runCy,YTIME)$TIME(YTIME) = V10SubsiTot.L(runCy,YTIME)$TIME(YTIME);
 *---

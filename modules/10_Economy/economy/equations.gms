@@ -11,7 +11,8 @@
 *' * Economy module
 
 *' The equation computes the total state revenues from carbon taxes, as the product of all fuel consumption in all subsectors of the supply side,
-*' along with the relevant fuel emission factor, and the carbon tax posed regionally that year.
+*' along with the relevant fuel emission factor, and the carbon tax posed regionally that year. This is added to the 0.5% of the GDP,
+*' which is assumed to be used by each state for green subsidies.
 Q10SubsiTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V10SubsiTot(allCy,YTIME)
         =E=
@@ -23,9 +24,8 @@ Q10SubsiTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
           sum(CO2CAPTECH,
           V06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME))
         ) *
-        sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))
-        +
-        0.005 * i01GDP(allCy,YTIME)
+        sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME)) +
+        0.005 * i01GDP(YTIME,allCy) * 1000
 ;
 
 *' Subsidies in demand (Millions US$2015)
@@ -95,7 +95,7 @@ Q10SubsiCapCostSupply(allCy,SSBS,STECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q10NetSubsiTax(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       VmNetSubsiTax(allCy,YTIME)
       =E=
-        V03SubsiTot(allCy,YTIME) -
+        V10SubsiTot(allCy,YTIME) -
         sum((DSBS,TECH)$SECTTECH(DSBS,TECH),
           VmSubsiCapCostTech(allCy,DSBS,TECH,YTIME)
         ) -
