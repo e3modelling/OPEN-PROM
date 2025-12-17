@@ -1,4 +1,4 @@
-*' @title Equations of OPEN-PROMs Heat module
+*' @title Equations of OPEN-PROMs Economy module
 *' @code
 
 *' GENERAL INFORMATION
@@ -8,35 +8,25 @@
 *' The type of "demand" is computed based on its past value, the ratio of the current and past activity indicators (with the corresponding elasticity), 
 *' and the ratio of lagged energy costs (with the corresponding elasticities). This type of equation captures both short term and long term reactions to energy costs. 
 
-*' * Heat module
-
-*' This equation calculates the total heat demand in the system. It takes into account the overall need for steam
-*' across sectors like transportation, industry, and power generation, adjusted for any transportation losses or distribution inefficiencies.
+*' * Economy module
 
 *' The equation computes the total state revenues from carbon taxes, as the product of all fuel consumption in all subsectors of the supply side,
 *' along with the relevant fuel emission factor, and the carbon tax posed regionally that year.
-Q03CarbTaxTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V03CarbTaxTot(allCy,YTIME)
+Q10SubsiTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V10SubsiTot(allCy,YTIME)
         =E=
-        sum(EF$EFS(EF),
+        (
+          sum(EF$EFS(EF),
             VmConsFinEneCountry(allCy, EF, YTIME) *
-            imCo2EmiFac(allCy,"PG", EF, YTIME) *
-            sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))
-        ) -
-        SUM(CO2CAPTECH,
-        V06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME)
-        )     
+            imCo2EmiFac(allCy,"PG", EF, YTIME))
+          -
+          sum(CO2CAPTECH,
+          V06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME))
+        ) *
+        sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))
+        +
+        0.005 * i01GDP(allCy,YTIME)
 ;
-
-$ontext
-*' The equation computes the total state subsidies to each technology,
-*' along with a factor expressing the sharing of subsidies to each technology according.
-Q03SubsiStat(allCy,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-      VmSubsiStat(allCy,TECH,YTIME)
-      =E=
-       V03CarbTaxTot(allCy,YTIME-1) * i03FacSubsiStat(TECH)
-;
-$offtext
 
 *' Subsidies in demand (Millions US$2015)
 Q10SubsiCapCostTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS,TECH))..
@@ -105,7 +95,7 @@ Q10SubsiCapCostSupply(allCy,SSBS,STECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q10NetSubsiTax(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       VmNetSubsiTax(allCy,YTIME)
       =E=
-        V03CarbTaxTot(allCy,YTIME) -
+        V03SubsiTot(allCy,YTIME) -
         sum((DSBS,TECH)$SECTTECH(DSBS,TECH),
           VmSubsiCapCostTech(allCy,DSBS,TECH,YTIME)
         ) -

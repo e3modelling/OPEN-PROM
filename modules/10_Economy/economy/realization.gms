@@ -1,4 +1,4 @@
-*' @description This is the heat realization of the Heat module.
+*' @description This is the economy realization of the Economy module.
 
 *####################### R SECTION START (PHASES) ##############################
 $Ifi "%phase%" == "sets"         $include "./modules/10_Economy/economy/sets.gms"

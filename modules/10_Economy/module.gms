@@ -1,6 +1,6 @@
-*' @title Heat module
+*' @title Economy module
 *'
-*' @description This is the Heat module.
+*' @description This is the Economy module.
 
 *###################### R SECTION START (MODULETYPES) ##########################
 $Ifi "%Economy%" == "economy" $include "./modules/10_Economy/economy/realization.gms"

@@ -1,5 +1,5 @@
-*' @title Heat Inputs
+*' @title Economy Inputs
 *' @code
 
-Parameters
+*'Parameters
 *---
