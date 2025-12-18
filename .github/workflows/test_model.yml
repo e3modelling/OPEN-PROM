@@ -50,12 +50,12 @@ jobs:
           
       - name: Test Model Run - NPi Default Scenario
         run: |
-          & "C:\GAMS\48\gams.exe" main.gms lo 2 --DevMode=0 --GenerateInput=off --fEndY=2100 --fScenario=1 -Idir=./data
+          & "C:\GAMS\48\gams.exe" main.gms lo 2 --DevMode=0 --WriteGDX=off --GenerateInput=off --fEndY=2100 --fScenario=1 -Idir=./data
 
       - name: Test Model Run - 1.5C Scenario
         run: |
-          & "C:\GAMS\48\gams.exe" main.gms lo 2 --DevMode=0 --GenerateInput=off --fEndY=2100 --fScenario=2 -Idir=./data
+          & "C:\GAMS\48\gams.exe" main.gms lo 2 --DevMode=0 --WriteGDX=off --GenerateInput=off --fEndY=2100 --fScenario=2 -Idir=./data
           
       - name: Test Model Run - 2C Scenario
         run: |
-          & "C:\GAMS\48\gams.exe" main.gms lo 2 --DevMode=0 --GenerateInput=off --fEndY=2100 --fScenario=3 -Idir=./data
+          & "C:\GAMS\48\gams.exe" main.gms lo 2 --DevMode=0 --WriteGDX=off --GenerateInput=off --fEndY=2100 --fScenario=3 -Idir=./data

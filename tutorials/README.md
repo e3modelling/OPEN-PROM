@@ -70,3 +70,24 @@ A brief guide to automatically creating new GitHub issues by adding specially fo
 
 - ***10_Modular OPEN-PROM guide:***
 A guide to run the model in its modular version by sector.
+
+- ***11_Updating Dataset of Github Actions:***
+A guide describing how to update the datasets used by GitHub Actions for automated testing of the model.
+
+- ***12_Soft-Linking Tutorial OPEN-PROM-MAgPIE:***
+Instructions for creating and using soft links when integrating OPEN-PROM with the MAgPIE model.
+
+- ***13_Soft-Linking Tutorial OPEN-PROM-Climate Emulators:***
+Instructions for creating and using soft links when integrating OPEN-PROM with climate emulator tools.
+
+- ***14_Modelling Server Setup Guide in Windows:***
+Step-by-step instructions for preparing a Windows modelling server environment for OPEN-PROM.
+
+Additional resources in this folder:
+
+- `InputDataOverview.csv` — a CSV overview of input data files and formats used by the model.
+- `Screenshot (1).png`, `Screenshot (2).png` — example screenshots referenced by some tutorials.
+
+If you add more tutorial files, update this list (filenames are shown in the tutorials folder).
+
+```
