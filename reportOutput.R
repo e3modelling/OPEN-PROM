@@ -44,16 +44,16 @@ reportOutput <- function(
   metadata <- getMetadata(path = runpath)
   print("Report generation completed.")
   
-  Val_Mif <- ValidationMif(.path = runpath, Validation_data_for_plots = Validation_data_for_plots
+  Val_Mif_fullval2 <- ValidationMif(.path = runpath, Validation_data_for_plots = Validation_data_for_plots
   )
   
   for (i in 1:length(runpath)) {
-    if (!is.null(Val_Mif)) {
-      Val_Mif[Val_Mif==0]=NA
+    if (!is.null(Val_Mif_fullval2)) {
+      Val_Mif_fullval2[Val_Mif_fullval2==0]=NA
       reportOPEN_PROM <- reports[[i]]
       #mbind validation data and OPEN-PROM
       val_years <- getYears(reportOPEN_PROM)
-      Val_Mif <- add_columns(Val_Mif, addnm = setdiff(getYears(reportOPEN_PROM),getYears(Val_Mif)), dim = 2, fill = NA)
+      Val_Mif <- add_columns(Val_Mif_fullval2, addnm = setdiff(getYears(reportOPEN_PROM),getYears(Val_Mif_fullval2)), dim = 2, fill = NA)
       Val_Mif <- Val_Mif[,getYears(reportOPEN_PROM),]
       Val_Mif <- add_columns(Val_Mif, addnm = setdiff(getRegions(reportOPEN_PROM),getRegions(Val_Mif)), dim = 1, fill = NA)
       Val_Mif <- Val_Mif[getRegions(reportOPEN_PROM),,]
