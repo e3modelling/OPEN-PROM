@@ -261,8 +261,7 @@ Q04ScrappingTotal(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
  !! +
    i04PlantDecomSched(allCy,PGALL,YTIME) * i04AvailRate(allCy,PGALL,YTIME);
 Q04ScrapExtra(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCY(allCY)))..
- !!   sum(vtime$(((ord(ytime)+50) >= ord(vtime)) AND ((ord(ytime)+50)-(ord(vtime)) <= i04TechLftPlaType(allCy,PGALL))),V04ScrapExtra(allCy,PGALL,VTIME,YTIME)*V04CapElecVintage(allCy,PGALL,VTIME,YTIME-1))
-    10 
+    sum(vtime$(((ord(ytime)+50) >= ord(vtime)) AND ((ord(ytime)+50)-(ord(vtime)) <= i04TechLftPlaType(allCy,PGALL))),V04ScrapExtra(allCy,PGALL,VTIME,YTIME)*V04CapElecVintage(allCy,PGALL,VTIME,YTIME-1))
         =E=
     10;
 *' This equation calculates the variable representing the newly added electricity generation capacity for a specific renewable power plant 
