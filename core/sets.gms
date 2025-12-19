@@ -554,7 +554,7 @@ ORD   Ordinary
 IMP   Improved
 /
 
-TECH      Technologies
+TECH      Technologies (in Demand side)
 /
 TGSL      "Internal Combustion Engine fueled by Gasoline"
 TLPG      "Internal Combustion Engine fueled by Liquified Petroleum Gas"

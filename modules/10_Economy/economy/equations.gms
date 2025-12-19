@@ -18,7 +18,7 @@ Q10SubsiTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         =E=
         (
           sum(EF$EFS(EF),
-            VmConsFinEneCountry(allCy, EF, YTIME) *
+            VmConsFinEneCountry(allCy, EF, YTIME) * !!add the supply emissions
             imCo2EmiFac(allCy,"PG", EF, YTIME))
           -
           sum(CO2CAPTECH,
@@ -26,6 +26,14 @@ Q10SubsiTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         ) *
         sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME)) +
         0.005 * i01GDP(YTIME,allCy) * 1000
+;
+
+*' The equation splits the available state grants to the various technologies through a policy parameter expressing this proportional division.
+*' The resulting amount (in Millions US$2015) is going to be implemented to the cost calculation of each subsided technology.
+Q10SubsiTech(allCy,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    VmSubsiTech(allCy,TECH,YTIME)
+        =E=
+        V10SubsiTot(allCy,YTIME-1) * i10SubsiPerTech(allCy,TECH,YTIME)
 ;
 
 *' Subsidies in demand (Millions US$2015)
@@ -91,7 +99,7 @@ Q10SubsiCapCostSupply(allCy,SSBS,STECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 ;
 
 *'This equation calculated the difference between the state revenues by collected carbon taxes, and the green grants and subsidies given in
-*'both the supply and demant sectors.
+*'both the supply and demand sectors.
 Q10NetSubsiTax(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       VmNetSubsiTax(allCy,YTIME)
       =E=
