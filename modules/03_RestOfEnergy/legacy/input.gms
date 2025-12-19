@@ -2,12 +2,6 @@
 *' @code
 
 *---
-table i03SuppRefCapacity(allCy,SUPOTH,YTIME)	  "Supplementary Parameter for the residual in refineries Capacity (1)"
-$ondelim
-$include "./iSuppRefCapacity.csv"
-$offdelim
-;
-*---
 table i03DataGrossInlCons(allCy,EF,YTIME)	      "Data for Gross Inland Conusmption (Mtoe)"
 $ondelim
 $include"./iDataGrossInlCons.csv"
@@ -17,12 +11,6 @@ $offdelim
 table i03DataOwnConsEne(allCy,SSBS,EFS,YTIME)	      "Data for Consumption of Energy Branch (Mtoe)"
 $ondelim
 $include"./iDataOwnConsEne.csv"
-$offdelim
-;
-*---
-table i03DataTotTransfInputRef(allCy,EF,YTIME)	  "Total Transformation Input in Refineries (Mtoe)"
-$ondelim
-$include"./iDataTotTransfInputRef.csv"
 $offdelim
 ;
 *---
@@ -50,15 +38,15 @@ $include "./iElcNetImpShare.csv"
 $offdelim
 ;
 *---
-table i03OutTotTransfProcess(allCy,SSBS,EFS,YTIME)	      ""	
+table i03OutTotTransfProcess(allCy,SSBS,EFS,YTIME)	      "Total transformation output of supply sectors (Mtoe)"	
 $ondelim
 $include"./iOutTransfProcess.csv"
 $offdelim
 ;
 *---
-table i03InpTotTransfProcess(allCy,EFS,YTIME)	      ""	
+table i03InpTotTransfProcess(allCy,SSBS,EFS,YTIME)	      "Total transformation input of supply sectors (Mtoe)"	
 $ondelim
-$include"./iInpTotalTransfProcess.csv"
+$include"./iInpTransfProcess.csv"
 $offdelim
 ;
 *---
@@ -111,11 +99,9 @@ a5 0.33343691
 Parameters
 i03SupTrnasfOutputRefineries(allCy,EF,YTIME)	  "Supplementary parameter for the transformation output from refineries (Mtoe)"
 i03SupResRefCapacity(allCy,SUPOTH,YTIME)	      "Supplementary Parameter for the residual in refineries Capacity (1)"
-i03TransfInputRef(allCy,EF,YTIME)	              "Transformation Input in Refineries (Mtoe)"
 i03TotEneBranchCons(allCy,EF,YTIME)	              "Total Energy Branch Consumption (Mtoe)"
-i03RefCapacity(allCy,YTIME)	                      "Refineries Capacity (Million Barrels/day)"
+*i03RefCapacity(allCy,YTIME)	                      "Refineries Capacity (Million Barrels/day)"
 i03GrosInlCons(allCy,EF,YTIME)	                  "Gross Inland Consumtpion (Mtoe)"
-i03GrossInConsNoEneBra(allCy,EF,YTIME)	          "Gross Inland Consumption,excluding energy branch (Mtoe)"
 i03FeedTransfr(allCy,EFS,YTIME)	                  "Feedstocks in Transfers (Mtoe)"
 i03ResRefCapacity(allCy,YTIME)	                  "Residual in Refineries Capacity (1)"
 i03ResTransfOutputRefineries(allCy,EF,YTIME)      "Residual in Transformation Output from Refineries (Mtoe)"
@@ -129,16 +115,9 @@ i03SupResRefCapacity(runCy,SUPOTH,YTIME) = 1;
 *---
 i03SupTrnasfOutputRefineries(runCy,EF,YTIME) = 1;
 *---
-i03TransfInputRef(runCy,EFS,YTIME)$(not An(YTIME)) = i03DataTotTransfInputRef(runCy,EFS,YTIME);
-*---
 i03TotEneBranchCons(runCy,EFS,YTIME) = SUM(SSBS,i03DataOwnConsEne(runCy,SSBS,EFS,YTIME));
 *---
-i03RefCapacity(runCy,YTIME) = i03SuppRefCapacity(runCy,"REF_CAP",YTIME);
-*---
 i03GrosInlCons(runCy,EFS,YTIME) = i03DataGrossInlCons(runCy,EFS,YTIME);
-i03GrossInConsNoEneBra(runCy,EFS,YTIME) = 1e-6 +
-i03GrosInlCons(runCy,EFS,YTIME) + i03TotEneBranchCons(runCy,EFS,YTIME)$EFtoEFA(EFS,"LQD")
-- i03TotEneBranchCons(runCy,EFS,YTIME)$(not EFtoEFA(EFS,"LQD"));
 *---
 i03FeedTransfr(runCy,EFS,YTIME) = i03SuppTransfers(runCy,EFS,YTIME);
 *---
@@ -149,6 +128,7 @@ i03ResTransfOutputRefineries(runCy,EFS,YTIME) = i03SupTrnasfOutputRefineries(run
 i03RateEneBranCons(runCy,SSBS,EFS,YTIME)$AN(YTIME) = i03RateEneBranCons(runCy,SSBS,EFS,"%fBaseY%");
 *---
 i03RatePriProTotPriNeeds(runCy,EFS,YTIME) = i03SuppRatePrimProd(runCy,EFS,YTIME);
+i03RatePriProTotPriNeeds(runCy,EFS,YTIME)$AN(YTIME) = i03RatePriProTotPriNeeds(runCy,EFS,"%fBaseY%");
 *---
 i03ResHcNgOilPrProd(runCy,"HCL",YTIME)$an(YTIME)   = i03SupResRefCapacity(runCy,"HCL_PPROD",YTIME);
 i03ResHcNgOilPrProd(runCy,"NGS",YTIME)$an(YTIME)   = i03SupResRefCapacity(runCy,"NGS_PPROD",YTIME);

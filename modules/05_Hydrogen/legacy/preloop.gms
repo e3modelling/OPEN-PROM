@@ -57,8 +57,8 @@ V05ShareCCSH2Prod.UP(runCy,H2TECH,YTIME) = 1;
 V05ShareNoCCSH2Prod.LO(runCy,H2TECH,YTIME) = 0;
 V05ShareNoCCSH2Prod.UP(runCy,H2TECH,YTIME) = 1;
 *---
-*VmConsFuelH2Prod.L(runCy,EF,YTIME) = 2;
-VmConsFuelH2Prod.FX(runCy,EF,YTIME)$(not An(YTIME)) = sum(H2TECH$H2TECHEFtoEF(H2TECH,EF),VmConsFuelTechH2Prod.L(runCy,H2TECH,EF,YTIME));
+VmConsFuelH2Prod.FX(runCy,EF,YTIME)$(DATAY(YTIME) and H2PRODEF(EF)) = sum(H2TECH$H2TECHEFtoEF(H2TECH,EF),VmConsFuelTechH2Prod.L(runCy,H2TECH,EF,YTIME));
+VmConsFuelH2Prod.FX(runCy,EF,YTIME)$(not H2PRODEF(EF)) = 0;
 *---
 V05CostProdCCSNoCCSH2Prod.LO(runCy,H2TECH,YTIME) = epsilon6;
 V05CostProdCCSNoCCSH2Prod.L(runCy,H2TECH,YTIME) = 2;
@@ -88,3 +88,5 @@ V05DemGapH2.LO(runCy,YTIME) = 0;
 V05PremRepH2Prod.LO(runCy,H2TECH,YTIME) = 0;
 V05PremRepH2Prod.UP(runCy,H2TECH,YTIME) = 1;
 V05PremRepH2Prod.FX(runCy,H2TECH,YTIME)$(not H2TECHPM(H2TECH)) = 1;
+*---
+V05CaptRateH2.FX(runCy,H2TECH,YTIME)$DATAY(YTIME) = i05CaptRateH2Prod(H2TECH);

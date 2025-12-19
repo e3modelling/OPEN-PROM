@@ -81,6 +81,7 @@ imDisc(runCy,"PC",YTIME) = 0.11;
 * FIXME: Drive the emission factors with mrprom
 * author=giannou
 parameter iCo2EmiFacAllSbs(EF) "CO2 emission factors (kgCO2/kgoe fuel burned)" /
+CRO 2.76
 LGN 4.15330622,
 HCL 3.941453651,
 SLD 4.438008647,
@@ -91,7 +92,7 @@ KRS 2.964253636,
 RFO 3.207089028,
 OLQ 3.207089028,
 NGS 2.336234395,
-OGS 3.207089028,
+OGS 2.336234395,
 BMSWAS 0/;
 *---
 imCo2EmiFac(runCy,SBS,EF,YTIME) = iCo2EmiFacAllSbs(EF);

@@ -71,3 +71,25 @@ q07ExpendHouseEne(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                                           +VmPriceElecIndResNoCliPol(allCy,"R",YTIME)*VmConsElecNonSubIndTert(allCy,"HOU",YTIME)/smTWhToMtoe;
 VmConsElecNonSubIndTert --> NO LONGER                                          
 $offtext
+
+Q07EmissCO2Supply(allCy,SSBS,YTIME)$(TIME(YTIME)$runCy(allCy))..
+    V07EmissCO2Supply(allCy,SSBS,YTIME)
+        =E=   
+    SUM(EFS,
+      (
+        V03InpTotTransf(allCy,SSBS,EFS,YTIME)$SSBSEMIT(SSBS) +
+        VmConsFiEneSec(allCy,SSBS,EFS,YTIME) 
+      ) * imCo2EmiFac(allCy,"PG",EFS,YTIME) -
+      SUM(CCS$PGALLtoEF(CCS,EFS),
+        VmProdElec(allCy,CCS,YTIME) * smTWhToMtoe / 
+        imPlantEffByType(allCy,CCS,YTIME) * 
+        V04CO2CaptRate(allCy,CCS,YTIME) * 
+        (imCo2EmiFac(allCy,"PG",EFS,YTIME) + 4.17$sameas("BMSWAS",EFS))
+      )$sameas("PG",SSBS) -
+      SUM(H2CCS$H2TECHEFtoEF(H2CCS,EFS),
+        VmProdH2(allCy,H2CCS,YTIME) /
+        i05EffH2Prod(allCy,H2CCS,YTIME) *
+        V05CaptRateH2(allCy,H2CCS,YTIME) *
+        (imCo2EmiFac(allCy,"PG",EFS,YTIME) + 4.17$sameas("BMSWAS",EFS))
+      )$sameas("H2P",SSBS)
+    );

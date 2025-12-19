@@ -4,9 +4,11 @@
 * Rest Of Energy Module
 
 *---
-V03CapRef.FX(runCyL,YTIME)$TIME(YTIME) = V03CapRef.L(runCyL,YTIME)$TIME(YTIME);
+* V03CapRef.FX(runCyL,YTIME)$TIME(YTIME) = V03CapRef.L(runCyL,YTIME)$TIME(YTIME);
 V03Transfers.FX(runCyL,EFS,YTIME)$TIME(YTIME) = V03Transfers.L(runCyL,EFS,YTIME)$TIME(YTIME);
-V03InputTransfRef.FX(runCyL,"CRO",YTIME)$(TIME(YTIME)) = V03InputTransfRef.L(runCyL,"CRO",YTIME)$(TIME(YTIME));
+V03InputTransfRef.FX(runCyL,EFS,YTIME)$TIME(YTIME) = V03InputTransfRef.L(runCyL,EFS,YTIME)$TIME(YTIME);
+V03InputTransfSolids.FX(runCyL,EFS,YTIME)$TIME(YTIME) = V03InputTransfSolids.L(runCyL,EFS,YTIME)$TIME(YTIME);
+V03InputTransfGasses.FX(runCyL,EFS,YTIME)$TIME(YTIME) = V03InputTransfGasses.L(runCyL,EFS,YTIME)$TIME(YTIME);
 V03ProdPrimary.FX(runCyL,EFS,YTIME)$TIME(YTIME) = V03ProdPrimary.L(runCyL,EFS,YTIME)$TIME(YTIME);
 VmConsFinEneCountry.FX(runCyL,EFS,YTIME)$TIME(YTIME) = VmConsFinEneCountry.L(runCyL,EFS,YTIME)$TIME(YTIME);
 V03OutTransfRefSpec.FX(runCyL,EFS,YTIME)$TIME(YTIME) = V03OutTransfRefSpec.L(runCyL,EFS,YTIME)$TIME(YTIME);
