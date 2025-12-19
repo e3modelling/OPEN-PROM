@@ -71,3 +71,35 @@ q07ExpendHouseEne(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                                           +VmPriceElecIndResNoCliPol(allCy,"R",YTIME)*VmConsElecNonSubIndTert(allCy,"HOU",YTIME)/smTWhToMtoe;
 VmConsElecNonSubIndTert --> NO LONGER                                          
 $offtext
+
+* -----------------------------------------------------------------------------
+* 1. REDUCTION FRACTION
+* Find the maximum abatement potential available where the MAC Cost is 
+* less than or equal to the current Carbon Price.
+* -----------------------------------------------------------------------------
+Q07RedAbsBySrcRegTim(E07SrcMacAbate, allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V07RedAbsBySrcRegTim(E07SrcMacAbate, allCy, YTIME)
+    =E=
+    smax(E07MAC$(p07MacCost(E07MAC) <= iCarbValYrExog(allCy, YTIME) * p07UnitConvFactor(E07SrcMacAbate)), 
+         i07DataCh4N2OFMAC(allCy, E07SrcMacAbate, E07MAC, YTIME));
+
+* -----------------------------------------------------------------------------
+* 2. TOTAL ABATEMENT COST
+* Calculate the area under the curve (Sum of: Step Size * Step Cost)
+* Only for steps strictly below or equal to the Carbon Price.
+* Multiplied by Baseline Emissions to get total monetary cost.
+* -----------------------------------------------------------------------------
+Q07CostAbateBySrcRegTim(E07SrcMacAbate, allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V07CostAbateBySrcRegTim(E07SrcMacAbate, allCy, YTIME)
+    =E=
+    sum(E07MAC$(p07MacCost(E07MAC) <= iCarbValYrExog(allCy, YTIME)), 
+        p07MarginalRed(allCy, E07SrcMacAbate, E07MAC, YTIME) * p07MacCost(E07MAC));
+
+* -----------------------------------------------------------------------------
+* EQUATION 3: ACTUAL EMISSIONS
+* Emissions = Baseline * (1 - ReductionFraction)
+* -----------------------------------------------------------------------------
+Q07EmiActBySrcRegTim(E07SrcMacAbate, allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V07EmiActBySrcRegTim(E07SrcMacAbate, allCy, YTIME)
+    =E=
+    i07DataCh4N2OFEmis(allCy, E07SrcMacAbate, YTIME)  - V07RedAbsBySrcRegTim(E07SrcMacAbate, allCy, YTIME);
