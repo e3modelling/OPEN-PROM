@@ -26,7 +26,7 @@ Q10SubsiTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         ) *
         sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME)) +
         0.005 * i01GDP(YTIME,allCy) * 1000 +
-        VmNetSubsiTax(allCy,YTIME-1)
+        VmNetSubsiTax(allCy,YTIME)
 ;
 
 *' The equation splits the available state grants to the various technologies through a policy parameter expressing this proportional division.
