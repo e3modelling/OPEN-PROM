@@ -18,7 +18,9 @@
 Parameters
     p07MarginalRed(allCy, E07SrcMacAbate, E07MAC, YTIME)   "Marginal reduction potential per step"
     p07MacCost(E07MAC)                                     "Numeric value of the MAC cost steps"
-    p07UnitConvFactor(E07SrcMacAbate)                       "Multiplier to convert carbon price units to MAC units";
+    p07UnitConvFactor(E07SrcMacAbate)                      "Multiplier to convert carbon price units to MAC units"
+    p07GWP(E07SrcMacAbate)                                 "Global Warming Potentials, AR4 100yr (CO2=1, CH4=25, N2O=298, etc), Data from Hamsen et al 2019"
+    p07CostCorrection(E07SrcMacAbate)                      "Factor to convert (Qty * Cost) to Million 2015$"
 ;
 
 Equations
