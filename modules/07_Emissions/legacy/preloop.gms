@@ -69,3 +69,5 @@ p07UnitConvFactor(E07SrcMacAbate)$(
 * * [$/tC 2005] * 1.2136 (Infl) -> [$ 2015] -> [$ 2015] / 10^6 -> [Mil $]
 p07CostCorrection(E07SrcMacAbate)$(sFGases(E07SrcMacAbate)) = 
     1000 * p07GWP(E07SrcMacAbate) * (1 / smCtoCO2)* (1/smDefl_15_to_05)* (1 / 1000000);
+
+V07EmiActBySrcRegTim.FX(E07SrcMacAbate, allCy, YTIME)$(not An(YTIME)) = i07DataCh4N2OFEmis(allCy,E07SrcMacAbate,YTIME) ;
