@@ -188,7 +188,7 @@ def collect_lagged_vars(root: Path):
         # Determine module from path
         module = "core"
         for part in path.parts:
-            if part.startswith(("01_", "02_", "03_", "04_", "05_", "06_", "07_", "08_")):
+            if part.startswith(("01_", "02_", "03_", "04_", "05_", "06_", "07_", "08_", "09_", "10_")):
                 module = part
                 break
                 
