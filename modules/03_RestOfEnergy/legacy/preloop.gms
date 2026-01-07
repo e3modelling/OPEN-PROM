@@ -13,7 +13,7 @@ V03OutTransfSolids.FX(runCy,EFS,YTIME)$(not SECtoEFPROD("SLD",EFS)) = 0;
 V03OutTransfGasses.FX(runCy,EFS,YTIME)$(DATAY(YTIME) and SECtoEFPROD("GAS",EFS)) = i03OutTotTransfProcess(runCy,"GAS",EFS,YTIME);
 V03OutTransfGasses.FX(runCy,EFS,YTIME)$(not SECtoEFPROD("GAS",EFS)) = 0;
 *---
-V03ConsGrssInlNotEneBranch.L(runCy,EFS,YTIME) = 1;
+V03ConsGrssInlNotEneBranch.L(runCy,EFS,YTIME) = i03DataGrossInlCons(runCy,EFS,"%fBaseY%") - i03TotEneBranchCons(runCy,EFS,"%fBaseY%");
 V03ConsGrssInlNotEneBranch.FX(runCy,EFS,YTIME)$DATAY(YTIME) = i03DataGrossInlCons(runCy,EFS,YTIME) - i03TotEneBranchCons(runCy,EFS,YTIME);
 *---
 V03InputTransfRef.FX(runCy,EFS,YTIME)$(DATAY(YTIME) and SECtoEF("LQD",EFS)) = -i03InpTotTransfProcess(runCy,"LQD",EFS,YTIME);
@@ -25,11 +25,13 @@ V03InputTransfSolids.FX(runCy,EFS,YTIME)$(not SECtoEF("SLD",EFS)) = 0;
 V03InputTransfGasses.FX(runCy,EFS,YTIME)$(DATAY(YTIME) and SECtoEF("GAS",EFS)) = -i03InpTotTransfProcess(runCy,"GAS",EFS,YTIME);
 V03InputTransfGasses.FX(runCy,EFS,YTIME)$(not SECtoEF("GAS",EFS)) = 0;
 *---
-V03ConsGrssInl.FX(runCy,EFS,YTIME)$(not An(YTIME)) = i03GrosInlCons(runCy,EFS,YTIME);
+V03ConsGrssInl.L(runCy,EFS,YTIME) = i03DataGrossInlCons(runCy,EFS,"%fBaseY%");
+V03ConsGrssInl.FX(runCy,EFS,YTIME)$DATAY(YTIME) = i03DataGrossInlCons(runCy,EFS,YTIME);
 *---
 V03Transfers.FX(runCy,EFS,YTIME)$(not An(YTIME)) = i03FeedTransfr(runCy,EFS,YTIME);
 *---
-V03ProdPrimary.LO(runCy,EFS,YTIME)$(sameas("STE",EFS) or sameas("NGS",EFS)) = 0;
+*V03ProdPrimary.LO(runCy,EFS,YTIME)$(sameas("STE",EFS) or sameas("NGS",EFS)) = 0;
+V03ProdPrimary.L(runCy,EFS,YTIME) = i03PrimProd(runCy,EFS,"%fBaseY%");
 V03ProdPrimary.FX(runCy,EFS,YTIME)$DATAY(YTIME) = i03PrimProd(runCy,EFS,YTIME);
 *---
 V03Imp.FX(runCy,"NGS",YTIME)$(not An(YTIME)) = imFuelImports(runCy,"NGS",YTIME);
@@ -41,11 +43,6 @@ V03Exp.FX(runCy,EFS,YTIME)$(not IMPEF(EFS)) = 0;
 *---
 VmConsFiEneSec.FX(runCy,SSBS,EFS,YTIME)$(DATAY(YTIME) and SECtoEF(SSBS,EFS))= i03DataOwnConsEne(runCy,SSBS,EFS,YTIME);
 VmConsFiEneSec.FX(runCy,SSBS,EFS,YTIME)$(not SECtoEF(SSBS,EFS)) = 0;
-*---
-VmConsFinEneCountry.FX(runCy,EFS,YTIME)$DATAY(YTIME) = 
-sum(DSBS$(not NENSE(DSBS)), 
-  imFuelConsPerFueSub(runCy,DSBS,EFS,YTIME)
-);
 *---
 VmLossesDistr.FX(runCy,EFS,YTIME)$DATAY(YTIME) = imDistrLosses(runCy,EFS,YTIME);
 *---
@@ -60,3 +57,13 @@ V03OutTransfDhp.FX(runCy,STEAM,YTIME)$(not AN(YTIME)) = i03OutDHPTransfProcess(r
 VmTransfInputDHPlants.FX(runCy,EFS,YTIME)$(not AN(YTIME)) = -i03InpDHPTransfProcess(runCy,EFS,YTIME);
 *---
 V03OutTransfCHP.FX(runCy,TOCTEF,YTIME)$(not AN(YTIME)) = i03OutCHPTransfProcess(runCy,TOCTEF,YTIME);
+*---
+VmConsFinEneCountry.FX(runCy,EFS,YTIME)$DATAY(YTIME) = 
+sum(DSBS$(not NENSE(DSBS)), 
+  imFuelConsPerFueSub(runCy,DSBS,EFS,YTIME)
+);
+*---
+VmConsFinNonEne.FX(runCy,EFS,YTIME)$DATAY(YTIME) = 
+SUM(NENSE$(not sameas("BU",NENSE) and SECtoEF(NENSE,EFS)),
+  imFuelConsPerFueSub(runCy,NENSE,EFS,YTIME)
+);

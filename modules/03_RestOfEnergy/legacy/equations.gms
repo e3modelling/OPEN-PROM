@@ -199,9 +199,11 @@ Q03InpTotTransf(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECtoEF(SSBS,E
 Q03OutTotTransf(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$runCy(allCy)$SECtoEFPROD(SSBS,EFS))..
     V03OutTotTransf(allCy,SSBS,EFS,YTIME)
         =E=
+    smTWhToMtoe * 
     (
-      smTWhToMtoe * sum(PGALL,VmProdElec(allCy,PGALL,YTIME))
-    )$(sameas("PG",SSBS) and ELCEF(EFS)) +
+      sum(PGALL,VmProdElec(allCy,PGALL,YTIME))$sameas("PG",SSBS) +
+      V04ProdElecEstCHP(allCy,YTIME)$sameas("CHP",SSBS)
+    )$ELCEF(EFS) +
     VmDemTotSte(allCy,YTIME)$(sameas("STEAMP",SSBS) and STEAM(EFS)) +
     !!FIXME: Add all liquids
     V03OutTransfRefSpec(allCy,EFS,YTIME)$sameas("LQD",SSBS) +  
@@ -254,9 +256,9 @@ Q03ConsGrssInl(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmConsFinEneCountry(allCy,EFS,YTIME) + 
     VmConsFinNonEne(allCy,EFS,YTIME) + 
     SUM(SSBS,
-    VmConsFiEneSec(allCy,SSBS,EFS,YTIME) +
-    V03InpTotTransf(allCy,SSBS,EFS,YTIME) -
-    V03OutTotTransf(allCy,SSBS,EFS,YTIME)
+      VmConsFiEneSec(allCy,SSBS,EFS,YTIME) +
+      V03InpTotTransf(allCy,SSBS,EFS,YTIME) -
+      V03OutTotTransf(allCy,SSBS,EFS,YTIME)
     ) + 
     VmLossesDistr(allCy,EFS,YTIME) - 
     V03Transfers(allCy,EFS,YTIME);  
@@ -276,16 +278,18 @@ Q03ProdPrimary(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         =E=  
     [
       (
-        i03RatePriProTotPriNeeds(allCy,EFS,YTIME) *
-        V03ConsGrssInl(allCy,EFS,YTIME)
+        !!i03RatePriProTotPriNeeds(allCy,EFS,YTIME) *
+        V03ProdPrimary(allCy,EFS,YTIME-1) *
+        V03ConsGrssInlNotEneBranch(allCy,EFS,YTIME) /
+        (V03ConsGrssInlNotEneBranch(allCy,EFS,YTIME-1) + 1e-6)
       )$(not (sameas(EFS,"CRO") or sameas(EFS,"NGS"))) +
       (
         i03ResHcNgOilPrProd(allCy,EFS,YTIME) * 
         V03ProdPrimary(allCy,EFS,YTIME-1) *
         (
           V03ConsGrssInlNotEneBranch(allCy,EFS,YTIME) /
-          V03ConsGrssInlNotEneBranch(allCy,EFS,YTIME-1)
-        ) ** i03NatGasPriProElst(allCy)
+          (V03ConsGrssInlNotEneBranch(allCy,EFS,YTIME-1) + 1e-6)
+        ) !!** i03NatGasPriProElst(allCy)
       )$(sameas(EFS,"NGS")) +
       (
         i03ResHcNgOilPrProd(allCy,EFS,YTIME) * 
@@ -297,7 +301,7 @@ Q03ProdPrimary(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
           ) ** (0.2 * i03PolDstrbtnLagCoeffPriOilPr(kpdl))
         )
       )$sameas(EFS,"CRO")   
-    ]$i03RatePriProTotPriNeeds(allCy,EFS,YTIME);   
+    ];   
 
 *' The equation calculates the fake exports for a specific energy branch
 *' in a given scenario and year. The computation is based on the fuel exports for
@@ -318,8 +322,7 @@ Q03Imp(allCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS) $runCy(allCy))..
     (
       i03RatioImpFinElecDem(allCy,YTIME) * 
       (VmConsFinEneCountry(allCy,EFS,YTIME) + VmConsFinNonEne(allCy,EFS,YTIME)) +
-      V03Exp(allCy,EFS,YTIME) +
-      i03ElecImp(allCy,YTIME)
+      V03Exp(allCy,EFS,YTIME) !! + i03ElecImp(allCy,YTIME)
     )$ELCEF(EFS) +
     (
       V03ConsGrssInl(allCy,EFS,YTIME) + 
