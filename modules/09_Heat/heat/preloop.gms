@@ -91,7 +91,7 @@ V09CostProdSte.LO(runCy,TSTEAM,YTIME) = epsilon6;
 V09CostProdSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) = V09CostCapProdSte.L(runCy,TSTEAM,YTIME) +
 V09CostVarProdSte.L(runCy,TSTEAM,YTIME);
 *---
-VmCostAvgProdSte.LO(runCy,YTIME) = epsilon6;
+VmCostAvgProdSte.LO(runCy,YTIME) = 0;
 VmCostAvgProdSte.FX(runCy,YTIME)$DATAY(YTIME) = 0;
 *---
 VmConsFuelSteProd.LO(runCy,STEMODE,EFS,YTIME) = 0;

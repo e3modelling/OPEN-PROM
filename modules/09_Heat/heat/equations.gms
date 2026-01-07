@@ -102,7 +102,7 @@ Q09CostAvgProdSte(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       VmProdSte(allCy,TSTEAM,YTIME) *
       V09CostProdSte(allCy,TSTEAM,YTIME)
     ) / 
-    sum(TSTEAM,VmProdSte(allCy,TSTEAM,YTIME));
+    (sum(TSTEAM,VmProdSte(allCy,TSTEAM,YTIME)) + 1e-6);
 
 Q09GapShareSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$runCy(allCy)) ..
     V09GapShareSte(allCy,TSTEAM,YTIME)
