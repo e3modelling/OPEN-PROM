@@ -2,7 +2,7 @@
 *' @code
 
 *' Parameters
-
+$$ontext
 table i10SubsiPerDemTech(allCy,TECH,YTIME)	              "State demand technology support policy, expressed as a proportion of the available state grants (%)"
 $ondelim
 $include"./iSubsiPerDemTech.csv"
@@ -14,4 +14,5 @@ $ondelim
 $include"./iSubsiPerSupTech.csv"
 $offdelim
 ;
+$$offtext
 *---

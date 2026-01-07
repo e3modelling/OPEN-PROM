@@ -34,7 +34,7 @@ Q10SubsiTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q10SubsiDemTech(allCy,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmSubsiDemTech(allCy,TECH,YTIME)
         =E=
-        V10SubsiTot(allCy,YTIME-1) * i10SubsiPerDemTech(allCy,TECH,YTIME)
+        V10SubsiTot(allCy,YTIME-1) !!* i10SubsiPerDemTech(allCy,TECH,YTIME)
 ;
 
 *' The equation splits the available state grants to the various supply technologies through a policy parameter expressing this proportional division.
@@ -42,7 +42,7 @@ Q10SubsiDemTech(allCy,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q10SubsiSupTech(allCy,STECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmSubsiSupTech(allCy,STECH,YTIME)
         =E=
-        V10SubsiTot(allCy,YTIME-1) * i10SubsiPerSupTech(allCy,STECH,YTIME)
+        V10SubsiTot(allCy,YTIME-1) !!* i10SubsiPerSupTech(allCy,STECH,YTIME)
 ;
 
 *' Subsidies in demand (Millions US$2015)
