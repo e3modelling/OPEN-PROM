@@ -3,9 +3,15 @@
 
 *' Parameters
 
-table i10SubsiPerTech(allCy,TECH,YTIME)	              "State technology support policy, expressed as a proportion of the available state grants (%)"
+table i10SubsiPerDemTech(allCy,TECH,YTIME)	              "State demand technology support policy, expressed as a proportion of the available state grants (%)"
 $ondelim
-$include"./iSubsiPerTech.csv"
+$include"./iSubsiPerDemTech.csv"
+$offdelim
+;
+*---
+table i10SubsiPerSupTech(allCy,STECH,YTIME)	              "State supply technology support policy, expressed as a proportion of the available state grants (%)"
+$ondelim
+$include"./iSubsiPerSupTech.csv"
 $offdelim
 ;
 *---

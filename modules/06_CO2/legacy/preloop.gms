@@ -13,6 +13,7 @@ V06CaptCummCO2.FX(runCy,YTIME)$(not an(YTIME)) = 0 ;
 *V06TrnsWghtLinToExp.scale(runCy,YTIME)=1.e-20;
 *Q06TrnsWghtLinToExp.scale(runCy,YTIME)=1.e-20;
 *---
+V06LvlCostDAC.L(allCy,DACTECH,YTIME) = 100
 V06LvlCostDAC.FX(runCyL,DACTECH,YTIME)$(not an(YTIME)) = 100;
 V06LvlCostDAC.LO(runCyL,DACTECH,YTIME) = 70;
 V06CapDAC.FX(runCyL,DACTECH,YTIME)$(not an(YTIME)) = 1;

@@ -29,12 +29,20 @@ Q10SubsiTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         VmNetSubsiTax(allCy,YTIME)
 ;
 
-*' The equation splits the available state grants to the various technologies through a policy parameter expressing this proportional division.
-*' The resulting amount (in Millions US$2015) is going to be implemented to the cost calculation of each subsided technology.
-Q10SubsiTech(allCy,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    VmSubsiTech(allCy,TECH,YTIME)
+*' The equation splits the available state grants to the various demand technologies through a policy parameter expressing this proportional division.
+*' The resulting amount (in Millions US$2015) is going to be implemented to the cost calculation of each subsided demand technology.
+Q10SubsiDemTech(allCy,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    VmSubsiDemTech(allCy,TECH,YTIME)
         =E=
-        V10SubsiTot(allCy,YTIME-1) * i10SubsiPerTech(allCy,TECH,YTIME)
+        V10SubsiTot(allCy,YTIME-1) * i10SubsiPerDemTech(allCy,TECH,YTIME)
+;
+
+*' The equation splits the available state grants to the various supply technologies through a policy parameter expressing this proportional division.
+*' The resulting amount (in Millions US$2015) is going to be implemented to the cost calculation of each subsided supply technology.
+Q10SubsiSupTech(allCy,STECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    VmSubsiSupTech(allCy,STECH,YTIME)
+        =E=
+        V10SubsiTot(allCy,YTIME-1) * i10SubsiPerSupTech(allCy,STECH,YTIME)
 ;
 
 *' Subsidies in demand (Millions US$2015)
