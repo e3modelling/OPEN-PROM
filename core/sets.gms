@@ -499,13 +499,6 @@ STEAM(EFS)       Steam                                               /STE/
 TOCTEF(EFS)      Energy forms produced by power plants and boilers   /ELC,STE/
 ALTEF(EF)        Alternative Fuels used in transport                 /BGDO,MET,ETH/
 
-ALTMAP(SBS,EF,EF)    Fuels whose prices affect the prices of alternative fuels
-/
-(PC,GU,PT,PB,GT,GN).MET.GDO
-(PC,GU,PT,PB,GT,GN).ETH.GDO
-(PC,GU,GN,PN).BGDO.GDO
-/
-
 PGEF(EFS)        "Energy forms used for steam production"
 
 *h2f1(pgef)
