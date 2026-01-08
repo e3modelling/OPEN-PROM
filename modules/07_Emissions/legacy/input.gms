@@ -15,4 +15,9 @@ $include"./iDataCh4N2OFgasesEmissions.csv"
 $offdelim
 ;
 
-* Delete cost files
+* Delete MAC files
+* For Windows
+$if %system.filesys% == MSNT $call 'del ".\data\iDataCh4N2OFgasesMAC.csv"'
+
+* For Linux / macOS
+$if %system.filesys% == UNIX $call 'rm "./data/iDataCh4N2OFgasesMAC.csv"'
