@@ -14,5 +14,5 @@ VmConsFinEneCountry.FX(runCyL,EFS,YTIME)$TIME(YTIME) = VmConsFinEneCountry.L(run
 V03OutTransfRefSpec.FX(runCyL,EFS,YTIME)$TIME(YTIME) = V03OutTransfRefSpec.L(runCyL,EFS,YTIME)$TIME(YTIME);
 V03OutTransfGasses.FX(runCyL,EFS,YTIME)$TIME(YTIME) = V03OutTransfGasses.L(runCyL,EFS,YTIME)$TIME(YTIME);
 V03OutTransfSolids.FX(runCyL,EFS,YTIME)$TIME(YTIME) = V03OutTransfSolids.L(runCyL,EFS,YTIME)$TIME(YTIME);
-V03ConsGrssInlNotEneBranch.FX(runCyL,EFS,YTIME)$TIME(YTIME) =  V03ConsGrssInlNotEneBranch.L(runCyL,EFS,YTIME)$TIME(YTIME);
+V03ConsGrssInlNotEneBranch.FX(runCyL,EFS,YTIME)$TIME(YTIME) = V03ConsGrssInlNotEneBranch.L(runCyL,EFS,YTIME)$TIME(YTIME);
 *---

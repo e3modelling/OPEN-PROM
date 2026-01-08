@@ -99,7 +99,7 @@ Q09CostAvgProdSte(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCostAvgProdSte(allCy,YTIME)
         =E=
     sum(TSTEAM, 
-      VmProdSte(allCy,TSTEAM,YTIME) *
+      (VmProdSte(allCy,TSTEAM,YTIME) + 1e-6) *
       V09CostProdSte(allCy,TSTEAM,YTIME)
     ) / 
     sum(TSTEAM,VmProdSte(allCy,TSTEAM,YTIME) + 1e-6);

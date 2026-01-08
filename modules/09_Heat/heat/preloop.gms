@@ -122,7 +122,7 @@ VmCostAvgProdSte.LO(runCy,YTIME) = 0;
 VmCostAvgProdSte.L(runCy,YTIME) = 1;
 VmCostAvgProdSte.FX(runCy,YTIME)$DATAY(YTIME) = 
 sum(TSTEAM, 
-  VmProdSte.L(runCy,TSTEAM,YTIME) *
+  (VmProdSte.L(runCy,TSTEAM,YTIME) + 1e-6) *
   V09CostProdSte.L(runCy,TSTEAM,YTIME)
 ) / 
 sum(TSTEAM,VmProdSte.L(runCy,TSTEAM,YTIME) + 1e-6) ;
@@ -133,5 +133,4 @@ VmConsFuelSteProd.FX(runCy,"CHP",STEAMEF,YTIME)$DATAY(YTIME) = -i03InpCHPTransfP
 VmConsFuelSteProd.FX(runCy,"DHP",STEAMEF,YTIME)$DATAY(YTIME) = -i03InpDHPTransfProcess(runCy,STEAMEF,YTIME);
 *---
 V09DemGapSte.LO(runCy,YTIME) = 0;
-V09DemGapSte.L(runCy,YTIME) = 0.4
-;
+V09DemGapSte.L(runCy,YTIME) = 1;

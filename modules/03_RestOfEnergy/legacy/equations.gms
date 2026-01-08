@@ -287,7 +287,7 @@ Q03ProdPrimary(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         i03ResHcNgOilPrProd(allCy,EFS,YTIME) * 
         V03ProdPrimary(allCy,EFS,YTIME-1) *
         (
-          V03ConsGrssInlNotEneBranch(allCy,EFS,YTIME) /
+          (V03ConsGrssInlNotEneBranch(allCy,EFS,YTIME) + 1e-6) /
           (V03ConsGrssInlNotEneBranch(allCy,EFS,YTIME-1) + 1e-6)
         ) !!** i03NatGasPriProElst(allCy)
       )$(sameas(EFS,"NGS")) +

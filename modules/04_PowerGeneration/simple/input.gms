@@ -217,4 +217,4 @@ i04DecInvPlantSched(runCy,PGALL,YTIME) = i04InvPlants(runCy,PGALL,YTIME);
 *---
 i04PlantDecomSched(runCy,PGALL,YTIME) = i04DecomPlants(runCy,PGALL,YTIME);
 *---
-i04MxmShareChpElec(runCy,YTIME) = 0.6;
+i04MxmShareChpElec(runCy,YTIME) = 0.3;

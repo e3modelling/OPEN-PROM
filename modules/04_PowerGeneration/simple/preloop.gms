@@ -71,7 +71,16 @@ V04LoadFacDom.FX(runCy,YTIME)$(datay(YTIME)) =
 $ifthen.calib %Calibration% == MatCalibration
 V04DemElecTot.FX(runCy,YTIME) = t04DemElecTot(runCy,YTIME);
 $else.calib
-V04DemElecTot.L(runCy,YTIME) = 10;
+*V04DemElecTot.LO(runCy,YTIME) = 0;
+V04DemElecTot.L(runCy,YTIME) = 
+1/smTWhToMtoe * 
+(
+  sum(DSBS, imFuelConsPerFueSub(runCy,DSBS,"ELC","%fBaseY%")) +
+  imDistrLosses(runCy,"ELC","%fBaseY%") +
+  i03TotEneBranchCons(runCy,"ELC","%fBaseY%") -
+  (imFuelImports(runCy,"ELC","%fBaseY%")- imFuelExprts(runCy,"ELC","%fBaseY%"))
+);
+
 V04DemElecTot.FX(runCy,YTIME)$DATAY(YTIME) = 
 1/smTWhToMtoe * 
 (
@@ -85,7 +94,7 @@ $endif.calib
 VmPeakLoad.L(runCy,YTIME) = 1;
 VmPeakLoad.FX(runCy,YTIME)$(datay(YTIME)) = V04DemElecTot.L(runCy,YTIME)/(V04LoadFacDom.L(runCy,YTIME)*8.76);
 *---
-VmProdElec.L(runCy,pgall,YTIME) = 1;
+VmProdElec.L(runCy,pgall,YTIME) = i04DataElecProdNonCHP(runCy,pgall,YTIME) / 1000 + 1;
 VmProdElec.FX(runCy,pgall,YTIME)$DATAY(YTIME) = i04DataElecProdNonCHP(runCy,pgall,YTIME) / 1000;
 *---
 V04ProdElecEstCHP.FX(runCy,YTIME)$DATAY(YTIME) = SUM(EF,i04DataElecProdCHP(runCy,EF,YTIME)) / 1000;

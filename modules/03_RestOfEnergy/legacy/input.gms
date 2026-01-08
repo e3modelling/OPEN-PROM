@@ -112,6 +112,8 @@ i03SupResRefCapacity(runCy,SUPOTH,YTIME) = 1;
 *---
 i03SupTrnasfOutputRefineries(runCy,EF,YTIME) = 1;
 *---
+i03DataOwnConsEne(runCy,SSBS,EFS,YTIME)$(i03DataOwnConsEne(runCy,SSBS,EFS,YTIME) < 1e-4) = 0;
+*---
 i03TotEneBranchCons(runCy,EFS,YTIME) = SUM(SSBS,i03DataOwnConsEne(runCy,SSBS,EFS,YTIME));
 *---
 i03FeedTransfr(runCy,EFS,YTIME) = i03SuppTransfers(runCy,EFS,YTIME);
