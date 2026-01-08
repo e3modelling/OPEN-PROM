@@ -253,6 +253,7 @@ $setGlobal CO2              legacy
 $setGlobal Emissions        legacy
 $setGlobal Prices           legacy
 $setGlobal Heat             heat
+$setGlobal Curves           LearningCurves
 $setGlobal Economy          economy
 
 ** CORE MODEL FILES **
