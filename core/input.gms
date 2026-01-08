@@ -654,6 +654,7 @@ imGrantCapCostTech(DSBS,TECH)                               !!State granting in 
 imSubsiCapCostFuel(SBS,EF)                                  !!State subsidy in fuel cost
 imFacSubsiCapCostSupply(SSBS,STECH)                         !!State subsidy (%) factor in technology capex (supply side)
 imGrantCapCostSupply(SSBS,STECH)                            !!State granting in technology capex (supply side)
+imCapCostTechMin(allCy,DSBS,TECH,YTIME)                    !!Factor for the minimum capex of a demand technology after the state subsidy
 ;
 
 if %fScenario% eq 0 then
@@ -735,13 +736,13 @@ imShrNonSubElecInTotElecDem(runCy,DOMSE)$(imShrNonSubElecInTotElecDem(runCy,DOMS
 *---
 **  Transport Sector
 imCapCostTech(runCy,TRANSE,TECH,YTIME) = imDataTransTech(TRANSE,TECH,"IC",YTIME);
-imCapCostTechMin(allCy,TRANSE,TTECH,YTIME) = 0.5;           "Factor for the minimum capex of a transport technology after the state subsidy"
+imCapCostTechMin(allCy,TRANSE,TECH,YTIME) = 0.5;
 imFixOMCostTech(runCy,TRANSE,TECH,YTIME) = imDataTransTech(TRANSE,TECH,"FC",YTIME);
 imVarCostTech(runCy,TRANSE,TECH,YTIME) = imDataTransTech(TRANSE,TECH,"VC",YTIME);
 *---
 **  Industrial Sector
 imCapCostTech(runCy,INDSE,TECH,YTIME) = imDataIndTechnology(INDSE,TECH,"IC");
-imCapCostTechMin(allCy,INDSE,TTECH,YTIME) = 0.5;           "Factor for the minimum capex of a transport technology after the state subsidy"
+imCapCostTechMin(allCy,INDSE,TECH,YTIME) = 0.5;
 imFixOMCostTech(runCy,INDSE,TECH,YTIME) = imDataIndTechnology(INDSE,TECH,"FC");
 imVarCostTech(runCy,INDSE,TECH,YTIME) = imDataIndTechnology(INDSE,TECH,"VC");
 imUsfEneConvSubTech(runCy,INDSE,TECH,YTIME)  = imDataIndTechnology(INDSE,TECH,"USC");

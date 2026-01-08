@@ -97,13 +97,13 @@ Q01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTE
     ) *
     (
       (
-        imCapCostTech(allCy,TRANSE,TTECH,YTIME) - 
-        VmSubsiDemTech(allCy,TTECH,YTIME) * 1e3 / ((V01StockPcYearlyTech(allCy,"TELC",YTIME) - V01StockPcYearlyTech(allCy,"TELC",YTIME-1)) * 1e6)
-        + i01CapCostTechMin(allCy,TRANSE,TTECH,YTIME) * imCapCostTech(allCy,TRANSE,TTECH,YTIME)
+        imCapCostTech(allCy,TRANSE,TTECH,YTIME) - !! Inclusion of subsidy in EVs
+        VmSubsiDemTech(allCy,TRANSE,TTECH,YTIME) * 1e3 / ((V01StockPcYearlyTech(allCy,"TELC",YTIME) - V01StockPcYearlyTech(allCy,"TELC",YTIME-1)) * 1e6)
+        + imCapCostTechMin(allCy,TRANSE,TTECH,YTIME) * imCapCostTech(allCy,TRANSE,TTECH,YTIME)
       ) +
       sqrt(sqr(imCapCostTech(allCy,TRANSE,TTECH,YTIME) - 
-      VmSubsiDemTech(allCy,TTECH,YTIME) * 1e3 / ((V01StockPcYearlyTech(allCy,"TELC",YTIME) - V01StockPcYearlyTech(allCy,"TELC",YTIME-1)) * 1e6)
-      - i01CapCostTechMin(allCy,TRANSE,TTECH,YTIME) * imCapCostTech(allCy,TRANSE,TTECH,YTIME)))
+      VmSubsiDemTech(allCy,TRANSE,TTECH,YTIME) * 1e3 / ((V01StockPcYearlyTech(allCy,"TELC",YTIME) - V01StockPcYearlyTech(allCy,"TELC",YTIME-1)) * 1e6)
+      - imCapCostTechMin(allCy,TRANSE,TTECH,YTIME) * imCapCostTech(allCy,TRANSE,TTECH,YTIME)))
     ) / 2
     *
     imCGI(allCy,YTIME)

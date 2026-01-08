@@ -31,10 +31,10 @@ Q11SubsiTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 
 *' The equation splits the available state grants to the various demand technologies through a policy parameter expressing this proportional division.
 *' The resulting amount (in Millions US$2015) is going to be implemented to the cost calculation of each subsided demand technology.
-Q11SubsiDemTech(allCy,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    VmSubsiDemTech(allCy,TECH,YTIME)
+Q11SubsiDemTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    VmSubsiDemTech(allCy,DSBS,TECH,YTIME)
         =E=
-        V11SubsiTot(allCy,YTIME-1) !!* i11SubsiPerDemTech(allCy,TECH,YTIME)
+        V11SubsiTot(allCy,YTIME-1) * i11SubsiPerDemTech(allCy,DSBS,TECH,YTIME)
 ;
 
 *' The equation splits the available state grants to the various supply technologies through a policy parameter expressing this proportional division.
@@ -50,11 +50,11 @@ Q11SubsiCapCostTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(
       VmSubsiCapCostTech(allCy,DSBS,TECH,YTIME)
       =E=
       ( !!Transport subsidies and grants
-        (imCapCostTech(allCy,DSBS,TECH,YTIME) * imFacSubsiCapCostTech(DSBS,TECH)) * 1e-3 *
-        (V01StockPcYearlyTech(allCy,"TELC",YTIME) - V01StockPcYearlyTech(allCy,"TELC",YTIME-1)) * 1e6
-        +
-        imGrantCapCostTech(DSBS,TECH) * 1e-3 *
-        (V01StockPcYearlyTech(allCy,"TELC",YTIME) - V01StockPcYearlyTech(allCy,"TELC",YTIME-1)) * 1e6
+        VmSubsiDemTech(allCy,DSBS,TECH,YTIME) * 1e3 / ((V01StockPcYearlyTech(allCy,"TELC",YTIME) - V01StockPcYearlyTech(allCy,"TELC",YTIME-1)) * 1e6)
+        + imCapCostTechMin(allCy,DSBS,TECH,YTIME) * imCapCostTech(allCy,DSBS,TECH,YTIME)
+        -
+        sqrt(sqr(VmSubsiDemTech(allCy,DSBS,TECH,YTIME) * 1e3 / ((V01StockPcYearlyTech(allCy,"TELC",YTIME) - V01StockPcYearlyTech(allCy,"TELC",YTIME-1)) * 1e6)
+      - imCapCostTechMin(allCy,DSBS,TECH,YTIME) * imCapCostTech(allCy,DSBS,TECH,YTIME)))
       )$(TRANSE(DSBS) and sameas (TECH,"TELC"))
       +
       sum(ITECH$sameas(ITECH,TECH), !!Industry subsidies and grants
