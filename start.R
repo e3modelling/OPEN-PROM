@@ -241,20 +241,55 @@ if (task == 0) {
   if (withRunFolder) createRunFolder(setScenarioName("RESNEWDATA"))
 
   # NEW DATA & CALIBRATE
-  shell(
-    paste0(
-      gams,
-      " main.gms -o mainCalib.lst --WriteGDX=off --DevMode=0 --fScenario=4 --GenerateInput=on --Calibration=MatCalibration -logOption 4 -Idir=./data 2>&1 | tee fullCalib.log"
-    )
+  calib_cmd <- paste0(
+    gams,
+    " main.gms -o mainCalib.lst --WriteGDX=off --DevMode=0 --fScenario=4 --GenerateInput=on --Calibration=MatCalibration -logOption 4 -Idir=./data 2>&1 | tee fullCalib.log"
   )
+  cat("Executing calibration with data generation:\n", calib_cmd, "\n")
+  
+  exit_code <- shell(calib_cmd)
+  
+  # Check for calibration execution failure
+  if (exit_code != 0) {
+    cat("ERROR: GAMS calibration failed with exit code:", exit_code, "\n")
+    cat("Calibration and data generation failed. Check fullCalib.log for details.\n")
+    stop("GAMS calibration execution failed during data generation. Terminating run.")
+  }
+  
+  # Verify calibration output files exist
   CalibratedParams <- c("i04MatFacPlaAvailCap.csv", "i04MatureFacPlaDisp.csv")
+  missing_files <- CalibratedParams[!file.exists(CalibratedParams)]
+  if (length(missing_files) > 0) {
+    cat("ERROR: Calibrated parameter files missing:", paste(missing_files, collapse = ", "), "\n")
+    stop("Calibration failed to generate required parameter files. Terminating run.")
+  }
+  
   newNames <- gsub("[0-9]", "", CalibratedParams) # remove numbers
   CalibratedParamsPath <- file.path(getwd(), CalibratedParams)
   newPath <- file.path(getwd(), "data", newNames)
-  s <- file.rename(CalibratedParamsPath, newPath)
+  rename_success <- file.rename(CalibratedParamsPath, newPath)
+  
+  if (!all(rename_success)) {
+    cat("ERROR: Failed to rename calibrated parameter files\n")
+    stop("File operation failed during calibration cleanup. Terminating run.")
+  }
+  
+  cat("Calibration completed successfully.\n")
 
   # RESEARCH
-  shell(paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log"))
+  research_cmd <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log")
+  cat("Executing research run:\n", research_cmd, "\n")
+  
+  exit_code <- shell(research_cmd)
+  
+  # Check for research execution failure  
+  if (exit_code != 0) {
+    cat("ERROR: GAMS research execution failed with exit code:", exit_code, "\n")
+    cat("Research run failed. Check full.log for details.\n")
+    stop("GAMS research execution failed. Terminating run.")
+  }
+  
+  cat("Research run completed successfully.\n")
   if (withRunFolder) file.copy("data", to = "../../", recursive = TRUE)
   if (withRunFolder) file.copy("targets", to = "../../", recursive = TRUE)
 
