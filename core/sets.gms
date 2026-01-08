@@ -343,10 +343,6 @@ BGDO    "Biodiesel"
 BGSL    "Biogasoline"
 H2F     "Hydrogen"
 ELC     "Electricity"
-HTDAC   "High-Temperature DAC"
-H2DAC   "High-Temperature H2-fueled DAC"
-LTDAC   "Low-Temperature DAC"
-EWDAC   "Enhanced-Weathering DAC"
 
 * Aggregate Fuels
 SLD     "Solid Fuels"
