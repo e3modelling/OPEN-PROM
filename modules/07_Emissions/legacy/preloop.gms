@@ -21,3 +21,4 @@ SUM(EFS,
   ) *
   imCo2EmiFac(runCy,"PG",EFS,YTIME)
 );
+V07EmiActBySrcRegTim.FX(E07SrcMacAbate, allCy, YTIME)$(not An(YTIME)) = i07DataCh4N2OFEmis(allCy,E07SrcMacAbate,YTIME) ;
