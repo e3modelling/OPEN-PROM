@@ -100,6 +100,25 @@ syncRun <- function() {
   # Create tgz archive with the files of each model run
   all_files <- list.files(folder_path, recursive = TRUE, all.files = TRUE)
 
+  # Define what you want to exclude (Files OR Folders)
+  itemsToExclude <- c("mainCalib.lst", "main.lst")
+
+  if (isRunSuccessful("modelstat.txt")) {
+    
+    message("Run Successful. Excluding temporary files from archive...")
+
+    for (item in itemsToExclude) {
+      # This Regex means: Match the item at the start (^) AND 
+      # ensure it ends there ($) OR is a folder parent (/)
+      # This prevents "temp.gdx" from accidentally matching "temp.gdx_final"
+      pattern <- paste0("^", item, "($|/)")
+      all_files <- all_files[!grepl(pattern, all_files)]
+    }
+    
+  } else {
+    message("Run had errors. Archiving ALL files for debugging.")
+  }
+
   # Include GDX files based on user preference
   if (uploadGDX) {
     files_to_archive <- all_files
@@ -155,6 +174,16 @@ setScenarioName <- function(scen_default) {
   }
 
   return(scen)
+}
+### Function that check if all country and year runs are successfull
+isRunSuccessful <- function(statusFilePath) {
+  if (!file.exists(statusFilePath)) return(FALSE)
+
+  lines <- readLines(statusFilePath)
+  modelStatus <- as.numeric(sub(".*Model Status:([0-9.]+).*", "\\1", lines))
+  allAreValid <- all(modelStatus %in% c(2.0, 5.0))
+
+  return(allAreValid)
 }
 
 ### Executing the VS Code tasks
@@ -320,7 +349,7 @@ if (task == 0) {
 
   if (withRunFolder && withSync) syncRun()
 
-  CalibratedParams <- c("i04MatFacPlaAvailCap.csv")
+  CalibratedParams <- c("i04MatFacPlaAvailCap.csv", "i04MatureFacPlaDisp.csv")
   newNames <- gsub("[0-9]", "", CalibratedParams) # remove numbers
   CalibratedParamsPath <- file.path(getwd(), CalibratedParams)
   newPath <- file.path(dirname(dirname(getwd())), "data", newNames)
