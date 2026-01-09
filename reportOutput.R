@@ -75,13 +75,13 @@ reportOutput <- function(
       reports_with_val <- mbind(reportOPEN_PROM, Val_Mif)
       reports[[i]] <- reports_with_val
     } else {
-      dummy <- new.magpie(getRegions(reports[[i]]), getYears(reports[[i]]), c("Emissions|CO2|VAL",
-                                                                              "Final Energy|Transportation|VAL",
-                                                                              "Final Energy|Industry|VAL",
-                                                                              "Final Energy|VAL",
-                                                                              "Secondary Energy|Electricity|VAL",
-                                                                              "Capacity|Electricity|VAL"), fill = NA)
-      dummy <- add_dimension(dummy, dim = 3.2, add = "unit", nm  = c("Mt CO2/yr","Mtoe","Mtoe","Mtoe","GW","GW"))
+      dummy <- new.magpie(getRegions(reports[[i]]), getYears(reports[[i]]), c("Emissions|CO2|VAL","Emissions|CO2|Validation",
+                                                                              "Final Energy|Transportation|VAL","Final Energy|Transportation|Validation",
+                                                                              "Final Energy|Industry|VAL","Final Energy|Industry|Validation",
+                                                                              "Final Energy|VAL","Final Energy|Validation",
+                                                                              "Secondary Energy|Electricity|VAL","Secondary Energy|Electricity|Validation",
+                                                                              "Capacity|Electricity|VAL","Capacity|Electricity|Validation"), fill = NA)
+      dummy <- add_dimension(dummy, dim = 3.2, add = "unit", nm  = c("Mt CO2/yr","Mt CO2/yr","Mtoe","Mtoe","Mtoe","Mtoe","Mtoe","Mtoe","GW","GW","GW","GW"))
       reports_with_val <- mbind(reports[[i]], dummy)
       reports[[i]] <- reports_with_val
     }
