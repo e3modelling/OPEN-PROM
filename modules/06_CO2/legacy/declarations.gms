@@ -4,7 +4,6 @@
 Equations
 Q06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME)	                           "Compute CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
 Q06CaptCummCO2(allCy,YTIME)	                               "Compute cumulative CO2 captured (Mtn of CO2)"
-Q06TrnsWghtLinToExp(allCy,YTIME)	                       "Transtition weight for shifting from linear to exponential CO2 sequestration cost curve"
 Q06GrossCapDAC(DACTECH,YTIME)                        "Computes CAPEX of DAC technologies with learning curve"
 Q06FixOandMDAC(DACTECH,YTIME)                        "Computes Fixed and O&M costs of DAC technologies with learning curve"
 Q06LvlCostDAC(allCy,DACTECH,YTIME)                         "Calculates the CAPEX and the Fixed Costs of DAC capacity regionally (US$2015/tCO2)"
@@ -22,7 +21,6 @@ Q06CstCO2SeqCsts(allCy,YTIME)	                           "Compute cost curve for
 Variables
 V06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME)	                "CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
 V06CaptCummCO2(allCy,YTIME)	                              "Cumulative CO2 captured (Mtn CO2)"
-V06TrnsWghtLinToExp(allCy,YTIME)	                       "Weight for transtition from linear CO2 sequestration cost curve to exponential (1)"
 V06GrossCapDAC(DACTECH,YTIME)                        "CAPEX of DAC technologies with learning curve"
 V06FixOandMDAC(DACTECH,YTIME)                        "Fixed and O&M costs of DAC technologies with learning curve"
 V06VarCostDAC(DACTECH,YTIME)                         "Variable costs of DAC technologies including carbon storage costs, with learning curve"

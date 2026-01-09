@@ -17,9 +17,6 @@ V02DemUsefulSubsecRemTech(allCy,DSBS,YTIME)
 V02GapUsefulDemSubsec(allCy,DSBS,YTIME)
 $offtext
 *---
-V02CostTech.LO(runCy,DSBS,ITECH,YTIME) = 0;
-V02CostTech.L(runCy,DSBS,ITECH,YTIME) = 0.1;
-*---
 * Levels in other variables?
 $ontext
 V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME)
@@ -60,7 +57,7 @@ VmConsFuel.FX(runCy,DSBS,EF,YTIME)$(not HEATPUMP(EF) and not TRANSE(DSBS) and DA
 *vmDemFinSubFuelInd.FX(runCy,YTIME)$(not An(YTIME))= SUM(INDSE,VmDemFinSubFuelSubsec.L(runCy,INDSE,YTIME));
 *---
 !!V02VarCostTech.FX(runCy,DSBS,ITECH,YTIME)$(not An(YTIME) and not TRANSE(DSBS) and not sameas(DSBS,"DAC") and SECTTECH(DSBS,ITECH)) = 0.0001;
-V02VarCostTech.FX(runCy,DSBS,ITECH,YTIME)$(not An(YTIME) and not TRANSE(DSBS) and not sameas(DSBS,"DAC") and SECTTECH(DSBS,ITECH)) =
+V02VarCostTech.FX(runCy,DSBS,ITECH,YTIME)$(DATAY(YTIME) and not TRANSE(DSBS) and not sameas(DSBS,"DAC") and SECTTECH(DSBS,ITECH)) =
   (
     sum(EF$ITECHtoEF(ITECH,EF),
       i02Share(runCy,DSBS,ITECH,EF,YTIME) *
@@ -84,4 +81,6 @@ V02CapCostTech.FX(runCy,DSBS,ITECH,YTIME)$(not An(YTIME) and not TRANSE(DSBS) an
     imFixOMCostTech(runCy,DSBS,ITECH,YTIME) / sUnitToKUnit)
     / imUsfEneConvSubTech(runCy,DSBS,ITECH,YTIME);
 *---
+V02CostTech.LO(runCy,DSBS,ITECH,YTIME) = 0;
+V02CostTech.L(runCy,DSBS,ITECH,YTIME) = 0.1;
 V02CostTech.FX(runCy,DSBS,ITECH,YTIME)$DATAY(YTIME) = V02VarCostTech.L(runCy,DSBS,ITECH,YTIME) + V02CapCostTech.L(runCy,DSBS,ITECH,YTIME);

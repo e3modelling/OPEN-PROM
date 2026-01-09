@@ -16,7 +16,7 @@ Q09DemTotSte(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmDemTotSte(allCy,YTIME)
         =E=
     sum(DSBS,VmConsFuel(allCy,DSBS,"STE",YTIME)) +
-    VmConsFiEneSec(allCy,"STE",YTIME) +
+    SUM(SSBS,VmConsFiEneSec(allCy,SSBS,"STE",YTIME)) +
     VmLossesDistr(allCy,"STE",YTIME) +
     V03Transfers(allCy,"STE",YTIME);
 
@@ -48,7 +48,7 @@ Q09DemGapSte(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         VmProdSte(allCy,TSTEAM,YTIME-1)
       )
   ))
-  )/2 + 1e-6;
+  )/2;
 
 Q09CostVarProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V09CostVarProdSte(allCy,TSTEAM,YTIME)
@@ -99,10 +99,10 @@ Q09CostAvgProdSte(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCostAvgProdSte(allCy,YTIME)
         =E=
     sum(TSTEAM, 
-      VmProdSte(allCy,TSTEAM,YTIME) *
+      (VmProdSte(allCy,TSTEAM,YTIME) + 1e-6) *
       V09CostProdSte(allCy,TSTEAM,YTIME)
     ) / 
-    sum(TSTEAM,VmProdSte(allCy,TSTEAM,YTIME));
+    sum(TSTEAM,VmProdSte(allCy,TSTEAM,YTIME) + 1e-6);
 
 Q09GapShareSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$runCy(allCy)) ..
     V09GapShareSte(allCy,TSTEAM,YTIME)
