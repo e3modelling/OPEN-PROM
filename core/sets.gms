@@ -253,7 +253,37 @@ PG_SF6         "Electricity production, related with SF6"
 OI_SF6         "Other Industries activities, related with SF6"
 /
 
-
+E07SrcMacAbate  "Non-CO₂ emission sources with MAC curves"
+/
+CH4_manure         "Methane from animal waste management"
+CH4_enteric        "Methane from enteric fermentation in livestock"
+CH4_coal           "Methane emissions from coal production and use"
+CH4_sewage         "Methane from domestic wastewater treatment"
+CH4_ngas            "Methane from natural gas production and distribution"
+CH4_landfills      "Methane from solid waste disposal (landfills)"
+CH4_oilp            "Methane from oil extraction and processing"
+CH4_rice           "Methane from wetland rice cultivation"
+N2O_sewage         "Nitrous oxide from domestic wastewater"
+N2O_adipic         "N₂O from adipic acid production (industrial process)"
+N2O_manure         "N₂O from animal waste management"
+N2O_fertilizer     "N₂O from agricultural fertilizer use"
+N2O_nitric         "N₂O from nitric acid production (industrial process)"
+N2O_transport      "N₂O from transport sector emissions"
+HFC_125            "Hydrofluorocarbon-125 emissions"
+HFC_134a           "Hydrofluorocarbon-134a emissions"
+HFC_143a           "Hydrofluorocarbon-143a emissions"
+HFC_152a           "Hydrofluorocarbon-152a emissions"
+HFC_227ea          "Hydrofluorocarbon-227ea emissions"
+HFC_23             "Hydrofluorocarbon-23 emissions"
+HFC_236fa          "Hydrofluorocarbon-236fa emissions"
+HFC_32             "Hydrofluorocarbon-32 emissions"
+HFC_43_10          "Hydrofluorocarbon-43-10 emissions"
+HFC_245ca          "Hydrofluorocarbon-245ca emissions"
+CF4                "Perfluoromethane (CF₄) emissions"
+C2F6               "Perfluoroethane (C₂F₆) emissions"
+C6F14              "Perfluorohexane (C₆F₁₄) emissions"
+SF6                "Sulfur hexafluoride (SF₆) emissions"
+/
 
 POLICIES_set
 /
@@ -1168,6 +1198,19 @@ BALEF2EFS(BALEF, EFS) Mapping from balance fuels to model fuels
 "Methanol".MET
 "Hydrogen".H2F
 "Electricity".ELC
+/
+
+E07MAC "Cost categories for Marginal abatement costs curves (MACC) -2010$/tC for CH4,N20 and 2005$/tC for F-gases" / 
+    0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 
+    320, 340, 360, 380, 400, 420, 460, 480, 500, 520, 540, 560, 580, 600, 660, 
+    680, 720, 740, 760, 780, 820, 840, 1000, 1080, 1100, 1120, 1520, 1660, 
+    1700, 1740, 2580, 2600, 3440, 3460, 3500, 3540, 3600, 3840, 4000 
+/
+Set sFGases(E07SrcMacAbate) "F-gases (Input data in kt)" 
+/
+    HFC_125, HFC_134a, HFC_143a, HFC_152a, HFC_227ea
+    HFC_23,  HFC_236fa, HFC_32,   HFC_43_10, HFC_245ca
+    CF4,     C2F6,      C6F14,    SF6
 /
 
 *         SET ASSIGNMENTS           *
