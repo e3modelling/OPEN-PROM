@@ -50,22 +50,23 @@ Q11SubsiCapCostTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(
       VmSubsiCapCostTech(allCy,DSBS,TECH,YTIME)
       =E=
       ( !!Transport subsidies and grants
-        VmSubsiDemTech(allCy,DSBS,TECH,YTIME) * 1e3 / ((V01StockPcYearlyTech(allCy,"TELC",YTIME) - V01StockPcYearlyTech(allCy,"TELC",YTIME-1)) * 1e6)
-        + imCapCostTechMin(allCy,DSBS,TECH,YTIME) * imCapCostTech(allCy,DSBS,TECH,YTIME)
+        VmSubsiDemTech(allCy,DSBS,TECH,YTIME) * 1e3
+        + imCapCostTechMin(allCy,DSBS,TECH,YTIME) * imCapCostTech(allCy,DSBS,TECH,YTIME) * 1e-3
+          * ((V01StockPcYearlyTech(allCy,"TELC",YTIME) - V01StockPcYearlyTech(allCy,"TELC",YTIME-1)) * 1e6)
         -
-        sqrt(sqr(VmSubsiDemTech(allCy,DSBS,TECH,YTIME) * 1e3 / ((V01StockPcYearlyTech(allCy,"TELC",YTIME) - V01StockPcYearlyTech(allCy,"TELC",YTIME-1)) * 1e6)
-      - imCapCostTechMin(allCy,DSBS,TECH,YTIME) * imCapCostTech(allCy,DSBS,TECH,YTIME)))
+        sqrt(sqr(VmSubsiDemTech(allCy,DSBS,TECH,YTIME) * 1e3
+        - imCapCostTechMin(allCy,DSBS,TECH,YTIME) * imCapCostTech(allCy,DSBS,TECH,YTIME) * 1e-3
+          * ((V01StockPcYearlyTech(allCy,"TELC",YTIME) - V01StockPcYearlyTech(allCy,"TELC",YTIME-1)) * 1e6)))
       )$(TRANSE(DSBS) and sameas (TECH,"TELC"))
       +
       sum(ITECH$sameas(ITECH,TECH), !!Industry subsidies and grants
         imCapCostTech(allCy,DSBS,ITECH,YTIME) * 1e3 *
-        imFacSubsiCapCostTech(DSBS,TECH) *
-        (V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME) * V02GapUsefulDemSubsec(allCy,DSBS,YTIME)) / 
-        (imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME) * i02util(allCy,DSBS,ITECH,YTIME))
-        +
-        imGrantCapCostTech(DSBS,TECH) *
-        (V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME) * V02GapUsefulDemSubsec(allCy,DSBS,YTIME)) / 
-        (imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME) * i02util(allCy,DSBS,ITECH,YTIME))
+        ((V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) - V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)) * VmLft(allCy,DSBS,ITECH,YTIME))
+        + imCapCostTechMin(allCy,DSBS,ITECH,YTIME) * imCapCostTech(allCy,DSBS,ITECH,YTIME)
+        -
+        sqrt(sqr(imCapCostTech(allCy,DSBS,ITECH,YTIME) * 1e3 *
+        ((V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) - V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)) * VmLft(allCy,DSBS,ITECH,YTIME))
+        - imCapCostTechMin(allCy,DSBS,ITECH,YTIME) * imCapCostTech(allCy,DSBS,ITECH,YTIME)))
       )$INDSE(DSBS)
       +
       sum(DACTECH$DACTECH(TECH), !!CDR subsidies and grants (V06GrossCapDAC is in annualized $/tCO2, so multiplied with lifetime)

@@ -40,7 +40,7 @@ Q02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITE
 Q02RatioRem(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and not TRANSE(DSBS) and not sameas(DSBS,"DAC"))$runCy(allCy))..
 V02RatioRem(allCy,DSBS,ITECH,YTIME) 
         =E=
-    ( (1 - 1/VmLft(allCy,DSBS,ITECH,YTIME))* (1 - V02PremScrpIndu(allCy,DSBS,ITECH,YTIME)));
+    (1 - 1/VmLft(allCy,DSBS,ITECH,YTIME))* (1 - V02PremScrpIndu(allCy,DSBS,ITECH,YTIME));
 
 
 Q02PremScrpIndu(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and not TRANSE(DSBS) and not sameas(DSBS,"DAC"))$runCy(allCy))..
@@ -92,15 +92,26 @@ Q02GapUsefulDemSubsec(allCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not 
 Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not sameas(DSBS,"DAC"))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
     V02CapCostTech(allCy,DSBS,ITECH,YTIME) 
         =E=
-    ((
+    (
       (
         imDisc(allCy,DSBS,YTIME) * !! in case of chp plants we use the discount rate of power generation sector
         exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME))
       ) /
       (exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME)) - 1)
     ) *
-    (imCapCostTech(allCy,DSBS,ITECH,YTIME) - imGrantCapCostTech(DSBS,ITECH)) * (1- imFacSubsiCapCostTech(DSBS,ITECH)) *
-    imCGI(allCy,YTIME)
+    (
+      (
+        imCapCostTech(allCy,DSBS,ITECH,YTIME) - !! Inclusion of subsidy in electricity techs in industry
+        VmSubsiDemTech(allCy,DSBS,ITECH,YTIME) * 1e3 /
+        ((V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME-1) * V02GapUsefulDemSubsec(allCy,DSBS,YTIME-1)) * 1e6 * VmLft(allCy,DSBS,ITECH,YTIME))
+        + imCapCostTechMin(allCy,DSBS,ITECH,YTIME) * imCapCostTech(allCy,DSBS,ITECH,YTIME)
+      ) +
+      sqrt(sqr(imCapCostTech(allCy,DSBS,ITECH,YTIME) - 
+        VmSubsiDemTech(allCy,DSBS,ITECH,YTIME) * 1e3 /
+        ((V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME-1) * V02GapUsefulDemSubsec(allCy,DSBS,YTIME-1)) * 1e6 * VmLft(allCy,DSBS,ITECH,YTIME))
+        - imCapCostTechMin(allCy,DSBS,ITECH,YTIME) * imCapCostTech(allCy,DSBS,ITECH,YTIME))
+      ) / 2 
+    * imCGI(allCy,YTIME)
     +
     imFixOMCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit
     ) / 
