@@ -47,6 +47,31 @@ reportOutput <- function(
   Val_Mif_fullval2 <- ValidationMif(.path = runpath, Validation_data_for_plots = Validation_data_for_plots
   )
   
+  if (!is.null(Val_Mif_fullval2)) {
+    if (metadata == 1) {
+      Val_Mif_fullval2 <- Val_Mif_fullval2[,,c("Current Policies Scenario","historical")]
+      Val_Mif_fullval2 <- collapseDim(Val_Mif_fullval2, 3.1)
+    } else if (metadata == 2) {
+      Val_Mif_fullval2 <- Val_Mif_fullval2[,,c("Stated Policies Scenario","historical")]
+      Val_Mif_fullval2 <- collapseDim(Val_Mif_fullval2, 3.1)
+    } else {
+      Val_Mif_fullval2 <- Val_Mif_fullval2[,,c("historical")]
+      Val_Mif_fullval2 <- collapseDim(Val_Mif_fullval2, 3.1)
+      dummy <- new.magpie(getRegions(Val_Mif_fullval2),
+                          getYears(Val_Mif_fullval2),
+                          c("Emissions|CO2|Validation",
+                            "Final Energy|Transportation|Validation",
+                            "Final Energy|Industry|Validation",
+                            "Final Energy|Validation",
+                            "Secondary Energy|Electricity|Validation"), fill = NA)
+      
+      dummy <- add_dimension(dummy, dim = 3.2, add = "unit", nm  = c("Mt CO2/yr","Mtoe","Mtoe","Mtoe","GW"))
+      
+      reports_with_Validation <- mbind(Val_Mif_fullval2, dummy)
+      Val_Mif_fullval2 <- reports_with_Validation
+    }
+  }
+  
   for (i in 1:length(runpath)) {
     if (!is.null(Val_Mif_fullval2)) {
       Val_Mif_fullval2[Val_Mif_fullval2==0]=NA
@@ -80,8 +105,8 @@ reportOutput <- function(
                                                                               "Final Energy|Industry|VAL","Final Energy|Industry|Validation",
                                                                               "Final Energy|VAL","Final Energy|Validation",
                                                                               "Secondary Energy|Electricity|VAL","Secondary Energy|Electricity|Validation",
-                                                                              "Capacity|Electricity|VAL","Capacity|Electricity|Validation"), fill = NA)
-      dummy <- add_dimension(dummy, dim = 3.2, add = "unit", nm  = c("Mt CO2/yr","Mt CO2/yr","Mtoe","Mtoe","Mtoe","Mtoe","Mtoe","Mtoe","GW","GW","GW","GW"))
+                                                                              "Capacity|Electricity|VAL"), fill = NA)
+      dummy <- add_dimension(dummy, dim = 3.2, add = "unit", nm  = c("Mt CO2/yr","Mt CO2/yr","Mtoe","Mtoe","Mtoe","Mtoe","Mtoe","Mtoe","GW","GW","GW"))
       reports_with_val <- mbind(reports[[i]], dummy)
       reports[[i]] <- reports_with_val
     }
