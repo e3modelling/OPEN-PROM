@@ -18,8 +18,9 @@ Q11SubsiTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         =E=
         (
           sum(EF$EFS(EF),
-            VmConsFinEneCountry(allCy, EF, YTIME) * !!add the supply emissions
-            imCo2EmiFac(allCy,"PG", EF, YTIME))
+            sum(SSBS,
+            (VmConsFinEneCountry(allCy, EF, YTIME) + V07EmissCO2Supply(allCy,SSBS,YTIME)) *
+            imCo2EmiFac(allCy,"PG", EF, YTIME)))
           -
           sum(CO2CAPTECH,
           V06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME))
