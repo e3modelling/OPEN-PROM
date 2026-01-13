@@ -62,6 +62,7 @@ Q03LossesDistr(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         V03ProdPrimary(allCy,EFS,YTIME)$sameas(EFS,"CRO")
       )
     )$(not H2EF(EFS)) +
+    !! FIXME: Do we need to add LQD,GAS,SLD here too?
     (
       VmDemTotH2(allCy,YTIME) -
       sum(SBS$SECtoEF(SBS,"H2F"), VmDemSecH2(allCy,SBS,YTIME))
@@ -99,11 +100,7 @@ Q03OutTransfCHP(allCy,TOCTEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     )$sameas("STE",TOCTEF) +
     (V04ProdElecEstCHP(allCy,YTIME) * smTWhToMtoe)$sameas("ELC",TOCTEF);
 
-Q03TransfInputCHPlants(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    VmTransfInputCHPlants(allCy,EFS,YTIME)
-        =E=
-    VmConsFuelSteProd(allCy,"CHP",EFS,YTIME);
-
+$ontext
 *' The equation calculates the refineries' capacity for a given scenario and year.
 *' The calculation is based on a residual factor, the previous year's capacity, and a production scaling
 *' factor that takes into account the historical consumption trends for different energy forms. The scaling factor is
@@ -121,69 +118,64 @@ Q03CapRef(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       $(ord(YTIME) gt 10)
       )     
     ]$i03RefCapacity(allCy,"%fStartHorizon%")+0;
+$offtext
 
 *' The equation calculates the transformation output from refineries for a specific energy form 
 *' in a given scenario and year. The output is computed based on a residual factor, the previous year's output, and the
 *' change in refineries' capacity. The calculation includes considerations for the base year and adjusts the result accordingly.
 *' The result represents the transformation output from refineries for the specified energy form in million tons of oil equivalent.
-Q03OutTransfRefSpec(allCy,EFS,YTIME)$(TIME(YTIME) $EFtoEFA(EFS,"LQD") $runCy(allCy))..
+Q03OutTransfRefSpec(allCy,EFS,YTIME)$(TIME(YTIME)$runCy(allCy)$SECtoEFPROD("LQD",EFS))..
     V03OutTransfRefSpec(allCy,EFS,YTIME)
         =E=
-    [
-      i03ResTransfOutputRefineries(allCy,EFS,YTIME) * 
-      V03OutTransfRefSpec(allCy,EFS,YTIME-1) *
-      (V03CapRef(allCy,YTIME)/V03CapRef(allCy,YTIME-1)) ** 0.3 *
-      (
-        1$(TFIRST(YTIME-1) or TFIRST(YTIME-2)) +
-        (
-          sum(EF$EFtoEFA(EF,"LQD"),VmConsFinEneCountry(allCy,EF,YTIME-1)) /
-          sum(EF$EFtoEFA(EF,"LQD"),VmConsFinEneCountry(allCy,EF,YTIME-2))
-        )$(not (TFIRST(YTIME-1) or TFIRST(YTIME-2)))
-      )**(0.7)
-    ]$i03RefCapacity(allCy,"%fStartHorizon%")
-; 
+    i03ResTransfOutputRefineries(allCy,EFS,YTIME) * 
+    V03OutTransfRefSpec(allCy,EFS,YTIME-1) *
+    (
+      SUM(EFS2$SECtoEFPROD("LQD",EFS2),VmConsFinEneCountry(allCy,EFS2,YTIME)) /
+      (SUM(EFS2$SECtoEFPROD("LQD",EFS2),VmConsFinEneCountry(allCy,EFS2,YTIME-1)) + 1e-6)
+    ) ** (0.98); 
+
+Q03OutTransfSolids(allCy,EFS,YTIME)$(TIME(YTIME)$runCy(allCy)$SECtoEFPROD("SLD",EFS))..
+    V03OutTransfSolids(allCy,EFS,YTIME)
+        =E=
+    V03OutTransfSolids(allCy,EFS,YTIME-1) *
+    (
+      VmConsFinEneCountry(allCy,EFS,YTIME) /
+      (VmConsFinEneCountry(allCy,EFS,YTIME-1) + 1e-6)
+    ) ** (0.98);
+
+Q03OutTransfGasses(allCy,EFS,YTIME)$(TIME(YTIME)$runCy(allCy)$SECtoEFPROD("GAS",EFS))..
+    V03OutTransfGasses(allCy,EFS,YTIME)
+        =E=
+    V03OutTransfGasses(allCy,EFS,YTIME-1) *
+    (
+      VmConsFinEneCountry(allCy,EFS,YTIME) /
+      (VmConsFinEneCountry(allCy,EFS,YTIME-1) + 1e-6)
+    ) ** (0.98);
 
 *' The equation calculates the transformation input to refineries for the energy form Crude Oil
 *' in a specific scenario and year. The input is computed based on the previous year's input to refineries, multiplied by the ratio of the transformation
 *' output from refineries for the given energy form and year to the output in the previous year. This calculation is conditional on the refineries' capacity
 *' being active in the specified starting horizon.The result represents the transformation input to refineries for crude oil in million tons of oil equivalent.
-Q03InputTransfRef(allCy,"CRO",YTIME)$(TIME(YTIME) $runCy(allCy))..
-    V03InputTransfRef(allCy,"CRO",YTIME)
+Q03InputTransfRef(allCy,EFS,YTIME)$(TIME(YTIME)$runCy(allCy)$SECtoEF("LQD",EFS))..
+    V03InputTransfRef(allCy,EFS,YTIME)
         =E=
-    [
-      V03InputTransfRef(allCy,"CRO",YTIME-1) *
-      sum(EFS$EFtoEFA(EFS,"LQD"), V03OutTransfRefSpec(allCy,EFS,YTIME)) /
-      sum(EFS$EFtoEFA(EFS,"LQD"), V03OutTransfRefSpec(allCy,EFS,YTIME-1))
-    ]$i03RefCapacity(allCy,"%fStartHorizon%")
-;                   
+    V03InputTransfRef(allCy,EFS,YTIME-1) *
+    sum(EFS2$SECtoEFPROD("LQD",EFS2), V03OutTransfRefSpec(allCy,EFS2,YTIME)) /
+    (sum(EFS2$SECtoEFPROD("LQD",EFS2), V03OutTransfRefSpec(allCy,EFS2,YTIME-1)) + 1e-6);                   
 
-*' The equation computes the transformation input to thermal power plants for a specific power generation form 
-*' in a given scenario and year. The input is calculated based on the following conditions:
-*' For conventional power plants that are not geothermal or nuclear, the transformation input is determined by the electricity production
-*' from the respective power plant multiplied by the conversion factor from terawatt-hours to million tons of oil equivalent (smTWhToMtoe), divided by the
-*' plant efficiency.For geothermal power plants, the transformation input is based on the electricity production from the geothermal plant multiplied by the conversion
-*' factor.For combined heat and power plants , the input is calculated as the sum of the consumption of fuels in various demand subsectors and the electricity
-*' production from the CHP plant . This sum is then divided by a factor based on the year to account for variations over time.The result represents
-*' the transformation input to thermal power plants in million tons of oil equivalent.
-Q03InpTransfTherm(allCy,PGEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    VmInpTransfTherm(allCy,PGEF,YTIME)
+Q03InputTransfSolids(allCy,EFS,YTIME)$(TIME(YTIME)$runCy(allCy)$SECtoEF("SLD",EFS))..
+    V03InputTransfSolids(allCy,EFS,YTIME)
         =E=
-    VmConsFuelElecProd(allCy,PGEF,YTIME);
+    V03InputTransfSolids(allCy,EFS,YTIME-1) *
+    sum(EFS2$SECtoEFPROD("SLD",EFS2), V03OutTransfSolids(allCy,EFS2,YTIME)) /
+    (sum(EFS2$SECtoEFPROD("SLD",EFS2), V03OutTransfSolids(allCy,EFS2,YTIME-1)) + 1e-6); 
 
-*' The equation calculates the transformation output from thermal power stations for a specific energy branch
-*' in a given scenario and year. The result is computed based on the following conditions: 
-*' If the energy branch is related to electricity, the transformation output from thermal power stations is the sum of electricity production from
-*' conventional power plants and combined heat and power plants. The production values are converted from terawatt-hours (TWh) to
-*' million tons of oil equivalent.
-*' If the energy branch is associated with steam, the transformation output is determined by the sum of the consumption of fuels in various demand
-*' subsectors, the rate of energy branch consumption over total transformation output, and losses.
-*' The result represents the transformation output from thermal power stations in million tons of oil equivalent.
-Q03OutTransfTherm(allCy,"ELC",YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V03OutTransfTherm(allCy,"ELC",YTIME)
+Q03InputTransfGasses(allCy,EFS,YTIME)$(TIME(YTIME)$runCy(allCy)$SECtoEF("GAS",EFS))..
+    V03InputTransfGasses(allCy,EFS,YTIME)
         =E=
-    smTWhToMtoe *
-    sum(PGALL,VmProdElec(allCy,PGALL,YTIME))
-    ; 
+    V03InputTransfGasses(allCy,EFS,YTIME-1) *
+    sum(EFS2$SECtoEFPROD("GAS",EFS2), V03OutTransfGasses(allCy,EFS2,YTIME)) /
+    (sum(EFS2$SECtoEFPROD("GAS",EFS2), V03OutTransfGasses(allCy,EFS2,YTIME-1)) + 1e-6); 
             
 *' The equation calculates the total transformation input for a specific energy branch 
 *' in a given scenario and year. The result is obtained by summing the transformation inputs from different sources, including
@@ -191,27 +183,35 @@ Q03OutTransfTherm(allCy,"ELC",YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' fuel and briquetting plants, and refineries. In the case where the energy branch is "OGS"
 *' (Other Gas), the total transformation input is calculated as the difference between the total transformation output and various consumption
 *' and loss components. The outcome represents the total transformation input in million tons of oil equivalent.
-Q03InpTotTransf(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V03InpTotTransf(allCy,EFS,YTIME)
+Q03InpTotTransf(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECtoEF(SSBS,EFS))..
+    V03InpTotTransf(allCy,SSBS,EFS,YTIME)
         =E=
-    VmConsFuelElecProd(allCy,EFS,YTIME) + 
-    VmConsFuelSteProd(allCy,"DHP",EFS,YTIME) + 
-    VmConsFuelSteProd(allCy,"CHP",EFS,YTIME) +
-    V03InputTransfRef(allCy,EFS,YTIME) + 
-    sum(EF$(H2PRODEF(EF) and EFtoEFS(EF,EFS)),VmConsFuelH2Prod(allCy,EF,YTIME));            
+    VmConsFuelElecProd(allCy,EFS,YTIME)$sameas("PG",SSBS) + 
+    VmConsFuelSteProd(allCy,"CHP",EFS,YTIME)$sameas("CHP",SSBS) +
+    VmConsFuelSteProd(allCy,"DHP",EFS,YTIME)$sameas("STEAMP",SSBS) +
+    V03InputTransfRef(allCy,EFS,YTIME)$sameas("LQD",SSBS) + 
+    V03InputTransfSolids(allCy,EFS,YTIME)$sameas("SLD",SSBS) +
+    V03InputTransfGasses(allCy,EFS,YTIME)$sameas("GAS",SSBS) + 
+    VmConsFuelH2Prod(allCy,EFS,YTIME)$sameas("H2P",SSBS);            
 
 *' The equation calculates the total transformation output for a specific energy branch in a given scenario and year.
 *' The result is obtained by summing the transformation outputs from different sources, including thermal power stations, District Heating Plants,
 *' nuclear plants, patent fuel and briquetting plants, coke-oven plants, blast furnace plants, and gas works
 *' as well as refineries. The outcome represents the total transformation output in million tons of oil equivalent.
-Q03OutTotTransf(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V03OutTotTransf(allCy,EFS,YTIME)
+Q03OutTotTransf(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$runCy(allCy)$SECtoEFPROD(SSBS,EFS))..
+    V03OutTotTransf(allCy,SSBS,EFS,YTIME)
         =E=
-    V03OutTransfTherm(allCy,"ELC",YTIME)$ELCEF(EFS) + 
-    VmDemTotSte(allCy,YTIME)$STEAM(EFS) +
-    V03OutTransfRefSpec(allCy,EFS,YTIME) +  
-    sum(H2TECH$(sameas(EFS, "H2F")), VmProdH2(allCy, H2TECH, YTIME))
-;  !! Hydrogen production for EFS = "H2F" + TONEW(allCy,EFS,YTIME)
+    smTWhToMtoe * 
+    (
+      sum(PGALL,VmProdElec(allCy,PGALL,YTIME))$sameas("PG",SSBS) +
+      V04ProdElecEstCHP(allCy,YTIME)$sameas("CHP",SSBS)
+    )$ELCEF(EFS) +
+    VmDemTotSte(allCy,YTIME)$(sameas("STEAMP",SSBS) and STEAM(EFS)) +
+    !!FIXME: Add all liquids
+    V03OutTransfRefSpec(allCy,EFS,YTIME)$sameas("LQD",SSBS) +  
+    V03OutTransfSolids(allCy,EFS,YTIME)$sameas("SLD",SSBS) +
+    V03OutTransfGasses(allCy,EFS,YTIME)$sameas("GAS",SSBS) +  
+    VmDemTotH2(allCy,YTIME)$(sameas(EFS, "H2F") and sameas("H2P",SSBS));
 
 *' The equation calculates the transfers of a specific energy branch in a given scenario and year.
 *' The result is computed based on a complex formula that involves the previous year's transfers,
@@ -223,17 +223,18 @@ Q03Transfers(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         =E=
     ( 
       (
-        V03Transfers(allCy,EFS,YTIME-1)*
-        VmConsFinEneCountry(allCy,EFS,YTIME) /
-        (VmConsFinEneCountry(allCy,EFS,YTIME-1) + 0.0001)
-      )$EFTOEFA(EFS,"LQD") +
+        V03Transfers(allCy,EFS,YTIME-1) *
+        (
+          VmConsFinEneCountry(allCy,EFS,YTIME) /
+          (VmConsFinEneCountry(allCy,EFS,YTIME-1) + 1e-6)
+        ) ** 0.3
+      )$(not sameas(EFS,"CRO")) +
       (
         V03Transfers(allCy,"CRO",YTIME-1) *
         SUM(EFS2$EFTOEFA(EFS2,"LQD"),V03Transfers(allCy,EFS2,YTIME)) /
         SUM(EFS2$EFTOEFA(EFS2,"LQD"),V03Transfers(allCy,EFS2,YTIME-1))
       )$sameas(EFS,"CRO")   
-    )$(i03FeedTransfr(allCy,EFS,"%fStartHorizon%"))$(NOT sameas("OLQ",EFS))
-;         
+    )$i03FeedTransfr(allCy,EFS,"%fStartHorizon%");         
 
 *' The equation calculates the gross inland consumption excluding the consumption of a specific energy branch
 *' in a given scenario and year. The result is computed by summing various components, including
@@ -244,23 +245,24 @@ Q03ConsGrssInlNotEneBranch(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         =E=
     VmConsFinEneCountry(allCy,EFS,YTIME) + 
     VmConsFinNonEne(allCy,EFS,YTIME) + 
-    V03InpTotTransf(allCy,EFS,YTIME) - 
-    V03OutTotTransf(allCy,EFS,YTIME) + 
+    SUM(SSBS,V03InpTotTransf(allCy,SSBS,EFS,YTIME)) - 
+    SUM(SSBS,V03OutTotTransf(allCy,SSBS,EFS,YTIME)) + 
     VmLossesDistr(allCy,EFS,YTIME) - 
     V03Transfers(allCy,EFS,YTIME)
 ; 
 
-*' The equation calculates the gross inland consumptionfor a specific energy branch in a given scenario and year.
-*' This is computed by summing various components, including total final energy consumption, final consumption in the energy sector, final non-energy consumption,
-*' total transformation input and output, distribution losses, and transfers. The result represents the gross inland consumption in million tons of oil equivalent.
+*' The equation calculates the gross inland consumption. This quantity is equal to the total energy
+*' supply for each country.
 Q03ConsGrssInl(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V03ConsGrssInl(allCy,EFS,YTIME)
         =E=
     VmConsFinEneCountry(allCy,EFS,YTIME) + 
-    VmConsFiEneSec(allCy,EFS,YTIME) + 
     VmConsFinNonEne(allCy,EFS,YTIME) + 
-    V03InpTotTransf(allCy,EFS,YTIME) - 
-    V03OutTotTransf(allCy,EFS,YTIME) +
+    SUM(SSBS,
+      VmConsFiEneSec(allCy,SSBS,EFS,YTIME) +
+      V03InpTotTransf(allCy,SSBS,EFS,YTIME) -
+      V03OutTotTransf(allCy,SSBS,EFS,YTIME)
+    ) + 
     VmLossesDistr(allCy,EFS,YTIME) - 
     V03Transfers(allCy,EFS,YTIME)
 ;  
@@ -275,33 +277,35 @@ Q03ConsGrssInl(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' For Crude Oil primary production, the computation includes the rate of primary production in total primary needs, residuals for hard coal, natural gas, and oil
 *' primary production, the fuel primary production, and a product term involving the polynomial distribution lag coefficients for primary oil production.
 *' The result represents the primary production in million tons of oil equivalent.
-Q03ProdPrimary(allCy,PPRODEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V03ProdPrimary(allCy,PPRODEF,YTIME)
+Q03ProdPrimary(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V03ProdPrimary(allCy,EFS,YTIME)
         =E=  
     [
       (
-        i03RatePriProTotPriNeeds(allCy,PPRODEF,YTIME) *
-        (V03ConsGrssInlNotEneBranch(allCy,PPRODEF,YTIME) +  VmConsFiEneSec(allCy,PPRODEF,YTIME))
-      )$(not (sameas(PPRODEF,"CRO")or sameas(PPRODEF,"NGS"))) +
+        !!i03RatePriProTotPriNeeds(allCy,EFS,YTIME) *
+        V03ProdPrimary(allCy,EFS,YTIME-1) *
+        V03ConsGrssInlNotEneBranch(allCy,EFS,YTIME) /
+        (V03ConsGrssInlNotEneBranch(allCy,EFS,YTIME-1) + 1e-6)
+      )$(not (sameas(EFS,"CRO") or sameas(EFS,"NGS"))) +
       (
-        i03ResHcNgOilPrProd(allCy,PPRODEF,YTIME) * 
-        V03ProdPrimary(allCy,PPRODEF,YTIME-1) *
+        i03ResHcNgOilPrProd(allCy,EFS,YTIME) * 
+        V03ProdPrimary(allCy,EFS,YTIME-1) *
         (
-          V03ConsGrssInlNotEneBranch(allCy,PPRODEF,YTIME) /
-          V03ConsGrssInlNotEneBranch(allCy,PPRODEF,YTIME-1)
-        )**i03NatGasPriProElst(allCy)
-      )$(sameas(PPRODEF,"NGS")) +
+          (V03ConsGrssInlNotEneBranch(allCy,EFS,YTIME) + 1e-6) /
+          (V03ConsGrssInlNotEneBranch(allCy,EFS,YTIME-1) + 1e-6)
+        ) !!** i03NatGasPriProElst(allCy)
+      )$(sameas(EFS,"NGS")) +
       (
-        i03ResHcNgOilPrProd(allCy,PPRODEF,YTIME) * 
-        i03PrimProd(allCy,PPRODEF,YTIME) *
+        i03ResHcNgOilPrProd(allCy,EFS,YTIME) * 
+        V03ProdPrimary(allCy,EFS,YTIME-1) *
         prod(kpdl$(ord(kpdl) lt 5),
           (
             imPriceFuelsInt("WCRO",YTIME-(ord(kpdl)+1)) /
             imPriceFuelsIntBase("WCRO",YTIME-(ord(kpdl)+1))
-          ) ** (0.2 * i03PolDstrbtnLagCoeffPriOilPr(kpdl)))
-      )$sameas(PPRODEF,"CRO")   
-    ]$i03RatePriProTotPriNeeds(allCy,PPRODEF,YTIME)
-;   
+          ) ** (0.2 * i03PolDstrbtnLagCoeffPriOilPr(kpdl))
+        )
+      )$sameas(EFS,"CRO")   
+    ];   
 
 *' The equation calculates the fake exports for a specific energy branch
 *' in a given scenario and year. The computation is based on the fuel exports for
@@ -321,9 +325,9 @@ Q03Imp(allCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS) $runCy(allCy))..
     V03Imp(allCy,EFS,YTIME)
         =E=
     (
-      i03RatioImpFinElecDem(allCy,YTIME) * (VmConsFinEneCountry(allCy,EFS,YTIME) + VmConsFinNonEne(allCy,EFS,YTIME)) +
-      V03Exp(allCy,EFS,YTIME) +
-      i03ElecImp(allCy,YTIME)
+      i03RatioImpFinElecDem(allCy,YTIME) * 
+      (VmConsFinEneCountry(allCy,EFS,YTIME) + VmConsFinNonEne(allCy,EFS,YTIME)) +
+      V03Exp(allCy,EFS,YTIME) !! + i03ElecImp(allCy,YTIME)
     )$ELCEF(EFS) +
     (
       V03ConsGrssInl(allCy,EFS,YTIME) + 
@@ -340,9 +344,12 @@ Q03Imp(allCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS) $runCy(allCy))..
 *         +imImpExp(allCy,"NGS",YTIME)$(sameas(EFS,"NGS"))
     (
       (1-i03RatePriProTotPriNeeds(allCy,EFS,YTIME)) *
-      (V03ConsGrssInl(allCy,EFS,YTIME) + V03Exp(allCy,EFS,YTIME) + VmConsFuel(allCy,"BU",EFS,YTIME)$SECtoEF("BU",EFS) )
-    )$(not (ELCEF(EFS) or sameas(EFS,"NGS") or sameas(EFS,"CRO")))
-;
+      (
+        V03ConsGrssInl(allCy,EFS,YTIME) +
+        V03Exp(allCy,EFS,YTIME) +
+        VmConsFuel(allCy,"BU",EFS,YTIME)$SECtoEF("BU",EFS)
+      )
+    )$(not (ELCEF(EFS) or sameas(EFS,"NGS") or sameas(EFS,"CRO")));
 
 *' The equation computes the net imports for a specific energy branch 
 *' in a given scenario and year. It subtracts the fake exports from the fake imports for
@@ -350,28 +357,19 @@ Q03Imp(allCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS) $runCy(allCy))..
 Q03ImpNetEneBrnch(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmImpNetEneBrnch(allCy,EFS,YTIME)
         =E=
-    V03Imp(allCy,EFS,YTIME) - V03Exp(allCy,EFS,YTIME)
-;
+    V03Imp(allCy,EFS,YTIME) - 
+    V03Exp(allCy,EFS,YTIME);
                                
-*' The equation calculates the final energy consumption in the energy sector.
+*' The equation calculates the final energy own consumption in the energy sector.
 *' It considers the rate of energy branch consumption over the total transformation output.
 *' The final consumption is determined based on the total transformation output and primary production for energy
 *' branches, excluding Oil, Coal, and Gas. The result, VmConsFiEneSec, represents the final consumption in million tons of
 *' oil equivalent for the specified scenario and year.
-Q03ConsFiEneSec(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    VmConsFiEneSec(allCy,EFS,YTIME)
+Q03ConsFiEneSec(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECtoEF(SSBS,EFS))..
+    VmConsFiEneSec(allCy,SSBS,EFS,YTIME)
         =E=
-    i03RateEneBranCons(allCy,EFS,YTIME) *
-    (
-      (
-        V03OutTotTransf(allCy,EFS,YTIME) +
-        V03ProdPrimary(allCy,EFS,YTIME)$(sameas(EFS,"CRO") or sameas(EFS,"NGS"))
-      )$(not TOCTEF(EFS)) +
-      (
-        VmConsFinEneCountry(allCy,EFS,YTIME) + 
-        VmConsFinNonEne(allCy,EFS,YTIME) + 
-        VmLossesDistr(allCy,EFS,YTIME)
-      )$TOCTEF(EFS)
-    ) +
-    sum(EF$(H2PRODEF(EF) and EFtoEFS(EF,EFS)), VmConsFuelH2Prod(allCy,EF,YTIME))$TOCTEF(EFS)
-;                               
+    i03RateEneBranCons(allCy,SSBS,EFS,YTIME) *
+    SUM(EFS2$SECtoEFPROD(SSBS,EFS2), 
+      V03OutTotTransf(allCy,SSBS,EFS2,YTIME) +
+      V03ProdPrimary(allCy,EFS2,YTIME)$(not PGRENEF(EFS2))
+    );                               

@@ -84,12 +84,6 @@ $include"./iInpPGTransfProcess.csv"
 $offdelim
 ;
 *---
-table i03OutPGTransfProcess(allCy,ELCEF,YTIME)	      ""	
-$ondelim
-$include"./iOutPGTransfProcess.csv"
-$offdelim
-;
-*---
 $IFTHEN.calib %Calibration% == MatCalibration
 variable i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   "Maturity factor related to plant available capacity (1)";
 table i04MatFacPlaAvailCapL(allCy,PGALL,YTIME)     "Maturity factor related to plant available capacity (1)"
@@ -223,4 +217,4 @@ i04DecInvPlantSched(runCy,PGALL,YTIME) = i04InvPlants(runCy,PGALL,YTIME);
 *---
 i04PlantDecomSched(runCy,PGALL,YTIME) = i04DecomPlants(runCy,PGALL,YTIME);
 *---
-i04MxmShareChpElec(runCy,YTIME) = 0.6;
+i04MxmShareChpElec(runCy,YTIME) = 0.3;

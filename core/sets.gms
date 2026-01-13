@@ -197,6 +197,10 @@ BM_CO2         "Non metallic minerals production, related with CO2"
 PG_SF6         "Electricity production, related with SF6"
 OI_SF6         "Other Industries activities, related with SF6"
 DAC            "Direct Air Capture"
+LQD            "Liquids Production"
+SLD            "Solids Production"
+GAS            "Gases Production"
+CHP
 /
 
 SBS(ALLSBS)          Model Subsectors
@@ -228,10 +232,13 @@ NEN   "Other Non Energy Uses"
 PG    "Power and Steam Generation"
 H2P   "Hydrogen production"
 STEAMP "Steam Production"
+LQD    "Liquids Production"
+SLD    "Solids Production"
+GAS    "Gases Production"
 H2INFR "Hydrogen storage and delivery"
 DAC    "Direct Air Capture"
+CHP
 /
-
 
 SCT_GHG(ALLSBS)      Aggregate Sectors used in non-energy related GHG emissions
 /
@@ -253,7 +260,37 @@ PG_SF6         "Electricity production, related with SF6"
 OI_SF6         "Other Industries activities, related with SF6"
 /
 
-
+E07SrcMacAbate  "Non-CO₂ emission sources with MAC curves"
+/
+CH4_manure         "Methane from animal waste management"
+CH4_enteric        "Methane from enteric fermentation in livestock"
+CH4_coal           "Methane emissions from coal production and use"
+CH4_sewage         "Methane from domestic wastewater treatment"
+CH4_ngas            "Methane from natural gas production and distribution"
+CH4_landfills      "Methane from solid waste disposal (landfills)"
+CH4_oilp            "Methane from oil extraction and processing"
+CH4_rice           "Methane from wetland rice cultivation"
+N2O_sewage         "Nitrous oxide from domestic wastewater"
+N2O_adipic         "N₂O from adipic acid production (industrial process)"
+N2O_manure         "N₂O from animal waste management"
+N2O_fertilizer     "N₂O from agricultural fertilizer use"
+N2O_nitric         "N₂O from nitric acid production (industrial process)"
+N2O_transport      "N₂O from transport sector emissions"
+HFC_125            "Hydrofluorocarbon-125 emissions"
+HFC_134a           "Hydrofluorocarbon-134a emissions"
+HFC_143a           "Hydrofluorocarbon-143a emissions"
+HFC_152a           "Hydrofluorocarbon-152a emissions"
+HFC_227ea          "Hydrofluorocarbon-227ea emissions"
+HFC_23             "Hydrofluorocarbon-23 emissions"
+HFC_236fa          "Hydrofluorocarbon-236fa emissions"
+HFC_32             "Hydrofluorocarbon-32 emissions"
+HFC_43_10          "Hydrofluorocarbon-43-10 emissions"
+HFC_245ca          "Hydrofluorocarbon-245ca emissions"
+CF4                "Perfluoromethane (CF₄) emissions"
+C2F6               "Perfluoroethane (C₂F₆) emissions"
+C6F14              "Perfluorohexane (C₆F₁₄) emissions"
+SF6                "Sulfur hexafluoride (SF₆) emissions"
+/
 
 POLICIES_set
 /
@@ -314,7 +351,7 @@ INDDOM(DSBS)      Industry and Tertiary         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,S
 HOU1(SBS)         Households                     /HOU/
 SERV(SBS)         Services                       /SE,AG/
 
-SSBS(SBS)         All Supply Subsectors         /PG,H2P,H2INFR/
+SSBS(SBS)         All Supply Subsectors         /PG,H2P,CHP,STEAMP,LQD,SLD,GAS,H2INFR/
 *         Energy Forms            *
 
 EF           Energy Forms
@@ -399,7 +436,7 @@ GDO     "Diesel Oil"
 EFtoEFA(EF,EFA)  Energy Forms Aggregations (for summary balance report)
 /
 (HCL,LGN).SLD
-(GSL,GDO,RFO,LPG,KRS,OLQ).LQD
+(CRO,GSL,GDO,RFO,LPG,KRS,OLQ).LQD
 (LPG,KRS,OLQ).OLQT
 (NGS,OGS).GAS
 (WND,SOL,GEO).REN
@@ -505,6 +542,7 @@ PGEF(EFS)        "Energy forms used for steam production"
 PPRODEF(EFS)     Fuels considered in primary production
 /
 LGN
+BGDO
 OLQ
 HCL
 CRO
@@ -683,33 +721,33 @@ EWDAC
 
 STECH     "Technologies in supply side"
 /
-ATHLGN  Advanced thermal monovalent lignite
-ATHCOAL Advanced thermal monovalent hard coal
-ATHGAS Advanced thermal monovalent natural gas
-ATHBMSWAS Advanced thermal monovalent biomass and waste
-ATHBMSCCS
-ATHOIL Advanced gas turbines (peak devices) diesel oil
-PGLHYD Large Hydro Plants
-PGSHYD Small Hydro Plants
-PGAWND Wind Plants
-PGSOL Solar Photovoltaic Plants
-PGCSP Advanced Solar Thermal Plants
-PGOTHREN Advanced geothermal Plants
-PGANUC New Nuclear Designs
-ATHCOALCCS Supercritical coal with CCS
-ATHLGNCCS Supercritical lignite with CCS
-ATHGASCCS Gas turbine combined cycle with CCS
-PGAWNO Wind offshore
-PGH2F
-gsr   "gas steam reforming"
-gss   "gas steam reforming with CCS"
-weg   "water electrolysis from grid power"
-wew   "water electrolysis with wind"
-wes   "water electrolysis with solar"
-cgf   "coal gasification"
-cgs   "coal gasification with CCS"
-bgfl  "biomass gasification large scale"
-bgfls "biomass gasification large scale with CCS"
+ATHLGN      "Advanced thermal monovalent lignite"
+ATHCOAL     "Advanced thermal monovalent hard coal"
+ATHGAS      "Advanced thermal monovalent natural gas"
+ATHBMSWAS   "Advanced thermal monovalent biomass and waste"
+ATHBMSCCS   "Advanced thermal monovalent biomass and waste with CCS"
+ATHOIL      "Advanced gas turbines (peak devices) diesel oil"
+PGLHYD      "Large Hydro Plants"
+PGSHYD      "Small Hydro Plants"
+PGAWND      "Wind Plants"
+PGSOL       "Solar Photovoltaic Plants"
+PGCSP       "Advanced Solar Thermal Plants"
+PGOTHREN    "Advanced geothermal Plants"
+PGANUC      "New Nuclear Designs"
+ATHCOALCCS  "Supercritical coal with CCS"
+ATHLGNCCS   "Supercritical lignite with CCS"
+ATHGASCCS   "Gas turbine combined cycle with CCS"
+PGAWNO      "Wind offshore"
+PGH2F       "Hydrogen Production"
+gsr         "gas steam reforming"
+gss         "gas steam reforming with CCS"
+weg         "water electrolysis from grid power"
+wew         "water electrolysis with wind"
+wes         "water electrolysis with solar"
+cgf         "coal gasification"
+cgs         "coal gasification with CCS"
+bgfl        "biomass gasification large scale"
+bgfls       "biomass gasification large scale with CCS"
 /
 
 TECHtoEF (TECH,EF) Fuels consumed by technologies
@@ -808,6 +846,8 @@ TCHEVGDO
 
 SSECTTECH(SSBS,STECH) "Link between Model Supply Subsectors and Technologies"
 
+SSECTTECH(SSBS,STECH) "Link between Model Supply Subsectors and Technologies"
+
 SECTTECH(DSBS,TECH) Link between Model Demand Subsectors and Technologies
 /
 *PC.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO,CHEVGSL,CHEVGDO)
@@ -823,8 +863,8 @@ PA.(TKRS)
 (IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(TLGN,THCL,TGDO,TGSL,TRFO,TLPG,TKRS,TOLQ,TNGS,TOGS,
                                 TELC,TBMSWAS,TSTE,TH2F)
 (IS,BM,CH).(TNGSCCS,THCLCCS)
-(HOU,AG).(TLPG,TKRS,TGDO,TNGS,TOGS,TBMSWAS,TELC,TSTE)
-SE.(TLPG,TKRS,TNGS,TOGS,TELC,TSTE)
+(HOU,AG).(THCL,TLPG,TKRS,TGDO,TNGS,TOGS,TBMSWAS,TELC,TSTE)
+SE.(THCL,TLPG,TKRS,TNGS,TOGS,TELC,TSTE)
 
 *BU.(GDO,RFO,OLQ)
 BU.(TGDO,TRFO,TKRS)
@@ -832,15 +872,18 @@ BU.(TGDO,TRFO,TKRS)
 DAC.(HTDAC,H2DAC,LTDAC,EWDAC)
 /
 
-SECtoEF(SBS,EF) Link between Model Subsectors and Energy FORMS
+SECtoEF(SBS,EF) Link between Model Subsectors and Energy Forms consumed
 /
 PG.(LGN,HCL,GDO,RFO,NGS,OGS,NUC,HYD,BMSWAS,SOL,GEO,WND,H2F)
+CHP.(LGN,HCL,GDO,RFO,NGS,OGS,NUC,HYD,BMSWAS,SOL,GEO,WND)
 H2P.(HCL,LGN,RFO,GDO,NGS,OGS,NUC,BMSWAS,SOL,WND,ELC)
 STEAMP.(HCL,LGN,GDO,RFO,LPG,KRS,NGS,OGS,OLQ,NUC,GEO,BMSWAS,ELC,H2F)
-*DAC.(ELC,NGS)
+SLD.(LGN,HCL,GSL,GDO,BGDO,RFO,OLQ,NGS,OGS,BMSWAS,SOL,CRO,LPG,KRS,ELC,STE)
+LQD.(LGN,HCL,GSL,GDO,BGDO,RFO,OLQ,NGS,OGS,BMSWAS,SOL,CRO,LPG,KRS,ELC,STE)
+GAS.(HCL,GSL,GDO,BGDO,RFO,OLQ,NGS,OGS,BMSWAS,SOL,CRO,LPG,KRS,ELC,STE)
 /
 
-PGALL(STECH)            Power Generation Plant Types !! Maybe these should be the power generation technologies?
+PGALL(STECH)     Power Generation Plant Types
 /
 *CTHLGN Conventional thermal monovalent lignite
 *CTHHCL Conventional thermal monovalent hard coal
@@ -925,17 +968,14 @@ PGREN(PGALL)    REN PLANTS with Saturation                /PGLHYD,PGSHYD,PGAWND,
 PGREN2(PGALL)     Renewable Plants                          /PGLHYD,PGSHYD,PGAWND,PGSOL,PGCSP,PGOTHREN,PGAWNO,PGANUC,ATHCOALCCS,ATHLGNCCS,ATHGASCCS,PGH2F/
 PGRENSW(PGALL)   Solar and wind Plants                     /PGSOL,PGCSP,PGAWND,PGAWNO/
 PGNREN(PGALL)    Advanced Renewable Plants potential      /PGCSP,PGOTHREN,PGAWNO,ATHBMSWAS/
-PGRENEF          Renewable energy forms in power generation  /LHYD,SHYD,WND,WNO,SOL,DPV,BMSWAS,OTHREN/
+PGRENEF          Renewable energy forms in power generation  /HYD,WND,SOL,BMSWAS,GEO/
 
 PGALLtoPGRENEF(PGALL,PGRENEF)     Correspondence between renewable plants and renewable energy forms
 /
-PGLHYD.LHYD
-(PGSHYD).SHYD
-(PGAWND).WND
-PGAWNO.WNO
+(PGSHYD,PGLHYD).HYD
+(PGAWND,PGAWNO).WND
 (PGSOL,PGCSP).SOL
-*PGADPV.DPV
-(PGOTHREN).OTHREN
+PGOTHREN.GEO
 (ATHBMSWAS,ATHBMSCCS).BMSWAS
 /
 
@@ -1196,6 +1236,19 @@ BALEF2EFS(BALEF, EFS) Mapping from balance fuels to model fuels
 "Electricity".ELC
 /
 
+E07MAC "Cost categories for Marginal abatement costs curves (MACC) -2010$/tC for CH4,N20 and 2005$/tC for F-gases" / 
+    0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 
+    320, 340, 360, 380, 400, 420, 460, 480, 500, 520, 540, 560, 580, 600, 660, 
+    680, 720, 740, 760, 780, 820, 840, 1000, 1080, 1100, 1120, 1520, 1660, 
+    1700, 1740, 2580, 2600, 3440, 3460, 3500, 3540, 3600, 3840, 4000 
+/
+Set sFGases(E07SrcMacAbate) "F-gases (Input data in kt)" 
+/
+    HFC_125, HFC_134a, HFC_143a, HFC_152a, HFC_227ea
+    HFC_23,  HFC_236fa, HFC_32,   HFC_43_10, HFC_245ca
+    CF4,     C2F6,      C6F14,    SF6
+/
+
 *         SET ASSIGNMENTS           *
 
 alias(TT, ytime);
@@ -1266,6 +1319,5 @@ SECtoEF(NENSE, "BGSL") = no;
 SECtoEF(NENSE, "BGDO") = no;
 *This is equivalent with the loop above
 *SECtoEF(DSBS, EF)$(sum(TECH, SECTTECH(DSBS, TECH) * TTECHtoEF(TECH, EF))) = yes;
-
 SSECTTECH("PG",STECH) = yes$PGALL(STECH);
 PGEF(EFS) = yes$(sum(PGALL, PGALLTOEF(PGALL,EFS)));

@@ -30,8 +30,6 @@ V01StockPcYearlyTech.FX(runCy,TTECH,"%fBaseY%") = i01StockPC(runCy,TTECH,"%fBase
 *---
 V01NumPcScrap.FX(runCy,YTIME)$sameas(YTIME,"%fBaseY%") = SUM(TTECH,V01RateScrPcTot.L(runCy,TTECH,YTIME) * V01StockPcYearlyTech.L(runCy,TTECH,YTIME)); 
 *---
-V01CostTranspPerMeanConsSize.LO(runCy,TRANSE,TTECH,YTIME) = epsilon6;
-*---
 V01ActivGoodsTransp.L(runCy,TRANSE,YTIME) = 0.1;
 V01ActivGoodsTransp.FX(runCy,TRANG,YTIME)$(not An(YTIME)) = imActv(YTIME,runCy,TRANG);
 V01ActivGoodsTransp.FX(runCy,TRANSE,YTIME)$(not TRANG(TRANSE)) = 0;
@@ -54,3 +52,47 @@ V01ConsTechTranspSectoral.FX(runCy,TRANSE,TTECH,EF,YTIME)$(SECTTECH(TRANSE,TTECH
 VmDemFinEneTranspPerFuel.FX(runCy,TRANSE,EF,YTIME) $(SECtoEF(TRANSE,EF) $(not An(YTIME))) = imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME);
 VmDemFinEneTranspPerFuel.FX(runCy,TRANSE,EF,YTIME)$(not SECtoEF(TRANSE,EF)) = 0;
 *---
+V01CapCostAnnualized.LO(runCy,TRANSE,TTECH,YTIME) = 0;
+V01CapCostAnnualized.FX(runCy,TRANSE,TTECH,YTIME)$DATAY(YTIME) =
+(
+  imDisc(runCy,TRANSE,YTIME) * exp(imDisc(runCy,TRANSE,YTIME) * i01TechLft(runCy,TRANSE,TTECH,YTIME)) /
+  (exp(imDisc(runCy,TRANSE,YTIME) * i01TechLft(runCy,TRANSE,TTECH,YTIME)) - 1)
+) * imCapCostTech(runCy,TRANSE,TTECH,YTIME) * imCGI(runCy,YTIME);
+*---
+V01CostFuel.LO(runCy,TRANSE,TTECH,YTIME) = 0;
+V01CostFuel.FX(runCy,TRANSE,TTECH,YTIME)$DATAY(YTIME) = 
+(
+  (
+    sum(EF$TTECHtoEF(TTECH,EF),
+      V01ConsSpecificFuel.L(runCy,TRANSE,TTECH,EF,YTIME) *
+      VmPriceFuelSubsecCarVal.L(runCy,TRANSE,EF,YTIME)
+    ) 
+  )$(not PLUGIN(TTECH)) +
+  (
+    sum(EF$(TTECHtoEF(TTECH,EF) $(not sameas("ELC",EF))),
+      (1-i01ShareAnnMilePlugInHybrid(runCy,YTIME)) *
+      V01ConsSpecificFuel.L(runCy,TRANSE,TTECH,EF,YTIME) *
+      VmPriceFuelSubsecCarVal.L(runCy,TRANSE,EF,YTIME)
+    ) +
+    i01ShareAnnMilePlugInHybrid(runCy,YTIME) *
+    V01ConsSpecificFuel.L(runCy,TRANSE,TTECH,"ELC",YTIME) *
+    VmPriceFuelSubsecCarVal.L(runCy,TRANSE,"ELC",YTIME)
+  )$PLUGIN(TTECH) +
+  imVarCostTech(runCy,TRANSE,TTECH,YTIME) +
+  (VmRenValue.L(YTIME)/1000)$(not RENEF(TTECH)) 
+) *
+(
+  1e-3 * V01ActivPassTrnsp.L(runCy,TRANSE,YTIME)$sameas(TRANSE,"PC") + !! aviation should be divided by 1000
+  1e-1 * V01ActivPassTrnsp.L(runCy,TRANSE,YTIME)$(sameas(TRANSE,"PT")) +
+  1e3 * V01ActivPassTrnsp.L(runCy,TRANSE,YTIME)$(sameas(TRANSE,"PB")) +
+  1 * V01ActivPassTrnsp.L(runCy,TRANSE,YTIME)$(sameas(TRANSE,"PN")) +
+  1 * V01ActivPassTrnsp.L(runCy,TRANSE,YTIME)$(sameas(TRANSE,"PA")) +
+  1e-5 * V01ActivGoodsTransp.L(runCy,TRANSE,YTIME)$TRANG(TRANSE)  !! should be divided by number of vehicles
+  !!imAnnCons(runCy,TRANSE,"modal")$(not sameas(TRANSE,"PC"))
+);
+*---
+V01CostTranspPerMeanConsSize.LO(runCy,TRANSE,TTECH,YTIME) = epsilon6;
+V01CostTranspPerMeanConsSize.FX(runCy,TRANSE,TTECH,YTIME)$DATAY(YTIME) = 
+V01CapCostAnnualized.L(runCy,TRANSE,TTECH,YTIME) +
+imFixOMCostTech(runCy,TRANSE,TTECH,YTIME) +
+V01CostFuel.L(runCy,TRANSE,TTECH,YTIME);

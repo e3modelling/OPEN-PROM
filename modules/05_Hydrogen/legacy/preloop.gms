@@ -12,9 +12,10 @@
 V05GapShareH2Tech1.UP(runCy,H2TECH,YTIME) = 1;
 V05GapShareH2Tech1.LO(runCy,H2TECH,YTIME) = 0;
 *---
+V05DemGapH2.LO(runCy,YTIME) = 0;
 V05DemGapH2.L(runCy,YTIME) = 2;
 V05DemGapH2.FX(runCy,YTIME)$(not An(YTIME)) = 0;
-display V05DemGapH2.L;
+
 *---
 VmProdH2.L(runCy,H2TECH, YTIME) = 0.5;
 VmProdH2.LO(runCy,H2TECH, YTIME) = 0;
@@ -49,6 +50,7 @@ V05CostProdH2Tech.LO(runCy,H2TECH,YTIME) = epsilon6;
 V05CostProdH2Tech.L(runCy,H2TECH,YTIME) = 2;
 V05CostProdH2Tech.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
 *---
+*V05CostVarProdH2Tech.LO(runCy,H2TECH,YTIME) = epsilon6;
 V05CostVarProdH2Tech.L(runCy,H2TECH,YTIME) = 2;
 *---
 V05ShareCCSH2Prod.LO(runCy,H2TECH,YTIME) = 0;
@@ -57,14 +59,20 @@ V05ShareCCSH2Prod.UP(runCy,H2TECH,YTIME) = 1;
 V05ShareNoCCSH2Prod.LO(runCy,H2TECH,YTIME) = 0;
 V05ShareNoCCSH2Prod.UP(runCy,H2TECH,YTIME) = 1;
 *---
-*VmConsFuelH2Prod.L(runCy,EF,YTIME) = 2;
-VmConsFuelH2Prod.FX(runCy,EF,YTIME)$(not An(YTIME)) = sum(H2TECH$H2TECHEFtoEF(H2TECH,EF),VmConsFuelTechH2Prod.L(runCy,H2TECH,EF,YTIME));
+VmConsFuelH2Prod.FX(runCy,EF,YTIME)$(DATAY(YTIME) and H2PRODEF(EF)) = sum(H2TECH$H2TECHEFtoEF(H2TECH,EF),VmConsFuelTechH2Prod.L(runCy,H2TECH,EF,YTIME));
+VmConsFuelH2Prod.FX(runCy,EF,YTIME)$(not H2PRODEF(EF)) = 0;
 *---
 V05CostProdCCSNoCCSH2Prod.LO(runCy,H2TECH,YTIME) = epsilon6;
 V05CostProdCCSNoCCSH2Prod.L(runCy,H2TECH,YTIME) = 2;
 *---
+VmCostAvgProdH2.LO(runCy,YTIME) = 0;
 VmCostAvgProdH2.L(runCy,YTIME) = 2;
-VmCostAvgProdH2.FX(runCy,YTIME)$(not An(YTIME)) = 0;
+VmCostAvgProdH2.FX(runCy,YTIME)$DATAY(YTIME) = 
+sum(H2TECH, 
+  (VmProdH2.L(runCy,H2TECH,YTIME) + 1e-6) *
+  V05CostProdH2Tech.L(runCy,H2TECH,YTIME)
+) /
+sum(H2TECH,VmProdH2.L(runCy,H2TECH,YTIME) + 1e-6);
 *---
 *V05InvNewReqH2Infra.L(runCy,INFRTECH,YTIME) = 2;
 *V05InvNewReqH2Infra.FX(runCy,INFRTECH,YTIME)$(not An(YTIME)) = 1e-5;
@@ -83,8 +91,9 @@ VmCostAvgProdH2.FX(runCy,YTIME)$(not An(YTIME)) = 0;
 *---
 *V05H2InfrArea.L(runCy,YTIME) = 0.001;
 *---
-V05DemGapH2.LO(runCy,YTIME) = 0;
-*---
 V05PremRepH2Prod.LO(runCy,H2TECH,YTIME) = 0;
 V05PremRepH2Prod.UP(runCy,H2TECH,YTIME) = 1;
 V05PremRepH2Prod.FX(runCy,H2TECH,YTIME)$(not H2TECHPM(H2TECH)) = 1;
+*---
+*V05CaptRateH2.L(runCy,H2TECH,YTIME) = 0.7;
+V05CaptRateH2.FX(runCy,H2TECH,YTIME)$DATAY(YTIME) = i05CaptRateH2Prod(H2TECH);

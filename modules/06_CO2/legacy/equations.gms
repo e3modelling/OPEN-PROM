@@ -68,19 +68,8 @@ Q06CaptCummCO2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06CaptCummCO2(allCy,YTIME-1) +
     SUM(CO2CAPTECH,
       V06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME)
-    )
- ;   
+    );   
 
-*' The equation computes the transition weight from a linear to exponential CO2 sequestration
-*' cost curve for a specific scenario and year. The transition weight is determined based on the cumulative CO2 captured
-*' and parameters defining the transition characteristics.The transition weight is calculated using a logistic function.
-*' This equation provides a mechanism to smoothly transition from a linear to exponential cost curve based on the cumulative CO2 captured, allowing
-*' for a realistic representation of the cost dynamics associated with CO2 sequestration. The result represents the weight for
-*' the transition in the specified scenario and year.
-Q06TrnsWghtLinToExp(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V06TrnsWghtLinToExp(allCy,YTIME)
-        =E=
-    0.6;
 $ontext
     1 /
     (1 + exp(-i06ElastCO2Seq(allCy,"mc_s") * (V06CaptCummCO2(allCy,YTIME)*1e3 /i06ElastCO2Seq(allCy,"pot")-i06ElastCO2Seq(allCy,"mc_m")))); 
@@ -97,10 +86,10 @@ Q06CstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCstCO2SeqCsts(allCy,YTIME) 
         =E=
     !! linear component
-    V06TrnsWghtLinToExp(allCy,YTIME) * 
+    0.6 * 
     i06ElastCO2Seq(allCy,"mc_b") +
     !! exponential component
-    (1-V06TrnsWghtLinToExp(allCy,YTIME)) *
+    (1-0.6) *
     i06ElastCO2Seq(allCy,"mc_b") *
     exp(V06CaptCummCO2(allCy,YTIME) / i06ElastCO2Seq(allCy,"mc_d"));           
 
@@ -180,15 +169,12 @@ Q06ProfRateDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 
 *' The equation estimates the annual increase rate of DAC capacity regionally, according to the maturity and profitability of each technology.
 Q06CapFacNewDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V06CapFacNewDAC(allCy,DACTECH,YTIME)
-            =E=
-          (
-            (exp(i06MatFacDAC(DACTECH) * V06ProfRateDAC(allCy,DACTECH,YTIME) - 1)) /
-           (exp(i06MatFacDAC(DACTECH) * S06ProfRateMaxDAC - 1))
-          ) *
-          (S06CapFacMaxNewDAC - S06CapFacMinNewDAC) +
-          S06CapFacMinNewDAC
-;
+  V06CapFacNewDAC(allCy,DACTECH,YTIME)
+      =E=
+  exp(i06MatFacDAC(DACTECH) * V06ProfRateDAC(allCy,DACTECH,YTIME) - 1) /
+  exp(i06MatFacDAC(DACTECH) * S06ProfRateMaxDAC - 1) *
+  (S06CapFacMaxNewDAC - S06CapFacMinNewDAC) +
+  S06CapFacMinNewDAC;
 
 *' The equation calculates the DAC installed capacity annually and regionally,
 *' adding capacity based on the maturity of the technology, as well as given capacities of actual scheduled DAC units.
