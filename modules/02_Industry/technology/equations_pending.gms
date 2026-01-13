@@ -40,7 +40,7 @@ Q02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITE
 Q02RatioRem(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and not TRANSE(DSBS) and not sameas(DSBS,"DAC"))$runCy(allCy))..
 V02RatioRem(allCy,DSBS,ITECH,YTIME) 
         =E=
-    ( (1 - 1/VmLft(allCy,DSBS,ITECH,YTIME))* (1 - V02PremScrpIndu(allCy,DSBS,ITECH,YTIME)));
+    (1 - 1/VmLft(allCy,DSBS,ITECH,YTIME))* (1 - V02PremScrpIndu(allCy,DSBS,ITECH,YTIME));
 
 
 Q02PremScrpIndu(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and not TRANSE(DSBS) and not sameas(DSBS,"DAC"))$runCy(allCy))..
@@ -89,20 +89,17 @@ Q02GapUsefulDemSubsec(allCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not 
 *' OLD VARIABLE: V02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME) --> NEW VARIABLE:V02CapCostTech(allCy,DSBS,rCon,EF,YTIME)
 *' Add parameter sUnitToKUnit = 1000
 *' Check ITECH and CHPs
-Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not sameas(DSBS,"DAC"))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
-    V02CapCostTech(allCy,DSBS,ITECH,YTIME) 
+Q02CapCostTech1(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not sameas(DSBS,"DAC"))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
+    V02CapCostTech1(allCy,DSBS,ITECH,YTIME) 
         =E=
-    ((
+    (
       (
         imDisc(allCy,DSBS,YTIME) * !! in case of chp plants we use the discount rate of power generation sector
         exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME))
       ) /
       (exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME)) - 1)
-    ) *[
-    imCapCostTech(allCy,DSBS,ITECH,YTIME) * imCGI(allCy,YTIME) +
-    imFixOMCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit]$(sameas(YTIME,"2021")) +
-    [
-      (
+    ) *
+    (
       (
         imCapCostTech(allCy,DSBS,ITECH,YTIME) - !! Inclusion of subsidy in electricity techs in industry
         VmSubsiDemTech(allCy,DSBS,ITECH,YTIME) * 1e3 /
@@ -117,10 +114,23 @@ Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not sa
     * imCGI(allCy,YTIME)
     +
     imFixOMCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit
-    )
-    ]$(not (sameas(YTIME,"2021")))
-    )
-    / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME); !! divide with utilization rate or with efficiency as well???? depends on the CapCostTech parameter
+    ) / 
+    imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME); !! divide with utilization rate or with efficiency as well???? depends on the CapCostTech parameter
+
+Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not sameas(DSBS,"DAC"))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
+    V02CapCostTech(allCy,DSBS,ITECH,YTIME)
+        =E=
+    ((
+      (
+        imDisc(allCy,DSBS,YTIME) * !! in case of chp plants we use the discount rate of power generation sector
+        exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME))
+      ) /
+      (exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME)) - 1)
+    ) *
+    imCapCostTech(allCy,DSBS,ITECH,YTIME) * imCGI(allCy,YTIME) +
+    imFixOMCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit)
+    / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME);
+ 
 
 *' The equation computes the variable cost (variable + fuel) of each technology in each subsector - to check about consumer sizes
 *' OLD EQUATION: Q02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME) --> NEW EQUATION:Q02VarCostTech(allCy,DSBS,rCon,ITECH,YTIME)
@@ -154,10 +164,10 @@ Q02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $SECTTECH(DSBS,I
     V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME) 
         =E=
     imMatrFactor(allCy,DSBS,ITECH,YTIME) *
-    V02CostTech(allCy,DSBS,ITECH,YTIME-1) ** (-i02ElaSub(allCy,DSBS)) /
-    sum(ITECH2$SECTTECH(DSBS,ITECH2),
+    V02CostTech(allCy,DSBS,ITECH,YTIME) ** (-i02ElaSub(allCy,DSBS)) /
+    sum(ITECH2$(SECTTECH(DSBS,ITECH2)),
       imMatrFactor(allCy,DSBS,ITECH2,YTIME) *
-      V02CostTech(allCy,DSBS,ITECH2,YTIME-1) ** (-i02ElaSub(allCy,DSBS))
+      V02CostTech(allCy,DSBS,ITECH2,YTIME) ** (-i02ElaSub(allCy,DSBS))
     );
 
 *' This equation computes the equipment capacity of each technology in each subsector
