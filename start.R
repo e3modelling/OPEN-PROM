@@ -3,11 +3,15 @@ library(jsonlite)
 
 # Various flags used to modify script behavior
 withRunFolder <- TRUE # Set to FALSE to disable model run folder creation and file copying
-withSync <- TRUE # Set to FALSE to disable model run sync to SharePoint
-withReport <- TRUE # Set to FALSE to disable the report output script execution (applicable to research mode only)
-uploadGDX <- TRUE # Set to TRUE to include GDX files in the uploaded archive
+withSync <- FALSE # Set to FALSE to disable model run sync to SharePoint
+withReport <- FALSE # Set to FALSE to disable the report output script execution (applicable to research mode only)
+uploadGDX <- FALSE # Set to TRUE to include GDX files in the uploaded archive
 
 ### Define function that saves model metadata into a JSON file.
+gmsCmdOpt <- function(x) {
+  cfg2 <- dplyr::select(x, -scenario)
+  return(paste(names(cfg2), cfg2, collapse = " --", sep="="))
+}
 
 saveMetadata <- function(DevMode) {
   # Gather Git information with system calls
@@ -162,6 +166,10 @@ setScenarioName <- function(scen_default) {
     config <- fromJSON("config.json")
     scen_config <- config$scenario_name
   }
+  if (file.exists("config2.json")) {
+    config2 <- fromJSON("config2.json")
+    scen_config <- config2$scenario
+  }
 
   # Checking if the scenario name is NULL or empty string
   if (!is.null(scen_config) && nzchar(trimws(scen_config))) {
@@ -219,6 +227,8 @@ for (arg in args) {
 
 if (is.null(task)) stop("Task parameter is missing or invalid.")
 
+cfg <- fromJSON("config2.json")
+
 # Setting the appropriate GAMS flags for each task
 if (task == 0) {
   # Running task OPEN-PROM DEV
@@ -240,7 +250,7 @@ if (task == 0) {
   saveMetadata(DevMode = 1)
   if (withRunFolder) createRunFolder(setScenarioName("DEVNEWDATA"))
 
-  shell(paste0(gams, " main.gms --DevMode=1 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 | tee full.log"))
+  shell(paste0(gams, " main.gms ", gmsCmdOpt(cfg), " --GenerateInput=on -logOption 4 -Idir=./data 2>&1 | tee full.log"))
 
   if (withRunFolder) {
     file.copy("data", to = "../../", recursive = TRUE) # Copying generated data to parent folder for future runs
@@ -252,7 +262,7 @@ if (task == 0) {
   saveMetadata(DevMode = 0)
   if (withRunFolder) createRunFolder(setScenarioName("RES"))
 
-  shell(paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log"))
+  shell(paste0(gams, " main.gms --", gmsCmdOpt(cfg)," --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log"))
 
 
   if (withRunFolder && withReport) {

@@ -4,6 +4,20 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "SCENARIOCONFIG",
+            "type": "shell",
+            "command": "Rscript scenarioConfig.r",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "focus": true
+            }
+        },
+
+        {
             "label": "OPEN-PROM DEV",
             "type": "shell",
             "command": "Rscript start.R task=0",
