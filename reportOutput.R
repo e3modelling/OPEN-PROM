@@ -75,12 +75,14 @@ reportOutput <- function(
         reportOPEN_PROM[,val_years,"Final Energy|Residential and Commercial"] + reportOPEN_PROM[,val_years,"Final Energy|Non Energy"] +
         reportOPEN_PROM[,val_years,"Final Energy|Bunkers"]
       
-      Val_Mif[,val_years,"Final Energy|Industry|Validation"] <- Val_Mif[,val_years,"Final Energy|Industry|Validation"] +
-        reportOPEN_PROM[,val_years,"Final Energy|Residential and Commercial"] + reportOPEN_PROM[,val_years,"Final Energy|Transportation"] +
-        reportOPEN_PROM[,val_years,"Final Energy|Non Energy"] + reportOPEN_PROM[,val_years,"Final Energy|Bunkers"]
-      Val_Mif[,val_years,"Final Energy|Transportation|Validation"] <- Val_Mif[,val_years,"Final Energy|Transportation|Validation"] +
-        reportOPEN_PROM[,val_years,"Final Energy|Residential and Commercial"] + reportOPEN_PROM[,val_years,"Final Energy|Non Energy"] +
-        reportOPEN_PROM[,val_years,"Final Energy|Bunkers"]
+      if (metadata == 1) {
+        Val_Mif[,val_years,"Final Energy|Industry|Validation"] <- Val_Mif[,val_years,"Final Energy|Industry|Validation"] +
+          reportOPEN_PROM[,val_years,"Final Energy|Residential and Commercial"] + reportOPEN_PROM[,val_years,"Final Energy|Transportation"] +
+          reportOPEN_PROM[,val_years,"Final Energy|Non Energy"] + reportOPEN_PROM[,val_years,"Final Energy|Bunkers"]
+        Val_Mif[,val_years,"Final Energy|Transportation|Validation"] <- Val_Mif[,val_years,"Final Energy|Transportation|Validation"] +
+          reportOPEN_PROM[,val_years,"Final Energy|Residential and Commercial"] + reportOPEN_PROM[,val_years,"Final Energy|Non Energy"] +
+          reportOPEN_PROM[,val_years,"Final Energy|Bunkers"]
+      }
       
       reports_with_val <- mbind(reportOPEN_PROM, Val_Mif)
       reports[[i]] <- reports_with_val
