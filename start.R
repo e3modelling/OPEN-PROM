@@ -9,8 +9,8 @@ uploadGDX <- FALSE # Set to TRUE to include GDX files in the uploaded archive
 
 ### Define function that saves model metadata into a JSON file.
 gmsCmdOpt <- function(x) {
-  cfg2 <- dplyr::select(x, -scenario)
-  return(paste(names(cfg2), cfg2, collapse = " --", sep="="))
+  cfg2 <- dplyr::select(x, -c(scenario, start))
+  return(paste(names(cfg2), cfg2, collapse = " --", sep = "="))
 }
 
 saveMetadata <- function(DevMode) {
