@@ -3,9 +3,9 @@ library(jsonlite)
 
 # Various flags used to modify script behavior
 withRunFolder <- TRUE # Set to FALSE to disable model run folder creation and file copying
-withSync <- FALSE # Set to FALSE to disable model run sync to SharePoint
-withReport <- FALSE # Set to FALSE to disable the report output script execution (applicable to research mode only)
-uploadGDX <- FALSE # Set to TRUE to include GDX files in the uploaded archive
+withSync <- TRUE # Set to FALSE to disable model run sync to SharePoint
+withReport <- TRUE # Set to FALSE to disable the report output script execution (applicable to research mode only)
+uploadGDX <- TRUE # Set to TRUE to include GDX files in the uploaded archive
 
 ### Define function that saves model metadata into a JSON file.
 gmsCmdOpt <- function(x) {
@@ -13,7 +13,7 @@ gmsCmdOpt <- function(x) {
   return(paste(names(cfg2), cfg2, collapse = " --", sep = "="))
 }
 
-saveMetadata <- function(DevMode) {
+saveMetadata <- function(DevMode, cfg = NULL) {
   # Gather Git information with system calls
   commit_author <- system("git log -1 --format=%an", intern = TRUE)
   commit_hash <- system("git log -1 --format=%H", intern = TRUE)
@@ -62,7 +62,7 @@ saveMetadata <- function(DevMode) {
   )
 
   # Convert to JSON and save to file
-  data_to_save <- list("Git Information" = git_info, "Model Information" = model_info)
+  data_to_save <- list("Git Information" = git_info, "Model Information" = model_info, "GAMS Command Options" = cfg)
   json_data <- toJSON(data_to_save, pretty = TRUE)
   write(json_data, file = "metadata.json")
 
@@ -259,7 +259,7 @@ if (task == 0) {
   }
 } else if (task == 2) {
   # Running task OPEN-PROM RESEARCH
-  saveMetadata(DevMode = 0)
+  saveMetadata(DevMode = 0, cfg = cfg)
   if (withRunFolder) createRunFolder(setScenarioName("RES"))
 
   shell(paste0(gams, " main.gms --", gmsCmdOpt(cfg)," --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log"))
