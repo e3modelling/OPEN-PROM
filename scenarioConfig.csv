@@ -1,5 +1,5 @@
 scenario,start,fEndY,SolverTryMax,fScenario,WriteGDX
 test,0,2021,4,0,off
-test2,1,2022,2,1,off
-test3,1,2021,2,2,off
+test2,1,2022,2,1,on
+test3,1,2021,2,2,on
 
