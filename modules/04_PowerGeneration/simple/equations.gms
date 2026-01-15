@@ -49,7 +49,7 @@ Q04DemElecTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       VmConsFinEneCountry(allCy,"ELC",YTIME) + 
       VmConsFinNonEne(allCy,"ELC",YTIME) + 
       VmLossesDistr(allCy,"ELC",YTIME) +
-      VmConsFiEneSec(allCy,"ELC",YTIME) - 
+      SUM(SSBS,VmConsFiEneSec(allCy,SSBS,"ELC",YTIME)) - 
       VmImpNetEneBrnch(allCy,"ELC",YTIME)
     );
 $endif.calib
@@ -85,14 +85,24 @@ Q04CapElecTotEst(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmPeakLoad(allCy,YTIME) / VmPeakLoad(allCy,YTIME-1);          
 
 *' This equation calculates the CAPEX and the Fixed Costs of each power generation unit, taking into account its discount rate and life expectancy, 
-*' for each region (country) and year.
+*' for each region (country) and year. Learning curves applied only to CAPEX costs with cost breakdown.
+*' Formula: Cost = [LearnableFraction × CostMultiplier + (1-LearnableFraction)] × InitialCost
 Q04CapexFixCostPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04CapexFixCostPG(allCy,PGALL,YTIME)
         =E=         
     ( 
       imDisc(allCy,"PG",YTIME) * exp(imDisc(allCy,"PG",YTIME) * i04TechLftPlaType(allCy,PGALL))
       / (exp(imDisc(allCy,"PG",YTIME) * i04TechLftPlaType(allCy,PGALL)) -1)
-    ) * i04GrossCapCosSubRen(allCy,PGALL,YTIME) * 1000 * imCGI(allCy,YTIME) +
+    ) * i04GrossCapCosSubRen(allCy,PGALL,YTIME) * 1000 * imCGI(allCy,YTIME) 
+    * 
+    (
+$ifthen.curves "%Curves%" == "LearningCurves" 
+        sum(LCTECH$sameas(LCTECH,PGALL), i10LearnableFraction(LCTECH) * VmCostLC(LCTECH,YTIME) + (1 - i10LearnableFraction(LCTECH)))$LCTECH(PGALL)
+        + 1$(not LCTECH(PGALL))
+$else.curves
+        1 
+$endif.curves
+    ) +
     i04FixOandMCost(allCy,PGALL,YTIME);
 
 Q04CostCapTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
@@ -181,7 +191,7 @@ Q04GapGenCapPowerDiff(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         )
       ))
       ) 
-    )/2 + 1e-6;
+    )/2;
 
 *' Calculates the share of all the unflexible RES penetration into the mixture, and specifically how much above a given threshold it is.
 Q04ShareMixWndSol(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
@@ -318,11 +328,8 @@ Q04ShareSatPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(PGREN(PGALL)))..
 Q04CostPowGenAvgLng(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCostPowGenAvgLng(allCy,YTIME)
         =E=
-    (
-      SUM(PGALL, VmProdElec(allCy,PGALL,YTIME) * V04CostHourProdInvDec(allCy,PGALL,YTIME))
-* 0* VmCostElcAvgProdCHP(allCy,"TSTE",YTIME) * V04ProdElecEstCHP(allCy,YTIME)
-    ) / 
-    (V04DemElecTot(allCy,YTIME) - V04ProdElecEstCHP(allCy,YTIME)); 
+    SUM(PGALL,VmProdElec(allCy,PGALL,YTIME) * V04CostHourProdInvDec(allCy,PGALL,YTIME)) / 
+    (SUM(PGALL,VmProdElec(allCy,PGALL,YTIME)) + 1e-6); 
 
 *' This equation estimates the factor increasing the CAPEX of new RES (unflexible) capacity installation due to simultaneous need for grind upgrade and storage, 
 *' for each region (country) and year. This factor depends on the existing RES (unflexible) penetration in the electriciy mixture.
