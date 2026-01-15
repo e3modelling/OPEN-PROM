@@ -644,8 +644,8 @@ $offtext
 $ELSE.calib
 variable imMatrFactor(allCy,DSBS,TECH,YTIME)    "Maturity factor per technology and subsector for all countries (1)";
 imMatrFactor.LO(runCy,DSBS,TECH,YTIME) = 1e-4;                                          
-*imMatrFactor.UP(runCy,DSBS,TECH,YTIME) = 100;
-imMatrFactor.L(runCy,DSBS,TECH,YTIME) = 1 ;!!iMatrFactorData(runCy,DSBS,TECH,YTIME);     
+imMatrFactor.UP(runCy,DSBS,TECH,YTIME) = 100;
+imMatrFactor.L(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);     
 imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(not sameas(DSBS,"PC") or not SECTTECH(DSBS,TECH)) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                          
 $ENDIF.calib
 *---

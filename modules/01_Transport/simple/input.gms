@@ -182,19 +182,6 @@ GN.TH2F.H2F	1.5
 /
 ;
 *---
-
-Parameters
-i01GdpPassCarsMarkExt(allCy)	                          "GDP-dependent passenger cars market extension (GDP/capita)"
-i01PassCarsScrapRate(allCy)	                          "Passenger cars scrapping rate (1)"
-i01ShareAnnMilePlugInHybrid(allCy,YTIME)	           "Share of annual mileage of a plug-in hybrid which is covered by electricity (1)"
-i01AvgVehCapLoadFac(allCy,TRANSE,TRANSUSE,YTIME)	      "Average capacity/vehicle and load factor (tn/veh or passenegers/veh)"
-i01TechLft(allCy,DSBS,TECH,YTIME)	                     "Technical Lifetime. For passenger cars it is a variable (1)"
-i01PassCarsMarkSat(allCy)	                          "Passenger cars ownership saturation threshold (1)"
-i01GDPperCapita(YTIME,allCy)
-i01Sigma(allCy,SG)                                   "S parameters of Gompertz function for passenger cars vehicle km (1)"
-i01ShareTTechFuel(allCy,TRANSE,TTECH,EF)
-;
-*---
 i01PassCarsMarkSat(runCy) = 0.7;
 *---
 i01ShareAnnMilePlugInHybrid(runCy,YTIME) = i01PlugHybrFractData(YTIME);
@@ -225,10 +212,25 @@ i01ShareTTechFuel(runCy,TRANSE,TTECH,EF)$(SECTTECH(TRANSE,TTECH) and not ((samea
   (SUM(EF2$TTECHtoEF(TTECH,EF2),imFuelConsPerFueSub(runCy,TRANSE,EF2,"%fBaseY%")))
  )$(SUM(EF2$TTECHtoEF(TTECH,EF2),imFuelConsPerFueSub(runCy,TRANSE,EF2,"%fBaseY%"))$(TTECHtoEF(TTECH,EF)));
 *---
-$ifthen.calib %Calibration% == MatCalibration
+table iPremScrpFacData(allCy,TRANSE,TTECH,YTIME)     "Parameter that scales premature scrapping"
+$ondelim
+$include"./iPremScrpFac.csv"
+$offdelim
+;
+*---
+$IFTHEN.calib %Calibration% == off
+parameter i01PremScrpFac(allCy,TRANSE,TTECH,YTIME)     "Parameter that controls premature scrapping";
+i01PremScrpFac(runCy,TRANSE,TTECH,YTIME) = iPremScrpFacData(runCy,TRANSE,TTECH,YTIME);
+$ELSE.calib
 table t01StockPC(allCy,TTECH,YTIME)    "Targets for passenger cars stock"
 $ondelim
 $include "../targets/tStockPC.csv"
 $offdelim
 ;
-$endif.calib
+variable i01PremScrpFac(allCy,TRANSE,TTECH,YTIME)     "Variable that scales premature scrapping";
+i01PremScrpFac.L(runCy,"PC",TTECH,YTIME) = iPremScrpFacData(runCy,TRANSE,TTECH,YTIME);                                          
+i01PremScrpFac.LO(runCy,"PC",TTECH,YTIME) = 1e-6;                                         
+i01PremScrpFac.UP(runCy,"PC",TTECH,YTIME) = 10;
+i01PremScrpFac.FX(runCy,TRANSE,TTECH,YTIME)$(not sameas(TRANSE,"PC")) = iPremScrpFacData(runCy,TRANSE,TTECH,YTIME);
+i01PremScrpFac.FX(runCy,TRANSE,TTECH,YTIME)$(not SECTTECH(TRANSE,TTECH)) = 0;
+$ENDIF.calib

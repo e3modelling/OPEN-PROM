@@ -175,14 +175,14 @@ Q01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME)$runCy(allCy)
 * - V01ShareTechTr: Dimensionless value representing the share of each technology in total sectoral use.
 * -------------------------------------------------------------------------------
 Q01ShareTechTr(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runCy(allCy))..
-        V01ShareTechTr(allCy,TRANSE,TTECH,YTIME)
-            =E=
-        imMatrFactor(allCy,TRANSE,TTECH,YTIME) *
-        V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME-1)**(-3) /
-        sum((TTECH2)$SECTTECH(TRANSE,TTECH2), 
-          imMatrFactor(allCy,TRANSE,TTECH2,YTIME) * 
-          V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1)**(-3)
-        );
+    V01ShareTechTr(allCy,TRANSE,TTECH,YTIME)
+      =E=
+    imMatrFactor(allCy,TRANSE,TTECH,YTIME) *
+    V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME-1)**(-3) /
+    sum(TTECH2$SECTTECH(TRANSE,TTECH2), 
+      imMatrFactor(allCy,TRANSE,TTECH2,YTIME) * 
+      V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1)**(-3)
+    );
 
 *' This equation calculates the consumption of each technology in transport sectors. It considers various factors such as the lifetime of the technology,
 *' average capacity per vehicle, load factor, scrapping rate, and specific fuel consumption. The equation also takes into account the technology's variable
@@ -250,7 +250,7 @@ Q01StockPcYearly(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       V01PcOwnPcLevl(allCy,YTIME) * 
       (i01Pop(YTIME,allCy) * 1000);
 
-Q01StockPcYearlyTech(allCy,TTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+Q01StockPcYearlyTech(allCy,TTECH,YTIME)$(TIME(YTIME)$runCy(allCy)$SECTTECH("PC",TTECH))..
       V01StockPcYearlyTech(allCy,TTECH,YTIME)
             =E=
       V01StockPcYearlyTech(allCy,TTECH,YTIME-1) * 
@@ -348,7 +348,7 @@ Q01PremScrp(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME)$SECTTECH(TRANSE,TTECH)$runCy(
     (V01CostFuel(allCy,TRANSE,TTECH,YTIME) + 1e-4) ** (-2) /
     (
       (V01CostFuel(allCy,TRANSE,TTECH,YTIME) + 1e-4) ** (-2) +
-      0.1 * 
+      i01PremScrpFac(allCy,TRANSE,TTECH,YTIME) * 
       SUM(TTECH2$(not sameas(TTECH2,TTECH) and SECTTECH(TRANSE,TTECH2)),
         (V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME) + 1e-4) ** (-2)
       )

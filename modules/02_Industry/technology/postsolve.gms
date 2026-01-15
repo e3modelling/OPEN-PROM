@@ -22,4 +22,5 @@ V02PremScrpIndu.FX(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME) = V02PremScrpIndu.L(runC
 
 $ifthen.calib %Calibration% == MatCalibration
 imMatrFactor.FX(runCyL,DSBS,TECH,YTIME)$TIME(YTIME) = imMatrFactor.L(runCyL,DSBS,TECH,YTIME)$TIME(YTIME);
+i01PremScrpFac.FX(runCyL,TRANSE,TTECH,YTIME)$TIME(YTIME) = i01PremScrpFac.L(runCyL,TRANSE,TTECH,YTIME)$TIME(YTIME);
 $endif.calib

@@ -20,9 +20,10 @@ qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
       t04SharePowPlaNewEq(allCy,PGALL,YTIME)
     )
   ) +
-  SUM(TTECH,
+  SUM(TTECH$SECTTECH("PC",TTECH),
     SQR(
-      V01ShareTechTr(allCy,"PC",TTECH,YTIME) - 
+      V01StockPcYearlyTech(allCy,TTECH,YTIME) /
+      SUM(TTECH2$SECTTECH("PC",TTECH2),V01StockPcYearlyTech(allCy,TTECH2,YTIME)) -
       t01StockPC(allCy,TTECH,YTIME)
     )
   );

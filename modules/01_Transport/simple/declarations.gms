@@ -1,6 +1,18 @@
 *' @title Transport Declarations
 *' @code
 
+Parameters
+i01GdpPassCarsMarkExt(allCy)	                          "GDP-dependent passenger cars market extension (GDP/capita)"
+i01PassCarsScrapRate(allCy)	                          "Passenger cars scrapping rate (1)"
+i01ShareAnnMilePlugInHybrid(allCy,YTIME)	           "Share of annual mileage of a plug-in hybrid which is covered by electricity (1)"
+i01AvgVehCapLoadFac(allCy,TRANSE,TRANSUSE,YTIME)	      "Average capacity/vehicle and load factor (tn/veh or passenegers/veh)"
+i01TechLft(allCy,DSBS,TECH,YTIME)	                     "Technical Lifetime. For passenger cars it is a variable (1)"
+i01PassCarsMarkSat(allCy)	                          "Passenger cars ownership saturation threshold (1)"
+i01GDPperCapita(YTIME,allCy)
+i01Sigma(allCy,SG)                                   "S parameters of Gompertz function for passenger cars vehicle km (1)"
+i01ShareTTechFuel(allCy,TRANSE,TTECH,EF)
+;
+
 Equations
 *' *** Transport
 Q01ActivGoodsTransp(allCy,TRANSE,YTIME)                    "Compute goods transport activity"

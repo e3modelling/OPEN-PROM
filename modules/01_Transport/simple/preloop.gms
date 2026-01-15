@@ -26,7 +26,8 @@ V01RateScrPc.FX(runCy,TTECH,YTIME)$(DATAY(YTIME) and SECTTECH("PC",TTECH)) = 1 /
 *---
 V01RateScrPcTot.FX(runCy,TTECH,YTIME)$DATAY(YTIME) = V01RateScrPc.L(runCy,TTECH,YTIME);
 *---
-V01StockPcYearlyTech.FX(runCy,TTECH,"%fBaseY%") = i01StockPC(runCy,TTECH,"%fBaseY%");
+V01StockPcYearlyTech.L(runCy,TTECH,YTIME) = i01StockPC(runCy,TTECH,"%fBaseY%");
+V01StockPcYearlyTech.FX(runCy,TTECH,YTIME)$DATAY(YTIME) = i01StockPC(runCy,TTECH,YTIME);
 *---
 V01NumPcScrap.FX(runCy,YTIME)$sameas(YTIME,"%fBaseY%") = SUM(TTECH,V01RateScrPcTot.L(runCy,TTECH,YTIME) * V01StockPcYearlyTech.L(runCy,TTECH,YTIME)); 
 *---
@@ -34,7 +35,6 @@ V01ActivGoodsTransp.L(runCy,TRANSE,YTIME) = 0.1;
 V01ActivGoodsTransp.FX(runCy,TRANG,YTIME)$(not An(YTIME)) = imActv(YTIME,runCy,TRANG);
 V01ActivGoodsTransp.FX(runCy,TRANSE,YTIME)$(not TRANG(TRANSE)) = 0;
 *---
-*V01PcOwnPcLevl.FX(runCy,YTIME)$((not An(YTIME)) $(ord(YTIME) gt 1) ) = V01StockPcYearly.L(runCy,YTIME-1) / (i01Pop(YTIME-1,runCy)*1000) ;
 V01PcOwnPcLevl.FX(runCy,YTIME)$(not An(YTIME)) = V01StockPcYearly.L(runCy,YTIME) / (i01Pop(YTIME,runCy) * 1000) ;
 *---
 i01Sigma(runCy,"S2") = 0.5;
