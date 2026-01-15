@@ -199,8 +199,6 @@ $offOrder
 *'
 *' *** Calibration
 $setGlobal Calibration off !! MatCalibration/Calibration/off
-$setGlobal MatFacCalibration off 
-$setGlobal useCalibData on
 
 *' *** MAgPIE link
 $setglobal link2MAgPIE off  !! on or off For soft link with MAgPIE

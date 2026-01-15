@@ -10,20 +10,20 @@
 
 *' * Define dummy objective function
 
-$IFTHEN.calib %Calibration% == Calibration
-qDummyObj(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy))).. vDummyObj =e=
-SQRT(SUM((DSBS,TECH)$(SECTTECH(DSBS,TECH)and TECHtoEF(TECH,EF) and (INDDOM(DSBS))), SQR(imFuelConsPerFueSub(allCy,DSBS,EF,YTIME)-VmConsFuel(allCy,DSBS,EF,YTIME)))) +
-SQRT(SUM((DSBS,TECH)$(SECTTECH(DSBS,TECH)and TECHtoEF(TECH,EF) and (TRANSE(DSBS))), SQR(VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)-imFuelConsPerFueSub(allCy,TRANSE,EF,YTIME)))) +
-0;
-$ELSEIF.calib %Calibration% == MatCalibration
+$IFTHEN.calib %Calibration% == MatCalibration
 qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy)).. 
   vDummyObj 
       =e=
-  SUM(
-    (PGALL),
+  SUM(PGALL,
     SQR(
       V04SharePowPlaNewEq(allCy,PGALL,YTIME) - 
       t04SharePowPlaNewEq(allCy,PGALL,YTIME)
+    )
+  ) +
+  SUM(TTECH,
+    SQR(
+      V01ShareTechTr(allCy,"PC",TTECH,YTIME) - 
+      t01StockPC(allCy,TTECH,YTIME)
     )
   );
 $ELSE.calib qDummyObj.. vDummyObj =e= 1;

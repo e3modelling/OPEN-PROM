@@ -576,7 +576,7 @@ $include"./iDataImports.csv"
 $offdelim
 ;
 *---
-imFuelImports(runCy,EFS,YTIME)$(not An(YTIME)) = iDataImports(runCy,EFS,YTIME);
+imFuelImports(runCy,EFS,YTIME)$DATAY(YTIME) = iDataImports(runCy,EFS,YTIME);
 *---
 iNetImp(runCy,EFS,YTIME) = iDataImports(runCy,"ELC",YTIME)-iSuppExports(runCy,"ELC",YTIME);
 *---
@@ -600,19 +600,15 @@ elseif %fScenario% eq 4 then
      iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"exogCV_Calib",YTIME);
 endif;
 *---
-table iMatrFactorData(DSBS,TECH,YTIME)          "Maturity factor per technology and subsector (1)"
+table iMatrFactorData(allCy,DSBS,TECH,YTIME)          "Maturity factor per technology and subsector (1)"
 $ondelim
 $include"./iMatrFactorData.csv"
 $offdelim
 ;
-iMatrFactorData(DSBS,TECH,YTIME)$(TRANSE(DSBS) or INDSE(DSBS) or DOMSE(DSBS)) = 1;
-iMatrFactorData(DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and (INDSE(DSBS)) and CCSTECH(ITECH)) = 1;
-iMatrFactorData(DSBS,TECH,YTIME)$(sameas(DSBS, "PC")$SECTTECH(DSBS,TECH)) = 1;
 *---
-$IFTHEN.calib %MatFacCalibration% == off
+$IFTHEN.calib %Calibration% == off
 parameter imMatrFactor(allCy,DSBS,TECH,YTIME)   "Maturity factor per technology and subsector for all countries (1)";
-imMatrFactor(runCy,DSBS,TECH,YTIME) = iMatrFactorData(DSBS,TECH,YTIME);                                          
-imMatrFactor(runCy,DSBS,TECH,YTIME)$(imMatrFactor(runCy,DSBS,TECH,YTIME)=0) = 0.000001;
+imMatrFactor(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                          
 
 imMatrFactor(runCy,DSBS,"TGDO",YTIME)$((ord(YTIME) > 11) and TRANSE(DSBS)) = 0.5;
 imMatrFactor(runCy,DSBS,"TGSL",YTIME)$((ord(YTIME) > 11) and TRANSE(DSBS)) = 0.5;
@@ -647,9 +643,10 @@ $offtext
 
 $ELSE.calib
 variable imMatrFactor(allCy,DSBS,TECH,YTIME)    "Maturity factor per technology and subsector for all countries (1)";
-imMatrFactor.L(runCy,DSBS,TECH,YTIME) = iMatrFactorData(DSBS,TECH,YTIME) + 1e-6;                                          
-imMatrFactor.LO(runCy,DSBS,EF,YTIME) = -10;                                          
-imMatrFactor.UP(runCy,DSBS,EF,YTIME) = 100;
+imMatrFactor.LO(runCy,DSBS,TECH,YTIME) = 1e-4;                                          
+*imMatrFactor.UP(runCy,DSBS,TECH,YTIME) = 100;
+imMatrFactor.L(runCy,DSBS,TECH,YTIME) = 1 ;!!iMatrFactorData(runCy,DSBS,TECH,YTIME);     
+imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(not sameas(DSBS,"PC") or not SECTTECH(DSBS,TECH)) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                          
 $ENDIF.calib
 *---
 ** Industry

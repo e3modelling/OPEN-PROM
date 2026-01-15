@@ -224,3 +224,11 @@ i01ShareTTechFuel(runCy,TRANSE,TTECH,EF)$(SECTTECH(TRANSE,TTECH) and not ((samea
   imFuelConsPerFueSub(runCy,TRANSE,EF,"%fBaseY%") /
   (SUM(EF2$TTECHtoEF(TTECH,EF2),imFuelConsPerFueSub(runCy,TRANSE,EF2,"%fBaseY%")))
  )$(SUM(EF2$TTECHtoEF(TTECH,EF2),imFuelConsPerFueSub(runCy,TRANSE,EF2,"%fBaseY%"))$(TTECHtoEF(TTECH,EF)));
+*---
+$ifthen.calib %Calibration% == MatCalibration
+table t01StockPC(allCy,TTECH,YTIME)    "Targets for passenger cars stock"
+$ondelim
+$include "../targets/tStockPC.csv"
+$offdelim
+;
+$endif.calib

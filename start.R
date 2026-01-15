@@ -286,7 +286,7 @@ if (task == 0) {
   }
   
   # Verify calibration output files exist
-  CalibratedParams <- c("i04MatFacPlaAvailCap.csv", "i04MatureFacPlaDisp.csv")
+  CalibratedParams <- c("i04MatFacPlaAvailCap.csv", "imMatrFactor.csv")
   missing_files <- CalibratedParams[!file.exists(CalibratedParams)]
   if (length(missing_files) > 0) {
     cat("ERROR: Calibrated parameter files missing:", paste(missing_files, collapse = ", "), "\n")
@@ -349,7 +349,7 @@ if (task == 0) {
 
   if (withRunFolder && withSync) syncRun()
 
-  CalibratedParams <- c("i04MatFacPlaAvailCap.csv", "i04MatureFacPlaDisp.csv")
+  CalibratedParams <- c("i04MatFacPlaAvailCap.csv", "imMatrFactor.csv")
   newNames <- gsub("[0-9]", "", CalibratedParams) # remove numbers
   CalibratedParamsPath <- file.path(getwd(), CalibratedParams)
   newPath <- file.path(dirname(dirname(getwd())), "data", newNames)
