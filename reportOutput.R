@@ -47,6 +47,16 @@ reportOutput <- function(
   Val_Mif_fullval2 <- ValidationMif(.path = runpath, Validation_data_for_plots = Validation_data_for_plots
   )
   
+  if (!is.null(Val_Mif_fullval2)) {
+    if (metadata == 1) {
+      Val_Mif_fullval2 <- Val_Mif_fullval2
+    } else {
+      Val_Mif_fullval2[,,c("Final Energy|Validation","Final Energy|Industry|Validation",
+                           "Final Energy|Transportation|Validation",
+                           "Secondary Energy|Electricity|Validation","Emissions|CO2|Validation")] <-  NA
+    }
+  }
+  
   for (i in 1:length(runpath)) {
     if (!is.null(Val_Mif_fullval2)) {
       Val_Mif_fullval2[Val_Mif_fullval2==0]=NA
@@ -65,16 +75,25 @@ reportOutput <- function(
         reportOPEN_PROM[,val_years,"Final Energy|Residential and Commercial"] + reportOPEN_PROM[,val_years,"Final Energy|Non Energy"] +
         reportOPEN_PROM[,val_years,"Final Energy|Bunkers"]
       
+      if (metadata == 1) {
+        Val_Mif[,val_years,"Final Energy|Industry|Validation"] <- Val_Mif[,val_years,"Final Energy|Industry|Validation"] +
+          reportOPEN_PROM[,val_years,"Final Energy|Residential and Commercial"] + reportOPEN_PROM[,val_years,"Final Energy|Transportation"] +
+          reportOPEN_PROM[,val_years,"Final Energy|Non Energy"] + reportOPEN_PROM[,val_years,"Final Energy|Bunkers"]
+        Val_Mif[,val_years,"Final Energy|Transportation|Validation"] <- Val_Mif[,val_years,"Final Energy|Transportation|Validation"] +
+          reportOPEN_PROM[,val_years,"Final Energy|Residential and Commercial"] + reportOPEN_PROM[,val_years,"Final Energy|Non Energy"] +
+          reportOPEN_PROM[,val_years,"Final Energy|Bunkers"]
+      }
+      
       reports_with_val <- mbind(reportOPEN_PROM, Val_Mif)
       reports[[i]] <- reports_with_val
     } else {
-      dummy <- new.magpie(getRegions(reports[[i]]), getYears(reports[[i]]), c("Emissions|CO2|VAL",
-                                                                              "Final Energy|Transportation|VAL",
-                                                                              "Final Energy|Industry|VAL",
-                                                                              "Final Energy|VAL",
-                                                                              "Secondary Energy|Electricity|VAL",
+      dummy <- new.magpie(getRegions(reports[[i]]), getYears(reports[[i]]), c("Emissions|CO2|VAL","Emissions|CO2|Validation",
+                                                                              "Final Energy|Transportation|VAL","Final Energy|Transportation|Validation",
+                                                                              "Final Energy|Industry|VAL","Final Energy|Industry|Validation",
+                                                                              "Final Energy|VAL","Final Energy|Validation",
+                                                                              "Secondary Energy|Electricity|VAL","Secondary Energy|Electricity|Validation",
                                                                               "Capacity|Electricity|VAL"), fill = NA)
-      dummy <- add_dimension(dummy, dim = 3.2, add = "unit", nm  = c("Mt CO2/yr","Mtoe","Mtoe","Mtoe","GW","GW"))
+      dummy <- add_dimension(dummy, dim = 3.2, add = "unit", nm  = c("Mt CO2/yr","Mt CO2/yr","Mtoe","Mtoe","Mtoe","Mtoe","Mtoe","Mtoe","GW","GW","GW"))
       reports_with_val <- mbind(reports[[i]], dummy)
       reports[[i]] <- reports_with_val
     }
