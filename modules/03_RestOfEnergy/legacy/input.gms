@@ -50,30 +50,6 @@ $include"./iInpTransfProcess.csv"
 $offdelim
 ;
 *---
-table i03InpCHPTransfProcess(allCy,EFS,YTIME)	      ""	
-$ondelim
-$include"./iInpCHPTransfProcess.csv"
-$offdelim
-;
-*---
-table i03OutCHPTransfProcess(allCy,EFS,YTIME)	      ""	
-$ondelim
-$include"./iOutCHPTransfProcess.csv"
-$offdelim
-;
-*---
-table i03InpDHPTransfProcess(allCy,EFS,YTIME)	      ""	
-$ondelim
-$include"./iInpDHPTransfProcess.csv"
-$offdelim
-;
-*---
-table i03OutDHPTransfProcess(allCy,EFS,YTIME)	      ""	
-$ondelim
-$include"./iOutDHPTransfProcess.csv"
-$offdelim
-;
-*---
 table i03RateEneBranCons(allCy,SSBS,EFS,YTIME)	      "Rate of Energy Branch Consumption over total transformation output (1)"
 $ondelim
 $include"./iRatioBranchOwnCons.csv"
