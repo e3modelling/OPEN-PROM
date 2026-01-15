@@ -9,9 +9,9 @@ V02DemSubUsefulSubsec.FX(runCy,DSBS,YTIME)$(ord(YTIME) > 2 and DATAY(YTIME) and 
         imActv(YTIME,runCy,DSBS) ** imElastA(runCy,DSBS,"a",YTIME) *
         (VmPriceFuelAvgSub.L(runCy,DSBS,YTIME)/VmPriceFuelAvgSub.L(runCy,DSBS,YTIME-1) ) ** imElastA(runCy,DSBS,"b1",YTIME) *
         (VmPriceFuelAvgSub.L(runCy,DSBS,YTIME-1)/VmPriceFuelAvgSub.L(runCy,DSBS,YTIME-2) ) ** imElastA(runCy,DSBS,"b2",YTIME) * 1
-        !!prod(KPDL,
-        !!  ((VmPriceFuelAvgSub.L(runCy,DSBS,YTIME-ord(KPDL))/VmPriceFuelAvgSub.L(runCy,DSBS,YTIME-(ord(KPDL)+1)))/((imCGI(runCy,YTIME)**(1/6))+1))**( imElastA(runCy,DSBS,"c",YTIME)*imFPDL(DSBS,KPDL))
-        !!)
+        prod(KPDL,
+          ((VmPriceFuelAvgSub.L(runCy,DSBS,YTIME-ord(KPDL))/VmPriceFuelAvgSub.L(runCy,DSBS,YTIME-(ord(KPDL)+1)))/((imCGI(runCy,YTIME)**(1/6))+1))**( imElastA(runCy,DSBS,"c",YTIME)*imFPDL(DSBS,KPDL))
+        )
       ]$imActv(YTIME-1,runCy,DSBS)
 ;
 *---

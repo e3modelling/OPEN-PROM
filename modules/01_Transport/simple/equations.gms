@@ -104,8 +104,8 @@ Q01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTE
       sqrt(sqr(imCapCostTech(allCy,TRANSE,TTECH,YTIME) - 
       VmSubsiDemTech(allCy,TRANSE,TTECH,YTIME) * 1e3 / ((V01StockPcYearlyTech(allCy,"TELC",YTIME) - V01StockPcYearlyTech(allCy,"TELC",YTIME-1)) * 1e6)
       - imCapCostTechMin(allCy,TRANSE,TTECH,YTIME) * imCapCostTech(allCy,TRANSE,TTECH,YTIME)))
-    ) / 2
-    *
+    )
+    / 2 *
     imCGI(allCy,YTIME)
 ;
 
