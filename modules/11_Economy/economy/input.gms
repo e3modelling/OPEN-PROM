@@ -2,7 +2,7 @@
 *' @code
 
 *' Parameters
-table i11SubsiPerDemTech(allCy,DSBS,TECH,YTIME)	              "State demand technology support policy, expressed as a proportion factor of the available state grants (1)"
+table i11SubsiPerDemTechAvail(allCy,DSBS,TECH,YTIME)	              "State demand technology support policy, expressed as a proportion factor of the available state grants (1)"
 $ondelim
 $include"./iSubsiPerDemTech.csv"
 $offdelim

@@ -149,8 +149,8 @@ Q06VarCostDAC(DACTECH,YTIME)$(TIME(YTIME))..
 Q06LvlCostDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06LvlCostDAC(allCy,DACTECH,YTIME)
         =E=         
-    V06GrossCapDAC(DACTECH,YTIME) -
-    VmSubsiDemTech(allCy,"DAC",DACTECH,YTIME) / 
+    V06GrossCapDAC(DACTECH,YTIME) +
+    VmSubsiDemTechAvail(allCy,"DAC",DACTECH,YTIME) / 
     (V06CapDAC(allCy,DACTECH,YTIME-1) * V06CapFacNewDAC(allCy,DACTECH,YTIME-1) + i06SchedNewCapDAC(allCy,DACTECH,YTIME-1)) + 
     V06FixOandMDAC(DACTECH,YTIME) + 
     V06VarCostDAC(DACTECH,YTIME) - 20 +

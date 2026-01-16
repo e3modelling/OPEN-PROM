@@ -100,25 +100,15 @@ Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not sa
       (exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME)) - 1)
     ) *[
     imCapCostTech(allCy,DSBS,ITECH,YTIME) * imCGI(allCy,YTIME) +
-    imFixOMCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit]$(sameas(YTIME,"2021")) +
+    imFixOMCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit]$(sameas(YTIME,"%fStartY%")) +
     [
       (
-      (
-        imCapCostTech(allCy,DSBS,ITECH,YTIME) - !! Inclusion of subsidy in electricity techs in industry
-        VmSubsiDemTech(allCy,DSBS,ITECH,YTIME) * 1e3 /
-        ((V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME-1) * V02GapUsefulDemSubsec(allCy,DSBS,YTIME-1)) * 1e6 * VmLft(allCy,DSBS,ITECH,YTIME))
-        + imCapCostTechMin(allCy,DSBS,ITECH,YTIME) * imCapCostTech(allCy,DSBS,ITECH,YTIME)
-      ) +
-      sqrt(sqr(imCapCostTech(allCy,DSBS,ITECH,YTIME) - 
-        VmSubsiDemTech(allCy,DSBS,ITECH,YTIME) * 1e3 /
-        ((V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME-1) * V02GapUsefulDemSubsec(allCy,DSBS,YTIME-1)) * 1e6 * VmLft(allCy,DSBS,ITECH,YTIME))
-        - imCapCostTechMin(allCy,DSBS,ITECH,YTIME) * imCapCostTech(allCy,DSBS,ITECH,YTIME))
-      ) / 2 
+      (imCapCostTech(allCy,DSBS,ITECH,YTIME) - VmSubsiDemTech(allCy,DSBS,ITECH,YTIME)) 
     * imCGI(allCy,YTIME)
     +
     imFixOMCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit
     )
-    ]$(not (sameas(YTIME,"2021")))
+    ]$(not (sameas(YTIME,"%fStartY%")))
     )
     / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME); !! divide with utilization rate or with efficiency as well???? depends on the CapCostTech parameter
 
