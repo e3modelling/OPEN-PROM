@@ -23,6 +23,8 @@ suppressPackageStartupMessages({
   library(tidyr)
   library(gdx)
   library(postprom)
+  library(mrprom)
+  library(stringr)
 })
 
 # ----------------------------
@@ -55,21 +57,27 @@ readEnvPolicies <- function(csvPath = inputCsvPath) {
   list(envWide = envWide, envLong = envLong, yearCols = yearCols)
 }
 
-applyAlpha <- function(envWide, yearCols, alpha) {
+applyAlpha <- function(envWide, yearCols, alpha, targetRegion) {
   x <- data.table::copy(envWide)
+  
   # Identify only year columns >= 2025
   yearColsFuture <- yearCols[as.integer(yearCols) >= 2025]
-  # Apply scaling only to those columns
-  x[, (yearColsFuture) := lapply(.SD, function(col) col * alpha), .SDcols = yearColsFuture]
+  
+  if (is.null(targetRegion)) {
+    # --- GLOBAL MODE: Apply to ALL regions ---
+    x[, (yearColsFuture) := lapply(.SD, function(col) col * alpha), .SDcols = yearColsFuture]
+  } else {
+    # --- REGIONAL MODE: Apply to specific region only ---
+    x[region == targetRegion, (yearColsFuture) := lapply(.SD, function(col) col * alpha), .SDcols = yearColsFuture]
+  }
   x
-
 }
 
-writeFinalPolicyFiles <- function(envWide, yearCols, alphaFinal,
+writeFinalPolicyFiles <- function(envWide, yearCols, alphaFinal, region,
                                   canonicalPath = file.path("data","iEnvPolicies.csv"),
                                   updatedPath   = file.path("data","iEnvPolicies_updated.csv"),
                                   alsoTimestamped = TRUE) {
-  envFinal <- applyAlpha(envWide, yearCols, alphaFinal)
+  envFinal <- applyAlpha(envWide, yearCols, alphaFinal, region)
   dir.create(dirname(canonicalPath), showWarnings = FALSE, recursive = TRUE)
   dir.create(dirname(updatedPath),   showWarnings = FALSE, recursive = TRUE)
   fwrite(envFinal, canonicalPath, na = "NA")
@@ -86,7 +94,7 @@ writeFinalPolicyFiles <- function(envWide, yearCols, alphaFinal,
 # Simulator wrapper (fixed defaults)
 # ----------------------------
 run_gams <- function(gms = "main.gms",
-                     args = c("--DevMode=0", "--GenerateInput=off", "lo=4", "idir=./data"),
+                     args = GAMSCmdArgs,
                      log = "full.log", echo_on_success = FALSE) {
   if (!file.exists(gms)) stop("OPEN-PROM not found: ", gms)
   message("Executing OPEN-PROM: ", gms)
@@ -108,25 +116,33 @@ run_gams <- function(gms = "main.gms",
 }
 
 # Returns cumulative CO2 (Gt) for a given alpha
-emissionsOPENPROM <- function(envWide, yearCols, alpha,
+emissionsOPENPROM <- function(envWide, yearCols, alpha, targetRegion, targetYear,
                               dataDir = "data",
                               gms = "main.gms",
-                              gamsArgs = c("--DevMode=0", "--GenerateInput=off", "lo=4", "idir=./data"),
+                              gamsArgs = GAMSCmdArgs,
                               log = "full.log",
                               echo_on_success = FALSE) {
   canonicalCsv <- file.path(dataDir, "iEnvPolicies.csv")
   on.exit({
     if (file.exists(backupCsvPath)) file.copy(backupCsvPath, canonicalCsv, overwrite = TRUE)
   }, add = TRUE)
-
-  fwrite(applyAlpha(envWide, yearCols, alpha), canonicalCsv, na = "NA")
+  
+  fwrite(applyAlpha(envWide, yearCols, alpha, targetRegion), canonicalCsv, na = "NA")
   ok <- run_gams(gms = gms, args = gamsArgs, log = log, echo_on_success = echo_on_success)
   if (!ok) stop("OPEN-PROM run failed for alpha=", alpha)
 
   # Post-process emissions via postprom
   regions <- readGDX(file.path(workDir, "blabla.gdx"), "runCYL")
   years   <- paste0("y", c(2010:2020, as.character(readGDX(file.path(workDir, "blabla.gdx"), "an"))))
-  emissions <- reportEmissions(file.path(workDir, "blabla.gdx"), regions, years)
+  # Send text output to the void (nullfile) and suppress messages
+  utils::capture.output({
+      suppressMessages({
+        suppressWarnings({
+          emissions <- reportEmissions(file.path(workDir, "blabla.gdx"), regions, years)
+        })
+      })
+    }, file = nullfile())
+
 
   items <- getItems(emissions, 3)
   keep  <- items[!grepl("^Price|^Activity growth rate", items)]
@@ -134,7 +150,26 @@ emissionsOPENPROM <- function(envWide, yearCols, alpha,
   getItems(addRegionGLO, 1) <- "World"
   emissionsWorld <- mbind(emissions, addRegionGLO)
 
-  as.numeric(emissionsWorld["World", 2100, "Emissions|CO2|Cumulated.Gt CO2"])
+  # Calculate GHG
+  CO2eq <- calculateGhg(emissions)
+
+  if (!is.null(targetRegion)) {
+    # Specific Region Case
+    val <- CO2eq[ , targetYear, ]
+  } else {
+    # Global Case: Sum over all regions (dim 1)
+    # --- Filter for EU27 Regions ---
+    # regionMapping <- toolGetMapping(name = "EU28.csv", type = "regional", where = "mrprom")
+    # regionsEu27 <- regionMapping$ISO3.Code[regionMapping$ISO3.Code != "GBR"]
+    # dataMagpieEu27 <- CO2eq[getRegions(CO2eq) %in% regionsEu27, , ]
+
+    val <- dimSums(CO2eq, dim = 1)[, targetYear, ]
+  }
+  
+  # Always use Mt to be consistent for countries and regions
+  as.numeric(val)
+
+  #as.numeric(emissionsWorld["Worcld", 2100, "Emissions|CO2|Cumulated.Gt CO2"])
 }
 
 # ----------------------------
@@ -155,11 +190,11 @@ alphaSeedLinear <- function(alpha0, E0, alphar, Er, Etarget, warn = TRUE, stopIf
   alpha0 + (Etarget - E0) * (alphar - alpha0) / (Er - E0)
 }
 
-autoBracketFromSeed <- function(seedAlpha, budgetTarget, envWide, yearCols,
+autoBracketFromSeed <- function(seedAlpha, budgetTarget, envWide, yearCols, targetRegion, targetYear, 
                                    minAlpha = 0.0, maxAlpha = 5.0,
                                    expandFactor = 1.35, maxProbes = 20, verbose = TRUE) {
   if (verbose) message(sprintf("Seeding bracket near alpha ≈ %.4f", seedAlpha))
-  probe <- function(a) emissionsOPENPROM(envWide, yearCols, a)
+  probe <- function(a) emissionsOPENPROM(envWide, yearCols, a, targetRegion, targetYear)
 
   Eseed <- probe(seedAlpha)
   if (verbose) message(sprintf("Seed: alpha=%.4f → E=%.6f (target=%.6f)", seedAlpha, Eseed, budgetTarget))
@@ -190,20 +225,20 @@ autoBracketFromSeed <- function(seedAlpha, budgetTarget, envWide, yearCols,
 
 findAlphaForBudget <- function(envWide, yearCols, budgetTarget,
                                lowerAlpha, upperAlpha,
-                               eLow = NULL, eHigh = NULL,
+                               eLow = NULL, eHigh = NULL, targetRegion, targetYear,
                                tolAlphaRel = 1e-3, tolEmisAbs = 1e-3,
                                maxIter = 60, verbose = TRUE, writeFinalCsv = TRUE) {
 
   # If we dont run auto-seed, then we need to now the emissions in the lower and higher bounds.
-  if (is.null(eLow))  eLow  <- emissionsOPENPROM(envWide, yearCols, lowerAlpha)
-  if (is.null(eHigh)) eHigh <- emissionsOPENPROM(envWide, yearCols, upperAlpha)
+  if (is.null(eLow))  eLow  <- emissionsOPENPROM(envWide, yearCols, lowerAlpha, targetRegion, targetYear)
+  if (is.null(eHigh)) eHigh <- emissionsOPENPROM(envWide, yearCols, upperAlpha, targetRegion, targetYear)
 
   if (verbose) message(sprintf(
     "Initial: aL=%.6f -> E=%.6f; aU=%.6f -> E=%.6f; target=%.6f",
     lowerAlpha, eLow, upperAlpha, eHigh, budgetTarget))
 
   if (eLow <= budgetTarget) {
-    if (writeFinalCsv) writeFinalPolicyFiles(envWide, yearCols, lowerAlpha)
+    if (writeFinalCsv) writeFinalPolicyFiles(envWide, yearCols, lowerAlpha, targetRegion)
     return(list(alpha = lowerAlpha, emissions = eLow, converged = TRUE, iters = 0))
   }
   if (eHigh > budgetTarget) stop("upperAlpha still exceeds budget. Increase it or check monotonicity.")
@@ -215,75 +250,359 @@ findAlphaForBudget <- function(envWide, yearCols, budgetTarget,
   while (it < maxIter) {
     it <- it + 1
     aM <- 0.5 * (aL + aU)
-    emisM <- emissionsOPENPROM(envWide, yearCols, aM)
+    emisM <- emissionsOPENPROM(envWide, yearCols, aM, targetRegion, targetYear)
     if (verbose) message(sprintf("Iter %02d: aM=%.6f -> E=%.6f (target=%.6f)", it, aM, emisM, budgetTarget))
 
     if (emisM > budgetTarget) { aL <- aM; emisL <- emisM } else { aU <- aM; emisU <- emisM }
     if ((abs(aU - aL) / max(1.0, aM) < tolAlphaRel) || (abs(emisM - budgetTarget) < tolEmisAbs)) {
       if (verbose) message("Converged.")
-      if (writeFinalCsv) writeFinalPolicyFiles(envWide, yearCols, aU)
+      if (writeFinalCsv) writeFinalPolicyFiles(envWide, yearCols, aU, targetRegion)
       return(list(alpha = aU, emissions = emisU, converged = TRUE, iters = it))
     }
   }
 
   warning("Max iterations reached without strict tolerance convergence.")
-  if (writeFinalCsv) writeFinalPolicyFiles(envWide, yearCols, aU)
+  if (writeFinalCsv) writeFinalPolicyFiles(envWide, yearCols, aU, targetRegion)
   list(alpha = aU, emissions = emisU, converged = FALSE, iters = it)
+}
+configureGamsFile <- function(gmsPath, targetRegion) {
+  lines <- readLines(gmsPath, warn = FALSE)
+  
+  # Find the line with "$setGlobal fCountries" (ignoring spaces/case)
+  idx <- grep("fCountries", lines, ignore.case = TRUE)
+  
+  if (length(idx) > 0) {
+    # Replace that specific line completely
+    lines[idx[1]] <- paste0("$setGlobal fCountries '", targetRegion, "'")
+    message(sprintf("  -> Updated fCountries to '%s'", targetRegion))
+    
+    # Save the file
+    writeLines(lines, gmsPath)
+  } else {
+    warning("Could not find 'fCountries' in main.gms")
+  }
+}
+# --- Helper Function: Get CO2 Equivalent Factor ---
+getCo2EqFactor <- function(varName) {
+  # Define GWP Factors (AR4 100-year values standard for reporting)
+  gwpMap <- c(
+    "CH4"        = 25,
+    "N2O"        = 298,
+    "SF6"        = 22800,
+    "HFC125"     = 3500,
+    "HFC134a"    = 1430,
+    "HFC143a"    = 4470,
+    "HFC152a"    = 124,
+    "HFC227ea"   = 3220,
+    "HFC23"      = 14800,
+    "HFC32"      = 675,
+    "HFC43-10"   = 1640,
+    "HFC245ca"   = 693,
+    "HFC-236fa"  = 9810,
+    "PFC"        = 7390,
+    "CF4"        = 7390,
+    "C2F6"       = 12200,
+    "C6F14"      = 9300
+  )
+  
+  cleanName <- sub("(\\s*\\(.*\\)|\\.[^.]*)$", "", varName)
+  
+  if (grepl("CH4", cleanName)) {
+    return(gwpMap[["CH4"]])
+  } else if (grepl("N2O", cleanName)) {
+    return(gwpMap[["N2O"]] / 1000)
+  } else {
+    gasLeaf <- sub(".*\\|", "", cleanName)
+    if (gasLeaf %in% names(gwpMap)) {
+      return(gwpMap[[gasLeaf]] / 1000)
+    } else {
+      warning(paste("GWP not found for:", varName))
+      return(0)
+    }
+  }
+}
+#' Calculate GHG Emissions (Mt CO2eq) from a magpie object
+calculateGhg <- function(dataMagpie) {
+
+  # --- Apply Conversion ---
+  allVars <- getNames(dataMagpie)
+  targetVars <- grep("Emissions\\|", allVars, value = TRUE)
+  
+  totalCo2Eq <- NULL
+  
+  for (var in targetVars) {
+    factor <- getCo2EqFactor(var)
+    
+    if (factor != 0) {
+      currentGas <- dataMagpie[, , var] * factor
+      totalCo2Eq <- mbind(totalCo2Eq, currentGas)
+    }
+  }
+  
+  # Combine with Energy CO2
+  emissions <- mbind(totalCo2Eq, dataMagpie[, , "Emissions|CO2|Energy and Industrial Processes.Mt CO2/yr"])
+  
+  # --- Exclude Specific Variables (Fit for 55 logic) ---
+  emissions <- emissions[, , setdiff(getNames(emissions),
+                                     c("Emissions|NOx|AFOLU. Mt NH3/yr",
+                                       "Emissions|CH4|AFOLU|Land. Mt CH4/yr",
+                                       "Emissions|N2O|AFOLU|Land. kt N2O/yr"))]
+  
+  # --- Aggregation ---
+  emissionsCO2eq <- dimSums(emissions, dim = 3)
+  getNames(emissionsCO2eq) <- "Emissions. Mt CO2-equiv/yr"
+
+  return(emissionsCO2eq)
 }
 
 # ----------------------------
 # Run
 # ----------------------------
 start_time <- Sys.time()
+#targetRegion <- "IRL"  # Germany (Example ISO3 code)
+#budgetTarget <- 0.1  # Gt CO2
+GAMSCmdArgs <- c("--DevMode=1", "--GenerateInput=off", "lo=4", "idir=./data")
+selectedYear <- 2030
+#envData <- readEnvPolicies(inputCsvPath)
 
-budgetTarget <- 1521  # Gt CO2
+# if (!is.null(targetRegion)) {
+#   configureGamsFile("main.gms", targetRegion)
+# }
+
+
+# ----------------------------
+# Run: Optimization
+# ----------------------------
+start_time <- Sys.time()
+
+# ---------------------------------------------------------
+# CASE A: Specific Regions
+targetList <- list(
+  "AUT" = 48.70,
+  "BEL" = 83.70,
+  "BGR" = 26.20,
+  "HRV" = 14.87,
+  "CYP" = 5.38,
+  "CZE" = 60.96,
+  "DNK" = 25.39,
+  "EST" = 11.60,
+  "FIN" = 23.62,
+  "FRA" = 253.00,
+  "DEU" = 452.00,
+  "GRC" = 47.20,
+  "HUN" = 42.08,
+  "IRL" = 48.01,
+  "ITA" = 321.00,
+  "LVA" = 5.66,
+  "LTU" = 6.78,
+  "LUX" = 4.49,
+  "MLT" = 1.32,
+  "NLD" = 123.97,
+  "POL" = 288.44,
+  "PRT" = 30.62,
+  "ROU" = 34.31,
+  "SVK" = 29.54,
+  "SVN" = 13.38,
+  "ESP" = 156.66,
+  "SWE" = 3.70
+)
+
+
+# CASE B: No Target Regions (Empty List) -> Implies Global Run
+globalParams <- list(budget = 20.5, year = 2050)
+
+# LOGGING SETUP
+logFilePath <- "script_execution.log"
+
+# Create/Clear the log file
+file.create(logFilePath)
+logCon <- file(logFilePath, open = "a") # Open in append mode
+# Create/Clear the log file
+file.create(logFilePath)
+logCon <- file(logFilePath, open = "a") # Open in append mode
+# ---------------------------------------------------------
+
 envData <- readEnvPolicies(inputCsvPath)
+currentEnvWide <- envData$envWide
+yearCols       <- envData$yearCols
 
-# ---- Option A (Seed from two points) ----
-# alpha0 <- 1.00; E0 <- 641.8802
-# alphar <- 5.00; Er <- 
+# Backup original state
+if (file.exists(inputCsvPath)) file.copy(inputCsvPath, backupCsvPath, overwrite = TRUE)
 
-# alphaSeedLinear interpolates the alpha from two points
-# seedAlpha <- alphaSeedLinear(alpha0, E0, alphar, Er, Etarget = budgetTarget)
+# PREPARE THE LOOP LIST
+if (length(targetList) > 0) {
+  # We have specific countries
+  runQueue <- targetList
+  message("Mode: Sequential Regional Optimization")
+} else {
+  # We have NO specific countries -> Global Mode
+  # We use "NULL" as the key to signal global mode to our loop
+  runQueue <- list("GLOBAL" = globalBudget)
+  message("Mode: Global Optimization (No specific regions defined)")
+}
+# ----------------------------
+# START LOGGING (SUPPRESS CONSOLE)
+# ----------------------------
+# Redirect standard output and messages to the file connection
+sink(logCon, type = "output")
+sink(logCon, type = "message")
 
-# ---- Option B (fallback if you don't have reported points) - Alter manually ----
-seedAlpha <- 0.5
+# We use on.exit to ensure console comes back even if script crashes!
+on.exit({
+  sink(type = "message") # Restore messages
+  sink()                 # Restore output
+  close(logCon)          # Close file
+  message("Log redirection ended. Console restored.")
+}, add = TRUE)
+resultsLog <- list()
 
-# Auto-bracket around the seed (runs a few probe simulations)
-brkt <- autoBracketFromSeed(
-  seedAlpha    = seedAlpha,
-  budgetTarget = budgetTarget,
-  envWide      = envData$envWide,
-  yearCols     = envData$yearCols,
-  minAlpha     = 0.1,
-  maxAlpha     = 1.0,
-  expandFactor = 1.35,
-  maxProbes    = 12,
-  verbose      = TRUE
-)
-message(sprintf("Auto-bracket: [%.4f, %.4f]", brkt$lowerAlpha, brkt$upperAlpha))
+# EXECUTE LOOP
+for (regName in names(runQueue)) {
+  
+  bg <- runQueue[[regName]]
+  
+  # Determine if this is a real region code or Global mode
+  if (regName == "GLOBAL") {
+    actualRegion <- NULL  # Pass NULL to helpers for Global
+    displayName  <- "World"
+  } else {
+    actualRegion <- regName # Pass "DEU", "FRA", etc.
+    displayName  <- regName
+  }
 
-solveResult <- findAlphaForBudget(
-  envWide      = envData$envWide,
-  yearCols     = envData$yearCols,
-  budgetTarget = budgetTarget,
-  lowerAlpha   = brkt$lowerAlpha,
-  upperAlpha   = brkt$upperAlpha,
-  eLow         = brkt$EL,
-  eHigh        = brkt$EU,
-  tolAlphaRel  = 1e-2,
-  tolEmisAbs   = 1e-1,
-  maxIter      = 60,
-  verbose      = TRUE,
-  writeFinalCsv = TRUE
-)
+  message(sprintf("\n--- Optimizing %s (Target: %.4f Mt) ---", displayName, bg))
+  skipRegion <- FALSE
+  
+  tryCatch({
+  # A. Update GAMS File (Only needed for specific regions)
+  if (!is.null(actualRegion)) {
+    configureGamsFile("main.gms", actualRegion)
+  }
 
-alphaStar <- solveResult$alpha
-message(sprintf("Chosen alpha = %.3f; simulated cumulative emissions = %.6f; converged=%s; iters=%d",
-                alphaStar, solveResult$emissions, solveResult$converged, solveResult$iters))
+  # B. Auto-Bracket
+  brkt <- autoBracketFromSeed(
+    seedAlpha    = 3.0,
+    budgetTarget = bg,
+    envWide      = currentEnvWide,
+    yearCols     = yearCols,
+    targetRegion = actualRegion, # Passes NULL if global
+    targetYear   = selectedYear,
+    minAlpha     = 1.0,
+    maxAlpha     = 6.0,
+    expandFactor = 1.35,
+    maxProbes    = 12,
+    verbose      = TRUE
+  )
 
-message(sprintf("Final carbon prices : %s", outputCsvPath))
-message(sprintf("Backup of original carbon prices: %s", backupCsvPath))
+  # C. Solve
+  solveResult <- findAlphaForBudget(
+    envWide      = currentEnvWide,
+    yearCols     = yearCols,
+    budgetTarget = bg,
+    targetRegion = actualRegion, # Passes NULL if global
+    targetYear   = selectedYear,
+    lowerAlpha   = brkt$lowerAlpha,
+    upperAlpha   = brkt$upperAlpha,
+    eLow         = brkt$EL,
+    eHigh        = brkt$EU,
+    tolAlphaRel  = 1e-2,
+    tolEmisAbs   = 1e-1,
+    maxIter      = 60,
+    verbose      = TRUE,
+    writeFinalCsv = FALSE
+  )
+  
+  finalAlpha <- solveResult$alpha
+  message(sprintf(" -> Converged %s: Alpha=%.3f", displayName, finalAlpha))
 
-end_time <- Sys.time()
-message(sprintf("Script running time: %s", end_time - start_time))
+  # D. Update State & Backup
+  currentEnvWide <- applyAlpha(currentEnvWide, yearCols, finalAlpha, actualRegion)
+  fwrite(currentEnvWide, inputCsvPath, na = "NA")
+  file.copy(inputCsvPath, backupCsvPath, overwrite = TRUE)
+  resultsLog[[regName]] <- list(status="OK", alpha=finalAlpha)
+}, error = function(e) {
+    
+    # --- FAILURE HANDLER ---
+    message(sprintf("  !! FAILURE for %s !!", displayName))
+    message(sprintf("  Error: %s", e$message))
+    message("  -> Reverting file to previous state and skipping...")
+    
+    # Revert 'iEnvPolicies.csv' to the last known good state (backupCsvPath)
+    if (file.exists(backupCsvPath)) {
+      file.copy(backupCsvPath, inputCsvPath, overwrite = TRUE)
+    }
+    
+    # Log the failure
+    resultsLog[[regName]] <<- list(status = "FAILED", error = e$message)
+    skipRegion <<- TRUE
+  })
+  
+  if (skipRegion) next # Jump to the next country immediately
+}
+# FINAL WRAP UP
+sink(type = "message") 
+sink()
+
+message("\n--- Final Summary ---")
+for (r in names(resultsLog)) {
+  item <- resultsLog[[r]]
+  if (item$status == "OK") {
+    message(sprintf(" [OK]     %s : Alpha = %.3f", r, item$alpha))
+  } else {
+    message(sprintf(" [FAILED] %s : %s", r, item$error))
+  }
+}
+# FINISH
+writeFinalPolicyFiles(currentEnvWide, yearCols, 1.0, NULL)
+message(sprintf("Done. Total time: %s", Sys.time() - start_time))
+
+# # ---- Option A (Seed from two points) ----
+# # alpha0 <- 1.00; E0 <- 641.8802
+# # alphar <- 5.00; Er <- 
+
+# # alphaSeedLinear interpolates the alpha from two points
+# # seedAlpha <- alphaSeedLinear(alpha0, E0, alphar, Er, Etarget = budgetTarget)
+
+# # ---- Option B (fallback if you don't have reported points) - Alter manually ----
+# seedAlpha <- 3
+
+# # Auto-bracket around the seed (runs a few probe simulations)
+# brkt <- autoBracketFromSeed(
+#   seedAlpha    = seedAlpha,
+#   budgetTarget = budgetTarget,
+#   envWide      = envData$envWide,
+#   yearCols     = envData$yearCols,
+#   targetRegion = targetRegion,
+#   minAlpha     = 1.0,
+#   maxAlpha     = 6.0,
+#   expandFactor = 1.35,
+#   maxProbes    = 12,
+#   verbose      = TRUE
+# )
+# message(sprintf("Auto-bracket: [%.4f, %.4f]", brkt$lowerAlpha, brkt$upperAlpha))
+
+# solveResult <- findAlphaForBudget(
+#   envWide      = envData$envWide,
+#   yearCols     = envData$yearCols,
+#   budgetTarget = budgetTarget,
+#   lowerAlpha   = brkt$lowerAlpha,
+#   upperAlpha   = brkt$upperAlpha,
+#   eLow         = brkt$EL,
+#   eHigh        = brkt$EU,
+#   targetRegion = targetRegion,
+#   tolAlphaRel  = 1e-2,
+#   tolEmisAbs   = 1e-1,
+#   maxIter      = 60,
+#   verbose      = TRUE,
+#   writeFinalCsv = TRUE
+# )
+
+# alphaStar <- solveResult$alpha
+# message(sprintf("Chosen alpha = %.3f; simulated cumulative emissions = %.6f; converged=%s; iters=%d",
+#                 alphaStar, solveResult$emissions, solveResult$converged, solveResult$iters))
+
+# message(sprintf("Final carbon prices : %s", outputCsvPath))
+# message(sprintf("Backup of original carbon prices: %s", backupCsvPath))
+
+# end_time <- Sys.time()
+# message(sprintf("Script running time: %s", end_time - start_time))
