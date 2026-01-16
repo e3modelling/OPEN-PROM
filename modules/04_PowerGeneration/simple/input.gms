@@ -78,12 +78,6 @@ $include"./iDecomPlants.csv"
 $offdelim
 ;
 *---
-table i03InpPGTransfProcess(allCy,EFS,YTIME)	      ""	
-$ondelim
-$include"./iInpPGTransfProcess.csv"
-$offdelim
-;
-*---
 $IFTHEN.calib %Calibration% == MatCalibration
 variable i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   "Maturity factor related to plant available capacity (1)";
 table i04MatFacPlaAvailCapL(allCy,PGALL,YTIME)     "Maturity factor related to plant available capacity (1)"
