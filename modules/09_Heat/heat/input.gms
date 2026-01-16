@@ -189,12 +189,12 @@ i09PowToHeatRatio(TSTEAM,YTIME) = i09EffSteElc(TSTEAM,YTIME) / i09EffSteThrm(TST
 *---
 i09ShareFuel(allCy,TCHP,EFS,YTIME)$(DATAY(YTIME) and TSTEAMTOEF(TCHP,EFS)) = 
 [
-  (i03InpCHPTransfProcess(allCy,EFS,YTIME) - 1e-6) /
-  (SUM(EFS2$TSTEAMTOEF(TCHP,EFS2),i03InpCHPTransfProcess(allCy,EFS2,YTIME) - 1e-6))
+  (i03InpTotTransfProcess(allCy,"CHP",EFS,YTIME) - 1e-6) /
+  (SUM(EFS2$TSTEAMTOEF(TCHP,EFS2),i03InpTotTransfProcess(allCy,"CHP",EFS,YTIME) - 1e-6))
 ];
 
 i09ShareFuel(allCy,TDHP,EFS,YTIME)$(DATAY(YTIME) and TSTEAMTOEF(TDHP,EFS)) = 
 [
-  (i03InpDHPTransfProcess(allCy,EFS,YTIME) - 1e-6) /
-  (SUM(EFS2$TSTEAMTOEF(TDHP,EFS2),i03InpDHPTransfProcess(allCy,EFS2,YTIME) - 1e-6))
+  (i03InpTotTransfProcess(allCy,"STEAMP",EFS,YTIME) - 1e-6) /
+  (SUM(EFS2$TSTEAMTOEF(TDHP,EFS2),i03InpTotTransfProcess(allCy,"STEAMP",EFS2,YTIME) - 1e-6))
 ];

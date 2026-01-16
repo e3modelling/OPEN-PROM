@@ -117,6 +117,6 @@ SUM(PGALL$PGALLTOEF(PGALL,PGEF),
   imPlantEffByType(runCy,PGALL,YTIME)
 );
 *---
-VmConsFuelElecProd.FX(runCy,PGEF,YTIME)$DATAY(YTIME) = -i03InpPGTransfProcess(runCy,PGEF,YTIME);
+VmConsFuelElecProd.FX(runCy,PGEF,YTIME)$DATAY(YTIME) = -i03InpTotTransfProcess(runCy,"PG",PGEF,YTIME);
 *---
 V04GapGenCapPowerDiff.LO(runCy,YTIME) = 0;

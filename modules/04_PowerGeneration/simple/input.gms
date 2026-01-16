@@ -78,12 +78,6 @@ $include"./iDecomPlants.csv"
 $offdelim
 ;
 *---
-table i03InpPGTransfProcess(allCy,EFS,YTIME)	      ""	
-$ondelim
-$include"./iInpPGTransfProcess.csv"
-$offdelim
-;
-*---
 table iMatFacPlaAvailCapData(allCy,PGALL,YTIME)      "Maturity factor related to plant available capacity (1)"
 $ondelim
 $include"./iMatFacPlaAvailCap.csv"

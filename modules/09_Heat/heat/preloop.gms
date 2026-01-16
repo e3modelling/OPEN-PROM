@@ -34,8 +34,8 @@ i03FeedTransfr(runCy,"STE",YTIME);
 VmProdSte.LO(runCy,TSTEAM,YTIME) = 0;
 VmProdSte.L(runCy,TSTEAM,YTIME) = 
 (
-  SUM(EFS$TSTEAMTOEF(TSTEAM,EFS),i03InpCHPTransfProcess(runCy,EFS,"%fBaseY%") * i09EffSteThrm(TSTEAM,"%fBaseY%") - 1e-6) /
-  SUM(EFS$STEAMEF(EFS),i03InpCHPTransfProcess(runCy,EFS,"%fBaseY%") * i09EffSteThrm(TSTEAM,"%fBaseY%") - 1e-6) * 
+  SUM(EFS$TSTEAMTOEF(TSTEAM,EFS),i03InpTotTransfProcess(runCy,"CHP",EFS,"%fBaseY%") * i09EffSteThrm(TSTEAM,"%fBaseY%") - 1e-6) /
+  SUM(EFS$STEAMEF(EFS),i03InpTotTransfProcess(runCy,"CHP",EFS,"%fBaseY%") * i09EffSteThrm(TSTEAM,"%fBaseY%") - 1e-6) * 
   (
     SUM(DSBS$(not DOMSE(DSBS)), imFuelConsPerFueSub(runCy,DSBS,"STE","%fBaseY%")) +
     i03TotEneBranchCons(runCy,"STE","%fBaseY%") +
@@ -44,8 +44,8 @@ VmProdSte.L(runCy,TSTEAM,YTIME) =
   )
 )$TCHP(TSTEAM) +
 (
-  SUM(EFS$TSTEAMTOEF(TSTEAM,EFS),i03InpDHPTransfProcess(runCy,EFS,"%fBaseY%") * i09EffSteThrm(TSTEAM,"%fBaseY%") - 1e-6) /
-  SUM(EFS$STEAMEF(EFS),i03InpDHPTransfProcess(runCy,EFS,"%fBaseY%") * i09EffSteThrm(TSTEAM,"%fBaseY%") - 1e-6) * 
+  SUM(EFS$TSTEAMTOEF(TSTEAM,EFS),i03InpTotTransfProcess(runCy,"STEAMP",EFS,"%fBaseY%") * i09EffSteThrm(TSTEAM,"%fBaseY%") - 1e-6) /
+  SUM(EFS$STEAMEF(EFS),i03InpTotTransfProcess(runCy,"STEAMP",EFS,"%fBaseY%") * i09EffSteThrm(TSTEAM,"%fBaseY%") - 1e-6) * 
   (
     SUM(DSBS$DOMSE(DSBS), imFuelConsPerFueSub(runCy,DSBS,"STE","%fBaseY%")) +
     imDistrLosses(runCy,"STE","%fBaseY%") / 2 +
@@ -55,8 +55,8 @@ VmProdSte.L(runCy,TSTEAM,YTIME) =
 
 VmProdSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) = 
 (
-  SUM(EFS$TSTEAMTOEF(TSTEAM,EFS),i03InpCHPTransfProcess(runCy,EFS,YTIME) * i09EffSteThrm(TSTEAM,YTIME) - 1e-6) /
-  SUM(EFS$STEAMEF(EFS),i03InpCHPTransfProcess(runCy,EFS,YTIME) * i09EffSteThrm(TSTEAM,YTIME) - 1e-6) * 
+  SUM(EFS$TSTEAMTOEF(TSTEAM,EFS),i03InpTotTransfProcess(runCy,"CHP",EFS,YTIME) * i09EffSteThrm(TSTEAM,YTIME) - 1e-6) /
+  SUM(EFS$STEAMEF(EFS),i03InpTotTransfProcess(runCy,"CHP",EFS,YTIME) * i09EffSteThrm(TSTEAM,YTIME) - 1e-6) * 
   (
     SUM(DSBS$(not DOMSE(DSBS)), imFuelConsPerFueSub(runCy,DSBS,"STE",YTIME)) +
     i03TotEneBranchCons(runCy,"STE",YTIME) +
@@ -65,8 +65,8 @@ VmProdSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) =
   )
 )$TCHP(TSTEAM) +
 (
-  SUM(EFS$TSTEAMTOEF(TSTEAM,EFS),i03InpDHPTransfProcess(runCy,EFS,YTIME) * i09EffSteThrm(TSTEAM,YTIME) - 1e-6) /
-  SUM(EFS$STEAMEF(EFS),i03InpDHPTransfProcess(runCy,EFS,YTIME) * i09EffSteThrm(TSTEAM,YTIME) - 1e-6) * 
+  SUM(EFS$TSTEAMTOEF(TSTEAM,EFS),i03InpTotTransfProcess(runCy,"STEAMP",EFS,YTIME) * i09EffSteThrm(TSTEAM,YTIME) - 1e-6) /
+  SUM(EFS$STEAMEF(EFS),i03InpTotTransfProcess(runCy,"STEAMP",EFS,YTIME) * i09EffSteThrm(TSTEAM,YTIME) - 1e-6) * 
   (
     SUM(DSBS$DOMSE(DSBS), imFuelConsPerFueSub(runCy,DSBS,"STE",YTIME)) +
     imDistrLosses(runCy,"STE",YTIME) / 2 +
@@ -129,8 +129,8 @@ sum(TSTEAM,VmProdSte.L(runCy,TSTEAM,YTIME) + 1e-6) ;
 *---
 VmConsFuelSteProd.LO(runCy,STEMODE,EFS,YTIME) = 0;
 VmConsFuelSteProd.FX(runCy,STEMODE,EFS,YTIME)$(not STEAMEF(EFS)) = 0;
-VmConsFuelSteProd.FX(runCy,"CHP",STEAMEF,YTIME)$DATAY(YTIME) = -i03InpCHPTransfProcess(runCy,STEAMEF,YTIME);
-VmConsFuelSteProd.FX(runCy,"DHP",STEAMEF,YTIME)$DATAY(YTIME) = -i03InpDHPTransfProcess(runCy,STEAMEF,YTIME);
+VmConsFuelSteProd.FX(runCy,"CHP",STEAMEF,YTIME)$DATAY(YTIME) = -i03InpTotTransfProcess(runCy,"CHP",STEAMEF,YTIME);
+VmConsFuelSteProd.FX(runCy,"DHP",STEAMEF,YTIME)$DATAY(YTIME) = -i03InpTotTransfProcess(runCy,"STEAMP",STEAMEF,YTIME);
 *---
 V09DemGapSte.LO(runCy,YTIME) = 0;
 V09DemGapSte.L(runCy,YTIME) = 1;

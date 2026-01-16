@@ -1,5 +1,7 @@
 endloop;  !! close countries loop
+$ifthen.curves "%Curves%" == "LearningCurves"
 V10CumCapGlobal.FX(LCTECH,YTIME)$TIME(YTIME) = V10CumCapGlobal.L(LCTECH,YTIME)$TIME(YTIME);
+$endif.curves
 * Export model results to GDX file
 $ifthen.calib %Calibration% == MatCalibration
 execute_unload "outputCalib.gdx", ODummyObj, VmCapElec, V04CapElecNominal, VmProdElec, V04ProdElecEstCHP, i04MatFacPlaAvailCap, imMatrFactor, i01PremScrpFac, V04SharePowPlaNewEq, t04SharePowPlaNewEq, V04ShareTechPG, V04CostHourProdInvDec, V04ShareSatPG, V01ShareTechTr, i04AvailRate, V04DemElecTot, t01StockPC, t04DemElecTot, iCarbValYrExog;
