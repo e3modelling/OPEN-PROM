@@ -27,7 +27,9 @@ reportOutput <- function(
     aggregate = TRUE,
     fullValidation = TRUE,
     plot_name = NULL,
-    Validation_data_for_plots = TRUE) {
+    Validation_data_for_plots = TRUE,
+    emissions = TRUE,
+    htmlReport = FALSE, projectReport = FALSE) {
   # Region mapping used for aggregating validation data (e.g. ENERDATA)
   if (length(runpath) > 1) {
     reg_map <- jsonlite::read_json(paste0((runpath[1]),"/metadata.json"))[["Model Information"]][["Region Mapping"]][[1]]
