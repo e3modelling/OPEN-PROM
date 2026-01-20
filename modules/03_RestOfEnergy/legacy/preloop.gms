@@ -60,6 +60,7 @@ VmTransfInputDHPlants.FX(runCy,EFS,YTIME)$DATAY(YTIME) = -i03InpTotTransfProcess
 *---
 V03OutTransfCHP.FX(runCy,TOCTEF,YTIME)$DATAY(YTIME) = i03OutTotTransfProcess(runCy,"CHP",TOCTEF,YTIME);
 *---
+VmConsFinEneCountry.LO(runCy,EFS,YTIME) = 0;
 VmConsFinEneCountry.FX(runCy,EFS,YTIME)$DATAY(YTIME) = 
 sum(DSBS$(not NENSE(DSBS)), 
   imFuelConsPerFueSub(runCy,DSBS,EFS,YTIME)

@@ -141,6 +141,7 @@ $offdelim
 i01SFCPC(allCy,TTECH,"BGSL",YTIME) = i01SFCPC(allCy,TTECH,"GSL",YTIME);
 i01SFCPC(allCy,TTECH,"BGDO",YTIME) = i01SFCPC(allCy,TTECH,"GDO",YTIME);
 i01SFCPC(allCy,TTECH,"OGS",YTIME) = i01SFCPC(allCy,TTECH,"NGS",YTIME);
+i01SFCPC(allCy,TTECH,EF,YTIME)$AN(YTIME) = i01SFCPC(allCy,TTECH,EF,"%fBaseY%");
 *---
 parameter i01InitSpecFuelConsData(TRANSE,TTECH,EF)      "Initial Specific fuel consumption: (ktoe/Gvkm)" /
 PT.TGDO.GDO	11.
@@ -153,6 +154,8 @@ PA.TKRS.KRS	20
 PN.TGDO.GDO  30
 PN.TGDO.BGDO  30
 PN.TH2F.H2F  43
+PB.TGSL.GSL  8
+PB.TGSL.BGSL  8
 PB.TGDO.GDO  7.8
 PB.TGDO.BGDO  7.8
 PB.TNGS.NGS  5.6
@@ -212,12 +215,6 @@ i01ShareTTechFuel(runCy,TRANSE,TTECH,EF)$(SECTTECH(TRANSE,TTECH) and not ((samea
   (SUM(EF2$TTECHtoEF(TTECH,EF2),imFuelConsPerFueSub(runCy,TRANSE,EF2,"%fBaseY%")))
  )$(SUM(EF2$TTECHtoEF(TTECH,EF2),imFuelConsPerFueSub(runCy,TRANSE,EF2,"%fBaseY%"))$(TTECHtoEF(TTECH,EF)));
 *---
-table iPremScrpFacData(allCy,TRANSE,TTECH,YTIME)     "Parameter that scales premature scrapping"
-$ondelim
-$include"./iPremScrpFac.csv"
-$offdelim
-;
-*---
 $IFTHEN.calib %Calibration% == off
 parameter i01PremScrpFac(allCy,TRANSE,TTECH,YTIME)     "Parameter that controls premature scrapping";
 i01PremScrpFac(runCy,TRANSE,TTECH,YTIME) = iPremScrpFacData(runCy,TRANSE,TTECH,YTIME);
@@ -227,10 +224,15 @@ $ondelim
 $include "../targets/tStockPC.csv"
 $offdelim
 ;
-variable i01PremScrpFac(allCy,TRANSE,TTECH,YTIME)     "Variable that scales premature scrapping";
-i01PremScrpFac.L(runCy,"PC",TTECH,YTIME) = iPremScrpFacData(runCy,TRANSE,TTECH,YTIME);                                          
-i01PremScrpFac.LO(runCy,"PC",TTECH,YTIME) = 1e-6;                                         
-i01PremScrpFac.UP(runCy,"PC",TTECH,YTIME) = 10;
+
+variable i01PremScrpFac(allCy,TRANSE,TTECH,YTIME)     "Variable that controls premature scrapping";
+i01PremScrpFac.L(runCy,"PC",TTECH,YTIME) = iPremScrpFacData(runCy,"PC",TTECH,YTIME);                                          
+i01PremScrpFac.LO(runCy,"PC",TTECH,YTIME) = 0;                                         
+i01PremScrpFac.UP(runCy,"PC",TTECH,YTIME) = 20;
 i01PremScrpFac.FX(runCy,TRANSE,TTECH,YTIME)$(not sameas(TRANSE,"PC")) = iPremScrpFacData(runCy,TRANSE,TTECH,YTIME);
 i01PremScrpFac.FX(runCy,TRANSE,TTECH,YTIME)$(not SECTTECH(TRANSE,TTECH)) = 0;
+
+imMatrFactor.FX(runCy,"PC",TTECH,YTIME)$((t01StockPC(runCy,TTECH,YTIME) < 0) and SECTTECH("PC",TTECH)) = 1;                                          
+i01PremScrpFac.FX(runCy,"PC",TTECH,YTIME)$((t01StockPC(runCy,TTECH,YTIME) < 0) and SECTTECH("PC",TTECH)) = 0.1;
+
 $ENDIF.calib
