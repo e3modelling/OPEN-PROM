@@ -16,28 +16,29 @@
 Q11SubsiTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V11SubsiTot(allCy,YTIME)
         =E=
-        ((
+        (
           sum(EF,
-            sum(SSBS,
-            VmConsFinEneCountry(allCy, EF, YTIME) * imCo2EmiFac(allCy,"PG", EF, YTIME) +
-            V07EmissCO2Supply(allCy,SSBS,YTIME)))
-          -
-          sum(CO2CAPTECH,
-          V06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME))
-        ) -
-        sqrt(sqr(
-          sum(EF,
-            sum(SSBS,
-            VmConsFinEneCountry(allCy, EF, YTIME) * imCo2EmiFac(allCy,"PG", EF, YTIME) +
-            V07EmissCO2Supply(allCy,SSBS,YTIME)))
-          -
-          sum(CO2CAPTECH,
-          V06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME))
-        )))
+            VmConsFinEneCountry(allCy, EF, YTIME) * imCo2EmiFac(allCy,"PG", EF, YTIME)) 
+          + sum(SSBS,
+          V07EmissCO2Supply(allCy,SSBS,YTIME))
+        !!  -
+        !!  sum(CO2CAPTECH,
+         !! V06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME))
+        )
+!!) -
+!!        sqrt(sqr(
+ !!         sum(EF,
+ !!           VmConsFinEneCountry(allCy, EF, YTIME) * imCo2EmiFac(allCy,"PG", EF, YTIME)) +
+  !!        sum(SSBS, 
+  !!          V07EmissCO2Supply(allCy,SSBS,YTIME))
+   !!       -
+   !!       sum(CO2CAPTECH,
+   !!       V06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME))
+   !!     )))
         *
-        sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME)) +
-        0.005 * i01GDP(YTIME,allCy) * 1000 +
-        VmNetSubsiTax(allCy,YTIME-1)
+        sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))
+        !!+ 0.005 * i01GDP(YTIME,allCy) * 1000 +
+        !!VmNetSubsiTax(allCy,YTIME-1)
 ;
 
 *' The equation splits the available state grants to the various demand technologies through a policy parameter expressing this proportional division.
@@ -81,7 +82,7 @@ Q11SubsiDemTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS
       - (1 - imCapCostTechMin(allCy,DSBS,TECH,YTIME)) * imCapCostTech(allCy,DSBS,TECH,YTIME)))
     )$((ord(YTIME) > 12 and TRANSE(DSBS)))
     / 2 +
-    sum(ITECH$ITECH(TECH), !! Industry
+    sum(ITECH$(sameas(TECH,ITECH)), !! Industry
       VmSubsiDemITech(allCy,DSBS,ITECH,YTIME)
     )$INDSE(DSBS)
 ;
@@ -95,7 +96,7 @@ Q11SubsiSupTech(allCy,STECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 ;
 
 *' Subsidies in demand (Millions US$2015) 
-*' ERROR: GIVING DUPLICATES AND NEED TO DEAL WITH SUM
+*' GIVING DUPLICATES AND NEED TO DEAL WITH SUM
 Q11SubsiCapCostTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS,TECH))..
       VmSubsiCapCostTech(allCy,DSBS,TECH,YTIME)
       =E=
@@ -109,14 +110,13 @@ Q11SubsiCapCostTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(
           * ((V01StockPcYearlyTech(allCy,"TELC",YTIME) - V01StockPcYearlyTech(allCy,"TELC",YTIME-1)) * 1e6)))
       )$(TRANSE(DSBS) and sameas (TECH,"TELC"))
       +
-      sum(ITECH$sameas(ITECH,TECH), !!Industry subsidies and grants
-        imCapCostTech(allCy,DSBS,ITECH,YTIME) * 1e3 *
-        ((V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) - V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)) * VmLft(allCy,DSBS,ITECH,YTIME))
-        + imCapCostTechMin(allCy,DSBS,ITECH,YTIME) * imCapCostTech(allCy,DSBS,ITECH,YTIME)
+      sum(ITECH$(sameas(TECH,ITECH)), !!Industry subsidies and grants
+        ((VmSubsiDemTech(allCy,DSBS,TECH,YTIME) * 1e6 
+        + imCapCostTechMin(allCy,DSBS,ITECH,YTIME) * imCapCostTech(allCy,DSBS,ITECH,YTIME))
         -
-        sqrt(sqr(imCapCostTech(allCy,DSBS,ITECH,YTIME) * 1e3 *
-        ((V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) - V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)) * VmLft(allCy,DSBS,ITECH,YTIME))
-        - imCapCostTechMin(allCy,DSBS,ITECH,YTIME) * imCapCostTech(allCy,DSBS,ITECH,YTIME)))
+        sqrt(sqr((VmSubsiDemTech(allCy,DSBS,TECH,YTIME) * 1e6 
+        - imCapCostTechMin(allCy,DSBS,ITECH,YTIME) * imCapCostTech(allCy,DSBS,ITECH,YTIME))))
+        ) * ((V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) - V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)) * VmLft(allCy,DSBS,ITECH,YTIME))
       )$INDSE(DSBS)
 !!      +
 !!      sum(DACTECH$DACTECH(TECH), !!CDR subsidies and grants (V06GrossCapDAC is in annualized $/tCO2, so multiplied with lifetime)
