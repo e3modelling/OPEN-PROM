@@ -2,15 +2,9 @@
 *' @code
 
 *'                *VARIABLE INITIALISATION*
-V11SubsiTot.LO(runCy,YTIME) = 0;
+V11SubsiTot.LO(runCy,YTIME) = 0.0001;
 *V11SubsiTot.L(runCy,YTIME) = 1;
-V11SubsiTot.FX(runCy,YTIME)$(DATAY(YTIME)) = (
-    sum(EF,
-        VmConsFinEneCountry.L(runCy, EF, YTIME) * imCo2EmiFac(runCy,"PG", EF, YTIME)) +
-    sum(SSBS,
-        V07EmissCO2Supply.L(runCy,SSBS,YTIME))
-    )
-    * sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal.L(runCy,NAP,YTIME));
+
 *---
 VmSubsiDemITech.LO(runCy,DSBS,ITECH,YTIME) = 0;
 VmSubsiDemITech.L(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH)) = 1;

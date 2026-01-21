@@ -18,9 +18,9 @@ Q11SubsiTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         =E=
         (
           sum(EF,
-            VmConsFinEneCountry(allCy, EF, YTIME) * imCo2EmiFac(allCy,"PG", EF, YTIME)) 
+            VmConsFinEneCountry(allCy, EF, YTIME-1) * imCo2EmiFac(allCy,"PG", EF, YTIME-1)) 
           + sum(SSBS,
-          V07EmissCO2Supply(allCy,SSBS,YTIME))
+          V07EmissCO2Supply(allCy,SSBS,YTIME-1))
         !!  -
         !!  sum(CO2CAPTECH,
          !! V06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME))
@@ -36,7 +36,7 @@ Q11SubsiTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
    !!       V06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME))
    !!     )))
         *
-        sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME))
+        sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME-1))
         !!+ 0.005 * i01GDP(YTIME,allCy) * 1000 +
         !!VmNetSubsiTax(allCy,YTIME-1)
 ;
@@ -46,7 +46,7 @@ Q11SubsiTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q11SubsiDemTechAvail(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS,TECH))..
     VmSubsiDemTechAvail(allCy,DSBS,TECH,YTIME)
         =E=
-    V11SubsiTot(allCy,YTIME-1) * i11SubsiPerDemTechAvail(allCy,DSBS,TECH,YTIME);
+    V11SubsiTot(allCy,YTIME) * i11SubsiPerDemTechAvail(allCy,DSBS,TECH,YTIME);
 
 *' The equation calculates the state support per unit of new capacity in the industrial subsectors and technologies (kUS$2015/toe-year).
 Q11SubsiDemITech(allCy,DSBS,ITECH,YTIME)$(INDSE(DSBS) and SECTTECH(DSBS,ITECH) and TIME(YTIME) and not sameas(DSBS,"DAC") and runCy(allCy))..
@@ -92,7 +92,7 @@ Q11SubsiDemTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS
 Q11SubsiSupTech(allCy,STECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmSubsiSupTech(allCy,STECH,YTIME)
         =E=
-        V11SubsiTot(allCy,YTIME-1) !!* i11SubsiPerSupTech(allCy,STECH,YTIME)
+        V11SubsiTot(allCy,YTIME) !!* i11SubsiPerSupTech(allCy,STECH,YTIME)
 ;
 
 *' Subsidies in demand (Millions US$2015) 
