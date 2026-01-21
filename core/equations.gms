@@ -25,7 +25,20 @@ qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
       V01StockPcYearlyTech(allCy,TTECH,YTIME) /
       SUM(TTECH2$SECTTECH("PC",TTECH2),V01StockPcYearlyTech(allCy,TTECH2,YTIME)) -
       t01StockPC(allCy,TTECH,YTIME)
-    )
-  );
+      !!imMatrFactor(allCy,"PC",TTECH,YTIME) - imMatrFactor(allCy,"PC",TTECH,YTIME-1) +
+      !!i01PremScrpFac(allCy,"PC",TTECH,YTIME) - i01PremScrpFac(allCy,"PC",TTECH,YTIME-1)
+    ) 
+  ) ;
+  !!SUM(TTECH$(SECTTECH("PC",TTECH) and (t01NewShareStockPC(allCy,TTECH,YTIME) >= 0)),
+   !! V01NewRegPcTechYearly(allCy,TTECH,YTIME) -
+  !!  t01NewShareStockPC(allCy,TTECH,YTIME)
+  !!);
+
+cDummyObj(allCy,TTECH,YTIME)$(TIME(YTIME) and runCy(allCy) and SECTTECH("PC",TTECH) ).. 
+   V01ShareTechTr(allCy,"PC",TTECH,YTIME)
+   =g=
+   !!0.2$(sameas(TTECH, "TELC"));
+  t01NewShareStockPC(allCy,TTECH,YTIME);
+
 $ELSE.calib qDummyObj.. vDummyObj =e= 1;
 $ENDIF.calib
