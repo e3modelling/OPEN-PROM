@@ -20,18 +20,14 @@ Q11SubsiTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
             (
               sum((EF,EFS)$EFtoEFS(EF,EFS),
                 VmConsFinEneCountry(allCy,EF,YTIME-1) * imCo2EmiFac(allCy,"PG",EF,YTIME-1)) 
-            !!  + sum(SSBS, !!h2infr and the rest to be defined
-          !!       V07EmissCO2Supply(allCy,SSBS,YTIME-1))
+              + sum(SSBS, V07EmissCO2Supply(allCy,SSBS,YTIME-1))
               -
-              sum(CO2CAPTECH,
-                V06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME-1))
+              sum(CO2CAPTECH,V06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME-1))
             )
             +
             sqrt(sqr(
-              sum((EF,EFS)$EFtoEFS(EF,EFS),
-                VmConsFinEneCountry(allCy,EF,YTIME-1) * imCo2EmiFac(allCy,"PG",EF,YTIME-1))
-        !!    + sum(SSBS, 
-        !!        V07EmissCO2Supply(allCy,SSBS,YTIME-1))
+              sum((EF,EFS)$EFtoEFS(EF,EFS),VmConsFinEneCountry(allCy,EF,YTIME-1) * imCo2EmiFac(allCy,"PG",EF,YTIME-1))
+            + sum(SSBS,V07EmissCO2Supply(allCy,SSBS,YTIME-1))
               -
               sum(CO2CAPTECH,
                 V06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME-1))
@@ -124,7 +120,7 @@ Q11SubsiCapCostTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(
         ) * ((V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) - V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)) * VmLft(allCy,DSBS,ITECH,YTIME))
       )$INDSE(DSBS)
       / 2
-      +
+      !!+
       !!sum(DACTECH$DACTECH(TECH), !!CDR subsidies and grants (V06GrossCapDAC is in annualized $/tCO2, so multiplied with lifetime)
       !!  V06GrossCapDAC(DACTECH,YTIME) * 1e-6 *
       !!  imFacSubsiCapCostTech("DAC",DACTECH) *
