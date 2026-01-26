@@ -42,8 +42,7 @@ $ENDIF
         VmPriceElecIndResConsu(allCy,"c",YTIME)$SERV(SBS)
       )/smTWhToMtoe
       +
-      (imEffValueInDollars(allCy,SBS,YTIME)/1000)$DSBS(SBS) -
-      imSubsiCapCostFuel(SBS,EF)$(INDSE1(SBS) or sameas("HOU",SBS))
+      (imEffValueInDollars(allCy,SBS,YTIME)/1000)$DSBS(SBS)
     )$(ELCEF(EF) or HEATPUMP(EF)) +
     (
       VmPriceFuelSubsecCarVal(allCy,"OI",EF,YTIME)$(not sameas("BMSWAS",EF) or not sameas("CRO",EF)) +

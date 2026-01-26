@@ -651,14 +651,15 @@ imMatrFactor.UP(runCy,DSBS,EF,YTIME) = 100;
 $ENDIF.calib
 *---
 parameters
-imFacSubsiCapCostTech(DSBS,TECH)                            !!State subsidy (%) factor in technology capex (demand side)
-imGrantCapCostTech(DSBS,TECH)                               !!State granting in technology capex (demand side)
-imSubsiCapCostFuel(SBS,EF)                                  !!State subsidy in fuel cost
-imFacSubsiCapCostSupply(SSBS,STECH)                         !!State subsidy (%) factor in technology capex (supply side)
-imGrantCapCostSupply(SSBS,STECH)                            !!State granting in technology capex (supply side)
+!!imFacSubsiCapCostTech(DSBS,TECH)                            !!State subsidy (%) factor in technology capex (demand side)
+!!imGrantCapCostTech(DSBS,TECH)                               !!State granting in technology capex (demand side)
+!!imSubsiCapCostFuel(SBS,EF)                                  !!State subsidy in fuel cost
+!!imFacSubsiCapCostSupply(SSBS,STECH)                         !!State subsidy (%) factor in technology capex (supply side)
+!!imGrantCapCostSupply(SSBS,STECH)                            !!State granting in technology capex (supply side)
 imCapCostTechMin(allCy,DSBS,TECH,YTIME)                    !!Factor for the minimum capex of a demand technology after the state subsidy
 ;
 
+$ontext
 if %fScenario% eq 0 then
      imFacSubsiCapCostTech("PC","TELC") = 0;
      imFacSubsiCapCostTech("CH","TELC") = 0;
@@ -725,6 +726,7 @@ elseif %fScenario% eq 4 then
      imGrantCapCostSupply("PG",PGREN) = 0;                       !!kUS$2015/kW
      imGrantCapCostSupply("H2P",H2TECH) = 0;                     !!US$2015/toe H2
 endif;
+$offtext
 *---
 ** Industry
 imShrNonSubElecInTotElecDem(runCy,INDSE)  = iIndCharData(INDSE,"SHR_NSE");

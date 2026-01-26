@@ -34,7 +34,7 @@ V04CFAvgRen.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = i04AvailRate(runCy,PGALL,YTIME)
 *---
 V04CapexFixCostPG.FX(runCy,PGALL,YTIME)$(DATAY(YTIME)) = (imDisc(runCy,"PG",YTIME) * exp(imDisc(runCy,"PG",YTIME) * i04TechLftPlaType(runCy,PGALL))
           / (exp(imDisc(runCy,"PG",YTIME) * i04TechLftPlaType(runCy,PGALL)) -1))
-          * (i04GrossCapCosSubRen(runCY,PGALL,YTIME) * 1000 - imGrantCapCostSupply ("PG",PGALL)) * (1 - imFacSubsiCapCostSupply("PG",PGALL))
+          * i04GrossCapCosSubRen(runCY,PGALL,YTIME) * 1000
           * imCGI(runCy,YTIME)
           + i04FixOandMCost(runCy,PGALL,YTIME)
 ;

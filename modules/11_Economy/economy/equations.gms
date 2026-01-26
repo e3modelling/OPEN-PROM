@@ -135,6 +135,7 @@ Q11SubsiCapCostTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(
     !!  imSubsiCapCostFuel("HOU","ELC") * VmConsFuel(allCy,"HOU","ELC",YTIME) !!Residential electricity subsidies
 ;
 
+$ontext
 *' Subsidies in supply (Millions US$2015)
 Q11SubsiCapCostSupply(allCy,SSBS,STECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       VmSubsiCapCostSupply(allCy,SSBS,STECH,YTIME)
@@ -156,6 +157,7 @@ Q11SubsiCapCostSupply(allCy,SSBS,STECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         imGrantCapCostSupply(SSBS,STECH)
       )$sameas(SSBS,"H2P")
 ;
+$offtext
 
 *'This equation calculated the difference between the state revenues by collected carbon taxes, and the green grants and subsidies given in
 *'both the supply and demand sectors.

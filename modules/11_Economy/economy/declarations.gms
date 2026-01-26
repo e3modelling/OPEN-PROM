@@ -8,7 +8,7 @@ Q11SubsiDemITech(allCy,DSBS,ITECH,YTIME)                 "Computes the state sup
 Q11SubsiDemTech(allCy,DSBS,TECH,YTIME)                   "Computes the state grants used for the support of each demand technology (Millions US$2015)"
 Q11SubsiSupTech(allCy,STECH,YTIME)                       "Computes the state grants purposed to the support of each supply technology (Millions US$2015)"
 Q11SubsiCapCostTech(allCy,DSBS,TECH,YTIME)                        ""
-Q11SubsiCapCostSupply(allCy,SSBS,STECH,YTIME)
+!!Q11SubsiCapCostSupply(allCy,SSBS,STECH,YTIME)
 Q11NetSubsiTax(allCy,YTIME)                              "Computes the net difference between the cabon taxes and the green state grants and subsidies (Millions US$2015)"
 ;
 
