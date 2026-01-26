@@ -46,13 +46,13 @@ V02RatioRem(allCy,DSBS,ITECH,YTIME)
 Q02PremScrpIndu(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and not TRANSE(DSBS) and not sameas(DSBS,"DAC"))$runCy(allCy))..
     V02PremScrpIndu(allCy,DSBS,ITECH,YTIME)
         =E=
-    1 - (V02VarCostTech(allCy,DSBS,ITECH,YTIME-1) * i02util(allCy,DSBS,ITECH,YTIME-1)) ** (-2) /
+    1 - ((V02VarCostTech(allCy,DSBS,ITECH,YTIME-1) + V02EmiCostTech(allCY,DSBS,ITECH,YTIME-1))* i02util(allCy,DSBS,ITECH,YTIME-1)) ** (-2) /
     (
-      (V02VarCostTech(allCy,DSBS,ITECH,YTIME-1) * i02util(allCy,DSBS,ITECH,YTIME-1)) ** (-2) +
+      ((V02VarCostTech(allCy,DSBS,ITECH,YTIME-1) + V02EmiCostTech(allCY,DSBS,ITECH,YTIME-1)) * i02util(allCy,DSBS,ITECH,YTIME-1)) ** (-2) +
       (
         i02ScaleEndogScrap(DSBS) *
         sum(ITECH2$(not sameas(ITECH2,ITECH) and SECTTECH(DSBS,ITECH2)),
-          V02CostTech(allCy,DSBS,ITECH2,YTIME-1) + V02VarCostTech(allCy,DSBS,ITECH2,YTIME-1)
+          V02CostTech(allCy,DSBS,ITECH2,YTIME-1) + (V02VarCostTech(allCy,DSBS,ITECH,YTIME-1) + V02EmiCostTech(allCY,DSBS,ITECH,YTIME-1))
         )
       )**(-2)
     );
@@ -113,20 +113,29 @@ Q02VarCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not s
   (
     sum(EF$ITECHtoEF(ITECH,EF), 
       i02Share(allCy,DSBS,ITECH,EF,YTIME) *
-      VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME) +
+      VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME) + !! (convert to ONLY FUEL PRICE)
       imCO2CaptRateIndustry(allCy,ITECH,YTIME) * VmCstCO2SeqCsts(allCy,YTIME-1) * 1e-3 * imCo2EmiFac(allCy,DSBS,EF,YTIME-1)  +
-      (1-imCO2CaptRateIndustry(allCy,ITECH,YTIME)) * 1e-3 * imCo2EmiFac(allCy,DSBS,EF,YTIME-1)  *
-      (sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME-1))) +
       (VmRenValue(YTIME)/1000)$(not RENEF(ITECH) and not NENSE(DSBS)) !! needs change of units
     ) +
     imVarCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit
   ) / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME);
 
+*' Unit in KUS$2015/toe
+Q02EmiCostTech(allCY,DSBS,ITECH,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not sameas(DSBS,"DAC"))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
+    V02EmiCostTech(allCY,DSBS,ITECH,YTIME)
+    =E=      
+      (
+        sum(EF$ITECHtoEF(ITECH,EF), 
+        i02Share(allCy,DSBS,ITECH,EF,YTIME) * 
+        (1-imCO2CaptRateIndustry(allCy,ITECH,YTIME)) * imCo2EmiFac(allCy,DSBS,EF,YTIME) * (sum(NAP$NAPtoALLSBS(NAP,DSBS), VmCarVal(allCy,NAP,YTIME-1))) * 1e-3)
+      ) / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME);
+
 Q02CostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
     V02CostTech(allCy,DSBS,ITECH,YTIME) 
         =E=
     V02CapCostTech(allCy,DSBS,ITECH,YTIME) +
-    V02VarCostTech(allCy,DSBS,ITECH,YTIME);
+    V02VarCostTech(allCy,DSBS,ITECH,YTIME) +
+    V02EmiCostTech(allCY,DSBS,ITECH,YTIME);
 
 *' This equation calculates the technology share in new equipment based on factors such as maturity factor,
 *' cumulative distribution function of consumer size groups, number of consumers, technology cost, distribution function of consumer

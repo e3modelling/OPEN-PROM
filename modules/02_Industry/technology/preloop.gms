@@ -56,30 +56,38 @@ VmConsFuel.FX(runCy,DSBS,EF,YTIME)$(not HEATPUMP(EF) and not TRANSE(DSBS) and DA
  
 *vmDemFinSubFuelInd.FX(runCy,YTIME)$(not An(YTIME))= SUM(INDSE,VmDemFinSubFuelSubsec.L(runCy,INDSE,YTIME));
 *---
-!!V02VarCostTech.FX(runCy,DSBS,ITECH,YTIME)$(not An(YTIME) and not TRANSE(DSBS) and not sameas(DSBS,"DAC") and SECTTECH(DSBS,ITECH)) = 0.0001;
-V02VarCostTech.FX(runCy,DSBS,ITECH,YTIME)$(DATAY(YTIME) and not TRANSE(DSBS) and not sameas(DSBS,"DAC") and SECTTECH(DSBS,ITECH)) =
-  (
-    sum(EF$ITECHtoEF(ITECH,EF),
-      i02Share(runCy,DSBS,ITECH,EF,YTIME) *
-      VmPriceFuelSubsecCarVal.L(runCy,DSBS,EF,YTIME) +
-      imCO2CaptRateIndustry(runCy,ITECH,YTIME) * VmCstCO2SeqCsts.L(runCy,YTIME-1) * 1e-3 * (imCo2EmiFac(runCy,DSBS,EF,YTIME-1) + 4.17$(sameas("BMSWAS", EF))) +
-      (1-imCO2CaptRateIndustry(runCy,ITECH,YTIME)) * 1e-3 * (imCo2EmiFac(runCy,DSBS,EF,YTIME-1) + 4.17$(sameas("BMSWAS", EF))) *
-      (sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal.L(runCy,NAP,YTIME-1))) +
-      VmRenValue.L(YTIME)$(not RENEF(ITECH) and not NENSE(DSBS)) !! needs change of units
-    ) +
-    imVarCostTech(runCy,DSBS,ITECH,YTIME) / sUnitToKUnit
-  ) / imUsfEneConvSubTech(runCy,DSBS,ITECH,YTIME);
 
-V02CapCostTech.FX(runCy,DSBS,ITECH,YTIME)$(not An(YTIME) and not TRANSE(DSBS) and not sameas(DSBS,"DAC") and SECTTECH(DSBS,ITECH)) = ((
+
+V02CapCostTech.FX(runCy,DSBS,ITECH,YTIME)$(DATAY(YTIME) and not TRANSE(DSBS) and not sameas(DSBS,"DAC") and SECTTECH(DSBS,ITECH)) = ((
       (
-        (imDisc(runCy,DSBS,YTIME)$(not TSTEAM(ITECH)) + imDisc(runCy,"PG",YTIME)$TSTEAM(ITECH)) * !! in case of chp plants we use the discount rate of power generation sector
-        exp((imDisc(runCy,DSBS,YTIME)$(not TSTEAM(ITECH)) + imDisc(runCy,"PG",YTIME)$TSTEAM(ITECH)) * VmLft.L(runCy,DSBS,ITECH,YTIME))
+        imDisc(runCy,DSBS,YTIME) * !! in case of chp plants we use the discount rate of power generation sector
+        exp(imDisc(runCy,DSBS,YTIME) * VmLft.L(runCy,DSBS,ITECH,YTIME))
       ) /
-      (exp((imDisc(runCy,DSBS,YTIME)$(not TSTEAM(ITECH)) + imDisc(runCy,"PG",YTIME)$TSTEAM(ITECH)) * VmLft.L(runCy,DSBS,ITECH,YTIME)) - 1)
+      (exp(imDisc(runCy,DSBS,YTIME) * VmLft.L(runCy,DSBS,ITECH,YTIME)) - 1)
     ) *
     imCapCostTech(runCy,DSBS,ITECH,YTIME) * imCGI(runCy,YTIME) +
     imFixOMCostTech(runCy,DSBS,ITECH,YTIME) / sUnitToKUnit)
     / imUsfEneConvSubTech(runCy,DSBS,ITECH,YTIME);
+
+!!V02VarCostTech.FX(runCy,DSBS,ITECH,YTIME)$(not An(YTIME) and not TRANSE(DSBS) and not sameas(DSBS,"DAC") and SECTTECH(DSBS,ITECH)) = 0.0001;
+V02VarCostTech.FX(runCy,DSBS,ITECH,YTIME)$(DATAY(YTIME) and not TRANSE(DSBS) and not sameas(DSBS,"DAC") and SECTTECH(DSBS,ITECH)) =
+   (
+    sum(EF$ITECHtoEF(ITECH,EF), 
+      i02Share(runCy,DSBS,ITECH,EF,YTIME) *
+      VmPriceFuelSubsecCarVal.L(runCy,DSBS,EF,YTIME) + !! (convert to ONLY FUEL PRICE)
+      imCO2CaptRateIndustry(runCy,ITECH,YTIME) * VmCstCO2SeqCsts.L(runCy,YTIME-1) * 1e-3 * imCo2EmiFac(runCy,DSBS,EF,YTIME-1)  +
+      (VmRenValue.L(YTIME)/1000)$(not RENEF(ITECH) and not NENSE(DSBS)) !! needs change of units
+    ) +
+    imVarCostTech(runCy,DSBS,ITECH,YTIME) / sUnitToKUnit
+  ) / imUsfEneConvSubTech(runCy,DSBS,ITECH,YTIME);
+
+V02EmiCostTech.FX(runCY,DSBS,ITECH,YTIME)$(DATAY(YTIME) and not TRANSE(DSBS) and not sameas(DSBS,"DAC") and SECTTECH(DSBS,ITECH)) =      
+      (
+        sum(EF$ITECHtoEF(ITECH,EF), 
+        i02Share(runCy,DSBS,ITECH,EF,YTIME) * 
+        (1-imCO2CaptRateIndustry(runCy,ITECH,YTIME)) * imCo2EmiFac(runCy,DSBS,EF,YTIME) * (sum(NAP$NAPtoALLSBS(NAP,DSBS), VmCarVal.L(runCy,NAP,YTIME-1))) * 1e-3)
+      ) / imUsfEneConvSubTech(runCy,DSBS,ITECH,YTIME);
+    
 *---
 V02CostTech.LO(runCy,DSBS,ITECH,YTIME) = 0;
 V02CostTech.L(runCy,DSBS,ITECH,YTIME) = 0.1;
