@@ -53,12 +53,12 @@ Q11SubsiDemITech(allCy,DSBS,ITECH,YTIME)$(INDSE(DSBS) and SECTTECH(DSBS,ITECH) a
     (
       VmSubsiDemTechAvail(allCy,DSBS,ITECH,YTIME) * 1e3 /
       (V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME-1) * V02GapUsefulDemSubsec(allCy,DSBS,YTIME-1) * 1e6 * VmLft(allCy,DSBS,ITECH,YTIME)) +
-      (1 - imCapCostTechMin(allCy,DSBS,ITECH,YTIME)) * imCapCostTech(allCy,DSBS,ITECH,YTIME)
+      (1 - imCapCostTechMin(allCy,DSBS,ITECH,YTIME)) * V02CostTech(allCy,DSBS,ITECH,YTIME-1)
     -
     sqrt(sqr(
       VmSubsiDemTechAvail(allCy,DSBS,ITECH,YTIME) * 1e3 /
       (V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME-1) * V02GapUsefulDemSubsec(allCy,DSBS,YTIME-1) * 1e6 * VmLft(allCy,DSBS,ITECH,YTIME)) -
-      (1 - imCapCostTechMin(allCy,DSBS,ITECH,YTIME)) * imCapCostTech(allCy,DSBS,ITECH,YTIME)
+      (1 - imCapCostTechMin(allCy,DSBS,ITECH,YTIME)) * V02CostTech(allCy,DSBS,ITECH,YTIME-1)
     ))
     )$(ord(YTIME) > 12) / 2;
 
@@ -85,6 +85,18 @@ Q11SubsiDemTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS
     sum(ITECH$(sameas(TECH,ITECH)), !! Industry
       VmSubsiDemITech(allCy,DSBS,ITECH,YTIME)
     )$INDSE(DSBS)
+    +
+    sum(DACTECH$(sameas(TECH,DACTECH)), !! CDR
+      (
+        VmSubsiDemTechAvail(allCy,"DAC",DACTECH,YTIME) * 1e6 / 
+      (V06CapDAC(allCy,DACTECH,YTIME-1) * V06CapFacNewDAC(allCy,DACTECH,YTIME-1))
+      + (1 - imCapCostTechMin(allCy,"DAC",DACTECH,YTIME)) * V06LvlCostDAC(allCy,DACTECH,YTIME-1)
+      -
+      sqrt(sqr(VmSubsiDemTechAvail(allCy,"DAC",DACTECH,YTIME) * 1e6 / 
+      (V06CapDAC(allCy,DACTECH,YTIME-1) * V06CapFacNewDAC(allCy,DACTECH,YTIME-1))
+      - (1 - imCapCostTechMin(allCy,"DAC",DACTECH,YTIME)) * V06LvlCostDAC(allCy,DACTECH,YTIME-1)))
+      ) / 2
+    )$((ord(YTIME) > 12))
 ;
 
 *' The equation splits the available state grants to the various supply technologies through a policy parameter expressing this proportional division.
@@ -112,20 +124,25 @@ Q11SubsiCapCostTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(
       / 2
       +
       sum(ITECH$(sameas(TECH,ITECH)), !!Industry subsidies and grants
-        ((VmSubsiDemTech(allCy,DSBS,TECH,YTIME) * 1e6 
-        + imCapCostTechMin(allCy,DSBS,ITECH,YTIME) * imCapCostTech(allCy,DSBS,ITECH,YTIME))
+        VmSubsiDemTechAvail(allCy,DSBS,TECH,YTIME) 
+        + imCapCostTechMin(allCy,DSBS,ITECH,YTIME) * V02CostTech(allCy,DSBS,ITECH,YTIME) * 1e3
+        * ((V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) - V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)) * VmLft(allCy,DSBS,ITECH,YTIME))
         -
-        sqrt(sqr((VmSubsiDemTech(allCy,DSBS,TECH,YTIME) * 1e6 
-        - imCapCostTechMin(allCy,DSBS,ITECH,YTIME) * imCapCostTech(allCy,DSBS,ITECH,YTIME))))
-        ) * ((V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) - V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)) * VmLft(allCy,DSBS,ITECH,YTIME))
+        sqrt(sqr(VmSubsiDemTechAvail(allCy,DSBS,TECH,YTIME) 
+        - imCapCostTechMin(allCy,DSBS,ITECH,YTIME) * V02CostTech(allCy,DSBS,ITECH,YTIME) * 1e3
+        * ((V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) - V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)) * VmLft(allCy,DSBS,ITECH,YTIME))))
       )$INDSE(DSBS)
       / 2
-      !!+
-      !!sum(DACTECH$DACTECH(TECH), !!CDR subsidies and grants (V06GrossCapDAC is in annualized $/tCO2, so multiplied with lifetime)
-      !!  V06GrossCapDAC(DACTECH,YTIME) * 1e-6 *
-      !!  imFacSubsiCapCostTech("DAC",DACTECH) *
-      !!  (V06CapFacNewDAC(allCy,DACTECH,YTIME) * V06CapDAC(allCy,DACTECH,YTIME-1) + i06SchedNewCapDAC(allCy,DACTECH,YTIME)) *
-      !!  VmLft(allCy,"DAC",DACTECH,YTIME)
+    !!  +
+    !!  sum(DACTECH$DACTECH(TECH), !!CDR subsidies and grants (V06GrossCapDAC is in annualized $/tCO2, so multiplied with lifetime)
+     !!   VmSubsiDemTechAvail(allCy,"DAC",DACTECH,YTIME)
+    !!    + V06LvlCostDAC(allCy,DACTECH,YTIME-1) * 1e-6 * imCapCostTechMin(allCy,"DAC",DACTECH,YTIME) *
+    !!    (V06CapFacNewDAC(allCy,DACTECH,YTIME) * V06CapDAC(allCy,DACTECH,YTIME-1)) * VmLft(allCy,"DAC",DACTECH,YTIME)
+    !!    -
+    !!    sqrt(sqr(VmSubsiDemTechAvail(allCy,"DAC",DACTECH,YTIME)
+    !!    - V06LvlCostDAC(allCy,DACTECH,YTIME-1) * 1e-6 * imCapCostTechMin(allCy,"DAC",DACTECH,YTIME) *
+    !!    (V06CapFacNewDAC(allCy,DACTECH,YTIME) * V06CapDAC(allCy,DACTECH,YTIME-1)) * VmLft(allCy,"DAC",DACTECH,YTIME)))
+    !!  ) / 2
       !!  +
        !! imGrantCapCostTech(DSBS,TECH) * 1e-6 *
       !!  (V06CapFacNewDAC(allCy,DACTECH,YTIME) * V06CapDAC(allCy,DACTECH,YTIME-1) + i06SchedNewCapDAC(allCy,DACTECH,YTIME)) *

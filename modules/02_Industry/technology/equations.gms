@@ -103,19 +103,8 @@ Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not sa
             imCapCostTech(allCy,DSBS,ITECH,YTIME) * imCGI(allCy,YTIME) +
             imFixOMCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit
         ) / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME)
-    )$(sameas(YTIME,"%fStartY%")) +
-    (
-        (
-            (
-                (imDisc(allCy,DSBS,YTIME) * !! in case of chp plants we use the discount rate of power generation sector
-                    exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME))
-                ) /
-                (exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME)) - 1)
-            ) *
-            (imCapCostTech(allCy,DSBS,ITECH,YTIME) - VmSubsiDemTech(allCy,DSBS,ITECH,YTIME)) * imCGI(allCy,YTIME) +
-            imFixOMCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit
-        ) / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME)
-    )$(not (sameas(YTIME,"%fStartY%"))); !! divide with utilization rate or with efficiency as well???? depends on the CapCostTech parameter
+    )
+;
 
 *' The equation computes the variable cost (variable + fuel) of each technology in each subsector - to check about consumer sizes
 *' OLD EQUATION: Q02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME) --> NEW EQUATION:Q02VarCostTech(allCy,DSBS,rCon,ITECH,YTIME)
@@ -140,7 +129,8 @@ Q02CostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS))$SECTTECH(DSB
     V02CostTech(allCy,DSBS,ITECH,YTIME) 
         =E=
     V02CapCostTech(allCy,DSBS,ITECH,YTIME) +
-    V02VarCostTech(allCy,DSBS,ITECH,YTIME);
+    V02VarCostTech(allCy,DSBS,ITECH,YTIME) -
+    VmSubsiDemTech(allCy,DSBS,ITECH,YTIME);
 
 *' This equation calculates the technology share in new equipment based on factors such as maturity factor,
 *' cumulative distribution function of consumer size groups, number of consumers, technology cost, distribution function of consumer
