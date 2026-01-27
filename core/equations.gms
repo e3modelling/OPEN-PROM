@@ -26,15 +26,14 @@ qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
         V01ShareTechTr(allCy,"PC",TTECH,YTIME) -
         t01NewShareStockPC(allCy,TTECH,YTIME)
       )$(t01NewShareStockPC(allCy,TTECH,YTIME) >= 0) +
-      0 * (imMatrFactor(allCy,"PC",TTECH,YTIME) - imMatrFactor(allCy,"PC",TTECH,YTIME-1))
+      0.01 * (imMatrFactor(allCy,"PC",TTECH,YTIME) - imMatrFactor(allCy,"PC",TTECH,YTIME-1))
     )
     
-  ) +
-  0 * SUM(TTECH$(SECTTECH("PC",TTECH)),
-    SQR(
-      imMatrFactor(allCy,"PC",TTECH,YTIME) - imMatrFactor(allCy,"PC",TTECH,YTIME-1)
-    ) 
-  ) ;
+  );
 
+qRestrain(allCy,TTECH,YTIME)$(TIME(YTIME) and runCy(allCy) and (t01NewShareStockPC(allCy,TTECH,YTIME) < 0)).. 
+  imMatrFactor(allCy,"PC",TTECH,YTIME)
+    =e=
+  common(allCy,YTIME);
 $ELSE.calib qDummyObj.. vDummyObj =e= 1;
 $ENDIF.calib
