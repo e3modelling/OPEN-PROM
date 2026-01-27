@@ -40,6 +40,7 @@ V01PcOwnPcLevl.FX(runCy,YTIME)$(not An(YTIME)) = V01StockPcYearly.L(runCy,YTIME)
 i01Sigma(runCy,"S2") = 0.5;
 i01Sigma(runCy,"S1") = -log(V01PcOwnPcLevl.L(runCy,"%fBaseY%") / i01PassCarsMarkSat(runCy)) * EXP(i01Sigma(runCy,"S2") * i01GDPperCapita("%fBaseY%",runCy) / 10000);
 *---
+V01GapTranspActiv.LO(runCy,TRANSE,YTIME) = 0;
 V01GapTranspActiv.FX(runCy,TRANSE,YTIME)$(not AN(YTIME))=0;
 *---
 V01ConsSpecificFuel.FX(runCy,TRANSE,TTECH,EF,YTIME)$(not sameas(TRANSE,"PC")$(SECTTECH(TRANSE,TTECH)$TTECHtoEF(TTECH,EF))) = i01InitSpecFuelConsData(TRANSE,TTECH,EF);
@@ -98,3 +99,5 @@ V01CostTranspPerMeanConsSize.FX(runCy,TRANSE,TTECH,YTIME)$DATAY(YTIME) =
 V01CapCostAnnualized.L(runCy,TRANSE,TTECH,YTIME) +
 imFixOMCostTech(runCy,TRANSE,TTECH,YTIME) +
 V01CostFuel.L(runCy,TRANSE,TTECH,YTIME);
+*---
+V01ShareTechTr.LO(runCy,TRANSE,TTECH,YTIME) = 0;

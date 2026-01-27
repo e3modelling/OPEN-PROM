@@ -219,11 +219,6 @@ $IFTHEN.calib %Calibration% == off
 parameter i01PremScrpFac(allCy,TRANSE,TTECH,YTIME)     "Parameter that controls premature scrapping";
 i01PremScrpFac(runCy,TRANSE,TTECH,YTIME) = iPremScrpFacData(runCy,TRANSE,TTECH,YTIME);
 $ELSE.calib
-table t01StockPC(allCy,TTECH,YTIME)         "Targets for share of passenger cars"
-$ondelim
-$include "../targets/tStockPC.csv"
-$offdelim
-;
 
 table t01NewShareStockPC(allCy,TTECH,YTIME)    "Targets for share of new passenger cars"
 $ondelim
@@ -238,7 +233,6 @@ i01PremScrpFac.UP(runCy,"PC",TTECH,YTIME) = 20;
 i01PremScrpFac.FX(runCy,TRANSE,TTECH,YTIME)$(not sameas(TRANSE,"PC")) = iPremScrpFacData(runCy,TRANSE,TTECH,YTIME);
 i01PremScrpFac.FX(runCy,TRANSE,TTECH,YTIME)$(not SECTTECH(TRANSE,TTECH)) = 0;
 
-*imMatrFactor.FX(runCy,"PC",TTECH,YTIME)$((t01StockPC(runCy,TTECH,YTIME) < 0 and t01NewShareStockPC(runCy,TTECH,YTIME) <0) and SECTTECH("PC",TTECH)) = 1;                                          
-i01PremScrpFac.FX(runCy,"PC",TTECH,YTIME)$((t01StockPC(runCy,TTECH,YTIME) < 0) and SECTTECH("PC",TTECH)) = 0.1;
-
+*imMatrFactor.FX(runCy,"PC",TTECH,YTIME)$((t01StockPC(runCy,TTECH,YTIME) < 0) and (t01NewShareStockPC(runCy,TTECH,YTIME) <= 0)) = 100;         
+i01PremScrpFac.FX(runCy,"PC",TTECH,YTIME)$(SECTTECH("PC",TTECH)) = 0.1;
 $ENDIF.calib

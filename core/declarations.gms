@@ -58,7 +58,6 @@ smGwToTwhPerYear(YTIME)                                    "convert GW mean powe
 Equations
 *' *** Miscellaneous'
 qDummyObj                                                  "Define dummy objective function"
-cDummyObj                                                  "Define constraint equation"
 ;
 
 Variables
