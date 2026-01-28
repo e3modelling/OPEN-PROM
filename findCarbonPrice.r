@@ -155,21 +155,21 @@ emissionsOPENPROM <- function(envWide, yearCols, alpha, targetRegion, targetYear
 
   if (!is.null(targetRegion)) {
     # Specific Region Case
-    val <- CO2eq[ , targetYear, ]
+    val <- CO2eq[targetRegion, targetYear, ]
   } else {
-    # Global Case: Sum over all regions (dim 1)
+    # ΕU Case: Sum over all regions (dim 1)
     # --- Filter for EU27 Regions ---
-    # regionMapping <- toolGetMapping(name = "EU28.csv", type = "regional", where = "mrprom")
-    # regionsEu27 <- regionMapping$ISO3.Code[regionMapping$ISO3.Code != "GBR"]
-    # dataMagpieEu27 <- CO2eq[getRegions(CO2eq) %in% regionsEu27, , ]
+    regionMapping <- toolGetMapping(name = "EU28.csv", type = "regional", where = "mrprom")
+    regionsEu27 <- regionMapping$ISO3.Code[regionMapping$ISO3.Code != "GBR"]
+    dataMagpieEu27 <- CO2eq[getRegions(CO2eq) %in% regionsEu27, , ]
 
-    val <- dimSums(CO2eq, dim = 1)[, targetYear, ]
+    val <- dimSums(dataMagpieEu27, dim = 1)[, targetYear, ]
   }
   
   # Always use Mt to be consistent for countries and regions
   as.numeric(val)
 
-  #as.numeric(emissionsWorld["Worcld", 2100, "Emissions|CO2|Cumulated.Gt CO2"])
+  #as.numeric(emissionsWorld["World", 2100, "Emissions|CO2|Cumulated.Gt CO2"])
 }
 
 # ----------------------------
@@ -340,13 +340,17 @@ calculateGhg <- function(dataMagpie) {
   }
   
   # Combine with Energy CO2
-  emissions <- mbind(totalCo2Eq, dataMagpie[, , "Emissions|CO2|Energy and Industrial Processes.Mt CO2/yr"])
-  
+  if (flagCO2eq) {
+    emissions <- mbind(totalCo2Eq, dataMagpie[, , "Emissions|CO2.Mt CO2/yr"])
+  } else {
+    emissions <- dataMagpie[, , "Emissions|CO2.Mt CO2/yr"]
+  }
+
   # --- Exclude Specific Variables (Fit for 55 logic) ---
-  emissions <- emissions[, , setdiff(getNames(emissions),
-                                     c("Emissions|NOx|AFOLU. Mt NH3/yr",
-                                       "Emissions|CH4|AFOLU|Land. Mt CH4/yr",
-                                       "Emissions|N2O|AFOLU|Land. kt N2O/yr"))]
+  # emissions <- emissions[, , setdiff(getNames(emissions),
+  #                                    c("Emissions|NOx|AFOLU. Mt NH3/yr",
+  #                                      "Emissions|CH4|AFOLU|Land. Mt CH4/yr",
+  #                                      "Emissions|N2O|AFOLU|Land. kt N2O/yr"))]
   
   # --- Aggregation ---
   emissionsCO2eq <- dimSums(emissions, dim = 3)
@@ -359,67 +363,79 @@ calculateGhg <- function(dataMagpie) {
 # Run
 # ----------------------------
 start_time <- Sys.time()
-#targetRegion <- "IRL"  # Germany (Example ISO3 code)
-#budgetTarget <- 0.1  # Gt CO2
-GAMSCmdArgs <- c("--DevMode=1", "--GenerateInput=off", "lo=4", "idir=./data")
+GAMSCmdArgs <- c("--DevMode=0", "--GenerateInput=off", "lo=4", "idir=./data")
 selectedYear <- 2030
-#envData <- readEnvPolicies(inputCsvPath)
-
-# if (!is.null(targetRegion)) {
-#   configureGamsFile("main.gms", targetRegion)
-# }
-
-
-# ----------------------------
-# Run: Optimization
-# ----------------------------
-start_time <- Sys.time()
+flagCO2eq <- FALSE
 
 # ---------------------------------------------------------
 # CASE A: Specific Regions
+# targetList <- list(
+#   "AUT" = 30.3,
+#   "BEL" = 64.305,
+#   "BGR" = 36.45,
+#   "HRV" = 11.3,
+#   "CYP" = 2.5,
+#   "CZE" = 86.5,
+#   "DNK" = 35.3,
+#   "EST" = 15.8,
+#   "FIN" = 21.7,
+#   "FRA" = 234.5,
+#   "DEU" = 577.5,
+#   "GRC" = 45.8,
+#   "HUN" = 41.2,
+#   "IRL" = 27.1,
+#   "ITA" = 233.1,
+#   "LVA" = 6.2,
+#   "LTU" = 19.3,
+#   "LUX" = 5.7,
+#   "MLT" = 1.2,
+#   "NLD" = 103.0,
+#   "POL" = 201.3,
+#   "PRT" = 29.7,
+#   "ROU" = 103.7,
+#   "SVK" = 29.1,
+#   "SVN" = 6.5,
+#   "ESP" = 114.0,
+#   "SWE" = 9.0
+# )
+# targetConditionalMtCO2e MtCO2e/yr
+# targetList <- list(
+#   "CAZ" = 780.6,
+#   "CHA" = 14373,
+#   "GBR" = 260.3,
+#   "IND" = 4816,
+#   "JPN" = 760.32,
+#   "LAM" = 3886,
+#   "MEA" = 2164.6,
+#   "NEU" = 832.1,
+#   "OAS" = 5292.7,
+#   "REF" = 3668,
+#   "SSA" = 832.1,
+# )
+# targetConditionalMtCO2 MtCO2/yr - ONLY CO2
 targetList <- list(
-  "AUT" = 48.70,
-  "BEL" = 83.70,
-  "BGR" = 26.20,
-  "HRV" = 14.87,
-  "CYP" = 5.38,
-  "CZE" = 60.96,
-  "DNK" = 25.39,
-  "EST" = 11.60,
-  "FIN" = 23.62,
-  "FRA" = 253.00,
-  "DEU" = 452.00,
-  "GRC" = 47.20,
-  "HUN" = 42.08,
-  "IRL" = 48.01,
-  "ITA" = 321.00,
-  "LVA" = 5.66,
-  "LTU" = 6.78,
-  "LUX" = 4.49,
-  "MLT" = 1.32,
-  "NLD" = 123.97,
-  "POL" = 288.44,
-  "PRT" = 30.62,
-  "ROU" = 34.31,
-  "SVK" = 29.54,
-  "SVN" = 13.38,
-  "ESP" = 156.66,
-  "SWE" = 3.70
+  "CAZ" = 585,
+  "CHA" = 10780,
+  "GBR" = 195,
+  "IND" = 3612,
+  "JPN" = 570,
+  "LAM" = 2915,
+  "MEA" = 1623,
+  "NEU" = 624,
+  "OAS" = 3970,
+  "REF" = 2752,
+  "SSA" = 1735
 )
+#targetList <- NULL
+# CASE B: No Target Regions (Empty List) -> Implies EU27 Run
+#globalParams <- 1750 # EU-27 target 2030 in MtCO2/yr - ONLY CO2
+globalParams <- 2250  # EU-27 target 2030 in MtCO2e/yr 
 
-
-# CASE B: No Target Regions (Empty List) -> Implies Global Run
-globalParams <- list(budget = 20.5, year = 2050)
 
 # LOGGING SETUP
-logFilePath <- "script_execution.log"
-
-# Create/Clear the log file
+logFilePath <- "Carbon_price_optimization.log"
 file.create(logFilePath)
-logCon <- file(logFilePath, open = "a") # Open in append mode
-# Create/Clear the log file
-file.create(logFilePath)
-logCon <- file(logFilePath, open = "a") # Open in append mode
+logCon <- file(logFilePath, open = "a")
 # ---------------------------------------------------------
 
 envData <- readEnvPolicies(inputCsvPath)
@@ -436,13 +452,11 @@ if (length(targetList) > 0) {
   message("Mode: Sequential Regional Optimization")
 } else {
   # We have NO specific countries -> Global Mode
-  # We use "NULL" as the key to signal global mode to our loop
-  runQueue <- list("GLOBAL" = globalBudget)
+  # We use "NULL" as the key to signal global or EU mode to our loop
+  runQueue <- list("GLOBAL" = globalParams)
   message("Mode: Global Optimization (No specific regions defined)")
 }
-# ----------------------------
-# START LOGGING (SUPPRESS CONSOLE)
-# ----------------------------
+
 # Redirect standard output and messages to the file connection
 sink(logCon, type = "output")
 sink(logCon, type = "message")
@@ -456,7 +470,7 @@ on.exit({
 }, add = TRUE)
 resultsLog <- list()
 
-# EXECUTE LOOP
+# Countries/Regions Loop
 for (regName in names(runQueue)) {
   
   bg <- runQueue[[regName]]
@@ -481,14 +495,14 @@ for (regName in names(runQueue)) {
 
   # B. Auto-Bracket
   brkt <- autoBracketFromSeed(
-    seedAlpha    = 3.0,
+    seedAlpha    = 1.0,
     budgetTarget = bg,
     envWide      = currentEnvWide,
     yearCols     = yearCols,
     targetRegion = actualRegion, # Passes NULL if global
     targetYear   = selectedYear,
     minAlpha     = 1.0,
-    maxAlpha     = 6.0,
+    maxAlpha     = 8.0,
     expandFactor = 1.35,
     maxProbes    = 12,
     verbose      = TRUE
@@ -539,9 +553,6 @@ for (regName in names(runQueue)) {
   
   if (skipRegion) next # Jump to the next country immediately
 }
-# FINAL WRAP UP
-sink(type = "message") 
-sink()
 
 message("\n--- Final Summary ---")
 for (r in names(resultsLog)) {
@@ -552,6 +563,10 @@ for (r in names(resultsLog)) {
     message(sprintf(" [FAILED] %s : %s", r, item$error))
   }
 }
+# FINAL WRAP UP
+sink(type = "message")
+sink()
+
 # FINISH
 writeFinalPolicyFiles(currentEnvWide, yearCols, 1.0, NULL)
 message(sprintf("Done. Total time: %s", Sys.time() - start_time))
