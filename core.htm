@@ -50,8 +50,10 @@
    <a href='04_PowerGeneration.htm'> 4. PowerGeneration module</a>
    <a href='05_Hydrogen.htm'> 5. Hydrogen module</a>
    <a href='06_CO2.htm'> 6. CO2 module</a>
+   <a href='07_Emissions.htm'> 7. Emissions module</a>
    <a href='08_Prices.htm'> 8. Prices module</a>
    <a href='09_Heat.htm'> 9. Heat module</a>
+   <a href='10_Curves.htm'>10. Curves module</a>
    </div>
   </div>
   <div class="dropdown">
@@ -303,11 +305,19 @@ smTWhToMtoe                                                &quot;TWh to Mtoe con
 smElecToSteRatioChp                                        &quot;Technical maximum of electricity to steam ratio in CHP plants&quot; /2.5/
 sIter                                                      &quot;time step iterator&quot; /0/
 sSolverTryMax                                              &quot;maximum attempts to solve each time step&quot; /%SolverTryMax%/
+$ifthen.magpie &quot;%link2MAgPIE%&quot; == &quot;on&quot;
+sLink2MAgPIE                                               &quot;Binary flag for MAgPIE link (1=on, 0=off)&quot; /1/
+$else.magpie
+sLink2MAgPIE                                               &quot;Binary flag for MAgPIE link (1=on, 0=off)&quot; /0/
+$endif.magpie
 sModelStat                                                 &quot;helper parameter for solver status&quot;
 smFracElecPriChp                                           &quot;Fraction of Electricity Price at which a CHP sells electricity to network&quot; /0/
 sCY                                                        &quot;country iterator&quot; /0/
 sUnitToKUnit                                               &quot;units to Kilo units conversion&quot; /1000/
-epsilon6                                                    &quot;A small number of magnitude 6&quot; /1e-6/
+epsilon6                                                   &quot;A small number of magnitude 6&quot; /1e-6/
+smCtoCO2                                                   &quot;Mass conversion factor (44/12) per tCO2 -&gt; per tC&quot; / 3.66419 /
+smDefl_15_to_10                                            &quot;Deflate 2015$ to 2010$ - Data_MAC_CH4N2O_Harmsen-et-al_PBL_2019&quot; / 0.8957 /
+smDefl_15_to_05                                            &quot;Deflate 2015$ to 2005$ - Data_MAC_F-gases_Harmsen-et-al_PBL_2019&quot; / 0.824 /
 ;</code></pre>
 <p>GENERAL INFORMATION Equation format: “typical useful energy demand
 equation” The main explanatory variables (drivers) are activity
@@ -336,7 +346,7 @@ qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
   );
 $ELSE.calib qDummyObj.. vDummyObj =e= 1;
 $ENDIF.calib</code></pre>
-<pre><code>table imActv(YTIME,allCy,SBS) &quot;Sector activity (various)&quot;
+<pre><code>table imActv(YTIME,allCy,DSBS) &quot;Sector activity (various)&quot;
                               !! main sectors (Billion US$2015) 
                               !! bunkers and households (1)
                               !! transport (Gpkm, or Gvehkm or Gtkm)
@@ -406,6 +416,7 @@ parameter imDisc(allCy,SBS,YTIME) &quot;Discount rates per subsector for all cou
 imDisc(runCy,SBS,YTIME) = iDiscData(SBS);
 imDisc(runCy,&quot;PC&quot;,YTIME) = 0.11;
 parameter iCo2EmiFacAllSbs(EF) &quot;CO2 emission factors (kgCO2/kgoe fuel burned)&quot; /
+CRO 2.76
 LGN 4.15330622,
 HCL 3.941453651,
 SLD 4.438008647,
@@ -416,7 +427,7 @@ KRS 2.964253636,
 RFO 3.207089028,
 OLQ 3.207089028,
 NGS 2.336234395,
-OGS 3.207089028,
+OGS 2.336234395,
 BMSWAS 0/;
 imCo2EmiFac(runCy,SBS,EF,YTIME) = iCo2EmiFacAllSbs(EF);
 imCo2EmiFac(runCy,&quot;IS&quot;,&quot;HCL&quot;,YTIME) = iCo2EmiFacAllSbs(&quot;SLD&quot;); !! This is the assignment for coke
@@ -501,9 +512,9 @@ IS.TNGS      0.48295 10.2    2.04    25  0.8
 IS.TNGSCCS   0.52159 9.38    2.04    25  0.8
 IS.TOGS      0.48295 10.2    2.04    25  0.8
 IS.TBMSWAS   0.48295 10.2    2.04    25  0.5
-IS.TELC      0.29367 6.8     1.36    25  0.97
+IS.TELC      0.29367 6.8     1.36    25  0.85
 IS.THEATPUMP 0.92974 19.3882 3.1021  25  1.848
-IS.TH2F      1.04547 40.4451 17.68   25  0.97
+IS.TH2F      1.04547 40.4451 17.68   25  0.85
 NF.THCL      3.8528  63.036          30  0.5
 NF.TLGN      3.8528  63.036          30  0.5
 NF.TLPG      3.21067 63.036          30  0.72
@@ -514,9 +525,9 @@ NF.TOLQ      3.21067 63.036          30  0.72
 NF.TNGS      2.56853 63.036          30  0.8
 NF.TOGS      2.56853 63.036          30  0.8
 NF.TBMSWAS   3.8528  63.036          30  0.5
-NF.TELC      3.4     63.036          30  0.97
+NF.TELC      3.4     63.036          30  0.85
 NF.THEATPUMP 4.94477 119.819         30  1.848
-NF.TH2F      4.94477 119.819 41.1163 30  0.97
+NF.TH2F      4.94477 119.819 41.1163 30  0.85
 CH.THCL      0.53294 5.44            25  0.5
 CH.THCLCCS   0.69282 5.44            25  0.5
 CH.TLGN      0.53294 5.44            25  0.5
@@ -529,9 +540,9 @@ CH.TNGS      0.35529 5.44            25  0.8
 CH.TNGSCCS   0.46188 5.44            25  0.8
 CH.TOGS      0.35529 5.44            25  0.8
 CH.TBMSWAS   0.53294 5.44            25  0.5
-CH.TELC      0.476   5.44            25  0.97
+CH.TELC      0.476   5.44            25  0.85
 CH.THEATPUMP 0.68398 10.3404         25  1.848
-CH.TH2F      3.13528 94.0585 41.1163 25  0.97
+CH.TH2F      3.13528 94.0585 41.1163 25  0.85
 BM.THCL      4.41477 3.2096          30  0.5
 BM.THCLCCS   5.25357 3.8515          30  0.5
 BM.TLGN      4.41477 3.2096          30  0.5
@@ -544,9 +555,9 @@ BM.TNGS      2.94318 3.2096          30  0.8
 BM.TNGSCCS   3.50238 3.8515          30  0.8
 BM.TOGS      2.94318 3.2096          30  0.8
 BM.TBMSWAS   4.41477 3.2096          30  0.5
-BM.TELC      3.808   3.2096          30  0.97
+BM.TELC      3.808   3.2096          30  0.85
 BM.THEATPUMP 5.66602 6.10081         30  1.848
-BM.TH2F      5.66602 94.0585 41.1163 30  0.97
+BM.TH2F      5.66602 94.0585 41.1163 30  0.85
 PP.THCL      0.90179 1.632           25  0.5
 PP.TLGN      0.90179 1.632           25  0.5
 PP.TLPG      0.75149 1.632           25  0.72
@@ -557,9 +568,9 @@ PP.TOLQ      0.75149 1.632           25  0.72
 PP.TNGS      0.60119 1.632           25  0.8
 PP.TOGS      0.60119 1.632           25  0.8
 PP.TBMSWAS   0.90179 1.632           25  0.5
-PP.TELC      0.884   1.632           25  0.97
+PP.TELC      0.884   1.632           25  0.85
 PP.THEATPUMP 1.15738 3.10211         25  1.68
-PP.TH2F      2.43133 68.3668 41.1163 25  0.97
+PP.TH2F      2.43133 68.3668 41.1163 25  0.85
 FD.THCL      0.63096 0.5372          25  0.5
 FD.TLGN      0.63096 0.5372          25  0.5
 FD.TLPG      0.42064 0.5372          25  0.72
@@ -570,9 +581,9 @@ FD.TOLQ      0.42064 0.5372          25  0.72
 FD.TNGS      0.33651 0.5372          25  0.8
 FD.TOGS      0.33651 0.5372          25  0.8
 FD.TBMSWAS   0.63096 0.5372          25  0.5
-FD.TELC      0.476   0.5372          25  0.97
+FD.TELC      0.476   0.5372          25  0.85
 FD.THEATPUMP 0.64783 1.02111         25  1.68
-FD.TH2F      2.43133 68.3668 41.1163 25  0.97
+FD.TH2F      2.43133 68.3668 41.1163 25  0.85
 EN.THCL      1.00937 0.31769         25  0.5
 EN.TLGN      1.00937 0.31769         25  0.5
 EN.TLPG      0.84114 0.31769         25  0.72
@@ -583,9 +594,9 @@ EN.TOLQ      0.84114 0.31769         25  0.72
 EN.TNGS      0.67291 0.31769         25  0.8
 EN.TOGS      0.67291 0.31769         25  0.8
 EN.TBMSWAS   1.00937 0.31769         25  0.5
-EN.TELC      0.748   0.31769         20  0.97
+EN.TELC      0.748   0.31769         20  0.85
 EN.THEATPUMP 1.29545 0.60387         25  1.68
-EN.TH2F      2.43133 68.3668 41.1163 25  0.97
+EN.TH2F      2.43133 68.3668 41.1163 25  0.85
 TX.THCL      0.67371 0.16959         20  0.5
 TX.TLGN      0.67371 0.16959         20  0.5
 TX.TLPG      0.44914 0.16959         20  0.72
@@ -596,9 +607,9 @@ TX.TOLQ      0.44914 0.16959         20  0.72
 TX.TNGS      0.35931 0.16959         20  0.8
 TX.TOGS      0.35931 0.16959         20  0.8
 TX.TBMSWAS   0.476   0.16959         20  0.5
-TX.TELC      0.476   0.16959         20  0.97
+TX.TELC      0.476   0.16959         20  0.85
 TX.THEATPUMP 0.69173 0.32236         20  1.68
-TX.TH2F      2.43133 68.3668 41.1163 25  0.97
+TX.TH2F      2.43133 68.3668 41.1163 25  0.85
 OE.THCL      1.00937 0.31769         25  0.5
 OE.TLGN      1.00937 0.31769         25  0.5
 OE.TLPG      0.84114 0.31769         25  0.72
@@ -609,9 +620,9 @@ OE.TOLQ      0.84114 0.31769         25  0.72
 OE.TNGS      0.67291 0.31769         25  0.8
 OE.TOGS      0.67291 0.31769         25  0.8
 OE.TBMSWAS   1.00937 0.31769         25  0.5
-OE.TELC      0.84114 0.31769         25  0.97
+OE.TELC      0.84114 0.31769         25  0.85
 OE.THEATPUMP 1.29545 0.60387         25  1.68
-OE.TH2F      2.43133 68.3668 41.1163 25  0.97
+OE.TH2F      2.43133 68.3668 41.1163 25  0.85
 OI.THCL      0.94967 1.40352         20  0.5
 OI.TLGN      0.94967 1.40352         20  0.5
 OI.TLPG      0.79139 1.40352         20  0.72
@@ -622,9 +633,9 @@ OI.TOLQ      0.79139 1.40352         20  0.72
 OI.TNGS      0.63311 1.40352         20  0.8
 OI.TOGS      0.63311 1.40352         20  0.8
 OI.TBMSWAS   0.94967 1.40352         20  0.5
-OI.TELC      0.68    1.40352         20  0.97
+OI.TELC      0.68    1.40352         20  0.85
 OI.THEATPUMP 1.21884 2.66781         20  1.68
-OI.TH2F      2.43133 68.3668 41.1163 25  0.97
+OI.TH2F      2.43133 68.3668 41.1163 25  0.85
 ;
 imDataIndTechnology(INDSE,TECH,&quot;IC&quot;) = imDataIndTechnology(INDSE,TECH,&quot;IC&quot;) * 1.3;
 imDataIndTechnology(INDSE,TECH,&quot;FC&quot;) = imDataIndTechnology(INDSE,TECH,&quot;FC&quot;) * 1.3;
@@ -645,7 +656,7 @@ SE.TOLQ       0.24888  10.88           20  0.8
 SE.TNGS       0.2244   6.8             20  0.88
 SE.TOGS       0.2244   10.88           20  0.8
 SE.TBMSWAS    0.323544 10.88           20  0.5
-SE.TELC       0.3      8.976           12  0.97
+SE.TELC       0.3      8.976           12  0.85
 SE.THEATPUMP  0.432    12.9254         20  1.848
 AG.THCL       0.323544 10.88           20  0.7
 AG.TLGN       0.323544 10.88           20  0.5
@@ -658,7 +669,7 @@ AG.TOLQ       0.24888  10.88           20  0.8
 AG.TNGS       0.2244   6.8             20  0.88
 AG.TOGS       0.2244   10.88           20  0.8
 AG.TBMSWAS    0.323544 10.88           20  0.5
-AG.TELC       0.3      8.976           12  0.97
+AG.TELC       0.3      8.976           12  0.85
 AG.THEATPUMP  0.432    12.9254         20  1.848
 HOU.THCL      0.323544 10.88           20  0.7
 HOU.TLGN      0.323544 10.88           20  0.5
@@ -671,7 +682,7 @@ HOU.TOLQ      0.24888  10.88           20  0.8
 HOU.TNGS      0.2244   6.8             20  0.88
 HOU.TOGS      0.2244   10.88           20  0.8
 HOU.TBMSWAS   0.323544 10.88           20  0.5
-HOU.TELC      0.3      8.976           12  0.97
+HOU.TELC      0.3      8.976           12  0.85
 HOU.THEATPUMP 0.432    12.9254         20  1.848
 ;
 imDataDomTech(DOMSE,TECH,&quot;IC&quot;) = imDataDomTech(DOMSE,TECH,&quot;IC&quot;) * 1.3;
@@ -855,8 +866,6 @@ imMatrFactor(runCy,DSBS,TECH,YTIME) = iMatrFactorData(DSBS,TECH,YTIME);
 imMatrFactor(runCy,DSBS,TECH,YTIME)$(imMatrFactor(runCy,DSBS,TECH,YTIME)=0) = 0.000001;
 imMatrFactor(runCy,DSBS,&quot;TGDO&quot;,YTIME)$((ord(YTIME) &gt; 11) and TRANSE(DSBS)) = 0.5;
 imMatrFactor(runCy,DSBS,&quot;TGSL&quot;,YTIME)$((ord(YTIME) &gt; 11) and TRANSE(DSBS)) = 0.5;
-imMatrFactor(runCy,DSBS,&quot;TNGSCCS&quot;,YTIME)$((ord(YTIME) &gt; 11) and INDSE(DSBS)) = 1;
-imMatrFactor(runCy,DSBS,&quot;THCLCCS&quot;,YTIME)$((ord(YTIME) &gt; 11) and INDSE(DSBS)) = 1;
 imMatrFactor(runCy,DSBS,&quot;TELC&quot;,YTIME)$((ord(YTIME) &gt; 11) and TRANSE(DSBS)) = 3;
 imMatrFactor(&quot;CHA&quot;,DSBS,&quot;TELC&quot;,YTIME)$((ord(YTIME) &gt; 11) and TRANSE(DSBS)) = 8;
 imMatrFactor(runCy,DSBS,&quot;TELC&quot;,YTIME)$(ord(YTIME) &gt; 30 and TRANSE(DSBS)) = 8;
@@ -864,13 +873,15 @@ imMatrFactor(runCy,DSBS,&quot;TELC&quot;,YTIME)$(ord(YTIME) &gt; 40 and TRANSE(D
 imMatrFactor(runCy,DSBS,&quot;TELC&quot;,YTIME)$(ord(YTIME) &gt; 40 and TRANSE(DSBS)) = 11;
 imMatrFactor(runCy,DSBS,&quot;TELC&quot;,YTIME)$(ord(YTIME) &gt; 50 and TRANSE(DSBS)) = 15;
 imMatrFactor(runCy,DSBS,&quot;TELC&quot;,YTIME)$(ord(YTIME) &gt; 50 and TRANSE(DSBS)) = 15;
+imMatrFactor(runCy,DSBS,&quot;TELC&quot;,YTIME)$(ord(YTIME) &gt; 40 and TRANSE(DSBS)) = 11;
+imMatrFactor(runCy,DSBS,&quot;TELC&quot;,YTIME)$(ord(YTIME) &gt; 40 and TRANSE(DSBS)) = 11;
+imMatrFactor(runCy,DSBS,&quot;TNGSCCS&quot;,YTIME)$((ord(YTIME) &gt; 11) and INDSE(DSBS)) = 1;
+imMatrFactor(runCy,DSBS,&quot;THCLCCS&quot;,YTIME)$((ord(YTIME) &gt; 11) and INDSE(DSBS)) = 1;
 imMatrFactor(runCy,DSBS,&quot;TELC&quot;,YTIME)$(ord(YTIME) &gt; 11 and DOMSE(DSBS)) = 20;
 imMatrFactor(runCy,DSBS,&quot;TBMSWAS&quot;,YTIME)$(ord(YTIME) &gt; 11 and DOMSE(DSBS)) = 0.001;
 imMatrFactor(runCy,DSBS,&quot;TH2F&quot;,YTIME)$(ord(YTIME) &lt; 21 and INDSE(DSBS)) = 0;
 imMatrFactor(runCy,DSBS,&quot;TH2F&quot;,YTIME)$(ord(YTIME) &gt; 21 and INDSE(DSBS)) = 2;
 imMatrFactor(runCy,DSBS,&quot;TH2F&quot;,YTIME)$(ord(YTIME) &gt; 40 and INDSE(DSBS)) = 2;
-imMatrFactor(runCy,DSBS,&quot;TELC&quot;,YTIME)$(ord(YTIME) &gt; 40 and TRANSE(DSBS)) = 11;
-imMatrFactor(runCy,DSBS,&quot;TELC&quot;,YTIME)$(ord(YTIME) &gt; 40 and TRANSE(DSBS)) = 11;
 imMatrFactor(runCy,DSBS,&quot;TELC&quot;,YTIME)$(ord(YTIME) &gt; 11 and INDSE(DSBS)) = 4;
 imMatrFactor(runCy,DSBS,&quot;TH2F&quot;,YTIME)$(ord(YTIME) &gt; 11 and INDSE(DSBS)) = 20;
 imMatrFactor(runCy,DSBS,&quot;TGDO&quot;,YTIME)$(ord(YTIME) &gt; 30 and TRANSE(DSBS)) = 0.001;
@@ -900,8 +911,6 @@ imCapCostTech(runCy,INDSE,TECH,YTIME) = imDataIndTechnology(INDSE,TECH,&quot;IC&
 imFixOMCostTech(runCy,INDSE,TECH,YTIME) = imDataIndTechnology(INDSE,TECH,&quot;FC&quot;);
 imVarCostTech(runCy,INDSE,TECH,YTIME) = imDataIndTechnology(INDSE,TECH,&quot;VC&quot;);
 imUsfEneConvSubTech(runCy,INDSE,TECH,YTIME)  = imDataIndTechnology(INDSE,TECH,&quot;USC&quot;);
-imUsfEneConvSubTech(runCy,INDSE,&quot;THCL&quot;,YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,&quot;THCL&quot;,&quot;USC&quot;) + 0.005 * (ord(YTIME)-11);
-imUsfEneConvSubTech(runCy,INDSE,&quot;THCLCCS&quot;,YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,&quot;THCLCCS&quot;,&quot;USC&quot;) + 0.005 * (ord(YTIME)-11);
 imFixOMCostTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,&quot;FC&quot;);
 imVarCostTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,&quot;VC&quot;);
 imUsfEneConvSubTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,&quot;USC&quot;);
@@ -917,7 +926,7 @@ $include &quot;./iDataPlantEffByType.csv&quot;
 $offdelim
 ;
 imPlantEffByType(runCy,PGALL,YTIME) = iDataPlantEffByType(runCy,PGALL, YTIME) ;
-imPlantEffByType(runCy,&quot;PGH2F&quot;,YTIME) = 0.97;
+imPlantEffByType(runCy,&quot;PGH2F&quot;,YTIME) = 0.85;
 smGwToTwhPerYear(YTIME) = 8.76 + 0.024 $ (mod(YTIME.val,4) = 0 and mod (YTIME.val,100) &lt;&gt; 0);</code></pre>
 <ul>
 <li>Calculation of polynomial distribution lags coefficients</li>
@@ -959,7 +968,6 @@ $IFTHEN %link2MAgPIE% == on
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,&quot;BMSWAS&quot;,YTIME)$(An(YTIME)) = iPricesMagpie(runCy,SBS,YTIME);
 $ENDIF
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,EF,YTIME)$(SECtoEF(SBS,EF)$(not HEATPUMP(EF)) and DATAY(YTIME)) = imFuelPrice(runCy,SBS,EF,YTIME);
-VmPriceFuelSubsecCarVal.FX(runCy,SBS,ALTEF,YTIME)$(SECtoEF(SBS,ALTEF)$(not An(YTIME))) = sum(EF$ALTMAP(SBS,ALTEF,EF),imFuelPrice(runCy,SBS,EF,YTIME));
 VmPriceFuelSubsecCarVal.FX(runCy,&quot;PG&quot;,&quot;NUC&quot;,YTIME) = 0.02; !! fixed price for nuclear fuel to 25Euro/toe
 VmPriceFuelSubsecCarVal.FX(runCy,&quot;H2P&quot;,&quot;NUC&quot;,YTIME) = 0.02; !! fixed price for nuclear fuel to 25Euro/toe
 VmPriceFuelSubsecCarVal.FX(runCy,&quot;STEAMP&quot;,&quot;NUC&quot;,YTIME) = 0.02; !! fixed price for nuclear fuel to 25Euro/toe
@@ -1046,6 +1054,10 @@ BM_CO2         &quot;Non metallic minerals production, related with CO2&quot;
 PG_SF6         &quot;Electricity production, related with SF6&quot;
 OI_SF6         &quot;Other Industries activities, related with SF6&quot;
 DAC            &quot;Direct Air Capture&quot;
+LQD            &quot;Liquids Production&quot;
+SLD            &quot;Solids Production&quot;
+GAS            &quot;Gases Production&quot;
+CHP
 /
 SBS(ALLSBS)          Model Subsectors
 /
@@ -1076,8 +1088,12 @@ NEN   &quot;Other Non Energy Uses&quot;
 PG    &quot;Power and Steam Generation&quot;
 H2P   &quot;Hydrogen production&quot;
 STEAMP &quot;Steam Production&quot;
+LQD    &quot;Liquids Production&quot;
+SLD    &quot;Solids Production&quot;
+GAS    &quot;Gases Production&quot;
 H2INFR &quot;Hydrogen storage and delivery&quot;
 DAC    &quot;Direct Air Capture&quot;
+CHP
 /
 SCT_GHG(ALLSBS)      Aggregate Sectors used in non-energy related GHG emissions
 /
@@ -1097,6 +1113,37 @@ NF_PFC         &quot;Aluminium production, related with PFC&quot;
 BM_CO2         &quot;Non metallic minerals production, related with CO2&quot;
 PG_SF6         &quot;Electricity production, related with SF6&quot;
 OI_SF6         &quot;Other Industries activities, related with SF6&quot;
+/
+E07SrcMacAbate  &quot;Non-CO₂ emission sources with MAC curves&quot;
+/
+CH4_manure         &quot;Methane from animal waste management&quot;
+CH4_enteric        &quot;Methane from enteric fermentation in livestock&quot;
+CH4_coal           &quot;Methane emissions from coal production and use&quot;
+CH4_sewage         &quot;Methane from domestic wastewater treatment&quot;
+CH4_ngas            &quot;Methane from natural gas production and distribution&quot;
+CH4_landfills      &quot;Methane from solid waste disposal (landfills)&quot;
+CH4_oilp            &quot;Methane from oil extraction and processing&quot;
+CH4_rice           &quot;Methane from wetland rice cultivation&quot;
+N2O_sewage         &quot;Nitrous oxide from domestic wastewater&quot;
+N2O_adipic         &quot;N₂O from adipic acid production (industrial process)&quot;
+N2O_manure         &quot;N₂O from animal waste management&quot;
+N2O_fertilizer     &quot;N₂O from agricultural fertilizer use&quot;
+N2O_nitric         &quot;N₂O from nitric acid production (industrial process)&quot;
+N2O_transport      &quot;N₂O from transport sector emissions&quot;
+HFC_125            &quot;Hydrofluorocarbon-125 emissions&quot;
+HFC_134a           &quot;Hydrofluorocarbon-134a emissions&quot;
+HFC_143a           &quot;Hydrofluorocarbon-143a emissions&quot;
+HFC_152a           &quot;Hydrofluorocarbon-152a emissions&quot;
+HFC_227ea          &quot;Hydrofluorocarbon-227ea emissions&quot;
+HFC_23             &quot;Hydrofluorocarbon-23 emissions&quot;
+HFC_236fa          &quot;Hydrofluorocarbon-236fa emissions&quot;
+HFC_32             &quot;Hydrofluorocarbon-32 emissions&quot;
+HFC_43_10          &quot;Hydrofluorocarbon-43-10 emissions&quot;
+HFC_245ca          &quot;Hydrofluorocarbon-245ca emissions&quot;
+CF4                &quot;Perfluoromethane (CF₄) emissions&quot;
+C2F6               &quot;Perfluoroethane (C₂F₆) emissions&quot;
+C6F14              &quot;Perfluorohexane (C₆F₁₄) emissions&quot;
+SF6                &quot;Sulfur hexafluoride (SF₆) emissions&quot;
 /
 POLICIES_set
 /
@@ -1148,6 +1195,7 @@ BUN(DSBS)         Bunkers                       /BU/
 INDDOM(DSBS)      Industry and Tertiary         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,SE,AG,HOU/
 HOU1(SBS)         Households                     /HOU/
 SERV(SBS)         Services                       /SE,AG/
+SSBS(SBS)         All Supply Subsectors         /PG,H2P,CHP,STEAMP,LQD,SLD,GAS,H2INFR/
 EF           Energy Forms
 /
 HCL     &quot;Hard Coal, Coke and Other Solids&quot;
@@ -1174,10 +1222,6 @@ BGDO    &quot;Biodiesel&quot;
 BGSL    &quot;Biogasoline&quot;
 H2F     &quot;Hydrogen&quot;
 ELC     &quot;Electricity&quot;
-HTDAC   &quot;High-Temperature DAC&quot;
-H2DAC   &quot;High-Temperature H2-fueled DAC&quot;
-LTDAC   &quot;Low-Temperature DAC&quot;
-EWDAC   &quot;Enhanced-Weathering DAC&quot;
 SLD     &quot;Solid Fuels&quot;
 GAS     &quot;Gases&quot;
 LQD     &quot;All Liquids&quot;
@@ -1223,7 +1267,7 @@ GDO     &quot;Diesel Oil&quot;
 EFtoEFA(EF,EFA)  Energy Forms Aggregations (for summary balance report)
 /
 (HCL,LGN).SLD
-(GSL,GDO,RFO,LPG,KRS,OLQ).LQD
+(CRO,GSL,GDO,RFO,LPG,KRS,OLQ).LQD
 (LPG,KRS,OLQ).OLQT
 (NGS,OGS).GAS
 (WND,SOL,GEO).REN
@@ -1310,16 +1354,11 @@ H2EF(EF)         Hydrogen                                            /H2F/
 STEAM(EFS)       Steam                                               /STE/
 TOCTEF(EFS)      Energy forms produced by power plants and boilers   /ELC,STE/
 ALTEF(EF)        Alternative Fuels used in transport                 /BGDO,MET,ETH/
-ALTMAP(SBS,EF,EF)    Fuels whose prices affect the prices of alternative fuels
-/
-(PC,GU,PT,PB,GT,GN).MET.GDO
-(PC,GU,PT,PB,GT,GN).ETH.GDO
-(PC,GU,GN,PN).BGDO.GDO
-/
 PGEF(EFS)        &quot;Energy forms used for steam production&quot;
 PPRODEF(EFS)     Fuels considered in primary production
 /
 LGN
+BGDO
 OLQ
 HCL
 CRO
@@ -1446,6 +1485,36 @@ H2DAC
 LTDAC
 EWDAC
 /
+STECH     &quot;Technologies in supply side&quot;
+/
+ATHLGN      &quot;Advanced thermal monovalent lignite&quot;
+ATHCOAL     &quot;Advanced thermal monovalent hard coal&quot;
+ATHGAS      &quot;Advanced thermal monovalent natural gas&quot;
+ATHBMSWAS   &quot;Advanced thermal monovalent biomass and waste&quot;
+ATHBMSCCS   &quot;Advanced thermal monovalent biomass and waste with CCS&quot;
+ATHOIL      &quot;Advanced gas turbines (peak devices) diesel oil&quot;
+PGLHYD      &quot;Large Hydro Plants&quot;
+PGSHYD      &quot;Small Hydro Plants&quot;
+PGAWND      &quot;Wind Plants&quot;
+PGSOL       &quot;Solar Photovoltaic Plants&quot;
+PGCSP       &quot;Advanced Solar Thermal Plants&quot;
+PGOTHREN    &quot;Advanced geothermal Plants&quot;
+PGANUC      &quot;New Nuclear Designs&quot;
+ATHCOALCCS  &quot;Supercritical coal with CCS&quot;
+ATHLGNCCS   &quot;Supercritical lignite with CCS&quot;
+ATHGASCCS   &quot;Gas turbine combined cycle with CCS&quot;
+PGAWNO      &quot;Wind offshore&quot;
+PGH2F       &quot;Hydrogen Production&quot;
+gsr         &quot;gas steam reforming&quot;
+gss         &quot;gas steam reforming with CCS&quot;
+weg         &quot;water electrolysis from grid power&quot;
+wew         &quot;water electrolysis with wind&quot;
+wes         &quot;water electrolysis with solar&quot;
+cgf         &quot;coal gasification&quot;
+cgs         &quot;coal gasification with CCS&quot;
+bgfl        &quot;biomass gasification large scale&quot;
+bgfls       &quot;biomass gasification large scale with CCS&quot;
+/
 TECHtoEF (TECH,EF) Fuels consumed by technologies
 /
 TGSL.(GSL,BGSL)
@@ -1528,6 +1597,7 @@ CHYBV(TECH) CONVENTIONAL hybrids
 TCHEVGSL
 TCHEVGDO
 /
+SSECTTECH(SSBS,STECH) &quot;Link between Model Supply Subsectors and Technologies&quot;
 SECTTECH(DSBS,TECH) Link between Model Demand Subsectors and Technologies
 /
 PC.(TGSL,TLPG,TGDO,TNGS,TELC,TPHEVGSL,TPHEVGDO,TCHEVGSL,TCHEVGDO,TH2F)
@@ -1539,19 +1609,23 @@ PA.(TKRS)
 (IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(TLGN,THCL,TGDO,TGSL,TRFO,TLPG,TKRS,TOLQ,TNGS,TOGS,
                                 TELC,TBMSWAS,TSTE,TH2F)
 (IS,BM,CH).(TNGSCCS,THCLCCS)
-(HOU,AG).(TLPG,TKRS,TGDO,TNGS,TOGS,TBMSWAS,TELC,TSTE)
-SE.(TLPG,TKRS,TNGS,TOGS,TELC,TSTE)
+(HOU,AG).(THCL,TLPG,TKRS,TGDO,TNGS,TOGS,TBMSWAS,TELC,TSTE)
+SE.(THCL,TLPG,TKRS,TNGS,TOGS,TELC,TSTE)
 BU.(TGDO,TRFO,TKRS)
 (PCH,NEN).(TLGN,THCL,TGDO,TRFO,TLPG,TOLQ,TNGS,TOGS)
 DAC.(HTDAC,H2DAC,LTDAC,EWDAC)
 /
-SECtoEF(SBS,EF) Link between Model Subsectors and Energy FORMS
+SECtoEF(SBS,EF) Link between Model Subsectors and Energy Forms consumed
 /
 PG.(LGN,HCL,GDO,RFO,NGS,OGS,NUC,HYD,BMSWAS,SOL,GEO,WND,H2F)
+CHP.(LGN,HCL,GDO,RFO,NGS,OGS,NUC,HYD,BMSWAS,SOL,GEO,WND)
 H2P.(HCL,LGN,RFO,GDO,NGS,OGS,NUC,BMSWAS,SOL,WND,ELC)
 STEAMP.(HCL,LGN,GDO,RFO,LPG,KRS,NGS,OGS,OLQ,NUC,GEO,BMSWAS,ELC,H2F)
+SLD.(LGN,HCL,GSL,GDO,BGDO,RFO,OLQ,NGS,OGS,BMSWAS,SOL,CRO,LPG,KRS,ELC,STE)
+LQD.(LGN,HCL,GSL,GDO,BGDO,RFO,OLQ,NGS,OGS,BMSWAS,SOL,CRO,LPG,KRS,ELC,STE)
+GAS.(HCL,GSL,GDO,BGDO,RFO,OLQ,NGS,OGS,BMSWAS,SOL,CRO,LPG,KRS,ELC,STE)
 /
-PGALL            Power Generation Plant Types
+PGALL(STECH)     Power Generation Plant Types
 /
 ATHLGN  Advanced thermal monovalent lignite
 ATHCOAL Advanced thermal monovalent hard coal
@@ -1599,15 +1673,13 @@ PGREN(PGALL)    REN PLANTS with Saturation                /PGLHYD,PGSHYD,PGAWND,
 PGREN2(PGALL)     Renewable Plants                          /PGLHYD,PGSHYD,PGAWND,PGSOL,PGCSP,PGOTHREN,PGAWNO,PGANUC,ATHCOALCCS,ATHLGNCCS,ATHGASCCS,PGH2F/
 PGRENSW(PGALL)   Solar and wind Plants                     /PGSOL,PGCSP,PGAWND,PGAWNO/
 PGNREN(PGALL)    Advanced Renewable Plants potential      /PGCSP,PGOTHREN,PGAWNO,ATHBMSWAS/
-PGRENEF          Renewable energy forms in power generation  /LHYD,SHYD,WND,WNO,SOL,DPV,BMSWAS,OTHREN/
+PGRENEF          Renewable energy forms in power generation  /HYD,WND,SOL,BMSWAS,GEO/
 PGALLtoPGRENEF(PGALL,PGRENEF)     Correspondence between renewable plants and renewable energy forms
 /
-PGLHYD.LHYD
-(PGSHYD).SHYD
-(PGAWND).WND
-PGAWNO.WNO
+(PGSHYD,PGLHYD).HYD
+(PGAWND,PGAWNO).WND
 (PGSOL,PGCSP).SOL
-(PGOTHREN).OTHREN
+PGOTHREN.GEO
 (ATHBMSWAS,ATHBMSCCS).BMSWAS
 /
 PGALLtoEF(PGALL,EFS)     Correspondence between plants and energy forms
@@ -1807,6 +1879,18 @@ BALEF2EFS(BALEF, EFS) Mapping from balance fuels to model fuels
 &quot;Methanol&quot;.MET
 &quot;Hydrogen&quot;.H2F
 &quot;Electricity&quot;.ELC
+/
+E07MAC &quot;Cost categories for Marginal abatement costs curves (MACC) -2010$/tC for CH4,N20 and 2005$/tC for F-gases&quot; / 
+    0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 
+    320, 340, 360, 380, 400, 420, 460, 480, 500, 520, 540, 560, 580, 600, 660, 
+    680, 720, 740, 760, 780, 820, 840, 1000, 1080, 1100, 1120, 1520, 1660, 
+    1700, 1740, 2580, 2600, 3440, 3460, 3500, 3540, 3600, 3840, 4000 
+/
+Set sFGases(E07SrcMacAbate) &quot;F-gases (Input data in kt)&quot; 
+/
+    HFC_125, HFC_134a, HFC_143a, HFC_152a, HFC_227ea
+    HFC_23,  HFC_236fa, HFC_32,   HFC_43_10, HFC_245ca
+    CF4,     C2F6,      C6F14,    SF6
 /
 alias(TT, ytime);</code></pre>
 <blockquote>

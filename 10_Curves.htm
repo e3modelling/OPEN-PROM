@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="generator" content="goxygen" />
+  <meta name="author" content="Giannis Tolios" />
+  <meta name="author" content="Eleftheria Zisarou" />
+  <meta name="author" content="Alexandros Tsimpoukis" />
+  <meta name="author" content="Fotis Sioutas" />
+  <meta name="author" content="Sonja Sechi" />
+  <meta name="author" content="Dionysis Pramangioulis" />
+  <meta name="author" content="Giorgos Plessias" />
+  <meta name="author" content="Michael Madianos" />
+  <meta name="author" content="Anastasis Giannousakis" />
+  <meta name="author" content="Panagiotis Fragkos" />
+  <meta name="author" content="Maro Baka" />
+<title>OPEN PROM – 10. Curves module</title>
+<link rel="stylesheet" href="ming/style.css">
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS_CHTML-full"></script>
+<script type="text/x-mathjax-config">
+                    MathJax.Hub.Config({
+                      CommonHTML: { linebreaks: { automatic: true } },
+                      "HTML-CSS": { linebreaks: { automatic: true } },
+                             SVG: { linebreaks: { automatic: true } }
+                    });
+</script>
+</head>
+<body>
+<div class="header">
+      <div class="headerimg"><a href="index.htm"><img id="logo" src="images/logo.png" height="100" alt="model logo" /></a></div>
+    <div class="headertext">
+      <h1 id="mainheadertitle"><a href="https://github.com/e3modelling/OPEN-PROM">OPEN PROM</a></h1>
+      <h3>0.1</h3>
+      <div class="by">created with <a href="https://github.com/pik-piam/goxygen">goxygen</a> 1.4.5</div>
+    </div>
+</div>
+
+<div class="pagenav" id="pagenav">
+    <div class="dropdown">
+   <button class="dropbtn">10. Curves module
+     <i class="fa fa-caret-down"></i>
+   </button>
+   <div id="mainnav" class="dropdown-content">
+   <a href='index.htm'>Overview</a>
+   <a href='core.htm'>core</a>
+   <a href='01_Transport.htm'> 1. Transport module</a>
+   <a href='02_Industry.htm'> 2. Industry module</a>
+   <a href='03_RestOfEnergy.htm'> 3. RestOfEnergy module</a>
+   <a href='04_PowerGeneration.htm'> 4. PowerGeneration module</a>
+   <a href='05_Hydrogen.htm'> 5. Hydrogen module</a>
+   <a href='06_CO2.htm'> 6. CO2 module</a>
+   <a href='07_Emissions.htm'> 7. Emissions module</a>
+   <a href='08_Prices.htm'> 8. Prices module</a>
+   <a href='09_Heat.htm'> 9. Heat module</a>
+   <a href='10_Curves.htm'>10. Curves module</a>
+   </div>
+  </div>
+  <div class="dropdown">
+   <button class="dropbtn">Contents
+     <i class="fa fa-caret-down"></i>
+   </button>
+   <div class="dropdown-content">
+   <ul>
+   <li><a href="#id-10_Curves" id="toc-id-10_Curves">Curves module
+   (10_Curves)</a>
+   <ul>
+   <li><a href="#description" id="toc-description">Description</a></li>
+   <li><a href="#interfaces" id="toc-interfaces">Interfaces</a>
+   <ul>
+   <li><a href="#output" id="toc-output">Output</a></li>
+   </ul></li>
+   <li><a href="#realizations" id="toc-realizations">Realizations</a>
+   <ul>
+   <li><a href="#a-learningcurves" id="toc-a-learningcurves">(A)
+   LearningCurves</a></li>
+   </ul></li>
+   <li><a href="#definitions" id="toc-definitions">Definitions</a>
+   <ul>
+   <li><a href="#objects" id="toc-objects">Objects</a></li>
+   <li><a href="#sets" id="toc-sets">Sets</a></li>
+   </ul></li>
+   <li><a href="#see-also" id="toc-see-also">See Also</a></li>
+   <li><a href="#references" id="toc-references">References</a></li>
+   </ul></li>
+   </ul>
+   </div>
+  </div>
+</div>
+
+<h1 id="id-10_Curves">Curves module (10_Curves)</h1>
+<h2 id="description">Description</h2>
+<p>This is the Curves module for learning curves.</p>
+<h2 id="interfaces">Interfaces</h2>
+<figure>
+<img src="images/interfaces_Curves.png"
+style="width:100.0%;height:50.0%" alt="Interfaces to other modules" />
+<figcaption aria-hidden="true">Interfaces to other modules</figcaption>
+</figure>
+<h3 id="output">Output</h3>
+<table style="width:81%;">
+<caption>module outputs</caption>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 45%" />
+<col style="width: 9%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"> </th>
+<th style="text-align: center;">Description</th>
+<th style="text-align: center;">Unit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">VmCostLC<br />
+(LCTECH, YTIME)</td>
+<td style="text-align: center;">Learning curve cost multiplier</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+</tr>
+</tbody>
+</table>
+<h2 id="realizations">Realizations</h2>
+<h3 id="a-learningcurves">(A) LearningCurves</h3>
+<p>This is the LearningCurves realization of the Curves module.</p>
+<p>NOTE: LCTECH is equivalent to the existing PGRENSW set but is defined
+here for clarity within the Learning Curves module.</p>
+<pre><code>sets
+LCTECH(PGALL) &quot;Technologies with learning curves - subset of PGALL&quot;
+/
+    PGSOL    &quot;Solar PV&quot;
+    PGCSP    &quot;Concentrated Solar Power&quot;
+    PGAWND   &quot;Wind onshore&quot; 
+    PGAWNO   &quot;Wind offshore&quot;
+/
+LCSOL(LCTECH) &quot;Solar technologies subset&quot;
+/
+    PGSOL
+    PGCSP
+/
+LCWND(LCTECH) &quot;Wind technologies subset&quot;  
+/
+    PGAWND
+    PGAWNO
+/
+;</code></pre>
+<pre><code>Equations
+Q10CostLC(LCTECH,YTIME)             &quot;Learning curve cost multiplier calculation&quot;
+Q10CumCapGlobal(LCTECH,YTIME)       &quot;Global cumulative capacity calculation&quot;
+;
+Variables
+VmCostLC(LCTECH,YTIME)             &quot;Learning curve cost multiplier (1)&quot;
+V10CumCapGlobal(LCTECH,YTIME)       &quot;Global cumulative capacity (GW)&quot;
+;</code></pre>
+<p>GENERAL INFORMATION * Learning Curves module This equation implements
+the learning curve for wind and solar technologies with stopping
+mechanism. The learning curve follows the equation: multiplier =
+(Cap_current / Cap_initial)^ε where ε is calculated from learning rate:
+ε = log(1-LR)/log(2)</p>
+<p>STOPPING MECHANISM: Only a fraction of costs are subject to learning
+curves. - LearnableFraction: Technology-specific manufacturing costs
+that improve with experience - FixedFraction: Basic materials, labor,
+installation costs that remain constant - MinCostFraction: Absolute
+floor preventing unrealistic cost reductions</p>
+<p>The cost multiplier applies only to the learnable portion of total
+costs. Final cost = [LearnableFraction × CostMultiplier +
+(1-LearnableFraction)] × InitialCost Learning curve cost multiplier
+equation with numerical safeguards Timing: Cost multiplier for YTIME
+based on capacity growth in previous period (YTIME-1 vs YTIME-2) This
+reflects that learning happens from past experience and affects current
+period costs Safeguards: Add small epsilon to denominator to avoid
+division by zero</p>
+<pre><code>Q10CostLC(LCTECH,YTIME)$(TIME(YTIME))..
+    VmCostLC(LCTECH,YTIME)
+        =E=
+    (V10CumCapGlobal(LCTECH,YTIME-1) / (V10CumCapGlobal(LCTECH,YTIME-2))) ** i10AlphaLC(LCTECH);</code></pre>
+<p>Global cumulative capacity tracking equation Tracks total cumulative
+capacity installations since base year Cumulative = Previous cumulative
++ New installations this period (converted MW to GW)</p>
+<pre><code>Q10CumCapGlobal(LCTECH,YTIME)$(TIME(YTIME))..
+    V10CumCapGlobal(LCTECH,YTIME)
+        =E=
+    V10CumCapGlobal(LCTECH,YTIME-1) + 
+    sum(allCy$(runCy(allCy)), V04NewCapElec(allCy,LCTECH,YTIME));</code></pre>
+<p>This file contains input data for the Learning Curves module.</p>
+<p>COST BREAKDOWN METHODOLOGY: Total cost is split into two components:
+1. Learnable fraction: Subject to learning curve cost reductions
+(technology/manufacturing costs) 2. Fixed fraction: Not affected by
+learning (materials, labor, grid connection, etc.)</p>
+<p>Formula: FinalCost = LearnableFraction × CostMultiplier × InitialCost
++ (1-LearnableFraction) × InitialCost Simplified: FinalCost =
+[LearnableFraction × CostMultiplier + (1-LearnableFraction)] ×
+InitialCost</p>
+<p>This prevents unrealistic cost reductions while maintaining learning
+benefits.</p>
+<pre><code>Parameters
+i10AlphaLC(LCTECH)                    &quot;Learning curve factor alpha for technology (1)&quot;
+i10LearningRate(LCTECH)               &quot;Learning rate for technology (1)&quot; 
+i10InitCostRefLC(allCy,LCTECH,YTIME)  &quot;Initial cost reference for learning curves from PowerGeneration (kUS$2015/KW)&quot;
+i10LearnableFraction(LCTECH)          &quot;Fraction of cost subject to learning curve (1)&quot;
+i10MinCostFraction(LCTECH)            &quot;Minimum cost as fraction of initial cost (1)&quot;
+;
+i10LearningRate(&quot;PGSOL&quot;) = 0.20;    !! 20% cost reduction per doubling for Solar PV
+i10LearningRate(&quot;PGCSP&quot;) = 0.20;    !! 20% cost reduction per doubling for CSP
+i10LearningRate(&quot;PGAWND&quot;) = 0.10;   !! 10% cost reduction per doubling for Onshore Wind
+i10LearningRate(&quot;PGAWNO&quot;) = 0.10;   !! 10% cost reduction per doubling for Offshore Wind</code></pre>
+<p>Learnable fraction - what portion of total cost can be reduced by
+learning Typically manufacturing/technology costs (~60-80%) vs. fixed
+costs (materials, labor, grid connection)</p>
+<pre><code>i10LearnableFraction(&quot;PGSOL&quot;) = 0.75;   !! 75% of solar PV costs subject to learning
+i10LearnableFraction(&quot;PGCSP&quot;) = 0.75;   !! 75% of CSP costs subject to learning  
+i10LearnableFraction(&quot;PGAWND&quot;) = 0.60;  !! 60% of onshore wind costs subject to learning
+i10LearnableFraction(&quot;PGAWNO&quot;) = 0.60;  !! 60% of offshore wind costs subject to learning</code></pre>
+<p>Minimum cost floor - prevents unrealistic cost reductions Based on
+fundamental material and labor costs that cannot be reduced
+indefinitely</p>
+<pre><code>i10MinCostFraction(&quot;PGSOL&quot;) = 0.25;     !! Solar PV cannot go below 25% of initial cost
+i10MinCostFraction(&quot;PGCSP&quot;) = 0.25;     !! CSP cannot go below 25% of initial cost
+i10MinCostFraction(&quot;PGAWND&quot;) = 0.40;    !! Onshore wind cannot go below 40% of initial cost  
+i10MinCostFraction(&quot;PGAWNO&quot;) = 0.40;    !! Offshore wind cannot go below 40% of initial cost</code></pre>
+<p>Use the base year costs as the reference point for learning
+curves</p>
+<pre><code>i10InitCostRefLC(allCy,LCTECH,YTIME)$TFIRST(YTIME) = i04GrossCapCosSubRen(allCy,LCTECH,YTIME);</code></pre>
+<p>Calculate learning curve parameters from learning rates With C(t) =
+(Cap(t)/Cap(t-1))^ε and LR = 1 - 2^(-ε) Solving for ε: ε = -log(1-LR) /
+log(2) (negative for cost reduction)</p>
+<pre><code>i10AlphaLC(LCTECH) = -log(1 - i10LearningRate(LCTECH)) / log(2);</code></pre>
+<p><em>VARIABLE INITIALISATION</em> Set bounds for cost multiplier with
+conservative values to avoid max() function Lower bound set to prevent
+excessive cost reductions while ensuring solver compatibility Using
+simple conservative bound instead of complex max() calculation Cost =
+(LearnableFraction * CostMultiplier + (1-LearnableFraction)) *
+InitialCost</p>
+<pre><code>VmCostLC.LO(LCTECH,YTIME) = 0.1;   !! Conservative 10% minimum cost multiplier (90% max reduction)
+VmCostLC.UP(LCTECH,YTIME) = 2.0;   !! Allow some cost increase for numerical stability</code></pre>
+<p>Initialize cost multiplier to 1.0 for base year (no cost reduction
+initially)</p>
+<pre><code>VmCostLC.FX(LCTECH,&quot;%fBaseY%&quot;) = 1.0;</code></pre>
+<p>Initialize cumulative capacity with historical data from base year
+only Sum installed capacity across all countries for learning curve
+technologies Keep units consistent: imInstCapPastNonCHP is in GW,
+V10CumCapGlobal should be in GW to match V04NewCapElec</p>
+<pre><code>V10CumCapGlobal.FX(LCTECH,&quot;2010&quot;) = sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,&quot;2010&quot;));
+V10CumCapGlobal.FX(LCTECH,&quot;2011&quot;) = V10CumCapGlobal.L(LCTECH,&quot;2010&quot;) + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,&quot;2011&quot;));
+V10CumCapGlobal.FX(LCTECH,&quot;2012&quot;) = V10CumCapGlobal.L(LCTECH,&quot;2011&quot;) + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,&quot;2012&quot;));
+V10CumCapGlobal.FX(LCTECH,&quot;2013&quot;) = V10CumCapGlobal.L(LCTECH,&quot;2012&quot;) + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,&quot;2013&quot;));
+V10CumCapGlobal.FX(LCTECH,&quot;2014&quot;) = V10CumCapGlobal.L(LCTECH,&quot;2013&quot;) + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,&quot;2014&quot;));
+V10CumCapGlobal.FX(LCTECH,&quot;2015&quot;) = V10CumCapGlobal.L(LCTECH,&quot;2014&quot;) + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,&quot;2015&quot;));
+V10CumCapGlobal.FX(LCTECH,&quot;2016&quot;) = V10CumCapGlobal.L(LCTECH,&quot;2015&quot;) + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,&quot;2016&quot;));
+V10CumCapGlobal.FX(LCTECH,&quot;2017&quot;) = V10CumCapGlobal.L(LCTECH,&quot;2016&quot;) + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,&quot;2017&quot;));
+V10CumCapGlobal.FX(LCTECH,&quot;2018&quot;) = V10CumCapGlobal.L(LCTECH,&quot;2017&quot;) + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,&quot;2018&quot;));
+V10CumCapGlobal.FX(LCTECH,&quot;2019&quot;) = V10CumCapGlobal.L(LCTECH,&quot;2018&quot;) + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,&quot;2019&quot;));
+V10CumCapGlobal.FX(LCTECH,&quot;%fBaseY%&quot;) = V10CumCapGlobal.L(LCTECH,&quot;2019&quot;) + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,&quot;%fBaseY%&quot;));</code></pre>
+<blockquote>
+<p><strong>Limitations</strong> There are no known limitations.</p>
+</blockquote>
+<h2 id="definitions">Definitions</h2>
+<h3 id="objects">Objects</h3>
+<table>
+<caption>module-internal objects (A: LearningCurves)</caption>
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 42%" />
+<col style="width: 22%" />
+<col style="width: 5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"> </th>
+<th style="text-align: center;">Description</th>
+<th style="text-align: center;">Unit</th>
+<th style="text-align: center;">A</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">i10AlphaLC<br />
+(LCTECH)</td>
+<td style="text-align: center;">Learning curve factor alpha for
+technology</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">i10InitCostRefLC<br />
+(allCy, LCTECH, YTIME)</td>
+<td style="text-align: center;">Initial cost reference for learning
+curves from PowerGeneration</td>
+<td style="text-align: center;"><span
+class="math inline">\(kUS\$2015/KW\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">i10LearnableFraction<br />
+(LCTECH)</td>
+<td style="text-align: center;">Fraction of cost subject to learning
+curve</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">i10LearningRate<br />
+(LCTECH)</td>
+<td style="text-align: center;">Learning rate for technology</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">i10MinCostFraction<br />
+(LCTECH)</td>
+<td style="text-align: center;">Minimum cost as fraction of initial
+cost</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Q10CostLC<br />
+(LCTECH, YTIME)</td>
+<td style="text-align: center;">Learning curve cost multiplier
+calculation</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Q10CumCapGlobal<br />
+(LCTECH, YTIME)</td>
+<td style="text-align: center;">Global cumulative capacity
+calculation</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">V10CumCapGlobal<br />
+(LCTECH, YTIME)</td>
+<td style="text-align: center;">Global cumulative capacity</td>
+<td style="text-align: center;"><span
+class="math inline">\(GW\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sets">Sets</h3>
+<table style="width:67%;">
+<caption>sets in use</caption>
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 44%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"> </th>
+<th style="text-align: center;">description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">allCy</td>
+<td style="text-align: center;">All Countries Used in the Model</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">LCSOL(LCTECH)</td>
+<td style="text-align: center;">Solar technologies subset</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">LCTECH(PGALL)</td>
+<td style="text-align: center;">Technologies with learning curves -
+subset of PGALL</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">LCWND(LCTECH)</td>
+<td style="text-align: center;">Wind technologies subset</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">PGALL(STECH)</td>
+<td style="text-align: center;">Power Generation Plant Types</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">PGCSP(PGALL)</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">runCy(allCy)</td>
+<td style="text-align: center;">Countries for which the model is
+running</td>
+</tr>
+</tbody>
+</table>
+<h2 id="see-also">See Also</h2>
+<p><a href="04_PowerGeneration.htm">04_PowerGeneration</a></p>
+<h2 id="references">References</h2>
+<script>
+window.onscroll = function() {myFunction()};
+
+var navbar = document.getElementById("pagenav");
+var sticky = navbar.offsetTop;
+
+function myFunction() {
+  var currentScrollPos = window.pageYOffset;
+  if (window.pageYOffset >= sticky) {
+    if (prevScrollpos > currentScrollPos) {
+      document.getElementById("pagenav").style.top = "0";
+      document.getElementById("pagenav").style.position = "fixed";
+    } else {
+      document.getElementById("pagenav").style.top = "-50px";
+    }
+  } else {
+      document.getElementById("pagenav").style.position = "static";
+  }
+  prevScrollpos = currentScrollPos;
+}
+</script>
+</body>
+</html>

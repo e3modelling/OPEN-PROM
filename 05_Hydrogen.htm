@@ -50,8 +50,10 @@
    <a href='04_PowerGeneration.htm'> 4. PowerGeneration module</a>
    <a href='05_Hydrogen.htm'> 5. Hydrogen module</a>
    <a href='06_CO2.htm'> 6. CO2 module</a>
+   <a href='07_Emissions.htm'> 7. Emissions module</a>
    <a href='08_Prices.htm'> 8. Prices module</a>
    <a href='09_Heat.htm'> 9. Heat module</a>
+   <a href='10_Curves.htm'>10. Curves module</a>
    </div>
   </div>
   <div class="dropdown">
@@ -504,6 +506,7 @@ subsector receives only the relevant demand.</p>
         =E=
     sum(INDDOM$SAMEAS(INDDOM,SBS), VmConsFuel(allCy,INDDOM,&quot;H2F&quot;,YTIME)) +
     sum(TRANSE$SAMEAS(TRANSE,SBS), VmDemFinEneTranspPerFuel(allCy,TRANSE,&quot;H2F&quot;,YTIME)) +
+    !! FIXME: Add LQD,GAS,SLD sectors consumption too
     VmConsFuelDACProd(allCy,&quot;H2F&quot;,YTIME)$sameas(&quot;DAC&quot;,SBS) +
     VmConsFuelElecProd(allCy,&quot;H2F&quot;,YTIME)$sameas(&quot;PG&quot;,SBS);</code></pre>
 <p>This equation defines the amount of hydrogen production capacity that
@@ -711,13 +714,11 @@ overall assessment of hydrogen production cost.</p>
 <pre><code>Q05CostAvgProdH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCostAvgProdH2(allCy,YTIME)
         =E=
-    ( sum(H2TECH, 
-        VmProdH2(allCy,H2TECH,YTIME) *
-        V05CostProdH2Tech(allCy,H2TECH,YTIME)
-      ) + 1e-6
+    sum(H2TECH, 
+      (VmProdH2(allCy,H2TECH,YTIME) + 1e-6) *
+      V05CostProdH2Tech(allCy,H2TECH,YTIME)
     ) /
-    (sum(H2TECH,VmProdH2(allCy,H2TECH,YTIME)) + 1e-6)
-;</code></pre>
+    sum(H2TECH,VmProdH2(allCy,H2TECH,YTIME) + 1e-6);</code></pre>
 <p>This equation calculates the fuel consumption for each hydrogen
 production technology, considering the efficiency of the technology and
 the amount of fuel required for producing a unit of hydrogen. It
@@ -731,7 +732,7 @@ provides insight into fuel demand for hydrogen production.</p>
 hydrogen production technologies in the system, summing up the fuel
 requirements from all sources. It helps track the total fuel demand for
 hydrogen production.</p>
-<pre><code>Q05ConsFuelH2Prod(allCy,EF,YTIME)$(TIME(YTIME) $H2PRODEF(EF) $(runCy(allCy)))..
+<pre><code>Q05ConsFuelH2Prod(allCy,EF,YTIME)$(TIME(YTIME)$H2PRODEF(EF)$(runCy(allCy)))..
     VmConsFuelH2Prod(allCy,EF,YTIME)
         =E=
     sum(H2TECH$H2TECHEFtoEF(H2TECH,EF),VmConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME))
@@ -993,9 +994,9 @@ endloop;</code></pre>
 <p><em>VARIABLE INITIALISATION</em></p>
 <pre><code>V05GapShareH2Tech1.UP(runCy,H2TECH,YTIME) = 1;
 V05GapShareH2Tech1.LO(runCy,H2TECH,YTIME) = 0;
+V05DemGapH2.LO(runCy,YTIME) = 0;
 V05DemGapH2.L(runCy,YTIME) = 2;
 V05DemGapH2.FX(runCy,YTIME)$(not An(YTIME)) = 0;
-display V05DemGapH2.L;
 VmProdH2.L(runCy,H2TECH, YTIME) = 0.5;
 VmProdH2.LO(runCy,H2TECH, YTIME) = 0;
 VmProdH2.FX(runCy,H2TECH, YTIME)$(not An(YTIME)) = 0;
@@ -1021,15 +1022,22 @@ V05ShareCCSH2Prod.LO(runCy,H2TECH,YTIME) = 0;
 V05ShareCCSH2Prod.UP(runCy,H2TECH,YTIME) = 1;
 V05ShareNoCCSH2Prod.LO(runCy,H2TECH,YTIME) = 0;
 V05ShareNoCCSH2Prod.UP(runCy,H2TECH,YTIME) = 1;
-VmConsFuelH2Prod.FX(runCy,EF,YTIME)$(not An(YTIME)) = sum(H2TECH$H2TECHEFtoEF(H2TECH,EF),VmConsFuelTechH2Prod.L(runCy,H2TECH,EF,YTIME));
+VmConsFuelH2Prod.FX(runCy,EF,YTIME)$(DATAY(YTIME) and H2PRODEF(EF)) = sum(H2TECH$H2TECHEFtoEF(H2TECH,EF),VmConsFuelTechH2Prod.L(runCy,H2TECH,EF,YTIME));
+VmConsFuelH2Prod.FX(runCy,EF,YTIME)$(not H2PRODEF(EF)) = 0;
 V05CostProdCCSNoCCSH2Prod.LO(runCy,H2TECH,YTIME) = epsilon6;
 V05CostProdCCSNoCCSH2Prod.L(runCy,H2TECH,YTIME) = 2;
+VmCostAvgProdH2.LO(runCy,YTIME) = 0;
 VmCostAvgProdH2.L(runCy,YTIME) = 2;
-VmCostAvgProdH2.FX(runCy,YTIME)$(not An(YTIME)) = 0;
-V05DemGapH2.LO(runCy,YTIME) = 0;
+VmCostAvgProdH2.FX(runCy,YTIME)$DATAY(YTIME) = 
+sum(H2TECH, 
+  (VmProdH2.L(runCy,H2TECH,YTIME) + 1e-6) *
+  V05CostProdH2Tech.L(runCy,H2TECH,YTIME)
+) /
+sum(H2TECH,VmProdH2.L(runCy,H2TECH,YTIME) + 1e-6);
 V05PremRepH2Prod.LO(runCy,H2TECH,YTIME) = 0;
 V05PremRepH2Prod.UP(runCy,H2TECH,YTIME) = 1;
-V05PremRepH2Prod.FX(runCy,H2TECH,YTIME)$(not H2TECHPM(H2TECH)) = 1;</code></pre>
+V05PremRepH2Prod.FX(runCy,H2TECH,YTIME)$(not H2TECHPM(H2TECH)) = 1;
+V05CaptRateH2.FX(runCy,H2TECH,YTIME)$DATAY(YTIME) = i05CaptRateH2Prod(H2TECH);</code></pre>
 <pre><code>VmConsFuelTechH2Prod.FX(runCyL,H2TECH,EF,YTIME)$TIME(YTIME) = VmConsFuelTechH2Prod.L(runCyL,H2TECH,EF,YTIME)$TIME(YTIME);
 V05GapShareH2Tech1.FX(runCyL,H2TECH,YTIME)$TIME(YTIME) = V05GapShareH2Tech1.L(runCyL,H2TECH,YTIME)$TIME(YTIME);
 VmProdH2.FX(runCyL,H2TECH,YTIME)$TIME(YTIME) = VmProdH2.L(runCyL,H2TECH,YTIME)$TIME(YTIME);
@@ -1727,7 +1735,7 @@ sectors</td>
 years</td>
 </tr>
 <tr class="odd">
-<td style="text-align: center;">PGALL</td>
+<td style="text-align: center;">PGALL(STECH)</td>
 <td style="text-align: center;">Power Generation Plant Types</td>
 </tr>
 <tr class="even">
@@ -1751,9 +1759,13 @@ running</td>
 <tr class="even">
 <td style="text-align: center;">SECtoEF(SBS, EF)</td>
 <td style="text-align: center;">Link between Model Subsectors and Energy
-FORMS</td>
+Forms consumed</td>
 </tr>
 <tr class="odd">
+<td style="text-align: center;">SSBS(SBS)</td>
+<td style="text-align: center;">All Supply Subsectors</td>
+</tr>
+<tr class="even">
 <td style="text-align: center;">TRANSE(DSBS)</td>
 <td style="text-align: center;">All Transport Subsectors</td>
 </tr>
@@ -1764,8 +1776,9 @@ FORMS</td>
 href="02_Industry.htm">02_Industry</a>, <a
 href="03_RestOfEnergy.htm">03_RestOfEnergy</a>, <a
 href="04_PowerGeneration.htm">04_PowerGeneration</a>, <a
-href="06_CO2.htm">06_CO2</a>, <a href="08_Prices.htm">08_Prices</a>, <a
-href="core.htm">core</a></p>
+href="06_CO2.htm">06_CO2</a>, <a
+href="07_Emissions.htm">07_Emissions</a>, <a
+href="08_Prices.htm">08_Prices</a>, <a href="core.htm">core</a></p>
 <h2 id="references">References</h2>
 <script>
 window.onscroll = function() {myFunction()};

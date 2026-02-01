@@ -50,8 +50,10 @@
    <a href='04_PowerGeneration.htm'> 4. PowerGeneration module</a>
    <a href='05_Hydrogen.htm'> 5. Hydrogen module</a>
    <a href='06_CO2.htm'> 6. CO2 module</a>
+   <a href='07_Emissions.htm'> 7. Emissions module</a>
    <a href='08_Prices.htm'> 8. Prices module</a>
    <a href='09_Heat.htm'> 9. Heat module</a>
+   <a href='10_Curves.htm'>10. Curves module</a>
    </div>
   </div>
   <div class="dropdown">
@@ -269,8 +271,12 @@ $ENDIF
       )
       /1000
     )$(DSBS(SBS))$(not (ELCEF(EF) or HEATPUMP(EF) or ALTEF(EF) or H2EF(EF) or sameas(&quot;STE&quot;,EF))) +
-    (
-      VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1)
+       (VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1) +
+      sum(NAP$NAPtoALLSBS(NAP,SBS),
+      VmCarVal(allCy,NAP,YTIME)*imCo2EmiFac(allCy,SBS,EF,YTIME) - 
+      VmCarVal(allCy,NAP,YTIME-1)*imCo2EmiFac(allCy,SBS,EF,YTIME-1)
+      )
+      /1000
       !!We should account for carbon tax increase for the own consumption emissions
     )$sameas(SBS,&quot;PG&quot;) +
     VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1)$(DSBS(SBS))$ALTEF(EF) +
@@ -467,7 +473,6 @@ V08PriceFuelSepCarbonWght.FX(runCy,DSBS,EF,YTIME)$(not AN(YTIME)) = i08WgtSecAvg
 VmPriceFuelAvgSub.L(runCy,DSBS,YTIME) = 0.001;
 VmPriceFuelAvgSub.FX(runCy,DSBS,YTIME)$DATAY(YTIME) = sum(EF$SECtoEF(DSBS,EF), i08WgtSecAvgPriFueCons(runCy,DSBS,EF) * imFuelPrice(runCy,DSBS,EF,YTIME));
 V08FuelPriSubNoCarb.FX(runCy,SBS,EF,YTIME)$(SECtoEF(SBS,EF) $(not HEATPUMP(EF))  $(not An(YTIME))) = imFuelPrice(runCy,SBS,EF,YTIME);
-V08FuelPriSubNoCarb.FX(runCy,SBS,ALTEF,YTIME)$(SECtoEF(SBS,ALTEF) $(not An(YTIME))) = sum(EF$ALTMAP(SBS,ALTEF,EF),imFuelPrice(runCy,SBS,EF,YTIME));
 V08FuelPriSubNoCarb.FX(runCy,&quot;PG&quot;,&quot;NUC&quot;,YTIME) = 0.025; !! fixed price for nuclear fuel to 25Euro/toe
 V08FuelPriSubNoCarb.FX(runCy,INDDOM,&quot;HEATPUMP&quot;,YTIME)$(SECtoEF(INDDOM,&quot;HEATPUMP&quot;)$(not An(YTIME))) = imFuelPrice(runCy,INDDOM,&quot;ELC&quot;,YTIME);
 $ontext
@@ -614,21 +619,20 @@ class="math inline">\(kUS\$2015/toe\)</span></td>
 <td style="text-align: center;">Alternative Fuels used in transport</td>
 </tr>
 <tr class="odd">
-<td style="text-align: center;">ALTMAP(SBS, EF, EF)</td>
-<td style="text-align: center;">Fuels whose prices affect the prices of
-alternative fuels</td>
-</tr>
-<tr class="even">
 <td style="text-align: center;">biomass(balef)</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">DSBS(SBS)</td>
 <td style="text-align: center;">All Demand Subsectors</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">EF</td>
 <td style="text-align: center;">Energy Forms</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">EFS(EF)</td>
+<td style="text-align: center;">Energy Forms used in Supply Side</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">ELCEF(EF)</td>
@@ -690,17 +694,21 @@ running</td>
 <tr class="even">
 <td style="text-align: center;">SECtoEF(SBS, EF)</td>
 <td style="text-align: center;">Link between Model Subsectors and Energy
-FORMS</td>
+Forms consumed</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">SERV(SBS)</td>
 <td style="text-align: center;">Services</td>
 </tr>
 <tr class="even">
+<td style="text-align: center;">SSBS(SBS)</td>
+<td style="text-align: center;">All Supply Subsectors</td>
+</tr>
+<tr class="odd">
 <td style="text-align: center;">TRANS1(SBS)</td>
 <td style="text-align: center;">All Transport Subsectors</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">TRANSE(DSBS)</td>
 <td style="text-align: center;">All Transport Subsectors</td>
 </tr>

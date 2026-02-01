@@ -50,8 +50,10 @@
    <a href='04_PowerGeneration.htm'> 4. PowerGeneration module</a>
    <a href='05_Hydrogen.htm'> 5. Hydrogen module</a>
    <a href='06_CO2.htm'> 6. CO2 module</a>
+   <a href='07_Emissions.htm'> 7. Emissions module</a>
    <a href='08_Prices.htm'> 8. Prices module</a>
    <a href='09_Heat.htm'> 9. Heat module</a>
+   <a href='10_Curves.htm'>10. Curves module</a>
    </div>
   </div>
   <div class="dropdown">
@@ -123,7 +125,7 @@ CO2\)</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">VmConsFiEneSec<br />
-(allCy, EFS, YTIME)</td>
+(allCy, SSBS, EFS, YTIME)</td>
 <td style="text-align: center;">Final consumption in energy sector</td>
 <td style="text-align: center;"><span
 class="math inline">\(Mtoe\)</span></td>
@@ -322,7 +324,7 @@ or distribution inefficiencies.</p>
     VmDemTotSte(allCy,YTIME)
         =E=
     sum(DSBS,VmConsFuel(allCy,DSBS,&quot;STE&quot;,YTIME)) +
-    VmConsFiEneSec(allCy,&quot;STE&quot;,YTIME) +
+    SUM(SSBS,VmConsFiEneSec(allCy,SSBS,&quot;STE&quot;,YTIME)) +
     VmLossesDistr(allCy,&quot;STE&quot;,YTIME) +
     V03Transfers(allCy,&quot;STE&quot;,YTIME);
 Q09ScrapRate(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
@@ -351,7 +353,7 @@ Q09DemGapSte(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         VmProdSte(allCy,TSTEAM,YTIME-1)
       )
   ))
-  )/2 + 1e-6;
+  )/2;
 Q09CostVarProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V09CostVarProdSte(allCy,TSTEAM,YTIME)
         =E=
@@ -398,10 +400,10 @@ Q09CostAvgProdSte(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCostAvgProdSte(allCy,YTIME)
         =E=
     sum(TSTEAM, 
-      VmProdSte(allCy,TSTEAM,YTIME) *
+      (VmProdSte(allCy,TSTEAM,YTIME) + 1e-6) *
       V09CostProdSte(allCy,TSTEAM,YTIME)
     ) / 
-    sum(TSTEAM,VmProdSte(allCy,TSTEAM,YTIME));
+    sum(TSTEAM,VmProdSte(allCy,TSTEAM,YTIME) + 1e-6);
 Q09GapShareSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$runCy(allCy)) ..
     V09GapShareSte(allCy,TSTEAM,YTIME)
         =E=
@@ -606,17 +608,16 @@ i09AvailRateSteProd(TSTEAM,YTIME) = imDataChpPowGen(TSTEAM,&quot;AVAIL&quot;,YTI
 i09PowToHeatRatio(TSTEAM,YTIME) = i09EffSteElc(TSTEAM,YTIME) / i09EffSteThrm(TSTEAM,YTIME);
 i09ShareFuel(allCy,TCHP,EFS,YTIME)$(DATAY(YTIME) and TSTEAMTOEF(TCHP,EFS)) = 
 [
-  (i03InpCHPTransfProcess(allCy,EFS,YTIME) - 1e-6) /
-  (SUM(EFS2$TSTEAMTOEF(TCHP,EFS2),i03InpCHPTransfProcess(allCy,EFS2,YTIME) - 1e-6))
+  (i03InpTotTransfProcess(allCy,&quot;CHP&quot;,EFS,YTIME) - 1e-6) /
+  (SUM(EFS2$TSTEAMTOEF(TCHP,EFS2),i03InpTotTransfProcess(allCy,&quot;CHP&quot;,EFS,YTIME) - 1e-6))
 ];
 i09ShareFuel(allCy,TDHP,EFS,YTIME)$(DATAY(YTIME) and TSTEAMTOEF(TDHP,EFS)) = 
 [
-  (i03InpDHPTransfProcess(allCy,EFS,YTIME) - 1e-6) /
-  (SUM(EFS2$TSTEAMTOEF(TDHP,EFS2),i03InpDHPTransfProcess(allCy,EFS2,YTIME) - 1e-6))
+  (i03InpTotTransfProcess(allCy,&quot;STEAMP&quot;,EFS,YTIME) - 1e-6) /
+  (SUM(EFS2$TSTEAMTOEF(TDHP,EFS2),i03InpTotTransfProcess(allCy,&quot;STEAMP&quot;,EFS2,YTIME) - 1e-6))
 ];</code></pre>
 <p><em>VARIABLE INITIALISATION</em></p>
-<pre><code>V09DemGapSte.LO(runCy,YTIME) = 0;
-V09ScrapRatePremature.LO(runCy,TSTEAM,YTIME) = 0;
+<pre><code>V09ScrapRatePremature.LO(runCy,TSTEAM,YTIME) = 0;
 V09ScrapRatePremature.UP(runCy,TSTEAM,YTIME) = 1;
 V09GapShareSte.LO(runCy,TSTEAM,YTIME) = 0;
 V09GapShareSte.UP(runCy,TSTEAM,YTIME) = 1;
@@ -624,34 +625,59 @@ V09CaptRateSte.LO(runCy,TSTEAM,YTIME) = 0;
 V09CaptRateSte.UP(runCy,TSTEAM,YTIME) = 1;
 V09ScrapRate.LO(runCy,TSTEAM,YTIME) = 0;
 V09ScrapRate.UP(runCy,TSTEAM,YTIME) = 1;
+V09ScrapRate.L(runCy,TSTEAM,YTIME) = 0.5;
 VmDemTotSte.LO(runCy,YTIME) = 0;
+VmDemTotSte.L(runCy,YTIME) = 
+SUM(DSBS, imFuelConsPerFueSub(runCy,DSBS,&quot;STE&quot;,&quot;%fBaseY%&quot;)) +
+i03TotEneBranchCons(runCy,&quot;STE&quot;,&quot;%fBaseY%&quot;) +
+imDistrLosses(runCy,&quot;STE&quot;,&quot;%fBaseY%&quot;) +
+i03FeedTransfr(runCy,&quot;STE&quot;,&quot;%fBaseY%&quot;);
 VmDemTotSte.FX(runCy,YTIME)$DATAY(YTIME) = 
 SUM(DSBS, imFuelConsPerFueSub(runCy,DSBS,&quot;STE&quot;,YTIME)) +
 i03TotEneBranchCons(runCy,&quot;STE&quot;,YTIME) +
 imDistrLosses(runCy,&quot;STE&quot;,YTIME) +
 i03FeedTransfr(runCy,&quot;STE&quot;,YTIME);
 VmProdSte.LO(runCy,TSTEAM,YTIME) = 0;
-VmProdSte.L(runCy,TSTEAM,YTIME) = 1;
+VmProdSte.L(runCy,TSTEAM,YTIME) = 
+(
+  SUM(EFS$TSTEAMTOEF(TSTEAM,EFS),i03InpTotTransfProcess(runCy,&quot;CHP&quot;,EFS,&quot;%fBaseY%&quot;) * i09EffSteThrm(TSTEAM,&quot;%fBaseY%&quot;) - 1e-6) /
+  SUM(EFS$STEAMEF(EFS),i03InpTotTransfProcess(runCy,&quot;CHP&quot;,EFS,&quot;%fBaseY%&quot;) * i09EffSteThrm(TSTEAM,&quot;%fBaseY%&quot;) - 1e-6) * 
+  (
+    SUM(DSBS$(not DOMSE(DSBS)), imFuelConsPerFueSub(runCy,DSBS,&quot;STE&quot;,&quot;%fBaseY%&quot;)) +
+    i03TotEneBranchCons(runCy,&quot;STE&quot;,&quot;%fBaseY%&quot;) +
+    imDistrLosses(runCy,&quot;STE&quot;,&quot;%fBaseY%&quot;) / 2 +
+    i03FeedTransfr(runCy,&quot;STE&quot;,&quot;%fBaseY%&quot;) / 2
+  )
+)$TCHP(TSTEAM) +
+(
+  SUM(EFS$TSTEAMTOEF(TSTEAM,EFS),i03InpTotTransfProcess(runCy,&quot;STEAMP&quot;,EFS,&quot;%fBaseY%&quot;) * i09EffSteThrm(TSTEAM,&quot;%fBaseY%&quot;) - 1e-6) /
+  SUM(EFS$STEAMEF(EFS),i03InpTotTransfProcess(runCy,&quot;STEAMP&quot;,EFS,&quot;%fBaseY%&quot;) * i09EffSteThrm(TSTEAM,&quot;%fBaseY%&quot;) - 1e-6) * 
+  (
+    SUM(DSBS$DOMSE(DSBS), imFuelConsPerFueSub(runCy,DSBS,&quot;STE&quot;,&quot;%fBaseY%&quot;)) +
+    imDistrLosses(runCy,&quot;STE&quot;,&quot;%fBaseY%&quot;) / 2 +
+    i03FeedTransfr(runCy,&quot;STE&quot;,&quot;%fBaseY%&quot;) / 2
+  )
+)$TDHP(TSTEAM);
 VmProdSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) = 
 (
-  SUM(EFS$TSTEAMTOEF(TSTEAM,EFS),i03InpCHPTransfProcess(runCy,EFS,YTIME) * i09EffSteThrm(TSTEAM,YTIME)) /
-  SUM(EFS$STEAMEF(EFS),i03InpCHPTransfProcess(runCy,EFS,YTIME) * i09EffSteThrm(TSTEAM,YTIME)) * 
+  SUM(EFS$TSTEAMTOEF(TSTEAM,EFS),i03InpTotTransfProcess(runCy,&quot;CHP&quot;,EFS,YTIME) * i09EffSteThrm(TSTEAM,YTIME) - 1e-6) /
+  SUM(EFS$STEAMEF(EFS),i03InpTotTransfProcess(runCy,&quot;CHP&quot;,EFS,YTIME) * i09EffSteThrm(TSTEAM,YTIME) - 1e-6) * 
   (
     SUM(DSBS$(not DOMSE(DSBS)), imFuelConsPerFueSub(runCy,DSBS,&quot;STE&quot;,YTIME)) +
     i03TotEneBranchCons(runCy,&quot;STE&quot;,YTIME) +
     imDistrLosses(runCy,&quot;STE&quot;,YTIME) / 2 +
     i03FeedTransfr(runCy,&quot;STE&quot;,YTIME) / 2
   )
-)$(TCHP(TSTEAM) and SUM(EFS,i03InpCHPTransfProcess(runCy,EFS,YTIME) * i09EffSteThrm(TSTEAM,YTIME))) +
+)$TCHP(TSTEAM) +
 (
-  SUM(EFS$TSTEAMTOEF(TSTEAM,EFS),i03InpDHPTransfProcess(runCy,EFS,YTIME) * i09EffSteThrm(TSTEAM,YTIME)) /
-  SUM(EFS$STEAMEF(EFS),i03InpDHPTransfProcess(runCy,EFS,YTIME) * i09EffSteThrm(TSTEAM,YTIME)) * 
+  SUM(EFS$TSTEAMTOEF(TSTEAM,EFS),i03InpTotTransfProcess(runCy,&quot;STEAMP&quot;,EFS,YTIME) * i09EffSteThrm(TSTEAM,YTIME) - 1e-6) /
+  SUM(EFS$STEAMEF(EFS),i03InpTotTransfProcess(runCy,&quot;STEAMP&quot;,EFS,YTIME) * i09EffSteThrm(TSTEAM,YTIME) - 1e-6) * 
   (
     SUM(DSBS$DOMSE(DSBS), imFuelConsPerFueSub(runCy,DSBS,&quot;STE&quot;,YTIME)) +
     imDistrLosses(runCy,&quot;STE&quot;,YTIME) / 2 +
     i03FeedTransfr(runCy,&quot;STE&quot;,YTIME) / 2
   )
-)$(TDHP(TSTEAM) and SUM(EFS,i03InpDHPTransfProcess(runCy,EFS,YTIME) * i09EffSteThrm(TSTEAM,YTIME)));
+)$TDHP(TSTEAM);
 V09CaptRateSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) = i09CaptRateSteProd(TSTEAM);
 V09CostCapProdSte.LO(runCy,TSTEAM,YTIME) = 0;
 V09CostCapProdSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) =
@@ -670,6 +696,7 @@ V09CostCapProdSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) =
   smTWhToMtoe * 1e3
 );
 V09CostVarProdSte.LO(runCy,TSTEAM,YTIME) = epsilon6;
+V09CostVarProdSte.L(runCy,TSTEAM,YTIME) = 1;
 V09CostVarProdSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) =
 sum(EF$TSTEAMTOEF(TSTEAM,EF),
   (
@@ -687,15 +714,24 @@ i09CostVOMSteProd(TSTEAM,YTIME) * 1e-3 / smTWhToMtoe * VmPriceElecInd.L(runCy,YT
   smFracElecPriChp *
   VmPriceElecInd.L(runCy,YTIME)
 )$TCHP(TSTEAM);
-V09CostProdSte.LO(runCy,TSTEAM,YTIME) = epsilon6;
-V09CostProdSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) = V09CostCapProdSte.L(runCy,TSTEAM,YTIME) +
-V09CostVarProdSte.L(runCy,TSTEAM,YTIME);
-VmCostAvgProdSte.LO(runCy,YTIME) = epsilon6;
-VmCostAvgProdSte.FX(runCy,YTIME)$DATAY(YTIME) = 0;
+V09CostProdSte.LO(runCy,TSTEAM,YTIME) = 0;
+V09CostProdSte.L(runCy,TSTEAM,YTIME) = 1;
+V09CostProdSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) = 
+V09CostCapProdSte.L(runCy,TSTEAM,YTIME) + V09CostVarProdSte.L(runCy,TSTEAM,YTIME);
+VmCostAvgProdSte.LO(runCy,YTIME) = 0;
+VmCostAvgProdSte.L(runCy,YTIME) = 1;
+VmCostAvgProdSte.FX(runCy,YTIME)$DATAY(YTIME) = 
+sum(TSTEAM, 
+  (VmProdSte.L(runCy,TSTEAM,YTIME) + 1e-6) *
+  V09CostProdSte.L(runCy,TSTEAM,YTIME)
+) / 
+sum(TSTEAM,VmProdSte.L(runCy,TSTEAM,YTIME) + 1e-6) ;
 VmConsFuelSteProd.LO(runCy,STEMODE,EFS,YTIME) = 0;
 VmConsFuelSteProd.FX(runCy,STEMODE,EFS,YTIME)$(not STEAMEF(EFS)) = 0;
-VmConsFuelSteProd.FX(runCy,&quot;CHP&quot;,STEAMEF,YTIME)$DATAY(YTIME) = -i03InpCHPTransfProcess(runCy,STEAMEF,YTIME);
-VmConsFuelSteProd.FX(runCy,&quot;DHP&quot;,STEAMEF,YTIME)$DATAY(YTIME) = -i03InpDHPTransfProcess(runCy,STEAMEF,YTIME);</code></pre>
+VmConsFuelSteProd.FX(runCy,&quot;CHP&quot;,STEAMEF,YTIME)$DATAY(YTIME) = -i03InpTotTransfProcess(runCy,&quot;CHP&quot;,STEAMEF,YTIME);
+VmConsFuelSteProd.FX(runCy,&quot;DHP&quot;,STEAMEF,YTIME)$DATAY(YTIME) = -i03InpTotTransfProcess(runCy,&quot;STEAMP&quot;,STEAMEF,YTIME);
+V09DemGapSte.LO(runCy,YTIME) = 0;
+V09DemGapSte.L(runCy,YTIME) = 1;</code></pre>
 <blockquote>
 <p><strong>Limitations</strong> There are no known limitations.</p>
 </blockquote>
@@ -1621,30 +1657,34 @@ running</td>
 <td style="text-align: center;">Model Subsectors</td>
 </tr>
 <tr class="even">
+<td style="text-align: center;">SSBS(SBS)</td>
+<td style="text-align: center;">All Supply Subsectors</td>
+</tr>
+<tr class="odd">
 <td style="text-align: center;">STEAM(EFS)</td>
 <td style="text-align: center;">Steam</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">STEAMEF(EFS)</td>
 <td style="text-align: center;">Fuels used for steam production</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">STEMODE</td>
 <td style="text-align: center;">Steam production modes</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">TCHP(TSTEAM)</td>
 <td style="text-align: center;">CHP plant technologies</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">TDHP(TSTEAM)</td>
 <td style="text-align: center;">CHP plant technologies</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">TSTEAM</td>
 <td style="text-align: center;">CHP &amp; DHP plant technologies</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">TSTEAMTOEF(TSTEAM, EF)</td>
 <td style="text-align: center;">Correspondence between chp plants and
 energy forms</td>

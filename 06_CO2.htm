@@ -50,8 +50,10 @@
    <a href='04_PowerGeneration.htm'> 4. PowerGeneration module</a>
    <a href='05_Hydrogen.htm'> 5. Hydrogen module</a>
    <a href='06_CO2.htm'> 6. CO2 module</a>
+   <a href='07_Emissions.htm'> 7. Emissions module</a>
    <a href='08_Prices.htm'> 8. Prices module</a>
    <a href='09_Heat.htm'> 9. Heat module</a>
+   <a href='10_Curves.htm'>10. Curves module</a>
    </div>
   </div>
   <div class="dropdown">
@@ -207,7 +209,6 @@ IND
 <pre><code>Equations
 Q06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME)                              &quot;Compute CO2 captured by electricity and hydrogen production plants (Mtn CO2)&quot;
 Q06CaptCummCO2(allCy,YTIME)                                &quot;Compute cumulative CO2 captured (Mtn of CO2)&quot;
-Q06TrnsWghtLinToExp(allCy,YTIME)                           &quot;Transtition weight for shifting from linear to exponential CO2 sequestration cost curve&quot;
 Q06GrossCapDAC(DACTECH,YTIME)                        &quot;Computes CAPEX of DAC technologies with learning curve&quot;
 Q06FixOandMDAC(DACTECH,YTIME)                        &quot;Computes Fixed and O&amp;M costs of DAC technologies with learning curve&quot;
 Q06LvlCostDAC(allCy,DACTECH,YTIME)                         &quot;Calculates the CAPEX and the Fixed Costs of DAC capacity regionally (US$2015/tCO2)&quot;
@@ -223,7 +224,6 @@ Q06ConsFuelDACProd(allCy,EF,YTIME)                         &quot;Computed the an
 Variables
 V06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME)                   &quot;CO2 captured by electricity and hydrogen production plants (Mtn CO2)&quot;
 V06CaptCummCO2(allCy,YTIME)                               &quot;Cumulative CO2 captured (Mtn CO2)&quot;
-V06TrnsWghtLinToExp(allCy,YTIME)                           &quot;Weight for transtition from linear CO2 sequestration cost curve to exponential (1)&quot;
 V06GrossCapDAC(DACTECH,YTIME)                        &quot;CAPEX of DAC technologies with learning curve&quot;
 V06FixOandMDAC(DACTECH,YTIME)                        &quot;Fixed and O&amp;M costs of DAC technologies with learning curve&quot;
 V06VarCostDAC(DACTECH,YTIME)                         &quot;Variable costs of DAC technologies including carbon storage costs, with learning curve&quot;
@@ -310,22 +310,7 @@ total CO2 capture over time in the specified scenario.</p>
     V06CaptCummCO2(allCy,YTIME-1) +
     SUM(CO2CAPTECH,
       V06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME)
-    )
- ;   </code></pre>
-<p>The equation computes the transition weight from a linear to
-exponential CO2 sequestration cost curve for a specific scenario and
-year. The transition weight is determined based on the cumulative CO2
-captured and parameters defining the transition characteristics.The
-transition weight is calculated using a logistic function. This equation
-provides a mechanism to smoothly transition from a linear to exponential
-cost curve based on the cumulative CO2 captured, allowing for a
-realistic representation of the cost dynamics associated with CO2
-sequestration. The result represents the weight for the transition in
-the specified scenario and year.</p>
-<pre><code>Q06TrnsWghtLinToExp(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V06TrnsWghtLinToExp(allCy,YTIME)
-        =E=
-    0.6;
+    );   
 $ontext
     1 /
     (1 + exp(-i06ElastCO2Seq(allCy,&quot;mc_s&quot;) * (V06CaptCummCO2(allCy,YTIME)*1e3 /i06ElastCO2Seq(allCy,&quot;pot&quot;)-i06ElastCO2Seq(allCy,&quot;mc_m&quot;)))); 
@@ -348,10 +333,10 @@ the specified scenario and year.</p>
     VmCstCO2SeqCsts(allCy,YTIME) 
         =E=
     !! linear component
-    V06TrnsWghtLinToExp(allCy,YTIME) * 
+    0.6 * 
     i06ElastCO2Seq(allCy,&quot;mc_b&quot;) +
     !! exponential component
-    (1-V06TrnsWghtLinToExp(allCy,YTIME)) *
+    (1-0.6) *
     i06ElastCO2Seq(allCy,&quot;mc_b&quot;) *
     exp(V06CaptCummCO2(allCy,YTIME) / i06ElastCO2Seq(allCy,&quot;mc_d&quot;));           </code></pre>
 <p>The equation calculates the CAPEX of each DAC technology, as it’s
@@ -425,22 +410,19 @@ revenues/avoided costs (carbon values, carbon subsidies) regionally.</p>
 <pre><code>Q06ProfRateDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06ProfRateDAC(allCy,DACTECH,YTIME)
         =E=
-    (i06SubsFacDAC(DACTECH) * sum(NAP$NAPtoALLSBS(NAP,&quot;DAC&quot;),VmCarVal(allCy,NAP,YTIME))) / 
-    V06LvlCostDAC(allCy,DACTECH,YTIME - 1)
-;</code></pre>
+    i06SubsFacDAC(DACTECH) * 
+    sum(NAP$NAPtoALLSBS(NAP,&quot;DAC&quot;),VmCarVal(allCy,NAP,YTIME)) / 
+    V06LvlCostDAC(allCy,DACTECH,YTIME - 1);</code></pre>
 <p>The equation estimates the annual increase rate of DAC capacity
 regionally, according to the maturity and profitability of each
 technology.</p>
 <pre><code>Q06CapFacNewDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V06CapFacNewDAC(allCy,DACTECH,YTIME)
-         =E=
-          (
-            (exp(i06MatFacDAC(DACTECH) * V06ProfRateDAC(allCy,DACTECH,YTIME) - 1)) /
-           (exp(i06MatFacDAC(DACTECH) * S06ProfRateMaxDAC - 1))
-          ) *
-          (S06CapFacMaxNewDAC - S06CapFacMinNewDAC) +
-          S06CapFacMinNewDAC
-;</code></pre>
+  V06CapFacNewDAC(allCy,DACTECH,YTIME)
+      =E=
+  exp(i06MatFacDAC(DACTECH) * V06ProfRateDAC(allCy,DACTECH,YTIME) - 1) /
+  exp(i06MatFacDAC(DACTECH) * S06ProfRateMaxDAC - 1) *
+  (S06CapFacMaxNewDAC - S06CapFacMinNewDAC) +
+  S06CapFacMinNewDAC;</code></pre>
 <p>The equation calculates the DAC installed capacity annually and
 regionally, adding capacity based on the maturity of the technology, as
 well as given capacities of actual scheduled DAC units.</p>
@@ -622,8 +604,11 @@ i06SpecHeatDAC(runCy,DACTECH,YTIME) = i06HeatNeedsDAC(DACTECH);</code></pre>
 !!VmCstCO2SeqCsts.FX(runCy,YTIME)$(not an(YTIME)) = i06ElastCO2Seq(runCy,&quot;mc_b&quot;);
 V06CapCO2ElecHydr.FX(runCy,CO2CAPTECH,YTIME)$(not An(YTIME)) = 0;
 V06CaptCummCO2.FX(runCy,YTIME)$(not an(YTIME)) = 0 ;
-V06LvlCostDAC.FX(runCy,DACTECH,YTIME)$(not an(YTIME)) = 100;
-V06CapDAC.FX(runCy,DACTECH,YTIME)$(not an(YTIME)) = 1;</code></pre>
+V06LvlCostDAC.LO(runCy,DACTECH,YTIME) = epsilon6;
+V06LvlCostDAC.L(runCy,DACTECH,YTIME) = 100;
+V06LvlCostDAC.FX(runCy,DACTECH,YTIME)$DATAY(YTIME) = 100;
+V06CapDAC.FX(runCy,DACTECH,YTIME)$(not an(YTIME)) = 1;
+V06ProfRateDAC.LO(runCy,DACTECH,YTIME) = 0;</code></pre>
 <blockquote>
 <p><strong>Limitations</strong> There are no known limitations.</p>
 </blockquote>
@@ -947,14 +932,6 @@ of DAC including the lifecycle costs and revenues regionally</td>
 <td style="text-align: center;">x</td>
 </tr>
 <tr class="even">
-<td style="text-align: center;">Q06TrnsWghtLinToExp<br />
-(allCy, YTIME)</td>
-<td style="text-align: center;">Transtition weight for shifting from
-linear to exponential CO2 sequestration cost curve</td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;">x</td>
-</tr>
-<tr class="odd">
 <td style="text-align: center;">Q06VarCostDAC<br />
 (DACTECH, YTIME)</td>
 <td style="text-align: center;">Computes variable costs of DAC
@@ -962,28 +939,28 @@ technologies including carbon storage costs, with learning curve</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">S06CapFacMaxNewDAC</td>
 <td style="text-align: center;">The maximum level of the
 V06DACNewCapFac</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">S06CapFacMinNewDAC</td>
 <td style="text-align: center;">The minimum level of the
 V06DACNewCapFac</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">S06ProfRateMaxDAC</td>
 <td style="text-align: center;">The maximum profitability rate of
 V06DACProfRate</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">V06CapCO2ElecHydr<br />
 (allCy, CO2CAPTECH, YTIME)</td>
 <td style="text-align: center;">CO2 captured by electricity and hydrogen
@@ -992,7 +969,7 @@ production plants</td>
 CO2\)</span></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">V06CapDAC<br />
 (allCy, DACTECH, YTIME)</td>
 <td style="text-align: center;">DAC regional installed capacity</td>
@@ -1000,7 +977,7 @@ CO2\)</span></td>
 class="math inline">\(tCO2\)</span></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">V06CapFacNewDAC<br />
 (allCy, DACTECH, YTIME)</td>
 <td style="text-align: center;">Factor expressing the annual increase in
@@ -1008,7 +985,7 @@ the installed capacity of DAC regionally</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">V06CaptCummCO2<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Cumulative CO2 captured</td>
@@ -1016,7 +993,7 @@ the installed capacity of DAC regionally</td>
 CO2\)</span></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">V06FixOandMDAC<br />
 (DACTECH, YTIME)</td>
 <td style="text-align: center;">Fixed and O&amp;M costs of DAC
@@ -1024,7 +1001,7 @@ technologies with learning curve</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">V06GrossCapDAC<br />
 (DACTECH, YTIME)</td>
 <td style="text-align: center;">CAPEX of DAC technologies with learning
@@ -1032,7 +1009,7 @@ curve</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">V06LvlCostDAC<br />
 (allCy, DACTECH, YTIME)</td>
 <td style="text-align: center;">Regional CAPEX and the Fixed Costs of
@@ -1041,21 +1018,12 @@ DAC capacity</td>
 class="math inline">\(US\$2015/tCO2\)</span></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">V06ProfRateDAC<br />
 (allCy, DACTECH, YTIME)</td>
 <td style="text-align: center;">The annual profitability rate of DAC
 including the lifecycle costs and revenues regionally</td>
 <td style="text-align: center;"></td>
-<td style="text-align: center;">x</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">V06TrnsWghtLinToExp<br />
-(allCy, YTIME)</td>
-<td style="text-align: center;">Weight for transtition from linear CO2
-sequestration cost curve to exponential</td>
-<td style="text-align: center;"><span
-class="math inline">\(1\)</span></td>
 <td style="text-align: center;">x</td>
 </tr>
 <tr class="even">
@@ -1078,11 +1046,11 @@ class="math inline">\(Mtoe\)</span></td>
 </tbody>
 </table>
 <h3 id="sets">Sets</h3>
-<table style="width:76%;">
+<table style="width:78%;">
 <caption>sets in use</caption>
 <colgroup>
 <col style="width: 31%" />
-<col style="width: 44%" />
+<col style="width: 45%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -1131,6 +1099,15 @@ curve</td>
 <td style="text-align: center;">Energy Forms</td>
 </tr>
 <tr class="even">
+<td style="text-align: center;">EFS(EF)</td>
+<td style="text-align: center;">Energy Forms used in Supply Side</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">H2CCS(H2TECH)</td>
+<td style="text-align: center;">Hydrogen production technologies
+equipped with CCS facility</td>
+</tr>
+<tr class="even">
 <td style="text-align: center;">H2TECH</td>
 <td style="text-align: center;">Hydrogen production technologies</td>
 </tr>
@@ -1160,7 +1137,7 @@ categories</td>
 sectors</td>
 </tr>
 <tr class="even">
-<td style="text-align: center;">PGALL</td>
+<td style="text-align: center;">PGALL(STECH)</td>
 <td style="text-align: center;">Power Generation Plant Types</td>
 </tr>
 <tr class="odd">
@@ -1193,6 +1170,10 @@ running</td>
 Technologies</td>
 </tr>
 <tr class="odd">
+<td style="text-align: center;">SSBS(SBS)</td>
+<td style="text-align: center;">All Supply Subsectors</td>
+</tr>
+<tr class="even">
 <td style="text-align: center;">TECHtoEF</td>
 <td style="text-align: center;">(TECHEF) Fuels consumed by
 technologies</td>

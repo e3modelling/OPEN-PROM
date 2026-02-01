@@ -50,8 +50,10 @@
    <a href='04_PowerGeneration.htm'> 4. PowerGeneration module</a>
    <a href='05_Hydrogen.htm'> 5. Hydrogen module</a>
    <a href='06_CO2.htm'> 6. CO2 module</a>
+   <a href='07_Emissions.htm'> 7. Emissions module</a>
    <a href='08_Prices.htm'> 8. Prices module</a>
    <a href='09_Heat.htm'> 9. Heat module</a>
+   <a href='10_Curves.htm'>10. Curves module</a>
    </div>
   </div>
   <div class="dropdown">
@@ -129,7 +131,7 @@ CO2\)</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">VmConsFiEneSec<br />
-(allCy, EFS, YTIME)</td>
+(allCy, SSBS, EFS, YTIME)</td>
 <td style="text-align: center;">Final consumption in energy sector</td>
 <td style="text-align: center;"><span
 class="math inline">\(Mtoe\)</span></td>
@@ -175,6 +177,15 @@ class="math inline">\(US\$2015/KWh\)</span></td>
 <td style="text-align: center;"></td>
 </tr>
 <tr class="odd">
+<td style="text-align: center;">VmCostLC<br />
+(LCTECH, YTIME)</td>
+<td style="text-align: center;">Learning curve cost multiplier</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
 <td style="text-align: center;">VmCstCO2SeqCsts<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Cost curve for CO2 sequestration
@@ -186,7 +197,7 @@ sequestrated\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">VmDemFinEneTranspPerFuel<br />
 (allCy, TRANSE, EF, YTIME)</td>
 <td style="text-align: center;">Final energy demand in transport
@@ -196,7 +207,7 @@ class="math inline">\(Mtoe\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">VmImpNetEneBrnch<br />
 (allCy, EFS, YTIME)</td>
 <td style="text-align: center;">Net Imports</td>
@@ -205,7 +216,7 @@ class="math inline">\(Mtoe\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">VmLossesDistr<br />
 (allCy, EFS, YTIME)</td>
 <td style="text-align: center;">Distribution losses</td>
@@ -214,7 +225,7 @@ class="math inline">\(Mtoe\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">VmPriceElecInd<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Electricity index - a function of
@@ -224,7 +235,7 @@ class="math inline">\(1\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">VmPriceFuelSubsecCarVal<br />
 (allCy, SBS, EF, YTIME)</td>
 <td style="text-align: center;">Fuel prices per subsector and fuel</td>
@@ -233,7 +244,7 @@ class="math inline">\(k\$2015/toe\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">VmRenValue<br />
 (YTIME)</td>
 <td style="text-align: center;">Renewable value</td>
@@ -1662,7 +1673,7 @@ the total electricity demand.</p>
       VmConsFinEneCountry(allCy,&quot;ELC&quot;,YTIME) + 
       VmConsFinNonEne(allCy,&quot;ELC&quot;,YTIME) + 
       VmLossesDistr(allCy,&quot;ELC&quot;,YTIME) +
-      VmConsFiEneSec(allCy,&quot;ELC&quot;,YTIME) - 
+      SUM(SSBS,VmConsFiEneSec(allCy,SSBS,&quot;ELC&quot;,YTIME)) - 
       VmImpNetEneBrnch(allCy,&quot;ELC&quot;,YTIME)
     );
 $endif.calib</code></pre>
@@ -1701,14 +1712,26 @@ peak load.</p>
     VmPeakLoad(allCy,YTIME) / VmPeakLoad(allCy,YTIME-1);          </code></pre>
 <p>This equation calculates the CAPEX and the Fixed Costs of each power
 generation unit, taking into account its discount rate and life
-expectancy, for each region (country) and year.</p>
+expectancy, for each region (country) and year. Learning curves applied
+only to CAPEX costs with cost breakdown. Formula: Cost =
+[LearnableFraction × CostMultiplier + (1-LearnableFraction)] ×
+InitialCost</p>
 <pre><code>Q04CapexFixCostPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04CapexFixCostPG(allCy,PGALL,YTIME)
         =E=         
     ( 
       imDisc(allCy,&quot;PG&quot;,YTIME) * exp(imDisc(allCy,&quot;PG&quot;,YTIME) * i04TechLftPlaType(allCy,PGALL))
       / (exp(imDisc(allCy,&quot;PG&quot;,YTIME) * i04TechLftPlaType(allCy,PGALL)) -1)
-    ) * i04GrossCapCosSubRen(allCy,PGALL,YTIME) * 1000 * imCGI(allCy,YTIME) +
+    ) * i04GrossCapCosSubRen(allCy,PGALL,YTIME) * 1000 * imCGI(allCy,YTIME) 
+    * 
+    (
+$ifthen.curves &quot;%Curves%&quot; == &quot;LearningCurves&quot; 
+        sum(LCTECH$sameas(LCTECH,PGALL), i10LearnableFraction(LCTECH) * VmCostLC(LCTECH,YTIME) + (1 - i10LearnableFraction(LCTECH)))$LCTECH(PGALL)
+        + 1$(not LCTECH(PGALL))
+$else.curves
+        1 
+$endif.curves
+    ) +
     i04FixOandMCost(allCy,PGALL,YTIME);
 Q04CostCapTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
     V04CostCapTech(allCy,PGALL,YTIME) 
@@ -1808,7 +1831,7 @@ calculation.</p>
         )
       ))
       ) 
-    )/2 + 1e-6;</code></pre>
+    )/2;</code></pre>
 <p>Calculates the share of all the unflexible RES penetration into the
 mixture, and specifically how much above a given threshold it is.</p>
 <pre><code>Q04ShareMixWndSol(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
@@ -1970,10 +1993,8 @@ the given time period.</p>
 <pre><code>Q04CostPowGenAvgLng(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCostPowGenAvgLng(allCy,YTIME)
         =E=
-    (
-      SUM(PGALL, VmProdElec(allCy,PGALL,YTIME) * V04CostHourProdInvDec(allCy,PGALL,YTIME))
-    ) / 
-    (V04DemElecTot(allCy,YTIME) - V04ProdElecEstCHP(allCy,YTIME)); </code></pre>
+    SUM(PGALL,VmProdElec(allCy,PGALL,YTIME) * V04CostHourProdInvDec(allCy,PGALL,YTIME)) / 
+    (SUM(PGALL,VmProdElec(allCy,PGALL,YTIME)) + 1e-6); </code></pre>
 <p>This equation estimates the factor increasing the CAPEX of new RES
 (unflexible) capacity installation due to simultaneous need for grind
 upgrade and storage, for each region (country) and year. This factor
@@ -2141,16 +2162,6 @@ $ondelim
 $include&quot;./iDecomPlants.csv&quot;
 $offdelim
 ;
-table i03InpPGTransfProcess(allCy,EFS,YTIME)          &quot;&quot;    
-$ondelim
-$include&quot;./iInpPGTransfProcess.csv&quot;
-$offdelim
-;
-table i03OutPGTransfProcess(allCy,ELCEF,YTIME)        &quot;&quot;    
-$ondelim
-$include&quot;./iOutPGTransfProcess.csv&quot;
-$offdelim
-;
 $IFTHEN.calib %Calibration% == MatCalibration
 variable i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   &quot;Maturity factor related to plant available capacity (1)&quot;;
 table i04MatFacPlaAvailCapL(allCy,PGALL,YTIME)     &quot;Maturity factor related to plant available capacity (1)&quot;
@@ -2268,7 +2279,7 @@ ENDLOOP;
 i04ScaleEndogScrap = 2 / card(PGALL);
 i04DecInvPlantSched(runCy,PGALL,YTIME) = i04InvPlants(runCy,PGALL,YTIME);
 i04PlantDecomSched(runCy,PGALL,YTIME) = i04DecomPlants(runCy,PGALL,YTIME);
-i04MxmShareChpElec(runCy,YTIME) = 0.6;</code></pre>
+i04MxmShareChpElec(runCy,YTIME) = 0.3;</code></pre>
 <p><em>VARIABLE INITIALISATION</em></p>
 <pre><code>V04ShareTechPG.LO(runCy,PGALL,YTIME)$DATAY(YTIME) = 0;
 V04ShareTechPG.UP(runCy,PGALL,YTIME)$DATAY(YTIME) = 1;
@@ -2323,7 +2334,14 @@ V04LoadFacDom.FX(runCy,YTIME)$(datay(YTIME)) =
 $ifthen.calib %Calibration% == MatCalibration
 V04DemElecTot.FX(runCy,YTIME) = t04DemElecTot(runCy,YTIME);
 $else.calib
-V04DemElecTot.L(runCy,YTIME) = 10;
+V04DemElecTot.L(runCy,YTIME) = 
+1/smTWhToMtoe * 
+(
+  sum(DSBS, imFuelConsPerFueSub(runCy,DSBS,&quot;ELC&quot;,&quot;%fBaseY%&quot;)) +
+  imDistrLosses(runCy,&quot;ELC&quot;,&quot;%fBaseY%&quot;) +
+  i03TotEneBranchCons(runCy,&quot;ELC&quot;,&quot;%fBaseY%&quot;) -
+  (imFuelImports(runCy,&quot;ELC&quot;,&quot;%fBaseY%&quot;)- imFuelExprts(runCy,&quot;ELC&quot;,&quot;%fBaseY%&quot;))
+);
 V04DemElecTot.FX(runCy,YTIME)$DATAY(YTIME) = 
 1/smTWhToMtoe * 
 (
@@ -2335,7 +2353,7 @@ V04DemElecTot.FX(runCy,YTIME)$DATAY(YTIME) =
 $endif.calib
 VmPeakLoad.L(runCy,YTIME) = 1;
 VmPeakLoad.FX(runCy,YTIME)$(datay(YTIME)) = V04DemElecTot.L(runCy,YTIME)/(V04LoadFacDom.L(runCy,YTIME)*8.76);
-VmProdElec.L(runCy,pgall,YTIME) = 1;
+VmProdElec.L(runCy,pgall,YTIME) = i04DataElecProdNonCHP(runCy,pgall,YTIME) / 1000 + 1;
 VmProdElec.FX(runCy,pgall,YTIME)$DATAY(YTIME) = i04DataElecProdNonCHP(runCy,pgall,YTIME) / 1000;
 V04ProdElecEstCHP.FX(runCy,YTIME)$DATAY(YTIME) = SUM(EF,i04DataElecProdCHP(runCy,EF,YTIME)) / 1000;
 V04ShareMixWndSol.FX(runCy,YTIME)$DATAY(YTIME) = sum(PGALL$PGRENSW(PGALL), VmCapElec.L(runCy,PGALL,YTIME)) / sum(PGALL2, VmCapElec.L(runCy,PGALL2,YTIME));
@@ -2350,7 +2368,8 @@ SUM(PGALL$PGALLTOEF(PGALL,PGEF),
   VmProdElec.L(runCy,PGALL,YTIME) * smTWhToMtoe / 
   imPlantEffByType(runCy,PGALL,YTIME)
 );
-VmConsFuelElecProd.FX(runCy,PGEF,YTIME)$DATAY(YTIME) = -i03InpPGTransfProcess(runCy,PGEF,YTIME);</code></pre>
+VmConsFuelElecProd.FX(runCy,PGEF,YTIME)$DATAY(YTIME) = -i03InpTotTransfProcess(runCy,&quot;PG&quot;,PGEF,YTIME);
+V04GapGenCapPowerDiff.LO(runCy,YTIME) = 0;</code></pre>
 <blockquote>
 <p><strong>Limitations</strong> There are no known limitations.</p>
 </blockquote>
@@ -2380,22 +2399,6 @@ VmConsFuelElecProd.FX(runCy,PGEF,YTIME)$DATAY(YTIME) = -i03InpPGTransfProcess(ru
 <td style="text-align: center;"></td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
-<td style="text-align: center;">x</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">i03InpPGTransfProcess<br />
-(allCy, EFS, YTIME)</td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;">x</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">i03OutPGTransfProcess<br />
-(allCy, ELCEF, YTIME)</td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
 <tr class="even">
@@ -3817,21 +3820,22 @@ of the model</td>
 <td style="text-align: center;">Energy Forms used in Supply Side</td>
 </tr>
 <tr class="even">
-<td style="text-align: center;">ELCEF(EF)</td>
-<td style="text-align: center;">Electricity</td>
-</tr>
-<tr class="odd">
 <td style="text-align: center;">HOU</td>
 <td style="text-align: center;">11.511 0.9 0.00001</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">hour</td>
 <td style="text-align: center;">Segments of hours in a year
 (250,1250,…,8250)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">INDDOM(DSBS)</td>
 <td style="text-align: center;">Industry and Tertiary</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">LCTECH(PGALL)</td>
+<td style="text-align: center;">Technologies with learning curves -
+subset of PGALL</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">NAP(Policies_set)</td>
@@ -3858,7 +3862,7 @@ but they are not</td>
 years</td>
 </tr>
 <tr class="odd">
-<td style="text-align: center;">PGALL</td>
+<td style="text-align: center;">PGALL(STECH)</td>
 <td style="text-align: center;">Power Generation Plant Types</td>
 </tr>
 <tr class="even">
@@ -3923,24 +3927,28 @@ running</td>
 <td style="text-align: center;">Model Subsectors</td>
 </tr>
 <tr class="odd">
+<td style="text-align: center;">SSBS(SBS)</td>
+<td style="text-align: center;">All Supply Subsectors</td>
+</tr>
+<tr class="even">
 <td style="text-align: center;">time(ytime)</td>
 <td style="text-align: center;">Model time horizon used in equation
 definitions</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">TOCTEF(EFS)</td>
 <td style="text-align: center;">Energy forms produced by power plants
 and boilers</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">TRANSE(DSBS)</td>
 <td style="text-align: center;">All Transport Subsectors</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">VARIOUS_LABELS</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">ytime</td>
 <td style="text-align: center;">Model time horizon</td>
 </tr>
@@ -3951,7 +3959,9 @@ and boilers</td>
 href="02_Industry.htm">02_Industry</a>, <a
 href="03_RestOfEnergy.htm">03_RestOfEnergy</a>, <a
 href="05_Hydrogen.htm">05_Hydrogen</a>, <a href="06_CO2.htm">06_CO2</a>,
-<a href="08_Prices.htm">08_Prices</a>, <a href="core.htm">core</a></p>
+<a href="07_Emissions.htm">07_Emissions</a>, <a
+href="08_Prices.htm">08_Prices</a>, <a
+href="10_Curves.htm">10_Curves</a>, <a href="core.htm">core</a></p>
 <h2 id="references">References</h2>
 <script>
 window.onscroll = function() {myFunction()};

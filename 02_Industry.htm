@@ -50,8 +50,10 @@
    <a href='04_PowerGeneration.htm'> 4. PowerGeneration module</a>
    <a href='05_Hydrogen.htm'> 5. Hydrogen module</a>
    <a href='06_CO2.htm'> 6. CO2 module</a>
+   <a href='07_Emissions.htm'> 7. Emissions module</a>
    <a href='08_Prices.htm'> 8. Prices module</a>
    <a href='09_Heat.htm'> 9. Heat module</a>
+   <a href='10_Curves.htm'>10. Curves module</a>
    </div>
   </div>
   <div class="dropdown">
@@ -829,10 +831,10 @@ function of consumer size groups, and technology sorting.</p>
     V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME) 
         =E=
     imMatrFactor(allCy,DSBS,ITECH,YTIME) *
-    V02CostTech(allCy,DSBS,ITECH,YTIME) ** (-i02ElaSub(allCy,DSBS)) /
-    sum(ITECH2$(SECTTECH(DSBS,ITECH2)),
+    V02CostTech(allCy,DSBS,ITECH,YTIME-1) ** (-i02ElaSub(allCy,DSBS)) /
+    sum(ITECH2$SECTTECH(DSBS,ITECH2),
       imMatrFactor(allCy,DSBS,ITECH2,YTIME) *
-      V02CostTech(allCy,DSBS,ITECH2,YTIME) ** (-i02ElaSub(allCy,DSBS))
+      V02CostTech(allCy,DSBS,ITECH2,YTIME-1) ** (-i02ElaSub(allCy,DSBS))
     );</code></pre>
 <p>This equation computes the equipment capacity of each technology in
 each subsector Check if Tech exists in main.gms</p>
@@ -922,15 +924,15 @@ price dynamics.</p>
     (VmPriceFuelSubsecCarVal(allCy,&quot;OI&quot;,&quot;ELC&quot;,YTIME-1)/VmPriceFuelAvgSub(allCy,&quot;OI&quot;,YTIME-1)) ** (0.02) *
     (VmPriceFuelSubsecCarVal(allCy,&quot;OI&quot;,&quot;ELC&quot;,YTIME-2)/VmPriceFuelAvgSub(allCy,&quot;OI&quot;,YTIME-2)) ** (0.01) *
     (VmPriceFuelSubsecCarVal(allCy,&quot;OI&quot;,&quot;ELC&quot;,YTIME-3)/VmPriceFuelAvgSub(allCy,&quot;OI&quot;,YTIME-3)) ** (0.01);</code></pre>
-<pre><code>table i02ElastNonSubElecData(SBS,ETYPES,YTIME)             &quot;Elasticities of Non Substitutable Electricity (1)&quot;
+<pre><code>table i02ElastNonSubElecData(DSBS,ETYPES,YTIME)             &quot;Elasticities of Non Substitutable Electricity (1)&quot;
 $ondelim
 $include &quot;./iElastNonSubElecData.csv&quot;
 $offdelim
 ;
 table i02ElaSub(allCy,DSBS)                                &quot;Elasticities by subsector for all countries (1)&quot; ;
 Parameters
-i02ExogDemOfBiomass(allCy,SBS,YTIME)                       &quot;Demand of tranditional biomass defined exogenously ()&quot;
-$IF NOT %Calibration% == Calibration i02ElastNonSubElec(allCy,SBS,ETYPES,YTIME)                   &quot;Elasticities of Non Substitutable Electricity (1)&quot;
+i02ExogDemOfBiomass(allCy,DSBS,YTIME)                      &quot;Demand of tranditional biomass defined exogenously ()&quot;
+$IF NOT %Calibration% == Calibration i02ElastNonSubElec(allCy,DSBS,ETYPES,YTIME)                   &quot;Elasticities of Non Substitutable Electricity (1)&quot;
 i02util(allCy,DSBS,ITECH,YTIME)                            &quot;Utilization rate of technology&quot;
 i02numtechnologiesUsingEF(DSBS,EF)                         &quot;Number of technologues using an energy form&quot;     
 i02Share(allCy,DSBS,ITECH,EF,YTIME)                        &quot;Share of each energy form in a technology&quot;
@@ -945,18 +947,18 @@ i02ExogDemOfBiomass(runCy,DOMSE,YTIME) = 0;
 i02util(runCy,DSBS,ITECH,YTIME) = 1;
 i02Share(runCy,DSBS,ITECH,EF,YTIME) = 1; !! (To be included in mrprom when mix of fuels for technologies)
 $IFTHEN.calib %Calibration% == Calibration
-variable i02ElastNonSubElec(allCy,SBS,ETYPES,YTIME)        &quot;Elasticities of Non Substitutable Electricity (1)&quot;;
-i02ElastNonSubElec.L(runCy,SBS,ETYPES,YTIME) = i02ElastNonSubElecData(SBS,ETYPES,YTIME);
-i02ElastNonSubElec.LO(runCy,SBS,&quot;a&quot;,YTIME)   = 0.001;
-i02ElastNonSubElec.UP(runCy,SBS,&quot;a&quot;,YTIME)   = 10;
-i02ElastNonSubElec.LO(runCy,SBS,&quot;b1&quot;,YTIME)  = -10;
-i02ElastNonSubElec.UP(runCy,SBS,&quot;b1&quot;,YTIME)  = -0.001;
-i02ElastNonSubElec.LO(runCy,SBS,&quot;b2&quot;,YTIME)  = -10;
-i02ElastNonSubElec.UP(runCy,SBS,&quot;b2&quot;,YTIME)  = -0.001;
-i02ElastNonSubElec.LO(runCy,SBS,&quot;c&quot;,YTIME)   = -10;
-i02ElastNonSubElec.UP(runCy,SBS,&quot;c&quot;,YTIME)   = -0.001;
+variable i02ElastNonSubElec(allCy,DSBS,ETYPES,YTIME)        &quot;Elasticities of Non Substitutable Electricity (1)&quot;;
+i02ElastNonSubElec.L(runCy,DSBS,ETYPES,YTIME) = i02ElastNonSubElecData(DSBS,ETYPES,YTIME);
+i02ElastNonSubElec.LO(runCy,DSBS,&quot;a&quot;,YTIME)   = 0.001;
+i02ElastNonSubElec.UP(runCy,DSBS,&quot;a&quot;,YTIME)   = 10;
+i02ElastNonSubElec.LO(runCy,DSBS,&quot;b1&quot;,YTIME)  = -10;
+i02ElastNonSubElec.UP(runCy,DSBS,&quot;b1&quot;,YTIME)  = -0.001;
+i02ElastNonSubElec.LO(runCy,DSBS,&quot;b2&quot;,YTIME)  = -10;
+i02ElastNonSubElec.UP(runCy,DSBS,&quot;b2&quot;,YTIME)  = -0.001;
+i02ElastNonSubElec.LO(runCy,DSBS,&quot;c&quot;,YTIME)   = -10;
+i02ElastNonSubElec.UP(runCy,DSBS,&quot;c&quot;,YTIME)   = -0.001;
 $ELSE.calib
-i02ElastNonSubElec(runCy,SBS,ETYPES,YTIME) = i02ElastNonSubElecData(SBS,ETYPES,YTIME);
+i02ElastNonSubElec(runCy,DSBS,ETYPES,YTIME) = i02ElastNonSubElecData(DSBS,ETYPES,YTIME);
 $ENDIF.calib
 i02ElaSub(runCy,DSBS) = imElaSubData(DSBS);
 i02ElaSub(runCy,DSBS) = 2; !!
@@ -974,8 +976,6 @@ V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)
 V02DemUsefulSubsecRemTech(allCy,DSBS,YTIME)
 V02GapUsefulDemSubsec(allCy,DSBS,YTIME)
 $offtext
-V02CostTech.LO(runCy,DSBS,ITECH,YTIME) = 0;
-V02CostTech.L(runCy,DSBS,ITECH,YTIME) = 0.1;
 $ontext
 V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME)
 V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)
@@ -1004,7 +1004,7 @@ VmConsFuel.FX(runCy,DSBS,EF,YTIME)$(HEATPUMP(EF) or TRANSE(DSBS) or sameas(&quot
 VmConsFuel.FX(runCy,DSBS,EF,YTIME)$(not HEATPUMP(EF) and not TRANSE(DSBS) and DATAY(YTIME)) = imFuelConsPerFueSub(runCy,DSBS,EF,YTIME);
  
 !!V02VarCostTech.FX(runCy,DSBS,ITECH,YTIME)$(not An(YTIME) and not TRANSE(DSBS) and not sameas(DSBS,&quot;DAC&quot;) and SECTTECH(DSBS,ITECH)) = 0.0001;
-V02VarCostTech.FX(runCy,DSBS,ITECH,YTIME)$(not An(YTIME) and not TRANSE(DSBS) and not sameas(DSBS,&quot;DAC&quot;) and SECTTECH(DSBS,ITECH)) =
+V02VarCostTech.FX(runCy,DSBS,ITECH,YTIME)$(DATAY(YTIME) and not TRANSE(DSBS) and not sameas(DSBS,&quot;DAC&quot;) and SECTTECH(DSBS,ITECH)) =
   (
     sum(EF$ITECHtoEF(ITECH,EF),
       i02Share(runCy,DSBS,ITECH,EF,YTIME) *
@@ -1026,6 +1026,8 @@ V02CapCostTech.FX(runCy,DSBS,ITECH,YTIME)$(not An(YTIME) and not TRANSE(DSBS) an
     imCapCostTech(runCy,DSBS,ITECH,YTIME) * imCGI(runCy,YTIME) +
     imFixOMCostTech(runCy,DSBS,ITECH,YTIME) / sUnitToKUnit)
     / imUsfEneConvSubTech(runCy,DSBS,ITECH,YTIME);
+V02CostTech.LO(runCy,DSBS,ITECH,YTIME) = 0;
+V02CostTech.L(runCy,DSBS,ITECH,YTIME) = 0.1;
 V02CostTech.FX(runCy,DSBS,ITECH,YTIME)$DATAY(YTIME) = V02VarCostTech.L(runCy,DSBS,ITECH,YTIME) + V02CapCostTech.L(runCy,DSBS,ITECH,YTIME);</code></pre>
 <blockquote>
 <p><strong>Limitations</strong> There are no known limitations.</p>
@@ -1747,114 +1749,118 @@ heating</td>
 <td style="text-align: center;">Energy Forms</td>
 </tr>
 <tr class="odd">
+<td style="text-align: center;">EFS(EF)</td>
+<td style="text-align: center;">Energy Forms used in Supply Side</td>
+</tr>
+<tr class="even">
 <td style="text-align: center;">ELCEF(EF)</td>
 <td style="text-align: center;">Electricity</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">ETYPES</td>
 <td style="text-align: center;">Elasticities types</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">H2EF(EF)</td>
 <td style="text-align: center;">Hydrogen</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">HEATPUMP(EF)</td>
 <td style="text-align: center;">Heatpumps are reducing the heat
 requirements of the sector but increasing electricity consumption</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">HOU</td>
 <td style="text-align: center;">11.511 0.9 0.00001</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">INDDOM(DSBS)</td>
 <td style="text-align: center;">Industry and Tertiary</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">INDSE(DSBS)</td>
 <td style="text-align: center;">Industrial SubSectors</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">ITECH(TECH)</td>
 <td style="text-align: center;">Industrial - Domestic - Non-energy &amp;
 Bunkers Technologies</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">ITECHtoEF(ITECH, EF)</td>
 <td style="text-align: center;">Fuels consumed by industrial
 technologies</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">NAP(Policies_set)</td>
 <td style="text-align: center;">National Allocation Plan sector
 categories</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">NAPtoALLSBS(NAP, ALLSBS)</td>
 <td style="text-align: center;">Energy sectors corresponding to NAP
 sectors</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">NENSE(DSBS)</td>
 <td style="text-align: center;">Non Energy and Bunkers</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">PGEF(EFS)</td>
 <td style="text-align: center;">Energy forms used for steam
 production</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">rCon</td>
 <td style="text-align: center;">counter for the number of consumers</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">RENEF(TECH)</td>
 <td style="text-align: center;">Renewable technologies in demand
 side</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">runCy(allCy)</td>
 <td style="text-align: center;">Countries for which the model is
 running</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">runCyL(allCy)</td>
 <td style="text-align: center;">Countries for which the model is running
 (used in countries loop)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">SBS(ALLSBS)</td>
 <td style="text-align: center;">Model Subsectors</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">SECtoEF(SBS, EF)</td>
 <td style="text-align: center;">Link between Model Subsectors and Energy
-FORMS</td>
+Forms consumed</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">SECTTECH(DSBS, TECH)</td>
 <td style="text-align: center;">Link between Model Demand Subsectors and
 Technologies</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">TECH</td>
 <td style="text-align: center;">Technologies</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">TECHtoEF</td>
 <td style="text-align: center;">(TECHEF) Fuels consumed by
 technologies</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">TRANSE(DSBS)</td>
 <td style="text-align: center;">All Transport Subsectors</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">TSTEAM</td>
 <td style="text-align: center;">CHP &amp; DHP plant technologies</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">ytime</td>
 <td style="text-align: center;">Model time horizon</td>
 </tr>
