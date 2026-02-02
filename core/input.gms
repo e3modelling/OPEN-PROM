@@ -333,7 +333,7 @@ imDataIndTechnology(INDSE,TECH,"IC") = imDataIndTechnology(INDSE,TECH,"IC") * 1.
 imDataIndTechnology(INDSE,TECH,"FC") = imDataIndTechnology(INDSE,TECH,"FC") * 1.3;
 imDataIndTechnology(INDSE,TECH,"VC") = imDataIndTechnology(INDSE,TECH,"VC") * 1.3;
 
-imDataIndTechnology(INDSE,"TBGDO",ECONCHAR) = imDataIndTechnology(INDSE,"TGDO",ECONCHAR);
+*imDataIndTechnology(INDSE,"TBGDO",ECONCHAR) = imDataIndTechnology(INDSE,"TGDO",ECONCHAR);
 imDataIndTechnology(INDSE,"TBMSWAS",ECONCHAR) = imDataIndTechnology("IS","TBMSWAS",ECONCHAR);
 imDataIndTechnology(INDSE,"TSTE",ECONCHAR) = imDataIndTechnology(INDSE,"THCL",ECONCHAR);
 *---

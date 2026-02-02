@@ -38,6 +38,12 @@ $include"./iStockPC.csv"
 $offdelim
 ;
 *---
+table i01DataShareBlend(allCy,TRANSE,EF,YTIME)                     "Blend share of fuel per transport mode (1)"
+$ondelim
+$include"./iDataShareBlend.csv"
+$offdelim
+;
+*---
 parameter i01PlugHybrFractData(YTIME)                   "Plug in hybrid fraction of mileage" /
 2010    0.5
 2011    0.504444
@@ -205,15 +211,18 @@ i01TechLft(runCy,DOMSE,ITECH,YTIME) = imDataDomTech(DOMSE,ITECH,"LFT");
 i01TechLft(runCy,NENSE,ITECH,YTIME) = imDataNonEneSec(NENSE,ITECH,"LFT");
 *---
 i01GDPperCapita(YTIME,runCy) = i01GDP(YTIME,runCy) / i01Pop(YTIME,runCy);
-*---
-*i01ShareTTechFuel(runCy,TRANSE,TTECH,EF,YTIME)$(SECTTECH(TRANSE,TTECH) and (sameas("TPHEVGSL",TTECH) or sameas("TPHEVGDO",TTECH)) and ELCEF(EF)) = i01ShareAnnMilePlugInHybrid(runCy,YTIME);
-i01ShareTTechFuel(runCy,TRANSE,TTECH,EF)$(SECTTECH(TRANSE,TTECH) and not ((sameas("TPHEVGSL",TTECH) or sameas("TPHEVGDO",TTECH)) and ELCEF(EF)))
-=
-*(1-i01ShareTTechFuel(runCy,TRANSE,TTECH,"ELC",YTIME)) * 
-(
-  imFuelConsPerFueSub(runCy,TRANSE,EF,"%fBaseY%") /
-  (SUM(EF2$TTECHtoEF(TTECH,EF2),imFuelConsPerFueSub(runCy,TRANSE,EF2,"%fBaseY%")))
- )$(SUM(EF2$TTECHtoEF(TTECH,EF2),imFuelConsPerFueSub(runCy,TRANSE,EF2,"%fBaseY%"))$(TTECHtoEF(TTECH,EF)));
+*---or not sameas("BGSL", EF) or not sameas("BGDO", EF) "%fBaseY%"
+i01ShareBlend(runCy,TRANSE,EF,YTIME)$DATAY(YTIME) =
+SUM(EF2$BLENDMAP(EF2,EF),
+  (
+    imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME) / 
+    sum(EFS$BLENDMAP(EF2,EFS),
+      imFuelConsPerFueSub(runCy,TRANSE,EFS,YTIME)
+    )
+  )$(sum(EFS$BLENDMAP(EF2,EFS),imFuelConsPerFueSub(runCy,TRANSE,EFS,YTIME)) > 0)
+);
+i01ShareBlend(runCy,TRANSE,EF,YTIME)$(AN(YTIME) and (i01DataShareBlend(runCy,TRANSE,EF,YTIME) = 0)) = i01ShareBlend(runCy,TRANSE,EF,"%fBaseY%");
+i01ShareBlend(runCy,TRANSE,EF,YTIME)$(AN(YTIME) and i01DataShareBlend(runCy,TRANSE,EF,YTIME)) = i01DataShareBlend(runCy,TRANSE,EF,YTIME);
 *---
 $IFTHEN.calib %Calibration% == off
 parameter i01PremScrpFac(allCy,TRANSE,TTECH,YTIME)     "Parameter that controls premature scrapping";

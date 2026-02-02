@@ -10,7 +10,7 @@ i01TechLft(allCy,DSBS,TECH,YTIME)	                     "Technical Lifetime. For 
 i01PassCarsMarkSat(allCy)	                          "Passenger cars ownership saturation threshold (1)"
 i01GDPperCapita(YTIME,allCy)
 i01Sigma(allCy,SG)                                   "S parameters of Gompertz function for passenger cars vehicle km (1)"
-i01ShareTTechFuel(allCy,TRANSE,TTECH,EF)
+i01ShareBlend(allCy,TRANSE,EF,YTIME)
 ;
 
 Equations
