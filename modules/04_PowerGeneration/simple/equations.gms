@@ -146,10 +146,10 @@ Q04IndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(al
     V04CostVarTech(allCy,PGALL,YTIME)**(-2) /
     (
       V04CostVarTech(allCy,PGALL,YTIME)**(-2) +
-      0 *(
+      (
         i04ScaleEndogScrap *
         sum(PGALL2$(not sameas(PGALL,PGALL2)),
-          !!i04AvailRate(allCy,PGALL2,YTIME) / i04AvailRate(allCy,PGALL,YTIME) * 
+          i04AvailRate(allCy,PGALL2,YTIME) / i04AvailRate(allCy,PGALL,YTIME) * 
           V04CostHourProdInvDec(allCy,PGALL2,YTIME) 
           !!+
           !!(1-i04AvailRate(allCy,PGALL2,YTIME) / i04AvailRate(allCy,PGALL,YTIME)) *
@@ -358,7 +358,7 @@ Q04CCSRetroFit(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(NOCCS(PGALL)))..
     V04CostVarTech(allCy,PGALL,YTIME) ** (-2) /
     (
       V04CostVarTech(allCy,PGALL,YTIME) ** (-2) +
-      0.005 *
+      0.05 *
       SUM(PGALL2$CCS_NOCCS(PGALL2,PGALL),
         (
           V04CostCapTech(allCy,PGALL2,YTIME) -

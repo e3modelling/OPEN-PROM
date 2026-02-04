@@ -37,8 +37,8 @@ $include "./iElastA.csv"
 $offdelim
 ;
 imElastA(runCy,SBS,ETYPES,YTIME) = imElastA("ELL",SBS,ETYPES,YTIME);
-imElastA(runCy,DSBS,"b1",YTIME)$(not TRANSE(DSBS)) = imElastA(runCy,DSBS,"b1",YTIME) / 4;
-imElastA(runCy,DSBS,"b2",YTIME)$(not TRANSE(DSBS)) = imElastA(runCy,DSBS,"b2",YTIME) / 4;
+imElastA(runCy,DSBS,"b1",YTIME)$(not TRANSE(DSBS)) = imElastA(runCy,DSBS,"b1",YTIME) * 0;
+imElastA(runCy,DSBS,"b2",YTIME)$(not TRANSE(DSBS)) = imElastA(runCy,DSBS,"b2",YTIME) *0;
 $ENDIF.calib
 *---
 parameter iDiscData(SBS) "Discount rates per subsector ()" /
@@ -614,7 +614,7 @@ parameter imMatrFactor(allCy,DSBS,TECH,YTIME)   "Maturity factor per technology 
 imMatrFactor(runCy,DSBS,TECH,YTIME) = iMatrFactorData(DSBS,TECH,YTIME);                                          
 imMatrFactor(runCy,DSBS,TECH,YTIME)$(imMatrFactor(runCy,DSBS,TECH,YTIME)=0) = 0.000001;
 imMatrFactor(runCy,DSBS,"TBMSWAS",YTIME) = 0.01;
-imMatrFactor(runCy,DSBS,"TELC",YTIME)$(DOMSE(DSBS) ) = 20; 
+imMatrFactor(runCy,DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40; 
 * DOMSE(DSBS)
 imMatrFactor(runCy,DSBS,"TLGN",YTIME)$(DOMSE(DSBS)) = 0.01;
 imMatrFactor(runCy,DSBS,"THCL",YTIME)$(DOMSE(DSBS)) = 0.01;

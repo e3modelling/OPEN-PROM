@@ -179,7 +179,7 @@ i09EffSteThrm(TDHP,YTIME) * (i03OutDHPTransfProcess("CHA","STE","2020") + 1e-6) 
 (1e-6 - SUM((TDHP2,STEAMEF)$(TSTEAMTOEF(TDHP2,STEAMEF) and (not sameas("TSTE2GEO",TDHP))),imDataChpPowGen(TDHP2,"effThrm","2020") *i03InpDHPTransfProcess("CHA",STEAMEF,"2020")));
 $offtext
 i09EffSteElc(TSTEAM,YTIME) = imDataChpPowGen(TSTEAM,"effElc",YTIME);
-i09EffSteThrm(TSTEAM,YTIME) = imDataChpPowGen(TSTEAM,"effThrm",YTIME) / 2.5;
+i09EffSteThrm(TSTEAM,YTIME) = imDataChpPowGen(TSTEAM,"effThrm",YTIME) / 4;
 *---
 i09AvailRateSteProd(TSTEAM,YTIME) = imDataChpPowGen(TSTEAM,"AVAIL",YTIME);
 !!FIXME : What is the difference between imDataChpPowGen vs imDataIndTechnologyCHP?
