@@ -600,7 +600,7 @@ elseif %fScenario% eq 4 then
      iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"exogCV_Calib",YTIME);
 endif;
 *---
-table iPremScrpFacData(allCy,DSBS,TECH,YTIME)     "Parameter that controls premature scrapping"
+table i01PremScrpFac(allCy,DSBS,TECH,YTIME)     "Parameter that controls premature scrapping"
 $ondelim
 $include"./iPremScrpFac.csv"
 $offdelim
@@ -650,8 +650,8 @@ imMatrFactor(runCy,DSBS,"TCHEVGDO",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 0
 $ELSE.calib
 variable imMatrFactor(allCy,DSBS,TECH,YTIME)    "Maturity factor per technology and subsector for all countries (1)";
 imMatrFactor.LO(runCy,DSBS,TECH,YTIME) = 0;                                          
-*imMatrFactor.UP(runCy,DSBS,TECH,YTIME) = 100;
-imMatrFactor.L(runCy,DSBS,TECH,YTIME) = 1; !!iMatrFactorData(runCy,DSBS,TECH,YTIME);     
+imMatrFactor.UP(runCy,DSBS,TECH,YTIME) = 10;
+imMatrFactor.L(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);     
 imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(not sameas(DSBS,"PC") or not SECTTECH(DSBS,TECH)) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                          
 $ENDIF.calib
 *---
@@ -687,6 +687,8 @@ imUsfEneConvSubTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,"USC");
 imFixOMCostTech(runCy,NENSE,TECH,YTIME)= imDataNonEneSec(NENSE,TECH,"FC");
 imVarCostTech(runCy,NENSE,TECH,YTIME) = imDataNonEneSec(NENSE,TECH,"VC");
 imUsfEneConvSubTech(runCy,NENSE,TECH,YTIME) = imDataNonEneSec(NENSE,TECH,"USC");
+imUsfEneConvSubTech(runCy,"BU","TH2F",YTIME) = 0.7;
+imCapCostTech(runCy,"BU","TH2F",YTIME) = 1.5 * imCapCostTech(runCy,"BU","TGDO",YTIME);
 *---
 !!imUsfEneConvSubTech(runCy,INDSE,"THCL",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCL","USC") + 0.005 * (ord(YTIME)-11);
 imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCLCCS","USC") + 0.005 * (ord(YTIME)-11);

@@ -209,6 +209,7 @@ i01TechLft(runCy,DOMSE,ITECH,YTIME) = imDataDomTech(DOMSE,ITECH,"LFT");
 *---
 **  Non Energy Sector and Bunkers
 i01TechLft(runCy,NENSE,ITECH,YTIME) = imDataNonEneSec(NENSE,ITECH,"LFT");
+i01TechLft(runCy,"BU","TH2F",YTIME) = 25;
 *---
 i01GDPperCapita(YTIME,runCy) = i01GDP(YTIME,runCy) / i01Pop(YTIME,runCy);
 *---or not sameas("BGSL", EF) or not sameas("BGDO", EF) "%fBaseY%"
@@ -221,27 +222,18 @@ SUM(EF2$BLENDMAP(EF2,EF),
     )
   )$(sum(EFS$BLENDMAP(EF2,EFS),imFuelConsPerFueSub(runCy,TRANSE,EFS,YTIME)) > 0)
 );
-i01ShareBlend(runCy,TRANSE,EF,YTIME)$(AN(YTIME) and (i01DataShareBlend(runCy,TRANSE,EF,YTIME) = 0)) = i01ShareBlend(runCy,TRANSE,EF,"%fBaseY%");
-i01ShareBlend(runCy,TRANSE,EF,YTIME)$(AN(YTIME) and i01DataShareBlend(runCy,TRANSE,EF,YTIME)) = i01DataShareBlend(runCy,TRANSE,EF,YTIME);
+i01ShareBlend(runCy,TRANSE,EFS,YTIME)$(SECtoEF(TRANSE,EFS) and not SUM(EF2,BLENDMAP(EF2,EFS))) = 1;
+i01ShareBlend(runCy,TRANSE,EF,YTIME)$AN(YTIME) = i01ShareBlend(runCy,TRANSE,EF,"%fBaseY%");
+i01ShareBlend("LAM",ROAD,"BGDO",YTIME) = i01ShareBlend("LAM",ROAD,"BGDO","%fBaseY%") + 0.002 * (ord(YTIME)-11);
+i01ShareBlend("LAM",ROAD,"GDO",YTIME) = i01ShareBlend("LAM",ROAD,"GDO","%fBaseY%") - 0.002 * (ord(YTIME)-11);
+i01ShareBlend("LAM",ROAD,"BGSL",YTIME) = i01ShareBlend("LAM",ROAD,"BGSL","%fBaseY%") + 0.001 * (ord(YTIME)-11);
+i01ShareBlend("LAM",ROAD,"GSL",YTIME) = i01ShareBlend("LAM",ROAD,"GSL","%fBaseY%") - 0.001 * (ord(YTIME)-11);
 *---
-$IFTHEN.calib %Calibration% == off
-parameter i01PremScrpFac(allCy,TRANSE,TTECH,YTIME)     "Parameter that controls premature scrapping";
-i01PremScrpFac(runCy,TRANSE,TTECH,YTIME) = iPremScrpFacData(runCy,TRANSE,TTECH,YTIME);
-$ELSE.calib
-
+$IFTHEN.calib %Calibration% == MatCalibration
 table t01NewShareStockPC(allCy,TTECH,YTIME)    "Targets for share of new passenger cars"
 $ondelim
 $include "../targets/tNewShareStockPC.csv"
 $offdelim
 ;
-
-variable i01PremScrpFac(allCy,TRANSE,TTECH,YTIME)     "Variable that controls premature scrapping";
-i01PremScrpFac.L(runCy,"PC",TTECH,YTIME) = iPremScrpFacData(runCy,"PC",TTECH,YTIME);                                          
-i01PremScrpFac.LO(runCy,"PC",TTECH,YTIME) = 0;                                         
-i01PremScrpFac.UP(runCy,"PC",TTECH,YTIME) = 20;
-i01PremScrpFac.FX(runCy,TRANSE,TTECH,YTIME)$(not sameas(TRANSE,"PC")) = iPremScrpFacData(runCy,TRANSE,TTECH,YTIME);
-i01PremScrpFac.FX(runCy,TRANSE,TTECH,YTIME)$(not SECTTECH(TRANSE,TTECH)) = 0;
-
 *imMatrFactor.FX(runCy,"PC",TTECH,YTIME)$((t01StockPC(runCy,TTECH,YTIME) < 0) and (t01NewShareStockPC(runCy,TTECH,YTIME) <= 0)) = 100;         
-i01PremScrpFac.FX(runCy,"PC",TTECH,YTIME)$(SECTTECH("PC",TTECH)) = 0.1;
 $ENDIF.calib

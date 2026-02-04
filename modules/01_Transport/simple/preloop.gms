@@ -5,11 +5,13 @@
 
 V01RateScrPcTot.UP(runCy,TTECH,YTIME) = 1;
 V01PcOwnPcLevl.UP(runCy,YTIME) = 2*i01PassCarsMarkSat(runCy);
-V01PremScrp.UP(runCy,TRANSE,TTECH,YTIME) = 1;
+*---
 V01RateScrPc.UP(runCy,TTECH,YTIME) = 1;
-
 V01RateScrPc.LO(runCy,TTECH,YTIME) = 0;
+*---
+V01PremScrp.UP(runCy,TRANSE,TTECH,YTIME) = 1;
 V01PremScrp.LO(runCy,TRANSE,TTECH,YTIME) = 0;
+V01PremScrp.FX(runCy,TRANSE,TTECH,YTIME)$(not SECTTECH(TRANSE,TTECH)) = 0;
 *---
 V01StockPcYearly.L(runCy,YTIME) = 0.1;
 V01StockPcYearly.FX(runCy,YTIME)$(not An(YTIME)) = imActv(YTIME,runCy,"PC");
@@ -50,6 +52,7 @@ V01ConsTechTranspSectoral.FX(runCy,TRANSE,TTECH,EF,YTIME)$(SECTTECH(TRANSE,TTECH
 V01ConsTechTranspSectoral.FX(runCy,TRANSE,TTECH,EF,YTIME)$(SECTTECH(TRANSE,TTECH) and PLUGIN(TTECH) and DATAY(YTIME)) = 0;
 V01ConsTechTranspSectoral.FX(runCy,TRANSE,TTECH,EF,YTIME)$(SECTTECH(TRANSE,TTECH) and CHYBV(TTECH) and DATAY(YTIME)) = 0;
 *---
+VmDemFinEneTranspPerFuel.L(runCy,TRANSE,EF,YTIME) = 1;
 VmDemFinEneTranspPerFuel.FX(runCy,TRANSE,EF,YTIME) $(SECtoEF(TRANSE,EF) $(not An(YTIME))) = imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME);
 VmDemFinEneTranspPerFuel.FX(runCy,TRANSE,EF,YTIME)$(not SECtoEF(TRANSE,EF)) = 0;
 *---

@@ -28,7 +28,6 @@ qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
       )$(t01NewShareStockPC(allCy,TTECH,YTIME) >= 0) +
       0.01 * (imMatrFactor(allCy,"PC",TTECH,YTIME) - imMatrFactor(allCy,"PC",TTECH,YTIME-1))
     )
-    
   );
 
 qRestrain(allCy,TTECH,YTIME)$(TIME(YTIME) and runCy(allCy) and (t01NewShareStockPC(allCy,TTECH,YTIME) < 0)).. 
