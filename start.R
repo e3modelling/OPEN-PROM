@@ -252,7 +252,7 @@ if (task == 0) {
   saveMetadata(DevMode = 0)
   if (withRunFolder) createRunFolder(setScenarioName("RES"))
 
-  shell(paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log"))
+  shell(paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1"))
 
 
   if (withRunFolder && withReport) {

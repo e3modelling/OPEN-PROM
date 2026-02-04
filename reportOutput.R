@@ -25,11 +25,11 @@ reportOutput <- function(
     runpath,
     mif_name,
     aggregate = TRUE,
-    fullValidation = TRUE,
+    fullValidation = FALSE,
     plot_name = NULL,
     Validation_data_for_plots = TRUE,
     emissions = TRUE,
-    htmlReport = FALSE, projectReport = FALSE) {
+    htmlReport = FALSE, projectReport = TRUE) {
   # Region mapping used for aggregating validation data (e.g. ENERDATA)
   if (length(runpath) > 1) {
     reg_map <- jsonlite::read_json(paste0((runpath[1]),"/metadata.json"))[["Model Information"]][["Region Mapping"]][[1]]
@@ -41,7 +41,9 @@ reportOutput <- function(
 
   reports <- convertGDXtoMIF(runpath,
     mif_name = mif_name,
-    aggregate = aggregate, fullValidation = fullValidation
+    aggregate = aggregate, fullValidation = fullValidation,
+    emissions = emissions,
+    htmlReport = htmlReport, projectReport = projectReport
   )
   metadata <- getMetadata(path = runpath)
   print("Report generation completed.")

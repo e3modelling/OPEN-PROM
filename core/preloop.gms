@@ -31,9 +31,9 @@ imTransChar(runCy,"RES_MEXTV",YTIME) = 0.04;
 *'                **Interdependent Variables**
 
 *---
-VmRenValue.FX(YTIME)$(ord(YTIME)<20) = 0 ;
-VmRenValue.FX(YTIME)$(ord(YTIME)>=20 and ord(YTIME)<50) = (ord(YTIME)-20) * 100;
-VmRenValue.FX(YTIME)$(ord(YTIME)>=40) = 2000;
+VmRenValue.FX(YTIME)$(ord(YTIME)) = 0 ;
+VmRenValue.FX(YTIME)$(ord(YTIME)>=20 and ord(YTIME)<50) = (ord(YTIME)-20) * 10;
+VmRenValue.FX(YTIME)$(ord(YTIME)>=40) = 750;
 *VmRenValue.FX(YTIME)$(not AN(YTIME)) = 0 ;
 *VmRenValue.FX(YTIME)$(AN(YTIME)) = 0 ;
 *---

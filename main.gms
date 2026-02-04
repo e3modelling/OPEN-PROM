@@ -216,7 +216,7 @@ $setEnv GDXCOMPRESS 1
 *' *** Generate input data?
 $setGlobal GenerateInput off !! can be overwritten if VS Code Tasks are used
 
-$setGlobal fCountries 'CHA,DEU,IND,USA,RWO' !! can be overwritten if VS Code Tasks are used
+$setGlobal fCountries 'CHA,DEU,IND,USA,RWO'
 
 $setGlobal fCountryList %countries%
 
@@ -224,7 +224,7 @@ $evalGlobal fPeriodOfYears 1
 
 $evalGlobal fStartHorizon 2010
 $evalGlobal fEndHorizon 2100
-$evalGlobal fEndY 2100
+$evalGlobal fEndY 2030
 $evalGlobal fStartY 2021
 $evalGlobal fBaseY %fStartY% - %fPeriodOfYears%
 $evalGlobal fScenario 1 !! Setting the model scenario: 0 is No carbon price, 1 is NPi_Default, 2 is 1.5C and 3 is 2C
@@ -253,7 +253,7 @@ $setGlobal CO2              legacy
 $setGlobal Emissions        legacy
 $setGlobal Prices           legacy
 $setGlobal Heat             heat
-$setGlobal Curves           LearningCurves
+$setGlobal Curves           off
 $setGlobal Economy          economy
 *' To disable learning curves module, use: $setGlobal Curves off
 
