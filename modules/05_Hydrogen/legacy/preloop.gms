@@ -44,9 +44,9 @@ V05ScrapLftH2Prod.UP(runCy,H2TECH,YTIME) = 1;
 V05ScrapLftH2Prod.LO(runCy,H2TECH,YTIME) = 0;
 V05ScrapLftH2Prod.FX(runCy,H2TECH,YTIME)$DATAY(YTIME) = 1/i05ProdLftH2(H2TECH,YTIME);
 *---
-V05CostProdH2Tech.LO(runCy,H2TECH,YTIME) = epsilon6;
+V05CostProdH2Tech.LO(runCy,H2TECH,YTIME) = 0;
 V05CostProdH2Tech.L(runCy,H2TECH,YTIME) = 2;
-V05CostProdH2Tech.FX(runCy,H2TECH,YTIME)$(not An(YTIME)) = 1e-5;
+V05CostProdH2Tech.FX(runCy,H2TECH,YTIME)$DATAY(YTIME) = 900;
 *---
 *V05CostVarProdH2Tech.LO(runCy,H2TECH,YTIME) = epsilon6;
 V05CostVarProdH2Tech.L(runCy,H2TECH,YTIME) = 2;
