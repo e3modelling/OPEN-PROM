@@ -82,6 +82,11 @@ smTWhToMtoe                                                "TWh to Mtoe conversi
 smElecToSteRatioChp                                        "Technical maximum of electricity to steam ratio in CHP plants" /2.5/
 sIter                                                      "time step iterator" /0/
 sSolverTryMax                                              "maximum attempts to solve each time step" /%SolverTryMax%/
+$ifthen.magpie "%link2MAgPIE%" == "on"
+sLink2MAgPIE                                               "Binary flag for MAgPIE link (1=on, 0=off)" /1/
+$else.magpie
+sLink2MAgPIE                                               "Binary flag for MAgPIE link (1=on, 0=off)" /0/
+$endif.magpie
 sModelStat                                                 "helper parameter for solver status"
 smFracElecPriChp                                           "Fraction of Electricity Price at which a CHP sells electricity to network" /0/
 sCY                                                        "country iterator" /0/
