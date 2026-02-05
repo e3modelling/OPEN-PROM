@@ -69,7 +69,7 @@ LTDAC	306,
 EWDAC	200
 / ;
 
-parameter i06SubsDAC(DACTECH)                    "Subsidy factor applied to the carbon price"
+parameter i06SubsiDAC(DACTECH)                    "Subsidy factor applied to the carbon price"
 /
 HTDAC	1,
 H2DAC	1.8,
@@ -149,7 +149,7 @@ i06VarCostDACMin(DACTECH)            "Minimum possible Variable and carbon stora
 i06FixOandMDAC(DACTECH)              "Fixed and O&M costs of each DAC technology ($/tCO2)"
 i06FixOandMDACMin(DACTECH)           "Minimum possible Fixed and O&M costs of each DAC technology affected by learning curve ($/tCO2)"
 i06LftDAC(allCy,DACTECH,YTIME)             "Lifetime of each DAC technology (years)"
-i06SubsFacDAC(DACTECH)                  "State subsidy factor for the carbon captured applied on the carbon price"
+i06SubsiFacDAC(DACTECH)                  "State subsidy factor for the carbon captured applied on the carbon price"
 i06SpecElecDAC(allCy,DACTECH,YTIME)        "Specific electricity needs of DAC technologies (MWh/tCO2)"
 i06SpecHeatDAC(allCy,DACTECH,YTIME)        "Specific heat needs of DAC technologies (MWh/tCO2)"
 ;
@@ -168,7 +168,7 @@ i06FixOandMDACMin(DACTECH) = i06FixCostDACMin(DACTECH);
 *---
 i06FixOandMDAC(DACTECH) = i06FixCostDAC(DACTECH);
 *---
-i06SubsFacDAC(DACTECH) = i06SubsDAC(DACTECH);
+i06SubsiFacDAC(DACTECH) = i06SubsiDAC(DACTECH);
 *---
 i06LftDAC(runCy,DACTECH,YTIME) = i06LftExpDAC(DACTECH);
 *---

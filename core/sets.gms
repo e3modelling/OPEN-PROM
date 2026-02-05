@@ -327,7 +327,7 @@ NoTrade  Carbon Value for non-trading sectors
 NAPtoALLSBS(NAP,ALLSBS) Energy sectors corresponding to NAP sectors
 /
 Trade.(FD,EN,TX,OE,OI,NF,CH,IS,BM,PP,PG,BM_CO2,H2P,STEAMP,DAC)
-NoTrade.(SE,AG,HOU,PC,PB,PT,PN,PA,GU,GT,GN,BU,PCH,NEN,LGN_PRD_CH4,HCL_PRD_CH4,GAS_PRD_CH4,TERT_CH4,TRAN_CH4,AG_CH4,SE_CH4,TRAN_N2O,TX_N2O,AG_N2O,OI_HFC,OI_PFC,NF_PFC,PG_SF6,OI_SF6,DAC)
+NoTrade.(SE,AG,HOU,PC,PB,PT,PN,PA,GU,GT,GN,BU,PCH,NEN,LGN_PRD_CH4,HCL_PRD_CH4,GAS_PRD_CH4,TERT_CH4,TRAN_CH4,AG_CH4,SE_CH4,TRAN_N2O,TX_N2O,AG_N2O,OI_HFC,OI_PFC,NF_PFC,PG_SF6,OI_SF6)
 /
 
 DSBS(SBS)         All Demand Subsectors         /PC,PT,PA,PB,PN,GU,GT,GN,IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,SE,AG,HOU,PCH,NEN,BU,DAC/
@@ -581,7 +581,7 @@ ORD   Ordinary
 IMP   Improved
 /
 
-TECH      Technologies
+TECH      Technologies (in Demand side)
 /
 TGSL      "Internal Combustion Engine fueled by Gasoline"
 TLPG      "Internal Combustion Engine fueled by Liquified Petroleum Gas"
@@ -846,6 +846,8 @@ TCHEVGDO
 
 SSECTTECH(SSBS,STECH) "Link between Model Supply Subsectors and Technologies"
 
+SSECTTECH(SSBS,STECH) "Link between Model Supply Subsectors and Technologies"
+
 SECTTECH(DSBS,TECH) Link between Model Demand Subsectors and Technologies
 /
 *PC.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO,CHEVGSL,CHEVGDO)
@@ -930,9 +932,6 @@ ATHGASCCS Gas turbine combined cycle with CCS
 PGAWNO Wind offshore
 PGH2F
 /
-
-PGCSP(PGALL)
-/PGCSP/
 
 CCS(PGALL) Plants which can be equipped with CCS
 /

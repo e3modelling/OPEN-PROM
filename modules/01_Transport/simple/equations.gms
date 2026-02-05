@@ -86,6 +86,7 @@ Q01GapTranspActiv(allCy,TRANSE,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 
 *' This equation computes the annualized capital cost of new transport technologies by converting upfront investment costs 
 *' into equivalent annual payments. It applies the annuity factor to spread the capital cost over the technology’s lifetime.
+*' It also includes state subsidy, as the amount that is purposed to each technology, except if a low cost bound is reached.
 Q01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runCy(allCy))..
     V01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)
           =E=
@@ -93,7 +94,9 @@ Q01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTE
       (imDisc(allCy,TRANSE,YTIME)*exp(imDisc(allCy,TRANSE,YTIME)*VmLft(allCy,TRANSE,TTECH,YTIME)))
       /
       (exp(imDisc(allCy,TRANSE,YTIME)*VmLft(allCy,TRANSE,TTECH,YTIME)) - 1)
-    ) * imCapCostTech(allCy,TRANSE,TTECH,YTIME) * imCGI(allCy,YTIME);
+    ) * (imCapCostTech(allCy,TRANSE,TTECH,YTIME) - VmSubsiDemTech(allCy,TRANSE,TTECH,YTIME)) *
+    imCGI(allCy,YTIME)
+;
 
 * -----------------------------------------------------------------------------
 * Q01CostFuel: Calculates the total fuel cost for transport technologies.

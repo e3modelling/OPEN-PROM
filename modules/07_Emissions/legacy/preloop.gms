@@ -3,6 +3,7 @@
 
 *'                *VARIABLE INITIALISATION*
 *---
+V07EmissCO2Supply.FX(runCy,"H2INFR",YTIME) = 0;
 V07EmissCO2Supply.FX(runCy,SSBS,YTIME)$DATAY(YTIME) = 
 SUM(EFS,
   (

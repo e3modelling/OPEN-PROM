@@ -214,6 +214,9 @@ i01TechLft(runCy,DOMSE,ITECH,YTIME) = imDataDomTech(DOMSE,ITECH,"LFT");
 **  Non Energy Sector and Bunkers
 i01TechLft(runCy,NENSE,ITECH,YTIME) = imDataNonEneSec(NENSE,ITECH,"LFT");
 *---
+**  DAC Sector
+i01TechLft(runCy,"DAC",DACTECH,YTIME) = 25;
+*---
 i01GDPperCapita(YTIME,runCy) = i01GDP(YTIME,runCy) / i01Pop(YTIME,runCy);
 *---
 *i01ShareTTechFuel(runCy,TRANSE,TTECH,EF,YTIME)$(SECTTECH(TRANSE,TTECH) and (sameas("TPHEVGSL",TTECH) or sameas("TPHEVGDO",TTECH)) and ELCEF(EF)) = i01ShareAnnMilePlugInHybrid(runCy,YTIME);

@@ -17,6 +17,7 @@ V04CFAvgRen.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = V04CFAvgRen.L(runCyL,PGALL,YTIM
 V04CapElecNonCHP.FX(runCyL,YTIME)$TIME(YTIME) = V04CapElecNonCHP.L(runCyL,YTIME)$TIME(YTIME);
 V04CapElec2.FX(runCy,PGALL,YTIME)$TIME(YTIME) = V04CapElec2.L(runCy,PGALL,YTIME)$TIME(YTIME);
 V04CapElecNominal.FX(runCy,PGALL,YTIME)$TIME(YTIME) = V04CapElecNominal.L(runCy,PGALL,YTIME)$TIME(YTIME);
+V04CostHourProdInvDec.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = V04CostHourProdInvDec.L(runCyL,PGALL,YTIME)$TIME(YTIME);
 
 $ifthen.calib %Calibration% == MatCalibration
 i04MatFacPlaAvailCap.FX(runCy,PGALL,YTIME) = i04MatFacPlaAvailCap.L(runCy,PGALL,"%fEndY%");
