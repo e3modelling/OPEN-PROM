@@ -92,6 +92,7 @@
 *'   07_Emissions
 *'   08_Prices
 *'   09_Heat
+*'   11_Economy
 *' Prefixes (V01, i01, etc.) map directly to these numbers.
 *'----------------------------------------
 *' 5. INTERDEPENDENT VARIABLE/INPUT USAGE
@@ -251,6 +252,7 @@ $setGlobal Emissions        legacy
 $setGlobal Prices           legacy
 $setGlobal Heat             heat
 $setGlobal Curves           LearningCurves
+$setGlobal Economy          economy
 *' To disable learning curves module, use: $setGlobal Curves off
 
 ** CORE MODEL FILES **

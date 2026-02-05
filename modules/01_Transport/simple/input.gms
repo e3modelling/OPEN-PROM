@@ -211,6 +211,9 @@ i01TechLft(runCy,DOMSE,ITECH,YTIME) = imDataDomTech(DOMSE,ITECH,"LFT");
 i01TechLft(runCy,NENSE,ITECH,YTIME) = imDataNonEneSec(NENSE,ITECH,"LFT");
 i01TechLft(runCy,"BU","TH2F",YTIME) = 25;
 *---
+**  DAC Sector
+i01TechLft(runCy,"DAC",DACTECH,YTIME) = 25;
+*---
 i01GDPperCapita(YTIME,runCy) = i01GDP(YTIME,runCy) / i01Pop(YTIME,runCy);
 *---or not sameas("BGSL", EF) or not sameas("BGDO", EF) "%fBaseY%"
 i01ShareBlend(runCy,TRANSE,EF,YTIME)$DATAY(YTIME) =

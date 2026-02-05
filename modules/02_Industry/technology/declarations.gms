@@ -8,6 +8,7 @@ Q02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)           "Compute Remaining Eq
 Q02DemUsefulSubsecRemTech(allCy,DSBS,YTIME)                "Compute Useful energy demand (substitutable) covered by remaining equipment"
 Q02GapUsefulDemSubsec(allCy,DSBS,YTIME)                    "Compute gap in useful energy demand per subsector"
 Q02CapCostTech(allCy,DSBS,ITECH,YTIME)                     "Compute capital cost of each technology per subsector (final)"
+!!Q02CapCostTech1(allCy,DSBS,ITECH,YTIME)
 Q02VarCostTech(allCy,DSBS,ITECH,YTIME)                     "Compute variable cost of each technology per subsector (final)"
 Q02CostTech(allCy,DSBS,ITECH,YTIME)                        "Compute total cost of each technology per subsector (useful)"
 Q02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME)         "Compute share of each technology in gap of useful energy"
@@ -28,10 +29,11 @@ Variables
 V02DemSubUsefulSubsec(allCy,DSBS,YTIME)                    "Demand for useful substitutable energy demand in each subsector"
 V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)           "Remaining Equipment Capacity per Technology in each subsector (substitutable)"
 V02DemUsefulSubsecRemTech(allCy,DSBS,YTIME)                "Useful energy demand (substitutable) covered by remaining equipment"
-V02GapUsefulDemSubsec(allCy,DSBS,YTIME)                    "gap in useful energy demand per subsector"
+V02GapUsefulDemSubsec(allCy,DSBS,YTIME)                    "gap in useful energy demand per subsector (Mtoe)"
 V02CapCostTech(allCy,DSBS,ITECH,YTIME)                     "capital cost of each technology per subsector (final)"
 V02VarCostTech(allCy,DSBS,ITECH,YTIME)                    "variable cost of each technology per subsector (final)"
 V02CostTech(allCy,DSBS,ITECH,YTIME)                        "total cost of each technology per subsector (useful)"
+!!V02CapCostTech1(allCy,DSBS,ITECH,YTIME)
 V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME)         "share of each technology in gap of useful energy"
 V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)              "equipment capacity of each technology in each subsector"
 V02UsefulElecNonSubIndTert(allCy,DSBS,YTIME)               "non-substitutable useful electricity"
