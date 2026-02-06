@@ -33,9 +33,9 @@ saveMetadata <- function(DevMode) {
 
   # Save the appropriate region mapping for each type of run (Development / Research).
   if (DevMode == 0) {
-    mapping <- "regionmappingOPDEV3.csv"
+    mapping <- "regionmappingOPDEV5.csv"
   } else if (DevMode == 1) {
-    mapping <- "regionmappingOPDEV2.csv"
+    mapping <- "regionmappingOPDEV4.csv"
   }
 
   # Get the model run description from config file
@@ -100,6 +100,25 @@ syncRun <- function() {
   # Create tgz archive with the files of each model run
   all_files <- list.files(folder_path, recursive = TRUE, all.files = TRUE)
 
+  # Define what you want to exclude (Files OR Folders)
+  itemsToExclude <- c("mainCalib.lst", "main.lst")
+
+  if (isRunSuccessful("modelstat.txt")) {
+    
+    message("Run Successful. Excluding temporary files from archive...")
+
+    for (item in itemsToExclude) {
+      # This Regex means: Match the item at the start (^) AND 
+      # ensure it ends there ($) OR is a folder parent (/)
+      # This prevents "temp.gdx" from accidentally matching "temp.gdx_final"
+      pattern <- paste0("^", item, "($|/)")
+      all_files <- all_files[!grepl(pattern, all_files)]
+    }
+    
+  } else {
+    message("Run had errors. Archiving ALL files for debugging.")
+  }
+
   # Include GDX files based on user preference
   if (uploadGDX) {
     files_to_archive <- all_files
@@ -156,6 +175,16 @@ setScenarioName <- function(scen_default) {
 
   return(scen)
 }
+### Function that check if all country and year runs are successfull
+isRunSuccessful <- function(statusFilePath) {
+  if (!file.exists(statusFilePath)) return(FALSE)
+
+  lines <- readLines(statusFilePath)
+  modelStatus <- as.numeric(sub(".*Model Status:([0-9.]+).*", "\\1", lines))
+  allAreValid <- all(modelStatus %in% c(2.0, 5.0))
+
+  return(allAreValid)
+}
 
 ### Executing the VS Code tasks
 
@@ -197,7 +226,14 @@ if (task == 0) {
   if (withRunFolder) createRunFolder(setScenarioName("DEV"))
 
   shell(paste0(gams, " main.gms --DevMode=1 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log"))
-
+  if (withRunFolder && withReport) {
+    run_path <- getwd()
+    setwd("../../") # Going back to root folder
+    cat("Executing the report output script\n")
+    report_cmd <- paste0("RScript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
+    shell(report_cmd)
+    setwd(run_path)
+  }
   if (withRunFolder && withSync) syncRun()
 } else if (task == 1) {
   # Running task OPEN-PROM DEV NEW DATA
@@ -234,20 +270,55 @@ if (task == 0) {
   if (withRunFolder) createRunFolder(setScenarioName("RESNEWDATA"))
 
   # NEW DATA & CALIBRATE
-  shell(
-    paste0(
-      gams,
-      " main.gms -o mainCalib.lst --WriteGDX=off --DevMode=0 --fScenario=4 --GenerateInput=on --Calibration=MatCalibration -logOption 4 -Idir=./data 2>&1 | tee fullCalib.log"
-    )
+  calib_cmd <- paste0(
+    gams,
+    " main.gms -o mainCalib.lst --WriteGDX=off --DevMode=0 --fScenario=4 --GenerateInput=on --Calibration=MatCalibration -logOption 4 -Idir=./data 2>&1 | tee fullCalib.log"
   )
+  cat("Executing calibration with data generation:\n", calib_cmd, "\n")
+  
+  exit_code <- shell(calib_cmd)
+  
+  # Check for calibration execution failure
+  if (exit_code != 0) {
+    cat("ERROR: GAMS calibration failed with exit code:", exit_code, "\n")
+    cat("Calibration and data generation failed. Check fullCalib.log for details.\n")
+    stop("GAMS calibration execution failed during data generation. Terminating run.")
+  }
+  
+  # Verify calibration output files exist
   CalibratedParams <- c("i04MatFacPlaAvailCap.csv", "i04MatureFacPlaDisp.csv")
+  missing_files <- CalibratedParams[!file.exists(CalibratedParams)]
+  if (length(missing_files) > 0) {
+    cat("ERROR: Calibrated parameter files missing:", paste(missing_files, collapse = ", "), "\n")
+    stop("Calibration failed to generate required parameter files. Terminating run.")
+  }
+  
   newNames <- gsub("[0-9]", "", CalibratedParams) # remove numbers
   CalibratedParamsPath <- file.path(getwd(), CalibratedParams)
   newPath <- file.path(getwd(), "data", newNames)
-  s <- file.rename(CalibratedParamsPath, newPath)
+  rename_success <- file.rename(CalibratedParamsPath, newPath)
+  
+  if (!all(rename_success)) {
+    cat("ERROR: Failed to rename calibrated parameter files\n")
+    stop("File operation failed during calibration cleanup. Terminating run.")
+  }
+  
+  cat("Calibration completed successfully.\n")
 
   # RESEARCH
-  shell(paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log"))
+  research_cmd <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log")
+  cat("Executing research run:\n", research_cmd, "\n")
+  
+  exit_code <- shell(research_cmd)
+  
+  # Check for research execution failure  
+  if (exit_code != 0) {
+    cat("ERROR: GAMS research execution failed with exit code:", exit_code, "\n")
+    cat("Research run failed. Check full.log for details.\n")
+    stop("GAMS research execution failed. Terminating run.")
+  }
+  
+  cat("Research run completed successfully.\n")
   if (withRunFolder) file.copy("data", to = "../../", recursive = TRUE)
   if (withRunFolder) file.copy("targets", to = "../../", recursive = TRUE)
 
@@ -283,4 +354,23 @@ if (task == 0) {
   CalibratedParamsPath <- file.path(getwd(), CalibratedParams)
   newPath <- file.path(dirname(dirname(getwd())), "data", newNames)
   file.rename(CalibratedParamsPath, newPath)
+
+} else if (task == 6) {
+  # Running task OPEN-PROM CALIBRATE CARBON PRICES 
+  saveMetadata(DevMode = 0)
+  if (withRunFolder) createRunFolder(setScenarioName("CARBONPRICES"))
+
+  run_path <- getwd()
+  print(run_path)
+  report_cmd <- paste0("RScript ./findCarbonPrice.R ", run_path)
+  shell(report_cmd)
+
+  if (withRunFolder && withReport) {
+    setwd("../../") # Going back to root folder
+    cat("Executing the report output script\n")
+    report_cmd <- paste0("RScript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
+    shell(report_cmd)
+    setwd(run_path)
+  }
+  if (withRunFolder && withSync) syncRun()
 }

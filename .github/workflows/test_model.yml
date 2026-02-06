@@ -8,15 +8,25 @@ on:
 
 jobs:
   test-model:
+    name: Run ${{ matrix.name }}
     runs-on: windows-latest
-
+    strategy:
+          fail-fast: false
+          matrix:
+            include:
+              - id: 1
+                name: "NPi Default Scenario"
+              - id: 2
+                name: "1.5C Scenario"
+              - id: 3
+                name: "2C Scenario"
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Setup GAMS
         run: |
-          $url = "https://d37drm4t2jghv5.cloudfront.net/distributions/48.1.0/windows/windows_x64_64.exe"
+          $url = "https://www.dropbox.com/scl/fi/rpy9ylitovj9njl8lyo0p/gams_installer.exe?rlkey=d4zfuyceji09dvor7hq54ichb&e=1&st=m9bd86wz&dl=1"
           $installer = "gams_installer.exe"
           Invoke-WebRequest -Uri $url -OutFile $installer
           Start-Process $installer -ArgumentList "/silent" -NoNewWindow -Wait
@@ -48,14 +58,6 @@ jobs:
 
           RScript dl_data.R $env:DATASET
           
-      - name: Test Model Run - NPi Default Scenario
+      - name: Test Model Run - ${{ matrix.name }}
         run: |
-          & "C:\GAMS\48\gams.exe" main.gms lo 2 --DevMode=0 --GenerateInput=off --fEndY=2100 --fScenario=1 -Idir=./data
-
-      - name: Test Model Run - 1.5C Scenario
-        run: |
-          & "C:\GAMS\48\gams.exe" main.gms lo 2 --DevMode=0 --GenerateInput=off --fEndY=2100 --fScenario=2 -Idir=./data
-          
-      - name: Test Model Run - 2C Scenario
-        run: |
-          & "C:\GAMS\48\gams.exe" main.gms lo 2 --DevMode=0 --GenerateInput=off --fEndY=2100 --fScenario=3 -Idir=./data
+          & "C:\GAMS\48\gams.exe" main.gms lo 2 --DevMode=0 --WriteGDX=off --GenerateInput=off --fEndY=2100 --fScenario=${{ matrix.id }} -Idir=./data

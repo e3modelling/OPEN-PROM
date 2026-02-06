@@ -3,7 +3,7 @@
 
 sets
 *---
-H2TECH "Hydrogen production technologies"
+H2TECH(STECH) "Hydrogen production technologies"
 /
 gsr   "gas steam reforming"
 gss   "gas steam reforming with CCS"
@@ -12,7 +12,8 @@ gss   "gas steam reforming with CCS"
 *nht   "nuclear termochemical cycle"
 weg   "water electrolysis from grid power"
 *wen   "water electrolysis with nuclear"
-*wew   "water electrolysis with wind"
+wew   "water electrolysis with wind"
+wes   "water electrolysis with solar"
 cgf   "coal gasification"
 cgs   "coal gasification with CCS"
 *opo   "oil partial oxydation"
@@ -73,31 +74,6 @@ LPIPU
 SSGG
 /
 *---
-$ontext
-H2SBS(SBS)               "Final demand sectors consuming hydrogen for energy purposes"
-/
-PG
-IS
-NF
-BM
-CH
-PP
-EN
-TX
-FD
-OE
-OI
-SE
-AG
-HOU
-PC
-GU
-PA
-PT
-GT
-/
-$offtext
-*---
 H2INFRSBS(INFRTECH,SBS)  "Infrustructure required by demand sector"
 /
 TPIPA.(PG,IS,NF,BM,CH,PP,EN,TX,FD,OE,OI,SE,AG,HOU,PC,GU,PA,PT,GT)
@@ -114,7 +90,7 @@ LPIPU
 SSGG
 /
 *---
-H2TECHEFtoEF(H2TECH,EF) "Mapping between production technologies and fuels"
+H2TECHEFtoEF(H2TECH,EF)   "Mapping between production technologies and fuels"
 /
 (gsr,gss).ngs !! ,smr
 (cgf,cgs).hcl
@@ -122,9 +98,18 @@ H2TECHEFtoEF(H2TECH,EF) "Mapping between production technologies and fuels"
 *sht.SOL
 *(nht,wen).NUC
 weg.ELC
-*wew.WND
+wes.ELC
+wew.ELC
 *(opo,ops).RFO
 /
+*---
+$ontext
+H2TECHtoPGALL(H2TECH,PGALL)  "Mapping between hydrogen production technologies and power generation technologies used for water electrolysis"
+/
+wes.PGSOL
+wew.PGAWNO
+/
+$offtext
 *---
 H2PRODEF(EF)               "Fuels used for hydrogen production"
 /
@@ -138,16 +123,27 @@ wnd
 rfo
 /
 *---
-$ontext
+
 H2TECHREN(H2TECH)          "Renewable hydrogen production technologies"
 /
-sht
+*sht
 wew
+wes
 /
-$offtext
 *---
 H2CCS(H2TECH)              "Hydrogen production technologies equipped with CCS facility"
 /
+gss   "gas steam reforming with CCS"
+cgs   "coal gasification with CCS"
+*ops   "oil partial oxydation with CCS"
+bgfls "biomass gasification large scale with CCS"
+/
+*---
+H2CCSREN(H2TECH)          "Renewable or CCS hydrogen production technologies"
+/
+*sht
+wew
+wes
 gss   "gas steam reforming with CCS"
 cgs   "coal gasification with CCS"
 *ops   "oil partial oxydation with CCS"
@@ -174,6 +170,8 @@ H2TECHPM(H2TECH)           "Technologies for which premature replacement is acti
 /
 gsr
 cgf
+bgfl
+weg
 *opo
 /
 *---
@@ -213,3 +211,4 @@ mpipu.mpipu
 ALIAS (H2TECH2,H2TECH);
 ALIAS (INFRTECH3,INFRTECH2, INFRTECH);
 *---
+SSECTTECH("H2P",STECH) = yes$H2TECH(STECH);

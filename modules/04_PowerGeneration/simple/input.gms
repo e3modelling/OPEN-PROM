@@ -7,6 +7,7 @@ $ondelim
 $include"./iAvailRate.csv"
 $offdelim
 ;
+i04AvailRate(allCy,"PGH2F",YTIME) = 0.9;
 *---
 table i04DataElecSteamGen(allCy,PGOTH,YTIME)	   "Various Data related to electricity and steam generation (1)"
 $ondelim
@@ -20,7 +21,7 @@ $include"./iDataElecProdNonCHP.csv"
 $offdelim
 ;
 *---
-table i04DataElecProdCHP(allCy,CHP,YTIME)           "Electricity CHP production past years (GWh)"
+table i04DataElecProdCHP(allCy,EF,YTIME)           "Electricity CHP production past years (GWh)"
 $ondelim
 $include"./iDataElecProdCHP.csv"
 $offdelim
@@ -35,7 +36,7 @@ $offdelim
 *---
 table t04SharePowPlaNewEq(allCy,PGALL,YTIME)    "Ratio of newly added capacity smoothed over 10-year period ()"
 $ondelim
-$include "../targets/tShares.csv"
+$include "../targets/tShares_ProdElec.csv"
 $offdelim
 ;
 $endif.calib
@@ -63,6 +64,7 @@ $ondelim
 $include"./iVarCost.csv"
 $offdelim
 ;
+i04VarCost(PGALL,YTIME) = i04VarCost(PGALL,YTIME) + 1e-3;
 *---
 table i04InvPlants(allCy,PGALL,YTIME)	           "Investment Plants (MW)"
 $ondelim
@@ -84,7 +86,7 @@ $include "./iMatFacPlaAvailCap.csv"
 $offdelim
 ;
 i04MatFacPlaAvailCap.L(runCy,PGALL,YTIME)    = i04MatFacPlaAvailCapL(runCy,PGALL,YTIME);
-i04MatFacPlaAvailCap.LO(runCy, PGALL, YTIME) = 0.00000001;
+i04MatFacPlaAvailCap.LO(runCy, PGALL, YTIME) = 1e-8;
 i04MatFacPlaAvailCap.UP(runCy, PGALL, YTIME) = 40;
 $ELSE.calib
 table i04MatFacPlaAvailCap(allCy,PGALL,YTIME)      "Maturity factor related to plant available capacity (1)"
@@ -112,11 +114,7 @@ $offdelim
 ;
 $ENDIF.calib
 *---
-parameter i04ScaleEndogScrap(PGALL)                "Scale parameter for endogenous scrapping applied to the sum of full costs (1)";
-*---
 parameter i04MxmShareChpElec                       "Maximum share of CHP electricity in a country (1)";
-*---
-parameter i04DataElecAndSteamGen(allCy,CHP,YTIME)  "Data releated to electricity and steam generation";
 *---
 parameter i04LoadFacElecDem(DSBS)                  "Load factor of electricity demand per sector (1)"
 /
@@ -183,11 +181,9 @@ MAXLOADSH 0.45
 Parameters
 i04BaseLoadShareDem(allCy,DSBS,YTIME)	           "Baseload share of demand per sector (1)"
 iTotAvailNomCapBsYr(allCy,YTIME)	               "Total nominal available installed capacity in base year (GW)"
-i04UtilRateChpPlants(allCy,CHP,YTIME)	           "Utilisation rate of CHP Plants (1)"
 i04MxmLoadFacElecDem(allCy,YTIME)	               "Maximum load factor of electricity demand (1)"
-i04BslCorrection(allCy,YTIME)	                   "Parameter of baseload correction (1)"
 i04TechLftPlaType(allCy,PGALL)	                   "Technical Lifetime per plant type (year)"
-i04ScaleEndogScrap(PGALL)                          "Scale parameter for endogenous scrapping applied to the sum of full costs (1)"
+i04ScaleEndogScrap                              "Scale parameter for endogenous scrapping applied to the sum of full costs (1)"
 i04DecInvPlantSched(allCy,PGALL,YTIME)             "Decided plant investment schedule (GW)"
 i04PlantDecomSched(allCy,PGALL,YTIME)	           "Decided plant decomissioning schedule (GW)"	
 i04MxmShareChpElec(allCy,YTIME)	                   "Maximum share of CHP electricity in a country (1)"
@@ -196,17 +192,12 @@ i04MxmShareChpElec(allCy,YTIME)	                   "Maximum share of CHP electri
 *---
 i04BaseLoadShareDem(runCy,DSBS,YTIME)$an(YTIME)  = i04LoadFactorAdj(DSBS);
 *---
-i04DataElecAndSteamGen(runCy,CHP,YTIME) = 0 ;
-*---
 iTotAvailNomCapBsYr(runCy,YTIME)$datay(YTIME) = i04DataElecSteamGen(runCy,"TOTNOMCAP",YTIME);
-*---
-i04UtilRateChpPlants(runCy,CHP,YTIME) = 0.5;
 *---
 i04MxmLoadFacElecDem(runCy,YTIME)$an(YTIME) = i04LoadFactorAdjMxm("MAXLOADSH");
 *---
-i04BslCorrection(runCy,YTIME)$an(YTIME) = i04LoadFactorAdjMxm("AMAXBASE");
-*---
 i04TechLftPlaType(runCy,PGALL) = i04DataTechLftPlaType(PGALL, "LFT");
+i04TechLftPlaType(runCy,"PGH2F") = 20;
 *---
 i04GrossCapCosSubRen(runCy,PGALL,YTIME) = i04GrossCapCosSubRen(runCy,PGALL,YTIME)/1000;
 *---
@@ -214,11 +205,10 @@ loop(runCy,PGALL,YTIME)$AN(YTIME) DO
          abort $(i04GrossCapCosSubRen(runCy,PGALL,YTIME)<0) "CAPITAL COST IS NEGATIVE", i04GrossCapCosSubRen
 ENDLOOP;
 *---
-i04ScaleEndogScrap(PGALL) = 0.65/PGALL.len;
+i04ScaleEndogScrap = 2 / card(PGALL);
 *---
 i04DecInvPlantSched(runCy,PGALL,YTIME) = i04InvPlants(runCy,PGALL,YTIME);
 *---
 i04PlantDecomSched(runCy,PGALL,YTIME) = i04DecomPlants(runCy,PGALL,YTIME);
 *---
-i04MxmShareChpElec(runCy,YTIME) = 0.1;
-*---
+i04MxmShareChpElec(runCy,YTIME) = 0.3;

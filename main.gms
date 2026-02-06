@@ -91,6 +91,8 @@
 *'   06_CO2
 *'   07_Emissions
 *'   08_Prices
+*'   09_Heat
+*'   11_Economy
 *' Prefixes (V01, i01, etc.) map directly to these numbers.
 *'----------------------------------------
 *' 5. INTERDEPENDENT VARIABLE/INPUT USAGE
@@ -214,7 +216,7 @@ $setEnv GDXCOMPRESS 1
 *' *** Generate input data?
 $setGlobal GenerateInput off !! can be overwritten if VS Code Tasks are used
 
-$setGlobal fCountries 'MAR,IND,USA,EGY,RWO' !! can be overwritten if VS Code Tasks are used
+$setGlobal fCountries 'CHA,DEU,IND,USA,RWO' !! can be overwritten if VS Code Tasks are used
 
 $setGlobal fCountryList %countries%
 
@@ -250,6 +252,10 @@ $setGlobal Hydrogen         legacy
 $setGlobal CO2              legacy
 $setGlobal Emissions        legacy
 $setGlobal Prices           legacy
+$setGlobal Heat             heat
+$setGlobal Curves           LearningCurves
+$setGlobal Economy          economy
+*' To disable learning curves module, use: $setGlobal Curves off
 
 ** CORE MODEL FILES **
 *' SETS

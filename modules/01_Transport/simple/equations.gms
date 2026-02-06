@@ -11,10 +11,10 @@
 *' * Transport
 
 *' This equation calculates the lifetime of passenger cars as the inverse of their scrapping rate.
-Q01Lft(allCy,DSBS,TTECH,YTIME)$(TIME(YTIME) $sameas(DSBS,"PC") $SECTTECH(DSBS,TTECH) $runCy(allCy))..
-      VmLft(allCy,DSBS,TTECH,YTIME)
-              =E=
-      1/V01RateScrPc(allCy,YTIME);
+Q01Lft(allCy,"PC",TTECH,YTIME)$(TIME(YTIME) $SECTTECH("PC",TTECH) $runCy(allCy))..
+    VmLft(allCy,"PC",TTECH,YTIME)
+        =E=
+    1 / V01RateScrPc(allCy,TTECH,YTIME);
 
 *' This equation calculates the activity for goods transport, considering different types of goods transport such as trucks and other freight transport.
 *' The activity is influenced by factors such as GDP, population, fuel prices, and elasticities. The equation includes terms for trucks and other
@@ -24,8 +24,8 @@ Q01ActivGoodsTransp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANG(TRANSE) $runCy(allCy
               =E=
       (
       V01ActivGoodsTransp(allCy,TRANSE,YTIME-1)
-        * [i01GDPperCapita(YTIME,allCy)/i01GDPperCapita(YTIME-1,allCy)]**0.5 !!imElastA(allCy,TRANSE,"a",YTIME)
-        * (i01Pop(YTIME,allCy)/i01Pop(YTIME-1,allCy)) ** 1
+        * [i01GDPperCapita(YTIME,allCy)/i01GDPperCapita(YTIME-1,allCy)] ** 0.4 !!imElastA(allCy,TRANSE,"a",YTIME)
+        * (i01Pop(YTIME,allCy)/i01Pop(YTIME-1,allCy)) ** 0.8
         * (VmPriceFuelAvgSub(allCy,TRANSE,YTIME)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1))**imElastA(allCy,TRANSE,"c1",YTIME)
         * (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2))**imElastA(allCy,TRANSE,"c2",YTIME)
         * prod(kpdl,
@@ -86,6 +86,7 @@ Q01GapTranspActiv(allCy,TRANSE,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 
 *' This equation computes the annualized capital cost of new transport technologies by converting upfront investment costs 
 *' into equivalent annual payments. It applies the annuity factor to spread the capital cost over the technology’s lifetime.
+*' It also includes state subsidy, as the amount that is purposed to each technology, except if a low cost bound is reached.
 Q01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runCy(allCy))..
     V01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)
           =E=
@@ -93,7 +94,9 @@ Q01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTE
       (imDisc(allCy,TRANSE,YTIME)*exp(imDisc(allCy,TRANSE,YTIME)*VmLft(allCy,TRANSE,TTECH,YTIME)))
       /
       (exp(imDisc(allCy,TRANSE,YTIME)*VmLft(allCy,TRANSE,TTECH,YTIME)) - 1)
-    ) * imCapCostTech(allCy,TRANSE,TTECH,YTIME) * imCGI(allCy,YTIME);
+    ) * (imCapCostTech(allCy,TRANSE,TTECH,YTIME) - VmSubsiDemTech(allCy,TRANSE,TTECH,YTIME)) *
+    imCGI(allCy,YTIME)
+;
 
 * -----------------------------------------------------------------------------
 * Q01CostFuel: Calculates the total fuel cost for transport technologies.
@@ -134,9 +137,15 @@ Q01CostFuel(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runC
       (VmRenValue(YTIME)/1000)$( not RENEF(TTECH)) 
     ) *
     (
-      1e-3 * V01ActivPassTrnsp(allCy,TRANSE,YTIME)$sameas(TRANSE,"PC") +
-      imAnnCons(allCy,TRANSE,"modal")$(not sameas(TRANSE,"PC"))
-    );
+      1e-3 * V01ActivPassTrnsp(allCy,TRANSE,YTIME)$sameas(TRANSE,"PC") + !! aviation should be divided by 1000
+      1e-1 * V01ActivPassTrnsp(allCy,TRANSE,YTIME)$(sameas(TRANSE,"PT")) +
+      1e3 * V01ActivPassTrnsp(allCy,TRANSE,YTIME)$(sameas(TRANSE,"PB")) +
+      1 * V01ActivPassTrnsp(allCy,TRANSE,YTIME)$(sameas(TRANSE,"PN")) +
+      1 * V01ActivPassTrnsp(allCy,TRANSE,YTIME)$(sameas(TRANSE,"PA")) +
+      1e-5 * V01ActivGoodsTransp(allCy,TRANSE,YTIME)$TRANG(TRANSE)  !! should be divided by number of vehicles
+      !!imAnnCons(allCy,TRANSE,"modal")$(not sameas(TRANSE,"PC"))
+    )
+    ;
 
 * -----------------------------------------------------------------------------
 * Q01CostTranspPerMeanConsSize: Calculates the total cost per transport unit.
@@ -151,9 +160,9 @@ Q01CostFuel(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runC
 * - In k$US2015 per vehicle for passenger cars
 * - In k$US2015 per Gpkm or Gtkm for other transport modes
 * -----------------------------------------------------------------------------
-Q01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME)$SECTTECH(TRANSE,TTECH) $runCy(allCy))..
-      V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME)
-          =E=
+Q01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME)$runCy(allCy)$SECTTECH(TRANSE,TTECH))..
+    V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME)
+        =E=
       V01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME) +
       imFixOMCostTech(allCy,TRANSE,TTECH,YTIME) +
       V01CostFuel(allCy,TRANSE,TTECH,YTIME);
@@ -172,10 +181,10 @@ Q01ShareTechTr(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $r
         V01ShareTechTr(allCy,TRANSE,TTECH,YTIME)
             =E=
         imMatrFactor(allCy,TRANSE,TTECH,YTIME) *
-        V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME)**(-2) /
+        V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME-1)**(-3) /
         sum((TTECH2)$SECTTECH(TRANSE,TTECH2), 
           imMatrFactor(allCy,TRANSE,TTECH2,YTIME) * 
-          V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME)**(-2)
+          V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1)**(-3)
         );
 
 *' This equation calculates the consumption of each technology in transport sectors. It considers various factors such as the lifetime of the technology,
@@ -195,15 +204,17 @@ Q01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)$(TIME(YTIME) $SECTTECH(TR
         i01AvgVehCapLoadFac(allCy,TRANSE,"LF",YTIME)
       )$(not sameas(TRANSE,"PC")) +
       (
-        1 - V01RateScrPc(allCy,YTIME)
+        1 - V01RateScrPcTot(allCy,TTECH,YTIME)
       )$sameas(TRANSE,"PC")
     ) +
     V01ShareTechTr(allCy,TRANSE,TTECH,YTIME) *
     (
-      V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)$(not PLUGIN(TTECH)) +
+      (i01ShareTTechFuel(allCy,TRANSE,TTECH,EF) *
+      V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME))$(not PLUGIN(TTECH)) +
       ( 
         (
           (1-i01ShareAnnMilePlugInHybrid(allCy,YTIME)) *
+          i01ShareTTechFuel(allCy,TRANSE,TTECH,EF) *
           V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)
         )$(not sameas("ELC",EF)) +
         i01ShareAnnMilePlugInHybrid(allCy,YTIME) *
@@ -218,7 +229,7 @@ Q01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)$(TIME(YTIME) $SECTTECH(TR
         i01AvgVehCapLoadFac(allCy,TRANSE,"CAP",YTIME) /
         i01AvgVehCapLoadFac(allCy,TRANSE,"LF",YTIME)
       )$(not sameas(TRANSE,"PC")) +
-      (V01ActivPassTrnsp(allCy,TRANSE,YTIME))$sameas(TRANSE,"PC")
+      V01ActivPassTrnsp(allCy,TRANSE,YTIME)$sameas(TRANSE,"PC")
     );
 
 *' This equation calculates the final energy demand in transport for each fuel within a specific transport subsector.
@@ -226,7 +237,9 @@ Q01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)$(TIME(YTIME) $SECTTECH(TR
 Q01DemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)$(TIME(YTIME) $SECtoEF(TRANSE,EF) $runCy(allCy))..
     VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)
             =E=
-    sum((TTECH)$(SECTTECH(TRANSE,TTECH) $TTECHtoEF(TTECH,EF) ), V01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME));
+    sum(TTECH$(SECTTECH(TRANSE,TTECH) and TTECHtoEF(TTECH,EF)),
+      V01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)
+    );
 
 * -----------------------------------------------------------------------------
 * Q01StockPcYearly: Computes the total stock of passenger cars (in millions).
@@ -244,9 +257,16 @@ Q01StockPcYearlyTech(allCy,TTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       V01StockPcYearlyTech(allCy,TTECH,YTIME)
             =E=
       V01StockPcYearlyTech(allCy,TTECH,YTIME-1) * 
-      (1 - V01RateScrPc(allCy,YTIME)) +
-      V01ShareTechTr(allCy,"PC",TTECH,YTIME) *
-      V01GapTranspActiv(allCy,"PC",YTIME);
+      (1 - V01RateScrPcTot(allCy,TTECH,YTIME)) +
+      V01NewRegPcTechYearly(allCy,TTECH,YTIME);
+
+* This equation computes the new registrations of passenger cars per technology for each country. 
+Q01NewRegPcTechYearly(allCy,TTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+        V01NewRegPcTechYearly(allCy,TTECH,YTIME)
+                =E=
+        V01ShareTechTr(allCy,"PC",TTECH,YTIME) *
+        V01GapTranspActiv(allCy,"PC",YTIME);
+
 
 *' This equation calculates the new registrations of passenger cars for a given year. It considers the market extension due to GDP-dependent and independent factors.
 *' The new registrations are influenced by the population, GDP, and the number of scrapped vehicles from the previous year.
@@ -293,31 +313,53 @@ Q01ActivPassTrnsp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANP(TRANSE) $runCy(allCy))
 *' This equation calculates the number of scrapped passenger cars based on the scrapping rate and the stock of passenger cars from the previous year.
 *' The scrapping rate represents the proportion of cars that are retired from the total stock, and it influences the annual number of cars taken out of service.
 Q01NumPcScrap(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-      V01NumPcScrap(allCy,YTIME)
-              =E=
-      V01RateScrPc(allCy,YTIME) * V01StockPcYearly(allCy,YTIME-1);
+    V01NumPcScrap(allCy,YTIME)
+            =E=
+    SUM(TTECH,
+      V01RateScrPcTot(allCy,TTECH,YTIME) * 
+      V01StockPcYearlyTech(allCy,TTECH,YTIME-1)
+    );
 
 *' This equation estimates vehicle ownership per capita for each country and year.
 *' It applies the Gompertz function to model how car ownership evolves in relation to GDP per capita.
 *' The formulation includes parameters that introduce a saturation effect, ensuring the model reflects
 *' an upper limit (asymptote) of car ownership as income levels rise.
-    Q01PcOwnPcLevl(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-        V01PcOwnPcLevl(allCy,YTIME)
-              =E=
-        i01PassCarsMarkSat(allCy) *
-        EXP(
-          -i01Sigma(allCy,"S1") *
-          EXP(-i01Sigma(allCy,"S2") * i01GDPperCapita(YTIME,allCy) / 10000)
-        );
+Q01PcOwnPcLevl(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V01PcOwnPcLevl(allCy,YTIME)
+          =E=
+    i01PassCarsMarkSat(allCy) *
+    EXP(
+      -i01Sigma(allCy,"S1") *
+      EXP(-i01Sigma(allCy,"S2") * i01GDPperCapita(YTIME,allCy) / 10000)
+    );
 
 *' This equation calculates the scrapping rate of passenger cars. The scrapping rate is influenced by the ratio of Gross Domestic Product (GDP) to the population,
 *' reflecting economic and demographic factors. The scrapping rate from the previous year is also considered, allowing for a dynamic estimation of the passenger
 *' cars scrapping rate over time.
-Q01RateScrPc(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V01RateScrPc(allCy,YTIME)
+Q01RateScrPc(allCy,TTECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH("PC",TTECH))..
+    V01RateScrPc(allCy,TTECH,YTIME)
         =E=
-    V01RateScrPc(allCy,YTIME-1) *
+    V01RateScrPc(allCy,TTECH,YTIME-1) *
     (
       i01GDPperCapita(YTIME,allCy) /
       i01GDPperCapita(YTIME-1,allCy)
     ) ** 0.1;
+
+Q01RateScrPcTot(allCy,TTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V01RateScrPcTot(allCy,TTECH,YTIME)
+        =E=
+    1 - (1 - V01RateScrPc(allCy,TTECH,YTIME)) *
+    (1 - V01PremScrp(allCy,"PC",TTECH,YTIME));
+    
+Q01PremScrp(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME)$SECTTECH(TRANSE,TTECH)$runCy(allCy))..
+    V01PremScrp(allCy,TRANSE,TTECH,YTIME)
+        =E=
+    1 -
+    (V01CostFuel(allCy,TRANSE,TTECH,YTIME) + 1e-4) ** (-2) /
+    (
+      (V01CostFuel(allCy,TRANSE,TTECH,YTIME) + 1e-4) ** (-2) +
+      0.1 * 
+      SUM(TTECH2$(not sameas(TTECH2,TTECH) and SECTTECH(TRANSE,TTECH2)),
+        (V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME) + 1e-4) ** (-2)
+      )
+    );

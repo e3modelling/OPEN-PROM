@@ -2,7 +2,7 @@
 *' @code
 
 *---
-table imActv(YTIME,allCy,SBS) "Sector activity (various)"
+table imActv(YTIME,allCy,DSBS) "Sector activity (various)"
                               !! main sectors (Billion US$2015) 
                               !! bunkers and households (1)
                               !! transport (Gpkm, or Gvehkm or Gtkm)
@@ -37,6 +37,8 @@ $include "./iElastA.csv"
 $offdelim
 ;
 imElastA(runCy,SBS,ETYPES,YTIME) = imElastA("ELL",SBS,ETYPES,YTIME);
+imElastA(runCy,DSBS,"b1",YTIME)$(not TRANSE(DSBS)) = imElastA(runCy,DSBS,"b1",YTIME) / 4;
+imElastA(runCy,DSBS,"b2",YTIME)$(not TRANSE(DSBS)) = imElastA(runCy,DSBS,"b2",YTIME) / 4;
 $ENDIF.calib
 *---
 parameter iDiscData(SBS) "Discount rates per subsector ()" /
@@ -67,7 +69,8 @@ NEN     0.08
 PG      0.1
 H2P     0.08
 H2INFR  0.08
-DAC     0.08 
+DAC     0.08
+STEAMP  0.08
 /;
 *---
 parameter imDisc(allCy,SBS,YTIME) "Discount rates per subsector for all countries ()" ;
@@ -78,6 +81,7 @@ imDisc(runCy,"PC",YTIME) = 0.11;
 * FIXME: Drive the emission factors with mrprom
 * author=giannou
 parameter iCo2EmiFacAllSbs(EF) "CO2 emission factors (kgCO2/kgoe fuel burned)" /
+CRO 2.76
 LGN 4.15330622,
 HCL 3.941453651,
 SLD 4.438008647,
@@ -88,12 +92,12 @@ KRS 2.964253636,
 RFO 3.207089028,
 OLQ 3.207089028,
 NGS 2.336234395,
-OGS 3.207089028,
+OGS 2.336234395,
 BMSWAS 0/;
 *---
 imCo2EmiFac(runCy,SBS,EF,YTIME) = iCo2EmiFacAllSbs(EF);
 imCo2EmiFac(runCy,"IS","HCL",YTIME) = iCo2EmiFacAllSbs("SLD"); !! This is the assignment for coke
-imCo2EmiFac(runCy,"H2P","NGS",YTIME) = 3.107;
+*imCo2EmiFac(runCy,"H2P","NGS",YTIME) = 3.107;
 *imCo2EmiFac(runCy,"H2P","BMSWAS",YTIME) = 0.497;
 *---
 parameter imElaSubData(DSBS)       "Elasticities by subsector (1)" /
@@ -122,19 +126,13 @@ modal    0.595709528,
 largest  0.833993339
 /;
 *---
-table imRateLossesFinCons(allCy,EF,YTIME)               "Rate of losses over Available for Final Consumption (1)"
-$ondelim
-$include "./iRateLossesFinCons.csv"
-$offdelim
-;
-*---
 table imInstCapPastNonCHP(allCy,PGALL,YTIME)        "Installed Non-CHP capacity past (GW)"
 $ondelim
 $include"./iInstCapPastNonCHP.csv"
 $offdelim
 ;
 *---
-table imInstCapPastCHP(allCy,CHP,YTIME)        "Installed CHP capacity past (GW)"
+table imInstCapPastCHP(allCy,EF,YTIME)        "Installed CHP capacity past (GW)"
 $ondelim
 $include"./iInstCapPastCHP.csv"
 $offdelim
@@ -164,6 +162,12 @@ $include"./iPriceFuelsInt.csv"
 $offdelim
 ;
 *---
+table imPriceElecInd(allCy,YTIME)                      "Electricity power to steam ratio"
+$ondelim
+$include"./iDataElecInd.csv"
+$offdelim
+;
+*---
 parameter imImpExp(allCy,EFS,YTIME)	              "Imports of exporting countries usually zero (1)" ;
 imImpExp(runCy,EFS,YTIME) = 0;
 *---
@@ -181,6 +185,8 @@ table imDataIndTechnology(INDSE,TECH,ECONCHAR)          "Technoeconomic characte
             IC      FC      VC      LFT USC
 *IS.THCL      0.32196 6.8     1.36    25  2.3255
 IS.THCL      0.32196 6.8     1.36    25  0.5
+* The share for IS +8% CAPEX -8%OPEX
+IS.THCLCCS   0.34772 6.256   1.36    25  0.5
 IS.TLGN      0.48295 10.2    2.04    25  0.5
 IS.TLPG      0.48295 10.2    2.04    25  0.72
 IS.TKRS      0.48295 10.2    2.04    25  0.72
@@ -188,20 +194,13 @@ IS.TGDO      0.48295 10.2    2.04    25  0.72
 IS.TRFO      0.48295 10.2    2.04    25  0.72
 IS.TOLQ      0.48295 10.2    2.04    25  0.72
 IS.TNGS      0.48295 10.2    2.04    25  0.8
+* The share for IS +8% CAPEX -8%OPEX
+IS.TNGSCCS   0.52159 9.38    2.04    25  0.8
 IS.TOGS      0.48295 10.2    2.04    25  0.8
 IS.TBMSWAS   0.48295 10.2    2.04    25  0.5
-* IS.TELC      0.29367 6.8     1.36    25  5.74713
-IS.TELC      0.29367 6.8     1.36    25  0.97
-IS.TSTE1AL   1.04547 17.284  17.68   25  0.35
-IS.TSTE1AH   1.04547 17.284  17.68   25  0.35
-IS.TSTE1AD   0.78340 23.3335 4.896   25  0.34
-IS.TSTE1AR   0.78340 23.3335 4.896   25  0.34
-*IS.TSTE1AG   0.50901 12.9631 13.6    20  0.44
-IS.TSTE1AG   1.18376 30.1467 31.6279 20  0.44
-IS.TSTE1AB   1.00334 28.8752 8.16    25  0.37
-IS.TSTE1AH2F 1.34817 40.4451         25  0.5
+IS.TELC      0.29367 6.8     1.36    25  0.85
 IS.THEATPUMP 0.92974 19.3882 3.1021  25  1.848
-IS.TH2F      1.04547 40.4451 17.68   25  0.97
+IS.TH2F      1.04547 40.4451 17.68   25  0.85
 NF.THCL      3.8528  63.036          30  0.5
 NF.TLGN      3.8528  63.036          30  0.5
 NF.TLPG      3.21067 63.036          30  0.72
@@ -212,17 +211,12 @@ NF.TOLQ      3.21067 63.036          30  0.72
 NF.TNGS      2.56853 63.036          30  0.8
 NF.TOGS      2.56853 63.036          30  0.8
 NF.TBMSWAS   3.8528  63.036          30  0.5
-NF.TELC      3.4     63.036          30  0.97
-NF.TSTE1AL   2.43133 40.1956 41.1163 25  0.35
-NF.TSTE1AH   2.43133 40.1956 41.1163 25  0.35
-NF.TSTE1AD   1.82186 54.264  11.386  25  0.34
-NF.TSTE1AR   1.82186 54.264  11.386  25  0.34
-NF.TSTE1AG   1.18376 30.1467 31.6279 20  0.44
-NF.TSTE1AB   2.33335 67.1517 18.9767 25  0.37
-NF.TSTE1AH2F 3.13528 94.0585         30  0.5
+NF.TELC      3.4     63.036          30  0.85
 NF.THEATPUMP 4.94477 119.819         30  1.848
-NF.TH2F      4.94477 119.819 41.1163 30  0.97
+NF.TH2F      4.94477 119.819 41.1163 30  0.85
 CH.THCL      0.53294 5.44            25  0.5
+* The share for CH +30% CAPEX 0%OPEX
+CH.THCLCCS   0.69282 5.44            25  0.5
 CH.TLGN      0.53294 5.44            25  0.5
 CH.TLPG      0.44411 5.44            25  0.72
 CH.TKRS      0.44411 5.44            25  0.72
@@ -230,19 +224,16 @@ CH.TGDO      0.44411 5.44            25  0.72
 CH.TRFO      0.44411 5.44            25  0.72
 CH.TOLQ      0.44411 5.44            25  0.72
 CH.TNGS      0.35529 5.44            25  0.8
+* The share for CH +30% CAPEX 0%OPEX
+CH.TNGSCCS   0.46188 5.44            25  0.8
 CH.TOGS      0.35529 5.44            25  0.8
 CH.TBMSWAS   0.53294 5.44            25  0.5
-CH.TELC      0.476   5.44            25  0.97
-CH.TSTE1AL   2.43133 40.1956 41.1163 25  0.35
-CH.TSTE1AH   2.43133 40.1956 41.1163 25  0.35
-CH.TSTE1AD   1.82186 54.264  11.386  25  0.34
-CH.TSTE1AR   1.82186 54.264  11.386  25  0.34
-CH.TSTE1AG   1.18376 30.1467 31.6279 20  0.44
-CH.TSTE1AB   2.33335 67.1517 18.9767 25  0.37
-CH.TSTE1AH2F 3.13528 94.0585         25  0.5
+CH.TELC      0.476   5.44            25  0.85
 CH.THEATPUMP 0.68398 10.3404         25  1.848
-CH.TH2F      3.13528 94.0585 41.1163 25  0.97
+CH.TH2F      3.13528 94.0585 41.1163 25  0.85
 BM.THCL      4.41477 3.2096          30  0.5
+* The share for BM +19% CAPEX +20%OPEX
+BM.THCLCCS   5.25357 3.8515          30  0.5
 BM.TLGN      4.41477 3.2096          30  0.5
 BM.TLPG      3.67898 3.2096          30  0.72
 BM.TKRS      3.67898 3.2096          30  0.72
@@ -250,18 +241,13 @@ BM.TGDO      3.67898 3.2096          30  0.72
 BM.TRFO      3.67898 3.2096          30  0.72
 BM.TOLQ      3.67898 3.2096          30  0.72
 BM.TNGS      2.94318 3.2096          30  0.8
+* The share for BM +19% CAPEX +20%OPEX
+BM.TNGSCCS   3.50238 3.8515          30  0.8
 BM.TOGS      2.94318 3.2096          30  0.8
 BM.TBMSWAS   4.41477 3.2096          30  0.5
-BM.TELC      3.808   3.2096          30  0.97
-BM.TSTE1AL   2.43133 40.1956 41.1163 25  0.35
-BM.TSTE1AH   2.43133 40.1956 41.1163 25  0.35
-BM.TSTE1AD   1.82186 54.264  11.386  25  0.34
-BM.TSTE1AR   1.82186 54.264  11.386  25  0.34
-BM.TSTE1AG   1.18376 30.1467 31.6279 20  0.44
-BM.TSTE1AB   2.33335 67.1517 18.9767 25  0.37
-BM.TSTE1AH2F 3.13528 94.0585         30  0.5
+BM.TELC      3.808   3.2096          30  0.85
 BM.THEATPUMP 5.66602 6.10081         30  1.848
-BM.TH2F      5.66602 94.0585 41.1163 30  0.97
+BM.TH2F      5.66602 94.0585 41.1163 30  0.85
 PP.THCL      0.90179 1.632           25  0.5
 PP.TLGN      0.90179 1.632           25  0.5
 PP.TLPG      0.75149 1.632           25  0.72
@@ -272,16 +258,9 @@ PP.TOLQ      0.75149 1.632           25  0.72
 PP.TNGS      0.60119 1.632           25  0.8
 PP.TOGS      0.60119 1.632           25  0.8
 PP.TBMSWAS   0.90179 1.632           25  0.5
-PP.TELC      0.884   1.632           25  0.97
-PP.TSTE1AL   2.43133 40.1956 41.1163 25  0.35
-PP.TSTE1AH   2.43133 40.1956 41.1163 25  0.35
-PP.TSTE1AD   1.82186 54.264  11.386  25  0.34
-PP.TSTE1AR   1.82186 54.264  11.386  25  0.34
-PP.TSTE1AG   1.18376 30.1467 31.6279 20  0.44
-PP.TSTE1AB   2.33335 67.1517 18.9767 25  0.37
-PP.TSTE1AH2F 2.27889 68.3668         25  0.5
+PP.TELC      0.884   1.632           25  0.85
 PP.THEATPUMP 1.15738 3.10211         25  1.68
-PP.TH2F      2.43133 68.3668 41.1163 25  0.97
+PP.TH2F      2.43133 68.3668 41.1163 25  0.85
 FD.THCL      0.63096 0.5372          25  0.5
 FD.TLGN      0.63096 0.5372          25  0.5
 FD.TLPG      0.42064 0.5372          25  0.72
@@ -292,16 +271,9 @@ FD.TOLQ      0.42064 0.5372          25  0.72
 FD.TNGS      0.33651 0.5372          25  0.8
 FD.TOGS      0.33651 0.5372          25  0.8
 FD.TBMSWAS   0.63096 0.5372          25  0.5
-FD.TELC      0.476   0.5372          25  0.97
-FD.TSTE1AL   2.43133 40.1956 41.1163 25  0.35
-FD.TSTE1AH   2.43133 40.1956 41.1163 25  0.35
-FD.TSTE1AD   1.82186 54.264  11.386  25  0.34
-FD.TSTE1AR   1.82186 54.264  11.386  25  0.34
-FD.TSTE1AG   1.18376 30.1467 31.6279 20  0.44
-FD.TSTE1AB   2.33335 67.1517 18.9767 25  0.37
-FD.TSTE1AH2F 2.27889 68.3668         25  0.5
+FD.TELC      0.476   0.5372          25  0.85
 FD.THEATPUMP 0.64783 1.02111         25  1.68
-FD.TH2F      2.43133 68.3668 41.1163 25  0.97
+FD.TH2F      2.43133 68.3668 41.1163 25  0.85
 EN.THCL      1.00937 0.31769         25  0.5
 EN.TLGN      1.00937 0.31769         25  0.5
 EN.TLPG      0.84114 0.31769         25  0.72
@@ -312,16 +284,9 @@ EN.TOLQ      0.84114 0.31769         25  0.72
 EN.TNGS      0.67291 0.31769         25  0.8
 EN.TOGS      0.67291 0.31769         25  0.8
 EN.TBMSWAS   1.00937 0.31769         25  0.5
-EN.TELC      0.748   0.31769         20  0.97
-EN.TSTE1AL   2.43133 40.1956 41.1163 25  0.35
-EN.TSTE1AH   2.43133 40.1956 41.1163 25  0.35
-EN.TSTE1AD   1.82186 54.264  11.386  25  0.34
-EN.TSTE1AR   1.82186 54.264  11.386  25  0.34
-EN.TSTE1AG   1.18376 30.1467 31.6279 20  0.44
-EN.TSTE1AB   2.33335 67.1517 18.9767 25  0.37
-EN.TSTE1AH2F 2.27889 68.3668         25  0.5
+EN.TELC      0.748   0.31769         20  0.85
 EN.THEATPUMP 1.29545 0.60387         25  1.68
-EN.TH2F      2.43133 68.3668 41.1163 25  0.97
+EN.TH2F      2.43133 68.3668 41.1163 25  0.85
 TX.THCL      0.67371 0.16959         20  0.5
 TX.TLGN      0.67371 0.16959         20  0.5
 TX.TLPG      0.44914 0.16959         20  0.72
@@ -332,16 +297,9 @@ TX.TOLQ      0.44914 0.16959         20  0.72
 TX.TNGS      0.35931 0.16959         20  0.8
 TX.TOGS      0.35931 0.16959         20  0.8
 TX.TBMSWAS   0.476   0.16959         20  0.5
-TX.TELC      0.476   0.16959         20  0.97
-TX.TSTE1AL   2.43133 40.1956 41.1163 25  0.35
-TX.TSTE1AH   2.43133 40.1956 41.1163 25  0.35
-TX.TSTE1AD   1.82186 54.264  11.386  25  0.34
-TX.TSTE1AR   1.82186 54.264  11.386  25  0.34
-TX.TSTE1AG   1.18376 30.1467 31.6279 20  0.44
-TX.TSTE1AB   2.33335 67.1517 18.9767 25  0.37
-TX.TSTE1AH2F 2.27889 68.3668         20  0.5
+TX.TELC      0.476   0.16959         20  0.85
 TX.THEATPUMP 0.69173 0.32236         20  1.68
-TX.TH2F      2.43133 68.3668 41.1163 25  0.97
+TX.TH2F      2.43133 68.3668 41.1163 25  0.85
 OE.THCL      1.00937 0.31769         25  0.5
 OE.TLGN      1.00937 0.31769         25  0.5
 OE.TLPG      0.84114 0.31769         25  0.72
@@ -352,16 +310,9 @@ OE.TOLQ      0.84114 0.31769         25  0.72
 OE.TNGS      0.67291 0.31769         25  0.8
 OE.TOGS      0.67291 0.31769         25  0.8
 OE.TBMSWAS   1.00937 0.31769         25  0.5
-OE.TELC      0.84114 0.31769         25  0.97
-OE.TSTE1AL   2.43133 40.1956 41.1163 25  0.35
-OE.TSTE1AH   2.43133 40.1956 41.1163 25  0.35
-OE.TSTE1AD   1.82186 54.264  11.386  25  0.34
-OE.TSTE1AR   1.82186 54.264  11.386  25  0.34
-OE.TSTE1AG   1.18376 30.1467 31.6279 20  0.44
-OE.TSTE1AB   2.33335 67.1517 18.9767 25  0.37
-OE.TSTE1AH2F 2.27889 68.3668         25  0.5
+OE.TELC      0.84114 0.31769         25  0.85
 OE.THEATPUMP 1.29545 0.60387         25  1.68
-OE.TH2F      2.43133 68.3668 41.1163 25  0.97
+OE.TH2F      2.43133 68.3668 41.1163 25  0.85
 OI.THCL      0.94967 1.40352         20  0.5
 OI.TLGN      0.94967 1.40352         20  0.5
 OI.TLPG      0.79139 1.40352         20  0.72
@@ -372,34 +323,19 @@ OI.TOLQ      0.79139 1.40352         20  0.72
 OI.TNGS      0.63311 1.40352         20  0.8
 OI.TOGS      0.63311 1.40352         20  0.8
 OI.TBMSWAS   0.94967 1.40352         20  0.5
-OI.TELC      0.68    1.40352         20  0.97
-OI.TSTE1AL   2.43133 40.1956 41.1163 25  0.35
-OI.TSTE1AH   2.43133 40.1956 41.1163 25  0.35
-OI.TSTE1AD   1.82186 54.264  11.386  25  0.34
-OI.TSTE1AR   1.82186 54.264  11.386  25  0.34
-OI.TSTE1AG   1.18376 30.1467 31.6279 20  0.44
-OI.TSTE1AB   2.33335 67.1517 18.9767 25  0.37
-OI.TSTE1AH2F 2.27889 68.3668         20  0.5
+OI.TELC      0.68    1.40352         20  0.85
 OI.THEATPUMP 1.21884 2.66781         20  1.68
-OI.TH2F      2.43133 68.3668 41.1163 25  0.97
+OI.TH2F      2.43133 68.3668 41.1163 25  0.85
 ;
 *---
 * Coverting EUR05 to US2015
 imDataIndTechnology(INDSE,TECH,"IC") = imDataIndTechnology(INDSE,TECH,"IC") * 1.3;
 imDataIndTechnology(INDSE,TECH,"FC") = imDataIndTechnology(INDSE,TECH,"FC") * 1.3;
 imDataIndTechnology(INDSE,TECH,"VC") = imDataIndTechnology(INDSE,TECH,"VC") * 1.3;
-*---
 
-table imDataChpPowGen(EF,CHPPGSET,YTIME)   "Data for power generation costs (various)"
-$ondelim
-$include"./iChpPowGen.csv"
-$offdelim
-;
-*---
-* Converting EUR2015 to US2015
-imDataChpPowGen(EF,"IC",YTIME)  = imDataChpPowGen(EF,"IC",YTIME) * 1.1;
-imDataChpPowGen(EF,"FC",YTIME)  = imDataChpPowGen(EF,"FC",YTIME) * 1.1;
-imDataChpPowGen(EF,"VOM",YTIME) = imDataChpPowGen(EF,"VOM",YTIME) * 1.1;
+imDataIndTechnology(INDSE,"TBGDO",ECONCHAR) = imDataIndTechnology(INDSE,"TGDO",ECONCHAR);
+imDataIndTechnology(INDSE,"TBMSWAS",ECONCHAR) = imDataIndTechnology("IS","TBMSWAS",ECONCHAR);
+imDataIndTechnology(INDSE,"TSTE",ECONCHAR) = imDataIndTechnology(INDSE,"THCL",ECONCHAR);
 *---
 table imDataDomTech(DOMSE,TECH,ECONCHAR)                "Technical lifetime of Industry (years)"
              IC       FC      VC      LFT USC
@@ -413,24 +349,9 @@ SE.TRFO       0.24888  10.88           20  0.8
 SE.TOLQ       0.24888  10.88           20  0.8
 SE.TNGS       0.2244   6.8             20  0.88
 SE.TOGS       0.2244   10.88           20  0.8
-*SE.PGTSOL     0.86224  1.36            20  0.97
+*SE.PGTSOL     0.86224  1.36            20  0.85
 SE.TBMSWAS    0.323544 10.88           20  0.5
-SE.TELC       0.3      8.976           12  0.97
-SE.TSTE1AL    2.43133  40.1956 41.1163 30  0.375
-SE.TSTE1AH    2.43133  40.1956 41.1163 30  0.375
-SE.TSTE1AD    1.82186  54.264  11.386  30  0.3475
-SE.TSTE1AR    1.82186  54.264  11.386  30  0.3475
-SE.TSTE1AG    1.18376  30.1467 31.6279 25  0.485
-SE.TSTE1AB    2.33335  67.1517 18.9767 30  0.3975
-SE.TSTE1AH2F  2.68089  80.4266         20  0.465
-SE.TSTE2LGN   0.296442 1.00489 2.37209 20  0.816667
-SE.TSTE2OSL   0.296442 1.00489 2.37209 20  0.816667
-SE.TSTE2GDO   0.296442 1.00489 2.37209 20  0.856667
-SE.TSTE2RFO   0.296442 1.00489 2.37209 20  0.856667
-SE.TSTE2OLQ   0.296442 1.00489 2.37209 20  0.856667
-SE.TSTE2NGS   0.296442 1.00489 2.37209 20  0.896667
-SE.TSTE2OGS   0.296442 1.00489 2.37209 20  0.896667
-SE.TSTE2BMS   0.296442 1.00489 2.37209 20  0.816667
+SE.TELC       0.3      8.976           12  0.85
 SE.THEATPUMP  0.432    12.9254         20  1.848
 AG.THCL       0.323544 10.88           20  0.7
 AG.TLGN       0.323544 10.88           20  0.5
@@ -442,24 +363,9 @@ AG.TRFO       0.24888  10.88           20  0.8
 AG.TOLQ       0.24888  10.88           20  0.8
 AG.TNGS       0.2244   6.8             20  0.88
 AG.TOGS       0.2244   10.88           20  0.8
-*AG.PGTSOL     0.86224  1.36            20  0.97
+*AG.PGTSOL     0.86224  1.36            20  0.85
 AG.TBMSWAS    0.323544 10.88           20  0.5
-AG.TELC       0.3      8.976           12  0.97
-AG.TSTE1AL    2.43133  40.1956 41.1163 30  0.375
-AG.TSTE1AH    2.43133  40.1956 41.1163 30  0.375
-AG.TSTE1AD    1.82186  54.264  11.386  30  0.3475
-AG.TSTE1AR    1.82186  54.264  11.386  30  0.3475
-AG.TSTE1AG    1.18376  30.1467 31.6279 25  0.485
-AG.TSTE1AB    2.33335  67.1517 18.9767 30  0.3975
-AG.TSTE1AH2F  2.68089  80.4266         20  0.465
-AG.TSTE2LGN   0.296442 1.00489 2.37209 20  0.816667
-AG.TSTE2OSL   0.296442 1.00489 2.37209 20  0.816667
-AG.TSTE2GDO   0.296442 1.00489 2.37209 20  0.856667
-AG.TSTE2RFO   0.296442 1.00489 2.37209 20  0.856667
-AG.TSTE2OLQ   0.296442 1.00489 2.37209 20  0.856667
-AG.TSTE2NGS   0.296442 1.00489 2.37209 20  0.896667
-AG.TSTE2OGS   0.296442 1.00489 2.37209 20  0.896667
-AG.TSTE2BMS   0.296442 1.00489 2.37209 20  0.816667
+AG.TELC       0.3      8.976           12  0.85
 AG.THEATPUMP  0.432    12.9254         20  1.848
 HOU.THCL      0.323544 10.88           20  0.7
 HOU.TLGN      0.323544 10.88           20  0.5
@@ -471,24 +377,9 @@ HOU.TRFO      0.24888  10.88           20  0.8
 HOU.TOLQ      0.24888  10.88           20  0.8
 HOU.TNGS      0.2244   6.8             20  0.88
 HOU.TOGS      0.2244   10.88           20  0.8
-*HOU.PGTSOL    0.86224  1.36            20  0.97
+*HOU.PGTSOL    0.86224  1.36            20  0.85
 HOU.TBMSWAS   0.323544 10.88           20  0.5
-HOU.TELC      0.3      8.976           12  0.97
-HOU.TSTE1AL   2.43133  40.1956 41.1163 30  0.375
-HOU.TSTE1AH   2.43133  40.1956 41.1163 30  0.375
-HOU.TSTE1AD   1.82186  54.264  11.386  30  0.3475
-HOU.TSTE1AR   1.82186  54.264  11.386  30  0.3475
-HOU.TSTE1AG   1.18376  30.1467 31.6279 25  0.485
-HOU.TSTE1AB   2.33335  67.1517 18.9767 30  0.3975
-HOU.TSTE1AH2F 2.68089  80.4266         20  0.465
-HOU.TSTE2LGN  0.296442 1.00489 2.37209 20  0.816667
-HOU.TSTE2OSL  0.296442 1.00489 2.37209 20  0.816667
-HOU.TSTE2GDO  0.296442 1.00489 2.37209 20  0.856667
-HOU.TSTE2RFO  0.296442 1.00489 2.37209 20  0.856667
-HOU.TSTE2OLQ  0.296442 1.00489 2.37209 20  0.856667
-HOU.TSTE2NGS  0.296442 1.00489 2.37209 20  0.896667
-HOU.TSTE2OGS  0.296442 1.00489 2.37209 20  0.896667
-HOU.TSTE2BMS  0.296442 1.00489 2.37209 20  0.816667
+HOU.TELC      0.3      8.976           12  0.85
 HOU.THEATPUMP 0.432    12.9254         20  1.848
 ;
 *---
@@ -496,6 +387,8 @@ HOU.THEATPUMP 0.432    12.9254         20  1.848
 imDataDomTech(DOMSE,TECH,"IC") = imDataDomTech(DOMSE,TECH,"IC") * 1.3;
 imDataDomTech(DOMSE,TECH,"FC") = imDataDomTech(DOMSE,TECH,"FC") * 1.3;
 imDataDomTech(DOMSE,TECH,"VC") = imDataDomTech(DOMSE,TECH,"VC") * 1.3;
+imDataIndTechnology(INDSE,"TGSL",ECONCHAR) = imDataDomTech("SE","TGSL",ECONCHAR);
+imDataDomTech(DOMSE,"TSTE",ECONCHAR) = imDataDomTech(DOMSE,"THCL",ECONCHAR);
 *---
 table imDataNonEneSec(NENSE,TECH,ECONCHAR)              "Technical data of non energy uses and bunkers (various)"
         IC      FC      VC      LFT USC
@@ -509,6 +402,7 @@ PCH.TNGS 0.18088 0.9044  2.37209 20  0.8
 PCH.TOGS 0.18088 1.36    2.37209 20  0.8
 BU.TGDO  0.204   0.136           25  0.72
 BU.TRFO  0.204   0.136           25  0.72
+BU.TKRS  0.136   6.8             25  0.72
 BU.TOLQ  0.136   6.8             25  0.72
 NEN.THCL 0.26227 45.22   2.37209 20  0.65
 NEN.TLGN 0.26227 47.6    2.37209 20  0.5
@@ -524,6 +418,7 @@ NEN.TOGS 0.18088 1.36    2.37209 20  0.8
 imDataNonEneSec(NENSE,TECH,"IC") = imDataNonEneSec(NENSE,TECH,"IC") * 1.3;
 imDataNonEneSec(NENSE,TECH,"FC") = imDataNonEneSec(NENSE,TECH,"FC") * 1.3;
 imDataNonEneSec(NENSE,TECH,"VC") = imDataNonEneSec(NENSE,TECH,"VC") * 1.3;
+imDataNonEneSec(NENSE,"TSTE",ECONCHAR) = imDataNonEneSec(NENSE,"THCL",ECONCHAR);
 *---
 * FIXME: check if country-specific data is needed; move to mrprom
 * author=giannou
@@ -662,46 +557,16 @@ $offdelim
 *---
 imDistrLosses(runCy,EFS,YTIME) = iDataDistrLosses(runCy,EFS,YTIME);
 *---
-table imFuelConsTRANSE(allCy,TRANSE,EF,YTIME)	      "Fuel consumption (Mtoe)"
+table imFuelCons(allCy,SBS,EF,YTIME)	      "Fuel consumption (Mtoe)"
 $ondelim
-$include"./iFuelConsTRANSE.csv"
+$include"./iFuelCons.csv"
 $offdelim
 ;
 *---
-imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME) = imFuelConsTRANSE(runCy,TRANSE,EF,YTIME);
-table iFuelConsINDSE(allCy,INDSE,EF,YTIME)	"Fuel consumption of industry subsector (Mtoe)"
-$ondelim
-$include"./iFuelConsINDSE.csv"
-$offdelim
-;
+imFuelConsPerFueSub(runCy,SBS,EF,YTIME) = imFuelCons(runCy,SBS,EF,YTIME);
+imFuelConsPerFueSub(runCy,"BU",EF,YTIME) = -imFuelConsPerFueSub(runCy,"BU",EF,YTIME);
 *---
-iFuelConsINDSE(runCy,INDSE,EF,YTIME)$(SECtoEF(INDSE,EF) $(iFuelConsINDSE(runCy,INDSE,EF,YTIME)<=0)) = 1e-6;
-*---
-table iFuelConsDOMSE(allCy,DOMSE,EF,YTIME)	"Fuel consumption of domestic subsector (Mtoe)"
-$ondelim
-$include"./iFuelConsDOMSE.csv"
-$offdelim
-;
-*---
-iFuelConsDOMSE(runCy,DOMSE,EF,YTIME)$(SECtoEF(DOMSE,EF) $(iFuelConsDOMSE(runCy,DOMSE,EF,YTIME)<=0)) = 1e-6;
-*---
-table iFuelConsNENSE(allCy,NENSE,EF,YTIME)	"Fuel consumption of non energy and bunkers (Mtoe)"
-$ondelim
-$include"./iFuelConsNENSE.csv"
-$offdelim
-;
-*---
-iFuelConsNENSE(runCy,NENSE,EF,YTIME)$(SECtoEF(NENSE,EF) $(iFuelConsNENSE(runCy,NENSE,EF,YTIME)<=0)) = 1e-6;
-imFuelConsPerFueSub(runCy,INDSE,EF,YTIME) = iFuelConsINDSE(runCy,INDSE,EF,YTIME);
-imFuelConsPerFueSub(runCy,DOMSE,EF,YTIME) = iFuelConsDOMSE(runCy,DOMSE,EF,YTIME);
-imFuelConsPerFueSub(runCy,NENSE,EF,YTIME) = iFuelConsNENSE(runCy,NENSE,EF,YTIME);
-* NEED TO CHECK IF CORRECT
-imFinEneCons(runCy,EFS,YTIME) =
-     sum((INDDOM,EF)$(EFtoEFS(EF,EFS) and sum(TECH$(SECTTECH(INDDOM,TECH) and TECHtoEF(TECH,EF)),1)),imFuelConsPerFueSub(runCy,INDDOM,EF,YTIME))
-     +
-     sum((TRANSE,EF)$(EFtoEFS(EF,EFS) and sum(TECH$(SECTTECH(TRANSE,TECH) and TECHtoEF(TECH,EF)$(not plugin(TECH))),1)), imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME));
-*---
-imCO2CaptRate(runCy,PGALL,YTIME) = 0.1; 
+imCO2CaptRate(PGALL)$CCS(PGALL) = 0.90; 
 imEffValueInDollars(runCy,SBS,YTIME) = 0;
 iScenarioPri(WEF,"NOTRADE",YTIME) = 0;
 *---
@@ -714,9 +579,6 @@ $offdelim
 imFuelImports(runCy,EFS,YTIME)$(not An(YTIME)) = iDataImports(runCy,EFS,YTIME);
 *---
 iNetImp(runCy,EFS,YTIME) = iDataImports(runCy,"ELC",YTIME)-iSuppExports(runCy,"ELC",YTIME);
-*---
-* Calculation of weights for sector average fuel price
-iResElecIndex(runCy,YTIME) = 1;
 *---
 **                   Power Generation
 table iEnvPolicies(allCy,POLICIES_SET,YTIME) "Environmental policies on emissions constraints  and subsidy on renewables (Mtn CO2)"
@@ -744,38 +606,152 @@ $include"./iMatrFactorData.csv"
 $offdelim
 ;
 iMatrFactorData(DSBS,TECH,YTIME)$(TRANSE(DSBS) or INDSE(DSBS) or DOMSE(DSBS)) = 1;
+iMatrFactorData(DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and (INDSE(DSBS)) and CCSTECH(ITECH)) = 1;
 iMatrFactorData(DSBS,TECH,YTIME)$(sameas(DSBS, "PC")$SECTTECH(DSBS,TECH)) = 1;
 *---
 $IFTHEN.calib %MatFacCalibration% == off
 parameter imMatrFactor(allCy,DSBS,TECH,YTIME)   "Maturity factor per technology and subsector for all countries (1)";
 imMatrFactor(runCy,DSBS,TECH,YTIME) = iMatrFactorData(DSBS,TECH,YTIME);                                          
 imMatrFactor(runCy,DSBS,TECH,YTIME)$(imMatrFactor(runCy,DSBS,TECH,YTIME)=0) = 0.000001;
+
+imMatrFactor(runCy,DSBS,"TGDO",YTIME)$((ord(YTIME) > 11) and TRANSE(DSBS)) = 0.5;
+imMatrFactor(runCy,DSBS,"TGSL",YTIME)$((ord(YTIME) > 11) and TRANSE(DSBS)) = 0.5;
+imMatrFactor(runCy,DSBS,"TELC",YTIME)$((ord(YTIME) > 11) and TRANSE(DSBS)) = 3;
+imMatrFactor("CHA",DSBS,"TELC",YTIME)$((ord(YTIME) > 11) and TRANSE(DSBS)) = 8;
+imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 30 and TRANSE(DSBS)) = 8;
+imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 11;
+imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 11;
+imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 50 and TRANSE(DSBS)) = 15;
+imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 50 and TRANSE(DSBS)) = 15;
+imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 11;
+imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 11;
+imMatrFactor(runCy,DSBS,"TNGSCCS",YTIME)$((ord(YTIME) > 11) and INDSE(DSBS)) = 1;
+imMatrFactor(runCy,DSBS,"THCLCCS",YTIME)$((ord(YTIME) > 11) and INDSE(DSBS)) = 1;
+imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 11 and DOMSE(DSBS)) = 20;
+imMatrFactor(runCy,DSBS,"TBMSWAS",YTIME)$(ord(YTIME) > 11 and DOMSE(DSBS)) = 0.001;
+imMatrFactor(runCy,DSBS,"TH2F",YTIME)$(ord(YTIME) < 21 and INDSE(DSBS)) = 0;
+imMatrFactor(runCy,DSBS,"TH2F",YTIME)$(ord(YTIME) > 21 and INDSE(DSBS)) = 2;
+imMatrFactor(runCy,DSBS,"TH2F",YTIME)$(ord(YTIME) > 40 and INDSE(DSBS)) = 2;
+imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 11 and INDSE(DSBS)) = 4;
+imMatrFactor(runCy,DSBS,"TH2F",YTIME)$(ord(YTIME) > 11 and INDSE(DSBS)) = 20;
+imMatrFactor(runCy,DSBS,"TGDO",YTIME)$(ord(YTIME) > 30 and TRANSE(DSBS)) = 0.001;
+imMatrFactor(runCy,DSBS,"TGSL",YTIME)$(ord(YTIME) > 30 and TRANSE(DSBS)) = 0.001;
+imMatrFactor(runCy,DSBS,"TNGS",YTIME)$(ord(YTIME) > 30 and TRANSE(DSBS)) = 0.001;
+imMatrFactor(runCy,DSBS,"TLPG",YTIME)$(ord(YTIME) > 30 and TRANSE(DSBS)) = 0.001;
+imMatrFactor(runCy,DSBS,"TPHEVGSL",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 0.001;
+imMatrFactor(runCy,DSBS,"TPHEVGDO",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 0.001;
+imMatrFactor(runCy,DSBS,"TCHEVGSL",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 0.001;
+imMatrFactor(runCy,DSBS,"TCHEVGDO",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 0.001;
+
 $ELSE.calib
 variable imMatrFactor(allCy,DSBS,TECH,YTIME)    "Maturity factor per technology and subsector for all countries (1)";
 imMatrFactor.L(runCy,DSBS,TECH,YTIME) = iMatrFactorData(DSBS,TECH,YTIME) + 1e-6;                                          
-imMatrFactor.L(runCy,DSBS,EF,YTIME)$(imMatrFactor.L(runCy,DSBS,TECH,YTIME)=0) = 0.000001;
 imMatrFactor.LO(runCy,DSBS,EF,YTIME) = -10;                                          
 imMatrFactor.UP(runCy,DSBS,EF,YTIME) = 100;
 $ENDIF.calib
 *---
+parameters
+!!imFacSubsiCapCostTech(DSBS,TECH)                            !!State subsidy (%) factor in technology capex (demand side)
+!!imGrantCapCostTech(DSBS,TECH)                               !!State granting in technology capex (demand side)
+!!imSubsiCapCostFuel(SBS,EF)                                  !!State subsidy in fuel cost
+!!imFacSubsiCapCostSupply(SSBS,STECH)                         !!State subsidy (%) factor in technology capex (supply side)
+!!imGrantCapCostSupply(SSBS,STECH)                            !!State granting in technology capex (supply side)
+imCapCostTechMin(allCy,DSBS,TECH,YTIME)                    !!Factor for the minimum capex of a demand technology after the state subsidy
+;
+
+$ontext
+if %fScenario% eq 0 then
+     imFacSubsiCapCostTech("PC","TELC") = 0;
+     imFacSubsiCapCostTech("CH","TELC") = 0;
+     imFacSubsiCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 0;
+     imGrantCapCostTech("PC","TELC") = 0;                        !!kUS$2015 per vehicle
+     imGrantCapCostTech("CH","TELC") = 0;                        !!kUS$2015/toe-year for Industry sectors
+     imGrantCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 0;         !!US$2015/tCO2
+     imSubsiCapCostFuel("HOU","ELC") = 0;                        !!kUS$2015/toe
+     imSubsiCapCostFuel(SBS,"ELC")$INDSE1(SBS) = 0;              !!kUS$2015/toe
+     imFacSubsiCapCostSupply("PG",PGREN) = 0;
+     imFacSubsiCapCostSupply("H2P",H2TECH) = 0;
+     imGrantCapCostSupply("PG",PGREN) = 0;                       !!kUS$2015/kW
+     imGrantCapCostSupply("H2P",H2TECH) = 0;                     !!US$2015/toe H2
+elseif %fScenario% eq 1 then
+     imFacSubsiCapCostTech("PC","TELC") = 0;
+     imFacSubsiCapCostTech("CH","TELC") = 0;
+     imFacSubsiCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 0;
+     imGrantCapCostTech("PC","TELC") = 1;                        !!kUS$2015 per vehicle
+     imGrantCapCostTech("CH","TELC") = 0;                        !!kUS$2015/toe-year for Industry sectors
+     imGrantCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 90;        !!US$2015/tCO2
+     imSubsiCapCostFuel("HOU","ELC") = 0;                        !!kUS$2015/toe
+     imSubsiCapCostFuel(SBS,"ELC")$INDSE1(SBS) = 0;              !!kUS$2015/toe
+     imFacSubsiCapCostSupply("PG",PGREN) = 0.1;
+     imFacSubsiCapCostSupply("H2P",H2TECH) = 0.2;
+     imGrantCapCostSupply("PG",PGREN) = 0;                       !!kUS$2015/kW
+     imGrantCapCostSupply("H2P",H2TECH) = 0;                     !!US$2015/toe H2
+elseif %fScenario% eq 2 then
+     imFacSubsiCapCostTech("PC","TELC") = 0;
+     imFacSubsiCapCostTech("CH","TELC") = 0.40;
+     imFacSubsiCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 0;
+     imGrantCapCostTech("PC","TELC") = 9;                        !!kUS$2015 per vehicle
+     imGrantCapCostTech("CH","TELC") = 0;                        !!kUS$2015/toe-year for Industry sectors
+     imGrantCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 90;        !!US$2015/tCO2
+     imSubsiCapCostFuel("HOU","ELC") = 0;                        !!kUS$2015/toe
+     imSubsiCapCostFuel(SBS,"ELC")$INDSE1(SBS) = 0;              !!kUS$2015/toe
+     imFacSubsiCapCostSupply("PG",PGREN) = 0.3;
+     imFacSubsiCapCostSupply("H2P",H2TECH) = 0.4;
+     imGrantCapCostSupply("PG",PGREN) = 0;                       !!kUS$2015/kW
+     imGrantCapCostSupply("H2P",H2TECH) = 0;                     !!US$2015/toe H2
+elseif %fScenario% eq 3 then
+     imFacSubsiCapCostTech("PC","TELC") = 0;
+     imFacSubsiCapCostTech("CH","TELC") = 0.10;
+     imFacSubsiCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 0;
+     imGrantCapCostTech("PC","TELC") = 7;                        !!kUS$2015 per vehicle
+     imGrantCapCostTech("CH","TELC") = 0;                        !!kUS$2015/toe-year for Industry sectors
+     imGrantCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 90;        !!US$2015/tCO2
+     imSubsiCapCostFuel("HOU","ELC") = 0;                        !!kUS$2015/toe
+     imSubsiCapCostFuel(SBS,"ELC")$INDSE1(SBS) = 0;              !!kUS$2015/toe
+     imFacSubsiCapCostSupply("PG",PGREN) = 0.3;
+     imFacSubsiCapCostSupply("H2P",H2TECH) = 0.3;
+     imGrantCapCostSupply("PG",PGREN) = 0;                       !!kUS$2015/kW
+     imGrantCapCostSupply("H2P",H2TECH) = 0;                     !!US$2015/toe H2
+elseif %fScenario% eq 4 then
+     imFacSubsiCapCostTech("PC","TELC") = 0;
+     imFacSubsiCapCostTech("CH","TELC") = 0;
+     imFacSubsiCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 0;
+     imGrantCapCostTech("PC","TELC") = 1;                        !!kUS$2015 per vehicle
+     imGrantCapCostTech("CH","TELC") = 0;                        !!kUS$2015/toe-year for Industry sectors
+     imGrantCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 90;        !!US$2015/tCO2
+     imSubsiCapCostFuel("HOU","ELC") = 0;                        !!kUS$2015/toe
+     imSubsiCapCostFuel(SBS,"ELC")$INDSE1(SBS) = 0;              !!kUS$2015/toe
+     imFacSubsiCapCostSupply("PG",PGREN) = 0.1;
+     imFacSubsiCapCostSupply("H2P",H2TECH) = 0.2;
+     imGrantCapCostSupply("PG",PGREN) = 0;                       !!kUS$2015/kW
+     imGrantCapCostSupply("H2P",H2TECH) = 0;                     !!US$2015/toe H2
+endif;
+$offtext
+*---
 ** Industry
 imShrNonSubElecInTotElecDem(runCy,INDSE)  = iIndCharData(INDSE,"SHR_NSE");
+imShrNonSubElecInTotElecDem(runCy,INDSE)  = iIndCharData(INDSE,"SHR_NSE") - 0.2;
 imShrNonSubElecInTotElecDem(runCy,INDSE)$(imShrNonSubElecInTotElecDem(runCy,INDSE)>0.98) = 0.98;
 **Domestic - Tertiary
 imShrNonSubElecInTotElecDem(runCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(DOMSE,"SHR_NSE");
+imShrNonSubElecInTotElecDem(runCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(DOMSE,"SHR_NSE") - 0.4;
 imShrNonSubElecInTotElecDem(runCy,DOMSE)$(imShrNonSubElecInTotElecDem(runCy,DOMSE)>0.98) = 0.98;
 **   Macroeconomic
 *---
 **  Transport Sector
 imCapCostTech(runCy,TRANSE,TECH,YTIME) = imDataTransTech(TRANSE,TECH,"IC",YTIME);
+imCapCostTechMin(allCy,TRANSE,TECH,YTIME) = 0.4;
 imFixOMCostTech(runCy,TRANSE,TECH,YTIME) = imDataTransTech(TRANSE,TECH,"FC",YTIME);
 imVarCostTech(runCy,TRANSE,TECH,YTIME) = imDataTransTech(TRANSE,TECH,"VC",YTIME);
 *---
 **  Industrial Sector
 imCapCostTech(runCy,INDSE,TECH,YTIME) = imDataIndTechnology(INDSE,TECH,"IC");
+imCapCostTechMin(allCy,INDSE,TECH,YTIME) = 0.5;
 imFixOMCostTech(runCy,INDSE,TECH,YTIME) = imDataIndTechnology(INDSE,TECH,"FC");
 imVarCostTech(runCy,INDSE,TECH,YTIME) = imDataIndTechnology(INDSE,TECH,"VC");
 imUsfEneConvSubTech(runCy,INDSE,TECH,YTIME)  = imDataIndTechnology(INDSE,TECH,"USC");
+*imUsfEneConvSubTech(runCy,INDSE,"THCL",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCL","USC") + 0.005 * (ord(YTIME)-11);
+*imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCLCCS","USC") + 0.005 * (ord(YTIME)-11);
 *---
 **  Domestic Sector
 imFixOMCostTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,"FC");
@@ -787,6 +763,16 @@ imFixOMCostTech(runCy,NENSE,TECH,YTIME)= imDataNonEneSec(NENSE,TECH,"FC");
 imVarCostTech(runCy,NENSE,TECH,YTIME) = imDataNonEneSec(NENSE,TECH,"VC");
 imUsfEneConvSubTech(runCy,NENSE,TECH,YTIME) = imDataNonEneSec(NENSE,TECH,"USC");
 *---
+**  CDR
+imCapCostTechMin(allCy,"DAC","HTDAC",YTIME) = 0.4;
+imCapCostTechMin(allCy,"DAC","H2DAC",YTIME) = 0.2;
+imCapCostTechMin(allCy,"DAC","LTDAC",YTIME) = 0.2;
+imCapCostTechMin(allCy,"DAC","EWDAC",YTIME) = 0.2;
+*---
+!!imUsfEneConvSubTech(runCy,INDSE,"THCL",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCL","USC") + 0.005 * (ord(YTIME)-11);
+imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCLCCS","USC") + 0.005 * (ord(YTIME)-11);
+imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$(ord(YTIME)>50)  = 0.7;
+
 **  Power Generation
 *---
 table iDataPlantEffByType(allCy,PGALL, YTIME)   "Data for plant efficiency per plant type"
@@ -796,6 +782,8 @@ $offdelim
 ;
 *---
 imPlantEffByType(runCy,PGALL,YTIME) = iDataPlantEffByType(runCy,PGALL, YTIME) ;
+imPlantEffByType(runCy,"PGH2F",YTIME) = 0.85;
 *---
 **   Conversion of GW mean power into TWh/y, depending on whether it's a leap year
 smGwToTwhPerYear(YTIME) = 8.76 + 0.024 $ (mod(YTIME.val,4) = 0 and mod (YTIME.val,100) <> 0);
+*--

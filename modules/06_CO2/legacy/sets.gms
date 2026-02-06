@@ -1,7 +1,7 @@
 *' @title CO2 Sets
 *' @code
 
-*---
+sets
 *---
 $ontext
 DACTECHEF(EF)               "Fuels used in DAC technologies"
@@ -16,3 +16,10 @@ DACTECHEFtoEF(DACTECH,EF)   "Mapping between DAC technologies and fuels"
 (HTDAC,LTDAC,EWDAC).elc
 /
 $offtext
+*---
+CO2CAPTECH           "Carbon capture subsectors" /
+PG
+H2P
+DAC
+IND
+/

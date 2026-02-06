@@ -10,11 +10,9 @@ iPriceReform(allCy,SBS,EF,YTIME)	                       "Price reformation (1)"
 iScenarioPri(WEF,NAP,YTIME)	                               "Scenario prices (KUS$2015/toe)"		
 iResNonSubsElecDem(allCy,SBS,YTIME	)	                   "Residuals in Non Substitutable Electricity Demand	(1)"	
 iResFuelConsPerSubAndFuel(allCy,SBS,EF,YTIME)	           "Residuals in fuel consumption per subsector and fuel (1)"	
-iFinEneConsPrevYear(allCy,EF,YTIME)	                       "Final energy consumption used for holding previous year results (Mtoe)"	
 iCarbValYrExog(allCy,ytime)	                               "Carbon value for each year when it is exogenous (US$2015/tn CO2)"
 iShrHeatPumpElecCons(allCy,SBS)	                           "Share of heat pump electricity consumption in total substitutable electricity (1)"						 			
 iTranfOutGasworks(allCy,EF,YTIME)	                       "Transformation Output from Gasworks, Blast Furnances and Briquetting plants (Mtoe)"	
-iResElecIndex(allCy,YTIME)                                 "Residual for electricity Index (1)"
 iNetImp(allCy,EFS,YTIME)                                   "Net imports (Mtoe)"
 ODummyObj                                                  "Parameter saving objective function"
 
@@ -32,11 +30,10 @@ imAnnCons(allCy,DSBS,conSet)                               "Annual consumption o
 imCumDistrFuncConsSize(allCy,DSBS)                         "Cummulative distribution function of consumer size groups (1)"
 imRateLossesFinCons(allCy,EF,YTIME)                        "Rate of losses over Available for Final Consumption (1)"  
 imFuelExprts(allCy,EF,YTIME)	                           "Fuel Exports (Mtoe)"
-imCO2CaptRate(allCy,PGALL,YTIME)	                       "Plant CO2 capture rate (1)"		
+imCO2CaptRate(PGALL)	                                    "Plant CO2 capture rate (1)"		
 imEffValueInDollars(allCy,SBS,YTIME)	                   "Efficiency value (US$2015/toe)" 	
 imShrNonSubElecInTotElecDem(allCy,SBS)	                   "Share of non substitutable electricity in total electricity demand per subsector (1)"		
 imDistrLosses(allCy,EF,YTIME)	                           "Distribution Losses (Mtoe)"		
-imFinEneCons(allCy,EF,YTIME)	                           "Final energy consumption (Mtoe)"		
 imFuelImports(allCy,EF,YTIME)	                           "Fuel Imports (Mtoe)"							
 imVarCostTech(allCy,SBS,TECH,YTIME)	                       "Variable Cost of technology ()"
                                                                 !! For transport (kUS$2015/vehicle)
@@ -78,11 +75,20 @@ VmRenValue(YTIME)                                          "Renewable value (US$
 
 Scalars
 smTWhToMtoe                                                "TWh to Mtoe conversion factor" /0.086/
-smElecToSteRatioChp                                        "Technical maximum of electricity to steam ratio in CHP plants" /0.9/
+smElecToSteRatioChp                                        "Technical maximum of electricity to steam ratio in CHP plants" /2.5/
 sIter                                                      "time step iterator" /0/
 sSolverTryMax                                              "maximum attempts to solve each time step" /%SolverTryMax%/
+$ifthen.magpie "%link2MAgPIE%" == "on"
+sLink2MAgPIE                                               "Binary flag for MAgPIE link (1=on, 0=off)" /1/
+$else.magpie
+sLink2MAgPIE                                               "Binary flag for MAgPIE link (1=on, 0=off)" /0/
+$endif.magpie
 sModelStat                                                 "helper parameter for solver status"
 smFracElecPriChp                                           "Fraction of Electricity Price at which a CHP sells electricity to network" /0/
 sCY                                                        "country iterator" /0/
 sUnitToKUnit                                               "units to Kilo units conversion" /1000/
+epsilon6                                                   "A small number of magnitude 6" /1e-6/
+smCtoCO2                                                   "Mass conversion factor (44/12) per tCO2 -> per tC" / 3.66419 /
+smDefl_15_to_10                                            "Deflate 2015$ to 2010$ - Data_MAC_CH4N2O_Harmsen-et-al_PBL_2019" / 0.8957 /
+smDefl_15_to_05                                            "Deflate 2015$ to 2005$ - Data_MAC_F-gases_Harmsen-et-al_PBL_2019" / 0.824 /
 ;
