@@ -38,6 +38,12 @@ $include"./iStockPC.csv"
 $offdelim
 ;
 *---
+table i01DataShareBlend(allCy,TRANSE,EF,YTIME)                     "Blend share of fuel per transport mode (1)"
+$ondelim
+$include"./iDataShareBlend.csv"
+$offdelim
+;
+*---
 parameter i01PlugHybrFractData(YTIME)                   "Plug in hybrid fraction of mileage" /
 2010    0.5
 2011    0.504444
@@ -141,6 +147,7 @@ $offdelim
 i01SFCPC(allCy,TTECH,"BGSL",YTIME) = i01SFCPC(allCy,TTECH,"GSL",YTIME);
 i01SFCPC(allCy,TTECH,"BGDO",YTIME) = i01SFCPC(allCy,TTECH,"GDO",YTIME);
 i01SFCPC(allCy,TTECH,"OGS",YTIME) = i01SFCPC(allCy,TTECH,"NGS",YTIME);
+i01SFCPC(allCy,TTECH,EF,YTIME)$AN(YTIME) = i01SFCPC(allCy,TTECH,EF,"%fBaseY%");
 *---
 parameter i01InitSpecFuelConsData(TRANSE,TTECH,EF)      "Initial Specific fuel consumption: (ktoe/Gvkm)" /
 PT.TGDO.GDO	11.
@@ -153,6 +160,8 @@ PA.TKRS.KRS	20
 PN.TGDO.GDO  30
 PN.TGDO.BGDO  30
 PN.TH2F.H2F  43
+PB.TGSL.GSL  8
+PB.TGSL.BGSL  8
 PB.TGDO.GDO  7.8
 PB.TGDO.BGDO  7.8
 PB.TNGS.NGS  5.6
@@ -182,19 +191,6 @@ GN.TH2F.H2F	1.5
 /
 ;
 *---
-
-Parameters
-i01GdpPassCarsMarkExt(allCy)	                          "GDP-dependent passenger cars market extension (GDP/capita)"
-i01PassCarsScrapRate(allCy)	                          "Passenger cars scrapping rate (1)"
-i01ShareAnnMilePlugInHybrid(allCy,YTIME)	           "Share of annual mileage of a plug-in hybrid which is covered by electricity (1)"
-i01AvgVehCapLoadFac(allCy,TRANSE,TRANSUSE,YTIME)	      "Average capacity/vehicle and load factor (tn/veh or passenegers/veh)"
-i01TechLft(allCy,DSBS,TECH,YTIME)	                     "Technical Lifetime. For passenger cars it is a variable (1)"
-i01PassCarsMarkSat(allCy)	                          "Passenger cars ownership saturation threshold (1)"
-i01GDPperCapita(YTIME,allCy)
-i01Sigma(allCy,SG)                                   "S parameters of Gompertz function for passenger cars vehicle km (1)"
-i01ShareTTechFuel(allCy,TRANSE,TTECH,EF)
-;
-*---
 i01PassCarsMarkSat(runCy) = 0.7;
 *---
 i01ShareAnnMilePlugInHybrid(runCy,YTIME) = i01PlugHybrFractData(YTIME);
@@ -213,17 +209,34 @@ i01TechLft(runCy,DOMSE,ITECH,YTIME) = imDataDomTech(DOMSE,ITECH,"LFT");
 *---
 **  Non Energy Sector and Bunkers
 i01TechLft(runCy,NENSE,ITECH,YTIME) = imDataNonEneSec(NENSE,ITECH,"LFT");
+i01TechLft(runCy,"BU","TH2F",YTIME) = 25;
 *---
 **  DAC Sector
 i01TechLft(runCy,"DAC",DACTECH,YTIME) = 25;
 *---
 i01GDPperCapita(YTIME,runCy) = i01GDP(YTIME,runCy) / i01Pop(YTIME,runCy);
+*---or not sameas("BGSL", EF) or not sameas("BGDO", EF) "%fBaseY%"
+i01ShareBlend(runCy,TRANSE,EF,YTIME)$DATAY(YTIME) =
+SUM(EF2$BLENDMAP(EF2,EF),
+  (
+    imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME) / 
+    sum(EFS$BLENDMAP(EF2,EFS),
+      imFuelConsPerFueSub(runCy,TRANSE,EFS,YTIME)
+    )
+  )$(sum(EFS$BLENDMAP(EF2,EFS),imFuelConsPerFueSub(runCy,TRANSE,EFS,YTIME)) > 0)
+);
+i01ShareBlend(runCy,TRANSE,EFS,YTIME)$(SECtoEF(TRANSE,EFS) and not SUM(EF2,BLENDMAP(EF2,EFS))) = 1;
+i01ShareBlend(runCy,TRANSE,EF,YTIME)$AN(YTIME) = i01ShareBlend(runCy,TRANSE,EF,"%fBaseY%");
+i01ShareBlend("LAM",ROAD,"BGDO",YTIME) = i01ShareBlend("LAM",ROAD,"BGDO","%fBaseY%") + 0.002 * (ord(YTIME)-11);
+i01ShareBlend("LAM",ROAD,"GDO",YTIME) = i01ShareBlend("LAM",ROAD,"GDO","%fBaseY%") - 0.002 * (ord(YTIME)-11);
+i01ShareBlend("LAM",ROAD,"BGSL",YTIME) = i01ShareBlend("LAM",ROAD,"BGSL","%fBaseY%") + 0.001 * (ord(YTIME)-11);
+i01ShareBlend("LAM",ROAD,"GSL",YTIME) = i01ShareBlend("LAM",ROAD,"GSL","%fBaseY%") - 0.001 * (ord(YTIME)-11);
 *---
-*i01ShareTTechFuel(runCy,TRANSE,TTECH,EF,YTIME)$(SECTTECH(TRANSE,TTECH) and (sameas("TPHEVGSL",TTECH) or sameas("TPHEVGDO",TTECH)) and ELCEF(EF)) = i01ShareAnnMilePlugInHybrid(runCy,YTIME);
-i01ShareTTechFuel(runCy,TRANSE,TTECH,EF)$(SECTTECH(TRANSE,TTECH) and not ((sameas("TPHEVGSL",TTECH) or sameas("TPHEVGDO",TTECH)) and ELCEF(EF)))
-=
-*(1-i01ShareTTechFuel(runCy,TRANSE,TTECH,"ELC",YTIME)) * 
-(
-  imFuelConsPerFueSub(runCy,TRANSE,EF,"%fBaseY%") /
-  (SUM(EF2$TTECHtoEF(TTECH,EF2),imFuelConsPerFueSub(runCy,TRANSE,EF2,"%fBaseY%")))
- )$(SUM(EF2$TTECHtoEF(TTECH,EF2),imFuelConsPerFueSub(runCy,TRANSE,EF2,"%fBaseY%"))$(TTECHtoEF(TTECH,EF)));
+$IFTHEN.calib %Calibration% == MatCalibration
+table t01NewShareStockPC(allCy,TTECH,YTIME)    "Targets for share of new passenger cars"
+$ondelim
+$include "../targets/tNewShareStockPC.csv"
+$offdelim
+;
+*imMatrFactor.FX(runCy,"PC",TTECH,YTIME)$((t01StockPC(runCy,TTECH,YTIME) < 0) and (t01NewShareStockPC(runCy,TTECH,YTIME) <= 0)) = 100;         
+$ENDIF.calib

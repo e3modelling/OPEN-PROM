@@ -39,7 +39,7 @@ VmRenValue.FX(YTIME)$(ord(YTIME)>=40) = 2000;
 *---
 VmElecConsHeatPla.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = imFuelConsPerFueSub(runCy,INDDOM,"ELC",YTIME)*(1-imShrNonSubElecInTotElecDem(runCy,INDDOM))*iShrHeatPumpElecCons(runCy,INDDOM);
 * Compute electricity consumed in heatpump plants, QElecConsHeatPla(runCy,INDDOM,YTIME)$time(ytime).
-VmElecConsHeatPla.FX(runCy,INDDOM,YTIME) = 1E-7;
+VmElecConsHeatPla.FX(runCy,DSBS,YTIME) = 0;
 *---
 VmCarVal.FX(runCy,"TRADE",YTIME) = iCarbValYrExog(runCy,YTIME);
 VmCarVal.FX(runCy,"NOTRADE",YTIME) = iCarbValYrExog(runCy,YTIME);
