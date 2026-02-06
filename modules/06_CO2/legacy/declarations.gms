@@ -3,6 +3,7 @@
 
 Equations
 Q06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME)	               "Compute CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
+Q06GlobalCCSLimit(YTIME)                "Global CCS limit across all regions excluding DAC (Mtn CO2/yr)"
 Q06CaptCummCO2(allCy,YTIME)	                               "Compute cumulative CO2 captured (Mtn of CO2)"
 Q06GrossCapDAC(DACTECH,YTIME)                        "Computes CAPEX of DAC technologies with learning curve"
 Q06FixOandMDAC(DACTECH,YTIME)                        "Computes Fixed and O&M costs of DAC technologies with learning curve"

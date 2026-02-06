@@ -308,6 +308,10 @@ exogCV_NPi
 exogCV_1_5C
 exogCV_2C
 exogCV_Calib
+Full_C200
+Full_C400
+Full_C600
+Full_C800
 /
 
 RegulaPolicies(POLICIES_set) Set of policies entering in the regula falsi loops

@@ -598,6 +598,14 @@ elseif %fScenario% eq 3 then
      iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"exogCV_2C",YTIME);
 elseif %fScenario% eq 4 then
      iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"exogCV_Calib",YTIME);
+elseif %fScenario% eq 5 then
+     iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"Full_C200",YTIME);
+elseif %fScenario% eq 6 then
+     iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"Full_C400",YTIME);   
+elseif %fScenario% eq 7 then
+     iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"Full_C600",YTIME);
+elseif %fScenario% eq 8 then
+     iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"Full_C800",YTIME);
 endif;
 *---
 table iMatrFactorData(DSBS,TECH,YTIME)          "Maturity factor per technology and subsector (1)"
