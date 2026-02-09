@@ -36,7 +36,7 @@ VmConsFuelDACProd(allCy,EF,YTIME)                          "Annual fuel demand i
 ;
 
 Scalars
-S06ProfRateMaxDAC                                           "The maximum profitability rate of V06DACProfRate" /7.5/
-S06CapFacMaxNewDAC                                          "The maximum level of the V06DACNewCapFac" /0.115/
-S06CapFacMinNewDAC                                          "The minimum level of the V06DACNewCapFac" /0.055/
+S06ProfRateMaxDAC                                           "The maximum profitability rate of V06DACProfRate" /15/
+S06CapFacMaxNewDAC                                          "The maximum level of the V06DACNewCapFac" /0.1/
+S06CapFacMinNewDAC                                          "The minimum level of the V06DACNewCapFac" /0.025/
 ;
