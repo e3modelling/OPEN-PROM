@@ -6,7 +6,6 @@ library(quitte)
 
 getRunpath <- function() {
   # Main execution
-  print(getwd())
   result <- call_functions()
   runpath <- as.data.frame(result)
   runpath <- as.vector(runpath[, seq(2, length(runpath), 2)])
