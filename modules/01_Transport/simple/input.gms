@@ -233,7 +233,7 @@ i01ShareBlend("LAM",ROAD,"BGSL",YTIME) = i01ShareBlend("LAM",ROAD,"BGSL","%fBase
 i01ShareBlend("LAM",ROAD,"GSL",YTIME) = i01ShareBlend("LAM",ROAD,"GSL","%fBaseY%") - 0.001 * (ord(YTIME)-11);
 *---
 $IFTHEN.calib %Calibration% == MatCalibration
-table t01NewShareStockPC(allCy,TTECH,YTIME)    "Targets for share of new passenger cars"
+table t01NewShareStockPC(allCy,TRANSE,TTECH,YTIME)    "Targets for share of new passenger cars"
 $ondelim
 $include "../targets/tNewShareStockPC.csv"
 $offdelim
