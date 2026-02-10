@@ -1,22 +1,14 @@
 library(madrat)
 library(postprom)
-library(reticulate)
 library(dplyr)
 library(quitte)
 
-installPythonPackages <- function(packages) {
-  for (pkg in packages) {
-    if (!py_module_available(pkg)) {
-      py_install(pkg, use_python = TRUE)
-    }
-  }
-}
 
 getRunpath <- function() {
-  py_config()
-  installPythonPackages(c("seaborn", "colorama", "pandas"))
-  python_output <- py_run_file("./scripts/reporting.py")
-  runpath <- as.data.frame(python_output$path)
+  # Main execution
+  print(getwd())
+  result <- call_functions()
+  runpath <- as.data.frame(result)
   runpath <- as.vector(runpath[, seq(2, length(runpath), 2)])
   return(unlist(runpath, use.names = FALSE))
 }
@@ -27,8 +19,8 @@ reportOutput <- function(
     aggregate = TRUE,
     fullValidation = TRUE,
     plot_name = NULL,
-    Validation_data_for_plots = TRUE,
-    Validation2050 = TRUE,
+    Validation_data_for_plots = Validation_data_for_plots,
+    Validation2050 = Validation2050,
     emissions = TRUE,
     htmlReport = FALSE, projectReport = FALSE) {
   # Region mapping used for aggregating validation data (e.g. ENERDATA)
