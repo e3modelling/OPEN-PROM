@@ -24,5 +24,4 @@ V04CostHourProdInvDec.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = V04CostHourProdInvDec
 
 $ifthen.calib %Calibration% == MatCalibration
 i04MatFacPlaAvailCap.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = i04MatFacPlaAvailCap.L(runCyL,PGALL,YTIME)$TIME(YTIME);
-i04MatureFacPlaDisp.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = i04MatureFacPlaDisp.L(runCyL,PGALL,"%fEndY%")$TIME(YTIME);
 $endif.calib

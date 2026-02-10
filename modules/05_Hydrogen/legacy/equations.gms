@@ -12,7 +12,7 @@ Q05DemTotH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         i05EffH2Transp(allCy,INFRTECH,YTIME)*
         (1-i05ConsSelfH2Transp(allCy,INFRTECH,YTIME))
       )
-    )  !! increase the demand due to transportation losses
+    ) !! increase the demand due to transportation losses
 ;
 
 *' This equation calculates the sectoral hydrogen demand (VmDemSecH2) for each demand subsector (DSBS), year, and region.
