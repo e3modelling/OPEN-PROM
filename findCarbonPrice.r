@@ -61,7 +61,7 @@ applyAlpha <- function(envWide, yearCols, alpha, targetRegion) {
   x <- data.table::copy(envWide)
   
   # Identify only year columns >= 2025
-  yearColsFuture <- yearCols[as.integer(yearCols) >= 2025]
+  yearColsFuture <- yearCols[as.integer(yearCols) >= changeCarbonPriceFromYear]
   
   if (is.null(targetRegion)) {
     # --- GLOBAL MODE: Apply to ALL regions ---
@@ -341,8 +341,10 @@ calculateGhg <- function(dataMagpie) {
   
   # Combine with Energy CO2
   if (flagCO2eq) {
+    #emissions <- mbind(totalCo2Eq, dataMagpie[, , "Emissions|CO2|Energy and Industrial Processes.Mt CO2/yr"])
     emissions <- mbind(totalCo2Eq, dataMagpie[, , "Emissions|CO2.Mt CO2/yr"])
   } else {
+    #emissions <- dataMagpie[, , "Emissions|CO2|Energy and Industrial Processes.Mt CO2/yr"]
     emissions <- dataMagpie[, , "Emissions|CO2.Mt CO2/yr"]
   }
 
@@ -364,7 +366,8 @@ calculateGhg <- function(dataMagpie) {
 # ----------------------------
 start_time <- Sys.time()
 GAMSCmdArgs <- c("--DevMode=0", "--GenerateInput=off", "lo=4", "idir=./data")
-selectedYear <- 2030
+selectedYear <- 2050
+changeCarbonPriceFromYear <- 2031
 flagCO2eq <- TRUE
 
 # ---------------------------------------------------------
@@ -401,16 +404,16 @@ flagCO2eq <- TRUE
 # targetConditionalMtCO2e MtCO2e/yr
 # targetList <- list(
 #   "CAZ" = 780.6,
-#   "CHA" = 14373,
-#   "GBR" = 260.3,
-#   "IND" = 4816,
-#   "JPN" = 760.32,
-#   "LAM" = 3886,
-#   "MEA" = 2164.6,
-#   "NEU" = 832.1,
-#   "OAS" = 5292.7,
-#   "REF" = 3668,
-#   "SSA" = 832.1,
+#    "CHA" = 14373,
+#    "GBR" = 260.3,
+#    "IND" = 4816,
+#    "JPN" = 760.32,
+#    "LAM" = 3886,
+#    "MEA" = 2164.6,
+#    "NEU" = 832.1,
+#    "OAS" = 5292.7,
+#    "REF" = 3668,
+#    "SSA" = 832.1
 # )
 # targetConditionalMtCO2 MtCO2/yr - ONLY CO2
 # targetList <- list(
@@ -426,11 +429,25 @@ flagCO2eq <- TRUE
 #   "REF" = 2752,
 #   "SSA" = 1735
 # )
+# targetConditionalMtCO2 MtCO2/yr - ONLY Emissions|CO2|Energy & Industrial Processes. MtCO2/yr
+# targetList <- list(
+#   "CAZ" = 777,
+#   "CHA" = 11252,
+#   "GBR" = 195,
+#   "IND" = 3592,
+#   "JPN" = 644,
+#   "LAM" = 4177,
+#   "MEA" = 1653,
+#   "NEU" = 719,
+#   "OAS" = 3583,
+#   "REF" = 3813,
+#   "SSA" = 2113
+# )
 targetList <- NULL
 # CASE B: No Target Regions (Empty List) -> Implies EU27 Run
 #globalParams <- 1750 # EU-27 target 2030 in MtCO2/yr - ONLY CO2
-globalParams <- 2250  # EU-27 target 2030 in MtCO2e/yr 
-
+#globalParams <- 2250  # EU-27 target 2030 in MtCO2e/yr 
+globalParams <- 0  # EU-27 target 2030 in MtCO2e/yr 
 # LOGGING SETUP
 logFilePath <- "Carbon_price_optimization.log"
 file.create(logFilePath)

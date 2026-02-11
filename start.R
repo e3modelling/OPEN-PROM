@@ -225,7 +225,7 @@ if (task == 0) {
   saveMetadata(DevMode = 1)
   if (withRunFolder) createRunFolder(setScenarioName("DEV"))
 
-  shell(paste0(gams, " main.gms --DevMode=1 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log"))
+  shell(paste0(gams, " main.gms --DevMode=1 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 "))
   if (withRunFolder && withReport) {
     run_path <- getwd()
     setwd("../../") # Going back to root folder
@@ -240,7 +240,7 @@ if (task == 0) {
   saveMetadata(DevMode = 1)
   if (withRunFolder) createRunFolder(setScenarioName("DEVNEWDATA"))
 
-  shell(paste0(gams, " main.gms --DevMode=1 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 | tee full.log"))
+  shell(paste0(gams, " main.gms --DevMode=1 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 "))
 
   if (withRunFolder) {
     file.copy("data", to = "../../", recursive = TRUE) # Copying generated data to parent folder for future runs
@@ -272,7 +272,7 @@ if (task == 0) {
   # NEW DATA & CALIBRATE
   calib_cmd <- paste0(
     gams,
-    " main.gms -o mainCalib.lst --WriteGDX=off --DevMode=0 --fScenario=4 --GenerateInput=on --Calibration=MatCalibration -logOption 4 -Idir=./data 2>&1 | tee fullCalib.log"
+    " main.gms -o mainCalib.lst --WriteGDX=off --DevMode=0 --fScenario=4 --GenerateInput=on --Calibration=MatCalibration -logOption 4 -Idir=./data 2>&1"
   )
   cat("Executing calibration with data generation:\n", calib_cmd, "\n")
   
@@ -306,7 +306,7 @@ if (task == 0) {
   cat("Calibration completed successfully.\n")
 
   # RESEARCH
-  research_cmd <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log")
+  research_cmd <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 ")
   cat("Executing research run:\n", research_cmd, "\n")
   
   exit_code <- shell(research_cmd)
@@ -334,7 +334,7 @@ if (task == 0) {
   if (withRunFolder && withSync) syncRun()
 } else if (task == 4) {
   # Debugging mode
-  shell(paste0(gams, " main.gms -logOption 4 -Idir=./data 2>&1 | tee full.log"))
+  shell(paste0(gams, " main.gms -logOption 4 -Idir=./data 2>&1 "))
 } else if (task == 5) {
   # Running task OPEN-PROM CALIBRATE
   saveMetadata(DevMode = 0)
@@ -343,7 +343,7 @@ if (task == 0) {
   shell(
     paste0(
       gams,
-      " main.gms -o mainCalib.lst --DevMode=0 --Calibration=MatCalibration --fScenario=4 -logOption 4 -Idir=./data 2>&1 | tee fullCalib.log"
+      " main.gms -o mainCalib.lst --DevMode=0 --Calibration=MatCalibration --fScenario=4 -logOption 4 -Idir=./data 2>&1"
     )
   )
 
