@@ -60,7 +60,7 @@ Q11SubsiDemITech(allCy,DSBS,ITECH,YTIME)$(INDSE(DSBS) and SECTTECH(DSBS,ITECH) a
       (V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME-1) * V02GapUsefulDemSubsec(allCy,DSBS,YTIME-1) * 1e6 * VmLft(allCy,DSBS,ITECH,YTIME)) -
       (1 - imCapCostTechMin(allCy,DSBS,ITECH,YTIME)) * V02CostTech(allCy,DSBS,ITECH,YTIME-1)
     ))
-    )$(ord(YTIME) > 12) / 2;
+    )$(ord(YTIME) > 14) / 2;
 
 *' The equation calculates the state support per unit of new capacity in the demand subsectors and technologies for the following units:
 *' - Transport (kUS$2015 per vehicle)
@@ -80,7 +80,7 @@ Q11SubsiDemTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS
         VmSubsiDemTechAvail(allCy,DSBS,TECH,YTIME) * 1e3 / ((V01StockPcYearlyTech(allCy,"TELC",YTIME-1) - V01StockPcYearlyTech(allCy,"TELC",YTIME-2)) * 1e6)
         - (1 - imCapCostTechMin(allCy,DSBS,TECH,YTIME)) * imCapCostTech(allCy,DSBS,TECH,YTIME)))
       ) / 2
-    )$((ord(YTIME) > 12 and TRANSE(DSBS)))
+    )$((ord(YTIME) > 14 and TRANSE(DSBS)))
     +
     sum(ITECH$(sameas(TECH,ITECH)), !! Industry
       VmSubsiDemITech(allCy,DSBS,ITECH,YTIME)
@@ -96,7 +96,7 @@ Q11SubsiDemTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS
       (V06CapDAC(allCy,DACTECH,YTIME-1) * V06CapFacNewDAC(allCy,DACTECH,YTIME-1))
       - (1 - imCapCostTechMin(allCy,"DAC",DACTECH,YTIME)) * V06LvlCostDAC(allCy,DACTECH,YTIME-1)))
       ) / 2
-    )$((ord(YTIME) > 12))
+    )$((ord(YTIME) > 14))
 ;
 
 *' The equation splits the available state grants to the various supply technologies through a policy parameter expressing this proportional division.
