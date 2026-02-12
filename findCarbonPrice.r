@@ -65,10 +65,11 @@ applyAlpha <- function(envWide, yearCols, alpha, targetRegion) {
   
   if (is.null(targetRegion)) {
     # --- GLOBAL MODE: Apply to ALL regions ---
-    x[, (yearColsFuture) := lapply(.SD, function(col) col * alpha), .SDcols = yearColsFuture]
+    # Formula: new = old + (alpha * old)
+    x[, (yearColsFuture) := lapply(.SD, function(col) col * (1 + alpha)), .SDcols = yearColsFuture]
   } else {
     # --- REGIONAL MODE: Apply to specific region only ---
-    x[region == targetRegion, (yearColsFuture) := lapply(.SD, function(col) col * alpha), .SDcols = yearColsFuture]
+    x[region == targetRegion, (yearColsFuture) := lapply(.SD, function(col) col * (1 + alpha)), .SDcols = yearColsFuture]
   }
   x
 }
@@ -510,15 +511,16 @@ for (regName in names(runQueue)) {
   }
 
   # B. Auto-Bracket
+  # Note: alpha is now a change factor. 0.0 = No change. 1.0 = +100% (Double price).
   brkt <- autoBracketFromSeed(
-    seedAlpha    = 1.0,
+    seedAlpha    = 0.2,            
     budgetTarget = bg,
     envWide      = currentEnvWide,
     yearCols     = yearCols,
-    targetRegion = actualRegion, # Passes NULL if global
+    targetRegion = actualRegion,
     targetYear   = selectedYear,
-    minAlpha     = 1.0,
-    maxAlpha     = 20.0,
+    minAlpha     = -0.5,           # Allow price reduction up to -50% if needed
+    maxAlpha     = 10.0,           # Allow up to +1000% increase
     expandFactor = 2.0,
     maxProbes    = 12,
     verbose      = TRUE
@@ -584,7 +586,7 @@ sink(type = "message")
 sink()
 
 # FINISH
-writeFinalPolicyFiles(currentEnvWide, yearCols, 1.0, NULL)
+writeFinalPolicyFiles(currentEnvWide, yearCols, 0.0, NULL)
 message(sprintf("Done. Total time: %s", Sys.time() - start_time))
 
 # # ---- Option A (Seed from two points) ----
