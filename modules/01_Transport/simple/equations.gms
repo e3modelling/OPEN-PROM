@@ -65,10 +65,15 @@ Q01GapTranspActiv(allCy,TRANSE,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
           V01ActivPassTrnsp(allCy,TRANSE,YTIME) - 
           V01ActivPassTrnsp(allCy,TRANSE,YTIME-1) + 
           V01ActivPassTrnsp(allCy,TRANSE,YTIME-1) /
-          (sum((TTECH)$SECTTECH(TRANSE,TTECH), VmLft(allCy,TRANSE,TTECH,YTIME-1)) / TECHS(TRANSE))
+          sum((TTECH)$SECTTECH(TRANSE,TTECH), VmLft(allCy,TRANSE,TTECH,YTIME-1)) / TECHS(TRANSE)
         ] +
-        SQRT( SQR([V01ActivPassTrnsp(allCy,TRANSE,YTIME) - V01ActivPassTrnsp(allCy,TRANSE,YTIME-1) + V01ActivPassTrnsp(allCy,TRANSE,YTIME-1)/
-        (sum((TTECH)$SECTTECH(TRANSE,TTECH),VmLft(allCy,TRANSE,TTECH,YTIME-1))/TECHS(TRANSE))]) + SQR(1e-4) ) 
+      SQRT(SQR(
+        [
+          V01ActivPassTrnsp(allCy,TRANSE,YTIME) -
+          V01ActivPassTrnsp(allCy,TRANSE,YTIME-1) +
+          V01ActivPassTrnsp(allCy,TRANSE,YTIME-1) /
+          sum((TTECH)$SECTTECH(TRANSE,TTECH),VmLft(allCy,TRANSE,TTECH,YTIME-1)) / TECHS(TRANSE)
+        ])) 
       )/2
     )$(TRANP(TRANSE) $(not sameas(TRANSE,"PC"))) +
     (
@@ -79,8 +84,13 @@ Q01GapTranspActiv(allCy,TRANSE,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
           V01ActivGoodsTransp(allCy,TRANSE,YTIME-1) /
           (sum(TTECH$SECTTECH(TRANSE,TTECH),VmLft(allCy,TRANSE,TTECH,YTIME-1))/TECHS(TRANSE))
         ] + 
-        SQRT( SQR([V01ActivGoodsTransp(allCy,TRANSE,YTIME) - V01ActivGoodsTransp(allCy,TRANSE,YTIME-1) + V01ActivGoodsTransp(allCy,TRANSE,YTIME-1)/
-        (sum((TTECH)$SECTTECH(TRANSE,TTECH),VmLft(allCy,TRANSE,TTECH,YTIME-1))/TECHS(TRANSE))]) + SQR(1e-4) ) 
+        SQRT(SQR(
+          [
+            V01ActivGoodsTransp(allCy,TRANSE,YTIME) -
+            V01ActivGoodsTransp(allCy,TRANSE,YTIME-1) + 
+            V01ActivGoodsTransp(allCy,TRANSE,YTIME-1)/
+        (sum((TTECH)$SECTTECH(TRANSE,TTECH),VmLft(allCy,TRANSE,TTECH,YTIME-1))/TECHS(TRANSE))
+          ])) 
       )/2
     )$TRANG(TRANSE);
 
@@ -273,9 +283,11 @@ Q01NewRegPcTechYearly(allCy,TTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q01NewRegPcYearly(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         V01NewRegPcYearly(allCy,YTIME)
                 =E=
-        V01StockPcYearly(allCy,YTIME) - 
-        V01StockPcYearly(allCy,YTIME-1) +
-        V01NumPcScrap(allCy,YTIME);     !! new cars due to scrapping
+        (
+          V01StockPcYearly(allCy,YTIME) - V01StockPcYearly(allCy,YTIME-1) + V01NumPcScrap(allCy,YTIME)
+        +
+        sqrt(sqr(V01StockPcYearly(allCy,YTIME) - V01StockPcYearly(allCy,YTIME-1) + V01NumPcScrap(allCy,YTIME)))
+        ) / 2;     !! new cars due to scrapping
 
 *' This equation calculates the passenger transport activity for various modes of transportation, including passenger cars, aviation, and other passenger transportation modes.
 *' The activity is influenced by factors such as fuel prices, GDP per capita, and elasticities specific to each transportation mode. The equation uses past activity levels and

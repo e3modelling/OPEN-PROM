@@ -73,11 +73,11 @@ Q11SubsiDemTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS
     (
       ( !! Transport (EVs)
         (
-          VmSubsiDemTechAvail(allCy,DSBS,TECH,YTIME) * 1e3 / ((V01StockPcYearlyTech(allCy,"TELC",YTIME-1) - V01StockPcYearlyTech(allCy,"TELC",YTIME-2)) * 1e6)
+          VmSubsiDemTechAvail(allCy,DSBS,TECH,YTIME) * 1e3 / ((V01StockPcYearlyTech(allCy,"TELC",YTIME-1) - V01StockPcYearlyTech(allCy,"TELC",YTIME-2)) * 1e6 + 1)
           + (1 - imCapCostTechMin(allCy,DSBS,TECH,YTIME)) * imCapCostTech(allCy,DSBS,TECH,YTIME)
         ) -
         sqrt(sqr( 
-        VmSubsiDemTechAvail(allCy,DSBS,TECH,YTIME) * 1e3 / ((V01StockPcYearlyTech(allCy,"TELC",YTIME-1) - V01StockPcYearlyTech(allCy,"TELC",YTIME-2)) * 1e6)
+        VmSubsiDemTechAvail(allCy,DSBS,TECH,YTIME) * 1e3 / ((V01StockPcYearlyTech(allCy,"TELC",YTIME-1) - V01StockPcYearlyTech(allCy,"TELC",YTIME-2)) * 1e6 + 1)
         - (1 - imCapCostTechMin(allCy,DSBS,TECH,YTIME)) * imCapCostTech(allCy,DSBS,TECH,YTIME)))
       ) / 2
     )$((ord(YTIME) > 14 and TRANSE(DSBS)))
@@ -115,7 +115,7 @@ Q11SubsiCapCostTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(
       ( !!Transport subsidies and grants
         VmSubsiDemTechAvail(allCy,DSBS,TECH,YTIME)
         + imCapCostTechMin(allCy,DSBS,TECH,YTIME) * imCapCostTech(allCy,DSBS,TECH,YTIME) * 1e-3
-          * ((V01StockPcYearlyTech(allCy,"TELC",YTIME) - V01StockPcYearlyTech(allCy,"TELC",YTIME-1)) * 1e6)
+          * ((V01StockPcYearlyTech(allCy,"TELC",YTIME) - V01StockPcYearlyTech(allCy,"TELC",YTIME-1)) * 1e6) !! Adding a small number to avoid zero division
         -
         sqrt(sqr(VmSubsiDemTechAvail(allCy,DSBS,TECH,YTIME)
         - imCapCostTechMin(allCy,DSBS,TECH,YTIME) * imCapCostTech(allCy,DSBS,TECH,YTIME) * 1e-3
