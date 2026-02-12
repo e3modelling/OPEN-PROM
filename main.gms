@@ -182,7 +182,7 @@ option limrow = 0;
 *' *** Save a GDX file after each solve, containing all computed variables (0 off, 1 on)
 option savepoint = 0;
 *' *** Print solution in .lst file (on/off)
-option solprint = on;
+option solprint = off;
 
 *' *** "dollar" ($) commands section: define GAMS flags & code control & compilation-time options
 *  *** onDollar activates printing of the $commands to .lst file
@@ -216,7 +216,7 @@ $setEnv GDXCOMPRESS 1
 *' *** Generate input data?
 $setGlobal GenerateInput off !! can be overwritten if VS Code Tasks are used
 
-$setGlobal fCountries 'ITA' !! can be overwritten if VS Code Tasks are used
+$setGlobal fCountries 'CHA,DEU,IND,USA,RWO' !! can be overwritten if VS Code Tasks are used
 
 $setGlobal fCountryList %countries%
 
@@ -224,7 +224,7 @@ $evalGlobal fPeriodOfYears 1
 
 $evalGlobal fStartHorizon 2010
 $evalGlobal fEndHorizon 2100
-$evalGlobal fEndY 2065
+$evalGlobal fEndY 2100
 $evalGlobal fStartY 2023
 $evalGlobal fBaseY %fStartY% - %fPeriodOfYears%
 $evalGlobal fScenario 1 !! Setting the model scenario: 0 is No carbon price, 1 is NPi_Default, 2 is 1.5C and 3 is 2C
