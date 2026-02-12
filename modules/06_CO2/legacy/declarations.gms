@@ -2,7 +2,7 @@
 *' @code
 
 Equations
-Q06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME)	               "Compute CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
+Q06CapCO2ElecHydr(allCy,SBS,YTIME)	               "Compute CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
 Q06CaptCummCO2(allCy,YTIME)	                               "Compute cumulative CO2 captured (Mtn of CO2)"
 Q06GrossCapDAC(DACTECH,YTIME)                        "Computes CAPEX of DAC technologies with learning curve"
 Q06FixOandMDAC(DACTECH,YTIME)                        "Computes Fixed and O&M costs of DAC technologies with learning curve"
@@ -19,7 +19,7 @@ Q06CstCO2SeqCsts(allCy,YTIME)	                           "Compute cost curve for
 ;
 
 Variables
-V06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME)	                "CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
+V06CapCO2ElecHydr(allCy,SBS,YTIME)	                "CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
 V06CaptCummCO2(allCy,YTIME)	                              "Cumulative CO2 captured (Mtn CO2)"
 V06GrossCapDAC(DACTECH,YTIME)                        "CAPEX of DAC technologies with learning curve"
 V06FixOandMDAC(DACTECH,YTIME)                        "Fixed and O&M costs of DAC technologies with learning curve"

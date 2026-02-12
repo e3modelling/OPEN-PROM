@@ -20,17 +20,17 @@ Q11SubsiTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
             (
               sum((EF,EFS)$EFtoEFS(EF,EFS),
                 VmConsFinEneCountry(allCy,EF,YTIME-1) * imCo2EmiFac(allCy,"PG",EF,YTIME-1)) 
-              + sum(SSBS, V07EmissCO2Supply(allCy,SSBS,YTIME-1))
+              + sum(SSBS, V07GrossEmissCO2Supply(allCy,SSBS,YTIME-1))
               -
-              sum(CO2CAPTECH,V06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME-1))
+              sum(SBS,V06CapCO2ElecHydr(allCy,SBS,YTIME-1))
             )
             +
             sqrt(sqr(
               sum((EF,EFS)$EFtoEFS(EF,EFS),VmConsFinEneCountry(allCy,EF,YTIME-1) * imCo2EmiFac(allCy,"PG",EF,YTIME-1))
-            + sum(SSBS,V07EmissCO2Supply(allCy,SSBS,YTIME-1))
+            + sum(SSBS,V07GrossEmissCO2Supply(allCy,SSBS,YTIME-1))
               -
-              sum(CO2CAPTECH,
-                V06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME-1))
+              sum(SBS,
+                V06CapCO2ElecHydr(allCy,SBS,YTIME-1))
             ))
           ) / 2
          *
@@ -70,8 +70,6 @@ Q11SubsiDemITech(allCy,DSBS,ITECH,YTIME)$(INDSE(DSBS) and SECTTECH(DSBS,ITECH) a
 Q11SubsiDemTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS,TECH))..
     VmSubsiDemTech(allCy,DSBS,TECH,YTIME)
         =E=
-    0
-$ontext
     sum(TTECH$(sameas(TECH,TTECH)), !! Transport
       ( !! Transport (EVs)
         (
@@ -99,7 +97,6 @@ $ontext
       - (1 - imCapCostTechMin(allCy,"DAC",DACTECH,YTIME)) * V06LvlCostDAC(allCy,DACTECH,YTIME-1)))
       ) / 2
     )$((ord(YTIME) > 12))
-$offtext
 ;
 
 *' The equation splits the available state grants to the various supply technologies through a policy parameter expressing this proportional division.

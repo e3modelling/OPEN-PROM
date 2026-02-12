@@ -3,9 +3,9 @@
 
 *'                *VARIABLE INITIALISATION*
 *---
-V06CapCO2ElecHydr.FX(runCy,CO2CAPTECH,YTIME)$(not An(YTIME)) = 0;
+V06CapCO2ElecHydr.FX(runCy,SBS,YTIME)$DATAY(YTIME) = 0;
 *---
-V06CaptCummCO2.FX(runCy,YTIME)$(not an(YTIME)) = 0 ;
+V06CaptCummCO2.FX(runCy,YTIME)$DATAY(YTIME) = 0 ;
 *---
 V06LvlCostDAC.LO(runCy,DACTECH,YTIME) = epsilon6;
 V06LvlCostDAC.L(runCy,DACTECH,YTIME) = 100;
