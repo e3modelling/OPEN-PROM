@@ -15,48 +15,34 @@
 *' the product of electricity production from plants with carbon capture and storage, the conversion
 *' factor from terawatt-hours to million tons of oil equivalent (smTWhToMtoe), the plant efficiency,
 *' the CO2 emission factor, and the plant CO2 capture rate. 
-Q06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME)
+Q06CapCO2ElecHydr(allCy,SBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V06CapCO2ElecHydr(allCy,SBS,YTIME)
       =E=
-    (
-      sum(PGEF,
-        sum(CCS$PGALLtoEF(CCS,PGEF),
-          VmProdElec(allCy,CCS,YTIME) * smTWhToMtoe /
-          imPlantEffByType(allCy,CCS,YTIME) *
-          imCo2EmiFac(allCy,"PG",PGEF,YTIME) *
-          V04CO2CaptRate(allCy,CCS,YTIME)
+    sum(EFS,
+      sum(CCS$PGALLtoEF(CCS,EFS),
+        VmProdElec(allCy,CCS,YTIME) * smTWhToMtoe /
+        imPlantEffByType(allCy,CCS,YTIME) *
+        (imCo2EmiFac(allCy,SBS,EFS,YTIME) + 4.17$sameas("BMSWAS",EFS))*
+        V04CO2CaptRate(allCy,CCS,YTIME)
+      )$sameas("PG", SBS) +
+      sum(H2TECH$H2TECHEFtoEF(H2TECH,EFS),
+        VmConsFuelTechH2Prod(allCy,H2TECH,EFS,YTIME) *
+        (imCo2EmiFac(allCy,SBS,EFS,YTIME) + 4.17$sameas("BMSWAS",EFS))*
+        V05CaptRateH2(allCy,H2TECH,YTIME)
+      )$sameas("H2P", SBS)
+    ) +
+    sum(DACTECH,V06CapDAC(allCy,DACTECH,YTIME) * 1e-6)$sameas("DAC", SBS) +
+    sum(DSBS$sameas(DSBS,SBS),
+      sum(CCSTECH$SECTTECH(DSBS,CCSTECH),
+        sum(EFS$ITECHtoEF(CCSTECH,EFS),
+          i02Share(allCy,DSBS,CCSTECH,EFS,YTIME) * 
+          V02EquipCapTechSubsec(allcy,DSBS,CCSTECH,YTIME) * 
+          i02util(allCy,DSBS,CCSTECH,YTIME) * 
+          imCO2CaptRateIndustry(allCy,CCSTECH,YTIME) * 
+          (imCo2EmiFac(allCy,DSBS,EFS,YTIME) + 4.17$sameas("BMSWAS",EFS))
         )
       )
-    )$sameas("PG", CO2CAPTECH) +
-    (
-      sum(EF, 
-        sum(H2TECH$H2TECHEFtoEF(H2TECH,EF),
-          VmConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME) *
-          imCo2EmiFac(allCy,"H2P",EF,YTIME) *
-          V05CaptRateH2(allCy,H2TECH,YTIME)
-        )
-      )
-      !! CO2 emissions captured by plants producing hydrogen
-    )$sameas("H2P", CO2CAPTECH) +
-    (
-      sum(DACTECH,
-        V06CapDAC(allCy,DACTECH,YTIME)
-      ) * 1e-6
-    )$sameas("DAC", CO2CAPTECH) +
-    (
-      sum(DSBS,
-        sum(CCSTECH$SECTTECH(DSBS,CCSTECH),
-          sum(EF$ITECHtoEF(CCSTECH,EF),
-            i02Share(allCy,DSBS,CCSTECH,EF,YTIME) * 
-            V02EquipCapTechSubsec(allcy,DSBS,CCSTECH,YTIME) * 
-            i02util(allCy,DSBS,CCSTECH,YTIME) * 
-            imCO2CaptRateIndustry(allCy,CCSTECH,YTIME) * 
-            imCo2EmiFac(allCy,DSBS,EF,YTIME)
-          )
-        )
-      )
-    )$sameas("IND", CO2CAPTECH)
-    ;   
+    )$INDSE1(SBS);   
 
 *' The equation calculates the cumulative CO2 captured in million tons of CO2 for a given scenario and year.
 *' The cumulative CO2 captured at the current time period is determined by adding the CO2 captured by electricity and hydrogen production
@@ -66,8 +52,8 @@ Q06CaptCummCO2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06CaptCummCO2(allCy,YTIME) 
       =E= 
     V06CaptCummCO2(allCy,YTIME-1) +
-    SUM(CO2CAPTECH,
-      V06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME)
+    SUM(SBS,
+      V06CapCO2ElecHydr(allCy,SBS,YTIME)
     );   
 
 $ontext

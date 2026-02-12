@@ -237,7 +237,7 @@ SLD    "Solids Production"
 GAS    "Gases Production"
 H2INFR "Hydrogen storage and delivery"
 DAC    "Direct Air Capture"
-CHP
+CHP    "Combined Heat and Power"
 /
 
 SCT_GHG(ALLSBS)      Aggregate Sectors used in non-energy related GHG emissions
@@ -330,7 +330,35 @@ Trade.(FD,EN,TX,OE,OI,NF,CH,IS,BM,PP,PG,BM_CO2,H2P,STEAMP,DAC)
 NoTrade.(SE,AG,HOU,PC,PB,PT,PN,PA,GU,GT,GN,BU,PCH,NEN,LGN_PRD_CH4,HCL_PRD_CH4,GAS_PRD_CH4,TERT_CH4,TRAN_CH4,AG_CH4,SE_CH4,TRAN_N2O,TX_N2O,AG_N2O,OI_HFC,OI_PFC,NF_PFC,PG_SF6,OI_SF6)
 /
 
-DSBS(SBS)         All Demand Subsectors         /PC,PT,PA,PB,PN,GU,GT,GN,IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,SE,AG,HOU,PCH,NEN,BU,DAC/
+DSBS(SBS)  "All Demand Subsectors"   
+/
+IS    "Iron and Steel"
+NF    "Non Ferrous Metals"
+CH    "Chemicals"
+BM    "Non Metallic Minerals"
+PP    "Paper and Pulp"
+FD    "Food Drink and Tobacco"
+EN    "Engineering"
+TX    "Textiles"
+OE    "Ore Extraction"
+OI    "Other Industrial sectors"
+SE    "Services and Trade"
+AG    "Agriculture, Fishing, Forestry"
+HOU   "Households"
+PC    "Passenger Transport - Cars"
+PB    "Passenger Transport - Busses"
+PT    "Passenger Transport - Rail"
+PN    "Passenger Transport - Inland Navigation"
+PA    "Passenger Transport - Aviation"
+GU    "Goods Transport - Trucks"
+GT    "Goods Transport - Rail"
+GN    "Goods Transport - Inland Navigation"
+BU    "Bunkers"
+PCH   "Petrochemicals Industry"
+NEN   "Other Non Energy Uses"
+DAC   "Direct Air Capture"
+/
+
 TRANSE(DSBS)      All Transport Subsectors      /PC,PT,PA,PB,PN,GU,GT,GN/
 TRANS1(SBS)       All Transport Subsectors      /PC,PT,PA,PB,PN,GU,GT,GN/
 TRANP(TRANSE)     Passenger Transport           /PC,PT,PA,PB,PN/
@@ -351,7 +379,17 @@ INDDOM(DSBS)      Industry and Tertiary         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,S
 HOU1(SBS)         Households                     /HOU/
 SERV(SBS)         Services                       /SE,AG/
 
-SSBS(SBS)         All Supply Subsectors         /PG,H2P,CHP,STEAMP,LQD,SLD,GAS,H2INFR/
+SSBS(SBS)     All Supply Subsectors    
+/
+PG      "Electricity"
+H2P     "Hydrogen"
+STEAMP  "Heat"
+LQD     "Liquids"
+SLD     "Solids"
+GAS     "Gases"
+H2INFR  "Hydrogen storage and delivery"
+CHP     "Combined Heat and Power"
+/
 *         Energy Forms            *
 
 EF           Energy Forms
@@ -477,31 +515,31 @@ EFtoWEF(DSBS,EF,WEF) Link between Imported Energy Forms and Energy Forms used in
 
 EFS(EF)          Energy Forms used in Supply Side
 /
-LGN
-HCL
-CRO
-GSL
-BGSL
-GDO
-BGDO
-RFO
-LPG
-KRS
-BKRS
-OLQ
-NGS
-OGS
-NUC
-STE
-HYD
-BMSWAS
-SOL
-WND
-GEO
-ELC
-H2F
-MET
-ETH
+HCL     "Hard Coal, Coke and Other Solids"
+LGN     "Lignite"
+CRO     "Crude Oil and Feedstocks"
+LPG     "Liquefied Petroleum Gas"
+GSL     "Gasoline"
+KRS     "Kerosene"
+GDO     "Diesel Oil"
+RFO     "Residual Fuel Oil"
+OLQ     "Other Liquids"
+NGS     "Natural Gas"
+OGS     "Other Gases"
+NUC     "Nuclear"
+STE     "Steam"
+HYD     "Hydro"
+WND     "Wind"
+SOL     "Solar"
+BMSWAS  "Biomass and Waste"
+GEO     "Geothermal and other renewable sources eg. Tidal, etc."
+MET     "Methanol"
+ETH     "Ethanol"
+BGDO    "Biodiesel"
+BGSL    "Biogasoline"
+BKRS    "Biokerosene"
+H2F     "Hydrogen"
+ELC     "Electricity"
 /
 
 EFtoEFS(EF,EFS)    Fuel Aggregation for Supply Side
