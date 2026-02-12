@@ -12,7 +12,7 @@ Q05DemTotH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         i05EffH2Transp(allCy,INFRTECH,YTIME)*
         (1-i05ConsSelfH2Transp(allCy,INFRTECH,YTIME))
       )
-    )  !! increase the demand due to transportation losses
+    ) !! increase the demand due to transportation losses
 ;
 
 *' This equation calculates the sectoral hydrogen demand (VmDemSecH2) for each demand subsector (DSBS), year, and region.
@@ -89,7 +89,7 @@ Q05DemGapH2(allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
             (1-V05CapScrapH2ProdTech(allCy,H2TECH,YTIME)) *
             VmProdH2(allCy,H2TECH,YTIME-1)
           )
-    )) )/2 + 1e-6
+    )) )/2
 ;
 
 *' This equation calculates the production costs of hydrogen, including both fixed costs (e.g., capital investment) 

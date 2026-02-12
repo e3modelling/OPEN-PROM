@@ -58,6 +58,9 @@ smGwToTwhPerYear(YTIME)                                    "convert GW mean powe
 Equations
 *' *** Miscellaneous'
 qDummyObj                                                  "Define dummy objective function"
+$IFTHEN.calib %Calibration% == MatCalibration
+qRestrain
+$ENDIF.calib
 ;
 
 Variables
@@ -71,6 +74,7 @@ VmElecConsHeatPla(allCy,DSBS,YTIME)                        "Electricity consumed
 Positive Variables
 VmCarVal(allCy,NAP,YTIME)                                  "Carbon prices for all countries (US$2015/tn CO2)"
 VmRenValue(YTIME)                                          "Renewable value (US$2015/KWh)"
+common(allCy,TRANSE,YTIME)
 ;
 
 Scalars

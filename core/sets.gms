@@ -378,6 +378,7 @@ MET     "Methanol"
 ETH     "Ethanol"
 BGDO    "Biodiesel"
 BGSL    "Biogasoline"
+BKRS    "Biokerosene"
 H2F     "Hydrogen"
 ELC     "Electricity"
 
@@ -486,6 +487,7 @@ BGDO
 RFO
 LPG
 KRS
+BKRS
 OLQ
 NGS
 OGS
@@ -517,7 +519,7 @@ NGS.NGS
 OGS.OGS
 NUC.NUC
 HYD.HYD
-(BGDO,BGSL,ETH,BMSWAS).BMSWAS
+(BGDO,BGSL,BKRS,ETH,BMSWAS).BMSWAS
 SOL.SOL
 GEO.GEO
 WND.WND
@@ -532,7 +534,7 @@ ELCEF(EF)        Electricity                                         /ELC/
 H2EF(EF)         Hydrogen                                            /H2F/
 STEAM(EFS)       Steam                                               /STE/
 TOCTEF(EFS)      Energy forms produced by power plants and boilers   /ELC,STE/
-ALTEF(EF)        Alternative Fuels used in transport                 /BGDO,MET,ETH/
+ALTEF(EF)        Alternative Fuels used in transport                 /BGDO,BKRS,MET,ETH/
 
 PGEF(EFS)        "Energy forms used for steam production"
 
@@ -542,7 +544,9 @@ PGEF(EFS)        "Energy forms used for steam production"
 PPRODEF(EFS)     Fuels considered in primary production
 /
 LGN
+BGSL
 BGDO
+BKRS
 OLQ
 HCL
 CRO
@@ -591,7 +595,7 @@ TELC      "Pure Electirc Engine"
 TKRS      "Gas Turbine fueled by Kerosene"
 TETH      "Internal Combustion Engine fueled by Ethanol"
 TMET      "Methanol (85% gasoline 15% methanol) coming either from ngs or bms"
-TBGDO     "Biodiesel internal combustion engine"
+*TBGDO     "Biodiesel internal combustion engine"
 TPHEVGSL  "Plug in Hybrid engine - gasoline"
 TPHEVGDO  "Plug in Hybrid engine - diesel"
 TH2F      "Fuel Cells: Hydrogen"
@@ -670,7 +674,6 @@ EWDAC
 
 ITECH(TECH)      Industrial - Domestic - Non-energy & Bunkers Technologies 
 /
-TBGDO
 TGDO
 TLPG
 TKRS  
@@ -709,7 +712,6 @@ TCHEVGSL  "conventional Hybrid engine - gasoline"
 TCHEVGDO  "conventional Hybrid engine - diesel"
 TBMSWAS  "Biomass and Waste"
 *GEO     "Geothermal and other renewable sources eg. Tidal, etc."
-TBGDO    "Biodiesel"
 TNGSCCS
 THCLCCS
 **
@@ -758,10 +760,9 @@ TGDO.(GDO,BGDO,RFO)
 TNGS.(NGS,OGS)
 TNGSCCS.NGS
 TELC.ELC
-TKRS.KRS
+TKRS.(KRS,BKRS)
 TETH.ETH
 TMET.MET
-TBGDO.BGDO
 TPHEVGSL.(GSL,BGSL,ELC)
 TPHEVGDO.(GDO,BGDO,ELC)
 TH2F.H2F
@@ -790,7 +791,7 @@ TLPG.LPG
 TGDO.(GDO,BGDO,RFO)
 TNGS.(NGS,OGS)
 TELC.ELC
-TKRS.KRS
+TKRS.(KRS,BKRS)
 TETH.ETH
 *TMET.MET
 *TBGDO.BGDO
@@ -803,7 +804,6 @@ TCHEVGDO.(GDO,BGDO)
 
 ITECHtoEF(ITECH,EF) Fuels consumed by industrial technologies
 /
-TBGDO.BGDO
 TGDO.GDO
 TLPG.LPG
 TKRS.KRS  
@@ -865,9 +865,7 @@ PA.(TKRS)
 (IS,BM,CH).(TNGSCCS,THCLCCS)
 (HOU,AG).(THCL,TLPG,TKRS,TGDO,TNGS,TOGS,TBMSWAS,TELC,TSTE)
 SE.(THCL,TLPG,TKRS,TNGS,TOGS,TELC,TSTE)
-
-*BU.(GDO,RFO,OLQ)
-BU.(TGDO,TRFO,TKRS)
+BU.(TGDO,TRFO,TKRS,TH2F)
 (PCH,NEN).(TLGN,THCL,TGDO,TRFO,TLPG,TOLQ,TNGS,TOGS)
 DAC.(HTDAC,H2DAC,LTDAC,EWDAC)
 /
@@ -1201,23 +1199,20 @@ BALEF fuels in balance report
 "Electricity"
 /
 
-biomass(balef)
-/"biomass"/
-
 TOTAL(BALEF)
 /"TOTAL"/
 
 BALEF2EFS(BALEF, EFS) Mapping from balance fuels to model fuels
 /
-"Total".(HCL,LGN,CRO,LPG,GSL,BGSL,KRS,GDO,BGDO,RFO,OLQ,NGS,OGS,NUC,STE,HYD,WND,SOL,BMSWAS,GEO,MET,ETH,H2F,ELC)
+"Total".(HCL,LGN,CRO,LPG,GSL,BGSL,KRS,BKRS,GDO,BGDO,RFO,OLQ,NGS,OGS,NUC,STE,HYD,WND,SOL,BMSWAS,GEO,MET,ETH,H2F,ELC)
 "Solids".(HCL,LGN)
 "Hard coal".HCL
 "Lignite".LGN
 "Crude oil and Feedstocks".CRO
-"Liquids".(LPG,GSL,BGSL,KRS,GDO,BGDO,RFO,OLQ)
+"Liquids".(LPG,GSL,BGSL,KRS,BKRS,GDO,BGDO,RFO,OLQ)
 "Liquified petroleum gas".LPG
 "Gasoline".(GSL,BGSL)
-"Kerosene".KRS
+"Kerosene".(KRS,BKRS)
 "Diesel oil".(GDO,BGDO)
 "Fuel oil".RFO
 "Other liquids".OLQ
