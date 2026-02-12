@@ -71,7 +71,7 @@ Q11SubsiDemTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS
     VmSubsiDemTech(allCy,DSBS,TECH,YTIME)
         =E=
     0
-$ontext
+
     sum(TTECH$(sameas(TECH,TTECH)), !! Transport
       ( !! Transport (EVs)
         (
@@ -82,7 +82,7 @@ $ontext
         VmSubsiDemTechAvail(allCy,DSBS,TECH,YTIME) * 1e3 / (V01NewRegPcTechYearly(allCy,TTECH,YTIME-1) * 1e6)
         - (1 - imCapCostTechMin(allCy,DSBS,TECH,YTIME)) * imCapCostTech(allCy,DSBS,TECH,YTIME)))
       ) / 2
-    )$(ord(YTIME) > 14 and TRANSE(DSBS) and sameas(DSBS,"PC") and sameas(TECH,"TELC"))
+    )$(ord(YTIME) > 14 and TRANSE(DSBS) and sameas(DSBS,"PC"))
     +
     sum(ITECH$(sameas(TECH,ITECH)), !! Industry
       VmSubsiDemITech(allCy,DSBS,ITECH,YTIME)
@@ -98,8 +98,8 @@ $ontext
       (V06CapDAC(allCy,DACTECH,YTIME-1) * V06CapFacNewDAC(allCy,DACTECH,YTIME-1))
       - (1 - imCapCostTechMin(allCy,"DAC",DACTECH,YTIME)) * V06LvlCostDAC(allCy,DACTECH,YTIME-1)))
       ) / 2
-    )$((ord(YTIME) > 12))
-$offtext
+    )$((ord(YTIME) > 14))
+
 ;
 
 *' The equation splits the available state grants to the various supply technologies through a policy parameter expressing this proportional division.
