@@ -19,3 +19,7 @@ VmConsFuel.FX(runCyL,DSBS,EF,YTIME)$TIME(YTIME) = VmConsFuel.L(runCyL,DSBS,EF,YT
 V02IndxElecIndPrices.FX(runCyL,YTIME)$TIME(YTIME) = V02IndxElecIndPrices.L(runCyL,YTIME)$TIME(YTIME);  
 V02PremScrpIndu.FX(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME) = V02PremScrpIndu.L(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME);
 *---
+
+$ifthen.calib %Calibration% == MatCalibration
+imMatrFactor.FX(runCyL,DSBS,TECH,YTIME)$TIME(YTIME) = imMatrFactor.L(runCyL,DSBS,TECH,YTIME)$TIME(YTIME);
+$endif.calib

@@ -191,8 +191,7 @@ Q03InpTotTransf(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECtoEF(SSBS,E
     VmConsFuelSteProd(allCy,"DHP",EFS,YTIME)$sameas("STEAMP",SSBS) +
     V03InputTransfRef(allCy,EFS,YTIME)$sameas("LQD",SSBS) + 
     V03InputTransfSolids(allCy,EFS,YTIME)$sameas("SLD",SSBS) +
-    V03InputTransfGasses(allCy,EFS,YTIME)$sameas("GAS",SSBS) + 
-    VmConsFuelH2Prod(allCy,EFS,YTIME)$sameas("H2P",SSBS);            
+    V03InputTransfGasses(allCy,EFS,YTIME)$sameas("GAS",SSBS);            
 
 *' The equation calculates the total transformation output for a specific energy branch in a given scenario and year.
 *' The result is obtained by summing the transformation outputs from different sources, including thermal power stations, District Heating Plants,
@@ -372,4 +371,5 @@ Q03ConsFiEneSec(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECtoEF(SSBS,E
     SUM(EFS2$SECtoEFPROD(SSBS,EFS2), 
       V03OutTotTransf(allCy,SSBS,EFS2,YTIME) +
       V03ProdPrimary(allCy,EFS2,YTIME)$(not PGRENEF(EFS2))
-    );                               
+    ) +
+    VmConsFuelH2Prod(allCy,EFS,YTIME)$sameas("H2P",SSBS);                               
