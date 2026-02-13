@@ -115,7 +115,7 @@ Q02VarCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not s
       =E=
   (
     sum(EF$ITECHtoEF(ITECH,EF), 
-      i02Share(allCy,DSBS,ITECH,EF,YTIME) *
+      i02ShareBlend(allCy,DSBS,ITECH,EF,YTIME) *
       VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME) +
       imCO2CaptRateIndustry(allCy,ITECH,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * imCo2EmiFac(allCy,DSBS,EF,YTIME)  +
       (1-imCO2CaptRateIndustry(allCy,ITECH,YTIME)) * 1e-3 * imCo2EmiFac(allCy,DSBS,EF,YTIME)  *
@@ -191,7 +191,7 @@ Q02ConsFuel(allCy,DSBS,EF,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not sameas(D
     VmConsFuel(allCy,DSBS,EF,YTIME) 
         =E=
     sum(ITECH$(ITECHtoEF(ITECH,EF)$SECTTECH(DSBS,ITECH)),
-      i02Share(allCy,DSBS,ITECH,EF,YTIME) *
+      i02ShareBlend(allCy,DSBS,ITECH,EF,YTIME) *
       V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) *
       i02util(allCy,DSBS,ITECH,YTIME)
     ) +

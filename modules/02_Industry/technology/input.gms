@@ -10,16 +10,6 @@ $offdelim
 *---
 table i02ElaSub(allCy,DSBS)                                "Elasticities by subsector for all countries (1)" ;
 *---
-Parameters
-i02ExogDemOfBiomass(allCy,DSBS,YTIME)	                   "Demand of tranditional biomass defined exogenously ()"
-$IF NOT %Calibration% == Calibration i02ElastNonSubElec(allCy,DSBS,ETYPES,YTIME)                   "Elasticities of Non Substitutable Electricity (1)"
-i02util(allCy,DSBS,ITECH,YTIME)                            "Utilization rate of technology"
-i02numtechnologiesUsingEF(DSBS,EF)                         "Number of technologues using an energy form"     
-i02Share(allCy,DSBS,ITECH,EF,YTIME)                        "Share of each energy form in a technology"
-imCO2CaptRateIndustry(allCy,ITECH,YTIME)	               "Industry CO2 capture rate (1)"
-i02ScaleEndogScrap(DSBS)                            "Scale parameter for endogenous scrapping applied to the sum of full costs (1)"
-;
-*---
 imTotFinEneDemSubBaseYr(runCy,TRANSE,YTIME)  = sum(EF$SECtoEF(TRANSE,EF), imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME));
 imTotFinEneDemSubBaseYr(runCy,INDSE,YTIME)   = SUM(EF$SECtoEF(INDSE,EF),imFuelConsPerFueSub(runCy,INDSE,EF,YTIME));
 imTotFinEneDemSubBaseYr(runCy,DOMSE,YTIME)   = SUM(EF$SECtoEF(DOMSE,EF),imFuelConsPerFueSub(runCy,DOMSE,EF,YTIME));
@@ -28,8 +18,6 @@ imTotFinEneDemSubBaseYr(runCy,NENSE,YTIME)   = SUM(EF$SECtoEF(NENSE,EF),imFuelCo
 i02ExogDemOfBiomass(runCy,DOMSE,YTIME) = 0;
 *---
 i02util(runCy,DSBS,ITECH,YTIME) = 1;
-*---
-i02Share(runCy,DSBS,ITECH,EF,YTIME) = 1; !! (To be included in mrprom when mix of fuels for technologies)
 *---
 $IFTHEN.calib %Calibration% == Calibration
 variable i02ElastNonSubElec(allCy,DSBS,ETYPES,YTIME)        "Elasticities of Non Substitutable Electricity (1)";
@@ -55,3 +43,15 @@ imCO2CaptRateIndustry(runCy,CCSTECH,YTIME) = 0.9;
 
 alias(ITECH,ITECH2);
 i02numtechnologiesUsingEF(DSBS,EF)=sum(ITECH2$(ITECHtoEF(ITECH2,EF)$SECTTECH(DSBS,ITECH2)),1);
+*---
+i02ShareBlend(runCy,DSBS,ITECH,EF,YTIME)$(DATAY(YTIME) and SECTTECH(DSBS,ITECH) and ITECHtoEF(ITECH,EF)) =
+(
+  imFuelConsPerFueSub(runCy,DSBS,EF,YTIME) /
+  SUM(EFS2$ITECHtoEF(ITECH,EFS2), imFuelConsPerFueSub(runCy,DSBS,EFS2,YTIME))
+)$SUM(EFS2$ITECHtoEF(ITECH,EFS2), imFuelConsPerFueSub(runCy,DSBS,EFS2,YTIME)) +
+1$(not SUM(EFS2$ITECHtoEF(ITECH,EFS2), imFuelConsPerFueSub(runCy,DSBS,EFS2,YTIME)) and not BIOFUELS(EF));
+i02ShareBlend(runCy,DSBS,ITECH,EF,YTIME)$AN(YTIME) = i02ShareBlend(runCy,DSBS,ITECH,EF,"%fBaseY%");
+i02ShareBlend(runCy,"BU","TKRS","KRS",YTIME)$AN(YTIME) = i02ShareBlend(runCy,"BU","TKRS","KRS","%fBaseY%") - 0.006 * (ord(YTIME)-11);
+i02ShareBlend(runCy,"BU","TKRS","BKRS",YTIME)$AN(YTIME) = i02ShareBlend(runCy,"BU","TKRS","BKRS","%fBaseY%") + 0.006 * (ord(YTIME)-11);
+i02ShareBlend(runCy,"BU","TGDO","GDO",YTIME)$AN(YTIME) = i02ShareBlend(runCy,"BU","TGDO","GDO","%fBaseY%") - 0.004 * (ord(YTIME)-11);
+i02ShareBlend(runCy,"BU","TGDO","BGDO",YTIME)$AN(YTIME) = i02ShareBlend(runCy,"BU","TGDO","BGDO","%fBaseY%") + 0.004 * (ord(YTIME)-11);
