@@ -35,7 +35,7 @@ Q06CapCO2ElecHydr(allCy,SBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     sum(DSBS$sameas(DSBS,SBS),
       sum(CCSTECH$SECTTECH(DSBS,CCSTECH),
         sum(EFS$ITECHtoEF(CCSTECH,EFS),
-          i02Share(allCy,DSBS,CCSTECH,EFS,YTIME) * 
+          i02ShareBlend(allCy,DSBS,CCSTECH,EFS,YTIME) *
           V02EquipCapTechSubsec(allcy,DSBS,CCSTECH,YTIME) * 
           i02util(allCy,DSBS,CCSTECH,YTIME) * 
           imCO2CaptRateIndustry(allCy,CCSTECH,YTIME) * 
