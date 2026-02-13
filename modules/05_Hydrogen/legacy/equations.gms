@@ -32,7 +32,7 @@ Q05DemSecH2(allCy,SBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q05ScrapLftH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         V05ScrapLftH2Prod(allCy,H2TECH,YTIME)
          =E=
-        (1/i05ProdLftH2(H2TECH,YTIME))$(ord(YTIME)>11+i05ProdLftH2(H2TECH,YTIME))
+        (1/i05ProdLftH2(H2TECH,YTIME))$(ord(YTIME)>14+i05ProdLftH2(H2TECH,YTIME))
 $ontext
          (
          V05GapShareH2Tech1(allCy,H2TECH,YTIME-i05ProdLftH2(H2TECH,YTIME)) *
