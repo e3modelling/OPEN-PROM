@@ -21,6 +21,7 @@ Q04CapElecCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          VmPriceElecInd(allCy,YTIME) / 
          !!i04UtilRateChpPlants(allCy,TCHP,YTIME) /
          smGwToTwhPerYear(YTIME);  
+*' generation plants, and 
 
 * Lambda (λₜ) defines the exponential decay rate of the peak load over time.
 * It is calibrated to match total electricity production given peak and base load levels.
