@@ -513,7 +513,7 @@ for (regName in names(runQueue)) {
   # B. Auto-Bracket
   # Note: alpha is now a change factor. 0.0 = No change. 1.0 = +100% (Double price).
   brkt <- autoBracketFromSeed(
-    seedAlpha    = 0.2,            
+    seedAlpha    = 0.05,
     budgetTarget = bg,
     envWide      = currentEnvWide,
     yearCols     = yearCols,

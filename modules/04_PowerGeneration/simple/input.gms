@@ -71,12 +71,19 @@ $ondelim
 $include"./iInvPlants.csv"
 $offdelim
 ;
+i04InvPlants("CHA","ATHCOAL",YTIME)$(ord(YTIME) < 16) = 0.07 * imInstCapPastNonCHP("CHA","ATHCOAL","%fBaseY%") / i04AvailRate("CHA","ATHCOAL","%fBaseY%");
+i04InvPlants("IND","ATHCOAL",YTIME)$(ord(YTIME) < 16) = 0.07 * imInstCapPastNonCHP("IND","ATHCOAL","%fBaseY%") / i04AvailRate("IND","ATHCOAL","%fBaseY%");
+i04InvPlants("USA","ATHCOAL",YTIME)$(ord(YTIME) < 16) = 0.07 * imInstCapPastNonCHP("USA","ATHCOAL","%fBaseY%") / i04AvailRate("USA","ATHCOAL","%fBaseY%");
+i04InvPlants("OAS","ATHCOAL",YTIME)$(ord(YTIME) < 16) = 0.07 * imInstCapPastNonCHP("OAS","ATHCOAL","%fBaseY%") / i04AvailRate("OAS","ATHCOAL","%fBaseY%");
+i04InvPlants("SSA","ATHCOAL",YTIME)$(ord(YTIME) < 16) = 0.07 * imInstCapPastNonCHP("SSA","ATHCOAL","%fBaseY%") / i04AvailRate("SSA","ATHCOAL","%fBaseY%");
+
 *---
 table i04PlantDecomSched(allCy,PGALL,YTIME)	           "Decided plant decomissioning schedule (GW)"
 $ondelim
 $include"./iDecomPlants.csv"
 $offdelim
 ;
+i04PlantDecomSched(allCy,PGALL,YTIME) = 0;
 *---
 table iMatFacPlaAvailCapData(allCy,PGALL,YTIME)      "Maturity factor related to plant available capacity (1)"
 $ondelim
@@ -92,6 +99,8 @@ i04MatFacPlaAvailCap.L(runCy,PGALL,YTIME) = iMatFacPlaAvailCapData(runCy,PGALL,Y
 $ELSE.calib
 parameter i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   "Maturity factor related to plant available capacity (1)";
 i04MatFacPlaAvailCap(runCy,PGALL,YTIME) = iMatFacPlaAvailCapData(runCy,PGALL,YTIME);
+i04MatFacPlaAvailCap(runCy,"ATHBMSCCS",YTIME) = 1;
+i04MatFacPlaAvailCap(runCy,"ATHCOAL",YTIME) = i04MatFacPlaAvailCap(runCy,"ATHCOAL",YTIME);
 $ENDIF.calib
 *---
 parameter i04LoadFacElecDem(DSBS)                  "Load factor of electricity demand per sector (1)"
@@ -169,7 +178,7 @@ loop(runCy,PGALL,YTIME)$AN(YTIME) DO
          abort $(i04GrossCapCosSubRen(runCy,PGALL,YTIME)<0) "CAPITAL COST IS NEGATIVE", i04GrossCapCosSubRen
 ENDLOOP;
 *---
-i04ScaleEndogScrap = 2 / card(PGALL);
+i04ScaleEndogScrap = 3 / card(PGALL);
 *---
 i04DecInvPlantSched(runCy,PGALL,YTIME) = i04InvPlants(runCy,PGALL,YTIME);
 *---

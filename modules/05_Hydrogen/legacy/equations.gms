@@ -154,17 +154,17 @@ Q05ShareCCSH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME) $H2CCS(H2TECH) $(runCy(allCy)
          =E=
                  1.5  *
          iWBLShareH2Prod(allCy,H2TECH,YTIME) *
-                 V05CostProdH2Tech(allCy,H2TECH,YTIME)**(-V05AcceptCCSH2Tech(allCy,YTIME)) /
+                 (V05CostProdH2Tech(allCy,H2TECH,YTIME) + 1e-2)**(-V05AcceptCCSH2Tech(allCy,YTIME)) /
          (
                  1.5  *
          iWBLShareH2Prod(allCy,H2TECH,YTIME) *
-                 V05CostProdH2Tech(allCy,H2TECH,YTIME)**(-V05AcceptCCSH2Tech(allCy,YTIME)) +
+                 (V05CostProdH2Tech(allCy,H2TECH,YTIME) + 1e-2)**(-V05AcceptCCSH2Tech(allCy,YTIME)) +
 
                  sum(H2TECH2$H2CCS_NOCCS(H2TECH,H2TECH2),
 
                  1  *
          iWBLShareH2Prod(allCy,H2TECH2,YTIME) *
-                 V05CostProdH2Tech(allCy,H2TECH2,YTIME)**(-V05AcceptCCSH2Tech(allCy,YTIME)))
+                 (V05CostProdH2Tech(allCy,H2TECH,YTIME) + 1e-2)**(-V05AcceptCCSH2Tech(allCy,YTIME)))
          )
 ;
 

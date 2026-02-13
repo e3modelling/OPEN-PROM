@@ -99,6 +99,7 @@ i03FeedTransfr(runCy,EFS,YTIME) = i03SuppTransfers(runCy,EFS,YTIME);
 i03ResTransfOutputRefineries(runCy,EFS,YTIME) = i03SupTrnasfOutputRefineries(runCy,EFS,YTIME);
 *---
 i03RateEneBranCons(runCy,SSBS,EFS,YTIME)$AN(YTIME) = i03RateEneBranCons(runCy,SSBS,EFS,"%fBaseY%");
+i03RateEneBranCons("LAM","STEAMP",EFS,YTIME) = 0;
 *---
 i03RatePriProTotPriNeeds(runCy,EFS,YTIME) = i03SuppRatePrimProd(runCy,EFS,"%fBaseY%");
 *---

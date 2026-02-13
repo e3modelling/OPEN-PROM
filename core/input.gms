@@ -617,7 +617,8 @@ parameter imMatrFactor(allCy,DSBS,TECH,YTIME)   "Maturity factor per technology 
 imMatrFactor(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                          
 imMatrFactor(runCy,DSBS,TECH,YTIME)$(imMatrFactor(runCy,DSBS,TECH,YTIME)=0) = 0.000001;
 imMatrFactor(runCy,DSBS,"TBMSWAS",YTIME) = 0.01;
- imMatrFactor(runCy,DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40; 
+imMatrFactor(runCy,DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40;
+
 * imMatrFactor("AUT",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40;
 * imMatrFactor("BEL",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40; 
 * imMatrFactor("BGR",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40; 
@@ -874,6 +875,11 @@ imCapCostTechMin(allCy,"DAC","EWDAC",YTIME) = 0.2;
 imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCLCCS","USC") + 0.005 * (ord(YTIME)-11);
 imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$(ord(YTIME)>50)  = 0.7;
 
+imUsfEneConvSubTech(runCy,"HOU","TELC",YTIME)$(ord(YTIME)>20)  = imDataDomTech("HOU","TELC","USC") + 0.0525 * (ord(YTIME)-21);
+imUsfEneConvSubTech(runCy,"HOU","TELC",YTIME)$(ord(YTIME)>40)  = 1.9;
+imUsfEneConvSubTech(runCy,"SE","TELC",YTIME)$(ord(YTIME)>20)  = imDataDomTech("SE","TELC","USC") + 0.0525 * (ord(YTIME)-21);
+imUsfEneConvSubTech(runCy,"SE","TELC",YTIME)$(ord(YTIME)>40)  = 1.9;
+
 **  Power Generation
 *---
 table iDataPlantEffByType(allCy,PGALL, YTIME)   "Data for plant efficiency per plant type"
@@ -883,6 +889,8 @@ $offdelim
 ;
 *---
 imPlantEffByType(runCy,PGALL,YTIME) = iDataPlantEffByType(runCy,PGALL, YTIME) ;
+imPlantEffByType(runCy,"ATHCOAL",YTIME) = 0.9 * iDataPlantEffByType(runCy,"ATHCOAL",YTIME) ;
+imPlantEffByType(runCy,"ATHGAS",YTIME) = 0.9 * iDataPlantEffByType(runCy,"ATHGAS",YTIME) ;
 imPlantEffByType(runCy,"PGH2F",YTIME) = 0.85;
 *---
 **   Conversion of GW mean power into TWh/y, depending on whether it's a leap year

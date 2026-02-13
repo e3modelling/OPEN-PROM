@@ -3,7 +3,7 @@ import numpy as np
 import re
 
 # ================= CONFIGURATION =================
-MIF_FILE = 'C:\\Users\\at39\\2-Models\\OPEN-PROM\\runs\\carbon_tax_hotfixes_no_curves_calibTrans_all_CO2eq_C150EU27_TELC5_2100_EU1P5C_other2C_fixedNonCO2_newEFs_2026-02-11_18-27-50\\reporting.mif'
+MIF_FILE = 'C:\\Users\\at39\\2-Models\\OPEN-PROM\\runs\\SoCDR_Ed3_CurrentTargets\\reporting.mif'
 
 # Years to appear in the output
 REPORT_YEARS = [2010, 2015, 2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070, 2075, 2080, 2085, 2090, 2095, 2100]
@@ -54,7 +54,7 @@ REPORT_STRUCTURE = [
     ("  Nuclear", "Secondary Energy|Electricity|Nuclear"),
     ("  Oil", "Secondary Energy|Electricity|Oil"),    
     ("  Solar", "Secondary Energy|Electricity|Solar"),
-    ("  Solar", "Secondary Energy|Electricity|Steam"),     
+    ("  Steam", "Secondary Energy|Electricity|Steam"),     
     ("  Wind", "Secondary Energy|Electricity|Wind"),
 
     # ================= FINAL ENERGY BY SECTOR =================
@@ -85,7 +85,7 @@ REPORT_STRUCTURE = [
     ("  Ind|Residual Fuel Oil", "Final Energy|Industry|Residual Fuel Oil"),
     ("  Ind|Solar", "Final Energy|Industry|Solar"),
     ("  Ind|Solids", "Final Energy|Industry|Solids"),
-    ("  Ind|Wind", "Final Energy|Industry|Wind"),
+    #("  Ind|Wind", "Final Energy|Industry|Wind"),
 
     # --- RESIDENTIAL AND COMMERCIAL ---
     ("Res & Comm Total (Mtoe)", "Final Energy|Residential and Commercial"),
@@ -113,22 +113,22 @@ REPORT_STRUCTURE = [
     ("  Res|Residual Fuel Oil", "Final Energy|Residential and Commercial|Residual Fuel Oil"),
     ("  Res|Solar", "Final Energy|Residential and Commercial|Solar"),
     ("  Res|Solids", "Final Energy|Residential and Commercial|Solids"),
-    ("  Res|Wind", "Final Energy|Residential and Commercial|Wind"),
+    #("  Res|Wind", "Final Energy|Residential and Commercial|Wind"),
 
     # --- TRANSPORTATION ---
     ("Transportation Total (Mtoe)", "Final Energy|Transportation"),
     ("  Trans|All liquids but GDO-RFO-GSL", "Final Energy|Transportation|All liquids but GDO - RFO - GSL"),
     ("  Trans|Biodiesel", "Final Energy|Transportation|Biodiesel"),
     ("  Trans|Biogasoline", "Final Energy|Transportation|Biogasoline"),
-    ("  Trans|Biomass and Waste", "Final Energy|Transportation|Biomass and Waste"),
-    ("  Trans|Crude Oil and Feedstocks", "Final Energy|Transportation|Crude Oil and Feedstocks"),
+    #("  Trans|Biomass and Waste", "Final Energy|Transportation|Biomass and Waste"),
+    #("  Trans|Crude Oil and Feedstocks", "Final Energy|Transportation|Crude Oil and Feedstocks"),
     ("  Trans|Diesel Oil", "Final Energy|Transportation|Diesel Oil"),
     ("  Trans|Electricity", "Final Energy|Transportation|Electricity"),
     ("  Trans|Gases", "Final Energy|Transportation|Gases"),
     ("  Trans|Gasoline", "Final Energy|Transportation|Gasoline"),
-    ("  Trans|Geothermal/Renewables", "Final Energy|Transportation|Geothermal and other renewable sources"),
-    ("  Trans|Hard Coal-Coke-Other Solids", "Final Energy|Transportation|Hard Coal-Coke-Other Solids"),
-    ("  Trans|Heat", "Final Energy|Transportation|Heat"),
+    #("  Trans|Geothermal/Renewables", "Final Energy|Transportation|Geothermal and other renewable sources"),
+    #("  Trans|Hard Coal-Coke-Other Solids", "Final Energy|Transportation|Hard Coal-Coke-Other Solids"),
+    #("  Trans|Heat", "Final Energy|Transportation|Heat"),
     ("  Trans|Kerosene", "Final Energy|Transportation|Kerosene"),
     ("  Trans|Lignite", "Final Energy|Transportation|Lignite"),
     ("  Trans|LPG", "Final Energy|Transportation|Liquefied Petroleum Gas"),
@@ -139,37 +139,37 @@ REPORT_STRUCTURE = [
     ("  Trans|Other Liquids", "Final Energy|Transportation|Other Liquids"),
     ("  Trans|Renewables exc Hydro", "Final Energy|Transportation|Renewables except Hydro"),
     ("  Trans|Residual Fuel Oil", "Final Energy|Transportation|Residual Fuel Oil"),
-    ("  Trans|Solar", "Final Energy|Transportation|Solar"),
-    ("  Trans|Solids", "Final Energy|Transportation|Solids"),
-    ("  Trans|Wind", "Final Energy|Transportation|Wind"),
+    # ("  Trans|Solar", "Final Energy|Transportation|Solar"),
+    # ("  Trans|Solids", "Final Energy|Transportation|Solids"),
+    # ("  Trans|Wind", "Final Energy|Transportation|Wind"),
 
     # --- BUNKERS ---
     ("Bunkers Total (Mtoe)", "Final Energy|Bunkers"),
     ("  Bunkers|All liquids but GDO-RFO-GSL", "Final Energy|Bunkers|All liquids but GDO - RFO - GSL"),
     ("  Bunkers|Biodiesel", "Final Energy|Bunkers|Biodiesel"),
-    ("  Bunkers|Biogasoline", "Final Energy|Bunkers|Biogasoline"),
-    ("  Bunkers|Biomass and Waste", "Final Energy|Bunkers|Biomass and Waste"),
-    ("  Bunkers|Crude Oil and Feedstocks", "Final Energy|Bunkers|Crude Oil and Feedstocks"),
+    # ("  Bunkers|Biogasoline", "Final Energy|Bunkers|Biogasoline"),
+    # ("  Bunkers|Biomass and Waste", "Final Energy|Bunkers|Biomass and Waste"),
+    # ("  Bunkers|Crude Oil and Feedstocks", "Final Energy|Bunkers|Crude Oil and Feedstocks"),
     ("  Bunkers|Diesel Oil", "Final Energy|Bunkers|Diesel Oil"),
-    ("  Bunkers|Electricity", "Final Energy|Bunkers|Electricity"),
+    # ("  Bunkers|Electricity", "Final Energy|Bunkers|Electricity"),
     ("  Bunkers|Gases", "Final Energy|Bunkers|Gases"),
     ("  Bunkers|Gasoline", "Final Energy|Bunkers|Gasoline"),
-    ("  Bunkers|Geothermal/Renewables", "Final Energy|Bunkers|Geothermal and other renewable sources"),
-    ("  Bunkers|Hard Coal-Coke-Other Solids", "Final Energy|Bunkers|Hard Coal-Coke-Other Solids"),
-    ("  Bunkers|Heat", "Final Energy|Bunkers|Heat"),
+    # ("  Bunkers|Geothermal/Renewables", "Final Energy|Bunkers|Geothermal and other renewable sources"),
+    # ("  Bunkers|Hard Coal-Coke-Other Solids", "Final Energy|Bunkers|Hard Coal-Coke-Other Solids"),
+    # ("  Bunkers|Heat", "Final Energy|Bunkers|Heat"),
     ("  Bunkers|Kerosene", "Final Energy|Bunkers|Kerosene"),
     ("  Bunkers|Lignite", "Final Energy|Bunkers|Lignite"),
     ("  Bunkers|LPG", "Final Energy|Bunkers|Liquefied Petroleum Gas"),
     ("  Bunkers|Liquids", "Final Energy|Bunkers|Liquids"),
     ("  Bunkers|Natural Gas", "Final Energy|Bunkers|Natural Gas"),
     ("  Bunkers|New energy forms", "Final Energy|Bunkers|New energy forms"),
-    ("  Bunkers|Other Gases", "Final Energy|Bunkers|Other Gases"),
-    ("  Bunkers|Other Liquids", "Final Energy|Bunkers|Other Liquids"),
-    ("  Bunkers|Renewables exc Hydro", "Final Energy|Bunkers|Renewables except Hydro"),
+    # ("  Bunkers|Other Gases", "Final Energy|Bunkers|Other Gases"),
+    # ("  Bunkers|Other Liquids", "Final Energy|Bunkers|Other Liquids"),
+    # ("  Bunkers|Renewables exc Hydro", "Final Energy|Bunkers|Renewables except Hydro"),
     ("  Bunkers|Residual Fuel Oil", "Final Energy|Bunkers|Residual Fuel Oil"),
-    ("  Bunkers|Solar", "Final Energy|Bunkers|Solar"),
-    ("  Bunkers|Solids", "Final Energy|Bunkers|Solids"),
-    ("  Bunkers|Wind", "Final Energy|Bunkers|Wind"),
+    # ("  Bunkers|Solar", "Final Energy|Bunkers|Solar"),
+    # ("  Bunkers|Solids", "Final Energy|Bunkers|Solids"),
+    # ("  Bunkers|Wind", "Final Energy|Bunkers|Wind"),
 
     # --- CO2 Emissions ---
     ("CO2 Emissions", None),
