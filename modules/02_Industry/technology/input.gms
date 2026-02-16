@@ -37,7 +37,7 @@ $ENDIF.calib
 i02ElaSub(runCy,DSBS) = imElaSubData(DSBS);
 i02ElaSub(runCy,DSBS) = 2; !!
 *---
-i02ScaleEndogScrap(DSBS)$(not TRANSE(DSBS) and not sameas("DAC",DSBS)) = 6./SUM(ITECH$SECTTECH(DSBS,ITECH),1);
+i02ScaleEndogScrap(DSBS)$(not TRANSE(DSBS) and not CDR(DSBS)) = 6./SUM(ITECH$SECTTECH(DSBS,ITECH),1);
 *---
 imCO2CaptRateIndustry(runCy,CCSTECH,YTIME) = 0.9;
 
@@ -45,11 +45,11 @@ alias(ITECH,ITECH2);
 i02numtechnologiesUsingEF(DSBS,EF)=sum(ITECH2$(ITECHtoEF(ITECH2,EF)$SECTTECH(DSBS,ITECH2)),1);
 *---
 i02ShareBlend(runCy,DSBS,ITECH,EF,YTIME)$(DATAY(YTIME) and SECTTECH(DSBS,ITECH) and ITECHtoEF(ITECH,EF)) =
-(
-  imFuelConsPerFueSub(runCy,DSBS,EF,YTIME) /
-  SUM(EFS2$ITECHtoEF(ITECH,EFS2), imFuelConsPerFueSub(runCy,DSBS,EFS2,YTIME))
-)$SUM(EFS2$ITECHtoEF(ITECH,EFS2), imFuelConsPerFueSub(runCy,DSBS,EFS2,YTIME)) +
-1$(not SUM(EFS2$ITECHtoEF(ITECH,EFS2), imFuelConsPerFueSub(runCy,DSBS,EFS2,YTIME)) and not BIOFUELS(EF));
+  (
+    imFuelConsPerFueSub(runCy,DSBS,EF,YTIME) /
+    SUM(EFS2$ITECHtoEF(ITECH,EFS2), imFuelConsPerFueSub(runCy,DSBS,EFS2,YTIME))
+  )$SUM(EFS2$ITECHtoEF(ITECH,EFS2), imFuelConsPerFueSub(runCy,DSBS,EFS2,YTIME)) +
+  1$(not SUM(EFS2$ITECHtoEF(ITECH,EFS2), imFuelConsPerFueSub(runCy,DSBS,EFS2,YTIME)) and not BIOFUELS(EF));
 i02ShareBlend(runCy,DSBS,ITECH,EF,YTIME)$AN(YTIME) = i02ShareBlend(runCy,DSBS,ITECH,EF,"%fBaseY%");
 i02ShareBlend(runCy,"BU","TKRS","KRS",YTIME)$AN(YTIME) = i02ShareBlend(runCy,"BU","TKRS","KRS","%fBaseY%") - 0.006 * (ord(YTIME)-11);
 i02ShareBlend(runCy,"BU","TKRS","BKRS",YTIME)$AN(YTIME) = i02ShareBlend(runCy,"BU","TKRS","BKRS","%fBaseY%") + 0.006 * (ord(YTIME)-11);

@@ -24,7 +24,8 @@ Q05DemSecH2(allCy,SBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     sum(INDDOM$SAMEAS(INDDOM,SBS), VmConsFuel(allCy,INDDOM,"H2F",YTIME)) +
     sum(TRANSE$SAMEAS(TRANSE,SBS), VmDemFinEneTranspPerFuel(allCy,TRANSE,"H2F",YTIME)) +
     !! FIXME: Add LQD,GAS,SLD sectors consumption too
-    VmConsFuelDACProd(allCy,"H2F",YTIME)$sameas("DAC",SBS) +
+    VmConsFuelCDRProd(allCy,"H2F",YTIME)$sameas("DAC",SBS) +
+    VmConsFuelCDRProd(allCy,"H2F",YTIME)$sameas("EW",SBS) +
     VmConsFuelElecProd(allCy,"H2F",YTIME)$sameas("PG",SBS);
 
 *' This equation defines the amount of hydrogen production capacity that is scrapped due to the expiration of the useful life of plants.

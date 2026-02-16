@@ -70,6 +70,7 @@ PG      0.1
 H2P     0.08
 H2INFR  0.08
 DAC     0.08
+EW     0.08
 STEAMP  0.08
 /;
 *---
@@ -456,6 +457,7 @@ imNcon(DOMSE) = 10;                                                    !! 11 dif
 imNcon(NENSE) = 10;                                                    !! 11 different consumer size groups for non energy uses
 imNcon("BU") = 2;                                                      !! ... except bunkers .
 imNcon("DAC") = 1;                                                      !! 
+imNcon("EW") = 1;
 *---
 * 11 vehicle mileage groups
 * 0.952 turned out to be a (constant) ratio between modal and average mileage through iterations in Excel
@@ -518,6 +520,10 @@ imAnnCons(runCy,"BU","modal") = 0.5 ;
 imAnnCons(runCy,"DAC","smallest") = 0.2 ;
 imAnnCons(runCy,"DAC","largest") = 1 ;
 imAnnCons(runCy,"DAC","modal") = 0.5 ;
+
+imAnnCons(runCy,"EW","smallest") = 0.2 ;
+imAnnCons(runCy,"EW","largest") = 1 ;
+imAnnCons(runCy,"EW","modal") = 0.5 ;
 *---
 * Consumer size groups distribution function
 Loop (runCy,DSBS) DO
@@ -776,7 +782,7 @@ imCapCostTech(runCy,"BU","TH2F",YTIME) = 1.5 * imCapCostTech(runCy,"BU","TGDO",Y
 imCapCostTechMin(allCy,"DAC","HTDAC",YTIME) = 0.4;
 imCapCostTechMin(allCy,"DAC","H2DAC",YTIME) = 0.2;
 imCapCostTechMin(allCy,"DAC","LTDAC",YTIME) = 0.2;
-imCapCostTechMin(allCy,"DAC","EWDAC",YTIME) = 0.2;
+imCapCostTechMin(allCy,"EW","TEW",YTIME) = 0.2;
 *---
 !!imUsfEneConvSubTech(runCy,INDSE,"THCL",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCL","USC") + 0.005 * (ord(YTIME)-11);
 imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCLCCS","USC") + 0.005 * (ord(YTIME)-11);

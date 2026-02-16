@@ -79,7 +79,7 @@ Q07GrossEmissCO2Demand(allCy,DSBS,YTIME)$(TIME(YTIME)$runCy(allCy))..
       (
         VmConsFuel(allCy,DSBS,EFS,YTIME) + 
         SUM(TRANSE$sameas(TRANSE,DSBS), VmDemFinEneTranspPerFuel(allCy,TRANSE,EFS,YTIME)) +
-        VmConsFuelDACProd(allCy,EFS,YTIME)
+        VmConsFuelCDRProd(allCy,EFS,YTIME)
       ) *
       imCo2EmiFac(allCy,DSBS,EFS,YTIME)
     );
