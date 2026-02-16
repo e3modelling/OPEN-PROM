@@ -70,17 +70,19 @@ Q11SubsiDemITech(allCy,DSBS,ITECH,YTIME)$(INDSE(DSBS) and SECTTECH(DSBS,ITECH) a
 Q11SubsiDemTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS,TECH))..
     VmSubsiDemTech(allCy,DSBS,TECH,YTIME)
         =E=
-    (
+    0
+$ontext
+    sum(TTECH$(sameas(TECH,TTECH)), !! Transport
       ( !! Transport (EVs)
         (
-          VmSubsiDemTechAvail(allCy,DSBS,TECH,YTIME) * 1e3 / ((V01StockPcYearlyTech(allCy,"TELC",YTIME-1) - V01StockPcYearlyTech(allCy,"TELC",YTIME-2)) * 1e6)
+          VmSubsiDemTechAvail(allCy,DSBS,TECH,YTIME) * 1e3 / (V01NewRegPcTechYearly(allCy,TTECH,YTIME-1) * 1e6)
           + (1 - imCapCostTechMin(allCy,DSBS,TECH,YTIME)) * imCapCostTech(allCy,DSBS,TECH,YTIME)
         ) -
-        sqrt(sqr( 
-        VmSubsiDemTechAvail(allCy,DSBS,TECH,YTIME) * 1e3 / ((V01StockPcYearlyTech(allCy,"TELC",YTIME-1) - V01StockPcYearlyTech(allCy,"TELC",YTIME-2)) * 1e6)
+        sqrt(sqr(
+        VmSubsiDemTechAvail(allCy,DSBS,TECH,YTIME) * 1e3 / (V01NewRegPcTechYearly(allCy,TTECH,YTIME-1) * 1e6)
         - (1 - imCapCostTechMin(allCy,DSBS,TECH,YTIME)) * imCapCostTech(allCy,DSBS,TECH,YTIME)))
       ) / 2
-    )$((ord(YTIME) > 12 and TRANSE(DSBS)))
+    )$(ord(YTIME) > 12 and TRANSE(DSBS) and sameas(DSBS,"PC") and sameas(TECH,"TELC"))
     +
     sum(ITECH$(sameas(TECH,ITECH)), !! Industry
       VmSubsiDemITech(allCy,DSBS,ITECH,YTIME)
@@ -97,6 +99,7 @@ Q11SubsiDemTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS
       - (1 - imCapCostTechMin(allCy,"DAC",DACTECH,YTIME)) * V06LvlCostDAC(allCy,DACTECH,YTIME-1)))
       ) / 2
     )$((ord(YTIME) > 12))
+$offtext
 ;
 
 *' The equation splits the available state grants to the various supply technologies through a policy parameter expressing this proportional division.
@@ -112,15 +115,15 @@ Q11SubsiSupTech(allCy,STECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q11SubsiCapCostTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS,TECH))..
       VmSubsiCapCostTech(allCy,DSBS,TECH,YTIME)
       =E=
-      ( !!Transport subsidies and grants
+      sum(TTECH$(sameas(TECH,TTECH)), !!Transport subsidies and grants
         VmSubsiDemTechAvail(allCy,DSBS,TECH,YTIME)
         + imCapCostTechMin(allCy,DSBS,TECH,YTIME) * imCapCostTech(allCy,DSBS,TECH,YTIME) * 1e-3
-          * ((V01StockPcYearlyTech(allCy,"TELC",YTIME) - V01StockPcYearlyTech(allCy,"TELC",YTIME-1)) * 1e6)
+          * (V01NewRegPcTechYearly(allCy,TTECH,YTIME-1) * 1e6)
         -
         sqrt(sqr(VmSubsiDemTechAvail(allCy,DSBS,TECH,YTIME)
         - imCapCostTechMin(allCy,DSBS,TECH,YTIME) * imCapCostTech(allCy,DSBS,TECH,YTIME) * 1e-3
-          * ((V01StockPcYearlyTech(allCy,"TELC",YTIME) - V01StockPcYearlyTech(allCy,"TELC",YTIME-1)) * 1e6)))
-      )$(TRANSE(DSBS) and sameas (TECH,"TELC"))
+          * (V01NewRegPcTechYearly(allCy,TTECH,YTIME-1) * 1e6)))
+      )$(TRANSE(DSBS) and sameas(DSBS,"PC"))
       / 2
       +
       sum(ITECH$(sameas(TECH,ITECH)), !!Industry subsidies and grants
