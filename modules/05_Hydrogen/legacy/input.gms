@@ -66,7 +66,7 @@ i05ProdLftH2(H2TECH,YTIME) = i05H2Production("LFT",H2TECH,YTIME);
 i05ProdLftH2("wes",YTIME)  = i05H2Production("LFT","weg",YTIME);
 i05ProdLftH2("wew",YTIME)  = i05H2Production("LFT","weg",YTIME);
 *---
-i05CaptRateH2Prod(H2TECH) = i05H2Production("CR",H2TECH,"%fBaseY%");
+i05CaptRateH2Prod(H2TECH) = smax(YTIME$DATAY(YTIME), i05H2Production("CR",H2TECH,YTIME));
 i05CaptRateH2Prod("wes")  = i05CaptRateH2Prod("weg");
 i05CaptRateH2Prod("wew")  = i05CaptRateH2Prod("weg");
 i05CaptRateH2Prod(H2TECH)$(not H2CCS(H2TECH)) = 0;

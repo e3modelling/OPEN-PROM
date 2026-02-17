@@ -103,12 +103,42 @@ def read_main_log(subfolder):
         print("main.log file not found in the selected subfolder.")
         return []
 
-def parse_main_log(lines):
+def read_modelstat(subfolder):
+    modelstat_path = os.path.join(subfolder, "modelstat.txt")
+    if os.path.exists(modelstat_path):
+        with open(modelstat_path, 'r') as file:
+            return file.readlines()
+    return []
+
+def parse_modelstat(lines):
+    modelstat_line_pattern = re.compile(r'Country:\s*([A-Z]+)\s+Model Status:\s*([0-9]+(?:\.[0-9]+)?)\s+Year:\s*(\d+)')
+    country_year_status = {}
+
+    for line in lines:
+        ms_match = re.search(modelstat_line_pattern, line)
+        if not ms_match:
+            continue
+
+        country = ms_match.group(1)
+        model_status = int(round(float(ms_match.group(2))))
+        year = int(ms_match.group(3))
+
+        if country not in country_year_status:
+            country_year_status[country] = {}
+
+        country_year_status[country][year] = 1 if model_status in (1, 2) else 0
+
+    return country_year_status
+
+def parse_main_log(lines, infes_tol=1e-7):
     year_pattern = re.compile(r'an\s*=\s*(\d+)')
     country_pattern = re.compile(r'runCyL\s*=\s*([A-Z]+)')
     reading_solution_pattern = re.compile(r'--- Reading solution for model openprom')
     optimal_solution_pattern = re.compile(r'\*\* Optimal solution')
     feasible_solution_pattern = re.compile(r'\*\* Feasible solution')
+    model_status_pattern = re.compile(r'\*\*\*\* MODEL STATUS\s+([0-9]+)')
+    infes_sum_pattern = re.compile(r'SUM\s+([0-9]+(?:\.[0-9]+)?(?:E[+-]?\d+)?)', re.IGNORECASE)
+    status_error_pattern = re.compile(r'\*\*\* Status:\s*Execution error', re.IGNORECASE)
 
     country_year_status = {}
     current_year = None
@@ -127,28 +157,50 @@ def parse_main_log(lines):
                 country_year_status[current_country] = {}
 
         if reading_solution_match:
-            
-            start_line = max(0, line_num - 5)
-            relevant_lines = lines[start_line:line_num]
+            if current_country is None or current_year is None:
+                continue
 
-            success_found = False
-            for relevant_line in relevant_lines:
-                optimal_solution_match = re.search(optimal_solution_pattern, relevant_line)
-                feasible_solution_match = re.search(feasible_solution_pattern, relevant_line)
+            end_line = min(len(lines), line_num + 250)
+            model_status = None
+            infes_sum = None
+            has_optimal_or_feasible = False
 
-                if optimal_solution_match:
-                    success_found = True
-                    country_year_status[current_country][current_year] = 1
-                    break
-                elif feasible_solution_match:
-                    success_found = True
-                    if current_country not in country_year_status or current_year not in country_year_status[current_country]:
-                        country_year_status[current_country][current_year] = 2
+            for j in range(line_num, end_line):
+                block_line = lines[j]
+
+                if j > line_num and re.search(reading_solution_pattern, block_line):
                     break
 
-            if not success_found:
-                if current_country not in country_year_status or current_year not in country_year_status[current_country]:
-                    country_year_status[current_country][current_year] = 0
+                status_error_match = re.search(status_error_pattern, block_line)
+                if status_error_match:
+                    model_status = 13
+
+                model_status_match = re.search(model_status_pattern, block_line)
+                if model_status_match:
+                    model_status = int(model_status_match.group(1))
+
+                infes_sum_match = re.search(infes_sum_pattern, block_line)
+                if infes_sum_match:
+                    try:
+                        infes_sum = float(infes_sum_match.group(1))
+                    except ValueError:
+                        infes_sum = None
+
+                if re.search(optimal_solution_pattern, block_line) or re.search(feasible_solution_pattern, block_line):
+                    has_optimal_or_feasible = True
+
+            if model_status is None and not has_optimal_or_feasible:
+                continue
+
+            is_success = False
+            if model_status in (1, 2):
+                is_success = True
+            elif model_status == 5 and infes_sum is not None and infes_sum <= infes_tol:
+                is_success = True
+            elif has_optimal_or_feasible:
+                is_success = True
+
+            country_year_status[current_country][current_year] = 1 if is_success else 0
                     
     return country_year_status
 
@@ -195,14 +247,21 @@ def main_loop(base_path, check_interval=1.5, max_no_update_intervals=4):
         if subfolder_status_list:
             latest_subfolder = subfolder_status_list[-1][1]
             folder_name = latest_subfolder.split(os.sep)[-1]
-            lines = read_main_log(latest_subfolder)
-            if lines:
-                country_year_status = parse_main_log(lines)
+            modelstat_lines = read_modelstat(latest_subfolder)
+            if modelstat_lines:
+                country_year_status = parse_modelstat(modelstat_lines)
                 df = create_dataframe(country_year_status)
                 plot_heatmap(df, folder_name)
                 plt.show()
             else:
-                print("No data found in the log file for the latest subfolder.")
+                lines = read_main_log(latest_subfolder)
+                if not lines:
+                    print("No data found in the log file for the latest subfolder.")
+                    return
+                country_year_status = parse_main_log(lines)
+                df = create_dataframe(country_year_status)
+                plot_heatmap(df, folder_name)
+                plt.show()
         return
 
     pending_folder_name = os.path.basename(pending_folder)
@@ -212,12 +271,16 @@ def main_loop(base_path, check_interval=1.5, max_no_update_intervals=4):
 
     while consecutive_no_update_intervals < max_no_update_intervals:
         try:
-            lines = read_main_log(pending_folder)
-            if not lines:
-                print(f"No data found in the log file for subfolder: {pending_folder}")
-                continue
+            modelstat_lines = read_modelstat(pending_folder)
+            if modelstat_lines:
+                country_year_status = parse_modelstat(modelstat_lines)
+            else:
+                lines = read_main_log(pending_folder)
+                if not lines:
+                    print(f"No data found in the log file for subfolder: {pending_folder}")
+                    continue
+                country_year_status = parse_main_log(lines)
 
-            country_year_status = parse_main_log(lines)
             pending_run = True
 
             df = create_dataframe(country_year_status, pending_run)

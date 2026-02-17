@@ -7,7 +7,7 @@ V01RateScrPcTot.UP(runCy,TTECH,YTIME) = 1;
 V01PcOwnPcLevl.UP(runCy,YTIME) = 2*i01PassCarsMarkSat(runCy);
 *---
 V01RateScrPc.UP(runCy,TTECH,YTIME) = 1;
-V01RateScrPc.LO(runCy,TTECH,YTIME) = 0;
+V01RateScrPc.LO(runCy,TTECH,YTIME) = 1e-6;
 *---
 V01PremScrp.UP(runCy,TRANSE,TTECH,YTIME) = 1;
 V01PremScrp.LO(runCy,TRANSE,TTECH,YTIME) = 0;

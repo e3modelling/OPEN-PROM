@@ -15,6 +15,9 @@ loop an do !! start outer iteration loop (time steps)
         if sModelStat gt 2 then
             solve openprom using nlp minimizing vDummyObj;
             sModelStat = openprom.modelstat;
+            if ((sModelStat = 5) and (openprom.suminfes <= sInfesTol)) then
+                sModelStat = 2;
+            endif;
             ODummyObj(runCyL,YTIME)$TIME(YTIME) = vDummyObj.L;  !! Assign objective function value
         endif;
     endloop;

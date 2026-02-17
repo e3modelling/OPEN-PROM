@@ -12,6 +12,7 @@ def parse_modelstat(lines):
     Parses the modelstat.txt file for country-year success statuses.
     """
     country_year_status = {}
+    modelstat_line_pattern = re.compile(r'Country:\s*([A-Z]+)\s+Model Status:\s*([0-9]+(?:\.[0-9]+)?)\s+Year:\s*(\d+)')
     year_pattern = re.compile(r'an\s*=\s*(\d+)')
     country_pattern = re.compile(r'runCyL\s*=\s*([A-Z]+)')
     solution_pattern = re.compile(r'--- Solution status\s*=\s*(\d+)')
@@ -19,7 +20,23 @@ def parse_modelstat(lines):
     current_country = None
     current_year = None
 
+    def map_status_to_heat(status_value):
+        status_int = int(round(float(status_value)))
+        if status_int in (1, 2):
+            return 1
+        return 0
+
     for line in lines:
+        ms_match = re.search(modelstat_line_pattern, line)
+        if ms_match:
+            country = ms_match.group(1)
+            model_status = ms_match.group(2)
+            year = int(ms_match.group(3))
+            if country not in country_year_status:
+                country_year_status[country] = {}
+            country_year_status[country][year] = map_status_to_heat(model_status)
+            continue
+
         year_match = re.search(year_pattern, line)
         country_match = re.search(country_pattern, line)
         solution_match = re.search(solution_pattern, line)
@@ -33,9 +50,16 @@ def parse_modelstat(lines):
         if solution_match:
             solution_status = int(solution_match.group(1))
             if current_country and current_year:
-                country_year_status[current_country][current_year] = solution_status
+                country_year_status[current_country][current_year] = 1 if solution_status in (1, 2) else 0
 
     return country_year_status
+
+def read_modelstat(subfolder):
+    modelstat_path = os.path.join(subfolder, "modelstat.txt")
+    if os.path.exists(modelstat_path):
+        with open(modelstat_path, 'r') as file:
+            return file.readlines()
+    return []
 
 def check_files_and_list_subfolders(base_path, flag=False):
     """
@@ -313,11 +337,15 @@ def main():
 
     for idx, (subfolder_status, selected_subfolder) in enumerate(selected_subfolders, 1):
         folder_name = selected_subfolder.split(os.sep)[-1]  # Extract folder name
-        lines = read_main_log(selected_subfolder) if not args.flag else parse_modelstat(os.path.join(selected_subfolder, "modelstat.txt"))
-        if not lines:
-            print(f"No data found in the log file for subfolder: {selected_subfolder}")
-            continue
-        country_year_status = parse_main_log(lines) if not args.flag else parse_modelstat(lines)
+        modelstat_lines = read_modelstat(selected_subfolder)
+        if modelstat_lines:
+            country_year_status = parse_modelstat(modelstat_lines)
+        else:
+            lines = read_main_log(selected_subfolder)
+            if not lines:
+                print(f"No data found in the log file for subfolder: {selected_subfolder}")
+                continue
+            country_year_status = parse_main_log(lines)
 
         # Check if the run is pending
         pending_run = "Status: PENDING" in subfolder_status

@@ -163,7 +163,7 @@ BMSWAS    0.76
 /
 ;
 *---
-i09ProdLftSte(TSTEAM) = imDataChpPowGen(TSTEAM,"LFT","%fBaseY%");
+i09ProdLftSte(TSTEAM) = max(1, imDataChpPowGen(TSTEAM,"LFT","%fBaseY%"));
 *---
 i09CostInvCostSteProd(TSTEAM,YTIME) = imDataChpPowGen(TSTEAM,"IC",YTIME);
 *---

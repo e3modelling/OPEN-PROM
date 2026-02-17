@@ -92,6 +92,7 @@ smFracElecPriChp                                           "Fraction of Electric
 sCY                                                        "country iterator" /0/
 sUnitToKUnit                                               "units to Kilo units conversion" /1000/
 epsilon6                                                   "A small number of magnitude 6" /1e-6/
+sInfesTol                                                  "Tolerance for treating tiny local infeasibilities as numerical noise" /1e-7/
 smCtoCO2                                                   "Mass conversion factor (44/12) per tCO2 -> per tC" / 3.66419 /
 smDefl_15_to_10                                            "Deflate 2015$ to 2010$ - Data_MAC_CH4N2O_Harmsen-et-al_PBL_2019" / 0.8957 /
 smDefl_15_to_05                                            "Deflate 2015$ to 2005$ - Data_MAC_F-gases_Harmsen-et-al_PBL_2019" / 0.824 /
