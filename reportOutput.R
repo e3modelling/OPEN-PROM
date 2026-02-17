@@ -2,11 +2,14 @@ library(madrat)
 library(postprom)
 library(dplyr)
 library(quitte)
-
+library(crayon)
+library(stringr)
 
 getRunpath <- function() {
   # Main execution
-  result <- call_functions()
+  source("scripts/helpers_of_compare_scenarios.R")
+  source("scripts/scan_run_folder.R")
+  result <- scan_run_folder()
   runpath <- as.data.frame(result)
   runpath <- as.vector(runpath[, seq(2, length(runpath), 2)])
   return(unlist(runpath, use.names = FALSE))
