@@ -48,7 +48,7 @@ Q09DemGapSte(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         VmProdSte(allCy,TSTEAM,YTIME-1)
       )
   ))
-  )/2;
+  )/2 + 1e-6;
 
 Q09CostVarProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V09CostVarProdSte(allCy,TSTEAM,YTIME)

@@ -92,16 +92,19 @@ Q02GapUsefulDemSubsec(allCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not 
 Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not sameas(DSBS,"DAC"))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
     V02CapCostTech(allCy,DSBS,ITECH,YTIME) 
         =E=
-    ((
-      (
-        imDisc(allCy,DSBS,YTIME) * !! in case of chp plants we use the discount rate of power generation sector
-        exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME))
-      ) /
-      (exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME)) - 1)
-    ) *
-    imCapCostTech(allCy,DSBS,ITECH,YTIME) * imCGI(allCy,YTIME) +
-    imFixOMCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit)
-    / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME); !! divide with utilization rate or with efficiency as well???? depends on the CapCostTech parameter
+    (
+        (
+            (
+                (imDisc(allCy,DSBS,YTIME) * !! in case of chp plants we use the discount rate of power generation sector
+                    exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME))
+                ) /
+                (exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME)) - 1)
+            ) *
+            imCapCostTech(allCy,DSBS,ITECH,YTIME) * imCGI(allCy,YTIME) +
+            imFixOMCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit
+        ) / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME)
+    )
+;
 
 *' The equation computes the variable cost (variable + fuel) of each technology in each subsector - to check about consumer sizes
 *' OLD EQUATION: Q02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME) --> NEW EQUATION:Q02VarCostTech(allCy,DSBS,rCon,ITECH,YTIME)
@@ -114,9 +117,9 @@ Q02VarCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not s
     sum(EF$ITECHtoEF(ITECH,EF), 
       i02Share(allCy,DSBS,ITECH,EF,YTIME) *
       VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME) +
-      imCO2CaptRateIndustry(allCy,ITECH,YTIME) * VmCstCO2SeqCsts(allCy,YTIME-1) * 1e-3 * imCo2EmiFac(allCy,DSBS,EF,YTIME-1)  +
-      (1-imCO2CaptRateIndustry(allCy,ITECH,YTIME)) * 1e-3 * imCo2EmiFac(allCy,DSBS,EF,YTIME-1)  *
-      (sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME-1))) +
+      imCO2CaptRateIndustry(allCy,ITECH,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * imCo2EmiFac(allCy,DSBS,EF,YTIME)  +
+      (1-imCO2CaptRateIndustry(allCy,ITECH,YTIME)) * 1e-3 * imCo2EmiFac(allCy,DSBS,EF,YTIME)  *
+      (sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME))) +
       (VmRenValue(YTIME)/1000)$(not RENEF(ITECH) and not NENSE(DSBS)) !! needs change of units
     ) +
     imVarCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit
@@ -126,7 +129,8 @@ Q02CostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS))$SECTTECH(DSB
     V02CostTech(allCy,DSBS,ITECH,YTIME) 
         =E=
     V02CapCostTech(allCy,DSBS,ITECH,YTIME) +
-    V02VarCostTech(allCy,DSBS,ITECH,YTIME);
+    V02VarCostTech(allCy,DSBS,ITECH,YTIME) -
+    VmSubsiDemTech(allCy,DSBS,ITECH,YTIME);
 
 *' This equation calculates the technology share in new equipment based on factors such as maturity factor,
 *' cumulative distribution function of consumer size groups, number of consumers, technology cost, distribution function of consumer

@@ -333,7 +333,7 @@ imDataIndTechnology(INDSE,TECH,"IC") = imDataIndTechnology(INDSE,TECH,"IC") * 1.
 imDataIndTechnology(INDSE,TECH,"FC") = imDataIndTechnology(INDSE,TECH,"FC") * 1.3;
 imDataIndTechnology(INDSE,TECH,"VC") = imDataIndTechnology(INDSE,TECH,"VC") * 1.3;
 
-imDataIndTechnology(INDSE,"TBGDO",ECONCHAR) = imDataIndTechnology(INDSE,"TGDO",ECONCHAR);
+*imDataIndTechnology(INDSE,"TBGDO",ECONCHAR) = imDataIndTechnology(INDSE,"TGDO",ECONCHAR);
 imDataIndTechnology(INDSE,"TBMSWAS",ECONCHAR) = imDataIndTechnology("IS","TBMSWAS",ECONCHAR);
 imDataIndTechnology(INDSE,"TSTE",ECONCHAR) = imDataIndTechnology(INDSE,"THCL",ECONCHAR);
 *---
@@ -576,7 +576,7 @@ $include"./iDataImports.csv"
 $offdelim
 ;
 *---
-imFuelImports(runCy,EFS,YTIME)$(not An(YTIME)) = iDataImports(runCy,EFS,YTIME);
+imFuelImports(runCy,EFS,YTIME)$DATAY(YTIME) = iDataImports(runCy,EFS,YTIME);
 *---
 iNetImp(runCy,EFS,YTIME) = iDataImports(runCy,"ELC",YTIME)-iSuppExports(runCy,"ELC",YTIME);
 *---
@@ -600,20 +600,24 @@ elseif %fScenario% eq 4 then
      iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"exogCV_Calib",YTIME);
 endif;
 *---
-table iMatrFactorData(DSBS,TECH,YTIME)          "Maturity factor per technology and subsector (1)"
+table i01PremScrpFac(allCy,DSBS,TECH,YTIME)     "Parameter that controls premature scrapping"
+$ondelim
+$include"./iPremScrpFac.csv"
+$offdelim
+;
+*---
+table iMatrFactorData(allCy,DSBS,TECH,YTIME)          "Maturity factor per technology and subsector (1)"
 $ondelim
 $include"./iMatrFactorData.csv"
 $offdelim
 ;
-iMatrFactorData(DSBS,TECH,YTIME)$(TRANSE(DSBS) or INDSE(DSBS) or DOMSE(DSBS)) = 1;
-iMatrFactorData(DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and (INDSE(DSBS)) and CCSTECH(ITECH)) = 1;
-iMatrFactorData(DSBS,TECH,YTIME)$(sameas(DSBS, "PC")$SECTTECH(DSBS,TECH)) = 1;
 *---
-$IFTHEN.calib %MatFacCalibration% == off
+$IFTHEN.calib %Calibration% == off
 parameter imMatrFactor(allCy,DSBS,TECH,YTIME)   "Maturity factor per technology and subsector for all countries (1)";
-imMatrFactor(runCy,DSBS,TECH,YTIME) = iMatrFactorData(DSBS,TECH,YTIME);                                          
-imMatrFactor(runCy,DSBS,TECH,YTIME)$(imMatrFactor(runCy,DSBS,TECH,YTIME)=0) = 0.000001;
+imMatrFactor(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                          
 
+imMatrFactor(runCy,DSBS,"TBMSWAS",YTIME) = 0.01;
+$ontext
 imMatrFactor(runCy,DSBS,"TGDO",YTIME)$((ord(YTIME) > 11) and TRANSE(DSBS)) = 0.5;
 imMatrFactor(runCy,DSBS,"TGSL",YTIME)$((ord(YTIME) > 11) and TRANSE(DSBS)) = 0.5;
 imMatrFactor(runCy,DSBS,"TELC",YTIME)$((ord(YTIME) > 11) and TRANSE(DSBS)) = 3;
@@ -625,6 +629,7 @@ imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 50 and TRANSE(DSBS)) = 15;
 imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 50 and TRANSE(DSBS)) = 15;
 imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 11;
 imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 11;
+
 imMatrFactor(runCy,DSBS,"TNGSCCS",YTIME)$((ord(YTIME) > 11) and INDSE(DSBS)) = 1;
 imMatrFactor(runCy,DSBS,"THCLCCS",YTIME)$((ord(YTIME) > 11) and INDSE(DSBS)) = 1;
 imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 11 and DOMSE(DSBS)) = 20;
@@ -642,13 +647,93 @@ imMatrFactor(runCy,DSBS,"TPHEVGSL",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 0
 imMatrFactor(runCy,DSBS,"TPHEVGDO",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 0.001;
 imMatrFactor(runCy,DSBS,"TCHEVGSL",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 0.001;
 imMatrFactor(runCy,DSBS,"TCHEVGDO",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 0.001;
+$offtext
 
 $ELSE.calib
 variable imMatrFactor(allCy,DSBS,TECH,YTIME)    "Maturity factor per technology and subsector for all countries (1)";
-imMatrFactor.L(runCy,DSBS,TECH,YTIME) = iMatrFactorData(DSBS,TECH,YTIME) + 1e-6;                                          
-imMatrFactor.LO(runCy,DSBS,EF,YTIME) = -10;                                          
-imMatrFactor.UP(runCy,DSBS,EF,YTIME) = 100;
+imMatrFactor.LO(runCy,DSBS,TECH,YTIME) = 0;                                          
+imMatrFactor.UP(runCy,DSBS,TECH,YTIME) = 20;
+imMatrFactor.L(runCy,DSBS,TECH,YTIME) = 1;!!iMatrFactorData(runCy,DSBS,TECH,YTIME);     
+imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(not (sameas(DSBS,"PC") or sameas(DSBS,"PB") or sameas(DSBS,"GU")) or not SECTTECH(DSBS,TECH)) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                          
 $ENDIF.calib
+*---
+parameters
+!!imFacSubsiCapCostTech(DSBS,TECH)                            !!State subsidy (%) factor in technology capex (demand side)
+!!imGrantCapCostTech(DSBS,TECH)                               !!State granting in technology capex (demand side)
+!!imSubsiCapCostFuel(SBS,EF)                                  !!State subsidy in fuel cost
+!!imFacSubsiCapCostSupply(SSBS,STECH)                         !!State subsidy (%) factor in technology capex (supply side)
+!!imGrantCapCostSupply(SSBS,STECH)                            !!State granting in technology capex (supply side)
+imCapCostTechMin(allCy,DSBS,TECH,YTIME)                    !!Factor for the minimum capex of a demand technology after the state subsidy
+;
+
+$ontext
+if %fScenario% eq 0 then
+     imFacSubsiCapCostTech("PC","TELC") = 0;
+     imFacSubsiCapCostTech("CH","TELC") = 0;
+     imFacSubsiCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 0;
+     imGrantCapCostTech("PC","TELC") = 0;                        !!kUS$2015 per vehicle
+     imGrantCapCostTech("CH","TELC") = 0;                        !!kUS$2015/toe-year for Industry sectors
+     imGrantCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 0;         !!US$2015/tCO2
+     imSubsiCapCostFuel("HOU","ELC") = 0;                        !!kUS$2015/toe
+     imSubsiCapCostFuel(SBS,"ELC")$INDSE1(SBS) = 0;              !!kUS$2015/toe
+     imFacSubsiCapCostSupply("PG",PGREN) = 0;
+     imFacSubsiCapCostSupply("H2P",H2TECH) = 0;
+     imGrantCapCostSupply("PG",PGREN) = 0;                       !!kUS$2015/kW
+     imGrantCapCostSupply("H2P",H2TECH) = 0;                     !!US$2015/toe H2
+elseif %fScenario% eq 1 then
+     imFacSubsiCapCostTech("PC","TELC") = 0;
+     imFacSubsiCapCostTech("CH","TELC") = 0;
+     imFacSubsiCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 0;
+     imGrantCapCostTech("PC","TELC") = 1;                        !!kUS$2015 per vehicle
+     imGrantCapCostTech("CH","TELC") = 0;                        !!kUS$2015/toe-year for Industry sectors
+     imGrantCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 90;        !!US$2015/tCO2
+     imSubsiCapCostFuel("HOU","ELC") = 0;                        !!kUS$2015/toe
+     imSubsiCapCostFuel(SBS,"ELC")$INDSE1(SBS) = 0;              !!kUS$2015/toe
+     imFacSubsiCapCostSupply("PG",PGREN) = 0.1;
+     imFacSubsiCapCostSupply("H2P",H2TECH) = 0.2;
+     imGrantCapCostSupply("PG",PGREN) = 0;                       !!kUS$2015/kW
+     imGrantCapCostSupply("H2P",H2TECH) = 0;                     !!US$2015/toe H2
+elseif %fScenario% eq 2 then
+     imFacSubsiCapCostTech("PC","TELC") = 0;
+     imFacSubsiCapCostTech("CH","TELC") = 0.40;
+     imFacSubsiCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 0;
+     imGrantCapCostTech("PC","TELC") = 9;                        !!kUS$2015 per vehicle
+     imGrantCapCostTech("CH","TELC") = 0;                        !!kUS$2015/toe-year for Industry sectors
+     imGrantCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 90;        !!US$2015/tCO2
+     imSubsiCapCostFuel("HOU","ELC") = 0;                        !!kUS$2015/toe
+     imSubsiCapCostFuel(SBS,"ELC")$INDSE1(SBS) = 0;              !!kUS$2015/toe
+     imFacSubsiCapCostSupply("PG",PGREN) = 0.3;
+     imFacSubsiCapCostSupply("H2P",H2TECH) = 0.4;
+     imGrantCapCostSupply("PG",PGREN) = 0;                       !!kUS$2015/kW
+     imGrantCapCostSupply("H2P",H2TECH) = 0;                     !!US$2015/toe H2
+elseif %fScenario% eq 3 then
+     imFacSubsiCapCostTech("PC","TELC") = 0;
+     imFacSubsiCapCostTech("CH","TELC") = 0.10;
+     imFacSubsiCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 0;
+     imGrantCapCostTech("PC","TELC") = 7;                        !!kUS$2015 per vehicle
+     imGrantCapCostTech("CH","TELC") = 0;                        !!kUS$2015/toe-year for Industry sectors
+     imGrantCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 90;        !!US$2015/tCO2
+     imSubsiCapCostFuel("HOU","ELC") = 0;                        !!kUS$2015/toe
+     imSubsiCapCostFuel(SBS,"ELC")$INDSE1(SBS) = 0;              !!kUS$2015/toe
+     imFacSubsiCapCostSupply("PG",PGREN) = 0.3;
+     imFacSubsiCapCostSupply("H2P",H2TECH) = 0.3;
+     imGrantCapCostSupply("PG",PGREN) = 0;                       !!kUS$2015/kW
+     imGrantCapCostSupply("H2P",H2TECH) = 0;                     !!US$2015/toe H2
+elseif %fScenario% eq 4 then
+     imFacSubsiCapCostTech("PC","TELC") = 0;
+     imFacSubsiCapCostTech("CH","TELC") = 0;
+     imFacSubsiCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 0;
+     imGrantCapCostTech("PC","TELC") = 1;                        !!kUS$2015 per vehicle
+     imGrantCapCostTech("CH","TELC") = 0;                        !!kUS$2015/toe-year for Industry sectors
+     imGrantCapCostTech("DAC",TECH)$(DACTECH(TECH)) = 90;        !!US$2015/tCO2
+     imSubsiCapCostFuel("HOU","ELC") = 0;                        !!kUS$2015/toe
+     imSubsiCapCostFuel(SBS,"ELC")$INDSE1(SBS) = 0;              !!kUS$2015/toe
+     imFacSubsiCapCostSupply("PG",PGREN) = 0.1;
+     imFacSubsiCapCostSupply("H2P",H2TECH) = 0.2;
+     imGrantCapCostSupply("PG",PGREN) = 0;                       !!kUS$2015/kW
+     imGrantCapCostSupply("H2P",H2TECH) = 0;                     !!US$2015/toe H2
+endif;
+$offtext
 *---
 ** Industry
 imShrNonSubElecInTotElecDem(runCy,INDSE)  = iIndCharData(INDSE,"SHR_NSE");
@@ -662,11 +747,13 @@ imShrNonSubElecInTotElecDem(runCy,DOMSE)$(imShrNonSubElecInTotElecDem(runCy,DOMS
 *---
 **  Transport Sector
 imCapCostTech(runCy,TRANSE,TECH,YTIME) = imDataTransTech(TRANSE,TECH,"IC",YTIME);
+imCapCostTechMin(allCy,TRANSE,TECH,YTIME) = 0.4;
 imFixOMCostTech(runCy,TRANSE,TECH,YTIME) = imDataTransTech(TRANSE,TECH,"FC",YTIME);
 imVarCostTech(runCy,TRANSE,TECH,YTIME) = imDataTransTech(TRANSE,TECH,"VC",YTIME);
 *---
 **  Industrial Sector
 imCapCostTech(runCy,INDSE,TECH,YTIME) = imDataIndTechnology(INDSE,TECH,"IC");
+imCapCostTechMin(allCy,INDSE,TECH,YTIME) = 0.5;
 imFixOMCostTech(runCy,INDSE,TECH,YTIME) = imDataIndTechnology(INDSE,TECH,"FC");
 imVarCostTech(runCy,INDSE,TECH,YTIME) = imDataIndTechnology(INDSE,TECH,"VC");
 imUsfEneConvSubTech(runCy,INDSE,TECH,YTIME)  = imDataIndTechnology(INDSE,TECH,"USC");
@@ -682,6 +769,14 @@ imUsfEneConvSubTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,"USC");
 imFixOMCostTech(runCy,NENSE,TECH,YTIME)= imDataNonEneSec(NENSE,TECH,"FC");
 imVarCostTech(runCy,NENSE,TECH,YTIME) = imDataNonEneSec(NENSE,TECH,"VC");
 imUsfEneConvSubTech(runCy,NENSE,TECH,YTIME) = imDataNonEneSec(NENSE,TECH,"USC");
+imUsfEneConvSubTech(runCy,"BU","TH2F",YTIME) = 0.7;
+imCapCostTech(runCy,"BU","TH2F",YTIME) = 1.5 * imCapCostTech(runCy,"BU","TGDO",YTIME);
+*---
+**  CDR
+imCapCostTechMin(allCy,"DAC","HTDAC",YTIME) = 0.4;
+imCapCostTechMin(allCy,"DAC","H2DAC",YTIME) = 0.2;
+imCapCostTechMin(allCy,"DAC","LTDAC",YTIME) = 0.2;
+imCapCostTechMin(allCy,"DAC","EWDAC",YTIME) = 0.2;
 *---
 !!imUsfEneConvSubTech(runCy,INDSE,"THCL",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCL","USC") + 0.005 * (ord(YTIME)-11);
 imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCLCCS","USC") + 0.005 * (ord(YTIME)-11);

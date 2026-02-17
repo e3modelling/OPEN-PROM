@@ -10,21 +10,29 @@
 
 *' * Define dummy objective function
 
-$IFTHEN.calib %Calibration% == Calibration
-qDummyObj(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy))).. vDummyObj =e=
-SQRT(SUM((DSBS,TECH)$(SECTTECH(DSBS,TECH)and TECHtoEF(TECH,EF) and (INDDOM(DSBS))), SQR(imFuelConsPerFueSub(allCy,DSBS,EF,YTIME)-VmConsFuel(allCy,DSBS,EF,YTIME)))) +
-SQRT(SUM((DSBS,TECH)$(SECTTECH(DSBS,TECH)and TECHtoEF(TECH,EF) and (TRANSE(DSBS))), SQR(VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)-imFuelConsPerFueSub(allCy,TRANSE,EF,YTIME)))) +
-0;
-$ELSEIF.calib %Calibration% == MatCalibration
+$IFTHEN.calib %Calibration% == MatCalibration
 qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy)).. 
   vDummyObj 
       =e=
-  SUM(
-    (PGALL),
+  SUM(PGALL,
     SQR(
       V04SharePowPlaNewEq(allCy,PGALL,YTIME) - 
       t04SharePowPlaNewEq(allCy,PGALL,YTIME)
     )
+  ) +
+  SUM((TRANSE,TTECH)$(SECTTECH("PC",TTECH) and (sameas("PC",TRANSE) or sameas("PB",TRANSE) or sameas("GU",TRANSE))),
+    SQR(
+      (
+        V01ShareTechTr(allCy,TRANSE,TTECH,YTIME) -
+        t01NewShareStockPC(allCy,TRANSE,TTECH,YTIME)
+      )$(t01NewShareStockPC(allCy,TRANSE,TTECH,YTIME) >= 0) +
+      0.01 * (imMatrFactor(allCy,TRANSE,TTECH,YTIME) - imMatrFactor(allCy,TRANSE,TTECH,YTIME-1))
+    )
   );
+
+qRestrain(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) and runCy(allCy) and (t01NewShareStockPC(allCy,TRANSE,TTECH,YTIME) < 0)).. 
+  imMatrFactor(allCy,TRANSE,TTECH,YTIME)
+    =e=
+  common(allCy,TRANSE,YTIME);
 $ELSE.calib qDummyObj.. vDummyObj =e= 1;
 $ENDIF.calib

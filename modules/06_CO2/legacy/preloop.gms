@@ -3,9 +3,6 @@
 
 *'                *VARIABLE INITIALISATION*
 *---
-!!VmCstCO2SeqCsts.L(runCy,YTIME)=1;
-!!VmCstCO2SeqCsts.FX(runCy,YTIME)$(not an(YTIME)) = i06ElastCO2Seq(runCy,"mc_b");
-*---
 V06CapCO2ElecHydr.FX(runCy,CO2CAPTECH,YTIME)$(not An(YTIME)) = 0;
 *---
 V06CaptCummCO2.FX(runCy,YTIME)$(not an(YTIME)) = 0 ;
@@ -14,6 +11,8 @@ V06LvlCostDAC.LO(runCy,DACTECH,YTIME) = epsilon6;
 V06LvlCostDAC.L(runCy,DACTECH,YTIME) = 100;
 V06LvlCostDAC.FX(runCy,DACTECH,YTIME)$DATAY(YTIME) = 100;
 *---
-V06CapDAC.FX(runCy,DACTECH,YTIME)$(not an(YTIME)) = 1;
+V06CapDAC.FX(runCy,DACTECH,YTIME)$DATAY(YTIME) = 1;
 *---
 V06ProfRateDAC.LO(runCy,DACTECH,YTIME) = 0;
+*---
+V06CapFacNewDAC.FX(runCy,DACTECH,YTIME)$DATAY(YTIME) = S06CapFacMinNewDAC;

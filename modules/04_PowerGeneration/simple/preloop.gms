@@ -3,8 +3,6 @@
 
 *'                *VARIABLE INITIALISATION*
 *---
-V04ShareTechPG.LO(runCy,PGALL,YTIME)$DATAY(YTIME) = 0;
-V04ShareTechPG.UP(runCy,PGALL,YTIME)$DATAY(YTIME) = 1;
 V04ScrpRate.UP(runCy,PGALL,YTIME) = 1;
 V04ScrpRate.LO(runCy,PGALL,YTIME) = 0;
 
@@ -34,8 +32,12 @@ V04CFAvgRen.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = i04AvailRate(runCy,PGALL,YTIME)
 *---
 V04CapexFixCostPG.FX(runCy,PGALL,YTIME)$(DATAY(YTIME)) = (imDisc(runCy,"PG",YTIME) * exp(imDisc(runCy,"PG",YTIME) * i04TechLftPlaType(runCy,PGALL))
           / (exp(imDisc(runCy,"PG",YTIME) * i04TechLftPlaType(runCy,PGALL)) -1))
-          * i04GrossCapCosSubRen(runCy,PGALL,YTIME) * 1000 * imCGI(runCy,YTIME)
-          + i04FixOandMCost(runCy,PGALL,YTIME);
+          * i04GrossCapCosSubRen(runCY,PGALL,YTIME) * 1000
+          * imCGI(runCy,YTIME)
+          + i04FixOandMCost(runCy,PGALL,YTIME)
+;
+*---
+V04CapexFixCostPG.LO(runCy,PGALL,YTIME) = i04FixOandMCost(runCy,PGALL,YTIME);
 *---
 V04CostCapTech.FX(runCy,PGALL,YTIME)$(not AN(YTIME)) = 
 V04CapexRESRate.L(runCy,PGALL,YTIME) * V04CapexFixCostPG.L(runCy,PGALL,YTIME) / 
@@ -54,9 +56,13 @@ V04CapElecCHP.FX(runCy,YTIME)$(not An(YTIME)) = SUM(EF,imInstCapPastCHP(runCy,EF
 *---
 VmCapElec.L(runCy,PGALL,YTIME) = 1;
 VmCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  imInstCapPastNonCHP(runCy,PGALL,YTIME);
+*---
 V04CapElecNominal.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = imInstCapPastNonCHP(runCy,PGALL,YTIME) / i04AvailRate(runCy,PGALL,YTIME);
 *---
-V04ShareTechPG.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  VmCapElec.L(runCy,PGALL,YTIME) / sum(PGALL2, VmCapElec.L(runCy,PGALL2,YTIME));
+V04ShareTechPG.LO(runCy,PGALL,YTIME)$DATAY(YTIME) = 0;
+V04ShareTechPG.UP(runCy,PGALL,YTIME)$DATAY(YTIME) = 1;
+V04ShareTechPG.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = imInstCapPastNonCHP(runCy,PGALL,YTIME) / sum(PGALL2, imInstCapPastNonCHP(runCy,PGALL2,YTIME));
+*---
 V04ShareSatPG.FX(runCy,PGALL,YTIME)$(not PGREN(PGALL) or not AN(YTIME)) = 1;
 *---
 V04IndxEndogScrap.FX(runCy,PGALL,YTIME)$(not an(YTIME) ) = 1;
