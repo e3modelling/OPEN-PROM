@@ -176,3 +176,7 @@ i06SpecElecDAC(runCy,DACTECH,YTIME) = i06ElNeedsDAC(DACTECH);
 *---
 i06SpecHeatDAC(runCy,DACTECH,YTIME) = i06HeatNeedsDAC(DACTECH);
 *---
+$IFTHEN "%EnchanchedWeathering%" == off
+i06SchedNewCapDAC(runCy,"EWDAC",YTIME) = 0;
+i06MatFacDAC("EWDAC") = 0;
+$ENDIF
