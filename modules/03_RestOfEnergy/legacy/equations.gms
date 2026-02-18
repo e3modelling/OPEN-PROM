@@ -259,7 +259,7 @@ Q03ProdPrimary(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       (
         !!i03RatePriProTotPriNeeds(allCy,EFS,YTIME) *
         V03ProdPrimary(allCy,EFS,YTIME-1) *
-        V03ConsGrssInlNotEneBranch(allCy,EFS,YTIME) /
+        (V03ConsGrssInlNotEneBranch(allCy,EFS,YTIME) + 1e-6) /
         (V03ConsGrssInlNotEneBranch(allCy,EFS,YTIME-1) + 1e-6)
       )$(not (sameas(EFS,"CRO") or sameas(EFS,"NGS"))) +
       (

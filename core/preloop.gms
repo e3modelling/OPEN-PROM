@@ -74,6 +74,8 @@ VmPriceFuelSubsecCarVal.FX(runCy,"STEAMP",EF,YTIME)$(SECtoEF("STEAMP",EF)$DATAY(
 VmPriceFuelSubsecCarVal.FX(runCy,"STEAMP","CRO",YTIME)$(not DATAY(YTIME)) = imFuelPrice(runCy,"PG","GDO","%fBaseY%") / 1.5;
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,"STE",YTIME)$(SECtoEF(SBS,"STE") and DATAY(YTIME)) = imFuelPrice(runCy,"OI","ELC",YTIME);
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,"GEO",YTIME) = 0;
+VmPriceFuelSubsecCarVal.FX(runCy,"DAC",EF,YTIME)$(DATAY(YTIME) and SECtoEF("DAC",EF))  = imFuelPrice(runCy,"OI",EF,YTIME);
+VmPriceFuelSubsecCarVal.FX(runCy,"EW",EF,YTIME)$(DATAY(YTIME) and SECtoEF("EW",EF)) = imFuelPrice(runCy,"OI",EF,YTIME);
 *---
 VmPriceFuelAvgSub.L(runCy,DSBS,YTIME) = 0.001;
 VmPriceFuelAvgSub.FX(runCy,DSBS,YTIME)$DATAY(YTIME) = sum(EF$SECtoEF(DSBS,EF), i08WgtSecAvgPriFueCons(runCy,DSBS,EF) * imFuelPrice(runCy,DSBS,EF,YTIME));
