@@ -118,28 +118,28 @@ Q08PriceElecIndResConsu(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       (
       (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
       (
-        VmPriceElecIndResConsu(allCy,"i","%fStartY%") / VmCostPowGenAvgLng(allCy, "%fStartY%") *
+        VmPriceElecIndResConsu(allCy,"i","%fStartY%") / (VmCostPowGenAvgLng(allCy, "%fStartY%") + 1e-6) *
         VmCostPowGenAvgLng(allCy,YTIME-1) !!Cost secondary energy electricity
       )$(not TFIRST(YTIME-1))
       )$sameas(ESET,"i") +
       (
         (VmPriceFuelSubsecCarVal(allCy,"HOU","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
         (
-          VmPriceElecIndResConsu(allCy,"r","%fStartY%") / VmCostPowGenAvgLng(allCy, "%fStartY%") *
+          VmPriceElecIndResConsu(allCy,"r","%fStartY%") / (VmCostPowGenAvgLng(allCy, "%fStartY%") + 1e-6) *
           VmCostPowGenAvgLng(allCy,YTIME-1) 
         )$(not TFIRST(YTIME-1))
       )$sameas(ESET,"r") +
       (
         (VmPriceFuelSubsecCarVal(allCy,"PC","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
         (
-          VmPriceElecIndResConsu(allCy,"t","%fStartY%") / VmCostPowGenAvgLng(allCy, "%fStartY%") *
+          VmPriceElecIndResConsu(allCy,"t","%fStartY%") / (VmCostPowGenAvgLng(allCy, "%fStartY%") + 1e-6) *
           VmCostPowGenAvgLng(allCy,YTIME-1) 
         )$(not TFIRST(YTIME-1))
       )$sameas(ESET,"t") +
       (
         (VmPriceFuelSubsecCarVal(allCy,"SE","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
         (
-          VmPriceElecIndResConsu(allCy,"c","%fStartY%") / VmCostPowGenAvgLng(allCy, "%fStartY%") *
+          VmPriceElecIndResConsu(allCy,"c","%fStartY%") / (VmCostPowGenAvgLng(allCy, "%fStartY%") + 1e-6) *
           VmCostPowGenAvgLng(allCy,YTIME-1) 
         )$(not TFIRST(YTIME-1))
       )$sameas(ESET,"c") 

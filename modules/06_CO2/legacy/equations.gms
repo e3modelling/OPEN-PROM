@@ -99,11 +99,11 @@ Q06GrossCapDAC(DACTECH,YTIME)$(TIME(YTIME))..
             =E=         
     0.5 * 
     (
-      (i06GrossCapDAC(DACTECH) * (sum(allCy$runCyL(allCy),V06CapDAC(allCy,DACTECH,YTIME-1))) ** (log(0.97)/log(2))) +
+      V10CoreGrossCapDAC(DACTECH,YTIME) +
       i06GrossCapDACMin(DACTECH) +
       sqrt(
         sqr(
-          (i06GrossCapDAC(DACTECH) * (sum(allCy$runCyL(allCy),V06CapDAC(allCy,DACTECH,YTIME-1))) ** (log(0.97)/log(2))) -
+          V10CoreGrossCapDAC(DACTECH,YTIME) -
           i06GrossCapDACMin(DACTECH)
         )
       )
@@ -116,11 +116,11 @@ Q06FixOandMDAC(DACTECH,YTIME)$(TIME(YTIME))..
             =E=         
     0.5 * 
     (
-      (i06FixOandMDAC(DACTECH) * (sum(allCy$runCyL(allCy),V06CapDAC(allCy,DACTECH,YTIME-1))) ** (log(0.97)/log(2))) +
+      V10CoreFixOandMDAC(DACTECH,YTIME) +
       i06FixOandMDACMin(DACTECH) +
       sqrt(
         sqr(
-          (i06FixOandMDAC(DACTECH) * (sum(allCy$runCyL(allCy),V06CapDAC(allCy,DACTECH,YTIME-1))) ** (log(0.97)/log(2))) -
+          V10CoreFixOandMDAC(DACTECH,YTIME) -
           i06FixOandMDACMin(DACTECH)
         )
       )
@@ -133,11 +133,11 @@ Q06VarCostDAC(DACTECH,YTIME)$(TIME(YTIME))..
             =E=         
     0.5 * 
     (
-      (i06VarCostDAC(DACTECH) * (sum(allCy$runCyL(allCy),V06CapDAC(allCy,DACTECH,YTIME-1))) ** (log(0.97)/log(2))) +
+      V10CoreVarCostDAC(DACTECH,YTIME) +
       i06VarCostDACMin(DACTECH) +
       sqrt(
         sqr(
-          (i06VarCostDAC(DACTECH) * (sum(allCy$runCyL(allCy),V06CapDAC(allCy,DACTECH,YTIME-1))) ** (log(0.97)/log(2))) -
+          V10CoreVarCostDAC(DACTECH,YTIME) -
           i06VarCostDACMin(DACTECH)
         )
       )

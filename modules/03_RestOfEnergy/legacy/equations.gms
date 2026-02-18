@@ -231,7 +231,7 @@ Q03Transfers(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       (
         V03Transfers(allCy,"CRO",YTIME-1) *
         SUM(EFS2$EFTOEFA(EFS2,"LQD"),V03Transfers(allCy,EFS2,YTIME)) /
-        SUM(EFS2$EFTOEFA(EFS2,"LQD"),V03Transfers(allCy,EFS2,YTIME-1))
+        (SUM(EFS2$EFTOEFA(EFS2,"LQD"),V03Transfers(allCy,EFS2,YTIME-1)) + 1e-6)
       )$sameas(EFS,"CRO")   
     )$i03FeedTransfr(allCy,EFS,"%fStartHorizon%");         
 

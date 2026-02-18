@@ -24,7 +24,7 @@
 Q10CostLC(LCTECH,YTIME)$(TIME(YTIME))..
     VmCostLC(LCTECH,YTIME)
         =E=
-    (V10CumCapGlobal(LCTECH,YTIME-1) / (V10CumCapGlobal(LCTECH,YTIME-2))) ** i10AlphaLC(LCTECH);
+    ((V10CumCapGlobal(LCTECH,YTIME-1) + 1e-6) / (V10CumCapGlobal(LCTECH,YTIME-2) + 1e-6)) ** i10AlphaLC(LCTECH);
 
 *' Global cumulative capacity tracking equation
 *' Tracks total cumulative capacity installations since base year
@@ -34,3 +34,24 @@ Q10CumCapGlobal(LCTECH,YTIME)$(TIME(YTIME))..
         =E=
     V10CumCapGlobal(LCTECH,YTIME-1) + 
     sum(allCy$(runCy(allCy)), V04NewCapElec(allCy,LCTECH,YTIME));
+
+*' Core DAC CAPEX learning term equation
+Q10CoreGrossCapDAC(DACTECH,YTIME)$(TIME(YTIME))..
+    V10CoreGrossCapDAC(DACTECH,YTIME)
+        =E=
+    i06GrossCapDAC(DACTECH) *
+    (sum(allCy$runCyL(allCy),V06CapDAC(allCy,DACTECH,YTIME-1)) + 1e-6) ** (log(0.97)/log(2));
+
+*' Core DAC fixed O&M learning term equation
+Q10CoreFixOandMDAC(DACTECH,YTIME)$(TIME(YTIME))..
+    V10CoreFixOandMDAC(DACTECH,YTIME)
+        =E=
+    i06FixOandMDAC(DACTECH) *
+    (sum(allCy$runCyL(allCy),V06CapDAC(allCy,DACTECH,YTIME-1)) + 1e-6) ** (log(0.97)/log(2));
+
+*' Core DAC variable cost learning term equation
+Q10CoreVarCostDAC(DACTECH,YTIME)$(TIME(YTIME))..
+    V10CoreVarCostDAC(DACTECH,YTIME)
+        =E=
+    i06VarCostDAC(DACTECH) *
+    (sum(allCy$runCyL(allCy),V06CapDAC(allCy,DACTECH,YTIME-1)) + 1e-6) ** (log(0.97)/log(2));
