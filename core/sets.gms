@@ -1333,10 +1333,7 @@ loop TECH do
         endloop;
     endloop;
 endloop;
-SECtoEF(INDDOM, "BGSL") = no;
-SECtoEF(INDDOM, "BGDO") = no;
-SECtoEF(NENSE, "BGSL") = no;
-SECtoEF(NENSE, "BGDO") = no;
+
 *This is equivalent with the loop above
 *SECtoEF(DSBS, EF)$(sum(TECH, SECTTECH(DSBS, TECH) * TTECHtoEF(TECH, EF))) = yes;
 SSECTTECH("PG",STECH) = yes$PGALL(STECH);
