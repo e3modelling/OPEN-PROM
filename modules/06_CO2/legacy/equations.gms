@@ -130,8 +130,9 @@ Q06LvlCostDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06LvlCostDAC(allCy,CDRTECH,YTIME)
         =E=         
     V06GrossCapDAC(CDRTECH,YTIME)
-    - VmSubsiDemTech(allCy,"DAC",CDRTECH,YTIME)
-   + V06FixOandMDAC(CDRTECH,YTIME) + 
+    - VmSubsiDemTech(allCy,"DAC",CDRTECH,YTIME)$DACTECH(CDRTECH) -
+    VmSubsiDemTech(allCy,"EW",CDRTECH,YTIME)$sameas("TEW",CDRTECH) +
+    V06FixOandMDAC(CDRTECH,YTIME) + 
     V06VarCostDAC(CDRTECH,YTIME) - 20 +
     i06SpecElecDAC(allCy,CDRTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME) +
     i06SpecHeatDAC(allCy,CDRTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","NGS",YTIME) / 0.85 +

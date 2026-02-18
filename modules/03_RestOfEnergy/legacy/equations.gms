@@ -42,8 +42,8 @@ $offtext
 Q03ConsFinNonEne(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmConsFinNonEne(allCy,EFS,YTIME)
         =E=
-    sum(NENSE$(not sameas("BU",NENSE)),
-      sum(EF$(EFtoEFS(EF,EFS)$SECtoEF(NENSE,EF)), VmConsFuel(allCy,NENSE,EF,YTIME))
+    sum(NENSE$(not sameas("BU",NENSE) and SECtoEF(NENSE,EFS)),
+      VmConsFuel(allCy,NENSE,EFS,YTIME)
     );  
 
 *' The equation computes the distribution losses in million tonnes of oil equivalent for a given energy form sector.
@@ -67,29 +67,6 @@ Q03LossesDistr(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       sum(SBS$SECtoEF(SBS,"H2F"), VmDemSecH2(allCy,SBS,YTIME))
     )$H2EF(EFS)
 ;  
-
-*' The equation calculates the transformation output from district heating plants .
-*' This transformation output is determined by summing over different demand sectors and district heating systems 
-*' that correspond to the specified energy form set. The equation then sums over these district heating 
-*' systems and calculates the consumption of fuels in each of these sectors. The resulting value represents the 
-*' transformation output from district heating plants in million tonnes of oil equivalent.
-Q03OutTransfDhp(allCy,STEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V03OutTransfDhp(allCy,STEAM,YTIME)
-        =E=
-    sum(TSTEAM$TDHP(TSTEAM),
-      VmProdSte(allCy,TSTEAM,YTIME)
-    );
-
-*' The equation calculates the transformation input to district heating plants.
-*' This transformation input is determined by summing over different district heating systems that correspond to the
-*' specified energy form set . The equation then sums over different demand sectors within each 
-*' district heating system and calculates the consumption of fuels in each of these sectors, taking into account
-*' the efficiency of district heating plants. The resulting value represents the transformation input to district
-*' heating plants in million tonnes of oil equivalent.
-Q03TransfInputDHPlants(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    VmTransfInputDHPlants(allCy,EFS,YTIME)
-        =E=
-    VmConsFuelSteProd(allCy,"DHP",EFS,YTIME);
 
 Q03OutTransfCHP(allCy,TOCTEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V03OutTransfCHP(allCy,TOCTEF,YTIME)

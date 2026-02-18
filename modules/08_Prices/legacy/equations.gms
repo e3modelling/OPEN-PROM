@@ -86,16 +86,15 @@ $offtext
 Q08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)$(SECtoEF(DSBS,EF) $TIME(YTIME) $runCy(allCy))..
 V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)
       =E=
-      1e-12 +
-      (
-        (VmConsFuel(allCy,DSBS,EF,YTIME) - V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$ELCEF(EF)) /
-        (SUM(EF2,VmConsFuel(allCy,DSBS,EF2,YTIME)- V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$ELCEF(EF2)) )
-      )$(INDDOM(DSBS) or NENSE(DSBS)) +   
-      SUM(TRANSE$(sameas(TRANSE,DSBS)),
-        VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME) /
-        (SUM(EF2$SECtoEF(TRANSE,EF2),VmDemFinEneTranspPerFuel(allCy,TRANSE,EF2,YTIME))+1e-12)
-      )
-;
+    1e-6 +
+    (
+      (VmConsFuel(allCy,DSBS,EF,YTIME) - V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$ELCEF(EF)) /
+      (SUM(EF2$SECtoEF(DSBS,EF2),VmConsFuel(allCy,DSBS,EF2,YTIME)- V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$ELCEF(EF2)) + 1e-6)
+    )$(INDDOM(DSBS) or NENSE(DSBS)) +   
+    SUM(TRANSE$(sameas(TRANSE,DSBS)),
+      VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME) /
+      (SUM(EF2$SECtoEF(TRANSE,EF2),VmDemFinEneTranspPerFuel(allCy,TRANSE,EF2,YTIME))+1e-12)
+    );
 *' The equation calculates the average fuel price per subsector. These average prices are used to further compute electricity prices in industry
 *' (using the OI "other industry" avg price), as well as the aggregate fuel demand (of substitutable fuels) per subsector.
 *' In the transport sector they feed into the calculation of the activity levels.

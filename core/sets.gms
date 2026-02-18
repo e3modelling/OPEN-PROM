@@ -575,7 +575,7 @@ ELCEF(EF)        Electricity                                         /ELC/
 H2EF(EF)         Hydrogen                                            /H2F/
 STEAM(EFS)       Steam                                               /STE/
 TOCTEF(EFS)      Energy forms produced by power plants and boilers   /ELC,STE/
-ALTEF(EF)        Alternative Fuels used in transport                 /BGDO,BKRS,MET,ETH/
+ALTEF(EF)        Alternative Fuels used in transport                 /BGDO,BKRS,BGSL,MET,ETH/
 
 PGEF(EFS)        "Energy forms used for steam production"
 
@@ -1337,10 +1337,7 @@ loop TECH do
         endloop;
     endloop;
 endloop;
-SECtoEF(INDDOM, "BGSL") = no;
-SECtoEF(INDDOM, "BGDO") = no;
-SECtoEF(NENSE, "BGSL") = no;
-SECtoEF(NENSE, "BGDO") = no;
+
 *This is equivalent with the loop above
 *SECtoEF(DSBS, EF)$(sum(TECH, SECTTECH(DSBS, TECH) * TTECHtoEF(TECH, EF))) = yes;
 SSECTTECH("PG",STECH) = yes$PGALL(STECH);

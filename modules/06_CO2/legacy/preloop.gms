@@ -5,6 +5,8 @@
 *---
 V06CapCO2ElecHydr.FX(runCy,SBS,YTIME)$DATAY(YTIME) = 0;
 *---
+V06CaptCummCO2.LO(runCy,YTIME) = 0;
+V06CaptCummCO2.L(runCy,YTIME) = 1;
 V06CaptCummCO2.FX(runCy,YTIME)$DATAY(YTIME) = 0 ;
 *---
 V06LvlCostDAC.LO(runCy,CDRTECH,YTIME) = epsilon6;
@@ -14,5 +16,6 @@ V06LvlCostDAC.FX(runCy,CDRTECH,YTIME)$DATAY(YTIME) = 100;
 V06CapCDR.FX(runCy,CDRTECH,YTIME)$DATAY(YTIME) = 1;
 *---
 V06ProfRateDAC.LO(runCy,CDRTECH,YTIME) = 0;
+V06ProfRateDAC.L(runCy,CDRTECH,YTIME) = 1;
 *---
 V06CapFacNewDAC.FX(runCy,CDRTECH,YTIME)$DATAY(YTIME) = S06CapFacMinNewDAC;
