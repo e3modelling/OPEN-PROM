@@ -20,17 +20,17 @@ qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
       t04SharePowPlaNewEq(allCy,PGALL,YTIME)
     )
   ) +
-  SUM((TRANSE,TTECH)$(SECTTECH("PC",TTECH) and (sameas("PC",TRANSE) or sameas("PB",TRANSE) or sameas("GU",TRANSE))),
+  SUM((TRANSE,TTECH)$(SECTTECH(TRANSE,TTECH) and (sameas("PC",TRANSE) or sameas("PB",TRANSE) or sameas("GU",TRANSE))),
     SQR(
       (
         V01ShareTechTr(allCy,TRANSE,TTECH,YTIME) -
         t01NewShareStockPC(allCy,TRANSE,TTECH,YTIME)
       )$(t01NewShareStockPC(allCy,TRANSE,TTECH,YTIME) >= 0) +
-      0 * (imMatrFactor(allCy,TRANSE,TTECH,YTIME) - imMatrFactor(allCy,TRANSE,TTECH,YTIME-1))
+      0.01 * (imMatrFactor(allCy,TRANSE,TTECH,YTIME) - imMatrFactor(allCy,TRANSE,TTECH,YTIME-1))
     )
   );
 
-qRestrain(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) and runCy(allCy) and (t01NewShareStockPC(allCy,TRANSE,TTECH,YTIME) < 0)).. 
+qRestrain(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) and SECTTECH(TRANSE,TTECH) and runCy(allCy) and (t01NewShareStockPC(allCy,TRANSE,TTECH,YTIME) < 0)).. 
   imMatrFactor(allCy,TRANSE,TTECH,YTIME)
     =e=
   common(allCy,TRANSE,YTIME);

@@ -172,7 +172,6 @@ parameter imImpExp(allCy,EFS,YTIME)	              "Imports of exporting countrie
 imImpExp(runCy,EFS,YTIME) = 0;
 *---
 parameter imTotFinEneDemSubBaseYr(allCy,SBS,YTIME)    "Total Final Energy Demand per subsector in Base year (Mtoe)";
-
 *---
 *Sources for vehicle lifetime:
 *US Department of Transportation, International Union of Railways, Statista, EU CORDIS
@@ -652,10 +651,11 @@ $offtext
 
 $ELSE.calib
 variable imMatrFactor(allCy,DSBS,TECH,YTIME)    "Maturity factor per technology and subsector for all countries (1)";
-imMatrFactor.LO(runCy,DSBS,TECH,YTIME) = 0;                                          
-imMatrFactor.UP(runCy,DSBS,TECH,YTIME) = 50;
-imMatrFactor.L(runCy,DSBS,TECH,YTIME) = 1;!!iMatrFactorData(runCy,DSBS,TECH,YTIME);     
-imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(not (sameas(DSBS,"PC") or sameas(DSBS,"PB") or sameas(DSBS,"GU")) or not SECTTECH(DSBS,TECH)) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                          
+imMatrFactor.LO(runCy,DSBS,TECH,YTIME) = 0;                                    
+imMatrFactor.UP(runCy,DSBS,TECH,YTIME) = 20;
+imMatrFactor.L(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);    
+imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(not (sameas(DSBS,"PC") or sameas(DSBS,"PB") or sameas(DSBS,"GU"))) = iMatrFactorData(runCy,DSBS,TECH,YTIME);  
+imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$((sameas(DSBS,"PC") or sameas(DSBS,"PB") or sameas(DSBS,"GU")) and not SECTTECH(DSBS,TECH)) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                      
 $ENDIF.calib
 *---
 parameters

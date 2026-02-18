@@ -140,10 +140,10 @@ Q02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $SECTTECH(DSBS,I
         =E=
     imMatrFactor(allCy,DSBS,ITECH,YTIME) *
     V02CostTech(allCy,DSBS,ITECH,YTIME-1) ** (-i02ElaSub(allCy,DSBS)) /
-    sum(ITECH2$SECTTECH(DSBS,ITECH2),
+    (sum(ITECH2$SECTTECH(DSBS,ITECH2),
       imMatrFactor(allCy,DSBS,ITECH2,YTIME) *
       V02CostTech(allCy,DSBS,ITECH2,YTIME-1) ** (-i02ElaSub(allCy,DSBS))
-    );
+    ) + 1e-6);
 
 *' This equation computes the equipment capacity of each technology in each subsector
 *'Check if Tech exists in main.gms
@@ -205,7 +205,7 @@ Q02IndAvrEffFinalUseful(allCy,DSBS,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not
     V02DemSubUsefulSubsec(allCy,DSBS,YTIME)   
     /
     (sum(EF$SECtoEF(DSBS,EF),VmConsFuel(allCy,DSBS,EF,YTIME)) - (V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(INDDOM(DSBS)) +
-    VmElecConsHeatPla(allCy,DSBS,YTIME)))
+    VmElecConsHeatPla(allCy,DSBS,YTIME)) + 1e-6)
     ;
 
 *' This equation calculates the estimated electricity index of the industry price for a given year. The estimated index is derived by considering the historical
