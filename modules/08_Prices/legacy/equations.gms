@@ -40,7 +40,7 @@ $ENDIF
     )$sameas(SBS,"PG") +
     VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1)$(DSBS(SBS))$ALTEF(EF) +
     (
-      ( VmPriceElecIndResConsu(allCy,"i",YTIME)$INDSE1(SBS)+
+      ( VmPriceElecIndResConsu(allCy,"i",YTIME)$(INDSE1(SBS) or sameas("DAC",SBS) or sameas("EW",SBS))+
         VmPriceElecIndResConsu(allCy,"r",YTIME)$HOU1(SBS) +
         VmPriceElecIndResConsu(allCy,"t",YTIME)$TRANS1(SBS) +
         VmPriceElecIndResConsu(allCy,"c",YTIME)$SERV(SBS)
@@ -86,16 +86,24 @@ $offtext
 Q08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)$(SECtoEF(DSBS,EF) $TIME(YTIME) $runCy(allCy))..
 V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)
       =E=
-      1e-12 +
-      (
-        (VmConsFuel(allCy,DSBS,EF,YTIME) - V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$ELCEF(EF)) /
-        (SUM(EF2$SECtoEF(DSBS,EF2),VmConsFuel(allCy,DSBS,EF2,YTIME)- V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$ELCEF(EF2)) + 1e-6)
-      )$(INDDOM(DSBS) or NENSE(DSBS)) +   
-      SUM(TRANSE$(sameas(TRANSE,DSBS)),
-        VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME) /
-        (SUM(EF2$SECtoEF(TRANSE,EF2),VmDemFinEneTranspPerFuel(allCy,TRANSE,EF2,YTIME))+1e-12)
-      )
-;
+    0 +
+    (
+      (VmConsFuel(allCy,DSBS,EF,YTIME) - V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$ELCEF(EF)) /
+      (SUM(EF2$SECtoEF(DSBS,EF2),VmConsFuel(allCy,DSBS,EF2,YTIME)- V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$ELCEF(EF2)) + 1e-6)
+    )$(INDDOM(DSBS) or NENSE(DSBS)) +   
+    SUM(TRANSE$(sameas(TRANSE,DSBS)),
+      VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME) /
+      (SUM(EF2$SECtoEF(TRANSE,EF2),VmDemFinEneTranspPerFuel(allCy,TRANSE,EF2,YTIME)) + 1e-6)
+    ) +
+    (
+      SUM(DACTECH,VmConsFuelTechCDRProd(allCy,DACTECH,EF,YTIME)) /
+      (SUM((DACTECH,EF2)$SECtoEF(DSBS,EF2),VmConsFuelTechCDRProd(allCy,DACTECH,EF2,YTIME)) + 1e-12)
+    )$sameas("DAC",DSBS) +
+    (
+      VmConsFuelTechCDRProd(allCy,"TEW",EF,YTIME) /
+      (SUM(EF2$SECtoEF(DSBS,EF2),VmConsFuelTechCDRProd(allCy,"TEW",EF2,YTIME)) + 1e-12)
+    )$sameas("EW",DSBS);
+  
 *' The equation calculates the average fuel price per subsector. These average prices are used to further compute electricity prices in industry
 *' (using the OI "other industry" avg price), as well as the aggregate fuel demand (of substitutable fuels) per subsector.
 *' In the transport sector they feed into the calculation of the activity levels.

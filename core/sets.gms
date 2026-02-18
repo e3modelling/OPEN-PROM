@@ -197,6 +197,7 @@ BM_CO2         "Non metallic minerals production, related with CO2"
 PG_SF6         "Electricity production, related with SF6"
 OI_SF6         "Other Industries activities, related with SF6"
 DAC            "Direct Air Capture"
+EW             "Enhanced Weathering"
 LQD            "Liquids Production"
 SLD            "Solids Production"
 GAS            "Gases Production"
@@ -237,7 +238,8 @@ SLD    "Solids Production"
 GAS    "Gases Production"
 H2INFR "Hydrogen storage and delivery"
 DAC    "Direct Air Capture"
-CHP
+EW     "Enhanced Weathering"
+CHP    "Combined Heat and Power"
 /
 
 SCT_GHG(ALLSBS)      Aggregate Sectors used in non-energy related GHG emissions
@@ -326,11 +328,40 @@ NoTrade  Carbon Value for non-trading sectors
 
 NAPtoALLSBS(NAP,ALLSBS) Energy sectors corresponding to NAP sectors
 /
-Trade.(FD,EN,TX,OE,OI,NF,CH,IS,BM,PP,PG,BM_CO2,H2P,STEAMP,DAC)
+Trade.(FD,EN,TX,OE,OI,NF,CH,IS,BM,PP,PG,BM_CO2,H2P,STEAMP,DAC,EW)
 NoTrade.(SE,AG,HOU,PC,PB,PT,PN,PA,GU,GT,GN,BU,PCH,NEN,LGN_PRD_CH4,HCL_PRD_CH4,GAS_PRD_CH4,TERT_CH4,TRAN_CH4,AG_CH4,SE_CH4,TRAN_N2O,TX_N2O,AG_N2O,OI_HFC,OI_PFC,NF_PFC,PG_SF6,OI_SF6)
 /
 
-DSBS(SBS)         All Demand Subsectors         /PC,PT,PA,PB,PN,GU,GT,GN,IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,SE,AG,HOU,PCH,NEN,BU,DAC/
+DSBS(SBS)  "All Demand Subsectors"   
+/
+IS    "Iron and Steel"
+NF    "Non Ferrous Metals"
+CH    "Chemicals"
+BM    "Non Metallic Minerals"
+PP    "Paper and Pulp"
+FD    "Food Drink and Tobacco"
+EN    "Engineering"
+TX    "Textiles"
+OE    "Ore Extraction"
+OI    "Other Industrial sectors"
+SE    "Services and Trade"
+AG    "Agriculture, Fishing, Forestry"
+HOU   "Households"
+PC    "Passenger Transport - Cars"
+PB    "Passenger Transport - Busses"
+PT    "Passenger Transport - Rail"
+PN    "Passenger Transport - Inland Navigation"
+PA    "Passenger Transport - Aviation"
+GU    "Goods Transport - Trucks"
+GT    "Goods Transport - Rail"
+GN    "Goods Transport - Inland Navigation"
+BU    "Bunkers"
+PCH   "Petrochemicals Industry"
+NEN   "Other Non Energy Uses"
+DAC   "Direct Air Capture"
+EW    "Enhanced Weathering"
+/
+
 TRANSE(DSBS)      All Transport Subsectors      /PC,PT,PA,PB,PN,GU,GT,GN/
 TRANS1(SBS)       All Transport Subsectors      /PC,PT,PA,PB,PN,GU,GT,GN/
 TRANP(TRANSE)     Passenger Transport           /PC,PT,PA,PB,PN/
@@ -351,7 +382,17 @@ INDDOM(DSBS)      Industry and Tertiary         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,S
 HOU1(SBS)         Households                     /HOU/
 SERV(SBS)         Services                       /SE,AG/
 
-SSBS(SBS)         All Supply Subsectors         /PG,H2P,CHP,STEAMP,LQD,SLD,GAS,H2INFR/
+SSBS(SBS)     All Supply Subsectors    
+/
+PG      "Electricity"
+H2P     "Hydrogen"
+STEAMP  "Heat"
+LQD     "Liquids"
+SLD     "Solids"
+GAS     "Gases"
+H2INFR  "Hydrogen storage and delivery"
+CHP     "Combined Heat and Power"
+/
 *         Energy Forms            *
 
 EF           Energy Forms
@@ -373,7 +414,7 @@ HYD     "Hydro"
 WND     "Wind"
 SOL     "Solar"
 BMSWAS  "Biomass and Waste"
-GEO     "Geothermal and other renewable sources eg. Tidal, etc."
+GEO     "Geothermal and other renewable sources (Tidal, etc)"
 MET     "Methanol"
 ETH     "Ethanol"
 BGDO    "Biodiesel"
@@ -477,31 +518,31 @@ EFtoWEF(DSBS,EF,WEF) Link between Imported Energy Forms and Energy Forms used in
 
 EFS(EF)          Energy Forms used in Supply Side
 /
-LGN
-HCL
-CRO
-GSL
-BGSL
-GDO
-BGDO
-RFO
-LPG
-KRS
-BKRS
-OLQ
-NGS
-OGS
-NUC
-STE
-HYD
-BMSWAS
-SOL
-WND
-GEO
-ELC
-H2F
-MET
-ETH
+HCL     "Hard Coal, Coke and Other Solids"
+LGN     "Lignite"
+CRO     "Crude Oil and Feedstocks"
+LPG     "Liquefied Petroleum Gas"
+GSL     "Gasoline"
+KRS     "Kerosene"
+GDO     "Diesel Oil"
+RFO     "Residual Fuel Oil"
+OLQ     "Other Liquids"
+NGS     "Natural Gas"
+OGS     "Other Gases"
+NUC     "Nuclear"
+STE     "Steam"
+HYD     "Hydro"
+WND     "Wind"
+SOL     "Solar"
+BMSWAS  "Biomass and Waste"
+GEO     "Geothermal and other renewable sources (Tidal, etc)"
+MET     "Methanol"
+ETH     "Ethanol"
+BGDO    "Biodiesel"
+BGSL    "Biogasoline"
+BKRS    "Biokerosene"
+H2F     "Hydrogen"
+ELC     "Electricity"
 /
 
 EFtoEFS(EF,EFS)    Fuel Aggregation for Supply Side
@@ -622,7 +663,8 @@ THEATPUMP
 HTDAC
 H2DAC
 LTDAC
-EWDAC
+TEW
+*EWDAC 
 * Power Generation Technologies
 *PGTLGN
 *PGTHCL 
@@ -664,12 +706,19 @@ TCHEVGSL  "conventional Hybrid engine - gasoline"
 TCHEVGDO  "conventional Hybrid engine - diesel"
 /
 
-DACTECH(TECH)     DAC Technologies
+CDRTECH(TECH)     CDR Technologies
 /
 HTDAC
 H2DAC
 LTDAC
-EWDAC
+TEW
+/
+
+DACTECH(CDRTECH)     DAC Technologies
+/
+HTDAC
+H2DAC
+LTDAC
 /
 
 ITECH(TECH)      Industrial - Domestic - Non-energy & Bunkers Technologies 
@@ -718,7 +767,7 @@ THCLCCS
 HTDAC
 H2DAC
 LTDAC
-EWDAC
+TEW
 /
 
 STECH     "Technologies in supply side"
@@ -782,7 +831,7 @@ TBMSWAS.BMSWAS
 HTDAC.(NGS,ELC)
 H2DAC.(H2F,ELC)
 LTDAC.ELC
-EWDAC.ELC
+TEW.ELC
 /
 TTECHtoEF(TTECH,EF) Fuels consumed by transport technologies
 /
@@ -804,9 +853,9 @@ TCHEVGDO.(GDO,BGDO)
 
 ITECHtoEF(ITECH,EF) Fuels consumed by industrial technologies
 /
-TGDO.GDO
+TGDO.(GDO,BGDO)
 TLPG.LPG
-TKRS.KRS  
+TKRS.(KRS,BKRS)  
 TNGS.NGS
 TNGSCCS.NGS
 TELC.ELC    
@@ -816,20 +865,12 @@ THCLCCS.HCL
 TRFO.RFO
 TOLQ.OLQ
 TOGS.OGS
-TGSL.GSL
+TGSL.(GSL,BGSL)
 TSTE.STE
 * Domestic Technologies (only add those not already in Transport & Industry)
 * LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC already exist in TRANSPORT or INDUSTRY technologies
 TH2F.H2F
 TBMSWAS.BMSWAS
-/
-
-DACTECHtoEF(DACTECH,EF)
-/
-HTDAC.(NGS,ELC)
-H2DAC.(H2F,ELC)
-LTDAC.ELC
-EWDAC.ELC
 /
 
 PLUGIN(TECH) Plug-in hybrids
@@ -867,7 +908,8 @@ PA.(TKRS)
 SE.(THCL,TLPG,TKRS,TNGS,TOGS,TELC,TSTE)
 BU.(TGDO,TRFO,TKRS,TH2F)
 (PCH,NEN).(TLGN,THCL,TGDO,TRFO,TLPG,TOLQ,TNGS,TOGS)
-DAC.(HTDAC,H2DAC,LTDAC,EWDAC)
+DAC.(HTDAC,H2DAC,LTDAC)
+EW.TEW
 /
 
 SECtoEF(SBS,EF) Link between Model Subsectors and Energy Forms consumed
@@ -1199,8 +1241,8 @@ BALEF fuels in balance report
 "Electricity"
 /
 
-TOTAL(BALEF)
-/"TOTAL"/
+BIOFUELS(EF)
+/BGSL,BGDO,BKRS/
 
 BALEF2EFS(BALEF, EFS) Mapping from balance fuels to model fuels
 /
@@ -1229,19 +1271,6 @@ BALEF2EFS(BALEF, EFS) Mapping from balance fuels to model fuels
 "Methanol".MET
 "Hydrogen".H2F
 "Electricity".ELC
-/
-
-E07MAC "Cost categories for Marginal abatement costs curves (MACC) -2010$/tC for CH4,N20 and 2005$/tC for F-gases" / 
-    0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 
-    320, 340, 360, 380, 400, 420, 460, 480, 500, 520, 540, 560, 580, 600, 660, 
-    680, 720, 740, 760, 780, 820, 840, 1000, 1080, 1100, 1120, 1520, 1660, 
-    1700, 1740, 2580, 2600, 3440, 3460, 3500, 3540, 3600, 3840, 4000 
-/
-Set sFGases(E07SrcMacAbate) "F-gases (Input data in kt)" 
-/
-    HFC_125, HFC_134a, HFC_143a, HFC_152a, HFC_227ea
-    HFC_23,  HFC_236fa, HFC_32,   HFC_43_10, HFC_245ca
-    CF4,     C2F6,      C6F14,    SF6
 /
 
 *         SET ASSIGNMENTS           *
@@ -1308,6 +1337,7 @@ loop TECH do
         endloop;
     endloop;
 endloop;
+
 *This is equivalent with the loop above
 *SECtoEF(DSBS, EF)$(sum(TECH, SECTTECH(DSBS, TECH) * TTECHtoEF(TECH, EF))) = yes;
 SSECTTECH("PG",STECH) = yes$PGALL(STECH);

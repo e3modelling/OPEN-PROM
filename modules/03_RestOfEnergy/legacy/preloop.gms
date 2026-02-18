@@ -54,10 +54,6 @@ V03OutTotTransf.FX(runCy,SSBS,EFS,YTIME)$(not SECtoEFPROD(SSBS,EFS)) = 0;
 V03InpTotTransf.FX(runCy,SSBS,EFS,YTIME)$(DATAY(YTIME) and SECtoEF(SSBS,EFS)) = -i03InpTotTransfProcess(runCy,SSBS,EFS,YTIME);
 V03InpTotTransf.FX(runCy,SSBS,EFS,YTIME)$(not SECtoEF(SSBS,EFS)) = 0;
 *---
-V03OutTransfDhp.FX(runCy,STEAM,YTIME)$DATAY(YTIME) = i03OutTotTransfProcess(runCy,"STEAMP",STEAM,YTIME);
-*---
-VmTransfInputDHPlants.FX(runCy,EFS,YTIME)$DATAY(YTIME) = -i03InpTotTransfProcess(runCy,"STEAMP",EFS,YTIME);
-*---
 V03OutTransfCHP.FX(runCy,TOCTEF,YTIME)$DATAY(YTIME) = i03OutTotTransfProcess(runCy,"CHP",TOCTEF,YTIME);
 *---
 VmConsFinEneCountry.LO(runCy,EFS,YTIME) = 0;

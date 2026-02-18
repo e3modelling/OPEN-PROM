@@ -24,7 +24,8 @@ Q05DemSecH2(allCy,SBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     sum(INDDOM$SAMEAS(INDDOM,SBS), VmConsFuel(allCy,INDDOM,"H2F",YTIME)) +
     sum(TRANSE$SAMEAS(TRANSE,SBS), VmDemFinEneTranspPerFuel(allCy,TRANSE,"H2F",YTIME)) +
     !! FIXME: Add LQD,GAS,SLD sectors consumption too
-    VmConsFuelDACProd(allCy,"H2F",YTIME)$sameas("DAC",SBS) +
+    VmConsFuelCDRProd(allCy,"H2F",YTIME)$sameas("DAC",SBS) +
+    VmConsFuelCDRProd(allCy,"H2F",YTIME)$sameas("EW",SBS) +
     VmConsFuelElecProd(allCy,"H2F",YTIME)$sameas("PG",SBS);
 
 *' This equation defines the amount of hydrogen production capacity that is scrapped due to the expiration of the useful life of plants.
@@ -154,17 +155,17 @@ Q05ShareCCSH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME) $H2CCS(H2TECH) $(runCy(allCy)
          =E=
                  1.5  *
          iWBLShareH2Prod(allCy,H2TECH,YTIME) *
-                 V05CostProdH2Tech(allCy,H2TECH,YTIME)**(-V05AcceptCCSH2Tech(allCy,YTIME)) /
+                 (V05CostProdH2Tech(allCy,H2TECH,YTIME) + 1e-3)**(-V05AcceptCCSH2Tech(allCy,YTIME)) /
          (
                  1.5  *
          iWBLShareH2Prod(allCy,H2TECH,YTIME) *
-                 V05CostProdH2Tech(allCy,H2TECH,YTIME)**(-V05AcceptCCSH2Tech(allCy,YTIME)) +
+                 (V05CostProdH2Tech(allCy,H2TECH,YTIME) + 1e-3)**(-V05AcceptCCSH2Tech(allCy,YTIME)) +
 
                  sum(H2TECH2$H2CCS_NOCCS(H2TECH,H2TECH2),
 
                  1  *
          iWBLShareH2Prod(allCy,H2TECH2,YTIME) *
-                 V05CostProdH2Tech(allCy,H2TECH2,YTIME)**(-V05AcceptCCSH2Tech(allCy,YTIME)))
+                 (V05CostProdH2Tech(allCy,H2TECH,YTIME) + 1e-3)**(-V05AcceptCCSH2Tech(allCy,YTIME)))
          )
 ;
 

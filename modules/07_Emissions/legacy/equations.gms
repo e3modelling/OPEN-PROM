@@ -72,26 +72,26 @@ q07ExpendHouseEne(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 VmConsElecNonSubIndTert --> NO LONGER                                          
 $offtext
 
-Q07EmissCO2Supply(allCy,SSBS,YTIME)$(TIME(YTIME)$runCy(allCy))..
-    V07EmissCO2Supply(allCy,SSBS,YTIME)
+Q07GrossEmissCO2Demand(allCy,DSBS,YTIME)$(TIME(YTIME)$runCy(allCy))..
+    V07GrossEmissCO2Demand(allCy,DSBS,YTIME)
+        =E=   
+    SUM(EFS,
+      (
+        VmConsFuel(allCy,DSBS,EFS,YTIME) + 
+        SUM(TRANSE$sameas(TRANSE,DSBS), VmDemFinEneTranspPerFuel(allCy,TRANSE,EFS,YTIME)) +
+        VmConsFuelCDRProd(allCy,EFS,YTIME)
+      ) *
+      imCo2EmiFac(allCy,DSBS,EFS,YTIME)
+    );
+
+Q07GrossEmissCO2Supply(allCy,SSBS,YTIME)$(TIME(YTIME)$runCy(allCy))..
+    V07GrossEmissCO2Supply(allCy,SSBS,YTIME)
         =E=   
     SUM(EFS,
       (
         V03InpTotTransf(allCy,SSBS,EFS,YTIME)$SSBSEMIT(SSBS) +
         VmConsFiEneSec(allCy,SSBS,EFS,YTIME) 
-      ) * imCo2EmiFac(allCy,"PG",EFS,YTIME) -
-      SUM(CCS$PGALLtoEF(CCS,EFS),
-        VmProdElec(allCy,CCS,YTIME) * smTWhToMtoe / 
-        imPlantEffByType(allCy,CCS,YTIME) * 
-        V04CO2CaptRate(allCy,CCS,YTIME) * 
-        (imCo2EmiFac(allCy,"PG",EFS,YTIME) + 4.17$sameas("BMSWAS",EFS))
-      )$sameas("PG",SSBS) -
-      SUM(H2CCS$H2TECHEFtoEF(H2CCS,EFS),
-        VmProdH2(allCy,H2CCS,YTIME) /
-        i05EffH2Prod(allCy,H2CCS,YTIME) *
-        V05CaptRateH2(allCy,H2CCS,YTIME) *
-        (imCo2EmiFac(allCy,"PG",EFS,YTIME) + 4.17$sameas("BMSWAS",EFS))
-      )$sameas("H2P",SSBS)
+      ) * imCo2EmiFac(allCy,SSBS,EFS,YTIME)
     );
     
 *' This equation calculates the total absolute abatement of non-CO2 emissions for a specific source, country, and time period.
