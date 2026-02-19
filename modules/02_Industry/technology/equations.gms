@@ -59,7 +59,7 @@ Q02PremScrpIndu(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and n
 
 *'NEW EQUATION' - kind of --> substitutes Q02ConsRemSubEquipSubSec
 * This equation computes the useful energy covered by the remaining equipment
-Q02DemUsefulSubsecRemTech(allCy,DSBS,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and CDR(DSBS))$runCy(allCy))..
+Q02DemUsefulSubsecRemTech(allCy,DSBS,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not CDR(DSBS))$runCy(allCy))..
     V02DemUsefulSubsecRemTech(allCy,DSBS,YTIME) 
         =E=
     SUM(ITECH$SECTTECH(DSBS,ITECH),
