@@ -4,7 +4,6 @@
 Equations
 *' *** REST OF ENERGY BALANCE SECTORS EQUATIONS
 *q03ConsTotFinEne(YTIME)                                   "Compute total final energy consumption in ALL countries"
-Q03OutTransfDhp(allCy,STEAM,YTIME)                           "Compute the transformation output from district heating plants"
 Q03OutTransfCHP(allCy,TOCTEF,YTIME)                            "Compute the transformation output from CHP (Mtoe)"
 *Q03CapRef(allCy,YTIME)	                                   "Compute refineries capacity"
 Q03OutTransfRefSpec(allCy,EFS,YTIME)	                   "Compute the transformation output from refineries"
@@ -25,7 +24,6 @@ Q03Imp(allCy,EFS,YTIME)	                                   "Compute fake imports
 *'                **Interdependent Equations**
 Q03ImpNetEneBrnch(allCy,EFS,YTIME)	                       "Compute net imports"
 Q03ConsFiEneSec(allCy,SSBS,EFS,YTIME)	                       "Compute energy branch final consumption"
-Q03TransfInputDHPlants(allCy,EFS,YTIME)                    "Compute the transformation input to distrcit heating plants"
 Q03ConsFinEneCountry(allCy,EFS,YTIME)                      "Compute total final energy consumption"
 Q03ConsFinNonEne(allCy,EFS,YTIME)                          "Compute final non-energy consumption"
 Q03LossesDistr(allCy,EFS,YTIME)                            "Compute distribution losses"
@@ -34,7 +32,6 @@ Q03LossesDistr(allCy,EFS,YTIME)                            "Compute distribution
 Variables
 *' *** REST OF ENERGY BALANCE SECTORS VARIABLES
 *v03ConsTotFinEne(YTIME)                                   "Total final energy Consumption in ALL COUNTRIES (Mtoe)"
-V03OutTransfDhp(allCy,STEAM,YTIME)                           "Transformation output from District Heating Plants (Mtoe)"
 V03OutTransfCHP(allCy,TOCTEF,YTIME)                            "Transformation output from CHP (Mtoe)"
 *V03CapRef(allCy,YTIME)	                                   "Refineries capacity (Million barrels/day)"
 V03OutTransfRefSpec(allCy,EFS,YTIME)	                   "Transformation output from refineries (Mtoe)"
@@ -55,7 +52,6 @@ V03Imp(allCy,EFS,YTIME)             	                   "Fake Imports for all fu
 *'                **Interdependent Variables**
 VmImpNetEneBrnch(allCy,EFS,YTIME)	                       "Net Imports (Mtoe)"
 VmConsFiEneSec(allCy,SSBS,EFS,YTIME)                            "Final consumption in energy sector (Mtoe)"
-VmTransfInputDHPlants(allCy,EFS,YTIME)                     "Transformation input to District Heating Plants (Mtoe)"
 VmConsFinEneCountry(allCy,EF,YTIME)                        "Total final energy consumnption (Mtoe)"
 VmConsFinNonEne(allCy,EFS,YTIME)                           "Final non energy consumption (Mtoe)"
 VmLossesDistr(allCy,EFS,YTIME)                             "Distribution losses (Mtoe)"

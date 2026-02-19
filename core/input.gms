@@ -70,6 +70,7 @@ PG      0.1
 H2P     0.08
 H2INFR  0.08
 DAC     0.08
+EW     0.08
 STEAMP  0.08
 /;
 *---
@@ -95,7 +96,7 @@ NGS 2.336234395,
 OGS 2.336234395,
 BMSWAS 0/;
 *---
-imCo2EmiFac(runCy,SBS,EF,YTIME) = iCo2EmiFacAllSbs(EF);
+imCo2EmiFac(runCy,SBS,EF,YTIME)$(not (sameas("NEN",SBS) or sameas("PCH",SBS))) = iCo2EmiFacAllSbs(EF);
 imCo2EmiFac(runCy,"IS","HCL",YTIME) = iCo2EmiFacAllSbs("SLD"); !! This is the assignment for coke
 *imCo2EmiFac(runCy,"H2P","NGS",YTIME) = 3.107;
 *imCo2EmiFac(runCy,"H2P","BMSWAS",YTIME) = 0.497;
@@ -456,6 +457,7 @@ imNcon(DOMSE) = 10;                                                    !! 11 dif
 imNcon(NENSE) = 10;                                                    !! 11 different consumer size groups for non energy uses
 imNcon("BU") = 2;                                                      !! ... except bunkers .
 imNcon("DAC") = 1;                                                      !! 
+imNcon("EW") = 1;
 *---
 * 11 vehicle mileage groups
 * 0.952 turned out to be a (constant) ratio between modal and average mileage through iterations in Excel
@@ -518,6 +520,10 @@ imAnnCons(runCy,"BU","modal") = 0.5 ;
 imAnnCons(runCy,"DAC","smallest") = 0.2 ;
 imAnnCons(runCy,"DAC","largest") = 1 ;
 imAnnCons(runCy,"DAC","modal") = 0.5 ;
+
+imAnnCons(runCy,"EW","smallest") = 0.2 ;
+imAnnCons(runCy,"EW","largest") = 1 ;
+imAnnCons(runCy,"EW","modal") = 0.5 ;
 *---
 * Consumer size groups distribution function
 Loop (runCy,DSBS) DO
@@ -652,9 +658,11 @@ $offtext
 $ELSE.calib
 variable imMatrFactor(allCy,DSBS,TECH,YTIME)    "Maturity factor per technology and subsector for all countries (1)";
 imMatrFactor.LO(runCy,DSBS,TECH,YTIME) = 0;                                          
-imMatrFactor.UP(runCy,DSBS,TECH,YTIME) = 20;
-imMatrFactor.L(runCy,DSBS,TECH,YTIME) = 1;!!iMatrFactorData(runCy,DSBS,TECH,YTIME);     
-imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(not (sameas(DSBS,"PC") or sameas(DSBS,"PB") or sameas(DSBS,"GU")) or not SECTTECH(DSBS,TECH)) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                          
+imMatrFactor.UP(runCy,DSBS,TECH,YTIME) = 50;
+imMatrFactor.L(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);     
+imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(not (sameas(DSBS,"PC") or sameas(DSBS,"PB") or sameas(DSBS,"GU"))) = iMatrFactorData(runCy,DSBS,TECH,YTIME);   
+imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$((sameas(DSBS,"PC") or sameas(DSBS,"PB") or sameas(DSBS,"GU")) and not SECTTECH(DSBS,TECH)) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                      
+imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$DATAY(YTIME)= iMatrFactorData(runCy,DSBS,TECH,YTIME);      
 $ENDIF.calib
 *---
 parameters
@@ -776,7 +784,7 @@ imCapCostTech(runCy,"BU","TH2F",YTIME) = 1.5 * imCapCostTech(runCy,"BU","TGDO",Y
 imCapCostTechMin(allCy,"DAC","HTDAC",YTIME) = 0.4;
 imCapCostTechMin(allCy,"DAC","H2DAC",YTIME) = 0.2;
 imCapCostTechMin(allCy,"DAC","LTDAC",YTIME) = 0.2;
-imCapCostTechMin(allCy,"DAC","EWDAC",YTIME) = 0.2;
+imCapCostTechMin(allCy,"EW","TEW",YTIME) = 0.2;
 *---
 !!imUsfEneConvSubTech(runCy,INDSE,"THCL",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCL","USC") + 0.005 * (ord(YTIME)-11);
 imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCLCCS","USC") + 0.005 * (ord(YTIME)-11);
