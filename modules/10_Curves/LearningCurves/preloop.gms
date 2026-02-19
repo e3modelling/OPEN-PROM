@@ -26,5 +26,8 @@ V10CumCapGlobal.FX(LCTECH,"2016") = V10CumCapGlobal.L(LCTECH,"2015") + sum(allCy
 V10CumCapGlobal.FX(LCTECH,"2017") = V10CumCapGlobal.L(LCTECH,"2016") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"2017"));
 V10CumCapGlobal.FX(LCTECH,"2018") = V10CumCapGlobal.L(LCTECH,"2017") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"2018"));
 V10CumCapGlobal.FX(LCTECH,"2019") = V10CumCapGlobal.L(LCTECH,"2018") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"2019"));
-V10CumCapGlobal.FX(LCTECH,"%fBaseY%") = V10CumCapGlobal.L(LCTECH,"2019") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"%fBaseY%"));
+V10CumCapGlobal.FX(LCTECH,"2020") = V10CumCapGlobal.L(LCTECH,"2019") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"2020"));
+V10CumCapGlobal.FX(LCTECH,"2021") = V10CumCapGlobal.L(LCTECH,"2020") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"2021"));
+V10CumCapGlobal.FX(LCTECH,"2022") = V10CumCapGlobal.L(LCTECH,"2021") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"2022"));
+V10CumCapGlobal.FX(LCTECH,"%fBaseY%") = V10CumCapGlobal.L(LCTECH,"2022") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"%fBaseY%"));
 *---
