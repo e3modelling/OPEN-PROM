@@ -129,8 +129,7 @@ Q02CostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS))$SECTTECH(DSB
     V02CostTech(allCy,DSBS,ITECH,YTIME) 
         =E=
     V02CapCostTech(allCy,DSBS,ITECH,YTIME) +
-    V02VarCostTech(allCy,DSBS,ITECH,YTIME) -
-    VmSubsiDemTech(allCy,DSBS,ITECH,YTIME);
+    V02VarCostTech(allCy,DSBS,ITECH,YTIME);
 
 *' This equation calculates the technology share in new equipment based on factors such as maturity factor,
 *' cumulative distribution function of consumer size groups, number of consumers, technology cost, distribution function of consumer
