@@ -55,3 +55,6 @@ i02ShareBlend(runCy,"BU","TKRS","KRS",YTIME)$AN(YTIME) = i02ShareBlend(runCy,"BU
 i02ShareBlend(runCy,"BU","TKRS","BKRS",YTIME)$AN(YTIME) = i02ShareBlend(runCy,"BU","TKRS","BKRS","%fBaseY%") + 0.006 * (ord(YTIME)-11);
 i02ShareBlend(runCy,"BU","TGDO","GDO",YTIME)$AN(YTIME) = i02ShareBlend(runCy,"BU","TGDO","GDO","%fBaseY%") - 0.004 * (ord(YTIME)-11);
 i02ShareBlend(runCy,"BU","TGDO","BGDO",YTIME)$AN(YTIME) = i02ShareBlend(runCy,"BU","TGDO","BGDO","%fBaseY%") + 0.004 * (ord(YTIME)-11);
+
+i02ShareElcHP(runCy,"HOU",YTIME) = 0.1;
+i02ShareElcHP(runCy,"SE",YTIME) = 0.1;

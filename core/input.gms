@@ -614,7 +614,9 @@ $offdelim
 *---
 $IFTHEN.calib %Calibration% == off
 parameter imMatrFactor(allCy,DSBS,TECH,YTIME)   "Maturity factor per technology and subsector for all countries (1)";
-imMatrFactor(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                          
+imMatrFactor(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);    
+imMatrFactor(runCy,"HOU","THEATPUMP",YTIME) = 1;          
+imMatrFactor(runCy,"SE","THEATPUMP",YTIME) = 1;                                   
 imMatrFactor(runCy,DSBS,TECH,YTIME)$(imMatrFactor(runCy,DSBS,TECH,YTIME)=0) = 0.000001;
 imMatrFactor(runCy,DSBS,"TBMSWAS",YTIME) = 0.01;
 imMatrFactor(runCy,DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40;
@@ -854,6 +856,7 @@ imUsfEneConvSubTech(runCy,INDSE,TECH,YTIME)  = imDataIndTechnology(INDSE,TECH,"U
 *imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCLCCS","USC") + 0.005 * (ord(YTIME)-11);
 *---
 **  Domestic Sector
+imCapCostTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,"IC");
 imFixOMCostTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,"FC");
 imVarCostTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,"VC");
 imUsfEneConvSubTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,"USC");
@@ -875,10 +878,10 @@ imCapCostTechMin(allCy,"DAC","EWDAC",YTIME) = 0.2;
 imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCLCCS","USC") + 0.005 * (ord(YTIME)-11);
 imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$(ord(YTIME)>50)  = 0.7;
 
-imUsfEneConvSubTech(runCy,"HOU","TELC",YTIME)$(ord(YTIME)>20)  = imDataDomTech("HOU","TELC","USC") + 0.0525 * (ord(YTIME)-21);
-imUsfEneConvSubTech(runCy,"HOU","TELC",YTIME)$(ord(YTIME)>40)  = 1.9;
-imUsfEneConvSubTech(runCy,"SE","TELC",YTIME)$(ord(YTIME)>20)  = imDataDomTech("SE","TELC","USC") + 0.0525 * (ord(YTIME)-21);
-imUsfEneConvSubTech(runCy,"SE","TELC",YTIME)$(ord(YTIME)>40)  = 1.9;
+*imUsfEneConvSubTech(runCy,"HOU","TELC",YTIME)$(ord(YTIME)>20)  = imDataDomTech("HOU","TELC","USC") + 0.0525 * (ord(YTIME)-21);
+*imUsfEneConvSubTech(runCy,"HOU","TELC",YTIME)$(ord(YTIME)>40)  = 1.9;
+*imUsfEneConvSubTech(runCy,"SE","TELC",YTIME)$(ord(YTIME)>20)  = imDataDomTech("SE","TELC","USC") + 0.0525 * (ord(YTIME)-21);
+*imUsfEneConvSubTech(runCy,"SE","TELC",YTIME)$(ord(YTIME)>40)  = 1.9;
 
 **  Power Generation
 *---
