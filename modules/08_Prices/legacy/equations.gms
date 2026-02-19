@@ -89,7 +89,7 @@ V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)
     1e-6 +
     (
       (VmConsFuel(allCy,DSBS,EF,YTIME) - V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$ELCEF(EF)) /
-      (SUM(EF2$SECtoEF(DSBS,EF2),VmConsFuel(allCy,DSBS,EF2,YTIME)- V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$ELCEF(EF2)) + 1e-6)
+      (SUM(EF2$SECtoEF(DSBS,EF2),VmConsFuel(allCy,DSBS,EF2,YTIME) - V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$ELCEF(EF2)) + 1e-6)
     )$(INDDOM(DSBS) or NENSE(DSBS)) +   
     SUM(TRANSE$(sameas(TRANSE,DSBS)),
       VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME) /
