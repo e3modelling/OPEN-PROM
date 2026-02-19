@@ -80,6 +80,7 @@ VmPriceFuelSubsecCarVal.FX(runCy,"EW",EF,YTIME)$(DATAY(YTIME) and SECtoEF("EW",E
 VmPriceFuelAvgSub.L(runCy,DSBS,YTIME) = 0.001;
 VmPriceFuelAvgSub.FX(runCy,DSBS,YTIME)$DATAY(YTIME) = sum(EF$SECtoEF(DSBS,EF), i08WgtSecAvgPriFueCons(runCy,DSBS,EF) * imFuelPrice(runCy,DSBS,EF,YTIME));
 *---
+VmPriceElecInd.L(runCy,YTIME) = imPriceElecInd(runCy,"%fBaseY%");
 VmPriceElecInd.FX(runCy,YTIME)$DATAY(YTIME) = imPriceElecInd(runCy,YTIME);
 *---
 VmLft.L(runCy,DSBS,TTECH,YTIME) = 10;
