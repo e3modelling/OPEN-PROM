@@ -26,7 +26,7 @@ Q04ProdElecEstCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         V03OutTransfCHP(allCy,"STE",YTIME) * VmPriceElecInd(allCy,YTIME) - 
         i04MxmShareChpElec(allCy,YTIME) * V04DemElecTot(allCy,YTIME))
       )  
-    )/2 + 1e-6;
+    )/2 + SQR(1E-4);
 
 *' This equation computes the electric capacity of Combined Heat and Power (CHP) plants. The capacity is calculated in gigawatts (GW) and is based on several factors,
 *' including the consumption of fuel in the industrial sector, the electricity prices in the industrial sector, the availability rate of power
