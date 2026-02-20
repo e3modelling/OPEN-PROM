@@ -101,6 +101,7 @@ parameter i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   "Maturity factor related to 
 i04MatFacPlaAvailCap(runCy,PGALL,YTIME) = iMatFacPlaAvailCapData(runCy,PGALL,YTIME);
 i04MatFacPlaAvailCap(runCy,"ATHBMSCCS",YTIME) = 1;
 i04MatFacPlaAvailCap(runCy,"ATHCOAL",YTIME) = i04MatFacPlaAvailCap(runCy,"ATHCOAL",YTIME);
+i04MatFacPlaAvailCap(runCy,"PGH2F",YTIME) = 0;
 $ENDIF.calib
 *---
 parameter i04LoadFacElecDem(DSBS)                  "Load factor of electricity demand per sector (1)"

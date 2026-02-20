@@ -168,10 +168,10 @@ bgfls.bgfl
 *---
 H2TECHPM(H2TECH)           "Technologies for which premature replacement is active"
 /
-gsr
-cgf
-bgfl
-weg
+*gsr
+*cgf
+*bgfl
+*weg
 *opo
 /
 *---
