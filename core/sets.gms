@@ -1215,6 +1215,7 @@ CHPPGSET /IC,FC,VOM,LFT,AVAIL,effElc,effThrm,MAXCHPSHARE/
 BALEF fuels in balance report
 /
 "Total"
+"Other Fuels"
 "Solids"
 "Hard coal"
 "Lignite"
@@ -1226,11 +1227,11 @@ BALEF fuels in balance report
 "Diesel oil"
 "Fuel oil"
 "Other liquids"
-"Gas fuels"
+"Gasses"
 "Natural gas"
 "Derived gases"
 "Nuclear heat"
-"Steam"
+"Heat"
 "Hydro"
 "Wind"
 "Solar energy"
@@ -1247,22 +1248,23 @@ BIOFUELS(EF)
 BALEF2EFS(BALEF, EFS) Mapping from balance fuels to model fuels
 /
 "Total".(HCL,LGN,CRO,LPG,GSL,BGSL,KRS,BKRS,GDO,BGDO,RFO,OLQ,NGS,OGS,NUC,STE,HYD,WND,SOL,BMSWAS,GEO,MET,ETH,H2F,ELC)
-"Solids".(HCL,LGN)
+"Solids".(HCL,LGN,BMSWAS)
 "Hard coal".HCL
 "Lignite".LGN
 "Crude oil and Feedstocks".CRO
-"Liquids".(LPG,GSL,BGSL,KRS,BKRS,GDO,BGDO,RFO,OLQ)
+"Liquids".(LPG,GSL,BGSL,KRS,BKRS,GDO,BGDO,RFO,OLQ,CRO)
+"Other fuels".(HYD,WND,SOL,GEO,NUC,MET,ETH)
 "Liquified petroleum gas".LPG
 "Gasoline".(GSL,BGSL)
 "Kerosene".(KRS,BKRS)
 "Diesel oil".(GDO,BGDO)
 "Fuel oil".RFO
 "Other liquids".OLQ
-"Gas fuels".(NGS,OGS)
+"Gasses".(NGS,OGS)
 "Natural gas".NGS
 "Derived gases".OGS
 "Nuclear heat".NUC
-"Steam".STE
+"Heat".STE
 "Hydro".HYD
 "Wind".WND
 "Solar energy".SOL
