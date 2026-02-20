@@ -71,12 +71,14 @@ $ondelim
 $include"./iInvPlants.csv"
 $offdelim
 ;
+i04InvPlants(allCy,PGALL,YTIME) = 0;
 *---
 table i04PlantDecomSched(allCy,PGALL,YTIME)	           "Decided plant decomissioning schedule (GW)"
 $ondelim
 $include"./iDecomPlants.csv"
 $offdelim
 ;
+i04PlantDecomSched(allCy,PGALL,YTIME) = 0;
 *---
 table iMatFacPlaAvailCapData(allCy,PGALL,YTIME)      "Maturity factor related to plant available capacity (1)"
 $ondelim
