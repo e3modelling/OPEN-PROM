@@ -43,7 +43,7 @@ V04CostCapTech.FX(runCy,PGALL,YTIME)$(not AN(YTIME)) =
 V04CapexRESRate.L(runCy,PGALL,YTIME) * V04CapexFixCostPG.L(runCy,PGALL,YTIME) / 
     (i04AvailRate(runCy,PGALL,YTIME) * smGwToTwhPerYear(YTIME) * 1000); 
 *---
-V04CostHourProdInvDec.LO(runCy,PGALL,YTIME) = epsilon6;
+V04CostHourProdInvDec.LO(runCy,PGALL,YTIME) = 1e-6;
 V04CostHourProdInvDec.L(runCy,PGALL,YTIME) = 0.1;     
 V04CostHourProdInvDec.FX(runCy,PGALL,YTIME)$(NOT AN(YTIME)) = 
 V04CostCapTech.L(runCy,PGALL,YTIME) + V04CostVarTech.L(runCy,PGALL,YTIME);
