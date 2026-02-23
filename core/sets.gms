@@ -197,6 +197,7 @@ BM_CO2         "Non metallic minerals production, related with CO2"
 PG_SF6         "Electricity production, related with SF6"
 OI_SF6         "Other Industries activities, related with SF6"
 DAC            "Direct Air Capture"
+EW             "Enhanced Weathering"
 LQD            "Liquids Production"
 SLD            "Solids Production"
 GAS            "Gases Production"
@@ -237,6 +238,7 @@ SLD    "Solids Production"
 GAS    "Gases Production"
 H2INFR "Hydrogen storage and delivery"
 DAC    "Direct Air Capture"
+EW     "Enhanced Weathering"
 CHP    "Combined Heat and Power"
 /
 
@@ -326,7 +328,7 @@ NoTrade  Carbon Value for non-trading sectors
 
 NAPtoALLSBS(NAP,ALLSBS) Energy sectors corresponding to NAP sectors
 /
-Trade.(FD,EN,TX,OE,OI,NF,CH,IS,BM,PP,PG,BM_CO2,H2P,STEAMP,DAC)
+Trade.(FD,EN,TX,OE,OI,NF,CH,IS,BM,PP,PG,BM_CO2,H2P,STEAMP,DAC,EW)
 NoTrade.(SE,AG,HOU,PC,PB,PT,PN,PA,GU,GT,GN,BU,PCH,NEN,LGN_PRD_CH4,HCL_PRD_CH4,GAS_PRD_CH4,TERT_CH4,TRAN_CH4,AG_CH4,SE_CH4,TRAN_N2O,TX_N2O,AG_N2O,OI_HFC,OI_PFC,NF_PFC,PG_SF6,OI_SF6)
 /
 
@@ -342,9 +344,9 @@ EN    "Engineering"
 TX    "Textiles"
 OE    "Ore Extraction"
 OI    "Other Industrial sectors"
-SE    "Services and Trade"
+SE    "Commercial"
 AG    "Agriculture, Fishing, Forestry"
-HOU   "Households"
+HOU   "Residential"
 PC    "Passenger Transport - Cars"
 PB    "Passenger Transport - Busses"
 PT    "Passenger Transport - Rail"
@@ -357,6 +359,7 @@ BU    "Bunkers"
 PCH   "Petrochemicals Industry"
 NEN   "Other Non Energy Uses"
 DAC   "Direct Air Capture"
+EW    "Enhanced Weathering"
 /
 
 TRANSE(DSBS)      All Transport Subsectors      /PC,PT,PA,PB,PN,GU,GT,GN/
@@ -411,7 +414,7 @@ HYD     "Hydro"
 WND     "Wind"
 SOL     "Solar"
 BMSWAS  "Biomass and Waste"
-GEO     "Geothermal and other renewable sources eg. Tidal, etc."
+GEO     "Geothermal and other renewable sources (Tidal, etc)"
 MET     "Methanol"
 ETH     "Ethanol"
 BGDO    "Biodiesel"
@@ -532,7 +535,7 @@ HYD     "Hydro"
 WND     "Wind"
 SOL     "Solar"
 BMSWAS  "Biomass and Waste"
-GEO     "Geothermal and other renewable sources eg. Tidal, etc."
+GEO     "Geothermal and other renewable sources"
 MET     "Methanol"
 ETH     "Ethanol"
 BGDO    "Biodiesel"
@@ -572,7 +575,7 @@ ELCEF(EF)        Electricity                                         /ELC/
 H2EF(EF)         Hydrogen                                            /H2F/
 STEAM(EFS)       Steam                                               /STE/
 TOCTEF(EFS)      Energy forms produced by power plants and boilers   /ELC,STE/
-ALTEF(EF)        Alternative Fuels used in transport                 /BGDO,BKRS,MET,ETH/
+ALTEF(EF)        Alternative Fuels used in transport                 /BGDO,BKRS,BGSL,MET,ETH/
 
 PGEF(EFS)        "Energy forms used for steam production"
 
@@ -660,7 +663,8 @@ THEATPUMP
 HTDAC
 H2DAC
 LTDAC
-EWDAC
+TEW
+*EWDAC 
 * Power Generation Technologies
 *PGTLGN
 *PGTHCL 
@@ -702,12 +706,19 @@ TCHEVGSL  "conventional Hybrid engine - gasoline"
 TCHEVGDO  "conventional Hybrid engine - diesel"
 /
 
-DACTECH(TECH)     DAC Technologies
+CDRTECH(TECH)     CDR Technologies
 /
 HTDAC
 H2DAC
 LTDAC
-EWDAC
+TEW
+/
+
+DACTECH(CDRTECH)     DAC Technologies
+/
+HTDAC
+H2DAC
+LTDAC
 /
 
 ITECH(TECH)      Industrial - Domestic - Non-energy & Bunkers Technologies 
@@ -757,7 +768,7 @@ THCLCCS
 HTDAC
 H2DAC
 LTDAC
-EWDAC
+TEW
 /
 
 STECH     "Technologies in supply side"
@@ -821,7 +832,7 @@ TBMSWAS.BMSWAS
 HTDAC.(NGS,ELC)
 H2DAC.(H2F,ELC)
 LTDAC.ELC
-EWDAC.ELC
+TEW.ELC
 /
 TTECHtoEF(TTECH,EF) Fuels consumed by transport technologies
 /
@@ -864,14 +875,6 @@ TBMSWAS.BMSWAS
 THEATPUMP.ELC
 /
 
-DACTECHtoEF(DACTECH,EF)
-/
-HTDAC.(NGS,ELC)
-H2DAC.(H2F,ELC)
-LTDAC.ELC
-EWDAC.ELC
-/
-
 PLUGIN(TECH) Plug-in hybrids
 /
 TPHEVGSL
@@ -908,7 +911,8 @@ SE.(THCL,TLPG,TKRS,TNGS,TOGS,TELC,TSTE)
 (HOU,SE).(THEATPUMP)
 BU.(TGDO,TRFO,TKRS,TH2F)
 (PCH,NEN).(TLGN,THCL,TGDO,TRFO,TLPG,TOLQ,TNGS,TOGS)
-DAC.(HTDAC,H2DAC,LTDAC,EWDAC)
+DAC.(HTDAC,H2DAC,LTDAC)
+EW.TEW
 /
 
 SECtoEF(SBS,EF) Link between Model Subsectors and Energy Forms consumed
@@ -1214,26 +1218,29 @@ CHPPGSET /IC,FC,VOM,LFT,AVAIL,effElc,effThrm,MAXCHPSHARE/
 BALEF fuels in balance report
 /
 "Total"
+"Other Fuels"
 "Solids"
 "Hard coal"
 "Lignite"
 "Crude oil and Feedstocks"
 "Liquids"
+"Fossil Liquids"
 "Liquified petroleum gas"
 "Gasoline"
 "Kerosene"
 "Diesel oil"
 "Fuel oil"
 "Other liquids"
-"Gas fuels"
+"Gases"
 "Natural gas"
 "Derived gases"
 "Nuclear heat"
-"Steam"
+"Heat"
 "Hydro"
 "Wind"
 "Solar energy"
 "Biomass"
+"Biofuels"
 "Geothermal heat"
 "Methanol"
 "Hydrogen"
@@ -1250,22 +1257,25 @@ BALEF2EFS(BALEF, EFS) Mapping from balance fuels to model fuels
 "Hard coal".HCL
 "Lignite".LGN
 "Crude oil and Feedstocks".CRO
-"Liquids".(LPG,GSL,BGSL,KRS,BKRS,GDO,BGDO,RFO,OLQ)
+"Liquids".(LPG,GSL,BGSL,KRS,BKRS,GDO,BGDO,RFO,OLQ,CRO)
+"Fossil Liquids".(LPG,GSL,KRS,GDO,RFO,OLQ,CRO)
+"Other fuels".(HYD,WND,SOL,GEO,NUC,MET,ETH)
 "Liquified petroleum gas".LPG
 "Gasoline".(GSL,BGSL)
 "Kerosene".(KRS,BKRS)
 "Diesel oil".(GDO,BGDO)
 "Fuel oil".RFO
 "Other liquids".OLQ
-"Gas fuels".(NGS,OGS)
+"Gases".(NGS,OGS)
 "Natural gas".NGS
 "Derived gases".OGS
 "Nuclear heat".NUC
-"Steam".STE
+"Heat".STE
 "Hydro".HYD
 "Wind".WND
 "Solar energy".SOL
 "Biomass".BMSWAS
+"Biofuels".(BMSWAS,BGSL,BKRS,BGDO)
 "Geothermal heat".GEO
 "Methanol".MET
 "Hydrogen".H2F
