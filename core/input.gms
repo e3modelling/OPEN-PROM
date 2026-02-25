@@ -624,10 +624,10 @@ imMatrFactor(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);
 
 imMatrFactor(runCy,DSBS,"TBMSWAS",YTIME) = 0.01;
 $ontext
-imMatrFactor(runCy,DSBS,"TGDO",YTIME)$((ord(YTIME) > 11) and TRANSE(DSBS)) = 0.5;
-imMatrFactor(runCy,DSBS,"TGSL",YTIME)$((ord(YTIME) > 11) and TRANSE(DSBS)) = 0.5;
-imMatrFactor(runCy,DSBS,"TELC",YTIME)$((ord(YTIME) > 11) and TRANSE(DSBS)) = 3;
-imMatrFactor("CHA",DSBS,"TELC",YTIME)$((ord(YTIME) > 11) and TRANSE(DSBS)) = 8;
+imMatrFactor(runCy,DSBS,"TGDO",YTIME)$((ord(YTIME) > 14) and TRANSE(DSBS)) = 0.5;
+imMatrFactor(runCy,DSBS,"TGSL",YTIME)$((ord(YTIME) > 14) and TRANSE(DSBS)) = 0.5;
+imMatrFactor(runCy,DSBS,"TELC",YTIME)$((ord(YTIME) > 14) and TRANSE(DSBS)) = 3;
+imMatrFactor("CHA",DSBS,"TELC",YTIME)$((ord(YTIME) > 14) and TRANSE(DSBS)) = 8;
 imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 30 and TRANSE(DSBS)) = 8;
 imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 11;
 imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 11;
@@ -636,15 +636,15 @@ imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 50 and TRANSE(DSBS)) = 15;
 imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 11;
 imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 11;
 
-imMatrFactor(runCy,DSBS,"TNGSCCS",YTIME)$((ord(YTIME) > 11) and INDSE(DSBS)) = 1;
-imMatrFactor(runCy,DSBS,"THCLCCS",YTIME)$((ord(YTIME) > 11) and INDSE(DSBS)) = 1;
-imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 11 and DOMSE(DSBS)) = 20;
-imMatrFactor(runCy,DSBS,"TBMSWAS",YTIME)$(ord(YTIME) > 11 and DOMSE(DSBS)) = 0.001;
+imMatrFactor(runCy,DSBS,"TNGSCCS",YTIME)$((ord(YTIME) > 14) and INDSE(DSBS)) = 1;
+imMatrFactor(runCy,DSBS,"THCLCCS",YTIME)$((ord(YTIME) > 14) and INDSE(DSBS)) = 1;
+imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 14 and DOMSE(DSBS)) = 20;
+imMatrFactor(runCy,DSBS,"TBMSWAS",YTIME)$(ord(YTIME) > 14 and DOMSE(DSBS)) = 0.001;
 imMatrFactor(runCy,DSBS,"TH2F",YTIME)$(ord(YTIME) < 21 and INDSE(DSBS)) = 0;
 imMatrFactor(runCy,DSBS,"TH2F",YTIME)$(ord(YTIME) > 21 and INDSE(DSBS)) = 2;
 imMatrFactor(runCy,DSBS,"TH2F",YTIME)$(ord(YTIME) > 40 and INDSE(DSBS)) = 2;
-imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 11 and INDSE(DSBS)) = 4;
-imMatrFactor(runCy,DSBS,"TH2F",YTIME)$(ord(YTIME) > 11 and INDSE(DSBS)) = 20;
+imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 14 and INDSE(DSBS)) = 4;
+imMatrFactor(runCy,DSBS,"TH2F",YTIME)$(ord(YTIME) > 14 and INDSE(DSBS)) = 20;
 imMatrFactor(runCy,DSBS,"TGDO",YTIME)$(ord(YTIME) > 30 and TRANSE(DSBS)) = 0.001;
 imMatrFactor(runCy,DSBS,"TGSL",YTIME)$(ord(YTIME) > 30 and TRANSE(DSBS)) = 0.001;
 imMatrFactor(runCy,DSBS,"TNGS",YTIME)$(ord(YTIME) > 30 and TRANSE(DSBS)) = 0.001;
@@ -765,8 +765,8 @@ imCapCostTechMin(allCy,INDSE,TECH,YTIME) = 0.5;
 imFixOMCostTech(runCy,INDSE,TECH,YTIME) = imDataIndTechnology(INDSE,TECH,"FC");
 imVarCostTech(runCy,INDSE,TECH,YTIME) = imDataIndTechnology(INDSE,TECH,"VC");
 imUsfEneConvSubTech(runCy,INDSE,TECH,YTIME)  = imDataIndTechnology(INDSE,TECH,"USC");
-*imUsfEneConvSubTech(runCy,INDSE,"THCL",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCL","USC") + 0.005 * (ord(YTIME)-11);
-*imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCLCCS","USC") + 0.005 * (ord(YTIME)-11);
+*imUsfEneConvSubTech(runCy,INDSE,"THCL",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCL","USC") + 0.005 * (ord(YTIME)-14);
+*imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCLCCS","USC") + 0.005 * (ord(YTIME)-14);
 *---
 **  Domestic Sector
 imFixOMCostTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,"FC");
@@ -786,8 +786,8 @@ imCapCostTechMin(allCy,"DAC","H2DAC",YTIME) = 0.2;
 imCapCostTechMin(allCy,"DAC","LTDAC",YTIME) = 0.2;
 imCapCostTechMin(allCy,"EW","TEW",YTIME) = 0.2;
 *---
-!!imUsfEneConvSubTech(runCy,INDSE,"THCL",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCL","USC") + 0.005 * (ord(YTIME)-11);
-imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCLCCS","USC") + 0.005 * (ord(YTIME)-11);
+!!imUsfEneConvSubTech(runCy,INDSE,"THCL",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCL","USC") + 0.005 * (ord(YTIME)-14);
+imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCLCCS","USC") + 0.005 * (ord(YTIME)-14);
 imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$(ord(YTIME)>50)  = 0.7;
 
 **  Power Generation

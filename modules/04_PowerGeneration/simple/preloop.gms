@@ -25,9 +25,9 @@ alias(datay, dataylag)
 loop (runCy,PGALL,datay,dataylag)$(ord(datay) = ord(dataylag) + 1 and PGREN(PGALL)) DO
   V04NetNewCapElec.FX(runCy,PGALL,datay) = imInstCapPastNonCHP(runCy,PGALL,datay) - imInstCapPastNonCHP(runCy,PGALL,dataylag) + 1E-10;
 ENDLOOP;
-V04NetNewCapElec.FX(runCy,"PGLHYD",YTIME)$TFIRST(YTIME) = +1E-10;
+V04NetNewCapElec.FX(runCy,"PGLHYD",YTIME)$TFIRST(YTIME) = 1e-6;
 *---
-V04CFAvgRen.L(runCy,PGALL,YTIME) = 0.1;
+V04CFAvgRen.L(runCy,PGALL,YTIME) = i04AvailRate(runCy,PGALL,"%fBaseY%");
 V04CFAvgRen.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = i04AvailRate(runCy,PGALL,YTIME);
 *---
 V04CapexFixCostPG.FX(runCy,PGALL,YTIME)$(DATAY(YTIME)) = (imDisc(runCy,"PG",YTIME) * exp(imDisc(runCy,"PG",YTIME) * i04TechLftPlaType(runCy,PGALL))
@@ -43,7 +43,7 @@ V04CostCapTech.FX(runCy,PGALL,YTIME)$(not AN(YTIME)) =
 V04CapexRESRate.L(runCy,PGALL,YTIME) * V04CapexFixCostPG.L(runCy,PGALL,YTIME) / 
     (i04AvailRate(runCy,PGALL,YTIME) * smGwToTwhPerYear(YTIME) * 1000); 
 *---
-V04CostHourProdInvDec.LO(runCy,PGALL,YTIME) = epsilon6;
+V04CostHourProdInvDec.LO(runCy,PGALL,YTIME) = 1e-6;
 V04CostHourProdInvDec.L(runCy,PGALL,YTIME) = 0.1;     
 V04CostHourProdInvDec.FX(runCy,PGALL,YTIME)$(NOT AN(YTIME)) = 
 V04CostCapTech.L(runCy,PGALL,YTIME) + V04CostVarTech.L(runCy,PGALL,YTIME);
@@ -54,6 +54,7 @@ V04CapElecNonCHP.FX(runCy,YTIME)$(not An(YTIME)) = sum(PGALL,imInstCapPastNonCHP
 *---
 V04CapElecCHP.FX(runCy,YTIME)$(not An(YTIME)) = SUM(EF,imInstCapPastCHP(runCy,EF,YTIME));
 *---
+VmCapElec.LO(runCy,PGALL,YTIME) = 0;
 VmCapElec.L(runCy,PGALL,YTIME) = 1;
 VmCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  imInstCapPastNonCHP(runCy,PGALL,YTIME);
 *---
@@ -100,6 +101,7 @@ $endif.calib
 VmPeakLoad.L(runCy,YTIME) = 1;
 VmPeakLoad.FX(runCy,YTIME)$(datay(YTIME)) = V04DemElecTot.L(runCy,YTIME)/(V04LoadFacDom.L(runCy,YTIME)*8.76);
 *---
+VmProdElec.LO(runCy,PGALL,YTIME) = 0;
 VmProdElec.L(runCy,pgall,YTIME) = i04DataElecProdNonCHP(runCy,pgall,YTIME) / 1000 + 1;
 VmProdElec.FX(runCy,pgall,YTIME)$DATAY(YTIME) = i04DataElecProdNonCHP(runCy,pgall,YTIME) / 1000;
 *---
