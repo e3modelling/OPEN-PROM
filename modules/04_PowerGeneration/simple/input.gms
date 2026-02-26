@@ -71,12 +71,14 @@ $ondelim
 $include"./iInvPlants.csv"
 $offdelim
 ;
+i04InvPlants(allCy,PGALL,YTIME) = 0;
 *---
 table i04PlantDecomSched(allCy,PGALL,YTIME)	           "Decided plant decomissioning schedule (GW)"
 $ondelim
 $include"./iDecomPlants.csv"
 $offdelim
 ;
+i04PlantDecomSched(allCy,PGALL,YTIME) = 0;
 *---
 table iMatFacPlaAvailCapData(allCy,PGALL,YTIME)      "Maturity factor related to plant available capacity (1)"
 $ondelim
@@ -173,4 +175,4 @@ i04ScaleEndogScrap = 2 / card(PGALL);
 *---
 i04DecInvPlantSched(runCy,PGALL,YTIME) = i04InvPlants(runCy,PGALL,YTIME);
 *---
-i04MxmShareChpElec(runCy,YTIME) = 0.3;
+i04MxmShareChpElec(runCy,YTIME) = 0.5;

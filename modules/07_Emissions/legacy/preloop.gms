@@ -3,8 +3,8 @@
 
 *'                *VARIABLE INITIALISATION*
 *---
-V07EmissCO2Supply.FX(runCy,"H2INFR",YTIME) = 0;
-V07EmissCO2Supply.FX(runCy,SSBS,YTIME)$DATAY(YTIME) = 
+V07GrossEmissCO2Supply.FX(runCy,"H2INFR",YTIME) = 0;
+V07GrossEmissCO2Supply.FX(runCy,SSBS,YTIME)$DATAY(YTIME) = 
 SUM(EFS,
   (
     (-i03InpTotTransfProcess(runCy,SSBS,EFS,YTIME))$SSBSEMIT(SSBS) +
@@ -22,4 +22,11 @@ SUM(EFS,
   ) *
   imCo2EmiFac(runCy,"PG",EFS,YTIME)
 );
-V07EmiActBySrcRegTim.FX(E07SrcMacAbate, allCy, YTIME)$(not An(YTIME)) = i07DataCh4N2OFEmis(allCy,E07SrcMacAbate,YTIME) ;
+*---
+V07GrossEmissCO2Demand.FX(runCy,DSBS,YTIME)$DATAY(YTIME) =   
+SUM(EF,
+  imFuelConsPerFueSub(runCy,DSBS,EF,YTIME) *
+  imCo2EmiFac(runCy,DSBS,EF,YTIME)
+);
+*---
+V07EmiActBySrcRegTim.FX(E07SrcMacAbate, allCy, YTIME)$DATAY(YTIME) = i07DataCh4N2OFEmis(allCy,E07SrcMacAbate,YTIME) ;

@@ -14,10 +14,11 @@ Equations
 *Q07GrnnHsEmisCO2Equiv(NAP,YTIME)	                       "Compute total CO2eq GHG emissions in all countries per NAP sector"
 *q07GrnnHsEmisCO2EquivAllCntr(YTIME)	                   "Compute total CO2eq GHG emissions in all countries"
 *q07ExpendHouseEne(allCy,YTIME)	                           "Compute households expenditures on energy"
-Q07EmissCO2Supply(allCy,SSBS,YTIME)                   "Compute total CO2eq GHG emissions per supply sector"
-Q07RedAbsBySrcRegTim(E07SrcMacAbate, allCy, YTIME)    "Calculate reduction fraction based on carbon price"
-Q07CostAbateBySrcRegTim(E07SrcMacAbate, allCy, YTIME) "Calculate total abatement cost"
-Q07EmiActBySrcRegTim(E07SrcMacAbate, allCy, YTIME)    "Calculate remaining actual emissions"
+Q07GrossEmissCO2Supply(allCy,SSBS,YTIME)                  "Compute total CO2eq GHG emissions per supply sector"
+Q07RedAbsBySrcRegTim(E07SrcMacAbate, allCy, YTIME)        "Calculate reduction fraction based on carbon price"
+Q07CostAbateBySrcRegTim(E07SrcMacAbate, allCy, YTIME)     "Calculate total abatement cost"
+Q07EmiActBySrcRegTim(E07SrcMacAbate, allCy, YTIME)        "Calculate remaining actual emissions"
+Q07GrossEmissCO2Demand(allCy,DSBS,YTIME)                  "Calculate gross emissions of demand subsectors"
 ;
 
 Variables
@@ -25,8 +26,9 @@ Variables
 *V07GrnnHsEmisCO2Equiv(NAP,YTIME)	                       "Total CO2eq GHG emissions in all countries per NAP sector (1)"
 *v07GrnnHsEmisCO2EquivAllCntr(YTIME)	                   "Total CO2eq GHG emissions in all countries (1)"
 *v07ExpendHouseEne(allCy,YTIME)	                           "Households expenditures on energy (billions)"
-V07EmissCO2Supply(allCy,SSBS,YTIME)                 "Total CO2eq GHG emissions per supply sector (Mt CO2/yr)"
+V07GrossEmissCO2Supply(allCy,SSBS,YTIME)                 "Total CO2eq GHG emissions per supply sector (Mt CO2/yr)"
 V07RedAbsBySrcRegTim(E07SrcMacAbate,allCy,YTIME)      "Selected cumulative abatement fraction"
 V07EmiActBySrcRegTim(E07SrcMacAbate,allCy,YTIME)       "Actual emissions"
 V07CostAbateBySrcRegTim(E07SrcMacAbate,allCy,YTIME)    "Total abatement cost"
+V07GrossEmissCO2Demand(allCy,DSBS,YTIME)                "Gross emissions of demand subsectors"
 *;
