@@ -21,15 +21,12 @@ Necessary Software:
 For Model Users:
 
 - Install GAMS and R (if you haven't already) and add them to your PATH variable.
-- Ensure that the reticulate library is installed in R.
 Note: To run the model, you need input data, which are not distributed with the model code. If you don't have the data, please contact us at: info@e3modelling.com.
 
 
 For Model Developers:
 - Install GAMS and R (if you haven't already) and add them to your PATH variable.
-- Proceed with Tutorial 00.
-Regionalization of OPEN-PROM
-The following section outlines the current regionalization of the OPEN-PROM model.
+- Proceed with Tutorial 01.
 
 ***Overview of the tutorials***
 
