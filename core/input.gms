@@ -694,12 +694,7 @@ imMatrFactor(runCy,DSBS,"TCHEVGSL",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 0
 imMatrFactor(runCy,DSBS,"TCHEVGDO",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 0.001;
 
 $offtext
-* Reduce the maturity factor of TELC in other regions except EU-27,GBR,JPN
-imMatrFactor("CAZ",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 5; 
-* imMatrFactor("CAZ",DSBS,"TLGN",YTIME)$(DOMSE(DSBS)) = 0;
-* imMatrFactor("CAZ",DSBS,"THCL",YTIME)$(DOMSE(DSBS)) = 0.01;
-* imMatrFactor("CAZ",DSBS,"TOGS",YTIME)$(DOMSE(DSBS)) = 0.01;
-* imMatrFactor("CAZ",DSBS,"TKRS",YTIME)$(DOMSE(DSBS)) = 0.01;
+* Reduce the maturity factor of TELC in other regions except EU-27,GBR,JPN,CAZ
 
 imMatrFactor("CHA",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 5; 
 * imMatrFactor("CHA",DSBS,"TLGN",YTIME)$(DOMSE(DSBS)) = 0;

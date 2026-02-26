@@ -55,7 +55,6 @@ V04CapElecNonCHP.FX(runCy,YTIME)$(not An(YTIME)) = sum(PGALL,imInstCapPastNonCHP
 V04CapElecCHP.FX(runCy,YTIME)$(not An(YTIME)) = SUM(EF,imInstCapPastCHP(runCy,EF,YTIME));
 *---
 VmCapElec.LO(runCy,PGALL,YTIME) = 0;
-VmCapElec.LO(runCy,PGALL,YTIME) = 0;
 VmCapElec.L(runCy,PGALL,YTIME) = 1;
 VmCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  imInstCapPastNonCHP(runCy,PGALL,YTIME);
 *---

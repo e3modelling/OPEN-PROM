@@ -71,11 +71,14 @@ $ondelim
 $include"./iInvPlants.csv"
 $offdelim
 ;
-i04InvPlants("CHA","ATHCOAL",YTIME)$(ord(YTIME) < 16) = 0.07 * imInstCapPastNonCHP("CHA","ATHCOAL","%fBaseY%") / i04AvailRate("CHA","ATHCOAL","%fBaseY%");
-i04InvPlants("IND","ATHCOAL",YTIME)$(ord(YTIME) < 16) = 0.07 * imInstCapPastNonCHP("IND","ATHCOAL","%fBaseY%") / i04AvailRate("IND","ATHCOAL","%fBaseY%");
-i04InvPlants("USA","ATHCOAL",YTIME)$(ord(YTIME) < 16) = 0.07 * imInstCapPastNonCHP("USA","ATHCOAL","%fBaseY%") / i04AvailRate("USA","ATHCOAL","%fBaseY%");
-i04InvPlants("OAS","ATHCOAL",YTIME)$(ord(YTIME) < 16) = 0.07 * imInstCapPastNonCHP("OAS","ATHCOAL","%fBaseY%") / i04AvailRate("OAS","ATHCOAL","%fBaseY%");
-i04InvPlants("SSA","ATHCOAL",YTIME)$(ord(YTIME) < 16) = 0.07 * imInstCapPastNonCHP("SSA","ATHCOAL","%fBaseY%") / i04AvailRate("SSA","ATHCOAL","%fBaseY%");
+i04InvPlants(allCy,PGALL,YTIME) = 0;
+i04InvPlants("CHA","ATHCOAL",YTIME)$(ord(YTIME) < 20) = 0.12 * imInstCapPastNonCHP("CHA","ATHCOAL","%fBaseY%") / i04AvailRate("CHA","ATHCOAL","%fBaseY%");
+i04InvPlants("IND","ATHCOAL",YTIME)$(ord(YTIME) < 20) = 0.12 * imInstCapPastNonCHP("IND","ATHCOAL","%fBaseY%") / i04AvailRate("IND","ATHCOAL","%fBaseY%");
+i04InvPlants("NEU","ATHCOAL",YTIME)$(ord(YTIME) < 20) = 0.12 * imInstCapPastNonCHP("NEU","ATHCOAL","%fBaseY%") / i04AvailRate("NEU","ATHCOAL","%fBaseY%");
+* i04InvPlants("SSA","ATHCOAL",YTIME)$(ord(YTIME) < 20) = 0.12 * imInstCapPastNonCHP("SSA","ATHCOAL","%fBaseY%") / i04AvailRate("SSA","ATHCOAL","%fBaseY%");
+* i04InvPlants("USA","ATHCOAL",YTIME)$(ord(YTIME) < 16) = 0.07 * imInstCapPastNonCHP("USA","ATHCOAL","%fBaseY%") / i04AvailRate("USA","ATHCOAL","%fBaseY%");
+* i04InvPlants("OAS","ATHCOAL",YTIME)$(ord(YTIME) < 16) = 0.07 * imInstCapPastNonCHP("OAS","ATHCOAL","%fBaseY%") / i04AvailRate("OAS","ATHCOAL","%fBaseY%");
+
 
 *---
 table i04PlantDecomSched(allCy,PGALL,YTIME)	           "Decided plant decomissioning schedule (GW)"

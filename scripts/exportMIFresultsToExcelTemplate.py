@@ -3,7 +3,7 @@ import numpy as np
 import re
 
 # ================= CONFIGURATION =================
-MIF_FILE = 'C:\\Users\\at39\\2-Models\\OPEN-PROM\\runs\\SoCDR_Ed3_CurrentTargets\\reporting.mif'
+MIF_FILE = 'C:\\Users\\at39\\2-Models\\OPEN-PROM\\runs\\SoCDR_Ed3_CurrentTargets_InvCAPCoal_2026-02-25_16-47-52\\reporting.mif'
 
 # Years to appear in the output
 REPORT_YEARS = [2010, 2015, 2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070, 2075, 2080, 2085, 2090, 2095, 2100]
@@ -21,6 +21,53 @@ REPORT_STRUCTURE = [
     ("Population / Economic growth", None),
     ("Population (Billions)", "Population"),
     ("GDP in billion (US$2015/yr PPP)", "GDP|PPP"),
+
+    # --- CO2 Emissions ---
+    ("CO2 Emissions", None),
+    ("CO2 Emissions (Mt CO2)", "Emissions|CO2"),
+    ("GHG emissions (MtCO2equiv/year)", "Emissions|Kyoto Gases"),
+    ("Non-CO2 Emissions (Mt CO2eq/yr)", "Emissions|nonCO2"), 
+    
+    ("  AFOLU", "Emissions|CO2|AFOLU"),
+    ("  Energy", "Emissions|CO2|Energy"),
+    ("  Energy and Industrial Processes", "Emissions|CO2|Energy and Industrial Processes"),  
+    ("Energy Demand", "Emissions|CO2|Energy|Demand"),        
+    ("  Bunkers ", "Emissions|CO2|Energy|Demand|Bunkers"),
+    ("  Industry", "Emissions|CO2|Energy|Demand|Industry"),
+    ("  Buildings", "Emissions|CO2|Energy|Demand|Residential"),    
+    ("  Agriculture - Fishing - Forestry", "Emissions|CO2|Energy|Demand|Agriculture, Fishing, Forestry"),
+    ("  Services and Trade", "Emissions|CO2|Energy|Demand|Commercial"),
+    ("  Transport", "Emissions|CO2|Energy|Demand|Transportation"),
+    ("  Goods Transport - Inland Navigation", "Emissions|CO2|Energy|Demand|Transportation|Goods Transport - Inland Navigation"),
+    ("  Goods Transport - Rail", "Emissions|CO2|Energy|Demand|Transportation|Goods Transport - Rail"),
+    ("  Goods Transport - Trucks", "Emissions|CO2|Energy|Demand|Transportation|Goods Transport - Trucks"),
+    ("  Passenger Transport - Aviation", "Emissions|CO2|Energy|Demand|Transportation|Passenger Transport - Aviation"),
+    ("  Passenger Transport - Busses", "Emissions|CO2|Energy|Demand|Transportation|Passenger Transport - Busses"),
+    ("  Passenger Transport - Cars", "Emissions|CO2|Energy|Demand|Transportation|Passenger Transport - Cars"),
+    ("  Passenger Transport - Inland Navigation", "Emissions|CO2|Energy|Demand|Transportation|Passenger Transport - Inland Navigation"),
+    ("  Passenger Transport - Rail", "Emissions|CO2|Energy|Demand|Transportation|Passenger Transport - Rail"),
+    ("Energy Supply", "Emissions|CO2|Energy|Supply"),
+    ("  Electricity", "Emissions|CO2|Energy|Supply|Electricity"),
+    ("  Heat", "Emissions|CO2|Energy|Supply|Heat"),
+    ("  Hydrogen", "Emissions|CO2|Energy|Supply|Hydrogen"),
+    ("Industrial Processes", "Emissions|CO2|Industrial Processes"),
+    # By Fuel Breakdown
+    ("By fuel", None),
+    ("  Solids", "Emissions|CO2|Energy|Supply|Solids"),
+    ("  Gases", "Emissions|CO2|Energy|Supply|Gases"),
+    ("  Liquids", "Emissions|CO2|Energy|Supply|Liquids"),
+    # --- Carbon Capture ---
+    ("Carbon Capture", None),
+    ("Carbon Capture (Mt CO2)", "Carbon Capture"),
+    ("  Electricity", "Carbon Capture|Energy|Supply|Electricity"),
+    ("  Direct Air Capture", "Carbon Capture|Direct Air Capture"),
+    ("  Hydrogen", "Carbon Capture|Energy|Supply|Hydrogen"),
+    #("  Industry", "Carbon Capture|Energy|Demand"),
+    ("Carbon Removal", None),    
+    ("  Land Use", "Carbon Removal|Land Use"),
+    ("  Enhanced Weathering", "Carbon Removal|Enhanced Weathering"),
+    ("Carbon Price", None),  
+    ("Carbon Price (US$2015/tn CO2)", "Price|Carbon"),
 
     # --- Primary Energy ---
     ("Primary Energy", None),
@@ -166,60 +213,10 @@ REPORT_STRUCTURE = [
     # ("  Bunkers|Other Gases", "Final Energy|Bunkers|Other Gases"),
     # ("  Bunkers|Other Liquids", "Final Energy|Bunkers|Other Liquids"),
     # ("  Bunkers|Renewables exc Hydro", "Final Energy|Bunkers|Renewables except Hydro"),
-    ("  Bunkers|Residual Fuel Oil", "Final Energy|Bunkers|Residual Fuel Oil"),
+    ("  Bunkers|Residual Fuel Oil", "Final Energy|Bunkers|Residual Fuel Oil")
     # ("  Bunkers|Solar", "Final Energy|Bunkers|Solar"),
     # ("  Bunkers|Solids", "Final Energy|Bunkers|Solids"),
     # ("  Bunkers|Wind", "Final Energy|Bunkers|Wind"),
-
-    # --- CO2 Emissions ---
-    ("CO2 Emissions", None),
-    ("CO2 Emissions (Mt CO2)", "Emissions|CO2"),
-    ("GHG emissions (MtCO2equiv/year)", "Emissions|Kyoto Gases"),
-    ("Non-CO2 Emissions (Mt CO2eq/yr)", "Emissions|nonCO2"), 
-    
-    ("  AFOLU", "Emissions|CO2|AFOLU"),
-    ("  Energy", "Emissions|CO2|Energy"),
-    ("  Energy and Industrial Processes", "Emissions|CO2|Energy and Industrial Processes"),  
-    ("Energy Demand", "Emissions|CO2|Energy|Demand"),        
-    ("  Bunkers ", "Emissions|CO2|Energy|Demand|Bunkers"),
-    ("  Industry", "Emissions|CO2|Energy|Demand|Industry"),
-    ("  Buildings", "Emissions|CO2|Energy|Demand|Residential and Commercial"),    
-    ("  Agriculture - Fishing - Forestry", "Emissions|CO2|Energy|Demand|Residential and Commercial|Agriculture - Fishing - Forestry"),
-    ("  Households", "Emissions|CO2|Energy|Demand|Residential and Commercial|Households"),
-    ("  Services and Trade", "Emissions|CO2|Energy|Demand|Residential and Commercial|Services and Trade"),
-    ("  Transport", "Emissions|CO2|Energy|Demand|Transportation"),
-    ("  Goods Transport - Inland Navigation", "Emissions|CO2|Energy|Demand|Transportation|Goods Transport - Inland Navigation"),
-    ("  Goods Transport - Rail", "Emissions|CO2|Energy|Demand|Transportation|Goods Transport - Rail"),
-    ("  Goods Transport - Trucks", "Emissions|CO2|Energy|Demand|Transportation|Goods Transport - Trucks"),
-    ("  Passenger Transport - Aviation", "Emissions|CO2|Energy|Demand|Transportation|Passenger Transport - Aviation"),
-    ("  Passenger Transport - Busses", "Emissions|CO2|Energy|Demand|Transportation|Passenger Transport - Busses"),
-    ("  Passenger Transport - Cars", "Emissions|CO2|Energy|Demand|Transportation|Passenger Transport - Cars"),
-    ("  Passenger Transport - Inland Navigation", "Emissions|CO2|Energy|Demand|Transportation|Passenger Transport - Inland Navigation"),
-    ("  Passenger Transport - Rail", "Emissions|CO2|Energy|Demand|Transportation|Passenger Transport - Rail"),
-    ("Energy Supply", "Emissions|CO2|Energy|Supply"),
-    ("  Electricity", "Emissions|CO2|Energy|Supply|Electricity"),
-    ("  Heat", "Emissions|CO2|Energy|Supply|Heat"),
-    ("  Hydrogen", "Emissions|CO2|Energy|Supply|Hydrogen"),
-    ("Industrial Processes", "Emissions|CO2|Industrial Processes"),
-    # By Fuel Breakdown
-    ("By fuel", None),
-    ("  Solids", "Emissions|CO2|Energy|Supply|Solids"),
-    ("  Gases", "Emissions|CO2|Energy|Supply|Gases"),
-    ("  Liquids", "Emissions|CO2|Energy|Supply|Liquids"),
-    # --- Carbon Capture ---
-    ("Carbon Capture", None),
-    ("Carbon Capture (Mt CO2)", "Carbon Capture"),
-    ("  Electricity", "Carbon Capture|Electricity"),
-    ("  Enhanced Weathering", "Carbon Capture|Enhanced Weathering"),
-    ("  Geological Storage", "Carbon Capture|Geological Storage"),
-    ("    Biomass", "Carbon Capture|Geological Storage|Biomass"),
-    ("    Direct Air Capture", "Carbon Capture|Geological Storage|Direct Air Capture"),
-    ("    Other Sources", "Carbon Capture|Geological Storage|Other Sources"),    
-    ("  Hydrogen", "Carbon Capture|Hydrogen"),
-    ("  Industry", "Carbon Capture|Industry"),
-    ("  Land Use", "Carbon Capture|Land Use"),
-    ("Carbon Price", None),  
-    ("Carbon Price (US$2015/tn CO2)", "Price|Carbon"),
 ]
 
 def get_mif_data(df, region, variable, year):

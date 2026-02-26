@@ -343,7 +343,8 @@ calculateGhg <- function(dataMagpie) {
   # Combine with Energy CO2
   if (flagCO2eq) {
     #emissions <- mbind(totalCo2Eq, dataMagpie[, , "Emissions|CO2|Energy and Industrial Processes.Mt CO2/yr"])
-    emissions <- mbind(totalCo2Eq, dataMagpie[, , "Emissions|CO2.Mt CO2/yr"])
+    #emissions <- mbind(totalCo2Eq, dataMagpie[, , "Emissions|CO2.Mt CO2/yr"])
+    emissions <- dataMagpie[, , "Emissions|Kyoto Gases.Mt CO2-equiv/yr"]
   } else {
     #emissions <- dataMagpie[, , "Emissions|CO2|Energy and Industrial Processes.Mt CO2/yr"]
     emissions <- dataMagpie[, , "Emissions|CO2.Mt CO2/yr"]
@@ -367,55 +368,26 @@ calculateGhg <- function(dataMagpie) {
 # ----------------------------
 start_time <- Sys.time()
 GAMSCmdArgs <- c("--DevMode=0", "--GenerateInput=off", "lo=4", "idir=./data")
-selectedYear <- 2050
-changeCarbonPriceFromYear <- 2031
+selectedYear <- 2030
+changeCarbonPriceFromYear <- 2025
 flagCO2eq <- TRUE
 
 # ---------------------------------------------------------
 # CASE A: Specific Regions
-# targetList <- list(
-#   "AUT" = 30.3,
-#   "BEL" = 64.305,
-#   "BGR" = 36.45,
-#   "HRV" = 11.3,
-#   "CYP" = 2.5,
-#   "CZE" = 86.5,
-#   "DNK" = 35.3,
-#   "EST" = 15.8,
-#   "FIN" = 21.7,
-#   "FRA" = 234.5,
-#   "DEU" = 577.5,
-#   "GRC" = 45.8,
-#   "HUN" = 41.2,
-#   "IRL" = 27.1,
-#   "ITA" = 233.1,
-#   "LVA" = 6.2,
-#   "LTU" = 19.3,
-#   "LUX" = 5.7,
-#   "MLT" = 1.2,
-#   "NLD" = 103.0,
-#   "POL" = 201.3,
-#   "PRT" = 29.7,
-#   "ROU" = 103.7,
-#   "SVK" = 29.1,
-#   "SVN" = 6.5,
-#   "ESP" = 114.0,
-#   "SWE" = 9.0
-# )
 # targetConditionalMtCO2e MtCO2e/yr
-# targetList <- list(
-#   "CAZ" = 780.6,
-#    "CHA" = 14373,
-#    "GBR" = 260.3,
-#    "IND" = 4816,
-#    "JPN" = 760.32,
-#    "LAM" = 3886,
-#    "MEA" = 2164.6,
-#    "NEU" = 832.1,
-#    "OAS" = 5292.7,
-#    "REF" = 3668,
-#    "SSA" = 832.1
-# )
+targetList <- list(
+   "CAZ" = 780.6,
+   #"CHA" = 14373,
+   "GBR" = 260.3,
+   #"IND" = 4816,
+   "JPN" = 760.32,
+   #"LAM" = 3886,
+   #"MEA" = 2164.6,
+   #"NEU" = 832.1,
+   "OAS" = 5292.7,
+   "REF" = 3668
+   #"SSA" = 832.1
+)
 # targetConditionalMtCO2 MtCO2/yr - ONLY CO2
 # targetList <- list(
 #   "CAZ" = 585,
@@ -444,11 +416,12 @@ flagCO2eq <- TRUE
 #   "REF" = 3813,
 #   "SSA" = 2113
 # )
-targetList <- NULL
+
 # CASE B: No Target Regions (Empty List) -> Implies EU27 Run
+# targetList <- NULL
 #globalParams <- 1750 # EU-27 target 2030 in MtCO2/yr - ONLY CO2
 #globalParams <- 2250  # EU-27 target 2030 in MtCO2e/yr 
-globalParams <- 0  # EU-27 target 2030 in MtCO2e/yr 
+#globalParams <- 0  # EU-27 target 2030 in MtCO2e/yr 
 # LOGGING SETUP
 logFilePath <- "Carbon_price_optimization.log"
 file.create(logFilePath)
@@ -513,7 +486,7 @@ for (regName in names(runQueue)) {
   # B. Auto-Bracket
   # Note: alpha is now a change factor. 0.0 = No change. 1.0 = +100% (Double price).
   brkt <- autoBracketFromSeed(
-    seedAlpha    = 0.05,
+    seedAlpha    = 0.1,
     budgetTarget = bg,
     envWide      = currentEnvWide,
     yearCols     = yearCols,
