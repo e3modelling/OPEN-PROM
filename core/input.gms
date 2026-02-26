@@ -792,14 +792,15 @@ imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$(ord(YTIME)>50)  = 0.7;
 
 **  Power Generation
 *---
-table iDataPlantEffByType(allCy,PGALL, YTIME)   "Data for plant efficiency per plant type"
+table imPlantEffByType(allCy,STECH,effSET,YTIME)   "Data for plant efficiency per plant type"
 $ondelim
 $include "./iDataPlantEffByType.csv"
 $offdelim
 ;
 *---
-imPlantEffByType(runCy,PGALL,YTIME) = iDataPlantEffByType(runCy,PGALL, YTIME) ;
-imPlantEffByType(runCy,"PGH2F",YTIME) = 0.85;
+imPlantEffByType(runCy,STECH,effSET,YTIME)$AN(YTIME) = imPlantEffByType(runCy,STECH,effSET,"%fBaseY%");
+imPlantEffByType(runCy,"PGH2F","effELC",YTIME) = 0.85;
+imPlantEffByType(runCy,"TSTE1AH2F",effSET,YTIME) = imPlantEffByType(runCy,"TSTE1AG",effSET,YTIME);
 *---
 **   Conversion of GW mean power into TWh/y, depending on whether it's a leap year
 smGwToTwhPerYear(YTIME) = 8.76 + 0.024 $ (mod(YTIME.val,4) = 0 and mod (YTIME.val,100) <> 0);

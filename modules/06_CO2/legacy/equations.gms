@@ -20,8 +20,9 @@ Q06CapCO2ElecHydr(allCy,SBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       =E=
     sum(EFS,
       sum(CCS$PGALLtoEF(CCS,EFS),
+        SUM(PGEF$sameas(PGEF,EFS),i04ShareFuels(allCy,CCS,PGEF)) *
         VmProdElec(allCy,CCS,YTIME) * smTWhToMtoe /
-        imPlantEffByType(allCy,CCS,YTIME) *
+        imPlantEffByType(allCy,CCS,"effELC",YTIME) *
         (imCo2EmiFac(allCy,SBS,EFS,YTIME) + 4.17$sameas("BMSWAS",EFS))*
         V04CO2CaptRate(allCy,CCS,YTIME)
       )$sameas("PG", SBS) +

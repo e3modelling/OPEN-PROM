@@ -172,14 +172,11 @@ i09CostFixOMSteProd(TSTEAM,YTIME) = imDataChpPowGen(TSTEAM,"FC",YTIME);
 i09CostVOMSteProd(TSTEAM,YTIME) = imDataChpPowGen(TSTEAM,"VOM",YTIME);
 *---
 imDataChpPowGen("TSTE2GEO","effThrm",YTIME) = 1;
-$ontext
-i09EffSteThrm(TDHP,YTIME) = imDataChpPowGen(TDHP,"effThrm","2020");
-i09EffSteThrm(TDHP,YTIME)$(not sameas("TSTE2GEO",TDHP)) = 
-i09EffSteThrm(TDHP,YTIME) * (i03OutDHPTransfProcess("CHA","STE","2020") + 1e-6) /
-(1e-6 - SUM((TDHP2,STEAMEF)$(TSTEAMTOEF(TDHP2,STEAMEF) and (not sameas("TSTE2GEO",TDHP))),imDataChpPowGen(TDHP2,"effThrm","2020") *i03InpDHPTransfProcess("CHA",STEAMEF,"2020")));
-$offtext
+
 i09EffSteElc(TSTEAM,YTIME) = imDataChpPowGen(TSTEAM,"effElc",YTIME);
 i09EffSteThrm(TSTEAM,YTIME) = imDataChpPowGen(TSTEAM,"effThrm",YTIME) / 4;
+*i09EffSteElc(TCHP,YTIME) = imPlantEffByType(allCy,TCHP,"CHP","effELC",YTIME);
+*i09EffSteThrm(TDHP,YTIME) = imPlantEffByType(allCy,TDHP,"CHP","effThrm",YTIME);
 *---
 i09AvailRateSteProd(TSTEAM,YTIME) = imDataChpPowGen(TSTEAM,"AVAIL",YTIME);
 !!FIXME : What is the difference between imDataChpPowGen vs imDataIndTechnologyCHP?

@@ -148,8 +148,6 @@ rcc                                                           /rcc1*rcc10/
 
 ***       Sectoral Structure        *
 
-
-
 ALLSBS   All sectors
 /
 IS    "Iron and Steel"
@@ -748,6 +746,8 @@ TNGSCCS
 THCLCCS
 /
 
+effSET "PG and thermal plants efficiencies"  /effElc, effHeat/
+
 RENEF(TECH)        Renewable technologies in demand side !! Should these remain in EF?
 /
 *HYD     "Hydro"
@@ -799,6 +799,20 @@ cgf         "coal gasification"
 cgs         "coal gasification with CCS"
 bgfl        "biomass gasification large scale"
 bgfls       "biomass gasification large scale with CCS"
+TSTE1AL           "Lignite powered advanced CHP"
+TSTE1AH           "Hard Coal powered advanced CHP"
+TSTE1AD           "Diesel Oil powered advanced CHP"
+*STE1AR           "Fuel Oil powered advanced CHP"
+TSTE1AG           "Natural Gas powered advanced CHP"
+TSTE1AB           "Biomass-Waste powered advanced CHP"
+TSTE1AH2F         "HYDROGEN powered FUEL CELL CHP"
+TSTE2LGN
+TSTE2OSL
+TSTE2GDO
+TSTE2NGS
+TSTE2BMS
+TSTE2GEO
+TSTE2OTH
 /
 
 TECHtoEF (TECH,EF) Fuels consumed by technologies
@@ -1022,16 +1036,18 @@ PGOTHREN.GEO
 PGALLtoEF(PGALL,EFS)     Correspondence between plants and energy forms
 /
 (ATHLGN,ATHLGNCCS).LGN
-(ATHCOAL, ATHCOALCCS).HCL
-(ATHOIL).GDO
-(ATHGAS,ATHGASCCS).NGS
+(ATHCOAL,ATHCOALCCS).HCL
+*(ATHOIL).GDO
+*(ATHGAS,ATHGASCCS).NGS
+ATHOIL.(GSL,BGSL,GDO,BGDO,KRS,BKRS,CRO)
+(ATHGAS,ATHGASCCS).(NGS,OGS)
 (ATHBMSWAS,ATHBMSCCS).BMSWAS
-(PGANUC).NUC
+PGANUC.NUC
 (PGLHYD,PGSHYD).HYD
 (PGAWND,PGAWNO).WND
 (PGSOL,PGCSP).SOL
-(PGOTHREN).GEO
-(PGH2F).H2F
+PGOTHREN.GEO
+PGH2F.H2F
 *(ACCHT,ICEH2,FC2).H2F
 /
 
@@ -1080,8 +1096,6 @@ HFC      "Hydrofluorocarbons"
 PFC      "Perfluorinated Compounds "
 SF6      "Sulfur Hexafluoride"
 /
-
-
 
 SCT_GHGtoEMISS(SCT_GHG,EMISS)  Mapping between sectors and emissions
 /
@@ -1330,7 +1344,7 @@ alias(NAP2,NAP);
 ALIAS (EFS2,EFS);
 ALIAS (INDDOM2,INDDOM);
 ALIAS (YYTIME2,ytime);
-
+ALIAS (PGEF2,PGEF);
 
 scalar ordfirst /0/;
 ordfirst=sum((ytime,YYTIME2)$((ord(ytime)<=ord(YYTIME2)) $TFIRST(YYTIME2)),1);

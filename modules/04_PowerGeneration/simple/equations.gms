@@ -119,11 +119,11 @@ Q04CostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
     i04VarCost(PGALL,YTIME) / 1e3 + 
     (VmRenValue(YTIME) * 8.6e-5)$(not (PGREN2(PGALL)$(not sameas("PGASHYD",PGALL)) $(not sameas("PGSHYD",PGALL)) $(not sameas("PGLHYD",PGALL)) )) +
     sum(PGEF$PGALLtoEF(PGALL,PGEF), 
-      (VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME) +
+      (i04ShareFuels(allCy,PGALL,PGEF) * VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME) +
       V04CO2CaptRate(allCy,PGALL,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME) + 4.17$(sameas("BMSWAS", PGEF))) +
       (1-V04CO2CaptRate(allCy,PGALL,YTIME)) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME) + 4.17$(sameas("BMSWAS", PGEF)))*
       (sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME)))
-      ) * smTWhToMtoe / imPlantEffByType(allCy,PGALL,YTIME)
+      ) * smTWhToMtoe / imPlantEffByType(allCy,PGALL,"effELC",YTIME)
     )$(not PGREN(PGALL));
 
 *' The equation calculates the hourly production cost of a power generation plant used in investment decisions. The cost is determined based on various factors,
@@ -197,7 +197,7 @@ Q04GapGenCapPowerDiff(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04ShareMixWndSol(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04ShareMixWndSol(allCy,YTIME)
         =E=
-    sum(PGALL$(PGRENSW(PGALL)), VmCapElec(allCy,PGALL,YTIME)) /
+    sum(PGALL$PGRENSW(PGALL), VmCapElec(allCy,PGALL,YTIME)) /
     sum(PGALL, VmCapElec(allCy,PGALL,YTIME));
  
 *' The equation calculates a temporary variable which is used to facilitate scaling in the Weibull equation. The scaling is influenced by three main factors:
@@ -329,7 +329,7 @@ Q04CostPowGenAvgLng(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCostPowGenAvgLng(allCy,YTIME)
         =E=
     SUM(PGALL,VmProdElec(allCy,PGALL,YTIME) * V04CostHourProdInvDec(allCy,PGALL,YTIME)) / 
-    (SUM(PGALL,VmProdElec(allCy,PGALL,YTIME))); 
+    SUM(PGALL,VmProdElec(allCy,PGALL,YTIME)); 
 
 *' This equation estimates the factor increasing the CAPEX of new RES (unflexible) capacity installation due to simultaneous need for grind upgrade and storage, 
 *' for each region (country) and year. This factor depends on the existing RES (unflexible) penetration in the electriciy mixture.
@@ -380,8 +380,9 @@ Q04ConsFuelElecProd(allCy,PGEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmConsFuelElecProd(allCy,PGEF,YTIME)
         =E=
     SUM(PGALL$PGALLTOEF(PGALL,PGEF),
+      i04ShareFuels(allCy,PGALL,PGEF) *
       VmProdElec(allCy,PGALL,YTIME) * smTWhToMtoe / 
-      imPlantEffByType(allCy,PGALL,YTIME)
+      imPlantEffByType(allCy,PGALL,"effELC",YTIME)
     );
 
 $ontext
