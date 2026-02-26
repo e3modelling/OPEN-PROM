@@ -150,10 +150,7 @@ Q06ProfRateDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q06CapFacNewDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
   V06CapFacNewDAC(allCy,CDRTECH,YTIME)
       =E=
-  exp(i06MatFacDAC(CDRTECH) * V06ProfRateDAC(allCy,CDRTECH,YTIME) - 1) /
-  exp(i06MatFacDAC(CDRTECH) * S06ProfRateMaxDAC - 1) *
-  (S06CapFacMaxNewDAC - S06CapFacMinNewDAC) +
-  S06CapFacMinNewDAC;
+  V06ProfRateDAC(allCy,CDRTECH,YTIME) * i06MatFacDAC(CDRTECH);
 
 *' The equation calculates the DAC installed capacity annually and regionally,
 *' adding capacity based on the maturity of the technology, as well as given capacities of actual scheduled DAC units.
