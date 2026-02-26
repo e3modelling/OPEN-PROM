@@ -160,11 +160,12 @@ emissionsOPENPROM <- function(envWide, yearCols, alpha, targetRegion, targetYear
   } else {
     # ΕU Case: Sum over all regions (dim 1)
     # --- Filter for EU27 Regions ---
-    regionMapping <- toolGetMapping(name = "EU28.csv", type = "regional", where = "mrprom")
-    regionsEu27 <- regionMapping$ISO3.Code[regionMapping$ISO3.Code != "GBR"]
-    dataMagpieEu27 <- CO2eq[getRegions(CO2eq) %in% regionsEu27, , ]
+    # regionMapping <- toolGetMapping(name = "EU28.csv", type = "regional", where = "mrprom")
+    # regionsEu27 <- regionMapping$ISO3.Code[regionMapping$ISO3.Code != "GBR"]
+    # dataMagpieEu27 <- CO2eq[getRegions(CO2eq) %in% regionsEu27, , ]
 
-    val <- dimSums(dataMagpieEu27, dim = 1)[, targetYear, ]
+    # Global Case: Sum over all regions (dim 1)
+    val <- dimSums(CO2eq, dim = 1)[, targetYear, ]
   }
   
   # Always use Mt to be consistent for countries and regions
@@ -368,26 +369,26 @@ calculateGhg <- function(dataMagpie) {
 # ----------------------------
 start_time <- Sys.time()
 GAMSCmdArgs <- c("--DevMode=0", "--GenerateInput=off", "lo=4", "idir=./data")
-selectedYear <- 2030
+selectedYear <- 2080
 changeCarbonPriceFromYear <- 2025
 flagCO2eq <- TRUE
 
 # ---------------------------------------------------------
 # CASE A: Specific Regions
 # targetConditionalMtCO2e MtCO2e/yr
-targetList <- list(
-   "CAZ" = 780.6,
-   #"CHA" = 14373,
-   "GBR" = 260.3,
-   #"IND" = 4816,
-   "JPN" = 760.32,
-   #"LAM" = 3886,
-   #"MEA" = 2164.6,
-   #"NEU" = 832.1,
-   "OAS" = 5292.7,
-   "REF" = 3668
-   #"SSA" = 832.1
-)
+# targetList <- list(
+#    "CAZ" = 780.6,
+#    #"CHA" = 14373,
+#    "GBR" = 260.3,
+#    #"IND" = 4816,
+#    "JPN" = 760.32,
+#    #"LAM" = 3886,
+#    #"MEA" = 2164.6,
+#    #"NEU" = 832.1,
+#    "OAS" = 5292.7,
+#    "REF" = 3668
+#    #"SSA" = 832.1
+# )
 # targetConditionalMtCO2 MtCO2/yr - ONLY CO2
 # targetList <- list(
 #   "CAZ" = 585,
@@ -422,6 +423,8 @@ targetList <- list(
 #globalParams <- 1750 # EU-27 target 2030 in MtCO2/yr - ONLY CO2
 #globalParams <- 2250  # EU-27 target 2030 in MtCO2e/yr 
 #globalParams <- 0  # EU-27 target 2030 in MtCO2e/yr 
+globalParams <- 0  # World target 2080 in MtCO2e/yr
+
 # LOGGING SETUP
 logFilePath <- "Carbon_price_optimization.log"
 file.create(logFilePath)
@@ -561,54 +564,3 @@ sink()
 # FINISH
 writeFinalPolicyFiles(currentEnvWide, yearCols, 0.0, NULL)
 message(sprintf("Done. Total time: %s", Sys.time() - start_time))
-
-# # ---- Option A (Seed from two points) ----
-# # alpha0 <- 1.00; E0 <- 641.8802
-# # alphar <- 5.00; Er <- 
-
-# # alphaSeedLinear interpolates the alpha from two points
-# # seedAlpha <- alphaSeedLinear(alpha0, E0, alphar, Er, Etarget = budgetTarget)
-
-# # ---- Option B (fallback if you don't have reported points) - Alter manually ----
-# seedAlpha <- 3
-
-# # Auto-bracket around the seed (runs a few probe simulations)
-# brkt <- autoBracketFromSeed(
-#   seedAlpha    = seedAlpha,
-#   budgetTarget = budgetTarget,
-#   envWide      = envData$envWide,
-#   yearCols     = envData$yearCols,
-#   targetRegion = targetRegion,
-#   minAlpha     = 1.0,
-#   maxAlpha     = 6.0,
-#   expandFactor = 1.35,
-#   maxProbes    = 12,
-#   verbose      = TRUE
-# )
-# message(sprintf("Auto-bracket: [%.4f, %.4f]", brkt$lowerAlpha, brkt$upperAlpha))
-
-# solveResult <- findAlphaForBudget(
-#   envWide      = envData$envWide,
-#   yearCols     = envData$yearCols,
-#   budgetTarget = budgetTarget,
-#   lowerAlpha   = brkt$lowerAlpha,
-#   upperAlpha   = brkt$upperAlpha,
-#   eLow         = brkt$EL,
-#   eHigh        = brkt$EU,
-#   targetRegion = targetRegion,
-#   tolAlphaRel  = 1e-2,
-#   tolEmisAbs   = 1e-1,
-#   maxIter      = 60,
-#   verbose      = TRUE,
-#   writeFinalCsv = TRUE
-# )
-
-# alphaStar <- solveResult$alpha
-# message(sprintf("Chosen alpha = %.3f; simulated cumulative emissions = %.6f; converged=%s; iters=%d",
-#                 alphaStar, solveResult$emissions, solveResult$converged, solveResult$iters))
-
-# message(sprintf("Final carbon prices : %s", outputCsvPath))
-# message(sprintf("Backup of original carbon prices: %s", backupCsvPath))
-
-# end_time <- Sys.time()
-# message(sprintf("Script running time: %s", end_time - start_time))
