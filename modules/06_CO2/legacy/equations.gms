@@ -80,11 +80,11 @@ Q06GrossCapDAC(CDRTECH,YTIME)$(TIME(YTIME))..
             =E=         
     0.5 * 
     (
-      (i06GrossCapDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.97)/log(2))) +
+      (i06GrossCapDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.92)/log(2))) +
       i06GrossCapDACMin(CDRTECH) +
       sqrt(
         sqr(
-          (i06GrossCapDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.97)/log(2))) -
+          (i06GrossCapDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.92)/log(2))) -
           i06GrossCapDACMin(CDRTECH)
         )
       )
