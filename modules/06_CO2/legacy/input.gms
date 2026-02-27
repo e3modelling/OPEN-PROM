@@ -15,17 +15,17 @@ mc_m	1.013
 
 parameter i06MatFacDAC(CDRTECH)                 "Maturity factor of DAC technology expressing its elasticity in implementation regarding its financial sustainability"
 /
-HTDAC	  0.6,
-H2DAC   1.5,
-LTDAC	  2,
-TEW	    2
+HTDAC	  0.4,
+H2DAC   0.8,
+LTDAC	  1,
+TEW	    1
 / ;
 
 parameter i06CapexDAC(CDRTECH)                  "CAPEX of each DAC technology ($/tCO2)"
 /
 HTDAC	250,
-H2DAC   1300
-LTDAC	1300,
+H2DAC   1100
+LTDAC	1100,
 TEW	400
 / ;
 

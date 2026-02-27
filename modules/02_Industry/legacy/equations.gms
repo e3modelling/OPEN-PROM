@@ -136,7 +136,7 @@ Q02CostElecProdCHP(allCy,DSBS,CHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS) $runCy(allCy
 *' This cost estimation is based on an intermediate technology cost and the elasticity parameter associated with the given subsector.
 *' The intermediate technology cost is raised to the power of the elasticity parameter to determine the final technology cost. The equation
 *' provides a comprehensive assessment of the overall expenses associated with different technologies in the given subsector and consumer size group.
-Q02CostTech(allCy,DSBS,rCon,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS))$(not DSBS("DAC")) $(ord(rCon) le imNcon(DSBS)+1) $SECTTECH(DSBS,EF) $runCy(allCy))..
+Q02CostTech(allCy,DSBS,rCon,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS))$(not CDR(DSBS)) $(ord(rCon) le imNcon(DSBS)+1) $SECTTECH(DSBS,EF) $runCy(allCy))..
         V02CostTech(allCy,DSBS,rCon,EF,YTIME) 
               =E= 
         V02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME)**(-i02ElaSub(allCy,DSBS)) ;   
@@ -207,7 +207,7 @@ Q02GapFinalDem(allCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $runCy(allCy))
 *' This equation calculates the technology share in new equipment based on factors such as maturity factor,
 *' cumulative distribution function of consumer size groups, number of consumers, technology cost, distribution function of consumer
 *' size groups, and technology sorting.
-Q02ShareTechNewEquip(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $SECTTECH(DSBS,EF) $(not TRANSE(DSBS))$(not DSBS("DAC")) $runCy(allCy))..
+Q02ShareTechNewEquip(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $SECTTECH(DSBS,EF) $(not TRANSE(DSBS))$(not CDR(DSBS)) $runCy(allCy))..
          V02ShareTechNewEquip(allCy,DSBS,EF,YTIME) =E=
          imMatrFactor(allCy,DSBS,EF,YTIME) / imCumDistrFuncConsSize(allCy,DSBS) *
          sum(rCon$(ord(rCon) le imNcon(DSBS)+1),

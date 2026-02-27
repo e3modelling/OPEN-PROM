@@ -21,10 +21,6 @@ CO2CAPTECH           "Carbon capture subsectors" /
 PG
 H2P
 DAC
-IND
-/
-
-CDR(DSBS)    "CDR subsectors" /
-DAC
 EW
+IND
 /

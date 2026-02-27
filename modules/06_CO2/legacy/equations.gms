@@ -31,7 +31,7 @@ Q06CapCO2ElecHydr(allCy,SBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         V05CaptRateH2(allCy,H2TECH,YTIME)
       )$sameas("H2P", SBS)
     ) +
-    sum(DACTECH,V06CapCDR(allCy,DACTECH,YTIME) * 1e-6)$sameas("DAC", SBS) +
+    sum(CDRTECH,V06CapCDR(allCy,CDRTECH,YTIME) * 1e-6)$sameas("DAC", SBS) +
     (V06CapCDR(allCy,"TEW",YTIME) * 1e-6)$sameas("EW", SBS) +
     sum(DSBS$sameas(DSBS,SBS),
       sum(CCSTECH$SECTTECH(DSBS,CCSTECH),
