@@ -102,7 +102,7 @@ i04MatFacPlaAvailCap.L(runCy,PGALL,YTIME) = iMatFacPlaAvailCapData(runCy,PGALL,Y
 $ELSE.calib
 parameter i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   "Maturity factor related to plant available capacity (1)";
 i04MatFacPlaAvailCap(runCy,PGALL,YTIME) = iMatFacPlaAvailCapData(runCy,PGALL,YTIME);
-i04MatFacPlaAvailCap(runCy,"ATHBMSCCS",YTIME) = 10;
+i04MatFacPlaAvailCap(runCy,"ATHBMSCCS",YTIME) = 15;
 i04MatFacPlaAvailCap(runCy,"ATHCOAL",YTIME) = i04MatFacPlaAvailCap(runCy,"ATHCOAL",YTIME);
 i04MatFacPlaAvailCap(runCy,"PGH2F",YTIME) = 0;
 $ENDIF.calib

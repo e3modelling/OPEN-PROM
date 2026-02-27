@@ -353,7 +353,7 @@ SE.TOGS       0.2244   10.88           20  0.8
 *SE.PGTSOL     0.86224  1.36            20  0.85
 SE.TBMSWAS    0.323544 10.88           20  0.5
 SE.TELC       0.3      8.976           12  0.85
-SE.THEATPUMP  0.432    12.9254         20  2.5
+SE.THEATPUMP  0.432    12.9254         20  3.0
 AG.THCL       0.323544 10.88           20  0.7
 AG.TLGN       0.323544 10.88           20  0.5
 AG.TLPG       0.24888  10.88           20  0.8
@@ -381,7 +381,7 @@ HOU.TOGS      0.2244   10.88           20  0.8
 *HOU.PGTSOL    0.86224  1.36            20  0.85
 HOU.TBMSWAS   0.323544 10.88           20  0.5
 HOU.TELC      0.3      8.976           12  0.85
-HOU.THEATPUMP 0.432    12.9254         20  2.5
+HOU.THEATPUMP 0.432    12.9254         20  3.0
 ;
 *---
 * Coverting EUR05 to US2015
@@ -626,6 +626,9 @@ imMatrFactor(runCy,"SE","THEATPUMP",YTIME) = 1;
 imMatrFactor(runCy,DSBS,TECH,YTIME)$(imMatrFactor(runCy,DSBS,TECH,YTIME)=0) = 0.000001;
 imMatrFactor(runCy,DSBS,"TBMSWAS",YTIME) = 0.01;
 imMatrFactor(runCy,DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40;
+*imMatrFactor(runCy,"BU","TH2F",YTIME) = 2;
+imMatrFactor(runCy,"BU","TH2F",YTIME)$((ord(YTIME) > 21)) = 5;
+*imMatrFactor(runCy,DSBS,"TELC",YTIME)$((ord(YTIME) > 25) and INDSE(DSBS)) = 5;
 
 * imMatrFactor("AUT",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40;
 * imMatrFactor("BEL",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40; 
@@ -661,6 +664,7 @@ imMatrFactor(runCy,DSBS,"TLGN",YTIME)$(DOMSE(DSBS)) = 0.01;
 imMatrFactor(runCy,DSBS,"THCL",YTIME)$(DOMSE(DSBS)) = 0.01;
 imMatrFactor(runCy,DSBS,"TOGS",YTIME)$(DOMSE(DSBS)) = 0.01;
 imMatrFactor(runCy,DSBS,"TKRS",YTIME)$(DOMSE(DSBS)) = 0.01;
+
 $ontext
 imMatrFactor(runCy,DSBS,"TGDO",YTIME)$((ord(YTIME) > 14) and TRANSE(DSBS)) = 0.5;
 imMatrFactor(runCy,DSBS,"TGSL",YTIME)$((ord(YTIME) > 14) and TRANSE(DSBS)) = 0.5;
@@ -676,6 +680,7 @@ imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 11;
 
 
 imMatrFactor(runCy,DSBS,"TNGSCCS",YTIME)$((ord(YTIME) > 11) and INDSE(DSBS)) = 1;
+imMatrFactor(runCy,DSBS,"THCLCCS",YTIME)$((ord(YTIME) > 11) and INDSE(DSBS)) = 1;
 imMatrFactor(runCy,DSBS,"THCLCCS",YTIME)$((ord(YTIME) > 11) and INDSE(DSBS)) = 1;
 imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 11 and DOMSE(DSBS)) = 20;
 imMatrFactor(runCy,DSBS,"TBMSWAS",YTIME)$(ord(YTIME) > 11 and DOMSE(DSBS)) = 0.001;
