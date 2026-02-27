@@ -41,7 +41,12 @@ V02DemSubUsefulSubsec.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = SUM(ITECH$SECTTEC
       i02util(runCy,INDDOM,ITECH,YTIME)
     );
 *V02DemSubUsefulSubsec.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = max(imTotFinEneDemSubBaseYr(runCy,INDDOM,YTIME) - V02UsefulElecNonSubIndTert.L(runCy,INDDOM,YTIME), 1e-5) * 0.5;
-V02DemSubUsefulSubsec.FX(runCy,NENSE,YTIME)$(not An(YTIME)) = max(imTotFinEneDemSubBaseYr(runCy,NENSE,YTIME),1e-5);
+V02DemSubUsefulSubsec.FX(runCy,NENSE,YTIME)$(not An(YTIME)) = SUM(ITECH$SECTTECH(NENSE,ITECH),
+      V02EquipCapTechSubsec.L(runCy,NENSE,ITECH,YTIME) *
+      imUsfEneConvSubTech(runCy,NENSE,ITECH,YTIME) *
+      i02util(runCy,NENSE,ITECH,YTIME)
+    );
+
 *V02DemSubUsefulSubsec.FX(runCy,"HOU",YTIME)$(not An(YTIME)) = max(imTotFinEneDemSubBaseYr(runCy,"HOU",YTIME) - V02UsefulElecNonSubIndTert.L(runCy,"HOU",YTIME)-i02ExogDemOfBiomass(runCy,"HOU",YTIME),1e-5) * 0.8;
  
  
