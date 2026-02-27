@@ -64,11 +64,11 @@ Q09CostVarProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         sum(NAP$NAPtoALLSBS(NAP,"STEAMP"),VmCarVal(allCy,NAP,YTIME))
       ) 
     ) / SUM(STECH$sameas(STECH,TSTEAM),imPlantEffByType(allCy,STECH,"effHeat","%fBaseY%")) + !!i09EffSteThrm(TSTEAM,YTIME) +
-    i09CostVOMSteProd(TSTEAM,YTIME) * 1e-3 / smTWhToMtoe * VmPriceElecInd(allCy,YTIME) -
+    i09CostVOMSteProd(TSTEAM,YTIME) * 1e-3 -!!/ smTWhToMtoe / SUM(TCHP$sameas(TCHP,TSTEAM),VmPriceElecInd(allCy,TCHP,YTIME)) -
     (
       VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME) *
-      smFracElecPriChp *
-      VmPriceElecInd(allCy,YTIME)
+      smFracElecPriChp /
+      SUM(TCHP$sameas(TCHP,TSTEAM),VmPriceElecInd(allCy,TCHP,YTIME))
     )$TCHP(TSTEAM);
 
 Q09CostCapProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
@@ -158,6 +158,6 @@ Q09ConsFuelSteProd(allCy,STEMODE,STEAMEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       i09ShareFuel(allCy,TDHP,STEAMEF,"%fBaseY%") / SUM(STECH$sameas(STECH,TDHP),imPlantEffByType(allCy,STECH,"effHeat","%fBaseY%")) !!i09EffSteThrm(TDHP,YTIME)
     )$sameas("DHP",STEMODE) +
     SUM(TCHP$(TSTEAMTOEF(TCHP,STEAMEF)),
-      VmProdSte(allCy,TCHP,YTIME) *
-      i09ShareFuel(allCy,TCHP,STEAMEF,"%fBaseY%") / SUM(STECH$sameas(STECH,TCHP),imPlantEffByType(allCy,STECH,"effHeat","%fBaseY%")) !!i09EffSteThrm(TCHP,YTIME)
+      VmProdSte(allCy,TCHP,YTIME) * i09ShareFuel(allCy,TCHP,STEAMEF,"%fBaseY%") / 
+      SUM(STECH$sameas(STECH,TCHP), imPlantEffByType(allCy,STECH,"effHeat","%fBaseY%"))
     )$sameas("CHP",STEMODE);

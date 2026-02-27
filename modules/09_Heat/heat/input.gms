@@ -18,7 +18,7 @@ i09ShareFuel(allCy,TSTEAM,EFS,YTIME)
 ;
 *---
 i09CaptRateSteProd(TSTEAM) = 0;
-i09ScaleEndogScrap = 15 / card(TSTEAM);
+i09ScaleEndogScrap = 20 / card(TSTEAM);
 *---
 table imDataIndTechnologyCHP(INDDOM,TSTEAM,ECONCHAR)          "Technoeconomic characteristics of industry (various)"
               IC      FC      VC      LFT USC
@@ -144,6 +144,12 @@ imDataIndTechnologyCHP(INDDOM,TSTEAM,"IC") = imDataIndTechnologyCHP(INDDOM,TSTEA
 imDataIndTechnologyCHP(INDDOM,TSTEAM,"FC") = imDataIndTechnologyCHP(INDDOM,TSTEAM,"FC") * 1.3;
 imDataIndTechnologyCHP(INDDOM,TSTEAM,"VC") = imDataIndTechnologyCHP(INDDOM,TSTEAM,"VC") * 1.3;
 *---
+table i04DataHeatProd(allCy,TSTEAM,YTIME)           "Steam production past years (Mtoe)"
+$ondelim
+$include"./iDataHeatProd.csv"
+$offdelim
+;
+*---
 table imDataChpPowGen(TSTEAM,CHPPGSET,YTIME)   "Data for power generation costs (various)"
 $ondelim
 $include"./iChpPowGen.csv"
@@ -184,14 +190,16 @@ i09AvailRateSteProd(TSTEAM,YTIME) = imDataChpPowGen(TSTEAM,"AVAIL",YTIME);
 *---
 i09PowToHeatRatio(TSTEAM,YTIME) = i09EffSteElc(TSTEAM,YTIME) / i09EffSteThrm(TSTEAM,YTIME);
 *---
-i09ShareFuel(allCy,TCHP,EFS,YTIME)$(DATAY(YTIME) and TSTEAMTOEF(TCHP,EFS)) = 
-[
-  (i03InpTotTransfProcess(allCy,"CHP",EFS,YTIME) - 1e-6) /
-  (SUM(EFS2$TSTEAMTOEF(TCHP,EFS2),i03InpTotTransfProcess(allCy,"CHP",EFS,YTIME) - 1e-6))
-];
+i09ShareFuel(runCy,TDHP,EFS,YTIME)$TSTEAMTOEF(TDHP,EFS) = 
+(
+  i03InpTotTransfProcess(runCy,"STEAMP",EFS,"%fBaseY%") / 
+  SUM(EFS2$TSTEAMTOEF(TDHP,EFS2),i03InpTotTransfProcess(runCy,"STEAMP",EFS2,"%fBaseY%"))
+)$SUM(EFS2$TSTEAMTOEF(TDHP,EFS2),i03InpTotTransfProcess(runCy,"STEAMP",EFS2,"%fBaseY%")) + 
+1$sameas(EFS,"H2F");
 
-i09ShareFuel(allCy,TDHP,EFS,YTIME)$(DATAY(YTIME) and TSTEAMTOEF(TDHP,EFS)) = 
-[
-  (i03InpTotTransfProcess(allCy,"STEAMP",EFS,YTIME) - 1e-6) /
-  (SUM(EFS2$TSTEAMTOEF(TDHP,EFS2),i03InpTotTransfProcess(allCy,"STEAMP",EFS2,YTIME) - 1e-6))
-];
+i09ShareFuel(runCy,TCHP,EFS,YTIME)$TSTEAMTOEF(TCHP,EFS) = 
+(
+  i03InpTotTransfProcess(runCy,"CHP",EFS,"%fBaseY%") / 
+  SUM(EFS2$TSTEAMTOEF(TCHP,EFS2),i03InpTotTransfProcess(runCy,"CHP",EFS2,"%fBaseY%"))
+)$SUM(EFS2$TSTEAMTOEF(TCHP,EFS2),i03InpTotTransfProcess(runCy,"CHP",EFS2,"%fBaseY%")) + 
+1$sameas(EFS,"H2F");

@@ -213,10 +213,10 @@ Q02IndAvrEffFinalUseful(allCy,DSBS,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not
 *' of fuel prices in the current and previous years, with a power of 0.3 applied to each ratio. This weighting factor introduces a gradual adjustment to reflect the
 *' historical changes in fuel prices, providing a more dynamic estimation of the electricity index. This equation provides a method to estimate the electricity index
 *' based on historical fuel price trends, allowing for a more flexible and responsive representation of industry price dynamics.
-Q02IndxElecIndPrices(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V02IndxElecIndPrices(allCy,YTIME)
+Q02IndxElecIndPrices(allCy,TCHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V02IndxElecIndPrices(allCy,TCHP,YTIME)
         =E=
-    VmPriceElecInd(allCy,YTIME-1) * 
-    (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)/VmPriceFuelAvgSub(allCy,"OI",YTIME-1)) ** (0.02) *
-    (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-2)/VmPriceFuelAvgSub(allCy,"OI",YTIME-2)) ** (0.01) *
-    (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-3)/VmPriceFuelAvgSub(allCy,"OI",YTIME-3)) ** (0.01);
+    VmPriceElecInd(allCy,TCHP,YTIME-1) * 
+    (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)/VmPriceFuelAvgSub(allCy,"OI",YTIME-1)) ** (-0.02) *
+    (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-2)/VmPriceFuelAvgSub(allCy,"OI",YTIME-2)) ** (-0.01) *
+    (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-3)/VmPriceFuelAvgSub(allCy,"OI",YTIME-3)) ** (-0.01);

@@ -21,7 +21,7 @@ $include"./iDataElecProdNonCHP.csv"
 $offdelim
 ;
 *---
-table i04DataElecProdCHP(allCy,EF,YTIME)           "Electricity CHP production past years (GWh)"
+table i04DataElecProdCHP(allCy,TCHP,YTIME)           "Electricity CHP production past years (GWh)"
 $ondelim
 $include"./iDataElecProdCHP.csv"
 $offdelim
@@ -88,8 +88,8 @@ $offdelim
 *---
 $IFTHEN.calib %Calibration% == MatCalibration
 variable i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   "Maturity factor related to plant available capacity (1)";
-i04MatFacPlaAvailCap.LO(runCy, PGALL, YTIME) = 1e-6;
-i04MatFacPlaAvailCap.UP(runCy, PGALL, YTIME) = 50;
+i04MatFacPlaAvailCap.LO(runCy, PGALL, YTIME) = 0;
+i04MatFacPlaAvailCap.UP(runCy, PGALL, YTIME) = 10;
 i04MatFacPlaAvailCap.L(runCy,PGALL,YTIME) = iMatFacPlaAvailCapData(runCy,PGALL,YTIME);
 $ELSE.calib
 parameter i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   "Maturity factor related to plant available capacity (1)";
@@ -168,6 +168,8 @@ i04ScaleEndogScrap = 3 / card(PGALL);
 i04DecInvPlantSched(runCy,PGALL,YTIME) = i04InvPlants(runCy,PGALL,YTIME);
 *---
 i04MxmShareChpElec(runCy,YTIME) = 0.5;
+*---
+i04Util(allCy,PGALL,YTIME) = 1;
 *---
 i04ShareFuels(runCy,PGALL,PGEF)$PGALLTOEF(PGALL,PGEF) = 
 (

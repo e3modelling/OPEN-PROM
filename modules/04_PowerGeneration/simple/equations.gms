@@ -14,27 +14,19 @@
 *' The estimation is based on the fuel consumption of CHP plants, their electricity prices, the maximum share of CHP electricity in total demand, and the overall
 *' electricity demand. The equation essentially estimates the electricity generation of CHP plants by considering their fuel consumption, electricity prices, and the maximum
 *' share of CHP electricity in total demand. The square root expression ensures that the estimated electricity generation remains non-negative.
-Q04ProdElecEstCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V04ProdElecEstCHP(allCy,YTIME) 
+Q04ProdElecEstCHP(allCy,TCHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V04ProdElecEstCHP(allCy,TCHP,YTIME) 
         =E=
     1/smTWhToMtoe *
     (  
-      V03OutTransfCHP(allCy,"STE",YTIME) * VmPriceElecInd(allCy,YTIME) + 
+      VmProdSte(allCy,TCHP,YTIME) / VmPriceElecInd(allCy,TCHP,YTIME) + 
       i04MxmShareChpElec(allCy,YTIME) * V04DemElecTot(allCy,YTIME) - 
 
       SQRT(SQR(
-        V03OutTransfCHP(allCy,"STE",YTIME) * VmPriceElecInd(allCy,YTIME) - 
+        VmProdSte(allCy,TCHP,YTIME) / VmPriceElecInd(allCy,TCHP,YTIME) - 
         i04MxmShareChpElec(allCy,YTIME) * V04DemElecTot(allCy,YTIME))
       )  
-    )/2 + 1e-6;
-
-*' This equation computes the electric capacity of Combined Heat and Power (CHP) plants. The capacity is calculated in gigawatts (GW) and is based on several factors,
-*' including the consumption of fuel in the industrial sector, the electricity prices in the industrial sector, the availability rate of power
-*' generation plants, and the utilization rate of CHP plants. The result represents the electric capacity of CHP plants in GW.
-Q04CapElecCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V04CapElecCHP(allCy,YTIME)
-        =E=
-    V04ProdElecEstCHP(allCy,YTIME) / (1e3 * smGwToTwhPerYear(YTIME));  
+    )/2;
 
 $ifthen.calib %Calibration% == off
 *' The equation calculates the total electricity demand by summing the components of final energy consumption in electricity, final non-energy consumption in electricity,
@@ -165,7 +157,7 @@ Q04CapElecNonCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04CapElecNonCHP(allCy,YTIME)
         =E=
     VmCapElecTotEst(allCy,YTIME) -
-    V04CapElecCHP(allCy,YTIME);      
+    SUM(TCHP,V04ProdElecEstCHP(allCy,TCHP,YTIME)) / smGwToTwhPerYear(YTIME);      
 
 *' In essence, the equation evaluates the difference between the current and expected power generation capacity, accounting for various factors such as planned capacity,
 *' decommissioning schedules, and endogenous scrapping. The square root term introduces a degree of tolerance in the calculation.
@@ -305,9 +297,10 @@ Q04CapOverall(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04ProdElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmProdElec(allCy,PGALL,YTIME)
         =E=
-    (V04DemElecTot(allCy,YTIME) - V04ProdElecEstCHP(allCy,YTIME)) /
-    sum(PGALL2, VmCapElec(allCy,PGALL2,YTIME)) *
-    VmCapElec(allCy,PGALL,YTIME);
+    !!(V04DemElecTot(allCy,YTIME) - SUM(TCHP,V04ProdElecEstCHP(allCy,TCHP,YTIME))) /
+    !!sum(PGALL2, VmCapElec(allCy,PGALL2,YTIME)) *
+    i04util(allCy,PGALL,YTIME) *
+    VmCapElec(allCy,PGALL,YTIME) * smGwToTwhPerYear(YTIME);
 
 *' Share of all technologies in the electricity mixture.
 Q04ShareTechPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..

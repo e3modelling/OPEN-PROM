@@ -44,15 +44,13 @@ V04CostHourProdInvDec.LO(runCy,PGALL,YTIME) = 1e-6;
 V04CostHourProdInvDec.L(runCy,PGALL,YTIME) = 0.1;     
 V04CostHourProdInvDec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = V04CostCapTech.L(runCy,PGALL,YTIME) + V04CostVarTech.L(runCy,PGALL,YTIME);
 *---
-VmCapElecTotEst.FX(runCy,YTIME)$DATAY(YTIME) = sum(PGALL,imInstCapPastNonCHP(runCy,PGALL,YTIME)) + SUM(EF,imInstCapPastCHP(runCy,EF,YTIME));
+VmCapElecTotEst.FX(runCy,YTIME)$DATAY(YTIME) = sum(PGALL,imInstCapPastNonCHP(runCy,PGALL,YTIME)) + SUM(TCHP,imInstCapPastCHP(runCy,TCHP,YTIME));
 *---
 V04CapElecNonCHP.FX(runCy,YTIME)$DATAY(YTIME) = sum(PGALL,imInstCapPastNonCHP(runCy,PGALL,YTIME));
 *---
-V04CapElecCHP.FX(runCy,YTIME)$DATAY(YTIME) = SUM(EF,imInstCapPastCHP(runCy,EF,YTIME));
-*---
 VmCapElec.LO(runCy,PGALL,YTIME) = 0;
 VmCapElec.L(runCy,PGALL,YTIME) = 1;
-VmCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  imInstCapPastNonCHP(runCy,PGALL,YTIME);
+VmCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = imInstCapPastNonCHP(runCy,PGALL,YTIME);
 *---
 V04CapElecNominal.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = imInstCapPastNonCHP(runCy,PGALL,YTIME) / i04AvailRate(runCy,PGALL,YTIME);
 *---
@@ -101,8 +99,9 @@ VmProdElec.LO(runCy,PGALL,YTIME) = 0;
 VmProdElec.L(runCy,pgall,YTIME) = i04DataElecProdNonCHP(runCy,pgall,YTIME) / 1000 + 1;
 VmProdElec.FX(runCy,pgall,YTIME)$DATAY(YTIME) = i04DataElecProdNonCHP(runCy,pgall,YTIME) / 1000;
 *---
-V04ProdElecEstCHP.L(runCy,YTIME) = SUM(EF,i04DataElecProdCHP(runCy,EF,"%fBaseY%")) / 1000;
-V04ProdElecEstCHP.FX(runCy,YTIME)$DATAY(YTIME) = SUM(EF,i04DataElecProdCHP(runCy,EF,YTIME)) / 1000;
+V04ProdElecEstCHP.LO(runCy,TCHP,YTIME) = 0;
+V04ProdElecEstCHP.L(runCy,TCHP,YTIME) = i04DataElecProdCHP(runCy,TCHP,"%fBaseY%") / 1000;
+V04ProdElecEstCHP.FX(runCy,TCHP,YTIME)$DATAY(YTIME) = i04DataElecProdCHP(runCy,TCHP,YTIME) / 1000;
 *---
 V04ShareMixWndSol.FX(runCy,YTIME)$DATAY(YTIME) = sum(PGALL$PGRENSW(PGALL), VmCapElec.L(runCy,PGALL,YTIME)) / sum(PGALL2, VmCapElec.L(runCy,PGALL2,YTIME));
 *---
@@ -124,3 +123,10 @@ SUM(PGALL$PGALLTOEF(PGALL,PGEF),
 VmConsFuelElecProd.FX(runCy,PGEF,YTIME)$DATAY(YTIME) = -i03InpTotTransfProcess(runCy,"PG",PGEF,YTIME);
 *---
 V04GapGenCapPowerDiff.LO(runCy,YTIME) = 0;
+*---
+VmCostPowGenAvgLng.LO(runCy,YTIME) = 0;
+VmCostPowGenAvgLng.L(runCy,YTIME) = SUM(PGALL,VmProdElec.L(runCy,PGALL,"%fBaseY%") * V04CostHourProdInvDec.L(runCy,PGALL,"%fBaseY%")) / 
+(SUM(PGALL,VmProdElec.L(runCy,PGALL,"%fBaseY%")));
+VmCostPowGenAvgLng.FX(runCy,YTIME)$DATAY(YTIME) = 
+SUM(PGALL,VmProdElec.L(runCy,PGALL,YTIME) * V04CostHourProdInvDec.L(runCy,PGALL,YTIME)) / 
+(SUM(PGALL,VmProdElec.L(runCy,PGALL,YTIME)));

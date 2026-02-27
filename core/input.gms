@@ -133,7 +133,7 @@ $include"./iInstCapPastNonCHP.csv"
 $offdelim
 ;
 *---
-table imInstCapPastCHP(allCy,EF,YTIME)        "Installed CHP capacity past (GW)"
+table imInstCapPastCHP(allCy,TCHP,YTIME)        "Installed CHP capacity past (GW)"
 $ondelim
 $include"./iInstCapPastCHP.csv"
 $offdelim
@@ -163,11 +163,12 @@ $include"./iPriceFuelsInt.csv"
 $offdelim
 ;
 *---
-table imPriceElecInd(allCy,YTIME)                      "Electricity power to steam ratio"
+table imPriceElecInd(allCy,TCHP,YTIME)                      "Electricity power to steam ratio"
 $ondelim
 $include"./iDataElecInd.csv"
 $offdelim
 ;
+imPriceElecInd(allCy,"TSTE1AH2F",YTIME) = imPriceElecInd(allCy,"TSTE1AG",YTIME)
 *---
 parameter imImpExp(allCy,EFS,YTIME)	              "Imports of exporting countries usually zero (1)" ;
 imImpExp(runCy,EFS,YTIME) = 0;
@@ -798,9 +799,10 @@ $include "./iDataPlantEffByType.csv"
 $offdelim
 ;
 *---
-imPlantEffByType(runCy,STECH,effSET,YTIME)$AN(YTIME) = imPlantEffByType(runCy,STECH,effSET,"%fBaseY%");
-imPlantEffByType(runCy,"PGH2F","effELC",YTIME) = 0.85;
+imPlantEffByType(runCy,"PGH2F","effELC",YTIME) = imPlantEffByType(runCy,"ATHGAS","effELC",YTIME);
 imPlantEffByType(runCy,"TSTE1AH2F",effSET,YTIME) = imPlantEffByType(runCy,"TSTE1AG",effSET,YTIME);
+imPlantEffByType(runCy,PGALL,"effELC",YTIME)= imPlantEffByType(runCy,PGALL,"effELC","%fBaseY%") ;
+imPlantEffByType(runCy,STECH,"effHeat",YTIME)$(not PGALL(STECH))= imPlantEffByType(runCy,STECH,"effHeat","%fBaseY%") ;
 *---
 **   Conversion of GW mean power into TWh/y, depending on whether it's a leap year
 smGwToTwhPerYear(YTIME) = 8.76 + 0.024 $ (mod(YTIME.val,4) = 0 and mod (YTIME.val,100) <> 0);
