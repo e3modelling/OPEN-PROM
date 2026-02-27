@@ -97,7 +97,13 @@ Q04CapexFixCostPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     * 
     (
 $ifthen.curves "%Curves%" == "LearningCurves" 
-        sum(LCTECH$sameas(LCTECH,PGALL), i10LearnableFraction(LCTECH) * VmCostLC(LCTECH,YTIME) + (1 - i10LearnableFraction(LCTECH)))$LCTECH(PGALL)
+*' Learning composition for technologies in LCTECH:
+*'   total multiplier on the learnable share = VmCostLC(global deployment learning)
+*'                                          * V10CostRD(regional R&D learning)
+*' The fixed/non-learnable share remains unchanged.
+*' This preserves the previous architecture while adding an orthogonal R&D channel.
+*' For non-LCTECH technologies, multiplier remains 1.
+    sum(LCTECH$sameas(LCTECH,PGALL), i10LearnableFraction(LCTECH) * VmCostLC(LCTECH,YTIME) * sum(RDTECH$sameas(RDTECH,LCTECH),V10CostRD(allCy,RDTECH,YTIME)) + (1 - i10LearnableFraction(LCTECH)))$LCTECH(PGALL)
         + 1$(not LCTECH(PGALL))
 $else.curves
         1 

@@ -35,23 +35,79 @@ Q10CumCapGlobal(LCTECH,YTIME)$(TIME(YTIME))..
     V10CumCapGlobal(LCTECH,YTIME-1) + 
     sum(allCy$(runCy(allCy)), V04NewCapElec(allCy,LCTECH,YTIME));
 
+*' Private R&D flow definition.
+*' - If private R&D is enabled, take exogenous path i10RDFundPrivate_exo.
+*' - If disabled, force zero so no hidden contribution enters knowledge stock.
+*' This keeps private-RD scenarios explicit and transparent.
+Q10RDFundPrivate(allCy,RDTECH,YTIME)$(TIME(YTIME) and runCy(allCy))..
+    V10RDFundPrivate(allCy,RDTECH,YTIME)
+        =E=
+$ifthen.pr "%EnablePrivateRD%" == "YES"
+    i10RDFundPrivate_exo(allCy,RDTECH,YTIME)
+$else.pr
+    0
+$endif.pr
+;
+
+*' State R&D flow definition.
+*' - Preferred mode: map from subsidy machinery (VmSubsiRDTech) to ensure policy linkage.
+*' - Fallback mode: use exogenous state R&D input for scenario experiments without
+*'   subsidy-endogeneity.
+*' Switching between these modes does not require equation edits, only flag changes.
+Q10RDFundState(allCy,RDTECH,YTIME)$(TIME(YTIME) and runCy(allCy))..
+    V10RDFundState(allCy,RDTECH,YTIME)
+        =E=
+$ifthen.sub "%RDLinkToSubsidies%" == "YES"
+    VmSubsiRDTech(allCy,RDTECH,YTIME)
+$else.sub
+    i10RDFundState_exo(allCy,RDTECH,YTIME)
+$endif.sub
+;
+
+*' Regional knowledge stock recursion:
+*' K(c,i,t) = (1-dep_i)*K(c,i,t-1) + RD_state(c,i,t) + RD_private(c,i,t)
+*' This equation is the core separation between regional R&D dynamics and global LBD.
+*' Country-specific stock means policy and private efforts translate into local cost effects.
+Q10RDStock(allCy,RDTECH,YTIME)$(TIME(YTIME) and runCy(allCy))..
+    V10RDStock(allCy,RDTECH,YTIME)
+        =E=
+    (1 - i10KnowDep(RDTECH)) * V10RDStock(allCy,RDTECH,YTIME-1)
+  + V10RDFundState(allCy,RDTECH,YTIME)
+  + V10RDFundPrivate(allCy,RDTECH,YTIME);
+
+*' Regional R&D multiplier equation in period-ratio form.
+*' - Enabled mode: multiplier = (K(t-1)/K(t-2))^beta
+*' - Disabled mode: multiplier = 1
+*' Ratio form aligns with existing period-to-period multiplier style and avoids
+*' introducing a new global reference normalization in the current architecture.
+*' 1e-6 safeguards prevent division-by-zero in early periods or low-stock states.
+Q10CostRD(allCy,RDTECH,YTIME)$(TIME(YTIME) and runCy(allCy))..
+    V10CostRD(allCy,RDTECH,YTIME)
+        =E=
+$ifthen.rd "%EnableLearningBySearching%" == "YES"
+    ((V10RDStock(allCy,RDTECH,YTIME-1) + 1e-6) / (V10RDStock(allCy,RDTECH,YTIME-2) + 1e-6)) ** i10BetaRD(RDTECH)
+$else.rd
+    1
+$endif.rd
+;
+
 *' Core DAC CAPEX learning term equation
 Q10CoreGrossCapDAC(DACTECH,YTIME)$(TIME(YTIME))..
     V10CoreGrossCapDAC(DACTECH,YTIME)
         =E=
     i06GrossCapDAC(DACTECH) *
-    (sum(allCy$runCyL(allCy),V06CapDAC(allCy,DACTECH,YTIME-1)) + 1e-6) ** (log(0.97)/log(2));
+    (sum(allCy$runCyL(allCy),V06CapCDR(allCy,DACTECH,YTIME-1)) + 1e-6) ** (log(0.97)/log(2));
 
 *' Core DAC fixed O&M learning term equation
 Q10CoreFixOandMDAC(DACTECH,YTIME)$(TIME(YTIME))..
     V10CoreFixOandMDAC(DACTECH,YTIME)
         =E=
     i06FixOandMDAC(DACTECH) *
-    (sum(allCy$runCyL(allCy),V06CapDAC(allCy,DACTECH,YTIME-1)) + 1e-6) ** (log(0.97)/log(2));
+    (sum(allCy$runCyL(allCy),V06CapCDR(allCy,DACTECH,YTIME-1)) + 1e-6) ** (log(0.97)/log(2));
 
 *' Core DAC variable cost learning term equation
 Q10CoreVarCostDAC(DACTECH,YTIME)$(TIME(YTIME))..
     V10CoreVarCostDAC(DACTECH,YTIME)
         =E=
     i06VarCostDAC(DACTECH) *
-    (sum(allCy$runCyL(allCy),V06CapDAC(allCy,DACTECH,YTIME-1)) + 1e-6) ** (log(0.97)/log(2));
+    (sum(allCy$runCyL(allCy),V06CapCDR(allCy,DACTECH,YTIME-1)) + 1e-6) ** (log(0.97)/log(2));

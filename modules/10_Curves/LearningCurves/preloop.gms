@@ -12,6 +12,39 @@ VmCostLC.LO(LCTECH,YTIME) = 0.1;   !! Conservative 10% minimum cost multiplier (
 VmCostLC.UP(LCTECH,YTIME) = 2.0;   !! Allow some cost increase for numerical stability
 *' Initialize cost multiplier to 1.0 for base year (no cost reduction initially)
 VmCostLC.FX(LCTECH,"%fBaseY%") = 1.0;
+
+*' Regional R&D multiplier bounds mirror VmCostLC bounds for consistency.
+*' Keeping a conservative lower bound avoids extreme one-step cost collapses in
+*' aggressive scenarios while still allowing meaningful cost reductions.
+V10CostRD.LO(runCy,RDTECH,YTIME) = 0.1;
+V10CostRD.UP(runCy,RDTECH,YTIME) = 2.0;
+
+*' Base-year anchor for R&D multiplier.
+*' This guarantees no immediate discontinuity at model start and preserves baseline
+*' calibration when R&D rates/funding are zero.
+V10CostRD.FX(runCy,RDTECH,"%fBaseY%") = 1.0;
+
+*' Knowledge-stock initialization strategy:
+*' - Set strictly positive lower bound to maintain numerical robustness in ratio equations.
+*' - Seed historical years with fixed value 1 so early-period multipliers remain neutral
+*'   unless explicit R&D inflows are introduced.
+*' - This avoids adding a separate historical R&D dataset in this first implementation.
+V10RDStock.LO(runCy,RDTECH,YTIME) = 1e-6;
+V10RDStock.L(runCy,RDTECH,YTIME) = 1;
+V10RDStock.FX(runCy,RDTECH,"2010") = 1;
+V10RDStock.FX(runCy,RDTECH,"2011") = 1;
+V10RDStock.FX(runCy,RDTECH,"2012") = 1;
+V10RDStock.FX(runCy,RDTECH,"2013") = 1;
+V10RDStock.FX(runCy,RDTECH,"2014") = 1;
+V10RDStock.FX(runCy,RDTECH,"2015") = 1;
+V10RDStock.FX(runCy,RDTECH,"2016") = 1;
+V10RDStock.FX(runCy,RDTECH,"2017") = 1;
+V10RDStock.FX(runCy,RDTECH,"2018") = 1;
+V10RDStock.FX(runCy,RDTECH,"2019") = 1;
+V10RDStock.FX(runCy,RDTECH,"2020") = 1;
+V10RDStock.FX(runCy,RDTECH,"2021") = 1;
+V10RDStock.FX(runCy,RDTECH,"2022") = 1;
+V10RDStock.FX(runCy,RDTECH,"%fBaseY%") = 1;
 *---
 *' Initialize cumulative capacity with historical data from base year only
 *' Sum installed capacity across all countries for learning curve technologies

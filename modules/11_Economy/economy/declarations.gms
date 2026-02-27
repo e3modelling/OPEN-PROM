@@ -4,6 +4,11 @@
 Equations
 Q11SubsiTot(allCy,YTIME)                                 "Computes the total annual state revenues from carbon taxes per region (Millions US$2015)"
 Q11SubsiDemTechAvail(allCy,DSBS,TECH,YTIME)              "Computes the state grants purposed to the support of each demand technology (Millions US$2015)"
+*' RD subsidy bridge equation.
+*' Purpose: expose a technology-level subsidy stream aligned with RDTECH so the
+*' LearningCurves module can link state R&D funding to policy budgets without
+*' duplicating economy logic.
+Q11SubsiRDTech(allCy,RDTECH,YTIME)                       "Maps available demand subsidies to RD-enabled technologies"
 Q11SubsiDemITech(allCy,DSBS,ITECH,YTIME)                 "Computes the state support per unit of new capacity in the industrial subsectors and technologies (kUS$2015/toe-year)"
 Q11SubsiDemTech(allCy,DSBS,TECH,YTIME)                   "Computes the state grants used for the support of each demand technology (Millions US$2015)"
 Q11SubsiSupTech(allCy,STECH,YTIME)                       "Computes the state grants purposed to the support of each supply technology (Millions US$2015)"
@@ -15,6 +20,9 @@ Q11NetSubsiTax(allCy,YTIME)                              "Computes the net diffe
 Variables
 V11SubsiTot(allCy,YTIME)                                 "Total annual state revenues from carbon taxes per region (Millions US$2015)"
 VmSubsiDemTechAvail(allCy,DSBS,TECH,YTIME)               "State grants purposed to the support of each demand technology (Millions US$2015)"
+*' Technology-level subsidy stream used as endogenous state R&D source when
+*' %RDLinkToSubsidies% == YES in LearningCurves equations.
+VmSubsiRDTech(allCy,RDTECH,YTIME)                        "State grants mapped to RD-enabled technologies (Millions US$2015)"
 VmSubsiDemITech(allCy,DSBS,ITECH,YTIME)                  "The state support per unit of new capacity in the industrial subsectors and technologies (kUS$2015/toe-year)"
 VmSubsiDemTech(allCy,DSBS,TECH,YTIME)                    "The state support per unit of new capacity in the demand subsectors and technologies for the following units:"
                                                             !!Transport (kUS$2015 per vehicle)

@@ -666,6 +666,32 @@ imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$DATAY(YTIME)= iMatrFactorData(runCy,DSBS,
 $ENDIF.calib
 *---
 parameters
+*' -----------------------------------------------------------------------------
+*' SUBSIDY / R&D DATA-ASSUMPTION NOTES (cross-module documentation)
+*' -----------------------------------------------------------------------------
+*' The active policy-cost controls in this file currently rely primarily on
+*' imCapCostTechMin(allCy,DSBS,TECH,YTIME), which acts as a floor factor in the
+*' economy equations when translating available subsidy budgets into per-unit
+*' technology support.
+*'
+*' For the new regional learning-by-searching implementation:
+*' - State R&D funding can be linked to subsidy allocations through
+*'   VmSubsiRDTech (defined in the Economy module equations).
+*' - VmSubsiRDTech is built from VmSubsiDemTechAvail, which itself is driven by
+*'   V11SubsiTot and i11SubsiPerDemTechAvail policy shares.
+*' - Therefore, subsidy data assumptions in this block indirectly shape the
+*'   endogenous state R&D stream whenever %RDLinkToSubsidies% == YES.
+*'
+*' Practical interpretation:
+*' - Tight capex floors (higher imCapCostTechMin) reduce effective subsidy leverage
+*'   in demand-tech equations.
+*' - This can propagate to a lower VmSubsiRDTech-linked state R&D contribution,
+*'   all else equal.
+*'
+*' Units reminder:
+*' - imCapCostTechMin is dimensionless.
+*' - VmSubsiDemTechAvail / VmSubsiRDTech are in Million US$2015 (see Economy).
+*' -----------------------------------------------------------------------------
 !!imFacSubsiCapCostTech(DSBS,TECH)                            !!State subsidy (%) factor in technology capex (demand side)
 !!imGrantCapCostTech(DSBS,TECH)                               !!State granting in technology capex (demand side)
 !!imSubsiCapCostFuel(SBS,EF)                                  !!State subsidy in fuel cost
@@ -675,6 +701,22 @@ imCapCostTechMin(allCy,DSBS,TECH,YTIME)                    !!Factor for the mini
 ;
 
 $ontext
+*' -----------------------------------------------------------------------------
+*' LEGACY SCENARIO SUBSIDY BLOCK (currently inactive by design)
+*' -----------------------------------------------------------------------------
+*' This block documents historical scenario-specific subsidy factor/grant values.
+*' It is wrapped in $ontext/$offtext and therefore NOT compiled/executed.
+*'
+*' Why keep it documented:
+*' - It provides provenance for older policy experiments.
+*' - It serves as a template if the model team decides to reactivate explicit
+*'   subsidy-factor controls alongside, or instead of, share-based allocations.
+*'
+*' Interaction with the new R&D linkage:
+*' - The new RD subsidy linkage does NOT depend on these commented factors.
+*' - It depends on active Economy equations (V11SubsiTot -> VmSubsiDemTechAvail ->
+*'   VmSubsiRDTech -> V10RDFundState when %RDLinkToSubsidies% == YES).
+*' -----------------------------------------------------------------------------
 if %fScenario% eq 0 then
      imFacSubsiCapCostTech("PC","TELC") = 0;
      imFacSubsiCapCostTech("CH","TELC") = 0;
@@ -755,12 +797,21 @@ imShrNonSubElecInTotElecDem(runCy,DOMSE)$(imShrNonSubElecInTotElecDem(runCy,DOMS
 *---
 **  Transport Sector
 imCapCostTech(runCy,TRANSE,TECH,YTIME) = imDataTransTech(TRANSE,TECH,"IC",YTIME);
+*' Active capex-floor assumption for transport technologies.
+*' This floor participates in subsidy translation equations and effectively limits
+*' how far policy support can reduce effective technology costs.
+*' Through the subsidy-to-RD bridge, it can also influence the endogenous state RD
+*' stream in linked scenarios.
 imCapCostTechMin(allCy,TRANSE,TECH,YTIME) = 0.4;
 imFixOMCostTech(runCy,TRANSE,TECH,YTIME) = imDataTransTech(TRANSE,TECH,"FC",YTIME);
 imVarCostTech(runCy,TRANSE,TECH,YTIME) = imDataTransTech(TRANSE,TECH,"VC",YTIME);
 *---
 **  Industrial Sector
 imCapCostTech(runCy,INDSE,TECH,YTIME) = imDataIndTechnology(INDSE,TECH,"IC");
+*' Active capex-floor assumption for industry technologies.
+*' Kept distinct from transport to reflect different structural/policy contexts.
+*' As above, this affects subsidy effectiveness and can indirectly affect linked
+*' state R&D inflows under subsidy-coupled RD scenarios.
 imCapCostTechMin(allCy,INDSE,TECH,YTIME) = 0.5;
 imFixOMCostTech(runCy,INDSE,TECH,YTIME) = imDataIndTechnology(INDSE,TECH,"FC");
 imVarCostTech(runCy,INDSE,TECH,YTIME) = imDataIndTechnology(INDSE,TECH,"VC");

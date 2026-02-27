@@ -46,6 +46,30 @@ Q11SubsiDemTechAvail(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH
         =E=
     V11SubsiTot(allCy,YTIME) * i11SubsiPerDemTechAvail(allCy,DSBS,TECH,YTIME);
 
+*' RD subsidy bridge construction.
+*' We define a single policy-linked funding stream per (country, RD technology, year)
+*' and guard it with an explicit compile-time switch branch:
+*' - %RDLinkToSubsidies% == YES: use subsidy budget * RD policy share template.
+*' - %RDLinkToSubsidies% != YES: force VmSubsiRDTech = 0.
+*'
+*' Why force zero in the OFF branch?
+*' - When subsidies are not linked, LearningCurves uses i10RDFundState_exo directly,
+*'   so keeping VmSubsiRDTech zero avoids hidden policy carryover and makes scenario
+*'   accounting cleaner.
+*'
+*' Budget consistency:
+*' - In linked mode, VmSubsiRDTech is proportional to V11SubsiTot through
+*'   i11SubsiPerRDTech(allCy,RDTECH,YTIME), a minimal PG/DAC-focused template.
+Q11SubsiRDTech(allCy,RDTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+  VmSubsiRDTech(allCy,RDTECH,YTIME)
+    =E=
+$ifthen.rdsub "%RDLinkToSubsidies%" == "YES"
+  V11SubsiTot(allCy,YTIME) * i11SubsiPerRDTech(allCy,RDTECH,YTIME)
+$else.rdsub
+  0
+$endif.rdsub
+;
+
 *' The equation calculates the state support per unit of new capacity in the industrial subsectors and technologies (kUS$2015/toe-year).
 Q11SubsiDemITech(allCy,DSBS,ITECH,YTIME)$(INDSE(DSBS) and SECTTECH(DSBS,ITECH) and TIME(YTIME) and not CDR(DSBS) and runCy(allCy))..
     VmSubsiDemITech(allCy,DSBS,ITECH,YTIME)

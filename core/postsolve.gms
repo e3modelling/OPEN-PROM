@@ -1,6 +1,13 @@
 endloop;  !! close countries loop
 $ifthen.curves "%Curves%" == "LearningCurves"
+*' Persist learning state variables between outer time-step solves.
+*' This mirrors existing treatment of V10CumCapGlobal and is required so the
+*' recursive knowledge-stock and multiplier equations carry history forward.
+*' Without these fixes, each outer iteration could restart from previous levels
+*' inconsistently, breaking intended dynamic behavior.
 V10CumCapGlobal.FX(LCTECH,YTIME)$TIME(YTIME) = V10CumCapGlobal.L(LCTECH,YTIME)$TIME(YTIME);
+V10RDStock.FX(runCy,RDTECH,YTIME)$TIME(YTIME) = V10RDStock.L(runCy,RDTECH,YTIME)$TIME(YTIME);
+V10CostRD.FX(runCy,RDTECH,YTIME)$TIME(YTIME) = V10CostRD.L(runCy,RDTECH,YTIME)$TIME(YTIME);
 $endif.curves
 * Export model results to GDX file
 $ifthen.calib %Calibration% == MatCalibration

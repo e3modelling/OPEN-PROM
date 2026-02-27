@@ -255,6 +255,31 @@ $setGlobal Curves           LearningCurves
 $setGlobal Economy          economy
 *' To disable learning curves module, use: $setGlobal Curves off
 
+*' Learning-by-searching (R&D) switches.
+*' These flags are evaluated in equation compilation blocks and make scenario control
+*' explicit without modifying algebraic equations between runs.
+*'
+*' %EnableLearningBySearching%:
+*'   NO  -> R&D multiplier is forced to 1 (no R&D-learning effect on costs)
+*'   YES -> R&D multiplier is computed from knowledge-stock growth
+$setGlobal EnableLearningBySearching NO
+
+*' %EnablePrivateRD%:
+*'   NO  -> private R&D inflow is set to zero
+*'   YES -> private R&D inflow follows i10RDFundPrivate_exo(allCy,RDTECH,YTIME)
+$setGlobal EnablePrivateRD NO
+
+*' %RDLinkToSubsidies%:
+*'   YES -> state R&D inflow is mapped from subsidy allocation (VmSubsiRDTech)
+*'   NO  -> state R&D inflow follows i10RDFundState_exo(allCy,RDTECH,YTIME)
+$setGlobal RDLinkToSubsidies YES
+
+*' %RDRegionalScope%:
+*' Reserved for forward-compatible scope control (regional/global aggregation style).
+*' Current implementation computes regional stocks/multipliers, so this remains a
+*' documented switch placeholder for later extension.
+$setGlobal RDRegionalScope REGIONAL
+
 ** CORE MODEL FILES **
 *' SETS
 $include    "./core/sets.gms";

@@ -126,14 +126,21 @@ Q06VarCostDAC(CDRTECH,YTIME)$(TIME(YTIME))..
 
 *' The equation calculates the Levelized Costs of DAC capacity, also taking into account its discount rate and life expectancy, 
 *' for each region (country) and year.
+*' Regional learning-by-searching integration:
+*' - Multiply DAC CAPEX/Fixed/Variable core terms by V10CostRD(allCy,RDTECH,YTIME)
+*'   for the matching DAC technology.
+*' - This adds a country-specific innovation channel on top of existing DAC global
+*'   deployment learning terms already embedded in V06GrossCapDAC/V06FixOandMDAC/V06VarCostDAC.
+*' - The mapping uses sameas(RDTECH,CDRTECH), so only technologies explicitly in RDTECH
+*'   receive this extra effect.
 Q06LvlCostDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06LvlCostDAC(allCy,CDRTECH,YTIME)
         =E=         
-    V06GrossCapDAC(CDRTECH,YTIME)
+  V06GrossCapDAC(CDRTECH,YTIME) * sum(RDTECH$sameas(RDTECH,CDRTECH),V10CostRD(allCy,RDTECH,YTIME))
     - VmSubsiDemTech(allCy,"DAC",CDRTECH,YTIME)$DACTECH(CDRTECH) -
     VmSubsiDemTech(allCy,"EW",CDRTECH,YTIME)$sameas("TEW",CDRTECH) +
-    V06FixOandMDAC(CDRTECH,YTIME) + 
-    V06VarCostDAC(CDRTECH,YTIME) - 20 +
+  V06FixOandMDAC(CDRTECH,YTIME) * sum(RDTECH$sameas(RDTECH,CDRTECH),V10CostRD(allCy,RDTECH,YTIME)) + 
+  V06VarCostDAC(CDRTECH,YTIME) * sum(RDTECH$sameas(RDTECH,CDRTECH),V10CostRD(allCy,RDTECH,YTIME)) - 20 +
     i06SpecElecDAC(allCy,CDRTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME) +
     i06SpecHeatDAC(allCy,CDRTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","NGS",YTIME) / 0.85 +
     VmCstCO2SeqCsts(allCy,YTIME)
