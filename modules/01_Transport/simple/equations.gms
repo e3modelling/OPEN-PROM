@@ -275,14 +275,14 @@ Q01NewRegPcTechYearly(allCy,TTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q01NewRegPcYearly(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         V01NewRegPcYearly(allCy,YTIME)
                 =E=
-        V01StockPcYearly(allCy,YTIME) - 
+        (V01StockPcYearly(allCy,YTIME) - 
         V01StockPcYearly(allCy,YTIME-1) +
         V01NumPcScrap(allCy,YTIME)
         +
         sqrt(sqr(V01StockPcYearly(allCy,YTIME) - 
         V01StockPcYearly(allCy,YTIME-1) +
         V01NumPcScrap(allCy,YTIME))
-        );     !! new cars due to scrapping
+        )) / 2;     !! new cars due to scrapping
 
 *' This equation calculates the passenger transport activity for various modes of transportation, including passenger cars, aviation, and other passenger transportation modes.
 *' The activity is influenced by factors such as fuel prices, GDP per capita, and elasticities specific to each transportation mode. The equation uses past activity levels and
