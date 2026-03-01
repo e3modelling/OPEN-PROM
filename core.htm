@@ -54,6 +54,7 @@
    <a href='08_Prices.htm'> 8. Prices module</a>
    <a href='09_Heat.htm'> 9. Heat module</a>
    <a href='10_Curves.htm'>10. Curves module</a>
+   <a href='11_Economy.htm'>11. Economy module</a>
    </div>
   </div>
   <div class="dropdown">
@@ -92,8 +93,8 @@ alt="Interfaces to other modules" />
 <table>
 <caption>module inputs</caption>
 <colgroup>
-<col style="width: 35%" />
-<col style="width: 42%" />
+<col style="width: 34%" />
+<col style="width: 43%" />
 <col style="width: 22%" />
 </colgroup>
 <thead>
@@ -139,28 +140,20 @@ CO2
 sequestrated\)</span></td>
 </tr>
 <tr class="odd">
-<td style="text-align: center;">VmDemFinEneTranspPerFuel<br />
-(allCy, TRANSE, EF, YTIME)</td>
-<td style="text-align: center;">Final energy demand in transport
-subsectors per fuel</td>
-<td style="text-align: center;"><span
-class="math inline">\(Mtoe\)</span></td>
-</tr>
-<tr class="even">
 <td style="text-align: center;">VmLft<br />
 (allCy, DSBS, TECH, YTIME)</td>
 <td style="text-align: center;">Lifetime of technologies</td>
 <td style="text-align: center;"><span
 class="math inline">\(years\)</span></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">VmPeakLoad<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Electricity peak load</td>
 <td style="text-align: center;"><span
 class="math inline">\(GW\)</span></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">VmPriceElecInd<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Electricity index - a function of
@@ -168,13 +161,20 @@ industry price</td>
 <td style="text-align: center;"><span
 class="math inline">\(1\)</span></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">VmPriceElecIndResConsu<br />
 (allCy, ESET, YTIME)</td>
 <td style="text-align: center;">Electricity price to Industrial and
 Residential Consumers</td>
 <td style="text-align: center;"><span
 class="math inline">\(US\$2015/KWh\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VmPriceFuelAvgSub<br />
+(allCy, DSBS, YTIME)</td>
+<td style="text-align: center;">Average fuel prices per subsector</td>
+<td style="text-align: center;"><span
+class="math inline">\(k\$2015/toe\)</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">VmPriceFuelSubsecCarVal<br />
@@ -290,6 +290,9 @@ smGwToTwhPerYear(YTIME)                                    &quot;convert GW mean
 Equations</code></pre>
 <p>*** Miscellaneous’</p>
 <pre><code>qDummyObj                                                  &quot;Define dummy objective function&quot;
+$IFTHEN.calib %Calibration% == MatCalibration
+qRestrain
+$ENDIF.calib
 ;
 Variables</code></pre>
 <p><strong>Interdependent Variables</strong> *** Miscellaneous</p>
@@ -299,6 +302,7 @@ VmElecConsHeatPla(allCy,DSBS,YTIME)                        &quot;Electricity con
 Positive Variables
 VmCarVal(allCy,NAP,YTIME)                                  &quot;Carbon prices for all countries (US$2015/tn CO2)&quot;
 VmRenValue(YTIME)                                          &quot;Renewable value (US$2015/KWh)&quot;
+common(allCy,TRANSE,YTIME)
 ;
 Scalars
 smTWhToMtoe                                                &quot;TWh to Mtoe conversion factor&quot; /0.086/
@@ -328,22 +332,29 @@ elasticity), and the ratio of lagged energy costs (with the
 corresponding elasticities). This type of equation captures both short
 term and long term reactions to energy costs. * Define dummy objective
 function</p>
-<pre><code>$IFTHEN.calib %Calibration% == Calibration
-qDummyObj(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy))).. vDummyObj =e=
-SQRT(SUM((DSBS,TECH)$(SECTTECH(DSBS,TECH)and TECHtoEF(TECH,EF) and (INDDOM(DSBS))), SQR(imFuelConsPerFueSub(allCy,DSBS,EF,YTIME)-VmConsFuel(allCy,DSBS,EF,YTIME)))) +
-SQRT(SUM((DSBS,TECH)$(SECTTECH(DSBS,TECH)and TECHtoEF(TECH,EF) and (TRANSE(DSBS))), SQR(VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)-imFuelConsPerFueSub(allCy,TRANSE,EF,YTIME)))) +
-0;
-$ELSEIF.calib %Calibration% == MatCalibration
+<pre><code>$IFTHEN.calib %Calibration% == MatCalibration
 qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy)).. 
   vDummyObj 
       =e=
-  SUM(
-    (PGALL),
+  SUM(PGALL,
     SQR(
       V04SharePowPlaNewEq(allCy,PGALL,YTIME) - 
       t04SharePowPlaNewEq(allCy,PGALL,YTIME)
     )
+  ) +
+  SUM((TRANSE,TTECH)$(SECTTECH(TRANSE,TTECH) and (sameas(&quot;PC&quot;,TRANSE) or sameas(&quot;PB&quot;,TRANSE) or sameas(&quot;GU&quot;,TRANSE))),
+    SQR(
+      (
+        V01ShareTechTr(allCy,TRANSE,TTECH,YTIME) -
+        t01NewShareStockPC(allCy,TRANSE,TTECH,YTIME)
+      )$(t01NewShareStockPC(allCy,TRANSE,TTECH,YTIME) &gt;= 0) +
+      0.01 * (imMatrFactor(allCy,TRANSE,TTECH,YTIME) - imMatrFactor(allCy,TRANSE,TTECH,YTIME-1))
+    )
   );
+qRestrain(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) and SECTTECH(TRANSE,TTECH) and runCy(allCy) and (t01NewShareStockPC(allCy,TRANSE,TTECH,YTIME) &lt; 0)).. 
+  imMatrFactor(allCy,TRANSE,TTECH,YTIME)
+    =e=
+  common(allCy,TRANSE,YTIME);
 $ELSE.calib qDummyObj.. vDummyObj =e= 1;
 $ENDIF.calib</code></pre>
 <pre><code>table imActv(YTIME,allCy,DSBS) &quot;Sector activity (various)&quot;
@@ -410,6 +421,7 @@ PG      0.1
 H2P     0.08
 H2INFR  0.08
 DAC     0.08
+EW     0.08
 STEAMP  0.08
 /;
 parameter imDisc(allCy,SBS,YTIME) &quot;Discount rates per subsector for all countries ()&quot; ;
@@ -429,7 +441,7 @@ OLQ 3.207089028,
 NGS 2.336234395,
 OGS 2.336234395,
 BMSWAS 0/;
-imCo2EmiFac(runCy,SBS,EF,YTIME) = iCo2EmiFacAllSbs(EF);
+imCo2EmiFac(runCy,SBS,EF,YTIME)$(not (sameas(&quot;NEN&quot;,SBS) or sameas(&quot;PCH&quot;,SBS))) = iCo2EmiFacAllSbs(EF);
 imCo2EmiFac(runCy,&quot;IS&quot;,&quot;HCL&quot;,YTIME) = iCo2EmiFacAllSbs(&quot;SLD&quot;); !! This is the assignment for coke
 parameter imElaSubData(DSBS)       &quot;Elasticities by subsector (1)&quot; /
 PCH 2
@@ -640,7 +652,6 @@ OI.TH2F      2.43133 68.3668 41.1163 25  0.85
 imDataIndTechnology(INDSE,TECH,&quot;IC&quot;) = imDataIndTechnology(INDSE,TECH,&quot;IC&quot;) * 1.3;
 imDataIndTechnology(INDSE,TECH,&quot;FC&quot;) = imDataIndTechnology(INDSE,TECH,&quot;FC&quot;) * 1.3;
 imDataIndTechnology(INDSE,TECH,&quot;VC&quot;) = imDataIndTechnology(INDSE,TECH,&quot;VC&quot;) * 1.3;
-imDataIndTechnology(INDSE,&quot;TBGDO&quot;,ECONCHAR) = imDataIndTechnology(INDSE,&quot;TGDO&quot;,ECONCHAR);
 imDataIndTechnology(INDSE,&quot;TBMSWAS&quot;,ECONCHAR) = imDataIndTechnology(&quot;IS&quot;,&quot;TBMSWAS&quot;,ECONCHAR);
 imDataIndTechnology(INDSE,&quot;TSTE&quot;,ECONCHAR) = imDataIndTechnology(INDSE,&quot;THCL&quot;,ECONCHAR);
 table imDataDomTech(DOMSE,TECH,ECONCHAR)                &quot;Technical lifetime of Industry (years)&quot;
@@ -746,6 +757,7 @@ imNcon(DOMSE) = 10;                                                    !! 11 dif
 imNcon(NENSE) = 10;                                                    !! 11 different consumer size groups for non energy uses
 imNcon(&quot;BU&quot;) = 2;                                                      !! ... except bunkers .
 imNcon(&quot;DAC&quot;) = 1;                                                      !! 
+imNcon(&quot;EW&quot;) = 1;
 imAnnCons(runCy,&#39;PC&#39;,&#39;smallest&#39;) = 0.5 * 0.952 * imTransChar(runCy,&quot;KM_VEH&quot;,&quot;%fBaseY%&quot;) * 1000 * 1E-6;
 imAnnCons(runCy,&#39;PC&#39; ,&#39;modal&#39;) = 0.952 * imTransChar(runCy,&quot;KM_VEH&quot;,&quot;%fBaseY%&quot;) * 1000 * 1E-6;
 imAnnCons(runCy,&#39;PC&#39; ,&#39;largest&#39;) = 4 * 0.952 * imTransChar(runCy,&quot;KM_VEH&quot;,&quot;%fBaseY%&quot;) * 1000 * 1E-6;
@@ -786,6 +798,9 @@ imAnnCons(runCy,&quot;BU&quot;,&quot;modal&quot;) = 0.5 ;
 imAnnCons(runCy,&quot;DAC&quot;,&quot;smallest&quot;) = 0.2 ;
 imAnnCons(runCy,&quot;DAC&quot;,&quot;largest&quot;) = 1 ;
 imAnnCons(runCy,&quot;DAC&quot;,&quot;modal&quot;) = 0.5 ;
+imAnnCons(runCy,&quot;EW&quot;,&quot;smallest&quot;) = 0.2 ;
+imAnnCons(runCy,&quot;EW&quot;,&quot;largest&quot;) = 1 ;
+imAnnCons(runCy,&quot;EW&quot;,&quot;modal&quot;) = 0.5 ;
 Loop (runCy,DSBS) DO
      Loop rCon$(ord(rCon) le imNcon(DSBS)+1) DO
           imDisFunConSize(runCy,DSBS,rCon) =
@@ -834,7 +849,7 @@ $ondelim
 $include&quot;./iDataImports.csv&quot;
 $offdelim
 ;
-imFuelImports(runCy,EFS,YTIME)$(not An(YTIME)) = iDataImports(runCy,EFS,YTIME);
+imFuelImports(runCy,EFS,YTIME)$DATAY(YTIME) = iDataImports(runCy,EFS,YTIME);
 iNetImp(runCy,EFS,YTIME) = iDataImports(runCy,&quot;ELC&quot;,YTIME)-iSuppExports(runCy,&quot;ELC&quot;,YTIME);
 table iEnvPolicies(allCy,POLICIES_SET,YTIME) &quot;Environmental policies on emissions constraints  and subsidy on renewables (Mtn CO2)&quot;
 $ondelim
@@ -852,22 +867,25 @@ elseif %fScenario% eq 3 then
 elseif %fScenario% eq 4 then
      iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,&quot;exogCV_Calib&quot;,YTIME);
 endif;
-table iMatrFactorData(DSBS,TECH,YTIME)          &quot;Maturity factor per technology and subsector (1)&quot;
+table i01PremScrpFac(allCy,DSBS,TECH,YTIME)     &quot;Parameter that controls premature scrapping&quot;
+$ondelim
+$include&quot;./iPremScrpFac.csv&quot;
+$offdelim
+;
+table iMatrFactorData(allCy,DSBS,TECH,YTIME)          &quot;Maturity factor per technology and subsector (1)&quot;
 $ondelim
 $include&quot;./iMatrFactorData.csv&quot;
 $offdelim
 ;
-iMatrFactorData(DSBS,TECH,YTIME)$(TRANSE(DSBS) or INDSE(DSBS) or DOMSE(DSBS)) = 1;
-iMatrFactorData(DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and (INDSE(DSBS)) and CCSTECH(ITECH)) = 1;
-iMatrFactorData(DSBS,TECH,YTIME)$(sameas(DSBS, &quot;PC&quot;)$SECTTECH(DSBS,TECH)) = 1;
-$IFTHEN.calib %MatFacCalibration% == off
+$IFTHEN.calib %Calibration% == off
 parameter imMatrFactor(allCy,DSBS,TECH,YTIME)   &quot;Maturity factor per technology and subsector for all countries (1)&quot;;
-imMatrFactor(runCy,DSBS,TECH,YTIME) = iMatrFactorData(DSBS,TECH,YTIME);                                          
-imMatrFactor(runCy,DSBS,TECH,YTIME)$(imMatrFactor(runCy,DSBS,TECH,YTIME)=0) = 0.000001;
-imMatrFactor(runCy,DSBS,&quot;TGDO&quot;,YTIME)$((ord(YTIME) &gt; 11) and TRANSE(DSBS)) = 0.5;
-imMatrFactor(runCy,DSBS,&quot;TGSL&quot;,YTIME)$((ord(YTIME) &gt; 11) and TRANSE(DSBS)) = 0.5;
-imMatrFactor(runCy,DSBS,&quot;TELC&quot;,YTIME)$((ord(YTIME) &gt; 11) and TRANSE(DSBS)) = 3;
-imMatrFactor(&quot;CHA&quot;,DSBS,&quot;TELC&quot;,YTIME)$((ord(YTIME) &gt; 11) and TRANSE(DSBS)) = 8;
+imMatrFactor(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                          
+imMatrFactor(runCy,DSBS,&quot;TBMSWAS&quot;,YTIME) = 0.01;
+$ontext
+imMatrFactor(runCy,DSBS,&quot;TGDO&quot;,YTIME)$((ord(YTIME) &gt; 14) and TRANSE(DSBS)) = 0.5;
+imMatrFactor(runCy,DSBS,&quot;TGSL&quot;,YTIME)$((ord(YTIME) &gt; 14) and TRANSE(DSBS)) = 0.5;
+imMatrFactor(runCy,DSBS,&quot;TELC&quot;,YTIME)$((ord(YTIME) &gt; 14) and TRANSE(DSBS)) = 3;
+imMatrFactor(&quot;CHA&quot;,DSBS,&quot;TELC&quot;,YTIME)$((ord(YTIME) &gt; 14) and TRANSE(DSBS)) = 8;
 imMatrFactor(runCy,DSBS,&quot;TELC&quot;,YTIME)$(ord(YTIME) &gt; 30 and TRANSE(DSBS)) = 8;
 imMatrFactor(runCy,DSBS,&quot;TELC&quot;,YTIME)$(ord(YTIME) &gt; 40 and TRANSE(DSBS)) = 11;
 imMatrFactor(runCy,DSBS,&quot;TELC&quot;,YTIME)$(ord(YTIME) &gt; 40 and TRANSE(DSBS)) = 11;
@@ -875,15 +893,15 @@ imMatrFactor(runCy,DSBS,&quot;TELC&quot;,YTIME)$(ord(YTIME) &gt; 50 and TRANSE(D
 imMatrFactor(runCy,DSBS,&quot;TELC&quot;,YTIME)$(ord(YTIME) &gt; 50 and TRANSE(DSBS)) = 15;
 imMatrFactor(runCy,DSBS,&quot;TELC&quot;,YTIME)$(ord(YTIME) &gt; 40 and TRANSE(DSBS)) = 11;
 imMatrFactor(runCy,DSBS,&quot;TELC&quot;,YTIME)$(ord(YTIME) &gt; 40 and TRANSE(DSBS)) = 11;
-imMatrFactor(runCy,DSBS,&quot;TNGSCCS&quot;,YTIME)$((ord(YTIME) &gt; 11) and INDSE(DSBS)) = 1;
-imMatrFactor(runCy,DSBS,&quot;THCLCCS&quot;,YTIME)$((ord(YTIME) &gt; 11) and INDSE(DSBS)) = 1;
-imMatrFactor(runCy,DSBS,&quot;TELC&quot;,YTIME)$(ord(YTIME) &gt; 11 and DOMSE(DSBS)) = 20;
-imMatrFactor(runCy,DSBS,&quot;TBMSWAS&quot;,YTIME)$(ord(YTIME) &gt; 11 and DOMSE(DSBS)) = 0.001;
+imMatrFactor(runCy,DSBS,&quot;TNGSCCS&quot;,YTIME)$((ord(YTIME) &gt; 14) and INDSE(DSBS)) = 1;
+imMatrFactor(runCy,DSBS,&quot;THCLCCS&quot;,YTIME)$((ord(YTIME) &gt; 14) and INDSE(DSBS)) = 1;
+imMatrFactor(runCy,DSBS,&quot;TELC&quot;,YTIME)$(ord(YTIME) &gt; 14 and DOMSE(DSBS)) = 20;
+imMatrFactor(runCy,DSBS,&quot;TBMSWAS&quot;,YTIME)$(ord(YTIME) &gt; 14 and DOMSE(DSBS)) = 0.001;
 imMatrFactor(runCy,DSBS,&quot;TH2F&quot;,YTIME)$(ord(YTIME) &lt; 21 and INDSE(DSBS)) = 0;
 imMatrFactor(runCy,DSBS,&quot;TH2F&quot;,YTIME)$(ord(YTIME) &gt; 21 and INDSE(DSBS)) = 2;
 imMatrFactor(runCy,DSBS,&quot;TH2F&quot;,YTIME)$(ord(YTIME) &gt; 40 and INDSE(DSBS)) = 2;
-imMatrFactor(runCy,DSBS,&quot;TELC&quot;,YTIME)$(ord(YTIME) &gt; 11 and INDSE(DSBS)) = 4;
-imMatrFactor(runCy,DSBS,&quot;TH2F&quot;,YTIME)$(ord(YTIME) &gt; 11 and INDSE(DSBS)) = 20;
+imMatrFactor(runCy,DSBS,&quot;TELC&quot;,YTIME)$(ord(YTIME) &gt; 14 and INDSE(DSBS)) = 4;
+imMatrFactor(runCy,DSBS,&quot;TH2F&quot;,YTIME)$(ord(YTIME) &gt; 14 and INDSE(DSBS)) = 20;
 imMatrFactor(runCy,DSBS,&quot;TGDO&quot;,YTIME)$(ord(YTIME) &gt; 30 and TRANSE(DSBS)) = 0.001;
 imMatrFactor(runCy,DSBS,&quot;TGSL&quot;,YTIME)$(ord(YTIME) &gt; 30 and TRANSE(DSBS)) = 0.001;
 imMatrFactor(runCy,DSBS,&quot;TNGS&quot;,YTIME)$(ord(YTIME) &gt; 30 and TRANSE(DSBS)) = 0.001;
@@ -892,12 +910,92 @@ imMatrFactor(runCy,DSBS,&quot;TPHEVGSL&quot;,YTIME)$(ord(YTIME) &gt; 40 and TRAN
 imMatrFactor(runCy,DSBS,&quot;TPHEVGDO&quot;,YTIME)$(ord(YTIME) &gt; 40 and TRANSE(DSBS)) = 0.001;
 imMatrFactor(runCy,DSBS,&quot;TCHEVGSL&quot;,YTIME)$(ord(YTIME) &gt; 40 and TRANSE(DSBS)) = 0.001;
 imMatrFactor(runCy,DSBS,&quot;TCHEVGDO&quot;,YTIME)$(ord(YTIME) &gt; 40 and TRANSE(DSBS)) = 0.001;
+$offtext
 $ELSE.calib
 variable imMatrFactor(allCy,DSBS,TECH,YTIME)    &quot;Maturity factor per technology and subsector for all countries (1)&quot;;
-imMatrFactor.L(runCy,DSBS,TECH,YTIME) = iMatrFactorData(DSBS,TECH,YTIME) + 1e-6;                                          
-imMatrFactor.LO(runCy,DSBS,EF,YTIME) = -10;                                          
-imMatrFactor.UP(runCy,DSBS,EF,YTIME) = 100;
+imMatrFactor.LO(runCy,DSBS,TECH,YTIME) = 0;                                          
+imMatrFactor.UP(runCy,DSBS,TECH,YTIME) = 50;
+imMatrFactor.L(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);     
+imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(not (sameas(DSBS,&quot;PC&quot;) or sameas(DSBS,&quot;PB&quot;) or sameas(DSBS,&quot;GU&quot;))) = iMatrFactorData(runCy,DSBS,TECH,YTIME);   
+imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$((sameas(DSBS,&quot;PC&quot;) or sameas(DSBS,&quot;PB&quot;) or sameas(DSBS,&quot;GU&quot;)) and not SECTTECH(DSBS,TECH)) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                      
+imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$DATAY(YTIME)= iMatrFactorData(runCy,DSBS,TECH,YTIME);      
 $ENDIF.calib
+parameters
+!!imFacSubsiCapCostTech(DSBS,TECH)                            !!State subsidy (%) factor in technology capex (demand side)
+!!imGrantCapCostTech(DSBS,TECH)                               !!State granting in technology capex (demand side)
+!!imSubsiCapCostFuel(SBS,EF)                                  !!State subsidy in fuel cost
+!!imFacSubsiCapCostSupply(SSBS,STECH)                         !!State subsidy (%) factor in technology capex (supply side)
+!!imGrantCapCostSupply(SSBS,STECH)                            !!State granting in technology capex (supply side)
+imCapCostTechMin(allCy,DSBS,TECH,YTIME)                    !!Factor for the minimum capex of a demand technology after the state subsidy
+;
+$ontext
+if %fScenario% eq 0 then
+     imFacSubsiCapCostTech(&quot;PC&quot;,&quot;TELC&quot;) = 0;
+     imFacSubsiCapCostTech(&quot;CH&quot;,&quot;TELC&quot;) = 0;
+     imFacSubsiCapCostTech(&quot;DAC&quot;,TECH)$(DACTECH(TECH)) = 0;
+     imGrantCapCostTech(&quot;PC&quot;,&quot;TELC&quot;) = 0;                        !!kUS$2015 per vehicle
+     imGrantCapCostTech(&quot;CH&quot;,&quot;TELC&quot;) = 0;                        !!kUS$2015/toe-year for Industry sectors
+     imGrantCapCostTech(&quot;DAC&quot;,TECH)$(DACTECH(TECH)) = 0;         !!US$2015/tCO2
+     imSubsiCapCostFuel(&quot;HOU&quot;,&quot;ELC&quot;) = 0;                        !!kUS$2015/toe
+     imSubsiCapCostFuel(SBS,&quot;ELC&quot;)$INDSE1(SBS) = 0;              !!kUS$2015/toe
+     imFacSubsiCapCostSupply(&quot;PG&quot;,PGREN) = 0;
+     imFacSubsiCapCostSupply(&quot;H2P&quot;,H2TECH) = 0;
+     imGrantCapCostSupply(&quot;PG&quot;,PGREN) = 0;                       !!kUS$2015/kW
+     imGrantCapCostSupply(&quot;H2P&quot;,H2TECH) = 0;                     !!US$2015/toe H2
+elseif %fScenario% eq 1 then
+     imFacSubsiCapCostTech(&quot;PC&quot;,&quot;TELC&quot;) = 0;
+     imFacSubsiCapCostTech(&quot;CH&quot;,&quot;TELC&quot;) = 0;
+     imFacSubsiCapCostTech(&quot;DAC&quot;,TECH)$(DACTECH(TECH)) = 0;
+     imGrantCapCostTech(&quot;PC&quot;,&quot;TELC&quot;) = 1;                        !!kUS$2015 per vehicle
+     imGrantCapCostTech(&quot;CH&quot;,&quot;TELC&quot;) = 0;                        !!kUS$2015/toe-year for Industry sectors
+     imGrantCapCostTech(&quot;DAC&quot;,TECH)$(DACTECH(TECH)) = 90;        !!US$2015/tCO2
+     imSubsiCapCostFuel(&quot;HOU&quot;,&quot;ELC&quot;) = 0;                        !!kUS$2015/toe
+     imSubsiCapCostFuel(SBS,&quot;ELC&quot;)$INDSE1(SBS) = 0;              !!kUS$2015/toe
+     imFacSubsiCapCostSupply(&quot;PG&quot;,PGREN) = 0.1;
+     imFacSubsiCapCostSupply(&quot;H2P&quot;,H2TECH) = 0.2;
+     imGrantCapCostSupply(&quot;PG&quot;,PGREN) = 0;                       !!kUS$2015/kW
+     imGrantCapCostSupply(&quot;H2P&quot;,H2TECH) = 0;                     !!US$2015/toe H2
+elseif %fScenario% eq 2 then
+     imFacSubsiCapCostTech(&quot;PC&quot;,&quot;TELC&quot;) = 0;
+     imFacSubsiCapCostTech(&quot;CH&quot;,&quot;TELC&quot;) = 0.40;
+     imFacSubsiCapCostTech(&quot;DAC&quot;,TECH)$(DACTECH(TECH)) = 0;
+     imGrantCapCostTech(&quot;PC&quot;,&quot;TELC&quot;) = 9;                        !!kUS$2015 per vehicle
+     imGrantCapCostTech(&quot;CH&quot;,&quot;TELC&quot;) = 0;                        !!kUS$2015/toe-year for Industry sectors
+     imGrantCapCostTech(&quot;DAC&quot;,TECH)$(DACTECH(TECH)) = 90;        !!US$2015/tCO2
+     imSubsiCapCostFuel(&quot;HOU&quot;,&quot;ELC&quot;) = 0;                        !!kUS$2015/toe
+     imSubsiCapCostFuel(SBS,&quot;ELC&quot;)$INDSE1(SBS) = 0;              !!kUS$2015/toe
+     imFacSubsiCapCostSupply(&quot;PG&quot;,PGREN) = 0.3;
+     imFacSubsiCapCostSupply(&quot;H2P&quot;,H2TECH) = 0.4;
+     imGrantCapCostSupply(&quot;PG&quot;,PGREN) = 0;                       !!kUS$2015/kW
+     imGrantCapCostSupply(&quot;H2P&quot;,H2TECH) = 0;                     !!US$2015/toe H2
+elseif %fScenario% eq 3 then
+     imFacSubsiCapCostTech(&quot;PC&quot;,&quot;TELC&quot;) = 0;
+     imFacSubsiCapCostTech(&quot;CH&quot;,&quot;TELC&quot;) = 0.10;
+     imFacSubsiCapCostTech(&quot;DAC&quot;,TECH)$(DACTECH(TECH)) = 0;
+     imGrantCapCostTech(&quot;PC&quot;,&quot;TELC&quot;) = 7;                        !!kUS$2015 per vehicle
+     imGrantCapCostTech(&quot;CH&quot;,&quot;TELC&quot;) = 0;                        !!kUS$2015/toe-year for Industry sectors
+     imGrantCapCostTech(&quot;DAC&quot;,TECH)$(DACTECH(TECH)) = 90;        !!US$2015/tCO2
+     imSubsiCapCostFuel(&quot;HOU&quot;,&quot;ELC&quot;) = 0;                        !!kUS$2015/toe
+     imSubsiCapCostFuel(SBS,&quot;ELC&quot;)$INDSE1(SBS) = 0;              !!kUS$2015/toe
+     imFacSubsiCapCostSupply(&quot;PG&quot;,PGREN) = 0.3;
+     imFacSubsiCapCostSupply(&quot;H2P&quot;,H2TECH) = 0.3;
+     imGrantCapCostSupply(&quot;PG&quot;,PGREN) = 0;                       !!kUS$2015/kW
+     imGrantCapCostSupply(&quot;H2P&quot;,H2TECH) = 0;                     !!US$2015/toe H2
+elseif %fScenario% eq 4 then
+     imFacSubsiCapCostTech(&quot;PC&quot;,&quot;TELC&quot;) = 0;
+     imFacSubsiCapCostTech(&quot;CH&quot;,&quot;TELC&quot;) = 0;
+     imFacSubsiCapCostTech(&quot;DAC&quot;,TECH)$(DACTECH(TECH)) = 0;
+     imGrantCapCostTech(&quot;PC&quot;,&quot;TELC&quot;) = 1;                        !!kUS$2015 per vehicle
+     imGrantCapCostTech(&quot;CH&quot;,&quot;TELC&quot;) = 0;                        !!kUS$2015/toe-year for Industry sectors
+     imGrantCapCostTech(&quot;DAC&quot;,TECH)$(DACTECH(TECH)) = 90;        !!US$2015/tCO2
+     imSubsiCapCostFuel(&quot;HOU&quot;,&quot;ELC&quot;) = 0;                        !!kUS$2015/toe
+     imSubsiCapCostFuel(SBS,&quot;ELC&quot;)$INDSE1(SBS) = 0;              !!kUS$2015/toe
+     imFacSubsiCapCostSupply(&quot;PG&quot;,PGREN) = 0.1;
+     imFacSubsiCapCostSupply(&quot;H2P&quot;,H2TECH) = 0.2;
+     imGrantCapCostSupply(&quot;PG&quot;,PGREN) = 0;                       !!kUS$2015/kW
+     imGrantCapCostSupply(&quot;H2P&quot;,H2TECH) = 0;                     !!US$2015/toe H2
+endif;
+$offtext
 imShrNonSubElecInTotElecDem(runCy,INDSE)  = iIndCharData(INDSE,&quot;SHR_NSE&quot;);
 imShrNonSubElecInTotElecDem(runCy,INDSE)  = iIndCharData(INDSE,&quot;SHR_NSE&quot;) - 0.2;
 imShrNonSubElecInTotElecDem(runCy,INDSE)$(imShrNonSubElecInTotElecDem(runCy,INDSE)&gt;0.98) = 0.98;
@@ -905,9 +1003,11 @@ imShrNonSubElecInTotElecDem(runCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(DOMS
 imShrNonSubElecInTotElecDem(runCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(DOMSE,&quot;SHR_NSE&quot;) - 0.4;
 imShrNonSubElecInTotElecDem(runCy,DOMSE)$(imShrNonSubElecInTotElecDem(runCy,DOMSE)&gt;0.98) = 0.98;
 imCapCostTech(runCy,TRANSE,TECH,YTIME) = imDataTransTech(TRANSE,TECH,&quot;IC&quot;,YTIME);
+imCapCostTechMin(allCy,TRANSE,TECH,YTIME) = 0.4;
 imFixOMCostTech(runCy,TRANSE,TECH,YTIME) = imDataTransTech(TRANSE,TECH,&quot;FC&quot;,YTIME);
 imVarCostTech(runCy,TRANSE,TECH,YTIME) = imDataTransTech(TRANSE,TECH,&quot;VC&quot;,YTIME);
 imCapCostTech(runCy,INDSE,TECH,YTIME) = imDataIndTechnology(INDSE,TECH,&quot;IC&quot;);
+imCapCostTechMin(allCy,INDSE,TECH,YTIME) = 0.5;
 imFixOMCostTech(runCy,INDSE,TECH,YTIME) = imDataIndTechnology(INDSE,TECH,&quot;FC&quot;);
 imVarCostTech(runCy,INDSE,TECH,YTIME) = imDataIndTechnology(INDSE,TECH,&quot;VC&quot;);
 imUsfEneConvSubTech(runCy,INDSE,TECH,YTIME)  = imDataIndTechnology(INDSE,TECH,&quot;USC&quot;);
@@ -917,8 +1017,14 @@ imUsfEneConvSubTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,&quot;USC
 imFixOMCostTech(runCy,NENSE,TECH,YTIME)= imDataNonEneSec(NENSE,TECH,&quot;FC&quot;);
 imVarCostTech(runCy,NENSE,TECH,YTIME) = imDataNonEneSec(NENSE,TECH,&quot;VC&quot;);
 imUsfEneConvSubTech(runCy,NENSE,TECH,YTIME) = imDataNonEneSec(NENSE,TECH,&quot;USC&quot;);
-!!imUsfEneConvSubTech(runCy,INDSE,&quot;THCL&quot;,YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,&quot;THCL&quot;,&quot;USC&quot;) + 0.005 * (ord(YTIME)-11);
-imUsfEneConvSubTech(runCy,INDSE,&quot;THCLCCS&quot;,YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,&quot;THCLCCS&quot;,&quot;USC&quot;) + 0.005 * (ord(YTIME)-11);
+imUsfEneConvSubTech(runCy,&quot;BU&quot;,&quot;TH2F&quot;,YTIME) = 0.7;
+imCapCostTech(runCy,&quot;BU&quot;,&quot;TH2F&quot;,YTIME) = 1.5 * imCapCostTech(runCy,&quot;BU&quot;,&quot;TGDO&quot;,YTIME);
+imCapCostTechMin(allCy,&quot;DAC&quot;,&quot;HTDAC&quot;,YTIME) = 0.4;
+imCapCostTechMin(allCy,&quot;DAC&quot;,&quot;H2DAC&quot;,YTIME) = 0.2;
+imCapCostTechMin(allCy,&quot;DAC&quot;,&quot;LTDAC&quot;,YTIME) = 0.2;
+imCapCostTechMin(allCy,&quot;EW&quot;,&quot;TEW&quot;,YTIME) = 0.2;
+!!imUsfEneConvSubTech(runCy,INDSE,&quot;THCL&quot;,YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,&quot;THCL&quot;,&quot;USC&quot;) + 0.005 * (ord(YTIME)-14);
+imUsfEneConvSubTech(runCy,INDSE,&quot;THCLCCS&quot;,YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,&quot;THCLCCS&quot;,&quot;USC&quot;) + 0.005 * (ord(YTIME)-14);
 imUsfEneConvSubTech(runCy,INDSE,&quot;THCLCCS&quot;,YTIME)$(ord(YTIME)&gt;50)  = 0.7;
 table iDataPlantEffByType(allCy,PGALL, YTIME)   &quot;Data for plant efficiency per plant type&quot;
 $ondelim
@@ -956,14 +1062,15 @@ imTransChar(runCy,&quot;RES_MEXTV&quot;,YTIME) = 0.04;</code></pre>
 VmRenValue.FX(YTIME)$(ord(YTIME)&gt;=20 and ord(YTIME)&lt;50) = (ord(YTIME)-20) * 100;
 VmRenValue.FX(YTIME)$(ord(YTIME)&gt;=40) = 2000;
 VmElecConsHeatPla.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = imFuelConsPerFueSub(runCy,INDDOM,&quot;ELC&quot;,YTIME)*(1-imShrNonSubElecInTotElecDem(runCy,INDDOM))*iShrHeatPumpElecCons(runCy,INDDOM);
-VmElecConsHeatPla.FX(runCy,INDDOM,YTIME) = 1E-7;
+VmElecConsHeatPla.FX(runCy,DSBS,YTIME) = 0;
 VmCarVal.FX(runCy,&quot;TRADE&quot;,YTIME) = iCarbValYrExog(runCy,YTIME);
 VmCarVal.FX(runCy,&quot;NOTRADE&quot;,YTIME) = iCarbValYrExog(runCy,YTIME);
 VmCstCO2SeqCsts.L(runCy,YTIME)=1;
 VmCstCO2SeqCsts.FX(runCy,YTIME)$(not an(YTIME)) = i06ElastCO2Seq(runCy,&quot;mc_b&quot;);
+VmPriceFuelSubsecCarVal.LO(runCy,SBS,&quot;H2F&quot;,YTIME) = 1E-6;
+VmPriceFuelSubsecCarVal.LO(runCy,&quot;HOU&quot;,&quot;ELC&quot;,YTIME) = 1E-6;
 VmPriceFuelSubsecCarVal.L(runCy,SBS,EF,YTIME)$SECtoEF(SBS,EF) = 1.5;
 VmPriceFuelSubsecCarVal.L(runCy,&quot;PG&quot;,PGEF,YTIME) = 1;
-VmPriceFuelSubsecCarVal.LO(runCy,SBS,&quot;H2F&quot;,YTIME) = 1E-6;
 $IFTHEN %link2MAgPIE% == on 
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,&quot;BMSWAS&quot;,YTIME)$(An(YTIME)) = iPricesMagpie(runCy,SBS,YTIME);
 $ENDIF
@@ -973,13 +1080,20 @@ VmPriceFuelSubsecCarVal.FX(runCy,&quot;H2P&quot;,&quot;NUC&quot;,YTIME) = 0.02; 
 VmPriceFuelSubsecCarVal.FX(runCy,&quot;STEAMP&quot;,&quot;NUC&quot;,YTIME) = 0.02; !! fixed price for nuclear fuel to 25Euro/toe
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,&quot;MET&quot;,YTIME)$(not An(YTIME)) = 1; !! fixed price methanol
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,&quot;ETH&quot;,YTIME)$(not An(YTIME)) = 1; !! fixed price for ethanol
-VmPriceFuelSubsecCarVal.FX(runCy,SBS,&quot;BGDO&quot;,YTIME)$DATAY(YTIME) = 0.5; !! fixed price for biodiesel
+VmPriceFuelSubsecCarVal.FX(runCy,SBS,&quot;BGDO&quot;,YTIME)$DATAY(YTIME) = imFuelPrice(runCy,SBS,&quot;GDO&quot;,YTIME);
+VmPriceFuelSubsecCarVal.FX(runCy,SBS,&quot;BGSL&quot;,YTIME)$DATAY(YTIME) = imFuelPrice(runCy,SBS,&quot;GSL&quot;,YTIME);
+VmPriceFuelSubsecCarVal.FX(runCy,SBS,&quot;BKRS&quot;,YTIME)$DATAY(YTIME) = imFuelPrice(runCy,SBS,&quot;KRS&quot;,YTIME);
 VmPriceFuelSubsecCarVal.FX(runCy,INDDOM,&quot;HEATPUMP&quot;,YTIME)$(SECtoEF(INDDOM,&quot;HEATPUMP&quot;)$(not An(YTIME))) = imFuelPrice(runCy,INDDOM,&quot;ELC&quot;,YTIME);
 VmPriceFuelSubsecCarVal.FX(runCy,&quot;H2P&quot;,EF,YTIME)$(SECtoEF(&quot;H2P&quot;,EF)$DATAY(YTIME)) = imFuelPrice(runCy,&quot;OI&quot;,EF,YTIME);
 VmPriceFuelSubsecCarVal.FX(runCy,&quot;STEAMP&quot;,EF,YTIME)$(SECtoEF(&quot;STEAMP&quot;,EF)$DATAY(YTIME)) = imFuelPrice(runCy,&quot;PG&quot;,EF,YTIME);
 VmPriceFuelSubsecCarVal.FX(runCy,&quot;STEAMP&quot;,&quot;CRO&quot;,YTIME)$(not DATAY(YTIME)) = imFuelPrice(runCy,&quot;PG&quot;,&quot;GDO&quot;,&quot;%fBaseY%&quot;) / 1.5;
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,&quot;STE&quot;,YTIME)$(SECtoEF(SBS,&quot;STE&quot;) and DATAY(YTIME)) = imFuelPrice(runCy,&quot;OI&quot;,&quot;ELC&quot;,YTIME);
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,&quot;GEO&quot;,YTIME) = 0;
+VmPriceFuelSubsecCarVal.FX(runCy,&quot;DAC&quot;,EF,YTIME)$(DATAY(YTIME) and SECtoEF(&quot;DAC&quot;,EF))  = imFuelPrice(runCy,&quot;OI&quot;,EF,YTIME);
+VmPriceFuelSubsecCarVal.FX(runCy,&quot;EW&quot;,EF,YTIME)$(DATAY(YTIME) and SECtoEF(&quot;EW&quot;,EF)) = imFuelPrice(runCy,&quot;OI&quot;,EF,YTIME);
+VmPriceFuelAvgSub.L(runCy,DSBS,YTIME) = 0.001;
+VmPriceFuelAvgSub.FX(runCy,DSBS,YTIME)$DATAY(YTIME) = sum(EF$SECtoEF(DSBS,EF), i08WgtSecAvgPriFueCons(runCy,DSBS,EF) * imFuelPrice(runCy,DSBS,EF,YTIME));
+VmPriceElecInd.L(runCy,YTIME) = imPriceElecInd(runCy,&quot;%fBaseY%&quot;);
 VmPriceElecInd.FX(runCy,YTIME)$DATAY(YTIME) = imPriceElecInd(runCy,YTIME);
 VmLft.L(runCy,DSBS,TTECH,YTIME) = 10;
 VmLft.FX(runCy,&quot;PC&quot;,TTECH,YTIME)$(DATAY(YTIME) and SECTTECH(&quot;PC&quot;,TTECH)) = i01TechLft(runCy,&quot;PC&quot;,TTECH,YTIME);
@@ -1054,6 +1168,7 @@ BM_CO2         &quot;Non metallic minerals production, related with CO2&quot;
 PG_SF6         &quot;Electricity production, related with SF6&quot;
 OI_SF6         &quot;Other Industries activities, related with SF6&quot;
 DAC            &quot;Direct Air Capture&quot;
+EW             &quot;Enhanced Weathering&quot;
 LQD            &quot;Liquids Production&quot;
 SLD            &quot;Solids Production&quot;
 GAS            &quot;Gases Production&quot;
@@ -1093,7 +1208,8 @@ SLD    &quot;Solids Production&quot;
 GAS    &quot;Gases Production&quot;
 H2INFR &quot;Hydrogen storage and delivery&quot;
 DAC    &quot;Direct Air Capture&quot;
-CHP
+EW     &quot;Enhanced Weathering&quot;
+CHP    &quot;Combined Heat and Power&quot;
 /
 SCT_GHG(ALLSBS)      Aggregate Sectors used in non-energy related GHG emissions
 /
@@ -1176,10 +1292,38 @@ NoTrade  Carbon Value for non-trading sectors
 /
 NAPtoALLSBS(NAP,ALLSBS) Energy sectors corresponding to NAP sectors
 /
-Trade.(FD,EN,TX,OE,OI,NF,CH,IS,BM,PP,PG,BM_CO2,H2P,STEAMP,DAC)
-NoTrade.(SE,AG,HOU,PC,PB,PT,PN,PA,GU,GT,GN,BU,PCH,NEN,LGN_PRD_CH4,HCL_PRD_CH4,GAS_PRD_CH4,TERT_CH4,TRAN_CH4,AG_CH4,SE_CH4,TRAN_N2O,TX_N2O,AG_N2O,OI_HFC,OI_PFC,NF_PFC,PG_SF6,OI_SF6,DAC)
+Trade.(FD,EN,TX,OE,OI,NF,CH,IS,BM,PP,PG,BM_CO2,H2P,STEAMP,DAC,EW)
+NoTrade.(SE,AG,HOU,PC,PB,PT,PN,PA,GU,GT,GN,BU,PCH,NEN,LGN_PRD_CH4,HCL_PRD_CH4,GAS_PRD_CH4,TERT_CH4,TRAN_CH4,AG_CH4,SE_CH4,TRAN_N2O,TX_N2O,AG_N2O,OI_HFC,OI_PFC,NF_PFC,PG_SF6,OI_SF6)
 /
-DSBS(SBS)         All Demand Subsectors         /PC,PT,PA,PB,PN,GU,GT,GN,IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,SE,AG,HOU,PCH,NEN,BU,DAC/
+DSBS(SBS)  &quot;All Demand Subsectors&quot;   
+/
+IS    &quot;Iron and Steel&quot;
+NF    &quot;Non Ferrous Metals&quot;
+CH    &quot;Chemicals&quot;
+BM    &quot;Non Metallic Minerals&quot;
+PP    &quot;Paper and Pulp&quot;
+FD    &quot;Food Drink and Tobacco&quot;
+EN    &quot;Engineering&quot;
+TX    &quot;Textiles&quot;
+OE    &quot;Ore Extraction&quot;
+OI    &quot;Other Industrial sectors&quot;
+SE    &quot;Commercial&quot;
+AG    &quot;Agriculture, Fishing, Forestry&quot;
+HOU   &quot;Residential&quot;
+PC    &quot;Passenger Transport - Cars&quot;
+PB    &quot;Passenger Transport - Busses&quot;
+PT    &quot;Passenger Transport - Rail&quot;
+PN    &quot;Passenger Transport - Inland Navigation&quot;
+PA    &quot;Passenger Transport - Aviation&quot;
+GU    &quot;Goods Transport - Trucks&quot;
+GT    &quot;Goods Transport - Rail&quot;
+GN    &quot;Goods Transport - Inland Navigation&quot;
+BU    &quot;Bunkers&quot;
+PCH   &quot;Petrochemicals Industry&quot;
+NEN   &quot;Other Non Energy Uses&quot;
+DAC   &quot;Direct Air Capture&quot;
+EW    &quot;Enhanced Weathering&quot;
+/
 TRANSE(DSBS)      All Transport Subsectors      /PC,PT,PA,PB,PN,GU,GT,GN/
 TRANS1(SBS)       All Transport Subsectors      /PC,PT,PA,PB,PN,GU,GT,GN/
 TRANP(TRANSE)     Passenger Transport           /PC,PT,PA,PB,PN/
@@ -1195,7 +1339,17 @@ BUN(DSBS)         Bunkers                       /BU/
 INDDOM(DSBS)      Industry and Tertiary         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,SE,AG,HOU/
 HOU1(SBS)         Households                     /HOU/
 SERV(SBS)         Services                       /SE,AG/
-SSBS(SBS)         All Supply Subsectors         /PG,H2P,CHP,STEAMP,LQD,SLD,GAS,H2INFR/
+SSBS(SBS)     All Supply Subsectors    
+/
+PG      &quot;Electricity&quot;
+H2P     &quot;Hydrogen&quot;
+STEAMP  &quot;Heat&quot;
+LQD     &quot;Liquids&quot;
+SLD     &quot;Solids&quot;
+GAS     &quot;Gases&quot;
+H2INFR  &quot;Hydrogen storage and delivery&quot;
+CHP     &quot;Combined Heat and Power&quot;
+/
 EF           Energy Forms
 /
 HCL     &quot;Hard Coal, Coke and Other Solids&quot;
@@ -1215,11 +1369,12 @@ HYD     &quot;Hydro&quot;
 WND     &quot;Wind&quot;
 SOL     &quot;Solar&quot;
 BMSWAS  &quot;Biomass and Waste&quot;
-GEO     &quot;Geothermal and other renewable sources eg. Tidal, etc.&quot;
+GEO     &quot;Geothermal and other renewable sources (Tidal, etc)&quot;
 MET     &quot;Methanol&quot;
 ETH     &quot;Ethanol&quot;
 BGDO    &quot;Biodiesel&quot;
 BGSL    &quot;Biogasoline&quot;
+BKRS    &quot;Biokerosene&quot;
 H2F     &quot;Hydrogen&quot;
 ELC     &quot;Electricity&quot;
 SLD     &quot;Solid Fuels&quot;
@@ -1300,30 +1455,31 @@ HCL.WCOKE
 EFtoWEF(DSBS,EF,WEF) Link between Imported Energy Forms and Energy Forms used in Model Subsectors
 EFS(EF)          Energy Forms used in Supply Side
 /
-LGN
-HCL
-CRO
-GSL
-BGSL
-GDO
-BGDO
-RFO
-LPG
-KRS
-OLQ
-NGS
-OGS
-NUC
-STE
-HYD
-BMSWAS
-SOL
-WND
-GEO
-ELC
-H2F
-MET
-ETH
+HCL     &quot;Hard Coal, Coke and Other Solids&quot;
+LGN     &quot;Lignite&quot;
+CRO     &quot;Crude Oil and Feedstocks&quot;
+LPG     &quot;Liquefied Petroleum Gas&quot;
+GSL     &quot;Gasoline&quot;
+KRS     &quot;Kerosene&quot;
+GDO     &quot;Diesel Oil&quot;
+RFO     &quot;Residual Fuel Oil&quot;
+OLQ     &quot;Other Liquids&quot;
+NGS     &quot;Natural Gas&quot;
+OGS     &quot;Other Gases&quot;
+NUC     &quot;Nuclear&quot;
+STE     &quot;Steam&quot;
+HYD     &quot;Hydro&quot;
+WND     &quot;Wind&quot;
+SOL     &quot;Solar&quot;
+BMSWAS  &quot;Biomass and Waste&quot;
+GEO     &quot;Geothermal and other renewable sources&quot;
+MET     &quot;Methanol&quot;
+ETH     &quot;Ethanol&quot;
+BGDO    &quot;Biodiesel&quot;
+BGSL    &quot;Biogasoline&quot;
+BKRS    &quot;Biokerosene&quot;
+H2F     &quot;Hydrogen&quot;
+ELC     &quot;Electricity&quot;
 /
 EFtoEFS(EF,EFS)    Fuel Aggregation for Supply Side
 /
@@ -1340,7 +1496,7 @@ NGS.NGS
 OGS.OGS
 NUC.NUC
 HYD.HYD
-(BGDO,BGSL,ETH,BMSWAS).BMSWAS
+(BGDO,BGSL,BKRS,ETH,BMSWAS).BMSWAS
 SOL.SOL
 GEO.GEO
 WND.WND
@@ -1353,12 +1509,14 @@ ELCEF(EF)        Electricity                                         /ELC/
 H2EF(EF)         Hydrogen                                            /H2F/
 STEAM(EFS)       Steam                                               /STE/
 TOCTEF(EFS)      Energy forms produced by power plants and boilers   /ELC,STE/
-ALTEF(EF)        Alternative Fuels used in transport                 /BGDO,MET,ETH/
+ALTEF(EF)        Alternative Fuels used in transport                 /BGDO,BKRS,BGSL,MET,ETH/
 PGEF(EFS)        &quot;Energy forms used for steam production&quot;
 PPRODEF(EFS)     Fuels considered in primary production
 /
 LGN
+BGSL
 BGDO
+BKRS
 OLQ
 HCL
 CRO
@@ -1390,7 +1548,7 @@ TEAALL              Technology progress (Demand Side)
 ORD   Ordinary
 IMP   Improved
 /
-TECH      Technologies
+TECH      Technologies (in Demand side)
 /
 TGSL      &quot;Internal Combustion Engine fueled by Gasoline&quot;
 TLPG      &quot;Internal Combustion Engine fueled by Liquified Petroleum Gas&quot;
@@ -1400,7 +1558,6 @@ TELC      &quot;Pure Electirc Engine&quot;
 TKRS      &quot;Gas Turbine fueled by Kerosene&quot;
 TETH      &quot;Internal Combustion Engine fueled by Ethanol&quot;
 TMET      &quot;Methanol (85% gasoline 15% methanol) coming either from ngs or bms&quot;
-TBGDO     &quot;Biodiesel internal combustion engine&quot;
 TPHEVGSL  &quot;Plug in Hybrid engine - gasoline&quot;
 TPHEVGDO  &quot;Plug in Hybrid engine - diesel&quot;
 TH2F      &quot;Fuel Cells: Hydrogen&quot;
@@ -1419,7 +1576,7 @@ THEATPUMP
 HTDAC
 H2DAC
 LTDAC
-EWDAC
+TEW
 /
 TTECH(TECH)      Transport Technologies
 /
@@ -1436,16 +1593,21 @@ TH2F      &quot;Fuel Cells: Hydrogen&quot;
 TCHEVGSL  &quot;conventional Hybrid engine - gasoline&quot;
 TCHEVGDO  &quot;conventional Hybrid engine - diesel&quot;
 /
-DACTECH(TECH)     DAC Technologies
+CDRTECH(TECH)     CDR Technologies
 /
 HTDAC
 H2DAC
 LTDAC
-EWDAC
+TEW
+/
+DACTECH(CDRTECH)     DAC Technologies
+/
+HTDAC
+H2DAC
+LTDAC
 /
 ITECH(TECH)      Industrial - Domestic - Non-energy &amp; Bunkers Technologies 
 /
-TBGDO
 TGDO
 TLPG
 TKRS  
@@ -1477,13 +1639,12 @@ TH2F      &quot;Fuel Cells: Hydrogen&quot;
 TCHEVGSL  &quot;conventional Hybrid engine - gasoline&quot;
 TCHEVGDO  &quot;conventional Hybrid engine - diesel&quot;
 TBMSWAS  &quot;Biomass and Waste&quot;
-TBGDO    &quot;Biodiesel&quot;
 TNGSCCS
 THCLCCS
 HTDAC
 H2DAC
 LTDAC
-EWDAC
+TEW
 /
 STECH     &quot;Technologies in supply side&quot;
 /
@@ -1523,10 +1684,9 @@ TGDO.(GDO,BGDO,RFO)
 TNGS.(NGS,OGS)
 TNGSCCS.NGS
 TELC.ELC
-TKRS.KRS
+TKRS.(KRS,BKRS)
 TETH.ETH
 TMET.MET
-TBGDO.BGDO
 TPHEVGSL.(GSL,BGSL,ELC)
 TPHEVGDO.(GDO,BGDO,ELC)
 TH2F.H2F
@@ -1543,7 +1703,7 @@ TBMSWAS.BMSWAS
 HTDAC.(NGS,ELC)
 H2DAC.(H2F,ELC)
 LTDAC.ELC
-EWDAC.ELC
+TEW.ELC
 /
 TTECHtoEF(TTECH,EF) Fuels consumed by transport technologies
 /
@@ -1552,7 +1712,7 @@ TLPG.LPG
 TGDO.(GDO,BGDO,RFO)
 TNGS.(NGS,OGS)
 TELC.ELC
-TKRS.KRS
+TKRS.(KRS,BKRS)
 TETH.ETH
 TPHEVGSL.(GSL,BGSL,ELC)
 TPHEVGDO.(GDO,BGDO,ELC)
@@ -1562,10 +1722,9 @@ TCHEVGDO.(GDO,BGDO)
 /
 ITECHtoEF(ITECH,EF) Fuels consumed by industrial technologies
 /
-TBGDO.BGDO
-TGDO.GDO
+TGDO.(GDO,BGDO)
 TLPG.LPG
-TKRS.KRS  
+TKRS.(KRS,BKRS)  
 TNGS.NGS
 TNGSCCS.NGS
 TELC.ELC    
@@ -1575,17 +1734,10 @@ THCLCCS.HCL
 TRFO.RFO
 TOLQ.OLQ
 TOGS.OGS
-TGSL.GSL
+TGSL.(GSL,BGSL)
 TSTE.STE
 TH2F.H2F
 TBMSWAS.BMSWAS
-/
-DACTECHtoEF(DACTECH,EF)
-/
-HTDAC.(NGS,ELC)
-H2DAC.(H2F,ELC)
-LTDAC.ELC
-EWDAC.ELC
 /
 PLUGIN(TECH) Plug-in hybrids
 /
@@ -1597,6 +1749,7 @@ CHYBV(TECH) CONVENTIONAL hybrids
 TCHEVGSL
 TCHEVGDO
 /
+SSECTTECH(SSBS,STECH) &quot;Link between Model Supply Subsectors and Technologies&quot;
 SSECTTECH(SSBS,STECH) &quot;Link between Model Supply Subsectors and Technologies&quot;
 SECTTECH(DSBS,TECH) Link between Model Demand Subsectors and Technologies
 /
@@ -1611,9 +1764,10 @@ PA.(TKRS)
 (IS,BM,CH).(TNGSCCS,THCLCCS)
 (HOU,AG).(THCL,TLPG,TKRS,TGDO,TNGS,TOGS,TBMSWAS,TELC,TSTE)
 SE.(THCL,TLPG,TKRS,TNGS,TOGS,TELC,TSTE)
-BU.(TGDO,TRFO,TKRS)
+BU.(TGDO,TRFO,TKRS,TH2F)
 (PCH,NEN).(TLGN,THCL,TGDO,TRFO,TLPG,TOLQ,TNGS,TOGS)
-DAC.(HTDAC,H2DAC,LTDAC,EWDAC)
+DAC.(HTDAC,H2DAC,LTDAC)
+EW.TEW
 /
 SECtoEF(SBS,EF) Link between Model Subsectors and Energy Forms consumed
 /
@@ -1646,8 +1800,6 @@ ATHGASCCS Gas turbine combined cycle with CCS
 PGAWNO Wind offshore
 PGH2F
 /
-PGCSP(PGALL)
-/PGCSP/
 CCS(PGALL) Plants which can be equipped with CCS
 /
 ATHCOALCCS
@@ -1823,74 +1975,66 @@ CHPPGSET /IC,FC,VOM,LFT,AVAIL,effElc,effThrm,MAXCHPSHARE/
 BALEF fuels in balance report
 /
 &quot;Total&quot;
+&quot;Other Fuels&quot;
 &quot;Solids&quot;
 &quot;Hard coal&quot;
 &quot;Lignite&quot;
 &quot;Crude oil and Feedstocks&quot;
 &quot;Liquids&quot;
+&quot;Fossil Liquids&quot;
 &quot;Liquified petroleum gas&quot;
 &quot;Gasoline&quot;
 &quot;Kerosene&quot;
 &quot;Diesel oil&quot;
 &quot;Fuel oil&quot;
 &quot;Other liquids&quot;
-&quot;Gas fuels&quot;
+&quot;Gases&quot;
 &quot;Natural gas&quot;
 &quot;Derived gases&quot;
 &quot;Nuclear heat&quot;
-&quot;Steam&quot;
+&quot;Heat&quot;
 &quot;Hydro&quot;
 &quot;Wind&quot;
 &quot;Solar energy&quot;
 &quot;Biomass&quot;
+&quot;Biofuels&quot;
 &quot;Geothermal heat&quot;
 &quot;Methanol&quot;
 &quot;Hydrogen&quot;
 &quot;Electricity&quot;
 /
-biomass(balef)
-/&quot;biomass&quot;/
-TOTAL(BALEF)
-/&quot;TOTAL&quot;/
+BIOFUELS(EF)
+/BGSL,BGDO,BKRS/
 BALEF2EFS(BALEF, EFS) Mapping from balance fuels to model fuels
 /
-&quot;Total&quot;.(HCL,LGN,CRO,LPG,GSL,BGSL,KRS,GDO,BGDO,RFO,OLQ,NGS,OGS,NUC,STE,HYD,WND,SOL,BMSWAS,GEO,MET,ETH,H2F,ELC)
+&quot;Total&quot;.(HCL,LGN,CRO,LPG,GSL,BGSL,KRS,BKRS,GDO,BGDO,RFO,OLQ,NGS,OGS,NUC,STE,HYD,WND,SOL,BMSWAS,GEO,MET,ETH,H2F,ELC)
 &quot;Solids&quot;.(HCL,LGN)
 &quot;Hard coal&quot;.HCL
 &quot;Lignite&quot;.LGN
 &quot;Crude oil and Feedstocks&quot;.CRO
-&quot;Liquids&quot;.(LPG,GSL,BGSL,KRS,GDO,BGDO,RFO,OLQ)
+&quot;Liquids&quot;.(LPG,GSL,BGSL,KRS,BKRS,GDO,BGDO,RFO,OLQ,CRO)
+&quot;Fossil Liquids&quot;.(LPG,GSL,KRS,GDO,RFO,OLQ,CRO)
+&quot;Other fuels&quot;.(HYD,WND,SOL,GEO,NUC,MET,ETH)
 &quot;Liquified petroleum gas&quot;.LPG
 &quot;Gasoline&quot;.(GSL,BGSL)
-&quot;Kerosene&quot;.KRS
+&quot;Kerosene&quot;.(KRS,BKRS)
 &quot;Diesel oil&quot;.(GDO,BGDO)
 &quot;Fuel oil&quot;.RFO
 &quot;Other liquids&quot;.OLQ
-&quot;Gas fuels&quot;.(NGS,OGS)
+&quot;Gases&quot;.(NGS,OGS)
 &quot;Natural gas&quot;.NGS
 &quot;Derived gases&quot;.OGS
 &quot;Nuclear heat&quot;.NUC
-&quot;Steam&quot;.STE
+&quot;Heat&quot;.STE
 &quot;Hydro&quot;.HYD
 &quot;Wind&quot;.WND
 &quot;Solar energy&quot;.SOL
 &quot;Biomass&quot;.BMSWAS
+&quot;Biofuels&quot;.(BMSWAS,BGSL,BKRS,BGDO)
 &quot;Geothermal heat&quot;.GEO
 &quot;Methanol&quot;.MET
 &quot;Hydrogen&quot;.H2F
 &quot;Electricity&quot;.ELC
-/
-E07MAC &quot;Cost categories for Marginal abatement costs curves (MACC) -2010$/tC for CH4,N20 and 2005$/tC for F-gases&quot; / 
-    0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 
-    320, 340, 360, 380, 400, 420, 460, 480, 500, 520, 540, 560, 580, 600, 660, 
-    680, 720, 740, 760, 780, 820, 840, 1000, 1080, 1100, 1120, 1520, 1660, 
-    1700, 1740, 2580, 2600, 3440, 3460, 3500, 3540, 3600, 3840, 4000 
-/
-Set sFGases(E07SrcMacAbate) &quot;F-gases (Input data in kt)&quot; 
-/
-    HFC_125, HFC_134a, HFC_143a, HFC_152a, HFC_227ea
-    HFC_23,  HFC_236fa, HFC_32,   HFC_43_10, HFC_245ca
-    CF4,     C2F6,      C6F14,    SF6
 /
 alias(TT, ytime);</code></pre>
 <blockquote>
@@ -1902,7 +2046,8 @@ href="02_Industry.htm">02_Industry</a>, <a
 href="04_PowerGeneration.htm">04_PowerGeneration</a>, <a
 href="05_Hydrogen.htm">05_Hydrogen</a>, <a href="06_CO2.htm">06_CO2</a>,
 <a href="08_Prices.htm">08_Prices</a>, <a
-href="09_Heat.htm">09_Heat</a></p>
+href="09_Heat.htm">09_Heat</a>, <a
+href="11_Economy.htm">11_Economy</a></p>
 <h2 id="references">References</h2>
 <script>
 window.onscroll = function() {myFunction()};

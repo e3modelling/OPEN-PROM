@@ -54,6 +54,7 @@
    <a href='08_Prices.htm'> 8. Prices module</a>
    <a href='09_Heat.htm'> 9. Heat module</a>
    <a href='10_Curves.htm'>10. Curves module</a>
+   <a href='11_Economy.htm'>11. Economy module</a>
    </div>
   </div>
   <div class="dropdown">
@@ -252,7 +253,10 @@ V10CumCapGlobal.FX(LCTECH,&quot;2016&quot;) = V10CumCapGlobal.L(LCTECH,&quot;201
 V10CumCapGlobal.FX(LCTECH,&quot;2017&quot;) = V10CumCapGlobal.L(LCTECH,&quot;2016&quot;) + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,&quot;2017&quot;));
 V10CumCapGlobal.FX(LCTECH,&quot;2018&quot;) = V10CumCapGlobal.L(LCTECH,&quot;2017&quot;) + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,&quot;2018&quot;));
 V10CumCapGlobal.FX(LCTECH,&quot;2019&quot;) = V10CumCapGlobal.L(LCTECH,&quot;2018&quot;) + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,&quot;2019&quot;));
-V10CumCapGlobal.FX(LCTECH,&quot;%fBaseY%&quot;) = V10CumCapGlobal.L(LCTECH,&quot;2019&quot;) + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,&quot;%fBaseY%&quot;));</code></pre>
+V10CumCapGlobal.FX(LCTECH,&quot;2020&quot;) = V10CumCapGlobal.L(LCTECH,&quot;2019&quot;) + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,&quot;2020&quot;));
+V10CumCapGlobal.FX(LCTECH,&quot;2021&quot;) = V10CumCapGlobal.L(LCTECH,&quot;2020&quot;) + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,&quot;2021&quot;));
+V10CumCapGlobal.FX(LCTECH,&quot;2022&quot;) = V10CumCapGlobal.L(LCTECH,&quot;2021&quot;) + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,&quot;2022&quot;));
+V10CumCapGlobal.FX(LCTECH,&quot;%fBaseY%&quot;) = V10CumCapGlobal.L(LCTECH,&quot;2022&quot;) + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,&quot;%fBaseY%&quot;));</code></pre>
 <blockquote>
 <p><strong>Limitations</strong> There are no known limitations.</p>
 </blockquote>
@@ -381,10 +385,6 @@ subset of PGALL</td>
 <td style="text-align: center;">Power Generation Plant Types</td>
 </tr>
 <tr class="even">
-<td style="text-align: center;">PGCSP(PGALL)</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr class="odd">
 <td style="text-align: center;">runCy(allCy)</td>
 <td style="text-align: center;">Countries for which the model is
 running</td>

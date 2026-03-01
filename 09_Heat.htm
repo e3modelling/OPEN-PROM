@@ -54,6 +54,7 @@
    <a href='08_Prices.htm'> 8. Prices module</a>
    <a href='09_Heat.htm'> 9. Heat module</a>
    <a href='10_Curves.htm'>10. Curves module</a>
+   <a href='11_Economy.htm'>11. Economy module</a>
    </div>
   </div>
   <div class="dropdown">
@@ -353,7 +354,7 @@ Q09DemGapSte(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         VmProdSte(allCy,TSTEAM,YTIME-1)
       )
   ))
-  )/2;
+  )/2 + 1e-6;
 Q09CostVarProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V09CostVarProdSte(allCy,TSTEAM,YTIME)
         =E=
@@ -602,7 +603,7 @@ i09EffSteThrm(TDHP,YTIME) * (i03OutDHPTransfProcess(&quot;CHA&quot;,&quot;STE&qu
 (1e-6 - SUM((TDHP2,STEAMEF)$(TSTEAMTOEF(TDHP2,STEAMEF) and (not sameas(&quot;TSTE2GEO&quot;,TDHP))),imDataChpPowGen(TDHP2,&quot;effThrm&quot;,&quot;2020&quot;) *i03InpDHPTransfProcess(&quot;CHA&quot;,STEAMEF,&quot;2020&quot;)));
 $offtext
 i09EffSteElc(TSTEAM,YTIME) = imDataChpPowGen(TSTEAM,&quot;effElc&quot;,YTIME);
-i09EffSteThrm(TSTEAM,YTIME) = imDataChpPowGen(TSTEAM,&quot;effThrm&quot;,YTIME);
+i09EffSteThrm(TSTEAM,YTIME) = imDataChpPowGen(TSTEAM,&quot;effThrm&quot;,YTIME) / 4;
 i09AvailRateSteProd(TSTEAM,YTIME) = imDataChpPowGen(TSTEAM,&quot;AVAIL&quot;,YTIME);
 !!FIXME : What is the difference between imDataChpPowGen vs imDataIndTechnologyCHP?
 i09PowToHeatRatio(TSTEAM,YTIME) = i09EffSteElc(TSTEAM,YTIME) / i09EffSteThrm(TSTEAM,YTIME);
@@ -730,8 +731,7 @@ VmConsFuelSteProd.LO(runCy,STEMODE,EFS,YTIME) = 0;
 VmConsFuelSteProd.FX(runCy,STEMODE,EFS,YTIME)$(not STEAMEF(EFS)) = 0;
 VmConsFuelSteProd.FX(runCy,&quot;CHP&quot;,STEAMEF,YTIME)$DATAY(YTIME) = -i03InpTotTransfProcess(runCy,&quot;CHP&quot;,STEAMEF,YTIME);
 VmConsFuelSteProd.FX(runCy,&quot;DHP&quot;,STEAMEF,YTIME)$DATAY(YTIME) = -i03InpTotTransfProcess(runCy,&quot;STEAMP&quot;,STEAMEF,YTIME);
-V09DemGapSte.LO(runCy,YTIME) = 0;
-V09DemGapSte.L(runCy,YTIME) = 1;</code></pre>
+V09DemGapSte.LO(runCy,YTIME) = 0;</code></pre>
 <blockquote>
 <p><strong>Limitations</strong> There are no known limitations.</p>
 </blockquote>

@@ -54,6 +54,7 @@
    <a href='08_Prices.htm'> 8. Prices module</a>
    <a href='09_Heat.htm'> 9. Heat module</a>
    <a href='10_Curves.htm'>10. Curves module</a>
+   <a href='11_Economy.htm'>11. Economy module</a>
    </div>
   </div>
   <div class="dropdown">
@@ -98,12 +99,12 @@ style="width:100.0%;height:50.0%" alt="Interfaces to other modules" />
 <figcaption aria-hidden="true">Interfaces to other modules</figcaption>
 </figure>
 <h3 id="input">Input</h3>
-<table style="width:100%;">
+<table>
 <caption>module inputs (A: legacy)</caption>
 <colgroup>
-<col style="width: 33%" />
-<col style="width: 39%" />
-<col style="width: 22%" />
+<col style="width: 32%" />
+<col style="width: 40%" />
+<col style="width: 21%" />
 <col style="width: 4%" />
 </colgroup>
 <thead>
@@ -133,6 +134,15 @@ class="math inline">\(Mtoe\)</span></td>
 <td style="text-align: center;">x</td>
 </tr>
 <tr class="odd">
+<td style="text-align: center;">VmConsFuelTechCDRProd<br />
+(allCy, CDRTECH, EF, YTIME)</td>
+<td style="text-align: center;">Annual fuel demand in each DAC
+technology regionally</td>
+<td style="text-align: center;"><span
+class="math inline">\(Mtoe\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
 <td style="text-align: center;">VmCostAvgProdH2<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Average production cost of hydrogen in
@@ -140,7 +150,7 @@ Euro per toe</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">VmCostAvgProdSte<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Average cost of steam production</td>
@@ -148,7 +158,7 @@ Euro per toe</td>
 class="math inline">\(kUS\$2015/toe\)</span></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">VmCostPowGenAvgLng<br />
 (allCy, ESET, YTIME)</td>
 <td style="text-align: center;">Long-term average power generation
@@ -157,7 +167,7 @@ cost</td>
 class="math inline">\(US\$2015/kWh\)</span></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">VmDemFinEneTranspPerFuel<br />
 (allCy, TRANSE, EF, YTIME)</td>
 <td style="text-align: center;">Final energy demand in transport
@@ -281,19 +291,19 @@ $ENDIF
     )$sameas(SBS,&quot;PG&quot;) +
     VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1)$(DSBS(SBS))$ALTEF(EF) +
     (
-      ( VmPriceElecIndResConsu(allCy,&quot;i&quot;,YTIME)$INDSE1(SBS)+
+      ( VmPriceElecIndResConsu(allCy,&quot;i&quot;,YTIME)$(INDSE1(SBS) or sameas(&quot;DAC&quot;,SBS) or sameas(&quot;EW&quot;,SBS))+
         VmPriceElecIndResConsu(allCy,&quot;r&quot;,YTIME)$HOU1(SBS) +
         VmPriceElecIndResConsu(allCy,&quot;t&quot;,YTIME)$TRANS1(SBS) +
         VmPriceElecIndResConsu(allCy,&quot;c&quot;,YTIME)$SERV(SBS)
       )/smTWhToMtoe
       +
-      ((imEffValueInDollars(allCy,SBS,YTIME))/1000)$DSBS(SBS)
+      (imEffValueInDollars(allCy,SBS,YTIME)/1000)$DSBS(SBS)
     )$(ELCEF(EF) or HEATPUMP(EF)) +
     (
       VmPriceFuelSubsecCarVal(allCy,&quot;OI&quot;,EF,YTIME)$(not sameas(&quot;BMSWAS&quot;,EF) or not sameas(&quot;CRO&quot;,EF)) +
       VmPriceFuelSubsecCarVal(allCy,&quot;AG&quot;,EF,YTIME)$sameas(&quot;BMSWAS&quot;,EF)
     )$(sameas (&quot;H2P&quot;,SBS) or sameas(&quot;STEAMP&quot;,SBS)) +
-    (VmCostAvgProdH2(allCy,YTIME)$DSBS(SBS)/1000)$H2EF(EF) +
+    (VmCostAvgProdH2(allCy,YTIME-1)$DSBS(SBS)/1000)$H2EF(EF) +
     (VmCostAvgProdSte(allCy,YTIME)$DSBS(SBS))$sameas(&quot;STE&quot;,EF);
 $ontext</code></pre>
 <p>The equation calculates the fuel prices per subsector and fuel
@@ -330,16 +340,24 @@ $offtext
 Q08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)$(SECtoEF(DSBS,EF) $TIME(YTIME) $runCy(allCy))..
 V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)
       =E=
-      1e-12 +
-      (
-        (VmConsFuel(allCy,DSBS,EF,YTIME) - V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$ELCEF(EF)) /
-        (SUM(EF2,VmConsFuel(allCy,DSBS,EF2,YTIME)- V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$ELCEF(EF2)) )
-      )$(INDDOM(DSBS) or NENSE(DSBS)) +   
-      SUM(TRANSE$(sameas(TRANSE,DSBS)),
-        VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME) /
-        (SUM(EF2$SECtoEF(TRANSE,EF2),VmDemFinEneTranspPerFuel(allCy,TRANSE,EF2,YTIME))+1e-12)
-      )
-;</code></pre>
+    1e-6 +
+    (
+      (VmConsFuel(allCy,DSBS,EF,YTIME) - V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$ELCEF(EF)) /
+      (SUM(EF2$SECtoEF(DSBS,EF2),VmConsFuel(allCy,DSBS,EF2,YTIME) - V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$ELCEF(EF2)) + 1e-6)
+    )$(INDDOM(DSBS) or NENSE(DSBS)) +   
+    SUM(TRANSE$(sameas(TRANSE,DSBS)),
+      VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME) /
+      (SUM(EF2$SECtoEF(TRANSE,EF2),VmDemFinEneTranspPerFuel(allCy,TRANSE,EF2,YTIME)) + 1e-6)
+    ) +
+    (
+      SUM(DACTECH,VmConsFuelTechCDRProd(allCy,DACTECH,EF,YTIME)) /
+      (SUM((DACTECH,EF2)$SECtoEF(DSBS,EF2),VmConsFuelTechCDRProd(allCy,DACTECH,EF2,YTIME)) + 1e-12)
+    )$sameas(&quot;DAC&quot;,DSBS) +
+    (
+      VmConsFuelTechCDRProd(allCy,&quot;TEW&quot;,EF,YTIME) /
+      (SUM(EF2$SECtoEF(DSBS,EF2),VmConsFuelTechCDRProd(allCy,&quot;TEW&quot;,EF2,YTIME)) + 1e-12)
+    )$sameas(&quot;EW&quot;,DSBS);
+  </code></pre>
 <p>The equation calculates the average fuel price per subsector. These
 average prices are used to further compute electricity prices in
 industry (using the OI “other industry” avg price), as well as the
@@ -470,8 +488,6 @@ VmPriceElecIndResConsu.FX(runCy,&quot;r&quot;,YTIME)$(not An(YTIME)) = VmPriceFu
 VmPriceElecIndResConsu.FX(runCy,&quot;t&quot;,YTIME)$(not An(YTIME)) = VmPriceFuelSubsecCarVal.L(runCy,&quot;PC&quot;,&quot;ELC&quot;,YTIME)*smTWhToMtoe;
 VmPriceElecIndResConsu.FX(runCy,&quot;c&quot;,YTIME)$(not An(YTIME)) = VmPriceFuelSubsecCarVal.L(runCy,&quot;SE&quot;,&quot;ELC&quot;,YTIME)*smTWhToMtoe;
 V08PriceFuelSepCarbonWght.FX(runCy,DSBS,EF,YTIME)$(not AN(YTIME)) = i08WgtSecAvgPriFueCons(runCy,DSBS,EF);
-VmPriceFuelAvgSub.L(runCy,DSBS,YTIME) = 0.001;
-VmPriceFuelAvgSub.FX(runCy,DSBS,YTIME)$DATAY(YTIME) = sum(EF$SECtoEF(DSBS,EF), i08WgtSecAvgPriFueCons(runCy,DSBS,EF) * imFuelPrice(runCy,DSBS,EF,YTIME));
 V08FuelPriSubNoCarb.FX(runCy,SBS,EF,YTIME)$(SECtoEF(SBS,EF) $(not HEATPUMP(EF))  $(not An(YTIME))) = imFuelPrice(runCy,SBS,EF,YTIME);
 V08FuelPriSubNoCarb.FX(runCy,&quot;PG&quot;,&quot;NUC&quot;,YTIME) = 0.025; !! fixed price for nuclear fuel to 25Euro/toe
 V08FuelPriSubNoCarb.FX(runCy,INDDOM,&quot;HEATPUMP&quot;,YTIME)$(SECtoEF(INDDOM,&quot;HEATPUMP&quot;)$(not An(YTIME))) = imFuelPrice(runCy,INDDOM,&quot;ELC&quot;,YTIME);
@@ -619,90 +635,90 @@ class="math inline">\(kUS\$2015/toe\)</span></td>
 <td style="text-align: center;">Alternative Fuels used in transport</td>
 </tr>
 <tr class="odd">
-<td style="text-align: center;">biomass(balef)</td>
-<td style="text-align: center;"></td>
+<td style="text-align: center;">CDRTECH(TECH)</td>
+<td style="text-align: center;">CDR Technologies</td>
 </tr>
 <tr class="even">
+<td style="text-align: center;">DACTECH(CDRTECH)</td>
+<td style="text-align: center;">DAC Technologies</td>
+</tr>
+<tr class="odd">
 <td style="text-align: center;">DSBS(SBS)</td>
 <td style="text-align: center;">All Demand Subsectors</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">EF</td>
 <td style="text-align: center;">Energy Forms</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">EFS(EF)</td>
 <td style="text-align: center;">Energy Forms used in Supply Side</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">ELCEF(EF)</td>
 <td style="text-align: center;">Electricity</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">H2EF(EF)</td>
 <td style="text-align: center;">Hydrogen</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">HEATPUMP(EF)</td>
 <td style="text-align: center;">Heatpumps are reducing the heat
 requirements of the sector but increasing electricity consumption</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">HOU</td>
 <td style="text-align: center;">11.511 0.9 0.00001</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">HOU1(SBS)</td>
 <td style="text-align: center;">Households</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">INDDOM(DSBS)</td>
 <td style="text-align: center;">Industry and Tertiary</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">INDSE1(SBS)</td>
 <td style="text-align: center;">Industrial SubSectors</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">NAP(Policies_set)</td>
 <td style="text-align: center;">National Allocation Plan sector
 categories</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">NAPtoALLSBS(NAP, ALLSBS)</td>
 <td style="text-align: center;">Energy sectors corresponding to NAP
 sectors</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">NENSE(DSBS)</td>
 <td style="text-align: center;">Non Energy and Bunkers</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">runCy(allCy)</td>
 <td style="text-align: center;">Countries for which the model is
 running</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">runCyL(allCy)</td>
 <td style="text-align: center;">Countries for which the model is running
 (used in countries loop)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">SBS(ALLSBS)</td>
 <td style="text-align: center;">Model Subsectors</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">SECtoEF(SBS, EF)</td>
 <td style="text-align: center;">Link between Model Subsectors and Energy
 Forms consumed</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">SERV(SBS)</td>
 <td style="text-align: center;">Services</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">SSBS(SBS)</td>
-<td style="text-align: center;">All Supply Subsectors</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">TRANS1(SBS)</td>

@@ -54,6 +54,7 @@
    <a href='08_Prices.htm'> 8. Prices module</a>
    <a href='09_Heat.htm'> 9. Heat module</a>
    <a href='10_Curves.htm'>10. Curves module</a>
+   <a href='11_Economy.htm'>11. Economy module</a>
    </div>
   </div>
   <div class="dropdown">
@@ -146,15 +147,24 @@ class="math inline">\(k\$2015/toe\)</span></td>
 class="math inline">\(TWh\)</span></td>
 <td style="text-align: center;">x</td>
 </tr>
+<tr class="odd">
+<td style="text-align: center;">VmSubsiDemTech<br />
+(allCy, DSBS, TECH, YTIME)</td>
+<td style="text-align: center;">The state support per unit of new
+capacity in the demand subsectors and technologies for the following
+units:</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
 </tbody>
 </table>
 <h3 id="output">Output</h3>
-<table style="width:89%;">
+<table>
 <caption>module outputs</caption>
 <colgroup>
-<col style="width: 27%" />
-<col style="width: 38%" />
-<col style="width: 22%" />
+<col style="width: 32%" />
+<col style="width: 45%" />
+<col style="width: 21%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -165,7 +175,7 @@ class="math inline">\(TWh\)</span></td>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: center;">VmConsFuelDACProd<br />
+<td style="text-align: center;">VmConsFuelCDRProd<br />
 (allCy, EF, YTIME)</td>
 <td style="text-align: center;">Annual fuel demand in DAC
 regionally</td>
@@ -173,6 +183,14 @@ regionally</td>
 class="math inline">\(Mtoe\)</span></td>
 </tr>
 <tr class="even">
+<td style="text-align: center;">VmConsFuelTechCDRProd<br />
+(allCy, CDRTECH, EF, YTIME)</td>
+<td style="text-align: center;">Annual fuel demand in each DAC
+technology regionally</td>
+<td style="text-align: center;"><span
+class="math inline">\(Mtoe\)</span></td>
+</tr>
+<tr class="odd">
 <td style="text-align: center;">VmCstCO2SeqCsts<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Cost curve for CO2 sequestration
@@ -205,41 +223,45 @@ PG
 H2P
 DAC
 IND
+/
+CDR(DSBS)    &quot;CDR subsectors&quot; /
+DAC
+EW
 /</code></pre>
 <pre><code>Equations
-Q06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME)                              &quot;Compute CO2 captured by electricity and hydrogen production plants (Mtn CO2)&quot;
+Q06CapCO2ElecHydr(allCy,SBS,YTIME)                 &quot;Compute CO2 captured by electricity and hydrogen production plants (Mtn CO2)&quot;
 Q06CaptCummCO2(allCy,YTIME)                                &quot;Compute cumulative CO2 captured (Mtn of CO2)&quot;
-Q06GrossCapDAC(DACTECH,YTIME)                        &quot;Computes CAPEX of DAC technologies with learning curve&quot;
-Q06FixOandMDAC(DACTECH,YTIME)                        &quot;Computes Fixed and O&amp;M costs of DAC technologies with learning curve&quot;
-Q06LvlCostDAC(allCy,DACTECH,YTIME)                         &quot;Calculates the CAPEX and the Fixed Costs of DAC capacity regionally (US$2015/tCO2)&quot;
-Q06VarCostDAC(DACTECH,YTIME)                         &quot;Computes variable costs of DAC technologies including carbon storage costs, with learning curve&quot;
-Q06ProfRateDAC(allCy,DACTECH,YTIME)                        &quot;Computes the annual profitability rate of DAC including the lifecycle costs and revenues regionally&quot;
-Q06CapFacNewDAC(allCy,DACTECH,YTIME)                       &quot;Computes the factor expressing the annual increase in the installed capacity of DAC regionally&quot;
-Q06CapDAC(allCy,DACTECH,YTIME)                             &quot;Computes the DAC installed capacity annually and regionally&quot;
-Q06ConsFuelTechDACProd(allCy,DACTECH,EF,YTIME)             &quot;Computed the annual fuel demand in each DAC technology regionally (Mtoe)&quot;
-Q06ConsFuelDACProd(allCy,EF,YTIME)                         &quot;Computed the annual fuel demand in DAC regionally (Mtoe)&quot;</code></pre>
+Q06GrossCapDAC(CDRTECH,YTIME)                        &quot;Computes CAPEX of DAC technologies with learning curve&quot;
+Q06FixOandMDAC(CDRTECH,YTIME)                        &quot;Computes Fixed and O&amp;M costs of DAC technologies with learning curve&quot;
+Q06LvlCostDAC(allCy,CDRTECH,YTIME)                         &quot;Calculates the CAPEX and the Fixed Costs of DAC capacity regionally (US$2015/tCO2)&quot;
+Q06VarCostDAC(CDRTECH,YTIME)                               &quot;Computes variable costs of DAC technologies including carbon storage costs, with learning curve&quot;
+Q06ProfRateDAC(allCy,CDRTECH,YTIME)                        &quot;Computes the annual profitability rate of DAC including the lifecycle costs and revenues regionally&quot;
+Q06CapFacNewDAC(allCy,CDRTECH,YTIME)                       &quot;Computes the factor expressing the annual increase in the installed capacity of DAC regionally&quot;
+Q06CapCDR(allCy,CDRTECH,YTIME)                             &quot;Computes the DAC installed capacity annually and regionally&quot;
+Q06ConsFuelTechCDRProd(allCy,CDRTECH,EF,YTIME)             &quot;Computes the annual fuel demand in each CDR technology regionally (Mtoe)&quot;
+Q06ConsFuelCDRProd(allCy,EF,YTIME)                         &quot;Computes the annual fuel demand in CDR regionally (Mtoe)&quot;</code></pre>
 <p><strong>Interdependent Equations</strong></p>
 <pre><code>Q06CstCO2SeqCsts(allCy,YTIME)                              &quot;Compute cost curve for CO2 sequestration costs&quot; 
 ;
 Variables
-V06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME)                   &quot;CO2 captured by electricity and hydrogen production plants (Mtn CO2)&quot;
+V06CapCO2ElecHydr(allCy,SBS,YTIME)                  &quot;CO2 captured by electricity and hydrogen production plants (Mtn CO2)&quot;
 V06CaptCummCO2(allCy,YTIME)                               &quot;Cumulative CO2 captured (Mtn CO2)&quot;
-V06GrossCapDAC(DACTECH,YTIME)                        &quot;CAPEX of DAC technologies with learning curve&quot;
-V06FixOandMDAC(DACTECH,YTIME)                        &quot;Fixed and O&amp;M costs of DAC technologies with learning curve&quot;
-V06VarCostDAC(DACTECH,YTIME)                         &quot;Variable costs of DAC technologies including carbon storage costs, with learning curve&quot;
-V06LvlCostDAC(allCy,DACTECH,YTIME)                         &quot;Regional CAPEX and the Fixed Costs of DAC capacity (US$2015/tCO2)&quot;
-V06ProfRateDAC(allCy,DACTECH,YTIME)                        &quot;The annual profitability rate of DAC including the lifecycle costs and revenues regionally&quot;
-V06CapFacNewDAC(allCy,DACTECH,YTIME)                       &quot;Factor expressing the annual increase in the installed capacity of DAC regionally&quot;
-V06CapDAC(allCy,DACTECH,YTIME)                             &quot;DAC regional installed capacity (tCO2)&quot;
-VmConsFuelTechDACProd(allCy,DACTECH,EF,YTIME)              &quot;Annual fuel demand in each DAC technology regionally (Mtoe)&quot;
-VmConsFuelDACProd(allCy,EF,YTIME)                          &quot;Annual fuel demand in DAC regionally (Mtoe)&quot;</code></pre>
+V06GrossCapDAC(CDRTECH,YTIME)                        &quot;CAPEX of DAC technologies with learning curve&quot;
+V06FixOandMDAC(CDRTECH,YTIME)                        &quot;Fixed and O&amp;M costs of DAC technologies with learning curve&quot;
+V06VarCostDAC(CDRTECH,YTIME)                         &quot;Variable costs of DAC technologies including carbon storage costs, with learning curve&quot;
+V06LvlCostDAC(allCy,CDRTECH,YTIME)                         &quot;Regional CAPEX and the Fixed Costs of DAC capacity (US$2015/tCO2)&quot;
+V06ProfRateDAC(allCy,CDRTECH,YTIME)                        &quot;The annual profitability rate of DAC including the lifecycle costs and revenues regionally&quot;
+V06CapFacNewDAC(allCy,CDRTECH,YTIME)                       &quot;Factor expressing the annual increase in the installed capacity of DAC regionally&quot;
+V06CapCDR(allCy,CDRTECH,YTIME)                             &quot;DAC regional installed capacity (tCO2)&quot;</code></pre>
 <p><strong>Interdependent Variables</strong></p>
 <pre><code>VmCstCO2SeqCsts(allCy,YTIME)                               &quot;Cost curve for CO2 sequestration costs (US$2015/tn of CO2 sequestrated)&quot;
+VmConsFuelTechCDRProd(allCy,CDRTECH,EF,YTIME)              &quot;Annual fuel demand in each DAC technology regionally (Mtoe)&quot;
+VmConsFuelCDRProd(allCy,EF,YTIME)                          &quot;Annual fuel demand in DAC regionally (Mtoe)&quot;
 ;
 Scalars
 S06ProfRateMaxDAC                                           &quot;The maximum profitability rate of V06DACProfRate&quot; /7.5/
-S06CapFacMaxNewDAC                                          &quot;The maximum level of the V06DACNewCapFac&quot; /0.11/
-S06CapFacMinNewDAC                                          &quot;The minimum level of the V06DACNewCapFac&quot; /0.05/
+S06CapFacMaxNewDAC                                          &quot;The maximum level of the V06DACNewCapFac&quot; /0.115/
+S06CapFacMinNewDAC                                          &quot;The minimum level of the V06DACNewCapFac&quot; /0.055/
 ;</code></pre>
 <p>GENERAL INFORMATION Equation format: “typical useful energy demand
 equation” The main explanatory variables (drivers) are activity
@@ -256,48 +278,35 @@ of electricity production from plants with carbon capture and storage,
 the conversion factor from terawatt-hours to million tons of oil
 equivalent (smTWhToMtoe), the plant efficiency, the CO2 emission factor,
 and the plant CO2 capture rate.</p>
-<pre><code>Q06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME)
+<pre><code>Q06CapCO2ElecHydr(allCy,SBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V06CapCO2ElecHydr(allCy,SBS,YTIME)
       =E=
-    (
-      sum(PGEF,
-        sum(CCS$PGALLtoEF(CCS,PGEF),
-          VmProdElec(allCy,CCS,YTIME) * smTWhToMtoe /
-          imPlantEffByType(allCy,CCS,YTIME) *
-          imCo2EmiFac(allCy,&quot;PG&quot;,PGEF,YTIME) *
-          V04CO2CaptRate(allCy,CCS,YTIME)
+    sum(EFS,
+      sum(CCS$PGALLtoEF(CCS,EFS),
+        VmProdElec(allCy,CCS,YTIME) * smTWhToMtoe /
+        imPlantEffByType(allCy,CCS,YTIME) *
+        (imCo2EmiFac(allCy,SBS,EFS,YTIME) + 4.17$sameas(&quot;BMSWAS&quot;,EFS))*
+        V04CO2CaptRate(allCy,CCS,YTIME)
+      )$sameas(&quot;PG&quot;, SBS) +
+      sum(H2TECH$H2TECHEFtoEF(H2TECH,EFS),
+        VmConsFuelTechH2Prod(allCy,H2TECH,EFS,YTIME) *
+        (imCo2EmiFac(allCy,SBS,EFS,YTIME) + 4.17$sameas(&quot;BMSWAS&quot;,EFS))*
+        V05CaptRateH2(allCy,H2TECH,YTIME)
+      )$sameas(&quot;H2P&quot;, SBS)
+    ) +
+    sum(DACTECH,V06CapCDR(allCy,DACTECH,YTIME) * 1e-6)$sameas(&quot;DAC&quot;, SBS) +
+    (V06CapCDR(allCy,&quot;TEW&quot;,YTIME) * 1e-6)$sameas(&quot;EW&quot;, SBS) +
+    sum(DSBS$sameas(DSBS,SBS),
+      sum(CCSTECH$SECTTECH(DSBS,CCSTECH),
+        sum(EFS$ITECHtoEF(CCSTECH,EFS),
+          i02ShareBlend(allCy,DSBS,CCSTECH,EFS,YTIME) *
+          V02EquipCapTechSubsec(allcy,DSBS,CCSTECH,YTIME) * 
+          i02util(allCy,DSBS,CCSTECH,YTIME) * 
+          imCO2CaptRateIndustry(allCy,CCSTECH,YTIME) * 
+          (imCo2EmiFac(allCy,DSBS,EFS,YTIME) + 4.17$sameas(&quot;BMSWAS&quot;,EFS))
         )
       )
-    )$sameas(&quot;PG&quot;, CO2CAPTECH) +
-    (
-      sum(EF, 
-        sum(H2TECH$H2TECHEFtoEF(H2TECH,EF),
-          VmConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME) *
-          imCo2EmiFac(allCy,&quot;H2P&quot;,EF,YTIME) *
-          V05CaptRateH2(allCy,H2TECH,YTIME)
-        )
-      )
-      !! CO2 emissions captured by plants producing hydrogen
-    )$sameas(&quot;H2P&quot;, CO2CAPTECH) +
-    (
-      sum(DACTECH,
-        V06CapDAC(allCy,DACTECH,YTIME)
-      ) * 1e-6
-    )$sameas(&quot;DAC&quot;, CO2CAPTECH) +
-    (
-      sum(DSBS,
-        sum(CCSTECH$SECTTECH(DSBS,CCSTECH),
-          sum(EF$ITECHtoEF(CCSTECH,EF),
-            i02Share(allCy,DSBS,CCSTECH,EF,YTIME) * 
-            V02EquipCapTechSubsec(allcy,DSBS,CCSTECH,YTIME) * 
-            i02util(allCy,DSBS,CCSTECH,YTIME) * 
-            imCO2CaptRateIndustry(allCy,CCSTECH,YTIME) * 
-            imCo2EmiFac(allCy,DSBS,EF,YTIME)
-          )
-        )
-      )
-    )$sameas(&quot;IND&quot;, CO2CAPTECH)
-    ;   </code></pre>
+    )$INDSE1(SBS);   </code></pre>
 <p>The equation calculates the cumulative CO2 captured in million tons
 of CO2 for a given scenario and year. The cumulative CO2 captured at the
 current time period is determined by adding the CO2 captured by
@@ -308,13 +317,7 @@ total CO2 capture over time in the specified scenario.</p>
     V06CaptCummCO2(allCy,YTIME) 
       =E= 
     V06CaptCummCO2(allCy,YTIME-1) +
-    SUM(CO2CAPTECH,
-      V06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME)
-    );   
-$ontext
-    1 /
-    (1 + exp(-i06ElastCO2Seq(allCy,&quot;mc_s&quot;) * (V06CaptCummCO2(allCy,YTIME)*1e3 /i06ElastCO2Seq(allCy,&quot;pot&quot;)-i06ElastCO2Seq(allCy,&quot;mc_m&quot;)))); 
-$offtext</code></pre>
+    SUM(SBS$(not sameas(&quot;EW&quot;,SBS)),V06CapCO2ElecHydr(allCy,SBS,YTIME));   </code></pre>
 <p>The equation calculates the cost curve for CO2 sequestration costs in
 Euro per ton of CO2 sequestered for a specific scenario and year. The
 cost curve is determined based on cumulative CO2 captured and
@@ -340,275 +343,253 @@ the specified scenario and year.</p>
     i06ElastCO2Seq(allCy,&quot;mc_b&quot;) *
     exp(V06CaptCummCO2(allCy,YTIME) / i06ElastCO2Seq(allCy,&quot;mc_d&quot;));           </code></pre>
 <p>The equation calculates the CAPEX of each DAC technology, as it’s
-affected by a learning curve.</p>
-<pre><code>Q06GrossCapDAC(DACTECH,YTIME)$(TIME(YTIME))..
-    V06GrossCapDAC(DACTECH,YTIME)
-            =E=         
-    0.5 * 
-    (
-      (i06GrossCapDAC(DACTECH) * (sum(allCy$runCyL(allCy),V06CapDAC(allCy,DACTECH,YTIME-1))) ** (log(0.97)/log(2))) +
-      i06GrossCapDACMin(DACTECH) +
+affected by a learning curve (<span class="math inline">\(/tCO2).
+```
+Q06GrossCapDAC(CDRTECH,YTIME)\)</span>(TIME(YTIME))..
+V06GrossCapDAC(CDRTECH,YTIME) =E=<br />
+0.5 * ( (i06GrossCapDAC(CDRTECH) * (sum(allCy<span
+class="math inline">\(runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1)))
+** (log(0.97)/log(2))) +
+      i06GrossCapDACMin(CDRTECH) +
       sqrt(
         sqr(
-          (i06GrossCapDAC(DACTECH) * (sum(allCy$runCyL(allCy),V06CapDAC(allCy,DACTECH,YTIME-1))) ** (log(0.97)/log(2))) -
-          i06GrossCapDACMin(DACTECH)
+          (i06GrossCapDAC(CDRTECH) *
+(sum(allCy\)</span>runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) **
+(log(0.97)/log(2))) - i06GrossCapDACMin(CDRTECH) ) ) );</p>
+<pre><code>The equation calculates the fixed and O&amp;M costs of each DAC technology, as they are affected by a learning curve.</code></pre>
+<p>Q06FixOandMDAC(CDRTECH,YTIME)<span
+class="math inline">\((TIME(YTIME))..
+    V06FixOandMDAC(CDRTECH,YTIME)
+            =E=
+    0.5 *
+    (
+      (i06FixOandMDAC(CDRTECH) *
+(sum(allCy\)</span>runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) **
+(log(0.97)/log(2))) + i06FixOandMDACMin(CDRTECH) + sqrt( sqr(
+(i06FixOandMDAC(CDRTECH) * (sum(allCy<span
+class="math inline">\(runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1)))
+** (log(0.97)/log(2))) -
+          i06FixOandMDACMin(CDRTECH)
         )
       )
     )
-;</code></pre>
-<p>The equation calculates the fixed and O&amp;M costs of each DAC
-technology, as they are affected by a learning curve.</p>
-<pre><code>Q06FixOandMDAC(DACTECH,YTIME)$(TIME(YTIME))..
-    V06FixOandMDAC(DACTECH,YTIME)
-            =E=         
-    0.5 * 
-    (
-      (i06FixOandMDAC(DACTECH) * (sum(allCy$runCyL(allCy),V06CapDAC(allCy,DACTECH,YTIME-1))) ** (log(0.97)/log(2))) +
-      i06FixOandMDACMin(DACTECH) +
-      sqrt(
-        sqr(
-          (i06FixOandMDAC(DACTECH) * (sum(allCy$runCyL(allCy),V06CapDAC(allCy,DACTECH,YTIME-1))) ** (log(0.97)/log(2))) -
-          i06FixOandMDACMin(DACTECH)
-        )
-      )
-    )
-;</code></pre>
-<p>The equation calculates the variable costs of each DAC technology
+;
+```
+The equation calculates the variable costs of each DAC technology
 including the CO2 storage costs, as they are affected by a learning
-curve.</p>
-<pre><code>Q06VarCostDAC(DACTECH,YTIME)$(TIME(YTIME))..
-    V06VarCostDAC(DACTECH,YTIME)
-            =E=         
-    0.5 * 
-    (
-      (i06VarCostDAC(DACTECH) * (sum(allCy$runCyL(allCy),V06CapDAC(allCy,DACTECH,YTIME-1))) ** (log(0.97)/log(2))) +
-      i06VarCostDACMin(DACTECH) +
+curve.
+```
+Q06VarCostDAC(CDRTECH,YTIME)\)</span>(TIME(YTIME))..
+V06VarCostDAC(CDRTECH,YTIME) =E=<br />
+0.5 * ( (i06VarCostDAC(CDRTECH) * (sum(allCy<span
+class="math inline">\(runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1)))
+** (log(0.97)/log(2))) +
+      i06VarCostDACMin(CDRTECH) +
       sqrt(
         sqr(
-          (i06VarCostDAC(DACTECH) * (sum(allCy$runCyL(allCy),V06CapDAC(allCy,DACTECH,YTIME-1))) ** (log(0.97)/log(2))) -
-          i06VarCostDACMin(DACTECH)
-        )
-      )
-    )
-;</code></pre>
-<p>The equation calculates the Levelized Costs of DAC capacity, also
-taking into account its discount rate and life expectancy, for each
-region (country) and year.</p>
-<pre><code>Q06LvlCostDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V06LvlCostDAC(allCy,DACTECH,YTIME)
-        =E=         
-    V06GrossCapDAC(DACTECH,YTIME) + 
-    V06FixOandMDAC(DACTECH,YTIME) + 
-    V06VarCostDAC(DACTECH,YTIME) - 20 +
-    i06SpecElecDAC(allCy,DACTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,&quot;OI&quot;,&quot;ELC&quot;,YTIME) +
-    i06SpecHeatDAC(allCy,DACTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,&quot;OI&quot;,&quot;NGS&quot;,YTIME) / 0.85 +
-    VmCstCO2SeqCsts(allCy,YTIME)
-;</code></pre>
-<p>The equation estimates the profitability of DAC capacity, calculating
-the rate between levelized costs (CAPEX, fixed and fuel needs) and
-revenues/avoided costs (carbon values, carbon subsidies) regionally.</p>
-<pre><code>Q06ProfRateDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V06ProfRateDAC(allCy,DACTECH,YTIME)
-        =E=
-    i06SubsFacDAC(DACTECH) * 
-    sum(NAP$NAPtoALLSBS(NAP,&quot;DAC&quot;),VmCarVal(allCy,NAP,YTIME)) / 
-    V06LvlCostDAC(allCy,DACTECH,YTIME - 1);</code></pre>
-<p>The equation estimates the annual increase rate of DAC capacity
+          (i06VarCostDAC(CDRTECH) *
+(sum(allCy\)</span>runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) **
+(log(0.97)/log(2))) - i06VarCostDACMin(CDRTECH) ) ) ) ;</p>
+<pre><code>The equation calculates the Levelized Costs of DAC capacity, also taking into account its discount rate and life expectancy, 
+for each region (country) and year.</code></pre>
+<p>Q06LvlCostDAC(allCy,CDRTECH,YTIME)<span
+class="math inline">\((TIME(YTIME)\)</span>(runCy(allCy)))..
+V06LvlCostDAC(allCy,CDRTECH,YTIME) =E=<br />
+V06GrossCapDAC(CDRTECH,YTIME) -
+VmSubsiDemTech(allCy,“DAC”,CDRTECH,YTIME)<span
+class="math inline">\(DACTECH(CDRTECH) -
+    VmSubsiDemTech(allCy,&quot;EW&quot;,CDRTECH,YTIME)\)</span>sameas(“TEW”,CDRTECH)
++ V06FixOandMDAC(CDRTECH,YTIME) + V06VarCostDAC(CDRTECH,YTIME) - 20 +
+i06SpecElecDAC(allCy,CDRTECH,YTIME) *
+VmPriceFuelSubsecCarVal(allCy,“OI”,“ELC”,YTIME) +
+i06SpecHeatDAC(allCy,CDRTECH,YTIME) *
+VmPriceFuelSubsecCarVal(allCy,“OI”,“NGS”,YTIME) / 0.85 +
+VmCstCO2SeqCsts(allCy,YTIME) ;</p>
+<pre><code>The equation estimates the profitability of DAC capacity, calculating the rate between levelized costs (CAPEX, fixed and fuel needs)
+and revenues/avoided costs (carbon values, carbon subsidies) regionally.</code></pre>
+<p>Q06ProfRateDAC(allCy,CDRTECH,YTIME)<span
+class="math inline">\((TIME(YTIME)\)</span>(runCy(allCy)))..
+V06ProfRateDAC(allCy,CDRTECH,YTIME) =E= (sum(NAP<span
+class="math inline">\(NAPtoALLSBS(NAP,&quot;DAC&quot;),VmCarVal(allCy,NAP,YTIME)))
+    / V06LvlCostDAC(allCy,CDRTECH,YTIME - 1)
+;
+```
+The equation estimates the annual increase rate of DAC capacity
 regionally, according to the maturity and profitability of each
-technology.</p>
-<pre><code>Q06CapFacNewDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-  V06CapFacNewDAC(allCy,DACTECH,YTIME)
+technology.
+```
+Q06CapFacNewDAC(allCy,CDRTECH,YTIME)\)</span>(TIME(YTIME)<span
+class="math inline">\((runCy(allCy)))..
+  V06CapFacNewDAC(allCy,CDRTECH,YTIME)
       =E=
-  exp(i06MatFacDAC(DACTECH) * V06ProfRateDAC(allCy,DACTECH,YTIME) - 1) /
-  exp(i06MatFacDAC(DACTECH) * S06ProfRateMaxDAC - 1) *
+  exp(i06MatFacDAC(CDRTECH) * V06ProfRateDAC(allCy,CDRTECH,YTIME) - 1) /
+  exp(i06MatFacDAC(CDRTECH) * S06ProfRateMaxDAC - 1) *
   (S06CapFacMaxNewDAC - S06CapFacMinNewDAC) +
-  S06CapFacMinNewDAC;</code></pre>
-<p>The equation calculates the DAC installed capacity annually and
-regionally, adding capacity based on the maturity of the technology, as
-well as given capacities of actual scheduled DAC units.</p>
-<pre><code>Q06CapDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V06CapDAC(allCy,DACTECH,YTIME)
-         =E=
-          V06CapDAC(allCy,DACTECH,YTIME-1) * (1 + V06CapFacNewDAC(allCy,DACTECH,YTIME)) +
-          i06SchedNewCapDAC(allCy,DACTECH,YTIME)
-;</code></pre>
-<p>The equation calculates the different fuels consumed by the DAC
-installed capacity annually and regionally.</p>
-<pre><code>Q06ConsFuelTechDACProd(allCy,DACTECH,EF,YTIME)$(TIME(YTIME) $TECHtoEF(DACTECH,EF) $(runCy(allCy)))..
-         VmConsFuelTechDACProd(allCy,DACTECH,EF,YTIME)
-         =E=
-         (
-          (V06CapDAC(allCy,DACTECH,YTIME) * i06SpecHeatDAC(allCy,DACTECH,YTIME) / 0.85)$(sameas(EF, &#39;ngs&#39;)) +
-          (V06CapDAC(allCy,DACTECH,YTIME) * i06SpecHeatDAC(allCy,DACTECH,YTIME) / 0.85)$(sameas(EF, &#39;H2F&#39;)) +
-          (V06CapDAC(allCy,DACTECH,YTIME) * i06SpecElecDAC(allCy,DACTECH,YTIME))$(sameas(EF, &#39;elc&#39;)) 
-         )
-         / 1e6
-;</code></pre>
-<p>The equation calculates the different fuels consumed by the DAC
-installed capacity annually and regionally.</p>
-<pre><code>Q06ConsFuelDACProd(allCy,EF,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
-    VmConsFuelDACProd(allCy,EF,YTIME)
+  S06CapFacMinNewDAC;
+```
+The equation calculates the DAC installed capacity annually and
+regionally,
+adding capacity based on the maturity of the technology, as well as
+given capacities of actual scheduled DAC units.
+```
+Q06CapCDR(allCy,CDRTECH,YTIME)\)</span>(TIME(YTIME)<span
+class="math inline">\((runCy(allCy)))..
+         V06CapCDR(allCy,CDRTECH,YTIME)
+            =E=
+          V06CapCDR(allCy,CDRTECH,YTIME-1) * (1 +
+V06CapFacNewDAC(allCy,CDRTECH,YTIME)) +
+          i06SchedNewCapDAC(allCy,CDRTECH,YTIME);
+```
+The equation calculates the different fuels consumed by the DAC
+installed capacity annually and regionally.
+```
+Q06ConsFuelTechCDRProd(allCy,CDRTECH,EF,YTIME)\)</span>(TIME(YTIME)
+$TECHtoEF(CDRTECH,EF) <span class="math inline">\((runCy(allCy)))..
+    VmConsFuelTechCDRProd(allCy,CDRTECH,EF,YTIME)
+      =E=
+    (
+    (V06CapCDR(allCy,CDRTECH,YTIME) *
+i06SpecHeatDAC(allCy,CDRTECH,YTIME) / 0.85)\)</span>(sameas(EF, ‘ngs’))
++ (V06CapCDR(allCy,CDRTECH,YTIME) * i06SpecHeatDAC(allCy,CDRTECH,YTIME)
+/ 0.85)<span class="math inline">\((sameas(EF, &#39;H2F&#39;)) +
+    (V06CapCDR(allCy,CDRTECH,YTIME) *
+i06SpecElecDAC(allCy,CDRTECH,YTIME))\)</span>(sameas(EF, ‘elc’)) ) /
+1e6;</p>
+<pre><code>The equation calculates the different fuels consumed by the DAC installed capacity annually and regionally.</code></pre>
+<p>Q06ConsFuelCDRProd(allCy,EF,YTIME)$(TIME(YTIME) <span
+class="math inline">\((runCy(allCy)))..
+    VmConsFuelCDRProd(allCy,EF,YTIME)
         =E=
-    sum(DACTECH$TECHtoEF(DACTECH,EF),VmConsFuelTechDACProd(allCy,DACTECH,EF,YTIME))
-;</code></pre>
-<pre><code>parameter i06CO2SeqData(CO2SEQELAST)            &quot;Data for CO2 sequestration (1)&quot;
-/
-POT 9175,
-mc_a    0,
-mc_b    20,
-mc_c    0.02,
-mc_d    5e3,
-mc_s    120,
-mc_m    1.013
-/ ;
-parameter i06MatFacDAC(DACTECH)                 &quot;Maturity factor of DAC technology expressing its elasticity in implementation regarding its financial sustainability&quot;
-/
-HTDAC     0.80,
-H2DAC   0.27,
-LTDAC     0.13,
-EWDAC     0.35
-/ ;
-parameter i06CapexDAC(DACTECH)                  &quot;CAPEX of each DAC technology ($/tCO2)&quot;
+    sum(CDRTECH\)</span>TECHtoEF(CDRTECH,EF),VmConsFuelTechCDRProd(allCy,CDRTECH,EF,YTIME));</p>
+<pre><code></code></pre>
+<p>parameter i06CO2SeqData(CO2SEQELAST) “Data for CO2 sequestration (1)”
+/ POT 9175, mc_a 0, mc_b 20, mc_c 0.02, mc_d 5e3, mc_s 120, mc_m 1.013 /
+; parameter i06MatFacDAC(CDRTECH) “Maturity factor of DAC technology
+expressing its elasticity in implementation regarding its financial
+sustainability” / HTDAC 0.80, H2DAC 0.27, LTDAC 0.13, TEW 0.35 / ;
+parameter i06CapexDAC(CDRTECH) “CAPEX of each DAC technology (<span
+class="math inline">\(/tCO2)&quot;
 /
 HTDAC   250,
 H2DAC   1300
 LTDAC   1300,
-EWDAC   400
+TEW 400
 / ;
-parameter i06CapexDACMin(DACTECH)               &quot;Minimum possible CAPEX of each DAC technology affected by learning curve ($/tCO2)&quot;
-/
-HTDAC   120,
-H2DAC   68,
-LTDAC   68,
-EWDAC   68
-/ ;
-parameter i06FixCostDAC(DACTECH)                &quot;Fixed and O&amp;M costs of each DAC technology ($/tCO2)&quot;
+parameter i06CapexDACMin(CDRTECH)               &quot;Minimum possible
+CAPEX of each DAC technology affected by learning curve
+(\)</span>/tCO2)” / HTDAC 120, H2DAC 68, LTDAC 68, TEW 68 / ; parameter
+i06FixCostDAC(CDRTECH) “Fixed and O&amp;M costs of each DAC technology
+(<span class="math inline">\(/tCO2)&quot;
 /
 HTDAC   72,
 H2DAC   80,
 LTDAC   180,
-EWDAC   600
+TEW 600
 / ;
-parameter i06FixCostDACMin(DACTECH)             &quot;Minimum possible Fixed and O&amp;M costs of each DAC technology affected by learning curve ($/tCO2)&quot;
-/
-HTDAC   40,
-H2DAC   40,
-LTDAC   30,
-EWDAC   30
-/ ;
-parameter i06VarDACMin(DACTECH)                 &quot;Minimum possible Variable and carbon storage costs of each DAC technology affected by learning curve ($/tCO2)&quot;
+parameter i06FixCostDACMin(CDRTECH)             &quot;Minimum possible
+Fixed and O&amp;M costs of each DAC technology affected by learning
+curve (\)</span>/tCO2)” / HTDAC 40, H2DAC 40, LTDAC 30, TEW 30 / ;
+parameter i06VarDACMin(CDRTECH) “Minimum possible Variable and carbon
+storage costs of each DAC technology affected by learning curve (<span
+class="math inline">\(/tCO2)&quot;
 /
 HTDAC   75,
 H2DAC   94,
 LTDAC   250,
-EWDAC   130
+TEW 130
 / ;
-parameter i06VarDAC(DACTECH)                    &quot;Variable and carbon storage costs of each DAC technology ($/tCO2)&quot;
-/
-HTDAC   90,
-H2DAC   115,
-LTDAC   306,
-EWDAC   200
-/ ;
-parameter i06SubsDAC(DACTECH)                    &quot;Subsidy factor applied to the carbon price&quot;
-/
-HTDAC   1,
-H2DAC   1.8,
-LTDAC   1.8,
-EWDAC   1.8
-/ ;
-parameter i06LftExpDAC(DACTECH)                 &quot;Lifetime of each DAC technology (years)&quot;
-/
-HTDAC   25,
-H2DAC   25,
-LTDAC   20,
-EWDAC   15
-/ ;
-parameter i06ElNeedsDAC(DACTECH)                &quot;Specific electricity needs of DAC technologies (toe/tCO2)&quot;
-/
-HTDAC   0.12658832,
-H2DAC   0.12658832,
-LTDAC   0.0236457,
-EWDAC   3
-/ ;
-parameter i06HeatNeedsDAC(DACTECH)               &quot;Specific heat needs of DAC technologies (toe/tCO2)&quot;
-/
-HTDAC   1.265883,
-H2DAC   1.265883,
-LTDAC   0,
-EWDAC   0
-/ ;
-parameter i06SchedNewCapDAC(allCy,DACTECH,YTIME)        &quot;Scheduled new DAC capacity&quot; /
-NEU.LTDAC.2027  4e4,    !!Removr – Mongstad pilot / industrial‑scale projects
-NEU.LTDAC.2026  4e4,    !!Orca (Climeworks + Carbfix) + Mammoth (Climeworks + Carbfix)
-NEU.LTDAC.2028  1e5,    !!Removr + Carbfix (Large‑Scale Plant)
-NEU.LTDAC.2024  900,    !!Climeworks – Hinwil pilot, Switzerland
-USA.LTDAC.2023  1e3,    !!Global Thermostat – Commerce City, Colorado
-USA.HTDAC.2024  1e3,    !!Heirloom – Tracy, California
-USA.LTDAC.2025  5e3,    !!Heimdal – Bantam, Oklahoma
-USA.LTDAC.2026  5e5,    !!Stratos (1PointFive / Occidental) — Texas
-USA.HTDAC.2027  5e5,    !!Project Cypress (Climeworks + Heirloom + Battelle) — Louisiana
-USA.LTDAC.2027  5e5,    !!Project Cypress (Climeworks + Heirloom + Battelle) — Louisiana
-USA.LTDAC.2032  1e6,    !!HIF USA eFuels – Matagorda County, Texas
-USA.LTDAC.2034  5e5,    !!Project Bison – Wyoming (CarbonCapture Inc.)
-USA.LTDAC.2035  7e5     !!South Texas DAC Hub
-$ifthen.DACproj %fScenario% == 2
+parameter i06VarDAC(CDRTECH)                    &quot;Variable and
+carbon storage costs of each DAC technology (\)</span>/tCO2)” / HTDAC
+90, H2DAC 115, LTDAC 306, TEW 200 / ; parameter i06SubsiDAC(CDRTECH)
+“Subsidy factor applied to the carbon price” / HTDAC 1, H2DAC 1.8, LTDAC
+1.8, TEW 1.8 / ; parameter i06LftExpDAC(CDRTECH) “Lifetime of each DAC
+technology (years)” / HTDAC 25, H2DAC 25, LTDAC 20, TEW 15 / ; parameter
+i06ElNeedsDAC(CDRTECH) “Specific electricity needs of DAC technologies
+(toe/tCO2)” / HTDAC 0.12658832, H2DAC 0.12658832, LTDAC 0.0236457, TEW 3
+/ ; parameter i06HeatNeedsDAC(CDRTECH) “Specific heat needs of DAC
+technologies (toe/tCO2)” / HTDAC 1.265883, H2DAC 1.265883, LTDAC 0, TEW
+0 / ; parameter i06SchedNewCapDAC(allCy,CDRTECH,YTIME) “Scheduled new
+DAC capacity” / NEU.LTDAC.2027 4e4, !!Removr – Mongstad pilot /
+industrial‑scale projects NEU.LTDAC.2026 4e4, !!Orca (Climeworks +
+Carbfix) + Mammoth (Climeworks + Carbfix) NEU.LTDAC.2028 1e5, !!Removr +
+Carbfix (Large‑Scale Plant) NEU.LTDAC.2024 900, !!Climeworks – Hinwil
+pilot, Switzerland USA.LTDAC.2023 1e3, !!Global Thermostat – Commerce
+City, Colorado USA.HTDAC.2024 1e3, !!Heirloom – Tracy, California
+USA.LTDAC.2025 5e3, !!Heimdal – Bantam, Oklahoma USA.LTDAC.2026 5e5,
+!!Stratos (1PointFive / Occidental) — Texas USA.HTDAC.2027 5e5,
+!!Project Cypress (Climeworks + Heirloom + Battelle) — Louisiana
+USA.LTDAC.2027 5e5, !!Project Cypress (Climeworks + Heirloom + Battelle)
+— Louisiana USA.LTDAC.2032 1e6, !!HIF USA eFuels – Matagorda County,
+Texas USA.LTDAC.2034 5e5, !!Project Bison – Wyoming (CarbonCapture Inc.)
+USA.LTDAC.2035 7e5 !!South Texas DAC Hub <span
+class="math inline">\(ifthen.DACproj %fScenario% == 2
 CHA.LTDAC.2026  1e6,    !!Possible
 CHA.H2DAC.2030  1e5,    !!Possible
-CHA.EWDAC.2030  1e6,    !!Possible
+CHA.TEW.2030  1e6,    !!Possible
 OAS.LTDAC.2030  1e6,    !!Possible
-OAS.EWDAC.2035  1e5,    !!Possible
+OAS.TEW.2035  1e5,    !!Possible
 DEU.LTDAC.2035  4e5,    !!Possible
-DEU.EWDAC.2035  2e5,    !!Possible
+DEU.TEW.2035  2e5,    !!Possible
 FRA.LTDAC.2035  2e5,    !!Possible
 GBR.H2DAC.2035  5e4,    !!Possible
 IND.LTDAC.2026  7e5,    !!Possible
-IND.EWDAC.2030  7e5,    !!Possible
+IND.TEW.2030  7e5,    !!Possible
 JPN.H2DAC.2030  1e5,    !!Possible
 REF.LTDAC.2029  5e5,    !!Possible
-REF.EWDAC.2033  1e5,    !!Possible
+REF.TEW.2033  1e5,    !!Possible
 MEA.LTDAC.2031  1e5,    !!Possible
-MEA.EWDAC.2037  5e5,    !!Possible
+MEA.TEW.2037  5e5,    !!Possible
 SSA.LTDAC.2032  1e6,    !!Possible
-SSA.EWDAC.2037  1e5,    !!Possible
-LAM.EWDAC.2024  5e5/;
-$else.DACproj
-/;
-$endIf.DACproj
+SSA.TEW.2037  1e5,    !!Possible
+LAM.TEW.2024  5e5/;\)</span>else.DACproj /; <span
+class="math inline">\(endIf.DACproj
 Parameters
-i06ElastCO2Seq(allCy,CO2SEQELAST)          &quot;Elasticities for CO2 sequestration cost curve (1)&quot;
-i06GrossCapDACMin(DACTECH)           &quot;Minimum possible CAPEX of each DAC technology affected by learning curve ($/tCO2)&quot;
-i06GrossCapDAC(DACTECH)            &quot;CAPEX of each DAC technology ($/tCO2)&quot;
-i06VarCostDAC(DACTECH)               &quot;Variable and carbon storage costs of each DAC technology ($/tCO2)&quot;
-i06VarCostDACMin(DACTECH)            &quot;Minimum possible Variable and carbon storage costs of each DAC technology affected by learning curve ($/tCO2)&quot;
-i06FixOandMDAC(DACTECH)              &quot;Fixed and O&amp;M costs of each DAC technology ($/tCO2)&quot;
-i06FixOandMDACMin(DACTECH)           &quot;Minimum possible Fixed and O&amp;M costs of each DAC technology affected by learning curve ($/tCO2)&quot;
-i06LftDAC(allCy,DACTECH,YTIME)             &quot;Lifetime of each DAC technology (years)&quot;
-i06SubsFacDAC(DACTECH)                  &quot;State subsidy factor for the carbon captured applied on the carbon price&quot;
-i06SpecElecDAC(allCy,DACTECH,YTIME)        &quot;Specific electricity needs of DAC technologies (MWh/tCO2)&quot;
-i06SpecHeatDAC(allCy,DACTECH,YTIME)        &quot;Specific heat needs of DAC technologies (MWh/tCO2)&quot;
-;
+i06ElastCO2Seq(allCy,CO2SEQELAST)          &quot;Elasticities for CO2
+sequestration cost curve (1)&quot;
+i06GrossCapDACMin(CDRTECH)           &quot;Minimum possible CAPEX of
+each DAC technology affected by learning curve (\)</span>/tCO2)”
+i06GrossCapDAC(CDRTECH) “CAPEX of each DAC technology (<span
+class="math inline">\(/tCO2)&quot;
+i06VarCostDAC(CDRTECH)               &quot;Variable and carbon storage
+costs of each DAC technology (\)</span>/tCO2)” i06VarCostDACMin(CDRTECH)
+“Minimum possible Variable and carbon storage costs of each DAC
+technology affected by learning curve (<span
+class="math inline">\(/tCO2)&quot;
+i06FixOandMDAC(CDRTECH)              &quot;Fixed and O&amp;M costs of
+each DAC technology (\)</span>/tCO2)” i06FixOandMDACMin(CDRTECH)
+“Minimum possible Fixed and O&amp;M costs of each DAC technology
+affected by learning curve ($/tCO2)” i06LftDAC(allCy,CDRTECH,YTIME)
+“Lifetime of each DAC technology (years)” i06SubsiFacDAC(CDRTECH) “State
+subsidy factor for the carbon captured applied on the carbon price”
+i06SpecElecDAC(allCy,CDRTECH,YTIME) “Specific electricity needs of DAC
+technologies (MWh/tCO2)” i06SpecHeatDAC(allCy,CDRTECH,YTIME) “Specific
+heat needs of DAC technologies (MWh/tCO2)” ;
 i06ElastCO2Seq(runCy,CO2SEQELAST) = i06CO2SeqData(CO2SEQELAST);
-i06GrossCapDACMin(DACTECH) = i06CapexDACMin(DACTECH);
-i06GrossCapDAC(DACTECH) = i06CapexDAC(DACTECH);
-i06VarCostDAC(DACTECH) = i06VarDAC(DACTECH);
-i06VarCostDACMin(DACTECH) = i06VarDACMin(DACTECH);
-i06FixOandMDACMin(DACTECH) = i06FixCostDACMin(DACTECH);
-i06FixOandMDAC(DACTECH) = i06FixCostDAC(DACTECH);
-i06SubsFacDAC(DACTECH) = i06SubsDAC(DACTECH);
-i06LftDAC(runCy,DACTECH,YTIME) = i06LftExpDAC(DACTECH);
-i06SpecElecDAC(runCy,DACTECH,YTIME) = i06ElNeedsDAC(DACTECH);
-i06SpecHeatDAC(runCy,DACTECH,YTIME) = i06HeatNeedsDAC(DACTECH);</code></pre>
-<p><em>VARIABLE INITIALISATION</em></p>
-<pre><code>!!VmCstCO2SeqCsts.L(runCy,YTIME)=1;
-!!VmCstCO2SeqCsts.FX(runCy,YTIME)$(not an(YTIME)) = i06ElastCO2Seq(runCy,&quot;mc_b&quot;);
-V06CapCO2ElecHydr.FX(runCy,CO2CAPTECH,YTIME)$(not An(YTIME)) = 0;
-V06CaptCummCO2.FX(runCy,YTIME)$(not an(YTIME)) = 0 ;
-V06LvlCostDAC.LO(runCy,DACTECH,YTIME) = epsilon6;
-V06LvlCostDAC.L(runCy,DACTECH,YTIME) = 100;
-V06LvlCostDAC.FX(runCy,DACTECH,YTIME)$DATAY(YTIME) = 100;
-V06CapDAC.FX(runCy,DACTECH,YTIME)$(not an(YTIME)) = 1;
-V06ProfRateDAC.LO(runCy,DACTECH,YTIME) = 0;</code></pre>
+i06GrossCapDACMin(CDRTECH) = i06CapexDACMin(CDRTECH);
+i06GrossCapDAC(CDRTECH) = i06CapexDAC(CDRTECH); i06VarCostDAC(CDRTECH) =
+i06VarDAC(CDRTECH); i06VarCostDACMin(CDRTECH) = i06VarDACMin(CDRTECH);
+i06FixOandMDACMin(CDRTECH) = i06FixCostDACMin(CDRTECH);
+i06FixOandMDAC(CDRTECH) = i06FixCostDAC(CDRTECH);
+i06SubsiFacDAC(CDRTECH) = i06SubsiDAC(CDRTECH);
+i06LftDAC(runCy,CDRTECH,YTIME) = i06LftExpDAC(CDRTECH);
+i06SpecElecDAC(runCy,CDRTECH,YTIME) = i06ElNeedsDAC(CDRTECH);
+i06SpecHeatDAC(runCy,CDRTECH,YTIME) = i06HeatNeedsDAC(CDRTECH);</p>
+<pre><code>
+*VARIABLE INITIALISATION*</code></pre>
+<p>V06CapCO2ElecHydr.FX(runCy,SBS,YTIME)<span
+class="math inline">\(DATAY(YTIME) = 0;
+V06CaptCummCO2.LO(runCy,YTIME) = 0;
+V06CaptCummCO2.L(runCy,YTIME) = 1;
+V06CaptCummCO2.FX(runCy,YTIME)\)</span>DATAY(YTIME) = 0 ;
+V06LvlCostDAC.LO(runCy,CDRTECH,YTIME) = epsilon6;
+V06LvlCostDAC.L(runCy,CDRTECH,YTIME) = 100;
+V06LvlCostDAC.FX(runCy,CDRTECH,YTIME)<span
+class="math inline">\(DATAY(YTIME) = 100;
+V06CapCDR.FX(runCy,CDRTECH,YTIME)\)</span>DATAY(YTIME) = 1;
+V06ProfRateDAC.LO(runCy,CDRTECH,YTIME) = 0;
+V06ProfRateDAC.L(runCy,CDRTECH,YTIME) = 1;
+V06CapFacNewDAC.FX(runCy,CDRTECH,YTIME)$DATAY(YTIME) =
+S06CapFacMinNewDAC; ```</p>
 <blockquote>
 <p><strong>Limitations</strong> There are no known limitations.</p>
 </blockquote>
@@ -633,7 +614,7 @@ V06ProfRateDAC.LO(runCy,DACTECH,YTIME) = 0;</code></pre>
 <tbody>
 <tr class="odd">
 <td style="text-align: center;">i06CapexDAC<br />
-(DACTECH)</td>
+(CDRTECH)</td>
 <td style="text-align: center;">CAPEX of each DAC technology</td>
 <td style="text-align: center;"><span
 class="math inline">\(\$/tCO2\)</span></td>
@@ -641,7 +622,7 @@ class="math inline">\(\$/tCO2\)</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">i06CapexDACMin<br />
-(DACTECH)</td>
+(CDRTECH)</td>
 <td style="text-align: center;">Minimum possible CAPEX of each DAC
 technology affected by learning curve</td>
 <td style="text-align: center;"><span
@@ -667,7 +648,7 @@ class="math inline">\(1\)</span></td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">i06ElNeedsDAC<br />
-(DACTECH)</td>
+(CDRTECH)</td>
 <td style="text-align: center;">Specific electricity needs of DAC
 technologies</td>
 <td style="text-align: center;"><span
@@ -676,7 +657,7 @@ class="math inline">\(toe/tCO2\)</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">i06FixCostDAC<br />
-(DACTECH)</td>
+(CDRTECH)</td>
 <td style="text-align: center;">Fixed and O&amp;M costs of each DAC
 technology</td>
 <td style="text-align: center;"><span
@@ -685,7 +666,7 @@ class="math inline">\(\$/tCO2\)</span></td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">i06FixCostDACMin<br />
-(DACTECH)</td>
+(CDRTECH)</td>
 <td style="text-align: center;">Minimum possible Fixed and O&amp;M costs
 of each DAC technology affected by learning curve</td>
 <td style="text-align: center;"><span
@@ -694,7 +675,7 @@ class="math inline">\(\$/tCO2\)</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">i06FixOandMDAC<br />
-(DACTECH)</td>
+(CDRTECH)</td>
 <td style="text-align: center;">Fixed and O&amp;M costs of each DAC
 technology</td>
 <td style="text-align: center;"><span
@@ -703,7 +684,7 @@ class="math inline">\(\$/tCO2\)</span></td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">i06FixOandMDACMin<br />
-(DACTECH)</td>
+(CDRTECH)</td>
 <td style="text-align: center;">Minimum possible Fixed and O&amp;M costs
 of each DAC technology affected by learning curve</td>
 <td style="text-align: center;"><span
@@ -712,7 +693,7 @@ class="math inline">\(\$/tCO2\)</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">i06GrossCapDAC<br />
-(DACTECH)</td>
+(CDRTECH)</td>
 <td style="text-align: center;">CAPEX of each DAC technology</td>
 <td style="text-align: center;"><span
 class="math inline">\(\$/tCO2\)</span></td>
@@ -720,7 +701,7 @@ class="math inline">\(\$/tCO2\)</span></td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">i06GrossCapDACMin<br />
-(DACTECH)</td>
+(CDRTECH)</td>
 <td style="text-align: center;">Minimum possible CAPEX of each DAC
 technology affected by learning curve</td>
 <td style="text-align: center;"><span
@@ -729,7 +710,7 @@ class="math inline">\(\$/tCO2\)</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">i06HeatNeedsDAC<br />
-(DACTECH)</td>
+(CDRTECH)</td>
 <td style="text-align: center;">Specific heat needs of DAC
 technologies</td>
 <td style="text-align: center;"><span
@@ -738,7 +719,7 @@ class="math inline">\(toe/tCO2\)</span></td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">i06LftDAC<br />
-(allCy, DACTECH, YTIME)</td>
+(allCy, CDRTECH, YTIME)</td>
 <td style="text-align: center;">Lifetime of each DAC technology</td>
 <td style="text-align: center;"><span
 class="math inline">\(years\)</span></td>
@@ -746,7 +727,7 @@ class="math inline">\(years\)</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">i06LftExpDAC<br />
-(DACTECH)</td>
+(CDRTECH)</td>
 <td style="text-align: center;">Lifetime of each DAC technology</td>
 <td style="text-align: center;"><span
 class="math inline">\(years\)</span></td>
@@ -754,7 +735,7 @@ class="math inline">\(years\)</span></td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">i06MatFacDAC<br />
-(DACTECH)</td>
+(CDRTECH)</td>
 <td style="text-align: center;">Maturity factor of DAC technology
 expressing its elasticity in implementation regarding its financial
 sustainability</td>
@@ -763,14 +744,14 @@ sustainability</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">i06SchedNewCapDAC<br />
-(allCy, DACTECH, YTIME)</td>
+(allCy, CDRTECH, YTIME)</td>
 <td style="text-align: center;">Scheduled new DAC capacity</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">i06SpecElecDAC<br />
-(allCy, DACTECH, YTIME)</td>
+(allCy, CDRTECH, YTIME)</td>
 <td style="text-align: center;">Specific electricity needs of DAC
 technologies</td>
 <td style="text-align: center;"><span
@@ -779,7 +760,7 @@ class="math inline">\(MWh/tCO2\)</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">i06SpecHeatDAC<br />
-(allCy, DACTECH, YTIME)</td>
+(allCy, CDRTECH, YTIME)</td>
 <td style="text-align: center;">Specific heat needs of DAC
 technologies</td>
 <td style="text-align: center;"><span
@@ -787,16 +768,16 @@ class="math inline">\(MWh/tCO2\)</span></td>
 <td style="text-align: center;">x</td>
 </tr>
 <tr class="odd">
-<td style="text-align: center;">i06SubsDAC<br />
-(DACTECH)</td>
+<td style="text-align: center;">i06SubsiDAC<br />
+(CDRTECH)</td>
 <td style="text-align: center;">Subsidy factor applied to the carbon
 price</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
 <tr class="even">
-<td style="text-align: center;">i06SubsFacDAC<br />
-(DACTECH)</td>
+<td style="text-align: center;">i06SubsiFacDAC<br />
+(CDRTECH)</td>
 <td style="text-align: center;">State subsidy factor for the carbon
 captured applied on the carbon price</td>
 <td style="text-align: center;"></td>
@@ -804,7 +785,7 @@ captured applied on the carbon price</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">i06VarCostDAC<br />
-(DACTECH)</td>
+(CDRTECH)</td>
 <td style="text-align: center;">Variable and carbon storage costs of
 each DAC technology</td>
 <td style="text-align: center;"><span
@@ -813,7 +794,7 @@ class="math inline">\(\$/tCO2\)</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">i06VarCostDACMin<br />
-(DACTECH)</td>
+(CDRTECH)</td>
 <td style="text-align: center;">Minimum possible Variable and carbon
 storage costs of each DAC technology affected by learning curve</td>
 <td style="text-align: center;"><span
@@ -822,7 +803,7 @@ class="math inline">\(\$/tCO2\)</span></td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">i06VarDAC<br />
-(DACTECH)</td>
+(CDRTECH)</td>
 <td style="text-align: center;">Variable and carbon storage costs of
 each DAC technology</td>
 <td style="text-align: center;"><span
@@ -831,7 +812,7 @@ class="math inline">\(\$/tCO2\)</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">i06VarDACMin<br />
-(DACTECH)</td>
+(CDRTECH)</td>
 <td style="text-align: center;">Minimum possible Variable and carbon
 storage costs of each DAC technology affected by learning curve</td>
 <td style="text-align: center;"><span
@@ -839,25 +820,25 @@ class="math inline">\(\$/tCO2\)</span></td>
 <td style="text-align: center;">x</td>
 </tr>
 <tr class="odd">
+<td style="text-align: center;">Q06CapCDR<br />
+(allCy, CDRTECH, YTIME)</td>
+<td style="text-align: center;">Computes the DAC installed capacity
+annually and regionally</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
 <td style="text-align: center;">Q06CapCO2ElecHydr<br />
-(allCy, CO2CAPTECH, YTIME)</td>
+(allCy, SBS, YTIME)</td>
 <td style="text-align: center;">Compute CO2 captured by electricity and
 hydrogen production plants</td>
 <td style="text-align: center;"><span class="math inline">\(Mtn
 CO2\)</span></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
-<td style="text-align: center;">Q06CapDAC<br />
-(allCy, DACTECH, YTIME)</td>
-<td style="text-align: center;">Computes the DAC installed capacity
-annually and regionally</td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;">x</td>
-</tr>
 <tr class="odd">
 <td style="text-align: center;">Q06CapFacNewDAC<br />
-(allCy, DACTECH, YTIME)</td>
+(allCy, CDRTECH, YTIME)</td>
 <td style="text-align: center;">Computes the factor expressing the
 annual increase in the installed capacity of DAC regionally</td>
 <td style="text-align: center;"></td>
@@ -873,19 +854,19 @@ CO2\)</span></td>
 <td style="text-align: center;">x</td>
 </tr>
 <tr class="odd">
-<td style="text-align: center;">Q06ConsFuelDACProd<br />
+<td style="text-align: center;">Q06ConsFuelCDRProd<br />
 (allCy, EF, YTIME)</td>
-<td style="text-align: center;">Computed the annual fuel demand in DAC
+<td style="text-align: center;">Computes the annual fuel demand in CDR
 regionally</td>
 <td style="text-align: center;"><span
 class="math inline">\(Mtoe\)</span></td>
 <td style="text-align: center;">x</td>
 </tr>
 <tr class="even">
-<td style="text-align: center;">Q06ConsFuelTechDACProd<br />
-(allCy, DACTECH, EF, YTIME)</td>
-<td style="text-align: center;">Computed the annual fuel demand in each
-DAC technology regionally</td>
+<td style="text-align: center;">Q06ConsFuelTechCDRProd<br />
+(allCy, CDRTECH, EF, YTIME)</td>
+<td style="text-align: center;">Computes the annual fuel demand in each
+CDR technology regionally</td>
 <td style="text-align: center;"><span
 class="math inline">\(Mtoe\)</span></td>
 <td style="text-align: center;">x</td>
@@ -900,7 +881,7 @@ costs</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">Q06FixOandMDAC<br />
-(DACTECH, YTIME)</td>
+(CDRTECH, YTIME)</td>
 <td style="text-align: center;">Computes Fixed and O&amp;M costs of DAC
 technologies with learning curve</td>
 <td style="text-align: center;"></td>
@@ -908,7 +889,7 @@ technologies with learning curve</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">Q06GrossCapDAC<br />
-(DACTECH, YTIME)</td>
+(CDRTECH, YTIME)</td>
 <td style="text-align: center;">Computes CAPEX of DAC technologies with
 learning curve</td>
 <td style="text-align: center;"></td>
@@ -916,7 +897,7 @@ learning curve</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">Q06LvlCostDAC<br />
-(allCy, DACTECH, YTIME)</td>
+(allCy, CDRTECH, YTIME)</td>
 <td style="text-align: center;">Calculates the CAPEX and the Fixed Costs
 of DAC capacity regionally</td>
 <td style="text-align: center;"><span
@@ -925,7 +906,7 @@ class="math inline">\(US\$2015/tCO2\)</span></td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">Q06ProfRateDAC<br />
-(allCy, DACTECH, YTIME)</td>
+(allCy, CDRTECH, YTIME)</td>
 <td style="text-align: center;">Computes the annual profitability rate
 of DAC including the lifecycle costs and revenues regionally</td>
 <td style="text-align: center;"></td>
@@ -933,7 +914,7 @@ of DAC including the lifecycle costs and revenues regionally</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">Q06VarCostDAC<br />
-(DACTECH, YTIME)</td>
+(CDRTECH, YTIME)</td>
 <td style="text-align: center;">Computes variable costs of DAC
 technologies including carbon storage costs, with learning curve</td>
 <td style="text-align: center;"></td>
@@ -961,25 +942,25 @@ V06DACProfRate</td>
 <td style="text-align: center;">x</td>
 </tr>
 <tr class="even">
+<td style="text-align: center;">V06CapCDR<br />
+(allCy, CDRTECH, YTIME)</td>
+<td style="text-align: center;">DAC regional installed capacity</td>
+<td style="text-align: center;"><span
+class="math inline">\(tCO2\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
 <td style="text-align: center;">V06CapCO2ElecHydr<br />
-(allCy, CO2CAPTECH, YTIME)</td>
+(allCy, SBS, YTIME)</td>
 <td style="text-align: center;">CO2 captured by electricity and hydrogen
 production plants</td>
 <td style="text-align: center;"><span class="math inline">\(Mtn
 CO2\)</span></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
-<td style="text-align: center;">V06CapDAC<br />
-(allCy, DACTECH, YTIME)</td>
-<td style="text-align: center;">DAC regional installed capacity</td>
-<td style="text-align: center;"><span
-class="math inline">\(tCO2\)</span></td>
-<td style="text-align: center;">x</td>
-</tr>
 <tr class="even">
 <td style="text-align: center;">V06CapFacNewDAC<br />
-(allCy, DACTECH, YTIME)</td>
+(allCy, CDRTECH, YTIME)</td>
 <td style="text-align: center;">Factor expressing the annual increase in
 the installed capacity of DAC regionally</td>
 <td style="text-align: center;"></td>
@@ -995,7 +976,7 @@ CO2\)</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">V06FixOandMDAC<br />
-(DACTECH, YTIME)</td>
+(CDRTECH, YTIME)</td>
 <td style="text-align: center;">Fixed and O&amp;M costs of DAC
 technologies with learning curve</td>
 <td style="text-align: center;"></td>
@@ -1003,7 +984,7 @@ technologies with learning curve</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">V06GrossCapDAC<br />
-(DACTECH, YTIME)</td>
+(CDRTECH, YTIME)</td>
 <td style="text-align: center;">CAPEX of DAC technologies with learning
 curve</td>
 <td style="text-align: center;"></td>
@@ -1011,7 +992,7 @@ curve</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">V06LvlCostDAC<br />
-(allCy, DACTECH, YTIME)</td>
+(allCy, CDRTECH, YTIME)</td>
 <td style="text-align: center;">Regional CAPEX and the Fixed Costs of
 DAC capacity</td>
 <td style="text-align: center;"><span
@@ -1020,7 +1001,7 @@ class="math inline">\(US\$2015/tCO2\)</span></td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">V06ProfRateDAC<br />
-(allCy, DACTECH, YTIME)</td>
+(allCy, CDRTECH, YTIME)</td>
 <td style="text-align: center;">The annual profitability rate of DAC
 including the lifecycle costs and revenues regionally</td>
 <td style="text-align: center;"></td>
@@ -1028,29 +1009,20 @@ including the lifecycle costs and revenues regionally</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">V06VarCostDAC<br />
-(DACTECH, YTIME)</td>
+(CDRTECH, YTIME)</td>
 <td style="text-align: center;">Variable costs of DAC technologies
 including carbon storage costs, with learning curve</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
-<td style="text-align: center;">VmConsFuelTechDACProd<br />
-(allCy, DACTECH, EF, YTIME)</td>
-<td style="text-align: center;">Annual fuel demand in each DAC
-technology regionally</td>
-<td style="text-align: center;"><span
-class="math inline">\(Mtoe\)</span></td>
-<td style="text-align: center;">x</td>
-</tr>
 </tbody>
 </table>
 <h3 id="sets">Sets</h3>
-<table style="width:78%;">
+<table style="width:76%;">
 <caption>sets in use</caption>
 <colgroup>
 <col style="width: 31%" />
-<col style="width: 45%" />
+<col style="width: 44%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -1064,51 +1036,49 @@ class="math inline">\(Mtoe\)</span></td>
 <td style="text-align: center;">All Countries Used in the Model</td>
 </tr>
 <tr class="even">
-<td style="text-align: center;">an(ytime)</td>
-<td style="text-align: center;">Years for which the model is
-running</td>
-</tr>
-<tr class="odd">
 <td style="text-align: center;">CCS(PGALL)</td>
 <td style="text-align: center;">Plants which can be equipped with
 CCS</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">CCSTECH(ITECH)</td>
 <td style="text-align: center;"></td>
 </tr>
+<tr class="even">
+<td style="text-align: center;">CDR(DSBS)</td>
+<td style="text-align: center;">CDR subsectors</td>
+</tr>
 <tr class="odd">
+<td style="text-align: center;">CDRTECH(TECH)</td>
+<td style="text-align: center;">CDR Technologies</td>
+</tr>
+<tr class="even">
 <td style="text-align: center;">CO2CAPTECH</td>
 <td style="text-align: center;">Carbon capture subsectors</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">CO2SEQELAST</td>
 <td style="text-align: center;">Elasticities for CO2 sequestration cost
 curve</td>
 </tr>
-<tr class="odd">
-<td style="text-align: center;">DACTECH(TECH)</td>
+<tr class="even">
+<td style="text-align: center;">DACTECH(CDRTECH)</td>
 <td style="text-align: center;">DAC Technologies</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">DSBS(SBS)</td>
 <td style="text-align: center;">All Demand Subsectors</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">EF</td>
 <td style="text-align: center;">Energy Forms</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">EFS(EF)</td>
 <td style="text-align: center;">Energy Forms used in Supply Side</td>
 </tr>
-<tr class="odd">
-<td style="text-align: center;">H2CCS(H2TECH)</td>
-<td style="text-align: center;">Hydrogen production technologies
-equipped with CCS facility</td>
-</tr>
 <tr class="even">
-<td style="text-align: center;">H2TECH</td>
+<td style="text-align: center;">H2TECH(STECH)</td>
 <td style="text-align: center;">Hydrogen production technologies</td>
 </tr>
 <tr class="odd">
@@ -1117,38 +1087,37 @@ equipped with CCS facility</td>
 and fuels</td>
 </tr>
 <tr class="even">
+<td style="text-align: center;">INDSE1(SBS)</td>
+<td style="text-align: center;">Industrial SubSectors</td>
+</tr>
+<tr class="odd">
 <td style="text-align: center;">ITECH(TECH)</td>
 <td style="text-align: center;">Industrial - Domestic - Non-energy &amp;
 Bunkers Technologies</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">ITECHtoEF(ITECH, EF)</td>
 <td style="text-align: center;">Fuels consumed by industrial
 technologies</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">NAP(Policies_set)</td>
 <td style="text-align: center;">National Allocation Plan sector
 categories</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">NAPtoALLSBS(NAP, ALLSBS)</td>
 <td style="text-align: center;">Energy sectors corresponding to NAP
 sectors</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">PGALL(STECH)</td>
 <td style="text-align: center;">Power Generation Plant Types</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">PGALLtoEF(PGALL, EFS)</td>
 <td style="text-align: center;">Correspondence between plants and energy
 forms</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">PGEF(EFS)</td>
-<td style="text-align: center;">Energy forms used for steam
-production</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">runCy(allCy)</td>
@@ -1170,8 +1139,8 @@ running</td>
 Technologies</td>
 </tr>
 <tr class="odd">
-<td style="text-align: center;">SSBS(SBS)</td>
-<td style="text-align: center;">All Supply Subsectors</td>
+<td style="text-align: center;">TECH</td>
+<td style="text-align: center;">Technologies (in Demand side)</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">TECHtoEF</td>
@@ -1185,8 +1154,9 @@ technologies</td>
 href="03_RestOfEnergy.htm">03_RestOfEnergy</a>, <a
 href="04_PowerGeneration.htm">04_PowerGeneration</a>, <a
 href="05_Hydrogen.htm">05_Hydrogen</a>, <a
+href="07_Emissions.htm">07_Emissions</a>, <a
 href="08_Prices.htm">08_Prices</a>, <a href="09_Heat.htm">09_Heat</a>,
-<a href="core.htm">core</a></p>
+<a href="11_Economy.htm">11_Economy</a>, <a href="core.htm">core</a></p>
 <h2 id="references">References</h2>
 <script>
 window.onscroll = function() {myFunction()};

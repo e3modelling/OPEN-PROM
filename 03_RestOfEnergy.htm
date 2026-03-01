@@ -54,6 +54,7 @@
    <a href='08_Prices.htm'> 8. Prices module</a>
    <a href='09_Heat.htm'> 9. Heat module</a>
    <a href='10_Curves.htm'>10. Curves module</a>
+   <a href='11_Economy.htm'>11. Economy module</a>
    </div>
   </div>
   <div class="dropdown">
@@ -125,7 +126,7 @@ class="math inline">\(Mtoe\)</span></td>
 <td style="text-align: center;">x</td>
 </tr>
 <tr class="even">
-<td style="text-align: center;">VmConsFuelDACProd<br />
+<td style="text-align: center;">VmConsFuelCDRProd<br />
 (allCy, EF, YTIME)</td>
 <td style="text-align: center;">Annual fuel demand in DAC
 regionally</td>
@@ -263,7 +264,7 @@ class="math inline">\(Mtoe\)</span></td>
 SECtoEFPROD(SSBS,EFS)      &quot;Energy forms produced by each supply sector&quot;
 /
 SLD.(HCL,LGN,BMSWAS)
-LQD.(CRO,GSL,BGSL,GDO,BGDO,RFO,LPG,KRS,OLQ,MET,ETH)
+LQD.(CRO,GSL,BGSL,GDO,BGDO,RFO,LPG,KRS,BKRS,OLQ,MET,ETH)
 GAS.(NGS,OGS)
 PG.(ELC,NUC)
 H2P.H2F
@@ -272,8 +273,7 @@ STEAMP.STE
 ;</code></pre>
 <pre><code>Equations</code></pre>
 <p>*** REST OF ENERGY BALANCE SECTORS EQUATIONS</p>
-<pre><code>Q03OutTransfDhp(allCy,STEAM,YTIME)                           &quot;Compute the transformation output from district heating plants&quot;
-Q03OutTransfCHP(allCy,TOCTEF,YTIME)                            &quot;Compute the transformation output from CHP (Mtoe)&quot;
+<pre><code>Q03OutTransfCHP(allCy,TOCTEF,YTIME)                            &quot;Compute the transformation output from CHP (Mtoe)&quot;
 Q03OutTransfRefSpec(allCy,EFS,YTIME)                       &quot;Compute the transformation output from refineries&quot;
 Q03OutTransfGasses(allCy,EFS,YTIME) 
 Q03OutTransfSolids(allCy,EFS,YTIME)
@@ -291,15 +291,13 @@ Q03Imp(allCy,EFS,YTIME)                                    &quot;Compute fake im
 <p><strong>Interdependent Equations</strong></p>
 <pre><code>Q03ImpNetEneBrnch(allCy,EFS,YTIME)                         &quot;Compute net imports&quot;
 Q03ConsFiEneSec(allCy,SSBS,EFS,YTIME)                          &quot;Compute energy branch final consumption&quot;
-Q03TransfInputDHPlants(allCy,EFS,YTIME)                    &quot;Compute the transformation input to distrcit heating plants&quot;
 Q03ConsFinEneCountry(allCy,EFS,YTIME)                      &quot;Compute total final energy consumption&quot;
 Q03ConsFinNonEne(allCy,EFS,YTIME)                          &quot;Compute final non-energy consumption&quot;
 Q03LossesDistr(allCy,EFS,YTIME)                            &quot;Compute distribution losses&quot;
 ;
 Variables</code></pre>
 <p>*** REST OF ENERGY BALANCE SECTORS VARIABLES</p>
-<pre><code>V03OutTransfDhp(allCy,STEAM,YTIME)                           &quot;Transformation output from District Heating Plants (Mtoe)&quot;
-V03OutTransfCHP(allCy,TOCTEF,YTIME)                            &quot;Transformation output from CHP (Mtoe)&quot;
+<pre><code>V03OutTransfCHP(allCy,TOCTEF,YTIME)                            &quot;Transformation output from CHP (Mtoe)&quot;
 V03OutTransfRefSpec(allCy,EFS,YTIME)                       &quot;Transformation output from refineries (Mtoe)&quot;
 V03OutTransfGasses(allCy,EFS,YTIME) 
 V03OutTransfSolids(allCy,EFS,YTIME)
@@ -317,7 +315,6 @@ V03Imp(allCy,EFS,YTIME)                                    &quot;Fake Imports fo
 <p><strong>Interdependent Variables</strong></p>
 <pre><code>VmImpNetEneBrnch(allCy,EFS,YTIME)                          &quot;Net Imports (Mtoe)&quot;
 VmConsFiEneSec(allCy,SSBS,EFS,YTIME)                            &quot;Final consumption in energy sector (Mtoe)&quot;
-VmTransfInputDHPlants(allCy,EFS,YTIME)                     &quot;Transformation input to District Heating Plants (Mtoe)&quot;
 VmConsFinEneCountry(allCy,EF,YTIME)                        &quot;Total final energy consumnption (Mtoe)&quot;
 VmConsFinNonEne(allCy,EFS,YTIME)                           &quot;Final non energy consumption (Mtoe)&quot;
 VmLossesDistr(allCy,EFS,YTIME)                             &quot;Distribution losses (Mtoe)&quot;
@@ -348,7 +345,7 @@ and fuels.</p>
         VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)
       )
     ) +
-    sum(EF$(EFtoEFS(EF,EFS) $SECtoEF(&quot;DAC&quot;,EF)),VmConsFuelDACProd(allCy,EF,YTIME));</code></pre>
+    VmConsFuelCDRProd(allCy,EFS,YTIME);</code></pre>
 <p>The equation computes the total final energy consumption in million
 tonnes of oil equivalent for all countries at a specific time period.
 This is achieved by summing the final energy consumption for each energy
@@ -365,8 +362,8 @@ supply side. This process is performed for each time period.</p>
 <pre><code>Q03ConsFinNonEne(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmConsFinNonEne(allCy,EFS,YTIME)
         =E=
-    sum(NENSE$(not sameas(&quot;BU&quot;,NENSE)),
-      sum(EF$(EFtoEFS(EF,EFS)$SECtoEF(NENSE,EF)), VmConsFuel(allCy,NENSE,EF,YTIME))
+    sum(NENSE$(not sameas(&quot;BU&quot;,NENSE) and SECtoEF(NENSE,EFS)),
+      VmConsFuel(allCy,NENSE,EFS,YTIME)
     );  </code></pre>
 <p>The equation computes the distribution losses in million tonnes of
 oil equivalent for a given energy form sector. The losses are determined
@@ -390,34 +387,8 @@ sector.</p>
     (
       VmDemTotH2(allCy,YTIME) -
       sum(SBS$SECtoEF(SBS,&quot;H2F&quot;), VmDemSecH2(allCy,SBS,YTIME))
-    )$H2EF(EFS);  </code></pre>
-<p>The equation calculates the transformation output from district
-heating plants . This transformation output is determined by summing
-over different demand sectors and district heating systems that
-correspond to the specified energy form set. The equation then sums over
-these district heating systems and calculates the consumption of fuels
-in each of these sectors. The resulting value represents the
-transformation output from district heating plants in million tonnes of
-oil equivalent.</p>
-<pre><code>Q03OutTransfDhp(allCy,STEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V03OutTransfDhp(allCy,STEAM,YTIME)
-        =E=
-    sum(TSTEAM$TDHP(TSTEAM),
-      VmProdSte(allCy,TSTEAM,YTIME)
-    );</code></pre>
-<p>The equation calculates the transformation input to district heating
-plants. This transformation input is determined by summing over
-different district heating systems that correspond to the specified
-energy form set . The equation then sums over different demand sectors
-within each district heating system and calculates the consumption of
-fuels in each of these sectors, taking into account the efficiency of
-district heating plants. The resulting value represents the
-transformation input to district heating plants in million tonnes of oil
-equivalent.</p>
-<pre><code>Q03TransfInputDHPlants(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    VmTransfInputDHPlants(allCy,EFS,YTIME)
-        =E=
-    VmConsFuelSteProd(allCy,&quot;DHP&quot;,EFS,YTIME);
+    )$H2EF(EFS)
+;  
 Q03OutTransfCHP(allCy,TOCTEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V03OutTransfCHP(allCy,TOCTEF,YTIME)
         =E=
@@ -522,8 +493,7 @@ total transformation input in million tons of oil equivalent.</p>
     VmConsFuelSteProd(allCy,&quot;DHP&quot;,EFS,YTIME)$sameas(&quot;STEAMP&quot;,SSBS) +
     V03InputTransfRef(allCy,EFS,YTIME)$sameas(&quot;LQD&quot;,SSBS) + 
     V03InputTransfSolids(allCy,EFS,YTIME)$sameas(&quot;SLD&quot;,SSBS) +
-    V03InputTransfGasses(allCy,EFS,YTIME)$sameas(&quot;GAS&quot;,SSBS) + 
-    VmConsFuelH2Prod(allCy,EFS,YTIME)$sameas(&quot;H2P&quot;,SSBS);            </code></pre>
+    V03InputTransfGasses(allCy,EFS,YTIME)$sameas(&quot;GAS&quot;,SSBS);            </code></pre>
 <p>The equation calculates the total transformation output for a
 specific energy branch in a given scenario and year. The result is
 obtained by summing the transformation outputs from different sources,
@@ -587,7 +557,8 @@ equivalent.</p>
     SUM(SSBS,V03InpTotTransf(allCy,SSBS,EFS,YTIME)) - 
     SUM(SSBS,V03OutTotTransf(allCy,SSBS,EFS,YTIME)) + 
     VmLossesDistr(allCy,EFS,YTIME) - 
-    V03Transfers(allCy,EFS,YTIME); </code></pre>
+    V03Transfers(allCy,EFS,YTIME)
+; </code></pre>
 <p>The equation calculates the gross inland consumption. This quantity
 is equal to the total energy supply for each country.</p>
 <pre><code>Q03ConsGrssInl(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
@@ -601,7 +572,8 @@ is equal to the total energy supply for each country.</p>
       V03OutTotTransf(allCy,SSBS,EFS,YTIME)
     ) + 
     VmLossesDistr(allCy,EFS,YTIME) - 
-    V03Transfers(allCy,EFS,YTIME);  </code></pre>
+    V03Transfers(allCy,EFS,YTIME)
+;  </code></pre>
 <p>The equation calculates the primary production for a specific primary
 production definition in a given scenario and year. The computation
 involves different scenarios based on the type of primary production
@@ -627,7 +599,7 @@ primary production in million tons of oil equivalent.</p>
       (
         !!i03RatePriProTotPriNeeds(allCy,EFS,YTIME) *
         V03ProdPrimary(allCy,EFS,YTIME-1) *
-        V03ConsGrssInlNotEneBranch(allCy,EFS,YTIME) /
+        (V03ConsGrssInlNotEneBranch(allCy,EFS,YTIME) + 1e-6) /
         (V03ConsGrssInlNotEneBranch(allCy,EFS,YTIME-1) + 1e-6)
       )$(not (sameas(EFS,&quot;CRO&quot;) or sameas(EFS,&quot;NGS&quot;))) +
       (
@@ -656,7 +628,8 @@ fake exports in million tons of oil equivalent.</p>
 <pre><code>Q03Exp(allCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS) $runCy(allCy))..
     V03Exp(allCy,EFS,YTIME)
         =E=
-    imFuelExprts(allCy,EFS,YTIME);</code></pre>
+    imFuelExprts(allCy,EFS,YTIME)
+;</code></pre>
 <p>The equation computes the fake imports for a specific energy branch
 in a given scenario and year. The calculation is based on different
 conditions for various energy branches, such as electricity, crude oil,
@@ -716,7 +689,8 @@ equivalent for the specified scenario and year.</p>
     SUM(EFS2$SECtoEFPROD(SSBS,EFS2), 
       V03OutTotTransf(allCy,SSBS,EFS2,YTIME) +
       V03ProdPrimary(allCy,EFS2,YTIME)$(not PGRENEF(EFS2))
-    );                               </code></pre>
+    ) +
+    VmConsFuelH2Prod(allCy,EFS,YTIME)$sameas(&quot;H2P&quot;,SSBS);                               </code></pre>
 <pre><code>table i03DataGrossInlCons(allCy,EF,YTIME)         &quot;Data for Gross Inland Conusmption (Mtoe)&quot;
 $ondelim
 $include&quot;./iDataGrossInlCons.csv&quot;
@@ -837,9 +811,8 @@ V03OutTotTransf.FX(runCy,SSBS,EFS,YTIME)$(DATAY(YTIME) and SECtoEFPROD(SSBS,EFS)
 V03OutTotTransf.FX(runCy,SSBS,EFS,YTIME)$(not SECtoEFPROD(SSBS,EFS)) = 0;
 V03InpTotTransf.FX(runCy,SSBS,EFS,YTIME)$(DATAY(YTIME) and SECtoEF(SSBS,EFS)) = -i03InpTotTransfProcess(runCy,SSBS,EFS,YTIME);
 V03InpTotTransf.FX(runCy,SSBS,EFS,YTIME)$(not SECtoEF(SSBS,EFS)) = 0;
-V03OutTransfDhp.FX(runCy,STEAM,YTIME)$DATAY(YTIME) = i03OutTotTransfProcess(runCy,&quot;STEAMP&quot;,STEAM,YTIME);
-VmTransfInputDHPlants.FX(runCy,EFS,YTIME)$DATAY(YTIME) = -i03InpTotTransfProcess(runCy,&quot;STEAMP&quot;,EFS,YTIME);
 V03OutTransfCHP.FX(runCy,TOCTEF,YTIME)$DATAY(YTIME) = i03OutTotTransfProcess(runCy,&quot;CHP&quot;,TOCTEF,YTIME);
+VmConsFinEneCountry.LO(runCy,EFS,YTIME) = 0;
 VmConsFinEneCountry.FX(runCy,EFS,YTIME)$DATAY(YTIME) = 
 sum(DSBS$(not NENSE(DSBS)), 
   imFuelConsPerFueSub(runCy,DSBS,EFS,YTIME)
@@ -1152,21 +1125,13 @@ class="math inline">\(Mtoe\)</span></td>
 <td style="text-align: center;">x</td>
 </tr>
 <tr class="odd">
-<td style="text-align: center;">Q03OutTransfDhp<br />
-(allCy, STEAM, YTIME)</td>
-<td style="text-align: center;">Compute the transformation output from
-district heating plants</td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;">x</td>
-</tr>
-<tr class="even">
 <td style="text-align: center;">Q03OutTransfGasses<br />
 (allCy, EFS, YTIME)</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">Q03OutTransfRefSpec<br />
 (allCy, EFS, YTIME)</td>
 <td style="text-align: center;">Compute the transformation output from
@@ -1174,32 +1139,24 @@ refineries</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">Q03OutTransfSolids<br />
 (allCy, EFS, YTIME)</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">Q03ProdPrimary<br />
 (allCy, EFS, YTIME)</td>
 <td style="text-align: center;">Compute primary production</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">Q03Transfers<br />
 (allCy, EFS, YTIME)</td>
 <td style="text-align: center;">Compute transfers</td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;">x</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">Q03TransfInputDHPlants<br />
-(allCy, EFS, YTIME)</td>
-<td style="text-align: center;">Compute the transformation input to
-distrcit heating plants</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
@@ -1289,22 +1246,13 @@ class="math inline">\(Mtoe\)</span></td>
 <td style="text-align: center;">x</td>
 </tr>
 <tr class="even">
-<td style="text-align: center;">V03OutTransfDhp<br />
-(allCy, STEAM, YTIME)</td>
-<td style="text-align: center;">Transformation output from District
-Heating Plants</td>
-<td style="text-align: center;"><span
-class="math inline">\(Mtoe\)</span></td>
-<td style="text-align: center;">x</td>
-</tr>
-<tr class="odd">
 <td style="text-align: center;">V03OutTransfGasses<br />
 (allCy, EFS, YTIME)</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">V03OutTransfRefSpec<br />
 (allCy, EFS, YTIME)</td>
 <td style="text-align: center;">Transformation output from
@@ -1313,14 +1261,14 @@ refineries</td>
 class="math inline">\(Mtoe\)</span></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">V03OutTransfSolids<br />
 (allCy, EFS, YTIME)</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">V03ProdPrimary<br />
 (allCy, EFS, YTIME)</td>
 <td style="text-align: center;">Primary Production</td>
@@ -1328,19 +1276,10 @@ class="math inline">\(Mtoe\)</span></td>
 class="math inline">\(Mtoe\)</span></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">V03Transfers<br />
 (allCy, EFS, YTIME)</td>
 <td style="text-align: center;">Transfers</td>
-<td style="text-align: center;"><span
-class="math inline">\(Mtoe\)</span></td>
-<td style="text-align: center;">x</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">VmTransfInputDHPlants<br />
-(allCy, EFS, YTIME)</td>
-<td style="text-align: center;">Transformation input to District Heating
-Plants</td>
 <td style="text-align: center;"><span
 class="math inline">\(Mtoe\)</span></td>
 <td style="text-align: center;">x</td>
@@ -1371,107 +1310,98 @@ class="math inline">\(Mtoe\)</span></td>
 running</td>
 </tr>
 <tr class="odd">
-<td style="text-align: center;">CCS(PGALL)</td>
-<td style="text-align: center;">Plants which can be equipped with
-CCS</td>
-</tr>
-<tr class="even">
 <td style="text-align: center;">DSBS(SBS)</td>
 <td style="text-align: center;">All Demand Subsectors</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">EF</td>
 <td style="text-align: center;">Energy Forms</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">EFS(EF)</td>
 <td style="text-align: center;">Energy Forms used in Supply Side</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">EFtoEFS(EF, EFS)</td>
 <td style="text-align: center;">Fuel Aggregation for Supply Side</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">ELCEF(EF)</td>
 <td style="text-align: center;">Electricity</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">H2EF(EF)</td>
 <td style="text-align: center;">Hydrogen</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">IMPEF(EFS)</td>
 <td style="text-align: center;">Fuels considered in Imports and
 Exports</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">INDDOM(DSBS)</td>
 <td style="text-align: center;">Industry and Tertiary</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">kpdl</td>
 <td style="text-align: center;">counter for Polynomial Distribution
 Lag</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">NENSE(DSBS)</td>
 <td style="text-align: center;">Non Energy and Bunkers</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">PGALL(STECH)</td>
 <td style="text-align: center;">Power Generation Plant Types</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">PGRENEF</td>
 <td style="text-align: center;">Renewable energy forms in power
 generation</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">runCy(allCy)</td>
 <td style="text-align: center;">Countries for which the model is
 running</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">runCyL(allCy)</td>
 <td style="text-align: center;">Countries for which the model is running
 (used in countries loop)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">SBS(ALLSBS)</td>
 <td style="text-align: center;">Model Subsectors</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">SECtoEF(SBS, EF)</td>
 <td style="text-align: center;">Link between Model Subsectors and Energy
 Forms consumed</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">SECtoEFPROD(SSBS, EFS)</td>
 <td style="text-align: center;">Energy forms produced by each supply
 sector</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">SSBS(SBS)</td>
 <td style="text-align: center;">All Supply Subsectors</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">STEAM(EFS)</td>
 <td style="text-align: center;">Steam</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">STEMODE</td>
 <td style="text-align: center;">Steam production modes</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">SUPOTH</td>
 <td style="text-align: center;">Indicators related to supply side</td>
 </tr>
-<tr class="odd">
-<td style="text-align: center;">TCHP(TSTEAM)</td>
-<td style="text-align: center;">CHP plant technologies</td>
-</tr>
 <tr class="even">
-<td style="text-align: center;">TDHP(TSTEAM)</td>
+<td style="text-align: center;">TCHP(TSTEAM)</td>
 <td style="text-align: center;">CHP plant technologies</td>
 </tr>
 <tr class="odd">
@@ -1500,7 +1430,8 @@ href="02_Industry.htm">02_Industry</a>, <a
 href="04_PowerGeneration.htm">04_PowerGeneration</a>, <a
 href="05_Hydrogen.htm">05_Hydrogen</a>, <a href="06_CO2.htm">06_CO2</a>,
 <a href="07_Emissions.htm">07_Emissions</a>, <a
-href="09_Heat.htm">09_Heat</a></p>
+href="09_Heat.htm">09_Heat</a>, <a
+href="11_Economy.htm">11_Economy</a></p>
 <h2 id="references">References</h2>
 <script>
 window.onscroll = function() {myFunction()};

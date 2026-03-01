@@ -54,6 +54,7 @@
    <a href='08_Prices.htm'> 8. Prices module</a>
    <a href='09_Heat.htm'> 9. Heat module</a>
    <a href='10_Curves.htm'>10. Curves module</a>
+   <a href='11_Economy.htm'>11. Economy module</a>
    </div>
   </div>
   <div class="dropdown">
@@ -402,7 +403,7 @@ V04SharePowPlaNewEq(allCy,PGALL,YTIME)                     &quot;Power plant sha
 V04CostVarTechElec(allCy,PGALL,YTIME)                      &quot;Variable cost of technology (US$2015/KWh)&quot;  
 V04CostVarTechElecTot(allCy,YTIME)                         &quot;Electricity peak loads (GW)&quot;    
 V04SortPlantDispatch(allCy,PGALL,YTIME)                    &quot;Power plants sorting according to variable cost to decide the plant dispatching (1)&quot;
-V04NewCapElec(allCy,PGALL,YTIME)                           &quot;The new capacity added every year (MW)&quot; 
+V04NewCapElec(allCy,PGALL,YTIME)                           &quot;The new capacity added every year (GW)&quot; 
 V04NetNewCapElec(allCy,PGALL,YTIME)                        &quot;Yearly difference in installed capacity (MW)&quot;   
 V04CFAvgRen(allCy,PGALL,YTIME)                             &quot;The average capacity factor of RES (1)&quot;
 V04CapOverall(allCy,PGALL,YTIME)                           &quot;Overall Capacity (MW)&quot;  
@@ -952,7 +953,7 @@ weighted average of the availability rates over these eight periods.</p>
     (V04NetNewCapElec(allCy,PGALL,YTIME) + V04NetNewCapElec(allCy,PGALL,YTIME-1)+
     V04NetNewCapElec(allCy,PGALL,YTIME-2) + V04NetNewCapElec(allCy,PGALL,YTIME-3)+
     V04NetNewCapElec(allCy,PGALL,YTIME-4) + V04NetNewCapElec(allCy,PGALL,YTIME-5)+
-    V04NetNewCapElec(allCy,PGALL,YTIME-6) + V04NetNewCapElec(allCy,PGALL,YTIME-7)
+    V04NetNewCapElec(allCy,PGALL,YTIME-6) + V04NetNewCapElec(allCy,PGALL,YTIME-7) + 1e-6
     );</code></pre>
 <p>This equation calculates the variable representing the overall
 capacity for a specific power plant in a given country and time period .
@@ -1592,7 +1593,7 @@ V04GapGenCapPowerDiff(allCy,YTIME)                         &quot;Gap in total ge
 V04ShareSatPG(allCy,PGALL,YTIME)                               &quot;Saturation for electricity mixture penetration of RES technologies&quot; 
 V04SharePowPlaNewEq(allCy,PGALL,YTIME)                     &quot;Power plant share in new equipment (1)&quot;         
 V04SortPlantDispatch(allCy,PGALL,YTIME)                    &quot;Power plants sorting according to variable cost to decide the plant dispatching (1)&quot;
-V04NewCapElec(allCy,PGALL,YTIME)                           &quot;The new capacity added every year (MW)&quot; 
+V04NewCapElec(allCy,PGALL,YTIME)                           &quot;The new capacity added every year (GW)&quot; 
 V04NetNewCapElec(allCy,PGALL,YTIME)                        &quot;Yearly difference in installed capacity (MW)&quot;   
 V04CFAvgRen(allCy,PGALL,YTIME)                             &quot;The average capacity factor of RES (1)&quot;
 V04CapOverall(allCy,PGALL,YTIME)                           &quot;Overall Capacity (MW)&quot;  
@@ -1644,7 +1645,7 @@ estimated electricity generation remains non-negative.</p>
         V03OutTransfCHP(allCy,&quot;STE&quot;,YTIME) * VmPriceElecInd(allCy,YTIME) - 
         i04MxmShareChpElec(allCy,YTIME) * V04DemElecTot(allCy,YTIME))
       )  
-    )/2 + SQR(1E-4);</code></pre>
+    )/2 + 1e-6;</code></pre>
 <p>This equation computes the electric capacity of Combined Heat and
 Power (CHP) plants. The capacity is calculated in gigawatts (GW) and is
 based on several factors, including the consumption of fuel in the
@@ -1941,7 +1942,7 @@ weighted average of the availability rates over these eight periods.</p>
     (V04NetNewCapElec(allCy,PGALL,YTIME) + V04NetNewCapElec(allCy,PGALL,YTIME-1)+
     V04NetNewCapElec(allCy,PGALL,YTIME-2) + V04NetNewCapElec(allCy,PGALL,YTIME-3)+
     V04NetNewCapElec(allCy,PGALL,YTIME-4) + V04NetNewCapElec(allCy,PGALL,YTIME-5)+
-    V04NetNewCapElec(allCy,PGALL,YTIME-6) + V04NetNewCapElec(allCy,PGALL,YTIME-7)
+    V04NetNewCapElec(allCy,PGALL,YTIME-6) + V04NetNewCapElec(allCy,PGALL,YTIME-7) + 1e-6
     );</code></pre>
 <p>This equation calculates the variable representing the overall
 capacity for a specific power plant in a given country and time period .
@@ -1955,7 +1956,7 @@ renewable power plants based on their average capacity factor.</p>
     V04CFAvgRen(allCy,PGALL,YTIME-1) *
     (
       V04NetNewCapElec(allCy,PGALL,YTIME) / i04AvailRate(allCy,PGALL,YTIME) +
-      V04CapOverall(allCy,PGALL,YTIME-1) / V04CFAvgRen(allCy,PGALL,YTIME-1)
+      V04CapOverall(allCy,PGALL,YTIME-1) / (V04CFAvgRen(allCy,PGALL,YTIME-1) + 1e-6)
     )$PGREN(PGALL);</code></pre>
 <p>This equation calculates the electricity production from power
 generation plants for a specific country , power generation plant type ,
@@ -1994,7 +1995,7 @@ the given time period.</p>
     VmCostPowGenAvgLng(allCy,YTIME)
         =E=
     SUM(PGALL,VmProdElec(allCy,PGALL,YTIME) * V04CostHourProdInvDec(allCy,PGALL,YTIME)) / 
-    (SUM(PGALL,VmProdElec(allCy,PGALL,YTIME)) + 1e-6); </code></pre>
+    (SUM(PGALL,VmProdElec(allCy,PGALL,YTIME))); </code></pre>
 <p>This equation estimates the factor increasing the CAPEX of new RES
 (unflexible) capacity installation due to simultaneous need for grind
 upgrade and storage, for each region (country) and year. This factor
@@ -2157,46 +2158,27 @@ $ondelim
 $include&quot;./iInvPlants.csv&quot;
 $offdelim
 ;
-table i04DecomPlants(allCy,PGALL,YTIME)            &quot;Decomissioning Plants (MW)&quot;
+i04InvPlants(allCy,PGALL,YTIME) = 0;
+table i04PlantDecomSched(allCy,PGALL,YTIME)            &quot;Decided plant decomissioning schedule (GW)&quot;
 $ondelim
 $include&quot;./iDecomPlants.csv&quot;
 $offdelim
 ;
+i04PlantDecomSched(allCy,PGALL,YTIME) = 0;
+table iMatFacPlaAvailCapData(allCy,PGALL,YTIME)      &quot;Maturity factor related to plant available capacity (1)&quot;
+$ondelim
+$include&quot;./iMatFacPlaAvailCap.csv&quot;
+$offdelim
+;
 $IFTHEN.calib %Calibration% == MatCalibration
 variable i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   &quot;Maturity factor related to plant available capacity (1)&quot;;
-table i04MatFacPlaAvailCapL(allCy,PGALL,YTIME)     &quot;Maturity factor related to plant available capacity (1)&quot;
-$ondelim
-$include &quot;./iMatFacPlaAvailCap.csv&quot;
-$offdelim
-;
-i04MatFacPlaAvailCap.L(runCy,PGALL,YTIME)    = i04MatFacPlaAvailCapL(runCy,PGALL,YTIME);
-i04MatFacPlaAvailCap.LO(runCy, PGALL, YTIME) = 1e-8;
-i04MatFacPlaAvailCap.UP(runCy, PGALL, YTIME) = 40;
+i04MatFacPlaAvailCap.LO(runCy, PGALL, YTIME) = 1e-6;
+i04MatFacPlaAvailCap.UP(runCy, PGALL, YTIME) = 50;
+i04MatFacPlaAvailCap.L(runCy,PGALL,YTIME) = iMatFacPlaAvailCapData(runCy,PGALL,YTIME);
 $ELSE.calib
-table i04MatFacPlaAvailCap(allCy,PGALL,YTIME)      &quot;Maturity factor related to plant available capacity (1)&quot;
-$ondelim
-$include &quot;./iMatFacPlaAvailCap.csv&quot;
-$offdelim
-;
+parameter i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   &quot;Maturity factor related to plant available capacity (1)&quot;;
+i04MatFacPlaAvailCap(runCy,PGALL,YTIME) = iMatFacPlaAvailCapData(runCy,PGALL,YTIME);
 $ENDIF.calib
-$IFTHEN.calib %Calibration% == MatCalibration
-variable i04MatureFacPlaDisp(allCy,PGALL,YTIME)    &quot;Maturity factor related to plant dispatching (1)&quot;;
-table i04MatureFacPlaDispL(allCy,PGALL,YTIME)      &quot;Maturity factor related to plant dispatching (1)&quot;
-$ondelim
-$include &quot;./iMatureFacPlaDisp.csv&quot;
-$offdelim
-;
-i04MatureFacPlaDisp.L(runCy,PGALL,YTIME)    = i04MatureFacPlaDispL(runCy,PGALL,YTIME);
-i04MatureFacPlaDisp.LO(runCy, PGALL, YTIME) = 1e-8;
-i04MatureFacPlaDisp.UP(runCy, PGALL, YTIME) = 600;
-$ELSE.calib
-table i04MatureFacPlaDisp(allCy,PGALL,YTIME)       &quot;Maturity factor related to plant dispatching (1)&quot;
-$ondelim
-$include&quot;./iMatureFacPlaDisp.csv&quot;
-$offdelim
-;
-$ENDIF.calib
-parameter i04MxmShareChpElec                       &quot;Maximum share of CHP electricity in a country (1)&quot;;
 parameter i04LoadFacElecDem(DSBS)                  &quot;Load factor of electricity demand per sector (1)&quot;
 /
 IS  0.92,
@@ -2251,25 +2233,14 @@ BU  0.43,
 PCH 0.78,
 NEN 0.78 
 / ;
-parameter i04LoadFactorAdjMxm(VARIOUS_LABELS)      &quot;Parameter for load factor adjustment i04MxmLoadFacElecDem (1)&quot;
-/
-AMAXBASE  3,
-MAXLOADSH 0.45
-/ ;
 Parameters
-i04BaseLoadShareDem(allCy,DSBS,YTIME)              &quot;Baseload share of demand per sector (1)&quot;
 iTotAvailNomCapBsYr(allCy,YTIME)                   &quot;Total nominal available installed capacity in base year (GW)&quot;
-i04MxmLoadFacElecDem(allCy,YTIME)                  &quot;Maximum load factor of electricity demand (1)&quot;
 i04TechLftPlaType(allCy,PGALL)                     &quot;Technical Lifetime per plant type (year)&quot;
 i04ScaleEndogScrap                              &quot;Scale parameter for endogenous scrapping applied to the sum of full costs (1)&quot;
 i04DecInvPlantSched(allCy,PGALL,YTIME)             &quot;Decided plant investment schedule (GW)&quot;
-i04PlantDecomSched(allCy,PGALL,YTIME)              &quot;Decided plant decomissioning schedule (GW)&quot; 
 i04MxmShareChpElec(allCy,YTIME)                    &quot;Maximum share of CHP electricity in a country (1)&quot;
-!! i04MatureFacPlaDisp(allCy,PGALL,YTIME)          &quot;Maturity factor related to plant dispatching (1)&quot;
 ;
-i04BaseLoadShareDem(runCy,DSBS,YTIME)$an(YTIME)  = i04LoadFactorAdj(DSBS);
 iTotAvailNomCapBsYr(runCy,YTIME)$datay(YTIME) = i04DataElecSteamGen(runCy,&quot;TOTNOMCAP&quot;,YTIME);
-i04MxmLoadFacElecDem(runCy,YTIME)$an(YTIME) = i04LoadFactorAdjMxm(&quot;MAXLOADSH&quot;);
 i04TechLftPlaType(runCy,PGALL) = i04DataTechLftPlaType(PGALL, &quot;LFT&quot;);
 i04TechLftPlaType(runCy,&quot;PGH2F&quot;) = 20;
 i04GrossCapCosSubRen(runCy,PGALL,YTIME) = i04GrossCapCosSubRen(runCy,PGALL,YTIME)/1000;
@@ -2278,12 +2249,9 @@ loop(runCy,PGALL,YTIME)$AN(YTIME) DO
 ENDLOOP;
 i04ScaleEndogScrap = 2 / card(PGALL);
 i04DecInvPlantSched(runCy,PGALL,YTIME) = i04InvPlants(runCy,PGALL,YTIME);
-i04PlantDecomSched(runCy,PGALL,YTIME) = i04DecomPlants(runCy,PGALL,YTIME);
-i04MxmShareChpElec(runCy,YTIME) = 0.3;</code></pre>
+i04MxmShareChpElec(runCy,YTIME) = 0.5;</code></pre>
 <p><em>VARIABLE INITIALISATION</em></p>
-<pre><code>V04ShareTechPG.LO(runCy,PGALL,YTIME)$DATAY(YTIME) = 0;
-V04ShareTechPG.UP(runCy,PGALL,YTIME)$DATAY(YTIME) = 1;
-V04ScrpRate.UP(runCy,PGALL,YTIME) = 1;
+<pre><code>V04ScrpRate.UP(runCy,PGALL,YTIME) = 1;
 V04ScrpRate.LO(runCy,PGALL,YTIME) = 0;
 V04CostVarTech.LO(runCy,PGALL,YTIME) = epsilon6;
 V04CostVarTech.L(runCy,PGALL,YTIME) = 0.1;
@@ -2302,27 +2270,33 @@ alias(datay, dataylag)
 loop (runCy,PGALL,datay,dataylag)$(ord(datay) = ord(dataylag) + 1 and PGREN(PGALL)) DO
   V04NetNewCapElec.FX(runCy,PGALL,datay) = imInstCapPastNonCHP(runCy,PGALL,datay) - imInstCapPastNonCHP(runCy,PGALL,dataylag) + 1E-10;
 ENDLOOP;
-V04NetNewCapElec.FX(runCy,&quot;PGLHYD&quot;,YTIME)$TFIRST(YTIME) = +1E-10;
-V04CFAvgRen.L(runCy,PGALL,YTIME) = 0.1;
+V04NetNewCapElec.FX(runCy,&quot;PGLHYD&quot;,YTIME)$TFIRST(YTIME) = 1e-6;
+V04CFAvgRen.L(runCy,PGALL,YTIME) = i04AvailRate(runCy,PGALL,&quot;%fBaseY%&quot;);
 V04CFAvgRen.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = i04AvailRate(runCy,PGALL,YTIME);
 V04CapexFixCostPG.FX(runCy,PGALL,YTIME)$(DATAY(YTIME)) = (imDisc(runCy,&quot;PG&quot;,YTIME) * exp(imDisc(runCy,&quot;PG&quot;,YTIME) * i04TechLftPlaType(runCy,PGALL))
           / (exp(imDisc(runCy,&quot;PG&quot;,YTIME) * i04TechLftPlaType(runCy,PGALL)) -1))
-          * i04GrossCapCosSubRen(runCy,PGALL,YTIME) * 1000 * imCGI(runCy,YTIME)
-          + i04FixOandMCost(runCy,PGALL,YTIME);
+          * i04GrossCapCosSubRen(runCY,PGALL,YTIME) * 1000
+          * imCGI(runCy,YTIME)
+          + i04FixOandMCost(runCy,PGALL,YTIME)
+;
+V04CapexFixCostPG.LO(runCy,PGALL,YTIME) = i04FixOandMCost(runCy,PGALL,YTIME);
 V04CostCapTech.FX(runCy,PGALL,YTIME)$(not AN(YTIME)) = 
 V04CapexRESRate.L(runCy,PGALL,YTIME) * V04CapexFixCostPG.L(runCy,PGALL,YTIME) / 
     (i04AvailRate(runCy,PGALL,YTIME) * smGwToTwhPerYear(YTIME) * 1000); 
-V04CostHourProdInvDec.LO(runCy,PGALL,YTIME) = epsilon6;
+V04CostHourProdInvDec.LO(runCy,PGALL,YTIME) = 1e-6;
 V04CostHourProdInvDec.L(runCy,PGALL,YTIME) = 0.1;     
 V04CostHourProdInvDec.FX(runCy,PGALL,YTIME)$(NOT AN(YTIME)) = 
 V04CostCapTech.L(runCy,PGALL,YTIME) + V04CostVarTech.L(runCy,PGALL,YTIME);
 VmCapElecTotEst.FX(runCy,YTIME)$(not An(YTIME)) = sum(PGALL,imInstCapPastNonCHP(runCy,PGALL,YTIME)) + SUM(EF,imInstCapPastCHP(runCy,EF,YTIME));
 V04CapElecNonCHP.FX(runCy,YTIME)$(not An(YTIME)) = sum(PGALL,imInstCapPastNonCHP(runCy,PGALL,YTIME));
 V04CapElecCHP.FX(runCy,YTIME)$(not An(YTIME)) = SUM(EF,imInstCapPastCHP(runCy,EF,YTIME));
+VmCapElec.LO(runCy,PGALL,YTIME) = 0;
 VmCapElec.L(runCy,PGALL,YTIME) = 1;
 VmCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  imInstCapPastNonCHP(runCy,PGALL,YTIME);
 V04CapElecNominal.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = imInstCapPastNonCHP(runCy,PGALL,YTIME) / i04AvailRate(runCy,PGALL,YTIME);
-V04ShareTechPG.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =  VmCapElec.L(runCy,PGALL,YTIME) / sum(PGALL2, VmCapElec.L(runCy,PGALL2,YTIME));
+V04ShareTechPG.LO(runCy,PGALL,YTIME)$DATAY(YTIME) = 0;
+V04ShareTechPG.UP(runCy,PGALL,YTIME)$DATAY(YTIME) = 1;
+V04ShareTechPG.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = imInstCapPastNonCHP(runCy,PGALL,YTIME) / sum(PGALL2, imInstCapPastNonCHP(runCy,PGALL2,YTIME));
 V04ShareSatPG.FX(runCy,PGALL,YTIME)$(not PGREN(PGALL) or not AN(YTIME)) = 1;
 V04IndxEndogScrap.FX(runCy,PGALL,YTIME)$(not an(YTIME) ) = 1;
 V04IndxEndogScrap.FX(runCy,PGSCRN,YTIME) = 1;            !! premature replacement it is not allowed for all new plants
@@ -2353,8 +2327,10 @@ V04DemElecTot.FX(runCy,YTIME)$DATAY(YTIME) =
 $endif.calib
 VmPeakLoad.L(runCy,YTIME) = 1;
 VmPeakLoad.FX(runCy,YTIME)$(datay(YTIME)) = V04DemElecTot.L(runCy,YTIME)/(V04LoadFacDom.L(runCy,YTIME)*8.76);
+VmProdElec.LO(runCy,PGALL,YTIME) = 0;
 VmProdElec.L(runCy,pgall,YTIME) = i04DataElecProdNonCHP(runCy,pgall,YTIME) / 1000 + 1;
 VmProdElec.FX(runCy,pgall,YTIME)$DATAY(YTIME) = i04DataElecProdNonCHP(runCy,pgall,YTIME) / 1000;
+V04ProdElecEstCHP.L(runCy,YTIME) = SUM(EF,i04DataElecProdCHP(runCy,EF,&quot;%fBaseY%&quot;)) / 1000;
 V04ProdElecEstCHP.FX(runCy,YTIME)$DATAY(YTIME) = SUM(EF,i04DataElecProdCHP(runCy,EF,YTIME)) / 1000;
 V04ShareMixWndSol.FX(runCy,YTIME)$DATAY(YTIME) = sum(PGALL$PGRENSW(PGALL), VmCapElec.L(runCy,PGALL,YTIME)) / sum(PGALL2, VmCapElec.L(runCy,PGALL2,YTIME));
 V04CCSRetroFit.UP(runCy,PGALL,YTIME) = 1;
@@ -2521,7 +2497,7 @@ class="math inline">\(GW\)</span></td>
 <td style="text-align: center;"><span
 class="math inline">\(MW\)</span></td>
 <td style="text-align: center;">x</td>
-<td style="text-align: center;">x</td>
+<td style="text-align: center;"></td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">i04FixOandMCost<br />
@@ -2580,7 +2556,7 @@ i04MxmLoadFacElecDem</td>
 <td style="text-align: center;"><span
 class="math inline">\(1\)</span></td>
 <td style="text-align: center;">x</td>
-<td style="text-align: center;">x</td>
+<td style="text-align: center;"></td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">i04MatFacPlaAvailCap<br />
@@ -2600,7 +2576,7 @@ available capacity</td>
 <td style="text-align: center;"><span
 class="math inline">\(1\)</span></td>
 <td style="text-align: center;">x</td>
-<td style="text-align: center;">x</td>
+<td style="text-align: center;"></td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">i04MatureFacPlaDisp<br />
@@ -2610,7 +2586,7 @@ dispatching</td>
 <td style="text-align: center;"><span
 class="math inline">\(1\)</span></td>
 <td style="text-align: center;">x</td>
-<td style="text-align: center;">x</td>
+<td style="text-align: center;"></td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">i04MatureFacPlaDispL<br />
@@ -2620,7 +2596,7 @@ dispatching</td>
 <td style="text-align: center;"><span
 class="math inline">\(1\)</span></td>
 <td style="text-align: center;">x</td>
-<td style="text-align: center;">x</td>
+<td style="text-align: center;"></td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">i04MxmLoadFacElecDem<br />
@@ -2630,7 +2606,7 @@ demand</td>
 <td style="text-align: center;"><span
 class="math inline">\(1\)</span></td>
 <td style="text-align: center;">x</td>
-<td style="text-align: center;">x</td>
+<td style="text-align: center;"></td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">i04MxmShareChpElec</td>
@@ -2709,6 +2685,16 @@ class="math inline">\(US\$2015/MWh\)</span></td>
 <td style="text-align: center;">x</td>
 </tr>
 <tr class="even">
+<td style="text-align: center;">iMatFacPlaAvailCapData<br />
+(allCy, PGALL, YTIME)</td>
+<td style="text-align: center;">Maturity factor related to plant
+available capacity</td>
+<td style="text-align: center;"><span
+class="math inline">\(1\)</span></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
 <td style="text-align: center;">iTotAvailNomCapBsYr<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Total nominal available installed
@@ -2718,7 +2704,7 @@ class="math inline">\(GW\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">Q04BaseLoad<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Compute electricity base load</td>
@@ -2726,7 +2712,7 @@ class="math inline">\(GW\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">Q04BaseLoadMax<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Compute baseload corresponding to
@@ -2735,7 +2721,7 @@ maximum load</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">Q04BsldEst<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Compute estimated base load</td>
@@ -2743,7 +2729,7 @@ maximum load</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">Q04CapElec<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Compute electricity generation
@@ -2752,7 +2738,7 @@ capacity</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">Q04CapElec2<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Compute electricity generation
@@ -2761,7 +2747,7 @@ capacity</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">Q04CapElecCHP<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Compute CHP electric capacity</td>
@@ -2769,7 +2755,7 @@ capacity</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">Q04CapElecNominal<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Compute nominal electricity generation
@@ -2778,7 +2764,7 @@ capacity</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">Q04CapElecNonCHP<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Compute total electricity generation
@@ -2787,7 +2773,7 @@ capacity excluding CHP plants</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">Q04CapElecTotEst<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Compute Estimated total electricity
@@ -2796,7 +2782,7 @@ generation capacity</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">Q04CapexFixCostPG<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Computes the capex and fixed costs of
@@ -2805,7 +2791,7 @@ any power generation technology</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">Q04CapexRESRate<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Estimates a multiplying factor
@@ -2815,7 +2801,7 @@ according to the RES penetration in the mixture</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">Q04CapOverall<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Compute overall capacity</td>
@@ -2823,7 +2809,7 @@ according to the RES penetration in the mixture</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">Q04CCSRetroFit<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;"></td>
@@ -2831,7 +2817,7 @@ according to the RES penetration in the mixture</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">Q04CFAvgRen<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Compute the average capacity factor of
@@ -2840,7 +2826,7 @@ RES</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">Q04CO2CaptRate<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;"></td>
@@ -2848,7 +2834,7 @@ RES</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">Q04ConsElec<br />
 (allCy, DSBS, YTIME)</td>
 <td style="text-align: center;">Compute electricity consumption per
@@ -2857,7 +2843,7 @@ final demand sector</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">Q04ConsFuelElecProd<br />
 (allCy, EFS, YTIME)</td>
 <td style="text-align: center;"></td>
@@ -2865,7 +2851,7 @@ final demand sector</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">Q04CostAvgPowGenLonNoClimPol<br />
 (allCy, PGALL, ESET, YTIME)</td>
 <td style="text-align: center;">Compute long term average power
@@ -2874,7 +2860,7 @@ generation cost excluding climate policies</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">Q04CostCapTech<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;"></td>
@@ -2882,7 +2868,7 @@ generation cost excluding climate policies</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">Q04CostHourProdInvDec<br />
 (allCy, PGALL, HOUR, YTIME)</td>
 <td style="text-align: center;">Compute hourly production cost used in
@@ -2891,7 +2877,7 @@ investment decisions</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">Q04CostHourProdInvDecNoCCS<br />
 (allCy, PGALL, HOUR, YTIME)</td>
 <td style="text-align: center;">Compute hourly production cost used in
@@ -2900,7 +2886,7 @@ investment decisions</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">Q04CostPowGenAvgLng<br />
 (allCy, ESET, YTIME)</td>
 <td style="text-align: center;">Compute long term power generation
@@ -2909,7 +2895,7 @@ cost</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">Q04CostPowGenLngTechNoCp<br />
 (allCy, PGALL, ESET, YTIME)</td>
 <td style="text-align: center;">Compute long term power generation cost
@@ -2918,7 +2904,7 @@ of technologies excluding climate policies</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">Q04CostPowGenLonNoClimPol<br />
 (allCy, ESET, YTIME)</td>
 <td style="text-align: center;">Compute long term power generation cost
@@ -2927,7 +2913,7 @@ excluding climate policies</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">Q04CostProdSpecTech<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Compute production cost used in
@@ -2936,7 +2922,7 @@ investment decisions</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">Q04CostProdTeCHPreReplac<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Compute production cost of technology
@@ -2945,7 +2931,7 @@ used in premature replacement</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">Q04CostProdTeCHPreReplacAvail<br />
 (allCy, PGALL, PGALL2, YTIME)</td>
 <td style="text-align: center;">Compute production cost of technology
@@ -2954,7 +2940,7 @@ used in premature replacement including plant availability rate</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">Q04CostVarTech<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Compute variable cost of technology</td>
@@ -2962,7 +2948,7 @@ used in premature replacement including plant availability rate</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">Q04CostVarTechElec<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Compute variable cost of technology</td>
@@ -2970,7 +2956,7 @@ used in premature replacement including plant availability rate</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">Q04CostVarTechElecTot<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Compute Electricity peak loads</td>
@@ -2978,7 +2964,7 @@ used in premature replacement including plant availability rate</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">Q04CostVarTechNotPGSCRN<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Compute variable cost of technology
@@ -2987,7 +2973,7 @@ excluding PGSCRN</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">Q04DemElecTot<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Compute total electricity demand</td>
@@ -2996,7 +2982,7 @@ class="math inline">\(TWh\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">Q04GapGenCapPowerDiff<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Compute the gap in power generation
@@ -3005,7 +2991,7 @@ capacity</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">Q04IndxEndogScrap<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Compute endogenous scrapping index</td>
@@ -3013,7 +2999,7 @@ capacity</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">Q04Lambda<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Compute Lambda parameter</td>
@@ -3021,7 +3007,7 @@ capacity</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">Q04LoadFacDom<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Compute electricity load factor for
@@ -3030,7 +3016,7 @@ entire domestic system</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">Q04NetNewCapElec<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Compute the yearly difference in
@@ -3039,7 +3025,7 @@ installed capacity</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">Q04NewCapElec<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Compute the new capacity added every
@@ -3048,7 +3034,7 @@ year</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">Q04NewInvElec<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Compute for Power Plant new investment
@@ -3057,7 +3043,7 @@ decision</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">Q04PeakLoad<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Compute elerctricity peak load</td>
@@ -3065,7 +3051,7 @@ decision</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">Q04ProdElec<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Compute electricity production from
@@ -3074,7 +3060,7 @@ power generation plants</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">Q04ProdElecCHP<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Compute CHP electricity production</td>
@@ -3083,7 +3069,7 @@ class="math inline">\(TWh\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">Q04ProdElecEstCHP<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Estimate the electricity of CHP
@@ -3092,7 +3078,7 @@ Plants</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">Q04ProdElecNonCHP<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Compute non CHP electricity
@@ -3101,7 +3087,7 @@ production</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">Q04ProdElecReqCHP<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Compute total estimated CHP electricity
@@ -3110,7 +3096,7 @@ production</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">Q04ProdElecReqTot<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Compute total required electricity
@@ -3120,7 +3106,7 @@ class="math inline">\(TWh\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">Q04RenTechMatMult<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Compute renewable technologies maturity
@@ -3129,7 +3115,7 @@ multiplier</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">Q04RenTechMatMultExpr<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Renewable power capacity over
@@ -3139,7 +3125,7 @@ class="math inline">\(1\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">Q04ScalFacPlantDispatch<br />
 (allCy, HOUR, YTIME)</td>
 <td style="text-align: center;">Compute the scaling factor for plant
@@ -3148,7 +3134,7 @@ dispatching</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">Q04ScalWeibullSum<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Compute sum (over hours) of temporary
@@ -3157,7 +3143,7 @@ variable facilitating the scaling in Weibull equation</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">Q04ScrpRate<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;"></td>
@@ -3165,7 +3151,7 @@ variable facilitating the scaling in Weibull equation</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">Q04SensCCS<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Compute gamma parameter used in CCS/No
@@ -3174,7 +3160,7 @@ CCS decision tree</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">Q04ShareMixWndSol<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Computes the participation of solar and
@@ -3184,7 +3170,7 @@ class="math inline">\(\%\)</span></td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">Q04ShareNewTechCCS<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Compute SHRCAP</td>
@@ -3192,7 +3178,7 @@ class="math inline">\(\%\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">Q04ShareNewTechNoCCS<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Compute SHRCAP excluding CCs</td>
@@ -3200,7 +3186,7 @@ class="math inline">\(\%\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">Q04SharePowPlaNewEq<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Compute the power plant share in new
@@ -3209,7 +3195,7 @@ equipment</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">Q04ShareSatPG<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Saturation mechanism for electricity
@@ -3218,7 +3204,7 @@ mixture penetration of RES technologies</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">Q04ShareTechPG<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Share of all technologies in the
@@ -3227,7 +3213,7 @@ electricity mixture</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">Q04SortPlantDispatch<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Compute Power plants sorting according
@@ -3236,7 +3222,7 @@ to variable cost to decide the plant dispatching</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">S04CapexBessRate</td>
 <td style="text-align: center;">The power expressing the rate of the
 increase in the solar &amp; wind CAPEX because of storage need and grid
@@ -3245,7 +3231,7 @@ upgrade</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">t04DemElecTot<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Secondary energy electricity - target
@@ -3255,7 +3241,7 @@ class="math inline">\(TWh\)</span></td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">t04SharePowPlaNewEq<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Ratio of newly added capacity smoothed
@@ -3264,7 +3250,7 @@ over 10-year period</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">V04BaseLoadMax<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Baseload corresponding to Maximum Load
@@ -3274,7 +3260,7 @@ class="math inline">\(1\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">V04BsldEst<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Estimated base load</td>
@@ -3283,7 +3269,7 @@ class="math inline">\(GW\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">V04CapElec2<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Electricity generation plants
@@ -3293,7 +3279,7 @@ class="math inline">\(GW\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">V04CapElecCHP<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Capacity of CHP Plants</td>
@@ -3302,7 +3288,7 @@ class="math inline">\(GW\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">V04CapElecNominal<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Nominal electricity generation plants
@@ -3312,7 +3298,7 @@ class="math inline">\(GW\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">V04CapElecNonCHP<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Total electricity generation capacity
@@ -3322,7 +3308,7 @@ class="math inline">\(GW\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">V04CapexFixCostPG<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">CAPEX and fixed costs of any power
@@ -3332,7 +3318,7 @@ class="math inline">\(US\$2015/kW\)</span></td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">V04CapexRESRate<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Multiplying factor expressing the extra
@@ -3342,7 +3328,7 @@ penetration in the mixture</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">V04CapOverall<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Overall Capacity</td>
@@ -3351,7 +3337,7 @@ class="math inline">\(MW\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">V04CCSRetroFit<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;"></td>
@@ -3359,7 +3345,7 @@ class="math inline">\(MW\)</span></td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">V04CFAvgRen<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">The average capacity factor of RES</td>
@@ -3368,7 +3354,7 @@ class="math inline">\(1\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">V04CO2CaptRate<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;"></td>
@@ -3376,7 +3362,7 @@ class="math inline">\(1\)</span></td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">V04ConsElec<br />
 (allCy, DSBS, YTIME)</td>
 <td style="text-align: center;">Electricity demand per final sector</td>
@@ -3385,7 +3371,7 @@ class="math inline">\(Mtoe\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">V04CostAvgPowGenLonNoClimPol<br />
 (allCy, PGALL, ESET, YTIME)</td>
 <td style="text-align: center;">Long-term average power generation cost
@@ -3394,7 +3380,7 @@ excluding climate policies(US$2015/kWh)</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">V04CostCapTech<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;"></td>
@@ -3402,7 +3388,7 @@ excluding climate policies(US$2015/kWh)</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">V04CostHourProdInvDec<br />
 (allCy, PGALL, HOUR, YTIME)</td>
 <td style="text-align: center;">Hourly production cost of
@@ -3412,7 +3398,7 @@ class="math inline">\(US\$2015/KWh\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">V04CostHourProdInvDecNoCCS<br />
 (allCy, PGALL, HOUR, YTIME)</td>
 <td style="text-align: center;">Hourly production cost of
@@ -3422,7 +3408,7 @@ class="math inline">\(US\$2015/KWh\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">V04CostPowGenLngTechNoCp<br />
 (allCy, PGALL, ESET, YTIME)</td>
 <td style="text-align: center;">Long-term average power generation
@@ -3432,7 +3418,7 @@ class="math inline">\(US\$2015/kWh\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">V04CostPowGenLonNoClimPol<br />
 (allCy, ESET, YTIME)</td>
 <td style="text-align: center;">Long-term average power generation cost
@@ -3442,7 +3428,7 @@ class="math inline">\(US\$2015/kWh\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">V04CostProdSpecTech<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Production cost of technology</td>
@@ -3451,7 +3437,7 @@ class="math inline">\(US\$2015/KWh\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">V04CostProdTeCHPreReplac<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Production cost of technology used in
@@ -3461,7 +3447,7 @@ class="math inline">\(US\$2015/KWh\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">V04CostProdTeCHPreReplacAvail<br />
 (allCy, PGALL, PGALL2, YTIME)</td>
 <td style="text-align: center;">Production cost of technology used in
@@ -3471,7 +3457,7 @@ class="math inline">\(US\$2015/KWh\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">V04CostVarTech<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Variable cost of technology</td>
@@ -3480,7 +3466,7 @@ class="math inline">\(US\$2015/KWh\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">V04CostVarTechElec<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Variable cost of technology</td>
@@ -3489,7 +3475,7 @@ class="math inline">\(US\$2015/KWh\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">V04CostVarTechElecTot<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Electricity peak loads</td>
@@ -3498,7 +3484,7 @@ class="math inline">\(GW\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">V04CostVarTechNotPGSCRN<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Variable cost of technology excluding
@@ -3508,7 +3494,7 @@ class="math inline">\(US\$2015/KWh\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">V04DemElecTot<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Total electricity demand</td>
@@ -3517,7 +3503,7 @@ class="math inline">\(TWh\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">V04GapGenCapPowerDiff<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Gap in total generation capacity to be
@@ -3527,7 +3513,7 @@ class="math inline">\(GW\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">V04IndxEndogScrap<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Index used for endogenous power plants
@@ -3537,7 +3523,7 @@ class="math inline">\(1\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">V04Lambda<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Parameter for load curve
@@ -3547,7 +3533,7 @@ class="math inline">\(1\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">V04LoadFacDom<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Electricity load factor for entire
@@ -3556,7 +3542,7 @@ domestic system</td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">V04NetNewCapElec<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Yearly difference in installed
@@ -3566,16 +3552,16 @@ class="math inline">\(MW\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">V04NewCapElec<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">The new capacity added every year</td>
 <td style="text-align: center;"><span
-class="math inline">\(MW\)</span></td>
+class="math inline">\(GW\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">V04NewInvElec<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Power plant sorting for new investment
@@ -3585,7 +3571,7 @@ class="math inline">\(1\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">V04ProdElecCHP<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">CHP electricity production</td>
@@ -3594,7 +3580,7 @@ class="math inline">\(TWh\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">V04ProdElecEstCHP<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Estimate the electricity of CHP
@@ -3604,7 +3590,7 @@ class="math inline">\(1\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">V04ProdElecNonCHP<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Non CHP total electricity
@@ -3614,7 +3600,7 @@ class="math inline">\(TWh\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">V04ProdElecReqCHP<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Total estimated CHP electricity
@@ -3624,7 +3610,7 @@ class="math inline">\(TWh\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">V04ProdElecReqTot<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Total required electricity
@@ -3634,7 +3620,7 @@ class="math inline">\(TWh\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">V04RenTechMatMult<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Renewable technologies maturity
@@ -3644,7 +3630,7 @@ class="math inline">\(1\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">V04RenTechMatMultExpr<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Renewable power capacity over
@@ -3654,7 +3640,7 @@ class="math inline">\(1\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">V04ScalFacPlaDisp<br />
 (allCy, HOUR, YTIME)</td>
 <td style="text-align: center;">Scaling factor for plant dispatching
@@ -3663,7 +3649,7 @@ class="math inline">\(1\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">V04ScalWeibullSum<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Sum (over hours) of temporary variable
@@ -3673,7 +3659,7 @@ class="math inline">\(1\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">V04ScrpRate<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;"></td>
@@ -3681,7 +3667,7 @@ class="math inline">\(1\)</span></td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">V04SensCCS<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Variable that controlls the sensitivity
@@ -3691,7 +3677,7 @@ class="math inline">\(1\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">V04ShareMixWndSol<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">The participation of solar and wind in
@@ -3700,7 +3686,7 @@ the energy mixture(%)</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">V04ShareNewTechCCS<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Power plant share in new equipment</td>
@@ -3709,7 +3695,7 @@ class="math inline">\(1\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">V04ShareNewTechNoCCS<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Power plant share in new equipment</td>
@@ -3718,7 +3704,7 @@ class="math inline">\(1\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">V04SharePowPlaNewEq<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Power plant share in new equipment</td>
@@ -3727,7 +3713,7 @@ class="math inline">\(1\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">V04ShareSatPG<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Saturation for electricity mixture
@@ -3736,7 +3722,7 @@ penetration of RES technologies</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">V04ShareTechPG<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Share of all technologies in the
@@ -3745,7 +3731,7 @@ electricity mixture</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">V04SortPlantDispatch<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Power plants sorting according to
@@ -3755,7 +3741,7 @@ class="math inline">\(1\)</span></td>
 <td style="text-align: center;">x</td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">VmBaseLoad<br />
 (allCy, YTIME)</td>
 <td style="text-align: center;">Corrected base load</td>

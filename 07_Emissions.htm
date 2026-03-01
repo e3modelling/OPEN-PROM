@@ -54,6 +54,7 @@
    <a href='08_Prices.htm'> 8. Prices module</a>
    <a href='09_Heat.htm'> 9. Heat module</a>
    <a href='10_Curves.htm'>10. Curves module</a>
+   <a href='11_Economy.htm'>11. Economy module</a>
    </div>
   </div>
   <div class="dropdown">
@@ -97,11 +98,11 @@ style="width:100.0%;height:50.0%" alt="Interfaces to other modules" />
 <figcaption aria-hidden="true">Interfaces to other modules</figcaption>
 </figure>
 <h3 id="input">Input</h3>
-<table style="width:85%;">
+<table>
 <caption>module inputs (A: legacy)</caption>
 <colgroup>
-<col style="width: 25%" />
-<col style="width: 41%" />
+<col style="width: 37%" />
+<col style="width: 44%" />
 <col style="width: 12%" />
 <col style="width: 5%" />
 </colgroup>
@@ -123,6 +124,33 @@ class="math inline">\(Mtoe\)</span></td>
 <td style="text-align: center;">x</td>
 </tr>
 <tr class="even">
+<td style="text-align: center;">VmConsFuel<br />
+(allCy, DSBS, EF, YTIME)</td>
+<td style="text-align: center;">Consumption of fuels in each demand
+subsector, excluding heat from heatpumps</td>
+<td style="text-align: center;"><span
+class="math inline">\(Mtoe\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">VmConsFuelCDRProd<br />
+(allCy, EF, YTIME)</td>
+<td style="text-align: center;">Annual fuel demand in DAC
+regionally</td>
+<td style="text-align: center;"><span
+class="math inline">\(Mtoe\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">VmDemFinEneTranspPerFuel<br />
+(allCy, TRANSE, EF, YTIME)</td>
+<td style="text-align: center;">Final energy demand in transport
+subsectors per fuel</td>
+<td style="text-align: center;"><span
+class="math inline">\(Mtoe\)</span></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
 <td style="text-align: center;">VmProdElec<br />
 (allCy, PGALL, YTIME)</td>
 <td style="text-align: center;">Electricity production</td>
@@ -130,7 +158,7 @@ class="math inline">\(Mtoe\)</span></td>
 class="math inline">\(TWh\)</span></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">VmProdH2<br />
 (allCy, H2TECH, YTIME)</td>
 <td style="text-align: center;">Hydrogen Production by technology in
@@ -144,7 +172,19 @@ Mtoe</td>
 <h3 id="a-legacy">(A) legacy</h3>
 <p>This is the legacy realization of the Emissions module.</p>
 <pre><code>sets
-SSBSEMIT(SSBS)     Supply Subsectors emitting inputs     /PG,H2P,CHP,STEAMP/</code></pre>
+SSBSEMIT(SSBS)     Supply Subsectors emitting inputs     /PG,H2P,CHP,STEAMP/
+E07MAC &quot;Cost categories for Marginal abatement costs curves (MACC) -2010$/tC for CH4,N20 and 2005$/tC for F-gases&quot; / 
+    0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 
+    320, 340, 360, 380, 400, 420, 460, 480, 500, 520, 540, 560, 580, 600, 660, 
+    680, 720, 740, 760, 780, 820, 840, 1000, 1080, 1100, 1120, 1520, 1660, 
+    1700, 1740, 2580, 2600, 3440, 3460, 3500, 3540, 3600, 3840, 4000 
+/
+Set sFGases(E07SrcMacAbate) &quot;F-gases (Input data in kt)&quot; 
+/
+    HFC_125, HFC_134a, HFC_143a, HFC_152a, HFC_227ea
+    HFC_23,  HFC_236fa, HFC_32,   HFC_43_10, HFC_245ca
+    CF4,     C2F6,      C6F14,    SF6
+/</code></pre>
 <pre><code>Parameters
 p07MarginalRed(allCy, E07SrcMacAbate, E07MAC, YTIME)   &quot;Marginal reduction potential per step&quot;
 p07MacCost(E07MAC)                                     &quot;Numeric value of the MAC cost steps&quot;
@@ -154,17 +194,19 @@ p07CostCorrection(E07SrcMacAbate)                      &quot;Factor to convert (
 ;
 Equations</code></pre>
 <p>*** Emissions Constraints Equations</p>
-<pre><code>Q07EmissCO2Supply(allCy,SSBS,YTIME)                   &quot;Compute total CO2eq GHG emissions per supply sector&quot;
-Q07RedAbsBySrcRegTim(E07SrcMacAbate, allCy, YTIME)    &quot;Calculate reduction fraction based on carbon price&quot;
-Q07CostAbateBySrcRegTim(E07SrcMacAbate, allCy, YTIME) &quot;Calculate total abatement cost&quot;
-Q07EmiActBySrcRegTim(E07SrcMacAbate, allCy, YTIME)    &quot;Calculate remaining actual emissions&quot;
+<pre><code>Q07GrossEmissCO2Supply(allCy,SSBS,YTIME)                  &quot;Compute total CO2eq GHG emissions per supply sector&quot;
+Q07RedAbsBySrcRegTim(E07SrcMacAbate, allCy, YTIME)        &quot;Calculate reduction fraction based on carbon price&quot;
+Q07CostAbateBySrcRegTim(E07SrcMacAbate, allCy, YTIME)     &quot;Calculate total abatement cost&quot;
+Q07EmiActBySrcRegTim(E07SrcMacAbate, allCy, YTIME)        &quot;Calculate remaining actual emissions&quot;
+Q07GrossEmissCO2Demand(allCy,DSBS,YTIME)                  &quot;Calculate gross emissions of demand subsectors&quot;
 ;
 Variables</code></pre>
 <p>*** Emissions Constraints Variables</p>
-<pre><code>V07EmissCO2Supply(allCy,SSBS,YTIME)                 &quot;Total CO2eq GHG emissions per supply sector (Mt CO2/yr)&quot;
+<pre><code>V07GrossEmissCO2Supply(allCy,SSBS,YTIME)                 &quot;Total CO2eq GHG emissions per supply sector (Mt CO2/yr)&quot;
 V07RedAbsBySrcRegTim(E07SrcMacAbate,allCy,YTIME)      &quot;Selected cumulative abatement fraction&quot;
 V07EmiActBySrcRegTim(E07SrcMacAbate,allCy,YTIME)       &quot;Actual emissions&quot;
-V07CostAbateBySrcRegTim(E07SrcMacAbate,allCy,YTIME)    &quot;Total abatement cost&quot;</code></pre>
+V07CostAbateBySrcRegTim(E07SrcMacAbate,allCy,YTIME)    &quot;Total abatement cost&quot;
+V07GrossEmissCO2Demand(allCy,DSBS,YTIME)                &quot;Gross emissions of demand subsectors&quot;</code></pre>
 <p>GENERAL INFORMATION Equation format: “typical useful energy demand
 equation” The main explanatory variables (drivers) are activity
 indicators (economic activity) and corresponding energy costs. The type
@@ -246,26 +288,25 @@ q07ExpendHouseEne(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                                           +VmPriceElecIndResNoCliPol(allCy,&quot;R&quot;,YTIME)*VmConsElecNonSubIndTert(allCy,&quot;HOU&quot;,YTIME)/smTWhToMtoe;
 VmConsElecNonSubIndTert --&gt; NO LONGER                                          
 $offtext
-Q07EmissCO2Supply(allCy,SSBS,YTIME)$(TIME(YTIME)$runCy(allCy))..
-    V07EmissCO2Supply(allCy,SSBS,YTIME)
+Q07GrossEmissCO2Demand(allCy,DSBS,YTIME)$(TIME(YTIME)$runCy(allCy))..
+    V07GrossEmissCO2Demand(allCy,DSBS,YTIME)
+        =E=   
+    SUM(EFS,
+      (
+        VmConsFuel(allCy,DSBS,EFS,YTIME) + 
+        SUM(TRANSE$sameas(TRANSE,DSBS), VmDemFinEneTranspPerFuel(allCy,TRANSE,EFS,YTIME)) +
+        VmConsFuelCDRProd(allCy,EFS,YTIME)
+      ) *
+      imCo2EmiFac(allCy,DSBS,EFS,YTIME)
+    );
+Q07GrossEmissCO2Supply(allCy,SSBS,YTIME)$(TIME(YTIME)$runCy(allCy))..
+    V07GrossEmissCO2Supply(allCy,SSBS,YTIME)
         =E=   
     SUM(EFS,
       (
         V03InpTotTransf(allCy,SSBS,EFS,YTIME)$SSBSEMIT(SSBS) +
         VmConsFiEneSec(allCy,SSBS,EFS,YTIME) 
-      ) * imCo2EmiFac(allCy,&quot;PG&quot;,EFS,YTIME) -
-      SUM(CCS$PGALLtoEF(CCS,EFS),
-        VmProdElec(allCy,CCS,YTIME) * smTWhToMtoe / 
-        imPlantEffByType(allCy,CCS,YTIME) * 
-        V04CO2CaptRate(allCy,CCS,YTIME) * 
-        (imCo2EmiFac(allCy,&quot;PG&quot;,EFS,YTIME) + 4.17$sameas(&quot;BMSWAS&quot;,EFS))
-      )$sameas(&quot;PG&quot;,SSBS) -
-      SUM(H2CCS$H2TECHEFtoEF(H2CCS,EFS),
-        VmProdH2(allCy,H2CCS,YTIME) /
-        i05EffH2Prod(allCy,H2CCS,YTIME) *
-        V05CaptRateH2(allCy,H2CCS,YTIME) *
-        (imCo2EmiFac(allCy,&quot;PG&quot;,EFS,YTIME) + 4.17$sameas(&quot;BMSWAS&quot;,EFS))
-      )$sameas(&quot;H2P&quot;,SSBS)
+      ) * imCo2EmiFac(allCy,SSBS,EFS,YTIME)
     );
     </code></pre>
 <p>This equation calculates the total absolute abatement of non-CO2
@@ -362,7 +403,8 @@ p07GWP(E07SrcMacAbate) * (1 / smCtoCO2) * (1/smDefl_15_to_05) *
 1e-6;</p>
 <pre><code>
 *VARIABLE INITIALISATION*</code></pre>
-<p>V07EmissCO2Supply.FX(runCy,SSBS,YTIME)<span
+<p>V07GrossEmissCO2Supply.FX(runCy,“H2INFR”,YTIME) = 0;
+V07GrossEmissCO2Supply.FX(runCy,SSBS,YTIME)<span
 class="math inline">\(DATAY(YTIME) =
 SUM(EFS,
   (
@@ -378,18 +420,25 @@ class="math inline">\(H2TECHEFtoEF(H2CCS,EFS),
       i05EffH2Prod(runCy,H2CCS,YTIME) *
       V05CaptRateH2.L(runCy,H2CCS,YTIME)
     )\)</span>sameas(“H2P”,SSBS) ) * imCo2EmiFac(runCy,“PG”,EFS,YTIME)
-); V07EmiActBySrcRegTim.FX(E07SrcMacAbate, allCy, YTIME)$(not An(YTIME))
-= i07DataCh4N2OFEmis(allCy,E07SrcMacAbate,YTIME) ; ```</p>
+); V07GrossEmissCO2Demand.FX(runCy,DSBS,YTIME)<span
+class="math inline">\(DATAY(YTIME) =
+SUM(EF,
+  imFuelConsPerFueSub(runCy,DSBS,EF,YTIME) *
+  imCo2EmiFac(runCy,DSBS,EF,YTIME)
+);
+V07EmiActBySrcRegTim.FX(E07SrcMacAbate, allCy,
+YTIME)\)</span>DATAY(YTIME) =
+i07DataCh4N2OFEmis(allCy,E07SrcMacAbate,YTIME) ; ```</p>
 <blockquote>
 <p><strong>Limitations</strong> There are no known limitations.</p>
 </blockquote>
 <h2 id="definitions">Definitions</h2>
 <h3 id="objects">Objects</h3>
-<table>
+<table style="width:100%;">
 <caption>module-internal objects (A: legacy)</caption>
 <colgroup>
-<col style="width: 38%" />
-<col style="width: 43%" />
+<col style="width: 35%" />
+<col style="width: 45%" />
 <col style="width: 13%" />
 <col style="width: 5%" />
 </colgroup>
@@ -404,30 +453,9 @@ class="math inline">\(H2TECHEFtoEF(H2CCS,EFS),
 <tbody>
 <tr class="odd">
 <td style="text-align: center;">)</td>
-<td style="text-align: center;">* imCo2EmiFac(allCyPGEFSYTIME) -</td>
+<td style="text-align: center;">*</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">)$sameas<br />
-([#DESC#25#], SSBS)</td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;">x</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;"><br />
-(imCo2EmiFac(allCy, [#DESC#24#], EFS, YTIME) + 4.17<span
-class="math inline">\(sameas(&quot;BMSWAS&quot;,
-EFS))
-(imCo2EmiFacallCy,
-[#DESC#24#],
-EFS,
-YTIME+4.17\)</span>sameas”BMSWAS”, EFS)</td>
-<td style="text-align: center;">(imCo2EmiFac(allCyPGEFSYTIME) +
-4.17$sameas(“BMSWAS”EFS))</td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;"></td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">=E=</td>
@@ -436,13 +464,6 @@ YTIME+4.17\)</span>sameas”BMSWAS”, EFS)</td>
 <td style="text-align: center;">x</td>
 </tr>
 <tr class="odd">
-<td style="text-align: center;">i05EffH2Prod<br />
-(allCy, H2CCS, YTIME)</td>
-<td style="text-align: center;">*</td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;">x</td>
-</tr>
-<tr class="even">
 <td style="text-align: center;">i07DataCh4N2OFEmis<br />
 (allCy, E07SrcMacAbate, YTIME)</td>
 <td style="text-align: center;">Baseline non-CO₂ emissions by source
@@ -450,11 +471,18 @@ YTIME+4.17\)</span>sameas”BMSWAS”, EFS)</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">i07DataCh4N2OFMAC<br />
 (allCy, E07SrcMacAbate, E07MAC, YTIME)</td>
 <td style="text-align: center;">Marginal abatement cost curve (MACC)
 data for non-CO₂ emission sources</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">imCo2EmiFac<br />
+(allCy, DSBS, EFS, YTIME)</td>
+<td style="text-align: center;"></td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
@@ -513,14 +541,22 @@ emissions</td>
 <td style="text-align: center;">x</td>
 </tr>
 <tr class="odd">
-<td style="text-align: center;">Q07EmissCO2Supply<br />
-(allCy, SSBS, YTIME)</td>
+<td style="text-align: center;">Q07GrossEmissCO2Demand<br />
+(allCy, DSBS, YTIME)</td>
 <td style="text-align: center;"><span
 class="math inline">\((TIME(YTIME)\)</span>runCy(allCy))..</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
 <tr class="even">
+<td style="text-align: center;">Q07GrossEmissCO2Supply<br />
+(allCy, SSBS, YTIME)</td>
+<td style="text-align: center;">Compute total CO2eq GHG emissions per
+supply sector</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
+<tr class="odd">
 <td style="text-align: center;">Q07RedAbsBySrcRegTim<br />
 (E07SrcMacAbate, allCy, YTIME)</td>
 <td style="text-align: center;">Calculate reduction fraction based on
@@ -528,42 +564,36 @@ carbon price</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">SUM</td>
 <td style="text-align: center;">(EFS</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="even">
-<td style="text-align: center;">V03InpTotTransf<br />
-(allCy, SSBS, EFS, YTIME)</td>
-<td style="text-align: center;">$SSBSEMIT(SSBS) +</td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;">x</td>
-</tr>
 <tr class="odd">
-<td style="text-align: center;">V05CaptRateH2<br />
-(allCy, H2CCS, YTIME)</td>
-<td style="text-align: center;">*</td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;">x</td>
-</tr>
-<tr class="even">
 <td style="text-align: center;">V07CostAbateBySrcRegTim<br />
 (E07SrcMacAbate, allCy, YTIME)</td>
 <td style="text-align: center;">Total abatement cost</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">V07EmiActBySrcRegTim<br />
 (E07SrcMacAbate, allCy, YTIME)</td>
 <td style="text-align: center;">Actual emissions</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">x</td>
 </tr>
+<tr class="odd">
+<td style="text-align: center;">V07GrossEmissCO2Demand<br />
+(allCy, DSBS, YTIME)</td>
+<td style="text-align: center;">Gross emissions of demand
+subsectors</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x</td>
+</tr>
 <tr class="even">
-<td style="text-align: center;">V07EmissCO2Supply<br />
+<td style="text-align: center;">V07GrossEmissCO2Supply<br />
 (allCy, SSBS, YTIME)</td>
 <td style="text-align: center;">Total CO2eq GHG emissions per supply
 sector</td>
@@ -605,51 +635,60 @@ fraction</td>
 CCS</td>
 </tr>
 <tr class="odd">
+<td style="text-align: center;">DSBS(SBS)</td>
+<td style="text-align: center;">All Demand Subsectors</td>
+</tr>
+<tr class="even">
 <td style="text-align: center;">E07MAC</td>
 <td style="text-align: center;">Cost categories for Marginal abatement
 costs curves (MACC) -2010<span class="math inline">\(/tC for CH4,N20 and
 2005\)</span>/tC for F-gases</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">E07SrcMacAbate</td>
 <td style="text-align: center;">Non-CO₂ emission sources with MAC
 curves</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">EF</td>
 <td style="text-align: center;">Energy Forms</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">EFS(EF)</td>
 <td style="text-align: center;">Energy Forms used in Supply Side</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">H2CCS(H2TECH)</td>
 <td style="text-align: center;">Hydrogen production technologies
 equipped with CCS facility</td>
 </tr>
-<tr class="even">
-<td style="text-align: center;">H2TECH</td>
+<tr class="odd">
+<td style="text-align: center;">H2TECH(STECH)</td>
 <td style="text-align: center;">Hydrogen production technologies</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">H2TECHEFtoEF(H2TECH, EF)</td>
 <td style="text-align: center;">Mapping between production technologies
 and fuels</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">PGALL(STECH)</td>
 <td style="text-align: center;">Power Generation Plant Types</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">PGALLtoEF(PGALL, EFS)</td>
 <td style="text-align: center;">Correspondence between plants and energy
 forms</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">runCy(allCy)</td>
 <td style="text-align: center;">Countries for which the model is
 running</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">runCyL(allCy)</td>
+<td style="text-align: center;">Countries for which the model is running
+(used in countries loop)</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">SBS(ALLSBS)</td>
@@ -668,15 +707,22 @@ running</td>
 <td style="text-align: center;">Supply Subsectors emitting inputs</td>
 </tr>
 <tr class="odd">
+<td style="text-align: center;">TRANSE(DSBS)</td>
+<td style="text-align: center;">All Transport Subsectors</td>
+</tr>
+<tr class="even">
 <td style="text-align: center;">ytime</td>
 <td style="text-align: center;">Model time horizon</td>
 </tr>
 </tbody>
 </table>
 <h2 id="see-also">See Also</h2>
-<p><a href="03_RestOfEnergy.htm">03_RestOfEnergy</a>, <a
+<p><a href="01_Transport.htm">01_Transport</a>, <a
+href="02_Industry.htm">02_Industry</a>, <a
+href="03_RestOfEnergy.htm">03_RestOfEnergy</a>, <a
 href="04_PowerGeneration.htm">04_PowerGeneration</a>, <a
-href="05_Hydrogen.htm">05_Hydrogen</a></p>
+href="05_Hydrogen.htm">05_Hydrogen</a>, <a
+href="06_CO2.htm">06_CO2</a></p>
 <h2 id="references">References</h2>
 <script>
 window.onscroll = function() {myFunction()};
