@@ -114,7 +114,7 @@ Q04CostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
       (i04ShareFuels(allCy,PGALL,PGEF) * VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME) +
       V04CO2CaptRate(allCy,PGALL,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME) + 4.17$(sameas("BMSWAS", PGEF))) +
       (1-V04CO2CaptRate(allCy,PGALL,YTIME)) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME) + 4.17$(sameas("BMSWAS", PGEF)))*
-      (sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME)))
+      sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME))
       ) * smTWhToMtoe / imPlantEffByType(allCy,PGALL,"effELC",YTIME)
     )$(not PGREN(PGALL));
 
@@ -366,7 +366,7 @@ Q04ScrpRate(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04ScrpRate(allCy,PGALL,YTIME)
         =E=
     1 - (1 - 1 / i04TechLftPlaType(allCy,PGALL)) * 
-    V04IndxEndogScrap(allCy,PGALL,YTIME) *
+    V04IndxEndogScrap(allCy,PGALL,YTIME-1) *
     V04CCSRetroFit(allCy,PGALL,YTIME);
 
 Q04ConsFuelElecProd(allCy,PGEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
