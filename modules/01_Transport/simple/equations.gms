@@ -182,10 +182,11 @@ Q01ShareTechTr(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $r
       =E=
     imMatrFactor(allCy,TRANSE,TTECH,YTIME) *
     V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME-1)**(-3) /
-    sum(TTECH2$SECTTECH(TRANSE,TTECH2), 
+    (sum(TTECH2$SECTTECH(TRANSE,TTECH2), 
       imMatrFactor(allCy,TRANSE,TTECH2,YTIME) * 
       V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1)**(-3)
-    );
+    )
+    +1e-6);
 
 *' This equation calculates the consumption of each technology in transport sectors. It considers various factors such as the lifetime of the technology,
 *' average capacity per vehicle, load factor, scrapping rate, and specific fuel consumption. The equation also takes into account the technology's variable
@@ -292,8 +293,8 @@ Q01ActivPassTrnsp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANP(TRANSE) $runCy(allCy))
               =E=
       (  !! passenger cars
         V01ActivPassTrnsp(allCy,TRANSE,YTIME-1) *
-        (VmPriceFuelAvgSub(allCy,TRANSE,YTIME)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1))**imElastA(allCy,TRANSE,"b1",YTIME) *
-        (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2))**imElastA(allCy,TRANSE,"b2",YTIME) *
+        (VmPriceFuelAvgSub(allCy,TRANSE,YTIME)/(VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1)+1e-6))**imElastA(allCy,TRANSE,"b1",YTIME) *
+        (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1)/(VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2)+1e-6))**imElastA(allCy,TRANSE,"b2",YTIME) *
         [(V01StockPcYearly(allCy,YTIME)/(i01Pop(YTIME,allCy)*1000))/(V01PcOwnPcLevl(allCy,YTIME-1))]**imElastA(allCy,TRANSE,"b3",YTIME) *
         [i01GDPperCapita(YTIME,allCy) / i01GDPperCapita(YTIME-1,allCy)] ** 0.2 !!imElastA(allCy,TRANSE,"b4",YTIME)
       )$sameas(TRANSE,"PC") +
