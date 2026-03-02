@@ -88,15 +88,15 @@ Q11SubsiDemTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS
     +
     sum(CDRTECH$(sameas(TECH,CDRTECH)), !! CDR
       (
-        VmSubsiDemTechAvail(allCy,CDR,CDRTECH,YTIME) * 1e6 / 
+        VmSubsiDemTechAvail(allCy,DSBS,CDRTECH,YTIME) * 1e6 / 
       (V06CapCDR(allCy,CDRTECH,YTIME-1) * V06CapFacNewDAC(allCy,CDRTECH,YTIME-1))
-      + (1 - imCapCostTechMin(allCy,CDR,CDRTECH,YTIME)) * V06LvlCostDAC(allCy,CDRTECH,YTIME-1)
+      + (1 - imCapCostTechMin(allCy,DSBS,CDRTECH,YTIME)) * V06LvlCostDAC(allCy,CDRTECH,YTIME-1)
       -
-      sqrt(sqr(VmSubsiDemTechAvail(allCy,CDR,CDRTECH,YTIME) * 1e6 / 
+      sqrt(sqr(VmSubsiDemTechAvail(allCy,DSBS,CDRTECH,YTIME) * 1e6 / 
       (V06CapCDR(allCy,CDRTECH,YTIME-1) * V06CapFacNewDAC(allCy,CDRTECH,YTIME-1))
-      - (1 - imCapCostTechMin(allCy,CDR,CDRTECH,YTIME)) * V06LvlCostDAC(allCy,CDRTECH,YTIME-1)))
+      - (1 - imCapCostTechMin(allCy,DSBS,CDRTECH,YTIME)) * V06LvlCostDAC(allCy,CDRTECH,YTIME-1)))
       ) / 2
-    )$((ord(YTIME) > 15))
+    )$(CDR(DSBS) and ord(YTIME) > 15)
 ;
 
 *' The equation splits the available state grants to the various supply technologies through a policy parameter expressing this proportional division.

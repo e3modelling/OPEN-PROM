@@ -252,7 +252,7 @@ $setGlobal Emissions        legacy
 $setGlobal Prices           legacy
 $setGlobal Heat             heat
 $setGlobal Curves           off
-* $setGlobal Economy          economy
+$setGlobal Economy          economy
 *' To disable learning curves module, use: $setGlobal Curves off
 
 ** CORE MODEL FILES **

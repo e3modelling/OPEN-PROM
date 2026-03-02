@@ -129,7 +129,7 @@ Q06VarCostDAC(CDRTECH,YTIME)$(TIME(YTIME))..
 Q06LvlCostDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06LvlCostDAC(allCy,CDRTECH,YTIME)
         =E=         
-    V06GrossCapDAC(CDRTECH,YTIME) +
+    V06GrossCapDAC(CDRTECH,YTIME) - VmSubsiDemTech(allCy,"DAC",CDRTECH,YTIME) - VmSubsiDemTech(allCy,"EW",CDRTECH,YTIME) +
     V06FixOandMDAC(CDRTECH,YTIME) + 
     V06VarCostDAC(CDRTECH,YTIME) - 20 +
     i06SpecElecDAC(allCy,CDRTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME) +
@@ -156,7 +156,7 @@ Q06CapFacNewDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
   V06CapFacNewDAC(allCy,CDRTECH,YTIME)
       =E=
   S06CapFacMaxNewDAC / 2
-  * (tanh(4 * (V06ProfRateDAC(allCy,CDRTECH,YTIME) - 1.4)) + 1)
+  * (tanh(2 * (V06ProfRateDAC(allCy,CDRTECH,YTIME) - 2)) + 1)
   * i06MatFacDAC(CDRTECH);
 
 *' The equation calculates the DAC installed capacity annually and regionally,
