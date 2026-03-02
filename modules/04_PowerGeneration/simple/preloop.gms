@@ -104,7 +104,7 @@ VmProdElec.L(runCy,pgall,YTIME) = i04DataElecProdNonCHP(runCy,pgall,YTIME) / 100
 VmProdElec.FX(runCy,pgall,YTIME)$DATAY(YTIME) = i04DataElecProdNonCHP(runCy,pgall,YTIME) / 1000;
 *---
 V04ProdElecEstCHP.LO(runCy,TCHP,YTIME) = 0;
-V04ProdElecEstCHP.L(runCy,TCHP,YTIME) = i04DataElecProdCHP(runCy,TCHP,"%fBaseY%") / 1000;
+V04ProdElecEstCHP.L(runCy,TCHP,YTIME) = i04DataElecProdCHP(runCy,TCHP,"%fBaseY%") / 1000 + 1;
 V04ProdElecEstCHP.FX(runCy,TCHP,YTIME)$DATAY(YTIME) = i04DataElecProdCHP(runCy,TCHP,YTIME) / 1000;
 *---
 V04ShareMixWndSol.FX(runCy,YTIME)$DATAY(YTIME) = sum(PGALL$PGRENSW(PGALL), VmCapElec.L(runCy,PGALL,YTIME)) / sum(PGALL2, VmCapElec.L(runCy,PGALL2,YTIME));

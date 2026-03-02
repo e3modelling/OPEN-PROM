@@ -68,14 +68,6 @@ Q03LossesDistr(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     )$H2EF(EFS)
 ;  
 
-Q03OutTransfCHP(allCy,TOCTEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V03OutTransfCHP(allCy,TOCTEF,YTIME)
-        =E=
-    sum(TSTEAM$TCHP(TSTEAM),
-      VmProdSte(allCy,TSTEAM,YTIME)
-    )$sameas("STE",TOCTEF) +
-    SUM(TCHP,V04ProdElecEstCHP(allCy,TCHP,YTIME) * smTWhToMtoe)$sameas("ELC",TOCTEF);
-
 $ontext
 *' The equation calculates the refineries' capacity for a given scenario and year.
 *' The calculation is based on a residual factor, the previous year's capacity, and a production scaling

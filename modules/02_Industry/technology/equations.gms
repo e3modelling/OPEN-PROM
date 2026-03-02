@@ -38,9 +38,10 @@ Q02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITE
     V02RatioRem(allCy,DSBS,ITECH,YTIME);
 
 Q02RatioRem(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and not TRANSE(DSBS) and not CDR(DSBS))$runCy(allCy))..
-V02RatioRem(allCy,DSBS,ITECH,YTIME) 
+    V02RatioRem(allCy,DSBS,ITECH,YTIME) 
         =E=
-    ( (1 - 1/VmLft(allCy,DSBS,ITECH,YTIME))* (1 - V02PremScrpIndu(allCy,DSBS,ITECH,YTIME)));
+    (1 - 1/VmLft(allCy,DSBS,ITECH,YTIME)) * 
+    (1 - V02PremScrpIndu(allCy,DSBS,ITECH,YTIME));
 
 Q02PremScrpIndu(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and not TRANSE(DSBS) and not CDR(DSBS))$runCy(allCy))..
     V02PremScrpIndu(allCy,DSBS,ITECH,YTIME)

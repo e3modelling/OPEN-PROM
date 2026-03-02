@@ -60,9 +60,9 @@ VmPriceFuelSubsecCarVal.FX(runCy,SBS,EF,YTIME)$(SECtoEF(SBS,EF)$(not HEATPUMP(EF
 * Alternative fuel prices are set explicitly below instead of using ALTMAP
 * FIXME: VmPriceFuelSubsecCarVal (NUC/MET/ETH/BGDO) should be computed endogenously after startYear, and with mrprom before startYear
 * author=giannou
-VmPriceFuelSubsecCarVal.FX(runCy,"PG","NUC",YTIME) = 0.02; !! fixed price for nuclear fuel to 25Euro/toe
-VmPriceFuelSubsecCarVal.FX(runCy,"H2P","NUC",YTIME) = 0.02; !! fixed price for nuclear fuel to 25Euro/toe
-VmPriceFuelSubsecCarVal.FX(runCy,"STEAMP","NUC",YTIME) = 0.02; !! fixed price for nuclear fuel to 25Euro/toe
+VmPriceFuelSubsecCarVal.FX(runCy,"PG","NUC",YTIME) = 0.2; !! fixed price for nuclear fuel to 25Euro/toe
+VmPriceFuelSubsecCarVal.FX(runCy,"H2P","NUC",YTIME) = 0.2; !! fixed price for nuclear fuel to 25Euro/toe
+VmPriceFuelSubsecCarVal.FX(runCy,"STEAMP","NUC",YTIME) = 0.2; !! fixed price for nuclear fuel to 25Euro/toe
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,"MET",YTIME)$(not An(YTIME)) = 1; !! fixed price methanol
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,"ETH",YTIME)$(not An(YTIME)) = 1; !! fixed price for ethanol
 VmPriceFuelSubsecCarVal.FX(runCy,INDDOM,"HEATPUMP",YTIME)$(SECtoEF(INDDOM,"HEATPUMP")$(not An(YTIME))) = imFuelPrice(runCy,INDDOM,"ELC",YTIME);
