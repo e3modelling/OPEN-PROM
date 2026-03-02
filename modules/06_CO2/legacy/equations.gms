@@ -146,16 +146,17 @@ Q06ProfRateDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     / V06LvlCostDAC(allCy,CDRTECH,YTIME - 1)
 ;
 
-*' The equation estimates the annual increase rate of DAC capacity regionally, according to the maturity and profitability of each technology.
+* The equation determines the annual growth rate of new DAC capacity by region and technology. 
+* The growth rate is modeled as a smooth S-shaped (tanh) function of the profitability rate, 
+* scaled by the maximum allowable expansion factor and adjusted by a technology-specific 
+* maturity factor. This formulation captures the idea that as DAC technologies become more profitable,
+* their growth rate will accelerate, but will eventually level off as they reach market saturation or face other constraints.
+*'The maturity factor allows for differentiation between technologies based on their readiness and potential for rapid deployment.
 Q06CapFacNewDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
   V06CapFacNewDAC(allCy,CDRTECH,YTIME)
       =E=
-  (
-    (V06ProfRateDAC(allCy,CDRTECH,YTIME) - 1 
-    + 
-    sqrt(sqr(V06ProfRateDAC(allCy,CDRTECH,YTIME) - 1))
-    ) / 2
-  ) ** 0.3
+  S06CapFacMaxNewDAC / 2
+  * (tanh(4 * (V06ProfRateDAC(allCy,CDRTECH,YTIME) - 1.4)) + 1)
   * i06MatFacDAC(CDRTECH);
 
 *' The equation calculates the DAC installed capacity annually and regionally,
