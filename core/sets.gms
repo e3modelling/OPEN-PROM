@@ -572,7 +572,6 @@ STE.STE
 ELCEF(EF)        Electricity                                         /ELC/
 H2EF(EF)         Hydrogen                                            /H2F/
 STEAM(EFS)       Steam                                               /STE/
-TOCTEF(EFS)      Energy forms produced by power plants and boilers   /ELC,STE/
 ALTEF(EF)        Alternative Fuels used in transport                 /BGDO,BKRS,BGSL,MET,ETH/
 
 PGEF(EFS)        "Energy forms used for steam production"
@@ -617,12 +616,6 @@ ELC
 /
 
 *         Technologies            *
-
-TEAALL              Technology progress (Demand Side)
-/
-ORD   Ordinary
-IMP   Improved
-/
 
 TECH      Technologies (in Demand side)
 /
@@ -928,10 +921,10 @@ EW.TEW
 
 SECtoEF(SBS,EF) Link between Model Subsectors and Energy Forms consumed
 /
-PG.(LGN,HCL,CRO,GSL,BGSL,KRS,BKRS,GDO,BGDO,RFO,NGS,OGS,NUC,HYD,BMSWAS,SOL,GEO,WND,H2F)
+PG.(LGN,HCL,CRO,GSL,BGSL,KRS,BKRS,GDO,BGDO,RFO,OLQ,NGS,OGS,NUC,HYD,BMSWAS,SOL,GEO,WND,H2F)
 CHP.(LGN,HCL,GDO,RFO,NGS,OGS,NUC,HYD,BMSWAS,SOL,GEO,WND)
 H2P.(HCL,LGN,RFO,GDO,NGS,OGS,NUC,BMSWAS,SOL,WND,ELC)
-STEAMP.(HCL,LGN,GDO,RFO,LPG,KRS,NGS,OGS,OLQ,NUC,GEO,BMSWAS,ELC,H2F)
+STEAMP.(HCL,LGN,CRO,GDO,BGDO,GSL,BGSL,KRS,BKRS,RFO,LPG,NGS,OGS,OLQ,NUC,GEO,BMSWAS,ELC,H2F)
 SLD.(LGN,HCL,GSL,GDO,BGDO,RFO,OLQ,NGS,OGS,BMSWAS,SOL,CRO,LPG,KRS,ELC,STE)
 LQD.(LGN,HCL,GSL,GDO,BGDO,RFO,OLQ,NGS,OGS,BMSWAS,SOL,CRO,LPG,KRS,ELC,STE)
 GAS.(HCL,GSL,GDO,BGDO,RFO,OLQ,NGS,OGS,BMSWAS,SOL,CRO,LPG,KRS,ELC,STE)
@@ -1024,22 +1017,13 @@ PGRENSW(PGALL)   Solar and wind Plants                     /PGSOL,PGCSP,PGAWND,P
 PGNREN(PGALL)    Advanced Renewable Plants potential      /PGCSP,PGOTHREN,PGAWNO,ATHBMSWAS/
 PGRENEF          Renewable energy forms in power generation  /HYD,WND,SOL,BMSWAS,GEO/
 
-PGALLtoPGRENEF(PGALL,PGRENEF)     Correspondence between renewable plants and renewable energy forms
-/
-(PGSHYD,PGLHYD).HYD
-(PGAWND,PGAWNO).WND
-(PGSOL,PGCSP).SOL
-PGOTHREN.GEO
-(ATHBMSWAS,ATHBMSCCS).BMSWAS
-/
-
 PGALLtoEF(PGALL,EFS)     Correspondence between plants and energy forms
 /
 (ATHLGN,ATHLGNCCS).LGN
 (ATHCOAL,ATHCOALCCS).HCL
 *(ATHOIL).GDO
 *(ATHGAS,ATHGASCCS).NGS
-ATHOIL.(GSL,BGSL,GDO,BGDO,KRS,BKRS,CRO)
+ATHOIL.(GSL,BGSL,GDO,BGDO,KRS,BKRS,CRO,OLQ)
 (ATHGAS,ATHGASCCS).(NGS,OGS)
 (ATHBMSWAS,ATHBMSCCS).BMSWAS
 PGANUC.NUC

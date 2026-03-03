@@ -291,7 +291,7 @@ Q03Exp(allCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS) $runCy(allCy))..
 Q03Imp(allCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS) $runCy(allCy))..
     V03Imp(allCy,EFS,YTIME)
         =E=
-    (
+    0 *(
       i03RatioImpFinElecDem(allCy,YTIME) * 
       (VmConsFinEneCountry(allCy,EFS,YTIME) + VmConsFinNonEne(allCy,EFS,YTIME)) +
       V03Exp(allCy,EFS,YTIME) !! + i03ElecImp(allCy,YTIME)
