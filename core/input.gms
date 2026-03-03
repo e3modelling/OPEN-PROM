@@ -845,7 +845,7 @@ imShrNonSubElecInTotElecDem(runCy,DOMSE)$(imShrNonSubElecInTotElecDem(runCy,DOMS
 *---
 **  Transport Sector
 imCapCostTech(runCy,TRANSE,TECH,YTIME) = imDataTransTech(TRANSE,TECH,"IC",YTIME);
-imCapCostTechMin(allCy,TRANSE,TECH,YTIME) = 0.4;
+imCapCostTechMin(allCy,TRANSE,TECH,YTIME) = 0.6;
 imFixOMCostTech(runCy,TRANSE,TECH,YTIME) = imDataTransTech(TRANSE,TECH,"FC",YTIME);
 imVarCostTech(runCy,TRANSE,TECH,YTIME) = imDataTransTech(TRANSE,TECH,"VC",YTIME);
 *---
@@ -872,10 +872,10 @@ imUsfEneConvSubTech(runCy,"BU","TH2F",YTIME) = 0.7;
 imCapCostTech(runCy,"BU","TH2F",YTIME) = 1.5 * imCapCostTech(runCy,"BU","TGDO",YTIME);
 *---
 **  CDR
-imCapCostTechMin(allCy,"DAC","HTDAC",YTIME) = 0.3;
-imCapCostTechMin(allCy,"DAC","H2DAC",YTIME) = 0.5;
-imCapCostTechMin(allCy,"DAC","LTDAC",YTIME) = 0.5;
-imCapCostTechMin(allCy,"EW","TEW",YTIME) = 0.5;
+imCapCostTechMin(allCy,"DAC","HTDAC",YTIME) = 0.6;
+imCapCostTechMin(allCy,"DAC","H2DAC",YTIME) = 0.3;
+imCapCostTechMin(allCy,"DAC","LTDAC",YTIME) = 0.3;
+imCapCostTechMin(allCy,"EW","TEW",YTIME) = 0.3;
 *---
 !!imUsfEneConvSubTech(runCy,INDSE,"THCL",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCL","USC") + 0.005 * (ord(YTIME)-14);
 imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCLCCS","USC") + 0.005 * (ord(YTIME)-14);
