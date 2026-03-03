@@ -57,15 +57,12 @@ Q06CstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCstCO2SeqCsts(allCy,YTIME) 
         =E=
     !! linear component
-    0.6 * 
+    1 * 
     i06ElastCO2Seq(allCy,"mc_b") +
     !! exponential component
-    (1-0.6) *
+    (1-1) *
     i06ElastCO2Seq(allCy,"mc_b") *
-    exp(
-      (V06CaptCummCO2(allCy,YTIME) - V06CapCDR(allCy,"TEW",YTIME) * 1e-6) / 
-      i06ElastCO2Seq(allCy,"mc_d")
-    );           
+    exp(V06CaptCummCO2(allCy,YTIME) / (i06ElastCO2Seq(allCy,"mc_d")));           
 
 *' The equation calculates the CAPEX of each DAC technology, as it's affected by a learning curve ($/tCO2).
 Q06GrossCapDAC(CDRTECH,YTIME)$(TIME(YTIME))..

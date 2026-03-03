@@ -701,53 +701,27 @@ imMatrFactor(runCy,DSBS,"TCHEVGDO",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 0
 $offtext
 * Reduce the maturity factor of TELC in other regions except EU-27,GBR,JPN,CAZ
 
-imMatrFactor("CHA",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 5; 
+imMatrFactor("CHA",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 5;
+imMatrFactor("CHA",DSBS,"TNGSCCS",YTIME)$((ord(YTIME) > 26) and INDSE(DSBS)) = 10;
+imMatrFactor("CHA",DSBS,"THCLCCS",YTIME)$((ord(YTIME) > 26) and INDSE(DSBS)) = 10;
+imMatrFactor("CHA",DSBS,"TELC",YTIME)$((ord(YTIME) > 26) and INDSE(DSBS)) = 15;
 * imMatrFactor("CHA",DSBS,"TLGN",YTIME)$(DOMSE(DSBS)) = 0;
 * imMatrFactor("CHA",DSBS,"THCL",YTIME)$(DOMSE(DSBS)) = 1;
 * imMatrFactor("CHA",DSBS,"TOGS",YTIME)$(DOMSE(DSBS)) = 1;
 * imMatrFactor("CHA",DSBS,"TKRS",YTIME)$(DOMSE(DSBS)) = 1;
 
 imMatrFactor("IND",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 5; 
-* imMatrFactor("IND",DSBS,"TLGN",YTIME)$(DOMSE(DSBS)) = 0;
-* imMatrFactor("IND",DSBS,"THCL",YTIME)$(DOMSE(DSBS)) = 1;
-* imMatrFactor("IND",DSBS,"TOGS",YTIME)$(DOMSE(DSBS)) = 1;
-* imMatrFactor("IND",DSBS,"TKRS",YTIME)$(DOMSE(DSBS)) = 1;
+imMatrFactor("IND",DSBS,"TNGSCCS",YTIME)$((ord(YTIME) > 36) and INDSE(DSBS)) = 10;
+imMatrFactor("IND",DSBS,"THCLCCS",YTIME)$((ord(YTIME) > 36) and INDSE(DSBS)) = 10;
+imMatrFactor("IND",DSBS,"TELC",YTIME)$((ord(YTIME) > 36) and INDSE(DSBS)) = 15;
+imMatrFactor("LAM",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 3; 
+imMatrFactor("MEA",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 3; 
+imMatrFactor("NEU",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 3; 
+imMatrFactor("OAS",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 3; 
+imMatrFactor("REF",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 3; 
+imMatrFactor("SSA",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 3;
+imMatrFactor("USA",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 5; 
 
-imMatrFactor("LAM",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 5; 
-* imMatrFactor("LAM",DSBS,"TLGN",YTIME)$(DOMSE(DSBS)) = 0;
-* imMatrFactor("LAM",DSBS,"THCL",YTIME)$(DOMSE(DSBS)) = 1;
-* imMatrFactor("LAM",DSBS,"TOGS",YTIME)$(DOMSE(DSBS)) = 1;
-* imMatrFactor("LAM",DSBS,"TKRS",YTIME)$(DOMSE(DSBS)) = 1;
-
-imMatrFactor("MEA",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 5; 
-* imMatrFactor("MEA",DSBS,"TLGN",YTIME)$(DOMSE(DSBS)) = 0;
-* imMatrFactor("MEA",DSBS,"THCL",YTIME)$(DOMSE(DSBS)) = 1;
-* imMatrFactor("MEA",DSBS,"TOGS",YTIME)$(DOMSE(DSBS)) = 1;
-* imMatrFactor("MEA",DSBS,"TKRS",YTIME)$(DOMSE(DSBS)) = 1;
-
-imMatrFactor("NEU",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 5; 
-* imMatrFactor("NEU",DSBS,"TLGN",YTIME)$(DOMSE(DSBS)) = 0;
-* imMatrFactor("NEU",DSBS,"THCL",YTIME)$(DOMSE(DSBS)) = 1;
-* imMatrFactor("NEU",DSBS,"TOGS",YTIME)$(DOMSE(DSBS)) = 1;
-* imMatrFactor("NEU",DSBS,"TKRS",YTIME)$(DOMSE(DSBS)) = 1;
-
-imMatrFactor("OAS",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 5; 
-* imMatrFactor("OAS",DSBS,"TLGN",YTIME)$(DOMSE(DSBS)) =0;
-* imMatrFactor("OAS",DSBS,"THCL",YTIME)$(DOMSE(DSBS)) = 1;
-* imMatrFactor("OAS",DSBS,"TOGS",YTIME)$(DOMSE(DSBS)) = 1;
-* imMatrFactor("OAS",DSBS,"TKRS",YTIME)$(DOMSE(DSBS)) = 1;
-
-imMatrFactor("REF",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 5; 
-* imMatrFactor("REF",DSBS,"TLGN",YTIME)$(DOMSE(DSBS)) = 0;
-* imMatrFactor("REF",DSBS,"THCL",YTIME)$(DOMSE(DSBS)) = 1;
-* imMatrFactor("REF",DSBS,"TOGS",YTIME)$(DOMSE(DSBS)) = 1;
-* imMatrFactor("REF",DSBS,"TKRS",YTIME)$(DOMSE(DSBS)) = 1;
-
-imMatrFactor("SSA",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 5; 
-* imMatrFactor("SSA",DSBS,"TLGN",YTIME)$(DOMSE(DSBS)) = 0;
-* imMatrFactor("SSA",DSBS,"THCL",YTIME)$(DOMSE(DSBS)) = 1;
-* imMatrFactor("SSA",DSBS,"TOGS",YTIME)$(DOMSE(DSBS)) = 1;
-* imMatrFactor("SSA",DSBS,"TKRS",YTIME)$(DOMSE(DSBS)) = 1;
 
 
 $ELSE.calib

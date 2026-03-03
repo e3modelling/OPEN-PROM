@@ -102,7 +102,21 @@ i04MatFacPlaAvailCap.L(runCy,PGALL,YTIME) = iMatFacPlaAvailCapData(runCy,PGALL,Y
 $ELSE.calib
 parameter i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   "Maturity factor related to plant available capacity (1)";
 i04MatFacPlaAvailCap(runCy,PGALL,YTIME) = iMatFacPlaAvailCapData(runCy,PGALL,YTIME);
-i04MatFacPlaAvailCap(runCy,"ATHBMSCCS",YTIME) = 15;
+*
+i04MatFacPlaAvailCap(runCy,"ATHBMSCCS",YTIME) = 10;
+i04MatFacPlaAvailCap('CHA',"ATHBMSCCS",YTIME) = 1;
+i04MatFacPlaAvailCap('CHA',"ATHBMSCCS",YTIME)$((ord(YTIME) > 26)) = 2;
+i04MatFacPlaAvailCap('IND',"ATHBMSCCS",YTIME) = 1;
+i04MatFacPlaAvailCap('IND',"ATHBMSCCS",YTIME)$((ord(YTIME) > 36)) = 2;
+i04MatFacPlaAvailCap('LAM',"ATHBMSCCS",YTIME) = iMatFacPlaAvailCapData('LAM',"ATHBMSCCS",YTIME);
+i04MatFacPlaAvailCap('MEA',"ATHBMSCCS",YTIME) = iMatFacPlaAvailCapData('MEA',"ATHBMSCCS",YTIME);
+i04MatFacPlaAvailCap('NEU',"ATHBMSCCS",YTIME) = iMatFacPlaAvailCapData('NEU',"ATHBMSCCS",YTIME);
+i04MatFacPlaAvailCap('OAS',"ATHBMSCCS",YTIME) = iMatFacPlaAvailCapData('OAS',"ATHBMSCCS",YTIME);
+i04MatFacPlaAvailCap('REF',"ATHBMSCCS",YTIME) = iMatFacPlaAvailCapData('REF',"ATHBMSCCS",YTIME);
+i04MatFacPlaAvailCap('SSA',"ATHBMSCCS",YTIME) = iMatFacPlaAvailCapData('SSA',"ATHBMSCCS",YTIME);
+i04MatFacPlaAvailCap('USA',"ATHBMSCCS",YTIME) = iMatFacPlaAvailCapData('USA',"ATHBMSCCS",YTIME);
+*
+
 i04MatFacPlaAvailCap(runCy,"ATHCOAL",YTIME) = i04MatFacPlaAvailCap(runCy,"ATHCOAL",YTIME);
 i04MatFacPlaAvailCap(runCy,"PGH2F",YTIME) = 0;
 $ENDIF.calib

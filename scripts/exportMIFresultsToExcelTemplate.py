@@ -3,7 +3,7 @@ import numpy as np
 import re
 
 # ================= CONFIGURATION =================
-MIF_FILE = 'C:\\Users\\at39\\2-Models\\OPEN-PROM\\runs\\SoCDR_Ed3_CurrentTargets_InvCAPCoal_2026-02-25_16-47-52\\reporting.mif'
+MIF_FILE = 'C:\\Users\\at39\\2-Models\\OPEN-PROM\\runs\\Server_SoCDR_Ed3_CurrentTargets_USAnopolicy_2026-03-03_15-38-57\\reporting.mif'
 
 # Years to appear in the output
 REPORT_YEARS = [2010, 2015, 2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070, 2075, 2080, 2085, 2090, 2095, 2100]

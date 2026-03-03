@@ -160,12 +160,12 @@ emissionsOPENPROM <- function(envWide, yearCols, alpha, targetRegion, targetYear
   } else {
     # ΕU Case: Sum over all regions (dim 1)
     # --- Filter for EU27 Regions ---
-    # regionMapping <- toolGetMapping(name = "EU28.csv", type = "regional", where = "mrprom")
-    # regionsEu27 <- regionMapping$ISO3.Code[regionMapping$ISO3.Code != "GBR"]
-    # dataMagpieEu27 <- CO2eq[getRegions(CO2eq) %in% regionsEu27, , ]
+    regionMapping <- toolGetMapping(name = "EU28.csv", type = "regional", where = "mrprom")
+    regionsEu27 <- regionMapping$ISO3.Code[regionMapping$ISO3.Code != "GBR"]
+    dataMagpieEu27 <- CO2eq[getRegions(CO2eq) %in% regionsEu27, , ]
 
     # Global Case: Sum over all regions (dim 1)
-    val <- dimSums(CO2eq, dim = 1)[, targetYear, ]
+    val <- dimSums(dataMagpieEu27, dim = 1)[, targetYear, ]
   }
   
   # Always use Mt to be consistent for countries and regions
@@ -369,8 +369,8 @@ calculateGhg <- function(dataMagpie) {
 # ----------------------------
 start_time <- Sys.time()
 GAMSCmdArgs <- c("--DevMode=0", "--GenerateInput=off", "lo=4", "idir=./data")
-selectedYear <- 2080
-changeCarbonPriceFromYear <- 2025
+selectedYear <- 2050
+changeCarbonPriceFromYear <- 2031
 flagCO2eq <- TRUE
 
 # ---------------------------------------------------------
@@ -419,7 +419,7 @@ flagCO2eq <- TRUE
 # )
 
 # CASE B: No Target Regions (Empty List) -> Implies EU27 Run
-# targetList <- NULL
+targetList <- NULL
 #globalParams <- 1750 # EU-27 target 2030 in MtCO2/yr - ONLY CO2
 #globalParams <- 2250  # EU-27 target 2030 in MtCO2e/yr 
 #globalParams <- 0  # EU-27 target 2030 in MtCO2e/yr 
