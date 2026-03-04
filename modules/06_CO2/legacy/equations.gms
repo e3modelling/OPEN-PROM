@@ -15,10 +15,12 @@ Q06CO2CaptureCCS(allCy,SBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECtoEF(SBS,EF
       =E=
     (
       sum(CCS$PGALLtoEF(CCS,EFS),
-        SUM(PGEF$sameas(PGEF,EFS),i04ShareFuels(allCy,CCS,PGEF)) *
+        SUM(PGEF$sameas(PGEF,EFS),
+        i04ShareFuels(allCy,CCS,PGEF) *
         VmProdElec(allCy,CCS,YTIME) * smTWhToMtoe /
         imPlantEffByType(allCy,CCS,"effELC",YTIME) *
         V04CO2CaptRate(allCy,CCS,YTIME)
+      )
       )$sameas("PG", SBS) +
       sum(H2TECH$H2TECHEFtoEF(H2TECH,EFS),
         VmConsFuelTechH2Prod(allCy,H2TECH,EFS,YTIME) *
