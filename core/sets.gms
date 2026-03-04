@@ -1221,6 +1221,7 @@ BALEF fuels in balance report
 "Crude oil and Feedstocks"
 "Liquids"
 "Fossil Liquids"
+"Fossil"
 "Liquified petroleum gas"
 "Gasoline"
 "Kerosene"
@@ -1255,6 +1256,7 @@ BALEF2EFS(BALEF, EFS) Mapping from balance fuels to model fuels
 "Crude oil and Feedstocks".CRO
 "Liquids".(LPG,GSL,BGSL,KRS,BKRS,GDO,BGDO,RFO,OLQ,CRO)
 "Fossil Liquids".(LPG,GSL,KRS,GDO,RFO,OLQ,CRO)
+"Fossil".(HCL,LGN,CRO,LPG,GSL,KRS,GDO,RFO,OLQ,NGS,OGS)
 "Renewables".(HYD,WND,SOL,GEO)
 "Other fuels".(MET,ETH)
 "Liquified petroleum gas".LPG

@@ -10,41 +10,30 @@
 
 *' * CO2 SEQUESTRATION COST CURVES
 
-*' The equation calculates the CO2 captured by electricity and hydrogen production plants
-*' in million tons of CO2 for a specific scenario and year. The CO2 capture is determined by summing 
-*' the product of electricity production from plants with carbon capture and storage, the conversion
-*' factor from terawatt-hours to million tons of oil equivalent (smTWhToMtoe), the plant efficiency,
-*' the CO2 emission factor, and the plant CO2 capture rate. 
-Q06CapCO2ElecHydr(allCy,SBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V06CapCO2ElecHydr(allCy,SBS,YTIME)
+Q06CO2CaptureCCS(allCy,SBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECtoEF(SBS,EFS))..
+    V06CO2CaptureCCS(allCy,SBS,EFS,YTIME)
       =E=
-    sum(EFS,
+    (
       sum(CCS$PGALLtoEF(CCS,EFS),
         SUM(PGEF$sameas(PGEF,EFS),i04ShareFuels(allCy,CCS,PGEF)) *
         VmProdElec(allCy,CCS,YTIME) * smTWhToMtoe /
         imPlantEffByType(allCy,CCS,"effELC",YTIME) *
-        (imCo2EmiFac(allCy,SBS,EFS,YTIME) + 4.17$sameas("BMSWAS",EFS))*
         V04CO2CaptRate(allCy,CCS,YTIME)
       )$sameas("PG", SBS) +
       sum(H2TECH$H2TECHEFtoEF(H2TECH,EFS),
         VmConsFuelTechH2Prod(allCy,H2TECH,EFS,YTIME) *
-        (imCo2EmiFac(allCy,SBS,EFS,YTIME) + 4.17$sameas("BMSWAS",EFS))*
         V05CaptRateH2(allCy,H2TECH,YTIME)
-      )$sameas("H2P", SBS)
-    ) +
-    sum(DACTECH,V06CapCDR(allCy,DACTECH,YTIME) * 1e-6)$sameas("DAC", SBS) +
-    (V06CapCDR(allCy,"TEW",YTIME) * 1e-6)$sameas("EW", SBS) +
-    sum(DSBS$sameas(DSBS,SBS),
-      sum(CCSTECH$SECTTECH(DSBS,CCSTECH),
-        sum(EFS$ITECHtoEF(CCSTECH,EFS),
-          i02ShareBlend(allCy,DSBS,CCSTECH,EFS,YTIME) *
-          V02EquipCapTechSubsec(allcy,DSBS,CCSTECH,YTIME) * 
-          i02util(allCy,DSBS,CCSTECH,YTIME) * 
-          imCO2CaptRateIndustry(allCy,CCSTECH,YTIME) * 
-          (imCo2EmiFac(allCy,DSBS,EFS,YTIME) + 4.17$sameas("BMSWAS",EFS))
+      )$sameas("H2P", SBS) +
+      sum(DSBS$sameas(DSBS,SBS),
+        sum(CCSTECH$SECTTECH(DSBS,CCSTECH),
+            i02ShareBlend(allCy,DSBS,CCSTECH,EFS,YTIME) *
+            V02EquipCapTechSubsec(allcy,DSBS,CCSTECH,YTIME) * 
+            i02util(allCy,DSBS,CCSTECH,YTIME) * 
+            imCO2CaptRateIndustry(allCy,CCSTECH,YTIME)
         )
-      )
-    )$INDSE1(SBS);   
+      )$INDSE1(SBS)
+    ) *
+    (imCo2EmiFac(allCy,SBS,EFS,YTIME) + 4.17$sameas("BMSWAS",EFS));
 
 *' The equation calculates the cumulative CO2 captured in million tons of CO2 for a given scenario and year.
 *' The cumulative CO2 captured at the current time period is determined by adding the CO2 captured by electricity and hydrogen production
@@ -54,7 +43,8 @@ Q06CaptCummCO2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06CaptCummCO2(allCy,YTIME) 
       =E= 
     V06CaptCummCO2(allCy,YTIME-1) +
-    SUM(SBS$(not sameas("EW",SBS)),V06CapCO2ElecHydr(allCy,SBS,YTIME));   
+    sum((SBS,EFS)$SECtoEF(SBS,EFS),V06CO2CaptureCCS(allCy,SBS,EFS,YTIME)) +
+    sum(CDRTECH,V06CapCDR(allCy,CDRTECH,YTIME) * 1e-6);   
 
 *' The equation calculates the cost curve for CO2 sequestration costs in Euro per ton of CO2 sequestered
 *' for a specific scenario and year. The cost curve is determined based on cumulative CO2 captured and
@@ -73,7 +63,10 @@ Q06CstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     !! exponential component
     (1-0.6) *
     i06ElastCO2Seq(allCy,"mc_b") *
-    exp(V06CaptCummCO2(allCy,YTIME) / i06ElastCO2Seq(allCy,"mc_d"));           
+    exp(
+      (V06CaptCummCO2(allCy,YTIME) - V06CapCDR(allCy,"TEW",YTIME) * 1e-6) / 
+      i06ElastCO2Seq(allCy,"mc_d")
+    );           
 
 *' The equation calculates the CAPEX of each DAC technology, as it's affected by a learning curve ($/tCO2).
 Q06GrossCapDAC(CDRTECH,YTIME)$(TIME(YTIME))..
