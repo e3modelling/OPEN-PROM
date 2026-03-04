@@ -67,10 +67,10 @@ Q06CstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCstCO2SeqCsts(allCy,YTIME) 
         =E=
     !! linear component
-    0.1 * 
+    0.75 * 
     i06ElastCO2Seq(allCy,"mc_b") +
     !! exponential component
-    (1-0.1) *
+    (1-0.75) *
     i06ElastCO2Seq(allCy,"mc_b") *
     exp(V06CaptCummCO2(allCy,YTIME) / i06ElastCO2Seq(allCy,"mc_d"));           
 
@@ -156,7 +156,7 @@ Q06CapFacNewDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
   V06CapFacNewDAC(allCy,CDRTECH,YTIME)
       =E=
   S06CapFacMaxNewDAC / 2
-  * (tanh(2 * (V06ProfRateDAC(allCy,CDRTECH,YTIME) - 1.5)) + 1)
+  * (tanh(2 * (V06ProfRateDAC(allCy,CDRTECH,YTIME) - 1.2)) + 1)
   * i06MatFacDAC(CDRTECH);
 
 *' The equation calculates the DAC installed capacity annually and regionally,
