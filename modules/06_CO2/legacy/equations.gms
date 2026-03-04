@@ -67,10 +67,10 @@ Q06CstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCstCO2SeqCsts(allCy,YTIME) 
         =E=
     !! linear component
-    1 * 
+    0.1 * 
     i06ElastCO2Seq(allCy,"mc_b") +
     !! exponential component
-    (1-1) *
+    (1-0.1) *
     i06ElastCO2Seq(allCy,"mc_b") *
     exp(V06CaptCummCO2(allCy,YTIME) / i06ElastCO2Seq(allCy,"mc_d"));           
 
@@ -134,7 +134,7 @@ Q06LvlCostDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06VarCostDAC(CDRTECH,YTIME) - 20 +
     i06SpecElecDAC(allCy,CDRTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME) +
     i06SpecHeatDAC(allCy,CDRTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","NGS",YTIME) / 0.85 +
-    VmCstCO2SeqCsts(allCy,YTIME)
+    VmCstCO2SeqCsts(allCy,YTIME)$(not sameas("TEW", CDRTECH))
 ;
 
 *' The equation estimates the profitability of DAC capacity, calculating the rate between levelized costs (CAPEX, fixed and fuel needs)
