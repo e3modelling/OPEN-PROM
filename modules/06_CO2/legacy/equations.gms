@@ -152,19 +152,17 @@ Q06ProfRateDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q06CapFacNewDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
   V06CapFacNewDAC(allCy,CDRTECH,YTIME)
       =E=
-  exp(i06MatFacDAC(CDRTECH) * V06ProfRateDAC(allCy,CDRTECH,YTIME) - 1) /
-  exp(i06MatFacDAC(CDRTECH) * S06ProfRateMaxDAC - 1) *
-  (S06CapFacMaxNewDAC - S06CapFacMinNewDAC) +
-  S06CapFacMinNewDAC;
+  S06CapFacMaxNewDAC / 2
+  * (tanh(2 * (V06ProfRateDAC(allCy,CDRTECH,YTIME) - 1.2)) + 1)
+  * i06MatFacDAC(CDRTECH);
 
 *' The equation calculates the DAC installed capacity annually and regionally,
 *' adding capacity based on the maturity of the technology, as well as given capacities of actual scheduled DAC units.
 Q06CapCDR(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V06CapCDR(allCy,CDRTECH,YTIME)
+          V06CapCDR(allCy,CDRTECH,YTIME)
             =E=
-      S06CapFacMaxNewDAC / 2
-      * (tanh(2 * (V06ProfRateDAC(allCy,CDRTECH,YTIME) - 1.2)) + 1)
-      * i06MatFacDAC(CDRTECH);
+          V06CapCDR(allCy,CDRTECH,YTIME-1) * (1 + V06CapFacNewDAC(allCy,CDRTECH,YTIME)) +
+          i06SchedNewCapDAC(allCy,CDRTECH,YTIME);
 
 *' The equation calculates the different fuels consumed by the DAC installed capacity annually and regionally.
 Q06ConsFuelTechCDRProd(allCy,CDRTECH,EF,YTIME)$(TIME(YTIME) $TECHtoEF(CDRTECH,EF) $(runCy(allCy)))..
