@@ -10,8 +10,10 @@ SUM(EFS,
     (-i03InpTotTransfProcess(runCy,SSBS,EFS,YTIME))$SSBSEMIT(SSBS) +
     i03DataOwnConsEne(runCy,SSBS,EFS,YTIME) -
     SUM(CCS$PGALLtoEF(CCS,EFS),
+      SUM(PGEF$sameas(PGEF,EFS),
+      i04ShareFuels(runCy,CCS,PGEF)) *
       VmProdElec.L(runCy,CCS,YTIME) * smTWhToMtoe / 
-      imPlantEffByType(runCy,CCS,YTIME) * 
+      imPlantEffByType(runCy,CCS,"effELC",YTIME) * 
       V04CO2CaptRate.L(runCy,CCS,YTIME)
     )$sameas("PG",SSBS) -
     SUM(H2CCS$H2TECHEFtoEF(H2CCS,EFS),
