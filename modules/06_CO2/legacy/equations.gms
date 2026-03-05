@@ -60,10 +60,10 @@ Q06CstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCstCO2SeqCsts(allCy,YTIME) 
         =E=
     !! linear component
-    0.6 * 
+    0.75 * 
     i06ElastCO2Seq(allCy,"mc_b") +
     !! exponential component
-    (1-0.6) *
+    (1-0.75) *
     i06ElastCO2Seq(allCy,"mc_b") *
     exp(
       (V06CaptCummCO2(allCy,YTIME) - V06CapCDR(allCy,"TEW",YTIME) * 1e-6) / 
@@ -76,11 +76,11 @@ Q06GrossCapDAC(CDRTECH,YTIME)$(TIME(YTIME))..
             =E=         
     0.5 * 
     (
-      (i06GrossCapDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.97)/log(2))) +
+      (i06GrossCapDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.92)/log(2))) +
       i06GrossCapDACMin(CDRTECH) +
       sqrt(
         sqr(
-          (i06GrossCapDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.97)/log(2))) -
+          (i06GrossCapDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.92)/log(2))) -
           i06GrossCapDACMin(CDRTECH)
         )
       )
@@ -126,13 +126,12 @@ Q06LvlCostDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06LvlCostDAC(allCy,CDRTECH,YTIME)
         =E=         
     V06GrossCapDAC(CDRTECH,YTIME)
-    - VmSubsiDemTech(allCy,"DAC",CDRTECH,YTIME)$DACTECH(CDRTECH) -
-    VmSubsiDemTech(allCy,"EW",CDRTECH,YTIME)$sameas("TEW",CDRTECH) +
+    - VmSubsiDemTech(allCy,"DAC",CDRTECH,YTIME)$DACTECH(CDRTECH) - VmSubsiDemTech(allCy,"EW",CDRTECH,YTIME)$sameas("TEW",CDRTECH) +
     V06FixOandMDAC(CDRTECH,YTIME) + 
     V06VarCostDAC(CDRTECH,YTIME) - 20 +
     i06SpecElecDAC(allCy,CDRTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME) +
     i06SpecHeatDAC(allCy,CDRTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","NGS",YTIME) / 0.85 +
-    VmCstCO2SeqCsts(allCy,YTIME)
+    VmCstCO2SeqCsts(allCy,YTIME)$(not sameas("TEW", CDRTECH))
 ;
 
 *' The equation estimates the profitability of DAC capacity, calculating the rate between levelized costs (CAPEX, fixed and fuel needs)
@@ -144,7 +143,12 @@ Q06ProfRateDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     / V06LvlCostDAC(allCy,CDRTECH,YTIME - 1)
 ;
 
-*' The equation estimates the annual increase rate of DAC capacity regionally, according to the maturity and profitability of each technology.
+* The equation determines the annual growth rate of new DAC capacity by region and technology. 
+* The growth rate is modeled as a smooth S-shaped (tanh) function of the profitability rate, 
+* scaled by the maximum allowable expansion factor and adjusted by a technology-specific 
+* maturity factor. This formulation captures the idea that as DAC technologies become more profitable,
+* their growth rate will accelerate, but will eventually level off as they reach market saturation or face other constraints.
+*'The maturity factor allows for differentiation between technologies based on their readiness and potential for rapid deployment.
 Q06CapFacNewDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
   V06CapFacNewDAC(allCy,CDRTECH,YTIME)
       =E=
@@ -158,8 +162,9 @@ Q06CapFacNewDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q06CapCDR(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V06CapCDR(allCy,CDRTECH,YTIME)
             =E=
-          V06CapCDR(allCy,CDRTECH,YTIME-1) * (1 + V06CapFacNewDAC(allCy,CDRTECH,YTIME)) +
-          i06SchedNewCapDAC(allCy,CDRTECH,YTIME);
+      S06CapFacMaxNewDAC / 2
+      * (tanh(2 * (V06ProfRateDAC(allCy,CDRTECH,YTIME) - 1.2)) + 1)
+      * i06MatFacDAC(CDRTECH);
 
 *' The equation calculates the different fuels consumed by the DAC installed capacity annually and regionally.
 Q06ConsFuelTechCDRProd(allCy,CDRTECH,EF,YTIME)$(TIME(YTIME) $TECHtoEF(CDRTECH,EF) $(runCy(allCy)))..

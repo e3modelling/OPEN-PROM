@@ -266,8 +266,14 @@ Q01StockPcYearlyTech(allCy,TTECH,YTIME)$(TIME(YTIME)$runCy(allCy)$SECTTECH("PC",
 Q01NewRegPcTechYearly(allCy,TTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         V01NewRegPcTechYearly(allCy,TTECH,YTIME)
                 =E=
-        V01ShareTechTr(allCy,"PC",TTECH,YTIME) *
-        V01GapTranspActiv(allCy,"PC",YTIME);
+        (V01StockPcYearly(allCy,YTIME) - 
+        V01StockPcYearly(allCy,YTIME-1) +
+        V01NumPcScrap(allCy,YTIME)
+        +
+        sqrt(sqr(V01StockPcYearly(allCy,YTIME) - 
+        V01StockPcYearly(allCy,YTIME-1) +
+        V01NumPcScrap(allCy,YTIME))
+        )) / 2;     !! new cars due to scrapping
 
 
 *' This equation calculates the new registrations of passenger cars for a given year. It considers the market extension due to GDP-dependent and independent factors.
