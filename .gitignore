@@ -1,3 +1,5 @@
+.venv/
+venv/
 *.lst
 *.log
 !loadMadratData.R
@@ -18,6 +20,7 @@ regionmappingOP.csv
 /data2
 /targets
 /runs
+openprom_py/runs
 /default*
 metadata.json
 /doc

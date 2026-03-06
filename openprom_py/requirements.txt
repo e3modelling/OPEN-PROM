@@ -1,0 +1,9 @@
+# OPEN-PROM Python PoC — required Python packages
+# Install with: pip install -r requirements.txt
+
+pyomo>=6.0
+pandas>=1.3
+
+# NLP solver Ipopt (install separately; not on PyPI).
+# See README.md section "Installing Ipopt" for Windows / Linux / macOS.
+# Pyomo will use Ipopt if it is on PATH or found by the solver manager.
