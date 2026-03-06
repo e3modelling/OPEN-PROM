@@ -26,6 +26,8 @@ from run_report import (
     get_report_logger,
     log_section,
     log_solver_output,
+    log_model_statistics_line,
+    log_solve_summary,
     log_traceback,
     get_report_path,
 )
@@ -97,6 +99,7 @@ def run_poc(config: Optional[PoCConfig] = None, load_data: bool = True):
             countries_str = ", ".join(run_cy)
             log_section("Solve cycle: year {} | countries: {}".format(year, countries_str))
             log_info(">>> Start iterations for year {}, country/ies: {} <<<".format(year, countries_str))
+            log_model_statistics_line(model_name="openprom", solver="NLP")
             tee_stream = _TeeStream()
             old_stdout = sys.stdout
             try:
@@ -114,6 +117,14 @@ def run_poc(config: Optional[PoCConfig] = None, load_data: bool = True):
             obj = value(m.vDummyObj) if m.vDummyObj.value is not None else None
             results.append({"year": year, "status": str(status), "termination": str(term), "vDummyObj": obj})
 
+            log_solve_summary(
+                model_name="openprom",
+                objective="vDummyObj",
+                solver_type="NLP",
+                status=str(status),
+                termination=str(term),
+                objective_value=obj,
+            )
             log_info(">>> End of iterations for year {}, country/ies: {} <<<".format(year, countries_str))
             log_info(f"Termination: {term}  Status: {status}  vDummyObj: {obj}")
             if str(term).lower() not in ("optimal", "ok", "locally_optimal"):

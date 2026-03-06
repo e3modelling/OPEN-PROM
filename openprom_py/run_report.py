@@ -93,24 +93,59 @@ def start_run_report(
     _report_path = report_path.resolve()
     _report_file = open(_report_path, "w", encoding="utf-8")
 
-    _write_line(_report_file, "=== OPEN-PROM run report ===")
-    _write_line(_report_file, datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-    _write_line(_report_file, "Command: run_poc (load_data={})".format(load_data if load_data is not None else "?"))
+    # GAMS-style header (mirrors main.lst first lines)
+    _write_line(_report_file, "OPEN-PROM PoC  Python/Pyomo  {}".format(
+        datetime.now().strftime("%m/%d/%y %H:%M:%S")))
+    _write_line(_report_file, "O p e n   P r o m   P o C   R u n")
+    _write_line(_report_file, "E x e c u t i o n")
+    _write_line(_report_file, "")
+    _write_line(_report_file, "Command: run_poc (load_data={})".format(
+        load_data if load_data is not None else "?"))
     if "runs" in _report_path.parts:
         run_archive_dir = _report_path.parent
-        _write_line(_report_file, "Run archive: {} (main.lst + openprom_py snapshot)".format(run_archive_dir))
+        _write_line(_report_file, "Run archive: {} (main.lst + openprom_py snapshot)".format(
+            run_archive_dir))
     _write_line(_report_file, "")
 
-    # Configuration section
-    _write_line(_report_file, "=== Configuration ===")
+    # Configuration section (GAMS $setGlobal / $evalGlobal style)
+    _write_line(_report_file, "*** Configuration (GAMS-equivalent flags) ***")
     if config is not None:
-        _write_line(_report_file, f"countries: {getattr(config, 'countries', ())}")
-        _write_line(_report_file, "start_horizon: {}  end_horizon: {}".format(
-            getattr(config, "start_horizon", "?"), getattr(config, "end_horizon", "?")))
-        _write_line(_report_file, "start_y: {}  end_y: {}  base_y: {}".format(
-            getattr(config, "start_y", "?"), getattr(config, "end_y", "?"),
+        countries = getattr(config, "countries", ())
+        fcountries = ",".join(countries) if countries else "?"
+        _write_line(_report_file, "  Calibration       {}".format(
+            getattr(config, "calibration", "off")))
+        _write_line(_report_file, "  link2MAgPIE       {}".format(
+            getattr(config, "link2magpie", "off")))
+        _write_line(_report_file, "  SolverTryMax      {}".format(
+            getattr(config, "solver_try_max", "?")))
+        _write_line(_report_file, "  fCountries        '{}'".format(fcountries))
+        _write_line(_report_file, "  fPeriodOfYears     {}".format(
+            getattr(config, "period_of_years", 1)))
+        _write_line(_report_file, "  fStartHorizon     {}".format(
+            getattr(config, "start_horizon", "?")))
+        _write_line(_report_file, "  fEndHorizon       {}".format(
+            getattr(config, "end_horizon", "?")))
+        _write_line(_report_file, "  fStartY           {}".format(
+            getattr(config, "start_y", "?")))
+        _write_line(_report_file, "  fEndY             {}".format(
+            getattr(config, "end_y", "?")))
+        _write_line(_report_file, "  fBaseY            {}".format(
             getattr(config, "base_y", "?")))
-        _write_line(_report_file, "load_data: {}".format(load_data if load_data is not None else "?"))
+        _write_line(_report_file, "  fScenario         {}".format(
+            getattr(config, "scenario", "?")))
+        _write_line(_report_file, "")
+        _write_line(_report_file, "**MODULE REALIZATION SWITCHES**")
+        _write_line(_report_file, "  Transport         simple")
+        _write_line(_report_file, "  (other modules   legacy/off in PoC)")
+        _write_line(_report_file, "")
+        _write_line(_report_file, "  load_data         {}".format(
+            load_data if load_data is not None else "?"))
+        try:
+            data_dir = getattr(config, "data_dir", None)
+            if data_dir is not None:
+                _write_line(_report_file, "  data_dir          {}".format(Path(data_dir).resolve()))
+        except Exception:
+            pass
     _write_line(_report_file, "")
 
     # Create logger that writes to this file only
@@ -147,6 +182,45 @@ def log_solver_output(text: str) -> None:
     if text and not text.endswith("\n"):
         _report_file.write("\n")
     _report_file.flush()
+
+
+def log_model_statistics_line(model_name: str = "openprom", solver: str = "NLP") -> None:
+    """Write GAMS-style 'Model Statistics SOLVE ... Using NLP' line before solver output."""
+    if _report_file is None:
+        return
+    _write_line(_report_file, "Model Statistics    SOLVE {} Using {} From line 0".format(
+        model_name, solver))
+    _write_line(_report_file, "")
+    _write_line(_report_file, "")
+
+
+def log_solve_summary(
+    model_name: str = "openprom",
+    objective: str = "vDummyObj",
+    solver_type: str = "NLP",
+    status: Optional[str] = None,
+    termination: Optional[str] = None,
+    objective_value: Optional[float] = None,
+) -> None:
+    """
+    Write GAMS-style S O L V E   S U M M A R Y block after solver output.
+    Mirrors the block in GAMS main.lst (MODEL, OBJECTIVE, status, etc.).
+    """
+    if _report_file is None:
+        return
+    _write_line(_report_file, "")
+    _write_line(_report_file, "               S O L V E      S U M M A R Y")
+    _write_line(_report_file, "")
+    _write_line(_report_file, "     MODEL   {:<16} OBJECTIVE  {}".format(
+        model_name, objective))
+    _write_line(_report_file, "     TYPE    {}".format(solver_type))
+    if status is not None:
+        _write_line(_report_file, "     SOLVER STATUS  {}".format(status))
+    if termination is not None:
+        _write_line(_report_file, "     TERMINATION    {}".format(termination))
+    if objective_value is not None:
+        _write_line(_report_file, "     OBJECTIVE VAL  {}".format(objective_value))
+    _write_line(_report_file, "")
 
 
 def _format_elapsed(seconds: float) -> str:
