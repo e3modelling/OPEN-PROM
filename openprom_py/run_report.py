@@ -291,6 +291,11 @@ def log_generating_nlp_model(model_name: str = "openprom") -> None:
     _write_log_line("--- Generating NLP model {}".format(model_name))
 
 
+def log_rcc_attempt(attempt: int) -> None:
+    """Write '--- rcc = rccN' to main.log (GAMS-style solver attempt counter)."""
+    _write_log_line("--- rcc = rcc{}".format(attempt))
+
+
 def end_run_report(
     success: bool,
     summary: Optional[str] = None,
@@ -364,3 +369,16 @@ def log_traceback() -> None:
 def get_report_path() -> Optional[Path]:
     """Return the path to the current report file, or None."""
     return _report_path
+
+
+def write_modelstat_line(country: str, modelstat: int, year: int) -> None:
+    """
+    Append a line to modelstat.txt (GAMS-compatible: Country, Model Status, Year).
+    File is written next to main.lst (e.g. runs/<timestamp>/modelstat.txt).
+    """
+    if _report_path is None:
+        return
+    path = _report_path.parent / "modelstat.txt"
+    with open(path, "a", encoding="utf-8") as f:
+        f.write("Country: {}  Model Status: {}  Year: {}\n".format(country, modelstat, year))
+        f.flush()
