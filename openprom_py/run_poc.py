@@ -26,6 +26,9 @@ from run_report import (
     get_report_logger,
     log_section,
     log_solver_output,
+    log_starting_model_build,
+    log_starting_execution,
+    log_generating_nlp_model,
     log_model_statistics_line,
     log_solve_summary,
     log_traceback,
@@ -72,6 +75,7 @@ def run_poc(config: Optional[PoCConfig] = None, load_data: bool = True):
         log_section("Data loading")
         log_info("(see Model build phase for load_data result)")
 
+        log_starting_model_build()
         log_section("Model build")
         log_info("Building model (core + price stub + transport)...")
         m = build_openprom_model(config, load_data=load_data)
@@ -81,6 +85,7 @@ def run_poc(config: Optional[PoCConfig] = None, load_data: bool = True):
         opt = SolverFactory("ipopt")
         available = opt is not None and opt.available()
 
+        log_starting_execution()
         log_section("Solve")
         log_info(f"Solver: ipopt  available: {available}")
         log_info(f"Ipopt options: max_iter={IPOPT_MAX_ITER}")
@@ -99,6 +104,7 @@ def run_poc(config: Optional[PoCConfig] = None, load_data: bool = True):
             countries_str = ", ".join(run_cy)
             log_section("Solve cycle: year {} | countries: {}".format(year, countries_str))
             log_info(">>> Start iterations for year {}, country/ies: {} <<<".format(year, countries_str))
+            log_generating_nlp_model(model_name="openprom")
             log_model_statistics_line(model_name="openprom", solver="NLP")
             tee_stream = _TeeStream()
             old_stdout = sys.stdout
