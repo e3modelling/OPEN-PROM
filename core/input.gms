@@ -770,7 +770,8 @@ imUsfEneConvSubTech(runCy,INDSE,TECH,YTIME)  = imDataIndTechnology(INDSE,TECH,"U
 *imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCLCCS","USC") + 0.005 * (ord(YTIME)-14);
 *---
 **  Domestic Sector
-imCapCostTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,"IC");
+imCapCostTech(runCy,DOMSE,TECH,YTIME) = 0.3;
+*imCapCostTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,"IC");
 imFixOMCostTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,"FC");
 imVarCostTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,"VC");
 imUsfEneConvSubTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,"USC");
