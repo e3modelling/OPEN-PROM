@@ -216,7 +216,7 @@ Q04SharePowPlaNewEq(allCy,PGALL,YTIME)$(TIME(YTIME)$runCy(allCy)) ..
     (V04CostHourProdInvDec(allCy,PGALL,YTIME-1) + 1e-6)** (-2) /
     SUM(PGALL2,
       i04MatFacPlaAvailCap(allCy,PGALL2,YTIME) *
-      V04ShareSatPG(allCy,PGALL2,YTIME-1) *
+      (V04ShareSatPG(allCy,PGALL2,YTIME-1) + 1e-6) *
       (V04CostHourProdInvDec(allCy,PGALL2,YTIME-1) + 1e-6) ** (-2)
     );
 
