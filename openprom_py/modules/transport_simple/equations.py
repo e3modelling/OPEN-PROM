@@ -10,11 +10,19 @@ GENERAL INFORMATION (from GAMS):
   both short term and long term reactions to energy costs.
 
 All equation names and comments mirror 01_Transport/simple/equations.gms.
+
+Convergence: Activity constraints (Q01ActivGoodsTransp, Q01ActivPassTrnsp) are scaled by
+ACTIVITY_SCALE so the residual seen by the solver is O(1) when activity is in Mtoe (1e6).
+This reduces constraint violation magnitude and helps Ipopt converge.
 """
 from pyomo.core import Constraint
 from pyomo.environ import exp as pyo_exp, sqrt
 
 from core import sets as core_sets
+
+# Scale for activity equilibrium constraints (residual = (lhs - rhs) / scale)
+# Use 1e6 so when activity is in millions the scaled residual is O(1); improves convergence.
+ACTIVITY_SCALE = 1e6
 
 
 def _ord(ytime_list, y):
@@ -108,6 +116,8 @@ def add_transport_equations(m, core_sets_obj):
                 * (price_1 / price_2) ** mod.imElastA[cy, tran, "c2", y]
                 * prod_pdl
             )
+            lhs = mod.V01ActivGoodsTransp[cy, tran, y]
+            return (lhs - rhs) / ACTIVITY_SCALE == 0
         else:
             act_gu = mod.V01ActivGoodsTransp[cy, "GU", y]
             act_gu_1 = mod.V01ActivGoodsTransp[cy, "GU", y_1]
@@ -119,7 +129,8 @@ def add_transport_equations(m, core_sets_obj):
                 * prod_pdl
                 * ((act_gu + 1e-6) / (act_gu_1 + 1e-6)) ** mod.imElastA[cy, tran, "c4", y]
             )
-        return mod.V01ActivGoodsTransp[cy, tran, y] == rhs
+        lhs = mod.V01ActivGoodsTransp[cy, tran, y]
+        return (lhs - rhs) / ACTIVITY_SCALE == 0
 
     m.Q01ActivGoodsTransp = Constraint(run_cy, trang, ytime, rule=_q01_activ_goods_rule)
 
@@ -517,7 +528,8 @@ def add_transport_equations(m, core_sets_obj):
                 * cross ** mod.imElastA[cy, tran, "c4", y]
                 * prod_pdl
             )
-        return mod.V01ActivPassTrnsp[cy, tran, y] == rhs
+        lhs = mod.V01ActivPassTrnsp[cy, tran, y]
+        return (lhs - rhs) / ACTIVITY_SCALE == 0
 
     m.Q01ActivPassTrnsp = Constraint(run_cy, tranp, ytime, rule=_q01_activ_pass_rule)
 
