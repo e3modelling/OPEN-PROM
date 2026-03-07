@@ -76,7 +76,10 @@ def add_hydrogen_equations(m: ConcreteModel, core_sets_obj) -> None:
     if not nap_h2p:
         nap_h2p = list(core_sets.NAP)
 
-    # Q05DemTotH2: total H2 demand (simplified: sum of sector demands; GAMS divides by transport efficiency product)
+    # -------------------------------------------------------------------------
+    # Q05DemTotH2 (GAMS): This equation calculates the total hydrogen demand in the system. It takes into account the overall need for hydrogen across sectors like transportation, industry, and power generation, adjusted for any transportation losses or distribution inefficiencies.
+    # GAMS: divides sector demand by prod(INFRTECH, i05EffH2Transp*(1-i05ConsSelfH2Transp)); INFRTECH/H2INFRSBS not in core so we use sum(VmDemSecH2).
+    # -------------------------------------------------------------------------
     def _q05_dem_tot_h2(mod, cy, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -86,7 +89,9 @@ def add_hydrogen_equations(m: ConcreteModel, core_sets_obj) -> None:
 
     m.Q05DemTotH2 = Constraint(run_cy, ytime, rule=_q05_dem_tot_h2)
 
-    # Q05DemSecH2: sectoral H2 demand from industry, transport, DAC, EW, PG
+    # -------------------------------------------------------------------------
+    # Q05DemSecH2 (GAMS): Sectoral hydrogen demand for each subsector; sums VmConsFuel (INDDOM), VmDemFinEneTranspPerFuel (TRANSE), VmConsFuelCDRProd (DAC/EW), VmConsFuelElecProd (PG).
+    # -------------------------------------------------------------------------
     def _q05_dem_sec_h2(mod, cy, sb, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -105,10 +110,19 @@ def add_hydrogen_equations(m: ConcreteModel, core_sets_obj) -> None:
 
     m.Q05DemSecH2 = Constraint(run_cy, sbs, ytime, rule=_q05_dem_sec_h2)
 
-    # Q05ScrapLftH2Prod: normal scrapping = 1/lifetime (simplified; GAMS has ord condition)
+    # -------------------------------------------------------------------------
+    # Q05ScrapLftH2Prod (GAMS): This equation defines the amount of hydrogen production capacity that is scrapped due to the expiration of the useful life of plants. GAMS: (1/i05ProdLftH2)$(ord(YTIME)>14+i05ProdLftH2); else 0.
+    # -------------------------------------------------------------------------
     def _q05_scrap_lft(mod, cy, ht, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
+        try:
+            ord_y = ytime.index(y) + 1  # 1-based ord(YTIME)
+            lft = pyo_value(mod.i05ProdLftH2[ht, y]) or 0.0
+            if ord_y <= 14 + lft:
+                return mod.V05ScrapLftH2Prod[cy, ht, y] == 0.0
+        except (ValueError, TypeError):
+            pass
         return mod.V05ScrapLftH2Prod[cy, ht, y] == 1.0 / (mod.i05ProdLftH2[ht, y] + _EPS)
 
     m.Q05ScrapLftH2Prod = Constraint(run_cy, h2tech, ytime, rule=_q05_scrap_lft)

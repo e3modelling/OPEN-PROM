@@ -232,6 +232,28 @@ CDRTECHtoEF: Set[Tuple[str, str]] = set(_CDRTECHTOEF_LIST)
 # INDSE1 = industry subsectors (for Q06CapCO2ElecHydr industry term); same as INDSE
 INDSE1 = INDSE
 
+# -----------------------------------------------------------------------------
+# 07_Emissions (legacy) sets (GAMS: modules/07_Emissions/legacy/sets.gms)
+# -----------------------------------------------------------------------------
+# SSBSEMIT(SSBS) = supply subsectors that emit (used in Q07GrossEmissCO2Supply: only these get V03InpTotTransf term)
+SSBSEMIT = ("PG", "H2P", "CHP", "STEAMP")
+# E07MAC = cost categories for MACC (2010$/tC for CH4,N2O; 2005$/tC for F-gases)
+E07MAC = (
+    0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300,
+    320, 340, 360, 380, 400, 420, 460, 480, 500, 520, 540, 560, 580, 600, 660,
+    680, 720, 740, 760, 780, 820, 840, 1000, 1080, 1100, 1120, 1520, 1660,
+    1700, 1740, 2580, 2600, 3440, 3460, 3500, 3540, 3600, 3840, 4000,
+)
+# sFGases = F-gas source names (subset of E07SrcMacAbate)
+sFGases = (
+    "HFC_125", "HFC_134a", "HFC_143a", "HFC_152a", "HFC_227ea",
+    "HFC_23", "HFC_236fa", "HFC_32", "HFC_43_10", "HFC_245ca",
+    "CF4", "C2F6", "C6F14", "SF6",
+)
+# E07SrcMacAbate = non-CO2 emission sources (first 14 CH4/N2O, then F-gases; order matters for ord()<=14)
+_E07_CH4_N2O = ("CH4_1", "CH4_2", "CH4_3", "CH4_4", "CH4_5", "CH4_6", "CH4_7", "N2O_1", "N2O_2", "N2O_3", "N2O_4", "N2O_5", "N2O_6", "N2O_7")
+E07SrcMacAbate = _E07_CH4_N2O + sFGases
+
 # ETYPES for elasticity parameters
 ETYPES = ("a", "b1", "b2", "b3", "b4", "b5", "c", "c1", "c2", "c3", "c4", "c5", "aend", "b3end", "b4end")
 

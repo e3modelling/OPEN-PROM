@@ -4,6 +4,7 @@ Industry (technology) module — equation definitions.
 Mirrors 02_Industry/technology/equations.gms. Constraints apply to subsectors
 excluding TRANSE (transport) and CDR; INDDOM is used for non-substitutable
 electricity. Safe division and scaling are used for solver stability.
+Equation descriptions below are transferred from GAMS *' comments.
 """
 from pyomo.core import Constraint
 from pyomo.environ import exp as pyo_exp
@@ -54,7 +55,7 @@ def add_industry_equations(m, core_sets_obj):
     nap = list(core_sets.NAP)
 
     # -------------------------------------------------------------------------
-    # Q02RemEquipCapTechSubsec: remaining capacity = previous capacity * ratio remaining
+    # Q02RemEquipCapTechSubsec (GAMS): This equation computes the remaining equipment capacity of each technology in each subsector at the beginning of the year YTIME based on the available capacity of the previous year. V02RemEquipCapTechSubsec = V02EquipCapTechSubsec(YTIME-1) * V02RatioRem.
     # -------------------------------------------------------------------------
     def _q02_rem_equip_rule(mod, cy, sb, tech, y):
         if cy not in run_cy or y not in time_set or sb in TRANSE or sb in CDR:
@@ -75,7 +76,7 @@ def add_industry_equations(m, core_sets_obj):
     )
 
     # -------------------------------------------------------------------------
-    # Q02RatioRem: (1 - 1/VmLft) * (1 - V02PremScrpIndu)
+    # Q02RatioRem (GAMS): V02RatioRem = (1 - 1/VmLft) * (1 - V02PremScrpIndu). Fraction of capacity remaining after normal and premature scrapping.
     # -------------------------------------------------------------------------
     def _q02_ratio_rem_rule(mod, cy, sb, tech, y):
         if cy not in run_cy or y not in time_set or sb in TRANSE or sb in CDR:
@@ -90,7 +91,7 @@ def add_industry_equations(m, core_sets_obj):
     m.Q02RatioRem = Constraint(run_cy, dsbs, itech, ytime, rule=_q02_ratio_rem_rule)
 
     # -------------------------------------------------------------------------
-    # Q02PremScrpIndu: premature scrapping (logit-like share of costs)
+    # Q02PremScrpIndu (GAMS): Premature scrapping index. The equation computes the share of capacity that is scrapped prematurely based on variable costs and scale parameter; logit-like formulation with (V02VarCostTech * i02util)**(-2) in numerator and denominator with sum of other technologies' costs.
     # -------------------------------------------------------------------------
     def _q02_prem_scrp_rule(mod, cy, sb, tech, y):
         if cy not in run_cy or y not in time_set or sb in TRANSE or sb in CDR:
@@ -116,7 +117,7 @@ def add_industry_equations(m, core_sets_obj):
     m.Q02PremScrpIndu = Constraint(run_cy, dsbs, itech, ytime, rule=_q02_prem_scrp_rule)
 
     # -------------------------------------------------------------------------
-    # Q02DemUsefulSubsecRemTech: useful energy from remaining equipment
+    # Q02DemUsefulSubsecRemTech (GAMS): This equation computes the useful energy covered by the remaining equipment. V02DemUsefulSubsecRemTech = SUM(ITECH, V02RemEquipCapTechSubsec * imUsfEneConvSubTech * i02util).
     # -------------------------------------------------------------------------
     def _q02_dem_useful_rem_rule(mod, cy, sb, y):
         if cy not in run_cy or y not in time_set or sb in TRANSE or sb in CDR:
@@ -135,7 +136,7 @@ def add_industry_equations(m, core_sets_obj):
     )
 
     # -------------------------------------------------------------------------
-    # Q02GapUsefulDemSubsec: gap = (demand - rem + sqrt((demand - rem)^2)) / 2 + 1e-6
+    # Q02GapUsefulDemSubsec (GAMS): This equation calculates the gap in useful energy demand for industry, tertiary, non-energy uses, and bunkers. It is determined by subtracting the useful energy demand that can be satisfied by existing equipment from the total useful energy demand per subsector. The square root term is included to ensure a non-negative result. (demand - rem + sqrt((demand - rem)^2)) / 2 + 1e-6.
     # -------------------------------------------------------------------------
     def _q02_gap_rule(mod, cy, sb, y):
         if cy not in run_cy or y not in time_set or sb in TRANSE or sb in CDR:
@@ -152,7 +153,7 @@ def add_industry_equations(m, core_sets_obj):
     m.Q02GapUsefulDemSubsec = Constraint(run_cy, dsbs, ytime, rule=_q02_gap_rule)
 
     # -------------------------------------------------------------------------
-    # Q02CapCostTech: capital cost (annuity + fixed O&M) / useful conversion
+    # Q02CapCostTech (GAMS): The equation computes the capital cost and fixed O&M cost of each technology in each subsector. Annuity factor from discount rate and VmLft; (imCapCostTech * imCGI + imFixOMCostTech / sUnitToKUnit) / imUsfEneConvSubTech.
     # -------------------------------------------------------------------------
     def _q02_cap_cost_rule(mod, cy, sb, tech, y):
         if cy not in run_cy or y not in time_set or sb in TRANSE or sb in CDR:
@@ -170,7 +171,7 @@ def add_industry_equations(m, core_sets_obj):
     m.Q02CapCostTech = Constraint(run_cy, dsbs, itech, ytime, rule=_q02_cap_cost_rule)
 
     # -------------------------------------------------------------------------
-    # Q02VarCostTech: variable (fuel + CO2 + other) / useful conversion
+    # Q02VarCostTech (GAMS): The equation computes the variable cost (variable + fuel) of each technology in each subsector. Sum over EF of share * fuel price, CO2 capture cost, carbon cost, plus renewable value and imVarCostTech; divided by useful conversion.
     # -------------------------------------------------------------------------
     def _q02_var_cost_rule(mod, cy, sb, tech, y):
         if cy not in run_cy or y not in time_set or sb in TRANSE or sb in CDR:
@@ -399,7 +400,7 @@ def add_industry_equations(m, core_sets_obj):
     m.Q02IndxElecIndPrices = Constraint(run_cy, ytime, rule=_q02_indx_elec_rule)
 
     # -------------------------------------------------------------------------
-    # Q02DemSubUsefulSubsec: useful substitutable demand (typical demand equation)
+    # Q02DemSubUsefulSubsec (GAMS): This equation computes the useful energy demand in each demand subsector (excluding TRANSPORT). This demand is potentially "satisfied" by multiple energy forms/fuels (substitutable demand). The equation follows the "typical useful energy demand" format where the main explanatory variables are activity indicators (imActv) and average weighted technology costs (VmPriceFuelAvgSub). Demand = past demand * (activity ratio)^elast_a * (price ratios)^elast_b * prod(KPDL, price-lag term).
     # -------------------------------------------------------------------------
     def _q02_dem_sub_useful_rule(mod, cy, sb, y):
         if cy not in run_cy or y not in time_set or sb in TRANSE or sb in CDR:

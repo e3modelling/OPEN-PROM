@@ -4,6 +4,7 @@ Module 04_PowerGeneration (simple): equation definitions.
 Mirrors modules/04_PowerGeneration/simple/equations.gms. All Q04* constraints.
 Uses core sets PGREN, PGREN2, PGRENSW, PGSCRN, NOCCS_PG, CCS_NOCCS, PGALLtoEF, NAPtoALLSBS.
 Calibration off: Q04DemElecTot is active. Learning curves off: factor 1 in Q04CapexFixCostPG.
+Equation descriptions below are transferred from GAMS *' comments.
 """
 from pyomo.core import ConcreteModel, Constraint, value as pyo_value
 from pyomo.environ import exp, sqrt
@@ -80,7 +81,9 @@ def add_power_generation_equations(m: ConcreteModel, core_sets_obj, config=None)
     # *q04CostPowGenShortIntPri(allCy,PGALL,ESET,YTIME): short-term cost with international fuel prices
     # *q04CostPowGenAvgShrt(allCy,ESET,YTIME): short-term average power generation cost
 
-    # Q04ProdElecEstCHP
+    # -------------------------------------------------------------------------
+    # Q04ProdElecEstCHP (GAMS): This equation calculates the estimated electricity generation of Combined Heat and Power plants in a specific country and time period. The estimation is based on the fuel consumption of CHP plants, their electricity prices, the maximum share of CHP electricity in total demand, and the overall electricity demand. The square root expression ensures that the estimated electricity generation remains non-negative.
+    # -------------------------------------------------------------------------
     def _q04_prod_elec_est_chp(mod, cy, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -97,7 +100,9 @@ def add_power_generation_equations(m: ConcreteModel, core_sets_obj, config=None)
 
     m.Q04ProdElecEstCHP = Constraint(run_cy, ytime, rule=_q04_prod_elec_est_chp)
 
-    # Q04CapElecCHP
+    # -------------------------------------------------------------------------
+    # Q04CapElecCHP (GAMS): This equation computes the electric capacity of Combined Heat and Power (CHP) plants. The capacity is calculated in gigawatts (GW) and is based on several factors, including the consumption of fuel in the industrial sector, the electricity prices in the industrial sector, the availability rate of power generation plants, and the utilization rate of CHP plants.
+    # -------------------------------------------------------------------------
     def _q04_cap_elec_chp(mod, cy, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -107,7 +112,9 @@ def add_power_generation_equations(m: ConcreteModel, core_sets_obj, config=None)
 
     m.Q04CapElecCHP = Constraint(run_cy, ytime, rule=_q04_cap_elec_chp)
 
-    # Q04DemElecTot (GAMS $ifthen.calib %Calibration% == off: only then this equation is active)
+    # -------------------------------------------------------------------------
+    # Q04DemElecTot (GAMS): The equation calculates the total electricity demand by summing the components of final energy consumption in electricity, final non-energy consumption in electricity, distribution losses, and final consumption in the energy sector for electricity, and then subtracting net imports. The result is normalized using a conversion factor which converts TWh to Mtoe. Active only when Calibration == off ($ifthen.calib).
+    # -------------------------------------------------------------------------
     if calibration != "MatCalibration":
         def _q04_dem_elec_tot(mod, cy, y):
             if y not in time_set or cy not in run_cy:
@@ -123,7 +130,9 @@ def add_power_generation_equations(m: ConcreteModel, core_sets_obj, config=None)
 
         m.Q04DemElecTot = Constraint(run_cy, ytime, rule=_q04_dem_elec_tot)
 
-    # Q04LoadFacDom
+    # -------------------------------------------------------------------------
+    # Q04LoadFacDom (GAMS): This equation calculates the load factor of the entire domestic system as a sum of consumption in each demand subsector and the sum of energy demand in transport subsectors (electricity only). Those sums are also divided by the load factor of electricity demand per sector.
+    # -------------------------------------------------------------------------
     def _q04_load_fac_dom(mod, cy, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -142,7 +151,9 @@ def add_power_generation_equations(m: ConcreteModel, core_sets_obj, config=None)
 
     m.Q04LoadFacDom = Constraint(run_cy, ytime, rule=_q04_load_fac_dom)
 
-    # Q04PeakLoad
+    # -------------------------------------------------------------------------
+    # Q04PeakLoad (GAMS): The equation calculates the electricity peak load by dividing the total electricity demand by the load factor for the domestic sector and converting the result to gigawatts (GW) using the conversion factor. This provides an estimate of the maximum power demand during a specific time period.
+    # -------------------------------------------------------------------------
     def _q04_peak_load(mod, cy, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -152,7 +163,9 @@ def add_power_generation_equations(m: ConcreteModel, core_sets_obj, config=None)
 
     m.Q04PeakLoad = Constraint(run_cy, ytime, rule=_q04_peak_load)
 
-    # Q04CapElecTotEst
+    # -------------------------------------------------------------------------
+    # Q04CapElecTotEst (GAMS): The equation calculates the estimated total electricity generation capacity by multiplying the previous year's total electricity generation capacity with the ratio of the current year's estimated electricity peak load to the previous year's electricity peak load. This provides an estimate of the required generation capacity based on the changes in peak load.
+    # -------------------------------------------------------------------------
     def _q04_cap_elec_tot_est(mod, cy, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -163,7 +176,9 @@ def add_power_generation_equations(m: ConcreteModel, core_sets_obj, config=None)
 
     m.Q04CapElecTotEst = Constraint(run_cy, ytime, rule=_q04_cap_elec_tot_est)
 
-    # Q04CapexFixCostPG (no learning curves: factor 1)
+    # -------------------------------------------------------------------------
+    # Q04CapexFixCostPG (GAMS): This equation calculates the CAPEX and the Fixed Costs of each power generation unit, taking into account its discount rate and life expectancy, for each region (country) and year. Learning curves applied only to CAPEX costs with cost breakdown. Formula: Cost = [LearnableFraction × CostMultiplier + (1-LearnableFraction)] × InitialCost. (We use factor 1 when LearningCurves not active.)
+    # -------------------------------------------------------------------------
     def _q04_capex_fix_cost_pg(mod, cy, pg, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -186,7 +201,7 @@ def add_power_generation_equations(m: ConcreteModel, core_sets_obj, config=None)
         run_cy, pgall, ytime, rule=_q04_capex_fix_cost_pg
     )
 
-    # Q04CostCapTech
+    # Q04CostCapTech: V04CostCapTech = V04CapexRESRate * V04CapexFixCostPG / (i04AvailRate * smGwToTwhPerYear * 1000)
     def _q04_cost_cap_tech(mod, cy, pg, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -202,7 +217,9 @@ def add_power_generation_equations(m: ConcreteModel, core_sets_obj, config=None)
 
     m.Q04CostCapTech = Constraint(run_cy, pgall, ytime, rule=_q04_cost_cap_tech)
 
-    # Q04CostVarTech: renewable part + fuel part (only when pg not in PGREN)
+    # -------------------------------------------------------------------------
+    # Q04CostVarTech (GAMS): Compute the variable cost of each power plant technology for every region, by utilizing the gross cost, fuel prices, CO2 emission factors & capture, and plant efficiency.
+    # -------------------------------------------------------------------------
     def _q04_cost_var_tech(mod, cy, pg, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -236,7 +253,9 @@ def add_power_generation_equations(m: ConcreteModel, core_sets_obj, config=None)
 
     m.Q04CostVarTech = Constraint(run_cy, pgall, ytime, rule=_q04_cost_var_tech)
 
-    # Q04CostHourProdInvDec
+    # -------------------------------------------------------------------------
+    # Q04CostHourProdInvDec (GAMS): The equation calculates the hourly production cost of a power generation plant used in investment decisions. The cost is determined based on various factors, including the discount rate, gross capital cost, fixed O&M cost, availability rate, variable cost, renewable value, and fuel prices. The production cost is normalized per unit of electricity generated (kEuro2005/kWh).
+    # -------------------------------------------------------------------------
     def _q04_cost_hour_prod_inv_dec(mod, cy, pg, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -248,7 +267,9 @@ def add_power_generation_equations(m: ConcreteModel, core_sets_obj, config=None)
         run_cy, pgall, ytime, rule=_q04_cost_hour_prod_inv_dec
     )
 
-    # Q04IndxEndogScrap (only for pg not in PGSCRN)
+    # -------------------------------------------------------------------------
+    # Q04IndxEndogScrap (GAMS): The equation computes the endogenous scrapping index for power generation plants during the specified year. The index is calculated as the variable cost of technology divided by the sum of this variable cost and a scaled value based on the scale parameter for endogenous scrapping. Only for plants not in PGSCRN.
+    # -------------------------------------------------------------------------
     def _q04_indx_endog_scrap(mod, cy, pg, y):
         if y not in time_set or cy not in run_cy or pg in pgscrn:
             return Constraint.Skip
@@ -267,7 +288,9 @@ def add_power_generation_equations(m: ConcreteModel, core_sets_obj, config=None)
         run_cy, pgall, ytime, rule=_q04_indx_endog_scrap
     )
 
-    # Q04CapElecNonCHP
+    # -------------------------------------------------------------------------
+    # Q04CapElecNonCHP (GAMS): The equation calculates the total electricity generation capacity excluding Combined Heat and Power plants for a specified year. It is derived by subtracting the sum of the capacities of CHP plants multiplied by a factor of 0.85 from the total electricity generation capacity.
+    # -------------------------------------------------------------------------
     def _q04_cap_elec_non_chp(mod, cy, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -277,7 +300,9 @@ def add_power_generation_equations(m: ConcreteModel, core_sets_obj, config=None)
 
     m.Q04CapElecNonCHP = Constraint(run_cy, ytime, rule=_q04_cap_elec_non_chp)
 
-    # Q04GapGenCapPowerDiff
+    # -------------------------------------------------------------------------
+    # Q04GapGenCapPowerDiff (GAMS): In essence, the equation evaluates the difference between the current and expected power generation capacity, accounting for various factors such as planned capacity, decommissioning schedules, and endogenous scrapping. The square root term introduces a degree of tolerance in the calculation.
+    # -------------------------------------------------------------------------
     def _q04_gap_gen_cap_power_diff(mod, cy, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -302,7 +327,9 @@ def add_power_generation_equations(m: ConcreteModel, core_sets_obj, config=None)
         run_cy, ytime, rule=_q04_gap_gen_cap_power_diff
     )
 
-    # Q04ShareMixWndSol
+    # -------------------------------------------------------------------------
+    # Q04ShareMixWndSol (GAMS): Calculates the share of all the unflexible RES penetration into the mixture (sum over PGRENSW of VmCapElec / sum over all PGALL of VmCapElec).
+    # -------------------------------------------------------------------------
     def _q04_share_mix_wnd_sol(mod, cy, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -312,7 +339,9 @@ def add_power_generation_equations(m: ConcreteModel, core_sets_obj, config=None)
 
     m.Q04ShareMixWndSol = Constraint(run_cy, ytime, rule=_q04_share_mix_wnd_sol)
 
-    # Q04SharePowPlaNewEq
+    # -------------------------------------------------------------------------
+    # Q04SharePowPlaNewEq (GAMS): The equation calculates the power plant share in new equipment for a specific power plant in a given country and time period. The calculation depends on maturity factor, saturation share (t-1), and hourly production cost (t-1)**(-2); ratio to sum over all plants. For plants with CCS the share is determined by summing shares of corresponding non-CCS plants.
+    # -------------------------------------------------------------------------
     def _q04_share_pow_pla_new_eq(mod, cy, pg, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -334,7 +363,9 @@ def add_power_generation_equations(m: ConcreteModel, core_sets_obj, config=None)
         run_cy, pgall, ytime, rule=_q04_share_pow_pla_new_eq
     )
 
-    # Q04CapElec
+    # -------------------------------------------------------------------------
+    # Q04CapElec (GAMS): This equation calculates the electricity generation capacity for a specific power plant in a given country and time period. VmCapElec = VmCapElec(t-1)*(1 - V04ScrpRate) + V04NewCapElec - i04PlantDecomSched * i04AvailRate.
+    # -------------------------------------------------------------------------
     def _q04_cap_elec(mod, cy, pg, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -347,7 +378,7 @@ def add_power_generation_equations(m: ConcreteModel, core_sets_obj, config=None)
 
     m.Q04CapElec = Constraint(run_cy, pgall, ytime, rule=_q04_cap_elec)
 
-    # Q04CapElecNominal
+    # Q04CapElecNominal: V04CapElecNominal = VmCapElec / i04AvailRate
     def _q04_cap_elec_nominal(mod, cy, pg, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -359,7 +390,7 @@ def add_power_generation_equations(m: ConcreteModel, core_sets_obj, config=None)
         run_cy, pgall, ytime, rule=_q04_cap_elec_nominal
     )
 
-    # Q04NewCapElec
+    # Q04NewCapElec: New capacity = share * gap + scheduled + CCS retrofit from non-CCS plants
     def _q04_new_cap_elec(mod, cy, pg, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -378,7 +409,9 @@ def add_power_generation_equations(m: ConcreteModel, core_sets_obj, config=None)
 
     m.Q04NewCapElec = Constraint(run_cy, pgall, ytime, rule=_q04_new_cap_elec)
 
-    # Q04NetNewCapElec (only PGREN)
+    # -------------------------------------------------------------------------
+    # Q04NetNewCapElec (GAMS): This equation calculates the newly added electricity generation capacity for a specific renewable power plant in a given country and time period. V04NetNewCapElec = VmCapElec - VmCapElec(t-1). (Only PGREN.)
+    # -------------------------------------------------------------------------
     def _q04_net_new_cap_elec(mod, cy, pg, y):
         if y not in time_set or cy not in run_cy or pg not in pgren:
             return Constraint.Skip
@@ -391,7 +424,9 @@ def add_power_generation_equations(m: ConcreteModel, core_sets_obj, config=None)
         run_cy, pgall, ytime, rule=_q04_net_new_cap_elec
     )
 
-    # Q04CFAvgRen (only PGREN): 8-year weighted average
+    # -------------------------------------------------------------------------
+    # Q04CFAvgRen (GAMS): This equation calculates the average capacity factor of renewable energy sources for a specific renewable power plant. The calculation involves the availability rates and newly added capacity in the current and seven previous time periods; weighted average over eight periods. (Only PGREN.)
+    # -------------------------------------------------------------------------
     def _q04_cf_avg_ren(mod, cy, pg, y):
         if y not in time_set or cy not in run_cy or pg not in pgren:
             return Constraint.Skip
@@ -408,7 +443,9 @@ def add_power_generation_equations(m: ConcreteModel, core_sets_obj, config=None)
 
     m.Q04CFAvgRen = Constraint(run_cy, pgall, ytime, rule=_q04_cf_avg_ren)
 
-    # Q04CapOverall: non-REN = VmCapElec; REN = CF_avg(t-1) * (NetNew/avail + CapOverall(t-1)/(CF_avg(t-1)+eps))
+    # -------------------------------------------------------------------------
+    # Q04CapOverall (GAMS): This equation calculates the overall capacity for a specific power plant. For non-renewable: V04CapOverall = VmCapElec. For renewable: V04CapOverall = V04CFAvgRen(t-1) * (V04NetNewCapElec/i04AvailRate + V04CapOverall(t-1)/(V04CFAvgRen(t-1)+eps)).
+    # -------------------------------------------------------------------------
     def _q04_cap_overall(mod, cy, pg, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -426,7 +463,9 @@ def add_power_generation_equations(m: ConcreteModel, core_sets_obj, config=None)
 
     m.Q04CapOverall = Constraint(run_cy, pgall, ytime, rule=_q04_cap_overall)
 
-    # Q04ProdElec
+    # -------------------------------------------------------------------------
+    # Q04ProdElec (GAMS): This equation calculates the electricity production from power generation plants for a specific country, power plant type, and time period. VmProdElec = (V04DemElecTot - V04ProdElecEstCHP) / sum(VmCapElec) * VmCapElec (proportional dispatch by capacity).
+    # -------------------------------------------------------------------------
     def _q04_prod_elec(mod, cy, pg, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -437,7 +476,7 @@ def add_power_generation_equations(m: ConcreteModel, core_sets_obj, config=None)
 
     m.Q04ProdElec = Constraint(run_cy, pgall, ytime, rule=_q04_prod_elec)
 
-    # Q04ShareTechPG
+    # Q04ShareTechPG (GAMS): Share of all technologies in the electricity mixture. V04ShareTechPG = VmCapElec / sum(VmCapElec).
     def _q04_share_tech_pg(mod, cy, pg, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -448,7 +487,7 @@ def add_power_generation_equations(m: ConcreteModel, core_sets_obj, config=None)
         run_cy, pgall, ytime, rule=_q04_share_tech_pg
     )
 
-    # Q04ShareSatPG (only PGREN)
+    # Q04ShareSatPG (GAMS): Sigmoid function used as a saturation mechanism for electricity mixture penetration of RES technologies. V04ShareSatPG = 2 / (1 + exp(9*V04ShareTechPG)). (Only PGREN.)
     def _q04_share_sat_pg(mod, cy, pg, y):
         if y not in time_set or cy not in run_cy or pg not in pgren:
             return Constraint.Skip
@@ -460,7 +499,9 @@ def add_power_generation_equations(m: ConcreteModel, core_sets_obj, config=None)
         run_cy, pgall, ytime, rule=_q04_share_sat_pg
     )
 
-    # Q04CostPowGenAvgLng
+    # -------------------------------------------------------------------------
+    # Q04CostPowGenAvgLng (GAMS): This equation computes the long-term average power generation cost. Sum over PGALL of (VmProdElec * V04CostHourProdInvDec) / sum(VmProdElec).
+    # -------------------------------------------------------------------------
     def _q04_cost_pow_gen_avg_lng(mod, cy, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -475,7 +516,7 @@ def add_power_generation_equations(m: ConcreteModel, core_sets_obj, config=None)
         run_cy, ytime, rule=_q04_cost_pow_gen_avg_lng
     )
 
-    # Q04CapexRESRate: 1 + (V04ShareMixWndSol(y-1) if PGRENSW) ** S04CapexBessRate
+    # Q04CapexRESRate (GAMS): This equation estimates the factor increasing the CAPEX of new RES (unflexible) capacity installation due to grid upgrade and storage. V04CapexRESRate = 1 + (V04ShareMixWndSol(t-1))**S04CapexBessRate for PGRENSW.
     def _q04_capex_res_rate(mod, cy, pg, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -490,7 +531,7 @@ def add_power_generation_equations(m: ConcreteModel, core_sets_obj, config=None)
         run_cy, pgall, ytime, rule=_q04_capex_res_rate
     )
 
-    # Q04CO2CaptRate
+    # Q04CO2CaptRate: CO2 capture rate as function of sequestration cost vs carbon value (smooth step).
     def _q04_co2_capt_rate(mod, cy, pg, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -507,7 +548,7 @@ def add_power_generation_equations(m: ConcreteModel, core_sets_obj, config=None)
         run_cy, pgall, ytime, rule=_q04_co2_capt_rate
     )
 
-    # Q04CCSRetroFit (only NOCCS_PG)
+    # Q04CCSRetroFit (GAMS): Retrofit share for non-CCS plants; logit-like in variable cost vs CCS alternative. (Only NOCCS_PG.)
     def _q04_ccs_retro_fit(mod, cy, pg, y):
         if y not in time_set or cy not in run_cy or pg not in noccs_pg:
             return Constraint.Skip
@@ -532,7 +573,7 @@ def add_power_generation_equations(m: ConcreteModel, core_sets_obj, config=None)
         run_cy, pgall, ytime, rule=_q04_ccs_retro_fit
     )
 
-    # Q04ScrpRate
+    # Q04ScrpRate: Endogenous scrapping rate from V04IndxEndogScrap; 0 for PGSCRN.
     def _q04_scrp_rate(mod, cy, pg, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -545,7 +586,7 @@ def add_power_generation_equations(m: ConcreteModel, core_sets_obj, config=None)
         run_cy, pgall, ytime, rule=_q04_scrp_rate
     )
 
-    # Q04ConsFuelElecProd (index PGEF = EFS that appear in PGALLtoEF)
+    # Q04ConsFuelElecProd: Fuel consumption for electricity production = sum over PGALL of VmProdElec * smTWhToMtoe / eff * fuel share (PGALLtoEF).
     def _q04_cons_fuel_elec_prod(mod, cy, pgef_ef, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip

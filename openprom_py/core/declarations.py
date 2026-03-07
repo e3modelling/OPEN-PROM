@@ -42,9 +42,17 @@ def add_core_parameters(m: ConcreteModel, core_sets_obj: core_sets.CoreSets) -> 
     m.epsilon6 = Param(within=Reals, default=1e-6, mutable=False)
     # sUnitToKUnit: units to thousands (e.g. vehicles to k-vehicles)
     m.sUnitToKUnit = Param(within=Reals, default=1000.0, mutable=False)
+    # 07_Emissions: tCO2 <-> tC conversion (1 tC = 3.66 tCO2); used in p07UnitConvFactor and p07CostCorrection
+    m.smCtoCO2 = Param(within=Reals, default=3.66, mutable=False)
+    # 07_Emissions: deflators 2015->2010 (CH4/N2O MAC in 2010$) and 2015->2005 (F-gases in 2005$)
+    m.smDefl_15_to_10 = Param(within=Reals, default=1.0, mutable=False)
+    m.smDefl_15_to_05 = Param(within=Reals, default=1.0, mutable=False)
 
-    # imCo2EmiFac(allCy, SBS, EF, YTIME) — CO2 emission factor (kgCO2/kgoe). Include PG, H2P, STEAMP for 04.
-    sbs_and_supply = list(sbs) + ["PG", "H2P", "STEAMP"]
+    # imCo2EmiFac(allCy, SBS/SSBS, EF, YTIME) — CO2 emission factor (kgCO2/kgoe).
+    # GAMS indexes by both demand SBS and supply SSBS; 07_Emissions uses imCo2EmiFac(allCy,SSBS,EFS,YTIME) for supply.
+    # So we include all of SSBS (PG, H2P, STEAMP, LQD, SLD, GAS, CHP) in addition to SBS (DSBS).
+    ssbs = list(getattr(core_sets, "SSBS", ()))
+    sbs_and_supply = list(sbs) + [x for x in ssbs if x not in sbs]
     m.imCo2EmiFac = Param(
         run_cy, sbs_and_supply, ef, ytime,
         mutable=True,
@@ -243,6 +251,13 @@ def add_core_parameters(m: ConcreteModel, core_sets_obj: core_sets.CoreSets) -> 
         initialize={},
     )
     # imInstCapPastCHP(allCy, EF, YTIME): Installed CHP capacity by fuel (GW). From core input.
+    # iCarbValYrExog(allCy, YTIME): exogenous carbon value (e.g. $/tCO2) for 07_Emissions non-CO2 MAC
+    m.iCarbValYrExog = Param(
+        run_cy, ytime,
+        mutable=True,
+        default=0.0,
+        initialize={},
+    )
     m.imInstCapPastCHP = Param(
         run_cy, ef, ytime,
         mutable=True,

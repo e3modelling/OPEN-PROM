@@ -2,9 +2,8 @@
 Module 03_RestOfEnergy (legacy): equation definitions.
 
 Mirrors modules/03_RestOfEnergy/legacy/equations.gms. Each constraint is documented
-with the corresponding GAMS equation name and a short explanation so that
-non-specialists can follow what each equation does (e.g. "total final energy
-consumption = industry + transport + CDR").
+with the corresponding GAMS equation name and the GAMS *' description text so that
+non-specialists can follow what each equation does. Descriptions transferred from GAMS.
 """
 
 from pyomo.core import Constraint
@@ -72,8 +71,7 @@ def add_rest_of_energy_equations(m, core_sets_obj):
     base_y = core_sets_obj.tFirst if hasattr(core_sets_obj, "tFirst") else (ytime[0] if ytime else None)
 
     # -------------------------------------------------------------------------
-    # Q03ConsFinEneCountry: Total final energy consumption by country and EFS (Mtoe).
-    # = Industry/domestic consumption (VmConsFuel) + Transport (VmDemFinEneTranspPerFuel) + CDR.
+    # Q03ConsFinEneCountry (GAMS): The equation computes the total final energy consumption in million tonnes of oil equivalent for each country, energy form sector, and time period. The total final energy consumption is calculated as the sum of final energy consumption in the Industry and Tertiary sectors and the sum of final energy demand in all transport subsectors. The consumption is determined by the relevant link between model subsectors and fuels. Plus VmConsFuelCDRProd(EFS).
     # -------------------------------------------------------------------------
     def _q03_cons_fin_ene_country_rule(mod, cy, efs_, y):
         if cy not in run_cy or y not in time_set:
@@ -107,8 +105,7 @@ def add_rest_of_energy_equations(m, core_sets_obj):
     #     v03ConsTotFinEne(YTIME) =E= sum((allCy,EFS), VmConsFinEneCountry(allCy,EFS,YTIME));
 
     # -------------------------------------------------------------------------
-    # Q03ConsFinNonEne: Final non-energy consumption (Mtoe).
-    # = Sum over NENSE (excluding BU) of VmConsFuel for this EFS.
+    # Q03ConsFinNonEne (GAMS): The equation computes the final non-energy consumption in million tonnes of oil equivalent for a given energy form sector. The calculation involves summing the consumption of fuels in each non-energy and bunkers demand subsector based on the corresponding fuel aggregation for the supply side. This process is performed for each time period. (Excluding BU.)
     # -------------------------------------------------------------------------
     def _q03_cons_fin_non_ene_rule(mod, cy, efs_, y):
         if cy not in run_cy or y not in time_set:
@@ -128,9 +125,7 @@ def add_rest_of_energy_equations(m, core_sets_obj):
     )
 
     # -------------------------------------------------------------------------
-    # Q03LossesDistr: Distribution losses (Mtoe).
-    # = imRateLossesFinCons * (VmConsFinEneCountry + VmConsFinNonEne + V03ProdPrimary for CRO).
-    # For H2: special term (VmDemTotH2 - sum VmDemSecH2). We use stub vars (0) if not H2.
+    # Q03LossesDistr (GAMS): The equation computes the distribution losses in million tonnes of oil equivalent for a given energy form sector. The losses are determined by the rate of losses over available for final consumption multiplied by the sum of total final energy consumption and final non-energy consumption. This calculation is performed for each time period. Please note that distribution losses are not considered for the hydrogen sector (H2 uses a different term: VmDemTotH2 - sum VmDemSecH2).
     # -------------------------------------------------------------------------
     def _q03_losses_distr_rule(mod, cy, efs_, y):
         if cy not in run_cy or y not in time_set:
@@ -156,8 +151,7 @@ def add_rest_of_energy_equations(m, core_sets_obj):
     )
 
     # -------------------------------------------------------------------------
-    # Q03OutTransfCHP: CHP transformation output (ELC and STE) in Mtoe.
-    # STE = sum of VmProdSte over TSTEAM; ELC = V04ProdElecEstCHP * smTWhToMtoe.
+    # Q03OutTransfCHP (GAMS): CHP transformation output. STE = sum(TSTEAM, VmProdSte); ELC = V04ProdElecEstCHP * smTWhToMtoe.
     # -------------------------------------------------------------------------
     def _q03_out_transf_chp_rule(mod, cy, tocef, y):
         if cy not in run_cy or y not in time_set:
@@ -185,7 +179,7 @@ def add_rest_of_energy_equations(m, core_sets_obj):
     #     ]$i03RefCapacity(allCy,"%fStartHorizon%")+0;
 
     # -------------------------------------------------------------------------
-    # Q03OutTransfRefSpec: Refinery output by product. Lagged dynamics + growth in LQD demand.
+    # Q03OutTransfRefSpec (GAMS): The equation calculates the transformation output from refineries for a specific energy form in a given scenario and year. The output is computed based on a residual factor, the previous year's output, and the change in refineries' capacity. The calculation includes considerations for the base year and adjusts the result accordingly. The result represents the transformation output from refineries for the specified energy form in million tons of oil equivalent.
     # -------------------------------------------------------------------------
     def _q03_out_transf_ref_spec_rule(mod, cy, efs_, y):
         if cy not in run_cy or y not in time_set:
@@ -210,7 +204,7 @@ def add_rest_of_energy_equations(m, core_sets_obj):
     )
 
     # -------------------------------------------------------------------------
-    # Q03OutTransfSolids / Q03OutTransfGasses: Same structure as refineries, per EFS.
+    # Q03OutTransfSolids / Q03OutTransfGasses (GAMS): Same structure as refineries—lagged output times growth in final consumption (exponent 0.98), per EFS for SLD and GAS.
     # -------------------------------------------------------------------------
     def _q03_out_transf_solids_rule(mod, cy, efs_, y):
         if cy not in run_cy or y not in time_set or ("SLD", efs_) not in SECtoEFPROD:
@@ -237,7 +231,7 @@ def add_rest_of_energy_equations(m, core_sets_obj):
     m.Q03OutTransfGasses = Constraint(run_cy, efs, ytime, rule=_q03_out_transf_gasses_rule)
 
     # -------------------------------------------------------------------------
-    # Q03InputTransfRef: Transformation input to refineries (LQD). Tracks output growth.
+    # Q03InputTransfRef (GAMS): The equation calculates the transformation input to refineries for the energy form Crude Oil in a specific scenario and year. The input is computed based on the previous year's input to refineries, multiplied by the ratio of the transformation output from refineries for the given energy form and year to the output in the previous year.
     # -------------------------------------------------------------------------
     def _q03_input_transf_ref_rule(mod, cy, efs_, y):
         if cy not in run_cy or y not in time_set or ("LQD", efs_) not in SECtoEF:
@@ -284,8 +278,7 @@ def add_rest_of_energy_equations(m, core_sets_obj):
     m.Q03InputTransfGasses = Constraint(run_cy, efs, ytime, rule=_q03_input_transf_gasses_rule)
 
     # -------------------------------------------------------------------------
-    # Q03InpTotTransf: Total transformation input by supply sector and EFS.
-    # Sum of fuel use for electricity, steam (CHP/DHP), refineries, solids, gases.
+    # Q03InpTotTransf (GAMS): The equation calculates the total transformation input for a specific energy branch in a given scenario and year. The result is obtained by summing the transformation inputs from different sources, including thermal power plants, District Heating Plants, nuclear plants, patent fuel and briquetting plants, and refineries (VmConsFuelElecProd for PG, VmConsFuelSteProd for CHP/STEAMP, V03InputTransfRef/Solids/Gasses for LQD/SLD/GAS).
     # -------------------------------------------------------------------------
     def _q03_inp_tot_transf_rule(mod, cy, ssbs_, efs_, y):
         if cy not in run_cy or y not in time_set or (ssbs_, efs_) not in SECtoEF:
@@ -311,8 +304,7 @@ def add_rest_of_energy_equations(m, core_sets_obj):
     )
 
     # -------------------------------------------------------------------------
-    # Q03OutTotTransf: Total transformation output by supply sector and EFS.
-    # PG: electricity; CHP: V04ProdElecEstCHP; STEAMP: VmDemTotSte; LQD/SLD/GAS/H2P: outputs.
+    # Q03OutTotTransf (GAMS): The equation calculates the total transformation output for a specific energy branch in a given scenario and year. The result is obtained by summing the transformation outputs from different sources, including thermal power stations, District Heating Plants, nuclear plants, patent fuel and briquetting plants, coke-oven plants, blast furnace plants, and gas works as well as refineries. The outcome represents the total transformation output in million tons of oil equivalent.
     # -------------------------------------------------------------------------
     def _q03_out_tot_transf_rule(mod, cy, ssbs_, efs_, y):
         if cy not in run_cy or y not in time_set or (ssbs_, efs_) not in SECtoEFPROD:
@@ -340,8 +332,7 @@ def add_rest_of_energy_equations(m, core_sets_obj):
     )
 
     # -------------------------------------------------------------------------
-    # Q03Transfers: Transfers (Mtoe). Lagged growth; CRO follows LQD aggregate.
-    # Only active when i03FeedTransfr > 0 (we use > 0.5 as "on" for stub).
+    # Q03Transfers (GAMS): The equation calculates the transfers of a specific energy branch in a given scenario and year. The result is computed based on a complex formula that involves the previous year's transfers, the residual for feedstocks in transfers, and various conditions. In particular, the equation includes terms related to feedstock transfers, residual feedstock transfers, and specific conditions for the energy branch "CRO" (crop residues). The outcome represents the transfers in million tons of oil equivalent. Active when i03FeedTransfr > 0.
     # -------------------------------------------------------------------------
     def _q03_transfers_rule(mod, cy, efs_, y):
         if cy not in run_cy or y not in time_set:
@@ -369,7 +360,7 @@ def add_rest_of_energy_equations(m, core_sets_obj):
     m.Q03Transfers = Constraint(run_cy, efs, ytime, rule=_q03_transfers_rule)
 
     # -------------------------------------------------------------------------
-    # Q03ConsGrssInlNotEneBranch: Gross inland consumption excluding energy branch.
+    # Q03ConsGrssInlNotEneBranch (GAMS): Gross inland consumption excluding energy branch = VmConsFinEneCountry + VmConsFinNonEne + sum(V03InpTotTransf) - sum(V03OutTotTransf) + VmLossesDistr - V03Transfers.
     # -------------------------------------------------------------------------
     def _q03_cons_grss_inl_not_ene_rule(mod, cy, efs_, y):
         if cy not in run_cy or y not in time_set:
@@ -390,7 +381,8 @@ def add_rest_of_energy_equations(m, core_sets_obj):
     )
 
     # -------------------------------------------------------------------------
-    # Q03ConsGrssInl: Gross inland consumption (including energy branch).
+    # -------------------------------------------------------------------------
+    # Q03ConsGrssInl (GAMS): Gross inland consumption including energy branch = same as ConsGrssInlNotEneBranch but with sum(VmConsFiEneSec + V03InpTotTransf - V03OutTotTransf) over SSBS.
     # -------------------------------------------------------------------------
     def _q03_cons_grss_inl_rule(mod, cy, efs_, y):
         if cy not in run_cy or y not in time_set:
@@ -412,7 +404,7 @@ def add_rest_of_energy_equations(m, core_sets_obj):
     m.Q03ConsGrssInl = Constraint(run_cy, efs, ytime, rule=_q03_cons_grss_inl_rule)
 
     # -------------------------------------------------------------------------
-    # Q03ProdPrimary: Primary production. Three cases: other fuels, NGS, CRO.
+    # Q03ProdPrimary (GAMS): Primary production. For most fuels: lagged value times growth in gross inland (excluding energy branch). For NGS: with residual i03ResHcNgOilPrProd. For CRO: with polynomial distributed lag on oil price (KPDL).
     # -------------------------------------------------------------------------
     def _q03_prod_primary_rule(mod, cy, efs_, y):
         if cy not in run_cy or y not in time_set:
@@ -505,7 +497,7 @@ def add_rest_of_energy_equations(m, core_sets_obj):
     PGRENEF = {"HYD", "WND", "SOL", "BMSWAS", "GEO"}
 
     # -------------------------------------------------------------------------
-    # Q03ConsFiEneSec: Final consumption in energy sector = rate * (output + primary) + H2 prod.
+    # Q03ConsFiEneSec (GAMS): The equation computes the final consumption in the energy sector (VmConsFiEneSec) per supply subsector and energy form. Rate applied to transformation output and primary production; special handling for H2 (H2 production term).
     # -------------------------------------------------------------------------
     def _q03_cons_fi_ene_sec_rule(mod, cy, ssbs_, efs_, y):
         if cy not in run_cy or y not in time_set or (ssbs_, efs_) not in SECtoEF:

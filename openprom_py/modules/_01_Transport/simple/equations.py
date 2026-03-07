@@ -57,9 +57,7 @@ def add_transport_equations(m, core_sets_obj):
     RENEF = core_sets.RENEF
 
     # -------------------------------------------------------------------------
-    # Q01Lft: Lifetime of passenger cars = inverse of scrapping rate.
-    # This equation calculates the lifetime of passenger cars as the inverse
-    # of their scrapping rate.
+    # Q01Lft (GAMS): This equation calculates the lifetime of passenger cars as the inverse of their scrapping rate. VmLft(allCy,"PC",TTECH,YTIME) = 1 / V01RateScrPc(allCy,TTECH,YTIME).
     # -------------------------------------------------------------------------
     def _q01_lft_rule(mod, cy, tech, y):
         if cy not in run_cy or y not in time_set:
@@ -71,9 +69,7 @@ def add_transport_equations(m, core_sets_obj):
     m.Q01Lft = Constraint(run_cy, ttech, ytime, rule=_q01_lft_rule)
 
     # -------------------------------------------------------------------------
-    # Q01ActivGoodsTransp: Activity for goods transport (trucks GU, other freight GT/GN).
-    # The activity is influenced by GDP, population, fuel prices, and elasticities.
-    # Trucks (GU): one form; other freight: includes cross-term with GU activity.
+    # Q01ActivGoodsTransp (GAMS): This equation calculates the activity for goods transport, considering different types of goods transport such as trucks and other freight transport. The activity is influenced by factors such as GDP, population, fuel prices, and elasticities. The equation includes terms for trucks (GU) and other freight transport modes (GT, GN); other freight includes a cross-term with GU activity growth.
     # -------------------------------------------------------------------------
     def _q01_activ_goods_rule(mod, cy, tran, y):
         if cy not in run_cy or y not in time_set or tran not in trang:
@@ -135,8 +131,7 @@ def add_transport_equations(m, core_sets_obj):
     m.Q01ActivGoodsTransp = Constraint(run_cy, trang, ytime, rule=_q01_activ_goods_rule)
 
     # -------------------------------------------------------------------------
-    # Q01GapTranspActiv: Gap in transport activity to be filled by new technologies.
-    # Calculated separately for passenger cars, other passenger modes, and goods transport.
+    # Q01GapTranspActiv (GAMS): This equation calculates the gap in transport activity, which represents the activity that needs to be filled by new technologies. The gap is calculated separately for passenger cars (new registrations), other passenger transportation modes, and goods transport. The equation involves various terms, including the new registrations of passenger cars, the activity of passenger and goods transport, and considerations for different types of transportation modes. Non-negative via (x + sqrt(x^2 + eps)) / 2.
     # -------------------------------------------------------------------------
     def _q01_gap_rule(mod, cy, tran, y):
         if cy not in run_cy or y not in time_set:
@@ -179,9 +174,7 @@ def add_transport_equations(m, core_sets_obj):
     m.Q01GapTranspActiv = Constraint(run_cy, trans, ytime, rule=_q01_gap_rule)
 
     # -------------------------------------------------------------------------
-    # Q01CapCostAnnualized: Annualized capital cost of new transport technologies.
-    # Converts upfront investment into equivalent annual payments (annuity factor).
-    # Includes state subsidy (VmSubsiDemTech).
+    # Q01CapCostAnnualized (GAMS): This equation computes the annualized capital cost of new transport technologies by converting upfront investment costs into equivalent annual payments. It applies the annuity factor to spread the capital cost over the technology's lifetime. It also includes state subsidy, as the amount that is purposed to each technology, except if a low cost bound is reached. V01CapCostAnnualized = annuity * (imCapCostTech - VmSubsiDemTech) * imCGI.
     # -------------------------------------------------------------------------
     def _q01_cap_cost_rule(mod, cy, tran, tech, y):
         if cy not in run_cy or y not in time_set or (tran, tech) not in core_sets.SECTTECH:
@@ -203,9 +196,7 @@ def add_transport_equations(m, core_sets_obj):
     m.Q01CapCostAnnualized = Constraint(run_cy, trans, ttech, ytime, rule=_q01_cap_cost_rule)
 
     # -------------------------------------------------------------------------
-    # Q01CostFuel: Total fuel cost for transport technologies.
-    # Includes: SFC * fuel prices; plug-in hybrid electric/non-electric split;
-    # variable cost; renewable value for non-renewable techs. Scaled by activity.
+    # Q01CostFuel (GAMS): Calculates the total fuel cost for transport technologies. This equation includes: specific fuel consumption multiplied by fuel prices for each fuel type (EF); special handling for plug-in hybrid technologies (non-electric portion weighted by (1 - share of electric mileage), electric portion weighted by share of electric mileage); additional variable costs specific to the technology; renewable value adjustment for non-renewable technologies. The total cost is scaled by transport activity (1000 vehicle-km for passenger cars; annual consumption per transport unit for other modes).
     # -------------------------------------------------------------------------
     def _q01_cost_fuel_rule(mod, cy, tran, tech, y):
         if cy not in run_cy or y not in time_set or (tran, tech) not in core_sets.SECTTECH:

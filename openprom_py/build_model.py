@@ -43,6 +43,10 @@ from modules._06_CO2.legacy.declarations import add_co2_parameters, add_co2_vari
 from modules._06_CO2.legacy.equations import add_co2_equations
 from modules._06_CO2.legacy.input_loader import load_co2_data, load_co2_data_into_model
 from modules._06_CO2.legacy.preloop import apply_co2_preloop
+from modules._07_Emissions.legacy.declarations import add_emissions_parameters, add_emissions_variables
+from modules._07_Emissions.legacy.equations import add_emissions_equations
+from modules._07_Emissions.legacy.input_loader import load_emissions_data, load_emissions_data_into_model
+from modules._07_Emissions.legacy.preloop import apply_emissions_preloop
 
 
 def _log(msg: str) -> None:
@@ -92,6 +96,9 @@ def build_openprom_model(config: PoCConfig, load_data: bool = True) -> ConcreteM
     _log("Adding CO2 (legacy) parameters and variables.")
     add_co2_parameters(m, core_sets_obj)
     add_co2_variables(m, core_sets_obj)
+    _log("Adding Emissions (legacy) parameters and variables.")
+    add_emissions_parameters(m, core_sets_obj)
+    add_emissions_variables(m, core_sets_obj)
 
     # 2) Equations: objective, qDummyObj, transport, industry, rest-of-energy, power-gen constraints
     _log("Adding core objective and qDummyObj constraint.")
@@ -109,6 +116,8 @@ def build_openprom_model(config: PoCConfig, load_data: bool = True) -> ConcreteM
     add_hydrogen_equations(m, core_sets_obj)
     _log("Adding CO2 equations.")
     add_co2_equations(m, core_sets_obj)
+    _log("Adding Emissions equations.")
+    add_emissions_equations(m, core_sets_obj)
 
     # 3) Load CSV data *before* preloop so historical fixes use loaded params (e.g. imFuelConsPerFueSub)
     if load_data:
@@ -120,6 +129,7 @@ def build_openprom_model(config: PoCConfig, load_data: bool = True) -> ConcreteM
             data_power_gen = load_power_generation_data(config)
             data_hydrogen = load_hydrogen_data(config)
             data_co2 = load_co2_data(config)
+            data_emissions = load_emissions_data(config)
             _log("Loading core data into model.")
             load_core_data_into_model(m, data, core_sets_obj)
             _log("Loading transport data into model.")
@@ -132,6 +142,8 @@ def build_openprom_model(config: PoCConfig, load_data: bool = True) -> ConcreteM
             load_hydrogen_data_into_model(m, data_hydrogen, core_sets_obj)
             _log("Loading CO2 data into model.")
             load_co2_data_into_model(m, data_co2, core_sets_obj)
+            _log("Loading Emissions data into model.")
+            load_emissions_data_into_model(m, data_emissions, core_sets_obj)
         except Exception as e:
             _log("Data load failed: {}".format(e))
             raise
@@ -151,6 +163,8 @@ def build_openprom_model(config: PoCConfig, load_data: bool = True) -> ConcreteM
     apply_hydrogen_preloop(m, core_sets_obj)
     _log("Applying CO2 preloop.")
     apply_co2_preloop(m, core_sets_obj)
+    _log("Applying Emissions preloop.")
+    apply_emissions_preloop(m, core_sets_obj)
 
     # Attach for run_poc / postsolve
     m._core_sets = core_sets_obj

@@ -23,18 +23,22 @@ from core import sets as core_sets
 
 
 def add_co2_parameters(m: ConcreteModel, core_sets_obj) -> None:
-    """Add 06_CO2 (legacy) parameters. Filled from input_loader."""
+    """
+    Add 06_CO2 (legacy) parameters.
+    Scalars: DAC profitability/capacity factor bounds. Params: sequestration elasticity, DAC costs (learning curve), scheduled capacity.
+    Filled from input_loader or left at default.
+    """
     run_cy = core_sets_obj.runCy
     ytime = core_sets_obj.ytime
     cdrtech = list(core_sets.CDRTECH)
     co2seqelast = list(core_sets.CO2SEQELAST)
 
-    # Scalars (GAMS: S06ProfRateMaxDAC, S06CapFacMaxNewDAC, S06CapFacMinNewDAC)
+    # DAC caps: max profitability rate, max/min annual capacity factor for new DAC
     m.S06ProfRateMaxDAC = Param(within=Reals, default=7.5, mutable=False)
     m.S06CapFacMaxNewDAC = Param(within=Reals, default=0.115, mutable=False)
     m.S06CapFacMinNewDAC = Param(within=Reals, default=0.055, mutable=False)
 
-    # Parameters (from input or derived)
+    # CO2 sequestration cost curve elasticity (mc_b, mc_d, etc.); DAC learning-curve base and min costs; scheduled new capacity
     m.i06ElastCO2Seq = Param(run_cy, co2seqelast, mutable=True, default=0.0, initialize={})
     m.i06GrossCapDAC = Param(cdrtech, mutable=True, default=500.0, initialize={})
     m.i06GrossCapDACMin = Param(cdrtech, mutable=True, default=68.0, initialize={})

@@ -12,7 +12,8 @@ Proof-of-concept: OPEN-PROM **core** + **01_Transport (simple)** in Python using
   - **_03_RestOfEnergy/legacy/** — 03_RestOfEnergy (realization: legacy)  
   - **_04_PowerGeneration/simple/** — 04_PowerGeneration (realization: simple)  
   - **_05_Hydrogen/legacy/** — 05_Hydrogen (realization: legacy)  
-  - **_06_CO2/legacy/** — 06_CO2 (realization: legacy)
+  - **_06_CO2/legacy/** — 06_CO2 (realization: legacy)  
+  - **_07_Emissions/legacy/** — 07_Emissions (realization: legacy)
 - **data/** — Place CSV/CSVR input files here (see `data/README.md`).
 - **prices_stub.py** — Exogenous fuel prices and subsidies (no 08_Prices / 11_Economy).
 - **build_model.py** — Assembles the Pyomo model.

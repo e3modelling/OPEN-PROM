@@ -26,6 +26,7 @@ from modules._04_PowerGeneration.simple.postsolve import apply_power_generation_
 from modules._03_RestOfEnergy.legacy.postsolve import apply_rest_of_energy_postsolve
 from modules._05_Hydrogen.legacy.postsolve import apply_hydrogen_postsolve
 from modules._06_CO2.legacy.postsolve import apply_co2_postsolve
+from modules._07_Emissions.legacy.postsolve import apply_emissions_postsolve
 from run_report import (
     create_run_archive,
     start_run_report,
@@ -279,6 +280,10 @@ def run_poc(config: Optional[PoCConfig] = None, load_data: bool = True):
                 apply_co2_postsolve(m, core_sets, year)
             except Exception as ex:
                 log_info("CO2 postsolve failed: {}".format(ex))
+            try:
+                apply_emissions_postsolve(m, core_sets, year)
+            except Exception as ex:
+                log_info("Emissions postsolve failed: {}".format(ex))
             # Export key variable values to run directory (solution.csv)
             try:
                 solution_path = run_dir / "solution.csv"
