@@ -20,10 +20,11 @@ from pyomo.core import value
 from config.poc_config import PoCConfig
 from build_model import build_openprom_model
 from core.postsolve import export_solution_csv
-from modules.m01_transport_simple.postsolve import apply_transport_postsolve
-from modules.m02_industry_technology.postsolve import apply_industry_postsolve
-from modules.m04_power_generation_simple.postsolve import apply_power_generation_postsolve
-from modules.m03_rest_of_energy_legacy.postsolve import apply_rest_of_energy_postsolve
+from modules._01_Transport.simple.postsolve import apply_transport_postsolve
+from modules._02_Industry.technology.postsolve import apply_industry_postsolve
+from modules._04_PowerGeneration.simple.postsolve import apply_power_generation_postsolve
+from modules._03_RestOfEnergy.legacy.postsolve import apply_rest_of_energy_postsolve
+from modules._05_Hydrogen.legacy.postsolve import apply_hydrogen_postsolve
 from run_report import (
     create_run_archive,
     start_run_report,
@@ -269,6 +270,10 @@ def run_poc(config: Optional[PoCConfig] = None, load_data: bool = True):
                 apply_rest_of_energy_postsolve(m, core_sets, year)
             except Exception as ex:
                 log_info("RestOfEnergy postsolve failed: {}".format(ex))
+            try:
+                apply_hydrogen_postsolve(m, core_sets, year)
+            except Exception as ex:
+                log_info("Hydrogen postsolve failed: {}".format(ex))
             # Export key variable values to run directory (solution.csv)
             try:
                 solution_path = run_dir / "solution.csv"

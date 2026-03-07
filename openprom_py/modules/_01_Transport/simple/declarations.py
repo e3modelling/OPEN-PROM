@@ -10,7 +10,7 @@ from pyomo.core import ConcreteModel, Param, Var
 from pyomo.environ import Reals
 
 from core import sets as core_sets
-from modules.m01_transport_simple import sets as t_sets
+from modules._01_Transport.simple import sets as t_sets
 
 
 def add_transport_parameters(m: ConcreteModel, core_sets_obj) -> None:

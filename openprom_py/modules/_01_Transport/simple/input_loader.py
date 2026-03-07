@@ -13,7 +13,7 @@ from typing import Any, Dict, Optional
 import pandas as pd
 
 from core import sets as core_sets
-from modules.m01_transport_simple import sets as t_sets
+from modules._01_Transport.simple import sets as t_sets
 
 
 def _path(data_dir: Path, filename: str) -> Optional[Path]:

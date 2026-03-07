@@ -6,11 +6,12 @@ Proof-of-concept: OPEN-PROM **core** + **01_Transport (simple)** in Python using
 
 - **config/** — Run configuration (`poc_config.py`), paths (`paths.py`).
 - **core/** — Sets, parameters, variables, equations, preloop, input loader, postsolve.
-- **modules/** — Module packages aligned with GAMS numbering (Python names use `mNN_` prefix):  
-  - **m01_transport_simple/** — 01_Transport (simple)  
-  - **m02_industry_technology/** — 02_Industry (technology)  
-  - **m03_rest_of_energy_legacy/** — 03_RestOfEnergy (legacy)  
-  - **m04_power_generation_simple/** — 04_PowerGeneration (simple)
+- **modules/** — Module packages aligned with GAMS (folder names use leading `_` for valid Python identifiers):  
+  - **_01_Transport/simple/** — 01_Transport (realization: simple)  
+  - **_02_Industry/technology/** — 02_Industry (realization: technology)  
+  - **_03_RestOfEnergy/legacy/** — 03_RestOfEnergy (realization: legacy)  
+  - **_04_PowerGeneration/simple/** — 04_PowerGeneration (realization: simple)  
+  - **_05_Hydrogen/legacy/** — 05_Hydrogen (realization: legacy)
 - **data/** — Place CSV/CSVR input files here (see `data/README.md`).
 - **prices_stub.py** — Exogenous fuel prices and subsidies (no 08_Prices / 11_Economy).
 - **build_model.py** — Assembles the Pyomo model.

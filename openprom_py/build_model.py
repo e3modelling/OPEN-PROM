@@ -20,21 +20,25 @@ from core.equations import add_core_objective, add_q_dummy_obj_constraint
 from core.preloop import apply_core_preloop
 from core.input_loader import load_core_data, load_core_data_into_model
 from prices_stub import add_price_stub_parameters
-from modules.m01_transport_simple.input_loader import load_transport_data, load_transport_data_into_model
-from modules.m01_transport_simple.declarations import add_transport_parameters, add_transport_variables
-from modules.m01_transport_simple.equations import add_transport_equations
-from modules.m01_transport_simple.preloop import apply_transport_preloop
-from modules.m02_industry_technology.declarations import add_industry_parameters, add_industry_variables
-from modules.m02_industry_technology.equations import add_industry_equations
-from modules.m02_industry_technology.preloop import apply_industry_preloop
-from modules.m04_power_generation_simple.declarations import add_power_generation_parameters, add_power_generation_variables
-from modules.m04_power_generation_simple.equations import add_power_generation_equations
-from modules.m04_power_generation_simple.input_loader import load_power_generation_data, load_power_generation_data_into_model
-from modules.m04_power_generation_simple.preloop import apply_power_generation_preloop
-from modules.m03_rest_of_energy_legacy.declarations import add_rest_of_energy_parameters, add_rest_of_energy_variables
-from modules.m03_rest_of_energy_legacy.equations import add_rest_of_energy_equations
-from modules.m03_rest_of_energy_legacy.preloop import apply_rest_of_energy_preloop
-from modules.m03_rest_of_energy_legacy.input_loader import load_rest_of_energy_data, load_rest_of_energy_data_into_model
+from modules._01_Transport.simple.input_loader import load_transport_data, load_transport_data_into_model
+from modules._01_Transport.simple.declarations import add_transport_parameters, add_transport_variables
+from modules._01_Transport.simple.equations import add_transport_equations
+from modules._01_Transport.simple.preloop import apply_transport_preloop
+from modules._02_Industry.technology.declarations import add_industry_parameters, add_industry_variables
+from modules._02_Industry.technology.equations import add_industry_equations
+from modules._02_Industry.technology.preloop import apply_industry_preloop
+from modules._04_PowerGeneration.simple.declarations import add_power_generation_parameters, add_power_generation_variables
+from modules._04_PowerGeneration.simple.equations import add_power_generation_equations
+from modules._04_PowerGeneration.simple.input_loader import load_power_generation_data, load_power_generation_data_into_model
+from modules._04_PowerGeneration.simple.preloop import apply_power_generation_preloop
+from modules._03_RestOfEnergy.legacy.declarations import add_rest_of_energy_parameters, add_rest_of_energy_variables
+from modules._03_RestOfEnergy.legacy.equations import add_rest_of_energy_equations
+from modules._03_RestOfEnergy.legacy.preloop import apply_rest_of_energy_preloop
+from modules._03_RestOfEnergy.legacy.input_loader import load_rest_of_energy_data, load_rest_of_energy_data_into_model
+from modules._05_Hydrogen.legacy.declarations import add_hydrogen_parameters, add_hydrogen_variables
+from modules._05_Hydrogen.legacy.equations import add_hydrogen_equations
+from modules._05_Hydrogen.legacy.input_loader import load_hydrogen_data, load_hydrogen_data_into_model
+from modules._05_Hydrogen.legacy.preloop import apply_hydrogen_preloop
 
 
 def _log(msg: str) -> None:
@@ -78,6 +82,9 @@ def build_openprom_model(config: PoCConfig, load_data: bool = True) -> ConcreteM
     _log("Adding RestOfEnergy (legacy) parameters and variables.")
     add_rest_of_energy_parameters(m, core_sets_obj)
     add_rest_of_energy_variables(m, core_sets_obj)
+    _log("Adding Hydrogen (legacy) parameters and variables.")
+    add_hydrogen_parameters(m, core_sets_obj)
+    add_hydrogen_variables(m, core_sets_obj)
 
     # 2) Equations: objective, qDummyObj, transport, industry, rest-of-energy, power-gen constraints
     _log("Adding core objective and qDummyObj constraint.")
@@ -91,6 +98,8 @@ def build_openprom_model(config: PoCConfig, load_data: bool = True) -> ConcreteM
     add_rest_of_energy_equations(m, core_sets_obj)
     _log("Adding PowerGeneration equations.")
     add_power_generation_equations(m, core_sets_obj, config)
+    _log("Adding Hydrogen equations.")
+    add_hydrogen_equations(m, core_sets_obj)
 
     # 3) Load CSV data *before* preloop so historical fixes use loaded params (e.g. imFuelConsPerFueSub)
     if load_data:
@@ -100,6 +109,7 @@ def build_openprom_model(config: PoCConfig, load_data: bool = True) -> ConcreteM
             data_transport = load_transport_data(config)
             data_rest_energy = load_rest_of_energy_data(config)
             data_power_gen = load_power_generation_data(config)
+            data_hydrogen = load_hydrogen_data(config)
             _log("Loading core data into model.")
             load_core_data_into_model(m, data, core_sets_obj)
             _log("Loading transport data into model.")
@@ -108,6 +118,8 @@ def build_openprom_model(config: PoCConfig, load_data: bool = True) -> ConcreteM
             load_rest_of_energy_data_into_model(m, data_rest_energy, core_sets_obj)
             _log("Loading PowerGeneration data into model.")
             load_power_generation_data_into_model(m, data_power_gen, core_sets_obj, config)
+            _log("Loading Hydrogen data into model.")
+            load_hydrogen_data_into_model(m, data_hydrogen, core_sets_obj)
         except Exception as e:
             _log("Data load failed: {}".format(e))
             raise
@@ -123,6 +135,8 @@ def build_openprom_model(config: PoCConfig, load_data: bool = True) -> ConcreteM
     apply_rest_of_energy_preloop(m, core_sets_obj)
     _log("Applying PowerGeneration preloop.")
     apply_power_generation_preloop(m, core_sets_obj, config)
+    _log("Applying Hydrogen preloop.")
+    apply_hydrogen_preloop(m, core_sets_obj)
 
     # Attach for run_poc / postsolve
     m._core_sets = core_sets_obj

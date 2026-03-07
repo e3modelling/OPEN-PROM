@@ -184,6 +184,32 @@ for _s in DSBS:
         _NAPTOALLSBS_LIST.append(("NoTrade", _s))
 NAPtoALLSBS: Set[Tuple[str, str]] = set(_NAPTOALLSBS_LIST)
 
+# -----------------------------------------------------------------------------
+# 05_Hydrogen (legacy) sets and mappings (GAMS: modules/05_Hydrogen/legacy/sets.gms)
+# -----------------------------------------------------------------------------
+# H2TECH = hydrogen production technologies
+H2TECH = ("gsr", "gss", "weg", "wew", "wes", "cgf", "cgs", "bgfl", "bgfls")
+# H2TECHEFtoEF(H2TECH, EF) = which fuel each H2 tech uses
+_H2TECHEFTOEF_LIST = [
+    ("gsr", "NGS"), ("gss", "NGS"),
+    ("cgf", "HCL"), ("cgs", "HCL"),
+    ("bgfl", "BMSWAS"), ("bgfls", "BMSWAS"),
+    ("weg", "ELC"), ("wes", "ELC"), ("wew", "ELC"),
+]
+H2TECHEFtoEF: Set[Tuple[str, str]] = set(_H2TECHEFTOEF_LIST)
+# H2CCS = H2 technologies with CCS
+H2CCS = ("gss", "cgs", "bgfls")
+# H2NOCCS = H2 technologies without CCS but with CCS counterpart
+H2NOCCS = ("gsr", "cgf", "bgfl")
+# H2CCS_NOCCS(CCS_tech, NOCCS_tech) = mapping
+H2CCS_NOCCS: Set[Tuple[str, str]] = {("gss", "gsr"), ("cgs", "cgf"), ("bgfls", "bgfl")}
+# H2TECHREN = renewable H2 production (electrolysis with wind/solar)
+H2TECHREN = ("wew", "wes")
+# H2TECHPM = technologies with premature replacement active
+H2TECHPM = ("gsr", "cgf", "bgfl", "weg")
+# H2PRODEF(EF) = fuels used for hydrogen production (for equation indexing)
+H2PRODEF = ("NGS", "HCL", "BMSWAS", "SOL", "NUC", "ELC", "WND", "RFO")
+
 # ETYPES for elasticity parameters
 ETYPES = ("a", "b1", "b2", "b3", "b4", "b5", "c", "c1", "c2", "c3", "c4", "c5", "aend", "b3end", "b4end")
 
