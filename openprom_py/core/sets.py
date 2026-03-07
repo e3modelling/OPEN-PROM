@@ -276,8 +276,47 @@ NENSE = ("PCH", "NEN", "BU")
 CDR = ("DAC", "EW")
 # Electricity energy form (singleton for equation guards)
 ELCEF = ("ELC",)
-# Steam-related technologies (use PG discount in GAMS)
-TSTEAM = ("TSTE",)
+# Steam-related technologies (use PG discount in GAMS). Minimal placeholder; 09_Heat uses extended list.
+# 09_Heat/heat/sets.gms defines full TSTEAM (CHP + DHP plant types). We keep TSTE for compatibility;
+# 09_Heat module adds full TSTEAM_09 if needed, or we extend here for 09.
+# Full list from GAMS 09_Heat/heat/sets.gms. Include "TSTE" for 02_Industry (industry steam tech).
+_TSTEAM_CHP = ("TSTE1AL", "TSTE1AH", "TSTE1AD", "TSTE1AG", "TSTE1AB", "TSTE1AH2F")
+_TSTEAM_DHP = ("TSTE2LGN", "TSTE2OSL", "TSTE2GDO", "TSTE2NGS", "TSTE2BMS", "TSTE2GEO", "TSTE2OTH")
+TSTEAM = ("TSTE",) + _TSTEAM_CHP + _TSTEAM_DHP
+# TCHP(TSTEAM) = CHP plant technologies (subset of TSTEAM)
+TCHP = _TSTEAM_CHP
+# TDHP(TSTEAM) = DHP plant technologies
+TDHP = _TSTEAM_DHP
+# STEMODE = steam production modes
+STEMODE = ("CHP", "DHP")
+# STEAMEF(EFS) = fuels used for steam production (from TSTEAMTOEF)
+_STEAMEF_EFS = ("LGN", "HCL", "GDO", "RFO", "OLQ", "KRS", "NGS", "OGS", "BMSWAS", "H2F", "GEO", "NUC")
+STEAMEF = _STEAMEF_EFS
+# TSTEAMTOEF(TSTEAM, EF): which EF each steam plant uses (simplified: map CHP/DHP to typical EF)
+_TSTEAMTOEF_LIST = [
+    ("TSTE1AL", "LGN"), ("TSTE1AH", "HCL"), ("TSTE1AD", "GDO"), ("TSTE1AG", "NGS"), ("TSTE1AB", "BMSWAS"), ("TSTE1AH2F", "H2F"),
+    ("TSTE2LGN", "LGN"), ("TSTE2OSL", "HCL"), ("TSTE2GDO", "GDO"), ("TSTE2NGS", "NGS"), ("TSTE2BMS", "BMSWAS"), ("TSTE2GEO", "GEO"), ("TSTE2OTH", "NUC"),
+]
+# Expand (TSTE1AD,TSTE2GDO).(GDO,RFO,OLQ,LPG,KRS) etc. for multi-EF
+for _t, _ef in [("TSTE1AD", "RFO"), ("TSTE1AD", "OLQ"), ("TSTE1AD", "LPG"), ("TSTE1AD", "KRS"), ("TSTE1AG", "OGS")]:
+    if (_t, _ef) not in _TSTEAMTOEF_LIST:
+        _TSTEAMTOEF_LIST.append((_t, _ef))
+TSTEAMTOEF: Set[Tuple[str, str]] = set(_TSTEAMTOEF_LIST)
+
+# -----------------------------------------------------------------------------
+# 08_Prices (legacy) sets (GAMS: modules/08_Prices/legacy/sets.gms — file is empty; ESET from equations)
+# -----------------------------------------------------------------------------
+# ESET = electricity consumer types: i=industry, r=residential, t=transport, c=commercial/services
+ESET = ("i", "r", "t", "c")
+# INDSE1 = industry subsectors (for Q08PriceElecIndResConsu "i"); same as INDSE
+# HOU1 = household subsector (for "r")
+HOU1 = ("HOU",)
+# TRANS1 = transport subsectors (for "t"); same as TRANSE
+TRANS1 = TRANSE
+# SERV = services subsector (for "c")
+SERV = ("SE",)
+# ALTEF = alternative energy forms (GAMS: if used in Q08PriceFuelSubsecCarVal); often empty
+ALTEF = ()
 
 # SECTTECH(DSBS, TECH): which technologies are in which demand subsector
 _SECTTECH_LIST = [

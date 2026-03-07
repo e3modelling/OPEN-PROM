@@ -47,6 +47,9 @@ def add_core_parameters(m: ConcreteModel, core_sets_obj: core_sets.CoreSets) -> 
     # 07_Emissions: deflators 2015->2010 (CH4/N2O MAC in 2010$) and 2015->2005 (F-gases in 2005$)
     m.smDefl_15_to_10 = Param(within=Reals, default=1.0, mutable=False)
     m.smDefl_15_to_05 = Param(within=Reals, default=1.0, mutable=False)
+    # 08_Prices / 09_Heat: fraction of electricity price at which CHP sells to grid; max electricity-to-steam ratio in CHP
+    m.smFracElecPriChp = Param(within=Reals, default=0.5, mutable=False)
+    m.smElecToSteRatioChp = Param(within=Reals, default=1.0, mutable=False)
 
     # imCo2EmiFac(allCy, SBS/SSBS, EF, YTIME) — CO2 emission factor (kgCO2/kgoe).
     # GAMS indexes by both demand SBS and supply SSBS; 07_Emissions uses imCo2EmiFac(allCy,SSBS,EFS,YTIME) for supply.
@@ -111,6 +114,22 @@ def add_core_parameters(m: ConcreteModel, core_sets_obj: core_sets.CoreSets) -> 
     # imFuelConsPerFueSub(allCy, SBS, EF, YTIME)
     m.imFuelConsPerFueSub = Param(
         run_cy, sbs, ef, ytime,
+        mutable=True,
+        default=0.0,
+        initialize={},
+    )
+
+    # 08_Prices: imEffValueInDollars(allCy, SBS, YTIME) — efficiency value in dollars for electricity/heat pump price component
+    m.imEffValueInDollars = Param(
+        run_cy, sbs, ytime,
+        mutable=True,
+        default=0.0,
+        initialize={},
+    )
+
+    # imFuelPrice(allCy, SBS, EF, YTIME) — base fuel price ($/toe); 08_Prices preloop uses it for V08FuelPriSubNoCarb; GAMS rescales to k$/toe
+    m.imFuelPrice = Param(
+        run_cy, sbs_and_supply, ef, ytime,
         mutable=True,
         default=0.0,
         initialize={},

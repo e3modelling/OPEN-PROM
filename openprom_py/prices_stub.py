@@ -21,14 +21,9 @@ def add_price_stub_parameters(
     core_sets_obj: core_sets.CoreSets,
 ) -> None:
     """
-    Add VmPriceFuelSubsecCarVal, VmPriceFuelAvgSub, VmSubsiDemTech as mutable Params.
-
-    - VmPriceFuelSubsecCarVal(cy, SBS, EF, y): fuel price per subsector and fuel (k$2015/toe).
-    - VmPriceFuelAvgSub(cy, DSBS, y): average fuel price per subsector.
-    - VmSubsiDemTech(cy, DSBS, TECH, y): subsidy per unit of new capacity (11_Economy).
-
-    Defaults: 1.5 (prices), 0.001 (avg), 0 (subsidy) so the model is feasible.
-    Fill from data using load_price_stub_from_fuel_price() when imFuelPrice is loaded.
+    Add VmPriceFuelSubsecCarVal, VmPriceFuelAvgSub, VmSubsiDemTech as mutable Params only when
+    08_Prices module is not loaded. When 08_Prices is loaded, those two are Variables; the stub
+    adds only VmSubsiDemTech (11_Economy subsidy). Defaults: 1.5 (prices), 0.001 (avg), 0 (subsidy).
     """
     run_cy = core_sets_obj.runCy
     ytime = core_sets_obj.ytime
@@ -38,21 +33,25 @@ def add_price_stub_parameters(
     ef = list(core_sets.EF)
     tech = list(core_sets.TECH)
 
-    # Fuel price per subsector and fuel (k$2015/toe). Default 1.5 for feasibility.
-    m.VmPriceFuelSubsecCarVal = Param(
-        run_cy, sbs_and_supply, ef, ytime,
-        mutable=True,
-        default=1.5,
-        initialize={},
-    )
+    from pyomo.core.base.var import Var
+    # If 08_Prices already added these as Variables, only add subsidy.
+    if not (hasattr(m, "VmPriceFuelSubsecCarVal") and isinstance(getattr(m, "VmPriceFuelSubsecCarVal"), Var)):
+        # Fuel price per subsector and fuel (k$2015/toe). Default 1.5 for feasibility.
+        m.VmPriceFuelSubsecCarVal = Param(
+            run_cy, sbs_and_supply, ef, ytime,
+            mutable=True,
+            default=1.5,
+            initialize={},
+        )
 
-    # Average fuel price per subsector (k$2015/toe).
-    m.VmPriceFuelAvgSub = Param(
-        run_cy, dsbs, ytime,
-        mutable=True,
-        default=0.001,
-        initialize={},
-    )
+    if not (hasattr(m, "VmPriceFuelAvgSub") and isinstance(getattr(m, "VmPriceFuelAvgSub"), Var)):
+        # Average fuel price per subsector (k$2015/toe).
+        m.VmPriceFuelAvgSub = Param(
+            run_cy, dsbs, ytime,
+            mutable=True,
+            default=0.001,
+            initialize={},
+        )
 
     # Subsidy per unit of new capacity (11_Economy). Default 0 for PoC.
     m.VmSubsiDemTech = Param(

@@ -66,7 +66,8 @@ def add_rest_of_energy_equations(m, core_sets_obj):
     ssbs = list(core_sets.SSBS)
     efs = list(core_sets.EFS)
     toctef = list(core_sets.TOCTEF)
-    tsteam = list(core_sets.TSTEAM)
+    # STE output: sum over heat plants only (TCHP+TDHP); TSTE is industry placeholder, not in heat module
+    tsteam = list(core_sets.TCHP) + list(core_sets.TDHP)
     kpdl_list = [k for k in core_sets.KPDL][:5]  # a1..a5
     base_y = core_sets_obj.tFirst if hasattr(core_sets_obj, "tFirst") else (ytime[0] if ytime else None)
 

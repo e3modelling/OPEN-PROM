@@ -327,10 +327,28 @@ def load_core_data_into_model(
             if len(key) == 3 and key[0] in run_cy and key[2] in ytime:
                 m.imTransChar[key] = val
 
-    # Fill price stub (VmPriceFuelSubsecCarVal, VmPriceFuelAvgSub) from imFuelPrice when available
+    # imFuelPrice(allCy, SBS, EF, YTIME) — fill when model has the param (core or 08_Prices preloop use it)
+    if data.get("imFuelPrice") and hasattr(m, "imFuelPrice"):
+        for key, val in data["imFuelPrice"].items():
+            if len(key) == 4 and key[0] in run_cy and key[3] in ytime:
+                try:
+                    m.imFuelPrice[key] = float(val) / 1000.0  # GAMS: change units $15 -> k$15
+                except (TypeError, ValueError):
+                    pass
+        # GAMS: imFuelPrice(runCy,"BU","KRS",YTIME) = imFuelPrice(runCy,"PA","KRS",YTIME)
+        for cy in run_cy:
+            for y in ytime:
+                try:
+                    if (cy, "PA", "KRS", y) in m.imFuelPrice:
+                        m.imFuelPrice[cy, "BU", "KRS", y] = m.imFuelPrice[cy, "PA", "KRS", y]
+                except (KeyError, TypeError):
+                    pass
+    # Fill price stub (VmPriceFuelSubsecCarVal, VmPriceFuelAvgSub) from imFuelPrice when using stub (not 08_Prices vars)
     if data.get("imFuelPrice") and hasattr(m, "VmPriceFuelSubsecCarVal"):
-        from prices_stub import load_price_stub_from_fuel_price
-        load_price_stub_from_fuel_price(m, data["imFuelPrice"], core_sets_obj)
+        from pyomo.core.base.param import Param
+        if isinstance(getattr(m, "VmPriceFuelSubsecCarVal"), Param):
+            from prices_stub import load_price_stub_from_fuel_price
+            load_price_stub_from_fuel_price(m, data["imFuelPrice"], core_sets_obj)
 
     # imFuelConsPerFueSub(allCy, SBS, EF, YTIME) — fuel consumption per subsector and fuel
     if data.get("imFuelCons"):

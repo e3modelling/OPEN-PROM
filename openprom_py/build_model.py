@@ -47,6 +47,16 @@ from modules._07_Emissions.legacy.declarations import add_emissions_parameters, 
 from modules._07_Emissions.legacy.equations import add_emissions_equations
 from modules._07_Emissions.legacy.input_loader import load_emissions_data, load_emissions_data_into_model
 from modules._07_Emissions.legacy.preloop import apply_emissions_preloop
+from modules._08_Prices.legacy.declarations import add_prices_parameters, add_prices_variables
+from modules._08_Prices.legacy.equations import add_prices_equations
+from modules._08_Prices.legacy.input_loader import load_prices_data, load_prices_data_into_model
+from modules._08_Prices.legacy.preloop import apply_prices_preloop
+from modules._08_Prices.legacy.postsolve import apply_prices_postsolve
+from modules._09_Heat.heat.declarations import add_heat_parameters, add_heat_variables
+from modules._09_Heat.heat.equations import add_heat_equations
+from modules._09_Heat.heat.input_loader import load_heat_data, load_heat_data_into_model
+from modules._09_Heat.heat.preloop import apply_heat_preloop
+from modules._09_Heat.heat.postsolve import apply_heat_postsolve
 
 
 def _log(msg: str) -> None:
@@ -76,7 +86,10 @@ def build_openprom_model(config: PoCConfig, load_data: bool = True) -> ConcreteM
     _log("Adding core parameters and variables.")
     add_core_parameters(m, core_sets_obj)
     add_core_variables(m, core_sets_obj)
-    _log("Adding price stub parameters.")
+    _log("Adding 08_Prices (legacy) parameters and variables.")
+    add_prices_parameters(m, core_sets_obj)
+    add_prices_variables(m, core_sets_obj)
+    _log("Adding price stub parameters (VmSubsiDemTech only when 08_Prices loaded).")
     add_price_stub_parameters(m, core_sets_obj)
     _log("Adding transport parameters and variables.")
     add_transport_parameters(m, core_sets_obj)
@@ -99,6 +112,9 @@ def build_openprom_model(config: PoCConfig, load_data: bool = True) -> ConcreteM
     _log("Adding Emissions (legacy) parameters and variables.")
     add_emissions_parameters(m, core_sets_obj)
     add_emissions_variables(m, core_sets_obj)
+    _log("Adding 09_Heat (heat) parameters and variables.")
+    add_heat_parameters(m, core_sets_obj)
+    add_heat_variables(m, core_sets_obj)
 
     # 2) Equations: objective, qDummyObj, transport, industry, rest-of-energy, power-gen constraints
     _log("Adding core objective and qDummyObj constraint.")
@@ -118,6 +134,10 @@ def build_openprom_model(config: PoCConfig, load_data: bool = True) -> ConcreteM
     add_co2_equations(m, core_sets_obj)
     _log("Adding Emissions equations.")
     add_emissions_equations(m, core_sets_obj)
+    _log("Adding 09_Heat equations.")
+    add_heat_equations(m, core_sets_obj)
+    _log("Adding 08_Prices equations.")
+    add_prices_equations(m, core_sets_obj)
 
     # 3) Load CSV data *before* preloop so historical fixes use loaded params (e.g. imFuelConsPerFueSub)
     if load_data:
@@ -130,6 +150,8 @@ def build_openprom_model(config: PoCConfig, load_data: bool = True) -> ConcreteM
             data_hydrogen = load_hydrogen_data(config)
             data_co2 = load_co2_data(config)
             data_emissions = load_emissions_data(config)
+            data_prices = load_prices_data(config)
+            data_heat = load_heat_data(config)
             _log("Loading core data into model.")
             load_core_data_into_model(m, data, core_sets_obj)
             _log("Loading transport data into model.")
@@ -144,6 +166,10 @@ def build_openprom_model(config: PoCConfig, load_data: bool = True) -> ConcreteM
             load_co2_data_into_model(m, data_co2, core_sets_obj)
             _log("Loading Emissions data into model.")
             load_emissions_data_into_model(m, data_emissions, core_sets_obj)
+            _log("Loading 08_Prices data into model.")
+            load_prices_data_into_model(m, data_prices, core_sets_obj)
+            _log("Loading 09_Heat data into model.")
+            load_heat_data_into_model(m, data_heat, core_sets_obj)
         except Exception as e:
             _log("Data load failed: {}".format(e))
             raise
@@ -165,6 +191,10 @@ def build_openprom_model(config: PoCConfig, load_data: bool = True) -> ConcreteM
     apply_co2_preloop(m, core_sets_obj)
     _log("Applying Emissions preloop.")
     apply_emissions_preloop(m, core_sets_obj)
+    _log("Applying 09_Heat preloop.")
+    apply_heat_preloop(m, core_sets_obj)
+    _log("Applying 08_Prices preloop.")
+    apply_prices_preloop(m, core_sets_obj)
 
     # Attach for run_poc / postsolve
     m._core_sets = core_sets_obj
