@@ -210,6 +210,28 @@ H2TECHPM = ("gsr", "cgf", "bgfl", "weg")
 # H2PRODEF(EF) = fuels used for hydrogen production (for equation indexing)
 H2PRODEF = ("NGS", "HCL", "BMSWAS", "SOL", "NUC", "ELC", "WND", "RFO")
 
+# -----------------------------------------------------------------------------
+# 06_CO2 (legacy) sets (GAMS: modules/06_CO2/legacy/sets.gms)
+# -----------------------------------------------------------------------------
+# CO2CAPTECH = sectors with CO2 capture (PG, H2P, DAC, IND)
+CO2CAPTECH = ("PG", "H2P", "DAC", "IND")
+# CDRTECH = CDR/DAC technologies (HTDAC, H2DAC, LTDAC, TEW)
+CDRTECH = ("HTDAC", "H2DAC", "LTDAC", "TEW")
+# DACTECH(CDRTECH) = DAC sector technologies (excludes TEW which is EW)
+DACTECH = ("HTDAC", "H2DAC", "LTDAC")
+# CO2SEQELAST = elasticity parameter names for CO2 sequestration cost curve
+CO2SEQELAST = ("POT", "mc_a", "mc_b", "mc_c", "mc_d", "mc_s", "mc_m")
+# CDRTECHtoEF(CDRTECH, EF): fuels used per CDR tech (for Q06ConsFuelTechCDRProd)
+_CDRTECHTOEF_LIST = [
+    ("HTDAC", "NGS"), ("HTDAC", "H2F"), ("HTDAC", "ELC"),
+    ("H2DAC", "NGS"), ("H2DAC", "H2F"), ("H2DAC", "ELC"),
+    ("LTDAC", "ELC"),
+    ("TEW", "ELC"),
+]
+CDRTECHtoEF: Set[Tuple[str, str]] = set(_CDRTECHTOEF_LIST)
+# INDSE1 = industry subsectors (for Q06CapCO2ElecHydr industry term); same as INDSE
+INDSE1 = INDSE
+
 # ETYPES for elasticity parameters
 ETYPES = ("a", "b1", "b2", "b3", "b4", "b5", "c", "c1", "c2", "c3", "c4", "c5", "aend", "b3end", "b4end")
 

@@ -1,12 +1,15 @@
 """
 05_Hydrogen (legacy) postsolve: fix solution values for the next time step.
 
-Mirrors modules/05_Hydrogen/legacy/postsolve.gms. After each solve, fix V05* and Vm*
-at the given year to their current solution for multi-year loop.
+Mirrors modules/05_Hydrogen/legacy/postsolve.gms. Fix VmConsFuelTechH2Prod, V05GapShareH2Tech1,
+VmProdH2, V05DemGapH2, VmCostAvgProdH2, V05CaptRateH2 at the given year.
 """
 from pyomo.core import ConcreteModel, value
 
 from core import sets as core_sets
+
+# --- GAMS postsolve.gms commented-out, transferred as comment ---
+# *V05DelivH2InfrTech.FX(runCyL,INFRTECH,YTIME)$TIME(YTIME) = V05DelivH2InfrTech.L(runCyL,INFRTECH,YTIME)$TIME(YTIME);
 
 
 def apply_hydrogen_postsolve(m: ConcreteModel, core_sets_obj, year: int) -> None:

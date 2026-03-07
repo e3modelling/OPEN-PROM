@@ -5,6 +5,13 @@ Mirrors modules/05_Hydrogen/legacy/input.gms. Loads i05H2Production (IC, FC, VC,
 i05H2Parameters, i05H2InfrCapCosts, iTechShareH2Prod. Fills i05ProdLftH2, i05CaptRateH2Prod,
 i05CostCapH2Prod, i05CostFOMH2Prod, i05CostVOMH2Prod, i05AvailH2Prod, i05EffH2Prod,
 iWBLShareH2Prod, iWBLPremRepH2Prod (0.1), i05WBLGammaH2Prod (1), etc.
+
+Intentional simplifications (no loose ends):
+- i05CostAvgWeight: GAMS sets 1 then loop YTIME i05CostAvgWeight = -1/19 + i05CostAvgWeight(YTIME-1);
+  we default to 1.0 for all (cy,y).
+- i05EffNetH2Transp: GAMS has loop over H2EFFLOOP/INFRTECH2$H2NETWORK for network efficiency;
+  we set i05EffNetH2Transp = i05EffH2Transp*(1-i05ConsSelfH2Transp) only (no network propagation).
+- i05AvailH2Prod for wes/wew: we use min(weg, i04AvailRate(PGSOL/PGAWNO)) when 04 is present (GAMS parity).
 """
 from pathlib import Path
 from typing import Any, Dict

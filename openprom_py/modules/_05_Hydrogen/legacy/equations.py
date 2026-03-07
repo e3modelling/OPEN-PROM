@@ -6,7 +6,33 @@ Q05ScrapLftH2Prod, Q05PremRepH2Prod, Q05CapScrapH2ProdTech, Q05DemGapH2, Q05Cost
 Q05CostVarProdH2Tech, Q05AcceptCCSH2Tech, Q05ShareCCSH2Prod, Q05ShareNoCCSH2Prod,
 Q05CostProdCCSNoCCSH2Prod, Q05GapShareH2Tech2, Q05GapShareH2Tech1, Q05ProdH2,
 Q05CostAvgProdH2, Q05ConsFuelTechH2Prod, Q05ConsFuelH2Prod, Q05CaptRateH2.
-Infrastructure equations (Q05H2InfrArea, Q05DelivH2InfrTech, etc.) are commented out in GAMS; not implemented.
+
+Simplifications vs GAMS (intentional):
+- Q05DemTotH2: GAMS divides sector demand by prod(INFRTECH, i05EffH2Transp*(1-i05ConsSelfH2Transp));
+  we use sum(VmDemSecH2) without that transport-efficiency product (infrastructure block is $ontext).
+- Q05ScrapLftH2Prod: GAMS uses (1/lifetime)$(ord(YTIME)>14+i05ProdLftH2) and $ontext gap-share term;
+  we use 1/lifetime for all years.
+
+---
+GAMS $ontext ... $offtext (commented out in GAMS; transferred here as comments):
+$ontext
+!!                               B. Hydrogen Infrustructure
+!!
+*' Q05H2InfrArea(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+*'   V05H2InfrArea(allCy,YTIME) =E= i05PolH2AreaMax(allCy)/(1 + exp( -i05H2Adopt(allCy,"B",YTIME)*( VmDemTotH2(allCy,YTIME)/(i05HabAreaCountry(allCy)/s05AreaStyle*0.275)- i05H2Adopt(allCy,"MID",YTIME))));
+*' Q05DelivH2InfrTech(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+*'   V05DelivH2InfrTech = ( sum(SBS$(H2INFRSBS$SECTtoEF(SBS,"H2F")), VmDemSecH2/(i05EffH2Transp*(1-i05ConsSelfH2Transp)) )$H2INFRDNODES + sum(INFRTECH2$H2NETWORK, V05DelivH2InfrTech(INFRTECH2)/(i05EffH2Transp*(1-i05ConsSelfH2Transp)) )$(not H2INFRDNODES) )$i05PolH2AreaMax +1e-7;
+*' Q05InvNewReqH2Infra: V05InvNewReqH2Infra = ( V05DelivH2InfrTech-V05DelivH2InfrTech(YTIME-1) + 0 + SQRT(SQR(...)+SQR(1e-4)) )/2;
+*' Q05H2Pipe: V05H2Pipe = (55*V05InvNewReqH2Infra/(1e-3*s05DelivH2Turnpike))$TPIPA + (i05PipeH2Transp*1e6*V05InvNewReqH2Infra)$(LPIPU or HPIPI) + (s05LenH2StationConn*V05CostInvTechH2Infr(SSGG))$MPIPS + (sum(H2NETWORK,V05CostInvTechH2Infr*i05KmFactH2Transp))$(MPIPU or HPIPU) + (V05InvNewReqH2Infra/s05SalesH2Station*1E3)$SSGG;
+*' Q05CostInvTechH2Infr: 1e-6*(i05CostInvH2Transp/V05H2InfrArea*V05CostInvTechH2Infr)$TPIPA + ... + (i05CostInvH2Transp*V05InvNewReqH2Infra)$SSGG;
+*' Q05CostTechH2Infr: ((imDisc("H2INFR")*exp(...)/i05TranspLftH2)/(exp(...)-1))*V05CostInvCummH2Transp*(1+i05CostInvFOMH2)/i05AvailRateH2Transp + i05CostInvVOMH2 * ... + (i05ConsSelfH2Transp*V05InvNewReqH2Infra*(VmCostAvgProdH2(YTIME-1)$HPIPU + VmPriceFuelSubsecCarVal*1e3)$SSGG)$(SSGG or HPIPU) /V05InvNewReqH2Infra;
+*' Q05CostInvCummH2Transp: V05CostInvCummH2Transp = sum(YYTIME$(an$(ord<=ord(YTIME)), V05CostTechH2Infr*V05InvNewReqH2Infra*exp(0.04*(ord(YTIME)-ord(YYTIME)))) / sum(YYTIME$, V05InvNewReqH2Infra);
+*' Q05TariffH2Infr: V05TariffH2Infr = i05CostAvgWeight*V05H2Pipe + (1-i05CostAvgWeight)*V05CostTechH2Infr;
+*' Q05PriceH2Infr(allCy,SBS,YTIME)$(TIME $SECTTECH(SBS,"H2F") $runCy): V05PriceH2Infr = sum(INFRTECH$H2INFRSBS(INFRTECH,SBS), V05TariffH2Infr);
+*' Q05CostTotH2(allCy,SBS,YTIME)$(TIME $SECTTECH(SBS,"H2F") $runCy): V05CostTotH2 = V05PriceH2Infr+VmCostAvgProdH2;
+*' *Q05ProdCapH2Tech(allCy,H2TECH,YTIME)
+$offtext
+---
 """
 from pyomo.core import ConcreteModel, Constraint, value as pyo_value
 from pyomo.environ import exp, sqrt
@@ -328,3 +354,21 @@ def add_hydrogen_equations(m: ConcreteModel, core_sets_obj) -> None:
         return mod.V05CaptRateH2[cy, ht, y] == base / (denom + _EPS)
 
     m.Q05CaptRateH2 = Constraint(run_cy, h2tech, ytime, rule=_q05_capt_rate)
+
+# --- GAMS equations.gms $ontext ... $offtext (full block, commented out in GAMS), transferred as comments ---
+# $ontext
+# !!                               B. Hydrogen Infrustructure
+# !! Q05H2InfrArea(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+# !!   V05H2InfrArea(allCy,YTIME) =E= i05PolH2AreaMax(allCy)/(1 + exp( -i05H2Adopt(allCy,"B",YTIME)*( VmDemTotH2(allCy,YTIME)/(i05HabAreaCountry(allCy)/s05AreaStyle*0.275)- i05H2Adopt(allCy,"MID",YTIME))));
+# !! Q05DelivH2InfrTech(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+# !!   V05DelivH2InfrTech = ( (sum(SBS$(H2INFRSBS(INFRTECH,SBS) $SECTtoEF(SBS,"H2F")), VmDemSecH2/(i05EffH2Transp*(1-i05ConsSelfH2Transp))) )$H2INFRDNODES(INFRTECH) + sum(INFRTECH2$H2NETWORK(INFRTECH,INFRTECH2), V05DelivH2InfrTech(INFRTECH2)/(i05EffH2Transp*(1-i05ConsSelfH2Transp))))$(not H2INFRDNODES(INFRTECH)) )$i05PolH2AreaMax(allCy) +1e-7;
+# !! Q05InvNewReqH2Infra: V05InvNewReqH2Infra = ( V05DelivH2InfrTech-V05DelivH2InfrTech(YTIME-1) + 0 + SQRT(SQR(...)+SQR(1e-4)) )/2;
+# !! Q05H2Pipe: V05H2Pipe = (55*V05InvNewReqH2Infra/(1e-3*s05DelivH2Turnpike))$sameas("TPIPA",INFRTECH) + (i05PipeH2Transp*1e6*V05InvNewReqH2Infra)$(LPIPU or HPIPI) + ... + (V05InvNewReqH2Infra/s05SalesH2Station*1E3)$sameas("SSGG",INFRTECH);
+# !! Q05CostInvTechH2Infr: 1e-6*(i05CostInvH2Transp/V05H2InfrArea*V05CostInvTechH2Infr)$TPIPA + ... + (i05CostInvH2Transp*V05InvNewReqH2Infra)$SSGG;
+# !! Q05CostTechH2Infr: ((imDisc("H2INFR")*exp(...)/(exp(...)-1))*V05CostInvCummH2Transp*(1+i05CostInvFOMH2)/i05AvailRateH2Transp + i05CostInvVOMH2)*... + (i05ConsSelfH2Transp*V05InvNewReqH2Infra*(VmCostAvgProdH2(YTIME-1)$HPIPU + VmPriceFuelSubsecCarVal*1e3)$SSGG)$(SSGG or HPIPU) /V05InvNewReqH2Infra;
+# !! Q05CostInvCummH2Transp: V05CostInvCummH2Transp = sum(YYTIME$(an(YYTIME)$(ord(YYTIME)<=ord(YTIME))), V05CostTechH2Infr*V05InvNewReqH2Infra*exp(0.04*(ord(YTIME)-ord(YYTIME)))) / sum(YYTIME$(an(YYTIME)$(ord(YYTIME)<=ord(YTIME))), V05InvNewReqH2Infra);
+# !! Q05TariffH2Infr: V05TariffH2Infr = i05CostAvgWeight*V05H2Pipe + (1-i05CostAvgWeight)*V05CostTechH2Infr;
+# !! Q05PriceH2Infr(allCy,SBS,YTIME)$(TIME $SECTTECH(SBS,"H2F") $runCy): V05PriceH2Infr = sum(INFRTECH$H2INFRSBS(INFRTECH,SBS), V05TariffH2Infr);
+# !! Q05CostTotH2(allCy,SBS,YTIME)$(TIME $SECTTECH(SBS,"H2F") $runCy): V05CostTotH2 = V05PriceH2Infr+VmCostAvgProdH2;
+# !! *Q05ProdCapH2Tech(allCy,H2TECH,YTIME)
+# $offtext

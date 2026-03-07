@@ -6,6 +6,24 @@ costs, CCS/no-CCS shares, demand gap, and fuel consumption. Core provides imDisc
 imCo2EmiFac (with H2P), NAPtoALLSBS; 04 provides V04CapexFixCostPG, i04VarCost, i04AvailRate.
 03_RestOfEnergy already declares VmDemTotH2, VmDemSecH2, VmConsFuelH2Prod; this module
 declares V05*, VmProdH2, VmCostAvgProdH2, VmConsFuelTechH2Prod.
+
+--- GAMS $ontext ... $offtext (commented out in GAMS; transferred as comments) ---
+$ontext
+*'                **Infrastructure Variables**
+V05H2InfrArea(allCy, YTIME)                       "Number of stylised areas covered by H2 infrastructure"
+V05DelivH2InfrTech(allCy, INFRTECH, YTIME)        "Hydrogen delivered by infrastructure technology in Mtoe"
+V05InvNewReqH2Infra(allCy, INFRTECH, YTIME)       "New infrastructure requirements in Mtoe of delivered hydrogen"
+V05H2Pipe(allCy, INFRTECH, YTIME)                 "Required capacity to meet the new infrastructure requirements"
+                                                    !! - km of pipelines, !! - number of service stations
+V05CostInvTechH2Infr(allCy, INFRTECH, YTIME)      "Investment cost of infrastructure by technology in Million Euros (MEuro)"
+V05CostInvCummH2Transp(allCy, INFRTECH, YTIME)    "Average cost of infrastructure Euro per toe"
+V05CostTechH2Infr(allCy, INFRTECH, YTIME)         "Marginal cost by infrastructure technology in Euro"
+V05TariffH2Infr(allCy, INFRTECH, YTIME)           "Tarrif paid by the final consumer ... Euro per toe annual"
+V05PriceH2Infr(allCy, SBS, YTIME)                 "Hydrogen distribution and storage price paid by final consumer in Euro per toe annual"
+V05CostTotH2(allCy, SBS, YTIME)                   "Total Hydrogen Cost Per Sector in Euro per toe"
+*' *** Miscellaneous
+*V05ProdCapH2Tech(allCy, H2TECH, YTIME)           "Production capacity by H2 production technology"
+$offtext
 """
 from pyomo.core import ConcreteModel, Param, Var
 from pyomo.environ import Reals

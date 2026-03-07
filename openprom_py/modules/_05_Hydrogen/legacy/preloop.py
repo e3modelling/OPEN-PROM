@@ -5,10 +5,35 @@ Mirrors modules/05_Hydrogen/legacy/preloop.gms. Sets bounds on V05GapShareH2Tech
 V05DemGapH2, VmDemTotH2, VmProdH2, V05ScrapLftH2Prod, V05CostProdH2Tech, V05ShareCCSH2Prod,
 V05ShareNoCCSH2Prod, VmConsFuelH2Prod, V05CostProdCCSNoCCSH2Prod, VmCostAvgProdH2,
 V05PremRepH2Prod, V05CaptRateH2; fixes for datay where applicable.
+Also: VmConsFuelTechH2Prod.FX at base year = VmProdH2.L/i05EffH2Prod (GAMS parity).
 """
 from pyomo.core import ConcreteModel, value as pyo_value
 
 from core import sets as core_sets
+
+# --- GAMS preloop.gms commented-out lines, transferred as comments ---
+# *V05CostTotH2.L(runCy,SBS,YTIME) = 2;
+# *V05CostTotH2.FX(runCy,TRANSE,YTIME)$(not An(YTIME)) = imFuelPrice(runCy,TRANSE,"H2F",YTIME)$(not An(YTIME));
+# *V05CostTotH2.FX(runCy,"PG",YTIME)$(not An(YTIME))   = imFuelPrice(runCy,"PG","H2F",YTIME)$(not An(YTIME));
+# *V05CostTotH2.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = imFuelPrice(runCy,INDDOM,"STE1AH2F",YTIME)$(not An(YTIME));
+# *display V05CostTotH2.L;
+# *VmConsFuelTechH2Prod.L(runCy,H2TECH,EF,YTIME)$(not An(YTIME)$H2TECHEFtoEF(H2TECH,EF)) = 0;
+# (VmConsFuelTechH2Prod.FX at base year is implemented in code below)
+# *V05DelivH2InfrTech.L(runCy,INFRTECH,YTIME) = 2;
+# *V05DelivH2InfrTech.FX(runCy,INFRTECH,YTIME)$(not An(YTIME)) = 1e-5;
+# *V05DelivH2InfrTech.FX(runCy,INFRTECH,"%fBaseY%") = 0;
+# *V05CostVarProdH2Tech.LO(runCy,H2TECH,YTIME) = epsilon6;
+# *V05InvNewReqH2Infra.L(runCy,INFRTECH,YTIME) = 2;
+# *V05InvNewReqH2Infra.FX(runCy,INFRTECH,YTIME)$(not An(YTIME)) = 1e-5;
+# *V05CostInvTechH2Infr.L(runCy, INFRTECH,YTIME) = 2;
+# *V05CostInvTechH2Infr.FX(runCy, INFRTECH,YTIME)$(not An(YTIME)) = 1e-5;
+# *V05CostInvCummH2Transp.L(runCy,INFRTECH,YTIME) = 2;
+# *V05CostInvCummH2Transp.FX(runCy,INFRTECH,YTIME)$(not An(YTIME)) = 1e-5;
+# *V05TariffH2Infr.L(runCy,INFRTECH,YTIME) = 2;
+# *V05TariffH2Infr.FX(runCy,INFRTECH,YTIME) $(not An(YTIME)) = 1e-5;
+# *V05PriceH2Infr.L(runCy,SBS,YTIME) = 2;
+# *V05PriceH2Infr.FX(runCy,SBS,YTIME)  $(not An(YTIME)) = 1e-5;
+# *V05H2InfrArea.L(runCy,YTIME) = 0.001;
 
 
 def _pval(m, param, *idx):
@@ -167,6 +192,20 @@ def apply_hydrogen_preloop(m: ConcreteModel, core_sets_obj) -> None:
                     m.V05CaptRateH2[cy, ht, y].setlb(0.0)
                     if y in datay:
                         m.V05CaptRateH2[cy, ht, y].fix(_pval(m, m.i05CaptRateH2Prod, ht) or 0.0)
+                except Exception:
+                    pass
+
+    # VmConsFuelTechH2Prod.FX at base year = VmProdH2.L / i05EffH2Prod (GAMS: runCy,H2TECH,EF,"%fBaseY%")
+    base_y = getattr(core_sets_obj, "tFirst", None)
+    if base_y is not None and hasattr(base_y, "__iter__") and not isinstance(base_y, str):
+        base_y = next(iter(base_y), None)
+    if base_y is not None:
+        for cy in run_cy:
+            for (ht, ef_) in h2techeftoef:
+                try:
+                    prod = pyo_value(m.VmProdH2[cy, ht, base_y]) or 0.0
+                    eff = _pval(m, m.i05EffH2Prod, cy, ht, base_y) or 1.0
+                    m.VmConsFuelTechH2Prod[cy, ht, ef_, base_y].fix(prod / (eff + 1e-10))
                 except Exception:
                     pass
 

@@ -263,14 +263,18 @@ def apply_rest_of_energy_preloop(m, core_sets_obj) -> None:
                             tot += _pval(m.imFuelConsPerFueSub, cy, nn, efs_, y)
                     m.VmConsFinNonEne[cy, efs_, y].fix(tot)
 
-    # 16) Stub variables: fix to 0 so equations are well-defined. Skip H2 vars when 05_Hydrogen is loaded.
+    # 16) Stub variables: fix to 0 so equations are well-defined. Skip H2 vars when 05_Hydrogen is loaded; skip CDR when 06_CO2 is loaded.
     h2_stubs = ("VmConsFuelH2Prod", "VmDemTotH2", "VmDemSecH2")
+    cdr_stubs = ("VmConsFuelCDRProd",)
     skip_h2 = hasattr(m, "VmProdH2")  # 05_Hydrogen legacy declares VmProdH2
+    skip_cdr = hasattr(m, "V06CapCDR")  # 06_CO2 legacy defines VmConsFuelCDRProd via Q06ConsFuelCDRProd
     for stub_name in (
         "V04ProdElecEstCHP", "VmProdSte", "VmConsFuelElecProd", "VmConsFuelSteProd",
         "VmConsFuelH2Prod", "VmConsFuelCDRProd", "VmDemTotH2", "VmProdElec", "VmDemTotSte",
     ):
         if skip_h2 and stub_name in h2_stubs:
+            continue
+        if skip_cdr and stub_name in cdr_stubs:
             continue
         var = getattr(m, stub_name, None)
         if var is None:
