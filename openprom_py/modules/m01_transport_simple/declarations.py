@@ -10,7 +10,7 @@ from pyomo.core import ConcreteModel, Param, Var
 from pyomo.environ import Reals
 
 from core import sets as core_sets
-from modules.transport_simple import sets as t_sets
+from modules.m01_transport_simple import sets as t_sets
 
 
 def add_transport_parameters(m: ConcreteModel, core_sets_obj) -> None:
@@ -52,8 +52,17 @@ def add_transport_parameters(m: ConcreteModel, core_sets_obj) -> None:
     m.i01SFCPC = Param(run_cy, ttech, ef, ytime, mutable=True, default=0.0, initialize={})
     # Population (YTIME, allCy) — for ownership level
     m.i01Pop = Param(ytime, run_cy, mutable=True, default=0.001, initialize={})
-    # GDP (YTIME, allCy)
+    # GDP (YTIME, allCy) — billion US$2015
     m.i01GDP = Param(ytime, run_cy, mutable=True, default=1.0, initialize={})
+    # GDP-dependent passenger cars market extension (allCy)
+    m.i01GdpPassCarsMarkExt = Param(run_cy, mutable=True, default=1.0, initialize={})
+    # Passenger cars scrapping rate (allCy) — used in calibration
+    m.i01PassCarsScrapRate = Param(run_cy, mutable=True, default=0.05, initialize={})
+
+    # --- Commented out in GAMS (01_Transport/simple/declarations.gms) ---
+    # *Q01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME) "Compute Specific Fuel Consumption"
+    # *q01DemFinEneSubTransp(allCy,TRANSE,YTIME) "Compute final energy demand in transport"
+    # *v01DemFinEneSubTransp(allCy,TRANSE,YTIME) "Final energy demand in transport subsectors (Mtoe)"
 
 
 def add_transport_variables(m: ConcreteModel, core_sets_obj) -> None:
@@ -112,3 +121,6 @@ def add_transport_variables(m: ConcreteModel, core_sets_obj) -> None:
     m.VmDemFinEneTranspPerFuel = Var(run_cy, trans, ef, ytime, domain=Reals, bounds=(0, None), initialize=1.0)
     # Technical lifetime (shared; fixed in preloop for non-PC and historical PC)
     m.VmLft = Var(run_cy, dsbs, tech, ytime, domain=Reals, bounds=(0, None), initialize=10.0)
+
+    # --- Commented out in GAMS (01_Transport/simple/declarations.gms) ---
+    # *v01DemFinEneSubTransp(allCy,TRANSE,YTIME) "Final energy demand in transport subsectors (Mtoe)"

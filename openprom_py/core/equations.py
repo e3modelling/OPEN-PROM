@@ -9,6 +9,10 @@ GAMS (core/equations.gms):
 
 We implement only the non-calibration case: constraint vDummyObj == 1 and
 objective minimize vDummyObj, so the single feasible value is 1.
+
+Commented out in GAMS (when Calibration == MatCalibration): qDummyObj becomes
+a sum of squares of (V04SharePowPlaNewEq - t04SharePowPlaNewEq) and
+(V01ShareTechTr - t01NewShareStockPC); qRestrain ties imMatrFactor to common().
 """
 from pyomo.core import ConcreteModel, Constraint, Objective, minimize
 

@@ -1,9 +1,9 @@
 """
-Core parameter and variable declarations.
+Core parameter and variable declarations for OPEN-PROM.
 
 Adds to a Pyomo ConcreteModel all core parameters and variables defined in
-core/declarations.gms that are needed for the dummy objective and for the
-Transport module (and for preloop fixes). Index sets are taken from core/sets
+core/declarations.gms that are needed for the dummy objective, Transport (01),
+Industry (02), and RestOfEnergy (03) modules. Index sets come from core/sets
 and from core_sets_obj (runCy, ytime).
 
 Does not add VmPriceFuelSubsecCarVal, VmPriceFuelAvgSub, VmSubsiDemTech — those
@@ -22,6 +22,8 @@ def add_core_parameters(m: ConcreteModel, core_sets_obj: core_sets.CoreSets) -> 
 
     All are mutable so that load_core_data_into_model() can fill them from CSV.
     Defaults are set for sparse access; unused indices return the default.
+    Parameters used by RestOfEnergy (03): imRateLossesFinCons, imDistrLosses,
+    imFuelImports, imFuelExprts.
     """
     run_cy = core_sets_obj.runCy
     ytime = core_sets_obj.ytime
@@ -30,11 +32,25 @@ def add_core_parameters(m: ConcreteModel, core_sets_obj: core_sets.CoreSets) -> 
     trans = list(core_sets.TRANSE)
     tech = list(core_sets.TECH)
     ef = list(core_sets.EF)
+    efs = list(core_sets.EFS)  # Supply-side energy form aggregate (used by 03_RestOfEnergy)
     kpdl = list(core_sets.KPDL)
 
-    # Scalars (GAMS: smTWhToMtoe, epsilon6)
+    # --- Scalars: conversion factors and small constants ---
+    # smTWhToMtoe: TWh to Mtoe (e.g. for electricity output in balance equations)
     m.smTWhToMtoe = Param(within=Reals, default=0.086, mutable=False)
+    # epsilon6: small number to avoid division by zero in ratio constraints
     m.epsilon6 = Param(within=Reals, default=1e-6, mutable=False)
+    # sUnitToKUnit: units to thousands (e.g. vehicles to k-vehicles)
+    m.sUnitToKUnit = Param(within=Reals, default=1000.0, mutable=False)
+
+    # imCo2EmiFac(allCy, SBS, EF, YTIME) — CO2 emission factor (kgCO2/kgoe). Include PG, H2P, STEAMP for 04.
+    sbs_and_supply = list(sbs) + ["PG", "H2P", "STEAMP"]
+    m.imCo2EmiFac = Param(
+        run_cy, sbs_and_supply, ef, ytime,
+        mutable=True,
+        default=0.0,
+        initialize={},
+    )
 
     # PDL coefficients: set in preloop, not from CSV
     m.imFPDL = Param(
@@ -60,9 +76,9 @@ def add_core_parameters(m: ConcreteModel, core_sets_obj: core_sets.CoreSets) -> 
         initialize={},
     )
 
-    # imDisc(allCy, SBS, YTIME)
+    # imDisc(allCy, SBS, YTIME). SBS includes supply sectors PG, H2P, STEAMP for 04_PowerGeneration.
     m.imDisc = Param(
-        run_cy, sbs, ytime,
+        run_cy, sbs_and_supply, ytime,
         mutable=True,
         default=0.1,
         initialize={},
@@ -158,6 +174,89 @@ def add_core_parameters(m: ConcreteModel, core_sets_obj: core_sets.CoreSets) -> 
         initialize={},
     )
 
+    # -------------------------------------------------------------------------
+    # Parameters used by module 03_RestOfEnergy (energy balance, losses, trade)
+    # -------------------------------------------------------------------------
+
+    # imRateLossesFinCons(allCy, EFS, YTIME): Rate of distribution losses over
+    # "available for final consumption". Used in Q03LossesDistr. Formula in GAMS:
+    # imDistrLosses / (sum over DSBS of imFuelConsPerFueSub + i03PrimProd for CRO);
+    # for future years set to base-year value. Unit: (1).
+    m.imRateLossesFinCons = Param(
+        run_cy, efs, ytime,
+        mutable=True,
+        default=0.0,
+        initialize={},
+    )
+
+    # imDistrLosses(allCy, EF, YTIME): Distribution losses by fuel (Mtoe).
+    # Used to compute imRateLossesFinCons in 03 input and to fix VmLossesDistr in preloop.
+    m.imDistrLosses = Param(
+        run_cy, ef, ytime,
+        mutable=True,
+        default=0.0,
+        initialize={},
+    )
+
+    # imFuelImports(allCy, EF, YTIME): Fuel imports (Mtoe). Used in 03 preloop
+    # to fix V03Imp for natural gas in historical years.
+    m.imFuelImports = Param(
+        run_cy, ef, ytime,
+        mutable=True,
+        default=0.0,
+        initialize={},
+    )
+
+    # imFuelExprts(allCy, EF, YTIME): Fuel exports (Mtoe). Used in Q03Exp and
+    # 03 preloop to fix V03Exp in historical years.
+    m.imFuelExprts = Param(
+        run_cy, ef, ytime,
+        mutable=True,
+        default=0.0,
+        initialize={},
+    )
+
+    # -------------------------------------------------------------------------
+    # Parameters used by module 04_PowerGeneration (plant efficiency, capacity, GW->TWh)
+    # -------------------------------------------------------------------------
+
+    # imPlantEffByType(allCy, PGALL, YTIME): Plant efficiency per plant type (1). From iDataPlantEffByType.
+    pgall = list(core_sets.PGALL)
+    m.imPlantEffByType = Param(
+        run_cy, pgall, ytime,
+        mutable=True,
+        default=0.35,
+        initialize={},
+    )
+    # imCO2CaptRate(PGALL): CO2 capture rate for CCS plants (1). GAMS: 0.90 for CCS(PGALL).
+    m.imCO2CaptRate = Param(
+        pgall,
+        mutable=True,
+        default=0.0,
+        initialize={},
+    )
+    # imInstCapPastNonCHP(allCy, PGALL, YTIME): Installed non-CHP capacity past (GW). From core input.
+    m.imInstCapPastNonCHP = Param(
+        run_cy, pgall, ytime,
+        mutable=True,
+        default=0.0,
+        initialize={},
+    )
+    # imInstCapPastCHP(allCy, EF, YTIME): Installed CHP capacity by fuel (GW). From core input.
+    m.imInstCapPastCHP = Param(
+        run_cy, ef, ytime,
+        mutable=True,
+        default=0.0,
+        initialize={},
+    )
+    # smGwToTwhPerYear(YTIME): Convert GW mean power to TWh/year (8.76 or 8.784 for leap years).
+    m.smGwToTwhPerYear = Param(
+        ytime,
+        mutable=True,
+        default=8.76,
+        initialize={},
+    )
+
 
 def add_core_variables(m: ConcreteModel, core_sets_obj: core_sets.CoreSets) -> None:
     """
@@ -202,4 +301,18 @@ def add_core_variables(m: ConcreteModel, core_sets_obj: core_sets.CoreSets) -> N
         domain=Reals,
         bounds=(0, None),
         initialize=0.0,
+    )
+    # CO2 sequestration cost (allCy, YTIME) — used by Industry
+    m.VmCstCO2SeqCsts = Var(
+        run_cy, ytime,
+        domain=Reals,
+        bounds=(0, None),
+        initialize=1.0,
+    )
+    # Electricity price index for industry (allCy, YTIME)
+    m.VmPriceElecInd = Var(
+        run_cy, ytime,
+        domain=Reals,
+        bounds=(0, None),
+        initialize=1.0,
     )

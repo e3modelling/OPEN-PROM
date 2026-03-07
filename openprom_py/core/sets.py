@@ -57,11 +57,57 @@ EF = (
     "BGSL", "BKRS", "H2F", "ELC", "HEATPUMP",
 )
 
+# EFS = energy forms on the supply side (same as EF but used in supply/balance equations)
+# STE = steam (output of CHP/heat sector); used in RestOfEnergy (03).
 EFS = (
     "HCL", "LGN", "CRO", "LPG", "GSL", "KRS", "GDO", "RFO", "OLQ", "NGS", "OGS",
     "NUC", "STE", "HYD", "WND", "SOL", "BMSWAS", "GEO", "MET", "ETH", "BGDO",
     "BGSL", "BKRS", "H2F", "ELC",
 )
+
+# -----------------------------------------------------------------------------
+# Supply-side sectors and mappings (GAMS: SSBS, SECtoEFPROD, EFtoEFS, TOCTEF, IMPEF, H2EF)
+# Used by module 03_RestOfEnergy for energy balance (transformation, primary prod, etc.)
+# -----------------------------------------------------------------------------
+
+# SSBS = supply subsectors (electricity PG, hydrogen H2P, heat STEAMP, liquids LQD, solids SLD, gas GAS, CHP)
+SSBS = ("PG", "H2P", "STEAMP", "LQD", "SLD", "GAS", "CHP")
+
+# SECtoEFPROD(SSBS, EFS) = which energy forms are *produced* by each supply sector
+# Example: LQD produces CRO, GSL, BGSL, GDO, ...; SLD produces HCL, LGN, BMSWAS.
+_SECTOEFPROD_LIST = [
+    ("SLD", "HCL"), ("SLD", "LGN"), ("SLD", "BMSWAS"),
+    ("LQD", "CRO"), ("LQD", "GSL"), ("LQD", "BGSL"), ("LQD", "GDO"), ("LQD", "BGDO"),
+    ("LQD", "RFO"), ("LQD", "LPG"), ("LQD", "KRS"), ("LQD", "BKRS"), ("LQD", "OLQ"),
+    ("LQD", "MET"), ("LQD", "ETH"),
+    ("GAS", "NGS"), ("GAS", "OGS"),
+    ("PG", "ELC"), ("PG", "NUC"),
+    ("H2P", "H2F"),
+    ("STEAMP", "STE"),
+]
+SECtoEFPROD: Set[Tuple[str, str]] = set(_SECTOEFPROD_LIST)
+
+# EFtoEFS(EF, EFS) = demand-side fuel EF maps to supply-side aggregate EFS (for balance reporting)
+# Used in Q03ConsFinEneCountry: sum over EF where EFtoEFS(EF,EFS) and SECtoEF(INDDOM,EF).
+# Most map 1:1; GAMS has (BGDO,BGSL,BKRS,ETH,BMSWAS).BMSWAS and similar. We use 1:1 for EF in EFS.
+_EFTOEFS_LIST: List[Tuple[str, str]] = [(e, e) for e in EFS]
+# Biofuels / other: map to parent EFS where needed (BGDO->GDO etc. already in EFS as separate)
+_EFTOEFS_LIST.extend([("BGSL", "GSL"), ("BGDO", "GDO"), ("BKRS", "KRS"), ("ETH", "ETH"), ("BMSWAS", "BMSWAS")])
+EFtoEFS: Set[Tuple[str, str]] = set(_EFTOEFS_LIST)
+
+# TOCTEF = energy forms produced by power/boilers (ELC, STE). Used in Q03OutTransfCHP.
+TOCTEF = ("ELC", "STE")
+
+# IMPEF = energy forms in imports/exports (used in Q03Exp, Q03Imp). Subset of EFS.
+IMPEF = ("LGN", "HCL", "CRO", "GSL", "GDO", "RFO", "LPG", "KRS", "OLQ", "NGS", "OGS", "ELC")
+
+# H2EF = hydrogen (single element set for equation guards)
+H2EF = ("H2F",)
+
+# STEAM(EFS) = steam for equation guards
+STEAM_EFS = ("STE",)
+
+# Commented out in GAMS (03_RestOfEnergy/legacy/sets.gms): TRANSFSECS /PG,H2P,CHP,STEAMP,LQD,SLD,GAS,H2INFR/
 
 # Transport technologies
 TTECH = (
@@ -87,8 +133,56 @@ PGALL = (
     "ATHCOALCCS", "ATHLGNCCS", "ATHGASCCS", "PGAWNO", "PGH2F",
 )
 
-# PGEF = energy forms used for steam production (subset of EFS)
+# PGEF = energy forms used in power generation (EFS that appear in PGALLtoEF)
 PGEF = ("LGN", "HCL", "GDO", "RFO", "NGS", "OGS", "NUC", "HYD", "BMSWAS", "SOL", "GEO", "WND", "ELC", "STE", "H2F")
+
+# Power generation subsets and mappings (GAMS: PGREN, PGRENSW, PGSCRN, CCS, NOCCS, CCS_NOCCS, PGOTH, PGECONCHAR, PGALLtoEF)
+# PGREN = renewable plants with saturation (used in share/cost equations)
+PGREN = ("PGLHYD", "PGSHYD", "PGAWND", "PGSOL", "PGCSP", "PGOTHREN", "PGAWNO")
+# PGREN2 = renewable + nuclear + CCS + H2 (for VmRenValue term: exclude these from fuel cost)
+PGREN2 = ("PGLHYD", "PGSHYD", "PGAWND", "PGSOL", "PGCSP", "PGOTHREN", "PGAWNO", "PGANUC", "ATHCOALCCS", "ATHLGNCCS", "ATHGASCCS", "PGH2F")
+# PGRENSW = solar and wind (for RES share / capex rate)
+PGRENSW = ("PGSOL", "PGCSP", "PGAWND", "PGAWNO")
+# PGSCRN = plants not subject to endogenous scrapping (V04IndxEndogScrap = 1)
+PGSCRN = ("ATHBMSWAS", "PGLHYD", "PGSHYD", "PGAWND", "PGSOL", "PGCSP", "PGANUC", "ATHCOALCCS", "ATHLGNCCS", "ATHGASCCS", "PGAWNO", "PGOTHREN", "ATHBMSCCS", "PGH2F")
+# CCS (PGALL) = plants with CCS
+CCS_PG = ("ATHCOALCCS", "ATHLGNCCS", "ATHGASCCS", "ATHBMSCCS")
+# NOCCS (PGALL) = plants that can have CCS but are the non-CCS version
+NOCCS_PG = ("ATHLGN", "ATHCOAL", "ATHGAS", "ATHBMSWAS")
+# CCS_NOCCS(PGALL, PGALL) = mapping (CCS_plant, NOCCS_plant)
+_CCS_NOCCS_LIST = [("ATHLGNCCS", "ATHLGN"), ("ATHCOALCCS", "ATHCOAL"), ("ATHGASCCS", "ATHGAS"), ("ATHBMSCCS", "ATHBMSWAS")]
+CCS_NOCCS: Set[Tuple[str, str]] = set(_CCS_NOCCS_LIST)
+# PGOTH = other power/steam data (e.g. TOTNOMCAP, TOTCAP)
+PGOTH = ("TOTCAP", "TOTNOMCAP")
+# PGECONCHAR = economic character (e.g. LFT for lifetime)
+PGECONCHAR = ("LFT",)
+# PGALLtoEF(PGALL, EFS) = which energy form each plant uses
+_PGALLTOEF_LIST = [
+    ("ATHLGN", "LGN"), ("ATHLGNCCS", "LGN"),
+    ("ATHCOAL", "HCL"), ("ATHCOALCCS", "HCL"),
+    ("ATHOIL", "GDO"),
+    ("ATHGAS", "NGS"), ("ATHGASCCS", "NGS"),
+    ("ATHBMSWAS", "BMSWAS"), ("ATHBMSCCS", "BMSWAS"),
+    ("PGANUC", "NUC"),
+    ("PGLHYD", "HYD"), ("PGSHYD", "HYD"),
+    ("PGAWND", "WND"), ("PGAWNO", "WND"),
+    ("PGSOL", "SOL"), ("PGCSP", "SOL"),
+    ("PGOTHREN", "GEO"),
+    ("PGH2F", "H2F"),
+]
+PGALLtoEF: Set[Tuple[str, str]] = set(_PGALLTOEF_LIST)
+# NAPtoALLSBS(NAP, SBS): which sectors belong to Trade vs NoTrade (for VmCarVal sum)
+# GAMS: Trade.(FD,EN,TX,...); NoTrade.(SE,AG,HOU,...)
+_NAPTOALLSBS_LIST = [
+    ("Trade", "FD"), ("Trade", "EN"), ("Trade", "TX"), ("Trade", "OE"), ("Trade", "OI"), ("Trade", "NF"), ("Trade", "CH"),
+    ("Trade", "IS"), ("Trade", "BM"), ("Trade", "PP"), ("Trade", "PG"), ("Trade", "BM_CO2"), ("Trade", "H2P"),
+    ("Trade", "STEAMP"), ("Trade", "DAC"), ("Trade", "EW"),
+]
+# Add NoTrade sectors (DSBS that are not in Trade)
+for _s in DSBS:
+    if not any(_t[1] == _s for _t in _NAPTOALLSBS_LIST):
+        _NAPTOALLSBS_LIST.append(("NoTrade", _s))
+NAPtoALLSBS: Set[Tuple[str, str]] = set(_NAPTOALLSBS_LIST)
 
 # ETYPES for elasticity parameters
 ETYPES = ("a", "b1", "b2", "b3", "b4", "b5", "c", "c1", "c2", "c3", "c4", "c5", "aend", "b3end", "b4end")
@@ -99,8 +193,25 @@ TRANSPCHAR = ("KM_VEH", "KM_VEH_TRUCK", "OCCUP_CAR", "RES_MEXTV", "RES_MEXTF")
 # TRANSUSE
 TRANSUSE = ("CAP", "LF")
 
+# Industrial / domestic / non-energy technologies (subset of TECH)
+ITECH = (
+    "TGDO", "TLPG", "TKRS", "TNGS", "TNGSCCS", "TELC", "TLGN", "THCL", "THCLCCS",
+    "TRFO", "TOLQ", "TOGS", "TSTE", "TH2F", "TGSL", "TBMSWAS",
+)
+# CCS technologies (industry)
+CCSTECH = ("TNGSCCS", "THCLCCS")
+# Non-energy subsectors (bunkers, etc.)
+NENSE = ("PCH", "NEN", "BU")
+# CDR subsectors (excluded from industry equations)
+CDR = ("DAC", "EW")
+# Electricity energy form (singleton for equation guards)
+ELCEF = ("ELC",)
+# Steam-related technologies (use PG discount in GAMS)
+TSTEAM = ("TSTE",)
+
 # SECTTECH(DSBS, TECH): which technologies are in which demand subsector
 _SECTTECH_LIST = [
+    # Transport
     ("PC", "TGSL"), ("PC", "TLPG"), ("PC", "TGDO"), ("PC", "TNGS"), ("PC", "TELC"),
     ("PC", "TPHEVGSL"), ("PC", "TPHEVGDO"), ("PC", "TCHEVGSL"), ("PC", "TCHEVGDO"), ("PC", "TH2F"),
     ("PB", "TLPG"), ("PB", "TGSL"), ("PB", "TGDO"), ("PB", "TNGS"), ("PB", "TELC"), ("PB", "TH2F"),
@@ -108,8 +219,53 @@ _SECTTECH_LIST = [
     ("PT", "TGDO"), ("PT", "TELC"), ("GT", "TGDO"), ("GT", "TELC"),
     ("PA", "TKRS"),
     ("PN", "TGDO"), ("PN", "TH2F"), ("GN", "TGDO"), ("GN", "TH2F"),
+    # Industry (INDSE)
+    ("IS", "TLGN"), ("IS", "THCL"), ("IS", "TGDO"), ("IS", "TGSL"), ("IS", "TRFO"), ("IS", "TLPG"), ("IS", "TKRS"),
+    ("IS", "TOLQ"), ("IS", "TNGS"), ("IS", "TOGS"), ("IS", "TELC"), ("IS", "TBMSWAS"), ("IS", "TSTE"), ("IS", "TH2F"),
+    ("IS", "TNGSCCS"), ("IS", "THCLCCS"),
+    ("NF", "TLGN"), ("NF", "THCL"), ("NF", "TGDO"), ("NF", "TGSL"), ("NF", "TRFO"), ("NF", "TLPG"), ("NF", "TKRS"),
+    ("NF", "TOLQ"), ("NF", "TNGS"), ("NF", "TOGS"), ("NF", "TELC"), ("NF", "TBMSWAS"), ("NF", "TSTE"), ("NF", "TH2F"),
+    ("CH", "TLGN"), ("CH", "THCL"), ("CH", "TGDO"), ("CH", "TGSL"), ("CH", "TRFO"), ("CH", "TLPG"), ("CH", "TKRS"),
+    ("CH", "TOLQ"), ("CH", "TNGS"), ("CH", "TOGS"), ("CH", "TELC"), ("CH", "TBMSWAS"), ("CH", "TSTE"), ("CH", "TH2F"),
+    ("CH", "TNGSCCS"), ("CH", "THCLCCS"),
+    ("BM", "TLGN"), ("BM", "THCL"), ("BM", "TGDO"), ("BM", "TGSL"), ("BM", "TRFO"), ("BM", "TLPG"), ("BM", "TKRS"),
+    ("BM", "TOLQ"), ("BM", "TNGS"), ("BM", "TOGS"), ("BM", "TELC"), ("BM", "TBMSWAS"), ("BM", "TSTE"), ("BM", "TH2F"),
+    ("BM", "TNGSCCS"), ("BM", "THCLCCS"),
+    ("PP", "TLGN"), ("PP", "THCL"), ("PP", "TGDO"), ("PP", "TGSL"), ("PP", "TRFO"), ("PP", "TLPG"), ("PP", "TKRS"),
+    ("PP", "TOLQ"), ("PP", "TNGS"), ("PP", "TOGS"), ("PP", "TELC"), ("PP", "TBMSWAS"), ("PP", "TSTE"), ("PP", "TH2F"),
+    ("FD", "TLGN"), ("FD", "THCL"), ("FD", "TGDO"), ("FD", "TGSL"), ("FD", "TRFO"), ("FD", "TLPG"), ("FD", "TKRS"),
+    ("FD", "TOLQ"), ("FD", "TNGS"), ("FD", "TOGS"), ("FD", "TELC"), ("FD", "TBMSWAS"), ("FD", "TSTE"), ("FD", "TH2F"),
+    ("EN", "TLGN"), ("EN", "THCL"), ("EN", "TGDO"), ("EN", "TGSL"), ("EN", "TRFO"), ("EN", "TLPG"), ("EN", "TKRS"),
+    ("EN", "TOLQ"), ("EN", "TNGS"), ("EN", "TOGS"), ("EN", "TELC"), ("EN", "TBMSWAS"), ("EN", "TSTE"), ("EN", "TH2F"),
+    ("TX", "TLGN"), ("TX", "THCL"), ("TX", "TGDO"), ("TX", "TGSL"), ("TX", "TRFO"), ("TX", "TLPG"), ("TX", "TKRS"),
+    ("TX", "TOLQ"), ("TX", "TNGS"), ("TX", "TOGS"), ("TX", "TELC"), ("TX", "TBMSWAS"), ("TX", "TSTE"), ("TX", "TH2F"),
+    ("OE", "TLGN"), ("OE", "THCL"), ("OE", "TGDO"), ("OE", "TGSL"), ("OE", "TRFO"), ("OE", "TLPG"), ("OE", "TKRS"),
+    ("OE", "TOLQ"), ("OE", "TNGS"), ("OE", "TOGS"), ("OE", "TELC"), ("OE", "TBMSWAS"), ("OE", "TSTE"), ("OE", "TH2F"),
+    ("OI", "TLGN"), ("OI", "THCL"), ("OI", "TGDO"), ("OI", "TGSL"), ("OI", "TRFO"), ("OI", "TLPG"), ("OI", "TKRS"),
+    ("OI", "TOLQ"), ("OI", "TNGS"), ("OI", "TOGS"), ("OI", "TELC"), ("OI", "TBMSWAS"), ("OI", "TSTE"), ("OI", "TH2F"),
+    # Domestic (HOU, AG, SE)
+    ("HOU", "THCL"), ("HOU", "TLPG"), ("HOU", "TKRS"), ("HOU", "TGDO"), ("HOU", "TNGS"), ("HOU", "TOGS"),
+    ("HOU", "TBMSWAS"), ("HOU", "TELC"), ("HOU", "TSTE"),
+    ("AG", "THCL"), ("AG", "TLPG"), ("AG", "TKRS"), ("AG", "TGDO"), ("AG", "TNGS"), ("AG", "TOGS"),
+    ("AG", "TBMSWAS"), ("AG", "TELC"), ("AG", "TSTE"),
+    ("SE", "THCL"), ("SE", "TLPG"), ("SE", "TKRS"), ("SE", "TNGS"), ("SE", "TOGS"), ("SE", "TELC"), ("SE", "TSTE"),
+    # Bunkers
+    ("BU", "TGDO"), ("BU", "TRFO"), ("BU", "TKRS"), ("BU", "TH2F"),
 ]
 SECTTECH: Set[Tuple[str, str]] = set(_SECTTECH_LIST)
+
+# ITECHtoEF(ITECH, EF): fuels consumed by industrial technologies (GAMS ITECHtoEF)
+_ITECHTOEF = [
+    ("TGDO", "GDO"), ("TGDO", "BGDO"),
+    ("TLPG", "LPG"),
+    ("TKRS", "KRS"), ("TKRS", "BKRS"),
+    ("TNGS", "NGS"), ("TNGSCCS", "NGS"),
+    ("TELC", "ELC"),
+    ("TLGN", "LGN"), ("THCL", "HCL"), ("THCLCCS", "HCL"),
+    ("TRFO", "RFO"), ("TOLQ", "OLQ"), ("TOGS", "OGS"), ("TGSL", "GSL"), ("TGSL", "BGSL"),
+    ("TSTE", "STE"), ("TH2F", "H2F"), ("TBMSWAS", "BMSWAS"),
+]
+ITECHtoEF: Set[Tuple[str, str]] = set(_ITECHTOEF)
 
 # TTECHtoEF(TTECH, EF): fuels consumed by transport technologies
 _TTECHTOEF = [
@@ -142,17 +298,21 @@ _SECTOEF_SUPPLY = [
     ("STEAMP", "KRS"), ("STEAMP", "NGS"), ("STEAMP", "OGS"), ("STEAMP", "OLQ"), ("STEAMP", "NUC"),
     ("STEAMP", "GEO"), ("STEAMP", "BMSWAS"), ("STEAMP", "ELC"), ("STEAMP", "H2F"),
 ]
-# Demand side: from SECTTECH + TTECHtoEF (transport)
+# Demand side: from SECTTECH + TTECHtoEF (transport) or ITECHtoEF (industry/domestic)
 _SECTOEF_DEMAND: List[Tuple[str, str]] = []
 for (dsbs, tech) in SECTTECH:
     for (t, ef) in TTECHtoEF:
+        if t == tech:
+            _SECTOEF_DEMAND.append((dsbs, ef))
+    for (t, ef) in ITECHtoEF:
         if t == tech:
             _SECTOEF_DEMAND.append((dsbs, ef))
 # INDDOM (industry/tertiary) x ELC and HEATPUMP for core preloop
 for sbs in INDDOM:
     _SECTOEF_DEMAND.append((sbs, "ELC"))
     _SECTOEF_DEMAND.append((sbs, "HEATPUMP"))
-SECtoEF: Set[Tuple[str, str]] = set(_SECTOEF_SUPPLY) | set(_SECTOEF_DEMAND)
+# Supply sector to EFS: add SECtoEFPROD so (LQD, CRO), (SLD, HCL), (GAS, NGS), etc. exist for Q03InpTotTransf
+SECtoEF: Set[Tuple[str, str]] = set(_SECTOEF_SUPPLY) | SECtoEFPROD | set(_SECTOEF_DEMAND)
 
 # PLUGIN(TECH)
 PLUGIN = {"TPHEVGSL", "TPHEVGDO"}

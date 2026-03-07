@@ -33,13 +33,14 @@ def add_price_stub_parameters(
     run_cy = core_sets_obj.runCy
     ytime = core_sets_obj.ytime
     sbs = list(core_sets.SBS)
+    sbs_and_supply = sbs + ["PG", "H2P", "STEAMP"]  # 04_PowerGeneration uses PG
     dsbs = list(core_sets.DSBS)
     ef = list(core_sets.EF)
     tech = list(core_sets.TECH)
 
     # Fuel price per subsector and fuel (k$2015/toe). Default 1.5 for feasibility.
     m.VmPriceFuelSubsecCarVal = Param(
-        run_cy, sbs, ef, ytime,
+        run_cy, sbs_and_supply, ef, ytime,
         mutable=True,
         default=1.5,
         initialize={},

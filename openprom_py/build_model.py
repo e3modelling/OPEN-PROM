@@ -1,12 +1,12 @@
 """
-Build the OPEN-PROM Pyomo model: core + price stub + 01_Transport (simple).
+Build the OPEN-PROM Pyomo model: core + price stub + 01_Transport + 02_Industry + 04_PowerGeneration + 03_RestOfEnergy.
 
 Assembly order mirrors main.gms:
   1. Sets (via CoreSets.from_config)
-  2. Declarations: core params/vars, price stub params, transport params/vars
-  3. Equations: core objective and qDummyObj, transport constraints
-  4. Preloop: core (PDL, fixes), transport (historical fixes, bounds)
-  5. Optional: load CSV data into mutable Params
+  2. Declarations: core params/vars, price stub, transport, industry, 04 power-gen, rest-of-energy params/vars
+  3. Equations: core objective and qDummyObj, transport, industry, rest-of-energy, power-gen constraints
+  4. Preloop: core (PDL, fixes), transport, industry, rest-of-energy, power-gen (historical fixes, stubs)
+  5. Optional: load CSV data into mutable Params (core, transport, rest-of-energy, power-gen)
 
 The resulting ConcreteModel has all components needed to solve one or more
 (time step, country) subproblems with an NLP solver (e.g. Ipopt).
@@ -20,9 +20,21 @@ from core.equations import add_core_objective, add_q_dummy_obj_constraint
 from core.preloop import apply_core_preloop
 from core.input_loader import load_core_data, load_core_data_into_model
 from prices_stub import add_price_stub_parameters
-from modules.transport_simple.declarations import add_transport_parameters, add_transport_variables
-from modules.transport_simple.equations import add_transport_equations
-from modules.transport_simple.preloop import apply_transport_preloop
+from modules.m01_transport_simple.input_loader import load_transport_data, load_transport_data_into_model
+from modules.m01_transport_simple.declarations import add_transport_parameters, add_transport_variables
+from modules.m01_transport_simple.equations import add_transport_equations
+from modules.m01_transport_simple.preloop import apply_transport_preloop
+from modules.m02_industry_technology.declarations import add_industry_parameters, add_industry_variables
+from modules.m02_industry_technology.equations import add_industry_equations
+from modules.m02_industry_technology.preloop import apply_industry_preloop
+from modules.m04_power_generation_simple.declarations import add_power_generation_parameters, add_power_generation_variables
+from modules.m04_power_generation_simple.equations import add_power_generation_equations
+from modules.m04_power_generation_simple.input_loader import load_power_generation_data, load_power_generation_data_into_model
+from modules.m04_power_generation_simple.preloop import apply_power_generation_preloop
+from modules.m03_rest_of_energy_legacy.declarations import add_rest_of_energy_parameters, add_rest_of_energy_variables
+from modules.m03_rest_of_energy_legacy.equations import add_rest_of_energy_equations
+from modules.m03_rest_of_energy_legacy.preloop import apply_rest_of_energy_preloop
+from modules.m03_rest_of_energy_legacy.input_loader import load_rest_of_energy_data, load_rest_of_energy_data_into_model
 
 
 def _log(msg: str) -> None:
@@ -38,7 +50,7 @@ def _log(msg: str) -> None:
 
 def build_openprom_model(config: PoCConfig, load_data: bool = True) -> ConcreteModel:
     """
-    Build the Pyomo model with core + price stub + 01_Transport (simple).
+    Build the Pyomo model with core + price stub + 01_Transport + 02_Industry (technology).
 
     If load_data is True, load CSVs from config.data_dir and fill mutable Params
     (requires data files in openprom_py/data/). If load_data is False, only
@@ -48,7 +60,7 @@ def build_openprom_model(config: PoCConfig, load_data: bool = True) -> ConcreteM
     _log("Core sets from config.")
     core_sets_obj = CoreSets.from_config(config)
 
-    # 1) Declarations: core params/vars, price stub, transport params/vars
+    # 1) Declarations: core params/vars, price stub, transport, industry params/vars
     _log("Adding core parameters and variables.")
     add_core_parameters(m, core_sets_obj)
     add_core_variables(m, core_sets_obj)
@@ -57,30 +69,60 @@ def build_openprom_model(config: PoCConfig, load_data: bool = True) -> ConcreteM
     _log("Adding transport parameters and variables.")
     add_transport_parameters(m, core_sets_obj)
     add_transport_variables(m, core_sets_obj)
+    _log("Adding industry (technology) parameters and variables.")
+    add_industry_parameters(m, core_sets_obj)
+    add_industry_variables(m, core_sets_obj)
+    _log("Adding PowerGeneration (simple) parameters and variables.")
+    add_power_generation_parameters(m, core_sets_obj, config)
+    add_power_generation_variables(m, core_sets_obj)
+    _log("Adding RestOfEnergy (legacy) parameters and variables.")
+    add_rest_of_energy_parameters(m, core_sets_obj)
+    add_rest_of_energy_variables(m, core_sets_obj)
 
-    # 2) Equations: objective (min vDummyObj), qDummyObj, and all Q01* transport constraints
+    # 2) Equations: objective, qDummyObj, transport, industry, rest-of-energy, power-gen constraints
     _log("Adding core objective and qDummyObj constraint.")
     add_core_objective(m, calibration=config.calibration)
     add_q_dummy_obj_constraint(m, core_sets_obj)
     _log("Adding transport equations.")
     add_transport_equations(m, core_sets_obj)
+    _log("Adding industry equations.")
+    add_industry_equations(m, core_sets_obj)
+    _log("Adding RestOfEnergy equations.")
+    add_rest_of_energy_equations(m, core_sets_obj)
+    _log("Adding PowerGeneration equations.")
+    add_power_generation_equations(m, core_sets_obj, config)
 
-    # 3) Preloop: PDL, core var fixes, transport historical fixes and bounds
-    _log("Applying core preloop.")
-    apply_core_preloop(m, core_sets_obj)
-    _log("Applying transport preloop.")
-    apply_transport_preloop(m, core_sets_obj)
-
-    # 4) Optional: load CSV data into mutable Params (imElastA, imActv, imTransChar, etc.)
+    # 3) Load CSV data *before* preloop so historical fixes use loaded params (e.g. imFuelConsPerFueSub)
     if load_data:
         try:
             _log("Loading data from CSV files.")
             data = load_core_data(config)
-            _log("Loading data into model.")
+            data_transport = load_transport_data(config)
+            data_rest_energy = load_rest_of_energy_data(config)
+            data_power_gen = load_power_generation_data(config)
+            _log("Loading core data into model.")
             load_core_data_into_model(m, data, core_sets_obj)
+            _log("Loading transport data into model.")
+            load_transport_data_into_model(m, data_transport, core_sets_obj, data_core=data)
+            _log("Loading RestOfEnergy data into model.")
+            load_rest_of_energy_data_into_model(m, data_rest_energy, core_sets_obj)
+            _log("Loading PowerGeneration data into model.")
+            load_power_generation_data_into_model(m, data_power_gen, core_sets_obj, config)
         except Exception as e:
             _log("Data load failed: {}".format(e))
             raise
+
+    # 4) Preloop: PDL, core var fixes, transport, industry, rest-of-energy, power-gen historical fixes and stubs
+    _log("Applying core preloop.")
+    apply_core_preloop(m, core_sets_obj)
+    _log("Applying transport preloop.")
+    apply_transport_preloop(m, core_sets_obj)
+    _log("Applying industry preloop.")
+    apply_industry_preloop(m, core_sets_obj)
+    _log("Applying RestOfEnergy preloop.")
+    apply_rest_of_energy_preloop(m, core_sets_obj)
+    _log("Applying PowerGeneration preloop.")
+    apply_power_generation_preloop(m, core_sets_obj, config)
 
     # Attach for run_poc / postsolve
     m._core_sets = core_sets_obj

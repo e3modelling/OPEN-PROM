@@ -1,6 +1,13 @@
 """
 Core preloop: PDL coefficients and variable initialisation/fixes.
 
+WHAT "PRELOOP" MEANS (plain language):
+  Before the solver runs, we set some variables to fixed numbers (e.g. historical
+  demand in past years) so the model doesn't try to "solve" them. We also set
+  bounds (e.g. "this variable must be >= 0"). This file does that for *core*
+  variables; each module (Transport, Industry, RestOfEnergy) has its own preloop
+  for its variables.
+
 Mirrors core/preloop.gms. This module:
   1. Computes Polynomial Distribution Lag (PDL) coefficients imFPDL(DSBS, KPDL)
      used in demand equations for lagged price effects.
@@ -9,6 +16,9 @@ Mirrors core/preloop.gms. This module:
 
 Does not set VmPriceFuelSubsecCarVal / VmPriceFuelAvgSub (handled by price stub)
 or VmLft (handled in transport preloop).
+
+Commented out in GAMS (core/preloop.gms): *VmRenValue.FX(YTIME)$(not AN(YTIME)) = 0;
+*VmRenValue.FX(YTIME)$(AN(YTIME)) = 0;
 """
 from typing import Any
 
@@ -90,3 +100,15 @@ def apply_core_preloop(
                     m.VmCarVal[cy, nap_, y].fix(i_carb_val_yr_exog[cy, y])
                 else:
                     m.VmCarVal[cy, nap_, y].fix(0.0)
+
+    # 5) VmCstCO2SeqCsts, VmPriceElecInd: fix for historical years (Industry module)
+    if hasattr(m, "VmCstCO2SeqCsts"):
+        for cy in run_cy:
+            for y in ytime:
+                if y in core_sets_obj.datay:
+                    m.VmCstCO2SeqCsts[cy, y].fix(1.0)
+    if hasattr(m, "VmPriceElecInd"):
+        for cy in run_cy:
+            for y in ytime:
+                if y in core_sets_obj.datay:
+                    m.VmPriceElecInd[cy, y].fix(1.0)

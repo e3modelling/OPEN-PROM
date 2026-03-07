@@ -1,6 +1,14 @@
 """
 Load core input data from CSV/CSVR files in the data folder.
 
+WHAT THIS MODULE DOES (plain language):
+  The model needs numbers for things like elasticities, activity levels, and
+  fuel consumption by sector. Those numbers live in CSV files (e.g. iElastA.csv,
+  iActv.csvr). This module reads those files and writes the values into the
+  model's "parameters" (Params). The preloop then uses those parameter values
+  to fix historical variables (e.g. fix 2010 demand to the 2010 data). So data
+  is loaded *before* preloop runs.
+
 All paths are relative to the data directory (config.data_dir), i.e. openprom_py/data/.
 File names and expected dimensions mirror core/input.gms (table/parameter declarations).
 CSV format: GAMS uses $ondelim $include "file" $offdelim, so comma-delimited with
@@ -158,6 +166,75 @@ def load_im_fuel_cons(data_dir: Path) -> Dict[tuple, float]:
     return out
 
 
+def load_im_inst_cap_past_non_chp(data_dir: Path) -> Dict[tuple, float]:
+    """imInstCapPastNonCHP(allCy, PGALL, YTIME). Installed non-CHP capacity (GW)."""
+    p = data_dir / "iInstCapPastNonCHP.csv"
+    if not p.exists():
+        return {}
+    df = pd.read_csv(p)
+    cols = df.columns.tolist()
+    year_cols = [c for c in cols if str(c).isdigit()]
+    idx_cols = [c for c in cols if c not in year_cols]
+    out = {}
+    for _, row in df.iterrows():
+        if len(idx_cols) >= 2:
+            cy, pg = row[idx_cols[0]], row[idx_cols[1]]
+        else:
+            cy, pg = row[0], row[1]
+        for ycol in year_cols:
+            try:
+                out[(cy, pg, int(ycol))] = float(row[ycol])
+            except (TypeError, ValueError):
+                continue
+    return out
+
+
+def load_im_inst_cap_past_chp(data_dir: Path) -> Dict[tuple, float]:
+    """imInstCapPastCHP(allCy, EF, YTIME). Installed CHP capacity by fuel (GW)."""
+    p = data_dir / "iInstCapPastCHP.csv"
+    if not p.exists():
+        return {}
+    df = pd.read_csv(p)
+    cols = df.columns.tolist()
+    year_cols = [c for c in cols if str(c).isdigit()]
+    idx_cols = [c for c in cols if c not in year_cols]
+    out = {}
+    for _, row in df.iterrows():
+        if len(idx_cols) >= 2:
+            cy, ef = row[idx_cols[0]], row[idx_cols[1]]
+        else:
+            cy, ef = row[0], row[1]
+        for ycol in year_cols:
+            try:
+                out[(cy, ef, int(ycol))] = float(row[ycol])
+            except (TypeError, ValueError):
+                continue
+    return out
+
+
+def load_i_data_plant_eff_by_type(data_dir: Path) -> Dict[tuple, float]:
+    """iDataPlantEffByType(allCy, PGALL, YTIME) -> imPlantEffByType. Plant efficiency (1)."""
+    p = data_dir / "iDataPlantEffByType.csv"
+    if not p.exists():
+        return {}
+    df = pd.read_csv(p)
+    cols = df.columns.tolist()
+    year_cols = [c for c in cols if str(c).isdigit()]
+    idx_cols = [c for c in cols if c not in year_cols]
+    out = {}
+    for _, row in df.iterrows():
+        if len(idx_cols) >= 2:
+            cy, pg = row[idx_cols[0]], row[idx_cols[1]]
+        else:
+            cy, pg = row[0], row[1]
+        for ycol in year_cols:
+            try:
+                out[(cy, pg, int(ycol))] = float(row[ycol])
+            except (TypeError, ValueError):
+                continue
+    return out
+
+
 def load_core_data(config: Any) -> Dict[str, Any]:
     """
     Load all core input data used by the PoC.
@@ -189,6 +266,19 @@ def load_core_data(config: Any) -> Dict[str, Any]:
         except Exception as e:
             _data_load_log(filename, "PARSE ERROR", str(e))
             raise
+
+    # Optional: power generation related (for 04_PowerGeneration)
+    for name, filename, loader in [
+        ("imInstCapPastNonCHP", "iInstCapPastNonCHP.csv", load_im_inst_cap_past_non_chp),
+        ("imInstCapPastCHP", "iInstCapPastCHP.csv", load_im_inst_cap_past_chp),
+        ("iDataPlantEffByType", "iDataPlantEffByType.csv", load_i_data_plant_eff_by_type),
+    ]:
+        try:
+            result[name] = loader(data_dir)
+            _data_load_log(filename, "OK")
+        except Exception as e:
+            result[name] = {}
+            _data_load_log(filename, "SKIP", str(e))
     return result
 
 
@@ -247,3 +337,34 @@ def load_core_data_into_model(
         for key, val in data["imFuelCons"].items():
             if len(key) == 4 and key[0] in run_cy and key[3] in ytime:
                 m.imFuelConsPerFueSub[key] = val
+
+    # smGwToTwhPerYear(YTIME): 8.76 or 8.784 for leap years
+    if hasattr(m, "smGwToTwhPerYear"):
+        for y in ytime:
+            leap = (y % 4 == 0 and y % 100 != 0) or (y % 400 == 0)
+            m.smGwToTwhPerYear[y] = 8.784 if leap else 8.76
+
+    # imInstCapPastNonCHP, imInstCapPastCHP (optional, for 04)
+    if data.get("imInstCapPastNonCHP") and hasattr(m, "imInstCapPastNonCHP"):
+        for key, val in data["imInstCapPastNonCHP"].items():
+            if len(key) == 3 and key[0] in run_cy and key[2] in ytime:
+                m.imInstCapPastNonCHP[key] = val
+    if data.get("imInstCapPastCHP") and hasattr(m, "imInstCapPastCHP"):
+        for key, val in data["imInstCapPastCHP"].items():
+            if len(key) == 3 and key[0] in run_cy and key[2] in ytime:
+                m.imInstCapPastCHP[key] = val
+
+    # imPlantEffByType from iDataPlantEffByType; PGH2F = 0.85 (GAMS)
+    if data.get("iDataPlantEffByType") and hasattr(m, "imPlantEffByType"):
+        for key, val in data["iDataPlantEffByType"].items():
+            if len(key) == 3 and key[0] in run_cy and key[2] in ytime:
+                m.imPlantEffByType[key] = val
+        for cy in run_cy:
+            for y in ytime:
+                m.imPlantEffByType[cy, "PGH2F", y] = 0.85
+
+    # imCO2CaptRate(PGALL): 0.90 for CCS plants (GAMS)
+    if hasattr(m, "imCO2CaptRate"):
+        from core import sets as core_sets
+        for pg in core_sets.CCS_PG:
+            m.imCO2CaptRate[pg] = 0.90

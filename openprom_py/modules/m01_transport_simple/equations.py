@@ -387,6 +387,10 @@ def add_transport_equations(m, core_sets_obj):
         run_cy, trans, ef, ytime, rule=_q01_dem_fin_rule
     )
 
+    # --- Commented out in GAMS (01_Transport/legacy/equations.gms $ontext) ---
+    # q01DemFinEneSubTransp(allCy,TRANSE,YTIME)$(TIME(YTIME) $runCy(allCy))..
+    #     v01DemFinEneSubTransp(allCy,TRANSE,YTIME) =E= sum(EF, VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME));
+
     # -------------------------------------------------------------------------
     # Q01StockPcYearly: Total stock of passenger cars (million vehicles).
     # Stock = ownership ratio * (population * 1000).
