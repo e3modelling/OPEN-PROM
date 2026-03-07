@@ -45,7 +45,12 @@ def add_heat_equations(m: ConcreteModel, core_sets_obj) -> None:
     else:
         base_y = ytime[0] if ytime else None
 
-    # Q09DemTotSte: VmDemTotSte = sum(DSBS, VmConsFuel(STE)) + sum(SSBS, VmConsFiEneSec(STE)) + VmLossesDistr(STE) + V03Transfers(STE)
+    # -------------------------------------------------------------------------
+    # Q09DemTotSte (GAMS): This equation calculates the total heat demand in the system. It takes into
+    # account the overall need for steam across sectors like transportation, industry, and power generation,
+    # adjusted for any transportation losses or distribution inefficiencies.
+    # VmDemTotSte = sum(DSBS, VmConsFuel(STE)) + sum(SSBS, VmConsFiEneSec(STE)) + VmLossesDistr(STE) + V03Transfers(STE).
+    # -------------------------------------------------------------------------
     def _q09_dem_tot_ste(mod, cy, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -59,7 +64,9 @@ def add_heat_equations(m: ConcreteModel, core_sets_obj) -> None:
 
     m.Q09DemTotSte = Constraint(run_cy, ytime, rule=_q09_dem_tot_ste)
 
-    # Q09ScrapRate: V09ScrapRate = 1 - (1 - 1/i09ProdLftSte) * V09ScrapRatePremature
+    # -------------------------------------------------------------------------
+    # Q09ScrapRate (GAMS): Scrap rate of steam capacity; 1 - (1 - 1/i09ProdLftSte) * V09ScrapRatePremature.
+    # -------------------------------------------------------------------------
     def _q09_scrap_rate(mod, cy, t, y):
         if y not in time_set or cy not in run_cy or t not in tsteam:
             return Constraint.Skip
@@ -69,7 +76,10 @@ def add_heat_equations(m: ConcreteModel, core_sets_obj) -> None:
 
     m.Q09ScrapRate = Constraint(run_cy, tsteam, ytime, rule=_q09_scrap_rate)
 
-    # Q09ProdSte: VmProdSte = (1-V09ScrapRate)*VmProdSte(t-1) + V09GapShareSte*V09DemGapSte
+    # -------------------------------------------------------------------------
+    # Q09ProdSte (GAMS): Steam production by plant type; surviving capacity production plus new gap share.
+    # VmProdSte = (1-V09ScrapRate)*VmProdSte(t-1) + V09GapShareSte*V09DemGapSte.
+    # -------------------------------------------------------------------------
     def _q09_prod_ste(mod, cy, t, y):
         if y not in time_set or cy not in run_cy or t not in tsteam:
             return Constraint.Skip
@@ -79,7 +89,10 @@ def add_heat_equations(m: ConcreteModel, core_sets_obj) -> None:
 
     m.Q09ProdSte = Constraint(run_cy, tsteam, ytime, rule=_q09_prod_ste)
 
-    # Q09DemGapSte: (demand - sum((1-scrap)*prod(t-1)) + sqrt(...))/2 + 1e-6
+    # -------------------------------------------------------------------------
+    # Q09DemGapSte (GAMS): Demand gap for steam; positive part of (demand - remaining capacity production) + 1e-6.
+    # V09DemGapSte = (VmDemTotSte - sum((1-V09ScrapRate)*VmProdSte(t-1)) + sqrt(sqr(...)))/2 + 1e-6.
+    # -------------------------------------------------------------------------
     def _q09_dem_gap_ste(mod, cy, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -91,7 +104,10 @@ def add_heat_equations(m: ConcreteModel, core_sets_obj) -> None:
 
     m.Q09DemGapSte = Constraint(run_cy, ytime, rule=_q09_dem_gap_ste)
 
-    # Q09CostVarProdSte: variable cost from fuel, CO2, VOM, CHP electricity credit
+    # -------------------------------------------------------------------------
+    # Q09CostVarProdSte (GAMS): Variable cost of steam production: fuel, CO2, VOM, minus CHP electricity credit.
+    # Sum over TSTEAMTOEF of (share*price + capture*CO2 + (1-capture)*carbon*carVal)/efficiency + VOM - CHP credit for TCHP.
+    # -------------------------------------------------------------------------
     def _q09_cost_var_prod_ste(mod, cy, t, y):
         if y not in time_set or cy not in run_cy or t not in tsteam:
             return Constraint.Skip
@@ -115,7 +131,10 @@ def add_heat_equations(m: ConcreteModel, core_sets_obj) -> None:
 
     m.Q09CostVarProdSte = Constraint(run_cy, tsteam, ytime, rule=_q09_cost_var_prod_ste)
 
-    # Q09CostCapProdSte: annuity * (IC*imCGI + FC) / (powToHeat+1 for DHP) / (avail * smGwToTwhPerYear * smTWhToMtoe * 1e3)
+    # -------------------------------------------------------------------------
+    # Q09CostCapProdSte (GAMS): Capital cost of steam production (annuity). imDisc*exp(...)/(exp(...)-1) * (IC*imCGI + FC)
+    # / (i09PowToHeatRatio + 1 for DHP) / (i09AvailRateSteProd * smGwToTwhPerYear * smTWhToMtoe * 1e3).
+    # -------------------------------------------------------------------------
     def _q09_cost_cap_prod_ste(mod, cy, t, y):
         if y not in time_set or cy not in run_cy or t not in tsteam:
             return Constraint.Skip
@@ -131,7 +150,9 @@ def add_heat_equations(m: ConcreteModel, core_sets_obj) -> None:
 
     m.Q09CostCapProdSte = Constraint(run_cy, tsteam, ytime, rule=_q09_cost_cap_prod_ste)
 
-    # Q09CostProdSte: V09CostProdSte = V09CostCapProdSte + V09CostVarProdSte
+    # -------------------------------------------------------------------------
+    # Q09CostProdSte (GAMS): Total cost of steam production; V09CostProdSte = V09CostCapProdSte + V09CostVarProdSte.
+    # -------------------------------------------------------------------------
     def _q09_cost_prod_ste(mod, cy, t, y):
         if y not in time_set or cy not in run_cy or t not in tsteam:
             return Constraint.Skip
@@ -139,7 +160,10 @@ def add_heat_equations(m: ConcreteModel, core_sets_obj) -> None:
 
     m.Q09CostProdSte = Constraint(run_cy, tsteam, ytime, rule=_q09_cost_prod_ste)
 
-    # Q09CostAvgProdSte: VmCostAvgProdSte = sum((VmProdSte+1e-6)*V09CostProdSte) / sum(VmProdSte+1e-6)
+    # -------------------------------------------------------------------------
+    # Q09CostAvgProdSte (GAMS): Average cost of steam production (production-weighted). Used by 08_Prices.
+    # VmCostAvgProdSte = sum(TSTEAM, (VmProdSte+1e-6)*V09CostProdSte) / sum(TSTEAM, VmProdSte+1e-6).
+    # -------------------------------------------------------------------------
     def _q09_cost_avg_prod_ste(mod, cy, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -149,7 +173,10 @@ def add_heat_equations(m: ConcreteModel, core_sets_obj) -> None:
 
     m.Q09CostAvgProdSte = Constraint(run_cy, ytime, rule=_q09_cost_avg_prod_ste)
 
-    # Q09GapShareSte: V09GapShareSte = V09CostProdSte(t-1)**(-2) / sum(TSTEAM2, V09CostProdSte(t-1)**(-2))
+    # -------------------------------------------------------------------------
+    # Q09GapShareSte (GAMS): Share of new steam demand gap allocated to each plant type (inverse cost squared).
+    # V09GapShareSte = V09CostProdSte(t-1)**(-2) / sum(TSTEAM2, V09CostProdSte(t-1)**(-2)). !! i04MatFacPlaAvailCap commented.
+    # -------------------------------------------------------------------------
     def _q09_gap_share_ste(mod, cy, t, y):
         if y not in time_set or cy not in run_cy or t not in tsteam:
             return Constraint.Skip
@@ -160,7 +187,10 @@ def add_heat_equations(m: ConcreteModel, core_sets_obj) -> None:
 
     m.Q09GapShareSte = Constraint(run_cy, tsteam, ytime, rule=_q09_gap_share_ste)
 
-    # Q09CaptRateSte: sigmoid in VmCstCO2SeqCsts / (sum VmCarVal(STEAMP) + 1)
+    # -------------------------------------------------------------------------
+    # Q09CaptRateSte (GAMS): CO2 capture rate for steam plants; sigmoid in VmCstCO2SeqCsts/(sum VmCarVal(STEAMP)+1).
+    # i09CaptRateSteProd / (1 + EXP(20*(...))).
+    # -------------------------------------------------------------------------
     def _q09_capt_rate_ste(mod, cy, t, y):
         if y not in time_set or cy not in run_cy or t not in tsteam:
             return Constraint.Skip
@@ -173,7 +203,10 @@ def add_heat_equations(m: ConcreteModel, core_sets_obj) -> None:
 
     m.Q09CaptRateSte = Constraint(run_cy, tsteam, ytime, rule=_q09_capt_rate_ste)
 
-    # Q09ScrapRatePremature: logit-like in V09CostVarProdSte vs other techs
+    # -------------------------------------------------------------------------
+    # Q09ScrapRatePremature (GAMS): Endogenous premature scrap rate; logit-like in V09CostVarProdSte vs other techs.
+    # V09CostVarProdSte**(-2) / (V09CostVarProdSte**(-2) + (i09ScaleEndogScrap * sum(other TCHP/TDHP cost))**(-2)).
+    # -------------------------------------------------------------------------
     def _q09_scrap_rate_premature(mod, cy, t, y):
         if y not in time_set or cy not in run_cy or t not in tsteam:
             return Constraint.Skip
@@ -189,7 +222,10 @@ def add_heat_equations(m: ConcreteModel, core_sets_obj) -> None:
 
     m.Q09ScrapRatePremature = Constraint(run_cy, tsteam, ytime, rule=_q09_scrap_rate_premature)
 
-    # Q09ConsFuelSteProd: VmConsFuelSteProd(STEMODE, STEAMEF) = sum(TDHP/TCHP, VmProdSte * i09ShareFuel / i09EffSteThrm)
+    # -------------------------------------------------------------------------
+    # Q09ConsFuelSteProd (GAMS): Fuel consumption for steam production by mode (DHP/CHP) and fuel.
+    # VmConsFuelSteProd = sum(TDHP/TCHP with TSTEAMTOEF, VmProdSte * i09ShareFuel / i09EffSteThrm).
+    # -------------------------------------------------------------------------
     def _q09_cons_fuel_ste_prod(mod, cy, mode, efs_, y):
         if y not in time_set or cy not in run_cy or efs_ not in steam_ef:
             return Constraint.Skip

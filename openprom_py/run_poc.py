@@ -29,6 +29,8 @@ from modules._06_CO2.legacy.postsolve import apply_co2_postsolve
 from modules._07_Emissions.legacy.postsolve import apply_emissions_postsolve
 from modules._08_Prices.legacy.postsolve import apply_prices_postsolve
 from modules._09_Heat.heat.postsolve import apply_heat_postsolve
+from modules._10_Curves.LearningCurves.postsolve import apply_curves_postsolve
+from modules._11_Economy.economy.postsolve import apply_economy_postsolve
 from run_report import (
     create_run_archive,
     start_run_report,
@@ -294,6 +296,14 @@ def run_poc(config: Optional[PoCConfig] = None, load_data: bool = True):
                 apply_prices_postsolve(m, core_sets, year)
             except Exception as ex:
                 log_info("Prices postsolve failed: {}".format(ex))
+            try:
+                apply_curves_postsolve(m, core_sets, year)
+            except Exception as ex:
+                log_info("Curves postsolve failed: {}".format(ex))
+            try:
+                apply_economy_postsolve(m, core_sets, year)
+            except Exception as ex:
+                log_info("Economy postsolve failed: {}".format(ex))
             # Export key variable values to run directory (solution.csv)
             try:
                 solution_path = run_dir / "solution.csv"

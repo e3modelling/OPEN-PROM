@@ -127,7 +127,11 @@ def add_hydrogen_equations(m: ConcreteModel, core_sets_obj) -> None:
 
     m.Q05ScrapLftH2Prod = Constraint(run_cy, h2tech, ytime, rule=_q05_scrap_lft)
 
-    # Q05PremRepH2Prod: only for H2TECHPM
+    # -------------------------------------------------------------------------
+    # Q05PremRepH2Prod (GAMS): This equation models the premature replacement of hydrogen production capacity.
+    # It adjusts for the need to replace aging or inefficient hydrogen production technologies before their expected
+    # end of life based on economic factors such as cost, technological progress, and demand shifts. Only for H2TECHPM.
+    # -------------------------------------------------------------------------
     def _q05_prem_rep(mod, cy, ht, y):
         if y not in time_set or cy not in run_cy or ht not in h2techpm:
             return Constraint.Skip
@@ -144,7 +148,10 @@ def add_hydrogen_equations(m: ConcreteModel, core_sets_obj) -> None:
 
     m.Q05PremRepH2Prod = Constraint(run_cy, h2tech, ytime, rule=_q05_prem_rep)
 
-    # Q05CapScrapH2ProdTech
+    # -------------------------------------------------------------------------
+    # Q05CapScrapH2ProdTech (GAMS): This equation calculates the total hydrogen production capacity that is scrapped
+    # as part of the premature replacement and normal plant life cycle. Links scrapped capacity to age and retirement.
+    # -------------------------------------------------------------------------
     def _q05_cap_scrap(mod, cy, ht, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -154,7 +161,11 @@ def add_hydrogen_equations(m: ConcreteModel, core_sets_obj) -> None:
 
     m.Q05CapScrapH2ProdTech = Constraint(run_cy, h2tech, ytime, rule=_q05_cap_scrap)
 
-    # Q05DemGapH2: demand minus (1-scrap)*production last year; non-negative via (x + sqrt(x^2))/2
+    # -------------------------------------------------------------------------
+    # Q05DemGapH2 (GAMS): The hydrogen demand gap equation defines the difference between the total hydrogen demand
+    # (calculated in Q05DemTotH2) and the actual hydrogen production capacity. It ensures that the gap value is
+    # non-negative, preventing overproduction or underproduction of hydrogen. (x + sqrt(x^2))/2 for non-negativity.
+    # -------------------------------------------------------------------------
     def _q05_dem_gap(mod, cy, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -169,7 +180,11 @@ def add_hydrogen_equations(m: ConcreteModel, core_sets_obj) -> None:
 
     m.Q05DemGapH2 = Constraint(run_cy, ytime, rule=_q05_dem_gap)
 
-    # Q05CostProdH2Tech: levelized cost + variable cost; wes/wew use V04CapexFixCostPG from 04
+    # -------------------------------------------------------------------------
+    # Q05CostProdH2Tech (GAMS): This equation calculates the production costs of hydrogen, including both fixed costs
+    # (e.g., capital investment) and variable costs (e.g., operational expenses). Differentiated by hydrogen
+    # production technologies. Levelized cost + variable cost; wes/wew use V04CapexFixCostPG from 04.
+    # -------------------------------------------------------------------------
     def _q05_cost_prod(mod, cy, ht, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -194,7 +209,11 @@ def add_hydrogen_equations(m: ConcreteModel, core_sets_obj) -> None:
 
     m.Q05CostProdH2Tech = Constraint(run_cy, h2tech, ytime, rule=_q05_cost_prod)
 
-    # Q05CostVarProdH2Tech: fuel + CO2 cost for non-REN; wes/wew use i04VarCost
+    # -------------------------------------------------------------------------
+    # Q05CostVarProdH2Tech (GAMS): This equation models the variable costs associated with hydrogen production,
+    # factoring in fuel prices (e.g., electricity or natural gas), CO₂ emission costs, and the efficiency of the
+    # production technology. Fuel + CO2 cost for non-REN; wes/wew use i04VarCost.
+    # -------------------------------------------------------------------------
     def _q05_cost_var(mod, cy, ht, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -225,7 +244,11 @@ def add_hydrogen_equations(m: ConcreteModel, core_sets_obj) -> None:
 
     m.Q05CostVarProdH2Tech = Constraint(run_cy, h2tech, ytime, rule=_q05_cost_var)
 
-    # Q05AcceptCCSH2Tech
+    # -------------------------------------------------------------------------
+    # Q05AcceptCCSH2Tech (GAMS): This equation models the acceptance of carbon capture and storage (CCS) technologies
+    # in hydrogen production. It evaluates the economic feasibility of adding CCS, considering cost, environmental
+    # policies, and technology readiness.
+    # -------------------------------------------------------------------------
     def _q05_accept_ccs(mod, cy, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -235,7 +258,11 @@ def add_hydrogen_equations(m: ConcreteModel, core_sets_obj) -> None:
 
     m.Q05AcceptCCSH2Tech = Constraint(run_cy, ytime, rule=_q05_accept_ccs)
 
-    # Q05ShareCCSH2Prod: only for H2CCS
+    # -------------------------------------------------------------------------
+    # Q05ShareCCSH2Prod (GAMS): This equation determines the share of hydrogen produced using CCS technologies
+    # compared to those produced without CCS. The share is calculated based on relative costs, technological
+    # feasibility, and policy incentives. Only for H2CCS.
+    # -------------------------------------------------------------------------
     def _q05_share_ccs(mod, cy, ht, y):
         if y not in time_set or cy not in run_cy or ht not in h2ccs:
             return Constraint.Skip
@@ -248,7 +275,11 @@ def add_hydrogen_equations(m: ConcreteModel, core_sets_obj) -> None:
 
     m.Q05ShareCCSH2Prod = Constraint(run_cy, h2tech, ytime, rule=_q05_share_ccs)
 
-    # Q05ShareNoCCSH2Prod: only for H2NOCCS
+    # -------------------------------------------------------------------------
+    # Q05ShareNoCCSH2Prod (GAMS): Similar to Q05ShareCCSH2Prod, this equation models the share of hydrogen produced
+    # without CCS technologies. It calculates the proportion of production from non-CCS methods like electrolysis
+    # or SMR without CO₂ capture. Only for H2NOCCS.
+    # -------------------------------------------------------------------------
     def _q05_share_noccs(mod, cy, ht, y):
         if y not in time_set or cy not in run_cy or ht not in h2noccs:
             return Constraint.Skip
@@ -261,7 +292,10 @@ def add_hydrogen_equations(m: ConcreteModel, core_sets_obj) -> None:
 
     m.Q05ShareNoCCSH2Prod = Constraint(run_cy, h2tech, ytime, rule=_q05_share_noccs)
 
-    # Q05CostProdCCSNoCCSH2Prod: only for H2NOCCS
+    # -------------------------------------------------------------------------
+    # Q05CostProdCCSNoCCSH2Prod (GAMS): This equation computes the weighted average production cost of hydrogen,
+    # incorporating both CCS and non-CCS production methods. It provides an overall cost perspective. Only for H2NOCCS.
+    # -------------------------------------------------------------------------
     def _q05_cost_ccs_noccs(mod, cy, ht, y):
         if y not in time_set or cy not in run_cy or ht not in h2noccs:
             return Constraint.Skip
@@ -273,7 +307,11 @@ def add_hydrogen_equations(m: ConcreteModel, core_sets_obj) -> None:
 
     m.Q05CostProdCCSNoCCSH2Prod = Constraint(run_cy, h2tech, ytime, rule=_q05_cost_ccs_noccs)
 
-    # Q05GapShareH2Tech2
+    # -------------------------------------------------------------------------
+    # Q05GapShareH2Tech2 (GAMS): This equation calculates the market share of different hydrogen production
+    # technologies, considering factors like cost competitiveness, policy support, and fuel availability.
+    # Further adjusts the share considering relative competitiveness between CCS and non-CCS technologies.
+    # -------------------------------------------------------------------------
     def _q05_gap_share2(mod, cy, ht, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -297,7 +335,11 @@ def add_hydrogen_equations(m: ConcreteModel, core_sets_obj) -> None:
 
     m.Q05GapShareH2Tech2 = Constraint(run_cy, h2tech, ytime, rule=_q05_gap_share2)
 
-    # Q05GapShareH2Tech1
+    # -------------------------------------------------------------------------
+    # Q05GapShareH2Tech1 (GAMS): This equation further adjusts the market share of hydrogen technologies,
+    # particularly considering the relative competitiveness between CCS and non-CCS technologies. Links
+    # V05GapShareH2Tech2 to CCS/NoCCS shares.
+    # -------------------------------------------------------------------------
     def _q05_gap_share1(mod, cy, ht, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -310,7 +352,11 @@ def add_hydrogen_equations(m: ConcreteModel, core_sets_obj) -> None:
 
     m.Q05GapShareH2Tech1 = Constraint(run_cy, h2tech, ytime, rule=_q05_gap_share1)
 
-    # Q05ProdH2
+    # -------------------------------------------------------------------------
+    # Q05ProdH2 (GAMS): This equation defines the actual hydrogen production levels, considering both scrapped
+    # capacity and the demand gap. It allocates production from different technologies to meet the overall demand,
+    # adjusting for changes in capacity and technology availability.
+    # -------------------------------------------------------------------------
     def _q05_prod_h2(mod, cy, ht, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -322,7 +368,10 @@ def add_hydrogen_equations(m: ConcreteModel, core_sets_obj) -> None:
 
     m.Q05ProdH2 = Constraint(run_cy, h2tech, ytime, rule=_q05_prod_h2)
 
-    # Q05CostAvgProdH2
+    # -------------------------------------------------------------------------
+    # Q05CostAvgProdH2 (GAMS): This equation calculates the average cost of hydrogen production across all
+    # technologies in the system. It accounts for varying costs of different technologies (e.g., electrolysis vs. SMR).
+    # -------------------------------------------------------------------------
     def _q05_cost_avg(mod, cy, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip
@@ -335,7 +384,11 @@ def add_hydrogen_equations(m: ConcreteModel, core_sets_obj) -> None:
 
     m.Q05CostAvgProdH2 = Constraint(run_cy, ytime, rule=_q05_cost_avg)
 
-    # Q05ConsFuelTechH2Prod: only for (ht, ef) in H2TECHEFtoEF
+    # -------------------------------------------------------------------------
+    # Q05ConsFuelTechH2Prod (GAMS): This equation calculates the fuel consumption for each hydrogen production
+    # technology, considering the efficiency of the technology and the amount of fuel required for producing
+    # a unit of hydrogen. Only for (ht, ef) in H2TECHEFtoEF.
+    # -------------------------------------------------------------------------
     def _q05_cons_fuel_tech(mod, cy, ht, ef_, y):
         if y not in time_set or cy not in run_cy or (ht, ef_) not in h2techeftoef:
             return Constraint.Skip
@@ -343,7 +396,10 @@ def add_hydrogen_equations(m: ConcreteModel, core_sets_obj) -> None:
 
     m.Q05ConsFuelTechH2Prod = Constraint(run_cy, h2tech, ef_list, ytime, rule=_q05_cons_fuel_tech)
 
-    # Q05ConsFuelH2Prod: only for ef in H2PRODEF
+    # -------------------------------------------------------------------------
+    # Q05ConsFuelH2Prod (GAMS): This equation aggregates the total fuel consumption across all hydrogen production
+    # technologies in the system, summing up the fuel requirements from all sources. Only for ef in H2PRODEF.
+    # -------------------------------------------------------------------------
     def _q05_cons_fuel(mod, cy, ef_, y):
         if y not in time_set or cy not in run_cy or ef_ not in h2prodef:
             return Constraint.Skip
@@ -355,7 +411,10 @@ def add_hydrogen_equations(m: ConcreteModel, core_sets_obj) -> None:
 
     m.Q05ConsFuelH2Prod = Constraint(run_cy, ef_list, ytime, rule=_q05_cons_fuel)
 
-    # Q05CaptRateH2: smooth step from i05CaptRateH2Prod based on CO2 price vs carbon value
+    # -------------------------------------------------------------------------
+    # Q05CaptRateH2 (GAMS): CO2 capture rate for hydrogen production. Sigmoid in VmCstCO2SeqCsts/(sum VmCarVal(H2P)+1);
+    # i05CaptRateH2Prod(H2TECH) / (1 + EXP(20*(...))). Smooth step from base capture rate based on CO2 price vs carbon value.
+    # -------------------------------------------------------------------------
     def _q05_capt_rate(mod, cy, ht, y):
         if y not in time_set or cy not in run_cy:
             return Constraint.Skip

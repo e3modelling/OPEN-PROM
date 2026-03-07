@@ -34,7 +34,7 @@ def add_price_stub_parameters(
     tech = list(core_sets.TECH)
 
     from pyomo.core.base.var import Var
-    # If 08_Prices already added these as Variables, only add subsidy.
+    # If 08_Prices already added these as Variables, only add subsidy. If 11_Economy added VmSubsiDemTech as Var, skip it.
     if not (hasattr(m, "VmPriceFuelSubsecCarVal") and isinstance(getattr(m, "VmPriceFuelSubsecCarVal"), Var)):
         # Fuel price per subsector and fuel (k$2015/toe). Default 1.5 for feasibility.
         m.VmPriceFuelSubsecCarVal = Param(
@@ -53,13 +53,14 @@ def add_price_stub_parameters(
             initialize={},
         )
 
-    # Subsidy per unit of new capacity (11_Economy). Default 0 for PoC.
-    m.VmSubsiDemTech = Param(
-        run_cy, dsbs, tech, ytime,
-        mutable=True,
-        default=0.0,
-        initialize={},
-    )
+    # Subsidy per unit of new capacity (11_Economy). Default 0 for PoC. Skip if 11_Economy already added as Var.
+    if not (hasattr(m, "VmSubsiDemTech") and isinstance(getattr(m, "VmSubsiDemTech"), Var)):
+        m.VmSubsiDemTech = Param(
+            run_cy, dsbs, tech, ytime,
+            mutable=True,
+            default=0.0,
+            initialize={},
+        )
 
 
 def load_price_stub_from_fuel_price(

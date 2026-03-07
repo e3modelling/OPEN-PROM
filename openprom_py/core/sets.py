@@ -143,6 +143,10 @@ PGREN = ("PGLHYD", "PGSHYD", "PGAWND", "PGSOL", "PGCSP", "PGOTHREN", "PGAWNO")
 PGREN2 = ("PGLHYD", "PGSHYD", "PGAWND", "PGSOL", "PGCSP", "PGOTHREN", "PGAWNO", "PGANUC", "ATHCOALCCS", "ATHLGNCCS", "ATHGASCCS", "PGH2F")
 # PGRENSW = solar and wind (for RES share / capex rate)
 PGRENSW = ("PGSOL", "PGCSP", "PGAWND", "PGAWNO")
+# 10_Curves LearningCurves: technologies with learning curves (subset of PGALL; same as PGRENSW)
+LCTECH = ("PGSOL", "PGCSP", "PGAWND", "PGAWNO")
+LCSOL = ("PGSOL", "PGCSP")   # Solar subset
+LCWND = ("PGAWND", "PGAWNO")  # Wind subset
 # PGSCRN = plants not subject to endogenous scrapping (V04IndxEndogScrap = 1)
 PGSCRN = ("ATHBMSWAS", "PGLHYD", "PGSHYD", "PGAWND", "PGSOL", "PGCSP", "PGANUC", "ATHCOALCCS", "ATHLGNCCS", "ATHGASCCS", "PGAWNO", "PGOTHREN", "ATHBMSCCS", "PGH2F")
 # CCS (PGALL) = plants with CCS
@@ -171,6 +175,11 @@ _PGALLTOEF_LIST = [
     ("PGH2F", "H2F"),
 ]
 PGALLtoEF: Set[Tuple[str, str]] = set(_PGALLTOEF_LIST)
+# 11_Economy: STECH = supply technologies (PGALL for power; can include H2TECH)
+STECH = PGALL
+# SSECTTECH(SSBS, STECH): which supply sector uses which tech — e.g. (PG, pg) for pg in PGALL
+_SSECTTECH_LIST: List[Tuple[str, str]] = [("PG", p) for p in PGALL]
+SSECTTECH: Set[Tuple[str, str]] = set(_SSECTTECH_LIST)
 # NAPtoALLSBS(NAP, SBS): which sectors belong to Trade vs NoTrade (for VmCarVal sum)
 # GAMS: Trade.(FD,EN,TX,...); NoTrade.(SE,AG,HOU,...)
 _NAPTOALLSBS_LIST = [

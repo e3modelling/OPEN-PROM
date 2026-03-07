@@ -103,6 +103,14 @@ def add_core_parameters(m: ConcreteModel, core_sets_obj: core_sets.CoreSets) -> 
         initialize={},
     )
 
+    # 11_Economy: imCapCostTechMin(allCy, DSBS, TECH, YTIME) — minimum cap cost fraction (1 = no subsidy below this)
+    m.imCapCostTechMin = Param(
+        run_cy, sbs, tech, ytime,
+        mutable=True,
+        default=0.0,
+        initialize={},
+    )
+
     # imVarCostTech(allCy, SBS, TECH, YTIME)
     m.imVarCostTech = Param(
         run_cy, sbs, tech, ytime,

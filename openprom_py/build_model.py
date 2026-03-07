@@ -57,6 +57,16 @@ from modules._09_Heat.heat.equations import add_heat_equations
 from modules._09_Heat.heat.input_loader import load_heat_data, load_heat_data_into_model
 from modules._09_Heat.heat.preloop import apply_heat_preloop
 from modules._09_Heat.heat.postsolve import apply_heat_postsolve
+from modules._10_Curves.LearningCurves.declarations import add_curves_parameters, add_curves_variables
+from modules._10_Curves.LearningCurves.equations import add_curves_equations
+from modules._10_Curves.LearningCurves.input_loader import load_curves_data, load_curves_data_into_model
+from modules._10_Curves.LearningCurves.preloop import apply_curves_preloop
+from modules._10_Curves.LearningCurves.postsolve import apply_curves_postsolve
+from modules._11_Economy.economy.declarations import add_economy_parameters, add_economy_variables
+from modules._11_Economy.economy.equations import add_economy_equations
+from modules._11_Economy.economy.input_loader import load_economy_data, load_economy_data_into_model
+from modules._11_Economy.economy.preloop import apply_economy_preloop
+from modules._11_Economy.economy.postsolve import apply_economy_postsolve
 
 
 def _log(msg: str) -> None:
@@ -89,7 +99,10 @@ def build_openprom_model(config: PoCConfig, load_data: bool = True) -> ConcreteM
     _log("Adding 08_Prices (legacy) parameters and variables.")
     add_prices_parameters(m, core_sets_obj)
     add_prices_variables(m, core_sets_obj)
-    _log("Adding price stub parameters (VmSubsiDemTech only when 08_Prices loaded).")
+    _log("Adding 11_Economy (economy) parameters and variables.")
+    add_economy_parameters(m, core_sets_obj)
+    add_economy_variables(m, core_sets_obj)
+    _log("Adding price stub parameters (VmSubsiDemTech only when 11_Economy not loaded).")
     add_price_stub_parameters(m, core_sets_obj)
     _log("Adding transport parameters and variables.")
     add_transport_parameters(m, core_sets_obj)
@@ -115,6 +128,9 @@ def build_openprom_model(config: PoCConfig, load_data: bool = True) -> ConcreteM
     _log("Adding 09_Heat (heat) parameters and variables.")
     add_heat_parameters(m, core_sets_obj)
     add_heat_variables(m, core_sets_obj)
+    _log("Adding 10_Curves (LearningCurves) parameters and variables.")
+    add_curves_parameters(m, core_sets_obj)
+    add_curves_variables(m, core_sets_obj)
 
     # 2) Equations: objective, qDummyObj, transport, industry, rest-of-energy, power-gen constraints
     _log("Adding core objective and qDummyObj constraint.")
@@ -138,6 +154,10 @@ def build_openprom_model(config: PoCConfig, load_data: bool = True) -> ConcreteM
     add_heat_equations(m, core_sets_obj)
     _log("Adding 08_Prices equations.")
     add_prices_equations(m, core_sets_obj)
+    _log("Adding 10_Curves equations.")
+    add_curves_equations(m, core_sets_obj)
+    _log("Adding 11_Economy equations.")
+    add_economy_equations(m, core_sets_obj)
 
     # 3) Load CSV data *before* preloop so historical fixes use loaded params (e.g. imFuelConsPerFueSub)
     if load_data:
@@ -152,6 +172,8 @@ def build_openprom_model(config: PoCConfig, load_data: bool = True) -> ConcreteM
             data_emissions = load_emissions_data(config)
             data_prices = load_prices_data(config)
             data_heat = load_heat_data(config)
+            data_curves = load_curves_data(config)
+            data_economy = load_economy_data(config)
             _log("Loading core data into model.")
             load_core_data_into_model(m, data, core_sets_obj)
             _log("Loading transport data into model.")
@@ -170,6 +192,10 @@ def build_openprom_model(config: PoCConfig, load_data: bool = True) -> ConcreteM
             load_prices_data_into_model(m, data_prices, core_sets_obj)
             _log("Loading 09_Heat data into model.")
             load_heat_data_into_model(m, data_heat, core_sets_obj)
+            _log("Loading 10_Curves data into model.")
+            load_curves_data_into_model(m, data_curves, core_sets_obj)
+            _log("Loading 11_Economy data into model.")
+            load_economy_data_into_model(m, data_economy, core_sets_obj)
         except Exception as e:
             _log("Data load failed: {}".format(e))
             raise
@@ -195,6 +221,10 @@ def build_openprom_model(config: PoCConfig, load_data: bool = True) -> ConcreteM
     apply_heat_preloop(m, core_sets_obj)
     _log("Applying 08_Prices preloop.")
     apply_prices_preloop(m, core_sets_obj)
+    _log("Applying 10_Curves preloop.")
+    apply_curves_preloop(m, core_sets_obj)
+    _log("Applying 11_Economy preloop.")
+    apply_economy_preloop(m, core_sets_obj)
 
     # Attach for run_poc / postsolve
     m._core_sets = core_sets_obj
