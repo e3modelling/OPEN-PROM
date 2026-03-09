@@ -16,7 +16,12 @@ from pyomo.core import ConcreteModel
 from config.poc_config import PoCConfig
 from core.sets import CoreSets
 from core.declarations import add_core_parameters, add_core_variables
-from core.equations import add_core_objective, add_q_dummy_obj_constraint, add_q_dummy_obj_calibration
+from core.equations import (
+    add_core_objective,
+    add_q_dummy_obj_constraint,
+    add_q_dummy_obj_calibration,
+    fix_imMatrFactor_for_mode,
+)
 from core.preloop import apply_core_preloop
 from core.input_loader import load_core_data, load_core_data_into_model
 from prices_stub import add_price_stub_parameters
@@ -239,6 +244,10 @@ def build_openprom_model(config: PoCConfig, load_data: bool = True) -> ConcreteM
     apply_curves_preloop(m, core_sets_obj)
     _log("Applying 11_Economy preloop.")
     apply_economy_preloop(m, core_sets_obj)
+
+    # 5) Fix/unfix imMatrFactor based on calibration mode (after data loading + preloops)
+    _log("Fixing imMatrFactor for calibration mode: {}".format(config.calibration))
+    fix_imMatrFactor_for_mode(m, core_sets_obj, calibration=config.calibration)
 
     # Attach for run_poc / postsolve
     m._core_sets = core_sets_obj

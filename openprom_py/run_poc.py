@@ -27,6 +27,7 @@ from pyomo.core import value
 from config.poc_config import PoCConfig
 from build_model import build_openprom_model
 from core.postsolve import export_solution_csv
+from core.equations import apply_imMatrFactor_postsolve
 from modules._01_Transport.simple.postsolve import apply_transport_postsolve
 from modules._02_Industry.technology.postsolve import apply_industry_postsolve
 from modules._04_PowerGeneration.simple.postsolve import apply_power_generation_postsolve
@@ -311,6 +312,12 @@ def run_poc(config: Optional[PoCConfig] = None, load_data: bool = True):
                 apply_economy_postsolve(m, core_sets, year)
             except Exception as ex:
                 log_info("Economy postsolve failed: {}".format(ex))
+            # In calibration mode, fix imMatrFactor at solved year (GAMS postsolve pattern)
+            if getattr(getattr(m, "_config", None), "calibration", "off") == "MatCalibration":
+                try:
+                    apply_imMatrFactor_postsolve(m, core_sets, year)
+                except Exception as ex:
+                    log_info("imMatrFactor postsolve failed: {}".format(ex))
             # Export key variable values to run directory (solution.csv)
             try:
                 solution_path = run_dir / "solution.csv"

@@ -191,12 +191,14 @@ def add_core_parameters(m: ConcreteModel, core_sets_obj: core_sets.CoreSets) -> 
     )
 
     # imMatrFactor(allCy, DSBS, TECH, YTIME) — Maturity factor per technology and subsector (1).
-    # Used in Transport Q01ShareTechTr. Loaded from iMatrFactorData in core input.
-    m.imMatrFactor = Param(
+    # GAMS: parameter when calibration=off, variable [0,50] when MatCalibration.
+    # Declared as Var always; fix_imMatrFactor_for_mode() selectively fixes/unfixes
+    # based on calibration mode (see core/equations.py).
+    m.imMatrFactor = Var(
         run_cy, dsbs, tech, ytime,
-        mutable=True,
-        default=1.0,
-        initialize={},
+        domain=Reals,
+        bounds=(0, 50),
+        initialize=1.0,
     )
 
     # i01PremScrpFac(allCy, DSBS, TECH, YTIME) — Parameter that controls premature scrapping.

@@ -95,26 +95,30 @@ def add_q_dummy_obj_calibration(m: ConcreteModel, core_sets_obj: core_sets.CoreS
                     pass
 
         # Transport share residuals (PC, PB, GU only)
+        # GAMS: SQR( (V01 - target)$(target>=0) + 0.01*(mf(t) - mf(t-1)) )
+        # Both the share-diff and the maturity-factor delta sit inside ONE SQR().
         tr_sum = 0.0
         for transe in _CALIB_TRANSE:
             for tech in core_sets.TTECH:
                 if (transe, tech) not in secttech:
                     continue
+                # Build inner expression: both terms inside one square
+                inner = 0.0
                 try:
                     target = pyo_value(mod.t01NewShareStockPC[cy, transe, tech, y])
                 except (KeyError, TypeError):
                     target = -1.0
                 if target >= 0:
-                    v = mod.V01ShareTechTr[cy, transe, tech, y]
-                    tr_sum += (v - target) ** 2
-                # Add maturity-factor smoothing term (0.01 * delta)
+                    inner += mod.V01ShareTechTr[cy, transe, tech, y] - target
+                # Maturity-factor smoothing: 0.01 * (mf(t) - mf(t-1))
                 y_1 = _prev_year(y)
                 try:
                     mf_now = mod.imMatrFactor[cy, transe, tech, y]
                     mf_prev = mod.imMatrFactor[cy, transe, tech, y_1]
-                    tr_sum += 0.01 * (mf_now - mf_prev)
+                    inner += 0.01 * (mf_now - mf_prev)
                 except (KeyError, TypeError):
                     pass
+                tr_sum += inner ** 2
 
         return mod.vDummyObj == pg_sum + tr_sum
 
@@ -136,7 +140,95 @@ def add_q_dummy_obj_calibration(m: ConcreteModel, core_sets_obj: core_sets.CoreS
         return mod.imMatrFactor[cy, transe, tech, y] == mod.common[cy, transe, y]
 
     m.qRestrain = Constraint(
-        run_cy, list(_CALIB_TRANSE), list(core_sets.TTECH), ytime,
+        run_cy, list(core_sets.TRANSE), list(core_sets.TTECH), ytime,
         rule=_q_restrain,
     )
     logger.info("Calibration equations added: qDummyObj (sum-of-squares) + qRestrain")
+
+
+# ---------------------------------------------------------------------------
+# imMatrFactor fix/unfix helpers
+# ---------------------------------------------------------------------------
+
+def fix_imMatrFactor_for_mode(
+    m: ConcreteModel,
+    core_sets_obj: core_sets.CoreSets,
+    calibration: str = "off",
+) -> None:
+    """
+    Fix / unfix ``imMatrFactor`` indices based on calibration mode.
+
+    GAMS ``core/input.gms``:
+      - ``calibration=off``:  ``imMatrFactor`` is a fixed *parameter*
+        → fix ALL indices so the solver cannot alter them.
+      - ``MatCalibration``:   ``imMatrFactor`` is a *variable* [0, 50].
+        Fixed for non-transport (non PC/PB/GU) subsectors, non-SECTTECH
+        pairs, and historical years (DATAY).  Free for
+        PC/PB/GU × SECTTECH × future years so the solver can adjust them.
+    """
+    if not hasattr(m, "imMatrFactor"):
+        return
+
+    secttech = core_sets.SECTTECH  # set of (DSBS, TECH) pairs
+    datay = core_sets_obj.datay
+
+    if calibration != "MatCalibration":
+        # Non-calibration: behave like a GAMS parameter — fix everything
+        for idx in m.imMatrFactor:
+            m.imMatrFactor[idx].fix()
+        logger.info("imMatrFactor: all indices fixed (calibration=%s)", calibration)
+        return
+
+    # MatCalibration mode: selective fix/unfix
+    n_fixed = 0
+    n_free = 0
+    for idx in m.imMatrFactor:
+        cy, dsbs, tech, y = idx
+        is_calib_transe = dsbs in _CALIB_TRANSE
+        is_secttech = (dsbs, tech) in secttech
+        is_historical = y in datay
+
+        if not is_calib_transe or not is_secttech or is_historical:
+            m.imMatrFactor[idx].fix()
+            n_fixed += 1
+        else:
+            # Free for calibration: PC/PB/GU × SECTTECH × future years
+            n_free += 1
+
+    logger.info(
+        "imMatrFactor: %d indices fixed, %d free (MatCalibration)",
+        n_fixed, n_free,
+    )
+
+
+def apply_imMatrFactor_postsolve(
+    m: ConcreteModel,
+    core_sets_obj: core_sets.CoreSets,
+    year: int,
+) -> None:
+    """
+    Fix ``imMatrFactor`` at ``year`` to its solved value (calibration mode).
+
+    GAMS ``core/postsolve.gms`` (inside ``$ifthen.calib MatCalibration``):
+      ``imMatrFactor.FX(runCyL,DSBS,TECH,YTIME)$TIME(YTIME) = imMatrFactor.L(...)``
+
+    Call after each successful solve for *year* so the next year sees the
+    calibrated maturity factors as fixed.  In non-calibration mode this is
+    a no-op (imMatrFactor is already fixed everywhere).
+    """
+    if not hasattr(m, "imMatrFactor"):
+        return
+
+    run_cy = core_sets_obj.runCy
+    dsbs_list = list(core_sets.DSBS)
+    tech_list = list(core_sets.TECH)
+
+    for cy in run_cy:
+        for ds in dsbs_list:
+            for tech in tech_list:
+                try:
+                    v = pyo_value(m.imMatrFactor[cy, ds, tech, year])
+                    if v is not None:
+                        m.imMatrFactor[cy, ds, tech, year].fix(v)
+                except (KeyError, TypeError, ValueError):
+                    pass

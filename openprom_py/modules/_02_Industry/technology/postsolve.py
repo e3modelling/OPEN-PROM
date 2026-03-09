@@ -4,8 +4,8 @@ Industry (technology) postsolve: fix solution values for the next time step.
 Mirrors 02_Industry/technology/postsolve.gms. After each solve for a given year,
 fix all Industry variables (V02*, VmConsFuel) at that year to their current
 solution so that in a multi-year loop the next solve sees the previous year as fixed.
-Optionally in calibration mode GAMS also fixes imMatrFactor to its .L; we skip that
-here since imMatrFactor is a Param in Python.
+In calibration mode GAMS also fixes imMatrFactor to its .L; this is handled by
+apply_imMatrFactor_postsolve() in core/equations.py (called from run_poc.py).
 """
 from pyomo.core import ConcreteModel, value
 
@@ -87,4 +87,4 @@ def apply_industry_postsolve(m: ConcreteModel, core_sets_obj, year: int) -> None
                     fix_var(m.V02PremScrpIndu, (cy, ds, tech, year))
 
     # GAMS $ifthen.calib %Calibration% == MatCalibration: imMatrFactor.FX(...) = imMatrFactor.L(...)
-    # In Python imMatrFactor is a mutable Param; solver does not set it. Omitted here.
+    # Handled centrally by apply_imMatrFactor_postsolve() in core/equations.py.
