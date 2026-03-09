@@ -2,13 +2,12 @@
 Core parameter and variable declarations for OPEN-PROM.
 
 Adds to a Pyomo ConcreteModel all core parameters and variables defined in
-core/declarations.gms that are needed for the dummy objective, Transport (01),
-Industry (02), and RestOfEnergy (03) modules. Index sets come from core/sets
-and from core_sets_obj (runCy, ytime).
+core/declarations.gms that are shared across modules. Index sets come from
+core/sets and from core_sets_obj (runCy, ytime).
 
-Does not add VmPriceFuelSubsecCarVal, VmPriceFuelAvgSub, VmSubsiDemTech — those
-are provided by the price stub (prices_stub.py) so that 08_Prices and 11_Economy
-modules are not required for the PoC.
+VmPriceFuelSubsecCarVal, VmPriceFuelAvgSub, VmSubsiDemTech are provided by
+08_Prices and 11_Economy modules; a fallback price stub (prices_stub.py)
+adds them as Params when those modules' Vars are not yet declared.
 """
 from pyomo.core import ConcreteModel, Param, Var
 from pyomo.environ import Reals

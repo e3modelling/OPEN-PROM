@@ -59,6 +59,16 @@ def add_transport_parameters(m: ConcreteModel, core_sets_obj) -> None:
     # Passenger cars scrapping rate (allCy) — used in calibration
     m.i01PassCarsScrapRate = Param(run_cy, mutable=True, default=0.05, initialize={})
 
+    # t01NewShareStockPC(allCy, TRANSE, TTECH, YTIME) — calibration target for new
+    # passenger car shares. Values >= 0 are targets used in the MatCalibration
+    # objective (sum-of-squares); values < 0 trigger qRestrain (imMatrFactor == common).
+    m.t01NewShareStockPC = Param(
+        run_cy, trans, ttech, ytime,
+        mutable=True,
+        default=-1.0,  # negative = no target (triggers qRestrain in calibration)
+        initialize={},
+    )
+
     # --- Commented out in GAMS (01_Transport/simple/declarations.gms) ---
     # *Q01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME) "Compute Specific Fuel Consumption"
     # *q01DemFinEneSubTransp(allCy,TRANSE,YTIME) "Compute final energy demand in transport"

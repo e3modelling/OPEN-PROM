@@ -23,6 +23,9 @@ from pathlib import Path
 from typing import Any, Dict
 
 import pandas as pd
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def _data_load_log(filename: str, status: str, detail: str = "") -> None:
@@ -35,8 +38,8 @@ def _data_load_log(filename: str, status: str, detail: str = "") -> None:
                 log.info("  {}  {}  {}".format(filename, status, detail))
             else:
                 log.info("  {}  {}".format(filename, status))
-    except Exception:
-        pass
+    except Exception as _exc:
+        logger.debug("Skipped: %s", _exc)
 
 
 def _path(data_dir: Path, filename: str) -> Path:

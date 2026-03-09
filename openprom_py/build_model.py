@@ -1,12 +1,12 @@
 """
-Build the OPEN-PROM Pyomo model: core + price stub + 01_Transport + 02_Industry + 04_PowerGeneration + 03_RestOfEnergy.
+Build the OPEN-PROM Pyomo model: core + all 11 modules.
 
 Assembly order mirrors main.gms:
   1. Sets (via CoreSets.from_config)
-  2. Declarations: core params/vars, price stub, transport, industry, 04 power-gen, rest-of-energy params/vars
-  3. Equations: core objective and qDummyObj, transport, industry, rest-of-energy, power-gen constraints
-  4. Preloop: core (PDL, fixes), transport, industry, rest-of-energy, power-gen (historical fixes, stubs)
-  5. Optional: load CSV data into mutable Params (core, transport, rest-of-energy, power-gen)
+  2. Declarations: core params/vars, price stub fallback, 01-11 module params/vars
+  3. Equations: core objective and qDummyObj (or MatCalibration), module constraints
+  4. Preloop: core (PDL, fixes), module-specific historical fixes and stubs
+  5. Optional: load CSV data into mutable Params (core + all modules)
 
 The resulting ConcreteModel has all components needed to solve one or more
 (time step, country) subproblems with an NLP solver (e.g. Ipopt).
@@ -16,7 +16,7 @@ from pyomo.core import ConcreteModel
 from config.poc_config import PoCConfig
 from core.sets import CoreSets
 from core.declarations import add_core_parameters, add_core_variables
-from core.equations import add_core_objective, add_q_dummy_obj_constraint
+from core.equations import add_core_objective, add_q_dummy_obj_constraint, add_q_dummy_obj_calibration
 from core.preloop import apply_core_preloop
 from core.input_loader import load_core_data, load_core_data_into_model
 from prices_stub import add_price_stub_parameters
@@ -67,6 +67,9 @@ from modules._11_Economy.economy.equations import add_economy_equations
 from modules._11_Economy.economy.input_loader import load_economy_data, load_economy_data_into_model
 from modules._11_Economy.economy.preloop import apply_economy_preloop
 from modules._11_Economy.economy.postsolve import apply_economy_postsolve
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def _log(msg: str) -> None:
@@ -76,13 +79,20 @@ def _log(msg: str) -> None:
         log = get_report_logger()
         if log:
             log.info(msg)
-    except Exception:
-        pass
+    except Exception as _exc:
+        logger.debug("Skipped: %s", _exc)
 
 
 def build_openprom_model(config: PoCConfig, load_data: bool = True) -> ConcreteModel:
     """
-    Build the Pyomo model with core + price stub + 01_Transport + 02_Industry (technology).
+    Build the Pyomo model with core + all 11 modules.
+
+    Modules: 01_Transport (simple), 02_Industry (technology),
+    03_RestOfEnergy (legacy), 04_PowerGeneration (simple),
+    05_Hydrogen (legacy), 06_CO2 (legacy), 07_Emissions (legacy),
+    08_Prices (legacy), 09_Heat (heat), 10_Curves (LearningCurves),
+    11_Economy (economy).  A price stub provides fallback Params when
+    08_Prices/11_Economy Vars are not declared.
 
     If load_data is True, load CSVs from config.data_dir and fill mutable Params
     (requires data files in openprom_py/data/). If load_data is False, only
@@ -135,7 +145,11 @@ def build_openprom_model(config: PoCConfig, load_data: bool = True) -> ConcreteM
     # 2) Equations: objective, qDummyObj, transport, industry, rest-of-energy, power-gen constraints
     _log("Adding core objective and qDummyObj constraint.")
     add_core_objective(m, calibration=config.calibration)
-    add_q_dummy_obj_constraint(m, core_sets_obj)
+    if config.calibration == "MatCalibration":
+        _log("Using MatCalibration: sum-of-squares qDummyObj + qRestrain.")
+        add_q_dummy_obj_calibration(m, core_sets_obj)
+    else:
+        add_q_dummy_obj_constraint(m, core_sets_obj)
     _log("Adding transport equations.")
     add_transport_equations(m, core_sets_obj)
     _log("Adding industry equations.")

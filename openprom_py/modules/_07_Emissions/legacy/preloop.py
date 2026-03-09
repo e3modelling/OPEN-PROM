@@ -8,6 +8,9 @@ V07EmiActBySrcRegTim (to i07DataCh4N2OFEmis).
 from pyomo.core import ConcreteModel, value as pyo_value
 
 from core import sets as core_sets
+import logging
+
+logger = logging.getLogger(__name__)
 
 _EPS = 1e-10
 
@@ -73,8 +76,8 @@ def apply_emissions_preloop(m: ConcreteModel, core_sets_obj) -> None:
                                         eff = _pval(m.imPlantEffByType, cy, ccs, y) or 1.0
                                         capt = pyo_value(getattr(m, "V04CO2CaptRate", m.imCO2CaptRate)[cy, ccs, y]) if hasattr(m, "V04CO2CaptRate") else _pval(m.imCO2CaptRate, cy, ccs, y)
                                         term -= prod * (getattr(m, "smTWhToMtoe", 0.086) or 0.086) / (eff + _EPS) * _pval(m.imCo2EmiFac, cy, "PG", efs_, y) * capt
-                            except Exception:
-                                pass
+                            except Exception as _exc:
+                                logger.debug("Skipped: %s", _exc)
                         # H2P: subtract H2 production with CCS (VmProdH2 / eff * V05CaptRateH2)
                         if ss == "H2P" and hasattr(m, "VmProdH2") and hasattr(m, "i05EffH2Prod"):
                             try:
@@ -86,8 +89,8 @@ def apply_emissions_preloop(m: ConcreteModel, core_sets_obj) -> None:
                                         eff = _pval(m.i05EffH2Prod, cy, h2ccs, y) or 1.0
                                         capt = pyo_value(getattr(m, "V05CaptRateH2", m.i05EffH2Prod)[cy, h2ccs, y]) if hasattr(m, "V05CaptRateH2") else 0.0
                                         term -= prod / (eff + _EPS) * capt
-                            except Exception:
-                                pass
+                            except Exception as _exc:
+                                logger.debug("Skipped: %s", _exc)
                         fac = _pval(m.imCo2EmiFac, cy, "PG", efs_, y)
                         rhs += term * fac
                     try:

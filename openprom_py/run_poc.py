@@ -1,11 +1,18 @@
 """
-Run OPEN-PROM PoC: build model, run time x country loop, solve with Ipopt.
+Run OPEN-PROM: build model, run time x country loop, solve with Ipopt.
 
 The GAMS model (core/solve.gms) loops over time (an) and then over countries
 (runCyL); for each (year, country) it updates the active time/country, applies
 preloop fixes, solves the NLP (minimize vDummyObj), and in postsolve fixes
-solution values for the next period. This script builds the full model once and
-solves one year (PoC); extend the loop and add postsolve fixes for a full run.
+solution values for the next period.
+
+Architecture note — country loop:
+  GAMS solves one country at a time (nested loop runCyL inside an). In Pyomo the
+  constraints are built once at model construction, so we solve all countries
+  simultaneously per time step.  For single-country runs the result is identical.
+  For multi-country runs the simultaneous solve is mathematically equivalent when
+  countries are independent (no cross-country constraints), except for the global
+  V10CumCapGlobal accumulator which is handled in the curves postsolve.
 
 Run report (main.lst) is written from the start of run_poc; for import errors
 before that, check the console/traceback.
@@ -97,7 +104,7 @@ class _TeeStream:
 
 def run_poc(config: Optional[PoCConfig] = None, load_data: bool = True):
     """
-    Build model, run solve loop (one year in PoC), return model and results.
+    Build model, run solve loop over all years in [start_y, end_y], return model and results.
 
     If Ipopt is not available, returns (m, None) and reports to main.lst.
     Otherwise returns (m, list of {year, status, termination, modelstat, vDummyObj}).
@@ -125,7 +132,7 @@ def run_poc(config: Optional[PoCConfig] = None, load_data: bool = True):
 
         log_starting_model_build()
         log_section("Model build")
-        log_info("Building model (core + price stub + transport)...")
+        log_info("Building model (core + all 11 modules)...")
         m = build_openprom_model(config, load_data=load_data)
         log_info("Model build complete.")
 
@@ -311,10 +318,10 @@ def run_poc(config: Optional[PoCConfig] = None, load_data: bool = True):
                 log_info("Solution exported to {}".format(solution_path))
             except Exception as ex:
                 log_info("Solution export failed: {}".format(ex))
-            break  # PoC: run one year only
 
+        n_years = len(results)
         elapsed = time.perf_counter() - t0
-        end_run_report(True, "Solved 1 year.", elapsed_seconds=elapsed)
+        end_run_report(True, "Solved {} year(s).".format(n_years), elapsed_seconds=elapsed)
         print("Report written to", report_path)
         print("Run archive:", run_dir)
         return m, results

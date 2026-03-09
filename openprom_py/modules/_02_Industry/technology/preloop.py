@@ -9,6 +9,9 @@ for VmConsFuel, V02VarCostTech, V02CapCostTech, V02CostTech.
 from pyomo.core import ConcreteModel
 
 from core import sets as core_sets
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def _in_an(core_sets_obj, y):
@@ -190,8 +193,8 @@ def apply_industry_preloop(m: ConcreteModel, core_sets_obj) -> None:
                         m.V02CapCostTech[cy, sb, tech, y].fix(1.0)
                     try:
                         m.V02VarCostTech[cy, sb, tech, y].fix(2.0)
-                    except Exception:
-                        pass
+                    except Exception as _exc:
+                        logger.debug("Skipped: %s", _exc)
                     try:
                         m.V02CostTech[cy, sb, tech, y].fix(
                             m.V02CapCostTech[cy, sb, tech, y].value + m.V02VarCostTech[cy, sb, tech, y].value

@@ -11,6 +11,9 @@ from typing import Any, Dict
 from pyomo.core import ConcreteModel, value as pyo_value
 
 from core import sets as core_sets
+import logging
+
+logger = logging.getLogger(__name__)
 
 # --- GAMS input.gms (transferred as comments) ---
 # $IFTHEN %link2MAgPIE% == on
@@ -112,8 +115,8 @@ def load_prices_data_into_model(
                         )
                         if tot and tot > 0:
                             w = pyo_value(m.imFuelConsPerFueSub[cy, sb, e, base_y]) / tot
-                    except Exception:
-                        pass
+                    except Exception as _exc:
+                        logger.debug("Skipped: %s", _exc)
                 m.i08WgtSecAvgPriFueCons[cy, sb, e] = w
         # Rescale weights to sum to 1 per (cy, sb)
         for sb in sbs_and_supply:

@@ -9,6 +9,9 @@ from pyomo.core import ConcreteModel, Constraint
 from pyomo.environ import sqrt, value as pyo_value
 
 from core import sets as core_sets
+import logging
+
+logger = logging.getLogger(__name__)
 
 _EPS = 1e-10
 
@@ -58,8 +61,8 @@ def add_economy_equations(m: ConcreteModel, core_sets_obj) -> None:
                 break
             try:
                 term_cons += mod.VmConsFinEneCountry[cy, efs_, y_1] * pyo_value(mod.imCo2EmiFac[cy, "PG", ef_, y_1])
-            except Exception:
-                pass
+            except Exception as _exc:
+                logger.debug("Skipped: %s", _exc)
         term_supply = sum(mod.V07GrossEmissCO2Supply[cy, ss, y_1] for ss in ssbs) if hasattr(mod, "V07GrossEmissCO2Supply") else 0.0
         term_cap = sum(mod.V06CapCO2ElecHydr[cy, sb, y_1] for sb in sbs) if hasattr(mod, "V06CapCO2ElecHydr") else 0.0
         bracket = (term_cons + term_supply - term_cap + sqrt((term_cons + term_supply - term_cap) ** 2 + _EPS)) / 2.0

@@ -19,6 +19,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Optional, Tuple
 
+logger = logging.getLogger(__name__)
+
 # Module-level state
 _report_file = None   # main.lst (listing)
 _log_file = None     # main.log (screen-style output)
@@ -149,8 +151,17 @@ def start_run_report(
             getattr(config, "scenario", "?")))
         _write_line(_report_file, "")
         _write_line(_report_file, "**MODULE REALIZATION SWITCHES**")
-        _write_line(_report_file, "  Transport         simple")
-        _write_line(_report_file, "  (other modules   legacy/off in PoC)")
+        _write_line(_report_file, "  01_Transport      simple")
+        _write_line(_report_file, "  02_Industry       technology")
+        _write_line(_report_file, "  03_RestOfEnergy   legacy")
+        _write_line(_report_file, "  04_PowerGeneration simple")
+        _write_line(_report_file, "  05_Hydrogen       legacy")
+        _write_line(_report_file, "  06_CO2            legacy")
+        _write_line(_report_file, "  07_Emissions      legacy")
+        _write_line(_report_file, "  08_Prices         legacy")
+        _write_line(_report_file, "  09_Heat           heat")
+        _write_line(_report_file, "  10_Curves         LearningCurves")
+        _write_line(_report_file, "  11_Economy        economy")
         _write_line(_report_file, "")
         _write_line(_report_file, "  load_data         {}".format(
             load_data if load_data is not None else "?"))
@@ -158,8 +169,8 @@ def start_run_report(
             data_dir = getattr(config, "data_dir", None)
             if data_dir is not None:
                 _write_line(_report_file, "  data_dir          {}".format(Path(data_dir).resolve()))
-        except Exception:
-            pass
+        except Exception as _exc:
+            logger.debug("Skipped: %s", _exc)
     _write_line(_report_file, "")
 
     # Create logger that writes to this file only

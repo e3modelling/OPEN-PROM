@@ -10,6 +10,9 @@ from typing import Any, Dict
 import math
 from pyomo.core import ConcreteModel, value as pyo_value
 from core import sets as core_sets
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def load_curves_data(config: Any) -> Dict[str, Any]:
@@ -57,5 +60,5 @@ def load_curves_data_into_model(m: ConcreteModel, data: Dict[str, Any], core_set
             for lc in lctech:
                 try:
                     m.i10InitCostRefLC[cy, lc, base_y] = pyo_value(m.i04GrossCapCosSubRen[cy, lc, base_y])
-                except Exception:
-                    pass
+                except Exception as _exc:
+                    logger.debug("Skipped: %s", _exc)

@@ -7,6 +7,9 @@ Mirrors modules/10_Curves/LearningCurves/preloop.gms:
 """
 from pyomo.core import ConcreteModel, value as pyo_value
 from core import sets as core_sets
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def apply_curves_preloop(m: ConcreteModel, core_sets_obj) -> None:
@@ -39,10 +42,10 @@ def apply_curves_preloop(m: ConcreteModel, core_sets_obj) -> None:
             for cy in run_cy:
                 try:
                     add += pyo_value(m.imInstCapPastNonCHP[cy, lc, y])
-                except Exception:
-                    pass
+                except Exception as _exc:
+                    logger.debug("Skipped: %s", _exc)
             cum[lc] = cum[lc] + add
             try:
                 m.V10CumCapGlobal[lc, y].fix(cum[lc])
-            except Exception:
-                pass
+            except Exception as _exc:
+                logger.debug("Skipped: %s", _exc)

@@ -15,6 +15,9 @@ import pandas as pd
 from pyomo.core import value as pyo_value
 
 from core import sets as core_sets
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def _read_table(
@@ -206,8 +209,8 @@ def load_power_generation_data_into_model(
                     m.iTotAvailNomCapBsYr[cy, y] = pyo_value(
                         m.i04DataElecSteamGen[cy, "TOTNOMCAP", y]
                     )
-                except Exception:
-                    pass
+                except Exception as _exc:
+                    logger.debug("Skipped: %s", _exc)
 
     # i04MxmShareChpElec = 0.5
     for cy in run_cy:

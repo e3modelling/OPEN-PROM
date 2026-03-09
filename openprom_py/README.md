@@ -1,6 +1,6 @@
-# OPEN-PROM Python PoC
+# OPEN-PROM Python Translation
 
-Proof-of-concept: OPEN-PROM **core** + **01_Transport (simple)** in Python using Pyomo and Ipopt.
+Full OPEN-PROM model (**core** + **all 11 modules**) in Python using Pyomo and Ipopt.
 
 ## Layout
 
@@ -14,10 +14,14 @@ Proof-of-concept: OPEN-PROM **core** + **01_Transport (simple)** in Python using
   - **_05_Hydrogen/legacy/** — 05_Hydrogen (realization: legacy)  
   - **_06_CO2/legacy/** — 06_CO2 (realization: legacy)  
   - **_07_Emissions/legacy/** — 07_Emissions (realization: legacy)
+  - **_08_Prices/legacy/** — 08_Prices (realization: legacy)
+  - **_09_Heat/heat/** — 09_Heat (realization: heat)
+  - **_10_Curves/LearningCurves/** — 10_Curves (realization: LearningCurves)
+  - **_11_Economy/economy/** — 11_Economy (realization: economy)
 - **data/** — Place CSV/CSVR input files here (see `data/README.md`).
-- **prices_stub.py** — Exogenous fuel prices and subsidies (no 08_Prices / 11_Economy).
-- **build_model.py** — Assembles the Pyomo model.
-- **run_poc.py** — Builds and solves (one year in PoC); requires Ipopt.
+- **prices_stub.py** — Fallback Params for fuel prices/subsidies when 08_Prices/11_Economy Vars are already declared.
+- **build_model.py** — Assembles the Pyomo model (core + all 11 modules).
+- **run_poc.py** — Builds and solves over the configured time horizon; requires Ipopt.
 - **run_report.py** — Run report (main.lst): configuration, data load, build, solver log, errors.
 
 ## Setup
@@ -65,7 +69,7 @@ Ipopt is not on PyPI; install it using one of the following. See `requirements.t
   ```bash
   conda install -c conda-forge ipopt
   ```
-  Run the PoC from the same environment so that `ipopt` is on PATH. **Easier:** open Anaconda Prompt, `cd` to `openprom_py`, and run `setup_conda_env.bat` to create a conda env `openprom` with Python 3.14, Ipopt, and Pyomo/pandas in one go.
+  Run the model from the same environment so that `ipopt` is on PATH. **Easier:** open Anaconda Prompt, `cd` to `openprom_py`, and run `setup_conda_env.bat` to create a conda env `openprom` with Python 3.14, Ipopt, and Pyomo/pandas in one go.
 
 - **Windows (no conda)**  
   Conda is the supported way to get Ipopt on Windows. Alternatives: use WSL and install Ipopt inside Linux, or see [Ipopt releases](https://github.com/coin-or/Ipopt/releases) for binaries (manual PATH setup).
@@ -93,7 +97,7 @@ With your virtual environment **activated** and from the `openprom_py` directory
 
 ```bash
 python build_model.py    # Build only (no data required)
-python run_poc.py        # Build and solve (needs Ipopt; data optional for minimal run)
+python run_poc.py        # Build and solve over configured horizon (needs Ipopt; data optional for minimal run)
 ```
 
 Data paths are relative to the project root; `config.paths.DATA_DIR` points to `data/`.

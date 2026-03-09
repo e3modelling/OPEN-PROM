@@ -46,5 +46,5 @@ def apply_rest_of_energy_postsolve(m, core_sets_obj, year) -> None:
                     val = var[idx].value
                     if val is not None:
                         var[idx].fix(val)
-        except Exception:
-            pass
+        except Exception as _exc:
+            logger.debug("Skipped: %s", _exc)

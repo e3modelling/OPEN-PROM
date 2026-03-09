@@ -1,5 +1,5 @@
 """
-PoC run configuration: countries, time horizon, and flags.
+Run configuration: countries, time horizon, and flags.
 
 Mirrors the GAMS $setGlobal / $evalGlobal definitions in main.gms so that
 the Python run uses the same scenario and horizon as a typical GAMS run.
@@ -55,7 +55,7 @@ class PoCConfig:
     @classmethod
     def default_poc(cls) -> "PoCConfig":
         """
-        Default PoC configuration: one country (DEU), short horizon, calibration off.
+        Default configuration: one country (DEU), short horizon, calibration off.
         Use this for quick tests; override countries and end_y for longer runs.
         """
         return cls(

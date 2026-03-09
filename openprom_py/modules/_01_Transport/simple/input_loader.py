@@ -14,6 +14,9 @@ import pandas as pd
 
 from core import sets as core_sets
 from modules._01_Transport.simple import sets as t_sets
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def _path(data_dir: Path, filename: str) -> Optional[Path]:
@@ -30,8 +33,8 @@ def _log(filename: str, status: str, detail: str = "") -> None:
                 log.info("  {}  {}  {}".format(filename, status, detail))
             else:
                 log.info("  {}  {}".format(filename, status))
-    except Exception:
-        pass
+    except Exception as _exc:
+        logger.debug("Skipped: %s", _exc)
 
 
 # --- Inline data (GAMS parameter / table in code) ---
@@ -343,8 +346,8 @@ def load_transport_data_into_model(
                     try:
                         if (tran, tech, "LFT", y) not in [(k[0], k[1], k[2], k[3]) for k in trans_tech if len(k) >= 4]:
                             pass  # keep default 20
-                    except Exception:
-                        pass
+                    except Exception as _exc:
+                        logger.debug("Skipped: %s", _exc)
 
     # i01NewReg, i01StockPC
     if data.get("i01NewReg"):
@@ -374,8 +377,8 @@ def load_transport_data_into_model(
         if tran in trans and tech in ttech and e in ef:
             try:
                 m.i01InitSpecFuelConsData[tran, tech, e] = v
-            except Exception:
-                pass
+            except Exception as _exc:
+                logger.debug("Skipped: %s", _exc)
 
     # i01ShareBlend: from imFuelConsPerFueSub + BLENDMAP when data_core has imFuelCons; else from i01DataShareBlend; then AN = base year; LAM/ROAD profile
     im_fuel_cons = (data_core or {}).get("imFuelCons") or {}
@@ -402,8 +405,8 @@ def load_transport_data_into_model(
                         for e in ef:
                             try:
                                 m.i01ShareBlend[cy, tran, e, y] = m.i01ShareBlend[cy, tran, e, base_y].value or 0.0
-                            except Exception:
-                                pass
+                            except Exception as _exc:
+                                logger.debug("Skipped: %s", _exc)
         for y in ytime:
             ord_y = core_sets_obj.year_to_ord.get(y, 14) if hasattr(core_sets_obj, "year_to_ord") else (ytime.index(y) + 1 if y in ytime else 14)
             for cy in run_cy:
@@ -418,8 +421,8 @@ def load_transport_data_into_model(
                             m.i01ShareBlend[cy, tran, "GDO", y] = (base_gdo or 0) - 0.002 * (ord_y - 14)
                             m.i01ShareBlend[cy, tran, "BGSL", y] = (base_bgsl or 0) + 0.001 * (ord_y - 14)
                             m.i01ShareBlend[cy, tran, "GSL", y] = (base_gsl or 0) - 0.001 * (ord_y - 14)
-                    except Exception:
-                        pass
+                    except Exception as _exc:
+                        logger.debug("Skipped: %s", _exc)
     elif data.get("i01DataShareBlend"):
         for (cy, tran, e, y), v in data["i01DataShareBlend"].items():
             if cy in run_cy and tran in trans and e in ef and y in ytime:
@@ -431,5 +434,5 @@ def load_transport_data_into_model(
                         for e in ef:
                             try:
                                 m.i01ShareBlend[cy, tran, e, y] = m.i01ShareBlend[cy, tran, e, base_y].value or 0.0
-                            except Exception:
-                                pass
+                            except Exception as _exc:
+                                logger.debug("Skipped: %s", _exc)

@@ -10,6 +10,9 @@ Also: VmConsFuelTechH2Prod.FX at base year = VmProdH2.L/i05EffH2Prod (GAMS parit
 from pyomo.core import ConcreteModel, value as pyo_value
 
 from core import sets as core_sets
+import logging
+
+logger = logging.getLogger(__name__)
 
 # --- GAMS preloop.gms commented-out lines, transferred as comments ---
 # *V05CostTotH2.L(runCy,SBS,YTIME) = 2;
@@ -68,8 +71,8 @@ def apply_hydrogen_preloop(m: ConcreteModel, core_sets_obj) -> None:
                 try:
                     m.V05GapShareH2Tech1[cy, ht, y].setub(1.0)
                     m.V05GapShareH2Tech1[cy, ht, y].setlb(0.0)
-                except Exception:
-                    pass
+                except Exception as _exc:
+                    logger.debug("Skipped: %s", _exc)
 
             # V05DemGapH2
             try:
@@ -77,8 +80,8 @@ def apply_hydrogen_preloop(m: ConcreteModel, core_sets_obj) -> None:
                 m.V05DemGapH2[cy, y].set_value(10.0)
                 if y not in an:
                     m.V05DemGapH2[cy, y].fix(0.0)
-            except Exception:
-                pass
+            except Exception as _exc:
+                logger.debug("Skipped: %s", _exc)
 
             # VmDemTotH2: init and fix in datay from supply + demand data
             try:
@@ -94,8 +97,8 @@ def apply_hydrogen_preloop(m: ConcreteModel, core_sets_obj) -> None:
                 m.VmDemTotH2[cy, y].set_value(s)
                 if y in datay:
                     m.VmDemTotH2[cy, y].fix(s)
-            except Exception:
-                pass
+            except Exception as _exc:
+                logger.debug("Skipped: %s", _exc)
 
             # VmProdH2: fix in datay to 0
             for ht in h2tech:
@@ -104,8 +107,8 @@ def apply_hydrogen_preloop(m: ConcreteModel, core_sets_obj) -> None:
                     m.VmProdH2[cy, ht, y].set_value(0.5)
                     if y in datay:
                         m.VmProdH2[cy, ht, y].fix(0.0)
-                except Exception:
-                    pass
+                except Exception as _exc:
+                    logger.debug("Skipped: %s", _exc)
 
             # V05ScrapLftH2Prod: fix in datay to 1/lifetime
             for ht in h2tech:
@@ -115,8 +118,8 @@ def apply_hydrogen_preloop(m: ConcreteModel, core_sets_obj) -> None:
                     if y in datay:
                         lft = _pval(m, m.i05ProdLftH2, ht, y) or 20.0
                         m.V05ScrapLftH2Prod[cy, ht, y].fix(1.0 / (lft + 1e-10))
-                except Exception:
-                    pass
+                except Exception as _exc:
+                    logger.debug("Skipped: %s", _exc)
 
             # V05CostProdH2Tech: fix in datay to 900 (GAMS)
             for ht in h2tech:
@@ -125,8 +128,8 @@ def apply_hydrogen_preloop(m: ConcreteModel, core_sets_obj) -> None:
                     m.V05CostProdH2Tech[cy, ht, y].set_value(2.0)
                     if y in datay:
                         m.V05CostProdH2Tech[cy, ht, y].fix(900.0)
-                except Exception:
-                    pass
+                except Exception as _exc:
+                    logger.debug("Skipped: %s", _exc)
 
             # V05ShareCCSH2Prod, V05ShareNoCCSH2Prod bounds
             for ht in h2tech:
@@ -135,8 +138,8 @@ def apply_hydrogen_preloop(m: ConcreteModel, core_sets_obj) -> None:
                     m.V05ShareCCSH2Prod[cy, ht, y].setub(1.0)
                     m.V05ShareNoCCSH2Prod[cy, ht, y].setlb(0.0)
                     m.V05ShareNoCCSH2Prod[cy, ht, y].setub(1.0)
-                except Exception:
-                    pass
+                except Exception as _exc:
+                    logger.debug("Skipped: %s", _exc)
 
             # VmConsFuelH2Prod: fix in datay to sum of tech; fix to 0 for non-H2PRODEF
             for ef_ in ef_list:
@@ -150,16 +153,16 @@ def apply_hydrogen_preloop(m: ConcreteModel, core_sets_obj) -> None:
                             if e == ef_
                         )
                         m.VmConsFuelH2Prod[cy, ef_, y].fix(s)
-                except Exception:
-                    pass
+                except Exception as _exc:
+                    logger.debug("Skipped: %s", _exc)
 
             # V05CostProdCCSNoCCSH2Prod bounds
             for ht in h2tech:
                 try:
                     m.V05CostProdCCSNoCCSH2Prod[cy, ht, y].setlb(1e-6)
                     m.V05CostProdCCSNoCCSH2Prod[cy, ht, y].set_value(2.0)
-                except Exception:
-                    pass
+                except Exception as _exc:
+                    logger.debug("Skipped: %s", _exc)
 
             # VmCostAvgProdH2: fix in datay to weighted average
             try:
@@ -173,8 +176,8 @@ def apply_hydrogen_preloop(m: ConcreteModel, core_sets_obj) -> None:
                     )
                     denom = sum((pyo_value(m.VmProdH2[cy, ht, y]) or 0.0) + 1e-6 for ht in h2tech)
                     m.VmCostAvgProdH2[cy, y].fix(num / (denom + 1e-10))
-            except Exception:
-                pass
+            except Exception as _exc:
+                logger.debug("Skipped: %s", _exc)
 
             # V05PremRepH2Prod: fix to 1 for non-H2TECHPM
             for ht in h2tech:
@@ -183,8 +186,8 @@ def apply_hydrogen_preloop(m: ConcreteModel, core_sets_obj) -> None:
                     m.V05PremRepH2Prod[cy, ht, y].setub(1.0)
                     if ht not in h2techpm:
                         m.V05PremRepH2Prod[cy, ht, y].fix(1.0)
-                except Exception:
-                    pass
+                except Exception as _exc:
+                    logger.debug("Skipped: %s", _exc)
 
             # V05CaptRateH2: fix in datay to i05CaptRateH2Prod
             for ht in h2tech:
@@ -192,8 +195,8 @@ def apply_hydrogen_preloop(m: ConcreteModel, core_sets_obj) -> None:
                     m.V05CaptRateH2[cy, ht, y].setlb(0.0)
                     if y in datay:
                         m.V05CaptRateH2[cy, ht, y].fix(_pval(m, m.i05CaptRateH2Prod, ht) or 0.0)
-                except Exception:
-                    pass
+                except Exception as _exc:
+                    logger.debug("Skipped: %s", _exc)
 
     # VmConsFuelTechH2Prod.FX at base year = VmProdH2.L / i05EffH2Prod (GAMS: runCy,H2TECH,EF,"%fBaseY%")
     base_y = getattr(core_sets_obj, "tFirst", None)
@@ -206,8 +209,8 @@ def apply_hydrogen_preloop(m: ConcreteModel, core_sets_obj) -> None:
                     prod = pyo_value(m.VmProdH2[cy, ht, base_y]) or 0.0
                     eff = _pval(m, m.i05EffH2Prod, cy, ht, base_y) or 1.0
                     m.VmConsFuelTechH2Prod[cy, ht, ef_, base_y].fix(prod / (eff + 1e-10))
-                except Exception:
-                    pass
+                except Exception as _exc:
+                    logger.debug("Skipped: %s", _exc)
 
     # V05CapScrapH2ProdTech, V05GapShareH2Tech2 bounds
     for cy in run_cy:
@@ -218,5 +221,5 @@ def apply_hydrogen_preloop(m: ConcreteModel, core_sets_obj) -> None:
                     m.V05CapScrapH2ProdTech[cy, ht, y].setub(1.0)
                     m.V05GapShareH2Tech2[cy, ht, y].setlb(0.0)
                     m.V05GapShareH2Tech2[cy, ht, y].setub(1.0)
-                except Exception:
-                    pass
+                except Exception as _exc:
+                    logger.debug("Skipped: %s", _exc)

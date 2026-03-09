@@ -18,6 +18,9 @@ import pandas as pd
 from pyomo.core import value as pyo_value
 
 from core import sets as core_sets
+import logging
+
+logger = logging.getLogger(__name__)
 
 # SUPOTH elements (GAMS); used for i03SupResRefCapacity default and i03ResHcNgOilPrProd
 _SUPOTH_FULL = ["ELC_IMP", "REF_CAP_RES", "HCL_PPROD", "NGS_PPROD", "OIL_PPROD"]
@@ -32,8 +35,8 @@ def _log(msg: str, detail: str = "") -> None:
                 log.info("  [03_RestOfEnergy] {}  {}".format(msg, detail))
             else:
                 log.info("  [03_RestOfEnergy] {}".format(msg))
-    except Exception:
-        pass
+    except Exception as _exc:
+        logger.debug("Skipped: %s", _exc)
 
 
 def _path(data_dir: Path, filename: str) -> Path:
@@ -355,16 +358,16 @@ def load_rest_of_energy_data_into_model(m, data: Dict[str, Dict[tuple, float]], 
                             v = m.i03DataOwnConsEne[cy, ss, efs_, y].value
                             if v is not None and v < 1e-4:
                                 m.i03DataOwnConsEne[cy, ss, efs_, y] = 0.0
-                        except Exception:
-                            pass
+                        except Exception as _exc:
+                            logger.debug("Skipped: %s", _exc)
 
     # i03FeedTransfr = i03SuppTransfers
     for (cy, efs_, y), val in data.get("i03SuppTransfers", {}).items():
         if hasattr(m, "i03FeedTransfr"):
             try:
                 m.i03FeedTransfr[cy, efs_, y] = val
-            except Exception:
-                pass
+            except Exception as _exc:
+                logger.debug("Skipped: %s", _exc)
 
     # GAMS: i03SupResRefCapacity(runCy,SUPOTH,YTIME) = 1; i03SupTrnasfOutputRefineries(runCy,EF,YTIME) = 1
     if hasattr(m, "i03SupResRefCapacity"):
@@ -373,16 +376,16 @@ def load_rest_of_energy_data_into_model(m, data: Dict[str, Dict[tuple, float]], 
                 for y in ytime:
                     try:
                         m.i03SupResRefCapacity[cy, sup, y] = 1.0
-                    except Exception:
-                        pass
+                    except Exception as _exc:
+                        logger.debug("Skipped: %s", _exc)
     if hasattr(m, "i03SupTrnasfOutputRefineries"):
         for cy in run_cy:
             for e in ef:
                 for y in ytime:
                     try:
                         m.i03SupTrnasfOutputRefineries[cy, e, y] = 1.0
-                    except Exception:
-                        pass
+                    except Exception as _exc:
+                        logger.debug("Skipped: %s", _exc)
 
     # GAMS: i03ResTransfOutputRefineries(runCy,EFS,YTIME) = i03SupTrnasfOutputRefineries(runCy,EFS,YTIME)
     if hasattr(m, "i03ResTransfOutputRefineries") and hasattr(m, "i03SupTrnasfOutputRefineries"):
@@ -399,8 +402,8 @@ def load_rest_of_energy_data_into_model(m, data: Dict[str, Dict[tuple, float]], 
                     except Exception:
                         try:
                             m.i03ResTransfOutputRefineries[cy, efs_, y] = 1.0
-                        except Exception:
-                            pass
+                        except Exception as _exc:
+                            logger.debug("Skipped: %s", _exc)
 
     # GAMS: i03ResHcNgOilPrProd(runCy,"HCL",YTIME)$an(YTIME) = i03SupResRefCapacity(runCy,"HCL_PPROD",YTIME); same NGS,CRO
     if hasattr(m, "i03ResHcNgOilPrProd") and hasattr(m, "i03SupResRefCapacity"):
@@ -410,8 +413,8 @@ def load_rest_of_energy_data_into_model(m, data: Dict[str, Dict[tuple, float]], 
                     m.i03ResHcNgOilPrProd[cy, "HCL", y] = pyo_value(m.i03SupResRefCapacity[cy, "HCL_PPROD", y])
                     m.i03ResHcNgOilPrProd[cy, "NGS", y] = pyo_value(m.i03SupResRefCapacity[cy, "NGS_PPROD", y])
                     m.i03ResHcNgOilPrProd[cy, "CRO", y] = pyo_value(m.i03SupResRefCapacity[cy, "OIL_PPROD", y])
-                except Exception:
-                    pass
+                except Exception as _exc:
+                    logger.debug("Skipped: %s", _exc)
 
     # Commented out in GAMS (input.gms): *i03RefCapacity(allCy,YTIME) "Refineries Capacity (Million Barrels/day)"
     # *i03ResRefCapacity(runCy,YTIME) = i03SupResRefCapacity(runCy,"REF_CAP_RES",YTIME);
@@ -426,8 +429,8 @@ def load_rest_of_energy_data_into_model(m, data: Dict[str, Dict[tuple, float]], 
                 if hasattr(m, "i03RatePriProTotPriNeeds"):
                     try:
                         m.i03RatePriProTotPriNeeds[cy, efs_, y] = val
-                    except Exception:
-                        pass
+                    except Exception as _exc:
+                        logger.debug("Skipped: %s", _exc)
 
     # i03ResHcNgOilPrProd = 1 (default). GAMS sets from i03SupResRefCapacity per HCL/NGS/CRO
     for cy in run_cy:
@@ -436,8 +439,8 @@ def load_rest_of_energy_data_into_model(m, data: Dict[str, Dict[tuple, float]], 
                 if hasattr(m, "i03ResHcNgOilPrProd"):
                     try:
                         m.i03ResHcNgOilPrProd[cy, efs_, y] = 1.0
-                    except Exception:
-                        pass
+                    except Exception as _exc:
+                        logger.debug("Skipped: %s", _exc)
 
     # i03RatioImpFinElecDem = i03ElcNetImpShare(cy, "ELC_IMP", y)
     elc_share = data.get("i03ElcNetImpShare", {})
@@ -447,8 +450,8 @@ def load_rest_of_energy_data_into_model(m, data: Dict[str, Dict[tuple, float]], 
             if hasattr(m, "i03RatioImpFinElecDem"):
                 try:
                     m.i03RatioImpFinElecDem[cy, y] = val
-                except Exception:
-                    pass
+                except Exception as _exc:
+                    logger.debug("Skipped: %s", _exc)
 
     # i03TotEneBranchCons = sum over SSBS of i03DataOwnConsEne
     own_cons = data.get("i03DataOwnConsEne", {})
@@ -459,8 +462,8 @@ def load_rest_of_energy_data_into_model(m, data: Dict[str, Dict[tuple, float]], 
                 if hasattr(m, "i03TotEneBranchCons"):
                     try:
                         m.i03TotEneBranchCons[cy, efs_, y] = tot
-                    except Exception:
-                        pass
+                    except Exception as _exc:
+                        logger.debug("Skipped: %s", _exc)
 
     # i03RateEneBranCons: for future years use base-year value (GAMS: $AN(YTIME) = base)
     rate_cons = data.get("i03RateEneBranCons", {})
@@ -475,8 +478,8 @@ def load_rest_of_energy_data_into_model(m, data: Dict[str, Dict[tuple, float]], 
                     if hasattr(m, "i03RateEneBranCons"):
                         try:
                             m.i03RateEneBranCons[cy, ss, efs_, y] = base_val
-                        except Exception:
-                            pass
+                        except Exception as _exc:
+                            logger.debug("Skipped: %s", _exc)
 
     # imRateLossesFinCons: GAMS formula imDistrLosses / (sum DSBS imFuelConsPerFueSub + i03PrimProd for CRO); then $AN = base.
     if hasattr(m, "imRateLossesFinCons") and hasattr(m, "imDistrLosses") and hasattr(m, "imFuelConsPerFueSub") and hasattr(m, "i03PrimProd"):
@@ -491,8 +494,8 @@ def load_rest_of_energy_data_into_model(m, data: Dict[str, Dict[tuple, float]], 
                             continue
                         num = pyo_value(m.imDistrLosses[cy, efs_, y])
                         m.imRateLossesFinCons[cy, efs_, y] = num / denom
-                    except Exception:
-                        pass
+                    except Exception as _exc:
+                        logger.debug("Skipped: %s", _exc)
         if base_y is not None:
             for cy in run_cy:
                 for efs_ in efs:
@@ -503,5 +506,5 @@ def load_rest_of_energy_data_into_model(m, data: Dict[str, Dict[tuple, float]], 
                     for y in an:
                         try:
                             m.imRateLossesFinCons[cy, efs_, y] = base_val
-                        except Exception:
-                            pass
+                        except Exception as _exc:
+                            logger.debug("Skipped: %s", _exc)

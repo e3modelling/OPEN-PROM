@@ -2,6 +2,9 @@
 from pathlib import Path
 from typing import Any, Dict
 from pyomo.core import ConcreteModel
+import logging
+
+logger = logging.getLogger(__name__)
 
 def load_economy_data(config: Any) -> Dict[str, Any]:
     data = {}
@@ -38,5 +41,5 @@ def load_economy_data_into_model(m: ConcreteModel, data: Dict[str, Any], core_se
         if len(key) == 4 and key[0] in run_cy and key[3] in ytime:
             try:
                 m.i11SubsiPerDemTechAvail[key] = float(val)
-            except Exception:
-                pass
+            except Exception as _exc:
+                logger.debug("Skipped: %s", _exc)
