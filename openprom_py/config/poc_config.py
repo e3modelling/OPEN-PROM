@@ -55,15 +55,15 @@ class PoCConfig:
     @classmethod
     def default_poc(cls) -> "PoCConfig":
         """
-        Default configuration: one country (DEU), short horizon, calibration off.
-        Use this for quick tests; override countries and end_y for longer runs.
+        Default configuration: one country (DEU), full horizon to 2100, calibration off.
+        Matches GAMS main.gms: fStartY=2024, fEndY=2100.
         """
         return cls(
             countries=("DEU",),
             start_horizon=2010,
             end_horizon=2100,
             start_y=2024,
-            end_y=2030,
+            end_y=2100,
             base_y=2023,
             period_of_years=1,
             scenario=1,
