@@ -148,8 +148,6 @@ rcc                                                           /rcc1*rcc10/
 
 ***       Sectoral Structure        *
 
-
-
 ALLSBS   All sectors
 /
 IS    "Iron and Steel"
@@ -574,7 +572,6 @@ STE.STE
 ELCEF(EF)        Electricity                                         /ELC/
 H2EF(EF)         Hydrogen                                            /H2F/
 STEAM(EFS)       Steam                                               /STE/
-TOCTEF(EFS)      Energy forms produced by power plants and boilers   /ELC,STE/
 ALTEF(EF)        Alternative Fuels used in transport                 /BGDO,BKRS,BGSL,MET,ETH/
 
 PGEF(EFS)        "Energy forms used for steam production"
@@ -619,12 +616,6 @@ ELC
 /
 
 *         Technologies            *
-
-TEAALL              Technology progress (Demand Side)
-/
-ORD   Ordinary
-IMP   Improved
-/
 
 TECH      Technologies (in Demand side)
 /
@@ -748,6 +739,8 @@ TNGSCCS
 THCLCCS
 /
 
+effSET "PG and thermal plants efficiencies"  /effElc, effHeat/
+
 RENEF(TECH)        Renewable technologies in demand side !! Should these remain in EF?
 /
 *HYD     "Hydro"
@@ -799,6 +792,20 @@ cgf         "coal gasification"
 cgs         "coal gasification with CCS"
 bgfl        "biomass gasification large scale"
 bgfls       "biomass gasification large scale with CCS"
+TSTE1AL           "Lignite powered advanced CHP"
+TSTE1AH           "Hard Coal powered advanced CHP"
+TSTE1AD           "Diesel Oil powered advanced CHP"
+*STE1AR           "Fuel Oil powered advanced CHP"
+TSTE1AG           "Natural Gas powered advanced CHP"
+TSTE1AB           "Biomass-Waste powered advanced CHP"
+TSTE1AH2F         "HYDROGEN powered FUEL CELL CHP"
+TSTE2LGN
+TSTE2OSL
+TSTE2GDO
+TSTE2NGS
+TSTE2BMS
+TSTE2GEO
+TSTE2OTH
 /
 
 TECHtoEF (TECH,EF) Fuels consumed by technologies
@@ -914,10 +921,10 @@ EW.TEW
 
 SECtoEF(SBS,EF) Link between Model Subsectors and Energy Forms consumed
 /
-PG.(LGN,HCL,GDO,RFO,NGS,OGS,NUC,HYD,BMSWAS,SOL,GEO,WND,H2F)
+PG.(LGN,HCL,CRO,GSL,BGSL,KRS,BKRS,GDO,BGDO,RFO,OLQ,NGS,OGS,NUC,HYD,BMSWAS,SOL,GEO,WND,H2F)
 CHP.(LGN,HCL,GDO,RFO,NGS,OGS,NUC,HYD,BMSWAS,SOL,GEO,WND)
 H2P.(HCL,LGN,RFO,GDO,NGS,OGS,NUC,BMSWAS,SOL,WND,ELC)
-STEAMP.(HCL,LGN,GDO,RFO,LPG,KRS,NGS,OGS,OLQ,NUC,GEO,BMSWAS,ELC,H2F)
+STEAMP.(HCL,LGN,CRO,GDO,BGDO,GSL,BGSL,KRS,BKRS,RFO,LPG,NGS,OGS,OLQ,NUC,GEO,BMSWAS,ELC,H2F)
 SLD.(LGN,HCL,GSL,GDO,BGDO,RFO,OLQ,NGS,OGS,BMSWAS,SOL,CRO,LPG,KRS,ELC,STE)
 LQD.(LGN,HCL,GSL,GDO,BGDO,RFO,OLQ,NGS,OGS,BMSWAS,SOL,CRO,LPG,KRS,ELC,STE)
 GAS.(HCL,GSL,GDO,BGDO,RFO,OLQ,NGS,OGS,BMSWAS,SOL,CRO,LPG,KRS,ELC,STE)
@@ -1010,28 +1017,21 @@ PGRENSW(PGALL)   Solar and wind Plants                     /PGSOL,PGCSP,PGAWND,P
 PGNREN(PGALL)    Advanced Renewable Plants potential      /PGCSP,PGOTHREN,PGAWNO,ATHBMSWAS/
 PGRENEF          Renewable energy forms in power generation  /HYD,WND,SOL,BMSWAS,GEO/
 
-PGALLtoPGRENEF(PGALL,PGRENEF)     Correspondence between renewable plants and renewable energy forms
-/
-(PGSHYD,PGLHYD).HYD
-(PGAWND,PGAWNO).WND
-(PGSOL,PGCSP).SOL
-PGOTHREN.GEO
-(ATHBMSWAS,ATHBMSCCS).BMSWAS
-/
-
 PGALLtoEF(PGALL,EFS)     Correspondence between plants and energy forms
 /
 (ATHLGN,ATHLGNCCS).LGN
-(ATHCOAL, ATHCOALCCS).HCL
-(ATHOIL).GDO
-(ATHGAS,ATHGASCCS).NGS
+(ATHCOAL,ATHCOALCCS).HCL
+*(ATHOIL).GDO
+*(ATHGAS,ATHGASCCS).NGS
+ATHOIL.(GSL,BGSL,GDO,BGDO,KRS,BKRS,CRO,OLQ)
+(ATHGAS,ATHGASCCS).(NGS,OGS)
 (ATHBMSWAS,ATHBMSCCS).BMSWAS
-(PGANUC).NUC
+PGANUC.NUC
 (PGLHYD,PGSHYD).HYD
 (PGAWND,PGAWNO).WND
 (PGSOL,PGCSP).SOL
-(PGOTHREN).GEO
-(PGH2F).H2F
+PGOTHREN.GEO
+PGH2F.H2F
 *(ACCHT,ICEH2,FC2).H2F
 /
 
@@ -1080,8 +1080,6 @@ HFC      "Hydrofluorocarbons"
 PFC      "Perfluorinated Compounds "
 SF6      "Sulfur Hexafluoride"
 /
-
-
 
 SCT_GHGtoEMISS(SCT_GHG,EMISS)  Mapping between sectors and emissions
 /
@@ -1216,12 +1214,14 @@ BALEF fuels in balance report
 /
 "Total"
 "Other Fuels"
+"Renewables"
 "Solids"
 "Hard coal"
 "Lignite"
 "Crude oil and Feedstocks"
 "Liquids"
 "Fossil Liquids"
+"Fossil"
 "Liquified petroleum gas"
 "Gasoline"
 "Kerosene"
@@ -1256,7 +1256,9 @@ BALEF2EFS(BALEF, EFS) Mapping from balance fuels to model fuels
 "Crude oil and Feedstocks".CRO
 "Liquids".(LPG,GSL,BGSL,KRS,BKRS,GDO,BGDO,RFO,OLQ,CRO)
 "Fossil Liquids".(LPG,GSL,KRS,GDO,RFO,OLQ,CRO)
-"Other fuels".(HYD,WND,SOL,GEO,NUC,MET,ETH)
+"Fossil".(HCL,LGN,CRO,LPG,GSL,KRS,GDO,RFO,OLQ,NGS,OGS)
+"Renewables".(HYD,WND,SOL,GEO)
+"Other fuels".(MET,ETH)
 "Liquified petroleum gas".LPG
 "Gasoline".(GSL,BGSL)
 "Kerosene".(KRS,BKRS)
@@ -1330,7 +1332,7 @@ alias(NAP2,NAP);
 ALIAS (EFS2,EFS);
 ALIAS (INDDOM2,INDDOM);
 ALIAS (YYTIME2,ytime);
-
+ALIAS (PGEF2,PGEF);
 
 scalar ordfirst /0/;
 ordfirst=sum((ytime,YYTIME2)$((ord(ytime)<=ord(YYTIME2)) $TFIRST(YYTIME2)),1);

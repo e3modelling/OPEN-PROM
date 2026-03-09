@@ -21,7 +21,7 @@ $include"./iDataElecProdNonCHP.csv"
 $offdelim
 ;
 *---
-table i04DataElecProdCHP(allCy,EF,YTIME)           "Electricity CHP production past years (GWh)"
+table i04DataElecProdCHP(allCy,TCHP,YTIME)           "Electricity CHP production past years (GWh)"
 $ondelim
 $include"./iDataElecProdCHP.csv"
 $offdelim
@@ -88,8 +88,8 @@ $offdelim
 *---
 $IFTHEN.calib %Calibration% == MatCalibration
 variable i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   "Maturity factor related to plant available capacity (1)";
-i04MatFacPlaAvailCap.LO(runCy, PGALL, YTIME) = 1e-6;
-i04MatFacPlaAvailCap.UP(runCy, PGALL, YTIME) = 50;
+i04MatFacPlaAvailCap.LO(runCy, PGALL, YTIME) = 0;
+i04MatFacPlaAvailCap.UP(runCy, PGALL, YTIME) = 20;
 i04MatFacPlaAvailCap.L(runCy,PGALL,YTIME) = iMatFacPlaAvailCapData(runCy,PGALL,YTIME);
 $ELSE.calib
 parameter i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   "Maturity factor related to plant available capacity (1)";
@@ -152,14 +152,6 @@ PCH	0.78,
 NEN	0.78 
 / ;
 *---
-Parameters
-iTotAvailNomCapBsYr(allCy,YTIME)	               "Total nominal available installed capacity in base year (GW)"
-i04TechLftPlaType(allCy,PGALL)	                   "Technical Lifetime per plant type (year)"
-i04ScaleEndogScrap                              "Scale parameter for endogenous scrapping applied to the sum of full costs (1)"
-i04DecInvPlantSched(allCy,PGALL,YTIME)             "Decided plant investment schedule (GW)"
-i04MxmShareChpElec(allCy,YTIME)	                   "Maximum share of CHP electricity in a country (1)"
-;
-*---
 iTotAvailNomCapBsYr(runCy,YTIME)$datay(YTIME) = i04DataElecSteamGen(runCy,"TOTNOMCAP",YTIME);
 *---
 i04TechLftPlaType(runCy,PGALL) = i04DataTechLftPlaType(PGALL, "LFT");
@@ -171,8 +163,16 @@ loop(runCy,PGALL,YTIME)$AN(YTIME) DO
          abort $(i04GrossCapCosSubRen(runCy,PGALL,YTIME)<0) "CAPITAL COST IS NEGATIVE", i04GrossCapCosSubRen
 ENDLOOP;
 *---
-i04ScaleEndogScrap = 2 / card(PGALL);
+i04ScaleEndogScrap = 6 / card(PGALL);
 *---
 i04DecInvPlantSched(runCy,PGALL,YTIME) = i04InvPlants(runCy,PGALL,YTIME);
 *---
-i04MxmShareChpElec(runCy,YTIME) = 0.5;
+i04MxmShareChpElec(runCy,YTIME) = 0.35;
+*---
+i04Util(allCy,PGALL,YTIME) = 1;
+*---
+i04ShareFuels(runCy,PGALL,PGEF)$PGALLTOEF(PGALL,PGEF) = 
+(
+  (i03InpTotTransfProcess(runCy,"PG",PGEF,"%fBaseY%") - 1e-6) / 
+  SUM(PGEF2$PGALLTOEF(PGALL,PGEF2),i03InpTotTransfProcess(runCy,"PG",PGEF2,"%fBaseY%") - 1e-6)
+)$SUM(PGEF2$PGALLTOEF(PGALL,PGEF2),i03InpTotTransfProcess(runCy,"PG",PGEF2,"%fBaseY%") - 1e-6);

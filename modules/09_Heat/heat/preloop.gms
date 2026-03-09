@@ -30,49 +30,9 @@ i03TotEneBranchCons(runCy,"STE",YTIME) +
 imDistrLosses(runCy,"STE",YTIME) +
 i03FeedTransfr(runCy,"STE",YTIME);
 *---
-* We account the steam production per chp plant based on a ratio of input transformation
 VmProdSte.LO(runCy,TSTEAM,YTIME) = 0;
-VmProdSte.L(runCy,TSTEAM,YTIME) = 
-(
-  SUM(EFS$TSTEAMTOEF(TSTEAM,EFS),i03InpTotTransfProcess(runCy,"CHP",EFS,"%fBaseY%") * i09EffSteThrm(TSTEAM,"%fBaseY%") - 1e-6) /
-  SUM(EFS$STEAMEF(EFS),i03InpTotTransfProcess(runCy,"CHP",EFS,"%fBaseY%") * i09EffSteThrm(TSTEAM,"%fBaseY%") - 1e-6) * 
-  (
-    SUM(DSBS$(not DOMSE(DSBS)), imFuelConsPerFueSub(runCy,DSBS,"STE","%fBaseY%")) +
-    i03TotEneBranchCons(runCy,"STE","%fBaseY%") +
-    imDistrLosses(runCy,"STE","%fBaseY%") / 2 +
-    i03FeedTransfr(runCy,"STE","%fBaseY%") / 2
-  )
-)$TCHP(TSTEAM) +
-(
-  SUM(EFS$TSTEAMTOEF(TSTEAM,EFS),i03InpTotTransfProcess(runCy,"STEAMP",EFS,"%fBaseY%") * i09EffSteThrm(TSTEAM,"%fBaseY%") - 1e-6) /
-  SUM(EFS$STEAMEF(EFS),i03InpTotTransfProcess(runCy,"STEAMP",EFS,"%fBaseY%") * i09EffSteThrm(TSTEAM,"%fBaseY%") - 1e-6) * 
-  (
-    SUM(DSBS$DOMSE(DSBS), imFuelConsPerFueSub(runCy,DSBS,"STE","%fBaseY%")) +
-    imDistrLosses(runCy,"STE","%fBaseY%") / 2 +
-    i03FeedTransfr(runCy,"STE","%fBaseY%") / 2
-  )
-)$TDHP(TSTEAM);
-
-VmProdSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) = 
-(
-  SUM(EFS$TSTEAMTOEF(TSTEAM,EFS),i03InpTotTransfProcess(runCy,"CHP",EFS,YTIME) * i09EffSteThrm(TSTEAM,YTIME) - 1e-6) /
-  SUM(EFS$STEAMEF(EFS),i03InpTotTransfProcess(runCy,"CHP",EFS,YTIME) * i09EffSteThrm(TSTEAM,YTIME) - 1e-6) * 
-  (
-    SUM(DSBS$(not DOMSE(DSBS)), imFuelConsPerFueSub(runCy,DSBS,"STE",YTIME)) +
-    i03TotEneBranchCons(runCy,"STE",YTIME) +
-    imDistrLosses(runCy,"STE",YTIME) / 2 +
-    i03FeedTransfr(runCy,"STE",YTIME) / 2
-  )
-)$TCHP(TSTEAM) +
-(
-  SUM(EFS$TSTEAMTOEF(TSTEAM,EFS),i03InpTotTransfProcess(runCy,"STEAMP",EFS,YTIME) * i09EffSteThrm(TSTEAM,YTIME) - 1e-6) /
-  SUM(EFS$STEAMEF(EFS),i03InpTotTransfProcess(runCy,"STEAMP",EFS,YTIME) * i09EffSteThrm(TSTEAM,YTIME) - 1e-6) * 
-  (
-    SUM(DSBS$DOMSE(DSBS), imFuelConsPerFueSub(runCy,DSBS,"STE",YTIME)) +
-    imDistrLosses(runCy,"STE",YTIME) / 2 +
-    i03FeedTransfr(runCy,"STE",YTIME) / 2
-  )
-)$TDHP(TSTEAM);
+VmProdSte.L(runCy,TSTEAM,YTIME) = i04DataHeatProd(runCy,TSTEAM,"%fBaseY%");
+VmProdSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) = i04DataHeatProd(runCy,TSTEAM,YTIME);
 *---
 V09CaptRateSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) = i09CaptRateSteProd(TSTEAM);
 *---
@@ -105,12 +65,12 @@ sum(EF$TSTEAMTOEF(TSTEAM,EF),
     (1-V09CaptRateSte.L(runCy,TSTEAM,YTIME)) * 1e-3 * (imCo2EmiFac(runCy,"STEAMP",EF,YTIME)) *
     sum(NAP$NAPtoALLSBS(NAP,"STEAMP"),VmCarVal.L(runCy,NAP,YTIME))
   )
-) / i09EffSteThrm(TSTEAM,YTIME) +
-i09CostVOMSteProd(TSTEAM,YTIME) * 1e-3 / smTWhToMtoe * VmPriceElecInd.L(runCy,YTIME) -
+) / SUM(STECH$sameas(STECH,TSTEAM),imPlantEffByType(runCy,STECH,"effHeat",YTIME)) +
+i09CostVOMSteProd(TSTEAM,YTIME) * 1e-3 -!!/ smTWhToMtoe / SUM(TCHP$sameas(TCHP,TSTEAM),VmPriceElecInd.L(runCy,TCHP,YTIME)) -
 (
   VmPriceFuelSubsecCarVal.L(runCy,"OI","ELC",YTIME) *
-  smFracElecPriChp *
-  VmPriceElecInd.L(runCy,YTIME)
+  smFracElecPriChp /
+  SUM(TCHP$sameas(TCHP,TSTEAM),VmPriceElecInd.L(runCy,TCHP,YTIME))
 )$TCHP(TSTEAM);
 *---
 V09CostProdSte.LO(runCy,TSTEAM,YTIME) = 0;

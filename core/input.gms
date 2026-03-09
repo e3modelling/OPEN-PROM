@@ -133,7 +133,7 @@ $include"./iInstCapPastNonCHP.csv"
 $offdelim
 ;
 *---
-table imInstCapPastCHP(allCy,EF,YTIME)        "Installed CHP capacity past (GW)"
+table imInstCapPastCHP(allCy,TCHP,YTIME)        "Installed CHP capacity past (GW)"
 $ondelim
 $include"./iInstCapPastCHP.csv"
 $offdelim
@@ -163,11 +163,12 @@ $include"./iPriceFuelsInt.csv"
 $offdelim
 ;
 *---
-table imPriceElecInd(allCy,YTIME)                      "Electricity power to steam ratio"
+table imPriceElecInd(allCy,TCHP,YTIME)                      "Electricity power to steam ratio"
 $ondelim
 $include"./iDataElecInd.csv"
 $offdelim
 ;
+imPriceElecInd(allCy,"TSTE1AH2F",YTIME) = imPriceElecInd(allCy,"TSTE1AG",YTIME)
 *---
 parameter imImpExp(allCy,EFS,YTIME)	              "Imports of exporting countries usually zero (1)" ;
 imImpExp(runCy,EFS,YTIME) = 0;
@@ -658,7 +659,7 @@ $offtext
 $ELSE.calib
 variable imMatrFactor(allCy,DSBS,TECH,YTIME)    "Maturity factor per technology and subsector for all countries (1)";
 imMatrFactor.LO(runCy,DSBS,TECH,YTIME) = 0;                                          
-imMatrFactor.UP(runCy,DSBS,TECH,YTIME) = 50;
+imMatrFactor.UP(runCy,DSBS,TECH,YTIME) = 20;
 imMatrFactor.L(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);     
 imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(not (sameas(DSBS,"PC") or sameas(DSBS,"PB") or sameas(DSBS,"GU"))) = iMatrFactorData(runCy,DSBS,TECH,YTIME);   
 imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$((sameas(DSBS,"PC") or sameas(DSBS,"PB") or sameas(DSBS,"GU")) and not SECTTECH(DSBS,TECH)) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                      
@@ -792,14 +793,16 @@ imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$(ord(YTIME)>50)  = 0.7;
 
 **  Power Generation
 *---
-table iDataPlantEffByType(allCy,PGALL, YTIME)   "Data for plant efficiency per plant type"
+table imPlantEffByType(allCy,STECH,effSET,YTIME)   "Data for plant efficiency per plant type"
 $ondelim
 $include "./iDataPlantEffByType.csv"
 $offdelim
 ;
 *---
-imPlantEffByType(runCy,PGALL,YTIME) = iDataPlantEffByType(runCy,PGALL, YTIME) ;
-imPlantEffByType(runCy,"PGH2F",YTIME) = 0.85;
+imPlantEffByType(runCy,"PGH2F","effELC",YTIME) = imPlantEffByType(runCy,"ATHGAS","effELC",YTIME);
+imPlantEffByType(runCy,"TSTE1AH2F",effSET,YTIME) = imPlantEffByType(runCy,"TSTE1AG",effSET,YTIME);
+imPlantEffByType(runCy,PGALL,"effELC",YTIME)= imPlantEffByType(runCy,PGALL,"effELC","%fBaseY%") ;
+imPlantEffByType(runCy,STECH,"effHeat",YTIME)$(not PGALL(STECH))= imPlantEffByType(runCy,STECH,"effHeat","%fBaseY%") ;
 *---
 **   Conversion of GW mean power into TWh/y, depending on whether it's a leap year
 smGwToTwhPerYear(YTIME) = 8.76 + 0.024 $ (mod(YTIME.val,4) = 0 and mod (YTIME.val,100) <> 0);

@@ -26,26 +26,6 @@
 *' The equation provides a comprehensive approach to calculating CO2eq emissions for each NAP sector, considering various aspects of fuel consumption
 *' and transformation across different subsectors. The result represents the overall CO2 emissions for each NAP sector across
 *' all countries for the specified year.
-$ontext
-Q07GrnnHsEmisCO2Equiv(NAP,YTIME)$(TIME(YTIME))..
-         V07GrnnHsEmisCO2Equiv(NAP,YTIME)
-          =E=
-        (
-        sum(allCy,
-                 sum((EFS,INDSE)$(SECTTECH(INDSE,EFS)  $NAPtoALLSBS(NAP,INDSE)),
-                      VmConsFuel(allCy,INDSE,EFS,YTIME) * imCo2EmiFac(allCy,INDSE,EFS,YTIME)) !! final consumption
-                +
-                 sum(PGEF, VmInpTransfTherm(allCy,PGEF,YTIME)*imCo2EmiFac(allCy,"PG",PGEF,YTIME)$(not h2f1(pgef))) !! input to power generation sector
-                 +
-                 sum(EFS, VmTransfInputDHPlants(allCy,EFS,YTIME)*imCo2EmiFac(allCy,"PG",EFS,YTIME)) !! input to district heating plants
-                 +
-                 sum(EFS, VmConsFiEneSec(allCy,EFS,YTIME)*imCo2EmiFac(allCy,"PG",EFS,YTIME)) !! consumption of energy branch
-
-                 -
-                 sum(PGEF,sum(CCS$PGALLtoEF(CCS,PGEF),
-                         VmProdElec(allCy,CCS,YTIME)*smTWhToMtoe/imPlantEffByType(allCy,CCS,YTIME)*
-                         imCo2EmiFac(allCy,"PG",PGEF,YTIME)*imCO2CaptRate(allCy,CCS,YTIME)))));   !! CO2 captured by CCS plants in power generation
-$offtext
 
 *' The equation computes the total CO2 equivalent greenhouse gas emissions in all countries for a specific year.
 *' The result represents the sum of total CO2eq emissions across all countries. The summation is performed over the NAP (National Allocation Plan) sectors,
