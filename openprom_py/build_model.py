@@ -56,22 +56,18 @@ from modules._08_Prices.legacy.declarations import add_prices_parameters, add_pr
 from modules._08_Prices.legacy.equations import add_prices_equations
 from modules._08_Prices.legacy.input_loader import load_prices_data, load_prices_data_into_model
 from modules._08_Prices.legacy.preloop import apply_prices_preloop
-from modules._08_Prices.legacy.postsolve import apply_prices_postsolve
 from modules._09_Heat.heat.declarations import add_heat_parameters, add_heat_variables
 from modules._09_Heat.heat.equations import add_heat_equations
 from modules._09_Heat.heat.input_loader import load_heat_data, load_heat_data_into_model
 from modules._09_Heat.heat.preloop import apply_heat_preloop
-from modules._09_Heat.heat.postsolve import apply_heat_postsolve
 from modules._10_Curves.LearningCurves.declarations import add_curves_parameters, add_curves_variables
 from modules._10_Curves.LearningCurves.equations import add_curves_equations
 from modules._10_Curves.LearningCurves.input_loader import load_curves_data, load_curves_data_into_model
 from modules._10_Curves.LearningCurves.preloop import apply_curves_preloop
-from modules._10_Curves.LearningCurves.postsolve import apply_curves_postsolve
 from modules._11_Economy.economy.declarations import add_economy_parameters, add_economy_variables
 from modules._11_Economy.economy.equations import add_economy_equations
 from modules._11_Economy.economy.input_loader import load_economy_data, load_economy_data_into_model
 from modules._11_Economy.economy.preloop import apply_economy_preloop
-from modules._11_Economy.economy.postsolve import apply_economy_postsolve
 import logging
 
 logger = logging.getLogger(__name__)
