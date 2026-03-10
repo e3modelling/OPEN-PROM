@@ -194,12 +194,10 @@ i09ShareFuel(runCy,TDHP,EFS,YTIME)$TSTEAMTOEF(TDHP,EFS) =
 (
   (i03InpTotTransfProcess(runCy,"STEAMP",EFS,"%fBaseY%") - 1e-6)/ 
   SUM(EFS2$TSTEAMTOEF(TDHP,EFS2),i03InpTotTransfProcess(runCy,"STEAMP",EFS2,"%fBaseY%") - 1e-6)
-)$SUM(EFS2$TSTEAMTOEF(TDHP,EFS2),i03InpTotTransfProcess(runCy,"STEAMP",EFS2,"%fBaseY%") - 1e-6) + 
-1$sameas(EFS,"H2F");
+)$SUM(EFS2$TSTEAMTOEF(TDHP,EFS2),i03InpTotTransfProcess(runCy,"STEAMP",EFS2,"%fBaseY%") - 1e-6);
 
 i09ShareFuel(runCy,TCHP,EFS,YTIME)$TSTEAMTOEF(TCHP,EFS) = 
 (
   (i03InpTotTransfProcess(runCy,"CHP",EFS,"%fBaseY%") - 1e-6) / 
   SUM(EFS2$TSTEAMTOEF(TCHP,EFS2),i03InpTotTransfProcess(runCy,"CHP",EFS2,"%fBaseY%") - 1e-6)
-)$SUM(EFS2$TSTEAMTOEF(TCHP,EFS2),i03InpTotTransfProcess(runCy,"CHP",EFS2,"%fBaseY%") - 1e-6) + 
-1$sameas(EFS,"H2F");
+)$SUM(EFS2$TSTEAMTOEF(TCHP,EFS2),i03InpTotTransfProcess(runCy,"CHP",EFS2,"%fBaseY%") - 1e-6);

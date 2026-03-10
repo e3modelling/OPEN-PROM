@@ -173,7 +173,6 @@ i04Util(allCy,PGALL,YTIME) = 1;
 *---
 i04ShareFuels(runCy,PGALL,PGEF)$PGALLTOEF(PGALL,PGEF) = 
 (
-  i03InpTotTransfProcess(runCy,"PG",PGEF,"%fBaseY%") / 
-  SUM(PGEF2$PGALLTOEF(PGALL,PGEF2),i03InpTotTransfProcess(runCy,"PG",PGEF2,"%fBaseY%"))
-)$SUM(PGEF2$PGALLTOEF(PGALL,PGEF2),i03InpTotTransfProcess(runCy,"PG",PGEF2,"%fBaseY%")) + 
-1$sameas(PGEF,"H2F");
+  (i03InpTotTransfProcess(runCy,"PG",PGEF,"%fBaseY%") - 1e-6) / 
+  SUM(PGEF2$PGALLTOEF(PGALL,PGEF2),i03InpTotTransfProcess(runCy,"PG",PGEF2,"%fBaseY%") - 1e-6)
+)$SUM(PGEF2$PGALLTOEF(PGALL,PGEF2),i03InpTotTransfProcess(runCy,"PG",PGEF2,"%fBaseY%") - 1e-6);
