@@ -225,13 +225,13 @@ if (task == 0) {
   saveMetadata(DevMode = 1)
   if (withRunFolder) createRunFolder(setScenarioName("DEV"))
 
-  shell(paste0(gams, " main.gms --DevMode=1 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 "))
+  system(paste0(gams, " main.gms --DevMode=1 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 "))
   if (withRunFolder && withReport) {
     run_path <- getwd()
     setwd("../../") # Going back to root folder
     cat("Executing the report output script\n")
-    report_cmd <- paste0("RScript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
-    shell(report_cmd)
+    report_cmd <- paste0("Rscript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
+    system(report_cmd)
     setwd(run_path)
   }
   if (withRunFolder && withSync) syncRun()
@@ -240,7 +240,7 @@ if (task == 0) {
   saveMetadata(DevMode = 1)
   if (withRunFolder) createRunFolder(setScenarioName("DEVNEWDATA"))
 
-  shell(paste0(gams, " main.gms --DevMode=1 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 "))
+  system(paste0(gams, " main.gms --DevMode=1 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 "))
 
   if (withRunFolder) {
     file.copy("data", to = "../../", recursive = TRUE) # Copying generated data to parent folder for future runs
@@ -252,15 +252,15 @@ if (task == 0) {
   saveMetadata(DevMode = 0)
   if (withRunFolder) createRunFolder(setScenarioName("RES"))
 
-  shell(paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1"))
+  system(paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1"))
 
 
   if (withRunFolder && withReport) {
     run_path <- getwd()
     setwd("../../") # Going back to root folder
     cat("Executing the report output script\n")
-    report_cmd <- paste0("RScript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
-    shell(report_cmd)
+    report_cmd <- paste0("Rscript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
+    system(report_cmd)
     setwd(run_path)
   }
   if (withRunFolder && withSync) syncRun()
@@ -276,7 +276,7 @@ if (task == 0) {
   )
   cat("Executing calibration with data generation:\n", calib_cmd, "\n")
   
-  exit_code <- shell(calib_cmd)
+  exit_code <- system(calib_cmd)
   
   # Check for calibration execution failure
   if (exit_code != 0) {
@@ -309,7 +309,7 @@ if (task == 0) {
   research_cmd <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 ")
   cat("Executing research run:\n", research_cmd, "\n")
   
-  exit_code <- shell(research_cmd)
+  exit_code <- system(research_cmd)
   
   # Check for research execution failure  
   if (exit_code != 0) {
@@ -326,21 +326,21 @@ if (task == 0) {
     run_path <- getwd()
     setwd("../../") # Going back to root folder
     cat("Executing the report output script\n")
-    report_cmd <- paste0("RScript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
-    shell(report_cmd)
+    report_cmd <- paste0("Rscript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
+    system(report_cmd)
     setwd(run_path)
   }
 
   if (withRunFolder && withSync) syncRun()
 } else if (task == 4) {
   # Debugging mode
-  shell(paste0(gams, " main.gms -logOption 4 -Idir=./data 2>&1 "))
+  system(paste0(gams, " main.gms -logOption 4 -Idir=./data 2>&1 "))
 } else if (task == 5) {
   # Running task OPEN-PROM CALIBRATE
   saveMetadata(DevMode = 0)
   if (withRunFolder) createRunFolder(setScenarioName("CALIB"))
 
-  shell(
+  system(
     paste0(
       gams,
       " main.gms -o mainCalib.lst --DevMode=0 --Calibration=MatCalibration --fScenario=4 -logOption 4 -Idir=./data 2>&1"
@@ -361,14 +361,14 @@ if (task == 0) {
 
   run_path <- getwd()
   print(run_path)
-  report_cmd <- paste0("RScript ./findCarbonPrice.R ", run_path)
-  shell(report_cmd)
+  report_cmd <- paste0("Rscript ./findCarbonPrice.R ", run_path)
+  system(report_cmd)
 
   if (withRunFolder && withReport) {
     setwd("../../") # Going back to root folder
     cat("Executing the report output script\n")
-    report_cmd <- paste0("RScript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
-    shell(report_cmd)
+    report_cmd <- paste0("Rscript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
+    system(report_cmd)
     setwd(run_path)
   }
   if (withRunFolder && withSync) syncRun()
