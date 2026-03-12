@@ -340,49 +340,49 @@ imDataIndTechnology(INDSE,"TBMSWAS",ECONCHAR) = imDataIndTechnology("IS","TBMSWA
 imDataIndTechnology(INDSE,"TSTE",ECONCHAR) = imDataIndTechnology(INDSE,"THCL",ECONCHAR);
 *---
 table imDataDomTech(DOMSE,TECH,ECONCHAR)                "Technical lifetime of Industry (years)"
-             IC       FC      VC      LFT USC
-SE.THCL       0.323544 10.88           20  0.7
-SE.TLGN       0.323544 10.88           20  0.5
-SE.TLPG       0.24888  10.88           20  0.8
-SE.TGSL       0.323544 10.88           20  0.7
-SE.TKRS       0.24888  10.88           20  0.8
-SE.TGDO       0.24888  6.8             20  0.85
-SE.TRFO       0.24888  10.88           20  0.8
-SE.TOLQ       0.24888  10.88           20  0.8
-SE.TNGS       0.2244   6.8             20  0.88
-SE.TOGS       0.2244   10.88           20  0.8
-*SE.PGTSOL     0.86224  1.36            20  0.85
-SE.TBMSWAS    0.323544 10.88           20  0.5
-SE.TELC       0.3      8.976           12  0.85
-SE.THEATPUMP  0.432    12.9254         20  1.848
-AG.THCL       0.323544 10.88           20  0.7
-AG.TLGN       0.323544 10.88           20  0.5
-AG.TLPG       0.24888  10.88           20  0.8
-AG.TGSL       0.323544 10.88           20  0.7
-AG.TKRS       0.24888  10.88           20  0.8
-AG.TGDO       0.24888  6.8             20  0.85
-AG.TRFO       0.24888  10.88           20  0.8
-AG.TOLQ       0.24888  10.88           20  0.8
-AG.TNGS       0.2244   6.8             20  0.88
-AG.TOGS       0.2244   10.88           20  0.8
-*AG.PGTSOL     0.86224  1.36            20  0.85
-AG.TBMSWAS    0.323544 10.88           20  0.5
-AG.TELC       0.3      8.976           12  0.85
-AG.THEATPUMP  0.432    12.9254         20  1.848
-HOU.THCL      0.323544 10.88           20  0.7
-HOU.TLGN      0.323544 10.88           20  0.5
-HOU.TLPG      0.24888  10.88           20  0.8
-HOU.TGSL      0.323544 10.88           20  0.7
-HOU.TKRS      0.24888  10.88           20  0.8
-HOU.TGDO      0.24888  6.8             20  0.85
-HOU.TRFO      0.24888  10.88           20  0.8
-HOU.TOLQ      0.24888  10.88           20  0.8
-HOU.TNGS      0.2244   6.8             20  0.88
-HOU.TOGS      0.2244   10.88           20  0.8
-*HOU.PGTSOL    0.86224  1.36            20  0.85
-HOU.TBMSWAS   0.323544 10.88           20  0.5
-HOU.TELC      0.3      8.976           12  0.85
-HOU.THEATPUMP 0.432    12.9254         20  1.848
+               IC        FC      VC      LFT      USC
+SE.THCL       0.323544   0.88            20       0.7
+SE.TLGN       0.323544   10.88           20       0.5
+SE.TLPG       0.24888    10.88           20       0.8
+SE.TGSL       0.323544   10.88           20       0.7
+SE.TKRS       0.24888    10.88           20       0.8
+SE.TGDO       0.24888    6.8             20       0.85
+SE.TRFO       0.24888    10.88           20       0.8
+SE.TOLQ       0.24888    10.88           20       0.8
+SE.TNGS       0.2244     6.8             20       0.88
+SE.TOGS       0.2244     10.88           20       0.8
+*SE.PGTSOL     0.86224   1.36            20       0.85
+SE.TBMSWAS    0.323544   10.88           20       0.5
+SE.TELC       0.3        8.976           12       0.85
+SE.THEATPUMP  0.54       12.9254         20       1.848
+AG.THCL       0.323544   10.88           20       0.7
+AG.TLGN       0.323544   10.88           20       0.5
+AG.TLPG       0.24888    10.88           20       0.8
+AG.TGSL       0.323544   10.88           20       0.7
+AG.TKRS       0.24888    10.88           20       0.8
+AG.TGDO       0.24888    6.8             20       0.85
+AG.TRFO       0.24888    10.88           20       0.8
+AG.TOLQ       0.24888    10.88           20       0.8
+AG.TNGS       0.2244     6.8             20       0.88
+AG.TOGS       0.2244     10.88           20       0.8
+*AG.PGTSOL     0.86224   1.36            20       0.85
+AG.TBMSWAS    0.323544   10.88           20       0.5
+AG.TELC       0.3        8.976           12       0.85
+AG.THEATPUMP  0.54       12.9254         20       1.848
+HOU.THCL      0.323544   10.88           20       0.7
+HOU.TLGN      0.323544   10.88           20       0.5
+HOU.TLPG      0.24888    10.88           20       0.8
+HOU.TGSL      0.323544   10.88           20       0.7
+HOU.TKRS      0.24888    10.88           20       0.8
+HOU.TGDO      0.24888    6.8             20       0.85
+HOU.TRFO      0.24888    10.88           20       0.8
+HOU.TOLQ      0.24888    10.88           20       0.8
+HOU.TNGS      0.2244     6.8             20       0.88
+HOU.TOGS      0.2244     10.88           20       0.8
+*HOU.PGTSOL    0.86224   1.36            20       0.85
+HOU.TBMSWAS   0.323544   10.88           20       0.5
+HOU.TELC      0.3        8.976           12       0.85
+HOU.THEATPUMP 0.54       12.9254         20       1.848
 ;
 *---
 * Coverting EUR05 to US2015
@@ -770,9 +770,7 @@ imUsfEneConvSubTech(runCy,INDSE,TECH,YTIME)  = imDataIndTechnology(INDSE,TECH,"U
 *imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCLCCS","USC") + 0.005 * (ord(YTIME)-14);
 *---
 **  Domestic Sector
-*imCapCostTech(runCy,DOMSE,TECH,YTIME) = 0.25;
 imCapCostTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,"IC");
-imCapCostTech(runCy,DOMSE,TECH,YTIME)$(imDataDomTech(DOMSE,TECH,"IC")>0.25) = 0.25;
 imFixOMCostTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,"FC");
 imVarCostTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,"VC");
 imUsfEneConvSubTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,"USC");
