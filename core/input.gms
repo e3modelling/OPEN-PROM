@@ -37,8 +37,8 @@ $include "./iElastA.csv"
 $offdelim
 ;
 imElastA(runCy,SBS,ETYPES,YTIME) = imElastA("ELL",SBS,ETYPES,YTIME);
-imElastA(runCy,DSBS,"b1",YTIME)$(not TRANSE(DSBS)) = imElastA(runCy,DSBS,"b1",YTIME) * 0;
-imElastA(runCy,DSBS,"b2",YTIME)$(not TRANSE(DSBS)) = imElastA(runCy,DSBS,"b2",YTIME) *0;
+imElastA(runCy,DSBS,"b1",YTIME)$(not TRANSE(DSBS)) = imElastA(runCy,DSBS,"b1",YTIME) / 4;
+imElastA(runCy,DSBS,"b2",YTIME)$(not TRANSE(DSBS)) = imElastA(runCy,DSBS,"b2",YTIME) / 4;
 $ENDIF.calib
 *---
 parameter iDiscData(SBS) "Discount rates per subsector ()" /
@@ -82,18 +82,18 @@ imDisc(runCy,"PC",YTIME) = 0.11;
 * FIXME: Drive the emission factors with mrprom
 * author=giannou
 parameter iCo2EmiFacAllSbs(EF) "CO2 emission factors (kgCO2/kgoe fuel burned)" /
-CRO 3.2
-LGN 4.2,
-HCL 4.2,
+CRO 2.76
+LGN 4.15330622,
+HCL 3.941453651,
 SLD 4.438008647,
-GSL 3.2,
-GDO 3.2,
-LPG 3.2,
-KRS 3.2,
-RFO 3.2,
-OLQ 3.2,
-NGS 2.5,
-OGS 2.5,
+GSL 2.872144882,
+GDO 3.068924588,
+LPG 2.612562612,
+KRS 2.964253636,
+RFO 3.207089028,
+OLQ 3.207089028,
+NGS 2.336234395,
+OGS 2.336234395,
 BMSWAS 0/;
 *---
 imCo2EmiFac(runCy,SBS,EF,YTIME)$(not (sameas("NEN",SBS) or sameas("PCH",SBS))) = iCo2EmiFacAllSbs(EF);
@@ -354,7 +354,7 @@ SE.TOGS       0.2244   10.88           20  0.8
 *SE.PGTSOL     0.86224  1.36            20  0.85
 SE.TBMSWAS    0.323544 10.88           20  0.5
 SE.TELC       0.3      8.976           12  0.85
-SE.THEATPUMP  0.432    12.9254         20  3.0
+SE.THEATPUMP  0.432    12.9254         20  1.848
 AG.THCL       0.323544 10.88           20  0.7
 AG.TLGN       0.323544 10.88           20  0.5
 AG.TLPG       0.24888  10.88           20  0.8
@@ -382,7 +382,7 @@ HOU.TOGS      0.2244   10.88           20  0.8
 *HOU.PGTSOL    0.86224  1.36            20  0.85
 HOU.TBMSWAS   0.323544 10.88           20  0.5
 HOU.TELC      0.3      8.976           12  0.85
-HOU.THEATPUMP 0.432    12.9254         20  3.0
+HOU.THEATPUMP 0.432    12.9254         20  1.848
 ;
 *---
 * Coverting EUR05 to US2015
@@ -621,51 +621,9 @@ $offdelim
 *---
 $IFTHEN.calib %Calibration% == off
 parameter imMatrFactor(allCy,DSBS,TECH,YTIME)   "Maturity factor per technology and subsector for all countries (1)";
-imMatrFactor(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);    
-imMatrFactor(runCy,"HOU","THEATPUMP",YTIME) = 1;          
-imMatrFactor(runCy,"SE","THEATPUMP",YTIME) = 1;                                   
-imMatrFactor(runCy,DSBS,TECH,YTIME)$(imMatrFactor(runCy,DSBS,TECH,YTIME)=0) = 0.000001;
+imMatrFactor(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                          
+
 imMatrFactor(runCy,DSBS,"TBMSWAS",YTIME) = 0.01;
-imMatrFactor(runCy,DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40;
-*imMatrFactor(runCy,"BU","TH2F",YTIME) = 2;
-imMatrFactor(runCy,"BU","TH2F",YTIME)$((ord(YTIME) > 21)) = 5;
-*imMatrFactor(runCy,DSBS,"TELC",YTIME)$((ord(YTIME) > 25) and INDSE(DSBS)) = 5;
-
-* imMatrFactor("AUT",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40;
-* imMatrFactor("BEL",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40; 
-* imMatrFactor("BGR",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40; 
-* imMatrFactor("CYP",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40; 
-* imMatrFactor("CZE",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40; 
-* imMatrFactor("DEU",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40; 
-* imMatrFactor("DNK",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40; 
-* imMatrFactor("ESP",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40; 
-* imMatrFactor("EST",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40; 
-* imMatrFactor("FIN",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40; 
-* imMatrFactor("FRA",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40; 
-* imMatrFactor("GBR",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40; 
-* imMatrFactor("GRC",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40; 
-* imMatrFactor("HRV",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40; 
-* imMatrFactor("HUN",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40; 
-* imMatrFactor("IRL",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40; 
-* imMatrFactor("ITA",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40; 
-* imMatrFactor("LTU",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40; 
-* imMatrFactor("LUX",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40; 
-* imMatrFactor("LVA",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40;
-* imMatrFactor("MLT",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40;
-* imMatrFactor("NLD",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40;
-* imMatrFactor("POL",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40;
-* imMatrFactor("PRT",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40;
-* imMatrFactor("ROU",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40;
-* imMatrFactor("SVK",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40;
-* imMatrFactor("SVN",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40;
-* imMatrFactor("SWE",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40;
-* imMatrFactor("JPN",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 40;    
-* DOMSE(DSBS)
-imMatrFactor(runCy,DSBS,"TLGN",YTIME)$(DOMSE(DSBS)) = 0.01;
-imMatrFactor(runCy,DSBS,"THCL",YTIME)$(DOMSE(DSBS)) = 0.01;
-imMatrFactor(runCy,DSBS,"TOGS",YTIME)$(DOMSE(DSBS)) = 0.01;
-imMatrFactor(runCy,DSBS,"TKRS",YTIME)$(DOMSE(DSBS)) = 0.01;
-
 $ontext
 imMatrFactor(runCy,DSBS,"TGDO",YTIME)$((ord(YTIME) > 14) and TRANSE(DSBS)) = 0.5;
 imMatrFactor(runCy,DSBS,"TGSL",YTIME)$((ord(YTIME) > 14) and TRANSE(DSBS)) = 0.5;
@@ -679,12 +637,10 @@ imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 50 and TRANSE(DSBS)) = 15;
 imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 11;
 imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 11;
 
-
-imMatrFactor(runCy,DSBS,"TNGSCCS",YTIME)$((ord(YTIME) > 11) and INDSE(DSBS)) = 1;
-imMatrFactor(runCy,DSBS,"THCLCCS",YTIME)$((ord(YTIME) > 11) and INDSE(DSBS)) = 1;
-imMatrFactor(runCy,DSBS,"THCLCCS",YTIME)$((ord(YTIME) > 11) and INDSE(DSBS)) = 1;
-imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 11 and DOMSE(DSBS)) = 20;
-imMatrFactor(runCy,DSBS,"TBMSWAS",YTIME)$(ord(YTIME) > 11 and DOMSE(DSBS)) = 0.001;
+imMatrFactor(runCy,DSBS,"TNGSCCS",YTIME)$((ord(YTIME) > 14) and INDSE(DSBS)) = 1;
+imMatrFactor(runCy,DSBS,"THCLCCS",YTIME)$((ord(YTIME) > 14) and INDSE(DSBS)) = 1;
+imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 14 and DOMSE(DSBS)) = 20;
+imMatrFactor(runCy,DSBS,"TBMSWAS",YTIME)$(ord(YTIME) > 14 and DOMSE(DSBS)) = 0.001;
 imMatrFactor(runCy,DSBS,"TH2F",YTIME)$(ord(YTIME) < 21 and INDSE(DSBS)) = 0;
 imMatrFactor(runCy,DSBS,"TH2F",YTIME)$(ord(YTIME) > 21 and INDSE(DSBS)) = 2;
 imMatrFactor(runCy,DSBS,"TH2F",YTIME)$(ord(YTIME) > 40 and INDSE(DSBS)) = 2;
@@ -698,32 +654,7 @@ imMatrFactor(runCy,DSBS,"TPHEVGSL",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 0
 imMatrFactor(runCy,DSBS,"TPHEVGDO",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 0.001;
 imMatrFactor(runCy,DSBS,"TCHEVGSL",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 0.001;
 imMatrFactor(runCy,DSBS,"TCHEVGDO",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 0.001;
-
 $offtext
-* Reduce the maturity factor of TELC in other regions except EU-27,GBR,JPN,CAZ
-
-imMatrFactor("CHA",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 5;
-imMatrFactor("CHA",DSBS,"TNGSCCS",YTIME)$((ord(YTIME) > 26) and INDSE(DSBS)) = 10;
-imMatrFactor("CHA",DSBS,"THCLCCS",YTIME)$((ord(YTIME) > 26) and INDSE(DSBS)) = 10;
-imMatrFactor("CHA",DSBS,"TELC",YTIME)$((ord(YTIME) > 26) and INDSE(DSBS)) = 15;
-* imMatrFactor("CHA",DSBS,"TLGN",YTIME)$(DOMSE(DSBS)) = 0;
-* imMatrFactor("CHA",DSBS,"THCL",YTIME)$(DOMSE(DSBS)) = 1;
-* imMatrFactor("CHA",DSBS,"TOGS",YTIME)$(DOMSE(DSBS)) = 1;
-* imMatrFactor("CHA",DSBS,"TKRS",YTIME)$(DOMSE(DSBS)) = 1;
-
-imMatrFactor("IND",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 5; 
-imMatrFactor("IND",DSBS,"TNGSCCS",YTIME)$((ord(YTIME) > 36) and INDSE(DSBS)) = 10;
-imMatrFactor("IND",DSBS,"THCLCCS",YTIME)$((ord(YTIME) > 36) and INDSE(DSBS)) = 10;
-imMatrFactor("IND",DSBS,"TELC",YTIME)$((ord(YTIME) > 36) and INDSE(DSBS)) = 15;
-imMatrFactor("LAM",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 3; 
-imMatrFactor("MEA",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 3; 
-imMatrFactor("NEU",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 3; 
-imMatrFactor("OAS",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 3; 
-imMatrFactor("REF",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 3; 
-imMatrFactor("SSA",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 3;
-imMatrFactor("USA",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 5; 
-
-
 
 $ELSE.calib
 variable imMatrFactor(allCy,DSBS,TECH,YTIME)    "Maturity factor per technology and subsector for all countries (1)";
@@ -861,11 +792,6 @@ imCapCostTechMin(allCy,"EW","TEW",YTIME) = 0.2;
 imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCLCCS","USC") + 0.005 * (ord(YTIME)-14);
 imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$(ord(YTIME)>50)  = 0.7;
 
-*imUsfEneConvSubTech(runCy,"HOU","TELC",YTIME)$(ord(YTIME)>20)  = imDataDomTech("HOU","TELC","USC") + 0.0525 * (ord(YTIME)-21);
-*imUsfEneConvSubTech(runCy,"HOU","TELC",YTIME)$(ord(YTIME)>40)  = 1.9;
-*imUsfEneConvSubTech(runCy,"SE","TELC",YTIME)$(ord(YTIME)>20)  = imDataDomTech("SE","TELC","USC") + 0.0525 * (ord(YTIME)-21);
-*imUsfEneConvSubTech(runCy,"SE","TELC",YTIME)$(ord(YTIME)>40)  = 1.9;
-
 **  Power Generation
 *---
 table imPlantEffByType(allCy,STECH,effSET,YTIME)   "Data for plant efficiency per plant type"
@@ -874,10 +800,10 @@ $include "./iDataPlantEffByType.csv"
 $offdelim
 ;
 *---
-imPlantEffByType(runCy,PGALL,YTIME) = iDataPlantEffByType(runCy,PGALL, YTIME) ;
-imPlantEffByType(runCy,"ATHCOAL",YTIME) = 0.9 * iDataPlantEffByType(runCy,"ATHCOAL",YTIME) ;
-imPlantEffByType(runCy,"ATHGAS",YTIME) = 0.9 * iDataPlantEffByType(runCy,"ATHGAS",YTIME) ;
-imPlantEffByType(runCy,"PGH2F",YTIME) = 0.85;
+imPlantEffByType(runCy,"PGH2F","effELC",YTIME) = imPlantEffByType(runCy,"ATHGAS","effELC",YTIME);
+imPlantEffByType(runCy,"TSTE1AH2F",effSET,YTIME) = imPlantEffByType(runCy,"TSTE1AG",effSET,YTIME);
+imPlantEffByType(runCy,PGALL,"effELC",YTIME)= imPlantEffByType(runCy,PGALL,"effELC","%fBaseY%") ;
+imPlantEffByType(runCy,STECH,"effHeat",YTIME)$(not PGALL(STECH))= imPlantEffByType(runCy,STECH,"effHeat","%fBaseY%") ;
 *---
 **   Conversion of GW mean power into TWh/y, depending on whether it's a leap year
 smGwToTwhPerYear(YTIME) = 8.76 + 0.024 $ (mod(YTIME.val,4) = 0 and mod (YTIME.val,100) <> 0);

@@ -214,7 +214,7 @@ $setEnv GDXCOMPRESS 1
 *' *** Generate input data?
 $setGlobal GenerateInput off !! can be overwritten if VS Code Tasks are used
 
-$setGlobal fCountries 'CHA,USA'
+$setGlobal fCountries 'CHA,DEU,IND,USA,RWO' !! can be overwritten if VS Code Tasks are used
 
 $setGlobal fCountryList %countries%
 
@@ -252,7 +252,7 @@ $setGlobal Emissions        legacy
 $setGlobal Prices           legacy
 $setGlobal Heat             heat
 $setGlobal Curves           off
-* $setGlobal Economy          economy
+$setGlobal Economy          economy
 *' To disable learning curves module, use: $setGlobal Curves off
 
 ** CORE MODEL FILES **

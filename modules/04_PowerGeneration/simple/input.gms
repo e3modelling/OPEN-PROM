@@ -72,14 +72,6 @@ $include"./iInvPlants.csv"
 $offdelim
 ;
 i04InvPlants(allCy,PGALL,YTIME) = 0;
-i04InvPlants("CHA","ATHCOAL",YTIME)$(ord(YTIME) < 20) = 0.12 * imInstCapPastNonCHP("CHA","ATHCOAL","%fBaseY%") / i04AvailRate("CHA","ATHCOAL","%fBaseY%");
-i04InvPlants("IND","ATHCOAL",YTIME)$(ord(YTIME) < 20) = 0.12 * imInstCapPastNonCHP("IND","ATHCOAL","%fBaseY%") / i04AvailRate("IND","ATHCOAL","%fBaseY%");
-i04InvPlants("NEU","ATHCOAL",YTIME)$(ord(YTIME) < 20) = 0.12 * imInstCapPastNonCHP("NEU","ATHCOAL","%fBaseY%") / i04AvailRate("NEU","ATHCOAL","%fBaseY%");
-* i04InvPlants("SSA","ATHCOAL",YTIME)$(ord(YTIME) < 20) = 0.12 * imInstCapPastNonCHP("SSA","ATHCOAL","%fBaseY%") / i04AvailRate("SSA","ATHCOAL","%fBaseY%");
-* i04InvPlants("USA","ATHCOAL",YTIME)$(ord(YTIME) < 16) = 0.07 * imInstCapPastNonCHP("USA","ATHCOAL","%fBaseY%") / i04AvailRate("USA","ATHCOAL","%fBaseY%");
-* i04InvPlants("OAS","ATHCOAL",YTIME)$(ord(YTIME) < 16) = 0.07 * imInstCapPastNonCHP("OAS","ATHCOAL","%fBaseY%") / i04AvailRate("OAS","ATHCOAL","%fBaseY%");
-
-
 *---
 table i04PlantDecomSched(allCy,PGALL,YTIME)	           "Decided plant decomissioning schedule (GW)"
 $ondelim
@@ -102,23 +94,6 @@ i04MatFacPlaAvailCap.L(runCy,PGALL,YTIME) = 1;
 $ELSE.calib
 parameter i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   "Maturity factor related to plant available capacity (1)";
 i04MatFacPlaAvailCap(runCy,PGALL,YTIME) = iMatFacPlaAvailCapData(runCy,PGALL,YTIME);
-*
-i04MatFacPlaAvailCap(runCy,"ATHBMSCCS",YTIME) = 10;
-i04MatFacPlaAvailCap('CHA',"ATHBMSCCS",YTIME) = 1;
-i04MatFacPlaAvailCap('CHA',"ATHBMSCCS",YTIME)$((ord(YTIME) > 26)) = 2;
-i04MatFacPlaAvailCap('IND',"ATHBMSCCS",YTIME) = 1;
-i04MatFacPlaAvailCap('IND',"ATHBMSCCS",YTIME)$((ord(YTIME) > 36)) = 2;
-i04MatFacPlaAvailCap('LAM',"ATHBMSCCS",YTIME) = iMatFacPlaAvailCapData('LAM',"ATHBMSCCS",YTIME);
-i04MatFacPlaAvailCap('MEA',"ATHBMSCCS",YTIME) = iMatFacPlaAvailCapData('MEA',"ATHBMSCCS",YTIME);
-i04MatFacPlaAvailCap('NEU',"ATHBMSCCS",YTIME) = iMatFacPlaAvailCapData('NEU',"ATHBMSCCS",YTIME);
-i04MatFacPlaAvailCap('OAS',"ATHBMSCCS",YTIME) = iMatFacPlaAvailCapData('OAS',"ATHBMSCCS",YTIME);
-i04MatFacPlaAvailCap('REF',"ATHBMSCCS",YTIME) = iMatFacPlaAvailCapData('REF',"ATHBMSCCS",YTIME);
-i04MatFacPlaAvailCap('SSA',"ATHBMSCCS",YTIME) = iMatFacPlaAvailCapData('SSA',"ATHBMSCCS",YTIME);
-i04MatFacPlaAvailCap('USA',"ATHBMSCCS",YTIME) = iMatFacPlaAvailCapData('USA',"ATHBMSCCS",YTIME);
-*
-
-i04MatFacPlaAvailCap(runCy,"ATHCOAL",YTIME) = i04MatFacPlaAvailCap(runCy,"ATHCOAL",YTIME);
-i04MatFacPlaAvailCap(runCy,"PGH2F",YTIME) = 0;
 $ENDIF.calib
 *---
 parameter i04LoadFacElecDem(DSBS)                  "Load factor of electricity demand per sector (1)"
@@ -188,7 +163,7 @@ loop(runCy,PGALL,YTIME)$AN(YTIME) DO
          abort $(i04GrossCapCosSubRen(runCy,PGALL,YTIME)<0) "CAPITAL COST IS NEGATIVE", i04GrossCapCosSubRen
 ENDLOOP;
 *---
-i04ScaleEndogScrap = 3 / card(PGALL);
+i04ScaleEndogScrap = 6 / card(PGALL);
 *---
 i04DecInvPlantSched(runCy,PGALL,YTIME) = i04InvPlants(runCy,PGALL,YTIME);
 *---

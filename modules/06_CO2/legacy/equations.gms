@@ -60,12 +60,15 @@ Q06CstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCstCO2SeqCsts(allCy,YTIME) 
         =E=
     !! linear component
-    1 * 
+    0.6 * 
     i06ElastCO2Seq(allCy,"mc_b") +
     !! exponential component
-    (1-1) *
+    (1-0.6) *
     i06ElastCO2Seq(allCy,"mc_b") *
-    exp(V06CaptCummCO2(allCy,YTIME) / (i06ElastCO2Seq(allCy,"mc_d")));           
+    exp(
+      (V06CaptCummCO2(allCy,YTIME) - V06CapCDR(allCy,"TEW",YTIME) * 1e-6) / 
+      i06ElastCO2Seq(allCy,"mc_d")
+    );           
 
 *' The equation calculates the CAPEX of each DAC technology, as it's affected by a learning curve ($/tCO2).
 Q06GrossCapDAC(CDRTECH,YTIME)$(TIME(YTIME))..
@@ -122,7 +125,9 @@ Q06VarCostDAC(CDRTECH,YTIME)$(TIME(YTIME))..
 Q06LvlCostDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06LvlCostDAC(allCy,CDRTECH,YTIME)
         =E=         
-    V06GrossCapDAC(CDRTECH,YTIME) +
+    V06GrossCapDAC(CDRTECH,YTIME)
+    - VmSubsiDemTech(allCy,"DAC",CDRTECH,YTIME)$DACTECH(CDRTECH) -
+    VmSubsiDemTech(allCy,"EW",CDRTECH,YTIME)$sameas("TEW",CDRTECH) +
     V06FixOandMDAC(CDRTECH,YTIME) + 
     V06VarCostDAC(CDRTECH,YTIME) - 20 +
     i06SpecElecDAC(allCy,CDRTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME) +
