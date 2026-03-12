@@ -617,7 +617,81 @@ ELC
 
 *         Technologies            *
 
-TECH      Technologies (in Demand side)
+ALLTECH   "All technologies (demand + supply side)"
+/
+* --- Demand-side technologies (TECH) ---
+TGSL      "Internal Combustion Engine fueled by Gasoline"
+TLPG      "Internal Combustion Engine fueled by Liquified Petroleum Gas"
+TGDO      "Internal Combustion Engine fueled by Diesel Oil"
+TNGS      "Internal Combustion Engine fueled by Natural Gas"
+TELC      "Pure Electirc Engine"
+TKRS      "Gas Turbine fueled by Kerosene"
+TETH      "Internal Combustion Engine fueled by Ethanol"
+TMET      "Methanol (85% gasoline 15% methanol) coming either from ngs or bms"
+TPHEVGSL  "Plug in Hybrid engine - gasoline"
+TPHEVGDO  "Plug in Hybrid engine - diesel"
+TH2F      "Fuel Cells: Hydrogen"
+TCHEVGSL  "conventional Hybrid engine - gasoline"
+TCHEVGDO  "conventional Hybrid engine - diesel"
+TNGSCCS
+TLGN
+THCL
+THCLCCS
+TRFO
+TOLQ
+TOGS
+TSTE
+TBMSWAS
+THEATPUMP
+HTDAC
+H2DAC
+LTDAC
+TEW
+EWDAC
+* --- Supply-side technologies (STECH) ---
+ATHLGN      "Advanced thermal monovalent lignite"
+ATHCOAL     "Advanced thermal monovalent hard coal"
+ATHGAS      "Advanced thermal monovalent natural gas"
+ATHBMSWAS   "Advanced thermal monovalent biomass and waste"
+ATHBMSCCS   "Advanced thermal monovalent biomass and waste with CCS"
+ATHOIL      "Advanced gas turbines (peak devices) diesel oil"
+PGLHYD      "Large Hydro Plants"
+PGSHYD      "Small Hydro Plants"
+PGAWND      "Wind Plants"
+PGSOL       "Solar Photovoltaic Plants"
+PGCSP       "Advanced Solar Thermal Plants"
+PGOTHREN    "Advanced geothermal Plants"
+PGANUC      "New Nuclear Designs"
+ATHCOALCCS  "Supercritical coal with CCS"
+ATHLGNCCS   "Supercritical lignite with CCS"
+ATHGASCCS   "Gas turbine combined cycle with CCS"
+PGAWNO      "Wind offshore"
+PGH2F       "Hydrogen Production"
+gsr         "gas steam reforming"
+gss         "gas steam reforming with CCS"
+weg         "water electrolysis from grid power"
+wew         "water electrolysis with wind"
+wes         "water electrolysis with solar"
+cgf         "coal gasification"
+cgs         "coal gasification with CCS"
+bgfl        "biomass gasification large scale"
+bgfls       "biomass gasification large scale with CCS"
+TSTE1AL           "Lignite powered advanced CHP"
+TSTE1AH           "Hard Coal powered advanced CHP"
+TSTE1AD           "Diesel Oil powered advanced CHP"
+TSTE1AG           "Natural Gas powered advanced CHP"
+TSTE1AB           "Biomass-Waste powered advanced CHP"
+TSTE1AH2F         "HYDROGEN powered FUEL CELL CHP"
+TSTE2LGN
+TSTE2OSL
+TSTE2GDO
+TSTE2NGS
+TSTE2BMS
+TSTE2GEO
+TSTE2OTH
+/
+
+TECH(ALLTECH)      Technologies (in Demand side)
 /
 TGSL      "Internal Combustion Engine fueled by Gasoline"
 TLPG      "Internal Combustion Engine fueled by Liquified Petroleum Gas"
@@ -655,7 +729,7 @@ HTDAC
 H2DAC
 LTDAC
 TEW
-*EWDAC 
+EWDAC 
 * Power Generation Technologies
 *PGTLGN
 *PGTHCL 
@@ -703,6 +777,7 @@ HTDAC
 H2DAC
 LTDAC
 TEW
+EWDAC
 /
 
 DACTECH(CDRTECH)     DAC Technologies
@@ -710,6 +785,7 @@ DACTECH(CDRTECH)     DAC Technologies
 HTDAC
 H2DAC
 LTDAC
+EWDAC
 /
 
 ITECH(TECH)      Industrial - Domestic - Non-energy & Bunkers Technologies 
@@ -761,9 +837,10 @@ HTDAC
 H2DAC
 LTDAC
 TEW
+EWDAC
 /
 
-STECH     "Technologies in supply side"
+STECH(ALLTECH)     "Technologies in supply side"
 /
 ATHLGN      "Advanced thermal monovalent lignite"
 ATHCOAL     "Advanced thermal monovalent hard coal"
@@ -839,6 +916,7 @@ HTDAC.(NGS,ELC)
 H2DAC.(H2F,ELC)
 LTDAC.ELC
 TEW.ELC
+EWDAC.ELC
 /
 TTECHtoEF(TTECH,EF) Fuels consumed by transport technologies
 /
@@ -915,7 +993,7 @@ PA.(TKRS)
 SE.(THCL,TLPG,TKRS,TNGS,TOGS,TELC,TSTE)
 BU.(TGDO,TRFO,TKRS,TH2F)
 (PCH,NEN).(TLGN,THCL,TGDO,TRFO,TLPG,TOLQ,TNGS,TOGS)
-DAC.(HTDAC,H2DAC,LTDAC)
+DAC.(HTDAC,H2DAC,LTDAC,EWDAC)
 EW.TEW
 /
 

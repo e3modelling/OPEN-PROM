@@ -33,7 +33,7 @@ LCWND(LCTECH) "Wind technologies subset"
 *'   2) include technologies not in LCTECH (e.g., DAC),
 *'   3) run scenarios that toggle R&D effects independently.
 *' Current scope includes wind/solar + DAC families used in this implementation.
-RDTECH(TECH) "Technologies with regional learning-by-searching"
+RDTECH(ALLTECH) "Technologies with regional learning-by-searching"
 /
     PGSOL
     PGCSP

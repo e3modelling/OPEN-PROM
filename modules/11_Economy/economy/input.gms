@@ -24,8 +24,12 @@ $offdelim
 Parameter i11SubsiPerRDTech(allCy,RDTECH,YTIME) "State R&D policy share by country/technology/year (1)";
 
 i11SubsiPerRDTech(allCy,RDTECH,YTIME) = 0;
-i11SubsiPerRDTech(allCy,RDTECH,YTIME)$LCTECH(RDTECH) = i11SubsiPerDemTechAvail(allCy,"PG",RDTECH,YTIME);
-i11SubsiPerRDTech(allCy,RDTECH,YTIME)$DACTECH(RDTECH) = i11SubsiPerDemTechAvail(allCy,"DAC",RDTECH,YTIME);
+*' Note: LCTECH elements (PGSOL,PGCSP,PGAWND,PGAWNO) belong to STECH, not TECH,
+*' and PG is a supply subsector (not in DSBS), so no demand-tech subsidy data exists.
+*' DACTECH elements (HTDAC, H2DAC, LTDAC, EWDAC) are in both RDTECH and TECH,
+*' so we bridge them to the DAC demand-subsidy row (sameas avoids domain violations).
+i11SubsiPerRDTech(allCy,RDTECH,YTIME)$sum(DACTECH$sameas(DACTECH,RDTECH), 1) =
+    sum(TECH$sameas(TECH,RDTECH), i11SubsiPerDemTechAvail(allCy,"DAC",TECH,YTIME));
 *---
 $$ontext
 table i11SubsiPerSupTech(allCy,STECH,YTIME)	              "State supply technology support policy, expressed as a proportion factor of the available state grants (1)"
