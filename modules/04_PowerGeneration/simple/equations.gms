@@ -14,27 +14,19 @@
 *' The estimation is based on the fuel consumption of CHP plants, their electricity prices, the maximum share of CHP electricity in total demand, and the overall
 *' electricity demand. The equation essentially estimates the electricity generation of CHP plants by considering their fuel consumption, electricity prices, and the maximum
 *' share of CHP electricity in total demand. The square root expression ensures that the estimated electricity generation remains non-negative.
-Q04ProdElecEstCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V04ProdElecEstCHP(allCy,YTIME) 
+Q04ProdElecEstCHP(allCy,TCHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V04ProdElecEstCHP(allCy,TCHP,YTIME) 
         =E=
     1/smTWhToMtoe *
     (  
-      V03OutTransfCHP(allCy,"STE",YTIME) * VmPriceElecInd(allCy,YTIME) + 
+      VmProdSte(allCy,TCHP,YTIME) / VmPriceElecInd(allCy,TCHP,YTIME) + 
       i04MxmShareChpElec(allCy,YTIME) * V04DemElecTot(allCy,YTIME) - 
 
       SQRT(SQR(
-        V03OutTransfCHP(allCy,"STE",YTIME) * VmPriceElecInd(allCy,YTIME) - 
+        VmProdSte(allCy,TCHP,YTIME) / VmPriceElecInd(allCy,TCHP,YTIME) - 
         i04MxmShareChpElec(allCy,YTIME) * V04DemElecTot(allCy,YTIME))
       )  
-    )/2 + 1e-6;
-
-*' This equation computes the electric capacity of Combined Heat and Power (CHP) plants. The capacity is calculated in gigawatts (GW) and is based on several factors,
-*' including the consumption of fuel in the industrial sector, the electricity prices in the industrial sector, the availability rate of power
-*' generation plants, and the utilization rate of CHP plants. The result represents the electric capacity of CHP plants in GW.
-Q04CapElecCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V04CapElecCHP(allCy,YTIME)
-        =E=
-    V04ProdElecEstCHP(allCy,YTIME) / (1e3 * smGwToTwhPerYear(YTIME));  
+    )/2;
 
 $ifthen.calib %Calibration% == off
 *' The equation calculates the total electricity demand by summing the components of final energy consumption in electricity, final non-energy consumption in electricity,
@@ -119,11 +111,11 @@ Q04CostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
     i04VarCost(PGALL,YTIME) / 1e3 + 
     (VmRenValue(YTIME) * 8.6e-5)$(not (PGREN2(PGALL)$(not sameas("PGASHYD",PGALL)) $(not sameas("PGSHYD",PGALL)) $(not sameas("PGLHYD",PGALL)) )) +
     sum(PGEF$PGALLtoEF(PGALL,PGEF), 
-      (VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME) +
+      (i04ShareFuels(allCy,PGALL,PGEF) * VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME) +
       V04CO2CaptRate(allCy,PGALL,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME) + 4.17$(sameas("BMSWAS", PGEF))) +
       (1-V04CO2CaptRate(allCy,PGALL,YTIME)) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME) + 4.17$(sameas("BMSWAS", PGEF)))*
-      (sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME)))
-      ) * smTWhToMtoe / imPlantEffByType(allCy,PGALL,YTIME)
+      sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME))
+      ) * smTWhToMtoe / imPlantEffByType(allCy,PGALL,"effELC",YTIME)
     )$(not PGREN(PGALL));
 
 *' The equation calculates the hourly production cost of a power generation plant used in investment decisions. The cost is determined based on various factors,
@@ -165,7 +157,7 @@ Q04CapElecNonCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04CapElecNonCHP(allCy,YTIME)
         =E=
     VmCapElecTotEst(allCy,YTIME) -
-    V04CapElecCHP(allCy,YTIME);      
+    SUM(TCHP,V04ProdElecEstCHP(allCy,TCHP,YTIME)) / smGwToTwhPerYear(YTIME);      
 
 *' In essence, the equation evaluates the difference between the current and expected power generation capacity, accounting for various factors such as planned capacity,
 *' decommissioning schedules, and endogenous scrapping. The square root term introduces a degree of tolerance in the calculation.
@@ -197,7 +189,7 @@ Q04GapGenCapPowerDiff(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04ShareMixWndSol(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04ShareMixWndSol(allCy,YTIME)
         =E=
-    sum(PGALL$(PGRENSW(PGALL)), VmCapElec(allCy,PGALL,YTIME)) /
+    sum(PGALL$PGRENSW(PGALL), VmCapElec(allCy,PGALL,YTIME)) /
     sum(PGALL, VmCapElec(allCy,PGALL,YTIME));
  
 *' The equation calculates a temporary variable which is used to facilitate scaling in the Weibull equation. The scaling is influenced by three main factors:
@@ -305,9 +297,10 @@ Q04CapOverall(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04ProdElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmProdElec(allCy,PGALL,YTIME)
         =E=
-    (V04DemElecTot(allCy,YTIME) - V04ProdElecEstCHP(allCy,YTIME)) /
-    sum(PGALL2, VmCapElec(allCy,PGALL2,YTIME)) *
-    VmCapElec(allCy,PGALL,YTIME);
+    !!(V04DemElecTot(allCy,YTIME) - SUM(TCHP,V04ProdElecEstCHP(allCy,TCHP,YTIME))) /
+    !!sum(PGALL2, VmCapElec(allCy,PGALL2,YTIME)) *
+    i04util(allCy,PGALL,YTIME) *
+    VmCapElec(allCy,PGALL,YTIME) * smGwToTwhPerYear(YTIME);
 
 *' Share of all technologies in the electricity mixture.
 Q04ShareTechPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
@@ -329,7 +322,7 @@ Q04CostPowGenAvgLng(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCostPowGenAvgLng(allCy,YTIME)
         =E=
     SUM(PGALL,VmProdElec(allCy,PGALL,YTIME) * V04CostHourProdInvDec(allCy,PGALL,YTIME)) / 
-    (SUM(PGALL,VmProdElec(allCy,PGALL,YTIME))); 
+    SUM(PGALL,VmProdElec(allCy,PGALL,YTIME)); 
 
 *' This equation estimates the factor increasing the CAPEX of new RES (unflexible) capacity installation due to simultaneous need for grind upgrade and storage, 
 *' for each region (country) and year. This factor depends on the existing RES (unflexible) penetration in the electriciy mixture.
@@ -361,10 +354,10 @@ Q04CCSRetroFit(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(NOCCS(PGALL)))..
       0.05 *
       SUM(PGALL2$CCS_NOCCS(PGALL2,PGALL),
         (
-          V04CostCapTech(allCy,PGALL2,YTIME) -
+          V04CostCapTech(allCy,PGALL2,YTIME-1) -
           i04AvailRate(allCy,PGALL,YTIME) / i04AvailRate(allCy,PGALL2,YTIME) *
-          V04CostCapTech(allCy,PGALL,YTIME) +
-          V04CostVarTech(allCy,PGALL2,YTIME)
+          V04CostCapTech(allCy,PGALL,YTIME-1) +
+          V04CostVarTech(allCy,PGALL2,YTIME-1)
         ) ** (-2)
       )
     );
@@ -380,8 +373,9 @@ Q04ConsFuelElecProd(allCy,PGEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmConsFuelElecProd(allCy,PGEF,YTIME)
         =E=
     SUM(PGALL$PGALLTOEF(PGALL,PGEF),
+      i04ShareFuels(allCy,PGALL,PGEF) *
       VmProdElec(allCy,PGALL,YTIME) * smTWhToMtoe / 
-      imPlantEffByType(allCy,PGALL,YTIME)
+      imPlantEffByType(allCy,PGALL,"effELC",YTIME)
     );
 
 $ontext

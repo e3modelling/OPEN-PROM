@@ -4,7 +4,6 @@
 Equations
 *' *** REST OF ENERGY BALANCE SECTORS EQUATIONS
 *q03ConsTotFinEne(YTIME)                                   "Compute total final energy consumption in ALL countries"
-Q03OutTransfCHP(allCy,TOCTEF,YTIME)                            "Compute the transformation output from CHP (Mtoe)"
 *Q03CapRef(allCy,YTIME)	                                   "Compute refineries capacity"
 Q03OutTransfRefSpec(allCy,EFS,YTIME)	                   "Compute the transformation output from refineries"
 Q03OutTransfGasses(allCy,EFS,YTIME)	
@@ -32,7 +31,6 @@ Q03LossesDistr(allCy,EFS,YTIME)                            "Compute distribution
 Variables
 *' *** REST OF ENERGY BALANCE SECTORS VARIABLES
 *v03ConsTotFinEne(YTIME)                                   "Total final energy Consumption in ALL COUNTRIES (Mtoe)"
-V03OutTransfCHP(allCy,TOCTEF,YTIME)                            "Transformation output from CHP (Mtoe)"
 *V03CapRef(allCy,YTIME)	                                   "Refineries capacity (Million barrels/day)"
 V03OutTransfRefSpec(allCy,EFS,YTIME)	                   "Transformation output from refineries (Mtoe)"
 V03OutTransfGasses(allCy,EFS,YTIME)	
