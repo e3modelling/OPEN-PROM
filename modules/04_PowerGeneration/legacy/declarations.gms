@@ -103,7 +103,7 @@ V04NetNewCapElec(allCy,PGALL,YTIME)	                       "Yearly difference in
 V04CFAvgRen(allCy,PGALL,YTIME)	                           "The average capacity factor of RES (1)"
 V04CapOverall(allCy,PGALL,YTIME)	                       "Overall Capacity (MW)"	
 V04ScalFacPlaDisp(allCy,HOUR,YTIME)	                       "Scaling factor for plant dispatching	(1)"
-V04ProdElecEstCHP(allCy,YTIME)	                           "Estimate the electricity of CHP Plants (1)"	
+V04ProdElecEstCHP(allCy,YTIME)	                           "Estimate the electricity of CHP Plants (TWh)"	
 V04ProdElecNonCHP(allCy,YTIME)	                           "Non CHP total electricity production (TWh)"				
 V04ProdElecReqCHP(allCy,YTIME)	                           "Total estimated CHP electricity production (TWh)"	
 *v04SecContrTotCHPProd(allCy,SBS,CHP,YTIME)                "Contribution of each sector in total CHP production (1)"	

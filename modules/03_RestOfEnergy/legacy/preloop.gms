@@ -54,8 +54,6 @@ V03OutTotTransf.FX(runCy,SSBS,EFS,YTIME)$(not SECtoEFPROD(SSBS,EFS)) = 0;
 V03InpTotTransf.FX(runCy,SSBS,EFS,YTIME)$(DATAY(YTIME) and SECtoEF(SSBS,EFS)) = -i03InpTotTransfProcess(runCy,SSBS,EFS,YTIME);
 V03InpTotTransf.FX(runCy,SSBS,EFS,YTIME)$(not SECtoEF(SSBS,EFS)) = 0;
 *---
-V03OutTransfCHP.FX(runCy,TOCTEF,YTIME)$DATAY(YTIME) = i03OutTotTransfProcess(runCy,"CHP",TOCTEF,YTIME);
-*---
 VmConsFinEneCountry.LO(runCy,EFS,YTIME) = 0;
 VmConsFinEneCountry.FX(runCy,EFS,YTIME)$DATAY(YTIME) = 
 sum(DSBS$(not NENSE(DSBS)), 

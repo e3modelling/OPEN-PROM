@@ -68,14 +68,6 @@ Q03LossesDistr(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     )$H2EF(EFS)
 ;  
 
-Q03OutTransfCHP(allCy,TOCTEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V03OutTransfCHP(allCy,TOCTEF,YTIME)
-        =E=
-    sum(TSTEAM$TCHP(TSTEAM),
-      VmProdSte(allCy,TSTEAM,YTIME)
-    )$sameas("STE",TOCTEF) +
-    (V04ProdElecEstCHP(allCy,YTIME) * smTWhToMtoe)$sameas("ELC",TOCTEF);
-
 $ontext
 *' The equation calculates the refineries' capacity for a given scenario and year.
 *' The calculation is based on a residual factor, the previous year's capacity, and a production scaling
@@ -179,7 +171,7 @@ Q03OutTotTransf(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$runCy(allCy)$SECtoEFPROD(SSBS
     smTWhToMtoe * 
     (
       sum(PGALL,VmProdElec(allCy,PGALL,YTIME))$sameas("PG",SSBS) +
-      V04ProdElecEstCHP(allCy,YTIME)$sameas("CHP",SSBS)
+      SUM(TCHP,V04ProdElecEstCHP(allCy,TCHP,YTIME))$sameas("CHP",SSBS)
     )$ELCEF(EFS) +
     VmDemTotSte(allCy,YTIME)$(sameas("STEAMP",SSBS) and STEAM(EFS)) +
     !!FIXME: Add all liquids
@@ -206,7 +198,7 @@ Q03Transfers(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       )$(not sameas(EFS,"CRO")) +
       (
         V03Transfers(allCy,"CRO",YTIME-1) *
-        SUM(EFS2$EFTOEFA(EFS2,"LQD"),V03Transfers(allCy,EFS2,YTIME)) /
+        (SUM(EFS2$EFTOEFA(EFS2,"LQD"),V03Transfers(allCy,EFS2,YTIME)) + 1e-6) /
         (SUM(EFS2$EFTOEFA(EFS2,"LQD"),V03Transfers(allCy,EFS2,YTIME-1)) + 1e-6)
       )$sameas(EFS,"CRO")   
     )$i03FeedTransfr(allCy,EFS,"%fStartHorizon%");         
@@ -299,7 +291,7 @@ Q03Exp(allCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS) $runCy(allCy))..
 Q03Imp(allCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS) $runCy(allCy))..
     V03Imp(allCy,EFS,YTIME)
         =E=
-    (
+    0 *(
       i03RatioImpFinElecDem(allCy,YTIME) * 
       (VmConsFinEneCountry(allCy,EFS,YTIME) + VmConsFinNonEne(allCy,EFS,YTIME)) +
       V03Exp(allCy,EFS,YTIME) !! + i03ElecImp(allCy,YTIME)
