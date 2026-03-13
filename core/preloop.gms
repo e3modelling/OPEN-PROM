@@ -49,7 +49,7 @@ VmCstCO2SeqCsts.L(runCy,YTIME)=1;
 VmCstCO2SeqCsts.FX(runCy,YTIME)$(not an(YTIME)) = i06ElastCO2Seq(runCy,"mc_b");
 *---
 VmPriceFuelSubsecCarVal.LO(runCy,SBS,"H2F",YTIME) = 1E-6;
-VmPriceFuelSubsecCarVal.LO(runCy,"HOU","ELC",YTIME) = 1E-6;
+*VmPriceFuelSubsecCarVal.LO(runCy,"HOU","ELC",YTIME) = 1E-6;
 VmPriceFuelSubsecCarVal.L(runCy,SBS,EF,YTIME)$SECtoEF(SBS,EF) = 1.5;
 VmPriceFuelSubsecCarVal.L(runCy,"PG",PGEF,YTIME) = 1;
 
@@ -87,6 +87,16 @@ VmLft.FX(runCy,"PC",TTECH,YTIME)$(DATAY(YTIME) and SECTTECH("PC",TTECH)) = i01Te
 VmLft.FX(runCy,DSBS,TECH,YTIME)$(SECTTECH(DSBS,TECH) and (not sameas(DSBS,"PC"))) = i01TechLft(runCy,DSBS,TECH,YTIME);
 VmLft.FX(runCy,DSBS,TECH,YTIME)$(not SECTTECH(DSBS,TECH)) = 0;
 *---
+*option NLP=convert;
+*$ONTEXT
+$onecho>conopt.opt
+RTMAXV=1E30
+RVTIME=360
+RTREDG=1E-2
+RTNWMI=1e-6
+RTNWMA=1e-5
+$offecho
+*$OFFTEXT
 openprom.optfile=1;
 *---
 openprom.scaleopt=1;

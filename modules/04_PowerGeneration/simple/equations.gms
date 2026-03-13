@@ -135,9 +135,9 @@ Q04CostHourProdInvDec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04IndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(allCy))..
     V04IndxEndogScrap(allCy,PGALL,YTIME)
         =E=
-    V04CostVarTech(allCy,PGALL,YTIME)**(-2) /
+    (V04CostVarTech(allCy,PGALL,YTIME) + 1e-6)**(-2) /
     (
-      V04CostVarTech(allCy,PGALL,YTIME)**(-2) +
+      (V04CostVarTech(allCy,PGALL,YTIME) + 1e-6)**(-2) +
       (
         i04ScaleEndogScrap *
         sum(PGALL2$(not sameas(PGALL,PGALL2)),
