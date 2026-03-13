@@ -231,7 +231,7 @@ opt <- parse_args(OptionParser(option_list = optionList))
 if (is.null(opt$model) || is.null(opt$`run-folder`)) {
   cat("No --model or --runFolder provided. Using defaults: model = 'ciceroscm', runFolder = 'daily_npi'\n")
   model <- "magicc"
-  runFolder <- "SoCDR_HA_H2_SeqCosts_DAC135_CPriceFromNDC_2026-03-03_12-43-10"
+  runFolder <- "Hydrogen_Cleanup_1p5C_updated_carbon_values_2025-10-06_17-23-21"
 } else {
   model <- opt$model
   runFolder <- opt$runFolder
