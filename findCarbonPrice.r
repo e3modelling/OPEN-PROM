@@ -1,21 +1,63 @@
 # ============================================================
-# Find Optimal Carbon price to reach a certain carbon budget
+# Carbon Price Optimization to Reach Emissions Targets
 # ============================================================
 
-# This script provides a tuner for the iEnvPolicies input used by the OPEN-PROM model: 
-# it perturbs a baseline per-region policy time-series by a scalar alpha, runs the model, 
-# and searches for the alpha that yields a specified cumulative CO₂ budget (Gt CO₂).
+# This script calibrates carbon prices in the OPEN-PROM model so that simulated
+# emissions match specified target levels (e.g., Mt CO2 or Mt CO2-equivalent)
+# for selected regions or for an aggregated region such as EU27 or the world.
+#
+# The script perturbs the carbon price trajectory contained in `data/iEnvPolicies.csv`
+# by applying a scalar adjustment factor (alpha) and repeatedly runs OPEN-PROM
+# through GAMS until the resulting emissions match a user-defined target.
+#
+# Core workflow:
+# 1) Read the baseline policy file (`iEnvPolicies.csv`).
+# 2) Multiply carbon price values from a chosen start year onward by (1 + alpha).
+# 3) Execute OPEN-PROM via GAMS.
+# 4) Post-process model outputs using `postprom`/`gdx` to compute emissions.
+# 5) Iteratively adjust alpha until emissions meet the target using:
+#      • automatic bracketing around a seed alpha
+#      • bisection root-finding to converge to the target emissions level
+#
 # Key features:
-# Wraps model execution (run_gams) and post-processing via postprom/gdx helpers to extract cumulative world CO₂ in 2050 (emissionsOPENPROM).
-# Applies a scalar multiplier to all year columns (applyAlpha) and writes final updated CSVs with optional timestamped backups (writeFinalPolicyFiles). 
-# Provides seeding/bracketing logic (alphaSeedLinear, autoBracketFromSeed) and a bisection solver (findAlphaForBudget) to find an alpha that meets the budgetTarget.
-
-# Dependencies: data.table, dplyr, tidyr, gdx, postprom and a working GAMS installation accessible via the gams command.
-# Typical workflow: 
-# 1) set budgetTarget - The budget target must take into account the emissions from the start of OPEN-PROM run, 
-#                       e.g., budget=EmissIPCC(2020-2100)+Emiss(2010-2020 of OPEN-PROM)
-# 2) ensure data/iEnvPolicies.csv and main.gms are present, 
-# 3) then run the script — it will probe the model, bracket a root, bisect to tolerance, and save the final scaled carbon prices file.
+# • Supports sequential optimization for multiple regions (one after another).
+# • Can run in regional mode (specific region codes) or global/EU mode.
+# • Automatically modifies the `main.gms` file to set the target region.
+# • Handles CO2 or CO2-equivalent emissions depending on `flagCO2eq`.
+# • Calculates GHG totals using IPCC AR4 Global Warming Potential factors.
+# • Maintains automatic backups of policy input files to allow rollback.
+# • Writes updated policy files once optimization converges.
+# • Logs all runs, iterations, and errors to `Carbon_price_optimization.log`.
+#
+# Dependencies:
+#   data.table, dplyr, tidyr, gdx, postprom, mrprom, stringr
+#   and a working GAMS installation accessible via the `gams` command.
+#
+# Typical usage:
+# 1) Define emissions targets (e.g., in `targetList` for regional runs
+#    or `globalParams` for EU/world runs).
+# 2) Configure key parameters:
+#      • `selectedYear` – year used for emissions matching
+#      • `changeCarbonPriceFromYear` – first year carbon prices are modified
+#      • `flagCO2eq` – toggle between CO2 or CO2-equivalent emissions
+# 3) Ensure `data/iEnvPolicies.csv` and `main.gms` exist.
+# 4) Run the script. It will:
+#      • probe emissions responses,
+#      • automatically bracket a valid alpha range,
+#      • solve for the optimal alpha via bisection,
+#      • update carbon prices accordingly.
+#
+# Output:
+# • Updated carbon price trajectory written to `data/iEnvPolicies_updated.csv`
+# • Timestamped backups of policy files
+# • Execution log stored in `Carbon_price_optimization.log`
+#
+# Notes:
+# • Alpha represents a proportional change in carbon prices:
+#       new_price = old_price * (1 + alpha)
+# • Alpha < 0 decreases prices, alpha > 0 increases prices.
+# • Sequential runs update the policy file cumulatively so that
+#   each region’s optimization builds on previously optimized regions.
 
 suppressPackageStartupMessages({
   library(data.table)

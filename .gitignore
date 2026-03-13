@@ -24,5 +24,4 @@ metadata.json
 *.pyc
 config.json
 modelstat.txt
-git_diff.txt
 *.xlsx
