@@ -88,7 +88,7 @@ Q11SubsiDemTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS
     )$INDSE(DSBS))
     
     +
-    
+$$offtext 
     sum(CDRTECH$(sameas(TECH,CDRTECH)), !! CDR
       (
         VmSubsiDemTechAvail(allCy,DSBS,CDRTECH,YTIME) * 1e6 / 
@@ -100,8 +100,7 @@ Q11SubsiDemTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS
       - (1 - imCapCostTechMin(allCy,DSBS,CDRTECH,YTIME)) * V06LvlCostDAC(allCy,CDRTECH,YTIME-1)))
       ) / 2
     )$(CDR(DSBS) and ord(YTIME) > 15)
-$$offtext
-0;
+;
 
 *' The equation splits the available state grants to the various supply technologies through a policy parameter expressing this proportional division.
 *' The resulting amount (in Millions US$2015) is going to be implemented to the cost calculation of each subsided supply technology.
