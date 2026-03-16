@@ -129,6 +129,7 @@ SUM(PGALL$PGALLTOEF(PGALL,PGEF),
 VmConsFuelElecProd.FX(runCy,PGEF,YTIME)$DATAY(YTIME) = -i03InpTotTransfProcess(runCy,"PG",PGEF,YTIME);
 *---
 V04GapGenCapPowerDiff.LO(runCy,YTIME) = 0;
+V04GapGenCapPowerDiff.L(runCy,YTIME) = 1;
 *---
 VmCostPowGenAvgLng.LO(runCy,YTIME) = 0;
 VmCostPowGenAvgLng.L(runCy,YTIME) = SUM(PGALL,VmProdElec.L(runCy,PGALL,"%fBaseY%") * V04CostHourProdInvDec.L(runCy,PGALL,"%fBaseY%")) / 
@@ -136,3 +137,6 @@ VmCostPowGenAvgLng.L(runCy,YTIME) = SUM(PGALL,VmProdElec.L(runCy,PGALL,"%fBaseY%
 VmCostPowGenAvgLng.FX(runCy,YTIME)$DATAY(YTIME) = 
 SUM(PGALL,VmProdElec.L(runCy,PGALL,YTIME) * V04CostHourProdInvDec.L(runCy,PGALL,YTIME)) / 
 (SUM(PGALL,VmProdElec.L(runCy,PGALL,YTIME)));
+*---
+V04SharePowPlaNewEq.LO(runCy,PGALL,YTIME) = 0;
+V04SharePowPlaNewEq.UP(runCy,PGALL,YTIME) = 1;

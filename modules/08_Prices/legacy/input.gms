@@ -53,6 +53,7 @@ imFuelPrice(runCy,SBS,"BGDO",YTIME) = imFuelPrice(runCy,SBS,"GDO",YTIME);
 imFuelPrice(runCy,SBS,"BGSL",YTIME) = imFuelPrice(runCy,SBS,"GSL",YTIME);
 imFuelPrice(runCy,SBS,"BKRS",YTIME) = imFuelPrice(runCy,SBS,"KRS",YTIME);
 imFuelPrice(runCy,CDR,EF,YTIME)$SECtoEF(CDR,EF) = imFuelPrice(runCy,"OI",EF,YTIME);
-*imFuelPrice(runCy,"EW",EF,YTIME)$SECtoEF("EW",EF) = imFuelPrice(runCy,"OI",EF,YTIME);
+imFuelPrice(runCy,"PG","OLQ",YTIME) = imFuelPrice(runCy,"PG","GDO",YTIME);
+imFuelPrice(runCy,"PG","LPG",YTIME) = imFuelPrice(runCy,"OI","LPG",YTIME);
 
 *---
