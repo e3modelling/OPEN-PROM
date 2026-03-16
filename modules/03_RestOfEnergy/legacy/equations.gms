@@ -215,8 +215,7 @@ Q03ConsGrssInlNotEneBranch(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     SUM(SSBS,V03InpTotTransf(allCy,SSBS,EFS,YTIME)) - 
     SUM(SSBS,V03OutTotTransf(allCy,SSBS,EFS,YTIME)) + 
     VmLossesDistr(allCy,EFS,YTIME) - 
-    V03Transfers(allCy,EFS,YTIME)
-; 
+    V03Transfers(allCy,EFS,YTIME); 
 
 *' The equation calculates the gross inland consumption. This quantity is equal to the total energy
 *' supply for each country.

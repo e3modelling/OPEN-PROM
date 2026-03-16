@@ -17,7 +17,8 @@ qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
   SUM(PGALL,
     SQR(
       V04SharePowPlaNewEq(allCy,PGALL,YTIME) - 
-      t04SharePowPlaNewEq(allCy,PGALL,YTIME)
+      t04SharePowPlaNewEq(allCy,PGALL,YTIME) +
+      0.01 * (i04MatFacPlaAvailCap(allCy,PGALL,YTIME) - i04MatFacPlaAvailCap(allCy,PGALL,YTIME-1))
     )
   ) +
   SUM((TRANSE,TTECH)$(SECTTECH(TRANSE,TTECH) and (sameas("PC",TRANSE) or sameas("PB",TRANSE) or sameas("GU",TRANSE))),
