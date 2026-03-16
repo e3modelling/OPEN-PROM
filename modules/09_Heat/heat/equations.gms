@@ -131,20 +131,20 @@ Q09CaptRateSte(allCy,TSTEAM,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
 Q09ScrapRatePremature(allCy,TSTEAM,YTIME)$(TIME(YTIME)$runCy(allCy))..
     V09ScrapRatePremature(allCy,TSTEAM,YTIME)
         =E=
-    V09CostVarProdSte(allCy,TSTEAM,YTIME) ** (-2) /
+    V09CostVarProdSte(allCy,TSTEAM,YTIME-1) ** (-2) /
     (
-      V09CostVarProdSte(allCy,TSTEAM,YTIME) ** (-2) +
+      V09CostVarProdSte(allCy,TSTEAM,YTIME-1) ** (-2) +
       (( 
         i09ScaleEndogScrap *
         sum(TCHP2$(not sameas(TSTEAM,TCHP2)),
-          V09CostProdSte(allCy,TCHP2,YTIME)
+          V09CostProdSte(allCy,TCHP2,YTIME-1)
         )
       ) ** (-2)
       )$TCHP(TSTEAM) +
       (( 
         i09ScaleEndogScrap *
         sum(TDHP2$(not sameas(TSTEAM,TDHP2)),
-          V09CostProdSte(allCy,TDHP2,YTIME)
+          V09CostProdSte(allCy,TDHP2,YTIME-1)
         )
       ) ** (-2)
       )$TDHP(TSTEAM)

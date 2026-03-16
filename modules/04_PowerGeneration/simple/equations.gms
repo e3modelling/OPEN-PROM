@@ -135,9 +135,9 @@ Q04CostHourProdInvDec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04IndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(allCy))..
     V04IndxEndogScrap(allCy,PGALL,YTIME)
         =E=
-    V04CostVarTech(allCy,PGALL,YTIME)**(-2) /
+    V04CostVarTech(allCy,PGALL,YTIME-1)**(-2) /
     (
-      V04CostVarTech(allCy,PGALL,YTIME)**(-2) +
+      V04CostVarTech(allCy,PGALL,YTIME-1)**(-2) +
       (
         i04ScaleEndogScrap *
         sum(PGALL2$(not sameas(PGALL,PGALL2)),
@@ -183,7 +183,7 @@ Q04GapGenCapPowerDiff(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         )
       ))
       ) 
-    )/2;
+    )/2 + 1e-6;
 
 *' Calculates the share of all the unflexible RES penetration into the mixture, and specifically how much above a given threshold it is.
 Q04ShareMixWndSol(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
@@ -214,11 +214,11 @@ Q04SharePowPlaNewEq(allCy,PGALL,YTIME)$(TIME(YTIME)$runCy(allCy)) ..
     i04MatFacPlaAvailCap(allCy,PGALL,YTIME) *
     V04ShareSatPG(allCy,PGALL,YTIME-1) *
     V04CostHourProdInvDec(allCy,PGALL,YTIME-1) ** (-2) /
-    SUM(PGALL2,
+    (SUM(PGALL2,
       i04MatFacPlaAvailCap(allCy,PGALL2,YTIME) *
       V04ShareSatPG(allCy,PGALL2,YTIME-1) *
       V04CostHourProdInvDec(allCy,PGALL2,YTIME-1) ** (-2)
-    );
+    ) + 1e-6);
 
 *' This equation calculates the variable representing the electricity generation capacity for a specific power plant in a given country
 *' and time period. The calculation takes into account various factors related to new investments, decommissioning, and technology-specific parameters.
@@ -338,24 +338,24 @@ Q04CO2CaptRate(allCy,PGALL,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
     (1 + 
       EXP(20 * (
         ([VmCstCO2SeqCsts(allCy,YTIME) /
-        (sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME)) + 1)] + 2 -
+        (sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME)) + 1)] + 2 -
         [SQRT(SQR([VmCstCO2SeqCsts(allCy,YTIME) /
-        (sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME)) + 1)] - 2))])/2
-        -1)
+        (sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME)) + 1)] - 2))])/2
+        -1.1)
       )
     );
 
 Q04CCSRetroFit(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(NOCCS(PGALL)))..
     V04CCSRetroFit(allCy,PGALL,YTIME)
         =E=
-    V04CostVarTech(allCy,PGALL,YTIME) ** (-2) /
+    V04CostVarTech(allCy,PGALL,YTIME-1) ** (-2) /
     (
-      V04CostVarTech(allCy,PGALL,YTIME) ** (-2) +
+      V04CostVarTech(allCy,PGALL,YTIME-1) ** (-2) +
       0.01 *
       SUM(PGALL2$CCS_NOCCS(PGALL2,PGALL),
         (
           V04CostCapTech(allCy,PGALL2,YTIME-1) -
-          i04AvailRate(allCy,PGALL,YTIME) / i04AvailRate(allCy,PGALL2,YTIME) *
+          i04AvailRate(allCy,PGALL,YTIME-1) / i04AvailRate(allCy,PGALL2,YTIME-1) *
           V04CostCapTech(allCy,PGALL,YTIME-1) +
           V04CostVarTech(allCy,PGALL2,YTIME-1)
         ) ** (-2)

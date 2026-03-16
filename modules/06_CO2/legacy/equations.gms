@@ -14,13 +14,11 @@ Q06CO2CaptureCCS(allCy,SBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECtoEF(SBS,EF
     V06CO2CaptureCCS(allCy,SBS,EFS,YTIME)
       =E=
     (
-      sum(CCS$PGALLtoEF(CCS,EFS),
-        SUM(PGEF$sameas(PGEF,EFS),
-          i04ShareFuels(allCy,CCS,PGEF) *
-          VmProdElec(allCy,CCS,YTIME) * smTWhToMtoe /
-          imPlantEffByType(allCy,CCS,"effELC",YTIME) *
-          V04CO2CaptRate(allCy,CCS,YTIME)
-        )
+      sum(PGALL$(PGALLtoEF(PGALL,EFS) and CCS(PGALL)),
+        i04ShareFuels(allCy,PGALL,EFS) *
+        VmProdElec(allCy,PGALL,YTIME)* smTWhToMtoe /
+        imPlantEffByType(allCy,PGALL,"effELC",YTIME) *
+        V04CO2CaptRate(allCy,PGALL,YTIME)
       )$sameas("PG", SBS) +
       sum(H2TECH$H2TECHEFtoEF(H2TECH,EFS),
         VmConsFuelTechH2Prod(allCy,H2TECH,EFS,YTIME) *
@@ -66,7 +64,7 @@ Q06CstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     (1-0.75) *
     i06ElastCO2Seq(allCy,"mc_b") *
     exp(
-      (V06CaptCummCO2(allCy,YTIME) - V06CapCDR(allCy,"TEW",YTIME) * 1e-6) / 
+      (V06CaptCummCO2(allCy,YTIME-1) - V06CapCDR(allCy,"TEW",YTIME-1) * 1e-6) / 
       i06ElastCO2Seq(allCy,"mc_d")
     );           
 
@@ -139,8 +137,8 @@ Q06LvlCostDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q06ProfRateDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06ProfRateDAC(allCy,CDRTECH,YTIME)
         =E=
-    (sum(NAP$NAPtoALLSBS(NAP,"DAC"),VmCarVal(allCy,NAP,YTIME)))
-    / V06LvlCostDAC(allCy,CDRTECH,YTIME - 1)
+    sum(NAP$NAPtoALLSBS(NAP,"DAC"),VmCarVal(allCy,NAP,YTIME)) /
+    V06LvlCostDAC(allCy,CDRTECH,YTIME - 1)
 ;
 
 * The equation determines the annual growth rate of new DAC capacity by region and technology. 
