@@ -1,22 +1,16 @@
 library(madrat)
 library(postprom)
-library(reticulate)
 library(dplyr)
 library(quitte)
-
-installPythonPackages <- function(packages) {
-  for (pkg in packages) {
-    if (!py_module_available(pkg)) {
-      py_install(pkg, use_python = TRUE)
-    }
-  }
-}
+library(crayon)
+library(stringr)
 
 getRunpath <- function() {
-  py_config()
-  installPythonPackages(c("seaborn", "colorama", "pandas"))
-  python_output <- py_run_file("./scripts/reporting.py")
-  runpath <- as.data.frame(python_output$path)
+  # Main execution
+  source("scripts/helpersOfCompareScenarios.R")
+  source("scripts/scanRunFolder.R")
+  result <- scanRunFolder()
+  runpath <- as.data.frame(result)
   runpath <- as.vector(runpath[, seq(2, length(runpath), 2)])
   return(unlist(runpath, use.names = FALSE))
 }
@@ -27,10 +21,10 @@ reportOutput <- function(
     aggregate = TRUE,
     fullValidation = TRUE,
     plot_name = NULL,
-    Validation_data_for_plots = TRUE,
-    Validation2050 = TRUE,
-    emissions = TRUE,
-    htmlReport = FALSE, projectReport = FALSE) {
+    Validation_data_for_plots = Validation_data_for_plots,
+    Validation2050 = Validation2050,
+    emissions = emissions,
+    htmlReport = htmlReport, projectReport = projectReport) {
   # Region mapping used for aggregating validation data (e.g. ENERDATA)
   if (length(runpath) > 1) {
     reg_map <- jsonlite::read_json(paste0((runpath[1]),"/metadata.json"))[["Model Information"]][["Region Mapping"]][[1]]
@@ -42,7 +36,8 @@ reportOutput <- function(
 
   reports <- convertGDXtoMIF(runpath,
     mif_name = mif_name,
-    aggregate = aggregate, fullValidation = fullValidation
+    aggregate = aggregate, fullValidation = fullValidation,
+    emissions = emissions, htmlReport = htmlReport, projectReport = projectReport
   )
   metadata <- getMetadata(path = runpath)
   print("Report generation completed.")
@@ -73,4 +68,6 @@ runpath <- if (length(args) > 0) args[1] else getRunpath()
 mif_name <- if (length(args) > 1) args[2] else "reporting.mif"
 plot_name <- if (length(args) > 2) args[3] else "plot.tex"
 
-reportOutput(runpath = runpath, mif_name = mif_name, plot_name = plot_name, Validation_data_for_plots = TRUE, Validation2050 = FALSE)
+reportOutput(runpath = runpath, mif_name = mif_name, plot_name = plot_name,
+             Validation_data_for_plots = FALSE, Validation2050 = FALSE,
+             emissions = TRUE, htmlReport = FALSE, projectReport = FALSE)

@@ -1,5 +1,5 @@
 ## Installing GAMS 
-Before starting, you'll need to install the GAMS library, available for [download here](https://www.gams.com/download/). Install GAMS in a directory that does not require administrative privileges for easier access. During installation, select the "Use advanced installation mode" option and tick the checkbox for "Add GAMS directory to PATH environment variable" checkbox. This step is important to ensure GAMS is accessible via your operating system's command line.
+Before starting, you'll need to install GAMS, available for [download here](https://www.gams.com/download/). Install GAMS in a directory that does not require administrative privileges for easier access. During installation, select the "Use advanced installation mode" option and tick the checkbox for "Add GAMS directory to PATH environment variable" checkbox. This step is important to ensure GAMS is accessible via your operating system's command line.
 
 ## First OPEN-PROM run with dummy data
 
@@ -21,7 +21,7 @@ Running various different scenarios is a fundamental aspect of integrated assess
 # Final step: Running the Model with Dummy Data
  Afterwards, you simply need to open a terminal window and execute the following command:  
 
-`gams main.gms --DevMode=2 --GenerateInput=on --fCountries='RWO' -Idir=./data`
+`gams main.gms --DevMode=2 --GenerateInput=off --fCountries='RWO' -Idir=./data`
 
 This command will execute the OPEN-PROM model for a single region (RWO - Rest of the world), based on dummy datasets that are similar (**but not identical**) to those used internally by the E3-Modelling team. This will help you get a better understanding of the model equations, and experiment with the input/output.
- For any further questions or suggestions, feel free to contact the developing team at: info@e3modelling.com
+ To receive the dummy dataset please contact the developing team at: info@e3modelling.com

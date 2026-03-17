@@ -23,29 +23,28 @@ $ENDIF
    $(not sameas("NUC",EF)) $runCy(allCy))..
     VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)
         =E=
-    (VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1) +
+    (
+      VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1) +
       sum(NAP$NAPtoALLSBS(NAP,SBS),
       VmCarVal(allCy,NAP,YTIME)*imCo2EmiFac(allCy,SBS,EF,YTIME) - 
       VmCarVal(allCy,NAP,YTIME-1)*imCo2EmiFac(allCy,SBS,EF,YTIME-1)
-      )
-      /1000
+      ) / 1000
     )$(DSBS(SBS))$(not (ELCEF(EF) or HEATPUMP(EF) or ALTEF(EF) or H2EF(EF) or sameas("STE",EF))) +
-       (VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1) +
+    (
+      VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1) +
       sum(NAP$NAPtoALLSBS(NAP,SBS),
       VmCarVal(allCy,NAP,YTIME)*imCo2EmiFac(allCy,SBS,EF,YTIME) - 
       VmCarVal(allCy,NAP,YTIME-1)*imCo2EmiFac(allCy,SBS,EF,YTIME-1)
-      )
-      /1000
+      ) / 1000
       !!We should account for carbon tax increase for the own consumption emissions
     )$sameas(SBS,"PG") +
     VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1)$(DSBS(SBS))$ALTEF(EF) +
     (
-      ( VmPriceElecIndResConsu(allCy,"i",YTIME)$INDSE1(SBS)+
+      ( VmPriceElecIndResConsu(allCy,"i",YTIME)$(INDSE1(SBS) or sameas("DAC",SBS) or sameas("EW",SBS))+
         VmPriceElecIndResConsu(allCy,"r",YTIME)$HOU1(SBS) +
         VmPriceElecIndResConsu(allCy,"t",YTIME)$TRANS1(SBS) +
         VmPriceElecIndResConsu(allCy,"c",YTIME)$SERV(SBS)
-      )/smTWhToMtoe
-      +
+      ) / smTWhToMtoe +
       (imEffValueInDollars(allCy,SBS,YTIME)/1000)$DSBS(SBS)
     )$(ELCEF(EF) or HEATPUMP(EF)) +
     (
@@ -55,47 +54,27 @@ $ENDIF
     (VmCostAvgProdH2(allCy,YTIME-1)$DSBS(SBS)/1000)$H2EF(EF) +
     (VmCostAvgProdSte(allCy,YTIME)$DSBS(SBS))$sameas("STE",EF);
 
-$ontext
-*' The equation calculates the fuel prices per subsector and fuel multiplied by weights
-*' considering separate carbon values in each sector. This equation is applied for a specific scenario, subsector, fuel, and year.
-*' The calculation involves multiplying the sector's average price weight based on fuel consumption by the fuel price per subsector
-*' and fuel. The weights are determined by the sector's average price, considering the specific fuel consumption for the given scenario, subsector, and fuel.
-*' This equation allows for a more nuanced calculation of fuel prices, taking into account the carbon values in each sector. The result represents the fuel
-*' prices per subsector and fuel, multiplied by the corresponding weights, and adjusted based on the specific carbon values in each sector.
-Q08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)$(SECtoEF(DSBS,EF) $TIME(YTIME) $runCy(allCy))..
-    V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)
-      =E= 
-    !!i08WgtSecAvgPriFueCons(allCy,DSBS,EF) * 
-    !!(
-    1e-2+
-      (
-        (VmConsFuel(allCy,DSBS,EF,YTIME) - V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$ELCEF(EF)) / 
-        (SUM(EF2,VmConsFuel(allCy,DSBS,EF2,YTIME)- V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$ELCEF(EF2)) )
-      )$INDSE(DSBS) *
-      VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME)
-
-      +
-      SUM(TRANSE$TRANSE(DSBS), 
-        VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME) /
-        1!!SUM(EF2,VmDemFinEneTranspPerFuel(allCy,TRANSE,EF2,YTIME))
-      )$TRANSE(DSBS)
-    ) *
-    VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME);
-$offtext
-
 Q08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)$(SECtoEF(DSBS,EF) $TIME(YTIME) $runCy(allCy))..
 V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)
       =E=
-      1e-12 +
-      (
-        (VmConsFuel(allCy,DSBS,EF,YTIME) - V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$ELCEF(EF)) /
-        (SUM(EF2,VmConsFuel(allCy,DSBS,EF2,YTIME)- V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$ELCEF(EF2)) )
-      )$(INDDOM(DSBS) or NENSE(DSBS)) +   
-      SUM(TRANSE$(sameas(TRANSE,DSBS)),
-        VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME) /
-        (SUM(EF2$SECtoEF(TRANSE,EF2),VmDemFinEneTranspPerFuel(allCy,TRANSE,EF2,YTIME))+1e-12)
-      )
-;
+    1e-6 +
+    (
+      (VmConsFuel(allCy,DSBS,EF,YTIME) - V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$ELCEF(EF)) /
+      (SUM(EF2$SECtoEF(DSBS,EF2),VmConsFuel(allCy,DSBS,EF2,YTIME) - V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$ELCEF(EF2)) + 1e-6)
+    )$(INDDOM(DSBS) or NENSE(DSBS)) +   
+    SUM(TRANSE$(sameas(TRANSE,DSBS)),
+      VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME) /
+      (SUM(EF2$SECtoEF(TRANSE,EF2),VmDemFinEneTranspPerFuel(allCy,TRANSE,EF2,YTIME)) + 1e-6)
+    ) +
+    (
+      SUM(DACTECH,VmConsFuelTechCDRProd(allCy,DACTECH,EF,YTIME)) /
+      (SUM((DACTECH,EF2)$SECtoEF(DSBS,EF2),VmConsFuelTechCDRProd(allCy,DACTECH,EF2,YTIME)) + 1e-12)
+    )$sameas("DAC",DSBS) +
+    (
+      VmConsFuelTechCDRProd(allCy,"TEW",EF,YTIME) /
+      (SUM(EF2$SECtoEF(DSBS,EF2),VmConsFuelTechCDRProd(allCy,"TEW",EF2,YTIME)) + 1e-12)
+    )$sameas("EW",DSBS);
+  
 *' The equation calculates the average fuel price per subsector. These average prices are used to further compute electricity prices in industry
 *' (using the OI "other industry" avg price), as well as the aggregate fuel demand (of substitutable fuels) per subsector.
 *' In the transport sector they feed into the calculation of the activity levels.
@@ -165,9 +144,9 @@ $offtext
 *' of CHP plants. It involves the estimated electricity index, and a technical maximum of the electricity to steam ratio in CHP plants is incorporated to account
 *' for the specific characteristics of these facilities. This equation ensures that the derived electricity industry prices align with the estimated index and
 *' technical constraints, providing a realistic representation of the electricity market in the industrial sector.
-Q08PriceElecInd(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    VmPriceElecInd(allCy,YTIME) 
+Q08PriceElecInd(allCy,TCHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    VmPriceElecInd(allCy,TCHP,YTIME) 
         =E=
     (
-      V02IndxElecIndPrices(allCy,YTIME) + smElecToSteRatioChp - SQRT( SQR(V02IndxElecIndPrices(allCy,YTIME)-smElecToSteRatioChp))
+      V02IndxElecIndPrices(allCy,TCHP,YTIME) + smElecToSteRatioChp - SQRT( SQR(V02IndxElecIndPrices(allCy,TCHP,YTIME)-smElecToSteRatioChp))
     )/2;

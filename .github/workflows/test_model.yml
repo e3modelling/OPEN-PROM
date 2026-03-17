@@ -23,6 +23,20 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        
+      - name: Download Datasets
+        env:
+          DATASET: ${{ secrets.DATASET }}
+        run: |
+          @"
+          print("Getting data for GitHub Action")
+          url <- commandArgs(trailingOnly = TRUE)
+          fname <- 'ghaction_data.tgz'
+          download.file(url, fname, mode="wb")
+          utils::untar(fname, exdir = "./data")
+          "@ | Out-File -FilePath dl_data.R
+
+          RScript dl_data.R $env:DATASET
 
       - name: Setup GAMS
         run: |
@@ -43,21 +57,7 @@ jobs:
           $licenseFile = "C:\GAMS\48\gamslice.txt"
           New-Item -ItemType Directory -Force -Path "C:\GAMS\48"
           Set-Content -Path $licenseFile -Value $env:LICENSE
-
-      - name: Download Datasets
-        env:
-          DATASET: ${{ secrets.DATASET }}
-        run: |
-          @"
-          print("Getting data for GitHub Action")
-          url <- commandArgs(trailingOnly = TRUE)
-          fname <- 'ghaction_data.tgz'
-          download.file(url, fname, mode="wb")
-          utils::untar(fname, exdir = "./data")
-          "@ | Out-File -FilePath dl_data.R
-
-          RScript dl_data.R $env:DATASET
-          
+  
       - name: Test Model Run - ${{ matrix.name }}
         run: |
           & "C:\GAMS\48\gams.exe" main.gms lo 2 --DevMode=0 --WriteGDX=off --GenerateInput=off --fEndY=2100 --fScenario=${{ matrix.id }} -Idir=./data
