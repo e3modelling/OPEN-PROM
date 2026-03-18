@@ -598,24 +598,6 @@ WND
 NGS
 /
 
-
-IMPEF(EFS)       Fuels considered in Imports and Exports
-/
-LGN
-HCL
-CRO
-GSL
-GDO
-RFO
-LPG
-KRS
-OLQ
-NGS
-OGS
-ELC
-*BMSWAS
-/
-
 *         Technologies            *
 
 TECH      Technologies (in Demand side)
@@ -861,7 +843,7 @@ TCHEVGDO.(GDO,BGDO)
 
 ITECHtoEF(ITECH,EF) Fuels consumed by industrial technologies
 /
-TGDO.(GDO,BGDO)
+TGDO.(GDO,BGDO,CRO)
 TLPG.LPG
 TKRS.(KRS,BKRS)  
 TNGS.NGS
@@ -892,6 +874,8 @@ CHYBV(TECH) CONVENTIONAL hybrids
 TCHEVGSL
 TCHEVGDO
 /
+
+IMPEXP "Imports/Exports" /IMPORTS,EXPORTS/
 
 SSECTTECH(SSBS,STECH) "Link between Model Supply Subsectors and Technologies"
 

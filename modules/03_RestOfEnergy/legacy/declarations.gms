@@ -1,6 +1,18 @@
 *' @title REST OF ENERGY BALANCE SECTORS Declarations
 *' @code
 
+Parameters
+i03SupTrnasfOutputRefineries(allCy,EF,YTIME)	  "Supplementary parameter for the transformation output from refineries (Mtoe)"
+i03SupResRefCapacity(allCy,SUPOTH,YTIME)	      "Supplementary Parameter for the residual in refineries Capacity (1)"
+i03TotEneBranchCons(allCy,EF,YTIME)	              "Total Energy Branch Consumption (Mtoe)"
+*i03RefCapacity(allCy,YTIME)	                      "Refineries Capacity (Million Barrels/day)"
+i03ResTransfOutputRefineries(allCy,EF,YTIME)      "Residual in Transformation Output from Refineries (Mtoe)"
+i03ResHcNgOilPrProd(allCy,EF,YTIME)	              "Residuals for Hard Coal, Natural Gas and Oil Primary Production (1)"
+i03RatioImpFinElecDem(allCy,YTIME)	              "Ratio of imports in final electricity demand (1)"
+i03RatioPrimaryFuels(allCy,EFS,YTIME)
+i03InputEffSupply(allCy,SSBS,EFS,YTIME)
+;
+
 Equations
 *' *** REST OF ENERGY BALANCE SECTORS EQUATIONS
 *q03ConsTotFinEne(YTIME)                                   "Compute total final energy consumption in ALL countries"
@@ -14,7 +26,6 @@ Q03InputTransfGasses(allCy,EFS,YTIME)	                     "Compute the transfor
 Q03InpTotTransf(allCy,SSBS,EFS,YTIME)	                       "Compute total transformation input"
 Q03OutTotTransf(allCy,SSBS,EFS,YTIME)	                       "Compute total transformation output"
 Q03Transfers(allCy,EFS,YTIME)	                           "Compute transfers"
-Q03ConsGrssInlNotEneBranch(allCy,EFS,YTIME)	               "Compute gross inland consumption not including consumption of energy branch"
 Q03ConsGrssInl(allCy,EFS,YTIME)	                           "Compute gross inland consumption"
 Q03ProdPrimary(allCy,EFS,YTIME)	                           "Compute primary production"
 Q03Exp(allCy,EFS,YTIME)	                                   "Compute fake exports"
@@ -41,7 +52,6 @@ V03InputTransfGasses(allCy,EFS,YTIME)	                     "Transformation input
 V03InpTotTransf(allCy,SSBS,EFS,YTIME)	                       "Total transformation input (Mtoe)"
 V03OutTotTransf(allCy,SSBS,EFS,YTIME)	                       "Total transformation output (Mtoe)"
 V03Transfers(allCy,EFS,YTIME)	                           "Transfers (Mtoe)"
-V03ConsGrssInlNotEneBranch(allCy,EFS,YTIME)	               "Gross Inland Consumption not including consumption of energy branch (Mtoe)"
 V03ConsGrssInl(allCy,EFS,YTIME)	                           "Gross Inland Consumption (Mtoe)"
 V03ProdPrimary(allCy,EFS,YTIME)	                           "Primary Production (Mtoe)"
 V03Exp(allCy,EFS,YTIME)                        	           "Exports fake (Mtoe)"

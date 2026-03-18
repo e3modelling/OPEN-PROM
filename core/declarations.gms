@@ -3,7 +3,6 @@
 Parameters
 iNPDL(SBS)                                                 "Number of Polynomial Distribution Lags (PDL) (1)"
 iTransfInpGasworks(allCy,EF,YTIME)                         "Transformation Input in Gasworks, Blast Furnances, Briquetting plants (Mtoe)"
-iSuppExports(allCy,EF,YTIME)                	           "Supplementary parameter for  exports (Mtoe)"		
 iResMargTotAvailCap(allCy,PGRES,YTIME)	                   "Reserve margins on total available capacity and peak load (1)"
 iPriceTragets(allCy,SBS,EF,YTIME)	                       "Price Targets	(1)"
 iPriceReform(allCy,SBS,EF,YTIME)	                       "Price reformation (1)"
@@ -13,7 +12,6 @@ iResFuelConsPerSubAndFuel(allCy,SBS,EF,YTIME)	           "Residuals in fuel cons
 iCarbValYrExog(allCy,ytime)	                               "Carbon value for each year when it is exogenous (US$2015/tn CO2)"
 iShrHeatPumpElecCons(allCy,SBS)	                           "Share of heat pump electricity consumption in total substitutable electricity (1)"						 			
 iTranfOutGasworks(allCy,EF,YTIME)	                       "Transformation Output from Gasworks, Blast Furnances and Briquetting plants (Mtoe)"	
-iNetImp(allCy,EFS,YTIME)                                   "Net imports (Mtoe)"
 ODummyObj                                                  "Parameter saving objective function"
 
 *'                **Interdependent Parameters**
@@ -28,12 +26,10 @@ imAnnCons(allCy,DSBS,conSet)                               "Annual consumption o
                                                                 !! For goods transport, (Mtkm/vehicle)  
 imCumDistrFuncConsSize(allCy,DSBS)                         "Cummulative distribution function of consumer size groups (1)"
 imRateLossesFinCons(allCy,EF,YTIME)                        "Rate of losses over Available for Final Consumption (1)"  
-imFuelExprts(allCy,EF,YTIME)	                           "Fuel Exports (Mtoe)"
 imCO2CaptRate(PGALL)	                                    "Plant CO2 capture rate (1)"		
 imEffValueInDollars(allCy,SBS,YTIME)	                   "Efficiency value (US$2015/toe)" 	
 imShrNonSubElecInTotElecDem(allCy,SBS)	                   "Share of non substitutable electricity in total electricity demand per subsector (1)"		
 imDistrLosses(allCy,EF,YTIME)	                           "Distribution Losses (Mtoe)"		
-imFuelImports(allCy,EF,YTIME)	                           "Fuel Imports (Mtoe)"							
 imVarCostTech(allCy,SBS,TECH,YTIME)	                       "Variable Cost of technology ()"
                                                                 !! For transport (kUS$2015/vehicle)
                                                                 !! For Industrial sectors, except Iron and Steel (US$2015/toe-year)

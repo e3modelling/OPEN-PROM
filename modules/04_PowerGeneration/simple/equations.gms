@@ -36,14 +36,7 @@ $ifthen.calib %Calibration% == off
 Q04DemElecTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04DemElecTot(allCy,YTIME)
         =E=
-    1 / smTWhToMtoe *
-    ( 
-      VmConsFinEneCountry(allCy,"ELC",YTIME) + 
-      VmConsFinNonEne(allCy,"ELC",YTIME) + 
-      VmLossesDistr(allCy,"ELC",YTIME) +
-      SUM(SSBS,VmConsFiEneSec(allCy,SSBS,"ELC",YTIME)) - 
-      VmImpNetEneBrnch(allCy,"ELC",YTIME)
-    );
+    V03ConsGrssInl(allCy,"ELC",YTIME) / smTWhToMtoe;
 $endif.calib
 
 *' This equation calculates the load factor of the entire domestic system as a sum of consumption in each demand subsector
@@ -156,8 +149,11 @@ Q04IndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(al
 Q04CapElecNonCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04CapElecNonCHP(allCy,YTIME)
         =E=
-    VmCapElecTotEst(allCy,YTIME) -
-    SUM(TCHP,V04ProdElecEstCHP(allCy,TCHP,YTIME)) / smGwToTwhPerYear(YTIME);      
+    (
+      !!VmCapElecTotEst(allCy,YTIME) -
+      V04DemElecTot(allCy,YTIME) - 
+      SUM(TCHP,V04ProdElecEstCHP(allCy,TCHP,YTIME)) 
+    ) / smGwToTwhPerYear(YTIME);      
 
 *' In essence, the equation evaluates the difference between the current and expected power generation capacity, accounting for various factors such as planned capacity,
 *' decommissioning schedules, and endogenous scrapping. The square root term introduces a degree of tolerance in the calculation.
@@ -218,7 +214,7 @@ Q04SharePowPlaNewEq(allCy,PGALL,YTIME)$(TIME(YTIME)$runCy(allCy)) ..
       i04MatFacPlaAvailCap(allCy,PGALL2,YTIME) *
       V04ShareSatPG(allCy,PGALL2,YTIME-1) *
       V04CostHourProdInvDec(allCy,PGALL2,YTIME-1) ** (-2)
-    ) + 1e-6);
+    ));
 
 *' This equation calculates the variable representing the electricity generation capacity for a specific power plant in a given country
 *' and time period. The calculation takes into account various factors related to new investments, decommissioning, and technology-specific parameters.
@@ -297,10 +293,11 @@ Q04CapOverall(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04ProdElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmProdElec(allCy,PGALL,YTIME)
         =E=
-    !!(V04DemElecTot(allCy,YTIME) - SUM(TCHP,V04ProdElecEstCHP(allCy,TCHP,YTIME))) /
-    !!sum(PGALL2, VmCapElec(allCy,PGALL2,YTIME)) *
-    i04util(allCy,PGALL,YTIME) *
+    V04CapElecNonCHP(allCy,YTIME) /
+    sum(PGALL2, VmCapElec(allCy,PGALL2,YTIME)) * 
     VmCapElec(allCy,PGALL,YTIME) * smGwToTwhPerYear(YTIME);
+    !!i04util(allCy,PGALL,YTIME) *
+    !!VmCapElec(allCy,PGALL,YTIME) * smGwToTwhPerYear(YTIME);
 
 *' Share of all technologies in the electricity mixture.
 Q04ShareTechPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
@@ -321,8 +318,8 @@ Q04ShareSatPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(PGREN(PGALL)))..
 Q04CostPowGenAvgLng(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCostPowGenAvgLng(allCy,YTIME)
         =E=
-    SUM(PGALL,VmProdElec(allCy,PGALL,YTIME) * V04CostHourProdInvDec(allCy,PGALL,YTIME)) / 
-    SUM(PGALL,VmProdElec(allCy,PGALL,YTIME)); 
+    1; !!SUM(PGALL,VmProdElec(allCy,PGALL,YTIME) * V04CostHourProdInvDec(allCy,PGALL,YTIME)) / 
+    !!SUM(PGALL,VmProdElec(allCy,PGALL,YTIME)); 
 
 *' This equation estimates the factor increasing the CAPEX of new RES (unflexible) capacity installation due to simultaneous need for grind upgrade and storage, 
 *' for each region (country) and year. This factor depends on the existing RES (unflexible) penetration in the electriciy mixture.
@@ -348,19 +345,7 @@ Q04CO2CaptRate(allCy,PGALL,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
 Q04CCSRetroFit(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(NOCCS(PGALL)))..
     V04CCSRetroFit(allCy,PGALL,YTIME)
         =E=
-    V04CostVarTech(allCy,PGALL,YTIME-1) ** (-2) /
-    (
-      V04CostVarTech(allCy,PGALL,YTIME-1) ** (-2) +
-      0.01 *
-      SUM(PGALL2$CCS_NOCCS(PGALL2,PGALL),
-        (
-          V04CostCapTech(allCy,PGALL2,YTIME-1) -
-          i04AvailRate(allCy,PGALL,YTIME-1) / i04AvailRate(allCy,PGALL2,YTIME-1) *
-          V04CostCapTech(allCy,PGALL,YTIME-1) +
-          V04CostVarTech(allCy,PGALL2,YTIME-1)
-        ) ** (-2)
-      )
-    );
+    1;
 
 Q04ScrpRate(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04ScrpRate(allCy,PGALL,YTIME)

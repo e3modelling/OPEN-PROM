@@ -151,11 +151,12 @@ $include"./iPriceFuelsIntBase.csv"
 $offdelim
 ;
 *---
-table iSuppExports(allCy,EF,YTIME)	                   "Supplementary parameter for  exports (Mtoe)"		
+table imFuelTrade(allCy,IMPEXP,EF,YTIME)	                   "Imports/exports (Mtoe)"		
 $ondelim
-$include"./iSuppExports.csv"
+$include"./iDataTrade.csv"
 $offdelim
 ;
+imFuelTrade(allCy,"EXPORTS",EF,YTIME) = - imFuelTrade(allCy,"EXPORTS",EF,YTIME);
 *---
 table imPriceFuelsInt(WEF,YTIME)                      "International Fuel Prices ($2015/toe)"
 $ondelim
@@ -169,9 +170,6 @@ $include"./iDataElecInd.csv"
 $offdelim
 ;
 imPriceElecInd(allCy,"TSTE1AH2F",YTIME) = imPriceElecInd(allCy,"TSTE1AG",YTIME)
-*---
-parameter imImpExp(allCy,EFS,YTIME)	              "Imports of exporting countries usually zero (1)" ;
-imImpExp(runCy,EFS,YTIME) = 0;
 *---
 parameter imTotFinEneDemSubBaseYr(allCy,SBS,YTIME)    "Total Final Energy Demand per subsector in Base year (Mtoe)";
 *---
@@ -448,8 +446,6 @@ AG   0.2078 0.9     0.00001
 iShrHeatPumpElecCons(runCy,INDSE) = iIndCharData(INDSE,"SH_HPELC");
 iShrHeatPumpElecCons(runCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(DOMSE,"SH_HPELC");
 *---
-imFuelExprts(runCy,EFS,YTIME) = iSuppExports(runCy,EFS,YTIME);
-*---
 *Calculation of consumer size groups and their distribution function
 imNcon(TRANSE)$(sameas(TRANSE,"PC") or sameas(TRANSE,"GU")) = 10;      !! 11 different consumer size groups for cars and trucks
 imNcon(TRANSE)$(not (sameas(TRANSE,"PC") or sameas(TRANSE,"GU"))) = 1; !! 2 different consumer size groups for inland navigation, trains, busses and aviation
@@ -576,16 +572,6 @@ imFuelConsPerFueSub(runCy,"BU",EF,YTIME) = -imFuelConsPerFueSub(runCy,"BU",EF,YT
 imCO2CaptRate(PGALL)$CCS(PGALL) = 0.90; 
 imEffValueInDollars(runCy,SBS,YTIME) = 0;
 iScenarioPri(WEF,"NOTRADE",YTIME) = 0;
-*---
-table iDataImports(allCy,EF,YTIME)	          "Data for imports (Mtoe)"
-$ondelim
-$include"./iDataImports.csv"
-$offdelim
-;
-*---
-imFuelImports(runCy,EFS,YTIME)$DATAY(YTIME) = iDataImports(runCy,EFS,YTIME);
-*---
-iNetImp(runCy,EFS,YTIME) = iDataImports(runCy,"ELC",YTIME)-iSuppExports(runCy,"ELC",YTIME);
 *---
 **                   Power Generation
 table iEnvPolicies(allCy,POLICIES_SET,YTIME) "Environmental policies on emissions constraints  and subsidy on renewables (Mtn CO2)"

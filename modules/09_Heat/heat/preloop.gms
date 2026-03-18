@@ -6,6 +6,7 @@
 *---
 V09ScrapRatePremature.LO(runCy,TSTEAM,YTIME) = 0;
 V09ScrapRatePremature.UP(runCy,TSTEAM,YTIME) = 1;
+V09ScrapRatePremature.L(runCy,TSTEAM,YTIME) = 0.7;
 *---
 V09GapShareSte.LO(runCy,TSTEAM,YTIME) = 0;
 V09GapShareSte.UP(runCy,TSTEAM,YTIME) = 1;
@@ -15,24 +16,30 @@ V09CaptRateSte.UP(runCy,TSTEAM,YTIME) = 1;
 *---
 V09ScrapRate.LO(runCy,TSTEAM,YTIME) = 0;
 V09ScrapRate.UP(runCy,TSTEAM,YTIME) = 1;
-V09ScrapRate.L(runCy,TSTEAM,YTIME) = 0.5;
 *---
 VmDemTotSte.LO(runCy,YTIME) = 0;
-VmDemTotSte.L(runCy,YTIME) = 
-SUM(DSBS, imFuelConsPerFueSub(runCy,DSBS,"STE","%fBaseY%")) +
-i03TotEneBranchCons(runCy,"STE","%fBaseY%") +
-imDistrLosses(runCy,"STE","%fBaseY%") +
-i03FeedTransfr(runCy,"STE","%fBaseY%");
-
-VmDemTotSte.FX(runCy,YTIME)$DATAY(YTIME) = 
-SUM(DSBS, imFuelConsPerFueSub(runCy,DSBS,"STE",YTIME)) +
-i03TotEneBranchCons(runCy,"STE",YTIME) +
-imDistrLosses(runCy,"STE",YTIME) +
-i03FeedTransfr(runCy,"STE",YTIME);
+VmDemTotSte.L(runCy,YTIME) = i03DataGrossInlCons(runCy,"STE","%fBaseY%");
+VmDemTotSte.FX(runCy,YTIME)$DATAY(YTIME) = i03DataGrossInlCons(runCy,"STE",YTIME);
+*---
+VmCapSte.LO(runCy,TSTEAM,YTIME) = 0;
+VmCapSte.L(runCy,TSTEAM,YTIME) = i04DataHeatProd(runCy,TSTEAM,"%fBaseY%") + 1;
+VmCapSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) = 
+(
+  (
+    i03DataGrossInlCons(runCy,"STE",YTIME) /
+    SUM(TSTEAM2,i04DataHeatProd(runCy,TSTEAM2,YTIME))
+  )$SUM(TSTEAM2,i04DataHeatProd(runCy,TSTEAM2,YTIME))
+) * i04DataHeatProd(runCy,TSTEAM,YTIME);
 *---
 VmProdSte.LO(runCy,TSTEAM,YTIME) = 0;
 VmProdSte.L(runCy,TSTEAM,YTIME) = i04DataHeatProd(runCy,TSTEAM,"%fBaseY%");
-VmProdSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) = i04DataHeatProd(runCy,TSTEAM,YTIME);
+VmProdSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) = 
+(
+  (
+    i03DataGrossInlCons(runCy,"STE",YTIME) /
+    SUM(TSTEAM2,i04DataHeatProd(runCy,TSTEAM2,YTIME))
+  )$SUM(TSTEAM2,i04DataHeatProd(runCy,TSTEAM2,YTIME))
+) * i04DataHeatProd(runCy,TSTEAM,YTIME);
 *---
 V09CaptRateSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) = i09CaptRateSteProd(TSTEAM);
 *---
@@ -53,7 +60,7 @@ V09CostCapProdSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) =
   smTWhToMtoe * 1e3
 );
 *---
-V09CostVarProdSte.LO(runCy,TSTEAM,YTIME) = epsilon6;
+V09CostVarProdSte.LO(runCy,TSTEAM,YTIME) = 0;
 V09CostVarProdSte.L(runCy,TSTEAM,YTIME) = 1;
 V09CostVarProdSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) =
 sum(EF$TSTEAMTOEF(TSTEAM,EF),
@@ -93,4 +100,4 @@ VmConsFuelSteProd.FX(runCy,"CHP",STEAMEF,YTIME)$DATAY(YTIME) = -i03InpTotTransfP
 VmConsFuelSteProd.FX(runCy,"DHP",STEAMEF,YTIME)$DATAY(YTIME) = -i03InpTotTransfProcess(runCy,"STEAMP",STEAMEF,YTIME);
 *---
 V09DemGapSte.LO(runCy,YTIME) = 0;
-*V09DemGapSte.L(runCy,YTIME) = 2;
+*V09DemGapSte.L(runCy,YTIME) = 0.1;

@@ -43,7 +43,6 @@ VmElecConsHeatPla.FX(runCy,DSBS,YTIME) = 0;
 *---
 VmCarVal.FX(runCy,"TRADE",YTIME) = iCarbValYrExog(runCy,YTIME);
 VmCarVal.FX(runCy,"NOTRADE",YTIME) = iCarbValYrExog(runCy,YTIME);
-
 *---
 VmCstCO2SeqCsts.LO(runCy,YTIME) = 0;
 VmCstCO2SeqCsts.L(runCy,YTIME) = 1;
@@ -78,6 +77,7 @@ VmPriceFuelAvgSub.LO(runCy,DSBS,YTIME) = 0;
 VmPriceFuelAvgSub.L(runCy,DSBS,YTIME) = 1;
 VmPriceFuelAvgSub.FX(runCy,DSBS,YTIME)$DATAY(YTIME) = sum(EF$SECtoEF(DSBS,EF), i08WgtSecAvgPriFueCons(runCy,DSBS,EF) * imFuelPrice(runCy,DSBS,EF,YTIME));
 *---
+VmPriceElecInd.LO(runCy,TCHP,YTIME) = 0;
 VmPriceElecInd.L(runCy,TCHP,YTIME) = imPriceElecInd(runCy,TCHP,"%fBaseY%");
 VmPriceElecInd.FX(runCy,TCHP,YTIME)$DATAY(YTIME) = imPriceElecInd(runCy,TCHP,YTIME);
 *---

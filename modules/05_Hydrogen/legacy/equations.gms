@@ -5,7 +5,9 @@
 *' across sectors like transportation, industry, and power generation, adjusted for any transportation losses or distribution inefficiencies.
 Q05DemTotH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmDemTotH2(allCy,YTIME)
-                 =E=
+      =E=
+    V03ConsGrssInl(allCy,"H2F",YTIME);
+$ontext
     sum(SBS$SECtoEF(SBS,"H2F"), 
       VmDemSecH2(allCy,SBS, YTIME) /
       prod(INFRTECH$H2INFRSBS(INFRTECH,SBS),
@@ -13,7 +15,7 @@ Q05DemTotH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         (1-i05ConsSelfH2Transp(allCy,INFRTECH,YTIME))
       )
     ) !! increase the demand due to transportation losses
-;
+$offtext
 
 *' This equation calculates the sectoral hydrogen demand (VmDemSecH2) for each demand subsector (DSBS), year, and region.
 *' It sums up hydrogen consumption from both industrial/tertiary sectors (using VmConsFuel) and transport sectors (using VmDemFinEneTranspPerFuel),
@@ -21,9 +23,9 @@ Q05DemTotH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q05DemSecH2(allCy,SBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmDemSecH2(allCy,SBS,YTIME)
         =E=
+    !! Unnecessary variable? author = mmadianos
     sum(INDDOM$SAMEAS(INDDOM,SBS), VmConsFuel(allCy,INDDOM,"H2F",YTIME)) +
     sum(TRANSE$SAMEAS(TRANSE,SBS), VmDemFinEneTranspPerFuel(allCy,TRANSE,"H2F",YTIME)) +
-    !! FIXME: Add LQD,GAS,SLD sectors consumption too
     VmConsFuelCDRProd(allCy,"H2F",YTIME)$sameas("DAC",SBS) +
     VmConsFuelCDRProd(allCy,"H2F",YTIME)$sameas("EW",SBS) +
     VmConsFuelElecProd(allCy,"H2F",YTIME)$sameas("PG",SBS);
