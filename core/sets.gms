@@ -885,6 +885,14 @@ TSTE2GEO
 TSTE2OTH
 /
 
+*' Stub for R&D technology scope used by Economy ↔ LearningCurves bridge.
+*' Populated by modules/10_Curves/LearningCurves/sets.gms when Curves = LearningCurves;
+*' remains empty when Curves = off so that RDTECH-indexed declarations compile harmlessly.
+$ifThen NOT "%Curves%" == "LearningCurves"
+RDTECH(ALLTECH) "Technologies with regional learning-by-searching (R&D)"
+/ /
+$endIf
+
 TECHtoEF (TECH,EF) Fuels consumed by technologies
 /
 TGSL.(GSL,BGSL)
