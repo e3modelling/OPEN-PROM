@@ -36,7 +36,7 @@ $ifthen.calib %Calibration% == off
 Q04DemElecTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04DemElecTot(allCy,YTIME)
         =E=
-    V03ConsGrssInl(allCy,"ELC",YTIME) / smTWhToMtoe;
+    (V03ConsGrssInl(allCy,"ELC",YTIME) - VmImpNetEneBrnch(allCy,"ELC",YTIME)) / smTWhToMtoe;
 $endif.calib
 
 *' This equation calculates the load factor of the entire domestic system as a sum of consumption in each demand subsector

@@ -7,8 +7,8 @@ $ifthen.calib %Calibration% == MatCalibration
 V04DemElecTot.FX(runCy,YTIME) = t04DemElecTot(runCy,YTIME);
 $else.calib
 V04DemElecTot.LO(runCy,YTIME) = 0;
-V04DemElecTot.L(runCy,YTIME) = i03DataGrossInlCons(runCy,"ELC","%fBaseY%") / smTWhToMtoe;
-V04DemElecTot.FX(runCy,YTIME)$DATAY(YTIME) = i03DataGrossInlCons(runCy,"ELC",YTIME) / smTWhToMtoe;
+V04DemElecTot.L(runCy,YTIME) = (i03DataGrossInlCons(runCy,"ELC","%fBaseY%") - imFuelTrade(runCy,"IMPORTS","ELC","%fBaseY%") + imFuelTrade(runCy,"EXPORTS","ELC","%fBaseY%")) / smTWhToMtoe;
+V04DemElecTot.FX(runCy,YTIME)$DATAY(YTIME) = (i03DataGrossInlCons(runCy,"ELC",YTIME) - imFuelTrade(runCy,"IMPORTS","ELC",YTIME) + imFuelTrade(runCy,"EXPORTS","ELC",YTIME)) / smTWhToMtoe;
 $endif.calib
 *---
 V04ProdElecEstCHP.LO(runCy,TCHP,YTIME) = 0;

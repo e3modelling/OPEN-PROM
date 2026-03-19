@@ -15,7 +15,7 @@
 Q09DemTotSte(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmDemTotSte(allCy,YTIME)
         =E=
-    V03ConsGrssInl(allCy,"STE",YTIME);
+    V03ConsGrssInl(allCy,"STE",YTIME) - VmImpNetEneBrnch(allCy,"STE",YTIME);
 
 Q09ScrapRate(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V09ScrapRate(allCy,TSTEAM,YTIME)

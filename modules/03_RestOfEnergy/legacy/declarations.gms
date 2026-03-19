@@ -17,12 +17,6 @@ Equations
 *' *** REST OF ENERGY BALANCE SECTORS EQUATIONS
 *q03ConsTotFinEne(YTIME)                                   "Compute total final energy consumption in ALL countries"
 *Q03CapRef(allCy,YTIME)	                                   "Compute refineries capacity"
-Q03OutTransfRefSpec(allCy,EFS,YTIME)	                   "Compute the transformation output from refineries"
-Q03OutTransfGasses(allCy,EFS,YTIME)	
-Q03OutTransfSolids(allCy,EFS,YTIME)
-Q03InputTransfRef(allCy,EFS,YTIME)	                       "Compute the transformation input to liquids"
-Q03InputTransfSolids(allCy,EFS,YTIME)	                     "Compute the transformation input to solids"
-Q03InputTransfGasses(allCy,EFS,YTIME)	                     "Compute the transformation input to gasses"
 Q03InpTotTransf(allCy,SSBS,EFS,YTIME)	                       "Compute total transformation input"
 Q03OutTotTransf(allCy,SSBS,EFS,YTIME)	                       "Compute total transformation output"
 Q03Transfers(allCy,EFS,YTIME)	                           "Compute transfers"
@@ -43,12 +37,6 @@ Variables
 *' *** REST OF ENERGY BALANCE SECTORS VARIABLES
 *v03ConsTotFinEne(YTIME)                                   "Total final energy Consumption in ALL COUNTRIES (Mtoe)"
 *V03CapRef(allCy,YTIME)	                                   "Refineries capacity (Million barrels/day)"
-V03OutTransfRefSpec(allCy,EFS,YTIME)	                   "Transformation output from refineries (Mtoe)"
-V03OutTransfGasses(allCy,EFS,YTIME)	
-V03OutTransfSolids(allCy,EFS,YTIME)
-V03InputTransfRef(allCy,EFS,YTIME)	                       "Transformation input to liquids supply sector (Mtoe)"
-V03InputTransfSolids(allCy,EFS,YTIME)	                     "Transformation input to solids supply sector (Mtoe)"
-V03InputTransfGasses(allCy,EFS,YTIME)	                     "Transformation input to gasses supply sector (Mtoe)"
 V03InpTotTransf(allCy,SSBS,EFS,YTIME)	                       "Total transformation input (Mtoe)"
 V03OutTotTransf(allCy,SSBS,EFS,YTIME)	                       "Total transformation output (Mtoe)"
 V03Transfers(allCy,EFS,YTIME)	                           "Transfers (Mtoe)"

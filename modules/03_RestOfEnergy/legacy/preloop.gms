@@ -3,22 +3,6 @@
 
 *'                *VARIABLE INITIALISATION*
 *---
-*V03OutTransfRefSpec.L(runCy,EFS,YTIME) = 0.1;
-V03OutTransfRefSpec.FX(runCy,EFS,YTIME)$(DATAY(YTIME)) = i03OutTotTransfProcess(runCy,"LQD",EFS,YTIME);
-*---
-V03OutTransfSolids.FX(runCy,EFS,YTIME)$(DATAY(YTIME)) = i03OutTotTransfProcess(runCy,"SLD",EFS,YTIME);
-*---
-V03OutTransfGasses.FX(runCy,EFS,YTIME)$(DATAY(YTIME)) = i03OutTotTransfProcess(runCy,"GAS",EFS,YTIME);
-*---
-V03InputTransfRef.FX(runCy,EFS,YTIME)$(DATAY(YTIME) and SECtoEF("LQD",EFS)) = -i03InpTotTransfProcess(runCy,"LQD",EFS,YTIME);
-V03InputTransfRef.FX(runCy,EFS,YTIME)$(not SECtoEF("LQD",EFS)) = 0;
-*---
-V03InputTransfSolids.FX(runCy,EFS,YTIME)$(DATAY(YTIME) and SECtoEF("SLD",EFS)) = -i03InpTotTransfProcess(runCy,"SLD",EFS,YTIME);
-V03InputTransfSolids.FX(runCy,EFS,YTIME)$(not SECtoEF("SLD",EFS)) = 0;
-*---
-V03InputTransfGasses.FX(runCy,EFS,YTIME)$(DATAY(YTIME) and SECtoEF("GAS",EFS)) = -i03InpTotTransfProcess(runCy,"GAS",EFS,YTIME);
-V03InputTransfGasses.FX(runCy,EFS,YTIME)$(not SECtoEF("GAS",EFS)) = 0;
-*---
 V03ConsGrssInl.LO(runCy,EFS,YTIME) = 0;
 V03ConsGrssInl.L(runCy,EFS,YTIME) = i03DataGrossInlCons(runCy,EFS,"%fBaseY%");
 V03ConsGrssInl.FX(runCy,EFS,YTIME)$DATAY(YTIME) = i03DataGrossInlCons(runCy,EFS,YTIME);

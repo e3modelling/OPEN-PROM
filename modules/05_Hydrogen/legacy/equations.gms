@@ -6,7 +6,7 @@
 Q05DemTotH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmDemTotH2(allCy,YTIME)
       =E=
-    V03ConsGrssInl(allCy,"H2F",YTIME);
+    V03ConsGrssInl(allCy,"H2F",YTIME) - VmImpNetEneBrnch(allCy,"H2F",YTIME);
 $ontext
     sum(SBS$SECtoEF(SBS,"H2F"), 
       VmDemSecH2(allCy,SBS, YTIME) /

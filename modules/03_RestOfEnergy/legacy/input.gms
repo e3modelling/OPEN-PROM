@@ -79,7 +79,7 @@ i03RatePriProTotPriNeeds(allCy,EFS,YTIME)$DATAY(YTIME) =
   i03DataGrossInlCons(allCy,EFS,YTIME)
 )$i03DataGrossInlCons(allCy,EFS,YTIME);
 i03RatePriProTotPriNeeds(allCy,EFS,YTIME) = max(-1000, min(1, i03RatePriProTotPriNeeds(allCy,EFS,YTIME))); !! Ensure it is in [-1,1]
-i03RatePriProTotPriNeeds(allCy,EFS,YTIME) = round(i03RatePriProTotPriNeeds(allCy,EFS,YTIME), 3);
+i03RatePriProTotPriNeeds(allCy,EFS,YTIME) = round(i03RatePriProTotPriNeeds(allCy,EFS,YTIME), 4);
 *---
 parameter i03PolDstrbtnLagCoeffPriOilPr(kpdl)	  "Polynomial Distribution Lag Coefficients for primary oil production (1)"
 /
