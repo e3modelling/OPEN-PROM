@@ -3,13 +3,9 @@
 
 *'                *VARIABLE INITIALISATION*
 *---
-$ifthen.calib %Calibration% == MatCalibration
-V04DemElecTot.FX(runCy,YTIME) = t04DemElecTot(runCy,YTIME);
-$else.calib
 V04DemElecTot.LO(runCy,YTIME) = 0;
 V04DemElecTot.L(runCy,YTIME) = (i03DataGrossInlCons(runCy,"ELC","%fBaseY%") - imFuelTrade(runCy,"IMPORTS","ELC","%fBaseY%") + imFuelTrade(runCy,"EXPORTS","ELC","%fBaseY%")) / smTWhToMtoe;
 V04DemElecTot.FX(runCy,YTIME)$DATAY(YTIME) = (i03DataGrossInlCons(runCy,"ELC",YTIME) - imFuelTrade(runCy,"IMPORTS","ELC",YTIME) + imFuelTrade(runCy,"EXPORTS","ELC",YTIME)) / smTWhToMtoe;
-$endif.calib
 *---
 V04ProdElecEstCHP.LO(runCy,TCHP,YTIME) = 0;
 V04ProdElecEstCHP.L(runCy,TCHP,YTIME) = i04DataElecProdCHP(runCy,TCHP,"%fBaseY%") / 1000 + 1;
@@ -17,7 +13,7 @@ V04ProdElecEstCHP.FX(runCy,TCHP,YTIME)$DATAY(YTIME) = i04DataElecProdCHP(runCy,T
 *---
 V04ScrpRate.UP(runCy,PGALL,YTIME) = 1;
 V04ScrpRate.LO(runCy,PGALL,YTIME) = 0;
-
+*---
 V04CostVarTech.LO(runCy,PGALL,YTIME) = 0;
 V04CostVarTech.L(runCy,PGALL,YTIME) = 1;
 V04CostVarTech.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = 
@@ -92,14 +88,12 @@ VmPeakLoad.L(runCy,YTIME) = 1;
 VmPeakLoad.FX(runCy,YTIME)$(datay(YTIME)) = V04DemElecTot.L(runCy,YTIME)/(V04LoadFacDom.L(runCy,YTIME)*8.76);
 *---
 VmCapElec.LO(runCy,PGALL,YTIME) = 0;
-VmCapElec.L(runCy,PGALL,YTIME) = imInstCapPastNonCHP(runCy,PGALL,"%fBaseY%");
-VmCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = imInstCapPastNonCHP(runCy,PGALL,YTIME);
+VmCapElec.L(runCy,PGALL,YTIME) = V04DemElecTot.L(runCy,"%fBaseY%") / smGwToTwhPerYear("%fBaseY%");
+VmCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = V04DemElecTot.L(runCy,YTIME) / smGwToTwhPerYear(YTIME);
 *---
 VmProdElec.LO(runCy,PGALL,YTIME) = 0;
 VmProdElec.L(runCy,pgall,YTIME) = i04DataElecProdNonCHP(runCy,pgall,"%fBaseY%") / 1000 + 1;
-VmProdElec.FX(runCy,pgall,YTIME)$DATAY(YTIME) = 
-V04CapElecNonCHP.L(runCy,YTIME) / SUM(PGALL2, imInstCapPastNonCHP(runCy,PGALL2,YTIME)) *
-imInstCapPastNonCHP(runCy,PGALL,YTIME) * smGwToTwhPerYear(YTIME);
+VmProdElec.FX(runCy,pgall,YTIME)$DATAY(YTIME) = i04DataElecProdNonCHP(runCy,pgall,YTIME) / 1000;
 *---
 V04ShareMixWndSol.FX(runCy,YTIME)$DATAY(YTIME) = sum(PGALL$PGRENSW(PGALL), VmCapElec.L(runCy,PGALL,YTIME)) / sum(PGALL2, VmCapElec.L(runCy,PGALL2,YTIME));
 *---

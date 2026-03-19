@@ -19,7 +19,6 @@ $ondelim
 $include"./iSuppTransfers.csv"
 $offdelim
 ;
-i03FeedTransfr(allCy,EFS,YTIME) = 0;
 *---
 table i03PrimProd(allCy,EFS,YTIME)	              "Primary Production (Mtoe)"
 $ondelim
@@ -63,6 +62,11 @@ $include "./iNatGasPriProElst.csv"
 $offdelim
 /;
 *---
+i03FeedTransfr(allCy,EFS,YTIME) = 0; !!FIXME: i03DataGrossInlCons must be correct to use transfers
+*--
+* FIXME:
+* IEA TES doesn't sum up to each data, due to incorrect transformation input mappings. 
+* Author: mmadianos
 i03DataGrossInlCons(allCy,EFS,YTIME)$DATAY(YTIME) =
 sum(DSBS, imFuelConsPerFueSub(allCy,DSBS,EFS,YTIME)) +
 SUM(SSBS,
