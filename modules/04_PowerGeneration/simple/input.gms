@@ -39,8 +39,8 @@ $ondelim
 $include "../targets/tShares_ProdElec.csv"
 $offdelim
 ;
-$endif.calib
 t04SharePowPlaNewEq(allCy,PGALL,YTIME) = round(t04SharePowPlaNewEq(allCy,PGALL,YTIME), 3);
+$endif.calib
 *---
 table i04DataTechLftPlaType(PGALL, PGECONCHAR)     "Data for power generation costs (various)"
 $ondelim

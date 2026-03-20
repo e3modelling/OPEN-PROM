@@ -88,8 +88,8 @@ VmPeakLoad.L(runCy,YTIME) = 1;
 VmPeakLoad.FX(runCy,YTIME)$(datay(YTIME)) = V04DemElecTot.L(runCy,YTIME)/(V04LoadFacDom.L(runCy,YTIME)*8.76);
 *---
 VmCapElec.LO(runCy,PGALL,YTIME) = 0;
-VmCapElec.L(runCy,PGALL,YTIME) = V04DemElecTot.L(runCy,"%fBaseY%") / smGwToTwhPerYear("%fBaseY%");
-VmCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = V04DemElecTot.L(runCy,YTIME) / smGwToTwhPerYear(YTIME);
+VmCapElec.L(runCy,PGALL,YTIME) = i04DataElecProdNonCHP(runCy,PGALL,"%fBaseY%") / 1000 + 1;
+VmCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = i04DataElecProdNonCHP(runCy,PGALL,YTIME) / 1000;
 *---
 VmProdElec.LO(runCy,PGALL,YTIME) = 0;
 VmProdElec.L(runCy,pgall,YTIME) = i04DataElecProdNonCHP(runCy,pgall,"%fBaseY%") / 1000 + 1;
