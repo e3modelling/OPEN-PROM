@@ -13,9 +13,11 @@ V03ProdPrimary.LO(runCy,EFS,YTIME) = 0;
 V03ProdPrimary.L(runCy,EFS,YTIME) = i03PrimProd(runCy,EFS,"%fBaseY%") + 1;
 V03ProdPrimary.FX(runCy,EFS,YTIME)$DATAY(YTIME) = i03PrimProd(runCy,EFS,YTIME);
 *---
+V03Imp.LO(runCy,EFS,YTIME) = 0;
 V03Imp.FX(runCy,EFS,YTIME)$DATAY(YTIME) = imFuelTrade(runCy,"IMPORTS",EFS,YTIME);
 *---
-V03Exp.FX(runCy,EFS,YTIME)$DATAY(YTIME) =  imFuelTrade(runCy,"EXPORTS",EFS,YTIME);
+V03Exp.LO(runCy,EFS,YTIME) = 0;
+V03Exp.FX(runCy,EFS,YTIME)$DATAY(YTIME) = imFuelTrade(runCy,"EXPORTS",EFS,YTIME);
 *---
 VmConsFiEneSec.LO(runCy,SSBS,EFS,YTIME) = 0;
 VmConsFiEneSec.L(runCy,SSBS,EFS,YTIME) = i03DataOwnConsEne(runCy,SSBS,EFS,"%fBaseY%");

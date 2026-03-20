@@ -28,7 +28,6 @@ Q04ProdElecEstCHP(allCy,TCHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       )  
     )/2;
 
-$ifthen.calib %Calibration% == off
 *' The equation calculates the total electricity demand by summing the components of final energy consumption in electricity, final non-energy consumption in electricity,
 *' distribution losses, and final consumption in the energy sector for electricity, and then subtracting net imports. The result is normalized using a conversion factor 
 *' which converts terawatt-hours (TWh) to million tonnes of oil equivalent (Mtoe). The formula provides a comprehensive measure of the factors contributing
@@ -37,7 +36,6 @@ Q04DemElecTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04DemElecTot(allCy,YTIME)
         =E=
     (V03ConsGrssInl(allCy,"ELC",YTIME) - VmImpNetEneBrnch(allCy,"ELC",YTIME)) / smTWhToMtoe;
-$endif.calib
 
 *' This equation calculates the load factor of the entire domestic system as a sum of consumption in each demand subsector
 *' and the sum of energy demand in transport subsectors (electricity only). Those sums are also divided by the load factor
@@ -66,8 +64,9 @@ Q04PeakLoad(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04CapElecTotEst(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCapElecTotEst(allCy,YTIME)
           =E=
-    VmCapElecTotEst(allCy,YTIME-1) *
-    VmPeakLoad(allCy,YTIME) / VmPeakLoad(allCy,YTIME-1);          
+    0; !!Not used
+    !!VmCapElecTotEst(allCy,YTIME-1) *
+    !!VmPeakLoad(allCy,YTIME) / VmPeakLoad(allCy,YTIME-1);          
 
 *' This equation calculates the CAPEX and the Fixed Costs of each power generation unit, taking into account its discount rate and life expectancy, 
 *' for each region (country) and year. Learning curves applied only to CAPEX costs with cost breakdown.

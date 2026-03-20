@@ -33,9 +33,7 @@ Q04CapOverall(allCy,PGALL,YTIME)	                       "Compute overall capacit
 *q04CostPowGenShortIntPri(allCy,PGALL,ESET,YTIME)          "Compute short term power generation cost of technologies including international Prices of main fuels"
 *q04CostPowGenAvgShrt(allCy,ESET,YTIME)	                   "Compute short term power generation cost"
 Q04LoadFacDom(allCy,YTIME)                                 "Compute electricity load factor for entire domestic system"	
-$ifthen.calib %Calibration% == off
 Q04DemElecTot(allCy,YTIME)                                 "Compute total electricity demand (TWh)"
-$endif.calib
 Q04ProdElecEstCHP(allCy,TCHP,YTIME)	                       "Estimate the electricity of CHP Plants"	
 Q04CapexFixCostPG(allCy,PGALL,YTIME)                       "Computes the capex and fixed costs of any power generation technology"
 Q04ShareMixWndSol(allCy,YTIME)                             "Computes the participation of solar and wind in the energy mixture (%)"

@@ -40,6 +40,7 @@ $include "../targets/tShares_ProdElec.csv"
 $offdelim
 ;
 $endif.calib
+t04SharePowPlaNewEq(allCy,PGALL,YTIME) = round(t04SharePowPlaNewEq(allCy,PGALL,YTIME), 3);
 *---
 table i04DataTechLftPlaType(PGALL, PGECONCHAR)     "Data for power generation costs (various)"
 $ondelim
@@ -89,7 +90,7 @@ $offdelim
 $IFTHEN.calib %Calibration% == MatCalibration
 variable i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   "Maturity factor related to plant available capacity (1)";
 i04MatFacPlaAvailCap.LO(runCy, PGALL, YTIME) = 0;
-i04MatFacPlaAvailCap.UP(runCy, PGALL, YTIME) = 10;
+i04MatFacPlaAvailCap.UP(runCy, PGALL, YTIME) = 5;
 i04MatFacPlaAvailCap.L(runCy,PGALL,YTIME) = iMatFacPlaAvailCapData(runCy,PGALL,YTIME);
 $ELSE.calib
 parameter i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   "Maturity factor related to plant available capacity (1)";
