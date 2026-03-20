@@ -29,7 +29,7 @@ Q09ScrapRate(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q09ProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmProdSte(allCy,TSTEAM,YTIME)
         =E=
-    (1-V09ScrapRate(allCy,TSTEAM,YTIME)) * VmProdSte(allCy,TSTEAM,YTIME-1) +
+    (1-V09ScrapRate(allCy,TSTEAM,YTIME)) * VmProdSte(allCy,TSTEAM,YTIME-%fPeriodOfYears%) +
     V09GapShareSte(allCy,TSTEAM,YTIME) * V09DemGapSte(allCy,YTIME);
 
 Q09DemGapSte(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
@@ -39,13 +39,13 @@ Q09DemGapSte(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       VmDemTotSte(allCy,YTIME) -
       sum(TSTEAM,
         (1-V09ScrapRate(allCy,TSTEAM,YTIME)) *
-        VmProdSte(allCy,TSTEAM,YTIME-1)
+        VmProdSte(allCy,TSTEAM,YTIME-%fPeriodOfYears%)
       ) +
   SQRT(SQR(
       VmDemTotSte(allCy,YTIME) -
       sum(TSTEAM,
         (1-V09ScrapRate(allCy,TSTEAM,YTIME)) *
-        VmProdSte(allCy,TSTEAM,YTIME-1)
+        VmProdSte(allCy,TSTEAM,YTIME-%fPeriodOfYears%)
       )
   ))
   )/2 + 1e-6;
@@ -108,10 +108,10 @@ Q09GapShareSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$runCy(allCy)) ..
     V09GapShareSte(allCy,TSTEAM,YTIME)
         =E=
     !!i04MatFacPlaAvailCap(allCy,TSTEAM,YTIME) *
-    V09CostProdSte(allCy,TSTEAM,YTIME-1) ** (-2) /
+    V09CostProdSte(allCy,TSTEAM,YTIME-%fPeriodOfYears%) ** (-2) /
     SUM(TSTEAM2,
       !!i04MatFacPlaAvailCap(allCy,TSTEAM2,YTIME) *
-      V09CostProdSte(allCy,TSTEAM2,YTIME-1) ** (-2)
+      V09CostProdSte(allCy,TSTEAM2,YTIME-%fPeriodOfYears%) ** (-2)
     );
 
 Q09CaptRateSte(allCy,TSTEAM,YTIME)$(TIME(YTIME) $(runCy(allCy)))..

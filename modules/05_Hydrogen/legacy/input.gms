@@ -128,6 +128,6 @@ endloop;
 *---
 i05CostAvgWeight(runCy,YTIME) = 1;
 loop YTIME$(An(YTIME)) do
-         i05CostAvgWeight(runCy,YTIME) = -1/19+i05CostAvgWeight(runCy,YTIME-1);
+         i05CostAvgWeight(runCy,YTIME) = -1/19+i05CostAvgWeight(runCy,YTIME-%fPeriodOfYears%);
 endloop;
 *---

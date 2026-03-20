@@ -24,21 +24,21 @@ $ENDIF
     VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)
         =E=
     (
-      VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1) +
+      VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-%fPeriodOfYears%) +
       sum(NAP$NAPtoALLSBS(NAP,SBS),
       VmCarVal(allCy,NAP,YTIME)*imCo2EmiFac(allCy,SBS,EF,YTIME) - 
-      VmCarVal(allCy,NAP,YTIME-1)*imCo2EmiFac(allCy,SBS,EF,YTIME-1)
+      VmCarVal(allCy,NAP,YTIME-%fPeriodOfYears%)*imCo2EmiFac(allCy,SBS,EF,YTIME-%fPeriodOfYears%)
       ) / 1000
     )$(DSBS(SBS))$(not (ELCEF(EF) or HEATPUMP(EF) or ALTEF(EF) or H2EF(EF) or sameas("STE",EF))) +
     (
-      VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1) +
+      VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-%fPeriodOfYears%) +
       sum(NAP$NAPtoALLSBS(NAP,SBS),
       VmCarVal(allCy,NAP,YTIME)*imCo2EmiFac(allCy,SBS,EF,YTIME) - 
-      VmCarVal(allCy,NAP,YTIME-1)*imCo2EmiFac(allCy,SBS,EF,YTIME-1)
+      VmCarVal(allCy,NAP,YTIME-%fPeriodOfYears%)*imCo2EmiFac(allCy,SBS,EF,YTIME-%fPeriodOfYears%)
       ) / 1000
       !!We should account for carbon tax increase for the own consumption emissions
     )$sameas(SBS,"PG") +
-    VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1)$(DSBS(SBS))$ALTEF(EF) +
+    VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-%fPeriodOfYears%)$(DSBS(SBS))$ALTEF(EF) +
     (
       ( VmPriceElecIndResConsu(allCy,"i",YTIME)$(INDSE1(SBS) or sameas("DAC",SBS) or sameas("EW",SBS))+
         VmPriceElecIndResConsu(allCy,"r",YTIME)$HOU1(SBS) +
@@ -51,7 +51,7 @@ $ENDIF
       VmPriceFuelSubsecCarVal(allCy,"OI",EF,YTIME)$(not sameas("BMSWAS",EF) or not sameas("CRO",EF)) +
       VmPriceFuelSubsecCarVal(allCy,"AG",EF,YTIME)$sameas("BMSWAS",EF)
     )$(sameas ("H2P",SBS) or sameas("STEAMP",SBS)) +
-    (VmCostAvgProdH2(allCy,YTIME-1)$DSBS(SBS)/1000)$H2EF(EF) +
+    (VmCostAvgProdH2(allCy,YTIME-%fPeriodOfYears%)$DSBS(SBS)/1000)$H2EF(EF) +
     (VmCostAvgProdSte(allCy,YTIME)$DSBS(SBS))$sameas("STE",EF);
 
 Q08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)$(SECtoEF(DSBS,EF) $TIME(YTIME) $runCy(allCy))..
@@ -82,8 +82,8 @@ Q08PriceFuelAvgSub(allCy,DSBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmPriceFuelAvgSub(allCy,DSBS,YTIME)
         =E=
     sum(EF$SECtoEF(DSBS,EF), 
-      V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME-1) *
-      VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-1));         
+      V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME-%fPeriodOfYears%) *
+      VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-%fPeriodOfYears%));         
 
 *' Calculates electricity price for industrial and residential consumers
 *' using previous year's fuel prices. For the first year, the price is directly based on fuel data.
@@ -95,32 +95,32 @@ Q08PriceElecIndResConsu(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     (1 + i08VAT(allCy,YTIME)) *
     (
       (
-      (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
+      (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-%fPeriodOfYears%)*smTWhToMtoe)$TFIRST(YTIME-%fPeriodOfYears%) +
       (
         VmPriceElecIndResConsu(allCy,"i","%fStartY%") / VmCostPowGenAvgLng(allCy, "%fStartY%") *
-        VmCostPowGenAvgLng(allCy,YTIME-1) !!Cost secondary energy electricity
-      )$(not TFIRST(YTIME-1))
+        VmCostPowGenAvgLng(allCy,YTIME-%fPeriodOfYears%) !!Cost secondary energy electricity
+      )$(not TFIRST(YTIME-%fPeriodOfYears%))
       )$sameas(ESET,"i") +
       (
-        (VmPriceFuelSubsecCarVal(allCy,"HOU","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
+        (VmPriceFuelSubsecCarVal(allCy,"HOU","ELC",YTIME-%fPeriodOfYears%)*smTWhToMtoe)$TFIRST(YTIME-%fPeriodOfYears%) +
         (
           VmPriceElecIndResConsu(allCy,"r","%fStartY%") / VmCostPowGenAvgLng(allCy, "%fStartY%") *
-          VmCostPowGenAvgLng(allCy,YTIME-1) 
-        )$(not TFIRST(YTIME-1))
+          VmCostPowGenAvgLng(allCy,YTIME-%fPeriodOfYears%) 
+        )$(not TFIRST(YTIME-%fPeriodOfYears%))
       )$sameas(ESET,"r") +
       (
-        (VmPriceFuelSubsecCarVal(allCy,"PC","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
+        (VmPriceFuelSubsecCarVal(allCy,"PC","ELC",YTIME-%fPeriodOfYears%)*smTWhToMtoe)$TFIRST(YTIME-%fPeriodOfYears%) +
         (
           VmPriceElecIndResConsu(allCy,"t","%fStartY%") / VmCostPowGenAvgLng(allCy, "%fStartY%") *
-          VmCostPowGenAvgLng(allCy,YTIME-1) 
-        )$(not TFIRST(YTIME-1))
+          VmCostPowGenAvgLng(allCy,YTIME-%fPeriodOfYears%) 
+        )$(not TFIRST(YTIME-%fPeriodOfYears%))
       )$sameas(ESET,"t") +
       (
-        (VmPriceFuelSubsecCarVal(allCy,"SE","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
+        (VmPriceFuelSubsecCarVal(allCy,"SE","ELC",YTIME-%fPeriodOfYears%)*smTWhToMtoe)$TFIRST(YTIME-%fPeriodOfYears%) +
         (
           VmPriceElecIndResConsu(allCy,"c","%fStartY%") / VmCostPowGenAvgLng(allCy, "%fStartY%") *
-          VmCostPowGenAvgLng(allCy,YTIME-1) 
-        )$(not TFIRST(YTIME-1))
+          VmCostPowGenAvgLng(allCy,YTIME-%fPeriodOfYears%) 
+        )$(not TFIRST(YTIME-%fPeriodOfYears%))
       )$sameas(ESET,"c") 
     );
 

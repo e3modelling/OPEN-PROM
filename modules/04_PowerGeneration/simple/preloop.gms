@@ -22,7 +22,7 @@ V04CostVarTech.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =
 V04CapexRESRate.L(runCy,PGALL,YTIME)=1;
 *---
 V04NetNewCapElec.L(runCy,PGALL,YTIME) = 1;
-V04NetNewCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = imInstCapPastNonCHP(runCy,PGALL,YTIME) - imInstCapPastNonCHP(runCy,PGALL,YTIME-1);
+V04NetNewCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = imInstCapPastNonCHP(runCy,PGALL,YTIME) - imInstCapPastNonCHP(runCy,PGALL,YTIME-%fPeriodOfYears%);
 *---
 V04CFAvgRen.L(runCy,PGALL,YTIME) = i04AvailRate(runCy,PGALL,"%fBaseY%");
 V04CFAvgRen.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = i04AvailRate(runCy,PGALL,YTIME);

@@ -112,10 +112,12 @@ runCyL(allCy)$(%DevMode% = 0) = resCy(allCy) ;
 sets
 ***        Model Time Horizon       *
 ytime           Model time horizon                                /%fStartHorizon%*%fEndHorizon%/
-an(ytime)       Years for which the model is running              /%fStartY%*%fEndY%/
+an(ytime)       Years for which the model is running              /%fStartY%*%fEndY%/  !! subsets are reset below based on fPeriodOfYears
 period(ytime)   Model can also run for periods of years
 tFirst(ytime)   Base year                                         /%fBaseY%/
-time(ytime)     Model time horizon used in equation definitions   /%fStartY%*%fEndY%/
+tStart(ytime)   Start year of the model (first year with results)  /%fStartY%/
+tEnd(ytime)   End year of the model (last year with results)     /%fEndY%/
+time(ytime)     Model time horizon used in equation definitions   /%fStartY%*%fEndY%/  !! will be adjusted below for fPeriodOfYears
 datay(ytime)    Historical years before the start year of the model /%fStartHorizon%*%fBaseY%/
 hour            "Segments of hours in a year (250,1250,...,8250)" /h0*h8/
 
@@ -1303,6 +1305,20 @@ alias(TTECH2,TTECH)
 
 scalar TF order of base year in set ytime;
 TF=sum((TFIRST,ytime), ord(ytime)$TFIRST(ytime));
+
+*** Set the modelling timeframe according to fPeriodOfYears (1 means annual, >1 means multi-year steps)
+scalar
+ordStartY
+ordEndY
+;
+ordStartY = sum((tStart,ytime), ord(ytime)$tStart(ytime));
+ordEndY   = sum((tEnd,ytime), ord(ytime)$tEnd(ytime));
+
+an(ytime) = no;
+time(ytime) = no;
+an(ytime)$((ord(ytime) >= ordStartY) and (ord(ytime) <= ordEndY) and mod(ord(ytime)-ordStartY,%fPeriodOfYears%) = 0) = yes;
+time(ytime) = an(ytime);
+display an, time;
 
 * Allocate imported fuels to fuels used in demand subsectors
 EFtoWEF(DSBS,EF,WEF)=NO;

@@ -78,7 +78,7 @@ Q03CapRef(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V03CapRef(allCy,YTIME)
         =E=
     [
-      i03ResRefCapacity(allCy,YTIME) * V03CapRef(allCy,YTIME-1) *
+      i03ResRefCapacity(allCy,YTIME) * V03CapRef(allCy,YTIME-%fPeriodOfYears%) *
       (1$(ord(YTIME) le 10) +
       (prod(rc,
       (sum(EFS$EFtoEFA(EFS,"LQD"),VmConsFinEneCountry(allCy,EFS,YTIME-(ord(rc)+1)))/sum(EFS$EFtoEFA(EFS,"LQD"),VmConsFinEneCountry(allCy,EFS,YTIME-(ord(rc)+2))))**(0.5/(ord(rc)+1)))
@@ -96,28 +96,28 @@ Q03OutTransfRefSpec(allCy,EFS,YTIME)$(TIME(YTIME)$runCy(allCy)$SECtoEFPROD("LQD"
     V03OutTransfRefSpec(allCy,EFS,YTIME)
         =E=
     i03ResTransfOutputRefineries(allCy,EFS,YTIME) * 
-    V03OutTransfRefSpec(allCy,EFS,YTIME-1) *
+    V03OutTransfRefSpec(allCy,EFS,YTIME-%fPeriodOfYears%) *
     (
       SUM(EFS2$SECtoEFPROD("LQD",EFS2),VmConsFinEneCountry(allCy,EFS2,YTIME)) /
-      (SUM(EFS2$SECtoEFPROD("LQD",EFS2),VmConsFinEneCountry(allCy,EFS2,YTIME-1)) + 1e-6)
+      (SUM(EFS2$SECtoEFPROD("LQD",EFS2),VmConsFinEneCountry(allCy,EFS2,YTIME-%fPeriodOfYears%)) + 1e-6)
     ) ** (0.98); 
 
 Q03OutTransfSolids(allCy,EFS,YTIME)$(TIME(YTIME)$runCy(allCy)$SECtoEFPROD("SLD",EFS))..
     V03OutTransfSolids(allCy,EFS,YTIME)
         =E=
-    V03OutTransfSolids(allCy,EFS,YTIME-1) *
+    V03OutTransfSolids(allCy,EFS,YTIME-%fPeriodOfYears%) *
     (
       VmConsFinEneCountry(allCy,EFS,YTIME) /
-      (VmConsFinEneCountry(allCy,EFS,YTIME-1) + 1e-6)
+      (VmConsFinEneCountry(allCy,EFS,YTIME-%fPeriodOfYears%) + 1e-6)
     ) ** (0.98);
 
 Q03OutTransfGasses(allCy,EFS,YTIME)$(TIME(YTIME)$runCy(allCy)$SECtoEFPROD("GAS",EFS))..
     V03OutTransfGasses(allCy,EFS,YTIME)
         =E=
-    V03OutTransfGasses(allCy,EFS,YTIME-1) *
+    V03OutTransfGasses(allCy,EFS,YTIME-%fPeriodOfYears%) *
     (
       VmConsFinEneCountry(allCy,EFS,YTIME) /
-      (VmConsFinEneCountry(allCy,EFS,YTIME-1) + 1e-6)
+      (VmConsFinEneCountry(allCy,EFS,YTIME-%fPeriodOfYears%) + 1e-6)
     ) ** (0.98);
 
 *' The equation calculates the transformation input to refineries for the energy form Crude Oil
@@ -127,23 +127,23 @@ Q03OutTransfGasses(allCy,EFS,YTIME)$(TIME(YTIME)$runCy(allCy)$SECtoEFPROD("GAS",
 Q03InputTransfRef(allCy,EFS,YTIME)$(TIME(YTIME)$runCy(allCy)$SECtoEF("LQD",EFS))..
     V03InputTransfRef(allCy,EFS,YTIME)
         =E=
-    V03InputTransfRef(allCy,EFS,YTIME-1) *
+    V03InputTransfRef(allCy,EFS,YTIME-%fPeriodOfYears%) *
     sum(EFS2$SECtoEFPROD("LQD",EFS2), V03OutTransfRefSpec(allCy,EFS2,YTIME)) /
-    (sum(EFS2$SECtoEFPROD("LQD",EFS2), V03OutTransfRefSpec(allCy,EFS2,YTIME-1)) + 1e-6);                   
+    (sum(EFS2$SECtoEFPROD("LQD",EFS2), V03OutTransfRefSpec(allCy,EFS2,YTIME-%fPeriodOfYears%)) + 1e-6);                   
 
 Q03InputTransfSolids(allCy,EFS,YTIME)$(TIME(YTIME)$runCy(allCy)$SECtoEF("SLD",EFS))..
     V03InputTransfSolids(allCy,EFS,YTIME)
         =E=
-    V03InputTransfSolids(allCy,EFS,YTIME-1) *
+    V03InputTransfSolids(allCy,EFS,YTIME-%fPeriodOfYears%) *
     sum(EFS2$SECtoEFPROD("SLD",EFS2), V03OutTransfSolids(allCy,EFS2,YTIME)) /
-    (sum(EFS2$SECtoEFPROD("SLD",EFS2), V03OutTransfSolids(allCy,EFS2,YTIME-1)) + 1e-6); 
+    (sum(EFS2$SECtoEFPROD("SLD",EFS2), V03OutTransfSolids(allCy,EFS2,YTIME-%fPeriodOfYears%)) + 1e-6); 
 
 Q03InputTransfGasses(allCy,EFS,YTIME)$(TIME(YTIME)$runCy(allCy)$SECtoEF("GAS",EFS))..
     V03InputTransfGasses(allCy,EFS,YTIME)
         =E=
-    V03InputTransfGasses(allCy,EFS,YTIME-1) *
+    V03InputTransfGasses(allCy,EFS,YTIME-%fPeriodOfYears%) *
     sum(EFS2$SECtoEFPROD("GAS",EFS2), V03OutTransfGasses(allCy,EFS2,YTIME)) /
-    (sum(EFS2$SECtoEFPROD("GAS",EFS2), V03OutTransfGasses(allCy,EFS2,YTIME-1)) + 1e-6); 
+    (sum(EFS2$SECtoEFPROD("GAS",EFS2), V03OutTransfGasses(allCy,EFS2,YTIME-%fPeriodOfYears%)) + 1e-6); 
             
 *' The equation calculates the total transformation input for a specific energy branch 
 *' in a given scenario and year. The result is obtained by summing the transformation inputs from different sources, including
@@ -190,16 +190,16 @@ Q03Transfers(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         =E=
     ( 
       (
-        V03Transfers(allCy,EFS,YTIME-1) *
+        V03Transfers(allCy,EFS,YTIME-%fPeriodOfYears%) *
         (
           VmConsFinEneCountry(allCy,EFS,YTIME) /
-          (VmConsFinEneCountry(allCy,EFS,YTIME-1) + 1e-6)
+          (VmConsFinEneCountry(allCy,EFS,YTIME-%fPeriodOfYears%) + 1e-6)
         ) ** 0.3
       )$(not sameas(EFS,"CRO")) +
       (
-        V03Transfers(allCy,"CRO",YTIME-1) *
+        V03Transfers(allCy,"CRO",YTIME-%fPeriodOfYears%) *
         (SUM(EFS2$EFTOEFA(EFS2,"LQD"),V03Transfers(allCy,EFS2,YTIME)) + 1e-6) /
-        (SUM(EFS2$EFTOEFA(EFS2,"LQD"),V03Transfers(allCy,EFS2,YTIME-1)) + 1e-6)
+        (SUM(EFS2$EFTOEFA(EFS2,"LQD"),V03Transfers(allCy,EFS2,YTIME-%fPeriodOfYears%)) + 1e-6)
       )$sameas(EFS,"CRO")   
     )$i03FeedTransfr(allCy,EFS,"%fStartHorizon%");         
 
@@ -250,21 +250,21 @@ Q03ProdPrimary(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     [
       (
         !!i03RatePriProTotPriNeeds(allCy,EFS,YTIME) *
-        V03ProdPrimary(allCy,EFS,YTIME-1) *
+        V03ProdPrimary(allCy,EFS,YTIME-%fPeriodOfYears%) *
         (V03ConsGrssInlNotEneBranch(allCy,EFS,YTIME) + 1e-6) /
-        (V03ConsGrssInlNotEneBranch(allCy,EFS,YTIME-1) + 1e-6)
+        (V03ConsGrssInlNotEneBranch(allCy,EFS,YTIME-%fPeriodOfYears%) + 1e-6)
       )$(not (sameas(EFS,"CRO") or sameas(EFS,"NGS"))) +
       (
         i03ResHcNgOilPrProd(allCy,EFS,YTIME) * 
-        V03ProdPrimary(allCy,EFS,YTIME-1) *
+        V03ProdPrimary(allCy,EFS,YTIME-%fPeriodOfYears%) *
         (
           (V03ConsGrssInlNotEneBranch(allCy,EFS,YTIME) + 1e-6) /
-          (V03ConsGrssInlNotEneBranch(allCy,EFS,YTIME-1) + 1e-6)
+          (V03ConsGrssInlNotEneBranch(allCy,EFS,YTIME-%fPeriodOfYears%) + 1e-6)
         ) !!** i03NatGasPriProElst(allCy)
       )$(sameas(EFS,"NGS")) +
       (
         i03ResHcNgOilPrProd(allCy,EFS,YTIME) * 
-        V03ProdPrimary(allCy,EFS,YTIME-1) *
+        V03ProdPrimary(allCy,EFS,YTIME-%fPeriodOfYears%) *
         prod(kpdl$(ord(kpdl) lt 5),
           (
             imPriceFuelsInt("WCRO",YTIME-(ord(kpdl)+1)) /

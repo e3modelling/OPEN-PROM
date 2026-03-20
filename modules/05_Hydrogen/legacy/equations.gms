@@ -38,7 +38,7 @@ $ontext
          (
          V05GapShareH2Tech1(allCy,H2TECH,YTIME-i05ProdLftH2(H2TECH,YTIME)) *
          V05DemGapH2(allCy,YTIME-i05ProdLftH2(H2TECH,YTIME)) /
-         (VmProdH2(allCy,H2TECH,YTIME-1) + 1e-6)
+         (VmProdH2(allCy,H2TECH,YTIME-%fPeriodOfYears%) + 1e-6)
          )$(ord(YTIME)>14+i05ProdLftH2(H2TECH,YTIME))
 $offtext
 ;
@@ -82,13 +82,13 @@ Q05DemGapH2(allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
           VmDemTotH2(allCy,YTIME) -
           sum(H2TECH,
             (1-V05CapScrapH2ProdTech(allCy,H2TECH,YTIME)) *
-            VmProdH2(allCy,H2TECH,YTIME-1)
+            VmProdH2(allCy,H2TECH,YTIME-%fPeriodOfYears%)
           ) +
     SQRT( SQR(
           VmDemTotH2(allCy,YTIME) -
           sum(H2TECH,
             (1-V05CapScrapH2ProdTech(allCy,H2TECH,YTIME)) *
-            VmProdH2(allCy,H2TECH,YTIME-1)
+            VmProdH2(allCy,H2TECH,YTIME-%fPeriodOfYears%)
           )
     )) )/2
 ;
@@ -217,7 +217,7 @@ Q05GapShareH2Tech1(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q05ProdH2(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmProdH2(allCy,H2TECH,YTIME)
         =E=
-    (1-V05CapScrapH2ProdTech(allCy,H2TECH,YTIME)) * VmProdH2(allCy,H2TECH,YTIME-1) +
+    (1-V05CapScrapH2ProdTech(allCy,H2TECH,YTIME)) * VmProdH2(allCy,H2TECH,YTIME-%fPeriodOfYears%) +
     V05GapShareH2Tech1(allCy,H2TECH,YTIME) * V05DemGapH2(allCy,YTIME);
 
 *' This equation calculates the average cost of hydrogen production across all technologies in the system.
@@ -237,9 +237,9 @@ Q05CostAvgProdH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q05ConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)$(TIME(YTIME) $H2TECHEFtoEF(H2TECH,EF) $(runCy(allCy)))..
          VmConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)
          =E=
-*        VmConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME-1)+
+*        VmConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME-%fPeriodOfYears%)+
          VmProdH2(allCy,H2TECH,YTIME)/i05EffH2Prod(allCy,H2TECH,YTIME)!!-
-*        (VmProdH2(allCy,H2TECH,YTIME-1)/i05EffH2Prod(allCy,H2TECH,YTIME-1))
+*        (VmProdH2(allCy,H2TECH,YTIME-%fPeriodOfYears%)/i05EffH2Prod(allCy,H2TECH,YTIME-%fPeriodOfYears%))
 ;
 
 *' This equation aggregates the total fuel consumption across all hydrogen production technologies in the system,
@@ -289,9 +289,9 @@ Q05DelivH2InfrTech(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q05InvNewReqH2Infra(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          V05InvNewReqH2Infra(allCy,INFRTECH,YTIME)
          =E=
-         ( V05DelivH2InfrTech(allCy,INFRTECH,YTIME)-V05DelivH2InfrTech(allCy,INFRTECH,YTIME-1)
+         ( V05DelivH2InfrTech(allCy,INFRTECH,YTIME)-V05DelivH2InfrTech(allCy,INFRTECH,YTIME-%fPeriodOfYears%)
           + 0 + 
-          SQRT( SQR(V05DelivH2InfrTech(allCy,INFRTECH,YTIME)-V05DelivH2InfrTech(allCy,INFRTECH,YTIME-1)+0) + SQR(1e-4) ) )/2
+          SQRT( SQR(V05DelivH2InfrTech(allCy,INFRTECH,YTIME)-V05DelivH2InfrTech(allCy,INFRTECH,YTIME-%fPeriodOfYears%)+0) + SQR(1e-4) ) )/2
 ;
 
 *' This equation focuses on the hydrogen transport capacity through pipelines. It calculates the amount of hydrogen that can be
@@ -337,8 +337,8 @@ Q05CostTechH2Infr(allCy,INFRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
          +
          (
             i05ConsSelfH2Transp(allCy,INFRTECH,YTIME)*V05InvNewReqH2Infra(allCy,INFRTECH,YTIME)*
-            (VmCostAvgProdH2(allCy,YTIME-1)$sameas("HPIPU",INFRTECH)+
-            VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)*1e3)$sameas("SSGG",INFRTECH)
+            (VmCostAvgProdH2(allCy,YTIME-%fPeriodOfYears%)$sameas("HPIPU",INFRTECH)+
+            VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-%fPeriodOfYears%)*1e3)$sameas("SSGG",INFRTECH)
          )$(sameas("SSGG",INFRTECH) or sameas("HPIPU",INFRTECH))
          /V05InvNewReqH2Infra(allCy,INFRTECH,YTIME)
 ;

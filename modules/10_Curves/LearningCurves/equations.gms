@@ -18,13 +18,13 @@
 *' Final cost = [LearnableFraction × CostMultiplier + (1-LearnableFraction)] × InitialCost
 
 *' Learning curve cost multiplier equation with numerical safeguards
-*' Timing: Cost multiplier for YTIME based on capacity growth in previous period (YTIME-1 vs YTIME-2)
+*' Timing: Cost multiplier for YTIME based on capacity growth in previous period (YTIME-%fPeriodOfYears% vs YTIME-2)
 *' This reflects that learning happens from past experience and affects current period costs
 *' Safeguards: Add small epsilon to denominator to avoid division by zero
 Q10CostLC(LCTECH,YTIME)$(TIME(YTIME))..
     VmCostLC(LCTECH,YTIME)
         =E=
-    (V10CumCapGlobal(LCTECH,YTIME-1) / (V10CumCapGlobal(LCTECH,YTIME-2))) ** i10AlphaLC(LCTECH);
+    (V10CumCapGlobal(LCTECH,YTIME-%fPeriodOfYears%) / (V10CumCapGlobal(LCTECH,YTIME-2))) ** i10AlphaLC(LCTECH);
 
 *' Global cumulative capacity tracking equation
 *' Tracks total cumulative capacity installations since base year
@@ -32,5 +32,5 @@ Q10CostLC(LCTECH,YTIME)$(TIME(YTIME))..
 Q10CumCapGlobal(LCTECH,YTIME)$(TIME(YTIME))..
     V10CumCapGlobal(LCTECH,YTIME)
         =E=
-    V10CumCapGlobal(LCTECH,YTIME-1) + 
+    V10CumCapGlobal(LCTECH,YTIME-%fPeriodOfYears%) + 
     sum(allCy$(runCy(allCy)), V04NewCapElec(allCy,LCTECH,YTIME));
