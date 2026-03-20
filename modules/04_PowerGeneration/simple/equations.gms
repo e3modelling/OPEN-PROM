@@ -134,7 +134,7 @@ Q04IndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(al
         i04ScaleEndogScrap *
         sum(PGALL2$(not sameas(PGALL,PGALL2)),
           i04AvailRate(allCy,PGALL2,YTIME) / i04AvailRate(allCy,PGALL,YTIME) * 
-          V04CostHourProdInvDec(allCy,PGALL2,YTIME) 
+          V04CostHourProdInvDec(allCy,PGALL2,YTIME-1) 
           !!+
           !!(1-i04AvailRate(allCy,PGALL2,YTIME) / i04AvailRate(allCy,PGALL,YTIME)) *
           !!V04CostVarTech(allCy,PGALL2,YTIME)
@@ -317,8 +317,8 @@ Q04ShareSatPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(PGREN(PGALL)))..
 Q04CostPowGenAvgLng(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCostPowGenAvgLng(allCy,YTIME)
         =E=
-    1; !!SUM(PGALL,VmProdElec(allCy,PGALL,YTIME) * V04CostHourProdInvDec(allCy,PGALL,YTIME)) / 
-    !!SUM(PGALL,VmProdElec(allCy,PGALL,YTIME)); 
+    SUM(PGALL,(VmProdElec(allCy,PGALL,YTIME) + 1e-6) * V04CostHourProdInvDec(allCy,PGALL,YTIME)) / 
+    SUM(PGALL,VmProdElec(allCy,PGALL,YTIME) + 1e-6); 
 
 *' This equation estimates the factor increasing the CAPEX of new RES (unflexible) capacity installation due to simultaneous need for grind upgrade and storage, 
 *' for each region (country) and year. This factor depends on the existing RES (unflexible) penetration in the electriciy mixture.
