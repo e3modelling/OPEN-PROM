@@ -19,7 +19,6 @@ ODummyObj                                                  "Parameter saving obj
 *'                **Interdependent Parameters**
 imCGI(allCy,YTIME)                                         "Capital Goods Index (defined as CGI(Scenario)/CGI(Baseline)) (1)"
 imFPDL(SBS,KPDL)                                           "Polynomial Distribution Lags (PDL) Coefficients per subsector (1)"
-imPlantEffByType(allCy,PGALL,YTIME)                        "Plant efficiency per plant type (1)"
 imCo2EmiFac(allCy,SBS,EF,YTIME)                            "CO2 emission factors per subsector (kgCO2/kgoe fuel burned)"
 imNcon(SBS)                                                "Number of consumers (1)"
 imDisFunConSize(allCy,DSBS,rCon)                           "Distribution function of consumer size groups (1)"
@@ -58,6 +57,9 @@ smGwToTwhPerYear(YTIME)                                    "convert GW mean powe
 Equations
 *' *** Miscellaneous'
 qDummyObj                                                  "Define dummy objective function"
+$IFTHEN.calib %Calibration% == MatCalibration
+qRestrain
+$ENDIF.calib
 ;
 
 Variables
@@ -71,6 +73,7 @@ VmElecConsHeatPla(allCy,DSBS,YTIME)                        "Electricity consumed
 Positive Variables
 VmCarVal(allCy,NAP,YTIME)                                  "Carbon prices for all countries (US$2015/tn CO2)"
 VmRenValue(YTIME)                                          "Renewable value (US$2015/KWh)"
+common(allCy,TRANSE,YTIME)
 ;
 
 Scalars

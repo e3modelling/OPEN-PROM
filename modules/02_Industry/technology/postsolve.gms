@@ -16,6 +16,10 @@ V02EquipCapTechSubsec.FX(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME) = V02EquipCapTechS
 V02UsefulElecNonSubIndTert.FX(runCyL,INDDOM,YTIME)$TIME(YTIME) = V02UsefulElecNonSubIndTert.L(runCyL,INDDOM,YTIME)$TIME(YTIME);            
 V02FinalElecNonSubIndTert.FX(runCyL,INDDOM,YTIME)$TIME(YTIME) = V02FinalElecNonSubIndTert.L(runCyL,INDDOM,YTIME)$TIME(YTIME);                                      
 VmConsFuel.FX(runCyL,DSBS,EF,YTIME)$TIME(YTIME) = VmConsFuel.L(runCyL,DSBS,EF,YTIME)$TIME(YTIME);       
-V02IndxElecIndPrices.FX(runCyL,YTIME)$TIME(YTIME) = V02IndxElecIndPrices.L(runCyL,YTIME)$TIME(YTIME);  
+V02IndxElecIndPrices.FX(runCyL,TCHP,YTIME)$TIME(YTIME) = V02IndxElecIndPrices.L(runCyL,TCHP,YTIME)$TIME(YTIME);  
 V02PremScrpIndu.FX(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME) = V02PremScrpIndu.L(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME);
 *---
+
+$ifthen.calib %Calibration% == MatCalibration
+imMatrFactor.FX(runCyL,DSBS,TECH,YTIME)$TIME(YTIME) = imMatrFactor.L(runCyL,DSBS,TECH,YTIME)$TIME(YTIME);
+$endif.calib

@@ -21,7 +21,7 @@ $include"./iDataElecProdNonCHP.csv"
 $offdelim
 ;
 *---
-table i04DataElecProdCHP(allCy,EF,YTIME)           "Electricity CHP production past years (GWh)"
+table i04DataElecProdCHP(allCy,TCHP,YTIME)           "Electricity CHP production past years (GWh)"
 $ondelim
 $include"./iDataElecProdCHP.csv"
 $offdelim
@@ -71,50 +71,30 @@ $ondelim
 $include"./iInvPlants.csv"
 $offdelim
 ;
+i04InvPlants(allCy,PGALL,YTIME) = 0;
 *---
-table i04DecomPlants(allCy,PGALL,YTIME)	           "Decomissioning Plants (MW)"
+table i04PlantDecomSched(allCy,PGALL,YTIME)	           "Decided plant decomissioning schedule (GW)"
 $ondelim
 $include"./iDecomPlants.csv"
+$offdelim
+;
+i04PlantDecomSched(allCy,PGALL,YTIME) = 0;
+*---
+table iMatFacPlaAvailCapData(allCy,PGALL,YTIME)      "Maturity factor related to plant available capacity (1)"
+$ondelim
+$include"./iMatFacPlaAvailCap.csv"
 $offdelim
 ;
 *---
 $IFTHEN.calib %Calibration% == MatCalibration
 variable i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   "Maturity factor related to plant available capacity (1)";
-table i04MatFacPlaAvailCapL(allCy,PGALL,YTIME)     "Maturity factor related to plant available capacity (1)"
-$ondelim
-$include "./iMatFacPlaAvailCap.csv"
-$offdelim
-;
-i04MatFacPlaAvailCap.L(runCy,PGALL,YTIME)    = i04MatFacPlaAvailCapL(runCy,PGALL,YTIME);
-i04MatFacPlaAvailCap.LO(runCy, PGALL, YTIME) = 1e-8;
-i04MatFacPlaAvailCap.UP(runCy, PGALL, YTIME) = 40;
+i04MatFacPlaAvailCap.LO(runCy, PGALL, YTIME) = 0;
+i04MatFacPlaAvailCap.UP(runCy, PGALL, YTIME) = 10;
+i04MatFacPlaAvailCap.L(runCy,PGALL,YTIME) = 1;
 $ELSE.calib
-table i04MatFacPlaAvailCap(allCy,PGALL,YTIME)      "Maturity factor related to plant available capacity (1)"
-$ondelim
-$include "./iMatFacPlaAvailCap.csv"
-$offdelim
-;
+parameter i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   "Maturity factor related to plant available capacity (1)";
+i04MatFacPlaAvailCap(runCy,PGALL,YTIME) = iMatFacPlaAvailCapData(runCy,PGALL,YTIME);
 $ENDIF.calib
-*---
-$IFTHEN.calib %Calibration% == MatCalibration
-variable i04MatureFacPlaDisp(allCy,PGALL,YTIME)    "Maturity factor related to plant dispatching (1)";
-table i04MatureFacPlaDispL(allCy,PGALL,YTIME)      "Maturity factor related to plant dispatching (1)"
-$ondelim
-$include "./iMatureFacPlaDisp.csv"
-$offdelim
-;
-i04MatureFacPlaDisp.L(runCy,PGALL,YTIME)    = i04MatureFacPlaDispL(runCy,PGALL,YTIME);
-i04MatureFacPlaDisp.LO(runCy, PGALL, YTIME) = 1e-8;
-i04MatureFacPlaDisp.UP(runCy, PGALL, YTIME) = 600;
-$ELSE.calib
-table i04MatureFacPlaDisp(allCy,PGALL,YTIME)       "Maturity factor related to plant dispatching (1)"
-$ondelim
-$include"./iMatureFacPlaDisp.csv"
-$offdelim
-;
-$ENDIF.calib
-*---
-parameter i04MxmShareChpElec                       "Maximum share of CHP electricity in a country (1)";
 *---
 parameter i04LoadFacElecDem(DSBS)                  "Load factor of electricity demand per sector (1)"
 /
@@ -172,29 +152,7 @@ PCH	0.78,
 NEN	0.78 
 / ;
 *---
-parameter i04LoadFactorAdjMxm(VARIOUS_LABELS)      "Parameter for load factor adjustment i04MxmLoadFacElecDem (1)"
-/
-AMAXBASE  3,
-MAXLOADSH 0.45
-/ ;
-*---
-Parameters
-i04BaseLoadShareDem(allCy,DSBS,YTIME)	           "Baseload share of demand per sector (1)"
-iTotAvailNomCapBsYr(allCy,YTIME)	               "Total nominal available installed capacity in base year (GW)"
-i04MxmLoadFacElecDem(allCy,YTIME)	               "Maximum load factor of electricity demand (1)"
-i04TechLftPlaType(allCy,PGALL)	                   "Technical Lifetime per plant type (year)"
-i04ScaleEndogScrap                              "Scale parameter for endogenous scrapping applied to the sum of full costs (1)"
-i04DecInvPlantSched(allCy,PGALL,YTIME)             "Decided plant investment schedule (GW)"
-i04PlantDecomSched(allCy,PGALL,YTIME)	           "Decided plant decomissioning schedule (GW)"	
-i04MxmShareChpElec(allCy,YTIME)	                   "Maximum share of CHP electricity in a country (1)"
-!! i04MatureFacPlaDisp(allCy,PGALL,YTIME)	       "Maturity factor related to plant dispatching (1)"
-;
-*---
-i04BaseLoadShareDem(runCy,DSBS,YTIME)$an(YTIME)  = i04LoadFactorAdj(DSBS);
-*---
 iTotAvailNomCapBsYr(runCy,YTIME)$datay(YTIME) = i04DataElecSteamGen(runCy,"TOTNOMCAP",YTIME);
-*---
-i04MxmLoadFacElecDem(runCy,YTIME)$an(YTIME) = i04LoadFactorAdjMxm("MAXLOADSH");
 *---
 i04TechLftPlaType(runCy,PGALL) = i04DataTechLftPlaType(PGALL, "LFT");
 i04TechLftPlaType(runCy,"PGH2F") = 20;
@@ -205,10 +163,16 @@ loop(runCy,PGALL,YTIME)$AN(YTIME) DO
          abort $(i04GrossCapCosSubRen(runCy,PGALL,YTIME)<0) "CAPITAL COST IS NEGATIVE", i04GrossCapCosSubRen
 ENDLOOP;
 *---
-i04ScaleEndogScrap = 2 / card(PGALL);
+i04ScaleEndogScrap = 6 / card(PGALL);
 *---
 i04DecInvPlantSched(runCy,PGALL,YTIME) = i04InvPlants(runCy,PGALL,YTIME);
 *---
-i04PlantDecomSched(runCy,PGALL,YTIME) = i04DecomPlants(runCy,PGALL,YTIME);
+i04MxmShareChpElec(runCy,YTIME) = 0.35;
 *---
-i04MxmShareChpElec(runCy,YTIME) = 0.3;
+i04Util(allCy,PGALL,YTIME) = 1;
+*---
+i04ShareFuels(runCy,PGALL,PGEF)$PGALLTOEF(PGALL,PGEF) = 
+(
+  (i03InpTotTransfProcess(runCy,"PG",PGEF,"%fBaseY%") - 1e-6) / 
+  SUM(PGEF2$PGALLTOEF(PGALL,PGEF2),i03InpTotTransfProcess(runCy,"PG",PGEF2,"%fBaseY%") - 1e-6)
+)$SUM(PGEF2$PGALLTOEF(PGALL,PGEF2),i03InpTotTransfProcess(runCy,"PG",PGEF2,"%fBaseY%") - 1e-6);

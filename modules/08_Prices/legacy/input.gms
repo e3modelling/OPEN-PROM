@@ -45,4 +45,9 @@ i08VAT(runCy, YTIME) = 0;
 *---
 imFuelPrice(runCy,SBS,EF,YTIME) = imFuelPrice(runCy,SBS,EF,YTIME)/1000; !! change units $15 -> k$15
 imFuelPrice(runCy,"BU","KRS",YTIME) = imFuelPrice(runCy,"PA","KRS",YTIME);
+imFuelPrice(runCy,"PG","GSL",YTIME) = imFuelPrice(runCy,"OI","GSL",YTIME);
+imFuelPrice(runCy,"PG","KRS",YTIME) = imFuelPrice(runCy,"OI","KRS",YTIME);
+imFuelPrice(runCy,SBS,"BGDO",YTIME) = imFuelPrice(runCy,SBS,"GDO",YTIME);
+imFuelPrice(runCy,SBS,"BGSL",YTIME) = imFuelPrice(runCy,SBS,"GSL",YTIME);
+imFuelPrice(runCy,SBS,"BKRS",YTIME) = imFuelPrice(runCy,SBS,"KRS",YTIME);
 *---

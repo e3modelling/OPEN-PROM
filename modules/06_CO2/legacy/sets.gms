@@ -23,3 +23,8 @@ H2P
 DAC
 IND
 /
+
+CDR(DSBS)    "CDR subsectors" /
+DAC
+EW
+/

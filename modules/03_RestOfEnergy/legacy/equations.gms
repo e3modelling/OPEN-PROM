@@ -25,7 +25,7 @@ Q03ConsFinEneCountry(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)
       )
     ) +
-    sum(EF$(EFtoEFS(EF,EFS) $SECtoEF("DAC",EF)),VmConsFuelDACProd(allCy,EF,YTIME));
+    VmConsFuelCDRProd(allCy,EFS,YTIME);
 
 *' The equation computes the total final energy consumption in million tonnes of oil equivalent 
 *' for all countries at a specific time period. This is achieved by summing the final energy consumption for each energy
@@ -42,8 +42,8 @@ $offtext
 Q03ConsFinNonEne(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmConsFinNonEne(allCy,EFS,YTIME)
         =E=
-    sum(NENSE$(not sameas("BU",NENSE)),
-      sum(EF$(EFtoEFS(EF,EFS)$SECtoEF(NENSE,EF)), VmConsFuel(allCy,NENSE,EF,YTIME))
+    sum(NENSE$(not sameas("BU",NENSE) and SECtoEF(NENSE,EFS)),
+      VmConsFuel(allCy,NENSE,EFS,YTIME)
     );  
 
 *' The equation computes the distribution losses in million tonnes of oil equivalent for a given energy form sector.
@@ -65,38 +65,8 @@ Q03LossesDistr(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     (
       VmDemTotH2(allCy,YTIME) -
       sum(SBS$SECtoEF(SBS,"H2F"), VmDemSecH2(allCy,SBS,YTIME))
-    )$H2EF(EFS);  
-
-*' The equation calculates the transformation output from district heating plants .
-*' This transformation output is determined by summing over different demand sectors and district heating systems 
-*' that correspond to the specified energy form set. The equation then sums over these district heating 
-*' systems and calculates the consumption of fuels in each of these sectors. The resulting value represents the 
-*' transformation output from district heating plants in million tonnes of oil equivalent.
-Q03OutTransfDhp(allCy,STEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V03OutTransfDhp(allCy,STEAM,YTIME)
-        =E=
-    sum(TSTEAM$TDHP(TSTEAM),
-      VmProdSte(allCy,TSTEAM,YTIME)
-    );
-
-*' The equation calculates the transformation input to district heating plants.
-*' This transformation input is determined by summing over different district heating systems that correspond to the
-*' specified energy form set . The equation then sums over different demand sectors within each 
-*' district heating system and calculates the consumption of fuels in each of these sectors, taking into account
-*' the efficiency of district heating plants. The resulting value represents the transformation input to district
-*' heating plants in million tonnes of oil equivalent.
-Q03TransfInputDHPlants(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    VmTransfInputDHPlants(allCy,EFS,YTIME)
-        =E=
-    VmConsFuelSteProd(allCy,"DHP",EFS,YTIME);
-
-Q03OutTransfCHP(allCy,TOCTEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V03OutTransfCHP(allCy,TOCTEF,YTIME)
-        =E=
-    sum(TSTEAM$TCHP(TSTEAM),
-      VmProdSte(allCy,TSTEAM,YTIME)
-    )$sameas("STE",TOCTEF) +
-    (V04ProdElecEstCHP(allCy,YTIME) * smTWhToMtoe)$sameas("ELC",TOCTEF);
+    )$H2EF(EFS)
+;  
 
 $ontext
 *' The equation calculates the refineries' capacity for a given scenario and year.
@@ -189,8 +159,7 @@ Q03InpTotTransf(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECtoEF(SSBS,E
     VmConsFuelSteProd(allCy,"DHP",EFS,YTIME)$sameas("STEAMP",SSBS) +
     V03InputTransfRef(allCy,EFS,YTIME)$sameas("LQD",SSBS) + 
     V03InputTransfSolids(allCy,EFS,YTIME)$sameas("SLD",SSBS) +
-    V03InputTransfGasses(allCy,EFS,YTIME)$sameas("GAS",SSBS) + 
-    VmConsFuelH2Prod(allCy,EFS,YTIME)$sameas("H2P",SSBS);            
+    V03InputTransfGasses(allCy,EFS,YTIME)$sameas("GAS",SSBS);            
 
 *' The equation calculates the total transformation output for a specific energy branch in a given scenario and year.
 *' The result is obtained by summing the transformation outputs from different sources, including thermal power stations, District Heating Plants,
@@ -202,7 +171,7 @@ Q03OutTotTransf(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$runCy(allCy)$SECtoEFPROD(SSBS
     smTWhToMtoe * 
     (
       sum(PGALL,VmProdElec(allCy,PGALL,YTIME))$sameas("PG",SSBS) +
-      V04ProdElecEstCHP(allCy,YTIME)$sameas("CHP",SSBS)
+      SUM(TCHP,V04ProdElecEstCHP(allCy,TCHP,YTIME))$sameas("CHP",SSBS)
     )$ELCEF(EFS) +
     VmDemTotSte(allCy,YTIME)$(sameas("STEAMP",SSBS) and STEAM(EFS)) +
     !!FIXME: Add all liquids
@@ -229,8 +198,8 @@ Q03Transfers(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       )$(not sameas(EFS,"CRO")) +
       (
         V03Transfers(allCy,"CRO",YTIME-1) *
-        SUM(EFS2$EFTOEFA(EFS2,"LQD"),V03Transfers(allCy,EFS2,YTIME)) /
-        SUM(EFS2$EFTOEFA(EFS2,"LQD"),V03Transfers(allCy,EFS2,YTIME-1))
+        (SUM(EFS2$EFTOEFA(EFS2,"LQD"),V03Transfers(allCy,EFS2,YTIME)) + 1e-6) /
+        (SUM(EFS2$EFTOEFA(EFS2,"LQD"),V03Transfers(allCy,EFS2,YTIME-1)) + 1e-6)
       )$sameas(EFS,"CRO")   
     )$i03FeedTransfr(allCy,EFS,"%fStartHorizon%");         
 
@@ -246,7 +215,8 @@ Q03ConsGrssInlNotEneBranch(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     SUM(SSBS,V03InpTotTransf(allCy,SSBS,EFS,YTIME)) - 
     SUM(SSBS,V03OutTotTransf(allCy,SSBS,EFS,YTIME)) + 
     VmLossesDistr(allCy,EFS,YTIME) - 
-    V03Transfers(allCy,EFS,YTIME); 
+    V03Transfers(allCy,EFS,YTIME)
+; 
 
 *' The equation calculates the gross inland consumption. This quantity is equal to the total energy
 *' supply for each country.
@@ -261,7 +231,8 @@ Q03ConsGrssInl(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       V03OutTotTransf(allCy,SSBS,EFS,YTIME)
     ) + 
     VmLossesDistr(allCy,EFS,YTIME) - 
-    V03Transfers(allCy,EFS,YTIME);  
+    V03Transfers(allCy,EFS,YTIME)
+;  
 
 *' The equation calculates the primary production for a specific primary production definition in a given scenario and year.
 *' The computation involves different scenarios based on the type of primary production definition:
@@ -280,7 +251,7 @@ Q03ProdPrimary(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       (
         !!i03RatePriProTotPriNeeds(allCy,EFS,YTIME) *
         V03ProdPrimary(allCy,EFS,YTIME-1) *
-        V03ConsGrssInlNotEneBranch(allCy,EFS,YTIME) /
+        (V03ConsGrssInlNotEneBranch(allCy,EFS,YTIME) + 1e-6) /
         (V03ConsGrssInlNotEneBranch(allCy,EFS,YTIME-1) + 1e-6)
       )$(not (sameas(EFS,"CRO") or sameas(EFS,"NGS"))) +
       (
@@ -309,7 +280,8 @@ Q03ProdPrimary(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q03Exp(allCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS) $runCy(allCy))..
     V03Exp(allCy,EFS,YTIME)
         =E=
-    imFuelExprts(allCy,EFS,YTIME);
+    imFuelExprts(allCy,EFS,YTIME)
+;
 
 *' The equation computes the fake imports for a specific energy branch 
 *' in a given scenario and year. The calculation is based on different conditions for various energy branches,
@@ -319,7 +291,7 @@ Q03Exp(allCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS) $runCy(allCy))..
 Q03Imp(allCy,EFS,YTIME)$(TIME(YTIME) $IMPEF(EFS) $runCy(allCy))..
     V03Imp(allCy,EFS,YTIME)
         =E=
-    (
+    0 *(
       i03RatioImpFinElecDem(allCy,YTIME) * 
       (VmConsFinEneCountry(allCy,EFS,YTIME) + VmConsFinNonEne(allCy,EFS,YTIME)) +
       V03Exp(allCy,EFS,YTIME) !! + i03ElecImp(allCy,YTIME)
@@ -367,4 +339,5 @@ Q03ConsFiEneSec(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECtoEF(SSBS,E
     SUM(EFS2$SECtoEFPROD(SSBS,EFS2), 
       V03OutTotTransf(allCy,SSBS,EFS2,YTIME) +
       V03ProdPrimary(allCy,EFS2,YTIME)$(not PGRENEF(EFS2))
-    );                               
+    ) +
+    VmConsFuelH2Prod(allCy,EFS,YTIME)$sameas("H2P",SSBS);                               

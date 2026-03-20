@@ -10,53 +10,32 @@
 
 *' * CO2 SEQUESTRATION COST CURVES
 
-*' The equation calculates the CO2 captured by electricity and hydrogen production plants
-*' in million tons of CO2 for a specific scenario and year. The CO2 capture is determined by summing 
-*' the product of electricity production from plants with carbon capture and storage, the conversion
-*' factor from terawatt-hours to million tons of oil equivalent (smTWhToMtoe), the plant efficiency,
-*' the CO2 emission factor, and the plant CO2 capture rate. 
-Q06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME)
+Q06CO2CaptureCCS(allCy,SBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECtoEF(SBS,EFS))..
+    V06CO2CaptureCCS(allCy,SBS,EFS,YTIME)
       =E=
     (
-      sum(PGEF,
-        sum(CCS$PGALLtoEF(CCS,PGEF),
+      sum(CCS$PGALLtoEF(CCS,EFS),
+        SUM(PGEF$sameas(PGEF,EFS),
+          i04ShareFuels(allCy,CCS,PGEF) *
           VmProdElec(allCy,CCS,YTIME) * smTWhToMtoe /
-          imPlantEffByType(allCy,CCS,YTIME) *
-          imCo2EmiFac(allCy,"PG",PGEF,YTIME) *
+          imPlantEffByType(allCy,CCS,"effELC",YTIME) *
           V04CO2CaptRate(allCy,CCS,YTIME)
         )
-      )
-    )$sameas("PG", CO2CAPTECH) +
-    (
-      sum(EF, 
-        sum(H2TECH$H2TECHEFtoEF(H2TECH,EF),
-          VmConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME) *
-          imCo2EmiFac(allCy,"H2P",EF,YTIME) *
-          V05CaptRateH2(allCy,H2TECH,YTIME)
-        )
-      )
-      !! CO2 emissions captured by plants producing hydrogen
-    )$sameas("H2P", CO2CAPTECH) +
-    (
-      sum(DACTECH,
-        V06CapDAC(allCy,DACTECH,YTIME)
-      ) * 1e-6
-    )$sameas("DAC", CO2CAPTECH) +
-    (
-      sum(DSBS,
+      )$sameas("PG", SBS) +
+      sum(H2TECH$H2TECHEFtoEF(H2TECH,EFS),
+        VmConsFuelTechH2Prod(allCy,H2TECH,EFS,YTIME) *
+        V05CaptRateH2(allCy,H2TECH,YTIME)
+      )$sameas("H2P", SBS) +
+      sum(DSBS$sameas(DSBS,SBS),
         sum(CCSTECH$SECTTECH(DSBS,CCSTECH),
-          sum(EF$ITECHtoEF(CCSTECH,EF),
-            i02Share(allCy,DSBS,CCSTECH,EF,YTIME) * 
+            i02ShareBlend(allCy,DSBS,CCSTECH,EFS,YTIME) *
             V02EquipCapTechSubsec(allcy,DSBS,CCSTECH,YTIME) * 
             i02util(allCy,DSBS,CCSTECH,YTIME) * 
-            imCO2CaptRateIndustry(allCy,CCSTECH,YTIME) * 
-            imCo2EmiFac(allCy,DSBS,EF,YTIME)
-          )
+            imCO2CaptRateIndustry(allCy,CCSTECH,YTIME)
         )
-      )
-    )$sameas("IND", CO2CAPTECH)
-    ;   
+      )$INDSE1(SBS)
+    ) *
+    (imCo2EmiFac(allCy,SBS,EFS,YTIME) + 4.17$sameas("BMSWAS",EFS));
 
 *' The equation calculates the cumulative CO2 captured in million tons of CO2 for a given scenario and year.
 *' The cumulative CO2 captured at the current time period is determined by adding the CO2 captured by electricity and hydrogen production
@@ -66,14 +45,9 @@ Q06CaptCummCO2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06CaptCummCO2(allCy,YTIME) 
       =E= 
     V06CaptCummCO2(allCy,YTIME-1) +
-    SUM(CO2CAPTECH,
-      V06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME)
-    );   
+    sum((SBS,EFS)$SECtoEF(SBS,EFS),V06CO2CaptureCCS(allCy,SBS,EFS,YTIME)) +
+    sum(CDRTECH,V06CapCDR(allCy,CDRTECH,YTIME) * 1e-6);   
 
-$ontext
-    1 /
-    (1 + exp(-i06ElastCO2Seq(allCy,"mc_s") * (V06CaptCummCO2(allCy,YTIME)*1e3 /i06ElastCO2Seq(allCy,"pot")-i06ElastCO2Seq(allCy,"mc_m")))); 
-$offtext
 *' The equation calculates the cost curve for CO2 sequestration costs in Euro per ton of CO2 sequestered
 *' for a specific scenario and year. The cost curve is determined based on cumulative CO2 captured and
 *' elasticities for the CO2 sequestration cost curve.The equation is formulated to represent a flexible cost curve that
@@ -91,54 +65,56 @@ Q06CstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     !! exponential component
     (1-0.6) *
     i06ElastCO2Seq(allCy,"mc_b") *
-    exp(V06CaptCummCO2(allCy,YTIME) / i06ElastCO2Seq(allCy,"mc_d"));           
+    exp(
+      (V06CaptCummCO2(allCy,YTIME) - V06CapCDR(allCy,"TEW",YTIME) * 1e-6) / 
+      i06ElastCO2Seq(allCy,"mc_d")
+    );           
 
-*' The equation calculates the CAPEX of each DAC technology, as it's affected by a learning curve.
-Q06GrossCapDAC(DACTECH,YTIME)$(TIME(YTIME))..
-    V06GrossCapDAC(DACTECH,YTIME)
+*' The equation calculates the CAPEX of each DAC technology, as it's affected by a learning curve ($/tCO2).
+Q06GrossCapDAC(CDRTECH,YTIME)$(TIME(YTIME))..
+    V06GrossCapDAC(CDRTECH,YTIME)
             =E=         
     0.5 * 
     (
-      (i06GrossCapDAC(DACTECH) * (sum(allCy$runCyL(allCy),V06CapDAC(allCy,DACTECH,YTIME-1))) ** (log(0.97)/log(2))) +
-      i06GrossCapDACMin(DACTECH) +
+      (i06GrossCapDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.97)/log(2))) +
+      i06GrossCapDACMin(CDRTECH) +
       sqrt(
         sqr(
-          (i06GrossCapDAC(DACTECH) * (sum(allCy$runCyL(allCy),V06CapDAC(allCy,DACTECH,YTIME-1))) ** (log(0.97)/log(2))) -
-          i06GrossCapDACMin(DACTECH)
+          (i06GrossCapDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.97)/log(2))) -
+          i06GrossCapDACMin(CDRTECH)
         )
       )
-    )
-;
+    );
 
 *' The equation calculates the fixed and O&M costs of each DAC technology, as they are affected by a learning curve.
-Q06FixOandMDAC(DACTECH,YTIME)$(TIME(YTIME))..
-    V06FixOandMDAC(DACTECH,YTIME)
+Q06FixOandMDAC(CDRTECH,YTIME)$(TIME(YTIME))..
+    V06FixOandMDAC(CDRTECH,YTIME)
             =E=         
     0.5 * 
     (
-      (i06FixOandMDAC(DACTECH) * (sum(allCy$runCyL(allCy),V06CapDAC(allCy,DACTECH,YTIME-1))) ** (log(0.97)/log(2))) +
-      i06FixOandMDACMin(DACTECH) +
+      (i06FixOandMDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.97)/log(2))) +
+      i06FixOandMDACMin(CDRTECH) +
       sqrt(
         sqr(
-          (i06FixOandMDAC(DACTECH) * (sum(allCy$runCyL(allCy),V06CapDAC(allCy,DACTECH,YTIME-1))) ** (log(0.97)/log(2))) -
-          i06FixOandMDACMin(DACTECH)
+          (i06FixOandMDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.97)/log(2))) -
+          i06FixOandMDACMin(CDRTECH)
         )
       )
     )
 ;
 
 *' The equation calculates the variable costs of each DAC technology including the CO2 storage costs, as they are affected by a learning curve.
-Q06VarCostDAC(DACTECH,YTIME)$(TIME(YTIME))..
-    V06VarCostDAC(DACTECH,YTIME)
+Q06VarCostDAC(CDRTECH,YTIME)$(TIME(YTIME))..
+    V06VarCostDAC(CDRTECH,YTIME)
             =E=         
     0.5 * 
     (
-      (i06VarCostDAC(DACTECH) * (sum(allCy$runCyL(allCy),V06CapDAC(allCy,DACTECH,YTIME-1))) ** (log(0.97)/log(2))) +
-      i06VarCostDACMin(DACTECH) +
+      (i06VarCostDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.97)/log(2))) +
+      i06VarCostDACMin(CDRTECH) +
       sqrt(
         sqr(
-          (i06VarCostDAC(DACTECH) * (sum(allCy$runCyL(allCy),V06CapDAC(allCy,DACTECH,YTIME-1))) ** (log(0.97)/log(2))) -
-          i06VarCostDACMin(DACTECH)
+          (i06VarCostDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.97)/log(2))) -
+          i06VarCostDACMin(CDRTECH)
         )
       )
     )
@@ -146,59 +122,57 @@ Q06VarCostDAC(DACTECH,YTIME)$(TIME(YTIME))..
 
 *' The equation calculates the Levelized Costs of DAC capacity, also taking into account its discount rate and life expectancy, 
 *' for each region (country) and year.
-Q06LvlCostDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V06LvlCostDAC(allCy,DACTECH,YTIME)
+Q06LvlCostDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V06LvlCostDAC(allCy,CDRTECH,YTIME)
         =E=         
-    V06GrossCapDAC(DACTECH,YTIME) + 
-    V06FixOandMDAC(DACTECH,YTIME) + 
-    V06VarCostDAC(DACTECH,YTIME) - 20 +
-    i06SpecElecDAC(allCy,DACTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME) +
-    i06SpecHeatDAC(allCy,DACTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","NGS",YTIME) / 0.85 +
+    V06GrossCapDAC(CDRTECH,YTIME)
+    - VmSubsiDemTech(allCy,"DAC",CDRTECH,YTIME)$DACTECH(CDRTECH) -
+    VmSubsiDemTech(allCy,"EW",CDRTECH,YTIME)$sameas("TEW",CDRTECH) +
+    V06FixOandMDAC(CDRTECH,YTIME) + 
+    V06VarCostDAC(CDRTECH,YTIME) - 20 +
+    i06SpecElecDAC(allCy,CDRTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME) +
+    i06SpecHeatDAC(allCy,CDRTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","NGS",YTIME) / 0.85 +
     VmCstCO2SeqCsts(allCy,YTIME)
 ;
 
 *' The equation estimates the profitability of DAC capacity, calculating the rate between levelized costs (CAPEX, fixed and fuel needs)
 *' and revenues/avoided costs (carbon values, carbon subsidies) regionally.
-Q06ProfRateDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V06ProfRateDAC(allCy,DACTECH,YTIME)
+Q06ProfRateDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V06ProfRateDAC(allCy,CDRTECH,YTIME)
         =E=
-    i06SubsFacDAC(DACTECH) * 
-    sum(NAP$NAPtoALLSBS(NAP,"DAC"),VmCarVal(allCy,NAP,YTIME)) / 
-    V06LvlCostDAC(allCy,DACTECH,YTIME - 1);
+    (sum(NAP$NAPtoALLSBS(NAP,"DAC"),VmCarVal(allCy,NAP,YTIME)))
+    / V06LvlCostDAC(allCy,CDRTECH,YTIME - 1)
+;
 
 *' The equation estimates the annual increase rate of DAC capacity regionally, according to the maturity and profitability of each technology.
-Q06CapFacNewDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-  V06CapFacNewDAC(allCy,DACTECH,YTIME)
+Q06CapFacNewDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+  V06CapFacNewDAC(allCy,CDRTECH,YTIME)
       =E=
-  exp(i06MatFacDAC(DACTECH) * V06ProfRateDAC(allCy,DACTECH,YTIME) - 1) /
-  exp(i06MatFacDAC(DACTECH) * S06ProfRateMaxDAC - 1) *
+  exp(i06MatFacDAC(CDRTECH) * V06ProfRateDAC(allCy,CDRTECH,YTIME) - 1) /
+  exp(i06MatFacDAC(CDRTECH) * S06ProfRateMaxDAC - 1) *
   (S06CapFacMaxNewDAC - S06CapFacMinNewDAC) +
   S06CapFacMinNewDAC;
 
 *' The equation calculates the DAC installed capacity annually and regionally,
 *' adding capacity based on the maturity of the technology, as well as given capacities of actual scheduled DAC units.
-Q06CapDAC(allCy,DACTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V06CapDAC(allCy,DACTECH,YTIME)
-         =E=
-          V06CapDAC(allCy,DACTECH,YTIME-1) * (1 + V06CapFacNewDAC(allCy,DACTECH,YTIME)) +
-          i06SchedNewCapDAC(allCy,DACTECH,YTIME)
-;
+Q06CapCDR(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+         V06CapCDR(allCy,CDRTECH,YTIME)
+            =E=
+          V06CapCDR(allCy,CDRTECH,YTIME-1) * (1 + V06CapFacNewDAC(allCy,CDRTECH,YTIME)) +
+          i06SchedNewCapDAC(allCy,CDRTECH,YTIME);
 
 *' The equation calculates the different fuels consumed by the DAC installed capacity annually and regionally.
-Q06ConsFuelTechDACProd(allCy,DACTECH,EF,YTIME)$(TIME(YTIME) $TECHtoEF(DACTECH,EF) $(runCy(allCy)))..
-         VmConsFuelTechDACProd(allCy,DACTECH,EF,YTIME)
-         =E=
-         (
-          (V06CapDAC(allCy,DACTECH,YTIME) * i06SpecHeatDAC(allCy,DACTECH,YTIME) / 0.85)$(sameas(EF, 'ngs')) +
-          (V06CapDAC(allCy,DACTECH,YTIME) * i06SpecHeatDAC(allCy,DACTECH,YTIME) / 0.85)$(sameas(EF, 'H2F')) +
-          (V06CapDAC(allCy,DACTECH,YTIME) * i06SpecElecDAC(allCy,DACTECH,YTIME))$(sameas(EF, 'elc')) 
-         )
-         / 1e6
-;
+Q06ConsFuelTechCDRProd(allCy,CDRTECH,EF,YTIME)$(TIME(YTIME) $TECHtoEF(CDRTECH,EF) $(runCy(allCy)))..
+    VmConsFuelTechCDRProd(allCy,CDRTECH,EF,YTIME)
+      =E=
+    (
+    (V06CapCDR(allCy,CDRTECH,YTIME) * i06SpecHeatDAC(allCy,CDRTECH,YTIME) / 0.85)$(sameas(EF, 'ngs')) +
+    (V06CapCDR(allCy,CDRTECH,YTIME) * i06SpecHeatDAC(allCy,CDRTECH,YTIME) / 0.85)$(sameas(EF, 'H2F')) +
+    (V06CapCDR(allCy,CDRTECH,YTIME) * i06SpecElecDAC(allCy,CDRTECH,YTIME))$(sameas(EF, 'elc')) 
+    ) / 1e6;
 
 *' The equation calculates the different fuels consumed by the DAC installed capacity annually and regionally.
-Q06ConsFuelDACProd(allCy,EF,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
-    VmConsFuelDACProd(allCy,EF,YTIME)
+Q06ConsFuelCDRProd(allCy,EF,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
+    VmConsFuelCDRProd(allCy,EF,YTIME)
         =E=
-    sum(DACTECH$TECHtoEF(DACTECH,EF),VmConsFuelTechDACProd(allCy,DACTECH,EF,YTIME))
-;
+    sum(CDRTECH$TECHtoEF(CDRTECH,EF),VmConsFuelTechCDRProd(allCy,CDRTECH,EF,YTIME));
