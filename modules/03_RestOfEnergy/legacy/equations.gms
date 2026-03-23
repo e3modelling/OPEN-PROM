@@ -193,7 +193,7 @@ Q03Imp(allCy,EFS,YTIME)$(TIME(YTIME) $runCy(allCy))..
 Q03ImpNetEneBrnch(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmImpNetEneBrnch(allCy,EFS,YTIME)
         =E=
-    i03RatePriProTotPriNeeds(allCy,EFS,"%fBaseY%") *
+    i03RateImpGrossInlCons(allCy,EFS,"%fBaseY%") *
     V03ConsGrssInl(allCy,EFS,YTIME);
                                
 *' The equation calculates the final energy own consumption in the energy sector.

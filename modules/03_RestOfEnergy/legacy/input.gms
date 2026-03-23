@@ -26,12 +26,6 @@ $include"./iPrimProd.csv"
 $offdelim
 ;
 *---
-table i03RatePriProTotPriNeeds(allCy,EFS,YTIME)	      "Rate of Primary Production in Total Primary Needs (1)"	
-$ondelim
-$include"./iSuppRatePrimProd.csv"
-$offdelim
-;
-*---
 table i03ElcNetImpShare(allCy,SUPOTH,YTIME)	      "Ratio of electricity imports in total final demand (1)"
 $ondelim
 $include "./iElcNetImpShare.csv"
@@ -77,13 +71,13 @@ imDistrLosses(allCy,EFS,YTIME) -
 i03FeedTransfr(allCy,EFS,YTIME);
 *(imFuelTrade(allCy,"IMPORTS",EFS,YTIME) - imFuelTrade(allCy,"EXPORTS",EFS,YTIME));
 *---
-i03RatePriProTotPriNeeds(allCy,EFS,YTIME)$DATAY(YTIME) = 
+i03RateImpGrossInlCons(allCy,EFS,YTIME)$DATAY(YTIME) = 
 (
   (imFuelTrade(allCy,"IMPORTS",EFS,YTIME) - imFuelTrade(allCy,"EXPORTS",EFS,YTIME)) / 
   i03DataGrossInlCons(allCy,EFS,YTIME)
 )$i03DataGrossInlCons(allCy,EFS,YTIME);
-i03RatePriProTotPriNeeds(allCy,EFS,YTIME) = max(-1000, min(1, i03RatePriProTotPriNeeds(allCy,EFS,YTIME))); !! Ensure it is in [-1,1]
-i03RatePriProTotPriNeeds(allCy,EFS,YTIME) = round(i03RatePriProTotPriNeeds(allCy,EFS,YTIME), 4);
+i03RateImpGrossInlCons(allCy,EFS,YTIME) = max(-1000, min(1, i03RateImpGrossInlCons(allCy,EFS,YTIME))); !! Ensure it is in [-1,1]
+i03RateImpGrossInlCons(allCy,EFS,YTIME) = round(i03RateImpGrossInlCons(allCy,EFS,YTIME), 4);
 *---
 parameter i03PolDstrbtnLagCoeffPriOilPr(kpdl)	  "Polynomial Distribution Lag Coefficients for primary oil production (1)"
 /

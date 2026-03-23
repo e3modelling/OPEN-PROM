@@ -344,7 +344,19 @@ Q04CO2CaptRate(allCy,PGALL,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
 Q04CCSRetroFit(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(NOCCS(PGALL)))..
     V04CCSRetroFit(allCy,PGALL,YTIME)
         =E=
-    1;
+    V04CostVarTech(allCy,PGALL,YTIME-1) ** (-2) /
+    (
+      V04CostVarTech(allCy,PGALL,YTIME-1) ** (-2) +
+      0.01 *
+      SUM(PGALL2$CCS_NOCCS(PGALL2,PGALL),
+        (
+          V04CostCapTech(allCy,PGALL2,YTIME-1) -
+          i04AvailRate(allCy,PGALL,YTIME) / i04AvailRate(allCy,PGALL2,YTIME) *
+          V04CostCapTech(allCy,PGALL,YTIME-1) +
+          V04CostVarTech(allCy,PGALL2,YTIME-1)
+        ) ** (-2)
+      )
+    );
 
 Q04ScrpRate(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04ScrpRate(allCy,PGALL,YTIME)
