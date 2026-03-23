@@ -57,6 +57,7 @@ V04CostHourProdInvDec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = V04CostCapTech.L(runC
 VmCapElecTotEst.FX(runCy,YTIME)$DATAY(YTIME) = sum(PGALL,imInstCapPastNonCHP(runCy,PGALL,YTIME)) + SUM(TCHP,imInstCapPastCHP(runCy,TCHP,YTIME));
 *---
 V04CapElecNonCHP.LO(runCy,YTIME) = 0;
+V04CapElecNonCHP.L(runCy,YTIME) = SUM(PGALL, i04DataElecProdNonCHP(runCy,PGALL,"%fBaseY%")) / 1000;
 V04CapElecNonCHP.FX(runCy,YTIME)$DATAY(YTIME) = 
 (
   V04DemElecTot.L(runCy,YTIME) - 
