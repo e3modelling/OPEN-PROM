@@ -28,7 +28,6 @@ Q04ProdElecEstCHP(allCy,TCHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       )  
     )/2;
 
-$ifthen.calib %Calibration% == off
 *' The equation calculates the total electricity demand by summing the components of final energy consumption in electricity, final non-energy consumption in electricity,
 *' distribution losses, and final consumption in the energy sector for electricity, and then subtracting net imports. The result is normalized using a conversion factor 
 *' which converts terawatt-hours (TWh) to million tonnes of oil equivalent (Mtoe). The formula provides a comprehensive measure of the factors contributing
@@ -36,15 +35,7 @@ $ifthen.calib %Calibration% == off
 Q04DemElecTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04DemElecTot(allCy,YTIME)
         =E=
-    1 / smTWhToMtoe *
-    ( 
-      VmConsFinEneCountry(allCy,"ELC",YTIME) + 
-      VmConsFinNonEne(allCy,"ELC",YTIME) + 
-      VmLossesDistr(allCy,"ELC",YTIME) +
-      SUM(SSBS,VmConsFiEneSec(allCy,SSBS,"ELC",YTIME)) - 
-      VmImpNetEneBrnch(allCy,"ELC",YTIME)
-    );
-$endif.calib
+    (V03ConsGrssInl(allCy,"ELC",YTIME) - VmImpNetEneBrnch(allCy,"ELC",YTIME)) / smTWhToMtoe;
 
 *' This equation calculates the load factor of the entire domestic system as a sum of consumption in each demand subsector
 *' and the sum of energy demand in transport subsectors (electricity only). Those sums are also divided by the load factor
@@ -73,8 +64,9 @@ Q04PeakLoad(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04CapElecTotEst(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCapElecTotEst(allCy,YTIME)
           =E=
-    VmCapElecTotEst(allCy,YTIME-1) *
-    VmPeakLoad(allCy,YTIME) / VmPeakLoad(allCy,YTIME-1);          
+    0; !!Not used
+    !!VmCapElecTotEst(allCy,YTIME-1) *
+    !!VmPeakLoad(allCy,YTIME) / VmPeakLoad(allCy,YTIME-1);          
 
 *' This equation calculates the CAPEX and the Fixed Costs of each power generation unit, taking into account its discount rate and life expectancy, 
 *' for each region (country) and year. Learning curves applied only to CAPEX costs with cost breakdown.
@@ -135,14 +127,14 @@ Q04CostHourProdInvDec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04IndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(allCy))..
     V04IndxEndogScrap(allCy,PGALL,YTIME)
         =E=
-    V04CostVarTech(allCy,PGALL,YTIME)**(-2) /
+    V04CostVarTech(allCy,PGALL,YTIME-1)**(-2) /
     (
-      V04CostVarTech(allCy,PGALL,YTIME)**(-2) +
+      V04CostVarTech(allCy,PGALL,YTIME-1)**(-2) +
       (
         i04ScaleEndogScrap *
         sum(PGALL2$(not sameas(PGALL,PGALL2)),
           i04AvailRate(allCy,PGALL2,YTIME) / i04AvailRate(allCy,PGALL,YTIME) * 
-          V04CostHourProdInvDec(allCy,PGALL2,YTIME) 
+          V04CostHourProdInvDec(allCy,PGALL2,YTIME-1) 
           !!+
           !!(1-i04AvailRate(allCy,PGALL2,YTIME) / i04AvailRate(allCy,PGALL,YTIME)) *
           !!V04CostVarTech(allCy,PGALL2,YTIME)
@@ -156,8 +148,11 @@ Q04IndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(al
 Q04CapElecNonCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04CapElecNonCHP(allCy,YTIME)
         =E=
-    VmCapElecTotEst(allCy,YTIME) -
-    SUM(TCHP,V04ProdElecEstCHP(allCy,TCHP,YTIME)) / smGwToTwhPerYear(YTIME);      
+    (
+      !!VmCapElecTotEst(allCy,YTIME) -
+      V04DemElecTot(allCy,YTIME) - 
+      SUM(TCHP,V04ProdElecEstCHP(allCy,TCHP,YTIME)) 
+    ) / smGwToTwhPerYear(YTIME);      
 
 *' In essence, the equation evaluates the difference between the current and expected power generation capacity, accounting for various factors such as planned capacity,
 *' decommissioning schedules, and endogenous scrapping. The square root term introduces a degree of tolerance in the calculation.
@@ -183,7 +178,7 @@ Q04GapGenCapPowerDiff(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         )
       ))
       ) 
-    )/2;
+    )/2 + 1e-6;
 
 *' Calculates the share of all the unflexible RES penetration into the mixture, and specifically how much above a given threshold it is.
 Q04ShareMixWndSol(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
@@ -214,11 +209,11 @@ Q04SharePowPlaNewEq(allCy,PGALL,YTIME)$(TIME(YTIME)$runCy(allCy)) ..
     i04MatFacPlaAvailCap(allCy,PGALL,YTIME) *
     V04ShareSatPG(allCy,PGALL,YTIME-1) *
     V04CostHourProdInvDec(allCy,PGALL,YTIME-1) ** (-2) /
-    SUM(PGALL2,
+    (SUM(PGALL2,
       i04MatFacPlaAvailCap(allCy,PGALL2,YTIME) *
       V04ShareSatPG(allCy,PGALL2,YTIME-1) *
       V04CostHourProdInvDec(allCy,PGALL2,YTIME-1) ** (-2)
-    );
+    ) + 1E-6);
 
 *' This equation calculates the variable representing the electricity generation capacity for a specific power plant in a given country
 *' and time period. The calculation takes into account various factors related to new investments, decommissioning, and technology-specific parameters.
@@ -297,10 +292,11 @@ Q04CapOverall(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04ProdElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmProdElec(allCy,PGALL,YTIME)
         =E=
-    !!(V04DemElecTot(allCy,YTIME) - SUM(TCHP,V04ProdElecEstCHP(allCy,TCHP,YTIME))) /
-    !!sum(PGALL2, VmCapElec(allCy,PGALL2,YTIME)) *
-    i04util(allCy,PGALL,YTIME) *
+    V04CapElecNonCHP(allCy,YTIME) /
+    sum(PGALL2, VmCapElec(allCy,PGALL2,YTIME)) * 
     VmCapElec(allCy,PGALL,YTIME) * smGwToTwhPerYear(YTIME);
+    !!i04util(allCy,PGALL,YTIME) *
+    !!VmCapElec(allCy,PGALL,YTIME) * smGwToTwhPerYear(YTIME);
 
 *' Share of all technologies in the electricity mixture.
 Q04ShareTechPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
@@ -322,7 +318,7 @@ Q04CostPowGenAvgLng(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCostPowGenAvgLng(allCy,YTIME)
         =E=
     SUM(PGALL,VmProdElec(allCy,PGALL,YTIME) * V04CostHourProdInvDec(allCy,PGALL,YTIME)) / 
-    SUM(PGALL,VmProdElec(allCy,PGALL,YTIME)); 
+    V04CapElecNonCHP(allCy,YTIME); 
 
 *' This equation estimates the factor increasing the CAPEX of new RES (unflexible) capacity installation due to simultaneous need for grind upgrade and storage, 
 *' for each region (country) and year. This factor depends on the existing RES (unflexible) penetration in the electriciy mixture.
@@ -338,19 +334,19 @@ Q04CO2CaptRate(allCy,PGALL,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
     (1 + 
       EXP(20 * (
         ([VmCstCO2SeqCsts(allCy,YTIME) /
-        (sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME)) + 1)] + 2 -
+        (sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME)) + 1)] + 2 -
         [SQRT(SQR([VmCstCO2SeqCsts(allCy,YTIME) /
-        (sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME)) + 1)] - 2))])/2
-        -1)
+        (sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME)) + 1)] - 2))])/2
+        -1.1)
       )
     );
 
 Q04CCSRetroFit(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(NOCCS(PGALL)))..
     V04CCSRetroFit(allCy,PGALL,YTIME)
         =E=
-    V04CostVarTech(allCy,PGALL,YTIME) ** (-2) /
+    V04CostVarTech(allCy,PGALL,YTIME-1) ** (-2) /
     (
-      V04CostVarTech(allCy,PGALL,YTIME) ** (-2) +
+      V04CostVarTech(allCy,PGALL,YTIME-1) ** (-2) +
       0.01 *
       SUM(PGALL2$CCS_NOCCS(PGALL2,PGALL),
         (

@@ -210,6 +210,8 @@ i01TechLft(runCy,DOMSE,ITECH,YTIME) = imDataDomTech(DOMSE,ITECH,"LFT");
 **  Non Energy Sector and Bunkers
 i01TechLft(runCy,NENSE,ITECH,YTIME) = imDataNonEneSec(NENSE,ITECH,"LFT");
 i01TechLft(runCy,"BU","TH2F",YTIME) = 25;
+i01TechLft(runCy,"BU","TNGS",YTIME) = 25;
+i01TechLft(runCy,"BU","TGSL",YTIME) = 25;
 *---
 **  CDR Sector
 i01TechLft(runCy,"DAC",DACTECH,YTIME) = 25;

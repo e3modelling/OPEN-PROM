@@ -370,6 +370,7 @@ DOMSE(DSBS)       Tertiary SubSectors           /SE,AG,HOU/
 INDSE1(SBS)       Industrial SubSectors         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI/
 DOMSE1(SBS)       Tertiary SubSectors           /SE,AG,HOU/
 HOU(DSBS)         Households                    /HOU/
+CDR(DSBS)         Carbon Dioxide Removal         /DAC,EW/
 
 NENSE(DSBS)       Non Energy and Bunkers        /PCH,NEN,BU/
 NENSE1(SBS)       Non Energy and Bunkers        /PCH,NEN,BU/
@@ -595,24 +596,6 @@ SOL
 GEO
 WND
 NGS
-/
-
-
-IMPEF(EFS)       Fuels considered in Imports and Exports
-/
-LGN
-HCL
-CRO
-GSL
-GDO
-RFO
-LPG
-KRS
-OLQ
-NGS
-OGS
-ELC
-*BMSWAS
 /
 
 *         Technologies            *
@@ -861,7 +844,7 @@ TCHEVGDO.(GDO,BGDO)
 
 ITECHtoEF(ITECH,EF) Fuels consumed by industrial technologies
 /
-TGDO.(GDO,BGDO)
+TGDO.(GDO,BGDO,CRO)
 TLPG.LPG
 TKRS.(KRS,BKRS)  
 TNGS.NGS
@@ -894,6 +877,8 @@ TCHEVGSL
 TCHEVGDO
 /
 
+IMPEXP "Imports/Exports" /IMPORTS,EXPORTS/
+
 SSECTTECH(SSBS,STECH) "Link between Model Supply Subsectors and Technologies"
 
 SSECTTECH(SSBS,STECH) "Link between Model Supply Subsectors and Technologies"
@@ -913,10 +898,9 @@ PA.(TKRS)
 (IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(TLGN,THCL,TGDO,TGSL,TRFO,TLPG,TKRS,TOLQ,TNGS,TOGS,
                                 TELC,TBMSWAS,TSTE,TH2F)
 (IS,BM,CH).(TNGSCCS,THCLCCS)
-(HOU,AG).(THCL,TLPG,TKRS,TGDO,TNGS,TOGS,TBMSWAS,TELC,TSTE)
-SE.(THCL,TLPG,TKRS,TNGS,TOGS,TELC,TSTE)
+(HOU,AG,SE).(THCL,TLPG,TKRS,TGDO,TNGS,TOGS,TBMSWAS,TELC,TSTE,TGSL,TLGN,TOLQ,TRFO)
 (HOU,SE).(THEATPUMP)
-BU.(TGDO,TRFO,TKRS,TH2F)
+BU.(TGDO,TRFO,TKRS,TH2F,TNGS)
 (PCH,NEN).(TLGN,THCL,TGDO,TRFO,TLPG,TOLQ,TNGS,TOGS)
 DAC.(HTDAC,H2DAC,LTDAC)
 EW.TEW
@@ -1026,7 +1010,7 @@ PGALLtoEF(PGALL,EFS)     Correspondence between plants and energy forms
 (ATHCOAL,ATHCOALCCS).HCL
 *(ATHOIL).GDO
 *(ATHGAS,ATHGASCCS).NGS
-ATHOIL.(GSL,BGSL,GDO,BGDO,KRS,BKRS,CRO,OLQ)
+ATHOIL.(GSL,BGSL,GDO,BGDO,KRS,BKRS,CRO,OLQ,RFO,LPG)
 (ATHGAS,ATHGASCCS).(NGS,OGS)
 (ATHBMSWAS,ATHBMSCCS).BMSWAS
 PGANUC.NUC

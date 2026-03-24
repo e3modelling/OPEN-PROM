@@ -22,7 +22,8 @@ V04ShareSatPG.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = V04ShareSatPG.L(runCyL,PGALL,
 V04CostHourProdInvDec.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = V04CostHourProdInvDec.L(runCyL,PGALL,YTIME)$TIME(YTIME);
 V04CostVarTech.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = V04CostVarTech.L(runCyL,PGALL,YTIME)$TIME(YTIME);
 V04CostCapTech.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = V04CostCapTech.L(runCyL,PGALL,YTIME)$TIME(YTIME);
+V04CO2CaptRate.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = V04CO2CaptRate.L(runCyL,PGALL,YTIME)$TIME(YTIME);
 
 $ifthen.calib %Calibration% == MatCalibration
-i04MatFacPlaAvailCap.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = i04MatFacPlaAvailCap.L(runCyL,PGALL,YTIME)$TIME(YTIME);
+i04MatFacPlaAvailCap.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = round(i04MatFacPlaAvailCap.L(runCyL,PGALL,YTIME)$TIME(YTIME), 3);
 $endif.calib
