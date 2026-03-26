@@ -73,12 +73,18 @@ i03FeedTransfr(allCy,EFS,YTIME);
 *---
 i03RateImpGrossInlCons(allCy,EFS,YTIME)$DATAY(YTIME) = 
 (
-  (imFuelTrade(allCy,"IMPORTS",EFS,YTIME) - imFuelTrade(allCy,"EXPORTS",EFS,YTIME)) / 
+  imFuelTrade(allCy,"IMPORTS",EFS,YTIME) / 
   i03DataGrossInlCons(allCy,EFS,YTIME)
 )$i03DataGrossInlCons(allCy,EFS,YTIME);
-i03RateImpGrossInlCons(allCy,EFS,YTIME) = max(-1000, min(1, i03RateImpGrossInlCons(allCy,EFS,YTIME))); !! Ensure it is in [-1,1]
+i03RateImpGrossInlCons(allCy,EFS,YTIME) = min(1, i03RateImpGrossInlCons(allCy,EFS,YTIME)); !! Ensure it is in [-1,1]
 i03RateImpGrossInlCons(allCy,EFS,YTIME) = round(i03RateImpGrossInlCons(allCy,EFS,YTIME), 4);
 *---
+i03RateExpTotImp(allCy,EFS,YTIME)$DATAY(YTIME) =
+(
+  imFuelTrade(allCy,"EXPORTS",EFS,YTIME) /
+  SUM(runCy2, imFuelTrade(runCy2,"IMPORTS",EFS,YTIME))
+)$SUM(runCy2, imFuelTrade(runCy2,"IMPORTS",EFS,YTIME));
+i03RateExpTotImp(allCy,EFS,YTIME) = round(i03RateExpTotImp(allCy,EFS,YTIME), 4);
 parameter i03PolDstrbtnLagCoeffPriOilPr(kpdl)	  "Polynomial Distribution Lag Coefficients for primary oil production (1)"
 /
 a1 1.666706504,

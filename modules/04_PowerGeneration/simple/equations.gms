@@ -43,11 +43,12 @@ Q04DemElecTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04LoadFacDom(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04LoadFacDom(allCy,YTIME)
         =E=
-    (sum(INDDOM,VmConsFuel(allCy,INDDOM,"ELC",YTIME)) + sum(TRANSE, VmDemFinEneTranspPerFuel(allCy,TRANSE,"ELC",YTIME))) /
-    (
-    sum(INDDOM,VmConsFuel(allCy,INDDOM,"ELC",YTIME)/i04LoadFacElecDem(INDDOM)) + 
-    sum(TRANSE, VmDemFinEneTranspPerFuel(allCy,TRANSE,"ELC",YTIME)/i04LoadFacElecDem(TRANSE))
-    );         
+    0;
+    !!(sum(INDDOM,VmConsFuel(allCy,INDDOM,"ELC",YTIME)) + sum(TRANSE, VmDemFinEneTranspPerFuel(allCy,TRANSE,"ELC",YTIME))) /
+    !!(
+    !!sum(INDDOM,VmConsFuel(allCy,INDDOM,"ELC",YTIME)/i04LoadFacElecDem(INDDOM)) + 
+    !!sum(TRANSE, VmDemFinEneTranspPerFuel(allCy,TRANSE,"ELC",YTIME)/i04LoadFacElecDem(TRANSE))
+    !!);         
 
 *' The equation calculates the electricity peak load by dividing the total electricity demand by the load factor for the domestic sector and converting the result
 *' to gigawatts (GW) using the conversion factor. This provides an estimate of the maximum power demand during a specific time period, taking into account the domestic
@@ -55,8 +56,9 @@ Q04LoadFacDom(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04PeakLoad(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmPeakLoad(allCy,YTIME)
         =E=
-    V04DemElecTot(allCy,YTIME) /
-    (V04LoadFacDom(allCy,YTIME) * smGwToTwhPerYear(YTIME));
+    0;
+    !!V04DemElecTot(allCy,YTIME) /
+    !!(V04LoadFacDom(allCy,YTIME) * smGwToTwhPerYear(YTIME));
 
 *' The equation calculates the estimated total electricity generation capacity by multiplying the previous year's total electricity generation capacity with
 *' the ratio of the current year's estimated electricity peak load to the previous year's electricity peak load. This provides an estimate of the required
@@ -317,8 +319,8 @@ Q04ShareSatPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(PGREN(PGALL)))..
 Q04CostPowGenAvgLng(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCostPowGenAvgLng(allCy,YTIME)
         =E=
-    SUM(PGALL,VmProdElec(allCy,PGALL,YTIME) * V04CostHourProdInvDec(allCy,PGALL,YTIME)) / 
-    V04CapElecNonCHP(allCy,YTIME); 
+    SUM(PGALL,(VmProdElec(allCy,PGALL,YTIME)) * V04CostHourProdInvDec(allCy,PGALL,YTIME)) / 
+    (V04CapElecNonCHP(allCy,YTIME)); 
 
 *' This equation estimates the factor increasing the CAPEX of new RES (unflexible) capacity installation due to simultaneous need for grind upgrade and storage, 
 *' for each region (country) and year. This factor depends on the existing RES (unflexible) penetration in the electriciy mixture.

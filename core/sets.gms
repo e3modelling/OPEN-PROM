@@ -109,6 +109,7 @@ runCyL(allCy) Countries for which the model is running (used in countries loop)
 runCy(allCy)$(%DevMode% = 0) = resCy(allCy) ;
 runCyL(allCy)$(%DevMode% = 0) = resCy(allCy) ;
 
+ALIAS(runCyL,runCy2)
 sets
 ***        Model Time Horizon       *
 ytime           Model time horizon                                /%fStartHorizon%*%fEndHorizon%/
@@ -796,7 +797,7 @@ TECHtoEF (TECH,EF) Fuels consumed by technologies
 /
 TGSL.(GSL,BGSL)
 TLPG.LPG
-TGDO.(GDO,BGDO,RFO)
+TGDO.(GDO,BGDO,RFO,CRO)
 TNGS.(NGS,OGS)
 TNGSCCS.NGS
 TELC.ELC
@@ -908,7 +909,7 @@ EW.TEW
 
 SECtoEF(SBS,EF) Link between Model Subsectors and Energy Forms consumed
 /
-PG.(LGN,HCL,CRO,GSL,BGSL,KRS,BKRS,GDO,BGDO,RFO,OLQ,NGS,OGS,NUC,HYD,BMSWAS,SOL,GEO,WND,H2F)
+PG.(LGN,HCL,CRO,GSL,BGSL,KRS,BKRS,GDO,BGDO,RFO,LPG,OLQ,NGS,OGS,NUC,HYD,BMSWAS,SOL,GEO,WND,H2F)
 CHP.(LGN,HCL,GDO,RFO,NGS,OGS,NUC,HYD,BMSWAS,SOL,GEO,WND)
 H2P.(HCL,LGN,RFO,GDO,NGS,OGS,NUC,BMSWAS,SOL,WND,ELC)
 STEAMP.(HCL,LGN,CRO,GDO,BGDO,GSL,BGSL,KRS,BKRS,RFO,LPG,NGS,OGS,OLQ,NUC,GEO,BMSWAS,ELC,H2F)
