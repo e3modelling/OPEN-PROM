@@ -21,5 +21,5 @@ V04CostCapTech.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = V04CostCapTech.L(runCyL,PGAL
 V04CO2CaptRate.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = V04CO2CaptRate.L(runCyL,PGALL,YTIME)$TIME(YTIME);
 
 $ifthen.calib %Calibration% == MatCalibration
-i04MatFacPlaAvailCap.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = round(i04MatFacPlaAvailCap.L(runCyL,PGALL,YTIME)$TIME(YTIME), 3);
+i04MatFacPlaAvailCap.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = i04MatFacPlaAvailCap.L(runCyL,PGALL,YTIME)$TIME(YTIME);
 $endif.calib
