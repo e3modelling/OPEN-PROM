@@ -90,8 +90,8 @@ $offdelim
 $IFTHEN.calib %Calibration% == MatCalibration
 variable i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   "Maturity factor related to plant available capacity (1)";
 i04MatFacPlaAvailCap.LO(runCy, PGALL, YTIME) = 0;
-i04MatFacPlaAvailCap.UP(runCy, PGALL, YTIME) = 5;
-i04MatFacPlaAvailCap.L(runCy,PGALL,YTIME) = iMatFacPlaAvailCapData(runCy,PGALL,YTIME);
+i04MatFacPlaAvailCap.UP(runCy, PGALL, YTIME) = 100;
+i04MatFacPlaAvailCap.L(runCy,PGALL,YTIME) = 0.0001;
 $ELSE.calib
 parameter i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   "Maturity factor related to plant available capacity (1)";
 i04MatFacPlaAvailCap(runCy,PGALL,YTIME) = iMatFacPlaAvailCapData(runCy,PGALL,YTIME);
