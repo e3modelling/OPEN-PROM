@@ -225,10 +225,11 @@ if (task == 0) {
   saveMetadata(DevMode = 1)
   if (withRunFolder) createRunFolder(setScenarioName("DEV"))
 
-  cmdCommand <- paste0(gams, " main.gms --DevMode=1 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log")
   if (.Platform$OS.type == "unix") {
+    cmdCommand <- paste0(gams, " main.gms --DevMode=1 --GenerateInput=off -logOption 4 -Idir=./data 2>&1")
     system(paste0("sh -c ", shQuote(cmdCommand)))
   } else {
+    cmdCommand <- paste0(gams, " main.gms --DevMode=1 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log")
     shell(cmdCommand)
   }
 
@@ -246,10 +247,12 @@ if (task == 0) {
   saveMetadata(DevMode = 1)
   if (withRunFolder) createRunFolder(setScenarioName("DEVNEWDATA"))
 
-  cmdCommand <- paste0(gams, " main.gms --DevMode=1 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 | tee full.log")
+
   if (.Platform$OS.type == "unix") {
-    system(paste0("sh -c ", shQuote(cmdCommand)))
+    cmdCommand <- paste0(gams, " main.gms --DevMode=1 --GenerateInput=on -logOption 4 -Idir=./data 2>&1")
+    system(cmdCommand)
   } else {
+    cmdCommand <- paste0(gams, " main.gms --DevMode=1 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 | tee full.log")
     shell(cmdCommand)
   }
   if (withRunFolder) {
@@ -262,12 +265,11 @@ if (task == 0) {
   saveMetadata(DevMode = 0)
   if (withRunFolder) createRunFolder(setScenarioName("RES"))
 
-  cmdCommand <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log")
-
   if (.Platform$OS.type == "unix") {
-    # Linux: Wrapping in sh -c ensures the pipe and redirect are handled by the shell
-    system(paste0("sh -c ", shQuote(cmdCommand)))
+    cmdCommand <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1")
+    system(cmdCommand)
   } else {
+    cmdCommand <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log")
     shell(cmdCommand)
   }
 
@@ -287,18 +289,21 @@ if (task == 0) {
   if (withRunFolder) createRunFolder(setScenarioName("RESNEWDATA"))
 
   # NEW DATA & CALIBRATE
-  calib_cmd <- paste0(
+  if (.Platform$OS.type == "unix") {
+    calib_cmd <- paste0(
+    gams,
+    " main.gms -o mainCalib.lst --WriteGDX=off --DevMode=0 --fScenario=4 --GenerateInput=on --Calibration=MatCalibration -logOption 4 -Idir=./data 2>&1"
+    )
+    exit_code <- system(calib_cmd)
+  } else {
+    calib_cmd <- paste0(
     gams,
     " main.gms -o mainCalib.lst --WriteGDX=off --DevMode=0 --fScenario=4 --GenerateInput=on --Calibration=MatCalibration -logOption 4 -Idir=./data 2>&1 | tee fullCalib.log"
-  )
-  cat("Executing calibration with data generation:\n", calib_cmd, "\n")
-  
-  if (.Platform$OS.type == "unix") {
-    exit_code <- system(paste0("sh -c ", shQuote(calib_cmd)))
-  } else {
+    )
     exit_code <- shell(calib_cmd)
   }
-  
+  cat("Executing calibration with data generation:\n", calib_cmd, "\n")
+
   # Check for calibration execution failure
   if (exit_code != 0) {
     cat("ERROR: GAMS calibration failed with exit code:", exit_code, "\n")
@@ -327,17 +332,15 @@ if (task == 0) {
   cat("Calibration completed successfully.\n")
 
   # RESEARCH
-  research_cmd <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log")
-  cat("Executing research run:\n", research_cmd, "\n")
-  
-  
   if (.Platform$OS.type == "unix") {
+    research_cmd <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1")
     exit_code <- system(paste0("sh -c ", shQuote(research_cmd)))
   } else {
+    research_cmd <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log")
     exit_code <- shell(research_cmd)
   }
-  
-  # Check for research execution failure  
+  cat("Executing research run:\n", research_cmd, "\n")
+  # Check for research execution failure
   if (exit_code != 0) {
     cat("ERROR: GAMS research execution failed with exit code:", exit_code, "\n")
     cat("Research run failed. Check full.log for details.\n")
@@ -360,10 +363,12 @@ if (task == 0) {
   if (withRunFolder && withSync) syncRun()
 } else if (task == 4) {
   # Debugging mode
-  cmdCommand <- paste0(gams, " main.gms -logOption 4 -Idir=./data 2>&1 | tee full.log")
+
   if (.Platform$OS.type == "unix") {
-    system(paste0("sh -c ", shQuote(cmdCommand)))
+    cmdCommand <- paste0(gams, " main.gms -logOption 4 -Idir=./data 2>&1")
+    system(cmdCommand)
   } else {
+    cmdCommand <- paste0(gams, " main.gms -logOption 4 -Idir=./data 2>&1 | tee full.log")
     shell(cmdCommand)
   }
 
@@ -377,8 +382,16 @@ if (task == 0) {
       " main.gms -o mainCalib.lst --DevMode=0 --Calibration=MatCalibration --fScenario=4 -logOption 4 -Idir=./data 2>&1 | tee fullCalib.log"
     )
   if (.Platform$OS.type == "unix") {
-    system(paste0("sh -c ", shQuote(cmdCommand)))
+    cmdCommand <- paste0(
+      gams,
+      " main.gms -o mainCalib.lst --DevMode=0 --Calibration=MatCalibration --fScenario=4 -logOption 4 -Idir=./data 2>&1"
+    )
+    system(cmdCommand)
   } else {
+    cmdCommand <- paste0(
+      gams,
+      " main.gms -o mainCalib.lst --DevMode=0 --Calibration=MatCalibration --fScenario=4 -logOption 4 -Idir=./data 2>&1 | tee fullCalib.log"
+    )
     shell(cmdCommand)
   }
 
