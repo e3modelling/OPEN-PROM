@@ -50,16 +50,6 @@ Q04LoadFacDom(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     !!sum(TRANSE, VmDemFinEneTranspPerFuel(allCy,TRANSE,"ELC",YTIME)/i04LoadFacElecDem(TRANSE))
     !!);         
 
-*' The equation calculates the electricity peak load by dividing the total electricity demand by the load factor for the domestic sector and converting the result
-*' to gigawatts (GW) using the conversion factor. This provides an estimate of the maximum power demand during a specific time period, taking into account the domestic
-*' load factor.
-Q04PeakLoad(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    VmPeakLoad(allCy,YTIME)
-        =E=
-    0;
-    !!V04DemElecTot(allCy,YTIME) /
-    !!(V04LoadFacDom(allCy,YTIME) * smGwToTwhPerYear(YTIME));
-
 *' The equation calculates the estimated total electricity generation capacity by multiplying the previous year's total electricity generation capacity with
 *' the ratio of the current year's estimated electricity peak load to the previous year's electricity peak load. This provides an estimate of the required
 *' generation capacity based on the changes in peak load.
@@ -211,11 +201,11 @@ Q04SharePowPlaNewEq(allCy,PGALL,YTIME)$(TIME(YTIME)$runCy(allCy)) ..
     i04MatFacPlaAvailCap(allCy,PGALL,YTIME) *
     V04ShareSatPG(allCy,PGALL,YTIME-1) *
     V04CostHourProdInvDec(allCy,PGALL,YTIME-1) ** (-2) /
-    (SUM(PGALL2,
+    SUM(PGALL2,
       i04MatFacPlaAvailCap(allCy,PGALL2,YTIME) *
       V04ShareSatPG(allCy,PGALL2,YTIME-1) *
       V04CostHourProdInvDec(allCy,PGALL2,YTIME-1) ** (-2)
-    ) + 1E-6);
+    );
 
 *' This equation calculates the variable representing the electricity generation capacity for a specific power plant in a given country
 *' and time period. The calculation takes into account various factors related to new investments, decommissioning, and technology-specific parameters.
@@ -249,42 +239,6 @@ Q04NetNewCapElec(allCy,PGALL,YTIME)$(PGREN(PGALL)$TIME(YTIME)$runCy(allCy))..
     V04NetNewCapElec(allCy,PGALL,YTIME) 
         =E=
     VmCapElec(allCy,PGALL,YTIME) - VmCapElec(allCy,PGALL,YTIME-1);                       
-
-*' This equation calculates the variable representing the average capacity factor of renewable energy sources for a specific renewable power plant
-*' in a given country  and time period. The capacity factor is a measure of the actual electricity generation output relative to the maximum
-*' possible output.The calculation involves considering the availability rates for the renewable power plant in the current and seven previous time periods,
-*' as well as the newly added capacity in these periods. The average capacity factor is then computed as the weighted average of the availability rates
-*' over these eight periods.
-Q04CFAvgRen(allCy,PGALL,YTIME)$(PGREN(PGALL)$TIME(YTIME)$runCy(allCy))..
-    V04CFAvgRen(allCy,PGALL,YTIME)
-        =E=
-    (i04AvailRate(allCy,PGALL,YTIME)*V04NetNewCapElec(allCy,PGALL,YTIME)+
-     i04AvailRate(allCy,PGALL,YTIME-1)*V04NetNewCapElec(allCy,PGALL,YTIME-1)+
-     i04AvailRate(allCy,PGALL,YTIME-2)*V04NetNewCapElec(allCy,PGALL,YTIME-2)+
-     i04AvailRate(allCy,PGALL,YTIME-3)*V04NetNewCapElec(allCy,PGALL,YTIME-3)+
-     i04AvailRate(allCy,PGALL,YTIME-4)*V04NetNewCapElec(allCy,PGALL,YTIME-4)+
-     i04AvailRate(allCy,PGALL,YTIME-5)*V04NetNewCapElec(allCy,PGALL,YTIME-5)+
-     i04AvailRate(allCy,PGALL,YTIME-6)*V04NetNewCapElec(allCy,PGALL,YTIME-6)+
-     i04AvailRate(allCy,PGALL,YTIME-7)*V04NetNewCapElec(allCy,PGALL,YTIME-7)
-    ) /
-    (V04NetNewCapElec(allCy,PGALL,YTIME) + V04NetNewCapElec(allCy,PGALL,YTIME-1)+
-    V04NetNewCapElec(allCy,PGALL,YTIME-2) + V04NetNewCapElec(allCy,PGALL,YTIME-3)+
-    V04NetNewCapElec(allCy,PGALL,YTIME-4) + V04NetNewCapElec(allCy,PGALL,YTIME-5)+
-    V04NetNewCapElec(allCy,PGALL,YTIME-6) + V04NetNewCapElec(allCy,PGALL,YTIME-7) + 1e-6
-    );
-
-*' This equation calculates the variable representing the overall capacity for a specific power plant in a given country and time period .
-*' The overall capacity is a composite measure that includes the existing capacity for non-renewable power plants and the expected capacity for renewable power plants based
-*' on their average capacity factor.
-Q04CapOverall(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V04CapOverall(allCy,PGALL,YTIME)
-          =E=
-    VmCapElec(allCy,pgall,ytime)$(not PGREN(PGALL)) +
-    V04CFAvgRen(allCy,PGALL,YTIME-1) *
-    (
-      V04NetNewCapElec(allCy,PGALL,YTIME) / i04AvailRate(allCy,PGALL,YTIME) +
-      V04CapOverall(allCy,PGALL,YTIME-1) / (V04CFAvgRen(allCy,PGALL,YTIME-1) + 1e-6)
-    )$PGREN(PGALL);
 
 *' This equation calculates the electricity production from power generation plants for a specific country ,
 *' power generation plant type , and time period . The electricity production is determined based on the overall electricity
