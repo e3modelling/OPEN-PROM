@@ -9,7 +9,7 @@ V03ConsGrssInl.FX(runCy,EFS,YTIME)$DATAY(YTIME) = i03DataGrossInlCons(runCy,EFS,
 *---
 V03Transfers.FX(runCy,EFS,YTIME)$DATAY(YTIME) = i03FeedTransfr(runCy,EFS,YTIME);
 *---
-V03ProdPrimary.LO(runCy,EFS,YTIME) = 0;
+*V03ProdPrimary.LO(runCy,EFS,YTIME) = 0;
 V03ProdPrimary.L(runCy,EFS,YTIME) = i03PrimProd(runCy,EFS,"%fBaseY%") + 1;
 V03ProdPrimary.FX(runCy,EFS,YTIME)$DATAY(YTIME) = i03PrimProd(runCy,EFS,YTIME);
 *---
