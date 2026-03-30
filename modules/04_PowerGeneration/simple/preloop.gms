@@ -123,4 +123,4 @@ SUM(PGALL,VmProdElec.L(runCy,PGALL,YTIME) * V04CostHourProdInvDec.L(runCy,PGALL,
 *---
 V04SharePowPlaNewEq.LO(runCy,PGALL,YTIME) = 0;
 V04SharePowPlaNewEq.UP(runCy,PGALL,YTIME) = 1;
-V04SharePowPlaNewEq.L(runCy,PGALL,YTIME)$AN(YTIME) = 1 / card(PGALL);
+V04SharePowPlaNewEq.L(runCy,PGALL,YTIME)$AN(YTIME) = t04SharePowPlaNewEq(runCy,PGALL,YTIME);
