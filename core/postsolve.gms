@@ -11,7 +11,7 @@ V10CostRD.FX(runCy,RDTECH,YTIME)$TIME(YTIME) = V10CostRD.L(runCy,RDTECH,YTIME)$T
 $endif.curves
 * Export model results to GDX file
 $ifthen.calib %Calibration% == MatCalibration
-execute_unload "outputCalib.gdx", V04GapGenCapPowerDiff, V04CapElecNonCHP, ODummyObj, VmCapElec, VmProdElec, V04ProdElecEstCHP, V01NewRegPcTechYearly, i04MatFacPlaAvailCap, imMatrFactor, i01PremScrpFac, V04SharePowPlaNewEq, t04SharePowPlaNewEq, V04ShareTechPG, V04CostHourProdInvDec, V04ShareSatPG, V01ShareTechTr, i04AvailRate, V04DemElecTot, t01NewShareStockPC, t04DemElecTot, iCarbValYrExog;
+execute_unload "outputCalib.gdx", V03ProdPrimary, V03ConsGrssInl, V03OutTotTransf, VmImpNetEneBrnch, V04GapGenCapPowerDiff, V04CapElecNonCHP, ODummyObj, VmCapElec, VmProdElec, V04ProdElecEstCHP, V01NewRegPcTechYearly, i04MatFacPlaAvailCap, imMatrFactor, V04SharePowPlaNewEq, t04SharePowPlaNewEq, V04ShareTechPG, V04CostHourProdInvDec, V04ShareSatPG, V01ShareTechTr, V04DemElecTot, t01NewShareStockPC, iCarbValYrExog;
 $else.calib
 execute_unload "outputData.gdx", ODummyObj, VmCapElecTotEst, VmPeakLoad, VmConsFuel, VmCapElec, V04CapElecNominal, VmProdElec, VmPriceFuelSubsecCarVal, VmPriceElecIndResConsu;
 $endif.calib

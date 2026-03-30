@@ -18,7 +18,7 @@ i09ShareFuel(allCy,TSTEAM,EFS,YTIME)
 ;
 *---
 i09CaptRateSteProd(TSTEAM) = 0;
-i09ScaleEndogScrap = 20 / card(TSTEAM);
+i09ScaleEndogScrap = 40 / card(TSTEAM);
 *---
 table imDataIndTechnologyCHP(INDDOM,TSTEAM,ECONCHAR)          "Technoeconomic characteristics of industry (various)"
               IC      FC      VC      LFT USC

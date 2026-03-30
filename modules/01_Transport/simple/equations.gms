@@ -182,10 +182,10 @@ Q01ShareTechTr(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $r
       =E=
     imMatrFactor(allCy,TRANSE,TTECH,YTIME) *
     V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME-1)**(-3) /
-    sum(TTECH2$SECTTECH(TRANSE,TTECH2), 
+    (sum(TTECH2$SECTTECH(TRANSE,TTECH2), 
       imMatrFactor(allCy,TRANSE,TTECH2,YTIME) * 
-      V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1)**(-3) + 1e-6
-    );
+      V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1)**(-3)
+    ) + 1e-6);
 
 *' This equation calculates the consumption of each technology in transport sectors. It considers various factors such as the lifetime of the technology,
 *' average capacity per vehicle, load factor, scrapping rate, and specific fuel consumption. The equation also takes into account the technology's variable
@@ -264,11 +264,10 @@ Q01StockPcYearlyTech(allCy,TTECH,YTIME)$(TIME(YTIME)$runCy(allCy)$SECTTECH("PC",
 
 * This equation computes the new registrations of passenger cars per technology for each country. 
 Q01NewRegPcTechYearly(allCy,TTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-        V01NewRegPcTechYearly(allCy,TTECH,YTIME)
-                =E=
-        V01ShareTechTr(allCy,"PC",TTECH,YTIME) *
-        V01GapTranspActiv(allCy,"PC",YTIME);
-
+    V01NewRegPcTechYearly(allCy,TTECH,YTIME)
+        =E=
+    V01ShareTechTr(allCy,"PC",TTECH,YTIME) *
+    V01GapTranspActiv(allCy,"PC",YTIME);
 
 *' This equation calculates the new registrations of passenger cars for a given year. It considers the market extension due to GDP-dependent and independent factors.
 *' The new registrations are influenced by the population, GDP, and the number of scrapped vehicles from the previous year.

@@ -151,11 +151,12 @@ $include"./iPriceFuelsIntBase.csv"
 $offdelim
 ;
 *---
-table iSuppExports(allCy,EF,YTIME)	                   "Supplementary parameter for  exports (Mtoe)"		
+table imFuelTrade(allCy,IMPEXP,EF,YTIME)	                   "Imports/exports (Mtoe)"		
 $ondelim
-$include"./iSuppExports.csv"
+$include"./iDataTrade.csv"
 $offdelim
 ;
+imFuelTrade(allCy,"EXPORTS",EF,YTIME) = - imFuelTrade(allCy,"EXPORTS",EF,YTIME);
 *---
 table imPriceFuelsInt(WEF,YTIME)                      "International Fuel Prices ($2015/toe)"
 $ondelim
@@ -169,9 +170,6 @@ $include"./iDataElecInd.csv"
 $offdelim
 ;
 imPriceElecInd(allCy,"TSTE1AH2F",YTIME) = imPriceElecInd(allCy,"TSTE1AG",YTIME)
-*---
-parameter imImpExp(allCy,EFS,YTIME)	              "Imports of exporting countries usually zero (1)" ;
-imImpExp(runCy,EFS,YTIME) = 0;
 *---
 parameter imTotFinEneDemSubBaseYr(allCy,SBS,YTIME)    "Total Final Energy Demand per subsector in Base year (Mtoe)";
 *---
@@ -448,8 +446,6 @@ AG   0.2078 0.9     0.00001
 iShrHeatPumpElecCons(runCy,INDSE) = iIndCharData(INDSE,"SH_HPELC");
 iShrHeatPumpElecCons(runCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(DOMSE,"SH_HPELC");
 *---
-imFuelExprts(runCy,EFS,YTIME) = iSuppExports(runCy,EFS,YTIME);
-*---
 *Calculation of consumer size groups and their distribution function
 imNcon(TRANSE)$(sameas(TRANSE,"PC") or sameas(TRANSE,"GU")) = 10;      !! 11 different consumer size groups for cars and trucks
 imNcon(TRANSE)$(not (sameas(TRANSE,"PC") or sameas(TRANSE,"GU"))) = 1; !! 2 different consumer size groups for inland navigation, trains, busses and aviation
@@ -577,16 +573,6 @@ imCO2CaptRate(PGALL)$CCS(PGALL) = 0.90;
 imEffValueInDollars(runCy,SBS,YTIME) = 0;
 iScenarioPri(WEF,"NOTRADE",YTIME) = 0;
 *---
-table iDataImports(allCy,EF,YTIME)	          "Data for imports (Mtoe)"
-$ondelim
-$include"./iDataImports.csv"
-$offdelim
-;
-*---
-imFuelImports(runCy,EFS,YTIME)$DATAY(YTIME) = iDataImports(runCy,EFS,YTIME);
-*---
-iNetImp(runCy,EFS,YTIME) = iDataImports(runCy,"ELC",YTIME)-iSuppExports(runCy,"ELC",YTIME);
-*---
 **                   Power Generation
 table iEnvPolicies(allCy,POLICIES_SET,YTIME) "Environmental policies on emissions constraints  and subsidy on renewables (Mtn CO2)"
 $ondelim
@@ -658,8 +644,8 @@ $offtext
 
 $ELSE.calib
 variable imMatrFactor(allCy,DSBS,TECH,YTIME)    "Maturity factor per technology and subsector for all countries (1)";
-imMatrFactor.LO(runCy,DSBS,TECH,YTIME) = 0;                                          
-imMatrFactor.UP(runCy,DSBS,TECH,YTIME) = 20;
+imMatrFactor.LO(runCy,DSBS,TECH,YTIME) = 1e-6;                                          
+imMatrFactor.UP(runCy,DSBS,TECH,YTIME) = 10;
 imMatrFactor.L(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);     
 imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(not (sameas(DSBS,"PC") or sameas(DSBS,"PB") or sameas(DSBS,"GU"))) = iMatrFactorData(runCy,DSBS,TECH,YTIME);   
 imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$((sameas(DSBS,"PC") or sameas(DSBS,"PB") or sameas(DSBS,"GU")) and not SECTTECH(DSBS,TECH)) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                      
@@ -831,13 +817,15 @@ imFixOMCostTech(runCy,NENSE,TECH,YTIME)= imDataNonEneSec(NENSE,TECH,"FC");
 imVarCostTech(runCy,NENSE,TECH,YTIME) = imDataNonEneSec(NENSE,TECH,"VC");
 imUsfEneConvSubTech(runCy,NENSE,TECH,YTIME) = imDataNonEneSec(NENSE,TECH,"USC");
 imUsfEneConvSubTech(runCy,"BU","TH2F",YTIME) = 0.7;
+imUsfEneConvSubTech(runCy,"BU","TNGS",YTIME) = 0.6;
+imUsfEneConvSubTech(runCy,"BU","TGSL",YTIME) = 0.5;
 imCapCostTech(runCy,"BU","TH2F",YTIME) = 1.5 * imCapCostTech(runCy,"BU","TGDO",YTIME);
 *---
 **  CDR
-imCapCostTechMin(allCy,"DAC","HTDAC",YTIME) = 0.4;
-imCapCostTechMin(allCy,"DAC","H2DAC",YTIME) = 0.2;
-imCapCostTechMin(allCy,"DAC","LTDAC",YTIME) = 0.2;
-imCapCostTechMin(allCy,"EW","TEW",YTIME) = 0.2;
+imCapCostTechMin(allCy,"DAC","HTDAC",YTIME) = 0.3;
+imCapCostTechMin(allCy,"DAC","H2DAC",YTIME) = 0.3;
+imCapCostTechMin(allCy,"DAC","LTDAC",YTIME) = 0.3;
+imCapCostTechMin(allCy,"EW","TEW",YTIME) = 0.1;
 *---
 !!imUsfEneConvSubTech(runCy,INDSE,"THCL",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCL","USC") + 0.005 * (ord(YTIME)-14);
 imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCLCCS","USC") + 0.005 * (ord(YTIME)-14);

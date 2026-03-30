@@ -217,7 +217,7 @@ Q02IndAvrEffFinalUseful(allCy,DSBS,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not
 Q02IndxElecIndPrices(allCy,TCHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V02IndxElecIndPrices(allCy,TCHP,YTIME)
         =E=
-    VmPriceElecInd(allCy,TCHP,YTIME-1) * 
-    (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)/VmPriceFuelAvgSub(allCy,"OI",YTIME-1)) ** (-0.02) *
-    (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-2)/VmPriceFuelAvgSub(allCy,"OI",YTIME-2)) ** (-0.01) *
-    (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-3)/VmPriceFuelAvgSub(allCy,"OI",YTIME-3)) ** (-0.01);
+    VmPriceElecInd(allCy,TCHP,YTIME-1);
+    !!(VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)/VmPriceFuelAvgSub(allCy,"OI",YTIME-1)) ** (-0.01) *
+    !!(VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-2)/VmPriceFuelAvgSub(allCy,"OI",YTIME-2)) ** (-0.005) *
+    !!(VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-3)/VmPriceFuelAvgSub(allCy,"OI",YTIME-3)) ** (-0.005);
