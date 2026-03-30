@@ -102,12 +102,19 @@ i04MatFacPlaAvailCap.L(runCy,PGALL,YTIME) = iMatFacPlaAvailCapData(runCy,PGALL,Y
 $ELSE.calib
 parameter i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   "Maturity factor related to plant available capacity (1)";
 i04MatFacPlaAvailCap(runCy,PGALL,YTIME) = iMatFacPlaAvailCapData(runCy,PGALL,YTIME);
-*
-i04MatFacPlaAvailCap(runCy,"ATHBMSCCS",YTIME) = 10;
-i04MatFacPlaAvailCap('CHA',"ATHBMSCCS",YTIME) = 1;
-i04MatFacPlaAvailCap('CHA',"ATHBMSCCS",YTIME)$((ord(YTIME) > 26)) = 2;
-i04MatFacPlaAvailCap('IND',"ATHBMSCCS",YTIME) = 1;
-i04MatFacPlaAvailCap('IND',"ATHBMSCCS",YTIME)$((ord(YTIME) > 36)) = 2;
+
+i04MatFacPlaAvailCap(runCy,"ATHCOALCCS",'2024') = 1e-06;
+i04MatFacPlaAvailCap(runCy,"ATHLGNCCS",'2024') = 1e-06;
+i04MatFacPlaAvailCap(runCy,"ATHGASCCS",'2024') = 1e-06;
+i04MatFacPlaAvailCap('OAS',"ATHCOALCCS",YTIME)$((ord(YTIME) < 27)) = 1e-06;
+i04MatFacPlaAvailCap('OAS',"ATHLGNCCS",YTIME)$((ord(YTIME) < 27)) = 1e-06;
+i04MatFacPlaAvailCap('OAS',"ATHGASCCS",YTIME)$((ord(YTIME) < 27)) = 1e-06;
+* i04MatFacPlaAvailCap(runCy,"ATHBMSCCS",YTIME) = 1;
+*i04MatFacPlaAvailCap('CHA',"ATHBMSCCS",YTIME) = 1;
+i04MatFacPlaAvailCap(runCy,"ATHBMSCCS",YTIME)$((ord(YTIME) > 26)) = 1;
+*i04MatFacPlaAvailCap('IND',"ATHBMSCCS",YTIME) = 1;
+
+i04MatFacPlaAvailCap('IND',"ATHBMSCCS",YTIME)$((ord(YTIME) > 36)) = 1;
 i04MatFacPlaAvailCap('LAM',"ATHBMSCCS",YTIME) = iMatFacPlaAvailCapData('LAM',"ATHBMSCCS",YTIME);
 i04MatFacPlaAvailCap('MEA',"ATHBMSCCS",YTIME) = iMatFacPlaAvailCapData('MEA',"ATHBMSCCS",YTIME);
 i04MatFacPlaAvailCap('NEU',"ATHBMSCCS",YTIME) = iMatFacPlaAvailCapData('NEU',"ATHBMSCCS",YTIME);
@@ -117,7 +124,9 @@ i04MatFacPlaAvailCap('SSA',"ATHBMSCCS",YTIME) = iMatFacPlaAvailCapData('SSA',"AT
 i04MatFacPlaAvailCap('USA',"ATHBMSCCS",YTIME) = iMatFacPlaAvailCapData('USA',"ATHBMSCCS",YTIME);
 *
 
-i04MatFacPlaAvailCap(runCy,"ATHCOAL",YTIME) = i04MatFacPlaAvailCap(runCy,"ATHCOAL",YTIME);
+*i04MatFacPlaAvailCap(runCy,"ATHCOAL",YTIME) = i04MatFacPlaAvailCap(runCy,"ATHCOAL",YTIME);
+
+
 i04MatFacPlaAvailCap(runCy,"PGH2F",YTIME) = 0;
 $ENDIF.calib
 *---
