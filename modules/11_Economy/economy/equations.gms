@@ -116,11 +116,11 @@ $$offtext
     sum(CDRTECH$(sameas(TECH,CDRTECH)), !! CDR
       (
         VmSubsiDemTechAvail(allCy,DSBS,CDRTECH,YTIME) * 1e6 / 
-      (V06CapCDR(allCy,CDRTECH,YTIME-1) * V06CapFacNewDAC(allCy,CDRTECH,YTIME-1))
+      (V06CapCDR(allCy,CDRTECH,YTIME-1) * V06CapFacNewDAC(allCy,CDRTECH,YTIME-1) + 1e-6)
       + (1 - imCapCostTechMin(allCy,DSBS,CDRTECH,YTIME)) * V06LvlCostDAC(allCy,CDRTECH,YTIME-1)
       -
       sqrt(sqr(VmSubsiDemTechAvail(allCy,DSBS,CDRTECH,YTIME) * 1e6 / 
-      (V06CapCDR(allCy,CDRTECH,YTIME-1) * V06CapFacNewDAC(allCy,CDRTECH,YTIME-1))
+      (V06CapCDR(allCy,CDRTECH,YTIME-1) * V06CapFacNewDAC(allCy,CDRTECH,YTIME-1) + 1e-6)
       - (1 - imCapCostTechMin(allCy,DSBS,CDRTECH,YTIME)) * V06LvlCostDAC(allCy,CDRTECH,YTIME-1)))
       ) / 2
     )$(CDR(DSBS) and ord(YTIME) > 15)

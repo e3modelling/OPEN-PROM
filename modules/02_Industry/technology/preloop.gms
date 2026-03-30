@@ -26,9 +26,13 @@ $offtext
 alias(ITECH,ITECH2);
 *--- Upper bounds to prevent numerical explosion (Jacobian ~1e30 for BGR,IS,THCLCCS,2085)
 *--- Equipment capacity in Mtoe; 1e4 is far above any realistic value but prevents solver failures
-V02RemEquipCapTechSubsec.LO(runCy,DSBS,ITECH,YTIME) = 1E-6;
+*--- V02RemEquipCapTechSubsec.LO must be 0 (not 1e-6) because when base-year capacity
+*--- V02EquipCapTechSubsec(t-1) is zero the equation forces this variable to zero.
+V02RemEquipCapTechSubsec.LO(runCy,DSBS,ITECH,YTIME) = 0;
 V02RemEquipCapTechSubsec.UP(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and not TRANSE(DSBS) and not CDR(DSBS)) = 1e4;
-V02EquipCapTechSubsec.LO(runCy,DSBS,ITECH,YTIME) = 1E-6;
+*--- V02EquipCapTechSubsec.LO must be 0 (not 1e-6) because for country/subsector/tech
+*--- combos with no base-year fuel consumption the equation forces this to zero.
+V02EquipCapTechSubsec.LO(runCy,DSBS,ITECH,YTIME) = 0;
 V02EquipCapTechSubsec.UP(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and not TRANSE(DSBS) and not CDR(DSBS)) = 1e4;
 *---
 V02EquipCapTechSubsec.FX(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and not An(YTIME) and not TRANSE(DSBS) and not CCSTECH(ITECH) and not sameas(ITECH,"TELC")) = sum(EF$ITECHtoEF(ITECH,EF), imFuelConsPerFueSub(runCy,DSBS,EF,YTIME)/sum(ITECH2$(ITECHtoEF(ITECH2,EF) and SECTTECH(DSBS,ITECH2) and not CCSTECH(ITECH2)),1)) / i02Util(runCy,DSBS,ITECH,YTIME);

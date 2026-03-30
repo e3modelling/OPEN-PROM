@@ -26,7 +26,8 @@ parameter i06CapexDAC(CDRTECH)                  "CAPEX of each DAC technology ($
 HTDAC	250,
 H2DAC   1100
 LTDAC	1100,
-TEW	400
+TEW	400,
+EWDAC	500
 / ;
 
 parameter i06CapexDACMin(CDRTECH)               "Minimum possible CAPEX of each DAC technology affected by learning curve ($/tCO2)"
@@ -34,7 +35,8 @@ parameter i06CapexDACMin(CDRTECH)               "Minimum possible CAPEX of each 
 HTDAC	120,
 H2DAC	68,
 LTDAC	68,
-TEW	68
+TEW	68,
+EWDAC	80
 / ;
 
 parameter i06FixCostDAC(CDRTECH)                "Fixed and O&M costs of each DAC technology ($/tCO2)"
@@ -42,7 +44,8 @@ parameter i06FixCostDAC(CDRTECH)                "Fixed and O&M costs of each DAC
 HTDAC	72,
 H2DAC	80,
 LTDAC	180,
-TEW	600
+TEW	600,
+EWDAC	150
 / ;
 
 parameter i06FixCostDACMin(CDRTECH)             "Minimum possible Fixed and O&M costs of each DAC technology affected by learning curve ($/tCO2)"
@@ -50,7 +53,8 @@ parameter i06FixCostDACMin(CDRTECH)             "Minimum possible Fixed and O&M 
 HTDAC	40,
 H2DAC	40,
 LTDAC	30,
-TEW	30
+TEW	30,
+EWDAC	40
 / ;
 
 parameter i06VarDACMin(CDRTECH)                 "Minimum possible Variable and carbon storage costs of each DAC technology affected by learning curve ($/tCO2)"
@@ -58,7 +62,8 @@ parameter i06VarDACMin(CDRTECH)                 "Minimum possible Variable and c
 HTDAC	75,
 H2DAC	94,
 LTDAC	250,
-TEW	130
+TEW	130,
+EWDAC	100
 / ;
 
 parameter i06VarDAC(CDRTECH)                    "Variable and carbon storage costs of each DAC technology ($/tCO2)"
@@ -66,7 +71,8 @@ parameter i06VarDAC(CDRTECH)                    "Variable and carbon storage cos
 HTDAC	90,
 H2DAC	115,
 LTDAC	306,
-TEW	200
+TEW	200,
+EWDAC	180
 / ;
 
 parameter i06SubsiDAC(CDRTECH)                    "Subsidy factor applied to the carbon price"
@@ -74,7 +80,8 @@ parameter i06SubsiDAC(CDRTECH)                    "Subsidy factor applied to the
 HTDAC	1,
 H2DAC	1.8,
 LTDAC	1.8,
-TEW	1.8
+TEW	1.8,
+EWDAC	1.8
 / ;
 
 parameter i06LftExpDAC(CDRTECH)                 "Lifetime of each DAC technology (years)"
@@ -82,7 +89,8 @@ parameter i06LftExpDAC(CDRTECH)                 "Lifetime of each DAC technology
 HTDAC	25,
 H2DAC	25,
 LTDAC	20,
-TEW	15
+TEW	15,
+EWDAC	20
 / ;
 
 parameter i06ElNeedsDAC(CDRTECH)                "Specific electricity needs of DAC technologies (toe/tCO2)"
@@ -90,7 +98,8 @@ parameter i06ElNeedsDAC(CDRTECH)                "Specific electricity needs of D
 HTDAC	0.12658832,
 H2DAC	0.12658832,
 LTDAC	0.0236457,
-TEW	3
+TEW	3,
+EWDAC	1.5
 / ;
 
 parameter i06HeatNeedsDAC(CDRTECH)               "Specific heat needs of DAC technologies (toe/tCO2)"
@@ -98,7 +107,8 @@ parameter i06HeatNeedsDAC(CDRTECH)               "Specific heat needs of DAC tec
 HTDAC	1.265883,
 H2DAC	1.265883,
 LTDAC	0,
-TEW	0
+TEW	0,
+EWDAC	0
 / ;
 
 parameter i06SchedNewCapDAC(allCy,CDRTECH,YTIME)        "Scheduled new DAC capacity" /
