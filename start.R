@@ -225,13 +225,20 @@ if (task == 0) {
   saveMetadata(DevMode = 1)
   if (withRunFolder) createRunFolder(setScenarioName("DEV"))
 
-  shell(paste0(gams, " main.gms --DevMode=1 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log"))
+  if (.Platform$OS.type == "unix") {
+    cmdCommand <- paste0(gams, " main.gms --DevMode=1 --GenerateInput=off -logOption 4 -Idir=./data 2>&1")
+    system(paste0("sh -c ", shQuote(cmdCommand)))
+  } else {
+    cmdCommand <- paste0(gams, " main.gms --DevMode=1 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log")
+    shell(cmdCommand)
+  }
+
   if (withRunFolder && withReport) {
     run_path <- getwd()
     setwd("../../") # Going back to root folder
     cat("Executing the report output script\n")
-    report_cmd <- paste0("RScript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
-    shell(report_cmd)
+    report_cmd <- paste0("Rscript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
+    system(report_cmd)
     setwd(run_path)
   }
   if (withRunFolder && withSync) syncRun()
@@ -240,8 +247,14 @@ if (task == 0) {
   saveMetadata(DevMode = 1)
   if (withRunFolder) createRunFolder(setScenarioName("DEVNEWDATA"))
 
-  shell(paste0(gams, " main.gms --DevMode=1 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 | tee full.log"))
 
+  if (.Platform$OS.type == "unix") {
+    cmdCommand <- paste0(gams, " main.gms --DevMode=1 --GenerateInput=on -logOption 4 -Idir=./data 2>&1")
+    system(cmdCommand)
+  } else {
+    cmdCommand <- paste0(gams, " main.gms --DevMode=1 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 | tee full.log")
+    shell(cmdCommand)
+  }
   if (withRunFolder) {
     file.copy("data", to = "../../", recursive = TRUE) # Copying generated data to parent folder for future runs
     file.copy("targets", to = "../../", recursive = TRUE)
@@ -252,32 +265,45 @@ if (task == 0) {
   saveMetadata(DevMode = 0)
   if (withRunFolder) createRunFolder(setScenarioName("RES"))
 
-  shell(paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log"))
-
+  if (.Platform$OS.type == "unix") {
+    cmdCommand <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1")
+    system(cmdCommand)
+  } else {
+    cmdCommand <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log")
+    shell(cmdCommand)
+  }
 
   if (withRunFolder && withReport) {
     run_path <- getwd()
     setwd("../../") # Going back to root folder
     cat("Executing the report output script\n")
-    report_cmd <- paste0("RScript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
-    shell(report_cmd)
+    report_cmd <- paste0("Rscript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
+    system(report_cmd)
     setwd(run_path)
   }
   if (withRunFolder && withSync) syncRun()
+
 } else if (task == 3) {
   # Running task OPEN-PROM RESEARCH NEW DATA
   saveMetadata(DevMode = 0)
   if (withRunFolder) createRunFolder(setScenarioName("RESNEWDATA"))
 
   # NEW DATA & CALIBRATE
-  calib_cmd <- paste0(
+  if (.Platform$OS.type == "unix") {
+    calib_cmd <- paste0(
+    gams,
+    " main.gms -o mainCalib.lst --WriteGDX=off --DevMode=0 --fScenario=4 --GenerateInput=on --Calibration=MatCalibration -logOption 4 -Idir=./data 2>&1"
+    )
+    exit_code <- system(calib_cmd)
+  } else {
+    calib_cmd <- paste0(
     gams,
     " main.gms -o mainCalib.lst --WriteGDX=off --DevMode=0 --fScenario=4 --GenerateInput=on --Calibration=MatCalibration -logOption 4 -Idir=./data 2>&1 | tee fullCalib.log"
-  )
+    )
+    exit_code <- shell(calib_cmd)
+  }
   cat("Executing calibration with data generation:\n", calib_cmd, "\n")
-  
-  exit_code <- shell(calib_cmd)
-  
+
   # Check for calibration execution failure
   if (exit_code != 0) {
     cat("ERROR: GAMS calibration failed with exit code:", exit_code, "\n")
@@ -306,12 +332,15 @@ if (task == 0) {
   cat("Calibration completed successfully.\n")
 
   # RESEARCH
-  research_cmd <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log")
+  if (.Platform$OS.type == "unix") {
+    research_cmd <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1")
+    exit_code <- system(paste0("sh -c ", shQuote(research_cmd)))
+  } else {
+    research_cmd <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log")
+    exit_code <- shell(research_cmd)
+  }
   cat("Executing research run:\n", research_cmd, "\n")
-  
-  exit_code <- shell(research_cmd)
-  
-  # Check for research execution failure  
+  # Check for research execution failure
   if (exit_code != 0) {
     cat("ERROR: GAMS research execution failed with exit code:", exit_code, "\n")
     cat("Research run failed. Check full.log for details.\n")
@@ -326,26 +355,45 @@ if (task == 0) {
     run_path <- getwd()
     setwd("../../") # Going back to root folder
     cat("Executing the report output script\n")
-    report_cmd <- paste0("RScript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
-    shell(report_cmd)
+    report_cmd <- paste0("Rscript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
+    system(report_cmd)
     setwd(run_path)
   }
 
   if (withRunFolder && withSync) syncRun()
 } else if (task == 4) {
   # Debugging mode
-  shell(paste0(gams, " main.gms -logOption 4 -Idir=./data 2>&1 | tee full.log"))
+
+  if (.Platform$OS.type == "unix") {
+    cmdCommand <- paste0(gams, " main.gms -logOption 4 -Idir=./data 2>&1")
+    system(cmdCommand)
+  } else {
+    cmdCommand <- paste0(gams, " main.gms -logOption 4 -Idir=./data 2>&1 | tee full.log")
+    shell(cmdCommand)
+  }
+
 } else if (task == 5) {
   # Running task OPEN-PROM CALIBRATE
   saveMetadata(DevMode = 0)
   if (withRunFolder) createRunFolder(setScenarioName("CALIB"))
 
-  shell(
-    paste0(
+  cmdCommand <- paste0(
       gams,
       " main.gms -o mainCalib.lst --DevMode=0 --Calibration=MatCalibration --fScenario=4 -logOption 4 -Idir=./data 2>&1 | tee fullCalib.log"
     )
-  )
+  if (.Platform$OS.type == "unix") {
+    cmdCommand <- paste0(
+      gams,
+      " main.gms -o mainCalib.lst --DevMode=0 --Calibration=MatCalibration --fScenario=4 -logOption 4 -Idir=./data 2>&1"
+    )
+    system(cmdCommand)
+  } else {
+    cmdCommand <- paste0(
+      gams,
+      " main.gms -o mainCalib.lst --DevMode=0 --Calibration=MatCalibration --fScenario=4 -logOption 4 -Idir=./data 2>&1 | tee fullCalib.log"
+    )
+    shell(cmdCommand)
+  }
 
   if (withRunFolder && withSync) syncRun()
 
@@ -361,14 +409,14 @@ if (task == 0) {
 
   run_path <- getwd()
   print(run_path)
-  report_cmd <- paste0("RScript ./findCarbonPrice.R ", run_path)
-  shell(report_cmd)
+  report_cmd <- paste0("Rscript ./findCarbonPrice.R ", run_path)
+  system(report_cmd)
 
   if (withRunFolder && withReport) {
     setwd("../../") # Going back to root folder
     cat("Executing the report output script\n")
-    report_cmd <- paste0("RScript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
-    shell(report_cmd)
+    report_cmd <- paste0("Rscript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
+    system(report_cmd)
     setwd(run_path)
   }
   if (withRunFolder && withSync) syncRun()
