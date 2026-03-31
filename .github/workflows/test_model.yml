@@ -40,17 +40,17 @@ jobs:
           
       - name: Download Targets
         env:
-          DATASET: ${{ secrets.TARGETS }}
+          TARGETS: ${{ secrets.TARGETS }}
         run: |
           @"
           print("Getting targets for GitHub Action")
-          url <- commandArgs(trailingOnly = TRUE)
+          urltargets <- commandArgs(trailingOnly = TRUE)
           fname <- 'ghaction_targets.tgz'
-          download.file(url, fname, mode="wb")
+          download.file(urltargets, fname, mode="wb")
           utils::untar(fname, exdir = "./targets")
-          "@ | Out-File -FilePath dl_data.R
-          Rscript dl_data.R $env:TARGETS
-          
+          "@ | Out-File -FilePath dl_targets.R
+          Rscript dl_targets.R $env:TARGETS
+  
       - name: Setup GAMS
         run: |
           $url = "https://www.dropbox.com/scl/fi/rpy9ylitovj9njl8lyo0p/gams_installer.exe?rlkey=d4zfuyceji09dvor7hq54ichb&e=1&st=m9bd86wz&dl=1"

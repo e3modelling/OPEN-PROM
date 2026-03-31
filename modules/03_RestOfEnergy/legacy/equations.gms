@@ -173,7 +173,8 @@ Q03ProdPrimary(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q03Exp(allCy,EFS,YTIME)$(TIME(YTIME) $runCy(allCy))..
     V03Exp(allCy,EFS,YTIME)
       =E=
-    0;
+    i03RateExpTotImp(allCy,EFS,"%fBaseY%") *
+    SUM(runCy2, V03Imp(runCy2,EFS,YTIME-1));
 
 *' The equation computes the fake imports for a specific energy branch 
 *' in a given scenario and year. The calculation is based on different conditions for various energy branches,
@@ -183,9 +184,8 @@ Q03Exp(allCy,EFS,YTIME)$(TIME(YTIME) $runCy(allCy))..
 Q03Imp(allCy,EFS,YTIME)$(TIME(YTIME) $runCy(allCy))..
     V03Imp(allCy,EFS,YTIME)
         =E=
-    0;!!V03Imp(allCy,EFS,"%fBaseY%") / !!(VmConsFinEneCountry(allCy,EFS,"%fBaseY%") + VmConsFinNonEne(allCy,EFS,"%fBaseY%") + 1e-6) *
-    !!(V03ConsGrssInl(allCy,EFS,"%fBaseY%") + 1e-6) * (V03ConsGrssInl(allCy,EFS,YTIME-1) + 1e-6);
-    !!(VmConsFinEneCountry(allCy,EFS,YTIME) + VmConsFinNonEne(allCy,EFS,YTIME) + 1e-6);
+    i03RateImpGrossInlCons(allCy,EFS,"%fBaseY%") *
+    V03ConsGrssInl(allCy,EFS,YTIME);
 
 *' The equation computes the net imports for a specific energy branch 
 *' in a given scenario and year. It subtracts the fake exports from the fake imports for
@@ -193,8 +193,8 @@ Q03Imp(allCy,EFS,YTIME)$(TIME(YTIME) $runCy(allCy))..
 Q03ImpNetEneBrnch(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmImpNetEneBrnch(allCy,EFS,YTIME)
         =E=
-    i03RateImpGrossInlCons(allCy,EFS,"%fBaseY%") *
-    V03ConsGrssInl(allCy,EFS,YTIME);
+    V03Imp(allCy,EFS,YTIME) -
+    V03Exp(allCy,EFS,YTIME);
                                
 *' The equation calculates the final energy own consumption in the energy sector.
 *' It considers the rate of energy branch consumption over the total transformation output.

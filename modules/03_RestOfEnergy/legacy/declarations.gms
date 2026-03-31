@@ -11,6 +11,7 @@ i03ResHcNgOilPrProd(allCy,EF,YTIME)	              "Residuals for Hard Coal, Natu
 i03RatioImpFinElecDem(allCy,YTIME)	              "Ratio of imports in final electricity demand (1)"
 i03RatioPrimaryFuels(allCy,EFS,YTIME)
 i03InputEffSupply(allCy,SSBS,EFS,YTIME)
+i03RateExpTotImp(allCy,EFS,YTIME)
 ;
 
 Equations
