@@ -13,6 +13,9 @@ iCarbValYrExog(allCy,ytime)	                               "Carbon value for eac
 iShrHeatPumpElecCons(allCy,SBS)	                           "Share of heat pump electricity consumption in total substitutable electricity (1)"						 			
 iTranfOutGasworks(allCy,EF,YTIME)	                       "Transformation Output from Gasworks, Blast Furnances and Briquetting plants (Mtoe)"	
 ODummyObj                                                  "Parameter saving objective function"
+VmCarVal(allCy,NAP,YTIME)                                  "Carbon prices for all countries (US$2015/tn CO2)"
+VmRenValue(YTIME)                                          "Renewable value (US$2015/KWh)"
+VmElecConsHeatPla(allCy,DSBS,YTIME)                        "Electricity consumed in heatpump plants (Mtoe)"
 
 *'                **Interdependent Parameters**
 imCGI(allCy,YTIME)                                         "Capital Goods Index (defined as CGI(Scenario)/CGI(Baseline)) (1)"
@@ -63,12 +66,9 @@ Variables
 
 *' *** Miscellaneous
 vDummyObj                                                  "Dummy maximisation variable (1)"
-VmElecConsHeatPla(allCy,DSBS,YTIME)                        "Electricity consumed in heatpump plants (Mtoe)"
 ;
 
 Positive Variables
-VmCarVal(allCy,NAP,YTIME)                                  "Carbon prices for all countries (US$2015/tn CO2)"
-VmRenValue(YTIME)                                          "Renewable value (US$2015/KWh)"
 common(allCy,TRANSE,YTIME)
 ;
 

@@ -86,7 +86,7 @@ V01CostFuel.FX(runCy,TRANSE,TTECH,YTIME)$DATAY(YTIME) =
     VmPriceFuelSubsecCarVal.L(runCy,TRANSE,"ELC",YTIME)
   )$PLUGIN(TTECH) +
   imVarCostTech(runCy,TRANSE,TTECH,YTIME) +
-  (VmRenValue.L(YTIME)/1000)$(not RENEF(TTECH)) 
+  (VmRenValue(YTIME)/1000)$(not RENEF(TTECH)) 
 ) *
 (
   1e-3 * V01ActivPassTrnsp.L(runCy,TRANSE,YTIME)$sameas(TRANSE,"PC") + !! aviation should be divided by 1000

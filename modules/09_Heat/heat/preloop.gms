@@ -37,20 +37,19 @@ VmProdSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) = i04DataHeatProd(runCy,TSTEAM,YTI
 *---
 V09CaptRateSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) = i09CaptRateSteProd(TSTEAM);
 *---
-V09CostCapProdSte.LO(runCy,TSTEAM,YTIME) = 0;
-V09CostCapProdSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) =
+p09CostCapProdSte(runCy,TSTEAM,YTIME) =
 (
-  imDisc(runCy,"STEAMP",YTIME) * 
+  imDisc(runCy,"STEAMP",YTIME) *
   exp(imDisc(runCy,"STEAMP",YTIME)* i09ProdLftSte(TSTEAM)) /
-  (exp(imDisc(runCy,"STEAMP",YTIME) * i09ProdLftSte(TSTEAM))-1) * 
+  (exp(imDisc(runCy,"STEAMP",YTIME) * i09ProdLftSte(TSTEAM))-1) *
   (
     i09CostInvCostSteProd(TSTEAM,YTIME) * imCGI(runCy,YTIME) +
     i09CostFixOMSteProd(TSTEAM,YTIME)
   )
 ) / (i09PowToHeatRatio(TSTEAM,YTIME) + 1$TDHP(TSTEAM)) /
 (
-  i09AvailRateSteProd(TSTEAM,YTIME) * 
-  smGwToTwhPerYear(YTIME) * 
+  i09AvailRateSteProd(TSTEAM,YTIME) *
+  smGwToTwhPerYear(YTIME) *
   smTWhToMtoe * 1e3
 );
 *---
@@ -60,11 +59,11 @@ V09CostVarProdSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) =
 sum(EF$TSTEAMTOEF(TSTEAM,EF),
   (
     VmPriceFuelSubsecCarVal.L(runCy,"STEAMP",EF,YTIME) +
-    V09CaptRateSte.L(runCy,TSTEAM,YTIME) * 
-    (imCo2EmiFac(runCy,"STEAMP",EF,YTIME) + 4.17$(sameas("BMSWAS", EF))) * 
+    V09CaptRateSte.L(runCy,TSTEAM,YTIME) *
+    (imCo2EmiFac(runCy,"STEAMP",EF,YTIME) + 4.17$(sameas("BMSWAS", EF))) *
     VmCstCO2SeqCsts.L(runCy,YTIME) * 1e-3 +
     (1-V09CaptRateSte.L(runCy,TSTEAM,YTIME)) * 1e-3 * (imCo2EmiFac(runCy,"STEAMP",EF,YTIME)) *
-    sum(NAP$NAPtoALLSBS(NAP,"STEAMP"),VmCarVal.L(runCy,NAP,YTIME))
+    sum(NAP$NAPtoALLSBS(NAP,"STEAMP"),VmCarVal(runCy,NAP,YTIME))
   )
 ) / SUM(STECH$sameas(STECH,TSTEAM),imPlantEffByType(runCy,STECH,"effHeat",YTIME)) +
 i09CostVOMSteProd(TSTEAM,YTIME) * 1e-3 -!!/ smTWhToMtoe / SUM(TCHP$sameas(TCHP,TSTEAM),VmPriceElecInd.L(runCy,TCHP,YTIME)) -
@@ -76,8 +75,8 @@ i09CostVOMSteProd(TSTEAM,YTIME) * 1e-3 -!!/ smTWhToMtoe / SUM(TCHP$sameas(TCHP,T
 *---
 V09CostProdSte.LO(runCy,TSTEAM,YTIME) = 0;
 V09CostProdSte.L(runCy,TSTEAM,YTIME) = 1;
-V09CostProdSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) = 
-V09CostCapProdSte.L(runCy,TSTEAM,YTIME) + V09CostVarProdSte.L(runCy,TSTEAM,YTIME);
+V09CostProdSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) =
+p09CostCapProdSte(runCy,TSTEAM,YTIME) + V09CostVarProdSte.L(runCy,TSTEAM,YTIME);
 *---
 VmCostAvgProdSte.LO(runCy,YTIME) = 0;
 VmCostAvgProdSte.L(runCy,YTIME) = 1;

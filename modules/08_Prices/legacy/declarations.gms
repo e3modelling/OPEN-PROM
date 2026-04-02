@@ -1,5 +1,8 @@
 *' @title Prices Declarations
 *' @code
+Parameters
+P08FuelPriSubNoCarb(allCy,SBS,EF,YTIME)	                   "Fuel prices per subsector and fuel  without carbon value (kUS$2015/toe)"
+;
 
 Equations
 *' *** Prices
@@ -25,5 +28,5 @@ VmPriceFuelAvgSub(allCy,DSBS,YTIME)                        "Average fuel prices 
 VmPriceElecInd(allCy,TCHP,YTIME)                                "Electricity index - a function of industry price (1)"
 
 *' *** Miscellaneous
-V08FuelPriSubNoCarb(allCy,SBS,EF,YTIME)	                   "Fuel prices per subsector and fuel  without carbon value (kUS$2015/toe)"
+
 ;

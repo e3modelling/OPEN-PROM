@@ -5,7 +5,6 @@ Equations
 Q09ScrapRate(allCy,TSTEAM,YTIME)
 Q09DemGapSte(allCy,YTIME)
 Q09CostVarProdSte(allCy,TSTEAM,YTIME)
-Q09CostCapProdSte(allCy,TSTEAM,YTIME)
 Q09CostProdSte(allCy,TSTEAM,YTIME)
 Q09GapShareSte(allCy,TSTEAM,YTIME)
 Q09CaptRateSte(allCy,TSTEAM,YTIME)
@@ -18,11 +17,14 @@ Q09CostAvgProdSte(allCy,YTIME)
 Q09ConsFuelSteProd(allCy,STEMODE,EFS,YTIME)
 ;
 
+Parameters
+p09CostCapProdSte(allCy,TSTEAM,YTIME)         "Capital cost of steam generation technologies (kUS$2015/toe)"
+;
+
 Variables
 V09ScrapRate(allCy,TSTEAM,YTIME)
 V09DemGapSte(allCy,YTIME)
 V09CostVarProdSte(allCy,TSTEAM,YTIME)         "Variable cost of steam generation technologies (kUS$2015/toe)"
-V09CostCapProdSte(allCy,TSTEAM,YTIME)         "Capex and O&M costs of steam generation technologies (kUS$2015/toe)"
 V09CostProdSte(allCy,TSTEAM,YTIME)            "Cost of steam production (kUS$2015/toe)"
 V09GapShareSte(allCy,TSTEAM,YTIME)
 V09CaptRateSte(allCy,TSTEAM,YTIME)

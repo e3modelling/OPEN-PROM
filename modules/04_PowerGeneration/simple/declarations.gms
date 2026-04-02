@@ -9,12 +9,11 @@ i04DecInvPlantSched(allCy,PGALL,YTIME)             "Decided plant investment sch
 i04MxmShareChpElec(allCy,YTIME)	                   "Maximum share of CHP electricity in a country (1)"
 i04ShareFuels(allCy,PGALL,EFS)
 i04Util(allCy,PGALL,YTIME)                         "Utilisation rate of power plants"
-i03RateImpGrossInlCons(allCy,EFS,YTIME)            "Rate of Imports in Gross inland consumption (1)"
+P04CapElecNominal(allCy,PGALL,YTIME)	                   "Nominal electricity generation plants capacity (GW)"
 ;
 
 Equations
 *' *** Power Generation
-Q04CapElecNominal(allCy,PGALL,YTIME)	                   "Compute nominal electricity generation capacity"
 Q04ShareTechPG(allCy,PGALL,YTIME)                          "Share of all technologies in the electricity mixture"
 Q04CostHourProdInvDec(allCy,PGALL,YTIME)                    "Compute production cost used in investment decisions"
 Q04CostVarTech(allCy,PGALL,YTIME)	                       "Compute variable cost of technology" 	
@@ -51,7 +50,6 @@ Q04ConsFuelElecProd(allCy,EFS,YTIME)
 
 Variables
 *' *** Power Generation Variables
-V04CapElecNominal(allCy,PGALL,YTIME)	                   "Nominal electricity generation plants capacity (GW)"
 V04ShareTechPG(allCy,PGALL,YTIME)                          "Share of all technologies in the electricity mixture"
 V04CostHourProdInvDec(allCy,PGALL,YTIME)                    "Production cost of technology (US$2015/KWh)"
 V04CostVarTech(allCy,PGALL,YTIME)	                       "Variable cost of technology (US$2015/KWh)"	
@@ -61,7 +59,6 @@ V04GapGenCapPowerDiff(allCy,YTIME)	                       "Gap in total generati
 *v04PotRenMinAllow(allCy,PGRENEF,YTIME)	                   "Minimum allowed renewable potential (GW)"		
 V04ShareSatPG(allCy,PGALL,YTIME)	                           "Saturation for electricity mixture penetration of RES technologies"	
 V04SharePowPlaNewEq(allCy,PGALL,YTIME)	                   "Power plant share in new equipment (1)"			
-V04SortPlantDispatch(allCy,PGALL,YTIME)	                   "Power plants sorting according to variable cost to decide the plant dispatching (1)"
 V04NewCapElec(allCy,PGALL,YTIME)	                       "The new capacity added every year (GW)"	
 V04NetNewCapElec(allCy,PGALL,YTIME)	                       "Yearly difference in installed capacity (MW)"	
 *v04SecContrTotCHPProd(allCy,SBS,CHP,YTIME)                "Contribution of each sector in total CHP production (1)"	

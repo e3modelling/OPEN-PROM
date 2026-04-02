@@ -1,12 +1,15 @@
 *' @title Hydrogen Declarations
 *' @code
 
+Parameters
+P05ScrapLftH2Prod(allCy, H2TECH, YTIME)           "Scrapping of equipment due to lifetime (normal scrapping)"
+;
+
 Variables
 V05GapShareH2Tech1(allCy, H2TECH, YTIME)          "Shares of H2 production technologies in new market competition 1"
 V05GapShareH2Tech2(allCy, H2TECH, YTIME)          "Shares of H2 production technologies in new market competition 2"
 V05CapScrapH2ProdTech(allCy, H2TECH, YTIME)       "Decommissioning of capacity by H2 production technology"
 V05PremRepH2Prod(allCy, H2TECH, YTIME)            "Premature replacement of H2 production technologies"
-V05ScrapLftH2Prod(allCy, H2TECH, YTIME)           "Scrapping of equipment due to lifetime (normal scrapping)"
 V05DemGapH2(allCy, YTIME)                         "Demand for H2 to be covered by new equipment in mtoe"
 V05CostProdH2Tech(allCy, H2TECH, YTIME)           "Hydrogen production cost per technology in US$2015 per toe of hydrogen"
 V05CostVarProdH2Tech(allCy, H2TECH, YTIME)        "Variable cost (including fuel cost) for hydrogen production by technology in US$2015 per toe"
@@ -50,7 +53,6 @@ Q05GapShareH2Tech1(allCy, H2TECH, YTIME)          "Equation for calculating the 
 Q05GapShareH2Tech2(allCy, H2TECH, YTIME)          "Equation for calculating the shares of technologies in hydrogen gap using Weibull equations 2"
 Q05CapScrapH2ProdTech(allCy, H2TECH, YTIME)       "Equation for decommissioning of capacity by H2 production technology"
 Q05PremRepH2Prod(allCy, H2TECH, YTIME)            "Equation for premature replacement of H2 production technologies"
-Q05ScrapLftH2Prod(allCy, H2TECH, YTIME)           "Equation for scrapping of equipment due to lifetime (normal scrapping)"
 Q05DemGapH2(allCy, YTIME)                         "Equation for gap in hydrogen demand"
 Q05CostProdH2Tech(allCy, H2TECH, YTIME)           "Equation for hydrogen production cost per technology"
 Q05CostVarProdH2Tech(allCy, H2TECH, YTIME)        "Equation for variable cost (including fuel cost) for hydrogen production by technology in Euro per toe"

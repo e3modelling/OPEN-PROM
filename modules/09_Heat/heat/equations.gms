@@ -75,28 +75,10 @@ Q09CostVarProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       SUM(TCHP$sameas(TCHP,TSTEAM),VmPriceElecInd(allCy,TCHP,YTIME))
     )$TCHP(TSTEAM);
 
-Q09CostCapProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V09CostCapProdSte(allCy,TSTEAM,YTIME)
-        =E=
-    (
-      imDisc(allCy,"STEAMP",YTIME) * 
-      exp(imDisc(allCy,"STEAMP",YTIME)* i09ProdLftSte(TSTEAM)) /
-      (exp(imDisc(allCy,"STEAMP",YTIME) * i09ProdLftSte(TSTEAM))-1) * 
-      (
-        i09CostInvCostSteProd(TSTEAM,YTIME) * imCGI(allCy,YTIME) +
-        i09CostFixOMSteProd(TSTEAM,YTIME)
-      )
-    ) / (i09PowToHeatRatio(TSTEAM,YTIME) + 1$TDHP(TSTEAM)) /
-    (
-      i09AvailRateSteProd(TSTEAM,YTIME) * 
-      smGwToTwhPerYear(YTIME) * 
-      smTWhToMtoe * 1e3
-    );
-
 Q09CostProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V09CostProdSte(allCy,TSTEAM,YTIME)
         =E=
-    V09CostCapProdSte(allCy,TSTEAM,YTIME) +
+    p09CostCapProdSte(allCy,TSTEAM,YTIME) +
     V09CostVarProdSte(allCy,TSTEAM,YTIME);
 
 Q09CostAvgProdSte(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..

@@ -30,21 +30,6 @@ Q05DemSecH2(allCy,SBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmConsFuelCDRProd(allCy,"H2F",YTIME)$sameas("EW",SBS) +
     VmConsFuelElecProd(allCy,"H2F",YTIME)$sameas("PG",SBS);
 
-*' This equation defines the amount of hydrogen production capacity that is scrapped due to the expiration of the useful life of plants.
-*' It considers the remaining lifetime of hydrogen production facilities and the impact of past production gaps.
-Q05ScrapLftH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-        V05ScrapLftH2Prod(allCy,H2TECH,YTIME)
-         =E=
-        (1/i05ProdLftH2(H2TECH,YTIME))$(ord(YTIME)>14+i05ProdLftH2(H2TECH,YTIME))
-$ontext
-         (
-         V05GapShareH2Tech1(allCy,H2TECH,YTIME-i05ProdLftH2(H2TECH,YTIME)) *
-         V05DemGapH2(allCy,YTIME-i05ProdLftH2(H2TECH,YTIME)) /
-         (VmProdH2(allCy,H2TECH,YTIME-1) + 1e-6)
-         )$(ord(YTIME)>14+i05ProdLftH2(H2TECH,YTIME))
-$offtext
-;
-
 *' This equation models the premature replacement of hydrogen production capacity. It adjusts for the need to replace aging
 *' or inefficient hydrogen production technologies before their expected end of life based on economic factors such as cost,
 *' technological progress, and demand shifts.
@@ -72,7 +57,7 @@ Q05PremRepH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$H2TECHPM(H2TECH
 Q05CapScrapH2ProdTech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V05CapScrapH2ProdTech(allCy,H2TECH,YTIME)
       =E=
-    1 - (1-V05ScrapLftH2Prod(allCy,H2TECH,YTIME)) *
+    1 - (1-P05ScrapLftH2Prod(allCy,H2TECH,YTIME)) *
     V05PremRepH2Prod(allCy,H2TECH,YTIME);
 
 *' The hydrogen demand gap equation defines the difference between the total hydrogen demand (calculated in Q05DemTotH2) and

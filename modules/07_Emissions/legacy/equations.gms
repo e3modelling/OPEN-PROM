@@ -52,18 +52,6 @@ q07ExpendHouseEne(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 VmConsElecNonSubIndTert --> NO LONGER                                          
 $offtext
 
-Q07GrossEmissCO2Demand(allCy,DSBS,YTIME)$(TIME(YTIME)$runCy(allCy))..
-    V07GrossEmissCO2Demand(allCy,DSBS,YTIME)
-        =E=   
-    SUM(EFS,
-      (
-        VmConsFuel(allCy,DSBS,EFS,YTIME) + 
-        SUM(TRANSE$sameas(TRANSE,DSBS), VmDemFinEneTranspPerFuel(allCy,TRANSE,EFS,YTIME)) +
-        sum(DACTECH$TECHtoEF(DACTECH,EFS),VmConsFuelTechCDRProd(allCy,DACTECH,EFS,YTIME))$(sameas(DSBS,"DAC")) +
-        VmConsFuelTechCDRProd(allCy,"TEW",EFS,YTIME)$(sameas(DSBS,"EW"))
-      ) *
-      imCo2EmiFac(allCy,DSBS,EFS,YTIME)
-    );
 
 Q07GrossEmissCO2Supply(allCy,SSBS,YTIME)$(TIME(YTIME)$runCy(allCy))..
     V07GrossEmissCO2Supply(allCy,SSBS,YTIME)
@@ -75,32 +63,3 @@ Q07GrossEmissCO2Supply(allCy,SSBS,YTIME)$(TIME(YTIME)$runCy(allCy))..
       ) * imCo2EmiFac(allCy,SSBS,EFS,YTIME)
     );
     
-*' This equation calculates the total absolute abatement of non-CO2 emissions for a specific source, country, and time period.
-*' The determination is based on the Marginal Abatement Cost (MAC) curves, the exogenous carbon price, and specific unit conversion factors. The equation 
-*' identifies the maximum abatement potential by scanning the MAC curve steps and selecting the highest reduction level where the implementation cost is less than or
-*' equal to the adjusted carbon price. This ensures that the model adopts all abatement measures that are economically viable given the current carbon price.
-Q07RedAbsBySrcRegTim(E07SrcMacAbate, allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V07RedAbsBySrcRegTim(E07SrcMacAbate, allCy, YTIME)
-    =E=
-    smax(E07MAC$(p07MacCost(E07MAC) <= iCarbValYrExog(allCy, YTIME) * p07UnitConvFactor(E07SrcMacAbate)), 
-         i07DataCh4N2OFMAC(allCy, E07SrcMacAbate, E07MAC, YTIME));
-
-*' This equation calculates the Total Cumulative Cost of all abatement actions combined for non-CO2 sources in a specific country and time period.
-*' The calculation is based on the marginal reduction steps derived from the MAC curves and their corresponding implementation costs. The equation 
-*' computes the total investment required by summing the cost of each individual abatement step (marginal reduction * step cost * cost correction) for all steps that fall
-*' strictly below or equal to the adjusted carbon price. This represents the area under the MAC curve up to the implementation point. 
-*' The 'p07CostCorrection' handles the GWP conversion for F-gases to ensure we are paying for 'C-equivalents', not 'tons of gas'. Output units: [Mil $2015] 
-Q07CostAbateBySrcRegTim(E07SrcMacAbate, allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V07CostAbateBySrcRegTim(E07SrcMacAbate, allCy, YTIME)
-    =E=
-    sum(E07MAC$(p07MacCost(E07MAC) <= iCarbValYrExog(allCy, YTIME) * p07UnitConvFactor(E07SrcMacAbate)), 
-        p07MarginalRed(allCy, E07SrcMacAbate, E07MAC, YTIME) * p07MacCost(E07MAC) * p07CostCorrection(E07SrcMacAbate));
-
-*' This equation calculates the actual remaining non-CO2 emissions for a specific source, country, and time period after mitigation.
-*' The calculation is based on the exogenous baseline emissions projection (what emissions would be without action) and the total absolute abatement calculated
-*' in the previous step. The equation essentially subtracts the economically feasible abatement quantity from the baseline emissions to derive the final
-*' volume of emissions released into the atmosphere. Output units,  CH4 and N20: Mt C-eq, F-gases: kt-gas
-Q07EmiActBySrcRegTim(E07SrcMacAbate, allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V07EmiActBySrcRegTim(E07SrcMacAbate, allCy, YTIME)
-    =E=
-    i07DataCh4N2OFEmis(allCy, E07SrcMacAbate, YTIME)  - V07RedAbsBySrcRegTim(E07SrcMacAbate, allCy, YTIME);

@@ -153,7 +153,7 @@ QTrnspActiv            ,Q01ActivPassTrnsp          ,TRANSE$(TRANP(TRANSE)),Trans
 QScrap               ,Q01NumPcScrap            ,,Transport
 " VScrap(runCy,YTIME)"," V01NumPcScrap(runCy,YTIME)",,Transport
 QLevl               ,Q01PcOwnPcLevl            ,,Transport
-" VLamda(runCy,YTIME)"," V01PcOwnPcLevl(runCy,YTIME)",,Transport
+" VLamda(runCy,YTIME)"," P01PcOwnPcLevl(runCy,YTIME)",,Transport
 QScrRate              ,Q01RateScrPc             ,,Transport
 " VScrRate(runCy,YTIME)"," V01RateScrPc(runCy,YTIME)",,Transport
 QElecConsAll            ,Q04ConsElec             ,DSBS,Transport
@@ -237,7 +237,7 @@ QGrssInCons            ,Q03ConsGrssInl            ,EFS,REST OF ENERGY BALANCE SE
 QPrimProd             ,Q03ProdPrimary            ,PPRODEF,REST OF ENERGY BALANCE SECTORS
 " VPrimProd(runCy,PPRODEF,YTIME)"," V03ProdPrimary(runCy,PPRODEF,YTIME)",PPRODEF,REST OF ENERGY BALANCE SECTORS
 QFakeExp              ,Q03Exp                ,EFS$(IMPEF(EFS)),REST OF ENERGY BALANCE SECTORS
-" VExportsFake(runCy,EFS,YTIME)"," V03Exp(runCy,EFS,YTIME)",EFS$(IMPEF(EFS)),REST OF ENERGY BALANCE SECTORS
+" VExportsFake(runCy,EFS,YTIME)"," P03Exp(runCy,EFS,YTIME)",EFS$(IMPEF(EFS)),REST OF ENERGY BALANCE SECTORS
 QFakeImprts            ,Q03Imp                ,EFS$(IMPEF(EFS)),REST OF ENERGY BALANCE SECTORS
 " VFkImpAllFuelsNotNatGas(runCy,EFS,YTIME)"," V03Imp(runCy,EFS,YTIME)",EFS$(IMPEF(EFS)),REST OF ENERGY BALANCE SECTORS
 QNetImports            ,Q03ImpNetEneBrnch          ,EFS,REST OF ENERGY BALANCE SECTORS

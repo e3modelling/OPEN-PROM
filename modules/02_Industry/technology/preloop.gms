@@ -73,8 +73,8 @@ V02VarCostTech.FX(runCy,DSBS,ITECH,YTIME)$(DATAY(YTIME) and not TRANSE(DSBS) and
       VmPriceFuelSubsecCarVal.L(runCy,DSBS,EF,YTIME) +
       imCO2CaptRateIndustry(runCy,ITECH,YTIME) * VmCstCO2SeqCsts.L(runCy,YTIME) * 1e-3 * (imCo2EmiFac(runCy,DSBS,EF,YTIME) + 4.17$(sameas("BMSWAS", EF))) +
       (1-imCO2CaptRateIndustry(runCy,ITECH,YTIME)) * 1e-3 * (imCo2EmiFac(runCy,DSBS,EF,YTIME) + 4.17$(sameas("BMSWAS", EF))) *
-      (sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal.L(runCy,NAP,YTIME))) +
-      VmRenValue.L(YTIME)$(not RENEF(ITECH) and not NENSE(DSBS)) !! needs change of units
+      (sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(runCy,NAP,YTIME))) +
+      VmRenValue(YTIME)$(not RENEF(ITECH) and not NENSE(DSBS)) !! needs change of units
     ) +
     imVarCostTech(runCy,DSBS,ITECH,YTIME) / sUnitToKUnit
   ) / imUsfEneConvSubTech(runCy,DSBS,ITECH,YTIME);

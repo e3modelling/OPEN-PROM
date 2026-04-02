@@ -295,7 +295,7 @@ Parameter,IntPriceBPRN,REMOVED FROM OPEN-PROM,,,,
 Parameter,IntPricePRN,REMOVED FROM OPEN-PROM,,,,
 Parameter,kappa,iPriceReform,Price reformation,"CYall,SBS,EF,YTIME","allCy,SBS,EF,YTIME",POWER GENERATION SECTOR
 Parameter,KAPPA1,iDataPriceReform,Price reformation,"CYall,AGSECT,EF,YTIME","allCy,AGSECT,EF,YTIME",POWER GENERATION SECTOR
-Variable,L,V01PcOwnPcLevl,Ratio of car ownership over saturation car ownership (1),"CYall,YTIME","allCy,YTIME",TRANSPORT SECTOR VARIABLES
+Variable,L,P01PcOwnPcLevl,Ratio of car ownership over saturation car ownership (1),"CYall,YTIME","allCy,YTIME",TRANSPORT SECTOR VARIABLES
 Variable,LAMBDA,V04Lambda,Parameter for load curve construction,"CYall,YTIME","allCy,YTIME",POWER GENERATION SECTOR
 Variable,LFT,VMVLft,Lifetime of technologies (years),"CYall,DSBS,EF,YTIME","allCy,DSBS,EF,YTIME",PRICES
 Parameter,LOADF,i04LoadFacElecDem,Load factor of electricity demand per sector,"CYaLL,DSBS,YTIME","allCy,DSBS,YTIME",Power Generation Parameters

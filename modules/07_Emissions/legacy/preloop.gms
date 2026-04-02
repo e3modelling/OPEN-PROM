@@ -25,10 +25,15 @@ SUM(EFS,
   imCo2EmiFac(runCy,"PG",EFS,YTIME)
 );
 *---
-V07GrossEmissCO2Demand.FX(runCy,DSBS,YTIME)$DATAY(YTIME) =   
-SUM(EF,
-  imFuelConsPerFueSub(runCy,DSBS,EF,YTIME) *
-  imCo2EmiFac(runCy,DSBS,EF,YTIME)
-);
-*---
-V07EmiActBySrcRegTim.FX(E07SrcMacAbate, allCy, YTIME)$DATAY(YTIME) = i07DataCh4N2OFEmis(allCy,E07SrcMacAbate,YTIME) ;
+P07RedAbsBySrcRegTim(E07SrcMacAbate, allCy, YTIME)$(TIME(YTIME)$(runCy(allCy))) =
+    smax(E07MAC$(p07MacCost(E07MAC) <= iCarbValYrExog(allCy, YTIME) * p07UnitConvFactor(E07SrcMacAbate)),
+         i07DataCh4N2OFMAC(allCy, E07SrcMacAbate, E07MAC, YTIME));
+
+P07CostAbateBySrcRegTim(E07SrcMacAbate, allCy, YTIME)$(TIME(YTIME)$(runCy(allCy))) =
+    sum(E07MAC$(p07MacCost(E07MAC) <= iCarbValYrExog(allCy, YTIME) * p07UnitConvFactor(E07SrcMacAbate)),
+        p07MarginalRed(allCy, E07SrcMacAbate, E07MAC, YTIME) * p07MacCost(E07MAC) * p07CostCorrection(E07SrcMacAbate));
+
+P07EmiActBySrcRegTim(E07SrcMacAbate, allCy, YTIME)$(TIME(YTIME)$(runCy(allCy))) =
+    i07DataCh4N2OFEmis(allCy, E07SrcMacAbate, YTIME)  - P07RedAbsBySrcRegTim(E07SrcMacAbate, allCy, YTIME);
+    
+P07EmiActBySrcRegTim(E07SrcMacAbate, allCy, YTIME)$DATAY(YTIME) = i07DataCh4N2OFEmis(allCy,E07SrcMacAbate,YTIME) ;
