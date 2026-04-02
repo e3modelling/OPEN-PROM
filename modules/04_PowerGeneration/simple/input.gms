@@ -9,12 +9,6 @@ $offdelim
 ;
 i04AvailRate(allCy,"PGH2F",YTIME) = 0.9;
 *---
-table i04DataElecSteamGen(allCy,PGOTH,YTIME)	   "Various Data related to electricity and steam generation (1)"
-$ondelim
-$include"./iDataElecSteamGen.csv"
-$offdelim
-;
-*---
 table i04DataElecProdNonCHP(allCy,PGALL,YTIME)           "Electricity Non-CHP production past years (GWh)"
 $ondelim
 $include"./iDataElecProdNonCHP.csv"
@@ -144,8 +138,6 @@ BU 	0.43,
 PCH	0.78,
 NEN	0.78 
 / ;
-*---
-iTotAvailNomCapBsYr(runCy,YTIME)$datay(YTIME) = i04DataElecSteamGen(runCy,"TOTNOMCAP",YTIME);
 *---
 i04TechLftPlaType(runCy,PGALL) = i04DataTechLftPlaType(PGALL, "LFT");
 i04TechLftPlaType(runCy,"PGH2F") = 20;

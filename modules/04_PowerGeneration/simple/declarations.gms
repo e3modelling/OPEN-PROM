@@ -2,14 +2,12 @@
 *' @code
 
 Parameters
-iTotAvailNomCapBsYr(allCy,YTIME)	               "Total nominal available installed capacity in base year (GW)"
 i04TechLftPlaType(allCy,PGALL)	                   "Technical Lifetime per plant type (year)"
 i04ScaleEndogScrap                                 "Scale parameter for endogenous scrapping applied to the sum of full costs (1)"
 i04DecInvPlantSched(allCy,PGALL,YTIME)             "Decided plant investment schedule (GW)"
 i04MxmShareChpElec(allCy,YTIME)	                   "Maximum share of CHP electricity in a country (1)"
 i04ShareFuels(allCy,PGALL,EFS)
 i04Util(allCy,PGALL,YTIME)                         "Utilisation rate of power plants"
-i03RateImpGrossInlCons(allCy,EFS,YTIME)            "Rate of Imports in Gross inland consumption (1)"
 ;
 
 Equations

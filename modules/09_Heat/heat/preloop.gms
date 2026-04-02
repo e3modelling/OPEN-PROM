@@ -86,7 +86,7 @@ sum(TSTEAM,
   (VmProdSte.L(runCy,TSTEAM,YTIME) + 1e-6) *
   V09CostProdSte.L(runCy,TSTEAM,YTIME)
 ) / 
-sum(TSTEAM,VmProdSte.L(runCy,TSTEAM,YTIME) + 1e-6) ;
+sum(TSTEAM,VmProdSte.L(runCy,TSTEAM,YTIME) + 1e-6);
 *---
 VmConsFuelSteProd.LO(runCy,STEMODE,EFS,YTIME) = 0;
 VmConsFuelSteProd.FX(runCy,STEMODE,EFS,YTIME)$(not STEAMEF(EFS)) = 0;
