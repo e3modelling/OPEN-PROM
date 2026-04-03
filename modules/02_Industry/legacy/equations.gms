@@ -20,7 +20,7 @@ Q02ConsElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       VmConsElecNonSubIndTert(allCy,INDDOM,YTIME-%fPeriodOfYears%) * 
       imActv(YTIME,allCy,INDDOM) ** i02ElastNonSubElec(allCy,INDDOM,"a",YTIME) *
       (VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME) / VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-%fPeriodOfYears%))**i02ElastNonSubElec(allCy,INDDOM,"b1",YTIME) *
-      (VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-%fPeriodOfYears%) / VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-2))**i02ElastNonSubElec(allCy,INDDOM,"b2",YTIME) *
+      (VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-%fPeriodOfYears%) / VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-%fDoublePeriod%))**i02ElastNonSubElec(allCy,INDDOM,"b2",YTIME) *
       prod(KPDL,
         (
           VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-ord(KPDL)) /
@@ -44,7 +44,7 @@ Q02ConsRemSubEquipSubSec(allCy,DSBS,EF,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $
       ) *
       imActv(YTIME,allCy,DSBS) ** imElastA(allCy,DSBS,"a",YTIME) *
       (VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME) / VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-%fPeriodOfYears%)) ** imElastA(allCy,DSBS,"b1",YTIME) *
-      (VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-%fPeriodOfYears%) / VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-2)) ** imElastA(allCy,DSBS,"b2",YTIME) *
+      (VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-%fPeriodOfYears%) / VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-%fDoublePeriod%)) ** imElastA(allCy,DSBS,"b2",YTIME) *
       prod(KPDL,
         (
           VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-ord(KPDL)) /
@@ -62,7 +62,7 @@ Q02DemFinSubFuelSubsec(allCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS)) $runCy
       VmDemFinSubFuelSubsec(allCy,DSBS,YTIME-%fPeriodOfYears%)
       * imActv(YTIME,allCy,DSBS)**imElastA(allCy,DSBS,"a",YTIME)
       * (VmPriceFuelAvgSub(allCy,DSBS,YTIME)/VmPriceFuelAvgSub(allCy,DSBS,YTIME-%fPeriodOfYears%))**imElastA(allCy,DSBS,"b1",YTIME)
-      * (VmPriceFuelAvgSub(allCy,DSBS,YTIME-%fPeriodOfYears%)/VmPriceFuelAvgSub(allCy,DSBS,YTIME-2))**imElastA(allCy,DSBS,"b2",YTIME)
+      * (VmPriceFuelAvgSub(allCy,DSBS,YTIME-%fPeriodOfYears%)/VmPriceFuelAvgSub(allCy,DSBS,YTIME-%fDoublePeriod%))**imElastA(allCy,DSBS,"b2",YTIME)
       * prod(KPDL,
               ( (VmPriceFuelAvgSub(allCy,DSBS,YTIME-ord(KPDL))/VmPriceFuelAvgSub(allCy,DSBS,YTIME-(ord(KPDL)+1)))/(imCGI(allCy,YTIME)**(1/6))
               )**( imElastA(allCy,DSBS,"c",YTIME)*imFPDL(DSBS,KPDL))
@@ -111,7 +111,7 @@ Q02IndxElecIndPrices(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
               =E=
       VmPriceElecInd(allCy,YTIME-%fPeriodOfYears%) * 
       (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-%fPeriodOfYears%)/VmPriceFuelAvgSub(allCy,"OI",YTIME-%fPeriodOfYears%)) ** (0.1) *
-      (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-2)/VmPriceFuelAvgSub(allCy,"OI",YTIME-2)) ** (0.05) *
+      (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-%fDoublePeriod%)/VmPriceFuelAvgSub(allCy,"OI",YTIME-%fDoublePeriod%)) ** (0.05) *
       (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-3)/VmPriceFuelAvgSub(allCy,"OI",YTIME-3)) ** (0.05)
       ;
 

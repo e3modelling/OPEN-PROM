@@ -1290,17 +1290,19 @@ alias(TTECH2,TTECH)
 scalar TF order of base year in set ytime;
 TF=sum((TFIRST,ytime), ord(ytime)$TFIRST(ytime));
 
-*** Set the modelling timeframe according to fPeriodOfYears (1 means annual, >1 means multi-year steps)
+*** Set the modelling timeframe: annual periods until 2075, then 5-year periods
 scalar
 ordStartY
 ordEndY
+ord2075
 ;
 ordStartY = sum((tStart,ytime), ord(ytime)$tStart(ytime));
 ordEndY   = sum((tEnd,ytime), ord(ytime)$tEnd(ytime));
+ord2075 = sum(ytime$(ytime.val = 2075), ord(ytime));
 
 an(ytime) = no;
 time(ytime) = no;
-an(ytime)$((ord(ytime) >= ordStartY) and (ord(ytime) <= ordEndY) and mod(ord(ytime)-ordStartY,%fPeriodOfYears%) = 0) = yes;
+an(ytime)$((ord(ytime) >= ordStartY) and (ord(ytime) <= ordEndY) and ((ord(ytime) <= ord2075) or mod(ord(ytime)-ord2075,5) = 0)) = yes;
 time(ytime) = an(ytime);
 display an, time;
 

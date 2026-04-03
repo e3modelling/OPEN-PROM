@@ -27,7 +27,7 @@ Q01ActivGoodsTransp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANG(TRANSE) $runCy(allCy
         * [i01GDPperCapita(YTIME,allCy)/i01GDPperCapita(YTIME-%fPeriodOfYears%,allCy)] ** 0.4 !!imElastA(allCy,TRANSE,"a",YTIME)
         * (i01Pop(YTIME,allCy)/i01Pop(YTIME-%fPeriodOfYears%,allCy)) ** 0.8
         * (VmPriceFuelAvgSub(allCy,TRANSE,YTIME)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-%fPeriodOfYears%))**imElastA(allCy,TRANSE,"c1",YTIME)
-        * (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-%fPeriodOfYears%)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2))**imElastA(allCy,TRANSE,"c2",YTIME)
+        * (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-%fPeriodOfYears%)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-%fDoublePeriod%))**imElastA(allCy,TRANSE,"c2",YTIME)
         * prod(kpdl,
               [(VmPriceFuelAvgSub(allCy,TRANSE,YTIME-ord(kpdl))/
                 VmPriceFuelAvgSub(allCy,TRANSE,YTIME-(ord(kpdl)+1)))/
@@ -38,7 +38,7 @@ Q01ActivGoodsTransp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANG(TRANSE) $runCy(allCy
         V01ActivGoodsTransp(allCy,TRANSE,YTIME-%fPeriodOfYears%) *
         [i01GDPperCapita(YTIME,allCy) / i01GDPperCapita(YTIME-%fPeriodOfYears%,allCy)]**imElastA(allCy,TRANSE,"a",YTIME) *
         (VmPriceFuelAvgSub(allCy,TRANSE,YTIME) / VmPriceFuelAvgSub(allCy,TRANSE,YTIME-%fPeriodOfYears%))**imElastA(allCy,TRANSE,"c1",YTIME) *
-        (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-%fPeriodOfYears%)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2))**imElastA(allCy,TRANSE,"c2",YTIME) *
+        (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-%fPeriodOfYears%)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-%fDoublePeriod%))**imElastA(allCy,TRANSE,"c2",YTIME) *
         prod(kpdl,
           [
             (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-ord(kpdl)) / VmPriceFuelAvgSub(allCy,TRANSE,YTIME-(ord(kpdl)+1))) /
@@ -293,7 +293,7 @@ Q01ActivPassTrnsp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANP(TRANSE) $runCy(allCy))
       (  !! passenger cars
         V01ActivPassTrnsp(allCy,TRANSE,YTIME-%fPeriodOfYears%) *
         (VmPriceFuelAvgSub(allCy,TRANSE,YTIME)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-%fPeriodOfYears%))**imElastA(allCy,TRANSE,"b1",YTIME) *
-        (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-%fPeriodOfYears%)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2))**imElastA(allCy,TRANSE,"b2",YTIME) *
+        (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-%fPeriodOfYears%)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-%fDoublePeriod%))**imElastA(allCy,TRANSE,"b2",YTIME) *
         [(V01StockPcYearly(allCy,YTIME)/(i01Pop(YTIME,allCy)*1000))/(V01PcOwnPcLevl(allCy,YTIME-%fPeriodOfYears%))]**imElastA(allCy,TRANSE,"b3",YTIME) *
         [i01GDPperCapita(YTIME,allCy) / i01GDPperCapita(YTIME-%fPeriodOfYears%,allCy)] ** 0.2 !!imElastA(allCy,TRANSE,"b4",YTIME)
       )$sameas(TRANSE,"PC") +
@@ -301,13 +301,13 @@ Q01ActivPassTrnsp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANP(TRANSE) $runCy(allCy))
         V01ActivPassTrnsp(allCy,TRANSE,YTIME-%fPeriodOfYears%) *
         [i01GDPperCapita(YTIME,allCy)/i01GDPperCapita(YTIME-%fPeriodOfYears%,allCy)]**imElastA(allCy,TRANSE,"a",YTIME) *
         (VmPriceFuelAvgSub(allCy,TRANSE,YTIME)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-%fPeriodOfYears%))**imElastA(allCy,TRANSE,"c1",YTIME) *
-        (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-%fPeriodOfYears%)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2))**imElastA(allCy,TRANSE,"c2",YTIME)
+        (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-%fPeriodOfYears%)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-%fDoublePeriod%))**imElastA(allCy,TRANSE,"c2",YTIME)
       )$sameas(TRANSE,"PA") +
       (   !! other passenger transportation modes
         V01ActivPassTrnsp(allCy,TRANSE,YTIME-%fPeriodOfYears%) *
         [(i01GDP(YTIME,allCy)/i01Pop(YTIME,allCy))/(i01GDP(YTIME-%fPeriodOfYears%,allCy)/i01Pop(YTIME-%fPeriodOfYears%,allCy))]**imElastA(allCy,TRANSE,"a",YTIME) *
         (VmPriceFuelAvgSub(allCy,TRANSE,YTIME)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-%fPeriodOfYears%))**imElastA(allCy,TRANSE,"c1",YTIME) *
-        (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-%fPeriodOfYears%)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2))**imElastA(allCy,TRANSE,"c2",YTIME) *
+        (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-%fPeriodOfYears%)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-%fDoublePeriod%))**imElastA(allCy,TRANSE,"c2",YTIME) *
         [(V01StockPcYearly(allCy,YTIME)*V01ActivPassTrnsp(allCy,"PC",YTIME))/(V01StockPcYearly(allCy,YTIME-%fPeriodOfYears%)*V01ActivPassTrnsp(allCy,"PC",YTIME-%fPeriodOfYears%))]**imElastA(allCy,TRANSE,"c4",YTIME) *
         prod(kpdl,
           [(VmPriceFuelAvgSub(allCy,TRANSE,YTIME-ord(kpdl))/

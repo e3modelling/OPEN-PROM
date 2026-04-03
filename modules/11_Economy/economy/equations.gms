@@ -22,14 +22,14 @@ Q11SubsiTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                 VmConsFinEneCountry(allCy,EF,YTIME-%fPeriodOfYears%) * imCo2EmiFac(allCy,"PG",EF,YTIME-%fPeriodOfYears%)) 
               + sum(SSBS, V07GrossEmissCO2Supply(allCy,SSBS,YTIME-%fPeriodOfYears%))
               -
-              (V06CaptCummCO2(allCy,YTIME-%fPeriodOfYears%) - V06CaptCummCO2(allCy,YTIME-2))
+              (V06CaptCummCO2(allCy,YTIME-%fPeriodOfYears%) - V06CaptCummCO2(allCy,YTIME-%fDoublePeriod%))
             )
             +
             sqrt(sqr(
               sum((EF,EFS)$EFtoEFS(EF,EFS),VmConsFinEneCountry(allCy,EF,YTIME-%fPeriodOfYears%) * imCo2EmiFac(allCy,"PG",EF,YTIME-%fPeriodOfYears%))
             + sum(SSBS,V07GrossEmissCO2Supply(allCy,SSBS,YTIME-%fPeriodOfYears%))
               -
-              (V06CaptCummCO2(allCy,YTIME-%fPeriodOfYears%) - V06CaptCummCO2(allCy,YTIME-2))
+              (V06CaptCummCO2(allCy,YTIME-%fPeriodOfYears%) - V06CaptCummCO2(allCy,YTIME-%fDoublePeriod%))
             ))
           ) / 2
          *
