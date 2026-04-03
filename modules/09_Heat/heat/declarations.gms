@@ -12,6 +12,7 @@ Q09CaptRateSte(allCy,TSTEAM,YTIME)
 Q09ScrapRatePremature(allCy,TSTEAM,YTIME)
 *'                **Interdependent Equations**
 Q09DemTotSte(allCy,YTIME)
+Q09CapSte(allCy,TSTEAM,YTIME)
 Q09ProdSte(allCy,TSTEAM,YTIME)
 Q09CostAvgProdSte(allCy,YTIME)
 Q09ConsFuelSteProd(allCy,STEMODE,EFS,YTIME)
@@ -28,6 +29,7 @@ V09CaptRateSte(allCy,TSTEAM,YTIME)
 V09ScrapRatePremature(allCy,TSTEAM,YTIME)
 *'            **Interdependent Variables**
 VmDemTotSte(allCy,YTIME)
+VmCapSte(allCy,TSTEAM,YTIME)
 VmProdSte(allCy,TSTEAM,YTIME)
 VmCostAvgProdSte(allCy,YTIME)                 "Average cost of steam production (kUS$2015/toe)"
 VmConsFuelSteProd(allCy,STEMODE,EFS,YTIME)

@@ -37,6 +37,8 @@ i08WgtSecAvgPriFueCons(runCy,INDDOM,EF)$(SECtoEF(INDDOM,EF)) =
 )$(imTotFinEneDemSubBaseYr(runCy,INDDOM,"%fBaseY%") - imShrNonSubElecInTotElecDem(runCy,INDDOM) * imFuelConsPerFueSub(runCy,INDDOM,"ELC","%fBaseY%"))
 + (1/i08DiffFuelsInSec(INDDOM))$(not imTotFinEneDemSubBaseYr(runCy,INDDOM,"%fBaseY%") - imShrNonSubElecInTotElecDem(runCy,INDDOM) * imFuelConsPerFueSub(runCy,INDDOM,"ELC","%fBaseY%"));
 *---
+i08WgtSecAvgPriFueCons(runCy,CDR,EF)$SECtoEF(CDR,EF) = 1 / sum(EF2$SECtoEF(CDR,EF2), 1);
+*---
 * Rescaling the weights
 i08WgtSecAvgPriFueCons(runCy,SBS,EF)$(SECtoEF(SBS,EF) $sum(ef2$SECtoEF(SBS,EF),i08WgtSecAvgPriFueCons(runCy,SBS,EF2))) = i08WgtSecAvgPriFueCons(runCy,SBS,EF)/sum(ef2$SECtoEF(SBS,EF),i08WgtSecAvgPriFueCons(runCy,SBS,EF2));
 *---
@@ -50,4 +52,18 @@ imFuelPrice(runCy,"PG","KRS",YTIME) = imFuelPrice(runCy,"OI","KRS",YTIME);
 imFuelPrice(runCy,SBS,"BGDO",YTIME) = imFuelPrice(runCy,SBS,"GDO",YTIME);
 imFuelPrice(runCy,SBS,"BGSL",YTIME) = imFuelPrice(runCy,SBS,"GSL",YTIME);
 imFuelPrice(runCy,SBS,"BKRS",YTIME) = imFuelPrice(runCy,SBS,"KRS",YTIME);
+imFuelPrice(runCy,CDR,EF,YTIME)$SECtoEF(CDR,EF) = imFuelPrice(runCy,"OI",EF,YTIME);
+imFuelPrice(runCy,"PG","OLQ",YTIME) = imFuelPrice(runCy,"PG","GDO",YTIME);
+imFuelPrice(runCy,"PG","LPG",YTIME) = imFuelPrice(runCy,"OI","LPG",YTIME);
+imFuelPrice(runCy,DOMSE,"GSL",YTIME) = imFuelPrice(runCy,"OI","GSL",YTIME);
+imFuelPrice(runCy,DOMSE,"BGSL",YTIME) = imFuelPrice(runCy,"OI","BGSL",YTIME);
+imFuelPrice(runCy,DOMSE,"LGN",YTIME) = imFuelPrice(runCy,"OI","LGN",YTIME);
+imFuelPrice(runCy,DOMSE,"OLQ",YTIME) = imFuelPrice(runCy,"OI","OLQ",YTIME);
+imFuelPrice(runCy,DOMSE,"RFO",YTIME) = imFuelPrice(runCy,"OI","RFO",YTIME);
+imFuelPrice(runCy,"SE","GDO",YTIME) = imFuelPrice(runCy,"OI","GDO",YTIME);
+imFuelPrice(runCy,"SE","BGDO",YTIME) = imFuelPrice(runCy,"OI","BGDO",YTIME);
+imFuelPrice(runCy,"SE","BMSWAS",YTIME) = imFuelPrice(runCy,"AG","BMSWAS",YTIME);
+imFuelPrice(runCy,"BU","NGS",YTIME) = imFuelPrice(runCy,"OI","NGS",YTIME);
+imFuelPrice(runCy,"BU","GSL",YTIME) = imFuelPrice(runCy,"OI","GSL",YTIME);
+imFuelPrice(runCy,"BU","BGSL",YTIME) = imFuelPrice(runCy,"OI","BGSL",YTIME);
 *---

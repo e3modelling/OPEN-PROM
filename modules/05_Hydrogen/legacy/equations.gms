@@ -5,7 +5,9 @@
 *' across sectors like transportation, industry, and power generation, adjusted for any transportation losses or distribution inefficiencies.
 Q05DemTotH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmDemTotH2(allCy,YTIME)
-                 =E=
+      =E=
+    V03ConsGrssInl(allCy,"H2F",YTIME) - VmImpNetEneBrnch(allCy,"H2F",YTIME);
+$ontext
     sum(SBS$SECtoEF(SBS,"H2F"), 
       VmDemSecH2(allCy,SBS, YTIME) /
       prod(INFRTECH$H2INFRSBS(INFRTECH,SBS),
@@ -13,7 +15,7 @@ Q05DemTotH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         (1-i05ConsSelfH2Transp(allCy,INFRTECH,YTIME))
       )
     ) !! increase the demand due to transportation losses
-;
+$offtext
 
 *' This equation calculates the sectoral hydrogen demand (VmDemSecH2) for each demand subsector (DSBS), year, and region.
 *' It sums up hydrogen consumption from both industrial/tertiary sectors (using VmConsFuel) and transport sectors (using VmDemFinEneTranspPerFuel),
@@ -21,9 +23,9 @@ Q05DemTotH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q05DemSecH2(allCy,SBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmDemSecH2(allCy,SBS,YTIME)
         =E=
+    !! Unnecessary variable? author = mmadianos
     sum(INDDOM$SAMEAS(INDDOM,SBS), VmConsFuel(allCy,INDDOM,"H2F",YTIME)) +
     sum(TRANSE$SAMEAS(TRANSE,SBS), VmDemFinEneTranspPerFuel(allCy,TRANSE,"H2F",YTIME)) +
-    !! FIXME: Add LQD,GAS,SLD sectors consumption too
     VmConsFuelCDRProd(allCy,"H2F",YTIME)$sameas("DAC",SBS) +
     VmConsFuelCDRProd(allCy,"H2F",YTIME)$sameas("EW",SBS) +
     VmConsFuelElecProd(allCy,"H2F",YTIME)$sameas("PG",SBS);
@@ -49,19 +51,19 @@ $offtext
 Q05PremRepH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$H2TECHPM(H2TECH))..
     V05PremRepH2Prod(allCy,H2TECH,YTIME)
         =E=
-    V05CostVarProdH2Tech(allCy,H2TECH,YTIME)**(-i05WBLGammaH2Prod(allCy,YTIME)) /
+    V05CostVarProdH2Tech(allCy,H2TECH,YTIME-%fPeriodOfYears%)**(-i05WBLGammaH2Prod(allCy,YTIME)) /
     (
       iWBLPremRepH2Prod(allCy,H2TECH,YTIME) *
       (
         sum(H2TECH2$(not sameas(H2TECH,H2TECH2)),
-          V05CostProdH2Tech(allCy,H2TECH2,YTIME)
+          V05CostProdH2Tech(allCy,H2TECH2,YTIME-%fPeriodOfYears%)
           !!V05GapShareH2Tech1(allCy,H2TECH2,YTIME)*
           !!(1/i05AvailH2Prod(allCy,H2TECH,YTIME)*
           !!V05CostProdH2Tech(allCy,H2TECH2,YTIME) +
           !!(1-1/i05AvailH2Prod(allCy,H2TECH,YTIME)) * V05CostVarProdH2Tech(allCy,H2TECH2,YTIME))
         )
       )**(-i05WBLGammaH2Prod(allCy,YTIME)) +
-      V05CostVarProdH2Tech(allCy,H2TECH,YTIME)**(-i05WBLGammaH2Prod(allCy,YTIME))
+      V05CostVarProdH2Tech(allCy,H2TECH,YTIME-%fPeriodOfYears%)**(-i05WBLGammaH2Prod(allCy,YTIME))
     );
 
 *' This equation calculates the total hydrogen production capacity that is scrapped as part of the premature replacement
@@ -155,17 +157,17 @@ Q05ShareCCSH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME) $H2CCS(H2TECH) $(runCy(allCy)
          =E=
                  1.5  *
          iWBLShareH2Prod(allCy,H2TECH,YTIME) *
-                 (V05CostProdH2Tech(allCy,H2TECH,YTIME) + 1e-3)**(-V05AcceptCCSH2Tech(allCy,YTIME)) /
+                 (V05CostProdH2Tech(allCy,H2TECH,YTIME-%fPeriodOfYears%) + 1e-3)**(-V05AcceptCCSH2Tech(allCy,YTIME)) /
          (
                  1.5  *
          iWBLShareH2Prod(allCy,H2TECH,YTIME) *
-                 (V05CostProdH2Tech(allCy,H2TECH,YTIME) + 1e-3)**(-V05AcceptCCSH2Tech(allCy,YTIME)) +
+                 (V05CostProdH2Tech(allCy,H2TECH,YTIME-%fPeriodOfYears%) + 1e-3)**(-V05AcceptCCSH2Tech(allCy,YTIME)) +
 
                  sum(H2TECH2$H2CCS_NOCCS(H2TECH,H2TECH2),
 
                  1  *
          iWBLShareH2Prod(allCy,H2TECH2,YTIME) *
-                 (V05CostProdH2Tech(allCy,H2TECH,YTIME) + 1e-3)**(-V05AcceptCCSH2Tech(allCy,YTIME)))
+                 (V05CostProdH2Tech(allCy,H2TECH,YTIME-%fPeriodOfYears%) + 1e-3)**(-V05AcceptCCSH2Tech(allCy,YTIME)))
          )
 ;
 
@@ -194,10 +196,16 @@ Q05GapShareH2Tech2(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
           =E=
     (
       iWBLShareH2Prod(allCy,H2TECH,YTIME) * 
-      (V05CostProdH2Tech(allCy,H2TECH,YTIME)$(not H2NOCCS(H2TECH)) + V05CostProdCCSNoCCSH2Prod(allCy,H2TECH,YTIME)$H2NOCCS(H2TECH))**(-i05WBLGammaH2Prod(allCy,YTIME)) /
+      (
+        V05CostProdH2Tech(allCy,H2TECH,YTIME-%fPeriodOfYears%)$(not H2NOCCS(H2TECH)) + 
+        V05CostProdCCSNoCCSH2Prod(allCy,H2TECH,YTIME-%fPeriodOfYears%)$H2NOCCS(H2TECH)
+      )**(-i05WBLGammaH2Prod(allCy,YTIME)) /
       sum(H2TECH2$(not H2CCS(H2TECH2)),
-      iWBLShareH2Prod(allCy,H2TECH2,YTIME) * 
-      (V05CostProdH2Tech(allCy,H2TECH2,YTIME)$(not H2NOCCS(H2TECH2)) + V05CostProdCCSNoCCSH2Prod(allCy,H2TECH2,YTIME)$H2NOCCS(H2TECH2))**(-i05WBLGammaH2Prod(allCy,YTIME))
+        iWBLShareH2Prod(allCy,H2TECH2,YTIME) * 
+        (
+          V05CostProdH2Tech(allCy,H2TECH2,YTIME-%fPeriodOfYears%)$(not H2NOCCS(H2TECH2)) + 
+          V05CostProdCCSNoCCSH2Prod(allCy,H2TECH2,YTIME-%fPeriodOfYears%)$H2NOCCS(H2TECH2)
+        )**(-i05WBLGammaH2Prod(allCy,YTIME))
       )
     )$(not H2CCS(H2TECH)) +
     sum(H2NOCCS$H2CCS_NOCCS(H2TECH,H2NOCCS), V05GapShareH2Tech2(allCy,H2NOCCS,YTIME))$H2CCS(H2TECH);
@@ -395,6 +403,6 @@ Q05CaptRateH2(allCy,H2TECH,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
         (sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME)) + 1)] + 2 -
         [SQRT(SQR([VmCstCO2SeqCsts(allCy,YTIME) /
         (sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME)) + 1)] - 2))])/2
-        -1)
+        -1.1)
       )
     );

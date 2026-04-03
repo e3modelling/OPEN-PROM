@@ -17,8 +17,8 @@ V05DemGapH2.L(runCy,YTIME) = 10;
 V05DemGapH2.FX(runCy,YTIME)$(not An(YTIME)) = 0;
 *---
 VmDemTotH2.LO(runCy,YTIME) = 0;
-VmDemTotH2.L(runCy,YTIME) = SUM(SSBS$SECtoEF(SSBS,"H2F"),i03DataOwnConsEne(runCy,SSBS,"H2F",YTIME)) + SUM(DSBS, imFuelConsPerFueSub(runCy,DSBS,"H2F",YTIME)) + 1;
-VmDemTotH2.FX(runCy,YTIME)$DATAY(YTIME) = SUM(SSBS$SECtoEF(SSBS,"H2F"),i03DataOwnConsEne(runCy,SSBS,"H2F",YTIME)) + SUM(DSBS, imFuelConsPerFueSub(runCy,DSBS,"H2F",YTIME));
+VmDemTotH2.L(runCy,YTIME) = (i03DataGrossInlCons(runCy,"H2F","%fBaseY%") - imFuelTrade(runCy,"IMPORTS","H2F","%fBaseY%") + imFuelTrade(runCy,"EXPORTS","H2F","%fBaseY%")) + 1;
+VmDemTotH2.FX(runCy,YTIME)$DATAY(YTIME) = (i03DataGrossInlCons(runCy,"H2F",YTIME) - imFuelTrade(runCy,"IMPORTS","H2F",YTIME) + imFuelTrade(runCy,"EXPORTS","H2F",YTIME));
 *---
 VmProdH2.LO(runCy,H2TECH, YTIME) = 0;
 VmProdH2.L(runCy,H2TECH, YTIME) = 0.5;
