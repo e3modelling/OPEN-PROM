@@ -109,6 +109,7 @@ runCyL(allCy) Countries for which the model is running (used in countries loop)
 runCy(allCy)$(%DevMode% = 0) = resCy(allCy) ;
 runCyL(allCy)$(%DevMode% = 0) = resCy(allCy) ;
 
+ALIAS(runCyL,runCy2)
 sets
 ***        Model Time Horizon       *
 ytime           Model time horizon                                /%fStartHorizon%*%fEndHorizon%/
@@ -370,6 +371,7 @@ DOMSE(DSBS)       Tertiary SubSectors           /SE,AG,HOU/
 INDSE1(SBS)       Industrial SubSectors         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI/
 DOMSE1(SBS)       Tertiary SubSectors           /SE,AG,HOU/
 HOU(DSBS)         Households                    /HOU/
+CDR(DSBS)         Carbon Dioxide Removal         /DAC,EW/
 
 NENSE(DSBS)       Non Energy and Bunkers        /PCH,NEN,BU/
 NENSE1(SBS)       Non Energy and Bunkers        /PCH,NEN,BU/
@@ -597,24 +599,6 @@ WND
 NGS
 /
 
-
-IMPEF(EFS)       Fuels considered in Imports and Exports
-/
-LGN
-HCL
-CRO
-GSL
-GDO
-RFO
-LPG
-KRS
-OLQ
-NGS
-OGS
-ELC
-*BMSWAS
-/
-
 *         Technologies            *
 
 TECH      Technologies (in Demand side)
@@ -813,7 +797,7 @@ TECHtoEF (TECH,EF) Fuels consumed by technologies
 /
 TGSL.(GSL,BGSL)
 TLPG.LPG
-TGDO.(GDO,BGDO,RFO)
+TGDO.(GDO,BGDO,RFO,CRO)
 TNGS.(NGS,OGS)
 TNGSCCS.NGS
 TELC.ELC
@@ -861,7 +845,7 @@ TCHEVGDO.(GDO,BGDO)
 
 ITECHtoEF(ITECH,EF) Fuels consumed by industrial technologies
 /
-TGDO.(GDO,BGDO)
+TGDO.(GDO,BGDO,CRO)
 TLPG.LPG
 TKRS.(KRS,BKRS)  
 TNGS.NGS
@@ -894,6 +878,8 @@ TCHEVGSL
 TCHEVGDO
 /
 
+IMPEXP "Imports/Exports" /IMPORTS,EXPORTS/
+
 SSECTTECH(SSBS,STECH) "Link between Model Supply Subsectors and Technologies"
 
 SSECTTECH(SSBS,STECH) "Link between Model Supply Subsectors and Technologies"
@@ -913,10 +899,9 @@ PA.(TKRS)
 (IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(TLGN,THCL,TGDO,TGSL,TRFO,TLPG,TKRS,TOLQ,TNGS,TOGS,
                                 TELC,TBMSWAS,TSTE,TH2F)
 (IS,BM,CH).(TNGSCCS,THCLCCS)
-(HOU,AG).(THCL,TLPG,TKRS,TGDO,TNGS,TOGS,TBMSWAS,TELC,TSTE)
-SE.(THCL,TLPG,TKRS,TNGS,TOGS,TELC,TSTE)
+(HOU,AG,SE).(THCL,TLPG,TKRS,TGDO,TNGS,TOGS,TBMSWAS,TELC,TSTE,TGSL,TLGN,TOLQ,TRFO)
 (HOU,SE).(THEATPUMP)
-BU.(TGDO,TRFO,TKRS,TH2F)
+BU.(TGDO,TRFO,TKRS,TH2F,TNGS)
 (PCH,NEN).(TLGN,THCL,TGDO,TRFO,TLPG,TOLQ,TNGS,TOGS)
 DAC.(HTDAC,H2DAC,LTDAC)
 EW.TEW
@@ -924,7 +909,7 @@ EW.TEW
 
 SECtoEF(SBS,EF) Link between Model Subsectors and Energy Forms consumed
 /
-PG.(LGN,HCL,CRO,GSL,BGSL,KRS,BKRS,GDO,BGDO,RFO,OLQ,NGS,OGS,NUC,HYD,BMSWAS,SOL,GEO,WND,H2F)
+PG.(LGN,HCL,CRO,GSL,BGSL,KRS,BKRS,GDO,BGDO,RFO,LPG,OLQ,NGS,OGS,NUC,HYD,BMSWAS,SOL,GEO,WND,H2F)
 CHP.(LGN,HCL,GDO,RFO,NGS,OGS,NUC,HYD,BMSWAS,SOL,GEO,WND)
 H2P.(HCL,LGN,RFO,GDO,NGS,OGS,NUC,BMSWAS,SOL,WND,ELC)
 STEAMP.(HCL,LGN,CRO,GDO,BGDO,GSL,BGSL,KRS,BKRS,RFO,LPG,NGS,OGS,OLQ,NUC,GEO,BMSWAS,ELC,H2F)
@@ -1017,7 +1002,6 @@ ATHBMSCCS.ATHBMSWAS
 PGREN(PGALL)    REN PLANTS with Saturation                /PGLHYD,PGSHYD,PGAWND,PGSOL,PGCSP,PGOTHREN,PGAWNO/
 PGREN2(PGALL)     Renewable Plants                          /PGLHYD,PGSHYD,PGAWND,PGSOL,PGCSP,PGOTHREN,PGAWNO,PGANUC,ATHCOALCCS,ATHLGNCCS,ATHGASCCS,PGH2F/
 PGRENSW(PGALL)   Solar and wind Plants                     /PGSOL,PGCSP,PGAWND,PGAWNO/
-PGNREN(PGALL)    Advanced Renewable Plants potential      /PGCSP,PGOTHREN,PGAWNO,ATHBMSWAS/
 PGRENEF          Renewable energy forms in power generation  /HYD,WND,SOL,BMSWAS,GEO/
 
 PGALLtoEF(PGALL,EFS)     Correspondence between plants and energy forms
@@ -1026,7 +1010,7 @@ PGALLtoEF(PGALL,EFS)     Correspondence between plants and energy forms
 (ATHCOAL,ATHCOALCCS).HCL
 *(ATHOIL).GDO
 *(ATHGAS,ATHGASCCS).NGS
-ATHOIL.(GSL,BGSL,GDO,BGDO,KRS,BKRS,CRO,OLQ)
+ATHOIL.(GSL,BGSL,GDO,BGDO,KRS,BKRS,CRO,OLQ,RFO,LPG)
 (ATHGAS,ATHGASCCS).(NGS,OGS)
 (ATHBMSWAS,ATHBMSCCS).BMSWAS
 PGANUC.NUC

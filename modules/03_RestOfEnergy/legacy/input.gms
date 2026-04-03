@@ -2,7 +2,7 @@
 *' @code
 
 *---
-table i03DataGrossInlCons(allCy,EF,YTIME)	      "Data for Gross Inland Conusmption (Mtoe)"
+table i03DataGrossInlCons(allCy,EFS,YTIME)	      "Data for Gross Inland Conusmption (Mtoe)"
 $ondelim
 $include"./iDataGrossInlCons.csv"
 $offdelim
@@ -14,7 +14,7 @@ $include"./iDataOwnConsEne.csv"
 $offdelim
 ;
 *---
-table i03SuppTransfers(allCy,EFS,YTIME)	          "Supplementary Parameter for Transfers (Mtoe)"
+table i03FeedTransfr(allCy,EFS,YTIME)	          "Feedstocks in Transfers (Mtoe)"
 $ondelim
 $include"./iSuppTransfers.csv"
 $offdelim
@@ -23,12 +23,6 @@ $offdelim
 table i03PrimProd(allCy,EFS,YTIME)	              "Primary Production (Mtoe)"
 $ondelim
 $include"./iPrimProd.csv"
-$offdelim
-;
-*---
-table i03SuppRatePrimProd(allCy,EF,YTIME)	      "Supplementary Parameter for iRatePrimProd (1)"	
-$ondelim
-$include"./iSuppRatePrimProd.csv"
 $offdelim
 ;
 *---
@@ -62,6 +56,36 @@ $include "./iNatGasPriProElst.csv"
 $offdelim
 /;
 *---
+i03FeedTransfr(allCy,EFS,YTIME) = 0; !!FIXME: i03DataGrossInlCons must be correct to use transfers
+*--
+* FIXME:
+* IEA TES doesn't sum up to each data, due to incorrect transformation input mappings. 
+* Author: mmadianos
+i03DataGrossInlCons(allCy,EFS,YTIME)$DATAY(YTIME) =
+sum(DSBS, imFuelConsPerFueSub(allCy,DSBS,EFS,YTIME)) +
+SUM(SSBS,
+  i03DataOwnConsEne(allCy,SSBS,EFS,YTIME) -
+  i03InpTotTransfProcess(allCy,SSBS,EFS,YTIME)
+) +
+imDistrLosses(allCy,EFS,YTIME) -
+i03FeedTransfr(allCy,EFS,YTIME);
+*(imFuelTrade(allCy,"IMPORTS",EFS,YTIME) - imFuelTrade(allCy,"EXPORTS",EFS,YTIME));
+*---
+i03RateImpGrossInlCons(allCy,EFS,YTIME)$DATAY(YTIME) = 
+(
+  imFuelTrade(allCy,"IMPORTS",EFS,YTIME) / 
+  i03DataGrossInlCons(allCy,EFS,YTIME)
+)$i03DataGrossInlCons(allCy,EFS,YTIME);
+i03RateImpGrossInlCons(allCy,EFS,YTIME) = min(1, i03RateImpGrossInlCons(allCy,EFS,YTIME)); !! Ensure it is in [-1,1]
+i03RateImpGrossInlCons(allCy,EFS,YTIME) = i03RateImpGrossInlCons(allCy,EFS,YTIME);
+*---
+i03RateExpTotImp(allCy,EFS,YTIME)$DATAY(YTIME) =
+(
+  imFuelTrade(allCy,"EXPORTS",EFS,YTIME) /
+  SUM(runCy2, imFuelTrade(runCy2,"IMPORTS",EFS,YTIME))
+)$SUM(runCy2, imFuelTrade(runCy2,"IMPORTS",EFS,YTIME));
+i03RateExpTotImp(allCy,EFS,YTIME) = (i03RateExpTotImp(allCy,EFS,YTIME) / sum(runCy2,i03RateExpTotImp(runCy2,EFS,YTIME)))$sum(runCy2,i03RateExpTotImp(runCy2,EFS,YTIME));
+i03RateExpTotImp(allCy,EFS,YTIME) = i03RateExpTotImp(allCy,EFS,YTIME);
 parameter i03PolDstrbtnLagCoeffPriOilPr(kpdl)	  "Polynomial Distribution Lag Coefficients for primary oil production (1)"
 /
 a1 1.666706504,
@@ -71,19 +95,6 @@ a4 0.666634797,
 a5 0.33343691
 /;
 *---
-
-Parameters
-i03SupTrnasfOutputRefineries(allCy,EF,YTIME)	  "Supplementary parameter for the transformation output from refineries (Mtoe)"
-i03SupResRefCapacity(allCy,SUPOTH,YTIME)	      "Supplementary Parameter for the residual in refineries Capacity (1)"
-i03TotEneBranchCons(allCy,EF,YTIME)	              "Total Energy Branch Consumption (Mtoe)"
-*i03RefCapacity(allCy,YTIME)	                      "Refineries Capacity (Million Barrels/day)"
-i03FeedTransfr(allCy,EFS,YTIME)	                  "Feedstocks in Transfers (Mtoe)"
-i03ResTransfOutputRefineries(allCy,EF,YTIME)      "Residual in Transformation Output from Refineries (Mtoe)"
-i03RatePriProTotPriNeeds(allCy,EF,YTIME)	      "Rate of Primary Production in Total Primary Needs (1)"	
-i03ResHcNgOilPrProd(allCy,EF,YTIME)	              "Residuals for Hard Coal, Natural Gas and Oil Primary Production (1)"
-i03RatioImpFinElecDem(allCy,YTIME)	              "Ratio of imports in final electricity demand (1)"	
-;
-*---
 i03SupResRefCapacity(runCy,SUPOTH,YTIME) = 1;
 *---
 i03SupTrnasfOutputRefineries(runCy,EF,YTIME) = 1;
@@ -92,15 +103,12 @@ i03DataOwnConsEne(runCy,SSBS,EFS,YTIME)$(i03DataOwnConsEne(runCy,SSBS,EFS,YTIME)
 *---
 i03TotEneBranchCons(runCy,EFS,YTIME) = SUM(SSBS,i03DataOwnConsEne(runCy,SSBS,EFS,YTIME));
 *---
-i03FeedTransfr(runCy,EFS,YTIME) = i03SuppTransfers(runCy,EFS,YTIME);
-*---
 *i03ResRefCapacity(runCy,YTIME) = i03SupResRefCapacity(runCy,"REF_CAP_RES",YTIME);
 *---
 i03ResTransfOutputRefineries(runCy,EFS,YTIME) = i03SupTrnasfOutputRefineries(runCy,EFS,YTIME);
 *---
 i03RateEneBranCons(runCy,SSBS,EFS,YTIME)$AN(YTIME) = i03RateEneBranCons(runCy,SSBS,EFS,"%fBaseY%");
-*---
-i03RatePriProTotPriNeeds(runCy,EFS,YTIME) = i03SuppRatePrimProd(runCy,EFS,"%fBaseY%");
+i03RateEneBranCons(runCy,SSBS,EFS,YTIME)$(i03RateEneBranCons(runCy,SSBS,EFS,YTIME)  < 1e-6) = 0;
 *---
 i03ResHcNgOilPrProd(runCy,"HCL",YTIME)$an(YTIME)   = i03SupResRefCapacity(runCy,"HCL_PPROD",YTIME);
 i03ResHcNgOilPrProd(runCy,"NGS",YTIME)$an(YTIME)   = i03SupResRefCapacity(runCy,"NGS_PPROD",YTIME);
@@ -114,3 +122,24 @@ imRateLossesFinCons(runCy,EFS,YTIME) =
   (sum(DSBS, imFuelConsPerFueSub(runCy,DSBS,EFS,YTIME)) + i03PrimProd(runCy,"CRO",YTIME)$sameas("CRO",EFS))
 ]$(sum(DSBS, imFuelConsPerFueSub(runCy,DSBS,EFS,YTIME)) + i03PrimProd(runCy,"CRO",YTIME)$sameas("CRO",EFS));
 imRateLossesFinCons(runCy,EFS,YTIME)$AN(YTIME) = imRateLossesFinCons(runCy,EFS,"%fBaseY%");
+*---
+i03RatioPrimaryFuels(runCy,EFS,YTIME)$DATAY(YTIME) = 
+(
+  i03PrimProd(runCy,EFS,YTIME) / 
+  (i03PrimProd(runCy,EFS,YTIME) + SUM(SSBS,i03OutTotTransfProcess(runCy,SSBS,EFS,YTIME)))
+)$(i03PrimProd(runCy,EFS,YTIME) + SUM(SSBS,i03OutTotTransfProcess(runCy,SSBS,EFS,YTIME))) +
+(
+  SUM(runCyL,i03PrimProd(runCyL,EFS,YTIME)) / 
+  (SUM(runCyL,i03PrimProd(runCyL,EFS,YTIME)) + SUM(runCyL,SUM(SSBS,i03OutTotTransfProcess(runCyL,SSBS,EFS,YTIME))) + 1e-6)
+)$(not (i03PrimProd(runCy,EFS,YTIME) + SUM(SSBS,i03OutTotTransfProcess(runCy,SSBS,EFS,YTIME))));
+i03RatioPrimaryFuels(runCy,EFS,YTIME) = round(i03RatioPrimaryFuels(runCy,EFS,YTIME), 3);
+*---
+i03InputEffSupply(runCy,SSBS,EFS,YTIME)$DATAY(YTIME) = 
+(
+  -i03InpTotTransfProcess(runCy,SSBS,EFS,YTIME) / 
+  SUM(EFS2, i03OutTotTransfProcess(runCy,SSBS,EFS2,YTIME))
+)$SUM(EFS2, i03OutTotTransfProcess(runCy,SSBS,EFS2,YTIME)) +
+(
+  -SUM(runCyL,i03InpTotTransfProcess(runCyL,SSBS,EFS,YTIME)) / 
+  (SUM((runCyL,EFS2),i03OutTotTransfProcess(runCyL,SSBS,EFS2,YTIME)) + 1e-6)
+)$(not SUM(EFS2, i03OutTotTransfProcess(runCy,SSBS,EFS2,YTIME)));

@@ -16,7 +16,7 @@
 *' carbon values for all countries, electricity prices to industrial and residential consumers,
 *' efficiency values, and the total hydrogen cost per sector.The result of the equation is the fuel price per 
 *' subsector and fuel, adjusted based on changes in carbon values, electricity prices, efficiency, and hydrogen costs.
-Q08PriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)$(SECtoEF(SBS,EF) $TIME(YTIME)
+Q08PriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)$(SECtoEF(SBS,EF) $(not sameas("CRO",EF)) $TIME(YTIME)
 $IFTHEN %link2MAgPIE% == on 
    $(not sameas("BMSWAS",EF))
 $ENDIF
@@ -52,7 +52,7 @@ $ENDIF
       VmPriceFuelSubsecCarVal(allCy,"AG",EF,YTIME)$sameas("BMSWAS",EF)
     )$(sameas ("H2P",SBS) or sameas("STEAMP",SBS)) +
     (VmCostAvgProdH2(allCy,YTIME-1)$DSBS(SBS)/1000)$H2EF(EF) +
-    (VmCostAvgProdSte(allCy,YTIME)$DSBS(SBS))$sameas("STE",EF);
+    (VmCostAvgProdSte(allCy,YTIME-1)$DSBS(SBS))$sameas("STE",EF);
 
 Q08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)$(SECtoEF(DSBS,EF) $TIME(YTIME) $runCy(allCy))..
 V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)
@@ -67,8 +67,8 @@ V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)
       (SUM(EF2$SECtoEF(TRANSE,EF2),VmDemFinEneTranspPerFuel(allCy,TRANSE,EF2,YTIME)) + 1e-6)
     ) +
     (
-      SUM(DACTECH,VmConsFuelTechCDRProd(allCy,DACTECH,EF,YTIME)) /
-      (SUM((DACTECH,EF2)$SECtoEF(DSBS,EF2),VmConsFuelTechCDRProd(allCy,DACTECH,EF2,YTIME)) + 1e-12)
+      SUM(CDRTECH,VmConsFuelTechCDRProd(allCy,CDRTECH,EF,YTIME)) /
+      (SUM((CDRTECH,EF2)$SECtoEF(DSBS,EF2),VmConsFuelTechCDRProd(allCy,CDRTECH,EF2,YTIME)) + 1e-12)
     )$sameas("DAC",DSBS) +
     (
       VmConsFuelTechCDRProd(allCy,"TEW",EF,YTIME) /
