@@ -273,8 +273,8 @@ Q04ShareSatPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(PGREN(PGALL)))..
 Q04CostPowGenAvgLng(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCostPowGenAvgLng(allCy,YTIME)
         =E=
-    SUM(PGALL,VmProdElec(allCy,PGALL,YTIME) * V04CostHourProdInvDec(allCy,PGALL,YTIME)) / 
-    SUM(PGALL,VmProdElec(allCy,PGALL,YTIME)); 
+    SUM(PGALL,(VmProdElec(allCy,PGALL,YTIME) + 1e-6)* V04CostHourProdInvDec(allCy,PGALL,YTIME)) / 
+    SUM(PGALL,VmProdElec(allCy,PGALL,YTIME) + 1e-6); 
 
 *' This equation estimates the factor increasing the CAPEX of new RES (unflexible) capacity installation due to simultaneous need for grind upgrade and storage, 
 *' for each region (country) and year. This factor depends on the existing RES (unflexible) penetration in the electriciy mixture.

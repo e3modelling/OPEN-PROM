@@ -32,8 +32,8 @@ Q09CapSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q09ProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmProdSte(allCy,TSTEAM,YTIME)
         =E=
-    (VmDemTotSte(allCy,YTIME) + 1e-6) /
-    (SUM(TSTEAM2, VmCapSte(allCy,TSTEAM2,YTIME)) + 1e-6) * 
+    VmDemTotSte(allCy,YTIME) /
+    SUM(TSTEAM2, VmCapSte(allCy,TSTEAM2,YTIME)) * 
     VmCapSte(allCy,TSTEAM,YTIME);
 
 Q09DemGapSte(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..

@@ -24,7 +24,7 @@ $ENDIF
     VmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME)
         =E=
     VmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME-1) *
-    (1 + (VmCostPowGenAvgLng(allCy,YTIME) / VmCostPowGenAvgLng(allCy,YTIME-1) - 1)$sameas("ELC",EFS)) *
+    (1 + (VmCostPowGenAvgLng(allCy,YTIME-1) / VmCostPowGenAvgLng(allCy,YTIME-2) - 1)$sameas("ELC",EFS)) *
     (1 + (VmCostAvgProdH2(allCy,YTIME) / VmCostAvgProdH2(allCy,YTIME-1) - 1)$sameas("H2F",EFS)) * 
     (1 + (VmCostAvgProdSte(allCy,YTIME) / VmCostAvgProdSte(allCy,YTIME-1) - 1)$sameas("STE",EFS)) *
     (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.4 - 1)$sameas("NGS",EFS)) *
