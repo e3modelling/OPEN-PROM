@@ -85,8 +85,8 @@ V04LoadFacDom.FX(runCy,YTIME)$(datay(YTIME)) =
          i04LoadFacElecDem(TRANSE)));
 *---
 VmCapElec.LO(runCy,PGALL,YTIME) = 0;
-VmCapElec.L(runCy,PGALL,YTIME) = i04DataElecProdNonCHP(runCy,PGALL,"%fBaseY%") / 1000 + 1;
-VmCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = i04DataElecProdNonCHP(runCy,PGALL,YTIME) / 1000;
+VmCapElec.L(runCy,PGALL,YTIME) = i04DataElecProdNonCHP(runCy,PGALL,"%fBaseY%") / 1000 / smGwToTwhPerYear(YTIME) + 1;
+VmCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = i04DataElecProdNonCHP(runCy,PGALL,YTIME) / 1000 / smGwToTwhPerYear(YTIME);
 *---
 VmProdElec.LO(runCy,PGALL,YTIME) = 0;
 VmProdElec.L(runCy,pgall,YTIME) = i04DataElecProdNonCHP(runCy,pgall,"%fBaseY%") / 1000 + 1;

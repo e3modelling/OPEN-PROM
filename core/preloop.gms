@@ -42,7 +42,6 @@ VmElecConsHeatPla.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = imFuelConsPerFueSub(r
 VmElecConsHeatPla.FX(runCy,DSBS,YTIME) = 0;
 *---
 VmCarVal.FX(runCy,"TRADE",YTIME) = iCarbValYrExog(runCy,YTIME);
-VmCarVal.FX(runCy,"NOTRADE",YTIME) = iCarbValYrExog(runCy,YTIME);
 *---
 VmCstCO2SeqCsts.LO(runCy,YTIME) = 0;
 VmCstCO2SeqCsts.L(runCy,YTIME) = 1;
