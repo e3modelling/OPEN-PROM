@@ -112,7 +112,7 @@ Q07EmissionsNet(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     =E=
     sum(SSBS, V07GrossEmissCO2Supply(allCy,SSBS,YTIME))
     + sum(DSBS, V07GrossEmissCO2Demand(allCy,DSBS,YTIME))
-    - sum((SBS,EFS), V06CO2CaptureCCS(allCy,SBS,EFS,YTIME))
+    - sum((SBS,EFS)$SECtoEF(SBS,EFS), V06CO2CaptureCCS(allCy,SBS,EFS,YTIME))
     - sum(CDRTECH, V06CapCDR(allCy,CDRTECH,YTIME)) * 1e-6
     ;
 
@@ -120,5 +120,5 @@ Q07EmissionsNetPart(allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V07EmissionsNetPart(allCy,YTIME)
     =E=
     V07EmissionsNet(allCy,YTIME-1) /
-    sum(allCy2, V07EmissionsNet(allCy2,YTIME-1))
+    sum(runCy2, V07EmissionsNet(runCy2,YTIME-1))
     ;
