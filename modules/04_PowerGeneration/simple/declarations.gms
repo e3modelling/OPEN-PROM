@@ -29,7 +29,6 @@ Q04NetNewCapElec(allCy,PGALL,YTIME)	                       "Compute the yearly d
 *q04CostPowGenLongIntPri(allCy,PGALL,ESET,YTIME)           "Compute long term power generation cost of technologies including international Prices of main fuels"
 *q04CostPowGenShortIntPri(allCy,PGALL,ESET,YTIME)          "Compute short term power generation cost of technologies including international Prices of main fuels"
 *q04CostPowGenAvgShrt(allCy,ESET,YTIME)	                   "Compute short term power generation cost"
-Q04LoadFacDom(allCy,YTIME)                                 "Compute electricity load factor for entire domestic system"	
 Q04DemElecTot(allCy,YTIME)                                 "Compute total electricity demand (TWh)"
 Q04ProdElecEstCHP(allCy,TCHP,YTIME)	                       "Estimate the electricity of CHP Plants"	
 Q04CapexFixCostPG(allCy,PGALL,YTIME)                       "Computes the capex and fixed costs of any power generation technology"
@@ -42,7 +41,6 @@ Q04ScrpRate(allCy,PGALL,YTIME)
 *'                **Interdependent Equations**
 Q04ProdElec(allCy,PGALL,YTIME)                             "Compute electricity production from power generation plants"
 Q04CostPowGenAvgLng(allCy,YTIME)	                   "Compute long term power generation cost"
-Q04CapElecTotEst(allCy,YTIME)                              "Compute Estimated total electricity generation capacity"
 Q04CapElec(allCy,PGALL,YTIME)	                           "Compute electricity generation capacity"
 Q04ConsFuelElecProd(allCy,EFS,YTIME)
 ;
@@ -67,7 +65,6 @@ V04NetNewCapElec(allCy,PGALL,YTIME)	                       "Yearly difference in
 *v04CostPowGenLongIntPri(allCy,PGALL,ESET,YTIME)           "Long term power generation cost of technologies including international prices of main fuels (kUS$2015/toe)"
 *v04CostPowGenShortIntPri(allCy,PGALL,ESET,YTIME)          "Short term power generation cost of technologies including international Prices of main fuels (kUS$2015/toe)"
 *v04CostPowGenAvgShrt(allCy,ESET,YTIME)                    "Short-term average power generation cost (US$2015/kWh)"
-V04LoadFacDom(allCy,YTIME)                                 "Electricity load factor for entire domestic system"	
 V04DemElecTot(allCy,YTIME)                                 "Total electricity demand (TWh)"
 V04ProdElecEstCHP(allCy,TCHP,YTIME)	                       "Estimate the electricity of CHP Plants (1)"	
 V04CapexFixCostPG(allCy,PGALL,YTIME)                       "CAPEX and fixed costs of any power generation technology (US$2015/kW)"
@@ -80,7 +77,6 @@ V04ScrpRate(allCy,PGALL,YTIME)
 *'                **Interdependent Variables**	
 VmProdElec(allCy,PGALL,YTIME)                              "Electricity production (TWh)"	
 VmCostPowGenAvgLng(allCy,YTIME)	                   "Long-term average power generation cost (US$2015/kWh)"
-VmCapElecTotEst(allCy,YTIME)	                           "Estimated Total electricity generation capacity (GW)"
 VmCapElec(allCy,PGALL,YTIME)	                           "Electricity generation plants capacity (GW)"
 VmConsFuelElecProd(allCy,EFS,YTIME)
 ;

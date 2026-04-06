@@ -57,15 +57,13 @@ V09CostCapProdSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) =
 V09CostVarProdSte.LO(runCy,TSTEAM,YTIME) = 0;
 V09CostVarProdSte.L(runCy,TSTEAM,YTIME) = 1;
 V09CostVarProdSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) =
-sum(EF$TSTEAMTOEF(TSTEAM,EF),
-  (
-    VmPriceFuelSubsecCarVal.L(runCy,"STEAMP",EF,YTIME) +
-    V09CaptRateSte.L(runCy,TSTEAM,YTIME) * 
-    (imCo2EmiFac(runCy,"STEAMP",EF,YTIME) + 4.17$(sameas("BMSWAS", EF))) * 
-    VmCstCO2SeqCsts.L(runCy,YTIME) * 1e-3 +
-    (1-V09CaptRateSte.L(runCy,TSTEAM,YTIME)) * 1e-3 * (imCo2EmiFac(runCy,"STEAMP",EF,YTIME)) *
-    sum(NAP$NAPtoALLSBS(NAP,"STEAMP"),VmCarVal.L(runCy,NAP,YTIME))
-  )
+sum(EFS$TSTEAMTOEF(TSTEAM,EFS),
+  i09ShareFuel(runCy,TSTEAM,EFS,"%fBaseY%") * 
+    (
+      VmPriceFuelSubsecCarVal.L(runCy,"STEAMP",EFS,YTIME) +
+      V09CaptRateSte.L(runCy,TSTEAM,YTIME) * (imCo2EmiFac(runCy,"STEAMP",EFS,YTIME) + 4.17$(sameas("BMSWAS", EFS))) * VmCstCO2SeqCsts.L(runCy,YTIME) * 1e-3 +
+      (1-V09CaptRateSte.L(runCy,TSTEAM,YTIME)) * 1e-3 * (imCo2EmiFac(runCy,"STEAMP",EFS,YTIME)) * sum(NAP$NAPtoALLSBS(NAP,"STEAMP"),VmCarVal.L(runCy,NAP,YTIME))
+    )
 ) / SUM(STECH$sameas(STECH,TSTEAM),imPlantEffByType(runCy,STECH,"effHeat",YTIME)) +
 i09CostVOMSteProd(TSTEAM,YTIME) * 1e-3 -!!/ smTWhToMtoe / SUM(TCHP$sameas(TCHP,TSTEAM),VmPriceElecInd.L(runCy,TCHP,YTIME)) -
 (

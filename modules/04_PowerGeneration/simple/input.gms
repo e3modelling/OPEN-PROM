@@ -152,7 +152,7 @@ i04ScaleEndogScrap = 6 / card(PGALL);
 *---
 i04DecInvPlantSched(runCy,PGALL,YTIME) = i04InvPlants(runCy,PGALL,YTIME);
 *---
-i04MxmShareChpElec(runCy,YTIME) = 0.35;
+i04MxmShareChpElec(runCy,YTIME) = 0.2;
 *---
 i04Util(allCy,PGALL,YTIME) = 1;
 *---

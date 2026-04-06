@@ -204,9 +204,11 @@ Q03ImpNetEneBrnch(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q03ConsFiEneSec(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmConsFiEneSec(allCy,SSBS,EFS,YTIME)
         =E=
-    i03RateEneBranCons(allCy,SSBS,EFS,YTIME) *
-    SUM(EFS2$SECtoEFPROD(SSBS,EFS2), 
-      V03OutTotTransf(allCy,SSBS,EFS2,YTIME) +
-      V03ProdPrimary(allCy,EFS2,YTIME)$(not PGRENEF(EFS2))
-    ) +
+    (
+      i03RateEneBranCons(allCy,SSBS,EFS,YTIME) *
+      SUM(EFS2$SECtoEFPROD(SSBS,EFS2), 
+        V03OutTotTransf(allCy,SSBS,EFS2,YTIME) +
+        V03ProdPrimary(allCy,EFS2,YTIME)$(not PGRENEF(EFS2))
+      )
+     )$(not sameas("H2P",SSBS)) +
     VmConsFuelH2Prod(allCy,EFS,YTIME)$sameas("H2P",SSBS);                               
