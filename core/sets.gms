@@ -110,6 +110,7 @@ runCy(allCy)$(%DevMode% = 0) = resCy(allCy) ;
 runCyL(allCy)$(%DevMode% = 0) = resCy(allCy) ;
 
 ALIAS(runCyL,runCy2)
+alias(allCy, allCy2);
 sets
 ***        Model Time Horizon       *
 ytime           Model time horizon                                /%fStartHorizon%*%fEndHorizon%/

@@ -116,6 +116,7 @@ USA.LTDAC.2032  1e6,    !!HIF USA eFuels – Matagorda County, Texas
 USA.LTDAC.2034  5e5,    !!Project Bison – Wyoming (CarbonCapture Inc.)
 USA.LTDAC.2035  7e5     !!South Texas DAC Hub
 $ifthen.DACproj %fScenario% == 2
+$$ontext
 CHA.LTDAC.2026  1e6,    !!Possible
 CHA.H2DAC.2030  1e5,    !!Possible
 CHA.TEW.2030  1e6,    !!Possible
@@ -134,7 +135,9 @@ MEA.LTDAC.2031  1e5,    !!Possible
 MEA.TEW.2037  5e5,    !!Possible
 SSA.LTDAC.2032  1e6,    !!Possible
 SSA.TEW.2037  1e5,    !!Possible
-LAM.TEW.2024  5e5/;
+LAM.TEW.2024  5e5
+$$offtext
+/;
 $else.DACproj
 /;
 $endIf.DACproj
