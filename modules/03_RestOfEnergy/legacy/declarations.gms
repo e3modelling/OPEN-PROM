@@ -12,6 +12,7 @@ i03RatioImpFinElecDem(allCy,YTIME)	              "Ratio of imports in final elec
 i03RatioPrimaryFuels(allCy,EFS,YTIME)
 i03InputEffSupply(allCy,SSBS,EFS,YTIME)
 i03RateExpTotImp(allCy,EFS,YTIME)
+i03RateImpGrossInlCons(allCy,EFS,YTIME)            "Rate of Imports in Gross inland consumption (1)"
 ;
 
 Equations

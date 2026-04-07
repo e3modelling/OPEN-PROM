@@ -35,30 +35,7 @@ Q04ProdElecEstCHP(allCy,TCHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04DemElecTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04DemElecTot(allCy,YTIME)
         =E=
-    (V03ConsGrssInl(allCy,"ELC",YTIME) - VmImpNetEneBrnch(allCy,"ELC",YTIME)) / smTWhToMtoe;
-
-*' This equation calculates the load factor of the entire domestic system as a sum of consumption in each demand subsector
-*' and the sum of energy demand in transport subsectors (electricity only). Those sums are also divided by the load factor
-*' of electricity demand per sector
-Q04LoadFacDom(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V04LoadFacDom(allCy,YTIME)
-        =E=
-    0;
-    !!(sum(INDDOM,VmConsFuel(allCy,INDDOM,"ELC",YTIME)) + sum(TRANSE, VmDemFinEneTranspPerFuel(allCy,TRANSE,"ELC",YTIME))) /
-    !!(
-    !!sum(INDDOM,VmConsFuel(allCy,INDDOM,"ELC",YTIME)/i04LoadFacElecDem(INDDOM)) + 
-    !!sum(TRANSE, VmDemFinEneTranspPerFuel(allCy,TRANSE,"ELC",YTIME)/i04LoadFacElecDem(TRANSE))
-    !!);         
-
-*' The equation calculates the estimated total electricity generation capacity by multiplying the previous year's total electricity generation capacity with
-*' the ratio of the current year's estimated electricity peak load to the previous year's electricity peak load. This provides an estimate of the required
-*' generation capacity based on the changes in peak load.
-Q04CapElecTotEst(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    VmCapElecTotEst(allCy,YTIME)
-          =E=
-    0; !!Not used
-    !!VmCapElecTotEst(allCy,YTIME-1) *
-    !!VmPeakLoad(allCy,YTIME) / VmPeakLoad(allCy,YTIME-1);          
+    (V03ConsGrssInl(allCy,"ELC",YTIME) - VmImpNetEneBrnch(allCy,"ELC",YTIME)) / smTWhToMtoe;          
 
 *' This equation calculates the CAPEX and the Fixed Costs of each power generation unit, taking into account its discount rate and life expectancy, 
 *' for each region (country) and year. Learning curves applied only to CAPEX costs with cost breakdown.
@@ -95,10 +72,11 @@ Q04CostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
     i04VarCost(PGALL,YTIME) / 1e3 + 
     (VmRenValue(YTIME) * 8.6e-5)$(not (PGREN2(PGALL)$(not sameas("PGASHYD",PGALL)) $(not sameas("PGSHYD",PGALL)) $(not sameas("PGLHYD",PGALL)) )) +
     sum(PGEF$PGALLtoEF(PGALL,PGEF), 
-      (i04ShareFuels(allCy,PGALL,PGEF) * VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME) +
+      i04ShareFuels(allCy,PGALL,PGEF) * 
+      (
+        VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME) +
       V04CO2CaptRate(allCy,PGALL,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME) + 4.17$(sameas("BMSWAS", PGEF))) +
-      (1-V04CO2CaptRate(allCy,PGALL,YTIME)) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME) + 4.17$(sameas("BMSWAS", PGEF)))*
-      sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME))
+      (1-V04CO2CaptRate(allCy,PGALL,YTIME)) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME) + 4.17$(sameas("BMSWAS", PGEF))) * sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME))
       ) * smTWhToMtoe / imPlantEffByType(allCy,PGALL,"effELC",YTIME)
     )$(not PGREN(PGALL));
 
@@ -273,8 +251,8 @@ Q04ShareSatPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(PGREN(PGALL)))..
 Q04CostPowGenAvgLng(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCostPowGenAvgLng(allCy,YTIME)
         =E=
-    SUM(PGALL,(VmProdElec(allCy,PGALL,YTIME) + 1e-6) * V04CostHourProdInvDec(allCy,PGALL,YTIME)) / 
-    (V04CapElecNonCHP(allCy,YTIME) + 1e-6); 
+    SUM(PGALL,(VmProdElec(allCy,PGALL,YTIME) + 1e-6)* V04CostHourProdInvDec(allCy,PGALL,YTIME)) / 
+    SUM(PGALL,VmProdElec(allCy,PGALL,YTIME) + 1e-6); 
 
 *' This equation estimates the factor increasing the CAPEX of new RES (unflexible) capacity installation due to simultaneous need for grind upgrade and storage, 
 *' for each region (country) and year. This factor depends on the existing RES (unflexible) penetration in the electriciy mixture.

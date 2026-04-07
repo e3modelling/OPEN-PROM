@@ -11,6 +11,12 @@ $offdelim
 ;
 $ENDIF
 *---
+parameter i08PriceCrudeOil(YTIME) /
+$ondelim
+$include "CrudeOilPrice.csv"
+$offdelim
+/;
+*---
 Parameters
 i08DiffFuelsInSec(SBS)                    "Auxiliary parameter holding the number of different fuels in a sector"
 i08WgtSecAvgPriFueCons(allCy,SBS,EF)	    "Weights for sector's average price, based on fuel consumption (1)"
@@ -66,4 +72,5 @@ imFuelPrice(runCy,"SE","BMSWAS",YTIME) = imFuelPrice(runCy,"AG","BMSWAS",YTIME);
 imFuelPrice(runCy,"BU","NGS",YTIME) = imFuelPrice(runCy,"OI","NGS",YTIME);
 imFuelPrice(runCy,"BU","GSL",YTIME) = imFuelPrice(runCy,"OI","GSL",YTIME);
 imFuelPrice(runCy,"BU","BGSL",YTIME) = imFuelPrice(runCy,"OI","BGSL",YTIME);
+imFuelPrice(runCy,SBS,"CRO",YTIME) = i08PriceCrudeOil(YTIME);
 *---
