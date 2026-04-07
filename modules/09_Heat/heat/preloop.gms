@@ -92,4 +92,5 @@ VmConsFuelSteProd.FX(runCy,"CHP",STEAMEF,YTIME)$DATAY(YTIME) = -i03InpTotTransfP
 VmConsFuelSteProd.FX(runCy,"DHP",STEAMEF,YTIME)$DATAY(YTIME) = -i03InpTotTransfProcess(runCy,"STEAMP",STEAMEF,YTIME);
 *---
 V09DemGapSte.LO(runCy,YTIME) = 0;
-*V09DemGapSte.L(runCy,YTIME) = 0.1;
+V09DemGapSte.L(runCy,YTIME) = 1;
+V09DemGapSte.FX(runCy,YTIME)$DATAY(YTIME) = 0;
