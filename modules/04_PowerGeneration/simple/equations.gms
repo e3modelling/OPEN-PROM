@@ -148,7 +148,7 @@ Q04GapGenCapPowerDiff(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         )
       ))
       ) 
-    )/2 + 1e-6;
+    )/2;
 
 *' Calculates the share of all the unflexible RES penetration into the mixture, and specifically how much above a given threshold it is.
 Q04ShareMixWndSol(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
