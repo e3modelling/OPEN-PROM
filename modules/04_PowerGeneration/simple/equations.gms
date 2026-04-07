@@ -281,7 +281,7 @@ Q04CCSRetroFit(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(NOCCS(PGALL)))..
     V04CostVarTech(allCy,PGALL,YTIME-1) ** (-2) /
     (
       V04CostVarTech(allCy,PGALL,YTIME-1) ** (-2) +
-      0.05 *
+      0.01 *
       SUM(PGALL2$CCS_NOCCS(PGALL2,PGALL),
         (
           V04CostCapTech(allCy,PGALL2,YTIME-1) -
