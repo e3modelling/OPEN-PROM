@@ -163,9 +163,9 @@ Q03ConsGrssInl(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q03ProdPrimary(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V03ProdPrimary(allCy,EFS,YTIME)
         =E=  
-    V03ConsGrssInl(allCy,EFS,YTIME) -
-    SUM(SSBS,V03OutTotTransf(allCy,SSBS,EFS,YTIME)) -
-    VmImpNetEneBrnch(allCy,EFS,YTIME);   
+    V03ConsGrssInl(allCy,EFS,YTIME) - 
+    VmImpNetEneBrnch(allCy,EFS,YTIME) -
+    SUM(SSBS,V03OutTotTransf(allCy,SSBS,EFS,YTIME));   
 
 *' The equation calculates the fake exports for a specific energy branch
 *' in a given scenario and year. The computation is based on the fuel exports for
@@ -204,9 +204,11 @@ Q03ImpNetEneBrnch(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q03ConsFiEneSec(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmConsFiEneSec(allCy,SSBS,EFS,YTIME)
         =E=
-    i03RateEneBranCons(allCy,SSBS,EFS,YTIME) *
-    SUM(EFS2$SECtoEFPROD(SSBS,EFS2), 
-      V03OutTotTransf(allCy,SSBS,EFS2,YTIME) +
-      V03ProdPrimary(allCy,EFS2,YTIME)$(not PGRENEF(EFS2))
-    ) +
+    (
+      i03RateEneBranCons(allCy,SSBS,EFS,YTIME) *
+      SUM(EFS2$SECtoEFPROD(SSBS,EFS2), 
+        V03OutTotTransf(allCy,SSBS,EFS2,YTIME) +
+        V03ProdPrimary(allCy,EFS2,YTIME)$(not PGRENEF(EFS2))
+      )
+     )$(not sameas("H2P",SSBS)) +
     VmConsFuelH2Prod(allCy,EFS,YTIME)$sameas("H2P",SSBS);                               

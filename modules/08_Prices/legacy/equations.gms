@@ -16,43 +16,23 @@
 *' carbon values for all countries, electricity prices to industrial and residential consumers,
 *' efficiency values, and the total hydrogen cost per sector.The result of the equation is the fuel price per 
 *' subsector and fuel, adjusted based on changes in carbon values, electricity prices, efficiency, and hydrogen costs.
-Q08PriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)$(SECtoEF(SBS,EF) $(not sameas("CRO",EF)) $TIME(YTIME)
+Q08PriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME)$(SECtoEF(SBS,EFS) $(not sameas("CRO",EFS)) $TIME(YTIME)
 $IFTHEN %link2MAgPIE% == on 
-   $(not sameas("BMSWAS",EF))
+   $(not sameas("BMSWAS",EFS))
 $ENDIF
-   $(not sameas("NUC",EF)) $runCy(allCy))..
-    VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)
+   $(not sameas("NUC",EFS)) $runCy(allCy))..
+    VmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME)
         =E=
+    VmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME-1) *
+    (1 + (VmCostPowGenAvgLng(allCy,YTIME-1) / VmCostPowGenAvgLng(allCy,YTIME-2) - 1)$sameas("ELC",EFS)) *
+    (1 + (VmCostAvgProdH2(allCy,YTIME-1) / VmCostAvgProdH2(allCy,YTIME-2) - 1)$sameas("H2F",EFS)) * 
+    (1 + (VmCostAvgProdSte(allCy,YTIME-1) / VmCostAvgProdSte(allCy,YTIME-2) - 1)$sameas("STE",EFS)) *
+    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.4 - 1)$sameas("NGS",EFS)) *
+    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.8 - 1)$SECtoEFPROD("LQD",EFS)) +
     (
-      VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1) +
-      sum(NAP$NAPtoALLSBS(NAP,SBS),
-      VmCarVal(allCy,NAP,YTIME)*imCo2EmiFac(allCy,SBS,EF,YTIME) - 
-      VmCarVal(allCy,NAP,YTIME-1)*imCo2EmiFac(allCy,SBS,EF,YTIME-1)
-      ) / 1000
-    )$(DSBS(SBS))$(not (ELCEF(EF) or HEATPUMP(EF) or ALTEF(EF) or H2EF(EF) or sameas("STE",EF))) +
-    (
-      VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1) +
-      sum(NAP$NAPtoALLSBS(NAP,SBS),
-      VmCarVal(allCy,NAP,YTIME)*imCo2EmiFac(allCy,SBS,EF,YTIME) - 
-      VmCarVal(allCy,NAP,YTIME-1)*imCo2EmiFac(allCy,SBS,EF,YTIME-1)
-      ) / 1000
-      !!We should account for carbon tax increase for the own consumption emissions
-    )$sameas(SBS,"PG") +
-    VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1)$(DSBS(SBS))$ALTEF(EF) +
-    (
-      ( VmPriceElecIndResConsu(allCy,"i",YTIME)$(INDSE1(SBS) or sameas("DAC",SBS) or sameas("EW",SBS))+
-        VmPriceElecIndResConsu(allCy,"r",YTIME)$HOU1(SBS) +
-        VmPriceElecIndResConsu(allCy,"t",YTIME)$TRANS1(SBS) +
-        VmPriceElecIndResConsu(allCy,"c",YTIME)$SERV(SBS)
-      ) / smTWhToMtoe +
-      (imEffValueInDollars(allCy,SBS,YTIME)/1000)$DSBS(SBS)
-    )$(ELCEF(EF) or HEATPUMP(EF)) +
-    (
-      VmPriceFuelSubsecCarVal(allCy,"OI",EF,YTIME)$(not sameas("BMSWAS",EF) or not sameas("CRO",EF)) +
-      VmPriceFuelSubsecCarVal(allCy,"AG",EF,YTIME)$sameas("BMSWAS",EF)
-    )$(sameas ("H2P",SBS) or sameas("STEAMP",SBS)) +
-    (VmCostAvgProdH2(allCy,YTIME-1)$DSBS(SBS)/1000)$H2EF(EF) +
-    (VmCostAvgProdSte(allCy,YTIME-1)$DSBS(SBS))$sameas("STE",EF);
+      VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,SBS,EFS,YTIME) * 1e-3 - 
+      VmCarVal(allCy,"TRADE",YTIME-1) * imCo2EmiFac(allCy,SBS,EFS,YTIME-1) * 1e-3
+    )$DSBS(SBS);
 
 Q08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)$(SECtoEF(DSBS,EF) $TIME(YTIME) $runCy(allCy))..
 V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)
@@ -84,45 +64,6 @@ Q08PriceFuelAvgSub(allCy,DSBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     sum(EF$SECtoEF(DSBS,EF), 
       V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME-1) *
       VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-1));         
-
-*' Calculates electricity price for industrial and residential consumers
-*' using previous year's fuel prices. For the first year, the price is directly based on fuel data.
-*' For later years, the price is scaled using a ratio of 2021 electricity price to 2021 average generation cost
-*' to ensure smoothness between historical and non-historical years.
-Q08PriceElecIndResConsu(allCy,ESET,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    VmPriceElecIndResConsu(allCy,ESET,YTIME) !!Cost final electricity
-        =E=
-    (1 + i08VAT(allCy,YTIME)) *
-    (
-      (
-      (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
-      (
-        VmPriceElecIndResConsu(allCy,"i","%fStartY%") / VmCostPowGenAvgLng(allCy, "%fStartY%") *
-        VmCostPowGenAvgLng(allCy,YTIME-1) !!Cost secondary energy electricity
-      )$(not TFIRST(YTIME-1))
-      )$sameas(ESET,"i") +
-      (
-        (VmPriceFuelSubsecCarVal(allCy,"HOU","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
-        (
-          VmPriceElecIndResConsu(allCy,"r","%fStartY%") / VmCostPowGenAvgLng(allCy, "%fStartY%") *
-          VmCostPowGenAvgLng(allCy,YTIME-1) 
-        )$(not TFIRST(YTIME-1))
-      )$sameas(ESET,"r") +
-      (
-        (VmPriceFuelSubsecCarVal(allCy,"PC","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
-        (
-          VmPriceElecIndResConsu(allCy,"t","%fStartY%") / VmCostPowGenAvgLng(allCy, "%fStartY%") *
-          VmCostPowGenAvgLng(allCy,YTIME-1) 
-        )$(not TFIRST(YTIME-1))
-      )$sameas(ESET,"t") +
-      (
-        (VmPriceFuelSubsecCarVal(allCy,"SE","ELC",YTIME-1)*smTWhToMtoe)$TFIRST(YTIME-1) +
-        (
-          VmPriceElecIndResConsu(allCy,"c","%fStartY%") / VmCostPowGenAvgLng(allCy, "%fStartY%") *
-          VmCostPowGenAvgLng(allCy,YTIME-1) 
-        )$(not TFIRST(YTIME-1))
-      )$sameas(ESET,"c") 
-    );
 
 *' This equation calculates the fuel prices per subsector and fuel, specifically for Combined Heat and Power (CHP) plants, considering the profit earned from
 *' electricity sales. The equation incorporates various factors such as the base fuel price, renewable value, variable cost of technology, useful energy conversion
