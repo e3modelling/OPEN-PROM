@@ -25,3 +25,12 @@ Running various different scenarios is a fundamental aspect of integrated assess
 
 This command will execute the OPEN-PROM model for a single region (RWO - Rest of the world), based on dummy datasets that are similar (**but not identical**) to those used internally by the E3-Modelling team. This will help you get a better understanding of the model equations, and experiment with the input/output.
  To receive the dummy dataset please contact the developing team at: info@e3modelling.com
+
+## (Optional): Re-defining mainfolder for madrat package
+If you get an error while the model generates the model input or output data, try running the following commands in the terminal:
+```
+R
+library(mrprom)
+library(postprom)
+```
+and specify your mainfolder path. This happens due to VS Code not loading the correct R version by default.
