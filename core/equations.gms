@@ -28,6 +28,9 @@ qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
       )$(t01NewShareStockPC(allCy,TRANSE,TTECH,YTIME) >= 0) +
       0.01 * (imMatrFactor(allCy,TRANSE,TTECH,YTIME) - imMatrFactor(allCy,TRANSE,TTECH,YTIME-1))
     )
+  ) +
+  SUM((DSBS,EFS)$(sameas("HOU",DSBS) and SECtoEF(DSBS,EFS)),
+    SQR(VmConsFuelShare(allCy,DSBS,EFS,YTIME) - (0.5$sameas("ELC",EFS) + 0.3$sameas("BMSWAS",EFS) + 0.2$sameas("NGS",EFS)))
   );
 
 qRestrain(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) and SECTTECH(TRANSE,TTECH) and runCy(allCy) and (t01NewShareStockPC(allCy,TRANSE,TTECH,YTIME) < 0)).. 

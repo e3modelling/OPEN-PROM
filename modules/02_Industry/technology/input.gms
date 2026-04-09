@@ -19,28 +19,24 @@ i02ExogDemOfBiomass(runCy,DOMSE,YTIME) = 0;
 *---
 i02util(runCy,DSBS,ITECH,YTIME) = 1;
 *---
-$IFTHEN.calib %Calibration% == Calibration
-variable i02ElastNonSubElec(allCy,DSBS,ETYPES,YTIME)        "Elasticities of Non Substitutable Electricity (1)";
-i02ElastNonSubElec.L(runCy,DSBS,ETYPES,YTIME) = i02ElastNonSubElecData(DSBS,ETYPES,YTIME);
-i02ElastNonSubElec.LO(runCy,DSBS,"a",YTIME)   = 0.001;
-i02ElastNonSubElec.UP(runCy,DSBS,"a",YTIME)   = 10;
-i02ElastNonSubElec.LO(runCy,DSBS,"b1",YTIME)  = -10;
-i02ElastNonSubElec.UP(runCy,DSBS,"b1",YTIME)  = -0.001;
-i02ElastNonSubElec.LO(runCy,DSBS,"b2",YTIME)  = -10;
-i02ElastNonSubElec.UP(runCy,DSBS,"b2",YTIME)  = -0.001;
-i02ElastNonSubElec.LO(runCy,DSBS,"c",YTIME)   = -10;
-i02ElastNonSubElec.UP(runCy,DSBS,"c",YTIME)   = -0.001;
+$IFTHEN.calib %Calibration% == off
+parameter i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME)       "Scale parameter for endogenous scrapping applied to the sum of full costs (1)";
+i02ScaleEndogScrap(runCy,DSBS,ITECH,YTIME) = 1;
 $ELSE.calib
-i02ElastNonSubElec(runCy,DSBS,ETYPES,YTIME) = i02ElastNonSubElecData(DSBS,ETYPES,YTIME);
+variable i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME)        "Scale parameter for endogenous scrapping applied to the sum of full costs (1)";
+i02ScaleEndogScrap.LO(runCy,DSBS,ITECH,YTIME) = 0;                                          
+i02ScaleEndogScrap.UP(runCy,DSBS,ITECH,YTIME) = 100;
+i02ScaleEndogScrap.L(runCy,DSBS,ITECH,YTIME) = 1;
+i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$DATAY(YTIME) = 0;
+i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$(not sameas("HOU",DSBS)) = 1;
 $ENDIF.calib
+i02ElastNonSubElec(runCy,DSBS,ETYPES,YTIME) = i02ElastNonSubElecData(DSBS,ETYPES,YTIME);
 *---
 i02ElaSub(runCy,DSBS) = imElaSubData(DSBS);
 i02ElaSub(runCy,DSBS) = 2; !!
 *---
-i02ScaleEndogScrap(DSBS)$(not TRANSE(DSBS) and not CDR(DSBS)) = 6./SUM(ITECH$SECTTECH(DSBS,ITECH),1);
-*---
 imCO2CaptRateIndustry(runCy,CCSTECH,YTIME) = 0.9;
-
+*---
 alias(ITECH,ITECH2);
 i02numtechnologiesUsingEF(DSBS,EF)=sum(ITECH2$(ITECHtoEF(ITECH2,EF)$SECTTECH(DSBS,ITECH2)),1);
 *---

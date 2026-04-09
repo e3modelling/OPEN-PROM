@@ -7,7 +7,6 @@ $IF NOT %Calibration% == Calibration i02ElastNonSubElec(allCy,DSBS,ETYPES,YTIME)
 i02util(allCy,DSBS,ITECH,YTIME)                            "Utilization rate of technology"
 i02numtechnologiesUsingEF(DSBS,EF)                         "Number of technologues using an energy form"     
 imCO2CaptRateIndustry(allCy,ITECH,YTIME)	               "Industry CO2 capture rate (1)"
-i02ScaleEndogScrap(DSBS)                            "Scale parameter for endogenous scrapping applied to the sum of full costs (1)"
 i02ShareBlend(allCy,DSBS,ITECH,EF,YTIME)                   "Share of each energy form in a technology"
 i02ShareElcHP(allCy,DSBS,YTIME)                            "Share of final electricity consumption of HeatPumps in substitutable electricity consumption (1)"
 ;
@@ -33,6 +32,7 @@ Q02PremScrpIndu(allCy,DSBS,ITECH,YTIME)                    "premature scrapping"
 Q02RatioRem(allCy,DSBS,ITECH,YTIME)
 *'                **Interdependent Equations**
 Q02ConsFuel(allCy,DSBS,EF,YTIME)                           "Compute fuel consumption of fuels in each subsector"
+Q02ConsFuelShare(allCy,DSBS,EF,YTIME)
 ;
 
 Variables
@@ -56,4 +56,5 @@ V02PremScrpIndu(allCy,DSBS,ITECH,YTIME)                    "premature scrapping"
 V02RatioRem(allCy,DSBS,ITECH,YTIME)
 *'                **Interdependent Variables**
 VmConsFuel(allCy,DSBS,EF,YTIME)                            "fuel consumption of fuels in each subsector"
+VmConsFuelShare(allCy,DSBS,EF,YTIME)
 ;

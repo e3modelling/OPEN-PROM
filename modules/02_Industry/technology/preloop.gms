@@ -93,3 +93,5 @@ V02CapCostTech.FX(runCy,DSBS,ITECH,YTIME)$(not An(YTIME) and not TRANSE(DSBS) an
 V02CostTech.LO(runCy,DSBS,ITECH,YTIME) = 0;
 V02CostTech.L(runCy,DSBS,ITECH,YTIME) = 1;
 V02CostTech.FX(runCy,DSBS,ITECH,YTIME)$DATAY(YTIME) = V02VarCostTech.L(runCy,DSBS,ITECH,YTIME) + V02CapCostTech.L(runCy,DSBS,ITECH,YTIME);
+*---
+VmConsFuelShare.FX(runCy,DSBS,EF,YTIME)$DATAY(YTIME) = (imFuelConsPerFueSub(runCy,DSBS,EF,YTIME) / SUM(EF2, imFuelConsPerFueSub(runCy,DSBS,EF2,YTIME)))$SUM(EF2, imFuelConsPerFueSub(runCy,DSBS,EF2,YTIME));
