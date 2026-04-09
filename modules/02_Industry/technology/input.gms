@@ -21,14 +21,24 @@ i02util(runCy,DSBS,ITECH,YTIME) = 1;
 *---
 $IFTHEN.calib %Calibration% == off
 parameter i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME)       "Scale parameter for endogenous scrapping applied to the sum of full costs (1)";
+parameter i02CalibUsefulEnergy(allCy,DSBS,YTIME);
+
 i02ScaleEndogScrap(runCy,DSBS,ITECH,YTIME) = 1;
+i02CalibUsefulEnergy(runCy,DSBS,YTIME) = 1;
 $ELSE.calib
 variable i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME)        "Scale parameter for endogenous scrapping applied to the sum of full costs (1)";
-i02ScaleEndogScrap.LO(runCy,DSBS,ITECH,YTIME) = 0;                                          
+variable i02CalibUsefulEnergy(allCy,DSBS,YTIME)        ;
+
+i02ScaleEndogScrap.LO(runCy,DSBS,ITECH,YTIME) = 0;                                      
 i02ScaleEndogScrap.UP(runCy,DSBS,ITECH,YTIME) = 100;
 i02ScaleEndogScrap.L(runCy,DSBS,ITECH,YTIME) = 1;
 i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$DATAY(YTIME) = 0;
 i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$(not sameas("HOU",DSBS)) = 1;
+
+i02CalibUsefulEnergy.LO(runCy,DSBS,YTIME) = -1;  
+i02CalibUsefulEnergy.UP(runCy,DSBS,YTIME) = 1;  
+i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$DATAY(YTIME) = 1;
+i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$(not sameas("HOU",DSBS)) = 1;
 $ENDIF.calib
 i02ElastNonSubElec(runCy,DSBS,ETYPES,YTIME) = i02ElastNonSubElecData(DSBS,ETYPES,YTIME);
 *---

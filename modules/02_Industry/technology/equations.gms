@@ -19,15 +19,15 @@
 Q02DemSubUsefulSubsec(allCy,DSBS,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not CDR(DSBS))$runCy(allCy))..
     V02DemSubUsefulSubsec(allCy,DSBS,YTIME) 
         =E=
-    [
-      V02DemSubUsefulSubsec(allCy,DSBS,YTIME-1) *
-      imActv(YTIME,allCy,DSBS) ** imElastA(allCy,DSBS,"a",YTIME) *
-      (VmPriceFuelAvgSub(allCy,DSBS,YTIME)/VmPriceFuelAvgSub(allCy,DSBS,YTIME-1) ) ** imElastA(allCy,DSBS,"b1",YTIME) *
-      (VmPriceFuelAvgSub(allCy,DSBS,YTIME-1)/VmPriceFuelAvgSub(allCy,DSBS,YTIME-2) ) ** imElastA(allCy,DSBS,"b2",YTIME) *
-      prod(KPDL,
-        ((VmPriceFuelAvgSub(allCy,DSBS,YTIME-ord(KPDL))/VmPriceFuelAvgSub(allCy,DSBS,YTIME-(ord(KPDL)+1)))/(imCGI(allCy,YTIME)**(1/6)))**( imElastA(allCy,DSBS,"c",YTIME)*imFPDL(DSBS,KPDL))
-      )
-    ]$imActv(YTIME-1,allCy,DSBS)
+    (1 + i02CalibUsefulEnergy(allCy,DSBS,YTIME)) *
+    V02DemSubUsefulSubsec(allCy,DSBS,YTIME-1) *
+    imActv(YTIME,allCy,DSBS) ** imElastA(allCy,DSBS,"a",YTIME) *
+    (VmPriceFuelAvgSub(allCy,DSBS,YTIME)/VmPriceFuelAvgSub(allCy,DSBS,YTIME-1) ) ** imElastA(allCy,DSBS,"b1",YTIME) *
+    (VmPriceFuelAvgSub(allCy,DSBS,YTIME-1)/VmPriceFuelAvgSub(allCy,DSBS,YTIME-2) ) ** imElastA(allCy,DSBS,"b2",YTIME) *
+    prod(KPDL,
+      ((VmPriceFuelAvgSub(allCy,DSBS,YTIME-ord(KPDL))/VmPriceFuelAvgSub(allCy,DSBS,YTIME-(ord(KPDL)+1)))/(imCGI(allCy,YTIME)**(1/6)))**( imElastA(allCy,DSBS,"c",YTIME)*imFPDL(DSBS,KPDL))
+    )
+    
 ;
 *'NEW EQUATION'
 *' This equation computes the remaining equipment capacity of each technology in each subsector in the beginning of the year YTIME based on the available capacity of the previous year
@@ -92,17 +92,12 @@ Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not CD
     V02CapCostTech(allCy,DSBS,ITECH,YTIME) 
         =E=
     (
-        (
-            (
-                (imDisc(allCy,DSBS,YTIME) * !! in case of chp plants we use the discount rate of power generation sector
-                    exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME))
-                ) /
-                (exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME)) - 1)
-            ) *
-            imCapCostTech(allCy,DSBS,ITECH,YTIME) * imCGI(allCy,YTIME) +
-            imFixOMCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit
-        ) / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME)
-    )
+      
+      imDisc(allCy,DSBS,YTIME) * exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME)) /
+      (exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME)) - 1) * 
+      imCapCostTech(allCy,DSBS,ITECH,YTIME) * imCGI(allCy,YTIME) +
+      imFixOMCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit
+    ) / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME)
 ;
 
 *' The equation computes the variable cost (variable + fuel) of each technology in each subsector - to check about consumer sizes
