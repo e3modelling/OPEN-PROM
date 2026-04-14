@@ -2,42 +2,101 @@
 
 **Objective:**
 
-In this installation guide, you will find a brief guide about loading input data files to the OPEN-PROM model. This is accomplished by utilizing the complementary [`mrprom`](https://github.com/e3modelling/mrprom) R package, that is also developed by E3-Modelling.
+In this guide, you will find the common setup that is needed before loading input data files to the OPEN-PROM model. This setup is shared by both external users and E3-Modelling internal users. The input data workflow relies on the complementary [`mrprom`](https://github.com/e3modelling/mrprom) R package, which is also developed by E3-Modelling.
 
-You can move directly to Tutorial named 04_First OPEN-PROM running if you want to test the model with dummy data and come back later here. This tutorial has to be completed before running the model with real data as it will be explained in 05_Running OPEN-PROM with real input data.
+If you only want to test the model with dummy data, you do not need the full real-data setup described later in this tutorial. However, you still need the basic software environment described here, because the dummy-data first run still depends on R, GAMS, and the `loadMadratData.R` script used in Tutorial 04.
 
 ## Installing Necessary Software and Libraries
-Before using the `mrprom` package, you'll need to install a recent version of the R language, available for [download here](https://www.r-project.org/), as well as Rtools (software that allows compilation of R packages from source code), available [here](https://cran.r-project.org/bin/windows/Rtools/). Make sure to install both in folders that do not require admin priviledges! Furthermore, R and Rtools should be added to the PATH variable of your OS, so check the instructions for [Windows](https://www.bbminfo.com/r/r-programming-environment-setup.php) and [Linux](https://www.digitalocean.com/community/tutorials/how-to-view-and-update-the-linux-path-environment-variable), respectively. Please be sure that the library reticulate is installed in R. You may need to restart your computer to ensure R is correctly added to your path.
 
+Before using `mrprom`, you need a working installation of R (download [here](https://www.r-project.org/)), as well as GAMS. If you use Windows, you may also need Rtools (download [here](https://cran.r-project.org/bin/windows/Rtools/)) for packages that compile from source. Make sure that R, GAMS, and, where relevant, Rtools are installed in folders that do not require admin priviledges, and can be found from your command line. If you need help adding software to your `PATH`, you can check example instructions for [Windows](https://www.bbminfo.com/r/r-programming-environment-setup.php) and [Linux](https://www.digitalocean.com/community/tutorials/how-to-view-and-update-the-linux-path-environment-variable). Please be sure that the library reticulate is installed in R. You may need to restart your computer to ensure that the updated `PATH` is visible in a new terminal session.
 
 After making sure that R is correctly set up on your system, launch the R console and execute the following commands:
 
-```
-options(repos = c(CRAN = "@CRAN@", pik = "https://rse.pik-potsdam.de/r/packages"))
-install.packages("devtools")
-devtools::install_github("GAMS-dev/gdxrrw/gdxrrw")
-devtools::install_github("https://github.com/e3modelling/mrprom")
-devtools::install_github("https://github.com/e3modelling/postprom")
-```
-If you get a warning, click "yes" on creating a personal library where packages can be written, and then choose an appropriate CRAN mirror option.
-If postprom requires additional libraries, try running the following commands:
-```
-options(repos = c(CRAN = "@CRAN@", pik = "https://rse.pik-potsdam.de/r/packages"))
-install.packages("piamValidation")
-install.packages("mip")
-devtools::install_github("https://github.com/e3modelling/postprom")
-```
-Optional: You can add ```options(repos = c(CRAN = "@CRAN@", pik = "https://rse.pik-potsdam.de/r/packages"))``` to your .Rprofile for future libraries' installations.
+```r
+options(repos = c(
+  pik = "https://pik-piam.r-universe.dev",
+  CRAN = "https://cloud.r-project.org"
+))
 
-Those commands will install the `mrprom` package, as well as additional dependencies that are necessary for its functionality. Please note, that you may be prompted to install the RTools utility, so proceed in doing that too.
+install.packages(c(
+  "magclass",
+  "madrat",
+  "gdx",
+  "gdxrrw",
+  "quitte",
+  "mip",
+  "piamValidation",
+  "mrdrivers",
+  "gms"
+))
+
+install.packages("remotes")
+remotes::install_github("e3modelling/mrprom")
+remotes::install_github("e3modelling/postprom")
+```
+
+Those commands install `mrprom`, `postprom`, and the main supporting packages used by the OPEN-PROM workflow. `remotes` is only needed as a helper package so that R can install packages directly from GitHub.
+
+If your goal is only the external dummy-data first run, this is more than the absolute minimum. In that case, the real essentials are:
+
+* a working R installation,
+* a working GAMS installation,
+* the ability to run `Rscript loadMadratData.R DevMode=2`,
+* and the R packages needed by that script, most notably `dplyr`.
+
+If `gdxrrw` cannot find your GAMS installation automatically, you may need to configure it explicitly in R. This is especially common on macOS and Linux. A typical example is:
+
+```r
+library(gdxrrw)
+gdxrrw::igdx("/path/to/gams/")
+```
+
+## Creating the Local Configuration File
+
+Apart from installing the software, you should also create a local `config.json` file in the root folder of `OPEN-PROM`. The simplest way is to copy `config.template.json` and edit the relevant fields.
+
+The most important settings are:
+
+* `gams_path`: the directory of the GAMS installation, if `gams` is not already available in your system `PATH`
+* `scenario_name`: the scenario label used in run folders and output naming
+* `model_runs_path`: the destination used by the optional run-folder sync step
+
+If you are not working in the internal E3-Modelling environment, `model_runs_path` is often not needed immediately. In that case, the common first change in `start.R` is:
+
+```r
+withSync <- FALSE
+```
+
+This avoids errors at the archive and sync stage when no valid internal destination has been configured.
+
+## Understanding the Main `start.R` Switches
+
+At the top of `start.R`, OPEN-PROM defines four switches that modify the workflow around the model run:
+
+* `withRunFolder`
+* `withSync`
+* `withReport`
+* `uploadGDX`
+
+These switches do not change the mathematical model itself. They control the wrapper workflow around it, such as whether a run folder is created, whether outputs are archived, and whether the reporting script is executed automatically. There are also several task modes available through VS Code and `start.R`, but their exact meaning is explained later in Tutorial 05.
 
 ## Adding the Data Sources
-Apart from installing the software, you also need to include the necessary data sources to the associated local directory of `madrat`, with instructions being available [here](https://cran.r-project.org/web/packages/madrat/vignettes/madrat.html). Due to the proprietary nature of those datasets, we can't share them publicly, so you'll have to acquire them yourself, or contact us for further guidance. Furthermore, if you are interested in testing the model with dummy datasets that are openly provided by E3-Modelling, please refer to Tutorial 03 for instructions.
+
+Apart from software setup, the model also needs access to the right data sources. This is where external users and internal users begin to diverge.
+
+If you are an E3-Modelling internal user, the normal workflow is to point `madrat` (see instructions [here](https://cran.r-project.org/web/packages/madrat/vignettes/madrat.html)) to a locally synced internal data directory. That step, together with the SharePoint and `mainfolder` setup, is described in Tutorial 05. Due to the proprietary nature of those datasets, we can't share them publicly, so you'll have to acquire them yourself, or contact us for further guidance.
+
+If you are an external user, you do not need to configure the full internal data sources in order to try the model for the first time. The dummy-data route described in Tutorial 04 downloads a public archive from Google Drive and extracts it locally. That path does not use the full internal `mrprom` data pipeline, but it still uses R and the local helper script.
 
 ## Input Data Overview
-The `mrprom` package calc functions generate a multitude of datasets, originating from various reputable sources. To ensure transparency and reproducibility, we have created a spreadsheet about all the datasets utilized by the OPEN-PROM model, available [here](https://github.com/e3modelling/OPEN-PROM/blob/main/tutorials/InputDataOverview.csv). In this spreadsheet, you can find information about every dataset generated by `mrprom`, along with the original source, as well as a brief description of the resulting OPEN-PROM input parameter.
 
-## Executing the OPEN-PROM Model 
-To run the model using the generated input data, follow the steps in **05_Running OPEN-PROM with real input data**. 
+The `mrprom` package calc functions generate a large number of datasets, originating from many different sources. To support transparency and reproducibility, a spreadsheet with the OPEN-PROM input datasets is available in `InputDataOverview.csv` in this tutorials folder. It provides the generated OPEN-PROM input parameters together with the original source and a short description.
 
-As mentioned in the VS Code Task Runner Tutorial (01), the OPEN-PROM model can be executed by clicking **Task Runner > OPEN-PROM DEV** on the Visual Studio Code menu. This will invoke the `LoadMadratData.R` script that utilizes the `mrprom` package, and processes all datasets that are necessary to successfuly run the model. If the model runs correctly, a number of CSV files will be stored in the root directory of OPEN-PROM, along with some additional configuration and diagnostics files that are generated by `mrprom`. The entire process output will be available on the Visual Studio Code terminal, so you can catch any errors, or simply monitor the R and GAMS code execution!
+## Executing the OPEN-PROM Model
+
+To run the model after the setup is complete:
+
+* External users should continue with Tutorial 04.
+* E3-Modelling internal users should continue with Tutorial 05.
+
+As mentioned in the VS Code Task Runner tutorial, OPEN-PROM can be started either from the Task Runner panel or from the command line. However, the correct button or command depends on the run mode, the available data, and whether fresh input generation is needed. That is why the actual execution paths are explained in the next tutorials rather than here.

@@ -4,10 +4,10 @@ This guide is designed for advanced users, though the model can still be utilize
 
 **Objective:**
 
-Learn how to install the Task Runner extension in VS Code. This allows to quickly execute tasks by creating and using buttons similar to the ones found in other programs (e.g. GAMS Studio). These buttons can streamline your workflow, whether for development or research, by automating tasks. You'll also learn about development and research modes, and their computational requirements. 
+Learn how to install the Task Runner extension in VS Code. This allows you to quickly execute OPEN-PROM tasks by creating and using buttons similar to the ones found in other programs, such as GAMS Studio. These buttons simplify the launch of the predefined workflows, but they do not replace the command line. They are simply a more convenient way to trigger the same commands from inside VS Code.
 
 **Note:**
-It is recommended to follow this tutorial after completing Tutorial 01 and having cloned the repository, and added all necessary extensions.
+It is recommended to follow this tutorial after completing Tutorial 01 and having cloned the repository and installed the necessary extensions.
 
 ## Step-by-Step Guide
 
@@ -19,26 +19,35 @@ It is recommended to follow this tutorial after completing Tutorial 01 and havin
    - After installing the extension, restart Visual Studio Code for the changes to take effect.
 
 3. **Open Cloned Repository:**
-   - Open the cloned repository folder in Visual Studio Code.
+   - Open the cloned `OPEN-PROM` repository folder in Visual Studio Code.
 
 4. **Access Task Runner:**
    - In the left-hand sidebar, click on the "Explorer" tab.
-   - At the bottom of the opened tab, you should see the Task Runner dropdown list. Click on it to reveal the available tasks, such as OPEN-PROM tasks.
+   - At the bottom of the Explorer view, you should see the Task Runner dropdown list.
+   - Expand it to reveal the available OPEN-PROM buttons from `.vscode/tasks.json`.
+
+## What the Buttons Actually Do
+
+The Task Runner buttons are shortcuts for commands defined in `.vscode/tasks.json`. In practice, they call commands such as:
+
+- `Rscript start.R task=...`
+- or direct GAMS calls
+
+So the Task Runner panel is not a different workflow. It is a launch panel for the same predefined commands that could also be executed in the terminal.
 
 ## Development and Research Modes
 
-The OPEN-PROM tasks are divided into two modes: development and research.
+The OPEN-PROM tasks are divided into several run modes. At a high level, these include:
 
-- **Development Mode:**
-  - Use development mode when adding new features or modifying the model code.
-  - Development mode is less demanding in terms of computational resources (6 countries instead of the 50+ countries in research mode).
+- development runs,
+- development runs with fresh data generation,
+- research runs,
+- and calibration-related runs.
 
-- **Research Mode:**
-  - Prefer research mode for production runs.
-  - Research mode requires more computational resources and takes longer to execute.
+At this stage, you do not need to memorize every task. The important point is that different buttons trigger different combinations of flags in `start.R`, such as `DevMode`, `GenerateInput`, and reporting options.
 
-If you want to study the command-line flags of each mode, refer to the `.vscode/tasks.json` file in your project directory.
+If you want to study the exact meaning of each mode, continue to Tutorial 05.
 
 **You are all set up!**
 
-By following these steps, you can seamlessly integrate the Task Runner extension into your Visual Studio Code workflow for running GAMS code efficiently.
+By following these steps, you can integrate the Task Runner extension into your Visual Studio Code workflow and use it as a convenient way to launch OPEN-PROM runs.
