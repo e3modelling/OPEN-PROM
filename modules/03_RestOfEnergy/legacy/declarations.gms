@@ -2,16 +2,16 @@
 *' @code
 
 Parameters
-i03SupTrnasfOutputRefineries(allCy,EF,YTIME)	  "Supplementary parameter for the transformation output from refineries (Mtoe)"
-i03SupResRefCapacity(allCy,SUPOTH,YTIME)	      "Supplementary Parameter for the residual in refineries Capacity (1)"
+*i03SupTrnasfOutputRefineries(allCy,EF,YTIME)	  "Supplementary parameter for the transformation output from refineries (Mtoe)"
+*i03SupResRefCapacity(allCy,SUPOTH,YTIME)	      "Supplementary Parameter for the residual in refineries Capacity (1)"
 i03TotEneBranchCons(allCy,EF,YTIME)	              "Total Energy Branch Consumption (Mtoe)"
 *i03RefCapacity(allCy,YTIME)	                      "Refineries Capacity (Million Barrels/day)"
-i03ResTransfOutputRefineries(allCy,EF,YTIME)      "Residual in Transformation Output from Refineries (Mtoe)"
-i03ResHcNgOilPrProd(allCy,EF,YTIME)	              "Residuals for Hard Coal, Natural Gas and Oil Primary Production (1)"
-i03RatioImpFinElecDem(allCy,YTIME)	              "Ratio of imports in final electricity demand (1)"
+*i03ResTransfOutputRefineries(allCy,EF,YTIME)      "Residual in Transformation Output from Refineries (Mtoe)"
+*i03ResHcNgOilPrProd(allCy,EF,YTIME)	              "Residuals for Hard Coal, Natural Gas and Oil Primary Production (1)"
+*i03RatioImpFinElecDem(allCy,YTIME)	              "Ratio of imports in final electricity demand (1)"
 i03RatioPrimaryFuels(allCy,EFS,YTIME)
 i03InputEffSupply(allCy,SSBS,EFS,YTIME)
-i03RateExpTotImp(allCy,EFS,YTIME)
+i03RateExpTotImp(allCy,EFS,YTIME)                  "Share of exports in total world trade"
 i03RateImpGrossInlCons(allCy,EFS,YTIME)            "Rate of Imports in Gross inland consumption (1)"
 ;
 
