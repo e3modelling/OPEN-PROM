@@ -246,7 +246,7 @@ $setGlobal Transport        simple
 $setGlobal Industry         technology
 $setGlobal RestOfEnergy     legacy
 $setGlobal PowerGeneration  simple
-$setGlobal Hydrogen         legacy
+$setGlobal Hydrogen         simple
 $setGlobal CO2              legacy
 $setGlobal Emissions        legacy
 $setGlobal Prices           legacy
