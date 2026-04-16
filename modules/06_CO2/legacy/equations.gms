@@ -35,19 +35,6 @@ Q06CO2CaptureCCS(allCy,SBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECtoEF(SBS,EF
     ) *
     (imCo2EmiFac(allCy,SBS,EFS,YTIME) + 4.17$sameas("BMSWAS",EFS));
 
-*' The equation calculates the global CCS limit across all regions excluding DAC in million tons of CO2 per year for a specific year. 
-*' The global CCS limit is determined by summing the CO2 captured by electricity and hydrogen production plants across all regions and technologies, excluding DAC. 
-*' This equation imposes a constraint on the total annual point-source CO2 capture, ensuring that it does not exceed a specified limit of 5000 million tons of CO2 per year.
-*' Global CCS limit: Constrains total annual point-source CO2 capture (excluding DAC) 
-*' across all regions to 5 GtCO2/yr (5000 MtCO2/yr)
-Q06GlobalCCSLimit(YTIME)$(TIME(YTIME))..
-    sum((runCy,CO2CAPTECH)$(not sameas(CO2CAPTECH,"DAC")),
-      V06CapCO2ElecHydr(runCy,CO2CAPTECH,YTIME)
-    )
-      =L=
-    5000
-    ;
-
 *' The equation calculates the cumulative CO2 captured in million tons of CO2 for a given scenario and year.
 *' The cumulative CO2 captured at the current time period is determined by adding the CO2 captured by electricity and hydrogen production
 *' plants to the cumulative CO2 captured in the previous time period. This equation captures the ongoing total CO2 capture
