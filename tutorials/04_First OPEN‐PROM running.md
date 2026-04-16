@@ -1,27 +1,51 @@
-## Installing GAMS 
-Before starting, you'll need to install the GAMS library, available for [download here](https://www.gams.com/download/). Install GAMS in a directory that does not require administrative privileges for easier access. During installation, select the "Use advanced installation mode" option and tick the checkbox for "Add GAMS directory to PATH environment variable" checkbox. This step is important to ensure GAMS is accessible via your operating system's command line.
-
 ## First OPEN-PROM run with dummy data
 
-**Objective:**
- OPEN-PROM utilizes some proprietary data sources that can't be publicly shared. To run the OPEN-PROM model for the first time, you can use dummy data to test its functionality and ensure everything is set up correctly. This allows you to familiarize yourself with the model’s structure, configuration, and output without needing access to proprietary data. The following section will guide you through the steps to create a configuration file, adjust the necessary settings, and execute the model using dummy data. This will provide you with a clear understanding of how the model operates and allow you to begin experimenting with its features.
+**Objective**
 
-## 1st step: Creating a Configuration File
-Customization and flexibility is a priority during the development of OPEN-PROM, so we have included a configuration file that lets users change model settings. To create your own configuration file, please **make a copy** of the `config.template.json` file and rename it to `config.json`. Afterwards, you will be able to configure various settings, such as the custom GAMS system directory. 
+This tutorial is for external users who want to verify that OPEN-PROM runs on their machine before they have access to real input data. It uses a public dummy dataset and runs only the `RWO` region.
 
-## 2nd step: Creating and Syncing Run Folders in the Configuration File
-Every model run started by the aforementioned tasks, will be saved as a subfolder in the `/runs` folder. In case you want to temporarily disable this feature, you can open the `start.R` script, and set the `withRunFolder` flag equal to `FALSE`. Additionally, if you are part of E3Modelling, every individual model run stored in `/runs` will also be synced with the company cloud storage (SharePoint). You can specify the SharePoint path of your preference in the `"model_runs_path"` parameter of the configuration file. Finally, in case you want to disable this feature, you can set the `withSync` flag equal to `FALSE`.
+This tutorial assumes that you have at least completed the basic software setup from Tutorial 03. In practice, you need a working `Rscript` command, a working `gams` command, and the R packages required by `loadMadratData.R`.
 
-## 3rd step: Setting a Custom GAMS Path
-In some cases, it is beneficial to install multiple versions of GAMS, for testing and debugging purposes. For example, you can execute the model with both GAMS version 45 and 46, and compare the results. To specify the GAMS version that is used while executing the model, you can add the associated directory path to the `"gams_path"` parameter of the configuration file. To avoid errors, please remember to include a trailing slash, e.g. `C:\GAMS\45\`.
+If you later experiment with `start.R` or the VS Code Task Runner instead of the direct GAMS command below, first open `start.R` and set:
 
-## 4th step: Setting a Custom Scenario Name
-Running various different scenarios is a fundamental aspect of integrated assessment modelling, with the purpose of comparing alternative decarbonization pathways and exploring greenhouse gas emissions trajectories. You can easily specify the scenario name of your preference, by setting the `"scenario_name"` parameter in the configuration file. This scenario name will be used in the model run folders that were mentioned previously.
+```r
+withSync <- FALSE
+```
 
-# Final step: Running the Model with Dummy Data
- Afterwards, you simply need to open a terminal window and execute the following command:  
+This dummy-data path does not use the normal internal sync workflow, and leaving `withSync <- TRUE` can make `syncRun()` stop the wrapper when `model_runs_path` is not configured.
 
-`gams main.gms --DevMode=2 --GenerateInput=on --fCountries='RWO' -Idir=./data`
+## 1. Download the dummy data
 
-This command will execute the OPEN-PROM model for a single region (RWO - Rest of the world), based on dummy datasets that are similar (**but not identical**) to those used internally by the E3-Modelling team. This will help you get a better understanding of the model equations, and experiment with the input/output.
- For any further questions or suggestions, feel free to contact the developing team at: info@e3modelling.com
+Run the dummy-data loader once:
+
+```bash
+Rscript loadMadratData.R DevMode=2
+```
+
+This downloads `dummy_data.tgz` from Google Drive and extracts it into `./data`. It does **not** create `./targets`, so it cannot be used for calibration or any workflow that depends on targets.
+
+## 2. Run the model
+
+After `./data` exists, start OPEN-PROM directly with GAMS:
+
+```bash
+gams main.gms --DevMode=1 --GenerateInput=off --fCountries='RWO' -Idir=./data
+```
+
+This is the cleanest first run for external users:
+
+* `--DevMode=1` selects the development-size region set
+* `--GenerateInput=off` tells GAMS to use the already extracted dummy `data/`
+* `--fCountries='RWO'` restricts the run to the single public dummy region
+
+Do not treat this as the internal Task Runner workflow. `DevMode=2` is only for the public dummy-data path, and it is not the same as the internal task modes described in Tutorial 05.
+
+## 3. What to expect
+
+If the run is configured correctly, GAMS will solve the model for `RWO` and write the usual model outputs in the current working directory. Typical files to check are:
+
+* `modelstat.txt`
+* `outputData.gdx`
+* the standard listing and log files produced by GAMS
+
+If you later want to understand the internal workflow, data generation, or task modes, continue with Tutorial 05.

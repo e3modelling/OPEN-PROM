@@ -20,17 +20,16 @@ Q11SubsiTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
             (
               sum((EF,EFS)$EFtoEFS(EF,EFS),
                 VmConsFinEneCountry(allCy,EF,YTIME-1) * imCo2EmiFac(allCy,"PG",EF,YTIME-1)) 
-              + sum(SSBS, V07EmissCO2Supply(allCy,SSBS,YTIME-1))
+              + sum(SSBS, V07GrossEmissCO2Supply(allCy,SSBS,YTIME-1))
               -
-              sum(CO2CAPTECH,V06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME-1))
+              (V06CaptCummCO2(allCy,YTIME-1) - V06CaptCummCO2(allCy,YTIME-2))
             )
             +
             sqrt(sqr(
               sum((EF,EFS)$EFtoEFS(EF,EFS),VmConsFinEneCountry(allCy,EF,YTIME-1) * imCo2EmiFac(allCy,"PG",EF,YTIME-1))
-            + sum(SSBS,V07EmissCO2Supply(allCy,SSBS,YTIME-1))
+            + sum(SSBS,V07GrossEmissCO2Supply(allCy,SSBS,YTIME-1))
               -
-              sum(CO2CAPTECH,
-                V06CapCO2ElecHydr(allCy,CO2CAPTECH,YTIME-1))
+              (V06CaptCummCO2(allCy,YTIME-1) - V06CaptCummCO2(allCy,YTIME-2))
             ))
           ) / 2
          *
@@ -47,20 +46,20 @@ Q11SubsiDemTechAvail(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH
     V11SubsiTot(allCy,YTIME) * i11SubsiPerDemTechAvail(allCy,DSBS,TECH,YTIME);
 
 *' The equation calculates the state support per unit of new capacity in the industrial subsectors and technologies (kUS$2015/toe-year).
-Q11SubsiDemITech(allCy,DSBS,ITECH,YTIME)$(INDSE(DSBS) and SECTTECH(DSBS,ITECH) and TIME(YTIME) and not sameas(DSBS,"DAC") and runCy(allCy))..
+Q11SubsiDemITech(allCy,DSBS,ITECH,YTIME)$(INDSE(DSBS) and SECTTECH(DSBS,ITECH) and TIME(YTIME) and not CDR(DSBS) and runCy(allCy))..
     VmSubsiDemITech(allCy,DSBS,ITECH,YTIME)
         =E=
-    (
+    0 * (
       VmSubsiDemTechAvail(allCy,DSBS,ITECH,YTIME) * 1e3 /
-      (V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME-1) * V02GapUsefulDemSubsec(allCy,DSBS,YTIME-1) * 1e6 * VmLft(allCy,DSBS,ITECH,YTIME)) +
+      (V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME-1) * V02GapUsefulDemSubsec(allCy,DSBS,YTIME-1) * 1e6 * VmLft(allCy,DSBS,ITECH,YTIME) + 1e-6) +
       (1 - imCapCostTechMin(allCy,DSBS,ITECH,YTIME)) * V02CostTech(allCy,DSBS,ITECH,YTIME-1)
     -
     sqrt(sqr(
       VmSubsiDemTechAvail(allCy,DSBS,ITECH,YTIME) * 1e3 /
-      (V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME-1) * V02GapUsefulDemSubsec(allCy,DSBS,YTIME-1) * 1e6 * VmLft(allCy,DSBS,ITECH,YTIME)) -
+      (V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME-1) * V02GapUsefulDemSubsec(allCy,DSBS,YTIME-1) * 1e6 * VmLft(allCy,DSBS,ITECH,YTIME) + 1e-6) -
       (1 - imCapCostTechMin(allCy,DSBS,ITECH,YTIME)) * V02CostTech(allCy,DSBS,ITECH,YTIME-1)
     ))
-    )$(ord(YTIME) > 12) / 2;
+    )$(ord(YTIME) > 15) / 2;
 
 *' The equation calculates the state support per unit of new capacity in the demand subsectors and technologies for the following units:
 *' - Transport (kUS$2015 per vehicle)
@@ -70,36 +69,37 @@ Q11SubsiDemITech(allCy,DSBS,ITECH,YTIME)$(INDSE(DSBS) and SECTTECH(DSBS,ITECH) a
 Q11SubsiDemTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS,TECH))..
     VmSubsiDemTech(allCy,DSBS,TECH,YTIME)
         =E=
-    0
-$ontext
-    sum(TTECH$(sameas(TECH,TTECH)), !! Transport
+    $$ontext
+    (sum(TTECH$(sameas(TECH,TTECH)), !! Transport
       ( !! Transport (EVs)
         (
-          VmSubsiDemTechAvail(allCy,DSBS,TECH,YTIME) * 1e3 / (V01NewRegPcTechYearly(allCy,TTECH,YTIME-1) * 1e6)
+          VmSubsiDemTechAvail(allCy,DSBS,TECH,YTIME) * 1e3 / (V01NewRegPcTechYearly(allCy,TTECH,YTIME-1) * 1e6 + 1e-6) +
+           (1 - imCapCostTechMin(allCy,DSBS,TECH,YTIME)) * imCapCostTech(allCy,DSBS,TECH,YTIME)
           + (1 - imCapCostTechMin(allCy,DSBS,TECH,YTIME)) * imCapCostTech(allCy,DSBS,TECH,YTIME)
         ) -
         sqrt(sqr(
-        VmSubsiDemTechAvail(allCy,DSBS,TECH,YTIME) * 1e3 / (V01NewRegPcTechYearly(allCy,TTECH,YTIME-1) * 1e6)
+        VmSubsiDemTechAvail(allCy,DSBS,TECH,YTIME) * 1e3 / (V01NewRegPcTechYearly(allCy,TTECH,YTIME-1) * 1e6 + 1e-6)
         - (1 - imCapCostTechMin(allCy,DSBS,TECH,YTIME)) * imCapCostTech(allCy,DSBS,TECH,YTIME)))
       ) / 2
-    )$(ord(YTIME) > 12 and TRANSE(DSBS) and sameas(DSBS,"PC") and sameas(TECH,"TELC"))
+    )$(ord(YTIME) > 15 and TRANSE(DSBS) and sameas(DSBS,"PC") and sameas(TECH,"TELC")))
     +
-    sum(ITECH$(sameas(TECH,ITECH)), !! Industry
+    (sum(ITECH$(sameas(TECH,ITECH)), !! Industry
       VmSubsiDemITech(allCy,DSBS,ITECH,YTIME)
-    )$INDSE(DSBS)
+    )$INDSE(DSBS))
+    
     +
-    sum(DACTECH$(sameas(TECH,DACTECH)), !! CDR
+$$offtext 
+    sum(CDRTECH$(sameas(TECH,CDRTECH)), !! CDR
       (
-        VmSubsiDemTechAvail(allCy,"DAC",DACTECH,YTIME) * 1e6 / 
-      (V06CapDAC(allCy,DACTECH,YTIME-1) * V06CapFacNewDAC(allCy,DACTECH,YTIME-1))
-      + (1 - imCapCostTechMin(allCy,"DAC",DACTECH,YTIME)) * V06LvlCostDAC(allCy,DACTECH,YTIME-1)
+        VmSubsiDemTechAvail(allCy,DSBS,CDRTECH,YTIME) * 1e6 / 
+      (V06CapCDR(allCy,CDRTECH,YTIME-1) * V06CapFacNewDAC(allCy,CDRTECH,YTIME-1))
+      + (1 - imCapCostTechMin(allCy,DSBS,CDRTECH,YTIME)) * V06LvlCostDAC(allCy,CDRTECH,YTIME-1)
       -
-      sqrt(sqr(VmSubsiDemTechAvail(allCy,"DAC",DACTECH,YTIME) * 1e6 / 
-      (V06CapDAC(allCy,DACTECH,YTIME-1) * V06CapFacNewDAC(allCy,DACTECH,YTIME-1))
-      - (1 - imCapCostTechMin(allCy,"DAC",DACTECH,YTIME)) * V06LvlCostDAC(allCy,DACTECH,YTIME-1)))
+      sqrt(sqr(VmSubsiDemTechAvail(allCy,DSBS,CDRTECH,YTIME) * 1e6 / 
+      (V06CapCDR(allCy,CDRTECH,YTIME-1) * V06CapFacNewDAC(allCy,CDRTECH,YTIME-1))
+      - (1 - imCapCostTechMin(allCy,DSBS,CDRTECH,YTIME)) * V06LvlCostDAC(allCy,CDRTECH,YTIME-1)))
       ) / 2
-    )$((ord(YTIME) > 12))
-$offtext
+    )$(CDR(DSBS) and ord(YTIME) > 15)
 ;
 
 *' The equation splits the available state grants to the various supply technologies through a policy parameter expressing this proportional division.
@@ -117,22 +117,22 @@ Q11SubsiCapCostTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(
       =E=
       sum(TTECH$(sameas(TECH,TTECH)), !!Transport subsidies and grants
         VmSubsiDemTechAvail(allCy,DSBS,TECH,YTIME)
-        + imCapCostTechMin(allCy,DSBS,TECH,YTIME) * imCapCostTech(allCy,DSBS,TECH,YTIME) * 1e-3
+        + (1 - imCapCostTechMin(allCy,DSBS,TECH,YTIME)) * imCapCostTech(allCy,DSBS,TECH,YTIME) * 1e-3
           * (V01NewRegPcTechYearly(allCy,TTECH,YTIME-1) * 1e6)
         -
         sqrt(sqr(VmSubsiDemTechAvail(allCy,DSBS,TECH,YTIME)
-        - imCapCostTechMin(allCy,DSBS,TECH,YTIME) * imCapCostTech(allCy,DSBS,TECH,YTIME) * 1e-3
+        - (1 - imCapCostTechMin(allCy,DSBS,TECH,YTIME)) * imCapCostTech(allCy,DSBS,TECH,YTIME) * 1e-3
           * (V01NewRegPcTechYearly(allCy,TTECH,YTIME-1) * 1e6)))
       )$(TRANSE(DSBS) and sameas(DSBS,"PC"))
       / 2
       +
       sum(ITECH$(sameas(TECH,ITECH)), !!Industry subsidies and grants
         VmSubsiDemTechAvail(allCy,DSBS,TECH,YTIME) 
-        + imCapCostTechMin(allCy,DSBS,ITECH,YTIME) * V02CostTech(allCy,DSBS,ITECH,YTIME) * 1e3
+        + (1 - imCapCostTechMin(allCy,DSBS,ITECH,YTIME)) * V02CostTech(allCy,DSBS,ITECH,YTIME) * 1e3
         * ((V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) - V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)) * VmLft(allCy,DSBS,ITECH,YTIME))
         -
         sqrt(sqr(VmSubsiDemTechAvail(allCy,DSBS,TECH,YTIME) 
-        - imCapCostTechMin(allCy,DSBS,ITECH,YTIME) * V02CostTech(allCy,DSBS,ITECH,YTIME) * 1e3
+        - (1 - imCapCostTechMin(allCy,DSBS,ITECH,YTIME)) * V02CostTech(allCy,DSBS,ITECH,YTIME) * 1e3
         * ((V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) - V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)) * VmLft(allCy,DSBS,ITECH,YTIME))))
       )$INDSE(DSBS)
       / 2
@@ -140,15 +140,15 @@ Q11SubsiCapCostTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(
     !!  sum(DACTECH$DACTECH(TECH), !!CDR subsidies and grants (V06GrossCapDAC is in annualized $/tCO2, so multiplied with lifetime)
      !!   VmSubsiDemTechAvail(allCy,"DAC",DACTECH,YTIME)
     !!    + V06LvlCostDAC(allCy,DACTECH,YTIME-1) * 1e-6 * imCapCostTechMin(allCy,"DAC",DACTECH,YTIME) *
-    !!    (V06CapFacNewDAC(allCy,DACTECH,YTIME) * V06CapDAC(allCy,DACTECH,YTIME-1)) * VmLft(allCy,"DAC",DACTECH,YTIME)
+    !!    (V06CapFacNewDAC(allCy,DACTECH,YTIME) * V06CapCDR(allCy,DACTECH,YTIME-1)) * VmLft(allCy,"DAC",DACTECH,YTIME)
     !!    -
     !!    sqrt(sqr(VmSubsiDemTechAvail(allCy,"DAC",DACTECH,YTIME)
     !!    - V06LvlCostDAC(allCy,DACTECH,YTIME-1) * 1e-6 * imCapCostTechMin(allCy,"DAC",DACTECH,YTIME) *
-    !!    (V06CapFacNewDAC(allCy,DACTECH,YTIME) * V06CapDAC(allCy,DACTECH,YTIME-1)) * VmLft(allCy,"DAC",DACTECH,YTIME)))
+    !!    (V06CapFacNewDAC(allCy,DACTECH,YTIME) * V06CapCDR(allCy,DACTECH,YTIME-1)) * VmLft(allCy,"DAC",DACTECH,YTIME)))
     !!  ) / 2
       !!  +
        !! imGrantCapCostTech(DSBS,TECH) * 1e-6 *
-      !!  (V06CapFacNewDAC(allCy,DACTECH,YTIME) * V06CapDAC(allCy,DACTECH,YTIME-1) + i06SchedNewCapDAC(allCy,DACTECH,YTIME)) *
+      !!  (V06CapFacNewDAC(allCy,DACTECH,YTIME) * V06CapCDR(allCy,DACTECH,YTIME-1) + i06SchedNewCapDAC(allCy,DACTECH,YTIME)) *
       !!  VmLft(allCy,"DAC",DACTECH,YTIME)
     !!  )$sameas (DSBS,"DAC")
     !!  +

@@ -223,7 +223,7 @@ $evalGlobal fPeriodOfYears 1
 $evalGlobal fStartHorizon 2010
 $evalGlobal fEndHorizon 2100
 $evalGlobal fEndY 2100
-$evalGlobal fStartY 2021
+$evalGlobal fStartY 2024
 $evalGlobal fBaseY %fStartY% - %fPeriodOfYears%
 *' *** Model scenario selection ***
 *' 1 -> NPi_Default
@@ -240,9 +240,9 @@ $evalGlobal fScenario 1 !! Setting the model scenario: 0 is No carbon price, 1 i
 
 *' *** load input data files
 $ifthen.genInp %GenerateInput% == on 
-$ifthen.loadData %DevMode% == 0 $call "RScript ./loadMadratData.R DevMode=0"
-$elseif.loadData %DevMode% == 1 $call "RScript ./loadMadratData.R DevMode=1"
-$elseif.loadData %DevMode% == 2 $call "RScript ./loadMadratData.R DevMode=2"
+$ifthen.loadData %DevMode% == 0 $call "Rscript ./loadMadratData.R DevMode=0"
+$elseif.loadData %DevMode% == 1 $call "Rscript ./loadMadratData.R DevMode=1"
+$elseif.loadData %DevMode% == 2 $call "Rscript ./loadMadratData.R DevMode=2"
 $endif.loadData
 $endif.genInp
 
@@ -261,7 +261,7 @@ $setGlobal Emissions        legacy
 $setGlobal Prices           legacy
 $setGlobal Heat             heat
 *' To disable learning curves module, set: $setGlobal Curves off
-$setGlobal Curves           LearningCurves
+$setGlobal Curves           off
 $setGlobal Economy          economy
 *' For custom scenarios, to disable enhanced weathering, set: $setGlobal EnchanchedWeathering off
 $setGlobal EnchanchedWeathering on

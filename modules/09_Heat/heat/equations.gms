@@ -15,10 +15,7 @@
 Q09DemTotSte(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmDemTotSte(allCy,YTIME)
         =E=
-    sum(DSBS,VmConsFuel(allCy,DSBS,"STE",YTIME)) +
-    SUM(SSBS,VmConsFiEneSec(allCy,SSBS,"STE",YTIME)) +
-    VmLossesDistr(allCy,"STE",YTIME) +
-    V03Transfers(allCy,"STE",YTIME);
+    V03ConsGrssInl(allCy,"STE",YTIME) - VmImpNetEneBrnch(allCy,"STE",YTIME);
 
 Q09ScrapRate(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V09ScrapRate(allCy,TSTEAM,YTIME)
@@ -26,11 +23,18 @@ Q09ScrapRate(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     1 - (1 - 1 / i09ProdLftSte(TSTEAM)) *
     V09ScrapRatePremature(allCy,TSTEAM,YTIME);
 
+Q09CapSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    VmCapSte(allCy,TSTEAM,YTIME)
+        =E=
+    (1-V09ScrapRate(allCy,TSTEAM,YTIME)) * VmCapSte(allCy,TSTEAM,YTIME-1) +
+    V09GapShareSte(allCy,TSTEAM,YTIME) * V09DemGapSte(allCy,YTIME);
+
 Q09ProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmProdSte(allCy,TSTEAM,YTIME)
         =E=
-    (1-V09ScrapRate(allCy,TSTEAM,YTIME)) * VmProdSte(allCy,TSTEAM,YTIME-1) +
-    V09GapShareSte(allCy,TSTEAM,YTIME) * V09DemGapSte(allCy,YTIME);
+    VmDemTotSte(allCy,YTIME) /
+    SUM(TSTEAM2, VmCapSte(allCy,TSTEAM2,YTIME)) * 
+    VmCapSte(allCy,TSTEAM,YTIME);
 
 Q09DemGapSte(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V09DemGapSte(allCy,YTIME)
@@ -39,13 +43,13 @@ Q09DemGapSte(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       VmDemTotSte(allCy,YTIME) -
       sum(TSTEAM,
         (1-V09ScrapRate(allCy,TSTEAM,YTIME)) *
-        VmProdSte(allCy,TSTEAM,YTIME-1)
+        VmCapSte(allCy,TSTEAM,YTIME-1)
       ) +
   SQRT(SQR(
       VmDemTotSte(allCy,YTIME) -
       sum(TSTEAM,
         (1-V09ScrapRate(allCy,TSTEAM,YTIME)) *
-        VmProdSte(allCy,TSTEAM,YTIME-1)
+        VmCapSte(allCy,TSTEAM,YTIME-1)
       )
   ))
   )/2 + 1e-6;
@@ -54,21 +58,18 @@ Q09CostVarProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V09CostVarProdSte(allCy,TSTEAM,YTIME)
         =E=
     sum(EFS$TSTEAMTOEF(TSTEAM,EFS),
-      ( 
-        i09ShareFuel(allCy,TSTEAM,EFS,"%fBaseY%") *
+      i09ShareFuel(allCy,TSTEAM,EFS,"%fBaseY%") * 
+      (
         VmPriceFuelSubsecCarVal(allCy,"STEAMP",EFS,YTIME) +
-        V09CaptRateSte(allCy,TSTEAM,YTIME) * 
-        (imCo2EmiFac(allCy,"STEAMP",EFS,YTIME) + 4.17$(sameas("BMSWAS", EFS))) * 
-        VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 +
-        (1-V09CaptRateSte(allCy,TSTEAM,YTIME)) * 1e-3 * (imCo2EmiFac(allCy,"STEAMP",EFS,YTIME)) *
-        sum(NAP$NAPtoALLSBS(NAP,"STEAMP"),VmCarVal(allCy,NAP,YTIME))
-      ) 
-    ) / i09EffSteThrm(TSTEAM,YTIME) +
-    i09CostVOMSteProd(TSTEAM,YTIME) * 1e-3 / smTWhToMtoe * VmPriceElecInd(allCy,YTIME) -
+        V09CaptRateSte(allCy,TSTEAM,YTIME) * (imCo2EmiFac(allCy,"STEAMP",EFS,YTIME) + 4.17$(sameas("BMSWAS", EFS))) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 +
+        (1-V09CaptRateSte(allCy,TSTEAM,YTIME)) * 1e-3 * (imCo2EmiFac(allCy,"STEAMP",EFS,YTIME)) * sum(NAP$NAPtoALLSBS(NAP,"STEAMP"),VmCarVal(allCy,NAP,YTIME))
+      )
+    ) / SUM(STECH$sameas(STECH,TSTEAM),imPlantEffByType(allCy,STECH,"effHeat","%fBaseY%")) + !!i09EffSteThrm(TSTEAM,YTIME) +
+    i09CostVOMSteProd(TSTEAM,YTIME) * 1e-3 -!!/ smTWhToMtoe / SUM(TCHP$sameas(TCHP,TSTEAM),VmPriceElecInd(allCy,TCHP,YTIME)) -
     (
       VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME) *
-      smFracElecPriChp *
-      VmPriceElecInd(allCy,YTIME)
+      smFracElecPriChp /
+      SUM(TCHP$sameas(TCHP,TSTEAM),VmPriceElecInd(allCy,TCHP,YTIME))
     )$TCHP(TSTEAM);
 
 Q09CostCapProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
@@ -131,20 +132,20 @@ Q09CaptRateSte(allCy,TSTEAM,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
 Q09ScrapRatePremature(allCy,TSTEAM,YTIME)$(TIME(YTIME)$runCy(allCy))..
     V09ScrapRatePremature(allCy,TSTEAM,YTIME)
         =E=
-    V09CostVarProdSte(allCy,TSTEAM,YTIME) ** (-2) /
+    V09CostVarProdSte(allCy,TSTEAM,YTIME-1) ** (-2) /
     (
-      V09CostVarProdSte(allCy,TSTEAM,YTIME) ** (-2) +
+      V09CostVarProdSte(allCy,TSTEAM,YTIME-1) ** (-2) +
       (( 
         i09ScaleEndogScrap *
         sum(TCHP2$(not sameas(TSTEAM,TCHP2)),
-          V09CostProdSte(allCy,TCHP2,YTIME)
+          V09CostProdSte(allCy,TCHP2,YTIME-1)
         )
       ) ** (-2)
       )$TCHP(TSTEAM) +
       (( 
         i09ScaleEndogScrap *
         sum(TDHP2$(not sameas(TSTEAM,TDHP2)),
-          V09CostProdSte(allCy,TDHP2,YTIME)
+          V09CostProdSte(allCy,TDHP2,YTIME-1)
         )
       ) ** (-2)
       )$TDHP(TSTEAM)
@@ -155,9 +156,10 @@ Q09ConsFuelSteProd(allCy,STEMODE,STEAMEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       =E=
     SUM(TDHP$(TSTEAMTOEF(TDHP,STEAMEF)),
       VmProdSte(allCy,TDHP,YTIME) *
-      i09ShareFuel(allCy,TDHP,STEAMEF,"%fBaseY%") / i09EffSteThrm(TDHP,YTIME)
+      i09ShareFuel(allCy,TDHP,STEAMEF,"%fBaseY%") / SUM(STECH$sameas(STECH,TDHP),imPlantEffByType(allCy,STECH,"effHeat","%fBaseY%")) !!i09EffSteThrm(TDHP,YTIME)
     )$sameas("DHP",STEMODE) +
     SUM(TCHP$(TSTEAMTOEF(TCHP,STEAMEF)),
-      VmProdSte(allCy,TCHP,YTIME) *
-      i09ShareFuel(allCy,TCHP,STEAMEF,"%fBaseY%") / i09EffSteThrm(TCHP,YTIME)
+      VmProdSte(allCy,TCHP,YTIME) * i09ShareFuel(allCy,TCHP,STEAMEF,"%fBaseY%") / 
+      SUM(STECH$sameas(STECH,TCHP), imPlantEffByType(allCy,STECH,"effHeat","%fBaseY%"))
     )$sameas("CHP",STEMODE);
+

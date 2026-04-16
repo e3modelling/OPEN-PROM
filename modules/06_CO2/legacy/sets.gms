@@ -21,5 +21,6 @@ CO2CAPTECH           "Carbon capture subsectors" /
 PG
 H2P
 DAC
+EW
 IND
 /
