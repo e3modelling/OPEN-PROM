@@ -87,18 +87,18 @@ TEW	15
 
 parameter i06ElNeedsDAC(CDRTECH)                "Specific electricity needs of DAC technologies (toe/tCO2)"
 /
-HTDAC	0.12658832,
-H2DAC	0.12658832,
-LTDAC	0.0236457,
-TEW	3
+HTDAC	0.0234,
+H2DAC	0.0234,
+LTDAC	0.0315,
+TEW	0.0186
 / ;
 
 parameter i06HeatNeedsDAC(CDRTECH)               "Specific heat needs of DAC technologies (toe/tCO2)"
 /
-HTDAC	1.265883,
-H2DAC	1.265883,
-LTDAC	0,
-TEW	0
+HTDAC	0.234,
+H2DAC	0.234,
+LTDAC	0.127,
+TEW	0.148
 / ;
 
 parameter i06SchedNewCapDAC(allCy,CDRTECH,YTIME)        "Scheduled new DAC capacity" /
