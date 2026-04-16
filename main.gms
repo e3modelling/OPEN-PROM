@@ -260,9 +260,9 @@ $setGlobal CO2              legacy
 $setGlobal Emissions        legacy
 $setGlobal Prices           legacy
 $setGlobal Heat             heat
-*' To disable learning curves module, set: $setGlobal Curves off
 $setGlobal Curves           off
 $setGlobal Economy          economy
+*' To disable learning curves module, use: $setGlobal Curves off
 *' For custom scenarios, to disable enhanced weathering, set: $setGlobal EnchanchedWeathering off
 $setGlobal EnchanchedWeathering on
 
