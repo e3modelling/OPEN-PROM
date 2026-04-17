@@ -796,3 +796,17 @@ imPlantEffByType(runCy,STECH,"effHeat",YTIME)$(not PGALL(STECH))= imPlantEffByTy
 **   Conversion of GW mean power into TWh/y, depending on whether it's a leap year
 smGwToTwhPerYear(YTIME) = 8.76 + 0.024 $ (mod(YTIME.val,4) = 0 and mod (YTIME.val,100) <> 0);
 *--
+
+**  Residential space heating - Capacity factor
+*---
+parameter iResHeatCapFac(allCy)   "Data for the capacity factor of residential space heating technologies in 2024"
+/
+$ondelim
+$include "./iResHeatCapFac.csv"
+$offdelim
+/
+;
+
+parameter iCapFacHeat(YTIME,allCy,DSBS);
+iCapFacHeat(YTIME,allCy, DSBS) = 1;
+iCapFacHeat(YTIME,allCy,"DOMSE") = iResHeatCapFac(allCy);
