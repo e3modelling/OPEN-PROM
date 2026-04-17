@@ -780,7 +780,7 @@ imCapCostTech(runCy,"BU","TH2F",YTIME) = 1.5 * imCapCostTech(runCy,"BU","TGDO",Y
 imCapCostTechMin(allCy,"DAC","HTDAC",YTIME) = 0.3;
 imCapCostTechMin(allCy,"DAC","H2DAC",YTIME) = 0.3;
 imCapCostTechMin(allCy,"DAC","LTDAC",YTIME) = 0.3;
-imCapCostTechMin(allCy,"EW","TEW",YTIME) = 0.1;
+imCapCostTechMin(allCy,"EW","TEW",YTIME) = 0.3;
 *---
 !!imUsfEneConvSubTech(runCy,INDSE,"THCL",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCL","USC") + 0.005 * (ord(YTIME)-14);
 imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCLCCS","USC") + 0.005 * (ord(YTIME)-14);

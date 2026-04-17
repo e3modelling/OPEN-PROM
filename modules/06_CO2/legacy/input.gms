@@ -16,7 +16,7 @@ parameter i06MatFacDAC(CDRTECH)                 "Maturity factor of DAC technolo
 HTDAC	0.60,
 H2DAC   0.9,
 LTDAC	1,
-TEW	    1
+TEW	    0.9
 / ;
 
 parameter i06CapexDAC(CDRTECH)                  "CAPEX of each DAC technology ($/tCO2)"
@@ -100,6 +100,7 @@ TEW	0.148
 / ;
 
 parameter i06SchedNewCapDAC(allCy,CDRTECH,YTIME)        "Scheduled new DAC capacity" /
+$$ontext
 NEU.LTDAC.2027  4e4,    !!Removr – Mongstad pilot / industrial‑scale projects
 NEU.LTDAC.2026  4e4,    !!Orca (Climeworks + Carbfix) + Mammoth (Climeworks + Carbfix)
 NEU.LTDAC.2028  1e5,    !!Removr + Carbfix (Large‑Scale Plant)
@@ -113,6 +114,7 @@ USA.LTDAC.2027  5e5,    !!Project Cypress (Climeworks + Heirloom + Battelle) —
 USA.LTDAC.2032  1e6,    !!HIF USA eFuels – Matagorda County, Texas
 USA.LTDAC.2034  5e5,    !!Project Bison – Wyoming (CarbonCapture Inc.)
 USA.LTDAC.2035  7e5     !!South Texas DAC Hub
+$$offtext
 $ifthen.DACproj %fScenario% == 2
 $$ontext
 CHA.LTDAC.2026  1e6,    !!Possible
