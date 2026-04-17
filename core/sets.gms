@@ -1082,13 +1082,10 @@ BM_CO2.CO2
 CO2SEQELAST Elasticities for CO2 sequestration cost curve
 /
 POT      MAXIMUM POTENTIAL
-mc_a     linear slope
-mc_b     initial cost at x=0
-mc_c
-mc_d
-mc_s     speed to transition to exponential
-mc_m     value for the ratio of x to potential after which exponential is taking over
-
+sig_a
+sig_b
+seq_min
+seq_max
 /
 
 

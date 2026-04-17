@@ -46,6 +46,11 @@ Q06CaptCummCO2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     sum((SBS,EFS)$SECtoEF(SBS,EFS),V06CO2CaptureCCS(allCy,SBS,EFS,YTIME)) +
     sum(CDRTECH,V06CapCDR(allCy,CDRTECH,YTIME) * 1e-6);   
 
+Q06CaptCummCO2Glob(YTIME)$(TIME(YTIME))..
+    V06CaptCummCO2Glob(YTIME) 
+      =E= 
+    sum(allCy$runCy(allCy),V06CaptCummCO2(allCy,YTIME));
+
 *' The equation calculates the cost curve for CO2 sequestration costs in Euro per ton of CO2 sequestered
 *' for a specific scenario and year. The cost curve is determined based on cumulative CO2 captured and
 *' elasticities for the CO2 sequestration cost curve.The equation is formulated to represent a flexible cost curve that
@@ -57,16 +62,9 @@ Q06CaptCummCO2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q06CstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCstCO2SeqCsts(allCy,YTIME) 
         =E=
-    !! linear component
-    0.75 * 
-    i06ElastCO2Seq(allCy,"mc_b") +
-    !! exponential component
-    (1-0.75) *
-    i06ElastCO2Seq(allCy,"mc_b") *
-    exp(
-      (V06CaptCummCO2(allCy,YTIME-1) - V06CapCDR(allCy,"TEW",YTIME-1) * 1e-6) / 
-      i06ElastCO2Seq(allCy,"mc_d")
-    );           
+   i06CO2SeqData("seq_min") + 
+   (i06CO2SeqData("seq_max") - i06CO2SeqData("seq_min")) / 2 *
+   (1+tanh(i06CO2SeqData("sig_a") / (i06CO2SeqData("sig_b") * i06CO2SeqData("seq_max")) * (V06CaptCummCO2Glob(YTIME) * 1e-3 - i06CO2SeqData("sig_b") * i06CO2SeqData("seq_max"))));           
 
 *' The equation calculates the CAPEX of each DAC technology, as it's affected by a learning curve ($/tCO2).
 Q06GrossCapDAC(CDRTECH,YTIME)$(TIME(YTIME))..

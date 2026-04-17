@@ -4,13 +4,11 @@
 *---
 parameter i06CO2SeqData(CO2SEQELAST)	        "Data for CO2 sequestration (1)"
 /
-POT	9175,
-mc_a	0,
-mc_b	20,
-mc_c	0.02,
-mc_d	5e3,
-mc_s	120,
-mc_m	1.013
+POT	1445,
+sig_a 5,
+sig_b	0.9,
+seq_min 20,
+seq_max 900
 / ;
 
 parameter i06MatFacDAC(CDRTECH)                 "Maturity factor of DAC technology expressing its elasticity in implementation regarding its financial sustainability"

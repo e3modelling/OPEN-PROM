@@ -4,6 +4,7 @@
 Equations
 Q06CO2CaptureCCS(allCy,SBS,EF,YTIME)	               "Compute CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
 Q06CaptCummCO2(allCy,YTIME)	                               "Compute cumulative CO2 captured (Mtn of CO2)"
+Q06CaptCummCO2Glob(YTIME)                                   "Compute global cumulative CO2 captured (Mtn of CO2)"
 Q06GrossCapDAC(CDRTECH,YTIME)                        "Computes CAPEX of DAC technologies with learning curve"
 Q06FixOandMDAC(CDRTECH,YTIME)                        "Computes Fixed and O&M costs of DAC technologies with learning curve"
 Q06LvlCostDAC(allCy,CDRTECH,YTIME)                         "Calculates the CAPEX and the Fixed Costs of DAC capacity regionally (US$2015/tCO2)"
@@ -21,6 +22,7 @@ Q06CstCO2SeqCsts(allCy,YTIME)	                           "Compute cost curve for
 Variables
 V06CO2CaptureCCS(allCy,SBS,EF,YTIME)	                "CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
 V06CaptCummCO2(allCy,YTIME)	                              "Cumulative CO2 captured (Mtn CO2)"
+V06CaptCummCO2Glob(YTIME)                                   "Global cumulative CO2 captured (Mtn of CO2)"
 V06GrossCapDAC(CDRTECH,YTIME)                        "CAPEX of DAC technologies with learning curve"
 V06FixOandMDAC(CDRTECH,YTIME)                        "Fixed and O&M costs of DAC technologies with learning curve"
 V06VarCostDAC(CDRTECH,YTIME)                         "Variable costs of DAC technologies including carbon storage costs, with learning curve"
@@ -37,5 +39,5 @@ VmConsFuelCDRProd(allCy,EF,YTIME)                          "Annual fuel demand i
 
 Scalars
 S06ProfRateMaxDAC                                           "The maximum profitability rate of V06DACProfRate" /7.5/
-S06CapFacMaxNewDAC                                          "The maximum level of the V06DACNewCapFac" /1.00/
+S06CapFacMaxNewDAC                                          "The maximum level of the V06DACNewCapFac" /0.35/
 ;
