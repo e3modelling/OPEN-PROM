@@ -24,7 +24,7 @@ parameter i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME)       "Scale parameter for 
 parameter i02CalibUsefulEnergy(allCy,DSBS,YTIME);
 
 i02ScaleEndogScrap(runCy,DSBS,ITECH,YTIME) = 1;
-i02CalibUsefulEnergy(runCy,DSBS,YTIME) = 1;
+i02CalibUsefulEnergy(runCy,DSBS,YTIME) = 0;
 $ELSE.calib
 variable i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME)        "Scale parameter for endogenous scrapping applied to the sum of full costs (1)";
 variable i02CalibUsefulEnergy(allCy,DSBS,YTIME)        ;
@@ -37,8 +37,8 @@ i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$(not sameas("HOU",DSBS)) = 1;
 
 i02CalibUsefulEnergy.LO(runCy,DSBS,YTIME) = -1;  
 i02CalibUsefulEnergy.UP(runCy,DSBS,YTIME) = 1;  
-i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$DATAY(YTIME) = 1;
-i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$(not sameas("HOU",DSBS)) = 1;
+i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$DATAY(YTIME) = 0;
+i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$(not sameas("HOU",DSBS)) = 0;
 $ENDIF.calib
 i02ElastNonSubElec(runCy,DSBS,ETYPES,YTIME) = i02ElastNonSubElecData(DSBS,ETYPES,YTIME);
 *---

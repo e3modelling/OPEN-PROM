@@ -69,16 +69,28 @@ Q04CostCapTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
 Q04CostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
     V04CostVarTech(allCy,PGALL,YTIME) 
         =E=
-    i04VarCost(PGALL,YTIME) / 1e3 + 
-    (VmRenValue(YTIME) * 8.6e-5)$(not (PGREN2(PGALL)$(not sameas("PGASHYD",PGALL)) $(not sameas("PGSHYD",PGALL)) $(not sameas("PGLHYD",PGALL)) )) +
-    sum(PGEF$PGALLtoEF(PGALL,PGEF), 
-      i04ShareFuels(allCy,PGALL,PGEF) * 
-      (
-        VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME) +
-      V04CO2CaptRate(allCy,PGALL,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME) + 4.17$(sameas("BMSWAS", PGEF))) +
-      (1-V04CO2CaptRate(allCy,PGALL,YTIME)) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME) + 4.17$(sameas("BMSWAS", PGEF))) * sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME))
-      ) * smTWhToMtoe / imPlantEffByType(allCy,PGALL,"effELC",YTIME)
-    )$(not PGREN(PGALL));
+    (
+      i04VarCost(PGALL,YTIME) / 1e3 + 
+      sum(PGEF$PGALLtoEF(PGALL,PGEF), 
+        i04ShareFuels(allCy,PGALL,PGEF) * 
+        (
+          VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME) +
+        V04CO2CaptRate(allCy,PGALL,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME) - 4.17$sameas("BMSWAS", PGEF)) +
+        (1-V04CO2CaptRate(allCy,PGALL,YTIME)) * 1e-3 * imCo2EmiFac(allCy,"PG",PGEF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME))
+        ) * smTWhToMtoe / imPlantEffByType(allCy,PGALL,"effELC",YTIME)
+      ) +
+    SQRT(SQR(
+      i04VarCost(PGALL,YTIME) / 1e3 + 
+      sum(PGEF$PGALLtoEF(PGALL,PGEF), 
+        i04ShareFuels(allCy,PGALL,PGEF) * 
+        (
+          VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME) +
+        V04CO2CaptRate(allCy,PGALL,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME) - 4.17$sameas("BMSWAS", PGEF)) +
+        (1-V04CO2CaptRate(allCy,PGALL,YTIME)) * 1e-3 * imCo2EmiFac(allCy,"PG",PGEF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME))
+        ) * smTWhToMtoe / imPlantEffByType(allCy,PGALL,"effELC",YTIME)
+      )
+    ))
+    ) / 2 + 1e-6;
 
 *' The equation calculates the hourly production cost of a power generation plant used in investment decisions. The cost is determined based on various factors,
 *' including the discount rate, gross capital cost, fixed operation and maintenance cost, availability rate, variable cost, renewable value, and fuel prices.
@@ -97,9 +109,9 @@ Q04CostHourProdInvDec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04IndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(allCy))..
     V04IndxEndogScrap(allCy,PGALL,YTIME)
         =E=
-    V04CostVarTech(allCy,PGALL,YTIME-1)**(-2) /
+    (V04CostVarTech(allCy,PGALL,YTIME-1) + 1e-3)**(-2) /
     (
-      V04CostVarTech(allCy,PGALL,YTIME-1)**(-2) +
+      (V04CostVarTech(allCy,PGALL,YTIME-1) + 1e-3)**(-2) +
       (
         i04ScaleEndogScrap *
         sum(PGALL2$(not sameas(PGALL,PGALL2)),
@@ -278,15 +290,15 @@ Q04CO2CaptRate(allCy,PGALL,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
 Q04CCSRetroFit(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(NOCCS(PGALL)))..
     V04CCSRetroFit(allCy,PGALL,YTIME)
         =E=
-    V04CostVarTech(allCy,PGALL,YTIME-1) ** (-2) /
+    (V04CostVarTech(allCy,PGALL,YTIME-1) + 1e-3)** (-2) /
     (
-      V04CostVarTech(allCy,PGALL,YTIME-1) ** (-2) +
+      (V04CostVarTech(allCy,PGALL,YTIME-1) + 1e-3)** (-2) +
       0.01 *
       SUM(PGALL2$CCS_NOCCS(PGALL2,PGALL),
         (
-          V04CostCapTech(allCy,PGALL2,YTIME-1) -
-          i04AvailRate(allCy,PGALL,YTIME) / i04AvailRate(allCy,PGALL2,YTIME) *
-          V04CostCapTech(allCy,PGALL,YTIME-1) +
+          V04CostCapTech(allCy,PGALL2,YTIME-1) +
+          !! - i04AvailRate(allCy,PGALL,YTIME) / i04AvailRate(allCy,PGALL2,YTIME) *
+          !!V04CostCapTech(allCy,PGALL,YTIME-1) +
           V04CostVarTech(allCy,PGALL2,YTIME-1)
         ) ** (-2)
       )

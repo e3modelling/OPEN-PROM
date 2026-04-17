@@ -17,16 +17,28 @@ V04ScrpRate.LO(runCy,PGALL,YTIME) = 0;
 V04CostVarTech.LO(runCy,PGALL,YTIME) = 0;
 V04CostVarTech.L(runCy,PGALL,YTIME) = 1;
 V04CostVarTech.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = 
+(
+  i04VarCost(PGALL,YTIME) / 1e3 + 
+  sum(PGEF$PGALLtoEF(PGALL,PGEF), 
+    i04ShareFuels(runCy,PGALL,PGEF) * 
+    (
+      VmPriceFuelSubsecCarVal.L(runCy,"PG",PGEF,YTIME) +
+      imCO2CaptRate(PGALL) * VmCstCO2SeqCsts.L(runCy,YTIME) * 1e-3 * (imCo2EmiFac(runCy,"PG",PGEF,YTIME) - 4.17$sameas("BMSWAS", PGEF)) +
+      (1-imCO2CaptRate(PGALL)) * 1e-3 * imCo2EmiFac(runCy,"PG",PGEF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal.L(runCy,NAP,YTIME))
+    ) * smTWhToMtoe / imPlantEffByType(runCy,PGALL,"effELC",YTIME)
+  ) +
+  SQRT(SQR(
     i04VarCost(PGALL,YTIME) / 1e3 + 
-    (VmRenValue.L(YTIME) * 8.6e-5)$(not (PGREN(PGALL)$(not sameas("PGASHYD",PGALL)) $(not sameas("PGSHYD",PGALL)) $(not sameas("PGLHYD",PGALL)) )) +
     sum(PGEF$PGALLtoEF(PGALL,PGEF), 
       i04ShareFuels(runCy,PGALL,PGEF) * 
       (
         VmPriceFuelSubsecCarVal.L(runCy,"PG",PGEF,YTIME) +
-        imCO2CaptRate(PGALL) * VmCstCO2SeqCsts.L(runCy,YTIME) * 1e-3 * (imCo2EmiFac(runCy,"PG",PGEF,YTIME) + 4.17$(sameas("BMSWAS", PGEF))) +
-        (1-imCO2CaptRate(PGALL)) * 1e-3 * (imCo2EmiFac(runCy,"PG",PGEF,YTIME) + 4.17$(sameas("BMSWAS", PGEF))) * sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal.L(runCy,NAP,YTIME))
+        imCO2CaptRate(PGALL) * VmCstCO2SeqCsts.L(runCy,YTIME) * 1e-3 * (imCo2EmiFac(runCy,"PG",PGEF,YTIME) - 4.17$sameas("BMSWAS", PGEF)) +
+        (1-imCO2CaptRate(PGALL)) * 1e-3 * imCo2EmiFac(runCy,"PG",PGEF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal.L(runCy,NAP,YTIME))
       ) * smTWhToMtoe / imPlantEffByType(runCy,PGALL,"effELC",YTIME)
-    )$(not PGREN(PGALL));
+    )
+  ))
+) / 2;
 *---
 V04CapexRESRate.L(runCy,PGALL,YTIME) = 1;
 *---
@@ -120,6 +132,7 @@ SUM(PGALL$PGALLTOEF(PGALL,PGEF),
 VmConsFuelElecProd.FX(runCy,PGEF,YTIME)$DATAY(YTIME) = -i03InpTotTransfProcess(runCy,"PG",PGEF,YTIME);
 *---
 V04GapGenCapPowerDiff.LO(runCy,YTIME) = 0;
+V04GapGenCapPowerDiff.L(runCy,YTIME) = 1;
 V04GapGenCapPowerDiff.FX(runCy,YTIME)$DATAY(YTIME) = 0;
 *---
 VmCostPowGenAvgLng.LO(runCy,YTIME) = 0;

@@ -92,7 +92,6 @@ Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not CD
     V02CapCostTech(allCy,DSBS,ITECH,YTIME) 
         =E=
     (
-      
       imDisc(allCy,DSBS,YTIME) * exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME)) /
       (exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME)) - 1) * 
       imCapCostTech(allCy,DSBS,ITECH,YTIME) * imCGI(allCy,YTIME) +
