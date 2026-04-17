@@ -84,3 +84,5 @@ openprom.optfile=1;
 *---
 openprom.scaleopt=1;
 *---
+VmGDPPartGlob.L(runCy,YTIME) = 0.1;
+VmGDPPartGlob.FX(runCy,YTIME)$(DATAY(YTIME)) = i01GDP(YTIME,runCy) / sum(runCy2, i01GDP(YTIME,runCy2));

@@ -11,6 +11,12 @@ $include "./iActv.csvr"
 $offdelim
 ;
 *---
+table i01GDP(YTIME,allCy) "GDP (billion US$2015)"
+$ondelim
+$include "./iGDP.csvr"
+$offdelim
+;
+*---
 table imTransChar(allCy,TRANSPCHAR,YTIME) "km per car, passengers per car and residuals for passenger cars market extension ()"
 $ondelim
 $include "./iTransChar.csv"
