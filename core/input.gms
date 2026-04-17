@@ -770,7 +770,7 @@ imUsfEneConvSubTech(runCy,"BU","TNGS",YTIME) = 0.6;
 imUsfEneConvSubTech(runCy,"BU","TGSL",YTIME) = 0.5;
 imCapCostTech(runCy,"BU","TH2F",YTIME) = 1.5 * imCapCostTech(runCy,"BU","TGDO",YTIME);
 *---
-**  CDR
+**  CDR *
 imCapCostTechMin(allCy,"DAC","HTDAC",YTIME) = 0.3;
 imCapCostTechMin(allCy,"DAC","H2DAC",YTIME) = 0.3;
 imCapCostTechMin(allCy,"DAC","LTDAC",YTIME) = 0.3;
