@@ -340,8 +340,7 @@ imDataIndTechnology(INDSE,"TSTE",ECONCHAR) = imDataIndTechnology(INDSE,"THCL",EC
 table imDataDomTech(DOMSE,TECH,ECONCHAR)                "Technical lifetime of Industry (years)"
 * Data from PRIMES & Danish gov for DIAMOND 4.5
 *           kUSD/KW   USD/KW/y
-             IC       FC      VC      LFT USC
-IC        FC      VC   LFT  USC
+               IC       FC   VC      LFT  USC
 SE.THCL       0.35498   1.13         20   0.7
 SE.TLGN       0.42338   1.21         20   0.5
 SE.TLPG       0.14459  12.74         20   0.8
