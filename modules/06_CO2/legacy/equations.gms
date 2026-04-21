@@ -51,14 +51,14 @@ Q06CaptCummCO2Glob(YTIME)$(TIME(YTIME))..
       =E= 
     sum(allCy$runCy(allCy),V06CaptCummCO2(allCy,YTIME));
 
-*' The equation calculates the cost curve for CO2 sequestration costs in Euro per ton of CO2 sequestered
-*' for a specific scenario and year. The cost curve is determined based on cumulative CO2 captured and
-*' elasticities for the CO2 sequestration cost curve.The equation is formulated to represent a flexible cost curve that
-*' can transition from linear to exponential. The transition is controlled by the weight for the transition from linear to exponential
-*' The cost curve is expressed as a combination of linear and exponential functions, allowing for a realistic.
-*' representation of the relationship between cumulative CO2 captured and sequestration costs. This equation provides a dynamic and
-*' realistic approach to modeling CO2 sequestration costs, considering the cumulative CO2 captured and the associated elasticities
-*' for the cost curve. The result represents the cost of sequestering one ton of CO2 in the specified scenario and year.
+*' The equation calculates the CO2 sequestration cost in Euro per ton of CO2 sequestered for a given scenario 
+*' and year. The cost curve is determined based on global cumulative CO2 captured and sequestration cost parameters.
+*' The cost curve transitions smoothly from a minimum to a maximum cost using a hyperbolic tangent function, 
+*' representing a realistic relationship between cumulative CO2 captured and sequestration costs. The transition 
+*' behavior is controlled by shape parameters that define the steepness and midpoint of the cost curve. This 
+*' equation provides a dynamic approach to modeling CO2 sequestration costs, reflecting increasing costs as 
+*' cumulative CO2 captured expands. The result represents the cost of sequestering one ton of CO2 in the 
+*' specified scenario and year.
 Q06CstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCstCO2SeqCsts(allCy,YTIME) 
         =E=

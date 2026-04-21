@@ -52,6 +52,11 @@ q07ExpendHouseEne(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 VmConsElecNonSubIndTert --> NO LONGER                                          
 $offtext
 
+*' The equation calculates gross CO2 emissions from demand-side activities in million tons of CO2 for a given 
+*' country, demand sector, and year. Gross emissions are determined by summing fuel consumption across all 
+*' energy forms, including general fuel consumption, transport-specific final energy demand, and fuel consumption 
+*' from CDR technologies (Direct Air Capture and Enhanced Weathering), then multiplying by the corresponding 
+*' CO2 emission factors.
 Q07GrossEmissCO2Demand(allCy,DSBS,YTIME)$(TIME(YTIME)$runCy(allCy))..
     V07GrossEmissCO2Demand(allCy,DSBS,YTIME)
         =E=   
@@ -65,6 +70,10 @@ Q07GrossEmissCO2Demand(allCy,DSBS,YTIME)$(TIME(YTIME)$runCy(allCy))..
       imCo2EmiFac(allCy,DSBS,EFS,YTIME)
     );
 
+*' The equation calculates gross CO2 emissions from supply-side activities in million tons of CO2 for a given 
+*' country, supply sector, and year. Gross emissions are determined by summing total transformed inputs and 
+*' final energy consumption across all energy forms, then multiplying by the corresponding CO2 emission factors. 
+*' The transformed inputs component applies only to sectors designated as emission sources.
 Q07GrossEmissCO2Supply(allCy,SSBS,YTIME)$(TIME(YTIME)$runCy(allCy))..
     V07GrossEmissCO2Supply(allCy,SSBS,YTIME)
         =E=   
@@ -105,8 +114,10 @@ Q07EmiActBySrcRegTim(E07SrcMacAbate, allCy, YTIME)$(TIME(YTIME)$(runCy(allCy))).
     =E=
     i07DataCh4N2OFEmis(allCy, E07SrcMacAbate, YTIME)  - V07RedAbsBySrcRegTim(E07SrcMacAbate, allCy, YTIME);
 
-
-
+*' The equation calculates the net CO2 emissions in million tons of CO2 for a given country and year.
+*' Net emissions are determined by summing gross CO2 emissions from both supply-side and demand-side 
+*' sectors, then subtracting CO2 captured through CCS technologies in energy conversion plants and CO2 
+*' captured through dedicated CDR technologies.
 Q07EmissionsNet(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V07EmissionsNet(allCy,YTIME)
     =E=
@@ -116,6 +127,11 @@ Q07EmissionsNet(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     - sum(CDRTECH, V06CapCDR(allCy,CDRTECH,YTIME)) * 1e-6
     ;
 
+*' The equation calculates the net emissions share for a given country and year, representing the country's 
+*' proportion of global net emissions in the previous time period. The share is determined by dividing the 
+*' country's net emissions by a smoothed global total that uses a hyperbolic tangent function to handle 
+*' zero or negative global emissions gracefully. This approach ensures a stable emissions share calculation 
+*' while preventing numerical issues.
 Q07EmissionsNetPart(allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V07EmissionsNetPart(allCy,YTIME)
     =E=
