@@ -310,6 +310,11 @@ exogCV_NPi
 exogCV_1_5C
 exogCV_2C
 exogCV_Calib
+UPT_100
+UPT_200
+UPT_400
+UPT_600
+UPT_800
 /
 
 RegulaPolicies(POLICIES_set) Set of policies entering in the regula falsi loops
@@ -1001,7 +1006,6 @@ ATHBMSCCS.ATHBMSWAS
 /
 
 PGREN(PGALL)    REN PLANTS with Saturation                /PGLHYD,PGSHYD,PGAWND,PGSOL,PGCSP,PGOTHREN,PGAWNO/
-PGREN2(PGALL)     Renewable Plants                          /PGLHYD,PGSHYD,PGAWND,PGSOL,PGCSP,PGOTHREN,PGAWNO,PGANUC,ATHCOALCCS,ATHLGNCCS,ATHGASCCS,PGH2F/
 PGRENSW(PGALL)   Solar and wind Plants                     /PGSOL,PGCSP,PGAWND,PGAWNO/
 PGRENEF          Renewable energy forms in power generation  /HYD,WND,SOL,BMSWAS,GEO/
 
