@@ -3,7 +3,7 @@ library(jsonlite)
 
 # Various flags used to modify script behavior
 withRunFolder <- TRUE # Set to FALSE to disable model run folder creation and file copying
-withSync <- TRUE # Set to FALSE to disable model run sync to SharePoint
+withSync <- FALSE # Set to FALSE to disable model run sync to SharePoint
 withReport <- TRUE # Set to FALSE to disable the report output script execution (applicable to research mode only)
 uploadGDX <- TRUE # Set to TRUE to include GDX files in the uploaded archive
 
@@ -175,6 +175,7 @@ setScenarioName <- function(scen_default) {
 
   return(scen)
 }
+
 ### Function that check if all country and year runs are successfull
 isRunSuccessful <- function(statusFilePath) {
   if (!file.exists(statusFilePath)) return(FALSE)
@@ -416,6 +417,107 @@ if (task == 0) {
     setwd("../../") # Going back to root folder
     cat("Executing the report output script\n")
     report_cmd <- paste0("Rscript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
+    system(report_cmd)
+    setwd(run_path)
+  }
+  if (withRunFolder && withSync) syncRun()
+} else if (task == 7) {
+  # Running task OPEN-PROM <-> MAgPIE SOFT-LINK
+  # Pipeline: open-prom (link2MAgPIE=off)
+  #            -> linkPromToMagpie(forward = TRUE)    # OPEN-PROM -> MAgPIE
+  #            -> magpie (Rscript start.R)
+  #            -> linkPromToMagpie(forward = FALSE)   # MAgPIE2OPEN()
+  #            -> open-prom (link2MAgPIE=on)
+  #            -> reportOutput.R (postprom)
+  saveMetadata(DevMode = 0)
+  sceName <- "SOFTLINKMAGPIE"
+  if (withRunFolder) createRunFolder(setScenarioName(sceName))
+
+  # After createRunFolder() we are in OPEN-PROM/runs/<scen>_<ts>/.
+  # Go up THREE levels to reach the repo root where magpie/ lives.
+  openPromRun <- getwd()
+  magpieRoot  <- NULL
+  if (file.exists("config.json")) {
+    config <- fromJSON("config.json")
+    magpieRoot <- config$magpie_path
+  }
+  f56 <- file.path(magpieRoot, "modules", "56_ghg_policy", "input", "f56_pollutant_prices.cs3")
+  f60 <- file.path(magpieRoot, "modules", "60_bioenergy", "input", "f60_1stgen_bioenergy_dem.cs3")
+  linkOutDir  <- paste0(openPromRun, "/") # linkPromToMagpie uses paste0(pathsave, ...), trailing slash required
+
+  # ---- Step 1: OPEN-PROM run with link2MAgPIE = off -----------------------
+  cat(">>> [task 7] Step 1/6: OPEN-PROM run (link2MAgPIE=off)\n")
+  cmd1 <- paste0(gams,
+                 " main.gms --DevMode=0 --GenerateInput=off --link2MAgPIE=off",
+                 " -logOption 4 -Idir=./data 2>&1")
+  if (.Platform$OS.type == "unix") {
+    system(paste0("sh -c ", shQuote(cmd1)))
+  } else {
+    shell(paste0(cmd1, " | tee full_round1.log"))
+  }
+  if (!isRunSuccessful("modelstat.txt")) {
+    stop("[task 7] First OPEN-PROM run failed. Aborting soft-link.")
+  }
+  openPromGdx <- file.path(openPromRun, "blabla.gdx")
+
+  # ---- Step 2: OPEN-PROM -> MAgPIE via linkPromToMagpie(forward = TRUE) ---
+  cat(">>> [task 7] Step 2/6: linkPromToMagpie(forward = TRUE)\n")
+  library(postprom)
+  linkPromToMagpie(
+    path                = openPromGdx,
+    pathPollutantPrices = f56,
+    pathsave            = linkOutDir,
+    pathBioenergyDemand = f60,
+    forward             = TRUE,
+    scenario            = sceName
+  )
+  # Overwrite MAgPIE inputs with the freshly generated cs3 files
+  file.copy(file.path(linkOutDir, "result_f56_pollutant_prices.cs3"),     f56, overwrite = TRUE)
+  file.copy(file.path(linkOutDir, "result_f60_1stgen_bioenergy_dem.cs3"), f60, overwrite = TRUE)
+
+  # ---- Step 3: MAgPIE run -------------------------------------------------
+  cat(">>> [task 7] Step 3/6: MAgPIE run\n")
+  setwd(magpieRoot)
+  magpie_exit <- system("Rscript start.R")
+  if (magpie_exit != 0) {
+    setwd(openPromRun)
+    stop("[task 7] MAgPIE run failed with exit code ", magpie_exit, ".")
+  }
+  magpieOutDirs <- list.dirs("output", recursive = FALSE)
+  latestMagpieRun <- magpieOutDirs[which.max(file.info(magpieOutDirs)$mtime)]
+  magpieGdx       <- file.path(normalizePath(latestMagpieRun, winslash = "/"), "fulldata.gdx")
+  magpieReport    <- file.path(normalizePath(latestMagpieRun, winslash = "/"), "report.mif")
+
+  # ---- Step 4: MAgPIE -> OPEN-PROM via linkPromToMagpie(forward = FALSE) --
+  cat(">>> [task 7] Step 4/6: linkPromToMagpie(forward = FALSE) == MAgPIE2OPEN\n")
+  setwd(openPromRun)
+  linkPromToMagpie(
+    path                = magpieGdx,
+    pathPollutantPrices = NULL,
+    pathsave            = NULL,
+    pathBioenergyDemand = NULL,
+    pathReport          = magpieReport,
+    pathSave            = openPromRun,
+    forward             = FALSE
+  )
+
+  # ---- Step 5: OPEN-PROM run with link2MAgPIE = on ------------------------
+  cat(">>> [task 7] Step 5/6: OPEN-PROM run (link2MAgPIE=on)\n")
+  cmd2 <- paste0(gams,
+                 " main.gms --DevMode=0 --GenerateInput=off --link2MAgPIE=on",
+                 " -logOption 4 -Idir=./data 2>&1")
+  if (.Platform$OS.type == "unix") {
+    system(paste0("sh -c ", shQuote(cmd2)))
+  } else {
+    shell(paste0(cmd2, " | tee full_round2.log"))
+  }
+
+  # ---- Step 6: postprom / reportOutput.R + sync ---------------------------
+  if (withRunFolder && withReport) {
+    cat(">>> [task 7] Step 6/6: reportOutput.R\n")
+    run_path <- getwd()
+    setwd("../../") # Going back to OPEN-PROM root
+    report_cmd <- paste0("Rscript ./reportOutput.R ", run_path)
     system(report_cmd)
     setwd(run_path)
   }
