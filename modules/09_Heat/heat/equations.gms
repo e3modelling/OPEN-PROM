@@ -32,8 +32,8 @@ Q09CapSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q09ProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmProdSte(allCy,TSTEAM,YTIME)
         =E=
-    (VmDemTotSte(allCy,YTIME)) /
-    (SUM(TSTEAM2, VmCapSte(allCy,TSTEAM2,YTIME))) * 
+    VmDemTotSte(allCy,YTIME) /
+    SUM(TSTEAM2, VmCapSte(allCy,TSTEAM2,YTIME)) * 
     VmCapSte(allCy,TSTEAM,YTIME);
 
 Q09DemGapSte(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
@@ -52,21 +52,18 @@ Q09DemGapSte(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         VmCapSte(allCy,TSTEAM,YTIME-1)
       )
   ))
-  )/2 + 1e-3;
+  )/2 + 1e-6;
 
 Q09CostVarProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V09CostVarProdSte(allCy,TSTEAM,YTIME)
         =E=
     sum(EFS$TSTEAMTOEF(TSTEAM,EFS),
-      ( 
-        i09ShareFuel(allCy,TSTEAM,EFS,"%fBaseY%") *
+      i09ShareFuel(allCy,TSTEAM,EFS,"%fBaseY%") * 
+      (
         VmPriceFuelSubsecCarVal(allCy,"STEAMP",EFS,YTIME) +
-        V09CaptRateSte(allCy,TSTEAM,YTIME) * 
-        (imCo2EmiFac(allCy,"STEAMP",EFS,YTIME) + 4.17$(sameas("BMSWAS", EFS))) * 
-        VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 +
-        (1-V09CaptRateSte(allCy,TSTEAM,YTIME)) * 1e-3 * (imCo2EmiFac(allCy,"STEAMP",EFS,YTIME)) *
-        sum(NAP$NAPtoALLSBS(NAP,"STEAMP"),VmCarVal(allCy,NAP,YTIME))
-      ) 
+        V09CaptRateSte(allCy,TSTEAM,YTIME) * (imCo2EmiFac(allCy,"STEAMP",EFS,YTIME) + 4.17$(sameas("BMSWAS", EFS))) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 +
+        (1-V09CaptRateSte(allCy,TSTEAM,YTIME)) * 1e-3 * (imCo2EmiFac(allCy,"STEAMP",EFS,YTIME)) * sum(NAP$NAPtoALLSBS(NAP,"STEAMP"),VmCarVal(allCy,NAP,YTIME))
+      )
     ) / SUM(STECH$sameas(STECH,TSTEAM),imPlantEffByType(allCy,STECH,"effHeat","%fBaseY%")) + !!i09EffSteThrm(TSTEAM,YTIME) +
     i09CostVOMSteProd(TSTEAM,YTIME) * 1e-3 -!!/ smTWhToMtoe / SUM(TCHP$sameas(TCHP,TSTEAM),VmPriceElecInd(allCy,TCHP,YTIME)) -
     (

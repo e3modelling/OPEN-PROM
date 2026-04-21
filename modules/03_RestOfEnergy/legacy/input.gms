@@ -69,7 +69,6 @@ SUM(SSBS,
 ) +
 imDistrLosses(allCy,EFS,YTIME) -
 i03FeedTransfr(allCy,EFS,YTIME);
-*(imFuelTrade(allCy,"IMPORTS",EFS,YTIME) - imFuelTrade(allCy,"EXPORTS",EFS,YTIME));
 *---
 i03RateImpGrossInlCons(allCy,EFS,YTIME)$DATAY(YTIME) = 
 (
