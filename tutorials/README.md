@@ -1,6 +1,6 @@
 ## Welcome to the OPEN-PROM Tutorial!
 
-OPEN-PROM ("open PROMETHEUS") is an energy-economy model currently under development. The present version is based on the MENA-EDS ENERGY MODEL v4.0 (c) E3Modelling 2020.
+OPEN-PROM ("open PROMETHEUS") is an energy-economy model currently under development. The present version is based on the MENA-EDS ENERGY MODEL v4.0 (c) E3-Modelling 2020.
 
 Extensive documentation of the PROMETHEUS model on which both MENA-EDS and OPEN-PROM are based can be found here: https://e3modelling.com/modelling-tools/prometheus/.
 
@@ -21,15 +21,12 @@ Necessary Software:
 For Model Users:
 
 - Install GAMS and R (if you haven't already) and add them to your PATH variable.
-- Ensure that the reticulate library is installed in R.
 Note: To run the model, you need input data, which are not distributed with the model code. If you don't have the data, please contact us at: info@e3modelling.com.
 
 
 For Model Developers:
 - Install GAMS and R (if you haven't already) and add them to your PATH variable.
-- Proceed with Tutorial 00.
-Regionalization of OPEN-PROM
-The following section outlines the current regionalization of the OPEN-PROM model.
+- Proceed with Tutorial 01.
 
 ***Overview of the tutorials***
 

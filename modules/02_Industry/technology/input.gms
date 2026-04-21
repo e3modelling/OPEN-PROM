@@ -50,8 +50,12 @@ i02ShareBlend(runCy,DSBS,ITECH,EF,YTIME)$(DATAY(YTIME) and SECTTECH(DSBS,ITECH) 
     SUM(EFS2$ITECHtoEF(ITECH,EFS2), imFuelConsPerFueSub(runCy,DSBS,EFS2,YTIME))
   )$SUM(EFS2$ITECHtoEF(ITECH,EFS2), imFuelConsPerFueSub(runCy,DSBS,EFS2,YTIME)) +
   1$(not SUM(EFS2$ITECHtoEF(ITECH,EFS2), imFuelConsPerFueSub(runCy,DSBS,EFS2,YTIME)) and not BIOFUELS(EF));
+  
 i02ShareBlend(runCy,DSBS,ITECH,EF,YTIME)$AN(YTIME) = i02ShareBlend(runCy,DSBS,ITECH,EF,"%fBaseY%");
 i02ShareBlend(runCy,"BU","TKRS","KRS",YTIME)$AN(YTIME) = i02ShareBlend(runCy,"BU","TKRS","KRS","%fBaseY%") - 0.006 * (ord(YTIME)-14);
 i02ShareBlend(runCy,"BU","TKRS","BKRS",YTIME)$AN(YTIME) = i02ShareBlend(runCy,"BU","TKRS","BKRS","%fBaseY%") + 0.006 * (ord(YTIME)-14);
 i02ShareBlend(runCy,"BU","TGDO","GDO",YTIME)$AN(YTIME) = i02ShareBlend(runCy,"BU","TGDO","GDO","%fBaseY%") - 0.004 * (ord(YTIME)-14);
 i02ShareBlend(runCy,"BU","TGDO","BGDO",YTIME)$AN(YTIME) = i02ShareBlend(runCy,"BU","TGDO","BGDO","%fBaseY%") + 0.004 * (ord(YTIME)-14);
+
+i02ShareElcHP(runCy,"HOU",YTIME) = 0.1;
+i02ShareElcHP(runCy,"SE",YTIME) = 0.1;

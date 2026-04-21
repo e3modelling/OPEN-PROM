@@ -4,7 +4,6 @@
 *'                *VARIABLE INITIALISATION*
 
 V01RateScrPcTot.UP(runCy,TTECH,YTIME) = 1;
-V01PcOwnPcLevl.UP(runCy,YTIME) = 2*i01PassCarsMarkSat(runCy);
 *---
 V01RateScrPc.UP(runCy,TTECH,YTIME) = 1;
 V01RateScrPc.LO(runCy,TTECH,YTIME) = 0;
@@ -38,6 +37,8 @@ V01ActivGoodsTransp.L(runCy,TRANSE,YTIME) = 0.1;
 V01ActivGoodsTransp.FX(runCy,TRANG,YTIME)$(not An(YTIME)) = imActv(YTIME,runCy,TRANG);
 V01ActivGoodsTransp.FX(runCy,TRANSE,YTIME)$(not TRANG(TRANSE)) = 0;
 *---
+V01PcOwnPcLevl.UP(runCy,YTIME) = 2*i01PassCarsMarkSat(runCy);
+V01PcOwnPcLevl.L(runCy,YTIME) = 0.5;
 V01PcOwnPcLevl.FX(runCy,YTIME)$(not An(YTIME)) = V01StockPcYearly.L(runCy,YTIME) / (i01Pop(YTIME,runCy) * 1000) ;
 *---
 i01Sigma(runCy,"S2") = 0.4;
@@ -47,7 +48,7 @@ V01GapTranspActiv.LO(runCy,TRANSE,YTIME) = 0;
 V01GapTranspActiv.FX(runCy,TRANSE,YTIME)$(not AN(YTIME))=0;
 *---
 V01ConsSpecificFuel.FX(runCy,TRANSE,TTECH,EF,YTIME)$(not sameas(TRANSE,"PC")$(SECTTECH(TRANSE,TTECH)$TTECHtoEF(TTECH,EF))) = i01InitSpecFuelConsData(TRANSE,TTECH,EF);
-V01ConsSpecificFuel.FX(runCy,TRANSE,TTECH,EF,YTIME)$(sameas(TRANSE,"PC")$(SECTTECH(TRANSE,TTECH)$TTECHtoEF(TTECH,EF))) = i01SFCPC(runCy,TTECH,EF,YTIME);
+V01ConsSpecificFuel.FX(runCy,TRANSE,TTECH,EF,YTIME)$(sameas(TRANSE,"PC")$(SECTTECH(TRANSE,TTECH)$TTECHtoEF(TTECH,EF))) = i01SFCPC(runCy,TTECH,EF,"%fBaseY%");
 *---
 V01ConsTechTranspSectoral.FX(runCy,TRANSE,TTECH,EF,YTIME)$(SECTTECH(TRANSE,TTECH) and (not PLUGIN(TTECH)) and TTECHtoEF(TTECH,EF) and DATAY(YTIME)) = imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME); 
 V01ConsTechTranspSectoral.FX(runCy,TRANSE,TTECH,EF,YTIME)$(SECTTECH(TRANSE,TTECH) and PLUGIN(TTECH) and DATAY(YTIME)) = 0;

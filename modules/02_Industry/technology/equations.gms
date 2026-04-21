@@ -38,9 +38,10 @@ Q02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITE
     V02RatioRem(allCy,DSBS,ITECH,YTIME);
 
 Q02RatioRem(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and not TRANSE(DSBS) and not CDR(DSBS))$runCy(allCy))..
-V02RatioRem(allCy,DSBS,ITECH,YTIME) 
+    V02RatioRem(allCy,DSBS,ITECH,YTIME) 
         =E=
-    ( (1 - 1/VmLft(allCy,DSBS,ITECH,YTIME))* (1 - V02PremScrpIndu(allCy,DSBS,ITECH,YTIME)));
+    (1 - 1/VmLft(allCy,DSBS,ITECH,YTIME)) * 
+    (1 - V02PremScrpIndu(allCy,DSBS,ITECH,YTIME));
 
 Q02PremScrpIndu(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and not TRANSE(DSBS) and not CDR(DSBS))$runCy(allCy))..
     V02PremScrpIndu(allCy,DSBS,ITECH,YTIME)
@@ -165,11 +166,11 @@ Q02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     [
       V02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME-1) *
       imActv(YTIME,allCy,INDDOM) ** i02ElastNonSubElec(allCy,INDDOM,"a",YTIME) *
-      (VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME) / VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-1)) ** i02ElastNonSubElec(allCy,INDDOM,"b1",YTIME) *
-      (VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-1) / VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-2)) ** i02ElastNonSubElec(allCy,INDDOM,"b2",YTIME) *
-      prod(KPDL,
-        (VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-ord(KPDL)) / VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-(ord(KPDL)+1))) ** (i02ElastNonSubElec(allCy,INDDOM,"c",YTIME)*imFPDL(INDDOM,KPDL))
-      )
+      (VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME) / VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-1)) ** i02ElastNonSubElec(allCy,INDDOM,"b1",YTIME)
+      !!(VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-1) / VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-2)) ** i02ElastNonSubElec(allCy,INDDOM,"b2",YTIME) *
+      !!prod(KPDL,
+      !!  (VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-ord(KPDL)) / VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-(ord(KPDL)+1))) ** (i02ElastNonSubElec(allCy,INDDOM,"c",YTIME)*imFPDL(INDDOM,KPDL))
+      !!)
     ]$imActv(YTIME-1,allCy,INDDOM);
 
 *' NEW EQUATION - Useful Electricity to Final Electricity (Check if needed to add equipment of electricity)
@@ -213,10 +214,10 @@ Q02IndAvrEffFinalUseful(allCy,DSBS,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not
 *' of fuel prices in the current and previous years, with a power of 0.3 applied to each ratio. This weighting factor introduces a gradual adjustment to reflect the
 *' historical changes in fuel prices, providing a more dynamic estimation of the electricity index. This equation provides a method to estimate the electricity index
 *' based on historical fuel price trends, allowing for a more flexible and responsive representation of industry price dynamics.
-Q02IndxElecIndPrices(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V02IndxElecIndPrices(allCy,YTIME)
+Q02IndxElecIndPrices(allCy,TCHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V02IndxElecIndPrices(allCy,TCHP,YTIME)
         =E=
-    VmPriceElecInd(allCy,YTIME-1) * 
-    (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)/VmPriceFuelAvgSub(allCy,"OI",YTIME-1)) ** (0.02) *
-    (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-2)/VmPriceFuelAvgSub(allCy,"OI",YTIME-2)) ** (0.01) *
-    (VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-3)/VmPriceFuelAvgSub(allCy,"OI",YTIME-3)) ** (0.01);
+    VmPriceElecInd(allCy,TCHP,YTIME-1);
+    !!(VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)/VmPriceFuelAvgSub(allCy,"OI",YTIME-1)) ** (-0.01) *
+    !!(VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-2)/VmPriceFuelAvgSub(allCy,"OI",YTIME-2)) ** (-0.005) *
+    !!(VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-3)/VmPriceFuelAvgSub(allCy,"OI",YTIME-3)) ** (-0.005);

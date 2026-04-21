@@ -9,6 +9,7 @@ i02numtechnologiesUsingEF(DSBS,EF)                         "Number of technologu
 imCO2CaptRateIndustry(allCy,ITECH,YTIME)	               "Industry CO2 capture rate (1)"
 i02ScaleEndogScrap(DSBS)                            "Scale parameter for endogenous scrapping applied to the sum of full costs (1)"
 i02ShareBlend(allCy,DSBS,ITECH,EF,YTIME)                   "Share of each energy form in a technology"
+i02ShareElcHP(allCy,DSBS,YTIME)                            "Share of final electricity consumption of HeatPumps in substitutable electricity consumption (1)"
 ;
 
 Equations
@@ -26,7 +27,7 @@ Q02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)              "Compute equipment ca
 Q02UsefulElecNonSubIndTert(allCy,DSBS,YTIME)               "Compute non-substitutable useful electricity"
 Q02FinalElecNonSubIndTert(allCy,DSBS,YTIME)                "Compute final energy of non-substitutable electricity"
 
-Q02IndxElecIndPrices(allCy,YTIME)                          "Compute Electricity index - a function of industry price - Estimate"
+Q02IndxElecIndPrices(allCy,TCHP,YTIME)                          "Compute Electricity index - a function of industry price - Estimate"
 Q02IndAvrEffFinalUseful(allCy,DSBS,YTIME)                  "Average Efficiency" 
 Q02PremScrpIndu(allCy,DSBS,ITECH,YTIME)                    "premature scrapping"
 Q02RatioRem(allCy,DSBS,ITECH,YTIME)
@@ -49,7 +50,7 @@ V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)              "equipment capacity o
 V02UsefulElecNonSubIndTert(allCy,DSBS,YTIME)               "non-substitutable useful electricity"
 V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)                "final energy of non-substitutable electricity"
 
-V02IndxElecIndPrices(allCy,YTIME)                          "Electricity index - a function of industry price - Estimate"
+V02IndxElecIndPrices(allCy,TCHP,YTIME)                          "Electricity index - a function of industry price - Estimate"
 V02IndAvrEffFinalUseful(allCy,DSBS,YTIME)                  "Average Efficiency" 
 V02PremScrpIndu(allCy,DSBS,ITECH,YTIME)                    "premature scrapping"
 V02RatioRem(allCy,DSBS,ITECH,YTIME)

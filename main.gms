@@ -231,9 +231,9 @@ $evalGlobal fScenario 1 !! Setting the model scenario: 0 is No carbon price, 1 i
 
 *' *** load input data files
 $ifthen.genInp %GenerateInput% == on 
-$ifthen.loadData %DevMode% == 0 $call "RScript ./loadMadratData.R DevMode=0"
-$elseif.loadData %DevMode% == 1 $call "RScript ./loadMadratData.R DevMode=1"
-$elseif.loadData %DevMode% == 2 $call "RScript ./loadMadratData.R DevMode=2"
+$ifthen.loadData %DevMode% == 0 $call "Rscript ./loadMadratData.R DevMode=0"
+$elseif.loadData %DevMode% == 1 $call "Rscript ./loadMadratData.R DevMode=1"
+$elseif.loadData %DevMode% == 2 $call "Rscript ./loadMadratData.R DevMode=2"
 $endif.loadData
 $endif.genInp
 
@@ -251,7 +251,7 @@ $setGlobal CO2              legacy
 $setGlobal Emissions        legacy
 $setGlobal Prices           legacy
 $setGlobal Heat             heat
-$setGlobal Curves           LearningCurves
+$setGlobal Curves           off
 $setGlobal Economy          economy
 *' To disable learning curves module, use: $setGlobal Curves off
 

@@ -10,40 +10,30 @@
 
 *' * CO2 SEQUESTRATION COST CURVES
 
-*' The equation calculates the CO2 captured by electricity and hydrogen production plants
-*' in million tons of CO2 for a specific scenario and year. The CO2 capture is determined by summing 
-*' the product of electricity production from plants with carbon capture and storage, the conversion
-*' factor from terawatt-hours to million tons of oil equivalent (smTWhToMtoe), the plant efficiency,
-*' the CO2 emission factor, and the plant CO2 capture rate. 
-Q06CapCO2ElecHydr(allCy,SBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V06CapCO2ElecHydr(allCy,SBS,YTIME)
+Q06CO2CaptureCCS(allCy,SBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECtoEF(SBS,EFS))..
+    V06CO2CaptureCCS(allCy,SBS,EFS,YTIME)
       =E=
-    sum(EFS,
-      sum(CCS$PGALLtoEF(CCS,EFS),
-        VmProdElec(allCy,CCS,YTIME) * smTWhToMtoe /
-        imPlantEffByType(allCy,CCS,YTIME) *
-        (imCo2EmiFac(allCy,SBS,EFS,YTIME) + 4.17$sameas("BMSWAS",EFS))*
-        V04CO2CaptRate(allCy,CCS,YTIME)
+    (
+      sum(PGALL$(PGALLtoEF(PGALL,EFS) and CCS(PGALL)),
+        i04ShareFuels(allCy,PGALL,EFS) *
+        VmProdElec(allCy,PGALL,YTIME)* smTWhToMtoe /
+        imPlantEffByType(allCy,PGALL,"effELC",YTIME) *
+        V04CO2CaptRate(allCy,PGALL,YTIME)
       )$sameas("PG", SBS) +
       sum(H2TECH$H2TECHEFtoEF(H2TECH,EFS),
         VmConsFuelTechH2Prod(allCy,H2TECH,EFS,YTIME) *
-        (imCo2EmiFac(allCy,SBS,EFS,YTIME) + 4.17$sameas("BMSWAS",EFS))*
         V05CaptRateH2(allCy,H2TECH,YTIME)
-      )$sameas("H2P", SBS)
-    ) +
-    sum(DACTECH,V06CapCDR(allCy,DACTECH,YTIME) * 1e-6)$sameas("DAC", SBS) +
-    (V06CapCDR(allCy,"TEW",YTIME) * 1e-6)$sameas("EW", SBS) +
-    sum(DSBS$sameas(DSBS,SBS),
-      sum(CCSTECH$SECTTECH(DSBS,CCSTECH),
-        sum(EFS$ITECHtoEF(CCSTECH,EFS),
-          i02ShareBlend(allCy,DSBS,CCSTECH,EFS,YTIME) *
-          V02EquipCapTechSubsec(allcy,DSBS,CCSTECH,YTIME) * 
-          i02util(allCy,DSBS,CCSTECH,YTIME) * 
-          imCO2CaptRateIndustry(allCy,CCSTECH,YTIME) * 
-          (imCo2EmiFac(allCy,DSBS,EFS,YTIME) + 4.17$sameas("BMSWAS",EFS))
+      )$sameas("H2P", SBS) +
+      sum(DSBS$sameas(DSBS,SBS),
+        sum(CCSTECH$SECTTECH(DSBS,CCSTECH),
+            i02ShareBlend(allCy,DSBS,CCSTECH,EFS,YTIME) *
+            V02EquipCapTechSubsec(allcy,DSBS,CCSTECH,YTIME) * 
+            i02util(allCy,DSBS,CCSTECH,YTIME) * 
+            imCO2CaptRateIndustry(allCy,CCSTECH,YTIME)
         )
-      )
-    )$INDSE1(SBS);   
+      )$INDSE1(SBS)
+    ) *
+    (imCo2EmiFac(allCy,SBS,EFS,YTIME) + 4.17$sameas("BMSWAS",EFS));
 
 *' The equation calculates the cumulative CO2 captured in million tons of CO2 for a given scenario and year.
 *' The cumulative CO2 captured at the current time period is determined by adding the CO2 captured by electricity and hydrogen production
@@ -53,7 +43,8 @@ Q06CaptCummCO2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06CaptCummCO2(allCy,YTIME) 
       =E= 
     V06CaptCummCO2(allCy,YTIME-1) +
-    SUM(SBS$(not sameas("EW",SBS)),V06CapCO2ElecHydr(allCy,SBS,YTIME));   
+    sum((SBS,EFS)$SECtoEF(SBS,EFS),V06CO2CaptureCCS(allCy,SBS,EFS,YTIME)) +
+    sum(CDRTECH,V06CapCDR(allCy,CDRTECH,YTIME) * 1e-6);   
 
 *' The equation calculates the cost curve for CO2 sequestration costs in Euro per ton of CO2 sequestered
 *' for a specific scenario and year. The cost curve is determined based on cumulative CO2 captured and
@@ -67,12 +58,15 @@ Q06CstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCstCO2SeqCsts(allCy,YTIME) 
         =E=
     !! linear component
-    0.6 * 
+    0.75 * 
     i06ElastCO2Seq(allCy,"mc_b") +
     !! exponential component
-    (1-0.6) *
+    (1-0.75) *
     i06ElastCO2Seq(allCy,"mc_b") *
-    exp(V06CaptCummCO2(allCy,YTIME) / i06ElastCO2Seq(allCy,"mc_d"));           
+    exp(
+      (V06CaptCummCO2(allCy,YTIME-1) - V06CapCDR(allCy,"TEW",YTIME-1) * 1e-6) / 
+      i06ElastCO2Seq(allCy,"mc_d")
+    );           
 
 *' The equation calculates the CAPEX of each DAC technology, as it's affected by a learning curve ($/tCO2).
 Q06GrossCapDAC(CDRTECH,YTIME)$(TIME(YTIME))..
@@ -130,13 +124,12 @@ Q06LvlCostDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06LvlCostDAC(allCy,CDRTECH,YTIME)
         =E=         
     V06GrossCapDAC(CDRTECH,YTIME)
-    - VmSubsiDemTech(allCy,"DAC",CDRTECH,YTIME)$DACTECH(CDRTECH) -
-    VmSubsiDemTech(allCy,"EW",CDRTECH,YTIME)$sameas("TEW",CDRTECH) +
+    - VmSubsiDemTech(allCy,"DAC",CDRTECH,YTIME)$DACTECH(CDRTECH) - VmSubsiDemTech(allCy,"EW",CDRTECH,YTIME)$sameas("TEW",CDRTECH) +
     V06FixOandMDAC(CDRTECH,YTIME) + 
     V06VarCostDAC(CDRTECH,YTIME) - 20 +
     i06SpecElecDAC(allCy,CDRTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME) +
     i06SpecHeatDAC(allCy,CDRTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","NGS",YTIME) / 0.85 +
-    VmCstCO2SeqCsts(allCy,YTIME)
+    VmCstCO2SeqCsts(allCy,YTIME)$(not sameas("TEW", CDRTECH))
 ;
 
 *' The equation estimates the profitability of DAC capacity, calculating the rate between levelized costs (CAPEX, fixed and fuel needs)
@@ -144,23 +137,27 @@ Q06LvlCostDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q06ProfRateDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06ProfRateDAC(allCy,CDRTECH,YTIME)
         =E=
-    (sum(NAP$NAPtoALLSBS(NAP,"DAC"),VmCarVal(allCy,NAP,YTIME)))
-    / V06LvlCostDAC(allCy,CDRTECH,YTIME - 1)
+    sum(NAP$NAPtoALLSBS(NAP,"DAC"),VmCarVal(allCy,NAP,YTIME)) /
+    V06LvlCostDAC(allCy,CDRTECH,YTIME - 1)
 ;
 
-*' The equation estimates the annual increase rate of DAC capacity regionally, according to the maturity and profitability of each technology.
+* The equation determines the annual growth rate of new DAC capacity by region and technology. 
+* The growth rate is modeled as a smooth S-shaped (tanh) function of the profitability rate, 
+* scaled by the maximum allowable expansion factor and adjusted by a technology-specific 
+* maturity factor. This formulation captures the idea that as DAC technologies become more profitable,
+* their growth rate will accelerate, but will eventually level off as they reach market saturation or face other constraints.
+*'The maturity factor allows for differentiation between technologies based on their readiness and potential for rapid deployment.
 Q06CapFacNewDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
   V06CapFacNewDAC(allCy,CDRTECH,YTIME)
       =E=
-  exp(i06MatFacDAC(CDRTECH) * V06ProfRateDAC(allCy,CDRTECH,YTIME) - 1) /
-  exp(i06MatFacDAC(CDRTECH) * S06ProfRateMaxDAC - 1) *
-  (S06CapFacMaxNewDAC - S06CapFacMinNewDAC) +
-  S06CapFacMinNewDAC;
+  S06CapFacMaxNewDAC / 2
+  * (tanh(2 * (V06ProfRateDAC(allCy,CDRTECH,YTIME) - 1.2)) + 1)
+  * i06MatFacDAC(CDRTECH);
 
 *' The equation calculates the DAC installed capacity annually and regionally,
 *' adding capacity based on the maturity of the technology, as well as given capacities of actual scheduled DAC units.
 Q06CapCDR(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-         V06CapCDR(allCy,CDRTECH,YTIME)
+          V06CapCDR(allCy,CDRTECH,YTIME)
             =E=
           V06CapCDR(allCy,CDRTECH,YTIME-1) * (1 + V06CapFacNewDAC(allCy,CDRTECH,YTIME)) +
           i06SchedNewCapDAC(allCy,CDRTECH,YTIME);

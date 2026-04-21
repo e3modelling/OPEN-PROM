@@ -31,7 +31,7 @@ imTransChar(runCy,"RES_MEXTV",YTIME) = 0.04;
 *'                **Interdependent Variables**
 
 *---
-VmRenValue.FX(YTIME)$(ord(YTIME)<20) = 0 ;
+VmRenValue.FX(YTIME)$(ord(YTIME)) = 0 ;
 VmRenValue.FX(YTIME)$(ord(YTIME)>=20 and ord(YTIME)<50) = (ord(YTIME)-20) * 100;
 VmRenValue.FX(YTIME)$(ord(YTIME)>=40) = 2000;
 *VmRenValue.FX(YTIME)$(not AN(YTIME)) = 0 ;
@@ -42,46 +42,38 @@ VmElecConsHeatPla.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = imFuelConsPerFueSub(r
 VmElecConsHeatPla.FX(runCy,DSBS,YTIME) = 0;
 *---
 VmCarVal.FX(runCy,"TRADE",YTIME) = iCarbValYrExog(runCy,YTIME);
-VmCarVal.FX(runCy,"NOTRADE",YTIME) = iCarbValYrExog(runCy,YTIME);
-
 *---
-VmCstCO2SeqCsts.L(runCy,YTIME)=1;
-VmCstCO2SeqCsts.FX(runCy,YTIME)$(not an(YTIME)) = i06ElastCO2Seq(runCy,"mc_b");
+VmCstCO2SeqCsts.LO(runCy,YTIME) = 0;
+VmCstCO2SeqCsts.L(runCy,YTIME) = 1;
+VmCstCO2SeqCsts.FX(runCy,YTIME)$DATAY(YTIME) = i06ElastCO2Seq(runCy,"mc_b");
 *---
-VmPriceFuelSubsecCarVal.LO(runCy,SBS,"H2F",YTIME) = 1E-6;
-VmPriceFuelSubsecCarVal.LO(runCy,"HOU","ELC",YTIME) = 1E-6;
-VmPriceFuelSubsecCarVal.L(runCy,SBS,EF,YTIME)$SECtoEF(SBS,EF) = 1.5;
-VmPriceFuelSubsecCarVal.L(runCy,"PG",PGEF,YTIME) = 1;
+VmPriceFuelSubsecCarVal.LO(runCy,SBS,EF,YTIME) = 0;
+VmPriceFuelSubsecCarVal.L(runCy,SBS,EF,YTIME) = 1;
 
 $IFTHEN %link2MAgPIE% == on 
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,"BMSWAS",YTIME)$(An(YTIME)) = iPricesMagpie(runCy,SBS,YTIME);
 $ENDIF
-VmPriceFuelSubsecCarVal.FX(runCy,SBS,EF,YTIME)$(SECtoEF(SBS,EF)$(not HEATPUMP(EF)) and DATAY(YTIME)) = imFuelPrice(runCy,SBS,EF,YTIME);
+VmPriceFuelSubsecCarVal.FX(runCy,SBS,EF,YTIME)$(SECtoEF(SBS,EF) and not (HEATPUMP(EF) or sameas("NUC",EF)) and DATAY(YTIME)) = imFuelPrice(runCy,SBS,EF,YTIME);
 * Alternative fuel prices are set explicitly below instead of using ALTMAP
 * FIXME: VmPriceFuelSubsecCarVal (NUC/MET/ETH/BGDO) should be computed endogenously after startYear, and with mrprom before startYear
 * author=giannou
-VmPriceFuelSubsecCarVal.FX(runCy,"PG","NUC",YTIME) = 0.02; !! fixed price for nuclear fuel to 25Euro/toe
-VmPriceFuelSubsecCarVal.FX(runCy,"H2P","NUC",YTIME) = 0.02; !! fixed price for nuclear fuel to 25Euro/toe
-VmPriceFuelSubsecCarVal.FX(runCy,"STEAMP","NUC",YTIME) = 0.02; !! fixed price for nuclear fuel to 25Euro/toe
+VmPriceFuelSubsecCarVal.FX(runCy,SBS,"NUC",YTIME)$SECtoEF(SBS,"NUC") = 0.2; !! fixed price for nuclear fuel to 25Euro/toe
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,"MET",YTIME)$(not An(YTIME)) = 1; !! fixed price methanol
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,"ETH",YTIME)$(not An(YTIME)) = 1; !! fixed price for ethanol
-VmPriceFuelSubsecCarVal.FX(runCy,SBS,"BGDO",YTIME)$DATAY(YTIME) = imFuelPrice(runCy,SBS,"GDO",YTIME);
-VmPriceFuelSubsecCarVal.FX(runCy,SBS,"BGSL",YTIME)$DATAY(YTIME) = imFuelPrice(runCy,SBS,"GSL",YTIME);
-VmPriceFuelSubsecCarVal.FX(runCy,SBS,"BKRS",YTIME)$DATAY(YTIME) = imFuelPrice(runCy,SBS,"KRS",YTIME);
 VmPriceFuelSubsecCarVal.FX(runCy,INDDOM,"HEATPUMP",YTIME)$(SECtoEF(INDDOM,"HEATPUMP")$(not An(YTIME))) = imFuelPrice(runCy,INDDOM,"ELC",YTIME);
 VmPriceFuelSubsecCarVal.FX(runCy,"H2P",EF,YTIME)$(SECtoEF("H2P",EF)$DATAY(YTIME)) = imFuelPrice(runCy,"OI",EF,YTIME);
 VmPriceFuelSubsecCarVal.FX(runCy,"STEAMP",EF,YTIME)$(SECtoEF("STEAMP",EF)$DATAY(YTIME)) = imFuelPrice(runCy,"PG",EF,YTIME);
-VmPriceFuelSubsecCarVal.FX(runCy,"STEAMP","CRO",YTIME)$(not DATAY(YTIME)) = imFuelPrice(runCy,"PG","GDO","%fBaseY%") / 1.5;
+VmPriceFuelSubsecCarVal.FX(runCy,SBS,"CRO",YTIME) = imFuelPrice(runCy,SBS,"CRO",YTIME);
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,"STE",YTIME)$(SECtoEF(SBS,"STE") and DATAY(YTIME)) = imFuelPrice(runCy,"OI","ELC",YTIME);
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,"GEO",YTIME) = 0;
-VmPriceFuelSubsecCarVal.FX(runCy,"DAC",EF,YTIME)$(DATAY(YTIME) and SECtoEF("DAC",EF))  = imFuelPrice(runCy,"OI",EF,YTIME);
-VmPriceFuelSubsecCarVal.FX(runCy,"EW",EF,YTIME)$(DATAY(YTIME) and SECtoEF("EW",EF)) = imFuelPrice(runCy,"OI",EF,YTIME);
 *---
-VmPriceFuelAvgSub.L(runCy,DSBS,YTIME) = 0.001;
+VmPriceFuelAvgSub.LO(runCy,DSBS,YTIME) = 0;
+VmPriceFuelAvgSub.L(runCy,DSBS,YTIME) = 1;
 VmPriceFuelAvgSub.FX(runCy,DSBS,YTIME)$DATAY(YTIME) = sum(EF$SECtoEF(DSBS,EF), i08WgtSecAvgPriFueCons(runCy,DSBS,EF) * imFuelPrice(runCy,DSBS,EF,YTIME));
 *---
-VmPriceElecInd.L(runCy,YTIME) = imPriceElecInd(runCy,"%fBaseY%");
-VmPriceElecInd.FX(runCy,YTIME)$DATAY(YTIME) = imPriceElecInd(runCy,YTIME);
+VmPriceElecInd.LO(runCy,TCHP,YTIME) = 0;
+VmPriceElecInd.L(runCy,TCHP,YTIME) = imPriceElecInd(runCy,TCHP,"%fBaseY%");
+VmPriceElecInd.FX(runCy,TCHP,YTIME)$DATAY(YTIME) = imPriceElecInd(runCy,TCHP,YTIME);
 *---
 VmLft.L(runCy,DSBS,TTECH,YTIME) = 10;
 VmLft.FX(runCy,"PC",TTECH,YTIME)$(DATAY(YTIME) and SECTTECH("PC",TTECH)) = i01TechLft(runCy,"PC",TTECH,YTIME);
