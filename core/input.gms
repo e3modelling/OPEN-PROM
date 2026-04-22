@@ -582,7 +582,7 @@ iScenarioPri(WEF,"NOTRADE",YTIME) = 0;
 **                   Power Generation
 table iEnvPolicies(allCy,POLICIES_SET,YTIME) "Environmental policies on emissions constraints  and subsidy on renewables (Mtn CO2)"
 $ondelim
-$include"./iEnvPolicies_allScenarios.csv"
+$include"./iEnvPolicies.csv"
 $offdelim
 ;
 *---
