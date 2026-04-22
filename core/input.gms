@@ -808,7 +808,8 @@ $include "./iResHeatCapFac.csv"
 $offdelim
 /
 ;
-parameter iCapFacHeat(YTIME,allCy,DSBS);
-iCapFacHeat(YTIME,allCy, DSBS) = 1;
-iCapFacHeat(YTIME,allCy,DOMSE) = iResHeatCapFac(allCy);
-iCapFacHeat(YTIME,allCy,DOMSE)$(iCapFacHeat(YTIME,allCy,DOMSE)> 0.8) = 0.2; #set a realistic value for the countries with no info (nonEU)
+parameter iCapFacHeat(allCy,DSBS,YTIME);
+iCapFacHeat(allCy,DSBS,YTIME) = 1;
+iCapFacHeat(allCy,DSBS,YTIME) = iResHeatCapFac(allCy);
+*set a realistic value for the countries with no info (nonEU)
+iCapFacHeat(allCy,DSBS,YTIME)$(iCapFacHeat(allCy,DSBS,YTIME)> 0.8) = 0.2; 

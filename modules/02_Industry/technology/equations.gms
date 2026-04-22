@@ -104,7 +104,7 @@ Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not CD
             ) *
             (imCapCostTech(allCy,DSBS,ITECH,YTIME) * imCGI(allCy,YTIME) +
             imFixOMCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit )
-            / iCapHeat(allCy,DSBS,YTIME)
+            / iCapFacHeat(allCy,DSBS,YTIME)
         ) / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME)
     )
 ;
