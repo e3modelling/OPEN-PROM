@@ -151,7 +151,7 @@ Q06CapFacNewDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
   S06CapFacMinNewDAC +
   S06CapFacMaxNewDAC
   * (tanh(2 * (V06ProfRateDAC(allCy,CDRTECH,YTIME) - 1.2)) + 1) / 2
-  * (tanh(0.2 * (200 * V07EmissionsNetPart(allCy,YTIME) - 2)) + 0.5) / 2
+  * (tanh(0.15 * (200 * V07EmissionsNetPart(allCy,YTIME) - 2)) + 0.5) / 2
   * i06MatFacDAC(CDRTECH) + 1e-6;
 
 *' The equation calculates the DAC installed capacity annually and regionally,
