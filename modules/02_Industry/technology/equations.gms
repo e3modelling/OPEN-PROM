@@ -89,6 +89,8 @@ Q02GapUsefulDemSubsec(allCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not 
 *' OLD VARIABLE: V02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME) --> NEW VARIABLE:V02CapCostTech(allCy,DSBS,rCon,EF,YTIME)
 *' Add parameter sUnitToKUnit = 1000
 *' Check ITECH and CHPs
+
+* The capital cost of DOMSE is calculated per kW while for other sectors per toe.
 Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not CDR(DSBS))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
     V02CapCostTech(allCy,DSBS,ITECH,YTIME) 
         =E=
@@ -100,8 +102,9 @@ Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not CD
                 ) /
                 (exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME)) - 1)
             ) *
-            imCapCostTech(allCy,DSBS,ITECH,YTIME) * imCGI(allCy,YTIME) +
-            imFixOMCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit
+            (imCapCostTech(allCy,DSBS,ITECH,YTIME) * imCGI(allCy,YTIME) +
+            imFixOMCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit )
+            / iCapHeat(allCy,DSBS,YTIME)
         ) / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME)
     )
 ;

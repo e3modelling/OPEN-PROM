@@ -811,3 +811,4 @@ $offdelim
 parameter iCapFacHeat(YTIME,allCy,DSBS);
 iCapFacHeat(YTIME,allCy, DSBS) = 1;
 iCapFacHeat(YTIME,allCy,DOMSE) = iResHeatCapFac(allCy);
+iCapFacHeat(YTIME,allCy,DOMSE)$(iCapFacHeat(YTIME,allCy,DOMSE)> 0.8) = 0.2; #set a realistic value for the countries with no info (nonEU)
