@@ -1,24 +1,26 @@
 
-# 🌍 Soft-Linking Tutorial: OPEN-PROM ↔ MAgPIE
+# Soft-Linking Tutorial: OPEN-PROM ↔ MAgPIE (coupling-channel)
 
-This guide explains how to use the soft-linking functionality between the **OPEN-PROM** energy system model and the **MAgPIE** land-use model using two R functions:
+This guide explains how to run the soft-coupling between the **OPEN-PROM** energy-system model and the **MAgPIE** land-use model via the **coupling-channel** approach — the mif-based interface that MAgPIE already exposes for REMIND (`c56_pollutant_prices = "coupling"`, `c60_2ndgen_biodem = "coupling"`).
 
-- `linkPromToMagpie()` → For exporting data from **OPEN-PROM to MAgPIE**.
-- `MAgPIE2OPEN()` → For importing data from **MAgPIE to OPEN-PROM**.
+Two R functions (in `postprom/R/couplePromWithMagpie.R`) do the data exchange:
 
-It also describes the internal **model switch logic** implemented in `OPEN-PROM` to conditionally enable or disable this integration.
+* `couplePromToMagpie()` — exports OPEN-PROM carbon price + bioenergy demand to a REMIND-style `.mif` that MAgPIE consumes
+* `coupleMagpieToProm()` — reads MAgPIE's `report.mif` and writes `iPrices_magpie.csv` (biomass price) and `iEmissions_magpie.csv` (AFOLU emissions) for OPEN-PROM
+
+All of this is orchestrated by `task == 7` in `start.R`.
 
 ---
 
-## ⚙️ Model Integration Switch (in OPEN-PROM)
+## Model Integration Switch (OPEN-PROM side)
 
-OPEN-PROM includes a conditional switch that enables or disables the use of MAgPIE-derived inputs. This is done using the global flag:
+A global GAMS flag toggles whether OPEN-PROM reads MAgPIE-derived biomass prices:
 
 ```gams
 $setGlobal link2MAgPIE on
 ```
 
-In `input.gms`, a conditional block reads MAgPIE-based biomass prices **only if the switch is activated**:
+`modules/08_Prices/legacy/input.gms` conditionally reads the price table only when the switch is on:
 
 ```gams
 $ifthen %link2MAgPIE% == on
@@ -30,84 +32,81 @@ $offdelim
 $endif
 ```
 
-In the **preloop** phase, the fuel price values are set via:
+In the **preloop** phase, the biomass fuel price is fixed to the MAgPIE-supplied value:
 
 ```gams
-$IF %link2MAgPIE% == on 
+$IF %link2MAgPIE% == on
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,"BMSWAS",YTIME)$(An(YTIME)) = iPricesMagpie(runCy,SBS,YTIME);
 ```
 
-In the **equation definitions**, the switch logic is embedded using a combination of `$IFTHEN` and `$(...)`:
+And the price-formation equation in `modules/08_Prices/legacy/equations.gms:21` excludes `BMSWAS` from the regular price-recursion when the switch is on (`$(not sameas("BMSWAS",EF))`).
 
-```gams
-Q08PriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)$(SECTTECH(SBS,EF) $TIME(YTIME)
-$IFTHEN %link2MAgPIE% == on 
-   $(not sameas("BMSWAS",EF))
-$ENDIF
-   $(not sameas("NUC",EF)) $runCy(allCy))..
-   VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME) =E= ...
-```
-
-This ensures that if the user sets `link2MAgPIE = on`, MAgPIE-derived values will override default ones for bioenergy prices and emissions.
+The reverse-direction switch on the MAgPIE side is triggered by environment variables — `magpie/start.R` sets `cfg$gms$c56_pollutant_prices = "coupling"` and `cfg$gms$c60_2ndgen_biodem = "coupling"` when `OPENPROM_COUPLING_MIF` is defined. With the env-vars unset, MAgPIE's default behaviour is unchanged.
 
 ---
 
-## 🔄 R Code for Data Exchange
+## R functions
 
-### 1️⃣ From OPEN-PROM → MAgPIE
-
-This direction is triggered using the following R command:
+### 1. OPEN-PROM → MAgPIE
 
 ```r
-linkPromToMagpie("path/to/output.gdx", 
-                 "path/to/f56_pollutant_prices.cs3", 
-                 "path/to/f60_1stgen_bioenergy_dem.cs3")
+library(postprom)
+couplePromToMagpie(
+  gdxPath    = "path/to/blabla.gdx",          # OPEN-PROM round-1 gdx
+  outMifPath = "path/to/openprom_coupling.mif",
+  scenario   = "SSP2-PkBudg650"               # must match MAgPIE side
+)
 ```
 
-This function:
-- Extracts **carbon prices** and **bioenergy demand** from an OPEN-PROM `.gdx` file.
-- Converts carbon prices to MAgPIE's expected format (in CO2 pollutant units).
-- Converts bioenergy demand from **Mtoe → PJ**, aggregated to MAgPIE's regions.
-- Writes two `.cs3` files that MAgPIE uses as scenario-specific inputs:
-  - `f56_pollutant_prices.cs3` (carbon price trajectories)
-  - `f60_1stgen_bioenergy_dem.cs3` (bioenergy demand)
+What it does:
 
-These outputs are then copied into MAgPIE’s input folders before its execution.
+* Extracts `VmCarVal[,"TRADE",]` (CO2 price, US$2015/t CO2) and converts to US$2017 via a 1.04 deflator
+* Extracts `V03InpTotTransf[,"LQD","BMSWAS",]` (2G lignocellulosic feedstock, Mtoe/yr) and converts to EJ/yr (× 0.041868)
+* Derives `Price|N2O` (× AR6 GWP100 = 273) and `Price|CH4` (× 27) from the CO2 price — MAgPIE requires all three GHG prices present
+* Aggregates OPEN-PROM's 39 countries to MAgPIE's 12 h12 regions (EU-28 → `EUR`, the other 11 countries map 1:1)
+* Writes a REMIND-style `.mif` with 4 variables × 12 regions × 91 years that MAgPIE can consume via `cfg$path_to_report_ghgprices` / `cfg$path_to_report_bioenergy`
 
----
-
-### 2️⃣ From MAgPIE → OPEN-PROM
-
-After running MAgPIE, the reverse link is executed using:
+### 2. MAgPIE → OPEN-PROM
 
 ```r
-MAgPIE2OPEN("path/to/input.gdx", 
-            "path/to/output/report.mif", 
-            "path/to/OPEN-PROM/input/folder/")
+coupleMagpieToProm(
+  reportMifPath       = "path/to/magpie/output/noAR_.../report.mif",
+  outCsvPath          = "path/to/openprom/run/iPrices_magpie.csv",
+  outEmissionsCsvPath = "path/to/openprom/run/iEmissions_magpie.csv",
+  gdxPath             = "path/to/blabla.gdx"  # used to read the SBS set
+)
 ```
 
-This function:
-- Reads the `.mif` report from MAgPIE and extracts:
-  - **Biomass prices** (converted to USD2015/toe).
-  - **Land-use emissions** (CO2 and other gases).
-- Processes and interpolates the results.
-- Converts MAgPIE region format to match OPEN-PROM.
-- Saves two CSV files in OPEN-PROM format:
-  - `iPrices_magpie.csv` – bioenergy fuel prices by sector and region
-  - `iEmissions_magpie.csv` – emissions data from the AFOLU sector
+What it does:
 
-These files are then picked up by OPEN-PROM during its second model run, completing the loop.
+* Reads `Prices|Bioenergy (US$2017/GJ)` and converts to OPEN-PROM's k$2015/toe (× 0.96 × 41.868 / 1000)
+* Interpolates MAgPIE's 5-year steps onto OPEN-PROM's `YTIME = 2010..2100` annual grid
+* Disaggregates MAgPIE's 12 h12 regions back to OPEN-PROM's 39 countries (EU-28 members inherit the `EUR` value; other 11 regions 1:1) and broadcasts across the 34 `SBS` subsectors — writes `iPrices_magpie.csv` (the file that the GAMS switch above reads)
+* Also reads 11 AFOLU emission variables (`Emissions|CO2|Land`, `CH4|Land`, `N2O|Land`, fire-related BC/CO/OC/SO2/VOC, NH3, NO2, NO3-) and writes `iEmissions_magpie.csv`. **The GAMS side does not currently `$include` this file** — it is produced and saved for future extension
 
 ---
 
-## 🔁 Full Workflow
+## Full Workflow (automated by `start.R task 7`)
 
-The full sequence for executing the soft-link is:
+```r
+source("start.R")  # with task <- 7
+```
 
-1. Run OPEN-PROM with `link2MAgPIE = off` to generate carbon prices and bioenergy demand.
-2. Execute `linkPromToMagpie()` to generate MAgPIE input files.
-3. Run MAgPIE using the updated `.cs3` input files.
-4. Execute `MAgPIE2OPEN()` to extract and reformat the outputs.
-5. Run OPEN-PROM again with `link2MAgPIE = on` to finalize results using land-informed biomass prices and emissions.
+Pipeline:
 
-This setup ensures a flexible and traceable workflow for coupling energy system and land-use models using a modular and scenario-driven approach. The conditional GAMS switches allow seamless toggling, while the R script handles all the data transformations.
+1. **OPEN-PROM round-1** (`link2MAgPIE=off`) → `blabla.gdx`
+2. `couplePromToMagpie()` → `openprom_coupling.mif`
+3. **MAgPIE run** — launched via `Rscript start.R` inside `magpie/`, with env-vars `OPENPROM_COUPLING_MIF`, `OPENPROM_COUPLING_SCENARIO`, `OPENPROM_COUPLING_GHG=on`, `OPENPROM_COUPLING_BIOENERGY=on` set; MAgPIE writes `report.mif`
+4. `coupleMagpieToProm()` → `iPrices_magpie.csv` + `iEmissions_magpie.csv`
+5. **OPEN-PROM round-2** (`link2MAgPIE=on`) — reads `iPrices_magpie.csv`, fixes BMSWAS price, re-solves
+6. `reportOutput.R` + sync
+
+`config.json` must define `magpie_path` (absolute path to the MAgPIE root) so task 7 knows where to launch the land-use run.
+
+---
+
+## Notes
+
+* CSV format requirement: year column headers in `iPrices_magpie.csv` must be **bare integers** (`2010,2011,…,2100`) — no `y` prefix. OPEN-PROM's `YTIME` set is declared as `/%fStartHorizon%*%fEndHorizon%/` which expands to plain-integer labels, and any mismatch triggers GAMS error 170 (domain violation)
+* When launching GAMS from `start.R`, always pass `-Idir=./data` because `core/input.gms` includes CSVs with root-relative paths (`./iActv.csvr` etc.) that live in the `./data/` subdirectory
+* The forward bio channel sends `V03InpTotTransf[,"LQD","BMSWAS",]` — the narrow 2G lignocellulosic feedstock flow. Under scenarios where OPEN-PROM does not activate the liquid biofuel pathway, this signal can legitimately be near-zero; the CO2 price channel still transmits independently

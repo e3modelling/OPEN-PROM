@@ -4,7 +4,7 @@ library(jsonlite)
 # Various flags used to modify script behavior
 withRunFolder <- TRUE # Set to FALSE to disable model run folder creation and file copying
 withSync <- FALSE # Set to FALSE to disable model run sync to SharePoint
-withReport <- TRUE # Set to FALSE to disable the report output script execution (applicable to research mode only)
+withReport <- FALSE # Set to FALSE to disable the report output script execution (applicable to research mode only)
 uploadGDX <- TRUE # Set to TRUE to include GDX files in the uploaded archive
 
 ### Define function that saves model metadata into a JSON file.
@@ -422,28 +422,27 @@ if (task == 0) {
   }
   if (withRunFolder && withSync) syncRun()
 } else if (task == 7) {
-  # Running task OPEN-PROM <-> MAgPIE SOFT-LINK
+  # Running task OPEN-PROM <-> MAgPIE SOFT-LINK (coupling-channel, mif-based)
   # Pipeline: open-prom (link2MAgPIE=off)
-  #            -> linkPromToMagpie(forward = TRUE)    # OPEN-PROM -> MAgPIE
-  #            -> magpie (Rscript start.R)
-  #            -> linkPromToMagpie(forward = FALSE)   # MAgPIE2OPEN()
+  #            -> couplePromToMagpie()   # OPEN-PROM gdx  -> coupling.mif
+  #            -> magpie (Rscript start.R, reads env-vars OPENPROM_COUPLING_*)
+  #            -> coupleMagpieToProm()   # MAgPIE report.mif -> iPrices/iEmissions
   #            -> open-prom (link2MAgPIE=on)
   #            -> reportOutput.R (postprom)
   saveMetadata(DevMode = 0)
-  sceName <- "SOFTLINKMAGPIE"
+  sceName <- "SSP2-PkBudg650"
   if (withRunFolder) createRunFolder(setScenarioName(sceName))
 
-  # After createRunFolder() we are in OPEN-PROM/runs/<scen>_<ts>/.
-  # Go up THREE levels to reach the repo root where magpie/ lives.
   openPromRun <- getwd()
   magpieRoot  <- NULL
   if (file.exists("config.json")) {
     config <- fromJSON("config.json")
     magpieRoot <- config$magpie_path
   }
-  f56 <- file.path(magpieRoot, "modules", "56_ghg_policy", "input", "f56_pollutant_prices.cs3")
-  f60 <- file.path(magpieRoot, "modules", "60_bioenergy", "input", "f60_1stgen_bioenergy_dem.cs3")
-  linkOutDir  <- paste0(openPromRun, "/") # linkPromToMagpie uses paste0(pathsave, ...), trailing slash required
+  if (is.null(magpieRoot) || !nzchar(magpieRoot)) {
+    stop("[task 7] config.json must define magpie_path (absolute path to the magpie/ directory).")
+  }
+  couplingMif <- file.path(openPromRun, "openprom_coupling.mif")
 
   # ---- Step 1: OPEN-PROM run with link2MAgPIE = off -----------------------
   cat(">>> [task 7] Step 1/6: OPEN-PROM run (link2MAgPIE=off)\n")
@@ -460,45 +459,46 @@ if (task == 0) {
   }
   openPromGdx <- file.path(openPromRun, "blabla.gdx")
 
-  # ---- Step 2: OPEN-PROM -> MAgPIE via linkPromToMagpie(forward = TRUE) ---
-  cat(">>> [task 7] Step 2/6: linkPromToMagpie(forward = TRUE)\n")
+  # ---- Step 2: OPEN-PROM -> MAgPIE via couplePromToMagpie() --------------
+  cat(">>> [task 7] Step 2/6: couplePromToMagpie() -> ", couplingMif, "\n")
   library(postprom)
-  linkPromToMagpie(
-    path                = openPromGdx,
-    pathPollutantPrices = f56,
-    pathsave            = linkOutDir,
-    pathBioenergyDemand = f60,
-    forward             = TRUE,
-    scenario            = sceName
+  # Source the coupling helpers directly so edits in postprom/R/ take effect
+  # without requiring a package reinstall.
+  source(file.path(openPromRun, "..", "..", "postprom", "R", "couplePromWithMagpie.R"))
+  couplePromToMagpie(
+    gdxPath    = openPromGdx,
+    outMifPath = couplingMif,
+    scenario   = sceName
   )
-  # Overwrite MAgPIE inputs with the freshly generated cs3 files
-  file.copy(file.path(linkOutDir, "result_f56_pollutant_prices.cs3"),     f56, overwrite = TRUE)
-  file.copy(file.path(linkOutDir, "result_f60_1stgen_bioenergy_dem.cs3"), f60, overwrite = TRUE)
 
-  # ---- Step 3: MAgPIE run -------------------------------------------------
+  # ---- Step 3: MAgPIE run (reads coupling mif via env-vars) --------------
   cat(">>> [task 7] Step 3/6: MAgPIE run\n")
   setwd(magpieRoot)
+  Sys.setenv(
+    OPENPROM_COUPLING_MIF       = couplingMif,
+    OPENPROM_COUPLING_SCENARIO  = sceName,
+    OPENPROM_COUPLING_GHG       = "on",
+    OPENPROM_COUPLING_BIOENERGY = "on"
+  )
   magpie_exit <- system("Rscript start.R")
+  Sys.unsetenv(c("OPENPROM_COUPLING_MIF", "OPENPROM_COUPLING_SCENARIO",
+                 "OPENPROM_COUPLING_GHG", "OPENPROM_COUPLING_BIOENERGY"))
   if (magpie_exit != 0) {
     setwd(openPromRun)
     stop("[task 7] MAgPIE run failed with exit code ", magpie_exit, ".")
   }
-  magpieOutDirs <- list.dirs("output", recursive = FALSE)
+  magpieOutDirs   <- list.dirs("output", recursive = FALSE)
   latestMagpieRun <- magpieOutDirs[which.max(file.info(magpieOutDirs)$mtime)]
-  magpieGdx       <- file.path(normalizePath(latestMagpieRun, winslash = "/"), "fulldata.gdx")
   magpieReport    <- file.path(normalizePath(latestMagpieRun, winslash = "/"), "report.mif")
 
-  # ---- Step 4: MAgPIE -> OPEN-PROM via linkPromToMagpie(forward = FALSE) --
-  cat(">>> [task 7] Step 4/6: linkPromToMagpie(forward = FALSE) == MAgPIE2OPEN\n")
+  # ---- Step 4: MAgPIE -> OPEN-PROM via coupleMagpieToProm() --------------
+  cat(">>> [task 7] Step 4/6: coupleMagpieToProm()\n")
   setwd(openPromRun)
-  linkPromToMagpie(
-    path                = magpieGdx,
-    pathPollutantPrices = NULL,
-    pathsave            = NULL,
-    pathBioenergyDemand = NULL,
-    pathReport          = magpieReport,
-    pathSave            = openPromRun,
-    forward             = FALSE
+  coupleMagpieToProm(
+    reportMifPath       = magpieReport,
+    outCsvPath          = file.path(openPromRun, "iPrices_magpie.csv"),
+    outEmissionsCsvPath = file.path(openPromRun, "iEmissions_magpie.csv"),
+    gdxPath             = openPromGdx
   )
 
   # ---- Step 5: OPEN-PROM run with link2MAgPIE = on ------------------------
