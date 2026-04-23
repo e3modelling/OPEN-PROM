@@ -65,3 +65,11 @@ i02ShareBlend(runCy,"BU","TGDO","BGDO",YTIME)$AN(YTIME) = i02ShareBlend(runCy,"B
 
 i02ShareElcHP(runCy,"HOU",YTIME) = 0.1;
 i02ShareElcHP(runCy,"SE",YTIME) = 0.1;
+*---
+$IFTHEN.calib %Calibration% == MatCalibration
+table t02SharesFuelBuildings(allCy,DSBS,EFS,YTIME)    "Targets for share of new passenger cars"
+$ondelim
+$include "../targets/tSharesFuelBuildings.csv"
+$offdelim
+;
+$ENDIF.calib
