@@ -29,7 +29,7 @@ qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
       0.01 * (imMatrFactor(allCy,TRANSE,TTECH,YTIME) - imMatrFactor(allCy,TRANSE,TTECH,YTIME-1))
     )
   ) + 
-  SUM((DSBS,EFS)$(SECtoEF(DSBS,EFS) and sameas(DSBS,"HOU")),
+  SUM((DSBS,EFS)$((sameas("HOU",DSBS) or sameas("SE",DSBS)) and SECtoEF(DSBS,EFS)),
     SQR(
       t02SharesFuelBuildings(allCy,DSBS,EFS,YTIME) - 
       VmConsFuelShare(allCy,DSBS,EFS,YTIME)
