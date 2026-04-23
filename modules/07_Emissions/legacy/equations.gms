@@ -121,10 +121,17 @@ Q07EmiActBySrcRegTim(E07SrcMacAbate, allCy, YTIME)$(TIME(YTIME)$(runCy(allCy))).
 Q07EmissionsNet(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V07EmissionsNet(allCy,YTIME)
     =E=
-    sum(SSBS, V07GrossEmissCO2Supply(allCy,SSBS,YTIME))
+    (sum(SSBS, V07GrossEmissCO2Supply(allCy,SSBS,YTIME))
     + sum(DSBS, V07GrossEmissCO2Demand(allCy,DSBS,YTIME))
     - sum((SBS,EFS)$SECtoEF(SBS,EFS), V06CO2CaptureCCS(allCy,SBS,EFS,YTIME))
-!!    - sum(CDRTECH, V06CapCDR(allCy,CDRTECH,YTIME)) * 1e-6
+    - sum(CDRTECH, V06CapCDR(allCy,CDRTECH,YTIME)) * 1e-6)
+    +
+    sqrt(
+        sqr(-(sum(SSBS, V07GrossEmissCO2Supply(allCy,SSBS,YTIME))
+        + sum(DSBS, V07GrossEmissCO2Demand(allCy,DSBS,YTIME))
+        - sum((SBS,EFS)$SECtoEF(SBS,EFS), V06CO2CaptureCCS(allCy,SBS,EFS,YTIME))
+        - sum(CDRTECH, V06CapCDR(allCy,CDRTECH,YTIME)) * 1e-6))
+    ) + 1e-6
     ;
 
 *' The equation calculates the net emissions share for a given country and year, representing the country's 
