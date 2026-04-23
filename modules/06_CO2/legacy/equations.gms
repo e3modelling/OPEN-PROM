@@ -72,11 +72,11 @@ Q06GrossCapDAC(CDRTECH,YTIME)$(TIME(YTIME))..
             =E=         
     0.5 * 
     (
-      (i06GrossCapDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.9)/log(2))) +
+      (i06GrossCapDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.75)/log(2))) +
       i06GrossCapDACMin(CDRTECH) +
       sqrt(
         sqr(
-          (i06GrossCapDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.9)/log(2))) -
+          (i06GrossCapDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.75)/log(2))) -
           i06GrossCapDACMin(CDRTECH)
         )
       )
@@ -88,11 +88,11 @@ Q06FixOandMDAC(CDRTECH,YTIME)$(TIME(YTIME))..
             =E=         
     0.5 * 
     (
-      (i06FixOandMDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.9)/log(2))) +
+      (i06FixOandMDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.75)/log(2))) +
       i06FixOandMDACMin(CDRTECH) +
       sqrt(
         sqr(
-          (i06FixOandMDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.9)/log(2))) -
+          (i06FixOandMDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.75)/log(2))) -
           i06FixOandMDACMin(CDRTECH)
         )
       )
@@ -105,11 +105,11 @@ Q06VarCostDAC(CDRTECH,YTIME)$(TIME(YTIME))..
             =E=         
     0.5 * 
     (
-      (i06VarCostDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.9)/log(2))) +
+      (i06VarCostDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.75)/log(2))) +
       i06VarCostDACMin(CDRTECH) +
       sqrt(
         sqr(
-          (i06VarCostDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.9)/log(2))) -
+          (i06VarCostDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.75)/log(2))) -
           i06VarCostDACMin(CDRTECH)
         )
       )
@@ -151,7 +151,7 @@ Q06CapFacNewDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
   S06CapFacMinNewDAC +
   S06CapFacMaxNewDAC
   * (tanh(2 * (V06ProfRateDAC(allCy,CDRTECH,YTIME) - 1.2)) + 1) / 2
-  * (tanh(0.15 * (200 * V07EmissionsNetPart(allCy,YTIME) - 2)) + 0.5) / 2
+  * (tanh(0.3 * (200 * V07EmissionsNetPart(allCy,YTIME) - 0.5)) + 0.5) / 2
   * i06MatFacDAC(CDRTECH);
 
 *' The equation calculates the DAC installed capacity annually and regionally,
