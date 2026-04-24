@@ -355,20 +355,6 @@ SE.TOGS       0.14459  12.74         20   0.8
 SE.TBMSWAS    0.26753  17.14         20   0.75
 SE.TELC       0.05195   7.79         20   0.99
 SE.THEATPUMP  0.30736  22.16         20   3.175
-AG.THCL       0.35498   1.13         20   0.7
-AG.TLGN       0.42338   1.21         20   0.5
-AG.TLPG       0.14459  12.74         20   0.8
-AG.TGSL       0.14978   8.83         20   0.7
-AG.TKRS       0.14978   8.83         20   0.8
-AG.TGDO       0.14978   8.83         20   0.8
-AG.TRFO       0.21126   1.13         20   0.8
-AG.TOLQ       0.14978   8.83         20   0.8
-AG.TNGS       0.14459  12.74         20   0.81
-AG.TOGS       0.14459  12.74         20   0.8
-*AG.PGTSOL
-AG.TBMSWAS    0.26753  17.14         20   0.75
-AG.TELC       0.05195   7.79         20   0.99
-AG.THEATPUMP  0.30736  22.16         20   3.175
 HOU.THCL      0.35498   1.13         20   0.7
 HOU.TLGN      0.42338   1.21         20   0.5
 HOU.TLPG      0.14459  12.74         20   0.8
@@ -383,6 +369,21 @@ HOU.TOGS      0.14459  12.74         20   0.8
 HOU.TBMSWAS   0.26753  17.14         20   0.75
 HOU.TELC      0.05195   7.79         20   0.99
 HOU.THEATPUMP 0.30736  22.16         20   3.175
+*units        kUSD/toe USD/toe/y       
+AG.THCL       0.323544 10.88           20  0.7
+AG.TLGN       0.323544 10.88           20  0.5
+AG.TLPG       0.24888  10.88           20  0.8
+AG.TGSL       0.323544 10.88           20  0.7
+AG.TKRS       0.24888  10.88           20  0.8
+AG.TGDO       0.24888  6.8             20  0.85
+AG.TRFO       0.24888  10.88           20  0.8
+AG.TOLQ       0.24888  10.88           20  0.8
+AG.TNGS       0.2244   6.8             20  0.88
+AG.TOGS       0.2244   10.88           20  0.8
+*AG.PGTSOL     0.86224  1.36            20  0.85
+AG.TBMSWAS    0.323544 10.88           20  0.5
+AG.TELC       0.3      8.976           12  0.85
+AG.THEATPUMP  0.432    12.9254         20  1.848
 ;
 *---
 * Coverting EUR05 to US2015
@@ -799,9 +800,9 @@ imPlantEffByType(runCy,STECH,"effHeat",YTIME)$(not PGALL(STECH))= imPlantEffByTy
 smGwToTwhPerYear(YTIME) = 8.76 + 0.024 $ (mod(YTIME.val,4) = 0 and mod (YTIME.val,100) <> 0);
 *--
 
-**  Residential space heating - Capacity factor
+**  Residential and Commercial space heating - Capacity factor
 *---
-parameter iResHeatCapFac(allCy)   "Data for the capacity factor of residential space heating technologies in 2024"
+parameter iResHeatCapFac(allCy)   "Data for the capacity factor of residential and commercial space heating technologies in 2024"
 /
 $ondelim
 $include "./iResHeatCapFac.csv"
@@ -809,7 +810,9 @@ $offdelim
 /
 ;
 parameter iCapFacHeat(allCy,DSBS,YTIME);
+*set a default value of 1 for all other sectors
 iCapFacHeat(allCy,DSBS,YTIME) = 1;
-iCapFacHeat(allCy,DSBS,YTIME) = iResHeatCapFac(allCy);
+* set capacity factor for residential and commercial sectors
+iCapFacHeat(allCy,DSBS,YTIME)$(sameas(DSBS,"HOU") or sameas(DSBS,"SE")) = iResHeatCapFac(allCy);
 *set a realistic value for the countries with no info (nonEU)
-iCapFacHeat(allCy,DSBS,YTIME)$(iCapFacHeat(allCy,DSBS,YTIME)> 0.8) = 0.2; 
+iCapFacHeat(allCy,DSBS,YTIME)$(iCapFacHeat(allCy,DSBS,YTIME)> 0.8 and (sameas(DSBS,"HOU") or sameas(DSBS,"SE"))) = 0.2; 

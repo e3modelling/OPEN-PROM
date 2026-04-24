@@ -14,6 +14,11 @@ loop an do !! start outer iteration loop (time steps)
     loop rcc$(rcc.ord <= sSolverTryMax) do !! start inner iteration loop (solver attempts)
         if sModelStat gt 2 then
             solve openprom using nlp minimizing vDummyObj;
+            if sameas(rcc,'rcc2') then
+                option nlp=conopt3;
+            else    
+                option nlp=conopt4;   
+            endif;
             sModelStat = openprom.modelstat;
             ODummyObj(runCyL,YTIME)$TIME(YTIME) = vDummyObj.L;  !! Assign objective function value
         endif;
