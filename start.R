@@ -462,9 +462,6 @@ if (task == 0) {
   # ---- Step 2: OPEN-PROM -> MAgPIE via couplePromToMagpie() --------------
   cat(">>> [task 7] Step 2/6: couplePromToMagpie() -> ", couplingMif, "\n")
   library(postprom)
-  # Source the coupling helpers directly so edits in postprom/R/ take effect
-  # without requiring a package reinstall.
-  source(file.path(openPromRun, "..", "..", "postprom", "R", "couplePromWithMagpie.R"))
   couplePromToMagpie(
     gdxPath    = openPromGdx,
     outMifPath = couplingMif,
