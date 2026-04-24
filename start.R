@@ -397,7 +397,7 @@ if (task == 0) {
 
   if (withRunFolder && withSync) syncRun()
 
-  CalibratedParams <- c("iMatFacPlaAvailCap.csv", "iMatrFactorData.csv")
+  CalibratedParams <- c("iMatFacPlaAvailCap.csv", "iMatrFactorData.csv", "iScaleEndogScrap.csv")
   CalibratedParamsPath <- file.path(getwd(), CalibratedParams)
   newPath <- file.path(dirname(dirname(getwd())), "data", CalibratedParams)
   file.rename(CalibratedParamsPath, newPath)

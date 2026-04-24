@@ -15,4 +15,5 @@ $if %WriteGDX% == on execute_unload "blabla.gdx";
 $ifthen.calib %Calibration% == MatCalibration
 execute 'gdxdump outputCalib.gdx output=iMatFacPlaAvailCap.csv symb=i04MatFacPlaAvailCap cDim=y format=csv';
 execute 'gdxdump outputCalib.gdx output=iMatrFactorData.csv symb=imMatrFactor cDim=y format=csv';
+execute 'gdxdump outputCalib.gdx output=iScaleEndogScrap.csv symb=i02ScaleEndogScrap cDim=y format=csv';
 $endif.calib
