@@ -653,8 +653,8 @@ variable imMatrFactor(allCy,DSBS,TECH,YTIME)    "Maturity factor per technology 
 imMatrFactor.LO(runCy,DSBS,TECH,YTIME) = 1e-6;                                          
 imMatrFactor.UP(runCy,DSBS,TECH,YTIME) = 10;
 imMatrFactor.L(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);     
-imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(not (sameas(DSBS,"PC") or sameas(DSBS,"PB") or sameas(DSBS,"GU") or sameas(DSBS,"HOU") or sameas(DSBS,"SE"))) = iMatrFactorData(runCy,DSBS,TECH,YTIME);   
-imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$((sameas(DSBS,"PC") or sameas(DSBS,"PB") or sameas(DSBS,"GU") or sameas(DSBS,"HOU") or sameas(DSBS,"SE")) and not SECTTECH(DSBS,TECH)) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                      
+imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(not (sameas(DSBS,"PC") or sameas(DSBS,"PB") or sameas(DSBS,"GU") or DOMSE(DSBS))) = iMatrFactorData(runCy,DSBS,TECH,YTIME);   
+imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$((sameas(DSBS,"PC") or sameas(DSBS,"PB") or sameas(DSBS,"GU") or DOMSE(DSBS)) and not SECTTECH(DSBS,TECH)) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                      
 imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$DATAY(YTIME)= iMatrFactorData(runCy,DSBS,TECH,YTIME);      
 $ENDIF.calib
 *---

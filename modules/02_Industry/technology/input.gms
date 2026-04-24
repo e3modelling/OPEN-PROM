@@ -33,7 +33,7 @@ i02ScaleEndogScrap.LO(runCy,DSBS,ITECH,YTIME) = 0;
 i02ScaleEndogScrap.UP(runCy,DSBS,ITECH,YTIME) = 100;
 i02ScaleEndogScrap.L(runCy,DSBS,ITECH,YTIME) = 1;
 i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$DATAY(YTIME) = 0;
-i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$(not (sameas("HOU",DSBS) or sameas(DSBS,"SE"))) = 1;
+i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$(not DOMSE(DSBS)) = 1;
 
 i02CalibUsefulEnergy.LO(runCy,DSBS,YTIME) = -1;  
 i02CalibUsefulEnergy.UP(runCy,DSBS,YTIME) = 1;  
