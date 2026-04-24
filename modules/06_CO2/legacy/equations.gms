@@ -150,7 +150,7 @@ Q06CapFacNewDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       =E=
   S06CapFacMinNewDAC +
   S06CapFacMaxNewDAC
-  * (tanh(2 * (V06ProfRateDAC(allCy,CDRTECH,YTIME) - 1.2)) + 1) / 2
+  * (tanh(0.5 * (V06ProfRateDAC(allCy,CDRTECH,YTIME) - 5)) + 1) / 2
   * (tanh(0.3 * (200 * V07EmissionsNetPart(allCy,YTIME) - 1.5)) + 0.5) / 2
   * i06MatFacDAC(CDRTECH);
 
