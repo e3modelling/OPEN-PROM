@@ -1,6 +1,6 @@
 ## Welcome to the OPEN-PROM Tutorial!
 
-OPEN-PROM ("open PROMETHEUS") is an energy-economy model currently under development. The present version is based on the MENA-EDS ENERGY MODEL v4.0 (c) E3Modelling 2020.
+OPEN-PROM ("open PROMETHEUS") is an energy-economy model currently under development. The present version is based on the MENA-EDS ENERGY MODEL v4.0 (c) E3-Modelling 2020.
 
 Extensive documentation of the PROMETHEUS model on which both MENA-EDS and OPEN-PROM are based can be found here: https://e3modelling.com/modelling-tools/prometheus/.
 
