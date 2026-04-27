@@ -48,7 +48,7 @@ VmCstCO2SeqCsts.L(runCy,YTIME) = 1;
 VmCstCO2SeqCsts.FX(runCy,YTIME)$DATAY(YTIME) = i06ElastCO2Seq(runCy,"mc_b");
 *---
 VmPriceFuelSubsecCarVal.LO(runCy,SBS,EF,YTIME) = 0;
-VmPriceFuelSubsecCarVal.L(runCy,SBS,EF,YTIME) = 1;
+VmPriceFuelSubsecCarVal.L(runCy,SBS,EF,YTIME)$SECtoEF(SBS,EF) = 2;
 
 $IFTHEN %link2MAgPIE% == on 
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,"BMSWAS",YTIME)$(An(YTIME)) = iPricesMagpie(runCy,SBS,YTIME);
