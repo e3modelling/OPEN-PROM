@@ -10,7 +10,7 @@ $offdelim
 *---
 table i02ElaSub(allCy,DSBS)                                "Elasticities by subsector for all countries (1)" ;
 *---
-imTotFinEneDemSubBaseYr(runCy,TRANSE,YTIME)  = sum(EF$SECtoEF(TRANSE,EF), imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME));
+imTotFinEneDemSubBaseYr(runCy,TRANSE,YTIME)  = sum(EF$SECtoEF(TRANSE,EF),imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME));
 imTotFinEneDemSubBaseYr(runCy,INDSE,YTIME)   = SUM(EF$SECtoEF(INDSE,EF),imFuelConsPerFueSub(runCy,INDSE,EF,YTIME));
 imTotFinEneDemSubBaseYr(runCy,DOMSE,YTIME)   = SUM(EF$SECtoEF(DOMSE,EF),imFuelConsPerFueSub(runCy,DOMSE,EF,YTIME));
 imTotFinEneDemSubBaseYr(runCy,NENSE,YTIME)   = SUM(EF$SECtoEF(NENSE,EF),imFuelConsPerFueSub(runCy,NENSE,EF,YTIME));
@@ -20,11 +20,18 @@ i02ExogDemOfBiomass(runCy,DOMSE,YTIME) = 0;
 i02util(runCy,DSBS,ITECH,YTIME) = 1;
 *---
 $IFTHEN.calib %Calibration% == off
-parameter i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME)       "Scale parameter for endogenous scrapping applied to the sum of full costs (1)";
-parameter i02CalibUsefulEnergy(allCy,DSBS,YTIME);
-
-i02ScaleEndogScrap(runCy,DSBS,ITECH,YTIME) = 1;
-i02CalibUsefulEnergy(runCy,DSBS,YTIME) = 0;
+table i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME)       "Scale parameter for endogenous scrapping applied to the sum of full costs (1)"
+$ondelim
+$include"./iScaleEndogScrap.csv"
+$offdelim
+;
+*---
+table i02CalibUsefulEnergy(allCy,DSBS,YTIME)      "Calibration parameter for useful energy (1)"
+$ondelim
+$include"./iCalibUsefulEnergy.csv"
+$offdelim
+;
+*---
 $ELSE.calib
 variable i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME)        "Scale parameter for endogenous scrapping applied to the sum of full costs (1)";
 variable i02CalibUsefulEnergy(allCy,DSBS,YTIME);
@@ -32,11 +39,11 @@ variable i02CalibUsefulEnergy(allCy,DSBS,YTIME);
 i02ScaleEndogScrap.LO(runCy,DSBS,ITECH,YTIME) = 0;                                      
 i02ScaleEndogScrap.UP(runCy,DSBS,ITECH,YTIME) = 100;
 i02ScaleEndogScrap.L(runCy,DSBS,ITECH,YTIME) = 1;
-i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$DATAY(YTIME) = 0;
-i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$(not DOMSE(DSBS)) = 1;
+i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$(DATAY(YTIME) or not SECTTECH(DSBS,ITECH)) = 0;
+i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and not DOMSE(DSBS)) = 1;
 
-i02CalibUsefulEnergy.LO(runCy,DSBS,YTIME) = -0.5;  
-i02CalibUsefulEnergy.UP(runCy,DSBS,YTIME) = 1;  
+i02CalibUsefulEnergy.LO(runCy,DSBS,YTIME) = -0.8;  
+i02CalibUsefulEnergy.UP(runCy,DSBS,YTIME) = 2;  
 i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$DATAY(YTIME) = 0;
 i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$(not DOMSE(DSBS)) = 0;
 $ENDIF.calib

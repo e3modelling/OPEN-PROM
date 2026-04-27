@@ -312,7 +312,7 @@ if (task == 0) {
   }
   
   # Verify calibration output files exist
-  CalibratedParams <- c("iMatFacPlaAvailCap.csv", "iMatrFactorData.csv")
+  CalibratedParams <- c("iMatFacPlaAvailCap.csv", "iMatrFactorData.csv", "iScaleEndogScrap.csv", "iCalibUsefulEnergy.csv")
   missing_files <- CalibratedParams[!file.exists(CalibratedParams)]
   if (length(missing_files) > 0) {
     cat("ERROR: Calibrated parameter files missing:", paste(missing_files, collapse = ", "), "\n")
