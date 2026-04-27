@@ -212,3 +212,13 @@ Q03ConsFiEneSec(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       )
      )$(not sameas("H2P",SSBS)) +
     VmConsFuelH2Prod(allCy,EFS,YTIME)$sameas("H2P",SSBS);                               
+
+Q03FinalEnergy(allCy,DSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    VmFinalEnergy(allCy,DSBS,EFS,YTIME)
+        =E=
+    SUM((TRANSE,TTECH)$(sameas(DSBS,TRANSE) and SECTTECH(TRANSE,TTECH) and TTECHtoEF(TTECH,EFS)),
+      V01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EFS,YTIME)
+    ) + 
+    VmConsFuel(allCy,DSBS,EFS,YTIME) + 
+    sum(CDRTECH$TECHtoEF(CDRTECH,EFS),VmConsFuelTechCDRProd(allCy,CDRTECH,EFS,YTIME)) +
+    VmConsFuelTechCDRProd(allCy,"TEW",EFS,YTIME)$sameas(DSBS,"EW");   

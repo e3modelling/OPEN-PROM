@@ -33,6 +33,7 @@ Q03ConsFiEneSec(allCy,SSBS,EFS,YTIME)	                       "Compute energy bra
 Q03ConsFinEneCountry(allCy,EFS,YTIME)                      "Compute total final energy consumption"
 Q03ConsFinNonEne(allCy,EFS,YTIME)                          "Compute final non-energy consumption"
 Q03LossesDistr(allCy,EFS,YTIME)                            "Compute distribution losses"
+Q03FinalEnergy(allCy,DSBS,EFS,YTIME)
 ;
 
 Variables
@@ -53,4 +54,5 @@ VmConsFiEneSec(allCy,SSBS,EFS,YTIME)                            "Final consumpti
 VmConsFinEneCountry(allCy,EF,YTIME)                        "Total final energy consumnption (Mtoe)"
 VmConsFinNonEne(allCy,EFS,YTIME)                           "Final non energy consumption (Mtoe)"
 VmLossesDistr(allCy,EFS,YTIME)                             "Distribution losses (Mtoe)"
+VmFinalEnergy(allCy,DSBS,EFS,YTIME)
 ;
