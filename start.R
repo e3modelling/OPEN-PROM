@@ -431,33 +431,61 @@ if (task == 0) {
   #            -> reportOutput.R (postprom)
   saveMetadata(DevMode = 0)
   sceName <- "SSP2-PkBudg650"
-  if (withRunFolder) createRunFolder(setScenarioName(sceName))
 
-  openPromRun <- getwd()
   magpieRoot  <- NULL
+  existingRun <- NULL
   if (file.exists("config.json")) {
-    config <- fromJSON("config.json")
-    magpieRoot <- config$magpie_path
+    config      <- fromJSON("config.json")
+    magpieRoot  <- config$magpie_path
+    existingRun <- config$task7_existingRun
   }
   if (is.null(magpieRoot) || !nzchar(magpieRoot)) {
     stop("[task 7] config.json must define magpie_path (absolute path to the magpie/ directory).")
   }
+
+  reuseExisting <- !is.null(existingRun) && nzchar(existingRun)
+  if (reuseExisting) {
+    if (!dir.exists(existingRun)) {
+      stop("[task 7] task7_existingRun folder does not exist: ", existingRun)
+    }
+    openPromRun <- normalizePath(existingRun, winslash = "/", mustWork = TRUE)
+    setwd(openPromRun)
+    cat(">>> [task 7] reusing existing run folder:", openPromRun, "\n")
+  } else {
+    if (withRunFolder) createRunFolder(setScenarioName(sceName))
+    openPromRun <- getwd()
+  }
   couplingMif <- file.path(openPromRun, "openprom_coupling.mif")
 
   # ---- Step 1: OPEN-PROM run with link2MAgPIE = off -----------------------
-  cat(">>> [task 7] Step 1/6: OPEN-PROM run (link2MAgPIE=off)\n")
-  cmd1 <- paste0(gams,
-                 " main.gms --DevMode=0 --GenerateInput=off --link2MAgPIE=off",
-                 " -logOption 4 -Idir=./data 2>&1")
-  if (.Platform$OS.type == "unix") {
-    system(paste0("sh -c ", shQuote(cmd1)))
+  if (!reuseExisting) {
+    cat(">>> [task 7] Step 1/6: OPEN-PROM run (link2MAgPIE=off)\n")
+    cmd1 <- paste0(gams,
+                   " main.gms --DevMode=0 --GenerateInput=off --link2MAgPIE=off",
+                   " -logOption 4 -Idir=./data 2>&1")
+    if (.Platform$OS.type == "unix") {
+      system(paste0("sh -c ", shQuote(cmd1)))
+    } else {
+      shell(paste0(cmd1, " | tee full_round1.log"))
+    }
+    if (!isRunSuccessful("modelstat.txt")) {
+      stop("[task 7] First OPEN-PROM run failed. Aborting soft-link.")
+    }
+    file.copy(file.path(openPromRun, "blabla.gdx"),
+              file.path(openPromRun, "blabla_round1.gdx"),
+              overwrite = TRUE)
   } else {
-    shell(paste0(cmd1, " | tee full_round1.log"))
+    cat(">>> [task 7] Step 1/6: SKIPPED (reusing existing round-1)\n")
+    if (!file.exists(file.path(openPromRun, "blabla_round1.gdx"))) {
+      srcGdx <- file.path(openPromRun, "blabla.gdx")
+      if (!file.exists(srcGdx)) {
+        stop("[task 7] Existing run folder has neither blabla_round1.gdx nor blabla.gdx: ",
+             openPromRun)
+      }
+      file.copy(srcGdx, file.path(openPromRun, "blabla_round1.gdx"), overwrite = FALSE)
+    }
   }
-  if (!isRunSuccessful("modelstat.txt")) {
-    stop("[task 7] First OPEN-PROM run failed. Aborting soft-link.")
-  }
-  openPromGdx <- file.path(openPromRun, "blabla.gdx")
+  openPromGdx <- file.path(openPromRun, "blabla_round1.gdx")
 
   # ---- Step 2: OPEN-PROM -> MAgPIE via couplePromToMagpie() --------------
   cat(">>> [task 7] Step 2/6: couplePromToMagpie() -> ", couplingMif, "\n")
