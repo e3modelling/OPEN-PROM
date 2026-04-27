@@ -34,6 +34,12 @@ qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
       t02SharesFuelBuildings(allCy,DSBS,EFS,YTIME) - 
       VmConsFuelShare(allCy,DSBS,EFS,YTIME)
     )
+  ) +
+  SUM(DSBS$DOMSE(DSBS),
+    SQR(
+      t02FinalEnergyDOMSE(allCy,DSBS,YTIME) -
+      SUM(EFS$SECtoEF(DSBS,EFS),VmConsFuel(allCy,DSBS,EFS,YTIME))
+    )
   );
 
 qRestrain(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) and SECTTECH(TRANSE,TTECH) and runCy(allCy) and (t01NewShareStockPC(allCy,TRANSE,TTECH,YTIME) < 0)).. 

@@ -35,11 +35,10 @@ i02ScaleEndogScrap.L(runCy,DSBS,ITECH,YTIME) = 1;
 i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$DATAY(YTIME) = 0;
 i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$(not DOMSE(DSBS)) = 1;
 
-i02CalibUsefulEnergy.LO(runCy,DSBS,YTIME) = -1;  
+i02CalibUsefulEnergy.LO(runCy,DSBS,YTIME) = -0.5;  
 i02CalibUsefulEnergy.UP(runCy,DSBS,YTIME) = 1;  
 i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$DATAY(YTIME) = 0;
-i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$(not (sameas("HOU",DSBS) or sameas(DSBS,"SE"))) = 0;
-i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME) = 0;
+i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$(not DOMSE(DSBS)) = 0;
 $ENDIF.calib
 i02ElastNonSubElec(runCy,DSBS,ETYPES,YTIME) = i02ElastNonSubElecData(DSBS,ETYPES,YTIME);
 *---
@@ -71,6 +70,10 @@ $IFTHEN.calib %Calibration% == MatCalibration
 table t02SharesFuelBuildings(allCy,DSBS,EFS,YTIME)    "Targets for share of new passenger cars"
 $ondelim
 $include "../targets/tSharesFuelBuildings.csv"
-$offdelim
-;
+$offdelim;
+
+table t02FinalEnergyDOMSE(allCy,DSBS,YTIME)    "Targets for share of new passenger cars"
+$ondelim
+$include "../targets/tProjectionsFuelBuildings.csv"
+$offdelim;
 $ENDIF.calib

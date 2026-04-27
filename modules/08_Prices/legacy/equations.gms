@@ -49,11 +49,11 @@ V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)
     ) +
     (
       SUM(CDRTECH,VmConsFuelTechCDRProd(allCy,CDRTECH,EF,YTIME)) /
-      (SUM((CDRTECH,EF2)$SECtoEF(DSBS,EF2),VmConsFuelTechCDRProd(allCy,CDRTECH,EF2,YTIME)) + 1e-12)
+      (SUM((CDRTECH,EF2)$SECtoEF(DSBS,EF2),VmConsFuelTechCDRProd(allCy,CDRTECH,EF2,YTIME)) + 1e-6)
     )$sameas("DAC",DSBS) +
     (
       VmConsFuelTechCDRProd(allCy,"TEW",EF,YTIME) /
-      (SUM(EF2$SECtoEF(DSBS,EF2),VmConsFuelTechCDRProd(allCy,"TEW",EF2,YTIME)) + 1e-12)
+      (SUM(EF2$SECtoEF(DSBS,EF2),VmConsFuelTechCDRProd(allCy,"TEW",EF2,YTIME)) + 1e-6)
     )$sameas("EW",DSBS);
   
 *' The equation calculates the average fuel price per subsector. These average prices are used to further compute electricity prices in industry
