@@ -175,6 +175,7 @@ GN    "Goods Transport - Inland Navigation"
 BU    "Bunkers"
 PCH   "Petrochemicals Industry"
 NEN   "Other Non Energy Uses"
+ICT   "Data centers and Networks"
 PG    "Power and Steam Generation"
 H2P   "Hydrogen Production"
 STEAMP "Steam Production"
@@ -229,6 +230,7 @@ GN    "Goods Transport - Inland Navigation"
 BU    "Bunkers"
 PCH   "Petrochemicals Industry"
 NEN   "Other Non Energy Uses"
+ICT   "Data centers and Networks"
 PG    "Power and Steam Generation"
 H2P   "Hydrogen production"
 STEAMP "Steam Production"
@@ -357,6 +359,7 @@ GN    "Goods Transport - Inland Navigation"
 BU    "Bunkers"
 PCH   "Petrochemicals Industry"
 NEN   "Other Non Energy Uses"
+ICT   "Data centers and Networks"
 DAC   "Direct Air Capture"
 EW    "Enhanced Weathering"
 /
@@ -903,6 +906,7 @@ PA.(TKRS)
 (HOU,SE).(THEATPUMP)
 BU.(TGDO,TRFO,TKRS,TH2F,TNGS)
 (PCH,NEN).(TLGN,THCL,TGDO,TRFO,TLPG,TOLQ,TNGS,TOGS)
+ICT.TELC
 DAC.(HTDAC,H2DAC,LTDAC)
 EW.TEW
 /

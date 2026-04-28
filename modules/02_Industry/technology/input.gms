@@ -37,7 +37,7 @@ $ENDIF.calib
 i02ElaSub(runCy,DSBS) = imElaSubData(DSBS);
 i02ElaSub(runCy,DSBS) = 2; !!
 *---
-i02ScaleEndogScrap(DSBS)$(not TRANSE(DSBS) and not CDR(DSBS)) = 6./SUM(ITECH$SECTTECH(DSBS,ITECH),1);
+i02ScaleEndogScrap(DSBS)$(INDDOM(DSBS) or NENSE(DSBS)) = 6./SUM(ITECH$SECTTECH(DSBS,ITECH),1);
 *---
 imCO2CaptRateIndustry(runCy,CCSTECH,YTIME) = 0.9;
 

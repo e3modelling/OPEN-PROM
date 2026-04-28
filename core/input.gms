@@ -522,6 +522,7 @@ imAnnCons(runCy,"EW","smallest") = 0.2 ;
 imAnnCons(runCy,"EW","largest") = 1 ;
 imAnnCons(runCy,"EW","modal") = 0.5 ;
 *---
+$ontext
 * Consumer size groups distribution function
 Loop (runCy,DSBS) DO
      Loop rCon$(ord(rCon) le imNcon(DSBS)+1) DO
@@ -548,8 +549,9 @@ Loop (runCy,DSBS) DO
 ;
      ENDLOOP;
 ENDLOOP;
+$offtext
 *---
-imCumDistrFuncConsSize(runCy,DSBS) = sum(rCon, imDisFunConSize(runCy,DSBS,rCon));
+*imCumDistrFuncConsSize(runCy,DSBS) = sum(rCon, imDisFunConSize(runCy,DSBS,rCon));
 imCGI(allCy,YTIME) = 1;
 *---
 table iDataDistrLosses(allCy,EF,YTIME)	     "Data for Distribution Losses (Mtoe)"

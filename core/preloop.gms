@@ -48,7 +48,7 @@ VmCstCO2SeqCsts.L(runCy,YTIME) = 1;
 VmCstCO2SeqCsts.FX(runCy,YTIME)$DATAY(YTIME) = i06ElastCO2Seq(runCy,"mc_b");
 *---
 VmPriceFuelSubsecCarVal.LO(runCy,SBS,EF,YTIME) = 0;
-VmPriceFuelSubsecCarVal.L(runCy,SBS,EF,YTIME) = 1;
+VmPriceFuelSubsecCarVal.L(runCy,SBS,EF,YTIME)$SECtoEF(SBS,EF) = 1;
 
 $IFTHEN %link2MAgPIE% == on 
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,"BMSWAS",YTIME)$(An(YTIME)) = iPricesMagpie(runCy,SBS,YTIME);
@@ -58,8 +58,8 @@ VmPriceFuelSubsecCarVal.FX(runCy,SBS,EF,YTIME)$(SECtoEF(SBS,EF) and not (HEATPUM
 * FIXME: VmPriceFuelSubsecCarVal (NUC/MET/ETH/BGDO) should be computed endogenously after startYear, and with mrprom before startYear
 * author=giannou
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,"NUC",YTIME)$SECtoEF(SBS,"NUC") = 0.2; !! fixed price for nuclear fuel to 25Euro/toe
-VmPriceFuelSubsecCarVal.FX(runCy,SBS,"MET",YTIME)$(not An(YTIME)) = 1; !! fixed price methanol
-VmPriceFuelSubsecCarVal.FX(runCy,SBS,"ETH",YTIME)$(not An(YTIME)) = 1; !! fixed price for ethanol
+VmPriceFuelSubsecCarVal.FX(runCy,SBS,"MET",YTIME)$(DATAY(YTIME) and SECtoEF(SBS,"MET")) = 1; !! fixed price methanol
+VmPriceFuelSubsecCarVal.FX(runCy,SBS,"ETH",YTIME)$(DATAY(YTIME) and SECtoEF(SBS,"ETH")) = 1; !! fixed price for ethanol
 VmPriceFuelSubsecCarVal.FX(runCy,INDDOM,"HEATPUMP",YTIME)$(SECtoEF(INDDOM,"HEATPUMP")$(not An(YTIME))) = imFuelPrice(runCy,INDDOM,"ELC",YTIME);
 VmPriceFuelSubsecCarVal.FX(runCy,"H2P",EF,YTIME)$(SECtoEF("H2P",EF)$DATAY(YTIME)) = imFuelPrice(runCy,"OI",EF,YTIME);
 VmPriceFuelSubsecCarVal.FX(runCy,"STEAMP",EF,YTIME)$(SECtoEF("STEAMP",EF)$DATAY(YTIME)) = imFuelPrice(runCy,"PG",EF,YTIME);
