@@ -10,28 +10,6 @@
 
 *' * REST OF ENERGY BALANCE SECTORS
 
-*' The equation computes the total final energy consumption in million tonnes of oil equivalent for each country ,
-*' energy form sector, and time period. The total final energy consumption is calculated as the sum of final energy consumption in the
-*' Industry and Tertiary sectors and the sum of final energy demand in all transport subsectors. The consumption is determined by the 
-*' relevant link between model subsectors and fuels.
-Q03ConsFinEneCountry(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    VmConsFinEneCountry(allCy,EFS,YTIME)
-        =E=
-    sum(INDDOM,VmConsFuel(allCy,INDDOM,EFS,YTIME)) +
-    sum(TRANSE,VmDemFinEneTranspPerFuel(allCy,TRANSE,EFS,YTIME)) +
-    VmConsFuelCDRProd(allCy,EFS,YTIME);
-
-*' The equation computes the final non-energy consumption in million tonnes of oil equivalent
-*' for a given energy form sector. The calculation involves summing the consumption of fuels in each non-energy and bunkers
-*' demand subsector based on the corresponding fuel aggregation for the supply side. This process is performed 
-*' for each time period.
-Q03ConsFinNonEne(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    VmConsFinNonEne(allCy,EFS,YTIME)
-        =E=
-    sum(NENSE$(not sameas("BU",NENSE) and SECtoEF(NENSE,EFS)),
-      VmConsFuel(allCy,NENSE,EFS,YTIME)
-    );  
-
 *' The equation computes the distribution losses in million tonnes of oil equivalent for a given energy form sector.
 *' The losses are determined by the rate of losses over available for final consumption multiplied by the sum of total final energy
 *' consumption and final non-energy consumption. This calculation is performed for each time period.
@@ -42,8 +20,7 @@ Q03LossesDistr(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     (
       imRateLossesFinCons(allCy,EFS,YTIME) * 
       (
-        VmConsFinEneCountry(allCy,EFS,YTIME) + 
-        VmConsFinNonEne(allCy,EFS,YTIME) +
+        SUM(DSBS,VmFinalEnergy(allCy,DSBS,EFS,YTIME)) +
         V03ProdPrimary(allCy,EFS,YTIME)$sameas(EFS,"CRO")
       )
     )$(not H2EF(EFS)) +
@@ -120,29 +97,16 @@ Q03OutTotTransf(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$runCy(allCy))..
 Q03Transfers(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V03Transfers(allCy,EFS,YTIME) 
         =E=
-    (
-      V03Transfers(allCy,EFS,YTIME-1) *
-      (
-        (VmConsFinEneCountry(allCy,EFS,YTIME) + 1e-6) /
-        (VmConsFinEneCountry(allCy,EFS,YTIME-1) + 1e-6)
-      ) ** 0.3
-    )$(not sameas(EFS,"CRO")) +
-    (
-      V03Transfers(allCy,"CRO",YTIME-1) *
-      (
-        (SUM(EFS2$EFTOEFA(EFS2,"LQD"),VmConsFinEneCountry(allCy,EFS2,YTIME)) + 1e-6) /
-        (SUM(EFS2$EFTOEFA(EFS2,"LQD"),VmConsFinEneCountry(allCy,EFS2,YTIME-1)) + 1e-6)
-      ) ** 0.3
-    )$sameas(EFS,"CRO");         
+    V03Transfers(allCy,EFS,YTIME-1) *
+    SUM(DSBS,VmFinalEnergy(allCy,DSBS,EFS,YTIME) + 1e-6) / 
+    SUM(DSBS,VmFinalEnergy(allCy,DSBS,EFS,YTIME-1) + 1e-6);         
 
 *' The equation calculates the gross inland consumption. This quantity is equal to the total energy
 *' supply for each country.
 Q03ConsGrssInl(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V03ConsGrssInl(allCy,EFS,YTIME)
         =E=
-    VmConsFinEneCountry(allCy,EFS,YTIME) + 
-    VmConsFinNonEne(allCy,EFS,YTIME) +
-    VmConsFuel(allCy,"BU",EFS,YTIME) +
+    SUM(DSBS,VmFinalEnergy(allCy,DSBS,EFS,YTIME)) +
     SUM(SSBS,
       VmConsFiEneSec(allCy,SSBS,EFS,YTIME) +
       V03InpTotTransf(allCy,SSBS,EFS,YTIME)
@@ -210,7 +174,7 @@ Q03ConsFiEneSec(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         V03OutTotTransf(allCy,SSBS,EFS2,YTIME) +
         V03ProdPrimary(allCy,EFS2,YTIME)$(not PGRENEF(EFS2))
       )
-     )$(not sameas("H2P",SSBS)) +
+    )$(not sameas("H2P",SSBS)) +
     VmConsFuelH2Prod(allCy,EFS,YTIME)$sameas("H2P",SSBS);                               
 
 Q03FinalEnergy(allCy,DSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
@@ -220,5 +184,5 @@ Q03FinalEnergy(allCy,DSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       V01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EFS,YTIME)
     ) + 
     VmConsFuel(allCy,DSBS,EFS,YTIME) + 
-    sum(CDRTECH$TECHtoEF(CDRTECH,EFS),VmConsFuelTechCDRProd(allCy,CDRTECH,EFS,YTIME)) +
+    sum(CDRTECH$TECHtoEF(CDRTECH,EFS),VmConsFuelTechCDRProd(allCy,CDRTECH,EFS,YTIME))$sameas(DSBS,"DAC") +
     VmConsFuelTechCDRProd(allCy,"TEW",EFS,YTIME)$sameas(DSBS,"EW");   

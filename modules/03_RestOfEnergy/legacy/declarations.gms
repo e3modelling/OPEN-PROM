@@ -30,10 +30,8 @@ Q03Imp(allCy,EFS,YTIME)	                                   "Compute fake imports
 *'                **Interdependent Equations**
 Q03ImpNetEneBrnch(allCy,EFS,YTIME)	                       "Compute net imports"
 Q03ConsFiEneSec(allCy,SSBS,EFS,YTIME)	                       "Compute energy branch final consumption"
-Q03ConsFinEneCountry(allCy,EFS,YTIME)                      "Compute total final energy consumption"
-Q03ConsFinNonEne(allCy,EFS,YTIME)                          "Compute final non-energy consumption"
 Q03LossesDistr(allCy,EFS,YTIME)                            "Compute distribution losses"
-Q03FinalEnergy(allCy,DSBS,EFS,YTIME)
+Q03FinalEnergy(allCy,DSBS,EFS,YTIME)                       "Compute total final energy consumption"
 ;
 
 Variables
@@ -42,7 +40,7 @@ Variables
 *V03CapRef(allCy,YTIME)	                                   "Refineries capacity (Million barrels/day)"
 V03InpTotTransf(allCy,SSBS,EFS,YTIME)	                       "Total transformation input (Mtoe)"
 V03OutTotTransf(allCy,SSBS,EFS,YTIME)	                       "Total transformation output (Mtoe)"
-V03Transfers(allCy,EFS,YTIME)	                           "Transfers (Mtoe)"
+V03Transfers(allCy,EFS,YTIME)	                             "Transfers (Mtoe)"
 V03ConsGrssInl(allCy,EFS,YTIME)	                           "Gross Inland Consumption (Mtoe)"
 V03ProdPrimary(allCy,EFS,YTIME)	                           "Primary Production (Mtoe)"
 V03Exp(allCy,EFS,YTIME)                        	           "Exports fake (Mtoe)"
@@ -51,8 +49,6 @@ V03Imp(allCy,EFS,YTIME)             	                   "Fake Imports for all fu
 *'                **Interdependent Variables**
 VmImpNetEneBrnch(allCy,EFS,YTIME)	                       "Net Imports (Mtoe)"
 VmConsFiEneSec(allCy,SSBS,EFS,YTIME)                            "Final consumption in energy sector (Mtoe)"
-VmConsFinEneCountry(allCy,EF,YTIME)                        "Total final energy consumnption (Mtoe)"
-VmConsFinNonEne(allCy,EFS,YTIME)                           "Final non energy consumption (Mtoe)"
 VmLossesDistr(allCy,EFS,YTIME)                             "Distribution losses (Mtoe)"
-VmFinalEnergy(allCy,DSBS,EFS,YTIME)
+VmFinalEnergy(allCy,DSBS,EFS,YTIME)                        "Total final energy (Mtoe)"
 ;

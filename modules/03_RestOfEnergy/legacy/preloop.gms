@@ -35,16 +35,8 @@ V03InpTotTransf.L(runCy,SSBS,EFS,YTIME) = -i03InpTotTransfProcess(runCy,SSBS,EFS
 V03InpTotTransf.FX(runCy,SSBS,EFS,YTIME)$(DATAY(YTIME) and SECtoEF(SSBS,EFS)) = -i03InpTotTransfProcess(runCy,SSBS,EFS,YTIME);
 V03InpTotTransf.FX(runCy,SSBS,EFS,YTIME)$(not SECtoEF(SSBS,EFS)) = 0;
 *---
-VmConsFinEneCountry.LO(runCy,EFS,YTIME) = 0;
-VmConsFinEneCountry.FX(runCy,EFS,YTIME)$DATAY(YTIME) = 
-sum(DSBS$(not NENSE(DSBS)), 
-  imFuelConsPerFueSub(runCy,DSBS,EFS,YTIME)
-);
-*---
-VmConsFinNonEne.FX(runCy,EFS,YTIME)$DATAY(YTIME) = 
-SUM(NENSE$(not sameas("BU",NENSE) and SECtoEF(NENSE,EFS)),
-  imFuelConsPerFueSub(runCy,NENSE,EFS,YTIME)
-);
-*---
 VmImpNetEneBrnch.L(runCy,EFS,YTIME) = imFuelTrade(runCy,"IMPORTS",EFS,"%fBaseY%") - imFuelTrade(runCy,"EXPORTS",EFS,"%fBaseY%");
 VmImpNetEneBrnch.FX(runCy,EFS,YTIME)$DATAY(YTIME) = imFuelTrade(runCy,"IMPORTS",EFS,YTIME) - imFuelTrade(runCy,"EXPORTS",EFS,YTIME);
+*---
+VmFinalEnergy.LO(runCy,DSBS,EFS,YTIME) = 0;
+VmFinalEnergy.FX(runCy,DSBS,EFS,YTIME)$DATAY(YTIME) = imFuelConsPerFueSub(runCy,DSBS,EFS,YTIME);

@@ -4,3 +4,4 @@
 * Emissions Module
 
 V07GrossEmissCO2Supply.FX(runCyL,SSBS,YTIME)$TIME(YTIME) = V07GrossEmissCO2Supply.L(runCyL,SSBS,YTIME)$TIME(YTIME);
+V07GrossEmissCO2Demand.FX(runCyL,DSBS,YTIME)$TIME(YTIME) = V07GrossEmissCO2Demand.L(runCyL,DSBS,YTIME)$TIME(YTIME);

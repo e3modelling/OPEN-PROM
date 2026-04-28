@@ -2,9 +2,8 @@
 *' @code
 
 *'                *VARIABLE INITIALISATION*
-V11SubsiTot.LO(runCy,YTIME) = 0.0001;
-*V11SubsiTot.L(runCy,YTIME) = 1;
-
+V11SubsiTot.LO(runCy,YTIME) = 0;
+V11SubsiTot.L(runCy,YTIME) = 1;
 *---
 VmSubsiDemITech.LO(runCy,DSBS,ITECH,YTIME) = 0;
 VmSubsiDemITech.L(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH)) = 0;

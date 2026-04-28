@@ -3,6 +3,7 @@
 
 *'                *VARIABLE INITIALISATION*
 *---
+V07GrossEmissCO2Supply.LO(runCy,SSBS,YTIME) = 0;
 V07GrossEmissCO2Supply.FX(runCy,"H2INFR",YTIME) = 0;
 V07GrossEmissCO2Supply.FX(runCy,SSBS,YTIME)$DATAY(YTIME) = 
 SUM(EFS,
@@ -25,6 +26,7 @@ SUM(EFS,
   imCo2EmiFac(runCy,"PG",EFS,YTIME)
 );
 *---
+V07GrossEmissCO2Demand.LO(runCy,DSBS,YTIME) = 0;
 V07GrossEmissCO2Demand.FX(runCy,DSBS,YTIME)$DATAY(YTIME) =   
 SUM(EF,
   imFuelConsPerFueSub(runCy,DSBS,EF,YTIME) *
