@@ -1087,10 +1087,10 @@ BM_CO2.CO2
 CO2SEQELAST Elasticities for CO2 sequestration cost curve
 /
 POT      MAXIMUM POTENTIAL
-sig_a
-sig_b
-seq_min
-seq_max
+sig_a     "sigmoid a parameter (steepness of the curve)"
+sig_b     "sigmoid b parameter (position of the curve)"
+seq_min   "Minimum sequestration cost"
+seq_max   "Maximum sequestration cost"
 /
 
 
