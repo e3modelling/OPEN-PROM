@@ -3,8 +3,8 @@ library(jsonlite)
 
 # Various flags used to modify script behavior
 withRunFolder <- TRUE # Set to FALSE to disable model run folder creation and file copying
-withSync <- TRUE # Set to FALSE to disable model run sync to SharePoint
-withReport <- TRUE # Set to FALSE to disable the report output script execution (applicable to research mode only)
+withSync <- FALSE # Set to FALSE to disable model run sync to SharePoint
+withReport <- FALSE # Set to FALSE to disable the report output script execution (applicable to research mode only)
 uploadGDX <- TRUE # Set to TRUE to include GDX files in the uploaded archive
 
 ### Define function that saves model metadata into a JSON file.
@@ -175,6 +175,7 @@ setScenarioName <- function(scen_default) {
 
   return(scen)
 }
+
 ### Function that check if all country and year runs are successfull
 isRunSuccessful <- function(statusFilePath) {
   if (!file.exists(statusFilePath)) return(FALSE)
@@ -416,6 +417,132 @@ if (task == 0) {
     setwd("../../") # Going back to root folder
     cat("Executing the report output script\n")
     report_cmd <- paste0("Rscript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
+    system(report_cmd)
+    setwd(run_path)
+  }
+  if (withRunFolder && withSync) syncRun()
+} else if (task == 7) {
+  # Running task OPEN-PROM <-> MAgPIE SOFT-LINK (coupling-channel, mif-based)
+  # Pipeline: open-prom (link2MAgPIE=off)
+  #            -> couplePromToMagpie()   # OPEN-PROM gdx  -> coupling.mif
+  #            -> magpie (Rscript start.R, reads env-vars OPENPROM_COUPLING_*)
+  #            -> coupleMagpieToProm()   # MAgPIE report.mif -> iPrices/iEmissions
+  #            -> open-prom (link2MAgPIE=on)
+  #            -> reportOutput.R (postprom)
+  saveMetadata(DevMode = 0)
+  sceName <- "SSP2-PkBudg650"
+
+  magpieRoot  <- NULL
+  existingRun <- NULL
+  if (file.exists("config.json")) {
+    config      <- fromJSON("config.json")
+    magpieRoot  <- config$magpie_path
+    existingRun <- config$task7_existingRun
+  }
+  if (is.null(magpieRoot) || !nzchar(magpieRoot)) {
+    stop("[task 7] config.json must define magpie_path (absolute path to the magpie/ directory).")
+  }
+
+  reuseExisting <- !is.null(existingRun) && nzchar(existingRun)
+  if (reuseExisting) {
+    if (!dir.exists(existingRun)) {
+      stop("[task 7] task7_existingRun folder does not exist: ", existingRun)
+    }
+    openPromRun <- normalizePath(existingRun, winslash = "/", mustWork = TRUE)
+    setwd(openPromRun)
+    cat(">>> [task 7] reusing existing run folder:", openPromRun, "\n")
+  } else {
+    if (withRunFolder) createRunFolder(setScenarioName(sceName))
+    openPromRun <- getwd()
+  }
+  couplingMif <- file.path(openPromRun, "openprom_coupling.mif")
+
+  # ---- Step 1: OPEN-PROM run with link2MAgPIE = off -----------------------
+  if (!reuseExisting) {
+    cat(">>> [task 7] Step 1/6: OPEN-PROM run (link2MAgPIE=off)\n")
+    cmd1 <- paste0(gams,
+                   " main.gms --DevMode=0 --GenerateInput=off --link2MAgPIE=off",
+                   " -logOption 4 -Idir=./data 2>&1")
+    if (.Platform$OS.type == "unix") {
+      system(paste0("sh -c ", shQuote(cmd1)))
+    } else {
+      shell(paste0(cmd1, " | tee full_round1.log"))
+    }
+    if (!isRunSuccessful("modelstat.txt")) {
+      stop("[task 7] First OPEN-PROM run failed. Aborting soft-link.")
+    }
+    file.copy(file.path(openPromRun, "blabla.gdx"),
+              file.path(openPromRun, "blabla_round1.gdx"),
+              overwrite = TRUE)
+  } else {
+    cat(">>> [task 7] Step 1/6: SKIPPED (reusing existing round-1)\n")
+    if (!file.exists(file.path(openPromRun, "blabla_round1.gdx"))) {
+      srcGdx <- file.path(openPromRun, "blabla.gdx")
+      if (!file.exists(srcGdx)) {
+        stop("[task 7] Existing run folder has neither blabla_round1.gdx nor blabla.gdx: ",
+             openPromRun)
+      }
+      file.copy(srcGdx, file.path(openPromRun, "blabla_round1.gdx"), overwrite = FALSE)
+    }
+  }
+  openPromGdx <- file.path(openPromRun, "blabla_round1.gdx")
+
+  # ---- Step 2: OPEN-PROM -> MAgPIE via couplePromToMagpie() --------------
+  cat(">>> [task 7] Step 2/6: couplePromToMagpie() -> ", couplingMif, "\n")
+  library(postprom)
+  couplePromToMagpie(
+    gdxPath    = openPromGdx,
+    outMifPath = couplingMif,
+    scenario   = sceName
+  )
+
+  # ---- Step 3: MAgPIE run (reads coupling mif via env-vars) --------------
+  cat(">>> [task 7] Step 3/6: MAgPIE run\n")
+  setwd(magpieRoot)
+  Sys.setenv(
+    OPENPROM_COUPLING_MIF       = couplingMif,
+    OPENPROM_COUPLING_SCENARIO  = sceName,
+    OPENPROM_COUPLING_GHG       = "on",
+    OPENPROM_COUPLING_BIOENERGY = "on"
+  )
+  magpie_exit <- system("Rscript start.R")
+  Sys.unsetenv(c("OPENPROM_COUPLING_MIF", "OPENPROM_COUPLING_SCENARIO",
+                 "OPENPROM_COUPLING_GHG", "OPENPROM_COUPLING_BIOENERGY"))
+  if (magpie_exit != 0) {
+    setwd(openPromRun)
+    stop("[task 7] MAgPIE run failed with exit code ", magpie_exit, ".")
+  }
+  magpieOutDirs   <- list.dirs("output", recursive = FALSE)
+  latestMagpieRun <- magpieOutDirs[which.max(file.info(magpieOutDirs)$mtime)]
+  magpieReport    <- file.path(normalizePath(latestMagpieRun, winslash = "/"), "report.mif")
+
+  # ---- Step 4: MAgPIE -> OPEN-PROM via coupleMagpieToProm() --------------
+  cat(">>> [task 7] Step 4/6: coupleMagpieToProm()\n")
+  setwd(openPromRun)
+  coupleMagpieToProm(
+    reportMifPath       = magpieReport,
+    outCsvPath          = file.path(openPromRun, "iPrices_magpie.csv"),
+    outEmissionsCsvPath = file.path(openPromRun, "iEmissions_magpie.csv"),
+    gdxPath             = openPromGdx
+  )
+
+  # ---- Step 5: OPEN-PROM run with link2MAgPIE = on ------------------------
+  cat(">>> [task 7] Step 5/6: OPEN-PROM run (link2MAgPIE=on)\n")
+  cmd2 <- paste0(gams,
+                 " main.gms --DevMode=0 --GenerateInput=off --link2MAgPIE=on",
+                 " -logOption 4 -Idir=./data 2>&1")
+  if (.Platform$OS.type == "unix") {
+    system(paste0("sh -c ", shQuote(cmd2)))
+  } else {
+    shell(paste0(cmd2, " | tee full_round2.log"))
+  }
+
+  # ---- Step 6: postprom / reportOutput.R + sync ---------------------------
+  if (withRunFolder && withReport) {
+    cat(">>> [task 7] Step 6/6: reportOutput.R\n")
+    run_path <- getwd()
+    setwd("../../") # Going back to OPEN-PROM root
+    report_cmd <- paste0("Rscript ./reportOutput.R ", run_path)
     system(report_cmd)
     setwd(run_path)
   }
