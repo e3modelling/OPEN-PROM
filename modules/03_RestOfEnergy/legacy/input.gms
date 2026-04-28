@@ -50,7 +50,7 @@ i03FeedTransfr(allCy,EFS,YTIME) = 0; !!FIXME: i03DataGrossInlCons must be correc
 * IEA TES doesn't sum up to each data, due to incorrect transformation input mappings. 
 * Author: mmadianos
 i03DataGrossInlCons(allCy,EFS,YTIME)$DATAY(YTIME) =
-sum(DSBS, imFuelConsPerFueSub(allCy,DSBS,EFS,YTIME)) +
+sum(DSBS,imFuelCons(allCy,DSBS,EFS,YTIME)) +
 SUM(SSBS,
   i03DataOwnConsEne(allCy,SSBS,EFS,YTIME) -
   i03InpTotTransfProcess(allCy,SSBS,EFS,YTIME)
@@ -94,8 +94,8 @@ i03RateEneBranCons(runCy,SSBS,EFS,YTIME)$(i03RateEneBranCons(runCy,SSBS,EFS,YTIM
 imRateLossesFinCons(runCy,EFS,YTIME) = 
 [
   imDistrLosses(runCy,EFS,YTIME) /
-  (sum(DSBS, imFuelConsPerFueSub(runCy,DSBS,EFS,YTIME)) + i03PrimProd(runCy,"CRO",YTIME)$sameas("CRO",EFS))
-]$(sum(DSBS, imFuelConsPerFueSub(runCy,DSBS,EFS,YTIME)) + i03PrimProd(runCy,"CRO",YTIME)$sameas("CRO",EFS));
+  (sum(DSBS,imFuelCons(runCy,DSBS,EFS,YTIME)) + i03PrimProd(runCy,"CRO",YTIME)$sameas("CRO",EFS))
+]$(sum(DSBS,imFuelCons(runCy,DSBS,EFS,YTIME)) + i03PrimProd(runCy,"CRO",YTIME)$sameas("CRO",EFS));
 imRateLossesFinCons(runCy,EFS,YTIME)$AN(YTIME) = imRateLossesFinCons(runCy,EFS,"%fBaseY%");
 *---
 i03RatioPrimaryFuels(runCy,EFS,YTIME)$DATAY(YTIME) = 

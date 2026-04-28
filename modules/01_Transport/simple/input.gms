@@ -222,11 +222,11 @@ i01GDPperCapita(YTIME,runCy) = i01GDP(YTIME,runCy) / i01Pop(YTIME,runCy);
 i01ShareBlend(runCy,TRANSE,EF,YTIME)$DATAY(YTIME) =
 SUM(EF2$BLENDMAP(EF2,EF),
   (
-    imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME) / 
+    imFuelCons(runCy,TRANSE,EF,YTIME) / 
     sum(EFS$BLENDMAP(EF2,EFS),
-      imFuelConsPerFueSub(runCy,TRANSE,EFS,YTIME)
+      imFuelCons(runCy,TRANSE,EFS,YTIME)
     )
-  )$(sum(EFS$BLENDMAP(EF2,EFS),imFuelConsPerFueSub(runCy,TRANSE,EFS,YTIME)) > 0)
+  )$(sum(EFS$BLENDMAP(EF2,EFS),imFuelCons(runCy,TRANSE,EFS,YTIME)) > 0)
 );
 i01ShareBlend(runCy,TRANSE,EFS,YTIME)$(SECtoEF(TRANSE,EFS) and not SUM(EF2,BLENDMAP(EF2,EFS))) = 1;
 i01ShareBlend(runCy,TRANSE,EF,YTIME)$AN(YTIME) = i01ShareBlend(runCy,TRANSE,EF,"%fBaseY%");

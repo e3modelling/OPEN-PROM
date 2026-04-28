@@ -50,12 +50,12 @@ V01GapTranspActiv.FX(runCy,TRANSE,YTIME)$(not AN(YTIME))=0;
 V01ConsSpecificFuel.FX(runCy,TRANSE,TTECH,EF,YTIME)$(not sameas(TRANSE,"PC")$(SECTTECH(TRANSE,TTECH)$TTECHtoEF(TTECH,EF))) = i01InitSpecFuelConsData(TRANSE,TTECH,EF);
 V01ConsSpecificFuel.FX(runCy,TRANSE,TTECH,EF,YTIME)$(sameas(TRANSE,"PC")$(SECTTECH(TRANSE,TTECH)$TTECHtoEF(TTECH,EF))) = i01SFCPC(runCy,TTECH,EF,"%fBaseY%");
 *---
-V01ConsTechTranspSectoral.FX(runCy,TRANSE,TTECH,EF,YTIME)$(SECTTECH(TRANSE,TTECH) and (not PLUGIN(TTECH)) and TTECHtoEF(TTECH,EF) and DATAY(YTIME)) = imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME); 
+V01ConsTechTranspSectoral.FX(runCy,TRANSE,TTECH,EF,YTIME)$(SECTTECH(TRANSE,TTECH) and (not PLUGIN(TTECH)) and TTECHtoEF(TTECH,EF) and DATAY(YTIME)) = imFuelCons(runCy,TRANSE,EF,YTIME); 
 V01ConsTechTranspSectoral.FX(runCy,TRANSE,TTECH,EF,YTIME)$(SECTTECH(TRANSE,TTECH) and PLUGIN(TTECH) and DATAY(YTIME)) = 0;
 V01ConsTechTranspSectoral.FX(runCy,TRANSE,TTECH,EF,YTIME)$(SECTTECH(TRANSE,TTECH) and CHYBV(TTECH) and DATAY(YTIME)) = 0;
 *---
 VmDemFinEneTranspPerFuel.L(runCy,TRANSE,EF,YTIME) = 1;
-VmDemFinEneTranspPerFuel.FX(runCy,TRANSE,EF,YTIME) $(SECtoEF(TRANSE,EF) $(not An(YTIME))) = imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME);
+VmDemFinEneTranspPerFuel.FX(runCy,TRANSE,EF,YTIME) $(SECtoEF(TRANSE,EF) $(not An(YTIME))) = imFuelCons(runCy,TRANSE,EF,YTIME);
 VmDemFinEneTranspPerFuel.FX(runCy,TRANSE,EF,YTIME)$(not SECtoEF(TRANSE,EF)) = 0;
 *---
 V01CapCostAnnualized.LO(runCy,TRANSE,TTECH,YTIME) = 0;

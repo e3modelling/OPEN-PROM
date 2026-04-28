@@ -571,9 +571,7 @@ $ondelim
 $include"./iFuelCons.csv"
 $offdelim
 ;
-*---
-imFuelConsPerFueSub(runCy,SBS,EF,YTIME) = imFuelCons(runCy,SBS,EF,YTIME);
-imFuelConsPerFueSub(runCy,"BU",EF,YTIME) = -imFuelConsPerFueSub(runCy,"BU",EF,YTIME);
+imFuelCons(runCy,"BU",EF,YTIME) = -imFuelCons(runCy,"BU",EF,YTIME);
 *---
 imCO2CaptRate(PGALL)$CCS(PGALL) = 0.90; 
 imEffValueInDollars(runCy,SBS,YTIME) = 0;

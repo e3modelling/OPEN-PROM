@@ -29,7 +29,7 @@ SUM(EFS,
 V07GrossEmissCO2Demand.LO(runCy,DSBS,YTIME) = 0;
 V07GrossEmissCO2Demand.FX(runCy,DSBS,YTIME)$DATAY(YTIME) =   
 SUM(EF,
-  imFuelConsPerFueSub(runCy,DSBS,EF,YTIME) *
+  imFuelCons(runCy,DSBS,EF,YTIME) *
   imCo2EmiFac(runCy,DSBS,EF,YTIME)
 );
 *---

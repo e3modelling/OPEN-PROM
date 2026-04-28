@@ -46,7 +46,6 @@ imCapCostTech(allCy,SBS,TECH,YTIME)                          "Capital Cost of te
                                                                 !! - For Industrial sectors (except Iron and Steel) is expressed in kUS$2015/toe-year
                                                                 !! - For Iron and Steel is expressed in kUS$2015/tn-of-steel
                                                                 !! - For Domestic Sectors is expressed in kUS$2015/toe-year
-imFuelConsPerFueSub(allCy,SBS,EF,YTIME)	                   "Fuel consumption per fuel and subsector (Mtoe)"
 smGwToTwhPerYear(YTIME)                                    "convert GW mean power into TWh/y, depending on whether it's a leap year"
 ;
 
