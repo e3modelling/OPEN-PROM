@@ -35,7 +35,6 @@ Q01CostFuel(allCy,TRANSE,TTECH,YTIME)
 Q01PremScrp(allCy,TRANSE,TTECH,YTIME)
 Q01RateScrPcTot(allCy,TTECH,YTIME)
 *'                **Interdependent Equations**
-Q01DemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)	       "Compute final energy demand in transport per fuel"
 Q01Lft(allCy,DSBS,TECH,YTIME)	                               "Compute the lifetime of passenger cars" 
 ;
 
@@ -70,6 +69,5 @@ V01CostFuel(allCy,TRANSE,TTECH,YTIME)
 V01PremScrp(allCy,TRANSE,TTECH,YTIME)
 V01RateScrPcTot(allCy,TTECH,YTIME)
 *'                **Interdependent Equations**
-VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)            "Final energy demand in transport subsectors per fuel (Mtoe)"
 VmLft(allCy,DSBS,TECH,YTIME)                                 "Lifetime of technologies (years)"
 ;

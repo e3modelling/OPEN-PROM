@@ -234,15 +234,6 @@ Q01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)$(TIME(YTIME) $SECTTECH(TR
       V01ActivPassTrnsp(allCy,TRANSE,YTIME)$sameas(TRANSE,"PC")
     );
 
-*' This equation calculates the final energy demand in transport for each fuel within a specific transport subsector.
-*' It sums up the consumption of each technology and subsector for the given fuel. The result is expressed in million tonnes of oil equivalent.
-Q01DemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)$(TIME(YTIME) $SECtoEF(TRANSE,EF) $runCy(allCy))..
-    VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)
-            =E=
-    sum(TTECH$(SECTTECH(TRANSE,TTECH) and TTECHtoEF(TTECH,EF)),
-      V01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)
-    );
-
 * -----------------------------------------------------------------------------
 * Q01StockPcYearly: Computes the total stock of passenger cars (in millions).
 *
