@@ -11,6 +11,16 @@ i01PassCarsMarkSat(allCy)	                          "Passenger cars ownership sa
 i01GDPperCapita(YTIME,allCy)
 i01Sigma(allCy,SG)                                   "S parameters of Gompertz function for passenger cars vehicle km (1)"
 i01ShareBlend(allCy,TRANSE,EF,YTIME)
+i01ActivGoodsTransp(allCy,TRANSE,YTIME)              "Stored goods transport activity for solved years"
+i01ActivPassTrnsp(allCy,TRANSE,YTIME)                "Stored passenger transport activity for solved years"
+i01StockPcYearlyTech(allCy,TTECH,YTIME)              "Stored passenger car stock by technology for solved years"
+i01StockPcYearly(allCy,YTIME)                        "Stored passenger car stock for solved years"
+i01PcOwnPcLevl(allCy,YTIME)                          "Stored passenger car ownership level for solved years"
+i01RateScrPc(allCy,TTECH,YTIME)                      "Stored passenger car scrapping rate for solved years"
+i01CostFuel(allCy,TRANSE,TTECH,YTIME)                "Stored transport fuel costs for solved years"
+i01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME) "Stored transport costs per mean consumer size for solved years"
+i01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME) "Stored transport tech consumption for solved years"
+imLft(allCy,DSBS,TECH,YTIME)                          "Stored technology lifetime for solved years"
 ;
 
 Equations
