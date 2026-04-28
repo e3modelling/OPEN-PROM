@@ -2,25 +2,31 @@
 *' @code
 
 Parameters
-i01GdpPassCarsMarkExt(allCy)	                          "GDP-dependent passenger cars market extension (GDP/capita)"
-i01PassCarsScrapRate(allCy)	                          "Passenger cars scrapping rate (1)"
-i01ShareAnnMilePlugInHybrid(allCy,YTIME)	           "Share of annual mileage of a plug-in hybrid which is covered by electricity (1)"
-i01AvgVehCapLoadFac(allCy,TRANSE,TRANSUSE,YTIME)	      "Average capacity/vehicle and load factor (tn/veh or passenegers/veh)"
-i01TechLft(allCy,DSBS,TECH,YTIME)	                     "Technical Lifetime. For passenger cars it is a variable (1)"
-i01PassCarsMarkSat(allCy)	                          "Passenger cars ownership saturation threshold (1)"
-i01GDPperCapita(YTIME,allCy)
-i01Sigma(allCy,SG)                                   "S parameters of Gompertz function for passenger cars vehicle km (1)"
-i01ShareBlend(allCy,TRANSE,EF,YTIME)
-i01ActivGoodsTransp(allCy,TRANSE,YTIME)              "Stored goods transport activity for solved years"
-i01ActivPassTrnsp(allCy,TRANSE,YTIME)                "Stored passenger transport activity for solved years"
-i01StockPcYearlyTech(allCy,TTECH,YTIME)              "Stored passenger car stock by technology for solved years"
-i01StockPcYearly(allCy,YTIME)                        "Stored passenger car stock for solved years"
-i01PcOwnPcLevl(allCy,YTIME)                          "Stored passenger car ownership level for solved years"
-i01RateScrPc(allCy,TTECH,YTIME)                      "Stored passenger car scrapping rate for solved years"
-i01CostFuel(allCy,TRANSE,TTECH,YTIME)                "Stored transport fuel costs for solved years"
-i01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME) "Stored transport costs per mean consumer size for solved years"
-i01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME) "Stored transport tech consumption for solved years"
-imLft(allCy,DSBS,TECH,YTIME)                          "Stored technology lifetime for solved years"
+*' *** Transport Parameters exogenous'
+i01GdpPassCarsMarkExt(allCy)	                           "GDP-dependent passenger cars market extension (GDP/capita)"
+i01PassCarsScrapRate(allCy)	                               "Passenger cars scrapping rate (1)"
+i01ShareAnnMilePlugInHybrid(allCy,YTIME)	               "Share of annual mileage of a plug-in hybrid which is covered by electricity (1)"
+i01AvgVehCapLoadFac(allCy,TRANSE,TRANSUSE,YTIME)	       "Average capacity/vehicle and load factor (tn/veh or passenegers/veh)"
+i01TechLft(allCy,DSBS,TECH,YTIME)	                       "Technical Lifetime. For passenger cars it is a variable (1)"
+i01PassCarsMarkSat(allCy)	                               "Passenger cars ownership saturation threshold (1)"
+i01GDPperCapita(YTIME,allCy)                               "GDP per capita (2015 US$)"      
+i01Sigma(allCy,SG)                                         "S parameters of Gompertz function for passenger cars vehicle km (1)"
+i01ShareBlend(allCy,TRANSE,EF,YTIME)                       "Share of biofuels blend in total fuel consumption (1)"
+*' *** Transport Parameters endogenous'
+p01ActivGoodsTransp(allCy,TRANSE,YTIME)                    "Stored goods transport activity for solved years"
+p01ActivPassTrnsp(allCy,TRANSE,YTIME)                      "Stored passenger transport activity for solved years"
+p01StockPcYearlyTech(allCy,TTECH,YTIME)                    "Stored passenger car stock by technology for solved years"
+p01StockPcYearly(allCy,YTIME)                              "Stored passenger car stock for solved years"
+p01PcOwnPcLevl(allCy,YTIME)                                "Stored passenger car ownership level for solved years"
+p01RateScrPc(allCy,TTECH,YTIME)                            "Stored passenger car scrapping rate for solved years"
+p01CostFuel(allCy,TRANSE,TTECH,YTIME)                      "Stored transport fuel costs for solved years"
+p01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME)     "Stored transport costs per mean consumer size for solved years"
+p01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)     "Stored transport tech consumption for solved years"
+pmLft(allCy,DSBS,TECH,YTIME)                               "Stored technology lifetime for solved years"
+p01RateScrPcTot(allCy,TTECH,YTIME)                         "Stored total passenger car scrapping rate for solved years"
+p01NewRegPcYearly(allCy,YTIME)                             "Stored new registrations of passenger cars for solved years"
+p01NumPcScrap(allCy,YTIME)                                 "Stored number of scrapped passenger cars for solved years"
+p01PremScrp(allCy,TRANSE,TTECH,YTIME)                      "Stored premature scrapping probability for solved years"
 ;
 
 Equations
@@ -28,7 +34,7 @@ Equations
 Q01ActivGoodsTransp(allCy,TRANSE,YTIME)                    "Compute goods transport activity"
 Q01GapTranspActiv(allCy,TRANSE,YTIME)	                   "Compute the gap in transport activity"
 *Q01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)	       "Compute Specific Fuel Consumption"
-Q01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME)    "Compute transportation cost per mean in KUS$2015 per vehicle"
+Q01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME)     "Compute transportation cost per mean in KUS$2015 per vehicle"
 Q01ShareTechTr(allCy,TRANSE,TECH,YTIME)	                   "Compute technology sorting based on variable cost and new equipment"
 Q01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)	   "Compute consumption of each technology in transport sectors"
 *q01DemFinEneSubTransp(allCy,TRANSE,YTIME)	               "Compute final energy demand in transport"
@@ -39,14 +45,14 @@ Q01NewRegPcTechYearly(allCy,TTECH,YTIME)                   "Compute new registra
 Q01ActivPassTrnsp(allCy,TRANSE,YTIME)                      "Compute passenger transport acitivity"
 Q01NumPcScrap(allCy,YTIME)                                 "Compute scrapped passenger cars"
 Q01PcOwnPcLevl(allCy,YTIME)                                "Compute ratio of car ownership over saturation car ownership"
-Q01RateScrPc(allCy,TTECH,YTIME)                                  "Compute passenger cars scrapping rate"
-Q01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)
-Q01CostFuel(allCy,TRANSE,TTECH,YTIME)
-Q01PremScrp(allCy,TRANSE,TTECH,YTIME)
-Q01RateScrPcTot(allCy,TTECH,YTIME)
+Q01RateScrPc(allCy,TTECH,YTIME)                            "Compute passenger cars scrapping rate"
+Q01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)             "Compute annualized capital cost of transport technologies"
+Q01CostFuel(allCy,TRANSE,TTECH,YTIME)                      "Compute transport fuel costs"
+Q01PremScrp(allCy,TRANSE,TTECH,YTIME)                      "Compute premature scrapping probability of passenger cars"
+Q01RateScrPcTot(allCy,TTECH,YTIME)                         "Compute total passenger car scrapping rate"
 *'                **Interdependent Equations**
 Q01DemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)	       "Compute final energy demand in transport per fuel"
-Q01Lft(allCy,DSBS,TECH,YTIME)	                               "Compute the lifetime of passenger cars" 
+Q01Lft(allCy,DSBS,TECH,YTIME)	                           "Compute the lifetime of passenger cars" 
 ;
 
 Variables
@@ -60,7 +66,7 @@ V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)	       "Specific Fuel Consumpti
                                                                 !! SFC for passenger cars (ktoe/Gkm)
                                                                 !! SFC for other passsenger transportation modes (ktoe/Gpkm)
                                                                 !! SFC for trucks is measured (ktoe/Gtkm)
-V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME)    "Transportation cost per mean (KUS$2015/vehicle)"
+V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME)     "Transportation cost per mean (KUS$2015/vehicle)"
 V01ShareTechTr(allCy,TRANSE,TECH,YTIME)	                   "Technology share in new equipment (1)"
 V01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)	   "Consumption of each technology and subsector (Mtoe)"
 *v01DemFinEneSubTransp(allCy,TRANSE,YTIME)	               "Final energy demand in transport subsectors (Mtoe)"
@@ -74,12 +80,12 @@ V01ActivPassTrnsp(allCy,TRANSE,YTIME)                      "Passenger transport 
                                                                 !! - Activity for all other passenger transportation modes is measured in Gpkm
 V01NumPcScrap(allCy,YTIME)                                 "Scrapped passenger cars (million vehicles)"
 V01PcOwnPcLevl(allCy,YTIME)                                "Ratio of car ownership over saturation car ownership (1)"
-V01RateScrPc(allCy,TTECH,YTIME)                                  "Scrapping rate of passenger cars (1)"
-V01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)
-V01CostFuel(allCy,TRANSE,TTECH,YTIME)
-V01PremScrp(allCy,TRANSE,TTECH,YTIME)
-V01RateScrPcTot(allCy,TTECH,YTIME)
+V01RateScrPc(allCy,TTECH,YTIME)                            "Scrapping rate of passenger cars (1)"
+V01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)             "Annualized capital cost of transport technologies"
+V01CostFuel(allCy,TRANSE,TTECH,YTIME)                      "Transport fuel costs"
+V01PremScrp(allCy,TRANSE,TTECH,YTIME)                      "Premature scrapping probability of passenger cars"
+V01RateScrPcTot(allCy,TTECH,YTIME)                         "Total passenger car scrapping rate"
 *'                **Interdependent Equations**
 VmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)            "Final energy demand in transport subsectors per fuel (Mtoe)"
-VmLft(allCy,DSBS,TECH,YTIME)                                 "Lifetime of technologies (years)"
+VmLft(allCy,DSBS,TECH,YTIME)                               "Lifetime of technologies (years)"
 ;
