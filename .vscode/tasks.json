@@ -143,5 +143,19 @@
             }
         },
 
+        {
+            "label": "OPEN-PROM SOFT-LINK MAgPIE",
+            "type": "shell",
+            "command": "Rscript start.R task=7",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "focus": true
+            }
+        },
+
     ]
 }
