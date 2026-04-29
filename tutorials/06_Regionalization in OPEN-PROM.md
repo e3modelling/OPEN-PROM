@@ -35,7 +35,7 @@ A machine-readable version of this mapping is available here: https://raw.github
 | LTU | Lithuania | LTU | Lithuania |
 | LUX | Luxembourg | LUX | Luxembourg |
 | LVA | Latvia | LVA | Latvia |
-| MEA | Middle East, North Africa, Central Asia | ARE, BHR, DZA, EGY, ESH, IRN, IRQ, ISR, JOR, KWT, LBN, LBY, MAR, OMN, PSE, QAT, SAU, SDN, SYR, TUN, YEM | Algeria, Bahrain, Egypt, Iran, Islamic Republic of, Iraq, Israel, Jordan, Kuwait, Lebanon, Libya, Morocco, Oman, Palestine, State of, Qatar, Saudi Arabia, Sudan, Syrian Arab Republic, Tunisia, United Arab Emirates, Western Sahara, Yemen |
+| MEA | Middle East, North Africa | ARE, BHR, DZA, EGY, ESH, IRN, IRQ, ISR, JOR, KWT, LBN, LBY, MAR, OMN, PSE, QAT, SAU, SDN, SYR, TUN, YEM | Algeria, Bahrain, Egypt, Iran, Islamic Republic of, Iraq, Israel, Jordan, Kuwait, Lebanon, Libya, Morocco, Oman, Palestine, State of, Qatar, Saudi Arabia, Sudan, Syrian Arab Republic, Tunisia, United Arab Emirates, Western Sahara, Yemen |
 | MLT | Malta | MLT | Malta |
 | NEU | Europe (non-EU) | ALA, ALB, AND, BIH, CHE, FRO, GGY, GIB, GRL, IMN, ISL, JEY, LIE, MCO, MKD, MNE, NOR, SJM, SMR, SRB, TUR, VAT | Aland Islands, Albania, Andorra, Bosnia and Herzegovina, Faroe Islands, Gibraltar, Greenland, Guernsey, Holy See (Vatican City State), Iceland, Isle of Man, Jersey, Liechtenstein, Macedonia, the former Yugoslav Republic of, Monaco, Montenegro, Norway, San Marino, Serbia, Svalbard and Jan Mayen, Switzerland, Turkey |
 | NLD | Netherlands | NLD | Netherlands |
