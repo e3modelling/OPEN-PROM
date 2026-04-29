@@ -11,6 +11,12 @@ $include "./iActv.csvr"
 $offdelim
 ;
 *---
+table i01GDP(YTIME,allCy) "GDP (billion US$2015)"
+$ondelim
+$include "./iGDP.csvr"
+$offdelim
+;
+*---
 table imTransChar(allCy,TRANSPCHAR,YTIME) "km per car, passengers per car and residuals for passenger cars market extension ()"
 $ondelim
 $include "./iTransChar.csv"
@@ -593,6 +599,16 @@ elseif %fScenario% eq 3 then
      iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"exogCV_2C",YTIME);
 elseif %fScenario% eq 4 then
      iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"exogCV_Calib",YTIME);
+elseif %fScenario% eq 100 then
+     iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"UPT_100",YTIME);
+elseif %fScenario% eq 200 then
+     iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"UPT_200",YTIME);
+elseif %fScenario% eq 400 then
+     iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"UPT_400",YTIME);
+elseif %fScenario% eq 600 then
+     iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"UPT_600",YTIME);
+elseif %fScenario% eq 800 then
+     iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"UPT_800",YTIME);
 endif;
 *---
 table i01PremScrpFac(allCy,DSBS,TECH,YTIME)     "Parameter that controls premature scrapping"
@@ -776,7 +792,7 @@ imCapCostTech(runCy,"BU","TH2F",YTIME) = 1.5 * imCapCostTech(runCy,"BU","TGDO",Y
 imCapCostTechMin(allCy,"DAC","HTDAC",YTIME) = 0.3;
 imCapCostTechMin(allCy,"DAC","H2DAC",YTIME) = 0.3;
 imCapCostTechMin(allCy,"DAC","LTDAC",YTIME) = 0.3;
-imCapCostTechMin(allCy,"EW","TEW",YTIME) = 0.1;
+imCapCostTechMin(allCy,"EW","TEW",YTIME) = 0.3;
 *---
 !!imUsfEneConvSubTech(runCy,INDSE,"THCL",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCL","USC") + 0.005 * (ord(YTIME)-14);
 imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCLCCS","USC") + 0.005 * (ord(YTIME)-14);

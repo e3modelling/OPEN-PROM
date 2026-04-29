@@ -18,7 +18,6 @@ V04CostVarTech.LO(runCy,PGALL,YTIME) = 0;
 V04CostVarTech.L(runCy,PGALL,YTIME) = 1;
 V04CostVarTech.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = 
     i04VarCost(PGALL,YTIME) / 1e3 + 
-    (VmRenValue.L(YTIME) * 8.6e-5)$(not (PGREN(PGALL)$(not sameas("PGASHYD",PGALL)) $(not sameas("PGSHYD",PGALL)) $(not sameas("PGLHYD",PGALL)) )) +
     sum(PGEF$PGALLtoEF(PGALL,PGEF), 
       i04ShareFuels(runCy,PGALL,PGEF) * 
       (
