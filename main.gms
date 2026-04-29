@@ -198,6 +198,9 @@ $offOrder
 
 *' *** GAMS "flags" definitions
 *'
+*' Flags
+$setGlobal ICT Mean !!Low / Mean / Central / Upper
+$setGlobal SSP SSP2 !!SSP1-5
 *' *** Calibration
 $setGlobal Calibration off !! MatCalibration/Calibration/off
 

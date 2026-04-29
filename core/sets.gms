@@ -146,6 +146,7 @@ kpdl         counter for Polynomial Distribution Lag          /a1*a6/
 rc                                                            /1*3/
 rcc                                                           /rcc1*rcc10/
 
+SSPSCEN "SSP Scenarios" /SSP1,SSP2,SSP3,SSP4,SSP5/
 
 ***       Sectoral Structure        *
 

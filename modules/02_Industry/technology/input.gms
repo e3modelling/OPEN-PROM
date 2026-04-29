@@ -59,3 +59,9 @@ i02ShareBlend(runCy,"BU","TGDO","BGDO",YTIME)$AN(YTIME) = i02ShareBlend(runCy,"B
 
 i02ShareElcHP(runCy,"HOU",YTIME) = 0.1;
 i02ShareElcHP(runCy,"SE",YTIME) = 0.1;
+*---
+table i02FuelConsICT(allCy,ICTSCEN,SSPSCEN,YTIME)             "Elasticities of Non Substitutable Electricity (1)"
+$ondelim
+$include "./iFuelConsICT.csv"
+$offdelim
+;
