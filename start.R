@@ -430,17 +430,26 @@ if (task == 0) {
   #            -> open-prom (link2MAgPIE=on)
   #            -> reportOutput.R (postprom)
   saveMetadata(DevMode = 0)
-  sceName <- "SSP2-PkBudg650"
 
   magpieRoot  <- NULL
   existingRun <- NULL
+  magpieProj  <- NULL
+  sceName     <- NULL
   if (file.exists("config.json")) {
     config      <- fromJSON("config.json")
     magpieRoot  <- config$magpie_path
     existingRun <- config$task7_existingRun
+    magpieProj  <- config$magpie_project
+    sceName     <- config$magpie_scenario
   }
   if (is.null(magpieRoot) || !nzchar(magpieRoot)) {
     stop("[task 7] config.json must define magpie_path (absolute path to the magpie/ directory).")
+  }
+  if (is.null(magpieProj) || !nzchar(magpieProj)) {
+    stop("[task 7] config.json must define magpie_project (subdirectory name under magpie/projects/).")
+  }
+  if (is.null(sceName) || !nzchar(sceName)) {
+    stop("[task 7] config.json must define magpie_scenario (row title in projects/<project>/scenarios.csv).")
   }
 
   reuseExisting <- !is.null(existingRun) && nzchar(existingRun)
@@ -500,13 +509,16 @@ if (task == 0) {
   cat(">>> [task 7] Step 3/6: MAgPIE run\n")
   setwd(magpieRoot)
   Sys.setenv(
+    OPENPROM_MAGPIE_PROJECT     = magpieProj,
+    OPENPROM_MAGPIE_SUBSCENARIO = sceName,
     OPENPROM_COUPLING_MIF       = couplingMif,
     OPENPROM_COUPLING_SCENARIO  = sceName,
     OPENPROM_COUPLING_GHG       = "on",
     OPENPROM_COUPLING_BIOENERGY = "on"
   )
   magpie_exit <- system("Rscript start.R")
-  Sys.unsetenv(c("OPENPROM_COUPLING_MIF", "OPENPROM_COUPLING_SCENARIO",
+  Sys.unsetenv(c("OPENPROM_MAGPIE_PROJECT", "OPENPROM_MAGPIE_SUBSCENARIO",
+                 "OPENPROM_COUPLING_MIF", "OPENPROM_COUPLING_SCENARIO",
                  "OPENPROM_COUPLING_GHG", "OPENPROM_COUPLING_BIOENERGY"))
   if (magpie_exit != 0) {
     setwd(openPromRun)
