@@ -534,8 +534,9 @@ if (task == 0) {
   coupleMagpieToProm(
     reportMifPath       = magpieReport,
     outCsvPath          = file.path(openPromRun, "iPrices_magpie.csv"),
-    outEmissionsCsvPath = file.path(openPromRun, "iEmissions_magpie.csv"),
-    gdxPath             = openPromGdx
+    outEmissionsMifPath = file.path(openPromRun, "iEmissions_magpie.mif"),
+    gdxPath             = openPromGdx,
+    scenario            = sceName
   )
 
   # ---- Step 5: OPEN-PROM run with link2MAgPIE = on ------------------------
