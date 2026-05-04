@@ -2,12 +2,6 @@
 *' @code
 
 *---
-table i01GDP(YTIME,allCy) "GDP (billion US$2015)"
-$ondelim
-$include "./iGDP.csvr"
-$offdelim
-;
-*---
 table i01Pop(YTIME,allCy) "Population (billion)"
 $ondelim
 $include "./iPop.csvr"

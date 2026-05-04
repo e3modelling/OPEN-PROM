@@ -36,3 +36,8 @@ qRestrain(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) and SECTTECH(TRANSE,TTECH) and 
   common(allCy,TRANSE,YTIME);
 $ELSE.calib qDummyObj.. vDummyObj =e= 1;
 $ENDIF.calib
+
+QmGDPPartGlob(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
+    VmGDPPartGlob(allCy,YTIME)
+      =E=
+    i01GDP(YTIME,allCy) / sum(runCy2, VmGDPPartGlob(runCy2,YTIME));

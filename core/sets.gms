@@ -110,6 +110,7 @@ runCy(allCy)$(%DevMode% = 0) = resCy(allCy) ;
 runCyL(allCy)$(%DevMode% = 0) = resCy(allCy) ;
 
 ALIAS(runCyL,runCy2)
+alias(allCy, allCy2);
 sets
 ***        Model Time Horizon       *
 ytime           Model time horizon                                /%fStartHorizon%*%fEndHorizon%/
@@ -309,6 +310,11 @@ exogCV_NPi
 exogCV_1_5C
 exogCV_2C
 exogCV_Calib
+UPT_100
+UPT_200
+UPT_400
+UPT_600
+UPT_800
 /
 
 RegulaPolicies(POLICIES_set) Set of policies entering in the regula falsi loops
@@ -1081,13 +1087,10 @@ BM_CO2.CO2
 CO2SEQELAST Elasticities for CO2 sequestration cost curve
 /
 POT      MAXIMUM POTENTIAL
-mc_a     linear slope
-mc_b     initial cost at x=0
-mc_c
-mc_d
-mc_s     speed to transition to exponential
-mc_m     value for the ratio of x to potential after which exponential is taking over
-
+sig_a     "sigmoid a parameter (steepness of the curve)"
+sig_b     "sigmoid b parameter (position of the curve)"
+seq_min   "Minimum sequestration cost"
+seq_max   "Maximum sequestration cost"
 /
 
 

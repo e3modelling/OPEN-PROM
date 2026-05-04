@@ -67,18 +67,30 @@ Q04CostCapTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
 *' Compute the variable cost of each power plant technology for every region,
 *' By utilizing the gross cost, fuel prices, CO2 emission factors & capture, and plant efficiency. 
 Q04CostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
-    V04CostVarTech(allCy,PGALL,YTIME) 
+    V04CostVarTech(allCy,PGALL,YTIME)
         =E=
-    i04VarCost(PGALL,YTIME) / 1e3 + 
-    (VmRenValue(YTIME) * 8.6e-5)$(not (PGREN2(PGALL)$(not sameas("PGASHYD",PGALL)) $(not sameas("PGSHYD",PGALL)) $(not sameas("PGLHYD",PGALL)) )) +
-    sum(PGEF$PGALLtoEF(PGALL,PGEF), 
-      i04ShareFuels(allCy,PGALL,PGEF) * 
-      (
-        VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME) +
-      V04CO2CaptRate(allCy,PGALL,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME) + 4.17$(sameas("BMSWAS", PGEF))) +
-      (1-V04CO2CaptRate(allCy,PGALL,YTIME)) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME) + 4.17$(sameas("BMSWAS", PGEF))) * sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME))
-      ) * smTWhToMtoe / imPlantEffByType(allCy,PGALL,"effELC",YTIME)
-    )$(not PGREN(PGALL));
+    (
+      i04VarCost(PGALL,YTIME) / 1e3 +
+      sum(PGEF$PGALLtoEF(PGALL,PGEF),
+        i04ShareFuels(allCy,PGALL,PGEF) *
+        (
+          VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME) +
+        V04CO2CaptRate(allCy,PGALL,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME) - 4.17$sameas("BMSWAS", PGEF)) +
+        (1-V04CO2CaptRate(allCy,PGALL,YTIME)) * 1e-3 * imCo2EmiFac(allCy,"PG",PGEF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME))
+        ) * smTWhToMtoe / imPlantEffByType(allCy,PGALL,"effELC",YTIME)
+      ) +
+    SQRT(SQR(
+      i04VarCost(PGALL,YTIME) / 1e3 +
+      sum(PGEF$PGALLtoEF(PGALL,PGEF),
+        i04ShareFuels(allCy,PGALL,PGEF) *
+        (
+          VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME) +
+        V04CO2CaptRate(allCy,PGALL,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME) - 4.17$sameas("BMSWAS", PGEF)) +
+        (1-V04CO2CaptRate(allCy,PGALL,YTIME)) * 1e-3 * imCo2EmiFac(allCy,"PG",PGEF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME))
+        ) * smTWhToMtoe / imPlantEffByType(allCy,PGALL,"effELC",YTIME)
+      )
+    ))
+    ) / 2;
 
 *' The equation calculates the hourly production cost of a power generation plant used in investment decisions. The cost is determined based on various factors,
 *' including the discount rate, gross capital cost, fixed operation and maintenance cost, availability rate, variable cost, renewable value, and fuel prices.
