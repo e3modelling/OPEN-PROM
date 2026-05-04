@@ -43,8 +43,6 @@ SVK
 SVN
 SWE
 USA
-MAR
-EGY
 RWO
 /
 
@@ -89,6 +87,38 @@ SVK
 SVN
 SWE
 USA
+/
+
+EU28(allCy) "EU27 and UK"
+/
+EST
+LTU
+LUX
+LVA
+AUT
+BEL
+BGR
+CYP
+CZE
+DEU
+DNK
+ESP
+FIN
+FRA
+GBR
+GRC
+HRV
+HUN
+IRL
+ITA
+MLT
+NLD
+POL
+PRT
+ROU
+SVK
+SVN
+SWE
 /
 
 fscenario   "Model scenario used: 0 is No carbon price, 1 is NPi_Default, 2 is 1.5C and 3 is 2C"

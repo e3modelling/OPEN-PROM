@@ -35,7 +35,7 @@ qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
       VmConsFuelShare(allCy,DSBS,EFS,YTIME)
     )
   ) +
-  SUM(DSBS$DOMSE(DSBS),
+  SUM(DSBS$(sameas("SE", DSBS) or sameas("HOU",DSBS) or (sameas("AG",DSBS) and EU28(allCy))), !!DOMSE(DSBS),
     SQR(
       t02FinalEnergyDOMSE(allCy,DSBS,YTIME) -
       SUM(EFS$SECtoEF(DSBS,EFS),VmConsFuel(allCy,DSBS,EFS,YTIME))
