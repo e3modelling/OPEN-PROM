@@ -1,6 +1,13 @@
 *' @title Prices Declarations
 *' @code
 
+Parameters
+p08PriceFuelSepCarbonWght(allCy,SBS,EF,YTIME)            "Snapshot of V08PriceFuelSepCarbonWght for lagged references"
+p08PriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)             "Snapshot of VmPriceFuelSubsecCarVal for lagged references"
+p08PriceFuelAvgSub(allCy,DSBS,YTIME)                     "Snapshot of VmPriceFuelAvgSub for lagged references"
+p08PriceElecInd(allCy,TCHP,YTIME)                        "Snapshot of VmPriceElecInd for lagged references"
+;
+
 Equations
 *' *** Prices
 Q08PriceFuelSepCarbonWght(allCy,SBS,EF,YTIME)	           "Compute fuel prices per subsector and fuel, separate carbon value in each sector"

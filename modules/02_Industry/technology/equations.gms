@@ -22,10 +22,10 @@ Q02DemSubUsefulSubsec(allCy,DSBS,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not C
     [
       p02DemSubUsefulSubsec(allCy,DSBS,YTIME-1) *
       imActv(YTIME,allCy,DSBS) ** imElastA(allCy,DSBS,"a",YTIME) *
-      (VmPriceFuelAvgSub(allCy,DSBS,YTIME)/VmPriceFuelAvgSub(allCy,DSBS,YTIME-1) ) ** imElastA(allCy,DSBS,"b1",YTIME) *
-      (VmPriceFuelAvgSub(allCy,DSBS,YTIME-1)/VmPriceFuelAvgSub(allCy,DSBS,YTIME-2) ) ** imElastA(allCy,DSBS,"b2",YTIME) *
+            ((((VmPriceFuelAvgSub(allCy,DSBS,YTIME) + SQRT(SQR(VmPriceFuelAvgSub(allCy,DSBS,YTIME)) + 1e-8))/2) + 1e-6)/((((p08PriceFuelAvgSub(allCy,DSBS,YTIME-1) + SQRT(SQR(p08PriceFuelAvgSub(allCy,DSBS,YTIME-1)) + 1e-8))/2) + 1e-6)) ) ** imElastA(allCy,DSBS,"b1",YTIME) *
+            ((((p08PriceFuelAvgSub(allCy,DSBS,YTIME-1) + SQRT(SQR(p08PriceFuelAvgSub(allCy,DSBS,YTIME-1)) + 1e-8))/2) + 1e-6)/((((p08PriceFuelAvgSub(allCy,DSBS,YTIME-2) + SQRT(SQR(p08PriceFuelAvgSub(allCy,DSBS,YTIME-2)) + 1e-8))/2) + 1e-6)) ) ** imElastA(allCy,DSBS,"b2",YTIME) *
       prod(KPDL,
-        ((VmPriceFuelAvgSub(allCy,DSBS,YTIME-ord(KPDL))/VmPriceFuelAvgSub(allCy,DSBS,YTIME-(ord(KPDL)+1)))/(imCGI(allCy,YTIME)**(1/6)))**( imElastA(allCy,DSBS,"c",YTIME)*imFPDL(DSBS,KPDL))
+                (((((p08PriceFuelAvgSub(allCy,DSBS,YTIME-ord(KPDL)) + SQRT(SQR(p08PriceFuelAvgSub(allCy,DSBS,YTIME-ord(KPDL))) + 1e-8))/2) + 1e-6)/((((p08PriceFuelAvgSub(allCy,DSBS,YTIME-(ord(KPDL)+1)) + SQRT(SQR(p08PriceFuelAvgSub(allCy,DSBS,YTIME-(ord(KPDL)+1))) + 1e-8))/2) + 1e-6))/(imCGI(allCy,YTIME)**(1/6)))**( imElastA(allCy,DSBS,"c",YTIME)*imFPDL(DSBS,KPDL))
       )
     ]$imActv(YTIME-1,allCy,DSBS)
 ;
@@ -40,21 +40,21 @@ Q02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITE
 Q02RatioRem(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and not TRANSE(DSBS) and not CDR(DSBS))$runCy(allCy))..
     V02RatioRem(allCy,DSBS,ITECH,YTIME) 
         =E=
-    (1 - 1/VmLft(allCy,DSBS,ITECH,YTIME)) * 
+    (1 - 1/(VmLft(allCy,DSBS,ITECH,YTIME) + 1e-6)) * 
     (1 - V02PremScrpIndu(allCy,DSBS,ITECH,YTIME));
 
 Q02PremScrpIndu(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and not TRANSE(DSBS) and not CDR(DSBS))$runCy(allCy))..
     V02PremScrpIndu(allCy,DSBS,ITECH,YTIME)
         =E=
-        1 - (p02VarCostTech(allCy,DSBS,ITECH,YTIME-1) * i02util(allCy,DSBS,ITECH,YTIME-1)) ** (-2) /
+                1 - ((p02VarCostTech(allCy,DSBS,ITECH,YTIME-1) * i02util(allCy,DSBS,ITECH,YTIME-1)) + 1e-6) ** (-2) /
     (
-            (p02VarCostTech(allCy,DSBS,ITECH,YTIME-1) * i02util(allCy,DSBS,ITECH,YTIME-1)) ** (-2) +
+                        ((p02VarCostTech(allCy,DSBS,ITECH,YTIME-1) * i02util(allCy,DSBS,ITECH,YTIME-1)) + 1e-6) ** (-2) +
       (
         i02ScaleEndogScrap(DSBS) *
         sum(ITECH2$(not sameas(ITECH2,ITECH) and SECTTECH(DSBS,ITECH2)),
                     p02CostTech(allCy,DSBS,ITECH2,YTIME-1) + p02VarCostTech(allCy,DSBS,ITECH2,YTIME-1)
         )
-      )**(-2)
+            + 1e-6)**(-2)
     );
 
 *'NEW EQUATION' - kind of --> substitutes Q02ConsRemSubEquipSubSec
@@ -98,7 +98,7 @@ Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not CD
                 (imDisc(allCy,DSBS,YTIME) * !! in case of chp plants we use the discount rate of power generation sector
                     exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME))
                 ) /
-                (exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME)) - 1)
+                (exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME)) - 1 + 1e-6)
             ) *
             imCapCostTech(allCy,DSBS,ITECH,YTIME) * imCGI(allCy,YTIME) +
             imFixOMCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit
@@ -139,10 +139,10 @@ Q02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $SECTTECH(DSBS,I
     V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME) 
         =E=
     imMatrFactor(allCy,DSBS,ITECH,YTIME) *
-        p02CostTech(allCy,DSBS,ITECH,YTIME-1) ** (-i02ElaSub(allCy,DSBS)) /
+        (p02CostTech(allCy,DSBS,ITECH,YTIME-1) + 1e-6) ** (-i02ElaSub(allCy,DSBS)) /
     sum(ITECH2$SECTTECH(DSBS,ITECH2),
       imMatrFactor(allCy,DSBS,ITECH2,YTIME) *
-            p02CostTech(allCy,DSBS,ITECH2,YTIME-1) ** (-i02ElaSub(allCy,DSBS))
+            (p02CostTech(allCy,DSBS,ITECH2,YTIME-1) + 1e-6) ** (-i02ElaSub(allCy,DSBS))
     );
 
 *' This equation computes the equipment capacity of each technology in each subsector
@@ -166,10 +166,10 @@ Q02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     [
       p02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME-1) *
       imActv(YTIME,allCy,INDDOM) ** i02ElastNonSubElec(allCy,INDDOM,"a",YTIME) *
-      (VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME) / VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-1)) ** i02ElastNonSubElec(allCy,INDDOM,"b1",YTIME)
-      !!(VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-1) / VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-2)) ** i02ElastNonSubElec(allCy,INDDOM,"b2",YTIME) *
+            ((VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME) + 1e-6) / (p08PriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-1) + 1e-6)) ** i02ElastNonSubElec(allCy,INDDOM,"b1",YTIME)
+      !!(p08PriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-1) / p08PriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-2)) ** i02ElastNonSubElec(allCy,INDDOM,"b2",YTIME) *
       !!prod(KPDL,
-      !!  (VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-ord(KPDL)) / VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-(ord(KPDL)+1))) ** (i02ElastNonSubElec(allCy,INDDOM,"c",YTIME)*imFPDL(INDDOM,KPDL))
+      !!  (p08PriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-ord(KPDL)) / p08PriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-(ord(KPDL)+1))) ** (i02ElastNonSubElec(allCy,INDDOM,"c",YTIME)*imFPDL(INDDOM,KPDL))
       !!)
     ]$imActv(YTIME-1,allCy,INDDOM);
 
@@ -217,7 +217,7 @@ Q02IndAvrEffFinalUseful(allCy,DSBS,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not
 Q02IndxElecIndPrices(allCy,TCHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V02IndxElecIndPrices(allCy,TCHP,YTIME)
         =E=
-    VmPriceElecInd(allCy,TCHP,YTIME-1);
-    !!(VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)/VmPriceFuelAvgSub(allCy,"OI",YTIME-1)) ** (-0.01) *
-    !!(VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-2)/VmPriceFuelAvgSub(allCy,"OI",YTIME-2)) ** (-0.005) *
-    !!(VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-3)/VmPriceFuelAvgSub(allCy,"OI",YTIME-3)) ** (-0.005);
+    p08PriceElecInd(allCy,TCHP,YTIME-1);
+    !!(p08PriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)/p08PriceFuelAvgSub(allCy,"OI",YTIME-1)) ** (-0.01) *
+    !!(p08PriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-2)/p08PriceFuelAvgSub(allCy,"OI",YTIME-2)) ** (-0.005) *
+    !!(p08PriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-3)/p08PriceFuelAvgSub(allCy,"OI",YTIME-3)) ** (-0.005);

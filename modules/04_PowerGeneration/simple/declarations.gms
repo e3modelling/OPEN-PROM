@@ -2,6 +2,13 @@
 *' @code
 
 Parameters
+p04CostVarTech(allCy,PGALL,YTIME)                    "Snapshot of V04CostVarTech for lagged references"
+p04CostHourProdInvDec(allCy,PGALL,YTIME)             "Snapshot of V04CostHourProdInvDec for lagged references"
+p04CapElecNonCHP(allCy,YTIME)                        "Snapshot of V04CapElecNonCHP for lagged references"
+pmCapElec(allCy,PGALL,YTIME)                         "Snapshot of VmCapElec for lagged references"
+p04ShareSatPG(allCy,PGALL,YTIME)                     "Snapshot of V04ShareSatPG for lagged references"
+p04ShareMixWndSol(allCy,YTIME)                       "Snapshot of V04ShareMixWndSol for lagged references"
+p04CostCapTech(allCy,PGALL,YTIME)                    "Snapshot of V04CostCapTech for lagged references"
 i04TechLftPlaType(allCy,PGALL)	                   "Technical Lifetime per plant type (year)"
 i04ScaleEndogScrap                                 "Scale parameter for endogenous scrapping applied to the sum of full costs (1)"
 i04DecInvPlantSched(allCy,PGALL,YTIME)             "Decided plant investment schedule (GW)"

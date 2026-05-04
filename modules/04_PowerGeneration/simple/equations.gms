@@ -19,11 +19,11 @@ Q04ProdElecEstCHP(allCy,TCHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         =E=
     1/smTWhToMtoe *
     (  
-      VmProdSte(allCy,TCHP,YTIME) / VmPriceElecInd(allCy,TCHP,YTIME) + 
+      VmProdSte(allCy,TCHP,YTIME) / (VmPriceElecInd(allCy,TCHP,YTIME) + 1e-6) + 
       i04MxmShareChpElec(allCy,YTIME) * V04DemElecTot(allCy,YTIME) - 
 
       SQRT(SQR(
-        VmProdSte(allCy,TCHP,YTIME) / VmPriceElecInd(allCy,TCHP,YTIME) - 
+        VmProdSte(allCy,TCHP,YTIME) / (VmPriceElecInd(allCy,TCHP,YTIME) + 1e-6) - 
         i04MxmShareChpElec(allCy,YTIME) * V04DemElecTot(allCy,YTIME))
       )  
     )/2;
@@ -97,19 +97,19 @@ Q04CostHourProdInvDec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04IndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(allCy))..
     V04IndxEndogScrap(allCy,PGALL,YTIME)
         =E=
-    V04CostVarTech(allCy,PGALL,YTIME-1)**(-2) /
+    (p04CostVarTech(allCy,PGALL,YTIME-1) + 1e-6)**(-2) /
     (
-      V04CostVarTech(allCy,PGALL,YTIME-1)**(-2) +
+      (p04CostVarTech(allCy,PGALL,YTIME-1) + 1e-6)**(-2) +
       (
         i04ScaleEndogScrap *
         sum(PGALL2$(not sameas(PGALL,PGALL2)),
           i04AvailRate(allCy,PGALL2,YTIME) / i04AvailRate(allCy,PGALL,YTIME) * 
-          V04CostHourProdInvDec(allCy,PGALL2,YTIME-1) 
+          p04CostHourProdInvDec(allCy,PGALL2,YTIME-1) 
           !!+
           !!(1-i04AvailRate(allCy,PGALL2,YTIME) / i04AvailRate(allCy,PGALL,YTIME)) *
           !!V04CostVarTech(allCy,PGALL2,YTIME)
         )
-      )**(-2)
+      + 1e-6)**(-2)
     );
 
 *' The equation calculates the total electricity generation capacity excluding Combined Heat and Power plants for a specified year .
@@ -131,19 +131,19 @@ Q04GapGenCapPowerDiff(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         =E=
     (
       (
-        V04CapElecNonCHP(allCy,YTIME) - V04CapElecNonCHP(allCy,YTIME-1) +
+        V04CapElecNonCHP(allCy,YTIME) - p04CapElecNonCHP(allCy,YTIME-1) +
         sum(PGALL, 
-          VmCapElec(allCy,PGALL,YTIME-1) * V04ScrpRate(allCy,PGALL,YTIME) -
-          VmCapElec(allCy,PGALL,YTIME-1) * (1 - V04CCSRetroFit(allCy,PGALL,YTIME)) +
+          pmCapElec(allCy,PGALL,YTIME-1) * V04ScrpRate(allCy,PGALL,YTIME) -
+          pmCapElec(allCy,PGALL,YTIME-1) * (1 - V04CCSRetroFit(allCy,PGALL,YTIME)) +
           (i04PlantDecomSched(allCy,PGALL,YTIME) - i04DecInvPlantSched(allCy,PGALL,YTIME)) * i04AvailRate(allCy,PGALL,YTIME)
         ) 
       ) +
       SQRT(SQR(
       (
-        V04CapElecNonCHP(allCy,YTIME) - V04CapElecNonCHP(allCy,YTIME-1) +
+        V04CapElecNonCHP(allCy,YTIME) - p04CapElecNonCHP(allCy,YTIME-1) +
         sum(PGALL,
-          VmCapElec(allCy,PGALL,YTIME-1) * V04ScrpRate(allCy,PGALL,YTIME) -
-          VmCapElec(allCy,PGALL,YTIME-1) * (1 - V04CCSRetroFit(allCy,PGALL,YTIME)) +
+          pmCapElec(allCy,PGALL,YTIME-1) * V04ScrpRate(allCy,PGALL,YTIME) -
+          pmCapElec(allCy,PGALL,YTIME-1) * (1 - V04CCSRetroFit(allCy,PGALL,YTIME)) +
           (i04PlantDecomSched(allCy,PGALL,YTIME) - i04DecInvPlantSched(allCy,PGALL,YTIME)) * i04AvailRate(allCy,PGALL,YTIME)
         )
       ))
@@ -155,7 +155,7 @@ Q04ShareMixWndSol(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04ShareMixWndSol(allCy,YTIME)
         =E=
     sum(PGALL$PGRENSW(PGALL), VmCapElec(allCy,PGALL,YTIME)) /
-    sum(PGALL, VmCapElec(allCy,PGALL,YTIME));
+  (sum(PGALL, VmCapElec(allCy,PGALL,YTIME)) + 1e-6);
  
 *' The equation calculates a temporary variable which is used to facilitate scaling in the Weibull equation. The scaling is influenced by three main factors:
 *' Maturity Factor for Planned Available Capacity : This factor represents the material-specific influence on the planned available capacity for a power
@@ -177,12 +177,12 @@ Q04SharePowPlaNewEq(allCy,PGALL,YTIME)$(TIME(YTIME)$runCy(allCy)) ..
     V04SharePowPlaNewEq(allCy,PGALL,YTIME)
         =E=
     i04MatFacPlaAvailCap(allCy,PGALL,YTIME) *
-    V04ShareSatPG(allCy,PGALL,YTIME-1) *
-    V04CostHourProdInvDec(allCy,PGALL,YTIME-1) ** (-2) /
+    p04ShareSatPG(allCy,PGALL,YTIME-1) *
+    (p04CostHourProdInvDec(allCy,PGALL,YTIME-1) + 1e-6) ** (-2) /
     (SUM(PGALL2,
       i04MatFacPlaAvailCap(allCy,PGALL2,YTIME) *
-      V04ShareSatPG(allCy,PGALL2,YTIME-1) *
-      V04CostHourProdInvDec(allCy,PGALL2,YTIME-1) ** (-2)
+      p04ShareSatPG(allCy,PGALL2,YTIME-1) *
+      (p04CostHourProdInvDec(allCy,PGALL2,YTIME-1) + 1e-6) ** (-2)
     ) + 1e-6);
 
 *' This equation calculates the variable representing the electricity generation capacity for a specific power plant in a given country
@@ -191,7 +191,7 @@ Q04SharePowPlaNewEq(allCy,PGALL,YTIME)$(TIME(YTIME)$runCy(allCy)) ..
 Q04CapElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCapElec(allCy,PGALL,YTIME)
           =E=
-    VmCapElec(allCy,PGALL,YTIME-1) * (1 - V04ScrpRate(allCy,PGALL,YTIME)) +
+  pmCapElec(allCy,PGALL,YTIME-1) * (1 - V04ScrpRate(allCy,PGALL,YTIME)) +
     V04NewCapElec(allCy,PGALL,YTIME) -
     i04PlantDecomSched(allCy,PGALL,YTIME) * i04AvailRate(allCy,PGALL,YTIME);
 
@@ -206,7 +206,7 @@ Q04NewCapElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04SharePowPlaNewEq(allCy,PGALL,YTIME) * V04GapGenCapPowerDiff(allCy,YTIME) +
     i04DecInvPlantSched(allCy,PGALL,YTIME) * i04AvailRate(allCy,PGALL,YTIME) +
     SUM(PGALL2$CCS_NOCCS(PGALL,PGALL2),
-      (1 - V04CCSRetroFit(allCy,PGALL2,YTIME)) * VmCapElec(allCy,PGALL2,YTIME-1)
+      (1 - V04CCSRetroFit(allCy,PGALL2,YTIME)) * pmCapElec(allCy,PGALL2,YTIME-1)
     );
 
 *' This equation calculates the variable representing the newly added electricity generation capacity for a specific renewable power plant 
@@ -216,7 +216,7 @@ Q04NewCapElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04NetNewCapElec(allCy,PGALL,YTIME)$(PGREN(PGALL)$TIME(YTIME)$runCy(allCy))..
     V04NetNewCapElec(allCy,PGALL,YTIME) 
         =E=
-    VmCapElec(allCy,PGALL,YTIME) - VmCapElec(allCy,PGALL,YTIME-1);                       
+  VmCapElec(allCy,PGALL,YTIME) - pmCapElec(allCy,PGALL,YTIME-1);                       
 
 *' This equation calculates the electricity production from power generation plants for a specific country ,
 *' power generation plant type , and time period . The electricity production is determined based on the overall electricity
@@ -227,7 +227,7 @@ Q04ProdElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmProdElec(allCy,PGALL,YTIME)
         =E=
     V04CapElecNonCHP(allCy,YTIME) /
-    sum(PGALL2, VmCapElec(allCy,PGALL2,YTIME)) * 
+  (sum(PGALL2, VmCapElec(allCy,PGALL2,YTIME)) + 1e-6) * 
     VmCapElec(allCy,PGALL,YTIME) * smGwToTwhPerYear(YTIME);
     !!i04util(allCy,PGALL,YTIME) *
     !!VmCapElec(allCy,PGALL,YTIME) * smGwToTwhPerYear(YTIME);
@@ -237,7 +237,7 @@ Q04ShareTechPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04ShareTechPG(allCy,PGALL,YTIME)
         =E=
     VmCapElec(allCy,PGALL,YTIME) /
-    sum(PGALL2, VmCapElec(allCy,PGALL2,YTIME));
+  (sum(PGALL2, VmCapElec(allCy,PGALL2,YTIME)) + 1e-6);
 
 *'Sigmoid function used as a saturation mechanism for electricity mixture penetration of RES technologies.
 Q04ShareSatPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(PGREN(PGALL)))..
@@ -259,7 +259,7 @@ Q04CostPowGenAvgLng(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04CapexRESRate(allCy,PGALL,YTIME)$(TIME(YTIME) and runCy(allCy))..
     V04CapexRESRate(allCy,PGALL,YTIME)
         =E=
-    1 + (V04ShareMixWndSol(allCy,YTIME-1)$PGRENSW(PGALL)) ** S04CapexBessRate;
+  1 + (p04ShareMixWndSol(allCy,YTIME-1)$PGRENSW(PGALL)) ** S04CapexBessRate;
 
 Q04CO2CaptRate(allCy,PGALL,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
     V04CO2CaptRate(allCy,PGALL,YTIME)
@@ -278,16 +278,17 @@ Q04CO2CaptRate(allCy,PGALL,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
 Q04CCSRetroFit(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(NOCCS(PGALL)))..
     V04CCSRetroFit(allCy,PGALL,YTIME)
         =E=
-    V04CostVarTech(allCy,PGALL,YTIME-1) ** (-2) /
+    (p04CostVarTech(allCy,PGALL,YTIME-1) + 1e-6) ** (-2) /
     (
-      V04CostVarTech(allCy,PGALL,YTIME-1) ** (-2) +
+      (p04CostVarTech(allCy,PGALL,YTIME-1) + 1e-6) ** (-2) +
       0.01 *
       SUM(PGALL2$CCS_NOCCS(PGALL2,PGALL),
         (
-          V04CostCapTech(allCy,PGALL2,YTIME-1) -
+          p04CostCapTech(allCy,PGALL2,YTIME-1) -
           i04AvailRate(allCy,PGALL,YTIME) / i04AvailRate(allCy,PGALL2,YTIME) *
-          V04CostCapTech(allCy,PGALL,YTIME-1) +
-          V04CostVarTech(allCy,PGALL2,YTIME-1)
+          p04CostCapTech(allCy,PGALL,YTIME-1) +
+          p04CostVarTech(allCy,PGALL2,YTIME-1)
+          + 1e-6
         ) ** (-2)
       )
     );

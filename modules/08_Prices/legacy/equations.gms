@@ -23,12 +23,12 @@ $ENDIF
    $(not sameas("NUC",EFS)) $runCy(allCy))..
     VmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME)
         =E=
-    VmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME-1) *
+    p08PriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME-1) *
     (1 + (VmCostPowGenAvgLng(allCy,YTIME-1) / VmCostPowGenAvgLng(allCy,YTIME-2) - 1)$sameas("ELC",EFS)) *
     (1 + (VmCostAvgProdH2(allCy,YTIME-1) / VmCostAvgProdH2(allCy,YTIME-2) - 1)$sameas("H2F",EFS)) * 
     (1 + (VmCostAvgProdSte(allCy,YTIME-1) / VmCostAvgProdSte(allCy,YTIME-2) - 1)$sameas("STE",EFS)) *
-    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.4 - 1)$sameas("NGS",EFS)) *
-    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.8 - 1)$SECtoEFPROD("LQD",EFS)) +
+    (1 + ((((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) + SQRT(SQR(VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME)) + 1e-8))/2 + 1e-6) / (((p08PriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1) + SQRT(SQR(p08PriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) + 1e-8))/2) + 1e-6)) ** 0.4 - 1)$sameas("NGS",EFS)) *
+    (1 + ((((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) + SQRT(SQR(VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME)) + 1e-8))/2 + 1e-6) / (((p08PriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1) + SQRT(SQR(p08PriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) + 1e-8))/2) + 1e-6)) ** 0.8 - 1)$SECtoEFPROD("LQD",EFS)) +
     (
       VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,SBS,EFS,YTIME) * 1e-3 - 
       VmCarVal(allCy,"TRADE",YTIME-1) * imCo2EmiFac(allCy,SBS,EFS,YTIME-1) * 1e-3
@@ -62,8 +62,8 @@ Q08PriceFuelAvgSub(allCy,DSBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmPriceFuelAvgSub(allCy,DSBS,YTIME)
         =E=
     sum(EF$SECtoEF(DSBS,EF), 
-      V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME-1) *
-      VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-1));         
+      p08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME-1) *
+      p08PriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-1));         
 
 *' This equation calculates the fuel prices per subsector and fuel, specifically for Combined Heat and Power (CHP) plants, considering the profit earned from
 *' electricity sales. The equation incorporates various factors such as the base fuel price, renewable value, variable cost of technology, useful energy conversion

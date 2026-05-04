@@ -14,7 +14,7 @@
 Q01Lft(allCy,"PC",TTECH,YTIME)$(TIME(YTIME) $SECTTECH("PC",TTECH) $runCy(allCy))..
     VmLft(allCy,"PC",TTECH,YTIME)
         =E=
-    1 / V01RateScrPc(allCy,TTECH,YTIME);
+  1 / (V01RateScrPc(allCy,TTECH,YTIME) + 1e-6);
 
 *' This equation calculates the activity for goods transport, considering different types of goods transport such as trucks and other freight transport.
 *' The activity is influenced by factors such as GDP, population, fuel prices, and elasticities. The equation includes terms for trucks and other
@@ -26,22 +26,22 @@ Q01ActivGoodsTransp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANG(TRANSE) $runCy(allCy
   p01ActivGoodsTransp(allCy,TRANSE,YTIME-1)
         * [i01GDPperCapita(YTIME,allCy)/i01GDPperCapita(YTIME-1,allCy)] ** 0.4 !!imElastA(allCy,TRANSE,"a",YTIME)
         * (i01Pop(YTIME,allCy)/i01Pop(YTIME-1,allCy)) ** 0.8
-        * (VmPriceFuelAvgSub(allCy,TRANSE,YTIME)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1))**imElastA(allCy,TRANSE,"c1",YTIME)
-        * (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2))**imElastA(allCy,TRANSE,"c2",YTIME)
+        * ((VmPriceFuelAvgSub(allCy,TRANSE,YTIME) + 1e-6)/(p08PriceFuelAvgSub(allCy,TRANSE,YTIME-1) + 1e-6))**imElastA(allCy,TRANSE,"c1",YTIME)
+        * ((p08PriceFuelAvgSub(allCy,TRANSE,YTIME-1) + 1e-6)/(p08PriceFuelAvgSub(allCy,TRANSE,YTIME-2) + 1e-6))**imElastA(allCy,TRANSE,"c2",YTIME)
         * prod(kpdl,
-              [(VmPriceFuelAvgSub(allCy,TRANSE,YTIME-ord(kpdl))/
-                VmPriceFuelAvgSub(allCy,TRANSE,YTIME-(ord(kpdl)+1)))/
+              [((p08PriceFuelAvgSub(allCy,TRANSE,YTIME-ord(kpdl)) + 1e-6)/
+                (p08PriceFuelAvgSub(allCy,TRANSE,YTIME-(ord(kpdl)+1)) + 1e-6))/
                 (imCGI(allCy,YTIME)**(1/6))]**(imElastA(allCy,TRANSE,"c3",YTIME)*imFPDL(TRANSE,KPDL))
           )
       )$sameas(TRANSE,"GU") +      !!trucks
       (
         p01ActivGoodsTransp(allCy,TRANSE,YTIME-1) *
         [i01GDPperCapita(YTIME,allCy) / i01GDPperCapita(YTIME-1,allCy)]**imElastA(allCy,TRANSE,"a",YTIME) *
-        (VmPriceFuelAvgSub(allCy,TRANSE,YTIME) / VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1))**imElastA(allCy,TRANSE,"c1",YTIME) *
-        (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2))**imElastA(allCy,TRANSE,"c2",YTIME) *
+        ((VmPriceFuelAvgSub(allCy,TRANSE,YTIME) + 1e-6) / (p08PriceFuelAvgSub(allCy,TRANSE,YTIME-1) + 1e-6))**imElastA(allCy,TRANSE,"c1",YTIME) *
+        ((p08PriceFuelAvgSub(allCy,TRANSE,YTIME-1) + 1e-6)/(p08PriceFuelAvgSub(allCy,TRANSE,YTIME-2) + 1e-6))**imElastA(allCy,TRANSE,"c2",YTIME) *
         prod(kpdl,
           [
-            (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-ord(kpdl)) / VmPriceFuelAvgSub(allCy,TRANSE,YTIME-(ord(kpdl)+1))) /
+            ((p08PriceFuelAvgSub(allCy,TRANSE,YTIME-ord(kpdl)) + 1e-6) / (p08PriceFuelAvgSub(allCy,TRANSE,YTIME-(ord(kpdl)+1)) + 1e-6)) /
             (imCGI(allCy,YTIME)**(1/6))
           ]**(imElastA(allCy,TRANSE,"c3",YTIME)*imFPDL(TRANSE,KPDL))
         ) *
@@ -93,7 +93,7 @@ Q01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTE
     (
       (imDisc(allCy,TRANSE,YTIME)*exp(imDisc(allCy,TRANSE,YTIME)*VmLft(allCy,TRANSE,TTECH,YTIME)))
       /
-      (exp(imDisc(allCy,TRANSE,YTIME)*VmLft(allCy,TRANSE,TTECH,YTIME)) - 1)
+      (exp(imDisc(allCy,TRANSE,YTIME)*VmLft(allCy,TRANSE,TTECH,YTIME)) - 1 + 1e-6)
     ) * (imCapCostTech(allCy,TRANSE,TTECH,YTIME) - VmSubsiDemTech(allCy,TRANSE,TTECH,YTIME)) *
     imCGI(allCy,YTIME)
 ;
@@ -181,10 +181,10 @@ Q01ShareTechTr(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $r
     V01ShareTechTr(allCy,TRANSE,TTECH,YTIME)
       =E=
     imMatrFactor(allCy,TRANSE,TTECH,YTIME) *
-    p01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME-1)**(-3) /
+    (p01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME-1) + 1e-6)**(-3) /
     (sum(TTECH2$SECTTECH(TRANSE,TTECH2), 
       imMatrFactor(allCy,TRANSE,TTECH2,YTIME) * 
-      p01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1)**(-3)
+      (p01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1) + 1e-6)**(-3)
     ) + 1e-6);
 
 *' This equation calculates the consumption of each technology in transport sectors. It considers various factors such as the lifetime of the technology,
@@ -197,7 +197,7 @@ Q01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)$(TIME(YTIME) $SECTTECH(TR
     (
       (
         (pmLft(allCy,TRANSE,TTECH,YTIME-1)-1) / 
-        pmLft(allCy,TRANSE,TTECH,YTIME-1) *
+        (pmLft(allCy,TRANSE,TTECH,YTIME-1) + 1e-6) *
         i01AvgVehCapLoadFac(allCy,TRANSE,"CAP",YTIME-1) *
         i01AvgVehCapLoadFac(allCy,TRANSE,"LF",YTIME-1) /
         i01AvgVehCapLoadFac(allCy,TRANSE,"CAP",YTIME) /
@@ -292,26 +292,26 @@ Q01ActivPassTrnsp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANP(TRANSE) $runCy(allCy))
               =E=
       (  !! passenger cars
         p01ActivPassTrnsp(allCy,TRANSE,YTIME-1) *
-        ((VmPriceFuelAvgSub(allCy,TRANSE,YTIME) + 1e-6)/(VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1) + 1e-6))**imElastA(allCy,TRANSE,"b1",YTIME) *
-        ((VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1) + 1e-6)/(VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2) + 1e-6))**imElastA(allCy,TRANSE,"b2",YTIME) *
+        ((VmPriceFuelAvgSub(allCy,TRANSE,YTIME) + 1e-6)/(p08PriceFuelAvgSub(allCy,TRANSE,YTIME-1) + 1e-6))**imElastA(allCy,TRANSE,"b1",YTIME) *
+        ((p08PriceFuelAvgSub(allCy,TRANSE,YTIME-1) + 1e-6)/(p08PriceFuelAvgSub(allCy,TRANSE,YTIME-2) + 1e-6))**imElastA(allCy,TRANSE,"b2",YTIME) *
         [((V01StockPcYearly(allCy,YTIME)/(i01Pop(YTIME,allCy)*1000)) + 1e-6)/(p01PcOwnPcLevl(allCy,YTIME-1) + 1e-6)]**imElastA(allCy,TRANSE,"b3",YTIME) *
         [i01GDPperCapita(YTIME,allCy) / i01GDPperCapita(YTIME-1,allCy)] ** 0.2 !!imElastA(allCy,TRANSE,"b4",YTIME)
       )$sameas(TRANSE,"PC") +
       (  !! passenger aviation
         p01ActivPassTrnsp(allCy,TRANSE,YTIME-1) *
         [i01GDPperCapita(YTIME,allCy)/i01GDPperCapita(YTIME-1,allCy)]**imElastA(allCy,TRANSE,"a",YTIME) *
-        ((VmPriceFuelAvgSub(allCy,TRANSE,YTIME) + 1e-6)/(VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1) + 1e-6))**imElastA(allCy,TRANSE,"c1",YTIME) *
-        ((VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1) + 1e-6)/(VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2) + 1e-6))**imElastA(allCy,TRANSE,"c2",YTIME)
+        ((VmPriceFuelAvgSub(allCy,TRANSE,YTIME) + 1e-6)/(p08PriceFuelAvgSub(allCy,TRANSE,YTIME-1) + 1e-6))**imElastA(allCy,TRANSE,"c1",YTIME) *
+        ((p08PriceFuelAvgSub(allCy,TRANSE,YTIME-1) + 1e-6)/(p08PriceFuelAvgSub(allCy,TRANSE,YTIME-2) + 1e-6))**imElastA(allCy,TRANSE,"c2",YTIME)
       )$sameas(TRANSE,"PA") +
       (   !! other passenger transportation modes
         p01ActivPassTrnsp(allCy,TRANSE,YTIME-1) *
         [(i01GDP(YTIME,allCy)/i01Pop(YTIME,allCy))/(i01GDP(YTIME-1,allCy)/i01Pop(YTIME-1,allCy))]**imElastA(allCy,TRANSE,"a",YTIME) *
-        ((VmPriceFuelAvgSub(allCy,TRANSE,YTIME) + 1e-6)/(VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1) + 1e-6))**imElastA(allCy,TRANSE,"c1",YTIME) *
-        ((VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1) + 1e-6)/(VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2) + 1e-6))**imElastA(allCy,TRANSE,"c2",YTIME) *
+        ((VmPriceFuelAvgSub(allCy,TRANSE,YTIME) + 1e-6)/(p08PriceFuelAvgSub(allCy,TRANSE,YTIME-1) + 1e-6))**imElastA(allCy,TRANSE,"c1",YTIME) *
+        ((p08PriceFuelAvgSub(allCy,TRANSE,YTIME-1) + 1e-6)/(p08PriceFuelAvgSub(allCy,TRANSE,YTIME-2) + 1e-6))**imElastA(allCy,TRANSE,"c2",YTIME) *
         [((V01StockPcYearly(allCy,YTIME)*V01ActivPassTrnsp(allCy,"PC",YTIME)) + 1e-6)/((p01StockPcYearly(allCy,YTIME-1)*p01ActivPassTrnsp(allCy,"PC",YTIME-1)) + 1e-6)]**imElastA(allCy,TRANSE,"c4",YTIME) *
         prod(kpdl,
-          [((VmPriceFuelAvgSub(allCy,TRANSE,YTIME-ord(kpdl)) + 1e-6)/
-            (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-(ord(kpdl)+1)) + 1e-6))/
+          [((p08PriceFuelAvgSub(allCy,TRANSE,YTIME-ord(kpdl)) + 1e-6)/
+            (p08PriceFuelAvgSub(allCy,TRANSE,YTIME-(ord(kpdl)+1)) + 1e-6))/
             (imCGI(allCy,YTIME)**(1/6))
           ]**(imElastA(allCy,TRANSE,"c3",YTIME)*imFPDL(TRANSE,KPDL))
         )
