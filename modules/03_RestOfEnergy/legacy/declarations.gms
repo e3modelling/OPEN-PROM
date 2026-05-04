@@ -2,6 +2,14 @@
 *' @code
 
 Parameters
+p03Transfers(allCy,EFS,YTIME)         "Snapshot of V03Transfers for YTIME-1 reference (Mtoe)"
+p03ConsFinEneCountry(allCy,EFS,YTIME)  "Snapshot of VmConsFinEneCountry for YTIME-1 reference (Mtoe)"
+p03Imp(allCy,EFS,YTIME)               "Snapshot of V03Imp for YTIME-1 reference (Mtoe)"
+p03ConsGrssInl(allCy,EFS,YTIME)       "Snapshot of V03ConsGrssInl (Mtoe)"
+p03ProdPrimary(allCy,EFS,YTIME)       "Snapshot of V03ProdPrimary (Mtoe)"
+p03Exp(allCy,EFS,YTIME)               "Snapshot of V03Exp (Mtoe)"
+p03InpTotTransf(allCy,SSBS,EFS,YTIME) "Snapshot of V03InpTotTransf (Mtoe)"
+p03OutTotTransf(allCy,SSBS,EFS,YTIME) "Snapshot of V03OutTotTransf (Mtoe)"
 i03SupTrnasfOutputRefineries(allCy,EF,YTIME)	  "Supplementary parameter for the transformation output from refineries (Mtoe)"
 i03SupResRefCapacity(allCy,SUPOTH,YTIME)	      "Supplementary Parameter for the residual in refineries Capacity (1)"
 i03TotEneBranchCons(allCy,EF,YTIME)	              "Total Energy Branch Consumption (Mtoe)"
