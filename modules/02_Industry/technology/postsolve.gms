@@ -1,23 +1,48 @@
 *' @title INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS EQUATIONS postsolve
-* Fix values of variables for the next time step
+* Store values of variables as parameters for the next time step
 
 * Industry Module Module
 
 *---
-V02DemSubUsefulSubsec.FX(runCyL,DSBS,YTIME)$TIME(YTIME) = V02DemSubUsefulSubsec.L(runCyL,DSBS,YTIME)$TIME(YTIME);
-V02RemEquipCapTechSubsec.FX(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME) = V02RemEquipCapTechSubsec.L(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME);
-V02DemUsefulSubsecRemTech.FX(runCyL,DSBS,YTIME)$TIME(YTIME) = V02DemUsefulSubsecRemTech.L(runCyL,DSBS,YTIME)$TIME(YTIME);
-V02GapUsefulDemSubsec.FX(runCyL,DSBS,YTIME)$TIME(YTIME) = V02GapUsefulDemSubsec.L(runCyL,DSBS,YTIME)$TIME(YTIME);           
-V02CapCostTech.FX(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME) = V02CapCostTech.L(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME);                     
-V02VarCostTech.FX(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME) = V02VarCostTech.L(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME);   
-V02CostTech.FX(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME) = V02CostTech.L(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME);        
-V02ShareTechNewEquipUseful.FX(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME) = V02ShareTechNewEquipUseful.L(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME);
-V02EquipCapTechSubsec.FX(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME) = V02EquipCapTechSubsec.L(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME);  
-V02UsefulElecNonSubIndTert.FX(runCyL,INDDOM,YTIME)$TIME(YTIME) = V02UsefulElecNonSubIndTert.L(runCyL,INDDOM,YTIME)$TIME(YTIME);            
-V02FinalElecNonSubIndTert.FX(runCyL,INDDOM,YTIME)$TIME(YTIME) = V02FinalElecNonSubIndTert.L(runCyL,INDDOM,YTIME)$TIME(YTIME);                                      
-VmConsFuel.FX(runCyL,DSBS,EF,YTIME)$TIME(YTIME) = VmConsFuel.L(runCyL,DSBS,EF,YTIME)$TIME(YTIME);       
-V02IndxElecIndPrices.FX(runCyL,TCHP,YTIME)$TIME(YTIME) = V02IndxElecIndPrices.L(runCyL,TCHP,YTIME)$TIME(YTIME);  
-V02PremScrpIndu.FX(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME) = V02PremScrpIndu.L(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME);
+p02DemSubUsefulSubsec(runCyL,DSBS,YTIME)$TIME(YTIME) = V02DemSubUsefulSubsec.L(runCyL,DSBS,YTIME)$TIME(YTIME);
+p02EquipCapTechSubsec(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME) = V02EquipCapTechSubsec.L(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME);
+p02VarCostTech(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME) = V02VarCostTech.L(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME);
+p02CostTech(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME) = V02CostTech.L(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME);
+p02UsefulElecNonSubIndTert(runCyL,INDDOM,YTIME)$TIME(YTIME) = V02UsefulElecNonSubIndTert.L(runCyL,INDDOM,YTIME)$TIME(YTIME);
+
+option clear = V02DemSubUsefulSubsec;
+option clear = V02RemEquipCapTechSubsec;
+option clear = V02DemUsefulSubsecRemTech;
+option clear = V02GapUsefulDemSubsec;
+option clear = V02CapCostTech;
+option clear = V02VarCostTech;
+option clear = V02CostTech;
+option clear = V02ShareTechNewEquipUseful;
+option clear = V02EquipCapTechSubsec;
+option clear = V02UsefulElecNonSubIndTert;
+option clear = V02FinalElecNonSubIndTert;
+option clear = V02IndxElecIndPrices;
+option clear = V02IndAvrEffFinalUseful;
+option clear = V02PremScrpIndu;
+option clear = V02RatioRem;
+option clear = VmConsFuel;
+
+option clear = Q02DemSubUsefulSubsec;
+option clear = Q02RemEquipCapTechSubsec;
+option clear = Q02DemUsefulSubsecRemTech;
+option clear = Q02GapUsefulDemSubsec;
+option clear = Q02CapCostTech;
+option clear = Q02VarCostTech;
+option clear = Q02CostTech;
+option clear = Q02ShareTechNewEquipUseful;
+option clear = Q02EquipCapTechSubsec;
+option clear = Q02UsefulElecNonSubIndTert;
+option clear = Q02FinalElecNonSubIndTert;
+option clear = Q02IndxElecIndPrices;
+option clear = Q02IndAvrEffFinalUseful;
+option clear = Q02PremScrpIndu;
+option clear = Q02RatioRem;
+option clear = Q02ConsFuel;
 *---
 
 $ifthen.calib %Calibration% == MatCalibration

@@ -10,6 +10,11 @@ imCO2CaptRateIndustry(allCy,ITECH,YTIME)	               "Industry CO2 capture ra
 i02ScaleEndogScrap(DSBS)                            "Scale parameter for endogenous scrapping applied to the sum of full costs (1)"
 i02ShareBlend(allCy,DSBS,ITECH,EF,YTIME)                   "Share of each energy form in a technology"
 i02ShareElcHP(allCy,DSBS,YTIME)                            "Share of final electricity consumption of HeatPumps in substitutable electricity consumption (1)"
+p02DemSubUsefulSubsec(allCy,DSBS,YTIME)                    "Stored useful substitutable energy demand for solved years"
+p02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)              "Stored equipment capacity by technology for solved years"
+p02VarCostTech(allCy,DSBS,ITECH,YTIME)                     "Stored variable cost by technology for solved years"
+p02CostTech(allCy,DSBS,ITECH,YTIME)                        "Stored total cost by technology for solved years"
+p02UsefulElecNonSubIndTert(allCy,DSBS,YTIME)               "Stored useful non-substitutable electricity for solved years"
 ;
 
 Equations

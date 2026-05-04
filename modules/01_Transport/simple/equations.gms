@@ -65,10 +65,10 @@ Q01GapTranspActiv(allCy,TRANSE,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
           V01ActivPassTrnsp(allCy,TRANSE,YTIME) - 
           p01ActivPassTrnsp(allCy,TRANSE,YTIME-1) + 
           p01ActivPassTrnsp(allCy,TRANSE,YTIME-1) /
-          (sum((TTECH)$SECTTECH(TRANSE,TTECH), pmLft(allCy,TRANSE,TTECH,YTIME-1)) / TECHS(TRANSE))
+          ((sum((TTECH)$SECTTECH(TRANSE,TTECH), pmLft(allCy,TRANSE,TTECH,YTIME-1)) / TECHS(TRANSE)) + 1e-6)
         ] +
         SQRT( SQR([V01ActivPassTrnsp(allCy,TRANSE,YTIME) - p01ActivPassTrnsp(allCy,TRANSE,YTIME-1) + p01ActivPassTrnsp(allCy,TRANSE,YTIME-1)/
-        (sum((TTECH)$SECTTECH(TRANSE,TTECH),pmLft(allCy,TRANSE,TTECH,YTIME-1))/TECHS(TRANSE))]) + SQR(1e-4) ) 
+        ((sum((TTECH)$SECTTECH(TRANSE,TTECH),pmLft(allCy,TRANSE,TTECH,YTIME-1))/TECHS(TRANSE)) + 1e-6)]) + SQR(1e-4) ) 
       )/2
     )$(TRANP(TRANSE) $(not sameas(TRANSE,"PC"))) +
     (
@@ -77,10 +77,10 @@ Q01GapTranspActiv(allCy,TRANSE,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
           V01ActivGoodsTransp(allCy,TRANSE,YTIME) - 
           p01ActivGoodsTransp(allCy,TRANSE,YTIME-1) + 
           p01ActivGoodsTransp(allCy,TRANSE,YTIME-1) /
-          (sum(TTECH$SECTTECH(TRANSE,TTECH),pmLft(allCy,TRANSE,TTECH,YTIME-1))/TECHS(TRANSE))
+          ((sum(TTECH$SECTTECH(TRANSE,TTECH),pmLft(allCy,TRANSE,TTECH,YTIME-1))/TECHS(TRANSE)) + 1e-6)
         ] + 
         SQRT( SQR([V01ActivGoodsTransp(allCy,TRANSE,YTIME) - p01ActivGoodsTransp(allCy,TRANSE,YTIME-1) + p01ActivGoodsTransp(allCy,TRANSE,YTIME-1)/
-        (sum((TTECH)$SECTTECH(TRANSE,TTECH),pmLft(allCy,TRANSE,TTECH,YTIME-1))/TECHS(TRANSE))]) + SQR(1e-4) ) 
+        ((sum((TTECH)$SECTTECH(TRANSE,TTECH),pmLft(allCy,TRANSE,TTECH,YTIME-1))/TECHS(TRANSE)) + 1e-6)]) + SQR(1e-4) ) 
       )/2
     )$TRANG(TRANSE);
 
@@ -292,26 +292,26 @@ Q01ActivPassTrnsp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANP(TRANSE) $runCy(allCy))
               =E=
       (  !! passenger cars
         p01ActivPassTrnsp(allCy,TRANSE,YTIME-1) *
-        (VmPriceFuelAvgSub(allCy,TRANSE,YTIME)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1))**imElastA(allCy,TRANSE,"b1",YTIME) *
-        (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2))**imElastA(allCy,TRANSE,"b2",YTIME) *
-        [(V01StockPcYearly(allCy,YTIME)/(i01Pop(YTIME,allCy)*1000))/(p01PcOwnPcLevl(allCy,YTIME-1))]**imElastA(allCy,TRANSE,"b3",YTIME) *
+        ((VmPriceFuelAvgSub(allCy,TRANSE,YTIME) + 1e-6)/(VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1) + 1e-6))**imElastA(allCy,TRANSE,"b1",YTIME) *
+        ((VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1) + 1e-6)/(VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2) + 1e-6))**imElastA(allCy,TRANSE,"b2",YTIME) *
+        [((V01StockPcYearly(allCy,YTIME)/(i01Pop(YTIME,allCy)*1000)) + 1e-6)/(p01PcOwnPcLevl(allCy,YTIME-1) + 1e-6)]**imElastA(allCy,TRANSE,"b3",YTIME) *
         [i01GDPperCapita(YTIME,allCy) / i01GDPperCapita(YTIME-1,allCy)] ** 0.2 !!imElastA(allCy,TRANSE,"b4",YTIME)
       )$sameas(TRANSE,"PC") +
       (  !! passenger aviation
         p01ActivPassTrnsp(allCy,TRANSE,YTIME-1) *
         [i01GDPperCapita(YTIME,allCy)/i01GDPperCapita(YTIME-1,allCy)]**imElastA(allCy,TRANSE,"a",YTIME) *
-        (VmPriceFuelAvgSub(allCy,TRANSE,YTIME)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1))**imElastA(allCy,TRANSE,"c1",YTIME) *
-        (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2))**imElastA(allCy,TRANSE,"c2",YTIME)
+        ((VmPriceFuelAvgSub(allCy,TRANSE,YTIME) + 1e-6)/(VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1) + 1e-6))**imElastA(allCy,TRANSE,"c1",YTIME) *
+        ((VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1) + 1e-6)/(VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2) + 1e-6))**imElastA(allCy,TRANSE,"c2",YTIME)
       )$sameas(TRANSE,"PA") +
       (   !! other passenger transportation modes
         p01ActivPassTrnsp(allCy,TRANSE,YTIME-1) *
         [(i01GDP(YTIME,allCy)/i01Pop(YTIME,allCy))/(i01GDP(YTIME-1,allCy)/i01Pop(YTIME-1,allCy))]**imElastA(allCy,TRANSE,"a",YTIME) *
-        (VmPriceFuelAvgSub(allCy,TRANSE,YTIME)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1))**imElastA(allCy,TRANSE,"c1",YTIME) *
-        (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2))**imElastA(allCy,TRANSE,"c2",YTIME) *
-        [(V01StockPcYearly(allCy,YTIME)*V01ActivPassTrnsp(allCy,"PC",YTIME))/(p01StockPcYearly(allCy,YTIME-1)*p01ActivPassTrnsp(allCy,"PC",YTIME-1))]**imElastA(allCy,TRANSE,"c4",YTIME) *
+        ((VmPriceFuelAvgSub(allCy,TRANSE,YTIME) + 1e-6)/(VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1) + 1e-6))**imElastA(allCy,TRANSE,"c1",YTIME) *
+        ((VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1) + 1e-6)/(VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2) + 1e-6))**imElastA(allCy,TRANSE,"c2",YTIME) *
+        [((V01StockPcYearly(allCy,YTIME)*V01ActivPassTrnsp(allCy,"PC",YTIME)) + 1e-6)/((p01StockPcYearly(allCy,YTIME-1)*p01ActivPassTrnsp(allCy,"PC",YTIME-1)) + 1e-6)]**imElastA(allCy,TRANSE,"c4",YTIME) *
         prod(kpdl,
-          [(VmPriceFuelAvgSub(allCy,TRANSE,YTIME-ord(kpdl))/
-            VmPriceFuelAvgSub(allCy,TRANSE,YTIME-(ord(kpdl)+1)))/
+          [((VmPriceFuelAvgSub(allCy,TRANSE,YTIME-ord(kpdl)) + 1e-6)/
+            (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-(ord(kpdl)+1)) + 1e-6))/
             (imCGI(allCy,YTIME)**(1/6))
           ]**(imElastA(allCy,TRANSE,"c3",YTIME)*imFPDL(TRANSE,KPDL))
         )

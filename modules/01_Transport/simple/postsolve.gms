@@ -6,7 +6,7 @@
 p01ActivGoodsTransp(runCyL,TRANSE,YTIME)$TIME(YTIME) = V01ActivGoodsTransp.L(runCyL,TRANSE,YTIME)$TIME(YTIME);
 p01ActivPassTrnsp(runCyL,TRANSE,YTIME)$TIME(YTIME) = V01ActivPassTrnsp.L(runCyL,TRANSE,YTIME)$TIME(YTIME);
 p01ConsTechTranspSectoral(runCyL,TRANSE,TTECH,EF,YTIME)$TIME(YTIME) = V01ConsTechTranspSectoral.L(runCyL,TRANSE,TTECH,EF,YTIME)$TIME(YTIME);
-pmLft(runCyL,DSBS,TTECH,YTIME)$TIME(YTIME) = VmLft.L(runCyL,DSBS,TTECH,YTIME)$TIME(YTIME);
+pmLft(runCyL,DSBS,TECH,YTIME)$TIME(YTIME) = VmLft.L(runCyL,DSBS,TECH,YTIME)$TIME(YTIME);
 p01StockPcYearlyTech(runCyL,TTECH,YTIME)$TIME(YTIME) = V01StockPcYearlyTech.L(runCyL,TTECH,YTIME)$TIME(YTIME);
 p01StockPcYearly(runCyL,YTIME)$TIME(YTIME) = V01StockPcYearly.L(runCyL,YTIME)$TIME(YTIME);
 p01PcOwnPcLevl(runCyL,YTIME)$TIME(YTIME) = V01PcOwnPcLevl.L(runCyL,YTIME)$TIME(YTIME);
@@ -60,4 +60,14 @@ option clear = Q01PcOwnPcLevl;
 option clear = Q01RateScrPc;
 option clear = Q01RateScrPcTot;
 option clear = Q01PremScrp;
+
+V01ActivGoodsTransp.L(allCy,TRANSE,YTIME)$TIME(YTIME) = p01ActivGoodsTransp(allCy,TRANSE,YTIME)$TIME(YTIME);
+V01ActivPassTrnsp.L(allCy,TRANSE,YTIME)$TIME(YTIME) = p01ActivPassTrnsp(allCy,TRANSE,YTIME)$TIME(YTIME);
+V01StockPcYearly.L(allCy,YTIME)$TIME(YTIME) = p01StockPcYearly(allCy,YTIME)$TIME(YTIME);
+V01PcOwnPcLevl.L(allCy,YTIME)$TIME(YTIME) = p01PcOwnPcLevl(allCy,YTIME)$TIME(YTIME);
+V01RateScrPc.L(allCy,TTECH,YTIME)$TIME(YTIME) = p01RateScrPc(allCy,TTECH,YTIME)$TIME(YTIME);
+V01CostFuel.L(allCy,TRANSE,TTECH,YTIME)$TIME(YTIME) = p01CostFuel(allCy,TRANSE,TTECH,YTIME)$TIME(YTIME);
+V01CostTranspPerMeanConsSize.L(allCy,TRANSE,TTECH,YTIME)$TIME(YTIME) = p01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME)$TIME(YTIME);
+VmLft.L(allCy,DSBS,TECH,YTIME)$TIME(YTIME) = pmLft(allCy,DSBS,TECH,YTIME)$TIME(YTIME);
+VmDemFinEneTranspPerFuel.L(allCy,TRANSE,EF,YTIME)$TIME(YTIME) = 1;
 *---
