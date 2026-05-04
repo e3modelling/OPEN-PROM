@@ -19,7 +19,7 @@ reportOutput <- function(
     runpath,
     mif_name,
     aggregate = TRUE,
-    fullValidation = TRUE,
+    fullValidation = FALSE,
     plot_name = NULL,
     Validation_data_for_plots = Validation_data_for_plots,
     Validation2050 = Validation2050,

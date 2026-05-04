@@ -607,9 +607,21 @@ $offdelim
 *---
 $IFTHEN.calib %Calibration% == off
 parameter imMatrFactor(allCy,DSBS,TECH,YTIME)   "Maturity factor per technology and subsector for all countries (1)";
-imMatrFactor(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                          
+imMatrFactor(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);    
+imMatrFactor(runCy,"HOU","THEATPUMP",YTIME) = 5;          
+imMatrFactor(runCy,"SE","THEATPUMP",YTIME) = 1;                                   
+imMatrFactor(runCy,DSBS,TECH,YTIME)$(imMatrFactor(runCy,DSBS,TECH,YTIME)=0) = 0.000001;
+imMatrFactor(runCy,DSBS,"TBMSWAS",YTIME) = 5;
+imMatrFactor(runCy,DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 60;
+*imMatrFactor(runCy,"BU","TH2F",YTIME) = 2;
+imMatrFactor(runCy,"BU","TH2F",YTIME)$((ord(YTIME) > 21)) = 5;
+*imMatrFactor(runCy,DSBS,"TELC",YTIME)$((ord(YTIME) > 25) and INDSE(DSBS)) = 5;
+* DOMSE(DSBS)
+imMatrFactor(runCy,DSBS,"TLGN",YTIME)$(DOMSE(DSBS)) = 0.01;
+imMatrFactor(runCy,DSBS,"THCL",YTIME)$(DOMSE(DSBS)) = 0.01;
+imMatrFactor(runCy,DSBS,"TOGS",YTIME)$(DOMSE(DSBS)) = 0.01;
+imMatrFactor(runCy,DSBS,"TKRS",YTIME)$(DOMSE(DSBS)) = 0.01;
 
-imMatrFactor(runCy,DSBS,"TBMSWAS",YTIME) = 0.01;
 $ontext
 imMatrFactor(runCy,DSBS,"TGDO",YTIME)$((ord(YTIME) > 14) and TRANSE(DSBS)) = 0.5;
 imMatrFactor(runCy,DSBS,"TGSL",YTIME)$((ord(YTIME) > 14) and TRANSE(DSBS)) = 0.5;
@@ -641,6 +653,30 @@ imMatrFactor(runCy,DSBS,"TPHEVGDO",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 0
 imMatrFactor(runCy,DSBS,"TCHEVGSL",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 0.001;
 imMatrFactor(runCy,DSBS,"TCHEVGDO",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 0.001;
 $offtext
+
+imMatrFactor(runCy,DSBS,"TNGSCCS",YTIME)$((ord(YTIME) < 28) and INDSE(DSBS)) = 1;
+imMatrFactor(runCy,DSBS,"THCLCCS",YTIME)$((ord(YTIME) < 28) and INDSE(DSBS)) = 1;
+* Reduce the maturity factor of TELC in other regions except EU-27,GBR,JPN,CAZ
+imMatrFactor("CHA",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 5;
+imMatrFactor("CHA",DSBS,"TNGSCCS",YTIME)$((ord(YTIME) > 26) and INDSE(DSBS)) = 10;
+imMatrFactor("CHA",DSBS,"THCLCCS",YTIME)$((ord(YTIME) > 26) and INDSE(DSBS)) = 10;
+imMatrFactor("CHA",DSBS,"TELC",YTIME)$((ord(YTIME) > 26) and INDSE(DSBS)) = 15;
+* imMatrFactor("CHA",DSBS,"TLGN",YTIME)$(DOMSE(DSBS)) = 0;
+* imMatrFactor("CHA",DSBS,"THCL",YTIME)$(DOMSE(DSBS)) = 1;
+* imMatrFactor("CHA",DSBS,"TOGS",YTIME)$(DOMSE(DSBS)) = 1;
+* imMatrFactor("CHA",DSBS,"TKRS",YTIME)$(DOMSE(DSBS)) = 1;
+
+imMatrFactor("IND",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 5; 
+imMatrFactor("IND",DSBS,"TNGSCCS",YTIME)$((ord(YTIME) > 36) and INDSE(DSBS)) = 10;
+imMatrFactor("IND",DSBS,"THCLCCS",YTIME)$((ord(YTIME) > 36) and INDSE(DSBS)) = 10;
+imMatrFactor("IND",DSBS,"TELC",YTIME)$((ord(YTIME) > 36) and INDSE(DSBS)) = 15;
+imMatrFactor("LAM",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 3; 
+imMatrFactor("MEA",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 3; 
+imMatrFactor("NEU",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 3; 
+imMatrFactor("OAS",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 3; 
+imMatrFactor("REF",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 3; 
+imMatrFactor("SSA",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 3;
+imMatrFactor("USA",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 5; 
 
 $ELSE.calib
 variable imMatrFactor(allCy,DSBS,TECH,YTIME)    "Maturity factor per technology and subsector for all countries (1)";
