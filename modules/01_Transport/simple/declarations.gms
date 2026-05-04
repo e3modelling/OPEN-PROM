@@ -25,6 +25,7 @@ p01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)     "Stored transport tec
 pmLft(allCy,DSBS,TECH,YTIME)                               "Stored technology lifetime for solved years"
 p01RateScrPcTot(allCy,TTECH,YTIME)                         "Stored total passenger car scrapping rate for solved years"
 p01NewRegPcYearly(allCy,YTIME)                             "Stored new registrations of passenger cars for solved years"
+p01NewRegPcTechYearly(allCy,TTECH,YTIME)                   "Stored new registrations of passenger cars by technology for solved years"
 p01NumPcScrap(allCy,YTIME)                                 "Stored number of scrapped passenger cars for solved years"
 p01PremScrp(allCy,TRANSE,TTECH,YTIME)                      "Stored premature scrapping probability for solved years"
 ;

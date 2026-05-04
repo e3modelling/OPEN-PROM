@@ -25,6 +25,10 @@ p01ActivPassTrnsp(runCy,TRANP,YTIME)$(DATAY(YTIME) and not sameas(TRANP,"PC")) =
 *---
 V01NewRegPcYearly.FX(runCy,YTIME)$DATAY(ytime) = i01NewReg(runCy,YTIME);
 p01NewRegPcYearly(runCy,YTIME)$DATAY(YTIME) = i01NewReg(runCy,YTIME);
+p01NewRegPcTechYearly(runCy,TTECH,YTIME)$(DATAY(YTIME) and SECTTECH("PC",TTECH)) =
+  i01NewReg(runCy,YTIME) * i01StockPC(runCy,TTECH,YTIME) /
+  (sum(TTECH2$SECTTECH("PC",TTECH2), i01StockPC(runCy,TTECH2,YTIME)) + 1e-6);
+p01NewRegPcTechYearly(runCy,TTECH,YTIME)$(not SECTTECH("PC",TTECH)) = 0;
 *---
 V01RateScrPc.L(runCy,TTECH,YTIME) = 0.05;
 V01RateScrPc.FX(runCy,TTECH,YTIME)$(not SECTTECH("PC",TTECH)) = 0; 

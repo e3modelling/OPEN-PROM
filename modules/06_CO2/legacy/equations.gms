@@ -42,7 +42,7 @@ Q06CO2CaptureCCS(allCy,SBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECtoEF(SBS,EF
 Q06CaptCummCO2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06CaptCummCO2(allCy,YTIME) 
       =E= 
-    V06CaptCummCO2(allCy,YTIME-1) +
+    p06CaptCummCO2(allCy,YTIME-1) +
     sum((SBS,EFS)$SECtoEF(SBS,EFS),V06CO2CaptureCCS(allCy,SBS,EFS,YTIME)) +
     sum(CDRTECH,V06CapCDR(allCy,CDRTECH,YTIME) * 1e-6);   
 
@@ -64,7 +64,7 @@ Q06CstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     (1-0.75) *
     i06ElastCO2Seq(allCy,"mc_b") *
     exp(
-      (V06CaptCummCO2(allCy,YTIME-1) - V06CapCDR(allCy,"TEW",YTIME-1) * 1e-6) / 
+      (p06CaptCummCO2(allCy,YTIME-1) - p06CapCDR(allCy,"TEW",YTIME-1) * 1e-6) / 
       i06ElastCO2Seq(allCy,"mc_d")
     );           
 
@@ -74,11 +74,11 @@ Q06GrossCapDAC(CDRTECH,YTIME)$(TIME(YTIME))..
             =E=         
     0.5 * 
     (
-      (i06GrossCapDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.97)/log(2))) +
+      (i06GrossCapDAC(CDRTECH) * (sum(allCy$runCyL(allCy),p06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.97)/log(2))) +
       i06GrossCapDACMin(CDRTECH) +
       sqrt(
         sqr(
-          (i06GrossCapDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.97)/log(2))) -
+          (i06GrossCapDAC(CDRTECH) * (sum(allCy$runCyL(allCy),p06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.97)/log(2))) -
           i06GrossCapDACMin(CDRTECH)
         )
       )
@@ -90,11 +90,11 @@ Q06FixOandMDAC(CDRTECH,YTIME)$(TIME(YTIME))..
             =E=         
     0.5 * 
     (
-      (i06FixOandMDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.97)/log(2))) +
+      (i06FixOandMDAC(CDRTECH) * (sum(allCy$runCyL(allCy),p06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.97)/log(2))) +
       i06FixOandMDACMin(CDRTECH) +
       sqrt(
         sqr(
-          (i06FixOandMDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.97)/log(2))) -
+          (i06FixOandMDAC(CDRTECH) * (sum(allCy$runCyL(allCy),p06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.97)/log(2))) -
           i06FixOandMDACMin(CDRTECH)
         )
       )
@@ -107,11 +107,11 @@ Q06VarCostDAC(CDRTECH,YTIME)$(TIME(YTIME))..
             =E=         
     0.5 * 
     (
-      (i06VarCostDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.97)/log(2))) +
+      (i06VarCostDAC(CDRTECH) * (sum(allCy$runCyL(allCy),p06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.97)/log(2))) +
       i06VarCostDACMin(CDRTECH) +
       sqrt(
         sqr(
-          (i06VarCostDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.97)/log(2))) -
+          (i06VarCostDAC(CDRTECH) * (sum(allCy$runCyL(allCy),p06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.97)/log(2))) -
           i06VarCostDACMin(CDRTECH)
         )
       )
@@ -159,7 +159,7 @@ Q06CapFacNewDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q06CapCDR(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
           V06CapCDR(allCy,CDRTECH,YTIME)
             =E=
-          V06CapCDR(allCy,CDRTECH,YTIME-1) * (1 + V06CapFacNewDAC(allCy,CDRTECH,YTIME)) +
+          p06CapCDR(allCy,CDRTECH,YTIME-1) * (1 + V06CapFacNewDAC(allCy,CDRTECH,YTIME)) +
           i06SchedNewCapDAC(allCy,CDRTECH,YTIME);
 
 *' The equation calculates the different fuels consumed by the DAC installed capacity annually and regionally.

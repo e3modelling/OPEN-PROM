@@ -2,6 +2,7 @@
 *' @code
 
 Parameters
+p04CostPowGenAvgLng(allCy,YTIME)                     "Snapshot of VmCostPowGenAvgLng for lagged references"
 p04CostVarTech(allCy,PGALL,YTIME)                    "Snapshot of V04CostVarTech for lagged references"
 p04CostHourProdInvDec(allCy,PGALL,YTIME)             "Snapshot of V04CostHourProdInvDec for lagged references"
 p04CapElecNonCHP(allCy,YTIME)                        "Snapshot of V04CapElecNonCHP for lagged references"

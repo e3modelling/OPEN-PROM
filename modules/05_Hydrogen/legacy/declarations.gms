@@ -1,6 +1,14 @@
 *' @title Hydrogen Declarations
 *' @code
 
+Parameters
+p05ProdH2(allCy,H2TECH,YTIME)                         "Historical hydrogen production by technology"
+p05CostVarProdH2Tech(allCy,H2TECH,YTIME)             "Historical hydrogen variable production cost by technology"
+p05CostProdH2Tech(allCy,H2TECH,YTIME)                "Historical hydrogen production cost by technology"
+p05CostProdCCSNoCCSH2Prod(allCy,H2TECH,YTIME)        "Historical hydrogen CCS/no-CCS blended production cost by technology"
+p05CostAvgProdH2(allCy,YTIME)                        "Historical average hydrogen production cost"
+;
+
 Variables
 V05GapShareH2Tech1(allCy, H2TECH, YTIME)          "Shares of H2 production technologies in new market competition 1"
 V05GapShareH2Tech2(allCy, H2TECH, YTIME)          "Shares of H2 production technologies in new market competition 2"

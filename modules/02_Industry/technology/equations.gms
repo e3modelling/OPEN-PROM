@@ -19,15 +19,27 @@
 Q02DemSubUsefulSubsec(allCy,DSBS,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not CDR(DSBS))$runCy(allCy))..
     V02DemSubUsefulSubsec(allCy,DSBS,YTIME) 
         =E=
-    [
+        (
       p02DemSubUsefulSubsec(allCy,DSBS,YTIME-1) *
       imActv(YTIME,allCy,DSBS) ** imElastA(allCy,DSBS,"a",YTIME) *
-            ((((VmPriceFuelAvgSub(allCy,DSBS,YTIME) + SQRT(SQR(VmPriceFuelAvgSub(allCy,DSBS,YTIME)) + 1e-8))/2) + 1e-6)/((((p08PriceFuelAvgSub(allCy,DSBS,YTIME-1) + SQRT(SQR(p08PriceFuelAvgSub(allCy,DSBS,YTIME-1)) + 1e-8))/2) + 1e-6)) ) ** imElastA(allCy,DSBS,"b1",YTIME) *
-            ((((p08PriceFuelAvgSub(allCy,DSBS,YTIME-1) + SQRT(SQR(p08PriceFuelAvgSub(allCy,DSBS,YTIME-1)) + 1e-8))/2) + 1e-6)/((((p08PriceFuelAvgSub(allCy,DSBS,YTIME-2) + SQRT(SQR(p08PriceFuelAvgSub(allCy,DSBS,YTIME-2)) + 1e-8))/2) + 1e-6)) ) ** imElastA(allCy,DSBS,"b2",YTIME) *
+            (
+                (((VmPriceFuelAvgSub(allCy,DSBS,YTIME) + SQRT(SQR(VmPriceFuelAvgSub(allCy,DSBS,YTIME)) + 1e-8)) / 2) + 1e-6) /
+                (((p08PriceFuelAvgSub(allCy,DSBS,YTIME-1) + SQRT(SQR(p08PriceFuelAvgSub(allCy,DSBS,YTIME-1)) + 1e-8)) / 2) + 1e-6)
+            ) ** imElastA(allCy,DSBS,"b1",YTIME) *
+            (
+                (((p08PriceFuelAvgSub(allCy,DSBS,YTIME-1) + SQRT(SQR(p08PriceFuelAvgSub(allCy,DSBS,YTIME-1)) + 1e-8)) / 2) + 1e-6) /
+                (((p08PriceFuelAvgSub(allCy,DSBS,YTIME-2) + SQRT(SQR(p08PriceFuelAvgSub(allCy,DSBS,YTIME-2)) + 1e-8)) / 2) + 1e-6)
+            ) ** imElastA(allCy,DSBS,"b2",YTIME) *
       prod(KPDL,
-                (((((p08PriceFuelAvgSub(allCy,DSBS,YTIME-ord(KPDL)) + SQRT(SQR(p08PriceFuelAvgSub(allCy,DSBS,YTIME-ord(KPDL))) + 1e-8))/2) + 1e-6)/((((p08PriceFuelAvgSub(allCy,DSBS,YTIME-(ord(KPDL)+1)) + SQRT(SQR(p08PriceFuelAvgSub(allCy,DSBS,YTIME-(ord(KPDL)+1))) + 1e-8))/2) + 1e-6))/(imCGI(allCy,YTIME)**(1/6)))**( imElastA(allCy,DSBS,"c",YTIME)*imFPDL(DSBS,KPDL))
+                (
+                    (
+                        (((p08PriceFuelAvgSub(allCy,DSBS,YTIME-ord(KPDL)) + SQRT(SQR(p08PriceFuelAvgSub(allCy,DSBS,YTIME-ord(KPDL))) + 1e-8)) / 2) + 1e-6) /
+                        (((p08PriceFuelAvgSub(allCy,DSBS,YTIME-(ord(KPDL)+1)) + SQRT(SQR(p08PriceFuelAvgSub(allCy,DSBS,YTIME-(ord(KPDL)+1))) + 1e-8)) / 2) + 1e-6)
+                    ) /
+                    (imCGI(allCy,YTIME) ** (1 / 6))
+                ) ** (imElastA(allCy,DSBS,"c",YTIME) * imFPDL(DSBS,KPDL))
       )
-    ]$imActv(YTIME-1,allCy,DSBS)
+        )$imActv(YTIME-1,allCy,DSBS)
 ;
 *'NEW EQUATION'
 *' This equation computes the remaining equipment capacity of each technology in each subsector in the beginning of the year YTIME based on the available capacity of the previous year

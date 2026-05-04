@@ -17,12 +17,14 @@ V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)
 V02DemUsefulSubsecRemTech(allCy,DSBS,YTIME)
 V02GapUsefulDemSubsec(allCy,DSBS,YTIME)
 $offtext
+p02GapUsefulDemSubsec(runCy,DSBS,YTIME)$(not An(YTIME)) = 0;
 *---
 * Levels in other variables?
 $ontext
 V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME)
 V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)
 $offtext
+p02ShareTechNewEquipUseful(runCy,DSBS,ITECH,YTIME)$(not An(YTIME)) = 0;
 *---
 alias(ITECH,ITECH2);
 V02EquipCapTechSubsec.FX(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and not An(YTIME) and not TRANSE(DSBS) and not CCSTECH(ITECH) and not sameas(ITECH,"TELC")) = sum(EF$ITECHtoEF(ITECH,EF), imFuelConsPerFueSub(runCy,DSBS,EF,YTIME)/sum(ITECH2$(ITECHtoEF(ITECH2,EF) and SECTTECH(DSBS,ITECH2) and not CCSTECH(ITECH2)),1)) / i02Util(runCy,DSBS,ITECH,YTIME);

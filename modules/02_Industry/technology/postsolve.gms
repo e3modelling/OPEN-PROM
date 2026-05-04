@@ -5,9 +5,11 @@
 
 *---
 p02DemSubUsefulSubsec(runCyL,DSBS,YTIME)$TIME(YTIME) = V02DemSubUsefulSubsec.L(runCyL,DSBS,YTIME)$TIME(YTIME);
+p02GapUsefulDemSubsec(runCyL,DSBS,YTIME)$TIME(YTIME) = V02GapUsefulDemSubsec.L(runCyL,DSBS,YTIME)$TIME(YTIME);
 p02EquipCapTechSubsec(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME) = V02EquipCapTechSubsec.L(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME);
 p02VarCostTech(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME) = V02VarCostTech.L(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME);
 p02CostTech(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME) = V02CostTech.L(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME);
+p02ShareTechNewEquipUseful(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME) = V02ShareTechNewEquipUseful.L(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME);
 p02UsefulElecNonSubIndTert(runCyL,INDDOM,YTIME)$TIME(YTIME) = V02UsefulElecNonSubIndTert.L(runCyL,INDDOM,YTIME)$TIME(YTIME);
 
 option clear = V02DemSubUsefulSubsec;
@@ -44,6 +46,9 @@ option clear = Q02PremScrpIndu;
 option clear = Q02RatioRem;
 option clear = Q02ConsFuel;
 *---
+
+V02GapUsefulDemSubsec.L(allCy,DSBS,YTIME)$TIME(YTIME) = p02GapUsefulDemSubsec(allCy,DSBS,YTIME)$TIME(YTIME);
+V02ShareTechNewEquipUseful.L(allCy,DSBS,ITECH,YTIME)$TIME(YTIME) = p02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME)$TIME(YTIME);
 
 $ifthen.calib %Calibration% == MatCalibration
 imMatrFactor.FX(runCyL,DSBS,TECH,YTIME)$TIME(YTIME) = round(imMatrFactor.L(runCyL,DSBS,TECH,YTIME)$TIME(YTIME), 3);

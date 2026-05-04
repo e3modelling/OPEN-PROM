@@ -135,6 +135,7 @@ SUM(PGALL,VmProdElec.L(runCy,PGALL,"%fBaseY%") + 1e-6);
 VmCostPowGenAvgLng.FX(runCy,YTIME)$DATAY(YTIME) = 
 SUM(PGALL,(VmProdElec.L(runCy,PGALL,YTIME) + 1e-6) * V04CostHourProdInvDec.L(runCy,PGALL,YTIME)) / 
 SUM(PGALL,VmProdElec.L(runCy,PGALL,YTIME) + 1e-6);
+p04CostPowGenAvgLng(runCy,YTIME)$DATAY(YTIME) = VmCostPowGenAvgLng.L(runCy,YTIME);
 *---
 V04SharePowPlaNewEq.LO(runCy,PGALL,YTIME) = 0;
 V04SharePowPlaNewEq.UP(runCy,PGALL,YTIME) = 1;

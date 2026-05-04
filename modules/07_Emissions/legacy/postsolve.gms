@@ -3,4 +3,9 @@
 
 * Emissions Module
 
-V07GrossEmissCO2Supply.FX(runCyL,SSBS,YTIME)$TIME(YTIME) = V07GrossEmissCO2Supply.L(runCyL,SSBS,YTIME)$TIME(YTIME);
+p07GrossEmissCO2Supply(runCyL,SSBS,YTIME)$TIME(YTIME) = V07GrossEmissCO2Supply.L(runCyL,SSBS,YTIME)$TIME(YTIME);
+
+option clear = Q07GrossEmissCO2Supply;
+option clear = V07GrossEmissCO2Supply;
+
+V07GrossEmissCO2Supply.L(runCyL,SSBS,YTIME)$TIME(YTIME) = p07GrossEmissCO2Supply(runCyL,SSBS,YTIME)$TIME(YTIME);

@@ -1,6 +1,15 @@
 *' @title Heat module Declarations
 *' @code
 
+Parameters
+p09CapSte(allCy,TSTEAM,YTIME)                    "Historical steam capacity by technology (GW)"
+p09ProdSte(allCy,TSTEAM,YTIME)                   "Historical steam production by technology (Mtoe)"
+p09CostProdSte(allCy,TSTEAM,YTIME)               "Historical total steam production cost (kUS$2015/toe)"
+p09CostVarProdSte(allCy,TSTEAM,YTIME)            "Historical variable steam production cost (kUS$2015/toe)"
+p09ConsFuelSteProd(allCy,STEMODE,EFS,YTIME)      "Historical fuel consumption for steam production (Mtoe)"
+p09CostAvgProdSte(allCy,YTIME)                   "Historical average steam production cost (kUS$2015/toe)"
+;
+
 Equations
 Q09ScrapRate(allCy,TSTEAM,YTIME)
 Q09DemGapSte(allCy,YTIME)

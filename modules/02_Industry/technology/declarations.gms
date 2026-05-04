@@ -11,9 +11,11 @@ i02ScaleEndogScrap(DSBS)                            "Scale parameter for endogen
 i02ShareBlend(allCy,DSBS,ITECH,EF,YTIME)                   "Share of each energy form in a technology"
 i02ShareElcHP(allCy,DSBS,YTIME)                            "Share of final electricity consumption of HeatPumps in substitutable electricity consumption (1)"
 p02DemSubUsefulSubsec(allCy,DSBS,YTIME)                    "Stored useful substitutable energy demand for solved years"
+p02GapUsefulDemSubsec(allCy,DSBS,YTIME)                    "Stored useful energy demand gap for solved years"
 p02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)              "Stored equipment capacity by technology for solved years"
 p02VarCostTech(allCy,DSBS,ITECH,YTIME)                     "Stored variable cost by technology for solved years"
 p02CostTech(allCy,DSBS,ITECH,YTIME)                        "Stored total cost by technology for solved years"
+p02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME)         "Stored technology shares in new useful energy equipment for solved years"
 p02UsefulElecNonSubIndTert(allCy,DSBS,YTIME)               "Stored useful non-substitutable electricity for solved years"
 ;
 

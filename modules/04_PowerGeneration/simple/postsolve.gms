@@ -4,7 +4,7 @@
 * Power Generation Module
 
 *---
-VmCostPowGenAvgLng.FX(runCyL,YTIME)$TIME(YTIME) = VmCostPowGenAvgLng.L(runCyL,YTIME)$TIME(YTIME);
+p04CostPowGenAvgLng(runCyL,YTIME)$TIME(YTIME) = VmCostPowGenAvgLng.L(runCyL,YTIME)$TIME(YTIME);
 p04CostVarTech(runCyL,PGALL,YTIME)$TIME(YTIME) = V04CostVarTech.L(runCyL,PGALL,YTIME)$TIME(YTIME);
 p04CostHourProdInvDec(runCyL,PGALL,YTIME)$TIME(YTIME) = V04CostHourProdInvDec.L(runCyL,PGALL,YTIME)$TIME(YTIME);
 p04CapElecNonCHP(runCyL,YTIME)$TIME(YTIME) = V04CapElecNonCHP.L(runCyL,YTIME)$TIME(YTIME);
@@ -21,6 +21,7 @@ V04CapexRESRate.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = V04CapexRESRate.L(runCyL,PG
 V04CO2CaptRate.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = V04CO2CaptRate.L(runCyL,PGALL,YTIME)$TIME(YTIME);
 
 option clear = VmCapElec;
+option clear = VmCostPowGenAvgLng;
 option clear = V04CapElecNonCHP;
 option clear = V04ShareSatPG;
 option clear = V04ShareMixWndSol;
@@ -28,6 +29,7 @@ option clear = V04CostHourProdInvDec;
 option clear = V04CostVarTech;
 option clear = V04CostCapTech;
 
+VmCostPowGenAvgLng.L(allCy,YTIME)$TIME(YTIME) = p04CostPowGenAvgLng(allCy,YTIME)$TIME(YTIME);
 VmCapElec.L(allCy,PGALL,YTIME)$TIME(YTIME) = 1e-6;
 VmCapElec.L(allCy,PGALL,YTIME)$(TIME(YTIME) and pmCapElec(allCy,PGALL,YTIME) gt 1e-6) = pmCapElec(allCy,PGALL,YTIME);
 V04CapElecNonCHP.L(allCy,YTIME)$TIME(YTIME) = p04CapElecNonCHP(allCy,YTIME);

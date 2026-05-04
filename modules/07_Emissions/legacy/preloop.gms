@@ -32,3 +32,5 @@ SUM(EF,
 );
 *---
 V07EmiActBySrcRegTim.FX(E07SrcMacAbate, allCy, YTIME)$DATAY(YTIME) = i07DataCh4N2OFEmis(allCy,E07SrcMacAbate,YTIME) ;
+
+p07GrossEmissCO2Supply(runCy,SSBS,YTIME)$DATAY(YTIME) = V07GrossEmissCO2Supply.L(runCy,SSBS,YTIME);

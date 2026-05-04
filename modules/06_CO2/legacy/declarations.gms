@@ -1,6 +1,13 @@
 *' @title CO2 SEQUESTRATION COST CURVES Declarations
 *' @code
 
+Parameters
+p06CaptCummCO2(allCy,YTIME)                         "Historical cumulative captured CO2"
+p06CapCDR(allCy,CDRTECH,YTIME)                     "Historical CDR capacity"
+p06LvlCostDAC(allCy,CDRTECH,YTIME)                 "Historical DAC levelized cost"
+p06CapFacNewDAC(allCy,CDRTECH,YTIME)               "Historical DAC new capacity factor"
+;
+
 Equations
 Q06CO2CaptureCCS(allCy,SBS,EF,YTIME)	               "Compute CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
 Q06CaptCummCO2(allCy,YTIME)	                               "Compute cumulative CO2 captured (Mtn of CO2)"

@@ -91,6 +91,15 @@ VmConsFuelSteProd.FX(runCy,STEMODE,EFS,YTIME)$(not STEAMEF(EFS)) = 0;
 VmConsFuelSteProd.FX(runCy,"CHP",STEAMEF,YTIME)$DATAY(YTIME) = -i03InpTotTransfProcess(runCy,"CHP",STEAMEF,YTIME);
 VmConsFuelSteProd.FX(runCy,"DHP",STEAMEF,YTIME)$DATAY(YTIME) = -i03InpTotTransfProcess(runCy,"STEAMP",STEAMEF,YTIME);
 *---
+* Seed snapshot parameters for YTIME-1 references
+p09CapSte(runCy,TSTEAM,YTIME)$DATAY(YTIME) = VmCapSte.L(runCy,TSTEAM,YTIME);
+p09ProdSte(runCy,TSTEAM,YTIME)$DATAY(YTIME) = VmProdSte.L(runCy,TSTEAM,YTIME);
+p09CostProdSte(runCy,TSTEAM,YTIME)$DATAY(YTIME) = V09CostProdSte.L(runCy,TSTEAM,YTIME);
+p09CostVarProdSte(runCy,TSTEAM,YTIME)$DATAY(YTIME) = V09CostVarProdSte.L(runCy,TSTEAM,YTIME);
+p09CostAvgProdSte(runCy,YTIME)$DATAY(YTIME) = VmCostAvgProdSte.L(runCy,YTIME);
+p09ConsFuelSteProd(runCy,"CHP",EFS,YTIME)$DATAY(YTIME) = -i03InpTotTransfProcess(runCy,"CHP",EFS,YTIME);
+p09ConsFuelSteProd(runCy,"DHP",EFS,YTIME)$DATAY(YTIME) = -i03InpTotTransfProcess(runCy,"STEAMP",EFS,YTIME);
+*---
 V09DemGapSte.LO(runCy,YTIME) = 0;
 V09DemGapSte.L(runCy,YTIME) = 1;
 V09DemGapSte.FX(runCy,YTIME)$DATAY(YTIME) = 0;
