@@ -67,12 +67,12 @@ Q04CostCapTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
 *' Compute the variable cost of each power plant technology for every region,
 *' By utilizing the gross cost, fuel prices, CO2 emission factors & capture, and plant efficiency. 
 Q04CostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
-    V04CostVarTech(allCy,PGALL,YTIME) 
+    V04CostVarTech(allCy,PGALL,YTIME)
         =E=
     (
-      i04VarCost(PGALL,YTIME) / 1e3 + 
-      sum(PGEF$PGALLtoEF(PGALL,PGEF), 
-        i04ShareFuels(allCy,PGALL,PGEF) * 
+      i04VarCost(PGALL,YTIME) / 1e3 +
+      sum(PGEF$PGALLtoEF(PGALL,PGEF),
+        i04ShareFuels(allCy,PGALL,PGEF) *
         (
           VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME) +
         V04CO2CaptRate(allCy,PGALL,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME) - 4.17$sameas("BMSWAS", PGEF)) +
@@ -80,9 +80,9 @@ Q04CostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
         ) * smTWhToMtoe / imPlantEffByType(allCy,PGALL,"effELC",YTIME)
       ) +
     SQRT(SQR(
-      i04VarCost(PGALL,YTIME) / 1e3 + 
-      sum(PGEF$PGALLtoEF(PGALL,PGEF), 
-        i04ShareFuels(allCy,PGALL,PGEF) * 
+      i04VarCost(PGALL,YTIME) / 1e3 +
+      sum(PGEF$PGALLtoEF(PGALL,PGEF),
+        i04ShareFuels(allCy,PGALL,PGEF) *
         (
           VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME) +
         V04CO2CaptRate(allCy,PGALL,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME) - 4.17$sameas("BMSWAS", PGEF)) +
@@ -90,7 +90,7 @@ Q04CostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
         ) * smTWhToMtoe / imPlantEffByType(allCy,PGALL,"effELC",YTIME)
       )
     ))
-    ) / 2 + 1e-6;
+    ) / 2;
 
 *' The equation calculates the hourly production cost of a power generation plant used in investment decisions. The cost is determined based on various factors,
 *' including the discount rate, gross capital cost, fixed operation and maintenance cost, availability rate, variable cost, renewable value, and fuel prices.

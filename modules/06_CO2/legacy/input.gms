@@ -4,13 +4,11 @@
 *---
 parameter i06CO2SeqData(CO2SEQELAST)	        "Data for CO2 sequestration (1)"
 /
-POT	9175,
-mc_a	0,
-mc_b	20,
-mc_c	0.02,
-mc_d	5e3,
-mc_s	120,
-mc_m	1.013
+POT	1445,
+sig_a 5,
+sig_b	0.9,
+seq_min 20,
+seq_max 900
 / ;
 
 parameter i06MatFacDAC(CDRTECH)                 "Maturity factor of DAC technology expressing its elasticity in implementation regarding its financial sustainability"
@@ -18,7 +16,7 @@ parameter i06MatFacDAC(CDRTECH)                 "Maturity factor of DAC technolo
 HTDAC	0.60,
 H2DAC   0.9,
 LTDAC	1,
-TEW	    1
+TEW	    0.7
 / ;
 
 parameter i06CapexDAC(CDRTECH)                  "CAPEX of each DAC technology ($/tCO2)"
@@ -87,35 +85,36 @@ TEW	15
 
 parameter i06ElNeedsDAC(CDRTECH)                "Specific electricity needs of DAC technologies (toe/tCO2)"
 /
-HTDAC	0.12658832,
-H2DAC	0.12658832,
-LTDAC	0.0236457,
-TEW	3
+HTDAC	0.0234,
+H2DAC	0.0234,
+LTDAC	0.0315,
+TEW	0.0186
 / ;
 
 parameter i06HeatNeedsDAC(CDRTECH)               "Specific heat needs of DAC technologies (toe/tCO2)"
 /
-HTDAC	1.265883,
-H2DAC	1.265883,
-LTDAC	0,
-TEW	0
+HTDAC	0.234,
+H2DAC	0.234,
+LTDAC	0.127,
+TEW	0.148
 / ;
 
 parameter i06SchedNewCapDAC(allCy,CDRTECH,YTIME)        "Scheduled new DAC capacity" /
-NEU.LTDAC.2027  4e4,    !!Removr – Mongstad pilot / industrial‑scale projects
-NEU.LTDAC.2026  4e4,    !!Orca (Climeworks + Carbfix) + Mammoth (Climeworks + Carbfix)
-NEU.LTDAC.2028  1e5,    !!Removr + Carbfix (Large‑Scale Plant)
-NEU.LTDAC.2024  900,    !!Climeworks – Hinwil pilot, Switzerland
-USA.LTDAC.2023  1e3,    !!Global Thermostat – Commerce City, Colorado
-USA.HTDAC.2024  1e3,    !!Heirloom – Tracy, California
-USA.LTDAC.2025  5e3,    !!Heimdal – Bantam, Oklahoma
-USA.LTDAC.2026  5e5,    !!Stratos (1PointFive / Occidental) — Texas
-USA.HTDAC.2027  5e5,    !!Project Cypress (Climeworks + Heirloom + Battelle) — Louisiana
-USA.LTDAC.2027  5e5,    !!Project Cypress (Climeworks + Heirloom + Battelle) — Louisiana
-USA.LTDAC.2032  1e6,    !!HIF USA eFuels – Matagorda County, Texas
-USA.LTDAC.2034  5e5,    !!Project Bison – Wyoming (CarbonCapture Inc.)
-USA.LTDAC.2035  7e5     !!South Texas DAC Hub
+!!NEU.LTDAC.2027  4e4,    !!Removr – Mongstad pilot / industrial‑scale projects
+!!NEU.LTDAC.2026  4e4,    !!Orca (Climeworks + Carbfix) + Mammoth (Climeworks + Carbfix)
+!!NEU.LTDAC.2028  1e5,    !!Removr + Carbfix (Large‑Scale Plant)
+!!NEU.LTDAC.2024  900,    !!Climeworks – Hinwil pilot, Switzerland
+!!USA.LTDAC.2023  1e3,    !!Global Thermostat – Commerce City, Colorado
+!!USA.HTDAC.2024  1e3,    !!Heirloom – Tracy, California
+!!USA.LTDAC.2025  5e3,    !!Heimdal – Bantam, Oklahoma
+!!USA.LTDAC.2026  5e5,    !!Stratos (1PointFive / Occidental) — Texas
+!!USA.HTDAC.2027  5e5,    !!Project Cypress (Climeworks + Heirloom + Battelle) — Louisiana
+!!USA.LTDAC.2027  5e5,    !!Project Cypress (Climeworks + Heirloom + Battelle) — Louisiana
+!!USA.LTDAC.2032  1e6,    !!HIF USA eFuels – Matagorda County, Texas
+!!USA.LTDAC.2034  5e5,    !!Project Bison – Wyoming (CarbonCapture Inc.)
+!!USA.LTDAC.2035  7e5     !!South Texas DAC Hub
 $ifthen.DACproj %fScenario% == 2
+$$ontext
 CHA.LTDAC.2026  1e6,    !!Possible
 CHA.H2DAC.2030  1e5,    !!Possible
 CHA.TEW.2030  1e6,    !!Possible
@@ -134,7 +133,9 @@ MEA.LTDAC.2031  1e5,    !!Possible
 MEA.TEW.2037  5e5,    !!Possible
 SSA.LTDAC.2032  1e6,    !!Possible
 SSA.TEW.2037  1e5,    !!Possible
-LAM.TEW.2024  5e5/;
+LAM.TEW.2024  5e5
+$$offtext
+/;
 $else.DACproj
 /;
 $endIf.DACproj
