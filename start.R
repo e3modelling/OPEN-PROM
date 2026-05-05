@@ -452,6 +452,29 @@ if (task == 0) {
     stop("[task 7] config.json must define magpie_scenario (row title in projects/<project>/scenarios.csv).")
   }
 
+  # ---- pre-flight: validate magpie installation + project structure --------
+  # Two checks — directory existence and project +
+  # scenarios.csv existence — with explicit error messages.
+
+  # (a) magpie_path itself must exist as a directory
+  if (!dir.exists(magpieRoot)) {
+    stop("[task 7] magpie_path does not exist: ", magpieRoot,
+         ". Check config.json:magpie_path.")
+  }
+
+  # (b) the project subfolder + scenarios.csv inside it must exist
+  projDir <- file.path(magpieRoot, "e3m_projects", magpieProj)
+  scenCsv <- file.path(projDir, "scenarios.csv")
+  if (!dir.exists(projDir)) {
+    stop("[task 7] project folder not found: ", projDir,
+         ". Check config.json:magpie_project (must be a subdirectory of ",
+         "<magpie_path>/e3m_projects/).")
+  }
+  if (!file.exists(scenCsv)) {
+    stop("[task 7] scenarios.csv missing at: ", scenCsv,
+         ". The project folder is incomplete.")
+  }
+
   reuseExisting <- !is.null(existingRun) && nzchar(existingRun)
   if (reuseExisting) {
     if (!dir.exists(existingRun)) {
