@@ -446,10 +446,10 @@ if (task == 0) {
     stop("[task 7] config.json must define magpie_path (absolute path to the magpie/ directory).")
   }
   if (is.null(magpieProj) || !nzchar(magpieProj)) {
-    stop("[task 7] config.json must define magpie_project (subdirectory name under magpie/projects/).")
+    stop("[task 7] config.json must define magpie_project (subdirectory name under magpie/e3m_projects/).")
   }
   if (is.null(sceName) || !nzchar(sceName)) {
-    stop("[task 7] config.json must define magpie_scenario (row title in projects/<project>/scenarios.csv).")
+    stop("[task 7] config.json must define magpie_scenario (row title in e3m_projects/<project>/scenarios.csv).")
   }
 
   # ---- pre-flight: validate magpie installation + project structure --------
