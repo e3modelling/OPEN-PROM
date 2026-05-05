@@ -67,7 +67,7 @@ Q04CostCapTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
 *' Compute the variable cost of each power plant technology for every region,
 *' By utilizing the gross cost, fuel prices, CO2 emission factors & capture, and plant efficiency. 
 Q04CostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
-    V04CostVarTech(allCy,PGALL,YTIME) 
+    V04CostVarTech(allCy,PGALL,YTIME)
         =E=
     (
       i04VarCost(PGALL,YTIME) / 1e3 + 

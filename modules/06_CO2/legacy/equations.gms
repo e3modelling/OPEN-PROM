@@ -46,27 +46,25 @@ Q06CaptCummCO2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     sum((SBS,EFS)$SECtoEF(SBS,EFS),V06CO2CaptureCCS(allCy,SBS,EFS,YTIME)) +
     sum(CDRTECH,V06CapCDR(allCy,CDRTECH,YTIME) * 1e-6);   
 
-*' The equation calculates the cost curve for CO2 sequestration costs in Euro per ton of CO2 sequestered
-*' for a specific scenario and year. The cost curve is determined based on cumulative CO2 captured and
-*' elasticities for the CO2 sequestration cost curve.The equation is formulated to represent a flexible cost curve that
-*' can transition from linear to exponential. The transition is controlled by the weight for the transition from linear to exponential
-*' The cost curve is expressed as a combination of linear and exponential functions, allowing for a realistic.
-*' representation of the relationship between cumulative CO2 captured and sequestration costs. This equation provides a dynamic and
-*' realistic approach to modeling CO2 sequestration costs, considering the cumulative CO2 captured and the associated elasticities
-*' for the cost curve. The result represents the cost of sequestering one ton of CO2 in the specified scenario and year.
+Q06CaptCummCO2Glob(YTIME)$(TIME(YTIME))..
+    V06CaptCummCO2Glob(YTIME) 
+      =E= 
+    sum(allCy$runCy(allCy),V06CaptCummCO2(allCy,YTIME));
+
+*' The equation calculates the CO2 sequestration cost in Euro per ton of CO2 sequestered for a given scenario 
+*' and year. The cost curve is determined based on global cumulative CO2 captured and sequestration cost parameters.
+*' The cost curve transitions smoothly from a minimum to a maximum cost using a hyperbolic tangent function, 
+*' representing a realistic relationship between cumulative CO2 captured and sequestration costs. The transition 
+*' behavior is controlled by shape parameters that define the steepness and midpoint of the cost curve. This 
+*' equation provides a dynamic approach to modeling CO2 sequestration costs, reflecting increasing costs as 
+*' cumulative CO2 captured expands. The result represents the cost of sequestering one ton of CO2 in the 
+*' specified scenario and year.
 Q06CstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCstCO2SeqCsts(allCy,YTIME) 
         =E=
-    !! linear component
-    0.75 * 
-    i06ElastCO2Seq(allCy,"mc_b") +
-    !! exponential component
-    (1-0.75) *
-    i06ElastCO2Seq(allCy,"mc_b") *
-    exp(
-      (V06CaptCummCO2(allCy,YTIME-1) - V06CapCDR(allCy,"TEW",YTIME-1) * 1e-6) / 
-      i06ElastCO2Seq(allCy,"mc_d")
-    );           
+   i06CO2SeqData("seq_min") + 
+   (i06CO2SeqData("seq_max") - i06CO2SeqData("seq_min")) / 2 *
+   (1+tanh(i06CO2SeqData("sig_a") / (i06CO2SeqData("sig_b") * i06CO2SeqData("seq_max")) * (V06CaptCummCO2Glob(YTIME) * 1e-3 - i06CO2SeqData("sig_b") * i06CO2SeqData("seq_max"))));           
 
 *' The equation calculates the CAPEX of each DAC technology, as it's affected by a learning curve ($/tCO2).
 Q06GrossCapDAC(CDRTECH,YTIME)$(TIME(YTIME))..
@@ -74,11 +72,11 @@ Q06GrossCapDAC(CDRTECH,YTIME)$(TIME(YTIME))..
             =E=         
     0.5 * 
     (
-      (i06GrossCapDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.97)/log(2))) +
+      (i06GrossCapDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.75)/log(2))) +
       i06GrossCapDACMin(CDRTECH) +
       sqrt(
         sqr(
-          (i06GrossCapDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.97)/log(2))) -
+          (i06GrossCapDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.75)/log(2))) -
           i06GrossCapDACMin(CDRTECH)
         )
       )
@@ -90,11 +88,11 @@ Q06FixOandMDAC(CDRTECH,YTIME)$(TIME(YTIME))..
             =E=         
     0.5 * 
     (
-      (i06FixOandMDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.97)/log(2))) +
+      (i06FixOandMDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.75)/log(2))) +
       i06FixOandMDACMin(CDRTECH) +
       sqrt(
         sqr(
-          (i06FixOandMDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.97)/log(2))) -
+          (i06FixOandMDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.75)/log(2))) -
           i06FixOandMDACMin(CDRTECH)
         )
       )
@@ -107,11 +105,11 @@ Q06VarCostDAC(CDRTECH,YTIME)$(TIME(YTIME))..
             =E=         
     0.5 * 
     (
-      (i06VarCostDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.97)/log(2))) +
+      (i06VarCostDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.75)/log(2))) +
       i06VarCostDACMin(CDRTECH) +
       sqrt(
         sqr(
-          (i06VarCostDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.97)/log(2))) -
+          (i06VarCostDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.75)/log(2))) -
           i06VarCostDACMin(CDRTECH)
         )
       )
@@ -150,8 +148,10 @@ Q06ProfRateDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q06CapFacNewDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
   V06CapFacNewDAC(allCy,CDRTECH,YTIME)
       =E=
-  S06CapFacMaxNewDAC / 2
-  * (tanh(2 * (V06ProfRateDAC(allCy,CDRTECH,YTIME) - 1.2)) + 1)
+  S06CapFacMinNewDAC +
+  S06CapFacMaxNewDAC
+  * (tanh(0.7 * (V06ProfRateDAC(allCy,CDRTECH,YTIME) - 3)) + 1) / 2
+  * (tanh(0.3 * (200 * V07EmissionsNetPart(allCy,YTIME) - 1.5)) + 0.5) / 2
   * i06MatFacDAC(CDRTECH);
 
 *' The equation calculates the DAC installed capacity annually and regionally,
