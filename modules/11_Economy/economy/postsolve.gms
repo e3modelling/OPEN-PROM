@@ -12,7 +12,6 @@ p11SubsiDemITech(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME) = VmSubsiDemITech.L(runCyL
 p11SubsiDemTech(runCyL,DSBS,TECH,YTIME)$TIME(YTIME) = VmSubsiDemTech.L(runCyL,DSBS,TECH,YTIME)$TIME(YTIME);
 p11SubsiSupTech(runCyL,STECH,YTIME)$TIME(YTIME) = VmSubsiSupTech.L(runCyL,STECH,YTIME)$TIME(YTIME);
 p11SubsiCapCostTech(runCyL,DSBS,TECH,YTIME)$TIME(YTIME) = VmSubsiCapCostTech.L(runCyL,DSBS,TECH,YTIME)$TIME(YTIME);
-p11SubsiCapCostSupply(runCyL,SSBS,STECH,YTIME)$TIME(YTIME) = VmSubsiCapCostSupply.L(runCyL,SSBS,STECH,YTIME)$TIME(YTIME);
 
 *' Clear variables and equations for the next time step
 option clear = V11SubsiTot;
