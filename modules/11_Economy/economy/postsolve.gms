@@ -29,5 +29,4 @@ option clear = Q11SubsiDemITech;
 option clear = Q11SubsiDemTech;
 option clear = Q11SubsiSupTech;
 option clear = Q11SubsiCapCostTech;
-option clear = Q11SubsiCapCostSupply;
 option clear = Q11NetSubsiTax;
