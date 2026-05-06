@@ -1,6 +1,17 @@
 *' @title Economy module Declarations
 *' @code
 
+Parameters
+p11NetSubsiTax(allCy,YTIME)                      "Historical net subsidy-tax for YTIME-1 reference (Millions US$2015)"
+p11SubsiTot(allCy,YTIME)                         "Historical total subsidies from carbon-tax revenues"
+p11SubsiDemTechAvail(allCy,DSBS,TECH,YTIME)      "Historical available demand-side subsidy budget"
+p11SubsiDemITech(allCy,DSBS,ITECH,YTIME)         "Historical industry-technology subsidy rates"
+p11SubsiDemTech(allCy,DSBS,TECH,YTIME)           "Historical demand-technology subsidy rates"
+p11SubsiSupTech(allCy,STECH,YTIME)               "Historical supply-technology subsidy budget"
+p11SubsiCapCostTech(allCy,DSBS,TECH,YTIME)       "Historical subsidy component of demand technology CAPEX"
+p11SubsiCapCostSupply(allCy,SSBS,STECH,YTIME)    "Historical subsidy component of supply technology CAPEX"
+;
+
 Equations
 Q11SubsiTot(allCy,YTIME)                                 "Computes the total annual state revenues from carbon taxes per region (Millions US$2015)"
 Q11SubsiDemTechAvail(allCy,DSBS,TECH,YTIME)              "Computes the state grants purposed to the support of each demand technology (Millions US$2015)"

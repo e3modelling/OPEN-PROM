@@ -7,6 +7,20 @@ p05CostVarProdH2Tech(allCy,H2TECH,YTIME)             "Historical hydrogen variab
 p05CostProdH2Tech(allCy,H2TECH,YTIME)                "Historical hydrogen production cost by technology"
 p05CostProdCCSNoCCSH2Prod(allCy,H2TECH,YTIME)        "Historical hydrogen CCS/no-CCS blended production cost by technology"
 p05CostAvgProdH2(allCy,YTIME)                        "Historical average hydrogen production cost"
+p05GapShareH2Tech1(allCy,H2TECH,YTIME)               "Historical hydrogen gap shares level 1"
+p05GapShareH2Tech2(allCy,H2TECH,YTIME)               "Historical hydrogen gap shares level 2"
+p05CapScrapH2ProdTech(allCy,H2TECH,YTIME)            "Historical hydrogen production capacity scrapping"
+p05PremRepH2Prod(allCy,H2TECH,YTIME)                 "Historical premature hydrogen technology replacement"
+p05ScrapLftH2Prod(allCy,H2TECH,YTIME)                "Historical lifetime hydrogen technology scrapping"
+p05DemGapH2(allCy,YTIME)                             "Historical hydrogen demand gap"
+p05ShareCCSH2Prod(allCy,H2TECH,YTIME)                "Historical CCS hydrogen production shares"
+p05ShareNoCCSH2Prod(allCy,H2TECH,YTIME)              "Historical no-CCS hydrogen production shares"
+p05AcceptCCSH2Tech(allCy,YTIME)                      "Historical CCS acceptance in hydrogen technologies"
+p05CaptRateH2(allCy,H2TECH,YTIME)                    "Historical hydrogen CO2 capture rates"
+p05DemTotH2(allCy,YTIME)                             "Historical total hydrogen demand"
+p05DemSecH2(allCy,SBS,YTIME)                         "Historical hydrogen demand by sector"
+p05ConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)         "Historical fuel use by hydrogen technology"
+p05ConsFuelH2Prod(allCy,EF,YTIME)                    "Historical total fuel use for hydrogen production"
 ;
 
 Variables

@@ -8,6 +8,12 @@ p07UnitConvFactor(E07SrcMacAbate)                      "Multiplier to convert ca
 p07GWP(E07SrcMacAbate)                                 "Global Warming Potentials, AR4 100yr (CO2=1, CH4=25, N2O=298, etc), Data from Hamsen et al 2019"
 p07CostCorrection(E07SrcMacAbate)                      "Factor to convert (Qty * Cost) to Million 2015$"
 p07GrossEmissCO2Supply(allCy,SSBS,YTIME)               "Historical gross emissions of supply subsectors"
+p07RedAbsBySrcRegTim(E07SrcMacAbate,allCy,YTIME)       "Historical cumulative abatement fraction"
+p07EmiActBySrcRegTim(E07SrcMacAbate,allCy,YTIME)       "Historical actual emissions by source"
+p07CostAbateBySrcRegTim(E07SrcMacAbate,allCy,YTIME)    "Historical abatement cost by source"
+p07GrossEmissCO2Demand(allCy,DSBS,YTIME)               "Historical gross emissions of demand subsectors"
+p07EmissionsNet(allCy,YTIME)                           "Snapshot of net emissions from previous timestep"
+p07EmissionsNetPart(allCy,YTIME)                       "Snapshot of emissions share from previous timestep"
 ;
 
 Equations

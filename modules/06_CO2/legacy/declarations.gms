@@ -6,6 +6,15 @@ p06CaptCummCO2(allCy,YTIME)                         "Historical cumulative captu
 p06CapCDR(allCy,CDRTECH,YTIME)                     "Historical CDR capacity"
 p06LvlCostDAC(allCy,CDRTECH,YTIME)                 "Historical DAC levelized cost"
 p06CapFacNewDAC(allCy,CDRTECH,YTIME)               "Historical DAC new capacity factor"
+p06CO2CaptureCCS(allCy,SBS,EF,YTIME)               "Historical CO2 captured by CCS"
+p06CaptCummCO2Glob(YTIME)                          "Historical global cumulative captured CO2"
+p06GrossCapDAC(CDRTECH,YTIME)                      "Historical DAC CAPEX with learning"
+p06FixOandMDAC(CDRTECH,YTIME)                      "Historical DAC fixed O and M costs with learning"
+p06VarCostDAC(CDRTECH,YTIME)                       "Historical DAC variable costs with learning"
+p06ProfRateDAC(allCy,CDRTECH,YTIME)                "Historical DAC profitability rate"
+p06CstCO2SeqCsts(allCy,YTIME)                      "Historical CO2 sequestration cost curve"
+p06ConsFuelTechCDRProd(allCy,CDRTECH,EF,YTIME)     "Historical fuel demand by CDR technology"
+p06ConsFuelCDRProd(allCy,EF,YTIME)                 "Historical total fuel demand in CDR"
 ;
 
 Equations

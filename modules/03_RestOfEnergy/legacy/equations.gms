@@ -123,15 +123,27 @@ Q03Transfers(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     (
       p03Transfers(allCy,EFS,YTIME-1) *
       (
-        (VmConsFinEneCountry(allCy,EFS,YTIME) + 1e-6) /
-        (p03ConsFinEneCountry(allCy,EFS,YTIME-1) + 1e-6)
+        (
+          (VmConsFinEneCountry(allCy,EFS,YTIME) + 1e-6) /
+          (p03ConsFinEneCountry(allCy,EFS,YTIME-1) + 1e-6)
+          + SQRT(SQR(
+            (VmConsFinEneCountry(allCy,EFS,YTIME) + 1e-6) /
+            (p03ConsFinEneCountry(allCy,EFS,YTIME-1) + 1e-6)
+          ) + 1e-8)
+        ) / 2 + 1e-6
       ) ** 0.3
     )$(not sameas(EFS,"CRO")) +
     (
       p03Transfers(allCy,"CRO",YTIME-1) *
       (
-        (SUM(EFS2$EFTOEFA(EFS2,"LQD"),VmConsFinEneCountry(allCy,EFS2,YTIME)) + 1e-6) /
-        (SUM(EFS2$EFTOEFA(EFS2,"LQD"),p03ConsFinEneCountry(allCy,EFS2,YTIME-1)) + 1e-6)
+        (
+          (SUM(EFS2$EFTOEFA(EFS2,"LQD"),VmConsFinEneCountry(allCy,EFS2,YTIME)) + 1e-6) /
+          (SUM(EFS2$EFTOEFA(EFS2,"LQD"),p03ConsFinEneCountry(allCy,EFS2,YTIME-1)) + 1e-6)
+          + SQRT(SQR(
+            (SUM(EFS2$EFTOEFA(EFS2,"LQD"),VmConsFinEneCountry(allCy,EFS2,YTIME)) + 1e-6) /
+            (SUM(EFS2$EFTOEFA(EFS2,"LQD"),p03ConsFinEneCountry(allCy,EFS2,YTIME-1)) + 1e-6)
+          ) + 1e-8)
+        ) / 2 + 1e-6
       ) ** 0.3
     )$sameas(EFS,"CRO");         
 

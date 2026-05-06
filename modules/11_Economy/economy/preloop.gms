@@ -13,6 +13,7 @@ VmSubsiDemITech.FX(runCy,DSBS,ITECH,YTIME)$(DATAY(YTIME) or TFIRST(YTIME) or not
 VmSubsiCapCostTech.FX(runCy,DSBS,TECH,YTIME)$(not SECTTECH(DSBS,TECH)) = 0;
 *---
 VmNetSubsiTax.FX(runCy,YTIME)$(DATAY(YTIME)) = 0;
+p11NetSubsiTax(runCy,YTIME)$DATAY(YTIME) = 0;
 *---
 VmSubsiDemTech.LO(runCy,DSBS,TECH,YTIME) = 0;
 VmSubsiDemTech.L(runCy,DSBS,TECH,YTIME)$(SECTTECH(DSBS,TECH)) = 0;

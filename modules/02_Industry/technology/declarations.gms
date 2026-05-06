@@ -10,13 +10,23 @@ imCO2CaptRateIndustry(allCy,ITECH,YTIME)	               "Industry CO2 capture ra
 i02ScaleEndogScrap(DSBS)                            "Scale parameter for endogenous scrapping applied to the sum of full costs (1)"
 i02ShareBlend(allCy,DSBS,ITECH,EF,YTIME)                   "Share of each energy form in a technology"
 i02ShareElcHP(allCy,DSBS,YTIME)                            "Share of final electricity consumption of HeatPumps in substitutable electricity consumption (1)"
+
 p02DemSubUsefulSubsec(allCy,DSBS,YTIME)                    "Stored useful substitutable energy demand for solved years"
 p02GapUsefulDemSubsec(allCy,DSBS,YTIME)                    "Stored useful energy demand gap for solved years"
+p02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)           "Stored remaining equipment capacity by technology for solved years"
+p02DemUsefulSubsecRemTech(allCy,DSBS,YTIME)                "Stored useful demand covered by remaining equipment for solved years"
 p02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)              "Stored equipment capacity by technology for solved years"
+p02CapCostTech(allCy,DSBS,ITECH,YTIME)                     "Stored capital cost by technology for solved years"
 p02VarCostTech(allCy,DSBS,ITECH,YTIME)                     "Stored variable cost by technology for solved years"
 p02CostTech(allCy,DSBS,ITECH,YTIME)                        "Stored total cost by technology for solved years"
 p02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME)         "Stored technology shares in new useful energy equipment for solved years"
 p02UsefulElecNonSubIndTert(allCy,DSBS,YTIME)               "Stored useful non-substitutable electricity for solved years"
+p02FinalElecNonSubIndTert(allCy,DSBS,YTIME)                "Stored final non-substitutable electricity for solved years"
+p02IndxElecIndPrices(allCy,TCHP,YTIME)                     "Stored electricity index for solved years"
+p02IndAvrEffFinalUseful(allCy,DSBS,YTIME)                  "Stored average final/useful efficiency for solved years"
+p02PremScrpIndu(allCy,DSBS,ITECH,YTIME)                    "Stored premature scrapping by technology for solved years"
+p02RatioRem(allCy,DSBS,ITECH,YTIME)                        "Stored remaining-capacity ratio by technology for solved years"
+p02ConsFuel(allCy,DSBS,EF,YTIME)                           "Stored fuel consumption by subsector and fuel for solved years"
 ;
 
 Equations

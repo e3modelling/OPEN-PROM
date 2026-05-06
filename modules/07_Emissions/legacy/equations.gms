@@ -117,21 +117,23 @@ Q07EmiActBySrcRegTim(E07SrcMacAbate, allCy, YTIME)$(TIME(YTIME)$(runCy(allCy))).
 *' The equation calculates the net CO2 emissions in million tons of CO2 for a given country and year.
 *' Net emissions are determined by summing gross CO2 emissions from both supply-side and demand-side 
 *' sectors, then subtracting CO2 captured through CCS technologies in energy conversion plants and CO2 
-*' captured through dedicated CDR technologies.
+*' captured through dedicated CDR technologies. A smooth approximation ensures non-negativity and numerical stability.
 Q07EmissionsNet(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V07EmissionsNet(allCy,YTIME)
     =E=
-    (sum(SSBS, V07GrossEmissCO2Supply(allCy,SSBS,YTIME))
-    + sum(DSBS, V07GrossEmissCO2Demand(allCy,DSBS,YTIME))
-    - sum((SBS,EFS)$SECtoEF(SBS,EFS), V06CO2CaptureCCS(allCy,SBS,EFS,YTIME))
-    - sum(CDRTECH, V06CapCDR(allCy,CDRTECH,YTIME)) * 1e-6)
-    +
-    sqrt(
-        sqr(-(sum(SSBS, V07GrossEmissCO2Supply(allCy,SSBS,YTIME))
+    0.5 * (
+      (sum(SSBS, V07GrossEmissCO2Supply(allCy,SSBS,YTIME))
+      + sum(DSBS, V07GrossEmissCO2Demand(allCy,DSBS,YTIME))
+      - sum((SBS,EFS)$SECtoEF(SBS,EFS), V06CO2CaptureCCS(allCy,SBS,EFS,YTIME))
+      - sum(CDRTECH, V06CapCDR(allCy,CDRTECH,YTIME)) * 1e-6)
+      +
+      sqrt(
+        sqr(sum(SSBS, V07GrossEmissCO2Supply(allCy,SSBS,YTIME))
         + sum(DSBS, V07GrossEmissCO2Demand(allCy,DSBS,YTIME))
         - sum((SBS,EFS)$SECtoEF(SBS,EFS), V06CO2CaptureCCS(allCy,SBS,EFS,YTIME))
-        - sum(CDRTECH, V06CapCDR(allCy,CDRTECH,YTIME)) * 1e-6))
-    ) + 1e-6
+        - sum(CDRTECH, V06CapCDR(allCy,CDRTECH,YTIME)) * 1e-6) + 1e-12
+      )
+    )
     ;
 
 *' The equation calculates the net emissions share for a given country and year, representing the country's 
@@ -142,8 +144,6 @@ Q07EmissionsNet(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q07EmissionsNetPart(allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V07EmissionsNetPart(allCy,YTIME)
     =E=
-    (V07EmissionsNet(allCy,YTIME-1) /
-    (sum(runCy2, V07EmissionsNet(runCy2,YTIME-1))))
-!!    * 1 / 2 * ( 1 + tanh (10 * sum(runCy2, V07EmissionsNet(runCy2,YTIME-1))))
-    + 1e-6
+    p07EmissionsNet(allCy,YTIME-1) /
+    (sum(runCy2, p07EmissionsNet(runCy2,YTIME-1)) + 1e-6)
     ;

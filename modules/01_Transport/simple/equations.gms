@@ -46,8 +46,8 @@ Q01ActivGoodsTransp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANG(TRANSE) $runCy(allCy
           ]**(imElastA(allCy,TRANSE,"c3",YTIME)*imFPDL(TRANSE,KPDL))
         ) *
         (
-          (V01ActivGoodsTransp(allCy,"GU",YTIME) + 1e-6) / 
-          (p01ActivGoodsTransp(allCy,"GU",YTIME-1) + 1e-6)
+          (V01ActivGoodsTransp(allCy,"GU",YTIME) + 1e6) /
+          (p01ActivGoodsTransp(allCy,"GU",YTIME-1) + 1e6)
         )**imElastA(allCy,TRANSE,"c4",YTIME)
       )$(not sameas(TRANSE,"GU"));        !!other freight transport
 
