@@ -43,7 +43,7 @@ i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$(DATAY(YTIME) or not SECTTECH(DSBS
 i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and not DOMSE(DSBS)) = 1;
 i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$(sameas("AG",DSBS) and not EU28(runCy)) = 1;
 
-i02CalibUsefulEnergy.LO(runCy,DSBS,YTIME) = -0.8;  
+i02CalibUsefulEnergy.LO(runCy,DSBS,YTIME) = -0.5;  
 i02CalibUsefulEnergy.UP(runCy,DSBS,YTIME) = 2;  
 i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$DATAY(YTIME) = 0;
 i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$(not DOMSE(DSBS)) = 0;

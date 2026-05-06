@@ -90,7 +90,7 @@ Q04CostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
         ) * smTWhToMtoe / imPlantEffByType(allCy,PGALL,"effELC",YTIME)
       )
     ))
-    ) / 2 + 1e-6;
+    ) / 2;
 
 *' The equation calculates the hourly production cost of a power generation plant used in investment decisions. The cost is determined based on various factors,
 *' including the discount rate, gross capital cost, fixed operation and maintenance cost, availability rate, variable cost, renewable value, and fuel prices.
@@ -160,7 +160,7 @@ Q04GapGenCapPowerDiff(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         )
       ))
       ) 
-    )/2 + 1e-6;
+    )/2;
 
 *' Calculates the share of all the unflexible RES penetration into the mixture, and specifically how much above a given threshold it is.
 Q04ShareMixWndSol(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..

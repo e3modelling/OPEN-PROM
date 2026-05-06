@@ -85,6 +85,8 @@ V04CapElecNonCHP.FX(runCy,YTIME)$DATAY(YTIME) =
 ) / smGwToTwhPerYear(YTIME);
 *---
 V04NewCapElec.LO(runCy,PGALL,YTIME) = 0;
+V04NewCapElec.L(runCy,PGALL,YTIME) = 1;
+V04NewCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = 0;
 *---
 V04CapElecNominal.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = imInstCapPastNonCHP(runCy,PGALL,YTIME) / i04AvailRate(runCy,PGALL,YTIME);
 *---
