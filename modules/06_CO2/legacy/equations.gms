@@ -136,7 +136,7 @@ Q06ProfRateDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06ProfRateDAC(allCy,CDRTECH,YTIME)
         =E=
     sum(NAP$NAPtoALLSBS(NAP,"DAC"),VmCarVal(allCy,NAP,YTIME)) /
-  (V06LvlCostDAC(allCy,CDRTECH,YTIME - 1) + 1e-6)
+  (p06LvlCostDAC(allCy,CDRTECH,YTIME-1) + 1e-6)
 ;
 
 * The equation determines the annual growth rate of new DAC capacity by region and technology. 

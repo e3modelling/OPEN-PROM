@@ -27,8 +27,8 @@ $ENDIF
     (1 + (p04CostPowGenAvgLng(allCy,YTIME-1) / p04CostPowGenAvgLng(allCy,YTIME-2) - 1)$sameas("ELC",EFS)) *
     (1 + (p05CostAvgProdH2(allCy,YTIME-1) / p05CostAvgProdH2(allCy,YTIME-2) - 1)$sameas("H2F",EFS)) * 
     (1 + (p09CostAvgProdSte(allCy,YTIME-1) / p09CostAvgProdSte(allCy,YTIME-2) - 1)$sameas("STE",EFS)) *
-    (1 + ((((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) + SQRT(SQR(VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME)) + 1e-8))/2 + 1e-6) / (((p08PriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1) + SQRT(SQR(p08PriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) + 1e-8))/2) + 1e-6)) ** 0.4 - 1)$sameas("NGS",EFS)) *
-    (1 + ((((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) + SQRT(SQR(VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME)) + 1e-8))/2 + 1e-6) / (((p08PriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1) + SQRT(SQR(p08PriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) + 1e-8))/2) + 1e-6)) ** 0.8 - 1)$SECtoEFPROD("LQD",EFS)) +
+    (1 + ((((imFuelPrice(allCy,SBS,"CRO",YTIME) + SQRT(SQR(imFuelPrice(allCy,SBS,"CRO",YTIME)) + 1e-8))/2 + 1e-6) / (((imFuelPrice(allCy,SBS,"CRO",YTIME-1) + SQRT(SQR(imFuelPrice(allCy,SBS,"CRO",YTIME-1)) + 1e-8))/2) + 1e-6)) ** 0.4 - 1)$sameas("NGS",EFS)) *
+    (1 + ((((imFuelPrice(allCy,SBS,"CRO",YTIME) + SQRT(SQR(imFuelPrice(allCy,SBS,"CRO",YTIME)) + 1e-8))/2 + 1e-6) / (((imFuelPrice(allCy,SBS,"CRO",YTIME-1) + SQRT(SQR(imFuelPrice(allCy,SBS,"CRO",YTIME-1)) + 1e-8))/2) + 1e-6)) ** 0.8 - 1)$SECtoEFPROD("LQD",EFS)) +
     (
       VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,SBS,EFS,YTIME) * 1e-3 - 
       VmCarVal(allCy,"TRADE",YTIME-1) * imCo2EmiFac(allCy,SBS,EFS,YTIME-1) * 1e-3
