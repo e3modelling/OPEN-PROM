@@ -5,10 +5,17 @@
 
 *---
 * Store snapshot values
+p09ScrapRate(runCyL,TSTEAM,YTIME)$TIME(YTIME) = V09ScrapRate.L(runCyL,TSTEAM,YTIME)$TIME(YTIME);
+p09DemGapSte(runCyL,YTIME)$TIME(YTIME) = V09DemGapSte.L(runCyL,YTIME)$TIME(YTIME);
 p09CapSte(runCyL,TSTEAM,YTIME)$TIME(YTIME) = VmCapSte.L(runCyL,TSTEAM,YTIME)$TIME(YTIME);
 p09ProdSte(runCyL,TSTEAM,YTIME)$TIME(YTIME) = VmProdSte.L(runCyL,TSTEAM,YTIME)$TIME(YTIME);
 p09CostProdSte(runCyL,TSTEAM,YTIME)$TIME(YTIME) = V09CostProdSte.L(runCyL,TSTEAM,YTIME)$TIME(YTIME);
 p09CostVarProdSte(runCyL,TSTEAM,YTIME)$TIME(YTIME) = V09CostVarProdSte.L(runCyL,TSTEAM,YTIME)$TIME(YTIME);
+p09CostCapProdSte(runCyL,TSTEAM,YTIME)$TIME(YTIME) = V09CostCapProdSte.L(runCyL,TSTEAM,YTIME)$TIME(YTIME);
+p09GapShareSte(runCyL,TSTEAM,YTIME)$TIME(YTIME) = V09GapShareSte.L(runCyL,TSTEAM,YTIME)$TIME(YTIME);
+p09CaptRateSte(runCyL,TSTEAM,YTIME)$TIME(YTIME) = V09CaptRateSte.L(runCyL,TSTEAM,YTIME)$TIME(YTIME);
+p09ScrapRatePremature(runCyL,TSTEAM,YTIME)$TIME(YTIME) = V09ScrapRatePremature.L(runCyL,TSTEAM,YTIME)$TIME(YTIME);
+p09DemTotSte(runCyL,YTIME)$TIME(YTIME) = VmDemTotSte.L(runCyL,YTIME)$TIME(YTIME);
 p09ConsFuelSteProd(runCyL,STEMODE,EFS,YTIME)$TIME(YTIME) = VmConsFuelSteProd.L(runCyL,STEMODE,EFS,YTIME)$TIME(YTIME);
 p09CostAvgProdSte(runCyL,YTIME)$TIME(YTIME) = VmCostAvgProdSte.L(runCyL,YTIME)$TIME(YTIME);
 
@@ -28,17 +35,16 @@ option clear = Q09CostAvgProdSte;
 option clear = Q09ConsFuelSteProd;
 
 *' Clear variables for the next time step
+option clear = V09ScrapRate;
+option clear = V09DemGapSte;
 option clear = VmCapSte;
 option clear = VmProdSte;
 option clear = V09CostProdSte;
 option clear = V09CostVarProdSte;
+option clear = V09CostCapProdSte;
+option clear = V09GapShareSte;
+option clear = V09CaptRateSte;
+option clear = V09ScrapRatePremature;
+option clear = VmDemTotSte;
 option clear = VmConsFuelSteProd;
 option clear = VmCostAvgProdSte;
-
-*' Reseed from snapshot parameters
-VmCapSte.L(runCyL,TSTEAM,YTIME)$TIME(YTIME) = p09CapSte(runCyL,TSTEAM,YTIME)$TIME(YTIME);
-VmProdSte.L(runCyL,TSTEAM,YTIME)$TIME(YTIME) = p09ProdSte(runCyL,TSTEAM,YTIME)$TIME(YTIME);
-V09CostProdSte.L(runCyL,TSTEAM,YTIME)$TIME(YTIME) = p09CostProdSte(runCyL,TSTEAM,YTIME)$TIME(YTIME);
-V09CostVarProdSte.L(runCyL,TSTEAM,YTIME)$TIME(YTIME) = p09CostVarProdSte(runCyL,TSTEAM,YTIME)$TIME(YTIME);
-VmConsFuelSteProd.L(runCyL,STEMODE,EFS,YTIME)$TIME(YTIME) = p09ConsFuelSteProd(runCyL,STEMODE,EFS,YTIME)$TIME(YTIME);
-VmCostAvgProdSte.L(runCyL,YTIME)$TIME(YTIME) = p09CostAvgProdSte(runCyL,YTIME)$TIME(YTIME);

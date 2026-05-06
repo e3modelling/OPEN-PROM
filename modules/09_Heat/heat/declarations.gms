@@ -2,10 +2,17 @@
 *' @code
 
 Parameters
+p09ScrapRate(allCy,TSTEAM,YTIME)                 "Historical scrapping rate by steam technology"
+p09DemGapSte(allCy,YTIME)                        "Historical steam demand gap"
 p09CapSte(allCy,TSTEAM,YTIME)                    "Historical steam capacity by technology (GW)"
 p09ProdSte(allCy,TSTEAM,YTIME)                   "Historical steam production by technology (Mtoe)"
 p09CostProdSte(allCy,TSTEAM,YTIME)               "Historical total steam production cost (kUS$2015/toe)"
 p09CostVarProdSte(allCy,TSTEAM,YTIME)            "Historical variable steam production cost (kUS$2015/toe)"
+p09CostCapProdSte(allCy,TSTEAM,YTIME)            "Historical capex and O&M steam production cost (kUS$2015/toe)"
+p09GapShareSte(allCy,TSTEAM,YTIME)               "Historical steam technology gap shares"
+p09CaptRateSte(allCy,TSTEAM,YTIME)               "Historical carbon capture rates in steam production"
+p09ScrapRatePremature(allCy,TSTEAM,YTIME)        "Historical premature scrapping rate by steam technology"
+p09DemTotSte(allCy,YTIME)                        "Historical total steam demand"
 p09ConsFuelSteProd(allCy,STEMODE,EFS,YTIME)      "Historical fuel consumption for steam production (Mtoe)"
 p09CostAvgProdSte(allCy,YTIME)                   "Historical average steam production cost (kUS$2015/toe)"
 ;
