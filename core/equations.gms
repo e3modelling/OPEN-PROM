@@ -13,11 +13,13 @@
 $IFTHEN.calib %Calibration% == MatCalibration
 qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy)).. 
   vDummyObj 
-      =e=
+    =e=
   vDummyObjPGALL(allCy,YTIME) + vDummyObjTRANSE(allCy,YTIME) + vDummyObjDOMSE1(allCy,YTIME) + vDummyObjDOMSE2(allCy,YTIME)
   ;
 
 qDummyObjPGALL(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
+  vDummyObjPGALL(allCy,YTIME)
+    =e=
   SUM(PGALL,
     SQR(
       V04SharePowPlaNewEq(allCy,PGALL,YTIME) - 
@@ -27,6 +29,8 @@ qDummyObjPGALL(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
   ;
 
 qDummyObjTRANSE(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..  
+  vDummyObjTRANSE(allCy,YTIME)
+    =e=
   SUM((TRANSE,TTECH)$(SECTTECH(TRANSE,TTECH) and (sameas("PC",TRANSE) or sameas("PB",TRANSE) or sameas("GU",TRANSE))),
     SQR(
       (
@@ -39,6 +43,8 @@ qDummyObjTRANSE(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
   ;
 
 qDummyObjDOMSE1(allCy,YTIME)$(TIME(YTIME) and runCy(allCy)).. 
+  vDummyObjDOMSE1(allCy,YTIME)
+    =e=
   SUM((DSBS,EFS)$(sameas("SE", DSBS) or sameas("HOU",DSBS) or (sameas("AG",DSBS) and EU28(allCy))),
     SQR(
       t02SharesFuelBuildings(allCy,DSBS,EFS,YTIME) - 
@@ -48,6 +54,8 @@ qDummyObjDOMSE1(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
   ;
 
 qDummyObjDOMSE2(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
+  vDummyObjDOMSE2(allCy,YTIME)
+    =e=
   SUM(DSBS$(sameas("SE", DSBS) or sameas("HOU",DSBS) or (sameas("AG",DSBS) and EU28(allCy))), !!DOMSE(DSBS),
     SQR(
       SUM(EF2$SECtoEF(DSBS,EF2),VmConsFuel(allCy,DSBS,EF2,YTIME)) / t02FinalEnergyDOMSE(allCy,DSBS,YTIME) - 1
