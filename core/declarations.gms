@@ -13,6 +13,10 @@ iCarbValYrExog(allCy,ytime)	                               "Carbon value for eac
 iShrHeatPumpElecCons(allCy,SBS)	                           "Share of heat pump electricity consumption in total substitutable electricity (1)"						 			
 iTranfOutGasworks(allCy,EF,YTIME)	                       "Transformation Output from Gasworks, Blast Furnances and Briquetting plants (Mtoe)"	
 ODummyObj                                                  "Parameter saving objective function"
+ODummyObjPGALL                                             "Parameter saving objective function for PGALL"
+ODummyObjTRANSE                                            "Parameter saving objective function for TRANSE"
+ODummyObjDOMSE1                                            "Parameter saving objective function for DOMSE shares"
+ODummyObjDOMSE2                                            "Parameter saving objective function for DOMSE2 final energy"
 
 *'                **Interdependent Parameters**
 imCGI(allCy,YTIME)                                         "Capital Goods Index (defined as CGI(Scenario)/CGI(Baseline)) (1)"
@@ -53,6 +57,10 @@ smGwToTwhPerYear(YTIME)                                    "convert GW mean powe
 Equations
 *' *** Miscellaneous'
 qDummyObj                                                  "Define dummy objective function"
+qDummyObjPGALL                                             "Define dummy objective function for PGALL"
+qDummyObjTRANSE                                            "Define dummy objective function for TRANSE"
+qDummyObjDOMSE1                                            "Define dummy objective function for DOMSE shares"
+qDummyObjDOMSE2                                            "Define dummy objective function for DOMSE final energy"
 QmGDPPartGlob(allCy,YTIME)                                           "Global GDP share (1)"
 $IFTHEN.calib %Calibration% == MatCalibration
 qRestrain
@@ -64,6 +72,10 @@ Variables
 
 *' *** Miscellaneous
 vDummyObj                                                  "Dummy maximisation variable (1)"
+vDummyObjPGALL                                             "Dummy maximisation variable for PGALL (1)"
+vDummyObjTRANSE                                            "Dummy maximisation variable for TRANSE (1)"
+vDummyObjDOMSE1                                            "Dummy maximisation variable for DOMSE shares (1)"
+vDummyObjDOMSE2                                            "Dummy maximisation variable for DOMSE final energy (1)"
 VmElecConsHeatPla(allCy,DSBS,YTIME)                        "Electricity consumed in heatpump plants (Mtoe)"
 ;
 
