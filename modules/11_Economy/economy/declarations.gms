@@ -1,6 +1,17 @@
 *' @title Economy module Declarations
 *' @code
 
+Parameters
+p11SubsiTot(allCy,YTIME)                                 "Stored total annual state revenues from carbon taxes per region"
+pmSubsiDemTechAvail(allCy,DSBS,TECH,YTIME)               "Stored state grants purposed to demand technology support"
+pmSubsiDemITech(allCy,DSBS,ITECH,YTIME)                  "Stored state support per unit of new industrial capacity"
+pmSubsiDemTech(allCy,DSBS,TECH,YTIME)                    "Stored state support per unit of new demand technology capacity"
+pmSubsiSupTech(allCy,STECH,YTIME)                        "Stored state grants purposed to supply technology support"
+pmSubsiCapCostTech(allCy,DSBS,TECH,YTIME)                "Stored subsidies in demand"
+pmSubsiCapCostSupply(allCy,SSBS,STECH,YTIME)             "Stored subsidies in supply"
+pmNetSubsiTax(allCy,YTIME)                               "Stored net difference between carbon taxes and subsidies"
+;
+
 Equations
 Q11SubsiTot(allCy,YTIME)                                 "Computes the total annual state revenues from carbon taxes per region (Millions US$2015)"
 Q11SubsiDemTechAvail(allCy,DSBS,TECH,YTIME)              "Computes the state grants purposed to the support of each demand technology (Millions US$2015)"

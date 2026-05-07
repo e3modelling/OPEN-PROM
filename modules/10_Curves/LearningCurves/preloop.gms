@@ -31,3 +31,8 @@ V10CumCapGlobal.FX(LCTECH,"2021") = V10CumCapGlobal.L(LCTECH,"2020") + sum(allCy
 V10CumCapGlobal.FX(LCTECH,"2022") = V10CumCapGlobal.L(LCTECH,"2021") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"2022"));
 V10CumCapGlobal.FX(LCTECH,"%fBaseY%") = V10CumCapGlobal.L(LCTECH,"2022") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"%fBaseY%"));
 *---
+
+*'                *PARAMETER INITIALISATION FOR RECURSIVE LAGS*
+
+pmCostLC(LCTECH,YTIME) = VmCostLC.L(LCTECH,YTIME);
+p10CumCapGlobal(LCTECH,YTIME) = V10CumCapGlobal.L(LCTECH,YTIME);
