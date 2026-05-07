@@ -1,6 +1,28 @@
 *' @title Hydrogen Declarations
 *' @code
 
+Parameters
+p05GapShareH2Tech1(allCy, H2TECH, YTIME)          "Stored shares of H2 production technologies in new market competition 1"
+p05GapShareH2Tech2(allCy, H2TECH, YTIME)          "Stored shares of H2 production technologies in new market competition 2"
+p05CapScrapH2ProdTech(allCy, H2TECH, YTIME)       "Stored decommissioning of capacity by H2 production technology"
+p05PremRepH2Prod(allCy, H2TECH, YTIME)            "Stored premature replacement of H2 production technologies"
+p05ScrapLftH2Prod(allCy, H2TECH, YTIME)           "Stored scrapping of equipment due to lifetime"
+p05DemGapH2(allCy, YTIME)                         "Stored demand for H2 to be covered by new equipment in mtoe"
+p05CostProdH2Tech(allCy, H2TECH, YTIME)           "Stored hydrogen production cost per technology"
+p05CostVarProdH2Tech(allCy, H2TECH, YTIME)        "Stored variable cost for hydrogen production by technology"
+p05ShareCCSH2Prod(allCy, H2TECH, YTIME)           "Stored share of CCS technology"
+p05ShareNoCCSH2Prod(allCy, H2TECH, YTIME)         "Stored share of technology without CCS"
+p05AcceptCCSH2Tech(allCy, YTIME)                  "Stored acceptance of investment in CCS technologies"
+p05CostProdCCSNoCCSH2Prod(allCy, H2TECH, YTIME)   "Stored production cost of the composite technology with and without CCS"
+p05CaptRateH2(allCy,H2TECH,YTIME)                 "Stored hydrogen capture rate"
+pmDemTotH2(allCy, YTIME)                          "Stored hydrogen production requirement in Mtoe"
+pmProdH2(allCy, H2TECH, YTIME)                    "Stored hydrogen production by technology in Mtoe"
+pmConsFuelTechH2Prod(allCy, H2TECH, EF, YTIME)    "Stored fuel consumption by hydrogen production technology in Mtoe"
+pmDemSecH2(allCy, SBS, YTIME)                     "Stored demand for H2 by sector in mtoe"
+pmCostAvgProdH2(allCy, YTIME)                     "Stored average production cost of hydrogen in Euro per toe"
+pmConsFuelH2Prod(allCy, EF, YTIME)                "Stored total fuel consumption for hydrogen production in Mtoe"
+;
+
 Variables
 V05GapShareH2Tech1(allCy, H2TECH, YTIME)          "Shares of H2 production technologies in new market competition 1"
 V05GapShareH2Tech2(allCy, H2TECH, YTIME)          "Shares of H2 production technologies in new market competition 2"
