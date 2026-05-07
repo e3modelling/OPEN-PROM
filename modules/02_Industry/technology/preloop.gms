@@ -100,5 +100,9 @@ VmConsFuelShare.LO(runCy,DSBS,EF,YTIME) = 0;
 VmConsFuelShare.FX(runCy,DSBS,EF,YTIME)$DATAY(YTIME) = (imFuelConsPerFueSub(runCy,DSBS,EF,YTIME) / SUM(EF2, imFuelConsPerFueSub(runCy,DSBS,EF2,YTIME)))$SUM(EF2, imFuelConsPerFueSub(runCy,DSBS,EF2,YTIME));
 *---
 V02DemUsefulSubsecRemTech.LO(allCy,DSBS,YTIME) = 0;
-V02DemUsefulSubsecRemTech.L(allCy,DSBS,YTIME) = 1;
+V02DemUsefulSubsecRemTech.L(allCy,DSBS,YTIME) = 2;
 V02DemUsefulSubsecRemTech.FX(allCy,DSBS,YTIME)$DATAY(YTIME) = 0;
+*---
+V02RemEquipCapTechSubsec.LO(allCy,DSBS,ITECH,YTIME) = 0;
+V02RemEquipCapTechSubsec.L(allCy,DSBS,ITECH,YTIME) = 1;
+V02RemEquipCapTechSubsec.FX(allCy,DSBS,ITECH,YTIME)$DATAY(YTIME) = 0;

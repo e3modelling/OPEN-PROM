@@ -48,7 +48,8 @@ i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$((INDDOM(DSBS) or sameas("NEN",DSB
 i02CalibUsefulEnergy.LO(runCy,DSBS,YTIME) = -0.5;  
 i02CalibUsefulEnergy.UP(runCy,DSBS,YTIME) = 2;  
 i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$DATAY(YTIME) = 0;
-i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$(not (INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS))) = 0;
+*i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$(not (INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS))) = 0;
+i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$(not DOMSE(DSBS)) = 0;
 i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$(sameas("AG",DSBS) and not EU28(runCy)) = 0;
 i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$((INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and not EU28(runCy)) = 0;
 $ENDIF.calib
