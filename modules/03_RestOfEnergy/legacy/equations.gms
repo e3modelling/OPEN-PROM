@@ -121,17 +121,17 @@ Q03Transfers(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V03Transfers(allCy,EFS,YTIME) 
         =E=
     (
-      V03Transfers(allCy,EFS,YTIME-1) *
+      p03Transfers(allCy,EFS,YTIME-1) *
       (
         (VmConsFinEneCountry(allCy,EFS,YTIME) + 1e-6) /
-        (VmConsFinEneCountry(allCy,EFS,YTIME-1) + 1e-6)
+        (pmConsFinEneCountry(allCy,EFS,YTIME-1) + 1e-6)
       ) ** 0.3
     )$(not sameas(EFS,"CRO")) +
     (
-      V03Transfers(allCy,"CRO",YTIME-1) *
+      p03Transfers(allCy,"CRO",YTIME-1) *
       (
         (SUM(EFS2$EFTOEFA(EFS2,"LQD"),VmConsFinEneCountry(allCy,EFS2,YTIME)) + 1e-6) /
-        (SUM(EFS2$EFTOEFA(EFS2,"LQD"),VmConsFinEneCountry(allCy,EFS2,YTIME-1)) + 1e-6)
+        (SUM(EFS2$EFTOEFA(EFS2,"LQD"),pmConsFinEneCountry(allCy,EFS2,YTIME-1)) + 1e-6)
       ) ** 0.3
     )$sameas(EFS,"CRO");         
 
@@ -174,7 +174,7 @@ Q03Exp(allCy,EFS,YTIME)$(TIME(YTIME) $runCy(allCy))..
     V03Exp(allCy,EFS,YTIME)
       =E=
     i03RateExpTotImp(allCy,EFS,"%fBaseY%") *
-    SUM(runCy2, V03Imp(runCy2,EFS,YTIME-1));
+    SUM(runCy2, p03Imp(runCy2,EFS,YTIME-1));
 
 *' The equation computes the fake imports for a specific energy branch 
 *' in a given scenario and year. The calculation is based on different conditions for various energy branches,

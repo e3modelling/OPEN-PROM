@@ -13,6 +13,18 @@ i03RatioPrimaryFuels(allCy,EFS,YTIME)
 i03InputEffSupply(allCy,SSBS,EFS,YTIME)
 i03RateExpTotImp(allCy,EFS,YTIME)
 i03RateImpGrossInlCons(allCy,EFS,YTIME)            "Rate of Imports in Gross inland consumption (1)"
+p03InpTotTransf(allCy,SSBS,EFS,YTIME)              "Stored total transformation input (Mtoe)"
+p03OutTotTransf(allCy,SSBS,EFS,YTIME)              "Stored total transformation output (Mtoe)"
+p03Transfers(allCy,EFS,YTIME)                      "Stored transfers (Mtoe)"
+p03ConsGrssInl(allCy,EFS,YTIME)                    "Stored gross inland consumption (Mtoe)"
+p03ProdPrimary(allCy,EFS,YTIME)                    "Stored primary production (Mtoe)"
+p03Exp(allCy,EFS,YTIME)                            "Stored exports fake (Mtoe)"
+p03Imp(allCy,EFS,YTIME)                            "Stored fake imports for all fuels except natural gas (Mtoe)"
+pmImpNetEneBrnch(allCy,EFS,YTIME)                  "Stored net imports (Mtoe)"
+pmConsFiEneSec(allCy,SSBS,EFS,YTIME)               "Stored final consumption in energy sector (Mtoe)"
+pmConsFinEneCountry(allCy,EF,YTIME)                "Stored total final energy consumption (Mtoe)"
+pmConsFinNonEne(allCy,EFS,YTIME)                   "Stored final non energy consumption (Mtoe)"
+pmLossesDistr(allCy,EFS,YTIME)                     "Stored distribution losses (Mtoe)"
 ;
 
 Equations
