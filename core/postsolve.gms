@@ -6,7 +6,7 @@ $endif.curves
 $ifthen.calib %Calibration% == MatCalibration
 execute_unload "outputCalib.gdx", V03ProdPrimary, V03ConsGrssInl, V03OutTotTransf, VmImpNetEneBrnch, V04GapGenCapPowerDiff, V04CapElecNonCHP, ODummyObj, ODummyObjPGALL, ODummyObjTRANSE, ODummyObjDOMSE1, ODummyObjDOMSE2, VmCapElec, VmProdElec, V04ProdElecEstCHP, V01NewRegPcTechYearly, i04MatFacPlaAvailCap, imMatrFactor, V04SharePowPlaNewEq, t04SharePowPlaNewEq, V04ShareTechPG, V04CostHourProdInvDec, V04ShareSatPG, V01ShareTechTr, V04DemElecTot, t01NewShareStockPC, iCarbValYrExog, i02ScaleEndogScrap, i02CalibUsefulEnergy, VmConsFuelShare, t02SharesFuelBuildings, t02FinalEnergyDOMSE, VmConsFuel;
 $else.calib
-execute_unload "outputData.gdx", ODummyObj, ODummyObjPGALL, ODummyObjTRANSE, ODummyObjDOMSE1, ODummyObjDOMSE2, VmConsFuel, VmCapElec, V04CapElecNominal, VmProdElec, VmPriceFuelSubsecCarVal;
+execute_unload "outputData.gdx", ODummyObj, VmConsFuel, VmCapElec, V04CapElecNominal, VmProdElec, VmPriceFuelSubsecCarVal;
 $endif.calib
 endloop;  !! close outer iteration loop (time steps)
 putclose fStat;

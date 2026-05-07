@@ -16,10 +16,12 @@ loop an do !! start outer iteration loop (time steps)
             solve openprom using nlp minimizing vDummyObj;
             sModelStat = openprom.modelstat;
             ODummyObj(runCyL,YTIME)$TIME(YTIME) = vDummyObj.L;  !! Assign objective function value
+$ifthen.calib %Calibration% == MatCalibration
             ODummyObjPGALL(runCyL,YTIME)$TIME(YTIME) = vDummyObjPGALL.L;  !! Assign objective function value for PGALL
             ODummyObjTRANSE(runCyL,YTIME)$TIME(YTIME) = vDummyObjTRANSE.L;  !! Assign objective function value for TRANSE
             ODummyObjDOMSE1(runCyL,YTIME)$TIME(YTIME) = vDummyObjDOMSE1.L;  !! Assign objective function value for DOMSE1
             ODummyObjDOMSE2(runCyL,YTIME)$TIME(YTIME) = vDummyObjDOMSE2.L;  !! Assign objective function value for DOMSE2
+$ENDIF.calib
         endif;
     endloop;
 

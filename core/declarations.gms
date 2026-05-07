@@ -57,13 +57,13 @@ smGwToTwhPerYear(YTIME)                                    "convert GW mean powe
 Equations
 *' *** Miscellaneous'
 qDummyObj                                                  "Define dummy objective function"
+QmGDPPartGlob(allCy,YTIME)                                           "Global GDP share (1)"
+$IFTHEN.calib %Calibration% == MatCalibration
+qRestrain
 qDummyObjPGALL                                             "Define dummy objective function for PGALL"
 qDummyObjTRANSE                                            "Define dummy objective function for TRANSE"
 qDummyObjDOMSE1                                            "Define dummy objective function for DOMSE shares"
 qDummyObjDOMSE2                                            "Define dummy objective function for DOMSE final energy"
-QmGDPPartGlob(allCy,YTIME)                                           "Global GDP share (1)"
-$IFTHEN.calib %Calibration% == MatCalibration
-qRestrain
 $ENDIF.calib
 ;
 
