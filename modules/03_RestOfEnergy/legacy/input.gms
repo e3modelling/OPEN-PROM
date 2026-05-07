@@ -25,6 +25,7 @@ $ondelim
 $include"./iPrimProd.csv"
 $offdelim
 ;
+i03PrimProd(allCy,"STE",YTIME) = 0;
 *---
 table i03OutTotTransfProcess(allCy,SSBS,EFS,YTIME)	      "Total transformation output of supply sectors (Mtoe)"	
 $ondelim
