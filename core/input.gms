@@ -602,7 +602,7 @@ elseif %fScenario% eq 2 then
 elseif %fScenario% eq 3 then
      iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"exogCV_2C",YTIME);
 elseif %fScenario% eq 4 then
-     iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"exogCV_Calib",YTIME);
+     iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"exogCV_NPi",YTIME);
 elseif %fScenario% eq 100 then
      iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"UPT_100",YTIME);
 elseif %fScenario% eq 200 then
@@ -631,7 +631,7 @@ $IFTHEN.calib %Calibration% == off
 parameter imMatrFactor(allCy,DSBS,TECH,YTIME)   "Maturity factor per technology and subsector for all countries (1)";
 imMatrFactor(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                          
 
-*imMatrFactor(runCy,DSBS,"TBMSWAS",YTIME) = 0.01;
+imMatrFactor(runCy,DSBS,"TBMSWAS",YTIME)$(SECTTECH(DSBS,"TBMSWAS") and (INDSE(DSBS) or NENSE(DSBS))) = 0.01;
 $ontext
 imMatrFactor(runCy,DSBS,"TGDO",YTIME)$((ord(YTIME) > 14) and TRANSE(DSBS)) = 0.5;
 imMatrFactor(runCy,DSBS,"TGSL",YTIME)$((ord(YTIME) > 14) and TRANSE(DSBS)) = 0.5;
