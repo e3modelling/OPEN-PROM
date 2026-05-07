@@ -18,7 +18,7 @@ qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
   ;
 
 qDummyObjPGALL(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
-  vDummyObjPGALL(allCy,YTIME)
+  vDummyObjPGALL
     =e=
   SUM(PGALL,
     SQR(
@@ -29,7 +29,7 @@ qDummyObjPGALL(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
   ;
 
 qDummyObjTRANSE(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..  
-  vDummyObjTRANSE(allCy,YTIME)
+  vDummyObjTRANSE
     =e=
   SUM((TRANSE,TTECH)$(SECTTECH(TRANSE,TTECH) and (sameas("PC",TRANSE) or sameas("PB",TRANSE) or sameas("GU",TRANSE))),
     SQR(
@@ -43,7 +43,7 @@ qDummyObjTRANSE(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
   ;
 
 qDummyObjDOMSE1(allCy,YTIME)$(TIME(YTIME) and runCy(allCy)).. 
-  vDummyObjDOMSE1(allCy,YTIME)
+  vDummyObjDOMSE1
     =e=
   SUM((DSBS,EFS)$(sameas("SE", DSBS) or sameas("HOU",DSBS) or (sameas("AG",DSBS) and EU28(allCy))),
     SQR(
@@ -54,7 +54,7 @@ qDummyObjDOMSE1(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
   ;
 
 qDummyObjDOMSE2(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
-  vDummyObjDOMSE2(allCy,YTIME)
+  vDummyObjDOMSE2
     =e=
   SUM(DSBS$(sameas("SE", DSBS) or sameas("HOU",DSBS) or (sameas("AG",DSBS) and EU28(allCy))), !!DOMSE(DSBS),
     SQR(
