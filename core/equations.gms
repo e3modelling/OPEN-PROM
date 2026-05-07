@@ -29,7 +29,7 @@ qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
       0.01 * (imMatrFactor(allCy,TRANSE,TTECH,YTIME) - imMatrFactor(allCy,TRANSE,TTECH,YTIME-1))
     )
   ) + 
-  SUM((DSBS,EFS)$(sameas("SE", DSBS) or sameas("HOU",DSBS) or (sameas("AG",DSBS) and EU28(allCy))),
+  SUM((DSBS,EFS)$(sameas("SE", DSBS) or sameas("HOU",DSBS) or (sameas("AG",DSBS) and EU28(allCy)) and SECtoEF(DSBS,EFS)),
     SQR(
       t02SharesFuelBuildings(allCy,DSBS,EFS,YTIME) - 
       VmConsFuelShare(allCy,DSBS,EFS,YTIME)
@@ -40,6 +40,20 @@ qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
       SUM(EF2$SECtoEF(DSBS,EF2),VmConsFuel(allCy,DSBS,EF2,YTIME)) / t02FinalEnergyDOMSE(allCy,DSBS,YTIME) - 1
     ) +
     SQR(i02CalibUsefulEnergy(allCy,DSBS,YTIME) - i02CalibUsefulEnergy(allCy,DSBS,YTIME-1))
+  ) +
+
+
+  SUM(DSBS$((INDSE(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and EU28(allCy)),
+    SQR(
+      SUM(EF2$SECtoEF(DSBS,EF2),VmConsFuel(allCy,DSBS,EF2,YTIME)) / t02FinalEnergyINDSE(allCy,DSBS,YTIME) - 1
+    )$t02FinalEnergyINDSE(allCy,DSBS,YTIME) +
+    SQR(i02CalibUsefulEnergy(allCy,DSBS,YTIME) - i02CalibUsefulEnergy(allCy,DSBS,YTIME-1))
+  ) +
+  SUM((DSBS,EFS)$((INDSE(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and EU28(allCy) and SECtoEF(DSBS,EFS)),
+    SQR(
+      t02SharesFuelINDSE(allCy,DSBS,EFS,YTIME) - 
+      VmConsFuelShare(allCy,DSBS,EFS,YTIME)
+    )
   )
   ;
 
