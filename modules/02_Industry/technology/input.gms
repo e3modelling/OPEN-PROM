@@ -96,6 +96,6 @@ $offdelim;
 
 table t02FinalEnergyINDSE(allCy,DSBS,YTIME)    "Targets for share of new passenger cars"
 $ondelim
-$include "../targets/tProjectionsFuelINDSE.csv"
+$include "../targets/tProjectionsINDSE.csv"
 $offdelim;
 $ENDIF.calib
