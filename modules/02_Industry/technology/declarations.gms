@@ -10,6 +10,22 @@ imCO2CaptRateIndustry(allCy,ITECH,YTIME)	               "Industry CO2 capture ra
 i02ScaleEndogScrap(DSBS)                            "Scale parameter for endogenous scrapping applied to the sum of full costs (1)"
 i02ShareBlend(allCy,DSBS,ITECH,EF,YTIME)                   "Share of each energy form in a technology"
 i02ShareElcHP(allCy,DSBS,YTIME)                            "Share of final electricity consumption of HeatPumps in substitutable electricity consumption (1)"
+p02DemSubUsefulSubsec(allCy,DSBS,YTIME)                    "Stored demand for useful substitutable energy demand in each subsector"
+p02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)           "Stored remaining equipment capacity per technology in each subsector"
+p02DemUsefulSubsecRemTech(allCy,DSBS,YTIME)                "Stored useful energy demand covered by remaining equipment"
+p02GapUsefulDemSubsec(allCy,DSBS,YTIME)                    "Stored gap in useful energy demand per subsector"
+p02CapCostTech(allCy,DSBS,ITECH,YTIME)                     "Stored capital cost of each technology per subsector"
+p02VarCostTech(allCy,DSBS,ITECH,YTIME)                     "Stored variable cost of each technology per subsector"
+p02CostTech(allCy,DSBS,ITECH,YTIME)                        "Stored total cost of each technology per subsector"
+p02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME)         "Stored share of each technology in gap of useful energy"
+p02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)              "Stored equipment capacity of each technology in each subsector"
+p02UsefulElecNonSubIndTert(allCy,DSBS,YTIME)               "Stored non-substitutable useful electricity"
+p02FinalElecNonSubIndTert(allCy,DSBS,YTIME)                "Stored final energy of non-substitutable electricity"
+p02IndxElecIndPrices(allCy,TCHP,YTIME)                     "Stored electricity index"
+p02IndAvrEffFinalUseful(allCy,DSBS,YTIME)                  "Stored average efficiency"
+p02PremScrpIndu(allCy,DSBS,ITECH,YTIME)                    "Stored premature scrapping"
+p02RatioRem(allCy,DSBS,ITECH,YTIME)                        "Stored remaining capacity ratio"
+pmConsFuel(allCy,DSBS,EF,YTIME)                            "Stored fuel consumption of fuels in each subsector"
 ;
 
 Equations
