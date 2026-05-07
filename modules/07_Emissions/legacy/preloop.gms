@@ -45,6 +45,9 @@ V07EmissionsNetPart.FX(runCy,YTIME)$DATAY(YTIME) = V07EmissionsNet.L(runCy,YTIME
 
 *'                *PARAMETER INITIALISATION FOR RECURSIVE LAGS*
 
+V07RedAbsBySrcRegTim.L(E07SrcMacAbate,runCy,YTIME) = 0;
+V07CostAbateBySrcRegTim.L(E07SrcMacAbate,runCy,YTIME) = 0;
+
 p07GrossEmissCO2Supply(runCy,SSBS,YTIME) = V07GrossEmissCO2Supply.L(runCy,SSBS,YTIME);
 p07RedAbsBySrcRegTim(E07SrcMacAbate,runCy,YTIME) = V07RedAbsBySrcRegTim.L(E07SrcMacAbate,runCy,YTIME);
 p07EmiActBySrcRegTim(E07SrcMacAbate,runCy,YTIME) = V07EmiActBySrcRegTim.L(E07SrcMacAbate,runCy,YTIME);

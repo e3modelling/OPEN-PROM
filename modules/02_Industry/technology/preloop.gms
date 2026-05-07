@@ -96,6 +96,15 @@ V02CostTech.FX(runCy,DSBS,ITECH,YTIME)$DATAY(YTIME) = V02VarCostTech.L(runCy,DSB
 
 *'                *PARAMETER INITIALISATION FOR RECURSIVE LAGS*
 
+V02RemEquipCapTechSubsec.L(runCy,DSBS,ITECH,YTIME) = 0;
+V02DemUsefulSubsecRemTech.L(runCy,DSBS,YTIME) = 0;
+V02GapUsefulDemSubsec.L(runCy,DSBS,YTIME) = 0;
+V02ShareTechNewEquipUseful.L(runCy,DSBS,ITECH,YTIME) = 0;
+V02IndxElecIndPrices.L(runCy,TCHP,YTIME) = 0;
+V02IndAvrEffFinalUseful.L(runCy,DSBS,YTIME) = 0;
+V02PremScrpIndu.L(runCy,DSBS,ITECH,YTIME) = 0;
+V02RatioRem.L(runCy,DSBS,ITECH,YTIME) = 0;
+
 p02DemSubUsefulSubsec(runCy,DSBS,YTIME) = V02DemSubUsefulSubsec.L(runCy,DSBS,YTIME);
 p02RemEquipCapTechSubsec(runCy,DSBS,ITECH,YTIME) = V02RemEquipCapTechSubsec.L(runCy,DSBS,ITECH,YTIME);
 p02DemUsefulSubsecRemTech(runCy,DSBS,YTIME) = V02DemUsefulSubsecRemTech.L(runCy,DSBS,YTIME);

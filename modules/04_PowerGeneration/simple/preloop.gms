@@ -134,6 +134,8 @@ V04SharePowPlaNewEq.L(runCy,PGALL,YTIME)$AN(YTIME) = t04SharePowPlaNewEq(runCy,P
 
 *'                *PARAMETER INITIALISATION FOR RECURSIVE LAGS*
 
+V04SortPlantDispatch.L(runCy,PGALL,YTIME) = 0;
+
 p04CapElecNominal(runCy,PGALL,YTIME) = V04CapElecNominal.L(runCy,PGALL,YTIME);
 p04ShareTechPG(runCy,PGALL,YTIME) = V04ShareTechPG.L(runCy,PGALL,YTIME);
 p04CostHourProdInvDec(runCy,PGALL,YTIME) = V04CostHourProdInvDec.L(runCy,PGALL,YTIME);

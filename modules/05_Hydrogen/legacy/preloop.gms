@@ -124,6 +124,9 @@ V05PremRepH2Prod.FX(runCy,H2TECH,YTIME)$(not H2TECHPM(H2TECH)) = 1;
 
 *'                *PARAMETER INITIALISATION FOR RECURSIVE LAGS*
 
+V05AcceptCCSH2Tech.L(runCy,YTIME) = 0;
+VmDemSecH2.L(runCy,SBS,YTIME) = 0;
+
 p05GapShareH2Tech1(runCy,H2TECH,YTIME) = V05GapShareH2Tech1.L(runCy,H2TECH,YTIME);
 p05GapShareH2Tech2(runCy,H2TECH,YTIME) = V05GapShareH2Tech2.L(runCy,H2TECH,YTIME);
 p05CapScrapH2ProdTech(runCy,H2TECH,YTIME) = V05CapScrapH2ProdTech.L(runCy,H2TECH,YTIME);

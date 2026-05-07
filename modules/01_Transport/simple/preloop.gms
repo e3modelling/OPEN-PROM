@@ -109,6 +109,8 @@ V01ShareTechTr.LO(runCy,TRANSE,TTECH,YTIME) = 0;
 
 *'                *PARAMETER INITIALISATION FOR RECURSIVE LAGS*
 
+V01NewRegPcTechYearly.L(runCy,TTECH,YTIME) = 0;
+
 p01StockPcYearly(runCy,YTIME) = V01StockPcYearly.L(runCy,YTIME);
 p01RateScrPc(runCy,TTECH,YTIME) = V01RateScrPc.L(runCy,TTECH,YTIME);
 p01RateScrPcTot(runCy,TTECH,YTIME) = V01RateScrPcTot.L(runCy,TTECH,YTIME);
