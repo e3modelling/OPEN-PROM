@@ -21,6 +21,6 @@ V02PremScrpIndu.FX(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME) = V02PremScrpIndu.L(runC
 *---
 
 $ifthen.calib %Calibration% == MatCalibration
-imMatrFactor.FX(runCyL,DSBS,TECH,YTIME)$TIME(YTIME) = round(imMatrFactor.L(runCyL,DSBS,TECH,YTIME)$TIME(YTIME), 3);
+imMatrFactor.FX(runCyL,DSBS,TECH,YTIME)$TIME(YTIME) = imMatrFactor.L(runCyL,DSBS,TECH,YTIME)$TIME(YTIME);
 i02CalibUsefulEnergy.FX(runCyL,DSBS,YTIME)$TIME(YTIME) = i02CalibUsefulEnergy.L(runCyL,DSBS,YTIME)$TIME(YTIME);
 $endif.calib
