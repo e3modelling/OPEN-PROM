@@ -16,12 +16,7 @@
 *' OLD EQUATION: Q02DemFinSubFuelSubsec(allCy,DSBS,YTIME) --> NEW EQUATION:Q02DemUsefulSubsec
 *' OLD VARIABLE: VmDemFinSubFuelSubsec(allCy,DSBS,YTIME) --> NEW VARIABLE:VmDemUsefulSubsec
 *' Note: To check which cost should be used... (this VmPriceFuelAvgSub or another cost (weighted average per technology))
-Q02DemSubUsefulSubsec(allCy,DSBS,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not CDR(DSBS))$runCy(allCy)
-  $imActv(YTIME-1,allCy,DSBS)
-  $pmPriceFuelAvgSub(allCy,DSBS,YTIME-1)
-  $pmPriceFuelAvgSub(allCy,DSBS,YTIME-2)
-  $prod(KPDL, pmPriceFuelAvgSub(allCy,DSBS,YTIME-ord(KPDL)) * pmPriceFuelAvgSub(allCy,DSBS,YTIME-(ord(KPDL)+1)))
-)..
+Q02DemSubUsefulSubsec(allCy,DSBS,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not CDR(DSBS))$runCy(allCy))..
     V02DemSubUsefulSubsec(allCy,DSBS,YTIME) 
         =E=
     [
@@ -42,18 +37,13 @@ Q02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITE
     p02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME-1) * 
     V02RatioRem(allCy,DSBS,ITECH,YTIME);
 
-Q02RatioRem(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and not TRANSE(DSBS) and not CDR(DSBS))$runCy(allCy)
-  $i01TechLft(allCy,DSBS,ITECH,YTIME)
-)..
+Q02RatioRem(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and not TRANSE(DSBS) and not CDR(DSBS))$runCy(allCy))..
     V02RatioRem(allCy,DSBS,ITECH,YTIME) 
         =E=
     (1 - 1/VmLft(allCy,DSBS,ITECH,YTIME)) * 
     (1 - V02PremScrpIndu(allCy,DSBS,ITECH,YTIME));
 
-Q02PremScrpIndu(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and not TRANSE(DSBS) and not CDR(DSBS))$runCy(allCy)
-  $(p02VarCostTech(allCy,DSBS,ITECH,YTIME-1) * i02util(allCy,DSBS,ITECH,YTIME-1))
-  $sum(ITECH2$(not sameas(ITECH2,ITECH) and SECTTECH(DSBS,ITECH2)), p02CostTech(allCy,DSBS,ITECH2,YTIME-1) + p02VarCostTech(allCy,DSBS,ITECH2,YTIME-1))
-)..
+Q02PremScrpIndu(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and not TRANSE(DSBS) and not CDR(DSBS))$runCy(allCy))..
     V02PremScrpIndu(allCy,DSBS,ITECH,YTIME)
         =E=
     1 - (p02VarCostTech(allCy,DSBS,ITECH,YTIME-1) * i02util(allCy,DSBS,ITECH,YTIME-1)) ** (-2) /
@@ -99,11 +89,7 @@ Q02GapUsefulDemSubsec(allCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not 
 *' OLD VARIABLE: V02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME) --> NEW VARIABLE:V02CapCostTech(allCy,DSBS,rCon,EF,YTIME)
 *' Add parameter sUnitToKUnit = 1000
 *' Check ITECH and CHPs
-Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not CDR(DSBS))$SECTTECH(DSBS,ITECH)$runCy(allCy)
-  $imDisc(allCy,DSBS,YTIME)
-  $i01TechLft(allCy,DSBS,ITECH,YTIME)
-  $imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME)
-)..
+Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not CDR(DSBS))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
     V02CapCostTech(allCy,DSBS,ITECH,YTIME) 
         =E=
     (
@@ -174,10 +160,7 @@ Q02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and TIME(YTI
 *' OLD EQUATION: Q02ConsElecNonSubIndTert(allCy,INDDOM,YTIME) --> NEW EQUATION:Q02UsefulElecNonSubIndTert(allCy,DSBS,YTIME)
 *' OLD VARIABLE: VmConsElecNonSubIndTert(allCy,INDDOM,YTIME) --> NEW VARIABLE:V02UsefulElecNonSubIndTert(allCy,DSBS,YTIME)
 
-Q02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy))
-  $imActv(YTIME-1,allCy,INDDOM)
-  $pmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-1)
-)..
+Q02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME) 
         =E=
     [
@@ -191,9 +174,7 @@ Q02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy))
     ]$imActv(YTIME-1,allCy,INDDOM);
 
 *' NEW EQUATION - Useful Electricity to Final Electricity (Check if needed to add equipment of electricity)
-Q02FinalElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy))
-  $imUsfEneConvSubTech(allCy,INDDOM,"TELC",YTIME)
-)..
+Q02FinalElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V02FinalElecNonSubIndTert(allCy,INDDOM,YTIME) 
         =E=
     V02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME) / 

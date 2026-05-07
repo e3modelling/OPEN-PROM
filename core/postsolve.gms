@@ -3,7 +3,7 @@ pmCarVal(runCyL,NAP,YTIME)$TIME(YTIME) = VmCarVal.L(runCyL,NAP,YTIME)$TIME(YTIME
 
 endloop;  !! close countries loop
 $ifthen.curves "%Curves%" == "LearningCurves"
-V10CumCapGlobal.FX(LCTECH,YTIME)$TIME(YTIME) = V10CumCapGlobal.L(LCTECH,YTIME)$TIME(YTIME);
+V10CumCapGlobal.FX(LCTECH,YTIME)$TIME(YTIME) = p10CumCapGlobal(LCTECH,YTIME)$TIME(YTIME);
 $endif.curves
 * Export model results to GDX file
 $ifthen.calib %Calibration% == MatCalibration

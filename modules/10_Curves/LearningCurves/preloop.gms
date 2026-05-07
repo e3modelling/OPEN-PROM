@@ -16,20 +16,23 @@ VmCostLC.FX(LCTECH,"%fBaseY%") = 1.0;
 *' Initialize cumulative capacity with historical data from base year only
 *' Sum installed capacity across all countries for learning curve technologies
 *' Keep units consistent: imInstCapPastNonCHP is in GW, V10CumCapGlobal should be in GW to match V04NewCapElec
-V10CumCapGlobal.FX(LCTECH,"2010") = sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"2010"));
-V10CumCapGlobal.FX(LCTECH,"2011") = V10CumCapGlobal.L(LCTECH,"2010") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"2011"));
-V10CumCapGlobal.FX(LCTECH,"2012") = V10CumCapGlobal.L(LCTECH,"2011") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"2012"));
-V10CumCapGlobal.FX(LCTECH,"2013") = V10CumCapGlobal.L(LCTECH,"2012") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"2013"));
-V10CumCapGlobal.FX(LCTECH,"2014") = V10CumCapGlobal.L(LCTECH,"2013") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"2014"));
-V10CumCapGlobal.FX(LCTECH,"2015") = V10CumCapGlobal.L(LCTECH,"2014") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"2015"));
-V10CumCapGlobal.FX(LCTECH,"2016") = V10CumCapGlobal.L(LCTECH,"2015") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"2016"));
-V10CumCapGlobal.FX(LCTECH,"2017") = V10CumCapGlobal.L(LCTECH,"2016") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"2017"));
-V10CumCapGlobal.FX(LCTECH,"2018") = V10CumCapGlobal.L(LCTECH,"2017") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"2018"));
-V10CumCapGlobal.FX(LCTECH,"2019") = V10CumCapGlobal.L(LCTECH,"2018") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"2019"));
-V10CumCapGlobal.FX(LCTECH,"2020") = V10CumCapGlobal.L(LCTECH,"2019") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"2020"));
-V10CumCapGlobal.FX(LCTECH,"2021") = V10CumCapGlobal.L(LCTECH,"2020") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"2021"));
-V10CumCapGlobal.FX(LCTECH,"2022") = V10CumCapGlobal.L(LCTECH,"2021") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"2022"));
-V10CumCapGlobal.FX(LCTECH,"%fBaseY%") = V10CumCapGlobal.L(LCTECH,"2022") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"%fBaseY%"));
+p10CumCapGlobal(LCTECH,"2010") = sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"2010"));
+p10CumCapGlobal(LCTECH,"2011") = p10CumCapGlobal.L(LCTECH,"2010") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"2011"));
+p10CumCapGlobal(LCTECH,"2012") = p10CumCapGlobal.L(LCTECH,"2011") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"2012"));
+p10CumCapGlobal(LCTECH,"2013") = p10CumCapGlobal.L(LCTECH,"2012") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"2013"));
+p10CumCapGlobal(LCTECH,"2014") = p10CumCapGlobal.L(LCTECH,"2013") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"2014"));
+p10CumCapGlobal(LCTECH,"2015") = p10CumCapGlobal.L(LCTECH,"2014") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"2015"));
+p10CumCapGlobal(LCTECH,"2016") = p10CumCapGlobal.L(LCTECH,"2015") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"2016"));
+p10CumCapGlobal(LCTECH,"2017") = p10CumCapGlobal.L(LCTECH,"2016") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"2017"));
+p10CumCapGlobal(LCTECH,"2018") = p10CumCapGlobal.L(LCTECH,"2017") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"2018"));
+p10CumCapGlobal(LCTECH,"2019") = p10CumCapGlobal.L(LCTECH,"2018") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"2019"));
+p10CumCapGlobal(LCTECH,"2020") = p10CumCapGlobal.L(LCTECH,"2019") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"2020"));
+p10CumCapGlobal(LCTECH,"2021") = p10CumCapGlobal.L(LCTECH,"2020") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"2021"));
+p10CumCapGlobal(LCTECH,"2022") = p10CumCapGlobal.L(LCTECH,"2021") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"2022"));
+p10CumCapGlobal(LCTECH,"2023") = p10CumCapGlobal.L(LCTECH,"2022") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"2023"));
+p10CumCapGlobal(LCTECH,"%fBaseY%") = p10CumCapGlobal.L(LCTECH,"2023") + sum(allCy$(runCy(allCy)), imInstCapPastNonCHP(allCy,LCTECH,"%fBaseY%"));
+
+V10CumCapGlobal.FX(LCTECH,"%fBaseY%") = p10CumCapGlobal(LCTECH,"%fBaseY%")
 *---
 
 *'                *PARAMETER INITIALISATION FOR RECURSIVE LAGS*

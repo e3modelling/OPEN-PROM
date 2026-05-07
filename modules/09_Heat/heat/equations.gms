@@ -29,9 +29,7 @@ Q09CapSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     (1-V09ScrapRate(allCy,TSTEAM,YTIME)) * pmCapSte(allCy,TSTEAM,YTIME-1) +
     V09GapShareSte(allCy,TSTEAM,YTIME) * V09DemGapSte(allCy,YTIME);
 
-Q09ProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy))
-  $sum(TSTEAM2, pmCapSte(allCy,TSTEAM2,YTIME-1))
-)..
+Q09ProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmProdSte(allCy,TSTEAM,YTIME)
         =E=
     VmDemTotSte(allCy,YTIME) /
@@ -56,10 +54,7 @@ Q09DemGapSte(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
   ))
   )/2 + 1e-6;
 
-Q09CostVarProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy))
-  $SUM(STECH$sameas(STECH,TSTEAM), imPlantEffByType(allCy,STECH,"effHeat","%fBaseY%"))
-  $((not TCHP(TSTEAM)) or sum(TCHP$sameas(TCHP,TSTEAM), pmPriceElecInd(allCy,TCHP,YTIME-1)))
-)..
+Q09CostVarProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V09CostVarProdSte(allCy,TSTEAM,YTIME)
         =E=
     sum(EFS$TSTEAMTOEF(TSTEAM,EFS),
@@ -110,10 +105,7 @@ Q09CostAvgProdSte(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     ) / 
     sum(TSTEAM,VmProdSte(allCy,TSTEAM,YTIME) + 1e-6);
 
-Q09GapShareSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$runCy(allCy)
-  $p09CostProdSte(allCy,TSTEAM,YTIME-1)
-  $sum(TSTEAM2, p09CostProdSte(allCy,TSTEAM2,YTIME-1))
-) ..
+Q09GapShareSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$runCy(allCy)) ..
     V09GapShareSte(allCy,TSTEAM,YTIME)
         =E=
     !!i04MatFacPlaAvailCap(allCy,TSTEAM,YTIME) *
@@ -137,11 +129,7 @@ Q09CaptRateSte(allCy,TSTEAM,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
       )
     );
 
-Q09ScrapRatePremature(allCy,TSTEAM,YTIME)$(TIME(YTIME)$runCy(allCy)
-  $p09CostVarProdSte(allCy,TSTEAM,YTIME-1)
-  $((not TCHP(TSTEAM)) or sum(TCHP2$(not sameas(TSTEAM,TCHP2)), p09CostProdSte(allCy,TCHP2,YTIME-1)))
-  $((not TDHP(TSTEAM)) or sum(TDHP2$(not sameas(TSTEAM,TDHP2)), p09CostProdSte(allCy,TDHP2,YTIME-1)))
-)..
+Q09ScrapRatePremature(allCy,TSTEAM,YTIME)$(TIME(YTIME)$runCy(allCy))..
     V09ScrapRatePremature(allCy,TSTEAM,YTIME)
         =E=
     p09CostVarProdSte(allCy,TSTEAM,YTIME-1) ** (-2) /

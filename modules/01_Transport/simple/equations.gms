@@ -11,9 +11,7 @@
 *' * Transport
 
 *' This equation calculates the lifetime of passenger cars as the inverse of their scrapping rate.
-Q01Lft(allCy,"PC",TTECH,YTIME)$(TIME(YTIME) $SECTTECH("PC",TTECH) $runCy(allCy)
-  $i01TechLft(allCy,"PC",TTECH,YTIME)
-)..
+Q01Lft(allCy,"PC",TTECH,YTIME)$(TIME(YTIME) $SECTTECH("PC",TTECH) $runCy(allCy))..
     VmLft(allCy,"PC",TTECH,YTIME)
         =E=
     1 / V01RateScrPc(allCy,TTECH,YTIME);
@@ -21,11 +19,7 @@ Q01Lft(allCy,"PC",TTECH,YTIME)$(TIME(YTIME) $SECTTECH("PC",TTECH) $runCy(allCy)
 *' This equation calculates the activity for goods transport, considering different types of goods transport such as trucks and other freight transport.
 *' The activity is influenced by factors such as GDP, population, fuel prices, and elasticities. The equation includes terms for trucks and other
 *' freight transport modes.
-Q01ActivGoodsTransp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANG(TRANSE) $runCy(allCy)
-  $pmPriceFuelAvgSub(allCy,TRANSE,YTIME-1)
-  $pmPriceFuelAvgSub(allCy,TRANSE,YTIME-2)
-  $prod(kpdl, pmPriceFuelAvgSub(allCy,TRANSE,YTIME-ord(kpdl)) * pmPriceFuelAvgSub(allCy,TRANSE,YTIME-(ord(kpdl)+1)))
-)..
+Q01ActivGoodsTransp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANG(TRANSE) $runCy(allCy))..
       V01ActivGoodsTransp(allCy,TRANSE,YTIME)
               =E=
       (
@@ -61,9 +55,7 @@ Q01ActivGoodsTransp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANG(TRANSE) $runCy(allCy
 *' The gap is calculated separately for passenger cars, other passenger transportation modes, and goods transport. The equation involves
 *' various terms, including the new registrations of passenger cars, the activity of passenger and goods transport, and considerations for
 *' different types of transportation modes.
-Q01GapTranspActiv(allCy,TRANSE,YTIME)$(TIME(YTIME)$(runCy(allCy))
-  $((sameas(TRANSE,"PC")) or sum(TTECH$SECTTECH(TRANSE,TTECH), pmLft(allCy,TRANSE,TTECH,YTIME-1)))
-)..
+Q01GapTranspActiv(allCy,TRANSE,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V01GapTranspActiv(allCy,TRANSE,YTIME)
             =E=
     V01NewRegPcYearly(allCy,YTIME)$sameas(TRANSE,"PC") +
@@ -95,10 +87,7 @@ Q01GapTranspActiv(allCy,TRANSE,YTIME)$(TIME(YTIME)$(runCy(allCy))
 *' This equation computes the annualized capital cost of new transport technologies by converting upfront investment costs 
 *' into equivalent annual payments. It applies the annuity factor to spread the capital cost over the technology’s lifetime.
 *' It also includes state subsidy, as the amount that is purposed to each technology, except if a low cost bound is reached.
-Q01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runCy(allCy)
-  $imDisc(allCy,TRANSE,YTIME)
-  $i01TechLft(allCy,TRANSE,TTECH,YTIME)
-)..
+Q01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runCy(allCy))..
     V01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)
           =E=
     (
@@ -188,11 +177,7 @@ Q01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME)$runCy(allCy)
 * Result:
 * - V01ShareTechTr: Dimensionless value representing the share of each technology in total sectoral use.
 * -------------------------------------------------------------------------------
-Q01ShareTechTr(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runCy(allCy)
-  $imMatrFactor(allCy,TRANSE,TTECH,YTIME)
-  $p01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME-1)
-  $prod(TTECH2$(SECTTECH(TRANSE,TTECH2) and imMatrFactor(allCy,TRANSE,TTECH2,YTIME)), p01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1))
-)..
+Q01ShareTechTr(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runCy(allCy))..
     V01ShareTechTr(allCy,TRANSE,TTECH,YTIME)
       =E=
     imMatrFactor(allCy,TRANSE,TTECH,YTIME) *
@@ -205,9 +190,7 @@ Q01ShareTechTr(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $r
 *' This equation calculates the consumption of each technology in transport sectors. It considers various factors such as the lifetime of the technology,
 *' average capacity per vehicle, load factor, scrapping rate, and specific fuel consumption. The equation also takes into account the technology's variable
 *' cost for new equipment and the gap in transport activity to be filled by new technologies. The result is expressed in million tonnes of oil equivalent.
-Q01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $TTECHtoEF(TTECH,EF) $runCy(allCy)
-  $((sameas(TRANSE,"PC")) or (pmLft(allCy,TRANSE,TTECH,YTIME-1) * i01AvgVehCapLoadFac(allCy,TRANSE,"CAP",YTIME) * i01AvgVehCapLoadFac(allCy,TRANSE,"LF",YTIME)))
-)..
+Q01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $TTECHtoEF(TTECH,EF) $runCy(allCy))..
     V01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)
             =E=
     p01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME-1) *
@@ -304,13 +287,7 @@ Q01NewRegPcYearly(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' This equation calculates the passenger transport activity for various modes of transportation, including passenger cars, aviation, and other passenger transportation modes.
 *' The activity is influenced by factors such as fuel prices, GDP per capita, and elasticities specific to each transportation mode. The equation uses past activity levels and
 *' price trends to estimate the current year's activity. The coefficients and exponents in the equation represent the sensitivities of activity to changes in various factors.
-Q01ActivPassTrnsp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANP(TRANSE) $runCy(allCy)
-  $pmPriceFuelAvgSub(allCy,TRANSE,YTIME-1)
-  $pmPriceFuelAvgSub(allCy,TRANSE,YTIME-2)
-  $((not sameas(TRANSE,"PC")) or p01PcOwnPcLevl(allCy,YTIME-1))
-  $((sameas(TRANSE,"PC")) or sameas(TRANSE,"PA") or (p01StockPcYearly(allCy,YTIME-1) * p01ActivPassTrnsp(allCy,"PC",YTIME-1)))
-  $prod(kpdl, pmPriceFuelAvgSub(allCy,TRANSE,YTIME-ord(kpdl)) * pmPriceFuelAvgSub(allCy,TRANSE,YTIME-(ord(kpdl)+1)))
-)..
+Q01ActivPassTrnsp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANP(TRANSE) $runCy(allCy))..
       V01ActivPassTrnsp(allCy,TRANSE,YTIME)
               =E=
       (  !! passenger cars

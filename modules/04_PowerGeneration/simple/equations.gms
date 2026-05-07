@@ -14,9 +14,7 @@
 *' The estimation is based on the fuel consumption of CHP plants, their electricity prices, the maximum share of CHP electricity in total demand, and the overall
 *' electricity demand. The equation essentially estimates the electricity generation of CHP plants by considering their fuel consumption, electricity prices, and the maximum
 *' share of CHP electricity in total demand. The square root expression ensures that the estimated electricity generation remains non-negative.
-Q04ProdElecEstCHP(allCy,TCHP,YTIME)$(TIME(YTIME)$(runCy(allCy))
-  $pmPriceElecInd(allCy,TCHP,YTIME-1)
-)..
+Q04ProdElecEstCHP(allCy,TCHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04ProdElecEstCHP(allCy,TCHP,YTIME) 
         =E=
     1/smTWhToMtoe *
@@ -114,10 +112,7 @@ Q04CostHourProdInvDec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' The index is calculated as the variable cost of technology excluding power plants flagged as not subject to scrapping 
 *' divided by the sum of this variable cost and a scaled value based on the scale parameter for endogenous scrapping . The scale
 *' parameter is applied to the sum of full costs and raised to the power of -2. The resulting index is used to determine the endogenous scrapping of power plants.
-Q04IndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(allCy)
-  $p04CostVarTech(allCy,PGALL,YTIME-1)
-  $sum(PGALL2$(not sameas(PGALL,PGALL2)), p04CostHourProdInvDec(allCy,PGALL2,YTIME-1))
-)..
+Q04IndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(allCy))..
     V04IndxEndogScrap(allCy,PGALL,YTIME)
         =E=
     p04CostVarTech(allCy,PGALL,YTIME-1)**(-2) /
@@ -174,9 +169,7 @@ Q04GapGenCapPowerDiff(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     )/2 + 1e-6;
 
 *' Calculates the share of all the unflexible RES penetration into the mixture, and specifically how much above a given threshold it is.
-Q04ShareMixWndSol(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy))
-  $sum(PGALL, pmCapElec(allCy,PGALL,YTIME-1))
-)..
+Q04ShareMixWndSol(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04ShareMixWndSol(allCy,YTIME)
         =E=
     sum(PGALL$PGRENSW(PGALL), VmCapElec(allCy,PGALL,YTIME)) /
@@ -198,10 +191,7 @@ Q04ShareMixWndSol(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy))
 *' overall new investment decision for power plants . This ratio provides a proportionate share of new equipment for each power plant, considering factors such
 *' as material-specific scaling and economic considerations.For power plants with CCS , the share is determined by summing the shares of corresponding power plants
 *' without CCS. This allows for the allocation of shares in new equipment for CCS and non-CCS versions of the same power plant.
-Q04SharePowPlaNewEq(allCy,PGALL,YTIME)$(TIME(YTIME)$runCy(allCy)
-  $p04CostHourProdInvDec(allCy,PGALL,YTIME-1)
-  $prod(PGALL2$(i04MatFacPlaAvailCap(allCy,PGALL2,YTIME) * p04ShareSatPG(allCy,PGALL2,YTIME-1)), p04CostHourProdInvDec(allCy,PGALL2,YTIME-1))
-) ..
+Q04SharePowPlaNewEq(allCy,PGALL,YTIME)$(TIME(YTIME)$runCy(allCy)) ..
     V04SharePowPlaNewEq(allCy,PGALL,YTIME)
         =E=
     i04MatFacPlaAvailCap(allCy,PGALL,YTIME) *
@@ -251,9 +241,7 @@ Q04NetNewCapElec(allCy,PGALL,YTIME)$(PGREN(PGALL)$TIME(YTIME)$runCy(allCy))..
 *' demand, the required electricity production, and the capacity of the power generation plants.The equation calculates the electricity production
 *' from power generation plants based on the proportion of electricity demand that needs to be met by power generation plants, considering their
 *' capacity and the scaling factor for dispatching.
-Q04ProdElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))
-  $sum(PGALL2, pmCapElec(allCy,PGALL2,YTIME-1))
-)..
+Q04ProdElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmProdElec(allCy,PGALL,YTIME)
         =E=
     V04CapElecNonCHP(allCy,YTIME) /
@@ -263,9 +251,7 @@ Q04ProdElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))
     !!VmCapElec(allCy,PGALL,YTIME) * smGwToTwhPerYear(YTIME);
 
 *' Share of all technologies in the electricity mixture.
-Q04ShareTechPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))
-  $sum(PGALL2, pmCapElec(allCy,PGALL2,YTIME-1))
-)..
+Q04ShareTechPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04ShareTechPG(allCy,PGALL,YTIME)
         =E=
     VmCapElec(allCy,PGALL,YTIME) /
@@ -313,10 +299,7 @@ Q04CO2CaptRate(allCy,PGALL,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
       )
     );
 
-Q04CCSRetroFit(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(NOCCS(PGALL))
-  $p04CostVarTech(allCy,PGALL,YTIME-1)
-  $prod(PGALL2$CCS_NOCCS(PGALL2,PGALL), p04CostCapTech(allCy,PGALL2,YTIME-1) + p04CostVarTech(allCy,PGALL2,YTIME-1))
-)..
+Q04CCSRetroFit(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(NOCCS(PGALL)))..
     V04CCSRetroFit(allCy,PGALL,YTIME)
         =E=
     p04CostVarTech(allCy,PGALL,YTIME-1) ** (-2) /

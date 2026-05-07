@@ -3,6 +3,9 @@ loop an do !! start outer iteration loop (time steps)
    TIME(YTIME) = NO;
    TIME(AN)$(ord(an)=sIter) = YES;
    display TIME;
+$ifthen.curves "%Curves%" == "LearningCurves"
+   p10CumCapGlobal(LCTECH,YTIME)$TIME(YTIME) = p10CumCapGlobal(LCTECH,YTIME-1);
+$endif.curves
    sCY = 0;
    loop runCyL do !! start countries loop
       sCY = sCY + 1;

@@ -69,7 +69,7 @@ i09CostVOMSteProd(TSTEAM,YTIME) * 1e-3 -!!/ smTWhToMtoe / SUM(TCHP$sameas(TCHP,T
 (
   VmPriceFuelSubsecCarVal.L(runCy,"OI","ELC",YTIME) *
   smFracElecPriChp /
-  SUM(TCHP$sameas(TCHP,TSTEAM),VmPriceElecInd.L(runCy,TCHP,YTIME))
+  (SUM(TCHP$sameas(TCHP,TSTEAM),VmPriceElecInd.L(runCy,TCHP,YTIME)) + epsilon6)
 )$TCHP(TSTEAM);
 *---
 V09CostProdSte.LO(runCy,TSTEAM,YTIME) = 0;

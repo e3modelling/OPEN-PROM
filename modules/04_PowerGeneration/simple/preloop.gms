@@ -43,23 +43,23 @@ V04CapexFixCostPG.LO(runCy,PGALL,YTIME) = 0;
 V04CapexFixCostPG.L(runCy,PGALL,YTIME) = 
 ( 
   imDisc(runCy,"PG",YTIME) * exp(imDisc(runCy,"PG",YTIME) * i04TechLftPlaType(runCy,PGALL)) /
-  (exp(imDisc(runCy,"PG",YTIME) * i04TechLftPlaType(runCy,PGALL)) -1)
+  (exp(imDisc(runCy,"PG",YTIME) * i04TechLftPlaType(runCy,PGALL)) -1 + epsilon6)
 ) * i04GrossCapCosSubRen(runCy,PGALL,YTIME) * 1000 * imCGI(runCy,YTIME) +
 i04FixOandMCost(runCy,PGALL,YTIME);
 V04CapexFixCostPG.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = 
 ( 
   imDisc(runCy,"PG",YTIME) * exp(imDisc(runCy,"PG",YTIME) * i04TechLftPlaType(runCy,PGALL)) /
-  (exp(imDisc(runCy,"PG",YTIME) * i04TechLftPlaType(runCy,PGALL)) -1)
+  (exp(imDisc(runCy,"PG",YTIME) * i04TechLftPlaType(runCy,PGALL)) -1 + epsilon6)
 ) * i04GrossCapCosSubRen(runCy,PGALL,YTIME) * 1000 * imCGI(runCy,YTIME) +
 i04FixOandMCost(runCy,PGALL,YTIME);
 *---
-V04CostCapTech.LO(runCy,PGALL,YTIME) = 0;
+V04CostCapTech.LO(runCy,PGALL,YTIME) = epsilon6;
 V04CostCapTech.L(runCy,PGALL,YTIME) = 1;
 V04CostCapTech.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = 
 V04CapexRESRate.L(runCy,PGALL,YTIME) * V04CapexFixCostPG.L(runCy,PGALL,YTIME) / 
     (i04AvailRate(runCy,PGALL,YTIME) * smGwToTwhPerYear(YTIME) * 1000); 
 *---
-V04CostHourProdInvDec.LO(runCy,PGALL,YTIME) = 0;
+V04CostHourProdInvDec.LO(runCy,PGALL,YTIME) = epsilon6;
 V04CostHourProdInvDec.L(runCy,PGALL,YTIME) = V04CostCapTech.L(runCy,PGALL,"%fBaseY%") + V04CostVarTech.L(runCy,PGALL,"%fBaseY%");     
 V04CostHourProdInvDec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = V04CostCapTech.L(runCy,PGALL,YTIME) + V04CostVarTech.L(runCy,PGALL,YTIME);
 *---
