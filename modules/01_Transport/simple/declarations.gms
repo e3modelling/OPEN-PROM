@@ -11,6 +11,26 @@ i01PassCarsMarkSat(allCy)	                          "Passenger cars ownership sa
 i01GDPperCapita(YTIME,allCy)
 i01Sigma(allCy,SG)                                   "S parameters of Gompertz function for passenger cars vehicle km (1)"
 i01ShareBlend(allCy,TRANSE,EF,YTIME)
+p01ActivGoodsTransp(allCy,TRANSE,YTIME)                    "Stored goods transport acitivity (Gtkm)"
+p01GapTranspActiv(allCy,TRANSE,YTIME)                      "Stored gap in transport activity to be filled by new technologies ()"
+p01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)           "Stored Specific Fuel Consumption ()"
+p01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME)     "Stored transportation cost per mean (KUS$2015/vehicle)"
+p01ShareTechTr(allCy,TRANSE,TECH,YTIME)                    "Stored technology share in new equipment (1)"
+p01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)     "Stored consumption of each technology and subsector (Mtoe)"
+p01StockPcYearly(allCy,YTIME)                              "Stored stock of passenger cars (million vehicles)"
+p01StockPcYearlyTech(allCy,TTECH,YTIME)                    "Stored stock of passenger cars per technology (in million vehicles)"
+p01NewRegPcYearly(allCy,YTIME)                             "Stored passenger cars new registrations (million vehicles)"
+p01NewRegPcTechYearly(allCy,TTECH,YTIME)                   "Stored passenger cars new registrations per technology (million vehicles)"
+p01ActivPassTrnsp(allCy,TRANSE,YTIME)                      "Stored passenger transport activity (1)"
+p01NumPcScrap(allCy,YTIME)                                 "Stored scrapped passenger cars (million vehicles)"
+p01PcOwnPcLevl(allCy,YTIME)                                "Stored ratio of car ownership over saturation car ownership (1)"
+p01RateScrPc(allCy,TTECH,YTIME)                            "Stored scrapping rate of passenger cars (1)"
+p01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)             "Stored annualized capital cost"
+p01CostFuel(allCy,TRANSE,TTECH,YTIME)                      "Stored fuel cost"
+p01PremScrp(allCy,TRANSE,TTECH,YTIME)                      "Stored premature scrapping"
+p01RateScrPcTot(allCy,TTECH,YTIME)                         "Stored total scrapping rate of passenger cars (1)"
+pmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)            "Stored final energy demand in transport subsectors per fuel (Mtoe)"
+pmLft(allCy,DSBS,TECH,YTIME)                               "Stored lifetime of technologies (years)"
 ;
 
 Equations

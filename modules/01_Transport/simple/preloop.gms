@@ -106,3 +106,26 @@ imFixOMCostTech(runCy,TRANSE,TTECH,YTIME) +
 V01CostFuel.L(runCy,TRANSE,TTECH,YTIME);
 *---
 V01ShareTechTr.LO(runCy,TRANSE,TTECH,YTIME) = 0;
+
+*'                *PARAMETER INITIALISATION FOR RECURSIVE LAGS*
+
+p01StockPcYearly(runCy,YTIME) = V01StockPcYearly.L(runCy,YTIME);
+p01RateScrPc(runCy,TTECH,YTIME) = V01RateScrPc.L(runCy,TTECH,YTIME);
+p01RateScrPcTot(runCy,TTECH,YTIME) = V01RateScrPcTot.L(runCy,TTECH,YTIME);
+p01ActivGoodsTransp(runCy,TRANSE,YTIME) = V01ActivGoodsTransp.L(runCy,TRANSE,YTIME);
+p01ConsSpecificFuel(runCy,TRANSE,TTECH,EF,YTIME) = V01ConsSpecificFuel.L(runCy,TRANSE,TTECH,EF,YTIME);
+p01ConsTechTranspSectoral(runCy,TRANSE,TTECH,EF,YTIME) = V01ConsTechTranspSectoral.L(runCy,TRANSE,TTECH,EF,YTIME);
+p01ActivPassTrnsp(runCy,TRANSE,YTIME) = V01ActivPassTrnsp.L(runCy,TRANSE,YTIME);
+pmLft(runCy,DSBS,TTECH,YTIME) = VmLft.L(runCy,DSBS,TTECH,YTIME);
+p01NewRegPcYearly(runCy,YTIME) = V01NewRegPcYearly.L(runCy,YTIME);
+p01NewRegPcTechYearly(runCy,TTECH,YTIME) = V01NewRegPcTechYearly.L(runCy,TTECH,YTIME);
+p01NumPcScrap(runCy,YTIME) = V01NumPcScrap.L(runCy,YTIME);
+p01StockPcYearlyTech(runCy,TTECH,YTIME) = V01StockPcYearlyTech.L(runCy,TTECH,YTIME);
+p01PcOwnPcLevl(runCy,YTIME) = V01PcOwnPcLevl.L(runCy,YTIME);
+p01GapTranspActiv(runCy,TRANSE,YTIME) = V01GapTranspActiv.L(runCy,TRANSE,YTIME);
+p01PremScrp(runCy,TRANSE,TTECH,YTIME) = V01PremScrp.L(runCy,TRANSE,TTECH,YTIME);
+p01CapCostAnnualized(runCy,TRANSE,TTECH,YTIME) = V01CapCostAnnualized.L(runCy,TRANSE,TTECH,YTIME);
+p01CostTranspPerMeanConsSize(runCy,TRANSE,TTECH,YTIME) = V01CostTranspPerMeanConsSize.L(runCy,TRANSE,TTECH,YTIME);
+p01CostFuel(runCy,TRANSE,TTECH,YTIME) = V01CostFuel.L(runCy,TRANSE,TTECH,YTIME);
+p01ShareTechTr(runCy,TRANSE,TTECH,YTIME) = V01ShareTechTr.L(runCy,TRANSE,TTECH,YTIME);
+pmDemFinEneTranspPerFuel(runCy,TRANSE,EF,YTIME) = VmDemFinEneTranspPerFuel.L(runCy,TRANSE,EF,YTIME);
