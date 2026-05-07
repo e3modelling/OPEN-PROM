@@ -100,6 +100,7 @@ Q02GapUsefulDemSubsec(allCy,DSBS,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not 
 *' Add parameter sUnitToKUnit = 1000
 *' Check ITECH and CHPs
 Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not CDR(DSBS))$SECTTECH(DSBS,ITECH)$runCy(allCy)
+  $imDisc(allCy,DSBS,YTIME)
   $i01TechLft(allCy,DSBS,ITECH,YTIME)
   $imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME)
 )..

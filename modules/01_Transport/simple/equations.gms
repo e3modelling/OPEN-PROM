@@ -11,7 +11,9 @@
 *' * Transport
 
 *' This equation calculates the lifetime of passenger cars as the inverse of their scrapping rate.
-Q01Lft(allCy,"PC",TTECH,YTIME)$(TIME(YTIME) $SECTTECH("PC",TTECH) $runCy(allCy))..
+Q01Lft(allCy,"PC",TTECH,YTIME)$(TIME(YTIME) $SECTTECH("PC",TTECH) $runCy(allCy)
+  $i01TechLft(allCy,"PC",TTECH,YTIME)
+)..
     VmLft(allCy,"PC",TTECH,YTIME)
         =E=
     1 / V01RateScrPc(allCy,TTECH,YTIME);
@@ -93,7 +95,10 @@ Q01GapTranspActiv(allCy,TRANSE,YTIME)$(TIME(YTIME)$(runCy(allCy))
 *' This equation computes the annualized capital cost of new transport technologies by converting upfront investment costs 
 *' into equivalent annual payments. It applies the annuity factor to spread the capital cost over the technology’s lifetime.
 *' It also includes state subsidy, as the amount that is purposed to each technology, except if a low cost bound is reached.
-Q01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runCy(allCy))..
+Q01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runCy(allCy)
+  $imDisc(allCy,TRANSE,YTIME)
+  $i01TechLft(allCy,TRANSE,TTECH,YTIME)
+)..
     V01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)
           =E=
     (

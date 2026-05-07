@@ -47,7 +47,7 @@ VmCstCO2SeqCsts.LO(runCy,YTIME) = i06ElastCO2Seq(runCy,"seq_min");
 VmCstCO2SeqCsts.L(runCy,YTIME) = i06ElastCO2Seq(runCy,"seq_min");
 VmCstCO2SeqCsts.FX(runCy,YTIME)$DATAY(YTIME) = i06ElastCO2Seq(runCy,"seq_min");
 *---
-VmPriceFuelSubsecCarVal.LO(runCy,SBS,EF,YTIME) = 0;
+VmPriceFuelSubsecCarVal.LO(runCy,SBS,EF,YTIME) = epsilon6;
 VmPriceFuelSubsecCarVal.L(runCy,SBS,EF,YTIME) = 1;
 
 $IFTHEN %link2MAgPIE% == on 
@@ -67,11 +67,11 @@ VmPriceFuelSubsecCarVal.FX(runCy,SBS,"CRO",YTIME) = imFuelPrice(runCy,SBS,"CRO",
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,"STE",YTIME)$(SECtoEF(SBS,"STE") and DATAY(YTIME)) = imFuelPrice(runCy,"OI","ELC",YTIME);
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,"GEO",YTIME) = 0;
 *---
-VmPriceFuelAvgSub.LO(runCy,DSBS,YTIME) = 0;
+VmPriceFuelAvgSub.LO(runCy,DSBS,YTIME) = epsilon6;
 VmPriceFuelAvgSub.L(runCy,DSBS,YTIME) = 1;
 VmPriceFuelAvgSub.FX(runCy,DSBS,YTIME)$DATAY(YTIME) = sum(EF$SECtoEF(DSBS,EF), i08WgtSecAvgPriFueCons(runCy,DSBS,EF) * imFuelPrice(runCy,DSBS,EF,YTIME));
 *---
-VmPriceElecInd.LO(runCy,TCHP,YTIME) = 0;
+VmPriceElecInd.LO(runCy,TCHP,YTIME) = epsilon6;
 VmPriceElecInd.L(runCy,TCHP,YTIME) = imPriceElecInd(runCy,TCHP,"%fBaseY%");
 VmPriceElecInd.FX(runCy,TCHP,YTIME)$DATAY(YTIME) = imPriceElecInd(runCy,TCHP,YTIME);
 *---
