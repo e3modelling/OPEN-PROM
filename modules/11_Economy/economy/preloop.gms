@@ -20,9 +20,9 @@ VmSubsiDemTech.FX(runCy,DSBS,TECH,YTIME)$(DATAY(YTIME) or TFIRST(YTIME) or not S
 
 *'                *PARAMETER INITIALISATION FOR RECURSIVE LAGS*
 
-VmSubsiDemTechAvail.L(runCy,DSBS,TECH,YTIME) = 0;
-VmSubsiSupTech.L(runCy,STECH,YTIME) = 0;
-VmSubsiCapCostSupply.L(runCy,SSBS,STECH,YTIME) = 0;
+VmSubsiDemTechAvail.L(runCy,DSBS,TECH,YTIME) = 1e-6;
+VmSubsiSupTech.L(runCy,STECH,YTIME) = 1e-6;
+VmSubsiCapCostSupply.L(runCy,SSBS,STECH,YTIME) = 1e-6;
 
 p11SubsiTot(runCy,YTIME) = V11SubsiTot.L(runCy,YTIME);
 pmSubsiDemTechAvail(runCy,DSBS,TECH,YTIME) = VmSubsiDemTechAvail.L(runCy,DSBS,TECH,YTIME);
