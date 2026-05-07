@@ -142,8 +142,8 @@ Q07EmissionsNet(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q07EmissionsNetPart(allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V07EmissionsNetPart(allCy,YTIME)
     =E=
-    (V07EmissionsNet(allCy,YTIME-1) /
-    (sum(runCy2, V07EmissionsNet(runCy2,YTIME-1))))
-!!    * 1 / 2 * ( 1 + tanh (10 * sum(runCy2, V07EmissionsNet(runCy2,YTIME-1))))
+    (p07EmissionsNet(allCy,YTIME-1) /
+    (sum(runCy2, p07EmissionsNet(runCy2,YTIME-1))))
+!!    * 1 / 2 * ( 1 + tanh (10 * sum(runCy2, p07EmissionsNet(runCy2,YTIME-1))))
     + 1e-6
     ;

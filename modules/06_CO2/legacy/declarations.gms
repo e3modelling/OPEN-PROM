@@ -1,6 +1,22 @@
 *' @title CO2 SEQUESTRATION COST CURVES Declarations
 *' @code
 
+Parameters
+p06CO2CaptureCCS(allCy,SBS,EF,YTIME)                    "Stored CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
+p06CaptCummCO2(allCy,YTIME)                             "Stored cumulative CO2 captured (Mtn CO2)"
+p06CaptCummCO2Glob(YTIME)                               "Stored global cumulative CO2 captured (Mtn CO2)"
+p06GrossCapDAC(CDRTECH,YTIME)                           "Stored CAPEX of DAC technologies with learning curve"
+p06FixOandMDAC(CDRTECH,YTIME)                           "Stored fixed and O&M costs of DAC technologies with learning curve"
+p06VarCostDAC(CDRTECH,YTIME)                            "Stored variable costs of DAC technologies"
+p06LvlCostDAC(allCy,CDRTECH,YTIME)                      "Stored regional DAC levelized cost (US$2015/tCO2)"
+p06ProfRateDAC(allCy,CDRTECH,YTIME)                     "Stored annual profitability rate of DAC"
+p06CapFacNewDAC(allCy,CDRTECH,YTIME)                    "Stored annual increase factor for DAC installed capacity"
+p06CapCDR(allCy,CDRTECH,YTIME)                          "Stored DAC regional installed capacity (tCO2)"
+pmCstCO2SeqCsts(allCy,YTIME)                            "Stored CO2 sequestration cost curve (US$2015/tn CO2)"
+pmConsFuelTechCDRProd(allCy,CDRTECH,EF,YTIME)           "Stored annual fuel demand in each DAC technology (Mtoe)"
+pmConsFuelCDRProd(allCy,EF,YTIME)                       "Stored annual fuel demand in DAC (Mtoe)"
+;
+
 Equations
 Q06CO2CaptureCCS(allCy,SBS,EF,YTIME)	               "Compute CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
 Q06CaptCummCO2(allCy,YTIME)	                               "Compute cumulative CO2 captured (Mtn of CO2)"

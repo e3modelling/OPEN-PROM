@@ -7,6 +7,13 @@ p07MacCost(E07MAC)                                     "Numeric value of the MAC
 p07UnitConvFactor(E07SrcMacAbate)                      "Multiplier to convert carbon price units to MAC units"
 p07GWP(E07SrcMacAbate)                                 "Global Warming Potentials, AR4 100yr (CO2=1, CH4=25, N2O=298, etc), Data from Hamsen et al 2019"
 p07CostCorrection(E07SrcMacAbate)                      "Factor to convert (Qty * Cost) to Million 2015$"
+p07GrossEmissCO2Supply(allCy,SSBS,YTIME)               "Stored total CO2eq GHG emissions per supply sector"
+p07RedAbsBySrcRegTim(E07SrcMacAbate,allCy,YTIME)       "Stored selected cumulative abatement fraction"
+p07EmiActBySrcRegTim(E07SrcMacAbate,allCy,YTIME)       "Stored actual emissions"
+p07CostAbateBySrcRegTim(E07SrcMacAbate,allCy,YTIME)    "Stored total abatement cost"
+p07GrossEmissCO2Demand(allCy,DSBS,YTIME)               "Stored gross emissions of demand subsectors"
+p07EmissionsNet(allCy,YTIME)                           "Stored net emissions after abatement"
+p07EmissionsNetPart(allCy,YTIME)                       "Stored fraction of regional net emissions to global net emissions"
 ;
 
 Equations
