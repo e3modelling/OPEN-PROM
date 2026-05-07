@@ -26,7 +26,7 @@ Q09ScrapRate(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q09CapSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCapSte(allCy,TSTEAM,YTIME)
         =E=
-    (1-V09ScrapRate(allCy,TSTEAM,YTIME)) * VmCapSte(allCy,TSTEAM,YTIME-1) +
+    (1-V09ScrapRate(allCy,TSTEAM,YTIME)) * pmCapSte(allCy,TSTEAM,YTIME-1) +
     V09GapShareSte(allCy,TSTEAM,YTIME) * V09DemGapSte(allCy,YTIME);
 
 Q09ProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
@@ -43,13 +43,13 @@ Q09DemGapSte(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       VmDemTotSte(allCy,YTIME) -
       sum(TSTEAM,
         (1-V09ScrapRate(allCy,TSTEAM,YTIME)) *
-        VmCapSte(allCy,TSTEAM,YTIME-1)
+        pmCapSte(allCy,TSTEAM,YTIME-1)
       ) +
   SQRT(SQR(
       VmDemTotSte(allCy,YTIME) -
       sum(TSTEAM,
         (1-V09ScrapRate(allCy,TSTEAM,YTIME)) *
-        VmCapSte(allCy,TSTEAM,YTIME-1)
+        pmCapSte(allCy,TSTEAM,YTIME-1)
       )
   ))
   )/2 + 1e-6;
@@ -109,10 +109,10 @@ Q09GapShareSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$runCy(allCy)) ..
     V09GapShareSte(allCy,TSTEAM,YTIME)
         =E=
     !!i04MatFacPlaAvailCap(allCy,TSTEAM,YTIME) *
-    V09CostProdSte(allCy,TSTEAM,YTIME-1) ** (-2) /
+    p09CostProdSte(allCy,TSTEAM,YTIME-1) ** (-2) /
     SUM(TSTEAM2,
       !!i04MatFacPlaAvailCap(allCy,TSTEAM2,YTIME) *
-      V09CostProdSte(allCy,TSTEAM2,YTIME-1) ** (-2)
+      p09CostProdSte(allCy,TSTEAM2,YTIME-1) ** (-2)
     );
 
 Q09CaptRateSte(allCy,TSTEAM,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
@@ -132,20 +132,20 @@ Q09CaptRateSte(allCy,TSTEAM,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
 Q09ScrapRatePremature(allCy,TSTEAM,YTIME)$(TIME(YTIME)$runCy(allCy))..
     V09ScrapRatePremature(allCy,TSTEAM,YTIME)
         =E=
-    V09CostVarProdSte(allCy,TSTEAM,YTIME-1) ** (-2) /
+    p09CostVarProdSte(allCy,TSTEAM,YTIME-1) ** (-2) /
     (
-      V09CostVarProdSte(allCy,TSTEAM,YTIME-1) ** (-2) +
+      p09CostVarProdSte(allCy,TSTEAM,YTIME-1) ** (-2) +
       (( 
         i09ScaleEndogScrap *
         sum(TCHP2$(not sameas(TSTEAM,TCHP2)),
-          V09CostProdSte(allCy,TCHP2,YTIME-1)
+          p09CostProdSte(allCy,TCHP2,YTIME-1)
         )
       ) ** (-2)
       )$TCHP(TSTEAM) +
       (( 
         i09ScaleEndogScrap *
         sum(TDHP2$(not sameas(TSTEAM,TDHP2)),
-          V09CostProdSte(allCy,TDHP2,YTIME-1)
+          p09CostProdSte(allCy,TDHP2,YTIME-1)
         )
       ) ** (-2)
       )$TDHP(TSTEAM)

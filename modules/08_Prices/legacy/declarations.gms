@@ -1,6 +1,13 @@
 *' @title Prices Declarations
 *' @code
 
+Parameters
+p08PriceFuelSepCarbonWght(allCy,SBS,EF,YTIME)             "Stored fuel prices per subsector and fuel multiplied by weights"
+pmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)               "Stored fuel prices per subsector and fuel"
+pmPriceFuelAvgSub(allCy,DSBS,YTIME)                       "Stored average fuel prices per subsector"
+pmPriceElecInd(allCy,TCHP,YTIME)                          "Stored electricity index"
+;
+
 Equations
 *' *** Prices
 Q08PriceFuelSepCarbonWght(allCy,SBS,EF,YTIME)	           "Compute fuel prices per subsector and fuel, separate carbon value in each sector"

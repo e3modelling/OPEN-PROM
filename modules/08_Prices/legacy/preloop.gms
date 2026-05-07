@@ -16,3 +16,10 @@ SQRT( SQR(((VmPriceFuelSubsecCarVal.L(runCy,DSBS,EF,YTIME)+imVarCostTech(runCy,D
 *---
 $offtext
 *---
+
+*'                *PARAMETER INITIALISATION FOR RECURSIVE LAGS*
+
+p08PriceFuelSepCarbonWght(runCy,SBS,EF,YTIME) = V08PriceFuelSepCarbonWght.L(runCy,SBS,EF,YTIME);
+pmPriceFuelSubsecCarVal(runCy,SBS,EF,YTIME) = VmPriceFuelSubsecCarVal.L(runCy,SBS,EF,YTIME);
+pmPriceFuelAvgSub(runCy,DSBS,YTIME) = VmPriceFuelAvgSub.L(runCy,DSBS,YTIME);
+pmPriceElecInd(runCy,TCHP,YTIME) = VmPriceElecInd.L(runCy,TCHP,YTIME);

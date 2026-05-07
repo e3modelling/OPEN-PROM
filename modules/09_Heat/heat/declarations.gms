@@ -1,6 +1,22 @@
 *' @title Heat module Declarations
 *' @code
 
+Parameters
+p09ScrapRate(allCy,TSTEAM,YTIME)                  "Stored heat scrapping rate"
+p09DemGapSte(allCy,YTIME)                         "Stored steam demand gap"
+p09CostVarProdSte(allCy,TSTEAM,YTIME)             "Stored variable cost of steam generation technologies"
+p09CostCapProdSte(allCy,TSTEAM,YTIME)             "Stored capex and O&M costs of steam generation technologies"
+p09CostProdSte(allCy,TSTEAM,YTIME)                "Stored cost of steam production"
+p09GapShareSte(allCy,TSTEAM,YTIME)                "Stored steam gap share"
+p09CaptRateSte(allCy,TSTEAM,YTIME)                "Stored steam capture rate"
+p09ScrapRatePremature(allCy,TSTEAM,YTIME)         "Stored premature steam scrapping rate"
+pmDemTotSte(allCy,YTIME)                          "Stored total steam demand"
+pmCapSte(allCy,TSTEAM,YTIME)                      "Stored steam capacity"
+pmProdSte(allCy,TSTEAM,YTIME)                     "Stored steam production"
+pmCostAvgProdSte(allCy,YTIME)                     "Stored average cost of steam production"
+pmConsFuelSteProd(allCy,STEMODE,EFS,YTIME)        "Stored fuel consumption for steam production"
+;
+
 Equations
 Q09ScrapRate(allCy,TSTEAM,YTIME)
 Q09DemGapSte(allCy,YTIME)
