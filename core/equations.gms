@@ -14,7 +14,7 @@ $IFTHEN.calib %Calibration% == MatCalibration
 qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy)).. 
   vDummyObj 
     =e=
-  vDummyObjPGALL(allCy,YTIME) + vDummyObjTRANSE(allCy,YTIME) + vDummyObjDOMSE1(allCy,YTIME) + vDummyObjDOMSE2(allCy,YTIME)
+  vDummyObjPGALL + vDummyObjTRANSE + vDummyObjDOMSE1 + vDummyObjDOMSE2
   ;
 
 qDummyObjPGALL(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
