@@ -48,6 +48,7 @@ imCapCostTech(allCy,SBS,TECH,YTIME)                          "Capital Cost of te
                                                                 !! - For Domestic Sectors is expressed in kUS$2015/toe-year
 imFuelConsPerFueSub(allCy,SBS,EF,YTIME)	                   "Fuel consumption per fuel and subsector (Mtoe)"
 smGwToTwhPerYear(YTIME)                                    "convert GW mean power into TWh/y, depending on whether it's a leap year"
+pmCarVal(allCy,NAP,YTIME)                                  "Stored carbon prices for all countries (US$2015/tn CO2)"
 ;
 
 Equations

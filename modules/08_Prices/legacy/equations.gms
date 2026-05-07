@@ -31,7 +31,7 @@ $ENDIF
     (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.8 - 1)$SECtoEFPROD("LQD",EFS)) +
     (
       VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,SBS,EFS,YTIME) * 1e-3 - 
-      VmCarVal(allCy,"TRADE",YTIME-1) * imCo2EmiFac(allCy,SBS,EFS,YTIME-1) * 1e-3
+      pmCarVal(allCy,"TRADE",YTIME-1) * imCo2EmiFac(allCy,SBS,EFS,YTIME-1) * 1e-3
     )$DSBS(SBS);
 
 Q08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)$(SECtoEF(DSBS,EF) $TIME(YTIME) $runCy(allCy))..

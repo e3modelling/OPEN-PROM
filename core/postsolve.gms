@@ -1,3 +1,6 @@
+*' Core recursive VmCarVal state
+pmCarVal(runCyL,NAP,YTIME)$TIME(YTIME) = VmCarVal.L(runCyL,NAP,YTIME)$TIME(YTIME);
+
 endloop;  !! close countries loop
 $ifthen.curves "%Curves%" == "LearningCurves"
 V10CumCapGlobal.FX(LCTECH,YTIME)$TIME(YTIME) = V10CumCapGlobal.L(LCTECH,YTIME)$TIME(YTIME);

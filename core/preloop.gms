@@ -86,3 +86,7 @@ openprom.scaleopt=1;
 *---
 VmGDPPartGlob.L(runCy,YTIME) = 0.1;
 VmGDPPartGlob.FX(runCy,YTIME)$(DATAY(YTIME)) = i01GDP(YTIME,runCy) / sum(runCy2, i01GDP(YTIME,runCy2));
+
+*'                *PARAMETER INITIALISATION FOR RECURSIVE VmCarVal LAGS*
+
+pmCarVal(runCy,NAP,YTIME) = VmCarVal.L(runCy,NAP,YTIME);

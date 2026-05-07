@@ -33,7 +33,7 @@ Q11SubsiTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
             ))
           ) / 2
          *
-         sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME-1))
+         sum(NAP$NAPtoALLSBS(NAP,"PG"),pmCarVal(allCy,NAP,YTIME-1))
          + 0.005 * i01GDP(YTIME,allCy) * 1000
          + pmNetSubsiTax(allCy,YTIME-1)
 ;
