@@ -99,10 +99,14 @@ V02CostTech.FX(runCy,DSBS,ITECH,YTIME)$DATAY(YTIME) = V02VarCostTech.L(runCy,DSB
 VmConsFuelShare.LO(runCy,DSBS,EF,YTIME) = 0;
 VmConsFuelShare.FX(runCy,DSBS,EF,YTIME)$DATAY(YTIME) = (imFuelConsPerFueSub(runCy,DSBS,EF,YTIME) / SUM(EF2, imFuelConsPerFueSub(runCy,DSBS,EF2,YTIME)))$SUM(EF2, imFuelConsPerFueSub(runCy,DSBS,EF2,YTIME));
 *---
-V02DemUsefulSubsecRemTech.LO(allCy,DSBS,YTIME) = 0;
-V02DemUsefulSubsecRemTech.L(allCy,DSBS,YTIME) = 2;
-V02DemUsefulSubsecRemTech.FX(allCy,DSBS,YTIME)$DATAY(YTIME) = 0;
+V02DemUsefulSubsecRemTech.LO(runCy,DSBS,YTIME) = 0;
+V02DemUsefulSubsecRemTech.L(runCy,DSBS,YTIME)$(INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) = 2;
+V02DemUsefulSubsecRemTech.FX(runCy,DSBS,YTIME)$DATAY(YTIME) = 0;
 *---
-V02RemEquipCapTechSubsec.LO(allCy,DSBS,ITECH,YTIME) = 0;
-V02RemEquipCapTechSubsec.L(allCy,DSBS,ITECH,YTIME) = 1;
-V02RemEquipCapTechSubsec.FX(allCy,DSBS,ITECH,YTIME)$DATAY(YTIME) = 0;
+V02RemEquipCapTechSubsec.LO(runCy,DSBS,ITECH,YTIME) = 0;
+V02RemEquipCapTechSubsec.L(runCy,DSBS,ITECH,YTIME)$((INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and SECTTECH(DSBS,ITECH)) = 1;
+V02RemEquipCapTechSubsec.FX(runCy,DSBS,ITECH,YTIME)$(DATAY(YTIME) or not SECTTECH(DSBS,ITECH))= 0;
+*---
+V02GapUsefulDemSubsec.LO(runCy,DSBS,YTIME) = 0;
+V02GapUsefulDemSubsec.L(runCy,DSBS,YTIME)$(INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) = 1;
+V02GapUsefulDemSubsec.FX(runCy,DSBS,YTIME)$DATAY(YTIME) = 0;
