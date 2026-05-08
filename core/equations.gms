@@ -14,7 +14,7 @@ $IFTHEN.calib %Calibration% == MatCalibration
 qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy)).. 
   vDummyObj 
     =e=
-  vDummyObjPGALL + vDummyObjTRANSE + vDummyObjDOMSE1 + vDummyObjDOMSE2
+  vDummyObjPGALL + vDummyObjTRANSE + vDummyObjDOMSEShares + vDummyObjDOMSEFinalEnergy
   ;
 
 qDummyObjPGALL(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
@@ -42,8 +42,8 @@ qDummyObjTRANSE(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
   ) 
   ;
 
-qDummyObjDOMSE1(allCy,YTIME)$(TIME(YTIME) and runCy(allCy)).. 
-  vDummyObjDOMSE1
+qDummyObjDOMSEShares(allCy,YTIME)$(TIME(YTIME) and runCy(allCy)).. 
+  vDummyObjDOMSEShares
     =e=
   SUM((DSBS,EFS)$(sameas("SE", DSBS) or sameas("HOU",DSBS) or (sameas("AG",DSBS) and EU28(allCy))),
     SQR(
@@ -53,8 +53,8 @@ qDummyObjDOMSE1(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
   ) 
   ;
 
-qDummyObjDOMSE2(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
-  vDummyObjDOMSE2
+qDummyObjDOMSEFinalEnergy(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
+  vDummyObjDOMSEFinalEnergy
     =e=
   SUM(DSBS$(sameas("SE", DSBS) or sameas("HOU",DSBS) or (sameas("AG",DSBS) and EU28(allCy))), !!DOMSE(DSBS),
     SQR(

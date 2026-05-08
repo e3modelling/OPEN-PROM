@@ -19,8 +19,8 @@ loop an do !! start outer iteration loop (time steps)
 $ifthen.calib %Calibration% == MatCalibration
             ODummyObjPGALL(runCyL,YTIME)$TIME(YTIME) = vDummyObjPGALL.L;  !! Assign objective function value for PGALL
             ODummyObjTRANSE(runCyL,YTIME)$TIME(YTIME) = vDummyObjTRANSE.L;  !! Assign objective function value for TRANSE
-            ODummyObjDOMSE1(runCyL,YTIME)$TIME(YTIME) = vDummyObjDOMSE1.L;  !! Assign objective function value for DOMSE1
-            ODummyObjDOMSE2(runCyL,YTIME)$TIME(YTIME) = vDummyObjDOMSE2.L;  !! Assign objective function value for DOMSE2
+            ODummyObjDOMSEShares(runCyL,YTIME)$TIME(YTIME) = vDummyObjDOMSEShares.L;  !! Assign objective function value for DOMSE Shares
+            ODummyObjDOMSEFinalEnergy(runCyL,YTIME)$TIME(YTIME) = vDummyObjDOMSEFinalEnergy.L;  !! Assign objective function value for DOMSE Final Energy
 $ENDIF.calib
         endif;
     endloop;
