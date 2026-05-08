@@ -14,7 +14,9 @@ $IFTHEN.calib %Calibration% == MatCalibration
 qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy)).. 
   vDummyObj 
     =e=
-  vDummyObjPGALL + vDummyObjTRANSE + vDummyObjDOMSEShares + vDummyObjDOMSEFinalEnergy
+  vDummyObjPGALL + vDummyObjTRANSE + 
+  SUM(DSBS$(sameas("SE", DSBS) or sameas("HOU",DSBS) or (sameas("AG",DSBS) and EU28(allCy))), vDummyObjDOMSEShares(DSBS)) + 
+  SUM(DSBS$(sameas("SE", DSBS) or sameas("HOU",DSBS) or (sameas("AG",DSBS) and EU28(allCy))), vDummyObjDOMSEFinalEnergy(DSBS))
   ;
 
 qDummyObjPGALL(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
@@ -42,10 +44,10 @@ qDummyObjTRANSE(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
   ) 
   ;
 
-qDummyObjDOMSEShares(allCy,YTIME)$(TIME(YTIME) and runCy(allCy)).. 
-  vDummyObjDOMSEShares
+qDummyObjDOMSEShares(allCy,YTIME,DSBS)$(TIME(YTIME) and runCy(allCy) and (sameas("SE", DSBS) or sameas("HOU",DSBS) or (sameas("AG",DSBS) and EU28(allCy)))).. 
+  vDummyObjDOMSEShares(DSBS)
     =e=
-  SUM((DSBS,EFS)$(sameas("SE", DSBS) or sameas("HOU",DSBS) or (sameas("AG",DSBS) and EU28(allCy))),
+  SUM(EFS,
     SQR(
       t02SharesFuelBuildings(allCy,DSBS,EFS,YTIME) - 
       VmConsFuelShare(allCy,DSBS,EFS,YTIME)
@@ -53,15 +55,14 @@ qDummyObjDOMSEShares(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
   ) 
   ;
 
-qDummyObjDOMSEFinalEnergy(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
-  vDummyObjDOMSEFinalEnergy
+qDummyObjDOMSEFinalEnergy(allCy,YTIME,DSBS)$(TIME(YTIME) and runCy(allCy) and (sameas("SE", DSBS) or sameas("HOU",DSBS) or (sameas("AG",DSBS) and EU28(allCy))))..
+  vDummyObjDOMSEFinalEnergy(DSBS)
     =e=
-  SUM(DSBS$(sameas("SE", DSBS) or sameas("HOU",DSBS) or (sameas("AG",DSBS) and EU28(allCy))), !!DOMSE(DSBS),
     SQR(
       SUM(EF2$SECtoEF(DSBS,EF2),VmConsFuel(allCy,DSBS,EF2,YTIME)) / t02FinalEnergyDOMSE(allCy,DSBS,YTIME) - 1
     ) +
     SQR(i02CalibUsefulEnergy(allCy,DSBS,YTIME) - i02CalibUsefulEnergy(allCy,DSBS,YTIME-1))
-  )
+  
   ;
 
 qRestrain(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) and SECTTECH(TRANSE,TTECH) and runCy(allCy) and (t01NewShareStockPC(allCy,TRANSE,TTECH,YTIME) < 0)).. 

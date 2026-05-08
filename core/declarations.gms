@@ -74,8 +74,8 @@ Variables
 vDummyObj                                                  "Dummy maximisation variable (1)"
 vDummyObjPGALL                                             "Dummy maximisation variable for PGALL (1)"
 vDummyObjTRANSE                                            "Dummy maximisation variable for TRANSE (1)"
-vDummyObjDOMSEShares                                       "Dummy maximisation variable for DOMSE shares (1)"
-vDummyObjDOMSEFinalEnergy                                  "Dummy maximisation variable for DOMSE final energy (1)"
+vDummyObjDOMSEShares(DSBS)                                 "Dummy maximisation variable for DOMSE shares (1)"
+vDummyObjDOMSEFinalEnergy(DSBS)                            "Dummy maximisation variable for DOMSE final energy (1)"
 VmElecConsHeatPla(allCy,DSBS,YTIME)                        "Electricity consumed in heatpump plants (Mtoe)"
 ;
 
