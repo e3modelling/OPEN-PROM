@@ -103,7 +103,7 @@ V04IndxEndogScrap.UP(runCy,PGALL,YTIME) = 1;
 V04IndxEndogScrap.L(runCy,PGALL,YTIME) = 0.5;
 V04IndxEndogScrap.FX(runCy,PGALL,YTIME)$(DATAY(YTIME) or PGSCRN(PGALL)) = 1;
 *---
-VmCapElec.LO(runCy,PGALL,YTIME) = 1e-6;
+VmCapElec.LO(runCy,PGALL,YTIME)$(i04DataElecProdNonCHP(runCy,PGALL,"%fBaseY%") > 0) = 1e-6;
 VmCapElec.L(runCy,PGALL,YTIME) = V04DemElecTot.L(runCy,"%fBaseY%") / (SUM(PGALL2,i04DataElecProdNonCHP(runCy,PGALL2,"%fBaseY%") ) / 1000) * 
 (i04DataElecProdNonCHP(runCy,PGALL,"%fBaseY%") / 1000 / smGwToTwhPerYear("%fBaseY%"));
 VmCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = 
