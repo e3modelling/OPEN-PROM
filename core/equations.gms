@@ -47,7 +47,7 @@ qDummyObjTRANSE(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
 qDummyObjDOMSEShares(allCy,YTIME,DSBS)$(TIME(YTIME) and runCy(allCy) and (sameas("SE", DSBS) or sameas("HOU",DSBS) or (sameas("AG",DSBS) and EU28(allCy)))).. 
   vDummyObjDOMSEShares(DSBS)
     =e=
-  SUM(EFS,
+  SUM(EFS$SECtoEF(DSBS,EFS),
     SQR(
       t02SharesFuelBuildings(allCy,DSBS,EFS,YTIME) - 
       VmConsFuelShare(allCy,DSBS,EFS,YTIME)
