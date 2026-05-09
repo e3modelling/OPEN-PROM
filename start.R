@@ -425,7 +425,7 @@ if (task == 0) {
   # Running task OPEN-PROM <-> MAgPIE SOFT-LINK (coupling-channel, mif-based)
   # Pipeline: open-prom (link2MAgPIE=off)
   #            -> couplePromToMagpie()   # OPEN-PROM gdx  -> coupling.mif
-  #            -> magpie (Rscript start.R, reads env-vars OPENPROM_COUPLING_*)
+  #            -> magpie (Rscript e3m_start.R, reads env-vars OPENPROM_COUPLING_*)
   #            -> coupleMagpieToProm()   # MAgPIE report.mif -> iPrices/iEmissions
   #            -> open-prom (link2MAgPIE=on)
   #            -> reportOutput.R (postprom)
@@ -539,7 +539,7 @@ if (task == 0) {
     OPENPROM_COUPLING_GHG       = "on",
     OPENPROM_COUPLING_BIOENERGY = "on"
   )
-  magpie_exit <- system("Rscript start.R")
+  magpie_exit <- system("Rscript e3m_start.R")
   Sys.unsetenv(c("OPENPROM_MAGPIE_PROJECT", "OPENPROM_MAGPIE_SUBSCENARIO",
                  "OPENPROM_COUPLING_MIF", "OPENPROM_COUPLING_SCENARIO",
                  "OPENPROM_COUPLING_GHG", "OPENPROM_COUPLING_BIOENERGY"))
