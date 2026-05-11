@@ -49,7 +49,7 @@ qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
     )$t02FinalEnergyINDSE(allCy,DSBS,YTIME) +
     SQR(i02CalibUsefulEnergy(allCy,DSBS,YTIME) - i02CalibUsefulEnergy(allCy,DSBS,YTIME-1))
   ) +
-  SUM((DSBS,EFS)$(INDSE(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS) and SECtoEF(DSBS,EFS)),
+  SUM((DSBS,EFS)$(INDSE(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS) and SECtoEF(DSBS,EFS) and t02FinalEnergyINDSE(allCy,DSBS,YTIME)),
     SQR(
       t02SharesFuelINDSE(allCy,DSBS,EFS,YTIME) - 
       VmConsFuelShare(allCy,DSBS,EFS,YTIME)

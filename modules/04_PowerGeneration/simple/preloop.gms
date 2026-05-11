@@ -88,6 +88,7 @@ V04NewCapElec.LO(runCy,PGALL,YTIME) = 0;
 V04NewCapElec.L(runCy,PGALL,YTIME) = 1;
 V04NewCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = 0;
 *---
+V04CapElecNominal.LO(runCy,PGALL,YTIME) = 0;
 V04CapElecNominal.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = imInstCapPastNonCHP(runCy,PGALL,YTIME) / i04AvailRate(runCy,PGALL,YTIME);
 *---
 V04ShareTechPG.LO(runCy,PGALL,YTIME) = 0;
@@ -123,6 +124,7 @@ V04CCSRetroFit.FX(runCy,PGALL,YTIME)$(DATAY(YTIME) or not NOCCS(PGALL)) = 1;
 V04CO2CaptRate.UP(runCy,PGALL,YTIME) = 1;
 V04CO2CaptRate.LO(runCy,PGALL,YTIME) = 0;
 *---
+VmConsFuelElecProd.LO(runCy,EFS,YTIME) = 0;
 VmConsFuelElecProd.FX(runCy,EFS,YTIME)$(not PGEF(EFS)) = 0;
 VmConsFuelElecProd.FX(runCy,PGEF,YTIME)$DATAY(YTIME) = 
 SUM(PGALL$PGALLTOEF(PGALL,PGEF),
@@ -130,7 +132,6 @@ SUM(PGALL$PGALLTOEF(PGALL,PGEF),
   VmProdElec.L(runCy,PGALL,YTIME) * smTWhToMtoe / 
   imPlantEffByType(runCy,PGALL,"effELC",YTIME)
 );
-*---
 VmConsFuelElecProd.FX(runCy,PGEF,YTIME)$DATAY(YTIME) = -i03InpTotTransfProcess(runCy,"PG",PGEF,YTIME);
 *---
 V04GapGenCapPowerDiff.LO(runCy,YTIME) = 0;

@@ -198,7 +198,7 @@ Q02IndAvrEffFinalUseful(allCy,DSBS,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not
        =E=
     V02DemSubUsefulSubsec(allCy,DSBS,YTIME) /
     (sum(EF$SECtoEF(DSBS,EF),VmConsFuel(allCy,DSBS,EF,YTIME)) - (V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(INDDOM(DSBS)) +
-    VmElecConsHeatPla(allCy,DSBS,YTIME)) + 1e-6)
+    VmElecConsHeatPla(allCy,DSBS,YTIME)) + 1e-3)
     ;
 
 *' This equation calculates the estimated electricity index of the industry price for a given year. The estimated index is derived by considering the historical
