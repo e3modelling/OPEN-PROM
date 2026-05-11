@@ -410,27 +410,60 @@ calculateGhg <- function(dataMagpie) {
 # Run
 # ----------------------------
 start_time <- Sys.time()
-GAMSCmdArgs <- c("--DevMode=0", "--GenerateInput=off", "lo=4", "idir=./data")
 selectedYear <- 2050
 changeCarbonPriceFromYear <- 2031
 flagCO2eq <- TRUE
+GAMSCmdArgs <- c("--DevMode=0", "--GenerateInput=off", "lo=4", "idir=./data", paste0("--fEndY=", selectedYear))
 
 # ---------------------------------------------------------
-# CASE A: Specific Regions
+# CASE A: Specific Regions 2030
 # targetConditionalMtCO2e MtCO2e/yr
 # targetList <- list(
-#    "CAZ" = 780.6,
-#    #"CHA" = 14373,
-#    "GBR" = 260.3,
-#    #"IND" = 4816,
-#    "JPN" = 760.32,
-#    #"LAM" = 3886,
-#    #"MEA" = 2164.6,
-#    #"NEU" = 832.1,
-#    "OAS" = 5292.7,
-#    "REF" = 3668
-#    #"SSA" = 832.1
+#    "CAZ" = 840,
+#    "CHA" = 13447,
+#    "GBR" = 263,
+#    "IND" = 3981,
+#    "JPN" = 766,
+#    "LAM" = 3199,
+#    "MEA" = 4218,
+#    "NEU" = 773,
+#    "OAS" = 4894,
+#    "REF" = 2904,
+#    "SSA" = 3367
 # )
+
+# CASE A: Specific Regions 2035
+# targetConditionalMtCO2e MtCO2e/yr
+# targetList <- list(
+#    "CAZ" = 644,
+#    "CHA" = 12808,
+#    "GBR" = 156,
+#    "IND" = ,
+#    "JPN" = 575,
+#    "LAM" = 1984,
+#    "MEA" = 208,
+#    "NEU" = 694,
+#    "OAS" = 3680,
+#    "REF" = 2705,
+#    "SSA" = 1303
+# )
+
+# CASE A: Specific Regions 2050
+# targetConditionalMtCO2e MtCO2e/yr
+# targetList <- list(
+#    "CAZ" = 0,
+#    "CHA" = 48,
+#    "GBR" = 0,
+#    "IND" = 0,
+#    "JPN" = 0,
+#    "LAM" = 1383,
+#    "MEA" = 2351,
+#    "NEU" = 138,
+#    "OAS" = 747,
+#    "REF" = 375,
+#    "SSA" = 1569
+# )
+
 # targetConditionalMtCO2 MtCO2/yr - ONLY CO2
 # targetList <- list(
 #   "CAZ" = 585,
@@ -465,7 +498,10 @@ targetList <- NULL
 #globalParams <- 1750 # EU-27 target 2030 in MtCO2/yr - ONLY CO2
 #globalParams <- 2250  # EU-27 target 2030 in MtCO2e/yr 
 #globalParams <- 0  # EU-27 target 2030 in MtCO2e/yr 
-globalParams <- 0  # World target 2080 in MtCO2e/yr
+
+globalParams <- 2093  # EU-27 target 2030 in MtCO2e/yr (incl. LULUCF)
+# globalParams <- 1425  # EU-27 target 2035 in MtCO2e/yr (incl. LULUCF)
+# globalParams <- 0  # EU-27 target 2050 in MtCO2e/yr (incl. LULUCF)
 
 # LOGGING SETUP
 logFilePath <- "Carbon_price_optimization.log"
