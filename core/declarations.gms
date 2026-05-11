@@ -13,6 +13,7 @@ iCarbValYrExog(allCy,ytime)	                               "Carbon value for eac
 iShrHeatPumpElecCons(allCy,SBS)	                           "Share of heat pump electricity consumption in total substitutable electricity (1)"						 			
 iTranfOutGasworks(allCy,EF,YTIME)	                       "Transformation Output from Gasworks, Blast Furnances and Briquetting plants (Mtoe)"	
 ODummyObj                                                  "Parameter saving objective function"
+pSolveHandle(allCy)                                      "Asynchronous solve handle by country"
 
 *'                **Interdependent Parameters**
 imCGI(allCy,YTIME)                                         "Capital Goods Index (defined as CGI(Scenario)/CGI(Baseline)) (1)"
@@ -85,6 +86,10 @@ $else.magpie
 sLink2MAgPIE                                               "Binary flag for MAgPIE link (1=on, 0=off)" /0/
 $endif.magpie
 sModelStat                                                 "helper parameter for solver status"
+sHandleCollect                                             "helper scalar for asynchronous handle collection"
+sReadyCollect                                              "helper scalar for asynchronous wait status"
+sAsyncAttempt                                              "helper scalar for asynchronous solver attempts"
+sAsyncWaitHandle                                           "helper scalar for the asynchronous handle currently being collected"
 smFracElecPriChp                                           "Fraction of Electricity Price at which a CHP sells electricity to network" /0/
 sCY                                                        "country iterator" /0/
 sUnitToKUnit                                               "units to Kilo units conversion" /1000/
