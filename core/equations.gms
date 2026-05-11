@@ -15,8 +15,9 @@ qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
   vDummyObj 
     =e=
   vDummyObjPGALL + vDummyObjTRANSE + 
-  SUM(DSBS$(sameas("SE", DSBS) or sameas("HOU",DSBS) or (sameas("AG",DSBS) and EU28(allCy))), vDummyObjDOMSEShares(DSBS)) + 
-  SUM(DSBS$(sameas("SE", DSBS) or sameas("HOU",DSBS) or (sameas("AG",DSBS) and EU28(allCy))), vDummyObjDOMSEFinalEnergy(DSBS))
+  SUM(DSBS$((INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and not (sameas("AG",DSBS) and not EU28(allCy))), 
+  vDummyObjDOMSEShares(DSBS) + vDummyObjDOMSEFinalEnergy(DSBS)
+  )
   ;
 
 qDummyObjPGALL(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
@@ -44,7 +45,7 @@ qDummyObjTRANSE(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
   ) 
   ;
 
-qDummyObjDOMSEShares(allCy,YTIME,DSBS)$(TIME(YTIME) and ((sameas("SE", DSBS) and runCy(allCy)) or (sameas("HOU",DSBS) and runCy(allCy)) or (sameas("AG",DSBS) and EU28(allCy)))).. 
+qDummyObjDOMSEShares(allCy,YTIME,DSBS)$(TIME(YTIME) and runCy(allCy) and (INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS))).. 
   vDummyObjDOMSEShares(DSBS)
     =e=
   SUM(EFS$SECtoEF(DSBS,EFS),
@@ -52,32 +53,25 @@ qDummyObjDOMSEShares(allCy,YTIME,DSBS)$(TIME(YTIME) and ((sameas("SE", DSBS) and
       t02SharesFuelBuildings(allCy,DSBS,EFS,YTIME) - 
       VmConsFuelShare(allCy,DSBS,EFS,YTIME)
     )
-  ) 
-  ;
-
-qDummyObjDOMSEFinalEnergy(allCy,YTIME,DSBS)$(TIME(YTIME) and ((sameas("SE", DSBS) and runCy(allCy)) or (sameas("HOU",DSBS) and runCy(allCy)) or (sameas("AG",DSBS) and EU28(allCy)))).. 
-  vDummyObjDOMSEFinalEnergy(DSBS)
-    =e=
-    SQR(
-      SUM(EF2$SECtoEF(DSBS,EF2),VmConsFuel(allCy,DSBS,EF2,YTIME)) / t02FinalEnergyDOMSE(allCy,DSBS,YTIME) - 1
-    ) +
-    SQR(i02CalibUsefulEnergy(allCy,DSBS,YTIME) - i02CalibUsefulEnergy(allCy,DSBS,YTIME-1))
-  ) +
-
-
-  SUM(DSBS$(INDSE(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)),
-    SQR(
-      SUM(EF2$SECtoEF(DSBS,EF2),VmConsFuel(allCy,DSBS,EF2,YTIME)) / t02FinalEnergyINDSE(allCy,DSBS,YTIME) - 1
-    )$t02FinalEnergyINDSE(allCy,DSBS,YTIME) +
-    SQR(i02CalibUsefulEnergy(allCy,DSBS,YTIME) - i02CalibUsefulEnergy(allCy,DSBS,YTIME-1))
-  ) +
-  SUM((DSBS,EFS)$(INDSE(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS) and SECtoEF(DSBS,EFS) and t02FinalEnergyINDSE(allCy,DSBS,YTIME)),
+  )$(DOMSE(DSBS) and not (sameas("AG",DSBS) and not EU28(allCy))) +
+  SUM(EFS$SECtoEF(DSBS,EFS),
     SQR(
       t02SharesFuelINDSE(allCy,DSBS,EFS,YTIME) - 
       VmConsFuelShare(allCy,DSBS,EFS,YTIME)
     )
-  )
+  )$((INDSE(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and t02FinalEnergyINDSE(allCy,DSBS,YTIME))
   ;
+
+qDummyObjDOMSEFinalEnergy(allCy,YTIME,DSBS)$(TIME(YTIME) and runCy(allCy) and (INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS))).. 
+  vDummyObjDOMSEFinalEnergy(DSBS)
+    =e=
+    SQR(
+      SUM(EF2$SECtoEF(DSBS,EF2),VmConsFuel(allCy,DSBS,EF2,YTIME)) / t02FinalEnergyDOMSE(allCy,DSBS,YTIME) - 1
+    )$(DOMSE(DSBS) and not (sameas("AG",DSBS) and not EU28(allCy))) +
+    SQR(
+      SUM(EF2$SECtoEF(DSBS,EF2),VmConsFuel(allCy,DSBS,EF2,YTIME)) / t02FinalEnergyINDSE(allCy,DSBS,YTIME) - 1
+    )$((INDSE(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and t02FinalEnergyINDSE(allCy,DSBS,YTIME)) +
+    SQR(i02CalibUsefulEnergy(allCy,DSBS,YTIME) - i02CalibUsefulEnergy(allCy,DSBS,YTIME-1));
 
 qRestrain(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) and SECTTECH(TRANSE,TTECH) and runCy(allCy) and (t01NewShareStockPC(allCy,TRANSE,TTECH,YTIME) < 0)).. 
   imMatrFactor(allCy,TRANSE,TTECH,YTIME)

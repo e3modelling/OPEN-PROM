@@ -19,8 +19,8 @@ loop an do !! start outer iteration loop (time steps)
 $ifthen.calib %Calibration% == MatCalibration
             ODummyObjPGALL(runCyL,YTIME)$TIME(YTIME) = vDummyObjPGALL.L;  !! Assign objective function value for PGALL
             ODummyObjTRANSE(runCyL,YTIME)$TIME(YTIME) = vDummyObjTRANSE.L;  !! Assign objective function value for TRANSE
-            ODummyObjDOMSEShares(allCy,YTIME,DSBS)$(TIME(YTIME) and ((sameas("SE", DSBS) and runCy(allCy)) or (sameas("HOU",DSBS) and runCy(allCy)) or (sameas("AG",DSBS) and EU28(allCy)))) = vDummyObjDOMSEShares.L(DSBS);  !! Assign objective function value for DOMSE Shares
-            ODummyObjDOMSEFinalEnergy(allCy,YTIME,DSBS)$(TIME(YTIME) and ((sameas("SE", DSBS) and runCy(allCy)) or (sameas("HOU",DSBS) and runCy(allCy)) or (sameas("AG",DSBS) and EU28(allCy)))) = vDummyObjDOMSEFinalEnergy.L(DSBS);  !! Assign objective function value for DOMSE Final Energy
+            ODummyObjDOMSEShares(allCy,YTIME,DSBS)$(TIME(YTIME) and runCy(allCy) and ((INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and not (sameas("AG",DSBS) and not EU28(allCy)))) = vDummyObjDOMSEShares.L(DSBS);  !! Assign objective function value for DOMSE Shares
+            ODummyObjDOMSEFinalEnergy(allCy,YTIME,DSBS)$(TIME(YTIME) and runCy(allCy) and ((INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and not (sameas("AG",DSBS) and not EU28(allCy)))) = vDummyObjDOMSEFinalEnergy.L(DSBS);  !! Assign objective function value for DOMSE Final Energy
 $ENDIF.calib
         endif;
     endloop;
