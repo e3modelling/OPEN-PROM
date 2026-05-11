@@ -62,7 +62,21 @@ qDummyObjDOMSEFinalEnergy(allCy,YTIME,DSBS)$(TIME(YTIME) and ((sameas("SE", DSBS
       SUM(EF2$SECtoEF(DSBS,EF2),VmConsFuel(allCy,DSBS,EF2,YTIME)) / t02FinalEnergyDOMSE(allCy,DSBS,YTIME) - 1
     ) +
     SQR(i02CalibUsefulEnergy(allCy,DSBS,YTIME) - i02CalibUsefulEnergy(allCy,DSBS,YTIME-1))
-  
+  ) +
+
+
+  SUM(DSBS$(INDSE(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)),
+    SQR(
+      SUM(EF2$SECtoEF(DSBS,EF2),VmConsFuel(allCy,DSBS,EF2,YTIME)) / t02FinalEnergyINDSE(allCy,DSBS,YTIME) - 1
+    )$t02FinalEnergyINDSE(allCy,DSBS,YTIME) +
+    SQR(i02CalibUsefulEnergy(allCy,DSBS,YTIME) - i02CalibUsefulEnergy(allCy,DSBS,YTIME-1))
+  ) +
+  SUM((DSBS,EFS)$(INDSE(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS) and SECtoEF(DSBS,EFS) and t02FinalEnergyINDSE(allCy,DSBS,YTIME)),
+    SQR(
+      t02SharesFuelINDSE(allCy,DSBS,EFS,YTIME) - 
+      VmConsFuelShare(allCy,DSBS,EFS,YTIME)
+    )
+  )
   ;
 
 qRestrain(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) and SECTTECH(TRANSE,TTECH) and runCy(allCy) and (t01NewShareStockPC(allCy,TRANSE,TTECH,YTIME) < 0)).. 
