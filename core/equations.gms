@@ -15,8 +15,14 @@ qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
   vDummyObj 
     =e=
   vDummyObjPGALL + vDummyObjTRANSE + 
-  SUM(DSBS$(sameas("SE", DSBS) or sameas("HOU",DSBS) or (sameas("AG",DSBS) and EU28(allCy))), vDummyObjDOMSEShares(DSBS)) + 
-  SUM(DSBS$(sameas("SE", DSBS) or sameas("HOU",DSBS) or (sameas("AG",DSBS) and EU28(allCy))), vDummyObjDOMSEFinalEnergy(DSBS))
+  (SUM(DSBS$(sameas("SE", DSBS) or sameas("HOU",DSBS) or (sameas("AG",DSBS) and EU28(allCy))), 
+    vDummyObjDOMSEShares(DSBS)
+  ) +
+  SUM(DSBS$(sameas("SE", DSBS) or sameas("HOU",DSBS) or (sameas("AG",DSBS) and EU28(allCy))),   
+    vDummyObjDOMSEFinalEnergy(DSBS)
+  )
+  )
+  /SUM(DSBS$(sameas("SE", DSBS) or sameas("HOU",DSBS) or (sameas("AG",DSBS) and EU28(allCy))), 1)
   ;
 
 qDummyObjPGALL(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
@@ -27,7 +33,8 @@ qDummyObjPGALL(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
       V04SharePowPlaNewEq(allCy,PGALL,YTIME) - 
       t04SharePowPlaNewEq(allCy,PGALL,YTIME)
     )
-  ) 
+  )
+  /CARD(PGALL) 
   ;
 
 qDummyObjTRANSE(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..  
@@ -41,7 +48,8 @@ qDummyObjTRANSE(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
       )$(t01NewShareStockPC(allCy,TRANSE,TTECH,YTIME) >= 0) +
       0.01 * (imMatrFactor(allCy,TRANSE,TTECH,YTIME) - imMatrFactor(allCy,TRANSE,TTECH,YTIME-1))
     )
-  ) 
+  )
+  /SUM((TRANSE,TTECH)$(SECTTECH(TRANSE,TTECH) and (sameas("PC",TRANSE) or sameas("PB",TRANSE) or sameas("GU",TRANSE))), 1)
   ;
 
 qDummyObjDOMSEShares(allCy,YTIME,DSBS)$(TIME(YTIME) and ((sameas("SE", DSBS) and runCy(allCy)) or (sameas("HOU",DSBS) and runCy(allCy)) or (sameas("AG",DSBS) and EU28(allCy)))).. 
@@ -53,6 +61,8 @@ qDummyObjDOMSEShares(allCy,YTIME,DSBS)$(TIME(YTIME) and ((sameas("SE", DSBS) and
       VmConsFuelShare(allCy,DSBS,EFS,YTIME)
     )
   ) 
+  /
+  SUM(EFS$SECtoEF(DSBS,EFS), 1)
   ;
 
 qDummyObjDOMSEFinalEnergy(allCy,YTIME,DSBS)$(TIME(YTIME) and ((sameas("SE", DSBS) and runCy(allCy)) or (sameas("HOU",DSBS) and runCy(allCy)) or (sameas("AG",DSBS) and EU28(allCy)))).. 
