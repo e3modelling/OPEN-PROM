@@ -40,13 +40,13 @@ i02ScaleEndogScrap.LO(runCy,DSBS,ITECH,YTIME) = 0;
 i02ScaleEndogScrap.UP(runCy,DSBS,ITECH,YTIME) = 100;
 i02ScaleEndogScrap.L(runCy,DSBS,ITECH,YTIME) = 1;
 i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$(DATAY(YTIME) or not SECTTECH(DSBS,ITECH)) = 0;
-i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and not (DOMSE(DSBS))) = 1;
+i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and not (INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS))) = 1;
 i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$(sameas("AG",DSBS) and not EU28(runCy)) = 1;
-!!i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$((INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and not EU28(runCy)) = 1;
+i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$((INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and not EU28(runCy)) = 1;
 
 
 i02CalibUsefulEnergy.LO(runCy,DSBS,YTIME) = -0.5;  
-i02CalibUsefulEnergy.UP(runCy,DSBS,YTIME) = 2;  
+i02CalibUsefulEnergy.UP(runCy,DSBS,YTIME) = 1;  
 i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$DATAY(YTIME) = 0;
 *i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$(not (INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS))) = 0;
 i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$(not (INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS))) = 0;

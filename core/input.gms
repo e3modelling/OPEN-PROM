@@ -669,7 +669,7 @@ variable imMatrFactor(allCy,DSBS,TECH,YTIME)    "Maturity factor per technology 
 imMatrFactor.LO(runCy,DSBS,TECH,YTIME) = 1e-6;                                          
 imMatrFactor.UP(runCy,DSBS,TECH,YTIME) = 10;
 imMatrFactor.L(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);     
-imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(not (sameas(DSBS,"PC") or sameas(DSBS,"PB") or sameas(DSBS,"GU") or DOMSE(DSBS))) = iMatrFactorData(runCy,DSBS,TECH,YTIME);   
+imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(not (sameas(DSBS,"PC") or sameas(DSBS,"PB") or sameas(DSBS,"GU") or INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS))) = iMatrFactorData(runCy,DSBS,TECH,YTIME);   
 imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(sameas(DSBS,"AG") and not EU28(runCy)) = iMatrFactorData(runCy,DSBS,TECH,YTIME); 
 *imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(DOMSE(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS) and not EU28(runCy)) = iMatrFactorData(runCy,DSBS,TECH,YTIME); 
 imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$((sameas(DSBS,"PC") or sameas(DSBS,"PB") or sameas(DSBS,"GU") or INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and not SECTTECH(DSBS,TECH)) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                      
