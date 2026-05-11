@@ -410,8 +410,8 @@ calculateGhg <- function(dataMagpie) {
 # Run
 # ----------------------------
 start_time <- Sys.time()
-selectedYear <- 2050
-changeCarbonPriceFromYear <- 2031
+selectedYear <- 2035
+changeCarbonPriceFromYear <- 2024
 flagCO2eq <- TRUE
 GAMSCmdArgs <- c("--DevMode=0", "--GenerateInput=off", "lo=4", "idir=./data", paste0("--fEndY=", selectedYear))
 
@@ -438,10 +438,8 @@ GAMSCmdArgs <- c("--DevMode=0", "--GenerateInput=off", "lo=4", "idir=./data", pa
 #    "CAZ" = 644,
 #    "CHA" = 12808,
 #    "GBR" = 156,
-#    "IND" = ,
 #    "JPN" = 575,
 #    "LAM" = 1984,
-#    "MEA" = 208,
 #    "NEU" = 694,
 #    "OAS" = 3680,
 #    "REF" = 2705,
@@ -499,8 +497,8 @@ targetList <- NULL
 #globalParams <- 2250  # EU-27 target 2030 in MtCO2e/yr 
 #globalParams <- 0  # EU-27 target 2030 in MtCO2e/yr 
 
-globalParams <- 2093  # EU-27 target 2030 in MtCO2e/yr (incl. LULUCF)
-# globalParams <- 1425  # EU-27 target 2035 in MtCO2e/yr (incl. LULUCF)
+# globalParams <- 2093  # EU-27 target 2030 in MtCO2e/yr (incl. LULUCF)
+globalParams <- 1425  # EU-27 target 2035 in MtCO2e/yr (incl. LULUCF)
 # globalParams <- 0  # EU-27 target 2050 in MtCO2e/yr (incl. LULUCF)
 
 # LOGGING SETUP
@@ -574,7 +572,7 @@ for (regName in names(runQueue)) {
     targetRegion = actualRegion,
     targetYear   = selectedYear,
     minAlpha     = -0.5,           # Allow price reduction up to -50% if needed
-    maxAlpha     = 10.0,           # Allow up to +1000% increase
+    maxAlpha     = 20.0,           # Allow up to +1000% increase
     expandFactor = 2.0,
     maxProbes    = 12,
     verbose      = TRUE
