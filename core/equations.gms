@@ -44,7 +44,7 @@ qDummyObjTRANSE(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
   ) 
   ;
 
-qDummyObjDOMSEShares(allCy,YTIME,DSBS)$(TIME(YTIME) and runCy(allCy) and (sameas("SE", DSBS) or sameas("HOU",DSBS) or (sameas("AG",DSBS) and EU28(allCy)))).. 
+qDummyObjDOMSEShares(allCy,YTIME,DSBS)$(TIME(YTIME) and ((sameas("SE", DSBS) and runCy(allCy)) or (sameas("HOU",DSBS) and runCy(allCy)) or (sameas("AG",DSBS) and EU28(allCy)))).. 
   vDummyObjDOMSEShares(DSBS)
     =e=
   SUM(EFS$SECtoEF(DSBS,EFS),
@@ -55,7 +55,7 @@ qDummyObjDOMSEShares(allCy,YTIME,DSBS)$(TIME(YTIME) and runCy(allCy) and (sameas
   ) 
   ;
 
-qDummyObjDOMSEFinalEnergy(allCy,YTIME,DSBS)$(TIME(YTIME) and runCy(allCy) and (sameas("SE", DSBS) or sameas("HOU",DSBS) or (sameas("AG",DSBS) and EU28(allCy))))..
+qDummyObjDOMSEFinalEnergy(allCy,YTIME,DSBS)$(TIME(YTIME) and ((sameas("SE", DSBS) and runCy(allCy)) or (sameas("HOU",DSBS) and runCy(allCy)) or (sameas("AG",DSBS) and EU28(allCy)))).. 
   vDummyObjDOMSEFinalEnergy(DSBS)
     =e=
     SQR(
