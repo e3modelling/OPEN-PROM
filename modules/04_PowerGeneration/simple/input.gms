@@ -21,6 +21,12 @@ $include"./iDataElecProdCHP.csv"
 $offdelim
 ;
 *---
+table i04FIT(allCy,PGALL,YTIME)	                   "Feed-in-Tariff (US$2015/KWh)"
+$ondelim
+$include"./iFIT.csv"
+$offdelim
+;
+*---
 table t04SharePowPlaNewEq(allCy,PGALL,YTIME)    "Ratio of newly added capacity smoothed over 10-year period ()"
 $ondelim
 $include "../targets/tShares_ProdElec.csv"
@@ -110,6 +116,19 @@ BU 	0.7,
 PCH	0.83,
 NEN	0.83 
 / ;
+*---
+$$ontext
+parameter i04FIT(allCy,PGALL,YTIME)                  "Feed0In-Tariff (US$2015/KWh)"
+/
+JPN.PGAWND.YTIME 0.09
+JPN.PGAWNO.YTIME 0.25
+JPN.PGOTHREN.YTIME 0.21
+JPN.PGLHYD.YTIME 0.13
+JPN.PGSHYD.YTIME 0.20
+JPN.ATHBMSWAS.YTIME 0.15
+JPN.PGSOL.YTIME 0.06
+/ ;
+$$offtext
 *---
 parameter i04LoadFactorAdj(DSBS)	               "Parameters for load factor adjustment i04BaseLoadShareDem (1)"
 /
