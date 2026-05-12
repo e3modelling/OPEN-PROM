@@ -15,20 +15,10 @@ qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
   vDummyObj 
     =e=
   vDummyObjPGALL + vDummyObjTRANSE + 
-<<<<<<< HEAD
-  (SUM(DSBS$(sameas("SE", DSBS) or sameas("HOU",DSBS) or (sameas("AG",DSBS) and EU28(allCy))), 
-    vDummyObjDOMSEShares(DSBS)
-  ) +
-  SUM(DSBS$(sameas("SE", DSBS) or sameas("HOU",DSBS) or (sameas("AG",DSBS) and EU28(allCy))),   
-    vDummyObjDOMSEFinalEnergy(DSBS)
-  )
-  )
-  /SUM(DSBS$(sameas("SE", DSBS) or sameas("HOU",DSBS) or (sameas("AG",DSBS) and EU28(allCy))), 1)
-=======
   SUM(DSBS$((INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and not (sameas("AG",DSBS) and not EU28(allCy))), 
   vDummyObjDOMSEShares(DSBS) + vDummyObjDOMSEFinalEnergy(DSBS)
   )
->>>>>>> 560c7c98fddf438b4fe500d593020113935866ea
+  /SUM(DSBS$((INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and not (sameas("AG",DSBS) and not EU28(allCy))), 1)
   ;
 
 qDummyObjPGALL(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
@@ -61,24 +51,24 @@ qDummyObjTRANSE(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
 qDummyObjDOMSEShares(allCy,YTIME,DSBS)$(TIME(YTIME) and runCy(allCy) and (INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS))).. 
   vDummyObjDOMSEShares(DSBS)
     =e=
-  SUM(EFS$SECtoEF(DSBS,EFS),
+  (SUM(EFS$SECtoEF(DSBS,EFS),
     SQR(
       t02SharesFuelBuildings(allCy,DSBS,EFS,YTIME) - 
       VmConsFuelShare(allCy,DSBS,EFS,YTIME)
     )
-<<<<<<< HEAD
-  ) 
-  /
-  SUM(EFS$SECtoEF(DSBS,EFS), 1)
-=======
-  )$(DOMSE(DSBS) and not (sameas("AG",DSBS) and not EU28(allCy))) +
-  SUM(EFS$SECtoEF(DSBS,EFS),
+  )
+  /SUM(EFS$SECtoEF(DSBS,EFS), 1)
+  )$(DOMSE(DSBS) and not (sameas("AG",DSBS) and not EU28(allCy)))
+   +
+  (SUM(EFS$SECtoEF(DSBS,EFS),
     SQR(
       t02SharesFuelINDSE(allCy,DSBS,EFS,YTIME) - 
       VmConsFuelShare(allCy,DSBS,EFS,YTIME)
     )
+  )
+  /SUM(EFS$SECtoEF(DSBS,EFS), 1)
   )$((INDSE(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and t02FinalEnergyINDSE(allCy,DSBS,YTIME))
->>>>>>> 560c7c98fddf438b4fe500d593020113935866ea
+  
   ;
 
 qDummyObjDOMSEFinalEnergy(allCy,YTIME,DSBS)$(TIME(YTIME) and runCy(allCy) and (INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS))).. 
