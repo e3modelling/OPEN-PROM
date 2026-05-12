@@ -227,10 +227,10 @@ if (task == 0) {
   if (withRunFolder) createRunFolder(setScenarioName("DEV"))
 
   if (.Platform$OS.type == "unix") {
-    cmdCommand <- paste0(gams, " main.gms --DevMode=1 --GenerateInput=off -logOption 4 -Idir=./data 2>&1")
+    cmdCommand <- paste0(gams, " main.gms --DevMode=1 --GenerateInput=off -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1")
     system(paste0("sh -c ", shQuote(cmdCommand)))
   } else {
-    cmdCommand <- paste0(gams, " main.gms --DevMode=1 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log")
+    cmdCommand <- paste0(gams, " main.gms --DevMode=1 --GenerateInput=off -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1 | tee full.log")
     shell(cmdCommand)
   }
 
@@ -250,10 +250,10 @@ if (task == 0) {
 
 
   if (.Platform$OS.type == "unix") {
-    cmdCommand <- paste0(gams, " main.gms --DevMode=1 --GenerateInput=on -logOption 4 -Idir=./data 2>&1")
+    cmdCommand <- paste0(gams, " main.gms --DevMode=1 --GenerateInput=on -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1")
     system(cmdCommand)
   } else {
-    cmdCommand <- paste0(gams, " main.gms --DevMode=1 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 | tee full.log")
+    cmdCommand <- paste0(gams, " main.gms --DevMode=1 --GenerateInput=on -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1 | tee full.log")
     shell(cmdCommand)
   }
   if (withRunFolder) {
@@ -267,10 +267,10 @@ if (task == 0) {
   if (withRunFolder) createRunFolder(setScenarioName("RES"))
 
   if (.Platform$OS.type == "unix") {
-    cmdCommand <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1")
+    cmdCommand <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1")
     system(cmdCommand)
   } else {
-    cmdCommand <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log")
+    cmdCommand <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1 | tee full.log")
     shell(cmdCommand)
   }
 
@@ -293,13 +293,13 @@ if (task == 0) {
   if (.Platform$OS.type == "unix") {
     calib_cmd <- paste0(
     gams,
-    " main.gms -o mainCalib.lst --WriteGDX=off --DevMode=0 --fScenario=4 --GenerateInput=on --Calibration=MatCalibration -logOption 4 -Idir=./data 2>&1"
+    " main.gms -o mainCalib.lst --WriteGDX=off --DevMode=0 --fScenario=4 --GenerateInput=on --Calibration=MatCalibration -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1"
     )
     exit_code <- system(calib_cmd)
   } else {
     calib_cmd <- paste0(
     gams,
-    " main.gms -o mainCalib.lst --WriteGDX=off --DevMode=0 --fScenario=4 --GenerateInput=on --Calibration=MatCalibration -logOption 4 -Idir=./data 2>&1 | tee fullCalib.log"
+    " main.gms -o mainCalib.lst --WriteGDX=off --DevMode=0 --fScenario=4 --GenerateInput=on --Calibration=MatCalibration -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1 | tee fullCalib.log"
     )
     exit_code <- shell(calib_cmd)
   }
@@ -334,10 +334,10 @@ if (task == 0) {
 
   # RESEARCH
   if (.Platform$OS.type == "unix") {
-    research_cmd <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1")
+    research_cmd <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1")
     exit_code <- system(paste0("sh -c ", shQuote(research_cmd)))
   } else {
-    research_cmd <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log")
+    research_cmd <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1 | tee full.log")
     exit_code <- shell(research_cmd)
   }
   cat("Executing research run:\n", research_cmd, "\n")
@@ -366,10 +366,10 @@ if (task == 0) {
   # Debugging mode
 
   if (.Platform$OS.type == "unix") {
-    cmdCommand <- paste0(gams, " main.gms -logOption 4 -Idir=./data 2>&1")
+    cmdCommand <- paste0(gams, " main.gms -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1")
     system(cmdCommand)
   } else {
-    cmdCommand <- paste0(gams, " main.gms -logOption 4 -Idir=./data 2>&1 | tee full.log")
+    cmdCommand <- paste0(gams, " main.gms -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1 | tee full.log")
     shell(cmdCommand)
   }
 
@@ -380,18 +380,18 @@ if (task == 0) {
 
   cmdCommand <- paste0(
       gams,
-      " main.gms -o mainCalib.lst --DevMode=0 --Calibration=MatCalibration --fScenario=4 -logOption 4 -Idir=./data 2>&1 | tee fullCalib.log"
+      " main.gms -o mainCalib.lst --DevMode=0 --Calibration=MatCalibration --fScenario=4 -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1 | tee fullCalib.log"
     )
   if (.Platform$OS.type == "unix") {
     cmdCommand <- paste0(
       gams,
-      " main.gms -o mainCalib.lst --DevMode=0 --Calibration=MatCalibration --fScenario=4 -logOption 4 -Idir=./data 2>&1"
+      " main.gms -o mainCalib.lst --DevMode=0 --Calibration=MatCalibration --fScenario=4 -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1"
     )
     system(cmdCommand)
   } else {
     cmdCommand <- paste0(
       gams,
-      " main.gms -o mainCalib.lst --DevMode=0 --Calibration=MatCalibration --fScenario=4 -logOption 4 -Idir=./data 2>&1 | tee fullCalib.log"
+      " main.gms -o mainCalib.lst --DevMode=0 --Calibration=MatCalibration --fScenario=4 -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1 | tee fullCalib.log"
     )
     shell(cmdCommand)
   }
@@ -462,7 +462,7 @@ if (task == 0) {
     cat(">>> [task 7] Step 1/6: OPEN-PROM run (link2MAgPIE=off)\n")
     cmd1 <- paste0(gams,
                    " main.gms --DevMode=0 --GenerateInput=off --link2MAgPIE=off",
-                   " -logOption 4 -Idir=./data 2>&1")
+                   " -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1")
     if (.Platform$OS.type == "unix") {
       system(paste0("sh -c ", shQuote(cmd1)))
     } else {
@@ -530,7 +530,7 @@ if (task == 0) {
   cat(">>> [task 7] Step 5/6: OPEN-PROM run (link2MAgPIE=on)\n")
   cmd2 <- paste0(gams,
                  " main.gms --DevMode=0 --GenerateInput=off --link2MAgPIE=on",
-                 " -logOption 4 -Idir=./data 2>&1")
+                 " -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1")
   if (.Platform$OS.type == "unix") {
     system(paste0("sh -c ", shQuote(cmd2)))
   } else {
