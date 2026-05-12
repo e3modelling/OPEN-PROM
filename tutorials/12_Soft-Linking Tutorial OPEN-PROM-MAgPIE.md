@@ -6,7 +6,7 @@ This guide explains how to run the soft-coupling between the **OPEN-PROM** energ
 Two R functions (in `postprom/R/couplePromWithMagpie.R`) do the data exchange:
 
 * `couplePromToMagpie()` — exports OPEN-PROM carbon price + bioenergy demand to a REMIND-style `.mif` that MAgPIE consumes
-* `coupleMagpieToProm()` — reads MAgPIE's `report.mif` and writes `iPrices_magpie.csv` (biomass price) and `iEmissions_magpie.csv` (AFOLU emissions) for OPEN-PROM
+* `coupleMagpieToProm()` — reads MAgPIE's `report.mif` and writes `iPrices_magpie.csv` (biomass price for round-2) and `iEmissions_magpie.mif` (AFOLU emissions, 200 variables, IAMC mif format) for OPEN-PROM
 
 All of this is orchestrated by `task == 7` in `start.R`.
 
@@ -52,37 +52,51 @@ The reverse-direction switch on the MAgPIE side is triggered by environment vari
 ```r
 library(postprom)
 couplePromToMagpie(
-  gdxPath    = "path/to/blabla.gdx",          # OPEN-PROM round-1 gdx
-  outMifPath = "path/to/openprom_coupling.mif",
-  scenario   = "SSP2-PkBudg650"               # must match MAgPIE side
+  gdxPath        = "path/to/blabla.gdx",          # OPEN-PROM round-1 gdx
+  outMifPath     = "path/to/openprom_coupling.mif",
+  scenario       = "SSP2-PkBudg650",              # must match MAgPIE side
+  nonCo2Mode     = "gwp",                         # "gwp" (default) or "zero"
+  deflator15to17 = 1.04                           # US$2015 -> US$2017
 )
 ```
 
 What it does:
 
-* Extracts `VmCarVal[,"TRADE",]` (CO2 price, US$2015/t CO2) and converts to US$2017 via a 1.04 deflator
-* Extracts `V03InpTotTransf[,"LQD","BMSWAS",]` (2G lignocellulosic feedstock, Mtoe/yr) and converts to EJ/yr (× 0.041868)
-* Derives `Price|N2O` (× AR6 GWP100 = 273) and `Price|CH4` (× 27) from the CO2 price — MAgPIE requires all three GHG prices present
-* Aggregates OPEN-PROM's 39 countries to MAgPIE's 12 h12 regions (EU-28 → `EUR`, the other 11 countries map 1:1)
-* Writes a REMIND-style `.mif` with 4 variables × 12 regions × 91 years that MAgPIE can consume via `cfg$path_to_report_ghgprices` / `cfg$path_to_report_bioenergy`
+* **CO2 price**: extracts `VmCarVal[,"TRADE",]` (US$2015/t CO2), bioenergy-weighted-averaged 39 → 12 h12, deflated US$2015→US$2017
+* **Bioenergy demand**: weighted blend of three OPEN-PROM 2nd-gen carriers from `V03ProdPrimary` (Mtoe/yr) — `0.4 × BMSWAS + 0.6 × BGSL + 0.6 × BKRS` (raw 2G feedstock + 2G biogasoline + 2G biokerosene). Summed 39 → 12 h12, converted Mtoe/yr → EJ/yr (× 0.041868)
+* **Non-CO2 prices**: `Price|N2O` and `Price|CH4` derived from CO2 via AR6 GWP100 (273 / 27) when `nonCo2Mode = "gwp"`, or set to zero when `"zero"` — MAgPIE requires all three GHG prices present
+* **Aggregation**: OPEN-PROM's 39 countries → MAgPIE's 12 h12 regions (EU-28 → `EUR`, the other 11 countries map 1:1)
+* **Output**: REMIND-style `.mif` with 4 variables × 12 regions × 91 years, consumed by MAgPIE via `cfg$path_to_report_ghgprices` / `cfg$path_to_report_bioenergy`
 
 ### 2. MAgPIE → OPEN-PROM
 
 ```r
 coupleMagpieToProm(
-  reportMifPath       = "path/to/magpie/output/noAR_.../report.mif",
+  reportMifPath       = "path/to/magpie/output/SSP2-PkBudg650_.../report.mif",
   outCsvPath          = "path/to/openprom/run/iPrices_magpie.csv",
-  outEmissionsCsvPath = "path/to/openprom/run/iEmissions_magpie.csv",
-  gdxPath             = "path/to/blabla.gdx"  # used to read the SBS set
+  outEmissionsMifPath = "path/to/openprom/run/iEmissions_magpie.mif",
+  gdxPath             = "path/to/blabla.gdx",   # used to read the SBS set
+  scenario            = "SSP2-PkBudg650",
+  deflator17to15      = 0.96
 )
 ```
 
-What it does:
+What it does (two output channels):
+
+**(a) Bioenergy price → `iPrices_magpie.csv`** (consumed by GAMS round-2)
 
 * Reads `Prices|Bioenergy (US$2017/GJ)` and converts to OPEN-PROM's k$2015/toe (× 0.96 × 41.868 / 1000)
 * Interpolates MAgPIE's 5-year steps onto OPEN-PROM's `YTIME = 2010..2100` annual grid
-* Disaggregates MAgPIE's 12 h12 regions back to OPEN-PROM's 39 countries (EU-28 members inherit the `EUR` value; other 11 regions 1:1) and broadcasts across the 34 `SBS` subsectors — writes `iPrices_magpie.csv` (the file that the GAMS switch above reads)
-* Also reads 11 AFOLU emission variables (`Emissions|CO2|Land`, `CH4|Land`, `N2O|Land`, fire-related BC/CO/OC/SO2/VOC, NH3, NO2, NO3-) and writes `iEmissions_magpie.csv`. **The GAMS side does not currently `$include` this file** — it is produced and saved for future extension
+* **Intensive variable** (price) — broadcast 12 h12 → 39 resCy (EU-28 members inherit `EUR`; other 11 regions 1:1), then broadcast across 34 `SBS` subsectors
+
+**(b) AFOLU emissions → `iEmissions_magpie.mif`** (IAMC mif, 200 variables; reporting-only — current GAMS does not `$include` this file)
+
+* Reads 200 curated AFOLU emission variables across 11 gases (BC, CH4, CO, CO2, N2O, NH3, NO2, NO3-, OC, SO2, VOC) covering MAgPIE's 4 sub-trees: `|Land|*` endogenous, `|AFOLU|Land|Fires|*` GFED wildfires, `|AFOLU|Agriculture` GAINS/CEDS air pollutants, plus the post-process Grassi alias dropped to avoid double-count
+* **Extensive variable** (Mt/yr) — disaggregated 12 h12 → 39 resCy via two passes over the IAMC `|+|` tree (parsed from variable names):
+  * **Pass 1, leaves**: weight-based split. 199 leaves use **MAgPIE-internal cell-level (0.5°) land-use distributions** as country weights (one of 11 physical drivers — drained peatland area, secondary forest area, cropland area, etc.); 1 leaf (`Emissions|CO2|Land|+|Indirect`) uses **ClimateWatch year-2010 LULUCF CO2 signed weights** because per-Mha forest sink density varies ~8x across EU climate zones
+  * **Pass 2, parents**: country values = Σ direct children, processed deepest-first. Country-level `|+|` sum-to-parent identities hold automatically
+* **Pre-requisite**: the run's `cell.{land,land_split,peatland}_0.5.mz` + `clustermap_*.rds` must exist in the MAgPIE output directory (produced by MAgPIE's standard `extra/disaggregation.R` postprocessor)
+* Per-leaf weight assignments are in `inst/extdata/magpie-afolu-emission-variables.csv` (manually maintained — single source of truth for variable list, weight choice, and parent–child documentation)
 
 ---
 
@@ -96,12 +110,18 @@ Pipeline:
 
 1. **OPEN-PROM round-1** (`link2MAgPIE=off`) → `blabla.gdx` + `blabla_round1.gdx` snapshot
 2. `couplePromToMagpie()` → `openprom_coupling.mif` (reads `blabla_round1.gdx`)
-3. **MAgPIE run** — launched via `Rscript start.R` inside `magpie/`, with env-vars `OPENPROM_COUPLING_MIF`, `OPENPROM_COUPLING_SCENARIO`, `OPENPROM_COUPLING_GHG=on`, `OPENPROM_COUPLING_BIOENERGY=on` set; MAgPIE writes `report.mif`
-4. `coupleMagpieToProm()` → `iPrices_magpie.csv` + `iEmissions_magpie.csv`
+3. **MAgPIE run** — launched via `Rscript start.R` inside `magpie/`, with env-vars `OPENPROM_MAGPIE_PROJECT`, `OPENPROM_MAGPIE_SUBSCENARIO`, `OPENPROM_COUPLING_MIF`, `OPENPROM_COUPLING_SCENARIO`, `OPENPROM_COUPLING_GHG=on`, `OPENPROM_COUPLING_BIOENERGY=on` set; MAgPIE writes `report.mif` + `cell.{land,land_split,peatland}_0.5.mz` + `clustermap_*.rds`
+4. `coupleMagpieToProm()` → `iPrices_magpie.csv` + `iEmissions_magpie.mif`
 5. **OPEN-PROM round-2** (`link2MAgPIE=on`) — reads `iPrices_magpie.csv`, fixes BMSWAS price, re-solves; overwrites `blabla.gdx` with the round-2 result (the round-1 snapshot is preserved)
 6. `reportOutput.R` + sync
 
-`config.json` must define `magpie_path` (absolute path to the MAgPIE root) so task 7 knows where to launch the land-use run.
+`config.json` must define three fields for task 7:
+
+* `magpie_path` — absolute path to the MAgPIE root (`<...>/OPEN-PROM/magpie/`)
+* `magpie_project` — subdirectory name under `magpie/e3m_projects/` (e.g. `"uptake"`); must contain a `scenarios.csv` that lists subscenarios
+* `magpie_scenario` — `title` of one row in that `scenarios.csv` (e.g. `"SSP2-PkBudg650"`)
+
+`start.R` performs pre-flight validation on these three fields and aborts before the long round-1 GAMS solve if any path is missing or misspelled.
 
 ### Run-folder layout (what each step produces)
 
@@ -118,14 +138,18 @@ runs/SSP2-PkBudg650_<timestamp>/                  ← OPEN-PROM run folder
 ├── full_round2.log                               Windows only: tee'd Step 5 console log
 ├── openprom_coupling.mif                         Step 2 output → MAgPIE Step 3 input
 ├── iPrices_magpie.csv                            Step 4 output → Step 5 input (BMSWAS price table)
-├── iEmissions_magpie.csv                         Step 4 output (AFOLU; produced for completeness, GAMS does not yet read it)
+├── iEmissions_magpie.mif                         Step 4 output (AFOLU 200 vars; IAMC mif; reporting only — GAMS does not yet $include it)
 ├── reporting.mif                                 Step 6 (`convertGDXtoMIF`) — converted MIF report
 ├── plot.tex / plot.pdf                           Step 6 (`batchPlotReport`) — auto-generated plots
 └── metadata.json                                 written by `saveMetadata()` at task entry
 
-magpie/output/noAR_<timestamp>/                   ← created by Step 3, one new folder per MAgPIE run
-├── report.mif                                    Step 3 output → Step 4 input
+magpie/output/<scenario>_<timestamp>/             ← created by Step 3, one new folder per MAgPIE run
+├── report.mif                                    Step 3 main output → Step 4 input
 ├── fulldata.gdx                                  MAgPIE main GDX
+├── cell.land_0.5.mz                              0.5° gridded land categories (Step 4 country weights)
+├── cell.land_split_0.5.mz                        further-split (forestry sub-classes, cropland tree cover, …)
+├── cell.peatland_0.5.mz                          0.5° peatland states (drained / intact / rewetted / …)
+├── clustermap_*.rds                              cell → (cluster, region, country) mapping (Step 4 aggregates by country)
 ├── full.log / full.lst                           GAMS log/listing
 ├── runstatistics.rda                             runtime stats
 └── _renv.lock / renv.lock                        per-run renv snapshot
@@ -138,7 +162,8 @@ Notes on file lifetimes:
 
 * `blabla.gdx` is produced twice (Step 1, then overwritten in Step 5). `blabla_round1.gdx` is the immutable round-1 snapshot — every resume reads from it, never from `blabla.gdx`.
 * `modelstat.txt`, `main.lst`, `main.log` likewise reflect only the *latest* solve. If Step 5 finishes, you cannot tell from these whether Step 1 also succeeded — but `blabla_round1.gdx` proves it did.
-* The MAgPIE step always creates a *new* timestamped subfolder under `magpie/output/`, so resuming task 7 leaves the previous MAgPIE folder untouched and Step 4 picks the most recent one (`which.max(mtime)`).
+* The MAgPIE step always creates a *new* timestamped subfolder under `magpie/output/` (named `<scenario>_<timestamp>` from `cfg$title`), so resuming task 7 leaves the previous MAgPIE folder untouched and Step 4 picks the most recent one (`which.max(mtime)`).
+* The `cell.*.mz` files are produced by MAgPIE's standard `extra/disaggregation.R` postprocessor — included by default in every MAgPIE run. If you customise the MAgPIE output script list and disable this postprocessor, Step 4 will fail with a clear error.
 * `syncRun()` writes the `.tgz` archive locally first, copies it to `config$model_runs_path`, then deletes the local copy. Excludes `main.lst` / `mainCalib.lst` on success; the `uploadGDX` flag in `start.R` controls whether `.gdx` files are included.
 
 ---
@@ -149,8 +174,10 @@ If a task 7 run fails mid-pipeline (e.g. MAgPIE crashes in Step 3) and you want 
 
 ```json
 {
-  "model_runs_path": "...",
-  "magpie_path":     "...",
+  "model_runs_path":   "...",
+  "magpie_path":       "...",
+  "magpie_project":    "uptake",
+  "magpie_scenario":   "SSP2-PkBudg650",
   "task7_existingRun": "/abs/path/to/runs/SSP2-PkBudg650_2026-04-25_xxx"
 }
 ```
@@ -173,4 +200,5 @@ Outputs from Step 2–6 overwrite previous artefacts in place, so a re-run after
 
 * CSV format requirement: year column headers in `iPrices_magpie.csv` must be **bare integers** (`2010,2011,…,2100`) — no `y` prefix. OPEN-PROM's `YTIME` set is declared as `/%fStartHorizon%*%fEndHorizon%/` which expands to plain-integer labels, and any mismatch triggers GAMS error 170 (domain violation)
 * When launching GAMS from `start.R`, always pass `-Idir=./data` because `core/input.gms` includes CSVs with root-relative paths (`./iActv.csvr` etc.) that live in the `./data/` subdirectory
-* The forward bio channel sends `V03InpTotTransf[,"LQD","BMSWAS",]` — the narrow 2G lignocellulosic feedstock flow. Under scenarios where OPEN-PROM does not activate the liquid biofuel pathway, this signal can legitimately be near-zero; the CO2 price channel still transmits independently
+* The forward bio channel sends a weighted blend of three `V03ProdPrimary` carriers (`0.4 × BMSWAS + 0.6 × BGSL + 0.6 × BKRS`) — raw 2G feedstock plus 2G biogasoline and biokerosene; the weights approximate each carrier's effective 2G-biomass content. Under scenarios where OPEN-PROM does not activate the liquid biofuel pathway, this signal can legitimately be near-zero; the CO2 price channel still transmits independently
+* The IAMC tree of `iEmissions_magpie.mif` preserves `|+|` markers — country-level sum-to-parent identities hold (parent = Σ direct children), matching the h12-level identities in MAgPIE's source `report.mif`
