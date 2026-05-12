@@ -1,5 +1,7 @@
 endloop;  !! close countries loop
+$ifthen.countryParallel "%CountrySolveMode%" == "parallel"
 $offImplicitAssign
+$endif.countryParallel
 $ifthen.curves "%Curves%" == "LearningCurves"
 V10CumCapGlobal.FX(LCTECH,YTIME)$TIME(YTIME) = V10CumCapGlobal.L(LCTECH,YTIME)$TIME(YTIME);
 $endif.curves
