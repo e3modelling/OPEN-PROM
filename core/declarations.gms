@@ -17,6 +17,7 @@ ODummyObjPGALL                                             "Parameter saving obj
 ODummyObjTRANSE                                            "Parameter saving objective function for TRANSE"
 ODummyObjDOMSEShares                                       "Parameter saving objective function for DOMSE shares"
 ODummyObjDOMSEFinalEnergy                                  "Parameter saving objective function for DOMSE final energy"
+pSolveHandle(allCy)                                      "Asynchronous solve handle by country"
 
 *'                **Interdependent Parameters**
 imCGI(allCy,YTIME)                                         "Capital Goods Index (defined as CGI(Scenario)/CGI(Baseline)) (1)"
@@ -97,6 +98,10 @@ $else.magpie
 sLink2MAgPIE                                               "Binary flag for MAgPIE link (1=on, 0=off)" /0/
 $endif.magpie
 sModelStat                                                 "helper parameter for solver status"
+sHandleCollect                                             "helper scalar for asynchronous handle collection"
+sReadyCollect                                              "helper scalar for asynchronous wait status"
+sAsyncAttempt                                              "helper scalar for asynchronous solver attempts"
+sAsyncWaitHandle                                           "helper scalar for the asynchronous handle currently being collected"
 smFracElecPriChp                                           "Fraction of Electricity Price at which a CHP sells electricity to network" /0/
 sCY                                                        "country iterator" /0/
 sUnitToKUnit                                               "units to Kilo units conversion" /1000/
