@@ -39,6 +39,7 @@ $onImplicitAssign
          until sHandleCollect;
 
          sModelStat = openprom.modelstat;
+         display sModelStat
          display$handleDelete(pSolveHandle(runCyL)) "Trouble deleting asynchronous solve handle", runCyL;
          pSolveHandle(runCyL) = 0;
 
