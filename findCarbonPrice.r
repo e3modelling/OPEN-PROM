@@ -411,7 +411,7 @@ calculateGhg <- function(dataMagpie) {
 # ----------------------------
 start_time <- Sys.time()
 selectedYear <- 2035
-changeCarbonPriceFromYear <- 2024
+changeCarbonPriceFromYear <- 2026
 flagCO2eq <- TRUE
 GAMSCmdArgs <- c("--DevMode=0", "--GenerateInput=off", "lo=4", "idir=./data", paste0("--fEndY=", selectedYear))
 
@@ -571,8 +571,8 @@ for (regName in names(runQueue)) {
     yearCols     = yearCols,
     targetRegion = actualRegion,
     targetYear   = selectedYear,
-    minAlpha     = -0.5,           # Allow price reduction up to -50% if needed
-    maxAlpha     = 20.0,           # Allow up to +1000% increase
+    minAlpha     = -1.0,           # Allow price reduction up to -100% if needed
+    maxAlpha     = 2.0,           # Allow up to +200% increase
     expandFactor = 2.0,
     maxProbes    = 12,
     verbose      = TRUE
