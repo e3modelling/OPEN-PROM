@@ -1,11 +1,13 @@
 endloop;  !! close countries loop
+$ifthen.countryParallel "%CountrySolveMode%" == "parallel"
 $offImplicitAssign
+$endif.countryParallel
 $ifthen.curves "%Curves%" == "LearningCurves"
 V10CumCapGlobal.FX(LCTECH,YTIME)$TIME(YTIME) = V10CumCapGlobal.L(LCTECH,YTIME)$TIME(YTIME);
 $endif.curves
 * Export model results to GDX file
 $ifthen.calib %Calibration% == MatCalibration
-execute_unload "outputCalib.gdx", V03ProdPrimary, V03ConsGrssInl, V03OutTotTransf, VmImpNetEneBrnch, V04GapGenCapPowerDiff, V04CapElecNonCHP, ODummyObj, VmCapElec, VmProdElec, V04ProdElecEstCHP, V01NewRegPcTechYearly, i04MatFacPlaAvailCap, imMatrFactor, V04SharePowPlaNewEq, t04SharePowPlaNewEq, V04ShareTechPG, V04CostHourProdInvDec, V04ShareSatPG, V01ShareTechTr, V04DemElecTot, t01NewShareStockPC, iCarbValYrExog;
+execute_unload "outputCalib.gdx", V03ProdPrimary, V03ConsGrssInl, V03OutTotTransf, VmImpNetEneBrnch, V04GapGenCapPowerDiff, V04CapElecNonCHP, ODummyObj, ODummyObjPGALL, ODummyObjTRANSE, ODummyObjDOMSEShares, ODummyObjDOMSEFinalEnergy, VmCapElec, VmProdElec, V04ProdElecEstCHP, V01NewRegPcTechYearly, i04MatFacPlaAvailCap, imMatrFactor, V04SharePowPlaNewEq, t04SharePowPlaNewEq, V04ShareTechPG, V04CostHourProdInvDec, V04ShareSatPG, V01ShareTechTr, V04DemElecTot, t01NewShareStockPC, iCarbValYrExog, i02ScaleEndogScrap, i02CalibUsefulEnergy, VmConsFuelShare, t02SharesFuelBuildings, t02FinalEnergyDOMSE, VmConsFuel, t02FinalEnergyINDSE, t02SharesFuelINDSE;
 $else.calib
 execute_unload "outputData.gdx", ODummyObj, VmConsFuel, VmCapElec, V04CapElecNominal, VmProdElec, VmPriceFuelSubsecCarVal;
 $endif.calib
