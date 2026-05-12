@@ -16,7 +16,7 @@ qDummyObj(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
     =e=
   vDummyObjPGALL + vDummyObjTRANSE + 
   SUM(DSBS$((INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and not (sameas("AG",DSBS) and not EU28(allCy))), 
-  vDummyObjDOMSEShares(DSBS) + vDummyObjDOMSEFinalEnergy(DSBS)
+  vDummyObjINDDOMShares(DSBS) + vDummyObjINDDOMFinalEnergy(DSBS)
   )
   /SUM(DSBS$((INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and not (sameas("AG",DSBS) and not EU28(allCy))), 1)
   ;
@@ -48,8 +48,8 @@ qDummyObjTRANSE(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
   /SUM((TRANSE,TTECH)$(SECTTECH(TRANSE,TTECH) and (sameas("PC",TRANSE) or sameas("PB",TRANSE) or sameas("GU",TRANSE))), 1)
   ;
 
-qDummyObjDOMSEShares(allCy,YTIME,DSBS)$(TIME(YTIME) and runCy(allCy) and (INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS))).. 
-  vDummyObjDOMSEShares(DSBS)
+qDummyObjINDDOMShares(allCy,YTIME,DSBS)$(TIME(YTIME) and runCy(allCy) and (INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS))).. 
+  vDummyObjINDDOMShares(DSBS)
     =e=
   (SUM(EFS$SECtoEF(DSBS,EFS),
     SQR(
@@ -71,8 +71,8 @@ qDummyObjDOMSEShares(allCy,YTIME,DSBS)$(TIME(YTIME) and runCy(allCy) and (INDDOM
   
   ;
 
-qDummyObjDOMSEFinalEnergy(allCy,YTIME,DSBS)$(TIME(YTIME) and runCy(allCy) and (INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS))).. 
-  vDummyObjDOMSEFinalEnergy(DSBS)
+qDummyObjINDDOMFinalEnergy(allCy,YTIME,DSBS)$(TIME(YTIME) and runCy(allCy) and (INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS))).. 
+  vDummyObjINDDOMFinalEnergy(DSBS)
     =e=
     SQR(
       SUM(EF2$SECtoEF(DSBS,EF2),VmConsFuel(allCy,DSBS,EF2,YTIME)) / t02FinalEnergyDOMSE(allCy,DSBS,YTIME) - 1

@@ -55,9 +55,9 @@ $onImplicitAssign
 $ifthen.calib %Calibration% == MatCalibration
       ODummyObjPGALL(runCyL,YTIME)$TIME(YTIME) = vDummyObjPGALL.L;  !! Assign objective function value for PGALL
       ODummyObjTRANSE(runCyL,YTIME)$TIME(YTIME) = vDummyObjTRANSE.L;  !! Assign objective function value for TRANSE
-      ODummyObjDOMSEShares(allCy,YTIME,DSBS)$(TIME(YTIME) and runCy(allCy) and ((INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and not (sameas("AG",DSBS) and not EU28(allCy)))) = vDummyObjDOMSEShares.L(DSBS);  !! Assign objective function value for DOMSE Shares
-      ODummyObjDOMSEFinalEnergy(allCy,YTIME,DSBS)$(TIME(YTIME) and runCy(allCy) and ((INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and not (sameas("AG",DSBS) and not EU28(allCy)))) = vDummyObjDOMSEFinalEnergy.L(DSBS);  !! Assign objective function value for DOMSE Final Energy
-$endif.calib
+      ODummyObjINDDOMShares(allCy,YTIME,DSBS)$(TIME(YTIME) and runCy(allCy) and ((INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and not (sameas("AG",DSBS) and not EU28(allCy)))) = vDummyObjINDDOMShares.L(DSBS);  !! Assign objective function value for INDDOM Shares
+      ODummyObjINDDOMFinalEnergy(allCy,YTIME,DSBS)$(TIME(YTIME) and runCy(allCy) and ((INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and not (sameas("AG",DSBS) and not EU28(allCy)))) = vDummyObjINDDOMFinalEnergy.L(DSBS);  !! Assign objective function value for INDDOM Final Energy
+$ENDIF.calib
 
       put fStat;
       put "Country:", runCyL.tl, " Model Status:", sModelStat:0:2, " Year:", an.tl /;

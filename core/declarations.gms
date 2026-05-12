@@ -15,8 +15,8 @@ iTranfOutGasworks(allCy,EF,YTIME)	                       "Transformation Output 
 ODummyObj                                                  "Parameter saving objective function"
 ODummyObjPGALL                                             "Parameter saving objective function for PGALL"
 ODummyObjTRANSE                                            "Parameter saving objective function for TRANSE"
-ODummyObjDOMSEShares                                       "Parameter saving objective function for DOMSE shares"
-ODummyObjDOMSEFinalEnergy                                  "Parameter saving objective function for DOMSE final energy"
+ODummyObjINDDOMShares                                       "Parameter saving objective function for INDDOM shares"
+ODummyObjINDDOMFinalEnergy                                  "Parameter saving objective function for INDDOM final energy"
 pSolveHandle(allCy)                                      "Asynchronous solve handle by country"
 
 *'                **Interdependent Parameters**
@@ -63,8 +63,8 @@ $IFTHEN.calib %Calibration% == MatCalibration
 qRestrain
 qDummyObjPGALL                                             "Define dummy objective function for PGALL"
 qDummyObjTRANSE                                            "Define dummy objective function for TRANSE"
-qDummyObjDOMSEShares                                       "Define dummy objective function for DOMSE shares"
-qDummyObjDOMSEFinalEnergy                                  "Define dummy objective function for DOMSE final energy"
+qDummyObjINDDOMShares                                       "Define dummy objective function for INDDOM shares"
+qDummyObjINDDOMFinalEnergy                                  "Define dummy objective function for INDDOM final energy"
 $ENDIF.calib
 ;
 
@@ -75,8 +75,8 @@ Variables
 vDummyObj                                                  "Dummy maximisation variable (1)"
 vDummyObjPGALL                                             "Dummy maximisation variable for PGALL (1)"
 vDummyObjTRANSE                                            "Dummy maximisation variable for TRANSE (1)"
-vDummyObjDOMSEShares(DSBS)                                 "Dummy maximisation variable for DOMSE shares (1)"
-vDummyObjDOMSEFinalEnergy(DSBS)                            "Dummy maximisation variable for DOMSE final energy (1)"
+vDummyObjINDDOMShares(DSBS)                                 "Dummy maximisation variable for INDDOM shares (1)"
+vDummyObjINDDOMFinalEnergy(DSBS)                            "Dummy maximisation variable for INDDOM final energy (1)"
 VmElecConsHeatPla(allCy,DSBS,YTIME)                        "Electricity consumed in heatpump plants (Mtoe)"
 ;
 
