@@ -6,7 +6,7 @@
         {
             "label": "OPEN-PROM DEV",
             "type": "shell",
-            "command": "Rscript start.R task=0",
+            "command": "Rscript run.R task_id=0",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -20,7 +20,7 @@
         {
             "label": "OPEN-PROM DEV NEW DATA",
             "type": "shell",
-            "command": "Rscript start.R task=1",
+            "command": "Rscript run.R task_id=1",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -34,7 +34,7 @@
         {
             "label": "OPEN-PROM RESEARCH",
             "type": "shell",
-            "command": "Rscript start.R task=2",
+            "command": "Rscript run.R task_id=2",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -44,11 +44,11 @@
                 "focus": true
             }
         },
-               
+
         {
             "label": "OPEN-PROM RESEARCH NEW DATA",
             "type": "shell",
-            "command": "Rscript start.R task=3",
+            "command": "Rscript run.R task_id=3",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -62,7 +62,7 @@
         {
             "label": "OPEN-PROM DEBUGGING",
             "type": "shell",
-            "command": "Rscript start.R task=4",
+            "command": "Rscript run.R task_id=4",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -90,7 +90,7 @@
         {
             "label": "COMPARE SCENARIOS",
             "type": "shell",
-            "command": "Rscript reportOutput.R",
+            "command": "Rscript scripts/tasks/reportOutput.R",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -104,7 +104,7 @@
         {
             "label": "CALIBRATE",
             "type": "shell",
-            "command": "Rscript start.R task=5",
+            "command": "Rscript run.R task_id=5",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -118,7 +118,7 @@
         {
             "label": "CALIBRATE CARBON PRICES",
             "type": "shell",
-            "command": "Rscript start.R task=6",
+            "command": "Rscript run.R task_id=6",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -132,7 +132,7 @@
         {
             "label": "OPEN-PROM LIVE",
             "type": "shell",
-            "command": "python ./scripts/R-live.py",
+            "command": "python ./scripts/tools/R-live.py",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -146,7 +146,7 @@
         {
             "label": "OPEN-PROM SOFT-LINK MAgPIE",
             "type": "shell",
-            "command": "Rscript start.R task=7",
+            "command": "Rscript run.R task_id=7",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -156,6 +156,30 @@
                 "focus": true
             }
         },
+
+        {
+            "label": "RUN BATCH",
+            "type": "shell",
+            "command": "Rscript run.R scenarios.csv",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "focus": true
+            }
+        },
+
+        // Hide the auto-registered task from the markdownlint extension
+        // (DavidAnson.vscode-markdownlint). The extension itself stays
+        // active for in-editor linting; only the "Lint all Markdown files"
+        // entry in the task runner is suppressed.
+        {
+            "label": "lint all",
+            "type": "markdownlint",
+            "hide": true
+        }
 
     ]
 }

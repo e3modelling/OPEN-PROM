@@ -42,24 +42,29 @@ The practical result is:
 
 The underlying script is triggered automatically in the normal workflow when the appropriate task uses `GenerateInput=on`, but you can also run it directly if you want to inspect the generated files yourself.
 
-## 4. Task modes in `start.R`
+## 4. Task modes in `run.R`
 
-The standard internal entry point is:
+The standard single-scenario entry point is:
 
 ```bash
-Rscript start.R task=N
+Rscript run.R task_id=N
 ```
+
+`run.R` always runs **one** scenario: the one defined in `config.json:scenario`. Edit that block to change what gets run.
+
+For batch sweeps over multiple scenarios, use `run.R <csv>` instead — it reads `scenarios.csv` at the repo root and runs each row as its own OPEN-PROM run. Batch mode only supports `task_id` 2 and 7 (RESEARCH and MAgPIE soft-link); the other tasks have no batch use case.
 
 The main task modes are:
 
-| task | Button name | What it does | Main input requirement | Main outputs |
-|------|-------------|--------------|------------------------|--------------|
-| 0 | `OPEN-PROM DEV` | Runs the development model with existing input data | existing `data/` | model run output; `reportOutput.R` runs automatically if `withRunFolder` and `withReport` are enabled |
-| 1 | `OPEN-PROM DEV NEW DATA` | Rebuilds development input data and then runs the model | internal data access | fresh development `data/` and a model run |
-| 2 | `OPEN-PROM RESEARCH` | Runs the research model with existing research input data | existing research `data/` | model run output; `reportOutput.R` runs automatically if `withRunFolder` and `withReport` are enabled |
-| 3 | `OPEN-PROM RESEARCH NEW DATA` | Rebuilds research input data, calibrates maturity factors, then runs the model | internal data access | fresh research `data/`, `targets/`, calibration results, and a model run |
-| 5 | `CALIBRATE` | Runs calibration only | existing `data/` and `targets/` | calibrated maturity-factor files |
-| 6 | `CALIBRATE CARBON PRICES` | Runs carbon-price calibration | internal calibration setup | updated carbon-price inputs and, if enabled, a report |
+| task_id | Button name | What it does | Main input requirement | Main outputs | Batchable? |
+|---------|-------------|--------------|------------------------|--------------|:-:|
+| 0 | `OPEN-PROM DEV` | Runs the development model with existing input data | existing `data/` | model run output; `reportOutput.R` runs automatically if `withRunFolder` and `withReport` are enabled | no |
+| 1 | `OPEN-PROM DEV NEW DATA` | Rebuilds development input data and then runs the model | internal data access | fresh development `data/` and a model run | no |
+| 2 | `OPEN-PROM RESEARCH` | Runs the research model with existing research input data | existing research `data/` | model run output; `reportOutput.R` runs automatically if `withRunFolder` and `withReport` are enabled | **yes** |
+| 3 | `OPEN-PROM RESEARCH NEW DATA` | Rebuilds research input data, calibrates maturity factors, then runs the model | internal data access | fresh research `data/`, `targets/`, calibration results, and a model run | no |
+| 5 | `CALIBRATE` | Runs calibration only | existing `data/` and `targets/` | calibrated maturity-factor files | no |
+| 6 | `CALIBRATE CARBON PRICES` | Runs carbon-price calibration | internal calibration setup | updated carbon-price inputs and, if enabled, a report | no |
+| 7 | `OPEN-PROM SOFT-LINK MAgPIE` | Runs the MAgPIE soft-link pipeline (see Tutorial 12) | internal data access + MAgPIE checkout | scenario run with coupled MAgPIE outputs | **yes** |
 
 Task 4 is a debugging path and is not part of the normal run flow.
 
@@ -70,9 +75,23 @@ The easiest way to read this table is:
 * `RESEARCH` means the full research setup
 * `CALIBRATE` modes are specialized runs and not the usual first step
 
+## 4b. Batch mode (`run.R <csv>`)
+
+When you want to run several scenarios in one go, put a `scenarios.csv` file at the repo root. Each row defines one scenario; the columns are flat fields, with dots in the column header indicating nested config keys (e.g. `gams_flags.fScenario` ↔ `{"gams_flags": {"fScenario": ...}}`).
+
+A starter template lives at `scenarios.template.csv`. The minimal required columns are `scenario_name` and `task_id`; everything else is optional (empty cells fall back to whatever `config.json:scenario` provides).
+
+Run:
+
+```bash
+Rscript run.R scenarios.csv
+```
+
+or click the **RUN BATCH** button in the VS Code Task Runner. The button fails with "scenarios.csv not found" if the file is missing, which is intentional — batch is always opt-in via that file.
+
 ## 5. What the outputs mean
 
-When `withReport <- TRUE`, `start.R` automatically calls `reportOutput.R` after task 0, 2, 3, or 6, provided the run-folder workflow is active. That script converts the model output into a MIF report, typically `reporting.mif`. It may also try to create plot files, but PDF generation depends on the local LaTeX/TinyTeX setup.
+When `behavior.withReport: true` in `config.json`, the task body automatically calls `scripts/tasks/reportOutput.R` after task 0, 2, 3, 6 or 7, provided the run-folder workflow is active. That script converts the model output into a MIF report, typically `reporting.mif`. It may also try to create plot files, but PDF generation depends on the local LaTeX/TinyTeX setup.
 
 `outputForProject.mif` is not part of the default workflow. It is only created when project reporting is explicitly enabled.
 
@@ -81,6 +100,6 @@ For a quick success check:
 * `modelstat.txt` should show successful model status lines for the solved years and regions
 * `outputData.gdx` should exist after a normal model run
 * `reporting.mif` only appears when the reporting step actually runs
-* if `withReport <- FALSE`, the model can still run successfully even though no MIF or reporting plots are created
+* if `behavior.withReport: false`, the model can still run successfully even though no MIF or reporting plots are created
 
 So when checking a run, do not confuse “the model solved” with “the full reporting workflow also ran”.

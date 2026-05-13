@@ -6,20 +6,22 @@ This tutorial is for external users who want to verify that OPEN-PROM runs on th
 
 This tutorial assumes that you have at least completed the basic software setup from Tutorial 03. In practice, you need a working `Rscript` command, a working `gams` command, and the R packages required by `loadMadratData.R`.
 
-If you later experiment with `start.R` or the VS Code Task Runner instead of the direct GAMS command below, first open `start.R` and set:
+If you later experiment with `run.R` or the VS Code Task Runner instead of the direct GAMS command below, first edit `config.json` to set:
 
-```r
-withSync <- FALSE
+```json
+{
+  "behavior": { "withSync": false }
+}
 ```
 
-This dummy-data path does not use the normal internal sync workflow, and leaving `withSync <- TRUE` can make `syncRun()` stop the wrapper when `model_runs_path` is not configured.
+This dummy-data path does not use the normal internal sync workflow, and leaving `withSync` enabled can make `syncRun()` stop the wrapper when `paths.model_runs_path` is not configured.
 
 ## 1. Download the dummy data
 
 Run the dummy-data loader once:
 
 ```bash
-Rscript loadMadratData.R DevMode=2
+Rscript scripts/tasks/loadMadratData.R DevMode=2
 ```
 
 This downloads `dummy_data.tgz` from Google Drive and extracts it into `./data`. It does **not** create `./targets`, so it cannot be used for calibration or any workflow that depends on targets.

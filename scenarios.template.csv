@@ -1,0 +1,6 @@
+scenario_name,task_id,description,gams_flags.fScenario,magpie.project,magpie.existing_prom_run
+C200_biolim100,2,UPTAKE C200 biolim100,200,uptake,
+C200_landHigh,2,UPTAKE C200 landHigh,200,uptake,
+C600_biolim100,7,UPTAKE C600 biolim100,600,uptake,
+C600_landHigh,7,UPTAKE C600 landHigh,600,uptake,
+C200_resume_from_existing,7,resume MAgPIE coupling from a prior OPEN-PROM run,200,uptake,/absolute/path/to/runs/C200_biolim100_<timestamp>

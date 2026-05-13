@@ -30,7 +30,7 @@ It is recommended to follow this tutorial after completing Tutorial 01 and havin
 
 The Task Runner buttons are shortcuts for commands defined in `.vscode/tasks.json`. In practice, they call commands such as:
 
-- `Rscript start.R task=...`
+- `Rscript run.R task_id=...`
 - or direct GAMS calls
 
 So the Task Runner panel is not a different workflow. It is a launch panel for the same predefined commands that could also be executed in the terminal.
@@ -44,7 +44,7 @@ The OPEN-PROM tasks are divided into several run modes. At a high level, these i
 - research runs,
 - and calibration-related runs.
 
-At this stage, you do not need to memorize every task. The important point is that different buttons trigger different combinations of flags in `start.R`, such as `DevMode`, `GenerateInput`, and reporting options.
+At this stage, you do not need to memorize every task. The important point is that different buttons trigger different combinations of GAMS flags via `run.R` + the task body in `scripts/tasks/`, such as `DevMode`, `GenerateInput`, and reporting options.
 
 If you want to study the exact meaning of each mode, continue to Tutorial 05.
 

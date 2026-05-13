@@ -7,8 +7,8 @@ library(stringr)
 
 getRunpath <- function() {
   # Main execution
-  source("scripts/helpersOfCompareScenarios.R")
-  source("scripts/scanRunFolder.R")
+  source("scripts/tasks/helpersOfCompareScenarios.R")
+  source("scripts/tasks/scanRunFolder.R")
   result <- scanRunFolder()
   runpath <- as.data.frame(result)
   runpath <- as.vector(runpath[, seq(2, length(runpath), 2)])
