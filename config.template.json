@@ -4,5 +4,7 @@
     "gams_path": "path\\to\\gams\\folder\\including\\trailing\\slash\\",
     "task7_existingRun": "path\\to\\existing\\model\\run\\for\\task7",
     "scenario_name": "SCEN",
+    "magpie_project": "uptake",
+    "magpie_scenario": "SSP2-PkBudg650",
     "description": "Model run description. Replace with your own, based on scenario and model settings."
 }

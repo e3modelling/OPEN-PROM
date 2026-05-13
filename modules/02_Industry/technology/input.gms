@@ -10,7 +10,7 @@ $offdelim
 *---
 table i02ElaSub(allCy,DSBS)                                "Elasticities by subsector for all countries (1)" ;
 *---
-imTotFinEneDemSubBaseYr(runCy,TRANSE,YTIME)  = sum(EF$SECtoEF(TRANSE,EF), imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME));
+imTotFinEneDemSubBaseYr(runCy,TRANSE,YTIME)  = sum(EF$SECtoEF(TRANSE,EF),imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME));
 imTotFinEneDemSubBaseYr(runCy,INDSE,YTIME)   = SUM(EF$SECtoEF(INDSE,EF),imFuelConsPerFueSub(runCy,INDSE,EF,YTIME));
 imTotFinEneDemSubBaseYr(runCy,DOMSE,YTIME)   = SUM(EF$SECtoEF(DOMSE,EF),imFuelConsPerFueSub(runCy,DOMSE,EF,YTIME));
 imTotFinEneDemSubBaseYr(runCy,NENSE,YTIME)   = SUM(EF$SECtoEF(NENSE,EF),imFuelConsPerFueSub(runCy,NENSE,EF,YTIME));
@@ -19,28 +19,45 @@ i02ExogDemOfBiomass(runCy,DOMSE,YTIME) = 0;
 *---
 i02util(runCy,DSBS,ITECH,YTIME) = 1;
 *---
-$IFTHEN.calib %Calibration% == Calibration
-variable i02ElastNonSubElec(allCy,DSBS,ETYPES,YTIME)        "Elasticities of Non Substitutable Electricity (1)";
-i02ElastNonSubElec.L(runCy,DSBS,ETYPES,YTIME) = i02ElastNonSubElecData(DSBS,ETYPES,YTIME);
-i02ElastNonSubElec.LO(runCy,DSBS,"a",YTIME)   = 0.001;
-i02ElastNonSubElec.UP(runCy,DSBS,"a",YTIME)   = 10;
-i02ElastNonSubElec.LO(runCy,DSBS,"b1",YTIME)  = -10;
-i02ElastNonSubElec.UP(runCy,DSBS,"b1",YTIME)  = -0.001;
-i02ElastNonSubElec.LO(runCy,DSBS,"b2",YTIME)  = -10;
-i02ElastNonSubElec.UP(runCy,DSBS,"b2",YTIME)  = -0.001;
-i02ElastNonSubElec.LO(runCy,DSBS,"c",YTIME)   = -10;
-i02ElastNonSubElec.UP(runCy,DSBS,"c",YTIME)   = -0.001;
+$IFTHEN.calib %Calibration% == off
+table i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME)       "Scale parameter for endogenous scrapping applied to the sum of full costs (1)"
+$ondelim
+$include"./iScaleEndogScrap.csv"
+$offdelim
+;
+*---
+table i02CalibUsefulEnergy(allCy,DSBS,YTIME)      "Calibration parameter for useful energy (1)"
+$ondelim
+$include"./iCalibUsefulEnergy.csv"
+$offdelim
+;
+*---
 $ELSE.calib
-i02ElastNonSubElec(runCy,DSBS,ETYPES,YTIME) = i02ElastNonSubElecData(DSBS,ETYPES,YTIME);
+variable i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME)        "Scale parameter for endogenous scrapping applied to the sum of full costs (1)";
+variable i02CalibUsefulEnergy(allCy,DSBS,YTIME);
+
+i02ScaleEndogScrap.LO(runCy,DSBS,ITECH,YTIME) = 0;                                      
+i02ScaleEndogScrap.UP(runCy,DSBS,ITECH,YTIME) = 100;
+i02ScaleEndogScrap.L(runCy,DSBS,ITECH,YTIME) = 1;
+i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$(DATAY(YTIME) or not SECTTECH(DSBS,ITECH)) = 0;
+i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and not (INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS))) = 1;
+i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$(sameas("AG",DSBS) and not EU28(runCy)) = 1;
+
+i02CalibUsefulEnergy.LO(runCy,DSBS,YTIME) = -0.5;  
+i02CalibUsefulEnergy.UP(runCy,DSBS,YTIME) = 1;  
+i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$DATAY(YTIME) = 0;
+i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$(not (INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS))) = 0;
+i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$(sameas("AG",DSBS) and not EU28(runCy)) = 0;
 $ENDIF.calib
+i02ElastNonSubElec(runCy,DSBS,ETYPES,YTIME) = i02ElastNonSubElecData(DSBS,ETYPES,YTIME);
 *---
 i02ElaSub(runCy,DSBS) = imElaSubData(DSBS);
-i02ElaSub(runCy,DSBS) = 2; !!
+i02ElaSub(runCy,DSBS) = 2;
 *---
-i02ScaleEndogScrap(DSBS)$(not TRANSE(DSBS) and not CDR(DSBS)) = 3./SUM(ITECH$SECTTECH(DSBS,ITECH),1);
+* i02ScaleEndogScrap(DSBS)$(not TRANSE(DSBS) and not CDR(DSBS)) = 3./SUM(ITECH$SECTTECH(DSBS,ITECH),1);
 *---
 imCO2CaptRateIndustry(runCy,CCSTECH,YTIME) = 0.9;
-
+*---
 alias(ITECH,ITECH2);
 i02numtechnologiesUsingEF(DSBS,EF)=sum(ITECH2$(ITECHtoEF(ITECH2,EF)$SECTTECH(DSBS,ITECH2)),1);
 *---
@@ -59,8 +76,30 @@ i02ShareBlend(runCy,"BU","TGDO","BGDO",YTIME)$AN(YTIME) = i02ShareBlend(runCy,"B
 
 i02ShareElcHP(runCy,"HOU",YTIME) = 0.1;
 i02ShareElcHP(runCy,"SE",YTIME) = 0.1;
+*---
+$IFTHEN.calib %Calibration% == MatCalibration
+table t02SharesFuelBuildings(allCy,DSBS,EFS,YTIME)    "Targets for share of new passenger cars"
+$ondelim
+$include "../targets/tSharesFuelBuildings.csv"
+$offdelim;
+
+table t02SharesFuelINDSE(allCy,DSBS,EFS,YTIME)    "Targets for share of new passenger cars"
+$ondelim
+$include "../targets/tSharesINDSE.csv"
+$offdelim;
+
+table t02FinalEnergyDOMSE(allCy,DSBS,YTIME)    "Targets for share of new passenger cars"
+$ondelim
+$include "../targets/tProjectionsFuelBuildings.csv"
+$offdelim;
+
+table t02FinalEnergyINDSE(allCy,DSBS,YTIME)    "Targets for share of new passenger cars"
+$ondelim
+$include "../targets/tProjectionsINDSE.csv"
+$offdelim;
+$ENDIF.calib
 
 * imUsfEneConvSubTech(runCy,"HOU","TELC",YTIME)$(ord(YTIME)>20)  = imDataDomTech("HOU","TELC","USC") + 0.0525 * (ord(YTIME)-21);
-imUsfEneConvSubTech(runCy,"HOU","THEATPUMP",YTIME)$AN(YTIME)  = 3.5;
+* imUsfEneConvSubTech(runCy,"HOU","THEATPUMP",YTIME)$AN(YTIME)  = 3.5;
 * imUsfEneConvSubTech(runCy,"SE","TELC",YTIME)$(ord(YTIME)>20)  = imDataDomTech("SE","TELC","USC") + 0.0525 * (ord(YTIME)-21);
-imUsfEneConvSubTech(runCy,"SE","THEATPUMP",YTIME)$AN(YTIME)  = 3.5;
+* imUsfEneConvSubTech(runCy,"SE","THEATPUMP",YTIME)$AN(YTIME)  = 3.5;
