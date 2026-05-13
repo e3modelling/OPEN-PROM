@@ -206,6 +206,8 @@ $setglobal link2MAgPIE off  !! on or off For soft link with MAgPIE
 
 *' *** Maximum number of solver attempts
 $evalGlobal SolverTryMax 4
+*' *** Country solve mode: serial or parallel
+$setGlobal CountrySolveMode serial
 *' *** Setting research mode (0) or development mode (1) to modify settings and parameters accordingly
 $setGlobal DevMode 0 !! can be overwritten if VS Code Tasks are used
 *' *** Write a compressed GDX file with all data at the end of the run
