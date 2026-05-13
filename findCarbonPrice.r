@@ -592,7 +592,7 @@ for (regName in names(runQueue)) {
     targetRegion = actualRegion,
     targetYear   = selectedYear,
     minAlpha     = -1.0,           # Allow price reduction up to -100% if needed
-    maxAlpha     = 4.0,            # Allow up to +400% increase
+    maxAlpha     = 2.0,            # Allow up to +400% increase
     expandFactor = 2.0,
     maxProbes    = 12,
     verbose      = TRUE
