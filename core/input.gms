@@ -658,6 +658,11 @@ imMatrFactor(runCy,DSBS,"TCHEVGSL",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 0
 imMatrFactor(runCy,DSBS,"TCHEVGDO",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 0.001;
 $offtext
 
+imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 14 and DOMSE(DSBS) and not sameas(DSBS,"AG")) = 40;
+imMatrFactor(runCy,DSBS,"THEATPUMP",YTIME)$(ord(YTIME) > 14 and DOMSE(DSBS) and not sameas(DSBS,"AG")) = 40;
+imMatrFactor(runCy,DSBS,"TNGSCCS",YTIME)$((ord(YTIME) > 14) and INDSE(DSBS)) = 3;
+imMatrFactor(runCy,DSBS,"THCLCCS",YTIME)$((ord(YTIME) > 14) and INDSE(DSBS)) = 3;
+
 $ELSE.calib
 variable imMatrFactor(allCy,DSBS,TECH,YTIME)    "Maturity factor per technology and subsector for all countries (1)";
 imMatrFactor.LO(runCy,DSBS,TECH,YTIME) = 1e-6;                                          

@@ -37,7 +37,7 @@ $ENDIF.calib
 i02ElaSub(runCy,DSBS) = imElaSubData(DSBS);
 i02ElaSub(runCy,DSBS) = 2; !!
 *---
-i02ScaleEndogScrap(DSBS)$(not TRANSE(DSBS) and not CDR(DSBS)) = 6./SUM(ITECH$SECTTECH(DSBS,ITECH),1);
+i02ScaleEndogScrap(DSBS)$(not TRANSE(DSBS) and not CDR(DSBS)) = 3./SUM(ITECH$SECTTECH(DSBS,ITECH),1);
 *---
 imCO2CaptRateIndustry(runCy,CCSTECH,YTIME) = 0.9;
 
@@ -59,3 +59,8 @@ i02ShareBlend(runCy,"BU","TGDO","BGDO",YTIME)$AN(YTIME) = i02ShareBlend(runCy,"B
 
 i02ShareElcHP(runCy,"HOU",YTIME) = 0.1;
 i02ShareElcHP(runCy,"SE",YTIME) = 0.1;
+
+* imUsfEneConvSubTech(runCy,"HOU","TELC",YTIME)$(ord(YTIME)>20)  = imDataDomTech("HOU","TELC","USC") + 0.0525 * (ord(YTIME)-21);
+imUsfEneConvSubTech(runCy,"HOU","THEATPUMP",YTIME)$AN(YTIME)  = 3.5;
+* imUsfEneConvSubTech(runCy,"SE","TELC",YTIME)$(ord(YTIME)>20)  = imDataDomTech("SE","TELC","USC") + 0.0525 * (ord(YTIME)-21);
+imUsfEneConvSubTech(runCy,"SE","THEATPUMP",YTIME)$AN(YTIME)  = 3.5;
