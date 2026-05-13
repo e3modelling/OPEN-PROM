@@ -820,6 +820,10 @@ imPlantEffByType(runCy,"PGH2F","effELC",YTIME) = imPlantEffByType(runCy,"ATHGAS"
 imPlantEffByType(runCy,"TSTE1AH2F",effSET,YTIME) = imPlantEffByType(runCy,"TSTE1AG",effSET,YTIME);
 imPlantEffByType(runCy,PGALL,"effELC",YTIME)= imPlantEffByType(runCy,PGALL,"effELC","%fBaseY%") ;
 imPlantEffByType(runCy,STECH,"effHeat",YTIME)$(not PGALL(STECH))= imPlantEffByType(runCy,STECH,"effHeat","%fBaseY%") ;
+* imPlantEffByType(runCy,"ATHGAS","effELC",YTIME)$(AN(YTIME) and ord(YTIME)<=20) = imPlantEffByType(runCy,"ATHGAS","effELC","%fBaseY%") + 0.015 * (ord(YTIME)-14);
+* imPlantEffByType(runCy,"ATHGAS","effELC",YTIME)$(AN(YTIME) and ord(YTIME)>20) = imPlantEffByType(runCy,"ATHGAS","effELC","%fBaseY%") + 0.015 * 6;
+* imPlantEffByType(runCy,"ATHGASCCS","effELC",YTIME)$(AN(YTIME) and ord(YTIME)<=20) = imPlantEffByType(runCy,"ATHGASCCS","effELC","%fBaseY%") + 0.015 * (ord(YTIME)-14);
+* imPlantEffByType(runCy,"ATHGASCCS","effELC",YTIME)$(AN(YTIME) and ord(YTIME)>20) = imPlantEffByType(runCy,"ATHGASCCS","effELC","%fBaseY%") + 0.015 * 6;
 *---
 **   Conversion of GW mean power into TWh/y, depending on whether it's a leap year
 smGwToTwhPerYear(YTIME) = 8.76 + 0.024 $ (mod(YTIME.val,4) = 0 and mod (YTIME.val,100) <> 0);
