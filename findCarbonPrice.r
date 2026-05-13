@@ -76,6 +76,7 @@ inputCsvPath   <- "data/iEnvPolicies.csv"
 outputCsvPath  <- "data/iEnvPolicies_updated.csv"
 backupCsvPath  <- "data/iEnvPolicies_backup.csv"
 workDir        <- getwd()
+lastTestedPolicy <- NULL # Most recent policy table tested by OPEN-PROM
 
 # One-time backup of the original canonical file
 if (file.exists(inputCsvPath) && !file.exists(backupCsvPath)) {
@@ -169,8 +170,9 @@ emissionsOPENPROM <- function(envWide, yearCols, alpha, targetRegion, targetYear
   on.exit({
     if (file.exists(backupCsvPath)) file.copy(backupCsvPath, canonicalCsv, overwrite = TRUE)
   }, add = TRUE)
-  
-  fwrite(applyAlpha(envWide, yearCols, alpha, targetRegion), canonicalCsv, na = "NA")
+  #Calculate and store the latest tested carbon prices if optimization fails later
+  lastTestedPolicy <<- applyAlpha(envWide, yearCols, alpha, targetRegion)
+  fwrite(lastTestedPolicy, canonicalCsv, na = "NA")
   ok <- run_gams(gms = gms, args = gamsArgs, log = log, echo_on_success = echo_on_success)
   if (!ok) stop("OPEN-PROM run failed for alpha=", alpha)
 
@@ -235,10 +237,26 @@ alphaSeedLinear <- function(alpha0, E0, alphar, Er, Etarget, warn = TRUE, stopIf
 }
 
 autoBracketFromSeed <- function(seedAlpha, budgetTarget, envWide, yearCols, targetRegion, targetYear, 
-                                   minAlpha = 0.0, maxAlpha = 5.0,
-                                   expandFactor = 1.35, maxProbes = 20, verbose = TRUE) {
-  if (verbose) message(sprintf("Seeding bracket near alpha ≈ %.4f", seedAlpha))
+                                minAlpha = 0.0, maxAlpha = 5.0,
+                                expandFactor = 1.35, maxProbes = 20, verbose = TRUE) {
+  if (verbose) message(sprintf("Testing maxAlpha before seed bracketing: max=%.4f", maxAlpha))
   probe <- function(a) emissionsOPENPROM(envWide, yearCols, a, targetRegion, targetYear)
+
+  Emax <- probe(maxAlpha)
+  if (verbose) message(sprintf("Max alpha: alpha=%.4f -> E=%.6f (target=%.6f)", maxAlpha, Emax, budgetTarget))
+
+  if (Emax > budgetTarget) {
+    stop(sprintf(
+      paste(
+        "maxAlpha too low.",
+        "At maxAlpha=%.4f, emissions are %.6f, still above target %.6f.",
+        "Increase maxAlpha before running the optimization."
+      ),
+      maxAlpha, Emax, budgetTarget
+    ))
+  }
+
+  if (verbose) message(sprintf("maxAlpha is feasible; seeding bracket near alpha %.4f", seedAlpha))
 
   Eseed <- probe(seedAlpha)
   if (verbose) message(sprintf("Seed: alpha=%.4f → E=%.6f (target=%.6f)", seedAlpha, Eseed, budgetTarget))
@@ -538,10 +556,11 @@ on.exit({
   message("Log redirection ended. Console restored.")
 }, add = TRUE)
 resultsLog <- list()
+writeFinalOutput <- TRUE # Skip final overwrite if failure output is already written
 
 # Countries/Regions Loop
 for (regName in names(runQueue)) {
-  
+  lastTestedPolicy <- NULL # Avoid carrying a previous region's tested policy into this run
   bg <- runQueue[[regName]]
   
   # Determine if this is a real region code or Global mode
@@ -562,7 +581,7 @@ for (regName in names(runQueue)) {
     configureGamsFile("main.gms", actualRegion)
   }
 
-  # B. Auto-Bracket
+  # B. Check maxAlpha feasibility, then use the existing seed/expand bracketing
   # Note: alpha is now a change factor. 0.0 = No change. 1.0 = +100% (Double price).
   brkt <- autoBracketFromSeed(
     seedAlpha    = 0.1,
@@ -572,7 +591,7 @@ for (regName in names(runQueue)) {
     targetRegion = actualRegion,
     targetYear   = selectedYear,
     minAlpha     = -1.0,           # Allow price reduction up to -100% if needed
-    maxAlpha     = 2.0,           # Allow up to +200% increase
+    maxAlpha     = 4.0,            # Allow up to +400% increase
     expandFactor = 2.0,
     maxProbes    = 12,
     verbose      = TRUE
@@ -605,12 +624,18 @@ for (regName in names(runQueue)) {
   file.copy(inputCsvPath, backupCsvPath, overwrite = TRUE)
   resultsLog[[regName]] <- list(status="OK", alpha=finalAlpha)
 }, error = function(e) {
-    
+
     # --- FAILURE HANDLER ---
     message(sprintf("  !! FAILURE for %s !!", displayName))
     message(sprintf("  Error: %s", e$message))
     message("  -> Reverting file to previous state and skipping...")
-    
+    # Save the last policy table actually tested before the failure.
+    if (!is.null(lastTestedPolicy)) {
+      fwrite(lastTestedPolicy, outputCsvPath, na = "NA")
+    }
+    # Prevent the final wrap-up from overwriting the failure output.  
+    writeFinalOutput <<- FALSE
+
     # Revert 'iEnvPolicies.csv' to the last known good state (backupCsvPath)
     if (file.exists(backupCsvPath)) {
       file.copy(backupCsvPath, inputCsvPath, overwrite = TRUE)
@@ -638,5 +663,9 @@ sink(type = "message")
 sink()
 
 # FINISH
-writeFinalPolicyFiles(currentEnvWide, yearCols, 0.0, NULL)
+# On success, write the converged policy file.
+# On failure, keep the last-tested policy written by the error handler.
+if (writeFinalOutput) {
+  writeFinalPolicyFiles(currentEnvWide, yearCols, 0.0, NULL)
+}
 message(sprintf("Done. Total time: %s", Sys.time() - start_time))
