@@ -236,6 +236,7 @@ alphaSeedLinear <- function(alpha0, E0, alphar, Er, Etarget, warn = TRUE, stopIf
   alpha0 + (Etarget - E0) * (alphar - alpha0) / (Er - E0)
 }
 
+# First test maxAlpha, if the run is above emissions target, stop and exit. If below target, start the bisection algorithm with the seedAlpha.
 autoBracketFromSeed <- function(seedAlpha, budgetTarget, envWide, yearCols, targetRegion, targetYear, 
                                 minAlpha = 0.0, maxAlpha = 5.0,
                                 expandFactor = 1.35, maxProbes = 20, verbose = TRUE) {
