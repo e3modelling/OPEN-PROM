@@ -8,7 +8,7 @@ Two R functions (in `postprom/R/couplePromWithMagpie.R`) do the data exchange:
 * `couplePromToMagpie()` — exports OPEN-PROM carbon price + bioenergy demand to a REMIND-style `.mif` that MAgPIE consumes
 * `coupleMagpieToProm()` — reads MAgPIE's `report.mif` and writes `iPrices_magpie.csv` (biomass price for round-2) and `iEmissions_magpie.mif` (AFOLU emissions, 200 variables, IAMC mif format) for OPEN-PROM
 
-All of this is orchestrated by `task_id == 7` in `run.R` (the body is in `scripts/tasks/task7SoftLinkMagpie.R`).
+All of this is orchestrated by `task_id == 7` in `start.R` (the body is in `scripts/tasks/task7SoftLinkMagpie.R`).
 
 ---
 
@@ -100,10 +100,10 @@ What it does (two output channels):
 
 ---
 
-## Full Workflow (automated by `run.R task_id=7`)
+## Full Workflow (automated by `start.R task_id=7`)
 
 ```bash
-Rscript run.R task_id=7
+Rscript start.R task_id=7
 ```
 
 Pipeline:
@@ -172,7 +172,7 @@ Notes on file lifetimes:
 
 If a task 7 run fails mid-pipeline (e.g. MAgPIE crashes in Step 3) and you want to retry without paying the cost of OPEN-PROM round-1 again, add the optional `magpie.existing_prom_run` field.
 
-**Single-scenario mode** (run.R): put it directly under `config.json:scenario.magpie`:
+**Single-scenario mode** (start.R): put it directly under `config.json:scenario.magpie`:
 
 ```json
 {
@@ -187,7 +187,7 @@ If a task 7 run fails mid-pipeline (e.g. MAgPIE crashes in Step 3) and you want 
 }
 ```
 
-**Batch mode** (`run.R <csv>`): add a `magpie.existing_prom_run` column to `scenarios.csv` and populate it on the specific row(s) where you want a resume. Leaving the cell empty on other rows means those scenarios run from scratch. Do **not** put `magpie.existing_prom_run` in `config.json:scenario` when batching across multiple scenarios, because then every row that doesn't override the column would reuse the same OPEN-PROM round-1 — defeating the comparison.
+**Batch mode** (`start.R <csv>`): add a `magpie.existing_prom_run` column to `scenarios.csv` and populate it on the specific row(s) where you want a resume. Leaving the cell empty on other rows means those scenarios run from scratch. Do **not** put `magpie.existing_prom_run` in `config.json:scenario` when batching across multiple scenarios, because then every row that doesn't override the column would reuse the same OPEN-PROM round-1 — defeating the comparison.
 
 When this field is non-empty, the task 7 body:
 

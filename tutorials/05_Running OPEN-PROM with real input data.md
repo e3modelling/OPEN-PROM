@@ -42,17 +42,17 @@ The practical result is:
 
 The underlying script is triggered automatically in the normal workflow when the appropriate task uses `GenerateInput=on`, but you can also run it directly if you want to inspect the generated files yourself.
 
-## 4. Task modes in `run.R`
+## 4. Task modes in `start.R`
 
 The standard single-scenario entry point is:
 
 ```bash
-Rscript run.R task_id=N
+Rscript start.R task_id=N
 ```
 
-`run.R` always runs **one** scenario: the one defined in `config.json:scenario`. Edit that block to change what gets run.
+`start.R` always runs **one** scenario: the one defined in `config.json:scenario`. Edit that block to change what gets run.
 
-For batch sweeps over multiple scenarios, use `run.R <csv>` instead — it reads `scenarios.csv` at the repo root and runs each row as its own OPEN-PROM run. Batch mode only supports `task_id` 2 and 7 (RESEARCH and MAgPIE soft-link); the other tasks have no batch use case.
+For batch sweeps over multiple scenarios, use `start.R <csv>` instead — it reads `scenarios.csv` at the repo root and runs each row as its own OPEN-PROM run. Batch mode only supports `task_id` 2 and 7 (RESEARCH and MAgPIE soft-link); the other tasks have no batch use case.
 
 The main task modes are:
 
@@ -75,7 +75,7 @@ The easiest way to read this table is:
 * `RESEARCH` means the full research setup
 * `CALIBRATE` modes are specialized runs and not the usual first step
 
-## 4b. Batch mode (`run.R <csv>`)
+## 4b. Batch mode (`start.R <csv>`)
 
 When you want to run several scenarios in one go, put a `scenarios.csv` file at the repo root. Each row defines one scenario; the columns are flat fields, with dots in the column header indicating nested config keys (e.g. `gams_flags.fScenario` ↔ `{"gams_flags": {"fScenario": ...}}`).
 
@@ -84,7 +84,7 @@ A starter template lives at `scenarios.template.csv`. The minimal required colum
 Run:
 
 ```bash
-Rscript run.R scenarios.csv
+Rscript start.R scenarios.csv
 ```
 
 or click the **RUN BATCH** button in the VS Code Task Runner. The button fails with "scenarios.csv not found" if the file is missing, which is intentional — batch is always opt-in via that file.

@@ -6,7 +6,7 @@
         {
             "label": "OPEN-PROM DEV",
             "type": "shell",
-            "command": "Rscript run.R task_id=0",
+            "command": "Rscript start.R task_id=0",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -20,7 +20,7 @@
         {
             "label": "OPEN-PROM DEV NEW DATA",
             "type": "shell",
-            "command": "Rscript run.R task_id=1",
+            "command": "Rscript start.R task_id=1",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -34,7 +34,7 @@
         {
             "label": "OPEN-PROM RESEARCH",
             "type": "shell",
-            "command": "Rscript run.R task_id=2",
+            "command": "Rscript start.R task_id=2",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -48,7 +48,7 @@
         {
             "label": "OPEN-PROM RESEARCH NEW DATA",
             "type": "shell",
-            "command": "Rscript run.R task_id=3",
+            "command": "Rscript start.R task_id=3",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -62,7 +62,7 @@
         {
             "label": "OPEN-PROM DEBUGGING",
             "type": "shell",
-            "command": "Rscript run.R task_id=4",
+            "command": "Rscript start.R task_id=4",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -104,7 +104,7 @@
         {
             "label": "CALIBRATE",
             "type": "shell",
-            "command": "Rscript run.R task_id=5",
+            "command": "Rscript start.R task_id=5",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -118,7 +118,7 @@
         {
             "label": "CALIBRATE CARBON PRICES",
             "type": "shell",
-            "command": "Rscript run.R task_id=6",
+            "command": "Rscript start.R task_id=6",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -146,7 +146,7 @@
         {
             "label": "OPEN-PROM SOFT-LINK MAgPIE",
             "type": "shell",
-            "command": "Rscript run.R task_id=7",
+            "command": "Rscript start.R task_id=7",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -160,7 +160,7 @@
         {
             "label": "RUN BATCH",
             "type": "shell",
-            "command": "Rscript run.R scenarios.csv",
+            "command": "Rscript start.R scenarios.csv",
             "problemMatcher": [],
             "group": {
                 "kind": "build",

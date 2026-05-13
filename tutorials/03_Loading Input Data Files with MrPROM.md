@@ -62,9 +62,9 @@ Apart from installing the software, you should also create a local `config.json`
   * `paths.model_runs_path`: the destination used by the optional run-folder sync step
   * `paths.magpie_path`: only needed for the OPEN-PROM ↔ MAgPIE soft-link (task 7)
 * `behavior.*`: four switches controlling the wrapper workflow (see below)
-* `scenario.*`: the scenario to run (scenario_name, task_id, description, gams_flags, magpie) — this is what `run.R` reads to decide what to do
+* `scenario.*`: the scenario to run (scenario_name, task_id, description, gams_flags, magpie) — this is what `start.R` reads to decide what to do
 
-For batch sweeps over multiple scenarios, create a `scenarios.csv` at the repo root (see `scenarios.template.csv` for the format) and use `run.R <csv>` or the **RUN BATCH** VS Code button. Each CSV row overlays `config.json:scenario` for that one run. The CSV is opt-in: without it, only `run.R` (single scenario) is available.
+For batch sweeps over multiple scenarios, create a `scenarios.csv` at the repo root (see `scenarios.template.csv` for the format) and use `start.R <csv>` or the **RUN BATCH** VS Code button. Each CSV row overlays `config.json:scenario` for that one run. The CSV is opt-in: without it, only `start.R` (single scenario) is available.
 
 If you are not working in the internal E3-Modelling environment, `model_runs_path` is often not needed immediately. In that case, set in `config.json`:
 
@@ -85,7 +85,7 @@ OPEN-PROM defines four behavior switches that modify the workflow around the mod
 * `withReport`
 * `uploadGDX`
 
-These switches do not change the mathematical model itself. They control the wrapper workflow around it, such as whether a run folder is created, whether outputs are archived, and whether the reporting script is executed automatically. There are also several task modes available through VS Code and `run.R`, but their exact meaning is explained later in Tutorial 05.
+These switches do not change the mathematical model itself. They control the wrapper workflow around it, such as whether a run folder is created, whether outputs are archived, and whether the reporting script is executed automatically. There are also several task modes available through VS Code and `start.R`, but their exact meaning is explained later in Tutorial 05.
 
 ## Adding the Data Sources
 

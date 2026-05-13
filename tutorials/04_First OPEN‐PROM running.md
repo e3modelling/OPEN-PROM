@@ -6,7 +6,7 @@ This tutorial is for external users who want to verify that OPEN-PROM runs on th
 
 This tutorial assumes that you have at least completed the basic software setup from Tutorial 03. In practice, you need a working `Rscript` command, a working `gams` command, and the R packages required by `loadMadratData.R`.
 
-If you later experiment with `run.R` or the VS Code Task Runner instead of the direct GAMS command below, first edit `config.json` to set:
+If you later experiment with `start.R` or the VS Code Task Runner instead of the direct GAMS command below, first edit `config.json` to set:
 
 ```json
 {

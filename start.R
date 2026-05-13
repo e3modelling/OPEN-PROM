@@ -1,10 +1,10 @@
 #!/usr/bin/env Rscript
 # OPEN-PROM entry point. Two modes:
 #
-#   Single  :  Rscript run.R task_id=N
+#   Single  :  Rscript start.R task_id=N
 #              Runs one scenario, taken from config.json:scenario.
 #
-#   Batch   :  Rscript run.R <path-to-csv>          (e.g. scenarios.csv)
+#   Batch   :  Rscript start.R <path-to-csv>          (e.g. scenarios.csv)
 #              Reads the CSV at the given path. Each row defines one scenario
 #              by overriding (via deep merge with dotted column names) the
 #              config.json:scenario block. task_id is restricted to {2, 7} in
@@ -157,8 +157,8 @@ batch_mode <- length(cli_csv_paths) == 1L
 
 if (!batch_mode && !length(cli_task_id)) {
   stop("Usage:\n",
-       "  Rscript run.R task_id=N        single scenario from config.json:scenario\n",
-       "  Rscript run.R <path-to-csv>    batch over each row in the CSV")
+       "  Rscript start.R task_id=N        single scenario from config.json:scenario\n",
+       "  Rscript start.R <path-to-csv>    batch over each row in the CSV")
 }
 
 # ---- nestDottedKeys: take a flat named list whose names may contain dots ---
@@ -216,7 +216,7 @@ if (!batch_mode) {
   csv_path <- cli_csv_paths[1]
   if (!file.exists(csv_path)) {
     stop(sprintf(
-      "Batch CSV not found: %s\nCreate one (see scenarios.template.csv for the format), or run single-scenario mode:\n  Rscript run.R task_id=N",
+      "Batch CSV not found: %s\nCreate one (see scenarios.template.csv for the format), or run single-scenario mode:\n  Rscript start.R task_id=N",
       csv_path
     ))
   }
