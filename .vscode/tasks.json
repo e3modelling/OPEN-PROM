@@ -172,16 +172,6 @@
             "presentation": {
                 "focus": true
             }
-        },
-
-        // Hide the auto-registered task from the markdownlint extension
-        // (DavidAnson.vscode-markdownlint). The extension itself stays
-        // active for in-editor linting; only the "Lint all Markdown files"
-        // entry in the task runner is suppressed.
-        {
-            "label": "lint all",
-            "type": "markdownlint",
-            "hide": true
         }
 
     ]
