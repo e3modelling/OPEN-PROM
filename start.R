@@ -81,7 +81,6 @@ createRunFolder <- function(scenario = "default") {
   file.copy(grep(".csv$",   dir(), value = TRUE), to = runfolder)
   file.copy(grep("*.json$", dir(), value = TRUE), to = runfolder)
   file.copy("conopt.opt",   to = runfolder)
-  file.copy("git_diff.txt", to = runfolder)
   file.copy("data",       to = runfolder, recursive = TRUE)
   file.copy("targets",    to = runfolder, recursive = TRUE)
   file.copy("core",       to = runfolder, recursive = TRUE)

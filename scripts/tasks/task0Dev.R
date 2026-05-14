@@ -4,8 +4,8 @@
 runTask0 <- function() {
   scn <- jsonlite::fromJSON(Sys.getenv("OPENPROM_SCENARIO"))
 
-  saveMetadata(DevMode = 1)
   if (withRunFolder) createRunFolder(scn$scenario_name)
+  saveMetadata(DevMode = 1)
 
   extra <- Sys.getenv("OPENPROM_EXTRA_FLAGS")
   base_cmd <- paste(

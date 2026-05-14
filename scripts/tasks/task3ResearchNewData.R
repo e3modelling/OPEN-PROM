@@ -7,8 +7,8 @@
 runTask3 <- function() {
   scn <- jsonlite::fromJSON(Sys.getenv("OPENPROM_SCENARIO"))
 
-  saveMetadata(DevMode = 0)
   if (withRunFolder) createRunFolder(scn$scenario_name)
+  saveMetadata(DevMode = 0)
 
   # ---- Stage 1: calibration + new data generation (not affected by scenario gams_flags) ----
   if (.Platform$OS.type == "unix") {

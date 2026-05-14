@@ -15,8 +15,6 @@
 runTask7 <- function() {
   scn <- jsonlite::fromJSON(Sys.getenv("OPENPROM_SCENARIO"))
 
-  saveMetadata(DevMode = 0)
-
   # ---- Read required fields from config + scenario ----
   config        <- if (file.exists("config.json")) jsonlite::fromJSON("config.json") else list()
   magpieRoot    <- config$paths$magpie_path
@@ -58,6 +56,7 @@ runTask7 <- function() {
     if (withRunFolder) createRunFolder(sceName)
     openPromRun <- getwd()
   }
+  saveMetadata(DevMode = 0)
   couplingMif <- file.path(openPromRun, "openprom_coupling.mif")
 
   # ---- Step 1: OPEN-PROM run (link2MAgPIE=off) ----

@@ -5,8 +5,8 @@
 runTask6 <- function() {
   scn <- jsonlite::fromJSON(Sys.getenv("OPENPROM_SCENARIO"))
 
-  saveMetadata(DevMode = 0)
   if (withRunFolder) createRunFolder(scn$scenario_name)
+  saveMetadata(DevMode = 0)
 
   run_path <- getwd()
   print(run_path)
