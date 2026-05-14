@@ -3,6 +3,7 @@
     // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
+        // ---- Single-scenario task buttons (task 0 ... task 7) ----
         {
             "label": "OPEN-PROM DEV",
             "type": "shell",
@@ -74,34 +75,6 @@
         },
 
         {
-            "label": "SCENTOOL",
-            "type": "shell",
-            "command": "Rscript -e 'mip::scenTool()'",
-            "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "presentation": {
-                "focus": true
-            }
-        },
-
-        {
-            "label": "COMPARE SCENARIOS",
-            "type": "shell",
-            "command": "Rscript scripts/tasks/reportOutput.R",
-            "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "presentation": {
-                "focus": true
-            }
-        },
-
-        {
             "label": "CALIBRATE",
             "type": "shell",
             "command": "Rscript start.R task_id=5",
@@ -130,6 +103,36 @@
         },
 
         {
+            "label": "OPEN-PROM SOFT-LINK MAgPIE",
+            "type": "shell",
+            "command": "Rscript start.R task_id=7",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "focus": true
+            }
+        },
+
+        // ---- Batch button (extends the task system across many scenarios) ----
+        {
+            "label": "RUN BATCH",
+            "type": "shell",
+            "command": "Rscript start.R scenarios.csv",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "focus": true
+            }
+        },
+
+        // ---- Utilities ----
+        {
             "label": "OPEN-PROM LIVE",
             "type": "shell",
             "command": "python ./scripts/tools/R-live.py",
@@ -144,9 +147,9 @@
         },
 
         {
-            "label": "OPEN-PROM SOFT-LINK MAgPIE",
+            "label": "COMPARE SCENARIOS",
             "type": "shell",
-            "command": "Rscript start.R task_id=7",
+            "command": "Rscript scripts/tasks/reportOutput.R",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -158,9 +161,9 @@
         },
 
         {
-            "label": "RUN BATCH",
+            "label": "SCENTOOL",
             "type": "shell",
-            "command": "Rscript start.R scenarios.csv",
+            "command": "Rscript -e 'mip::scenTool()'",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
