@@ -45,7 +45,9 @@ runTask7 <- function() {
     stop("[task 7] scenarios.csv missing at: ", scenCsv,
          ". The project folder is incomplete.")
 
-  reuseExisting <- !is.null(existingRun) && nzchar(existingRun)
+  # NULL when omitted, NA when serialized through JSON as null, "" when blank.
+  # Treat all three as "no resume requested".
+  reuseExisting <- length(existingRun) > 0 && !is.na(existingRun) && nzchar(existingRun)
   if (reuseExisting) {
     if (!dir.exists(existingRun))
       stop("[task 7] magpie.existing_prom_run folder does not exist: ", existingRun)
