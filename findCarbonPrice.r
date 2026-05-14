@@ -237,7 +237,7 @@ alphaSeedLinear <- function(alpha0, E0, alphar, Er, Etarget, warn = TRUE, stopIf
 }
 
 # First test maxAlpha, if the run is above emissions target, stop and exit. If below target, start the bisection algorithm with the seedAlpha.
-autoBracketFromSeed <- function(seedAlpha, budgetTarget, envWide, yearCols, targetRegion, targetYear, 
+autoBracketFromSeed <- function(seedAlpha, budgetTarget, envWide, yearCols, targetRegion, targetYear,
                                 minAlpha = 0.0, maxAlpha = 5.0,
                                 expandFactor = 1.35, maxProbes = 20, verbose = TRUE) {
   if (verbose) message(sprintf("Testing maxAlpha before seed bracketing: max=%.4f", maxAlpha))
@@ -268,7 +268,7 @@ autoBracketFromSeed <- function(seedAlpha, budgetTarget, envWide, yearCols, targ
     repeat {
       EL <- probe(aL); tries <- tries + 1
       if (verbose) message(sprintf("Down probe: alpha=%.4f → E=%.6f", aL, EL))
-      if (EL > budgetTarget || tries >= maxProbes || aL <= minAlpha + 1e-9) break
+      if (EL > budgetTarget || tries >= maxProbes || aL <= minAlpha + 1e-9 || aL < 1e-4) break # stop also when aL is very close to zero.
       aL <- max(minAlpha, aL / expandFactor)
     }
     if (EL <= budgetTarget) stop("No failing lower bound; decrease minAlpha or revisit monotonicity.")
@@ -453,17 +453,17 @@ GAMSCmdArgs <- c("--DevMode=0", "--GenerateInput=off", "lo=4", "idir=./data", pa
 
 # CASE A: Specific Regions 2035
 # targetConditionalMtCO2e MtCO2e/yr
-# targetList <- list(
-#    "CAZ" = 644,
-#    "CHA" = 12808,
-#    "GBR" = 156,
-#    "JPN" = 575,
-#    "LAM" = 1984,
-#    "NEU" = 694,
-#    "OAS" = 3680,
-#    "REF" = 2705,
-#    "SSA" = 1303
-# )
+targetList <- list(
+   "CAZ" = 644,
+   "CHA" = 12808,
+   "GBR" = 156,
+   "JPN" = 575,
+   "LAM" = 1984,
+   "NEU" = 694,
+   "OAS" = 3680,
+   "REF" = 2705,
+   "SSA" = 1303
+)
 
 # CASE A: Specific Regions 2050
 # targetConditionalMtCO2e MtCO2e/yr
@@ -511,13 +511,13 @@ GAMSCmdArgs <- c("--DevMode=0", "--GenerateInput=off", "lo=4", "idir=./data", pa
 # )
 
 # CASE B: No Target Regions (Empty List) -> Implies EU27 Run
-targetList <- NULL
+# targetList <- NULL
 #globalParams <- 1750 # EU-27 target 2030 in MtCO2/yr - ONLY CO2
 #globalParams <- 2250  # EU-27 target 2030 in MtCO2e/yr 
 #globalParams <- 0  # EU-27 target 2030 in MtCO2e/yr 
 
 # globalParams <- 2093  # EU-27 target 2030 in MtCO2e/yr (incl. LULUCF)
-globalParams <- 1425  # EU-27 target 2035 in MtCO2e/yr (incl. LULUCF)
+# globalParams <- 1425  # EU-27 target 2035 in MtCO2e/yr (incl. LULUCF)
 # globalParams <- 0  # EU-27 target 2050 in MtCO2e/yr (incl. LULUCF)
 
 # LOGGING SETUP
@@ -591,38 +591,38 @@ for (regName in names(runQueue)) {
     yearCols     = yearCols,
     targetRegion = actualRegion,
     targetYear   = selectedYear,
-    minAlpha     = -1.0,           # Allow price reduction up to -100% if needed
-    maxAlpha     = 2.0,            # Allow up to +400% increase
-    expandFactor = 2.0,
+    minAlpha     = -0.5,           # Allow price reduction up to -100% if needed
+    maxAlpha     = 10.0,            # Allow up to +400% increase
+    expandFactor = 4.0,
     maxProbes    = 12,
     verbose      = TRUE
   )
 
-  # C. Solve
-  solveResult <- findAlphaForBudget(
-    envWide      = currentEnvWide,
-    yearCols     = yearCols,
-    budgetTarget = bg,
-    targetRegion = actualRegion, # Passes NULL if global
-    targetYear   = selectedYear,
-    lowerAlpha   = brkt$lowerAlpha,
-    upperAlpha   = brkt$upperAlpha,
-    eLow         = brkt$EL,
-    eHigh        = brkt$EU,
-    tolAlphaRel  = 1e-2,
-    tolEmisAbs   = 1e-1,
-    maxIter      = 60,
-    verbose      = TRUE,
-    writeFinalCsv = FALSE
-  )
-  
-  finalAlpha <- solveResult$alpha
-  message(sprintf(" -> Converged %s: Alpha=%.3f", displayName, finalAlpha))
+    # C. Solve
+    solveResult <- findAlphaForBudget(
+      envWide      = currentEnvWide,
+      yearCols     = yearCols,
+      budgetTarget = bg,
+      targetRegion = actualRegion, # Passes NULL if global
+      targetYear   = selectedYear,
+      lowerAlpha   = brkt$lowerAlpha,
+      upperAlpha   = brkt$upperAlpha,
+      eLow         = brkt$EL,
+      eHigh        = brkt$EU,
+      tolAlphaRel  = 1e-2,
+      tolEmisAbs   = 1e-1,
+      maxIter      = 60,
+      verbose      = TRUE,
+      writeFinalCsv = FALSE
+    )
 
-  # D. Update State & Backup
-  currentEnvWide <- applyAlpha(currentEnvWide, yearCols, finalAlpha, actualRegion)
-  fwrite(currentEnvWide, inputCsvPath, na = "NA")
-  file.copy(inputCsvPath, backupCsvPath, overwrite = TRUE)
+    finalAlpha <- solveResult$alpha
+    message(sprintf(" -> Converged %s: Alpha=%.3f", displayName, finalAlpha))
+
+    # D. Update State & Backup
+    currentEnvWide <- applyAlpha(currentEnvWide, yearCols, finalAlpha, actualRegion)
+    fwrite(currentEnvWide, inputCsvPath, na = "NA")
+    file.copy(inputCsvPath, backupCsvPath, overwrite = TRUE)
   resultsLog[[regName]] <- list(status="OK", alpha=finalAlpha)
 }, error = function(e) {
 
