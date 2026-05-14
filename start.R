@@ -12,13 +12,6 @@
 
 library(jsonlite)
 
-# Note: mrprom and postprom are expected to be installed globally via the R
-# package manager. If you keep local source trees of these packages and want to
-# reinstall on every run, add lines like:
-#   if (dir.exists("./mrprom"))  devtools::install_local("./mrprom")
-#   if (dir.exists("./postprom")) devtools::install_local("./postprom")
-# (these are a local-dev convenience and are not checked in.)
-
 `%||%` <- function(a, b) if (is.null(a)) b else a
 
 # ---- Read config.json (or the OPENPROM_CONFIG env var override (rarely used)) -----
