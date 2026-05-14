@@ -62,9 +62,9 @@ Apart from installing the software, you should also create a local `config.json`
   * `paths.model_runs_path`: the destination used by the optional run-folder sync step
   * `paths.magpie_path`: only needed for the OPEN-PROM ↔ MAgPIE soft-link (task 7)
 * `behavior.*`: four switches controlling the wrapper workflow (see below)
-* `scenario.*`: the scenario to run (scenario_name, task_id, description, gams_flags, magpie) — this is what `start.R` reads to decide what to do
+* `scenario.*`: the scenario to run (`scenario_name`, `description`, `gams_flags`, `magpie`). `task_id` is *not* stored here — it comes from the CLI (`task_id=N`, passed by every VS Code task button) or, in batch mode, from each row of `scenarios.csv`.
 
-For batch sweeps over multiple scenarios, create a `scenarios.csv` at the repo root (see `scenarios.template.csv` for the format) and use `start.R <csv>` or the **RUN BATCH** VS Code button. Each CSV row overlays `config.json:scenario` for that one run. The CSV is opt-in: without it, only `start.R` (single scenario) is available.
+For batch sweeps over multiple scenarios, create a `scenarios.csv` at the repo root (see `scenarios.template.csv` for the format) and use `Rscript start.R scenarios.csv` or the **RUN BATCH** VS Code button. Each CSV row overlays `config.json:scenario` for that one run. The CSV is opt-in: without it, only the single-scenario workflow (`Rscript start.R task_id=N`) is available.
 
 If you are not working in the internal E3-Modelling environment, `model_runs_path` is often not needed immediately. In that case, set in `config.json`:
 

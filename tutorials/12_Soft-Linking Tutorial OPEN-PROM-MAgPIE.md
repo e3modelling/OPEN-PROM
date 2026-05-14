@@ -172,22 +172,22 @@ Notes on file lifetimes:
 
 If a task 7 run fails mid-pipeline (e.g. MAgPIE crashes in Step 3) and you want to retry without paying the cost of OPEN-PROM round-1 again, add the optional `magpie.existing_prom_run` field.
 
-**Single-scenario mode** (start.R): put it directly under `config.json:scenario.magpie`:
+**Single-scenario mode** (`Rscript start.R task_id=7`): put it directly under `config.json:scenario.magpie`:
 
 ```json
 {
   "scenario": {
     "scenario_name": "SSP2-PkBudg650_resume",
-    "task_id":       7,
+    "description": "Resume MAgPIE coupling from an existing round-1 run",
     "magpie": {
-      "project":           "uptake",
+      "project": "uptake",
       "existing_prom_run": "/abs/path/to/runs/SSP2-PkBudg650_2026-04-25_xxx"
     }
   }
 }
 ```
 
-**Batch mode** (`start.R <csv>`): add a `magpie.existing_prom_run` column to `scenarios.csv` and populate it on the specific row(s) where you want a resume. Leaving the cell empty on other rows means those scenarios run from scratch. Do **not** put `magpie.existing_prom_run` in `config.json:scenario` when batching across multiple scenarios, because then every row that doesn't override the column would reuse the same OPEN-PROM round-1 — defeating the comparison.
+**Batch mode** (`Rscript start.R scenarios.csv`): add a `magpie.existing_prom_run` column to `scenarios.csv` and populate it only on the specific row(s) where you want a resume. Leaving the cell empty on other rows means those scenarios run from scratch. Do **not** put `magpie.existing_prom_run` in `config.json:scenario` when batching across multiple scenarios, because every row that doesn't override the column would inherit the same path and reuse the same OPEN-PROM round-1 — defeating the comparison.
 
 When this field is non-empty, the task 7 body:
 

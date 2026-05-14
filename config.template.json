@@ -6,9 +6,9 @@
   },
   "behavior": {
     "withRunFolder": true,
-    "withSync": false,
+    "withSync": true,
     "withReport": true,
-    "uploadGDX": false
+    "uploadGDX": true
   },
   "scenario": {
     "scenario_name": "SCEN",

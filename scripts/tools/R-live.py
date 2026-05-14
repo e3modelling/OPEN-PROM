@@ -244,6 +244,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     script_directory = os.path.dirname(os.path.abspath(__file__))
-    base_path = os.path.abspath(os.path.join(script_directory, ".."))
+    # script lives at scripts/tools/<x>.py, so repo root is two levels up
+    base_path = os.path.abspath(os.path.join(script_directory, "..", ".."))
 
     main_loop(base_path, args.interval)
