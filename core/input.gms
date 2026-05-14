@@ -594,13 +594,13 @@ $offdelim
 if %fScenario% eq 0 then
      iCarbValYrExog(allCy,YTIME) = 0;
 elseif %fScenario% eq 1 then
-     iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"exogCV_NPi",YTIME); !!$an(YTIME)
+     iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"exogCV_NPi",YTIME);
 elseif %fScenario% eq 2 then
      iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"exogCV_1_5C",YTIME);
 elseif %fScenario% eq 3 then
      iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"exogCV_2C",YTIME);
-elseif %fScenario% eq 4 then
-     iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"exogCV_Calib",YTIME);
+elseif %fScenario% eq 4 then !! Calibration scenario
+     iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"exogCV_NPi",YTIME); !!exogCV_Calib
 elseif %fScenario% eq 100 then
      iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"UPT_100",YTIME);
 elseif %fScenario% eq 200 then
@@ -629,7 +629,7 @@ $IFTHEN.calib %Calibration% == off
 parameter imMatrFactor(allCy,DSBS,TECH,YTIME)   "Maturity factor per technology and subsector for all countries (1)";
 imMatrFactor(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                          
 
-imMatrFactor(runCy,DSBS,"TBMSWAS",YTIME) = 0.01;
+imMatrFactor(runCy,DSBS,"TBMSWAS",YTIME)$(sameas("AG",DSBS) and not EU28(runCy)) = 0.01;
 $ontext
 imMatrFactor(runCy,DSBS,"TGDO",YTIME)$((ord(YTIME) > 14) and TRANSE(DSBS)) = 0.5;
 imMatrFactor(runCy,DSBS,"TGSL",YTIME)$((ord(YTIME) > 14) and TRANSE(DSBS)) = 0.5;
@@ -667,9 +667,10 @@ variable imMatrFactor(allCy,DSBS,TECH,YTIME)    "Maturity factor per technology 
 imMatrFactor.LO(runCy,DSBS,TECH,YTIME) = 1e-6;                                          
 imMatrFactor.UP(runCy,DSBS,TECH,YTIME) = 10;
 imMatrFactor.L(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);     
-imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(not (sameas(DSBS,"PC") or sameas(DSBS,"PB") or sameas(DSBS,"GU") or DOMSE(DSBS))) = iMatrFactorData(runCy,DSBS,TECH,YTIME);   
-imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$((sameas(DSBS,"PC") or sameas(DSBS,"PB") or sameas(DSBS,"GU") or DOMSE(DSBS)) and not SECTTECH(DSBS,TECH)) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                      
-imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$DATAY(YTIME)= iMatrFactorData(runCy,DSBS,TECH,YTIME);      
+imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(not (sameas(DSBS,"PC") or sameas(DSBS,"PB") or sameas(DSBS,"GU") or INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS))) = iMatrFactorData(runCy,DSBS,TECH,YTIME);   
+imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(sameas(DSBS,"AG") and not EU28(runCy)) = iMatrFactorData(runCy,DSBS,TECH,YTIME); 
+imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$((sameas(DSBS,"PC") or sameas(DSBS,"PB") or sameas(DSBS,"GU") or INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and not SECTTECH(DSBS,TECH)) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                      
+imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$DATAY(YTIME)= iMatrFactorData(runCy,DSBS,TECH,YTIME);        
 $ENDIF.calib
 *---
 parameters

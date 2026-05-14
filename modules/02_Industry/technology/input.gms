@@ -40,17 +40,19 @@ i02ScaleEndogScrap.LO(runCy,DSBS,ITECH,YTIME) = 0;
 i02ScaleEndogScrap.UP(runCy,DSBS,ITECH,YTIME) = 100;
 i02ScaleEndogScrap.L(runCy,DSBS,ITECH,YTIME) = 1;
 i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$(DATAY(YTIME) or not SECTTECH(DSBS,ITECH)) = 0;
-i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and not DOMSE(DSBS)) = 1;
+i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and not (INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS))) = 1;
+i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$(sameas("AG",DSBS) and not EU28(runCy)) = 1;
 
-i02CalibUsefulEnergy.LO(runCy,DSBS,YTIME) = -0.8;  
-i02CalibUsefulEnergy.UP(runCy,DSBS,YTIME) = 2;  
+i02CalibUsefulEnergy.LO(runCy,DSBS,YTIME) = -0.5;  
+i02CalibUsefulEnergy.UP(runCy,DSBS,YTIME) = 1;  
 i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$DATAY(YTIME) = 0;
-i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$(not DOMSE(DSBS)) = 0;
+i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$(not (INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS))) = 0;
+i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$(sameas("AG",DSBS) and not EU28(runCy)) = 0;
 $ENDIF.calib
 i02ElastNonSubElec(runCy,DSBS,ETYPES,YTIME) = i02ElastNonSubElecData(DSBS,ETYPES,YTIME);
 *---
 i02ElaSub(runCy,DSBS) = imElaSubData(DSBS);
-i02ElaSub(runCy,DSBS) = 2; !!
+i02ElaSub(runCy,DSBS) = 2;
 *---
 imCO2CaptRateIndustry(runCy,CCSTECH,YTIME) = 0.9;
 *---
@@ -79,8 +81,18 @@ $ondelim
 $include "../targets/tSharesFuelBuildings.csv"
 $offdelim;
 
+table t02SharesFuelINDSE(allCy,DSBS,EFS,YTIME)    "Targets for share of new passenger cars"
+$ondelim
+$include "../targets/tSharesINDSE.csv"
+$offdelim;
+
 table t02FinalEnergyDOMSE(allCy,DSBS,YTIME)    "Targets for share of new passenger cars"
 $ondelim
 $include "../targets/tProjectionsFuelBuildings.csv"
+$offdelim;
+
+table t02FinalEnergyINDSE(allCy,DSBS,YTIME)    "Targets for share of new passenger cars"
+$ondelim
+$include "../targets/tProjectionsINDSE.csv"
 $offdelim;
 $ENDIF.calib

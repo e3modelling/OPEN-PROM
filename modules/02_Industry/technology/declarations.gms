@@ -33,6 +33,7 @@ Q02RatioRem(allCy,DSBS,ITECH,YTIME)
 *'                **Interdependent Equations**
 Q02ConsFuel(allCy,DSBS,EF,YTIME)                           "Compute fuel consumption of fuels in each subsector"
 Q02ConsFuelShare(allCy,DSBS,EF,YTIME)
+Q02ConsFuelSum(allCy,DSBS,YTIME)
 ;
 
 Variables
@@ -57,4 +58,5 @@ V02RatioRem(allCy,DSBS,ITECH,YTIME)
 *'                **Interdependent Variables**
 VmConsFuel(allCy,DSBS,EF,YTIME)                            "fuel consumption of fuels in each subsector"
 VmConsFuelShare(allCy,DSBS,EF,YTIME)
+VmConsFuelSum(allCy,DSBS,YTIME)
 ;
