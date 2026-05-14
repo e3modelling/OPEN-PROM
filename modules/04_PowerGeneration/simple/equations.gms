@@ -70,9 +70,6 @@ Q04CostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
     V04CostVarTech(allCy,PGALL,YTIME)
         =E=
     (
-      i04VarCost(PGALL,YTIME) / 1e3 +
-      sum(PGEF$PGALLtoEF(PGALL,PGEF),
-        i04ShareFuels(allCy,PGALL,PGEF) *
       i04VarCost(PGALL,YTIME) / 1e3 + 
       sum(PGEF$PGALLtoEF(PGALL,PGEF), 
         i04ShareFuels(allCy,PGALL,PGEF) * 
@@ -83,9 +80,6 @@ Q04CostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
         ) * smTWhToMtoe / imPlantEffByType(allCy,PGALL,"effELC",YTIME)
       ) +
     SQRT(SQR(
-      i04VarCost(PGALL,YTIME) / 1e3 +
-      sum(PGEF$PGALLtoEF(PGALL,PGEF),
-        i04ShareFuels(allCy,PGALL,PGEF) *
       i04VarCost(PGALL,YTIME) / 1e3 + 
       sum(PGEF$PGALLtoEF(PGALL,PGEF), 
         i04ShareFuels(allCy,PGALL,PGEF) * 

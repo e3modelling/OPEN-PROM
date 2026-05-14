@@ -5,6 +5,8 @@
 *---
 V02FinalElecNonSubIndTert.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = imFuelCons(runCy,INDDOM,"ELC",YTIME) * imShrNonSubElecInTotElecDem(runCy,INDDOM);
 *---
+V02UsefulElecNonSubIndTert.LO(runCy,INDDOM,YTIME) = 0;
+V02UsefulElecNonSubIndTert.L(runCy,INDDOM,YTIME) = V02FinalElecNonSubIndTert.L(runCy,INDDOM,"%fBaseY%") * imUsfEneConvSubTech(runCy,INDDOM,"TELC","%fBaseY%");
 V02UsefulElecNonSubIndTert.FX(runCy,INDDOM,YTIME)$DATAY(YTIME) = V02FinalElecNonSubIndTert.L(runCy,INDDOM,YTIME) * imUsfEneConvSubTech(runCy,INDDOM,"TELC",YTIME);
 *----
 * Needs to be divided with average efficiency --- WHICH ONE?
@@ -59,7 +61,7 @@ V02DemSubUsefulSubsec.FX(runCy,NENSE,YTIME)$(not An(YTIME)) = SUM(ITECH$SECTTECH
 * V02UsefulElecNonSubIndTert.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = imFuelConsPerFueSub(runCy,INDDOM,"ELC",YTIME) * imShrNonSubElecInTotElecDem(runCy,INDDOM) / imUsfEneConvSubTech(runCy,INDDOM,"TELC",YTIME);
 *---
 VmConsFuel.LO(runCy,DSBS,EF,YTIME) = 0;
-VmConsFuel.L(runCy,DSBS,EF,YTIME) = imFuelConsPerFueSub(runCy,DSBS,EF,"%fBaseY%");
+VmConsFuel.L(runCy,DSBS,EF,YTIME) = imFuelCons(runCy,DSBS,EF,"%fBaseY%");
 VmConsFuel.FX(runCy,DSBS,EF,YTIME)$(HEATPUMP(EF) or TRANSE(DSBS) or CDR(DSBS) or not SECtoEF(DSBS,EF)) = 0;
 VmConsFuel.FX(runCy,DSBS,EF,YTIME)$(not HEATPUMP(EF) and not TRANSE(DSBS) and DATAY(YTIME)) = imFuelCons(runCy,DSBS,EF,YTIME);
 *---
@@ -106,7 +108,7 @@ V02DemUsefulSubsecRemTech.FX(runCy,DSBS,YTIME)$DATAY(YTIME) = 0;
 *---
 V02RemEquipCapTechSubsec.LO(runCy,DSBS,ITECH,YTIME) = 0;
 V02RemEquipCapTechSubsec.L(runCy,DSBS,ITECH,YTIME)$((INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and SECTTECH(DSBS,ITECH)) = 1;
-V02RemEquipCapTechSubsec.FX(runCy,DSBS,ITECH,YTIME)$(DATAY(YTIME) or not SECTTECH(DSBS,ITECH))= 0;
+V02RemEquipCapTechSubsec.FX(runCy,DSBS,ITECH,YTIME)$(DATAY(YTIME) or not SECTTECH(DSBS,ITECH)) = 0;
 *---
 V02GapUsefulDemSubsec.LO(runCy,DSBS,YTIME) = 0;
 V02GapUsefulDemSubsec.L(runCy,DSBS,YTIME)$(INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) = 1;
