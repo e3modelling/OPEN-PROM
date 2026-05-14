@@ -103,6 +103,48 @@ def read_main_log(subfolder):
         print("main.log file not found in the selected subfolder.")
         return []
 
+# modelstat.txt format: "Country:XXX  Model Status:N.NN Year:YYYY"
+# Works in both serial and parallel CountrySolveMode (main.log changes shape
+# in parallel mode and breaks parse_main_log).
+_MODELSTAT_LINE = re.compile(
+    r'Country:\s*(\S+)\s+Model Status:\s*([0-9.]+)\s+Year:\s*(\d+)'
+)
+
+
+def read_modelstat(subfolder):
+    """Return modelstat.txt lines, or [] if the file isn't there yet."""
+    p = os.path.join(subfolder, "modelstat.txt")
+    if not os.path.exists(p):
+        return []
+    with open(p, 'r') as f:
+        return f.readlines()
+
+
+def parse_modelstat(lines):
+    """Parse modelstat.txt into {country: {year: code}}.
+
+    code mapping (matches plot_heatmap colormap order):
+        1 = optimal   (GAMS Model Status 2)
+        2 = feasible  (GAMS Model Status 8)
+        0 = anything else (failure / infeasible / not solved)
+    """
+    out = {}
+    for line in lines:
+        m = _MODELSTAT_LINE.search(line)
+        if not m:
+            continue
+        country, status_str, year_str = m.group(1), m.group(2), m.group(3)
+        status = float(status_str)
+        if status == 2.0:
+            code = 1
+        elif status == 8.0:
+            code = 2
+        else:
+            code = 0
+        out.setdefault(country, {})[int(year_str)] = code
+    return out
+
+
 def parse_main_log(lines):
     year_pattern = re.compile(r'an\s*=\s*(\d+)')
     country_pattern = re.compile(r'runCyL\s*=\s*([A-Z]+)')
@@ -153,17 +195,19 @@ def parse_main_log(lines):
     return country_year_status
 
 def create_dataframe(country_year_status, pending_run=False):
-    if country_year_status:
-        df = pd.DataFrame(country_year_status).fillna(0)
-        df.index.name = 'Country'
-        df = df.T
-        df = df.astype(int)
-        if pending_run == True:
-            df.pop(df.columns[-1])
-        return df
-    else:
-        print("No data found in the log file.")
+    if not country_year_status:
         return None
+    df = pd.DataFrame(country_year_status).fillna(0)
+    df.index.name = 'Country'
+    df = df.T
+    if df.empty or df.shape[1] == 0:
+        # parser found country names but no year data (typical when parallel
+        # mode has just submitted solves but none have collected yet).
+        return None
+    df = df.astype(int)
+    if pending_run and df.shape[1] > 1:
+        df.pop(df.columns[-1])
+    return df
 
 def plot_heatmap(df, plot_title):
     if df is not None:
@@ -185,6 +229,18 @@ def plot_heatmap(df, plot_title):
     else:
         print("DataFrame is empty.")
 
+def get_country_year_status(subfolder):
+    """Prefer modelstat.txt (works in both serial and parallel CountrySolveMode).
+    Fall back to parsing main.log when modelstat.txt isn't there yet."""
+    mstat_lines = read_modelstat(subfolder)
+    if mstat_lines:
+        out = parse_modelstat(mstat_lines)
+        if out:
+            return out
+    log_lines = read_main_log(subfolder)
+    return parse_main_log(log_lines) if log_lines else {}
+
+
 def main_loop(base_path, check_interval=1.5, max_no_update_intervals=4):
     subfolder_status_list = check_files_and_list_subfolders(base_path)
     pending_folder = find_pending_run(subfolder_status_list)
@@ -195,14 +251,13 @@ def main_loop(base_path, check_interval=1.5, max_no_update_intervals=4):
         if subfolder_status_list:
             latest_subfolder = subfolder_status_list[-1][1]
             folder_name = latest_subfolder.split(os.sep)[-1]
-            lines = read_main_log(latest_subfolder)
-            if lines:
-                country_year_status = parse_main_log(lines)
+            country_year_status = get_country_year_status(latest_subfolder)
+            if country_year_status:
                 df = create_dataframe(country_year_status)
                 plot_heatmap(df, folder_name)
                 plt.show()
             else:
-                print("No data found in the log file for the latest subfolder.")
+                print("No data found for the latest subfolder.")
         return
 
     pending_folder_name = os.path.basename(pending_folder)
@@ -212,24 +267,23 @@ def main_loop(base_path, check_interval=1.5, max_no_update_intervals=4):
 
     while consecutive_no_update_intervals < max_no_update_intervals:
         try:
-            lines = read_main_log(pending_folder)
-            if not lines:
-                print(f"No data found in the log file for subfolder: {pending_folder}")
-                continue
-
-            country_year_status = parse_main_log(lines)
-            pending_run = True
-
-            df = create_dataframe(country_year_status, pending_run)
-            if df is None or df.empty:
-                print(f"No valid data found in the log file for subfolder: {pending_folder}")
+            country_year_status = get_country_year_status(pending_folder)
+            if not country_year_status:
                 consecutive_no_update_intervals += 1
+                time.sleep(check_interval)
                 continue
 
-            plot_title = pending_folder_name  # Use folder name as plot title
-            plot_heatmap(df, plot_title)
+            df = create_dataframe(country_year_status, pending_run=True)
+            if df is None or df.empty:
+                # parser ran but produced no plottable matrix yet (typical
+                # early in a parallel-mode run before any country collects).
+                consecutive_no_update_intervals += 1
+                time.sleep(check_interval)
+                continue
+
+            plot_heatmap(df, pending_folder_name)
             plt.pause(0.1)
-            consecutive_no_update_intervals = 0  # Reset the counter since there's an update
+            consecutive_no_update_intervals = 0
         except Exception as e:
             print(f"Error processing tasks: {e}")
 
