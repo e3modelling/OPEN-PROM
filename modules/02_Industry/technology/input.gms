@@ -17,7 +17,7 @@ imTotFinEneDemSubBaseYr(runCy,NENSE,YTIME)   = SUM(EF$SECtoEF(NENSE,EF),imFuelCo
 *---
 i02ExogDemOfBiomass(runCy,DOMSE,YTIME) = 0;
 *---
-i02util(runCy,DSBS,ITECH,YTIME) = 1;
+i02util(runCy,DSBS,ITECH,YTIME)$SECTTECH(DSBS,ITECH) = 1;
 *---
 $IFTHEN.calib %Calibration% == off
 table i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME)       "Scale parameter for endogenous scrapping applied to the sum of full costs (1)"

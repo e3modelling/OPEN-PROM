@@ -868,6 +868,8 @@ HTDAC.(NGS,ELC)
 H2DAC.(H2F,ELC)
 LTDAC.ELC
 TEW.ELC
+TSOL.SOL
+TGEO.GEO
 /
 TTECHtoEF(TTECH,EF) Fuels consumed by transport technologies
 /

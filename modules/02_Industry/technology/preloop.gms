@@ -10,19 +10,10 @@ V02UsefulElecNonSubIndTert.L(runCy,INDDOM,YTIME) = V02FinalElecNonSubIndTert.L(r
 V02UsefulElecNonSubIndTert.FX(runCy,INDDOM,YTIME)$DATAY(YTIME) = V02FinalElecNonSubIndTert.L(runCy,INDDOM,YTIME) * imUsfEneConvSubTech(runCy,INDDOM,"TELC",YTIME);
 *----
 * Needs to be divided with average efficiency --- WHICH ONE?
- 
-*---
-* Levels in other variables?
-$ontext
-V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)
-V02DemUsefulSubsecRemTech(allCy,DSBS,YTIME)
-V02GapUsefulDemSubsec(allCy,DSBS,YTIME)
-$offtext
 *---
 * Levels in other variables?
 $ontext
 V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME)
-V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)
 $offtext
 *---
 alias(ITECH,ITECH2);
@@ -106,13 +97,17 @@ VmConsFuelShare.LO(runCy,DSBS,EF,YTIME) = 0;
 VmConsFuelShare.FX(runCy,DSBS,EF,YTIME)$DATAY(YTIME) = (imFuelCons(runCy,DSBS,EF,YTIME) / SUM(EF2, imFuelCons(runCy,DSBS,EF2,YTIME)))$SUM(EF2, imFuelCons(runCy,DSBS,EF2,YTIME));
 *---
 V02DemUsefulSubsecRemTech.LO(runCy,DSBS,YTIME) = 0;
-V02DemUsefulSubsecRemTech.L(runCy,DSBS,YTIME)$(INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) = 2;
-V02DemUsefulSubsecRemTech.FX(runCy,DSBS,YTIME)$DATAY(YTIME) = 0;
+V02DemUsefulSubsecRemTech.L(runCy,DSBS,YTIME)$(INDDOM(DSBS) or NENSE(DSBS)) = 2;
+V02DemUsefulSubsecRemTech.FX(runCy,DSBS,YTIME)$(DATAY(YTIME) or not (INDDOM(DSBS) or NENSE(DSBS))) = 0;
 *---
 V02RemEquipCapTechSubsec.LO(runCy,DSBS,ITECH,YTIME) = 0;
-V02RemEquipCapTechSubsec.L(runCy,DSBS,ITECH,YTIME)$((INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and SECTTECH(DSBS,ITECH)) = 1;
-V02RemEquipCapTechSubsec.FX(runCy,DSBS,ITECH,YTIME)$(DATAY(YTIME) or not SECTTECH(DSBS,ITECH)) = 0;
+V02RemEquipCapTechSubsec.L(runCy,DSBS,ITECH,YTIME)$((INDDOM(DSBS) or NENSE(DSBS)) and SECTTECH(DSBS,ITECH)) = 1;
+V02RemEquipCapTechSubsec.FX(runCy,DSBS,ITECH,YTIME)$(DATAY(YTIME) or not SECTTECH(DSBS,ITECH) or not (INDDOM(DSBS) or NENSE(DSBS))) = 0;
 *---
 V02GapUsefulDemSubsec.LO(runCy,DSBS,YTIME) = 0;
-V02GapUsefulDemSubsec.L(runCy,DSBS,YTIME)$(INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) = 1;
-V02GapUsefulDemSubsec.FX(runCy,DSBS,YTIME)$DATAY(YTIME) = 0;
+V02GapUsefulDemSubsec.L(runCy,DSBS,YTIME)$(INDDOM(DSBS) or NENSE(DSBS)) = 1;
+V02GapUsefulDemSubsec.FX(runCy,DSBS,YTIME)$(DATAY(YTIME) or not (INDDOM(DSBS) or NENSE(DSBS))) = 0;
+*---
+V02RatioRem.LO(runCy,DSBS,ITECH,YTIME) = 0;
+V02RatioRem.L(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and (INDDOM(DSBS) or NENSE(DSBS))) = 0.5;
+V02RatioRem.FX(runCy,DSBS,ITECH,YTIME)$(not SECTTECH(DSBS,ITECH) or not (INDDOM(DSBS) or NENSE(DSBS))) = 0;
