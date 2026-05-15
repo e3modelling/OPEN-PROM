@@ -43,8 +43,6 @@ SVK
 SVN
 SWE
 USA
-MAR
-EGY
 RWO
 /
 
@@ -89,6 +87,38 @@ SVK
 SVN
 SWE
 USA
+/
+
+EU28(allCy) "EU27 and UK"
+/
+EST
+LTU
+LUX
+LVA
+AUT
+BEL
+BGR
+CYP
+CZE
+DEU
+DNK
+ESP
+FIN
+FRA
+GBR
+GRC
+HRV
+HUN
+IRL
+ITA
+MLT
+NLD
+POL
+PRT
+ROU
+SVK
+SVN
+SWE
 /
 
 fscenario   "Model scenario used: 0 is No carbon price, 1 is NPi_Default, 2 is 1.5C and 3 is 2C"
@@ -532,9 +562,9 @@ HCL     "Hard Coal, Coke and Other Solids"
 LGN     "Lignite"
 CRO     "Crude Oil and Feedstocks"
 LPG     "Liquefied Petroleum Gas"
-GSL     "Gasoline"
-KRS     "Kerosene"
-GDO     "Diesel Oil"
+GSL     "Fossil Gasoline"
+KRS     "Fossil Kerosene"
+GDO     "Fossil Diesel Oil"
 RFO     "Residual Fuel Oil"
 OLQ     "Other Liquids"
 NGS     "Natural Gas"
@@ -640,6 +670,8 @@ TSTE
 * Domestic Technologies (only add those not already in Transport & Industry)
 * LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC already exist in TRANSPORT or INDUSTRY technologies
 TBMSWAS
+TSOL
+TGEO
 * Non-Energy and Bunkers Technologies (only add those not already in Transport & Industry & Domestic)
 * GDO,RFO,LGN,HCL,GDO,LPG,OLQ,NGS,OGS already exist
 * NOT USED
@@ -726,6 +758,8 @@ TH2F
 TGSL
 TBMSWAS
 THEATPUMP
+TSOL
+TGEO
 /
 
 CCSTECH(ITECH)
@@ -874,6 +908,8 @@ TSTE.STE
 TH2F.H2F
 TBMSWAS.BMSWAS
 THEATPUMP.ELC
+TSOL.SOL
+TGEO.GEO
 /
 
 PLUGIN(TECH) Plug-in hybrids
@@ -909,7 +945,7 @@ PA.(TKRS)
 (IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(TLGN,THCL,TGDO,TGSL,TRFO,TLPG,TKRS,TOLQ,TNGS,TOGS,
                                 TELC,TBMSWAS,TSTE,TH2F)
 (IS,BM,CH).(TNGSCCS,THCLCCS)
-(HOU,AG,SE).(THCL,TLPG,TKRS,TGDO,TNGS,TOGS,TBMSWAS,TELC,TSTE,TGSL,TLGN,TOLQ,TRFO)
+(HOU,AG,SE).(THCL,TLPG,TKRS,TGDO,TNGS,TOGS,TBMSWAS,TELC,TSTE,TGSL,TLGN,TOLQ,TRFO,TSOL,TGEO)
 (HOU,SE).(THEATPUMP)
 BU.(TGDO,TRFO,TKRS,TH2F,TNGS)
 (PCH,NEN).(TLGN,THCL,TGDO,TRFO,TLPG,TOLQ,TNGS,TOGS)
@@ -1011,7 +1047,6 @@ ATHBMSCCS.ATHBMSWAS
 /
 
 PGREN(PGALL)    REN PLANTS with Saturation                /PGLHYD,PGSHYD,PGAWND,PGSOL,PGCSP,PGOTHREN,PGAWNO/
-PGREN2(PGALL)     Renewable Plants                          /PGLHYD,PGSHYD,PGAWND,PGSOL,PGCSP,PGOTHREN,PGAWNO,PGANUC,ATHCOALCCS,ATHLGNCCS,ATHGASCCS,PGH2F/
 PGRENSW(PGALL)   Solar and wind Plants                     /PGSOL,PGCSP,PGAWND,PGAWNO/
 PGRENEF          Renewable energy forms in power generation  /HYD,WND,SOL,BMSWAS,GEO/
 

@@ -70,9 +70,9 @@ Q04CostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
     V04CostVarTech(allCy,PGALL,YTIME)
         =E=
     (
-      i04VarCost(PGALL,YTIME) / 1e3 +
-      sum(PGEF$PGALLtoEF(PGALL,PGEF),
-        i04ShareFuels(allCy,PGALL,PGEF) *
+      i04VarCost(PGALL,YTIME) / 1e3 + 
+      sum(PGEF$PGALLtoEF(PGALL,PGEF), 
+        i04ShareFuels(allCy,PGALL,PGEF) * 
         (
           VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME) +
         V04CO2CaptRate(allCy,PGALL,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME) - 4.17$sameas("BMSWAS", PGEF)) +
@@ -80,9 +80,9 @@ Q04CostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
         ) * smTWhToMtoe / imPlantEffByType(allCy,PGALL,"effELC",YTIME)
       ) +
     SQRT(SQR(
-      i04VarCost(PGALL,YTIME) / 1e3 +
-      sum(PGEF$PGALLtoEF(PGALL,PGEF),
-        i04ShareFuels(allCy,PGALL,PGEF) *
+      i04VarCost(PGALL,YTIME) / 1e3 + 
+      sum(PGEF$PGALLtoEF(PGALL,PGEF), 
+        i04ShareFuels(allCy,PGALL,PGEF) * 
         (
           VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME) +
         V04CO2CaptRate(allCy,PGALL,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME) - 4.17$sameas("BMSWAS", PGEF)) +
@@ -95,12 +95,18 @@ Q04CostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
 *' The equation calculates the hourly production cost of a power generation plant used in investment decisions. The cost is determined based on various factors,
 *' including the discount rate, gross capital cost, fixed operation and maintenance cost, availability rate, variable cost, renewable value, and fuel prices.
 *' The production cost is normalized per unit of electricity generated (kEuro2005/kWh) and is considered for each hour of the day. The equation includes considerations
-*' for renewable plants (excluding certain types) and fossil fuel plants.
+*' for renewable plants (excluding certain types) and fossil fuel plants. If a feed-in tariff is defined for this technology, it takes precedence over the calculated sum.
 Q04CostHourProdInvDec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04CostHourProdInvDec(allCy,PGALL,YTIME)
-        =E=         
-    V04CostCapTech(allCy,PGALL,YTIME) +
-    V04CostVarTech(allCy,PGALL,YTIME);
+        =E=             
+        (
+            (V04CostCapTech(allCy,PGALL,YTIME) + V04CostVarTech(allCy,PGALL,YTIME)) +
+            (2 * (V04CostCapTech(allCy,PGALL,YTIME) + V04CostVarTech(allCy,PGALL,YTIME)) - i04FIT(allCy,PGALL,YTIME))
+            -
+            sqrt(sqr((V04CostCapTech(allCy,PGALL,YTIME) + V04CostVarTech(allCy,PGALL,YTIME)) -
+            (2 * (V04CostCapTech(allCy,PGALL,YTIME) + V04CostVarTech(allCy,PGALL,YTIME)) - i04FIT(allCy,PGALL,YTIME))))
+        ) / 2;
+     ;
 
 *' The equation computes the endogenous scrapping index for power generation plants  during the specified year .
 *' The index is calculated as the variable cost of technology excluding power plants flagged as not subject to scrapping 
@@ -109,9 +115,9 @@ Q04CostHourProdInvDec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04IndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(allCy))..
     V04IndxEndogScrap(allCy,PGALL,YTIME)
         =E=
-    V04CostVarTech(allCy,PGALL,YTIME-1)**(-2) /
+    (V04CostVarTech(allCy,PGALL,YTIME-1) + 1e-3)**(-2) /
     (
-      V04CostVarTech(allCy,PGALL,YTIME-1)**(-2) +
+      (V04CostVarTech(allCy,PGALL,YTIME-1) + 1e-3)**(-2) +
       (
         i04ScaleEndogScrap *
         sum(PGALL2$(not sameas(PGALL,PGALL2)),
@@ -191,11 +197,11 @@ Q04SharePowPlaNewEq(allCy,PGALL,YTIME)$(TIME(YTIME)$runCy(allCy)) ..
     i04MatFacPlaAvailCap(allCy,PGALL,YTIME) *
     V04ShareSatPG(allCy,PGALL,YTIME-1) *
     V04CostHourProdInvDec(allCy,PGALL,YTIME-1) ** (-2) /
-    (SUM(PGALL2,
+    SUM(PGALL2,
       i04MatFacPlaAvailCap(allCy,PGALL2,YTIME) *
       V04ShareSatPG(allCy,PGALL2,YTIME-1) *
       V04CostHourProdInvDec(allCy,PGALL2,YTIME-1) ** (-2)
-    ) + 1e-6);
+    );
 
 *' This equation calculates the variable representing the electricity generation capacity for a specific power plant in a given country
 *' and time period. The calculation takes into account various factors related to new investments, decommissioning, and technology-specific parameters.
@@ -263,7 +269,13 @@ Q04ShareSatPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(PGREN(PGALL)))..
 Q04CostPowGenAvgLng(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCostPowGenAvgLng(allCy,YTIME)
         =E=
-    SUM(PGALL,(VmProdElec(allCy,PGALL,YTIME) + 1e-6)* V04CostHourProdInvDec(allCy,PGALL,YTIME)) / 
+    SUM(PGALL,(VmProdElec(allCy,PGALL,YTIME) + 1e-6) *
+        (
+            (V04CostCapTech(allCy,PGALL,YTIME) + V04CostVarTech(allCy,PGALL,YTIME)) + i04FIT(allCy,PGALL,YTIME)
+            +
+            sqrt(sqr((V04CostCapTech(allCy,PGALL,YTIME) + V04CostVarTech(allCy,PGALL,YTIME)) - i04FIT(allCy,PGALL,YTIME)))
+        ) / 2
+    ) / 
     SUM(PGALL,VmProdElec(allCy,PGALL,YTIME) + 1e-6); 
 
 *' This equation estimates the factor increasing the CAPEX of new RES (unflexible) capacity installation due to simultaneous need for grind upgrade and storage, 
@@ -290,15 +302,15 @@ Q04CO2CaptRate(allCy,PGALL,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
 Q04CCSRetroFit(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(NOCCS(PGALL)))..
     V04CCSRetroFit(allCy,PGALL,YTIME)
         =E=
-    V04CostVarTech(allCy,PGALL,YTIME-1) ** (-2) /
+    (V04CostVarTech(allCy,PGALL,YTIME-1) + 1e-3)** (-2) /
     (
-      V04CostVarTech(allCy,PGALL,YTIME-1) ** (-2) +
+      (V04CostVarTech(allCy,PGALL,YTIME-1) + 1e-3)** (-2) +
       0.01 *
       SUM(PGALL2$CCS_NOCCS(PGALL2,PGALL),
         (
-          V04CostCapTech(allCy,PGALL2,YTIME-1) -
-          i04AvailRate(allCy,PGALL,YTIME) / i04AvailRate(allCy,PGALL2,YTIME) *
-          V04CostCapTech(allCy,PGALL,YTIME-1) +
+          V04CostCapTech(allCy,PGALL2,YTIME-1) +
+          !! - i04AvailRate(allCy,PGALL,YTIME) / i04AvailRate(allCy,PGALL2,YTIME) *
+          !!V04CostCapTech(allCy,PGALL,YTIME-1) +
           V04CostVarTech(allCy,PGALL2,YTIME-1)
         ) ** (-2)
       )
