@@ -177,7 +177,7 @@ Q03ConsFiEneSec(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     )$(not sameas("H2P",SSBS)) +
     VmConsFuelH2Prod(allCy,EFS,YTIME)$sameas("H2P",SSBS);                               
 
-Q03FinalEnergy(allCy,DSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$(SECtoEF(DSBS,EFS)))..
+Q03FinalEnergy(allCy,DSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$(SECtoEF(DSBS,EFS))$(not sameas("ICT",DSBS)))..
     VmFinalEnergy(allCy,DSBS,EFS,YTIME)
         =E=
     SUM((TRANSE,TTECH)$(sameas(DSBS,TRANSE) and SECTTECH(TRANSE,TTECH) and TTECHtoEF(TTECH,EFS)),

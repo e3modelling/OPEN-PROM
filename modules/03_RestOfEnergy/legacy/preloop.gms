@@ -41,4 +41,5 @@ VmImpNetEneBrnch.FX(runCy,EFS,YTIME)$DATAY(YTIME) = imFuelTrade(runCy,"IMPORTS",
 VmFinalEnergy.LO(runCy,DSBS,EFS,YTIME) = 0;
 VmFinalEnergy.L(runCy,DSBS,EFS,YTIME) = imFuelCons(runCy,DSBS,EFS,"%fBaseY%");
 VmFinalEnergy.FX(runCy,DSBS,EFS,YTIME)$DATAY(YTIME) = imFuelCons(runCy,DSBS,EFS,YTIME);
-VmFinalEnergy.FX(allCy,DSBS,EFS,YTIME)$(not SECtoEF(DSBS,EFS)) = 0;
+VmFinalEnergy.FX(runCy,DSBS,EFS,YTIME)$(not SECtoEF(DSBS,EFS)) = 0;
+VmFinalEnergy.FX(runCy,"ICT","ELC",YTIME) = i02FuelConsICT(runCy,"%ICT%","%SSP%",YTIME);
