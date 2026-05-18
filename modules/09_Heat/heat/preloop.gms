@@ -97,16 +97,16 @@ V09DemGapSte.FX(runCy,YTIME)$DATAY(YTIME) = 0;
 
 *'                *PARAMETER INITIALISATION FOR RECURSIVE LAGS*
 
-p09ScrapRate(runCy,TSTEAM,YTIME) = V09ScrapRate.L(runCy,TSTEAM,YTIME);
-p09DemGapSte(runCy,YTIME) = V09DemGapSte.L(runCy,YTIME);
-p09CostVarProdSte(runCy,TSTEAM,YTIME) = V09CostVarProdSte.L(runCy,TSTEAM,YTIME);
-p09CostCapProdSte(runCy,TSTEAM,YTIME) = V09CostCapProdSte.L(runCy,TSTEAM,YTIME);
-p09CostProdSte(runCy,TSTEAM,YTIME) = V09CostProdSte.L(runCy,TSTEAM,YTIME);
-p09GapShareSte(runCy,TSTEAM,YTIME) = V09GapShareSte.L(runCy,TSTEAM,YTIME);
-p09CaptRateSte(runCy,TSTEAM,YTIME) = V09CaptRateSte.L(runCy,TSTEAM,YTIME);
-p09ScrapRatePremature(runCy,TSTEAM,YTIME) = V09ScrapRatePremature.L(runCy,TSTEAM,YTIME);
-pmDemTotSte(runCy,YTIME) = VmDemTotSte.L(runCy,YTIME);
-pmCapSte(runCy,TSTEAM,YTIME) = VmCapSte.L(runCy,TSTEAM,YTIME);
-pmProdSte(runCy,TSTEAM,YTIME) = VmProdSte.L(runCy,TSTEAM,YTIME);
-pmCostAvgProdSte(runCy,YTIME) = VmCostAvgProdSte.L(runCy,YTIME);
-pmConsFuelSteProd(runCy,STEMODE,EFS,YTIME) = VmConsFuelSteProd.L(runCy,STEMODE,EFS,YTIME);
+p09ScrapRate(runCy,TSTEAM,YTIME) = V09ScrapRate.L(runCy,TSTEAM,YTIME-1);
+p09DemGapSte(runCy,YTIME) = V09DemGapSte.L(runCy,YTIME-1);
+p09CostVarProdSte(runCy,TSTEAM,YTIME) = V09CostVarProdSte.L(runCy,TSTEAM,YTIME-1);
+p09CostCapProdSte(runCy,TSTEAM,YTIME) = V09CostCapProdSte.L(runCy,TSTEAM,YTIME-1);
+p09CostProdSte(runCy,TSTEAM,YTIME) = V09CostProdSte.L(runCy,TSTEAM,YTIME-1);
+p09GapShareSte(runCy,TSTEAM,YTIME) = V09GapShareSte.L(runCy,TSTEAM,YTIME-1);
+p09CaptRateSte(runCy,TSTEAM,YTIME) = V09CaptRateSte.L(runCy,TSTEAM,YTIME-1);
+p09ScrapRatePremature(runCy,TSTEAM,YTIME) = V09ScrapRatePremature.L(runCy,TSTEAM,YTIME-1);
+pmDemTotSte(runCy,YTIME) = VmDemTotSte.L(runCy,YTIME-1);
+pmCapSte(runCy,TSTEAM,YTIME) = VmCapSte.L(runCy,TSTEAM,YTIME-1);
+pmProdSte(runCy,TSTEAM,YTIME) = VmProdSte.L(runCy,TSTEAM,YTIME-1);
+pmCostAvgProdSte(runCy,YTIME) = VmCostAvgProdSte.L(runCy,YTIME-1);
+pmConsFuelSteProd(runCy,STEMODE,EFS,YTIME) = VmConsFuelSteProd.L(runCy,STEMODE,EFS,YTIME-1);

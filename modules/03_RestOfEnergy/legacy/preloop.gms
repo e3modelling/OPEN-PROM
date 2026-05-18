@@ -51,15 +51,15 @@ VmImpNetEneBrnch.FX(runCy,EFS,YTIME)$DATAY(YTIME) = imFuelTrade(runCy,"IMPORTS",
 
 *'                *PARAMETER INITIALISATION FOR RECURSIVE LAGS*
 
-p03InpTotTransf(runCy,SSBS,EFS,YTIME) = V03InpTotTransf.L(runCy,SSBS,EFS,YTIME);
-p03OutTotTransf(runCy,SSBS,EFS,YTIME) = V03OutTotTransf.L(runCy,SSBS,EFS,YTIME);
-p03Transfers(runCy,EFS,YTIME) = V03Transfers.L(runCy,EFS,YTIME);
-p03ConsGrssInl(runCy,EFS,YTIME) = V03ConsGrssInl.L(runCy,EFS,YTIME);
-p03ProdPrimary(runCy,EFS,YTIME) = V03ProdPrimary.L(runCy,EFS,YTIME);
-p03Exp(runCy,EFS,YTIME) = V03Exp.L(runCy,EFS,YTIME);
-p03Imp(runCy,EFS,YTIME) = V03Imp.L(runCy,EFS,YTIME);
-pmImpNetEneBrnch(runCy,EFS,YTIME) = VmImpNetEneBrnch.L(runCy,EFS,YTIME);
-pmConsFiEneSec(runCy,SSBS,EFS,YTIME) = VmConsFiEneSec.L(runCy,SSBS,EFS,YTIME);
-pmConsFinEneCountry(runCy,EFS,YTIME) = VmConsFinEneCountry.L(runCy,EFS,YTIME);
-pmConsFinNonEne(runCy,EFS,YTIME) = VmConsFinNonEne.L(runCy,EFS,YTIME);
-pmLossesDistr(runCy,EFS,YTIME) = VmLossesDistr.L(runCy,EFS,YTIME);
+p03InpTotTransf(runCy,SSBS,EFS,YTIME) = V03InpTotTransf.L(runCy,SSBS,EFS,YTIME-1);
+p03OutTotTransf(runCy,SSBS,EFS,YTIME) = V03OutTotTransf.L(runCy,SSBS,EFS,YTIME-1);
+p03Transfers(runCy,EFS,YTIME) = V03Transfers.L(runCy,EFS,YTIME-1);
+p03ConsGrssInl(runCy,EFS,YTIME) = V03ConsGrssInl.L(runCy,EFS,YTIME-1);
+p03ProdPrimary(runCy,EFS,YTIME) = V03ProdPrimary.L(runCy,EFS,YTIME-1);
+p03Exp(runCy,EFS,YTIME) = V03Exp.L(runCy,EFS,YTIME-1);
+p03Imp(runCy,EFS,YTIME) = V03Imp.L(runCy,EFS,YTIME-1);
+pmImpNetEneBrnch(runCy,EFS,YTIME) = VmImpNetEneBrnch.L(runCy,EFS,YTIME-1);
+pmConsFiEneSec(runCy,SSBS,EFS,YTIME) = VmConsFiEneSec.L(runCy,SSBS,EFS,YTIME-1);
+pmConsFinEneCountry(runCy,EFS,YTIME) = VmConsFinEneCountry.L(runCy,EFS,YTIME-1);
+pmConsFinNonEne(runCy,EFS,YTIME) = VmConsFinNonEne.L(runCy,EFS,YTIME-1);
+pmLossesDistr(runCy,EFS,YTIME) = VmLossesDistr.L(runCy,EFS,YTIME-1);

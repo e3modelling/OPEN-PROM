@@ -48,10 +48,10 @@ V07EmissionsNetPart.FX(runCy,YTIME)$DATAY(YTIME) = V07EmissionsNet.L(runCy,YTIME
 V07RedAbsBySrcRegTim.L(E07SrcMacAbate,runCy,YTIME) = 1e-6;
 V07CostAbateBySrcRegTim.L(E07SrcMacAbate,runCy,YTIME) = 1e-6;
 
-p07GrossEmissCO2Supply(runCy,SSBS,YTIME) = V07GrossEmissCO2Supply.L(runCy,SSBS,YTIME);
-p07RedAbsBySrcRegTim(E07SrcMacAbate,runCy,YTIME) = V07RedAbsBySrcRegTim.L(E07SrcMacAbate,runCy,YTIME);
-p07EmiActBySrcRegTim(E07SrcMacAbate,runCy,YTIME) = V07EmiActBySrcRegTim.L(E07SrcMacAbate,runCy,YTIME);
-p07CostAbateBySrcRegTim(E07SrcMacAbate,runCy,YTIME) = V07CostAbateBySrcRegTim.L(E07SrcMacAbate,runCy,YTIME);
-p07GrossEmissCO2Demand(runCy,DSBS,YTIME) = V07GrossEmissCO2Demand.L(runCy,DSBS,YTIME);
-p07EmissionsNet(runCy,YTIME) = V07EmissionsNet.L(runCy,YTIME);
-p07EmissionsNetPart(runCy,YTIME) = V07EmissionsNetPart.L(runCy,YTIME);
+p07GrossEmissCO2Supply(runCy,SSBS,YTIME) = V07GrossEmissCO2Supply.L(runCy,SSBS,YTIME-1);
+p07RedAbsBySrcRegTim(E07SrcMacAbate,runCy,YTIME) = V07RedAbsBySrcRegTim.L(E07SrcMacAbate,runCy,YTIME-1);
+p07EmiActBySrcRegTim(E07SrcMacAbate,runCy,YTIME) = V07EmiActBySrcRegTim.L(E07SrcMacAbate,runCy,YTIME-1);
+p07CostAbateBySrcRegTim(E07SrcMacAbate,runCy,YTIME) = V07CostAbateBySrcRegTim.L(E07SrcMacAbate,runCy,YTIME-1);
+p07GrossEmissCO2Demand(runCy,DSBS,YTIME) = V07GrossEmissCO2Demand.L(runCy,DSBS,YTIME-1);
+p07EmissionsNet(runCy,YTIME) = V07EmissionsNet.L(runCy,YTIME-1);
+p07EmissionsNetPart(runCy,YTIME) = V07EmissionsNetPart.L(runCy,YTIME-1);

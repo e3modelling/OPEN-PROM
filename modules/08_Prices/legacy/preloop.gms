@@ -19,7 +19,7 @@ $offtext
 
 *'                *PARAMETER INITIALISATION FOR RECURSIVE LAGS*
 
-p08PriceFuelSepCarbonWght(runCy,SBS,EF,YTIME) = V08PriceFuelSepCarbonWght.L(runCy,SBS,EF,YTIME);
-pmPriceFuelSubsecCarVal(runCy,SBS,EF,YTIME) = VmPriceFuelSubsecCarVal.L(runCy,SBS,EF,YTIME);
-pmPriceFuelAvgSub(runCy,DSBS,YTIME) = VmPriceFuelAvgSub.L(runCy,DSBS,YTIME);
-pmPriceElecInd(runCy,TCHP,YTIME) = VmPriceElecInd.L(runCy,TCHP,YTIME);
+p08PriceFuelSepCarbonWght(runCy,SBS,EF,YTIME) = V08PriceFuelSepCarbonWght.L(runCy,SBS,EF,YTIME-1);
+pmPriceFuelSubsecCarVal(runCy,SBS,EF,YTIME) = VmPriceFuelSubsecCarVal.L(runCy,SBS,EF,YTIME-1);
+pmPriceFuelAvgSub(runCy,DSBS,YTIME) = VmPriceFuelAvgSub.L(runCy,DSBS,YTIME-1);
+pmPriceElecInd(runCy,TCHP,YTIME) = VmPriceElecInd.L(runCy,TCHP,YTIME-1);
