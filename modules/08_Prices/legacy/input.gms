@@ -52,15 +52,10 @@ i08WgtSecAvgPriFueCons(runCy,SBS,EF)$(SECtoEF(SBS,EF) $sum(ef2$SECtoEF(SBS,EF),i
 i08VAT(runCy, YTIME) = 0;
 *---
 imFuelPrice(runCy,SBS,EF,YTIME) = imFuelPrice(runCy,SBS,EF,YTIME)/1000; !! change units $15 -> k$15
-imFuelPrice(runCy,"BU","KRS",YTIME) = imFuelPrice(runCy,"PA","KRS",YTIME);
-imFuelPrice(runCy,"PG","GSL",YTIME) = imFuelPrice(runCy,"OI","GSL",YTIME);
-imFuelPrice(runCy,"PG","KRS",YTIME) = imFuelPrice(runCy,"OI","KRS",YTIME);
 imFuelPrice(runCy,SBS,"BGDO",YTIME) = imFuelPrice(runCy,SBS,"GDO",YTIME);
 imFuelPrice(runCy,SBS,"BGSL",YTIME) = imFuelPrice(runCy,SBS,"GSL",YTIME);
 imFuelPrice(runCy,SBS,"BKRS",YTIME) = imFuelPrice(runCy,SBS,"KRS",YTIME);
 imFuelPrice(runCy,CDR,EF,YTIME)$SECtoEF(CDR,EF) = imFuelPrice(runCy,"OI",EF,YTIME);
-imFuelPrice(runCy,"PG","OLQ",YTIME) = imFuelPrice(runCy,"PG","GDO",YTIME);
-imFuelPrice(runCy,"PG","LPG",YTIME) = imFuelPrice(runCy,"OI","LPG",YTIME);
 imFuelPrice(runCy,DOMSE,"GSL",YTIME) = imFuelPrice(runCy,"OI","GSL",YTIME);
 imFuelPrice(runCy,DOMSE,"BGSL",YTIME) = imFuelPrice(runCy,"OI","BGSL",YTIME);
 imFuelPrice(runCy,DOMSE,"LGN",YTIME) = imFuelPrice(runCy,"OI","LGN",YTIME);
@@ -68,9 +63,7 @@ imFuelPrice(runCy,DOMSE,"OLQ",YTIME) = imFuelPrice(runCy,"OI","OLQ",YTIME);
 imFuelPrice(runCy,DOMSE,"RFO",YTIME) = imFuelPrice(runCy,"OI","RFO",YTIME);
 imFuelPrice(runCy,"SE","GDO",YTIME) = imFuelPrice(runCy,"OI","GDO",YTIME);
 imFuelPrice(runCy,"SE","BGDO",YTIME) = imFuelPrice(runCy,"OI","BGDO",YTIME);
-imFuelPrice(runCy,"SE","BMSWAS",YTIME) = imFuelPrice(runCy,"AG","BMSWAS",YTIME);
-imFuelPrice(runCy,"BU","NGS",YTIME) = imFuelPrice(runCy,"OI","NGS",YTIME);
-imFuelPrice(runCy,"BU","GSL",YTIME) = imFuelPrice(runCy,"OI","GSL",YTIME);
+*imFuelPrice(runCy,"SE","BMSWAS",YTIME) = imFuelPrice(runCy,"AG","BMSWAS",YTIME);
 imFuelPrice(runCy,"BU","BGSL",YTIME) = imFuelPrice(runCy,"OI","BGSL",YTIME);
 imFuelPrice(runCy,SBS,"CRO",YTIME) = i08PriceCrudeOil(YTIME);
 *---

@@ -28,10 +28,11 @@ $ENDIF
     (1 + (pmCostAvgProdH2(allCy,YTIME-1) / pmCostAvgProdH2(allCy,YTIME-2) - 1)$sameas("H2F",EFS)) * 
     (1 + (pmCostAvgProdSte(allCy,YTIME-1) / pmCostAvgProdSte(allCy,YTIME-2) - 1)$sameas("STE",EFS)) *
     (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.4 - 1)$sameas("NGS",EFS)) *
-    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.8 - 1)$SECtoEFPROD("LQD",EFS)) +
-    (
-      VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,SBS,EFS,YTIME) * 1e-3 - 
-      pmCarVal(allCy,"TRADE",YTIME-1) * imCo2EmiFac(allCy,SBS,EFS,YTIME-1) * 1e-3
+    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.8 - 1)$SECtoEFPROD("LQD",EFS)) *
+    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.2 - 1)$(sameas("HCL",EFS) or sameas("LGN",EFS))) +
+    1e-3 * (
+      VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,SBS,EFS,YTIME) - 
+      pmCarVal(allCy,"TRADE",YTIME-1) * imCo2EmiFac(allCy,SBS,EFS,YTIME-1)
     )$DSBS(SBS);
 
 Q08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)$(SECtoEF(DSBS,EF) $TIME(YTIME) $runCy(allCy))..
@@ -48,11 +49,11 @@ V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)
     ) +
     (
       SUM(CDRTECH,VmConsFuelTechCDRProd(allCy,CDRTECH,EF,YTIME)) /
-      (SUM((CDRTECH,EF2)$SECtoEF(DSBS,EF2),VmConsFuelTechCDRProd(allCy,CDRTECH,EF2,YTIME)) + 1e-12)
+      (SUM((CDRTECH,EF2)$SECtoEF(DSBS,EF2),VmConsFuelTechCDRProd(allCy,CDRTECH,EF2,YTIME)) + 1e-6)
     )$sameas("DAC",DSBS) +
     (
       VmConsFuelTechCDRProd(allCy,"TEW",EF,YTIME) /
-      (SUM(EF2$SECtoEF(DSBS,EF2),VmConsFuelTechCDRProd(allCy,"TEW",EF2,YTIME)) + 1e-12)
+      (SUM(EF2$SECtoEF(DSBS,EF2),VmConsFuelTechCDRProd(allCy,"TEW",EF2,YTIME)) + 1e-6)
     )$sameas("EW",DSBS);
   
 *' The equation calculates the average fuel price per subsector. These average prices are used to further compute electricity prices in industry

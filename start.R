@@ -227,10 +227,10 @@ if (task == 0) {
   if (withRunFolder) createRunFolder(setScenarioName("DEV"))
 
   if (.Platform$OS.type == "unix") {
-    cmdCommand <- paste0(gams, " main.gms --DevMode=1 --GenerateInput=off -logOption 4 -Idir=./data 2>&1")
+    cmdCommand <- paste0(gams, " main.gms --DevMode=1 --GenerateInput=off -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1")
     system(paste0("sh -c ", shQuote(cmdCommand)))
   } else {
-    cmdCommand <- paste0(gams, " main.gms --DevMode=1 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log")
+    cmdCommand <- paste0(gams, " main.gms --DevMode=1 --GenerateInput=off -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1 | tee full.log")
     shell(cmdCommand)
   }
 
@@ -250,10 +250,10 @@ if (task == 0) {
 
 
   if (.Platform$OS.type == "unix") {
-    cmdCommand <- paste0(gams, " main.gms --DevMode=1 --GenerateInput=on -logOption 4 -Idir=./data 2>&1")
+    cmdCommand <- paste0(gams, " main.gms --DevMode=1 --GenerateInput=on -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1")
     system(cmdCommand)
   } else {
-    cmdCommand <- paste0(gams, " main.gms --DevMode=1 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 | tee full.log")
+    cmdCommand <- paste0(gams, " main.gms --DevMode=1 --GenerateInput=on -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1 | tee full.log")
     shell(cmdCommand)
   }
   if (withRunFolder) {
@@ -267,10 +267,10 @@ if (task == 0) {
   if (withRunFolder) createRunFolder(setScenarioName("RES"))
 
   if (.Platform$OS.type == "unix") {
-    cmdCommand <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1")
+    cmdCommand <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1")
     system(cmdCommand)
   } else {
-    cmdCommand <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log")
+    cmdCommand <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1 | tee full.log")
     shell(cmdCommand)
   }
 
@@ -293,13 +293,13 @@ if (task == 0) {
   if (.Platform$OS.type == "unix") {
     calib_cmd <- paste0(
     gams,
-    " main.gms -o mainCalib.lst --WriteGDX=off --DevMode=0 --fScenario=4 --GenerateInput=on --Calibration=MatCalibration -logOption 4 -Idir=./data 2>&1"
+    " main.gms -o mainCalib.lst --WriteGDX=off --DevMode=0 --fScenario=4 --GenerateInput=on --Calibration=MatCalibration --CountrySolveMode=parallel -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1"
     )
     exit_code <- system(calib_cmd)
   } else {
     calib_cmd <- paste0(
     gams,
-    " main.gms -o mainCalib.lst --WriteGDX=off --DevMode=0 --fScenario=4 --GenerateInput=on --Calibration=MatCalibration -logOption 4 -Idir=./data 2>&1 | tee fullCalib.log"
+    " main.gms -o mainCalib.lst --WriteGDX=off --DevMode=0 --fScenario=4 --GenerateInput=on --Calibration=MatCalibration --CountrySolveMode=parallel -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1 | tee fullCalib.log"
     )
     exit_code <- shell(calib_cmd)
   }
@@ -313,7 +313,7 @@ if (task == 0) {
   }
   
   # Verify calibration output files exist
-  CalibratedParams <- c("iMatFacPlaAvailCap.csv", "iMatrFactorData.csv")
+  CalibratedParams <- c("iMatFacPlaAvailCap.csv", "iMatrFactorData.csv", "iScaleEndogScrap.csv", "iCalibUsefulEnergy.csv")
   missing_files <- CalibratedParams[!file.exists(CalibratedParams)]
   if (length(missing_files) > 0) {
     cat("ERROR: Calibrated parameter files missing:", paste(missing_files, collapse = ", "), "\n")
@@ -334,10 +334,10 @@ if (task == 0) {
 
   # RESEARCH
   if (.Platform$OS.type == "unix") {
-    research_cmd <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1")
+    research_cmd <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1")
     exit_code <- system(paste0("sh -c ", shQuote(research_cmd)))
   } else {
-    research_cmd <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log")
+    research_cmd <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1 | tee full.log")
     exit_code <- shell(research_cmd)
   }
   cat("Executing research run:\n", research_cmd, "\n")
@@ -366,10 +366,10 @@ if (task == 0) {
   # Debugging mode
 
   if (.Platform$OS.type == "unix") {
-    cmdCommand <- paste0(gams, " main.gms -logOption 4 -Idir=./data 2>&1")
+    cmdCommand <- paste0(gams, " main.gms -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1")
     system(cmdCommand)
   } else {
-    cmdCommand <- paste0(gams, " main.gms -logOption 4 -Idir=./data 2>&1 | tee full.log")
+    cmdCommand <- paste0(gams, " main.gms -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1 | tee full.log")
     shell(cmdCommand)
   }
 
@@ -380,25 +380,25 @@ if (task == 0) {
 
   cmdCommand <- paste0(
       gams,
-      " main.gms -o mainCalib.lst --DevMode=0 --Calibration=MatCalibration --fScenario=4 -logOption 4 -Idir=./data 2>&1 | tee fullCalib.log"
+      " main.gms -o mainCalib.lst --DevMode=0 --Calibration=MatCalibration --fScenario=4 --CountrySolveMode=parallel -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1 | tee fullCalib.log"
     )
   if (.Platform$OS.type == "unix") {
     cmdCommand <- paste0(
       gams,
-      " main.gms -o mainCalib.lst --DevMode=0 --Calibration=MatCalibration --fScenario=4 -logOption 4 -Idir=./data 2>&1"
+      " main.gms -o mainCalib.lst --DevMode=0 --Calibration=MatCalibration --fScenario=4 --CountrySolveMode=parallel -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1"
     )
     system(cmdCommand)
   } else {
     cmdCommand <- paste0(
       gams,
-      " main.gms -o mainCalib.lst --DevMode=0 --Calibration=MatCalibration --fScenario=4 -logOption 4 -Idir=./data 2>&1 | tee fullCalib.log"
+      " main.gms -o mainCalib.lst --DevMode=0 --Calibration=MatCalibration --fScenario=4 --CountrySolveMode=parallel -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1 | tee fullCalib.log"
     )
     shell(cmdCommand)
   }
 
   if (withRunFolder && withSync) syncRun()
 
-  CalibratedParams <- c("iMatFacPlaAvailCap.csv", "iMatrFactorData.csv")
+  CalibratedParams <- c("iMatFacPlaAvailCap.csv", "iMatrFactorData.csv", "iScaleEndogScrap.csv", "iCalibUsefulEnergy.csv")
   CalibratedParamsPath <- file.path(getwd(), CalibratedParams)
   newPath <- file.path(dirname(dirname(getwd())), "data", CalibratedParams)
   file.rename(CalibratedParamsPath, newPath)
@@ -425,22 +425,54 @@ if (task == 0) {
   # Running task OPEN-PROM <-> MAgPIE SOFT-LINK (coupling-channel, mif-based)
   # Pipeline: open-prom (link2MAgPIE=off)
   #            -> couplePromToMagpie()   # OPEN-PROM gdx  -> coupling.mif
-  #            -> magpie (Rscript start.R, reads env-vars OPENPROM_COUPLING_*)
+  #            -> magpie (Rscript e3m_start.R, reads env-vars OPENPROM_COUPLING_*)
   #            -> coupleMagpieToProm()   # MAgPIE report.mif -> iPrices/iEmissions
   #            -> open-prom (link2MAgPIE=on)
   #            -> reportOutput.R (postprom)
   saveMetadata(DevMode = 0)
-  sceName <- "SSP2-PkBudg650"
 
   magpieRoot  <- NULL
   existingRun <- NULL
+  magpieProj  <- NULL
+  sceName     <- NULL
   if (file.exists("config.json")) {
     config      <- fromJSON("config.json")
     magpieRoot  <- config$magpie_path
     existingRun <- config$task7_existingRun
+    magpieProj  <- config$magpie_project
+    sceName     <- config$magpie_scenario
   }
   if (is.null(magpieRoot) || !nzchar(magpieRoot)) {
     stop("[task 7] config.json must define magpie_path (absolute path to the magpie/ directory).")
+  }
+  if (is.null(magpieProj) || !nzchar(magpieProj)) {
+    stop("[task 7] config.json must define magpie_project (subdirectory name under magpie/e3m_projects/).")
+  }
+  if (is.null(sceName) || !nzchar(sceName)) {
+    stop("[task 7] config.json must define magpie_scenario (row title in e3m_projects/<project>/scenarios.csv).")
+  }
+
+  # ---- pre-flight: validate magpie installation + project structure --------
+  # Two checks — directory existence and project +
+  # scenarios.csv existence — with explicit error messages.
+
+  # (a) magpie_path itself must exist as a directory
+  if (!dir.exists(magpieRoot)) {
+    stop("[task 7] magpie_path does not exist: ", magpieRoot,
+         ". Check config.json:magpie_path.")
+  }
+
+  # (b) the project subfolder + scenarios.csv inside it must exist
+  projDir <- file.path(magpieRoot, "e3m_projects", magpieProj)
+  scenCsv <- file.path(projDir, "scenarios.csv")
+  if (!dir.exists(projDir)) {
+    stop("[task 7] project folder not found: ", projDir,
+         ". Check config.json:magpie_project (must be a subdirectory of ",
+         "<magpie_path>/e3m_projects/).")
+  }
+  if (!file.exists(scenCsv)) {
+    stop("[task 7] scenarios.csv missing at: ", scenCsv,
+         ". The project folder is incomplete.")
   }
 
   reuseExisting <- !is.null(existingRun) && nzchar(existingRun)
@@ -462,7 +494,7 @@ if (task == 0) {
     cat(">>> [task 7] Step 1/6: OPEN-PROM run (link2MAgPIE=off)\n")
     cmd1 <- paste0(gams,
                    " main.gms --DevMode=0 --GenerateInput=off --link2MAgPIE=off",
-                   " -logOption 4 -Idir=./data 2>&1")
+                   " -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1")
     if (.Platform$OS.type == "unix") {
       system(paste0("sh -c ", shQuote(cmd1)))
     } else {
@@ -500,13 +532,16 @@ if (task == 0) {
   cat(">>> [task 7] Step 3/6: MAgPIE run\n")
   setwd(magpieRoot)
   Sys.setenv(
+    OPENPROM_MAGPIE_PROJECT     = magpieProj,
+    OPENPROM_MAGPIE_SUBSCENARIO = sceName,
     OPENPROM_COUPLING_MIF       = couplingMif,
     OPENPROM_COUPLING_SCENARIO  = sceName,
     OPENPROM_COUPLING_GHG       = "on",
     OPENPROM_COUPLING_BIOENERGY = "on"
   )
-  magpie_exit <- system("Rscript start.R")
-  Sys.unsetenv(c("OPENPROM_COUPLING_MIF", "OPENPROM_COUPLING_SCENARIO",
+  magpie_exit <- system("Rscript e3m_start.R")
+  Sys.unsetenv(c("OPENPROM_MAGPIE_PROJECT", "OPENPROM_MAGPIE_SUBSCENARIO",
+                 "OPENPROM_COUPLING_MIF", "OPENPROM_COUPLING_SCENARIO",
                  "OPENPROM_COUPLING_GHG", "OPENPROM_COUPLING_BIOENERGY"))
   if (magpie_exit != 0) {
     setwd(openPromRun)
@@ -522,15 +557,16 @@ if (task == 0) {
   coupleMagpieToProm(
     reportMifPath       = magpieReport,
     outCsvPath          = file.path(openPromRun, "iPrices_magpie.csv"),
-    outEmissionsCsvPath = file.path(openPromRun, "iEmissions_magpie.csv"),
-    gdxPath             = openPromGdx
+    outEmissionsMifPath = file.path(openPromRun, "iEmissions_magpie.mif"),
+    gdxPath             = openPromGdx,
+    scenario            = sceName
   )
 
   # ---- Step 5: OPEN-PROM run with link2MAgPIE = on ------------------------
   cat(">>> [task 7] Step 5/6: OPEN-PROM run (link2MAgPIE=on)\n")
   cmd2 <- paste0(gams,
                  " main.gms --DevMode=0 --GenerateInput=off --link2MAgPIE=on",
-                 " -logOption 4 -Idir=./data 2>&1")
+                 " -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1")
   if (.Platform$OS.type == "unix") {
     system(paste0("sh -c ", shQuote(cmd2)))
   } else {

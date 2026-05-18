@@ -13,6 +13,11 @@ iCarbValYrExog(allCy,ytime)	                               "Carbon value for eac
 iShrHeatPumpElecCons(allCy,SBS)	                           "Share of heat pump electricity consumption in total substitutable electricity (1)"						 			
 iTranfOutGasworks(allCy,EF,YTIME)	                       "Transformation Output from Gasworks, Blast Furnances and Briquetting plants (Mtoe)"	
 ODummyObj                                                  "Parameter saving objective function"
+ODummyObjPGALL                                             "Parameter saving objective function for PGALL"
+ODummyObjTRANSE                                            "Parameter saving objective function for TRANSE"
+ODummyObjINDDOMShares                                       "Parameter saving objective function for INDDOM shares"
+ODummyObjINDDOMFinalEnergy                                  "Parameter saving objective function for INDDOM final energy"
+pSolveHandle(allCy)                                      "Asynchronous solve handle by country"
 
 *'                **Interdependent Parameters**
 imCGI(allCy,YTIME)                                         "Capital Goods Index (defined as CGI(Scenario)/CGI(Baseline)) (1)"
@@ -57,6 +62,10 @@ qDummyObj                                                  "Define dummy objecti
 QmGDPPartGlob(allCy,YTIME)                                           "Global GDP share (1)"
 $IFTHEN.calib %Calibration% == MatCalibration
 qRestrain
+qDummyObjPGALL                                             "Define dummy objective function for PGALL"
+qDummyObjTRANSE                                            "Define dummy objective function for TRANSE"
+qDummyObjINDDOMShares                                       "Define dummy objective function for INDDOM shares"
+qDummyObjINDDOMFinalEnergy                                  "Define dummy objective function for INDDOM final energy"
 $ENDIF.calib
 ;
 
@@ -65,6 +74,10 @@ Variables
 
 *' *** Miscellaneous
 vDummyObj                                                  "Dummy maximisation variable (1)"
+vDummyObjPGALL                                             "Dummy maximisation variable for PGALL (1)"
+vDummyObjTRANSE                                            "Dummy maximisation variable for TRANSE (1)"
+vDummyObjINDDOMShares(DSBS)                                 "Dummy maximisation variable for INDDOM shares (1)"
+vDummyObjINDDOMFinalEnergy(DSBS)                            "Dummy maximisation variable for INDDOM final energy (1)"
 VmElecConsHeatPla(allCy,DSBS,YTIME)                        "Electricity consumed in heatpump plants (Mtoe)"
 ;
 
@@ -86,6 +99,10 @@ $else.magpie
 sLink2MAgPIE                                               "Binary flag for MAgPIE link (1=on, 0=off)" /0/
 $endif.magpie
 sModelStat                                                 "helper parameter for solver status"
+sHandleCollect                                             "helper scalar for asynchronous handle collection"
+sReadyCollect                                              "helper scalar for asynchronous wait status"
+sAsyncAttempt                                              "helper scalar for asynchronous solver attempts"
+sAsyncWaitHandle                                           "helper scalar for the asynchronous handle currently being collected"
 smFracElecPriChp                                           "Fraction of Electricity Price at which a CHP sells electricity to network" /0/
 sCY                                                        "country iterator" /0/
 sUnitToKUnit                                               "units to Kilo units conversion" /1000/

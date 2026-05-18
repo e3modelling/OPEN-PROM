@@ -32,7 +32,7 @@ VmCapSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) =
 ) * i04DataHeatProd(runCy,TSTEAM,YTIME);
 *---
 VmProdSte.LO(runCy,TSTEAM,YTIME) = 0;
-VmProdSte.L(runCy,TSTEAM,YTIME) = VmCapSte.L(runCy,TSTEAM,"%fBaseY%") + 1;
+VmProdSte.L(runCy,TSTEAM,YTIME) = i04DataHeatProd(runCy,TSTEAM,"%fBaseY%") + 1;
 VmProdSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) = VmCapSte.L(runCy,TSTEAM,YTIME);
 *---
 V09CaptRateSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) = i09CaptRateSteProd(TSTEAM);
