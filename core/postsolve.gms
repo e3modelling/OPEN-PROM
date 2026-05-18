@@ -1,6 +1,10 @@
 *' Core recursive VmCarVal state
 pmCarVal(runCyL,NAP,YTIME)$TIME(YTIME) = VmCarVal.L(runCyL,NAP,YTIME)$TIME(YTIME);
 
+option clear = VmCarVal;
+option clear = VmGDPPartGlob;
+option clear = QmGDPPartGlob;
+
 endloop;  !! close countries loop
 $ifthen.countryParallel "%CountrySolveMode%" == "parallel"
 $offImplicitAssign

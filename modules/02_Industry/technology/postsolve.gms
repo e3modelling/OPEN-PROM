@@ -38,6 +38,8 @@ option clear = V02IndAvrEffFinalUseful;
 option clear = V02PremScrpIndu;
 option clear = V02RatioRem;
 option clear = VmConsFuel;
+option clear = VmConsFuelShare;
+option clear = VmConsFuelSum;
 
 option clear = Q02DemSubUsefulSubsec;
 option clear = Q02RemEquipCapTechSubsec;
@@ -55,6 +57,8 @@ option clear = Q02IndAvrEffFinalUseful;
 option clear = Q02PremScrpIndu;
 option clear = Q02RatioRem;
 option clear = Q02ConsFuel;
+option clear = Q02ConsFuelShare;
+option clear = Q02ConsFuelSum;
 *---
 
 $ifthen.calib %Calibration% == MatCalibration
