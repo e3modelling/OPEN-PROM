@@ -108,26 +108,53 @@ V01CostFuel.L(runCy,TRANSE,TTECH,YTIME);
 V01ShareTechTr.LO(runCy,TRANSE,TTECH,YTIME) = 0;
 
 *'                *PARAMETER INITIALISATION FOR RECURSIVE LAGS*
+*---
+*' Initialize parameters for first iteration (seed from historical data)
+p01StockPcYearly(runCy,YTIME)$(DATAY(YTIME)) = imActv(YTIME,runCy,"PC");
+p01RateScrPc(runCy,TTECH,YTIME)$(DATAY(YTIME) and SECTTECH("PC",TTECH)) = 1 / i01TechLft(runCy,"PC",TTECH,YTIME);
+p01RateScrPcTot(runCy,TTECH,YTIME)$(DATAY(YTIME) and SECTTECH("PC",TTECH)) = 1 / i01TechLft(runCy,"PC",TTECH,YTIME);
+p01ActivGoodsTransp(runCy,TRANSE,YTIME)$(DATAY(YTIME) and TRANG(TRANSE)) = imActv(YTIME,runCy,TRANSE);
+p01ConsSpecificFuel(runCy,TRANSE,TTECH,EF,YTIME)$(DATAY(YTIME) and not sameas(TRANSE,"PC") and SECTTECH(TRANSE,TTECH) and TTECHtoEF(TTECH,EF)) = i01InitSpecFuelConsData(TRANSE,TTECH,EF);
+p01ConsSpecificFuel(runCy,"PC",TTECH,EF,YTIME)$(DATAY(YTIME) and SECTTECH("PC",TTECH) and TTECHtoEF(TTECH,EF)) = i01SFCPC(runCy,TTECH,EF,"%fBaseY%");
+p01ConsTechTranspSectoral(runCy,TRANSE,TTECH,EF,YTIME)$(DATAY(YTIME) and SECTTECH(TRANSE,TTECH) and not PLUGIN(TTECH) and not CHYBV(TTECH) and TTECHtoEF(TTECH,EF)) = imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME);
+p01ActivPassTrnsp(runCy,"PC",YTIME)$(DATAY(YTIME)) = imTransChar(runCy,"KM_VEH",YTIME);
+p01ActivPassTrnsp(runCy,TRANP,YTIME)$(DATAY(YTIME) and not sameas(TRANP,"PC")) = imActv(YTIME,runCy,TRANP);
+pmLft(runCy,DSBS,TECH,YTIME)$(DATAY(YTIME) and SECTTECH(DSBS,TECH)) = i01TechLft(runCy,DSBS,TECH,YTIME);
+p01NewRegPcYearly(runCy,YTIME)$(DATAY(YTIME)) = i01NewReg(runCy,YTIME);
+p01NewRegPcTechYearly(runCy,TTECH,YTIME)$(DATAY(YTIME) and SECTTECH("PC",TTECH)) = 1;
+p01NumPcScrap(runCy,YTIME)$(DATAY(YTIME)) = SUM(TTECH$SECTTECH("PC",TTECH), (1 / i01TechLft(runCy,"PC",TTECH,YTIME)) * i01StockPC(runCy,TTECH,YTIME));
+p01StockPcYearlyTech(runCy,TTECH,YTIME)$(DATAY(YTIME) and SECTTECH("PC",TTECH)) = i01StockPC(runCy,TTECH,YTIME);
+p01PcOwnPcLevl(runCy,YTIME)$(DATAY(YTIME)) = imActv(YTIME,runCy,"PC") / (i01Pop(YTIME,runCy) * 1000);
+p01GapTranspActiv(runCy,TRANSE,YTIME)$(DATAY(YTIME)) = 0;
+p01PremScrp(runCy,TRANSE,TTECH,YTIME)$(DATAY(YTIME)) = 0;
+p01CapCostAnnualized(runCy,TRANSE,TTECH,YTIME)$(DATAY(YTIME) and SECTTECH(TRANSE,TTECH)) =
+  (imDisc(runCy,TRANSE,YTIME) * exp(imDisc(runCy,TRANSE,YTIME) * i01TechLft(runCy,TRANSE,TTECH,YTIME)) /
+   (exp(imDisc(runCy,TRANSE,YTIME) * i01TechLft(runCy,TRANSE,TTECH,YTIME)) - 1 + epsilon6))
+  * imCapCostTech(runCy,TRANSE,TTECH,YTIME) * imCGI(runCy,YTIME);
+p01CostFuel(runCy,TRANSE,TTECH,YTIME)$(DATAY(YTIME) and SECTTECH(TRANSE,TTECH)) = 1;
+p01CostTranspPerMeanConsSize(runCy,TRANSE,TTECH,YTIME)$(DATAY(YTIME) and SECTTECH(TRANSE,TTECH)) = 1;
+p01ShareTechTr(runCy,TRANSE,TTECH,YTIME)$(DATAY(YTIME)) = 0;
+pmDemFinEneTranspPerFuel(runCy,TRANSE,EF,YTIME)$(DATAY(YTIME) and SECtoEF(TRANSE,EF)) = imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME);
+*---
+V01StockPcYearly.L(runCy,YTIME) = p01StockPcYearly(runCy,YTIME-1);
+V01RateScrPc.L(runCy,TTECH,YTIME) = p01RateScrPc(runCy,TTECH,YTIME-1);
+V01RateScrPcTot.L(runCy,TTECH,YTIME) = p01RateScrPcTot(runCy,TTECH,YTIME-1);
+V01ActivGoodsTransp.L(runCy,TRANSE,YTIME) = p01ActivGoodsTransp(runCy,TRANSE,YTIME-1);
+V01ConsSpecificFuel.L(runCy,TRANSE,TTECH,EF,YTIME) = p01ConsSpecificFuel(runCy,TRANSE,TTECH,EF,YTIME-1);
+V01ConsTechTranspSectoral.L(runCy,TRANSE,TTECH,EF,YTIME) = p01ConsTechTranspSectoral(runCy,TRANSE,TTECH,EF,YTIME-1);
+V01ActivPassTrnsp.L(runCy,TRANSE,YTIME) = p01ActivPassTrnsp(runCy,TRANSE,YTIME-1);
+VmLft.L(runCy,DSBS,TTECH,YTIME) = pmLft(runCy,DSBS,TTECH,YTIME-1);
+V01NewRegPcYearly.L(runCy,YTIME) = p01NewRegPcYearly(runCy,YTIME-1);
+V01NewRegPcTechYearly.L(runCy,TTECH,YTIME) = p01NewRegPcTechYearly(runCy,TTECH,YTIME-1);
+V01NumPcScrap.L(runCy,YTIME) = p01NumPcScrap(runCy,YTIME-1);
+V01StockPcYearlyTech.L(runCy,TTECH,YTIME) = p01StockPcYearlyTech(runCy,TTECH,YTIME-1);
+V01PcOwnPcLevl.L(runCy,YTIME) = p01PcOwnPcLevl(runCy,YTIME-1);
+V01GapTranspActiv.L(runCy,TRANSE,YTIME) = p01GapTranspActiv(runCy,TRANSE,YTIME-1);
+V01PremScrp.L(runCy,TRANSE,TTECH,YTIME) = p01PremScrp(runCy,TRANSE,TTECH,YTIME-1);
+V01CapCostAnnualized.L(runCy,TRANSE,TTECH,YTIME) = p01CapCostAnnualized(runCy,TRANSE,TTECH,YTIME-1);
+V01CostTranspPerMeanConsSize.L(runCy,TRANSE,TTECH,YTIME) = p01CostTranspPerMeanConsSize(runCy,TRANSE,TTECH,YTIME-1);
+V01CostFuel.L(runCy,TRANSE,TTECH,YTIME) = p01CostFuel(runCy,TRANSE,TTECH,YTIME-1);
+V01ShareTechTr.L(runCy,TRANSE,TTECH,YTIME) = p01ShareTechTr(runCy,TRANSE,TTECH,YTIME-1);
+VmDemFinEneTranspPerFuel.L(runCy,TRANSE,EF,YTIME) = pmDemFinEneTranspPerFuel(runCy,TRANSE,EF,YTIME-1);
 
-V01NewRegPcTechYearly.L(runCy,TTECH,YTIME) = 1;
 
-p01StockPcYearly(runCy,YTIME) = V01StockPcYearly.L(runCy,YTIME-1);
-p01RateScrPc(runCy,TTECH,YTIME) = V01RateScrPc.L(runCy,TTECH,YTIME-1);
-p01RateScrPcTot(runCy,TTECH,YTIME) = V01RateScrPcTot.L(runCy,TTECH,YTIME-1);
-p01ActivGoodsTransp(runCy,TRANSE,YTIME) = V01ActivGoodsTransp.L(runCy,TRANSE,YTIME-1);
-p01ConsSpecificFuel(runCy,TRANSE,TTECH,EF,YTIME) = V01ConsSpecificFuel.L(runCy,TRANSE,TTECH,EF,YTIME-1);
-p01ConsTechTranspSectoral(runCy,TRANSE,TTECH,EF,YTIME) = V01ConsTechTranspSectoral.L(runCy,TRANSE,TTECH,EF,YTIME-1);
-p01ActivPassTrnsp(runCy,TRANSE,YTIME) = V01ActivPassTrnsp.L(runCy,TRANSE,YTIME-1);
-pmLft(runCy,DSBS,TTECH,YTIME) = VmLft.L(runCy,DSBS,TTECH,YTIME-1);
-p01NewRegPcYearly(runCy,YTIME) = V01NewRegPcYearly.L(runCy,YTIME-1);
-p01NewRegPcTechYearly(runCy,TTECH,YTIME) = V01NewRegPcTechYearly.L(runCy,TTECH,YTIME-1);
-p01NumPcScrap(runCy,YTIME) = V01NumPcScrap.L(runCy,YTIME-1);
-p01StockPcYearlyTech(runCy,TTECH,YTIME) = V01StockPcYearlyTech.L(runCy,TTECH,YTIME-1);
-p01PcOwnPcLevl(runCy,YTIME) = V01PcOwnPcLevl.L(runCy,YTIME-1);
-p01GapTranspActiv(runCy,TRANSE,YTIME) = V01GapTranspActiv.L(runCy,TRANSE,YTIME-1);
-p01PremScrp(runCy,TRANSE,TTECH,YTIME) = V01PremScrp.L(runCy,TRANSE,TTECH,YTIME-1);
-p01CapCostAnnualized(runCy,TRANSE,TTECH,YTIME) = V01CapCostAnnualized.L(runCy,TRANSE,TTECH,YTIME-1);
-p01CostTranspPerMeanConsSize(runCy,TRANSE,TTECH,YTIME) = V01CostTranspPerMeanConsSize.L(runCy,TRANSE,TTECH,YTIME-1);
-p01CostFuel(runCy,TRANSE,TTECH,YTIME) = V01CostFuel.L(runCy,TRANSE,TTECH,YTIME-1);
-p01ShareTechTr(runCy,TRANSE,TTECH,YTIME) = V01ShareTechTr.L(runCy,TRANSE,TTECH,YTIME-1);
-pmDemFinEneTranspPerFuel(runCy,TRANSE,EF,YTIME) = VmDemFinEneTranspPerFuel.L(runCy,TRANSE,EF,YTIME-1);
