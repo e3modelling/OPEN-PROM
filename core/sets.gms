@@ -125,7 +125,10 @@ fscenario   "Model scenario used: 0 is No carbon price, 1 is NPi_Default, 2 is 1
 /
 %fScenario%
 /
-
+ICT
+/
+%ICT%
+/
 runCy(allCy) Countries for which the model is running
 /
 %fCountries%
@@ -382,7 +385,7 @@ EN    "Engineering"
 TX    "Textiles"
 OE    "Ore Extraction"
 OI    "Other Industrial sectors"
-SE    "Commercial"
+SE    "Services"
 AG    "Agriculture, Fishing, Forestry"
 HOU   "Residential"
 PC    "Passenger Transport - Cars"
