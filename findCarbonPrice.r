@@ -75,6 +75,7 @@ suppressPackageStartupMessages({
 inputCsvPath   <- "data/iEnvPolicies.csv"
 outputCsvPath  <- "data/iEnvPolicies_updated.csv"
 backupCsvPath  <- "data/iEnvPolicies_backup.csv"
+lastTestedCsvPath <- "data/iEnvPolicies_last_tested.csv" # Last policy tested before a failure
 workDir        <- getwd()
 lastTestedPolicy <- NULL # Most recent policy table tested by OPEN-PROM
 
@@ -263,15 +264,19 @@ autoBracketFromSeed <- function(seedAlpha, budgetTarget, envWide, yearCols, targ
   if (verbose) message(sprintf("Seed: alpha=%.4f → E=%.6f (target=%.6f)", seedAlpha, Eseed, budgetTarget))
 
   if (Eseed <= budgetTarget) {
-    aU <- seedAlpha; EU <- Eseed
-    aL <- max(minAlpha, seedAlpha / expandFactor); tries <- 0
-    repeat {
-      EL <- probe(aL); tries <- tries + 1
-      if (verbose) message(sprintf("Down probe: alpha=%.4f → E=%.6f", aL, EL))
-      if (EL > budgetTarget || tries >= maxProbes || aL <= minAlpha + 1e-9 || aL < 1e-4) break # stop also when aL is very close to zero.
-      aL <- max(minAlpha, aL / expandFactor)
+    # Emissions are already at/below target at the seed alpha. Check whether the
+    # region also meets the target with carbon prices left unchanged (alpha = 0).
+    # If so, there is nothing to optimize: skip and keep the original prices.
+    E0 <- probe(0)
+    if (verbose) message(sprintf("No-change probe: alpha=0.0000 -> E=%.6f (target=%.6f)", E0, budgetTarget))
+    if (E0 <= budgetTarget) {
+      if (verbose) message("Region already meets target with unchanged carbon prices; skipping optimization.")
+      return(list(alreadyMet = TRUE, alpha = 0,
+                  lowerAlpha = 0, upperAlpha = 0, EL = E0, EU = E0))
     }
-    if (EL <= budgetTarget) stop("No failing lower bound; decrease minAlpha or revisit monotonicity.")
+    # alpha = 0 fails and the seed passes, so [0, seed] brackets the target.
+    aL <- 0;         EL <- E0
+    aU <- seedAlpha; EU <- Eseed
   } else {
     aL <- seedAlpha; EL <- Eseed
     aU <- min(maxAlpha, seedAlpha * expandFactor); tries <- 0
@@ -429,7 +434,7 @@ calculateGhg <- function(dataMagpie) {
 # Run
 # ----------------------------
 start_time <- Sys.time()
-selectedYear <- 2035
+selectedYear <- 2030
 changeCarbonPriceFromYear <- 2026
 flagCO2eq <- TRUE
 GAMSCmdArgs <- c("--DevMode=0", "--GenerateInput=off", "lo=4", "idir=./data", paste0("--fEndY=", selectedYear))
@@ -437,33 +442,33 @@ GAMSCmdArgs <- c("--DevMode=0", "--GenerateInput=off", "lo=4", "idir=./data", pa
 # ---------------------------------------------------------
 # CASE A: Specific Regions 2030
 # targetConditionalMtCO2e MtCO2e/yr
-# targetList <- list(
-#    "CAZ" = 840,
-#    "CHA" = 13447,
-#    "GBR" = 263,
-#    "IND" = 3981,
-#    "JPN" = 766,
-#    "LAM" = 3199,
-#    "MEA" = 4218,
-#    "NEU" = 773,
-#    "OAS" = 4894,
-#    "REF" = 2904,
-#    "SSA" = 3367
-# )
+targetList <- list(
+   "CAZ" = 840,
+   "CHA" = 13447,
+   "GBR" = 263,
+   "IND" = 3981,
+   "JPN" = 766,
+   "LAM" = 3199,
+   "MEA" = 4218,
+   "NEU" = 773,
+   "OAS" = 4894,
+   "REF" = 2904,
+   "SSA" = 3367
+)
 
 # CASE A: Specific Regions 2035
 # targetConditionalMtCO2e MtCO2e/yr
-targetList <- list(
-   "CAZ" = 644,
-   "CHA" = 12808,
-   "GBR" = 156,
-   "JPN" = 575,
-   "LAM" = 1984,
-   "NEU" = 694,
-   "OAS" = 3680,
-   "REF" = 2705,
-   "SSA" = 1303
-)
+# targetList <- list(
+#    "CAZ" = 644,
+#    "CHA" = 12808,
+#    "GBR" = 156,
+#    "JPN" = 575,
+#    "LAM" = 1984,
+#    "NEU" = 694,
+#    "OAS" = 3680,
+#    "REF" = 2705,
+#    "SSA" = 1303
+# )
 
 # CASE A: Specific Regions 2050
 # targetConditionalMtCO2e MtCO2e/yr
@@ -557,7 +562,6 @@ on.exit({
   message("Log redirection ended. Console restored.")
 }, add = TRUE)
 resultsLog <- list()
-writeFinalOutput <- TRUE # Skip final overwrite if failure output is already written
 
 # Countries/Regions Loop
 for (regName in names(runQueue)) {
@@ -592,32 +596,37 @@ for (regName in names(runQueue)) {
     targetRegion = actualRegion,
     targetYear   = selectedYear,
     minAlpha     = -0.5,           # Allow price reduction up to -100% if needed
-    maxAlpha     = 10.0,            # Allow up to +400% increase
+    maxAlpha     = 50,            # Allow up to +400% increase
     expandFactor = 4.0,
     maxProbes    = 12,
     verbose      = TRUE
   )
 
-    # C. Solve
-    solveResult <- findAlphaForBudget(
-      envWide      = currentEnvWide,
-      yearCols     = yearCols,
-      budgetTarget = bg,
-      targetRegion = actualRegion, # Passes NULL if global
-      targetYear   = selectedYear,
-      lowerAlpha   = brkt$lowerAlpha,
-      upperAlpha   = brkt$upperAlpha,
-      eLow         = brkt$EL,
-      eHigh        = brkt$EU,
-      tolAlphaRel  = 1e-2,
-      tolEmisAbs   = 1e-1,
-      maxIter      = 60,
-      verbose      = TRUE,
-      writeFinalCsv = FALSE
-    )
+    # C. Solve (skip bisection if the region already meets its target)
+    if (isTRUE(brkt$alreadyMet)) {
+      finalAlpha <- 0
+      message(sprintf(" -> %s already meets target; carbon prices left unchanged (Alpha=0).", displayName))
+    } else {
+      solveResult <- findAlphaForBudget(
+        envWide      = currentEnvWide,
+        yearCols     = yearCols,
+        budgetTarget = bg,
+        targetRegion = actualRegion, # Passes NULL if global
+        targetYear   = selectedYear,
+        lowerAlpha   = brkt$lowerAlpha,
+        upperAlpha   = brkt$upperAlpha,
+        eLow         = brkt$EL,
+        eHigh        = brkt$EU,
+        tolAlphaRel  = 1e-2,
+        tolEmisAbs   = 1e-1,
+        maxIter      = 60,
+        verbose      = TRUE,
+        writeFinalCsv = FALSE
+      )
 
-    finalAlpha <- solveResult$alpha
-    message(sprintf(" -> Converged %s: Alpha=%.3f", displayName, finalAlpha))
+      finalAlpha <- solveResult$alpha
+      message(sprintf(" -> Converged %s: Alpha=%.3f", displayName, finalAlpha))
+    }
 
     # D. Update State & Backup
     currentEnvWide <- applyAlpha(currentEnvWide, yearCols, finalAlpha, actualRegion)
@@ -630,12 +639,12 @@ for (regName in names(runQueue)) {
     message(sprintf("  !! FAILURE for %s !!", displayName))
     message(sprintf("  Error: %s", e$message))
     message("  -> Reverting file to previous state and skipping...")
-    # Save the last policy table actually tested before the failure.
+    # Save the last policy table actually tested before the failure to its
+    # own dedicated file, so the normal updated/canonical/backup outputs stay intact.
     if (!is.null(lastTestedPolicy)) {
-      fwrite(lastTestedPolicy, outputCsvPath, na = "NA")
+      fwrite(lastTestedPolicy, lastTestedCsvPath, na = "NA")
+      message(sprintf("  -> Last-tested policy saved to %s", lastTestedCsvPath))
     }
-    # Prevent the final wrap-up from overwriting the failure output.  
-    writeFinalOutput <<- FALSE
 
     # Revert 'iEnvPolicies.csv' to the last known good state (backupCsvPath)
     if (file.exists(backupCsvPath)) {
@@ -664,9 +673,7 @@ sink(type = "message")
 sink()
 
 # FINISH
-# On success, write the converged policy file.
-# On failure, keep the last-tested policy written by the error handler.
-if (writeFinalOutput) {
-  writeFinalPolicyFiles(currentEnvWide, yearCols, 0.0, NULL)
-}
+# Always write the converged policy file (covers regions that succeeded).
+# Any failure's last-tested policy is kept separately in lastTestedCsvPath.
+writeFinalPolicyFiles(currentEnvWide, yearCols, 0.0, NULL)
 message(sprintf("Done. Total time: %s", Sys.time() - start_time))
