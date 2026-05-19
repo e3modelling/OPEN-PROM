@@ -25,6 +25,7 @@ def check_files_and_list_subfolders(base_path):
     for folder in subfolders:
         main_gms_path = os.path.join(folder, "main.gms")
         main_lst_path = os.path.join(folder, "main.lst")
+        main_log_path = os.path.join(folder, "main.log")
         modelstat_path = os.path.join(folder, "modelstat.txt")
 
         folder_name = folder.split(os.sep)[-1]
@@ -35,44 +36,67 @@ def check_files_and_list_subfolders(base_path):
         if not os.path.exists(main_gms_path):
             status = f"Missing: main.gms  Status: NOT A RUN".ljust(max_status_length)
             color = Fore.RED
-        elif not os.path.exists(main_lst_path) or not os.path.exists(modelstat_path):
-            if current_time > max_modification_time:
-                status = f"main.lst or modelstat.txt missing -> FAILED".ljust(max_status_length)
-                color = Fore.RED
-            else:
-                status = f"Missing: main.lst or modelstat.txt  Status: PENDING".ljust(max_status_length)
-                color = Fore.BLUE
         else:
-            with open(main_gms_path, "r") as gms_file:
-                gms_content = gms_file.readlines()
-                end_horizon_line = next((line for line in gms_content if "$evalGlobal fEndY" in line), None)
-                end_horizon_year = end_horizon_line.split()[-1]
+            solve_mode = get_solve_mode(main_gms_path)
+            status_file_path = main_log_path if solve_mode == "serial" else modelstat_path
+            status_file_label = "main.log" if solve_mode == "serial" else "modelstat.txt"
 
-            with open(modelstat_path, "r") as file:
-                all_lines = file.readlines()
-                year_matches = [re.search(r"Year:\s*(\d+)", line) for line in all_lines]
-                years = [m.group(1) for m in year_matches if m]
-                latest_year_int = max((int(y) for y in years), default=None)
-                latest_year = str(latest_year_int).rjust(max_year_length) if latest_year_int is not None else "N/A"
-                end_horizon_int = int(end_horizon_year) if end_horizon_year.isdigit() else None
-
-                time_difference = current_time - os.path.getmtime(modelstat_path)
-                modification_threshold = 15
-
-                # PENDING: not yet at horizon AND file was modified recently (run is active)
-                # COMPLETED: reached the end horizon
-                # FAILED: stopped short of horizon and is no longer being updated
-                if latest_year_int is not None and end_horizon_int is not None and latest_year_int >= end_horizon_int:
-                    status = f"Missing: NONE      Status: COMPLETED  Year: {latest_year}  Horizon: {end_horizon_year}".ljust(max_status_length)
-                elif latest_year_int is not None and end_horizon_int is not None and latest_year_int < end_horizon_int and time_difference < modification_threshold:
-                    status = f"Missing: NONE      Status: PENDING    Running_Year: {latest_year}  Horizon: {end_horizon_year}".ljust(max_status_length)
-                    color = Fore.BLUE
-                elif years:
-                    status = f"Missing: NONE      Status: FAILED     Year: {latest_year}  Horizon: {end_horizon_year}".ljust(max_status_length)
+            if not os.path.exists(main_lst_path) or not os.path.exists(status_file_path):
+                if current_time > max_modification_time:
+                    status = f"main.lst or {status_file_label} missing -> FAILED".ljust(max_status_length)
                     color = Fore.RED
                 else:
-                    status = f"modelstat.txt -> FAILED Status: FAILED  Year: {latest_year}  Horizon: {end_horizon_year}".ljust(max_status_length)
-                    color = Fore.RED
+                    status = f"Missing: main.lst or {status_file_label}  Status: PENDING".ljust(max_status_length)
+                    color = Fore.BLUE
+            else:
+                with open(main_gms_path, "r") as gms_file:
+                    gms_content = gms_file.readlines()
+                    end_horizon_line = next((line for line in gms_content if "$evalGlobal fEndY" in line), None)
+                    end_horizon_year = end_horizon_line.split()[-1]
+
+                modification_threshold = 15
+
+                if solve_mode == "serial":
+                    with open(main_log_path, "r") as file:
+                        last_lines = file.readlines()[-65:]
+                    year = None
+                    running_year = None
+                    for line in last_lines:
+                        if "an =" in line:
+                            year = line.split("=")[1].strip().rjust(max_year_length)
+                    for line in reversed(last_lines):
+                        if "an =" in line:
+                            running_year = line.split("=")[1].strip().rjust(max_year_length)
+                            break
+                    time_difference = current_time - os.path.getmtime(main_log_path)
+                    if any("*** Status: Normal completion" in line for line in last_lines):
+                        status = f"Missing: NONE      Status: COMPLETED  Year: {year}  Horizon: {end_horizon_year}".ljust(max_status_length)
+                    elif time_difference < modification_threshold:
+                        status = f"Missing: NONE      Status: PENDING    Running_Year: {running_year}  Horizon: {end_horizon_year}".ljust(max_status_length)
+                        color = Fore.BLUE
+                    else:
+                        status = f"main.log -> FAILED Status: FAILED     Year: {year}  Horizon: {end_horizon_year}".ljust(max_status_length)
+                        color = Fore.RED
+                else:
+                    with open(modelstat_path, "r") as file:
+                        all_lines = file.readlines()
+                    year_matches = [re.search(r"Year:\s*(\d+)", line) for line in all_lines]
+                    years = [m.group(1) for m in year_matches if m]
+                    latest_year_int = max((int(y) for y in years), default=None)
+                    latest_year = str(latest_year_int).rjust(max_year_length) if latest_year_int is not None else "N/A"
+                    end_horizon_int = int(end_horizon_year) if end_horizon_year.isdigit() else None
+                    time_difference = current_time - os.path.getmtime(modelstat_path)
+                    if latest_year_int is not None and end_horizon_int is not None and latest_year_int >= end_horizon_int:
+                        status = f"Missing: NONE      Status: COMPLETED  Year: {latest_year}  Horizon: {end_horizon_year}".ljust(max_status_length)
+                    elif latest_year_int is not None and end_horizon_int is not None and latest_year_int < end_horizon_int and time_difference < modification_threshold:
+                        status = f"Missing: NONE      Status: PENDING    Running_Year: {latest_year}  Horizon: {end_horizon_year}".ljust(max_status_length)
+                        color = Fore.BLUE
+                    elif years:
+                        status = f"Missing: NONE      Status: FAILED     Year: {latest_year}  Horizon: {end_horizon_year}".ljust(max_status_length)
+                        color = Fore.RED
+                    else:
+                        status = f"modelstat.txt -> FAILED Status: FAILED  Year: {latest_year}  Horizon: {end_horizon_year}".ljust(max_status_length)
+                        color = Fore.RED
 
         subfolder_status_list.append((f"{color} {folder_name:<{max_folder_name_length}} {status}{Style.RESET_ALL}", folder))
 
@@ -90,11 +114,77 @@ def find_pending_run(subfolder_status_list):
 def find_latest_run_by_creation_time(subfolder_status_list):
     candidates = [
         (status, folder) for status, folder in subfolder_status_list
-        if os.path.exists(os.path.join(folder, "modelstat.txt"))
+        if os.path.exists(os.path.join(folder, "main.gms"))
+        and (os.path.exists(os.path.join(folder, "modelstat.txt"))
+             or os.path.exists(os.path.join(folder, "main.log")))
     ]
     if not candidates:
         return None
     return max(candidates, key=lambda x: os.path.getctime(x[1]))[1]
+
+def get_solve_mode(main_gms_path):
+    try:
+        with open(main_gms_path, "r") as f:
+            for line in f:
+                m = re.search(r'\$setGlobal\s+CountrySolveMode\s+(\S+)', line, re.IGNORECASE)
+                if m:
+                    return m.group(1).strip().lower()
+    except OSError:
+        pass
+    return "serial"
+
+def read_main_log(subfolder):
+    main_log_path = os.path.join(subfolder, "main.log")
+    if os.path.exists(main_log_path):
+        with open(main_log_path, 'r') as file:
+            lines = file.readlines()
+        return lines
+    else:
+        print("main.log file not found in the selected subfolder.")
+        return []
+
+def parse_main_log(lines):
+    year_pattern = re.compile(r'an\s*=\s*(\d+)')
+    country_pattern = re.compile(r'runCyL\s*=\s*([A-Z]+)')
+    reading_solution_pattern = re.compile(r'--- Reading solution for model openprom')
+    optimal_solution_pattern = re.compile(r'\*\* Optimal solution')
+    feasible_solution_pattern = re.compile(r'\*\* Feasible solution')
+
+    country_year_status = {}
+    current_year = None
+    current_country = None
+
+    for line_num, line in enumerate(lines):
+        year_match = re.search(year_pattern, line)
+        country_match = re.search(country_pattern, line)
+        reading_solution_match = re.search(reading_solution_pattern, line)
+
+        if year_match:
+            current_year = int(year_match.group(1))
+        if country_match:
+            current_country = country_match.group(1)
+            if current_country not in country_year_status:
+                country_year_status[current_country] = {}
+
+        if reading_solution_match:
+            start_line = max(0, line_num - 5)
+            relevant_lines = lines[start_line:line_num]
+            success_found = False
+            for relevant_line in relevant_lines:
+                if re.search(optimal_solution_pattern, relevant_line):
+                    success_found = True
+                    country_year_status[current_country][current_year] = 1
+                    break
+                elif re.search(feasible_solution_pattern, relevant_line):
+                    success_found = True
+                    if current_country not in country_year_status or current_year not in country_year_status[current_country]:
+                        country_year_status[current_country][current_year] = 2
+                    break
+            if not success_found:
+                if current_country not in country_year_status or current_year not in country_year_status[current_country]:
+                    country_year_status[current_country][current_year] = 0
+
+    return country_year_status
 
 def read_modelstat(subfolder):
     modelstat_path = os.path.join(subfolder, "modelstat.txt")
@@ -178,14 +268,18 @@ def main_loop(base_path, check_interval=1.5, max_no_update_intervals=4):
         latest_subfolder = find_latest_run_by_creation_time(subfolder_status_list)
         if latest_subfolder:
             folder_name = latest_subfolder.split(os.sep)[-1]
-            lines = read_modelstat(latest_subfolder)
+            latest_gms_path = os.path.join(latest_subfolder, "main.gms")
+            latest_solve_mode = get_solve_mode(latest_gms_path)
+            reader = read_main_log if latest_solve_mode == "serial" else read_modelstat
+            parser = parse_main_log if latest_solve_mode == "serial" else parse_modelstat
+            lines = reader(latest_subfolder)
             if lines:
-                country_year_status = parse_modelstat(lines)
+                country_year_status = parser(lines)
                 df = create_dataframe(country_year_status)
                 plot_heatmap(df, folder_name, live_mode=False)
                 plt.show()
             else:
-                print("No data found in modelstat.txt for the latest subfolder.")
+                print(f"No data found for the latest subfolder ({latest_solve_mode} mode).")
         else:
             print("No run folder was found in the runs directory.")
         return
@@ -193,22 +287,28 @@ def main_loop(base_path, check_interval=1.5, max_no_update_intervals=4):
     pending_folder_name = os.path.basename(pending_folder)
     print(f"Monitoring pending run in folder: {pending_folder_name}")
 
+    pending_gms_path = os.path.join(pending_folder, "main.gms")
+    pending_solve_mode = get_solve_mode(pending_gms_path)
+    print(f"Solve mode: {pending_solve_mode}")
+    reader = read_main_log if pending_solve_mode == "serial" else read_modelstat
+    parser = parse_main_log if pending_solve_mode == "serial" else parse_modelstat
+
     plt.ion()
     consecutive_no_update_intervals = 0
 
     while consecutive_no_update_intervals < max_no_update_intervals:
         try:
-            lines = read_modelstat(pending_folder)
+            lines = reader(pending_folder)
             if not lines:
-                print(f"No data found in modelstat.txt for subfolder: {pending_folder}")
+                print(f"No data found for subfolder: {pending_folder}")
                 continue
 
-            country_year_status = parse_modelstat(lines)
+            country_year_status = parser(lines)
             pending_run = True
 
             df = create_dataframe(country_year_status, pending_run)
             if df is None or df.empty:
-                print(f"No valid data found in modelstat.txt for subfolder: {pending_folder}")
+                print(f"No valid data found for subfolder: {pending_folder}")
                 consecutive_no_update_intervals += 1
                 continue
 
