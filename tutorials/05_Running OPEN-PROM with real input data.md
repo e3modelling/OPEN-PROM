@@ -131,6 +131,35 @@ the merged scenario `start.R` runs for this row is:
 
 **Practical implication for "default" values.** Whatever sits in `config.json:scenario` is the **default for every batch row** unless that row overrides it. So put **only project-wide invariants** there (e.g. `magpie.project: "uptake"`, `gams_flags.fScenario: 200` as the most common case). **Do not** put per-run "incidentals" like `magpie.existing_prom_run` in `config.json:scenario` — if you forget to override the column on every row, all of them will silently inherit the same `existing_prom_run` path, every batch row will skip Step 1 and reuse the same OPEN-PROM round-1 result, and they'll all overwrite each other in that one folder. Keep `magpie.existing_prom_run` in `config.json` as `null` and set it on individual CSV rows only when you actually want to resume from a specific path.
 
+### 5.2 Gating rows with a `start` column
+
+To skip rows without deleting them from the CSV, add an optional `start` column:
+
+* `1` — run this row
+* `0` — skip this row
+* anything else (typo, blank cell, `yes`/`no`, etc.) — `start.R` aborts before any scenario runs, listing every offending row
+
+If the `start` column is **absent**, every row runs (backwards-compatible with older CSVs). Validation happens upfront, so a typo on row 8 won't only surface after rows 1–7 have already run.
+
+Example:
+
+```csv
+scenario_name,start,task_id,description,gams_flags.fScenario
+C200_biolim100,1,2,UPTAKE C200 biolim100,200
+C200_landHigh,1,2,UPTAKE C200 landHigh,200
+C600_biolim100,0,7,UPTAKE C600 biolim100 -- temporarily off,600
+C600_landHigh,1,7,UPTAKE C600 landHigh,600
+```
+
+Console output:
+
+```
+Skipping row 3 (scenario_name=C600_biolim100): start=0
+Loaded 4 row(s) from scenarios.csv, 3 active, 1 skipped
+```
+
+The `start` column is stripped before each row's overlay is merged onto `config.json:scenario`, so it does not leak into the scenario object passed to the task body.
+
 ## 6. What the outputs mean
 
 When `behavior.withReport: true` in `config.json`, the task body automatically calls `scripts/tasks/reportOutput.R` after task 0, 2, 3, 6 or 7, provided the run-folder workflow is active. That script converts the model output into a MIF report, typically `reporting.mif`. It may also try to create plot files, but PDF generation depends on the local LaTeX/TinyTeX setup.
