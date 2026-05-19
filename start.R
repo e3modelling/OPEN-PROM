@@ -9,6 +9,9 @@
 #              by overriding (via deep merge with dotted column names) the
 #              config.json:scenario block. task_id is restricted to {2, 7} in
 #              batch mode. The VS Code "RUN BATCH" button passes "scenarios.csv".
+#              Optional `start` column gates each row: 1 = run, 0 = skip,
+#              anything else (incl. NA) = abort with row diagnostics. If the
+#              column is absent, every row runs (backwards compatible).
 
 library(jsonlite)
 
@@ -223,7 +226,46 @@ if (!batch_mode) {
   if (nrow(csv) == 0)
     stop(csv_path, " has no data rows.")
 
-  cat(sprintf("Loaded %d scenario(s) from %s\n", nrow(csv), csv_path))
+  # ---- Optional `start` column: gate each row (1 = run, 0 = skip).
+  # Validate the whole column upfront (any value other than 0/1 aborts) so
+  # typos surface before any scenario starts running. Missing column =
+  # everything runs (backwards-compatible with pre-`start` CSVs).
+  total_rows <- nrow(csv)
+  skipped_idx <- integer(0)
+  if ("start" %in% colnames(csv)) {
+    raw_start <- csv$start
+    parsed_start <- suppressWarnings(as.integer(trimws(as.character(raw_start))))
+    bad <- which(is.na(parsed_start) | !(parsed_start %in% c(0L, 1L)))
+    if (length(bad)) {
+      details <- paste(
+        sprintf("  row %d (scenario_name=%s): start=%s",
+                bad, csv$scenario_name[bad],
+                ifelse(is.na(raw_start[bad]), "<NA>",
+                       sprintf("\"%s\"", raw_start[bad]))),
+        collapse = "\n"
+      )
+      stop(sprintf(
+        "%s: `start` column must be 1 (run) or 0 (skip); invalid value(s):\n%s",
+        csv_path, details
+      ))
+    }
+    skipped_idx <- which(parsed_start == 0L)
+    if (length(skipped_idx)) {
+      for (j in skipped_idx) {
+        cat(sprintf("Skipping row %d (scenario_name=%s): start=0\n",
+                    j, csv$scenario_name[j]))
+      }
+      csv <- csv[parsed_start == 1L, , drop = FALSE]
+    }
+    # Strip `start` itself so it isn't merged into config.json:scenario
+    csv$start <- NULL
+  }
+
+  cat(sprintf("Loaded %d row(s) from %s, %d active%s\n",
+              total_rows, csv_path, nrow(csv),
+              if (length(skipped_idx)) sprintf(", %d skipped", length(skipped_idx)) else ""))
+  if (nrow(csv) == 0)
+    stop("All rows are gated off (start=0); nothing to run.")
 
   orig_wd <- getwd()
   for (i in seq_len(nrow(csv))) {
