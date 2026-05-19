@@ -136,6 +136,7 @@ p01CostTranspPerMeanConsSize(runCy,TRANSE,TTECH,YTIME)$(DATAY(YTIME) and SECTTEC
 p01ShareTechTr(runCy,TRANSE,TTECH,YTIME)$(DATAY(YTIME)) = 0;
 pmDemFinEneTranspPerFuel(runCy,TRANSE,EF,YTIME)$(DATAY(YTIME) and SECtoEF(TRANSE,EF)) = imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME);
 *---
+*' Initialize parameters for every iteration forward (seed from first iteration results)
 V01StockPcYearly.L(runCy,YTIME) = p01StockPcYearly(runCy,YTIME-1);
 V01RateScrPc.L(runCy,TTECH,YTIME) = p01RateScrPc(runCy,TTECH,YTIME-1);
 V01RateScrPcTot.L(runCy,TTECH,YTIME) = p01RateScrPcTot(runCy,TTECH,YTIME-1);
