@@ -94,11 +94,12 @@ V01CostFuel.FX(runCy,TRANSE,TTECH,YTIME)$DATAY(YTIME) =
   !!imAnnCons(runCy,TRANSE,"modal")$(not sameas(TRANSE,"PC"))
 );
 *---
-V01CostTranspPerMeanConsSize.LO(runCy,TRANSE,TTECH,YTIME) = epsilon6;
-V01CostTranspPerMeanConsSize.L(runCy,TRANSE,TTECH,YTIME) = 1;
+V01CostTranspPerMeanConsSize.LO(runCy,TRANSE,TTECH,YTIME) = 0;
+V01CostTranspPerMeanConsSize.L(runCy,TRANSE,TTECH,YTIME)$SECTTECH(TRANSE,TTECH) = 1;
 V01CostTranspPerMeanConsSize.FX(runCy,TRANSE,TTECH,YTIME)$DATAY(YTIME) = 
 V01CapCostAnnualized.L(runCy,TRANSE,TTECH,YTIME) +
 imFixOMCostTech(runCy,TRANSE,TTECH,YTIME) +
 V01CostFuel.L(runCy,TRANSE,TTECH,YTIME);
+V01CostTranspPerMeanConsSize.FX(runCy,TRANSE,TTECH,YTIME)$(not SECTTECH(TRANSE,TTECH)) = 0;
 *---
 V01ShareTechTr.LO(runCy,TRANSE,TTECH,YTIME) = 0;

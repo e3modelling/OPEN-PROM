@@ -16,16 +16,16 @@ getRunpath <- function() {
 }
 
 reportOutput <- function(
-    runpath,
-    mif_name,
-    aggregate = TRUE,
-    fullValidation = TRUE,
-    plot_name = NULL,
-    Validation_data_for_plots = Validation_data_for_plots,
-    Validation2050 = Validation2050,
-    emissions = emissions,
-    htmlReport = htmlReport, projectReport = projectReport) {
-    
+  runpath,
+  mif_name,
+  aggregate = TRUE,
+  fullValidation = TRUE,
+  plot_name = NULL,
+  Validation_data_for_plots = Validation_data_for_plots,
+  Validation2050 = Validation2050,
+  emissions = emissions,
+  htmlReport = htmlReport, projectReport = projectReport
+) {
   # setConfig(regionmapping = mapping)
 
   reports <- convertGDXtoMIF(runpath,
@@ -35,16 +35,18 @@ reportOutput <- function(
   )
   metadata <- getMetadata(path = runpath)
   print("Report generation completed.")
-  
+
   # add validation data for plots
   for (i in 1:length(runpath)) {
-      reportOPEN_PROM <- reports[[i]]
-      metadata_run <- getMetadata(path = runpath[[i]])
-      reports[[i]] <- ValidationMif(.path = runpath, Validation_data_for_plots = Validation_data_for_plots,
-                                    reportOPEN_PROM = reportOPEN_PROM, metadata_run = metadata_run,
-                                    Validation2050 = Validation2050)
+    reportOPEN_PROM <- reports[[i]]
+    metadata_run <- getMetadata(path = runpath[[i]])
+    reports[[i]] <- ValidationMif(
+      .path = runpath, Validation_data_for_plots = Validation_data_for_plots,
+      reportOPEN_PROM = reportOPEN_PROM, metadata_run = metadata_run,
+      Validation2050 = Validation2050
+    )
   }
-  
+
   if (!is.null(plot_name)) {
     save_names <- file.path(runpath, plot_name)
     mapply( # for each scenario, unpack the magpie obj and a pdf savename
@@ -62,6 +64,8 @@ runpath <- if (length(args) > 0) args[1] else getRunpath()
 mif_name <- if (length(args) > 1) args[2] else "reporting.mif"
 plot_name <- if (length(args) > 2) args[3] else "plot.tex"
 
-reportOutput(runpath = runpath, mif_name = mif_name, plot_name = plot_name,
-             Validation_data_for_plots = FALSE, Validation2050 = FALSE,
-             emissions = TRUE, htmlReport = FALSE, projectReport = FALSE)
+reportOutput(
+  runpath = runpath, mif_name = mif_name, plot_name = plot_name,
+  Validation_data_for_plots = FALSE, Validation2050 = FALSE,
+  emissions = TRUE, htmlReport = FALSE, projectReport = FALSE
+)

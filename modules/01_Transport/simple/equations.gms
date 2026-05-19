@@ -181,11 +181,11 @@ Q01ShareTechTr(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $r
     V01ShareTechTr(allCy,TRANSE,TTECH,YTIME)
       =E=
     imMatrFactor(allCy,TRANSE,TTECH,YTIME) *
-    V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME-1)**(-3) /
-    (sum(TTECH2$SECTTECH(TRANSE,TTECH2), 
+    V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME-1)**(-2) /
+    sum(TTECH2$SECTTECH(TRANSE,TTECH2), 
       imMatrFactor(allCy,TRANSE,TTECH2,YTIME) * 
-      V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1)**(-3)
-    ) + 1e-6);
+      V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1)**(-2)
+    );
 
 *' This equation calculates the consumption of each technology in transport sectors. It considers various factors such as the lifetime of the technology,
 *' average capacity per vehicle, load factor, scrapping rate, and specific fuel consumption. The equation also takes into account the technology's variable
