@@ -135,8 +135,11 @@ p01CostFuel(runCy,TRANSE,TTECH,YTIME)$(DATAY(YTIME) and SECTTECH(TRANSE,TTECH)) 
 p01CostTranspPerMeanConsSize(runCy,TRANSE,TTECH,YTIME)$(DATAY(YTIME) and SECTTECH(TRANSE,TTECH)) = 1;
 p01ShareTechTr(runCy,TRANSE,TTECH,YTIME)$(DATAY(YTIME)) = 0;
 pmDemFinEneTranspPerFuel(runCy,TRANSE,EF,YTIME)$(DATAY(YTIME) and SECtoEF(TRANSE,EF)) = imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME);
-*---
+
 *' Initialize parameters for every iteration forward (seed from first iteration results)
+VmLft.L(runCy,DSBS,TTECH,YTIME) = pmLft(runCy,DSBS,TTECH,YTIME-1);
+*' Restore correct .L for DATAY years (pmLft(YTIME-1) is zero for the first historical year)
+VmLft.L(runCy,DSBS,TTECH,YTIME)$(DATAY(YTIME) and SECTTECH(DSBS,TTECH)) = pmLft(runCy,DSBS,TTECH,YTIME);
 V01StockPcYearly.L(runCy,YTIME) = p01StockPcYearly(runCy,YTIME-1);
 V01RateScrPc.L(runCy,TTECH,YTIME) = p01RateScrPc(runCy,TTECH,YTIME-1);
 V01RateScrPcTot.L(runCy,TTECH,YTIME) = p01RateScrPcTot(runCy,TTECH,YTIME-1);
@@ -144,7 +147,6 @@ V01ActivGoodsTransp.L(runCy,TRANSE,YTIME) = p01ActivGoodsTransp(runCy,TRANSE,YTI
 V01ConsSpecificFuel.L(runCy,TRANSE,TTECH,EF,YTIME) = p01ConsSpecificFuel(runCy,TRANSE,TTECH,EF,YTIME-1);
 V01ConsTechTranspSectoral.L(runCy,TRANSE,TTECH,EF,YTIME) = p01ConsTechTranspSectoral(runCy,TRANSE,TTECH,EF,YTIME-1);
 V01ActivPassTrnsp.L(runCy,TRANSE,YTIME) = p01ActivPassTrnsp(runCy,TRANSE,YTIME-1);
-VmLft.L(runCy,DSBS,TTECH,YTIME) = pmLft(runCy,DSBS,TTECH,YTIME-1);
 V01NewRegPcYearly.L(runCy,YTIME) = p01NewRegPcYearly(runCy,YTIME-1);
 V01NewRegPcTechYearly.L(runCy,TTECH,YTIME) = p01NewRegPcTechYearly(runCy,TTECH,YTIME-1);
 V01NumPcScrap.L(runCy,YTIME) = p01NumPcScrap(runCy,YTIME-1);
@@ -157,5 +159,3 @@ V01CostTranspPerMeanConsSize.L(runCy,TRANSE,TTECH,YTIME) = p01CostTranspPerMeanC
 V01CostFuel.L(runCy,TRANSE,TTECH,YTIME) = p01CostFuel(runCy,TRANSE,TTECH,YTIME-1);
 V01ShareTechTr.L(runCy,TRANSE,TTECH,YTIME) = p01ShareTechTr(runCy,TRANSE,TTECH,YTIME-1);
 VmDemFinEneTranspPerFuel.L(runCy,TRANSE,EF,YTIME) = pmDemFinEneTranspPerFuel(runCy,TRANSE,EF,YTIME-1);
-
-

@@ -82,12 +82,13 @@ V02VarCostTech.FX(runCy,DSBS,ITECH,YTIME)$(DATAY(YTIME) and not TRANSE(DSBS) and
     imVarCostTech(runCy,DSBS,ITECH,YTIME) / sUnitToKUnit
   ) / imUsfEneConvSubTech(runCy,DSBS,ITECH,YTIME);
 
+VmLft.L(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH)) = i01TechLft(runCy,DSBS,ITECH,YTIME);
 V02CapCostTech.FX(runCy,DSBS,ITECH,YTIME)$(not An(YTIME) and not TRANSE(DSBS) and not CDR(DSBS) and SECTTECH(DSBS,ITECH)) = ((
       (
         (imDisc(runCy,DSBS,YTIME)$(not TSTEAM(ITECH)) + imDisc(runCy,"PG",YTIME)$TSTEAM(ITECH)) * !! in case of chp plants we use the discount rate of power generation sector
         exp((imDisc(runCy,DSBS,YTIME)$(not TSTEAM(ITECH)) + imDisc(runCy,"PG",YTIME)$TSTEAM(ITECH)) * VmLft.L(runCy,DSBS,ITECH,YTIME))
       ) /
-      (exp((imDisc(runCy,DSBS,YTIME)$(not TSTEAM(ITECH)) + imDisc(runCy,"PG",YTIME)$TSTEAM(ITECH)) * VmLft.L(runCy,DSBS,ITECH,YTIME)) - 1)
+      (exp((imDisc(runCy,DSBS,YTIME)$(not TSTEAM(ITECH)) + imDisc(runCy,"PG",YTIME)$TSTEAM(ITECH)) * VmLft.L(runCy,DSBS,ITECH,YTIME)) - 1 + epsilon6)
     ) *
     imCapCostTech(runCy,DSBS,ITECH,YTIME) * imCGI(runCy,YTIME) +
     imFixOMCostTech(runCy,DSBS,ITECH,YTIME) / sUnitToKUnit)

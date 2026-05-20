@@ -20,3 +20,11 @@ option clear = Q08PriceFuelSubsecCarVal;
 option clear = Q08PriceFuelAvgSub;
 option clear = Q08PriceElecInd;
 *---
+
+VmPriceFuelSubsecCarVal.FX(runCy,SBS,"NUC",YTIME)$(An(YTIME) and SECtoEF(SBS,"NUC")) = 0.2;
+VmPriceFuelSubsecCarVal.FX(runCy,SBS,"SOL",YTIME)$(An(YTIME)) = 0;
+VmPriceFuelSubsecCarVal.FX(runCy,SBS,"GEO",YTIME)$(An(YTIME)) = 0;
+VmPriceFuelSubsecCarVal.FX(runCy,SBS,"CRO",YTIME)$(An(YTIME)) = imFuelPrice(runCy,SBS,"CRO",YTIME);
+$IFTHEN %link2MAgPIE% == on 
+VmPriceFuelSubsecCarVal.FX(runCy,SBS,"BMSWAS",YTIME)$(An(YTIME)) = iPricesMagpie(runCy,SBS,YTIME);
+$ENDIF
