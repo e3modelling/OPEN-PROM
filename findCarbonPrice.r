@@ -434,27 +434,27 @@ calculateGhg <- function(dataMagpie) {
 # Run
 # ----------------------------
 start_time <- Sys.time()
-selectedYear <- 2030
-changeCarbonPriceFromYear <- 2026
+selectedYear <- 2035
+changeCarbonPriceFromYear <- 2031
 flagCO2eq <- TRUE
 GAMSCmdArgs <- c("--DevMode=0", "--GenerateInput=off", "lo=4", "idir=./data", paste0("--fEndY=", selectedYear))
 
 # ---------------------------------------------------------
 # CASE A: Specific Regions 2030
 # targetConditionalMtCO2e MtCO2e/yr
-targetList <- list(
-   "CAZ" = 840,
-   "CHA" = 13447,
-   "GBR" = 263,
-   "IND" = 3981,
-   "JPN" = 766,
-   "LAM" = 3199,
-   "MEA" = 4218,
-   "NEU" = 773,
-   "OAS" = 4894,
-   "REF" = 2904,
-   "SSA" = 3367
-)
+# targetList <- list(
+#    "CAZ" = 840,
+#    "CHA" = 13447,
+#    "GBR" = 263,
+#    "IND" = 3981,
+#    "JPN" = 766,
+#    "LAM" = 3616,
+#    "MEA" = 4868,
+#    "NEU" = 778,
+#    "OAS" = 5244,
+#    "REF" = 3119,
+#    "SSA" = 3669
+# )
 
 # CASE A: Specific Regions 2035
 # targetConditionalMtCO2e MtCO2e/yr
@@ -463,11 +463,12 @@ targetList <- list(
 #    "CHA" = 12808,
 #    "GBR" = 156,
 #    "JPN" = 575,
-#    "LAM" = 1984,
-#    "NEU" = 694,
-#    "OAS" = 3680,
-#    "REF" = 2705,
-#    "SSA" = 1303
+#    "LAM" = 3451,
+#    "MEA" = 3832,
+#    "NEU" = 708,
+#    "OAS" = 5065,
+#    "REF" = 2969,
+#    "SSA" = 3235
 # )
 
 # CASE A: Specific Regions 2050
@@ -516,13 +517,13 @@ targetList <- list(
 # )
 
 # CASE B: No Target Regions (Empty List) -> Implies EU27 Run
-# targetList <- NULL
+targetList <- NULL
 #globalParams <- 1750 # EU-27 target 2030 in MtCO2/yr - ONLY CO2
 #globalParams <- 2250  # EU-27 target 2030 in MtCO2e/yr 
 #globalParams <- 0  # EU-27 target 2030 in MtCO2e/yr 
 
 # globalParams <- 2093  # EU-27 target 2030 in MtCO2e/yr (incl. LULUCF)
-# globalParams <- 1425  # EU-27 target 2035 in MtCO2e/yr (incl. LULUCF)
+globalParams <- 1425  # EU-27 target 2035 in MtCO2e/yr (incl. LULUCF)
 # globalParams <- 0  # EU-27 target 2050 in MtCO2e/yr (incl. LULUCF)
 
 # LOGGING SETUP
@@ -596,7 +597,7 @@ for (regName in names(runQueue)) {
     targetRegion = actualRegion,
     targetYear   = selectedYear,
     minAlpha     = -0.5,           # Allow price reduction up to -100% if needed
-    maxAlpha     = 50,            # Allow up to +400% increase
+    maxAlpha     = 20,            # Allow up to +400% increase
     expandFactor = 4.0,
     maxProbes    = 12,
     verbose      = TRUE
@@ -628,10 +629,9 @@ for (regName in names(runQueue)) {
       message(sprintf(" -> Converged %s: Alpha=%.3f", displayName, finalAlpha))
     }
 
-    # D. Update State & Backup
+    # D. Update State (backup is left untouched so it keeps the original prices)
     currentEnvWide <- applyAlpha(currentEnvWide, yearCols, finalAlpha, actualRegion)
     fwrite(currentEnvWide, inputCsvPath, na = "NA")
-    file.copy(inputCsvPath, backupCsvPath, overwrite = TRUE)
   resultsLog[[regName]] <- list(status="OK", alpha=finalAlpha)
 }, error = function(e) {
 
@@ -642,8 +642,10 @@ for (regName in names(runQueue)) {
     # Save the last policy table actually tested before the failure to its
     # own dedicated file, so the normal updated/canonical/backup outputs stay intact.
     if (!is.null(lastTestedPolicy)) {
-      fwrite(lastTestedPolicy, lastTestedCsvPath, na = "NA")
-      message(sprintf("  -> Last-tested policy saved to %s", lastTestedCsvPath))
+      # Region-specific filename so each failing country's last-tested
+      # carbon price is preserved (not overwritten by later failures).
+      regionLastTestedCsvPath <- sub("\\.csv$", paste0("_", regName, ".csv"), lastTestedCsvPath)
+      fwrite(lastTestedPolicy, regionLastTestedCsvPath, na = "NA")
     }
 
     # Revert 'iEnvPolicies.csv' to the last known good state (backupCsvPath)
