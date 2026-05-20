@@ -255,7 +255,7 @@ $setGlobal Prices           legacy
 $setGlobal Heat             heat
 $setGlobal Curves           off          !! To disable learning curves module, use: $setGlobal Curves off
 $setGlobal Economy          economy
-$setGlobal ClimateImpact    iam_compact          !! To enable climate-impact overlay (CAPEX / CF / cooling demand), use: $setGlobal ClimateImpact iam_compact
+$setGlobal ClimateImpact    off          !! Use iam_compact to enable the module, it includes impacts `cooling electricity demand increase in HOU/SE`, `CF decrease for hydro, fossils, biomass, and nuclear`, and optional `CAPEX increase`.
 
 ** CORE MODEL FILES **
 *' SETS
