@@ -58,7 +58,7 @@ i02ElaSub(runCy,DSBS) = 2;
 *---
 
 *---
-i02SensCarbon(YTIME) = 10;
+i02SensCarbon(YTIME) = 2;
 *---
 imCO2CaptRateIndustry(runCy,CCSTECH,YTIME) = 0.9;
 *---
