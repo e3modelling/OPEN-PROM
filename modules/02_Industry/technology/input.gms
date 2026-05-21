@@ -56,6 +56,10 @@ i02ElaSub(runCy,DSBS) = 2;
 *---
 * i02ScaleEndogScrap(DSBS)$(not TRANSE(DSBS) and not CDR(DSBS)) = 3./SUM(ITECH$SECTTECH(DSBS,ITECH),1);
 *---
+
+*---
+i02SensCarbon(YTIME) = 10;
+*---
 imCO2CaptRateIndustry(runCy,CCSTECH,YTIME) = 0.9;
 *---
 alias(ITECH,ITECH2);
