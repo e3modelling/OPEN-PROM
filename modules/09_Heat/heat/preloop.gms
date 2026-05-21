@@ -21,7 +21,7 @@ VmDemTotSte.LO(runCy,YTIME) = 0;
 VmDemTotSte.L(runCy,YTIME) = (i03DataGrossInlCons(runCy,"STE","%fBaseY%") - imFuelTrade(runCy,"IMPORTS","STE","%fBaseY%") + imFuelTrade(runCy,"EXPORTS","STE","%fBaseY%")) + 1;
 VmDemTotSte.FX(runCy,YTIME)$DATAY(YTIME) = (i03DataGrossInlCons(runCy,"STE",YTIME) - imFuelTrade(runCy,"IMPORTS","STE",YTIME) + imFuelTrade(runCy,"EXPORTS","STE",YTIME));
 *---
-VmCapSte.LO(runCy,TSTEAM,YTIME) = epsilon6;
+VmCapSte.LO(runCy,TSTEAM,YTIME) = 0;
 VmCapSte.L(runCy,TSTEAM,YTIME) = i04DataHeatProd(runCy,TSTEAM,"%fBaseY%") + 1;
 VmCapSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) = 
 (

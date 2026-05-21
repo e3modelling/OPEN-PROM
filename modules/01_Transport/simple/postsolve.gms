@@ -25,6 +25,26 @@ p01ShareTechTr(runCyL,TRANSE,TTECH,YTIME)$TIME(YTIME) = V01ShareTechTr.L(runCyL,
 pmDemFinEneTranspPerFuel(runCyL,TRANSE,EF,YTIME)$TIME(YTIME) = VmDemFinEneTranspPerFuel.L(runCyL,TRANSE,EF,YTIME)$TIME(YTIME);
 *---
 
+option clear = Q01ActivGoodsTransp;
+option clear = Q01GapTranspActiv;
+option clear = Q01CostTranspPerMeanConsSize;
+option clear = Q01ShareTechTr;
+option clear = Q01ConsTechTranspSectoral;
+option clear = Q01StockPcYearly;
+option clear = Q01StockPcYearlyTech;
+option clear = Q01NewRegPcYearly;
+option clear = Q01NewRegPcTechYearly;
+option clear = Q01ActivPassTrnsp;
+option clear = Q01NumPcScrap;
+option clear = Q01PcOwnPcLevl;
+option clear = Q01RateScrPc;
+option clear = Q01CapCostAnnualized;
+option clear = Q01CostFuel;
+option clear = Q01PremScrp;
+option clear = Q01RateScrPcTot;
+option clear = Q01DemFinEneTranspPerFuel;
+option clear = Q01Lft;
+
 option clear = V01ActivGoodsTransp;
 option clear = V01GapTranspActiv;
 option clear = V01ConsSpecificFuel;
@@ -45,27 +65,6 @@ option clear = V01PremScrp;
 option clear = V01RateScrPcTot;
 option clear = VmDemFinEneTranspPerFuel;
 option clear = VmLft;
-
-option clear = Q01ActivGoodsTransp;
-option clear = Q01GapTranspActiv;
-option clear = Q01CostTranspPerMeanConsSize;
-option clear = Q01ShareTechTr;
-option clear = Q01ConsTechTranspSectoral;
-option clear = Q01StockPcYearly;
-option clear = Q01StockPcYearlyTech;
-option clear = Q01NewRegPcYearly;
-option clear = Q01NewRegPcTechYearly;
-option clear = Q01ActivPassTrnsp;
-option clear = Q01NumPcScrap;
-option clear = Q01PcOwnPcLevl;
-option clear = Q01RateScrPc;
-option clear = Q01CapCostAnnualized;
-option clear = Q01CostFuel;
-option clear = Q01PremScrp;
-option clear = Q01RateScrPcTot;
-option clear = Q01DemFinEneTranspPerFuel;
-option clear = Q01Lft;
-*---
 
 *---
 *' Initialize parameters for every iteration forward (seed from first iteration results)

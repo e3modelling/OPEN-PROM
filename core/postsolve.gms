@@ -2,7 +2,9 @@
 pmCarVal(runCyL,NAP,YTIME)$TIME(YTIME) = VmCarVal.L(runCyL,NAP,YTIME)$TIME(YTIME);
 
 option clear = VmCarVal;
-VmCarVal.FX(runCy,"TRADE",YTIME)$(An(YTIME)) = iCarbValYrExog(runCy,YTIME);
+*'                *PARAMETER INITIALISATION FOR RECURSIVE VmCarVal LAGS*
+pmCarVal(runCy,"TRADE",YTIME)$(DATAY(YTIME)) = iCarbValYrExog(runCy,YTIME);
+VmCarVal.L(runCy,NAP,YTIME) = pmCarVal(runCy,NAP,YTIME-1);
 endloop;  !! close countries loop
 $ifthen.countryParallel "%CountrySolveMode%" == "parallel"
 $offImplicitAssign

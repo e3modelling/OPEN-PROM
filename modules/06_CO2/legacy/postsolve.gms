@@ -47,3 +47,17 @@ option clear = Q06ConsFuelTechCDRProd;
 option clear = Q06ConsFuelCDRProd;
 option clear = Q06CstCO2SeqCsts;
 *---
+*' Initialize variable levels from previous period parameter
+V06CO2CaptureCCS.L(runCy,SBS,EFS,YTIME) = p06CO2CaptureCCS(runCy,SBS,EFS,YTIME-1);
+V06CaptCummCO2.L(runCy,YTIME) = p06CaptCummCO2(runCy,YTIME-1);
+V06CaptCummCO2Glob.L(YTIME) = p06CaptCummCO2Glob(YTIME-1);
+V06GrossCapDAC.L(CDRTECH,YTIME) = p06GrossCapDAC(CDRTECH,YTIME-1);
+V06FixOandMDAC.L(CDRTECH,YTIME) = p06FixOandMDAC(CDRTECH,YTIME-1);
+V06VarCostDAC.L(CDRTECH,YTIME) = p06VarCostDAC(CDRTECH,YTIME-1);
+V06LvlCostDAC.L(runCy,CDRTECH,YTIME) = p06LvlCostDAC(runCy,CDRTECH,YTIME-1);
+V06ProfRateDAC.L(runCy,CDRTECH,YTIME) = p06ProfRateDAC(runCy,CDRTECH,YTIME-1);
+V06CapFacNewDAC.L(runCy,CDRTECH,YTIME) = p06CapFacNewDAC(runCy,CDRTECH,YTIME-1);
+V06CapCDR.L(runCy,CDRTECH,YTIME) = p06CapCDR(runCy,CDRTECH,YTIME-1);
+VmCstCO2SeqCsts.L(runCy,YTIME) = pmCstCO2SeqCsts(runCy,YTIME-1);
+VmConsFuelTechCDRProd.L(runCy,CDRTECH,EFS,YTIME) = pmConsFuelTechCDRProd(runCy,CDRTECH,EFS,YTIME-1);
+VmConsFuelCDRProd.L(runCy,EFS,YTIME) = pmConsFuelCDRProd(runCy,EFS,YTIME-1);

@@ -133,6 +133,7 @@ p02PremScrpIndu(runCy,DSBS,ITECH,YTIME)$(DATAY(YTIME)) = 0;
 p02RatioRem(runCy,DSBS,ITECH,YTIME)$(DATAY(YTIME) and SECTTECH(DSBS,ITECH)) = 1;
 pmConsFuel(runCy,DSBS,EF,YTIME)$(DATAY(YTIME) and not HEATPUMP(EF) and not TRANSE(DSBS) and SECtoEF(DSBS,EF)) = imFuelConsPerFueSub(runCy,DSBS,EF,YTIME);
 *---
+
 *' Initialize parameters for every iteration forward (seed from first iteration results)
 V02DemSubUsefulSubsec.L(runCy,DSBS,YTIME) = p02DemSubUsefulSubsec(runCy,DSBS,YTIME-1);
 V02RemEquipCapTechSubsec.L(runCy,DSBS,ITECH,YTIME) = p02RemEquipCapTechSubsec(runCy,DSBS,ITECH,YTIME-1);

@@ -86,3 +86,30 @@ option clear = Q04ConsFuelElecProd;
 $ifthen.calib %Calibration% == MatCalibration
 i04MatFacPlaAvailCap.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = i04MatFacPlaAvailCap.L(runCyL,PGALL,YTIME)$TIME(YTIME);
 $endif.calib
+*---
+*' Initialize variable levels from previous period parameter
+V04CapElecNominal.L(runCy,PGALL,YTIME) = p04CapElecNominal(runCy,PGALL,YTIME-1);
+V04ShareTechPG.L(runCy,PGALL,YTIME) = p04ShareTechPG(runCy,PGALL,YTIME-1);
+V04CostHourProdInvDec.L(runCy,PGALL,YTIME) = p04CostHourProdInvDec(runCy,PGALL,YTIME-1);
+V04CostVarTech.L(runCy,PGALL,YTIME) = p04CostVarTech(runCy,PGALL,YTIME-1);
+V04IndxEndogScrap.L(runCy,PGALL,YTIME) = p04IndxEndogScrap(runCy,PGALL,YTIME-1);
+V04CapElecNonCHP.L(runCy,YTIME) = p04CapElecNonCHP(runCy,YTIME-1);
+V04GapGenCapPowerDiff.L(runCy,YTIME) = p04GapGenCapPowerDiff(runCy,YTIME-1);
+V04ShareSatPG.L(runCy,PGALL,YTIME) = p04ShareSatPG(runCy,PGALL,YTIME-1);
+V04SharePowPlaNewEq.L(runCy,PGALL,YTIME) = p04SharePowPlaNewEq(runCy,PGALL,YTIME-1);
+V04SortPlantDispatch.L(runCy,PGALL,YTIME) = p04SortPlantDispatch(runCy,PGALL,YTIME-1);
+V04NewCapElec.L(runCy,PGALL,YTIME) = p04NewCapElec(runCy,PGALL,YTIME-1);
+V04NetNewCapElec.L(runCy,PGALL,YTIME) = p04NetNewCapElec(runCy,PGALL,YTIME-1);
+V04DemElecTot.L(runCy,YTIME) = p04DemElecTot(runCy,YTIME-1);
+V04ProdElecEstCHP.L(runCy,TCHP,YTIME) = p04ProdElecEstCHP(runCy,TCHP,YTIME-1);
+V04CapexFixCostPG.L(runCy,PGALL,YTIME) = p04CapexFixCostPG(runCy,PGALL,YTIME-1);
+V04ShareMixWndSol.L(runCy,YTIME) = p04ShareMixWndSol(runCy,YTIME-1);
+V04CapexRESRate.L(runCy,PGALL,YTIME) = p04CapexRESRate(runCy,PGALL,YTIME-1);
+V04CO2CaptRate.L(runCy,PGALL,YTIME) = p04CO2CaptRate(runCy,PGALL,YTIME-1);
+V04CostCapTech.L(runCy,PGALL,YTIME) = p04CostCapTech(runCy,PGALL,YTIME-1);
+V04CCSRetroFit.L(runCy,PGALL,YTIME) = p04CCSRetroFit(runCy,PGALL,YTIME-1);
+V04ScrpRate.L(runCy,PGALL,YTIME) = p04ScrpRate(runCy,PGALL,YTIME-1);
+VmProdElec.L(runCy,PGALL,YTIME) = pmProdElec(runCy,PGALL,YTIME-1);
+VmCostPowGenAvgLng.L(runCy,YTIME) = pmCostPowGenAvgLng(runCy,YTIME-1);
+VmCapElec.L(runCy,PGALL,YTIME) = pmCapElec(runCy,PGALL,YTIME-1);
+VmConsFuelElecProd.L(runCy,EFS,YTIME) = pmConsFuelElecProd(runCy,EFS,YTIME-1);
