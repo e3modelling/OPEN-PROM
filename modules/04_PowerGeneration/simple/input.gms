@@ -184,4 +184,4 @@ i04ShareFuels(runCy,PGALL,PGEF)$PGALLTOEF(PGALL,PGEF) =
   1 / CARD(PGALL)
 )$(not SUM(PGEF2$PGALLTOEF(PGALL,PGEF2),i03InpTotTransfProcess(runCy,"PG",PGEF2,"%fBaseY%")));
 
-i04SensCarbon(YTIME) = 2;
+i04SensCarbon(YTIME) = 0.8;

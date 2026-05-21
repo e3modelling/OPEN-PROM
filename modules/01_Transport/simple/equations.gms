@@ -181,10 +181,21 @@ Q01ShareTechTr(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $r
     V01ShareTechTr(allCy,TRANSE,TTECH,YTIME)
       =E=
     imMatrFactor(allCy,TRANSE,TTECH,YTIME) *
-    V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME-1)**(-3) /
+    (V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME-1)
+            + i01SensCarbon(YTIME) * sum(EF$TTECHtoEF(TTECH,EF), 
+            i01ShareBlend(allCy,TRANSE,EF,YTIME) *
+            1e-3 *(VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,TRANSE,EF,YTIME))
+            )
+    )
+    **(-3) /
     (sum(TTECH2$SECTTECH(TRANSE,TTECH2), 
       imMatrFactor(allCy,TRANSE,TTECH2,YTIME) * 
-      V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1)**(-3)
+      (V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1)
+            + i01SensCarbon(YTIME) * sum(EF$TTECHtoEF(TTECH2,EF), 
+            i01ShareBlend(allCy,TRANSE,EF,YTIME) *
+            1e-3 *(VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,TRANSE,EF,YTIME))
+            )
+      )**(-3)
     ) + 1e-6);
 
 *' This equation calculates the consumption of each technology in transport sectors. It considers various factors such as the lifetime of the technology,
@@ -362,11 +373,21 @@ Q01PremScrp(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME)$SECTTECH(TRANSE,TTECH)$runCy(
     V01PremScrp(allCy,TRANSE,TTECH,YTIME)
         =E=
     1 -
-    (V01CostFuel(allCy,TRANSE,TTECH,YTIME-1) + 1e-4) ** (-2) /
+    (V01CostFuel(allCy,TRANSE,TTECH,YTIME-1) + 1e-4
+           + i01SensCarbon(YTIME) * sum(EF$TTECHtoEF(TTECH,EF), 
+            i01ShareBlend(allCy,TRANSE,EF,YTIME) *
+            1e-3 *(VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,TRANSE,EF,YTIME))
+            ) 
+    ) ** (-2) /
     (
       (V01CostFuel(allCy,TRANSE,TTECH,YTIME-1) + 1e-4) ** (-2) +
       i01PremScrpFac(allCy,TRANSE,TTECH,YTIME) * 
       SUM(TTECH2$(not sameas(TTECH2,TTECH) and SECTTECH(TRANSE,TTECH2)),
-        (V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1) + 1e-4) ** (-2)
+        (V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1) + 1e-4
+            + i01SensCarbon(YTIME) * sum(EF$TTECHtoEF(TTECH2,EF), 
+            i01ShareBlend(allCy,TRANSE,EF,YTIME) *
+            1e-3 *(VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,TRANSE,EF,YTIME))
+            )
+        ) ** (-2)
       )
     );
