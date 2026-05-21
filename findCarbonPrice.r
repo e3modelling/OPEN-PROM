@@ -434,27 +434,27 @@ calculateGhg <- function(dataMagpie) {
 # Run
 # ----------------------------
 start_time <- Sys.time()
-selectedYear <- 2035
-changeCarbonPriceFromYear <- 2031
+selectedYear <- 2030
+changeCarbonPriceFromYear <- 2026
 flagCO2eq <- TRUE
 GAMSCmdArgs <- c("--DevMode=0", "--GenerateInput=off", "lo=4", "idir=./data", paste0("--fEndY=", selectedYear))
 
 # ---------------------------------------------------------
 # CASE A: Specific Regions 2030
 # targetConditionalMtCO2e MtCO2e/yr
-# targetList <- list(
-#    "CAZ" = 840,
-#    "CHA" = 13447,
-#    "GBR" = 263,
-#    "IND" = 3981,
-#    "JPN" = 766,
-#    "LAM" = 3616,
-#    "MEA" = 4868,
-#    "NEU" = 778,
-#    "OAS" = 5244,
-#    "REF" = 3119,
-#    "SSA" = 3669
-# )
+targetList <- list(
+  #  "CAZ" = 840,
+  #  "CHA" = 13447,
+  #  "GBR" = 263,
+  #  "IND" = 3981,
+  #  "JPN" = 766,
+  #  "LAM" = 3618,
+  #  "MEA" = 4868,
+  #  "NEU" = 842,
+  #  "OAS" = 5244,
+  #  "REF" = 3119,
+  #  "SSA" = 3733
+)
 
 # CASE A: Specific Regions 2035
 # targetConditionalMtCO2e MtCO2e/yr
@@ -463,9 +463,9 @@ GAMSCmdArgs <- c("--DevMode=0", "--GenerateInput=off", "lo=4", "idir=./data", pa
 #    "CHA" = 12808,
 #    "GBR" = 156,
 #    "JPN" = 575,
-#    "LAM" = 3451,
+#    "LAM" = 3083,
 #    "MEA" = 3832,
-#    "NEU" = 708,
+#    "NEU" = 771,
 #    "OAS" = 5065,
 #    "REF" = 2969,
 #    "SSA" = 3235
@@ -474,17 +474,18 @@ GAMSCmdArgs <- c("--DevMode=0", "--GenerateInput=off", "lo=4", "idir=./data", pa
 # CASE A: Specific Regions 2050
 # targetConditionalMtCO2e MtCO2e/yr
 # targetList <- list(
-#    "CAZ" = 0,
-#    "CHA" = 48,
+#    "CAZ" = 68,
+#    "CHA" = 0,
 #    "GBR" = 0,
 #    "IND" = 0,
 #    "JPN" = 0,
-#    "LAM" = 1383,
-#    "MEA" = 2351,
+#    "LAM" = 709,
+#    "MEA" = 2167,
 #    "NEU" = 138,
-#    "OAS" = 747,
+#    "OAS" = 881,
 #    "REF" = 375,
-#    "SSA" = 1569
+#    "SSA" = 1665,
+#    "USA" = 0
 # )
 
 # targetConditionalMtCO2 MtCO2/yr - ONLY CO2
@@ -522,8 +523,8 @@ targetList <- NULL
 #globalParams <- 2250  # EU-27 target 2030 in MtCO2e/yr 
 #globalParams <- 0  # EU-27 target 2030 in MtCO2e/yr 
 
-# globalParams <- 2093  # EU-27 target 2030 in MtCO2e/yr (incl. LULUCF)
-globalParams <- 1425  # EU-27 target 2035 in MtCO2e/yr (incl. LULUCF)
+globalParams <- 2093  # EU-27 target 2030 in MtCO2e/yr (incl. LULUCF)
+# globalParams <- 1425  # EU-27 target 2035 in MtCO2e/yr (incl. LULUCF)
 # globalParams <- 0  # EU-27 target 2050 in MtCO2e/yr (incl. LULUCF)
 
 # LOGGING SETUP
@@ -597,8 +598,8 @@ for (regName in names(runQueue)) {
     targetRegion = actualRegion,
     targetYear   = selectedYear,
     minAlpha     = -0.5,           # Allow price reduction up to -100% if needed
-    maxAlpha     = 20,            # Allow up to +400% increase
-    expandFactor = 4.0,
+    maxAlpha     = 3.0,            # Allow up to +400% increase
+    expandFactor = 2.0,
     maxProbes    = 12,
     verbose      = TRUE
   )
