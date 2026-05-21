@@ -47,14 +47,14 @@ Q02PremScrpIndu(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and n
     V02PremScrpIndu(allCy,DSBS,ITECH,YTIME)
         =E=
     1 - (V02VarCostTech(allCy,DSBS,ITECH,YTIME-1) * i02util(allCy,DSBS,ITECH,YTIME-1) + 1e-3
-    + i02SensCarbon(YTIME) * sum(EF$ITECHtoEF(ITECH,EF), 
+    + i02SensCarbon(YTIME,DSBS) * sum(EF$ITECHtoEF(ITECH,EF), 
             i02ShareBlend(allCy,DSBS,ITECH,EF,YTIME) *
             1e-3 *(VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,DSBS,EF,YTIME))
             )
     ) ** (-2) /
     (
       (V02VarCostTech(allCy,DSBS,ITECH,YTIME-1) * i02util(allCy,DSBS,ITECH,YTIME-1) + 1e-3
-    + i02SensCarbon(YTIME) * sum(EF$ITECHtoEF(ITECH,EF), 
+    + i02SensCarbon(YTIME,DSBS) * sum(EF$ITECHtoEF(ITECH,EF), 
             i02ShareBlend(allCy,DSBS,ITECH,EF,YTIME) *
             1e-3 *(VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,DSBS,EF,YTIME))
             )      
@@ -62,7 +62,7 @@ Q02PremScrpIndu(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and n
       i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME) * (
         sum(ITECH2$(not sameas(ITECH2,ITECH) and SECTTECH(DSBS,ITECH2)),
           V02CostTech(allCy,DSBS,ITECH2,YTIME-1) + V02VarCostTech(allCy,DSBS,ITECH2,YTIME-1)
-            + i02SensCarbon(YTIME) * sum(EF$ITECHtoEF(ITECH2,EF), 
+            + i02SensCarbon(YTIME,DSBS) * sum(EF$ITECHtoEF(ITECH2,EF), 
             i02ShareBlend(allCy,DSBS,ITECH2,EF,YTIME) *
             1e-3 *(VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,DSBS,EF,YTIME))
             )
@@ -149,14 +149,14 @@ Q02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $SECTTECH(DSBS,I
         =E=
     imMatrFactor(allCy,DSBS,ITECH,YTIME) *
     (V02CostTech(allCy,DSBS,ITECH,YTIME-1) 
-        + i02SensCarbon(YTIME) * sum(EF$ITECHtoEF(ITECH,EF), 
+        + i02SensCarbon(YTIME,DSBS) * sum(EF$ITECHtoEF(ITECH,EF), 
             i02ShareBlend(allCy,DSBS,ITECH,EF,YTIME) *
             1e-3 *(VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,DSBS,EF,YTIME))
             )) ** (-i02ElaSub(allCy,DSBS)) /
     sum(ITECH2$SECTTECH(DSBS,ITECH2),
       imMatrFactor(allCy,DSBS,ITECH2,YTIME) *
       (V02CostTech(allCy,DSBS,ITECH2,YTIME-1)
-          + i02SensCarbon(YTIME) * sum(EF$ITECHtoEF(ITECH2,EF), 
+          + i02SensCarbon(YTIME,DSBS) * sum(EF$ITECHtoEF(ITECH2,EF), 
             i02ShareBlend(allCy,DSBS,ITECH2,EF,YTIME) *
             1e-3 *(VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,DSBS,EF,YTIME))
             )) ** (-i02ElaSub(allCy,DSBS))
