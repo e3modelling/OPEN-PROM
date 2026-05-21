@@ -79,7 +79,7 @@ V02VarCostTech.FX(runCy,DSBS,ITECH,YTIME)$(DATAY(YTIME) and not TRANSE(DSBS) and
       (sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal.L(runCy,NAP,YTIME))) +
       VmRenValue.L(YTIME)$(not RENEF(ITECH) and not NENSE(DSBS)) !! needs change of units
     ) +
-    imVarCostTech(runCy,DSBS,ITECH,YTIME) / sUnitToKUnit
+    imVarCostTech(runCy,DSBS,ITECH,YTIME) / sUnitToKUnit / ToeToTons(DSBS,ITECH)
   ) / imUsfEneConvSubTech(runCy,DSBS,ITECH,YTIME);
 
 V02CapCostTech.FX(runCy,DSBS,ITECH,YTIME)$(not An(YTIME) and not TRANSE(DSBS) and not CDR(DSBS) and SECTTECH(DSBS,ITECH)) = ((
@@ -91,7 +91,7 @@ V02CapCostTech.FX(runCy,DSBS,ITECH,YTIME)$(not An(YTIME) and not TRANSE(DSBS) an
     ) *
     imCapCostTech(runCy,DSBS,ITECH,YTIME) * imCGI(runCy,YTIME) +
     imFixOMCostTech(runCy,DSBS,ITECH,YTIME) / sUnitToKUnit)
-    / imUsfEneConvSubTech(runCy,DSBS,ITECH,YTIME);
+    / imUsfEneConvSubTech(runCy,DSBS,ITECH,YTIME) / ToeToTons(DSBS,ITECH) ;
 *---
 V02CostTech.LO(runCy,DSBS,ITECH,YTIME) = 0;
 V02CostTech.L(runCy,DSBS,ITECH,YTIME) = 1;
