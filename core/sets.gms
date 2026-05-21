@@ -1282,6 +1282,13 @@ BALEF fuels in balance report
 BIOFUELS(EF)
 /BGSL,BGDO,BKRS/
 
+BioToFossilFuel(EF,EF)  Mapping from bio fuels to fossil fuels
+/
+BGSL.GSL
+BGDO.GDO
+BKRS.KRS
+/
+
 BALEF2EFS(BALEF, EFS) Mapping from balance fuels to model fuels
 /
 "Total".(HCL,LGN,CRO,LPG,GSL,BGSL,KRS,BKRS,GDO,BGDO,RFO,OLQ,NGS,OGS,NUC,STE,HYD,WND,SOL,BMSWAS,GEO,MET,ETH,H2F,ELC)
