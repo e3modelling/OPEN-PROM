@@ -182,7 +182,7 @@ Q01ShareTechTr(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $r
       =E=
     imMatrFactor(allCy,TRANSE,TTECH,YTIME) *
     (V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME-1)
-            + i01SensCarbon(YTIME,TRANSE) * sum(EF$TTECHtoEF(TTECH,EF), 
+            + i01SensCarbon(allCy,YTIME,TRANSE) * sum(EF$TTECHtoEF(TTECH,EF), 
             i01ShareBlend(allCy,TRANSE,EF,YTIME) *
             1e-3 *(VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,TRANSE,EF,YTIME))
             )
@@ -191,7 +191,7 @@ Q01ShareTechTr(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $r
     (sum(TTECH2$SECTTECH(TRANSE,TTECH2), 
       imMatrFactor(allCy,TRANSE,TTECH2,YTIME) * 
       (V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1)
-            + i01SensCarbon(YTIME,TRANSE) * sum(EF$TTECHtoEF(TTECH2,EF), 
+            + i01SensCarbon(allCy,YTIME,TRANSE) * sum(EF$TTECHtoEF(TTECH2,EF), 
             i01ShareBlend(allCy,TRANSE,EF,YTIME) *
             1e-3 *(VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,TRANSE,EF,YTIME))
             )
@@ -374,7 +374,7 @@ Q01PremScrp(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME)$SECTTECH(TRANSE,TTECH)$runCy(
         =E=
     1 -
     (V01CostFuel(allCy,TRANSE,TTECH,YTIME-1) + 1e-4
-           + i01SensCarbon(YTIME,TRANSE) * sum(EF$TTECHtoEF(TTECH,EF), 
+           + i01SensCarbon(allCy,YTIME,TRANSE) * sum(EF$TTECHtoEF(TTECH,EF), 
             i01ShareBlend(allCy,TRANSE,EF,YTIME) *
             1e-3 *(VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,TRANSE,EF,YTIME))
             ) 
@@ -384,7 +384,7 @@ Q01PremScrp(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME)$SECTTECH(TRANSE,TTECH)$runCy(
       i01PremScrpFac(allCy,TRANSE,TTECH,YTIME) * 
       SUM(TTECH2$(not sameas(TTECH2,TTECH) and SECTTECH(TRANSE,TTECH2)),
         (V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1) + 1e-4
-            + i01SensCarbon(YTIME,TRANSE) * sum(EF$TTECHtoEF(TTECH2,EF), 
+            + i01SensCarbon(allCy,YTIME,TRANSE) * sum(EF$TTECHtoEF(TTECH2,EF), 
             i01ShareBlend(allCy,TRANSE,EF,YTIME) *
             1e-3 *(VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,TRANSE,EF,YTIME))
             )

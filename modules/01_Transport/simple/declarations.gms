@@ -11,7 +11,7 @@ i01PassCarsMarkSat(allCy)	                          "Passenger cars ownership sa
 i01GDPperCapita(YTIME,allCy)
 i01Sigma(allCy,SG)                                   "S parameters of Gompertz function for passenger cars vehicle km (1)"
 i01ShareBlend(allCy,TRANSE,EF,YTIME)
-i01SensCarbon(YTIME,TRANSE)                                    "Sensitivity to Carbon Price - Transport"
+i01SensCarbon(allCy,YTIME,TRANSE)                                    "Sensitivity to Carbon Price - Transport"
 ;
 
 Equations

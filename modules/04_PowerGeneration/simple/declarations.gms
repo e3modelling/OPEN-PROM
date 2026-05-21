@@ -8,7 +8,7 @@ i04DecInvPlantSched(allCy,PGALL,YTIME)             "Decided plant investment sch
 i04MxmShareChpElec(allCy,YTIME)	                   "Maximum share of CHP electricity in a country (1)"
 i04ShareFuels(allCy,PGALL,EFS)
 i04Util(allCy,PGALL,YTIME)                         "Utilisation rate of power plants"
-i04SensCarbon(YTIME)                               "Sensitivity to Carbon Price - Power Module"     
+i04SensCarbon(allCy,YTIME)                               "Sensitivity to Carbon Price - Power Module"     
 ;
 
 Equations

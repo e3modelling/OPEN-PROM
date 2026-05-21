@@ -116,14 +116,14 @@ Q04IndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(al
     V04IndxEndogScrap(allCy,PGALL,YTIME)
         =E=
     (V04CostVarTech(allCy,PGALL,YTIME-1) + 1e-3 
-          + i04SensCarbon(YTIME) * sum(PGEF$PGALLtoEF(PGALL,PGEF), 
+          + i04SensCarbon(allCy,YTIME) * sum(PGEF$PGALLtoEF(PGALL,PGEF), 
             i04ShareFuels(allCy,PGALL,PGEF) *
             1e-3 *(VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,"PG",PGEF,YTIME))
             )    
     )**(-2) /
     (
       (V04CostVarTech(allCy,PGALL,YTIME-1) + 1e-3
-            + i04SensCarbon(YTIME) * sum(PGEF$PGALLtoEF(PGALL,PGEF), 
+            + i04SensCarbon(allCy,YTIME) * sum(PGEF$PGALLtoEF(PGALL,PGEF), 
             i04ShareFuels(allCy,PGALL,PGEF) *
             1e-3 *(VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,"PG",PGEF,YTIME))
             )
@@ -133,7 +133,7 @@ Q04IndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(al
         sum(PGALL2$(not sameas(PGALL,PGALL2)),
           i04AvailRate(allCy,PGALL2,YTIME) / i04AvailRate(allCy,PGALL,YTIME) * 
           (V04CostHourProdInvDec(allCy,PGALL2,YTIME-1)          
-          + i04SensCarbon(YTIME) * sum(PGEF$PGALLtoEF(PGALL2,PGEF), 
+          + i04SensCarbon(allCy,YTIME) * sum(PGEF$PGALLtoEF(PGALL2,PGEF), 
             i04ShareFuels(allCy,PGALL2,PGEF) *
             1e-3 *(VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,"PG",PGEF,YTIME))
             )
@@ -212,7 +212,7 @@ Q04SharePowPlaNewEq(allCy,PGALL,YTIME)$(TIME(YTIME)$runCy(allCy)) ..
     i04MatFacPlaAvailCap(allCy,PGALL,YTIME) *
     V04ShareSatPG(allCy,PGALL,YTIME-1) *
     (V04CostHourProdInvDec(allCy,PGALL,YTIME-1)
-            + i04SensCarbon(YTIME) * sum(PGEF$PGALLtoEF(PGALL,PGEF), 
+            + i04SensCarbon(allCy,YTIME) * sum(PGEF$PGALLtoEF(PGALL,PGEF), 
             i04ShareFuels(allCy,PGALL,PGEF) *
             1e-3 *(VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,"PG",PGEF,YTIME))
             )
@@ -221,7 +221,7 @@ Q04SharePowPlaNewEq(allCy,PGALL,YTIME)$(TIME(YTIME)$runCy(allCy)) ..
       i04MatFacPlaAvailCap(allCy,PGALL2,YTIME) *
       V04ShareSatPG(allCy,PGALL2,YTIME-1) *
       (V04CostHourProdInvDec(allCy,PGALL2,YTIME-1)
-          + i04SensCarbon(YTIME) * sum(PGEF$PGALLtoEF(PGALL2,PGEF), 
+          + i04SensCarbon(allCy,YTIME) * sum(PGEF$PGALLtoEF(PGALL2,PGEF), 
             i04ShareFuels(allCy,PGALL2,PGEF) *
             1e-3 *(VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,"PG",PGEF,YTIME))
             )

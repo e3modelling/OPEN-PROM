@@ -238,4 +238,4 @@ $offdelim
 *imMatrFactor.FX(runCy,"PC",TTECH,YTIME)$((t01StockPC(runCy,TTECH,YTIME) < 0) and (t01NewShareStockPC(runCy,TTECH,YTIME) <= 0)) = 100;         
 $ENDIF.calib
 
-i01SensCarbon(YTIME,TRANSE) = 0.1;
+i01SensCarbon(allCy,YTIME,TRANSE) = 0.1;
