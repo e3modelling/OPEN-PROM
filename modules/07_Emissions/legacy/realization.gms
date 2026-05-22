@@ -6,5 +6,6 @@ $Ifi "%phase%" == "declarations" $include "./modules/07_Emissions/legacy/declara
 $Ifi "%phase%" == "equations"    $include "./modules/07_Emissions/legacy/equations.gms"
 $Ifi "%phase%" == "input"        $include "./modules/07_Emissions/legacy/input.gms"
 $Ifi "%phase%" == "preloop"      $include "./modules/07_Emissions/legacy/preloop.gms"
-$Ifi "%phase%" == "postsolve"    $include "./modules/07_Emissions/legacy/postsolve.gms"
+$Ifi "%phase%" == "postsolve"      $include "./modules/07_Emissions/legacy/postsolve.gms"
+$Ifi "%phase%" == "postsolve_year" $include "./modules/07_Emissions/legacy/postsolve_year.gms"
 *######################## R SECTION END (PHASES) ###############################
