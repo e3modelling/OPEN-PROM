@@ -3,7 +3,7 @@
 
 *'                *VARIABLE INITIALISATION*
 
-V01RateScrPcTot.UP(runCy,TTECH,YTIME) = 1;
+V01RateScrPcTot.UP(runCy,TRANSE,TTECH,YTIME) = 1;
 *---
 V01PremScrp.UP(runCy,TRANSE,TTECH,YTIME) = 1;
 V01PremScrp.LO(runCy,TRANSE,TTECH,YTIME) = 0;
@@ -18,14 +18,13 @@ V01ActivPassTrnsp.FX(runCy,TRANP,YTIME) $(DATAY(YTIME) and not sameas(TRANP,"PC"
 *---
 V01NewRegPcYearly.FX(runCy,YTIME)$DATAY(ytime) = i01NewReg(runCy,YTIME); 
 *---
-V01RateScrPcTot.FX(runCy,TTECH,YTIME)$DATAY(YTIME) = 1 / i01TechLft(runCy,"PC",TTECH,YTIME);
+V01RateScrPcTot.FX(runCy,TRANSE,TTECH,YTIME)$DATAY(YTIME) = 1 / i01TechLft(runCy,TRANSE,TTECH,YTIME);
 *---
 V01StockPcYearlyTech.L(runCy,TTECH,YTIME) = i01StockPC(runCy,TTECH,"%fBaseY%");
 V01StockPcYearlyTech.FX(runCy,TTECH,YTIME)$DATAY(YTIME) = i01StockPC(runCy,TTECH,YTIME);
 V01StockPcYearlyTech.FX(runCy,TTECH,YTIME)$(not SECTTECH("PC",TTECH)) = 0;
 *---
 V01NumPcScrap.LO(runCy,YTIME) = 0;
-*V01NumPcScrap.FX(runCy,YTIME)$sameas(YTIME,"%fBaseY%") = SUM(TTECH,V01RateScrPcTot.L(runCy,TTECH,YTIME) * V01StockPcYearlyTech.L(runCy,TTECH,YTIME)); 
 *---
 V01ActivGoodsTransp.L(runCy,TRANSE,YTIME) = 0.1;
 V01ActivGoodsTransp.FX(runCy,TRANG,YTIME)$(not An(YTIME)) = imActv(YTIME,runCy,TRANG);
@@ -62,12 +61,14 @@ V01CostFuel.FX(runCy,TRANSE,TTECH,YTIME)$DATAY(YTIME) =
   (
     sum(EF$TTECHtoEF(TTECH,EF),
       V01ConsSpecificFuel.L(runCy,TRANSE,TTECH,EF,YTIME) *
+      i01ShareBlend(runCy,TRANSE,EF,YTIME) *
       VmPriceFuelSubsecCarVal.L(runCy,TRANSE,EF,YTIME)
     ) 
   )$(not PLUGIN(TTECH)) +
   (
     sum(EF$(TTECHtoEF(TTECH,EF) $(not sameas("ELC",EF))),
       (1-i01ShareAnnMilePlugInHybrid(runCy,YTIME)) *
+      i01ShareBlend(runCy,TRANSE,EF,YTIME) *
       V01ConsSpecificFuel.L(runCy,TRANSE,TTECH,EF,YTIME) *
       VmPriceFuelSubsecCarVal.L(runCy,TRANSE,EF,YTIME)
     ) +
@@ -75,8 +76,7 @@ V01CostFuel.FX(runCy,TRANSE,TTECH,YTIME)$DATAY(YTIME) =
     V01ConsSpecificFuel.L(runCy,TRANSE,TTECH,"ELC",YTIME) *
     VmPriceFuelSubsecCarVal.L(runCy,TRANSE,"ELC",YTIME)
   )$PLUGIN(TTECH) +
-  imVarCostTech(runCy,TRANSE,TTECH,YTIME) +
-  (VmRenValue.L(YTIME)/1000)$(not RENEF(TTECH)) 
+  imVarCostTech(runCy,TRANSE,TTECH,YTIME)
 ) *
 (
   1e-3 * V01ActivPassTrnsp.L(runCy,TRANSE,YTIME)$sameas(TRANSE,"PC") + !! aviation should be divided by 1000

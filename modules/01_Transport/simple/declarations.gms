@@ -33,7 +33,7 @@ Q01PcOwnPcLevl(allCy,YTIME)                                "Compute ratio of car
 Q01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)
 Q01CostFuel(allCy,TRANSE,TTECH,YTIME)
 Q01PremScrp(allCy,TRANSE,TTECH,YTIME)
-Q01RateScrPcTot(allCy,TTECH,YTIME)
+Q01RateScrPcTot(allCy,TRANSE,TTECH,YTIME)
 Q01ShareBlend(allCy,TRANSE,TTECH,YTIME)
 *'                **Interdependent Equations**
 Q01Lft(allCy,DSBS,TECH,YTIME)	                               "Compute the lifetime of passenger cars" 
@@ -69,7 +69,7 @@ V01PcOwnPcLevl(allCy,YTIME)                                "Ratio of car ownersh
 V01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)
 V01CostFuel(allCy,TRANSE,TTECH,YTIME)
 V01PremScrp(allCy,TRANSE,TTECH,YTIME)
-V01RateScrPcTot(allCy,TTECH,YTIME)
+V01RateScrPcTot(allCy,TRANSE,TTECH,YTIME)
 V01ShareBlend(allCy,TRANSE,TTECH,YTIME)
 *'                **Interdependent Equations**
 VmLft(allCy,DSBS,TECH,YTIME)                                 "Lifetime of technologies (years)"

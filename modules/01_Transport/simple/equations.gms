@@ -61,26 +61,26 @@ Q01GapTranspActiv(allCy,TRANSE,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V01NewRegPcYearly(allCy,YTIME)$sameas(TRANSE,"PC") +
     (
       ( 
-        [
+        V01ActivPassTrnsp(allCy,TRANSE,YTIME) - 
+        V01ActivPassTrnsp(allCy,TRANSE,YTIME-1) + 
+        SUM(TTECH$SECTTECH(TRANSE,TTECH),V01CapacityTransport(allCy,TRANSE,TTECH,YTIME-1) * V01RateScrPcTot(allCy,TRANSE,TTECH,YTIME)) +
+        SQRT(SQR(
           V01ActivPassTrnsp(allCy,TRANSE,YTIME) - 
           V01ActivPassTrnsp(allCy,TRANSE,YTIME-1) + 
-          V01ActivPassTrnsp(allCy,TRANSE,YTIME-1) /
-          (sum((TTECH)$SECTTECH(TRANSE,TTECH), VmLft(allCy,TRANSE,TTECH,YTIME-1)) / TECHS(TRANSE))
-        ] +
-        SQRT( SQR([V01ActivPassTrnsp(allCy,TRANSE,YTIME) - V01ActivPassTrnsp(allCy,TRANSE,YTIME-1) + V01ActivPassTrnsp(allCy,TRANSE,YTIME-1)/
-        (sum((TTECH)$SECTTECH(TRANSE,TTECH),VmLft(allCy,TRANSE,TTECH,YTIME-1))/TECHS(TRANSE))]) + SQR(1e-4) ) 
+          SUM(TTECH$SECTTECH(TRANSE,TTECH),V01CapacityTransport(allCy,TRANSE,TTECH,YTIME-1) * V01RateScrPcTot(allCy,TRANSE,TTECH,YTIME))
+        )) 
       )/2
     )$(TRANP(TRANSE) $(not sameas(TRANSE,"PC"))) +
     (
       ( 
-        [
+        V01ActivGoodsTransp(allCy,TRANSE,YTIME) - 
+        V01ActivGoodsTransp(allCy,TRANSE,YTIME-1) + 
+        SUM(TTECH$SECTTECH(TRANSE,TTECH),V01CapacityTransport(allCy,TRANSE,TTECH,YTIME-1) * V01RateScrPcTot(allCy,TRANSE,TTECH,YTIME)) + 
+        SQRT( SQR(
           V01ActivGoodsTransp(allCy,TRANSE,YTIME) - 
           V01ActivGoodsTransp(allCy,TRANSE,YTIME-1) + 
-          V01ActivGoodsTransp(allCy,TRANSE,YTIME-1) /
-          (sum(TTECH$SECTTECH(TRANSE,TTECH),VmLft(allCy,TRANSE,TTECH,YTIME-1))/TECHS(TRANSE))
-        ] + 
-        SQRT( SQR([V01ActivGoodsTransp(allCy,TRANSE,YTIME) - V01ActivGoodsTransp(allCy,TRANSE,YTIME-1) + V01ActivGoodsTransp(allCy,TRANSE,YTIME-1)/
-        (sum((TTECH)$SECTTECH(TRANSE,TTECH),VmLft(allCy,TRANSE,TTECH,YTIME-1))/TECHS(TRANSE))]) + SQR(1e-4) ) 
+          SUM(TTECH$SECTTECH(TRANSE,TTECH),V01CapacityTransport(allCy,TRANSE,TTECH,YTIME-1) * V01RateScrPcTot(allCy,TRANSE,TTECH,YTIME))
+        )) 
       )/2
     )$TRANG(TRANSE);
 
@@ -133,8 +133,7 @@ Q01CostFuel(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runC
         V01ConsSpecificFuel(allCy,TRANSE,TTECH,"ELC",YTIME) *
         VmPriceFuelSubsecCarVal(allCy,TRANSE,"ELC",YTIME)
       )$PLUGIN(TTECH) +
-      imVarCostTech(allCy,TRANSE,TTECH,YTIME) +
-      (VmRenValue(YTIME)/1000)$( not RENEF(TTECH)) 
+      imVarCostTech(allCy,TRANSE,TTECH,YTIME)
     ) *
     (
       1e-3 * V01ActivPassTrnsp(allCy,TRANSE,YTIME)$sameas(TRANSE,"PC") + !! aviation should be divided by 1000
@@ -204,7 +203,7 @@ Q01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)$(TIME(YTIME) $SECTTECH(TR
         i01AvgVehCapLoadFac(allCy,TRANSE,"LF",YTIME)
       )$(not sameas(TRANSE,"PC")) +
       (
-        1 - V01RateScrPcTot(allCy,TTECH,YTIME)
+        1 - V01RateScrPcTot(allCy,"PC",TTECH,YTIME)
       )$sameas(TRANSE,"PC")
     ) +
     V01ShareTechTr(allCy,TRANSE,TTECH,YTIME) *
@@ -250,7 +249,7 @@ Q01StockPcYearlyTech(allCy,TTECH,YTIME)$(TIME(YTIME)$runCy(allCy)$SECTTECH("PC",
       V01StockPcYearlyTech(allCy,TTECH,YTIME)
             =E=
       V01StockPcYearlyTech(allCy,TTECH,YTIME-1) * 
-      (1 - V01RateScrPcTot(allCy,TTECH,YTIME)) +
+      (1 - V01RateScrPcTot(allCy,"PC",TTECH,YTIME)) +
       V01NewRegPcTechYearly(allCy,TTECH,YTIME);
 
 * This equation computes the new registrations of passenger cars per technology for each country. 
@@ -314,7 +313,7 @@ Q01NumPcScrap(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V01NumPcScrap(allCy,YTIME)
             =E=
     SUM(TTECH,
-      V01RateScrPcTot(allCy,TTECH,YTIME) * 
+      V01RateScrPcTot(allCy,"PC",TTECH,YTIME) * 
       V01StockPcYearlyTech(allCy,TTECH,YTIME-1)
     );
 
@@ -331,11 +330,11 @@ Q01PcOwnPcLevl(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       EXP(-i01Sigma(allCy,"S2") * i01GDPperCapita(YTIME,allCy) / 10000)
     );
 
-Q01RateScrPcTot(allCy,TTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V01RateScrPcTot(allCy,TTECH,YTIME)
+Q01RateScrPcTot(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V01RateScrPcTot(allCy,TRANSE,TTECH,YTIME)
         =E=
-    1 - (1 - 1 / i01TechLft(allCy,"PC",TTECH,YTIME)) *
-    (1 - V01PremScrp(allCy,"PC",TTECH,YTIME));
+    1 - (1 - 1 / i01TechLft(allCy,TRANSE,TTECH,YTIME)) *
+    (1 - V01PremScrp(allCy,TRANSE,TTECH,YTIME));
     
 Q01PremScrp(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME)$SECTTECH(TRANSE,TTECH)$runCy(allCy))..
     V01PremScrp(allCy,TRANSE,TTECH,YTIME)
@@ -393,6 +392,5 @@ Q01ConsFuelTransport(allCy,TRANSE,EF,YTIME)$(TIME(YTIME) $SECtoEF(TRANSE,EF) $ru
 Q01CapacityTransport(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME)$SECTTECH(TRANSE,TTECH)$runCy(allCy))..
   V01CapacityTransport(allCy,TRANSE,TTECH,YTIME)
       =E=
-  V01CapacityTransport(allCy,TRANSE,TTECH,YTIME-1) *
-  (1 - 1/VmLft(allCy,TRANSE,TTECH,YTIME-1)) + !! Add SCRAPPING
+  V01CapacityTransport(allCy,TRANSE,TTECH,YTIME-1) * (1 - V01RateScrPcTot(allCy,TRANSE,TTECH,YTIME)) +
   V01ShareTechTr(allCy,TRANSE,TTECH,YTIME) *  V01GapTranspActiv(allCy,TRANSE,YTIME);
