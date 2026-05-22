@@ -10,7 +10,7 @@ $ondelim
 $include "./iActv.csvr"
 $offdelim
 ;
-*imActv(YTIME,allCy,DSBS)$(imActv(YTIME,allCy,DSBS) = NA) = 0;
+imActv(YTIME,allCy,DSBS)$(imActv(YTIME,allCy,DSBS) = NA) = 0;
 *---
 table i01GDP(YTIME,allCy) "GDP (billion US$2015)"
 $ondelim

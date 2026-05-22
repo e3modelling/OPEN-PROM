@@ -30,7 +30,6 @@ Q01NewRegPcTechYearly(allCy,TTECH,YTIME)                   "Compute new registra
 Q01ActivPassTrnsp(allCy,TRANSE,YTIME)                      "Compute passenger transport acitivity"
 Q01NumPcScrap(allCy,YTIME)                                 "Compute scrapped passenger cars"
 Q01PcOwnPcLevl(allCy,YTIME)                                "Compute ratio of car ownership over saturation car ownership"
-Q01RateScrPc(allCy,TTECH,YTIME)                                  "Compute passenger cars scrapping rate"
 Q01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)
 Q01CostFuel(allCy,TRANSE,TTECH,YTIME)
 Q01PremScrp(allCy,TRANSE,TTECH,YTIME)
@@ -38,6 +37,8 @@ Q01RateScrPcTot(allCy,TTECH,YTIME)
 Q01ShareBlend(allCy,TRANSE,TTECH,YTIME)
 *'                **Interdependent Equations**
 Q01Lft(allCy,DSBS,TECH,YTIME)	                               "Compute the lifetime of passenger cars" 
+Q01ConsFuelTransport(allCy,TRANSE,EF,YTIME)
+Q01CapacityTransport(allCy,TRANSE,TTECH,YTIME)
 ;
 
 Variables
@@ -65,7 +66,6 @@ V01ActivPassTrnsp(allCy,TRANSE,YTIME)                      "Passenger transport 
                                                                 !! - Activity for all other passenger transportation modes is measured in Gpkm
 V01NumPcScrap(allCy,YTIME)                                 "Scrapped passenger cars (million vehicles)"
 V01PcOwnPcLevl(allCy,YTIME)                                "Ratio of car ownership over saturation car ownership (1)"
-V01RateScrPc(allCy,TTECH,YTIME)                                  "Scrapping rate of passenger cars (1)"
 V01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)
 V01CostFuel(allCy,TRANSE,TTECH,YTIME)
 V01PremScrp(allCy,TRANSE,TTECH,YTIME)
@@ -73,4 +73,7 @@ V01RateScrPcTot(allCy,TTECH,YTIME)
 V01ShareBlend(allCy,TRANSE,TTECH,YTIME)
 *'                **Interdependent Equations**
 VmLft(allCy,DSBS,TECH,YTIME)                                 "Lifetime of technologies (years)"
+V01ConsFuelTransport(allCy,TRANSE,EF,YTIME)	           "Consumption of each technology and subsector (Mtoe)"
+V01CapacityTransport(allCy,TRANSE,TTECH,YTIME)
+
 ;
