@@ -13,7 +13,7 @@ option clear = Q08PriceElecInd;
 $include "./modules/08_Prices/legacy/preloop.gms"
 
 *' Initialize variable levels from previous period parameter
-V08PriceFuelSepCarbonWght.L(runCy,DSBS,EF,YTIME) = p08PriceFuelSepCarbonWght(runCy,DSBS,EF,YTIME-1);
-VmPriceFuelSubsecCarVal.L(runCy,SBS,EF,YTIME) = pmPriceFuelSubsecCarVal(runCy,SBS,EF,YTIME-1);
-VmPriceFuelAvgSub.L(runCy,DSBS,YTIME) = pmPriceFuelAvgSub(runCy,DSBS,YTIME-1);
-VmPriceElecInd.L(runCy,TCHP,YTIME) = pmPriceElecInd(runCy,TCHP,YTIME-1);
+V08PriceFuelSepCarbonWght.L(runCy,DSBS,EF,YTIME+1) = p08PriceFuelSepCarbonWght(runCy,DSBS,EF,YTIME-1);
+VmPriceFuelSubsecCarVal.L(runCy,SBS,EF,YTIME+1) = pmPriceFuelSubsecCarVal(runCy,SBS,EF,YTIME-1);
+VmPriceFuelAvgSub.L(runCy,DSBS,YTIME+1) = pmPriceFuelAvgSub(runCy,DSBS,YTIME-1);
+VmPriceElecInd.L(runCy,TCHP,YTIME+1) = pmPriceElecInd(runCy,TCHP,YTIME-1);

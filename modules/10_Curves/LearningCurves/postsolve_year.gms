@@ -9,5 +9,5 @@ option clear = Q10CumCapGlobal;
 $include "./modules/10_Curves/LearningCurves/preloop.gms"
 
 *' Initialize variable levels from previous period parameter
-VmCostLC.L(LCTECH,YTIME) = pmCostLC(LCTECH,YTIME-1);
-V10CumCapGlobal.L(LCTECH,YTIME) = p10CumCapGlobal(LCTECH,YTIME-1);
+VmCostLC.L(LCTECH,YTIME+1) = pmCostLC(LCTECH,YTIME-1);
+V10CumCapGlobal.L(LCTECH,YTIME+1) = p10CumCapGlobal(LCTECH,YTIME-1);

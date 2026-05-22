@@ -20,11 +20,11 @@ option clear = Q11NetSubsiTax;
 $include "./modules/11_Economy/economy/preloop.gms"
 
 *' Initialize variable levels from previous period parameter
-V11SubsiTot.L(runCy,YTIME) = p11SubsiTot(runCy,YTIME-1);
-VmSubsiDemTechAvail.L(runCy,DSBS,TECH,YTIME) = pmSubsiDemTechAvail(runCy,DSBS,TECH,YTIME-1);
-VmSubsiDemITech.L(runCy,DSBS,ITECH,YTIME) = pmSubsiDemITech(runCy,DSBS,ITECH,YTIME-1);
-VmSubsiDemTech.L(runCy,DSBS,TECH,YTIME) = pmSubsiDemTech(runCy,DSBS,TECH,YTIME-1);
-VmSubsiSupTech.L(runCy,STECH,YTIME) = pmSubsiSupTech(runCy,STECH,YTIME-1);
-VmSubsiCapCostTech.L(runCy,DSBS,TECH,YTIME) = pmSubsiCapCostTech(runCy,DSBS,TECH,YTIME-1);
-VmSubsiCapCostSupply.L(runCy,SSBS,STECH,YTIME) = pmSubsiCapCostSupply(runCy,SSBS,STECH,YTIME-1);
-VmNetSubsiTax.L(runCy,YTIME) = pmNetSubsiTax(runCy,YTIME-1);
+V11SubsiTot.L(runCy,YTIME+1) = p11SubsiTot(runCy,YTIME-1);
+VmSubsiDemTechAvail.L(runCy,DSBS,TECH,YTIME+1) = pmSubsiDemTechAvail(runCy,DSBS,TECH,YTIME-1);
+VmSubsiDemITech.L(runCy,DSBS,ITECH,YTIME+1) = pmSubsiDemITech(runCy,DSBS,ITECH,YTIME-1);
+VmSubsiDemTech.L(runCy,DSBS,TECH,YTIME+1) = pmSubsiDemTech(runCy,DSBS,TECH,YTIME-1);
+VmSubsiSupTech.L(runCy,STECH,YTIME+1) = pmSubsiSupTech(runCy,STECH,YTIME-1);
+VmSubsiCapCostTech.L(runCy,DSBS,TECH,YTIME+1) = pmSubsiCapCostTech(runCy,DSBS,TECH,YTIME-1);
+VmSubsiCapCostSupply.L(runCy,SSBS,STECH,YTIME+1) = pmSubsiCapCostSupply(runCy,SSBS,STECH,YTIME-1);
+VmNetSubsiTax.L(runCy,YTIME+1) = pmNetSubsiTax(runCy,YTIME-1);
