@@ -221,7 +221,7 @@ def parse_modelstat(lines):
             country_year_status[country] = {}
 
         country_year_status[country][year] = model_status
-                    
+
     return country_year_status
 
 def create_dataframe(country_year_status, pending_run=False):
@@ -243,8 +243,8 @@ def plot_heatmap(df, plot_title, live_mode=False):
 
         # Clear the current figure
         plt.clf()
-      
-      
+
+
         sns.heatmap(df, cmap=cmap, annot=False, linewidths=.5, linecolor='black', vmin=0, vmax=2, cbar=False)
 
         plt.title(plot_title)
@@ -257,6 +257,7 @@ def plot_heatmap(df, plot_title, live_mode=False):
             plt.pause(0.1)
     else:
         print("DataFrame is empty.")
+
 
 def main_loop(base_path, check_interval=1.5, max_no_update_intervals=4):
     subfolder_status_list = check_files_and_list_subfolders(base_path)
@@ -300,7 +301,11 @@ def main_loop(base_path, check_interval=1.5, max_no_update_intervals=4):
         try:
             lines = reader(pending_folder)
             if not lines:
-                print(f"No data found for subfolder: {pending_folder}")
+                # Parallel-mode early startup: modelstat.txt not written yet.
+                # Treat as "no update" so we sleep + bump the counter instead of
+                # tight-looping (and let the loop exit after max_no_update_intervals).
+                consecutive_no_update_intervals += 1
+                time.sleep(check_interval)
                 continue
 
             country_year_status = parser(lines)
@@ -310,6 +315,7 @@ def main_loop(base_path, check_interval=1.5, max_no_update_intervals=4):
             if df is None or df.empty:
                 print(f"No valid data found for subfolder: {pending_folder}")
                 consecutive_no_update_intervals += 1
+                time.sleep(check_interval)
                 continue
 
             plot_title = pending_folder_name  # Use folder name as plot title
@@ -329,6 +335,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     script_directory = os.path.dirname(os.path.abspath(__file__))
-    base_path = os.path.abspath(os.path.join(script_directory, ".."))
+    # script lives at scripts/tools/<x>.py, so repo root is two levels up
+    base_path = os.path.abspath(os.path.join(script_directory, "..", ".."))
 
     main_loop(base_path, args.interval)

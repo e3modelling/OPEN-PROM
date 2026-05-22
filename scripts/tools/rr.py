@@ -286,11 +286,11 @@ def main():
     parser.add_argument('-f', '--flag', action='store_true', help='use the modelstat.txt file for parsing')
     args = parser.parse_args()
 
-    # The path to the "scripts" directory where the script is located
+    # script lives at scripts/tools/<x>.py
     script_directory = os.path.dirname(os.path.abspath(__file__))
 
-    # The base path to the "OPEN-PROM" directory
-    base_path = os.path.abspath(os.path.join(script_directory, ".."))
+    # The base path to the "OPEN-PROM" directory (two levels up)
+    base_path = os.path.abspath(os.path.join(script_directory, "..", ".."))
 
     subfolder_status_list = check_files_and_list_subfolders(base_path, flag=args.flag)
     selected_subfolders = []
