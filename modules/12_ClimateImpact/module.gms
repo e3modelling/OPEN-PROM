@@ -11,13 +11,18 @@
 *'   * "iam_compact": IAM-COMPACT project's climate-impact assumptions
 *'   * "off":         module disabled, baseline run (entire module skipped)
 *'
-*' Scenario sub-switch:
-*'   permanent / limit / no_impact toggle lives at the top of iam_compact/input.gms
-*'   ($setLocal iamCompactScenario).
+*' Sub-switches (all at the top of iam_compact/input.gms):
+*'   $setLocal iamCompactScenario {permanent|limit}
+*'       Shared time window for the tech-impact overlays (CAPEX, CF).
+*'   $setLocal iamCompactCapex    {on|off}
+*'       Toggle the CAPEX overlay (Part 2.1) independently.
+*'   $setLocal iamCompactCf       {on|off}
+*'       Toggle the capacity factor overlay (Part 2.2) independently.
 *'
-*' Cooling demand HD-D1 / HD-D4 toggle (based on CHILLED scenarios): manually edit the $include filename in iam_compact/input.gms Part 3.
-*'  - HD-D1_Derailment: scenario - projected; Quantitle - 95
-*'  - HD-D4_Inertia: scenario - DLS; Quantile - 95
+*' Cooling demand (Part 1 in iam_compact/input.gms) is always loaded.
+*' HD-D1 / HD-D4 (CHILLED scenarios) is swapped by editing the $include filename:
+*'   - HD-D1_Derailment: scenario - projected; Quantile - 95
+*'   - HD-D4_Inertia:    scenario - DLS;       Quantile - 95
 
 *###################### R SECTION START (MODULETYPES) ##########################
 $Ifi "%ClimateImpact%" == "iam_compact" $include "./modules/12_ClimateImpact/iam_compact/realization.gms"
