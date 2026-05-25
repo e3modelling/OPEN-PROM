@@ -58,9 +58,13 @@ i02ElaSub(runCy,DSBS) = 2;
 *---
 
 *---
-i02SensCarbon(allCy,YTIME,DSBS) = 0.8;
-i02SensCarbon(allCy,YTIME,"HOU") = 1;
-i02SensCarbon(allCy,YTIME,"SE") = 1;
+i02SensCarbon(allCy,YTIME,DSBS) = 0;
+*i02SensCarbon(EU27,YTIME,DSBS)$(ord(YTIME)>24) = 1;
+*i02SensCarbon(EU27,YTIME,"HOU")$(ord(YTIME)>24) = 2;
+*i02SensCarbon(EU27,YTIME,"SE")$(ord(YTIME)>24) = 2;
+i02SensCarbon(EU27,YTIME,DSBS) = 1;
+i02SensCarbon(EU27,YTIME,"HOU") = 2;
+i02SensCarbon(EU27,YTIME,"SE") = 2;
 *---
 imCO2CaptRateIndustry(runCy,CCSTECH,YTIME) = 0.9;
 *---

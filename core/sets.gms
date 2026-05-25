@@ -120,7 +120,36 @@ SVK
 SVN
 SWE
 /
-
+EU27(allCy) "EU27"
+/
+EST
+LTU
+LUX
+LVA
+AUT
+BEL
+BGR
+CYP
+CZE
+DEU
+DNK
+ESP
+FIN
+FRA
+GRC
+HRV
+HUN
+IRL
+ITA
+MLT
+NLD
+POL
+PRT
+ROU
+SVK
+SVN
+SWE
+/
 fscenario   "Model scenario used: 0 is No carbon price, 1 is NPi_Default, 2 is 1.5C and 3 is 2C"
 /
 %fScenario%
