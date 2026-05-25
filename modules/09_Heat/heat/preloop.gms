@@ -111,18 +111,3 @@ pmCapSte(runCy,TSTEAM,YTIME)$(DATAY(YTIME)) = VmCapSte.L(runCy,TSTEAM,YTIME);
 pmProdSte(runCy,TSTEAM,YTIME)$(DATAY(YTIME)) = VmProdSte.L(runCy,TSTEAM,YTIME);
 pmCostAvgProdSte(runCy,YTIME)$(DATAY(YTIME)) = VmCostAvgProdSte.L(runCy,YTIME);
 pmConsFuelSteProd(runCy,STEMODE,EFS,YTIME)$(DATAY(YTIME)) = VmConsFuelSteProd.L(runCy,STEMODE,EFS,YTIME);
-
-*' Initialize variable levels from previous period parameter
-V09ScrapRate.L(runCy,TSTEAM,YTIME) = p09ScrapRate(runCy,TSTEAM,YTIME-1);
-V09DemGapSte.L(runCy,YTIME) = p09DemGapSte(runCy,YTIME-1);
-V09GapShareSte.L(runCy,TSTEAM,YTIME) = p09GapShareSte(runCy,TSTEAM,YTIME-1);
-V09ScrapRatePremature.L(runCy,TSTEAM,YTIME) = p09ScrapRatePremature(runCy,TSTEAM,YTIME-1);
-V09CaptRateSte.L(runCy,TSTEAM,YTIME) = p09CaptRateSte(runCy,TSTEAM,YTIME-1);
-V09CostVarProdSte.L(runCy,TSTEAM,YTIME) = p09CostVarProdSte(runCy,TSTEAM,YTIME-1);
-V09CostCapProdSte.L(runCy,TSTEAM,YTIME) = p09CostCapProdSte(runCy,TSTEAM,YTIME-1);
-V09CostProdSte.L(runCy,TSTEAM,YTIME) = p09CostProdSte(runCy,TSTEAM,YTIME-1);
-VmDemTotSte.L(runCy,YTIME) = pmDemTotSte(runCy,YTIME-1);
-VmCapSte.L(runCy,TSTEAM,YTIME) = pmCapSte(runCy,TSTEAM,YTIME-1);
-VmProdSte.L(runCy,TSTEAM,YTIME) = pmProdSte(runCy,TSTEAM,YTIME-1);
-VmCostAvgProdSte.L(runCy,YTIME) = pmCostAvgProdSte(runCy,YTIME-1);
-VmConsFuelSteProd.L(runCy,STEMODE,EFS,YTIME) = pmConsFuelSteProd(runCy,STEMODE,EFS,YTIME-1);

@@ -56,12 +56,3 @@ p07CostAbateBySrcRegTim(E07SrcMacAbate,runCy,YTIME)$(DATAY(YTIME)) = 1e-6;
 p07GrossEmissCO2Demand(runCy,DSBS,YTIME)$(DATAY(YTIME)) = V07GrossEmissCO2Demand.L(runCy,DSBS,YTIME);
 p07EmissionsNet(runCy,YTIME)$(DATAY(YTIME)) = V07EmissionsNet.L(runCy,YTIME);
 p07EmissionsNetPart(runCy,YTIME)$(DATAY(YTIME)) = V07EmissionsNetPart.L(runCy,YTIME);
-
-*' Initialize variable levels from previous period parameter
-V07GrossEmissCO2Supply.L(runCy,SSBS,YTIME) = p07GrossEmissCO2Supply(runCy,SSBS,YTIME-1);
-V07RedAbsBySrcRegTim.L(E07SrcMacAbate,runCy,YTIME) = p07RedAbsBySrcRegTim(E07SrcMacAbate,runCy,YTIME-1);
-V07EmiActBySrcRegTim.L(E07SrcMacAbate,runCy,YTIME) = p07EmiActBySrcRegTim(E07SrcMacAbate,runCy,YTIME-1);
-V07CostAbateBySrcRegTim.L(E07SrcMacAbate,runCy,YTIME) = p07CostAbateBySrcRegTim(E07SrcMacAbate,runCy,YTIME-1);
-V07GrossEmissCO2Demand.L(runCy,DSBS,YTIME) = p07GrossEmissCO2Demand(runCy,DSBS,YTIME-1);
-V07EmissionsNet.L(runCy,YTIME) = p07EmissionsNet(runCy,YTIME-1);
-V07EmissionsNetPart.L(runCy,YTIME) = p07EmissionsNetPart(runCy,YTIME-1);

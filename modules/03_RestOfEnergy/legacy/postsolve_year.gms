@@ -25,19 +25,27 @@ option clear = Q03ConsFinEneCountry;
 option clear = Q03ConsFinNonEne;
 option clear = Q03LossesDistr;
 
-*' Re-apply preloop bounds for all active countries (outside country loop)
-$include "./modules/03_RestOfEnergy/legacy/preloop.gms"
+*' Re-apply critical bounds for all active countries (outside country loop)
+V03ConsGrssInl.LO(runCy,EFS,YTIME) = 0;
+V03ProdPrimary.LO(runCy,EFS,YTIME) = 0;
+V03Imp.LO(runCy,EFS,YTIME) = 0;
+V03Exp.LO(runCy,EFS,YTIME) = 0;
+VmConsFiEneSec.LO(runCy,SSBS,EFS,YTIME) = 0;
+VmLossesDistr.LO(runCy,EFS,YTIME) = 0;
+V03OutTotTransf.LO(runCy,SSBS,EFS,YTIME) = 0;
+V03InpTotTransf.LO(runCy,SSBS,EFS,YTIME) = 0;
+VmConsFinEneCountry.LO(runCy,EFS,YTIME) = 0;
 
 *' Initialize variable levels from previous period parameter
-V03ConsGrssInl.L(runCy,EFS,YTIME+1) = p03ConsGrssInl(runCy,EFS,YTIME-1);
-V03Transfers.L(runCy,EFS,YTIME+1) = p03Transfers(runCy,EFS,YTIME-1);
-V03ProdPrimary.L(runCy,EFS,YTIME+1) = p03ProdPrimary(runCy,EFS,YTIME-1);
-V03Exp.L(runCy,EFS,YTIME+1) = p03Exp(runCy,EFS,YTIME-1);
-V03Imp.L(runCy,EFS,YTIME+1) = p03Imp(runCy,EFS,YTIME-1);
-VmImpNetEneBrnch.L(runCy,EFS,YTIME+1) = pmImpNetEneBrnch(runCy,EFS,YTIME-1);
-VmConsFiEneSec.L(runCy,SSBS,EFS,YTIME+1) = pmConsFiEneSec(runCy,SSBS,EFS,YTIME-1);
-VmConsFinEneCountry.L(runCy,EFS,YTIME+1) = pmConsFinEneCountry(runCy,EFS,YTIME-1);
-VmConsFinNonEne.L(runCy,EFS,YTIME+1) = pmConsFinNonEne(runCy,EFS,YTIME-1);
-VmLossesDistr.L(runCy,EFS,YTIME+1) = pmLossesDistr(runCy,EFS,YTIME-1);
-V03InpTotTransf.L(runCy,SSBS,EFS,YTIME+1) = p03InpTotTransf(runCy,SSBS,EFS,YTIME-1);
-V03OutTotTransf.L(runCy,SSBS,EFS,YTIME+1) = p03OutTotTransf(runCy,SSBS,EFS,YTIME-1);
+V03ConsGrssInl.L(runCy,EFS,YTIME+1) = p03ConsGrssInl(runCy,EFS,YTIME);
+V03Transfers.L(runCy,EFS,YTIME+1) = p03Transfers(runCy,EFS,YTIME);
+V03ProdPrimary.L(runCy,EFS,YTIME+1) = p03ProdPrimary(runCy,EFS,YTIME);
+V03Exp.L(runCy,EFS,YTIME+1) = p03Exp(runCy,EFS,YTIME);
+V03Imp.L(runCy,EFS,YTIME+1) = p03Imp(runCy,EFS,YTIME);
+VmImpNetEneBrnch.L(runCy,EFS,YTIME+1) = pmImpNetEneBrnch(runCy,EFS,YTIME);
+VmConsFiEneSec.L(runCy,SSBS,EFS,YTIME+1) = pmConsFiEneSec(runCy,SSBS,EFS,YTIME);
+VmConsFinEneCountry.L(runCy,EFS,YTIME+1) = pmConsFinEneCountry(runCy,EFS,YTIME);
+VmConsFinNonEne.L(runCy,EFS,YTIME+1) = pmConsFinNonEne(runCy,EFS,YTIME);
+VmLossesDistr.L(runCy,EFS,YTIME+1) = pmLossesDistr(runCy,EFS,YTIME);
+V03InpTotTransf.L(runCy,SSBS,EFS,YTIME+1) = p03InpTotTransf(runCy,SSBS,EFS,YTIME);
+V03OutTotTransf.L(runCy,SSBS,EFS,YTIME+1) = p03OutTotTransf(runCy,SSBS,EFS,YTIME);

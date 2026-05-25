@@ -148,24 +148,4 @@ pmConsFuelTechH2Prod(runCy,H2TECH,EF,YTIME)$(DATAY(YTIME)) = 0;
 pmDemSecH2(runCy,SBS,YTIME)$(DATAY(YTIME)) = 1e-6;
 pmCostAvgProdH2(runCy,YTIME)$(DATAY(YTIME)) = VmCostAvgProdH2.L(runCy,YTIME);
 pmConsFuelH2Prod(runCy,EF,YTIME)$(DATAY(YTIME)) = VmConsFuelH2Prod.L(runCy,EF,YTIME);
-
-*' Initialize variable levels from previous period parameter
-V05GapShareH2Tech1.L(runCy,H2TECH,YTIME) = p05GapShareH2Tech1(runCy,H2TECH,YTIME-1);
-V05GapShareH2Tech2.L(runCy,H2TECH,YTIME) = p05GapShareH2Tech2(runCy,H2TECH,YTIME-1);
-V05CapScrapH2ProdTech.L(runCy,H2TECH,YTIME) = p05CapScrapH2ProdTech(runCy,H2TECH,YTIME-1);
-V05PremRepH2Prod.L(runCy,H2TECH,YTIME) = p05PremRepH2Prod(runCy,H2TECH,YTIME-1);
-V05ScrapLftH2Prod.L(runCy,H2TECH,YTIME) = p05ScrapLftH2Prod(runCy,H2TECH,YTIME-1);
-V05DemGapH2.L(runCy,YTIME) = p05DemGapH2(runCy,YTIME-1);
-V05CostProdH2Tech.L(runCy,H2TECH,YTIME) = p05CostProdH2Tech(runCy,H2TECH,YTIME-1);
-V05CostVarProdH2Tech.L(runCy,H2TECH,YTIME) = p05CostVarProdH2Tech(runCy,H2TECH,YTIME-1);
-V05ShareCCSH2Prod.L(runCy,H2TECH,YTIME) = p05ShareCCSH2Prod(runCy,H2TECH,YTIME-1);
-V05ShareNoCCSH2Prod.L(runCy,H2TECH,YTIME) = p05ShareNoCCSH2Prod(runCy,H2TECH,YTIME-1);
-V05AcceptCCSH2Tech.L(runCy,YTIME) = p05AcceptCCSH2Tech(runCy,YTIME-1);
-V05CostProdCCSNoCCSH2Prod.L(runCy,H2TECH,YTIME) = p05CostProdCCSNoCCSH2Prod(runCy,H2TECH,YTIME-1);
-V05CaptRateH2.L(runCy,H2TECH,YTIME) = p05CaptRateH2(runCy,H2TECH,YTIME-1);
-VmDemTotH2.L(runCy,YTIME) = pmDemTotH2(runCy,YTIME-1);
-VmProdH2.L(runCy,H2TECH,YTIME) = pmProdH2(runCy,H2TECH,YTIME-1);
-VmConsFuelTechH2Prod.L(runCy,H2TECH,EF,YTIME) = pmConsFuelTechH2Prod(runCy,H2TECH,EF,YTIME-1);
-VmDemSecH2.L(runCy,SBS,YTIME) = pmDemSecH2(runCy,SBS,YTIME-1);
-VmCostAvgProdH2.L(runCy,YTIME) = pmCostAvgProdH2(runCy,YTIME-1);
-VmConsFuelH2Prod.L(runCy,EF,YTIME) = pmConsFuelH2Prod(runCy,EF,YTIME-1);
+*---

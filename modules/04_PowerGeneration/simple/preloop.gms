@@ -66,13 +66,13 @@ V04CapexFixCostPG.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =
 ) * i04GrossCapCosSubRen(runCy,PGALL,YTIME) * 1000 * imCGI(runCy,YTIME) +
 i04FixOandMCost(runCy,PGALL,YTIME);
 *---
-V04CostCapTech.LO(runCy,PGALL,YTIME) = epsilon6;
+V04CostCapTech.LO(runCy,PGALL,YTIME) = 0;
 V04CostCapTech.L(runCy,PGALL,YTIME) = 1;
 V04CostCapTech.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = 
 V04CapexRESRate.L(runCy,PGALL,YTIME) * V04CapexFixCostPG.L(runCy,PGALL,YTIME) / 
     (i04AvailRate(runCy,PGALL,YTIME) * smGwToTwhPerYear(YTIME) * 1000); 
 *---
-V04CostHourProdInvDec.LO(runCy,PGALL,YTIME) = epsilon6;
+V04CostHourProdInvDec.LO(runCy,PGALL,YTIME) = 0;
 V04CostHourProdInvDec.L(runCy,PGALL,YTIME) = V04CostCapTech.L(runCy,PGALL,"%fBaseY%") + V04CostVarTech.L(runCy,PGALL,"%fBaseY%");     
 V04CostHourProdInvDec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = V04CostCapTech.L(runCy,PGALL,YTIME) + V04CostVarTech.L(runCy,PGALL,YTIME);
 *---
@@ -152,8 +152,6 @@ V04SharePowPlaNewEq.L(runCy,PGALL,YTIME)$AN(YTIME) = t04SharePowPlaNewEq(runCy,P
 
 *'                *PARAMETER INITIALISATION FOR RECURSIVE LAGS*
 
-V04SortPlantDispatch.L(runCy,PGALL,YTIME) = 1e-6;
-
 *' Seed parameters from historical data
 p04DemElecTot(runCy,YTIME)$(DATAY(YTIME)) = (i03DataGrossInlCons(runCy,"ELC",YTIME) - imFuelTrade(runCy,"IMPORTS","ELC",YTIME) + imFuelTrade(runCy,"EXPORTS","ELC",YTIME)) / smTWhToMtoe;
 p04ProdElecEstCHP(runCy,TCHP,YTIME)$(DATAY(YTIME)) = i04DataElecProdCHP(runCy,TCHP,YTIME) / 1000;
@@ -180,30 +178,4 @@ pmProdElec(runCy,PGALL,YTIME)$(DATAY(YTIME)) = i04DataElecProdNonCHP(runCy,PGALL
 pmCapElec(runCy,PGALL,YTIME)$(DATAY(YTIME)) = VmCapElec.L(runCy,PGALL,YTIME);
 pmCostPowGenAvgLng(runCy,YTIME)$(DATAY(YTIME)) = VmCostPowGenAvgLng.L(runCy,YTIME);
 pmConsFuelElecProd(runCy,EFS,YTIME)$(DATAY(YTIME)) = VmConsFuelElecProd.L(runCy,EFS,YTIME);
-
-*' Initialize variable levels from previous period parameter
-V04CapElecNominal.L(runCy,PGALL,YTIME) = p04CapElecNominal(runCy,PGALL,YTIME-1);
-V04ShareTechPG.L(runCy,PGALL,YTIME) = p04ShareTechPG(runCy,PGALL,YTIME-1);
-V04CostHourProdInvDec.L(runCy,PGALL,YTIME) = p04CostHourProdInvDec(runCy,PGALL,YTIME-1);
-V04CostVarTech.L(runCy,PGALL,YTIME) = p04CostVarTech(runCy,PGALL,YTIME-1);
-V04IndxEndogScrap.L(runCy,PGALL,YTIME) = p04IndxEndogScrap(runCy,PGALL,YTIME-1);
-V04CapElecNonCHP.L(runCy,YTIME) = p04CapElecNonCHP(runCy,YTIME-1);
-V04GapGenCapPowerDiff.L(runCy,YTIME) = p04GapGenCapPowerDiff(runCy,YTIME-1);
-V04ShareSatPG.L(runCy,PGALL,YTIME) = p04ShareSatPG(runCy,PGALL,YTIME-1);
-V04SharePowPlaNewEq.L(runCy,PGALL,YTIME) = p04SharePowPlaNewEq(runCy,PGALL,YTIME-1);
-V04SortPlantDispatch.L(runCy,PGALL,YTIME) = p04SortPlantDispatch(runCy,PGALL,YTIME-1);
-V04NewCapElec.L(runCy,PGALL,YTIME) = p04NewCapElec(runCy,PGALL,YTIME-1);
-V04NetNewCapElec.L(runCy,PGALL,YTIME) = p04NetNewCapElec(runCy,PGALL,YTIME-1);
-V04DemElecTot.L(runCy,YTIME) = p04DemElecTot(runCy,YTIME-1);
-V04ProdElecEstCHP.L(runCy,TCHP,YTIME) = p04ProdElecEstCHP(runCy,TCHP,YTIME-1);
-V04CapexFixCostPG.L(runCy,PGALL,YTIME) = p04CapexFixCostPG(runCy,PGALL,YTIME-1);
-V04ShareMixWndSol.L(runCy,YTIME) = p04ShareMixWndSol(runCy,YTIME-1);
-V04CapexRESRate.L(runCy,PGALL,YTIME) = p04CapexRESRate(runCy,PGALL,YTIME-1);
-V04CO2CaptRate.L(runCy,PGALL,YTIME) = p04CO2CaptRate(runCy,PGALL,YTIME-1);
-V04CostCapTech.L(runCy,PGALL,YTIME) = p04CostCapTech(runCy,PGALL,YTIME-1);
-V04CCSRetroFit.L(runCy,PGALL,YTIME) = p04CCSRetroFit(runCy,PGALL,YTIME-1);
-V04ScrpRate.L(runCy,PGALL,YTIME) = p04ScrpRate(runCy,PGALL,YTIME-1);
-VmProdElec.L(runCy,PGALL,YTIME) = pmProdElec(runCy,PGALL,YTIME-1);
-VmCostPowGenAvgLng.L(runCy,YTIME) = pmCostPowGenAvgLng(runCy,YTIME-1);
-VmCapElec.L(runCy,PGALL,YTIME) = pmCapElec(runCy,PGALL,YTIME-1);
-VmConsFuelElecProd.L(runCy,EFS,YTIME) = pmConsFuelElecProd(runCy,EFS,YTIME-1);
+*---

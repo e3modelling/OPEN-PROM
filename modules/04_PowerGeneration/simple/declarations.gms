@@ -82,7 +82,6 @@ V04GapGenCapPowerDiff(allCy,YTIME)	                       "Gap in total generati
 *v04PotRenMinAllow(allCy,PGRENEF,YTIME)	                   "Minimum allowed renewable potential (GW)"		
 V04ShareSatPG(allCy,PGALL,YTIME)	                           "Saturation for electricity mixture penetration of RES technologies"	
 V04SharePowPlaNewEq(allCy,PGALL,YTIME)	                   "Power plant share in new equipment (1)"			
-V04SortPlantDispatch(allCy,PGALL,YTIME)	                   "Power plants sorting according to variable cost to decide the plant dispatching (1)"
 V04NewCapElec(allCy,PGALL,YTIME)	                       "The new capacity added every year (GW)"	
 V04NetNewCapElec(allCy,PGALL,YTIME)	                       "Yearly difference in installed capacity (MW)"	
 *v04SecContrTotCHPProd(allCy,SBS,CHP,YTIME)                "Contribution of each sector in total CHP production (1)"	

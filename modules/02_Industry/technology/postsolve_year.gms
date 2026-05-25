@@ -37,24 +37,31 @@ option clear = VmConsFuel;
 option clear = VmConsFuelShare;
 option clear = VmConsFuelSum;
 
-*' Re-apply preloop bounds for all active countries (outside country loop)
-$include "./modules/02_Industry/technology/preloop.gms"
+*' Re-apply critical bounds for all active countries (outside country loop)
+V02EquipCapTechSubsec.LO(runCy,DSBS,ITECH,YTIME) = 0;
+V02DemSubUsefulSubsec.LO(runCy,INDDOM,YTIME) = 0;
+VmConsFuel.LO(runCy,DSBS,EF,YTIME) = 0;
+V02VarCostTech.LO(runCy,DSBS,ITECH,YTIME) = 0;
+V02CostTech.LO(runCy,DSBS,ITECH,YTIME) = 0;
+VmConsFuelShare.LO(runCy,DSBS,EF,YTIME) = 0;
+V02DemUsefulSubsecRemTech.LO(runCy,DSBS,YTIME) = 0;
+V02RemEquipCapTechSubsec.LO(runCy,DSBS,ITECH,YTIME) = 0;
+V02GapUsefulDemSubsec.LO(runCy,DSBS,YTIME) = 0;
 
 *' Initialize parameters for every iteration forward (seed from first iteration results)
-V02DemSubUsefulSubsec.L(runCy,DSBS,YTIME+1) = p02DemSubUsefulSubsec(runCy,DSBS,YTIME-1);
-display V02DemSubUsefulSubsec.L;
-V02RemEquipCapTechSubsec.L(runCy,DSBS,ITECH,YTIME+1) = p02RemEquipCapTechSubsec(runCy,DSBS,ITECH,YTIME-1);
-V02DemUsefulSubsecRemTech.L(runCy,DSBS,YTIME+1) = p02DemUsefulSubsecRemTech(runCy,DSBS,YTIME-1);
-V02GapUsefulDemSubsec.L(runCy,DSBS,YTIME+1) = p02GapUsefulDemSubsec(runCy,DSBS,YTIME-1);
-V02CapCostTech.L(runCy,DSBS,ITECH,YTIME+1) = p02CapCostTech(runCy,DSBS,ITECH,YTIME-1);
-V02VarCostTech.L(runCy,DSBS,ITECH,YTIME+1) = p02VarCostTech(runCy,DSBS,ITECH,YTIME-1);
-V02CostTech.L(runCy,DSBS,ITECH,YTIME+1) = p02CostTech(runCy,DSBS,ITECH,YTIME-1);
-V02ShareTechNewEquipUseful.L(runCy,DSBS,ITECH,YTIME+1) = p02ShareTechNewEquipUseful(runCy,DSBS,ITECH,YTIME-1);
-V02EquipCapTechSubsec.L(runCy,DSBS,ITECH,YTIME+1) = p02EquipCapTechSubsec(runCy,DSBS,ITECH,YTIME-1);
-V02UsefulElecNonSubIndTert.L(runCy,DSBS,YTIME+1) = p02UsefulElecNonSubIndTert(runCy,DSBS,YTIME-1);
-V02FinalElecNonSubIndTert.L(runCy,DSBS,YTIME+1) = p02FinalElecNonSubIndTert(runCy,DSBS,YTIME-1);
-V02IndxElecIndPrices.L(runCy,TCHP,YTIME+1) = p02IndxElecIndPrices(runCy,TCHP,YTIME-1);
-V02IndAvrEffFinalUseful.L(runCy,DSBS,YTIME+1) = p02IndAvrEffFinalUseful(runCy,DSBS,YTIME-1);
-V02PremScrpIndu.L(runCy,DSBS,ITECH,YTIME+1) = p02PremScrpIndu(runCy,DSBS,ITECH,YTIME-1);
-V02RatioRem.L(runCy,DSBS,ITECH,YTIME+1) = p02RatioRem(runCy,DSBS,ITECH,YTIME-1);
-VmConsFuel.L(runCy,DSBS,EF,YTIME+1) = pmConsFuel(runCy,DSBS,EF,YTIME-1);
+V02DemSubUsefulSubsec.L(runCy,DSBS,YTIME+1) = p02DemSubUsefulSubsec(runCy,DSBS,YTIME);
+V02RemEquipCapTechSubsec.L(runCy,DSBS,ITECH,YTIME+1) = p02RemEquipCapTechSubsec(runCy,DSBS,ITECH,YTIME);
+V02DemUsefulSubsecRemTech.L(runCy,DSBS,YTIME+1) = p02DemUsefulSubsecRemTech(runCy,DSBS,YTIME);
+V02GapUsefulDemSubsec.L(runCy,DSBS,YTIME+1) = p02GapUsefulDemSubsec(runCy,DSBS,YTIME);
+V02CapCostTech.L(runCy,DSBS,ITECH,YTIME+1) = p02CapCostTech(runCy,DSBS,ITECH,YTIME);
+V02VarCostTech.L(runCy,DSBS,ITECH,YTIME+1) = p02VarCostTech(runCy,DSBS,ITECH,YTIME);
+V02CostTech.L(runCy,DSBS,ITECH,YTIME+1) = p02CostTech(runCy,DSBS,ITECH,YTIME);
+V02ShareTechNewEquipUseful.L(runCy,DSBS,ITECH,YTIME+1) = p02ShareTechNewEquipUseful(runCy,DSBS,ITECH,YTIME);
+V02EquipCapTechSubsec.L(runCy,DSBS,ITECH,YTIME+1) = p02EquipCapTechSubsec(runCy,DSBS,ITECH,YTIME);
+V02UsefulElecNonSubIndTert.L(runCy,DSBS,YTIME+1) = p02UsefulElecNonSubIndTert(runCy,DSBS,YTIME);
+V02FinalElecNonSubIndTert.L(runCy,DSBS,YTIME+1) = p02FinalElecNonSubIndTert(runCy,DSBS,YTIME);
+V02IndxElecIndPrices.L(runCy,TCHP,YTIME+1) = p02IndxElecIndPrices(runCy,TCHP,YTIME);
+V02IndAvrEffFinalUseful.L(runCy,DSBS,YTIME+1) = p02IndAvrEffFinalUseful(runCy,DSBS,YTIME);
+V02PremScrpIndu.L(runCy,DSBS,ITECH,YTIME+1) = p02PremScrpIndu(runCy,DSBS,ITECH,YTIME);
+V02RatioRem.L(runCy,DSBS,ITECH,YTIME+1) = p02RatioRem(runCy,DSBS,ITECH,YTIME);
+VmConsFuel.L(runCy,DSBS,EF,YTIME+1) = pmConsFuel(runCy,DSBS,EF,YTIME);

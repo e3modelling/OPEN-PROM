@@ -64,17 +64,4 @@ pmConsFinNonEne(runCy,EFS,YTIME)$(DATAY(YTIME)) = SUM(NENSE$(not sameas("BU",NEN
 pmLossesDistr(runCy,EFS,YTIME)$(DATAY(YTIME)) = imDistrLosses(runCy,EFS,YTIME);
 p03InpTotTransf(runCy,SSBS,EFS,YTIME)$(DATAY(YTIME) and SECtoEF(SSBS,EFS)) = -i03InpTotTransfProcess(runCy,SSBS,EFS,YTIME);
 p03OutTotTransf(runCy,SSBS,EFS,YTIME)$(DATAY(YTIME)) = i03OutTotTransfProcess(runCy,SSBS,EFS,YTIME);
-
-*' Initialize variable levels from previous period parameter
-V03ConsGrssInl.L(runCy,EFS,YTIME) = p03ConsGrssInl(runCy,EFS,YTIME-1);
-V03Transfers.L(runCy,EFS,YTIME) = p03Transfers(runCy,EFS,YTIME-1);
-V03ProdPrimary.L(runCy,EFS,YTIME) = p03ProdPrimary(runCy,EFS,YTIME-1);
-V03Exp.L(runCy,EFS,YTIME) = p03Exp(runCy,EFS,YTIME-1);
-V03Imp.L(runCy,EFS,YTIME) = p03Imp(runCy,EFS,YTIME-1);
-VmImpNetEneBrnch.L(runCy,EFS,YTIME) = pmImpNetEneBrnch(runCy,EFS,YTIME-1);
-VmConsFiEneSec.L(runCy,SSBS,EFS,YTIME) = pmConsFiEneSec(runCy,SSBS,EFS,YTIME-1);
-VmConsFinEneCountry.L(runCy,EFS,YTIME) = pmConsFinEneCountry(runCy,EFS,YTIME-1);
-VmConsFinNonEne.L(runCy,EFS,YTIME) = pmConsFinNonEne(runCy,EFS,YTIME-1);
-VmLossesDistr.L(runCy,EFS,YTIME) = pmLossesDistr(runCy,EFS,YTIME-1);
-V03InpTotTransf.L(runCy,SSBS,EFS,YTIME) = p03InpTotTransf(runCy,SSBS,EFS,YTIME-1);
-V03OutTotTransf.L(runCy,SSBS,EFS,YTIME) = p03OutTotTransf(runCy,SSBS,EFS,YTIME-1);
+*---

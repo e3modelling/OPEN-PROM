@@ -40,7 +40,3 @@ V10CumCapGlobal.FX(LCTECH,"%fBaseY%") = p10CumCapGlobal(LCTECH,"%fBaseY%")
 *' Seed parameters from historical data
 *' Note: p10CumCapGlobal already correctly seeded for DATAY years by explicit accumulation above
 pmCostLC(LCTECH,YTIME)$(DATAY(YTIME)) = 1.0;
-
-*' Initialize variable levels from previous period parameter
-VmCostLC.L(LCTECH,YTIME) = pmCostLC(LCTECH,YTIME-1);
-V10CumCapGlobal.L(LCTECH,YTIME) = p10CumCapGlobal(LCTECH,YTIME-1);

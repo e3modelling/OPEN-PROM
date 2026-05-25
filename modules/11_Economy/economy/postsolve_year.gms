@@ -16,15 +16,17 @@ option clear = Q11SubsiSupTech;
 option clear = Q11SubsiCapCostTech;
 option clear = Q11NetSubsiTax;
 
-*' Re-apply preloop bounds for all active countries (outside country loop)
-$include "./modules/11_Economy/economy/preloop.gms"
+*' Re-apply critical bounds for all active countries (outside country loop)
+V11SubsiTot.LO(runCy,YTIME) = 0;
+VmSubsiDemITech.LO(runCy,DSBS,ITECH,YTIME) = 0;
+VmSubsiDemTech.LO(runCy,DSBS,TECH,YTIME) = 0;
 
 *' Initialize variable levels from previous period parameter
-V11SubsiTot.L(runCy,YTIME+1) = p11SubsiTot(runCy,YTIME-1);
-VmSubsiDemTechAvail.L(runCy,DSBS,TECH,YTIME+1) = pmSubsiDemTechAvail(runCy,DSBS,TECH,YTIME-1);
-VmSubsiDemITech.L(runCy,DSBS,ITECH,YTIME+1) = pmSubsiDemITech(runCy,DSBS,ITECH,YTIME-1);
-VmSubsiDemTech.L(runCy,DSBS,TECH,YTIME+1) = pmSubsiDemTech(runCy,DSBS,TECH,YTIME-1);
-VmSubsiSupTech.L(runCy,STECH,YTIME+1) = pmSubsiSupTech(runCy,STECH,YTIME-1);
-VmSubsiCapCostTech.L(runCy,DSBS,TECH,YTIME+1) = pmSubsiCapCostTech(runCy,DSBS,TECH,YTIME-1);
-VmSubsiCapCostSupply.L(runCy,SSBS,STECH,YTIME+1) = pmSubsiCapCostSupply(runCy,SSBS,STECH,YTIME-1);
-VmNetSubsiTax.L(runCy,YTIME+1) = pmNetSubsiTax(runCy,YTIME-1);
+V11SubsiTot.L(runCy,YTIME+1) = p11SubsiTot(runCy,YTIME);
+VmSubsiDemTechAvail.L(runCy,DSBS,TECH,YTIME+1) = pmSubsiDemTechAvail(runCy,DSBS,TECH,YTIME);
+VmSubsiDemITech.L(runCy,DSBS,ITECH,YTIME+1) = pmSubsiDemITech(runCy,DSBS,ITECH,YTIME);
+VmSubsiDemTech.L(runCy,DSBS,TECH,YTIME+1) = pmSubsiDemTech(runCy,DSBS,TECH,YTIME);
+VmSubsiSupTech.L(runCy,STECH,YTIME+1) = pmSubsiSupTech(runCy,STECH,YTIME);
+VmSubsiCapCostTech.L(runCy,DSBS,TECH,YTIME+1) = pmSubsiCapCostTech(runCy,DSBS,TECH,YTIME);
+VmSubsiCapCostSupply.L(runCy,SSBS,STECH,YTIME+1) = pmSubsiCapCostSupply(runCy,SSBS,STECH,YTIME);
+VmNetSubsiTax.L(runCy,YTIME+1) = pmNetSubsiTax(runCy,YTIME);
