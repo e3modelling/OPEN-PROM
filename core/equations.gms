@@ -26,8 +26,7 @@ qDummyObjPGALL(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
     =e=
   SUM(PGALL,
     SQR(
-      VmProdElec(allCy,PGALL,YTIME) /
-      SUM(PGALL2, VmProdElec(allCy,PGALL2,YTIME)) - 
+      V04SharePowPlaNewEq(allCy,PGALL,YTIME) - 
       t04SharePowPlaNewEq(allCy,PGALL,YTIME)
     ) +
     SQR(

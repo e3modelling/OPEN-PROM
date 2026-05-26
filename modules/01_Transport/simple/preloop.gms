@@ -40,7 +40,7 @@ i01Sigma(runCy,"S1") = -log(V01PcOwnPcLevl.L(runCy,"%fBaseY%") / i01PassCarsMark
 V01GapTranspActiv.LO(runCy,TRANSE,YTIME) = 0;
 V01GapTranspActiv.FX(runCy,TRANSE,YTIME)$DATAY(YTIME) = 0;
 *---
-V01ConsSpecificFuel.FX(runCy,TRANSE,TTECH,EF,YTIME)$(not sameas(TRANSE,"PC")$(SECTTECH(TRANSE,TTECH)$TTECHtoEF(TTECH,EF))) = testSFC(runCy,TRANSE,TTECH);
+V01ConsSpecificFuel.FX(runCy,TRANSE,TTECH,EF,YTIME)$(not sameas(TRANSE,"PC") and SECTTECH(TRANSE,TTECH) and TTECHtoEF(TTECH,EF)) = testSFC(runCy,TRANSE,TTECH);
 V01ConsSpecificFuel.FX(runCy,TRANSE,TTECH,EF,YTIME)$(sameas(TRANSE,"PC")$(SECTTECH(TRANSE,TTECH)$TTECHtoEF(TTECH,EF))) = i01SFCPC(runCy,TTECH,EF,"%fBaseY%");
 *---
 V01ConsTechTranspSectoral.FX(runCy,TRANSE,TTECH,EF,YTIME)$(SECTTECH(TRANSE,TTECH) and (not PLUGIN(TTECH)) and TTECHtoEF(TTECH,EF) and DATAY(YTIME)) = imFuelCons(runCy,TRANSE,EF,YTIME); 
@@ -98,8 +98,12 @@ V01CostTranspPerMeanConsSize.FX(runCy,TRANSE,TTECH,YTIME)$(not SECTTECH(TRANSE,T
 *---
 V01ShareTechTr.LO(runCy,TRANSE,TTECH,YTIME) = 0;
 *---
-V01ShareBlend.LO(runCy,TRANSE,TTECH,YTIME) = 0;
-V01ShareBlend.FX(runCy,TRANSE,TTECH,YTIME)$(DATAY(YTIME) and SECTTECH(TRANSE,TTECH)) = SUM(EF$(TTECHtoEF(TTECH,EF) and BIOFUELS(EF)), i01ShareBlend(runCy,TRANSE,EF,YTIME));
+V01ShareBlend.LO(runCy,TRANSE,TTECH,EF,YTIME) = 0;
+V01ShareBlend.FX(runCy,TRANSE,TTECH,EF,YTIME)$(DATAY(YTIME) and SECTTECH(TRANSE,TTECH) and TTECHtoEF(TTECH,EF) and not sameas("PC",TRANSE)) = 
+(imFuelCons(runCy,TRANSE,EF,YTIME) + 1e-6) / SUM(EF2$(SECtoEF(TRANSE,EF2) and TTECHtoEF(TTECH,EF2)),imFuelCons(runCy,TRANSE,EF2,YTIME) + 1e-6);
+!!imFuelCons(runCy,TRANSE,EF,YTIME) / SUM(EF2$(BioToFossilFuel(EF2,EF) or BioToFossilFuel(EF,EF2)), imFuelCons(runCy,TRANSE,EF,YTIME) + imFuelCons(runCy,TRANSE,EF2,YTIME) + 1e-8);
+!!V01ShareBioBlend.FX(runCy,TRANSE,TTECH,EF,YTIME)$(not BLEND(EF) and SECtoEF(TRANSE,EF)) = 1;
+!!V01ShareBioBlend.FX(runCy,TRANSE,TTECH,EF,YTIME)$(not SECtoEF(TRANSE,EF))  = 0;
 *---
 V01ConsFuelTransport.FX(runCy,TRANSE,EF,YTIME)$DATAY(YTIME) = imFuelCons(runCy,TRANSE,EF,YTIME);
 V01ConsFuelTransport.FX(runCy,TRANSE,EF,YTIME)$(not SECtoEF(TRANSE,EF)) = 0;
@@ -107,9 +111,12 @@ V01ConsFuelTransport.FX(runCy,TRANSE,EF,YTIME)$(not SECtoEF(TRANSE,EF)) = 0;
 V01CapacityTransport.FX(runCy,"GU","TCHEVGDO",YTIME)$DATAY(YTIME) = 0;
 V01CapacityTransport.FX(runCy,TRANSE,TTECH,YTIME)$(DATAY(YTIME) and SECTTECH(TRANSE,TTECH)) = 
 (
-  SUM(EF$(TTECHtoEF(TTECH,EF) ),
+  SUM(EF$(TTECHtoEF(TTECH,EF)),
   imFuelCons(runCy,TRANSE,EF,YTIME) / testSFC(runCy,TRANSE,TTECH)
-  ) * 1e3
+  + 1e-6) /
+  SUM((TTECH2,EF2)$(SECTTECH(TRANSE,TTECH2) and TTECHtoEF(TTECH2,EF2)),
+    imFuelCons(runCy,TRANSE,EF2,YTIME) / (testSFC(runCy,TRANSE,TTECH2))
+  + 1e-6) * imActv(YTIME,runCy,TRANSE)
 )$(not sameas("PC",TRANSE)) +
 (
   i01StockPC(runCy,TTECH,YTIME)

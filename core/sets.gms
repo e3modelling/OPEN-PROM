@@ -470,7 +470,6 @@ ELC     "Electricity"
 SLD     "Solid Fuels"
 GAS     "Gases"
 LQD     "All Liquids"
-OLQT    "All liquids but GDO, RFO, GSL"
 REN     "Renewables except Hydro"
 NFF     "Non Fossil Fuels"
 NEF     "New energy forms"
@@ -485,7 +484,6 @@ EFA(EF)          Aggregate Energy Forms
 /
 SLD   "Solid Fuels"
 LQD   "Liquids"
-OLQT  "All liquids but GDO, RFO, GSL"
 GAS   "Gases"
 REN   "Renewables except Hydro"
 STE   "Steam"
@@ -522,7 +520,6 @@ EFtoEFA(EF,EFA)  Energy Forms Aggregations (for summary balance report)
 /
 (HCL,LGN).SLD
 (CRO,GSL,GDO,RFO,LPG,KRS,OLQ).LQD
-(LPG,KRS,OLQ).OLQT
 (NGS,OGS).GAS
 (WND,SOL,GEO).REN
 (HYD,WND,SOL,GEO,NUC,BMSWAS).NFF

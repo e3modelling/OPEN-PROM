@@ -349,20 +349,29 @@ Q01PremScrp(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME)$SECTTECH(TRANSE,TTECH)$runCy(
       )
     );
 
-Q01ShareBlend(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runCy(allCy))..
-    V01ShareBlend(allCy,TRANSE,TTECH,YTIME)
-      =E=
-    SUM(EF$(TTECHtoEF(TTECH,EF) and BIOFUELS(EF)),
-      0.8 / (1 + exp(i01calb(allCy,TRANSE,EF) + 2 * log(VmPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME) / SUM(EF2$(BioToFossilFuel(EF,EF2)), VmPriceFuelSubsecCarVal(allCy,TRANSE,EF2,YTIME)))))
-    );
-
-$ontext
-Q01ShareBlend(allCy,TRANSE,TTECH,EF,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $TTECHtoEF(TTECH,EF) $runCy(allCy))..
+Q01ShareBlend(allCy,TRANSE,TTECH,EF,YTIME)$(TIME(YTIME)$SECTTECH(TRANSE,TTECH)$TTECHtoEF(TTECH,EF) $runCy(allCy))..
     V01ShareBlend(allCy,TRANSE,TTECH,EF,YTIME)
       =E=
-    VmPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME) ** (-2) / 
-    SUM(EF2$TTECHtoEF(TTECH,EF2),VmPriceFuelSubsecCarVal(allCy,TRANSE,EF2,YTIME) ** (-2));
-    !!SUM(EF2,VmPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME))
+    (
+      i01calibweibul(allCy,TRANSE,TTECH,EF) * VmPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME-1) ** (-2) /
+      SUM(EF2$TTECHtoEF(TTECH,EF2),i01calibweibul(allCy,TRANSE,TTECH,EF2) * VmPriceFuelSubsecCarVal(allCy,TRANSE,EF2,YTIME-1) ** (-2))
+    )$(not PLUGIN(TTECH)) +
+    (
+      i01calibweibul(allCy,TRANSE,TTECH,EF) * VmPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME-1) ** (-2) /
+      SUM(EF2$(TTECHtoEF(TTECH,EF2) and not sameas("ELC",EF2)),i01calibweibul(allCy,TRANSE,TTECH,EF2) * VmPriceFuelSubsecCarVal(allCy,TRANSE,EF2,YTIME-1) ** (-2))
+    )$(PLUGIN(TTECH) and not sameas("ELC",EF));
+    
+
+$ontext
+Q01ShareBioBlend(allCy,TRANSE,TTECH,EF,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $TTECHtoEF(TTECH,EF) $runCy(allCy))..
+      V01ShareBioBlend(allCy,TRANSE,EF,YTIME)
+      =E=
+    (
+      0.8 / (1 + exp(i01calb(allCy,TRANSE,EF) + 2 * log(VmPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME) / SUM(EF2$(BioToFossilFuel(EF,EF2)), VmPriceFuelSubsecCarVal(allCy,TRANSE,EF2,YTIME)))))
+    )$BIOFUELS(EF) +
+    SUM(EF2$(BioToFossilFuel(EF2,EF)),
+      1 - 0.8 / (1 + exp(i01calb(allCy,TRANSE,EF2) + 2 * log(VmPriceFuelSubsecCarVal(allCy,TRANSE,EF2,YTIME) / VmPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME))))
+    );
 $offtext
 
 
@@ -372,6 +381,7 @@ Q01ConsFuelTransport(allCy,TRANSE,EF,YTIME)$(TIME(YTIME) $SECtoEF(TRANSE,EF) $ru
     SUM(TTECH$(TTECHtoEF(TTECH,EF) and SECTTECH(TRANSE,TTECH) and not PLUGIN(TTECH)),
       V01CapacityTransport(allCy,TRANSE,TTECH,YTIME) * !![pkm] mvh
       i01ShareBlend(allCy,TRANSE,EF,YTIME) *
+      !!V01ShareBlend(allCy,TRANSE,TTECH,EF,YTIME) *
       V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME) / 1000 *!!Ktoe / pkm   ktoe/km
       (1$(not sameas(TRANSE,"PC")) + V01ActivPassTrnsp(allCy,TRANSE,YTIME)$sameas(TRANSE,"PC")) !!km/vh
     ) +
@@ -384,6 +394,7 @@ Q01ConsFuelTransport(allCy,TRANSE,EF,YTIME)$(TIME(YTIME) $SECtoEF(TRANSE,EF) $ru
       (
         (1-i01ShareAnnMilePlugInHybrid(allCy,YTIME)) *
         i01ShareBlend(allCy,TRANSE,EF,YTIME) *
+        !!V01ShareBlend(allCy,TRANSE,PLUGIN,EF,YTIME) *
         V01CapacityTransport(allCy,TRANSE,PLUGIN,YTIME) * !![pkm] mvh
         V01ConsSpecificFuel(allCy,TRANSE,PLUGIN,EF,YTIME) / 1000
       )$(not sameas("ELC",EF))

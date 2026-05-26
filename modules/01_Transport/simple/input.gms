@@ -279,20 +279,52 @@ i01calb(runCy,TRANSE,EF)$(SECtoEF(TRANSE,EF) and BIOFUELS(EF))=
 )$i01ShareBlend(runCy,TRANSE,EF,"%fBaseY%") +
 3$(not i01ShareBlend(runCy,TRANSE,EF,"%fBaseY%"));
 
-
-
+*i01calibweibul(runCy,TRANSE,TTECH,EF)$(SECTTECH(TRANSE,TTECH) and TTECHtoEF(TTECH,EF)) = (imFuelCons(runCy,TRANSE,EF,"%fBaseY%") + 1e-6) / SUM(EF2$(SECtoEF(TRANSE,EF2) and TTECHtoEF(TTECH,EF2)),imFuelCons(runCy,TRANSE,EF2,"%fBaseY%") + 1e-6) *imFuelPrice(runCy,TRANSE,EF,"%fBaseY%") ** 2;
+!!i01calibweibul(allCy,TRANSE,TTECH,EF)$(SECTTECH(TRANSE,TTECH) and TTECHtoEF(TTECH,EF) and BIOFUELS(EF)) = 0.5;
+$ontext
+testSFC(runCy,TRANSE,TTECH)$(not sameas("PC",TRANSE) ) = 
+test2SFC(TRANSE,TTECH) * 
+[
+  (
+    SUM((TTECH2,EF2)$(SECTTECH(TRANSE,TTECH2) and TTECHtoEF(TTECH2, EF2)),
+        (i01ShareBlend(runCy,TRANSE,EF2,"%fBaseY%")) *
+        (imFuelCons(runCy,TRANSE,EF2,"%fBaseY%") ) * 1e3
+      /
+      test2SFC(TRANSE,TTECH2)
+    )
+     / imActv("%fBaseY%",runCy,TRANSE) 
+  )$(imActv("%fBaseY%",runCy,TRANSE) and SUM((TTECH2,EF2)$(SECTTECH(TRANSE,TTECH2) and TTECHtoEF(TTECH2, EF2)),
+        (i01ShareBlend(runCy,TRANSE,EF2,"%fBaseY%")) *
+        (imFuelCons(runCy,TRANSE,EF2,"%fBaseY%") ) * 1e3
+      /
+      test2SFC(TRANSE,TTECH2)
+    )) +
+  1$(not (imActv("%fBaseY%",runCy,TRANSE) or (imActv("%fBaseY%",runCy,TRANSE) and SUM((TTECH2,EF2)$(SECTTECH(TRANSE,TTECH2) and TTECHtoEF(TTECH2, EF2)),
+      (i01ShareBlend(runCy,TRANSE,EF2,"%fBaseY%")) *
+      (imFuelCons(runCy,TRANSE,EF2,"%fBaseY%") ) * 1e3
+    /
+    test2SFC(TRANSE,TTECH2)
+  )))) !! Fixme: Default value should be the global average author: mmadianos     
+  
+]+1E-6;
+$offtext
 
 testSFC(runCy,TRANSE,TTECH)$(not sameas("PC",TRANSE) ) = 
 test2SFC(TRANSE,TTECH) * 
 [
-  1$(not imActv("%fBaseY%",runCy,TRANSE)) + !! Fixme: Default value should be the global average author: mmadianos
   (
-    SUM(TTECH2$(SECTTECH(TRANSE,TTECH2)),
-      SUM(EF2$TTECHtoEF(TTECH2, EF2),
-        i01ShareBlend(runCy,TRANSE,EF2,"%fBaseY%") *
-        imFuelCons(runCy,TRANSE,EF2,"%fBaseY%") * 1e3
-      ) /
+    SUM((TTECH2,EF2)$(SECTTECH(TRANSE,TTECH2) and TTECHtoEF(TTECH2, EF2)),
+        (i01ShareBlend(runCy,TRANSE,EF2,"%fBaseY%")) *
+        (imFuelCons(runCy,TRANSE,EF2,"%fBaseY%") ) * 1e3
+      /
       test2SFC(TRANSE,TTECH2)
-    ) / imActv("%fBaseY%",runCy,TRANSE) 
-  )$imActv("%fBaseY%",runCy,TRANSE)
+    )
+     / imActv("%fBaseY%",runCy,TRANSE) 
+  )$(imActv("%fBaseY%",runCy,TRANSE))!! Fixme: Default value should be the global average author: mmadianos     
+  +test2SFC(TRANSE,TTECH)$(not imActv("%fBaseY%",runCy,TRANSE) or  not SUM((TTECH2,EF2)$(SECTTECH(TRANSE,TTECH2) and TTECHtoEF(TTECH2, EF2)),
+        (i01ShareBlend(runCy,TRANSE,EF2,"%fBaseY%")) *
+        (imFuelCons(runCy,TRANSE,EF2,"%fBaseY%") ) 
+    ))
+  
 ];
+testSFC(runCy,TRANSE,TTECH)$(testSFC(runCy,TRANSE,TTECH) > 100) = test2SFC(TRANSE,TTECH);
