@@ -8,7 +8,7 @@ $batinclude "./modules/include.gms" postsolve_year
 option clear = VmCarVal;
 *'                *PARAMETER INITIALISATION FOR RECURSIVE VmCarVal LAGS*
 pmCarVal(runCy,"TRADE",YTIME)$(DATAY(YTIME)) = iCarbValYrExog(runCy,YTIME);
-VmCarVal.L(runCy,NAP,YTIME) = pmCarVal(runCy,NAP,YTIME-1);
+VmCarVal.FX(runCy,NAP,YTIME+1) = pmCarVal(runCy,NAP,YTIME+1);
 
 $ifthen.countryParallel "%CountrySolveMode%" == "parallel"
 $offImplicitAssign

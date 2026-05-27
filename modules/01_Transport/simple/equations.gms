@@ -119,18 +119,18 @@ Q01CostFuel(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runC
     (
       (
         sum(EF$TTECHtoEF(TTECH,EF),
-          p01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME) * i01ShareBlend(allCy,TRANSE,EF,YTIME) *
+          V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME) * i01ShareBlend(allCy,TRANSE,EF,YTIME) *
           VmPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME)
         ) 
       )$(not PLUGIN(TTECH)) +
       (
         sum(EF$(TTECHtoEF(TTECH,EF) $(not sameas("ELC",EF))),
           (1-i01ShareAnnMilePlugInHybrid(allCy,YTIME)) * i01ShareBlend(allCy,TRANSE,EF,YTIME) *
-          p01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME) *
+          V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME) *
           VmPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME)
         ) +
         i01ShareAnnMilePlugInHybrid(allCy,YTIME) *
-        p01ConsSpecificFuel(allCy,TRANSE,TTECH,"ELC",YTIME) *
+        V01ConsSpecificFuel(allCy,TRANSE,TTECH,"ELC",YTIME) *
         VmPriceFuelSubsecCarVal(allCy,TRANSE,"ELC",YTIME)
       )$PLUGIN(TTECH) +
       imVarCostTech(allCy,TRANSE,TTECH,YTIME) +
@@ -211,16 +211,16 @@ Q01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)$(TIME(YTIME) $SECTTECH(TR
     (
       (
         i01ShareBlend(allCy,TRANSE,EF,YTIME) *
-        p01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)
+        V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)
       )$(not PLUGIN(TTECH)) +
       ( 
         (
           (1-i01ShareAnnMilePlugInHybrid(allCy,YTIME)) *
           i01ShareBlend(allCy,TRANSE,EF,YTIME) *
-          p01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)
+          V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)
         )$(not sameas("ELC",EF)) +
         i01ShareAnnMilePlugInHybrid(allCy,YTIME) *
-        p01ConsSpecificFuel(allCy,TRANSE,TTECH,"ELC",YTIME)
+        V01ConsSpecificFuel(allCy,TRANSE,TTECH,"ELC",YTIME)
       )$PLUGIN(TTECH)
     ) / 1000 *
     V01GapTranspActiv(allCy,TRANSE,YTIME) *

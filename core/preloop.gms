@@ -90,5 +90,4 @@ VmGDPPartGlob.FX(runCy,YTIME)$(DATAY(YTIME)) = i01GDP(YTIME,runCy) / sum(runCy2,
 
 *'                *PARAMETER INITIALISATION FOR RECURSIVE VmCarVal LAGS*
 
-pmCarVal(runCy,"TRADE",YTIME)$(DATAY(YTIME)) = iCarbValYrExog(runCy,YTIME);
-VmCarVal.L(runCy,NAP,YTIME) = pmCarVal(runCy,NAP,YTIME-1);
+pmCarVal(runCy,"TRADE",YTIME) = iCarbValYrExog(runCy,YTIME);
