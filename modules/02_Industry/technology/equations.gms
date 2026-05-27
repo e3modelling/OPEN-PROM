@@ -64,7 +64,8 @@ Q02DemUsefulSubsecRemTech(allCy,DSBS,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and n
     SUM(ITECH$SECTTECH(DSBS,ITECH),
       V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) *
       imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME) *
-      i02util(allCy,DSBS,ITECH,YTIME)
+      i02util(allCy,DSBS,ITECH,YTIME) *
+      i02CapFactor(allCy,DSBS,ITECH,YTIME)
     );
 
 *' This equation calculates the gap in useful energy demand for industry, tertiary, non-energy uses, and bunkers.
@@ -96,7 +97,8 @@ Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not CD
       (exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME)) - 1) * 
       imCapCostTech(allCy,DSBS,ITECH,YTIME) * imCGI(allCy,YTIME) +
       imFixOMCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit
-    ) / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME) / ToeToTons(DSBS,ITECH) 
+    ) / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME) 
+    / i02CapFactor(allCy,DSBS,ITECH,YTIME) 
 ;
 
 *' The equation computes the variable cost (variable + fuel) of each technology in each subsector - to check about consumer sizes
@@ -117,7 +119,7 @@ Q02VarCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not C
         (VmRenValue(YTIME)/1000)$(not RENEF(ITECH) and not NENSE(DSBS)) !! needs change of units
       )
     ) +
-    imVarCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit / ToeToTons(DSBS,ITECH) 
+    imVarCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit 
   ) / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME);
 
 Q02CostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
@@ -147,7 +149,7 @@ Q02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and TIME(YTI
         =E= 
     V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) +
     (V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME) * V02GapUsefulDemSubsec(allCy,DSBS,YTIME)) / 
-    (imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME) * i02util(allCy,DSBS,ITECH,YTIME));
+    (imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME) * i02util(allCy,DSBS,ITECH,YTIME) * i02CapFactor(allCy,DSBS,ITECH,YTIME));
         
 *' This equation computes the consumption/demand of non-substitutable electricity for subsectors of INDUSTRY and DOMESTIC in the "typical useful energy demand equation".
 *' The main explanatory variables are activity indicators of each subsector and electricity prices per subsector. Corresponding elasticities are applied for activity indicators
@@ -187,7 +189,7 @@ Q02ConsFuel(allCy,DSBS,EF,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not CDR(DSBS
     sum(ITECH$(ITECHtoEF(ITECH,EF) and SECTTECH(DSBS,ITECH)),
       i02ShareBlend(allCy,DSBS,ITECH,EF,YTIME) *
       V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) *
-      i02util(allCy,DSBS,ITECH,YTIME) / ToeToTons(DSBS,ITECH)
+      i02util(allCy,DSBS,ITECH,YTIME) * i02CapFactor(allCy,DSBS,ITECH,YTIME) * i02SpecificEnergyIntensity(DSBS,ITECH)
     ) +
     V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(INDDOM(DSBS) and ELCEF(EF)) +
     VmElecConsHeatPla(allCy,DSBS,YTIME)$ELCEF(EF);
@@ -196,7 +198,7 @@ Q02ConsFuel(allCy,DSBS,EF,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not CDR(DSBS
 Q02IndAvrEffFinalUseful(allCy,DSBS,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not CDR(DSBS))$runCy(allCy))..
     V02IndAvrEffFinalUseful(allCy,DSBS,YTIME)
        =E=
-    V02DemSubUsefulSubsec(allCy,DSBS,YTIME) / ToeToTons(DSBS,ITECH) /
+    V02DemSubUsefulSubsec(allCy,DSBS,YTIME) * i02SpecificEnergyIntensity(DSBS,ITECH)   /
     (sum(EF$SECtoEF(DSBS,EF),VmConsFuel(allCy,DSBS,EF,YTIME)) - (V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(INDDOM(DSBS)) +
     VmElecConsHeatPla(allCy,DSBS,YTIME)) + 1e-3)
     ;

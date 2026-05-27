@@ -9,6 +9,8 @@ i02numtechnologiesUsingEF(DSBS,EF)                         "Number of technologu
 imCO2CaptRateIndustry(allCy,ITECH,YTIME)	               "Industry CO2 capture rate (1)"
 i02ShareBlend(allCy,DSBS,ITECH,EF,YTIME)                   "Share of each energy form in a technology"
 i02ShareElcHP(allCy,DSBS,YTIME)                            "Share of final electricity consumption of HeatPumps in substitutable electricity consumption (1)"
+i02SpecificEnergyIntensity(DSBS,ITECH)                     "Specific energy intensity of each technology in each subsector (Mtoe/Million tons) - used only for IS"
+I02CapFactor(allCy,DSBS,ITECH,YTIME)                       "Capacity factor of each technology in each subsector (1) - used only for IS"
 ;
 
 Equations
@@ -38,25 +40,25 @@ Q02ConsFuelSum(allCy,DSBS,YTIME)
 
 Variables
 *' ***  INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-V02DemSubUsefulSubsec(allCy,DSBS,YTIME)                    "Demand for useful substitutable energy demand in each subsector"
-V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)           "Remaining Equipment Capacity per Technology in each subsector (substitutable)"
-V02DemUsefulSubsecRemTech(allCy,DSBS,YTIME)                "Useful energy demand (substitutable) covered by remaining equipment"
-V02GapUsefulDemSubsec(allCy,DSBS,YTIME)                    "gap in useful energy demand per subsector (Mtoe)"
-V02CapCostTech(allCy,DSBS,ITECH,YTIME)                     "capital cost of each technology per subsector (final)"
-V02VarCostTech(allCy,DSBS,ITECH,YTIME)                    "variable cost of each technology per subsector (final)"
-V02CostTech(allCy,DSBS,ITECH,YTIME)                        "total cost of each technology per subsector (useful)"
+V02DemSubUsefulSubsec(allCy,DSBS,YTIME)                    "Demand for useful substitutable energy demand in each subsector (Mtoe - Million tons for IS)"
+V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)           "Remaining Equipment Capacity per Technology in each subsector (substitutable) (Mtoe/y - Million tons/y for IS)"
+V02DemUsefulSubsecRemTech(allCy,DSBS,YTIME)                "Useful energy demand (substitutable) covered by remaining equipment (Mtoe - Million tons for IS)"
+V02GapUsefulDemSubsec(allCy,DSBS,YTIME)                    "gap in useful energy demand per subsector ((Mtoe - Million tons for IS)"
+V02CapCostTech(allCy,DSBS,ITECH,YTIME)                     "capital cost of each technology per subsector (final) (k$/toe - $/tons for IS)"
+V02VarCostTech(allCy,DSBS,ITECH,YTIME)                     "variable cost of each technology per subsector (final) (k$/toe - $/tons for IS)"
+V02CostTech(allCy,DSBS,ITECH,YTIME)                        "total cost of each technology per subsector (useful) (k$/toe - $/tons for IS)"
 !!V02CapCostTech1(allCy,DSBS,ITECH,YTIME)
-V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME)         "share of each technology in gap of useful energy"
-V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)              "equipment capacity of each technology in each subsector"
-V02UsefulElecNonSubIndTert(allCy,DSBS,YTIME)               "non-substitutable useful electricity"
-V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)                "final energy of non-substitutable electricity"
+V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME)         "share of each technology in gap of useful energy (1)"
+V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)              "equipment capacity of each technology in each subsector  (Mtoe/y - Million tons/y for IS)"
+V02UsefulElecNonSubIndTert(allCy,DSBS,YTIME)               "non-substitutable useful electricity (Mtoe)"
+V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)                "final energy of non-substitutable electricity (Mtoe)"
 
-V02IndxElecIndPrices(allCy,TCHP,YTIME)                          "Electricity index - a function of industry price - Estimate"
-V02IndAvrEffFinalUseful(allCy,DSBS,YTIME)                  "Average Efficiency" 
-V02PremScrpIndu(allCy,DSBS,ITECH,YTIME)                    "premature scrapping"
+V02IndxElecIndPrices(allCy,TCHP,YTIME)                     "Electricity index - a function of industry price - Estimate (k$/toe)"
+V02IndAvrEffFinalUseful(allCy,DSBS,YTIME)                  "Average Efficiency (1)" 
+V02PremScrpIndu(allCy,DSBS,ITECH,YTIME)                    "premature scrapping (1)"
 V02RatioRem(allCy,DSBS,ITECH,YTIME)
 *'                **Interdependent Variables**
-VmConsFuel(allCy,DSBS,EF,YTIME)                            "fuel consumption of fuels in each subsector"
-VmConsFuelShare(allCy,DSBS,EF,YTIME)
-VmConsFuelSum(allCy,DSBS,YTIME)
+VmConsFuel(allCy,DSBS,EF,YTIME)                            "fuel consumption of fuels in each subsector (Mtoe)"
+VmConsFuelShare(allCy,DSBS,EF,YTIME)                       "share of each fuel in total fuel consumption of each subsector (1)"
+VmConsFuelSum(allCy,DSBS,YTIME)                            "total fuel consumption of each subsector (Mtoe)"      
 ;
