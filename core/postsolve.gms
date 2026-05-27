@@ -1,5 +1,5 @@
 *' Core recursive VmCarVal state
-pmCarVal(runCyL,NAP,YTIME)$TIME(YTIME) = VmCarVal.L(runCyL,NAP,YTIME)$TIME(YTIME);
+*pmCarVal(runCyL,NAP,YTIME)$TIME(YTIME) = VmCarVal.L(runCyL,NAP,YTIME)$TIME(YTIME);
 
 endloop;  !! close countries loop
 
@@ -7,7 +7,7 @@ $batinclude "./modules/include.gms" postsolve_year
 
 option clear = VmCarVal;
 *'                *PARAMETER INITIALISATION FOR RECURSIVE VmCarVal LAGS*
-pmCarVal(runCy,"TRADE",YTIME)$(DATAY(YTIME)) = iCarbValYrExog(runCy,YTIME);
+pmCarVal(runCy,"TRADE",YTIME) = iCarbValYrExog(runCy,YTIME);
 VmCarVal.FX(runCy,NAP,YTIME+1) = pmCarVal(runCy,NAP,YTIME+1);
 
 $ifthen.countryParallel "%CountrySolveMode%" == "parallel"
