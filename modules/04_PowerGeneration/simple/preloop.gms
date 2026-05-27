@@ -87,9 +87,7 @@ V04CapElecNonCHP.FX(runCy,YTIME)$DATAY(YTIME) =
 V04NewCapElec.LO(runCy,PGALL,YTIME) = 0;
 V04NewCapElec.L(runCy,PGALL,YTIME) = 1;
 V04NewCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = 0;
-*---
-V04CapElecNominal.LO(runCy,PGALL,YTIME) = 0;
-V04CapElecNominal.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = imInstCapPastNonCHP(runCy,PGALL,YTIME) / i04AvailRate(runCy,PGALL,YTIME);
+
 *---
 V04ShareTechPG.LO(runCy,PGALL,YTIME) = 0;
 V04ShareTechPG.UP(runCy,PGALL,YTIME) = 1; 
@@ -105,11 +103,18 @@ V04IndxEndogScrap.L(runCy,PGALL,YTIME) = 0.5;
 V04IndxEndogScrap.FX(runCy,PGALL,YTIME)$(DATAY(YTIME) or PGSCRN(PGALL)) = 1;
 *---
 VmCapElec.LO(runCy,PGALL,YTIME) = 0;
-VmCapElec.L(runCy,PGALL,YTIME) = V04DemElecTot.L(runCy,"%fBaseY%") / (SUM(PGALL2,i04DataElecProdNonCHP(runCy,PGALL2,"%fBaseY%") ) / 1000) * 
+VmCapElec.L(runCy,PGALL,YTIME) = 
+V04DemElecTot.L(runCy,"%fBaseY%") / (SUM(PGALL2,i04DataElecProdNonCHP(runCy,PGALL2,"%fBaseY%") ) / 1000) * 
 (i04DataElecProdNonCHP(runCy,PGALL,"%fBaseY%") / 1000 / smGwToTwhPerYear("%fBaseY%"));
 VmCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = 
 V04DemElecTot.L(runCy,YTIME) / (SUM(PGALL2,i04DataElecProdNonCHP(runCy,PGALL2,YTIME) ) / 1000) * 
 (i04DataElecProdNonCHP(runCy,PGALL,YTIME) / 1000 / smGwToTwhPerYear(YTIME)) ;
+*---
+
+*---
+V04CapElecNominal.LO(runCy,PGALL,YTIME) = 0;
+V04CapElecNominal.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = VmCapElec.L(runCy,PGALL,YTIME) / i04AvailRate(runCy,PGALL,YTIME);
+
 *---
 VmProdElec.LO(runCy,PGALL,YTIME) = 0;
 VmProdElec.L(runCy,pgall,YTIME) = i04DataElecProdNonCHP(runCy,pgall,"%fBaseY%") / 1000 + 1;

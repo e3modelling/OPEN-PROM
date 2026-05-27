@@ -129,7 +129,7 @@ Q04IndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(al
             )
       )**(-2) +
       (
-        i04ScaleEndogScrap *
+        i04ScaleEndogScrap * (1 + 3$EU28(allCy)) *
         sum(PGALL2$(not sameas(PGALL,PGALL2)),
           i04AvailRate(allCy,PGALL2,YTIME) / i04AvailRate(allCy,PGALL,YTIME) * 
           (V04CostHourProdInvDec(allCy,PGALL2,YTIME-1)          
@@ -330,7 +330,7 @@ Q04CCSRetroFit(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(NOCCS(PGALL)))..
     (V04CostVarTech(allCy,PGALL,YTIME-1) + 1e-3)** (-2) /
     (
       (V04CostVarTech(allCy,PGALL,YTIME-1) + 1e-3)** (-2) +
-      0.01 *
+      0.01 * (1 + 3$(ord(YTIME)>24)) *
       SUM(PGALL2$CCS_NOCCS(PGALL2,PGALL),
         (
           V04CostCapTech(allCy,PGALL2,YTIME-1) +
@@ -344,9 +344,9 @@ Q04CCSRetroFit(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(NOCCS(PGALL)))..
 Q04ScrpRate(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04ScrpRate(allCy,PGALL,YTIME)
         =E=
-    1 - (1 - 1 / i04TechLftPlaType(allCy,PGALL)) * 
+    1 - ((1 - 1 / i04TechLftPlaType(allCy,PGALL)) * 
     V04IndxEndogScrap(allCy,PGALL,YTIME) *
-    V04CCSRetroFit(allCy,PGALL,YTIME);
+    V04CCSRetroFit(allCy,PGALL,YTIME));
 
 Q04ConsFuelElecProd(allCy,PGEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmConsFuelElecProd(allCy,PGEF,YTIME)

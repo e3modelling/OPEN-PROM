@@ -668,7 +668,14 @@ imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 14 and DOMSE(DSBS) and not s
 imMatrFactor(runCy,DSBS,"THEATPUMP",YTIME)$(ord(YTIME) > 14 and DOMSE(DSBS) and not sameas(DSBS,"AG")) = 40;
 imMatrFactor(runCy,DSBS,"TNGSCCS",YTIME)$((ord(YTIME) > 14) and INDSE(DSBS)) = 3;
 imMatrFactor(runCy,DSBS,"THCLCCS",YTIME)$((ord(YTIME) > 14) and INDSE(DSBS)) = 3;
+
+imMatrFactor(runCy,DSBS,"TNGSCCS",YTIME)$((ord(YTIME) > 34) and INDSE(DSBS)) = 10;
+imMatrFactor(runCy,DSBS,"THCLCCS",YTIME)$((ord(YTIME) > 34) and INDSE(DSBS)) = 10;
 imMatrFactor(runCy,DSBS,TECH,YTIME)$((INDDOM(DSBS) or NENSE(DSBS)) and (imMatrFactor(runCy,DSBS,TECH,YTIME) < 1e-2) ) = 1e-2;
+
+
+*imMatrFactor(EU27,DSBS,TECH,YTIME)$(ord(YTIME)<24) = imMatrFactor(EU27,DSBS,TECH,"2023");
+*imMatrFactor(EU27,DSBS,TECH,YTIME)$(ord(YTIME)<24) = imMatrFactor(EU27,DSBS,TECH,YTIME-10);
 
 $ELSE.calib
 variable imMatrFactor(allCy,DSBS,TECH,YTIME)    "Maturity factor per technology and subsector for all countries (1)";
@@ -801,10 +808,10 @@ imUsfEneConvSubTech(runCy,"BU","TGSL",YTIME) = 0.5;
 imCapCostTech(runCy,"BU","TH2F",YTIME) = 1.5 * imCapCostTech(runCy,"BU","TGDO",YTIME);
 *---
 **  CDR
-imCapCostTechMin(allCy,"DAC","HTDAC",YTIME) = 0.3;
-imCapCostTechMin(allCy,"DAC","H2DAC",YTIME) = 0.3;
-imCapCostTechMin(allCy,"DAC","LTDAC",YTIME) = 0.3;
-imCapCostTechMin(allCy,"EW","TEW",YTIME) = 0.3;
+imCapCostTechMin(allCy,"DAC","HTDAC",YTIME) = 0.1;
+imCapCostTechMin(allCy,"DAC","H2DAC",YTIME) = 0.1;
+imCapCostTechMin(allCy,"DAC","LTDAC",YTIME) = 0.1;
+imCapCostTechMin(allCy,"EW","TEW",YTIME) = 0.1;
 *---
 !!imUsfEneConvSubTech(runCy,INDSE,"THCL",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCL","USC") + 0.005 * (ord(YTIME)-14);
 imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCLCCS","USC") + 0.005 * (ord(YTIME)-14);

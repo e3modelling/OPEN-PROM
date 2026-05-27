@@ -59,12 +59,14 @@ i02ElaSub(runCy,DSBS) = 2;
 
 *---
 i02SensCarbon(allCy,YTIME,DSBS) = 0;
-*i02SensCarbon(EU27,YTIME,DSBS)$(ord(YTIME)>24) = 1;
-*i02SensCarbon(EU27,YTIME,"HOU")$(ord(YTIME)>24) = 2;
-*i02SensCarbon(EU27,YTIME,"SE")$(ord(YTIME)>24) = 2;
-i02SensCarbon(EU27,YTIME,DSBS) = 1;
-i02SensCarbon(EU27,YTIME,"HOU") = 2;
-i02SensCarbon(EU27,YTIME,"SE") = 2;
+
+i02SensCarbon(EU28,YTIME,DSBS) = 1;
+i02SensCarbon(EU28,YTIME,"HOU") = 2;
+i02SensCarbon(EU28,YTIME,"SE") = 2;
+
+i02SensCarbon(EU27,YTIME,DSBS)$(ord(YTIME)>34) = 1.5;
+i02SensCarbon(EU27,YTIME,"HOU")$(ord(YTIME)>34) = 2.5;
+i02SensCarbon(EU27,YTIME,"SE")$(ord(YTIME)>34) = 2.5;
 *---
 imCO2CaptRateIndustry(runCy,CCSTECH,YTIME) = 0.9;
 *---
@@ -79,11 +81,15 @@ i02ShareBlend(runCy,DSBS,ITECH,EF,YTIME)$(DATAY(YTIME) and SECTTECH(DSBS,ITECH) 
   1$(not SUM(EFS2$ITECHtoEF(ITECH,EFS2), imFuelConsPerFueSub(runCy,DSBS,EFS2,YTIME)) and not BIOFUELS(EF));
   
 i02ShareBlend(runCy,DSBS,ITECH,EF,YTIME)$AN(YTIME) = i02ShareBlend(runCy,DSBS,ITECH,EF,"%fBaseY%");
-i02ShareBlend(runCy,"BU","TKRS","KRS",YTIME)$AN(YTIME) = i02ShareBlend(runCy,"BU","TKRS","KRS","%fBaseY%") - 0.006 * (ord(YTIME)-14);
-i02ShareBlend(runCy,"BU","TKRS","BKRS",YTIME)$AN(YTIME) = i02ShareBlend(runCy,"BU","TKRS","BKRS","%fBaseY%") + 0.006 * (ord(YTIME)-14);
-i02ShareBlend(runCy,"BU","TGDO","GDO",YTIME)$AN(YTIME) = i02ShareBlend(runCy,"BU","TGDO","GDO","%fBaseY%") - 0.004 * (ord(YTIME)-14);
-i02ShareBlend(runCy,"BU","TGDO","BGDO",YTIME)$AN(YTIME) = i02ShareBlend(runCy,"BU","TGDO","BGDO","%fBaseY%") + 0.004 * (ord(YTIME)-14);
+i02ShareBlend(runCy,"BU","TKRS","KRS",YTIME)$(AN(YTIME) and ord(YTIME)<55) = i02ShareBlend(runCy,"BU","TKRS","KRS","%fBaseY%") - 0.022 * (ord(YTIME)-14);
+i02ShareBlend(runCy,"BU","TKRS","BKRS",YTIME)$(AN(YTIME) and ord(YTIME)<55) = i02ShareBlend(runCy,"BU","TKRS","BKRS","%fBaseY%") + 0.022 * (ord(YTIME)-14);
+i02ShareBlend(runCy,"BU","TGDO","GDO",YTIME)$(AN(YTIME) and ord(YTIME)<55) = i02ShareBlend(runCy,"BU","TGDO","GDO","%fBaseY%") - 0.022 * (ord(YTIME)-14);
+i02ShareBlend(runCy,"BU","TGDO","BGDO",YTIME)$(AN(YTIME) and ord(YTIME)<55) = i02ShareBlend(runCy,"BU","TGDO","BGDO","%fBaseY%") + 0.022 * (ord(YTIME)-14);
 
+i02ShareBlend(runCy,"BU","TKRS","KRS",YTIME)$(AN(YTIME) and ord(YTIME)>=55) = i02ShareBlend(runCy,"BU","TKRS","KRS","%fBaseY%") - 0.022 * 41;
+i02ShareBlend(runCy,"BU","TKRS","BKRS",YTIME)$(AN(YTIME) and ord(YTIME)>=55) = i02ShareBlend(runCy,"BU","TKRS","BKRS","%fBaseY%") + 0.022 * 41;
+i02ShareBlend(runCy,"BU","TGDO","GDO",YTIME)$(AN(YTIME) and ord(YTIME)>=55) = i02ShareBlend(runCy,"BU","TGDO","GDO","%fBaseY%") - 0.022 * 41;
+i02ShareBlend(runCy,"BU","TGDO","BGDO",YTIME)$(AN(YTIME) and ord(YTIME)>=55) = i02ShareBlend(runCy,"BU","TGDO","BGDO","%fBaseY%") + 0.022 * 41;
 i02ShareElcHP(runCy,"HOU",YTIME) = 0.1;
 i02ShareElcHP(runCy,"SE",YTIME) = 0.1;
 *---

@@ -88,6 +88,14 @@ $ELSE.calib
 parameter i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   "Maturity factor related to plant available capacity (1)";
 i04MatFacPlaAvailCap(runCy,PGALL,YTIME) = iMatFacPlaAvailCapData(runCy,PGALL,YTIME);
 $ENDIF.calib
+
+i04MatFacPlaAvailCap(EU28,"ATHBMSCCS",YTIME)$(ord(YTIME)<61) = i04MatFacPlaAvailCap(EU28,"ATHBMSCCS","2024") + 0.004 * (ord(YTIME)-14);
+i04MatFacPlaAvailCap(EU28,"ATHGASCCS",YTIME)$(ord(YTIME)<61) = i04MatFacPlaAvailCap(EU28,"ATHGASCCS","2024")+ 0.002 * (ord(YTIME)-14);
+
+i04MatFacPlaAvailCap(EU28,"ATHBMSCCS",YTIME)$(ord(YTIME)>=61) = i04MatFacPlaAvailCap(EU28,"ATHBMSCCS","2024") + 0.004 * 46;
+i04MatFacPlaAvailCap(EU28,"ATHGASCCS",YTIME)$(ord(YTIME)>=61) = i04MatFacPlaAvailCap(EU28,"ATHGASCCS","2024")+ 0.002 * 46;
+
+
 *---
 parameter i04LoadFacElecDem(DSBS)                  "Load factor of electricity demand per sector (1)"
 /
@@ -186,5 +194,22 @@ i04ShareFuels(runCy,PGALL,PGEF)$PGALLTOEF(PGALL,PGEF) =
 
 
 i04SensCarbon(allCy,YTIME) = 0;
-*i04SensCarbon(EU27,YTIME)$(ord(YTIME)>24) = 0.4;
-i04SensCarbon(EU27,YTIME) = 0.4;
+
+i04SensCarbon(EU28,YTIME) = 0.4;
+i04SensCarbon(EU27,YTIME)$(ord(YTIME)>34) = 0.6;
+
+
+
+*--- COAL PHASE OUT ---
+i04MatFacPlaAvailCap(EU28,"ATHCOAL",YTIME) = 0;
+i04MatFacPlaAvailCap(EU28,"ATHOIL",YTIME) = 0;
+i04MatFacPlaAvailCap(EU28,"ATHLGN",YTIME) = 0;
+
+i04MatFacPlaAvailCap(EU28,"ATHCOALCCS",YTIME) = 0;
+i04MatFacPlaAvailCap(EU28,"ATHLGNCCS",YTIME) = 0;
+
+*--- Limit Lifetime to force phase out
+i04TechLftPlaType(EU28,"ATHCOAL") = 10;
+i04TechLftPlaType(EU28,"ATHOIL") = 10;
+i04TechLftPlaType(EU28,"ATHLGN") = 10;
+
