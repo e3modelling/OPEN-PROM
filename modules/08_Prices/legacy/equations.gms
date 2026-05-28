@@ -36,6 +36,10 @@
 *'               imBmswasSupplyCoefGLOBIOM, loaded from parameters/iBmswasSupplyCoefGLOBIOM.csv.
 *'               The active GHG scenario row is selected by %globiomGHGScen% (e.g. GHG000).
 *'               All other fuels (non-BMSWAS) continue to use the standard recursive dynamics.
+*'               A +1e-3 floor is used inside the ratio SC(Q(t-1))/SC(Q(t-2)) to prevent
+*'               0/0 in early years. The ratio formulation is self-calibrating and unit-
+*'               independent: no absolute supply-curve price is used, only the year-over-year
+*'               change in scarcity, which is applied as a multiplicative factor to P(t-1).
 *'     When OFF: All fuels including BMSWAS use the standard recursive price dynamics (original behavior).
 *'
 *' Summary of the four compile-time combinations:
@@ -43,6 +47,7 @@
 *'   link2MAgPIE=off, link2GLOBIOM=on   ->  BMSWAS in domain, GLOBIOM supply curve
 *'   link2MAgPIE=on,  link2GLOBIOM=off  ->  BMSWAS excluded from domain (MAgPIE handles it)
 *'   link2MAgPIE=on,  link2GLOBIOM=on   ->  BMSWAS excluded from domain (MAgPIE takes priority)
+
 Q08PriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME)$(SECtoEF(SBS,EFS) $(not sameas("CRO",EFS)) $TIME(YTIME)
 $IFTHEN %link2MAgPIE% == on 
    $(not sameas("BMSWAS",EFS))
@@ -74,20 +79,25 @@ $IFTHEN %link2GLOBIOM% == on
       )$DSBS(SBS)
     )$(not sameas("BMSWAS",EFS))
     +
-*'  --- GLOBIOM supply curve for BMSWAS ---
-*'  Price = a + b * (Q_total)^c
-*'  where:
-*'    a, b, c  = fitted coefficients from imBmswasSupplyCoefGLOBIOM
-*'               (NLLS fit to GLOBIOM lookup table, scenario %globiomGHGScen%)
-*'    Q_total  = sum of BMSWAS consumption over all demand subsectors DSBS2
-*'               that map to BMSWAS via SECtoEF, taken from the previous year.
-*'  The $sameas("BMSWAS",EFS) condition ensures this term only fires for BMSWAS.
+*'  --- GLOBIOM supply curve for BMSWAS: year-over-year ratio ---
+*'  P(t) = P(t-1) * SC(Q(t-1)) / SC(Q(t-2))
+*'  where SC(Q) = 1e-3 + a + b*(Q+1e-6)^c  (1e-3 prevents 0/0 when both years have Q=0)
+*'  The ratio formulation is unit-independent and self-calibrating: in early years
+*'  where BMSWAS demand is flat the ratio ~= 1 so the price tracks the calibrated
+*'  historical trajectory; as biomass demand grows the supply-curve scarcity signal
+*'  drives prices upward following GLOBIOM.
     (
-      imBmswasSupplyCoefGLOBIOM("%globiomGHGScen%",allCy,"a",YTIME) +
-      imBmswasSupplyCoefGLOBIOM("%globiomGHGScen%",allCy,"b",YTIME) *
-      (SUM(DSBS2$SECtoEF(DSBS2,"BMSWAS"), VmConsFuel(allCy,DSBS2,"BMSWAS",YTIME-1)) + 1e-6) **
-      imBmswasSupplyCoefGLOBIOM("%globiomGHGScen%",allCy,"c",YTIME)
-    )$sameas("BMSWAS",EFS)          !! fires only for BMSWAS
+      VmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME-1) *
+      ( 1e-3 + imBmswasSupplyCoefGLOBIOM("%globiomGHGScen%",allCy,"a",YTIME)
+             + imBmswasSupplyCoefGLOBIOM("%globiomGHGScen%",allCy,"b",YTIME)
+             * (SUM(DSBS2$SECtoEF(DSBS2,"BMSWAS"), VmConsFuel(allCy,DSBS2,"BMSWAS",YTIME-1)) + 1e-6)
+             ** imBmswasSupplyCoefGLOBIOM("%globiomGHGScen%",allCy,"c",YTIME) )
+      /
+      ( 1e-3 + imBmswasSupplyCoefGLOBIOM("%globiomGHGScen%",allCy,"a",YTIME)
+             + imBmswasSupplyCoefGLOBIOM("%globiomGHGScen%",allCy,"b",YTIME)
+             * (SUM(DSBS2$SECtoEF(DSBS2,"BMSWAS"), VmConsFuel(allCy,DSBS2,"BMSWAS",YTIME-2)) + 1e-6)
+             ** imBmswasSupplyCoefGLOBIOM("%globiomGHGScen%",allCy,"c",YTIME) )
+    )$sameas("BMSWAS",EFS)
 *' ============================================================
 *' Original / fallback path (link2GLOBIOM == off):
 *'   Standard recursive dynamics for ALL fuels including BMSWAS.
