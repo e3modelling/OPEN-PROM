@@ -148,7 +148,7 @@ Q06ProfRateDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q06CapFacNewDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
   V06CapFacNewDAC(allCy,CDRTECH,YTIME)
       =E=
-  (1 + 9$(EU28(allCy) and ord(YTIME)<40)) * 
+  (1 + 7$(EU28(allCy) and ord(YTIME)<40) - 0.5$(EU28(allCy) and ord(YTIME)>=40)) * 
   (S06CapFacMinNewDAC +
   S06CapFacMaxNewDAC
   * (tanh(0.7 * (V06ProfRateDAC(allCy,CDRTECH,YTIME) - 3)) + 1) / 2

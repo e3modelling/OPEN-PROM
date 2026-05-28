@@ -83,13 +83,13 @@ i02ShareBlend(runCy,DSBS,ITECH,EF,YTIME)$(DATAY(YTIME) and SECTTECH(DSBS,ITECH) 
 i02ShareBlend(runCy,DSBS,ITECH,EF,YTIME)$AN(YTIME) = i02ShareBlend(runCy,DSBS,ITECH,EF,"%fBaseY%");
 i02ShareBlend(runCy,"BU","TKRS","KRS",YTIME)$(AN(YTIME) and ord(YTIME)<55) = i02ShareBlend(runCy,"BU","TKRS","KRS","%fBaseY%") - 0.022 * (ord(YTIME)-14);
 i02ShareBlend(runCy,"BU","TKRS","BKRS",YTIME)$(AN(YTIME) and ord(YTIME)<55) = i02ShareBlend(runCy,"BU","TKRS","BKRS","%fBaseY%") + 0.022 * (ord(YTIME)-14);
-i02ShareBlend(runCy,"BU","TGDO","GDO",YTIME)$(AN(YTIME) and ord(YTIME)<55) = i02ShareBlend(runCy,"BU","TGDO","GDO","%fBaseY%") - 0.022 * (ord(YTIME)-14);
-i02ShareBlend(runCy,"BU","TGDO","BGDO",YTIME)$(AN(YTIME) and ord(YTIME)<55) = i02ShareBlend(runCy,"BU","TGDO","BGDO","%fBaseY%") + 0.022 * (ord(YTIME)-14);
+i02ShareBlend(runCy,"BU","TGDO","GDO",YTIME)$(AN(YTIME) and ord(YTIME)<55) = i02ShareBlend(runCy,"BU","TGDO","GDO","%fBaseY%") - 0.0195 * (ord(YTIME)-14);
+i02ShareBlend(runCy,"BU","TGDO","BGDO",YTIME)$(AN(YTIME) and ord(YTIME)<55) = i02ShareBlend(runCy,"BU","TGDO","BGDO","%fBaseY%") + 0.0195 * (ord(YTIME)-14);
 
 i02ShareBlend(runCy,"BU","TKRS","KRS",YTIME)$(AN(YTIME) and ord(YTIME)>=55) = i02ShareBlend(runCy,"BU","TKRS","KRS","%fBaseY%") - 0.022 * 41;
 i02ShareBlend(runCy,"BU","TKRS","BKRS",YTIME)$(AN(YTIME) and ord(YTIME)>=55) = i02ShareBlend(runCy,"BU","TKRS","BKRS","%fBaseY%") + 0.022 * 41;
-i02ShareBlend(runCy,"BU","TGDO","GDO",YTIME)$(AN(YTIME) and ord(YTIME)>=55) = i02ShareBlend(runCy,"BU","TGDO","GDO","%fBaseY%") - 0.022 * 41;
-i02ShareBlend(runCy,"BU","TGDO","BGDO",YTIME)$(AN(YTIME) and ord(YTIME)>=55) = i02ShareBlend(runCy,"BU","TGDO","BGDO","%fBaseY%") + 0.022 * 41;
+i02ShareBlend(runCy,"BU","TGDO","GDO",YTIME)$(AN(YTIME) and ord(YTIME)>=55) = i02ShareBlend(runCy,"BU","TGDO","GDO","%fBaseY%") - 0.0195 * 41;
+i02ShareBlend(runCy,"BU","TGDO","BGDO",YTIME)$(AN(YTIME) and ord(YTIME)>=55) = i02ShareBlend(runCy,"BU","TGDO","BGDO","%fBaseY%") + 0.0195 * 41;
 i02ShareElcHP(runCy,"HOU",YTIME) = 0.1;
 i02ShareElcHP(runCy,"SE",YTIME) = 0.1;
 *---
