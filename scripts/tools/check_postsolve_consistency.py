@@ -6,11 +6,11 @@ from collections import defaultdict
 
 # ================= CONFIG =================
 
-# Base directory = folder where this script lives (e.g. .../OPEN-PROM/scripts)
+# Base directory = folder where this script lives (.../OPEN-PROM/scripts/tools)
 BASE_DIR = Path(__file__).resolve().parent
 
-# Default root = parent of scripts folder, i.e. the OPEN-PROM repo root
-DEFAULT_ROOT = BASE_DIR.parent
+# Default root = the OPEN-PROM repo root (two levels up from scripts/tools)
+DEFAULT_ROOT = BASE_DIR.parent.parent
 
 # If a path is passed as an argument, use that as root; otherwise use DEFAULT_ROOT
 ROOT = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else DEFAULT_ROOT

@@ -28,7 +28,7 @@ $IFTHEN.calib %Calibration% == Calibration
 variable imElastA(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)";
 table imElastAL(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)"
 $ondelim
-$include "./iElastA.csv"
+$include "./parameters/iElastA.csv"
 $offdelim
 ;
 imElastA.L(runCy, SBS, ETYPES, YTIME) = imElastAL("ELL", SBS, ETYPES, YTIME);
@@ -40,7 +40,7 @@ imElastA.UP(runCy, SBS, negElast, YTIME) = -0.001;
 $ELSE.calib
 table imElastA(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)"
 $ondelim
-$include "./iElastA.csv"
+$include "./parameters/iElastA.csv"
 $offdelim
 ;
 imElastA(runCy,SBS,ETYPES,YTIME) = imElastA("ELL",SBS,ETYPES,YTIME);

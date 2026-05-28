@@ -4,10 +4,13 @@ from io import StringIO
 import re
 import yaml
 from datetime import date
+from pathlib import Path
 
 # === CONFIGURATION ===
+# Repo root is two levels up from this script (scripts/tools/<x>.py)
+_REPO_ROOT = Path(__file__).resolve().parents[2]
 csvUrl = "https://raw.githubusercontent.com/e3modelling/mrprom/main/inst/extdata/regional/regionmappingOPDEV5.csv"
-markdownPath = "../tutorials/06_Regionalization in OPEN-PROM.md"
+markdownPath = str(_REPO_ROOT / "tutorials" / "06_Regionalization in OPEN-PROM.md")
 mappingsYamlPath = "mappings.yaml"
 nativeRegionsYamlPath = "native_regions.yaml"
 sectionTitle = "### OPEN-PROM Regional Mapping Table"

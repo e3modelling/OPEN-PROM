@@ -8,7 +8,7 @@ Two R functions (in `postprom/R/couplePromWithMagpie.R`) do the data exchange:
 * `couplePromToMagpie()` — exports OPEN-PROM carbon price + bioenergy demand to a REMIND-style `.mif` that MAgPIE consumes
 * `coupleMagpieToProm()` — reads MAgPIE's `report.mif` and writes `iPrices_magpie.csv` (biomass price for round-2) and `iEmissions_magpie.mif` (AFOLU emissions, 200 variables, IAMC mif format) for OPEN-PROM
 
-All of this is orchestrated by `task == 7` in `start.R`.
+All of this is orchestrated by `task_id == 7` in `start.R` (the body is in `scripts/tasks/task7SoftLinkMagpie.R`).
 
 ---
 
@@ -100,10 +100,10 @@ What it does (two output channels):
 
 ---
 
-## Full Workflow (automated by `start.R task 7`)
+## Full Workflow (automated by `start.R task_id=7`)
 
-```r
-source("start.R")  # with task <- 7
+```bash
+Rscript start.R task_id=7
 ```
 
 Pipeline:
@@ -115,13 +115,13 @@ Pipeline:
 5. **OPEN-PROM round-2** (`link2MAgPIE=on`) — reads `iPrices_magpie.csv`, fixes BMSWAS price, re-solves; overwrites `blabla.gdx` with the round-2 result (the round-1 snapshot is preserved)
 6. `reportOutput.R` + sync
 
-`config.json` must define three fields for task 7:
+For task 7, three pieces of information are required, all inside `config.json`:
 
-* `magpie_path` — absolute path to the MAgPIE root (`<...>/OPEN-PROM/magpie/`)
-* `magpie_project` — subdirectory name under `magpie/e3m_projects/` (e.g. `"uptake"`); must contain a `scenarios.csv` that lists subscenarios
-* `magpie_scenario` — `title` of one row in that `scenarios.csv` (e.g. `"SSP2-PkBudg650"`)
+* `config.json:paths.magpie_path` — absolute path to the MAgPIE root (`<...>/OPEN-PROM/magpie/`)
+* `config.json:scenario.magpie.project` — subdirectory name under `magpie/e3m_projects/` (e.g. `"uptake"`); must contain a MAgPIE-side `scenarios.csv` that lists subscenarios (this is MAgPIE's own file inside the project folder, not OPEN-PROM's root-level `scenarios.csv` used for batch mode)
+* `config.json:scenario.scenario_name` — `title` of one row in that MAgPIE-side `scenarios.csv` (e.g. `"SSP2-PkBudg650"`); used as the scenario label on **both** the OPEN-PROM side and the MAgPIE side (the run folder name and the MAgPIE subscenario name share this string)
 
-`start.R` performs pre-flight validation on these three fields and aborts before the long round-1 GAMS solve if any path is missing or misspelled.
+The task 7 body performs pre-flight validation on these three fields and aborts before the long round-1 GAMS solve if any path is missing or misspelled.
 
 ### Run-folder layout (what each step produces)
 
@@ -164,25 +164,32 @@ Notes on file lifetimes:
 * `modelstat.txt`, `main.lst`, `main.log` likewise reflect only the *latest* solve. If Step 5 finishes, you cannot tell from these whether Step 1 also succeeded — but `blabla_round1.gdx` proves it did.
 * The MAgPIE step always creates a *new* timestamped subfolder under `magpie/output/` (named `<scenario>_<timestamp>` from `cfg$title`), so resuming task 7 leaves the previous MAgPIE folder untouched and Step 4 picks the most recent one (`which.max(mtime)`).
 * The `cell.*.mz` files are produced by MAgPIE's standard `extra/disaggregation.R` postprocessor — included by default in every MAgPIE run. If you customise the MAgPIE output script list and disable this postprocessor, Step 4 will fail with a clear error.
-* `syncRun()` writes the `.tgz` archive locally first, copies it to `config$model_runs_path`, then deletes the local copy. Excludes `main.lst` / `mainCalib.lst` on success; the `uploadGDX` flag in `start.R` controls whether `.gdx` files are included.
+* `syncRun()` writes the `.tgz` archive locally first, copies it to `config.json:paths.model_runs_path`, then deletes the local copy. Excludes `main.lst` / `mainCalib.lst` on success; the `config.json:behavior.uploadGDX` flag controls whether `.gdx` files are included.
 
 ---
 
 ## Resuming from an Existing Run
 
-If a task 7 run fails mid-pipeline (e.g. MAgPIE crashes in Step 3) and you want to retry without paying the cost of OPEN-PROM round-1 again, point the optional `task7_existingRun` field in `config.json` at the existing run folder:
+If a task 7 run fails mid-pipeline (e.g. MAgPIE crashes in Step 3) and you want to retry without paying the cost of OPEN-PROM round-1 again, add the optional `magpie.existing_prom_run` field.
+
+**Single-scenario mode** (`Rscript start.R task_id=7`): put it directly under `config.json:scenario.magpie`:
 
 ```json
 {
-  "model_runs_path":   "...",
-  "magpie_path":       "...",
-  "magpie_project":    "uptake",
-  "magpie_scenario":   "SSP2-PkBudg650",
-  "task7_existingRun": "/abs/path/to/runs/SSP2-PkBudg650_2026-04-25_xxx"
+  "scenario": {
+    "scenario_name": "SSP2-PkBudg650_resume",
+    "description": "Resume MAgPIE coupling from an existing round-1 run",
+    "magpie": {
+      "project": "uptake",
+      "existing_prom_run": "/abs/path/to/runs/SSP2-PkBudg650_2026-04-25_xxx"
+    }
+  }
 }
 ```
 
-When this field is non-empty, `start.R`:
+**Batch mode** (`Rscript start.R scenarios.csv`): add a `magpie.existing_prom_run` column to `scenarios.csv` and populate it only on the specific row(s) where you want a resume. Leaving the cell empty on other rows means those scenarios run from scratch. Do **not** put `magpie.existing_prom_run` in `config.json:scenario` when batching across multiple scenarios, because every row that doesn't override the column would inherit the same path and reuse the same OPEN-PROM round-1 — defeating the comparison.
+
+When this field is non-empty, the task 7 body:
 
 * skips Step 1 (the round-1 GAMS solve),
 * `cd`s into the named folder instead of creating a new one, and
@@ -190,15 +197,15 @@ When this field is non-empty, `start.R`:
 
 Outputs from Step 2–6 overwrite previous artefacts in place, so a re-run after a Step 3 failure simply rewrites `openprom_coupling.mif`, picks up the next MAgPIE output folder, and re-solves round-2.
 
-**Why the `blabla_round1.gdx` snapshot matters.** Step 5 overwrites `blabla.gdx` with the round-2 result. Without a snapshot, a resume started after Step 5 would feed the round-2 gdx back into `couplePromToMagpie()` — wrong coupling input. Step 1 success therefore always copies `blabla.gdx → blabla_round1.gdx`, and Step 2 reads only from the `_round1` snapshot. If you point `task7_existingRun` at a folder produced before this feature landed (only `blabla.gdx`, no snapshot), the script makes the snapshot once on first reuse.
+**Why the `blabla_round1.gdx` snapshot matters.** Step 5 overwrites `blabla.gdx` with the round-2 result. Without a snapshot, a resume started after Step 5 would feed the round-2 gdx back into `couplePromToMagpie()` — wrong coupling input. Step 1 success therefore always copies `blabla.gdx → blabla_round1.gdx`, and Step 2 reads only from the `_round1` snapshot. If you point `magpie.existing_prom_run` at a folder produced before this feature landed (only `blabla.gdx`, no snapshot), the script makes the snapshot once on first reuse.
 
-**Disabling resumption.** `"task7_existingRun": ""`, `"task7_existingRun": null`, or simply omitting the field — all three are treated as "run from scratch".
+**Disabling resumption.** Omit the `magpie.existing_prom_run` field — runs are treated as "from scratch" by default.
 
 ---
 
 ## Notes
 
 * CSV format requirement: year column headers in `iPrices_magpie.csv` must be **bare integers** (`2010,2011,…,2100`) — no `y` prefix. OPEN-PROM's `YTIME` set is declared as `/%fStartHorizon%*%fEndHorizon%/` which expands to plain-integer labels, and any mismatch triggers GAMS error 170 (domain violation)
-* When launching GAMS from `start.R`, always pass `-Idir=./data` because `core/input.gms` includes CSVs with root-relative paths (`./iActv.csvr` etc.) that live in the `./data/` subdirectory
+* When launching GAMS from a task body in `scripts/tasks/`, always pass `-Idir=./data` because `core/input.gms` includes CSVs with root-relative paths (`./iActv.csvr` etc.) that live in the `./data/` subdirectory
 * The forward bio channel sends a weighted blend of three `V03ProdPrimary` carriers (`0.4 × BMSWAS + 0.6 × BGSL + 0.6 × BKRS`) — raw 2G feedstock plus 2G biogasoline and biokerosene; the weights approximate each carrier's effective 2G-biomass content. Under scenarios where OPEN-PROM does not activate the liquid biofuel pathway, this signal can legitimately be near-zero; the CO2 price channel still transmits independently
 * The IAMC tree of `iEmissions_magpie.mif` preserves `|+|` markers — country-level sum-to-parent identities hold (parent = Σ direct children), matching the h12-level identities in MAgPIE's source `report.mif`
