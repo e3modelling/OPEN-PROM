@@ -352,6 +352,8 @@ Q01PremScrp(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME)$SECTTECH(TRANSE,TTECH)$runCy(
 Q01ShareBlend(allCy,TRANSE,TTECH,EF,YTIME)$(TIME(YTIME)$SECTTECH(TRANSE,TTECH)$TTECHtoEF(TTECH,EF) $runCy(allCy))..
     V01ShareBlend(allCy,TRANSE,TTECH,EF,YTIME)
       =E=
+    0;
+$ontext
     (
       i01calibweibul(allCy,TRANSE,TTECH,EF) * VmPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME-1) ** (-2) /
       SUM(EF2$TTECHtoEF(TTECH,EF2),i01calibweibul(allCy,TRANSE,TTECH,EF2) * VmPriceFuelSubsecCarVal(allCy,TRANSE,EF2,YTIME-1) ** (-2))
@@ -360,6 +362,7 @@ Q01ShareBlend(allCy,TRANSE,TTECH,EF,YTIME)$(TIME(YTIME)$SECTTECH(TRANSE,TTECH)$T
       i01calibweibul(allCy,TRANSE,TTECH,EF) * VmPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME-1) ** (-2) /
       SUM(EF2$(TTECHtoEF(TTECH,EF2) and not sameas("ELC",EF2)),i01calibweibul(allCy,TRANSE,TTECH,EF2) * VmPriceFuelSubsecCarVal(allCy,TRANSE,EF2,YTIME-1) ** (-2))
     )$(PLUGIN(TTECH) and not sameas("ELC",EF));
+$offtext
     
 
 $ontext

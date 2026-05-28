@@ -85,13 +85,13 @@ i04MatFacPlaAvailCap.LO(runCy, PGALL, YTIME) = 1e-6;
 i04MatFacPlaAvailCap.UP(runCy, PGALL, YTIME) = 10;
 i04MatFacPlaAvailCap.L(runCy,PGALL,YTIME) = iMatFacPlaAvailCapData(runCy,PGALL,YTIME);
 
-i04ScaleEndogScrap.LO(runCy,PGALL,YTIME) = 0;
-i04ScaleEndogScrap.UP(runCy,PGALL,YTIME) = 10;
-i04ScaleEndogScrap.L(runCy,PGALL,YTIME) = 1;
+*i04ScaleEndogScrap.LO(runCy,PGALL,YTIME) = 0;
+*i04ScaleEndogScrap.UP(runCy,PGALL,YTIME) = 10;
+*i04ScaleEndogScrap.L(runCy,PGALL,YTIME) = 1;
 $ELSE.calib
 parameter i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   "Maturity factor related to plant available capacity (1)";
 i04MatFacPlaAvailCap(runCy,PGALL,YTIME) = iMatFacPlaAvailCapData(runCy,PGALL,YTIME);
-i04ScaleEndogScrap(runCy,PGALL,YTIME) = 1;
+*i04ScaleEndogScrap(runCy,PGALL,YTIME) = 1;
 $ENDIF.calib
 *---
 $$ontext
@@ -126,3 +126,5 @@ i04ShareFuels(runCy,PGALL,PGEF)$PGALLTOEF(PGALL,PGEF) =
 (
   1 / CARD(PGALL)
 )$(not SUM(PGEF2$PGALLTOEF(PGALL,PGEF2),i03InpTotTransfProcess(runCy,"PG",PGEF2,"%fBaseY%")));
+*---
+i04ScaleEndogScrap(allCy,PGALL,YTIME) = 6 / card(PGALL);
