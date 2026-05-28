@@ -11,6 +11,19 @@ $offdelim
 ;
 $ENDIF
 *---
+$IFTHEN %link2GLOBIOM% == on
+table imBmswasSupplyCoefGLOBIOM(GHGSCEN,allCy,COEF,YTIME) "GLOBIOM biomass supply curve coefficients (P = a + b*Q^c)"
+$ondelim
+$include "./parameters/iBmswasSupplyCoefGLOBIOM.csv"
+$offdelim
+;
+table imBmswasEmisCoefGLOBIOM(GHGSCEN,allCy,EMTYPE,ECOEF,YTIME) "GLOBIOM land-use emission curve coefficients (Em = ea + eb*Q + ec*Q^2)"
+$ondelim
+$include "./parameters/iBmswasEmisCoefGLOBIOM.csv"
+$offdelim
+;
+$ENDIF
+*---
 parameter i08PriceCrudeOil(YTIME) /
 $ondelim
 $include "CrudeOilPrice.csv"
