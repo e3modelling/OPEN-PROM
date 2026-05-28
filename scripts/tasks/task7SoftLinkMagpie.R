@@ -186,9 +186,6 @@
 # Globals from start.R (sourced into the same R session):
 #   gams, withRunFolder, withSync, withReport, config,
 #   isRunSuccessful(), createRunFolder(), saveMetadata(), syncRun()
-#
-# Design background and rejected alternatives: see task7-refactor-plan.md
-# at the repo root.
 
 
 # ============================================================ constants
