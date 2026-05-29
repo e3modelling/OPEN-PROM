@@ -92,9 +92,9 @@ i04MatFacPlaAvailCap.LO(runCy, PGALL, YTIME) = 1e-2;
 i04MatFacPlaAvailCap.UP(runCy, PGALL, YTIME) = 1;
 i04MatFacPlaAvailCap.L(runCy,PGALL,YTIME) = iMatFacPlaAvailCapData(runCy,PGALL,YTIME);
 
-i04ScaleEndogScrap.LO(allCy,PGALL,YTIME) = 1e-2;
+i04ScaleEndogScrap.LO(runCy,PGALL,YTIME) = 1e-2;
 i04ScaleEndogScrap.L(runCy,PGALL,YTIME) = iScaleEndogScrapData(runCy,PGALL,YTIME);
-i04ScaleEndogScrap.UP(allCy,PGALL,YTIME) = 1;
+i04ScaleEndogScrap.UP(runCy,PGALL,YTIME) = 1;
 $ELSE.calib
 parameter i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   "Maturity factor related to plant available capacity (1)";
 parameter i04ScaleEndogScrap(allCy,PGALL,YTIME)     "Scale parameter for endogenous scrapping applied to the sum of full costs (1)";

@@ -26,17 +26,15 @@ qDummyObjPGALL(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
     =e=
   SUM(PGALL,
     SQR(
-      VmProdElec(allCy,PGALL,YTIME) / SUM(PGALL2,VmProdElec(allCy,PGALL2,YTIME)) - 
-      t04SharePowPlaNewEq(allCy,PGALL,YTIME)
+      VmProdElec(allCy,PGALL,YTIME) / SUM(PGALL2, VmProdElec(allCy,PGALL2,YTIME)) - t04SharePowPlaNewEq(allCy,PGALL,YTIME)
     ) +
-    0.001 * SQR(
+    1e-5 * SQR(
       i04MatFacPlaAvailCap(allCy,PGALL,YTIME) / i04MatFacPlaAvailCap(allCy,PGALL,YTIME-1) - 1
     ) +
-    0.001 * SQR(
+    1e-5 * SQR(
       i04ScaleEndogScrap(allCy,PGALL,YTIME) / i04ScaleEndogScrap(allCy,PGALL,YTIME-1) - 1
     )
-  ) / CARD(PGALL) 
-  ;
+  ) / CARD(PGALL);
 
 qDummyObjTRANSE(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..  
   vDummyObjTRANSE
