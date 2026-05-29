@@ -1,9 +1,6 @@
-scenario_name,start,task_id,description,gams_flags.fScenario,gams_flags.fEndY,gams_flags.CountrySolveMode,gams_flags.Transport,gams_flags.Industry,gams_flags.RestOfEnergy,gams_flags.PowerGeneration,gams_flags.Hydrogen,gams_flags.CO2,gams_flags.Emissions,gams_flags.Prices,gams_flags.Heat,gams_flags.Curves,gams_flags.Economy,magpie.project,magpie.existing_prom_run
-C200_biolim100,1,2,UPTAKE C200 biolim100,200,,,,,,,,,,,,,,uptake,
-C200_landHigh,1,2,UPTAKE C200 landHigh,200,,,,,,,,,,,,,,uptake,
-C600_biolim100,0,7,UPTAKE C600 biolim100,600,,,,,,,,,,,,,,uptake,
-C600_landHigh,1,7,UPTAKE C600 landHigh,600,,,,,,,,,,,,,,uptake,
-C200_endY2050_parallel,1,2,short-horizon parallel solve,200,2050,parallel,,,,,,,,,,,,uptake,
-C200_transport_full,1,2,override Transport realization only,200,,,legacy,,,,,,,,,,,uptake,
-C200_resume_from_existing,1,7,resume MAgPIE coupling from a prior OPEN-PROM run,200,,,,,,,,,,,,,,uptake,/absolute/path/to/runs/C200_biolim100_<timestamp>
-
+scenario_name,start,task_id,description,gams_flags.fScenario,magpie.project,magpie.existing_prom_run,magpie.max_iter,magpie.price_tol,magpie.quant_tol
+C200_biolim100,1,2,UPTAKE C200 biolim100,200,uptake,,,,
+C200_landHigh,1,2,UPTAKE C200 landHigh,200,uptake,,,,
+C600_biolim100,0,7,UPTAKE C600 biolim100 single round (max_iter=1),600,uptake,,1,,
+C600_landHigh,1,7,UPTAKE C600 landHigh iterated to convergence (5% tol),600,uptake,,5,0.05,0.05
+C200_resume_from_existing,1,7,resume coupled iteration from a previously interrupted run,200,uptake,/absolute/path/to/runs/C600_landHigh_<timestamp>,5,0.05,0.05
