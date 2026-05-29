@@ -150,9 +150,9 @@ Q06CapFacNewDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       =E=
   (1 + 
   (8$(EU28(allCy) and ord(YTIME)<40) - 0.5$(EU28(allCy) and ord(YTIME)>=40)) + 
-  (5$(sameas(allCy,"IND") and ord(YTIME)<40) - 0.5$(sameas(allCy,"IND") and ord(YTIME)<40)) +
-  (2$(sameas(allCy,"USA") and ord(YTIME)<40) - 0.5$(sameas(allCy,"USA") and ord(YTIME)<40)) +
-  (8$(sameas(allCy,"CHA") and ord(YTIME)<40) - 0.5$(sameas(allCy,"CHA") and ord(YTIME)<40)) +
+  (5$(sameas(allCy,"IND") and ord(YTIME)<60) - 0.5$(sameas(allCy,"IND") and ord(YTIME)<60)) +
+  (2$(sameas(allCy,"USA") and ord(YTIME)<40) - 0.99995$(sameas(allCy,"USA") and ord(YTIME)<40)) +
+  (8$(sameas(allCy,"CHA") and ord(YTIME)<50) - 0.5$(sameas(allCy,"CHA") and ord(YTIME)<50)) +
   (3$(sameas(allCy,"JPN") and ord(YTIME)<40) - 0.5$(sameas(allCy,"JPN") and ord(YTIME)<40)) +
   (6$(sameas(allCy,"REF") and ord(YTIME)<40) - 0.5$(sameas(allCy,"REF") and ord(YTIME)<40)) +
   (3$(sameas(allCy,"LAM") and ord(YTIME)<40) - 0.5$(sameas(allCy,"LAM") and ord(YTIME)<40)) +

@@ -671,6 +671,7 @@ imMatrFactor(runCy,DSBS,"THCLCCS",YTIME)$((ord(YTIME) > 14) and INDSE(DSBS)) = 3
 
 imMatrFactor(runCy,DSBS,"TNGSCCS",YTIME)$((ord(YTIME) > 34) and INDSE(DSBS)) = 10;
 imMatrFactor(runCy,DSBS,"THCLCCS",YTIME)$((ord(YTIME) > 34) and INDSE(DSBS)) = 10;
+imMatrFactor("CHA",DSBS,"TELC",YTIME)$((ord(YTIME) > 34) and INDSE(DSBS)) = 10;
 imMatrFactor(runCy,DSBS,TECH,YTIME)$((INDDOM(DSBS) or NENSE(DSBS)) and (imMatrFactor(runCy,DSBS,TECH,YTIME) < 1e-2) ) = 1e-2;
 
 
