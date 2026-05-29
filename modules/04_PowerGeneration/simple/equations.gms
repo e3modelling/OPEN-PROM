@@ -118,8 +118,8 @@ Q04IndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(al
     (V04CostVarTech(allCy,PGALL,YTIME-1) + 1e-3)**(-2) /
     (
       (V04CostVarTech(allCy,PGALL,YTIME-1) + 1e-3)**(-2) +
+      i04ScaleEndogScrap(allCy,PGALL,YTIME) *
       (
-        i04ScaleEndogScrap(allCy,PGALL,YTIME) *
         sum(PGALL2$(not sameas(PGALL,PGALL2)),
           i04AvailRate(allCy,PGALL2,YTIME) / i04AvailRate(allCy,PGALL,YTIME) * 
           V04CostHourProdInvDec(allCy,PGALL2,YTIME-1) 
