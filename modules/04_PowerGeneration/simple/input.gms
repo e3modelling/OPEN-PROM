@@ -79,14 +79,27 @@ $include"./iMatFacPlaAvailCap.csv"
 $offdelim
 ;
 *---
+table iScaleEndogScrapData(allCy,PGALL,YTIME)      "Maturity factor related to plant available capacity (1)"
+$ondelim
+$include"./iScaleEndogScrapPG.csv"
+$offdelim
+;
+*---
 $IFTHEN.calib %Calibration% == MatCalibration
 variable i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   "Maturity factor related to plant available capacity (1)";
-i04MatFacPlaAvailCap.LO(runCy, PGALL, YTIME) = 1e-6;
-i04MatFacPlaAvailCap.UP(runCy, PGALL, YTIME) = 10;
+variable i04ScaleEndogScrap(allCy,PGALL,YTIME)     "Scale parameter for endogenous scrapping applied to the sum of full costs (1)";
+i04MatFacPlaAvailCap.LO(runCy, PGALL, YTIME) = 1e-2;
+i04MatFacPlaAvailCap.UP(runCy, PGALL, YTIME) = 1;
 i04MatFacPlaAvailCap.L(runCy,PGALL,YTIME) = iMatFacPlaAvailCapData(runCy,PGALL,YTIME);
+
+i04ScaleEndogScrap.LO(allCy,PGALL,YTIME) = 0;
+i04ScaleEndogScrap.L(allCy,PGALL,YTIME) = iScaleEndogScrapData(runCy,PGALL,YTIME);
+i04ScaleEndogScrap.UP(allCy,PGALL,YTIME) = 1;
 $ELSE.calib
 parameter i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   "Maturity factor related to plant available capacity (1)";
+parameter i04ScaleEndogScrap(allCy,PGALL,YTIME)     "Scale parameter for endogenous scrapping applied to the sum of full costs (1)";
 i04MatFacPlaAvailCap(runCy,PGALL,YTIME) = iMatFacPlaAvailCapData(runCy,PGALL,YTIME);
+i04ScaleEndogScrap(runCy,PGALL,YTIME) = iScaleEndogScrapData(runCy,PGALL,YTIME);
 $ENDIF.calib
 *---
 parameter i04LoadFacElecDem(DSBS)                  "Load factor of electricity demand per sector (1)"
@@ -162,12 +175,6 @@ i04TechLftPlaType(runCy,PGALL) = i04DataTechLftPlaType(PGALL, "LFT");
 i04TechLftPlaType(runCy,"PGH2F") = 20;
 *---
 i04GrossCapCosSubRen(runCy,PGALL,YTIME) = i04GrossCapCosSubRen(runCy,PGALL,YTIME)/1000;
-*---
-loop(runCy,PGALL,YTIME)$AN(YTIME) DO
-         abort $(i04GrossCapCosSubRen(runCy,PGALL,YTIME)<0) "CAPITAL COST IS NEGATIVE", i04GrossCapCosSubRen
-ENDLOOP;
-*---
-i04ScaleEndogScrap = 6 / card(PGALL);
 *---
 i04DecInvPlantSched(runCy,PGALL,YTIME) = i04InvPlants(runCy,PGALL,YTIME);
 *---
