@@ -105,7 +105,7 @@ Q04CostHourProdInvDec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
             -
             sqrt(sqr((V04CostCapTech(allCy,PGALL,YTIME) + V04CostVarTech(allCy,PGALL,YTIME)) -
             (2 * (V04CostCapTech(allCy,PGALL,YTIME) + V04CostVarTech(allCy,PGALL,YTIME)) - i04FIT(allCy,PGALL,YTIME))))
-        ) / 2;
+        ) / 2 + 1e-6;
      ;
 
 *' The equation computes the endogenous scrapping index for power generation plants  during the specified year .
@@ -337,7 +337,7 @@ Q04CCSRetroFit(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(NOCCS(PGALL)))..
           !! - i04AvailRate(allCy,PGALL,YTIME) / i04AvailRate(allCy,PGALL2,YTIME) *
           !!V04CostCapTech(allCy,PGALL,YTIME-1) +
           V04CostVarTech(allCy,PGALL2,YTIME-1)
-        ) ** (-2)
+        +1e-3) ** (-2)
       )
     );
 

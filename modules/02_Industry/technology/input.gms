@@ -60,6 +60,31 @@ i02ElaSub(runCy,DSBS) = 2;
 *---
 i02SensCarbon(allCy,YTIME,DSBS) = 0;
 
+*--- USA
+i02SensCarbon("USA",YTIME,DSBS)$(ord(YTIME)>34) = 1;
+*--- LAM
+i02SensCarbon("LAM",YTIME,DSBS)$(ord(YTIME)>34) = 1;
+
+*--- REF
+i02SensCarbon("REF",YTIME,DSBS)$(ord(YTIME)>34) = 2;
+
+*--- IND
+i02SensCarbon("IND",YTIME,DSBS)$(ord(YTIME)>34) = 2.5;
+
+*--- OAS
+i02SensCarbon("OAS",YTIME,DSBS)$(ord(YTIME)>34) = 1;
+
+
+*--- CHA
+i02SensCarbon("CHA",YTIME,DSBS)$(ord(YTIME)>34) = 4;
+
+*--- CAZ
+i02SensCarbon("CAZ",YTIME,DSBS) = 1;
+i02SensCarbon("CAZ",YTIME,"HOU") = 2;
+i02SensCarbon("CAZ",YTIME,"SE") = 2;
+
+
+*--- EU + UK
 i02SensCarbon(EU28,YTIME,DSBS) = 1;
 i02SensCarbon(EU28,YTIME,"HOU") = 2;
 i02SensCarbon(EU28,YTIME,"SE") = 2;
