@@ -31,6 +31,9 @@ $ondelim
 $include"./iCalibUsefulEnergy.csv"
 $offdelim
 ;
+i02CalibUsefulEnergy(allCy,"HOU",YTIME) = 0;
+i02CalibUsefulEnergy(allCy,"SE",YTIME) = 0;
+
 *---
 $ELSE.calib
 variable i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME)        "Scale parameter for endogenous scrapping applied to the sum of full costs (1)";
