@@ -856,6 +856,8 @@ TRFO.RFO
 TOLQ.OLQ
 TOGS.OGS
 TSTE.STE
+TSOL.SOL
+TGEO.GEO
 * Domestic Technologies (only add those not already in Transport & Industry)
 * LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC already exist in TRANSPORT or INDUSTRY technologies
 THEATPUMP.ELC
