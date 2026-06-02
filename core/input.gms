@@ -663,17 +663,21 @@ imMatrFactor(runCy,DSBS,"TPHEVGDO",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 0
 imMatrFactor(runCy,DSBS,"TCHEVGSL",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 0.001;
 imMatrFactor(runCy,DSBS,"TCHEVGDO",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 0.001;
 $offtext
+* POLICY MEASURES PRISMA
 
-imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 14 and DOMSE(DSBS) and not sameas(DSBS,"AG")) = 40;
-imMatrFactor(runCy,DSBS,"THEATPUMP",YTIME)$(ord(YTIME) > 14 and DOMSE(DSBS) and not sameas(DSBS,"AG")) = 40;
-imMatrFactor(runCy,DSBS,"TNGSCCS",YTIME)$((ord(YTIME) > 14) and INDSE(DSBS)) = 3;
-imMatrFactor(runCy,DSBS,"THCLCCS",YTIME)$((ord(YTIME) > 14) and INDSE(DSBS)) = 3;
+*imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 14 and DOMSE(DSBS) and not sameas(DSBS,"AG")) = 40;
+*imMatrFactor(runCy,DSBS,"THEATPUMP",YTIME)$(ord(YTIME) > 14 and DOMSE(DSBS) and not sameas(DSBS,"AG")) = 40;
+*imMatrFactor(runCy,DSBS,"TNGSCCS",YTIME)$((ord(YTIME) > 14) and INDSE(DSBS)) = 3;
+*imMatrFactor(runCy,DSBS,"THCLCCS",YTIME)$((ord(YTIME) > 14) and INDSE(DSBS)) = 3;
 
-imMatrFactor(runCy,DSBS,"TNGSCCS",YTIME)$((ord(YTIME) > 34) and INDSE(DSBS)) = 10;
-imMatrFactor(runCy,DSBS,"THCLCCS",YTIME)$((ord(YTIME) > 34) and INDSE(DSBS)) = 10;
-imMatrFactor("CHA",DSBS,"TELC",YTIME)$((ord(YTIME) > 34) and INDSE(DSBS)) = 10;
+* imMatrFactor(runCy,DSBS,"TNGSCCS",YTIME)$((ord(YTIME) > 34) and INDSE(DSBS)) = 10;
+* imMatrFactor(runCy,DSBS,"THCLCCS",YTIME)$((ord(YTIME) > 34) and INDSE(DSBS)) = 10;
+* imMatrFactor("CHA",DSBS,"TELC",YTIME)$((ord(YTIME) > 34) and INDSE(DSBS)) = 10;
 imMatrFactor(runCy,DSBS,TECH,YTIME)$((INDDOM(DSBS) or NENSE(DSBS)) and (imMatrFactor(runCy,DSBS,TECH,YTIME) < 1e-2) ) = 1e-2;
+i04MatFacPlaAvailCap(runCy,PGALL,YTIME)$(i04MatFacPlaAvailCap(runCy,PGALL,YTIME) < 1e-2) = 1e-2
 
+imMatrFactor(runCy,DSBS,TECH,YTIME)$((INDDOM(DSBS) or NENSE(DSBS)) and (imMatrFactor(runCy,DSBS,TECH,YTIME) > 1e-2) ) = 1e-2;
+i04MatFacPlaAvailCap(runCy,PGALL,YTIME)$(i04MatFacPlaAvailCap(runCy,PGALL,YTIME) < 1e-2) = 1e-2
 
 *imMatrFactor(EU27,DSBS,TECH,YTIME)$(ord(YTIME)<24) = imMatrFactor(EU27,DSBS,TECH,"2023");
 *imMatrFactor(EU27,DSBS,TECH,YTIME)$(ord(YTIME)<24) = imMatrFactor(EU27,DSBS,TECH,YTIME-10);

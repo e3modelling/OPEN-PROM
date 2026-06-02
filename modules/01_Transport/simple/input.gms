@@ -240,8 +240,9 @@ $ENDIF.calib
 
 i01SensCarbon(allCy,YTIME,TRANSE) = 0;
 
-i01SensCarbon(EU28,YTIME,TRANSE) = 0.15;
-i01SensCarbon(EU27,YTIME,TRANSE)$(ord(YTIME)>34) = 0.3;
-*---USA
-i01SensCarbon("USA",YTIME,TRANSE) = 0.15;
-i01SensCarbon("USA",YTIME,TRANSE)$(ord(YTIME)>34) = 0.3;
+* POLICY MEASURES PRISMA
+* i01SensCarbon(EU28,YTIME,TRANSE) = 0.15;
+* i01SensCarbon(EU27,YTIME,TRANSE)$(ord(YTIME)>34) = 0.3;
+* *---USA
+* i01SensCarbon("USA",YTIME,TRANSE) = 0.15;
+* i01SensCarbon("USA",YTIME,TRANSE)$(ord(YTIME)>34) = 0.3;

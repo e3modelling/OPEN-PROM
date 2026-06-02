@@ -88,70 +88,72 @@ $ELSE.calib
 parameter i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   "Maturity factor related to plant available capacity (1)";
 i04MatFacPlaAvailCap(runCy,PGALL,YTIME) = iMatFacPlaAvailCapData(runCy,PGALL,YTIME);
 $ENDIF.calib
-*--- EU + UK
-i04MatFacPlaAvailCap(EU28,"ATHBMSCCS",YTIME)$(ord(YTIME)<41) = i04MatFacPlaAvailCap(EU28,"ATHBMSCCS","2024") + 0.004 * (ord(YTIME)-14);
-i04MatFacPlaAvailCap(EU28,"ATHGASCCS",YTIME)$(ord(YTIME)<41) = i04MatFacPlaAvailCap(EU28,"ATHGASCCS","2024")+ 0.002 * (ord(YTIME)-14);
 
-* i04MatFacPlaAvailCap(EU28,"ATHBMSCCS",YTIME)$(ord(YTIME)>=41) = i04MatFacPlaAvailCap(EU28,"ATHBMSCCS","2024") + 0.004 * 26;
-* i04MatFacPlaAvailCap(EU28,"ATHGASCCS",YTIME)$(ord(YTIME)>=41) = i04MatFacPlaAvailCap(EU28,"ATHGASCCS","2024")+ 0.002 * 26;
+* POLICY MEASURES PRISMA
+* *--- EU + UK
+* i04MatFacPlaAvailCap(EU28,"ATHBMSCCS",YTIME)$(ord(YTIME)<41) = i04MatFacPlaAvailCap(EU28,"ATHBMSCCS","2024") + 0.004 * (ord(YTIME)-14);
+* i04MatFacPlaAvailCap(EU28,"ATHGASCCS",YTIME)$(ord(YTIME)<41) = i04MatFacPlaAvailCap(EU28,"ATHGASCCS","2024")+ 0.002 * (ord(YTIME)-14);
 
-*--- IND
-i04MatFacPlaAvailCap("IND","ATHBMSCCS",YTIME)$(ord(YTIME)<51 and ord(YTIME)>20) = i04MatFacPlaAvailCap("IND","ATHBMSCCS","2024") + 0.002 * (ord(YTIME)-20);
-i04MatFacPlaAvailCap("IND","ATHGASCCS",YTIME)$(ord(YTIME)<51 and ord(YTIME)>20) = i04MatFacPlaAvailCap("IND","ATHGASCCS","2024")+ 0.001 * (ord(YTIME)-20);
+* * i04MatFacPlaAvailCap(EU28,"ATHBMSCCS",YTIME)$(ord(YTIME)>=41) = i04MatFacPlaAvailCap(EU28,"ATHBMSCCS","2024") + 0.004 * 26;
+* * i04MatFacPlaAvailCap(EU28,"ATHGASCCS",YTIME)$(ord(YTIME)>=41) = i04MatFacPlaAvailCap(EU28,"ATHGASCCS","2024")+ 0.002 * 26;
 
-* i04MatFacPlaAvailCap("IND","ATHBMSCCS",YTIME)$(ord(YTIME)>=51) = i04MatFacPlaAvailCap("IND","ATHBMSCCS","2024") + 0.002 * 31;
-* i04MatFacPlaAvailCap("IND","ATHGASCCS",YTIME)$(ord(YTIME)>=51) = i04MatFacPlaAvailCap("IND","ATHGASCCS","2024")+ 0.001 * 31;
+* *--- IND
+* i04MatFacPlaAvailCap("IND","ATHBMSCCS",YTIME)$(ord(YTIME)<51 and ord(YTIME)>20) = i04MatFacPlaAvailCap("IND","ATHBMSCCS","2024") + 0.002 * (ord(YTIME)-20);
+* i04MatFacPlaAvailCap("IND","ATHGASCCS",YTIME)$(ord(YTIME)<51 and ord(YTIME)>20) = i04MatFacPlaAvailCap("IND","ATHGASCCS","2024")+ 0.001 * (ord(YTIME)-20);
+
+* * i04MatFacPlaAvailCap("IND","ATHBMSCCS",YTIME)$(ord(YTIME)>=51) = i04MatFacPlaAvailCap("IND","ATHBMSCCS","2024") + 0.002 * 31;
+* * i04MatFacPlaAvailCap("IND","ATHGASCCS",YTIME)$(ord(YTIME)>=51) = i04MatFacPlaAvailCap("IND","ATHGASCCS","2024")+ 0.001 * 31;
 
 
-*---
+* *---
 
-*--- REF
-i04MatFacPlaAvailCap("REF","ATHBMSCCS",YTIME)$(ord(YTIME)<41 and ord(YTIME)>20) = i04MatFacPlaAvailCap("REF","ATHBMSCCS","2024") + 0.002 * (ord(YTIME)-20);
-i04MatFacPlaAvailCap("REF","ATHGASCCS",YTIME)$(ord(YTIME)<41 and ord(YTIME)>20) = i04MatFacPlaAvailCap("REF","ATHGASCCS","2024")+ 0.001 * (ord(YTIME)-20);
+* *--- REF
+* i04MatFacPlaAvailCap("REF","ATHBMSCCS",YTIME)$(ord(YTIME)<41 and ord(YTIME)>20) = i04MatFacPlaAvailCap("REF","ATHBMSCCS","2024") + 0.002 * (ord(YTIME)-20);
+* i04MatFacPlaAvailCap("REF","ATHGASCCS",YTIME)$(ord(YTIME)<41 and ord(YTIME)>20) = i04MatFacPlaAvailCap("REF","ATHGASCCS","2024")+ 0.001 * (ord(YTIME)-20);
 
-* i04MatFacPlaAvailCap("REF","ATHBMSCCS",YTIME)$(ord(YTIME)>=41) = i04MatFacPlaAvailCap("REF","ATHBMSCCS","2024") + 0.002 * 21;
-* i04MatFacPlaAvailCap("REF","ATHGASCCS",YTIME)$(ord(YTIME)>=41) = i04MatFacPlaAvailCap("REF","ATHGASCCS","2024")+ 0.001 * 21;
+* * i04MatFacPlaAvailCap("REF","ATHBMSCCS",YTIME)$(ord(YTIME)>=41) = i04MatFacPlaAvailCap("REF","ATHBMSCCS","2024") + 0.002 * 21;
+* * i04MatFacPlaAvailCap("REF","ATHGASCCS",YTIME)$(ord(YTIME)>=41) = i04MatFacPlaAvailCap("REF","ATHGASCCS","2024")+ 0.001 * 21;
 
-*--- JPN
-i04MatFacPlaAvailCap("JPN","ATHBMSCCS",YTIME)$(ord(YTIME)<41 and ord(YTIME)>20) = i04MatFacPlaAvailCap("JPN","ATHBMSCCS","2024") + 0.01 * (ord(YTIME)-20);
-i04MatFacPlaAvailCap("JPN","ATHGASCCS",YTIME)$(ord(YTIME)<41 and ord(YTIME)>20) = i04MatFacPlaAvailCap("JPN","ATHGASCCS","2024")+ 0.001 * (ord(YTIME)-20);
+* *--- JPN
+* i04MatFacPlaAvailCap("JPN","ATHBMSCCS",YTIME)$(ord(YTIME)<41 and ord(YTIME)>20) = i04MatFacPlaAvailCap("JPN","ATHBMSCCS","2024") + 0.01 * (ord(YTIME)-20);
+* i04MatFacPlaAvailCap("JPN","ATHGASCCS",YTIME)$(ord(YTIME)<41 and ord(YTIME)>20) = i04MatFacPlaAvailCap("JPN","ATHGASCCS","2024")+ 0.001 * (ord(YTIME)-20);
 
-* i04MatFacPlaAvailCap("JPN","ATHBMSCCS",YTIME)$(ord(YTIME)>=41) = i04MatFacPlaAvailCap("JPN","ATHBMSCCS","2024") + 0.002 * 21;
-* i04MatFacPlaAvailCap("JPN","ATHGASCCS",YTIME)$(ord(YTIME)>=41) = i04MatFacPlaAvailCap("JPN","ATHGASCCS","2024")+ 0.001 * 21;
+* * i04MatFacPlaAvailCap("JPN","ATHBMSCCS",YTIME)$(ord(YTIME)>=41) = i04MatFacPlaAvailCap("JPN","ATHBMSCCS","2024") + 0.002 * 21;
+* * i04MatFacPlaAvailCap("JPN","ATHGASCCS",YTIME)$(ord(YTIME)>=41) = i04MatFacPlaAvailCap("JPN","ATHGASCCS","2024")+ 0.001 * 21;
 
-*--- LAM
-i04MatFacPlaAvailCap("LAM","ATHBMSCCS",YTIME)$(ord(YTIME)<41 and ord(YTIME)>20) = i04MatFacPlaAvailCap("LAM","ATHBMSCCS","2024") + 0.002 * (ord(YTIME)-20);
-i04MatFacPlaAvailCap("LAM","ATHGASCCS",YTIME)$(ord(YTIME)<41 and ord(YTIME)>20) = i04MatFacPlaAvailCap("LAM","ATHGASCCS","2024")+ 0.001 * (ord(YTIME)-20);
+* *--- LAM
+* i04MatFacPlaAvailCap("LAM","ATHBMSCCS",YTIME)$(ord(YTIME)<41 and ord(YTIME)>20) = i04MatFacPlaAvailCap("LAM","ATHBMSCCS","2024") + 0.002 * (ord(YTIME)-20);
+* i04MatFacPlaAvailCap("LAM","ATHGASCCS",YTIME)$(ord(YTIME)<41 and ord(YTIME)>20) = i04MatFacPlaAvailCap("LAM","ATHGASCCS","2024")+ 0.001 * (ord(YTIME)-20);
 
-* i04MatFacPlaAvailCap("LAM","ATHBMSCCS",YTIME)$(ord(YTIME)>=41) = i04MatFacPlaAvailCap("LAM","ATHBMSCCS","2024") + 0.002 * 21;
-* i04MatFacPlaAvailCap("LAM","ATHGASCCS",YTIME)$(ord(YTIME)>=41) = i04MatFacPlaAvailCap("LAM","ATHGASCCS","2024")+ 0.001 * 21;
+* * i04MatFacPlaAvailCap("LAM","ATHBMSCCS",YTIME)$(ord(YTIME)>=41) = i04MatFacPlaAvailCap("LAM","ATHBMSCCS","2024") + 0.002 * 21;
+* * i04MatFacPlaAvailCap("LAM","ATHGASCCS",YTIME)$(ord(YTIME)>=41) = i04MatFacPlaAvailCap("LAM","ATHGASCCS","2024")+ 0.001 * 21;
 
-*--- USA
-i04MatFacPlaAvailCap("USA","ATHBMSCCS",YTIME)$(ord(YTIME)<41 and ord(YTIME)>20) = i04MatFacPlaAvailCap("USA","ATHBMSCCS","2024") + 0.01 * (ord(YTIME)-20);
-i04MatFacPlaAvailCap("USA","ATHGASCCS",YTIME)$(ord(YTIME)<41 and ord(YTIME)>20) = i04MatFacPlaAvailCap("USA","ATHGASCCS","2024")+ 0.001 * (ord(YTIME)-20);
+* *--- USA
+* i04MatFacPlaAvailCap("USA","ATHBMSCCS",YTIME)$(ord(YTIME)<41 and ord(YTIME)>20) = i04MatFacPlaAvailCap("USA","ATHBMSCCS","2024") + 0.01 * (ord(YTIME)-20);
+* i04MatFacPlaAvailCap("USA","ATHGASCCS",YTIME)$(ord(YTIME)<41 and ord(YTIME)>20) = i04MatFacPlaAvailCap("USA","ATHGASCCS","2024")+ 0.001 * (ord(YTIME)-20);
 
-* i04MatFacPlaAvailCap("USA","ATHBMSCCS",YTIME)$(ord(YTIME)>=41) = i04MatFacPlaAvailCap("USA","ATHBMSCCS","2024") + 0.002 * 21;
-* i04MatFacPlaAvailCap("USA","ATHGASCCS",YTIME)$(ord(YTIME)>=41) = i04MatFacPlaAvailCap("USA","ATHGASCCS","2024")+ 0.001 * 21;
+* * i04MatFacPlaAvailCap("USA","ATHBMSCCS",YTIME)$(ord(YTIME)>=41) = i04MatFacPlaAvailCap("USA","ATHBMSCCS","2024") + 0.002 * 21;
+* * i04MatFacPlaAvailCap("USA","ATHGASCCS",YTIME)$(ord(YTIME)>=41) = i04MatFacPlaAvailCap("USA","ATHGASCCS","2024")+ 0.001 * 21;
 
-*---OAS
-i04MatFacPlaAvailCap("OAS","ATHBMSCCS",YTIME)$(ord(YTIME)<51 and ord(YTIME)>20) = i04MatFacPlaAvailCap("OAS","ATHBMSCCS","2024") + 0.002 * (ord(YTIME)-20);
-i04MatFacPlaAvailCap("OAS","ATHGASCCS",YTIME)$(ord(YTIME)<51 and ord(YTIME)>20) = i04MatFacPlaAvailCap("OAS","ATHGASCCS","2024")+ 0.001 * (ord(YTIME)-20);
+* *---OAS
+* i04MatFacPlaAvailCap("OAS","ATHBMSCCS",YTIME)$(ord(YTIME)<51 and ord(YTIME)>20) = i04MatFacPlaAvailCap("OAS","ATHBMSCCS","2024") + 0.002 * (ord(YTIME)-20);
+* i04MatFacPlaAvailCap("OAS","ATHGASCCS",YTIME)$(ord(YTIME)<51 and ord(YTIME)>20) = i04MatFacPlaAvailCap("OAS","ATHGASCCS","2024")+ 0.001 * (ord(YTIME)-20);
 
-* i04MatFacPlaAvailCap("OAS","ATHBMSCCS",YTIME)$(ord(YTIME)>=51) = i04MatFacPlaAvailCap("OAS","ATHBMSCCS","2024") + 0.002 * 31;
-* i04MatFacPlaAvailCap("OAS","ATHGASCCS",YTIME)$(ord(YTIME)>=51) = i04MatFacPlaAvailCap("OAS","ATHGASCCS","2024")+ 0.001 * 31;
+* * i04MatFacPlaAvailCap("OAS","ATHBMSCCS",YTIME)$(ord(YTIME)>=51) = i04MatFacPlaAvailCap("OAS","ATHBMSCCS","2024") + 0.002 * 31;
+* * i04MatFacPlaAvailCap("OAS","ATHGASCCS",YTIME)$(ord(YTIME)>=51) = i04MatFacPlaAvailCap("OAS","ATHGASCCS","2024")+ 0.001 * 31;
 
-*---CAZ
-i04MatFacPlaAvailCap("CAZ","ATHBMSCCS",YTIME)$(ord(YTIME)<41 and ord(YTIME)>20) = i04MatFacPlaAvailCap("CAZ","ATHBMSCCS","2024") + 0.002 * (ord(YTIME)-20);
-i04MatFacPlaAvailCap("CAZ","ATHGASCCS",YTIME)$(ord(YTIME)<41 and ord(YTIME)>20) = i04MatFacPlaAvailCap("CAZ","ATHGASCCS","2024")+ 0.001 * (ord(YTIME)-20);
+* *---CAZ
+* i04MatFacPlaAvailCap("CAZ","ATHBMSCCS",YTIME)$(ord(YTIME)<41 and ord(YTIME)>20) = i04MatFacPlaAvailCap("CAZ","ATHBMSCCS","2024") + 0.002 * (ord(YTIME)-20);
+* i04MatFacPlaAvailCap("CAZ","ATHGASCCS",YTIME)$(ord(YTIME)<41 and ord(YTIME)>20) = i04MatFacPlaAvailCap("CAZ","ATHGASCCS","2024")+ 0.001 * (ord(YTIME)-20);
 
-* i04MatFacPlaAvailCap("CAZ","ATHBMSCCS",YTIME)$(ord(YTIME)>=41) = i04MatFacPlaAvailCap("CAZ","ATHBMSCCS","2024") + 0.002 * 21;
-* i04MatFacPlaAvailCap("CAZ","ATHGASCCS",YTIME)$(ord(YTIME)>=41) = i04MatFacPlaAvailCap("CAZ","ATHGASCCS","2024")+ 0.001 * 21;
-*---CHA
-i04MatFacPlaAvailCap("CHA","ATHBMSCCS",YTIME)$(ord(YTIME)<51 and ord(YTIME)>20) = i04MatFacPlaAvailCap("CHA","ATHBMSCCS","2024") + 0.0015 * (ord(YTIME)-20);
-i04MatFacPlaAvailCap("CHA","ATHGASCCS",YTIME)$(ord(YTIME)<51 and ord(YTIME)>20) = i04MatFacPlaAvailCap("CHA","ATHGASCCS","2024")+ 0.001 * (ord(YTIME)-20);
+* * i04MatFacPlaAvailCap("CAZ","ATHBMSCCS",YTIME)$(ord(YTIME)>=41) = i04MatFacPlaAvailCap("CAZ","ATHBMSCCS","2024") + 0.002 * 21;
+* * i04MatFacPlaAvailCap("CAZ","ATHGASCCS",YTIME)$(ord(YTIME)>=41) = i04MatFacPlaAvailCap("CAZ","ATHGASCCS","2024")+ 0.001 * 21;
+* *---CHA
+* i04MatFacPlaAvailCap("CHA","ATHBMSCCS",YTIME)$(ord(YTIME)<51 and ord(YTIME)>20) = i04MatFacPlaAvailCap("CHA","ATHBMSCCS","2024") + 0.0015 * (ord(YTIME)-20);
+* i04MatFacPlaAvailCap("CHA","ATHGASCCS",YTIME)$(ord(YTIME)<51 and ord(YTIME)>20) = i04MatFacPlaAvailCap("CHA","ATHGASCCS","2024")+ 0.001 * (ord(YTIME)-20);
 
-* i04MatFacPlaAvailCap("CHA","ATHBMSCCS",YTIME)$(ord(YTIME)>=51) = i04MatFacPlaAvailCap("CHA","ATHBMSCCS","2024") + 0.0015 * 31;
-* i04MatFacPlaAvailCap("CHA","ATHGASCCS",YTIME)$(ord(YTIME)>=51) = i04MatFacPlaAvailCap("CHA","ATHGASCCS","2024")+ 0.001 * 31;
+* * i04MatFacPlaAvailCap("CHA","ATHBMSCCS",YTIME)$(ord(YTIME)>=51) = i04MatFacPlaAvailCap("CHA","ATHBMSCCS","2024") + 0.0015 * 31;
+* * i04MatFacPlaAvailCap("CHA","ATHGASCCS",YTIME)$(ord(YTIME)>=51) = i04MatFacPlaAvailCap("CHA","ATHGASCCS","2024")+ 0.001 * 31;
 *---
 parameter i04LoadFacElecDem(DSBS)                  "Load factor of electricity demand per sector (1)"
 /
@@ -248,30 +250,30 @@ i04ShareFuels(runCy,PGALL,PGEF)$PGALLTOEF(PGALL,PGEF) =
   1 / CARD(PGALL)
 )$(not SUM(PGEF2$PGALLTOEF(PGALL,PGEF2),i03InpTotTransfProcess(runCy,"PG",PGEF2,"%fBaseY%")));
 
+* POLICY MEASURES PRISMA
+ i04SensCarbon(allCy,YTIME) = 0;
+* *--- EU+UK
+* i04SensCarbon(EU28,YTIME) = 0.4;
+* i04SensCarbon(EU27,YTIME)$(ord(YTIME)>34) = 0.6;
+* *--- IND
+* i04SensCarbon("IND",YTIME)$(ord(YTIME)>34) = 0.4;
+* *--- REF
+* i04SensCarbon("REF",YTIME) = 0.4;
+* *--- JPN
+* i04SensCarbon("JPN",YTIME) = 0.6;
+* *--- LAM
+* i04SensCarbon("LAM",YTIME) = 0.6;
 
-i04SensCarbon(allCy,YTIME) = 0;
-*--- EU+UK
-i04SensCarbon(EU28,YTIME) = 0.4;
-i04SensCarbon(EU27,YTIME)$(ord(YTIME)>34) = 0.6;
-*--- IND
-i04SensCarbon("IND",YTIME)$(ord(YTIME)>34) = 0.4;
-*--- REF
-i04SensCarbon("REF",YTIME) = 0.4;
-*--- JPN
-i04SensCarbon("JPN",YTIME) = 0.6;
-*--- LAM
-i04SensCarbon("LAM",YTIME) = 0.6;
+* *--- USA
+* i04SensCarbon("USA",YTIME) = 0.6;
 
-*--- USA
-i04SensCarbon("USA",YTIME) = 0.6;
+* *--- OAS
+* i04SensCarbon("OAS",YTIME) = 0.4;
+* *--- CAZ
+* i04SensCarbon("CAZ",YTIME) = 0.4;
 
-*--- OAS
-i04SensCarbon("OAS",YTIME) = 0.4;
-*--- CAZ
-i04SensCarbon("CAZ",YTIME) = 0.4;
-
-*---NEU
-i04SensCarbon("NEU",YTIME) = 0.4;
+* *---NEU
+* i04SensCarbon("NEU",YTIME) = 0.4;
 
 *--- COAL PHASE OUT ---
 i04MatFacPlaAvailCap(EU28,"ATHCOAL",YTIME) = 0;

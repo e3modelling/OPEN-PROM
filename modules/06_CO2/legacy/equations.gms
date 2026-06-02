@@ -148,15 +148,18 @@ Q06ProfRateDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q06CapFacNewDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
   V06CapFacNewDAC(allCy,CDRTECH,YTIME)
       =E=
-  (1 + 
-  (8$(EU28(allCy) and ord(YTIME)<40) - 0.5$(EU28(allCy) and ord(YTIME)>=40)) + 
-  (5$(sameas(allCy,"IND") and ord(YTIME)<40) - 0.5$(sameas(allCy,"IND") and ord(YTIME)<40)) +
-  (2$(sameas(allCy,"USA") and ord(YTIME)<40) - 0.9995$(sameas(allCy,"USA") and ord(YTIME)<40)) +
-  (8$(sameas(allCy,"CHA") and ord(YTIME)<40) - 0.5$(sameas(allCy,"CHA") and ord(YTIME)<40)) +
-  (3$(sameas(allCy,"JPN") and ord(YTIME)<40) - 0.5$(sameas(allCy,"JPN") and ord(YTIME)<40)) +
-  (6$(sameas(allCy,"REF") and ord(YTIME)<40) - 0.5$(sameas(allCy,"REF") and ord(YTIME)<40)) +
-  (3$(sameas(allCy,"LAM") and ord(YTIME)<40) - 0.5$(sameas(allCy,"LAM") and ord(YTIME)<40)) +
-  (2$(sameas(allCy,"CAZ") and ord(YTIME)<40) - 0.5$(sameas(allCy,"CAZ") and ord(YTIME)<40))) * 
+  (1 
+* POLICY MEASURES PRISMA
+* + 
+* (8$(EU28(allCy) and ord(YTIME)<40) - 0.5$(EU28(allCy) and ord(YTIME)>=40)) + 
+* (5$(sameas(allCy,"IND") and ord(YTIME)<40) - 0.5$(sameas(allCy,"IND") and ord(YTIME)<40)) +
+* (2$(sameas(allCy,"USA") and ord(YTIME)<40) - 0.9995$(sameas(allCy,"USA") and ord(YTIME)<40)) +
+* (8$(sameas(allCy,"CHA") and ord(YTIME)<40) - 0.5$(sameas(allCy,"CHA") and ord(YTIME)<40)) +
+* (3$(sameas(allCy,"JPN") and ord(YTIME)<40) - 0.5$(sameas(allCy,"JPN") and ord(YTIME)<40)) +
+* (6$(sameas(allCy,"REF") and ord(YTIME)<40) - 0.5$(sameas(allCy,"REF") and ord(YTIME)<40)) +
+* (3$(sameas(allCy,"LAM") and ord(YTIME)<40) - 0.5$(sameas(allCy,"LAM") and ord(YTIME)<40)) +
+* (2$(sameas(allCy,"CAZ") and ord(YTIME)<40) - 0.5$(sameas(allCy,"CAZ") and ord(YTIME)<40))
+  ) * 
   (S06CapFacMinNewDAC +
   S06CapFacMaxNewDAC
   * (tanh(0.7 * (V06ProfRateDAC(allCy,CDRTECH,YTIME) - 3)) + 1) / 2
