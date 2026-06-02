@@ -272,13 +272,14 @@ $offdelim
 *imMatrFactor.FX(runCy,"PC",TTECH,YTIME)$((t01StockPC(runCy,TTECH,YTIME) < 0) and (t01NewShareStockPC(runCy,TTECH,YTIME) <= 0)) = 100;         
 $ENDIF.calib
 *---
+$ontext
 i01calb(runCy,TRANSE,EF)$(SECtoEF(TRANSE,EF) and BIOFUELS(EF))= 
 (
   log(0.8/i01ShareBlend(runCy,TRANSE,EF,"%fBaseY%")-1) -
   2 * log(imFuelPrice(runCy,TRANSE,EF,"%fBaseY%")/ SUM(EF2$(BioToFossilFuel(EF,EF2)), imFuelPrice(runCy,TRANSE,EF2,"%fBaseY%")))
 )$i01ShareBlend(runCy,TRANSE,EF,"%fBaseY%") +
 3$(not i01ShareBlend(runCy,TRANSE,EF,"%fBaseY%"));
-
+$offtext
 *i01calibweibul(runCy,TRANSE,TTECH,EF)$(SECTTECH(TRANSE,TTECH) and TTECHtoEF(TTECH,EF)) = (imFuelCons(runCy,TRANSE,EF,"%fBaseY%") + 1e-6) / SUM(EF2$(SECtoEF(TRANSE,EF2) and TTECHtoEF(TTECH,EF2)),imFuelCons(runCy,TRANSE,EF2,"%fBaseY%") + 1e-6) *imFuelPrice(runCy,TRANSE,EF,"%fBaseY%") ** 2;
 !!i01calibweibul(allCy,TRANSE,TTECH,EF)$(SECTTECH(TRANSE,TTECH) and TTECHtoEF(TTECH,EF) and BIOFUELS(EF)) = 0.5;
 $ontext
