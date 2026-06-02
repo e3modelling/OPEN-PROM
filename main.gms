@@ -204,6 +204,13 @@ $setGlobal Calibration off !! MatCalibration/Calibration/off
 *' *** MAgPIE link
 $setglobal link2MAgPIE off  !! on or off For soft link with MAgPIE
 
+*' *** GLOBIOM biomass supply / land-use emission curves
+*' *** link2GLOBIOM: on = activate GLOBIOM supply-curve for BMSWAS (only when link2MAgPIE == off)
+$setglobal link2GLOBIOM on   !! on or off
+*' *** globiomGHGScen: active row in GLOBIOM tables (only used when link2GLOBIOM == on)
+*' *** Options: GHG000 GHG010 GHG020 GHG050 GHG100 (GHG price in $/tCO2)
+$setglobal globiomGHGScen GHG000
+
 *' *** Maximum number of solver attempts
 $evalGlobal SolverTryMax 4
 *' *** Country solve mode: serial or parallel
