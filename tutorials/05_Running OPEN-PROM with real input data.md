@@ -131,6 +131,22 @@ the merged scenario `start.R` runs for this row is:
 
 **Practical implication for "default" values.** Whatever sits in `config.json:scenario` is the **default for every batch row** unless that row overrides it. So put **only project-wide invariants** there (e.g. `magpie.project: "uptake"`, `gams_flags.fScenario: 200` as the most common case). **Do not** put per-run "incidentals" like `magpie.existing_prom_run` in `config.json:scenario` — if you forget to override the column on every row, all of them will silently inherit the same `existing_prom_run` path, every batch row will skip Step 1 and reuse the same OPEN-PROM round-1 result, and they'll all overwrite each other in that one folder. Keep `magpie.existing_prom_run` in `config.json` as `null` and set it on individual CSV rows only when you actually want to resume from a specific path.
 
+**Extensibility — any flag works, no R-code changes needed.** The dot-notation rule above is *generic*: `start.R` does not hard-code any particular column name. Some practical consequences:
+
+* **Any `gams_flags.X` works**, where `X` is any `$setGlobal` / `$evalGlobal` symbol declared in `main.gms` — e.g. `gams_flags.fEndY`, `gams_flags.CountrySolveMode`, `gams_flags.Transport`, `gams_flags.Industry`, `gams_flags.Curves`, etc. Each becomes a `--X=value` CLI flag passed to GAMS.
+* **The column does not need to pre-exist in `config.json`.** A CSV column for a key that isn't in `config.json:scenario` simply injects that key for rows where the cell is non-empty. (Putting it in `config.json` only gives it a default for the rows that leave the cell blank.)
+* **Column order is irrelevant.** `start.R` reads columns by name, not by position. `gams_flags.fEndY,gams_flags.Transport,…` and `gams_flags.Transport,gams_flags.fEndY,…` behave identically.
+* **Adding a flag is a data-only change.** You never edit `start.R` to expose a new flag — add the column, fill the cells you want overridden, leave the rest blank.
+
+Concrete example — sweep across end-year horizon and Transport realization without touching any R code:
+
+```csv
+scenario_name,task_id,gams_flags.fScenario,gams_flags.fEndY,gams_flags.Transport
+short_simple,2,200,2050,simple
+long_simple,2,200,2100,simple
+long_legacy,2,200,2100,legacy
+```
+
 ### 5.2 Gating rows with a `start` column
 
 To skip rows without deleting them from the CSV, add an optional `start` column:
