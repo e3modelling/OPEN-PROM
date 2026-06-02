@@ -10,6 +10,7 @@ $ondelim
 $include "./iActv.csvr"
 $offdelim
 ;
+imActv(YTIME,allCy,DSBS)$(imActv(YTIME,allCy,DSBS) = NA) = 0;
 *---
 table i01GDP(YTIME,allCy) "GDP (billion US$2015)"
 $ondelim
@@ -150,6 +151,21 @@ $ondelim
 $include"./iFuelPrice.csv"
 $offdelim
 ;
+imFuelPrice(allCy,SBS,EF,YTIME) = imFuelPrice(allCy,SBS,EF,YTIME)/1000; !! change units $15 -> k$15
+imFuelPrice(runCy,CDR,EF,YTIME)$SECtoEF(CDR,EF) = imFuelPrice(runCy,"OI",EF,YTIME);
+imFuelPrice(runCy,DOMSE,"GSL",YTIME) = imFuelPrice(runCy,"OI","GSL",YTIME);
+imFuelPrice(runCy,DOMSE,"BGSL",YTIME) = imFuelPrice(runCy,"OI","BGSL",YTIME);
+imFuelPrice(runCy,DOMSE,"LGN",YTIME) = imFuelPrice(runCy,"OI","LGN",YTIME);
+imFuelPrice(runCy,DOMSE,"OLQ",YTIME) = imFuelPrice(runCy,"OI","OLQ",YTIME);
+imFuelPrice(runCy,DOMSE,"RFO",YTIME) = imFuelPrice(runCy,"OI","RFO",YTIME);
+imFuelPrice(runCy,"SE","GDO",YTIME) = imFuelPrice(runCy,"OI","GDO",YTIME);
+imFuelPrice(runCy,"SE","BGDO",YTIME) = imFuelPrice(runCy,"OI","BGDO",YTIME);
+*imFuelPrice(runCy,"SE","BMSWAS",YTIME) = imFuelPrice(runCy,"AG","BMSWAS",YTIME);
+imFuelPrice(runCy,"BU","BGSL",YTIME) = imFuelPrice(runCy,"OI","BGSL",YTIME);
+imFuelPrice(runCy,TRANSE,"RFO",YTIME) = imFuelPrice(runCy,"BU","RFO",YTIME);
+imFuelPrice(runCy,TRANSE,"OGS",YTIME) = imFuelPrice(runCy,TRANSE,"NGS",YTIME);
+imFuelPrice(runCy,TRANSE,"OLQ",YTIME) = imFuelPrice(runCy,TRANSE,"GDO",YTIME);
+imFuelPrice(runCy,"ICT",EFS,YTIME)$SECtoEF("ICT",EFS) = imFuelPrice(runCy,"SE",EFS,YTIME);
 *---
 table imPriceFuelsIntBase(WEF,YTIME)	              "International Fuel Prices USED IN BASELINE SCENARIO ($2015/toe)"
 $ondelim
@@ -534,6 +550,7 @@ imAnnCons(runCy,"EW","smallest") = 0.2 ;
 imAnnCons(runCy,"EW","largest") = 1 ;
 imAnnCons(runCy,"EW","modal") = 0.5 ;
 *---
+$ontext
 * Consumer size groups distribution function
 Loop (runCy,DSBS) DO
      Loop rCon$(ord(rCon) le imNcon(DSBS)+1) DO
@@ -560,8 +577,9 @@ Loop (runCy,DSBS) DO
 ;
      ENDLOOP;
 ENDLOOP;
+$offtext
 *---
-imCumDistrFuncConsSize(runCy,DSBS) = sum(rCon, imDisFunConSize(runCy,DSBS,rCon));
+*imCumDistrFuncConsSize(runCy,DSBS) = sum(rCon, imDisFunConSize(runCy,DSBS,rCon));
 imCGI(allCy,YTIME) = 1;
 *---
 table iDataDistrLosses(allCy,EF,YTIME)	     "Data for Distribution Losses (Mtoe)"
@@ -577,9 +595,7 @@ $ondelim
 $include"./iFuelCons.csv"
 $offdelim
 ;
-*---
-imFuelConsPerFueSub(runCy,SBS,EF,YTIME) = imFuelCons(runCy,SBS,EF,YTIME);
-imFuelConsPerFueSub(runCy,"BU",EF,YTIME) = -imFuelConsPerFueSub(runCy,"BU",EF,YTIME);
+imFuelCons(runCy,"BU",EF,YTIME) = -imFuelCons(runCy,"BU",EF,YTIME);
 *---
 imCO2CaptRate(PGALL)$CCS(PGALL) = 0.90; 
 imEffValueInDollars(runCy,SBS,YTIME) = 0;

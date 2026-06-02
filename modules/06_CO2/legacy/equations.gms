@@ -157,23 +157,17 @@ Q06CapFacNewDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' The equation calculates the DAC installed capacity annually and regionally,
 *' adding capacity based on the maturity of the technology, as well as given capacities of actual scheduled DAC units.
 Q06CapCDR(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-          V06CapCDR(allCy,CDRTECH,YTIME)
-            =E=
-          V06CapCDR(allCy,CDRTECH,YTIME-1) * (1 + V06CapFacNewDAC(allCy,CDRTECH,YTIME)) +
-          i06SchedNewCapDAC(allCy,CDRTECH,YTIME);
+    V06CapCDR(allCy,CDRTECH,YTIME)
+      =E=
+    V06CapCDR(allCy,CDRTECH,YTIME-1) * (1 + V06CapFacNewDAC(allCy,CDRTECH,YTIME)) +
+    i06SchedNewCapDAC(allCy,CDRTECH,YTIME);
 
 *' The equation calculates the different fuels consumed by the DAC installed capacity annually and regionally.
 Q06ConsFuelTechCDRProd(allCy,CDRTECH,EF,YTIME)$(TIME(YTIME) $TECHtoEF(CDRTECH,EF) $(runCy(allCy)))..
     VmConsFuelTechCDRProd(allCy,CDRTECH,EF,YTIME)
       =E=
     (
-    (V06CapCDR(allCy,CDRTECH,YTIME) * i06SpecHeatDAC(allCy,CDRTECH,YTIME) / 0.85)$(sameas(EF, 'ngs')) +
-    (V06CapCDR(allCy,CDRTECH,YTIME) * i06SpecHeatDAC(allCy,CDRTECH,YTIME) / 0.85)$(sameas(EF, 'H2F')) +
-    (V06CapCDR(allCy,CDRTECH,YTIME) * i06SpecElecDAC(allCy,CDRTECH,YTIME))$(sameas(EF, 'elc')) 
+      (V06CapCDR(allCy,CDRTECH,YTIME) * i06SpecHeatDAC(allCy,CDRTECH,YTIME) / 0.85)$(sameas(EF, 'ngs')) +
+      (V06CapCDR(allCy,CDRTECH,YTIME) * i06SpecHeatDAC(allCy,CDRTECH,YTIME) / 0.85)$(sameas(EF, 'H2F')) +
+      (V06CapCDR(allCy,CDRTECH,YTIME) * i06SpecElecDAC(allCy,CDRTECH,YTIME))$(sameas(EF, 'elc')) 
     ) / 1e6;
-
-*' The equation calculates the different fuels consumed by the DAC installed capacity annually and regionally.
-Q06ConsFuelCDRProd(allCy,EF,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
-    VmConsFuelCDRProd(allCy,EF,YTIME)
-        =E=
-    sum(CDRTECH$TECHtoEF(CDRTECH,EF),VmConsFuelTechCDRProd(allCy,CDRTECH,EF,YTIME));

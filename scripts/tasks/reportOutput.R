@@ -37,16 +37,18 @@ reportOutput <- function(
   )
   metadata <- getMetadata(path = runpath)
   print("Report generation completed.")
-  
+
   # add validation data for plots
   for (i in 1:length(runpath)) {
-      reportOPEN_PROM <- reports[[i]]
-      metadata_run <- getMetadata(path = runpath[[i]])
-      reports[[i]] <- ValidationMif(.path = runpath, Validation_data_for_plots = Validation_data_for_plots,
-                                    reportOPEN_PROM = reportOPEN_PROM, metadata_run = metadata_run,
-                                    Validation2050 = Validation2050)
+    reportOPEN_PROM <- reports[[i]]
+    metadata_run <- getMetadata(path = runpath[[i]])
+    reports[[i]] <- ValidationMif(
+      .path = runpath, Validation_data_for_plots = Validation_data_for_plots,
+      reportOPEN_PROM = reportOPEN_PROM, metadata_run = metadata_run,
+      Validation2050 = Validation2050
+    )
   }
-  
+
   if (!is.null(plot_name)) {
     save_names <- file.path(runpath, plot_name)
     mapply( # for each scenario, unpack the magpie obj and a pdf savename
