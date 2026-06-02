@@ -102,3 +102,9 @@ $ondelim
 $include "../targets/tProjectionsINDSE.csv"
 $offdelim;
 $ENDIF.calib
+
+i02SensCarbon(allCy,YTIME,DSBS) = 0;
+
+imUsfEneConvSubTech(runCy,"HOU","THEATPUMP",YTIME)$AN(YTIME)  = 3.5;
+imUsfEneConvSubTech(runCy,"SE","THEATPUMP",YTIME)$AN(YTIME)  = 3.5;
+

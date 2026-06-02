@@ -328,3 +328,5 @@ test2SFC(TRANSE,TTECH) *
   
 ];
 testSFC(runCy,TRANSE,TTECH)$(testSFC(runCy,TRANSE,TTECH) > 100) = test2SFC(TRANSE,TTECH);
+
+i01SensCarbon(allCy,YTIME,TRANSE) = 0;

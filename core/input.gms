@@ -835,3 +835,18 @@ imPlantEffByType(runCy,STECH,"effHeat",YTIME)$(not PGALL(STECH))= imPlantEffByTy
 **   Conversion of GW mean power into TWh/y, depending on whether it's a leap year
 smGwToTwhPerYear(YTIME) = 8.76 + 0.024 $ (mod(YTIME.val,4) = 0 and mod (YTIME.val,100) <> 0);
 *--
+
+* PRISMA runs
+* imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 14 and DOMSE(DSBS) and not sameas(DSBS,"AG")) = 40;
+* imMatrFactor(runCy,DSBS,"THEATPUMP",YTIME)$(ord(YTIME) > 14 and DOMSE(DSBS) and not sameas(DSBS,"AG")) = 40;
+* imMatrFactor(runCy,DSBS,"TNGSCCS",YTIME)$((ord(YTIME) > 14) and INDSE(DSBS)) = 3;
+* imMatrFactor(runCy,DSBS,"THCLCCS",YTIME)$((ord(YTIME) > 14) and INDSE(DSBS)) = 3;
+
+* imMatrFactor(runCy,DSBS,"TNGSCCS",YTIME)$((ord(YTIME) > 34) and INDSE(DSBS)) = 10;
+* imMatrFactor(runCy,DSBS,"THCLCCS",YTIME)$((ord(YTIME) > 34) and INDSE(DSBS)) = 10;
+* imMatrFactor("CHA",DSBS,"TELC",YTIME)$((ord(YTIME) > 34) and INDSE(DSBS)) = 10;
+imMatrFactor(runCy,DSBS,TECH,YTIME)$((INDDOM(DSBS) or NENSE(DSBS)) and (imMatrFactor(runCy,DSBS,TECH,YTIME) < 1e-2) ) = 1e-2;
+
+
+*imMatrFactor(EU27,DSBS,TECH,YTIME)$(ord(YTIME)<24) = imMatrFactor(EU27,DSBS,TECH,"2023");
+*imMatrFactor(EU27,DSBS,TECH,YTIME)$(ord(YTIME)<24) = imMatrFactor(EU27,DSBS,TECH,YTIME-10);
