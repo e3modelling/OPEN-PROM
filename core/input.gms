@@ -92,7 +92,7 @@ parameter iCo2EmiFacAllSbs(EF) "CO2 emission factors (kgCO2/kgoe fuel burned)" /
 CRO 2.76
 LGN 4.15330622,
 HCL 3.941453651,
-SLD 4.438008647,
+*SLD 4.438008647,
 GSL 2.872144882,
 GDO 3.068924588,
 LPG 2.612562612,
@@ -104,7 +104,7 @@ OGS 2.336234395,
 BMSWAS 0/;
 *---
 imCo2EmiFac(runCy,SBS,EF,YTIME)$(not (sameas("NEN",SBS) or sameas("PCH",SBS))) = iCo2EmiFacAllSbs(EF);
-imCo2EmiFac(runCy,"IS","HCL",YTIME) = iCo2EmiFacAllSbs("SLD"); !! This is the assignment for coke
+imCo2EmiFac(runCy,"IS","HCL",YTIME) = 4.438008647; !! This is the assignment for coke
 *imCo2EmiFac(runCy,"H2P","NGS",YTIME) = 3.107;
 *imCo2EmiFac(runCy,"H2P","BMSWAS",YTIME) = 0.497;
 *---

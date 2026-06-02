@@ -463,32 +463,9 @@ ETH     "Ethanol"
 BGDO    "Biodiesel"
 BGSL    "Biogasoline"
 BKRS    "Biokerosene"
+BGAS    "Biogas"
 H2F     "Hydrogen"
 ELC     "Electricity"
-
-* Aggregate Fuels
-SLD     "Solid Fuels"
-GAS     "Gases"
-LQD     "All Liquids"
-REN     "Renewables except Hydro"
-NFF     "Non Fossil Fuels"
-NEF     "New energy forms"
-
-* heatpump energy (reduces the final energy demand of non electric consumption)
-HEATPUMP "Low enthalpy heat produced by heatpumps reducing the total final consumption of the sector"
-/
-HEATPUMP(EF) Heatpumps are reducing the heat requirements of the sector but increasing electricity consumption
-/HEATPUMP/
-
-EFA(EF)          Aggregate Energy Forms
-/
-SLD   "Solid Fuels"
-LQD   "Liquids"
-GAS   "Gases"
-REN   "Renewables except Hydro"
-STE   "Steam"
-NFF   "Non Fossil Fuels"
-NEF   "New energy forms"
 /
 
 REFORM(EF) FUELS CONSIDERED IN PRICE REFORM
@@ -502,29 +479,6 @@ RFO     "Residual Fuel Oil"
 OLQ     "Other Liquids"
 NGS     "Natural Gas"
 OGS     "Other Gases"
-/
-
-REFORM1(EF) FUELS CONSIDERED IN PRICE REFORM
-/HCL
-LGN/
-
-
-
-OIL(EF) Liquid fuels in private road transport
-/
-GSL     "Gasoline"
-GDO     "Diesel Oil"
-/
-
-EFtoEFA(EF,EFA)  Energy Forms Aggregations (for summary balance report)
-/
-(HCL,LGN).SLD
-(CRO,GSL,GDO,RFO,LPG,KRS,OLQ).LQD
-(NGS,OGS).GAS
-(WND,SOL,GEO).REN
-(HYD,WND,SOL,GEO,NUC,BMSWAS).NFF
-(H2F,MET,ETH).NEF
-STE.STE
 /
 
 WEF              Imported Energy Forms (affecting fuel prices)
@@ -581,6 +535,7 @@ ETH     "Ethanol"
 BGDO    "Biodiesel"
 BGSL    "Biogasoline"
 BKRS    "Biokerosene"
+BGAS    "Biogas"
 H2F     "Hydrogen"
 ELC     "Electricity"
 /
@@ -600,7 +555,7 @@ NGS.NGS
 OGS.OGS
 NUC.NUC
 HYD.HYD
-(BGDO,BGSL,BKRS,ETH,BMSWAS).BMSWAS
+(BGDO,BGSL,BKRS,BGAS,ETH,BMSWAS).BMSWAS
 SOL.SOL
 GEO.GEO
 WND.WND
@@ -614,7 +569,7 @@ STE.STE
 ELCEF(EF)        Electricity                                         /ELC/
 H2EF(EF)         Hydrogen                                            /H2F/
 STEAM(EFS)       Steam                                               /STE/
-ALTEF(EF)        Alternative Fuels used in transport                 /BGDO,BKRS,BGSL,MET,ETH/
+ALTEF(EF)        Alternative Fuels used in transport                 /BGDO,BKRS,BGSL,BGAS,MET,ETH/
 
 PGEF(EFS)        "Energy forms used for steam production"
 
@@ -627,6 +582,7 @@ LGN
 BGSL
 BGDO
 BKRS
+BGAS
 OLQ
 HCL
 CRO
@@ -1277,18 +1233,19 @@ BALEF fuels in balance report
 /
 
 BIOFUELS(EF)
-/BGSL,BGDO,BKRS/
+/BGSL,BGDO,BKRS,BGAS/
 
 BioToFossilFuel(EF,EF)  Mapping from bio fuels to fossil fuels
 /
 BGSL.GSL
 BGDO.GDO
 BKRS.KRS
+BGAS.NGS
 /
 
 BALEF2EFS(BALEF, EFS) Mapping from balance fuels to model fuels
 /
-"Total".(HCL,LGN,CRO,LPG,GSL,BGSL,KRS,BKRS,GDO,BGDO,RFO,OLQ,NGS,OGS,NUC,STE,HYD,WND,SOL,BMSWAS,GEO,MET,ETH,H2F,ELC)
+"Total".(HCL,LGN,CRO,LPG,GSL,BGSL,KRS,BKRS,BGAS,GDO,BGDO,RFO,OLQ,NGS,OGS,NUC,STE,HYD,WND,SOL,BMSWAS,GEO,MET,ETH,H2F,ELC)
 "Solids".(HCL,LGN)
 "Hard coal".HCL
 "Lignite".LGN
@@ -1304,7 +1261,7 @@ BALEF2EFS(BALEF, EFS) Mapping from balance fuels to model fuels
 "Diesel oil".(GDO,BGDO)
 "Fuel oil".RFO
 "Other liquids".OLQ
-"Gases".(NGS,OGS)
+"Gases".(NGS,OGS,BGAS)
 "Natural gas".NGS
 "Derived gases".OGS
 "Nuclear heat".NUC
@@ -1313,7 +1270,7 @@ BALEF2EFS(BALEF, EFS) Mapping from balance fuels to model fuels
 "Wind".WND
 "Solar energy".SOL
 "Biomass".BMSWAS
-"Biofuels".(BMSWAS,BGSL,BKRS,BGDO)
+"Biofuels".(BMSWAS,BGSL,BKRS,BGDO,BGAS)
 "Geothermal heat".GEO
 "Methanol".MET
 "Hydrogen".H2F

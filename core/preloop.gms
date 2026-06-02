@@ -53,7 +53,7 @@ VmPriceFuelSubsecCarVal.L(runCy,SBS,EF,YTIME)$SECtoEF(SBS,EF) = 1;
 $IFTHEN %link2MAgPIE% == on 
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,"BMSWAS",YTIME)$(An(YTIME)) = iPricesMagpie(runCy,SBS,YTIME);
 $ENDIF
-VmPriceFuelSubsecCarVal.FX(runCy,SBS,EF,YTIME)$(SECtoEF(SBS,EF) and not (HEATPUMP(EF) or sameas("NUC",EF)) and DATAY(YTIME)) = imFuelPrice(runCy,SBS,EF,YTIME);
+VmPriceFuelSubsecCarVal.FX(runCy,SBS,EF,YTIME)$(SECtoEF(SBS,EF) and not sameas("NUC",EF) and DATAY(YTIME)) = imFuelPrice(runCy,SBS,EF,YTIME);
 * Alternative fuel prices are set explicitly below instead of using ALTMAP
 * FIXME: VmPriceFuelSubsecCarVal (NUC/MET/ETH/BGDO) should be computed endogenously after startYear, and with mrprom before startYear
 * author=giannou
@@ -62,7 +62,6 @@ VmPriceFuelSubsecCarVal.FX(runCy,SBS,"SOL",YTIME) = 0;
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,"GEO",YTIME) = 0;
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,"MET",YTIME)$(DATAY(YTIME) and SECtoEF(SBS,"MET")) = 1; !! fixed price methanol
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,"ETH",YTIME)$(DATAY(YTIME) and SECtoEF(SBS,"ETH")) = 1; !! fixed price for ethanol
-VmPriceFuelSubsecCarVal.FX(runCy,INDDOM,"HEATPUMP",YTIME)$(SECtoEF(INDDOM,"HEATPUMP")$(not An(YTIME))) = imFuelPrice(runCy,INDDOM,"ELC",YTIME);
 VmPriceFuelSubsecCarVal.FX(runCy,"H2P",EF,YTIME)$(SECtoEF("H2P",EF)$DATAY(YTIME)) = imFuelPrice(runCy,"OI",EF,YTIME);
 VmPriceFuelSubsecCarVal.FX(runCy,"STEAMP",EF,YTIME)$(SECtoEF("STEAMP",EF)$DATAY(YTIME)) = imFuelPrice(runCy,"PG",EF,YTIME);
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,"CRO",YTIME) = imFuelPrice(runCy,SBS,"CRO",YTIME);

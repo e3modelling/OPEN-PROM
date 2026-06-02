@@ -54,7 +54,7 @@ V02DemSubUsefulSubsec.FX(runCy,NENSE,YTIME)$(not An(YTIME)) = SUM(ITECH$SECTTECH
 VmConsFuel.LO(runCy,DSBS,EF,YTIME) = 0;
 VmConsFuel.L(runCy,DSBS,EF,YTIME) = imFuelCons(runCy,DSBS,EF,"%fBaseY%");
 VmConsFuel.FX(runCy,DSBS,EF,YTIME)$(not (INDDOM(DSBS) or NENSE(DSBS)) or not SECtoEF(DSBS,EF)) = 0;
-VmConsFuel.FX(runCy,DSBS,EF,YTIME)$(not HEATPUMP(EF) and not TRANSE(DSBS) and not sameas(DSBS,"ICT") and DATAY(YTIME)) = imFuelCons(runCy,DSBS,EF,YTIME);
+VmConsFuel.FX(runCy,DSBS,EF,YTIME)$(not TRANSE(DSBS) and not sameas(DSBS,"ICT") and DATAY(YTIME)) = imFuelCons(runCy,DSBS,EF,YTIME);
 *---
 *vmConsTotElecInd.FX(runCy,YTIME)$(not An(YTIME))= SUM(INDSE,VmConsElecNonSubIndTert.l(runCy,INDSE,YTIME));
  
