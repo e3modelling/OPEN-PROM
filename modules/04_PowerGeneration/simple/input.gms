@@ -102,34 +102,6 @@ i04MatFacPlaAvailCap(runCy,PGALL,YTIME) = iMatFacPlaAvailCapData(runCy,PGALL,YTI
 i04ScaleEndogScrap(runCy,PGALL,YTIME) = iScaleEndogScrapData(runCy,PGALL,YTIME);
 $ENDIF.calib
 *---
-parameter i04LoadFacElecDem(DSBS)                  "Load factor of electricity demand per sector (1)"
-/
-IS 	0.92,
-NF 	0.94,
-CH 	0.83,
-BM 	0.82,
-PP 	0.74,
-FD 	0.65,
-EN 	0.7,
-TX 	0.61,
-OE 	0.92,
-OI 	0.67,
-SE 	0.64,
-AG 	0.52,
-HOU	0.72,
-PC 	0.7,
-PB 	0.7,
-PT 	0.62,
-PN 	0.7,
-PA 	0.7,
-GU 	0.7,
-GT 	0.62,
-GN 	0.7,
-BU 	0.7,
-PCH	0.83,
-NEN	0.83 
-/ ;
-*---
 $$ontext
 parameter i04FIT(allCy,PGALL,YTIME)                  "Feed0In-Tariff (US$2015/KWh)"
 /
@@ -142,34 +114,6 @@ JPN.ATHBMSWAS.YTIME 0.15
 JPN.PGSOL.YTIME 0.06
 / ;
 $$offtext
-*---
-parameter i04LoadFactorAdj(DSBS)	               "Parameters for load factor adjustment i04BaseLoadShareDem (1)"
-/
-IS 	0.9,
-NF 	0.92,
-CH 	0.78,
-BM 	0.81,
-PP 	0.91,
-FD 	0.61,
-EN 	0.65,
-TX 	0.6,
-OE 	0.9,
-OI 	0.59,
-SE 	0.58,
-AG 	0.45,
-HOU	0.55,
-PC 	0.43,
-PB 	0.43,
-PT 	0.29,
-PN 	0.43,
-PA 	0.43,
-GU 	0.43,
-GT 	0.29,
-GN 	0.43,
-BU 	0.43,
-PCH	0.78,
-NEN	0.78 
-/ ;
 *---
 i04TechLftPlaType(runCy,PGALL) = i04DataTechLftPlaType(PGALL, "LFT");
 i04TechLftPlaType(runCy,"PGH2F") = 20;
@@ -190,3 +134,5 @@ i04ShareFuels(runCy,PGALL,PGEF)$PGALLTOEF(PGALL,PGEF) =
 (
   1 / CARD(PGALL)
 )$(not SUM(PGEF2$PGALLTOEF(PGALL,PGEF2),i03InpTotTransfProcess(runCy,"PG",PGEF2,"%fBaseY%")));
+*---
+i04ScaleEndogScrap(allCy,PGALL,YTIME) = 6 / card(PGALL);
