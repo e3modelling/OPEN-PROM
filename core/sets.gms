@@ -538,6 +538,9 @@ BKRS    "Biokerosene"
 BGAS    "Biogas"
 H2F     "Hydrogen"
 ELC     "Electricity"
+*EGSL    "Synthetic Gasoline"
+*EBGDO   "Synthetic Diesel"
+*EKRS    "Synthetic Kerosene"
 /
 
 EFtoEFS(EF,EFS)    Fuel Aggregation for Supply Side
@@ -545,17 +548,17 @@ EFtoEFS(EF,EFS)    Fuel Aggregation for Supply Side
 LGN.LGN
 HCL.HCL
 CRO.CRO
-GSL.GSL
-GDO.GDO
+GSL.(GSL,BGSL)
+GDO.(GDO,BGDO)
 RFO.RFO
 LPG.LPG
-KRS.KRS
+KRS.(KRS,BKRS)
 OLQ.OLQ
-NGS.NGS
+NGS.(NGS,BGAS)
 OGS.OGS
 NUC.NUC
 HYD.HYD
-(BGDO,BGSL,BKRS,BGAS,ETH,BMSWAS).BMSWAS
+BMSWAS.BMSWAS
 SOL.SOL
 GEO.GEO
 WND.WND
