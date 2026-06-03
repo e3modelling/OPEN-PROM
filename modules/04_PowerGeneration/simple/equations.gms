@@ -115,9 +115,9 @@ Q04CostHourProdInvDec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04IndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(allCy))..
     V04IndxEndogScrap(allCy,PGALL,YTIME)
         =E=
-    (V04CostVarTech(allCy,PGALL,YTIME-1) + 1e-3)**(-2) /
+    (V04CostVarTech(allCy,PGALL,YTIME-1))**(-2) /
     (
-      (V04CostVarTech(allCy,PGALL,YTIME-1) + 1e-3)**(-2) +
+      (V04CostVarTech(allCy,PGALL,YTIME-1))**(-2) +
       i04ScaleEndogScrap(allCy,PGALL,YTIME) *
       (
         sum(PGALL2$(not sameas(PGALL,PGALL2)),
@@ -195,11 +195,11 @@ Q04SharePowPlaNewEq(allCy,PGALL,YTIME)$(TIME(YTIME)$runCy(allCy)) ..
     V04SharePowPlaNewEq(allCy,PGALL,YTIME)
         =E=
     i04MatFacPlaAvailCap(allCy,PGALL,YTIME) *
-    V04ShareSatPG(allCy,PGALL,YTIME-1) *
+    !!V04ShareSatPG(allCy,PGALL,YTIME-1) *
     V04CostHourProdInvDec(allCy,PGALL,YTIME-1) ** (-2) /
     SUM(PGALL2,
       i04MatFacPlaAvailCap(allCy,PGALL2,YTIME) *
-      V04ShareSatPG(allCy,PGALL2,YTIME-1) *
+      !!V04ShareSatPG(allCy,PGALL2,YTIME-1) *
       V04CostHourProdInvDec(allCy,PGALL2,YTIME-1) ** (-2)
     );
 
@@ -302,9 +302,9 @@ Q04CO2CaptRate(allCy,PGALL,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
 Q04CCSRetroFit(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(NOCCS(PGALL)))..
     V04CCSRetroFit(allCy,PGALL,YTIME)
         =E=
-    (V04CostVarTech(allCy,PGALL,YTIME-1) + 1e-3)** (-2) /
+    V04CostVarTech(allCy,PGALL,YTIME-1)** (-2) /
     (
-      (V04CostVarTech(allCy,PGALL,YTIME-1) + 1e-3)** (-2) +
+      V04CostVarTech(allCy,PGALL,YTIME-1)** (-2) +
       0.01 *
       SUM(PGALL2$CCS_NOCCS(PGALL2,PGALL),
         (
