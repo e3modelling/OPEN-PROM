@@ -1,0 +1,205 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>07 GAMS error codes &mdash; OPEN-PROM</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="08 Troubleshooting Guide Setting Up Git and Visual Studio Code for GitHub" href="08_troubleshooting_guide_setting_up_git_and_visual_studio_code_for_github.html" />
+    <link rel="prev" title="06 Regionalization in OPEN-PROM" href="06_regionalization_in_open_prom.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            OPEN-PROM
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">OPEN-PROM</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_git_and_vs_code_settings.html">01 Git and VS Code Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_git_and_vs_code_settings.html#basic-vs-code-guide">Basic VS code guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_git_and_vs_code_settings.html#adding-the-git-history-extension-to-vs-code-visual-studio-code">Adding the Git History Extension to VS Code (Visual Studio Code):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_git_and_vs_code_settings.html#optional-adding-the-gitlens-extension-to-vs-code-visual-studio-code">(OPTIONAL) Adding the GitLens Extension to VS Code (Visual Studio Code):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_task_runner_settings_in_vs_code.html">02 Task Runner settings in VS code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_loading_input_data_files_with_mrprom.html">03 Loading Input Data Files with MrPROM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_first_open_prom_running.html">04 First OPEN‐PROM running</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_running_open_prom_with_real_input_data.html">05 Running OPEN-PROM with real input data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_regionalization_in_open_prom.html">06 Regionalization in OPEN-PROM</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">07 GAMS error codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_troubleshooting_guide_setting_up_git_and_visual_studio_code_for_github.html">08 Troubleshooting Guide Setting Up Git and Visual Studio Code for GitHub</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_creating_fixme_issues_from_code_comments.html">09 Creating FIXME Issues from Code Comments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_a_comprehensive_guide_to_the_open_prom_modular_model.html">10 A Comprehensive Guide to the OPEN-PROM Modular Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_updating_dataset_of_github_actions.html">11 Updating Dataset of Github Actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_soft_linking_tutorial_open_prom_magpie.html">12 Soft-Linking Tutorial OPEN-PROM-MAgPIE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_soft_linking_tutorial_open_prom_magpie.html#soft-linking-tutorial-open-prom-magpie-coupling-channel">Soft-Linking Tutorial: OPEN-PROM ↔ MAgPIE (coupling-channel)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_soft_linking_tutorial_open_prom_climate_emulators.html">13 Soft-Linking Tutorial OPEN-PROM-Climate Emulators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_soft_linking_tutorial_open_prom_climate_emulators.html#using-climate-assessment-with-open-prom-on-windows-via-wsl">🌍 Using Climate-Assessment with OPEN-PROM on Windows (via WSL)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html">14 Modelling Server Setup Guide in Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#modelling-server-use-and-setup-guide-in-windows">Modelling Server Use and Setup Guide in Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#table-of-contents">Table of Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#how-to-connect">1. HOW TO CONNECT?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#system-preparation">2. SYSTEM PREPARATION</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#install-core-software-system-wide">3. INSTALL CORE SOFTWARE (SYSTEM-WIDE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#install-magpie-system-wide-no-renv">4. INSTALL MAGPIE SYSTEM-WIDE (NO RENV)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#install-python-packages-system-wide">5. INSTALL PYTHON PACKAGES (SYSTEM-WIDE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#install-tinytex-system-wide">6. INSTALL TINYTEX (SYSTEM-WIDE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#shared-onedrive-sharepoint-setup">7. SHARED ONEDRIVE / SHAREPOINT SETUP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#linux-support-wsl-per-user">8. LINUX SUPPORT - WSL (PER-USER)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#test-the-setup">9. TEST THE SETUP</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OPEN-PROM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">07 GAMS error codes</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tutorials/07_gams_error_codes.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="gams-error-codes">
+<h1>07 GAMS error codes<a class="headerlink" href="#gams-error-codes" title="Link to this heading"></a></h1>
+<section id="gams-errors-debugging-a-gams-run">
+<h2>GAMS Errors (Debugging a GAMS Run)<a class="headerlink" href="#gams-errors-debugging-a-gams-run" title="Link to this heading"></a></h2>
+<p><strong>Objective:</strong></p>
+<p>Encountering errors while working with GAMS (General Algebraic Modeling System) is common, but understanding how to troubleshoot them can save time and frustration. This guide provides solutions to some of the most common errors encountered in GAMS, including compilation errors, pre-triangular infeasibilities, and infeasibilities.</p>
+</section>
+<section id="compilation-errors">
+<h2>Compilation Errors<a class="headerlink" href="#compilation-errors" title="Link to this heading"></a></h2>
+<p>These occur during the model compilation phase, to tackle them start by searching for 4 asterisks (<code class="docutils literal notranslate"><span class="pre">****</span></code>) in the .lst file generated by GAMS.</p>
+<section id="error-101-syntax-error-unexpected-keyword-in-the-declaration-of-a-component">
+<h3>Error 101: “Syntax error, unexpected keyword in the declaration of a component”<a class="headerlink" href="#error-101-syntax-error-unexpected-keyword-in-the-declaration-of-a-component" title="Link to this heading"></a></h3>
+<p><strong>Solution:</strong> This error indicates a syntax error in your GAMS code. Double-check the syntax of the model code and make sure all keywords are spelled correctly.</p>
+</section>
+<section id="error-102-symbol-xxx-already-defined">
+<h3>Error 102: “Symbol ‘xxx’ already defined”<a class="headerlink" href="#error-102-symbol-xxx-already-defined" title="Link to this heading"></a></h3>
+<p><strong>Solution:</strong> This error occurs when a symbol is defined multiple times in the model. Check for duplicate definitions of symbols (variables, equations, parameters) and ensure each symbol is defined only once.</p>
+</section>
+<section id="error-103-inconsistent-equation-definition">
+<h3>Error 103: “Inconsistent equation definition”<a class="headerlink" href="#error-103-inconsistent-equation-definition" title="Link to this heading"></a></h3>
+<p><strong>Solution:</strong> This error indicates inconsistencies in the definition of equations. Review the equations in your model and ensure they are correctly defined according to the problem requirements.</p>
+</section>
+</section>
+<section id="pre-triangular-infeasibilities">
+<h2>Pre-triangular Infeasibilities<a class="headerlink" href="#pre-triangular-infeasibilities" title="Link to this heading"></a></h2>
+<section id="error-170-pre-triangular-infeasible-or-unbounded">
+<h3>Error 170: “Pre-triangular Infeasible or Unbounded”<a class="headerlink" href="#error-170-pre-triangular-infeasible-or-unbounded" title="Link to this heading"></a></h3>
+<p><strong>Solution:</strong> This error occurs when the initial values provided for the variables or parameters result in infeasibility or unboundedness. Adjust the initial values or constraints to ensure feasibility.</p>
+</section>
+<section id="error-171-gams-internal-solver-error">
+<h3>Error 171: “GAMS: Internal Solver Error”<a class="headerlink" href="#error-171-gams-internal-solver-error" title="Link to this heading"></a></h3>
+<p><strong>Solution:</strong> This error indicates an internal solver error. Try increasing the solver tolerance or switching to a different solver to see if the error persists. If the issue persists, contact GAMS support for assistance.</p>
+</section>
+</section>
+<section id="infeasibilities">
+<h2>Infeasibilities<a class="headerlink" href="#infeasibilities" title="Link to this heading"></a></h2>
+<section id="error-201-model-infeasible">
+<h3>Error 201: “Model infeasible”<a class="headerlink" href="#error-201-model-infeasible" title="Link to this heading"></a></h3>
+<p><strong>Solution:</strong> This error indicates that the model is infeasible, meaning there are no feasible solutions that satisfy all constraints. Review the model constraints and objective function to identify conflicting or overly restrictive conditions.</p>
+</section>
+<section id="error-202-constraint-xxx-is-infeasible">
+<h3>Error 202: “Constraint ‘xxx’ is infeasible”<a class="headerlink" href="#error-202-constraint-xxx-is-infeasible" title="Link to this heading"></a></h3>
+<p><strong>Solution:</strong> This error indicates that a specific constraint in the model is infeasible. Check the constraints associated with the given identifier (‘xxx’) and revise them if necessary to ensure feasibility.</p>
+</section>
+</section>
+<section id="license-errors">
+<h2>License Errors<a class="headerlink" href="#license-errors" title="Link to this heading"></a></h2>
+<section id="error-the-installed-license-is-invalid-or-license-has-expired">
+<h3>Error: “The installed license is invalid” or “License has expired”<a class="headerlink" href="#error-the-installed-license-is-invalid-or-license-has-expired" title="Link to this heading"></a></h3>
+<p>Ensure that the gamslice.txt file inside the installation bin folder is correct and contains valid license information. Keep in mind that GAMS may not always read the licence file from the bin folder. Check the file path indicated in the error message to confirm which license file GAMS is referencing.</p>
+</section>
+</section>
+<section id="general-troubleshooting-tips">
+<h2>General Troubleshooting Tips<a class="headerlink" href="#general-troubleshooting-tips" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Check Log Files:</strong> Review the GAMS log files for detailed error messages and diagnostic information.</p></li>
+<li><p><strong>Consult Documentation:</strong> Refer to the GAMS documentation and user guides for explanations of error messages and troubleshooting tips.</p></li>
+<li><p><strong>Update GAMS Version:</strong> Ensure you are using the latest version of GAMS, as newer versions may include bug fixes and improvements.</p></li>
+<li><p><strong>Search Forums and Communities:</strong> Look for solutions to common GAMS errors in online forums and communities, or post your question to seek assistance from experienced users.</p></li>
+</ul>
+<p>By following these troubleshooting tips and solutions, you can effectively resolve common errors encountered while working with GAMS and optimize your modeling workflow.</p>
+<p>Here is a page explaining typical error codes of GAMS.
+https://www.gams.com/latest/docs/UG_GAMSReturnCodes.html</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="06_regionalization_in_open_prom.html" class="btn btn-neutral float-left" title="06 Regionalization in OPEN-PROM" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="08_troubleshooting_guide_setting_up_git_and_visual_studio_code_for_github.html" class="btn btn-neutral float-right" title="08 Troubleshooting Guide Setting Up Git and Visual Studio Code for GitHub" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, OPEN-PROM contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,202 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>02 Task Runner settings in VS code &mdash; OPEN-PROM</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="03 Loading Input Data Files with MrPROM" href="03_loading_input_data_files_with_mrprom.html" />
+    <link rel="prev" title="01 Git and VS Code Settings" href="01_git_and_vs_code_settings.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            OPEN-PROM
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">OPEN-PROM</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_git_and_vs_code_settings.html">01 Git and VS Code Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_git_and_vs_code_settings.html#basic-vs-code-guide">Basic VS code guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_git_and_vs_code_settings.html#adding-the-git-history-extension-to-vs-code-visual-studio-code">Adding the Git History Extension to VS Code (Visual Studio Code):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_git_and_vs_code_settings.html#optional-adding-the-gitlens-extension-to-vs-code-visual-studio-code">(OPTIONAL) Adding the GitLens Extension to VS Code (Visual Studio Code):</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">02 Task Runner settings in VS code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_loading_input_data_files_with_mrprom.html">03 Loading Input Data Files with MrPROM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_first_open_prom_running.html">04 First OPEN‐PROM running</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_running_open_prom_with_real_input_data.html">05 Running OPEN-PROM with real input data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_regionalization_in_open_prom.html">06 Regionalization in OPEN-PROM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_gams_error_codes.html">07 GAMS error codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_troubleshooting_guide_setting_up_git_and_visual_studio_code_for_github.html">08 Troubleshooting Guide Setting Up Git and Visual Studio Code for GitHub</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_creating_fixme_issues_from_code_comments.html">09 Creating FIXME Issues from Code Comments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_a_comprehensive_guide_to_the_open_prom_modular_model.html">10 A Comprehensive Guide to the OPEN-PROM Modular Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_updating_dataset_of_github_actions.html">11 Updating Dataset of Github Actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_soft_linking_tutorial_open_prom_magpie.html">12 Soft-Linking Tutorial OPEN-PROM-MAgPIE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_soft_linking_tutorial_open_prom_magpie.html#soft-linking-tutorial-open-prom-magpie-coupling-channel">Soft-Linking Tutorial: OPEN-PROM ↔ MAgPIE (coupling-channel)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_soft_linking_tutorial_open_prom_climate_emulators.html">13 Soft-Linking Tutorial OPEN-PROM-Climate Emulators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_soft_linking_tutorial_open_prom_climate_emulators.html#using-climate-assessment-with-open-prom-on-windows-via-wsl">🌍 Using Climate-Assessment with OPEN-PROM on Windows (via WSL)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html">14 Modelling Server Setup Guide in Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#modelling-server-use-and-setup-guide-in-windows">Modelling Server Use and Setup Guide in Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#table-of-contents">Table of Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#how-to-connect">1. HOW TO CONNECT?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#system-preparation">2. SYSTEM PREPARATION</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#install-core-software-system-wide">3. INSTALL CORE SOFTWARE (SYSTEM-WIDE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#install-magpie-system-wide-no-renv">4. INSTALL MAGPIE SYSTEM-WIDE (NO RENV)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#install-python-packages-system-wide">5. INSTALL PYTHON PACKAGES (SYSTEM-WIDE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#install-tinytex-system-wide">6. INSTALL TINYTEX (SYSTEM-WIDE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#shared-onedrive-sharepoint-setup">7. SHARED ONEDRIVE / SHAREPOINT SETUP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#linux-support-wsl-per-user">8. LINUX SUPPORT - WSL (PER-USER)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#test-the-setup">9. TEST THE SETUP</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OPEN-PROM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">02 Task Runner settings in VS code</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tutorials/02_task_runner_settings_in_vs_code.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="task-runner-settings-in-vs-code">
+<h1>02 Task Runner settings in VS code<a class="headerlink" href="#task-runner-settings-in-vs-code" title="Link to this heading"></a></h1>
+<section id="id1">
+<h2>Task Runner Settings in VS code<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<p>This guide is designed for advanced users, though the model can still be utilized without Git or Visual Studio Code.</p>
+<p><strong>Objective:</strong></p>
+<p>Learn how to install the Task Runner extension in VS Code. This allows you to quickly execute OPEN-PROM tasks by creating and using buttons similar to the ones found in other programs, such as GAMS Studio. These buttons simplify the launch of the predefined workflows, but they do not replace the command line. They are simply a more convenient way to trigger the same commands from inside VS Code.</p>
+<p><strong>Note:</strong>
+It is recommended to follow this tutorial after completing Tutorial 01 and having cloned the repository and installed the necessary extensions.</p>
+</section>
+<section id="step-by-step-guide">
+<h2>Step-by-Step Guide<a class="headerlink" href="#step-by-step-guide" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p><strong>Install Task Runner Extension:</strong></p>
+<ul class="simple">
+<li><p>Search for the <code class="docutils literal notranslate"><span class="pre">Task</span> <span class="pre">Runner</span></code> extension by <a class="reference external" href="https://marketplace.visualstudio.com/items?itemName=sanaajani.taskrunner">Sana Ajani</a> in the Visual Studio Code Extensions Marketplace.</p></li>
+<li><p>Click on “Install” to add the extension to your VS Code setup.</p></li>
+</ul>
+</li>
+<li><p><strong>Restart Visual Studio Code:</strong></p>
+<ul class="simple">
+<li><p>After installing the extension, restart Visual Studio Code for the changes to take effect.</p></li>
+</ul>
+</li>
+<li><p><strong>Open Cloned Repository:</strong></p>
+<ul class="simple">
+<li><p>Open the cloned <code class="docutils literal notranslate"><span class="pre">OPEN-PROM</span></code> repository folder in Visual Studio Code.</p></li>
+</ul>
+</li>
+<li><p><strong>Access Task Runner:</strong></p>
+<ul class="simple">
+<li><p>In the left-hand sidebar, click on the “Explorer” tab.</p></li>
+<li><p>At the bottom of the Explorer view, you should see the Task Runner dropdown list.</p></li>
+<li><p>Expand it to reveal the available OPEN-PROM buttons from <code class="docutils literal notranslate"><span class="pre">.vscode/tasks.json</span></code>.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="what-the-buttons-actually-do">
+<h2>What the Buttons Actually Do<a class="headerlink" href="#what-the-buttons-actually-do" title="Link to this heading"></a></h2>
+<p>The Task Runner buttons are shortcuts for commands defined in <code class="docutils literal notranslate"><span class="pre">.vscode/tasks.json</span></code>. In practice, they call commands such as:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Rscript</span> <span class="pre">start.R</span> <span class="pre">task_id=...</span></code></p></li>
+<li><p>or direct GAMS calls</p></li>
+</ul>
+<p>So the Task Runner panel is not a different workflow. It is a launch panel for the same predefined commands that could also be executed in the terminal.</p>
+</section>
+<section id="development-and-research-modes">
+<h2>Development and Research Modes<a class="headerlink" href="#development-and-research-modes" title="Link to this heading"></a></h2>
+<p>The OPEN-PROM tasks are divided into several run modes. At a high level, these include:</p>
+<ul class="simple">
+<li><p>development runs,</p></li>
+<li><p>development runs with fresh data generation,</p></li>
+<li><p>research runs,</p></li>
+<li><p>and calibration-related runs.</p></li>
+</ul>
+<p>At this stage, you do not need to memorize every task. The important point is that different buttons trigger different combinations of GAMS flags via <code class="docutils literal notranslate"><span class="pre">start.R</span></code> + the task body in <code class="docutils literal notranslate"><span class="pre">scripts/tasks/</span></code>, such as <code class="docutils literal notranslate"><span class="pre">DevMode</span></code>, <code class="docutils literal notranslate"><span class="pre">GenerateInput</span></code>, and reporting options.</p>
+<p>If you want to study the exact meaning of each mode, continue to Tutorial 05.</p>
+<p><strong>You are all set up!</strong></p>
+<p>By following these steps, you can integrate the Task Runner extension into your Visual Studio Code workflow and use it as a convenient way to launch OPEN-PROM runs.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="01_git_and_vs_code_settings.html" class="btn btn-neutral float-left" title="01 Git and VS Code Settings" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="03_loading_input_data_files_with_mrprom.html" class="btn btn-neutral float-right" title="03 Loading Input Data Files with MrPROM" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, OPEN-PROM contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

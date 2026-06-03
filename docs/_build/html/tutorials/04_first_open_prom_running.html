@@ -1,0 +1,188 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>04 First OPEN‐PROM running &mdash; OPEN-PROM</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="05 Running OPEN-PROM with real input data" href="05_running_open_prom_with_real_input_data.html" />
+    <link rel="prev" title="03 Loading Input Data Files with MrPROM" href="03_loading_input_data_files_with_mrprom.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            OPEN-PROM
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">OPEN-PROM</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_git_and_vs_code_settings.html">01 Git and VS Code Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_git_and_vs_code_settings.html#basic-vs-code-guide">Basic VS code guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_git_and_vs_code_settings.html#adding-the-git-history-extension-to-vs-code-visual-studio-code">Adding the Git History Extension to VS Code (Visual Studio Code):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_git_and_vs_code_settings.html#optional-adding-the-gitlens-extension-to-vs-code-visual-studio-code">(OPTIONAL) Adding the GitLens Extension to VS Code (Visual Studio Code):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_task_runner_settings_in_vs_code.html">02 Task Runner settings in VS code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_loading_input_data_files_with_mrprom.html">03 Loading Input Data Files with MrPROM</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">04 First OPEN‐PROM running</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_running_open_prom_with_real_input_data.html">05 Running OPEN-PROM with real input data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_regionalization_in_open_prom.html">06 Regionalization in OPEN-PROM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_gams_error_codes.html">07 GAMS error codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_troubleshooting_guide_setting_up_git_and_visual_studio_code_for_github.html">08 Troubleshooting Guide Setting Up Git and Visual Studio Code for GitHub</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_creating_fixme_issues_from_code_comments.html">09 Creating FIXME Issues from Code Comments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_a_comprehensive_guide_to_the_open_prom_modular_model.html">10 A Comprehensive Guide to the OPEN-PROM Modular Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_updating_dataset_of_github_actions.html">11 Updating Dataset of Github Actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_soft_linking_tutorial_open_prom_magpie.html">12 Soft-Linking Tutorial OPEN-PROM-MAgPIE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_soft_linking_tutorial_open_prom_magpie.html#soft-linking-tutorial-open-prom-magpie-coupling-channel">Soft-Linking Tutorial: OPEN-PROM ↔ MAgPIE (coupling-channel)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_soft_linking_tutorial_open_prom_climate_emulators.html">13 Soft-Linking Tutorial OPEN-PROM-Climate Emulators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_soft_linking_tutorial_open_prom_climate_emulators.html#using-climate-assessment-with-open-prom-on-windows-via-wsl">🌍 Using Climate-Assessment with OPEN-PROM on Windows (via WSL)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html">14 Modelling Server Setup Guide in Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#modelling-server-use-and-setup-guide-in-windows">Modelling Server Use and Setup Guide in Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#table-of-contents">Table of Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#how-to-connect">1. HOW TO CONNECT?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#system-preparation">2. SYSTEM PREPARATION</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#install-core-software-system-wide">3. INSTALL CORE SOFTWARE (SYSTEM-WIDE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#install-magpie-system-wide-no-renv">4. INSTALL MAGPIE SYSTEM-WIDE (NO RENV)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#install-python-packages-system-wide">5. INSTALL PYTHON PACKAGES (SYSTEM-WIDE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#install-tinytex-system-wide">6. INSTALL TINYTEX (SYSTEM-WIDE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#shared-onedrive-sharepoint-setup">7. SHARED ONEDRIVE / SHAREPOINT SETUP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#linux-support-wsl-per-user">8. LINUX SUPPORT - WSL (PER-USER)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#test-the-setup">9. TEST THE SETUP</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OPEN-PROM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">04 First OPEN‐PROM running</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tutorials/04_first_open_prom_running.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="first-openprom-running">
+<h1>04 First OPEN‐PROM running<a class="headerlink" href="#first-openprom-running" title="Link to this heading"></a></h1>
+<section id="first-open-prom-run-with-dummy-data">
+<h2>First OPEN-PROM run with dummy data<a class="headerlink" href="#first-open-prom-run-with-dummy-data" title="Link to this heading"></a></h2>
+<p><strong>Objective</strong></p>
+<p>This tutorial is for external users who want to verify that OPEN-PROM runs on their machine before they have access to real input data. It uses a public dummy dataset and runs only the <code class="docutils literal notranslate"><span class="pre">RWO</span></code> region.</p>
+<p>This tutorial assumes that you have at least completed the basic software setup from Tutorial 03. In practice, you need a working <code class="docutils literal notranslate"><span class="pre">Rscript</span></code> command, a working <code class="docutils literal notranslate"><span class="pre">gams</span></code> command, and the R packages required by <code class="docutils literal notranslate"><span class="pre">loadMadratData.R</span></code>.</p>
+<p>If you later experiment with <code class="docutils literal notranslate"><span class="pre">start.R</span></code> or the VS Code Task Runner instead of the direct GAMS command below, first edit <code class="docutils literal notranslate"><span class="pre">config.json</span></code> to set:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;behavior&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;withSync&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This dummy-data path does not use the normal internal sync workflow, and leaving <code class="docutils literal notranslate"><span class="pre">withSync</span></code> enabled can make <code class="docutils literal notranslate"><span class="pre">syncRun()</span></code> stop the wrapper when <code class="docutils literal notranslate"><span class="pre">paths.model_runs_path</span></code> is not configured.</p>
+</section>
+<section id="download-the-dummy-data">
+<h2>1. Download the dummy data<a class="headerlink" href="#download-the-dummy-data" title="Link to this heading"></a></h2>
+<p>Run the dummy-data loader once:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Rscript<span class="w"> </span>scripts/tasks/loadMadratData.R<span class="w"> </span><span class="nv">DevMode</span><span class="o">=</span><span class="m">2</span>
+</pre></div>
+</div>
+<p>This downloads <code class="docutils literal notranslate"><span class="pre">dummy_data.tgz</span></code> from Google Drive and extracts it into <code class="docutils literal notranslate"><span class="pre">./data</span></code>. It does <strong>not</strong> create <code class="docutils literal notranslate"><span class="pre">./targets</span></code>, so it cannot be used for calibration or any workflow that depends on targets.</p>
+</section>
+<section id="run-the-model">
+<h2>2. Run the model<a class="headerlink" href="#run-the-model" title="Link to this heading"></a></h2>
+<p>After <code class="docutils literal notranslate"><span class="pre">./data</span></code> exists, start OPEN-PROM directly with GAMS:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gams<span class="w"> </span>main.gms<span class="w"> </span>--DevMode<span class="o">=</span><span class="m">1</span><span class="w"> </span>--GenerateInput<span class="o">=</span>off<span class="w"> </span>--fCountries<span class="o">=</span><span class="s1">&#39;RWO&#39;</span><span class="w"> </span>-Idir<span class="o">=</span>./data
+</pre></div>
+</div>
+<p>This is the cleanest first run for external users:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--DevMode=1</span></code> selects the development-size region set</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--GenerateInput=off</span></code> tells GAMS to use the already extracted dummy <code class="docutils literal notranslate"><span class="pre">data/</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--fCountries='RWO'</span></code> restricts the run to the single public dummy region</p></li>
+</ul>
+<p>Do not treat this as the internal Task Runner workflow. <code class="docutils literal notranslate"><span class="pre">DevMode=2</span></code> is only for the public dummy-data path, and it is not the same as the internal task modes described in Tutorial 05.</p>
+</section>
+<section id="what-to-expect">
+<h2>3. What to expect<a class="headerlink" href="#what-to-expect" title="Link to this heading"></a></h2>
+<p>If the run is configured correctly, GAMS will solve the model for <code class="docutils literal notranslate"><span class="pre">RWO</span></code> and write the usual model outputs in the current working directory. Typical files to check are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">modelstat.txt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">outputData.gdx</span></code></p></li>
+<li><p>the standard listing and log files produced by GAMS</p></li>
+</ul>
+<p>If you later want to understand the internal workflow, data generation, or task modes, continue with Tutorial 05.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="03_loading_input_data_files_with_mrprom.html" class="btn btn-neutral float-left" title="03 Loading Input Data Files with MrPROM" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="05_running_open_prom_with_real_input_data.html" class="btn btn-neutral float-right" title="05 Running OPEN-PROM with real input data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, OPEN-PROM contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,402 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>01 Git and VS Code Settings &mdash; OPEN-PROM</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="02 Task Runner settings in VS code" href="02_task_runner_settings_in_vs_code.html" />
+    <link rel="prev" title="Tutorials" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            OPEN-PROM
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">OPEN-PROM</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">01 Git and VS Code Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#basic-vs-code-guide">Basic VS code guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-the-git-history-extension-to-vs-code-visual-studio-code">Adding the Git History Extension to VS Code (Visual Studio Code):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#optional-adding-the-gitlens-extension-to-vs-code-visual-studio-code">(OPTIONAL) Adding the GitLens Extension to VS Code (Visual Studio Code):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_task_runner_settings_in_vs_code.html">02 Task Runner settings in VS code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_loading_input_data_files_with_mrprom.html">03 Loading Input Data Files with MrPROM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_first_open_prom_running.html">04 First OPEN‐PROM running</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_running_open_prom_with_real_input_data.html">05 Running OPEN-PROM with real input data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_regionalization_in_open_prom.html">06 Regionalization in OPEN-PROM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_gams_error_codes.html">07 GAMS error codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_troubleshooting_guide_setting_up_git_and_visual_studio_code_for_github.html">08 Troubleshooting Guide Setting Up Git and Visual Studio Code for GitHub</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_creating_fixme_issues_from_code_comments.html">09 Creating FIXME Issues from Code Comments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_a_comprehensive_guide_to_the_open_prom_modular_model.html">10 A Comprehensive Guide to the OPEN-PROM Modular Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_updating_dataset_of_github_actions.html">11 Updating Dataset of Github Actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_soft_linking_tutorial_open_prom_magpie.html">12 Soft-Linking Tutorial OPEN-PROM-MAgPIE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_soft_linking_tutorial_open_prom_magpie.html#soft-linking-tutorial-open-prom-magpie-coupling-channel">Soft-Linking Tutorial: OPEN-PROM ↔ MAgPIE (coupling-channel)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_soft_linking_tutorial_open_prom_climate_emulators.html">13 Soft-Linking Tutorial OPEN-PROM-Climate Emulators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_soft_linking_tutorial_open_prom_climate_emulators.html#using-climate-assessment-with-open-prom-on-windows-via-wsl">🌍 Using Climate-Assessment with OPEN-PROM on Windows (via WSL)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html">14 Modelling Server Setup Guide in Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#modelling-server-use-and-setup-guide-in-windows">Modelling Server Use and Setup Guide in Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#table-of-contents">Table of Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#how-to-connect">1. HOW TO CONNECT?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#system-preparation">2. SYSTEM PREPARATION</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#install-core-software-system-wide">3. INSTALL CORE SOFTWARE (SYSTEM-WIDE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#install-magpie-system-wide-no-renv">4. INSTALL MAGPIE SYSTEM-WIDE (NO RENV)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#install-python-packages-system-wide">5. INSTALL PYTHON PACKAGES (SYSTEM-WIDE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#install-tinytex-system-wide">6. INSTALL TINYTEX (SYSTEM-WIDE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#shared-onedrive-sharepoint-setup">7. SHARED ONEDRIVE / SHAREPOINT SETUP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#linux-support-wsl-per-user">8. LINUX SUPPORT - WSL (PER-USER)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#test-the-setup">9. TEST THE SETUP</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OPEN-PROM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">01 Git and VS Code Settings</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tutorials/01_git_and_vs_code_settings.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="git-and-vs-code-settings">
+<h1>01 Git and VS Code Settings<a class="headerlink" href="#git-and-vs-code-settings" title="Link to this heading"></a></h1>
+<section id="setting-up-git-and-vs-code-for-github-a-step-by-step-guide">
+<h2>Setting Up Git and VS Code for GitHub: A Step-by-Step Guide<a class="headerlink" href="#setting-up-git-and-vs-code-for-github-a-step-by-step-guide" title="Link to this heading"></a></h2>
+<p>This guide is designed for advanced users, though the model can still be utilized without Git or Visual Studio Code.</p>
+<p><strong>Objective:</strong></p>
+<p>By the end of this installation guide, you will be proficient in setting up Git and Visual Studio Code (VS Code) for GitHub collaboration. Through this step-by-step guide, you will learn key terminology, check for and install Git, configure settings, install VS Code, clone a repository, and explore the Task Runner extensions. You will understand how to execute tasks in development and research modes, and utilize VS Code functionalities.</p>
+<ul class="simple">
+<li><p>Git is a widely used Version Control software</p></li>
+<li><p>VS Code (Visual Studio Code) is a widely used and versatile text editor for modelers and developers</p></li>
+</ul>
+<p><em><strong>Clarifying Terminology:</strong></em></p>
+<p>Before diving into the setup process, let’s clarify some key terms you’ll encounter:</p>
+<ul class="simple">
+<li><p><strong>Git:</strong>
+Git is a distributed version control system that allows multiple developers to collaborate on projects efficiently. It tracks changes to files, maintains a history of revisions, and facilitates collaboration through features like branching and merging.</p></li>
+<li><p><strong>GitHub:</strong>
+GitHub is a web-based platform built on top of Git, providing hosting for software development projects. It offers features such as repository hosting, code review, issue tracking, and project management. GitHub is widely used by developers and organizations for open-source and private projects alike.</p></li>
+<li><p><strong>Visual Studio Code (VS Code):</strong>
+Visual Studio Code is a lightweight, open-source code editor developed by Microsoft. It offers built-in support for various programming languages, debugging tools, and extensions to enhance functionality. VS Code is highly customizable and popular among developers for its versatility and ease of use.</p></li>
+<li><p><strong>Repository:</strong>
+A repository, or repo for short, is a central location where files and directories related to a project are stored and managed. In the context of Git and GitHub, a repository typically contains the source code for a software project along with version history and other project-related files.</p></li>
+<li><p><strong>Cloning:</strong>
+Cloning refers to the process of creating a local copy of a repository from a remote source, such as GitHub. When you clone a repository, you replicate its entire history and contents onto your local machine, allowing you to work on the project offline and collaborate with others.</p></li>
+<li><p><strong>Commit:</strong>
+A commit is a snapshot of changes made to files in a repository at a specific point in time. When you commit changes in Git, you create a new revision in the project’s history, along with a descriptive message that explains the changes made. Commits are essential for tracking progress and collaborating on projects.</p></li>
+<li><p><strong>Push:</strong>
+Pushing refers to the act of uploading local changes to a remote repository, such as GitHub. When you push commits to a remote repository, you synchronize your local changes with the central repository, making them accessible to other collaborators.</p></li>
+<li><p><strong>Pull:</strong>
+Pulling, or fetching, involves retrieving changes from a remote repository and incorporating them into your local repository. When you pull changes, you update your local copy of the repository to reflect any new commits made by other collaborators.</p></li>
+</ul>
+<p>Understanding these terms will help you navigate the setup process and work effectively with Git, GitHub, and Visual Studio Code.</p>
+<p><em><strong>Check for Existing Git Installation:</strong></em></p>
+<ul>
+<li><p>Open your command-line interface (Windows Command Prompt).</p>
+<p>Type <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">--version</span></code> and press Enter.</p>
+<p>If Git is already installed, you’ll see its version number.<br />
+If not, you’ll receive the following message.
+<img alt="alt text" src="../_images/Screenshot%2520%282%29.png" /></p>
+</li>
+<li><p>Install Git:</p>
+<p><em>If Git is not installed, follow these steps:</em></p>
+<ol class="arabic simple">
+<li><p>Download the Git installer for your operating system from the official Git website: https://git-scm.com/downloads</p></li>
+<li><p>Run the installer and follow the on-screen instructions. Please note that you need to select the option of windows default console window, as shown below.
+<img alt="alt text" src="../_images/Screenshot%2520%281%29.png" /></p></li>
+<li><p>Once installed, repeat the <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">--version</span></code> command to verify the installation.</p></li>
+<li><p>Re-open your terminal.</p></li>
+</ol>
+</li>
+</ul>
+<p><em><strong>Setting Up GitHub Account:</strong></em></p>
+<p>If you don’t have a GitHub account, sign up at https://github.com.
+Verify your email address by following the link sent to your email.</p>
+<ul>
+<li><p>Configuring Git:</p>
+<ol class="arabic">
+<li><p>Open your command-line interface.</p></li>
+<li><p>Configure your name and email for Git using these commands:</p>
+<p><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">config</span> <span class="pre">--global</span> <span class="pre">user.name</span> <span class="pre">&quot;Your</span> <span class="pre">Name&quot;</span></code><br />
+<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">config</span> <span class="pre">--global</span> <span class="pre">user.email</span> <span class="pre">&quot;youremail&#64;example.com&quot;</span></code></p>
+</li>
+</ol>
+<p>Please note that <code class="docutils literal notranslate"><span class="pre">&quot;Your</span> <span class="pre">Name&quot;</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">&quot;youremail&#64;example.com&quot;</span></code> must be the ones that are used in GitHub.</p>
+</li>
+</ul>
+<p><em><strong>Setting Up VS Code:</strong></em></p>
+<ol class="arabic simple">
+<li><p>Download and install VS Code (Visual Studio Code) from the official website: https://code.visualstudio.com/download</p></li>
+<li><p>Follow the install instructions.</p></li>
+<li><p>Launch VS Code after installation.</p></li>
+</ol>
+<ul>
+<li><p>Connecting to Company GitHub and Cloning a Repository:</p>
+<ol class="arabic simple">
+<li><p>Open your browser and navigate to your company’s GitHub repository.</p></li>
+<li><p>Click on the “Code” button and copy the repository’s URL.</p></li>
+</ol>
+</li>
+<li><p>Cloning the Repository Using VS Code:</p>
+<ol class="arabic simple">
+<li><p>Open VS Code.</p></li>
+<li><p>Open your Terminal.<br />
+Navigate to the directory where you want to clone the repository using<br />
+the cd command (e.g., <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">Documents</span></code>).</p></li>
+<li><p>Copy the repository’s URL from GitHub.</p></li>
+</ol>
+</li>
+<li><p>Clone the Repository:</p>
+<p>In the command prompt, use the <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span></code> command followed by the repository URL and the desired folder name:</p>
+<p><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">&lt;repository-url&gt;</span> <span class="pre">&lt;folder-name&gt;</span></code></p>
+<p>Replace <repository-url> with the copied URL and <folder-name> with the name you want for the local repository directory.<br />
+Close and re-open the command prompt after the installation.</p>
+</li>
+<li><p>Open VS Code from Command Prompt:</p>
+<p>With the cloned repository folder as your current working directory, open VS Code (Visual Studio Code) from the command prompt using:</p>
+<p><code class="docutils literal notranslate"><span class="pre">code</span> <span class="pre">.</span></code></p>
+<p>This command opens VS Code with the current directory as the workspace.</p>
+</li>
+</ul>
+<p><strong>Now you’ve successfully cloned the repository using the command prompt and opened it in VS Code for further work.</strong></p>
+<p><em><strong>Making Changes and Pushing to GitHub:</strong></em></p>
+<ol class="arabic simple">
+<li><p>Make changes to files in your local repository.</p></li>
+<li><p>Save the changes in VS Code.</p></li>
+<li><p>Go to the Source Control panel (branch icon) in VS Code.</p></li>
+<li><p>Review the changes, add a commit message, and click the checkmark icon to commit the changes.</p></li>
+<li><p>Click on the “…” (three dots) menu and select “Push” to push the changes to the GitHub repository.</p></li>
+</ol>
+<p><strong>If everything goes according to plan you should now have a fully functioning, cloned workspace repository in Vs code.</strong></p>
+</section>
+</section>
+<section id="basic-vs-code-guide">
+<h1>Basic VS code guide<a class="headerlink" href="#basic-vs-code-guide" title="Link to this heading"></a></h1>
+<section id="main-bar">
+<h2>Main Bar:<a class="headerlink" href="#main-bar" title="Link to this heading"></a></h2>
+<p>The main bar in VS Code (Visual Studio Code) is the horizontal strip at the top of the application window.It provides quick access to various important features and actions within the editor.<br />
+Here’s what you’ll find in the main bar:</p>
+<p><img alt="image-3" src="https://github.com/e3modelling/OPEN-PROM/assets/109683718/4593f19e-7659-4242-84fe-1c0790855701" /></p>
+<p><strong>1. File Operations:</strong></p>
+<ul class="simple">
+<li><p>New File: Create a new, blank file.</p></li>
+<li><p>Open File: Open an existing file from your file system.</p></li>
+<li><p>Save: Save the currently open file.</p></li>
+<li><p>Save All: Save all open files.</p></li>
+<li><p>Close: Close the currently active file tab.</p></li>
+<li><p>Close All: Close all open file tabs.</p></li>
+</ul>
+<p><strong>2. Edit and Undo:</strong></p>
+<ul class="simple">
+<li><p>Undo: Revert the last action.</p></li>
+<li><p>Redo: Reapply a previously undone action.</p></li>
+<li><p>Cut, Copy, Paste: Standard clipboard operations.</p></li>
+<li><p>Find and Replace: Search for text and replace occurrences.</p></li>
+</ul>
+<p><strong>3. Selection:</strong></p>
+<ul class="simple">
+<li><p>Extend or shrink the current selection based on specific criteria.</p></li>
+<li><p>Select entire lines or words within the text.</p></li>
+<li><p>Multiple cursor support for editing multiple sections simultaneously.</p></li>
+<li><p>Select specific code blocks or elements based on syntax.</p></li>
+<li><p>Select all occurrences of a particular word or symbol in the document.</p></li>
+</ul>
+<p><strong>4. View:</strong></p>
+<ul class="simple">
+<li><p>Toggle visibility of various panels such as the sidebar, status bar, and activity bar.</p></li>
+<li><p>Customize editor layout and arrangement of panes.</p></li>
+<li><p>Access different view modes like Zen mode for distraction-free writing.</p></li>
+<li><p>Adjust font size and zoom level for better readability.</p></li>
+<li><p>Enable or disable specific editor features like word wrap or minimap.</p></li>
+</ul>
+<p><strong>5. Go:</strong></p>
+<ul class="simple">
+<li><p>Navigate to symbols within the current file.</p></li>
+<li><p>Jump to specific files or folders within the project.</p></li>
+<li><p>Navigate to specific lines or columns in the current file.</p></li>
+<li><p>Move between recent locations in the editor.</p></li>
+<li><p>Access shortcuts for navigating forward or backward through your navigation history.</p></li>
+</ul>
+<p><strong>6. Run:</strong></p>
+<ul class="simple">
+<li><p>Start debugging sessions for your code.</p></li>
+<li><p>Run or debug specific code files or snippets.</p></li>
+<li><p>Manage breakpoints and step through code during debugging.</p></li>
+<li><p>Run tasks defined in the project’s task configuration.</p></li>
+<li><p>Access output and debug consoles for monitoring program execution.</p></li>
+</ul>
+<p><strong>8. Terminal:</strong></p>
+<ul class="simple">
+<li><p>Open an integrated terminal within VS Code for executing command-line tasks.</p></li>
+<li><p>Run commands directly within the terminal without leaving the editor.</p></li>
+<li><p>Customize terminal settings such as shell type and terminal colors.</p></li>
+<li><p>Access terminal shortcuts and commands for efficient workflow.</p></li>
+<li><p>Utilize terminal multiplexing for running multiple commands simultaneously.</p></li>
+</ul>
+<p><strong>9. Help:</strong></p>
+<ul class="simple">
+<li><p>Access documentation and guides for Visual Studio Code and its extensions.</p></li>
+<li><p>Browse community forums or stack overflow for troubleshooting and support.</p></li>
+<li><p>Report issues or provide feedback directly to the VS Code development team.</p></li>
+<li><p>Explore keyboard shortcuts and productivity tips for using VS Code efficiently.</p></li>
+<li><p>Check for updates and release notes to stay informed about new features and improvements.</p></li>
+</ul>
+</section>
+<section id="sidebar">
+<h2>Sidebar:<a class="headerlink" href="#sidebar" title="Link to this heading"></a></h2>
+<p>The sidebar in VS Code (Visual Studio Code) is the vertical strip located on the left side of the application window.<br />
+It hosts several important navigation and information panels.<br />
+Here’s what you’ll find in the sidebar:</p>
+<p><img alt="image-2" src="https://github.com/e3modelling/OPEN-PROM/assets/109683718/8a9644e5-37d6-4bd4-b95f-fe6e38ee6c9e" /></p>
+<p><strong>1. Explorer:</strong></p>
+<p>Displays the file and folder structure of your project.<br />
+Allows you to easily navigate and open files.</p>
+<p><strong>2. Search:</strong></p>
+<p>Enables you to search for text within your project.<br />
+Provides search results and supports regex search.</p>
+<p><strong>3. Source Control:</strong></p>
+<p>Shows the changes made to your files in the version control system (e.g., Git).<br />
+Allows you to stage, commit, and push changes.</p>
+<p><strong>4. Run &amp; Debug:</strong></p>
+<p>Lists running and completed debugging sessions.<br />
+Provides access to debugging configuration.</p>
+<p><strong>5. Extensions:</strong></p>
+<p>Lists the installed extensions and their icons.<br />
+Provides quick access to extension settings.</p>
+<p><strong>6. Project Manager:(Optional - Extension)</strong></p>
+<p>Allows you to manage and organize different projects within VS Code (Visual Studio Code).<br />
+Provides quick access to your frequently used projects and workspaces.<br />
+Allows you to save and open groups of files, folders, and settings as a project.</p>
+<p><strong>7. GitLens:(Extension - See below for installation instructions)</strong></p>
+<p>GitLens enhances your coding experience by providing detailed insights and information about your code’s history.<br />
+Some of the features offered by GitLens include:</p>
+<ul class="simple">
+<li><p>Blame Annotations: Hover over lines of code to see who last modified them and when.</p></li>
+<li><p>Code Lens: Display commit and blame information directly in your code file.</p></li>
+<li><p>Current Line Blame: View commit details for the current line in the status bar.</p></li>
+<li><p>Gutter Indicators: See Git blame information in the gutter of your code file.</p></li>
+<li><p>Commit Annotations: See inline annotations for commits related to specific lines.</p></li>
+<li><p>Code History and Annotations: Access a more detailed history of code changes and annotations.</p></li>
+<li><p>Compare Changes: Compare changes between different commits and branches.</p></li>
+<li><p>Interactive Rebase Workflow: Manage interactive rebase operations directly within VS Code.</p></li>
+</ul>
+</section>
+</section>
+<section id="adding-the-git-history-extension-to-vs-code-visual-studio-code">
+<h1>Adding the Git History Extension to VS Code (Visual Studio Code):<a class="headerlink" href="#adding-the-git-history-extension-to-vs-code-visual-studio-code" title="Link to this heading"></a></h1>
+<p><strong>1. Open VS Code (Visual Studio Code):</strong></p>
+<p>Launch VS Code (Visual Studio Code) on your computer.</p>
+<p><strong>2. Access the Extension Marketplace:</strong></p>
+<p>Click on the “Extensions” icon in the sidebar (square icon) or press Ctrl+Shift+X to open the Extension Marketplace.</p>
+<p><strong>3. Search for Git History :</strong></p>
+<p>In the Extensions Marketplace, search for “Git History “ in the search bar at the top,<br />
+publisher:”Don Jayamanne” .</p>
+<p><strong>4. Install Git History :</strong></p>
+<p>You should see the “Git History “ extension in the search results.<br />
+Click on the “Install” button next to the Git History  extension.</p>
+<p><strong>5. Wait for Installation:</strong></p>
+<p>VS Code (Visual Studio Code) will download and install the Git History  extension.<br />
+You’ll see a progress bar indicating the installation process.</p>
+<p><strong>6. Restart VS Code (if Required):</strong></p>
+<p>After the installation is complete, you might be prompted to restart VS Code (Visual Studio Code).<br />
+If prompted, click on the “Restart” button.</p>
+</section>
+<section id="optional-adding-the-gitlens-extension-to-vs-code-visual-studio-code">
+<h1>(OPTIONAL) Adding the GitLens Extension to VS Code (Visual Studio Code):<a class="headerlink" href="#optional-adding-the-gitlens-extension-to-vs-code-visual-studio-code" title="Link to this heading"></a></h1>
+<p><strong>1. Open VS Code (Visual Studio Code):</strong></p>
+<p>Launch VS Code (Visual Studio Code) on your computer.</p>
+<p><strong>2. Access the Extension Marketplace:</strong></p>
+<p>Click on the “Extensions” icon in the sidebar (square icon) or press Ctrl+Shift+X to open the Extension Marketplace.</p>
+<p><strong>3. Search for GitLens :</strong></p>
+<p>In the Extensions Marketplace, search for “GitLens” in the search bar at the top.</p>
+<p><strong>4. Install GitLens :</strong></p>
+<p>You should see the “GitLens “ extension in the search results.<br />
+Click on the “Install” button next to the GitLens  extension.</p>
+<p><strong>5. Wait for Installation:</strong></p>
+<p>VS Code (Visual Studio Code) will download and install the GitLens  extension.<br />
+You’ll see a progress bar indicating the installation process.</p>
+<p><strong>6. Restart VS Code (if Required):</strong></p>
+<p>After the installation is complete, you might be prompted to restart VS Code (Visual Studio Code).<br />
+If prompted, click on the “Restart” button.<br />
+<strong>You are all set up !!!</strong></p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Tutorials" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="02_task_runner_settings_in_vs_code.html" class="btn btn-neutral float-right" title="02 Task Runner settings in VS code" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, OPEN-PROM contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

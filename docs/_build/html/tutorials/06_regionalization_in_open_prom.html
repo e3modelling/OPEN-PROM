@@ -1,0 +1,359 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>06 Regionalization in OPEN-PROM &mdash; OPEN-PROM</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="07 GAMS error codes" href="07_gams_error_codes.html" />
+    <link rel="prev" title="05 Running OPEN-PROM with real input data" href="05_running_open_prom_with_real_input_data.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            OPEN-PROM
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">OPEN-PROM</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_git_and_vs_code_settings.html">01 Git and VS Code Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_git_and_vs_code_settings.html#basic-vs-code-guide">Basic VS code guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_git_and_vs_code_settings.html#adding-the-git-history-extension-to-vs-code-visual-studio-code">Adding the Git History Extension to VS Code (Visual Studio Code):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_git_and_vs_code_settings.html#optional-adding-the-gitlens-extension-to-vs-code-visual-studio-code">(OPTIONAL) Adding the GitLens Extension to VS Code (Visual Studio Code):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_task_runner_settings_in_vs_code.html">02 Task Runner settings in VS code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_loading_input_data_files_with_mrprom.html">03 Loading Input Data Files with MrPROM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_first_open_prom_running.html">04 First OPEN‐PROM running</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_running_open_prom_with_real_input_data.html">05 Running OPEN-PROM with real input data</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">06 Regionalization in OPEN-PROM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_gams_error_codes.html">07 GAMS error codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_troubleshooting_guide_setting_up_git_and_visual_studio_code_for_github.html">08 Troubleshooting Guide Setting Up Git and Visual Studio Code for GitHub</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_creating_fixme_issues_from_code_comments.html">09 Creating FIXME Issues from Code Comments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_a_comprehensive_guide_to_the_open_prom_modular_model.html">10 A Comprehensive Guide to the OPEN-PROM Modular Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_updating_dataset_of_github_actions.html">11 Updating Dataset of Github Actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_soft_linking_tutorial_open_prom_magpie.html">12 Soft-Linking Tutorial OPEN-PROM-MAgPIE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_soft_linking_tutorial_open_prom_magpie.html#soft-linking-tutorial-open-prom-magpie-coupling-channel">Soft-Linking Tutorial: OPEN-PROM ↔ MAgPIE (coupling-channel)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_soft_linking_tutorial_open_prom_climate_emulators.html">13 Soft-Linking Tutorial OPEN-PROM-Climate Emulators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_soft_linking_tutorial_open_prom_climate_emulators.html#using-climate-assessment-with-open-prom-on-windows-via-wsl">🌍 Using Climate-Assessment with OPEN-PROM on Windows (via WSL)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html">14 Modelling Server Setup Guide in Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#modelling-server-use-and-setup-guide-in-windows">Modelling Server Use and Setup Guide in Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#table-of-contents">Table of Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#how-to-connect">1. HOW TO CONNECT?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#system-preparation">2. SYSTEM PREPARATION</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#install-core-software-system-wide">3. INSTALL CORE SOFTWARE (SYSTEM-WIDE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#install-magpie-system-wide-no-renv">4. INSTALL MAGPIE SYSTEM-WIDE (NO RENV)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#install-python-packages-system-wide">5. INSTALL PYTHON PACKAGES (SYSTEM-WIDE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#install-tinytex-system-wide">6. INSTALL TINYTEX (SYSTEM-WIDE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#shared-onedrive-sharepoint-setup">7. SHARED ONEDRIVE / SHAREPOINT SETUP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#linux-support-wsl-per-user">8. LINUX SUPPORT - WSL (PER-USER)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#test-the-setup">9. TEST THE SETUP</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OPEN-PROM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">06 Regionalization in OPEN-PROM</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tutorials/06_regionalization_in_open_prom.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="regionalization-in-open-prom">
+<h1>06 Regionalization in OPEN-PROM<a class="headerlink" href="#regionalization-in-open-prom" title="Link to this heading"></a></h1>
+<section id="id1">
+<h2>Regionalization in OPEN-PROM<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<p>This tutorial is dedicated to the classification of World countries into the 39 OPEN-PROM regions.</p>
+<p>Custom native region codes are highlighted, while all other countries are identified using their official three-letter ISO codes.</p>
+<p>A machine-readable version of this mapping is available here: https://raw.githubusercontent.com/e3modelling/mrprom/main/inst/extdata/regional/regionmappingOPDEV5.csv</p>
+<section id="open-prom-regional-mapping-table">
+<h3>OPEN-PROM Regional Mapping Table<a class="headerlink" href="#open-prom-regional-mapping-table" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>OPEN-PROM Region Code</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>ISO Codes</p></th>
+<th class="head"><p>Full Name of countries</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>AUT</p></td>
+<td><p>Austria</p></td>
+<td><p>AUT</p></td>
+<td><p>Austria</p></td>
+</tr>
+<tr class="row-odd"><td><p>BEL</p></td>
+<td><p>Belgium</p></td>
+<td><p>BEL</p></td>
+<td><p>Belgium</p></td>
+</tr>
+<tr class="row-even"><td><p>BGR</p></td>
+<td><p>Bulgaria</p></td>
+<td><p>BGR</p></td>
+<td><p>Bulgaria</p></td>
+</tr>
+<tr class="row-odd"><td><p>CAZ</p></td>
+<td><p>OECD Pacific and North America</p></td>
+<td><p>AUS, CAN, HMD, NZL, SPM</p></td>
+<td><p>Australia, Canada, Heard Island and McDonald Islands, New Zealand, Saint Pierre and Miquelon</p></td>
+</tr>
+<tr class="row-even"><td><p>CHA</p></td>
+<td><p>Asia</p></td>
+<td><p>CHN, HKG, MAC, TWN</p></td>
+<td><p>China, Hong Kong, Macao, Taiwan, Province of China</p></td>
+</tr>
+<tr class="row-odd"><td><p>CYP</p></td>
+<td><p>Cyprus</p></td>
+<td><p>CYP</p></td>
+<td><p>Cyprus</p></td>
+</tr>
+<tr class="row-even"><td><p>CZE</p></td>
+<td><p>Czech Republic</p></td>
+<td><p>CZE</p></td>
+<td><p>Czech Republic</p></td>
+</tr>
+<tr class="row-odd"><td><p>DEU</p></td>
+<td><p>Germany</p></td>
+<td><p>DEU</p></td>
+<td><p>Germany</p></td>
+</tr>
+<tr class="row-even"><td><p>DNK</p></td>
+<td><p>Denmark</p></td>
+<td><p>DNK</p></td>
+<td><p>Denmark</p></td>
+</tr>
+<tr class="row-odd"><td><p>ESP</p></td>
+<td><p>Spain</p></td>
+<td><p>ESP</p></td>
+<td><p>Spain</p></td>
+</tr>
+<tr class="row-even"><td><p>EST</p></td>
+<td><p>Estonia</p></td>
+<td><p>EST</p></td>
+<td><p>Estonia</p></td>
+</tr>
+<tr class="row-odd"><td><p>FIN</p></td>
+<td><p>Finland</p></td>
+<td><p>FIN</p></td>
+<td><p>Finland</p></td>
+</tr>
+<tr class="row-even"><td><p>FRA</p></td>
+<td><p>France</p></td>
+<td><p>FRA</p></td>
+<td><p>France</p></td>
+</tr>
+<tr class="row-odd"><td><p>GBR</p></td>
+<td><p>United Kingdom</p></td>
+<td><p>GBR</p></td>
+<td><p>United Kingdom</p></td>
+</tr>
+<tr class="row-even"><td><p>GRC</p></td>
+<td><p>Greece</p></td>
+<td><p>GRC</p></td>
+<td><p>Greece</p></td>
+</tr>
+<tr class="row-odd"><td><p>HRV</p></td>
+<td><p>Croatia</p></td>
+<td><p>HRV</p></td>
+<td><p>Croatia</p></td>
+</tr>
+<tr class="row-even"><td><p>HUN</p></td>
+<td><p>Hungary</p></td>
+<td><p>HUN</p></td>
+<td><p>Hungary</p></td>
+</tr>
+<tr class="row-odd"><td><p>IND</p></td>
+<td><p>India</p></td>
+<td><p>IND</p></td>
+<td><p>India</p></td>
+</tr>
+<tr class="row-even"><td><p>IRL</p></td>
+<td><p>Ireland</p></td>
+<td><p>IRL</p></td>
+<td><p>Ireland</p></td>
+</tr>
+<tr class="row-odd"><td><p>ITA</p></td>
+<td><p>Italy</p></td>
+<td><p>ITA</p></td>
+<td><p>Italy</p></td>
+</tr>
+<tr class="row-even"><td><p>JPN</p></td>
+<td><p>Japan</p></td>
+<td><p>JPN</p></td>
+<td><p>Japan</p></td>
+</tr>
+<tr class="row-odd"><td><p>LAM</p></td>
+<td><p>Latin America and the Caribbean</p></td>
+<td><p>ABW, AIA, ARG, ATA, ATG, BES, BHS, BLM, BLZ, BMU, BOL, BRA, BRB, BVT, CHL, COL, CRI, CUB, CUW, CYM, DMA, DOM, ECU, FLK, GLP, GRD, GTM, GUF, GUY, HND, HTI, JAM, KNA, LCA, MAF, MEX, MSR, MTQ, NIC, PAN, PER, PRI, PRY, SGS, SLV, SUR, SXM, TCA, TTO, URY, VCT, VEN, VGB, VIR</p></td>
+<td><p>Anguilla, Antarctica, Antigua and Barbuda, Argentina, Aruba, Bahamas, Barbados, Belize, Bermuda, Bolivia, Plurinational State of, Bonaire, Sint Eustatius and Saba, Bouvet Island, Brazil, Cayman Islands, Chile, Colombia, Costa Rica, Cuba, Curacao, Dominica, Dominican Republic, Ecuador, El Salvador, Falkland Islands (Malvinas), French Guiana, Grenada, Guadeloupe, Guatemala, Guyana, Haiti, Honduras, Jamaica, Martinique, Mexico, Montserrat, Nicaragua, Panama, Paraguay, Peru, Puerto Rico, Saint Barthelemy, Saint Kitts and Nevis, Saint Lucia, Saint Martin (French part), Saint Vincent and the Grenadines, Sint Maarten (Dutch part), South Georgia and the South Sandwich Islands, Suriname, Trinidad and Tobago, Turks and Caicos Islands, Uruguay, Venezuela, Bolivarian Republic of, Virgin Islands, British, Virgin Islands, U.S.</p></td>
+</tr>
+<tr class="row-even"><td><p>LTU</p></td>
+<td><p>Lithuania</p></td>
+<td><p>LTU</p></td>
+<td><p>Lithuania</p></td>
+</tr>
+<tr class="row-odd"><td><p>LUX</p></td>
+<td><p>Luxembourg</p></td>
+<td><p>LUX</p></td>
+<td><p>Luxembourg</p></td>
+</tr>
+<tr class="row-even"><td><p>LVA</p></td>
+<td><p>Latvia</p></td>
+<td><p>LVA</p></td>
+<td><p>Latvia</p></td>
+</tr>
+<tr class="row-odd"><td><p>MEA</p></td>
+<td><p>Middle East, North Africa</p></td>
+<td><p>ARE, BHR, DZA, EGY, ESH, IRN, IRQ, ISR, JOR, KWT, LBN, LBY, MAR, OMN, PSE, QAT, SAU, SDN, SYR, TUN, YEM</p></td>
+<td><p>Algeria, Bahrain, Egypt, Iran, Islamic Republic of, Iraq, Israel, Jordan, Kuwait, Lebanon, Libya, Morocco, Oman, Palestine, State of, Qatar, Saudi Arabia, Sudan, Syrian Arab Republic, Tunisia, United Arab Emirates, Western Sahara, Yemen</p></td>
+</tr>
+<tr class="row-even"><td><p>MLT</p></td>
+<td><p>Malta</p></td>
+<td><p>MLT</p></td>
+<td><p>Malta</p></td>
+</tr>
+<tr class="row-odd"><td><p>NEU</p></td>
+<td><p>Europe (non-EU)</p></td>
+<td><p>ALA, ALB, AND, BIH, CHE, FRO, GGY, GIB, GRL, IMN, ISL, JEY, LIE, MCO, MKD, MNE, NOR, SJM, SMR, SRB, TUR, VAT</p></td>
+<td><p>Aland Islands, Albania, Andorra, Bosnia and Herzegovina, Faroe Islands, Gibraltar, Greenland, Guernsey, Holy See (Vatican City State), Iceland, Isle of Man, Jersey, Liechtenstein, Macedonia, the former Yugoslav Republic of, Monaco, Montenegro, Norway, San Marino, Serbia, Svalbard and Jan Mayen, Switzerland, Turkey</p></td>
+</tr>
+<tr class="row-even"><td><p>NLD</p></td>
+<td><p>Netherlands</p></td>
+<td><p>NLD</p></td>
+<td><p>Netherlands</p></td>
+</tr>
+<tr class="row-odd"><td><p>OAS</p></td>
+<td><p>Asia</p></td>
+<td><p>AFG, ASM, ATF, BGD, BRN, BTN, CCK, COK, CXR, FJI, FSM, GUM, IDN, IOT, KHM, KIR, KOR, LAO, LKA, MDV, MHL, MMR, MNG, MNP, MYS, NCL, NFK, NIU, NPL, NRU, PAK, PCN, PHL, PLW, PNG, PRK, PYF, SGP, SLB, THA, TKL, TLS, TON, TUV, UMI, VNM, VUT, WLF, WSM</p></td>
+<td><p>Afghanistan, American Samoa, Bangladesh, Bhutan, British Indian Ocean Territory, Brunei Darussalam, Cambodia, Christmas Island, Cocos (Keeling) Islands, Cook Islands, Fiji, French Polynesia, French Southern Territories, Guam, Indonesia, Kiribati, Korea, Democratic People’s Republic of, Korea, Republic of, Lao People’s Democratic Republic, Malaysia, Maldives, Marshall Islands, Micronesia, Federated States of, Mongolia, Myanmar, Nauru, Nepal, New Caledonia, Niue, Norfolk Island, Northern Mariana Islands, Pakistan, Palau, Papua New Guinea, Philippines, Pitcairn, Samoa, Singapore, Solomon Islands, Sri Lanka, Thailand, Timor-Leste, Tokelau, Tonga, Tuvalu, United States Minor Outlying Islands, Vanuatu, Viet Nam, Wallis and Futuna</p></td>
+</tr>
+<tr class="row-even"><td><p>POL</p></td>
+<td><p>Poland</p></td>
+<td><p>POL</p></td>
+<td><p>Poland</p></td>
+</tr>
+<tr class="row-odd"><td><p>PRT</p></td>
+<td><p>Portugal</p></td>
+<td><p>PRT</p></td>
+<td><p>Portugal</p></td>
+</tr>
+<tr class="row-even"><td><p>REF</p></td>
+<td><p>Reforming Economies of Former Soviet Union</p></td>
+<td><p>ARM, AZE, BLR, GEO, KAZ, KGZ, MDA, RUS, TJK, TKM, UKR, UZB</p></td>
+<td><p>Armenia, Azerbaijan, Belarus, Georgia, Kazakhstan, Kyrgyzstan, Moldova, Republic of, Russian Federation, Tajikistan, Turkmenistan, Ukraine, Uzbekistan</p></td>
+</tr>
+<tr class="row-odd"><td><p>ROU</p></td>
+<td><p>Romania</p></td>
+<td><p>ROU</p></td>
+<td><p>Romania</p></td>
+</tr>
+<tr class="row-even"><td><p>SSA</p></td>
+<td><p>Sub-Saharan Africa</p></td>
+<td><p>AGO, BDI, BEN, BFA, BWA, CAF, CIV, CMR, COD, COG, COM, CPV, DJI, ERI, ETH, GAB, GHA, GIN, GMB, GNB, GNQ, KEN, LBR, LSO, MDG, MLI, MOZ, MRT, MUS, MWI, MYT, NAM, NER, NGA, REU, RWA, SEN, SHN, SLE, SOM, SSD, STP, SWZ, SYC, TCD, TGO, TZA, UGA, ZAF, ZMB, ZWE</p></td>
+<td><p>Angola, Benin, Botswana, Burkina Faso, Burundi, Cameroon, Cape Verde, Central African Republic, Chad, Comoros, Congo, Congo, the Democratic Republic of the, Cote d Ivoire, Djibouti, Equatorial Guinea, Eritrea, Ethiopia, Gabon, Gambia, Ghana, Guinea, Guinea-Bissau, Kenya, Lesotho, Liberia, Madagascar, Malawi, Mali, Mauritania, Mauritius, Mayotte, Mozambique, Namibia, Niger, Nigeria, Reunion, Rwanda, Saint Helena, Ascension and Tristan da Cunha, Sao Tome and Principe, Senegal, Seychelles, Sierra Leone, Somalia, South Africa, South Sudan, Swaziland, Tanzania, United Republic of, Togo, Uganda, Zambia, Zimbabwe</p></td>
+</tr>
+<tr class="row-odd"><td><p>SVK</p></td>
+<td><p>Slovakia</p></td>
+<td><p>SVK</p></td>
+<td><p>Slovakia</p></td>
+</tr>
+<tr class="row-even"><td><p>SVN</p></td>
+<td><p>Slovenia</p></td>
+<td><p>SVN</p></td>
+<td><p>Slovenia</p></td>
+</tr>
+<tr class="row-odd"><td><p>SWE</p></td>
+<td><p>Sweden</p></td>
+<td><p>SWE</p></td>
+<td><p>Sweden</p></td>
+</tr>
+<tr class="row-even"><td><p>USA</p></td>
+<td><p>United States</p></td>
+<td><p>USA</p></td>
+<td><p>United States</p></td>
+</tr>
+</tbody>
+</table>
+<p><em>Latest update on 2025-11-10</em></p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="05_running_open_prom_with_real_input_data.html" class="btn btn-neutral float-left" title="05 Running OPEN-PROM with real input data" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="07_gams_error_codes.html" class="btn btn-neutral float-right" title="07 GAMS error codes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, OPEN-PROM contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,243 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>03 Loading Input Data Files with MrPROM &mdash; OPEN-PROM</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="04 First OPEN‐PROM running" href="04_first_open_prom_running.html" />
+    <link rel="prev" title="02 Task Runner settings in VS code" href="02_task_runner_settings_in_vs_code.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            OPEN-PROM
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">OPEN-PROM</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_git_and_vs_code_settings.html">01 Git and VS Code Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_git_and_vs_code_settings.html#basic-vs-code-guide">Basic VS code guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_git_and_vs_code_settings.html#adding-the-git-history-extension-to-vs-code-visual-studio-code">Adding the Git History Extension to VS Code (Visual Studio Code):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_git_and_vs_code_settings.html#optional-adding-the-gitlens-extension-to-vs-code-visual-studio-code">(OPTIONAL) Adding the GitLens Extension to VS Code (Visual Studio Code):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_task_runner_settings_in_vs_code.html">02 Task Runner settings in VS code</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">03 Loading Input Data Files with MrPROM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_first_open_prom_running.html">04 First OPEN‐PROM running</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_running_open_prom_with_real_input_data.html">05 Running OPEN-PROM with real input data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_regionalization_in_open_prom.html">06 Regionalization in OPEN-PROM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_gams_error_codes.html">07 GAMS error codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_troubleshooting_guide_setting_up_git_and_visual_studio_code_for_github.html">08 Troubleshooting Guide Setting Up Git and Visual Studio Code for GitHub</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_creating_fixme_issues_from_code_comments.html">09 Creating FIXME Issues from Code Comments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_a_comprehensive_guide_to_the_open_prom_modular_model.html">10 A Comprehensive Guide to the OPEN-PROM Modular Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_updating_dataset_of_github_actions.html">11 Updating Dataset of Github Actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_soft_linking_tutorial_open_prom_magpie.html">12 Soft-Linking Tutorial OPEN-PROM-MAgPIE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_soft_linking_tutorial_open_prom_magpie.html#soft-linking-tutorial-open-prom-magpie-coupling-channel">Soft-Linking Tutorial: OPEN-PROM ↔ MAgPIE (coupling-channel)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_soft_linking_tutorial_open_prom_climate_emulators.html">13 Soft-Linking Tutorial OPEN-PROM-Climate Emulators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_soft_linking_tutorial_open_prom_climate_emulators.html#using-climate-assessment-with-open-prom-on-windows-via-wsl">🌍 Using Climate-Assessment with OPEN-PROM on Windows (via WSL)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html">14 Modelling Server Setup Guide in Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#modelling-server-use-and-setup-guide-in-windows">Modelling Server Use and Setup Guide in Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#table-of-contents">Table of Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#how-to-connect">1. HOW TO CONNECT?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#system-preparation">2. SYSTEM PREPARATION</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#install-core-software-system-wide">3. INSTALL CORE SOFTWARE (SYSTEM-WIDE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#install-magpie-system-wide-no-renv">4. INSTALL MAGPIE SYSTEM-WIDE (NO RENV)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#install-python-packages-system-wide">5. INSTALL PYTHON PACKAGES (SYSTEM-WIDE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#install-tinytex-system-wide">6. INSTALL TINYTEX (SYSTEM-WIDE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#shared-onedrive-sharepoint-setup">7. SHARED ONEDRIVE / SHAREPOINT SETUP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#linux-support-wsl-per-user">8. LINUX SUPPORT - WSL (PER-USER)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_modelling_server_setup_guide_in_windows.html#test-the-setup">9. TEST THE SETUP</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OPEN-PROM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">03 Loading Input Data Files with MrPROM</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tutorials/03_loading_input_data_files_with_mrprom.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="loading-input-data-files-with-mrprom">
+<h1>03 Loading Input Data Files with MrPROM<a class="headerlink" href="#loading-input-data-files-with-mrprom" title="Link to this heading"></a></h1>
+<section id="loading-input-data-files-with-mrprom-application">
+<h2>Loading Input Data Files with MrPROM application<a class="headerlink" href="#loading-input-data-files-with-mrprom-application" title="Link to this heading"></a></h2>
+<p><strong>Objective:</strong></p>
+<p>In this guide, you will find the common setup that is needed before loading input data files to the OPEN-PROM model. This setup is shared by both external users and E3-Modelling internal users. The input data workflow relies on the complementary <a class="reference external" href="https://github.com/e3modelling/mrprom"><code class="docutils literal notranslate"><span class="pre">mrprom</span></code></a> R package, which is also developed by E3-Modelling.</p>
+<p>If you only want to test the model with dummy data, you do not need the full real-data setup described later in this tutorial. However, you still need the basic software environment described here, because the dummy-data first run still depends on R, GAMS, and the <code class="docutils literal notranslate"><span class="pre">loadMadratData.R</span></code> script used in Tutorial 04.</p>
+</section>
+<section id="installing-necessary-software-and-libraries">
+<h2>Installing Necessary Software and Libraries<a class="headerlink" href="#installing-necessary-software-and-libraries" title="Link to this heading"></a></h2>
+<p>Before using <code class="docutils literal notranslate"><span class="pre">mrprom</span></code>, you need a working installation of R (download <a class="reference external" href="https://www.r-project.org/">here</a>), as well as GAMS. If you use Windows, you may also need Rtools (download <a class="reference external" href="https://cran.r-project.org/bin/windows/Rtools/">here</a>) for packages that compile from source. Make sure that R, GAMS, and, where relevant, Rtools are installed in folders that do not require admin priviledges, and can be found from your command line. If you need help adding software to your <code class="docutils literal notranslate"><span class="pre">PATH</span></code>, you can check example instructions for <a class="reference external" href="https://www.bbminfo.com/r/r-programming-environment-setup.php">Windows</a> and <a class="reference external" href="https://www.digitalocean.com/community/tutorials/how-to-view-and-update-the-linux-path-environment-variable">Linux</a>. Please be sure that the library reticulate is installed in R. You may need to restart your computer to ensure that the updated <code class="docutils literal notranslate"><span class="pre">PATH</span></code> is visible in a new terminal session.</p>
+<p>After making sure that R is correctly set up on your system, launch the R console and execute the following commands:</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">options</span><span class="p">(</span><span class="n">repos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span>
+<span class="w">  </span><span class="n">pik</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;https://pik-piam.r-universe.dev&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="n">CRAN</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;https://cloud.r-project.org&quot;</span>
+<span class="p">))</span>
+
+<span class="nf">install.packages</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span>
+<span class="w">  </span><span class="s">&quot;magclass&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s">&quot;madrat&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s">&quot;gdx&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s">&quot;gdxrrw&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s">&quot;quitte&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s">&quot;mip&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s">&quot;piamValidation&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s">&quot;mrdrivers&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s">&quot;gms&quot;</span>
+<span class="p">))</span>
+
+<span class="nf">install.packages</span><span class="p">(</span><span class="s">&quot;remotes&quot;</span><span class="p">)</span>
+<span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&quot;e3modelling/mrprom&quot;</span><span class="p">)</span>
+<span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&quot;e3modelling/postprom&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Those commands install <code class="docutils literal notranslate"><span class="pre">mrprom</span></code>, <code class="docutils literal notranslate"><span class="pre">postprom</span></code>, and the main supporting packages used by the OPEN-PROM workflow. <code class="docutils literal notranslate"><span class="pre">remotes</span></code> is only needed as a helper package so that R can install packages directly from GitHub.</p>
+<p>If your goal is only the external dummy-data first run, this is more than the absolute minimum. In that case, the real essentials are:</p>
+<ul class="simple">
+<li><p>a working R installation,</p></li>
+<li><p>a working GAMS installation,</p></li>
+<li><p>the ability to run <code class="docutils literal notranslate"><span class="pre">Rscript</span> <span class="pre">scripts/tasks/loadMadratData.R</span> <span class="pre">DevMode=2</span></code>,</p></li>
+<li><p>and the R packages needed by that script, most notably <code class="docutils literal notranslate"><span class="pre">dplyr</span></code>.</p></li>
+</ul>
+<p>If <code class="docutils literal notranslate"><span class="pre">gdxrrw</span></code> cannot find your GAMS installation automatically, you may need to configure it explicitly in R. This is especially common on macOS and Linux. A typical example is:</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">gdxrrw</span><span class="p">)</span>
+<span class="n">gdxrrw</span><span class="o">::</span><span class="nf">igdx</span><span class="p">(</span><span class="s">&quot;/path/to/gams/&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="creating-the-local-configuration-file">
+<h2>Creating the Local Configuration File<a class="headerlink" href="#creating-the-local-configuration-file" title="Link to this heading"></a></h2>
+<p>Apart from installing the software, you should also create a local <code class="docutils literal notranslate"><span class="pre">config.json</span></code> file in the root folder of <code class="docutils literal notranslate"><span class="pre">OPEN-PROM</span></code>. The simplest way is to copy <code class="docutils literal notranslate"><span class="pre">config.template.json</span></code> and edit the relevant fields.</p>
+<p><code class="docutils literal notranslate"><span class="pre">config.json</span></code> is a single file with three top-level blocks:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">paths.*</span></code>: machine-specific paths</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">paths.gams_path</span></code>: the directory of the GAMS installation, if <code class="docutils literal notranslate"><span class="pre">gams</span></code> is not already available in your system <code class="docutils literal notranslate"><span class="pre">PATH</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">paths.model_runs_path</span></code>: the destination used by the optional run-folder sync step</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">paths.magpie_path</span></code>: only needed for the OPEN-PROM ↔ MAgPIE soft-link (task 7)</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">behavior.*</span></code>: four switches controlling the wrapper workflow (see below)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scenario.*</span></code>: the scenario to run (<code class="docutils literal notranslate"><span class="pre">scenario_name</span></code>, <code class="docutils literal notranslate"><span class="pre">description</span></code>, <code class="docutils literal notranslate"><span class="pre">gams_flags</span></code>, <code class="docutils literal notranslate"><span class="pre">magpie</span></code>). <code class="docutils literal notranslate"><span class="pre">task_id</span></code> is <em>not</em> stored here — it comes from the CLI (<code class="docutils literal notranslate"><span class="pre">task_id=N</span></code>, passed by every VS Code task button) or, in batch mode, from each row of <code class="docutils literal notranslate"><span class="pre">scenarios.csv</span></code>.</p></li>
+</ul>
+<p>For batch sweeps over multiple scenarios, create a <code class="docutils literal notranslate"><span class="pre">scenarios.csv</span></code> at the repo root (see <code class="docutils literal notranslate"><span class="pre">scenarios.template.csv</span></code> for the format) and use <code class="docutils literal notranslate"><span class="pre">Rscript</span> <span class="pre">start.R</span> <span class="pre">scenarios.csv</span></code> or the <strong>RUN BATCH</strong> VS Code button. Each CSV row overlays <code class="docutils literal notranslate"><span class="pre">config.json:scenario</span></code> for that one run. The CSV is opt-in: without it, only the single-scenario workflow (<code class="docutils literal notranslate"><span class="pre">Rscript</span> <span class="pre">start.R</span> <span class="pre">task_id=N</span></code>) is available.</p>
+<p>If you are not working in the internal E3-Modelling environment, <code class="docutils literal notranslate"><span class="pre">model_runs_path</span></code> is often not needed immediately. In that case, set in <code class="docutils literal notranslate"><span class="pre">config.json</span></code>:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;behavior&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;withSync&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This avoids errors at the archive and sync stage when no valid internal destination has been configured.</p>
+</section>
+<section id="understanding-the-config-json-behavior-switches">
+<h2>Understanding the <code class="docutils literal notranslate"><span class="pre">config.json:behavior</span></code> Switches<a class="headerlink" href="#understanding-the-config-json-behavior-switches" title="Link to this heading"></a></h2>
+<p>OPEN-PROM defines four behavior switches that modify the workflow around the model run:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">withRunFolder</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">withSync</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">withReport</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">uploadGDX</span></code></p></li>
+</ul>
+<p>These switches do not change the mathematical model itself. They control the wrapper workflow around it, such as whether a run folder is created, whether outputs are archived, and whether the reporting script is executed automatically. There are also several task modes available through VS Code and <code class="docutils literal notranslate"><span class="pre">start.R</span></code>, but their exact meaning is explained later in Tutorial 05.</p>
+</section>
+<section id="adding-the-data-sources">
+<h2>Adding the Data Sources<a class="headerlink" href="#adding-the-data-sources" title="Link to this heading"></a></h2>
+<p>Apart from software setup, the model also needs access to the right data sources. This is where external users and internal users begin to diverge.</p>
+<p>If you are an E3-Modelling internal user, the normal workflow is to point <code class="docutils literal notranslate"><span class="pre">madrat</span></code> (see instructions <a class="reference external" href="https://cran.r-project.org/web/packages/madrat/vignettes/madrat.html">here</a>) to a locally synced internal data directory. That step, together with the SharePoint and <code class="docutils literal notranslate"><span class="pre">mainfolder</span></code> setup, is described in Tutorial 05. Due to the proprietary nature of those datasets, we can’t share them publicly, so you’ll have to acquire them yourself, or contact us for further guidance.</p>
+<p>If you are an external user, you do not need to configure the full internal data sources in order to try the model for the first time. The dummy-data route described in Tutorial 04 downloads a public archive from Google Drive and extracts it locally. That path does not use the full internal <code class="docutils literal notranslate"><span class="pre">mrprom</span></code> data pipeline, but it still uses R and the local helper script.</p>
+</section>
+<section id="input-data-overview">
+<h2>Input Data Overview<a class="headerlink" href="#input-data-overview" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">mrprom</span></code> package calc functions generate a large number of datasets, originating from many different sources. To support transparency and reproducibility, a spreadsheet with the OPEN-PROM input datasets is available in <code class="docutils literal notranslate"><span class="pre">InputDataOverview.csv</span></code> in this tutorials folder. It provides the generated OPEN-PROM input parameters together with the original source and a short description.</p>
+</section>
+<section id="executing-the-open-prom-model">
+<h2>Executing the OPEN-PROM Model<a class="headerlink" href="#executing-the-open-prom-model" title="Link to this heading"></a></h2>
+<p>To run the model after the setup is complete:</p>
+<ul class="simple">
+<li><p>External users should continue with Tutorial 04.</p></li>
+<li><p>E3-Modelling internal users should continue with Tutorial 05.</p></li>
+</ul>
+<p>As mentioned in the VS Code Task Runner tutorial, OPEN-PROM can be started either from the Task Runner panel or from the command line. However, the correct button or command depends on the run mode, the available data, and whether fresh input generation is needed. That is why the actual execution paths are explained in the next tutorials rather than here.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="02_task_runner_settings_in_vs_code.html" class="btn btn-neutral float-left" title="02 Task Runner settings in VS code" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="04_first_open_prom_running.html" class="btn btn-neutral float-right" title="04 First OPEN‐PROM running" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, OPEN-PROM contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
