@@ -20,16 +20,16 @@ VmSubsiDemTech.FX(runCy,DSBS,TECH,YTIME)$(DATAY(YTIME) or TFIRST(YTIME) or not S
 
 *'                *PARAMETER INITIALISATION FOR RECURSIVE LAGS*
 
-VmSubsiDemTechAvail.L(runCy,DSBS,TECH,YTIME) = 1e-6;
-VmSubsiSupTech.L(runCy,STECH,YTIME) = 1e-6;
-VmSubsiCapCostSupply.L(runCy,SSBS,STECH,YTIME) = 1e-6;
+VmSubsiDemTechAvail.L(runCy,DSBS,TECH,YTIME) = 0;
+VmSubsiSupTech.L(runCy,STECH,YTIME) = 0;
+VmSubsiCapCostSupply.L(runCy,SSBS,STECH,YTIME) = 0;
 
 *' Seed parameters from historical data
 p11SubsiTot(runCy,YTIME)$(DATAY(YTIME)) = 0.0001;
-pmSubsiDemTechAvail(runCy,DSBS,TECH,YTIME)$(DATAY(YTIME)) = 1e-6;
+pmSubsiDemTechAvail(runCy,DSBS,TECH,YTIME)$(DATAY(YTIME)) = 0;
 pmSubsiDemITech(runCy,DSBS,ITECH,YTIME)$(DATAY(YTIME)) = 0;
 pmSubsiDemTech(runCy,DSBS,TECH,YTIME)$(DATAY(YTIME)) = 0;
-pmSubsiSupTech(runCy,STECH,YTIME)$(DATAY(YTIME)) = 1e-6;
+pmSubsiSupTech(runCy,STECH,YTIME)$(DATAY(YTIME)) = 0;
 pmSubsiCapCostTech(runCy,DSBS,TECH,YTIME)$(DATAY(YTIME)) = 0;
-pmSubsiCapCostSupply(runCy,SSBS,STECH,YTIME)$(DATAY(YTIME)) = 1e-6;
+pmSubsiCapCostSupply(runCy,SSBS,STECH,YTIME)$(DATAY(YTIME)) = 0;
 pmNetSubsiTax(runCy,YTIME)$(DATAY(YTIME)) = 0;

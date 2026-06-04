@@ -6,7 +6,7 @@
 V01RateScrPcTot.UP(runCy,TTECH,YTIME) = 1;
 *---
 V01RateScrPc.UP(runCy,TTECH,YTIME) = 1;
-V01RateScrPc.LO(runCy,TTECH,YTIME) = epsilon6;
+V01RateScrPc.LO(runCy,TTECH,YTIME) = 0;
 *---
 V01PremScrp.UP(runCy,TRANSE,TTECH,YTIME) = 1;
 V01PremScrp.LO(runCy,TRANSE,TTECH,YTIME) = 0;
@@ -62,7 +62,7 @@ V01CapCostAnnualized.LO(runCy,TRANSE,TTECH,YTIME) = 0;
 V01CapCostAnnualized.FX(runCy,TRANSE,TTECH,YTIME)$DATAY(YTIME) =
 (
   imDisc(runCy,TRANSE,YTIME) * exp(imDisc(runCy,TRANSE,YTIME) * i01TechLft(runCy,TRANSE,TTECH,YTIME)) /
-  (exp(imDisc(runCy,TRANSE,YTIME) * i01TechLft(runCy,TRANSE,TTECH,YTIME)) - 1 + epsilon6)
+  (exp(imDisc(runCy,TRANSE,YTIME) * i01TechLft(runCy,TRANSE,TTECH,YTIME)) - 1 )
 ) * imCapCostTech(runCy,TRANSE,TTECH,YTIME) * imCGI(runCy,YTIME);
 *---
 V01CostFuel.LO(runCy,TRANSE,TTECH,YTIME) = 0;

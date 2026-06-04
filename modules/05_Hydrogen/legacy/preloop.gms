@@ -124,8 +124,8 @@ V05PremRepH2Prod.FX(runCy,H2TECH,YTIME)$(not H2TECHPM(H2TECH)) = 1;
 
 *'                *PARAMETER INITIALISATION FOR RECURSIVE LAGS*
 
-V05AcceptCCSH2Tech.L(runCy,YTIME) = 1e-6;
-VmDemSecH2.L(runCy,SBS,YTIME) = 1e-6;
+V05AcceptCCSH2Tech.L(runCy,YTIME) = 0;
+VmDemSecH2.L(runCy,SBS,YTIME) = 0;
 
 *' Seed parameters from historical data
 p05GapShareH2Tech1(runCy,H2TECH,YTIME)$(DATAY(YTIME)) = 0;
@@ -139,13 +139,13 @@ p05CostVarProdH2Tech(runCy,H2TECH,YTIME)$(DATAY(YTIME)) = V05CostVarProdH2Tech.L
 p05CostProdH2Tech(runCy,H2TECH,YTIME)$(DATAY(YTIME)) = V05CostProdH2Tech.L(runCy,H2TECH,YTIME);
 p05ShareCCSH2Prod(runCy,H2TECH,YTIME)$(DATAY(YTIME)) = 0;
 p05ShareNoCCSH2Prod(runCy,H2TECH,YTIME)$(DATAY(YTIME)) = 0;
-p05AcceptCCSH2Tech(runCy,YTIME)$(DATAY(YTIME)) = 1e-6;
+p05AcceptCCSH2Tech(runCy,YTIME)$(DATAY(YTIME)) = 0;
 p05CostProdCCSNoCCSH2Prod(runCy,H2TECH,YTIME)$(DATAY(YTIME)) = 2;
 p05CaptRateH2(runCy,H2TECH,YTIME)$(DATAY(YTIME)) = i05CaptRateH2Prod(H2TECH);
 pmDemTotH2(runCy,YTIME)$(DATAY(YTIME)) = i03DataGrossInlCons(runCy,"H2F",YTIME) - imFuelTrade(runCy,"IMPORTS","H2F",YTIME) + imFuelTrade(runCy,"EXPORTS","H2F",YTIME);
 pmProdH2(runCy,H2TECH,YTIME)$(DATAY(YTIME)) = 0;
 pmConsFuelTechH2Prod(runCy,H2TECH,EF,YTIME)$(DATAY(YTIME)) = 0;
-pmDemSecH2(runCy,SBS,YTIME)$(DATAY(YTIME)) = 1e-6;
+pmDemSecH2(runCy,SBS,YTIME)$(DATAY(YTIME)) = 0;
 pmCostAvgProdH2(runCy,YTIME)$(DATAY(YTIME)) = VmCostAvgProdH2.L(runCy,YTIME);
 pmConsFuelH2Prod(runCy,EF,YTIME)$(DATAY(YTIME)) = VmConsFuelH2Prod.L(runCy,EF,YTIME);
 *---

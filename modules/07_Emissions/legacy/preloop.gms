@@ -45,14 +45,14 @@ V07EmissionsNetPart.FX(runCy,YTIME)$DATAY(YTIME) = V07EmissionsNet.L(runCy,YTIME
 
 *'                *PARAMETER INITIALISATION FOR RECURSIVE LAGS*
 
-V07RedAbsBySrcRegTim.L(E07SrcMacAbate,runCy,YTIME) = 1e-6;
-V07CostAbateBySrcRegTim.L(E07SrcMacAbate,runCy,YTIME) = 1e-6;
+V07RedAbsBySrcRegTim.L(E07SrcMacAbate,runCy,YTIME) = 0;
+V07CostAbateBySrcRegTim.L(E07SrcMacAbate,runCy,YTIME) = 0;
 
 *' Seed parameters from historical data
 p07GrossEmissCO2Supply(runCy,SSBS,YTIME)$(DATAY(YTIME)) = V07GrossEmissCO2Supply.L(runCy,SSBS,YTIME);
-p07RedAbsBySrcRegTim(E07SrcMacAbate,runCy,YTIME)$(DATAY(YTIME)) = 1e-6;
+p07RedAbsBySrcRegTim(E07SrcMacAbate,runCy,YTIME)$(DATAY(YTIME)) = 0;
 p07EmiActBySrcRegTim(E07SrcMacAbate,runCy,YTIME)$(DATAY(YTIME)) = i07DataCh4N2OFEmis(runCy,E07SrcMacAbate,YTIME);
-p07CostAbateBySrcRegTim(E07SrcMacAbate,runCy,YTIME)$(DATAY(YTIME)) = 1e-6;
+p07CostAbateBySrcRegTim(E07SrcMacAbate,runCy,YTIME)$(DATAY(YTIME)) = 0;
 p07GrossEmissCO2Demand(runCy,DSBS,YTIME)$(DATAY(YTIME)) = V07GrossEmissCO2Demand.L(runCy,DSBS,YTIME);
 p07EmissionsNet(runCy,YTIME)$(DATAY(YTIME)) = V07EmissionsNet.L(runCy,YTIME);
 p07EmissionsNetPart(runCy,YTIME)$(DATAY(YTIME)) = V07EmissionsNetPart.L(runCy,YTIME);
