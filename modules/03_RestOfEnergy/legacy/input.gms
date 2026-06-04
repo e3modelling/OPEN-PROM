@@ -25,12 +25,7 @@ $ondelim
 $include"./iPrimProd.csv"
 $offdelim
 ;
-*---
-table i03ElcNetImpShare(allCy,SUPOTH,YTIME)	      "Ratio of electricity imports in total final demand (1)"
-$ondelim
-$include "./iElcNetImpShare.csv"
-$offdelim
-;
+i03PrimProd(allCy,"STE",YTIME) = 0;
 *---
 table i03OutTotTransfProcess(allCy,SSBS,EFS,YTIME)	      "Total transformation output of supply sectors (Mtoe)"	
 $ondelim
@@ -50,19 +45,13 @@ $include"./iRatioBranchOwnCons.csv"
 $offdelim
 ;
 *---
-parameter i03NatGasPriProElst(allCy)	          "Natural Gas primary production elasticity related to gross inland consumption (1)" /
-$ondelim
-$include "./iNatGasPriProElst.csv"
-$offdelim
-/;
-*---
 i03FeedTransfr(allCy,EFS,YTIME) = 0; !!FIXME: i03DataGrossInlCons must be correct to use transfers
 *--
 * FIXME:
 * IEA TES doesn't sum up to each data, due to incorrect transformation input mappings. 
 * Author: mmadianos
 i03DataGrossInlCons(allCy,EFS,YTIME)$DATAY(YTIME) =
-sum(DSBS, imFuelConsPerFueSub(allCy,DSBS,EFS,YTIME)) +
+sum(DSBS,imFuelCons(allCy,DSBS,EFS,YTIME)) +
 SUM(SSBS,
   i03DataOwnConsEne(allCy,SSBS,EFS,YTIME) -
   i03InpTotTransfProcess(allCy,SSBS,EFS,YTIME)
@@ -94,32 +83,20 @@ a4 0.666634797,
 a5 0.33343691
 /;
 *---
-i03SupResRefCapacity(runCy,SUPOTH,YTIME) = 1;
-*---
-i03SupTrnasfOutputRefineries(runCy,EF,YTIME) = 1;
-*---
 i03DataOwnConsEne(runCy,SSBS,EFS,YTIME)$(i03DataOwnConsEne(runCy,SSBS,EFS,YTIME) < 1e-4) = 0;
 *---
 i03TotEneBranchCons(runCy,EFS,YTIME) = SUM(SSBS,i03DataOwnConsEne(runCy,SSBS,EFS,YTIME));
 *---
 *i03ResRefCapacity(runCy,YTIME) = i03SupResRefCapacity(runCy,"REF_CAP_RES",YTIME);
 *---
-i03ResTransfOutputRefineries(runCy,EFS,YTIME) = i03SupTrnasfOutputRefineries(runCy,EFS,YTIME);
-*---
 i03RateEneBranCons(runCy,SSBS,EFS,YTIME)$AN(YTIME) = i03RateEneBranCons(runCy,SSBS,EFS,"%fBaseY%");
 i03RateEneBranCons(runCy,SSBS,EFS,YTIME)$(i03RateEneBranCons(runCy,SSBS,EFS,YTIME)  < 1e-6) = 0;
-*---
-i03ResHcNgOilPrProd(runCy,"HCL",YTIME)$an(YTIME)   = i03SupResRefCapacity(runCy,"HCL_PPROD",YTIME);
-i03ResHcNgOilPrProd(runCy,"NGS",YTIME)$an(YTIME)   = i03SupResRefCapacity(runCy,"NGS_PPROD",YTIME);
-i03ResHcNgOilPrProd(runCy,"CRO",YTIME)$an(YTIME)   = i03SupResRefCapacity(runCy,"OIL_PPROD",YTIME);
-*---
-i03RatioImpFinElecDem(runCy,YTIME)$an(YTIME) = i03ElcNetImpShare(runCy,"ELC_IMP",YTIME);
 *---
 imRateLossesFinCons(runCy,EFS,YTIME) = 
 [
   imDistrLosses(runCy,EFS,YTIME) /
-  (sum(DSBS, imFuelConsPerFueSub(runCy,DSBS,EFS,YTIME)) + i03PrimProd(runCy,"CRO",YTIME)$sameas("CRO",EFS))
-]$(sum(DSBS, imFuelConsPerFueSub(runCy,DSBS,EFS,YTIME)) + i03PrimProd(runCy,"CRO",YTIME)$sameas("CRO",EFS));
+  (sum(DSBS,imFuelCons(runCy,DSBS,EFS,YTIME)) + i03PrimProd(runCy,"CRO",YTIME)$sameas("CRO",EFS))
+]$(sum(DSBS,imFuelCons(runCy,DSBS,EFS,YTIME)) + i03PrimProd(runCy,"CRO",YTIME)$sameas("CRO",EFS));
 imRateLossesFinCons(runCy,EFS,YTIME)$AN(YTIME) = imRateLossesFinCons(runCy,EFS,"%fBaseY%");
 *---
 i03RatioPrimaryFuels(runCy,EFS,YTIME)$DATAY(YTIME) = 

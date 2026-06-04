@@ -13,18 +13,23 @@ iCarbValYrExog(allCy,ytime)	                               "Carbon value for eac
 iShrHeatPumpElecCons(allCy,SBS)	                           "Share of heat pump electricity consumption in total substitutable electricity (1)"						 			
 iTranfOutGasworks(allCy,EF,YTIME)	                       "Transformation Output from Gasworks, Blast Furnances and Briquetting plants (Mtoe)"	
 ODummyObj                                                  "Parameter saving objective function"
+ODummyObjPGALL                                             "Parameter saving objective function for PGALL"
+ODummyObjTRANSE                                            "Parameter saving objective function for TRANSE"
+ODummyObjINDDOMShares                                       "Parameter saving objective function for INDDOM shares"
+ODummyObjINDDOMFinalEnergy                                  "Parameter saving objective function for INDDOM final energy"
+pSolveHandle(allCy)                                      "Asynchronous solve handle by country"
 
 *'                **Interdependent Parameters**
 imCGI(allCy,YTIME)                                         "Capital Goods Index (defined as CGI(Scenario)/CGI(Baseline)) (1)"
 imFPDL(SBS,KPDL)                                           "Polynomial Distribution Lags (PDL) Coefficients per subsector (1)"
 imCo2EmiFac(allCy,SBS,EF,YTIME)                            "CO2 emission factors per subsector (kgCO2/kgoe fuel burned)"
 imNcon(SBS)                                                "Number of consumers (1)"
-imDisFunConSize(allCy,DSBS,rCon)                           "Distribution function of consumer size groups (1)"
+*imDisFunConSize(allCy,DSBS,rCon)                           "Distribution function of consumer size groups (1)"
 imAnnCons(allCy,DSBS,conSet)                               "Annual consumption of the smallest,modal,largest consumer, average for all countries (various)"
                                                                 !! For passenger cars (Million km/vehicle)
                                                                 !! For other passenger tranportation modes (Mpkm/vehicle)
                                                                 !! For goods transport, (Mtkm/vehicle)  
-imCumDistrFuncConsSize(allCy,DSBS)                         "Cummulative distribution function of consumer size groups (1)"
+*imCumDistrFuncConsSize(allCy,DSBS)                         "Cummulative distribution function of consumer size groups (1)"
 imRateLossesFinCons(allCy,EF,YTIME)                        "Rate of losses over Available for Final Consumption (1)"  
 imCO2CaptRate(PGALL)	                                    "Plant CO2 capture rate (1)"		
 imEffValueInDollars(allCy,SBS,YTIME)	                   "Efficiency value (US$2015/toe)" 	
@@ -46,15 +51,19 @@ imCapCostTech(allCy,SBS,TECH,YTIME)                          "Capital Cost of te
                                                                 !! - For Industrial sectors (except Iron and Steel) is expressed in kUS$2015/toe-year
                                                                 !! - For Iron and Steel is expressed in kUS$2015/tn-of-steel
                                                                 !! - For Domestic Sectors is expressed in kUS$2015/toe-year
-imFuelConsPerFueSub(allCy,SBS,EF,YTIME)	                   "Fuel consumption per fuel and subsector (Mtoe)"
 smGwToTwhPerYear(YTIME)                                    "convert GW mean power into TWh/y, depending on whether it's a leap year"
 ;
 
 Equations
 *' *** Miscellaneous'
 qDummyObj                                                  "Define dummy objective function"
+QmGDPPartGlob(allCy,YTIME)                                           "Global GDP share (1)"
 $IFTHEN.calib %Calibration% == MatCalibration
 qRestrain
+qDummyObjPGALL                                             "Define dummy objective function for PGALL"
+qDummyObjTRANSE                                            "Define dummy objective function for TRANSE"
+qDummyObjINDDOMShares                                       "Define dummy objective function for INDDOM shares"
+qDummyObjINDDOMFinalEnergy                                  "Define dummy objective function for INDDOM final energy"
 $ENDIF.calib
 ;
 
@@ -63,6 +72,10 @@ Variables
 
 *' *** Miscellaneous
 vDummyObj                                                  "Dummy maximisation variable (1)"
+vDummyObjPGALL                                             "Dummy maximisation variable for PGALL (1)"
+vDummyObjTRANSE                                            "Dummy maximisation variable for TRANSE (1)"
+vDummyObjINDDOMShares(DSBS)                                 "Dummy maximisation variable for INDDOM shares (1)"
+vDummyObjINDDOMFinalEnergy(DSBS)                            "Dummy maximisation variable for INDDOM final energy (1)"
 VmElecConsHeatPla(allCy,DSBS,YTIME)                        "Electricity consumed in heatpump plants (Mtoe)"
 ;
 
@@ -70,6 +83,7 @@ Positive Variables
 VmCarVal(allCy,NAP,YTIME)                                  "Carbon prices for all countries (US$2015/tn CO2)"
 VmRenValue(YTIME)                                          "Renewable value (US$2015/KWh)"
 common(allCy,TRANSE,YTIME)
+VmGDPPartGlob(allCy,YTIME)                                           "Global GDP share (1)"
 ;
 
 Scalars
@@ -83,6 +97,10 @@ $else.magpie
 sLink2MAgPIE                                               "Binary flag for MAgPIE link (1=on, 0=off)" /0/
 $endif.magpie
 sModelStat                                                 "helper parameter for solver status"
+sHandleCollect                                             "helper scalar for asynchronous handle collection"
+sReadyCollect                                              "helper scalar for asynchronous wait status"
+sAsyncAttempt                                              "helper scalar for asynchronous solver attempts"
+sAsyncWaitHandle                                           "helper scalar for the asynchronous handle currently being collected"
 smFracElecPriChp                                           "Fraction of Electricity Price at which a CHP sells electricity to network" /0/
 sCY                                                        "country iterator" /0/
 sUnitToKUnit                                               "units to Kilo units conversion" /1000/

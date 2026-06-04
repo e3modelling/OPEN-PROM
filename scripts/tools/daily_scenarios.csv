@@ -1,0 +1,4 @@
+scenario_name,task_id,description,gams_flags.fScenario
+DAILY_NPi,2,Daily NPi,1
+DAILY_1p5C,2,Daily 1.5C target,2
+DAILY_2C,2,Daily 2C target,3

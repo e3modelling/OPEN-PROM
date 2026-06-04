@@ -5,21 +5,22 @@
 
 *---
 V02DemSubUsefulSubsec.FX(runCyL,DSBS,YTIME)$TIME(YTIME) = V02DemSubUsefulSubsec.L(runCyL,DSBS,YTIME)$TIME(YTIME);
-V02RemEquipCapTechSubsec.FX(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME) = V02RemEquipCapTechSubsec.L(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME);
-V02DemUsefulSubsecRemTech.FX(runCyL,DSBS,YTIME)$TIME(YTIME) = V02DemUsefulSubsecRemTech.L(runCyL,DSBS,YTIME)$TIME(YTIME);
-V02GapUsefulDemSubsec.FX(runCyL,DSBS,YTIME)$TIME(YTIME) = V02GapUsefulDemSubsec.L(runCyL,DSBS,YTIME)$TIME(YTIME);           
+*V02RemEquipCapTechSubsec.FX(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME) = V02RemEquipCapTechSubsec.L(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME);
+*V02DemUsefulSubsecRemTech.FX(runCyL,DSBS,YTIME)$TIME(YTIME) = V02DemUsefulSubsecRemTech.L(runCyL,DSBS,YTIME)$TIME(YTIME);
+*V02GapUsefulDemSubsec.FX(runCyL,DSBS,YTIME)$TIME(YTIME) = V02GapUsefulDemSubsec.L(runCyL,DSBS,YTIME)$TIME(YTIME);           
 V02CapCostTech.FX(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME) = V02CapCostTech.L(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME);                     
 V02VarCostTech.FX(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME) = V02VarCostTech.L(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME);   
 V02CostTech.FX(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME) = V02CostTech.L(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME);        
 V02ShareTechNewEquipUseful.FX(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME) = V02ShareTechNewEquipUseful.L(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME);
 V02EquipCapTechSubsec.FX(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME) = V02EquipCapTechSubsec.L(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME);  
 V02UsefulElecNonSubIndTert.FX(runCyL,INDDOM,YTIME)$TIME(YTIME) = V02UsefulElecNonSubIndTert.L(runCyL,INDDOM,YTIME)$TIME(YTIME);            
-V02FinalElecNonSubIndTert.FX(runCyL,INDDOM,YTIME)$TIME(YTIME) = V02FinalElecNonSubIndTert.L(runCyL,INDDOM,YTIME)$TIME(YTIME);                                      
+*V02FinalElecNonSubIndTert.FX(runCyL,INDDOM,YTIME)$TIME(YTIME) = V02FinalElecNonSubIndTert.L(runCyL,INDDOM,YTIME)$TIME(YTIME);                                      
 VmConsFuel.FX(runCyL,DSBS,EF,YTIME)$TIME(YTIME) = VmConsFuel.L(runCyL,DSBS,EF,YTIME)$TIME(YTIME);       
 V02IndxElecIndPrices.FX(runCyL,TCHP,YTIME)$TIME(YTIME) = V02IndxElecIndPrices.L(runCyL,TCHP,YTIME)$TIME(YTIME);  
 V02PremScrpIndu.FX(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME) = V02PremScrpIndu.L(runCyL,DSBS,ITECH,YTIME)$TIME(YTIME);
 *---
 
 $ifthen.calib %Calibration% == MatCalibration
-imMatrFactor.FX(runCyL,DSBS,TECH,YTIME)$TIME(YTIME) = round(imMatrFactor.L(runCyL,DSBS,TECH,YTIME)$TIME(YTIME), 3);
+imMatrFactor.FX(runCyL,DSBS,TECH,YTIME)$TIME(YTIME) = imMatrFactor.L(runCyL,DSBS,TECH,YTIME)$TIME(YTIME);
+i02CalibUsefulEnergy.FX(runCyL,DSBS,YTIME)$TIME(YTIME) = i02CalibUsefulEnergy.L(runCyL,DSBS,YTIME)$TIME(YTIME);
 $endif.calib

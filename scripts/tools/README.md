@@ -19,7 +19,7 @@ Additionally, it offers color-coded indicators for easy interpretation.
 
 **Instructions:**
 1. The necessary library must be installed. Type `pip install colorama`.
-2. To run the script itself just type `python .\scripts\rv.py `.
+2. To run the script itself just type `python .\scripts\tools\rv.py `.
 
 ***The script runs automatically and no further user inputs are required.***
 
@@ -37,7 +37,7 @@ columns representing years. Success is indicated by green color, while failure i
           `pip install pandas`,\
           `pip install seaborn`,\
           `pip install matplotlib` .
-2. To run the script itself just type `python .\scripts\rs.py `.
+2. To run the script itself just type `python .\scripts\tools\rs.py `.
 
 ***The script requires a user input regarding the selection of the subfolder.***
 
@@ -54,7 +54,7 @@ Green color indicates success, while red color indicates failure.
 1. The necessary libraries must be installed.\
     Type:\
             `pip install pandas seaborn matplotlib colorama`
-2. To run the script itself just type `python .\scripts\rr.py `.
+2. To run the script itself just type `python .\scripts\tools\rr.py `.
 
 ***The script requires a user input regarding the selection of the subfolder.***
 
@@ -63,8 +63,8 @@ Green color indicates success, while red color indicates failure.
 
 1. The necessary libraries must be installed (check above).
 2. Type: \
-        `python .\scripts\rr.py  -q`\
-        `python .\scripts\rs.py  -q`
+        `python .\scripts\tools\rr.py  -q`\
+        `python .\scripts\tools\rs.py  -q`
 3. Note: Utilizing the quick execution command, the scripts automaticaly select the most recent subfolders. \
 ***The scripts run automatically and no further user inputs are required.***
 
@@ -79,6 +79,6 @@ This script provides real-time monitoring of pending runs. \
 1. The necessary libraries must be installed.\
     Type:\
             `pip install pandas seaborn matplotlib colorama`
-2. To run the script itself just type `python .\scripts\R-live.py `.
+2. To run the script itself just type `python .\scripts\tools\R-live.py `.
 
 ***The script runs automatically and no further user inputs are required.***
