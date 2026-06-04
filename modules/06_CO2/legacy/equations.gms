@@ -148,11 +148,21 @@ Q06ProfRateDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q06CapFacNewDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
   V06CapFacNewDAC(allCy,CDRTECH,YTIME)
       =E=
-  S06CapFacMinNewDAC +
+(1 + !! (all the factors - PRISMA - Meet Aspirations)
+  (8$(EU28(allCy) and ord(YTIME)<40) - 0.7$(EU28(allCy) and ord(YTIME)>=40)) + 
+  (2$(sameas(allCy,"IND") and ord(YTIME)<60) - 0.7$(sameas(allCy,"IND") and ord(YTIME)>=60)) +
+  (3$(sameas(allCy,"USA") and ord(YTIME)<40) - 0.8$(sameas(allCy,"USA") and ord(YTIME)>=40)) +
+  (6$(sameas(allCy,"CHA") and ord(YTIME)<50) - 0.8$(sameas(allCy,"CHA") and ord(YTIME)>=50)) +
+  (7$(sameas(allCy,"JPN") and ord(YTIME)<40) - 0.8$(sameas(allCy,"JPN") and ord(YTIME)>=40)) +
+  (12$(sameas(allCy,"REF") and ord(YTIME)<50) - 0.7$(sameas(allCy,"REF") and ord(YTIME)>=50)) +
+  (10$(sameas(allCy,"LAM") and ord(YTIME)<40) - 0.7$(sameas(allCy,"LAM") and ord(YTIME)>=40)) +
+  (3$(sameas(allCy,"CAZ") and ord(YTIME)<40) - 0.7$(sameas(allCy,"CAZ") and ord(YTIME)>=40))) * 
+  (S06CapFacMinNewDAC +
   S06CapFacMaxNewDAC
   * (tanh(0.7 * (V06ProfRateDAC(allCy,CDRTECH,YTIME) - 3)) + 1) / 2
   * (tanh(0.3 * (200 * V07EmissionsNetPart(allCy,YTIME) - 1.5)) + 0.5) / 2
-  * i06MatFacDAC(CDRTECH);
+  * i06MatFacDAC(CDRTECH));
+
 
 *' The equation calculates the DAC installed capacity annually and regionally,
 *' adding capacity based on the maturity of the technology, as well as given capacities of actual scheduled DAC units.

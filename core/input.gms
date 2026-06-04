@@ -809,11 +809,11 @@ imUsfEneConvSubTech(runCy,"BU","TNGS",YTIME) = 0.6;
 imUsfEneConvSubTech(runCy,"BU","TGSL",YTIME) = 0.5;
 imCapCostTech(runCy,"BU","TH2F",YTIME) = 1.5 * imCapCostTech(runCy,"BU","TGDO",YTIME);
 *---
-**  CDR
-imCapCostTechMin(allCy,"DAC","HTDAC",YTIME) = 0.3;
-imCapCostTechMin(allCy,"DAC","H2DAC",YTIME) = 0.3;
-imCapCostTechMin(allCy,"DAC","LTDAC",YTIME) = 0.3;
-imCapCostTechMin(allCy,"EW","TEW",YTIME) = 0.3;
+**  CDR - Changed Values for Meet Aspirations
+imCapCostTechMin(allCy,"DAC","HTDAC",YTIME) = 0.17;
+imCapCostTechMin(allCy,"DAC","H2DAC",YTIME) = 0.17;
+imCapCostTechMin(allCy,"DAC","LTDAC",YTIME) = 0.17;
+imCapCostTechMin(allCy,"EW","TEW",YTIME) = 0.17;
 *---
 !!imUsfEneConvSubTech(runCy,INDSE,"THCL",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCL","USC") + 0.005 * (ord(YTIME)-14);
 imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCLCCS","USC") + 0.005 * (ord(YTIME)-14);
@@ -836,7 +836,7 @@ imPlantEffByType(runCy,STECH,"effHeat",YTIME)$(not PGALL(STECH))= imPlantEffByTy
 smGwToTwhPerYear(YTIME) = 8.76 + 0.024 $ (mod(YTIME.val,4) = 0 and mod (YTIME.val,100) <> 0);
 *--
 
-* PRISMA runs
+* PRISMA runs - Meet Aspirations - Start
 * imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 14 and DOMSE(DSBS) and not sameas(DSBS,"AG")) = 40;
 * imMatrFactor(runCy,DSBS,"THEATPUMP",YTIME)$(ord(YTIME) > 14 and DOMSE(DSBS) and not sameas(DSBS,"AG")) = 40;
 * imMatrFactor(runCy,DSBS,"TNGSCCS",YTIME)$((ord(YTIME) > 14) and INDSE(DSBS)) = 3;

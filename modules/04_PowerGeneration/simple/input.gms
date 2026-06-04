@@ -143,3 +143,12 @@ i04TechLftPlaType(EU28,"ATHOIL") = 10;
 i04TechLftPlaType(EU28,"ATHLGN") = 10;
 
 i04SensCarbon(allCy,YTIME) = 0;
+
+* PRISMA - Meet Aspirations
+* i04SensCarbon(allCy,YTIME) = 1;
+
+* i04MatFacPlaAvailCap(runCY,"ATHBMSCCS",YTIME)$(ord(YTIME)<51 and ord(YTIME)>20) = i04MatFacPlaAvailCap(runCY,"ATHBMSCCS","2024") + 0.008 * (ord(YTIME)-20);
+* i04MatFacPlaAvailCap(runCY,"ATHGASCCS",YTIME)$(ord(YTIME)<51 and ord(YTIME)>20) = i04MatFacPlaAvailCap(runCY,"ATHGASCCS","2024")+ 0.002 * (ord(YTIME)-20);
+
+* i04MatFacPlaAvailCap(runCY,"ATHBMSCCS",YTIME)$(ord(YTIME)>=51) = 0.05;
+* i04MatFacPlaAvailCap(runCY,"ATHGASCCS",YTIME)$(ord(YTIME)>=51) = 0.05;

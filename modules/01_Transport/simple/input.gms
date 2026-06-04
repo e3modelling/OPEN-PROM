@@ -254,14 +254,14 @@ SUM(EF2$BLENDMAP(EF2,EF),
     sum(EFS$BLENDMAP(EF2,EFS),
       imFuelCons(runCy,TRANSE,EFS,YTIME)
     )
-  )$(sum(EFS$BLENDMAP(EF2,EFS),imFuelCons(runCy,TRANSE,EFS,YTIME)) > 0)
+  )$(sum(EFS$BLENDMAP(EF2,EFS),imFuelCons(runCy,TRANSE,EFS,YTIME)) > 0) + (1)$(sum(EFS$BLENDMAP(EF2,EFS),imFuelCons(runCy,TRANSE,EFS,YTIME)) = 0 and (sameas(EF,"KRS") or sameas(EF,"GDO") or sameas(EF,"GSL")))
 );
 i01ShareBlend(runCy,TRANSE,EFS,YTIME)$(SECtoEF(TRANSE,EFS) and not SUM(EF2,BLENDMAP(EF2,EFS))) = 1;
 i01ShareBlend(runCy,TRANSE,EF,YTIME)$AN(YTIME) = i01ShareBlend(runCy,TRANSE,EF,"%fBaseY%");
-i01ShareBlend("LAM",ROAD,"BGDO",YTIME) = i01ShareBlend("LAM",ROAD,"BGDO","%fBaseY%") + 0.002 * (ord(YTIME)-14);
-i01ShareBlend("LAM",ROAD,"GDO",YTIME) = i01ShareBlend("LAM",ROAD,"GDO","%fBaseY%") - 0.002 * (ord(YTIME)-14);
-i01ShareBlend("LAM",ROAD,"BGSL",YTIME) = i01ShareBlend("LAM",ROAD,"BGSL","%fBaseY%") + 0.001 * (ord(YTIME)-14);
-i01ShareBlend("LAM",ROAD,"GSL",YTIME) = i01ShareBlend("LAM",ROAD,"GSL","%fBaseY%") - 0.001 * (ord(YTIME)-14);
+* i01ShareBlend("LAM",ROAD,"BGDO",YTIME) = i01ShareBlend("LAM",ROAD,"BGDO","%fBaseY%") + 0.002 * (ord(YTIME)-14);
+* i01ShareBlend("LAM",ROAD,"GDO",YTIME) = i01ShareBlend("LAM",ROAD,"GDO","%fBaseY%") - 0.002 * (ord(YTIME)-14);
+* i01ShareBlend("LAM",ROAD,"BGSL",YTIME) = i01ShareBlend("LAM",ROAD,"BGSL","%fBaseY%") + 0.001 * (ord(YTIME)-14);
+* i01ShareBlend("LAM",ROAD,"GSL",YTIME) = i01ShareBlend("LAM",ROAD,"GSL","%fBaseY%") - 0.001 * (ord(YTIME)-14);
 *---
 $IFTHEN.calib %Calibration% == MatCalibration
 table t01NewShareStockPC(allCy,TRANSE,TTECH,YTIME)    "Targets for share of new passenger cars"
@@ -330,3 +330,19 @@ test2SFC(TRANSE,TTECH) *
 testSFC(runCy,TRANSE,TTECH)$(testSFC(runCy,TRANSE,TTECH) > 100) = test2SFC(TRANSE,TTECH);
 
 i01SensCarbon(allCy,YTIME,TRANSE) = 0;
+* PRISMA runs - Meet Aspirations
+* i01SensCarbon(allCy,YTIME,TRANSE) = 2;
+
+* * i01ShareBlend(runCy,"PA","TKRS","KRS",YTIME)$AN(YTIME) = i01ShareBlend(runCy,"PA","TKRS","KRS","%fBaseY%") - 0.006 * (ord(YTIME)-14); 
+* * i01ShareBlend(runCy,"PA","TKRS","BKRS",YTIME)$AN(YTIME) = i01ShareBlend(runCy,"PA","TKRS","BKRS","%fBaseY%") + 0.006 * (ord(YTIME)-14);
+* i01ShareBlend(runCy,"PA","BKRS",YTIME)$AN(YTIME) = i01ShareBlend(runCy,"PA","BKRS","%fBaseY%") + 0.008 * (ord(YTIME)-14);
+* i01ShareBlend(runCy,"PA","KRS",YTIME)$AN(YTIME) = i01ShareBlend(runCy,"PA","KRS","%fBaseY%") - 0.008 * (ord(YTIME)-14);
+
+* i01ShareBlend(runCy,ROAD,"BGDO",YTIME)$AN(YTIME) = i01ShareBlend(runCy,ROAD,"BGDO","%fBaseY%") + 0.008 * (ord(YTIME)-14);
+* i01ShareBlend(runCy,ROAD,"GDO",YTIME)$AN(YTIME) = i01ShareBlend(runCy,ROAD,"GDO","%fBaseY%") - 0.008 * (ord(YTIME)-14);
+
+* i01ShareBlend(runCy,ROAD,"BGSL",YTIME)$AN(YTIME) = i01ShareBlend(runCy,ROAD,"BGSL","%fBaseY%") + 0.008 * (ord(YTIME)-14);
+* i01ShareBlend(runCy,ROAD,"GSL",YTIME)$AN(YTIME) = i01ShareBlend(runCy,ROAD,"GSL","%fBaseY%") - 0.008 * (ord(YTIME)-14);
+
+* i01ShareBlend(runCy,TRANSE,"BGDO",YTIME)$(AN(YTIME) and (sameas(TRANSE,"PT") or sameas(TRANSE,"GT"))) = i01ShareBlend(runCy,TRANSE,"BGDO","%fBaseY%") + 0.006 * (ord(YTIME)-14);
+* i01ShareBlend(runCy,TRANSE,"GDO",YTIME)$(AN(YTIME) and (sameas(TRANSE,"PT") or sameas(TRANSE,"GT"))) = i01ShareBlend(runCy,TRANSE,"GDO","%fBaseY%") - 0.006 * (ord(YTIME)-14);
