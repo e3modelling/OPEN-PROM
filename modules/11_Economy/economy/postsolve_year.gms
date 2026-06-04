@@ -22,11 +22,11 @@ VmSubsiDemITech.LO(runCy,DSBS,ITECH,YTIME) = 0;
 VmSubsiDemTech.LO(runCy,DSBS,TECH,YTIME) = 0;
 
 *' Initialize variable levels from previous period parameter
-V11SubsiTot.L(runCyL,YTIME+1) = p11SubsiTot(runCy,YTIME);
-VmSubsiDemTechAvail.L(runCyL,DSBS,TECH,YTIME+1) = pmSubsiDemTechAvail(runCy,DSBS,TECH,YTIME);
-VmSubsiDemITech.L(runCyL,DSBS,ITECH,YTIME+1) = pmSubsiDemITech(runCy,DSBS,ITECH,YTIME);
-VmSubsiDemTech.L(runCyL,DSBS,TECH,YTIME+1) = pmSubsiDemTech(runCy,DSBS,TECH,YTIME);
-VmSubsiSupTech.L(runCyL,STECH,YTIME+1) = pmSubsiSupTech(runCy,STECH,YTIME);
-VmSubsiCapCostTech.L(runCyL,DSBS,TECH,YTIME+1) = pmSubsiCapCostTech(runCy,DSBS,TECH,YTIME);
-VmSubsiCapCostSupply.L(runCyL,SSBS,STECH,YTIME+1) = pmSubsiCapCostSupply(runCy,SSBS,STECH,YTIME);
-VmNetSubsiTax.L(runCyL,YTIME+1) = pmNetSubsiTax(runCy,YTIME);
+V11SubsiTot.L(runCyL,YTIME+1) = p11SubsiTot(runCyL,YTIME);
+VmSubsiDemTechAvail.L(runCyL,DSBS,TECH,YTIME+1) = pmSubsiDemTechAvail(runCyL,DSBS,TECH,YTIME);
+VmSubsiDemITech.L(runCyL,DSBS,ITECH,YTIME+1) = pmSubsiDemITech(runCyL,DSBS,ITECH,YTIME);
+VmSubsiDemTech.L(runCyL,DSBS,TECH,YTIME+1) = pmSubsiDemTech(runCyL,DSBS,TECH,YTIME);
+VmSubsiSupTech.L(runCyL,STECH,YTIME+1) = pmSubsiSupTech(runCyL,STECH,YTIME);
+VmSubsiCapCostTech.L(runCyL,DSBS,TECH,YTIME+1) = pmSubsiCapCostTech(runCyL,DSBS,TECH,YTIME);
+VmSubsiCapCostSupply.L(runCyL,SSBS,STECH,YTIME+1) = pmSubsiCapCostSupply(runCyL,SSBS,STECH,YTIME);
+VmNetSubsiTax.L(runCyL,YTIME+1) = pmNetSubsiTax(runCyL,YTIME);

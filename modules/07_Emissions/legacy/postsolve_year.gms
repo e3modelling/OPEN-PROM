@@ -18,10 +18,10 @@ option clear = Q07EmissionsNetPart;
 *' No non-default bounds in Emissions preloop — option clear defaults are sufficient
 
 *' Initialize variable levels from previous period parameter
-V07GrossEmissCO2Supply.L(runCyL,SSBS,YTIME+1) = p07GrossEmissCO2Supply(runCy,SSBS,YTIME);
-V07RedAbsBySrcRegTim.L(E07SrcMacAbate,runCy,YTIME+1) = p07RedAbsBySrcRegTim(E07SrcMacAbate,runCy,YTIME);
-V07EmiActBySrcRegTim.L(E07SrcMacAbate,runCy,YTIME+1) = p07EmiActBySrcRegTim(E07SrcMacAbate,runCy,YTIME);
-V07CostAbateBySrcRegTim.L(E07SrcMacAbate,runCy,YTIME+1) = p07CostAbateBySrcRegTim(E07SrcMacAbate,runCy,YTIME);
-V07GrossEmissCO2Demand.L(runCyL,DSBS,YTIME+1) = p07GrossEmissCO2Demand(runCy,DSBS,YTIME);
-V07EmissionsNet.L(runCyL,YTIME+1) = p07EmissionsNet(runCy,YTIME);
-V07EmissionsNetPart.L(runCyL,YTIME+1) = p07EmissionsNetPart(runCy,YTIME);
+V07GrossEmissCO2Supply.L(runCyL,SSBS,YTIME+1) = p07GrossEmissCO2Supply(runCyL,SSBS,YTIME);
+V07RedAbsBySrcRegTim.L(E07SrcMacAbate,runCyL,YTIME+1) = p07RedAbsBySrcRegTim(E07SrcMacAbate,runCyL,YTIME);
+V07EmiActBySrcRegTim.L(E07SrcMacAbate,runCyL,YTIME+1) = p07EmiActBySrcRegTim(E07SrcMacAbate,runCyL,YTIME);
+V07CostAbateBySrcRegTim.L(E07SrcMacAbate,runCyL,YTIME+1) = p07CostAbateBySrcRegTim(E07SrcMacAbate,runCyL,YTIME);
+V07GrossEmissCO2Demand.L(runCyL,DSBS,YTIME+1) = p07GrossEmissCO2Demand(runCyL,DSBS,YTIME);
+V07EmissionsNet.L(runCyL,YTIME+1) = p07EmissionsNet(runCyL,YTIME);
+V07EmissionsNetPart.L(runCyL,YTIME+1) = p07EmissionsNetPart(runCyL,YTIME);

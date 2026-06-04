@@ -37,15 +37,15 @@ V03InpTotTransf.LO(runCy,SSBS,EFS,YTIME) = 0;
 VmConsFinEneCountry.LO(runCy,EFS,YTIME) = 0;
 
 *' Initialize variable levels from previous period parameter
-V03ConsGrssInl.L(runCyL,EFS,YTIME+1) = p03ConsGrssInl(runCy,EFS,YTIME);
-V03Transfers.L(runCyL,EFS,YTIME+1) = p03Transfers(runCy,EFS,YTIME);
-V03ProdPrimary.L(runCyL,EFS,YTIME+1) = p03ProdPrimary(runCy,EFS,YTIME);
-V03Exp.L(runCyL,EFS,YTIME+1) = p03Exp(runCy,EFS,YTIME);
-V03Imp.L(runCyL,EFS,YTIME+1) = p03Imp(runCy,EFS,YTIME);
-VmImpNetEneBrnch.L(runCyL,EFS,YTIME+1) = pmImpNetEneBrnch(runCy,EFS,YTIME);
-VmConsFiEneSec.L(runCyL,SSBS,EFS,YTIME+1) = pmConsFiEneSec(runCy,SSBS,EFS,YTIME);
-VmConsFinEneCountry.L(runCyL,EFS,YTIME+1) = pmConsFinEneCountry(runCy,EFS,YTIME);
-VmConsFinNonEne.L(runCyL,EFS,YTIME+1) = pmConsFinNonEne(runCy,EFS,YTIME);
-VmLossesDistr.L(runCyL,EFS,YTIME+1) = pmLossesDistr(runCy,EFS,YTIME);
-V03InpTotTransf.L(runCyL,SSBS,EFS,YTIME+1) = p03InpTotTransf(runCy,SSBS,EFS,YTIME);
-V03OutTotTransf.L(runCyL,SSBS,EFS,YTIME+1) = p03OutTotTransf(runCy,SSBS,EFS,YTIME);
+V03ConsGrssInl.L(runCyL,EFS,YTIME+1) = p03ConsGrssInl(runCyL,EFS,YTIME);
+V03Transfers.L(runCyL,EFS,YTIME+1) = p03Transfers(runCyL,EFS,YTIME);
+V03ProdPrimary.L(runCyL,EFS,YTIME+1) = p03ProdPrimary(runCyL,EFS,YTIME);
+V03Exp.L(runCyL,EFS,YTIME+1) = p03Exp(runCyL,EFS,YTIME);
+V03Imp.L(runCyL,EFS,YTIME+1) = p03Imp(runCyL,EFS,YTIME);
+VmImpNetEneBrnch.L(runCyL,EFS,YTIME+1) = pmImpNetEneBrnch(runCyL,EFS,YTIME);
+VmConsFiEneSec.L(runCyL,SSBS,EFS,YTIME+1) = pmConsFiEneSec(runCyL,SSBS,EFS,YTIME);
+VmConsFinEneCountry.L(runCyL,EFS,YTIME+1) = pmConsFinEneCountry(runCyL,EFS,YTIME);
+VmConsFinNonEne.L(runCyL,EFS,YTIME+1) = pmConsFinNonEne(runCyL,EFS,YTIME);
+VmLossesDistr.L(runCyL,EFS,YTIME+1) = pmLossesDistr(runCyL,EFS,YTIME);
+V03InpTotTransf.L(runCyL,SSBS,EFS,YTIME+1) = p03InpTotTransf(runCyL,SSBS,EFS,YTIME);
+V03OutTotTransf.L(runCyL,SSBS,EFS,YTIME+1) = p03OutTotTransf(runCyL,SSBS,EFS,YTIME);
