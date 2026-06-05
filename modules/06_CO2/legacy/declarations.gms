@@ -11,7 +11,7 @@ Q06LvlCostDAC(allCy,CDRTECH,YTIME)                         "Calculates the CAPEX
 Q06VarCostDAC(CDRTECH,YTIME)                               "Computes variable costs of DAC technologies including carbon storage costs, with learning curve"
 Q06ProfRateDAC(allCy,CDRTECH,YTIME)                        "Computes the annual profitability rate of DAC including the lifecycle costs and revenues regionally"
 Q06CapFacNewDAC(allCy,CDRTECH,YTIME)                       "Computes the factor expressing the annual increase in the installed capacity of DAC regionally"
-Q06CapCDR(allCy,CDRTECH,YTIME)                             "Computes the DAC installed capacity annually and regionally"
+* Q06CapCDR(allCy,CDRTECH,YTIME)                             "Computes the DAC installed capacity annually and regionally"
 Q06ConsFuelTechCDRProd(allCy,CDRTECH,EF,YTIME)             "Computes the annual fuel demand in each CDR technology regionally (Mtoe)"
 *'                **Interdependent Equations**
 Q06CstCO2SeqCsts(allCy,YTIME)	                           "Compute cost curve for CO2 sequestration costs" 

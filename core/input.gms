@@ -809,7 +809,7 @@ imUsfEneConvSubTech(runCy,"BU","TNGS",YTIME) = 0.6;
 imUsfEneConvSubTech(runCy,"BU","TGSL",YTIME) = 0.5;
 imCapCostTech(runCy,"BU","TH2F",YTIME) = 1.5 * imCapCostTech(runCy,"BU","TGDO",YTIME);
 *---
-**  CDR - Changed Values for Meet Aspirations
+**  CDR - Changed Values for PRISMA 
 imCapCostTechMin(allCy,"DAC","HTDAC",YTIME) = 0.17;
 imCapCostTechMin(allCy,"DAC","H2DAC",YTIME) = 0.17;
 imCapCostTechMin(allCy,"DAC","LTDAC",YTIME) = 0.17;
@@ -850,3 +850,28 @@ imMatrFactor(runCy,DSBS,TECH,YTIME)$((INDDOM(DSBS) or NENSE(DSBS)) and (imMatrFa
 
 *imMatrFactor(EU27,DSBS,TECH,YTIME)$(ord(YTIME)<24) = imMatrFactor(EU27,DSBS,TECH,"2023");
 *imMatrFactor(EU27,DSBS,TECH,YTIME)$(ord(YTIME)<24) = imMatrFactor(EU27,DSBS,TECH,YTIME-10);
+
+* PRISMA runs - ARB - Start
+imMatrFactor(TenYearDelay,DSBS,"TELC",YTIME)$(ord(YTIME) > 24 and DOMSE(DSBS) and not sameas(DSBS,"AG")) = 40;
+imMatrFactor(TenYearDelay,DSBS,"THEATPUMP",YTIME)$(ord(YTIME) > 24 and DOMSE(DSBS) and not sameas(DSBS,"AG")) = 40;
+imMatrFactor(TenYearDelay,DSBS,"TNGSCCS",YTIME)$((ord(YTIME) > 24) and INDSE(DSBS)) = 3;
+imMatrFactor(TenYearDelay,DSBS,"THCLCCS",YTIME)$((ord(YTIME) > 24) and INDSE(DSBS)) = 3;
+
+imMatrFactor(TenYearDelay,DSBS,"TNGSCCS",YTIME)$((ord(YTIME) > 44) and INDSE(DSBS)) = 10;
+imMatrFactor(TenYearDelay,DSBS,"THCLCCS",YTIME)$((ord(YTIME) > 44) and INDSE(DSBS)) = 10;
+
+imMatrFactor(TwentyYearDelay,DSBS,"TELC",YTIME)$(ord(YTIME) > 34 and DOMSE(DSBS) and not sameas(DSBS,"AG")) = 40;
+imMatrFactor(TwentyYearDelay,DSBS,"THEATPUMP",YTIME)$(ord(YTIME) > 34 and DOMSE(DSBS) and not sameas(DSBS,"AG")) = 40;
+imMatrFactor(TwentyYearDelay,DSBS,"TNGSCCS",YTIME)$((ord(YTIME) > 34) and INDSE(DSBS)) = 3;
+imMatrFactor(TwentyYearDelay,DSBS,"THCLCCS",YTIME)$((ord(YTIME) > 34) and INDSE(DSBS)) = 3;
+
+imMatrFactor(TwentyYearDelay,DSBS,"TNGSCCS",YTIME)$((ord(YTIME) > 54) and INDSE(DSBS)) = 10;
+imMatrFactor(TwentyYearDelay,DSBS,"THCLCCS",YTIME)$((ord(YTIME) > 54) and INDSE(DSBS)) = 10;
+
+imMatrFactor(ThirtyYearDelay,DSBS,"TELC",YTIME)$(ord(YTIME) > 44 and DOMSE(DSBS) and not sameas(DSBS,"AG")) = 40;
+imMatrFactor(ThirtyYearDelay,DSBS,"THEATPUMP",YTIME)$(ord(YTIME) > 44 and DOMSE(DSBS) and not sameas(DSBS,"AG")) = 40;
+imMatrFactor(ThirtyYearDelay,DSBS,"TNGSCCS",YTIME)$((ord(YTIME) > 44) and INDSE(DSBS)) = 3;
+imMatrFactor(ThirtyYearDelay,DSBS,"THCLCCS",YTIME)$((ord(YTIME) > 44) and INDSE(DSBS)) = 3;
+
+imMatrFactor(ThirtyYearDelay,DSBS,"TNGSCCS",YTIME)$((ord(YTIME) > 64) and INDSE(DSBS)) = 10;
+imMatrFactor(ThirtyYearDelay,DSBS,"THCLCCS",YTIME)$((ord(YTIME) > 64) and INDSE(DSBS)) = 10;

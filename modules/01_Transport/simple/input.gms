@@ -346,3 +346,46 @@ i01SensCarbon(allCy,YTIME,TRANSE) = 0;
 
 * i01ShareBlend(runCy,TRANSE,"BGDO",YTIME)$(AN(YTIME) and (sameas(TRANSE,"PT") or sameas(TRANSE,"GT"))) = i01ShareBlend(runCy,TRANSE,"BGDO","%fBaseY%") + 0.006 * (ord(YTIME)-14);
 * i01ShareBlend(runCy,TRANSE,"GDO",YTIME)$(AN(YTIME) and (sameas(TRANSE,"PT") or sameas(TRANSE,"GT"))) = i01ShareBlend(runCy,TRANSE,"GDO","%fBaseY%") - 0.006 * (ord(YTIME)-14);
+
+* PRISMA runs - ARB
+i01SensCarbon(TenYearDelay,YTIME,TRANSE)$(ord(YTIME)>25) = 2;
+
+i01ShareBlend(TenYearDelay,"PA","BKRS",YTIME)$(ord(YTIME)>25) = i01ShareBlend(TenYearDelay,"PA","BKRS","%fBaseY%") + 0.008 * (ord(YTIME)-24);
+i01ShareBlend(TenYearDelay,"PA","KRS",YTIME)$(ord(YTIME)>25) = i01ShareBlend(TenYearDelay,"PA","KRS","%fBaseY%") - 0.008 * (ord(YTIME)-24);
+
+i01ShareBlend(TenYearDelay,ROAD,"BGDO",YTIME)$(ord(YTIME)>25) = i01ShareBlend(TenYearDelay,ROAD,"BGDO","%fBaseY%") + 0.008 * (ord(YTIME)-24);
+i01ShareBlend(TenYearDelay,ROAD,"GDO",YTIME)$(ord(YTIME)>25) = i01ShareBlend(TenYearDelay,ROAD,"GDO","%fBaseY%") - 0.008 * (ord(YTIME)-24);
+
+i01ShareBlend(TenYearDelay,ROAD,"BGSL",YTIME)$(ord(YTIME)>25) = i01ShareBlend(TenYearDelay,ROAD,"BGSL","%fBaseY%") + 0.008 * (ord(YTIME)-24);
+i01ShareBlend(TenYearDelay,ROAD,"GSL",YTIME)$(ord(YTIME)>25) = i01ShareBlend(TenYearDelay,ROAD,"GSL","%fBaseY%") - 0.008 * (ord(YTIME)-24);
+
+i01ShareBlend(TenYearDelay,TRANSE,"BGDO",YTIME)$((ord(YTIME)>25) and (sameas(TRANSE,"PT") or sameas(TRANSE,"GT"))) = i01ShareBlend(TenYearDelay,TRANSE,"BGDO","%fBaseY%") + 0.006 * (ord(YTIME)-24);
+i01ShareBlend(TenYearDelay,TRANSE,"GDO",YTIME)$((ord(YTIME)>25) and (sameas(TRANSE,"PT") or sameas(TRANSE,"GT"))) = i01ShareBlend(TenYearDelay,TRANSE,"GDO","%fBaseY%") - 0.006 * (ord(YTIME)-24);
+
+i01SensCarbon(TwentyYearDelay,YTIME,TRANSE)$(ord(YTIME)>35) = 2;
+
+i01ShareBlend(TwentyYearDelay,"PA","BKRS",YTIME)$(ord(YTIME)>35) = i01ShareBlend(TwentyYearDelay,"PA","BKRS","%fBaseY%") + 0.008 * (ord(YTIME)-34);
+i01ShareBlend(TwentyYearDelay,"PA","KRS",YTIME)$(ord(YTIME)>35) = i01ShareBlend(TwentyYearDelay,"PA","KRS","%fBaseY%") - 0.008 * (ord(YTIME)-34);
+
+i01ShareBlend(TwentyYearDelay,ROAD,"BGDO",YTIME)$(ord(YTIME)>35) = i01ShareBlend(TwentyYearDelay,ROAD,"BGDO","%fBaseY%") + 0.008 * (ord(YTIME)-34);
+i01ShareBlend(TwentyYearDelay,ROAD,"GDO",YTIME)$(ord(YTIME)>35) = i01ShareBlend(TwentyYearDelay,ROAD,"GDO","%fBaseY%") - 0.008 * (ord(YTIME)-34);
+
+i01ShareBlend(TwentyYearDelay,ROAD,"BGSL",YTIME)$(ord(YTIME)>35) = i01ShareBlend(TwentyYearDelay,ROAD,"BGSL","%fBaseY%") + 0.008 * (ord(YTIME)-34);
+i01ShareBlend(TwentyYearDelay,ROAD,"GSL",YTIME)$(ord(YTIME)>35) = i01ShareBlend(TwentyYearDelay,ROAD,"GSL","%fBaseY%") - 0.008 * (ord(YTIME)-34);
+
+i01ShareBlend(TwentyYearDelay,TRANSE,"BGDO",YTIME)$((ord(YTIME)>35) and (sameas(TRANSE,"PT") or sameas(TRANSE,"GT"))) = i01ShareBlend(TwentyYearDelay,TRANSE,"BGDO","%fBaseY%") + 0.006 * (ord(YTIME)-34);
+i01ShareBlend(TwentyYearDelay,TRANSE,"GDO",YTIME)$((ord(YTIME)>35) and (sameas(TRANSE,"PT") or sameas(TRANSE,"GT"))) = i01ShareBlend(TwentyYearDelay,TRANSE,"GDO","%fBaseY%") - 0.006 * (ord(YTIME)-34);
+
+i01SensCarbon(ThirtyYearDelay,YTIME,TRANSE)$(ord(YTIME)>45) = 2;
+
+i01ShareBlend(ThirtyYearDelay,"PA","BKRS",YTIME)$(ord(YTIME)>45) = i01ShareBlend(ThirtyYearDelay,"PA","BKRS","%fBaseY%") + 0.008 * (ord(YTIME)-44);
+i01ShareBlend(ThirtyYearDelay,"PA","KRS",YTIME)$(ord(YTIME)>45) = i01ShareBlend(ThirtyYearDelay,"PA","KRS","%fBaseY%") - 0.008 * (ord(YTIME)-44);
+
+i01ShareBlend(ThirtyYearDelay,ROAD,"BGDO",YTIME)$(ord(YTIME)>45) = i01ShareBlend(ThirtyYearDelay,ROAD,"BGDO","%fBaseY%") + 0.008 * (ord(YTIME)-44);
+i01ShareBlend(ThirtyYearDelay,ROAD,"GDO",YTIME)$(ord(YTIME)>45) = i01ShareBlend(ThirtyYearDelay,ROAD,"GDO","%fBaseY%") - 0.008 * (ord(YTIME)-44);
+
+i01ShareBlend(ThirtyYearDelay,ROAD,"BGSL",YTIME)$(ord(YTIME)>45) = i01ShareBlend(ThirtyYearDelay,ROAD,"BGSL","%fBaseY%") + 0.008 * (ord(YTIME)-44);
+i01ShareBlend(ThirtyYearDelay,ROAD,"GSL",YTIME)$(ord(YTIME)>45) = i01ShareBlend(ThirtyYearDelay,ROAD,"GSL","%fBaseY%") - 0.008 * (ord(YTIME)-44);
+
+i01ShareBlend(ThirtyYearDelay,TRANSE,"BGDO",YTIME)$((ord(YTIME)>45) and (sameas(TRANSE,"PT") or sameas(TRANSE,"GT"))) = i01ShareBlend(ThirtyYearDelay,TRANSE,"BGDO","%fBaseY%") + 0.006 * (ord(YTIME)-44);
+i01ShareBlend(ThirtyYearDelay,TRANSE,"GDO",YTIME)$((ord(YTIME)>45) and (sameas(TRANSE,"PT") or sameas(TRANSE,"GT"))) = i01ShareBlend(ThirtyYearDelay,TRANSE,"GDO","%fBaseY%") - 0.006 * (ord(YTIME)-44);

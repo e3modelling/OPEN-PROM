@@ -328,7 +328,7 @@ Q04CCSRetroFit(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(NOCCS(PGALL)))..
     (
       (V04CostVarTech(allCy,PGALL,YTIME-1) + 1e-3)** (-2) +
       0.01 * 
-      !!(1 + 3$(ord(YTIME)>24)) * !! PRISMA Meet Aspirations
+      !!(1 + 3$(ord(YTIME)>34)) * !! PRISMA Meet Aspirations (24) ARB (34)
       SUM(PGALL2$CCS_NOCCS(PGALL2,PGALL),
         (
           V04CostCapTech(allCy,PGALL2,YTIME-1) +

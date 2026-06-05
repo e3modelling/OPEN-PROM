@@ -83,6 +83,32 @@ i02ShareBlend(runCy,DSBS,ITECH,EF,YTIME)$AN(YTIME) = i02ShareBlend(runCy,DSBS,IT
 * i02ShareBlend(EU28,"BU","TKRS","BKRS",YTIME)$(AN(YTIME) and ord(YTIME)>=55) = i02ShareBlend(EU28,"BU","TKRS","BKRS","%fBaseY%") + 0.022 * 41;
 * i02ShareBlend(EU28,"BU","TGDO","GDO",YTIME)$(AN(YTIME) and ord(YTIME)>=55) = i02ShareBlend(EU28,"BU","TGDO","GDO","%fBaseY%") - 0.0195 * 41;
 * i02ShareBlend(EU28,"BU","TGDO","BGDO",YTIME)$(AN(YTIME) and ord(YTIME)>=55) = i02ShareBlend(EU28,"BU","TGDO","BGDO","%fBaseY%") + 0.0195 * 41;
+* PRISMA runs - ARB
+
+i02ShareBlend(EU28,"BU","TKRS","KRS",YTIME)$(AN(YTIME) and ord(YTIME)<65 and ord(YTIME)>24) = i02ShareBlend(EU28,"BU","TKRS","KRS","%fBaseY%") - 0.022 * (ord(YTIME)-24);
+i02ShareBlend(EU28,"BU","TKRS","BKRS",YTIME)$(AN(YTIME) and ord(YTIME)<65 and ord(YTIME)>24) = i02ShareBlend(EU28,"BU","TKRS","BKRS","%fBaseY%") + 0.022 * (ord(YTIME)-24);
+i02ShareBlend(EU28,"BU","TGDO","GDO",YTIME)$(AN(YTIME) and ord(YTIME)<65 and ord(YTIME)>24) = i02ShareBlend(EU28,"BU","TGDO","GDO","%fBaseY%") - 0.0195 * (ord(YTIME)-24);
+i02ShareBlend(EU28,"BU","TGDO","BGDO",YTIME)$(AN(YTIME) and ord(YTIME)<65 and ord(YTIME)>24) = i02ShareBlend(EU28,"BU","TGDO","BGDO","%fBaseY%") + 0.0195 * (ord(YTIME)-24);
+
+i02ShareBlend(EU28,"BU","TKRS","KRS",YTIME)$(AN(YTIME) and ord(YTIME)>=65) = i02ShareBlend(EU28,"BU","TKRS","KRS","%fBaseY%") - 0.022 * 41;
+i02ShareBlend(EU28,"BU","TKRS","BKRS",YTIME)$(AN(YTIME) and ord(YTIME)>=65) = i02ShareBlend(EU28,"BU","TKRS","BKRS","%fBaseY%") + 0.022 * 41;
+i02ShareBlend(EU28,"BU","TGDO","GDO",YTIME)$(AN(YTIME) and ord(YTIME)>=65) = i02ShareBlend(EU28,"BU","TGDO","GDO","%fBaseY%") - 0.0195 * 41;
+i02ShareBlend(EU28,"BU","TGDO","BGDO",YTIME)$(AN(YTIME) and ord(YTIME)>=65) = i02ShareBlend(EU28,"BU","TGDO","BGDO","%fBaseY%") + 0.0195 * 41;
+
+i02ShareBlend(TenYearDelay,"BU","TKRS","KRS",YTIME)$(AN(YTIME) and not EU28(TenYearDelay) and ord(YTIME)>24)= i02ShareBlend(TenYearDelay,"BU","TKRS","KRS","%fBaseY%") - 0.006 * (ord(YTIME)-24); 
+i02ShareBlend(TenYearDelay,"BU","TKRS","BKRS",YTIME)$(AN(YTIME) and not EU28(TenYearDelay) and ord(YTIME)>24) = i02ShareBlend(TenYearDelay,"BU","TKRS","BKRS","%fBaseY%") + 0.006 * (ord(YTIME)-24);
+i02ShareBlend(TenYearDelay,"BU","TGDO","GDO",YTIME)$(AN(YTIME) and not EU28(TenYearDelay) and ord(YTIME)>24) = i02ShareBlend(TenYearDelay,"BU","TGDO","GDO","%fBaseY%") - 0.004 * (ord(YTIME)-24);
+i02ShareBlend(TenYearDelay,"BU","TGDO","BGDO",YTIME)$(AN(YTIME) and not EU28(TenYearDelay) and ord(YTIME)>24) = i02ShareBlend(TenYearDelay,"BU","TGDO","BGDO","%fBaseY%") + 0.004 * (ord(YTIME)-24);
+
+i02ShareBlend(TwentyYearDelay,"BU","TKRS","KRS",YTIME)$(AN(YTIME) and ord(YTIME)>34)= i02ShareBlend(TwentyYearDelay,"BU","TKRS","KRS","%fBaseY%") - 0.006 * (ord(YTIME)-34); 
+i02ShareBlend(TwentyYearDelay,"BU","TKRS","BKRS",YTIME)$(AN(YTIME) and ord(YTIME)>34) = i02ShareBlend(TwentyYearDelay,"BU","TKRS","BKRS","%fBaseY%") + 0.006 * (ord(YTIME)-34);
+i02ShareBlend(TwentyYearDelay,"BU","TGDO","GDO",YTIME)$(AN(YTIME) and ord(YTIME)>34) = i02ShareBlend(TwentyYearDelay,"BU","TGDO","GDO","%fBaseY%") - 0.004 * (ord(YTIME)-34);
+i02ShareBlend(TwentyYearDelay,"BU","TGDO","BGDO",YTIME)$(AN(YTIME) and ord(YTIME)>34) = i02ShareBlend(TwentyYearDelay,"BU","TGDO","BGDO","%fBaseY%") + 0.004 * (ord(YTIME)-34);
+
+i02ShareBlend(ThirtyYearDelay,"BU","TKRS","KRS",YTIME)$(AN(YTIME) and ord(YTIME)>44)= i02ShareBlend(ThirtyYearDelay,"BU","TKRS","KRS","%fBaseY%") - 0.006 * (ord(YTIME)-44); 
+i02ShareBlend(ThirtyYearDelay,"BU","TKRS","BKRS",YTIME)$(AN(YTIME) and ord(YTIME)>44) = i02ShareBlend(ThirtyYearDelay,"BU","TKRS","BKRS","%fBaseY%") + 0.006 * (ord(YTIME)-44);
+i02ShareBlend(ThirtyYearDelay,"BU","TGDO","GDO",YTIME)$(AN(YTIME) and ord(YTIME)>44) = i02ShareBlend(ThirtyYearDelay,"BU","TGDO","GDO","%fBaseY%") - 0.004 * (ord(YTIME)-44);
+i02ShareBlend(ThirtyYearDelay,"BU","TGDO","BGDO",YTIME)$(AN(YTIME) and ord(YTIME)>44) = i02ShareBlend(ThirtyYearDelay,"BU","TGDO","BGDO","%fBaseY%") + 0.004 * (ord(YTIME)-44);
 
 i02ShareElcHP(runCy,"HOU",YTIME) = 0.1;
 i02ShareElcHP(runCy,"SE",YTIME) = 0.1;
@@ -119,6 +145,13 @@ $ENDIF.calib
 i02SensCarbon(allCy,YTIME,DSBS) = 0;
 * PRISMA Meet Aspirations
 * i02SensCarbon(allCy,YTIME,DSBS) = 5;
+
+* PRISMA ARB
+i02SensCarbon(TenYearDelay,YTIME,DSBS)$(ord(YTIME)>24) = 5;
+
+i02SensCarbon(TwentyYearDelay,YTIME,DSBS)$(ord(YTIME)>34) = 5;
+
+i02SensCarbon(ThirtyYearDelay,YTIME,DSBS)$(ord(YTIME)>44) = 5;
 
 imUsfEneConvSubTech(runCy,"HOU","THEATPUMP",YTIME)$AN(YTIME)  = 3.5;
 imUsfEneConvSubTech(runCy,"SE","THEATPUMP",YTIME)$AN(YTIME)  = 3.5;

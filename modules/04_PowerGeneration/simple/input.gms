@@ -152,3 +152,34 @@ i04SensCarbon(allCy,YTIME) = 0;
 
 * i04MatFacPlaAvailCap(runCY,"ATHBMSCCS",YTIME)$(ord(YTIME)>=51) = 0.05;
 * i04MatFacPlaAvailCap(runCY,"ATHGASCCS",YTIME)$(ord(YTIME)>=51) = 0.05;
+
+* PRISMA - ARB
+i04SensCarbon(TenYearDelay,YTIME)$(ord(YTIME)>24) = 1;
+
+i04MatFacPlaAvailCap(TenYearDelay,"ATHBMSCCS",YTIME)$(ord(YTIME)<61 and ord(YTIME)>30) = i04MatFacPlaAvailCap(TenYearDelay,"ATHBMSCCS","2034") + 0.008 * (ord(YTIME)-30);
+i04MatFacPlaAvailCap(TenYearDelay,"ATHGASCCS",YTIME)$(ord(YTIME)<61 and ord(YTIME)>30) = i04MatFacPlaAvailCap(TenYearDelay,"ATHGASCCS","2034")+ 0.002 * (ord(YTIME)-30);
+
+i04MatFacPlaAvailCap(TenYearDelay,"ATHBMSCCS",YTIME)$(ord(YTIME)>=61) = 0.05;
+i04MatFacPlaAvailCap(TenYearDelay,"ATHGASCCS",YTIME)$(ord(YTIME)>=61) = 0.05;
+
+i04SensCarbon(TwentyYearDelay,YTIME)$(ord(YTIME)>34) = 1;
+
+i04MatFacPlaAvailCap(TwentyYearDelay,"ATHBMSCCS",YTIME)$(ord(YTIME)<71 and ord(YTIME)>40) = i04MatFacPlaAvailCap(TwentyYearDelay,"ATHBMSCCS","2044") + 0.008 * (ord(YTIME)-40);
+i04MatFacPlaAvailCap(TwentyYearDelay,"ATHGASCCS",YTIME)$(ord(YTIME)<71 and ord(YTIME)>40) = i04MatFacPlaAvailCap(TwentyYearDelay,"ATHGASCCS","2044")+ 0.002 * (ord(YTIME)-40);
+
+i04MatFacPlaAvailCap(TwentyYearDelay,"ATHBMSCCS",YTIME)$(ord(YTIME)>=71) = 0.05;
+i04MatFacPlaAvailCap(TwentyYearDelay,"ATHGASCCS",YTIME)$(ord(YTIME)>=71) = 0.05;
+
+i04MatFacPlaAvailCap("CHA","ATHBMSCCS",YTIME)$(ord(YTIME)<71 and ord(YTIME)>40) = i04MatFacPlaAvailCap("CHA","ATHBMSCCS","2044") + 0.005 * (ord(YTIME)-40);
+i04MatFacPlaAvailCap("CHA","ATHGASCCS",YTIME)$(ord(YTIME)<71 and ord(YTIME)>40) = i04MatFacPlaAvailCap("CHA","ATHGASCCS","2044")+ 0.002 * (ord(YTIME)-40);
+
+i04MatFacPlaAvailCap("CHA","ATHBMSCCS",YTIME)$(ord(YTIME)>=71) = 0.05;
+i04MatFacPlaAvailCap("CHA","ATHGASCCS",YTIME)$(ord(YTIME)>=71) = 0.05;
+
+i04SensCarbon(ThirtyYearDelay,YTIME)$(ord(YTIME)>44) = 1;
+
+i04MatFacPlaAvailCap(ThirtyYearDelay,"ATHBMSCCS",YTIME)$(ord(YTIME)<81 and ord(YTIME)>50) = i04MatFacPlaAvailCap(ThirtyYearDelay,"ATHBMSCCS","2054") + 0.008 * (ord(YTIME)-50);
+i04MatFacPlaAvailCap(ThirtyYearDelay,"ATHGASCCS",YTIME)$(ord(YTIME)<81 and ord(YTIME)>50) = i04MatFacPlaAvailCap(ThirtyYearDelay,"ATHGASCCS","2054")+ 0.002 * (ord(YTIME)-50);
+
+i04MatFacPlaAvailCap(ThirtyYearDelay,"ATHBMSCCS",YTIME)$(ord(YTIME)>=81) = 0.05;
+i04MatFacPlaAvailCap(ThirtyYearDelay,"ATHGASCCS",YTIME)$(ord(YTIME)>=81) = 0.05;

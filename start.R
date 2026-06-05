@@ -91,6 +91,8 @@ createRunFolder <- function(scenario = "default") {
   file.copy("parameters", to = runfolder, recursive = TRUE)
   file.copy("scripts",    to = runfolder, recursive = TRUE)
 
+  file.copy(grep(".gdx$",   dir(), value = TRUE), to = runfolder)
+
   setwd(runfolder)
 }
 
