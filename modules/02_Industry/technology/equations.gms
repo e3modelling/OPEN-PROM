@@ -105,12 +105,15 @@ Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not CD
 *' OLD EQUATION: Q02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME) --> NEW EQUATION:Q02VarCostTech(allCy,DSBS,rCon,ITECH,YTIME)
 *' OLD VARIABLE: V02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME) --> NEW VARIABLE:V02VarCostTech(allCy,DSBS,rCon,ITECH,YTIME)
 *' NEW SET TECHEF
+*' Note from Maro: i02ShareBlend should be defined per unit of material. Added i02INDSEI Specific Energy Intensity for industry in the equation but need more changes in the code
+*' i02INDSEI should be included as a table
+Q02VarCostTech(allCy,D
 Q02VarCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not CDR(DSBS))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
   V02VarCostTech(allCy,DSBS,ITECH,YTIME) 
       =E=
   (
     sum(EF$ITECHtoEF(ITECH,EF), 
-      i02ShareBlend(allCy,DSBS,ITECH,EF,YTIME) *
+      (i02ShareBlend(allCy,DSBS,ITECH,EF,YTIME) *i02INDSpecificEnergyIntensity(allCy,DSBS,ITECH,YTIME))*  
       (
         VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME) +
         imCO2CaptRateIndustry(allCy,ITECH,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * imCo2EmiFac(allCy,DSBS,EF,YTIME)  +
