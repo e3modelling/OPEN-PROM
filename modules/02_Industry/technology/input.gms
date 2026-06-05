@@ -74,6 +74,46 @@ i02ShareBlend(runCy,"BU","TGDO","BGDO",YTIME)$AN(YTIME) = i02ShareBlend(runCy,"B
 
 i02ShareElcHP(runCy,"HOU",YTIME) = 0.1;
 i02ShareElcHP(runCy,"SE",YTIME) = 0.1;
+
+*shares iron and steel doubts on the definitions, in principle I would read these share directly from the data source
+i02ShareBlend(runCy,"IS","BFBOFBY","HCL",YTIME)$AN(YTIME) = 0.7;
+i02ShareBlend(runCy,"IS","BFBOFBY","NGS",YTIME)$AN(YTIME) = 0.1;
+i02ShareBlend(runCy,"IS","BFBOFBY","ELC",YTIME)$AN(YTIME) = 0.2;
+
+i02ShareBlend(runCy,"IS","DREAFBY","NGS",YTIME)$AN(YTIME) = 0.7;
+i02ShareBlend(runCy,"IS","DREAFBY","ELC",YTIME)$AN(YTIME) = 0.2;
+i02ShareBlend(runCy,"IS","DREAFBY","HCL",YTIME)$AN(YTIME) = 0.1;
+
+i02ShareBlend(runCy,"IS"," DREAFCOALBY","HCL",YTIME)$AN(YTIME) = 0.8;
+i02ShareBlend(runCy,"IS"," DREAFCOALBY","ELC",YTIME)$AN(YTIME) = 0.2;
+
+i02ShareBlend(runCy,"IS","SCREAFBY","ELC",YTIME)$AN(YTIME) = 0.9;
+i02ShareBlend(runCy,"IS","SCREAFBY","NGS",YTIME)$AN(YTIME) = 0.1;
+
+i02ShareBlend(runCy,"IS","BFBOF","HCL",YTIME)$AN(YTIME) = 0.7;
+i02ShareBlend(runCy,"IS","BFBOF","NGS",YTIME)$AN(YTIME) = 0.1;
+i02ShareBlend(runCy,"IS","BFBOF","ELC",YTIME)$AN(YTIME) = 0.2;
+
+i02ShareBlend(runCy,"IS","DREAF","NGS",YTIME)$AN(YTIME) = 0.7;
+i02ShareBlend(runCy,"IS","DREAF","ELC",YTIME)$AN(YTIME) = 0.2;
+i02ShareBlend(runCy,"IS","DREAF","HCL",YTIME)$AN(YTIME) = 0.1;
+
+i02ShareBlend(runCy,"IS","H2DREAF","H2F",YTIME)$AN(YTIME) = 0.7;
+i02ShareBlend(runCy,"IS","H2DREAF","ELC",YTIME)$AN(YTIME) = 0.2;
+i02ShareBlend(runCy,"IS","H2DREAF","NGS",YTIME)$AN(YTIME) = 0.1;
+
+i02ShareBlend(runCy,"IS","BFBOFCCS","HCL",YTIME)$AN(YTIME) = 0.7;
+i02ShareBlend(runCy,"IS","BFBOFCCS","NGS",YTIME)$AN(YTIME) = 0.1;
+i02ShareBlend(runCy,"IS","BFBOFCCS","ELC",YTIME)$AN(YTIME) = 0.2;
+
+i02ShareBlend(runCy,"IS","DREAFCCS","NGS",YTIME)$AN(YTIME) = 0.7;
+i02ShareBlend(runCy,"IS","DREAFCCS","ELC",YTIME)$AN(YTIME) = 0.2;
+i02ShareBlend(runCy,"IS","DREAFCCS","HCL",YTIME)$AN(YTIME) = 0.1;
+
+i02ShareBlend(runCy,"IS","SCREAF","ELC",YTIME)$AN(YTIME) = 0.9;
+i02ShareBlend(runCy,"IS","SCREAF","NGS",YTIME)$AN(YTIME) = 0.1;
+
+
 *---
 $IFTHEN.calib %Calibration% == MatCalibration
 table t02SharesFuelBuildings(allCy,DSBS,EFS,YTIME)    "Targets for share of new passenger cars"

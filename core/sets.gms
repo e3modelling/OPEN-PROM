@@ -664,13 +664,7 @@ TOLQ
 TOGS
 TSTE
 
-*ISTECH_NEW   New IS routes 
-   BFBOF "best available tech blast furnace basic oxygen furnace for primary steel production"
-   DREAF "best available tech direct reduction electric arc furnace fed ny natural gas for primary steel production"
-   H2DREAF    "best available tech direct reduction electric arc furnace fed ny 100% hydrogen "
-   BFBOFCCS   "best available tech blast furnace basic oxygen furnace with CCS ammine based for primary steel production"
-   DREAFCCS "best available tech direct reduction electric arc furnace with CCS ammine based for primary steel production"
-   SCREAF   "best available tech for scrap electric arc furnace for secondary steel production"
+
 
 * Domestic Technologies (only add those not already in Transport & Industry)
 * LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC already exist in TRANSPORT or INDUSTRY technologies
@@ -759,6 +753,18 @@ TOLQ
 TOGS
 TSTE
 TH2F
+*ISTECH_BY   Base Year production, existing technologies IS routes 
+   BFBOFBY "Existing Base Year 2024 blast furnace basic oxygen furnace for primary steel production"
+   DREAFBY "Existing Base Year 2024  direct reduction electric arc furnace fed ny natural gas for primary steel production"
+   DREAFCOALBY "Existing Base Year 2024  direct reduction electric arc furnace fed by coal for primary steel production India tech"
+   SCREAFBY   "Existing Base Year 2024  scrap electric arc furnace for secondary steel production"
+*ISTECH_NEW   New IS routes 
+   BFBOF "best available tech blast furnace basic oxygen furnace for primary steel production"
+   DREAF "best available tech direct reduction electric arc furnace fed ny natural gas for primary steel production"
+   H2DREAF    "best available tech direct reduction electric arc furnace fed ny 100% hydrogen "
+   BFBOFCCS   "best available tech blast furnace basic oxygen furnace with CCS ammine based for primary steel production"
+   DREAFCCS "best available tech direct reduction electric arc furnace with CCS ammine based for primary steel production"
+   SCREAF   "best available tech for scrap electric arc furnace for secondary steel production"
 * Domestic Technologies (only add those not already in Industry)
 TGSL
 TBMSWAS
@@ -865,6 +871,18 @@ TRFO.RFO
 TOLQ.OLQ
 TOGS.OGS
 TSTE.STE
+*ISTECH_BY   Iron and Steel (IS) Existing Base Year Technologies
+   BFBOFBY.(HCL,NGS,ELC) 
+   DREAFBY.(NGS,ELC)
+   DREAFCOALBY.(HCL,ELC)
+   SCREAFBY.(ELC,NGS)
+*ISTECH_NEW   Iron and Steel (IS) Existing Base Year Technologies 
+   BFBOF.(HCL,NGS,ELC)  
+   DREAF.(NGS,ELC) 
+   H2DREAF(H2F,ELC,NGS)    
+   BFBOFCCS.(HCL,NGS,ELC)    
+   DREAFCCS.(NGS,ELC)  
+   SCREAF.(ELC,NGS)
 * Domestic Technologies (only add those not already in Transport & Industry)
 * LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC already exist in TRANSPORT or INDUSTRY technologies
 THEATPUMP.ELC
@@ -908,6 +926,18 @@ TOLQ.OLQ
 TOGS.OGS
 TGSL.(GSL,BGSL)
 TSTE.STE
+*ISTECH_BY   Iron and Steel (IS) Existing Base Year Technologies
+   BFBOFBY.(HCL,NGS,ELC) 
+   DREAFBY.(NGS,ELC)
+   DREAFCOALBY.(HCL,ELC)
+   SCREAFBY.(ELC,NGS)
+*ISTECH_NEW   Iron and Steel (IS) Existing Base Year Technologies 
+   BFBOF.(HCL,NGS,ELC)  
+   DREAF.(NGS,ELC) 
+   H2DREAF(H2F,ELC,NGS)    
+   BFBOFCCS.(HCL,NGS,ELC)    
+   DREAFCCS.(NGS,ELC)  
+   SCREAF.(ELC,NGS)
 * Domestic Technologies (only add those not already in Transport & Industry)
 * LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC already exist in TRANSPORT or INDUSTRY technologies
 TH2F.H2F
@@ -947,9 +977,12 @@ GU.(TLPG,TGSL,TGDO,TNGS,TELC,TCHEVGDO,TH2F) !! Removed GSL and PHEVGSL
 (PT,GT).(TGDO,TELC)
 PA.(TKRS)
 (PN,GN).(TGDO,TH2F)
-(IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(TLGN,THCL,TGDO,TGSL,TRFO,TLPG,TKRS,TOLQ,TNGS,TOGS,
+(NF,CH,BM,PP,FD,EN,TX,OE,OI).(TLGN,THCL,TGDO,TGSL,TRFO,TLPG,TKRS,TOLQ,TNGS,TOGS,
                                 TELC,TBMSWAS,TSTE,TH2F)
-(IS,BM,CH).(TNGSCCS,THCLCCS)
+(BM,CH).(TNGSCCS,THCLCCS)
+
+IS.(BFBOFBY,DREAFBY,DREAFCOALBY,SCREAFBY,BFBOF,DREAF,H2DREAF,BFBOFCCS,DREAFCCS,SCREAF) *Iron and Steel tech routes
+
 (HOU,AG,SE).(THCL,TLPG,TKRS,TGDO,TNGS,TOGS,TBMSWAS,TELC,TSTE,TGSL,TLGN,TOLQ,TRFO,TSOL,TGEO)
 (HOU,SE).(THEATPUMP)
 BU.(TGDO,TRFO,TKRS,TH2F,TNGS)
