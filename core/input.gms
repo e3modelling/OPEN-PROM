@@ -165,6 +165,7 @@ imFuelPrice(runCy,"BU","BGSL",YTIME) = imFuelPrice(runCy,"OI","BGSL",YTIME);
 imFuelPrice(runCy,TRANSE,"RFO",YTIME) = imFuelPrice(runCy,"BU","RFO",YTIME);
 imFuelPrice(runCy,TRANSE,"OGS",YTIME) = imFuelPrice(runCy,TRANSE,"NGS",YTIME);
 imFuelPrice(runCy,TRANSE,"OLQ",YTIME) = imFuelPrice(runCy,TRANSE,"GDO",YTIME);
+imFuelPrice(runCy,TRANSE,"BGAS",YTIME) = 3;
 imFuelPrice(runCy,"ICT",EFS,YTIME)$SECtoEF("ICT",EFS) = imFuelPrice(runCy,"SE",EFS,YTIME);
 *---
 table imPriceFuelsIntBase(WEF,YTIME)	              "International Fuel Prices USED IN BASELINE SCENARIO ($2015/toe)"

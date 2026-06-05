@@ -13,7 +13,7 @@ i01Sigma(allCy,SG)                                   "S parameters of Gompertz f
 i01ShareBlend(allCy,TRANSE,EF,YTIME)
 i01ShareMix(allCy,TRANSE,EF,YTIME)
 i01calb(allCy,TRANSE,EF)
-i01calibweibul(allCy,TRANSE,TTECH,EF)
+i01calibweibul(allCy,TRANSE,EF,YTIME)
 ;
 
 Equations
@@ -36,7 +36,7 @@ Q01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)
 Q01CostFuel(allCy,TRANSE,TTECH,YTIME)
 Q01PremScrp(allCy,TRANSE,TTECH,YTIME)
 Q01RateScrPcTot(allCy,TRANSE,TTECH,YTIME)
-Q01ShareBlend(allCy,TRANSE,TTECH,EF,YTIME)
+Q01ShareBlend(allCy,TRANSE,EF,YTIME)
 *'                **Interdependent Equations**
 Q01Lft(allCy,DSBS,TECH,YTIME)	                               "Compute the lifetime of passenger cars" 
 Q01ConsFuelTransport(allCy,TRANSE,EF,YTIME)
@@ -72,7 +72,7 @@ V01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)
 V01CostFuel(allCy,TRANSE,TTECH,YTIME)
 V01PremScrp(allCy,TRANSE,TTECH,YTIME)
 V01RateScrPcTot(allCy,TRANSE,TTECH,YTIME)
-V01ShareBlend(allCy,TRANSE,TTECH,EF,YTIME)
+V01ShareBlend(allCy,TRANSE,EF,YTIME)
 *'                **Interdependent Equations**
 VmLft(allCy,DSBS,TECH,YTIME)                                 "Lifetime of technologies (years)"
 V01ConsFuelTransport(allCy,TRANSE,EF,YTIME)	           "Consumption of each technology and subsector (Mtoe)"

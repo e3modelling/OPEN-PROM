@@ -247,21 +247,14 @@ i01TechLft(runCy,"EW","TEW",YTIME) = 25;
 *---
 i01GDPperCapita(YTIME,runCy) = i01GDP(YTIME,runCy) / i01Pop(YTIME,runCy);
 *---or not sameas("BGSL", EF) or not sameas("BGDO", EF) "%fBaseY%"
-i01ShareBlend(runCy,TRANSE,EF,YTIME)$DATAY(YTIME) =
-SUM(EF2$BLENDMAP(EF2,EF),
-  (
-    imFuelCons(runCy,TRANSE,EF,YTIME) / 
-    sum(EFS$BLENDMAP(EF2,EFS),
-      imFuelCons(runCy,TRANSE,EFS,YTIME)
-    )
-  )$(sum(EFS$BLENDMAP(EF2,EFS),imFuelCons(runCy,TRANSE,EFS,YTIME)) > 0)
-);
-i01ShareBlend(runCy,TRANSE,EFS,YTIME)$(SECtoEF(TRANSE,EFS) and not SUM(EF2,BLENDMAP(EF2,EFS))) = 1;
+i01ShareBlend(runCy,TRANSE,EF,YTIME)$(DATAY(YTIME) and SECtoEF(TRANSE,EF) and yes$SUM(EF2,BLENDMAP(EF,EF2))) =
+(
+  imFuelCons(runCy,TRANSE,EF,YTIME) / 
+  SUM(EF2$BLENDMAP(EF,EF2), imFuelCons(runCy,TRANSE,EF2,YTIME))
+)$SUM(EF2$BLENDMAP(EF,EF2), imFuelCons(runCy,TRANSE,EF2,YTIME)) +
+1$(not SUM(EF2$BLENDMAP(EF,EF2), imFuelCons(runCy,TRANSE,EF2,YTIME)));
+i01ShareBlend(runCy,TRANSE,EF,YTIME)$(DATAY(YTIME) and SECtoEF(TRANSE,EF) and BIOFUELS(EF)) = 1 - SUM(EF2$BLENDMAP(EF2,EF), i01ShareBlend(runCy,TRANSE,EF2,YTIME));
 i01ShareBlend(runCy,TRANSE,EF,YTIME)$AN(YTIME) = i01ShareBlend(runCy,TRANSE,EF,"%fBaseY%");
-i01ShareBlend("LAM",ROAD,"BGDO",YTIME) = i01ShareBlend("LAM",ROAD,"BGDO","%fBaseY%") + 0.002 * (ord(YTIME)-14);
-i01ShareBlend("LAM",ROAD,"GDO",YTIME) = i01ShareBlend("LAM",ROAD,"GDO","%fBaseY%") - 0.002 * (ord(YTIME)-14);
-i01ShareBlend("LAM",ROAD,"BGSL",YTIME) = i01ShareBlend("LAM",ROAD,"BGSL","%fBaseY%") + 0.001 * (ord(YTIME)-14);
-i01ShareBlend("LAM",ROAD,"GSL",YTIME) = i01ShareBlend("LAM",ROAD,"GSL","%fBaseY%") - 0.001 * (ord(YTIME)-14);
 *---
 $IFTHEN.calib %Calibration% == MatCalibration
 table t01NewShareStockPC(allCy,TRANSE,TTECH,YTIME)    "Targets for share of new passenger cars"
@@ -279,6 +272,16 @@ i01calb(runCy,TRANSE,EF)$(SECtoEF(TRANSE,EF) and BIOFUELS(EF))=
 )$i01ShareBlend(runCy,TRANSE,EF,"%fBaseY%") +
 3$(not i01ShareBlend(runCy,TRANSE,EF,"%fBaseY%"));
 
+*i01calibweibul(runCy,TRANSE,EF) = -0.1;
+i01calibweibul(runCy,TRANSE,EF,"%fBaseY%")$(SECtoEF(TRANSE,EF) and yes$SUM(EF2,BLENDMAP(EF,EF2))) = 1;
+i01calibweibul(runCy,TRANSE,EF,"%fBaseY%")$(SECtoEF(TRANSE,EF) and yes$SUM(EF2,BLENDMAP2(EF,EF2))) = 
+(
+  i01ShareBlend(runCy,TRANSE,EF,"%fBaseY%") * imFuelPrice(runCy,TRANSE,EF,"%fBaseY%") ** (2) / 
+  SUM(EF2$BLENDMAP(EF2,EF),i01ShareBlend(runCy,TRANSE,EF2,"%fBaseY%") * imFuelPrice(runCy,TRANSE,EF2,"%fBaseY%") ** (2))
+);
+i01calibweibul(runCy,TRANSE,EF,YTIME)$AN(YTIME) = i01calibweibul(runCy,TRANSE,EF,"%fBaseY%");
+i01calibweibul(runCy,TRANSE,EF,YTIME)$(AN(YTIME) and SECtoEF(TRANSE,EF) and yes$SUM(EF2,BLENDMAP2(EF,EF2))) = i01calibweibul(runCy,TRANSE,EF,YTIME-1) + (ord(YTIME) - (%fBaseY% - %fStartHorizon% + 1)) * (1-i01calibweibul(runCy,TRANSE,EF,"%fBaseY%")) / (%fEndHorizon% - %fBaseY%);
+**i01calibweibul(runCy,TRANSE,EF,YTIME)$(SECtoEF(TRANSE,EF) and yes$SUM(EF2,BLENDMAP2(EF,EF2)) and AN(YTIME)) = i01calibweibul(runCy,TRANSE,EF,YTIME-1) + 0.01;
 *i01calibweibul(runCy,TRANSE,TTECH,EF)$(SECTTECH(TRANSE,TTECH) and TTECHtoEF(TTECH,EF)) = (imFuelCons(runCy,TRANSE,EF,"%fBaseY%") + 1e-6) / SUM(EF2$(SECtoEF(TRANSE,EF2) and TTECHtoEF(TTECH,EF2)),imFuelCons(runCy,TRANSE,EF2,"%fBaseY%") + 1e-6) *imFuelPrice(runCy,TRANSE,EF,"%fBaseY%") ** 2;
 !!i01calibweibul(allCy,TRANSE,TTECH,EF)$(SECTTECH(TRANSE,TTECH) and TTECHtoEF(TTECH,EF) and BIOFUELS(EF)) = 0.5;
 $ontext

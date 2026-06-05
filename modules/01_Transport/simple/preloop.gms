@@ -98,9 +98,10 @@ V01CostTranspPerMeanConsSize.FX(runCy,TRANSE,TTECH,YTIME)$(not SECTTECH(TRANSE,T
 *---
 V01ShareTechTr.LO(runCy,TRANSE,TTECH,YTIME) = 0;
 *---
-V01ShareBlend.LO(runCy,TRANSE,TTECH,EF,YTIME) = 0;
-V01ShareBlend.FX(runCy,TRANSE,TTECH,EF,YTIME)$(DATAY(YTIME) and SECTTECH(TRANSE,TTECH) and TTECHtoEF(TTECH,EF) and not sameas("PC",TRANSE)) = 
-(imFuelCons(runCy,TRANSE,EF,YTIME) + 1e-6) / SUM(EF2$(SECtoEF(TRANSE,EF2) and TTECHtoEF(TTECH,EF2)),imFuelCons(runCy,TRANSE,EF2,YTIME) + 1e-6);
+V01ShareBlend.LO(runCy,TRANSE,EF,YTIME) = 0;
+V01ShareBlend.FX(runCy,TRANSE,EF,YTIME)$DATAY(YTIME) = i01ShareBlend(runCy,TRANSE,EF,"%fBaseY%");
+V01ShareBlend.FX(runCy,TRANSE,EF,YTIME)$(SECtoEF(TRANSE,EF) and not yes$SUM(EF2,BLENDMAP(EF2,EF))) = 1;
+
 !!imFuelCons(runCy,TRANSE,EF,YTIME) / SUM(EF2$(BioToFossilFuel(EF2,EF) or BioToFossilFuel(EF,EF2)), imFuelCons(runCy,TRANSE,EF,YTIME) + imFuelCons(runCy,TRANSE,EF2,YTIME) + 1e-8);
 !!V01ShareBioBlend.FX(runCy,TRANSE,TTECH,EF,YTIME)$(not BLEND(EF) and SECtoEF(TRANSE,EF)) = 1;
 !!V01ShareBioBlend.FX(runCy,TRANSE,TTECH,EF,YTIME)$(not SECtoEF(TRANSE,EF))  = 0;
