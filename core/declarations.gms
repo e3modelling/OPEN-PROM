@@ -28,12 +28,12 @@ imBmswasEmisCoef(GHGSCEN,allCy,EMTYPE,ECOEF,YTIME)  "Land-use emulator land-use 
 imAfoluLandEmis(allCy,EMTYPE,YTIME)                        "AFOLU land CO2 from emulator curve, level incl intercept (Mt CO2/yr)"
 imAfoluAgriEmis(allCy,EMTYPE,YTIME)                        "AFOLU agriculture CH4/N2O, constant (CH4 Mt; N2O kt /yr)"
 imNcon(SBS)                                                "Number of consumers (1)"
-imDisFunConSize(allCy,DSBS,rCon)                           "Distribution function of consumer size groups (1)"
+*imDisFunConSize(allCy,DSBS,rCon)                           "Distribution function of consumer size groups (1)"
 imAnnCons(allCy,DSBS,conSet)                               "Annual consumption of the smallest,modal,largest consumer, average for all countries (various)"
                                                                 !! For passenger cars (Million km/vehicle)
                                                                 !! For other passenger tranportation modes (Mpkm/vehicle)
                                                                 !! For goods transport, (Mtkm/vehicle)  
-imCumDistrFuncConsSize(allCy,DSBS)                         "Cummulative distribution function of consumer size groups (1)"
+*imCumDistrFuncConsSize(allCy,DSBS)                         "Cummulative distribution function of consumer size groups (1)"
 imRateLossesFinCons(allCy,EF,YTIME)                        "Rate of losses over Available for Final Consumption (1)"  
 imCO2CaptRate(PGALL)	                                    "Plant CO2 capture rate (1)"		
 imEffValueInDollars(allCy,SBS,YTIME)	                   "Efficiency value (US$2015/toe)" 	
@@ -55,7 +55,6 @@ imCapCostTech(allCy,SBS,TECH,YTIME)                          "Capital Cost of te
                                                                 !! - For Industrial sectors (except Iron and Steel) is expressed in kUS$2015/toe-year
                                                                 !! - For Iron and Steel is expressed in kUS$2015/tn-of-steel
                                                                 !! - For Domestic Sectors is expressed in kUS$2015/toe-year
-imFuelConsPerFueSub(allCy,SBS,EF,YTIME)	                   "Fuel consumption per fuel and subsector (Mtoe)"
 smGwToTwhPerYear(YTIME)                                    "convert GW mean power into TWh/y, depending on whether it's a leap year"
 ;
 

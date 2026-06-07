@@ -125,7 +125,10 @@ fscenario   "Model scenario used: 0 is No carbon price, 1 is NPi_Default, 2 is 1
 /
 %fScenario%
 /
-
+ICT
+/
+%ICT%
+/
 runCy(allCy) Countries for which the model is running
 /
 %fCountries%
@@ -177,6 +180,7 @@ kpdl         counter for Polynomial Distribution Lag          /a1*a6/
 rc                                                            /1*3/
 rcc                                                           /rcc1*rcc10/
 
+SSPSCEN "SSP Scenarios" /SSP1,SSP2,SSP3,SSP4,SSP5/
 
 ***       Sectoral Structure        *
 
@@ -206,6 +210,7 @@ GN    "Goods Transport - Inland Navigation"
 BU    "Bunkers"
 PCH   "Petrochemicals Industry"
 NEN   "Other Non Energy Uses"
+ICT   "Data centers and Networks"
 PG    "Power and Steam Generation"
 H2P   "Hydrogen Production"
 STEAMP "Steam Production"
@@ -260,6 +265,7 @@ GN    "Goods Transport - Inland Navigation"
 BU    "Bunkers"
 PCH   "Petrochemicals Industry"
 NEN   "Other Non Energy Uses"
+ICT   "Data centers and Networks"
 PG    "Power and Steam Generation"
 H2P   "Hydrogen production"
 STEAMP "Steam Production"
@@ -430,7 +436,7 @@ EN    "Engineering"
 TX    "Textiles"
 OE    "Ore Extraction"
 OI    "Other Industrial sectors"
-SE    "Commercial"
+SE    "Services"
 AG    "Agriculture, Fishing, Forestry"
 HOU   "Residential"
 PC    "Passenger Transport - Cars"
@@ -444,6 +450,7 @@ GN    "Goods Transport - Inland Navigation"
 BU    "Bunkers"
 PCH   "Petrochemicals Industry"
 NEN   "Other Non Energy Uses"
+ICT   "Data centers and Networks"
 DAC   "Direct Air Capture"
 EW    "Enhanced Weathering"
 /
@@ -514,7 +521,6 @@ ELC     "Electricity"
 SLD     "Solid Fuels"
 GAS     "Gases"
 LQD     "All Liquids"
-OLQT    "All liquids but GDO, RFO, GSL"
 REN     "Renewables except Hydro"
 NFF     "Non Fossil Fuels"
 NEF     "New energy forms"
@@ -529,7 +535,6 @@ EFA(EF)          Aggregate Energy Forms
 /
 SLD   "Solid Fuels"
 LQD   "Liquids"
-OLQT  "All liquids but GDO, RFO, GSL"
 GAS   "Gases"
 REN   "Renewables except Hydro"
 STE   "Steam"
@@ -566,7 +571,6 @@ EFtoEFA(EF,EFA)  Energy Forms Aggregations (for summary balance report)
 /
 (HCL,LGN).SLD
 (CRO,GSL,GDO,RFO,LPG,KRS,OLQ).LQD
-(LPG,KRS,OLQ).OLQT
 (NGS,OGS).GAS
 (WND,SOL,GEO).REN
 (HYD,WND,SOL,GEO,NUC,BMSWAS).NFF
@@ -915,6 +919,8 @@ HTDAC.(NGS,ELC)
 H2DAC.(H2F,ELC)
 LTDAC.ELC
 TEW.ELC
+TSOL.SOL
+TGEO.GEO
 /
 TTECHtoEF(TTECH,EF) Fuels consumed by transport technologies
 /
@@ -959,13 +965,13 @@ TSOL.SOL
 TGEO.GEO
 /
 
-PLUGIN(TECH) Plug-in hybrids
+PLUGIN(TTECH) Plug-in hybrids
 /
 TPHEVGSL
 TPHEVGDO
 /
 
-CHYBV(TECH) CONVENTIONAL hybrids
+CHYBV(TTECH) CONVENTIONAL hybrids
 /
 TCHEVGSL
 TCHEVGDO
@@ -996,6 +1002,7 @@ PA.(TKRS)
 (HOU,SE).(THEATPUMP)
 BU.(TGDO,TRFO,TKRS,TH2F,TNGS)
 (PCH,NEN).(TLGN,THCL,TGDO,TRFO,TLPG,TOLQ,TNGS,TOGS)
+ICT.TELC
 DAC.(HTDAC,H2DAC,LTDAC)
 EW.TEW
 /
@@ -1322,6 +1329,13 @@ BALEF fuels in balance report
 
 BIOFUELS(EF)
 /BGSL,BGDO,BKRS/
+
+BioToFossilFuel(EF,EF)  Mapping from bio fuels to fossil fuels
+/
+BGSL.GSL
+BGDO.GDO
+BKRS.KRS
+/
 
 BALEF2EFS(BALEF, EFS) Mapping from balance fuels to model fuels
 /

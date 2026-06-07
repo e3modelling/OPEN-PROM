@@ -37,7 +37,7 @@ VmRenValue.FX(YTIME)$(ord(YTIME)>=40) = 2000;
 *VmRenValue.FX(YTIME)$(not AN(YTIME)) = 0 ;
 *VmRenValue.FX(YTIME)$(AN(YTIME)) = 0 ;
 *---
-VmElecConsHeatPla.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = imFuelConsPerFueSub(runCy,INDDOM,"ELC",YTIME)*(1-imShrNonSubElecInTotElecDem(runCy,INDDOM))*iShrHeatPumpElecCons(runCy,INDDOM);
+VmElecConsHeatPla.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = imFuelCons(runCy,INDDOM,"ELC",YTIME)*(1-imShrNonSubElecInTotElecDem(runCy,INDDOM))*iShrHeatPumpElecCons(runCy,INDDOM);
 * Compute electricity consumed in heatpump plants, QElecConsHeatPla(runCy,INDDOM,YTIME)$time(ytime).
 VmElecConsHeatPla.FX(runCy,DSBS,YTIME) = 0;
 *---
@@ -48,7 +48,7 @@ VmCstCO2SeqCsts.L(runCy,YTIME) = i06ElastCO2Seq(runCy,"seq_min");
 VmCstCO2SeqCsts.FX(runCy,YTIME)$DATAY(YTIME) = i06ElastCO2Seq(runCy,"seq_min");
 *---
 VmPriceFuelSubsecCarVal.LO(runCy,SBS,EF,YTIME) = 0;
-VmPriceFuelSubsecCarVal.L(runCy,SBS,EF,YTIME)$SECtoEF(SBS,EF) = 2;
+VmPriceFuelSubsecCarVal.L(runCy,SBS,EF,YTIME)$SECtoEF(SBS,EF) = 1;
 
 $IFTHEN %softLinkMAgPIE% == on 
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,"BMSWAS",YTIME)$(An(YTIME)) = iPricesMagpie(runCy,SBS,YTIME);
@@ -60,8 +60,8 @@ VmPriceFuelSubsecCarVal.FX(runCy,SBS,EF,YTIME)$(SECtoEF(SBS,EF) and not (HEATPUM
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,"NUC",YTIME)$SECtoEF(SBS,"NUC") = 0.2; !! fixed price for nuclear fuel to 25Euro/toe
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,"SOL",YTIME) = 0; 
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,"GEO",YTIME) = 0;
-VmPriceFuelSubsecCarVal.FX(runCy,SBS,"MET",YTIME)$(not An(YTIME)) = 1; !! fixed price methanol
-VmPriceFuelSubsecCarVal.FX(runCy,SBS,"ETH",YTIME)$(not An(YTIME)) = 1; !! fixed price for ethanol
+VmPriceFuelSubsecCarVal.FX(runCy,SBS,"MET",YTIME)$(DATAY(YTIME) and SECtoEF(SBS,"MET")) = 1; !! fixed price methanol
+VmPriceFuelSubsecCarVal.FX(runCy,SBS,"ETH",YTIME)$(DATAY(YTIME) and SECtoEF(SBS,"ETH")) = 1; !! fixed price for ethanol
 VmPriceFuelSubsecCarVal.FX(runCy,INDDOM,"HEATPUMP",YTIME)$(SECtoEF(INDDOM,"HEATPUMP")$(not An(YTIME))) = imFuelPrice(runCy,INDDOM,"ELC",YTIME);
 VmPriceFuelSubsecCarVal.FX(runCy,"H2P",EF,YTIME)$(SECtoEF("H2P",EF)$DATAY(YTIME)) = imFuelPrice(runCy,"OI",EF,YTIME);
 VmPriceFuelSubsecCarVal.FX(runCy,"STEAMP",EF,YTIME)$(SECtoEF("STEAMP",EF)$DATAY(YTIME)) = imFuelPrice(runCy,"PG",EF,YTIME);

@@ -16,26 +16,22 @@
 Q11SubsiTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V11SubsiTot(allCy,YTIME)
         =E=
-          (
-            (
-              sum((EF,EFS)$EFtoEFS(EF,EFS),
-                VmConsFinEneCountry(allCy,EF,YTIME-1) * imCo2EmiFac(allCy,"PG",EF,YTIME-1)) 
-              + sum(SSBS, V07GrossEmissCO2Supply(allCy,SSBS,YTIME-1))
-              -
-              (V06CaptCummCO2(allCy,YTIME-1) - V06CaptCummCO2(allCy,YTIME-2))
-            )
-            +
-            sqrt(sqr(
-              sum((EF,EFS)$EFtoEFS(EF,EFS),VmConsFinEneCountry(allCy,EF,YTIME-1) * imCo2EmiFac(allCy,"PG",EF,YTIME-1))
-            + sum(SSBS,V07GrossEmissCO2Supply(allCy,SSBS,YTIME-1))
-              -
-              (V06CaptCummCO2(allCy,YTIME-1) - V06CaptCummCO2(allCy,YTIME-2))
-            ))
-          ) / 2
-         *
-         sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME-1))
-         + 0.005 * i01GDP(YTIME,allCy) * 1000
-         + VmNetSubsiTax(allCy,YTIME-1)
+    (
+      SUM(DSBS, V07GrossEmissCO2Demand(allCy,DSBS,YTIME-1)) +
+      sum(SSBS, V07GrossEmissCO2Supply(allCy,SSBS,YTIME-1)) -
+      (V06CaptCummCO2(allCy,YTIME-1) - V06CaptCummCO2(allCy,YTIME-2))
+      +
+      sqrt(sqr(
+        SUM(DSBS, V07GrossEmissCO2Demand(allCy,DSBS,YTIME-1))
+      + sum(SSBS,V07GrossEmissCO2Supply(allCy,SSBS,YTIME-1))
+        -
+        (V06CaptCummCO2(allCy,YTIME-1) - V06CaptCummCO2(allCy,YTIME-2))
+      ))
+    ) / 2
+    *
+    sum(NAP$NAPtoALLSBS(NAP,"PG"),VmCarVal(allCy,NAP,YTIME-1))
+    + 0.005 * i01GDP(YTIME,allCy) * 1000
+    + VmNetSubsiTax(allCy,YTIME-1)
 ;
 
 *' The equation splits the available state grants to the various demand technologies through a policy parameter expressing this proportional division.
@@ -46,7 +42,7 @@ Q11SubsiDemTechAvail(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH
     V11SubsiTot(allCy,YTIME) * i11SubsiPerDemTechAvail(allCy,DSBS,TECH,YTIME);
 
 *' The equation calculates the state support per unit of new capacity in the industrial subsectors and technologies (kUS$2015/toe-year).
-Q11SubsiDemITech(allCy,DSBS,ITECH,YTIME)$(INDSE(DSBS) and SECTTECH(DSBS,ITECH) and TIME(YTIME) and not CDR(DSBS) and runCy(allCy))..
+Q11SubsiDemITech(allCy,DSBS,ITECH,YTIME)$(INDSE(DSBS) and SECTTECH(DSBS,ITECH) and TIME(YTIME) and runCy(allCy))..
     VmSubsiDemITech(allCy,DSBS,ITECH,YTIME)
         =E=
     0 * (
