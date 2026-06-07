@@ -10,34 +10,37 @@ VmPriceElecInd.FX(runCyL,TCHP,YTIME)$TIME(YTIME) = VmPriceElecInd.L(runCyL,TCHP,
 V08PriceFuelSepCarbonWght.FX(runCyL,DSBS,EF,YTIME)$TIME(YTIME) = V08PriceFuelSepCarbonWght.L(runCyL,DSBS,EF,YTIME)$TIME(YTIME);
 *---
 *' ============================================================
-*' GLOBIOM land-use emission accounting (link2GLOBIOM == on only)
+*' Land-use emulator emission accounting (landEmiMode == curve only)
 *'
 *' After each yearly solve, compute the land-use emissions attributable to
-*' BMSWAS consumption using the quadratic curve fitted from GLOBIOM data:
+*' BMSWAS consumption using the quadratic curve fitted by the land-use emulator
+*' (GLOBIOM or MAgPIE, selected by landUseEmulator):
 *'
 *'   Em(t) = ea + eb * Q(t) + ec * Q(t)^2
 *'
 *' where:
 *'   Em     = land-use emission for each species in EMTYPE
 *'            (CO2LandUse, CH4LandUse, N2OLandUse)
-*'   Q(t)   = total BMSWAS consumption in year t, summed over all demand
-*'            subsectors DSBS that are mapped to BMSWAS via SECtoEF.
-*'            VmConsFuel.L is used (not .FX) because this runs post-solve
-*'            in the same year — .FX is set below for carry-forward.
-*'   ea,eb,ec = OLS-fitted coefficients from imBmswasEmisCoefGLOBIOM,
-*'              indexed by the active GHG scenario (%globiomGHGScen%).
+*'   Q(t)   = total primary biomass production V03ProdPrimary.L("BMSWAS",t) in
+*'            Mtoe (same total-primary basis the emulator was fitted on).
+*'            .L is the solved current-year level (post-solve).
+*'   ea,eb,ec = fitted coefficients from imBmswasEmisCoef, indexed by the
+*'              active GHG scenario (%emulatorGHGScen%). For CO2 these are regressed
+*'              on Q; for CH4/N2O (agriculture) eb=ec=0 so Em is the constant ea.
 *'
-*' Result stored in the parameter imBmswasLandUseEmis(allCy,EMTYPE,YTIME).
-*' Note: all EU country rows currently have zero coefficients because EU
-*' land-use emissions are absent from the GLOBIOM lookup table; they will
-*' become non-zero when an improved table is delivered.
+*' Results stored in imAfoluLandEmis (land CO2, level incl intercept) and
+*' imAfoluAgriEmis (agriculture CH4/N2O, constant).
 *' ============================================================
-$IFTHEN %link2GLOBIOM% == on
-imBmswasLandUseEmis(runCyL,EMTYPE,YTIME)$TIME(YTIME) =
-  imBmswasEmisCoefGLOBIOM("%globiomGHGScen%",runCyL,EMTYPE,"ea",YTIME) +
-  imBmswasEmisCoefGLOBIOM("%globiomGHGScen%",runCyL,EMTYPE,"eb",YTIME) *
-    SUM(DSBS$SECtoEF(DSBS,"BMSWAS"), VmConsFuel.L(runCyL,DSBS,"BMSWAS",YTIME)) +
-  imBmswasEmisCoefGLOBIOM("%globiomGHGScen%",runCyL,EMTYPE,"ec",YTIME) *
-    SQR(SUM(DSBS$SECtoEF(DSBS,"BMSWAS"), VmConsFuel.L(runCyL,DSBS,"BMSWAS",YTIME)));
+$IFTHEN %landEmiMode% == curve
+* AFOLU LAND CO2 (regressed on Q): level (incl intercept) -> inventory
+imAfoluLandEmis(runCyL,EMTYPE,YTIME)$(TIME(YTIME) $sameas(EMTYPE,"CO2LandUse")) =
+  imBmswasEmisCoef("%emulatorGHGScen%",runCyL,EMTYPE,"ea",YTIME) +
+  imBmswasEmisCoef("%emulatorGHGScen%",runCyL,EMTYPE,"eb",YTIME) *
+    V03ProdPrimary.L(runCyL,"BMSWAS",YTIME) +
+  imBmswasEmisCoef("%emulatorGHGScen%",runCyL,EMTYPE,"ec",YTIME) *
+    SQR(V03ProdPrimary.L(runCyL,"BMSWAS",YTIME));
+* AFOLU AGRICULTURE CH4/N2O (not regressed; eb=ec=0 -> constant intercept ea)
+imAfoluAgriEmis(runCyL,EMTYPE,YTIME)$(TIME(YTIME) $(sameas(EMTYPE,"CH4LandUse") or sameas(EMTYPE,"N2OLandUse"))) =
+  imBmswasEmisCoef("%emulatorGHGScen%",runCyL,EMTYPE,"ea",YTIME);
 $ENDIF
 *---

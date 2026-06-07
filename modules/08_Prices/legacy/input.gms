@@ -3,7 +3,7 @@
 
 
 *---
-$IFTHEN %link2MAgPIE% == on
+$IFTHEN %softLinkMAgPIE% == on
 table iPricesMagpie(allCy,SBS,YTIME)	"Prices of biomass per subsector (k$2015/toe)"
 $ondelim
 $include "./iPrices_magpie.csv"
@@ -11,15 +11,17 @@ $offdelim
 ;
 $ENDIF
 *---
-$IFTHEN %link2GLOBIOM% == on
-table imBmswasSupplyCoefGLOBIOM(GHGSCEN,allCy,COEF,YTIME) "GLOBIOM biomass supply curve coefficients (P = a + b*Q^c)"
+$IFTHEN %bmswasPriceMode% == curve
+* Coefficient tables are generated per emulator source by mrprom into ./data as
+* iBmswas{Supply,Emis}Coef_<source>.csv; %landUseEmulator% (globiom/magpie) picks the active one.
+table imBmswasSupplyCoef(GHGSCEN,allCy,COEF,YTIME) "Land-use emulator biomass supply curve coefficients (P = a + b*Q^c)"
 $ondelim
-$include "./parameters/iBmswasSupplyCoefGLOBIOM.csv"
+$include "./iBmswasSupplyCoef_%landUseEmulator%.csv"
 $offdelim
 ;
-table imBmswasEmisCoefGLOBIOM(GHGSCEN,allCy,EMTYPE,ECOEF,YTIME) "GLOBIOM land-use emission curve coefficients (Em = ea + eb*Q + ec*Q^2)"
+table imBmswasEmisCoef(GHGSCEN,allCy,EMTYPE,ECOEF,YTIME) "Land-use emulator land-use emission curve coefficients (Em = ea + eb*Q + ec*Q^2)"
 $ondelim
-$include "./parameters/iBmswasEmisCoefGLOBIOM.csv"
+$include "./iBmswasEmisCoef_%landUseEmulator%.csv"
 $offdelim
 ;
 $ENDIF

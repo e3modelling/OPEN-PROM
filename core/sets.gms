@@ -370,23 +370,23 @@ NoTrade.(SE,AG,HOU,PC,PB,PT,PN,PA,GU,GT,GN,BU,PCH,NEN,LGN_PRD_CH4,HCL_PRD_CH4,GA
 *' ============================================================
 *' GLOBIOM coupling sets
 *'
-*' These four sets are used exclusively when %link2GLOBIOM% == on.
-*' They index the parameter tables loaded from:
-*'   parameters/iBmswasSupplyCoefGLOBIOM.csv   (supply curve coefficients)
-*'   parameters/iBmswasEmisCoefGLOBIOM.csv     (land-use emission coefficients)
-*' Both CSVs are produced by scripts/tools/build_bmswas_coef_globiom.py
-*' from the GLOBIOM_LookupTable.xlsx.
+*' These four sets are used exclusively when %bmswasPriceMode% == curve.
+*' They index the parameter tables loaded (via -Idir=./data) from:
+*'   iBmswasSupplyCoef_<source>.csv   (supply curve coefficients)
+*'   iBmswasEmisCoef_<source>.csv     (land-use emission coefficients)
+*' where <source> = %landUseEmulator% (globiom or magpie). Both CSVs are generated
+*' by mrprom calcBmswasSupplyCoef / calcBmswasEmisCoef (via fullOPEN-PROM).
 *' ============================================================
 
-*' GHG carbon price scenario identifier — each row in the GLOBIOM lookup table
+*' GHG carbon price scenario identifier — each row in the emulator coefficient table
 *' corresponds to a different GHG price trajectory (in $/tCO2):
 *'   GHG000 =   0 $/tCO2  (no carbon price on land use)
 *'   GHG010 =  10 $/tCO2
 *'   GHG020 =  20 $/tCO2
 *'   GHG050 =  50 $/tCO2
 *'   GHG100 = 100 $/tCO2
-*' The active scenario is selected at compile time via %globiomGHGScen%.
-GHGSCEN "GHG scenarios from GLOBIOM biomass supply table"
+*' The active scenario is selected at compile time via %emulatorGHGScen%.
+GHGSCEN "GHG carbon-price scenarios in the emulator coefficient tables"
 / GHG000, GHG010, GHG020, GHG050, GHG100 /
 
 *' Coefficient labels for the biomass supply curve P = a + b * Q^c
@@ -411,6 +411,12 @@ EMTYPE "Land-use emission types from GLOBIOM"
 *'   ec = quadratic coefficient
 ECOEF "Coefficients for GLOBIOM quadratic land-use emission curve (Em = ea + eb*Q + ec*Q^2)"
 / ea, eb, ec /
+
+*' Single-element tag set carrying the active position-2 land-emission mode
+*' (curve | softmif | exo), derived in main.gms. Written to blabla.gdx so
+*' postprom dispatches the AFOLU source from one tag (no file.exists guessing).
+sLandEmiMode "Active land-emission mode (single element, for postprom dispatch)"
+/ %landEmiMode% /
 
 DSBS(SBS)  "All Demand Subsectors"   
 /

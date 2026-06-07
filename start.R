@@ -15,6 +15,10 @@
 
 library(jsonlite)
 
+# Always (re)install the local mrprom/postprom so every run uses the root copies.
+if (dir.exists("./mrprom"))  devtools::install_local("./mrprom")
+if (dir.exists("./postprom")) devtools::install_local("./postprom")
+
 `%||%` <- function(a, b) if (is.null(a)) b else a
 
 # ---- Read config.json (or the OPENPROM_CONFIG env var override (rarely used)) -----
@@ -185,6 +189,15 @@ runScenario <- function(scn) {
                    collapse = " ")
   } else {
     extra <- ""
+  }
+  # Land-use emulator config group -> GAMS flags (the soft_link_magpie group is
+  # consumed by task7, which passes --softLinkMAgPIE itself).
+  lue <- scn$land_use_emulator
+  if (length(lue)) {
+    if (!is.null(lue$source))
+      extra <- paste(extra, sprintf("--landUseEmulator=%s", lue$source))
+    if (!is.null(lue$carbon_price))
+      extra <- paste(extra, sprintf("--emulatorGHGScen=%s", lue$carbon_price))
   }
   Sys.setenv(OPENPROM_EXTRA_FLAGS          = extra)
   Sys.setenv(OPENPROM_SCENARIO             = toJSON(scn, auto_unbox = TRUE))

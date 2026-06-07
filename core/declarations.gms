@@ -23,9 +23,10 @@ pSolveHandle(allCy)                                      "Asynchronous solve han
 imCGI(allCy,YTIME)                                         "Capital Goods Index (defined as CGI(Scenario)/CGI(Baseline)) (1)"
 imFPDL(SBS,KPDL)                                           "Polynomial Distribution Lags (PDL) Coefficients per subsector (1)"
 imCo2EmiFac(allCy,SBS,EF,YTIME)                            "CO2 emission factors per subsector (kgCO2/kgoe fuel burned)"
-imBmswasSupplyCoefGLOBIOM(GHGSCEN,allCy,COEF,YTIME)        "GLOBIOM biomass supply curve coefficients for P = a + b*Q^c (various units)"
-imBmswasEmisCoefGLOBIOM(GHGSCEN,allCy,EMTYPE,ECOEF,YTIME)  "GLOBIOM land-use emission curve coefficients for Em = ea + eb*Q + ec*Q^2 (various units)"
-imBmswasLandUseEmis(allCy,EMTYPE,YTIME)                     "BMSWAS land-use emissions computed from GLOBIOM quadratic curve (various units)"
+imBmswasSupplyCoef(GHGSCEN,allCy,COEF,YTIME)        "Land-use emulator biomass supply curve coefficients for P = a + b*Q^c (various units)"
+imBmswasEmisCoef(GHGSCEN,allCy,EMTYPE,ECOEF,YTIME)  "Land-use emulator land-use emission curve coefficients for Em = ea + eb*Q + ec*Q^2 (various units)"
+imAfoluLandEmis(allCy,EMTYPE,YTIME)                        "AFOLU land CO2 from emulator curve, level incl intercept (Mt CO2/yr)"
+imAfoluAgriEmis(allCy,EMTYPE,YTIME)                        "AFOLU agriculture CH4/N2O, constant (CH4 Mt; N2O kt /yr)"
 imNcon(SBS)                                                "Number of consumers (1)"
 imDisFunConSize(allCy,DSBS,rCon)                           "Distribution function of consumer size groups (1)"
 imAnnCons(allCy,DSBS,conSet)                               "Annual consumption of the smallest,modal,largest consumer, average for all countries (various)"
@@ -95,7 +96,7 @@ smTWhToMtoe                                                "TWh to Mtoe conversi
 smElecToSteRatioChp                                        "Technical maximum of electricity to steam ratio in CHP plants" /2.5/
 sIter                                                      "time step iterator" /0/
 sSolverTryMax                                              "maximum attempts to solve each time step" /%SolverTryMax%/
-$ifthen.magpie "%link2MAgPIE%" == "on"
+$ifthen.magpie "%softLinkMAgPIE%" == "on"
 sLink2MAgPIE                                               "Binary flag for MAgPIE link (1=on, 0=off)" /1/
 $else.magpie
 sLink2MAgPIE                                               "Binary flag for MAgPIE link (1=on, 0=off)" /0/

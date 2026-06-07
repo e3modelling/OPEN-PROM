@@ -5,7 +5,7 @@
 # 1. Round model
 # ============================================================================
 #
-# Round 0    cold OPEN-PROM (--link2MAgPIE=off)            -> blabla_round0.gdx
+# Round 0    cold OPEN-PROM (--softLinkMAgPIE=off)            -> blabla_round0.gdx
 # Round k>=1 four sequential phases, each persists its completion to
 #            coupling_state.json before the next starts:
 #
@@ -18,7 +18,7 @@
 #                   -> iPrices_magpie.csv + iEmissions_magpie.mif
 #                   (+ capture h12_price from report.mif; uses round-0 gdx
 #                    purely to read the invariant SBS set)
-#   openprom_hot  OPEN-PROM (--link2MAgPIE=on); reads the just-written
+#   openprom_hot  OPEN-PROM (--softLinkMAgPIE=on); reads the just-written
 #                 iPrices_magpie.csv and FX-es BMSWAS price
 #                   -> blabla_round{k}.gdx
 #
@@ -445,13 +445,13 @@
   state
 }
 
-# Round 0: cold OPEN-PROM (link2MAgPIE=off) -> blabla_round0.gdx.
+# Round 0: cold OPEN-PROM (softLinkMAgPIE=off) -> blabla_round0.gdx.
 .runOpenPromCold <- function(state, openPromRun, stateFile) {
   k <- 0L; key <- "0"
   tryCatch({
-    cat(">>> [task 7] Round 0: OPEN-PROM cold (link2MAgPIE=off)\n")
+    cat(">>> [task 7] Round 0: OPEN-PROM cold (softLinkMAgPIE=off)\n")
     extra <- Sys.getenv("OPENPROM_EXTRA_FLAGS")
-    cmd <- paste(gams, "main.gms --DevMode=0 --GenerateInput=off --link2MAgPIE=off",
+    cmd <- paste(gams, "main.gms --DevMode=0 --GenerateInput=off --softLinkMAgPIE=off",
                  extra, "-logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1")
     if (.Platform$OS.type == "unix") {
       system(paste0("sh -c ", shQuote(cmd)))
@@ -560,13 +560,13 @@
   }, error = function(e) .markFailedAndStop(state, stateFile, k, "backward_done", e))
 }
 
-# Hot OPEN-PROM (link2MAgPIE=on) -> blabla_round{k}.gdx. Reads iPrices_magpie.csv.
+# Hot OPEN-PROM (softLinkMAgPIE=on) -> blabla_round{k}.gdx. Reads iPrices_magpie.csv.
 .runOpenPromHot <- function(state, k, openPromRun, stateFile) {
   key <- as.character(k)
   tryCatch({
-    cat(sprintf(">>> [task 7] Round %d phase=openprom_hot: OPEN-PROM (link2MAgPIE=on)\n", k))
+    cat(sprintf(">>> [task 7] Round %d phase=openprom_hot: OPEN-PROM (softLinkMAgPIE=on)\n", k))
     extra <- Sys.getenv("OPENPROM_EXTRA_FLAGS")
-    cmd <- paste(gams, "main.gms --DevMode=0 --GenerateInput=off --link2MAgPIE=on",
+    cmd <- paste(gams, "main.gms --DevMode=0 --GenerateInput=off --softLinkMAgPIE=on",
                  extra, "-logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1")
     if (.Platform$OS.type == "unix") {
       system(paste0("sh -c ", shQuote(cmd)))
@@ -612,15 +612,15 @@ runTask7 <- function() {
   # ---- Read config + scenario fields
   config        <- if (file.exists("config.json")) jsonlite::fromJSON("config.json") else list()
   magpieRoot    <- config$paths$magpie_path
-  magpieProj    <- scn$magpie$project
+  magpieProj    <- scn$soft_link_magpie$project
   sceName       <- scn$scenario_name
-  existingRun   <- scn$magpie$existing_prom_run
+  existingRun   <- scn$soft_link_magpie$existing_prom_run
 
   # Coupling-loop config with defaults.
   cfg <- list(
-    max_iter  = as.integer(scn$magpie$max_iter  %||% 1L),
-    price_tol = as.numeric(scn$magpie$price_tol %||% 0.05),
-    quant_tol = as.numeric(scn$magpie$quant_tol %||% 0.05)
+    max_iter  = as.integer(scn$soft_link_magpie$max_iter  %||% 1L),
+    price_tol = as.numeric(scn$soft_link_magpie$price_tol %||% 0.05),
+    quant_tol = as.numeric(scn$soft_link_magpie$quant_tol %||% 0.05)
   )
 
   if (is.null(magpieRoot) || !nzchar(magpieRoot))
