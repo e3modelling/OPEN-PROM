@@ -434,28 +434,29 @@ calculateGhg <- function(dataMagpie) {
 # Run
 # ----------------------------
 start_time <- Sys.time()
-selectedYear <- 2090
-changeCarbonPriceFromYear <- 2061
+selectedYear <- 2035
+changeCarbonPriceFromYear <- 2026
 flagCO2eq <- TRUE
-selectedScenario <- 3  # 1: NPi, 5: Asymmetric Roll-Back, 6: Late Reawakening
+selectedScenario <- 1  # 1: NPi, 5: Asymmetric Roll-Back, 6: Late Reawakening
 GAMSCmdArgs <- c("--DevMode=0", "--GenerateInput=off", "lo=4", "idir=./data", paste0("--fEndY=", selectedYear), paste0("--fScenario=", selectedScenario))
 
 # ---------------------------------------------------------
 # CASE A: Specific Regions 2030
 # targetConditionalMtCO2e MtCO2e/yr
-# targetList <- list(
-  #  "CAZ" = 840,
-  #  "CHA" = 13447,
-  #  "GBR" = 263,
-  #  "IND" = 3981,
-  #  "JPN" = 766,
-  #  "LAM" = 3618,
-  #  "MEA" = 4868,
-  #  "NEU" = 842,
-  #  "OAS" = 5244,
-  #  "REF" = 3119,
-  #  "SSA" = 3733
-# )
+targetList <- list(
+   "CAZ" = 840,
+   "CHA" = 13447,
+   "GBR" = 263,
+   "IND" = 3981,
+   "JPN" = 766,
+   "LAM" = 3618,
+   "MEA" = 4868,
+   "NEU" = 842,
+   "OAS" = 5244,
+   "REF" = 3119,
+   "SSA" = 3733,
+    "USA" = 0
+)
 
 # CASE A: Specific Regions 2035
 # targetConditionalMtCO2e MtCO2e/yr
@@ -474,25 +475,25 @@ GAMSCmdArgs <- c("--DevMode=0", "--GenerateInput=off", "lo=4", "idir=./data", pa
 
 # CASE A: Specific Regions 2050
 # targetConditionalMtCO2e MtCO2e/yr
-# targetList <- list(
-  #  "CAZ" = 0,
+targetList <- list(
+   "CAZ" = 0,
   #  "GBR" = 0,
   #  "JPN" = 0,
-  #  "LAM" = 703,
-  #  "NEU" = 101,
-  #  "USA" = 0,
-  #  "SSA" = 2238
-# )
+   "LAM" = 703,
+  #  "NEU" = 101
+   "USA" = 0,
+   "SSA" = 2238
+)
 
 # CASE A: Specific Regions 2060
 # targetConditionalMtCO2e MtCO2e/yr
-targetList <- list(
+# targetList <- list(
   #  "CHA" = 263,
-   "MEA" = 3245,
+  #  "MEA" = 3245,
   #  "IND" = 0,
   #  "OAS" = 1186
-   "REF" = 355
-)
+  #  "REF" = 355
+# )
 
 # CASE A: Specific Regions 2070
 # targetConditionalMtCO2e MtCO2e/yr
@@ -610,8 +611,8 @@ for (regName in names(runQueue)) {
     targetRegion = actualRegion,
     targetYear   = selectedYear,
     minAlpha     = -0.5,           # Allow price reduction up to -100% if needed
-    maxAlpha     = 10.0,            # Allow up to +400% increase
-    expandFactor = 2.0,
+    maxAlpha     = 40.0,            # Allow up to +400% increase
+    expandFactor = 4.0,
     maxProbes    = 12,
     verbose      = TRUE
   )
