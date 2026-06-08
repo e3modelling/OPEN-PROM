@@ -168,7 +168,7 @@ The state file holds per-round `phase`, captured h12 matrices, computed deltas, 
 
 These run at the top of `runTask7()` and stop with a clear message before any expensive step:
 
-* **Required fields**: `paths.magpie_path`, `scenario.magpie.project`, `scenario.scenario_name`, `scenario.magpie.max_iter ≥ 1`
+* **Required fields**: `paths.magpie_path`, `scenario.soft_link_magpie.project`, `scenario.scenario_name`, `scenario.soft_link_magpie.max_iter ≥ 1`
 * **Filesystem**: `magpie_path/`, `magpie_path/e3m_projects/<project>/`, `magpie_path/e3m_projects/<project>/scenarios.csv` all exist
 * **MAgPIE subscenario**: `scenario_name` must match exactly one row in the `title` column of the MAgPIE-side `scenarios.csv` via exact-or-prefix match (same semantics MAgPIE's own `e3m_start.R` uses). Zero matches → error listing all available titles; multiple matches → error listing the ambiguous candidates. This prevents wasting hours on a typo.
 * **Resume mode** (only when `existing_prom_run` is set): the directory exists, `coupling_state.json` exists in it, `status` ∉ {`failed`, `converged`, `max_iter`}, and `config_snapshot` is bit-identical to current cfg.
@@ -177,7 +177,7 @@ These run at the top of `runTask7()` and stop with a clear message before any ex
 
 ## 4. Configuration
 
-All task 7 settings live under `config.json:scenario.magpie` (or, in batch mode, as `magpie.*` columns in `scenarios.csv`):
+All task 7 settings live under `config.json:scenario.soft_link_magpie` (or, in batch mode, as `soft_link_magpie.*` columns in `scenarios.csv`):
 
 ```jsonc
 {
@@ -185,7 +185,7 @@ All task 7 settings live under `config.json:scenario.magpie` (or, in batch mode,
     "scenario_name": "Full_C600_biolim100",     // also the MAgPIE subscenario name
     "description":   "UPTAKE C600 biolim100, coupled to convergence",
     "gams_flags":    { "fScenario": 600 },
-    "magpie": {
+    "soft_link_magpie": {
       "project":           "uptake",            // subdir under magpie/e3m_projects/
       "existing_prom_run": null,                // see §5 (Resume)
       "max_iter":          5,                   // upper bound on hot rounds
@@ -198,11 +198,11 @@ All task 7 settings live under `config.json:scenario.magpie` (or, in batch mode,
 
 | Field | Default | What it controls |
 |---|---|---|
-| `magpie.project` | (required) | Subdir name under `magpie/e3m_projects/` containing the MAgPIE-side `scenarios.csv` |
-| `magpie.existing_prom_run` | `null` | Absolute path to a run folder to resume; see §5 |
-| `magpie.max_iter` | `1` | Maximum number of hot rounds. `max_iter=1` reproduces the legacy single-shot behaviour (one MAgPIE call). |
-| `magpie.price_tol` | `0.05` | `delta_price_max < price_tol` is one half of the convergence rule |
-| `magpie.quant_tol` | `0.05` | `delta_quant_max < quant_tol` is the other half |
+| `soft_link_magpie.project` | (required) | Subdir name under `magpie/e3m_projects/` containing the MAgPIE-side `scenarios.csv` |
+| `soft_link_magpie.existing_prom_run` | `null` | Absolute path to a run folder to resume; see §5 |
+| `soft_link_magpie.max_iter` | `1` | Maximum number of hot rounds. `max_iter=1` reproduces the legacy single-shot behaviour (one MAgPIE call). |
+| `soft_link_magpie.price_tol` | `0.05` | `delta_price_max < price_tol` is one half of the convergence rule |
+| `soft_link_magpie.quant_tol` | `0.05` | `delta_quant_max < quant_tol` is the other half |
 
 Three internal constants are **not** exposed to config — they are written at the top of `scripts/tasks/task7SoftLinkMagpie.R` and changing them is a code edit:
 

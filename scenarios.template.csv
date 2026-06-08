@@ -1,4 +1,4 @@
-scenario_name,start,task_id,description,gams_flags.fScenario,magpie.project,magpie.existing_prom_run,magpie.max_iter,magpie.price_tol,magpie.quant_tol
+scenario_name,start,task_id,description,gams_flags.fScenario,soft_link_magpie.project,soft_link_magpie.existing_prom_run,soft_link_magpie.max_iter,soft_link_magpie.price_tol,soft_link_magpie.quant_tol
 C200_biolim100,1,2,UPTAKE C200 biolim100,200,uptake,,,,
 C200_landHigh,1,2,UPTAKE C200 landHigh,200,uptake,,,,
 C600_biolim100,0,7,UPTAKE C600 biolim100 single round (max_iter=1),600,uptake,,1,,

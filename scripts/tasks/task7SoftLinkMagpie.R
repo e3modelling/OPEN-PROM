@@ -76,8 +76,8 @@
 # revisit.
 #
 # Defaults:
-#   price_tol             0.05      5% relative (scenario.magpie.price_tol)
-#   quant_tol             0.05      5% relative (scenario.magpie.quant_tol)
+#   price_tol             0.05      5% relative (scenario.soft_link_magpie.price_tol)
+#   quant_tol             0.05      5% relative (scenario.soft_link_magpie.quant_tol)
 #   .PRICE_FLOOR          1.0       US$2017/GJ
 #   .QUANT_FLOOR          0.01      EJ/yr
 #   .CONVERGE_YEAR_START  2024      matches main.gms $evalGlobal fStartY
@@ -124,8 +124,8 @@
 # 4. Pre-flight (runs before any GAMS or MAgPIE work)
 # ============================================================================
 #
-#   Required fields    paths.magpie_path, scenario.magpie.project,
-#                      scenario.scenario_name, scenario.magpie.max_iter >= 1.
+#   Required fields    paths.magpie_path, scenario.soft_link_magpie.project,
+#                      scenario.scenario_name, scenario.soft_link_magpie.max_iter >= 1.
 #   Filesystem         magpie_path/, magpie_path/e3m_projects/<project>/,
 #                      magpie_path/e3m_projects/<project>/scenarios.csv.
 #   Subscenario        scenario_name matches exactly one row in the
@@ -626,11 +626,11 @@ runTask7 <- function() {
   if (is.null(magpieRoot) || !nzchar(magpieRoot))
     stop("[task 7] config.json must define paths.magpie_path.")
   if (is.null(magpieProj) || !nzchar(magpieProj))
-    stop("[task 7] scenario must define magpie.project.")
+    stop("[task 7] scenario must define soft_link_magpie.project.")
   if (is.null(sceName) || !nzchar(sceName))
     stop("[task 7] scenario must define scenario_name.")
   if (cfg$max_iter < 1L)
-    stop("[task 7] magpie.max_iter must be >= 1, got ", cfg$max_iter)
+    stop("[task 7] soft_link_magpie.max_iter must be >= 1, got ", cfg$max_iter)
 
   if (!dir.exists(magpieRoot))
     stop("[task 7] magpie_path does not exist: ", magpieRoot)
@@ -638,7 +638,7 @@ runTask7 <- function() {
   scenCsv <- file.path(projDir, "scenarios.csv")
   if (!dir.exists(projDir))
     stop("[task 7] project folder not found: ", projDir,
-         ". Check scenario.magpie.project.")
+         ". Check scenario.soft_link_magpie.project.")
   if (!file.exists(scenCsv))
     stop("[task 7] scenarios.csv missing at: ", scenCsv)
 
@@ -672,7 +672,7 @@ runTask7 <- function() {
 
   if (reuseExisting) {
     if (!dir.exists(existingRun))
-      stop("[task 7] magpie.existing_prom_run folder does not exist: ", existingRun)
+      stop("[task 7] soft_link_magpie.existing_prom_run folder does not exist: ", existingRun)
     openPromRun <- normalizePath(existingRun, winslash = "/", mustWork = TRUE)
     setwd(openPromRun)
     stateFile <- file.path(openPromRun, .STATE_FILENAME)

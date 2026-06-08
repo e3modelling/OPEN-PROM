@@ -64,7 +64,7 @@ The main task modes are:
 | 3 | `OPEN-PROM RESEARCH NEW DATA` | Rebuilds research input data, calibrates maturity factors, then runs the model | internal data access | fresh research `data/`, `targets/`, calibration results, and a model run | no |
 | 5 | `CALIBRATE` | Runs calibration only | existing `data/` and `targets/` | calibrated maturity-factor files | no |
 | 6 | `CALIBRATE CARBON PRICES` | Runs carbon-price calibration | internal calibration setup | updated carbon-price inputs and, if enabled, a report | no |
-| 7 | `OPEN-PROM SOFT-LINK MAgPIE` | Runs the OPEN-PROM ↔ MAgPIE soft-link, iterated to convergence (`magpie.max_iter` rounds at most; defaults to 1, i.e. single round-trip). See Tutorial 12 for the round model, convergence judgment, and resume semantics. | internal data access + MAgPIE checkout | one OPEN-PROM run folder + N MAgPIE output folders + `coupling_state.json` / `convergence_log.csv` / `coupling_summary.json` | **yes** |
+| 7 | `OPEN-PROM SOFT-LINK MAgPIE` | Runs the OPEN-PROM ↔ MAgPIE soft-link, iterated to convergence (`soft_link_magpie.max_iter` rounds at most; defaults to 1, i.e. single round-trip). See Tutorial 12 for the round model, convergence judgment, and resume semantics. | internal data access + MAgPIE checkout | one OPEN-PROM run folder + N MAgPIE output folders + `coupling_state.json` / `convergence_log.csv` / `coupling_summary.json` | **yes** |
 
 Task 4 is a debugging path and is not part of the normal run flow.
 
@@ -93,8 +93,8 @@ For each row, `start.R` builds a complete scenario object by **deep-merging the 
 
 1. **Dot-notation column names** map to nested config keys.
    * `gams_flags.fScenario` → `scenario.gams_flags.fScenario`
-   * `magpie.existing_prom_run` → `scenario.magpie.existing_prom_run`
-2. **Empty cells inherit, filled cells override.** A non-empty cell replaces the value from `config.json:scenario` at the same nested path; an empty cell leaves that path alone, so the row keeps whatever `config.json:scenario` provides as default. The merge is **recursive** — overriding `magpie.existing_prom_run` does not wipe `magpie.project`; only the leaf you wrote in the CSV changes.
+   * `soft_link_magpie.existing_prom_run` → `scenario.soft_link_magpie.existing_prom_run`
+2. **Empty cells inherit, filled cells override.** A non-empty cell replaces the value from `config.json:scenario` at the same nested path; an empty cell leaves that path alone, so the row keeps whatever `config.json:scenario` provides as default. The merge is **recursive** — overriding `soft_link_magpie.existing_prom_run` does not wipe `soft_link_magpie.project`; only the leaf you wrote in the CSV changes.
 
 Worked example — given `config.json:scenario`:
 
@@ -116,7 +116,7 @@ Worked example — given `config.json:scenario`:
 and one CSV row:
 
 ```csv
-scenario_name,task_id,description,gams_flags.fScenario,magpie.max_iter,magpie.price_tol,magpie.quant_tol,magpie.existing_prom_run
+scenario_name,task_id,description,gams_flags.fScenario,soft_link_magpie.max_iter,soft_link_magpie.price_tol,soft_link_magpie.quant_tol,soft_link_magpie.existing_prom_run
 C600_landHigh,7,UPTAKE C600 landHigh iterated to convergence,600,5,0.05,0.05,
 ```
 
@@ -138,9 +138,9 @@ the merged scenario `start.R` runs for this row is:
 }
 ```
 
-**Practical implication for "default" values.** Whatever sits in `config.json:scenario` is the **default for every batch row** unless that row overrides it. So put **only project-wide invariants** there (e.g. `magpie.project: "uptake"`, `gams_flags.fScenario: 200` as the most common case, `magpie.max_iter: 1` and `magpie.price_tol/quant_tol: 0.05` as conservative defaults).
+**Practical implication for "default" values.** Whatever sits in `config.json:scenario` is the **default for every batch row** unless that row overrides it. So put **only project-wide invariants** there (e.g. `soft_link_magpie.project: "uptake"`, `gams_flags.fScenario: 200` as the most common case, `soft_link_magpie.max_iter: 1` and `soft_link_magpie.price_tol/quant_tol: 0.05` as conservative defaults).
 
-**Do not** put per-run "incidentals" like `magpie.existing_prom_run` in `config.json:scenario`. That field points at a specific run folder to **resume** from (see Tutorial 12 §5); if every batch row silently inherits the same path, every row will try to resume into the same folder, fail the bit-identical `config_snapshot` check, and abort one by one. Keep `magpie.existing_prom_run` in `config.json` as `null` and set it on individual CSV rows only when you actually want to resume from a specific interrupted run.
+**Do not** put per-run "incidentals" like `soft_link_magpie.existing_prom_run` in `config.json:scenario`. That field points at a specific run folder to **resume** from (see Tutorial 12 §5); if every batch row silently inherits the same path, every row will try to resume into the same folder, fail the bit-identical `config_snapshot` check, and abort one by one. Keep `soft_link_magpie.existing_prom_run` in `config.json` as `null` and set it on individual CSV rows only when you actually want to resume from a specific interrupted run.
 
 **Extensibility — any flag works, no R-code changes needed.** The dot-notation rule above is *generic*: `start.R` does not hard-code any particular column name. Some practical consequences:
 
