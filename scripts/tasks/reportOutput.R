@@ -72,4 +72,4 @@ reportOutput(runpath = runpath, mif_name = mif_name, plot_name = plot_name,
              Validation_data_for_plots = FALSE, Validation2050 = FALSE,
              emissions = TRUE, htmlReport = FALSE, model = "OPEN-PROM 2.2",
              project_template = NULL,
-             stripScenarioTimestamp = TRUE)
+             stripScenarioTimestamp = FALSE)
