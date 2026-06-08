@@ -166,6 +166,7 @@ imFuelPrice(runCy,TRANSE,"RFO",YTIME) = imFuelPrice(runCy,"BU","RFO",YTIME);
 imFuelPrice(runCy,TRANSE,"OGS",YTIME) = imFuelPrice(runCy,TRANSE,"NGS",YTIME);
 imFuelPrice(runCy,TRANSE,"OLQ",YTIME) = imFuelPrice(runCy,TRANSE,"GDO",YTIME);
 imFuelPrice(runCy,TRANSE,"BGAS",YTIME) = 3;
+imFuelPrice(runCy,"PA","H2F",YTIME) = 2 * imFuelPrice(runCy,"PA","KRS",YTIME);
 imFuelPrice(runCy,"ICT",EFS,YTIME)$SECtoEF("ICT",EFS) = imFuelPrice(runCy,"SE",EFS,YTIME);
 *---
 table imPriceFuelsIntBase(WEF,YTIME)	              "International Fuel Prices USED IN BASELINE SCENARIO ($2015/toe)"
@@ -203,6 +204,7 @@ $ondelim
 $include"./iDataTransTech.csv"
 $offdelim
 ;
+imDataTransTech(NAVIGATION,"TRFO",ECONCHAR,YTIME) = imDataTransTech(NAVIGATION,"TGDO",ECONCHAR,YTIME)
 *---
 table imDataIndTechnology(INDSE,TECH,ECONCHAR)          "Technoeconomic characteristics of industry (various)"
             IC      FC      VC      LFT USC
