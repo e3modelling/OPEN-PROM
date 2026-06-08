@@ -212,7 +212,7 @@ $setglobal softLinkMAgPIE off  !! on or off
 *' ***   legacy  = no emulator (exogenous static price + external emission source)
 *' ***   globiom = GLOBIOM-derived curves
 *' ***   magpie  = MAgPIE-derived curves
-$setglobal landUseEmulator globiom
+$setglobal landUseEmulator legacy  !! legacy = no emulator (backward-compatible default); set to globiom/magpie to opt in
 *' *** emulatorGHGScen: active carbon-price row in the emulator coefficient tables
 *' *** (used when landUseEmulator != legacy and softLinkMAgPIE == off)
 *' *** Options: GHG000 GHG010 GHG020 GHG050 GHG100 (GHG price in $/tCO2)
