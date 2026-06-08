@@ -290,9 +290,9 @@ $setGlobal CO2              legacy
 $setGlobal Emissions        legacy
 $setGlobal Prices           legacy
 $setGlobal Heat             heat
-$setGlobal Curves           off
+$setGlobal Curves           off          !! To disable learning curves module, use: $setGlobal Curves off
 $setGlobal Economy          economy
-*' To disable learning curves module, use: $setGlobal Curves off
+$setGlobal ClimateImpact    iam_compact  !! Use iam_compact to enable the module, the impacts include `cooling electricity demand increase in HOU/SE`, `CF decrease for hydro, fossils, biomass, and nuclear`, and optional `CAPEX increase`. See details in 12_ClimateImpact/iam_compact/input.
 
 ** CORE MODEL FILES **
 *' SETS

@@ -181,7 +181,7 @@ Q02FinalElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 
 *' OLD VARIABLE: VmConsElecNonSubIndTert(allCy,INDDOM,YTIME) --> NEW VARIABLE:VmUsefulElecNonSubIndTert(allCy,DSBS,YTIME)
 Q02ConsFuel(allCy,DSBS,EF,YTIME)$(TIME(YTIME)$((INDDOM(DSBS) or NENSE(DSBS)) and SECtoEF(DSBS,EF))$runCy(allCy))..
-    VmConsFuel(allCy,DSBS,EF,YTIME) 
+    VmConsFuel(allCy,DSBS,EF,YTIME)
         =E=
     sum(ITECH$(ITECHtoEF(ITECH,EF) and SECTTECH(DSBS,ITECH)),
       i02ShareBlend(allCy,DSBS,ITECH,EF,YTIME) *
@@ -189,7 +189,11 @@ Q02ConsFuel(allCy,DSBS,EF,YTIME)$(TIME(YTIME)$((INDDOM(DSBS) or NENSE(DSBS)) and
       i02util(allCy,DSBS,ITECH,YTIME)
     ) +
     V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(INDDOM(DSBS) and ELCEF(EF)) +
-    VmElecConsHeatPla(allCy,DSBS,YTIME)$ELCEF(EF);
+    VmElecConsHeatPla(allCy,DSBS,YTIME)$ELCEF(EF)
+$ifthen.climateimpact not "%ClimateImpact%" == "off"
+    + i12ExtraCoolingElectricityDemand(allCy,DSBS,YTIME)$ELCEF(EF)
+$endif.climateimpact
+    ;
 
 *' Average efficiency of substitutable demand
 Q02IndAvrEffFinalUseful(allCy,DSBS,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(DSBS))$runCy(allCy))..
