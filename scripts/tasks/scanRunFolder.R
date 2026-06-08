@@ -13,13 +13,14 @@ library(stringr)   # for str_split, str_trim
 library(crayon)    # for yellow(), red(), blue(), green()
 
 scanRunFolder <- function(preselect = NULL) {
-  
-  # Path to the script directory
+
+  # Script lives at scripts/tasks/, so the repo root (which contains runs/) is
+  # two levels up.
   scriptDirectory <- getScriptDirectory()
-  print(scriptDirectory)
-  
+  basePath <- normalizePath(file.path(scriptDirectory, "..", ".."))
+
   # Get subfolders and their status
-  subfolderStatusList <- checkFilesAndListSubfolders(scriptDirectory)
+  subfolderStatusList <- checkFilesAndListSubfolders(basePath)
   selectedSubfolders <- listSubfolders(subfolderStatusList)
   
   if (length(selectedSubfolders) == 0) {

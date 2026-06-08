@@ -198,6 +198,9 @@ $offOrder
 
 *' *** GAMS "flags" definitions
 *'
+*' Flags
+$setGlobal ICT Central !!Low / Mean / Central / Upper
+$setGlobal SSP SSP2 !!SSP1-5
 *' *** Calibration
 $setGlobal Calibration off !! MatCalibration/Calibration/off
 
@@ -206,6 +209,8 @@ $setglobal link2MAgPIE off  !! on or off For soft link with MAgPIE
 
 *' *** Maximum number of solver attempts
 $evalGlobal SolverTryMax 4
+*' *** Country solve mode: serial or parallel
+$setGlobal CountrySolveMode serial
 *' *** Setting research mode (0) or development mode (1) to modify settings and parameters accordingly
 $setGlobal DevMode 0 !! can be overwritten if VS Code Tasks are used
 *' *** Write a compressed GDX file with all data at the end of the run
@@ -231,9 +236,9 @@ $evalGlobal fScenario 1 !! Setting the model scenario: 0 is No carbon price, 1 i
 
 *' *** load input data files
 $ifthen.genInp %GenerateInput% == on 
-$ifthen.loadData %DevMode% == 0 $call "Rscript ./loadMadratData.R DevMode=0"
-$elseif.loadData %DevMode% == 1 $call "Rscript ./loadMadratData.R DevMode=1"
-$elseif.loadData %DevMode% == 2 $call "Rscript ./loadMadratData.R DevMode=2"
+$ifthen.loadData %DevMode% == 0 $call "Rscript ./scripts/tasks/loadMadratData.R DevMode=0"
+$elseif.loadData %DevMode% == 1 $call "Rscript ./scripts/tasks/loadMadratData.R DevMode=1"
+$elseif.loadData %DevMode% == 2 $call "Rscript ./scripts/tasks/loadMadratData.R DevMode=2"
 $endif.loadData
 $endif.genInp
 

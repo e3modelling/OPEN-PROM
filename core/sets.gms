@@ -43,8 +43,6 @@ SVK
 SVN
 SWE
 USA
-MAR
-EGY
 RWO
 /
 
@@ -91,11 +89,46 @@ SWE
 USA
 /
 
+EU28(allCy) "EU27 and UK"
+/
+EST
+LTU
+LUX
+LVA
+AUT
+BEL
+BGR
+CYP
+CZE
+DEU
+DNK
+ESP
+FIN
+FRA
+GBR
+GRC
+HRV
+HUN
+IRL
+ITA
+MLT
+NLD
+POL
+PRT
+ROU
+SVK
+SVN
+SWE
+/
+
 fscenario   "Model scenario used: 0 is No carbon price, 1 is NPi_Default, 2 is 1.5C and 3 is 2C"
 /
 %fScenario%
 /
-
+ICT
+/
+%ICT%
+/
 runCy(allCy) Countries for which the model is running
 /
 %fCountries%
@@ -110,6 +143,7 @@ runCy(allCy)$(%DevMode% = 0) = resCy(allCy) ;
 runCyL(allCy)$(%DevMode% = 0) = resCy(allCy) ;
 
 ALIAS(runCyL,runCy2)
+alias(allCy, allCy2);
 sets
 ***        Model Time Horizon       *
 ytime           Model time horizon                                /%fStartHorizon%*%fEndHorizon%/
@@ -146,6 +180,7 @@ kpdl         counter for Polynomial Distribution Lag          /a1*a6/
 rc                                                            /1*3/
 rcc                                                           /rcc1*rcc10/
 
+SSPSCEN "SSP Scenarios" /SSP1,SSP2,SSP3,SSP4,SSP5/
 
 ***       Sectoral Structure        *
 
@@ -175,6 +210,7 @@ GN    "Goods Transport - Inland Navigation"
 BU    "Bunkers"
 PCH   "Petrochemicals Industry"
 NEN   "Other Non Energy Uses"
+ICT   "Data centers and Networks"
 PG    "Power and Steam Generation"
 H2P   "Hydrogen Production"
 STEAMP "Steam Production"
@@ -229,6 +265,7 @@ GN    "Goods Transport - Inland Navigation"
 BU    "Bunkers"
 PCH   "Petrochemicals Industry"
 NEN   "Other Non Energy Uses"
+ICT   "Data centers and Networks"
 PG    "Power and Steam Generation"
 H2P   "Hydrogen production"
 STEAMP "Steam Production"
@@ -309,6 +346,11 @@ exogCV_NPi
 exogCV_1_5C
 exogCV_2C
 exogCV_Calib
+UPT_100
+UPT_200
+UPT_400
+UPT_600
+UPT_800
 /
 
 RegulaPolicies(POLICIES_set) Set of policies entering in the regula falsi loops
@@ -343,7 +385,7 @@ EN    "Engineering"
 TX    "Textiles"
 OE    "Ore Extraction"
 OI    "Other Industrial sectors"
-SE    "Commercial"
+SE    "Services"
 AG    "Agriculture, Fishing, Forestry"
 HOU   "Residential"
 PC    "Passenger Transport - Cars"
@@ -357,6 +399,7 @@ GN    "Goods Transport - Inland Navigation"
 BU    "Bunkers"
 PCH   "Petrochemicals Industry"
 NEN   "Other Non Energy Uses"
+ICT   "Data centers and Networks"
 DAC   "Direct Air Capture"
 EW    "Enhanced Weathering"
 /
@@ -427,7 +470,6 @@ ELC     "Electricity"
 SLD     "Solid Fuels"
 GAS     "Gases"
 LQD     "All Liquids"
-OLQT    "All liquids but GDO, RFO, GSL"
 REN     "Renewables except Hydro"
 NFF     "Non Fossil Fuels"
 NEF     "New energy forms"
@@ -442,7 +484,6 @@ EFA(EF)          Aggregate Energy Forms
 /
 SLD   "Solid Fuels"
 LQD   "Liquids"
-OLQT  "All liquids but GDO, RFO, GSL"
 GAS   "Gases"
 REN   "Renewables except Hydro"
 STE   "Steam"
@@ -479,7 +520,6 @@ EFtoEFA(EF,EFA)  Energy Forms Aggregations (for summary balance report)
 /
 (HCL,LGN).SLD
 (CRO,GSL,GDO,RFO,LPG,KRS,OLQ).LQD
-(LPG,KRS,OLQ).OLQT
 (NGS,OGS).GAS
 (WND,SOL,GEO).REN
 (HYD,WND,SOL,GEO,NUC,BMSWAS).NFF
@@ -522,9 +562,9 @@ HCL     "Hard Coal, Coke and Other Solids"
 LGN     "Lignite"
 CRO     "Crude Oil and Feedstocks"
 LPG     "Liquefied Petroleum Gas"
-GSL     "Gasoline"
-KRS     "Kerosene"
-GDO     "Diesel Oil"
+GSL     "Fossil Gasoline"
+KRS     "Fossil Kerosene"
+GDO     "Fossil Diesel Oil"
 RFO     "Residual Fuel Oil"
 OLQ     "Other Liquids"
 NGS     "Natural Gas"
@@ -630,6 +670,8 @@ TSTE
 * Domestic Technologies (only add those not already in Transport & Industry)
 * LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC already exist in TRANSPORT or INDUSTRY technologies
 TBMSWAS
+TSOL
+TGEO
 * Non-Energy and Bunkers Technologies (only add those not already in Transport & Industry & Domestic)
 * GDO,RFO,LGN,HCL,GDO,LPG,OLQ,NGS,OGS already exist
 * NOT USED
@@ -716,6 +758,8 @@ TH2F
 TGSL
 TBMSWAS
 THEATPUMP
+TSOL
+TGEO
 /
 
 CCSTECH(ITECH)
@@ -824,6 +868,8 @@ HTDAC.(NGS,ELC)
 H2DAC.(H2F,ELC)
 LTDAC.ELC
 TEW.ELC
+TSOL.SOL
+TGEO.GEO
 /
 TTECHtoEF(TTECH,EF) Fuels consumed by transport technologies
 /
@@ -864,15 +910,17 @@ TSTE.STE
 TH2F.H2F
 TBMSWAS.BMSWAS
 THEATPUMP.ELC
+TSOL.SOL
+TGEO.GEO
 /
 
-PLUGIN(TECH) Plug-in hybrids
+PLUGIN(TTECH) Plug-in hybrids
 /
 TPHEVGSL
 TPHEVGDO
 /
 
-CHYBV(TECH) CONVENTIONAL hybrids
+CHYBV(TTECH) CONVENTIONAL hybrids
 /
 TCHEVGSL
 TCHEVGDO
@@ -899,10 +947,11 @@ PA.(TKRS)
 (IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(TLGN,THCL,TGDO,TGSL,TRFO,TLPG,TKRS,TOLQ,TNGS,TOGS,
                                 TELC,TBMSWAS,TSTE,TH2F)
 (IS,BM,CH).(TNGSCCS,THCLCCS)
-(HOU,AG,SE).(THCL,TLPG,TKRS,TGDO,TNGS,TOGS,TBMSWAS,TELC,TSTE,TGSL,TLGN,TOLQ,TRFO)
+(HOU,AG,SE).(THCL,TLPG,TKRS,TGDO,TNGS,TOGS,TBMSWAS,TELC,TSTE,TGSL,TLGN,TOLQ,TRFO,TSOL,TGEO)
 (HOU,SE).(THEATPUMP)
 BU.(TGDO,TRFO,TKRS,TH2F,TNGS)
 (PCH,NEN).(TLGN,THCL,TGDO,TRFO,TLPG,TOLQ,TNGS,TOGS)
+ICT.TELC
 DAC.(HTDAC,H2DAC,LTDAC)
 EW.TEW
 /
@@ -1000,7 +1049,6 @@ ATHBMSCCS.ATHBMSWAS
 /
 
 PGREN(PGALL)    REN PLANTS with Saturation                /PGLHYD,PGSHYD,PGAWND,PGSOL,PGCSP,PGOTHREN,PGAWNO/
-PGREN2(PGALL)     Renewable Plants                          /PGLHYD,PGSHYD,PGAWND,PGSOL,PGCSP,PGOTHREN,PGAWNO,PGANUC,ATHCOALCCS,ATHLGNCCS,ATHGASCCS,PGH2F/
 PGRENSW(PGALL)   Solar and wind Plants                     /PGSOL,PGCSP,PGAWND,PGAWNO/
 PGRENEF          Renewable energy forms in power generation  /HYD,WND,SOL,BMSWAS,GEO/
 
@@ -1081,13 +1129,10 @@ BM_CO2.CO2
 CO2SEQELAST Elasticities for CO2 sequestration cost curve
 /
 POT      MAXIMUM POTENTIAL
-mc_a     linear slope
-mc_b     initial cost at x=0
-mc_c
-mc_d
-mc_s     speed to transition to exponential
-mc_m     value for the ratio of x to potential after which exponential is taking over
-
+sig_a     "sigmoid a parameter (steepness of the curve)"
+sig_b     "sigmoid b parameter (position of the curve)"
+seq_min   "Minimum sequestration cost"
+seq_max   "Maximum sequestration cost"
 /
 
 
@@ -1233,6 +1278,13 @@ BALEF fuels in balance report
 
 BIOFUELS(EF)
 /BGSL,BGDO,BKRS/
+
+BioToFossilFuel(EF,EF)  Mapping from bio fuels to fossil fuels
+/
+BGSL.GSL
+BGDO.GDO
+BKRS.KRS
+/
 
 BALEF2EFS(BALEF, EFS) Mapping from balance fuels to model fuels
 /

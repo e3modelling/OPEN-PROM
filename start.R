@@ -1,423 +1,293 @@
-### Script for OPEN-PROM model execution and other associated tasks.
+#!/usr/bin/env Rscript
+# OPEN-PROM entry point. Two modes:
+#
+#   Single  :  Rscript start.R task_id=N
+#              Runs one scenario, taken from config.json:scenario.
+#
+#   Batch   :  Rscript start.R <path-to-csv>          (e.g. scenarios.csv)
+#              Reads the CSV at the given path. Each row defines one scenario
+#              by overriding (via deep merge with dotted column names) the
+#              config.json:scenario block. task_id is restricted to {2, 7} in
+#              batch mode. The VS Code "RUN BATCH" button passes "scenarios.csv".
+#              Optional `start` column gates each row: 1 = run, 0 = skip,
+#              anything else (incl. NA) = abort with row diagnostics. If the
+#              column is absent, every row runs (backwards compatible).
+
 library(jsonlite)
 
-# Various flags used to modify script behavior
-withRunFolder <- TRUE # Set to FALSE to disable model run folder creation and file copying
-withSync <- TRUE # Set to FALSE to disable model run sync to SharePoint
-withReport <- TRUE # Set to FALSE to disable the report output script execution (applicable to research mode only)
-uploadGDX <- TRUE # Set to TRUE to include GDX files in the uploaded archive
+`%||%` <- function(a, b) if (is.null(a)) b else a
 
-### Define function that saves model metadata into a JSON file.
+# ---- Read config.json (or the OPENPROM_CONFIG env var override (rarely used)) -----
+config_path <- Sys.getenv("OPENPROM_CONFIG", unset = "config.json")
+config <- if (file.exists(config_path))
+            fromJSON(config_path, simplifyVector = FALSE) else list()
 
+behavior      <- config$behavior %||% list()
+withRunFolder <- isTRUE(behavior$withRunFolder %||% TRUE)
+withSync      <- isTRUE(behavior$withSync      %||% FALSE)
+withReport    <- isTRUE(behavior$withReport    %||% TRUE)
+uploadGDX     <- isTRUE(behavior$uploadGDX     %||% FALSE)
+
+# ---- GAMS executable path ---------------------------------------------
+gams_path <- config$paths$gams_path
+if (!is.null(gams_path) && file.exists(gams_path) && file.info(gams_path)$isdir) {
+  gams <- paste0(gams_path, "gams")
+} else {
+  if (!is.null(gams_path)) cat("Custom GAMS path is not valid, falling back to `gams` from PATH.\n")
+  gams <- "gams"
+}
+
+# ---- Shared helpers ---------------------------------------------------
 saveMetadata <- function(DevMode) {
-  # Gather Git information with system calls
-  commit_author <- system("git log -1 --format=%an", intern = TRUE)
-  commit_hash <- system("git log -1 --format=%H", intern = TRUE)
-  commit_comment <- system("git log -1 --format=%B", intern = TRUE)
-  commit_date <- system("git log -1 --format=%ad", intern = TRUE)
-  branch_name <- system("git rev-parse --abbrev-ref HEAD", intern = TRUE)
-  git_status <- system("git status -s", intern = TRUE)
+  commit_author  <- system("git log -1 --format=%an",         intern = TRUE)
+  commit_hash    <- system("git log -1 --format=%H",          intern = TRUE)
+  commit_comment <- system("git log -1 --format=%B",          intern = TRUE)
+  commit_date    <- system("git log -1 --format=%ad",         intern = TRUE)
+  branch_name    <- system("git rev-parse --abbrev-ref HEAD", intern = TRUE)
+  git_status     <- system("git status -s",                   intern = TRUE)
   system("git diff --output=git_diff.txt")
-
   if (length(git_status) == 0) git_status <- "There are no changes made."
 
-  # Organize Git information into a list
   git_info <- list(
-    "Author" = commit_author,
-    "Branch Name" = branch_name,
+    "Author"         = commit_author,
+    "Branch Name"    = branch_name,
     "Commit Comment" = commit_comment,
-    "Git Status" = git_status,
-    "Commit Hash" = commit_hash,
-    "Date" = commit_date
+    "Git Status"     = git_status,
+    "Commit Hash"    = commit_hash,
+    "Date"           = commit_date
   )
 
-  # Save the appropriate region mapping for each type of run (Development / Research).
-  if (DevMode == 0) {
-    mapping <- "regionmappingOPDEV5.csv"
-  } else if (DevMode == 1) {
-    mapping <- "regionmappingOPDEV4.csv"
-  }
+  mapping <- if (DevMode == 0) "regionmappingOPDEV5.csv" else "regionmappingOPDEV4.csv"
 
-  # Get the model run description from config file
-  run_desc <- NULL
-  if (file.exists("config.json")) {
-    config <- fromJSON("config.json")
-    desc_config <- config$description
-  }
+  desc <- Sys.getenv("OPENPROM_SCENARIO_DESCRIPTION", unset = NA_character_)
+  if (is.na(desc) || !nzchar(trimws(desc))) desc <- "Default model run description."
 
-  if (!is.null(desc_config) && nzchar(trimws(desc_config))) {
-    run_desc <- desc_config
-  } else {
-    run_desc <- "Default model run description."
-  }
-
-  # Collect model information in a list
   model_info <- list(
-    "Region Mapping" = mapping,
-    "Run Description" = run_desc
+    "Region Mapping"  = mapping,
+    "Run Description" = desc
   )
 
-  # Convert to JSON and save to file
   data_to_save <- list("Git Information" = git_info, "Model Information" = model_info)
-  json_data <- toJSON(data_to_save, pretty = TRUE)
-  write(json_data, file = "metadata.json")
-
+  write(toJSON(data_to_save, pretty = TRUE), file = "metadata.json")
   cat("Metadata has been saved to metadata.json\n")
 }
 
-### Define a function that creates a separate folder for each model run.
-
 createRunFolder <- function(scenario = "default") {
-  # generate name of run folder
   folderName <- paste(scenario, format(Sys.time(), "%Y-%m-%d_%H-%M-%S"), sep = "_")
-
-  # create run folder under /runs
   if (!file.exists("runs")) dir.create("runs")
   runfolder <- paste0("runs/", folderName)
   dir.create(runfolder)
 
-  # copy necessary files to folder
-  file.copy(grep(".gms$", dir(), value = TRUE), to = runfolder)
-  file.copy(grep(".csv$", dir(), value = TRUE), to = runfolder)
-  file.copy(grep("*.R$", dir(), value = TRUE), to = runfolder)
+  # Copy run-time inputs + source tree snapshot into the run folder so every
+  # run is self-contained (and so main.gms can $call scripts/tasks/* under cwd).
+  file.copy(grep(".gms$",   dir(), value = TRUE), to = runfolder)
+  file.copy(grep(".csv$",   dir(), value = TRUE), to = runfolder)
   file.copy(grep("*.json$", dir(), value = TRUE), to = runfolder)
-  file.copy("conopt.opt", to = runfolder)
-  file.copy("git_diff.txt", to = runfolder)
-  file.copy("data", to = runfolder, recursive = TRUE)
-  file.copy("targets", to = runfolder, recursive = TRUE)
-  file.copy("core", to = runfolder, recursive = TRUE)
-  file.copy("modules", to = runfolder, recursive = TRUE)
+  file.copy("conopt.opt",   to = runfolder)
+  file.copy("data",       to = runfolder, recursive = TRUE)
+  file.copy("targets",    to = runfolder, recursive = TRUE)
+  file.copy("core",       to = runfolder, recursive = TRUE)
+  file.copy("modules",    to = runfolder, recursive = TRUE)
+  file.copy("parameters", to = runfolder, recursive = TRUE)
+  file.copy("scripts",    to = runfolder, recursive = TRUE)
 
-  # switch to the run folder
   setwd(runfolder)
 }
 
-### Define a function that archives and uploads each model run to a cloud
 syncRun <- function() {
-  folder_path <- getwd()
+  folder_path  <- getwd()
   archive_name <- paste0(basename(folder_path), ".tgz")
-
-  # Create tgz archive with the files of each model run
   all_files <- list.files(folder_path, recursive = TRUE, all.files = TRUE)
-
-  # Define what you want to exclude (Files OR Folders)
   itemsToExclude <- c("mainCalib.lst", "main.lst")
 
   if (isRunSuccessful("modelstat.txt")) {
-    
     message("Run Successful. Excluding temporary files from archive...")
-
     for (item in itemsToExclude) {
-      # This Regex means: Match the item at the start (^) AND 
-      # ensure it ends there ($) OR is a folder parent (/)
-      # This prevents "temp.gdx" from accidentally matching "temp.gdx_final"
       pattern <- paste0("^", item, "($|/)")
       all_files <- all_files[!grepl(pattern, all_files)]
     }
-    
   } else {
     message("Run had errors. Archiving ALL files for debugging.")
   }
 
-  # Include GDX files based on user preference
-  if (uploadGDX) {
-    files_to_archive <- all_files
-  } else {
-    files_to_archive <- all_files[!grepl("\\.gdx$", all_files, ignore.case = TRUE)]
-  }
+  files_to_archive <- if (uploadGDX) all_files
+                      else all_files[!grepl("\\.gdx$", all_files, ignore.case = TRUE)]
 
-  # Validate the model runs SharePoint path
-  if (file.exists("config.json")) {
-    config <- fromJSON("config.json")
-    model_runs_path <- config$model_runs_path
-
-    if (!is.null(model_runs_path) && file.exists(model_runs_path) && file.info(model_runs_path)$isdir) {
-      # Copy the archive to the user-specified directory
-      tar(tarfile = archive_name, files = files_to_archive, compression = "gzip", tar = "internal")
-
-      destination_path <- file.path(model_runs_path, basename(archive_name))
-      if (file.copy(archive_name, destination_path, overwrite = TRUE)) {
-        cat("File copied successfully to", destination_path, "\n")
-      }
-    } else {
-      cat("Please enter a valid model runs SharePoint directory path.\n")
-      quit()
+  model_runs_path <- config$paths$model_runs_path
+  if (!is.null(model_runs_path) && file.exists(model_runs_path) &&
+      file.info(model_runs_path)$isdir) {
+    tar(tarfile = archive_name, files = files_to_archive,
+        compression = "gzip", tar = "internal")
+    destination_path <- file.path(model_runs_path, basename(archive_name))
+    if (file.copy(archive_name, destination_path, overwrite = TRUE)) {
+      cat("File copied successfully to", destination_path, "\n")
     }
-  } else if (!file.exists("config.json")) {
-    cat("Please create a configuration file (config.json).\n")
-    quit()
-  }
-
-  # Delete the archive if it exists
-  if (file.exists(archive_name)) {
-    file.remove(archive_name)
-  }
-}
-
-### Define a function that returns the scenario name
-setScenarioName <- function(scen_default) {
-  scen_config <- NULL
-  # Reading the scenario name from config file
-  if (file.exists("config.json")) {
-    config <- fromJSON("config.json")
-    scen_config <- config$scenario_name
-  }
-
-  # Checking if the scenario name is NULL or empty string
-  if (!is.null(scen_config) && nzchar(trimws(scen_config))) {
-    scen <- scen_config
   } else {
-    # If the config scenario name is not valid, get the default one
-    # as specified in each VS Code task, e.g. DEV, DEVNEWDATA etc
-    cat("Invalid scenario name or missing config file, setting default name.\n")
-    scen <- scen_default
+    cat("config.json:paths.model_runs_path is not valid, skipping sync.\n")
   }
 
-  return(scen)
+  if (file.exists(archive_name)) file.remove(archive_name)
 }
-### Function that check if all country and year runs are successfull
+
 isRunSuccessful <- function(statusFilePath) {
   if (!file.exists(statusFilePath)) return(FALSE)
-
   lines <- readLines(statusFilePath)
   modelStatus <- as.numeric(sub(".*Model Status:([0-9.]+).*", "\\1", lines))
-  allAreValid <- all(modelStatus %in% c(2.0, 5.0))
-
-  return(allAreValid)
+  all(modelStatus %in% c(2.0, 5.0))
 }
 
-### Executing the VS Code tasks
+# ---- Load task bodies --------------------------------------------------
+for (f in list.files("scripts/tasks", pattern = "^task\\d+[A-Z].*\\.R$",
+                     full.names = TRUE)) source(f)
 
-# Optionally setting a custom GAMS path
-if (file.exists("config.json")) {
-  config <- fromJSON("config.json")
-  gams_path <- config$gams_path
+# ---- Parse CLI args ---------------------------------------------------
+args            <- commandArgs(trailingOnly = TRUE)
+cli_task_id     <- as.integer(sub("task_id=", "", grep("^task_id=", args, value = TRUE)))
+cli_csv_paths   <- grep("\\.csv$", args, ignore.case = TRUE, value = TRUE)
 
-  # Checking if the specified path exists and is a directory
-  if (!is.null(gams_path) && file.exists(gams_path) && file.info(gams_path)$isdir) {
-    gams <- paste0(gams_path, "gams")
-  } else {
-    cat("The specified custom GAMS path is not valid. Using the default path.\n")
-    gams <- "gams"
+if (length(cli_csv_paths) > 1) {
+  stop("Pass at most one CSV path. Got: ", paste(cli_csv_paths, collapse = ", "))
+}
+batch_mode <- length(cli_csv_paths) == 1L
+
+if (!batch_mode && !length(cli_task_id)) {
+  stop("Usage:\n",
+       "  Rscript start.R task_id=N        single scenario from config.json:scenario\n",
+       "  Rscript start.R <path-to-csv>    batch over each row in the CSV")
+}
+
+# ---- nestDottedKeys: take a flat named list whose names may contain dots ---
+# (e.g. "gams_flags.fScenario") and return a nested list rebuilding the
+# hierarchy. NA / empty-string values are skipped (= do not override).
+nestDottedKeys <- function(flat) {
+  out <- list()
+  for (key in names(flat)) {
+    val <- flat[[key]]
+    if (is.null(val) ||
+        (length(val) == 1 && (is.na(val) || identical(as.character(val), "")))) next
+    if (is.character(val)) val <- trimws(val)
+    if (identical(val, "")) next
+    parts <- strsplit(key, ".", fixed = TRUE)[[1]]
+    leaf <- val
+    for (i in rev(seq_along(parts))) leaf <- setNames(list(leaf), parts[i])
+    out <- modifyList(out, leaf)
   }
+  out
+}
+
+# ---- runScenario(): set env vars + dispatch to the right task body --------
+runScenario <- function(scn) {
+  if (is.null(scn$task_id)) stop("task_id is missing in the scenario.")
+
+  if (length(scn$gams_flags)) {
+    extra <- paste(sprintf("--%s=%s", names(scn$gams_flags),
+                           unlist(scn$gams_flags)),
+                   collapse = " ")
+  } else {
+    extra <- ""
+  }
+  Sys.setenv(OPENPROM_EXTRA_FLAGS          = extra)
+  Sys.setenv(OPENPROM_SCENARIO             = toJSON(scn, auto_unbox = TRUE))
+  Sys.setenv(OPENPROM_SCENARIO_DESCRIPTION = scn$description %||% "")
+
+  switch(as.character(scn$task_id),
+         "0" = runTask0(), "1" = runTask1(), "2" = runTask2(),
+         "3" = runTask3(), "4" = runTask4(), "5" = runTask5(),
+         "6" = runTask6(), "7" = runTask7(),
+         stop("Unknown task_id: ", scn$task_id))
+
+  message(sprintf("[%s] task_id=%d done",
+                  scn$scenario_name %||% "(no name)", scn$task_id))
+}
+
+# ---- Mode dispatch ----------------------------------------------------
+if (!batch_mode) {
+  # ---- Single mode: use config.json:scenario, override task_id via CLI ----
+  scn <- config$scenario %||% list()
+  scn$task_id <- cli_task_id
+  runScenario(scn)
 } else {
-  # Use the default gams command if config.json doesn't exist.
-  gams <- "gams"
-}
-
-# Parsing the command line argument
-args <- commandArgs(trailingOnly = TRUE)
-task <- NULL
-
-for (arg in args) {
-  key_value <- strsplit(arg, "=")[[1]]
-
-  if (key_value[1] == "task") {
-    task <- as.numeric(key_value[2])
+  # ---- Batch mode: read CSV, run each row as its own scenario ----
+  csv_path <- cli_csv_paths[1]
+  if (!file.exists(csv_path)) {
+    stop(sprintf(
+      "Batch CSV not found: %s\nCreate one (see scenarios.template.csv for the format), or run single-scenario mode:\n  Rscript start.R task_id=N",
+      csv_path
+    ))
   }
-}
+  ALLOWED_TASK_IDS <- c(2L, 7L)
 
-if (is.null(task)) stop("Task parameter is missing or invalid.")
+  csv <- read.csv(csv_path, stringsAsFactors = FALSE, na.strings = c("", "NA"),
+                  check.names = FALSE)
+  if (!"task_id" %in% colnames(csv))
+    stop(csv_path, " is missing the required `task_id` column.")
+  if (!"scenario_name" %in% colnames(csv))
+    stop(csv_path, " is missing the required `scenario_name` column.")
+  if (nrow(csv) == 0)
+    stop(csv_path, " has no data rows.")
 
-# Setting the appropriate GAMS flags for each task
-if (task == 0) {
-  # Running task OPEN-PROM DEV
-  saveMetadata(DevMode = 1)
-  if (withRunFolder) createRunFolder(setScenarioName("DEV"))
-
-  if (.Platform$OS.type == "unix") {
-    cmdCommand <- paste0(gams, " main.gms --DevMode=1 --GenerateInput=off -logOption 4 -Idir=./data 2>&1")
-    system(paste0("sh -c ", shQuote(cmdCommand)))
-  } else {
-    cmdCommand <- paste0(gams, " main.gms --DevMode=1 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log")
-    shell(cmdCommand)
-  }
-
-  if (withRunFolder && withReport) {
-    run_path <- getwd()
-    setwd("../../") # Going back to root folder
-    cat("Executing the report output script\n")
-    report_cmd <- paste0("Rscript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
-    system(report_cmd)
-    setwd(run_path)
-  }
-  if (withRunFolder && withSync) syncRun()
-} else if (task == 1) {
-  # Running task OPEN-PROM DEV NEW DATA
-  saveMetadata(DevMode = 1)
-  if (withRunFolder) createRunFolder(setScenarioName("DEVNEWDATA"))
-
-
-  if (.Platform$OS.type == "unix") {
-    cmdCommand <- paste0(gams, " main.gms --DevMode=1 --GenerateInput=on -logOption 4 -Idir=./data 2>&1")
-    system(cmdCommand)
-  } else {
-    cmdCommand <- paste0(gams, " main.gms --DevMode=1 --GenerateInput=on -logOption 4 -Idir=./data 2>&1 | tee full.log")
-    shell(cmdCommand)
-  }
-  if (withRunFolder) {
-    file.copy("data", to = "../../", recursive = TRUE) # Copying generated data to parent folder for future runs
-    file.copy("targets", to = "../../", recursive = TRUE)
-    if (withSync) syncRun()
-  }
-} else if (task == 2) {
-  # Running task OPEN-PROM RESEARCH
-  saveMetadata(DevMode = 0)
-  if (withRunFolder) createRunFolder(setScenarioName("RES"))
-
-  if (.Platform$OS.type == "unix") {
-    cmdCommand <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1")
-    system(cmdCommand)
-  } else {
-    cmdCommand <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log")
-    shell(cmdCommand)
+  # ---- Optional `start` column: gate each row (1 = run, 0 = skip).
+  # Validate the whole column upfront (any value other than 0/1 aborts) so
+  # typos surface before any scenario starts running. Missing column =
+  # everything runs (backwards-compatible with pre-`start` CSVs).
+  total_rows <- nrow(csv)
+  skipped_idx <- integer(0)
+  if ("start" %in% colnames(csv)) {
+    raw_start <- csv$start
+    parsed_start <- suppressWarnings(as.integer(trimws(as.character(raw_start))))
+    bad <- which(is.na(parsed_start) | !(parsed_start %in% c(0L, 1L)))
+    if (length(bad)) {
+      details <- paste(
+        sprintf("  row %d (scenario_name=%s): start=%s",
+                bad, csv$scenario_name[bad],
+                ifelse(is.na(raw_start[bad]), "<NA>",
+                       sprintf("\"%s\"", raw_start[bad]))),
+        collapse = "\n"
+      )
+      stop(sprintf(
+        "%s: `start` column must be 1 (run) or 0 (skip); invalid value(s):\n%s",
+        csv_path, details
+      ))
+    }
+    skipped_idx <- which(parsed_start == 0L)
+    if (length(skipped_idx)) {
+      for (j in skipped_idx) {
+        cat(sprintf("Skipping row %d (scenario_name=%s): start=0\n",
+                    j, csv$scenario_name[j]))
+      }
+      csv <- csv[parsed_start == 1L, , drop = FALSE]
+    }
+    # Strip `start` itself so it isn't merged into config.json:scenario
+    csv$start <- NULL
   }
 
-  if (withRunFolder && withReport) {
-    run_path <- getwd()
-    setwd("../../") # Going back to root folder
-    cat("Executing the report output script\n")
-    report_cmd <- paste0("Rscript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
-    system(report_cmd)
-    setwd(run_path)
-  }
-  if (withRunFolder && withSync) syncRun()
+  cat(sprintf("Loaded %d row(s) from %s, %d active%s\n",
+              total_rows, csv_path, nrow(csv),
+              if (length(skipped_idx)) sprintf(", %d skipped", length(skipped_idx)) else ""))
+  if (nrow(csv) == 0)
+    stop("All rows are gated off (start=0); nothing to run.")
 
-} else if (task == 3) {
-  # Running task OPEN-PROM RESEARCH NEW DATA
-  saveMetadata(DevMode = 0)
-  if (withRunFolder) createRunFolder(setScenarioName("RESNEWDATA"))
+  orig_wd <- getwd()
+  for (i in seq_len(nrow(csv))) {
+    setwd(orig_wd)  # createRunFolder() changes cwd; reset before each iteration.
 
-  # NEW DATA & CALIBRATE
-  if (.Platform$OS.type == "unix") {
-    calib_cmd <- paste0(
-    gams,
-    " main.gms -o mainCalib.lst --WriteGDX=off --DevMode=0 --fScenario=4 --GenerateInput=on --Calibration=MatCalibration -logOption 4 -Idir=./data 2>&1"
-    )
-    exit_code <- system(calib_cmd)
-  } else {
-    calib_cmd <- paste0(
-    gams,
-    " main.gms -o mainCalib.lst --WriteGDX=off --DevMode=0 --fScenario=4 --GenerateInput=on --Calibration=MatCalibration -logOption 4 -Idir=./data 2>&1 | tee fullCalib.log"
-    )
-    exit_code <- shell(calib_cmd)
-  }
-  cat("Executing calibration with data generation:\n", calib_cmd, "\n")
+    row     <- as.list(csv[i, , drop = FALSE])
+    task_id <- as.integer(row$task_id)
+    if (!task_id %in% ALLOWED_TASK_IDS) {
+      stop(sprintf(
+        "Row %d (scenario_name=%s): task_id=%s not allowed for batch; only {%s} are batchable.",
+        i, row$scenario_name, row$task_id, paste(ALLOWED_TASK_IDS, collapse = ", ")
+      ))
+    }
 
-  # Check for calibration execution failure
-  if (exit_code != 0) {
-    cat("ERROR: GAMS calibration failed with exit code:", exit_code, "\n")
-    cat("Calibration and data generation failed. Check fullCalib.log for details.\n")
-    stop("GAMS calibration execution failed during data generation. Terminating run.")
-  }
-  
-  # Verify calibration output files exist
-  CalibratedParams <- c("iMatFacPlaAvailCap.csv", "iMatrFactorData.csv")
-  missing_files <- CalibratedParams[!file.exists(CalibratedParams)]
-  if (length(missing_files) > 0) {
-    cat("ERROR: Calibrated parameter files missing:", paste(missing_files, collapse = ", "), "\n")
-    stop("Calibration failed to generate required parameter files. Terminating run.")
-  }
-  
-  newNames <- gsub("[0-9]", "", CalibratedParams) # remove numbers
-  CalibratedParamsPath <- file.path(getwd(), CalibratedParams)
-  newPath <- file.path(getwd(), "data", newNames)
-  rename_success <- file.rename(CalibratedParamsPath, newPath)
-  
-  if (!all(rename_success)) {
-    cat("ERROR: Failed to rename calibrated parameter files\n")
-    stop("File operation failed during calibration cleanup. Terminating run.")
-  }
-  
-  cat("Calibration completed successfully.\n")
+    overlay         <- nestDottedKeys(row)
+    overlay$task_id <- task_id          # ensure integer, not character from CSV
+    scn             <- modifyList(config$scenario %||% list(), overlay)
 
-  # RESEARCH
-  if (.Platform$OS.type == "unix") {
-    research_cmd <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1")
-    exit_code <- system(paste0("sh -c ", shQuote(research_cmd)))
-  } else {
-    research_cmd <- paste0(gams, " main.gms --DevMode=0 --GenerateInput=off -logOption 4 -Idir=./data 2>&1 | tee full.log")
-    exit_code <- shell(research_cmd)
-  }
-  cat("Executing research run:\n", research_cmd, "\n")
-  # Check for research execution failure
-  if (exit_code != 0) {
-    cat("ERROR: GAMS research execution failed with exit code:", exit_code, "\n")
-    cat("Research run failed. Check full.log for details.\n")
-    stop("GAMS research execution failed. Terminating run.")
-  }
-  
-  cat("Research run completed successfully.\n")
-  if (withRunFolder) file.copy("data", to = "../../", recursive = TRUE)
-  if (withRunFolder) file.copy("targets", to = "../../", recursive = TRUE)
-
-  if (withRunFolder && withReport) {
-    run_path <- getwd()
-    setwd("../../") # Going back to root folder
-    cat("Executing the report output script\n")
-    report_cmd <- paste0("Rscript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
-    system(report_cmd)
-    setwd(run_path)
+    cat(sprintf("\n=== [%d/%d] %s (task_id=%d) ===\n",
+                i, nrow(csv), scn$scenario_name %||% "(no name)", task_id))
+    runScenario(scn)
   }
 
-  if (withRunFolder && withSync) syncRun()
-} else if (task == 4) {
-  # Debugging mode
-
-  if (.Platform$OS.type == "unix") {
-    cmdCommand <- paste0(gams, " main.gms -logOption 4 -Idir=./data 2>&1")
-    system(cmdCommand)
-  } else {
-    cmdCommand <- paste0(gams, " main.gms -logOption 4 -Idir=./data 2>&1 | tee full.log")
-    shell(cmdCommand)
-  }
-
-} else if (task == 5) {
-  # Running task OPEN-PROM CALIBRATE
-  saveMetadata(DevMode = 0)
-  if (withRunFolder) createRunFolder(setScenarioName("CALIB"))
-
-  cmdCommand <- paste0(
-      gams,
-      " main.gms -o mainCalib.lst --DevMode=0 --Calibration=MatCalibration --fScenario=4 -logOption 4 -Idir=./data 2>&1 | tee fullCalib.log"
-    )
-  if (.Platform$OS.type == "unix") {
-    cmdCommand <- paste0(
-      gams,
-      " main.gms -o mainCalib.lst --DevMode=0 --Calibration=MatCalibration --fScenario=4 -logOption 4 -Idir=./data 2>&1"
-    )
-    system(cmdCommand)
-  } else {
-    cmdCommand <- paste0(
-      gams,
-      " main.gms -o mainCalib.lst --DevMode=0 --Calibration=MatCalibration --fScenario=4 -logOption 4 -Idir=./data 2>&1 | tee fullCalib.log"
-    )
-    shell(cmdCommand)
-  }
-
-  if (withRunFolder && withSync) syncRun()
-
-  CalibratedParams <- c("iMatFacPlaAvailCap.csv", "iMatrFactorData.csv")
-  CalibratedParamsPath <- file.path(getwd(), CalibratedParams)
-  newPath <- file.path(dirname(dirname(getwd())), "data", CalibratedParams)
-  file.rename(CalibratedParamsPath, newPath)
-
-} else if (task == 6) {
-  # Running task OPEN-PROM CALIBRATE CARBON PRICES
-  saveMetadata(DevMode = 0)
-  if (withRunFolder) createRunFolder(setScenarioName("CARBONPRICES"))
-
-  run_path <- getwd()
-  print(run_path)
-  report_cmd <- paste0("Rscript ./findCarbonPrice.R ", run_path)
-  system(report_cmd)
-
-  if (withRunFolder && withReport) {
-    setwd("../../") # Going back to root folder
-    cat("Executing the report output script\n")
-    report_cmd <- paste0("Rscript ./reportOutput.R ", run_path) # Executing the report output script on the current run path
-    system(report_cmd)
-    setwd(run_path)
-  }
-  if (withRunFolder && withSync) syncRun()
+  cat("\nBatch finished.\n")
 }

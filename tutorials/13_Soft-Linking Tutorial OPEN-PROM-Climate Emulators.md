@@ -74,10 +74,10 @@ Example:
 
 ## 4. Installation Script 
 
-Installing climate assessment is done by running the bash script "installClimateAssessmentToolWSL.sh" in the scripts folder. Please make sure that you are in the right folder and you are running it from WSL, not CMD. You can set the permissions by running in the WSL terminal:
+Installing climate assessment is done by running the bash script `scripts/tools/installClimateAssessmentToolWSL.sh`. Please make sure that you are in the right folder and you are running it from WSL, not CMD. You can set the permissions by running in the WSL terminal:
 ```
-chmod +x installClimateAssessmentToolWSL.sh
-./installClimateAssessmentToolWSL.sh
+chmod +x scripts/tools/installClimateAssessmentToolWSL.sh
+./scripts/tools/installClimateAssessmentToolWSL.sh
 ```
 After running the script, you should see a new folder called `.venv` in the `climate-assessment` folder. This is your Python virtual environment.
 
@@ -248,7 +248,7 @@ MAGICC_WORKER_ROOT_DIR=/mnt/tmp/workers
 ## 6. Typical Workflow
 
 1. Place emissions input files under the designated runs/<runFolder>/emissions.csv directory (or specify a custom path).
-2. Run the script with model and folder options, e.g.: "Rscript runClimateModels.R --model magicc --runFolder daily_npi"
+2. Run the script with model and folder options, e.g.: `Rscript scripts/tools/runClimateModels.r --model magicc --runFolder daily_npi`
 3. The script will:
    * Call the Python workflow inside the correct virtual environment.
    * Save processed outputs to runs/<runFolder>/EmissionsOutput-<model>/.

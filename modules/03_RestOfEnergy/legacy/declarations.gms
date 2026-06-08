@@ -2,16 +2,16 @@
 *' @code
 
 Parameters
-i03SupTrnasfOutputRefineries(allCy,EF,YTIME)	  "Supplementary parameter for the transformation output from refineries (Mtoe)"
-i03SupResRefCapacity(allCy,SUPOTH,YTIME)	      "Supplementary Parameter for the residual in refineries Capacity (1)"
+*i03SupTrnasfOutputRefineries(allCy,EF,YTIME)	  "Supplementary parameter for the transformation output from refineries (Mtoe)"
+*i03SupResRefCapacity(allCy,SUPOTH,YTIME)	      "Supplementary Parameter for the residual in refineries Capacity (1)"
 i03TotEneBranchCons(allCy,EF,YTIME)	              "Total Energy Branch Consumption (Mtoe)"
 *i03RefCapacity(allCy,YTIME)	                      "Refineries Capacity (Million Barrels/day)"
-i03ResTransfOutputRefineries(allCy,EF,YTIME)      "Residual in Transformation Output from Refineries (Mtoe)"
-i03ResHcNgOilPrProd(allCy,EF,YTIME)	              "Residuals for Hard Coal, Natural Gas and Oil Primary Production (1)"
-i03RatioImpFinElecDem(allCy,YTIME)	              "Ratio of imports in final electricity demand (1)"
+*i03ResTransfOutputRefineries(allCy,EF,YTIME)      "Residual in Transformation Output from Refineries (Mtoe)"
+*i03ResHcNgOilPrProd(allCy,EF,YTIME)	              "Residuals for Hard Coal, Natural Gas and Oil Primary Production (1)"
+*i03RatioImpFinElecDem(allCy,YTIME)	              "Ratio of imports in final electricity demand (1)"
 i03RatioPrimaryFuels(allCy,EFS,YTIME)
 i03InputEffSupply(allCy,SSBS,EFS,YTIME)
-i03RateExpTotImp(allCy,EFS,YTIME)
+i03RateExpTotImp(allCy,EFS,YTIME)                  "Share of exports in total world trade"
 i03RateImpGrossInlCons(allCy,EFS,YTIME)            "Rate of Imports in Gross inland consumption (1)"
 ;
 
@@ -30,9 +30,8 @@ Q03Imp(allCy,EFS,YTIME)	                                   "Compute fake imports
 *'                **Interdependent Equations**
 Q03ImpNetEneBrnch(allCy,EFS,YTIME)	                       "Compute net imports"
 Q03ConsFiEneSec(allCy,SSBS,EFS,YTIME)	                       "Compute energy branch final consumption"
-Q03ConsFinEneCountry(allCy,EFS,YTIME)                      "Compute total final energy consumption"
-Q03ConsFinNonEne(allCy,EFS,YTIME)                          "Compute final non-energy consumption"
 Q03LossesDistr(allCy,EFS,YTIME)                            "Compute distribution losses"
+Q03FinalEnergy(allCy,DSBS,EFS,YTIME)                       "Compute total final energy consumption"
 ;
 
 Variables
@@ -41,7 +40,7 @@ Variables
 *V03CapRef(allCy,YTIME)	                                   "Refineries capacity (Million barrels/day)"
 V03InpTotTransf(allCy,SSBS,EFS,YTIME)	                       "Total transformation input (Mtoe)"
 V03OutTotTransf(allCy,SSBS,EFS,YTIME)	                       "Total transformation output (Mtoe)"
-V03Transfers(allCy,EFS,YTIME)	                           "Transfers (Mtoe)"
+V03Transfers(allCy,EFS,YTIME)	                             "Transfers (Mtoe)"
 V03ConsGrssInl(allCy,EFS,YTIME)	                           "Gross Inland Consumption (Mtoe)"
 V03ProdPrimary(allCy,EFS,YTIME)	                           "Primary Production (Mtoe)"
 V03Exp(allCy,EFS,YTIME)                        	           "Exports fake (Mtoe)"
@@ -50,7 +49,6 @@ V03Imp(allCy,EFS,YTIME)             	                   "Fake Imports for all fu
 *'                **Interdependent Variables**
 VmImpNetEneBrnch(allCy,EFS,YTIME)	                       "Net Imports (Mtoe)"
 VmConsFiEneSec(allCy,SSBS,EFS,YTIME)                            "Final consumption in energy sector (Mtoe)"
-VmConsFinEneCountry(allCy,EF,YTIME)                        "Total final energy consumnption (Mtoe)"
-VmConsFinNonEne(allCy,EFS,YTIME)                           "Final non energy consumption (Mtoe)"
 VmLossesDistr(allCy,EFS,YTIME)                             "Distribution losses (Mtoe)"
+VmFinalEnergy(allCy,DSBS,EFS,YTIME)                        "Total final energy (Mtoe)"
 ;

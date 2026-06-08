@@ -3,10 +3,11 @@
     // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
+        // ---- Single-scenario task buttons (task 0 ... task 7) ----
         {
             "label": "OPEN-PROM DEV",
             "type": "shell",
-            "command": "Rscript start.R task=0",
+            "command": "Rscript start.R task_id=0",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -20,7 +21,7 @@
         {
             "label": "OPEN-PROM DEV NEW DATA",
             "type": "shell",
-            "command": "Rscript start.R task=1",
+            "command": "Rscript start.R task_id=1",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -34,7 +35,7 @@
         {
             "label": "OPEN-PROM RESEARCH",
             "type": "shell",
-            "command": "Rscript start.R task=2",
+            "command": "Rscript start.R task_id=2",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -44,11 +45,11 @@
                 "focus": true
             }
         },
-               
+
         {
             "label": "OPEN-PROM RESEARCH NEW DATA",
             "type": "shell",
-            "command": "Rscript start.R task=3",
+            "command": "Rscript start.R task_id=3",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -62,7 +63,93 @@
         {
             "label": "OPEN-PROM DEBUGGING",
             "type": "shell",
-            "command": "Rscript start.R task=4",
+            "command": "Rscript start.R task_id=4",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "focus": true
+            }
+        },
+
+        {
+            "label": "CALIBRATE",
+            "type": "shell",
+            "command": "Rscript start.R task_id=5",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "focus": true
+            }
+        },
+
+        {
+            "label": "CALIBRATE CARBON PRICES",
+            "type": "shell",
+            "command": "Rscript start.R task_id=6",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "focus": true
+            }
+        },
+
+        {
+            "label": "OPEN-PROM SOFT-LINK MAgPIE",
+            "type": "shell",
+            "command": "Rscript start.R task_id=7",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "focus": true
+            }
+        },
+
+        // ---- Batch button (extends the task system across many scenarios) ----
+        {
+            "label": "RUN BATCH",
+            "type": "shell",
+            "command": "Rscript start.R scenarios.csv",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "focus": true
+            }
+        },
+
+        // ---- Utilities ----
+        {
+            "label": "OPEN-PROM LIVE",
+            "type": "shell",
+            "command": "python ./scripts/tools/R-live.py",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "focus": true
+            }
+        },
+
+        {
+            "label": "COMPARE SCENARIOS",
+            "type": "shell",
+            "command": "Rscript scripts/tasks/reportOutput.R",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -85,63 +172,7 @@
             "presentation": {
                 "focus": true
             }
-        },
-
-        {
-            "label": "COMPARE SCENARIOS",
-            "type": "shell",
-            "command": "Rscript reportOutput.R",
-            "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "presentation": {
-                "focus": true
-            }
-        },
-
-        {
-            "label": "CALIBRATE",
-            "type": "shell",
-            "command": "Rscript start.R task=5",
-            "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "presentation": {
-                "focus": true
-            }
-        },
-
-        {
-            "label": "CALIBRATE CARBON PRICES",
-            "type": "shell",
-            "command": "Rscript start.R task=6",
-            "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "presentation": {
-                "focus": true
-            }
-        },
-
-        {
-            "label": "OPEN-PROM LIVE",
-            "type": "shell",
-            "command": "python ./scripts/R-live.py",
-            "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "presentation": {
-                "focus": true
-            }
-        },
+        }
 
     ]
 }

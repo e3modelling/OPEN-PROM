@@ -6,7 +6,7 @@ library(magclass)
 read_and_process_report <- function(base_path, scenario_name) {
   scenario_path <- file.path(base_path, "runs", scenario_name)
   setwd(scenario_path)
-  source("reportOutput.R")
+  source("scripts/tasks/reportOutput.R")
   reporting <- read.report("reporting.mif")
   setwd(base_path)  # Reset back to the base path
   return(reporting)
