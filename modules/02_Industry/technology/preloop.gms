@@ -61,7 +61,7 @@ VmConsFuel.FX(runCy,DSBS,EF,YTIME)$(not TRANSE(DSBS) and not sameas(DSBS,"ICT") 
 *vmDemFinSubFuelInd.FX(runCy,YTIME)$(not An(YTIME))= SUM(INDSE,VmDemFinSubFuelSubsec.L(runCy,INDSE,YTIME));
 *---
 V02VarCostTech.LO(runCy,DSBS,ITECH,YTIME) = 0;
-V02VarCostTech.L(runCy,DSBS,ITECH,YTIME) = 2;
+V02VarCostTech.L(runCy,DSBS,ITECH,YTIME)$SECTTECH(DSBS,ITECH) = 2;
 V02VarCostTech.FX(runCy,DSBS,ITECH,YTIME)$(DATAY(YTIME) and (INDDOM(DSBS) or NENSE(DSBS)) and SECTTECH(DSBS,ITECH)) =
   (
     sum(EF$ITECHtoEF(ITECH,EF),
@@ -69,8 +69,7 @@ V02VarCostTech.FX(runCy,DSBS,ITECH,YTIME)$(DATAY(YTIME) and (INDDOM(DSBS) or NEN
       VmPriceFuelSubsecCarVal.L(runCy,DSBS,EF,YTIME) +
       imCO2CaptRateIndustry(runCy,ITECH,YTIME) * VmCstCO2SeqCsts.L(runCy,YTIME) * 1e-3 * (imCo2EmiFac(runCy,DSBS,EF,YTIME) + 4.17$(sameas("BMSWAS", EF))) +
       (1-imCO2CaptRateIndustry(runCy,ITECH,YTIME)) * 1e-3 * (imCo2EmiFac(runCy,DSBS,EF,YTIME) + 4.17$(sameas("BMSWAS", EF))) *
-      (sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal.L(runCy,NAP,YTIME))) +
-      VmRenValue.L(YTIME)$(not RENEF(ITECH) and not NENSE(DSBS)) !! needs change of units
+      (sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal.L(runCy,NAP,YTIME)))
     ) +
     imVarCostTech(runCy,DSBS,ITECH,YTIME) / sUnitToKUnit
   ) / imUsfEneConvSubTech(runCy,DSBS,ITECH,YTIME);
