@@ -69,9 +69,7 @@ VmPriceElecInd.LO(runCy,TCHP,YTIME) = 0;
 VmPriceElecInd.L(runCy,TCHP,YTIME) = imPriceElecInd(runCy,TCHP,"%fBaseY%");
 VmPriceElecInd.FX(runCy,TCHP,YTIME)$DATAY(YTIME) = imPriceElecInd(runCy,TCHP,YTIME);
 *---
-VmLft.L(runCy,DSBS,TTECH,YTIME) = 10;
-VmLft.FX(runCy,"PC",TTECH,YTIME)$(DATAY(YTIME) and SECTTECH("PC",TTECH)) = i01TechLft(runCy,"PC",TTECH,YTIME);
-VmLft.FX(runCy,DSBS,TECH,YTIME)$(SECTTECH(DSBS,TECH) and (not sameas(DSBS,"PC"))) = i01TechLft(runCy,DSBS,TECH,YTIME);
+VmLft.FX(runCy,DSBS,TECH,YTIME)$SECTTECH(DSBS,TECH) = i01TechLft(runCy,DSBS,TECH,YTIME);
 VmLft.FX(runCy,DSBS,TECH,YTIME)$(not SECTTECH(DSBS,TECH)) = 0;
 *---
 openprom.optfile=1;

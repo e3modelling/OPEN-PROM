@@ -16,6 +16,7 @@ V01PremScrp.FX(runCy,TRANSE,TTECH,YTIME)$(not SECTTECH(TRANSE,TTECH)) = 0;
 V01StockPcYearly.L(runCy,YTIME) = 0.1;
 V01StockPcYearly.FX(runCy,YTIME)$DATAY(YTIME) = imActv(YTIME,runCy,"PC");
 *---
+V01ActivPassTrnsp.LO(runCy,TRANSE,YTIME) = 0;
 V01ActivPassTrnsp.L(runCy,TRANSE,YTIME) = 0.1;
 V01ActivPassTrnsp.FX(runCy,"PC",YTIME)$(DATAY(YTIME)) = imTransChar(runCy,"KM_VEH",YTIME); 
 V01ActivPassTrnsp.FX(runCy,TRANP,YTIME) $(DATAY(YTIME) and not sameas(TRANP,"PC")) = imActv(YTIME,runCy,TRANP); 
@@ -86,6 +87,7 @@ V01CostFuel.FX(runCy,TRANSE,TTECH,YTIME)$DATAY(YTIME) =
   1$(not sameas(TRANSE,"PC")) +
   1e-3 * V01ActivPassTrnsp.L(runCy,TRANSE,YTIME)$sameas(TRANSE,"PC") !! aviation should be divided by 1000
 );
+V01CostFuel.FX(runCy,TRANSE,TTECH,YTIME)$(not SECTTECH(TRANSE,TTECH)) = 0;
 *---
 V01CostTranspPerMeanConsSize.LO(runCy,TRANSE,TTECH,YTIME) = 0;
 V01CostTranspPerMeanConsSize.L(runCy,TRANSE,TTECH,YTIME)$SECTTECH(TRANSE,TTECH) = 1;

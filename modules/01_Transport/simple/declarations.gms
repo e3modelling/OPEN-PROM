@@ -38,7 +38,6 @@ Q01PremScrp(allCy,TRANSE,TTECH,YTIME)
 Q01RateScrPcTot(allCy,TRANSE,TTECH,YTIME)
 Q01ShareBlend(allCy,TRANSE,EF,YTIME)
 *'                **Interdependent Equations**
-Q01Lft(allCy,DSBS,TECH,YTIME)	                               "Compute the lifetime of passenger cars" 
 Q01ConsFuelTransport(allCy,TRANSE,EF,YTIME)
 Q01CapacityTransport(allCy,TRANSE,TTECH,YTIME)
 ;

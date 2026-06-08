@@ -256,6 +256,7 @@ i01ShareBlend(runCy,TRANSE,EF,YTIME)$(DATAY(YTIME) and SECtoEF(TRANSE,EF) and ye
 )$SUM(EF2$BLENDMAP(EF,EF2), imFuelCons(runCy,TRANSE,EF2,YTIME)) +
 1$(not SUM(EF2$BLENDMAP(EF,EF2), imFuelCons(runCy,TRANSE,EF2,YTIME)));
 i01ShareBlend(runCy,TRANSE,EF,YTIME)$(DATAY(YTIME) and SECtoEF(TRANSE,EF) and BIOFUELS(EF)) = 1 - SUM(EF2$BLENDMAP(EF2,EF), i01ShareBlend(runCy,TRANSE,EF2,YTIME));
+i01ShareBlend(runCy,TRANSE,EF,YTIME)$(DATAY(YTIME) and SECtoEF(TRANSE,EF) and not yes$SUM(EF2,BLENDMAP(EF2,EF))) = 1;
 i01ShareBlend(runCy,TRANSE,EF,YTIME)$AN(YTIME) = i01ShareBlend(runCy,TRANSE,EF,"%fBaseY%");
 *---
 $IFTHEN.calib %Calibration% == MatCalibration
@@ -267,13 +268,6 @@ $offdelim
 *imMatrFactor.FX(runCy,"PC",TTECH,YTIME)$((t01StockPC(runCy,TTECH,YTIME) < 0) and (t01NewShareStockPC(runCy,TTECH,YTIME) <= 0)) = 100;         
 $ENDIF.calib
 *---
-i01calb(runCy,TRANSE,EF)$(SECtoEF(TRANSE,EF) and BIOFUELS(EF))= 
-(
-  log(0.8/i01ShareBlend(runCy,TRANSE,EF,"%fBaseY%")-1) -
-  2 * log(imFuelPrice(runCy,TRANSE,EF,"%fBaseY%")/ SUM(EF2$(BioToFossilFuel(EF,EF2)), imFuelPrice(runCy,TRANSE,EF2,"%fBaseY%")))
-)$i01ShareBlend(runCy,TRANSE,EF,"%fBaseY%") +
-3$(not i01ShareBlend(runCy,TRANSE,EF,"%fBaseY%"));
-
 *i01calibweibul(runCy,TRANSE,EF) = -0.1;
 i01calibweibul(runCy,TRANSE,EF,"%fBaseY%")$(SECtoEF(TRANSE,EF) and yes$SUM(EF2,BLENDMAP(EF,EF2))) = 1;
 i01calibweibul(runCy,TRANSE,EF,"%fBaseY%")$(SECtoEF(TRANSE,EF) and yes$SUM(EF2,BLENDMAP2(EF,EF2))) = 
@@ -286,53 +280,18 @@ i01calibweibul(runCy,TRANSE,EF,YTIME)$AN(YTIME) = i01calibweibul(runCy,TRANSE,EF
 i01calibweibul(runCy,TRANSE,EF,YTIME)$(AN(YTIME) and SECtoEF(TRANSE,EF) and yes$SUM(EF2,BLENDMAP2(EF,EF2))) = min(1, i01calibweibul(runCy,TRANSE,EF,YTIME-1) + (ord(YTIME) - (%fBaseY% - %fStartHorizon% + 1)) * (1-i01calibweibul(runCy,TRANSE,EF,"%fBaseY%")) / (2050 - %fBaseY%));
 
 
-
-
-**i01calibweibul(runCy,TRANSE,EF,YTIME)$(SECtoEF(TRANSE,EF) and yes$SUM(EF2,BLENDMAP2(EF,EF2)) and AN(YTIME)) = i01calibweibul(runCy,TRANSE,EF,YTIME-1) + 0.01;
-*i01calibweibul(runCy,TRANSE,TTECH,EF)$(SECTTECH(TRANSE,TTECH) and TTECHtoEF(TTECH,EF)) = (imFuelCons(runCy,TRANSE,EF,"%fBaseY%") + 1e-6) / SUM(EF2$(SECtoEF(TRANSE,EF2) and TTECHtoEF(TTECH,EF2)),imFuelCons(runCy,TRANSE,EF2,"%fBaseY%") + 1e-6) *imFuelPrice(runCy,TRANSE,EF,"%fBaseY%") ** 2;
-!!i01calibweibul(allCy,TRANSE,TTECH,EF)$(SECTTECH(TRANSE,TTECH) and TTECHtoEF(TTECH,EF) and BIOFUELS(EF)) = 0.5;
-$ontext
 testSFC(runCy,TRANSE,TTECH)$(not sameas("PC",TRANSE) ) = 
 test2SFC(TRANSE,TTECH) * 
 [
   (
     SUM((TTECH2,EF2)$(SECTTECH(TRANSE,TTECH2) and TTECHtoEF(TTECH2, EF2)),
-        (i01ShareBlend(runCy,TRANSE,EF2,"%fBaseY%")) *
-        (imFuelCons(runCy,TRANSE,EF2,"%fBaseY%") ) * 1e3
-      /
-      test2SFC(TRANSE,TTECH2)
-    )
-     / imActv("%fBaseY%",runCy,TRANSE) 
-  )$(imActv("%fBaseY%",runCy,TRANSE) and SUM((TTECH2,EF2)$(SECTTECH(TRANSE,TTECH2) and TTECHtoEF(TTECH2, EF2)),
-        (i01ShareBlend(runCy,TRANSE,EF2,"%fBaseY%")) *
-        (imFuelCons(runCy,TRANSE,EF2,"%fBaseY%") ) * 1e3
-      /
-      test2SFC(TRANSE,TTECH2)
-    )) +
-  1$(not (imActv("%fBaseY%",runCy,TRANSE) or (imActv("%fBaseY%",runCy,TRANSE) and SUM((TTECH2,EF2)$(SECTTECH(TRANSE,TTECH2) and TTECHtoEF(TTECH2, EF2)),
-      (i01ShareBlend(runCy,TRANSE,EF2,"%fBaseY%")) *
-      (imFuelCons(runCy,TRANSE,EF2,"%fBaseY%") ) * 1e3
-    /
-    test2SFC(TRANSE,TTECH2)
-  )))) !! Fixme: Default value should be the global average author: mmadianos     
-  
-]+1E-6;
-$offtext
-
-testSFC(runCy,TRANSE,TTECH)$(not sameas("PC",TRANSE) ) = 
-test2SFC(TRANSE,TTECH) * 
-[
-  (
-    SUM((TTECH2,EF2)$(SECTTECH(TRANSE,TTECH2) and TTECHtoEF(TTECH2, EF2)),
-        (i01ShareBlend(runCy,TRANSE,EF2,"%fBaseY%")) *
-        (imFuelCons(runCy,TRANSE,EF2,"%fBaseY%") ) * 1e3
-      /
-      test2SFC(TRANSE,TTECH2)
-    )
-     / imActv("%fBaseY%",runCy,TRANSE) 
+        i01ShareBlend(runCy,TRANSE,EF2,"%fBaseY%") * imFuelCons(runCy,TRANSE,EF2,"%fBaseY%") * 1e3 /
+        test2SFC(TRANSE,TTECH2)
+    ) / imActv("%fBaseY%",runCy,TRANSE) 
   )$(imActv("%fBaseY%",runCy,TRANSE))!! Fixme: Default value should be the global average author: mmadianos     
-  +test2SFC(TRANSE,TTECH)$(not imActv("%fBaseY%",runCy,TRANSE) or  not SUM((TTECH2,EF2)$(SECTTECH(TRANSE,TTECH2) and TTECHtoEF(TTECH2, EF2)),
-        (i01ShareBlend(runCy,TRANSE,EF2,"%fBaseY%")) *
+  +
+  test2SFC(TRANSE,TTECH)$(not imActv("%fBaseY%",runCy,TRANSE) or  not SUM((TTECH2,EF2)$(SECTTECH(TRANSE,TTECH2) and TTECHtoEF(TTECH2, EF2)),
+        i01ShareBlend(runCy,TRANSE,EF2,"%fBaseY%") *
         (imFuelCons(runCy,TRANSE,EF2,"%fBaseY%") ) 
     ))
   
