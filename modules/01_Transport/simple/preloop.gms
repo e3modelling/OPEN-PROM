@@ -83,13 +83,8 @@ V01CostFuel.FX(runCy,TRANSE,TTECH,YTIME)$DATAY(YTIME) =
   imVarCostTech(runCy,TRANSE,TTECH,YTIME)
 ) *
 (
-  1e-3 * V01ActivPassTrnsp.L(runCy,TRANSE,YTIME)$sameas(TRANSE,"PC") + !! aviation should be divided by 1000
-  1e-1 * V01ActivPassTrnsp.L(runCy,TRANSE,YTIME)$(sameas(TRANSE,"PT")) +
-  1e3 * V01ActivPassTrnsp.L(runCy,TRANSE,YTIME)$(sameas(TRANSE,"PB")) +
-  1 * V01ActivPassTrnsp.L(runCy,TRANSE,YTIME)$(sameas(TRANSE,"PN")) +
-  1 * V01ActivPassTrnsp.L(runCy,TRANSE,YTIME)$(sameas(TRANSE,"PA")) +
-  1e-5 * V01ActivGoodsTransp.L(runCy,TRANSE,YTIME)$TRANG(TRANSE)  !! should be divided by number of vehicles
-  !!imAnnCons(runCy,TRANSE,"modal")$(not sameas(TRANSE,"PC"))
+  1$(not sameas(TRANSE,"PC")) +
+  1e-3 * V01ActivPassTrnsp.L(runCy,TRANSE,YTIME)$sameas(TRANSE,"PC") !! aviation should be divided by 1000
 );
 *---
 V01CostTranspPerMeanConsSize.LO(runCy,TRANSE,TTECH,YTIME) = 0;

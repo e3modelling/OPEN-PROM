@@ -680,6 +680,7 @@ TPHEVGDO  "Plug in Hybrid engine - diesel"
 TH2F      "Fuel Cells: Hydrogen"
 TCHEVGSL  "conventional Hybrid engine - gasoline"
 TCHEVGDO  "conventional Hybrid engine - diesel"
+TRFO
 /
 
 CDRTECH(TECH)     CDR Technologies
@@ -846,6 +847,7 @@ TPHEVGDO.(GDO,BGDO,ELC)
 TH2F.H2F
 TCHEVGSL.(GSL,BGSL)
 TCHEVGDO.(GDO,BGDO)
+TRFO.RFO
 /
 
 ITECHtoEF(ITECH,EF) Fuels consumed by industrial technologies
@@ -901,8 +903,8 @@ PC.(TGSL,TLPG,TGDO,TNGS,TELC,TPHEVGSL,TPHEVGDO,TCHEVGSL,TCHEVGDO,TH2F)
 PB.(TLPG,TGSL,TGDO,TNGS,TELC,TH2F)
 GU.(TLPG,TGSL,TGDO,TNGS,TELC,TCHEVGDO,TH2F) !! Removed GSL and PHEVGSL
 (PT,GT).(TGDO,TELC)
-PA.(TKRS)
-(PN,GN).(TGDO,TH2F)
+PA.(TKRS,TH2F)
+(PN,GN).(TGDO,TH2F,TRFO)
 (IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(TLGN,THCL,TGDO,TGSL,TRFO,TLPG,TKRS,TOLQ,TNGS,TOGS,
                                 TELC,TBMSWAS,TSTE,TH2F)
 (IS,BM,CH).(TNGSCCS,THCLCCS)

@@ -191,9 +191,10 @@ parameter test2SFC(TRANSE,TTECH)      "Initial Specific fuel consumption: (ktoe/
 PT.TGDO	11
 PT.TH2F	8.9
 PT.TELC	7
-*PA.H2F.H2F	21.7
+PA.TH2F	50
 PA.TKRS	30
 PN.TGDO  30
+PN.TRFO  30
 PN.TH2F  43
 PB.TGSL  8
 PB.TGDO  7.8
@@ -213,7 +214,8 @@ GT.TH2F	1.5
 GT.TELC	1.9
 GN.TGSL	2.0
 GN.TGDO	2.5
-GN.TH2F	1.5
+GN.TRFO	2.5
+GN.TH2F	2.5
 /
 ;
 

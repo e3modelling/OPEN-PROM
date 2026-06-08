@@ -119,14 +119,16 @@ Q01CostFuel(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runC
     (
       (
         sum(EF$TTECHtoEF(TTECH,EF),
-          V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME) * V01ShareBlend(allCy,TRANSE,EF,YTIME) * !!i01ShareBlend(allCy,TRANSE,EF,YTIME) *
+          V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME) * 
+          V01ShareBlend(allCy,TRANSE,EF,YTIME) * !!i01ShareBlend(allCy,TRANSE,EF,YTIME) *
           VmPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME)
         ) 
       )$(not PLUGIN(TTECH)) +
       (
         sum(EF$(TTECHtoEF(TTECH,EF) $(not sameas("ELC",EF))),
-          (1-i01ShareAnnMilePlugInHybrid(allCy,YTIME)) * V01ShareBlend(allCy,TRANSE,EF,YTIME) * !!i01ShareBlend(allCy,TRANSE,EF,YTIME) *
-          V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME) *
+          (1-i01ShareAnnMilePlugInHybrid(allCy,YTIME)) * 
+          V01ShareBlend(allCy,TRANSE,EF,YTIME) * !!i01ShareBlend(allCy,TRANSE,EF,YTIME) *
+          V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME) * !! ktoe / Activity
           VmPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME)
         ) +
         i01ShareAnnMilePlugInHybrid(allCy,YTIME) *
@@ -136,13 +138,8 @@ Q01CostFuel(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runC
       imVarCostTech(allCy,TRANSE,TTECH,YTIME)
     ) *
     (
-      1e-3 * V01ActivPassTrnsp(allCy,TRANSE,YTIME)$sameas(TRANSE,"PC") + !! aviation should be divided by 1000
-      1e-1 * V01ActivPassTrnsp(allCy,TRANSE,YTIME)$(sameas(TRANSE,"PT")) +
-      1e3 * V01ActivPassTrnsp(allCy,TRANSE,YTIME)$(sameas(TRANSE,"PB")) +
-      1 * V01ActivPassTrnsp(allCy,TRANSE,YTIME)$(sameas(TRANSE,"PN")) +
-      1 * V01ActivPassTrnsp(allCy,TRANSE,YTIME)$(sameas(TRANSE,"PA")) +
-      1e-5 * V01ActivGoodsTransp(allCy,TRANSE,YTIME)$TRANG(TRANSE)  !! should be divided by number of vehicles
-      !!imAnnCons(allCy,TRANSE,"modal")$(not sameas(TRANSE,"PC"))
+      1$(not sameas(TRANSE,"PC")) +
+      1e-3 * V01ActivPassTrnsp(allCy,TRANSE,YTIME)$sameas(TRANSE,"PC")
     )
     ;
 
@@ -180,10 +177,10 @@ Q01ShareTechTr(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $r
     V01ShareTechTr(allCy,TRANSE,TTECH,YTIME)
       =E=
     imMatrFactor(allCy,TRANSE,TTECH,YTIME) *
-    V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME-1)**(-2) /
+    V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME-1) ** (-2) /
     sum(TTECH2$SECTTECH(TRANSE,TTECH2), 
       imMatrFactor(allCy,TRANSE,TTECH2,YTIME) * 
-      V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1)**(-2)
+      V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1) ** (-2)
     );
 
 *' This equation calculates the consumption of each technology in transport sectors. It considers various factors such as the lifetime of the technology,
@@ -291,7 +288,8 @@ Q01ActivPassTrnsp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANP(TRANSE) $runCy(allCy))
       )$sameas(TRANSE,"PC") +
       (  !! passenger aviation
         V01ActivPassTrnsp(allCy,TRANSE,YTIME-1) *
-        [i01GDPperCapita(YTIME,allCy)/i01GDPperCapita(YTIME-1,allCy)]**imElastA(allCy,TRANSE,"a",YTIME) *
+        [i01GDPperCapita(YTIME,allCy) / i01GDPperCapita(YTIME-1,allCy)] ** imElastA(allCy,TRANSE,"a",YTIME) *
+        [i01Pop(YTIME,allCy) / i01Pop(YTIME-1,allCy)] ** 0.2 *
         (VmPriceFuelAvgSub(allCy,TRANSE,YTIME)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1))**imElastA(allCy,TRANSE,"c1",YTIME) *
         (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2))**imElastA(allCy,TRANSE,"c2",YTIME)
       )$sameas(TRANSE,"PA") +
@@ -342,12 +340,12 @@ Q01PremScrp(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME)$SECTTECH(TRANSE,TTECH)$runCy(
     V01PremScrp(allCy,TRANSE,TTECH,YTIME)
         =E=
     1 -
-    (V01CostFuel(allCy,TRANSE,TTECH,YTIME-1) + 1e-4) ** (-2) /
+    (V01CostFuel(allCy,TRANSE,TTECH,YTIME-1)) ** (-2) /
     (
-      (V01CostFuel(allCy,TRANSE,TTECH,YTIME-1) + 1e-4) ** (-2) +
+      V01CostFuel(allCy,TRANSE,TTECH,YTIME-1) ** (-2) +
       i01PremScrpFac(allCy,TRANSE,TTECH,YTIME) * 
       SUM(TTECH2$(not sameas(TTECH2,TTECH) and SECTTECH(TRANSE,TTECH2)),
-        (V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1) + 1e-4) ** (-2)
+        V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1) ** (-2)
       )
     );
 
