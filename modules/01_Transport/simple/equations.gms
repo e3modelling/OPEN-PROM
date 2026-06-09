@@ -153,7 +153,7 @@ Q01CostFuel(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runC
 Q01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME)$runCy(allCy)$SECTTECH(TRANSE,TTECH))..
     V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME)
         =E=
-      V01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME) +
+      0 *V01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME) +
       imFixOMCostTech(allCy,TRANSE,TTECH,YTIME) +
       V01CostFuel(allCy,TRANSE,TTECH,YTIME);
 
