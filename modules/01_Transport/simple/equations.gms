@@ -177,53 +177,6 @@ Q01ShareTechTr(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $r
       V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1) ** (-2)
     );
 
-*' This equation calculates the consumption of each technology in transport sectors. It considers various factors such as the lifetime of the technology,
-*' average capacity per vehicle, load factor, scrapping rate, and specific fuel consumption. The equation also takes into account the technology's variable
-*' cost for new equipment and the gap in transport activity to be filled by new technologies. The result is expressed in million tonnes of oil equivalent.
-Q01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $TTECHtoEF(TTECH,EF) $runCy(allCy))..
-    V01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)
-            =E=
-    V01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME-1) *
-    (
-      (
-        (VmLft(allCy,TRANSE,TTECH,YTIME-1)-1) / 
-        VmLft(allCy,TRANSE,TTECH,YTIME-1) *
-        i01AvgVehCapLoadFac(allCy,TRANSE,"CAP",YTIME-1) *
-        i01AvgVehCapLoadFac(allCy,TRANSE,"LF",YTIME-1) /
-        i01AvgVehCapLoadFac(allCy,TRANSE,"CAP",YTIME) /
-        i01AvgVehCapLoadFac(allCy,TRANSE,"LF",YTIME)
-      )$(not sameas(TRANSE,"PC")) +
-      (
-        1 - V01RateScrPcTot(allCy,"PC",TTECH,YTIME)
-      )$sameas(TRANSE,"PC")
-    ) +
-    V01ShareTechTr(allCy,TRANSE,TTECH,YTIME) *
-    (
-      (
-        V01ShareBlend(allCy,TRANSE,EF,YTIME) *
-        V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)
-      )$(not PLUGIN(TTECH)) +
-      ( 
-        (
-          (1-i01ShareAnnMilePlugInHybrid(allCy,YTIME)) *
-          V01ShareBlend(allCy,TRANSE,EF,YTIME) *
-          V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)
-        )$(not sameas("ELC",EF)) +
-        i01ShareAnnMilePlugInHybrid(allCy,YTIME) *
-        V01ConsSpecificFuel(allCy,TRANSE,TTECH,"ELC",YTIME)
-      )$PLUGIN(TTECH)
-    ) / 1000 *
-    V01GapTranspActiv(allCy,TRANSE,YTIME) *
-    (
-      (
-        i01AvgVehCapLoadFac(allCy,TRANSE,"CAP",YTIME-1) *
-        i01AvgVehCapLoadFac(allCy,TRANSE,"LF",YTIME-1) /
-        i01AvgVehCapLoadFac(allCy,TRANSE,"CAP",YTIME) /
-        i01AvgVehCapLoadFac(allCy,TRANSE,"LF",YTIME)
-      )$(not sameas(TRANSE,"PC")) +
-      V01ActivPassTrnsp(allCy,TRANSE,YTIME)$sameas(TRANSE,"PC")
-    );
-
 * -----------------------------------------------------------------------------
 * Q01StockPcYearly: Computes the total stock of passenger cars (in millions).
 *

@@ -23,8 +23,6 @@ Q01GapTranspActiv(allCy,TRANSE,YTIME)	                   "Compute the gap in tra
 *Q01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)	       "Compute Specific Fuel Consumption"
 Q01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME)    "Compute transportation cost per mean in KUS$2015 per vehicle"
 Q01ShareTechTr(allCy,TRANSE,TECH,YTIME)	                   "Compute technology sorting based on variable cost and new equipment"
-Q01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)	   "Compute consumption of each technology in transport sectors"
-*q01DemFinEneSubTransp(allCy,TRANSE,YTIME)	               "Compute final energy demand in transport"
 Q01StockPcYearly(allCy,YTIME)                              "Compute stock of passenger cars (in million vehicles)"
 Q01StockPcYearlyTech(allCy,TTECH,YTIME)                    "Compute stock of passenger cars (in million vehicles)"
 Q01NewRegPcYearly(allCy,YTIME)                             "Compute new registrations of passenger cars"
@@ -55,8 +53,6 @@ V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)	       "Specific Fuel Consumpti
                                                                 !! SFC for trucks is measured (ktoe/Gtkm)
 V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME)    "Transportation cost per mean (KUS$2015/vehicle)"
 V01ShareTechTr(allCy,TRANSE,TECH,YTIME)	                   "Technology share in new equipment (1)"
-V01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)	   "Consumption of each technology and subsector (Mtoe)"
-*v01DemFinEneSubTransp(allCy,TRANSE,YTIME)	               "Final energy demand in transport subsectors (Mtoe)"
 V01StockPcYearly(allCy,YTIME)                              "Stock of passenger cars (million vehicles)"
 V01StockPcYearlyTech(allCy,TTECH,YTIME)                    "stock of passenger cars per technology (in million vehicles)"
 V01NewRegPcYearly(allCy,YTIME)                             "Passenger cars new registrations (million vehicles)"
