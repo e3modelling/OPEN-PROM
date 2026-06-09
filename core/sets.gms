@@ -836,7 +836,7 @@ TTECHtoEF(TTECH,EF) Fuels consumed by transport technologies
 TGSL.(GSL,BGSL)
 TLPG.LPG
 TGDO.(GDO,BGDO)
-TNGS.(NGS)
+TNGS.(NGS,BGAS)
 TELC.ELC
 TKRS.(KRS,BKRS)
 TETH.ETH
@@ -1339,13 +1339,8 @@ scalar ordfirst /0/;
 ordfirst=sum((ytime,YYTIME2)$((ord(ytime)<=ord(YYTIME2)) $TFIRST(YYTIME2)),1);
 
 
-loop TECH do
-    loop DSBS$SECTTECH(DSBS,TECH) do
-        loop EF$TECHtoEF(TECH,EF) do
-            SECtoEF(DSBS,EF) = yes;
-        endloop;
-    endloop;
-endloop;
+SECtoEF(DSBS,EF) = yes$SUM(TECH$(SECTTECH(DSBS,TECH) and TECHtoEF(TECH,EF)), 1);
+SECtoEF(TRANSE,EF) = yes$SUM(TTECH$(SECTTECH(TRANSE,TTECH) and TTECHtoEF(TTECH,EF)), 1);
 
 *This is equivalent with the loop above
 *SECtoEF(DSBS, EF)$(sum(TECH, SECTTECH(DSBS, TECH) * TTECHtoEF(TECH, EF))) = yes;
