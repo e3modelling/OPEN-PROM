@@ -70,9 +70,12 @@ qDummyObjINDDOMShares(allCy,YTIME,DSBS)$(TIME(YTIME) and runCy(allCy) and (INDDO
     )
   )
   /SUM(EFS$SECtoEF(DSBS,EFS), 1)
-  )$((INDSE(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and t02FinalEnergyINDSE(allCy,DSBS,YTIME))
-  
-  ;
+  )$((INDSE(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and t02FinalEnergyINDSE(allCy,DSBS,YTIME)) +
+  SUM(ITECH$SECTTECH(DSBS,ITECH),
+    1e-5 * SQR(
+      i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME) - i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME-1)
+    )
+  ) / card(ITECH);
 
 qDummyObjINDDOMFinalEnergy(allCy,YTIME,DSBS)$(TIME(YTIME) and runCy(allCy) and (INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS))).. 
   vDummyObjINDDOMFinalEnergy(DSBS)
