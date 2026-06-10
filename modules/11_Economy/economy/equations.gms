@@ -65,13 +65,11 @@ Q11SubsiDemITech(allCy,DSBS,ITECH,YTIME)$(INDSE(DSBS) and SECTTECH(DSBS,ITECH) a
 Q11SubsiDemTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS,TECH))..
     VmSubsiDemTech(allCy,DSBS,TECH,YTIME)
         =E=
-    $$ontext
     (sum(TTECH$(sameas(TECH,TTECH)), !! Transport
       ( !! Transport (EVs)
         (
           VmSubsiDemTechAvail(allCy,DSBS,TECH,YTIME) * 1e3 / (V01NewRegPcTechYearly(allCy,TTECH,YTIME-1) * 1e6 + 1e-6) +
            (1 - imCapCostTechMin(allCy,DSBS,TECH,YTIME)) * imCapCostTech(allCy,DSBS,TECH,YTIME)
-          + (1 - imCapCostTechMin(allCy,DSBS,TECH,YTIME)) * imCapCostTech(allCy,DSBS,TECH,YTIME)
         ) -
         sqrt(sqr(
         VmSubsiDemTechAvail(allCy,DSBS,TECH,YTIME) * 1e3 / (V01NewRegPcTechYearly(allCy,TTECH,YTIME-1) * 1e6 + 1e-6)
@@ -79,6 +77,7 @@ Q11SubsiDemTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS
       ) / 2
     )$(ord(YTIME) > 15 and TRANSE(DSBS) and sameas(DSBS,"PC") and sameas(TECH,"TELC")))
     +
+$$ontext   
     (sum(ITECH$(sameas(TECH,ITECH)), !! Industry
       VmSubsiDemITech(allCy,DSBS,ITECH,YTIME)
     )$INDSE(DSBS))

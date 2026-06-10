@@ -781,7 +781,7 @@ imShrNonSubElecInTotElecDem(runCy,DOMSE)$(imShrNonSubElecInTotElecDem(runCy,DOMS
 *---
 **  Transport Sector
 imCapCostTech(runCy,TRANSE,TECH,YTIME) = imDataTransTech(TRANSE,TECH,"IC",YTIME);
-imCapCostTechMin(allCy,TRANSE,TECH,YTIME) = 0.4;
+imCapCostTechMin(allCy,TRANSE,TECH,YTIME) = 0.75;
 imFixOMCostTech(runCy,TRANSE,TECH,YTIME) = imDataTransTech(TRANSE,TECH,"FC",YTIME);
 imVarCostTech(runCy,TRANSE,TECH,YTIME) = imDataTransTech(TRANSE,TECH,"VC",YTIME);
 *---
