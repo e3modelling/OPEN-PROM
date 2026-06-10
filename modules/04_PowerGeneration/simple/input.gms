@@ -94,6 +94,14 @@ i04MatFacPlaAvailCap(runCy,PGALL,YTIME) = iMatFacPlaAvailCapData(runCy,PGALL,YTI
 *i04ScaleEndogScrap(runCy,PGALL,YTIME) = 1;
 $ENDIF.calib
 *---
+*--- Steepness of the RES penetration saturation sigmoid used in Q04ShareSatPG
+*    (V04ShareSatPG = 2/(1+exp(steep*share))). Default 9 (unchanged behaviour);
+*    module 12 (ClimateImpact) may relax it to a smaller value (flatter sigmoid ->
+*    renewables stay attractive at higher penetration) for HD-D1, per country and
+*    only inside the CF-cut window.
+parameter i04ShareSatSteep(allCy, YTIME) "steepness of the RES penetration saturation sigmoid (Q04ShareSatPG)";
+i04ShareSatSteep(allCy, YTIME) = 9;
+*---
 $$ontext
 parameter i04FIT(allCy,PGALL,YTIME)                  "Feed0In-Tariff (US$2015/KWh)"
 /

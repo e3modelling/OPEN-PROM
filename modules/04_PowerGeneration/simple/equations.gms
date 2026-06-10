@@ -261,7 +261,7 @@ Q04ShareTechPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04ShareSatPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(PGREN(PGALL)))..
     V04ShareSatPG(allCy,PGALL,YTIME)
         =E=
-    2 / (1+exp(9*V04ShareTechPG(allCy,PGALL,YTIME)));
+    2 / (1+exp(i04ShareSatSteep(allCy,YTIME)*V04ShareTechPG(allCy,PGALL,YTIME)));
 
 *' This equation computes the long-term average power generation cost. It involves summing the long-term average power generation costs for different power generation
 *' plants and energy forms, considering the specific characteristics and costs associated with each. The result is the average power generation cost per unit of
