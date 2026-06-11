@@ -46,7 +46,12 @@ V01GapTranspActiv.LO(runCy,TRANSE,YTIME) = 0;
 V01GapTranspActiv.FX(runCy,TRANSE,YTIME)$DATAY(YTIME) = 0;
 *---
 V01ConsSpecificFuel.FX(runCy,TRANSE,TTECH,EF,YTIME)$(not sameas(TRANSE,"PC") and SECTTECH(TRANSE,TTECH) and TTECHtoEF(TTECH,EF)) = testSFC(runCy,TRANSE,TTECH);
-V01ConsSpecificFuel.FX(runCy,TRANSE,TTECH,EF,YTIME)$(sameas(TRANSE,"PC")$(SECTTECH(TRANSE,TTECH)$TTECHtoEF(TTECH,EF))) = i01SFCPC(runCy,TTECH,EF,"%fBaseY%");
+V01ConsSpecificFuel.FX(runCy,TRANSE,TTECH,EF,YTIME)$(sameas(TRANSE,"PC")$(SECTTECH(TRANSE,TTECH)$TTECHtoEF(TTECH,EF))) = i01SFCPC(runCy,TTECH,EF,"%fBaseY%") * 
+SUM(EFS,imFuelCons(runCy,"PC",EFS,"%fBaseY%")) * 1e3 / 
+SUM((TTECH2,EF2)$TTECHtoEF(TTECH2,EF2), i01SFCPC(runCy,TTECH2,EF2,"%fBaseY%") * i01StockPC(runCy,TTECH2,"%fBaseY%") * i01ShareBlend(runCy,TRANSE,EF2,"%fBaseY%") * imTransChar(runCy,"KM_VEH","%fBaseY%"))
+;
+
+
 *---
 V01CapCostAnnualized.LO(runCy,TRANSE,TTECH,YTIME) = 0;
 V01CapCostAnnualized.FX(runCy,TRANSE,TTECH,YTIME)$DATAY(YTIME) =
