@@ -11,6 +11,7 @@ $include "./iActv.csvr"
 $offdelim
 ;
 imActv(YTIME,allCy,DSBS)$(imActv(YTIME,allCy,DSBS) = NA) = 0;
+imActv(YTIME,allCy,"PN")$DATAY(YTIME) = 1;
 *---
 table i01GDP(YTIME,allCy) "GDP (billion US$2015)"
 $ondelim
@@ -165,6 +166,7 @@ imFuelPrice(runCy,"BU","BGSL",YTIME) = imFuelPrice(runCy,"OI","BGSL",YTIME);
 imFuelPrice(runCy,TRANSE,"RFO",YTIME) = imFuelPrice(runCy,"BU","RFO",YTIME);
 imFuelPrice(runCy,TRANSE,"OGS",YTIME) = imFuelPrice(runCy,TRANSE,"NGS",YTIME);
 imFuelPrice(runCy,TRANSE,"OLQ",YTIME) = imFuelPrice(runCy,TRANSE,"GDO",YTIME);
+imFuelPrice(runCy,TRANSE,"H2F",YTIME) = 2 * imFuelPrice(runCy,TRANSE,"H2F",YTIME);
 imFuelPrice(runCy,"PA","H2F",YTIME) = 2 * imFuelPrice(runCy,"PA","KRS",YTIME);
 imFuelPrice(runCy,"ICT",EFS,YTIME)$SECtoEF("ICT",EFS) = imFuelPrice(runCy,"SE",EFS,YTIME);
 *---

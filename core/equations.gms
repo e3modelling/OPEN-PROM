@@ -44,7 +44,7 @@ qDummyObjTRANSE(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
         V01ShareTechTr(allCy,TRANSE,TTECH,YTIME) -
         t01NewShareStockPC(allCy,TRANSE,TTECH,YTIME)
       )$(t01NewShareStockPC(allCy,TRANSE,TTECH,YTIME) >= 0) +
-      0.01 * (imMatrFactor(allCy,TRANSE,TTECH,YTIME) - imMatrFactor(allCy,TRANSE,TTECH,YTIME-1))
+      0 * (imMatrFactor(allCy,TRANSE,TTECH,YTIME) - imMatrFactor(allCy,TRANSE,TTECH,YTIME-1))
     )
   )
   /SUM((TRANSE,TTECH)$(SECTTECH(TRANSE,TTECH) and (sameas("PC",TRANSE) or sameas("PB",TRANSE) or sameas("GU",TRANSE))), 1)

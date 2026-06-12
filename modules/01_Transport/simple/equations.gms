@@ -226,15 +226,15 @@ Q01ActivPassTrnsp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANP(TRANSE) $runCy(allCy))
               =E=
       (  !! passenger cars
         V01ActivPassTrnsp(allCy,TRANSE,YTIME-1) *
-        (VmPriceFuelAvgSub(allCy,TRANSE,YTIME)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1))**imElastA(allCy,TRANSE,"b1",YTIME) *
-        (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2))**imElastA(allCy,TRANSE,"b2",YTIME) *
+        !!(VmPriceFuelAvgSub(allCy,TRANSE,YTIME)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1))**imElastA(allCy,TRANSE,"b1",YTIME) *
+        !!(VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2))**imElastA(allCy,TRANSE,"b2",YTIME) *
         [(V01StockPcYearly(allCy,YTIME)/(i01Pop(YTIME,allCy)*1000))/(V01PcOwnPcLevl(allCy,YTIME-1))]**imElastA(allCy,TRANSE,"b3",YTIME) *
         [i01GDPperCapita(YTIME,allCy) / i01GDPperCapita(YTIME-1,allCy)] ** 0.2 !!imElastA(allCy,TRANSE,"b4",YTIME)
       )$sameas(TRANSE,"PC") +
       (  !! passenger aviation
         V01ActivPassTrnsp(allCy,TRANSE,YTIME-1) *
         [i01GDPperCapita(YTIME,allCy) / i01GDPperCapita(YTIME-1,allCy)] ** imElastA(allCy,TRANSE,"a",YTIME) *
-        [i01Pop(YTIME,allCy) / i01Pop(YTIME-1,allCy)] ** 0.2 *
+        [i01Pop(YTIME,allCy) / i01Pop(YTIME-1,allCy)] ** 0.4 *
         (VmPriceFuelAvgSub(allCy,TRANSE,YTIME)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1))**imElastA(allCy,TRANSE,"c1",YTIME) *
         (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2))**imElastA(allCy,TRANSE,"c2",YTIME)
       )$sameas(TRANSE,"PA") +
@@ -249,7 +249,8 @@ Q01ActivPassTrnsp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANP(TRANSE) $runCy(allCy))
             VmPriceFuelAvgSub(allCy,TRANSE,YTIME-(ord(kpdl)+1)))/
             (imCGI(allCy,YTIME)**(1/6))
           ]**(imElastA(allCy,TRANSE,"c3",YTIME)*imFPDL(TRANSE,KPDL))
-        )
+        ) *
+        [i01Pop(YTIME,allCy) / i01Pop(YTIME-1,allCy)] ** 0.4
       )$(NOT (sameas(TRANSE,"PC") or sameas(TRANSE,"PA")));
 
 *' This equation calculates the number of scrapped passenger cars based on the scrapping rate and the stock of passenger cars from the previous year.
@@ -288,7 +289,7 @@ Q01PremScrp(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME)$SECTTECH(TRANSE,TTECH)$runCy(
     (V01CostFuel(allCy,TRANSE,TTECH,YTIME-1)) ** (-2) /
     (
       V01CostFuel(allCy,TRANSE,TTECH,YTIME-1) ** (-2) +
-      0.1*i01PremScrpFac(allCy,TRANSE,TTECH,YTIME) * 
+      0.05*i01PremScrpFac(allCy,TRANSE,TTECH,YTIME) * 
       SUM(TTECH2$(not sameas(TTECH2,TTECH) and SECTTECH(TRANSE,TTECH2)),
         V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1) ** (-2)
       )
