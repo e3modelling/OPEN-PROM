@@ -214,7 +214,7 @@ Q01PremScrp(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME)$SECTTECH(TRANSE,TTECH)$runCy(
     (V01CostFuel(allCy,TRANSE,TTECH,YTIME-1)) ** (-2) /
     (
       V01CostFuel(allCy,TRANSE,TTECH,YTIME-1) ** (-2) +
-      0.05*i01PremScrpFac(allCy,TRANSE,TTECH,YTIME) * 
+      0*i01PremScrpFac(allCy,TRANSE,TTECH,YTIME) * 
       SUM(TTECH2$(not sameas(TTECH2,TTECH) and SECTTECH(TRANSE,TTECH2)),
         V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1) ** (-2)
       )
@@ -260,7 +260,7 @@ Q01ConsFuelTransport(allCy,TRANSE,EF,YTIME)$(TIME(YTIME) $SECtoEF(TRANSE,EF) $ru
       V01CapacityTransport(allCy,TRANSE,TTECH,YTIME) * !![pkm] mvh
       V01ShareBlend(allCy,TRANSE,EF,YTIME) *
       V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME) / 1000 *!!Ktoe / pkm   ktoe/km
-      (1$(not sameas(TRANSE,"PC")) + imTransChar(allCy,"KM_VEH",YTIME)$sameas(TRANSE,"PC")) !!km/vh
+      (1$(not sameas(TRANSE,"PC")) + imTransChar(allCy,"KM_VEH","%fBaseY%")$sameas(TRANSE,"PC")) !!km/vh
     ) +
     SUM(PLUGIN$(TTECHtoEF(PLUGIN,EF) and SECTTECH(TRANSE,PLUGIN)),
       (
