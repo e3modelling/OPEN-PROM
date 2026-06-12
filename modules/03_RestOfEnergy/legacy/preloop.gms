@@ -52,10 +52,9 @@ p03Exp(runCy,EFS,YTIME)$(DATAY(YTIME)) = imFuelTrade(runCy,"EXPORTS",EFS,YTIME);
 p03Imp(runCy,EFS,YTIME)$(DATAY(YTIME)) = imFuelTrade(runCy,"IMPORTS",EFS,YTIME);
 pmImpNetEneBrnch(runCy,EFS,YTIME)$(DATAY(YTIME)) = imFuelTrade(runCy,"IMPORTS",EFS,YTIME) - imFuelTrade(runCy,"EXPORTS",EFS,YTIME);
 pmConsFiEneSec(runCy,SSBS,EFS,YTIME)$(DATAY(YTIME)) = i03DataOwnConsEne(runCy,SSBS,EFS,YTIME);
-pmConsFinEneCountry(runCy,EFS,YTIME)$(DATAY(YTIME)) = sum(DSBS$(not NENSE(DSBS)), imFuelConsPerFueSub(runCy,DSBS,EFS,YTIME));
-pmConsFinNonEne(runCy,EFS,YTIME)$(DATAY(YTIME)) = SUM(NENSE$(not sameas("BU",NENSE) and SECtoEF(NENSE,EFS)), imFuelConsPerFueSub(runCy,NENSE,EFS,YTIME));
 pmLossesDistr(runCy,EFS,YTIME)$(DATAY(YTIME)) = imDistrLosses(runCy,EFS,YTIME);
 p03InpTotTransf(runCy,SSBS,EFS,YTIME)$(DATAY(YTIME) and SECtoEF(SSBS,EFS)) = -i03InpTotTransfProcess(runCy,SSBS,EFS,YTIME);
 p03OutTotTransf(runCy,SSBS,EFS,YTIME)$(DATAY(YTIME)) = i03OutTotTransfProcess(runCy,SSBS,EFS,YTIME);
+pmFinalEnergy(runCy,DSBS,EFS,YTIME)$(DATAY(YTIME) and SECtoEF(DSBS,EFS)) = imFuelCons(runCy,DSBS,EFS,YTIME);
 *---
 *---

@@ -8,8 +8,6 @@ option clear = V03Exp;
 option clear = V03Imp;
 option clear = VmImpNetEneBrnch;
 option clear = VmConsFiEneSec;
-option clear = VmConsFinEneCountry;
-option clear = VmConsFinNonEne;
 option clear = VmLossesDistr;
 
 option clear = Q03InpTotTransf;
@@ -21,8 +19,6 @@ option clear = Q03Exp;
 option clear = Q03Imp;
 option clear = Q03ImpNetEneBrnch;
 option clear = Q03ConsFiEneSec;
-option clear = Q03ConsFinEneCountry;
-option clear = Q03ConsFinNonEne;
 option clear = Q03LossesDistr;
 
 *' Re-apply critical bounds for all active countries (outside country loop)
@@ -34,7 +30,6 @@ VmConsFiEneSec.LO(runCy,SSBS,EFS,YTIME) = 0;
 VmLossesDistr.LO(runCy,EFS,YTIME) = 0;
 V03OutTotTransf.LO(runCy,SSBS,EFS,YTIME) = 0;
 V03InpTotTransf.LO(runCy,SSBS,EFS,YTIME) = 0;
-VmConsFinEneCountry.LO(runCy,EFS,YTIME) = 0;
 
 *' Initialize variable levels from previous period parameter
 V03ConsGrssInl.L(runCyL,EFS,YTIME+1) = p03ConsGrssInl(runCyL,EFS,YTIME);
@@ -44,8 +39,6 @@ V03Exp.L(runCyL,EFS,YTIME+1) = p03Exp(runCyL,EFS,YTIME);
 V03Imp.L(runCyL,EFS,YTIME+1) = p03Imp(runCyL,EFS,YTIME);
 VmImpNetEneBrnch.L(runCyL,EFS,YTIME+1) = pmImpNetEneBrnch(runCyL,EFS,YTIME);
 VmConsFiEneSec.L(runCyL,SSBS,EFS,YTIME+1) = pmConsFiEneSec(runCyL,SSBS,EFS,YTIME);
-VmConsFinEneCountry.L(runCyL,EFS,YTIME+1) = pmConsFinEneCountry(runCyL,EFS,YTIME);
-VmConsFinNonEne.L(runCyL,EFS,YTIME+1) = pmConsFinNonEne(runCyL,EFS,YTIME);
 VmLossesDistr.L(runCyL,EFS,YTIME+1) = pmLossesDistr(runCyL,EFS,YTIME);
 V03InpTotTransf.L(runCyL,SSBS,EFS,YTIME+1) = p03InpTotTransf(runCyL,SSBS,EFS,YTIME);
 V03OutTotTransf.L(runCyL,SSBS,EFS,YTIME+1) = p03OutTotTransf(runCyL,SSBS,EFS,YTIME);

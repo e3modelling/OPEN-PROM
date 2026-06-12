@@ -28,9 +28,9 @@ p01RateScrPc(allCy,TTECH,YTIME)                            "Stored scrapping rat
 p01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)             "Stored annualized capital cost"
 p01CostFuel(allCy,TRANSE,TTECH,YTIME)                      "Stored fuel cost"
 p01PremScrp(allCy,TRANSE,TTECH,YTIME)                      "Stored premature scrapping"
-p01RateScrPcTot(allCy,TTECH,YTIME)                         "Stored total scrapping rate of passenger cars (1)"
-pmDemFinEneTranspPerFuel(allCy,TRANSE,EF,YTIME)            "Stored final energy demand in transport subsectors per fuel (Mtoe)"
+p01RateScrPcTot(allCy,TRANSE,TTECH,YTIME)                         "Stored total scrapping rate of passenger cars (1)"
 pmLft(allCy,DSBS,TECH,YTIME)                               "Stored lifetime of technologies (years)"
+p01CapacityTransport(allCy,TRANSE,TTECH,YTIME)
 i01ShareMix(allCy,TRANSE,EF,YTIME)
 i01calb(allCy,TRANSE,EF)
 i01calibweibul(allCy,TRANSE,TTECH,EF)

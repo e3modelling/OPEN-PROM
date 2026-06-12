@@ -11,7 +11,6 @@ option clear = V06CapFacNewDAC;
 option clear = V06CapCDR;
 option clear = VmCstCO2SeqCsts;
 option clear = VmConsFuelTechCDRProd;
-option clear = VmConsFuelCDRProd;
 
 option clear = Q06CO2CaptureCCS;
 option clear = Q06CaptCummCO2;
@@ -24,7 +23,6 @@ option clear = Q06ProfRateDAC;
 option clear = Q06CapFacNewDAC;
 option clear = Q06CapCDR;
 option clear = Q06ConsFuelTechCDRProd;
-option clear = Q06ConsFuelCDRProd;
 option clear = Q06CstCO2SeqCsts;
 
 *' Re-apply critical bounds for all active countries (outside country loop)
@@ -50,4 +48,3 @@ V06CapFacNewDAC.L(runCyL,CDRTECH,YTIME+1) = p06CapFacNewDAC(runCyL,CDRTECH,YTIME
 V06CapCDR.L(runCyL,CDRTECH,YTIME+1) = p06CapCDR(runCyL,CDRTECH,YTIME);
 VmCstCO2SeqCsts.L(runCyL,YTIME+1) = pmCstCO2SeqCsts(runCyL,YTIME);
 VmConsFuelTechCDRProd.L(runCyL,CDRTECH,EFS,YTIME+1) = pmConsFuelTechCDRProd(runCyL,CDRTECH,EFS,YTIME);
-VmConsFuelCDRProd.L(runCyL,EFS,YTIME+1) = pmConsFuelCDRProd(runCyL,EFS,YTIME);

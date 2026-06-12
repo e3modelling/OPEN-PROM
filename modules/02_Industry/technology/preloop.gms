@@ -129,5 +129,5 @@ p02IndxElecIndPrices(runCy,TCHP,YTIME)$(DATAY(YTIME)) = 1;
 p02IndAvrEffFinalUseful(runCy,DSBS,YTIME)$(DATAY(YTIME)) = 1;
 p02PremScrpIndu(runCy,DSBS,ITECH,YTIME)$(DATAY(YTIME)) = 0;
 p02RatioRem(runCy,DSBS,ITECH,YTIME)$(DATAY(YTIME) and SECTTECH(DSBS,ITECH)) = 1;
-pmConsFuel(runCy,DSBS,EF,YTIME)$(DATAY(YTIME) and not HEATPUMP(EF) and not TRANSE(DSBS) and SECtoEF(DSBS,EF)) = imFuelConsPerFueSub(runCy,DSBS,EF,YTIME);
+pmConsFuel(runCy,DSBS,EF,YTIME)$(DATAY(YTIME) and not HEATPUMP(EF) and not TRANSE(DSBS) and SECtoEF(DSBS,EF)) = VmConsFuel.L(runCy,DSBS,EF,YTIME);
 *---

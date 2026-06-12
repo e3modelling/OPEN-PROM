@@ -51,7 +51,7 @@ V01CapCostAnnualized.LO(runCy,TRANSE,TTECH,YTIME) = 0;
 V01CapCostAnnualized.FX(runCy,TRANSE,TTECH,YTIME)$DATAY(YTIME) =
 (
   imDisc(runCy,TRANSE,YTIME) * exp(imDisc(runCy,TRANSE,YTIME) * i01TechLft(runCy,TRANSE,TTECH,YTIME)) /
-  (exp(imDisc(runCy,TRANSE,YTIME) * i01TechLft(runCy,TRANSE,TTECH,YTIME)) - 1 )
+  (exp(imDisc(runCy,TRANSE,YTIME) * i01TechLft(runCy,TRANSE,TTECH,YTIME)) - 1)
 ) * imCapCostTech(runCy,TRANSE,TTECH,YTIME) * imCGI(runCy,YTIME);
 *---
 V01CostFuel.LO(runCy,TRANSE,TTECH,YTIME) = 0;
@@ -97,6 +97,7 @@ V01CostFuel.L(runCy,TRANSE,TTECH,YTIME);
 V01CostTranspPerMeanConsSize.FX(runCy,TRANSE,TTECH,YTIME)$(not SECTTECH(TRANSE,TTECH)) = 0;
 *---
 V01ShareTechTr.LO(runCy,TRANSE,TTECH,YTIME) = 0;
+*---
 V01ShareBlend.LO(runCy,TRANSE,TTECH,EF,YTIME) = 0;
 V01ShareBlend.FX(runCy,TRANSE,TTECH,EF,YTIME)$(DATAY(YTIME) and SECTTECH(TRANSE,TTECH) and TTECHtoEF(TTECH,EF) and not sameas("PC",TRANSE)) = 
 (imFuelCons(runCy,TRANSE,EF,YTIME) + 1e-6) / SUM(EF2$(SECtoEF(TRANSE,EF2) and TTECHtoEF(TTECH,EF2)),imFuelCons(runCy,TRANSE,EF2,YTIME) + 1e-6);
@@ -126,11 +127,11 @@ V01CapacityTransport.FX(runCy,TRANSE,TTECH,YTIME)$(DATAY(YTIME) and SECTTECH(TRA
 *' Initialize parameters for first iteration (seed from historical data)
 p01StockPcYearly(runCy,YTIME)$(DATAY(YTIME)) = imActv(YTIME,runCy,"PC");
 p01RateScrPc(runCy,TTECH,YTIME)$(DATAY(YTIME) and SECTTECH("PC",TTECH)) = 1 / i01TechLft(runCy,"PC",TTECH,YTIME);
-p01RateScrPcTot(runCy,TTECH,YTIME)$(DATAY(YTIME) and SECTTECH("PC",TTECH)) = 1 / i01TechLft(runCy,"PC",TTECH,YTIME);
+p01RateScrPcTot(runCy,TRANSE,TTECH,YTIME)$(DATAY(YTIME) and SECTTECH(TRANSE,TTECH)) = V01RateScrPcTot.L(runCy,TRANSE,TTECH,YTIME);
 p01ActivGoodsTransp(runCy,TRANSE,YTIME)$(DATAY(YTIME) and TRANG(TRANSE)) = imActv(YTIME,runCy,TRANSE);
 p01ConsSpecificFuel(runCy,TRANSE,TTECH,EF,YTIME)$(DATAY(YTIME) and not sameas(TRANSE,"PC") and SECTTECH(TRANSE,TTECH) and TTECHtoEF(TTECH,EF)) = i01InitSpecFuelConsData(TRANSE,TTECH,EF);
 p01ConsSpecificFuel(runCy,"PC",TTECH,EF,YTIME)$(DATAY(YTIME) and SECTTECH("PC",TTECH) and TTECHtoEF(TTECH,EF)) = i01SFCPC(runCy,TTECH,EF,"%fBaseY%");
-p01ConsTechTranspSectoral(runCy,TRANSE,TTECH,EF,YTIME)$(DATAY(YTIME) and SECTTECH(TRANSE,TTECH) and not PLUGIN(TTECH) and not CHYBV(TTECH) and TTECHtoEF(TTECH,EF)) = imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME);
+p01ConsTechTranspSectoral(runCy,TRANSE,TTECH,EF,YTIME)$(DATAY(YTIME) and SECTTECH(TRANSE,TTECH) and not PLUGIN(TTECH) and not CHYBV(TTECH) and TTECHtoEF(TTECH,EF)) = V01ConsTechTranspSectoral.L(runCy,TRANSE,TTECH,EF,YTIME);
 p01ActivPassTrnsp(runCy,"PC",YTIME)$(DATAY(YTIME)) = imTransChar(runCy,"KM_VEH",YTIME);
 p01ActivPassTrnsp(runCy,TRANP,YTIME)$(DATAY(YTIME) and not sameas(TRANP,"PC")) = imActv(YTIME,runCy,TRANP);
 pmLft(runCy,DSBS,TECH,YTIME)$(DATAY(YTIME) and SECTTECH(DSBS,TECH)) = i01TechLft(runCy,DSBS,TECH,YTIME);
@@ -148,7 +149,7 @@ p01CapCostAnnualized(runCy,TRANSE,TTECH,YTIME)$(DATAY(YTIME) and SECTTECH(TRANSE
 p01CostFuel(runCy,TRANSE,TTECH,YTIME)$(DATAY(YTIME) and SECTTECH(TRANSE,TTECH)) = 1;
 p01CostTranspPerMeanConsSize(runCy,TRANSE,TTECH,YTIME)$(DATAY(YTIME) and SECTTECH(TRANSE,TTECH)) = 1;
 p01ShareTechTr(runCy,TRANSE,TTECH,YTIME)$(DATAY(YTIME)) = 0;
-pmDemFinEneTranspPerFuel(runCy,TRANSE,EF,YTIME)$(DATAY(YTIME) and SECtoEF(TRANSE,EF)) = imFuelConsPerFueSub(runCy,TRANSE,EF,YTIME);
+p01CapacityTransport(runCy,TRANSE,TTECH,YTIME)$(DATAY(YTIME)) = V01CapacityTransport.L(runCy,TRANSE,TTECH,YTIME);
 *---
 *---
 

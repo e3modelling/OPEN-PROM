@@ -22,9 +22,8 @@ p03Exp(allCy,EFS,YTIME)                            "Stored exports fake (Mtoe)"
 p03Imp(allCy,EFS,YTIME)                            "Stored fake imports for all fuels except natural gas (Mtoe)"
 pmImpNetEneBrnch(allCy,EFS,YTIME)                  "Stored net imports (Mtoe)"
 pmConsFiEneSec(allCy,SSBS,EFS,YTIME)               "Stored final consumption in energy sector (Mtoe)"
-pmConsFinEneCountry(allCy,EF,YTIME)                "Stored total final energy consumption (Mtoe)"
-pmConsFinNonEne(allCy,EFS,YTIME)                   "Stored final non energy consumption (Mtoe)"
 pmLossesDistr(allCy,EFS,YTIME)                     "Stored distribution losses (Mtoe)"
+pmFinalEnergy(allCy,DSBS,EFS,YTIME)                        "Total final energy (Mtoe)"
 ;
 
 Equations

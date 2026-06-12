@@ -5,7 +5,6 @@
 
 *---
 p03Transfers(runCyL,EFS,YTIME)$TIME(YTIME) = V03Transfers.L(runCyL,EFS,YTIME)$TIME(YTIME);
-pmConsFinEneCountry(runCyL,EFS,YTIME)$TIME(YTIME) = VmConsFinEneCountry.L(runCyL,EFS,YTIME)$TIME(YTIME);
 p03ConsGrssInl(runCyL,EFS,YTIME)$TIME(YTIME) = V03ConsGrssInl.L(runCyL,EFS,YTIME)$TIME(YTIME);
 p03InpTotTransf(runCyL,SSBS,EFS,YTIME)$TIME(YTIME) = V03InpTotTransf.L(runCyL,SSBS,EFS,YTIME)$TIME(YTIME);
 p03OutTotTransf(runCyL,SSBS,EFS,YTIME)$TIME(YTIME) = V03OutTotTransf.L(runCyL,SSBS,EFS,YTIME)$TIME(YTIME);
@@ -14,7 +13,6 @@ p03ProdPrimary(runCyL,EFS,YTIME)$TIME(YTIME) = V03ProdPrimary.L(runCyL,EFS,YTIME
 p03Exp(runCyL,EFS,YTIME)$TIME(YTIME) = V03Exp.L(runCyL,EFS,YTIME)$TIME(YTIME);
 pmImpNetEneBrnch(runCyL,EFS,YTIME)$TIME(YTIME) = VmImpNetEneBrnch.L(runCyL,EFS,YTIME)$TIME(YTIME);
 pmConsFiEneSec(runCyL,SSBS,EFS,YTIME)$TIME(YTIME) = VmConsFiEneSec.L(runCyL,SSBS,EFS,YTIME)$TIME(YTIME);
-pmConsFinNonEne(runCyL,EFS,YTIME)$TIME(YTIME) = VmConsFinNonEne.L(runCyL,EFS,YTIME)$TIME(YTIME);
 pmLossesDistr(runCyL,EFS,YTIME)$TIME(YTIME) = VmLossesDistr.L(runCyL,EFS,YTIME)$TIME(YTIME);
 pmFinalEnergy(runCyL,DSBS,EFS,YTIME)$TIME(YTIME) = VmFinalEnergy.L(runCyL,DSBS,EFS,YTIME)$TIME(YTIME);
 

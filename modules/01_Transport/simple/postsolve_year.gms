@@ -13,12 +13,10 @@ option clear = Q01NewRegPcTechYearly;
 option clear = Q01ActivPassTrnsp;
 option clear = Q01NumPcScrap;
 option clear = Q01PcOwnPcLevl;
-option clear = Q01RateScrPc;
 option clear = Q01CapCostAnnualized;
 option clear = Q01CostFuel;
 option clear = Q01PremScrp;
 option clear = Q01RateScrPcTot;
-option clear = Q01DemFinEneTranspPerFuel;
 option clear = Q01Lft;
 
 option clear = V01ActivGoodsTransp;
@@ -34,18 +32,13 @@ option clear = V01NewRegPcTechYearly;
 option clear = V01ActivPassTrnsp;
 option clear = V01NumPcScrap;
 option clear = V01PcOwnPcLevl;
-option clear = V01RateScrPc;
 option clear = V01CapCostAnnualized;
 option clear = V01CostFuel;
 option clear = V01PremScrp;
 option clear = V01RateScrPcTot;
-option clear = VmDemFinEneTranspPerFuel;
 option clear = VmLft;
 
 *' Re-apply critical bounds for all active countries (outside country loop)
-V01RateScrPcTot.UP(runCy,TTECH,YTIME) = 1;
-V01RateScrPc.UP(runCy,TTECH,YTIME) = 1;
-V01RateScrPc.LO(runCy,TTECH,YTIME) = 0;
 V01PremScrp.UP(runCy,TRANSE,TTECH,YTIME) = 1;
 V01PremScrp.LO(runCy,TRANSE,TTECH,YTIME) = 0;
 V01PcOwnPcLevl.UP(runCy,YTIME) = 2*i01PassCarsMarkSat(runCy);
@@ -58,8 +51,7 @@ V01ShareTechTr.LO(runCy,TRANSE,TTECH,YTIME) = 0;
 *' Initialize parameters for every iteration forward (seed from first iteration results)
 VmLft.L(runCyL,DSBS,TTECH,YTIME+1) = pmLft(runCyL,DSBS,TTECH,YTIME);
 V01StockPcYearly.L(runCyL,YTIME+1) = p01StockPcYearly(runCyL,YTIME);
-V01RateScrPc.L(runCyL,TTECH,YTIME+1) = p01RateScrPc(runCyL,TTECH,YTIME);
-V01RateScrPcTot.L(runCyL,TTECH,YTIME+1) = p01RateScrPcTot(runCyL,TTECH,YTIME);
+V01RateScrPcTot.L(runCyL,TRANSE,TTECH,YTIME+1) = p01RateScrPcTot(runCyL,TRANSE,TTECH,YTIME);
 V01ActivGoodsTransp.L(runCyL,TRANSE,YTIME+1) = p01ActivGoodsTransp(runCyL,TRANSE,YTIME);
 V01ConsSpecificFuel.L(runCyL,TRANSE,TTECH,EF,YTIME+1) = p01ConsSpecificFuel(runCyL,TRANSE,TTECH,EF,YTIME);
 V01ConsTechTranspSectoral.L(runCyL,TRANSE,TTECH,EF,YTIME+1) = p01ConsTechTranspSectoral(runCyL,TRANSE,TTECH,EF,YTIME);
@@ -75,4 +67,4 @@ V01CapCostAnnualized.L(runCyL,TRANSE,TTECH,YTIME+1) = p01CapCostAnnualized(runCy
 V01CostTranspPerMeanConsSize.L(runCyL,TRANSE,TTECH,YTIME+1) = p01CostTranspPerMeanConsSize(runCyL,TRANSE,TTECH,YTIME);
 V01CostFuel.L(runCyL,TRANSE,TTECH,YTIME+1) = p01CostFuel(runCyL,TRANSE,TTECH,YTIME);
 V01ShareTechTr.L(runCyL,TRANSE,TTECH,YTIME+1) = p01ShareTechTr(runCyL,TRANSE,TTECH,YTIME);
-VmDemFinEneTranspPerFuel.L(runCyL,TRANSE,EF,YTIME+1) = pmDemFinEneTranspPerFuel(runCyL,TRANSE,EF,YTIME);
+V01CapacityTransport.L(runCyL,TRANSE,TTECH,YTIME+1) = p01CapacityTransport(runCyL,TRANSE,TTECH,YTIME);
