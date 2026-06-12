@@ -66,7 +66,7 @@ $ENDIF
 *' ============================================================
 $IFTHEN %bmswasPriceMode% == curve
     (
-      VmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME-1) *
+      pmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME-1) *
       (1 + (pmCostPowGenAvgLng(allCy,YTIME-1) / pmCostPowGenAvgLng(allCy,YTIME-2) - 1)$sameas("ELC",EFS)) *
       (1 + (pmCostAvgProdH2(allCy,YTIME-1) / pmCostAvgProdH2(allCy,YTIME-2) - 1)$sameas("H2F",EFS)) * 
       (1 + (pmCostAvgProdSte(allCy,YTIME-1) / pmCostAvgProdSte(allCy,YTIME-2) - 1)$sameas("STE",EFS)) *
@@ -87,15 +87,15 @@ $IFTHEN %bmswasPriceMode% == curve
 *'  historical trajectory; as biomass demand grows the supply-curve scarcity signal
 *'  drives prices upward following GLOBIOM.
     (
-      VmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME-1) *
+      pmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME-1) *
       ( 1e-3 + imBmswasSupplyCoef("%emulatorGHGScen%",allCy,"a",YTIME)
              + imBmswasSupplyCoef("%emulatorGHGScen%",allCy,"b",YTIME)
-             * (V03ProdPrimary(allCy,"BMSWAS",YTIME-1) + 1e-6)
+             * (p03ProdPrimary(allCy,"BMSWAS",YTIME-1) + 1e-6)
              ** imBmswasSupplyCoef("%emulatorGHGScen%",allCy,"c",YTIME) )
       /
       ( 1e-3 + imBmswasSupplyCoef("%emulatorGHGScen%",allCy,"a",YTIME)
              + imBmswasSupplyCoef("%emulatorGHGScen%",allCy,"b",YTIME)
-             * (V03ProdPrimary(allCy,"BMSWAS",YTIME-2) + 1e-6)
+             * (p03ProdPrimary(allCy,"BMSWAS",YTIME-2) + 1e-6)
              ** imBmswasSupplyCoef("%emulatorGHGScen%",allCy,"c",YTIME) )
     )$sameas("BMSWAS",EFS)
 *' ============================================================
@@ -104,7 +104,7 @@ $IFTHEN %bmswasPriceMode% == curve
 *'   This restores the pre-GLOBIOM behavior exactly.
 *' ============================================================
 $ELSE
-    VmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME-1) *
+    pmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME-1) *
     (1 + (pmCostPowGenAvgLng(allCy,YTIME-1) / pmCostPowGenAvgLng(allCy,YTIME-2) - 1)$sameas("ELC",EFS)) *
     (1 + (pmCostAvgProdH2(allCy,YTIME-1) / pmCostAvgProdH2(allCy,YTIME-2) - 1)$sameas("H2F",EFS)) * 
     (1 + (pmCostAvgProdSte(allCy,YTIME-1) / pmCostAvgProdSte(allCy,YTIME-2) - 1)$sameas("STE",EFS)) *

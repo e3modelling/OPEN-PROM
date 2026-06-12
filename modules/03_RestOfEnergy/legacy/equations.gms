@@ -97,7 +97,7 @@ Q03OutTotTransf(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$runCy(allCy))..
 Q03Transfers(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V03Transfers(allCy,EFS,YTIME) 
         =E=
-    V03Transfers(allCy,EFS,YTIME-1) *
+    p03Transfers(allCy,EFS,YTIME-1) *
     SUM(DSBS,VmFinalEnergy(allCy,DSBS,EFS,YTIME) + 1e-6) / 
     SUM(DSBS,pmFinalEnergy(allCy,DSBS,EFS,YTIME-1) + 1e-6);         
 

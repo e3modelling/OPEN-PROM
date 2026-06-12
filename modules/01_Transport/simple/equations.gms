@@ -62,7 +62,7 @@ Q01GapTranspActiv(allCy,TRANSE,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     (
       ( 
         V01ActivPassTrnsp(allCy,TRANSE,YTIME) - 
-        V01ActivPassTrnsp(allCy,TRANSE,YTIME-1) + 
+        p01ActivPassTrnsp(allCy,TRANSE,YTIME-1) + 
         SUM(TTECH$SECTTECH(TRANSE,TTECH),p01CapacityTransport(allCy,TRANSE,TTECH,YTIME-1) * V01RateScrPcTot(allCy,TRANSE,TTECH,YTIME)) +
         SQRT(SQR(
           V01ActivPassTrnsp(allCy,TRANSE,YTIME) - 
@@ -74,11 +74,11 @@ Q01GapTranspActiv(allCy,TRANSE,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     (
       ( 
         V01ActivGoodsTransp(allCy,TRANSE,YTIME) - 
-        V01ActivGoodsTransp(allCy,TRANSE,YTIME-1) + 
-        SUM(TTECH$SECTTECH(TRANSE,TTECH),V01CapacityTransport(allCy,TRANSE,TTECH,YTIME-1) * V01RateScrPcTot(allCy,TRANSE,TTECH,YTIME)) + 
+        p01ActivGoodsTransp(allCy,TRANSE,YTIME-1) + 
+        SUM(TTECH$SECTTECH(TRANSE,TTECH),p01CapacityTransport(allCy,TRANSE,TTECH,YTIME-1) * V01RateScrPcTot(allCy,TRANSE,TTECH,YTIME)) + 
         SQRT( SQR(
           V01ActivGoodsTransp(allCy,TRANSE,YTIME) - 
-          V01ActivGoodsTransp(allCy,TRANSE,YTIME-1) + 
+          p01ActivGoodsTransp(allCy,TRANSE,YTIME-1) + 
           SUM(TTECH$SECTTECH(TRANSE,TTECH),p01CapacityTransport(allCy,TRANSE,TTECH,YTIME-1) * V01RateScrPcTot(allCy,TRANSE,TTECH,YTIME))
         )) 
       )/2
