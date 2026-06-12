@@ -18,23 +18,18 @@ i01calibweibul(allCy,TRANSE,EF,YTIME)
 
 Equations
 *' *** Transport
-Q01ActivGoodsTransp(allCy,TRANSE,YTIME)                    "Compute goods transport activity"
 Q01GapTranspActiv(allCy,TRANSE,YTIME)	                   "Compute the gap in transport activity"
 *Q01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)	       "Compute Specific Fuel Consumption"
 Q01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME)    "Compute transportation cost per mean in KUS$2015 per vehicle"
 Q01ShareTechTr(allCy,TRANSE,TECH,YTIME)	                   "Compute technology sorting based on variable cost and new equipment"
-Q01StockPcYearly(allCy,YTIME)                              "Compute stock of passenger cars (in million vehicles)"
-Q01StockPcYearlyTech(allCy,TTECH,YTIME)                    "Compute stock of passenger cars (in million vehicles)"
-Q01NewRegPcYearly(allCy,YTIME)                             "Compute new registrations of passenger cars"
 Q01NewRegPcTechYearly(allCy,TTECH,YTIME)                   "Compute new registrations of passenger cars per technology"
-Q01ActivPassTrnsp(allCy,TRANSE,YTIME)                      "Compute passenger transport acitivity"
-Q01NumPcScrap(allCy,YTIME)                                 "Compute scrapped passenger cars"
 Q01PcOwnPcLevl(allCy,YTIME)                                "Compute ratio of car ownership over saturation car ownership"
 Q01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)
 Q01CostFuel(allCy,TRANSE,TTECH,YTIME)
 Q01PremScrp(allCy,TRANSE,TTECH,YTIME)
 Q01RateScrPcTot(allCy,TRANSE,TTECH,YTIME)
 Q01ShareBlend(allCy,TRANSE,EF,YTIME)
+Q01TransportActivity(allCy,TRANSE,YTIME)                   "Compute transport acitivity"
 *'                **Interdependent Equations**
 Q01ConsFuelTransport(allCy,TRANSE,EF,YTIME)
 Q01CapacityTransport(allCy,TRANSE,TTECH,YTIME)
@@ -42,7 +37,6 @@ Q01CapacityTransport(allCy,TRANSE,TTECH,YTIME)
 
 Variables
 *' *** Transport Variables
-V01ActivGoodsTransp(allCy,TRANSE,YTIME)	                   "Goods transport acitivity (Gtkm)"
 V01GapTranspActiv(allCy,TRANSE,YTIME)	                   "Gap in transport activity to be filled by new technologies ()"
                                                                 !! Gap for passenger cars (million vehicles)
                                                                 !! Gap for all other passenger transportation modes (Gpkm)
@@ -53,21 +47,18 @@ V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)	       "Specific Fuel Consumpti
                                                                 !! SFC for trucks is measured (ktoe/Gtkm)
 V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME)    "Transportation cost per mean (KUS$2015/vehicle)"
 V01ShareTechTr(allCy,TRANSE,TECH,YTIME)	                   "Technology share in new equipment (1)"
-V01StockPcYearly(allCy,YTIME)                              "Stock of passenger cars (million vehicles)"
-V01StockPcYearlyTech(allCy,TTECH,YTIME)                    "stock of passenger cars per technology (in million vehicles)"
-V01NewRegPcYearly(allCy,YTIME)                             "Passenger cars new registrations (million vehicles)"
 V01NewRegPcTechYearly(allCy,TTECH,YTIME)                   "Passenger cars new registrations per technology (million vehicles)"
-V01ActivPassTrnsp(allCy,TRANSE,YTIME)                      "Passenger transport activity (1)"
-                                                                !! - Activity for passenger cars is measured in (000)km per vehicle
-                                                                !! - Activity for passenger aviation million passengers carried
-                                                                !! - Activity for all other passenger transportation modes is measured in Gpkm
-V01NumPcScrap(allCy,YTIME)                                 "Scrapped passenger cars (million vehicles)"
 V01PcOwnPcLevl(allCy,YTIME)                                "Ratio of car ownership over saturation car ownership (1)"
 V01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)
 V01CostFuel(allCy,TRANSE,TTECH,YTIME)
 V01PremScrp(allCy,TRANSE,TTECH,YTIME)
 V01RateScrPcTot(allCy,TRANSE,TTECH,YTIME)
 V01ShareBlend(allCy,TRANSE,EF,YTIME)
+V01TransportActivity(allCy,TRANSE,YTIME)                   "Passenger transport activity (1)"
+                                                                !! - Activity for passenger cars is measured in million vehicles
+                                                                !! - Activity for passenger aviation million passengers carried
+                                                                !! - Activity for all other passenger transportation modes is measured in Gpkm
+                                                                !! - Activity for all goods trasnportation modes is measured in Gtkm
 *'                **Interdependent Equations**
 VmLft(allCy,DSBS,TECH,YTIME)                                 "Lifetime of technologies (years)"
 V01ConsFuelTransport(allCy,TRANSE,EF,YTIME)	           "Consumption of each technology and subsector (Mtoe)"
