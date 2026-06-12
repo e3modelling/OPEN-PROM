@@ -16,4 +16,6 @@ pmImpNetEneBrnch(runCyL,EFS,YTIME)$TIME(YTIME) = VmImpNetEneBrnch.L(runCyL,EFS,Y
 pmConsFiEneSec(runCyL,SSBS,EFS,YTIME)$TIME(YTIME) = VmConsFiEneSec.L(runCyL,SSBS,EFS,YTIME)$TIME(YTIME);
 pmConsFinNonEne(runCyL,EFS,YTIME)$TIME(YTIME) = VmConsFinNonEne.L(runCyL,EFS,YTIME)$TIME(YTIME);
 pmLossesDistr(runCyL,EFS,YTIME)$TIME(YTIME) = VmLossesDistr.L(runCyL,EFS,YTIME)$TIME(YTIME);
+pmFinalEnergy(runCyL,DSBS,EFS,YTIME)$TIME(YTIME) = VmFinalEnergy.L(runCyL,DSBS,EFS,YTIME)$TIME(YTIME);
+
 *---
