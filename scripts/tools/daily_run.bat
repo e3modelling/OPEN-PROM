@@ -47,6 +47,7 @@ Rscript -e "devtools::install_github('e3modelling/mrprom'); devtools::install_gi
 
 REM Force a fresh data generation (targets is rebuilt by task 3's GenerateInput).
 rmdir /s /q data
+rmdir /s /q targets
 
 REM Sync to clean main.
 git switch dailyrunsag
@@ -55,21 +56,21 @@ git pull
 
 REM ---- Write the daily-run config.json (also sets scenario 1 = NPi) ----------
 REM Paths read from the SET vars above; non-path settings mirror root config.json.
-Rscript -e "library(jsonlite); cfg<-list(paths=list(model_runs_path=Sys.getenv('model_runs_path'), gams_path=Sys.getenv('gams_path')), behavior=list(withRunFolder=TRUE, withSync=FALSE, withReport=TRUE, uploadGDX=FALSE), scenario=list(scenario_name='DAILY_NPi', description='Daily main-branch integration test (mrprom + open-prom + postprom).', gams_flags=list(fScenario=1L, fEndY=2100L, CountrySolveMode='serial', Transport='simple', Industry='technology', RestOfEnergy='legacy', PowerGeneration='simple', Hydrogen='legacy', CO2='legacy', Emissions='legacy', Prices='legacy', Heat='heat', Curves='off', Economy='economy'))); write(toJSON(cfg, auto_unbox=TRUE, pretty=TRUE), 'config.json')"
+Rscript -e "library(jsonlite); cfg<-list(paths=list(model_runs_path=Sys.getenv('model_runs_path'), gams_path=Sys.getenv('gams_path')), behavior=list(withRunFolder=TRUE, withSync=FALSE, withReport=TRUE, uploadGDX=FALSE), scenario=list(scenario_name='DAILYAG_NPi', description='Daily main-branch integration test (mrprom + open-prom + postprom).', gams_flags=list(fScenario=1L, fEndY=2100L, CountrySolveMode='serial', Transport='simple', Industry='technology', RestOfEnergy='legacy', PowerGeneration='simple', Hydrogen='legacy', CO2='legacy', Emissions='legacy', Prices='legacy', Heat='heat', Curves='off', Economy='economy'))); write(toJSON(cfg, auto_unbox=TRUE, pretty=TRUE), 'config.json')"
 
 REM ---- 1. NPi: task 3 rebuilds data/+targets/ (via mrprom) then runs NPi -----
 Rscript start.R task_id=3
 
 REM ---- 2. No carbon price: task 2, reuses the data/ rebuilt above -------------
-Rscript -e "library(jsonlite); c<-fromJSON('config.json',simplifyVector=FALSE); c$scenario$scenario_name<-'DAILY_NoCP'; c$scenario$gams_flags$fScenario<-0L; write(toJSON(c,auto_unbox=TRUE,pretty=TRUE),'config.json')"
+Rscript -e "library(jsonlite); c<-fromJSON('config.json',simplifyVector=FALSE); c$scenario$scenario_name<-'DAILYAG_NoCP'; c$scenario$gams_flags$fScenario<-0L; write(toJSON(c,auto_unbox=TRUE,pretty=TRUE),'config.json')"
 Rscript start.R task_id=2
 
 REM ---- 3. 1.5C: task 2 -------------------------------------------------------
-Rscript -e "library(jsonlite); c<-fromJSON('config.json',simplifyVector=FALSE); c$scenario$scenario_name<-'DAILY_1p5C'; c$scenario$gams_flags$fScenario<-2L; write(toJSON(c,auto_unbox=TRUE,pretty=TRUE),'config.json')"
+Rscript -e "library(jsonlite); c<-fromJSON('config.json',simplifyVector=FALSE); c$scenario$scenario_name<-'DAILYAG_1p5C'; c$scenario$gams_flags$fScenario<-2L; write(toJSON(c,auto_unbox=TRUE,pretty=TRUE),'config.json')"
 Rscript start.R task_id=2
 
 REM ---- 4. 2C: task 2 ---------------------------------------------------------
-Rscript -e "library(jsonlite); c<-fromJSON('config.json',simplifyVector=FALSE); c$scenario$scenario_name<-'DAILY_2C'; c$scenario$gams_flags$fScenario<-3L; write(toJSON(c,auto_unbox=TRUE,pretty=TRUE),'config.json')"
+Rscript -e "library(jsonlite); c<-fromJSON('config.json',simplifyVector=FALSE); c$scenario$scenario_name<-'DAILYAG_2C'; c$scenario$gams_flags$fScenario<-3L; write(toJSON(c,auto_unbox=TRUE,pretty=TRUE),'config.json')"
 Rscript start.R task_id=2
 
 python "D:\Reporting\DR.py"
