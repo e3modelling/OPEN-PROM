@@ -31,9 +31,9 @@ REM magpie block is omitted (task 7 is not run, so it has no effect).
 REM ============================================================================
 
 REM ====================== FILL THESE FOR YOUR MACHINE ========================
-set mpath=C:\Users\Plessias\Desktop\Scheduled_OPEN-PROM\OPEN-PROM
-set gams_path=
-set model_runs_path=
+set mpath=D:\dailyruns
+set gams_path=C:\GAMS\52\
+set model_runs_path='C:\Users\gianoussakis\Ricardo Plc\Global Integrated Assessment Models - Documents\Work\PROMETHEUS Model\Runs'
 REM   mpath           : model root (where this repo is checked out)
 REM   gams_path       : GAMS install dir, e.g. C:\GAMS\48\ (blank -> use PATH)
 REM   model_runs_path : only used if behavior.withSync=true (it is false here);
@@ -49,7 +49,7 @@ REM Force a fresh data generation (targets is rebuilt by task 3's GenerateInput)
 rmdir /s /q data
 
 REM Sync to clean main.
-git switch main
+git switch dailyrunsag
 git reset --hard
 git pull
 
@@ -71,3 +71,5 @@ Rscript start.R task_id=2
 REM ---- 4. 2C: task 2 ---------------------------------------------------------
 Rscript -e "library(jsonlite); c<-fromJSON('config.json',simplifyVector=FALSE); c$scenario$scenario_name<-'DAILY_2C'; c$scenario$gams_flags$fScenario<-3L; write(toJSON(c,auto_unbox=TRUE,pretty=TRUE),'config.json')"
 Rscript start.R task_id=2
+
+python "D:\Reporting\DR.py"
