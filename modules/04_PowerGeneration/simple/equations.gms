@@ -146,7 +146,7 @@ Q04CapElecNonCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' decommissioning schedules, and endogenous scrapping. The square root term introduces a degree of tolerance in the calculation.
 Q04GapGenCapPowerDiff(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04GapGenCapPowerDiff(allCy,YTIME)
-        =E=
+        =G=
     (
       (
         V04CapElecNonCHP(allCy,YTIME) - p04CapElecNonCHP(allCy,YTIME-1) +
