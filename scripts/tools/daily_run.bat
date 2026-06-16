@@ -56,7 +56,7 @@ git pull
 
 REM ---- Write the daily-run config.json (also sets scenario 1 = NPi) ----------
 REM Paths read from the SET vars above; non-path settings mirror root config.json.
-Rscript -e "library(jsonlite); cfg<-list(paths=list(model_runs_path=Sys.getenv('model_runs_path'), gams_path=Sys.getenv('gams_path')), behavior=list(withRunFolder=TRUE, withSync=FALSE, withReport=TRUE, uploadGDX=FALSE), scenario=list(scenario_name='DAILYAG_NPi', description='Daily main-branch integration test (mrprom + open-prom + postprom).', gams_flags=list(fScenario=1L, fEndY=2100L, CountrySolveMode='serial', Transport='simple', Industry='technology', RestOfEnergy='legacy', PowerGeneration='simple', Hydrogen='legacy', CO2='legacy', Emissions='legacy', Prices='legacy', Heat='heat', Curves='off', Economy='economy'))); write(toJSON(cfg, auto_unbox=TRUE, pretty=TRUE), 'config.json')"
+Rscript -e "library(jsonlite); cfg<-list(paths=list(model_runs_path=Sys.getenv('model_runs_path'), gams_path=Sys.getenv('gams_path')), behavior=list(withRunFolder=TRUE, withSync=TRUE, withReport=TRUE, uploadGDX=FALSE), scenario=list(scenario_name='DAILYAG_NPi', description='Daily main-branch integration test (mrprom + open-prom + postprom).', gams_flags=list(fScenario=1L, fEndY=2100L, CountrySolveMode='serial', Transport='simple', Industry='technology', RestOfEnergy='legacy', PowerGeneration='simple', Hydrogen='legacy', CO2='legacy', Emissions='legacy', Prices='legacy', Heat='heat', Curves='off', Economy='economy'))); write(toJSON(cfg, auto_unbox=TRUE, pretty=TRUE), 'config.json')"
 
 REM ---- 1. NPi: task 3 rebuilds data/+targets/ (via mrprom) then runs NPi -----
 Rscript start.R task_id=3
