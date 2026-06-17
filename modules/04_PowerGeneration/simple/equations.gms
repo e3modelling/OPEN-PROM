@@ -17,16 +17,7 @@
 Q04ProdElecEstCHP(allCy,TCHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04ProdElecEstCHP(allCy,TCHP,YTIME) 
         =E=
-    1/smTWhToMtoe *
-    (  
-      VmProdSte(allCy,TCHP,YTIME) / VmPriceElecInd(allCy,TCHP,YTIME) + 
-      i04MxmShareChpElec(allCy,YTIME) * V04DemElecTot(allCy,YTIME) - 
-
-      SQRT(SQR(
-        VmProdSte(allCy,TCHP,YTIME) / VmPriceElecInd(allCy,TCHP,YTIME) - 
-        i04MxmShareChpElec(allCy,YTIME) * V04DemElecTot(allCy,YTIME))
-      )  
-    )/2;
+    VmProdSte(allCy,TCHP,YTIME) / VmPriceElecInd(allCy,TCHP,YTIME) / smTWhToMtoe;
 
 *' The equation calculates the total electricity demand by summing the components of final energy consumption in electricity, final non-energy consumption in electricity,
 *' distribution losses, and final consumption in the energy sector for electricity, and then subtracting net imports. The result is normalized using a conversion factor 
