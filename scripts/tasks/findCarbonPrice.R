@@ -383,15 +383,8 @@ calculateGhg <- function(dataMagpie) {
     }
   }
   
-  # Combine with Energy CO2
-  if (flagCO2eq) {
-    #emissions <- mbind(totalCo2Eq, dataMagpie[, , "Emissions|CO2|Energy and Industrial Processes.Mt CO2/yr"])
-    #emissions <- mbind(totalCo2Eq, dataMagpie[, , "Emissions|CO2.Mt CO2/yr"])
-    emissions <- dataMagpie[, , "Emissions|Kyoto Gases.Mt CO2-equiv/yr"]
-  } else {
-    #emissions <- dataMagpie[, , "Emissions|CO2|Energy and Industrial Processes.Mt CO2/yr"]
-    emissions <- dataMagpie[, , "Emissions|CO2.Mt CO2/yr"]
-  }
+  # Select the tracked emissions variable (controlled by emissionsVariable)
+  emissions <- dataMagpie[, , emissionsVariable]
 
   # --- Exclude Specific Variables (Fit for 55 logic) ---
   # emissions <- emissions[, , setdiff(getNames(emissions),
@@ -413,59 +406,48 @@ start_time <- Sys.time()
 GAMSCmdArgs <- c("--DevMode=0", "--GenerateInput=off", "lo=4", "idir=./data")
 selectedYear <- 2050
 changeCarbonPriceFromYear <- 2031
-flagCO2eq <- TRUE
+
+# --- Emissions variable to track ---
+# Must match a variable name returned by reportEmissions() (after dimSums over dim 3).
+# "Emissions|CO2.Mt CO2/yr"                 -> total CO2 only  (matches PC/ECPC/AP budgets)
+# "Emissions|Kyoto Gases.Mt CO2-equiv/yr"   -> all GHGs in CO2-equivalent
+emissionsVariable <- "Emissions|CO2.Mt CO2/yr"
+flagCO2eq <- FALSE   # keep consistent: FALSE = CO2-only
 
 # ---------------------------------------------------------
-# CASE A: Specific Regions
-# targetConditionalMtCO2e MtCO2e/yr
-# targetList <- list(
-#    "CAZ" = 780.6,
-#    #"CHA" = 14373,
-#    "GBR" = 260.3,
-#    #"IND" = 4816,
-#    "JPN" = 760.32,
-#    #"LAM" = 3886,
-#    #"MEA" = 2164.6,
-#    #"NEU" = 832.1,
-#    "OAS" = 5292.7,
-#    "REF" = 3668
-#    #"SSA" = 832.1
-# )
-# targetConditionalMtCO2 MtCO2/yr - ONLY CO2
-# targetList <- list(
-#   "CAZ" = 585,
-#   "CHA" = 10780,
-#   "GBR" = 195,
-#   "IND" = 3612,
-#   "JPN" = 570,
-#   "LAM" = 2915,
-#   "MEA" = 1623,
-#   "NEU" = 624,
-#   "OAS" = 3970,
-#   "REF" = 2752,
-#   "SSA" = 1735
-# )
-# targetConditionalMtCO2 MtCO2/yr - ONLY Emissions|CO2|Energy & Industrial Processes. MtCO2/yr
-# targetList <- list(
-#   "CAZ" = 777,
-#   "CHA" = 11252,
-#   "GBR" = 195,
-#   "IND" = 3592,
-#   "JPN" = 644,
-#   "LAM" = 4177,
-#   "MEA" = 1653,
-#   "NEU" = 719,
-#   "OAS" = 3583,
-#   "REF" = 3813,
-#   "SSA" = 2113
-# )
+# Budget file: load targets for all OPEN-PROM regions
+# Columns: region, temperature, risk, PC, ECPC, AP
+#   temperature: 1.6 or 2.0 (°C)
+#   risk:        0.33 or 0.5  (exceedance probability)
+#   budget column: "PC"   = Per-Capita convergence
+#                  "ECPC" = Equal Cumulative Per-Capita
+#                  "AP"   = Ability to Pay
+budgetCsvPath  <- "CO2budgets_OPENPROM.csv"
+budgetTemp     <- 1.6    # target temperature scenario
+budgetRisk     <- 0.5    # target risk level
+budgetColumn   <- "PC"   # which allocation column to use as target
 
-# CASE B: No Target Regions (Empty List) -> Implies EU27 Run
-targetList <- NULL
-#globalParams <- 1750 # EU-27 target 2030 in MtCO2/yr - ONLY CO2
-#globalParams <- 2250  # EU-27 target 2030 in MtCO2e/yr 
-#globalParams <- 0  # EU-27 target 2030 in MtCO2e/yr 
-globalParams <- 0  # World target 2080 in MtCO2e/yr
+budgetDf <- data.table::fread(budgetCsvPath)
+budgetDf <- budgetDf[temperature == budgetTemp & risk == budgetRisk]
+
+if (nrow(budgetDf) == 0) {
+  stop(sprintf("No rows in %s for temperature=%.1f and risk=%.2f", budgetCsvPath, budgetTemp, budgetRisk))
+}
+if (!budgetColumn %in% names(budgetDf)) {
+  stop(sprintf("Column '%s' not found in %s. Available: %s",
+               budgetColumn, budgetCsvPath, paste(names(budgetDf), collapse=", ")))
+}
+
+# Build targetList from all regions that have a valid (non-NA, positive) budget
+targetList <- as.list(setNames(budgetDf[[budgetColumn]], budgetDf$region))
+targetList <- Filter(function(v) !is.na(v) && is.finite(v) && v > 0, targetList)
+
+message(sprintf(
+  "Budget scenario: %s column, %.1f°C, risk=%.2f  ->  %d regions loaded",
+  budgetColumn, budgetTemp, budgetRisk, length(targetList)
+))
+
+globalParams <- 0  # used only if targetList is empty (EU27/World fallback)
 
 # LOGGING SETUP
 logFilePath <- "Carbon_price_optimization.log"

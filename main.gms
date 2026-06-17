@@ -204,56 +204,22 @@ $setGlobal SSP SSP2 !!SSP1-5
 *' *** Calibration
 $setGlobal Calibration off !! MatCalibration/Calibration/off
 
-*' *** softLinkMAgPIE: on = task7 soft-link iteration with MAgPIE (was link2MAgPIE)
-$setglobal softLinkMAgPIE off  !! on or off
-
-*' *** Land-use emulator: pre-fit BMSWAS supply & land-emission curves standing in
-*' *** for a land-use model (was link2GLOBIOM). One of:
-*' ***   legacy  = no emulator (exogenous static price + external emission source)
-*' ***   globiom = GLOBIOM-derived curves
-*' ***   magpie  = MAgPIE-derived curves
-$setglobal landUseEmulator globiom
-*' *** emulatorGHGScen: active carbon-price row in the emulator coefficient tables
-*' *** (used when landUseEmulator != legacy and softLinkMAgPIE == off)
-*' *** Options: GHG000 GHG010 GHG020 GHG050 GHG100 (GHG price in $/tCO2)
-$setglobal emulatorGHGScen GHG000
-
-*' *** Translate the two user switches above (softLinkMAgPIE, landUseEmulator) into
-*' *** the two internal flags the rest of the model actually reads:
-*' ***   bmswasPriceMode = how the BMSWAS biomass price is set:
-*' ***       softfx = fixed from MAgPIE each soft-link round
-*' ***       curve  = from the emulator supply curve
-*' ***       static = standard recursive price dynamics (no emulator)
-*' ***   landEmiMode     = where AFOLU land + agriculture emissions come from:
-*' ***       softmif = MAgPIE's iEmissions_magpie.mif
-*' ***       curve   = computed in-model from the emulator emission curve
-*' ***       exo     = external/legacy emission source
-*' *** Precedence: a MAgPIE soft-link run wins; otherwise the land-use emulator
-*' *** decides (legacy = no emulator -> static/exo; globiom/magpie -> curve).
-$ifThen.coupling %softLinkMAgPIE% == on
-$setglobal bmswasPriceMode softfx
-$setglobal landEmiMode softmif
-$elseIf.coupling %landUseEmulator% == legacy
-$setglobal bmswasPriceMode static
-$setglobal landEmiMode exo
-$else.coupling
-$setglobal bmswasPriceMode curve
-$setglobal landEmiMode curve
-$endIf.coupling
+*' *** MAgPIE link
+$setglobal link2MAgPIE off  !! on or off For soft link with MAgPIE
 
 *' *** Maximum number of solver attempts
 $evalGlobal SolverTryMax 4
 *' *** Country solve mode: serial or parallel
 $setGlobal CountrySolveMode serial
 *' *** Setting research mode (0) or development mode (1) to modify settings and parameters accordingly
-$setGlobal DevMode 0 !! can be overwritten if VS Code Tasks are used
+$setGlobal DevMode 1 !! can be overwritten if VS Code Tasks are used
 *' *** Write a compressed GDX file with all data at the end of the run
 $setGlobal WriteGDX on
 $setEnv GDXCOMPRESS 1
 *' *** Generate input data?
 $setGlobal GenerateInput off !! can be overwritten if VS Code Tasks are used
 
-$setGlobal fCountries 'CHA,DEU,IND,USA,RWO' !! can be overwritten if VS Code Tasks are used
+$setGlobal fCountries 'CHA' !! can be overwritten if VS Code Tasks are used
 
 $setGlobal fCountryList %countries%
 

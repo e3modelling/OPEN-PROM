@@ -14,8 +14,8 @@ i01ShareBlend(allCy,TRANSE,EF,YTIME)
 i01ShareMix(allCy,TRANSE,EF,YTIME)
 i01calb(allCy,TRANSE,EF)
 i01calibweibul(allCy,TRANSE,TTECH,EF)
+i01SensCarbon(allCy,YTIME,TRANSE)                                    "Sensitivity to Carbon Price - Transport"
 ;
-
 Equations
 *' *** Transport
 Q01ActivGoodsTransp(allCy,TRANSE,YTIME)                    "Compute goods transport activity"

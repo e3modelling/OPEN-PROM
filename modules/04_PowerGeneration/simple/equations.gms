@@ -115,14 +115,27 @@ Q04CostHourProdInvDec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04IndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(allCy))..
     V04IndxEndogScrap(allCy,PGALL,YTIME)
         =E=
-    (V04CostVarTech(allCy,PGALL,YTIME-1) + 1e-3)**(-2) /
+    (V04CostVarTech(allCy,PGALL,YTIME-1) + 1e-3
+          + i04SensCarbon(allCy,YTIME) * sum(PGEF$PGALLtoEF(PGALL,PGEF), 
+            i04ShareFuels(allCy,PGALL,PGEF) *
+            1e-3 *(VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,"PG",PGEF,YTIME)))    
+    )**(-2) /
     (
-      (V04CostVarTech(allCy,PGALL,YTIME-1) + 1e-3)**(-2) +
+      (V04CostVarTech(allCy,PGALL,YTIME-1) + 1e-3
+            + i04SensCarbon(allCy,YTIME) * sum(PGEF$PGALLtoEF(PGALL,PGEF), 
+            i04ShareFuels(allCy,PGALL,PGEF) *
+            1e-3 *(VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,"PG",PGEF,YTIME)))      
+      )**(-2) +
       (
         i04ScaleEndogScrap(allCy,PGALL,YTIME) *
         sum(PGALL2$(not sameas(PGALL,PGALL2)),
           i04AvailRate(allCy,PGALL2,YTIME) / i04AvailRate(allCy,PGALL,YTIME) * 
-          V04CostHourProdInvDec(allCy,PGALL2,YTIME-1) 
+          (V04CostHourProdInvDec(allCy,PGALL2,YTIME-1)
+          + i04SensCarbon(allCy,YTIME) * sum(PGEF$PGALLtoEF(PGALL2,PGEF), 
+            i04ShareFuels(allCy,PGALL2,PGEF) *
+            1e-3 *(VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,"PG",PGEF,YTIME))
+            )          
+          ) 
           !!+
           !!(1-i04AvailRate(allCy,PGALL2,YTIME) / i04AvailRate(allCy,PGALL,YTIME)) *
           !!V04CostVarTech(allCy,PGALL2,YTIME)
@@ -147,7 +160,7 @@ Q04CapElecNonCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04GapGenCapPowerDiff(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04GapGenCapPowerDiff(allCy,YTIME)
         =E=
-    (
+    (1e-6 +
       (
         V04CapElecNonCHP(allCy,YTIME) - V04CapElecNonCHP(allCy,YTIME-1) +
         sum(PGALL, 
@@ -157,7 +170,7 @@ Q04GapGenCapPowerDiff(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         ) 
       ) +
       SQRT(SQR(
-      (
+      (1e-6 +
         V04CapElecNonCHP(allCy,YTIME) - V04CapElecNonCHP(allCy,YTIME-1) +
         sum(PGALL,
           VmCapElec(allCy,PGALL,YTIME-1) * V04ScrpRate(allCy,PGALL,YTIME) -
@@ -196,11 +209,20 @@ Q04SharePowPlaNewEq(allCy,PGALL,YTIME)$(TIME(YTIME)$runCy(allCy)) ..
         =E=
     i04MatFacPlaAvailCap(allCy,PGALL,YTIME) *
     V04ShareSatPG(allCy,PGALL,YTIME-1) *
-    V04CostHourProdInvDec(allCy,PGALL,YTIME-1) ** (-2) /
+    (V04CostHourProdInvDec(allCy,PGALL,YTIME-1)
+            + i04SensCarbon(allCy,YTIME) * sum(PGEF$PGALLtoEF(PGALL,PGEF), 
+            i04ShareFuels(allCy,PGALL,PGEF) *
+            1e-3 *(VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,"PG",PGEF,YTIME)))    
+    ) ** (-2) /
     SUM(PGALL2,
       i04MatFacPlaAvailCap(allCy,PGALL2,YTIME) *
       V04ShareSatPG(allCy,PGALL2,YTIME-1) *
-      V04CostHourProdInvDec(allCy,PGALL2,YTIME-1) ** (-2)
+      (V04CostHourProdInvDec(allCy,PGALL2,YTIME-1)
+          + i04SensCarbon(allCy,YTIME) * sum(PGEF$PGALLtoEF(PGALL2,PGEF), 
+            i04ShareFuels(allCy,PGALL2,PGEF) *
+            1e-3 *(VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,"PG",PGEF,YTIME))
+            )      
+      ) ** (-2)
     );
 
 *' This equation calculates the variable representing the electricity generation capacity for a specific power plant in a given country
@@ -305,7 +327,7 @@ Q04CCSRetroFit(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(NOCCS(PGALL)))..
     (V04CostVarTech(allCy,PGALL,YTIME-1) + 1e-3)** (-2) /
     (
       (V04CostVarTech(allCy,PGALL,YTIME-1) + 1e-3)** (-2) +
-      0.01 *
+      0.01 * (1 + 3$(ord(YTIME)>24)) *
       SUM(PGALL2$CCS_NOCCS(PGALL2,PGALL),
         (
           V04CostCapTech(allCy,PGALL2,YTIME-1) +

@@ -25,8 +25,7 @@ reportOutput <- function(
     Validation2050 = Validation2050,
     emissions = emissions,
     htmlReport = htmlReport, model = model,
-    project_template = project_template,
-    stripScenarioTimestamp = stripScenarioTimestamp) {
+    project_template = project_template) {
     
   # setConfig(regionmapping = mapping)
 
@@ -34,8 +33,7 @@ reportOutput <- function(
     mif_name = mif_name,
     aggregate = aggregate, fullValidation = fullValidation,
     emissions = emissions, htmlReport = htmlReport,
-    project_template = project_template, model = model,
-    stripScenarioTimestamp = stripScenarioTimestamp
+    project_template = project_template, model = model
   )
   metadata <- getMetadata(path = runpath)
   print("Report generation completed.")
@@ -71,5 +69,4 @@ plot_name <- if (length(args) > 2) args[3] else "plot.tex"
 reportOutput(runpath = runpath, mif_name = mif_name, plot_name = plot_name,
              Validation_data_for_plots = FALSE, Validation2050 = FALSE,
              emissions = TRUE, htmlReport = FALSE, model = "OPEN-PROM 2.2",
-             project_template = NULL,
-             stripScenarioTimestamp = FALSE)
+             project_template = "prisma-template.csv")

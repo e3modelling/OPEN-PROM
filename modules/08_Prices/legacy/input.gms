@@ -3,32 +3,10 @@
 
 
 *---
-$IFTHEN %softLinkMAgPIE% == on
+$IFTHEN %link2MAgPIE% == on
 table iPricesMagpie(allCy,SBS,YTIME)	"Prices of biomass per subsector (k$2015/toe)"
 $ondelim
 $include "./iPrices_magpie.csv"
-$offdelim
-;
-$ENDIF
-*---
-$IFTHEN %bmswasPriceMode% == curve
-* Emulator tables are generated per source by mrprom into ./data as
-* iBmswas{SupplyCoef,LandEmisCoef,AgriEmis}_<source>.csv; %landUseEmulator% (globiom/magpie) picks the active one.
-* SupplyCoef & LandEmisCoef are fitted curves (a+b*Q^c / ea+eb*Q+ec*Q^2); AgriEmis is a
-* direct Q-independent table (agriculture CH4/N2O don't vary with biomass demand).
-table imBmswasSupplyCoef(GHGSCEN,allCy,COEF,YTIME) "Land-use emulator biomass supply curve coefficients (P = a + b*Q^c)"
-$ondelim
-$include "./iBmswasSupplyCoef_%landUseEmulator%.csv"
-$offdelim
-;
-table imBmswasLandEmisCoef(GHGSCEN,allCy,EMTYPE,ECOEF,YTIME) "Land-use emulator land CO2 emission curve coefficients (Em = ea + eb*Q + ec*Q^2)"
-$ondelim
-$include "./iBmswasLandEmisCoef_%landUseEmulator%.csv"
-$offdelim
-;
-table imBmswasAgriEmis(GHGSCEN,allCy,EMTYPE,YTIME) "Land-use emulator AFOLU agriculture CH4/N2O (Q-independent, direct values)"
-$ondelim
-$include "./iBmswasAgriEmis_%landUseEmulator%.csv"
 $offdelim
 ;
 $ENDIF

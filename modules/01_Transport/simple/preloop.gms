@@ -12,7 +12,7 @@ V01PremScrp.FX(runCy,TRANSE,TTECH,YTIME)$(not SECTTECH(TRANSE,TTECH)) = 0;
 V01StockPcYearly.L(runCy,YTIME) = 0.1;
 V01StockPcYearly.FX(runCy,YTIME)$DATAY(YTIME) = imActv(YTIME,runCy,"PC");
 *---
-V01ActivPassTrnsp.L(runCy,TRANSE,YTIME) = 0.1;
+V01ActivPassTrnsp.L(runCy,TRANP,YTIME) = 0.1;
 V01ActivPassTrnsp.FX(runCy,"PC",YTIME)$(DATAY(YTIME)) = imTransChar(runCy,"KM_VEH",YTIME); 
 V01ActivPassTrnsp.FX(runCy,TRANP,YTIME) $(DATAY(YTIME) and not sameas(TRANP,"PC")) = imActv(YTIME,runCy,TRANP); 
 *---
@@ -26,7 +26,7 @@ V01StockPcYearlyTech.FX(runCy,TTECH,YTIME)$(not SECTTECH("PC",TTECH)) = 0;
 *---
 V01NumPcScrap.LO(runCy,YTIME) = 0;
 *---
-V01ActivGoodsTransp.L(runCy,TRANSE,YTIME) = 0.1;
+V01ActivGoodsTransp.L(runCy,TRANG,YTIME) = 0.1;
 V01ActivGoodsTransp.FX(runCy,TRANG,YTIME)$(not An(YTIME)) = imActv(YTIME,runCy,TRANG);
 V01ActivGoodsTransp.FX(runCy,TRANSE,YTIME)$(not TRANG(TRANSE)) = 0;
 *---
