@@ -186,6 +186,15 @@ runScenario <- function(scn) {
   } else {
     extra <- ""
   }
+  # Land-use emulator config group -> GAMS flags (the soft_link_magpie group is
+  # consumed by task7, which passes --softLinkMAgPIE itself).
+  lue <- scn$land_use_emulator
+  if (length(lue)) {
+    if (!is.null(lue$source))
+      extra <- paste(extra, sprintf("--landUseEmulator=%s", lue$source))
+    if (!is.null(lue$carbon_price))
+      extra <- paste(extra, sprintf("--emulatorGHGScen=%s", lue$carbon_price))
+  }
   Sys.setenv(OPENPROM_EXTRA_FLAGS          = extra)
   Sys.setenv(OPENPROM_SCENARIO             = toJSON(scn, auto_unbox = TRUE))
   Sys.setenv(OPENPROM_SCENARIO_DESCRIPTION = scn$description %||% "")
