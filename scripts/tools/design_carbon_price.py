@@ -44,7 +44,7 @@ from pathlib import Path
 
 
 YEARS = list(range(2010, 2101))
-DATA_FILE = Path(__file__).parent.parent / "data" / "iEnvPolicies.csv"
+DATA_FILE = Path(__file__).parent.parent.parent / "data" / "iEnvPolicies.csv"
 
 
 # ---------------------------------------------------------------------------
@@ -240,6 +240,8 @@ def apply_path(
     path: dict[int, float],
     from_year: int | None = None,
 ) -> tuple[list[list[str]], list[str]]:
+    """Write path values into rows in-place. Years before from_year are left untouched,
+    preserving any existing historical values in the CSV for those years."""
     updated = []
     for region in regions:
         matched = False
@@ -381,7 +383,8 @@ def main(argv=None):
     header, rows = read_csv(csv_path)
 
     if grow_only:
-        # Apply compound growth independently per region, starting from existing CSV values
+        # grow-after-only mode: no --anchor provided, so the base price is read directly from
+        # the existing CSV for each region individually, then compounded forward from gy onward.
         gy, rate = grow_after
         milestone_years = [gy, 2030, 2040, 2050, 2060, 2070, 2080, 2090, 2100]
         all_updated = []
@@ -420,6 +423,8 @@ def main(argv=None):
             anchors[y] = v
 
         if len(anchors) < 2:
+            # trajectory enforces this inside _interp_trajectory with a clearer message;
+            # all other shapes need at least two points to define a segment.
             print("ERROR: at least two --anchor points are required.", file=sys.stderr)
             sys.exit(1)
 

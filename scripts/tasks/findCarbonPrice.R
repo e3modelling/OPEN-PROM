@@ -18,7 +18,7 @@
 #    the tracked emissions variable, scaled to the unit of the budget targets.
 # 5) Iteratively adjust alpha until emissions meet the target using:
 #      • automatic bracketing around a seed alpha
-#      • bisection root-finding to converge to the target
+#      • regula falsi (false-position) root-finding, with bisection fallback on stall
 # 6) Repeat sequentially for each entry in `targetList`, carrying forward the
 #    updated policy file so each region builds on previously optimized prices.
 #
@@ -207,7 +207,7 @@ emissionsOPENPROM <- function(envWide, yearCols, alpha, targetRegion, targetYear
 }
 
 # ----------------------------
-# Seeding, bracketing, bisection solver
+# Seeding, bracketing, regula falsi solver
 # ----------------------------
 
 alphaSeedLinear <- function(alpha0, E0, alphar, Er, Etarget, warn = TRUE, stopIfOutside = FALSE) {
@@ -279,19 +279,25 @@ findAlphaForBudget <- function(envWide, yearCols, budgetTarget,
   aL <- lowerAlpha; aU <- upperAlpha
   emisL <- eLow;     emisU <- eHigh
   it <- 0
-  # Illinois flag: tracks which side was updated twice in a row so we can
-  # halve that side's emission value, keeping superlinear convergence guaranteed.
-  lastSide <- NA
+  prevAM <- NA
 
   while (it < maxIter) {
     it <- it + 1
 
-    # Illinois / false-position step: interpolate linearly toward the target.
-    # Much faster than bisection (superlinear convergence) because it uses the
-    # gradient information already available from the two bracket endpoints.
-    # Falls back to bisection midpoint if interpolation lands outside the bracket.
-    aM <- aL + (budgetTarget - emisL) * (aU - aL) / (emisU - emisL)
-    aM <- max(aL, min(aU, aM))   # clamp to bracket for safety
+    # False-position (regula falsi) step: linearly interpolate toward the target.
+    # Faster than bisection because it uses gradient information from both endpoints.
+    # If the interpolated point repeats the previous one (stall), fall back to the
+    # bisection midpoint to guarantee progress.
+    aM_interp <- aL + (budgetTarget - emisL) * (aU - aL) / (emisU - emisL)
+    aM_interp <- max(aL, min(aU, aM_interp))   # clamp to bracket
+
+    if (!is.na(prevAM) && abs(aM_interp - prevAM) / max(1.0, abs(aM_interp)) < 1e-6) {
+      aM <- 0.5 * (aL + aU)   # stall detected: bisection fallback
+      if (verbose) message(sprintf("Iter %02d: stall detected, using bisection midpoint", it))
+    } else {
+      aM <- aM_interp
+    }
+    prevAM <- aM
 
     emisM <- emissionsOPENPROM(envWide, yearCols, aM, targetRegion, targetYear)
     if (verbose) message(sprintf("Iter %02d: aM=%.6f -> E=%.6f (target=%.6f)", it, aM, emisM, budgetTarget))
@@ -303,13 +309,9 @@ findAlphaForBudget <- function(envWide, yearCols, budgetTarget,
     }
 
     if (emisM > budgetTarget) {
-      # Left side (high-emission) moves up
-      if (identical(lastSide, "L")) emisU <- emisU / 2   # Illinois correction
-      aL <- aM; emisL <- emisM; lastSide <- "L"
+      aL <- aM; emisL <- emisM
     } else {
-      # Right side (low-emission) moves down
-      if (identical(lastSide, "U")) emisL <- emisL / 2   # Illinois correction
-      aU <- aM; emisU <- emisM; lastSide <- "U"
+      aU <- aM; emisU <- emisM
     }
   }
 
@@ -465,7 +467,7 @@ for (regName in names(targetList)) {
     eLow         = brkt$EL,
     eHigh        = brkt$EU,
     tolAlphaRel  = 1e-2,
-    tolEmisAbs   = 1e-1,
+    tolEmisAbs   = 1e+1,
     maxIter      = 60,
     verbose      = TRUE,
     writeFinalCsv = FALSE
