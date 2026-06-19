@@ -26,6 +26,7 @@ $ondelim
 $include"./iFIT.csv"
 $offdelim
 ;
+i04FIT(allCy,PGALL,YTIME) = 0;
 *---
 table t04SharePowPlaNewEq(allCy,PGALL,YTIME)    "Ratio of newly added capacity smoothed over 10-year period ()"
 $ondelim
