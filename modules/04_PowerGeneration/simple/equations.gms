@@ -83,7 +83,7 @@ Q04CostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
             ) * smTWhToMtoe / imPlantEffByType(allCy,PGALL,"effELC",YTIME)
           )
         ))
-      ) / 2 + 1e-6;
+      ) / 2 + 1e-4;
 
 *' The equation calculates the hourly production cost of a power generation plant used in investment decisions. The cost is determined based on various factors,
 *' including the discount rate, gross capital cost, fixed operation and maintenance cost, availability rate, variable cost, renewable value, and fuel prices.
