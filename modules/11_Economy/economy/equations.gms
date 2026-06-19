@@ -76,14 +76,11 @@ Q11SubsiDemTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS
         - (1 - imCapCostTechMin(allCy,DSBS,TECH,YTIME)) * imCapCostTech(allCy,DSBS,TECH,YTIME)))
       ) / 2
     )$(ord(YTIME) > 15 and TRANSE(DSBS) and sameas(DSBS,"PC") and sameas(TECH,"TELC")))
-    +
-$$ontext   
+    +  
     (sum(ITECH$(sameas(TECH,ITECH)), !! Industry
       VmSubsiDemITech(allCy,DSBS,ITECH,YTIME)
     )$INDSE(DSBS))
-    
     +
-$$offtext 
     sum(CDRTECH$(sameas(TECH,CDRTECH)), !! CDR
       (
         VmSubsiDemTechAvail(allCy,DSBS,CDRTECH,YTIME) * 1e6 / 
