@@ -212,11 +212,17 @@ $setglobal softLinkMAgPIE off  !! on or off
 *' ***   legacy  = no emulator (exogenous static price + external emission source)
 *' ***   globiom = GLOBIOM-derived curves
 *' ***   magpie  = MAgPIE-derived curves
-$setglobal landUseEmulator globiom
+$setglobal landUseEmulator legacy
 *' *** emulatorGHGScen: active carbon-price row in the emulator coefficient tables
 *' *** (used when landUseEmulator != legacy and softLinkMAgPIE == off)
 *' *** Options: GHG000 GHG010 GHG020 GHG050 GHG100 (GHG price in $/tCO2)
 $setglobal emulatorGHGScen GHG000
+
+*' *** calcTProdElecSubtype: which power-generation target trajectory module 04 uses
+*' ***   default   = pure PRIMES + IEA
+*' ***   OpenTEPES = OPEN-TEPES NT2030 anchor for the 27 EU countries
+*' *** mrprom (fullTARGETS) writes both tShareTechPG<variant>.csv; module 04 picks one.
+$setglobal calcTProdElecSubtype OpenTEPES
 
 *' *** Translate the two user switches above (softLinkMAgPIE, landUseEmulator) into
 *' *** the two internal flags the rest of the model actually reads:

@@ -30,7 +30,7 @@ i04FIT(allCy,PGALL,YTIME) = 0;
 *---
 table t04SharePowPlaNewEq(allCy,PGALL,YTIME)    "Ratio of newly added capacity smoothed over 10-year period ()"
 $ondelim
-$include "../targets/tShares_ProdElec.csv"
+$include "../targets/tShareTechPG%calcTProdElecSubtype%.csv"
 $offdelim
 ;
 t04SharePowPlaNewEq(allCy,PGALL,YTIME) = round(t04SharePowPlaNewEq(allCy,PGALL,YTIME), 3);
