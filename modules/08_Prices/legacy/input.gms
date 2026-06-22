@@ -14,14 +14,14 @@ $ENDIF
 $IFTHEN %bmswasPriceMode% == curve
 * Emulator tables are generated per source by mrprom into ./data as
 * iBmswas{SupplyCoef,LandEmisCoef,AgriEmis}_<source>.csv; %landUseEmulator% (globiom/magpie) picks the active one.
-* SupplyCoef & LandEmisCoef are fitted curves (a+b*Q^c / ea+eb*Q+ec*Q^2); AgriEmis is a
+* SupplyCoef & LandEmisCoef are fitted curves (a+b*Q^c / ea+eb*Q); AgriEmis is a
 * direct Q-independent table (agriculture CH4/N2O don't vary with biomass demand).
 table imBmswasSupplyCoef(GHGSCEN,allCy,COEF,YTIME) "Land-use emulator biomass supply curve coefficients (P = a + b*Q^c)"
 $ondelim
 $include "./iBmswasSupplyCoef_%landUseEmulator%.csv"
 $offdelim
 ;
-table imBmswasLandEmisCoef(GHGSCEN,allCy,EMTYPE,ECOEF,YTIME) "Land-use emulator land CO2 emission curve coefficients (Em = ea + eb*Q + ec*Q^2)"
+table imBmswasLandEmisCoef(GHGSCEN,allCy,EMTYPE,ECOEF,YTIME) "Land-use emulator land CO2 emission curve coefficients (Em = ea + eb*Q)"
 $ondelim
 $include "./iBmswasLandEmisCoef_%landUseEmulator%.csv"
 $offdelim
