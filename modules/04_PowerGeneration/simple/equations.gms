@@ -83,7 +83,7 @@ Q04CostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
             ) * smTWhToMtoe / imPlantEffByType(allCy,PGALL,"effELC",YTIME)
           )
         ))
-      ) / 2 + 1e-4;
+      ) / 2 + 1e-3;
 
 *' The equation calculates the hourly production cost of a power generation plant used in investment decisions. The cost is determined based on various factors,
 *' including the discount rate, gross capital cost, fixed operation and maintenance cost, availability rate, variable cost, renewable value, and fuel prices.
@@ -92,14 +92,13 @@ Q04CostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
 Q04CostHourProdInvDec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04CostHourProdInvDec(allCy,PGALL,YTIME)
         =E=             
-        (
-            (V04CostCapTech(allCy,PGALL,YTIME) + V04CostVarTech(allCy,PGALL,YTIME)) +
-            (2 * (V04CostCapTech(allCy,PGALL,YTIME) + V04CostVarTech(allCy,PGALL,YTIME)) - i04FIT(allCy,PGALL,YTIME))
-            -
-            sqrt(sqr((V04CostCapTech(allCy,PGALL,YTIME) + V04CostVarTech(allCy,PGALL,YTIME)) -
-            (2 * (V04CostCapTech(allCy,PGALL,YTIME) + V04CostVarTech(allCy,PGALL,YTIME)) - i04FIT(allCy,PGALL,YTIME))))
-        ) / 2;
-     ;
+    (
+      (V04CostCapTech(allCy,PGALL,YTIME) + V04CostVarTech(allCy,PGALL,YTIME)) +
+      (2 * (V04CostCapTech(allCy,PGALL,YTIME) + V04CostVarTech(allCy,PGALL,YTIME)) - i04FIT(allCy,PGALL,YTIME))
+      -
+      sqrt(sqr((V04CostCapTech(allCy,PGALL,YTIME) + V04CostVarTech(allCy,PGALL,YTIME)) -
+      (2 * (V04CostCapTech(allCy,PGALL,YTIME) + V04CostVarTech(allCy,PGALL,YTIME)) - i04FIT(allCy,PGALL,YTIME))))
+    ) / 2;
 
 *' The equation computes the endogenous scrapping index for power generation plants  during the specified year .
 *' The index is calculated as the variable cost of technology excluding power plants flagged as not subject to scrapping 
@@ -108,19 +107,19 @@ Q04CostHourProdInvDec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04IndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(allCy))..
     V04IndxEndogScrap(allCy,PGALL,YTIME)
         =E=
-    (V04CostVarTech(allCy,PGALL,YTIME-1))**(-2) /
+    V04CostVarTech(allCy,PGALL,YTIME-1)**(-2) /
     (
-      (V04CostVarTech(allCy,PGALL,YTIME-1))**(-2) +
+      V04CostVarTech(allCy,PGALL,YTIME-1)**(-2) +
       i04ScaleEndogScrap(allCy,PGALL,YTIME) *
-      (
-        sum(PGALL2$(not sameas(PGALL,PGALL2)),
+      sum(PGALL2$(not sameas(PGALL,PGALL2)),
+        (
           i04AvailRate(allCy,PGALL2,YTIME) / i04AvailRate(allCy,PGALL,YTIME) * 
           V04CostHourProdInvDec(allCy,PGALL2,YTIME-1) 
-          !!+
-          !!(1-i04AvailRate(allCy,PGALL2,YTIME) / i04AvailRate(allCy,PGALL,YTIME)) *
-          !!V04CostVarTech(allCy,PGALL2,YTIME)
-        )
-      )**(-2)
+        ) ** (-2)
+        !!+
+        !!(1-i04AvailRate(allCy,PGALL2,YTIME) / i04AvailRate(allCy,PGALL,YTIME)) *
+        !!V04CostVarTech(allCy,PGALL2,YTIME)
+      )
     );
 
 *' The equation calculates the total electricity generation capacity excluding Combined Heat and Power plants for a specified year .
