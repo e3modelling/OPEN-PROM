@@ -411,12 +411,13 @@ COEF "Coefficients for GLOBIOM power-law biomass supply curve (P = a + b*Q^c)"
 EMTYPE "Land-use emission types from GLOBIOM"
 / CO2LandUse, CH4LandUse, N2OLandUse /
 
-*' Coefficient labels for the linear land-use emission curve Em = ea + eb*Q
+*' Coefficient labels for the quadratic land-use emission curve Em = ea + eb*Q + ec*Q^2
 *' fitted by OLS to the GLOBIOM (quantity, emission) data points:
 *'   ea = constant term (emissions at zero biomass demand)
 *'   eb = linear coefficient
-ECOEF "Coefficients for GLOBIOM linear land-use emission curve (Em = ea + eb*Q)"
-/ ea, eb /
+*'   ec = quadratic coefficient
+ECOEF "Coefficients for GLOBIOM quadratic land-use emission curve (Em = ea + eb*Q + ec*Q^2)"
+/ ea, eb, ec /
 
 *' Single-element tag set carrying the active position-2 land-emission mode
 *' (curve | softmif | exo), derived in main.gms. Written to blabla.gdx so

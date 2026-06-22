@@ -21,7 +21,7 @@ $ondelim
 $include "./iBmswasSupplyCoef_%landUseEmulator%.csv"
 $offdelim
 ;
-table imBmswasLandEmisCoef(GHGSCEN,allCy,EMTYPE,ECOEF,YTIME) "Land-use emulator land CO2 emission curve coefficients (Em = ea + eb*Q)"
+table imBmswasLandEmisCoef(GHGSCEN,allCy,EMTYPE,ECOEF,YTIME) "Land-use emulator land CO2 emission curve coefficients (Em = ea + eb*Q + ec*Q^2)"
 $ondelim
 $include "./iBmswasLandEmisCoef_%landUseEmulator%.csv"
 $offdelim

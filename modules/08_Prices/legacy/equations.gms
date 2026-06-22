@@ -47,6 +47,7 @@
 *'   softLinkMAgPIE=on   -> bmswasPriceMode=softfx -> BMSWAS excluded (MAgPIE handles price)
 *'   off + landUseEmulator=legacy          -> bmswasPriceMode=static -> recursive dynamics
 *'   off + landUseEmulator=globiom/magpie  -> bmswasPriceMode=curve  -> emulator supply curve
+*'   H2F is pinned to its exogenous fuel-price trajectory here; hydrogen production costs remain in the H2 supply module.
 
 Q08PriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME)$(SECtoEF(SBS,EFS) $(not sameas("CRO",EFS)) $TIME(YTIME)
 $IFTHEN %softLinkMAgPIE% == on 
@@ -66,17 +67,19 @@ $ENDIF
 *' ============================================================
 $IFTHEN %bmswasPriceMode% == curve
     (
+      (
       VmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME-1) *
       (1 + (VmCostPowGenAvgLng(allCy,YTIME-1) / VmCostPowGenAvgLng(allCy,YTIME-2) - 1)$sameas("ELC",EFS)) *
-      (1 + (VmCostAvgProdH2(allCy,YTIME-1) / VmCostAvgProdH2(allCy,YTIME-2) - 1)$sameas("H2F",EFS)) * 
       (1 + (VmCostAvgProdSte(allCy,YTIME-1) / VmCostAvgProdSte(allCy,YTIME-2) - 1)$sameas("STE",EFS)) *
       (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.4 - 1)$sameas("NGS",EFS)) *
       (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.8 - 1)$SECtoEFPROD("LQD",EFS)) *
       (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.2 - 1)$(sameas("HCL",EFS) or sameas("LGN",EFS))) +
       1e-3 * (
-        VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,SBS,EFS,YTIME) - 
+        VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,SBS,EFS,YTIME) -
         VmCarVal(allCy,"TRADE",YTIME-1) * imCo2EmiFac(allCy,SBS,EFS,YTIME-1)
       )$DSBS(SBS)
+      )$(not sameas("H2F",EFS))
+      + imFuelPrice(allCy,SBS,EFS,YTIME)$sameas("H2F",EFS)
     )$(not sameas("BMSWAS",EFS))
     +
 *'  --- GLOBIOM supply curve for BMSWAS: year-over-year ratio ---
@@ -104,17 +107,19 @@ $IFTHEN %bmswasPriceMode% == curve
 *'   This restores the pre-GLOBIOM behavior exactly.
 *' ============================================================
 $ELSE
-    VmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME-1) *
-    (1 + (VmCostPowGenAvgLng(allCy,YTIME-1) / VmCostPowGenAvgLng(allCy,YTIME-2) - 1)$sameas("ELC",EFS)) *
-    (1 + (VmCostAvgProdH2(allCy,YTIME-1) / VmCostAvgProdH2(allCy,YTIME-2) - 1)$sameas("H2F",EFS)) * 
-    (1 + (VmCostAvgProdSte(allCy,YTIME-1) / VmCostAvgProdSte(allCy,YTIME-2) - 1)$sameas("STE",EFS)) *
-    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.4 - 1)$sameas("NGS",EFS)) *
-    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.8 - 1)$SECtoEFPROD("LQD",EFS)) *
-    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.2 - 1)$(sameas("HCL",EFS) or sameas("LGN",EFS))) +
-    1e-3 * (
-      VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,SBS,EFS,YTIME) - 
-      VmCarVal(allCy,"TRADE",YTIME-1) * imCo2EmiFac(allCy,SBS,EFS,YTIME-1)
-    )$DSBS(SBS)
+    (
+      VmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME-1) *
+      (1 + (VmCostPowGenAvgLng(allCy,YTIME-1) / VmCostPowGenAvgLng(allCy,YTIME-2) - 1)$sameas("ELC",EFS)) *
+      (1 + (VmCostAvgProdSte(allCy,YTIME-1) / VmCostAvgProdSte(allCy,YTIME-2) - 1)$sameas("STE",EFS)) *
+      (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.4 - 1)$sameas("NGS",EFS)) *
+      (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.8 - 1)$SECtoEFPROD("LQD",EFS)) *
+      (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.2 - 1)$(sameas("HCL",EFS) or sameas("LGN",EFS))) +
+      1e-3 * (
+        VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,SBS,EFS,YTIME) -
+        VmCarVal(allCy,"TRADE",YTIME-1) * imCo2EmiFac(allCy,SBS,EFS,YTIME-1)
+      )$DSBS(SBS)
+    )$(not sameas("H2F",EFS))
+    + imFuelPrice(allCy,SBS,EFS,YTIME)$sameas("H2F",EFS)
 $ENDIF
     ;
 
