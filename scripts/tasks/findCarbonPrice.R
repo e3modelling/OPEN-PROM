@@ -178,7 +178,10 @@ emissionsOPENPROM <- function(envWide, yearCols, alpha, targetRegion, targetYear
 
   # Read GDX output and extract emissions via postprom
   regions <- readGDX(file.path(workDir, "blabla.gdx"), "runCYL")
-  years   <- paste0("y", c(2010:2020, as.character(readGDX(file.path(workDir, "blabla.gdx"), "an"))))
+  years <- as.character(readGDX(file.path(workDir, "blabla.gdx"), "datay"))
+  years <- c(years, as.character(readGDX(file.path(workDir, "blabla.gdx"), "an")))
+  years <- paste0("y", years)
+
   # Suppress console noise from reportEmissions
   utils::capture.output({
       suppressMessages({
@@ -304,8 +307,8 @@ findAlphaForBudget <- function(envWide, yearCols, budgetTarget,
 
     if (abs(emisM - budgetTarget) < tolEmisAbs || abs(aU - aL) / max(1.0, abs(aM)) < tolAlphaRel) {
       if (verbose) message("Converged.")
-      if (writeFinalCsv) writeFinalPolicyFiles(envWide, yearCols, aU, targetRegion)
-      return(list(alpha = aU, emissions = emisU, converged = TRUE, iters = it))
+      if (writeFinalCsv) writeFinalPolicyFiles(envWide, yearCols, aM, targetRegion)
+      return(list(alpha = aM, emissions = emisM, converged = TRUE, iters = it))
     }
 
     if (emisM > budgetTarget) {
@@ -336,9 +339,9 @@ extractEmissions <- function(dataMagpie) {
   # emissionsVariable: name of the variable in the reportEmissions magpie object
   # emissionsScale:    multiplier to convert to the same unit as the budget targets
   emissions <- dataMagpie[, , emissionsVariable] * emissionsScale
-  emissionsMt <- dimSums(emissions, dim = 3)
-  getNames(emissionsMt) <- emissionsVariable
-  emissionsMt
+  #emissionsMt <- dimSums(emissions, dim = 3)
+  #getNames(emissions) <- emissions
+  emissions
 }
 
 # ----------------------------
@@ -450,8 +453,8 @@ for (regName in names(targetList)) {
     targetYear   = selectedYear,
     minAlpha     = -0.5,           # Allow price reduction up to -50% if needed
     maxAlpha     = 10.0,           # Allow up to +1000% increase
-    expandFactor = 4.0,
-    maxProbes    = 12,
+    expandFactor = 3.0,
+    maxProbes    = 7,
     verbose      = TRUE
   )
 
