@@ -49,11 +49,10 @@ Q02PremScrpIndu(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and (
     1 - (V02VarCostTech(allCy,DSBS,ITECH,YTIME-1) * i02util(allCy,DSBS,ITECH,YTIME-1) + 1e-3) ** (-2) /
     (
       (V02VarCostTech(allCy,DSBS,ITECH,YTIME-1) * i02util(allCy,DSBS,ITECH,YTIME-1) + 1e-3) ** (-2) +
-      i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME) * (
-        sum(ITECH2$(not sameas(ITECH2,ITECH) and SECTTECH(DSBS,ITECH2)),
+      i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME) *
+      sum(ITECH2$(not sameas(ITECH2,ITECH) and SECTTECH(DSBS,ITECH2)),
           V02CostTech(allCy,DSBS,ITECH2,YTIME-1) + V02VarCostTech(allCy,DSBS,ITECH2,YTIME-1)
-        )
-      )**(-2)
+      ) ** (-2)
     );
 
 *'NEW EQUATION' - kind of --> substitutes Q02ConsRemSubEquipSubSec

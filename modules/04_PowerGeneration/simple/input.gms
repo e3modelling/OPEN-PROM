@@ -80,19 +80,27 @@ $include"./iMatFacPlaAvailCap.csv"
 $offdelim
 ;
 *---
+table iScaleEndogScrapData(allCy,PGALL,YTIME)      "Maturity factor related to plant available capacity (1)"
+$ondelim
+$include"./iScaleEndogScrapPG.csv"
+$offdelim
+;
+*---
 $IFTHEN.calib %Calibration% == MatCalibration
 variable i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   "Maturity factor related to plant available capacity (1)";
-i04MatFacPlaAvailCap.LO(runCy, PGALL, YTIME) = 1e-6;
-i04MatFacPlaAvailCap.UP(runCy, PGALL, YTIME) = 10;
+variable i04ScaleEndogScrap(allCy,PGALL,YTIME)     "Scale parameter for endogenous scrapping applied to the sum of full costs (1)";
+i04MatFacPlaAvailCap.LO(runCy, PGALL, YTIME) = 1e-2;
+i04MatFacPlaAvailCap.UP(runCy, PGALL, YTIME) = 1;
 i04MatFacPlaAvailCap.L(runCy,PGALL,YTIME) = iMatFacPlaAvailCapData(runCy,PGALL,YTIME);
 
-*i04ScaleEndogScrap.LO(runCy,PGALL,YTIME) = 0;
-*i04ScaleEndogScrap.UP(runCy,PGALL,YTIME) = 10;
-*i04ScaleEndogScrap.L(runCy,PGALL,YTIME) = 1;
+i04ScaleEndogScrap.LO(runCy,PGALL,YTIME) = 1e-2;
+i04ScaleEndogScrap.UP(runCy,PGALL,YTIME) = 10;
+i04ScaleEndogScrap.L(runCy,PGALL,YTIME) = iScaleEndogScrapData(runCy,PGALL,YTIME);
 $ELSE.calib
 parameter i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   "Maturity factor related to plant available capacity (1)";
+parameter i04ScaleEndogScrap(allCy,PGALL,YTIME)     "Scale parameter for endogenous scrapping applied to the sum of full costs (1)";
 i04MatFacPlaAvailCap(runCy,PGALL,YTIME) = iMatFacPlaAvailCapData(runCy,PGALL,YTIME);
-*i04ScaleEndogScrap(runCy,PGALL,YTIME) = 1;
+i04ScaleEndogScrap(runCy,PGALL,YTIME) = iScaleEndogScrapData(runCy,PGALL,YTIME);
 $ENDIF.calib
 *---
 $$ontext
@@ -127,5 +135,3 @@ i04ShareFuels(runCy,PGALL,PGEF)$PGALLTOEF(PGALL,PGEF) =
 (
   1 / CARD(PGALL)
 )$(not SUM(PGEF2$PGALLTOEF(PGALL,PGEF2),i03InpTotTransfProcess(runCy,"PG",PGEF2,"%fBaseY%")));
-*---
-i04ScaleEndogScrap(allCy,PGALL,YTIME) = 6 / card(PGALL);
