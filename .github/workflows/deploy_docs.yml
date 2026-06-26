@@ -1,9 +1,11 @@
 name: Deploy R goxygen Docs to GitHub Pages
 
+# SUPERSEDED by deploy_sphinx.yml (the MyST/Sphinx site now owns the gh-pages root).
+# The monthly auto-deploy is disabled so it cannot overwrite the Sphinx site.
+# Kept for reference / manual use only — note: a manual run WILL overwrite gh-pages with the goxygen output.
+
 on:
-  schedule:
-    - cron: '0 0 1 * *'   # Monthly schedule
-  workflow_dispatch:       # Manual trigger
+  workflow_dispatch:       # Manual trigger only
 permissions:
   contents: write   
 jobs:
