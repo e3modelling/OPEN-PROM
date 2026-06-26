@@ -1,0 +1,577 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Setup and environment &mdash; OPEN-PROM</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+    <link rel="canonical" href="https://e3modelling.github.io/OPEN-PROM/guide/01_setup.html" />
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=b21de401"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Running the model" href="02_running_the_model.html" />
+    <link rel="prev" title="Overview" href="../overview.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            OPEN-PROM
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Setup and environment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#key-terminology">Key terminology</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#git-and-github-setup">Git and GitHub setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#check-for-an-existing-git-installation">Check for an existing Git installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#install-git">Install Git</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-and-configure-a-github-account">Create and configure a GitHub account</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#clone-the-repository">Clone the repository</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#commit-and-push-changes">Commit and push changes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#visual-studio-code">Visual Studio Code</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#install-vs-code">Install VS Code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#orientation">Orientation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#recommended-extensions">Recommended extensions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#task-runner">Task runner</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#setup">Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#run-modes">Run modes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#git-installation-fails">Git installation fails</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#github-authentication-fails">GitHub authentication fails</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cloning-fails">Cloning fails</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vs-code-git-integration-problems">VS Code / Git integration problems</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#modelling-server-windows">Modelling server (Windows)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#connecting">Connecting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#system-preparation">System preparation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#install-core-software-system-wide">Install core software (system-wide)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#install-magpie-system-wide-no-renv">Install MAgPIE system-wide (no renv)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#python-tinytex-and-shared-storage">Python, TinyTeX and shared storage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#linux-support-wsl-per-user">Linux support — WSL (per-user)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#test-the-setup">Test the setup</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="02_running_the_model.html">Running the model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="02_running_the_model.html#a-first-run-public-dummy-data">A first run (public dummy data)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_running_the_model.html#running-with-real-input-data">Running with real input data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="02_running_the_model.html#point-r-to-the-local-madrat-archive">Point R to the local <code class="docutils literal notranslate"><span class="pre">madrat</span></code> archive</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_running_the_model.html#how-data-and-targets-are-created">How <code class="docutils literal notranslate"><span class="pre">data/</span></code> and <code class="docutils literal notranslate"><span class="pre">targets/</span></code> are created</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_running_the_model.html#task-modes-in-start-r">Task modes in <code class="docutils literal notranslate"><span class="pre">start.R</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_running_the_model.html#batch-mode">Batch mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_running_the_model.html#what-the-outputs-mean">What the outputs mean</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="02_running_the_model.html#changing-the-region-set">Changing the region set</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">How-to guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="03_input_data.html">Input data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="03_input_data.html#installing-the-software-and-libraries">Installing the software and libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_input_data.html#creating-the-local-configuration-file">Creating the local configuration file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_input_data.html#adding-the-data-sources">Adding the data sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_input_data.html#updating-the-ci-dataset">Updating the CI dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_input_data.html#running-the-model">Running the model</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="04_development.html">Development and code structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="04_development.html#folder-structure">Folder structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_development.html#the-phase-system">The phase system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_development.html#modules-and-realizations">Modules and realizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_development.html#default-active-vs-dormant-features">Default active vs dormant features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_development.html#naming-convention">Naming convention</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_development.html#developer-workflow">Developer workflow</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="05_soft_linking.html">Soft-linking</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="05_soft_linking.html#soft-linking-with-magpie">Soft-linking with MAgPIE</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="05_soft_linking.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_soft_linking.html#running-an-iteration">Running an iteration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_soft_linking.html#configuration">Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_soft_linking.html#convergence-controls-and-state-files">Convergence controls and state files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_soft_linking.html#emulator-alternative-without-running-magpie">Emulator alternative (without running MAgPIE)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="05_soft_linking.html#soft-linking-with-climate-emulators-meteor">Soft-linking with climate emulators (METEOR)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="05_soft_linking.html#workflow">Workflow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_soft_linking.html#one-way-vs-iterative-use">One-way vs iterative use</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Model documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../model/01_introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/02_model_overview.html">2. Model overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../model/02_model_overview.html#time-granularity-and-regions">2.1. Time granularity and regions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/02_model_overview.html#sector-granularity">2.2. Sector granularity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/02_model_overview.html#gap-and-substitution-mechanism">2.3. Gap and substitution mechanism</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../model/02_model_overview.html#gap-and-scrapping-mechanism">2.3.1. Gap and scrapping mechanism</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model/02_model_overview.html#substitution-mechanism">2.3.2. Substitution mechanism</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model/02_model_overview.html#implementation-by-realisation">2.3.3. Implementation by realisation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../model/02_model_overview.html#prices">2.4. Prices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../model/02_model_overview.html#conceptual-framing-legacy">2.4.1. Conceptual framing (legacy)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model/02_model_overview.html#active-price-formation-current-code">2.4.2. Active price formation (current code)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../model/02_model_overview.html#energy-supply">2.5. Energy supply</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../model/02_model_overview.html#trade-representation">2.5.1. Trade representation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model/02_model_overview.html#end-use-sector-biofuel-blending">2.5.2. End-use sector: biofuel blending</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../model/03_demand_sectors.html">3. Demand sectors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../model/03_demand_sectors.html#industry-and-domestic-demand">3.1. Industry and domestic demand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/03_demand_sectors.html#residential-and-commercial">3.2. Residential and commercial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/03_demand_sectors.html#transport-and-bunkers-demand">3.3. Transport and bunkers demand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/03_demand_sectors.html#carbon-dioxide-removal-cdr-technologies">3.4. Carbon Dioxide Removal (CDR) technologies</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../model/04_supply_sectors.html">4. Supply sectors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../model/04_supply_sectors.html#power-supply">4.1. Power supply</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/04_supply_sectors.html#heat-supply">4.2. Heat supply</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/04_supply_sectors.html#hydrogen-supply">4.3. Hydrogen supply</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../model/04_supply_sectors.html#supplydemand-alignment-and-sector-coupling">4.3.1. Supply–demand alignment and sector coupling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model/04_supply_sectors.html#output-and-role-in-the-full-energy-system">4.3.2. Output and role in the full energy system</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../model/04_supply_sectors.html#supply-of-other-fuels">4.4. Supply of other fuels</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../model/05_data_and_calibration.html">5. Data pipeline and calibration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../model/05_data_and_calibration.html#input-data-sources-and-data-preparation">5.1. Input data sources and data preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/05_data_and_calibration.html#output-post-processing">5.2. Output post-processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/05_data_and_calibration.html#calibration-mechanism">5.3. Calibration mechanism</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../model/06_interlinkages.html">6. Model interlinkages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../model/06_interlinkages.html#link-with-opentepes">6.1. Link with openTEPES</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/06_interlinkages.html#link-with-meteor">6.2. Link with METEOR</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../model/06_interlinkages.html#overview-of-meteor">6.2.1. Overview of METEOR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model/06_interlinkages.html#rationale-for-linking-meteor-with-open-prom">6.2.2. Rationale for linking METEOR with OPEN-PROM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model/06_interlinkages.html#coupling-workflow-between-open-prom-and-meteor">6.2.3. Coupling workflow between OPEN-PROM and METEOR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model/06_interlinkages.html#added-value-for-open-prom">6.2.4. Added value for OPEN-PROM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../model/06_interlinkages.html#circular-economy-representation-with-omnia-engage">6.3. Circular economy representation with OMNIA-ENGAGE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/06_interlinkages.html#link-with-ftt-heat">6.4. Link with FTT:Heat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/06_interlinkages.html#link-with-magpie">6.5. Link with MAgPIE</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../model/07_baseline_results.html">7. Baseline results</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../model/07_baseline_results.html#baseline-emissions">7.1. Baseline emissions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/07_baseline_results.html#final-energy-demand">7.2. Final energy demand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/07_baseline_results.html#fuel-shares-and-electrification">7.3. Fuel shares and electrification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/07_baseline_results.html#electricity-generation-and-power-sector-transformation">7.4. Electricity generation and power-sector transformation</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference/gams_error_codes.html">GAMS error codes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../reference/gams_error_codes.html#compile-time-errors">Compile-time errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/gams_error_codes.html#execution-time-solver-and-model-status-issues">Execution-time solver and model-status issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/gams_error_codes.html#license-errors">License errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/gams_error_codes.html#general-troubleshooting-tips">General troubleshooting tips</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/abbreviations.html">Abbreviations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/bibliography.html">Bibliography and data sources</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../reference/bibliography.html#references">References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/bibliography.html#data-sources-and-tools">Data sources and tools</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../about.html#acknowledgements-and-funding">Acknowledgements and funding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about.html#how-to-cite">How to cite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about.html#links">Links</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OPEN-PROM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Setup and environment</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/guide/01_setup.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="setup-and-environment">
+<h1>Setup and environment<a class="headerlink" href="#setup-and-environment" title="Link to this heading"></a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>In brief</strong> — This page walks through preparing a working environment for OPEN-PROM: installing and configuring Git and GitHub, setting up Visual Studio Code with the Task Runner extension for launching model runs, resolving common setup problems, and configuring a shared Windows modelling server for multi-user use. The model can also be used without Git or VS Code, so this guide is aimed at users who want the full collaborative workflow.</p>
+</div>
+<p>OPEN-PROM is developed on GitHub and run through the R harness (<code class="docutils literal notranslate"><span class="pre">start.R</span></code>). The recommended day-to-day setup is <strong>Git</strong> for version control plus <strong>Visual Studio Code (VS Code)</strong> as the editor, with the GAMS, R and Python toolchains available on the <code class="docutils literal notranslate"><span class="pre">PATH</span></code>. This page covers a single-user workstation setup first, then the additional steps for a shared Windows modelling server.</p>
+<section id="key-terminology">
+<h2>Key terminology<a class="headerlink" href="#key-terminology" title="Link to this heading"></a></h2>
+<p>A few terms recur throughout the OPEN-PROM workflow:</p>
+<ul class="simple">
+<li><p><strong>Git</strong> — a distributed version-control system that tracks file changes, keeps a revision history, and supports collaboration through branching and merging.</p></li>
+<li><p><strong>GitHub</strong> — a web platform built on Git that hosts repositories and adds code review, issue tracking and project management.</p></li>
+<li><p><strong>Visual Studio Code (VS Code)</strong> — a lightweight, extensible, open-source code editor from Microsoft.</p></li>
+<li><p><strong>Repository (“repo”)</strong> — the central store of a project’s files together with their version history.</p></li>
+<li><p><strong>Cloning</strong> — creating a local copy of a remote repository on your machine.</p></li>
+<li><p><strong>Commit</strong> — a snapshot of changes recorded in the repository history, with a descriptive message.</p></li>
+<li><p><strong>Push / Pull</strong> — uploading your local commits to the remote (push) and retrieving others’ changes into your local copy (pull).</p></li>
+</ul>
+</section>
+<section id="git-and-github-setup">
+<h2>Git and GitHub setup<a class="headerlink" href="#git-and-github-setup" title="Link to this heading"></a></h2>
+<section id="check-for-an-existing-git-installation">
+<h3>Check for an existing Git installation<a class="headerlink" href="#check-for-an-existing-git-installation" title="Link to this heading"></a></h3>
+<p>Open a command-line interface (Windows Command Prompt or a terminal) and run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>--version
+</pre></div>
+</div>
+<p>If Git is installed you will see a version number. If it is not, you will get a “command not recognised” message and need to install it.</p>
+</section>
+<section id="install-git">
+<h3>Install Git<a class="headerlink" href="#install-git" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>Download the installer for your operating system from <a class="reference external" href="https://git-scm.com/downloads">https://git-scm.com/downloads</a>.</p></li>
+<li><p>Run the installer and follow the on-screen instructions. When prompted for the terminal emulator, select <strong>“Use Windows’ default console window”</strong> (see <a class="reference internal" href="#fig-guide-setup-1"><span class="std std-numref">Fig. 1</span></a>).</p></li>
+<li><p>Re-run <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">--version</span></code> to confirm the installation.</p></li>
+<li><p>Close and re-open your terminal so the new <code class="docutils literal notranslate"><span class="pre">PATH</span></code> takes effect.</p></li>
+</ol>
+<figure class="align-default" id="fig-guide-setup-1">
+<a class="reference internal image-reference" href="../_images/guide_setup_1.png"><img alt="../_images/guide_setup_1.png" src="../_images/guide_setup_1.png" style="width: 80%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Fig. 1 </span><span class="caption-text">During Git installation on Windows, select “Use Windows’ default console window”.</span><a class="headerlink" href="#fig-guide-setup-1" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="create-and-configure-a-github-account">
+<h3>Create and configure a GitHub account<a class="headerlink" href="#create-and-configure-a-github-account" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p>If you do not have an account, sign up at <a class="reference external" href="https://github.com">https://github.com</a> and verify your email address.</p></li>
+<li><p>Configure your identity for Git, using the <strong>same</strong> name and email registered on GitHub:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.name<span class="w"> </span><span class="s2">&quot;Your Name&quot;</span>
+git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.email<span class="w"> </span><span class="s2">&quot;youremail@example.com&quot;</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="clone-the-repository">
+<h3>Clone the repository<a class="headerlink" href="#clone-the-repository" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p>On GitHub, open the OPEN-PROM repository, click <strong>Code</strong>, and copy the repository URL.</p></li>
+<li><p>In your terminal, change into the directory where you want the local copy (for example <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">Documents</span></code>).</p></li>
+<li><p>Clone it, optionally giving the local folder a name:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>&lt;repository-url&gt;<span class="w"> </span>&lt;folder-name&gt;
+</pre></div>
+</div>
+</li>
+<li><p>Close and re-open the terminal once cloning completes.</p></li>
+</ol>
+</section>
+<section id="commit-and-push-changes">
+<h3>Commit and push changes<a class="headerlink" href="#commit-and-push-changes" title="Link to this heading"></a></h3>
+<p>After editing files locally, save them and use the VS Code <strong>Source Control</strong> panel (the branch icon in the sidebar):</p>
+<ol class="arabic simple">
+<li><p>Review the changed files.</p></li>
+<li><p>Enter a commit message and click the checkmark to commit.</p></li>
+<li><p>Open the <strong>“…”</strong> menu and choose <strong>Push</strong> to upload your commits to GitHub.</p></li>
+</ol>
+</section>
+</section>
+<section id="visual-studio-code">
+<h2>Visual Studio Code<a class="headerlink" href="#visual-studio-code" title="Link to this heading"></a></h2>
+<section id="install-vs-code">
+<h3>Install VS Code<a class="headerlink" href="#install-vs-code" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p>Download VS Code from <a class="reference external" href="https://code.visualstudio.com/download">https://code.visualstudio.com/download</a> and follow the installer.</p></li>
+<li><p>Launch it, then open the cloned repository — either via <strong>File → Open Folder</strong>, or from a terminal whose working directory is the repository:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>code<span class="w"> </span>.
+</pre></div>
+</div>
+</li>
+</ol>
+<p>This opens the repository as the VS Code workspace.</p>
+</section>
+<section id="orientation">
+<h3>Orientation<a class="headerlink" href="#orientation" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>The <strong>sidebar</strong> (left) hosts the key panels: <strong>Explorer</strong> (file tree), <strong>Search</strong>, <strong>Source Control</strong> (Git staging, commits, push), <strong>Run &amp; Debug</strong>, and <strong>Extensions</strong>.</p></li>
+<li><p>The <strong>integrated terminal</strong> runs command-line tasks — including <code class="docutils literal notranslate"><span class="pre">Rscript</span> <span class="pre">start.R</span></code> — without leaving the editor.</p></li>
+</ul>
+</section>
+<section id="recommended-extensions">
+<h3>Recommended extensions<a class="headerlink" href="#recommended-extensions" title="Link to this heading"></a></h3>
+<p>Install these from the Extensions Marketplace (the square icon in the sidebar, or <code class="docutils literal notranslate"><span class="pre">Ctrl+Shift+X</span></code>); restart VS Code if prompted:</p>
+<ul class="simple">
+<li><p><strong>Git History</strong> (publisher <em>Don Jayamanne</em>) — browse file and repository history.</p></li>
+<li><p><strong>GitLens</strong> <em>(optional)</em> — inline blame annotations, commit details, branch comparison and history.</p></li>
+</ul>
+</section>
+</section>
+<section id="task-runner">
+<h2>Task runner<a class="headerlink" href="#task-runner" title="Link to this heading"></a></h2>
+<p>The <strong>Task Runner</strong> extension adds clickable buttons inside VS Code for launching the predefined OPEN-PROM workflows, similar to the run buttons in GAMS Studio.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The Task Runner does not introduce a separate workflow. Its buttons are simply shortcuts for the commands defined in <code class="docutils literal notranslate"><span class="pre">.vscode/tasks.json</span></code> — typically <code class="docutils literal notranslate"><span class="pre">Rscript</span> <span class="pre">start.R</span> <span class="pre">task_id=...</span></code> or direct GAMS calls — which you could equally type in the terminal. It is a convenience, not a replacement for the command line.</p>
+</div>
+<section id="setup">
+<h3>Setup<a class="headerlink" href="#setup" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>Install the <strong>Task Runner</strong> extension by <em>Sana Ajani</em> from the Extensions Marketplace.</p></li>
+<li><p>Restart VS Code.</p></li>
+<li><p>Open the cloned <code class="docutils literal notranslate"><span class="pre">OPEN-PROM</span></code> folder.</p></li>
+<li><p>In the <strong>Explorer</strong> tab, find the <strong>Task Runner</strong> dropdown at the bottom of the panel and expand it to reveal the OPEN-PROM buttons read from <code class="docutils literal notranslate"><span class="pre">.vscode/tasks.json</span></code>.</p></li>
+</ol>
+</section>
+<section id="run-modes">
+<h3>Run modes<a class="headerlink" href="#run-modes" title="Link to this heading"></a></h3>
+<p>The buttons map to OPEN-PROM’s run modes — broadly: development runs, development runs with fresh data generation, research runs, and calibration runs. Each combines GAMS flags (such as <code class="docutils literal notranslate"><span class="pre">DevMode</span></code>, <code class="docutils literal notranslate"><span class="pre">GenerateInput</span></code>, and reporting options) through <code class="docutils literal notranslate"><span class="pre">start.R</span></code> and the corresponding task body in <code class="docutils literal notranslate"><span class="pre">scripts/tasks/</span></code>. You do not need to memorise them at this stage.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>For the precise meaning of each task and its flags, see <a class="reference internal" href="02_running_the_model.html"><span class="doc">Running the model</span></a>.</p>
+</div>
+</section>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h2>
+<p>Setup problems are common; the most frequent ones and their fixes are below.</p>
+<section id="git-installation-fails">
+<h3>Git installation fails<a class="headerlink" href="#git-installation-fails" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Confirm your system meets the <a class="reference external" href="https://git-scm.com/book/en/v2/Getting-Started-Installing-Git">minimum requirements for installing Git</a>.</p></li>
+<li><p>On Windows, right-click the installer and choose <strong>Run as administrator</strong>.</p></li>
+<li><p>Temporarily disable antivirus or firewall software that may be blocking the install.</p></li>
+<li><p>As an alternative, install via the command line with <a class="reference external" href="https://chocolatey.org/">Chocolatey</a>: <code class="docutils literal notranslate"><span class="pre">choco</span> <span class="pre">install</span> <span class="pre">git</span></code>.</p></li>
+</ul>
+</section>
+<section id="github-authentication-fails">
+<h3>GitHub authentication fails<a class="headerlink" href="#github-authentication-fails" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Double-check your GitHub username and password.</p></li>
+<li><p>If two-factor authentication is enabled, <a class="reference external" href="https://github.com/settings/tokens">generate a personal access token</a> and use it in place of your password.</p></li>
+<li><p>Refresh the stored credential helper on Windows: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">config</span> <span class="pre">--global</span> <span class="pre">credential.helper</span> <span class="pre">wincred</span></code>.</p></li>
+</ul>
+</section>
+<section id="cloning-fails">
+<h3>Cloning fails<a class="headerlink" href="#cloning-fails" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Verify the repository URL is correct and accessible (watch for typos).</p></li>
+<li><p>Check for a stable internet connection.</p></li>
+<li><p>For a private repository, confirm you have access rights and are authenticated.</p></li>
+<li><p>Update Git — older versions can have compatibility issues.</p></li>
+</ul>
+</section>
+<section id="vs-code-git-integration-problems">
+<h3>VS Code / Git integration problems<a class="headerlink" href="#vs-code-git-integration-problems" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Make sure the Git and GitHub extensions are installed.</p></li>
+<li><p>Restart VS Code; if needed, check for and install VS Code updates.</p></li>
+<li><p>Re-authenticate with GitHub via the command palette (<code class="docutils literal notranslate"><span class="pre">Ctrl+Shift+P</span></code>) and the Git commands.</p></li>
+</ul>
+</section>
+</section>
+<section id="modelling-server-windows">
+<h2>Modelling server (Windows)<a class="headerlink" href="#modelling-server-windows" title="Link to this heading"></a></h2>
+<p>This section describes configuring a <strong>Windows 11 Pro</strong> machine as a shared modelling server, so that multiple users can run OPEN-PROM (plus <code class="docutils literal notranslate"><span class="pre">mrprom</span></code> and <code class="docutils literal notranslate"><span class="pre">postprom</span></code>), use VS Code, GAMS, R and Python system-wide, share data via SharePoint, and use Linux tools through WSL.</p>
+<section id="connecting">
+<h3>Connecting<a class="headerlink" href="#connecting" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Remote Desktop (RDP)</strong> — use the Windows “Remote Desktop Connection” app with the server’s IP address. Do not use the default account: choose <strong>More options → Use a different account</strong> and enter your username (for example <code class="docutils literal notranslate"><span class="pre">xl99</span></code>) and password. Use the VPN when out of office or on a guest network.</p></li>
+<li><p><strong>Concurrent sessions</strong> — each Windows session is isolated. Logging in via RDP interrupts another user’s session, but their session (and any running model runs) is kept active in the background.</p></li>
+<li><p><strong>SSH via OpenSSH server</strong> — under development.</p></li>
+</ul>
+</section>
+<section id="system-preparation">
+<h3>System preparation<a class="headerlink" href="#system-preparation" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Ensure Windows 11 <strong>Pro</strong> is installed.</p></li>
+<li><p>IT must create a user account for each modeller.</p></li>
+<li><p>Administrator privileges are required during setup; ask IT for temporary admin rights if needed.</p></li>
+</ul>
+</section>
+<section id="install-core-software-system-wide">
+<h3>Install core software (system-wide)<a class="headerlink" href="#install-core-software-system-wide" title="Link to this heading"></a></h3>
+<p>Install <strong>Git first</strong>, before R and VS Code, so the latter can detect it automatically. It is recommended <strong>not</strong> to set up Git credentials per user.</p>
+<p><strong>Git</strong> — download from <a class="reference external" href="https://git-scm.com/download/win">https://git-scm.com/download/win</a> and install as administrator with “Install for all users”, a preferred path of <code class="docutils literal notranslate"><span class="pre">C:\Git\</span></code>, and “Add Git to PATH”. Verify with <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">--version</span></code>.</p>
+<p><strong>R</strong> — download from <a class="reference external" href="https://cloud.r-project.org">https://cloud.r-project.org</a>, install for all users to e.g. <code class="docutils literal notranslate"><span class="pre">C:\R\R-4.4.0\</span></code>, and install RStudio for all users afterwards (with admin rights). Then edit the global startup profile <code class="docutils literal notranslate"><span class="pre">C:\R\R-4.4.0\etc\Rprofile.site</span></code> so all users share consistent settings:</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">options</span><span class="p">(</span><span class="n">MADRAT_MAINFOLDER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;C:/madratverse&quot;</span><span class="p">)</span>
+<span class="nf">Sys.setenv</span><span class="p">(</span><span class="n">RENV_CONFIG_AUTOINSTALL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">)</span>
+<span class="nf">Sys.setenv</span><span class="p">(</span><span class="n">RENV_CONFIG_PROJECT_AUTO</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">)</span>
+<span class="nf">Sys.setenv</span><span class="p">(</span><span class="n">RENV_CONFIG_USER_PROFILE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">)</span>
+<span class="nf">Sys.setenv</span><span class="p">(</span><span class="n">RENV_PATHS_CACHE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Confirm by opening R (or a VS Code R terminal) as another user and running <code class="docutils literal notranslate"><span class="pre">.libPaths()</span></code> — it should point at the shared library, e.g. <code class="docutils literal notranslate"><span class="pre">C:/R/R-4.4.1/library</span></code>.</p>
+<p><strong>VS Code</strong> — install to <code class="docutils literal notranslate"><span class="pre">C:\Microsoft</span> <span class="pre">VS</span> <span class="pre">Code\</span></code>, then create shared data and extensions folders (<code class="docutils literal notranslate"><span class="pre">C:\VSCodeUserData</span></code>, <code class="docutils literal notranslate"><span class="pre">C:\VSCodeExtensions</span></code>). Edit <strong>every</strong> shortcut (Desktop, Start Menu, Taskbar) so its target passes these folders:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>&quot;C:\Microsoft VS Code\Code.exe&quot; --user-data-dir &quot;C:\VSCodeUserData&quot; --extensions-dir &quot;C:\VSCodeExtensions&quot;
+</pre></div>
+</div>
+<p>Do not launch the original executable directly; with this change all users share extensions, settings and interpreter paths.</p>
+<p><strong>GAMS</strong> — download from <a class="reference external" href="https://www.gams.com/download/">https://www.gams.com/download/</a>, install to <code class="docutils literal notranslate"><span class="pre">C:\GAMS\&lt;version&gt;</span></code>, and add GAMS to the system <code class="docutils literal notranslate"><span class="pre">PATH</span></code>.</p>
+</section>
+<section id="install-magpie-system-wide-no-renv">
+<h3>Install MAgPIE system-wide (no renv)<a class="headerlink" href="#install-magpie-system-wide-no-renv" title="Link to this heading"></a></h3>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Do <strong>not</strong> install MAgPIE via Chocolatey — it is unsuitable for multi-user setups.</p>
+</div>
+<p>Once R, Git and shared VS Code are working and users have the correct <code class="docutils literal notranslate"><span class="pre">PATH</span></code> and permissions, MAgPIE can be cloned and used system-wide without renv. In R (as admin):</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">install.packages</span><span class="p">(</span><span class="s">&quot;remotes&quot;</span><span class="p">)</span>
+<span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&quot;pik-piam/magclass&quot;</span><span class="p">)</span>
+<span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&quot;pik-piam/madrat&quot;</span><span class="p">)</span>
+<span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&quot;pik-piam/mrcommons&quot;</span><span class="p">)</span>
+<span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&quot;pik-piam/mrdrivers&quot;</span><span class="p">)</span>
+<span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&quot;pik-piam/mrvalidation&quot;</span><span class="p">)</span>
+<span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&quot;pik-piam/magpie&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Then:</p>
+<ol class="arabic">
+<li><p>Remove the <code class="docutils literal notranslate"><span class="pre">renv</span></code> folder from the MAgPIE directory.</p></li>
+<li><p>Edit <code class="docutils literal notranslate"><span class="pre">.Rprofile</span></code> in the MAgPIE folder to disable renv auto-activation, commenting out all lines except the PIK package repository:</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="kr">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="s">&quot;https://rse.pik-potsdam.de/r/packages&quot;</span><span class="w"> </span><span class="o">%in%</span><span class="w"> </span><span class="nf">getOption</span><span class="p">(</span><span class="s">&quot;repos&quot;</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nf">options</span><span class="p">(</span><span class="n">repos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="nf">getOption</span><span class="p">(</span><span class="s">&quot;repos&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">pik</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;https://rse.pik-potsdam.de/r/packages&quot;</span><span class="p">))</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p>Install the remaining required packages system-wide (<code class="docutils literal notranslate"><span class="pre">lucode2</span></code>, <code class="docutils literal notranslate"><span class="pre">gms</span></code>, etc.).</p></li>
+</ol>
+<p>A MAgPIE run can then be started with <code class="docutils literal notranslate"><span class="pre">Rscript</span> <span class="pre">start.R</span></code> in the MAgPIE folder — choose <code class="docutils literal notranslate"><span class="pre">1</span></code> for a default run, then <code class="docutils literal notranslate"><span class="pre">1</span></code> for direct execution.</p>
+</section>
+<section id="python-tinytex-and-shared-storage">
+<h3>Python, TinyTeX and shared storage<a class="headerlink" href="#python-tinytex-and-shared-storage" title="Link to this heading"></a></h3>
+<p><strong>Python</strong> — install for all users to <code class="docutils literal notranslate"><span class="pre">C:\Python310\</span></code>, then install packages as admin:</p>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">numpy</span> <span class="n">pandas</span> <span class="n">matplotlib</span>
+</pre></div>
+</div>
+<p><strong>TinyTeX</strong> — needed for automated PDF reporting. In R (as admin):</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">install.packages</span><span class="p">(</span><span class="s">&quot;tinytex&quot;</span><span class="p">)</span>
+<span class="n">tinytex</span><span class="o">::</span><span class="nf">install_tinytex</span><span class="p">(</span><span class="n">force</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">,</span><span class="w"> </span><span class="n">dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;C:/TinyTeX&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Add <code class="docutils literal notranslate"><span class="pre">C:\TinyTeX\bin\win32</span></code> to the system <code class="docutils literal notranslate"><span class="pre">PATH</span></code>.</p>
+<p><strong>Shared OneDrive / SharePoint</strong> — OneDrive does not natively support multi-user sync on one machine: it only syncs for the signed-in account, so other users see the folder but cannot sync changes. The workaround is a scheduled task that runs <code class="docutils literal notranslate"><span class="pre">OneDrive.exe</span></code> at startup under the single account that owns the sync (typically the admin who set up the <em>sources</em> folder for MADRaT and the <em>runs</em> folder for model outputs):</p>
+<ol class="arabic simple">
+<li><p>Log in as that admin user.</p></li>
+<li><p>In <strong>Task Scheduler</strong>, create a task named e.g. <em>Start OneDrive Sync</em> with <strong>“Run whether user is logged on or not”</strong> and <strong>“Run with highest privileges”</strong>, set to the owning user account.</p></li>
+<li><p>Add a trigger <strong>At startup</strong> (optionally delayed by ~30 s to let the network initialise).</p></li>
+<li><p>Add an action <strong>Start a program</strong> pointing at <code class="docutils literal notranslate"><span class="pre">C:\Users\&lt;account&gt;\AppData\Local\Microsoft\OneDrive\OneDrive.exe</span></code>, with the optional argument <code class="docutils literal notranslate"><span class="pre">/background</span></code>.</p></li>
+<li><p>Save (entering the account password if prompted), then test by right-clicking the task and choosing <strong>Run</strong>.</p></li>
+</ol>
+</section>
+<section id="linux-support-wsl-per-user">
+<h3>Linux support — WSL (per-user)<a class="headerlink" href="#linux-support-wsl-per-user" title="Link to this heading"></a></h3>
+<p>There is no system-wide WSL installation; each user installs it separately:</p>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="n">wsl</span> <span class="p">-</span><span class="n">-install</span> <span class="n">-d</span> <span class="n">Ubuntu</span>
+</pre></div>
+</div>
+</section>
+<section id="test-the-setup">
+<h3>Test the setup<a class="headerlink" href="#test-the-setup" title="Link to this heading"></a></h3>
+<p>Log out and log back in as a different Windows user, open PowerShell, and confirm each toolchain is on the <code class="docutils literal notranslate"><span class="pre">PATH</span></code>:</p>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="p">-</span><span class="n">-version</span>
+<span class="n">git</span> <span class="p">-</span><span class="n">-version</span>
+<span class="nb">R </span><span class="p">-</span><span class="n">-version</span>
+<span class="n">gams</span>
+</pre></div>
+</div>
+<p>If every command returns a version, the <code class="docutils literal notranslate"><span class="pre">PATH</span></code> is configured for all users. As a final end-to-end check, launch a <strong>research / new-data</strong> run of OPEN-PROM through the VS Code Task Runner.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../overview.html" class="btn btn-neutral float-left" title="Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="02_running_the_model.html" class="btn btn-neutral float-right" title="Running the model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, E3Modelling.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

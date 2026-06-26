@@ -1,0 +1,412 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4. Supply sectors &mdash; OPEN-PROM</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+    <link rel="canonical" href="https://e3modelling.github.io/OPEN-PROM/model/04_supply_sectors.html" />
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=b21de401"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="5. Data pipeline and calibration" href="05_data_and_calibration.html" />
+    <link rel="prev" title="3. Demand sectors" href="03_demand_sectors.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            OPEN-PROM
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/01_setup.html">Setup and environment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guide/01_setup.html#key-terminology">Key terminology</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/01_setup.html#git-and-github-setup">Git and GitHub setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#check-for-an-existing-git-installation">Check for an existing Git installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#install-git">Install Git</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#create-and-configure-a-github-account">Create and configure a GitHub account</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#clone-the-repository">Clone the repository</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#commit-and-push-changes">Commit and push changes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/01_setup.html#visual-studio-code">Visual Studio Code</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#install-vs-code">Install VS Code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#orientation">Orientation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#recommended-extensions">Recommended extensions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/01_setup.html#task-runner">Task runner</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#setup">Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#run-modes">Run modes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/01_setup.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#git-installation-fails">Git installation fails</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#github-authentication-fails">GitHub authentication fails</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#cloning-fails">Cloning fails</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#vs-code-git-integration-problems">VS Code / Git integration problems</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/01_setup.html#modelling-server-windows">Modelling server (Windows)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#connecting">Connecting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#system-preparation">System preparation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#install-core-software-system-wide">Install core software (system-wide)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#install-magpie-system-wide-no-renv">Install MAgPIE system-wide (no renv)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#python-tinytex-and-shared-storage">Python, TinyTeX and shared storage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#linux-support-wsl-per-user">Linux support — WSL (per-user)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#test-the-setup">Test the setup</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/02_running_the_model.html">Running the model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guide/02_running_the_model.html#a-first-run-public-dummy-data">A first run (public dummy data)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/02_running_the_model.html#running-with-real-input-data">Running with real input data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/02_running_the_model.html#point-r-to-the-local-madrat-archive">Point R to the local <code class="docutils literal notranslate"><span class="pre">madrat</span></code> archive</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/02_running_the_model.html#how-data-and-targets-are-created">How <code class="docutils literal notranslate"><span class="pre">data/</span></code> and <code class="docutils literal notranslate"><span class="pre">targets/</span></code> are created</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/02_running_the_model.html#task-modes-in-start-r">Task modes in <code class="docutils literal notranslate"><span class="pre">start.R</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/02_running_the_model.html#batch-mode">Batch mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/02_running_the_model.html#what-the-outputs-mean">What the outputs mean</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/02_running_the_model.html#changing-the-region-set">Changing the region set</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">How-to guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guide/03_input_data.html">Input data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guide/03_input_data.html#installing-the-software-and-libraries">Installing the software and libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/03_input_data.html#creating-the-local-configuration-file">Creating the local configuration file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/03_input_data.html#adding-the-data-sources">Adding the data sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/03_input_data.html#updating-the-ci-dataset">Updating the CI dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/03_input_data.html#running-the-model">Running the model</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/04_development.html">Development and code structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guide/04_development.html#folder-structure">Folder structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/04_development.html#the-phase-system">The phase system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/04_development.html#modules-and-realizations">Modules and realizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/04_development.html#default-active-vs-dormant-features">Default active vs dormant features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/04_development.html#naming-convention">Naming convention</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/04_development.html#developer-workflow">Developer workflow</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/05_soft_linking.html">Soft-linking</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guide/05_soft_linking.html#soft-linking-with-magpie">Soft-linking with MAgPIE</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/05_soft_linking.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/05_soft_linking.html#running-an-iteration">Running an iteration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/05_soft_linking.html#configuration">Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/05_soft_linking.html#convergence-controls-and-state-files">Convergence controls and state files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/05_soft_linking.html#emulator-alternative-without-running-magpie">Emulator alternative (without running MAgPIE)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/05_soft_linking.html#soft-linking-with-climate-emulators-meteor">Soft-linking with climate emulators (METEOR)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/05_soft_linking.html#workflow">Workflow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/05_soft_linking.html#one-way-vs-iterative-use">One-way vs iterative use</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Model documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="01_introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_model_overview.html">2. Model overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="02_model_overview.html#time-granularity-and-regions">2.1. Time granularity and regions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_model_overview.html#sector-granularity">2.2. Sector granularity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_model_overview.html#gap-and-substitution-mechanism">2.3. Gap and substitution mechanism</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="02_model_overview.html#gap-and-scrapping-mechanism">2.3.1. Gap and scrapping mechanism</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_model_overview.html#substitution-mechanism">2.3.2. Substitution mechanism</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_model_overview.html#implementation-by-realisation">2.3.3. Implementation by realisation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="02_model_overview.html#prices">2.4. Prices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="02_model_overview.html#conceptual-framing-legacy">2.4.1. Conceptual framing (legacy)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_model_overview.html#active-price-formation-current-code">2.4.2. Active price formation (current code)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="02_model_overview.html#energy-supply">2.5. Energy supply</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="02_model_overview.html#trade-representation">2.5.1. Trade representation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_model_overview.html#end-use-sector-biofuel-blending">2.5.2. End-use sector: biofuel blending</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="03_demand_sectors.html">3. Demand sectors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="03_demand_sectors.html#industry-and-domestic-demand">3.1. Industry and domestic demand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_demand_sectors.html#residential-and-commercial">3.2. Residential and commercial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_demand_sectors.html#transport-and-bunkers-demand">3.3. Transport and bunkers demand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_demand_sectors.html#carbon-dioxide-removal-cdr-technologies">3.4. Carbon Dioxide Removal (CDR) technologies</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">4. Supply sectors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#power-supply">4.1. Power supply</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#heat-supply">4.2. Heat supply</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hydrogen-supply">4.3. Hydrogen supply</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#supplydemand-alignment-and-sector-coupling">4.3.1. Supply–demand alignment and sector coupling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#output-and-role-in-the-full-energy-system">4.3.2. Output and role in the full energy system</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#supply-of-other-fuels">4.4. Supply of other fuels</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="05_data_and_calibration.html">5. Data pipeline and calibration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="05_data_and_calibration.html#input-data-sources-and-data-preparation">5.1. Input data sources and data preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_data_and_calibration.html#output-post-processing">5.2. Output post-processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_data_and_calibration.html#calibration-mechanism">5.3. Calibration mechanism</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="06_interlinkages.html">6. Model interlinkages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="06_interlinkages.html#link-with-opentepes">6.1. Link with openTEPES</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_interlinkages.html#link-with-meteor">6.2. Link with METEOR</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="06_interlinkages.html#overview-of-meteor">6.2.1. Overview of METEOR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="06_interlinkages.html#rationale-for-linking-meteor-with-open-prom">6.2.2. Rationale for linking METEOR with OPEN-PROM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="06_interlinkages.html#coupling-workflow-between-open-prom-and-meteor">6.2.3. Coupling workflow between OPEN-PROM and METEOR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="06_interlinkages.html#added-value-for-open-prom">6.2.4. Added value for OPEN-PROM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="06_interlinkages.html#circular-economy-representation-with-omnia-engage">6.3. Circular economy representation with OMNIA-ENGAGE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_interlinkages.html#link-with-ftt-heat">6.4. Link with FTT:Heat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_interlinkages.html#link-with-magpie">6.5. Link with MAgPIE</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="07_baseline_results.html">7. Baseline results</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="07_baseline_results.html#baseline-emissions">7.1. Baseline emissions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_baseline_results.html#final-energy-demand">7.2. Final energy demand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_baseline_results.html#fuel-shares-and-electrification">7.3. Fuel shares and electrification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_baseline_results.html#electricity-generation-and-power-sector-transformation">7.4. Electricity generation and power-sector transformation</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference/gams_error_codes.html">GAMS error codes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../reference/gams_error_codes.html#compile-time-errors">Compile-time errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/gams_error_codes.html#execution-time-solver-and-model-status-issues">Execution-time solver and model-status issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/gams_error_codes.html#license-errors">License errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/gams_error_codes.html#general-troubleshooting-tips">General troubleshooting tips</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/abbreviations.html">Abbreviations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/bibliography.html">Bibliography and data sources</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../reference/bibliography.html#references">References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/bibliography.html#data-sources-and-tools">Data sources and tools</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../about.html#acknowledgements-and-funding">Acknowledgements and funding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about.html#how-to-cite">How to cite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about.html#links">Links</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OPEN-PROM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">4. </span>Supply sectors</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/model/04_supply_sectors.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="supply-sectors">
+<h1><span class="section-number">4. </span>Supply sectors<a class="headerlink" href="#supply-sectors" title="Link to this heading"></a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>In brief</strong> — This chapter describes how OPEN-PROM supplies the energy carriers that meet sectoral demand: a technology-rich power sector, a district-heat sector, a production-centred hydrogen sector, and the aggregated supply of all other fuels (solids, liquids, gases and biofuels) that keep the energy balance closed.</p>
+</div>
+<p>The supply sectors translate the demand transmitted by the end-use modules into the production, conversion and pricing of energy carriers. They were developed in the context of the DIAMOND project and share the same accounting and decision logic that underpins the rest of the model.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The power, heat and hydrogen modules all reuse the same gap, scrapping and substitution logic described in <a class="reference internal" href="02_model_overview.html#gap-substitution"><span class="std std-ref">Gap and substitution mechanism</span></a>: surviving capacity is carried forward, the gap to demand is computed, and new production is allocated across competing technologies through a market-share mechanism.</p>
+</div>
+<p>Several supply-side features described below are governed by global switches and are <strong>not all active in the default configuration</strong>. The table summarises what the current <code class="docutils literal notranslate"><span class="pre">main</span></code> branch solves out of the box.</p>
+<table class="docutils align-default" id="tab-supply-defaults">
+<caption><span class="caption-number">Table 4.1 </span><span class="caption-text">Default active vs dormant supply-side features</span><a class="headerlink" href="#tab-supply-defaults" title="Link to this table"></a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Feature</p></th>
+<th class="head"><p>Default state</p></th>
+<th class="head"><p>How to activate</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Power-sector learning curves</p></td>
+<td><p><strong>Off</strong> — the capacity-cost expression multiplies by 1, so no endogenous cost reduction is applied (switch <code class="docutils literal notranslate"><span class="pre">Curves</span> <span class="pre">off</span></code>).</p></td>
+<td><p>Set <code class="docutils literal notranslate"><span class="pre">Curves=LearningCurves</span></code>; the learning term then enters the investment-cost calculation.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Hydrogen infrastructure (pipelines, service stations, network efficiencies, self-consumption, tariffs, delivered-cost)</p></td>
+<td><p><strong>Dormant</strong> — the equation block is structurally present but wrapped in <code class="docutils literal notranslate"><span class="pre">$ontext</span> <span class="pre">…</span> <span class="pre">$offtext</span></code>, so it is excluded from the solved model.</p></td>
+<td><p>Requires reactivating the commented infrastructure block in future development.</p></td>
+</tr>
+<tr class="row-even"><td><p>Land-use biomass supply curves</p></td>
+<td><p><strong>Emulator active</strong> — the <code class="docutils literal notranslate"><span class="pre">globiom</span></code> emulator supplies biomass supply/emission curves by default (<code class="docutils literal notranslate"><span class="pre">landUseEmulator</span> <span class="pre">globiom</span></code>); <code class="docutils literal notranslate"><span class="pre">legacy</span></code> disables the emulator (static price, exogenous emissions).</p></td>
+<td><p>Set <code class="docutils literal notranslate"><span class="pre">landUseEmulator</span></code> to <code class="docutils literal notranslate"><span class="pre">globiom</span></code>/<code class="docutils literal notranslate"><span class="pre">magpie</span></code>, or <code class="docutils literal notranslate"><span class="pre">legacy</span></code> to switch the emulator off.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Iterative MAgPIE soft-link</p></td>
+<td><p><strong>Off</strong> — biomass prices and land emissions are not iterated with the external MAgPIE model (<code class="docutils literal notranslate"><span class="pre">softLinkMAgPIE</span> <span class="pre">off</span></code>).</p></td>
+<td><p>Run the task-7 soft-link with <code class="docutils literal notranslate"><span class="pre">softLinkMAgPIE=on</span></code>, which then overrides the emulator.</p></td>
+</tr>
+</tbody>
+</table>
+<section id="power-supply">
+<span id="id1"></span><h2><span class="section-number">4.1. </span>Power supply<a class="headerlink" href="#power-supply" title="Link to this heading"></a></h2>
+<p>The Power Supply module, developed in the context of DIAMOND, represents the electricity generation sector, determining how electricity demand is met through a detailed portfolio of generation technologies and fuels. It features a technology-rich menu of power generation technologies<a class="footnote-reference brackets" href="#powertech" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, encompassing biomass and fossil-fuel plants (with and without Carbon Capture and Storage), nuclear, and renewable energy technologies. For example, the module includes coal-fired power, natural gas combined cycles and turbines, oil-fired units, nuclear reactors, hydroelectric power, wind turbines (onshore and offshore), solar power (photovoltaic and concentrated solar power, CSP), biomass-fired plants, and others. In addition to electricity-only power plants, cogeneration or combined heat and power (CHP) plants are also included. These technologies differ in that they produce heat (or steam) that can be distributed to consumers. All technologies compete to supply electricity based on their costs, availability, and policy constraints. The Power Supply module simulates capacity expansion and operation on an annual basis, ensuring that sufficient capacity is built and dispatched to satisfy electricity demand in every region and year.</p>
+<p>In terms of equations and functionality, the Power Supply module centres on capacity accumulation rather than on an explicit dispatch optimisation. In the active <code class="docutils literal notranslate"><span class="pre">simple</span></code> realization, electricity production is <strong>not</strong> obtained from operating-cost minimisation or a merit order: each plant is dispatched in proportion to its share of total installed capacity, so the generation mix follows the capacity mix (<code class="docutils literal notranslate"><span class="pre">Q04ProdElec</span></code>). Capacity, in turn, evolves through investment decisions that are cost- and maturity-driven. The share of each technology in new capacity follows a Weibull-type expression in which a lower expected hourly production cost and a higher maturity factor raise that technology’s share (<code class="docutils literal notranslate"><span class="pre">Q04SharePowPlaNewEq</span></code>), and installed capacity is accumulated from surviving capacity, scheduled investments and decommissioning, and CCS retrofits (<code class="docutils literal notranslate"><span class="pre">Q04CapElec</span></code> / <code class="docutils literal notranslate"><span class="pre">Q04NewCapElec</span></code>). The <em>maturity factors</em> thus guide the energy-mix trajectory by influencing investment-decision shares, accounting for non-economic considerations including policy preferences and challenges in scaling up technologies. Renewable energy sources are modelled with constraints reflecting resource potential and variability — for example, limits on annual generation from wind or solar corresponding to capacity-factor assumptions and installed capacity. The power module also accounts for fuel consumption and associated CO₂ emissions of thermal power plants.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>In the active <code class="docutils literal notranslate"><span class="pre">simple</span></code> realization, technology competition happens on the <strong>investment</strong> side (Weibull-type cost/maturity shares), not through a least-cost dispatch of existing plants. Generation is allocated pro rata to installed capacity.</p>
+</div>
+<p>The power module incorporates three mechanisms for technology scrapping: lifetime, premature, and retrofitting. Lifetime scrapping occurs when a technology surpasses its operational lifetime. An important output of the Power Supply module is the electricity price, which is determined by the average cost of electricity generation. In the integrated model, this electricity price feeds back to the demand modules, influencing electricity consumption in industry, buildings, and transport. Conversely, the module takes as input the total electricity demand from the Industry/Domestic and Transport modules and ensures this demand is met. Decarbonisation pressure reaches the power sector mainly through fuel and carbon prices acting on technology costs, which in turn shift the investment shares; the active <code class="docutils literal notranslate"><span class="pre">simple</span></code> realization does <strong>not</strong> contain explicit renewable-portfolio-standard or power-sector emission-cap constraints. When run in standalone mode, the Power Supply module would use exogenous electricity demand projections and fuel prices to simulate the power system expansion. In the full model run, however, it dynamically interacts with other modules, making it a central component for analysing decarbonisation pathways (since the power sector is often a major focus of climate policies). Overall, the Power Supply module provides a detailed picture of the evolving electricity generation mix, capacity investment needs, and the cost of electricity under various scenarios.</p>
+</section>
+<section id="heat-supply">
+<span id="id3"></span><h2><span class="section-number">4.2. </span>Heat supply<a class="headerlink" href="#heat-supply" title="Link to this heading"></a></h2>
+<p>The Heat Supply module, developed in the context of the DIAMOND project, simulates the production and availability of steam and heat to meet the model’s heat demand for district heating purposes, providing a detailed representation of all production technologies and supply-chain elements. It includes only heat that is produced and sold to third parties (e.g. residential, commercial, or industrial consumers) under contractual arrangements through the public grid. Heat produced and consumed within an autoproducer’s establishment is excluded here and is accounted for in the final fuel consumption of the relevant consuming sector.</p>
+<p>The functionality of the Heat Supply module focuses on ensuring that heat supply meets demand and on determining the market price of heat. On the supply side, the module includes equations for capacity investment in heat production plants and their output, while also accounting for heat produced as a by-product from CHP plants in the power generation module. It then allocates heat production across technologies based on cost competitiveness and operational constraints. For example, if renewable electricity is abundant and inexpensive in a given scenario, solar thermal technology may expand significantly; otherwise, fossil fuel plants may dominate unless restricted by carbon policies. The module also considers resource and policy constraints, such as the availability of geothermal resources for district heating plants, limits on CO₂ emissions for fossil-based heat, and targets for “green” hydrogen production. Non-economic factors, including transmission obstacles or policy-driven decisions, are implemented through corresponding maturity factors.</p>
+<p>As in the power generation module, the Heat Supply module also includes scrapping mechanisms (lifetime and premature scrapping) to account for cases where a heat plant becomes economically unfeasible compared to other technologies.</p>
+</section>
+<section id="hydrogen-supply">
+<span id="id4"></span><h2><span class="section-number">4.3. </span>Hydrogen supply<a class="headerlink" href="#hydrogen-supply" title="Link to this heading"></a></h2>
+<p>The Hydrogen Supply module, also developed during the DIAMOND project, represents the upstream production of hydrogen and its interaction with the wider energy system. In the current main-branch implementation, hydrogen is treated as a produced secondary energy carrier whose demand is linked to the model’s hydrogen energy balance, and whose production is allocated across competing technologies according to cost, existing production, scrapping and new demand requirements. The module is therefore focused on hydrogen production, production costs, fuel inputs and carbon-capture behaviour, while the more detailed hydrogen infrastructure representation is present in the model structure but not currently active in the solved equations.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The current implementation is <strong>production-centred</strong>. Input data and equation blocks for hydrogen delivery and infrastructure — pipelines, service stations, network efficiencies, self-consumption, infrastructure investment, tariffs and delivered hydrogen costs — exist in the model structure but are <strong>not active</strong> in the solved equations on the current main branch. Sectoral hydrogen demand is handled through the energy-balance link rather than built up from a distribution network.</p>
+</div>
+<p>The active production technology portfolio includes natural-gas steam reforming with and without CCS, coal gasification with and without CCS, grid-based electrolysis, solar- and wind-based electrolysis, and large-scale biomass gasification with and without CCS. These routes cover the main fossil, renewable electricity and biomass-based hydrogen pathways currently represented in OPEN-PROM. Several additional concepts, such as nuclear thermochemical routes, oil partial oxidation, solar thermochemical hydrogen and smaller biomass gasification routes, appear as dormant or commented options rather than active technologies in the present realization.</p>
+<p>Hydrogen demand is determined at country and year level from the model’s gross inland consumption of hydrogen, adjusted for net imports. This is an important distinction from a fully sector-explicit delivered-demand formulation. Although the model contains structures for assigning hydrogen demand to end-use sectors and for accounting for infrastructure losses, the currently active demand equation does not build total hydrogen demand by summing sectoral hydrogen uses through a distribution network. Sectoral hydrogen-demand variables are effectively inactive in the current implementation, while total hydrogen requirements are handled through the energy-balance link.</p>
+<p>Once total hydrogen requirements are known, the module calculates the gap between demand and surviving production from the previous period. Existing hydrogen production is carried forward subject to normal lifetime scrapping and premature replacement. New production required to close the gap is distributed across available technologies through a Weibull-type market-share mechanism, where lower-cost and more mature technologies receive higher shares. The CCS and non-CCS variants of fossil and biomass routes are also treated as competing options, with the attractiveness of CCS influenced by sequestration costs, carbon prices and technology-specific capture rates.</p>
+<p>Technology costs combine annualised capital costs, fixed and variable operation and maintenance costs, availability factors, conversion efficiencies and fuel costs. For fossil and biomass routes, variable production costs depend on the price of the input fuel, the emissions intensity of that fuel, the prevailing carbon price and the share of emissions captured. For electrolysis, the model distinguishes grid electrolysis from solar- and wind-linked electrolysis, with the latter two drawing on the cost and availability assumptions of the corresponding renewable power technologies. This creates a direct interaction between hydrogen production and the wider power, fuel-price, CCS and carbon-pricing systems.</p>
+<p>The module reports hydrogen production by technology, fuel consumption for hydrogen production, technology-specific production costs, average hydrogen production cost and captured-emission behaviour for CCS-equipped routes. The aggregate fuel requirements of hydrogen production are passed to the transformation side of the energy balance, so that upstream fuel use for hydrogen is accounted for consistently and is not confused with final energy demand. The average hydrogen production cost is also used by the wider price system to transmit hydrogen-cost dynamics to other parts of OPEN-PROM.</p>
+<p>The current implementation should therefore be described as a production-centred hydrogen supply module, not yet as a fully active hydrogen delivery-network module. Input data and inactive equation blocks exist for pipelines, service stations, network efficiencies, self-consumption, infrastructure investment, tariffs and delivered hydrogen costs, but these infrastructure equations are not part of the active solved module on the current main branch. Future development can reactivate or extend this infrastructure layer, but the present operational version mainly captures how different hydrogen production routes compete and how their fuel, electricity and carbon-price dependencies feed back into the broader energy-system solution.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>The CCS and BECCS routes referenced here connect to the carbon-capture and removal technologies described in <a class="reference internal" href="03_demand_sectors.html#cdr"><span class="std std-ref">Carbon Dioxide Removal (CDR) technologies</span></a>.</p>
+</div>
+<section id="supplydemand-alignment-and-sector-coupling">
+<h3><span class="section-number">4.3.1. </span>Supply–demand alignment and sector coupling<a class="headerlink" href="#supplydemand-alignment-and-sector-coupling" title="Link to this heading"></a></h3>
+<p>Hydrogen requirements reach the module through the energy balance rather than through a sector-by-sector delivered-demand build-up. The active total-demand equation (<code class="docutils literal notranslate"><span class="pre">Q05DemTotH2</span></code>) sets total hydrogen demand equal to the gross inland consumption of hydrogen minus net hydrogen imports; the term that would inflate this demand to cover transport and distribution losses is wrapped in <code class="docutils literal notranslate"><span class="pre">$ontext</span> <span class="pre">…</span> <span class="pre">$offtext</span></code> and is inactive. The sectoral hydrogen-demand equation (<code class="docutils literal notranslate"><span class="pre">Q05DemSecH2</span></code>) is fixed to zero on the current main branch, so sectoral hydrogen uses are not summed through a distribution network.</p>
+<p>Production is allocated across hydrogen technologies based on their cost competitiveness and technical constraints, ensuring that hydrogen supply meets this total demand. Hydrogen production based on electrolysis becomes more attractive when electricity prices decline or when higher carbon prices reduce the competitiveness of fossil-based production routes. Conventional fossil-based hydrogen production becomes less economically attractive under stringent climate policy, unless combined with carbon capture and storage. Biomass routes are controlled by feedstock availability and carbon accounting rules.</p>
+<p>The fuel required for hydrogen production is accounted for as an upstream transformation input rather than as final energy consumption. In practice, the model aggregates the fuel and electricity inputs needed by all hydrogen production technologies and passes them to the transformation side of the energy balance. This ensures that hydrogen production is represented consistently within the overall energy accounting framework. It also avoids double-counting, since fuels used to produce hydrogen are treated as inputs to an energy conversion process, while hydrogen consumed by industry, transport, or other end-use sectors is recorded separately as final demand.</p>
+<p>Hydrogen production also interacts with the emissions module through direct emissions (from non-CCS routes) and captured emissions (from CCS-equipped technologies), using the same emission factors and carbon prices used across the model. Thus, the hydrogen module is directly tied to the power system, fossil supply system, CCS system, emissions block, and the carbon pricing mechanism.</p>
+</section>
+<section id="output-and-role-in-the-full-energy-system">
+<h3><span class="section-number">4.3.2. </span>Output and role in the full energy system<a class="headerlink" href="#output-and-role-in-the-full-energy-system" title="Link to this heading"></a></h3>
+<p>The module provides hydrogen production by technology, overall hydrogen production cost, upstream fuel use, and CO₂ captured and emitted. The average production cost — not a delivered hydrogen price — is what feeds the wider price system; a delivered price would require the dormant infrastructure and tariff equations. Through these outputs, OPEN-PROM can assess how hydrogen scales in long-term decarbonisation scenarios: how fast electrolysis grows under cheap renewables, how CCS hydrogen competes when carbon prices tighten, how biomass-based hydrogen behaves under supply constraints, and how hydrogen production shifts electricity load and fossil fuel use. By explicitly modelling technologies, efficiencies, CO₂ pathways, price feedback loops, and sectoral interactions, the Hydrogen Supply Module provides a complete, system-integrated picture of hydrogen’s role within the broader energy transition.</p>
+</section>
+</section>
+<section id="supply-of-other-fuels">
+<span id="other-fuels"></span><h2><span class="section-number">4.4. </span>Supply of other fuels<a class="headerlink" href="#supply-of-other-fuels" title="Link to this heading"></a></h2>
+<p>The supply component for the rest of the fuels covers energy carriers that are not represented in dedicated electricity, hydrogen or heat supply modules, but remain essential for the overall energy balance. These include fossil solids (e.g. hard coal and lignite), liquid fuels (e.g. crude oil, gasoline, diesel, kerosene, LPG and residual fuel oil), gaseous fuels (e.g. natural gas and other gases), and non-fossil alternatives (e.g. biomass and waste, biodiesel, bio-gasoline, biokerosene, biogas, methanol and ethanol). These carriers appear throughout the model as final energy inputs, transformation fuels, primary production streams, and trade flows, as determined during DIAMOND.</p>
+<p>OPEN-PROM ensures that all energy balances are fully closed across regions, fuels and time periods. This is achieved through aggregated SOLIDS, LIQUIDS and GASES supply sectors, which track the full chain from primary resources to final use (see <a class="reference internal" href="02_model_overview.html#fig-energy-flow"><span class="std std-numref">Fig. 2.4</span></a>). These sectors act as the accounting backbone for fossil liquids, gases, solid fuels and biofuels.</p>
+<p>For each region and year, the supply sectors calculate the gross inland consumption of each fuel, which includes:</p>
+<ul class="simple">
+<li><p>final energy demand from industry, buildings, transport and other sectors;</p></li>
+<li><p>transformation inputs into conversion processes;</p></li>
+<li><p>own consumption within energy supply sectors;</p></li>
+<li><p>distribution losses and inter-fuel transfers.</p></li>
+</ul>
+<p>Based on these requirements, the model determines the transformation inputs needed to supply demand. Examples include crude oil inputs to refineries, coal inputs to liquefaction plants, and gas inputs to processing facilities. The associated energy needs of these processes, such as heat and electricity consumption, are explicitly accounted for, ensuring consistency across all energy carriers and sectors.</p>
+<p>The estimation of required resources relies on input–output relationships, derived as ratios based on the total transformation output of each supply sector. This allows OPEN-PROM to link upstream resource use with downstream fuel production in a transparent and internally consistent manner, without representing each individual facility in engineering detail.</p>
+<p>A specific and more detailed treatment is applied to biomass, reflecting its role as both an energy carrier and a land-constrained resource, which couples it to land availability and competing land uses. The way the land-use linkage enters the price block depends on which switch is set, and the two paths are distinct:</p>
+<ul class="simple">
+<li><p><strong>Emulator path</strong> (<code class="docutils literal notranslate"><span class="pre">landUseEmulator</span></code> = <code class="docutils literal notranslate"><span class="pre">globiom</span></code> or <code class="docutils literal notranslate"><span class="pre">magpie</span></code>). Pre-fitted coefficient tables — <code class="docutils literal notranslate"><span class="pre">iBmswasSupplyCoef_&lt;source&gt;.csv</span></code> (a supply curve <span class="math notranslate nohighlight">\(P = a + b\,Q^{c}\)</span>), <code class="docutils literal notranslate"><span class="pre">iBmswasLandEmisCoef_&lt;source&gt;.csv</span></code> (a land-emission curve <span class="math notranslate nohighlight">\(Em = ea + eb\,Q\)</span>) and <code class="docutils literal notranslate"><span class="pre">iBmswasAgriEmis_&lt;source&gt;.csv</span></code> (Q-independent agricultural CH₄/N₂O) — are read into GAMS, so the biomass price responds endogenously to biomass demand within a single OPEN-PROM solve. This is the default (<code class="docutils literal notranslate"><span class="pre">globiom</span></code>).</p></li>
+<li><p><strong>Full iterative soft-link</strong> (<code class="docutils literal notranslate"><span class="pre">softLinkMAgPIE</span> <span class="pre">=</span> <span class="pre">on</span></code>). The biomass price is <strong>not</strong> an in-GAMS supply curve: a full MAgPIE run writes <code class="docutils literal notranslate"><span class="pre">iPrices_magpie.csv</span></code>, which OPEN-PROM reads to fix biomass prices for the next iteration. The two models are iterated to convergence (task 7). When this switch is on it overrides the emulator.</p></li>
+</ul>
+<p>In either case biomass becomes an explicitly constrained resource that competes across alternative uses, including fuel production and carbon-removal pathways such as bioenergy with carbon capture and storage (BECCS).</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>The emulator curves and the iterative price feedback are described under the land-use coupling in <a class="reference internal" href="06_interlinkages.html#magpie-link"><span class="std std-ref">Link with MAgPIE</span></a>.</p>
+</div>
+<p>Through this structure, the supply sectors are capable of consistently tracking both primary and secondary energy production for each region, ensuring that domestic production, transformation processes, imports and exports jointly satisfy demand. Overall, these supply sectors provide a coherent and flexible representation of the rest of the fuels. It enables OPEN-PROM to capture the evolution of fossil fuels, bioenergy and alternative fuels, while maintaining consistency in energy balances and allowing interactions with demand sectors, fuel prices, technology choices and emissions across a wide range of scenarios.</p>
+</section>
+</section>
+<hr class="footnotes docutils" />
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="powertech" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">1</a><span class="fn-bracket">]</span></span>
+<p>The exact set of power generation technologies can be found in OPEN-PROM’s online documentation.</p>
+</aside>
+</aside>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="03_demand_sectors.html" class="btn btn-neutral float-left" title="3. Demand sectors" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="05_data_and_calibration.html" class="btn btn-neutral float-right" title="5. Data pipeline and calibration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, E3Modelling.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

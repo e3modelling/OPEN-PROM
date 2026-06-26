@@ -1,0 +1,459 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Input data &mdash; OPEN-PROM</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+    <link rel="canonical" href="https://e3modelling.github.io/OPEN-PROM/guide/03_input_data.html" />
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=b21de401"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Development and code structure" href="04_development.html" />
+    <link rel="prev" title="Running the model" href="02_running_the_model.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            OPEN-PROM
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01_setup.html">Setup and environment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="01_setup.html#key-terminology">Key terminology</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_setup.html#git-and-github-setup">Git and GitHub setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#check-for-an-existing-git-installation">Check for an existing Git installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#install-git">Install Git</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#create-and-configure-a-github-account">Create and configure a GitHub account</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#clone-the-repository">Clone the repository</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#commit-and-push-changes">Commit and push changes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="01_setup.html#visual-studio-code">Visual Studio Code</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#install-vs-code">Install VS Code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#orientation">Orientation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#recommended-extensions">Recommended extensions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="01_setup.html#task-runner">Task runner</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#setup">Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#run-modes">Run modes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="01_setup.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#git-installation-fails">Git installation fails</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#github-authentication-fails">GitHub authentication fails</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#cloning-fails">Cloning fails</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#vs-code-git-integration-problems">VS Code / Git integration problems</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="01_setup.html#modelling-server-windows">Modelling server (Windows)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#connecting">Connecting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#system-preparation">System preparation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#install-core-software-system-wide">Install core software (system-wide)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#install-magpie-system-wide-no-renv">Install MAgPIE system-wide (no renv)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#python-tinytex-and-shared-storage">Python, TinyTeX and shared storage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#linux-support-wsl-per-user">Linux support — WSL (per-user)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#test-the-setup">Test the setup</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="02_running_the_model.html">Running the model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="02_running_the_model.html#a-first-run-public-dummy-data">A first run (public dummy data)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_running_the_model.html#running-with-real-input-data">Running with real input data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="02_running_the_model.html#point-r-to-the-local-madrat-archive">Point R to the local <code class="docutils literal notranslate"><span class="pre">madrat</span></code> archive</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_running_the_model.html#how-data-and-targets-are-created">How <code class="docutils literal notranslate"><span class="pre">data/</span></code> and <code class="docutils literal notranslate"><span class="pre">targets/</span></code> are created</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_running_the_model.html#task-modes-in-start-r">Task modes in <code class="docutils literal notranslate"><span class="pre">start.R</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_running_the_model.html#batch-mode">Batch mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_running_the_model.html#what-the-outputs-mean">What the outputs mean</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="02_running_the_model.html#changing-the-region-set">Changing the region set</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">How-to guides</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Input data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installing-the-software-and-libraries">Installing the software and libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-the-local-configuration-file">Creating the local configuration file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-the-data-sources">Adding the data sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#updating-the-ci-dataset">Updating the CI dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-the-model">Running the model</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="04_development.html">Development and code structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="04_development.html#folder-structure">Folder structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_development.html#the-phase-system">The phase system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_development.html#modules-and-realizations">Modules and realizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_development.html#default-active-vs-dormant-features">Default active vs dormant features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_development.html#naming-convention">Naming convention</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_development.html#developer-workflow">Developer workflow</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="05_soft_linking.html">Soft-linking</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="05_soft_linking.html#soft-linking-with-magpie">Soft-linking with MAgPIE</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="05_soft_linking.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_soft_linking.html#running-an-iteration">Running an iteration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_soft_linking.html#configuration">Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_soft_linking.html#convergence-controls-and-state-files">Convergence controls and state files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_soft_linking.html#emulator-alternative-without-running-magpie">Emulator alternative (without running MAgPIE)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="05_soft_linking.html#soft-linking-with-climate-emulators-meteor">Soft-linking with climate emulators (METEOR)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="05_soft_linking.html#workflow">Workflow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_soft_linking.html#one-way-vs-iterative-use">One-way vs iterative use</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Model documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../model/01_introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/02_model_overview.html">2. Model overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../model/02_model_overview.html#time-granularity-and-regions">2.1. Time granularity and regions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/02_model_overview.html#sector-granularity">2.2. Sector granularity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/02_model_overview.html#gap-and-substitution-mechanism">2.3. Gap and substitution mechanism</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../model/02_model_overview.html#gap-and-scrapping-mechanism">2.3.1. Gap and scrapping mechanism</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model/02_model_overview.html#substitution-mechanism">2.3.2. Substitution mechanism</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model/02_model_overview.html#implementation-by-realisation">2.3.3. Implementation by realisation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../model/02_model_overview.html#prices">2.4. Prices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../model/02_model_overview.html#conceptual-framing-legacy">2.4.1. Conceptual framing (legacy)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model/02_model_overview.html#active-price-formation-current-code">2.4.2. Active price formation (current code)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../model/02_model_overview.html#energy-supply">2.5. Energy supply</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../model/02_model_overview.html#trade-representation">2.5.1. Trade representation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model/02_model_overview.html#end-use-sector-biofuel-blending">2.5.2. End-use sector: biofuel blending</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../model/03_demand_sectors.html">3. Demand sectors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../model/03_demand_sectors.html#industry-and-domestic-demand">3.1. Industry and domestic demand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/03_demand_sectors.html#residential-and-commercial">3.2. Residential and commercial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/03_demand_sectors.html#transport-and-bunkers-demand">3.3. Transport and bunkers demand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/03_demand_sectors.html#carbon-dioxide-removal-cdr-technologies">3.4. Carbon Dioxide Removal (CDR) technologies</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../model/04_supply_sectors.html">4. Supply sectors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../model/04_supply_sectors.html#power-supply">4.1. Power supply</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/04_supply_sectors.html#heat-supply">4.2. Heat supply</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/04_supply_sectors.html#hydrogen-supply">4.3. Hydrogen supply</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../model/04_supply_sectors.html#supplydemand-alignment-and-sector-coupling">4.3.1. Supply–demand alignment and sector coupling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model/04_supply_sectors.html#output-and-role-in-the-full-energy-system">4.3.2. Output and role in the full energy system</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../model/04_supply_sectors.html#supply-of-other-fuels">4.4. Supply of other fuels</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../model/05_data_and_calibration.html">5. Data pipeline and calibration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../model/05_data_and_calibration.html#input-data-sources-and-data-preparation">5.1. Input data sources and data preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/05_data_and_calibration.html#output-post-processing">5.2. Output post-processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/05_data_and_calibration.html#calibration-mechanism">5.3. Calibration mechanism</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../model/06_interlinkages.html">6. Model interlinkages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../model/06_interlinkages.html#link-with-opentepes">6.1. Link with openTEPES</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/06_interlinkages.html#link-with-meteor">6.2. Link with METEOR</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../model/06_interlinkages.html#overview-of-meteor">6.2.1. Overview of METEOR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model/06_interlinkages.html#rationale-for-linking-meteor-with-open-prom">6.2.2. Rationale for linking METEOR with OPEN-PROM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model/06_interlinkages.html#coupling-workflow-between-open-prom-and-meteor">6.2.3. Coupling workflow between OPEN-PROM and METEOR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model/06_interlinkages.html#added-value-for-open-prom">6.2.4. Added value for OPEN-PROM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../model/06_interlinkages.html#circular-economy-representation-with-omnia-engage">6.3. Circular economy representation with OMNIA-ENGAGE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/06_interlinkages.html#link-with-ftt-heat">6.4. Link with FTT:Heat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/06_interlinkages.html#link-with-magpie">6.5. Link with MAgPIE</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../model/07_baseline_results.html">7. Baseline results</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../model/07_baseline_results.html#baseline-emissions">7.1. Baseline emissions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/07_baseline_results.html#final-energy-demand">7.2. Final energy demand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/07_baseline_results.html#fuel-shares-and-electrification">7.3. Fuel shares and electrification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/07_baseline_results.html#electricity-generation-and-power-sector-transformation">7.4. Electricity generation and power-sector transformation</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference/gams_error_codes.html">GAMS error codes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../reference/gams_error_codes.html#compile-time-errors">Compile-time errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/gams_error_codes.html#execution-time-solver-and-model-status-issues">Execution-time solver and model-status issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/gams_error_codes.html#license-errors">License errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/gams_error_codes.html#general-troubleshooting-tips">General troubleshooting tips</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/abbreviations.html">Abbreviations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/bibliography.html">Bibliography and data sources</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../reference/bibliography.html#references">References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/bibliography.html#data-sources-and-tools">Data sources and tools</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../about.html#acknowledgements-and-funding">Acknowledgements and funding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about.html#how-to-cite">How to cite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about.html#links">Links</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OPEN-PROM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Input data</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/guide/03_input_data.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="input-data">
+<h1>Input data<a class="headerlink" href="#input-data" title="Link to this heading"></a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>In brief</strong> — This page is the operational how-to for getting OPEN-PROM’s input data in place: installing the
+software needed by the <code class="docutils literal notranslate"><span class="pre">mrprom</span></code> pipeline, creating your local <code class="docutils literal notranslate"><span class="pre">config.json</span></code>, choosing between the dummy-data and
+full-data routes, and refreshing the dataset used by the continuous-integration tests. The <em>theory</em> of the data
+pipeline (MADRaT, <code class="docutils literal notranslate"><span class="pre">mrprom</span></code> stages, regional aggregation) lives in the model documentation.</p>
+</div>
+<p>OPEN-PROM is fed by input data produced by the complementary <a class="reference external" href="https://github.com/e3modelling/mrprom"><code class="docutils literal notranslate"><span class="pre">mrprom</span></code></a>
+R package, an independent repository also developed by E3Modelling. The common setup below is shared by external
+users and E3Modelling internal users alike. If you only want to test the model with dummy data you do not need the
+full real-data setup, but you still need the basic software environment, because the dummy-data first run depends on
+R, GAMS, and the <code class="docutils literal notranslate"><span class="pre">loadMadratData.R</span></code> helper script.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>For the pipeline theory — how <code class="docutils literal notranslate"><span class="pre">mrprom</span></code> reads, harmonises and assembles datasets, and how outputs are validated — see
+<a class="reference internal" href="../model/05_data_and_calibration.html#input-data"><span class="std std-ref">Input data sources and data preparation</span></a>. For turning a run’s GDX into a reporting MIF, see <a class="reference internal" href="../model/05_data_and_calibration.html#postprocessing"><span class="std std-ref">Output post-processing</span></a>.</p>
+</div>
+<section id="installing-the-software-and-libraries">
+<h2>Installing the software and libraries<a class="headerlink" href="#installing-the-software-and-libraries" title="Link to this heading"></a></h2>
+<p>Before using <code class="docutils literal notranslate"><span class="pre">mrprom</span></code> you need a working installation of <a class="reference external" href="https://www.r-project.org/">R</a> and of GAMS. On Windows you
+may also need <a class="reference external" href="https://cran.r-project.org/bin/windows/Rtools/">Rtools</a> for packages that compile from source. Install
+R, GAMS and, where relevant, Rtools in folders that do <strong>not</strong> require admin privileges and that are reachable from
+your command line; if you need help adding software to your <code class="docutils literal notranslate"><span class="pre">PATH</span></code>, see example instructions for
+<a class="reference external" href="https://www.bbminfo.com/r/r-programming-environment-setup.php">Windows</a> and
+<a class="reference external" href="https://www.digitalocean.com/community/tutorials/how-to-view-and-update-the-linux-path-environment-variable">Linux</a>.
+Make sure the <code class="docutils literal notranslate"><span class="pre">reticulate</span></code> library is installed in R. You may need to restart your computer so the updated <code class="docutils literal notranslate"><span class="pre">PATH</span></code> is
+visible in a new terminal session.</p>
+<p>Once R is set up, launch the R console and run:</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">options</span><span class="p">(</span><span class="n">repos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span>
+<span class="w">  </span><span class="n">pik</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;https://pik-piam.r-universe.dev&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="n">CRAN</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;https://cloud.r-project.org&quot;</span>
+<span class="p">))</span>
+
+<span class="nf">install.packages</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span>
+<span class="w">  </span><span class="s">&quot;magclass&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s">&quot;madrat&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s">&quot;gdx&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s">&quot;gdxrrw&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s">&quot;quitte&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s">&quot;mip&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s">&quot;piamValidation&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s">&quot;mrdrivers&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s">&quot;gms&quot;</span>
+<span class="p">))</span>
+
+<span class="nf">install.packages</span><span class="p">(</span><span class="s">&quot;remotes&quot;</span><span class="p">)</span>
+<span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&quot;e3modelling/mrprom&quot;</span><span class="p">)</span>
+<span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&quot;e3modelling/postprom&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>These commands install <code class="docutils literal notranslate"><span class="pre">mrprom</span></code>, <code class="docutils literal notranslate"><span class="pre">postprom</span></code> and the main supporting packages used by the OPEN-PROM workflow;
+<code class="docutils literal notranslate"><span class="pre">remotes</span></code> is only a helper so R can install packages directly from GitHub.</p>
+<p>If your goal is only the external <strong>dummy-data first run</strong>, the real essentials are smaller:</p>
+<ul class="simple">
+<li><p>a working R installation,</p></li>
+<li><p>a working GAMS installation,</p></li>
+<li><p>the ability to run <code class="docutils literal notranslate"><span class="pre">Rscript</span> <span class="pre">scripts/tasks/loadMadratData.R</span> <span class="pre">DevMode=2</span></code>,</p></li>
+<li><p>and the R packages that script needs, most notably <code class="docutils literal notranslate"><span class="pre">dplyr</span></code>.</p></li>
+</ul>
+<p>If <code class="docutils literal notranslate"><span class="pre">gdxrrw</span></code> cannot find your GAMS installation automatically — common on macOS and Linux — configure it explicitly in
+R:</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">gdxrrw</span><span class="p">)</span>
+<span class="n">gdxrrw</span><span class="o">::</span><span class="nf">igdx</span><span class="p">(</span><span class="s">&quot;/path/to/gams/&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="creating-the-local-configuration-file">
+<h2>Creating the local configuration file<a class="headerlink" href="#creating-the-local-configuration-file" title="Link to this heading"></a></h2>
+<p>Create a local <code class="docutils literal notranslate"><span class="pre">config.json</span></code> in the root folder of OPEN-PROM. The simplest way is to copy <code class="docutils literal notranslate"><span class="pre">config.template.json</span></code> and
+edit the relevant fields. <code class="docutils literal notranslate"><span class="pre">config.json</span></code> has three top-level blocks:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">paths.*</span></code> — machine-specific paths:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">paths.gams_path</span></code> — the GAMS installation directory, if <code class="docutils literal notranslate"><span class="pre">gams</span></code> is not already on your system <code class="docutils literal notranslate"><span class="pre">PATH</span></code>;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">paths.model_runs_path</span></code> — the destination used by the optional run-folder sync step;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">paths.magpie_path</span></code> — only needed for the OPEN-PROM ↔ MAgPIE soft-link (task 7).</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">behavior.*</span></code> — four switches controlling the wrapper workflow (see below).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scenario.*</span></code> — the scenario to run (<code class="docutils literal notranslate"><span class="pre">scenario_name</span></code>, <code class="docutils literal notranslate"><span class="pre">description</span></code>, <code class="docutils literal notranslate"><span class="pre">gams_flags</span></code>, <code class="docutils literal notranslate"><span class="pre">magpie</span></code>). <code class="docutils literal notranslate"><span class="pre">task_id</span></code> is <em>not</em>
+stored here — it comes from the CLI (<code class="docutils literal notranslate"><span class="pre">task_id=N</span></code>, passed by every VS Code task button) or, in batch mode, from each
+row of <code class="docutils literal notranslate"><span class="pre">scenarios.csv</span></code>.</p></li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>For batch sweeps over multiple scenarios, create a <code class="docutils literal notranslate"><span class="pre">scenarios.csv</span></code> at the repo root (see <code class="docutils literal notranslate"><span class="pre">scenarios.template.csv</span></code>
+for the column format) and use <code class="docutils literal notranslate"><span class="pre">Rscript</span> <span class="pre">start.R</span> <span class="pre">scenarios.csv</span></code> or the <strong>RUN BATCH</strong> VS Code button. Each CSV row
+overlays <code class="docutils literal notranslate"><span class="pre">config.json:scenario</span></code> for that one run. The CSV is opt-in: without it, only the single-scenario workflow
+(<code class="docutils literal notranslate"><span class="pre">Rscript</span> <span class="pre">start.R</span> <span class="pre">task_id=N</span></code>) is available.</p>
+</div>
+<p>If you are not working in the internal E3Modelling environment, <code class="docutils literal notranslate"><span class="pre">model_runs_path</span></code> is often not needed immediately. In
+that case set the following in <code class="docutils literal notranslate"><span class="pre">config.json</span></code>, which avoids errors at the archive and sync stage when no valid
+internal destination has been configured:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;behavior&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;withSync&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>The <code class="docutils literal notranslate"><span class="pre">config.json:behavior</span></code> switches.</strong> OPEN-PROM defines four behaviour switches that modify the workflow
+<strong>around</strong> the model run:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">withRunFolder</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">withSync</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">withReport</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">uploadGDX</span></code></p></li>
+</ul>
+<p>These switches do not change the mathematical model itself. They control the wrapper workflow — whether a run folder
+is created, whether outputs are archived, and whether the reporting script runs automatically. The various task
+modes available through VS Code and <code class="docutils literal notranslate"><span class="pre">start.R</span></code> are explained in the running and development guides.</p>
+</section>
+<section id="adding-the-data-sources">
+<h2>Adding the data sources<a class="headerlink" href="#adding-the-data-sources" title="Link to this heading"></a></h2>
+<p>The model also needs access to the right data sources, and this is where external and internal workflows diverge.</p>
+<ul class="simple">
+<li><p><strong>E3Modelling internal users</strong> point <code class="docutils literal notranslate"><span class="pre">madrat</span></code> (see the
+<a class="reference external" href="https://cran.r-project.org/web/packages/madrat/vignettes/madrat.html">madrat vignette</a>) to a locally synced
+internal data directory, together with the SharePoint and <code class="docutils literal notranslate"><span class="pre">mainfolder</span></code> setup. Because those datasets are
+proprietary they cannot be shared publicly; acquire them yourself or contact us for guidance.</p></li>
+<li><p><strong>External users</strong> do not need the full internal data sources to try the model for the first time. The dummy-data
+route downloads a public archive from Google Drive and extracts it locally. That path does not use the full
+internal <code class="docutils literal notranslate"><span class="pre">mrprom</span></code> data pipeline, but it still uses R and the local helper script.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">mrprom</span></code> calc functions generate a large number of datasets from many different sources. For transparency and
+reproducibility, the <code class="docutils literal notranslate"><span class="pre">InputDataOverview.csv</span></code> spreadsheet in the tutorials folder lists every generated OPEN-PROM
+input parameter together with its original source and a short description.</p>
+</div>
+</section>
+<section id="updating-the-ci-dataset">
+<h2>Updating the CI dataset<a class="headerlink" href="#updating-the-ci-dataset" title="Link to this heading"></a></h2>
+<p>If your branch introduces new data, you must make sure the GitHub automated tests (GitHub Actions) test the model
+with that data. The continuous-integration workflow downloads a prebuilt dataset archive whose location is held in a
+repository secret. To refresh it:</p>
+<ol class="arabic">
+<li><p>From <strong>inside</strong> the folder that contains all the data files (not the parent folder), in a <em>bash</em> shell, build the
+archive:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tar<span class="w"> </span>-cvzf<span class="w"> </span>data.tgz<span class="w"> </span>*
+</pre></div>
+</div>
+</li>
+<li><p>Upload <code class="docutils literal notranslate"><span class="pre">data.tgz</span></code> to Google Drive and share it as “anyone with the link can view”. Copy the link <strong>ID</strong> — the
+string between the slashes, after <code class="docutils literal notranslate"><span class="pre">d</span></code>.</p></li>
+<li><p>Update the OPEN-PROM GitHub Actions secret <code class="docutils literal notranslate"><span class="pre">DATASET</span></code> with the new link ID by replacing <strong>only</strong> the ID in the
+URL, not the full URL. If you do not have access, ask a repository owner to do this for you.</p></li>
+<li><p>Open a pull request for the change in step 3, or commit directly to <code class="docutils literal notranslate"><span class="pre">main</span></code> if you have access.</p></li>
+<li><p>Merge the updated <code class="docutils literal notranslate"><span class="pre">main</span></code> into the branch to be merged.</p></li>
+<li><p>Open the pull request: the automated tests, triggered when a pull request is opened, will now run with the new
+dataset.</p></li>
+</ol>
+</section>
+<section id="running-the-model">
+<h2>Running the model<a class="headerlink" href="#running-the-model" title="Link to this heading"></a></h2>
+<p>Once setup is complete, the actual execution paths depend on the run mode, the available data, and whether fresh
+input generation is needed:</p>
+<ul class="simple">
+<li><p>External users should continue with the dummy-data first run.</p></li>
+<li><p>E3Modelling internal users should continue with the full-data workflow.</p></li>
+</ul>
+<p>OPEN-PROM can be started either from the VS Code Task Runner panel or from the command line, but the correct button
+or command depends on the run mode and your data, which is why the execution paths are covered in the running guide
+rather than here.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="02_running_the_model.html" class="btn btn-neutral float-left" title="Running the model" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="04_development.html" class="btn btn-neutral float-right" title="Development and code structure" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, E3Modelling.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

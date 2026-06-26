@@ -1,0 +1,529 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>5. Data pipeline and calibration &mdash; OPEN-PROM</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+    <link rel="canonical" href="https://e3modelling.github.io/OPEN-PROM/model/05_data_and_calibration.html" />
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=b21de401"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="6. Model interlinkages" href="06_interlinkages.html" />
+    <link rel="prev" title="4. Supply sectors" href="04_supply_sectors.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            OPEN-PROM
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/01_setup.html">Setup and environment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guide/01_setup.html#key-terminology">Key terminology</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/01_setup.html#git-and-github-setup">Git and GitHub setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#check-for-an-existing-git-installation">Check for an existing Git installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#install-git">Install Git</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#create-and-configure-a-github-account">Create and configure a GitHub account</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#clone-the-repository">Clone the repository</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#commit-and-push-changes">Commit and push changes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/01_setup.html#visual-studio-code">Visual Studio Code</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#install-vs-code">Install VS Code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#orientation">Orientation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#recommended-extensions">Recommended extensions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/01_setup.html#task-runner">Task runner</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#setup">Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#run-modes">Run modes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/01_setup.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#git-installation-fails">Git installation fails</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#github-authentication-fails">GitHub authentication fails</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#cloning-fails">Cloning fails</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#vs-code-git-integration-problems">VS Code / Git integration problems</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/01_setup.html#modelling-server-windows">Modelling server (Windows)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#connecting">Connecting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#system-preparation">System preparation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#install-core-software-system-wide">Install core software (system-wide)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#install-magpie-system-wide-no-renv">Install MAgPIE system-wide (no renv)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#python-tinytex-and-shared-storage">Python, TinyTeX and shared storage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#linux-support-wsl-per-user">Linux support — WSL (per-user)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#test-the-setup">Test the setup</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/02_running_the_model.html">Running the model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guide/02_running_the_model.html#a-first-run-public-dummy-data">A first run (public dummy data)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/02_running_the_model.html#running-with-real-input-data">Running with real input data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/02_running_the_model.html#point-r-to-the-local-madrat-archive">Point R to the local <code class="docutils literal notranslate"><span class="pre">madrat</span></code> archive</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/02_running_the_model.html#how-data-and-targets-are-created">How <code class="docutils literal notranslate"><span class="pre">data/</span></code> and <code class="docutils literal notranslate"><span class="pre">targets/</span></code> are created</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/02_running_the_model.html#task-modes-in-start-r">Task modes in <code class="docutils literal notranslate"><span class="pre">start.R</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/02_running_the_model.html#batch-mode">Batch mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/02_running_the_model.html#what-the-outputs-mean">What the outputs mean</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/02_running_the_model.html#changing-the-region-set">Changing the region set</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">How-to guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guide/03_input_data.html">Input data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guide/03_input_data.html#installing-the-software-and-libraries">Installing the software and libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/03_input_data.html#creating-the-local-configuration-file">Creating the local configuration file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/03_input_data.html#adding-the-data-sources">Adding the data sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/03_input_data.html#updating-the-ci-dataset">Updating the CI dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/03_input_data.html#running-the-model">Running the model</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/04_development.html">Development and code structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guide/04_development.html#folder-structure">Folder structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/04_development.html#the-phase-system">The phase system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/04_development.html#modules-and-realizations">Modules and realizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/04_development.html#default-active-vs-dormant-features">Default active vs dormant features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/04_development.html#naming-convention">Naming convention</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/04_development.html#developer-workflow">Developer workflow</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/05_soft_linking.html">Soft-linking</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guide/05_soft_linking.html#soft-linking-with-magpie">Soft-linking with MAgPIE</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/05_soft_linking.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/05_soft_linking.html#running-an-iteration">Running an iteration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/05_soft_linking.html#configuration">Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/05_soft_linking.html#convergence-controls-and-state-files">Convergence controls and state files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/05_soft_linking.html#emulator-alternative-without-running-magpie">Emulator alternative (without running MAgPIE)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/05_soft_linking.html#soft-linking-with-climate-emulators-meteor">Soft-linking with climate emulators (METEOR)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/05_soft_linking.html#workflow">Workflow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/05_soft_linking.html#one-way-vs-iterative-use">One-way vs iterative use</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Model documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="01_introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_model_overview.html">2. Model overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="02_model_overview.html#time-granularity-and-regions">2.1. Time granularity and regions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_model_overview.html#sector-granularity">2.2. Sector granularity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_model_overview.html#gap-and-substitution-mechanism">2.3. Gap and substitution mechanism</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="02_model_overview.html#gap-and-scrapping-mechanism">2.3.1. Gap and scrapping mechanism</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_model_overview.html#substitution-mechanism">2.3.2. Substitution mechanism</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_model_overview.html#implementation-by-realisation">2.3.3. Implementation by realisation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="02_model_overview.html#prices">2.4. Prices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="02_model_overview.html#conceptual-framing-legacy">2.4.1. Conceptual framing (legacy)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_model_overview.html#active-price-formation-current-code">2.4.2. Active price formation (current code)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="02_model_overview.html#energy-supply">2.5. Energy supply</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="02_model_overview.html#trade-representation">2.5.1. Trade representation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_model_overview.html#end-use-sector-biofuel-blending">2.5.2. End-use sector: biofuel blending</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="03_demand_sectors.html">3. Demand sectors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="03_demand_sectors.html#industry-and-domestic-demand">3.1. Industry and domestic demand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_demand_sectors.html#residential-and-commercial">3.2. Residential and commercial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_demand_sectors.html#transport-and-bunkers-demand">3.3. Transport and bunkers demand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_demand_sectors.html#carbon-dioxide-removal-cdr-technologies">3.4. Carbon Dioxide Removal (CDR) technologies</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="04_supply_sectors.html">4. Supply sectors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="04_supply_sectors.html#power-supply">4.1. Power supply</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_supply_sectors.html#heat-supply">4.2. Heat supply</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_supply_sectors.html#hydrogen-supply">4.3. Hydrogen supply</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="04_supply_sectors.html#supplydemand-alignment-and-sector-coupling">4.3.1. Supply–demand alignment and sector coupling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="04_supply_sectors.html#output-and-role-in-the-full-energy-system">4.3.2. Output and role in the full energy system</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="04_supply_sectors.html#supply-of-other-fuels">4.4. Supply of other fuels</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">5. Data pipeline and calibration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#input-data-sources-and-data-preparation">5.1. Input data sources and data preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#output-post-processing">5.2. Output post-processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#calibration-mechanism">5.3. Calibration mechanism</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="06_interlinkages.html">6. Model interlinkages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="06_interlinkages.html#link-with-opentepes">6.1. Link with openTEPES</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_interlinkages.html#link-with-meteor">6.2. Link with METEOR</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="06_interlinkages.html#overview-of-meteor">6.2.1. Overview of METEOR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="06_interlinkages.html#rationale-for-linking-meteor-with-open-prom">6.2.2. Rationale for linking METEOR with OPEN-PROM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="06_interlinkages.html#coupling-workflow-between-open-prom-and-meteor">6.2.3. Coupling workflow between OPEN-PROM and METEOR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="06_interlinkages.html#added-value-for-open-prom">6.2.4. Added value for OPEN-PROM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="06_interlinkages.html#circular-economy-representation-with-omnia-engage">6.3. Circular economy representation with OMNIA-ENGAGE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_interlinkages.html#link-with-ftt-heat">6.4. Link with FTT:Heat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_interlinkages.html#link-with-magpie">6.5. Link with MAgPIE</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="07_baseline_results.html">7. Baseline results</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="07_baseline_results.html#baseline-emissions">7.1. Baseline emissions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_baseline_results.html#final-energy-demand">7.2. Final energy demand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_baseline_results.html#fuel-shares-and-electrification">7.3. Fuel shares and electrification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_baseline_results.html#electricity-generation-and-power-sector-transformation">7.4. Electricity generation and power-sector transformation</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference/gams_error_codes.html">GAMS error codes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../reference/gams_error_codes.html#compile-time-errors">Compile-time errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/gams_error_codes.html#execution-time-solver-and-model-status-issues">Execution-time solver and model-status issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/gams_error_codes.html#license-errors">License errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/gams_error_codes.html#general-troubleshooting-tips">General troubleshooting tips</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/abbreviations.html">Abbreviations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/bibliography.html">Bibliography and data sources</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../reference/bibliography.html#references">References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/bibliography.html#data-sources-and-tools">Data sources and tools</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../about.html#acknowledgements-and-funding">Acknowledgements and funding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about.html#how-to-cite">How to cite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about.html#links">Links</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OPEN-PROM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">5. </span>Data pipeline and calibration</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/model/05_data_and_calibration.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="data-pipeline-and-calibration">
+<h1><span class="section-number">5. </span>Data pipeline and calibration<a class="headerlink" href="#data-pipeline-and-calibration" title="Link to this heading"></a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>In brief</strong> — This chapter describes how OPEN-PROM’s inputs are assembled and its outputs are reported and
+validated. Raw data from many external sources are harmonised through the MADRaT-based mrprom pipeline and
+aggregated to model regions; results are post-processed with postprom into standardised MIF/IAMC outputs and checked
+with a traffic-light validation system; finally, key model parameters are calibrated so the model reproduces a set of
+benchmark targets.</p>
+</div>
+<section id="input-data-sources-and-data-preparation">
+<span id="input-data"></span><h2><span class="section-number">5.1. </span>Input data sources and data preparation<a class="headerlink" href="#input-data-sources-and-data-preparation" title="Link to this heading"></a></h2>
+<p>The OPEN-PROM modelling framework relies on a wide range of external datasets covering energy balances, technology
+characteristics, fuel prices, power-generation capacities, environmental policies, macroeconomic indicators, and
+other sector-specific information. These datasets originate from multiple sources, including international
+organisations, research projects, and commercial databases.</p>
+<p>Examples of data sources currently integrated into the framework are listed below.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 22.0%" />
+<col style="width: 78.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Source</p></th>
+<th class="head"><p>What it provides</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.iea.org">International Energy Agency (IEA)</a></p></td>
+<td><p>Historical data on energy balances, fuel and electricity prices, energy supply and demand, imports and exports
+of energy commodities, electricity generation, CO₂ emissions, energy-efficiency indicators, and long-term energy
+projections and scenarios.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.enerdata.net">ENERDATA</a></p></td>
+<td><p>Energy statistics and indicators used primarily for model validation.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://irfnet.ch">International Road Federation (IRF)</a></p></td>
+<td><p>Historical data on vehicle stocks, road-network length, road infrastructure, traffic volumes, passenger and
+freight transport activity, and related transport indicators.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://ec.europa.eu/eurostat">Eurostat</a></p></td>
+<td><p>Historical transport activity data and transport technology shares.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.navigate-h2020.eu">NAVIGATE</a></p></td>
+<td><p>Scenario outputs and technology assumptions used for model benchmarking and validation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://data.worldbank.org">World Bank</a></p></td>
+<td><p>Historical carbon-pricing data (carbon taxes and emissions trading systems) and transport indicators.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://ember-energy.org">Ember</a></p></td>
+<td><p>Installed electricity-capacity data.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.irena.org">IRENA</a></p></td>
+<td><p>International Renewable Energy Agency — installed electricity-capacity data.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://e3modelling.com">GEM-E3</a></p></td>
+<td><p>Macroeconomic, sectoral, energy, and environmental projections, mainly used for activity data.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://e3modelling.com/modelling-tools/primes">PRIMES</a></p></td>
+<td><p>Reference and policy-scenario projections for the European energy system, used for target setting.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://edgar.jrc.ec.europa.eu">EDGAR</a></p></td>
+<td><p>Emissions Database for Global Atmospheric Research — greenhouse-gas (GHG) and air-pollutant emissions used for
+model validation.</p></td>
+</tr>
+</tbody>
+</table>
+<p>The diversity of these sources requires a harmonised and reproducible approach to data preparation. To support this
+process, OPEN-PROM adopts the <strong>MADRaT</strong> framework together with the project-specific
+<a class="reference external" href="https://github.com/e3modelling/mrprom">mrprom</a> package.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>MADRaT stands for <em>May All Data be Reproducible and Transparent</em> — a reproducible data-preparation framework.</p>
+</div>
+<p>Traditional spreadsheet-based approaches are often characterised by limited transparency, difficulties in reproducing
+results, inadequate version control, and increased susceptibility to manual errors. These limitations become
+particularly important when dealing with large-scale modelling datasets that require regular updates and validation.</p>
+<p>MADRaT addresses these challenges by providing a fully reproducible workflow for data preparation, quality assurance,
+metadata management, and version control. Building upon this infrastructure, mrprom serves as the dedicated OPEN-PROM
+data pre-processing layer (<a class="reference internal" href="#fig-mrprom-stages"><span class="std std-numref">Fig. 5.1</span></a>), allowing users to organise and execute all project-specific
+data-preparation activities in a transparent and standardised manner. Following data import, optional conversion
+routines harmonise classifications, units, and structures across datasets (<a class="reference internal" href="#fig-regional-workflow"><span class="std std-numref">Fig. 5.2</span></a>). The
+resulting information is standardised at country level, covering up to 249 countries.</p>
+<p>Examples of the data-processing routines implemented within the OPEN-PROM framework include the harmonisation of fuel
+consumption, economic, and transport activity data from multiple international sources. Fuel-consumption data from the
+IEA World Energy Balances database are processed and mapped to the OPEN-PROM energy forms and demand sectors, ensuring
+consistency with the model structure.</p>
+<p>Additional examples include the development of economic and transport activity indicators using data from GEM-E3, the
+International Road Federation (IRF), and the World Development Indicators (WDI) database. These datasets are combined,
+mapped to the OPEN-PROM sectoral classification, and processed to provide consistent activity drivers for projecting
+future energy demand.</p>
+<figure class="align-default" id="fig-mrprom-stages">
+<a class="reference internal image-reference" href="../_images/fig_mrprom_stages.png"><img alt="../_images/fig_mrprom_stages.png" src="../_images/fig_mrprom_stages.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Fig. 5.1 </span><span class="caption-text">Sequential stages of data acquisition, processing and dataset assembly in the mrprom framework.</span><a class="headerlink" href="#fig-mrprom-stages" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="fig-regional-workflow">
+<a class="reference internal image-reference" href="../_images/fig_regional_workflow.png"><img alt="../_images/fig_regional_workflow.png" src="../_images/fig_regional_workflow.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Fig. 5.2 </span><span class="caption-text">Workflow for generating OPEN-PROM regional input datasets.</span><a class="headerlink" href="#fig-regional-workflow" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p><strong>Regional aggregation.</strong> In the final stage of the data-preparation workflow, country-level datasets are aggregated into the regional
+structure adopted by the OPEN-PROM framework. This aggregation is performed automatically using configurable
+region-mapping files, which assign individual countries to their corresponding model regions. The current OPEN-PROM
+configuration comprises 39 countries and regions, collectively providing global coverage of all world regions
+represented in the model. The framework also incorporates caching mechanisms that prevent unnecessary recalculation
+of datasets that have already been processed, significantly improving computational performance.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>mrprom and postprom are maintained as independent repositories:
+<a class="reference external" href="https://github.com/e3modelling/mrprom">github.com/e3modelling/mrprom</a> and
+<a class="reference external" href="https://github.com/e3modelling/postprom">github.com/e3modelling/postprom</a>. For the operational how-to, see
+<a class="reference internal" href="../guide/03_input_data.html"><span class="doc">Input data</span></a>.</p>
+</div>
+</section>
+<section id="output-post-processing">
+<span id="postprocessing"></span><h2><span class="section-number">5.2. </span>Output post-processing<a class="headerlink" href="#output-post-processing" title="Link to this heading"></a></h2>
+<p>For the reporting of OPEN-PROM results, the <a class="reference external" href="https://github.com/e3modelling/postprom">postprom</a> framework is used.
+The postprom repository contains the post-processing framework developed to support the analysis, validation, and
+dissemination of results generated by the OPEN-PROM modelling platform. Implemented in R, the framework provides a
+comprehensive set of routines for transforming raw model outputs into structured, analysis-ready datasets and
+reporting products. It includes functionalities for data extraction, harmonisation, aggregation, quality control, and
+the calculation of key energy, emissions, and socio-economic indicators.</p>
+<p>In addition, postprom provides tools for scenario comparison, trend analysis across regions and sectors, and the
+production of standardised outputs for project deliverables, publications, and stakeholder communication. The
+repository forms a key component of the OPEN-PROM ecosystem by facilitating the transition from model outputs to
+analysis-ready results and supporting the systematic interpretation and visualisation of modelling outcomes.</p>
+<p>A central feature of the framework is its validation workflow, which enables the comparison of results from
+alternative model versions, scenarios, or code branches through standardised reports and indicators. The comparison
+is based on model outputs converted from GDX files into the Model Intercomparison Format (MIF), providing a common
+structure for storing and exchanging results. The generated MIF files facilitate the identification of differences
+arising from model updates, data revisions, or methodological changes, supporting the assessment of proposed
+developments and helping determine whether changes should be integrated into the main codebase through the GitHub
+review-and-merge process. In addition, postprom can utilise dedicated reference datasets, which provide benchmark
+validation data for the evaluation process.</p>
+<p>A notable feature of the framework is the implementation of a <strong>traffic-light validation system</strong>, which provides an
+intuitive visual representation of validation results through colour-coded indicators. Integrated into automated HTML
+reports, this functionality allows users to quickly identify areas where model results are consistent with reference
+data, require further review, or exhibit significant deviations, thereby facilitating quality assurance and the
+interpretation of validation outcomes.</p>
+<p>In addition, postprom supports the generation of standardised outputs in the Integrated Assessment Modelling
+Consortium (IAMC) format, enabling consistency and interoperability with commonly used tools and databases in the
+energy and climate modelling community. Model results are converted from GDX files into Model Intercomparison Format
+(MIF) files, which provide a common structure for storing, exchanging, and analysing scenario data. These MIF files
+can be explored and visualised through the SCENTool application, offering an interactive environment for reviewing
+model results, comparing scenarios, and generating graphical analyses. The framework also supports validation against
+benchmark datasets and results from external models, which are converted into compatible MIF files through dedicated
+scripts in the mrprom repository. This enables systematic comparisons between OPEN-PROM results and reference datasets
+using standardised indicators and validation metrics. Furthermore, postprom includes automated reporting
+functionalities for the production of comprehensive PDF and HTML reports containing key indicators, tables, figures,
+validation summaries, and traffic-light assessments.</p>
+<p>An automated PDF reporting tool (<a class="reference internal" href="#fig-pdf-report"><span class="std std-numref">Fig. 5.3</span></a>) was developed to summarise validation results and
+facilitate the review of model performance across regions and indicators.</p>
+<figure class="align-default" id="fig-pdf-report">
+<a class="reference internal image-reference" href="../_images/fig_pdf_report.png"><img alt="../_images/fig_pdf_report.png" src="../_images/fig_pdf_report.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Fig. 5.3 </span><span class="caption-text">Automated PDF reporting tool.</span><a class="headerlink" href="#fig-pdf-report" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>An interactive dashboard (<a class="reference internal" href="#fig-dashboard"><span class="std std-numref">Fig. 5.4</span></a>) was developed for visualisation and analysis of model outputs
+across regions, sectors, and time horizons.</p>
+<figure class="align-default" id="fig-dashboard">
+<a class="reference internal image-reference" href="../_images/fig_dashboard.png"><img alt="../_images/fig_dashboard.png" src="../_images/fig_dashboard.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Fig. 5.4 </span><span class="caption-text">Interactive dashboard for exploring model outputs.</span><a class="headerlink" href="#fig-dashboard" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p><a class="reference internal" href="#fig-validation-co2"><span class="std std-numref">Fig. 5.5</span></a> presents the validation results for CO₂ emissions (excluding international bunkers)
+against the reference dataset from EDGAR. For each region and year, the model output is compared with the
+corresponding EDGAR value, and the relative deviation is calculated.</p>
+<p>The colour coding indicates the level of agreement between the model and the reference data:</p>
+<ul class="simple">
+<li><p><strong>Green</strong> — deviation within ±10% of the reference value.</p></li>
+<li><p><strong>Yellow</strong> — deviation between ±10% and ±50% of the reference value.</p></li>
+<li><p><strong>Red</strong> — deviation greater than ±50% of the reference value.</p></li>
+</ul>
+<figure class="align-default" id="fig-validation-co2">
+<a class="reference internal image-reference" href="../_images/fig_validation_co2.png"><img alt="../_images/fig_validation_co2.png" src="../_images/fig_validation_co2.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Fig. 5.5 </span><span class="caption-text">Traffic-light validation of CO₂ emissions against the EDGAR reference dataset.</span><a class="headerlink" href="#fig-validation-co2" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>These capabilities support the efficient dissemination of modelling outcomes and ensure transparent, reproducible,
+and standardised reporting for project deliverables, scientific publications, and stakeholder communication.</p>
+</section>
+<section id="calibration-mechanism">
+<span id="calibration"></span><h2><span class="section-number">5.3. </span>Calibration mechanism<a class="headerlink" href="#calibration-mechanism" title="Link to this heading"></a></h2>
+<p>OPEN-PROM is fundamentally driven by economic decision-making mechanisms. As such, non-economic influences — for
+example infrastructure constraints (e.g. limited availability of electric-vehicle charging stations), political
+decisions (e.g. nuclear phase-out policies in Europe), or the risk of future technological obsolescence (e.g.
+internal-combustion-engine vehicles) — are not explicitly modelled as independent drivers within the core decision
+framework. Instead, these non-economic factors are implicitly incorporated through the calibration of key model
+parameters. Examples include:</p>
+<ul class="simple">
+<li><p><strong>Technology maturity factors</strong>, which affect the adoption rate of emerging technologies;</p></li>
+<li><p><strong>Premature scrapping parameters</strong>, which influence the early retirement of existing capital stock;</p></li>
+<li><p>other behavioural or adjustment parameters that capture deviations from purely cost-optimal adoption pathways.</p></li>
+</ul>
+<p>These parameters are calibrated under a given policy scenario to ensure that the model reproduces a predefined set of
+benchmark targets. These targets typically include:</p>
+<ul class="simple">
+<li><p>fuel-mix shares in the industry and residential sectors;</p></li>
+<li><p>technology mixes in power generation;</p></li>
+<li><p>sales shares across transportation technologies.</p></li>
+</ul>
+<p>This calibration approach enables the model to accurately reflect observed or expected system behaviour under current
+conditions, while maintaining internal consistency. The calibration targets are constructed using a combination of
+established, peer-reviewed data sources and forward-looking policy assumptions. Key inputs include datasets such as
+the IEA World Energy Outlook, complemented by other authoritative sources where relevant. In addition, known and
+already enacted policies, expected to take effect in the coming years, are explicitly incorporated into the
+target-setting process.</p>
+<p>The development of these targets involves a thorough data-analysis phase, during which information from multiple
+sources is harmonised and reconciled. This process ensures consistency across sectors and datasets, alignment with
+observed historical trends and credible projections, and feasibility within the structural and behavioural
+constraints of the model. Attention is given to ensuring that the resulting targets are not only coherent from a data
+perspective, but also attainable within the model framework, avoiding unrealistic or internally inconsistent
+outcomes. This rigorous approach to target definition strengthens the credibility of the calibration and ensures that
+subsequent scenario analysis is grounded in a robust and empirically consistent baseline.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>As a result, OPEN-PROM is particularly suited for comparative scenario analysis, where differences in outcomes can be
+attributed to variations in assumptions, policies, or external conditions, rather than to structural inconsistencies
+in the model.</p>
+</div>
+<p>To ensure robustness and avoid overfitting, additional constraints are imposed during calibration. For instance,
+regularisation techniques are applied to limit excessive year-to-year volatility in calibrated parameters, thereby
+preserving realistic temporal dynamics and improving model stability.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="04_supply_sectors.html" class="btn btn-neutral float-left" title="4. Supply sectors" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="06_interlinkages.html" class="btn btn-neutral float-right" title="6. Model interlinkages" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, E3Modelling.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

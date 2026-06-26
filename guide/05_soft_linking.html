@@ -1,0 +1,532 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Soft-linking &mdash; OPEN-PROM</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+    <link rel="canonical" href="https://e3modelling.github.io/OPEN-PROM/guide/05_soft_linking.html" />
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=b21de401"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1. Introduction" href="../model/01_introduction.html" />
+    <link rel="prev" title="Development and code structure" href="04_development.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            OPEN-PROM
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01_setup.html">Setup and environment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="01_setup.html#key-terminology">Key terminology</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_setup.html#git-and-github-setup">Git and GitHub setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#check-for-an-existing-git-installation">Check for an existing Git installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#install-git">Install Git</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#create-and-configure-a-github-account">Create and configure a GitHub account</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#clone-the-repository">Clone the repository</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#commit-and-push-changes">Commit and push changes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="01_setup.html#visual-studio-code">Visual Studio Code</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#install-vs-code">Install VS Code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#orientation">Orientation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#recommended-extensions">Recommended extensions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="01_setup.html#task-runner">Task runner</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#setup">Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#run-modes">Run modes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="01_setup.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#git-installation-fails">Git installation fails</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#github-authentication-fails">GitHub authentication fails</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#cloning-fails">Cloning fails</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#vs-code-git-integration-problems">VS Code / Git integration problems</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="01_setup.html#modelling-server-windows">Modelling server (Windows)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#connecting">Connecting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#system-preparation">System preparation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#install-core-software-system-wide">Install core software (system-wide)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#install-magpie-system-wide-no-renv">Install MAgPIE system-wide (no renv)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#python-tinytex-and-shared-storage">Python, TinyTeX and shared storage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#linux-support-wsl-per-user">Linux support — WSL (per-user)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#test-the-setup">Test the setup</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="02_running_the_model.html">Running the model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="02_running_the_model.html#a-first-run-public-dummy-data">A first run (public dummy data)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_running_the_model.html#running-with-real-input-data">Running with real input data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="02_running_the_model.html#point-r-to-the-local-madrat-archive">Point R to the local <code class="docutils literal notranslate"><span class="pre">madrat</span></code> archive</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_running_the_model.html#how-data-and-targets-are-created">How <code class="docutils literal notranslate"><span class="pre">data/</span></code> and <code class="docutils literal notranslate"><span class="pre">targets/</span></code> are created</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_running_the_model.html#task-modes-in-start-r">Task modes in <code class="docutils literal notranslate"><span class="pre">start.R</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_running_the_model.html#batch-mode">Batch mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_running_the_model.html#what-the-outputs-mean">What the outputs mean</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="02_running_the_model.html#changing-the-region-set">Changing the region set</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">How-to guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="03_input_data.html">Input data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="03_input_data.html#installing-the-software-and-libraries">Installing the software and libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_input_data.html#creating-the-local-configuration-file">Creating the local configuration file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_input_data.html#adding-the-data-sources">Adding the data sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_input_data.html#updating-the-ci-dataset">Updating the CI dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_input_data.html#running-the-model">Running the model</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="04_development.html">Development and code structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="04_development.html#folder-structure">Folder structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_development.html#the-phase-system">The phase system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_development.html#modules-and-realizations">Modules and realizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_development.html#default-active-vs-dormant-features">Default active vs dormant features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_development.html#naming-convention">Naming convention</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_development.html#developer-workflow">Developer workflow</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Soft-linking</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#soft-linking-with-magpie">Soft-linking with MAgPIE</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#running-an-iteration">Running an iteration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuration">Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#convergence-controls-and-state-files">Convergence controls and state files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#emulator-alternative-without-running-magpie">Emulator alternative (without running MAgPIE)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#soft-linking-with-climate-emulators-meteor">Soft-linking with climate emulators (METEOR)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#workflow">Workflow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#one-way-vs-iterative-use">One-way vs iterative use</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Model documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../model/01_introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/02_model_overview.html">2. Model overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../model/02_model_overview.html#time-granularity-and-regions">2.1. Time granularity and regions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/02_model_overview.html#sector-granularity">2.2. Sector granularity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/02_model_overview.html#gap-and-substitution-mechanism">2.3. Gap and substitution mechanism</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../model/02_model_overview.html#gap-and-scrapping-mechanism">2.3.1. Gap and scrapping mechanism</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model/02_model_overview.html#substitution-mechanism">2.3.2. Substitution mechanism</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model/02_model_overview.html#implementation-by-realisation">2.3.3. Implementation by realisation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../model/02_model_overview.html#prices">2.4. Prices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../model/02_model_overview.html#conceptual-framing-legacy">2.4.1. Conceptual framing (legacy)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model/02_model_overview.html#active-price-formation-current-code">2.4.2. Active price formation (current code)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../model/02_model_overview.html#energy-supply">2.5. Energy supply</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../model/02_model_overview.html#trade-representation">2.5.1. Trade representation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model/02_model_overview.html#end-use-sector-biofuel-blending">2.5.2. End-use sector: biofuel blending</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../model/03_demand_sectors.html">3. Demand sectors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../model/03_demand_sectors.html#industry-and-domestic-demand">3.1. Industry and domestic demand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/03_demand_sectors.html#residential-and-commercial">3.2. Residential and commercial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/03_demand_sectors.html#transport-and-bunkers-demand">3.3. Transport and bunkers demand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/03_demand_sectors.html#carbon-dioxide-removal-cdr-technologies">3.4. Carbon Dioxide Removal (CDR) technologies</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../model/04_supply_sectors.html">4. Supply sectors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../model/04_supply_sectors.html#power-supply">4.1. Power supply</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/04_supply_sectors.html#heat-supply">4.2. Heat supply</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/04_supply_sectors.html#hydrogen-supply">4.3. Hydrogen supply</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../model/04_supply_sectors.html#supplydemand-alignment-and-sector-coupling">4.3.1. Supply–demand alignment and sector coupling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model/04_supply_sectors.html#output-and-role-in-the-full-energy-system">4.3.2. Output and role in the full energy system</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../model/04_supply_sectors.html#supply-of-other-fuels">4.4. Supply of other fuels</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../model/05_data_and_calibration.html">5. Data pipeline and calibration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../model/05_data_and_calibration.html#input-data-sources-and-data-preparation">5.1. Input data sources and data preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/05_data_and_calibration.html#output-post-processing">5.2. Output post-processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/05_data_and_calibration.html#calibration-mechanism">5.3. Calibration mechanism</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../model/06_interlinkages.html">6. Model interlinkages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../model/06_interlinkages.html#link-with-opentepes">6.1. Link with openTEPES</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/06_interlinkages.html#link-with-meteor">6.2. Link with METEOR</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../model/06_interlinkages.html#overview-of-meteor">6.2.1. Overview of METEOR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model/06_interlinkages.html#rationale-for-linking-meteor-with-open-prom">6.2.2. Rationale for linking METEOR with OPEN-PROM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model/06_interlinkages.html#coupling-workflow-between-open-prom-and-meteor">6.2.3. Coupling workflow between OPEN-PROM and METEOR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model/06_interlinkages.html#added-value-for-open-prom">6.2.4. Added value for OPEN-PROM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../model/06_interlinkages.html#circular-economy-representation-with-omnia-engage">6.3. Circular economy representation with OMNIA-ENGAGE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/06_interlinkages.html#link-with-ftt-heat">6.4. Link with FTT:Heat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/06_interlinkages.html#link-with-magpie">6.5. Link with MAgPIE</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../model/07_baseline_results.html">7. Baseline results</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../model/07_baseline_results.html#baseline-emissions">7.1. Baseline emissions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/07_baseline_results.html#final-energy-demand">7.2. Final energy demand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/07_baseline_results.html#fuel-shares-and-electrification">7.3. Fuel shares and electrification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/07_baseline_results.html#electricity-generation-and-power-sector-transformation">7.4. Electricity generation and power-sector transformation</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference/gams_error_codes.html">GAMS error codes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../reference/gams_error_codes.html#compile-time-errors">Compile-time errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/gams_error_codes.html#execution-time-solver-and-model-status-issues">Execution-time solver and model-status issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/gams_error_codes.html#license-errors">License errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/gams_error_codes.html#general-troubleshooting-tips">General troubleshooting tips</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/abbreviations.html">Abbreviations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/bibliography.html">Bibliography and data sources</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../reference/bibliography.html#references">References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/bibliography.html#data-sources-and-tools">Data sources and tools</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../about.html#acknowledgements-and-funding">Acknowledgements and funding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about.html#how-to-cite">How to cite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about.html#links">Links</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OPEN-PROM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Soft-linking</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/guide/05_soft_linking.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="soft-linking">
+<h1>Soft-linking<a class="headerlink" href="#soft-linking" title="Link to this heading"></a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>In brief</strong> — This page is the operational how-to for running OPEN-PROM’s external couplings: the iterative
+soft-link with the MAgPIE land-use model and the one-way/iterative soft-link with the METEOR climate emulator.
+It covers the relevant configuration switches, task IDs, paths, how to drive an iteration, and how convergence
+and checkpointing work in practice. For <em>why</em> these couplings exist and what they exchange, see the
+interlinkages chapter.</p>
+</div>
+<section id="soft-linking-with-magpie">
+<h2>Soft-linking with MAgPIE<a class="headerlink" href="#soft-linking-with-magpie" title="Link to this heading"></a></h2>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>For the rationale and the exchanged quantities (carbon-price signal, advanced-bioenergy demand, bioenergy price,
+AFOLU emissions), see <a class="reference internal" href="../model/06_interlinkages.html#magpie-link"><span class="std std-ref">Link with MAgPIE</span></a>.</p>
+</div>
+<p>The OPEN-PROM ⇄ MAgPIE soft-link is driven by <strong>task 7</strong> of the <code class="docutils literal notranslate"><span class="pre">start.R</span></code> harness. It runs the two models as
+independently solved jobs and exchanges data between them as a <strong>round-based state machine</strong>: a cold round 0
+solve, followed by zero or more <em>hot</em> rounds that each run a forward / MAgPIE / backward / hot sequence, looping
+until the shared boundary signals converge or a round cap is reached.</p>
+<section id="prerequisites">
+<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>A working MAgPIE installation (the <code class="docutils literal notranslate"><span class="pre">magpie/</span></code> sibling repository), with <code class="docutils literal notranslate"><span class="pre">config.json:paths.magpie_path</span></code> pointing
+at its root (trailing slash included).</p></li>
+<li><p>A MAgPIE <em>project</em> folder under <code class="docutils literal notranslate"><span class="pre">&lt;magpie_path&gt;/e3m_projects/&lt;project&gt;/</span></code> containing a <code class="docutils literal notranslate"><span class="pre">scenarios.csv</span></code>. The
+project name is set in <code class="docutils literal notranslate"><span class="pre">config.json:scenario.soft_link_magpie.project</span></code> (the template default is <code class="docutils literal notranslate"><span class="pre">uptake</span></code>).</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">scenario_name</span></code>, which is used as the label on <strong>both</strong> sides: it names the OPEN-PROM run folder and selects
+the MAgPIE subscenario (matched against the <code class="docutils literal notranslate"><span class="pre">title</span></code> column of the project’s <code class="docutils literal notranslate"><span class="pre">scenarios.csv</span></code> by exact or prefix
+match).</p></li>
+</ul>
+</section>
+<section id="running-an-iteration">
+<h3>Running an iteration<a class="headerlink" href="#running-an-iteration" title="Link to this heading"></a></h3>
+<p>Task 7 is batchable (one scenario per CSV row), so either form works:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Rscript<span class="w"> </span>start.R<span class="w"> </span><span class="nv">task_id</span><span class="o">=</span><span class="m">7</span><span class="w">        </span><span class="c1"># single scenario from config.json:scenario</span>
+Rscript<span class="w"> </span>start.R<span class="w"> </span>scenarios.csv<span class="w">    </span><span class="c1"># batch; only task_id 2 and 7 are batchable</span>
+</pre></div>
+</div>
+<p>The harness runs a <strong>cold round 0</strong> and then iterates <strong>hot rounds</strong> <code class="docutils literal notranslate"><span class="pre">k</span> <span class="pre">≥</span> <span class="pre">1</span></code>:</p>
+<ol class="arabic simple">
+<li><p><strong>Round 0 — OPEN-PROM (cold).</strong> A first energy-system solve with the link disabled
+(<code class="docutils literal notranslate"><span class="pre">--softLinkMAgPIE=off</span></code>), producing <code class="docutils literal notranslate"><span class="pre">blabla_round0.gdx</span></code>. This is the baseline the forward coupling reads from.</p></li>
+<li><p><strong>Hot round <code class="docutils literal notranslate"><span class="pre">k</span></code> — four sequential phases</strong>, each checkpointed to <code class="docutils literal notranslate"><span class="pre">coupling_state.json</span></code> before the next begins:</p>
+<ul class="simple">
+<li><p><strong>forward</strong> — <code class="docutils literal notranslate"><span class="pre">postprom::couplePromToMagpie()</span></code> converts the previous round’s GDX into
+<code class="docutils literal notranslate"><span class="pre">openprom_coupling.mif</span></code> (the carbon-price and advanced-bioenergy-demand signals MAgPIE consumes).</p></li>
+<li><p><strong>magpie</strong> — MAgPIE is executed inside its project folder via <code class="docutils literal notranslate"><span class="pre">Rscript</span> <span class="pre">e3m_start.R</span></code>, reading the forwarded
+boundary; the harness diffs the <code class="docutils literal notranslate"><span class="pre">output/</span></code> listing to capture the one new run directory.</p></li>
+<li><p><strong>backward</strong> — <code class="docutils literal notranslate"><span class="pre">postprom::coupleMagpieToProm()</span></code> reads MAgPIE’s <code class="docutils literal notranslate"><span class="pre">report.mif</span></code> and writes <code class="docutils literal notranslate"><span class="pre">iPrices_magpie.csv</span></code>
+(the bioenergy price fed back into GAMS) plus <code class="docutils literal notranslate"><span class="pre">iEmissions_magpie.mif</span></code> (AFOLU emissions for reporting only).</p></li>
+<li><p><strong>openprom_hot</strong> — a solve with the link enabled (<code class="docutils literal notranslate"><span class="pre">--softLinkMAgPIE=on</span></code>), so the biomass-and-waste price is
+fixed from the just-written <code class="docutils literal notranslate"><span class="pre">iPrices_magpie.csv</span></code> rather than from OPEN-PROM’s internal price dynamics. The
+result is saved as <code class="docutils literal notranslate"><span class="pre">blabla_round{k}.gdx</span></code>.</p></li>
+</ul>
+</li>
+<li><p>The hot-round sequence repeats. From round <code class="docutils literal notranslate"><span class="pre">k</span> <span class="pre">≥</span> <span class="pre">2</span></code> a convergence test runs after <code class="docutils literal notranslate"><span class="pre">openprom_hot</span></code> (see below);
+the loop exits at the first converged round, or when <code class="docutils literal notranslate"><span class="pre">k</span></code> reaches <code class="docutils literal notranslate"><span class="pre">max_iter</span></code>.</p></li>
+<li><p><strong>Finalisation.</strong> The last round’s GDX is copied <code class="docutils literal notranslate"><span class="pre">blabla_round{final}.gdx</span></code> → <code class="docutils literal notranslate"><span class="pre">blabla.gdx</span></code>,
+<code class="docutils literal notranslate"><span class="pre">coupling_summary.json</span></code> is written, and (per the <code class="docutils literal notranslate"><span class="pre">behavior</span></code> flags) <code class="docutils literal notranslate"><span class="pre">reportOutput.R</span></code> and run synchronisation
+run on the final solution.</p></li>
+</ol>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Only the <strong>bioenergy price</strong> (<code class="docutils literal notranslate"><span class="pre">iPrices_magpie.csv</span></code>) feeds back into the GAMS solve. The MAgPIE AFOLU emissions
+(<code class="docutils literal notranslate"><span class="pre">iEmissions_magpie.mif</span></code>) do not influence the energy-system solution; the <code class="docutils literal notranslate"><span class="pre">softmif</span></code> land-emission mode merely
+tags <code class="docutils literal notranslate"><span class="pre">blabla.gdx</span></code> so <code class="docutils literal notranslate"><span class="pre">postprom</span></code> sources AFOLU emissions from the MAgPIE <code class="docutils literal notranslate"><span class="pre">.mif</span></code> during reporting.</p>
+</div>
+</section>
+<section id="configuration">
+<h3>Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h3>
+<p>The task-7 knobs live under <code class="docutils literal notranslate"><span class="pre">config.json:scenario.soft_link_magpie</span></code> (and the matching <code class="docutils literal notranslate"><span class="pre">soft_link_magpie.*</span></code>
+columns of <code class="docutils literal notranslate"><span class="pre">scenarios.csv</span></code>):</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">project</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">uptake</span></code></p></td>
+<td><p>MAgPIE project folder under <code class="docutils literal notranslate"><span class="pre">&lt;magpie_path&gt;/e3m_projects/</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">existing_prom_run</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">null</span></code></p></td>
+<td><p>path to an interrupted run folder to resume from (see below)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">max_iter</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p>maximum number of hot rounds</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">price_tol</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.05</span></code></p></td>
+<td><p>relative tolerance on the bioenergy <strong>price</strong> (5%)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">quant_tol</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.05</span></code></p></td>
+<td><p>relative tolerance on the bioenergy <strong>quantity</strong> (5%)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The template default is <code class="docutils literal notranslate"><span class="pre">max_iter</span> <span class="pre">=</span> <span class="pre">1</span></code>, which runs round 0 plus a single hot round and stops without ever
+reaching the convergence test (that test starts at round <code class="docutils literal notranslate"><span class="pre">k</span> <span class="pre">≥</span> <span class="pre">2</span></code>). For a genuinely converged soft-link set
+<code class="docutils literal notranslate"><span class="pre">max_iter</span></code> to a larger value (e.g. 5) together with <code class="docutils literal notranslate"><span class="pre">price_tol</span></code>/<code class="docutils literal notranslate"><span class="pre">quant_tol</span></code>.</p>
+</div>
+</section>
+<section id="convergence-controls-and-state-files">
+<h3>Convergence controls and state files<a class="headerlink" href="#convergence-controls-and-state-files" title="Link to this heading"></a></h3>
+<p>From the second hot round onward (<code class="docutils literal notranslate"><span class="pre">k</span> <span class="pre">≥</span> <span class="pre">2</span></code>) the harness compares the exchanged <strong>bioenergy price</strong> and
+<strong>bioenergy quantity</strong> pathways against the previous round, on the natural shared boundary of the two models (the
+H12 land-use regions × years), restricted to years from the model start year (<code class="docutils literal notranslate"><span class="pre">2024</span></code>) onward. For each series it
+computes a per-cell relative change against a denominator floor (<code class="docutils literal notranslate"><span class="pre">1.0</span></code> US$2017/GJ for price, <code class="docutils literal notranslate"><span class="pre">0.01</span></code> EJ/yr for
+quantity) and reduces it to a maximum, <code class="docutils literal notranslate"><span class="pre">delta_price_max</span></code> / <code class="docutils literal notranslate"><span class="pre">delta_quant_max</span></code> (the judges) and an L2 norm
+(diagnostic only). The coupling is declared <strong>converged</strong> only when <em>both</em> maxima fall below their tolerances:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>converged  iff  delta_price_max &lt; price_tol  AND  delta_quant_max &lt; quant_tol
+</pre></div>
+</div>
+<p>Otherwise another hot round runs until convergence or <code class="docutils literal notranslate"><span class="pre">max_iter</span></code>. A missing value on either side counts as <em>not
+converged</em>, so the loop never declares victory on an empty (region, year) grid.</p>
+<p>State and diagnostics written into the run folder:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>File</p></th>
+<th class="head"><p>Purpose</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">blabla_round0.gdx</span></code></p></td>
+<td><p>the cold round-0 OPEN-PROM solution</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">blabla_round{k}.gdx</span></code></p></td>
+<td><p>the hot-round OPEN-PROM solution for round <em>k</em></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">blabla.gdx</span></code></p></td>
+<td><p>a copy of the final round, used by <code class="docutils literal notranslate"><span class="pre">reportOutput</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">openprom_coupling.mif</span></code></p></td>
+<td><p>the last forward boundary sent to MAgPIE (overwritten each round)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">iPrices_magpie.csv</span></code></p></td>
+<td><p>the last bioenergy price returned to GAMS (overwritten each round)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">iEmissions_magpie.mif</span></code></p></td>
+<td><p>the last AFOLU emissions returned to <code class="docutils literal notranslate"><span class="pre">postprom</span></code> (overwritten each round)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">coupling_state.json</span></code></p></td>
+<td><p>per-phase checkpoint (status, rounds, captured H12 series) enabling resume</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">convergence_log.csv</span></code></p></td>
+<td><p>the per-round deviation trajectory (one row per round <code class="docutils literal notranslate"><span class="pre">k</span> <span class="pre">≥</span> <span class="pre">2</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">coupling_summary.json</span></code></p></td>
+<td><p>finalisation summary: status, thresholds, final deltas, timestamps</p></td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal notranslate"><span class="pre">coupling_state.json</span></code> is rewritten atomically after every phase, recording one of the statuses <code class="docutils literal notranslate"><span class="pre">iterating</span></code>,
+<code class="docutils literal notranslate"><span class="pre">failed</span></code>, <code class="docutils literal notranslate"><span class="pre">converged</span></code>, or <code class="docutils literal notranslate"><span class="pre">max_iter</span></code>. To resume an interrupted run, point
+<code class="docutils literal notranslate"><span class="pre">config.json:scenario.soft_link_magpie.existing_prom_run</span></code> at its run folder; the harness skips round 0 and
+continues from the highest round’s last completed phase. A resume is only allowed when the run is still
+<code class="docutils literal notranslate"><span class="pre">iterating</span></code> and its pinned config snapshot (<code class="docutils literal notranslate"><span class="pre">max_iter</span></code>, <code class="docutils literal notranslate"><span class="pre">price_tol</span></code>, <code class="docutils literal notranslate"><span class="pre">quant_tol</span></code>, <code class="docutils literal notranslate"><span class="pre">scenario_name</span></code>) matches the
+current configuration exactly; runs that already failed, converged, or hit <code class="docutils literal notranslate"><span class="pre">max_iter</span></code> cannot be resumed.</p>
+</section>
+<section id="emulator-alternative-without-running-magpie">
+<h3>Emulator alternative (without running MAgPIE)<a class="headerlink" href="#emulator-alternative-without-running-magpie" title="Link to this heading"></a></h3>
+<p>For cases where running the full MAgPIE model on every round is too costly, the land-use response can instead be
+represented by <strong>pre-fitted emulator curves</strong>, selected with the user switches at the top of <code class="docutils literal notranslate"><span class="pre">main.gms</span></code>. These
+are configured for ordinary single-solve tasks (0–6) through <code class="docutils literal notranslate"><span class="pre">config.json:scenario.land_use_emulator</span></code>, which
+<code class="docutils literal notranslate"><span class="pre">start.R</span></code> maps onto the GAMS flags <code class="docutils literal notranslate"><span class="pre">--landUseEmulator</span></code> and <code class="docutils literal notranslate"><span class="pre">--emulatorGHGScen</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">softLinkMAgPIE</span></code> (<code class="docutils literal notranslate"><span class="pre">on</span></code>/<code class="docutils literal notranslate"><span class="pre">off</span></code>) — the iterative task-7 soft-link above. When <code class="docutils literal notranslate"><span class="pre">on</span></code> it wins: the biomass price is
+fixed from MAgPIE and AFOLU emissions are read from MAgPIE’s <code class="docutils literal notranslate"><span class="pre">.mif</span></code>. The emulator switches below only take
+effect when <code class="docutils literal notranslate"><span class="pre">softLinkMAgPIE</span></code> is <code class="docutils literal notranslate"><span class="pre">off</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">land_use_emulator.source</span></code> → <code class="docutils literal notranslate"><span class="pre">landUseEmulator</span></code> (<code class="docutils literal notranslate"><span class="pre">legacy</span></code>/<code class="docutils literal notranslate"><span class="pre">globiom</span></code>/<code class="docutils literal notranslate"><span class="pre">magpie</span></code>) — selects the emulator source.
+<code class="docutils literal notranslate"><span class="pre">legacy</span></code> means no emulator (static biomass price, exogenous AFOLU emissions); <code class="docutils literal notranslate"><span class="pre">globiom</span></code>/<code class="docutils literal notranslate"><span class="pre">magpie</span></code> drive the
+biomass price from a fitted supply curve and AFOLU emissions from fitted land-use-emission curves.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">land_use_emulator.carbon_price</span></code> → <code class="docutils literal notranslate"><span class="pre">emulatorGHGScen</span></code> (<code class="docutils literal notranslate"><span class="pre">GHG000</span></code>, <code class="docutils literal notranslate"><span class="pre">GHG010</span></code>, <code class="docutils literal notranslate"><span class="pre">GHG020</span></code>, <code class="docutils literal notranslate"><span class="pre">GHG050</span></code>, <code class="docutils literal notranslate"><span class="pre">GHG100</span></code>) — picks
+the active land-use carbon-price row in the emulator coefficient tables.</p></li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The three approaches form a hierarchy of increasing fidelity and cost: exogenous land-use assumptions
+(<code class="docutils literal notranslate"><span class="pre">land_use_emulator.source</span> <span class="pre">=</span> <span class="pre">legacy</span></code>) → emulator-based coupling (<code class="docutils literal notranslate"><span class="pre">globiom</span></code>/<code class="docutils literal notranslate"><span class="pre">magpie</span></code>) → full iterative
+OPEN-PROM ⇄ MAgPIE soft-linking (<code class="docutils literal notranslate"><span class="pre">softLinkMAgPIE=on</span></code>, task 7). The emulator route never launches an external
+land-use model; it only evaluates the fitted curves during the solve.</p>
+</div>
+</section>
+</section>
+<section id="soft-linking-with-climate-emulators-meteor">
+<h2>Soft-linking with climate emulators (METEOR)<a class="headerlink" href="#soft-linking-with-climate-emulators-meteor" title="Link to this heading"></a></h2>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>For an overview of METEOR and what the coupling adds (spatially explicit climate feedbacks, HDD/CDD impact
+indicators), see <a class="reference internal" href="../model/06_interlinkages.html#meteor"><span class="std std-ref">Link with METEOR</span></a>.</p>
+</div>
+<p>The OPEN-PROM ⇄ METEOR link is an external post-processing pipeline rather than a built-in task: OPEN-PROM
+emissions trajectories are translated into spatial climate outcomes and impact indicators that are then fed back
+into selected model parameters.</p>
+<section id="workflow">
+<h3>Workflow<a class="headerlink" href="#workflow" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p><strong>Run an OPEN-PROM scenario</strong> and export its emissions trajectories — CO₂, CH₄, N₂O and sulphur-related
+emissions — in an IAMC-compatible format.</p></li>
+<li><p><strong>Compute radiative forcing</strong> by passing the IAMC emissions to the C-SCM emissions-to-forcing module, which
+converts the trajectories into radiative-forcing time series.</p></li>
+<li><p><strong>Emulate the spatial climate response</strong> with METEOR, producing gridded projections of climate variables
+(temperature, precipitation) for the selected horizons, e.g. mid-century and end-of-century.</p></li>
+<li><p><strong>Post-process to OPEN-PROM regions</strong> — apply regional masks, aggregate the gridded fields to OPEN-PROM
+regions, compute regional annual or monthly averages, and derive impact indicators such as Heating Degree
+Days (HDD) and Cooling Degree Days (CDD).</p></li>
+<li><p><strong>Feed back into OPEN-PROM</strong> — use the regional HDD/CDD indicators to adjust final-energy-demand assumptions,
+most directly in the buildings (heating and cooling) sector.</p></li>
+</ol>
+<p>Summarised as a chain:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>OPEN-PROM emissions scenario → IAMC-formatted emissions → C-SCM forcing calculation
+  → METEOR spatial climate emulation → regional aggregation and impact indicators → feedback to OPEN-PROM
+</pre></div>
+</div>
+</section>
+<section id="one-way-vs-iterative-use">
+<h3>One-way vs iterative use<a class="headerlink" href="#one-way-vs-iterative-use" title="Link to this heading"></a></h3>
+<p>The pipeline can be run as a <strong>one-way soft link</strong>, where METEOR outputs simply inform selected OPEN-PROM
+parameters for a single pass, or as an <strong>iterative coupling</strong>, where OPEN-PROM is rerun after the climate-impact
+indicators have been updated, letting climate impacts influence energy demand, technology deployment, emissions
+and the resulting mitigation pathway across successive rounds.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The most direct operational feedback currently implemented is the HDD/CDD adjustment to heating and cooling
+demand. Wider feedbacks (for example on water-system energy requirements or electricity peak loads) are part of
+the coupling’s intended scope but are not yet wired into the standard run.</p>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="04_development.html" class="btn btn-neutral float-left" title="Development and code structure" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../model/01_introduction.html" class="btn btn-neutral float-right" title="1. Introduction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, E3Modelling.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

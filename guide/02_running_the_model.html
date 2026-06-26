@@ -1,0 +1,608 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Running the model &mdash; OPEN-PROM</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+    <link rel="canonical" href="https://e3modelling.github.io/OPEN-PROM/guide/02_running_the_model.html" />
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=b21de401"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Input data" href="03_input_data.html" />
+    <link rel="prev" title="Setup and environment" href="01_setup.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            OPEN-PROM
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01_setup.html">Setup and environment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="01_setup.html#key-terminology">Key terminology</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_setup.html#git-and-github-setup">Git and GitHub setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#check-for-an-existing-git-installation">Check for an existing Git installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#install-git">Install Git</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#create-and-configure-a-github-account">Create and configure a GitHub account</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#clone-the-repository">Clone the repository</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#commit-and-push-changes">Commit and push changes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="01_setup.html#visual-studio-code">Visual Studio Code</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#install-vs-code">Install VS Code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#orientation">Orientation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#recommended-extensions">Recommended extensions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="01_setup.html#task-runner">Task runner</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#setup">Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#run-modes">Run modes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="01_setup.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#git-installation-fails">Git installation fails</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#github-authentication-fails">GitHub authentication fails</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#cloning-fails">Cloning fails</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#vs-code-git-integration-problems">VS Code / Git integration problems</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="01_setup.html#modelling-server-windows">Modelling server (Windows)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#connecting">Connecting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#system-preparation">System preparation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#install-core-software-system-wide">Install core software (system-wide)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#install-magpie-system-wide-no-renv">Install MAgPIE system-wide (no renv)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#python-tinytex-and-shared-storage">Python, TinyTeX and shared storage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#linux-support-wsl-per-user">Linux support — WSL (per-user)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_setup.html#test-the-setup">Test the setup</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Running the model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#a-first-run-public-dummy-data">A first run (public dummy data)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-with-real-input-data">Running with real input data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#point-r-to-the-local-madrat-archive">Point R to the local <code class="docutils literal notranslate"><span class="pre">madrat</span></code> archive</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-data-and-targets-are-created">How <code class="docutils literal notranslate"><span class="pre">data/</span></code> and <code class="docutils literal notranslate"><span class="pre">targets/</span></code> are created</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#task-modes-in-start-r">Task modes in <code class="docutils literal notranslate"><span class="pre">start.R</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#batch-mode">Batch mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#what-the-outputs-mean">What the outputs mean</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#changing-the-region-set">Changing the region set</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">How-to guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="03_input_data.html">Input data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="03_input_data.html#installing-the-software-and-libraries">Installing the software and libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_input_data.html#creating-the-local-configuration-file">Creating the local configuration file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_input_data.html#adding-the-data-sources">Adding the data sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_input_data.html#updating-the-ci-dataset">Updating the CI dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_input_data.html#running-the-model">Running the model</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="04_development.html">Development and code structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="04_development.html#folder-structure">Folder structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_development.html#the-phase-system">The phase system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_development.html#modules-and-realizations">Modules and realizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_development.html#default-active-vs-dormant-features">Default active vs dormant features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_development.html#naming-convention">Naming convention</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_development.html#developer-workflow">Developer workflow</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="05_soft_linking.html">Soft-linking</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="05_soft_linking.html#soft-linking-with-magpie">Soft-linking with MAgPIE</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="05_soft_linking.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_soft_linking.html#running-an-iteration">Running an iteration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_soft_linking.html#configuration">Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_soft_linking.html#convergence-controls-and-state-files">Convergence controls and state files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_soft_linking.html#emulator-alternative-without-running-magpie">Emulator alternative (without running MAgPIE)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="05_soft_linking.html#soft-linking-with-climate-emulators-meteor">Soft-linking with climate emulators (METEOR)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="05_soft_linking.html#workflow">Workflow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_soft_linking.html#one-way-vs-iterative-use">One-way vs iterative use</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Model documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../model/01_introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model/02_model_overview.html">2. Model overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../model/02_model_overview.html#time-granularity-and-regions">2.1. Time granularity and regions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/02_model_overview.html#sector-granularity">2.2. Sector granularity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/02_model_overview.html#gap-and-substitution-mechanism">2.3. Gap and substitution mechanism</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../model/02_model_overview.html#gap-and-scrapping-mechanism">2.3.1. Gap and scrapping mechanism</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model/02_model_overview.html#substitution-mechanism">2.3.2. Substitution mechanism</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model/02_model_overview.html#implementation-by-realisation">2.3.3. Implementation by realisation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../model/02_model_overview.html#prices">2.4. Prices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../model/02_model_overview.html#conceptual-framing-legacy">2.4.1. Conceptual framing (legacy)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model/02_model_overview.html#active-price-formation-current-code">2.4.2. Active price formation (current code)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../model/02_model_overview.html#energy-supply">2.5. Energy supply</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../model/02_model_overview.html#trade-representation">2.5.1. Trade representation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model/02_model_overview.html#end-use-sector-biofuel-blending">2.5.2. End-use sector: biofuel blending</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../model/03_demand_sectors.html">3. Demand sectors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../model/03_demand_sectors.html#industry-and-domestic-demand">3.1. Industry and domestic demand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/03_demand_sectors.html#residential-and-commercial">3.2. Residential and commercial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/03_demand_sectors.html#transport-and-bunkers-demand">3.3. Transport and bunkers demand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/03_demand_sectors.html#carbon-dioxide-removal-cdr-technologies">3.4. Carbon Dioxide Removal (CDR) technologies</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../model/04_supply_sectors.html">4. Supply sectors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../model/04_supply_sectors.html#power-supply">4.1. Power supply</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/04_supply_sectors.html#heat-supply">4.2. Heat supply</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/04_supply_sectors.html#hydrogen-supply">4.3. Hydrogen supply</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../model/04_supply_sectors.html#supplydemand-alignment-and-sector-coupling">4.3.1. Supply–demand alignment and sector coupling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model/04_supply_sectors.html#output-and-role-in-the-full-energy-system">4.3.2. Output and role in the full energy system</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../model/04_supply_sectors.html#supply-of-other-fuels">4.4. Supply of other fuels</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../model/05_data_and_calibration.html">5. Data pipeline and calibration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../model/05_data_and_calibration.html#input-data-sources-and-data-preparation">5.1. Input data sources and data preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/05_data_and_calibration.html#output-post-processing">5.2. Output post-processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/05_data_and_calibration.html#calibration-mechanism">5.3. Calibration mechanism</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../model/06_interlinkages.html">6. Model interlinkages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../model/06_interlinkages.html#link-with-opentepes">6.1. Link with openTEPES</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/06_interlinkages.html#link-with-meteor">6.2. Link with METEOR</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../model/06_interlinkages.html#overview-of-meteor">6.2.1. Overview of METEOR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model/06_interlinkages.html#rationale-for-linking-meteor-with-open-prom">6.2.2. Rationale for linking METEOR with OPEN-PROM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model/06_interlinkages.html#coupling-workflow-between-open-prom-and-meteor">6.2.3. Coupling workflow between OPEN-PROM and METEOR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model/06_interlinkages.html#added-value-for-open-prom">6.2.4. Added value for OPEN-PROM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../model/06_interlinkages.html#circular-economy-representation-with-omnia-engage">6.3. Circular economy representation with OMNIA-ENGAGE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/06_interlinkages.html#link-with-ftt-heat">6.4. Link with FTT:Heat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/06_interlinkages.html#link-with-magpie">6.5. Link with MAgPIE</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../model/07_baseline_results.html">7. Baseline results</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../model/07_baseline_results.html#baseline-emissions">7.1. Baseline emissions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/07_baseline_results.html#final-energy-demand">7.2. Final energy demand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/07_baseline_results.html#fuel-shares-and-electrification">7.3. Fuel shares and electrification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model/07_baseline_results.html#electricity-generation-and-power-sector-transformation">7.4. Electricity generation and power-sector transformation</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference/gams_error_codes.html">GAMS error codes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../reference/gams_error_codes.html#compile-time-errors">Compile-time errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/gams_error_codes.html#execution-time-solver-and-model-status-issues">Execution-time solver and model-status issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/gams_error_codes.html#license-errors">License errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/gams_error_codes.html#general-troubleshooting-tips">General troubleshooting tips</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/abbreviations.html">Abbreviations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/bibliography.html">Bibliography and data sources</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../reference/bibliography.html#references">References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/bibliography.html#data-sources-and-tools">Data sources and tools</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../about.html#acknowledgements-and-funding">Acknowledgements and funding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about.html#how-to-cite">How to cite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about.html#links">Links</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OPEN-PROM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Running the model</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/guide/02_running_the_model.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="running-the-model">
+<h1>Running the model<a class="headerlink" href="#running-the-model" title="Link to this heading"></a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>In brief</strong> — This page is the operational how-to for running OPEN-PROM: a first run on public dummy data, the
+internal real-data workflow driven by <code class="docutils literal notranslate"><span class="pre">start.R</span></code> task modes (including batch sweeps), and how to change which regions
+a run covers. For the conceptual description of the region set itself, see <a class="reference internal" href="../model/02_model_overview.html#regions"><span class="std std-ref">Time granularity and regions</span></a>.</p>
+</div>
+<p>The entry point for a normal run is always <code class="docutils literal notranslate"><span class="pre">start.R</span></code>, never <code class="docutils literal notranslate"><span class="pre">gams</span> <span class="pre">main.gms</span></code> directly: the harness sets up the run
+folder, metadata, flags and reporting. The only exception is the dummy-data smoke test below, which calls GAMS
+directly so that external users can verify their toolchain before they have access to the internal data pipeline.</p>
+<section id="a-first-run-public-dummy-data">
+<span id="running-first-run"></span><h2>A first run (public dummy data)<a class="headerlink" href="#a-first-run-public-dummy-data" title="Link to this heading"></a></h2>
+<p>This path is for external users who want to confirm that OPEN-PROM runs on their machine before they have real
+input data. It uses a public dummy dataset and solves only the single dummy region <code class="docutils literal notranslate"><span class="pre">RWO</span></code>. It assumes a working
+<code class="docutils literal notranslate"><span class="pre">Rscript</span></code> command, a working <code class="docutils literal notranslate"><span class="pre">gams</span></code> command, and the R packages required by <code class="docutils literal notranslate"><span class="pre">loadMadratData.R</span></code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The dummy-data path does <strong>not</strong> use the normal internal sync workflow. Before experimenting with <code class="docutils literal notranslate"><span class="pre">start.R</span></code> or the
+VS Code Task Runner on this path, set <code class="docutils literal notranslate"><span class="pre">behavior.withSync</span></code> to <code class="docutils literal notranslate"><span class="pre">false</span></code> in <code class="docutils literal notranslate"><span class="pre">config.json</span></code>; otherwise <code class="docutils literal notranslate"><span class="pre">syncRun()</span></code> can
+stop the wrapper when <code class="docutils literal notranslate"><span class="pre">paths.model_runs_path</span></code> is not configured.</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;behavior&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;withSync&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<p><strong>1. Download the dummy data.</strong> Run the loader once:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Rscript<span class="w"> </span>scripts/tasks/loadMadratData.R<span class="w"> </span><span class="nv">DevMode</span><span class="o">=</span><span class="m">2</span>
+</pre></div>
+</div>
+<p>This downloads <code class="docutils literal notranslate"><span class="pre">dummy_data.tgz</span></code> and extracts it into <code class="docutils literal notranslate"><span class="pre">./data</span></code>. It does <strong>not</strong> create <code class="docutils literal notranslate"><span class="pre">./targets</span></code>, so it cannot be
+used for calibration or any workflow that depends on targets.</p>
+<p><strong>2. Run the model</strong> directly with GAMS once <code class="docutils literal notranslate"><span class="pre">./data</span></code> exists:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gams<span class="w"> </span>main.gms<span class="w"> </span>--DevMode<span class="o">=</span><span class="m">1</span><span class="w"> </span>--GenerateInput<span class="o">=</span>off<span class="w"> </span>--fCountries<span class="o">=</span><span class="s1">&#39;RWO&#39;</span><span class="w"> </span>-Idir<span class="o">=</span>./data
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--DevMode=1</span></code> selects the development-size region set.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--GenerateInput=off</span></code> uses the already-extracted dummy <code class="docutils literal notranslate"><span class="pre">data/</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--fCountries='RWO'</span></code> restricts the run to the single public dummy region.</p></li>
+</ul>
+<p><strong>3. What to expect.</strong> GAMS solves the model for <code class="docutils literal notranslate"><span class="pre">RWO</span></code> and writes the usual outputs in the current working
+directory — typically <code class="docutils literal notranslate"><span class="pre">modelstat.txt</span></code>, <code class="docutils literal notranslate"><span class="pre">outputData.gdx</span></code>, and the standard GAMS listing and log files.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p><code class="docutils literal notranslate"><span class="pre">DevMode=2</span></code> is only for the public dummy-data path. It is <strong>not</strong> one of the internal task modes; do not treat this
+direct-GAMS call as the Task Runner workflow.</p>
+</div>
+</section>
+<section id="running-with-real-input-data">
+<h2>Running with real input data<a class="headerlink" href="#running-with-real-input-data" title="Link to this heading"></a></h2>
+<p>This is the E3Modelling internal path, for users who can access the real input-data pipeline. The repository
+supports two onboarding paths: external users run the dummy-data path above (creates <code class="docutils literal notranslate"><span class="pre">data/</span></code>, not <code class="docutils literal notranslate"><span class="pre">targets/</span></code>),
+while internal users prepare real <code class="docutils literal notranslate"><span class="pre">data/</span></code> and <code class="docutils literal notranslate"><span class="pre">targets/</span></code> from the internal <code class="docutils literal notranslate"><span class="pre">madrat</span></code> archive and then use the full
+task-based workflow described here.</p>
+<section id="point-r-to-the-local-madrat-archive">
+<h3>Point R to the local <code class="docutils literal notranslate"><span class="pre">madrat</span></code> archive<a class="headerlink" href="#point-r-to-the-local-madrat-archive" title="Link to this heading"></a></h3>
+<p>Make sure your local <code class="docutils literal notranslate"><span class="pre">madrat</span></code> directory is synced from SharePoint (or another internal source), then point R to
+that local archive:</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">madrat</span><span class="p">)</span>
+<span class="nf">setConfig</span><span class="p">(</span><span class="n">mainfolder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/path/to/local/madrat&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In the usual setup, <code class="docutils literal notranslate"><span class="pre">mainfolder</span></code> is the only path you need to set explicitly: <code class="docutils literal notranslate"><span class="pre">madrat</span></code> derives the relevant
+<code class="docutils literal notranslate"><span class="pre">sources/</span></code>, <code class="docutils literal notranslate"><span class="pre">output/</span></code> and <code class="docutils literal notranslate"><span class="pre">cache/</span></code> locations from it automatically. You do not normally point OPEN-PROM at every
+subfolder separately.</p>
+</section>
+<section id="how-data-and-targets-are-created">
+<h3>How <code class="docutils literal notranslate"><span class="pre">data/</span></code> and <code class="docutils literal notranslate"><span class="pre">targets/</span></code> are created<a class="headerlink" href="#how-data-and-targets-are-created" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">loadMadratData.R</span></code> is the bridge between the <code class="docutils literal notranslate"><span class="pre">mrprom</span></code> data pipeline and the model input folders at the repository
+root. <code class="docutils literal notranslate"><span class="pre">DevMode</span></code> selects what it generates:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">DevMode=0</span></code> — full research input <strong>and</strong> the calibration targets (creates both <code class="docutils literal notranslate"><span class="pre">./data</span></code> and <code class="docutils literal notranslate"><span class="pre">./targets</span></code>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DevMode=1</span></code> — development-size input for quick runs (creates <code class="docutils literal notranslate"><span class="pre">./data</span></code> only).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DevMode=2</span></code> — the public dummy-data path (not part of the internal real-data workflow).</p></li>
+</ul>
+<p>The script is triggered automatically when a task uses <code class="docutils literal notranslate"><span class="pre">GenerateInput=on</span></code>, but you can also run it directly to
+inspect the generated files yourself.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>The input-data pipeline (<code class="docutils literal notranslate"><span class="pre">mrprom</span></code>) and post-processing (<code class="docutils literal notranslate"><span class="pre">postprom</span></code>) are described in <a class="reference internal" href="03_input_data.html"><span class="doc">Input data</span></a>,
+with the conceptual treatment in <a class="reference internal" href="../model/05_data_and_calibration.html#input-data"><span class="std std-ref">Input data sources and data preparation</span></a> and <a class="reference internal" href="../model/05_data_and_calibration.html#postprocessing"><span class="std std-ref">Output post-processing</span></a>.</p>
+</div>
+</section>
+<section id="task-modes-in-start-r">
+<h3>Task modes in <code class="docutils literal notranslate"><span class="pre">start.R</span></code><a class="headerlink" href="#task-modes-in-start-r" title="Link to this heading"></a></h3>
+<p>The standard single-scenario entry point is:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Rscript<span class="w"> </span>start.R<span class="w"> </span><span class="nv">task_id</span><span class="o">=</span>N
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">start.R</span></code> always runs <strong>one</strong> scenario — the one defined in <code class="docutils literal notranslate"><span class="pre">config.json:scenario</span></code>. Edit that block to change what
+gets run. The main task modes:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 7.1%" />
+<col style="width: 26.2%" />
+<col style="width: 35.7%" />
+<col style="width: 21.4%" />
+<col style="width: 9.5%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><code class="docutils literal notranslate"><span class="pre">task_id</span></code></p></th>
+<th class="head"><p>Button name</p></th>
+<th class="head"><p>What it does</p></th>
+<th class="head"><p>Main input requirement</p></th>
+<th class="head"><p>Batchable?</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">OPEN-PROM</span> <span class="pre">DEV</span></code></p></td>
+<td><p>Runs the development model with existing input data</p></td>
+<td><p>existing <code class="docutils literal notranslate"><span class="pre">data/</span></code></p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">OPEN-PROM</span> <span class="pre">DEV</span> <span class="pre">NEW</span> <span class="pre">DATA</span></code></p></td>
+<td><p>Rebuilds development input data, then runs the model</p></td>
+<td><p>internal data access</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">OPEN-PROM</span> <span class="pre">RESEARCH</span></code></p></td>
+<td><p>Runs the research model with existing research input data</p></td>
+<td><p>existing research <code class="docutils literal notranslate"><span class="pre">data/</span></code></p></td>
+<td><p><strong>yes</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">OPEN-PROM</span> <span class="pre">RESEARCH</span> <span class="pre">NEW</span> <span class="pre">DATA</span></code></p></td>
+<td><p>Rebuilds research input data, calibrates maturity factors, then runs the model</p></td>
+<td><p>internal data access</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CALIBRATE</span></code></p></td>
+<td><p>Runs calibration only</p></td>
+<td><p>existing <code class="docutils literal notranslate"><span class="pre">data/</span></code> and <code class="docutils literal notranslate"><span class="pre">targets/</span></code></p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CALIBRATE</span> <span class="pre">CARBON</span> <span class="pre">PRICES</span></code></p></td>
+<td><p>Runs carbon-price calibration</p></td>
+<td><p>internal calibration setup</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">OPEN-PROM</span> <span class="pre">SOFT-LINK</span> <span class="pre">MAgPIE</span></code></p></td>
+<td><p>Runs the MAgPIE soft-link pipeline</p></td>
+<td><p>internal data access + MAgPIE checkout</p></td>
+<td><p><strong>yes</strong></p></td>
+</tr>
+</tbody>
+</table>
+<p>Task 4 is a debugging path and is not part of the normal run flow. A quick way to read the table: <code class="docutils literal notranslate"><span class="pre">NEW</span> <span class="pre">DATA</span></code> means
+the workflow first regenerates model inputs; <code class="docutils literal notranslate"><span class="pre">DEV</span></code> is the lighter development setup; <code class="docutils literal notranslate"><span class="pre">RESEARCH</span></code> is the full research
+setup; <code class="docutils literal notranslate"><span class="pre">CALIBRATE</span></code> modes are specialised runs, not the usual first step.</p>
+<p>For tasks 0, 2, 3, 6 and 7, <code class="docutils literal notranslate"><span class="pre">reportOutput.R</span></code> runs automatically when <code class="docutils literal notranslate"><span class="pre">behavior.withRunFolder</span></code> and
+<code class="docutils literal notranslate"><span class="pre">behavior.withReport</span></code> are both <code class="docutils literal notranslate"><span class="pre">true</span></code> in <code class="docutils literal notranslate"><span class="pre">config.json</span></code> (see <a class="reference internal" href="#running-outputs">What the outputs mean</a>).</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>The MAgPIE soft-link (task 7) is covered in <a class="reference internal" href="05_soft_linking.html"><span class="doc">Soft-linking</span></a>; see also <a class="reference internal" href="../model/06_interlinkages.html#magpie-link"><span class="std std-ref">Link with MAgPIE</span></a>.</p>
+</div>
+</section>
+<section id="batch-mode">
+<h3>Batch mode<a class="headerlink" href="#batch-mode" title="Link to this heading"></a></h3>
+<p>To run several scenarios in one go, put a <code class="docutils literal notranslate"><span class="pre">scenarios.csv</span></code> file at the repo root and run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Rscript<span class="w"> </span>start.R<span class="w"> </span>scenarios.csv
+</pre></div>
+</div>
+<p>or click the <strong>RUN BATCH</strong> button in the VS Code Task Runner. The script fails with
+<code class="docutils literal notranslate"><span class="pre">Batch</span> <span class="pre">CSV</span> <span class="pre">not</span> <span class="pre">found:</span> <span class="pre">scenarios.csv</span></code> if the file is missing — batch is always opt-in via that file. Each row
+produces its own <code class="docutils literal notranslate"><span class="pre">runs/&lt;scenario_name&gt;_&lt;timestamp&gt;/</span></code> folder; rows are processed sequentially inside one R process.
+Batch supports only <code class="docutils literal notranslate"><span class="pre">task_id</span></code> 2 and 7; other values are rejected per row. A starter template lives at
+<code class="docutils literal notranslate"><span class="pre">scenarios.template.csv</span></code>; the minimal required columns are <code class="docutils literal notranslate"><span class="pre">scenario_name</span></code> and <code class="docutils literal notranslate"><span class="pre">task_id</span></code>.</p>
+<section id="how-each-row-builds-its-scenario-merge-semantics">
+<h4>How each row builds its scenario (merge semantics)<a class="headerlink" href="#how-each-row-builds-its-scenario-merge-semantics" title="Link to this heading"></a></h4>
+<p>For each row, <code class="docutils literal notranslate"><span class="pre">start.R</span></code> builds a complete scenario object by <strong>deep-merging the CSV row onto
+<code class="docutils literal notranslate"><span class="pre">config.json:scenario</span></code></strong>. Two conventions make this work:</p>
+<ol class="arabic simple">
+<li><p><strong>Dot-notation column names</strong> map to nested config keys — <code class="docutils literal notranslate"><span class="pre">gams_flags.fScenario</span></code> →
+<code class="docutils literal notranslate"><span class="pre">scenario.gams_flags.fScenario</span></code>, <code class="docutils literal notranslate"><span class="pre">soft_link_magpie.existing_prom_run</span></code> →
+<code class="docutils literal notranslate"><span class="pre">scenario.soft_link_magpie.existing_prom_run</span></code>.</p></li>
+<li><p><strong>Empty cells inherit, filled cells override.</strong> A non-empty cell replaces the value from <code class="docutils literal notranslate"><span class="pre">config.json:scenario</span></code>
+at the same nested path; an empty cell leaves that path alone. The merge is <strong>recursive</strong> — overriding
+<code class="docutils literal notranslate"><span class="pre">soft_link_magpie.existing_prom_run</span></code> does not wipe <code class="docutils literal notranslate"><span class="pre">soft_link_magpie.project</span></code>; only the leaf you wrote in the
+CSV changes.</p></li>
+</ol>
+<p>Worked example — given <code class="docutils literal notranslate"><span class="pre">config.json:scenario</span></code>:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;scenario_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Default&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w">   </span><span class="s2">&quot;Default UPTAKE run&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;gams_flags&quot;</span><span class="p">:</span><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;fScenario&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;soft_link_magpie&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;project&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;uptake&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;existing_prom_run&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>and one CSV row:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>scenario_name,task_id,description,gams_flags.fScenario,soft_link_magpie.existing_prom_run
+C600_landHigh,7,UPTAKE C600 landHigh,600,
+</pre></div>
+</div>
+<p>the merged scenario <code class="docutils literal notranslate"><span class="pre">start.R</span></code> runs is:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{
+  &quot;scenario_name&quot;: &quot;C600_landHigh&quot;,        // from CSV
+  &quot;task_id&quot;:       7,                       // from CSV
+  &quot;description&quot;:   &quot;UPTAKE C600 landHigh&quot;,  // from CSV
+  &quot;gams_flags&quot;:    { &quot;fScenario&quot;: 600 },    // CSV overrides 200 -&gt; 600
+  &quot;soft_link_magpie&quot;: {
+    &quot;project&quot;:           &quot;uptake&quot;,          // inherited from config
+    &quot;existing_prom_run&quot;: null               // CSV cell empty, inherited
+  }
+}
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Put <strong>only project-wide invariants</strong> in <code class="docutils literal notranslate"><span class="pre">config.json:scenario</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">soft_link_magpie.project</span></code>, the most common
+<code class="docutils literal notranslate"><span class="pre">gams_flags.fScenario</span></code>). Keep per-run incidentals like <code class="docutils literal notranslate"><span class="pre">soft_link_magpie.existing_prom_run</span></code> as <code class="docutils literal notranslate"><span class="pre">null</span></code> and set them
+on individual CSV rows only when you want to resume from a specific path — otherwise every row silently inherits the
+same path, skips Step 1, reuses the same round-1 result, and overwrites each other in one folder.</p>
+</div>
+<p>The dot-notation rule is <strong>generic</strong> — <code class="docutils literal notranslate"><span class="pre">start.R</span></code> hard-codes no column names, so adding a flag is a data-only change:</p>
+<ul class="simple">
+<li><p><strong>Any <code class="docutils literal notranslate"><span class="pre">gams_flags.X</span></code> works</strong>, where <code class="docutils literal notranslate"><span class="pre">X</span></code> is any <code class="docutils literal notranslate"><span class="pre">$setGlobal</span></code> / <code class="docutils literal notranslate"><span class="pre">$evalGlobal</span></code> symbol in <code class="docutils literal notranslate"><span class="pre">main.gms</span></code> (e.g.
+<code class="docutils literal notranslate"><span class="pre">gams_flags.fEndY</span></code>, <code class="docutils literal notranslate"><span class="pre">gams_flags.CountrySolveMode</span></code>, <code class="docutils literal notranslate"><span class="pre">gams_flags.Transport</span></code>, <code class="docutils literal notranslate"><span class="pre">gams_flags.Curves</span></code>). Each becomes a
+<code class="docutils literal notranslate"><span class="pre">--X=value</span></code> CLI flag passed to GAMS.</p></li>
+<li><p><strong>The column need not pre-exist in <code class="docutils literal notranslate"><span class="pre">config.json</span></code>.</strong> A column for a key not in <code class="docutils literal notranslate"><span class="pre">config.json:scenario</span></code> injects that
+key for rows where the cell is non-empty.</p></li>
+<li><p><strong>Column order is irrelevant</strong> — columns are read by name, not position.</p></li>
+</ul>
+<p>Beyond <code class="docutils literal notranslate"><span class="pre">gams_flags.X</span></code>, two scenario groups are read specially by <code class="docutils literal notranslate"><span class="pre">start.R</span></code> rather than passed through verbatim:</p>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">land_use_emulator.*</span></code></strong> drives the pre-fitted land-use emulator. <code class="docutils literal notranslate"><span class="pre">start.R</span></code> translates
+<code class="docutils literal notranslate"><span class="pre">land_use_emulator.source</span></code> into the <code class="docutils literal notranslate"><span class="pre">--landUseEmulator=</span></code> flag and <code class="docutils literal notranslate"><span class="pre">land_use_emulator.carbon_price</span></code> into
+<code class="docutils literal notranslate"><span class="pre">--emulatorGHGScen=</span></code>. This is the path for <strong>emulator-only runs</strong> (no live MAgPIE coupling): e.g.
+<code class="docutils literal notranslate"><span class="pre">land_use_emulator.source</span> <span class="pre">=</span> <span class="pre">globiom</span></code> with <code class="docutils literal notranslate"><span class="pre">land_use_emulator.carbon_price</span> <span class="pre">=</span> <span class="pre">GHG100</span></code>.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">soft_link_magpie.*</span></code></strong> configures the task-7 MAgPIE soft-link. This group is <strong>not</strong> turned into GAMS flags by
+the generic dispatcher; task 7 reads it directly (<code class="docutils literal notranslate"><span class="pre">project</span></code>, <code class="docutils literal notranslate"><span class="pre">existing_prom_run</span></code>, <code class="docutils literal notranslate"><span class="pre">max_iter</span></code>, <code class="docutils literal notranslate"><span class="pre">price_tol</span></code>,
+<code class="docutils literal notranslate"><span class="pre">quant_tol</span></code>) and passes <code class="docutils literal notranslate"><span class="pre">--softLinkMAgPIE</span></code> itself. See <a class="reference internal" href="05_soft_linking.html"><span class="doc">Soft-linking</span></a>.</p></li>
+</ul>
+<p>Concrete example — sweep end-year horizon and Transport realization with no R-code changes:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>scenario_name,task_id,gams_flags.fScenario,gams_flags.fEndY,gams_flags.Transport
+short_simple,2,200,2050,simple
+long_simple,2,200,2100,simple
+long_legacy,2,200,2100,legacy
+</pre></div>
+</div>
+</section>
+<section id="gating-rows-with-a-start-column">
+<h4>Gating rows with a <code class="docutils literal notranslate"><span class="pre">start</span></code> column<a class="headerlink" href="#gating-rows-with-a-start-column" title="Link to this heading"></a></h4>
+<p>To skip rows without deleting them, add an optional <code class="docutils literal notranslate"><span class="pre">start</span></code> column: <code class="docutils literal notranslate"><span class="pre">1</span></code> runs the row, <code class="docutils literal notranslate"><span class="pre">0</span></code> skips it, and anything
+else (typo, blank, <code class="docutils literal notranslate"><span class="pre">yes</span></code>/<code class="docutils literal notranslate"><span class="pre">no</span></code>) makes <code class="docutils literal notranslate"><span class="pre">start.R</span></code> abort <strong>before any scenario runs</strong>, listing every offending row.
+If the <code class="docutils literal notranslate"><span class="pre">start</span></code> column is absent, every row runs (backwards-compatible). The column is stripped before each row’s
+overlay is merged, so it never leaks into the scenario object.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>scenario_name,start,task_id,description,gams_flags.fScenario
+C200_biolim100,1,2,UPTAKE C200 biolim100,200
+C200_landHigh,1,2,UPTAKE C200 landHigh,200
+C600_biolim100,0,7,UPTAKE C600 biolim100 -- temporarily off,600
+C600_landHigh,1,7,UPTAKE C600 landHigh,600
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Skipping</span> <span class="n">row</span> <span class="mi">3</span> <span class="p">(</span><span class="n">scenario_name</span><span class="o">=</span><span class="n">C600_biolim100</span><span class="p">):</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span>
+<span class="n">Loaded</span> <span class="mi">4</span> <span class="n">row</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">scenarios.csv</span><span class="p">,</span> <span class="mi">3</span> <span class="n">active</span><span class="p">,</span> <span class="mi">1</span> <span class="n">skipped</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="what-the-outputs-mean">
+<span id="running-outputs"></span><h3>What the outputs mean<a class="headerlink" href="#what-the-outputs-mean" title="Link to this heading"></a></h3>
+<p>When <code class="docutils literal notranslate"><span class="pre">behavior.withReport:</span> <span class="pre">true</span></code> (and the run-folder workflow is active), the task body automatically calls
+<code class="docutils literal notranslate"><span class="pre">scripts/tasks/reportOutput.R</span></code> after tasks 0, 2, 3, 6 or 7. That script converts the model output into a MIF report,
+typically <code class="docutils literal notranslate"><span class="pre">reporting.mif</span></code>. It may also try to create plots, but PDF generation depends on the local LaTeX/TinyTeX
+setup. <code class="docutils literal notranslate"><span class="pre">outputForProject.mif</span></code> is not part of the default workflow; it is created only when project reporting is
+explicitly enabled.</p>
+<p>For a quick success check:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">modelstat.txt</span></code> should show successful model-status lines for the solved years and regions.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">outputData.gdx</span></code> should exist after a normal model run.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reporting.mif</span></code> only appears when the reporting step actually runs.</p></li>
+<li><p>with <code class="docutils literal notranslate"><span class="pre">behavior.withReport:</span> <span class="pre">false</span></code>, the model can still solve successfully even though no MIF or plots are created.</p></li>
+</ul>
+<p>Do not confuse “the model solved” with “the full reporting workflow also ran”.</p>
+</section>
+</section>
+<section id="changing-the-region-set">
+<h2>Changing the region set<a class="headerlink" href="#changing-the-region-set" title="Link to this heading"></a></h2>
+<p>A run’s regions are governed by a <strong>region-mapping CSV</strong> that assigns every world country to one of the 39
+OPEN-PROM regions, plus the <code class="docutils literal notranslate"><span class="pre">fCountries</span></code> flag that picks which of those regions to actually solve.</p>
+<p><code class="docutils literal notranslate"><span class="pre">DevMode</span></code> selects which mapping file is used:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">DevMode=0</span></code> (research) → <code class="docutils literal notranslate"><span class="pre">regionmappingOPDEV5.csv</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DevMode=1</span></code> (development) → <code class="docutils literal notranslate"><span class="pre">regionmappingOPDEV4.csv</span></code></p></li>
+</ul>
+<p>The mapping files live in the <code class="docutils literal notranslate"><span class="pre">mrprom</span></code> package under <code class="docutils literal notranslate"><span class="pre">inst/extdata/regional/</span></code>. The research mapping is also
+available machine-readably at
+<a class="reference external" href="https://raw.githubusercontent.com/e3modelling/mrprom/main/inst/extdata/regional/regionmappingOPDEV5.csv">https://raw.githubusercontent.com/e3modelling/mrprom/main/inst/extdata/regional/regionmappingOPDEV5.csv</a>. In each
+file, custom multi-country regions use native region codes (e.g. <code class="docutils literal notranslate"><span class="pre">CHA</span></code> for China and neighbours, <code class="docutils literal notranslate"><span class="pre">LAM</span></code> for Latin
+America and the Caribbean, <code class="docutils literal notranslate"><span class="pre">MEA</span></code> for the Middle East and North Africa, <code class="docutils literal notranslate"><span class="pre">SSA</span></code> for Sub-Saharan Africa, <code class="docutils literal notranslate"><span class="pre">REF</span></code> for the
+reforming economies of the former Soviet Union, <code class="docutils literal notranslate"><span class="pre">RWO</span></code> as the residual rest-of-world dummy region), while all other
+countries are identified by their official three-letter ISO codes.</p>
+<p>To <strong>restrict</strong> a run to a subset of regions without editing the mapping, pass <code class="docutils literal notranslate"><span class="pre">fCountries</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># solve only China, Germany, India, the USA and rest-of-world</span>
+...<span class="w"> </span>--fCountries<span class="o">=</span><span class="s1">&#39;CHA,DEU,IND,USA,RWO&#39;</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">fCountries</span></code> defaults to <code class="docutils literal notranslate"><span class="pre">CHA,DEU,IND,USA,RWO</span></code>. To <strong>redefine</strong> which countries belong to a region, edit the
+relevant region-mapping CSV (or point to a different mapping file) rather than changing model code.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>For the full list of the 39 regions, their member countries, and the design rationale behind the regional
+aggregation, see <a class="reference internal" href="../model/02_model_overview.html#regions"><span class="std std-ref">Time granularity and regions</span></a> in the model overview.</p>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="01_setup.html" class="btn btn-neutral float-left" title="Setup and environment" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="03_input_data.html" class="btn btn-neutral float-right" title="Input data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, E3Modelling.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

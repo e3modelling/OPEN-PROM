@@ -1,0 +1,482 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3. Demand sectors &mdash; OPEN-PROM</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+    <link rel="canonical" href="https://e3modelling.github.io/OPEN-PROM/model/03_demand_sectors.html" />
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=b21de401"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="4. Supply sectors" href="04_supply_sectors.html" />
+    <link rel="prev" title="2. Model overview" href="02_model_overview.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            OPEN-PROM
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/01_setup.html">Setup and environment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guide/01_setup.html#key-terminology">Key terminology</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/01_setup.html#git-and-github-setup">Git and GitHub setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#check-for-an-existing-git-installation">Check for an existing Git installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#install-git">Install Git</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#create-and-configure-a-github-account">Create and configure a GitHub account</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#clone-the-repository">Clone the repository</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#commit-and-push-changes">Commit and push changes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/01_setup.html#visual-studio-code">Visual Studio Code</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#install-vs-code">Install VS Code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#orientation">Orientation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#recommended-extensions">Recommended extensions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/01_setup.html#task-runner">Task runner</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#setup">Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#run-modes">Run modes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/01_setup.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#git-installation-fails">Git installation fails</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#github-authentication-fails">GitHub authentication fails</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#cloning-fails">Cloning fails</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#vs-code-git-integration-problems">VS Code / Git integration problems</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/01_setup.html#modelling-server-windows">Modelling server (Windows)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#connecting">Connecting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#system-preparation">System preparation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#install-core-software-system-wide">Install core software (system-wide)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#install-magpie-system-wide-no-renv">Install MAgPIE system-wide (no renv)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#python-tinytex-and-shared-storage">Python, TinyTeX and shared storage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#linux-support-wsl-per-user">Linux support — WSL (per-user)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/01_setup.html#test-the-setup">Test the setup</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/02_running_the_model.html">Running the model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guide/02_running_the_model.html#a-first-run-public-dummy-data">A first run (public dummy data)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/02_running_the_model.html#running-with-real-input-data">Running with real input data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/02_running_the_model.html#point-r-to-the-local-madrat-archive">Point R to the local <code class="docutils literal notranslate"><span class="pre">madrat</span></code> archive</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/02_running_the_model.html#how-data-and-targets-are-created">How <code class="docutils literal notranslate"><span class="pre">data/</span></code> and <code class="docutils literal notranslate"><span class="pre">targets/</span></code> are created</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/02_running_the_model.html#task-modes-in-start-r">Task modes in <code class="docutils literal notranslate"><span class="pre">start.R</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/02_running_the_model.html#batch-mode">Batch mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/02_running_the_model.html#what-the-outputs-mean">What the outputs mean</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/02_running_the_model.html#changing-the-region-set">Changing the region set</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">How-to guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guide/03_input_data.html">Input data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guide/03_input_data.html#installing-the-software-and-libraries">Installing the software and libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/03_input_data.html#creating-the-local-configuration-file">Creating the local configuration file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/03_input_data.html#adding-the-data-sources">Adding the data sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/03_input_data.html#updating-the-ci-dataset">Updating the CI dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/03_input_data.html#running-the-model">Running the model</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/04_development.html">Development and code structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guide/04_development.html#folder-structure">Folder structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/04_development.html#the-phase-system">The phase system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/04_development.html#modules-and-realizations">Modules and realizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/04_development.html#default-active-vs-dormant-features">Default active vs dormant features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/04_development.html#naming-convention">Naming convention</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/04_development.html#developer-workflow">Developer workflow</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/05_soft_linking.html">Soft-linking</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guide/05_soft_linking.html#soft-linking-with-magpie">Soft-linking with MAgPIE</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/05_soft_linking.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/05_soft_linking.html#running-an-iteration">Running an iteration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/05_soft_linking.html#configuration">Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/05_soft_linking.html#convergence-controls-and-state-files">Convergence controls and state files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/05_soft_linking.html#emulator-alternative-without-running-magpie">Emulator alternative (without running MAgPIE)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/05_soft_linking.html#soft-linking-with-climate-emulators-meteor">Soft-linking with climate emulators (METEOR)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/05_soft_linking.html#workflow">Workflow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/05_soft_linking.html#one-way-vs-iterative-use">One-way vs iterative use</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Model documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="01_introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_model_overview.html">2. Model overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="02_model_overview.html#time-granularity-and-regions">2.1. Time granularity and regions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_model_overview.html#sector-granularity">2.2. Sector granularity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_model_overview.html#gap-and-substitution-mechanism">2.3. Gap and substitution mechanism</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="02_model_overview.html#gap-and-scrapping-mechanism">2.3.1. Gap and scrapping mechanism</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_model_overview.html#substitution-mechanism">2.3.2. Substitution mechanism</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_model_overview.html#implementation-by-realisation">2.3.3. Implementation by realisation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="02_model_overview.html#prices">2.4. Prices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="02_model_overview.html#conceptual-framing-legacy">2.4.1. Conceptual framing (legacy)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_model_overview.html#active-price-formation-current-code">2.4.2. Active price formation (current code)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="02_model_overview.html#energy-supply">2.5. Energy supply</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="02_model_overview.html#trade-representation">2.5.1. Trade representation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_model_overview.html#end-use-sector-biofuel-blending">2.5.2. End-use sector: biofuel blending</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Demand sectors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#industry-and-domestic-demand">3.1. Industry and domestic demand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#residential-and-commercial">3.2. Residential and commercial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#transport-and-bunkers-demand">3.3. Transport and bunkers demand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#carbon-dioxide-removal-cdr-technologies">3.4. Carbon Dioxide Removal (CDR) technologies</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="04_supply_sectors.html">4. Supply sectors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="04_supply_sectors.html#power-supply">4.1. Power supply</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_supply_sectors.html#heat-supply">4.2. Heat supply</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_supply_sectors.html#hydrogen-supply">4.3. Hydrogen supply</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="04_supply_sectors.html#supplydemand-alignment-and-sector-coupling">4.3.1. Supply–demand alignment and sector coupling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="04_supply_sectors.html#output-and-role-in-the-full-energy-system">4.3.2. Output and role in the full energy system</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="04_supply_sectors.html#supply-of-other-fuels">4.4. Supply of other fuels</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="05_data_and_calibration.html">5. Data pipeline and calibration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="05_data_and_calibration.html#input-data-sources-and-data-preparation">5.1. Input data sources and data preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_data_and_calibration.html#output-post-processing">5.2. Output post-processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_data_and_calibration.html#calibration-mechanism">5.3. Calibration mechanism</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="06_interlinkages.html">6. Model interlinkages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="06_interlinkages.html#link-with-opentepes">6.1. Link with openTEPES</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_interlinkages.html#link-with-meteor">6.2. Link with METEOR</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="06_interlinkages.html#overview-of-meteor">6.2.1. Overview of METEOR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="06_interlinkages.html#rationale-for-linking-meteor-with-open-prom">6.2.2. Rationale for linking METEOR with OPEN-PROM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="06_interlinkages.html#coupling-workflow-between-open-prom-and-meteor">6.2.3. Coupling workflow between OPEN-PROM and METEOR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="06_interlinkages.html#added-value-for-open-prom">6.2.4. Added value for OPEN-PROM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="06_interlinkages.html#circular-economy-representation-with-omnia-engage">6.3. Circular economy representation with OMNIA-ENGAGE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_interlinkages.html#link-with-ftt-heat">6.4. Link with FTT:Heat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_interlinkages.html#link-with-magpie">6.5. Link with MAgPIE</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="07_baseline_results.html">7. Baseline results</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="07_baseline_results.html#baseline-emissions">7.1. Baseline emissions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_baseline_results.html#final-energy-demand">7.2. Final energy demand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_baseline_results.html#fuel-shares-and-electrification">7.3. Fuel shares and electrification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_baseline_results.html#electricity-generation-and-power-sector-transformation">7.4. Electricity generation and power-sector transformation</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference/gams_error_codes.html">GAMS error codes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../reference/gams_error_codes.html#compile-time-errors">Compile-time errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/gams_error_codes.html#execution-time-solver-and-model-status-issues">Execution-time solver and model-status issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/gams_error_codes.html#license-errors">License errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/gams_error_codes.html#general-troubleshooting-tips">General troubleshooting tips</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/abbreviations.html">Abbreviations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/bibliography.html">Bibliography and data sources</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../reference/bibliography.html#references">References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/bibliography.html#data-sources-and-tools">Data sources and tools</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../about.html#acknowledgements-and-funding">Acknowledgements and funding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about.html#how-to-cite">How to cite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../about.html#links">Links</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OPEN-PROM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">3. </span>Demand sectors</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/model/03_demand_sectors.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="demand-sectors">
+<h1><span class="section-number">3. </span>Demand sectors<a class="headerlink" href="#demand-sectors" title="Link to this heading"></a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>In brief</strong> — This chapter describes the end-use demand modules of OPEN-PROM: industry and domestic demand, the
+ICT / data-centre sub-sector split off during PRISMA, transport and bunkers, and the carbon dioxide removal (CDR)
+technologies. Each module turns economic activity into final energy demand by fuel and feeds the supply modules.</p>
+</div>
+<section id="industry-and-domestic-demand">
+<span id="industry-demand"></span><h2><span class="section-number">3.1. </span>Industry and domestic demand<a class="headerlink" href="#industry-and-domestic-demand" title="Link to this heading"></a></h2>
+<p>The Industry and Domestic Demand module covers final energy consumption in the industrial sector and in the domestic
+sector (households and commercial/services, often grouped with residential demand). It projects how energy demand
+evolves in these sectors across the model horizon, disaggregating key subsectors and end-uses to capture structural
+and technological differences.</p>
+<p>Industry in OPEN-PROM is split into ten subsectors, reflecting a broad range of industrial activities with distinct
+energy profiles. These include energy-intensive industries such as:</p>
+<ul class="simple">
+<li><p>Iron and Steel</p></li>
+<li><p>Chemicals</p></li>
+<li><p>Non-ferrous Metals (e.g. aluminium)</p></li>
+<li><p>Non-Metallic Minerals</p></li>
+<li><p>Pulp and Paper</p></li>
+<li><p>Food, Drink and Tobacco</p></li>
+<li><p>Engineering</p></li>
+<li><p>Textiles</p></li>
+<li><p>Other Industrial Sectors (covering remaining manufacturing sectors)</p></li>
+</ul>
+<p>By modelling these subsectors separately, the module can account for differences in production growth, technological
+options, and energy intensity. Each subsector’s output or activity is usually driven by exogenous assumptions linked
+to GDP or sectoral value-added growth (for example, Iron &amp; Steel demand may follow construction and manufacturing
+trends).</p>
+<p>The domestic part of the module includes three main subsectors: Services and Trade; Households; and Agriculture,
+Fishing, Forestry etc. These domestic demands are driven by indicators such as population, number of households,
+floor area of buildings, income levels, and urbanisation. Both the industry and domestic sub-modules use these
+drivers to estimate baseline activity growth, then determine energy consumption based on the technology and fuel
+choices available.</p>
+<p>The core of this module’s functionality is the calculation of final energy demand by fuel for each subsector, using
+energy intensities or energy-service demand approaches. For example, in industry the model might have an energy
+intensity (energy per unit of output) that improves over time due to technological advances and efficiency policies;
+these improvements can be exogenous or endogenous (e.g. in response to energy prices). According to future activity
+projections, the module computes the total energy required to satisfy the demand of the specific sector. A fuel
+allocation routine then determines how that energy requirement is met by different fuels or technologies. The fuels
+considered usually include coal, oil, natural gas, biomass, hydrogen, electricity, and others. The module uses
+econometric formulations (such as logit or substitution elasticities) to split demand among fuels based on their
+relative prices and availabilities. For instance, if electricity becomes cheaper or cleaner, the model will shift
+some heating demand from fossil fuels to electric boilers or heat pumps in the residential sector (fuel switching);
+similarly, industries might adopt electric arc furnaces (using electricity) over blast furnaces (using coke for
+steelmaking) if conditions favour that, or switch from oil-fired furnaces to gas. The inclusion of hydrogen as a
+final demand option is a distinctive feature, allowing exploration of sector coupling and new fuel adoption. Thus
+price signals from the Prices module (energy prices by fuel) play a role in this module’s equations, influencing the
+chosen fuel mix in each subsector via behavioural parameters or cost comparisons.</p>
+<p>On the domestic side, a similar logic applies to household energy uses: the module simulates how heating is supplied
+by gas boilers versus electric heat pumps versus possibly hydrogen boilers, how cooking shifts from LPG to electricity, or
+how insulation and efficiency improvements reduce overall energy needs. Many of these changes over time can be driven
+by exogenous policies (such as building codes mandating efficiency, or incentives for heat pumps) or by the model
+responding to price changes (e.g. high carbon prices making fossil heating more expensive, thus accelerating
+electrification).</p>
+<p>The outcome of the Industry and Domestic Demand module is a detailed breakdown of energy demand by sector,
+subsector, end-use, and fuel in each region and year. These demands are then passed to other modules: electricity
+demand and hydrogen demand computed here become inputs for the Power and Hydrogen Supply modules respectively, while
+demand for fossil fuels (gas, oil, coal) interacts with the Prices module to determine if supply is adequate or if
+price adjustments are needed. In turn, the module receives information on final energy prices (which incorporate
+primary energy prices and any taxes or subsidies) from the Prices module each iteration, to recalculate consumption
+with price-responsive elements. When run standalone, the Industry/Domestic module uses exogenous price trajectories
+to simulate energy demand; within the integrated model it provides a crucial link from economic activity to energy
+usage, and ultimately to emissions.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Electricity and hydrogen demands computed here feed the supply side — see <a class="reference internal" href="04_supply_sectors.html#power-supply"><span class="std std-ref">Power supply</span></a> and
+<a class="reference internal" href="04_supply_sectors.html#hydrogen-supply"><span class="std std-ref">Hydrogen supply</span></a>.</p>
+</div>
+</section>
+<section id="residential-and-commercial">
+<h2><span class="section-number">3.2. </span>Residential and commercial<a class="headerlink" href="#residential-and-commercial" title="Link to this heading"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Despite its heading, this sub-section documents the <strong>ICT / data-centre</strong> sub-sector, which was split off from the
+services sector during the PRISMA project to track the fast-growing electricity consumption of data centres.</p>
+</div>
+<p>The ICT (Data Centres and related Infrastructure) sector is separated from the services sector, during the PRISMA
+project, to create a new sector that keeps track of the final consumption of the newly merged data-centres sector,
+which is expected to have significant growth over the coming years. For the projection of data-centre electricity
+demand we fit an econometric curve based on the IEA short-term projections, with further analysis leading to the
+creation of different scenarios (Lower, Medium and Higher Usage).</p>
+</section>
+<section id="transport-and-bunkers-demand">
+<span id="transport-demand"></span><h2><span class="section-number">3.3. </span>Transport and bunkers demand<a class="headerlink" href="#transport-and-bunkers-demand" title="Link to this heading"></a></h2>
+<p>The Transport Demand module models energy demand in the transportation sector by distinguishing between passenger and
+freight transport modes. In OPEN-PROM, transport is disaggregated into eight categories (modes) to reflect
+differences in technologies and usage patterns. Passenger transport includes passenger cars, passenger rail, aviation,
+buses, and passenger inland navigation, while freight transport comprises freight trucks, freight rail, and freight
+inland navigation. International maritime and aviation activities are treated separately under the bunkers category, outside the main transport
+module. This level of disaggregation, produced in the context of DIAMOND, allows the model to capture the distinct
+characteristics of each transport mode. For instance, passenger cars and aviation differ significantly in their
+energy consumption patterns, operational behaviour, and available fuel options.</p>
+<p>The module projects transport activity growth based on key socio-economic drivers. Activity indicators are expressed
+as:</p>
+<ul class="simple">
+<li><p>Kilometres per year for passenger cars</p></li>
+<li><p>Passenger-kilometres for other passenger modes</p></li>
+<li><p>Tonne-kilometres for freight transport</p></li>
+</ul>
+<p>In addition, the total passenger car stock in each region is estimated using socio-economic indicators such as GDP
+per capita and population. Rising incomes and urbanisation generally lead to increased demand for passenger mobility,
+reflected in higher car ownership rates and greater air travel. Similarly, growth in economic output and trade
+stimulates demand for freight transport services.</p>
+<p>A core component of the Transport Demand module is the representation of vehicle technologies and fuel choices,
+particularly in road transport. The passenger car segment is modelled in detail, distinguishing across multiple
+vehicle types:</p>
+<ul class="simple">
+<li><p>Conventional internal combustion engine vehicles (ICEVs, gasoline and diesel)</p></li>
+<li><p>Hybrid electric vehicles (HEVs)</p></li>
+<li><p>Plug-in hybrid electric vehicles (PHEVs)</p></li>
+<li><p>Compressed natural gas (CNG) vehicles</p></li>
+<li><p>Liquefied petroleum gas (LPG) vehicles</p></li>
+<li><p>Battery electric vehicles (BEVs)</p></li>
+<li><p>Hydrogen fuel cell vehicles (FCEVs)</p></li>
+</ul>
+<p>The model simulates the evolution of new vehicle sales using a multinomial logit framework, combined with cost-based
+comparisons to reflect consumer preferences. This allows technology adoption to respond endogenously to economic
+signals. For example, declining battery costs or increasing fossil fuel prices can lead to a higher share of electric
+vehicles in new registrations. Over time, the interaction between new sales and vehicle retirements determines the
+total fleet composition, from which the average efficiency and fuel mix are derived. A similar modelling approach is
+applied to other transport modes, including buses, freight vehicles, and rail (e.g. diesel versus electrified
+systems). Each mode is characterised by an evolving energy intensity, reflecting both technological improvements and
+shifts in the underlying technology mix.</p>
+<p>Using projected transport activity and mode-specific energy intensities, the module calculates total energy demand by
+fuel type and transport mode. Outputs include the consumption of major fuels such as gasoline, diesel, electricity,
+hydrogen, and other energy carriers used across the transport sector. These outputs are passed to other components of
+the modelling framework. Electricity and hydrogen demands are integrated into the Power Supply and Hydrogen modules
+respectively, while liquid fuel demand (e.g. gasoline, diesel, kerosene, and marine fuels) is transferred to the
+corresponding supply sector. In return, the Transport module receives updated fuel prices — such as electricity
+price, hydrogen costs, and retail fuel prices — which influence subsequent iterations of technology choice and
+transport demand.</p>
+<p>The module also incorporates a calibration mechanism. Regulatory measures such as CO₂ emission standards or electric
+vehicle mandates can be represented through parameters affecting technology uptake (e.g. maturity or adoption
+constraints), thereby influencing the composition of new vehicle sales. Finally, the Transport module includes
+vehicle stock dynamics, accounting for both standard lifetimes and premature scrapping. This enables the model to
+capture accelerated turnover in response to economic or policy drivers, particularly when certain technologies become
+less competitive.</p>
+<p>Within the integrated modelling framework, the Transport Demand module provides essential insights into the
+interaction between mobility trends, technological change, and energy demand. Its level of technological and modal
+detail enables the assessment of transition pathways, such as the impact of large-scale vehicle electrification on
+electricity demand and oil consumption, or the role of alternative fuels in reducing emissions from aviation and
+maritime transport.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>As with industry, the transport module’s electricity and hydrogen demands flow to the supply modules — see
+<a class="reference internal" href="04_supply_sectors.html#power-supply"><span class="std std-ref">Power supply</span></a> and <a class="reference internal" href="04_supply_sectors.html#hydrogen-supply"><span class="std std-ref">Hydrogen supply</span></a>.</p>
+</div>
+</section>
+<section id="carbon-dioxide-removal-cdr-technologies">
+<span id="cdr"></span><h2><span class="section-number">3.4. </span>Carbon Dioxide Removal (CDR) technologies<a class="headerlink" href="#carbon-dioxide-removal-cdr-technologies" title="Link to this heading"></a></h2>
+<p>The CO₂ module includes the calculation of carbon captured by the CCS and DAC technologies, as well as the curve of
+the sequestration costs according to the cumulative carbon captured as a result of the limitation in carbon storage.
+The rest of the module analyses the capacity expansion in CDR technologies.</p>
+<p>The following CDR technologies are added in OPEN-PROM:</p>
+<ol class="arabic simple">
+<li><p>Liquid solvent (high temperature) Direct-Air-Capture</p></li>
+<li><p>Liquid solvent (high temperature) Direct-Air-Capture (Hydrogen fuelled)</p></li>
+<li><p>Solid sorbent (low temperature) Direct-Air-Capture</p></li>
+<li><p>Enhanced Weathering</p></li>
+</ol>
+<p>Input data for the technologies, such as capital, fixed and variable costs, were taken mainly from the UPTAKE
+project. The gross capital cost, fixed O&amp;M cost, and variable cost are each affected by a learning curve
+(learning-by-doing) that scales them with cumulative installed capacity raised to the power
+<code class="docutils literal notranslate"><span class="pre">log(0.75)/log(2)</span></code>, i.e. a 25% cost reduction for every doubling of the installed capacity. Each cost is
+floored at a technology-specific minimum: the applied cost is the larger of the learning-curve value and that
+minimum (a smooth <code class="docutils literal notranslate"><span class="pre">max</span></code>), so costs decline with deployment but never fall below the parameterised floor.</p>
+<p>The expansion of these technologies is performed according to two basic criteria:</p>
+<ul class="simple">
+<li><p><strong>Financial sustainability</strong> is checked by calculating the ratio between the carbon taxes and the levelised carbon
+capture cost for each technology. Carbon taxes are supposed to increase as time passes, while at the same time the
+levelised cost decreases because of the learning curve. Moreover, this levelised cost is affected by the subsidy
+mechanism. This ratio affects the annual increase in the installed capacity, increasing the motivation for new
+investments where profitability is high.</p></li>
+<li><p><strong>Regional emissions</strong> create an extra motivation for CDR technology expansion. This adds regionality to the CDR
+technology expansion, ensuring that highly emissive regions have an extra reason to invest in CDR. This may
+eventually be linked with the subsidy mechanism, so as to express this extra motivation as a policy.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These drivers influence both the regional distribution of technology deployment and the definition of scenarios. On
+the one hand, regional differentiation is reflected in the expansion of technologies, as subsidies, costs, and
+residual emissions vary across regions. On the other hand, scenario design is shaped by the parameterisation of the
+subsidy mechanism, which represents policy choices specific to each scenario.</p>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="02_model_overview.html" class="btn btn-neutral float-left" title="2. Model overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="04_supply_sectors.html" class="btn btn-neutral float-right" title="4. Supply sectors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, E3Modelling.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
