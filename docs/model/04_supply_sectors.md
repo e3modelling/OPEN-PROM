@@ -10,14 +10,41 @@ The supply sectors translate the demand transmitted by the end-use modules into 
 The power, heat and hydrogen modules all reuse the same gap, scrapping and substitution logic described in {ref}`gap-substitution`: surviving capacity is carried forward, the gap to demand is computed, and new production is allocated across competing technologies through a market-share mechanism.
 :::
 
+Several supply-side features described below are governed by global switches and are **not all active in the default configuration**. The table summarises what the current `main` branch solves out of the box.
+
+:::{list-table} Default active vs dormant supply-side features
+:header-rows: 1
+:name: tab-supply-defaults
+
+* - Feature
+  - Default state
+  - How to activate
+* - Power-sector learning curves
+  - **Off** — the capacity-cost expression multiplies by 1, so no endogenous cost reduction is applied (switch `Curves off`).
+  - Set `Curves=LearningCurves`; the learning term then enters the investment-cost calculation.
+* - Hydrogen infrastructure (pipelines, service stations, network efficiencies, self-consumption, tariffs, delivered-cost)
+  - **Dormant** — the equation block is structurally present but wrapped in `$ontext … $offtext`, so it is excluded from the solved model.
+  - Requires reactivating the commented infrastructure block in future development.
+* - Land-use biomass supply curves
+  - **Emulator active** — the `globiom` emulator supplies biomass supply/emission curves by default (`landUseEmulator globiom`); `legacy` disables the emulator (static price, exogenous emissions).
+  - Set `landUseEmulator` to `globiom`/`magpie`, or `legacy` to switch the emulator off.
+* - Iterative MAgPIE soft-link
+  - **Off** — biomass prices and land emissions are not iterated with the external MAgPIE model (`softLinkMAgPIE off`).
+  - Run the task-7 soft-link with `softLinkMAgPIE=on`, which then overrides the emulator.
+:::
+
 (power-supply)=
 ## Power supply
 
 The Power Supply module, developed in the context of DIAMOND, represents the electricity generation sector, determining how electricity demand is met through a detailed portfolio of generation technologies and fuels. It features a technology-rich menu of power generation technologies[^powertech], encompassing biomass and fossil-fuel plants (with and without Carbon Capture and Storage), nuclear, and renewable energy technologies. For example, the module includes coal-fired power, natural gas combined cycles and turbines, oil-fired units, nuclear reactors, hydroelectric power, wind turbines (onshore and offshore), solar power (photovoltaic and concentrated solar power, CSP), biomass-fired plants, and others. In addition to electricity-only power plants, cogeneration or combined heat and power (CHP) plants are also included. These technologies differ in that they produce heat (or steam) that can be distributed to consumers. All technologies compete to supply electricity based on their costs, availability, and policy constraints. The Power Supply module simulates capacity expansion and operation on an annual basis, ensuring that sufficient capacity is built and dispatched to satisfy electricity demand in every region and year.
 
-In terms of equations and functionality, the Power Supply module usually includes equations for capacity accumulation. Capacity expansion equations determine how much new capacity of each technology is added each year, based on investment decisions which depend on expected profitability or exogenously specified build trajectories. Operating cost minimisation or simulation ensures that, for a given set of available plants, the least-cost generation options are used to meet demand, subject to constraints like maximum capacity and renewable availability. In addition, a set of parameter weights, referred to as *maturity factors*, guide the energy mix trajectory by influencing investment decision shares based on various factors. These factors account for non-economic considerations, including policy preferences and challenges in scaling up technologies. Renewable energy sources are typically modelled with constraints reflecting resource potential and variability — for example, limits on annual generation from wind or solar corresponding to capacity factor assumptions and installed capacity. The power module also accounts for fuel consumption and associated CO₂ emissions of thermal power plants.
+In terms of equations and functionality, the Power Supply module centres on capacity accumulation rather than on an explicit dispatch optimisation. In the active `simple` realization, electricity production is **not** obtained from operating-cost minimisation or a merit order: each plant is dispatched in proportion to its share of total installed capacity, so the generation mix follows the capacity mix (`Q04ProdElec`). Capacity, in turn, evolves through investment decisions that are cost- and maturity-driven. The share of each technology in new capacity follows a Weibull-type expression in which a lower expected hourly production cost and a higher maturity factor raise that technology's share (`Q04SharePowPlaNewEq`), and installed capacity is accumulated from surviving capacity, scheduled investments and decommissioning, and CCS retrofits (`Q04CapElec` / `Q04NewCapElec`). The *maturity factors* thus guide the energy-mix trajectory by influencing investment-decision shares, accounting for non-economic considerations including policy preferences and challenges in scaling up technologies. Renewable energy sources are modelled with constraints reflecting resource potential and variability — for example, limits on annual generation from wind or solar corresponding to capacity-factor assumptions and installed capacity. The power module also accounts for fuel consumption and associated CO₂ emissions of thermal power plants.
 
-The power module incorporates three mechanisms for technology scrapping: lifetime, premature, and retrofitting. Lifetime scrapping occurs when a technology surpasses its operational lifetime. An important output of the Power Supply module is the electricity price, which is determined by the average cost of electricity generation. In the integrated model, this electricity price feeds back to the demand modules, influencing electricity consumption in industry, buildings, and transport. Conversely, the module takes as input the total electricity demand from the Industry/Domestic and Transport modules and ensures this demand is met. The module can also incorporate policy measures such as renewable portfolio standards or emission caps: for instance, a constraint could force a minimum share of generation from renewables or limit emissions from the power sector, affecting the investment decisions. When run in standalone mode, the Power Supply module would use exogenous electricity demand projections and fuel prices to simulate the power system expansion. In the full model run, however, it dynamically interacts with other modules, making it a central component for analysing decarbonisation pathways (since the power sector is often a major focus of climate policies). Overall, the Power Supply module provides a detailed picture of the evolving electricity generation mix, capacity investment needs, and the cost of electricity under various scenarios.
+:::{tip}
+In the active `simple` realization, technology competition happens on the **investment** side (Weibull-type cost/maturity shares), not through a least-cost dispatch of existing plants. Generation is allocated pro rata to installed capacity.
+:::
+
+The power module incorporates three mechanisms for technology scrapping: lifetime, premature, and retrofitting. Lifetime scrapping occurs when a technology surpasses its operational lifetime. An important output of the Power Supply module is the electricity price, which is determined by the average cost of electricity generation. In the integrated model, this electricity price feeds back to the demand modules, influencing electricity consumption in industry, buildings, and transport. Conversely, the module takes as input the total electricity demand from the Industry/Domestic and Transport modules and ensures this demand is met. Decarbonisation pressure reaches the power sector mainly through fuel and carbon prices acting on technology costs, which in turn shift the investment shares; the active `simple` realization does **not** contain explicit renewable-portfolio-standard or power-sector emission-cap constraints. When run in standalone mode, the Power Supply module would use exogenous electricity demand projections and fuel prices to simulate the power system expansion. In the full model run, however, it dynamically interacts with other modules, making it a central component for analysing decarbonisation pathways (since the power sector is often a major focus of climate policies). Overall, the Power Supply module provides a detailed picture of the evolving electricity generation mix, capacity investment needs, and the cost of electricity under various scenarios.
 
 (heat-supply)=
 ## Heat supply
@@ -55,7 +82,7 @@ The CCS and BECCS routes referenced here connect to the carbon-capture and remov
 
 ### Supply–demand alignment and sector coupling
 
-Hydrogen demand arrives from other modules (industry, transport). The model calculates total hydrogen demand by combining end-use requirements with the additional hydrogen needed to cover transport losses and final-sector demand by the magnitude of system losses.
+Hydrogen requirements reach the module through the energy balance rather than through a sector-by-sector delivered-demand build-up. The active total-demand equation (`Q05DemTotH2`) sets total hydrogen demand equal to the gross inland consumption of hydrogen minus net hydrogen imports; the term that would inflate this demand to cover transport and distribution losses is wrapped in `$ontext … $offtext` and is inactive. The sectoral hydrogen-demand equation (`Q05DemSecH2`) is fixed to zero on the current main branch, so sectoral hydrogen uses are not summed through a distribution network.
 
 Production is allocated across hydrogen technologies based on their cost competitiveness and technical constraints, ensuring that hydrogen supply meets this total demand. Hydrogen production based on electrolysis becomes more attractive when electricity prices decline or when higher carbon prices reduce the competitiveness of fossil-based production routes. Conventional fossil-based hydrogen production becomes less economically attractive under stringent climate policy, unless combined with carbon capture and storage. Biomass routes are controlled by feedstock availability and carbon accounting rules.
 
@@ -65,7 +92,7 @@ Hydrogen production also interacts with the emissions module through direct emis
 
 ### Output and role in the full energy system
 
-The module provides hydrogen production by technology, overall hydrogen production cost, delivered hydrogen price, upstream fuel use, and CO₂ captured and emitted. Through these outputs, OPEN-PROM can assess how hydrogen scales in long-term decarbonisation scenarios: how fast electrolysis grows under cheap renewables, how CCS hydrogen competes when carbon prices tighten, how biomass-based hydrogen behaves under supply constraints, and how hydrogen production shifts electricity load and fossil fuel use. By explicitly modelling technologies, efficiencies, CO₂ pathways, price feedback loops, and sectoral interactions, the Hydrogen Supply Module provides a complete, system-integrated picture of hydrogen's role within the broader energy transition.
+The module provides hydrogen production by technology, overall hydrogen production cost, upstream fuel use, and CO₂ captured and emitted. The average production cost — not a delivered hydrogen price — is what feeds the wider price system; a delivered price would require the dormant infrastructure and tariff equations. Through these outputs, OPEN-PROM can assess how hydrogen scales in long-term decarbonisation scenarios: how fast electrolysis grows under cheap renewables, how CCS hydrogen competes when carbon prices tighten, how biomass-based hydrogen behaves under supply constraints, and how hydrogen production shifts electricity load and fossil fuel use. By explicitly modelling technologies, efficiencies, CO₂ pathways, price feedback loops, and sectoral interactions, the Hydrogen Supply Module provides a complete, system-integrated picture of hydrogen's role within the broader energy transition.
 
 (other-fuels)=
 ## Supply of other fuels
@@ -85,10 +112,15 @@ Based on these requirements, the model determines the transformation inputs need
 
 The estimation of required resources relies on input–output relationships, derived as ratios based on the total transformation output of each supply sector. This allows OPEN-PROM to link upstream resource use with downstream fuel production in a transparent and internally consistent manner, without representing each individual facility in engineering detail.
 
-A specific and more detailed treatment is applied to biomass, reflecting its role as both an energy carrier and a land-constrained resource. Biomass supply is represented using supply curves derived from the linkage with the MAgPIE land-use model (or its emulator), which incorporate biomass potential, land availability and competing land uses. As a result, biomass becomes an explicitly constrained resource that competes across alternative uses, including fuel production and carbon removal pathways such as bioenergy with carbon capture and storage (BECCS).
+A specific and more detailed treatment is applied to biomass, reflecting its role as both an energy carrier and a land-constrained resource, which couples it to land availability and competing land uses. The way the land-use linkage enters the price block depends on which switch is set, and the two paths are distinct:
+
+- **Emulator path** (`landUseEmulator` = `globiom` or `magpie`). Pre-fitted coefficient tables — `iBmswasSupplyCoef_<source>.csv` (a supply curve $P = a + b\,Q^{c}$), `iBmswasLandEmisCoef_<source>.csv` (a land-emission curve $Em = ea + eb\,Q$) and `iBmswasAgriEmis_<source>.csv` (Q-independent agricultural CH₄/N₂O) — are read into GAMS, so the biomass price responds endogenously to biomass demand within a single OPEN-PROM solve. This is the default (`globiom`).
+- **Full iterative soft-link** (`softLinkMAgPIE = on`). The biomass price is **not** an in-GAMS supply curve: a full MAgPIE run writes `iPrices_magpie.csv`, which OPEN-PROM reads to fix biomass prices for the next iteration. The two models are iterated to convergence (task 7). When this switch is on it overrides the emulator.
+
+In either case biomass becomes an explicitly constrained resource that competes across alternative uses, including fuel production and carbon-removal pathways such as bioenergy with carbon capture and storage (BECCS).
 
 :::{seealso}
-The biomass supply curves come from the land-use coupling described in {ref}`magpie-link`.
+The emulator curves and the iterative price feedback are described under the land-use coupling in {ref}`magpie-link`.
 :::
 
 Through this structure, the supply sectors are capable of consistently tracking both primary and secondary energy production for each region, ensuring that domestic production, transformation processes, imports and exports jointly satisfy demand. Overall, these supply sectors provide a coherent and flexible representation of the rest of the fuels. It enables OPEN-PROM to capture the evolution of fossil fuels, bioenergy and alternative fuels, while maintaining consistency in energy balances and allowing interactions with demand sectors, fuel prices, technology choices and emissions across a wide range of scenarios.

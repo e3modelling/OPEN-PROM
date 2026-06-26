@@ -36,6 +36,10 @@ regions with similar geographical and socioeconomic characteristics are grouped 
 is compatible with established global models (e.g. MAgPIE), facilitating both the linking of the models and the
 comparison of results. The current regional breakdown is shown in {numref}`fig-regions` and the table below.
 
+In research mode the model solves this full 39-region set (`resCy` in `core/sets.gms`). The wider country
+list (`allCy`) additionally contains `RWO` ("rest of world"), a dummy element retained for the lighter
+development and smoke-test workflows rather than for the standard research configuration.
+
 :::{important}
 During the DIAMOND project the start year of the simulation moved from 2021 to 2024, adding short-term realism, and
 the spatial resolution expanded from 15 to 39 regions.
@@ -103,7 +107,7 @@ materials (e.g. steel or cement), and appliance use, and their corresponding fin
 ensures a consistent energy balance by linking useful and final energy through technology-specific efficiencies.
 
 Energy demand is divided into three main demand sectors — industry, domestic, and transport — but also includes the
-non-energy sector and bunkers (international shipping and aviation), as shown in the table below.
+non-energy sector and bunkers (international shipping and aviation), as shown in the table below.[^ict]
 
 Demand for useful energy services ({numref}`fig-sectors`) (useful energy demand) is determined at the subsector
 level with an econometric top-down approach, where demand for useful energy services is driven by appropriate
@@ -120,7 +124,7 @@ in the relevant model equations.
   - Subsector
 * - **Industry**
   - Iron and Steel; Non-Ferrous Metals; Chemicals; Non-Metallic Minerals; Pulp and Paper; Food, Drink and Tobacco;
-    Engineering; Textiles; Other Industrial Sectors
+    Engineering; Textiles; Ore Extraction; Other Industrial Sectors
 * - **Domestic**
   - Services and Trade; Agriculture, Fishing, Forestry etc.; Households
 * - **Transport**
@@ -213,6 +217,14 @@ $sh_{i,k}$
 $eff_{i,k}$
 : the efficiency of technology/fuel $k$ in subsector $i$
 
+:::{note}
+The expression above is the *substitutable-demand core*: it covers the fuels and technologies that compete to
+fill the gap. In the code, total final energy (`Q03FinalEnergy`) adds several non-substitutable terms on top of
+this core — non-substitutable electricity in industry and tertiary (`V02FinalElecNonSubIndTert`), heat-pump
+electricity (`VmElecConsHeatPla`), transport fuel consumption (`V01ConsFuelTransport`), and the fuel used by
+carbon-dioxide-removal technologies (direct air capture and enhanced weathering).
+:::
+
 (gap-substitution)=
 ## Gap and substitution mechanism
 
@@ -244,6 +256,13 @@ Architecture of the gap-and-substitution mechanism.
 :::
 
 ### Gap and scrapping mechanism
+
+:::{note}
+The gap, scrapping, total-cost, and share (Weibull) equations in this section are a **conceptual algebra** common
+to all sectors. The active GAMS implementation is realisation-specific: each demand and supply module spells these
+out with its own variable names, cost-sensitivity exponents, and special terms. {ref}`gap-implementation` maps the
+generic forms onto the active equations.
+:::
 
 The gap is defined in terms of useful energy and is determined by the difference between useful energy demand
 ($DEM_{i,t}$ — the useful energy demand equation) and the amount of energy that can be satisfied using existing
@@ -347,8 +366,54 @@ preferences, uncertainty, and imperfect information, allowing for smoother, more
 pathways.
 :::
 
+(gap-implementation)=
+### Implementation by realisation
+
+The table below maps the generic gap/scrapping/cost/share algebra onto the active equations in each module, with
+the cost-sensitivity exponent ($-\gamma$) and the distinctive terms each one uses. A common device across modules
+is the non-negative-gap transform $\tfrac{1}{2}\!\left(x + \sqrt{x^{2}}\right)$, which clips a negative gap to zero.
+
+:::{list-table} Active gap-and-substitution equations by realisation
+:header-rows: 1
+
+* - Module (realisation)
+  - Share / scrapping equations
+  - Cost exponent
+  - Special terms
+* - Industry & tertiary (`02_Industry/technology`)
+  - `Q02ShareTechNewEquipUseful`, `Q02GapUsefulDemSubsec`, `Q02CostTech`
+  - $-i02ElaSub$ (country/sector-specific)
+  - Remaining-equipment demand `V02DemUsefulSubsecRemTech`; square-root non-negative gap; cost net of subsidies
+    (`VmSubsiDemTech`); maturity factor `imMatrFactor`
+* - Power generation (`04_PowerGeneration/simple`)
+  - `Q04SharePowPlaNewEq`, `Q04GapGenCapPowerDiff`, `Q04CapElec`, `Q04NewCapElec`
+  - $-2$
+  - Decommissioning schedules (`i04PlantDecomSched`); CCS retrofit term (`V04CCSRetroFit`); hourly production cost
+    `V04CostHourProdInvDec`
+* - Hydrogen (`05_Hydrogen/legacy`)
+  - `Q05PremRepH2Prod`, `Q05ScrapLftH2Prod`, `Q05CapScrapH2ProdTech`, `Q05DemGapH2`
+  - $-i05WBLGammaH2Prod$
+  - Normal scrapping $1/i05ProdLftH2$ gated by plant age; premature replacement on variable cost
+    `V05CostVarProdH2Tech`
+* - Steam / heat (`09_Heat/heat`)
+  - `Q09ScrapRatePremature`, `Q09ScrapRate`, `Q09DemGapSte`, `Q09ProdSte`
+  - $-2$
+  - Normal scrapping $1/i09ProdLftSte$; scaling factor `i09ScaleEndogScrap`; production allocated pro rata to
+    capacity ($Prod = Dem\cdot Cap/\sum Cap$)
+:::
+
 (prices)=
 ## Prices
+
+:::{warning}
+The next three paragraphs describe the **conceptual intent** of the Prices module as written for the DIAMOND
+project. The active code does **not** implement an iterative supply–demand tâtonnement: there is no loop that
+raises or lowers a price until demand equals supply. Prices are instead propagated recursively from the previous
+year's values. Read this part as legacy/conceptual context; the active mechanism is set out under
+{ref}`active-price-formation`.
+:::
+
+### Conceptual framing (legacy)
 
 The prices calculation, developed during the DIAMOND project, plays a central role in achieving market equilibrium
 by determining the energy prices that balance supply and demand across all fuels and sectors. It calculates both
@@ -376,6 +441,37 @@ emissions intensity, thereby incentivising low-carbon alternatives throughout th
 regulatory measures such as subsidy phase-outs or energy price reforms. Ultimately, the Prices Module is critical
 for transmitting economic signals between supply and demand components and for ensuring the internal consistency of
 the integrated model solution.
+
+(active-price-formation)=
+### Active price formation (current code)
+
+The active Prices realisation (`modules/08_Prices/legacy`) is **recursive index propagation**, not market
+clearing. The central equation `Q08PriceFuelSubsecCarVal` sets each subsector–fuel price for year $t$ by
+multiplying the previous year's price by a set of fuel-specific factors and then adding a carbon-value increment:
+
+- **Electricity, hydrogen, steam** are scaled by the year-on-year ratio of their average production cost
+  (`VmCostPowGenAvgLng`, `VmCostAvgProdH2`, `VmCostAvgProdSte`).
+- **Fossil fuels** are linked to the oil-price index through fixed elasticity exponents on the crude-oil price
+  ratio: natural gas $0.4$, liquids $0.8$, hard coal and lignite $0.2$. The crude-oil price itself is exogenous
+  (read from `CrudeOilPrice.csv`) and scenario-dependent.
+- **Carbon pricing** enters as an additive increment proportional to the change in carbon value times the fuel's
+  emission factor, $10^{-3}\,(CarVal_{t}\,emiFac_{t} - CarVal_{t-1}\,emiFac_{t-1})$, applied in the demand
+  subsectors.
+
+Final-stage equations then build sector-average prices (`Q08PriceFuelAvgSub`) and the industrial electricity price
+(`Q08PriceElecInd`) on top of these.
+
+Biomass (`BMSWAS`) is priced through one of three compile-time modes, derived in `main.gms` from the
+`softLinkMAgPIE` and `landUseEmulator` switches:
+
+- **`static`** (`softLinkMAgPIE=off`, `landUseEmulator=legacy`) — BMSWAS follows the same recursive price
+  dynamics as every other fuel.
+- **`curve`** (`softLinkMAgPIE=off`, `landUseEmulator=globiom`/`magpie`) — BMSWAS price is driven by a fitted
+  land-use supply curve $P = a + b\,Q^{c}$, applied as a year-on-year scarcity ratio on lagged primary biomass
+  production. The coefficients come from `imBmswasSupplyCoef` (loaded from `iBmswasSupplyCoef_<source>.csv`,
+  produced by mrprom), with the active carbon-price row picked by `emulatorGHGScen`.
+- **`softfx`** (`softLinkMAgPIE=on`) — BMSWAS is excluded from the price equation entirely; its price is fixed
+  (`.FX`) to `iPricesMagpie` from the MAgPIE soft-link in `core/preloop.gms`.
 
 The determination of prices is done endogenously through a combination of complementary mechanisms. For energy
 carriers with a detailed supply representation (electricity, hydrogen, and heat) prices are derived from the average
@@ -438,3 +534,5 @@ integration of synthetic fuels into the end-use fuel mix, using the same competi
 [^3]: Equipment that is installed before year $t$.
 [^4]: Services using only electricity will have electric equipment.
 [^5]: The subscript of the subsector $i$ is omitted for legibility.
+[^ict]: The active sector set also carries a separate, electricity-only demand subsector `ICT` ("Data centres and
+    Networks"), modelled outside the industry/domestic grouping; see the demand-sectors chapter.

@@ -129,6 +129,43 @@ include). The same `module.gms` then routes the assembly to the matching phase f
 `main.gms` also defines the run-level configuration: solver attempts, research vs development mode, time horizon and
 scenario, calibration mode, the active realizations, and country selection through `fCountries`.
 
+## Default active vs dormant features
+
+Several pieces of model logic are present in the source but **not exercised by the default switch settings**. Know
+which is which before you reason about a default run.
+
+:::{list-table}
+:header-rows: 1
+
+* - Feature
+  - Default state
+  - Notes
+* - Power learning curves
+  - **off**
+  - `Curves` defaults to `off` (`main.gms`). The endogenous capacity-cost learning term in
+    `04_PowerGeneration/simple` is wrapped in `$ifthen.curves "%Curves%" == "LearningCurves"` and only contributes
+    when `Curves=LearningCurves`; otherwise the cost multiplier is fixed at `1`.
+* - Hydrogen infrastructure equations
+  - **dormant**
+  - The "Hydrogen Infrastructure" block in `05_Hydrogen/legacy/equations.gms` (infrastructure area, distribution
+    price, total H₂ cost) is structurally complete but enclosed in `$ontext`/`$offtext`, so GAMS skips it at compile
+    time. The hydrogen *production* equations around it are active.
+* - MAgPIE soft-link
+  - **off**
+  - `softLinkMAgPIE` defaults to `off`; the iterative task-7 coupling with MAgPIE (fixed biomass price, AFOLU
+    emissions from MAgPIE's `.mif`) is an opt-in mode.
+* - Land-use emulator
+  - **globiom**
+  - `landUseEmulator` defaults to `globiom`, i.e. the pre-fitted supply/emission curves *are* active by default;
+    set it to `legacy` to disable the emulator (static biomass price, exogenous land emissions).
+:::
+
+:::{warning}
+The hydrogen infrastructure equations are inactive: editing them changes nothing until the surrounding
+`$ontext`/`$offtext` is removed. Likewise, references to learning-curve cost effects only apply when
+`Curves=LearningCurves`.
+:::
+
 ## Naming convention
 
 Object names encode their scope through a prefix; follow it for every new object. The type letters are:

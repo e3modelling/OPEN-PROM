@@ -182,10 +182,12 @@ For each row, `start.R` builds a complete scenario object by **deep-merging the 
 `config.json:scenario`**. Two conventions make this work:
 
 1. **Dot-notation column names** map to nested config keys — `gams_flags.fScenario` →
-   `scenario.gams_flags.fScenario`, `magpie.existing_prom_run` → `scenario.magpie.existing_prom_run`.
+   `scenario.gams_flags.fScenario`, `soft_link_magpie.existing_prom_run` →
+   `scenario.soft_link_magpie.existing_prom_run`.
 2. **Empty cells inherit, filled cells override.** A non-empty cell replaces the value from `config.json:scenario`
    at the same nested path; an empty cell leaves that path alone. The merge is **recursive** — overriding
-   `magpie.existing_prom_run` does not wipe `magpie.project`; only the leaf you wrote in the CSV changes.
+   `soft_link_magpie.existing_prom_run` does not wipe `soft_link_magpie.project`; only the leaf you wrote in the
+   CSV changes.
 
 Worked example — given `config.json:scenario`:
 
@@ -194,14 +196,14 @@ Worked example — given `config.json:scenario`:
   "scenario_name": "Default",
   "description":   "Default UPTAKE run",
   "gams_flags":    { "fScenario": 200 },
-  "magpie":        { "project": "uptake", "existing_prom_run": null }
+  "soft_link_magpie": { "project": "uptake", "existing_prom_run": null }
 }
 ```
 
 and one CSV row:
 
 ```text
-scenario_name,task_id,description,gams_flags.fScenario,magpie.existing_prom_run
+scenario_name,task_id,description,gams_flags.fScenario,soft_link_magpie.existing_prom_run
 C600_landHigh,7,UPTAKE C600 landHigh,600,
 ```
 
@@ -213,7 +215,7 @@ the merged scenario `start.R` runs is:
   "task_id":       7,                       // from CSV
   "description":   "UPTAKE C600 landHigh",  // from CSV
   "gams_flags":    { "fScenario": 600 },    // CSV overrides 200 -> 600
-  "magpie": {
+  "soft_link_magpie": {
     "project":           "uptake",          // inherited from config
     "existing_prom_run": null               // CSV cell empty, inherited
   }
@@ -221,9 +223,9 @@ the merged scenario `start.R` runs is:
 ```
 
 :::{tip}
-Put **only project-wide invariants** in `config.json:scenario` (e.g. `magpie.project`, the most common
-`gams_flags.fScenario`). Keep per-run incidentals like `magpie.existing_prom_run` as `null` and set them on
-individual CSV rows only when you want to resume from a specific path — otherwise every row silently inherits the
+Put **only project-wide invariants** in `config.json:scenario` (e.g. `soft_link_magpie.project`, the most common
+`gams_flags.fScenario`). Keep per-run incidentals like `soft_link_magpie.existing_prom_run` as `null` and set them
+on individual CSV rows only when you want to resume from a specific path — otherwise every row silently inherits the
 same path, skips Step 1, reuses the same round-1 result, and overwrites each other in one folder.
 :::
 
@@ -235,6 +237,16 @@ The dot-notation rule is **generic** — `start.R` hard-codes no column names, s
 - **The column need not pre-exist in `config.json`.** A column for a key not in `config.json:scenario` injects that
   key for rows where the cell is non-empty.
 - **Column order is irrelevant** — columns are read by name, not position.
+
+Beyond `gams_flags.X`, two scenario groups are read specially by `start.R` rather than passed through verbatim:
+
+- **`land_use_emulator.*`** drives the pre-fitted land-use emulator. `start.R` translates
+  `land_use_emulator.source` into the `--landUseEmulator=` flag and `land_use_emulator.carbon_price` into
+  `--emulatorGHGScen=`. This is the path for **emulator-only runs** (no live MAgPIE coupling): e.g.
+  `land_use_emulator.source = globiom` with `land_use_emulator.carbon_price = GHG100`.
+- **`soft_link_magpie.*`** configures the task-7 MAgPIE soft-link. This group is **not** turned into GAMS flags by
+  the generic dispatcher; task 7 reads it directly (`project`, `existing_prom_run`, `max_iter`, `price_tol`,
+  `quant_tol`) and passes `--softLinkMAgPIE` itself. See {doc}`/guide/05_soft_linking`.
 
 Concrete example — sweep end-year horizon and Transport realization with no R-code changes:
 

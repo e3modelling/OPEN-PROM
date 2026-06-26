@@ -95,9 +95,7 @@ Sequential stages of data acquisition, processing and dataset assembly in the mr
 Workflow for generating OPEN-PROM regional input datasets.
 :::
 
-### Regional aggregation
-
-In the final stage of the data-preparation workflow, country-level datasets are aggregated into the regional
+**Regional aggregation.** In the final stage of the data-preparation workflow, country-level datasets are aggregated into the regional
 structure adopted by the OPEN-PROM framework. This aggregation is performed automatically using configurable
 region-mapping files, which assign individual countries to their corresponding model regions. The current OPEN-PROM
 configuration comprises 39 countries and regions, collectively providing global coverage of all world regions
