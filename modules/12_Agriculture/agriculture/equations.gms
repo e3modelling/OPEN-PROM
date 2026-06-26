@@ -28,6 +28,44 @@ Q12EnergyService(allCy,AGRI_MODES,YTIME)$(TIME(YTIME) and runCy(allCy))..
   i12IndexClimateShift(allCy,AGRI_MODES,YTIME) * 
   i12IndexTechShift(allCy,AGRI_MODES,YTIME);
 
+Q12Capacity(allCy,AGRI_MODES,AGRITECH,YTIME)$(TIME(YTIME) and runCy(allCy))..
+  V12Capacity(allCy,AGRI_MODES,AGRITECH,YTIME)
+        =E=
+  V12Capacity(allCy,AGRI_MODES,AGRITECH,YTIME-1) * (1 - V12ScrpRate(allCy,AGRI_MODES,AGRITECH,YTIME)) +
+  V12ShareTech(allCy,AGRI_MODES,AGRITECH,YTIME) *  V12GapActivity(allCy,AGRI_MODES,YTIME);
+
+Q12GapActivity(allCy,AGRI_MODES,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+  V12GapActivity(allCy,AGRI_MODES,YTIME)
+    =E=
+  (
+    V12Activity(allCy,AGRI_MODES,YTIME) - 
+    V12Activity(allCy,AGRI_MODES,YTIME-1) +
+    SUM(AGRITECH$AGRMODEStoTECH(AGRI_MODES,AGRITECH),
+      V12Capacity(allCy,AGRI_MODES,AGRITECH,YTIME-1) * V12ScrpRate(allCy,AGRI_MODES,AGRITECH,YTIME)
+    ) +
+    SQRT(SQR(
+      V12Activity(allCy,AGRI_MODES,YTIME) - 
+      V12Activity(allCy,AGRI_MODES,YTIME-1) +
+      SUM(AGRITECH$AGRMODEStoTECH(AGRI_MODES,AGRITECH),
+        V12Capacity(allCy,AGRI_MODES,AGRITECH,YTIME-1) * V12ScrpRate(allCy,AGRI_MODES,AGRITECH,YTIME)
+      )
+    ))
+  ) / 2;
+
+Q12ScrpRate(allCy,AGRI_MODES,AGRITECH,YTIME)$(TIME(YTIME) and runCy(allCy))..
+    V12ScrpRate(allCy,AGRI_MODES,AGRITECH,YTIME)
+        =E=
+    1 - (1 - 1 / 20); !! * LIFETIME
+    !!(1 - V01PremScrp(allCy,AGRI_MODES,AGRITECH,YTIME));
+
+Q12ShareTech(allCy,AGRI_MODES,AGRITECH,YTIME)$(TIME(YTIME)$AGRMODEStoTECH(AGRI_MODES,AGRITECH) $runCy(allCy))..
+    V12ShareTech(allCy,AGRI_MODES,AGRITECH,YTIME)
+      =E=
+    1 /
+    SUM(AGRITECH2$AGRMODEStoTECH(AGRI_MODES,AGRITECH2),
+      1
+    );
+
 Q12ConsFuel(allCy,AGRI_MODES,EFS,YTIME)$(TIME(YTIME) and runCy(allCy))..
     V12ConsFuel(allCy,AGRI_MODES,EFS,YTIME)
         =E=
