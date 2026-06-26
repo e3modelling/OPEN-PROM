@@ -35,6 +35,15 @@ python scripts/design_carbon_price.py \
     --shape linear \
     --anchor 2025 25 --anchor 2050 150 \
     --preview
+
+# Shape trajectory (NDC→LTS) with alpha=0.5 (concave)
+python scripts/design_carbon_price.py \
+    --policy exogCV_NPi \
+    --regions AUT \
+    --shape trajectory  \
+    --anchor 2025 25 --anchor 2050 70 \
+    --alpha 0.1 \
+    --grow-after 2050 1
 """
 
 import argparse
