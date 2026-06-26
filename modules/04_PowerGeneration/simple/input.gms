@@ -127,25 +127,10 @@ i04ShareFuels(runCy,PGALL,PGEF)$PGALLTOEF(PGALL,PGEF) =
   1 / CARD(PGALL)
 )$(not SUM(PGEF2$PGALLTOEF(PGALL,PGEF2),i03InpTotTransfProcess(runCy,"PG",PGEF2,"%fBaseY%")));
 *---
-i04ScaleEndogScrap(allCy,PGALL,YTIME) = 3 / card(PGALL);
-i04MatFacPlaAvailCap(runCy,PGALL,YTIME)$(i04MatFacPlaAvailCap(runCy,PGALL,YTIME) < 1e-2) = 1e-2;
-*--- COAL PHASE OUT ---
-i04MatFacPlaAvailCap(EU28,"ATHCOAL",YTIME) = 0;
-i04MatFacPlaAvailCap(EU28,"ATHOIL",YTIME) = 0;
-i04MatFacPlaAvailCap(EU28,"ATHLGN",YTIME) = 0;
+i04ScaleEndogScrap(allCy,PGALL,YTIME) = 6 / card(PGALL);
 
-i04MatFacPlaAvailCap(EU28,"ATHCOALCCS",YTIME) = 0;
-i04MatFacPlaAvailCap(EU28,"ATHLGNCCS",YTIME) = 0;
-
-*--- Limit Lifetime to force phase out
-i04TechLftPlaType(EU28,"ATHCOAL") = 10;
-i04TechLftPlaType(EU28,"ATHOIL") = 10;
-i04TechLftPlaType(EU28,"ATHLGN") = 10;
-
-i04SensCarbon(allCy,YTIME) = 1;
-
-i04MatFacPlaAvailCap(runCY,"ATHBMSCCS",YTIME)$(ord(YTIME)<51 and ord(YTIME)>20) = i04MatFacPlaAvailCap(runCY,"ATHBMSCCS","2024") + 0.008 * (ord(YTIME)-20);
-i04MatFacPlaAvailCap(runCY,"ATHGASCCS",YTIME)$(ord(YTIME)<51 and ord(YTIME)>20) = i04MatFacPlaAvailCap(runCY,"ATHGASCCS","2024")+ 0.002 * (ord(YTIME)-20);
-
-i04MatFacPlaAvailCap(runCY,"ATHBMSCCS",YTIME)$(ord(YTIME)>=51) = 0.05;
-i04MatFacPlaAvailCap(runCY,"ATHGASCCS",YTIME)$(ord(YTIME)>=51) = 0.05;
+* Add premature scrapping for power generation to comply with early retirement in lower income countries
+i04ScaleEndogScrap("LAM",PGALL,YTIME) = 0;
+i04ScaleEndogScrap("IND",PGALL,YTIME) = 0;
+i04ScaleEndogScrap("MEA",PGALL,YTIME) = 0;
+i04ScaleEndogScrap("SSA",PGALL,YTIME) = 0;

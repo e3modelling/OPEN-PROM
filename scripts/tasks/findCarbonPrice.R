@@ -408,48 +408,83 @@ selectedYear <- 2050
 changeCarbonPriceFromYear <- 2031
 
 # --- Emissions variable to track ---
-# Must match a variable name returned by reportEmissions() (after dimSums over dim 3).
-# "Emissions|CO2.Mt CO2/yr"                 -> total CO2 only  (matches PC/ECPC/AP budgets)
-# "Emissions|Kyoto Gases.Mt CO2-equiv/yr"   -> all GHGs in CO2-equivalent
-emissionsVariable <- "Emissions|CO2.Mt CO2/yr"
-flagCO2eq <- FALSE   # keep consistent: FALSE = CO2-only
+# Set emissionsVariable to any variable name returned by reportEmissions().
+# Set emissionsScale so that after multiplication the unit matches your budget targets.
+#
+# Common choices:
+#   "Emissions|CO2|Cumulated.Gt CO2"          * 1000  -> Mt CO2  (cumulated)
+#   "Emissions|CO2.Mt CO2/yr"                 * 1     -> Mt CO2/yr
+#   "Emissions|Kyoto Gases.Mt CO2-equiv/yr"   * 1     -> Mt CO2-equiv/yr
+emissionsVariable <- "Emissions|CO2|Cumulated.Gt CO2"
+emissionsScale    <- 1000   # Gt -> Mt
 
-# ---------------------------------------------------------
-# Budget file: load targets for all OPEN-PROM regions
-# Columns: region, temperature, risk, PC, ECPC, AP
-#   temperature: 1.6 or 2.0 (°C)
-#   risk:        0.33 or 0.5  (exceedance probability)
-#   budget column: "PC"   = Per-Capita convergence
-#                  "ECPC" = Equal Cumulative Per-Capita
-#                  "AP"   = Ability to Pay
-budgetCsvPath  <- "CO2budgets_OPENPROM.csv"
-budgetTemp     <- 1.6    # target temperature scenario
-budgetRisk     <- 0.5    # target risk level
-budgetColumn   <- "PC"   # which allocation column to use as target
+# EU27 member regions — share a single carbon price in iEnvPolicies.csv.
+# Never optimised individually; always solved as one aggregated group.
+EU27_REGIONS <- c("AUT","BEL","BGR","CYP","CZE","DEU","DNK","ESP","EST",
+                   "FIN","FRA","GRC","HRV","HUN","IRL","ITA","LTU","LUX",
+                   "LVA","MLT","NLD","POL","PRT","ROU","SVK","SVN","SWE")
 
-budgetDf <- data.table::fread(budgetCsvPath)
-budgetDf <- budgetDf[temperature == budgetTemp & risk == budgetRisk]
+# --- Target list ---
+# Each entry is a named budget in the unit of emissionsVariable * emissionsScale.
+# Special keys:
+#   "EU27"  -> shared alpha applied to all 27 EU member rows; emissions summed over members.
+#   "WORLD" -> alpha applied to all region rows; emissions summed globally.
+# Any other key must match a region code in iEnvPolicies.csv.
+# Comment out any entry to skip that region in this run.
+#
+# Current unit: cumulated Mt CO2  (Emissions|CO2|Cumulated.Gt CO2 * 1000)
+# AP list
+# targetList <- list(
+#   #"WORLD" = 1257571,  # optional: comment out to skip world run
+#   # "EU27"  = 92917,    # sum of all 27 EU member budgets
+#   # "CAZ"   = 22517,
+#   # "CHA"   = 307728,
+#   # "GBR"   = 14692,
+#   # "IND"   = 223711,
+#   # "JPN"   = 29285,
+#   # "LAM"   = 117008,
+#   # "MEA"   = 102029,
+#   # "NEU"   = 22276,
+#   # "OAS"   = 220646,
+#   # "REF"   = 64216,
+#   "SSA"   = 175989
+#   #"USA"   = 100855
+# )
+# ECPC list
+targetList <- list(
+  #"WORLD" = 1257571,  # optional: comment out to skip world run
+   "EU27"  = 23461,    # sum of all 27 EU member budgets
+   "CAZ"   = 0,
+   "CHA"   = 161732,
+  # "GBR"   = 5602,
+  # "IND"   = 332509,
+   "JPN"   = 0,
+   #"LAM"   = 74910,
+   #"MEA"   = 139669,
+   "NEU"   = 20064,
+   #"OAS"   = 292508
+  "REF"   = 9332,
+  #"SSA"   = 483210
+  "USA"   = 0
+)
+# AP list
+#targetList <- list(
+  #"WORLD" = 1257571,  # optional: comment out to skip world run
+  # "EU27"  = 64629,    # sum of all 27 EU member budgets
+  # "CAZ" = 24832,
+  # "CHA" = 364532,
+  # "GBR" = 9524,
+  # "IND" = 162220,
+  # "JPN" = 25721,
+  #"LAM" = 108115,
+  # "MEA" = 96963,
+  # "NEU" = 14717,
+  # "OAS" = 198990
+  # "REF" = 83989,
+  # "SSA" = 224072
+  # "USA" = 108446
+#)
 
-if (nrow(budgetDf) == 0) {
-  stop(sprintf("No rows in %s for temperature=%.1f and risk=%.2f", budgetCsvPath, budgetTemp, budgetRisk))
-}
-if (!budgetColumn %in% names(budgetDf)) {
-  stop(sprintf("Column '%s' not found in %s. Available: %s",
-               budgetColumn, budgetCsvPath, paste(names(budgetDf), collapse=", ")))
-}
-
-# Build targetList from all regions that have a valid (non-NA, positive) budget
-targetList <- as.list(setNames(budgetDf[[budgetColumn]], budgetDf$region))
-targetList <- Filter(function(v) !is.na(v) && is.finite(v) && v > 0, targetList)
-
-message(sprintf(
-  "Budget scenario: %s column, %.1f°C, risk=%.2f  ->  %d regions loaded",
-  budgetColumn, budgetTemp, budgetRisk, length(targetList)
-))
-
-globalParams <- 0  # used only if targetList is empty (EU27/World fallback)
-
-# LOGGING SETUP
 logFilePath <- "Carbon_price_optimization.log"
 file.create(logFilePath)
 logCon <- file(logFilePath, open = "a")
@@ -520,9 +555,9 @@ for (regName in names(runQueue)) {
     targetRegion = actualRegion,
     targetYear   = selectedYear,
     minAlpha     = -0.5,           # Allow price reduction up to -50% if needed
-    maxAlpha     = 10.0,           # Allow up to +1000% increase
-    expandFactor = 2.0,
-    maxProbes    = 12,
+    maxAlpha     = 20.0,           # Allow up to +1000% increase
+    expandFactor = 4.0,
+    maxProbes    = 5,
     verbose      = TRUE
   )
 

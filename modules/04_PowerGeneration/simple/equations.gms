@@ -121,13 +121,9 @@ Q04IndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(al
             1e-3 *(VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,"PG",PGEF,YTIME)))    
     )**(-2) /
     (
-      (V04CostVarTech(allCy,PGALL,YTIME-1) + 1e-3
-            + i04SensCarbon(allCy,YTIME) * sum(PGEF$PGALLtoEF(PGALL,PGEF), 
-            i04ShareFuels(allCy,PGALL,PGEF) *
-            1e-3 *(VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,"PG",PGEF,YTIME)))      
-      )**(-2) +
+      (V04CostVarTech(allCy,PGALL,YTIME-1) + 1e-3)**(-2) + 
+      i04ScaleEndogScrap(allCy,PGALL,YTIME) *
       (
-        i04ScaleEndogScrap(allCy,PGALL,YTIME) *
         sum(PGALL2$(not sameas(PGALL,PGALL2)),
           i04AvailRate(allCy,PGALL2,YTIME) / i04AvailRate(allCy,PGALL,YTIME) * 
           (V04CostHourProdInvDec(allCy,PGALL2,YTIME-1)

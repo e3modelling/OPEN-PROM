@@ -69,4 +69,5 @@ plot_name <- if (length(args) > 2) args[3] else "plot.tex"
 reportOutput(runpath = runpath, mif_name = mif_name, plot_name = plot_name,
              Validation_data_for_plots = FALSE, Validation2050 = FALSE,
              emissions = TRUE, htmlReport = FALSE, model = "OPEN-PROM 2.2",
-             project_template = "prisma-template.csv")
+             project_template = "committed-internal-template.csv", dashboard = FALSE,
+             stripScenarioTimestamp = TRUE)

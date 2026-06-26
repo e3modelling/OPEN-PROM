@@ -210,7 +210,7 @@ $setglobal link2MAgPIE off  !! on or off For soft link with MAgPIE
 *' *** Maximum number of solver attempts
 $evalGlobal SolverTryMax 4
 *' *** Country solve mode: serial or parallel
-$setGlobal CountrySolveMode serial
+$setGlobal CountrySolveMode parallel
 *' *** Setting research mode (0) or development mode (1) to modify settings and parameters accordingly
 $setGlobal DevMode 1 !! can be overwritten if VS Code Tasks are used
 *' *** Write a compressed GDX file with all data at the end of the run
@@ -230,7 +230,7 @@ $evalGlobal fEndHorizon 2100
 $evalGlobal fEndY 2100
 $evalGlobal fStartY 2024
 $evalGlobal fBaseY %fStartY% - %fPeriodOfYears%
-$evalGlobal fScenario 1 !! Setting the model scenario: 0 is No carbon price, 1 is NPi_Default, 2 is 1.5C and 3 is 2C
+$evalGlobal fScenario 2 !! Setting the model scenario: 0 is No carbon price, 1 is NPi_Default, 2 is 1.5C and 3 is 2C
 
 *** end of dollar commands section, no further flag definitions allowed 
 
