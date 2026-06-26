@@ -1,5 +1,5 @@
-cff-version: 1.0.3
-message: 
+cff-version: 1.2.0
+message: "If you use OPEN-PROM, please cite it using these metadata."
 authors:
 
   - family-names: Baka
@@ -57,9 +57,9 @@ authors:
     affiliation: 
     email: 
 
-title: OPEN PROM
-version: 0.1
-date-released: 2024-05-13
+title: OPEN-PROM
+version: 2.2.0
+date-released: 2026-06-26
 repository-code: https://github.com/e3modelling/OPEN-PROM
 keywords:
   - prometheus

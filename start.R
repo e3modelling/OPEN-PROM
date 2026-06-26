@@ -14,7 +14,9 @@
 #              column is absent, every row runs (backwards compatible).
 
 library(jsonlite)
-
+# Always (re)install the local mrprom/postprom so every run uses the root copies.
+if (dir.exists("./mrprom"))  devtools::install_local("./mrprom")
+if (dir.exists("./postprom")) devtools::install_local("./postprom")
 `%||%` <- function(a, b) if (is.null(a)) b else a
 
 # ---- Read config.json (or the OPENPROM_CONFIG env var override (rarely used)) -----
