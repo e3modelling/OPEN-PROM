@@ -1,18 +1,20 @@
 
-# Soft-Linking Tutorial: OPEN-PROM ↔ MAgPIE (coupling-channel)
+# Soft-Linking Tutorial: OPEN-PROM ↔ MAgPIE
 
-This guide explains how to run the soft-coupling between the **OPEN-PROM** energy-system model and the **MAgPIE** land-use model via the **coupling-channel** approach — the mif-based interface that MAgPIE already exposes for REMIND (`c56_pollutant_prices = "coupling"`, `c60_2ndgen_biodem = "coupling"`).
+This guide explains how to run the iterative soft-coupling between the **OPEN-PROM** energy-system model and the **MAgPIE** land-use model via the **coupling-channel** approach — the mif-based interface that MAgPIE already exposes for REMIND (`c56_pollutant_prices = "coupling"`, `c60_2ndgen_biodem = "coupling"`).
 
-Two R functions (in `postprom/R/couplePromWithMagpie.R`) do the data exchange:
+The coupling loops OPEN-PROM ↔ MAgPIE round-by-round until two convergence judges fall below user-set tolerances, or a user-set `max_iter` is reached. Per-phase checkpointing supports resume after external interruption (power loss, `kill -9`, SSH drop).
+
+Two stateless single-direction R functions in `postprom/R/couplePromWithMagpie.R` do the data exchange:
 
 * `couplePromToMagpie()` — exports OPEN-PROM carbon price + bioenergy demand to a REMIND-style `.mif` that MAgPIE consumes
-* `coupleMagpieToProm()` — reads MAgPIE's `report.mif` and writes `iPrices_magpie.csv` (biomass price for round-2) and `iEmissions_magpie.mif` (AFOLU emissions, 200 variables, IAMC mif format) for OPEN-PROM
+* `coupleMagpieToProm()` — reads MAgPIE's `report.mif` and writes `iPrices_magpie.csv` (biomass price for the next OPEN-PROM round) and `iEmissions_magpie.mif` (AFOLU emissions, 200 variables, IAMC mif format)
 
-All of this is orchestrated by `task_id == 7` in `start.R` (the body is in `scripts/tasks/task7SoftLinkMagpie.R`).
+The iteration loop, checkpointing, convergence judgment and resume logic live in `scripts/tasks/task7SoftLinkMagpie.R` (orchestrated by `task_id == 7` in `start.R`). The two coupler functions stay stateless; cross-round logic is entirely in task 7.
 
 ---
 
-## Model Integration Switch (OPEN-PROM side)
+## 1. Model Integration Switch (OPEN-PROM side)
 
 A global GAMS flag toggles whether OPEN-PROM reads MAgPIE-derived biomass prices:
 
@@ -45,45 +47,45 @@ The reverse-direction switch on the MAgPIE side is triggered by environment vari
 
 ---
 
-## R functions
+## 2. R coupler functions
 
-### 1. OPEN-PROM → MAgPIE
+### 2.1 OPEN-PROM → MAgPIE
 
 ```r
 library(postprom)
 couplePromToMagpie(
-  gdxPath        = "path/to/blabla.gdx",          # OPEN-PROM round-1 gdx
+  gdxPath        = "path/to/blabla_round{k-1}.gdx",   # previous round's OPEN-PROM gdx
   outMifPath     = "path/to/openprom_coupling.mif",
-  scenario       = "SSP2-PkBudg650",              # must match MAgPIE side
-  nonCo2Mode     = "gwp",                         # "gwp" (default) or "zero"
-  deflator15to17 = 1.04                           # US$2015 -> US$2017
+  scenario       = "Full_C600_biolim100",             # must match MAgPIE side
+  nonCo2Mode     = "gwp",                             # "gwp" (default) or "zero"
+  deflator15to17 = 1.04                               # US$2015 -> US$2017
 )
 ```
 
 What it does:
 
 * **CO2 price**: extracts `VmCarVal[,"TRADE",]` (US$2015/t CO2), bioenergy-weighted-averaged 39 → 12 h12, deflated US$2015→US$2017
-* **Bioenergy demand**: weighted blend of three OPEN-PROM 2nd-gen carriers from `V03ProdPrimary` (Mtoe/yr) — `0.4 × BMSWAS + 0.6 × BGSL + 0.6 × BKRS` (raw 2G feedstock + 2G biogasoline + 2G biokerosene). Summed 39 → 12 h12, converted Mtoe/yr → EJ/yr (× 0.041868)
-* **Non-CO2 prices**: `Price|N2O` and `Price|CH4` derived from CO2 via AR6 GWP100 (273 / 27) when `nonCo2Mode = "gwp"`, or set to zero when `"zero"` — MAgPIE requires all three GHG prices present
+* **Bioenergy demand**: weighted blend of three OPEN-PROM 2nd-gen carriers from `V03ProdPrimary` (Mtoe/yr) — `0.4 × BMSWAS + 0.6 × BGSL + 0.6 × BKRS`. Summed 39 → 12 h12, converted Mtoe/yr → EJ/yr (× 0.041868)
+* **Non-CO2 prices**: `Price|N2O` and `Price|CH4` derived from CO2 via AR6 GWP100 (273 / 27) when `nonCo2Mode = "gwp"`, or set to zero when `"zero"`
 * **Aggregation**: OPEN-PROM's 39 countries → MAgPIE's 12 h12 regions (EU-28 → `EUR`, the other 11 countries map 1:1)
-* **Output**: REMIND-style `.mif` with 4 variables × 12 regions × 91 years, consumed by MAgPIE via `cfg$path_to_report_ghgprices` / `cfg$path_to_report_bioenergy`
+* **Output**: REMIND-style `.mif` with 4 variables × 12 regions × 91 years
 
-### 2. MAgPIE → OPEN-PROM
+### 2.2 MAgPIE → OPEN-PROM
 
 ```r
 coupleMagpieToProm(
-  reportMifPath       = "path/to/magpie/output/SSP2-PkBudg650_.../report.mif",
+  reportMifPath       = "path/to/magpie/output/Full_C600_biolim100_.../report.mif",
   outCsvPath          = "path/to/openprom/run/iPrices_magpie.csv",
   outEmissionsMifPath = "path/to/openprom/run/iEmissions_magpie.mif",
-  gdxPath             = "path/to/blabla.gdx",   # used to read the SBS set
-  scenario            = "SSP2-PkBudg650",
+  gdxPath             = "path/to/blabla_round0.gdx",   # used only to read the SBS set
+  scenario            = "Full_C600_biolim100",
   deflator17to15      = 0.96
 )
 ```
 
 What it does (two output channels):
 
-**(a) Bioenergy price → `iPrices_magpie.csv`** (consumed by GAMS round-2)
+**(a) Bioenergy price → `iPrices_magpie.csv`** (consumed by GAMS in the next OPEN-PROM round)
 
 * Reads `Prices|Bioenergy (US$2017/GJ)` and converts to OPEN-PROM's k$2015/toe (× 0.96 × 41.868 / 1000)
 * Interpolates MAgPIE's 5-year steps onto OPEN-PROM's `YTIME = 2010..2100` annual grid
@@ -91,121 +93,215 @@ What it does (two output channels):
 
 **(b) AFOLU emissions → `iEmissions_magpie.mif`** (IAMC mif, 200 variables; reporting-only — current GAMS does not `$include` this file)
 
-* Reads 200 curated AFOLU emission variables across 11 gases (BC, CH4, CO, CO2, N2O, NH3, NO2, NO3-, OC, SO2, VOC) covering MAgPIE's 4 sub-trees: `|Land|*` endogenous, `|AFOLU|Land|Fires|*` GFED wildfires, `|AFOLU|Agriculture` GAINS/CEDS air pollutants, plus the post-process Grassi alias dropped to avoid double-count
-* **Extensive variable** (Mt/yr) — disaggregated 12 h12 → 39 resCy via two passes over the IAMC `|+|` tree (parsed from variable names):
-  * **Pass 1, leaves**: weight-based split. 199 leaves use **MAgPIE-internal cell-level (0.5°) land-use distributions** as country weights (one of 11 physical drivers — drained peatland area, secondary forest area, cropland area, etc.); 1 leaf (`Emissions|CO2|Land|+|Indirect`) uses **ClimateWatch year-2010 LULUCF CO2 signed weights** because per-Mha forest sink density varies ~8x across EU climate zones
-  * **Pass 2, parents**: country values = Σ direct children, processed deepest-first. Country-level `|+|` sum-to-parent identities hold automatically
+* Reads 200 curated AFOLU emission variables across 11 gases (BC, CH4, CO, CO2, N2O, NH3, NO2, NO3-, OC, SO2, VOC)
+* **Extensive variable** (Mt/yr) — disaggregated 12 h12 → 39 resCy via two passes over the IAMC `|+|` tree
 * **Pre-requisite**: the run's `cell.{land,land_split,peatland}_0.5.mz` + `clustermap_*.rds` must exist in the MAgPIE output directory (produced by MAgPIE's standard `extra/disaggregation.R` postprocessor)
-* Per-leaf weight assignments are in `inst/extdata/magpie-afolu-emission-variables.csv` (manually maintained — single source of truth for variable list, weight choice, and parent–child documentation)
 
 ---
 
-## Full Workflow (automated by `start.R task_id=7`)
+## 3. The iterative workflow
 
 ```bash
 Rscript start.R task_id=7
 ```
 
-Pipeline:
+### 3.1 Round model
 
-1. **OPEN-PROM round-1** (`link2MAgPIE=off`) → `blabla.gdx` + `blabla_round1.gdx` snapshot
-2. `couplePromToMagpie()` → `openprom_coupling.mif` (reads `blabla_round1.gdx`)
-3. **MAgPIE run** — launched via `Rscript start.R` inside `magpie/`, with env-vars `OPENPROM_MAGPIE_PROJECT`, `OPENPROM_MAGPIE_SUBSCENARIO`, `OPENPROM_COUPLING_MIF`, `OPENPROM_COUPLING_SCENARIO`, `OPENPROM_COUPLING_GHG=on`, `OPENPROM_COUPLING_BIOENERGY=on` set; MAgPIE writes `report.mif` + `cell.{land,land_split,peatland}_0.5.mz` + `clustermap_*.rds`
-4. `coupleMagpieToProm()` → `iPrices_magpie.csv` + `iEmissions_magpie.mif`
-5. **OPEN-PROM round-2** (`link2MAgPIE=on`) — reads `iPrices_magpie.csv`, fixes BMSWAS price, re-solves; overwrites `blabla.gdx` with the round-2 result (the round-1 snapshot is preserved)
-6. `reportOutput.R` + sync
+| Round | What runs | Output gdx |
+|---|---|---|
+| **0** | cold OPEN-PROM (`--link2MAgPIE=off`) | `blabla_round0.gdx` |
+| **k ≥ 1** | four sequential phases (see below) | `blabla_round{k}.gdx` |
 
-For task 7, three pieces of information are required, all inside `config.json`:
+Each round k ≥ 1 has four phases, executed in order:
 
-* `config.json:paths.magpie_path` — absolute path to the MAgPIE root (`<...>/OPEN-PROM/magpie/`)
-* `config.json:scenario.magpie.project` — subdirectory name under `magpie/e3m_projects/` (e.g. `"uptake"`); must contain a MAgPIE-side `scenarios.csv` that lists subscenarios (this is MAgPIE's own file inside the project folder, not OPEN-PROM's root-level `scenarios.csv` used for batch mode)
-* `config.json:scenario.scenario_name` — `title` of one row in that MAgPIE-side `scenarios.csv` (e.g. `"SSP2-PkBudg650"`); used as the scenario label on **both** the OPEN-PROM side and the MAgPIE side (the run folder name and the MAgPIE subscenario name share this string)
+| Phase | What runs |
+|---|---|
+| `forward` | `couplePromToMagpie(blabla_round{k-1}.gdx)` → `openprom_coupling.mif`; also captures `h12_quant` series |
+| `magpie` | snapshot `magpie/output/` listing, set `OPENPROM_COUPLING_*` env vars, run `Rscript e3m_start.R` from `magpie_path`, then diff the listing (must yield exactly 1 new dir) |
+| `backward` | `coupleMagpieToProm(<new MAgPIE dir>/report.mif)` → `iPrices_magpie.csv` + `iEmissions_magpie.mif`; also captures `h12_price` series |
+| `openprom_hot` | OPEN-PROM (`--link2MAgPIE=on`); reads the just-written `iPrices_magpie.csv` → `blabla_round{k}.gdx` |
 
-The task 7 body performs pre-flight validation on these three fields and aborts before the long round-1 GAMS solve if any path is missing or misspelled.
+After each k ≥ 2 completes, convergence is checked against round k-1. If both deltas fall below their tolerances, the loop exits with `status="converged"`. Otherwise, if k reaches `max_iter`, it exits with `status="max_iter"`. Finalization copies `blabla_round{final_k}.gdx` → `blabla.gdx` for `reportOutput.R`, writes `coupling_summary.json`, and runs `reportOutput.R` + `syncRun` per the behavior flags.
 
-### Run-folder layout (what each step produces)
+### 3.2 Convergence judgment
 
-A successful task 7 run touches **two folders**: the OPEN-PROM run folder created by Step 1 (`createRunFolder`) and a fresh MAgPIE output folder created by Step 3.
+Two h12-region × year series are captured per round:
+
+| Series | Source | Variable | Unit |
+|---|---|---|---|
+| `h12_quant` | `openprom_coupling.mif` | `Primary Energy Production\|Biomass\|Energy Crops` | EJ/yr |
+| `h12_price` | MAgPIE `report.mif` | `Prices\|Bioenergy` | US$2017/GJ |
+
+For each round k ≥ 2 and x ∈ {price, quant}, restrict to t ≥ 2024 and compute the per-cell relative change
+
+$$rel(r,t) = |x_k(r,t) - x_{k-1}(r,t)| / max(|x_{k-1}(r,t)|, floor)$$
+
+then reduce to two scalars:
+
+* `delta_x_max = max(rel)` — **the convergence judge**
+* `delta_x_l2 = sqrt(mean(rel^2))` — diagnostic only
+
+The `floor` (1.0 US$/GJ for price, 0.01 EJ/yr for quant) prevents spurious 100% spikes from near-zero prev values on regions/years that don't matter (e.g. price flicker 0.001 → 0.002).
+
+**Convergence rule:** both must hold.
 
 ```
-runs/SSP2-PkBudg650_<timestamp>/                  ← OPEN-PROM run folder
-├── blabla.gdx                                    Step 1 output → Step 5 overwrites with round-2
-├── blabla_round1.gdx                             Step 1 snapshot; Step 2 reads only this; preserved across resumes
-├── outputData.gdx                                round-2 OPEN-PROM main GDX (used by Step 6)
-├── modelstat.txt                                 GAMS model status of the latest solve (Step 5 overwrites Step 1's)
-├── main.lst / main.log                           GAMS listing & log of the latest solve
-├── full_round1.log                               Windows only: tee'd Step 1 console log
-├── full_round2.log                               Windows only: tee'd Step 5 console log
-├── openprom_coupling.mif                         Step 2 output → MAgPIE Step 3 input
-├── iPrices_magpie.csv                            Step 4 output → Step 5 input (BMSWAS price table)
-├── iEmissions_magpie.mif                         Step 4 output (AFOLU 200 vars; IAMC mif; reporting only — GAMS does not yet $include it)
-├── reporting.mif                                 Step 6 (`convertGDXtoMIF`) — converted MIF report
-├── plot.tex / plot.pdf                           Step 6 (`batchPlotReport`) — auto-generated plots
-└── metadata.json                                 written by `saveMetadata()` at task entry
-
-magpie/output/<scenario>_<timestamp>/             ← created by Step 3, one new folder per MAgPIE run
-├── report.mif                                    Step 3 main output → Step 4 input
-├── fulldata.gdx                                  MAgPIE main GDX
-├── cell.land_0.5.mz                              0.5° gridded land categories (Step 4 country weights)
-├── cell.land_split_0.5.mz                        further-split (forestry sub-classes, cropland tree cover, …)
-├── cell.peatland_0.5.mz                          0.5° peatland states (drained / intact / rewetted / …)
-├── clustermap_*.rds                              cell → (cluster, region, country) mapping (Step 4 aggregates by country)
-├── full.log / full.lst                           GAMS log/listing
-├── runstatistics.rda                             runtime stats
-└── _renv.lock / renv.lock                        per-run renv snapshot
-
-<config$model_runs_path>/                         ← SharePoint / shared drive (Step 6 sync target)
-└── SSP2-PkBudg650_<timestamp>.tgz                tar-gzipped copy of the OPEN-PROM run folder
+converged iff  delta_price_max < price_tol  AND  delta_quant_max < quant_tol
 ```
 
-Notes on file lifetimes:
+Defaults: `price_tol = quant_tol = 0.05` (5%), `max_iter = 1` (single round, equivalent to legacy single-shot behaviour).
 
-* `blabla.gdx` is produced twice (Step 1, then overwritten in Step 5). `blabla_round1.gdx` is the immutable round-1 snapshot — every resume reads from it, never from `blabla.gdx`.
-* `modelstat.txt`, `main.lst`, `main.log` likewise reflect only the *latest* solve. If Step 5 finishes, you cannot tell from these whether Step 1 also succeeded — but `blabla_round1.gdx` proves it did.
-* The MAgPIE step always creates a *new* timestamped subfolder under `magpie/output/` (named `<scenario>_<timestamp>` from `cfg$title`), so resuming task 7 leaves the previous MAgPIE folder untouched and Step 4 picks the most recent one (`which.max(mtime)`).
-* The `cell.*.mz` files are produced by MAgPIE's standard `extra/disaggregation.R` postprocessor — included by default in every MAgPIE run. If you customise the MAgPIE output script list and disable this postprocessor, Step 4 will fail with a clear error.
-* `syncRun()` writes the `.tgz` archive locally first, copies it to `config.json:paths.model_runs_path`, then deletes the local copy. Excludes `main.lst` / `mainCalib.lst` on success; the `config.json:behavior.uploadGDX` flag controls whether `.gdx` files are included.
+### 3.3 State machine and checkpointing
+
+Each successful phase atomically writes `coupling_state.json` (tmp file + rename). The `status` field disambiguates the four possible exits:
+
+| `status` | Source | Next-invocation behaviour |
+|---|---|---|
+| `iterating` | last successful saveState (in progress OR frozen by external interruption — `kill -9`, power loss, SSH drop) | **auto-resume** from the highest round's last completed phase |
+| `failed` | `tryCatch` after a model-self error (modelstat ≠ 2/5, MAgPIE exit ≠ 0, couple* raised, magpie output dir count ≠ 1); `last_failure` carries `{round, phase, timestamp, message}` | **rejected** — the run is dead, same config will fail again; start fresh |
+| `converged` | loop exited via convergence test | rejected — already done |
+| `max_iter` | loop hit `max_iter` without converging | rejected — already done |
+
+The state file holds per-round `phase`, captured h12 matrices, computed deltas, and a `config_snapshot` of `{max_iter, price_tol, quant_tol, sce_name}`. Resume requires bit-identical `config_snapshot` to the current scenario config; any mismatch rejects with the differing field shown.
+
+### 3.4 Pre-flight checks
+
+These run at the top of `runTask7()` and stop with a clear message before any expensive step:
+
+* **Required fields**: `paths.magpie_path`, `scenario.soft_link_magpie.project`, `scenario.scenario_name`, `scenario.soft_link_magpie.max_iter ≥ 1`
+* **Filesystem**: `magpie_path/`, `magpie_path/e3m_projects/<project>/`, `magpie_path/e3m_projects/<project>/scenarios.csv` all exist
+* **MAgPIE subscenario**: `scenario_name` must match exactly one row in the `title` column of the MAgPIE-side `scenarios.csv` via exact-or-prefix match (same semantics MAgPIE's own `e3m_start.R` uses). Zero matches → error listing all available titles; multiple matches → error listing the ambiguous candidates. This prevents wasting hours on a typo.
+* **Resume mode** (only when `existing_prom_run` is set): the directory exists, `coupling_state.json` exists in it, `status` ∉ {`failed`, `converged`, `max_iter`}, and `config_snapshot` is bit-identical to current cfg.
 
 ---
 
-## Resuming from an Existing Run
+## 4. Configuration
 
-If a task 7 run fails mid-pipeline (e.g. MAgPIE crashes in Step 3) and you want to retry without paying the cost of OPEN-PROM round-1 again, add the optional `magpie.existing_prom_run` field.
+All task 7 settings live under `config.json:scenario.soft_link_magpie` (or, in batch mode, as `soft_link_magpie.*` columns in `scenarios.csv`):
 
-**Single-scenario mode** (`Rscript start.R task_id=7`): put it directly under `config.json:scenario.magpie`:
-
-```json
+```jsonc
 {
   "scenario": {
-    "scenario_name": "SSP2-PkBudg650_resume",
-    "description": "Resume MAgPIE coupling from an existing round-1 run",
-    "magpie": {
-      "project": "uptake",
-      "existing_prom_run": "/abs/path/to/runs/SSP2-PkBudg650_2026-04-25_xxx"
+    "scenario_name": "Full_C600_biolim100",     // also the MAgPIE subscenario name
+    "description":   "UPTAKE C600 biolim100, coupled to convergence",
+    "gams_flags":    { "fScenario": 600 },
+    "soft_link_magpie": {
+      "project":           "uptake",            // subdir under magpie/e3m_projects/
+      "existing_prom_run": null,                // see §5 (Resume)
+      "max_iter":          5,                   // upper bound on hot rounds
+      "price_tol":         0.05,                // delta_price_max threshold
+      "quant_tol":         0.05                 // delta_quant_max threshold
     }
   }
 }
 ```
 
-**Batch mode** (`Rscript start.R scenarios.csv`): add a `magpie.existing_prom_run` column to `scenarios.csv` and populate it only on the specific row(s) where you want a resume. Leaving the cell empty on other rows means those scenarios run from scratch. Do **not** put `magpie.existing_prom_run` in `config.json:scenario` when batching across multiple scenarios, because every row that doesn't override the column would inherit the same path and reuse the same OPEN-PROM round-1 — defeating the comparison.
+| Field | Default | What it controls |
+|---|---|---|
+| `soft_link_magpie.project` | (required) | Subdir name under `magpie/e3m_projects/` containing the MAgPIE-side `scenarios.csv` |
+| `soft_link_magpie.existing_prom_run` | `null` | Absolute path to a run folder to resume; see §5 |
+| `soft_link_magpie.max_iter` | `1` | Maximum number of hot rounds. `max_iter=1` reproduces the legacy single-shot behaviour (one MAgPIE call). |
+| `soft_link_magpie.price_tol` | `0.05` | `delta_price_max < price_tol` is one half of the convergence rule |
+| `soft_link_magpie.quant_tol` | `0.05` | `delta_quant_max < quant_tol` is the other half |
 
-When this field is non-empty, the task 7 body:
+Three internal constants are **not** exposed to config — they are written at the top of `scripts/tasks/task7SoftLinkMagpie.R` and changing them is a code edit:
 
-* skips Step 1 (the round-1 GAMS solve),
-* `cd`s into the named folder instead of creating a new one, and
-* resumes from Step 2.
-
-Outputs from Step 2–6 overwrite previous artefacts in place, so a re-run after a Step 3 failure simply rewrites `openprom_coupling.mif`, picks up the next MAgPIE output folder, and re-solves round-2.
-
-**Why the `blabla_round1.gdx` snapshot matters.** Step 5 overwrites `blabla.gdx` with the round-2 result. Without a snapshot, a resume started after Step 5 would feed the round-2 gdx back into `couplePromToMagpie()` — wrong coupling input. Step 1 success therefore always copies `blabla.gdx → blabla_round1.gdx`, and Step 2 reads only from the `_round1` snapshot. If you point `magpie.existing_prom_run` at a folder produced before this feature landed (only `blabla.gdx`, no snapshot), the script makes the snapshot once on first reuse.
-
-**Disabling resumption.** Omit the `magpie.existing_prom_run` field — runs are treated as "from scratch" by default.
+| Constant | Value | Why |
+|---|---|---|
+| `.PRICE_FLOOR` | `1.0` US$2017/GJ | Floor for relative-change denominator (physical noise threshold) |
+| `.QUANT_FLOOR` | `0.01` EJ/yr | Same, for quantity |
+| `.CONVERGE_YEAR_START` | `2024` | Matches `main.gms`'s `$evalGlobal fStartY`; historical years are exogenously fixed so they don't matter for convergence |
 
 ---
 
-## Notes
+## 5. Resuming an interrupted run
 
-* CSV format requirement: year column headers in `iPrices_magpie.csv` must be **bare integers** (`2010,2011,…,2100`) — no `y` prefix. OPEN-PROM's `YTIME` set is declared as `/%fStartHorizon%*%fEndHorizon%/` which expands to plain-integer labels, and any mismatch triggers GAMS error 170 (domain violation)
-* When launching GAMS from a task body in `scripts/tasks/`, always pass `-Idir=./data` because `core/input.gms` includes CSVs with root-relative paths (`./iActv.csvr` etc.) that live in the `./data/` subdirectory
-* The forward bio channel sends a weighted blend of three `V03ProdPrimary` carriers (`0.4 × BMSWAS + 0.6 × BGSL + 0.6 × BKRS`) — raw 2G feedstock plus 2G biogasoline and biokerosene; the weights approximate each carrier's effective 2G-biomass content. Under scenarios where OPEN-PROM does not activate the liquid biofuel pathway, this signal can legitimately be near-zero; the CO2 price channel still transmits independently
-* The IAMC tree of `iEmissions_magpie.mif` preserves `|+|` markers — country-level sum-to-parent identities hold (parent = Σ direct children), matching the h12-level identities in MAgPIE's source `report.mif`
+If a run is interrupted **externally** (power loss, `kill -9`, SSH drop, OOM kill — anything that prevents the R process from running its `tryCatch` handlers), the state file is frozen at the last successful phase with `status="iterating"`. To resume, point `existing_prom_run` at the run folder:
+
+```jsonc
+"magpie": {
+  "project":           "uptake",
+  "existing_prom_run": "/abs/path/to/runs/Full_C600_biolim100_2026-05-27_15-20-36",
+  "max_iter":          5,
+  "price_tol":         0.05,
+  "quant_tol":         0.05
+}
+```
+
+The four resume-side fields (`max_iter`, `price_tol`, `quant_tol`, `sce_name`) must match the run folder's `config_snapshot` bit-identically — otherwise the run aborts at pre-flight. To change a knob, start a fresh run.
+
+Task 7 then:
+* reads `coupling_state.json` and confirms `status="iterating"`
+* validates the config matches the snapshot
+* resumes from the highest round's last completed phase (the expensive MAgPIE step is **not** re-run if it already completed)
+* continues the loop until convergence or `max_iter`
+
+**Failed runs are not resumable.** If `status="failed"`, the same config in the same folder will fail again — task 7 stops at pre-flight with the `last_failure` summary and tells you to start fresh. The folder is preserved for diagnostics. There is no command-line "force-resume failed run" entry point.
+
+---
+
+## 6. Run-folder layout
+
+Successful task 7 run touches **two folders**: the OPEN-PROM run folder (created on first invocation) and one MAgPIE output folder per round.
+
+```
+runs/<scenario_name>_<timestamp>/                   ← OPEN-PROM run folder
+├── blabla_round0.gdx                               cold OPEN-PROM solution (round 0)
+├── blabla_round1.gdx                               round-1 hot OPEN-PROM solution
+├── blabla_round2.gdx                               ...
+├── blabla_round{final_k}.gdx                       last hot round
+├── blabla.gdx                                      copy of blabla_round{final_k}.gdx (for reportOutput.R)
+├── openprom_coupling.mif                           last round's forward output (overwritten each round)
+├── iPrices_magpie.csv                              last round's backward price output (overwritten)
+├── iEmissions_magpie.mif                           last round's backward emissions output (overwritten)
+├── coupling_state.json                             full state machine snapshot — see §3.3
+├── convergence_log.csv                             per-round convergence trajectory — see below
+├── coupling_summary.json                           finalize-time summary: status, thresholds,
+│                                                   final_deltas, magpie_output_dirs, timestamps
+├── outputData.gdx                                  last hot round's OPEN-PROM output GDX
+├── modelstat.txt                                   GAMS model status of the latest solve
+├── main.lst / main.log                             GAMS listing & log of the latest solve
+├── reporting.mif                                   convertGDXtoMIF output (from reportOutput.R)
+└── metadata.json                                   written by saveMetadata() at task entry
+
+magpie/output/<scenario>_<timestamp>/               ← created by each MAgPIE phase, one per round
+├── report.mif                                      MAgPIE main coupling output → backward input
+├── fulldata.gdx                                    MAgPIE main GDX
+├── cell.{land,land_split,peatland}_0.5.mz          0.5° gridded land categories (for backward weights)
+├── clustermap_*.rds                                cell → (cluster, region, country) mapping
+└── ...
+```
+
+### `convergence_log.csv` columns
+
+One row is appended per round k ≥ 2 after `openprom_done` completes. Rounds 0 and 1 do not appear (no comparable previous round for k=0; for k=1, round 0 is cold so its h12 series do not exist).
+
+| Column | Meaning |
+|---|---|
+| `round` | k (≥ 2) |
+| `delta_price_max` | **judge**: compare to `price_tol` |
+| `delta_price_l2` | diagnostic L2 for price |
+| `delta_quant_max` | **judge**: compare to `quant_tol` |
+| `delta_quant_l2` | diagnostic L2 for quant |
+| `status` | `iterating` or `converged` (never `failed` or `max_iter` — those exit before the row is written) |
+
+**Reading max vs L2** (always `max ≥ L2`):
+
+| Pattern | Interpretation |
+|---|---|
+| `max ≫ L2` | a few cells still moving, bulk has settled — localized issue |
+| `max ≈ L2` | broad disagreement, system not settled |
+| `max ≈ tol`, `L2 ≪ tol` | usually safe to stop iterating; the average state is converged, only outliers cling to tol |
+
+### Example trajectory
+
+A real run of `Full_C600_biolim100` with `max_iter=20`, `price_tol=quant_tol=0.01`:
+
+```csv
+round,delta_price_max,delta_price_l2,delta_quant_max,delta_quant_l2,status
+2,0.0733018,0.0148365,0.65505,0.214075,iterating
+3,0.0194236,0.0023783,0.040672,0.0100922,iterating
+4,0.00313016,0.000511805,0.00811401,0.001176,converged
+```
+
+Three hot rounds + cold = total 3h 49min on this hardware. The δ values drop by 4–16× per round; both judges fall below 1% at round 4.
