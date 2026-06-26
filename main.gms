@@ -221,8 +221,8 @@ $setglobal emulatorGHGScen GHG000
 *' *** calcTProdElecSubtype: which power-generation target trajectory module 04 uses
 *' ***   default   = pure PRIMES + IEA
 *' ***   OpenTEPES = OPEN-TEPES NT2030 anchor for the 27 EU countries
-*' *** mrprom (fullTARGETS) writes both tShareTechPG<variant>.csv; module 04 picks one.
-$setglobal calcTProdElecSubtype OpenTEPES
+*' *** mrprom (fullTARGETS) writes both tShares_ProdElec<variant>.csv; module 04 picks one.
+$setglobal calcTProdElecSubtype default
 
 *' *** Translate the two user switches above (softLinkMAgPIE, landUseEmulator) into
 *' *** the two internal flags the rest of the model actually reads:
