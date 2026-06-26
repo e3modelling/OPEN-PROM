@@ -1,7 +1,18 @@
-*' @title Heat Sets
+*' @title Agriculture Sets
 *' @code
 
-*'sets
+sets
 
 *---
-AGR_MODES       Agriculture energy services  /CROPS,IRRIGATION,CLIMATE,POSTHARVESTING,LIVESTOCK,FORESTRY,FISHING/
+FOOD_TYPES       Food types /PLANT,MEAT,FISH/
+AGRI_MODES       Agriculture energy services  /CROPS,IRRIGATION,CLIMATE,POSTHARVESTING,LIVESTOCK,FORESTRY,FISHING/
+FERT_TYPES       Fertilizer types /N,PH,K/
+
+MODEStoFOOD(AGRI_MODES,FOOD_TYPES)      "Agriculture modes mapped to the corresponding food type production"
+/
+CROPS.PLANT
+LIVESTOCK.MEAT
+FISHING.FISH
+/
+;
+

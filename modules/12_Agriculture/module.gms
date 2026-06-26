@@ -1,7 +1,7 @@
-*' @title Economy module
+*' @title Agriculture module
 *'
-*' @description This is the Economy module.
+*' @description This is the Agriculture module.
 
 *###################### R SECTION START (MODULETYPES) ##########################
-$Ifi "%Economy%" == "agriculture" $include "./modules/12_Agriculture/agriculture/realization.gms"
+$Ifi "%Agriculture%" == "agriculture" $include "./modules/12_Agriculture/agriculture/realization.gms"
 *###################### R SECTION END (MODULETYPES) ############################
