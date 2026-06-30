@@ -97,4 +97,4 @@ $ENDIF.calib
 QmGDPPartGlob(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
     VmGDPPartGlob(allCy,YTIME)
       =E=
-    i01GDP(YTIME,allCy) / sum(runCy2, VmGDPPartGlob(runCy2,YTIME));
+    i01GDP(YTIME,allCy) / sum(runCy2, i01GDP(YTIME,runCy2));
