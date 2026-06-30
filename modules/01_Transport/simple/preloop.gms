@@ -130,7 +130,6 @@ p01RateScrPcTot(runCy,TRANSE,TTECH,YTIME)$(DATAY(YTIME) and SECTTECH(TRANSE,TTEC
 p01ActivGoodsTransp(runCy,TRANSE,YTIME)$(DATAY(YTIME) and TRANG(TRANSE)) = imActv(YTIME,runCy,TRANSE);
 p01ConsSpecificFuel(runCy,TRANSE,TTECH,EF,YTIME)$(DATAY(YTIME) and not sameas(TRANSE,"PC") and SECTTECH(TRANSE,TTECH) and TTECHtoEF(TTECH,EF)) = i01InitSpecFuelConsData(TRANSE,TTECH,EF);
 p01ConsSpecificFuel(runCy,"PC",TTECH,EF,YTIME)$(DATAY(YTIME) and SECTTECH("PC",TTECH) and TTECHtoEF(TTECH,EF)) = i01SFCPC(runCy,TTECH,EF,"%fBaseY%");
-p01ConsTechTranspSectoral(runCy,TRANSE,TTECH,EF,YTIME)$(DATAY(YTIME) and SECTTECH(TRANSE,TTECH) and not PLUGIN(TTECH) and not CHYBV(TTECH) and TTECHtoEF(TTECH,EF)) = V01ConsTechTranspSectoral.L(runCy,TRANSE,TTECH,EF,YTIME);
 p01ActivPassTrnsp(runCy,"PC",YTIME)$(DATAY(YTIME)) = imTransChar(runCy,"KM_VEH",YTIME);
 p01ActivPassTrnsp(runCy,TRANP,YTIME)$(DATAY(YTIME) and not sameas(TRANP,"PC")) = imActv(YTIME,runCy,TRANP);
 pmLft(runCy,DSBS,TECH,YTIME)$(DATAY(YTIME) and SECTTECH(DSBS,TECH)) = i01TechLft(runCy,DSBS,TECH,YTIME);
@@ -151,4 +150,3 @@ p01ShareTechTr(runCy,TRANSE,TTECH,YTIME)$(DATAY(YTIME)) = 0;
 p01CapacityTransport(runCy,TRANSE,TTECH,YTIME)$(DATAY(YTIME)) = V01CapacityTransport.L(runCy,TRANSE,TTECH,YTIME);
 *---
 *---
-
