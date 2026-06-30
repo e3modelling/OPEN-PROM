@@ -24,7 +24,7 @@ imCGI(allCy,YTIME)                                         "Capital Goods Index 
 imFPDL(SBS,KPDL)                                           "Polynomial Distribution Lags (PDL) Coefficients per subsector (1)"
 imCo2EmiFac(allCy,SBS,EF,YTIME)                            "CO2 emission factors per subsector (kgCO2/kgoe fuel burned)"
 imBmswasSupplyCoef(GHGSCEN,allCy,COEF,YTIME)        "Land-use emulator biomass supply curve coefficients for P = a + b*Q^c (various units)"
-imBmswasLandEmisCoef(GHGSCEN,allCy,EMTYPE,ECOEF,YTIME)  "Land-use emulator land CO2 emission curve coefficients for Em = ea + eb*Q + ec*Q^2 (Mt CO2/yr)"
+imBmswasLandEmisCoef(GHGSCEN,allCy,EMTYPE,ECOEF,YTIME)  "Land-use emulator land CO2 emission curve coefficients for Em = ea + eb*Q (Mt CO2/yr)"
 imBmswasAgriEmis(GHGSCEN,allCy,EMTYPE,YTIME)        "Land-use emulator AFOLU agriculture CH4/N2O emissions, Q-independent input (CH4 Mt; N2O kt /yr)"
 imAfoluLandEmis(allCy,EMTYPE,YTIME)                        "AFOLU land CO2 from emulator curve, level incl intercept (Mt CO2/yr)"
 imAfoluAgriEmis(allCy,EMTYPE,YTIME)                        "AFOLU agriculture CH4/N2O, Q-independent (CH4 Mt; N2O kt /yr)"
@@ -87,7 +87,6 @@ VmElecConsHeatPla(allCy,DSBS,YTIME)                        "Electricity consumed
 
 Positive Variables
 VmCarVal(allCy,NAP,YTIME)                                  "Carbon prices for all countries (US$2015/tn CO2)"
-VmRenValue(YTIME)                                          "Renewable value (US$2015/KWh)"
 common(allCy,TRANSE,YTIME)
 VmGDPPartGlob(allCy,YTIME)                                           "Global GDP share (1)"
 ;

@@ -33,7 +33,7 @@ runTask3 <- function() {
   }
 
   # Verify calibration outputs exist
-  CalibratedParams <- c("iMatFacPlaAvailCap.csv", "iMatrFactorData.csv",
+  CalibratedParams <- c("iMatFacPlaAvailCap.csv", "iScaleEndogScrapPG.csv", "iMatrFactorData.csv",
                         "iScaleEndogScrap.csv", "iCalibUsefulEnergy.csv")
   missing_files <- CalibratedParams[!file.exists(CalibratedParams)]
   if (length(missing_files) > 0) {

@@ -32,4 +32,5 @@ pmConsFuelElecProd(runCyL,EFS,YTIME)$TIME(YTIME) = VmConsFuelElecProd.L(runCyL,E
 
 $ifthen.calib %Calibration% == MatCalibration
 i04MatFacPlaAvailCap.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = i04MatFacPlaAvailCap.L(runCyL,PGALL,YTIME)$TIME(YTIME);
+i04ScaleEndogScrap.FX(runCyL,PGALL,YTIME)$TIME(YTIME) = i04ScaleEndogScrap.L(runCyL,PGALL,YTIME)$TIME(YTIME);
 $endif.calib

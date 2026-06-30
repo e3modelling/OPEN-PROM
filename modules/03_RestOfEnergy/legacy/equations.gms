@@ -179,10 +179,8 @@ Q03ConsFiEneSec(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 
 Q03FinalEnergy(allCy,DSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$(SECtoEF(DSBS,EFS))$(not sameas("ICT",DSBS)))..
     VmFinalEnergy(allCy,DSBS,EFS,YTIME)
-        =E=
-    SUM((TRANSE,TTECH)$(sameas(DSBS,TRANSE) and SECTTECH(TRANSE,TTECH) and TTECHtoEF(TTECH,EFS)),
-      V01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EFS,YTIME)
-    ) + 
+        =E= 
+    SUM(TRANSE$sameas(TRANSE,DSBS),V01ConsFuelTransport(allCy,TRANSE,EFS,YTIME)) +
     VmConsFuel(allCy,DSBS,EFS,YTIME) + 
     sum(CDRTECH$TECHtoEF(CDRTECH,EFS),VmConsFuelTechCDRProd(allCy,CDRTECH,EFS,YTIME))$sameas(DSBS,"DAC") +
     VmConsFuelTechCDRProd(allCy,"TEW",EFS,YTIME)$sameas(DSBS,"EW");   
