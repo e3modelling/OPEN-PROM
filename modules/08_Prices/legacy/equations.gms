@@ -67,12 +67,12 @@ $ENDIF
 $IFTHEN %bmswasPriceMode% == curve
     (
       pmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME-1) *
-      (1 + (pmCostPowGenAvgLng(allCy,YTIME-1) / pmCostPowGenAvgLng(allCy,YTIME-2) - 1)$sameas("ELC",EFS)) *
-      (1 + (pmCostAvgProdH2(allCy,YTIME-1) / pmCostAvgProdH2(allCy,YTIME-2) - 1)$sameas("H2F",EFS)) * 
-      (1 + (pmCostAvgProdSte(allCy,YTIME-1) / pmCostAvgProdSte(allCy,YTIME-2) - 1)$sameas("STE",EFS)) *
-      (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.4 - 1)$sameas("NGS",EFS)) *
-      (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.8 - 1)$SECtoEFPROD("LQD",EFS)) *
-      (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.2 - 1)$(sameas("HCL",EFS) or sameas("LGN",EFS))) +
+      (1 + (pmCostPowGenAvgLng(allCy,YTIME-1) / pmCostPowGenAvgLng(allCy,YTIME-2) - 1)$(sameas("ELC",EFS) and pmCostPowGenAvgLng(allCy,YTIME-1) > 0 and pmCostPowGenAvgLng(allCy,YTIME-2) > 0)) *
+      (1 + (pmCostAvgProdH2(allCy,YTIME-1) / pmCostAvgProdH2(allCy,YTIME-2) - 1)$(sameas("H2F",EFS) and pmCostAvgProdH2(allCy,YTIME-1) > 0 and pmCostAvgProdH2(allCy,YTIME-2) > 0)) * 
+      (1 + (pmCostAvgProdSte(allCy,YTIME-1) / pmCostAvgProdSte(allCy,YTIME-2) - 1)$(sameas("STE",EFS) and pmCostAvgProdSte(allCy,YTIME-1) > 0 and pmCostAvgProdSte(allCy,YTIME-2) > 0)) *
+      (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.4 - 1)$(sameas("NGS",EFS) and pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1) > 0)) *
+      (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.8 - 1)$(SECtoEFPROD("LQD",EFS) and pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1) > 0)) *
+      (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.2 - 1)$((sameas("HCL",EFS) or sameas("LGN",EFS)) and pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1) > 0)) +
       1e-3 * (
         VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,SBS,EFS,YTIME) - 
         pmCarVal(allCy,"TRADE",YTIME-1) * imCo2EmiFac(allCy,SBS,EFS,YTIME-1)
@@ -105,12 +105,12 @@ $IFTHEN %bmswasPriceMode% == curve
 *' ============================================================
 $ELSE
     pmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME-1) *
-    (1 + (pmCostPowGenAvgLng(allCy,YTIME-1) / pmCostPowGenAvgLng(allCy,YTIME-2) - 1)$sameas("ELC",EFS)) *
-    (1 + (pmCostAvgProdH2(allCy,YTIME-1) / pmCostAvgProdH2(allCy,YTIME-2) - 1)$sameas("H2F",EFS)) * 
-    (1 + (pmCostAvgProdSte(allCy,YTIME-1) / pmCostAvgProdSte(allCy,YTIME-2) - 1)$sameas("STE",EFS)) *
-    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.4 - 1)$sameas("NGS",EFS)) *
-    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.8 - 1)$SECtoEFPROD("LQD",EFS)) *
-    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.2 - 1)$(sameas("HCL",EFS) or sameas("LGN",EFS))) +
+    (1 + (pmCostPowGenAvgLng(allCy,YTIME-1) / pmCostPowGenAvgLng(allCy,YTIME-2) - 1)$(sameas("ELC",EFS) and pmCostPowGenAvgLng(allCy,YTIME-1) > 0 and pmCostPowGenAvgLng(allCy,YTIME-2) > 0)) *
+    (1 + (pmCostAvgProdH2(allCy,YTIME-1) / pmCostAvgProdH2(allCy,YTIME-2) - 1)$(sameas("H2F",EFS) and pmCostAvgProdH2(allCy,YTIME-1) > 0 and pmCostAvgProdH2(allCy,YTIME-2) > 0)) * 
+    (1 + (pmCostAvgProdSte(allCy,YTIME-1) / pmCostAvgProdSte(allCy,YTIME-2) - 1)$(sameas("STE",EFS) and pmCostAvgProdSte(allCy,YTIME-1) > 0 and pmCostAvgProdSte(allCy,YTIME-2) > 0)) *
+    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.4 - 1)$(sameas("NGS",EFS) and pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1) > 0)) *
+    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.8 - 1)$(SECtoEFPROD("LQD",EFS) and pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1) > 0)) *
+    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.2 - 1)$((sameas("HCL",EFS) or sameas("LGN",EFS)) and pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1) > 0)) +
     1e-3 * (
       VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,SBS,EFS,YTIME) - 
       pmCarVal(allCy,"TRADE",YTIME-1) * imCo2EmiFac(allCy,SBS,EFS,YTIME-1)
