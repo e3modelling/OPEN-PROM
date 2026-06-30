@@ -22,14 +22,14 @@ option clear = Q03ConsFiEneSec;
 option clear = Q03LossesDistr;
 
 *' Re-apply critical bounds for all active countries (outside country loop)
-V03ConsGrssInl.LO(runCy,EFS,YTIME) = 0;
-V03ProdPrimary.LO(runCy,EFS,YTIME) = 0;
-V03Imp.LO(runCy,EFS,YTIME) = 0;
-V03Exp.LO(runCy,EFS,YTIME) = 0;
-VmConsFiEneSec.LO(runCy,SSBS,EFS,YTIME) = 0;
-VmLossesDistr.LO(runCy,EFS,YTIME) = 0;
-V03OutTotTransf.LO(runCy,SSBS,EFS,YTIME) = 0;
-V03InpTotTransf.LO(runCy,SSBS,EFS,YTIME) = 0;
+V03ConsGrssInl.LO(runCyL,EFS,YTIME) = 0;
+V03ProdPrimary.LO(runCyL,EFS,YTIME) = 0;
+V03Imp.LO(runCyL,EFS,YTIME) = 0;
+V03Exp.LO(runCyL,EFS,YTIME) = 0;
+VmConsFiEneSec.LO(runCyL,SSBS,EFS,YTIME) = 0;
+VmLossesDistr.LO(runCyL,EFS,YTIME) = 0;
+V03OutTotTransf.LO(runCyL,SSBS,EFS,YTIME) = 0;
+V03InpTotTransf.LO(runCyL,SSBS,EFS,YTIME) = 0;
 
 *' Initialize variable levels from previous period parameter
 V03ConsGrssInl.L(runCyL,EFS,YTIME+1) = p03ConsGrssInl(runCyL,EFS,YTIME);

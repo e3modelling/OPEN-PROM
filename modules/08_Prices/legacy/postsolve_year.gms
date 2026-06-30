@@ -10,7 +10,9 @@ option clear = Q08PriceFuelAvgSub;
 option clear = Q08PriceElecInd;
 
 *' Re-apply critical bounds for all active countries (outside country loop)
-V08PriceFuelSepCarbonWght.LO(runCy,DSBS,EF,YTIME) = 0;
+V08PriceFuelSepCarbonWght.LO(runCyL,DSBS,EF,YTIME) = 0;
+VmPriceFuelSubsecCarVal.LO(runCyL,SBS,EF,YTIME) = 0;
+VmPriceFuelAvgSub.LO(runCyL,DSBS,YTIME) = 0;
 
 *' Initialize variable levels from previous period parameter
 V08PriceFuelSepCarbonWght.L(runCyL,DSBS,EF,YTIME+1) = p08PriceFuelSepCarbonWght(runCyL,DSBS,EF,YTIME);

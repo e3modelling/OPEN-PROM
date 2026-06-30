@@ -28,23 +28,23 @@ option clear = Q09CostAvgProdSte;
 option clear = Q09ConsFuelSteProd;
 
 *' Re-apply critical bounds for all active countries (outside country loop)
-V09ScrapRatePremature.LO(runCy,TSTEAM,YTIME) = 0;
-V09ScrapRatePremature.UP(runCy,TSTEAM,YTIME) = 1;
-V09GapShareSte.LO(runCy,TSTEAM,YTIME) = 0;
-V09GapShareSte.UP(runCy,TSTEAM,YTIME) = 1;
-V09CaptRateSte.LO(runCy,TSTEAM,YTIME) = 0;
-V09CaptRateSte.UP(runCy,TSTEAM,YTIME) = 1;
-V09ScrapRate.LO(runCy,TSTEAM,YTIME) = 0;
-V09ScrapRate.UP(runCy,TSTEAM,YTIME) = 1;
-VmDemTotSte.LO(runCy,YTIME) = 0;
-VmCapSte.LO(runCy,TSTEAM,YTIME) = 0;
-VmProdSte.LO(runCy,TSTEAM,YTIME) = 0;
-V09CostCapProdSte.LO(runCy,TSTEAM,YTIME) = 0;
-V09CostVarProdSte.LO(runCy,TSTEAM,YTIME) = 0;
-V09CostProdSte.LO(runCy,TSTEAM,YTIME) = 0;
-VmCostAvgProdSte.LO(runCy,YTIME) = 0;
-VmConsFuelSteProd.LO(runCy,STEMODE,EFS,YTIME) = 0;
-V09DemGapSte.LO(runCy,YTIME) = 0;
+V09ScrapRatePremature.LO(runCyL,TSTEAM,YTIME) = 0;
+V09ScrapRatePremature.UP(runCyL,TSTEAM,YTIME) = 1;
+V09GapShareSte.LO(runCyL,TSTEAM,YTIME) = 0;
+V09GapShareSte.UP(runCyL,TSTEAM,YTIME) = 1;
+V09CaptRateSte.LO(runCyL,TSTEAM,YTIME) = 0;
+V09CaptRateSte.UP(runCyL,TSTEAM,YTIME) = 1;
+V09ScrapRate.LO(runCyL,TSTEAM,YTIME) = 0;
+V09ScrapRate.UP(runCyL,TSTEAM,YTIME) = 1;
+VmDemTotSte.LO(runCyL,YTIME) = 0;
+VmCapSte.LO(runCyL,TSTEAM,YTIME) = 0;
+VmProdSte.LO(runCyL,TSTEAM,YTIME) = 0;
+V09CostCapProdSte.LO(runCyL,TSTEAM,YTIME) = 0;
+V09CostVarProdSte.LO(runCyL,TSTEAM,YTIME) = 0;
+V09CostProdSte.LO(runCyL,TSTEAM,YTIME) = 0;
+VmCostAvgProdSte.LO(runCyL,YTIME) = 0;
+VmConsFuelSteProd.LO(runCyL,STEMODE,EFS,YTIME) = 0;
+V09DemGapSte.LO(runCyL,YTIME) = 0;
 
 *' Initialize variable levels from previous period parameter
 V09ScrapRate.L(runCyL,TSTEAM,YTIME+1) = p09ScrapRate(runCyL,TSTEAM,YTIME);
@@ -58,5 +58,7 @@ V09CostProdSte.L(runCyL,TSTEAM,YTIME+1) = p09CostProdSte(runCyL,TSTEAM,YTIME);
 VmDemTotSte.L(runCyL,YTIME+1) = pmDemTotSte(runCyL,YTIME);
 VmCapSte.L(runCyL,TSTEAM,YTIME+1) = pmCapSte(runCyL,TSTEAM,YTIME);
 VmProdSte.L(runCyL,TSTEAM,YTIME+1) = pmProdSte(runCyL,TSTEAM,YTIME);
+VmCapSte.L(runCyL,TSTEAM,YTIME+1)$(SUM(TSTEAM2, pmCapSte(runCyL,TSTEAM2,YTIME)) = 0) = i04DataHeatProd(runCyL,TSTEAM,"%fBaseY%") + 1;
+VmProdSte.L(runCyL,TSTEAM,YTIME+1)$(SUM(TSTEAM2, pmCapSte(runCyL,TSTEAM2,YTIME)) = 0) = VmCapSte.L(runCyL,TSTEAM,YTIME+1);
 VmCostAvgProdSte.L(runCyL,YTIME+1) = pmCostAvgProdSte(runCyL,YTIME);
 VmConsFuelSteProd.L(runCyL,STEMODE,EFS,YTIME+1) = pmConsFuelSteProd(runCyL,STEMODE,EFS,YTIME);

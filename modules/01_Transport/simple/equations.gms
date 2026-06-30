@@ -167,14 +167,20 @@ Q01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME)$runCy(allCy)
 * Result:
 * - V01ShareTechTr: Dimensionless value representing the share of each technology in total sectoral use.
 * -------------------------------------------------------------------------------
-Q01ShareTechTr(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runCy(allCy))..
+Q01ShareTechTr(allCy,TRANSE,TTECH,YTIME)$(
+  TIME(YTIME) and
+  SECTTECH(TRANSE,TTECH) and
+  runCy(allCy) and
+  p01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME-1) > 0 and
+  SUM(TTECH2$(SECTTECH(TRANSE,TTECH2) and p01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1) > 0), 1)
+)..
     V01ShareTechTr(allCy,TRANSE,TTECH,YTIME)
       =E=
     imMatrFactor(allCy,TRANSE,TTECH,YTIME) *
-    p01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME-1)**(-2) /
-    sum(TTECH2$SECTTECH(TRANSE,TTECH2), 
+    (1 / sqr(p01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME-1)))$(p01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME-1) > 0) /
+    sum(TTECH2$(SECTTECH(TRANSE,TTECH2) and p01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1) > 0), 
       imMatrFactor(allCy,TRANSE,TTECH2,YTIME) * 
-      p01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1) ** (-2)
+      (1 / sqr(p01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1)))$(p01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1) > 0)
     );
 
 * -----------------------------------------------------------------------------
@@ -282,25 +288,49 @@ Q01RateScrPcTot(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     1 - (1 - 1 / i01TechLft(allCy,TRANSE,TTECH,YTIME)) *
     (1 - V01PremScrp(allCy,TRANSE,TTECH,YTIME));
     
-Q01PremScrp(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME)$SECTTECH(TRANSE,TTECH)$runCy(allCy))..
+Q01PremScrp(allCy,TRANSE,TTECH,YTIME)$(
+  TIME(YTIME) and
+  SECTTECH(TRANSE,TTECH) and
+  runCy(allCy) and
+  p01CostFuel(allCy,TRANSE,TTECH,YTIME-1) > 0
+)..
     V01PremScrp(allCy,TRANSE,TTECH,YTIME)
         =E=
     1 -
-    (p01CostFuel(allCy,TRANSE,TTECH,YTIME-1)) ** (-2) /
+    ((1 / sqr(p01CostFuel(allCy,TRANSE,TTECH,YTIME-1)))$(p01CostFuel(allCy,TRANSE,TTECH,YTIME-1) > 0)) /
     (
-      p01CostFuel(allCy,TRANSE,TTECH,YTIME-1) ** (-2) +
+      (1 / sqr(p01CostFuel(allCy,TRANSE,TTECH,YTIME-1)))$(p01CostFuel(allCy,TRANSE,TTECH,YTIME-1) > 0) +
       0.05*i01PremScrpFac(allCy,TRANSE,TTECH,YTIME) * 
-      SUM(TTECH2$(not sameas(TTECH2,TTECH) and SECTTECH(TRANSE,TTECH2)),
-        p01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1) ** (-2)
+      SUM(TTECH2$(not sameas(TTECH2,TTECH) and SECTTECH(TRANSE,TTECH2) and p01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1) > 0),
+        (1 / sqr(p01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1)))$(p01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1) > 0)
       )
     );
 
 Q01ShareBlend(allCy,TRANSE,EF,YTIME)$(TIME(YTIME)$SECtoEF(TRANSE,EF)$runCy(allCy) and yes$SUM(EF2,BLENDMAP(EF2,EF)))..
     V01ShareBlend(allCy,TRANSE,EF,YTIME)
       =E=
-    i01calibweibul(allCy,TRANSE,EF,YTIME) * VmPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME-1) ** (-2) /
-    SUM(EF2$(BLENDMAP(EF,EF2) or BLENDMAP2(EF,EF2)),
-      i01calibweibul(allCy,TRANSE,EF2,YTIME) * VmPriceFuelSubsecCarVal(allCy,TRANSE,EF2,YTIME-1) ** (-2)
+    (
+      i01calibweibul(allCy,TRANSE,EF,YTIME) *
+      ((1 / sqr(pmPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME-1)))$(pmPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME-1) > 0)) /
+      SUM(EF2$(BLENDMAP(EF,EF2) or BLENDMAP2(EF,EF2)),
+        i01calibweibul(allCy,TRANSE,EF2,YTIME) *
+        ((1 / sqr(pmPriceFuelSubsecCarVal(allCy,TRANSE,EF2,YTIME-1)))$(pmPriceFuelSubsecCarVal(allCy,TRANSE,EF2,YTIME-1) > 0))
+      )
+    )$(
+      pmPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME-1) > 0 and
+      SUM(EF2$(BLENDMAP(EF,EF2) or BLENDMAP2(EF,EF2)), 1$(pmPriceFuelSubsecCarVal(allCy,TRANSE,EF2,YTIME-1) <= 0)) = 0 and
+      SUM(EF2$(BLENDMAP(EF,EF2) or BLENDMAP2(EF,EF2)),
+        i01calibweibul(allCy,TRANSE,EF2,YTIME) *
+        ((1 / sqr(pmPriceFuelSubsecCarVal(allCy,TRANSE,EF2,YTIME-1)))$(pmPriceFuelSubsecCarVal(allCy,TRANSE,EF2,YTIME-1) > 0))
+      ) > 0
+    ) +
+    i01ShareBlend(allCy,TRANSE,EF,YTIME)$(
+      pmPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME-1) <= 0 or
+      SUM(EF2$(BLENDMAP(EF,EF2) or BLENDMAP2(EF,EF2)), 1$(pmPriceFuelSubsecCarVal(allCy,TRANSE,EF2,YTIME-1) <= 0)) > 0 or
+      SUM(EF2$(BLENDMAP(EF,EF2) or BLENDMAP2(EF,EF2)),
+        i01calibweibul(allCy,TRANSE,EF2,YTIME) *
+        ((1 / sqr(pmPriceFuelSubsecCarVal(allCy,TRANSE,EF2,YTIME-1)))$(pmPriceFuelSubsecCarVal(allCy,TRANSE,EF2,YTIME-1) > 0))
+      ) <= 0
     );
 
 $ontext

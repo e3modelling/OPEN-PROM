@@ -35,14 +35,14 @@ option clear = V01PremScrp;
 option clear = V01RateScrPcTot;
 
 *' Re-apply critical bounds for all active countries (outside country loop)
-V01PremScrp.UP(runCy,TRANSE,TTECH,YTIME) = 1;
-V01PremScrp.LO(runCy,TRANSE,TTECH,YTIME) = 0;
-V01PcOwnPcLevl.UP(runCy,YTIME) = 2*i01PassCarsMarkSat(runCy);
-V01GapTranspActiv.LO(runCy,TRANSE,YTIME) = 0;
-V01CapCostAnnualized.LO(runCy,TRANSE,TTECH,YTIME) = 0;
-V01CostFuel.LO(runCy,TRANSE,TTECH,YTIME) = 0;
-V01CostTranspPerMeanConsSize.LO(runCy,TRANSE,TTECH,YTIME) = 0;
-V01ShareTechTr.LO(runCy,TRANSE,TTECH,YTIME) = 0;
+V01PremScrp.UP(runCyL,TRANSE,TTECH,YTIME) = 1;
+V01PremScrp.LO(runCyL,TRANSE,TTECH,YTIME) = 0;
+V01PcOwnPcLevl.UP(runCyL,YTIME) = 2*i01PassCarsMarkSat(runCyL);
+V01GapTranspActiv.LO(runCyL,TRANSE,YTIME) = 0;
+V01CapCostAnnualized.LO(runCyL,TRANSE,TTECH,YTIME) = 0;
+V01CostFuel.LO(runCyL,TRANSE,TTECH,YTIME) = 0;
+V01CostTranspPerMeanConsSize.LO(runCyL,TRANSE,TTECH,YTIME) = 0;
+V01ShareTechTr.LO(runCyL,TRANSE,TTECH,YTIME) = 0;
 
 *' Initialize parameters for every iteration forward (seed from first iteration results)
 V01StockPcYearly.L(runCyL,YTIME+1) = p01StockPcYearly(runCyL,YTIME);

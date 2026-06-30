@@ -76,7 +76,7 @@ $IFTHEN %bmswasPriceMode% == curve
       1e-3 * (
         VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,SBS,EFS,YTIME) - 
         pmCarVal(allCy,"TRADE",YTIME-1) * imCo2EmiFac(allCy,SBS,EFS,YTIME-1)
-      )$DSBS(SBS)
+      )$(DSBS(SBS) and not sameas("H2F",EFS))
     )$(not sameas("BMSWAS",EFS))
     +
 *'  --- GLOBIOM supply curve for BMSWAS: year-over-year ratio ---
@@ -114,7 +114,7 @@ $ELSE
     1e-3 * (
       VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,SBS,EFS,YTIME) - 
       pmCarVal(allCy,"TRADE",YTIME-1) * imCo2EmiFac(allCy,SBS,EFS,YTIME-1)
-    )$DSBS(SBS);
+    )$(DSBS(SBS) and not sameas("H2F",EFS));
 $ENDIF
     ;
 
