@@ -114,16 +114,7 @@ Q03ConsGrssInl(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmLossesDistr(allCy,EFS,YTIME) - 
     V03Transfers(allCy,EFS,YTIME); 
 
-*' The equation calculates the primary production for a specific primary production definition in a given scenario and year.
-*' The computation involves different scenarios based on the type of primary production definition:
-*' For primary production definitions the primary production is directly proportional to the rate of primary production in total primary needs,
-*' and it depends on gross inland consumption not including the consumption of the energy branch.
-*' For Natural Gas primary production, the calculation considers a specific formula involving the rate of primary production in total primary needs, residuals for
-*' hard coal, natural gas, and oil primary production, the elasticity related to gross inland consumption for natural gas, and other factors. Additionally, there is a lag
-*' effect with coefficients for primary oil production.
-*' For Crude Oil primary production, the computation includes the rate of primary production in total primary needs, residuals for hard coal, natural gas, and oil
-*' primary production, the fuel primary production, and a product term involving the polynomial distribution lag coefficients for primary oil production.
-*' The result represents the primary production in million tons of oil equivalent.
+*' The equation calculates the primary production 
 Q03ProdPrimary(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V03ProdPrimary(allCy,EFS,YTIME)
         =E=  
@@ -131,20 +122,15 @@ Q03ProdPrimary(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmImpNetEneBrnch(allCy,EFS,YTIME) -
     SUM(SSBS,V03OutTotTransf(allCy,SSBS,EFS,YTIME));   
 
-*' The equation calculates the fake exports for a specific energy branch
-*' in a given scenario and year. The computation is based on the fuel exports for
-*' the corresponding energy branch. The result represents the fake exports in million tons of oil equivalent.
+*' The equation computes the stylized exports
 Q03Exp(allCy,EFS,YTIME)$(TIME(YTIME) $runCy(allCy))..
     V03Exp(allCy,EFS,YTIME)
       =E=
     i03RateExpTotImp(allCy,EFS,"%fBaseY%") *
     SUM(runCy2, V03Imp(runCy2,EFS,YTIME-1));
 
-*' The equation computes the fake imports for a specific energy branch 
-*' in a given scenario and year. The calculation is based on different conditions for various energy branches,
-*' such as electricity, crude oil, and natural gas. The equation involves gross inland consumption,
-*' fake exports, consumption of fuels in demand subsectors, electricity imports,
-*' and other factors. The result represents the fake imports in million tons of oil equivalent for all fuels except natural gas.
+*' The equation computes the stylized imports
+
 Q03Imp(allCy,EFS,YTIME)$(TIME(YTIME) $runCy(allCy))..
     V03Imp(allCy,EFS,YTIME)
         =E=
@@ -152,8 +138,7 @@ Q03Imp(allCy,EFS,YTIME)$(TIME(YTIME) $runCy(allCy))..
     V03ConsGrssInl(allCy,EFS,YTIME);
 
 *' The equation computes the net imports for a specific energy branch 
-*' in a given scenario and year. It subtracts the fake exports from the fake imports for
-*' all fuels except natural gas . The result represents the net imports in million tons of oil equivalent.
+*' Net imports
 Q03ImpNetEneBrnch(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmImpNetEneBrnch(allCy,EFS,YTIME)
         =E=
@@ -165,6 +150,7 @@ Q03ImpNetEneBrnch(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' The final consumption is determined based on the total transformation output and primary production for energy
 *' branches, excluding Oil, Coal, and Gas. The result, VmConsFiEneSec, represents the final consumption in million tons of
 *' oil equivalent for the specified scenario and year.
+*' Own energy consumption - Look at Hydrogen (some are transformation inputs)
 Q03ConsFiEneSec(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmConsFiEneSec(allCy,SSBS,EFS,YTIME)
         =E=
@@ -177,6 +163,8 @@ Q03ConsFiEneSec(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     )$(not sameas("H2P",SSBS)) +
     VmConsFuelH2Prod(allCy,EFS,YTIME)$sameas("H2P",SSBS);                               
 
+
+*' Final Energy
 Q03FinalEnergy(allCy,DSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$(SECtoEF(DSBS,EFS))$(not sameas("ICT",DSBS)))..
     VmFinalEnergy(allCy,DSBS,EFS,YTIME)
         =E= 
