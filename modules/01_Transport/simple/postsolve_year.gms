@@ -33,7 +33,6 @@ option clear = V01CapCostAnnualized;
 option clear = V01CostFuel;
 option clear = V01PremScrp;
 option clear = V01RateScrPcTot;
-option clear = VmLft;
 
 *' Re-apply critical bounds for all active countries (outside country loop)
 V01PremScrp.UP(runCy,TRANSE,TTECH,YTIME) = 1;
@@ -46,7 +45,6 @@ V01CostTranspPerMeanConsSize.LO(runCy,TRANSE,TTECH,YTIME) = 0;
 V01ShareTechTr.LO(runCy,TRANSE,TTECH,YTIME) = 0;
 
 *' Initialize parameters for every iteration forward (seed from first iteration results)
-VmLft.L(runCyL,DSBS,TTECH,YTIME+1) = pmLft(runCyL,DSBS,TTECH,YTIME);
 V01StockPcYearly.L(runCyL,YTIME+1) = p01StockPcYearly(runCyL,YTIME);
 V01RateScrPcTot.L(runCyL,TRANSE,TTECH,YTIME+1) = p01RateScrPcTot(runCyL,TRANSE,TTECH,YTIME);
 V01ActivGoodsTransp.L(runCyL,TRANSE,YTIME+1) = p01ActivGoodsTransp(runCyL,TRANSE,YTIME);
