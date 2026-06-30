@@ -12,12 +12,12 @@
 Q12Activity(allCy,AGRI_MODES,YTIME)$(TIME(YTIME) and runCy(allCy))..
   V12Activity(allCy,AGRI_MODES,YTIME)
         =E=
-  SUM(allcy2,
-    i12CaloriesIntake(allcy2,"PLANT",YTIME)$sameas("CROPS",AGRI_MODES) +
-    i12CaloriesIntake(allcy2,"MEAT",YTIME)$sameas("LIVESTOCK",AGRI_MODES) +
-    i12CaloriesIntake(allcy2,"FISH",YTIME)$sameas("FISHING",AGRI_MODES)
-  ) +
-  V03ProdPrimary(allCy,"BMSWAS",YTIME)$sameas("FORESTRY",AGRI_MODES) +
+  V12Activity(allCy,AGRI_MODES,YTIME-1) *
+  (1 + (i12IndexGlobalCaloriesIntake("PLANT",YTIME) - 1)$(sameas("CROPS",AGRI_MODES) or sameas("CLIMATE",AGRI_MODES) or sameas("IRRIGATION",AGRI_MODES))) *
+  (1 + (i12IndexGlobalCaloriesIntake("MEAT",YTIME) - 1)$sameas("LIVESTOCK",AGRI_MODES)) *
+  (1 + (i12IndexGlobalCaloriesIntake("FISH",YTIME) - 1)$sameas("FISHING",AGRI_MODES)) *
+  (1 + ((V03ProdPrimary(allCy,"BMSWAS",YTIME) + 1e-6) / (V03ProdPrimary(allCy,"BMSWAS",YTIME-1) + 1e-6) - 1)$sameas("FORESTRY",AGRI_MODES)) +
+  !! ()$sameas("ENERGY_CROPS",AGRI_MODES))
   0.1;
 
 Q12EnergyService(allCy,AGRI_MODES,YTIME)$(TIME(YTIME) and runCy(allCy))..
