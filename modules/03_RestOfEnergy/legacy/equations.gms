@@ -161,7 +161,9 @@ Q03ConsFiEneSec(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         V03ProdPrimary(allCy,EFS2,YTIME)$(not PGRENEF(EFS2))
       )
     )$(not sameas("H2P",SSBS)) +
-    VmConsFuelH2Prod(allCy,EFS,YTIME)$sameas("H2P",SSBS);                               
+    VmConsFuelH2Prod(allCy,EFS,YTIME)$sameas("H2P",SSBS) + 
+    [(1-i02ShareBlend(allCy,"PCH","TOLQ","OLQ",YTIME)) * V02EquipCapTechSubsec(allCy,"PCH","TOLQ",YTIME) * 0.08]$(sameas(SSBS,"LQD") and ELCEF(EFS)) + !! Energy Use for Pyrolysis Oil
+    [(1-i02ShareBlend(allCy,"PCH","TOLQ","OLQ",YTIME)) * V02EquipCapTechSubsec(allCy,"PCH","TOLQ",YTIME) * 0.06]$(sameas(SSBS,"LQD") and sameas(EFS,"NGS"));  !! Energy Use for Pyrolysis Oil                            
 
 
 *' Final Energy
