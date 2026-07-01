@@ -56,6 +56,7 @@ i05EffNetH2Transp(allCy,INFRTECH,YTIME)     "Total efficiency of the distributio
 i05CostAvgWeight(allCy,YTIME)               "Weight for pricing in average cost or in marginal cost"
 iWBLShareH2Prod(allCy,H2TECH,YTIME)         "Maturity factors for H2 technologies"
 iWBLPremRepH2Prod(allCy,H2TECH,YTIME)       "Maturity factors for premature replacement of H2 technologies"
+i05MatFacH2(allCy,H2TECH,YTIME)
 ;
 *---
 iWBLShareH2Prod(runCy,H2TECH,YTIME) = iTechShareH2Prod(H2TECH,YTIME);
@@ -131,3 +132,4 @@ loop YTIME$(An(YTIME)) do
          i05CostAvgWeight(runCy,YTIME) = -1/19+i05CostAvgWeight(runCy,YTIME-1);
 endloop;
 *---
+i05MatFacH2(allCy,H2TECH,YTIME) = 1;

@@ -9,8 +9,8 @@
 *V05CostTotH2.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = imFuelPrice(runCy,INDDOM,"STE1AH2F",YTIME)$(not An(YTIME)); 
 *display V05CostTotH2.L;
 *---
-V05GapShareH2Tech1.UP(runCy,H2TECH,YTIME) = 1;
-V05GapShareH2Tech1.LO(runCy,H2TECH,YTIME) = 0;
+V05GapShareH2Tech.UP(runCy,H2TECH,YTIME) = 1;
+V05GapShareH2Tech.LO(runCy,H2TECH,YTIME) = 0;
 *---
 V05DemGapH2.LO(runCy,YTIME) = 0;
 V05DemGapH2.L(runCy,YTIME) = 10;
@@ -24,18 +24,10 @@ VmProdH2.LO(runCy,H2TECH, YTIME) = 0;
 VmProdH2.L(runCy,H2TECH, YTIME) = 0.5;
 VmProdH2.FX(runCy,H2TECH, YTIME)$DATAY(YTIME) = 0;
 *---
-*VmConsFuelTechH2Prod.L(runCy,H2TECH,EF,YTIME)$(not An(YTIME)$H2TECHEFtoEF(H2TECH,EF)) = 0;
-VmConsFuelTechH2Prod.FX(runCy,H2TECH,EF,"%fBaseY%")$(H2TECHEFtoEF(H2TECH,EF)) = (VmProdH2.L(runCy,H2TECH,"%fBaseY%")/i05EffH2Prod(runCy,H2TECH,"%fBaseY%"));
-display i05EffH2Prod;
-display VmConsFuelTechH2Prod.L;
-*---
 *V05DelivH2InfrTech.L(runCy,INFRTECH,YTIME) = 2;
 *V05DelivH2InfrTech.FX(runCy,INFRTECH,YTIME)$(not An(YTIME)) = 1e-5;
 *V05DelivH2InfrTech.FX(runCy,INFRTECH,"%fBaseY%") = 0;
 *display V05DelivH2InfrTech.L;
-*---
-V05GapShareH2Tech2.LO(runCy,H2TECH,YTIME) = 0;
-V05GapShareH2Tech2.UP(runCy,H2TECH,YTIME) = 1;
 *---
 V05CapScrapH2ProdTech.LO(runCy,H2TECH,YTIME) = 0;
 V05CapScrapH2ProdTech.UP(runCy,H2TECH,YTIME) = 1;
@@ -77,18 +69,6 @@ V05CostProdH2Tech.FX(runCy,H2TECH,YTIME)$DATAY(YTIME) =
 ) / 
 (i05AvailH2Prod(runCy,H2TECH,YTIME) * smGwToTwhPerYear(YTIME) * smTWhToMtoe) +
 V05CostVarProdH2Tech.L(runCy,H2TECH,YTIME);
-*---
-V05ShareCCSH2Prod.LO(runCy,H2TECH,YTIME) = 0;
-V05ShareCCSH2Prod.UP(runCy,H2TECH,YTIME) = 1;
-*---
-V05ShareNoCCSH2Prod.LO(runCy,H2TECH,YTIME) = 0;
-V05ShareNoCCSH2Prod.UP(runCy,H2TECH,YTIME) = 1;
-*---
-VmConsFuelH2Prod.FX(runCy,EF,YTIME)$(DATAY(YTIME) and H2PRODEF(EF)) = sum(H2TECH$H2TECHEFtoEF(H2TECH,EF),VmConsFuelTechH2Prod.L(runCy,H2TECH,EF,YTIME));
-VmConsFuelH2Prod.FX(runCy,EF,YTIME)$(not H2PRODEF(EF)) = 0;
-*---
-V05CostProdCCSNoCCSH2Prod.LO(runCy,H2TECH,YTIME) = epsilon6;
-V05CostProdCCSNoCCSH2Prod.L(runCy,H2TECH,YTIME) = 2;
 *---
 VmCostAvgProdH2.LO(runCy,YTIME) = 0;
 VmCostAvgProdH2.L(runCy,YTIME) = 1;

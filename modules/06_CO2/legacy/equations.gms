@@ -21,7 +21,8 @@ Q06CO2CaptureCCS(allCy,SBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECtoEF(SBS,EF
         V04CO2CaptRate(allCy,PGALL,YTIME)
       )$sameas("PG", SBS) +
       sum(H2TECH$H2TECHEFtoEF(H2TECH,EFS),
-        VmConsFuelTechH2Prod(allCy,H2TECH,EFS,YTIME) *
+        VmProdH2(allCy,H2TECH,YTIME) / 
+        i05EffH2Prod(allCy,H2TECH,YTIME) *
         V05CaptRateH2(allCy,H2TECH,YTIME)
       )$sameas("H2P", SBS) +
       sum(DSBS$sameas(DSBS,SBS),
