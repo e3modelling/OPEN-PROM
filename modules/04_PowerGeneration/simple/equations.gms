@@ -315,14 +315,6 @@ Q04ScrpRate(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04IndxEndogScrap(allCy,PGALL,YTIME) *
     V04CCSRetroFit(allCy,PGALL,YTIME);
 
-Q04ConsFuelElecProd(allCy,PGEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    VmConsFuelElecProd(allCy,PGEF,YTIME)
-        =E=
-    SUM(PGALL$PGALLTOEF(PGALL,PGEF),
-      i04ShareFuels(allCy,PGALL,PGEF) *
-      VmProdElec(allCy,PGALL,YTIME) * smTWhToMtoe / 
-      imPlantEffByType(allCy,PGALL,"effELC",YTIME)
-    );
 
 $ontext
 *' The equation computes the electricity production cost per Combined Heat and Power plant for a specific demand sector within a given subsector.

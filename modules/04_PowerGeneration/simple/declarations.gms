@@ -41,7 +41,6 @@ Q04ScrpRate(allCy,PGALL,YTIME)
 Q04ProdElec(allCy,PGALL,YTIME)                             "Compute electricity production from power generation plants"
 Q04CostPowGenAvgLng(allCy,YTIME)	                   "Compute long term power generation cost"
 Q04CapElec(allCy,PGALL,YTIME)	                           "Compute electricity generation capacity"
-Q04ConsFuelElecProd(allCy,EFS,YTIME)
 ;
 
 Variables
@@ -77,7 +76,6 @@ V04ScrpRate(allCy,PGALL,YTIME)
 VmProdElec(allCy,PGALL,YTIME)                              "Electricity production (TWh)"	
 VmCostPowGenAvgLng(allCy,YTIME)	                   "Long-term average power generation cost (US$2015/kWh)"
 VmCapElec(allCy,PGALL,YTIME)	                           "Electricity generation plants capacity (GW)"
-VmConsFuelElecProd(allCy,EFS,YTIME)
 ;
 
 Scalars

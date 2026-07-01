@@ -59,9 +59,19 @@ $offtext
 Q03InpTotTransf(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECtoEF(SSBS,EFS))..
     V03InpTotTransf(allCy,SSBS,EFS,YTIME)
         =E=
-    VmConsFuelElecProd(allCy,EFS,YTIME)$sameas("PG",SSBS) + 
-    VmConsFuelSteProd(allCy,"CHP",EFS,YTIME)$sameas("CHP",SSBS) +
-    VmConsFuelSteProd(allCy,"DHP",EFS,YTIME)$sameas("STEAMP",SSBS) +
+    SUM(PGALL$PGALLTOEF(PGALL,EFS),
+      i04ShareFuels(allCy,PGALL,EFS) *
+      VmProdElec(allCy,PGALL,YTIME) * smTWhToMtoe / 
+      imPlantEffByType(allCy,PGALL,"effELC",YTIME)
+    )$sameas("PG",SSBS) + 
+    SUM(TCHP$(TSTEAMTOEF(TCHP,EFS)),
+      VmProdSte(allCy,TCHP,YTIME) * i09ShareFuel(allCy,TCHP,EFS,"%fBaseY%") / 
+      SUM(STECH$sameas(STECH,TCHP), imPlantEffByType(allCy,STECH,"effHeat","%fBaseY%"))
+    )$sameas("CHP",SSBS) +
+    SUM(TDHP$(TSTEAMTOEF(TDHP,EFS)),
+      VmProdSte(allCy,TDHP,YTIME) *
+      i09ShareFuel(allCy,TDHP,EFS,"%fBaseY%") / SUM(STECH$sameas(STECH,TDHP),imPlantEffByType(allCy,STECH,"effHeat","%fBaseY%"))
+    )$sameas("STEAMP",SSBS) +
     (
       i03InputEffSupply(allCy,SSBS,EFS,"%fBaseY%") * 
       SUM(EFS2, V03OutTotTransf(allCy,SSBS,EFS2,YTIME))

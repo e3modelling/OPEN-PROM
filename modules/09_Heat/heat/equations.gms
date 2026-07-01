@@ -151,15 +151,4 @@ Q09ScrapRatePremature(allCy,TSTEAM,YTIME)$(TIME(YTIME)$runCy(allCy))..
       )$TDHP(TSTEAM)
     );
 
-Q09ConsFuelSteProd(allCy,STEMODE,STEAMEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    VmConsFuelSteProd(allCy,STEMODE,STEAMEF,YTIME)
-      =E=
-    SUM(TDHP$(TSTEAMTOEF(TDHP,STEAMEF)),
-      VmProdSte(allCy,TDHP,YTIME) *
-      i09ShareFuel(allCy,TDHP,STEAMEF,"%fBaseY%") / SUM(STECH$sameas(STECH,TDHP),imPlantEffByType(allCy,STECH,"effHeat","%fBaseY%")) !!i09EffSteThrm(TDHP,YTIME)
-    )$sameas("DHP",STEMODE) +
-    SUM(TCHP$(TSTEAMTOEF(TCHP,STEAMEF)),
-      VmProdSte(allCy,TCHP,YTIME) * i09ShareFuel(allCy,TCHP,STEAMEF,"%fBaseY%") / 
-      SUM(STECH$sameas(STECH,TCHP), imPlantEffByType(allCy,STECH,"effHeat","%fBaseY%"))
-    )$sameas("CHP",STEMODE);
 
