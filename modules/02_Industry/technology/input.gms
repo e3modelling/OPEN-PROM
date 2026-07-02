@@ -36,8 +36,8 @@ $ELSE.calib
 variable i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME)        "Scale parameter for endogenous scrapping applied to the sum of full costs (1)";
 variable i02CalibUsefulEnergy(allCy,DSBS,YTIME);
 
-i02ScaleEndogScrap.LO(runCy,DSBS,ITECH,YTIME) = 0;                                      
-i02ScaleEndogScrap.UP(runCy,DSBS,ITECH,YTIME) = 100;
+i02ScaleEndogScrap.LO(runCy,DSBS,ITECH,YTIME) = 0.01;                                      
+i02ScaleEndogScrap.UP(runCy,DSBS,ITECH,YTIME) = 1;
 i02ScaleEndogScrap.L(runCy,DSBS,ITECH,YTIME) = 1;
 i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$(DATAY(YTIME) or not SECTTECH(DSBS,ITECH)) = 0;
 i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and not (INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS))) = 1;

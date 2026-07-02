@@ -17,16 +17,7 @@
 Q04ProdElecEstCHP(allCy,TCHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04ProdElecEstCHP(allCy,TCHP,YTIME) 
         =E=
-    1/smTWhToMtoe *
-    (  
-      VmProdSte(allCy,TCHP,YTIME) / VmPriceElecInd(allCy,TCHP,YTIME) + 
-      i04MxmShareChpElec(allCy,YTIME) * V04DemElecTot(allCy,YTIME) - 
-
-      SQRT(SQR(
-        VmProdSte(allCy,TCHP,YTIME) / VmPriceElecInd(allCy,TCHP,YTIME) - 
-        i04MxmShareChpElec(allCy,YTIME) * V04DemElecTot(allCy,YTIME))
-      )  
-    )/2;
+    VmProdSte(allCy,TCHP,YTIME) / VmPriceElecInd(allCy,TCHP,YTIME) / smTWhToMtoe;
 
 *' The equation calculates the total electricity demand by summing the components of final energy consumption in electricity, final non-energy consumption in electricity,
 *' distribution losses, and final consumption in the energy sector for electricity, and then subtracting net imports. The result is normalized using a conversion factor 
@@ -69,28 +60,30 @@ Q04CostCapTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
 Q04CostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
     V04CostVarTech(allCy,PGALL,YTIME)
         =E=
-    (
-      i04VarCost(PGALL,YTIME) / 1e3 + 
-      sum(PGEF$PGALLtoEF(PGALL,PGEF), 
-        i04ShareFuels(allCy,PGALL,PGEF) * 
-        (
-          VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME) +
-        V04CO2CaptRate(allCy,PGALL,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME) - 4.17$sameas("BMSWAS", PGEF)) +
-        (1-V04CO2CaptRate(allCy,PGALL,YTIME)) * 1e-3 * imCo2EmiFac(allCy,"PG",PGEF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME))
-        ) * smTWhToMtoe / imPlantEffByType(allCy,PGALL,"effELC",YTIME)
-      ) +
-    SQRT(SQR(
-      i04VarCost(PGALL,YTIME) / 1e3 + 
-      sum(PGEF$PGALLtoEF(PGALL,PGEF), 
-        i04ShareFuels(allCy,PGALL,PGEF) * 
-        (
-          VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME) +
-        V04CO2CaptRate(allCy,PGALL,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME) - 4.17$sameas("BMSWAS", PGEF)) +
-        (1-V04CO2CaptRate(allCy,PGALL,YTIME)) * 1e-3 * imCo2EmiFac(allCy,"PG",PGEF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME))
-        ) * smTWhToMtoe / imPlantEffByType(allCy,PGALL,"effELC",YTIME)
-      )
-    ))
-    ) / 2;
+      (
+        i04VarCost(PGALL,YTIME) / 1e3 + 
+        sum(PGEF$PGALLtoEF(PGALL,PGEF), 
+          i04ShareFuels(allCy,PGALL,PGEF) * 
+          (
+            VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME) +
+            V04CO2CaptRate(allCy,PGALL,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME) + 4.17$sameas("BMSWAS", PGEF)) +
+            (1-V04CO2CaptRate(allCy,PGALL,YTIME)) * 1e-3 * imCo2EmiFac(allCy,"PG",PGEF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME)) -
+            V04CO2CaptRate(allCy,PGALL,YTIME) * 1e-3 * (4.17$sameas("BMSWAS", PGEF)) * sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME))
+          ) * smTWhToMtoe / imPlantEffByType(allCy,PGALL,"effELC",YTIME)
+        ) +
+        SQRT(SQR(
+          i04VarCost(PGALL,YTIME) / 1e3 + 
+          sum(PGEF$PGALLtoEF(PGALL,PGEF), 
+            i04ShareFuels(allCy,PGALL,PGEF) * 
+            (
+              VmPriceFuelSubsecCarVal(allCy,"PG",PGEF,YTIME) +
+              V04CO2CaptRate(allCy,PGALL,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME) + 4.17$sameas("BMSWAS", PGEF)) +
+              (1-V04CO2CaptRate(allCy,PGALL,YTIME)) * 1e-3 * imCo2EmiFac(allCy,"PG",PGEF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME)) -
+              V04CO2CaptRate(allCy,PGALL,YTIME) * 1e-3 * (4.17$sameas("BMSWAS", PGEF)) * sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME))
+            ) * smTWhToMtoe / imPlantEffByType(allCy,PGALL,"effELC",YTIME)
+          )
+        ))
+      ) / 2 + 1e-3;
 
 *' The equation calculates the hourly production cost of a power generation plant used in investment decisions. The cost is determined based on various factors,
 *' including the discount rate, gross capital cost, fixed operation and maintenance cost, availability rate, variable cost, renewable value, and fuel prices.
@@ -99,14 +92,13 @@ Q04CostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
 Q04CostHourProdInvDec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04CostHourProdInvDec(allCy,PGALL,YTIME)
         =E=             
-        (
-            (V04CostCapTech(allCy,PGALL,YTIME) + V04CostVarTech(allCy,PGALL,YTIME)) +
-            (2 * (V04CostCapTech(allCy,PGALL,YTIME) + V04CostVarTech(allCy,PGALL,YTIME)) - i04FIT(allCy,PGALL,YTIME))
-            -
-            sqrt(sqr((V04CostCapTech(allCy,PGALL,YTIME) + V04CostVarTech(allCy,PGALL,YTIME)) -
-            (2 * (V04CostCapTech(allCy,PGALL,YTIME) + V04CostVarTech(allCy,PGALL,YTIME)) - i04FIT(allCy,PGALL,YTIME))))
-        ) / 2;
-     ;
+    (
+      (V04CostCapTech(allCy,PGALL,YTIME) + V04CostVarTech(allCy,PGALL,YTIME)) +
+      (2 * (V04CostCapTech(allCy,PGALL,YTIME) + V04CostVarTech(allCy,PGALL,YTIME)) - i04FIT(allCy,PGALL,YTIME))
+      -
+      sqrt(sqr((V04CostCapTech(allCy,PGALL,YTIME) + V04CostVarTech(allCy,PGALL,YTIME)) -
+      (2 * (V04CostCapTech(allCy,PGALL,YTIME) + V04CostVarTech(allCy,PGALL,YTIME)) - i04FIT(allCy,PGALL,YTIME))))
+    ) / 2;
 
 *' The equation computes the endogenous scrapping index for power generation plants  during the specified year .
 *' The index is calculated as the variable cost of technology excluding power plants flagged as not subject to scrapping 
@@ -115,19 +107,19 @@ Q04CostHourProdInvDec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q04IndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(allCy))..
     V04IndxEndogScrap(allCy,PGALL,YTIME)
         =E=
-    (V04CostVarTech(allCy,PGALL,YTIME-1) + 1e-3)**(-2) /
+    V04CostVarTech(allCy,PGALL,YTIME-1)**(-2) /
     (
-      (V04CostVarTech(allCy,PGALL,YTIME-1) + 1e-3)**(-2) +
-      (
-        i04ScaleEndogScrap(allCy,PGALL,YTIME) *
-        sum(PGALL2$(not sameas(PGALL,PGALL2)),
+      V04CostVarTech(allCy,PGALL,YTIME-1)**(-2) +
+      i04ScaleEndogScrap(allCy,PGALL,YTIME) *
+      sum(PGALL2$(not sameas(PGALL,PGALL2)),
+        (
           i04AvailRate(allCy,PGALL2,YTIME) / i04AvailRate(allCy,PGALL,YTIME) * 
           V04CostHourProdInvDec(allCy,PGALL2,YTIME-1) 
-          !!+
-          !!(1-i04AvailRate(allCy,PGALL2,YTIME) / i04AvailRate(allCy,PGALL,YTIME)) *
-          !!V04CostVarTech(allCy,PGALL2,YTIME)
-        )
-      )**(-2)
+        ) ** (-2)
+        !!+
+        !!(1-i04AvailRate(allCy,PGALL2,YTIME) / i04AvailRate(allCy,PGALL,YTIME)) *
+        !!V04CostVarTech(allCy,PGALL2,YTIME)
+      )
     );
 
 *' The equation calculates the total electricity generation capacity excluding Combined Heat and Power plants for a specified year .
@@ -166,7 +158,7 @@ Q04GapGenCapPowerDiff(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         )
       ))
       ) 
-    )/2 + 1e-6;
+    ) / 2;
 
 *' Calculates the share of all the unflexible RES penetration into the mixture, and specifically how much above a given threshold it is.
 Q04ShareMixWndSol(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
@@ -195,11 +187,11 @@ Q04SharePowPlaNewEq(allCy,PGALL,YTIME)$(TIME(YTIME)$runCy(allCy)) ..
     V04SharePowPlaNewEq(allCy,PGALL,YTIME)
         =E=
     i04MatFacPlaAvailCap(allCy,PGALL,YTIME) *
-    V04ShareSatPG(allCy,PGALL,YTIME-1) *
+    !!V04ShareSatPG(allCy,PGALL,YTIME-1) *
     V04CostHourProdInvDec(allCy,PGALL,YTIME-1) ** (-2) /
     SUM(PGALL2,
       i04MatFacPlaAvailCap(allCy,PGALL2,YTIME) *
-      V04ShareSatPG(allCy,PGALL2,YTIME-1) *
+      !!V04ShareSatPG(allCy,PGALL2,YTIME-1) *
       V04CostHourProdInvDec(allCy,PGALL2,YTIME-1) ** (-2)
     );
 
@@ -302,10 +294,10 @@ Q04CO2CaptRate(allCy,PGALL,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
 Q04CCSRetroFit(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(NOCCS(PGALL)))..
     V04CCSRetroFit(allCy,PGALL,YTIME)
         =E=
-    (V04CostVarTech(allCy,PGALL,YTIME-1) + 1e-3)** (-2) /
+    V04CostVarTech(allCy,PGALL,YTIME-1)** (-2) /
     (
-      (V04CostVarTech(allCy,PGALL,YTIME-1) + 1e-3)** (-2) +
-      0.01 *
+      V04CostVarTech(allCy,PGALL,YTIME-1)** (-2) +
+      0.002 *
       SUM(PGALL2$CCS_NOCCS(PGALL2,PGALL),
         (
           V04CostCapTech(allCy,PGALL2,YTIME-1) +

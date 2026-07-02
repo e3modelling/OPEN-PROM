@@ -16,22 +16,18 @@
     "gams_flags": {
       "fScenario": 200,
       "fEndY": 2100,
-      "CountrySolveMode": "serial",
-      "Transport": "simple",
-      "Industry": "technology",
-      "RestOfEnergy": "legacy",
-      "PowerGeneration": "simple",
-      "Hydrogen": "legacy",
-      "CO2": "legacy",
-      "Emissions": "legacy",
-      "Prices": "legacy",
-      "Heat": "heat",
-      "Curves": "off",
-      "Economy": "economy"
+      "CountrySolveMode": "serial"
     },
-    "magpie": {
+    "land_use_emulator": {
+      "source": "legacy",
+      "carbon_price": "GHG100"
+    },
+    "soft_link_magpie": {
       "project": "uptake",
-      "existing_prom_run": null
+      "existing_prom_run": null,
+      "max_iter": 1,
+      "price_tol": 0.05,
+      "quant_tol": 0.05
     }
   }
 }

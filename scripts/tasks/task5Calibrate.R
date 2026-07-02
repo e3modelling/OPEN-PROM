@@ -25,7 +25,7 @@ runTask5 <- function() {
 
   if (withRunFolder && withSync) syncRun()
 
-  CalibratedParams <- c("iMatFacPlaAvailCap.csv", "iMatrFactorData.csv",
+  CalibratedParams <- c("iMatFacPlaAvailCap.csv", "iScaleEndogScrapPG.csv", "iMatrFactorData.csv",
                         "iScaleEndogScrap.csv", "iCalibUsefulEnergy.csv")
   CalibratedParamsPath <- file.path(getwd(), CalibratedParams)
   newPath <- file.path(dirname(dirname(getwd())), "data", CalibratedParams)
