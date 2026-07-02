@@ -36,7 +36,8 @@ i05CostCapH2Prod(allCy,H2TECH,YTIME)        "Capital cost of hydrogen production
 i05CostFOMH2Prod(allCy,H2TECH,YTIME)        "Fixed operating and maintenance costs of hydrogen production technologies in US$2015 per kW output H2"
 i05CostVOMH2Prod(allCy,H2TECH,YTIME)        "Variable operating and maintenance costs of hydrogen production technologies in US$2015 per kW output H2"
 i05AvailH2Prod(allCy,H2TECH,YTIME)          "Availability of hydrogen production technologies"
-i05EffH2Prod(allCy,H2TECH,YTIME)            "Efficiency of hydrogen production technologies"
+i05EffH2ProdFeed(allCy,H2TECH,YTIME)            
+i05EffH2ProdEnergy(allCy,H2TECH,YTIME)            
 i05CostInvH2Transp(allCy,INFRTECH,YTIME)    "Investment cost of infrastructure technology"
                                                    !! - Turnpike pipeline in Euro per km
                                                    !! - Low pressure urban pipeline in Euro per km
@@ -90,12 +91,12 @@ i05CostVOMH2Prod(runCy,"wes",YTIME)  = i05H2Production("VC","weg",YTIME);
 i05CostVOMH2Prod(runCy,"wew",YTIME)  = i05H2Production("VC","weg",YTIME);
 *---
 i05AvailH2Prod(runCy,H2TECH,YTIME) = i05H2Production("AVAIL",H2TECH,YTIME);
-i05AvailH2Prod(runCy,"wes",YTIME)  = min(i05AvailH2Prod(runCy,"weg",YTIME),i04AvailRate(runCy,"PGSOL",YTIME));
-i05AvailH2Prod(runCy,"wew",YTIME)  = min(i05AvailH2Prod(runCy,"weg",YTIME),i04AvailRate(runCy,"PGAWNO",YTIME));
+i05AvailH2Prod(runCy,"wes",YTIME)  = i04AvailRate(runCy,"PGSOL",YTIME);
+i05AvailH2Prod(runCy,"wew",YTIME)  = i04AvailRate(runCy,"PGAWNO",YTIME);
 *---
-i05EffH2Prod(runCy,H2TECH,YTIME) = i05H2Production("EFF",H2TECH,YTIME);
-i05EffH2Prod(runCy,"wes",YTIME)  = i05H2Production("EFF","weg",YTIME);
-i05EffH2Prod(runCy,"wew",YTIME)  = i05H2Production("EFF","weg",YTIME);
+i05EffH2ProdFeed(runCy,H2TECH,YTIME) = i05H2Production("EFF",H2TECH,YTIME);
+i05EffH2ProdFeed(runCy,"wes",YTIME)  = i05H2Production("EFF","weg",YTIME);
+i05EffH2ProdFeed(runCy,"wew",YTIME)  = i05H2Production("EFF","weg",YTIME);
 *---
 i05CostInvH2Transp(runCy,INFRTECH,YTIME) = i05H2InfrCapCosts("IC",INFRTECH,YTIME);
 *---

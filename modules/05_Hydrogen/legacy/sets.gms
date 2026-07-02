@@ -90,17 +90,24 @@ LPIPU
 SSGG
 /
 *---
-H2TECHEFtoEF(H2TECH,EF)   "Mapping between production technologies and fuels"
+H2TECHtoFEEDSTOCK(H2TECH,EFS)   "Mapping between production technologies and feedstock fuels for processes"
 /
 (gsr,gss).ngs !! ,smr
 (cgf,cgs).hcl
 (bgfls,bgfl).BMSWAS !! bpy,bgfs,
 *sht.SOL
 *(nht,wen).NUC
-weg.ELC
-wes.ELC
-wew.ELC
+wes.SOL
+wew.WND
 *(opo,ops).RFO
+/
+
+H2TECHtoENERGY(H2TECH,EFS)   "Mapping between production technologies and fuels for energy use (combustion)"
+/
+(gsr,gss).ngs
+(cgf,cgs).hcl
+(bgfls,bgfl).BMSWAS
+weg.ELC
 /
 *---
 $ontext

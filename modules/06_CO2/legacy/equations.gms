@@ -20,9 +20,9 @@ Q06CO2CaptureCCS(allCy,SBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECtoEF(SBS,EF
         imPlantEffByType(allCy,PGALL,"effELC",YTIME) *
         V04CO2CaptRate(allCy,PGALL,YTIME)
       )$sameas("PG", SBS) +
-      sum(H2TECH$H2TECHEFtoEF(H2TECH,EFS),
+      sum(H2TECH$(H2TECHtoFEEDSTOCK(H2TECH,EFS) or H2TECHtoENERGY(H2TECH,EFS)),
         VmProdH2(allCy,H2TECH,YTIME) / 
-        i05EffH2Prod(allCy,H2TECH,YTIME) *
+        (i05EffH2ProdFeed(allCy,H2TECH,YTIME) + i05EffH2ProdEnergy(allCy,H2TECH,YTIME)) *
         V05CaptRateH2(allCy,H2TECH,YTIME)
       )$sameas("H2P", SBS) +
       sum(DSBS$sameas(DSBS,SBS),

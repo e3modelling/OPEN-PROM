@@ -65,7 +65,8 @@ Q03InpTotTransf(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECtoEF(SSBS,E
     (
       i03InputEffSupply(allCy,SSBS,EFS,"%fBaseY%") * 
       SUM(EFS2, V03OutTotTransf(allCy,SSBS,EFS2,YTIME))
-    )$(sameas(SSBS,"GAS") or sameas(SSBS,"SLD") or sameas(SSBS,"LQD"));            
+    )$(sameas(SSBS,"GAS") or sameas(SSBS,"SLD") or sameas(SSBS,"LQD")) +
+    (SUM(H2TECH$H2TECHtoFEEDSTOCK(H2TECH,EFS),VmProdH2(allCy,H2TECH,YTIME) / i05EffH2ProdFeed(allCy,H2TECH,YTIME)))$sameas("H2P",SSBS);    
 
 *' The equation calculates the total transformation output for a specific energy branch in a given scenario and year.
 *' The result is obtained by summing the transformation outputs from different sources, including thermal power stations, District Heating Plants,
@@ -174,7 +175,8 @@ Q03ConsFiEneSec(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         V03OutTotTransf(allCy,SSBS,EFS2,YTIME) +
         V03ProdPrimary(allCy,EFS2,YTIME)$(not PGRENEF(EFS2))
       )
-    )$(not sameas("H2P",SSBS));                               
+    )$(not sameas("H2P",SSBS)) +
+    (SUM(H2TECH$H2TECHtoENERGY(H2TECH,EFS),VmProdH2(allCy,H2TECH,YTIME) / i05EffH2ProdEnergy(allCy,H2TECH,YTIME)))$sameas("H2P",SSBS);                               
 
 Q03FinalEnergy(allCy,DSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$(SECtoEF(DSBS,EFS))$(not sameas("ICT",DSBS)))..
     VmFinalEnergy(allCy,DSBS,EFS,YTIME)
