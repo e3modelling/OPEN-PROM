@@ -41,6 +41,13 @@ Q11SubsiDemTechAvail(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH
         =E=
     V11SubsiTot(allCy,YTIME) * i11SubsiPerDemTechAvail(allCy,DSBS,TECH,YTIME);
 
+*' The equation splits the available state grants to the various fuels through a policy parameter expressing this proportional division.
+*' The resulting amount (in Millions US$2015) is going to be implemented to the cost calculation of each subsidized demand fuel.
+Q11SubsiFuelAvail(allCy,SBS,EF,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECtoEF(SBS,EF))..
+    VmSubsiFuelAvail(allCy,SBS,EF,YTIME)
+        =E=
+    V11SubsiTot(allCy,YTIME) * i11SubsiPerFuelAvail(allCy,SBS,EF,YTIME);
+
 *' The equation calculates the state support per unit of new capacity in the industrial subsectors and technologies (kUS$2015/toe-year).
 Q11SubsiDemITech(allCy,DSBS,ITECH,YTIME)$(INDSE(DSBS) and SECTTECH(DSBS,ITECH) and TIME(YTIME) and runCy(allCy))..
     VmSubsiDemITech(allCy,DSBS,ITECH,YTIME)
@@ -80,6 +87,17 @@ Q11SubsiDemTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS
     (sum(ITECH$(sameas(TECH,ITECH)), !! Industry
       VmSubsiDemITech(allCy,DSBS,ITECH,YTIME)
     )$INDSE(DSBS))
+    +
+    !! Housing Electricity
+    VmSubsiDemTechAvail(allCy,DSBS,TECH,YTIME) /
+    ((VmConsFuelShare(allCy,DSBS,EF,YTIME-1) * V02DemSubUsefulSubsec(allCy,DSBS,YTIME-1)) + 1e-6) +
+    (1 - imCapCostTechMin(allCy,DSBS,TECH,YTIME)) * V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)
+    -
+    sqrt(sqr(
+      VmSubsiDemTechAvail(allCy,DSBS,TECH,YTIME) /
+      ((VmConsFuelShare(allCy,DSBS,EF,YTIME-1) * V02DemSubUsefulSubsec(allCy,DSBS,YTIME-1)) + 1e-6)
+      - (1 - imCapCostTechMin(allCy,DSBS,TECH,YTIME)) * V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)
+    )$(ord(YTIME) > 15 and sameas(DSBS,"HOU") and sameas(TECH,"TELC")))
     +
     sum(CDRTECH$(sameas(TECH,CDRTECH)), !! CDR
       (
