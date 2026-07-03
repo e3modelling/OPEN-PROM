@@ -54,13 +54,15 @@ Q05DemGapH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       VmDemTotH2(allCy,YTIME) -
       sum(H2TECH,
         (1-V05CapScrapH2ProdTech(allCy,H2TECH,YTIME)) *
-        VmProdH2(allCy,H2TECH,YTIME-1)
+        VmCapH2(allCy,H2TECH,YTIME-1) *
+        i05AvailH2Prod(allCy,H2TECH,YTIME) * smGwToTwhPerYear(YTIME) * smTWhToMtoe
       ) +
       SQRT(SQR(
         VmDemTotH2(allCy,YTIME) -
         sum(H2TECH,
           (1-V05CapScrapH2ProdTech(allCy,H2TECH,YTIME)) *
-          VmProdH2(allCy,H2TECH,YTIME-1)
+          VmCapH2(allCy,H2TECH,YTIME-1) *
+          i05AvailH2Prod(allCy,H2TECH,YTIME) * smGwToTwhPerYear(YTIME) * smTWhToMtoe
         )
       )) 
     ) / 2;
@@ -91,11 +93,13 @@ Q05CostVarProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V05CostVarProdH2Tech(allCy,H2TECH,YTIME)
         =E=
     sum(EF$(H2TECHtoFEEDSTOCK(H2TECH,EF) or H2TECHtoENERGY(H2TECH,EF)),
-      VmPriceFuelSubsecCarVal(allCy,"H2P",EF,YTIME) * 1e3 +
-      V05CaptRateH2(allCy,H2TECH,YTIME) * (imCo2EmiFac(allCy,"H2P",EF,YTIME) + 4.17$(sameas("BMSWAS", EF))) * VmCstCO2SeqCsts(allCy,YTIME) +
-      (1-V05CaptRateH2(allCy,H2TECH,YTIME)) * imCo2EmiFac(allCy,"H2P",EF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME))
-    ) / (i05EffH2ProdFeed(allCy,H2TECH,YTIME) + i05EffH2ProdEnergy(allCy,H2TECH,YTIME)) +
-    i05CostVOMH2Prod(allCy,H2TECH,YTIME) +
+      (
+        VmPriceFuelSubsecCarVal(allCy,"H2P",EF,YTIME) * 1e3 +
+        V05CaptRateH2(allCy,H2TECH,YTIME) * (imCo2EmiFac(allCy,"H2P",EF,YTIME) + 4.17$(sameas("BMSWAS", EF))) * VmCstCO2SeqCsts(allCy,YTIME) +
+        (1-V05CaptRateH2(allCy,H2TECH,YTIME)) * imCo2EmiFac(allCy,"H2P",EF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME))
+      ) * (i05InputOverOutH2ProdFeed(allCy,H2TECH,EF,YTIME) + i05InputOverOutH2ProdEnergy(allCy,H2TECH,EF,YTIME))
+    ) +
+    !!i05CostVOMH2Prod(allCy,H2TECH,YTIME) +
     (i04VarCost("PGSOL",YTIME) / smTWhToMtoe)$sameas(H2TECH,"wes") +
     (i04VarCost("PGAWNO",YTIME) / smTWhToMtoe)$sameas(H2TECH,"wew");
 
@@ -114,11 +118,29 @@ Q05GapShareH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 
 *' This equation defines the actual hydrogen production levels, considering both scrapped capacity and the demand gap.
 *' It allocates production from different technologies to meet the overall demand, adjusting for changes in capacity and technology availability.
+Q05CapH2(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    VmCapH2(allCy,H2TECH,YTIME)
+        =E=
+    (1-V05CapScrapH2ProdTech(allCy,H2TECH,YTIME)) * VmCapH2(allCy,H2TECH,YTIME-1) +
+    V05GapShareH2Tech(allCy,H2TECH,YTIME) * V05DemGapH2(allCy,YTIME) / (i05AvailH2Prod(allCy,H2TECH,YTIME) * smGwToTwhPerYear(YTIME) * smTWhToMtoe);
+
+Q05UtilRate(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V05UtilRate(allCy,H2TECH,YTIME)
+        =E=
+    VmDemTotH2(allCy,YTIME) /
+    SUM(H2TECH2,
+      VmCapH2(allCy,H2TECH2,YTIME) * 
+      i05AvailH2Prod(allCy,H2TECH2,YTIME) * smGwToTwhPerYear(YTIME) * smTWhToMtoe
+    );
+
+*' This equation defines the actual hydrogen production levels, considering both scrapped capacity and the demand gap.
+*' It allocates production from different technologies to meet the overall demand, adjusting for changes in capacity and technology availability.
 Q05ProdH2(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmProdH2(allCy,H2TECH,YTIME)
         =E=
-    (1-V05CapScrapH2ProdTech(allCy,H2TECH,YTIME)) * VmProdH2(allCy,H2TECH,YTIME-1) +
-    V05GapShareH2Tech(allCy,H2TECH,YTIME) * V05DemGapH2(allCy,YTIME);
+    V05UtilRate(allCy,H2TECH,YTIME) * 
+    VmCapH2(allCy,H2TECH,YTIME) * 
+    i05AvailH2Prod(allCy,H2TECH,YTIME) * smGwToTwhPerYear(YTIME) * smTWhToMtoe;
 
 *' This equation calculates the average cost of hydrogen production across all technologies in the system.
 *' It accounts for varying costs of different technologies (e.g., electrolysis vs. SMR) to provide an overall assessment of hydrogen production cost.

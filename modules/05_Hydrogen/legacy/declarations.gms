@@ -11,7 +11,7 @@ V05CostProdH2Tech(allCy, H2TECH, YTIME)           "Hydrogen production cost per 
 V05CostVarProdH2Tech(allCy, H2TECH, YTIME)        "Variable cost (including fuel cost) for hydrogen production by technology in US$2015 per toe"
 VmCostAvgProdH2(allCy, YTIME)                    "Average production cost of hydrogen in Euro per toe"
 V05CaptRateH2(allCy,H2TECH,YTIME)
-
+V05UtilRate(allCy,H2TECH,YTIME)
 $ontext
 *'                **Infrastructure Variables**
 V05H2InfrArea(allCy, YTIME)                       "Number of stylised areas covered by H2 infrastructure"
@@ -34,6 +34,7 @@ $offtext
 *'                **Interdependent Variables**	
 VmDemTotH2(allCy, YTIME)                          "Hydrogen production requirement in Mtoe for meeting final demand"
 VmProdH2(allCy, H2TECH, YTIME)                    "Hydrogen Production by technology in Mtoe"
+VmCapH2(allCy, H2TECH, YTIME)                     "Hydrogen capacity by technology in kw-output"
 VmCostAvgProdH2(allCy, YTIME)                     "Average production cost of hydrogen in Euro per toe"
 ;
 
@@ -47,6 +48,7 @@ Q05CostProdH2Tech(allCy, H2TECH, YTIME)           "Equation for hydrogen product
 Q05CostVarProdH2Tech(allCy, H2TECH, YTIME)        "Equation for variable cost (including fuel cost) for hydrogen production by technology in Euro per toe"
 Q05CostAvgProdH2(allCy, YTIME)                    "Equation for average production cost of hydrogen in Euro per toe"
 Q05CaptRateH2(allCy,H2TECH,YTIME)
+Q05UtilRate(allCy,H2TECH,YTIME)
 $ontext
 *'                **Infrastructure Equations**
 Q05H2InfrArea(allCy, YTIME)                       "Equation for infrastructure area"
@@ -65,7 +67,8 @@ Q05CostTotH2(allCy, SBS, YTIME)                   "Equation of total hydrogen co
 $offtext
 *'                **Interdependent Equations**	
 Q05DemTotH2(allCy, YTIME)                         "Equation for total hydrogen demand in a country in Mtoe"
-Q05ProdH2(allCy, H2TECH, YTIME)                   "Equation for H2 production by technology"
+Q05ProdH2(allCy,H2TECH,YTIME)                     "Equation for H2 production by technology"
+Q05CapH2(allCy,H2TECH,YTIME)                      "Equation for H2 capacity by technology"
 ;
 
 Scalars

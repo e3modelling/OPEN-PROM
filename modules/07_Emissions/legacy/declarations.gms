@@ -21,6 +21,7 @@ Q07EmiActBySrcRegTim(E07SrcMacAbate, allCy, YTIME)        "Calculate remaining a
 Q07GrossEmissCO2Demand(allCy,DSBS,YTIME)                  "Calculate gross emissions of demand subsectors"
 Q07EmissionsNet(allCy,YTIME)                             "Calculate net emissions after abatement"
 Q07EmissionsNetPart(allCy,YTIME)                          "Calculate the fraction of the regional net emissions to the global net emissions"
+Q07GrossEmissCO2Processes(allCy,SSBS,YTIME)
 ;
 
 Variables
@@ -35,4 +36,5 @@ V07CostAbateBySrcRegTim(E07SrcMacAbate,allCy,YTIME)    "Total abatement cost"
 V07GrossEmissCO2Demand(allCy,DSBS,YTIME)                "Gross emissions of demand subsectors"
 V07EmissionsNet(allCy,YTIME)                            "Net emissions after abatement"
 V07EmissionsNetPart(allCy,YTIME)                       "Fraction of regional net emissions to global net emissions"
+V07GrossEmissCO2Processes(allCy,SSBS,YTIME)
 *;

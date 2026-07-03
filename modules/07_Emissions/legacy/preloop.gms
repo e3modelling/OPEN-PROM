@@ -8,9 +8,9 @@ V07GrossEmissCO2Supply.FX(runCy,"H2INFR",YTIME) = 0;
 V07GrossEmissCO2Supply.FX(runCy,SSBS,YTIME)$DATAY(YTIME) = 
 SUM(EFS,
       (
-        V03InpTotTransf.L(allCy,SSBS,EFS,YTIME)$SSBSEMIT(SSBS) +
-        VmConsFiEneSec.L(allCy,SSBS,EFS,YTIME) 
-      ) * imCo2EmiFac(allCy,SSBS,EFS,YTIME)
+        V03InpTotTransf.L(runCy,SSBS,EFS,YTIME)$SSBSENERGY(SSBS) +
+        VmConsFiEneSec.L(runCy,SSBS,EFS,YTIME) 
+      ) * imCo2EmiFac(runCy,SSBS,EFS,YTIME)
 );
 *---
 V07GrossEmissCO2Demand.LO(runCy,DSBS,YTIME) = 0;
