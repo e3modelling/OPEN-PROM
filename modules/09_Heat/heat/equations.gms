@@ -29,7 +29,7 @@ Q09CapSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     (1-V09ScrapRate(allCy,TSTEAM,YTIME)) * pmCapSte(allCy,TSTEAM,YTIME-1) +
     V09GapShareSte(allCy,TSTEAM,YTIME) * V09DemGapSte(allCy,YTIME);
 
-Q09ProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+Q09ProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy))$(not sameas(YTIME,"%fStartY%")))..
     VmProdSte(allCy,TSTEAM,YTIME)
         =E=
     VmDemTotSte(allCy,YTIME) /

@@ -46,6 +46,24 @@ VmCostAvgProdSte.LO(runCyL,YTIME) = 0;
 VmConsFuelSteProd.LO(runCyL,STEMODE,EFS,YTIME) = 0;
 V09DemGapSte.LO(runCyL,YTIME) = 0;
 
+*' Re-apply data-year fixed values after option clear
+VmDemTotSte.FX(runCyL,YTIME)$DATAY(YTIME) = (i03DataGrossInlCons(runCyL,"STE",YTIME) - imFuelTrade(runCyL,"IMPORTS","STE",YTIME) + imFuelTrade(runCyL,"EXPORTS","STE",YTIME));
+VmCapSte.FX(runCyL,TSTEAM,YTIME)$DATAY(YTIME) =
+(
+  (
+    (i03DataGrossInlCons(runCyL,"STE",YTIME) - imFuelTrade(runCyL,"IMPORTS","STE",YTIME) + imFuelTrade(runCyL,"EXPORTS","STE",YTIME)) /
+    SUM(TSTEAM2,i04DataHeatProd(runCyL,TSTEAM2,YTIME))
+  )$SUM(TSTEAM2,i04DataHeatProd(runCyL,TSTEAM2,YTIME))
+) * i04DataHeatProd(runCyL,TSTEAM,YTIME);
+VmProdSte.L(runCyL,TSTEAM,YTIME)$DATAY(YTIME) =
+(
+  (
+    (i03DataGrossInlCons(runCyL,"STE",YTIME) - imFuelTrade(runCyL,"IMPORTS","STE",YTIME) + imFuelTrade(runCyL,"EXPORTS","STE",YTIME)) /
+    SUM(TSTEAM2,i04DataHeatProd(runCyL,TSTEAM2,YTIME))
+  )$SUM(TSTEAM2,i04DataHeatProd(runCyL,TSTEAM2,YTIME))
+) * i04DataHeatProd(runCyL,TSTEAM,YTIME);
+V09DemGapSte.FX(runCyL,YTIME)$DATAY(YTIME) = 0;
+
 *' Initialize variable levels from previous period parameter
 V09ScrapRate.L(runCyL,TSTEAM,YTIME+1) = p09ScrapRate(runCyL,TSTEAM,YTIME);
 V09DemGapSte.L(runCyL,YTIME+1) = p09DemGapSte(runCyL,YTIME);

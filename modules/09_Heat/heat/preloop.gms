@@ -26,14 +26,20 @@ VmCapSte.L(runCy,TSTEAM,YTIME) = i04DataHeatProd(runCy,TSTEAM,"%fBaseY%") + 1;
 VmCapSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) = 
 (
   (
-    VmDemTotSte.L(runCy,YTIME) /
+    (i03DataGrossInlCons(runCy,"STE",YTIME) - imFuelTrade(runCy,"IMPORTS","STE",YTIME) + imFuelTrade(runCy,"EXPORTS","STE",YTIME)) /
     SUM(TSTEAM2,i04DataHeatProd(runCy,TSTEAM2,YTIME))
   )$SUM(TSTEAM2,i04DataHeatProd(runCy,TSTEAM2,YTIME))
 ) * i04DataHeatProd(runCy,TSTEAM,YTIME);
 *---
 VmProdSte.LO(runCy,TSTEAM,YTIME) = 0;
 VmProdSte.L(runCy,TSTEAM,YTIME) = i04DataHeatProd(runCy,TSTEAM,"%fBaseY%") + 1;
-VmProdSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) = VmCapSte.L(runCy,TSTEAM,YTIME);
+VmProdSte.L(runCy,TSTEAM,YTIME)$DATAY(YTIME) =
+(
+  (
+    (i03DataGrossInlCons(runCy,"STE",YTIME) - imFuelTrade(runCy,"IMPORTS","STE",YTIME) + imFuelTrade(runCy,"EXPORTS","STE",YTIME)) /
+    SUM(TSTEAM2,i04DataHeatProd(runCy,TSTEAM2,YTIME))
+  )$SUM(TSTEAM2,i04DataHeatProd(runCy,TSTEAM2,YTIME))
+) * i04DataHeatProd(runCy,TSTEAM,YTIME);
 *---
 V09CaptRateSte.FX(runCy,TSTEAM,YTIME)$DATAY(YTIME) = i09CaptRateSteProd(TSTEAM);
 *---

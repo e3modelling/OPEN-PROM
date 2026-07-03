@@ -136,7 +136,7 @@ VmConsFuelElecProd.FX(runCy,PGEF,YTIME)$DATAY(YTIME) = -i03InpTotTransfProcess(r
 *---
 V04GapGenCapPowerDiff.LO(runCy,YTIME) = 0;
 V04GapGenCapPowerDiff.L(runCy,YTIME) = 1;
-V04GapGenCapPowerDiff.FX(runCy,YTIME)$DATAY(YTIME) = 0;
+V04GapGenCapPowerDiff.L(runCy,YTIME)$DATAY(YTIME) = 0;
 *---
 VmCostPowGenAvgLng.LO(runCy,YTIME) = 0;
 VmCostPowGenAvgLng.L(runCy,YTIME) = 
