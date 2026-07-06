@@ -5,8 +5,6 @@
 *---
 *' Unified fuel price-transmission elasticity table (source fuel rows -> target fuel cols).
 *' GAMS param name i08PriceTransElast <-> mrprom output file iPriceTransElast.csv.
-*' Loaded unconditionally (CRO rows are used in every mode; BMSWAS rows only take
-*' effect in the curve/softfx price terms). See bioform-price-elasticity-analysis.md.
 table i08PriceTransElast(EF,EF)   "Fuel price pass-through elasticity: source (rows) -> target (cols)"
 $ondelim
 $include "iPriceTransElast.csv"
