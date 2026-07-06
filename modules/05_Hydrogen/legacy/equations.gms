@@ -92,16 +92,33 @@ Q05CostProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q05CostVarProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V05CostVarProdH2Tech(allCy,H2TECH,YTIME)
         =E=
-    sum(EF$(H2TECHtoFEEDSTOCK(H2TECH,EF) or H2TECHtoENERGY(H2TECH,EF)),
-      (
-        VmPriceFuelSubsecCarVal(allCy,"H2P",EF,YTIME) * 1e3 +
-        V05CaptRateH2(allCy,H2TECH,YTIME) * (imCo2EmiFac(allCy,"H2P",EF,YTIME) + 4.17$(sameas("BMSWAS", EF))) * VmCstCO2SeqCsts(allCy,YTIME) +
-        (1-V05CaptRateH2(allCy,H2TECH,YTIME)) * imCo2EmiFac(allCy,"H2P",EF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME))
-      ) * (i05InputOverOutH2ProdFeed(allCy,H2TECH,EF,YTIME) + i05InputOverOutH2ProdEnergy(allCy,H2TECH,EF,YTIME))
-    ) +
-    !!i05CostVOMH2Prod(allCy,H2TECH,YTIME) +
-    (i04VarCost("PGSOL",YTIME) / smTWhToMtoe)$sameas(H2TECH,"wes") +
-    (i04VarCost("PGAWNO",YTIME) / smTWhToMtoe)$sameas(H2TECH,"wew");
+    (
+      sum(EF$(H2TECHtoFEEDSTOCK(H2TECH,EF) or H2TECHtoENERGY(H2TECH,EF)),
+        (
+          VmPriceFuelSubsecCarVal(allCy,"H2P",EF,YTIME) * 1e3 +
+          V05CaptRateH2(allCy,H2TECH,YTIME) * (imCo2EmiFac(allCy,"H2P",EF,YTIME) + 4.17$(sameas("BMSWAS", EF))) * VmCstCO2SeqCsts(allCy,YTIME) +
+          (1-V05CaptRateH2(allCy,H2TECH,YTIME)) * imCo2EmiFac(allCy,"H2P",EF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME)) -
+          V05CaptRateH2(allCy,H2TECH,YTIME) * (4.17$sameas("BMSWAS", EF)) * sum(NAP$NAPtoALLSBS(NAP,"H2P"), VmCarVal(allCy,NAP,YTIME))
+        ) * (i05InputOverOutH2ProdFeed(allCy,H2TECH,EF,YTIME) + i05InputOverOutH2ProdEnergy(allCy,H2TECH,EF,YTIME))
+      ) +
+      i05CostVOMH2Prod(allCy,H2TECH,YTIME) +
+      (i04VarCost("PGSOL",YTIME) / smTWhToMtoe)$sameas(H2TECH,"wes") +
+      (i04VarCost("PGAWNO",YTIME) / smTWhToMtoe)$sameas(H2TECH,"wew") +
+
+      SQRT(SQR(
+        sum(EF$(H2TECHtoFEEDSTOCK(H2TECH,EF) or H2TECHtoENERGY(H2TECH,EF)),
+          (
+            VmPriceFuelSubsecCarVal(allCy,"H2P",EF,YTIME) * 1e3 +
+            V05CaptRateH2(allCy,H2TECH,YTIME) * (imCo2EmiFac(allCy,"H2P",EF,YTIME) + 4.17$(sameas("BMSWAS", EF))) * VmCstCO2SeqCsts(allCy,YTIME) +
+            (1-V05CaptRateH2(allCy,H2TECH,YTIME)) * imCo2EmiFac(allCy,"H2P",EF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME)) -
+            V05CaptRateH2(allCy,H2TECH,YTIME) * (4.17$sameas("BMSWAS", EF)) * sum(NAP$NAPtoALLSBS(NAP,"H2P"), VmCarVal(allCy,NAP,YTIME))
+          ) * (i05InputOverOutH2ProdFeed(allCy,H2TECH,EF,YTIME) + i05InputOverOutH2ProdEnergy(allCy,H2TECH,EF,YTIME))
+        ) +
+        i05CostVOMH2Prod(allCy,H2TECH,YTIME) +
+        (i04VarCost("PGSOL",YTIME) / smTWhToMtoe)$sameas(H2TECH,"wes") +
+        (i04VarCost("PGAWNO",YTIME) / smTWhToMtoe)$sameas(H2TECH,"wew")
+      ))
+    ) / 2 + 1e-3;
 
 *' This equation further adjusts the market share of hydrogen technologies, particularly considering 
 *' the relative competitiveness between CCS and non-CCS technologies. It helps to model the transition 
