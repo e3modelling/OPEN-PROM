@@ -98,6 +98,7 @@ imRateLossesFinCons(runCy,EFS,YTIME) =
   (sum(DSBS,imFuelCons(runCy,DSBS,EFS,YTIME)) + i03PrimProd(runCy,"CRO",YTIME)$sameas("CRO",EFS))
 ]$(sum(DSBS,imFuelCons(runCy,DSBS,EFS,YTIME)) + i03PrimProd(runCy,"CRO",YTIME)$sameas("CRO",EFS));
 imRateLossesFinCons(runCy,EFS,YTIME)$AN(YTIME) = imRateLossesFinCons(runCy,EFS,"%fBaseY%");
+imRateLossesFinCons(runCy,"H2F",YTIME) = imRateLossesFinCons(runCy,"ELC",YTIME);
 *---
 i03RatioPrimaryFuels(runCy,EFS,YTIME)$DATAY(YTIME) = 
 (

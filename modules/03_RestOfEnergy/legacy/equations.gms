@@ -17,18 +17,13 @@
 Q03LossesDistr(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmLossesDistr(allCy,EFS,YTIME)
         =E=
+    imRateLossesFinCons(allCy,EFS,YTIME) * 
     (
-      imRateLossesFinCons(allCy,EFS,YTIME) * 
-      (
-        SUM(DSBS,VmFinalEnergy(allCy,DSBS,EFS,YTIME)) +
-        V03ProdPrimary(allCy,EFS,YTIME)$sameas(EFS,"CRO")
-      )
-    )$(not H2EF(EFS)) +
+      SUM(DSBS,VmFinalEnergy(allCy,DSBS,EFS,YTIME)) +
+      V03ProdPrimary(allCy,EFS,YTIME)$sameas(EFS,"CRO")
+    )
     !! FIXME: Do we need to add LQD,GAS,SLD here too?
-    (
-      0!!VmDemTotH2(allCy,YTIME) -
-      !!sum(SBS$SECtoEF(SBS,"H2F"), VmDemSecH2(allCy,SBS,YTIME))
-    )$H2EF(EFS);  
+;  
 
 $ontext
 *' The equation calculates the refineries' capacity for a given scenario and year.
