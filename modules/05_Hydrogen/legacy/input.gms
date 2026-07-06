@@ -136,4 +136,5 @@ loop YTIME$(An(YTIME)) do
 endloop;
 *---
 i05MatFacH2(allCy,H2TECH,YTIME) = 1;
-i05MatFacH2(allCy,H2TECH,YTIME)$(H2CCS(H2TECH) and ord(YTIME)<18) = 0;
+i05MatFacH2(allCy,H2TECH,YTIME)$(H2CCS(H2TECH) and ord(YTIME)<=20) = 0;
+i05MatFacH2(allCy,H2TECH,YTIME)$(H2CCS(H2TECH) and (ord(YTIME) = 20)) = 0.5;
