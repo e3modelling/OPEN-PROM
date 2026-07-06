@@ -53,7 +53,7 @@ i03FeedTransfr(allCy,EFS,YTIME) = 0; !!FIXME: i03DataGrossInlCons must be correc
 i03DataGrossInlCons(allCy,EFS,YTIME)$DATAY(YTIME) =
 sum(DSBS,imFuelCons(allCy,DSBS,EFS,YTIME)) +
 SUM(SSBS,
-  i03DataOwnConsEne(allCy,SSBS,EFS,YTIME) -
+  i03DataOwnConsEne(allCy,SSBS,EFS,YTIME) +
   i03InpTotTransfProcess(allCy,SSBS,EFS,YTIME)
 ) +
 imDistrLosses(allCy,EFS,YTIME) -
