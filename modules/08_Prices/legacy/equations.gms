@@ -116,6 +116,7 @@ $ELSE
       VmCarVal(allCy,"TRADE",YTIME-1) * imCo2EmiFac(allCy,SBS,EFS,YTIME-1)
     )$DSBS(SBS)
 $ENDIF
+    - VmSubsiFuel(allCy,SBS,EFS,YTIME)
     ;
 
 Q08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)$(SECtoEF(DSBS,EF) $TIME(YTIME) $runCy(allCy))..
