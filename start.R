@@ -90,7 +90,6 @@ createRunFolder <- function(scenario = "default") {
   file.copy("targets",    to = runfolder, recursive = TRUE)
   file.copy("core",       to = runfolder, recursive = TRUE)
   file.copy("modules",    to = runfolder, recursive = TRUE)
-  file.copy("parameters", to = runfolder, recursive = TRUE)
   file.copy("scripts",    to = runfolder, recursive = TRUE)
 
   setwd(runfolder)
