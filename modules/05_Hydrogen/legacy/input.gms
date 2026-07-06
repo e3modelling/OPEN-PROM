@@ -122,7 +122,7 @@ i05HabAreaCountry(runCy) = i05H2Parameters(runCy,"AREA");
 *---
 i05EffNetH2Transp(runCy,INFRTECH,YTIME) = i05EffH2Transp(runCy,INFRTECH,YTIME)*(1-i05ConsSelfH2Transp(runCy,INFRTECH,YTIME));
 *---
-iWBLPremRepH2Prod(runCy,H2TECH,YTIME) = 0.1 ;
+iWBLPremRepH2Prod(runCy,H2TECH,YTIME) = 0.01 ;
 *---
 loop H2EFFLOOP do
   loop INFRTECH2$H2NETWORK(INFRTECH2,H2EFFLOOP) do
