@@ -26,14 +26,14 @@ option clear = Q06ConsFuelTechCDRProd;
 option clear = Q06CstCO2SeqCsts;
 
 *' Re-apply critical bounds for all active countries (outside country loop)
-V06CO2CaptureCCS.LO(runCy,SBS,EFS,YTIME) = 0;
-V06CaptCummCO2.LO(runCy,YTIME) = 0;
-V06CaptCummCO2Glob.LO(YTIME) = 0;
-V06LvlCostDAC.LO(runCy,CDRTECH,YTIME) = 0;
-V06CapCDR.LO(runCy,CDRTECH,YTIME) = 0;
-V06ProfRateDAC.LO(runCy,CDRTECH,YTIME) = 0;
-V06CapFacNewDAC.LO(runCy,CDRTECH,YTIME) = 0;
-VmConsFuelTechCDRProd.LO(runCy,CDRTECH,EF,YTIME) = 0;
+V06CO2CaptureCCS.LO(runCy,SBS,EFS,YTIME+1) = 0;
+V06CaptCummCO2.LO(runCy,YTIME+1) = 0;
+V06CaptCummCO2Glob.LO(YTIME+1) = 0;
+V06LvlCostDAC.LO(runCy,CDRTECH,YTIME+1) = 0;
+V06CapCDR.LO(runCy,CDRTECH,YTIME+1) = 0;
+V06ProfRateDAC.LO(runCy,CDRTECH,YTIME+1) = 0;
+V06CapFacNewDAC.LO(runCy,CDRTECH,YTIME+1) = 0;
+VmConsFuelTechCDRProd.LO(runCy,CDRTECH,EF,YTIME+1) = 0;
 
 *' Initialize variable levels from previous period parameter
 V06CO2CaptureCCS.L(runCyL,SBS,EFS,YTIME+1) = p06CO2CaptureCCS(runCyL,SBS,EFS,YTIME);

@@ -17,9 +17,9 @@ option clear = Q11SubsiCapCostTech;
 option clear = Q11NetSubsiTax;
 
 *' Re-apply critical bounds for all active countries (outside country loop)
-V11SubsiTot.LO(runCy,YTIME) = 0;
-VmSubsiDemITech.LO(runCy,DSBS,ITECH,YTIME) = 0;
-VmSubsiDemTech.LO(runCy,DSBS,TECH,YTIME) = 0;
+V11SubsiTot.LO(runCy,YTIME+1) = 0;
+VmSubsiDemITech.LO(runCy,DSBS,ITECH,YTIME+1) = 0;
+VmSubsiDemTech.LO(runCy,DSBS,TECH,YTIME+1) = 0;
 
 *' Initialize variable levels from previous period parameter
 V11SubsiTot.L(runCyL,YTIME+1) = p11SubsiTot(runCyL,YTIME);

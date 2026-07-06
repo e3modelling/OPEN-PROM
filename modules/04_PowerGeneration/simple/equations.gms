@@ -24,9 +24,16 @@ Q04ProdElecEstCHP(allCy,TCHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' which converts terawatt-hours (TWh) to million tonnes of oil equivalent (Mtoe). The formula provides a comprehensive measure of the factors contributing
 *' to the total electricity demand.
 Q04DemElecTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V04DemElecTot(allCy,YTIME)
+    (
+      V04DemElecTot(allCy,YTIME) -
+      (V03ConsGrssInl(allCy,"ELC",YTIME) - VmImpNetEneBrnch(allCy,"ELC",YTIME)) / smTWhToMtoe
+    )$(not (sameas(allCy,"LTU") and sameas(YTIME,"2083"))) +
+    (
+      V04DemElecTot(allCy,YTIME) * smTWhToMtoe -
+      (V03ConsGrssInl(allCy,"ELC",YTIME) - VmImpNetEneBrnch(allCy,"ELC",YTIME))
+    )$(sameas(allCy,"LTU") and sameas(YTIME,"2083"))
         =E=
-    (V03ConsGrssInl(allCy,"ELC",YTIME) - VmImpNetEneBrnch(allCy,"ELC",YTIME)) / smTWhToMtoe;          
+    0;
 
 *' This equation calculates the CAPEX and the Fixed Costs of each power generation unit, taking into account its discount rate and life expectancy, 
 *' for each region (country) and year. Learning curves applied only to CAPEX costs with cost breakdown.
@@ -234,11 +241,24 @@ Q04NetNewCapElec(allCy,PGALL,YTIME)$(PGREN(PGALL)$TIME(YTIME)$runCy(allCy))..
 *' from power generation plants based on the proportion of electricity demand that needs to be met by power generation plants, considering their
 *' capacity and the scaling factor for dispatching.
 Q04ProdElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    VmProdElec(allCy,PGALL,YTIME)
+    (
+      VmProdElec(allCy,PGALL,YTIME) -
+      V04CapElecNonCHP(allCy,YTIME) /
+      sum(PGALL2, VmCapElec(allCy,PGALL2,YTIME)) *
+      VmCapElec(allCy,PGALL,YTIME) * smGwToTwhPerYear(YTIME)
+    )$(not (
+      (sameas(allCy,"ESP") and sameas(PGALL,"PGH2F") and sameas(YTIME,"2051")) or
+      (sameas(allCy,"FRA") and sameas(PGALL,"PGH2F") and sameas(YTIME,"2056"))
+    )) +
+    (
+      VmProdElec(allCy,PGALL,YTIME) * sum(PGALL2, VmCapElec(allCy,PGALL2,YTIME)) -
+      V04CapElecNonCHP(allCy,YTIME) * VmCapElec(allCy,PGALL,YTIME) * smGwToTwhPerYear(YTIME)
+    )$(
+      (sameas(allCy,"ESP") and sameas(PGALL,"PGH2F") and sameas(YTIME,"2051")) or
+      (sameas(allCy,"FRA") and sameas(PGALL,"PGH2F") and sameas(YTIME,"2056"))
+    )
         =E=
-    V04CapElecNonCHP(allCy,YTIME) /
-    sum(PGALL2, VmCapElec(allCy,PGALL2,YTIME)) * 
-    VmCapElec(allCy,PGALL,YTIME) * smGwToTwhPerYear(YTIME);
+    0;
     !!i04util(allCy,PGALL,YTIME) *
     !!VmCapElec(allCy,PGALL,YTIME) * smGwToTwhPerYear(YTIME);
 

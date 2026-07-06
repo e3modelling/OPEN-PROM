@@ -40,26 +40,26 @@ option clear = Q05ConsFuelTechH2Prod;
 option clear = Q05DemSecH2;
 
 *' Re-apply critical bounds for all active countries (outside country loop)
-V05GapShareH2Tech1.UP(runCy,H2TECH,YTIME) = 1;
-V05GapShareH2Tech1.LO(runCy,H2TECH,YTIME) = 0;
-V05DemGapH2.LO(runCy,YTIME) = 0;
-VmDemTotH2.LO(runCy,YTIME) = 0;
-VmProdH2.LO(runCy,H2TECH,YTIME) = 0;
-V05GapShareH2Tech2.LO(runCy,H2TECH,YTIME) = 0;
-V05GapShareH2Tech2.UP(runCy,H2TECH,YTIME) = 1;
-V05CapScrapH2ProdTech.LO(runCy,H2TECH,YTIME) = 0;
-V05CapScrapH2ProdTech.UP(runCy,H2TECH,YTIME) = 1;
-V05CaptRateH2.LO(runCy,H2TECH,YTIME) = 0;
-V05ScrapLftH2Prod.UP(runCy,H2TECH,YTIME) = 1;
-V05ScrapLftH2Prod.LO(runCy,H2TECH,YTIME) = 0;
-V05CostVarProdH2Tech.LO(runCy,H2TECH,YTIME) = 0;
-V05ShareCCSH2Prod.LO(runCy,H2TECH,YTIME) = 0;
-V05ShareCCSH2Prod.UP(runCy,H2TECH,YTIME) = 1;
-V05ShareNoCCSH2Prod.LO(runCy,H2TECH,YTIME) = 0;
-V05ShareNoCCSH2Prod.UP(runCy,H2TECH,YTIME) = 1;
-V05CostProdH2Tech.LO(runCy,H2TECH,YTIME) = 0;
-V05CostProdCCSNoCCSH2Prod.LO(runCy,H2TECH,YTIME) = 0;
-VmCostAvgProdH2.LO(runCy,YTIME) = 0;
+V05GapShareH2Tech1.UP(runCy,H2TECH,YTIME+1) = 1;
+V05GapShareH2Tech1.LO(runCy,H2TECH,YTIME+1) = 0;
+V05DemGapH2.LO(runCy,YTIME+1) = 0;
+VmDemTotH2.LO(runCy,YTIME+1) = 0;
+VmProdH2.LO(runCy,H2TECH,YTIME+1) = 0;
+V05GapShareH2Tech2.LO(runCy,H2TECH,YTIME+1) = 0;
+V05GapShareH2Tech2.UP(runCy,H2TECH,YTIME+1) = 1;
+V05CapScrapH2ProdTech.LO(runCy,H2TECH,YTIME+1) = 0;
+V05CapScrapH2ProdTech.UP(runCy,H2TECH,YTIME+1) = 1;
+V05CaptRateH2.LO(runCy,H2TECH,YTIME+1) = 0;
+V05ScrapLftH2Prod.UP(runCy,H2TECH,YTIME+1) = 1;
+V05ScrapLftH2Prod.LO(runCy,H2TECH,YTIME+1) = 0;
+V05CostVarProdH2Tech.LO(runCy,H2TECH,YTIME+1) = 0;
+V05ShareCCSH2Prod.LO(runCy,H2TECH,YTIME+1) = 0;
+V05ShareCCSH2Prod.UP(runCy,H2TECH,YTIME+1) = 1;
+V05ShareNoCCSH2Prod.LO(runCy,H2TECH,YTIME+1) = 0;
+V05ShareNoCCSH2Prod.UP(runCy,H2TECH,YTIME+1) = 1;
+V05CostProdH2Tech.LO(runCy,H2TECH,YTIME+1) = 0;
+V05CostProdCCSNoCCSH2Prod.LO(runCy,H2TECH,YTIME+1) = 0;
+VmCostAvgProdH2.LO(runCy,YTIME+1) = 0;
 
 *' Initialize variable levels from previous period parameter
 V05GapShareH2Tech1.L(runCyL,H2TECH,YTIME+1) = p05GapShareH2Tech1(runCyL,H2TECH,YTIME);

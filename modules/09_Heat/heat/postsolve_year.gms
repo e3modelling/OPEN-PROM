@@ -28,23 +28,23 @@ option clear = Q09CostAvgProdSte;
 option clear = Q09ConsFuelSteProd;
 
 *' Re-apply critical bounds for all active countries (outside country loop)
-V09ScrapRatePremature.LO(runCyL,TSTEAM,YTIME) = 0;
-V09ScrapRatePremature.UP(runCyL,TSTEAM,YTIME) = 1;
-V09GapShareSte.LO(runCyL,TSTEAM,YTIME) = 0;
-V09GapShareSte.UP(runCyL,TSTEAM,YTIME) = 1;
-V09CaptRateSte.LO(runCyL,TSTEAM,YTIME) = 0;
-V09CaptRateSte.UP(runCyL,TSTEAM,YTIME) = 1;
-V09ScrapRate.LO(runCyL,TSTEAM,YTIME) = 0;
-V09ScrapRate.UP(runCyL,TSTEAM,YTIME) = 1;
-VmDemTotSte.LO(runCyL,YTIME) = 0;
-VmCapSte.LO(runCyL,TSTEAM,YTIME) = 0;
-VmProdSte.LO(runCyL,TSTEAM,YTIME) = 0;
-V09CostCapProdSte.LO(runCyL,TSTEAM,YTIME) = 0;
-V09CostVarProdSte.LO(runCyL,TSTEAM,YTIME) = 0;
-V09CostProdSte.LO(runCyL,TSTEAM,YTIME) = 0;
-VmCostAvgProdSte.LO(runCyL,YTIME) = 0;
-VmConsFuelSteProd.LO(runCyL,STEMODE,EFS,YTIME) = 0;
-V09DemGapSte.LO(runCyL,YTIME) = 0;
+V09ScrapRatePremature.LO(runCyL,TSTEAM,YTIME+1) = 0;
+V09ScrapRatePremature.UP(runCyL,TSTEAM,YTIME+1) = 1;
+V09GapShareSte.LO(runCyL,TSTEAM,YTIME+1) = 0;
+V09GapShareSte.UP(runCyL,TSTEAM,YTIME+1) = 1;
+V09CaptRateSte.LO(runCyL,TSTEAM,YTIME+1) = 0;
+V09CaptRateSte.UP(runCyL,TSTEAM,YTIME+1) = 1;
+V09ScrapRate.LO(runCyL,TSTEAM,YTIME+1) = 0;
+V09ScrapRate.UP(runCyL,TSTEAM,YTIME+1) = 1;
+VmDemTotSte.LO(runCyL,YTIME+1) = 0;
+VmCapSte.LO(runCyL,TSTEAM,YTIME+1) = 0;
+VmProdSte.LO(runCyL,TSTEAM,YTIME+1) = 0;
+V09CostCapProdSte.LO(runCyL,TSTEAM,YTIME+1) = 0;
+V09CostVarProdSte.LO(runCyL,TSTEAM,YTIME+1) = 0;
+V09CostProdSte.LO(runCyL,TSTEAM,YTIME+1) = 0;
+VmCostAvgProdSte.LO(runCyL,YTIME+1) = 0;
+VmConsFuelSteProd.LO(runCyL,STEMODE,EFS,YTIME+1) = 0;
+V09DemGapSte.LO(runCyL,YTIME+1) = 0;
 
 *' Re-apply data-year fixed values after option clear
 VmDemTotSte.FX(runCyL,YTIME)$DATAY(YTIME) = (i03DataGrossInlCons(runCyL,"STE",YTIME) - imFuelTrade(runCyL,"IMPORTS","STE",YTIME) + imFuelTrade(runCyL,"EXPORTS","STE",YTIME));

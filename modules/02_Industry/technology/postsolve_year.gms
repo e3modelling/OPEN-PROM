@@ -38,15 +38,15 @@ option clear = VmConsFuelShare;
 option clear = VmConsFuelSum;
 
 *' Re-apply critical bounds for all active countries (outside country loop)
-V02EquipCapTechSubsec.LO(runCyL,DSBS,ITECH,YTIME) = 0;
-V02DemSubUsefulSubsec.LO(runCyL,INDDOM,YTIME) = 0;
-VmConsFuel.LO(runCyL,DSBS,EF,YTIME) = 0;
-V02VarCostTech.LO(runCyL,DSBS,ITECH,YTIME) = 0;
-V02CostTech.LO(runCyL,DSBS,ITECH,YTIME) = 0;
-VmConsFuelShare.LO(runCyL,DSBS,EF,YTIME) = 0;
-V02DemUsefulSubsecRemTech.LO(runCyL,DSBS,YTIME) = 0;
-V02RemEquipCapTechSubsec.LO(runCyL,DSBS,ITECH,YTIME) = 0;
-V02GapUsefulDemSubsec.LO(runCyL,DSBS,YTIME) = 0;
+V02EquipCapTechSubsec.LO(runCyL,DSBS,ITECH,YTIME+1) = 0;
+V02DemSubUsefulSubsec.LO(runCyL,INDDOM,YTIME+1) = 0;
+VmConsFuel.LO(runCyL,DSBS,EF,YTIME+1) = 0;
+V02VarCostTech.LO(runCyL,DSBS,ITECH,YTIME+1) = 0;
+V02CostTech.LO(runCyL,DSBS,ITECH,YTIME+1) = 0;
+VmConsFuelShare.LO(runCyL,DSBS,EF,YTIME+1) = 0;
+V02DemUsefulSubsecRemTech.LO(runCyL,DSBS,YTIME+1) = 0;
+V02RemEquipCapTechSubsec.LO(runCyL,DSBS,ITECH,YTIME+1) = 0;
+V02GapUsefulDemSubsec.LO(runCyL,DSBS,YTIME+1) = 0;
 
 *' Initialize parameters for every iteration forward (seed from first iteration results)
 V02DemSubUsefulSubsec.L(runCyL,DSBS,YTIME+1) = p02DemSubUsefulSubsec(runCyL,DSBS,YTIME);
