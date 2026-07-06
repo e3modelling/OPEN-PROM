@@ -67,6 +67,7 @@ $ENDIF
 $IFTHEN %bmswasPriceMode% == curve
     (
       VmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME-1) *
+      (1 + (VmPriceFuelSubsecCarVal(allCy,"PG","BMSWAS",YTIME) / VmPriceFuelSubsecCarVal(allCy,"PG","BMSWAS",YTIME-1) - 1)$BIOFORMS(EFS)) * !! bioform price linkage: pass BMSWAS price change (PG ref, yoy) through to biomass-derived forms
       (1 + (VmCostPowGenAvgLng(allCy,YTIME-1) / VmCostPowGenAvgLng(allCy,YTIME-2) - 1)$sameas("ELC",EFS)) *
       (1 + (VmCostAvgProdH2(allCy,YTIME-1) / VmCostAvgProdH2(allCy,YTIME-2) - 1)$sameas("H2F",EFS)) * 
       (1 + (VmCostAvgProdSte(allCy,YTIME-1) / VmCostAvgProdSte(allCy,YTIME-2) - 1)$sameas("STE",EFS)) *
@@ -99,12 +100,18 @@ $IFTHEN %bmswasPriceMode% == curve
              ** imBmswasSupplyCoef("%emulatorGHGScen%",allCy,"c",YTIME) )
     )$sameas("BMSWAS",EFS)
 *' ============================================================
-*' Fallback path (bmswasPriceMode == static):
+*' Fallback path ($ELSE covers bmswasPriceMode == static AND == softfx):
 *'   Standard recursive dynamics for ALL fuels including BMSWAS.
-*'   This restores the pre-GLOBIOM behavior exactly.
+*'   static: restores the pre-GLOBIOM behavior exactly (byte-identical).
+*'   softfx: same dynamics, PLUS the bioform BMSWAS-linkage factor below,
+*'           inserted only under the $IFTHEN %bmswasPriceMode% == softfx guard
+*'           (BMSWAS itself is excluded from this equation's domain in soft-link mode).
 *' ============================================================
 $ELSE
     VmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME-1) *
+$IFTHEN %bmswasPriceMode% == softfx
+    (1 + (VmPriceFuelSubsecCarVal(allCy,"PG","BMSWAS",YTIME) / VmPriceFuelSubsecCarVal(allCy,"PG","BMSWAS",YTIME-1) - 1)$BIOFORMS(EFS)) * !! bioform price linkage (soft-link): pass MAgPIE BMSWAS price change (PG ref, yoy) through to biomass-derived forms
+$ENDIF
     (1 + (VmCostPowGenAvgLng(allCy,YTIME-1) / VmCostPowGenAvgLng(allCy,YTIME-2) - 1)$sameas("ELC",EFS)) *
     (1 + (VmCostAvgProdH2(allCy,YTIME-1) / VmCostAvgProdH2(allCy,YTIME-2) - 1)$sameas("H2F",EFS)) * 
     (1 + (VmCostAvgProdSte(allCy,YTIME-1) / VmCostAvgProdSte(allCy,YTIME-2) - 1)$sameas("STE",EFS)) *

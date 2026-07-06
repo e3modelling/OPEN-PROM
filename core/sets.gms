@@ -1291,6 +1291,10 @@ BALEF fuels in balance report
 BIOFUELS(EF)
 /BGSL,BGDO,BKRS,BGAS/
 
+* Bioenergy forms whose price is linked to BMSWAS (raw biomass) scarcity in the land-use coupling. Used by module 08 (Q08PriceFuelSubsecCarVal) when bmswasPriceMode = curve/softfx. 
+BIOFORMS(EF)   Bioenergy forms priced off BMSWAS scarcity
+/BGSL,BGDO,BKRS,BGAS,ETH,MET/
+
 BioToFossilFuel(EF,EF)  Mapping from bio fuels to fossil fuels
 /
 BGSL.GSL
