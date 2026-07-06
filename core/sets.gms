@@ -1291,10 +1291,6 @@ BALEF fuels in balance report
 BIOFUELS(EF)
 /BGSL,BGDO,BKRS,BGAS/
 
-* Bioenergy forms whose price is linked to BMSWAS (raw biomass) scarcity in the land-use coupling. Used by module 08 (Q08PriceFuelSubsecCarVal) when bmswasPriceMode = curve/softfx. 
-BIOFORMS(EF)   Bioenergy forms priced off BMSWAS scarcity
-/BGSL,BGDO,BKRS,BGAS,ETH,MET/
-
 BioToFossilFuel(EF,EF)  Mapping from bio fuels to fossil fuels
 /
 BGSL.GSL
@@ -1344,6 +1340,8 @@ alias(TT, ytime);
 alias (YYTIME,ytime);
 alias(EF, EF2);
 * this alias is used in alternative transport fuels price calculations
+alias(SBS, SBS2);
+* SBS2 is used by the unified fuel price-transmission (module 08 Q08 / srcRefSBS)
 alias(PGALL2,PGALL);
 *this alias is used in plant dispatching equation
 alias(ITECH,ITECH2)

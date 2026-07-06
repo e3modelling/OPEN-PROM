@@ -67,15 +67,13 @@ $ENDIF
 $IFTHEN %bmswasPriceMode% == curve
     (
       VmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME-1) *
-      (1 + (VmPriceFuelSubsecCarVal(allCy,"PG","BMSWAS",YTIME) / VmPriceFuelSubsecCarVal(allCy,"PG","BMSWAS",YTIME-1) - 1)$BIOFORMS(EFS)) * !! bioform price linkage: pass BMSWAS price change (PG ref, yoy) through to biomass-derived forms
       (1 + (VmCostPowGenAvgLng(allCy,YTIME-1) / VmCostPowGenAvgLng(allCy,YTIME-2) - 1)$sameas("ELC",EFS)) *
       (1 + (VmCostAvgProdH2(allCy,YTIME-1) / VmCostAvgProdH2(allCy,YTIME-2) - 1)$sameas("H2F",EFS)) * 
       (1 + (VmCostAvgProdSte(allCy,YTIME-1) / VmCostAvgProdSte(allCy,YTIME-2) - 1)$sameas("STE",EFS)) *
-      (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.4 - 1)$sameas("NGS",EFS)) *
-      (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.8 - 1)$SECtoEFPROD("LQD",EFS)) *
-      (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.2 - 1)$(sameas("HCL",EFS) or sameas("LGN",EFS))) +
+      prod((EF2,SBS2)$(i08PriceTransElast(EF2,EFS) and srcRefSBS(EF2,SBS,SBS2)),
+        1 + ((VmPriceFuelSubsecCarVal(allCy,SBS2,EF2,YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS2,EF2,YTIME-1)) ** i08PriceTransElast(EF2,EFS) - 1)) + !! unified price-transmission: CRO->products & (curve) BMSWAS->bioforms, elasticities from i08PriceTransElast
       1e-3 * (
-        VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,SBS,EFS,YTIME) - 
+        VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,SBS,EFS,YTIME) -
         VmCarVal(allCy,"TRADE",YTIME-1) * imCo2EmiFac(allCy,SBS,EFS,YTIME-1)
       )$DSBS(SBS)
     )$(not sameas("BMSWAS",EFS))
@@ -109,17 +107,17 @@ $IFTHEN %bmswasPriceMode% == curve
 *' ============================================================
 $ELSE
     VmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME-1) *
-$IFTHEN %bmswasPriceMode% == softfx
-    (1 + (VmPriceFuelSubsecCarVal(allCy,"PG","BMSWAS",YTIME) / VmPriceFuelSubsecCarVal(allCy,"PG","BMSWAS",YTIME-1) - 1)$BIOFORMS(EFS)) * !! bioform price linkage (soft-link): pass MAgPIE BMSWAS price change (PG ref, yoy) through to biomass-derived forms
-$ENDIF
     (1 + (VmCostPowGenAvgLng(allCy,YTIME-1) / VmCostPowGenAvgLng(allCy,YTIME-2) - 1)$sameas("ELC",EFS)) *
-    (1 + (VmCostAvgProdH2(allCy,YTIME-1) / VmCostAvgProdH2(allCy,YTIME-2) - 1)$sameas("H2F",EFS)) * 
+    (1 + (VmCostAvgProdH2(allCy,YTIME-1) / VmCostAvgProdH2(allCy,YTIME-2) - 1)$sameas("H2F",EFS)) *
     (1 + (VmCostAvgProdSte(allCy,YTIME-1) / VmCostAvgProdSte(allCy,YTIME-2) - 1)$sameas("STE",EFS)) *
-    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.4 - 1)$sameas("NGS",EFS)) *
-    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.8 - 1)$SECtoEFPROD("LQD",EFS)) *
-    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.2 - 1)$(sameas("HCL",EFS) or sameas("LGN",EFS))) +
+    prod((EF2,SBS2)$(i08PriceTransElast(EF2,EFS) and srcRefSBS(EF2,SBS,SBS2)
+$IFTHEN %bmswasPriceMode% == static
+       and (not sameas(EF2,"BMSWAS"))
+$ENDIF
+       ),
+      1 + ((VmPriceFuelSubsecCarVal(allCy,SBS2,EF2,YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS2,EF2,YTIME-1)) ** i08PriceTransElast(EF2,EFS) - 1)) + !! unified price-transmission: CRO always; BMSWAS->bioforms only in softfx (static excludes BMSWAS -> legacy stays identical)
     1e-3 * (
-      VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,SBS,EFS,YTIME) - 
+      VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,SBS,EFS,YTIME) -
       VmCarVal(allCy,"TRADE",YTIME-1) * imCo2EmiFac(allCy,SBS,EFS,YTIME-1)
     )$DSBS(SBS)
 $ENDIF
