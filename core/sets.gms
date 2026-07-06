@@ -1340,8 +1340,6 @@ alias(TT, ytime);
 alias (YYTIME,ytime);
 alias(EF, EF2);
 * this alias is used in alternative transport fuels price calculations
-alias(SBS, SBS2);
-* SBS2 is used by the unified fuel price-transmission (module 08 Q08 / srcRefSBS)
 alias(PGALL2,PGALL);
 *this alias is used in plant dispatching equation
 alias(ITECH,ITECH2)
