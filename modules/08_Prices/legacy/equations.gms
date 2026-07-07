@@ -89,7 +89,7 @@ $ENDIF
 *' BMSWAS and this reproduces both legacy-static and emulator-curve exactly.)
     VmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME-1) *
     (1 + (VmCostPowGenAvgLng(allCy,YTIME-1) / VmCostPowGenAvgLng(allCy,YTIME-2) - 1)$sameas("ELC",EFS)) *
-    (1 + ((VmCostAvgProdH2(allCy,YTIME) / VmCostAvgProdH2(allCy,YTIME-1)) ** 0.7 - 1)$sameas("H2F",EFS)) * 
+    (1 + ((VmCostAvgProdH2(allCy,YTIME-1) / VmCostAvgProdH2(allCy,YTIME-2)) ** 0.7 - 1)$sameas("H2F",EFS)) * 
     (1 + (VmCostAvgProdSte(allCy,YTIME-1) / VmCostAvgProdSte(allCy,YTIME-2) - 1)$sameas("STE",EFS)) *
     (1 + (V08IndexBioSupply(allCy,YTIME) ** i08PriceTransElast(EFS,"BMSWAS") - 1)$(BIOFUELS(EFS) or sameas("BMSWAS",EFS))) *
     (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** i08PriceTransElast(EFS,"CRO") - 1)$sameas("NGS",EFS)) *
