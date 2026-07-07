@@ -22,7 +22,7 @@ $offdelim
 *---
 table iTechShareH2Prod(H2TECH,YTIME)	                      "Data for Hydrogen Infrastructure Costs"
 $ondelim
-$include"./parameters/iWBLShareH2Prod.csv"
+$include"iWBLShareH2Prod.csv"
 $offdelim
 ;
 *---
