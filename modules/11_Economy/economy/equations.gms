@@ -64,6 +64,7 @@ Q11SubsiDemITech(allCy,DSBS,ITECH,YTIME)$(INDSE(DSBS) and SECTTECH(DSBS,ITECH) a
     ))
     )$(ord(YTIME) > 15) / 2;
 
+*' The equation calculates the state support for each fuel (kUS$2015/toe-year).
 Q11SubsiFuel(allCy,SBS,EFS,YTIME)$(TIME(YTIME) and runCy(allCy) and SECtoEF(SBS,EFS))..
     VmSubsiFuel(allCy,SBS,EFS,YTIME)
         =E=
