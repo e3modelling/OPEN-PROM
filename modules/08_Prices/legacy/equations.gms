@@ -48,74 +48,57 @@
 *'   off + landUseEmulator=legacy          -> bmswasPriceMode=static -> recursive dynamics
 *'   off + landUseEmulator=globiom/magpie  -> bmswasPriceMode=curve  -> emulator supply curve
 
+*' V08IndexBioSupply: year-over-year BMSWAS scarcity index. THE ONLY place the
+*' coupling mode is switched:
+*'   curve  -> supply-curve ratio SC(Q(t-1))/SC(Q(t-2)), SC(Q)=1e-3+a+b*(Q+1e-6)^c
+*'   softfx -> MAgPIE BMSWAS price ratio (PG reference; iPricesMagpie is national)
+*'   static -> 1 (no coupling; the bio-supply factor is then neutral)
+Q08IndexBioSupply(allCy,YTIME)$(TIME(YTIME) $runCy(allCy))..
+    V08IndexBioSupply(allCy,YTIME)
+        =E=
+$IFTHEN.mode %bmswasPriceMode% == curve
+    ( 1e-3 + imBmswasSupplyCoef("%emulatorGHGScen%",allCy,"a",YTIME)
+           + imBmswasSupplyCoef("%emulatorGHGScen%",allCy,"b",YTIME)
+           * (p03ProdPrimary(allCy,"BMSWAS",YTIME-1) + 1e-6)
+           ** imBmswasSupplyCoef("%emulatorGHGScen%",allCy,"c",YTIME) )
+    /
+    ( 1e-3 + imBmswasSupplyCoef("%emulatorGHGScen%",allCy,"a",YTIME)
+           + imBmswasSupplyCoef("%emulatorGHGScen%",allCy,"b",YTIME)
+           * (p03ProdPrimary(allCy,"BMSWAS",YTIME-2) + 1e-6)
+           ** imBmswasSupplyCoef("%emulatorGHGScen%",allCy,"c",YTIME) )
+$ELSEIF.mode %bmswasPriceMode% == softfx
+    VmPriceFuelSubsecCarVal(allCy,"PG","BMSWAS",YTIME) / pmPriceFuelSubsecCarVal(allCy,"PG","BMSWAS",YTIME-1)
+$ELSE.mode
+    1
+$ENDIF.mode
+    ;
+
 Q08PriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME)$(SECtoEF(SBS,EFS) $(not sameas("CRO",EFS)) $TIME(YTIME)
-$IFTHEN %softLinkMAgPIE% == on 
+$IFTHEN %softLinkMAgPIE% == on
    $(not sameas("BMSWAS",EFS))
 $ENDIF
    $(not sameas("NUC",EFS)) $runCy(allCy))..
     VmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME)
         =E=
-*' ============================================================
-*' Emulator path (bmswasPriceMode == curve):
-*'   The RHS is split into two mutually exclusive additive terms:
-*'   (1) Standard recursive dynamics for all fuels EXCEPT BMSWAS,
-*'       guarded by $(not sameas("BMSWAS",EFS)).
-*'   (2) GLOBIOM power-law supply curve for BMSWAS only,
-*'       guarded by $sameas("BMSWAS",EFS).
-*'   This ensures exactly one term is non-zero for any given EFS.
-*' ============================================================
-$IFTHEN %bmswasPriceMode% == curve
-    (
-      pmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME-1) *
-      (1 + (pmCostPowGenAvgLng(allCy,YTIME-1) / pmCostPowGenAvgLng(allCy,YTIME-2) - 1)$(sameas("ELC",EFS) and pmCostPowGenAvgLng(allCy,YTIME-1) > 0 and pmCostPowGenAvgLng(allCy,YTIME-2) > 0)) *
-      (1 + (pmCostAvgProdH2(allCy,YTIME-1) / pmCostAvgProdH2(allCy,YTIME-2) - 1)$(sameas("H2F",EFS) and pmCostAvgProdH2(allCy,YTIME-1) > 0 and pmCostAvgProdH2(allCy,YTIME-2) > 0)) * 
-      (1 + (pmCostAvgProdSte(allCy,YTIME-1) / pmCostAvgProdSte(allCy,YTIME-2) - 1)$(sameas("STE",EFS) and pmCostAvgProdSte(allCy,YTIME-1) > 0 and pmCostAvgProdSte(allCy,YTIME-2) > 0)) *
-      (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.4 - 1)$(sameas("NGS",EFS) and pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1) > 0)) *
-      (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.8 - 1)$(SECtoEFPROD("LQD",EFS) and pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1) > 0)) *
-      (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.2 - 1)$((sameas("HCL",EFS) or sameas("LGN",EFS)) and pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1) > 0)) +
-      1e-3 * (
-        VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,SBS,EFS,YTIME) - 
-        pmCarVal(allCy,"TRADE",YTIME-1) * imCo2EmiFac(allCy,SBS,EFS,YTIME-1)
-      )$(DSBS(SBS) and not sameas("H2F",EFS))
-    )$(not sameas("BMSWAS",EFS))
-    +
-*'  --- GLOBIOM supply curve for BMSWAS: year-over-year ratio ---
-*'  P(t) = P(t-1) * SC(Q(t-1)) / SC(Q(t-2))
-*'  where SC(Q) = 1e-3 + a + b*(Q+1e-6)^c  (1e-3 prevents 0/0 when both years have Q=0)
-*'  The ratio formulation is unit-independent and self-calibrating: in early years
-*'  where BMSWAS demand is flat the ratio ~= 1 so the price tracks the calibrated
-*'  historical trajectory; as biomass demand grows the supply-curve scarcity signal
-*'  drives prices upward following GLOBIOM.
-    (
-      pmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME-1) *
-      ( 1e-3 + imBmswasSupplyCoef("%emulatorGHGScen%",allCy,"a",YTIME)
-             + imBmswasSupplyCoef("%emulatorGHGScen%",allCy,"b",YTIME)
-             * (p03ProdPrimary(allCy,"BMSWAS",YTIME-1) + 1e-6)
-             ** imBmswasSupplyCoef("%emulatorGHGScen%",allCy,"c",YTIME) )
-      /
-      ( 1e-3 + imBmswasSupplyCoef("%emulatorGHGScen%",allCy,"a",YTIME)
-             + imBmswasSupplyCoef("%emulatorGHGScen%",allCy,"b",YTIME)
-             * (p03ProdPrimary(allCy,"BMSWAS",YTIME-2) + 1e-6)
-             ** imBmswasSupplyCoef("%emulatorGHGScen%",allCy,"c",YTIME) )
-    )$sameas("BMSWAS",EFS)
-*' ============================================================
-*' Fallback path (bmswasPriceMode == static):
-*'   Standard recursive dynamics for ALL fuels including BMSWAS.
-*'   This restores the pre-GLOBIOM behavior exactly.
-*' ============================================================
-$ELSE
-    pmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME-1) *
-    (1 + (pmCostPowGenAvgLng(allCy,YTIME-1) / pmCostPowGenAvgLng(allCy,YTIME-2) - 1)$(sameas("ELC",EFS) and pmCostPowGenAvgLng(allCy,YTIME-1) > 0 and pmCostPowGenAvgLng(allCy,YTIME-2) > 0)) *
-    (1 + (pmCostAvgProdH2(allCy,YTIME-1) / pmCostAvgProdH2(allCy,YTIME-2) - 1)$(sameas("H2F",EFS) and pmCostAvgProdH2(allCy,YTIME-1) > 0 and pmCostAvgProdH2(allCy,YTIME-2) > 0)) * 
-    (1 + (pmCostAvgProdSte(allCy,YTIME-1) / pmCostAvgProdSte(allCy,YTIME-2) - 1)$(sameas("STE",EFS) and pmCostAvgProdSte(allCy,YTIME-1) > 0 and pmCostAvgProdSte(allCy,YTIME-2) > 0)) *
-    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.4 - 1)$(sameas("NGS",EFS) and pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1) > 0)) *
-    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.8 - 1)$(SECtoEFPROD("LQD",EFS) and pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1) > 0)) *
-    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.2 - 1)$((sameas("HCL",EFS) or sameas("LGN",EFS)) and pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1) > 0)) +
+*' Single expression for ALL modes (no curve/$ELSE duplication, no prod): price =
+*' previous year x source factors + carbon. ELC/H2F/STE track their own cost index;
+*' BMSWAS & bio-fuels track V08IndexBioSupply (elasticity from i08PriceTransElast, BMSWAS
+*' itself = 1 so it equals the supply curve in curve / MAgPIE ratio in softfx / stays
+*' flat with no coupling); NGS/liquids(LQD)/coal track crude oil. The mode switch lives
+*' only in Q08IndexBioSupply. (imCo2EmiFac("BMSWAS")=0, so the carbon term vanishes for
+*' BMSWAS and this reproduces both legacy-static and emulator-curve exactly.)
+    VmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME-1) *
+    (1 + (pmCostPowGenAvgLng(allCy,YTIME-1) / pmCostPowGenAvgLng(allCy,YTIME-2) - 1)$sameas("ELC",EFS)) *
+    (1 + (pmCostAvgProdH2(allCy,YTIME-1) / pmCostAvgProdH2(allCy,YTIME-2) - 1)$sameas("H2F",EFS)) *
+    (1 + (pmCostAvgProdSte(allCy,YTIME-1) / pmCostAvgProdSte(allCy,YTIME-2) - 1)$sameas("STE",EFS)) *
+    (1 + (V08IndexBioSupply(allCy,YTIME) ** i08PriceTransElast(EFS,"BMSWAS") - 1)$(BIOFUELS(EFS) or sameas("BMSWAS",EFS))) *
+    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** i08PriceTransElast(EFS,"CRO") - 1)$sameas("NGS",EFS)) *
+    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** i08PriceTransElast(EFS,"CRO") - 1)$SECtoEFPROD("LQD",EFS)) *
+    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** i08PriceTransElast(EFS,"CRO") - 1)$(sameas("HCL",EFS) or sameas("LGN",EFS))) +
     1e-3 * (
-      VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,SBS,EFS,YTIME) - 
+      VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,SBS,EFS,YTIME) -
       pmCarVal(allCy,"TRADE",YTIME-1) * imCo2EmiFac(allCy,SBS,EFS,YTIME-1)
     )$(DSBS(SBS) and not sameas("H2F",EFS));
-$ENDIF
     ;
 
 Q08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)$(SECtoEF(DSBS,EF) $TIME(YTIME) $runCy(allCy))..

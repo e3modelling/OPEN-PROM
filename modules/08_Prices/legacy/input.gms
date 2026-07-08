@@ -3,6 +3,16 @@
 
 
 *---
+*' Fuel price pass-through elasticity, indexed (target, source): i08PriceTransElast(EFS,"CRO"),
+*' i08PriceTransElast(EFS,"BMSWAS"). CRO rows reproduce the legacy 0.4/0.8/0.2; BMSWAS rows
+*' are 0.6 (bio-fuels) and 1 (BMSWAS itself). Table = target rows x source cols.
+*' GAMS param i08PriceTransElast <-> mrprom output file iPriceTransElast.csv.
+table i08PriceTransElast(EF,EF)   "Fuel price pass-through elasticity: target (rows) -> source (cols)"
+$ondelim
+$include "iPriceTransElast.csv"
+$offdelim
+;
+*---
 $IFTHEN %softLinkMAgPIE% == on
 table iPricesMagpie(allCy,SBS,YTIME)	"Prices of biomass per subsector (k$2015/toe)"
 $ondelim

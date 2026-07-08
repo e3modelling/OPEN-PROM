@@ -17,6 +17,11 @@ SQRT( SQR(((VmPriceFuelSubsecCarVal.L(runCy,DSBS,EF,YTIME)+imVarCostTech(runCy,D
 $offtext
 *---
 
+* Init for the BMSWAS bio-supply index variable (positive; neutral start = 1)
+V08IndexBioSupply.LO(runCy,YTIME) = 0;
+V08IndexBioSupply.L(runCy,YTIME)  = 1;
+*---
+
 *'                *PARAMETER INITIALISATION FOR RECURSIVE LAGS*
 
 *' Seed parameters from historical data
