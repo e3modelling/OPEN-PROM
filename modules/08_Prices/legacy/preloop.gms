@@ -29,3 +29,4 @@ p08PriceFuelSepCarbonWght(runCy,DSBS,EF,YTIME)$(DATAY(YTIME)) = i08WgtSecAvgPriF
 pmPriceFuelSubsecCarVal(runCy,SBS,EF,YTIME)$(DATAY(YTIME)) = VmPriceFuelSubsecCarVal.L(runCy,SBS,EF,YTIME);
 pmPriceFuelAvgSub(runCy,DSBS,YTIME)$(DATAY(YTIME)) = VmPriceFuelAvgSub.L(runCy,DSBS,YTIME);
 pmPriceElecInd(runCy,TCHP,YTIME)$(DATAY(YTIME)) = VmPriceElecInd.L(runCy,TCHP,YTIME);
+p08IndexBioSupply(runCy,YTIME)$(DATAY(YTIME)) = V08IndexBioSupply.L(runCy,YTIME);

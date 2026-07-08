@@ -6,6 +6,7 @@ p08PriceFuelSepCarbonWght(allCy,SBS,EF,YTIME)             "Stored fuel prices pe
 pmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)               "Stored fuel prices per subsector and fuel"
 pmPriceFuelAvgSub(allCy,DSBS,YTIME)                       "Stored average fuel prices per subsector"
 pmPriceElecInd(allCy,TCHP,YTIME)                          "Stored electricity index"
+p08IndexBioSupply(allCy,YTIME)                             "Stored BMSWAS bio-supply index"
 ;
 
 Equations

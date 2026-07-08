@@ -3,7 +3,7 @@ option clear = V08PriceFuelSepCarbonWght;
 option clear = VmPriceFuelSubsecCarVal;
 option clear = VmPriceFuelAvgSub;
 option clear = VmPriceElecInd;
-
+option clear = V08IndexBioSupply;
 option clear = Q08PriceFuelSepCarbonWght;
 option clear = Q08PriceFuelSubsecCarVal;
 option clear = Q08PriceFuelAvgSub;
@@ -13,9 +13,12 @@ option clear = Q08PriceElecInd;
 V08PriceFuelSepCarbonWght.LO(runCyL,DSBS,EF,YTIME+1) = 0;
 VmPriceFuelSubsecCarVal.LO(runCyL,SBS,EF,YTIME+1) = 0;
 VmPriceFuelAvgSub.LO(runCyL,DSBS,YTIME+1) = 0;
+V08IndexBioSupply.LO(runCy,YTIME) = 0;
+V08IndexBioSupply.L(runCy,YTIME)  = 1;
 
 *' Initialize variable levels from previous period parameter
 V08PriceFuelSepCarbonWght.L(runCyL,DSBS,EF,YTIME+1) = p08PriceFuelSepCarbonWght(runCyL,DSBS,EF,YTIME);
 VmPriceFuelSubsecCarVal.L(runCyL,SBS,EF,YTIME+1) = pmPriceFuelSubsecCarVal(runCyL,SBS,EF,YTIME);
 VmPriceFuelAvgSub.L(runCyL,DSBS,YTIME+1) = pmPriceFuelAvgSub(runCyL,DSBS,YTIME);
 VmPriceElecInd.L(runCyL,TCHP,YTIME+1) = pmPriceElecInd(runCyL,TCHP,YTIME);
+V08IndexBioSupply.L(runCyL,YTIME+1) = p08IndexBioSupply(runCyL,YTIME);
