@@ -22,6 +22,10 @@ V06LvlCostDAC.FX(runCy,CDRTECH,YTIME)$DATAY(YTIME) = 100;
 V06CapCDR.LO(runCy,CDRTECH,YTIME) = 0;
 V06CapCDR.L(runCy,CDRTECH,YTIME) = 1;
 V06CapCDR.FX(runCy,CDRTECH,"%fBaseY%") = 1000 * VmGDPPartGlob.L(runCy,"%fBaseY%"); !! Initial guess of 50 years to reach net zero emissions for each CDR technology, based on the net emissions in 2020
+parameter p06Temp(allCy,CDRTECH,YTIME);
+execute_load 'D:\OPEN-PROM\blablaMA.gdx', p06Temp = V06CapCDR.L;
+V06CapCDR.FX(runCy,CDRTECH,YTIME)$(not sameas(runCy,"DEU"))= p06Temp(runCy,CDRTECH,YTIME);
+V06CapCDR.FX("DEU",CDRTECH,YTIME)= 0.3 * p06Temp("DEU",CDRTECH,YTIME);
 *---
 V06ProfRateDAC.LO(runCy,CDRTECH,YTIME) = 0;
 V06ProfRateDAC.L(runCy,CDRTECH,YTIME) = 1;

@@ -77,13 +77,8 @@ $else.countryParallel
 $ifthen.calib %Calibration% == MatCalibration
             ODummyObjPGALL(runCyL,YTIME)$TIME(YTIME) = vDummyObjPGALL.L;  !! Assign objective function value for PGALL
             ODummyObjTRANSE(runCyL,YTIME)$TIME(YTIME) = vDummyObjTRANSE.L;  !! Assign objective function value for TRANSE
-* NOTE: vDummyObj/ODummyObjDOMSEShares & DOMSEFinalEnergy are referenced here but
-* never declared (incomplete CalibIndustry merge; not part of the calibration
-* objective in core/equations.gms). They trigger GAMS Error 140 under MatCalibration.
-* Commented out so calibration compiles — no effect on the calibration solve.
-* (Pre-existing issue, unrelated to the land-use-emulator migration.)
-*            ODummyObjDOMSEShares(allCy,YTIME,DSBS)$(TIME(YTIME) and runCy(allCy) and ((INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and not (sameas("AG",DSBS) and not EU28(allCy)))) = vDummyObjDOMSEShares.L(DSBS);  !! Assign objective function value for DOMSE Shares
-*            ODummyObjDOMSEFinalEnergy(allCy,YTIME,DSBS)$(TIME(YTIME) and runCy(allCy) and ((INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and not (sameas("AG",DSBS) and not EU28(allCy)))) = vDummyObjDOMSEFinalEnergy.L(DSBS);  !! Assign objective function value for DOMSE Final Energy
+            ODummyObjDOMSEShares(allCy,YTIME,DSBS)$(TIME(YTIME) and runCy(allCy) and ((INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and not (sameas("AG",DSBS) and not EU28(allCy)))) = vDummyObjDOMSEShares.L(DSBS);  !! Assign objective function value for DOMSE Shares
+            ODummyObjDOMSEFinalEnergy(allCy,YTIME,DSBS)$(TIME(YTIME) and runCy(allCy) and ((INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and not (sameas("AG",DSBS) and not EU28(allCy)))) = vDummyObjDOMSEFinalEnergy.L(DSBS);  !! Assign objective function value for DOMSE Final Energy
 $endif.calib
          endif;
       endloop;

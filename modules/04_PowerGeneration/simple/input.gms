@@ -26,7 +26,6 @@ $ondelim
 $include"./iFIT.csv"
 $offdelim
 ;
-i04FIT(allCy,PGALL,YTIME) = 0;
 *---
 table t04SharePowPlaNewEq(allCy,PGALL,YTIME)    "Ratio of newly added capacity smoothed over 10-year period ()"
 $ondelim
@@ -80,27 +79,19 @@ $include"./iMatFacPlaAvailCap.csv"
 $offdelim
 ;
 *---
-table iScaleEndogScrapData(allCy,PGALL,YTIME)      "Maturity factor related to plant available capacity (1)"
-$ondelim
-$include"./iScaleEndogScrapPG.csv"
-$offdelim
-;
-*---
 $IFTHEN.calib %Calibration% == MatCalibration
 variable i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   "Maturity factor related to plant available capacity (1)";
-variable i04ScaleEndogScrap(allCy,PGALL,YTIME)     "Scale parameter for endogenous scrapping applied to the sum of full costs (1)";
-i04MatFacPlaAvailCap.LO(runCy, PGALL, YTIME) = 1e-2;
-i04MatFacPlaAvailCap.UP(runCy, PGALL, YTIME) = 1;
+i04MatFacPlaAvailCap.LO(runCy, PGALL, YTIME) = 1e-6;
+i04MatFacPlaAvailCap.UP(runCy, PGALL, YTIME) = 10;
 i04MatFacPlaAvailCap.L(runCy,PGALL,YTIME) = iMatFacPlaAvailCapData(runCy,PGALL,YTIME);
 
-i04ScaleEndogScrap.LO(runCy,PGALL,YTIME) = 1e-2;
-i04ScaleEndogScrap.UP(runCy,PGALL,YTIME) = 10;
-i04ScaleEndogScrap.L(runCy,PGALL,YTIME) = iScaleEndogScrapData(runCy,PGALL,YTIME);
+*i04ScaleEndogScrap.LO(runCy,PGALL,YTIME) = 0;
+*i04ScaleEndogScrap.UP(runCy,PGALL,YTIME) = 10;
+*i04ScaleEndogScrap.L(runCy,PGALL,YTIME) = 1;
 $ELSE.calib
 parameter i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   "Maturity factor related to plant available capacity (1)";
-parameter i04ScaleEndogScrap(allCy,PGALL,YTIME)     "Scale parameter for endogenous scrapping applied to the sum of full costs (1)";
 i04MatFacPlaAvailCap(runCy,PGALL,YTIME) = iMatFacPlaAvailCapData(runCy,PGALL,YTIME);
-i04ScaleEndogScrap(runCy,PGALL,YTIME) = iScaleEndogScrapData(runCy,PGALL,YTIME);
+*i04ScaleEndogScrap(runCy,PGALL,YTIME) = 1;
 $ENDIF.calib
 *---
 $$ontext
@@ -135,3 +126,26 @@ i04ShareFuels(runCy,PGALL,PGEF)$PGALLTOEF(PGALL,PGEF) =
 (
   1 / CARD(PGALL)
 )$(not SUM(PGEF2$PGALLTOEF(PGALL,PGEF2),i03InpTotTransfProcess(runCy,"PG",PGEF2,"%fBaseY%")));
+*---
+i04ScaleEndogScrap(allCy,PGALL,YTIME) = 3 / card(PGALL);
+i04MatFacPlaAvailCap(runCy,PGALL,YTIME)$(i04MatFacPlaAvailCap(runCy,PGALL,YTIME) < 1e-2) = 1e-2;
+*--- COAL PHASE OUT ---
+i04MatFacPlaAvailCap(EU28,"ATHCOAL",YTIME) = 0;
+i04MatFacPlaAvailCap(EU28,"ATHOIL",YTIME) = 0;
+i04MatFacPlaAvailCap(EU28,"ATHLGN",YTIME) = 0;
+
+i04MatFacPlaAvailCap(EU28,"ATHCOALCCS",YTIME) = 0;
+i04MatFacPlaAvailCap(EU28,"ATHLGNCCS",YTIME) = 0;
+
+*--- Limit Lifetime to force phase out
+i04TechLftPlaType(EU28,"ATHCOAL") = 10;
+i04TechLftPlaType(EU28,"ATHOIL") = 10;
+i04TechLftPlaType(EU28,"ATHLGN") = 10;
+
+i04SensCarbon(allCy,YTIME) = 1;
+
+i04MatFacPlaAvailCap(runCY,"ATHBMSCCS",YTIME)$(ord(YTIME)<51 and ord(YTIME)>20) = i04MatFacPlaAvailCap(runCY,"ATHBMSCCS","2024") + 0.008 * (ord(YTIME)-20);
+i04MatFacPlaAvailCap(runCY,"ATHGASCCS",YTIME)$(ord(YTIME)<51 and ord(YTIME)>20) = i04MatFacPlaAvailCap(runCY,"ATHGASCCS","2024")+ 0.002 * (ord(YTIME)-20);
+
+i04MatFacPlaAvailCap(runCY,"ATHBMSCCS",YTIME)$(ord(YTIME)>=51) = 0.05;
+i04MatFacPlaAvailCap(runCY,"ATHGASCCS",YTIME)$(ord(YTIME)>=51) = 0.05;

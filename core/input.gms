@@ -11,7 +11,6 @@ $include "./iActv.csvr"
 $offdelim
 ;
 imActv(YTIME,allCy,DSBS)$(imActv(YTIME,allCy,DSBS) = NA) = 0;
-imActv(YTIME,allCy,"PN")$DATAY(YTIME) = 1;
 *---
 table i01GDP(YTIME,allCy) "GDP (billion US$2015)"
 $ondelim
@@ -93,7 +92,7 @@ parameter iCo2EmiFacAllSbs(EF) "CO2 emission factors (kgCO2/kgoe fuel burned)" /
 CRO 2.76
 LGN 4.15330622,
 HCL 3.941453651,
-*SLD 4.438008647,
+SLD 4.438008647,
 GSL 2.872144882,
 GDO 3.068924588,
 LPG 2.612562612,
@@ -105,7 +104,7 @@ OGS 2.336234395,
 BMSWAS 0/;
 *---
 imCo2EmiFac(runCy,SBS,EF,YTIME)$(not (sameas("NEN",SBS) or sameas("PCH",SBS))) = iCo2EmiFacAllSbs(EF);
-imCo2EmiFac(runCy,"IS","HCL",YTIME) = 4.438008647; !! This is the assignment for coke
+imCo2EmiFac(runCy,"IS","HCL",YTIME) = iCo2EmiFacAllSbs("SLD"); !! This is the assignment for coke
 *imCo2EmiFac(runCy,"H2P","NGS",YTIME) = 3.107;
 *imCo2EmiFac(runCy,"H2P","BMSWAS",YTIME) = 0.497;
 *---
@@ -166,8 +165,6 @@ imFuelPrice(runCy,"BU","BGSL",YTIME) = imFuelPrice(runCy,"OI","BGSL",YTIME);
 imFuelPrice(runCy,TRANSE,"RFO",YTIME) = imFuelPrice(runCy,"BU","RFO",YTIME);
 imFuelPrice(runCy,TRANSE,"OGS",YTIME) = imFuelPrice(runCy,TRANSE,"NGS",YTIME);
 imFuelPrice(runCy,TRANSE,"OLQ",YTIME) = imFuelPrice(runCy,TRANSE,"GDO",YTIME);
-imFuelPrice(runCy,TRANSE,"H2F",YTIME) = 2 * imFuelPrice(runCy,TRANSE,"H2F",YTIME);
-imFuelPrice(runCy,"PA","H2F",YTIME) = 2 * imFuelPrice(runCy,"PA","KRS",YTIME);
 imFuelPrice(runCy,"ICT",EFS,YTIME)$SECtoEF("ICT",EFS) = imFuelPrice(runCy,"SE",EFS,YTIME);
 *---
 table imPriceFuelsIntBase(WEF,YTIME)	              "International Fuel Prices USED IN BASELINE SCENARIO ($2015/toe)"
@@ -205,7 +202,6 @@ $ondelim
 $include"./iDataTransTech.csv"
 $offdelim
 ;
-imDataTransTech(NAVIGATION,"TRFO",ECONCHAR,YTIME) = imDataTransTech(NAVIGATION,"TGDO",ECONCHAR,YTIME)
 *---
 table imDataIndTechnology(INDSE,TECH,ECONCHAR)          "Technoeconomic characteristics of industry (various)"
             IC      FC      VC      LFT USC
@@ -802,8 +798,6 @@ imUsfEneConvSubTech(runCy,INDSE,TECH,YTIME)  = imDataIndTechnology(INDSE,TECH,"U
 imCapCostTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,"IC");
 imFixOMCostTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,"FC");
 imVarCostTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,"VC");
-imVarCostTech(runCy,DOMSE,"TSOL",YTIME) = 1e-3;
-imVarCostTech(runCy,DOMSE,"TGEO",YTIME) = 1e-3;
 imUsfEneConvSubTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,"USC");
 *---
 **  Non Energy Sector and Bunkers
@@ -816,10 +810,10 @@ imUsfEneConvSubTech(runCy,"BU","TGSL",YTIME) = 0.5;
 imCapCostTech(runCy,"BU","TH2F",YTIME) = 1.5 * imCapCostTech(runCy,"BU","TGDO",YTIME);
 *---
 **  CDR
-imCapCostTechMin(allCy,"DAC","HTDAC",YTIME) = 0.3;
-imCapCostTechMin(allCy,"DAC","H2DAC",YTIME) = 0.3;
-imCapCostTechMin(allCy,"DAC","LTDAC",YTIME) = 0.3;
-imCapCostTechMin(allCy,"EW","TEW",YTIME) = 0.3;
+imCapCostTechMin(allCy,"DAC","HTDAC",YTIME) = 0.17;
+imCapCostTechMin(allCy,"DAC","H2DAC",YTIME) = 0.17;
+imCapCostTechMin(allCy,"DAC","LTDAC",YTIME) = 0.17;
+imCapCostTechMin(allCy,"EW","TEW",YTIME) = 0.17;
 *---
 !!imUsfEneConvSubTech(runCy,INDSE,"THCL",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCL","USC") + 0.005 * (ord(YTIME)-14);
 imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCLCCS","USC") + 0.005 * (ord(YTIME)-14);
@@ -841,3 +835,18 @@ imPlantEffByType(runCy,STECH,"effHeat",YTIME)$(not PGALL(STECH))= imPlantEffByTy
 **   Conversion of GW mean power into TWh/y, depending on whether it's a leap year
 smGwToTwhPerYear(YTIME) = 8.76 + 0.024 $ (mod(YTIME.val,4) = 0 and mod (YTIME.val,100) <> 0);
 *--
+
+* PRISMA runs
+imMatrFactor(runCy,DSBS,"TELC",YTIME)$(ord(YTIME) > 14 and DOMSE(DSBS) and not sameas(DSBS,"AG")) = 40;
+imMatrFactor(runCy,DSBS,"THEATPUMP",YTIME)$(ord(YTIME) > 14 and DOMSE(DSBS) and not sameas(DSBS,"AG")) = 40;
+imMatrFactor(runCy,DSBS,"TNGSCCS",YTIME)$((ord(YTIME) > 14) and INDSE(DSBS)) = 3;
+imMatrFactor(runCy,DSBS,"THCLCCS",YTIME)$((ord(YTIME) > 14) and INDSE(DSBS)) = 3;
+
+imMatrFactor(runCy,DSBS,"TNGSCCS",YTIME)$((ord(YTIME) > 34) and INDSE(DSBS)) = 10;
+imMatrFactor(runCy,DSBS,"THCLCCS",YTIME)$((ord(YTIME) > 34) and INDSE(DSBS)) = 10;
+imMatrFactor("CHA",DSBS,"TELC",YTIME)$((ord(YTIME) > 34) and INDSE(DSBS)) = 10;
+imMatrFactor(runCy,DSBS,TECH,YTIME)$((INDDOM(DSBS) or NENSE(DSBS)) and (imMatrFactor(runCy,DSBS,TECH,YTIME) < 1e-2) ) = 1e-2;
+
+
+*imMatrFactor(EU27,DSBS,TECH,YTIME)$(ord(YTIME)<24) = imMatrFactor(EU27,DSBS,TECH,"2023");
+*imMatrFactor(EU27,DSBS,TECH,YTIME)$(ord(YTIME)<24) = imMatrFactor(EU27,DSBS,TECH,YTIME-10);

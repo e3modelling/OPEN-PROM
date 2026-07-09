@@ -9,6 +9,7 @@ i02numtechnologiesUsingEF(DSBS,EF)                         "Number of technologu
 imCO2CaptRateIndustry(allCy,ITECH,YTIME)	               "Industry CO2 capture rate (1)"
 i02ShareBlend(allCy,DSBS,ITECH,EF,YTIME)                   "Share of each energy form in a technology"
 i02ShareElcHP(allCy,DSBS,YTIME)                            "Share of final electricity consumption of HeatPumps in substitutable electricity consumption (1)"
+i02SensCarbon(allCy,YTIME,DSBS)                                       "Sensitivity to Carbon Price - INDDOM and NENSE"
 ;
 
 Equations

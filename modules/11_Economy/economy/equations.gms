@@ -45,17 +45,7 @@ Q11SubsiDemTechAvail(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH
 Q11SubsiDemITech(allCy,DSBS,ITECH,YTIME)$(INDSE(DSBS) and SECTTECH(DSBS,ITECH) and TIME(YTIME) and runCy(allCy))..
     VmSubsiDemITech(allCy,DSBS,ITECH,YTIME)
         =E=
-    0 * (
-      VmSubsiDemTechAvail(allCy,DSBS,ITECH,YTIME) * 1e3 /
-      (V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME-1) * V02GapUsefulDemSubsec(allCy,DSBS,YTIME-1) * 1e6 * VmLft(allCy,DSBS,ITECH,YTIME) + 1e-6) +
-      (1 - imCapCostTechMin(allCy,DSBS,ITECH,YTIME)) * V02CostTech(allCy,DSBS,ITECH,YTIME-1)
-    -
-    sqrt(sqr(
-      VmSubsiDemTechAvail(allCy,DSBS,ITECH,YTIME) * 1e3 /
-      (V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME-1) * V02GapUsefulDemSubsec(allCy,DSBS,YTIME-1) * 1e6 * VmLft(allCy,DSBS,ITECH,YTIME) + 1e-6) -
-      (1 - imCapCostTechMin(allCy,DSBS,ITECH,YTIME)) * V02CostTech(allCy,DSBS,ITECH,YTIME-1)
-    ))
-    )$(ord(YTIME) > 15) / 2;
+    0 ;
 
 *' The equation calculates the state support per unit of new capacity in the demand subsectors and technologies for the following units:
 *' - Transport (kUS$2015 per vehicle)
@@ -85,17 +75,7 @@ Q11SubsiDemTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS
     
     +
 $$offtext 
-    sum(CDRTECH$(sameas(TECH,CDRTECH)), !! CDR
-      (
-        VmSubsiDemTechAvail(allCy,DSBS,CDRTECH,YTIME) * 1e6 / 
-      (V06CapCDR(allCy,CDRTECH,YTIME-1) * V06CapFacNewDAC(allCy,CDRTECH,YTIME-1))
-      + (1 - imCapCostTechMin(allCy,DSBS,CDRTECH,YTIME)) * V06LvlCostDAC(allCy,CDRTECH,YTIME-1)
-      -
-      sqrt(sqr(VmSubsiDemTechAvail(allCy,DSBS,CDRTECH,YTIME) * 1e6 / 
-      (V06CapCDR(allCy,CDRTECH,YTIME-1) * V06CapFacNewDAC(allCy,CDRTECH,YTIME-1))
-      - (1 - imCapCostTechMin(allCy,DSBS,CDRTECH,YTIME)) * V06LvlCostDAC(allCy,CDRTECH,YTIME-1)))
-      ) / 2
-    )$(CDR(DSBS) and ord(YTIME) > 15)
+    0
 ;
 
 *' The equation splits the available state grants to the various supply technologies through a policy parameter expressing this proportional division.

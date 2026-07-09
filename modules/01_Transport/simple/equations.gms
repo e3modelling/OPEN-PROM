@@ -10,6 +10,12 @@
 
 *' * Transport
 
+*' This equation calculates the lifetime of passenger cars as the inverse of their scrapping rate.
+Q01Lft(allCy,"PC",TTECH,YTIME)$(TIME(YTIME) $SECTTECH("PC",TTECH) $runCy(allCy))..
+    VmLft(allCy,"PC",TTECH,YTIME)
+        =E=
+    i01TechLft(allCy,"PC",TTECH,YTIME);
+
 *' This equation calculates the activity for goods transport, considering different types of goods transport such as trucks and other freight transport.
 *' The activity is influenced by factors such as GDP, population, fuel prices, and elasticities. The equation includes terms for trucks and other
 *' freight transport modes.
@@ -113,16 +119,14 @@ Q01CostFuel(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runC
     (
       (
         sum(EF$TTECHtoEF(TTECH,EF),
-          V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME) * 
-          V01ShareBlend(allCy,TRANSE,EF,YTIME) *
+          V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME) * i01ShareBlend(allCy,TRANSE,EF,YTIME) *
           VmPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME)
         ) 
       )$(not PLUGIN(TTECH)) +
       (
         sum(EF$(TTECHtoEF(TTECH,EF) $(not sameas("ELC",EF))),
-          (1-i01ShareAnnMilePlugInHybrid(allCy,YTIME)) * 
-          V01ShareBlend(allCy,TRANSE,EF,YTIME) *
-          V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME) * !! ktoe / Activity
+          (1-i01ShareAnnMilePlugInHybrid(allCy,YTIME)) * i01ShareBlend(allCy,TRANSE,EF,YTIME) *
+          V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME) *
           VmPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME)
         ) +
         i01ShareAnnMilePlugInHybrid(allCy,YTIME) *
@@ -132,8 +136,13 @@ Q01CostFuel(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runC
       imVarCostTech(allCy,TRANSE,TTECH,YTIME)
     ) *
     (
-      1$(not sameas(TRANSE,"PC")) +
-      1e-3 * V01ActivPassTrnsp(allCy,TRANSE,YTIME)$sameas(TRANSE,"PC")
+      1e-3 * V01ActivPassTrnsp(allCy,TRANSE,YTIME)$sameas(TRANSE,"PC") + !! aviation should be divided by 1000
+      1e-1 * V01ActivPassTrnsp(allCy,TRANSE,YTIME)$(sameas(TRANSE,"PT")) +
+      1e3 * V01ActivPassTrnsp(allCy,TRANSE,YTIME)$(sameas(TRANSE,"PB")) +
+      1 * V01ActivPassTrnsp(allCy,TRANSE,YTIME)$(sameas(TRANSE,"PN")) +
+      1 * V01ActivPassTrnsp(allCy,TRANSE,YTIME)$(sameas(TRANSE,"PA")) +
+      1e-5 * V01ActivGoodsTransp(allCy,TRANSE,YTIME)$TRANG(TRANSE)  !! should be divided by number of vehicles
+      !!imAnnCons(allCy,TRANSE,"modal")$(not sameas(TRANSE,"PC"))
     )
     ;
 
@@ -153,7 +162,7 @@ Q01CostFuel(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runC
 Q01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME)$runCy(allCy)$SECTTECH(TRANSE,TTECH))..
     V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME)
         =E=
-      0 *V01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME) +
+      V01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME) +
       imFixOMCostTech(allCy,TRANSE,TTECH,YTIME) +
       V01CostFuel(allCy,TRANSE,TTECH,YTIME);
 
@@ -171,10 +180,65 @@ Q01ShareTechTr(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $r
     V01ShareTechTr(allCy,TRANSE,TTECH,YTIME)
       =E=
     imMatrFactor(allCy,TRANSE,TTECH,YTIME) *
-    V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME-1) ** (-2) /
+    (V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH,YTIME-1)
+            + i01SensCarbon(allCy,YTIME,TRANSE) * sum(EF$TTECHtoEF(TTECH,EF), 
+            i01ShareBlend(allCy,TRANSE,EF,YTIME) *
+            1e-3 *(VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,TRANSE,EF,YTIME)))    
+    )**(-2) /
     sum(TTECH2$SECTTECH(TRANSE,TTECH2), 
       imMatrFactor(allCy,TRANSE,TTECH2,YTIME) * 
-      V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1) ** (-2)
+      (V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1)
+            + i01SensCarbon(allCy,YTIME,TRANSE) * sum(EF$TTECHtoEF(TTECH2,EF), 
+            i01ShareBlend(allCy,TRANSE,EF,YTIME) *
+            1e-3 *(VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,TRANSE,EF,YTIME))            )
+      )**(-2)
+    );
+
+*' This equation calculates the consumption of each technology in transport sectors. It considers various factors such as the lifetime of the technology,
+*' average capacity per vehicle, load factor, scrapping rate, and specific fuel consumption. The equation also takes into account the technology's variable
+*' cost for new equipment and the gap in transport activity to be filled by new technologies. The result is expressed in million tonnes of oil equivalent.
+Q01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $TTECHtoEF(TTECH,EF) $runCy(allCy))..
+    V01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME)
+            =E=
+    V01ConsTechTranspSectoral(allCy,TRANSE,TTECH,EF,YTIME-1) *
+    (
+      (
+        (VmLft(allCy,TRANSE,TTECH,YTIME-1)-1) / 
+        VmLft(allCy,TRANSE,TTECH,YTIME-1) *
+        i01AvgVehCapLoadFac(allCy,TRANSE,"CAP",YTIME-1) *
+        i01AvgVehCapLoadFac(allCy,TRANSE,"LF",YTIME-1) /
+        i01AvgVehCapLoadFac(allCy,TRANSE,"CAP",YTIME) /
+        i01AvgVehCapLoadFac(allCy,TRANSE,"LF",YTIME)
+      )$(not sameas(TRANSE,"PC")) +
+      (
+        1 - V01RateScrPcTot(allCy,"PC",TTECH,YTIME)
+      )$sameas(TRANSE,"PC")
+    ) +
+    V01ShareTechTr(allCy,TRANSE,TTECH,YTIME) *
+    (
+      (
+        i01ShareBlend(allCy,TRANSE,EF,YTIME) *
+        V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)
+      )$(not PLUGIN(TTECH)) +
+      ( 
+        (
+          (1-i01ShareAnnMilePlugInHybrid(allCy,YTIME)) *
+          i01ShareBlend(allCy,TRANSE,EF,YTIME) *
+          V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME)
+        )$(not sameas("ELC",EF)) +
+        i01ShareAnnMilePlugInHybrid(allCy,YTIME) *
+        V01ConsSpecificFuel(allCy,TRANSE,TTECH,"ELC",YTIME)
+      )$PLUGIN(TTECH)
+    ) / 1000 *
+    V01GapTranspActiv(allCy,TRANSE,YTIME) *
+    (
+      (
+        i01AvgVehCapLoadFac(allCy,TRANSE,"CAP",YTIME-1) *
+        i01AvgVehCapLoadFac(allCy,TRANSE,"LF",YTIME-1) /
+        i01AvgVehCapLoadFac(allCy,TRANSE,"CAP",YTIME) /
+        i01AvgVehCapLoadFac(allCy,TRANSE,"LF",YTIME)
+      )$(not sameas(TRANSE,"PC")) +
+      V01ActivPassTrnsp(allCy,TRANSE,YTIME)$sameas(TRANSE,"PC")
     );
 
 * -----------------------------------------------------------------------------
@@ -226,15 +290,14 @@ Q01ActivPassTrnsp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANP(TRANSE) $runCy(allCy))
               =E=
       (  !! passenger cars
         V01ActivPassTrnsp(allCy,TRANSE,YTIME-1) *
-        !!(VmPriceFuelAvgSub(allCy,TRANSE,YTIME)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1))**imElastA(allCy,TRANSE,"b1",YTIME) *
-        !!(VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2))**imElastA(allCy,TRANSE,"b2",YTIME) *
+        (VmPriceFuelAvgSub(allCy,TRANSE,YTIME)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1))**imElastA(allCy,TRANSE,"b1",YTIME) *
+        (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2))**imElastA(allCy,TRANSE,"b2",YTIME) *
         [(V01StockPcYearly(allCy,YTIME)/(i01Pop(YTIME,allCy)*1000))/(V01PcOwnPcLevl(allCy,YTIME-1))]**imElastA(allCy,TRANSE,"b3",YTIME) *
         [i01GDPperCapita(YTIME,allCy) / i01GDPperCapita(YTIME-1,allCy)] ** 0.2 !!imElastA(allCy,TRANSE,"b4",YTIME)
       )$sameas(TRANSE,"PC") +
       (  !! passenger aviation
         V01ActivPassTrnsp(allCy,TRANSE,YTIME-1) *
-        [i01GDPperCapita(YTIME,allCy) / i01GDPperCapita(YTIME-1,allCy)] ** imElastA(allCy,TRANSE,"a",YTIME) *
-        [i01Pop(YTIME,allCy) / i01Pop(YTIME-1,allCy)] ** 0.4 *
+        [i01GDPperCapita(YTIME,allCy)/i01GDPperCapita(YTIME-1,allCy)]**imElastA(allCy,TRANSE,"a",YTIME) *
         (VmPriceFuelAvgSub(allCy,TRANSE,YTIME)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1))**imElastA(allCy,TRANSE,"c1",YTIME) *
         (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2))**imElastA(allCy,TRANSE,"c2",YTIME)
       )$sameas(TRANSE,"PA") +
@@ -249,8 +312,7 @@ Q01ActivPassTrnsp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANP(TRANSE) $runCy(allCy))
             VmPriceFuelAvgSub(allCy,TRANSE,YTIME-(ord(kpdl)+1)))/
             (imCGI(allCy,YTIME)**(1/6))
           ]**(imElastA(allCy,TRANSE,"c3",YTIME)*imFPDL(TRANSE,KPDL))
-        ) *
-        [i01Pop(YTIME,allCy) / i01Pop(YTIME-1,allCy)] ** 0.4
+        )
       )$(NOT (sameas(TRANSE,"PC") or sameas(TRANSE,"PA")));
 
 *' This equation calculates the number of scrapped passenger cars based on the scrapping rate and the stock of passenger cars from the previous year.
@@ -286,23 +348,32 @@ Q01PremScrp(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME)$SECTTECH(TRANSE,TTECH)$runCy(
     V01PremScrp(allCy,TRANSE,TTECH,YTIME)
         =E=
     1 -
-    (V01CostFuel(allCy,TRANSE,TTECH,YTIME-1)) ** (-2) /
+    (V01CostFuel(allCy,TRANSE,TTECH,YTIME-1) + 1e-4
+           + i01SensCarbon(allCy,YTIME,TRANSE) * sum(EF$TTECHtoEF(TTECH,EF), 
+            i01ShareBlend(allCy,TRANSE,EF,YTIME) *
+            1e-3 *(VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,TRANSE,EF,YTIME)))    
+    ) ** (-2) /
     (
-      V01CostFuel(allCy,TRANSE,TTECH,YTIME-1) ** (-2) +
-      0.05*i01PremScrpFac(allCy,TRANSE,TTECH,YTIME) * 
+      (V01CostFuel(allCy,TRANSE,TTECH,YTIME-1) + 1e-4
+           + i01SensCarbon(allCy,YTIME,TRANSE) * sum(EF$TTECHtoEF(TTECH,EF), 
+            i01ShareBlend(allCy,TRANSE,EF,YTIME) *
+            1e-3 *(VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,TRANSE,EF,YTIME)))      
+      ) ** (-2) +
+      i01PremScrpFac(allCy,TRANSE,TTECH,YTIME) * 
       SUM(TTECH2$(not sameas(TTECH2,TTECH) and SECTTECH(TRANSE,TTECH2)),
-        V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1) ** (-2)
+        (V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1) + 1e-4
+            + i01SensCarbon(allCy,YTIME,TRANSE) * sum(EF$TTECHtoEF(TTECH2,EF), 
+            i01ShareBlend(allCy,TRANSE,EF,YTIME) *
+            1e-3 *(VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,TRANSE,EF,YTIME))
+            )        
+        ) ** (-2)
       )
     );
 
-Q01ShareBlend(allCy,TRANSE,EF,YTIME)$(TIME(YTIME)$SECtoEF(TRANSE,EF)$runCy(allCy) and yes$SUM(EF2,BLENDMAP(EF2,EF)))..
-    V01ShareBlend(allCy,TRANSE,EF,YTIME)
+Q01ShareBlend(allCy,TRANSE,TTECH,EF,YTIME)$(TIME(YTIME)$SECTTECH(TRANSE,TTECH)$TTECHtoEF(TTECH,EF) $runCy(allCy))..
+    V01ShareBlend(allCy,TRANSE,TTECH,EF,YTIME)
       =E=
-    i01calibweibul(allCy,TRANSE,EF,YTIME) * VmPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME-1) ** (-2) /
-    SUM(EF2$(BLENDMAP(EF,EF2) or BLENDMAP2(EF,EF2)),
-      i01calibweibul(allCy,TRANSE,EF2,YTIME) * VmPriceFuelSubsecCarVal(allCy,TRANSE,EF2,YTIME-1) ** (-2)
-    );
-
+    0;
 $ontext
     (
       i01calibweibul(allCy,TRANSE,TTECH,EF) * VmPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME-1) ** (-2) /
@@ -333,7 +404,8 @@ Q01ConsFuelTransport(allCy,TRANSE,EF,YTIME)$(TIME(YTIME) $SECtoEF(TRANSE,EF) $ru
         =E=
     SUM(TTECH$(TTECHtoEF(TTECH,EF) and SECTTECH(TRANSE,TTECH) and not PLUGIN(TTECH)),
       V01CapacityTransport(allCy,TRANSE,TTECH,YTIME) * !![pkm] mvh
-      V01ShareBlend(allCy,TRANSE,EF,YTIME) *
+      i01ShareBlend(allCy,TRANSE,EF,YTIME) *
+      !!V01ShareBlend(allCy,TRANSE,TTECH,EF,YTIME) *
       V01ConsSpecificFuel(allCy,TRANSE,TTECH,EF,YTIME) / 1000 *!!Ktoe / pkm   ktoe/km
       (1$(not sameas(TRANSE,"PC")) + V01ActivPassTrnsp(allCy,TRANSE,YTIME)$sameas(TRANSE,"PC")) !!km/vh
     ) +
@@ -345,7 +417,8 @@ Q01ConsFuelTransport(allCy,TRANSE,EF,YTIME)$(TIME(YTIME) $SECtoEF(TRANSE,EF) $ru
       )$sameas("ELC",EF) +
       (
         (1-i01ShareAnnMilePlugInHybrid(allCy,YTIME)) *
-        V01ShareBlend(allCy,TRANSE,EF,YTIME) *
+        i01ShareBlend(allCy,TRANSE,EF,YTIME) *
+        !!V01ShareBlend(allCy,TRANSE,PLUGIN,EF,YTIME) *
         V01CapacityTransport(allCy,TRANSE,PLUGIN,YTIME) * !![pkm] mvh
         V01ConsSpecificFuel(allCy,TRANSE,PLUGIN,EF,YTIME) / 1000
       )$(not sameas("ELC",EF))
