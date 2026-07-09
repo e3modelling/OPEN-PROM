@@ -74,4 +74,5 @@ i08WgtSecAvgPriFueCons(runCy,SBS,EF)$(SECtoEF(SBS,EF) $sum(ef2$SECtoEF(SBS,EF),i
 i08VAT(runCy, YTIME) = 0;
 *---
 imFuelPrice(runCy,SBS,"CRO",YTIME) = i08PriceCrudeOil(YTIME);
+imFuelPrice(runCY,SBS,"CRO",YTIME)$(ord(YTIME)>20) = 2 * i08PriceCrudeOil(YTIME);
 *---
