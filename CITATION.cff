@@ -1,0 +1,81 @@
+cff-version: 1.2.0
+message: "If you use OPEN-PROM, please cite it using these metadata."
+authors:
+
+  - family-names: Baka
+    given-names: Maro
+    affiliation: "E3Modelling-WSP"
+    email: maro.baka@wsp.com
+
+  - family-names: Efthymiadou
+    given-names: Margarita
+    affiliation: "E3Modelling-WSP"
+    email: margarita.efthymiadou@wsp.com
+
+  - family-names: Fragkos
+    given-names: Panagiotis
+    affiliation: "E3Modelling-WSP"
+    email: panagiotis.fragkos@wsp.com
+
+  - family-names: Giannousakis
+    given-names: Anastasis
+    affiliation: "E3Modelling-WSP"
+    email: anastasis.giannousakis@wsp.com
+    
+  - family-names: Koumparakis
+    given-names: Christos
+    affiliation: "E3Modelling-WSP"
+    email: christos.koumparakis@wsp.com
+
+  - family-names: Madianos
+    given-names: Michael
+    affiliation: "E3Modelling-WSP"
+    email: michael.madianos@wsp.com
+
+  - family-names: Plessias
+    given-names: Giorgos
+    affiliation: "E3Modelling-WSP"
+    email: george.plessias@wsp.com
+
+  - family-names: Pramangioulis
+    given-names: Dionysis
+    affiliation: "E3Modelling-WSP"
+    email: dionysis.pramangioulis@wsp.com
+
+  - family-names: Sechi
+    given-names: Sonja
+    affiliation: "E3Modelling-WSP"
+    email: sonja.sechi@wsp.com
+
+  - family-names: Sioutas
+    given-names: Fotis
+    affiliation: "E3Modelling-WSP"
+    email: fotis.sioutas@wsp.com
+
+  - family-names: Songmin
+    given-names:  Yu
+    affiliation: "E3Modelling-WSP"
+    email: songmin.yu@wsp.com
+
+  - family-names: Tsimpoukis
+    given-names: Alexandros
+    affiliation: "E3Modelling-WSP"
+    email: alexandros.tsimpoukis@wsp.com
+
+  - family-names: Tolios
+    given-names: Giannis
+    affiliation: 
+    email: 
+
+  - family-names: Zisarou
+    given-names: Eleftheria
+    affiliation:
+    email:
+
+title: OPEN-PROM
+version: 2.2.0
+date-released: 2026-06-26
+repository-code: https://github.com/e3modelling/OPEN-PROM
+keywords:
+  - prometheus
+license: GNU AGPLv3
