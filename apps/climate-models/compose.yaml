@@ -1,0 +1,38 @@
+services:
+  climate-models:
+    build:
+      context: .
+      args:
+        CLIMATE_ASSESSMENT_REF: ${CLIMATE_ASSESSMENT_REF:-v0.1.6}
+    restart: unless-stopped
+    ports:
+      # Keep 127.0.0.1 when using a reverse proxy. Alternatively set this to
+      # the server's VPN-interface IP; never use 0.0.0.0 on an internet host.
+      - "${STREAMLIT_BIND_ADDRESS:-127.0.0.1}:8501:8501"
+    environment:
+      INFILLING_DATABASE: /opt/climate-assets/infilling.csv
+      MAX_UPLOAD_MB: ${MAX_UPLOAD_MB:-50}
+      RUN_TIMEOUT_SECONDS: ${RUN_TIMEOUT_SECONDS:-14400}
+      JOB_RETENTION_HOURS: ${JOB_RETENTION_HOURS:-24}
+      MAGICC_EXECUTABLE_7: ${MAGICC_EXECUTABLE_7:-}
+      MAGICC_PROBABILISTIC_FILE: ${MAGICC_PROBABILISTIC_FILE:-}
+      MAGICC_WORKER_ROOT_DIR: ${MAGICC_WORKER_ROOT_DIR:-/data/magicc-workers}
+      MAGICC_WORKER_NUMBER: ${MAGICC_WORKER_NUMBER:-2}
+    volumes:
+      - climate-jobs:/data/jobs
+      - ${INFILLING_DATABASE_HOST:?Set INFILLING_DATABASE_HOST in .env}:/opt/climate-assets/infilling.csv:ro
+      # Uncomment private MAGICC mounts after accepting its licence and setting
+      # the matching container paths in .env.
+      # - ${MAGICC_HOST_DIR}:/opt/magicc:ro
+      # - magicc-workers:/data/magicc-workers
+    read_only: true
+    tmpfs:
+      - /tmp:size=2G,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  climate-jobs:
+  # magicc-workers:
