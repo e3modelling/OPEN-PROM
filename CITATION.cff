@@ -52,15 +52,15 @@ authors:
     affiliation: "E3Modelling-WSP"
     email: fotis.sioutas@wsp.com
 
-  - family-names: Songmin
-    given-names:  Yu
-    affiliation: "E3Modelling-WSP"
-    email: songmin.yu@wsp.com
-
   - family-names: Tsimpoukis
     given-names: Alexandros
     affiliation: "E3Modelling-WSP"
     email: alexandros.tsimpoukis@wsp.com
+
+  - family-names: Yu
+    given-names:  Songmin
+    affiliation: "E3Modelling-WSP"
+    email: songmin.yu@wsp.com
 
   - family-names: Tolios
     given-names: Giannis
