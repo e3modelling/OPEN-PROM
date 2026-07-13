@@ -27,7 +27,8 @@ reportOutput <- function(
     htmlReport = htmlReport, model = model,
     dashboard = dashboard,
     project_template = project_template,
-    stripScenarioTimestamp = stripScenarioTimestamp) {
+    stripScenarioTimestamp = stripScenarioTimestamp,
+    PngFiles = PngFiles) {
     
   # setConfig(regionmapping = mapping)
 
