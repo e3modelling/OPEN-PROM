@@ -69,7 +69,7 @@ $IFTHEN.mode %bmswasPriceMode% == curve
 $ELSEIF.mode %bmswasPriceMode% == softfx
     VmPriceFuelSubsecCarVal(allCy,"PG","BMSWAS",YTIME) / VmPriceFuelSubsecCarVal(allCy,"PG","BMSWAS",YTIME-1)
 $ELSE.mode
-    1
+    EXP(0.7 * (SUM(allCy2,V03ProdPrimary(allCy2,"BMSWAS",YTIME-1)) / (150 * 23.88458966275)) ** 4)
 $ENDIF.mode
     ;
 

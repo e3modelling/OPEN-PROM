@@ -14,7 +14,7 @@ seq_max 900
 parameter i06MatFacDAC(CDRTECH)                 "Maturity factor of DAC technology expressing its elasticity in implementation regarding its financial sustainability"
 /
 HTDAC	0.60,
-H2DAC   0.9,
+H2DAC   0.3,
 LTDAC	1,
 TEW	    0.7
 / ;
