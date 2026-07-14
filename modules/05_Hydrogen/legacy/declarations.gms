@@ -39,10 +39,8 @@ $offtext
 *'                **Interdependent Variables**	
 VmDemTotH2(allCy, YTIME)                          "Hydrogen production requirement in Mtoe for meeting final demand"
 VmProdH2(allCy, H2TECH, YTIME)                    "Hydrogen Production by technology in Mtoe"
-VmConsFuelTechH2Prod(allCy, H2TECH, EF, YTIME)    "Fuel consumption by hydrogen production technology in Mtoe"
 VmDemSecH2(allCy, SBS, YTIME)                     "Demand for H2 by sector in mtoe"
 VmCostAvgProdH2(allCy, YTIME)                     "Average production cost of hydrogen in Euro per toe"
-VmConsFuelH2Prod(allCy, EF, YTIME)                "Total fuel consumption for hydrogen production in Mtoe"
 ;
 
 Equations
@@ -57,7 +55,6 @@ Q05CostVarProdH2Tech(allCy, H2TECH, YTIME)        "Equation for variable cost (i
 Q05ShareCCSH2Prod(allCy, H2TECH, YTIME)           "Equation for share of CCS technology in the decision tree between CCS and no CCS"
 Q05ShareNoCCSH2Prod(allCy, H2TECH, YTIME)         "Equation for share of technology without CCS in the decision tree between CCS and no CCS"
 Q05AcceptCCSH2Tech(allCy, YTIME)                  "Equation for acceptance in CCS technologies"
-Q05ConsFuelH2Prod(allCy, EF, YTIME)               "Equation for total fuel consumption for hydrogen production"
 Q05CostProdCCSNoCCSH2Prod(allCy, H2TECH, YTIME)   "Equation for calculating the production cost of the composite technology with and without CCS"
 Q05CostAvgProdH2(allCy, YTIME)                    "Equation for average production cost of hydrogen in Euro per toe"
 Q05CaptRateH2(allCy,H2TECH,YTIME)
@@ -80,7 +77,6 @@ $offtext
 *'                **Interdependent Equations**	
 Q05DemTotH2(allCy, YTIME)                         "Equation for total hydrogen demand in a country in Mtoe"
 Q05ProdH2(allCy, H2TECH, YTIME)                   "Equation for H2 production by technology"
-Q05ConsFuelTechH2Prod(allCy, H2TECH, EF, YTIME)   "Equation for fuel consumption by technology for hydrogen production"
 Q05DemSecH2(allCy, SBS, YTIME)                    "Equation for demand of H2 by sector in mtoe"
 ;
 

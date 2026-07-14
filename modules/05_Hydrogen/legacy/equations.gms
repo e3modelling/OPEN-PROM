@@ -121,16 +121,17 @@ Q05CostProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q05CostVarProdH2Tech(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V05CostVarProdH2Tech(allCy,H2TECH,YTIME)
         =E=
-    sum(EF$H2TECHEFtoEF(H2TECH,EF),
+    sum(EF$(H2TECHtoFEEDSTOCK(H2TECH,EF) or H2TECHtoENERGY(H2TECH,EF)),
       (
         VmPriceFuelSubsecCarVal(allCy,"H2P",EF,YTIME) * 1e3 +
         V05CaptRateH2(allCy,H2TECH,YTIME) * (imCo2EmiFac(allCy,"H2P",EF,YTIME) + 4.17$(sameas("BMSWAS", EF))) * VmCstCO2SeqCsts(allCy,YTIME) +
-        (1-V05CaptRateH2(allCy,H2TECH,YTIME)) * imCo2EmiFac(allCy,"H2P",EF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME))
-      ) 
-    )$(not H2TECHREN(H2TECH)) / i05EffH2Prod(allCy,H2TECH,YTIME) +
-    (i04VarCost("PGSOL",YTIME) / (smTWhToMtoe))$(sameas(H2TECH,"wes")) +
-    (i04VarCost("PGAWNO",YTIME) / (smTWhToMtoe))$(sameas(H2TECH,"wew"))
-;
+        (1-V05CaptRateH2(allCy,H2TECH,YTIME)) * imCo2EmiFac(allCy,"H2P",EF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal(allCy,NAP,YTIME)) -
+        0 *V05CaptRateH2(allCy,H2TECH,YTIME) * (4.17$sameas("BMSWAS", EF)) * sum(NAP$NAPtoALLSBS(NAP,"H2P"), VmCarVal(allCy,NAP,YTIME))
+      ) * (i05InputOverOutH2ProdFeed(allCy,H2TECH,EF,YTIME) + i05InputOverOutH2ProdEnergy(allCy,H2TECH,EF,YTIME))
+    ) +
+    i05CostVOMH2Prod(allCy,H2TECH,YTIME) +
+    (i04VarCost("PGSOL",YTIME) / smTWhToMtoe)$sameas(H2TECH,"wes") +
+    (i04VarCost("PGAWNO",YTIME) / smTWhToMtoe)$sameas(H2TECH,"wew");
 
 *' This equation models the acceptance of carbon capture and storage (CCS) technologies in hydrogen production. 
 *' It evaluates the economic feasibility of adding CCS to the hydrogen production process, considering cost, 
@@ -230,25 +231,6 @@ Q05CostAvgProdH2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       V05CostProdH2Tech(allCy,H2TECH,YTIME)
     ) /
     sum(H2TECH,VmProdH2(allCy,H2TECH,YTIME) + 1e-6);
-
-*' This equation calculates the fuel consumption for each hydrogen production technology, considering 
-*' the efficiency of the technology and the amount of fuel required for producing a unit of hydrogen. 
-*' It provides insight into fuel demand for hydrogen production.
-Q05ConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)$(TIME(YTIME) $H2TECHEFtoEF(H2TECH,EF) $(runCy(allCy)))..
-         VmConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME)
-         =E=
-*        VmConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME-1)+
-         VmProdH2(allCy,H2TECH,YTIME)/i05EffH2Prod(allCy,H2TECH,YTIME)!!-
-*        (VmProdH2(allCy,H2TECH,YTIME-1)/i05EffH2Prod(allCy,H2TECH,YTIME-1))
-;
-
-*' This equation aggregates the total fuel consumption across all hydrogen production technologies in the system,
-*' summing up the fuel requirements from all sources. It helps track the total fuel demand for hydrogen production.
-Q05ConsFuelH2Prod(allCy,EF,YTIME)$(TIME(YTIME)$H2PRODEF(EF)$(runCy(allCy)))..
-    VmConsFuelH2Prod(allCy,EF,YTIME)
-        =E=
-    sum(H2TECH$H2TECHEFtoEF(H2TECH,EF),VmConsFuelTechH2Prod(allCy,H2TECH,EF,YTIME))
-;
 
 $ontext
 !!

@@ -24,11 +24,6 @@ VmProdH2.LO(runCy,H2TECH, YTIME) = 0;
 VmProdH2.L(runCy,H2TECH, YTIME) = 0.5;
 VmProdH2.FX(runCy,H2TECH, YTIME)$DATAY(YTIME) = 0;
 *---
-*VmConsFuelTechH2Prod.L(runCy,H2TECH,EF,YTIME)$(not An(YTIME)$H2TECHEFtoEF(H2TECH,EF)) = 0;
-VmConsFuelTechH2Prod.FX(runCy,H2TECH,EF,"%fBaseY%")$(H2TECHEFtoEF(H2TECH,EF)) = (VmProdH2.L(runCy,H2TECH,"%fBaseY%")/i05EffH2Prod(runCy,H2TECH,"%fBaseY%"));
-display i05EffH2Prod;
-display VmConsFuelTechH2Prod.L;
-*---
 *V05DelivH2InfrTech.L(runCy,INFRTECH,YTIME) = 2;
 *V05DelivH2InfrTech.FX(runCy,INFRTECH,YTIME)$(not An(YTIME)) = 1e-5;
 *V05DelivH2InfrTech.FX(runCy,INFRTECH,"%fBaseY%") = 0;
@@ -50,12 +45,15 @@ V05ScrapLftH2Prod.FX(runCy,H2TECH,YTIME)$DATAY(YTIME) = 1/i05ProdLftH2(H2TECH,YT
 V05CostVarProdH2Tech.LO(runCy,H2TECH,YTIME) = 0;
 V05CostVarProdH2Tech.L(runCy,H2TECH,YTIME) = 2;
 V05CostVarProdH2Tech.FX(runCy,H2TECH,YTIME)$DATAY(YTIME) =
-sum(EF$H2TECHEFtoEF(H2TECH,EF),
-  VmPriceFuelSubsecCarVal.L(runCy,"H2P",EF,YTIME) * 1e3 +
-  V05CaptRateH2.L(runCy,H2TECH,YTIME) * (imCo2EmiFac(runCy,"H2P",EF,YTIME) + 4.17$(sameas("BMSWAS", EF))) * VmCstCO2SeqCsts.L(runCy,YTIME) +
-  (1-V05CaptRateH2.L(runCy,H2TECH,YTIME)) * (imCo2EmiFac(runCy,"H2P",EF,YTIME)) *
-  sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal.L(runCy,NAP,YTIME))
-)$(not H2TECHREN(H2TECH)) / i05EffH2Prod(runCy,H2TECH,YTIME) +
+sum(EF$(H2TECHtoFEEDSTOCK(H2TECH,EF) or H2TECHtoENERGY(H2TECH,EF)),
+  (
+    VmPriceFuelSubsecCarVal.L(runCy,"H2P",EF,YTIME) * 1e3 +
+    V05CaptRateH2.L(runCy,H2TECH,YTIME) * (imCo2EmiFac(runCy,"H2P",EF,YTIME) + 4.17$(sameas("BMSWAS", EF))) * VmCstCO2SeqCsts.L(runCy,YTIME) +
+    (1-V05CaptRateH2.L(runCy,H2TECH,YTIME)) * (imCo2EmiFac(runCy,"H2P",EF,YTIME)) *
+    sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal.L(runCy,NAP,YTIME))
+  ) * (i05InputOverOutH2ProdFeed(runCy,H2TECH,EF,YTIME) + i05InputOverOutH2ProdEnergy(runCy,H2TECH,EF,YTIME))
+) +
+i05CostVOMH2Prod(runCy,H2TECH,YTIME) +
 (i04VarCost("PGSOL",YTIME) / (smTWhToMtoe))$(sameas(H2TECH,"wes")) +
 (i04VarCost("PGAWNO",YTIME) / (smTWhToMtoe))$(sameas(H2TECH,"wew"));
 *---
@@ -84,22 +82,12 @@ V05ShareCCSH2Prod.UP(runCy,H2TECH,YTIME) = 1;
 V05ShareNoCCSH2Prod.LO(runCy,H2TECH,YTIME) = 0;
 V05ShareNoCCSH2Prod.UP(runCy,H2TECH,YTIME) = 1;
 *---
-VmConsFuelH2Prod.FX(runCy,EF,YTIME)$(DATAY(YTIME) and H2PRODEF(EF)) = sum(H2TECH$H2TECHEFtoEF(H2TECH,EF),VmConsFuelTechH2Prod.L(runCy,H2TECH,EF,YTIME));
-VmConsFuelH2Prod.FX(runCy,EF,YTIME)$(not H2PRODEF(EF)) = 0;
-*---
 V05CostProdCCSNoCCSH2Prod.LO(runCy,H2TECH,YTIME) = epsilon6;
 V05CostProdCCSNoCCSH2Prod.L(runCy,H2TECH,YTIME) = 2;
 *---
 VmCostAvgProdH2.LO(runCy,YTIME) = 0;
 VmCostAvgProdH2.L(runCy,YTIME) = 1;
-VmCostAvgProdH2.FX(runCy,YTIME)$DATAY(YTIME) = 
-sum(H2TECH, 
-  (VmProdH2.L(runCy,H2TECH,YTIME) + 1e-6) *
-  V05CostProdH2Tech.L(runCy,H2TECH,YTIME)
-) /
-sum(H2TECH,VmProdH2.L(runCy,H2TECH,YTIME) + 1e-6);
-
-
+VmCostAvgProdH2.FX(runCy,YTIME)$DATAY(YTIME) = V05CostProdH2Tech.L(runCy,"gsr",YTIME);
 *---
 *V05InvNewReqH2Infra.L(runCy,INFRTECH,YTIME) = 2;
 *V05InvNewReqH2Infra.FX(runCy,INFRTECH,YTIME)$(not An(YTIME)) = 1e-5;

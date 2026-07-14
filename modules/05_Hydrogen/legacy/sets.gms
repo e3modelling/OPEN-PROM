@@ -90,17 +90,24 @@ LPIPU
 SSGG
 /
 *---
-H2TECHEFtoEF(H2TECH,EF)   "Mapping between production technologies and fuels"
+H2TECHtoFEEDSTOCK(H2TECH,EF)   "Mapping between production technologies and fuels"
 /
 (gsr,gss).ngs !! ,smr
 (cgf,cgs).hcl
 (bgfls,bgfl).BMSWAS !! bpy,bgfs,
 *sht.SOL
 *(nht,wen).NUC
-weg.ELC
-wes.ELC
-wew.ELC
+wes.SOL
+wew.WND
 *(opo,ops).RFO
+/
+
+H2TECHtoENERGY(H2TECH,EF)   "Mapping between production technologies and fuels for energy use (combustion)"
+/
+(gsr,gss).(ngs,elc)
+(cgf,cgs).(hcl,elc)
+(bgfls,bgfl).(BMSWAS,elc)
+weg.ELC
 /
 *---
 $ontext
@@ -187,6 +194,27 @@ IC
 FC
 VC
 EFF
+SELF
+AVAIL
+LFT
+H2KMTOE
+mpips
+lpipu
+mpipu
+AREA
+MAXAREA
+B
+mid
+CR
+/
+
+ECONCHARHY2                 "Technical - Economic characteristics for demand technologies Hydrogen"
+/
+IC
+FC
+VC
+INOUT_ELC
+INOUT_HEAT
 SELF
 AVAIL
 LFT

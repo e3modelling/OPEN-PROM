@@ -2,7 +2,7 @@
 *' @code
 
 *---
-table i05H2Production(ECONCHARHY,H2TECH,YTIME)	            "Data for Hydrogen production"
+table i05H2Production(ECONCHARHY2,H2TECH,YTIME)	            "Data for Hydrogen production"
 $ondelim
 $include"./iH2Production.csv"
 $offdelim
@@ -36,7 +36,8 @@ i05CostCapH2Prod(allCy,H2TECH,YTIME)        "Capital cost of hydrogen production
 i05CostFOMH2Prod(allCy,H2TECH,YTIME)        "Fixed operating and maintenance costs of hydrogen production technologies in US$2015 per kW output H2"
 i05CostVOMH2Prod(allCy,H2TECH,YTIME)        "Variable operating and maintenance costs of hydrogen production technologies in US$2015 per kW output H2"
 i05AvailH2Prod(allCy,H2TECH,YTIME)          "Availability of hydrogen production technologies"
-i05EffH2Prod(allCy,H2TECH,YTIME)            "Efficiency of hydrogen production technologies"
+i05InputOverOutH2ProdFeed(allCy,H2TECH,EF,YTIME)            
+i05InputOverOutH2ProdEnergy(allCy,H2TECH,EF,YTIME)  
 i05CostInvH2Transp(allCy,INFRTECH,YTIME)    "Investment cost of infrastructure technology"
                                                    !! - Turnpike pipeline in Euro per km
                                                    !! - Low pressure urban pipeline in Euro per km
@@ -92,9 +93,11 @@ i05AvailH2Prod(runCy,H2TECH,YTIME) = i05H2Production("AVAIL",H2TECH,YTIME);
 i05AvailH2Prod(runCy,"wes",YTIME)  = min(i05AvailH2Prod(runCy,"weg",YTIME),i04AvailRate(runCy,"PGSOL",YTIME));
 i05AvailH2Prod(runCy,"wew",YTIME)  = min(i05AvailH2Prod(runCy,"weg",YTIME),i04AvailRate(runCy,"PGAWNO",YTIME));
 *---
-i05EffH2Prod(runCy,H2TECH,YTIME) = i05H2Production("EFF",H2TECH,YTIME);
-i05EffH2Prod(runCy,"wes",YTIME)  = i05H2Production("EFF","weg",YTIME);
-i05EffH2Prod(runCy,"wew",YTIME)  = i05H2Production("EFF","weg",YTIME);
+i05InputOverOutH2ProdFeed(runCy,H2TECH,EFS,YTIME)$H2TECHtoFEEDSTOCK(H2TECH,EFS) = 0.7 * i05H2Production("INOUT_HEAT",H2TECH,YTIME);
+i05InputOverOutH2ProdEnergy(runCy,H2TECH,EFS,YTIME)$(H2TECHtoENERGY(H2TECH,EFS) and not sameas("ELC",EFS)) = 0.3 * i05H2Production("INOUT_HEAT",H2TECH,YTIME);
+i05InputOverOutH2ProdEnergy(runCy,H2TECH,EFS,YTIME)$(H2TECHtoENERGY(H2TECH,EFS) and sameas("ELC",EFS)) = i05H2Production("INOUT_ELC",H2TECH,YTIME);
+i05InputOverOutH2ProdFeed(runCy,"wes",EFS,YTIME)$H2TECHtoFEEDSTOCK("wes",EFS) = i05InputOverOutH2ProdEnergy(runCy,"weg","ELC",YTIME);
+i05InputOverOutH2ProdFeed(runCy,"wew",EFS,YTIME)$H2TECHtoFEEDSTOCK("wew",EFS) = i05InputOverOutH2ProdEnergy(runCy,"weg","ELC",YTIME);
 *---
 i05CostInvH2Transp(runCy,INFRTECH,YTIME) = i05H2InfrCapCosts("IC",INFRTECH,YTIME);
 *---
