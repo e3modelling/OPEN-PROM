@@ -69,7 +69,8 @@ $IFTHEN.mode %bmswasPriceMode% == curve
 $ELSEIF.mode %bmswasPriceMode% == softfx
     VmPriceFuelSubsecCarVal(allCy,"PG","BMSWAS",YTIME) / VmPriceFuelSubsecCarVal(allCy,"PG","BMSWAS",YTIME-1)
 $ELSE.mode
-    EXP(0.7 * (SUM(allCy2,V03ProdPrimary(allCy2,"BMSWAS",YTIME-1)) / (150 * 23.88458966275)) ** 4)
+    EXP(0.9 * (SUM(runCy2,V03ProdPrimary(runCy2,"BMSWAS",YTIME-1)) / (150 * 23.88458966275)) ** 4) / 
+    EXP(0.9 * (SUM(runCy2,V03ProdPrimary(runCy2,"BMSWAS",YTIME-2)) / (150 * 23.88458966275)) ** 4)
 $ENDIF.mode
     ;
 
@@ -98,8 +99,7 @@ $ENDIF
     1e-3 * (
       VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,SBS,EFS,YTIME) -
       VmCarVal(allCy,"TRADE",YTIME-1) * imCo2EmiFac(allCy,SBS,EFS,YTIME-1)
-    )$DSBS(SBS)
-    ;
+    )$DSBS(SBS);
 
 Q08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)$(SECtoEF(DSBS,EF) $TIME(YTIME) $runCy(allCy))..
 V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)
