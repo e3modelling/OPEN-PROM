@@ -60,7 +60,7 @@ V01CapCostAnnualized.FX(runCy,TRANSE,TTECH,YTIME)$DATAY(YTIME) =
   (exp(imDisc(runCy,TRANSE,YTIME) * i01TechLft(runCy,TRANSE,TTECH,YTIME)) - 1)
 ) * imCapCostTech(runCy,TRANSE,TTECH,YTIME) * imCGI(runCy,YTIME);
 *---
-V01CostFuel.LO(runCy,TRANSE,TTECH,YTIME) = 0;
+V01CostFuel.LO(runCy,TRANSE,TTECH,YTIME) = -epsilon6;
 V01CostFuel.L(runCy,TRANSE,TTECH,YTIME)$SECTTECH(TRANSE,TTECH) = 1;
 V01CostFuel.FX(runCy,TRANSE,TTECH,YTIME)$DATAY(YTIME) = 
 (

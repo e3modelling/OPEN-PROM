@@ -43,10 +43,11 @@ V02DemSubUsefulSubsec.LO(runCyL,INDDOM,YTIME+1) = 0;
 VmConsFuel.LO(runCyL,DSBS,EF,YTIME+1) = 0;
 V02VarCostTech.LO(runCyL,DSBS,ITECH,YTIME+1) = 0;
 V02CostTech.LO(runCyL,DSBS,ITECH,YTIME+1) = 0;
-VmConsFuelShare.LO(runCyL,DSBS,EF,YTIME+1) = 0;
 V02DemUsefulSubsecRemTech.LO(runCyL,DSBS,YTIME+1) = 0;
 V02RemEquipCapTechSubsec.LO(runCyL,DSBS,ITECH,YTIME+1) = 0;
 V02GapUsefulDemSubsec.LO(runCyL,DSBS,YTIME+1) = 0;
+V02UsefulElecNonSubIndTert.LO(runCyL,INDDOM,YTIME+1) = 0;
+V02FinalElecNonSubIndTert.LO(runCyL,INDDOM,YTIME+1) = 0;
 
 *' Initialize parameters for every iteration forward (seed from first iteration results)
 V02DemSubUsefulSubsec.L(runCyL,DSBS,YTIME+1) = p02DemSubUsefulSubsec(runCyL,DSBS,YTIME);
@@ -65,3 +66,10 @@ V02IndAvrEffFinalUseful.L(runCyL,DSBS,YTIME+1) = p02IndAvrEffFinalUseful(runCyL,
 V02PremScrpIndu.L(runCyL,DSBS,ITECH,YTIME+1) = p02PremScrpIndu(runCyL,DSBS,ITECH,YTIME);
 V02RatioRem.L(runCyL,DSBS,ITECH,YTIME+1) = p02RatioRem(runCyL,DSBS,ITECH,YTIME);
 VmConsFuel.L(runCyL,DSBS,EF,YTIME+1) = pmConsFuel(runCyL,DSBS,EF,YTIME);
+VmConsFuelSum.L(runCyL,DSBS,YTIME+1) =
+  SUM(EF$SECtoEF(DSBS,EF), pmConsFuel(runCyL,DSBS,EF,YTIME));
+VmConsFuelShare.L(runCyL,DSBS,EF,YTIME+1)$(
+  SECtoEF(DSBS,EF) and SUM(EF2$SECtoEF(DSBS,EF2), pmConsFuel(runCyL,DSBS,EF2,YTIME))
+) =
+  pmConsFuel(runCyL,DSBS,EF,YTIME) /
+  SUM(EF2$SECtoEF(DSBS,EF2), pmConsFuel(runCyL,DSBS,EF2,YTIME));

@@ -51,7 +51,7 @@ $offtext
 Q05PremRepH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$H2TECHPM(H2TECH))..
     V05PremRepH2Prod(allCy,H2TECH,YTIME)
         =E=
-    p05CostVarProdH2Tech(allCy,H2TECH,YTIME-1)**(-i05WBLGammaH2Prod(allCy,YTIME)) /
+    (p05CostVarProdH2Tech(allCy,H2TECH,YTIME-1) + 1e-3)**(-i05WBLGammaH2Prod(allCy,YTIME)) /
     (
       iWBLPremRepH2Prod(allCy,H2TECH,YTIME) *
       (
@@ -61,9 +61,9 @@ Q05PremRepH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$H2TECHPM(H2TECH
           !!(1/i05AvailH2Prod(allCy,H2TECH,YTIME)*
           !!V05CostProdH2Tech(allCy,H2TECH2,YTIME) +
           !!(1-1/i05AvailH2Prod(allCy,H2TECH,YTIME)) * V05CostVarProdH2Tech(allCy,H2TECH2,YTIME))
-        )
+        ) + 1e-3
       )**(-i05WBLGammaH2Prod(allCy,YTIME)) +
-      p05CostVarProdH2Tech(allCy,H2TECH,YTIME-1)**(-i05WBLGammaH2Prod(allCy,YTIME))
+      (p05CostVarProdH2Tech(allCy,H2TECH,YTIME-1) + 1e-3)**(-i05WBLGammaH2Prod(allCy,YTIME))
     );
 
 *' This equation calculates the total hydrogen production capacity that is scrapped as part of the premature replacement
@@ -190,13 +190,15 @@ Q05GapShareH2Tech2(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       iWBLShareH2Prod(allCy,H2TECH,YTIME) * 
       (
         p05CostProdH2Tech(allCy,H2TECH,YTIME-1)$(not H2NOCCS(H2TECH)) + 
-        p05CostProdCCSNoCCSH2Prod(allCy,H2TECH,YTIME-1)$H2NOCCS(H2TECH)
+        p05CostProdCCSNoCCSH2Prod(allCy,H2TECH,YTIME-1)$H2NOCCS(H2TECH) +
+        1e-3
       )**(-i05WBLGammaH2Prod(allCy,YTIME)) /
       sum(H2TECH2$(not H2CCS(H2TECH2)),
         iWBLShareH2Prod(allCy,H2TECH2,YTIME) * 
         (
           p05CostProdH2Tech(allCy,H2TECH2,YTIME-1)$(not H2NOCCS(H2TECH2)) + 
-          p05CostProdCCSNoCCSH2Prod(allCy,H2TECH2,YTIME-1)$H2NOCCS(H2TECH2)
+          p05CostProdCCSNoCCSH2Prod(allCy,H2TECH2,YTIME-1)$H2NOCCS(H2TECH2) +
+          1e-3
         )**(-i05WBLGammaH2Prod(allCy,YTIME))
       )
     )$(not H2CCS(H2TECH)) +

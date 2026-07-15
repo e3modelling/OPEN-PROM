@@ -41,7 +41,7 @@ V01PcOwnPcLevl.UP(runCyL,YTIME+1) = 2*i01PassCarsMarkSat(runCyL);
 V01GapTranspActiv.LO(runCyL,TRANSE,YTIME+1) = 0;
 V01GapTranspActiv.FX(runCyL,TRANSE,YTIME+1)$(not AN(YTIME+1)) = 0;
 V01CapCostAnnualized.LO(runCyL,TRANSE,TTECH,YTIME+1) = 0;
-V01CostFuel.LO(runCyL,TRANSE,TTECH,YTIME+1) = 0;
+V01CostFuel.LO(runCyL,TRANSE,TTECH,YTIME+1) = -epsilon6;
 V01CostTranspPerMeanConsSize.LO(runCyL,TRANSE,TTECH,YTIME+1) = 0;
 V01ShareTechTr.LO(runCyL,TRANSE,TTECH,YTIME+1) = 0;
 

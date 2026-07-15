@@ -51,7 +51,7 @@ Q02PremScrpIndu(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and (
       (p02VarCostTech(allCy,DSBS,ITECH,YTIME-1) * i02util(allCy,DSBS,ITECH,YTIME-1) + 1e-3) ** (-2) +
       i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME) *
       sum(ITECH2$(not sameas(ITECH2,ITECH) and SECTTECH(DSBS,ITECH2)),
-          p02CostTech(allCy,DSBS,ITECH2,YTIME-1) + p02VarCostTech(allCy,DSBS,ITECH2,YTIME-1)
+          p02CostTech(allCy,DSBS,ITECH2,YTIME-1) + p02VarCostTech(allCy,DSBS,ITECH2,YTIME-1) + 1e-3
       ) ** (-2)
     );
 
@@ -132,10 +132,10 @@ Q02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $SECTTECH(DSBS,I
     V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME) 
         =E=
     imMatrFactor(allCy,DSBS,ITECH,YTIME) *
-    p02CostTech(allCy,DSBS,ITECH,YTIME-1) ** (-i02ElaSub(allCy,DSBS)) /
+    (p02CostTech(allCy,DSBS,ITECH,YTIME-1) + epsilon6) ** (-i02ElaSub(allCy,DSBS)) /
     sum(ITECH2$SECTTECH(DSBS,ITECH2),
       imMatrFactor(allCy,DSBS,ITECH2,YTIME) *
-      p02CostTech(allCy,DSBS,ITECH2,YTIME-1) ** (-i02ElaSub(allCy,DSBS))
+      (p02CostTech(allCy,DSBS,ITECH2,YTIME-1) + epsilon6) ** (-i02ElaSub(allCy,DSBS))
     );
 
 *' This equation computes the equipment capacity of each technology in each subsector

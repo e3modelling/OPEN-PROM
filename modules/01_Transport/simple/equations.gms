@@ -303,7 +303,8 @@ Q01PremScrp(allCy,TRANSE,TTECH,YTIME)$(
       0.05*i01PremScrpFac(allCy,TRANSE,TTECH,YTIME) * 
       SUM(TTECH2$(not sameas(TTECH2,TTECH) and SECTTECH(TRANSE,TTECH2) and p01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1) > 0),
         (1 / sqr(p01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1)))$(p01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1) > 0)
-      )
+      ) +
+      epsilon6
     );
 
 Q01ShareBlend(allCy,TRANSE,EF,YTIME)$(TIME(YTIME)$SECtoEF(TRANSE,EF)$runCy(allCy) and yes$SUM(EF2,BLENDMAP(EF2,EF)))..

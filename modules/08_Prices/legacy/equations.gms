@@ -88,13 +88,19 @@ $ENDIF
 *' only in Q08IndexBioSupply. (imCo2EmiFac("BMSWAS")=0, so the carbon term vanishes for
 *' BMSWAS and this reproduces both legacy-static and emulator-curve exactly.)
     VmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME-1) *
-    (1 + (pmCostPowGenAvgLng(allCy,YTIME-1) / pmCostPowGenAvgLng(allCy,YTIME-2) - 1)$sameas("ELC",EFS)) *
-    (1 + (pmCostAvgProdH2(allCy,YTIME-1) / pmCostAvgProdH2(allCy,YTIME-2) - 1)$sameas("H2F",EFS)) *
-    (1 + (pmCostAvgProdSte(allCy,YTIME-1) / pmCostAvgProdSte(allCy,YTIME-2) - 1)$sameas("STE",EFS)) *
+    (1 + (pmCostPowGenAvgLng(allCy,YTIME-1) / pmCostPowGenAvgLng(allCy,YTIME-2) - 1)$(
+      sameas("ELC",EFS) and pmCostPowGenAvgLng(allCy,YTIME-1) and pmCostPowGenAvgLng(allCy,YTIME-2)
+    )) *
+    (1 + (pmCostAvgProdH2(allCy,YTIME-1) / pmCostAvgProdH2(allCy,YTIME-2) - 1)$(
+      sameas("H2F",EFS) and pmCostAvgProdH2(allCy,YTIME-1) and pmCostAvgProdH2(allCy,YTIME-2)
+    )) *
+    (1 + (pmCostAvgProdSte(allCy,YTIME-1) / pmCostAvgProdSte(allCy,YTIME-2) - 1)$(
+      sameas("STE",EFS) and pmCostAvgProdSte(allCy,YTIME-1) and pmCostAvgProdSte(allCy,YTIME-2)
+    )) *
     (1 + (V08IndexBioSupply(allCy,YTIME) ** i08PriceTransElast(EFS,"BMSWAS") - 1)$(BIOFUELS(EFS) or sameas("BMSWAS",EFS))) *
-    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** i08PriceTransElast(EFS,"CRO") - 1)$sameas("NGS",EFS)) *
-    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** i08PriceTransElast(EFS,"CRO") - 1)$SECtoEFPROD("LQD",EFS)) *
-    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** i08PriceTransElast(EFS,"CRO") - 1)$(sameas("HCL",EFS) or sameas("LGN",EFS))) +
+    (1 + (((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) + epsilon6) / (pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1) + epsilon6)) ** i08PriceTransElast(EFS,"CRO") - 1)$sameas("NGS",EFS)) *
+    (1 + (((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) + epsilon6) / (pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1) + epsilon6)) ** i08PriceTransElast(EFS,"CRO") - 1)$SECtoEFPROD("LQD",EFS)) *
+    (1 + (((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) + epsilon6) / (pmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1) + epsilon6)) ** i08PriceTransElast(EFS,"CRO") - 1)$(sameas("HCL",EFS) or sameas("LGN",EFS))) +
     1e-3 * (
       VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,SBS,EFS,YTIME) -
       pmCarVal(allCy,"TRADE",YTIME-1) * imCo2EmiFac(allCy,SBS,EFS,YTIME-1)
