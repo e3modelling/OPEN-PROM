@@ -6,7 +6,8 @@ services:
         R_UNIVERSE_REPOS: "https://pik-piam.r-universe.dev,https://e3modelling.r-universe.dev"
         GITHUB_R_PACKAGES: "https://github.com/e3modelling/mrprom.git,https://github.com/e3modelling/postprom.git"
         COMMON_DEFINITIONS_REPO: "https://github.com/IAMconsortium/common-definitions.git"
-        COMMON_DEFINITIONS_REF: "main"
+        COMMON_DEFINITIONS_REF: "d877b5f56386317b66214bdb8cc694befda5596c"
+        NOMENCLATURE_IAMC_VERSION: "0.31.0"
     image: open-prom:local
     working_dir: /open-prom
     environment:

@@ -17,7 +17,6 @@ cran_or_runiverse_packages <- c(
   "dplyr",
   "gdx",
   "gms",
-  "iamc",
   "jsonlite",
   "madrat",
   "magclass",

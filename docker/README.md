@@ -179,6 +179,8 @@ Package installation is handled by:
 docker/install-r-packages.R
 ```
 
+The optional legacy script `scripts/tools/reportData.R` references the R package `iamc`. That package is not included in the default Docker runtime because it is not available from the configured CRAN/R-universe repositories. Add its source explicitly if that tool is required.
+
 Package sources can be overridden at build time:
 
 ```sh
@@ -207,13 +209,29 @@ The path is exposed as:
 IAMC_COMMON_DEFINITIONS=/opt/iamc/common-definitions
 ```
 
-The image also installs the Python package:
+For reproducible builds, the default Docker build pins this repository to:
 
 ```text
-nomenclature-iamc
+d877b5f56386317b66214bdb8cc694befda5596c
+```
+
+The image also installs the pinned Python package:
+
+```text
+nomenclature-iamc==0.31.0
 ```
 
 This repository and package support IAMC codelists, mappings, validation, and exports. They are separate from the R package `iamc`.
+
+Both pins can be overridden at build time:
+
+```sh
+docker compose build \
+  --build-arg COMMON_DEFINITIONS_REF="main" \
+  --build-arg NOMENCLATURE_IAMC_VERSION="0.31.0"
+```
+
+These pins make the IAMC common-definitions layer reproducible by default. Full image reproducibility would also require pinning the R package dependency graph, for example with an `renv.lock` file or equivalent version lock.
 
 ## Build
 
@@ -404,3 +422,80 @@ If outputs are missing, verify:
 - `withSync`
 - `model_runs_path`
 - write access to `./runs` and `./outputs`
+
+## Optional Windows Container
+
+The default Docker setup uses a Linux container. This is the recommended path, including on Windows hosts through Docker Desktop with WSL2.
+
+An optional Windows-container setup is also provided:
+
+- `Dockerfile.windows`
+- `docker-compose.windows.yml`
+- `config.windows-container.json`
+- `.env.windows.example`
+
+This setup is intended for environments that must use a Windows GAMS installation inside a Windows container.
+
+Windows-container requirements:
+
+- Docker Desktop switched to Windows containers.
+- A Windows base image compatible with the host, defaulting to `mcr.microsoft.com/windows/servercore:ltsc2022`.
+- A Windows GAMS installation, for example `C:\GAMS\47`.
+- A valid GAMS license for that Windows installation.
+
+Create the Windows environment file:
+
+```powershell
+Copy-Item .env.windows.example .env.windows
+```
+
+Edit `.env.windows` if GAMS is not installed at the default path:
+
+```text
+GAMS_WINDOWS_HOME=C:\GAMS\47
+```
+
+Build the Windows image:
+
+```powershell
+docker compose --env-file .env.windows -f docker-compose.windows.yml build
+```
+
+Run task 2:
+
+```powershell
+docker compose --env-file .env.windows -f docker-compose.windows.yml run --rm open-prom-windows
+```
+
+Run another task:
+
+```powershell
+docker compose --env-file .env.windows -f docker-compose.windows.yml run --rm open-prom-windows task_id=5
+```
+
+The Windows container maps paths as follows:
+
+```yaml
+      - .\config.windows-container.json:C:\open-prom\config.windows-container.json:ro
+      - .\data:C:\open-prom\data:ro
+      - .\targets:C:\open-prom\targets:ro
+      - .\runs:C:\open-prom\runs
+      - .\outputs:C:\outputs
+      - ${GAMS_WINDOWS_HOME:-C:\GAMS\47}:C:\GAMS:ro
+```
+
+Inside the Windows container, OPEN-PROM uses:
+
+```json
+{
+  "paths": {
+    "model_runs_path": "C:/outputs",
+    "magpie_path": "C:/magpie/",
+    "gams_path": "C:/GAMS/"
+  }
+}
+```
+
+The Windows image installs R and Rtools from pinned installer URLs and installs the same R package set as the Linux image. It downloads the pinned IAMC common-definitions archive into `C:\iamc\common-definitions`.
+
+The Windows image is expected to be larger and less portable than the Linux image. Prefer the Linux container unless Windows GAMS execution is required.

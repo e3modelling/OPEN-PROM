@@ -34,12 +34,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /open-prom
 
 ARG COMMON_DEFINITIONS_REPO="https://github.com/IAMconsortium/common-definitions.git"
-ARG COMMON_DEFINITIONS_REF="main"
+ARG COMMON_DEFINITIONS_REF="d877b5f56386317b66214bdb8cc694befda5596c"
+ARG NOMENCLATURE_IAMC_VERSION="0.31.0"
 ENV IAMC_COMMON_DEFINITIONS=/opt/iamc/common-definitions
 
-RUN python3 -m pip install --no-cache-dir --break-system-packages nomenclature-iamc \
+RUN python3 -m pip install --no-cache-dir --break-system-packages "nomenclature-iamc==${NOMENCLATURE_IAMC_VERSION}" \
     && mkdir -p /opt/iamc \
-    && git clone --depth 1 --branch ${COMMON_DEFINITIONS_REF} ${COMMON_DEFINITIONS_REPO} ${IAMC_COMMON_DEFINITIONS}
+    && git init ${IAMC_COMMON_DEFINITIONS} \
+    && git -C ${IAMC_COMMON_DEFINITIONS} remote add origin ${COMMON_DEFINITIONS_REPO} \
+    && git -C ${IAMC_COMMON_DEFINITIONS} fetch --depth 1 origin ${COMMON_DEFINITIONS_REF} \
+    && git -C ${IAMC_COMMON_DEFINITIONS} checkout --detach FETCH_HEAD
 
 COPY docker/install-r-packages.R docker/install-r-packages.R
 
