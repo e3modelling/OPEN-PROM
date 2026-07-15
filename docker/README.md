@@ -179,8 +179,6 @@ Package installation is handled by:
 docker/install-r-packages.R
 ```
 
-The optional legacy script `scripts/tools/reportData.R` references the R package `iamc`. That package is not included in the default Docker runtime because it is not available from the configured CRAN/R-universe repositories. Add its source explicitly if that tool is required.
-
 Package sources can be overridden at build time:
 
 ```sh
@@ -221,7 +219,7 @@ The image also installs the pinned Python package:
 nomenclature-iamc==0.31.0
 ```
 
-This repository and package support IAMC codelists, mappings, validation, and exports. They are separate from the R package `iamc`.
+This repository and package support IAMC codelists, mappings, validation, and exports.
 
 Both pins can be overridden at build time:
 
