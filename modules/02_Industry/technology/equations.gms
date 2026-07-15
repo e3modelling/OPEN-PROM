@@ -57,6 +57,7 @@ Q02PremScrpIndu(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and (
 
 *'NEW EQUATION' - kind of --> substitutes Q02ConsRemSubEquipSubSec
 * This equation computes the useful energy covered by the remaining equipment
+* imUsfEneConvSubTech to be set 1 for industry where tons are used
 Q02DemUsefulSubsecRemTech(allCy,DSBS,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(DSBS))$runCy(allCy))..
     V02DemUsefulSubsecRemTech(allCy,DSBS,YTIME) 
         =E=
@@ -88,6 +89,7 @@ Q02GapUsefulDemSubsec(allCy,DSBS,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(DSBS
 *' OLD VARIABLE: V02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME) --> NEW VARIABLE:V02CapCostTech(allCy,DSBS,rCon,EF,YTIME)
 *' Add parameter sUnitToKUnit = 1000
 *' Check ITECH and CHPs
+* imUsfEneConvSubTech to be set 1 for industry where tons are used
 Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(DSBS))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
     V02CapCostTech(allCy,DSBS,ITECH,YTIME) 
         =E=
@@ -104,13 +106,10 @@ Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(DSBS)
 *' OLD EQUATION: Q02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME) --> NEW EQUATION:Q02VarCostTech(allCy,DSBS,rCon,ITECH,YTIME)
 *' OLD VARIABLE: V02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME) --> NEW VARIABLE:V02VarCostTech(allCy,DSBS,rCon,ITECH,YTIME)
 *' NEW SET TECHEF
-<<<<<<< HEAD
 *' Note from Maro: i02ShareBlend should be defined per unit of material. Added i02INDSEI Specific Energy Intensity for industry in the equation but need more changes in the code
 *' i02INDSEI should be included as a table
+* imUsfEneConvSubTech to be set 1 for industry where tons are used
 Q02VarCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not CDR(DSBS))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
-=======
-Q02VarCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(DSBS))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
->>>>>>> main
   V02VarCostTech(allCy,DSBS,ITECH,YTIME) 
       =E=
   (
@@ -148,6 +147,7 @@ Q02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $SECTTECH(DSBS,I
 
 *' This equation computes the equipment capacity of each technology in each subsector
 *'Check if Tech exists in main.gms
+* imUsfEneConvSubTech to be set 1 for industry where tons are used
 Q02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and TIME(YTIME) and (INDDOM(DSBS) or NENSE(DSBS)) and runCy(allCy))..
     V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) 
         =E= 
