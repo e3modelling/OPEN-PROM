@@ -1,0 +1,24 @@
+services:
+  open-prom:
+    build:
+      context: .
+      args:
+        R_UNIVERSE_REPOS: "https://pik-piam.r-universe.dev,https://e3modelling.r-universe.dev"
+        GITHUB_R_PACKAGES: "https://github.com/e3modelling/mrprom.git,https://github.com/e3modelling/postprom.git"
+        COMMON_DEFINITIONS_REPO: "https://github.com/IAMconsortium/common-definitions.git"
+        COMMON_DEFINITIONS_REF: "main"
+    image: open-prom:local
+    working_dir: /open-prom
+    environment:
+      OPENPROM_CONFIG: config.container.json
+      IAMC_COMMON_DEFINITIONS: /opt/iamc/common-definitions
+    volumes:
+      - ./config.container.json:/open-prom/config.container.json:ro
+      - ./data:/open-prom/data:ro
+      - ./targets:/open-prom/targets:ro
+      - ./runs:/open-prom/runs
+      - ./outputs:/outputs
+      # Set GAMS_HOME in .env to a Linux GAMS installation.
+      # A Windows GAMS folder mounted from C:\GAMS will not run inside the Linux container.
+      - ${GAMS_HOME:-/path/to/linux/gams}:/opt/gams:ro
+    command: ["task_id=2"]
