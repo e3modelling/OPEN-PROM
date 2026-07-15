@@ -107,7 +107,6 @@ Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not CD
 *' NEW SET TECHEF
 *' Note from Maro: i02ShareBlend should be defined per unit of material. Added i02INDSEI Specific Energy Intensity for industry in the equation but need more changes in the code
 *' i02INDSEI should be included as a table
-Q02VarCostTech(allCy,D
 Q02VarCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not CDR(DSBS))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
   V02VarCostTech(allCy,DSBS,ITECH,YTIME) 
       =E=
