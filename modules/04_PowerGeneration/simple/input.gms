@@ -21,6 +21,13 @@ $include"./iDataElecProdCHP.csv"
 $offdelim
 ;
 *---
+table i04FIT(allCy,PGALL,YTIME)	                   "Feed-in-Tariff (US$2015/KWh)"
+$ondelim
+$include"./iFIT.csv"
+$offdelim
+;
+i04FIT(allCy,PGALL,YTIME) = 0;
+*---
 table t04SharePowPlaNewEq(allCy,PGALL,YTIME)    "Ratio of newly added capacity smoothed over 10-year period ()"
 $ondelim
 $include "../targets/tShares_ProdElec.csv"
@@ -73,82 +80,46 @@ $include"./iMatFacPlaAvailCap.csv"
 $offdelim
 ;
 *---
+table iScaleEndogScrapData(allCy,PGALL,YTIME)      "Maturity factor related to plant available capacity (1)"
+$ondelim
+$include"./iScaleEndogScrapPG.csv"
+$offdelim
+;
+*---
 $IFTHEN.calib %Calibration% == MatCalibration
 variable i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   "Maturity factor related to plant available capacity (1)";
-i04MatFacPlaAvailCap.LO(runCy, PGALL, YTIME) = 0;
-i04MatFacPlaAvailCap.UP(runCy, PGALL, YTIME) = 100;
+variable i04ScaleEndogScrap(allCy,PGALL,YTIME)     "Scale parameter for endogenous scrapping applied to the sum of full costs (1)";
+i04MatFacPlaAvailCap.LO(runCy, PGALL, YTIME) = 1e-2;
+i04MatFacPlaAvailCap.UP(runCy, PGALL, YTIME) = 1;
 i04MatFacPlaAvailCap.L(runCy,PGALL,YTIME) = iMatFacPlaAvailCapData(runCy,PGALL,YTIME);
+
+i04ScaleEndogScrap.LO(runCy,PGALL,YTIME) = 1e-2;
+i04ScaleEndogScrap.UP(runCy,PGALL,YTIME) = 10;
+i04ScaleEndogScrap.L(runCy,PGALL,YTIME) = iScaleEndogScrapData(runCy,PGALL,YTIME);
 $ELSE.calib
 parameter i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   "Maturity factor related to plant available capacity (1)";
+parameter i04ScaleEndogScrap(allCy,PGALL,YTIME)     "Scale parameter for endogenous scrapping applied to the sum of full costs (1)";
 i04MatFacPlaAvailCap(runCy,PGALL,YTIME) = iMatFacPlaAvailCapData(runCy,PGALL,YTIME);
+i04ScaleEndogScrap(runCy,PGALL,YTIME) = iScaleEndogScrapData(runCy,PGALL,YTIME);
 $ENDIF.calib
 *---
-parameter i04LoadFacElecDem(DSBS)                  "Load factor of electricity demand per sector (1)"
+$$ontext
+parameter i04FIT(allCy,PGALL,YTIME)                  "Feed0In-Tariff (US$2015/KWh)"
 /
-IS 	0.92,
-NF 	0.94,
-CH 	0.83,
-BM 	0.82,
-PP 	0.74,
-FD 	0.65,
-EN 	0.7,
-TX 	0.61,
-OE 	0.92,
-OI 	0.67,
-SE 	0.64,
-AG 	0.52,
-HOU	0.72,
-PC 	0.7,
-PB 	0.7,
-PT 	0.62,
-PN 	0.7,
-PA 	0.7,
-GU 	0.7,
-GT 	0.62,
-GN 	0.7,
-BU 	0.7,
-PCH	0.83,
-NEN	0.83 
+JPN.PGAWND.YTIME 0.09
+JPN.PGAWNO.YTIME 0.25
+JPN.PGOTHREN.YTIME 0.21
+JPN.PGLHYD.YTIME 0.13
+JPN.PGSHYD.YTIME 0.20
+JPN.ATHBMSWAS.YTIME 0.15
+JPN.PGSOL.YTIME 0.06
 / ;
-*---
-parameter i04LoadFactorAdj(DSBS)	               "Parameters for load factor adjustment i04BaseLoadShareDem (1)"
-/
-IS 	0.9,
-NF 	0.92,
-CH 	0.78,
-BM 	0.81,
-PP 	0.91,
-FD 	0.61,
-EN 	0.65,
-TX 	0.6,
-OE 	0.9,
-OI 	0.59,
-SE 	0.58,
-AG 	0.45,
-HOU	0.55,
-PC 	0.43,
-PB 	0.43,
-PT 	0.29,
-PN 	0.43,
-PA 	0.43,
-GU 	0.43,
-GT 	0.29,
-GN 	0.43,
-BU 	0.43,
-PCH	0.78,
-NEN	0.78 
-/ ;
+$$offtext
 *---
 i04TechLftPlaType(runCy,PGALL) = i04DataTechLftPlaType(PGALL, "LFT");
 i04TechLftPlaType(runCy,"PGH2F") = 20;
 *---
 i04GrossCapCosSubRen(runCy,PGALL,YTIME) = i04GrossCapCosSubRen(runCy,PGALL,YTIME)/1000;
-*---
-loop(runCy,PGALL,YTIME)$AN(YTIME) DO
-         abort $(i04GrossCapCosSubRen(runCy,PGALL,YTIME)<0) "CAPITAL COST IS NEGATIVE", i04GrossCapCosSubRen
-ENDLOOP;
-*---
-i04ScaleEndogScrap = 6 / card(PGALL);
 *---
 i04DecInvPlantSched(runCy,PGALL,YTIME) = i04InvPlants(runCy,PGALL,YTIME);
 *---

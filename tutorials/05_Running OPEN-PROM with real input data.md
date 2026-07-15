@@ -44,22 +44,27 @@ The underlying script is triggered automatically in the normal workflow when the
 
 ## 4. Task modes in `start.R`
 
-The standard internal entry point is:
+The standard single-scenario entry point is:
 
 ```bash
-Rscript start.R task=N
+Rscript start.R task_id=N
 ```
+
+`start.R` always runs **one** scenario: the one defined in `config.json:scenario`. Edit that block to change what gets run.
+
+For batch sweeps over multiple scenarios, see §5 below.
 
 The main task modes are:
 
-| task | Button name | What it does | Main input requirement | Main outputs |
-|------|-------------|--------------|------------------------|--------------|
-| 0 | `OPEN-PROM DEV` | Runs the development model with existing input data | existing `data/` | model run output; `reportOutput.R` runs automatically if `withRunFolder` and `withReport` are enabled |
-| 1 | `OPEN-PROM DEV NEW DATA` | Rebuilds development input data and then runs the model | internal data access | fresh development `data/` and a model run |
-| 2 | `OPEN-PROM RESEARCH` | Runs the research model with existing research input data | existing research `data/` | model run output; `reportOutput.R` runs automatically if `withRunFolder` and `withReport` are enabled |
-| 3 | `OPEN-PROM RESEARCH NEW DATA` | Rebuilds research input data, calibrates maturity factors, then runs the model | internal data access | fresh research `data/`, `targets/`, calibration results, and a model run |
-| 5 | `CALIBRATE` | Runs calibration only | existing `data/` and `targets/` | calibrated maturity-factor files |
-| 6 | `CALIBRATE CARBON PRICES` | Runs carbon-price calibration | internal calibration setup | updated carbon-price inputs and, if enabled, a report |
+| task_id | Button name | What it does | Main input requirement | Main outputs | Batchable? |
+|---------|-------------|--------------|------------------------|--------------|:-:|
+| 0 | `OPEN-PROM DEV` | Runs the development model with existing input data | existing `data/` | model run output; `reportOutput.R` runs automatically if `behavior.withRunFolder` and `behavior.withReport` are both `true` in `config.json` | no |
+| 1 | `OPEN-PROM DEV NEW DATA` | Rebuilds development input data and then runs the model | internal data access | fresh development `data/` and a model run | no |
+| 2 | `OPEN-PROM RESEARCH` | Runs the research model with existing research input data | existing research `data/` | model run output; `reportOutput.R` runs automatically if `behavior.withRunFolder` and `behavior.withReport` are both `true` in `config.json` | **yes** |
+| 3 | `OPEN-PROM RESEARCH NEW DATA` | Rebuilds research input data, calibrates maturity factors, then runs the model | internal data access | fresh research `data/`, `targets/`, calibration results, and a model run | no |
+| 5 | `CALIBRATE` | Runs calibration only | existing `data/` and `targets/` | calibrated maturity-factor files | no |
+| 6 | `CALIBRATE CARBON PRICES` | Runs carbon-price calibration | internal calibration setup | updated carbon-price inputs and, if enabled, a report | no |
+| 7 | `OPEN-PROM SOFT-LINK MAgPIE` | Runs the OPEN-PROM ↔ MAgPIE soft-link, iterated to convergence (`soft_link_magpie.max_iter` rounds at most; defaults to 1, i.e. single round-trip). See Tutorial 12 for the round model, convergence judgment, and resume semantics. | internal data access + MAgPIE checkout | one OPEN-PROM run folder + N MAgPIE output folders + `coupling_state.json` / `convergence_log.csv` / `coupling_summary.json` | **yes** |
 
 Task 4 is a debugging path and is not part of the normal run flow.
 
@@ -70,9 +75,121 @@ The easiest way to read this table is:
 * `RESEARCH` means the full research setup
 * `CALIBRATE` modes are specialized runs and not the usual first step
 
-## 5. What the outputs mean
+## 5. Batch mode
 
-When `withReport <- TRUE`, `start.R` automatically calls `reportOutput.R` after task 0, 2, 3, or 6, provided the run-folder workflow is active. That script converts the model output into a MIF report, typically `reporting.mif`. It may also try to create plot files, but PDF generation depends on the local LaTeX/TinyTeX setup.
+When you want to run several scenarios in one go, put a `scenarios.csv` file at the repo root and run:
+
+```bash
+Rscript start.R scenarios.csv
+```
+
+or click the **RUN BATCH** button in the VS Code Task Runner. The script fails with `Batch CSV not found: scenarios.csv` if the file is missing — batch is always opt-in via that file. Each row produces its own `runs/<scenario_name>_<timestamp>/` folder; rows are processed sequentially inside one R process (no subprocess overhead). Batch supports only `task_id` 2 and 7; other values are rejected per row.
+
+A starter template lives at `scenarios.template.csv`. The minimal required columns are `scenario_name` and `task_id`; everything else is optional.
+
+### 5.1 How each row builds its scenario (merge semantics)
+
+For each row, `start.R` builds a complete scenario object by **deep-merging the CSV row onto `config.json:scenario`**. Two conventions make this work:
+
+1. **Dot-notation column names** map to nested config keys.
+   * `gams_flags.fScenario` → `scenario.gams_flags.fScenario`
+   * `soft_link_magpie.existing_prom_run` → `scenario.soft_link_magpie.existing_prom_run`
+2. **Empty cells inherit, filled cells override.** A non-empty cell replaces the value from `config.json:scenario` at the same nested path; an empty cell leaves that path alone, so the row keeps whatever `config.json:scenario` provides as default. The merge is **recursive** — overriding `soft_link_magpie.existing_prom_run` does not wipe `soft_link_magpie.project`; only the leaf you wrote in the CSV changes.
+
+Worked example — given `config.json:scenario`:
+
+```json
+{
+  "scenario_name": "Default",
+  "description":   "Default UPTAKE run",
+  "gams_flags":    { "fScenario": 200 },
+  "magpie": {
+    "project":           "uptake",
+    "existing_prom_run": null,
+    "max_iter":          1,
+    "price_tol":         0.05,
+    "quant_tol":         0.05
+  }
+}
+```
+
+and one CSV row:
+
+```csv
+scenario_name,task_id,description,gams_flags.fScenario,soft_link_magpie.max_iter,soft_link_magpie.price_tol,soft_link_magpie.quant_tol,soft_link_magpie.existing_prom_run
+C600_landHigh,7,UPTAKE C600 landHigh iterated to convergence,600,5,0.05,0.05,
+```
+
+the merged scenario `start.R` runs for this row is:
+
+```jsonc
+{
+  "scenario_name": "C600_landHigh",                                 // from CSV
+  "task_id":       7,                                               // from CSV (also overrides anything else)
+  "description":   "UPTAKE C600 landHigh iterated to convergence",  // from CSV
+  "gams_flags":    { "fScenario": 600 },                            // CSV overrides 200 -> 600
+  "magpie": {
+    "project":           "uptake",                                  // inherited from config (no CSV override)
+    "existing_prom_run": null,                                      // CSV cell was empty, inherited
+    "max_iter":          5,                                         // CSV overrides 1 -> 5
+    "price_tol":         0.05,                                      // CSV matched default
+    "quant_tol":         0.05                                       // CSV matched default
+  }
+}
+```
+
+**Practical implication for "default" values.** Whatever sits in `config.json:scenario` is the **default for every batch row** unless that row overrides it. So put **only project-wide invariants** there (e.g. `soft_link_magpie.project: "uptake"`, `gams_flags.fScenario: 200` as the most common case, `soft_link_magpie.max_iter: 1` and `soft_link_magpie.price_tol/quant_tol: 0.05` as conservative defaults).
+
+**Do not** put per-run "incidentals" like `soft_link_magpie.existing_prom_run` in `config.json:scenario`. That field points at a specific run folder to **resume** from (see Tutorial 12 §5); if every batch row silently inherits the same path, every row will try to resume into the same folder, fail the bit-identical `config_snapshot` check, and abort one by one. Keep `soft_link_magpie.existing_prom_run` in `config.json` as `null` and set it on individual CSV rows only when you actually want to resume from a specific interrupted run.
+
+**Extensibility — any flag works, no R-code changes needed.** The dot-notation rule above is *generic*: `start.R` does not hard-code any particular column name. Some practical consequences:
+
+* **Any `gams_flags.X` works**, where `X` is any `$setGlobal` / `$evalGlobal` symbol declared in `main.gms` — e.g. `gams_flags.fEndY`, `gams_flags.CountrySolveMode`, `gams_flags.Transport`, `gams_flags.Industry`, `gams_flags.Curves`, etc. Each becomes a `--X=value` CLI flag passed to GAMS.
+* **The column does not need to pre-exist in `config.json`.** A CSV column for a key that isn't in `config.json:scenario` simply injects that key for rows where the cell is non-empty. (Putting it in `config.json` only gives it a default for the rows that leave the cell blank.)
+* **Column order is irrelevant.** `start.R` reads columns by name, not by position. `gams_flags.fEndY,gams_flags.Transport,…` and `gams_flags.Transport,gams_flags.fEndY,…` behave identically.
+* **Adding a flag is a data-only change.** You never edit `start.R` to expose a new flag — add the column, fill the cells you want overridden, leave the rest blank.
+
+Concrete example — sweep across end-year horizon and Transport realization without touching any R code:
+
+```csv
+scenario_name,task_id,gams_flags.fScenario,gams_flags.fEndY,gams_flags.Transport
+short_simple,2,200,2050,simple
+long_simple,2,200,2100,simple
+long_legacy,2,200,2100,legacy
+```
+
+### 5.2 Gating rows with a `start` column
+
+To skip rows without deleting them from the CSV, add an optional `start` column:
+
+* `1` — run this row
+* `0` — skip this row
+* anything else (typo, blank cell, `yes`/`no`, etc.) — `start.R` aborts before any scenario runs, listing every offending row
+
+If the `start` column is **absent**, every row runs (backwards-compatible with older CSVs). Validation happens upfront, so a typo on row 8 won't only surface after rows 1–7 have already run.
+
+Example:
+
+```csv
+scenario_name,start,task_id,description,gams_flags.fScenario
+C200_biolim100,1,2,UPTAKE C200 biolim100,200
+C200_landHigh,1,2,UPTAKE C200 landHigh,200
+C600_biolim100,0,7,UPTAKE C600 biolim100 -- temporarily off,600
+C600_landHigh,1,7,UPTAKE C600 landHigh,600
+```
+
+Console output:
+
+```
+Skipping row 3 (scenario_name=C600_biolim100): start=0
+Loaded 4 row(s) from scenarios.csv, 3 active, 1 skipped
+```
+
+The `start` column is stripped before each row's overlay is merged onto `config.json:scenario`, so it does not leak into the scenario object passed to the task body.
+
+## 6. What the outputs mean
+
+When `behavior.withReport: true` in `config.json`, the task body automatically calls `scripts/tasks/reportOutput.R` after task 0, 2, 3, 6 or 7, provided the run-folder workflow is active. That script converts the model output into a MIF report, typically `reporting.mif`. It may also try to create plot files, but PDF generation depends on the local LaTeX/TinyTeX setup.
 
 `outputForProject.mif` is not part of the default workflow. It is only created when project reporting is explicitly enabled.
 
@@ -81,6 +198,6 @@ For a quick success check:
 * `modelstat.txt` should show successful model status lines for the solved years and regions
 * `outputData.gdx` should exist after a normal model run
 * `reporting.mif` only appears when the reporting step actually runs
-* if `withReport <- FALSE`, the model can still run successfully even though no MIF or reporting plots are created
+* if `behavior.withReport: false`, the model can still run successfully even though no MIF or reporting plots are created
 
 So when checking a run, do not confuse “the model solved” with “the full reporting workflow also ran”.

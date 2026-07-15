@@ -10,6 +10,14 @@ $ondelim
 $include "./iActv.csvr"
 $offdelim
 ;
+imActv(YTIME,allCy,DSBS)$(imActv(YTIME,allCy,DSBS) = NA) = 0;
+imActv(YTIME,allCy,"PN")$DATAY(YTIME) = 1;
+*---
+table i01GDP(YTIME,allCy) "GDP (billion US$2015)"
+$ondelim
+$include "./iGDP.csvr"
+$offdelim
+;
 *---
 table imTransChar(allCy,TRANSPCHAR,YTIME) "km per car, passengers per car and residuals for passenger cars market extension ()"
 $ondelim
@@ -21,7 +29,7 @@ $IFTHEN.calib %Calibration% == Calibration
 variable imElastA(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)";
 table imElastAL(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)"
 $ondelim
-$include "./iElastA.csv"
+$include "iElastA.csv"
 $offdelim
 ;
 imElastA.L(runCy, SBS, ETYPES, YTIME) = imElastAL("ELL", SBS, ETYPES, YTIME);
@@ -33,7 +41,7 @@ imElastA.UP(runCy, SBS, negElast, YTIME) = -0.001;
 $ELSE.calib
 table imElastA(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)"
 $ondelim
-$include "./iElastA.csv"
+$include "iElastA.csv"
 $offdelim
 ;
 imElastA(runCy,SBS,ETYPES,YTIME) = imElastA("ELL",SBS,ETYPES,YTIME);
@@ -85,7 +93,7 @@ parameter iCo2EmiFacAllSbs(EF) "CO2 emission factors (kgCO2/kgoe fuel burned)" /
 CRO 2.76
 LGN 4.15330622,
 HCL 3.941453651,
-SLD 4.438008647,
+*SLD 4.438008647,
 GSL 2.872144882,
 GDO 3.068924588,
 LPG 2.612562612,
@@ -97,7 +105,7 @@ OGS 2.336234395,
 BMSWAS 0/;
 *---
 imCo2EmiFac(runCy,SBS,EF,YTIME)$(not (sameas("NEN",SBS) or sameas("PCH",SBS))) = iCo2EmiFacAllSbs(EF);
-imCo2EmiFac(runCy,"IS","HCL",YTIME) = iCo2EmiFacAllSbs("SLD"); !! This is the assignment for coke
+imCo2EmiFac(runCy,"IS","HCL",YTIME) = 4.438008647; !! This is the assignment for coke
 *imCo2EmiFac(runCy,"H2P","NGS",YTIME) = 3.107;
 *imCo2EmiFac(runCy,"H2P","BMSWAS",YTIME) = 0.497;
 *---
@@ -144,6 +152,23 @@ $ondelim
 $include"./iFuelPrice.csv"
 $offdelim
 ;
+imFuelPrice(allCy,SBS,EF,YTIME) = imFuelPrice(allCy,SBS,EF,YTIME)/1000; !! change units $15 -> k$15
+imFuelPrice(runCy,CDR,EF,YTIME)$SECtoEF(CDR,EF) = imFuelPrice(runCy,"OI",EF,YTIME);
+imFuelPrice(runCy,DOMSE,"GSL",YTIME) = imFuelPrice(runCy,"OI","GSL",YTIME);
+imFuelPrice(runCy,DOMSE,"BGSL",YTIME) = imFuelPrice(runCy,"OI","BGSL",YTIME);
+imFuelPrice(runCy,DOMSE,"LGN",YTIME) = imFuelPrice(runCy,"OI","LGN",YTIME);
+imFuelPrice(runCy,DOMSE,"OLQ",YTIME) = imFuelPrice(runCy,"OI","OLQ",YTIME);
+imFuelPrice(runCy,DOMSE,"RFO",YTIME) = imFuelPrice(runCy,"OI","RFO",YTIME);
+imFuelPrice(runCy,"SE","GDO",YTIME) = imFuelPrice(runCy,"OI","GDO",YTIME);
+imFuelPrice(runCy,"SE","BGDO",YTIME) = imFuelPrice(runCy,"OI","BGDO",YTIME);
+*imFuelPrice(runCy,"SE","BMSWAS",YTIME) = imFuelPrice(runCy,"AG","BMSWAS",YTIME);
+imFuelPrice(runCy,"BU","BGSL",YTIME) = imFuelPrice(runCy,"OI","BGSL",YTIME);
+imFuelPrice(runCy,TRANSE,"RFO",YTIME) = imFuelPrice(runCy,"BU","RFO",YTIME);
+imFuelPrice(runCy,TRANSE,"OGS",YTIME) = imFuelPrice(runCy,TRANSE,"NGS",YTIME);
+imFuelPrice(runCy,TRANSE,"OLQ",YTIME) = imFuelPrice(runCy,TRANSE,"GDO",YTIME);
+imFuelPrice(runCy,TRANSE,"H2F",YTIME) = 2 * imFuelPrice(runCy,TRANSE,"H2F",YTIME);
+imFuelPrice(runCy,"PA","H2F",YTIME) = 2 * imFuelPrice(runCy,"PA","KRS",YTIME);
+imFuelPrice(runCy,"ICT",EFS,YTIME)$SECtoEF("ICT",EFS) = imFuelPrice(runCy,"SE",EFS,YTIME);
 *---
 table imPriceFuelsIntBase(WEF,YTIME)	              "International Fuel Prices USED IN BASELINE SCENARIO ($2015/toe)"
 $ondelim
@@ -180,6 +205,7 @@ $ondelim
 $include"./iDataTransTech.csv"
 $offdelim
 ;
+imDataTransTech(NAVIGATION,"TRFO",ECONCHAR,YTIME) = imDataTransTech(NAVIGATION,"TGDO",ECONCHAR,YTIME)
 *---
 table imDataIndTechnology(INDSE,TECH,ECONCHAR)          "Technoeconomic characteristics of industry (various)"
             IC      FC      VC      LFT USC
@@ -355,6 +381,8 @@ SE.TOGS       0.14459    12.74        20    0.8
 SE.TBMSWAS    0.26753    17.14        20    0.75
 SE.TELC       0.05195    7.79         20    0.99
 SE.THEATPUMP  0.30736    22.16        20    3.175
+SE.TSOL       0.432    12.9254         20  1 *** change values in toe
+SE.TGEO       0.432    12.9254         20  0.5 *** change values in toe
 HOU.THCL      0.35498    1.13         20    0.7
 HOU.TLGN      0.42338    1.21         20    0.5
 HOU.TLPG      0.14459    12.74        20    0.8
@@ -369,6 +397,8 @@ HOU.TOGS      0.14459    12.74        20    0.8
 HOU.TBMSWAS   0.26753    17.14        20    0.75
 HOU.TELC      0.05195    7.79         20    0.99
 HOU.THEATPUMP 0.30736    22.16        20    3.175
+HOU.TSOL      0.432    12.9254         20  1 *** change values in toe
+HOU.TGEO      0.432    12.9254         20  0.5 ***     change values in toe
 *units        kUSD/toe USD/toe/y       
 AG.THCL       0.323544   10.88        20    0.7
 AG.TLGN       0.323544   10.88        20    0.5
@@ -384,6 +414,8 @@ AG.TOGS       0.2244     10.88        20    0.8
 AG.TBMSWAS    0.323544   10.88        20    0.5
 AG.TELC       0.3        8.976        12    0.85
 AG.THEATPUMP  0.432      12.9254      20    1.848
+
+
 ;
 *---
 * Coverting EUR05 to US2015
@@ -525,6 +557,7 @@ imAnnCons(runCy,"EW","smallest") = 0.2 ;
 imAnnCons(runCy,"EW","largest") = 1 ;
 imAnnCons(runCy,"EW","modal") = 0.5 ;
 *---
+$ontext
 * Consumer size groups distribution function
 Loop (runCy,DSBS) DO
      Loop rCon$(ord(rCon) le imNcon(DSBS)+1) DO
@@ -551,8 +584,9 @@ Loop (runCy,DSBS) DO
 ;
      ENDLOOP;
 ENDLOOP;
+$offtext
 *---
-imCumDistrFuncConsSize(runCy,DSBS) = sum(rCon, imDisFunConSize(runCy,DSBS,rCon));
+*imCumDistrFuncConsSize(runCy,DSBS) = sum(rCon, imDisFunConSize(runCy,DSBS,rCon));
 imCGI(allCy,YTIME) = 1;
 *---
 table iDataDistrLosses(allCy,EF,YTIME)	     "Data for Distribution Losses (Mtoe)"
@@ -568,9 +602,7 @@ $ondelim
 $include"./iFuelCons.csv"
 $offdelim
 ;
-*---
-imFuelConsPerFueSub(runCy,SBS,EF,YTIME) = imFuelCons(runCy,SBS,EF,YTIME);
-imFuelConsPerFueSub(runCy,"BU",EF,YTIME) = -imFuelConsPerFueSub(runCy,"BU",EF,YTIME);
+imFuelCons(runCy,"BU",EF,YTIME) = -imFuelCons(runCy,"BU",EF,YTIME);
 *---
 imCO2CaptRate(PGALL)$CCS(PGALL) = 0.90; 
 imEffValueInDollars(runCy,SBS,YTIME) = 0;
@@ -587,13 +619,23 @@ $offdelim
 if %fScenario% eq 0 then
      iCarbValYrExog(allCy,YTIME) = 0;
 elseif %fScenario% eq 1 then
-     iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"exogCV_NPi",YTIME); !!$an(YTIME)
+     iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"exogCV_NPi",YTIME);
 elseif %fScenario% eq 2 then
      iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"exogCV_1_5C",YTIME);
 elseif %fScenario% eq 3 then
      iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"exogCV_2C",YTIME);
-elseif %fScenario% eq 4 then
-     iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"exogCV_Calib",YTIME);
+elseif %fScenario% eq 4 then !! Calibration scenario
+     iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"exogCV_NPi",YTIME); !!exogCV_Calib
+elseif %fScenario% eq 100 then
+     iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"UPT_100",YTIME);
+elseif %fScenario% eq 200 then
+     iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"UPT_200",YTIME);
+elseif %fScenario% eq 400 then
+     iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"UPT_400",YTIME);
+elseif %fScenario% eq 600 then
+     iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"UPT_600",YTIME);
+elseif %fScenario% eq 800 then
+     iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"UPT_800",YTIME);
 endif;
 *---
 table i01PremScrpFac(allCy,DSBS,TECH,YTIME)     "Parameter that controls premature scrapping"
@@ -612,7 +654,7 @@ $IFTHEN.calib %Calibration% == off
 parameter imMatrFactor(allCy,DSBS,TECH,YTIME)   "Maturity factor per technology and subsector for all countries (1)";
 imMatrFactor(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                          
 
-imMatrFactor(runCy,DSBS,"TBMSWAS",YTIME) = 0.01;
+imMatrFactor(runCy,DSBS,"TBMSWAS",YTIME)$(sameas("AG",DSBS) and not EU28(runCy)) = 0.01;
 $ontext
 imMatrFactor(runCy,DSBS,"TGDO",YTIME)$((ord(YTIME) > 14) and TRANSE(DSBS)) = 0.5;
 imMatrFactor(runCy,DSBS,"TGSL",YTIME)$((ord(YTIME) > 14) and TRANSE(DSBS)) = 0.5;
@@ -650,9 +692,10 @@ variable imMatrFactor(allCy,DSBS,TECH,YTIME)    "Maturity factor per technology 
 imMatrFactor.LO(runCy,DSBS,TECH,YTIME) = 1e-6;                                          
 imMatrFactor.UP(runCy,DSBS,TECH,YTIME) = 10;
 imMatrFactor.L(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);     
-imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(not (sameas(DSBS,"PC") or sameas(DSBS,"PB") or sameas(DSBS,"GU"))) = iMatrFactorData(runCy,DSBS,TECH,YTIME);   
-imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$((sameas(DSBS,"PC") or sameas(DSBS,"PB") or sameas(DSBS,"GU")) and not SECTTECH(DSBS,TECH)) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                      
-imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$DATAY(YTIME)= iMatrFactorData(runCy,DSBS,TECH,YTIME);      
+imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(not (sameas(DSBS,"PC") or sameas(DSBS,"PB") or sameas(DSBS,"GU") or INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS))) = iMatrFactorData(runCy,DSBS,TECH,YTIME);   
+imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(sameas(DSBS,"AG") and not EU28(runCy)) = iMatrFactorData(runCy,DSBS,TECH,YTIME); 
+imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$((sameas(DSBS,"PC") or sameas(DSBS,"PB") or sameas(DSBS,"GU") or INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and not SECTTECH(DSBS,TECH)) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                      
+imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$DATAY(YTIME)= iMatrFactorData(runCy,DSBS,TECH,YTIME);        
 $ENDIF.calib
 *---
 parameters
@@ -762,6 +805,8 @@ imUsfEneConvSubTech(runCy,INDSE,TECH,YTIME)  = imDataIndTechnology(INDSE,TECH,"U
 imCapCostTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,"IC");
 imFixOMCostTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,"FC");
 imVarCostTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,"VC");
+imVarCostTech(runCy,DOMSE,"TSOL",YTIME) = 1e-3;
+imVarCostTech(runCy,DOMSE,"TGEO",YTIME) = 1e-3;
 imUsfEneConvSubTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,"USC");
 *---
 **  Non Energy Sector and Bunkers
@@ -777,7 +822,7 @@ imCapCostTech(runCy,"BU","TH2F",YTIME) = 1.5 * imCapCostTech(runCy,"BU","TGDO",Y
 imCapCostTechMin(allCy,"DAC","HTDAC",YTIME) = 0.3;
 imCapCostTechMin(allCy,"DAC","H2DAC",YTIME) = 0.3;
 imCapCostTechMin(allCy,"DAC","LTDAC",YTIME) = 0.3;
-imCapCostTechMin(allCy,"EW","TEW",YTIME) = 0.1;
+imCapCostTechMin(allCy,"EW","TEW",YTIME) = 0.3;
 *---
 !!imUsfEneConvSubTech(runCy,INDSE,"THCL",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCL","USC") + 0.005 * (ord(YTIME)-14);
 imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCLCCS","USC") + 0.005 * (ord(YTIME)-14);

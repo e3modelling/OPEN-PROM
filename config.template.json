@@ -1,6 +1,33 @@
 {
-    "model_runs_path": "local\\path\\to\\model\\runs",
-    "gams_path": "path\\to\\gams\\folder\\including\\trailing\\slash\\",
+  "paths": {
+    "model_runs_path": "local/path/to/model/runs/",
+    "magpie_path": "path/to/magpie/folder/including/trailing/slash/",
+    "gams_path": "path/to/gams/folder/including/trailing/slash/"
+  },
+  "behavior": {
+    "withRunFolder": true,
+    "withSync": true,
+    "withReport": true,
+    "uploadGDX": true
+  },
+  "scenario": {
     "scenario_name": "SCEN",
-    "description": "Model run description. Replace with your own, based on scenario and model settings."
+    "description": "Replace with your scenario description.",
+    "gams_flags": {
+      "fScenario": 200,
+      "fEndY": 2100,
+      "CountrySolveMode": "serial"
+    },
+    "land_use_emulator": {
+      "source": "legacy",
+      "carbon_price": "GHG100"
+    },
+    "soft_link_magpie": {
+      "project": "uptake",
+      "existing_prom_run": null,
+      "max_iter": 1,
+      "price_tol": 0.05,
+      "quant_tol": 0.05
+    }
+  }
 }

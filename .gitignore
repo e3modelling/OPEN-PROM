@@ -24,4 +24,6 @@ metadata.json
 *.pyc
 config.json
 modelstat.txt
+docs/_build/
 git_diff.txt
+scenarios.csv

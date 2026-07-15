@@ -3,6 +3,7 @@
 
 *'                *VARIABLE INITIALISATION*
 *---
+V07GrossEmissCO2Supply.LO(runCy,SSBS,YTIME) = 0;
 V07GrossEmissCO2Supply.FX(runCy,"H2INFR",YTIME) = 0;
 V07GrossEmissCO2Supply.FX(runCy,SSBS,YTIME)$DATAY(YTIME) = 
 SUM(EFS,
@@ -25,10 +26,21 @@ SUM(EFS,
   imCo2EmiFac(runCy,"PG",EFS,YTIME)
 );
 *---
+V07GrossEmissCO2Demand.LO(runCy,DSBS,YTIME) = 0;
 V07GrossEmissCO2Demand.FX(runCy,DSBS,YTIME)$DATAY(YTIME) =   
 SUM(EF,
-  imFuelConsPerFueSub(runCy,DSBS,EF,YTIME) *
+  imFuelCons(runCy,DSBS,EF,YTIME) *
   imCo2EmiFac(runCy,DSBS,EF,YTIME)
 );
 *---
 V07EmiActBySrcRegTim.FX(E07SrcMacAbate, allCy, YTIME)$DATAY(YTIME) = i07DataCh4N2OFEmis(allCy,E07SrcMacAbate,YTIME) ;
+*---
+V07EmissionsNet.FX(runCy,YTIME)$DATAY(YTIME) = sum(SSBS, V07GrossEmissCO2Supply.L(runCy,SSBS,YTIME))
+    + sum(DSBS, V07GrossEmissCO2Demand.L(runCy,DSBS,YTIME))
+    - sum((SBS,EFS)$SECtoEF(SBS,EFS), V06CO2CaptureCCS.L(runCy,SBS,EFS,YTIME))
+    - sum(CDRTECH, V06CapCDR.L(runCy,CDRTECH,YTIME));
+*---
+V07EmissionsNetPart.L(runCy,YTIME) = 0.1;
+V07EmissionsNetPart.FX(runCy,YTIME)$DATAY(YTIME) = V07EmissionsNet.L(runCy,YTIME) /
+    sum(runCy2, V07EmissionsNet.L(runCy2,YTIME));
+*---

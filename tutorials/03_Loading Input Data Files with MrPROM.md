@@ -41,7 +41,7 @@ If your goal is only the external dummy-data first run, this is more than the ab
 
 * a working R installation,
 * a working GAMS installation,
-* the ability to run `Rscript loadMadratData.R DevMode=2`,
+* the ability to run `Rscript scripts/tasks/loadMadratData.R DevMode=2`,
 * and the R packages needed by that script, most notably `dplyr`.
 
 If `gdxrrw` cannot find your GAMS installation automatically, you may need to configure it explicitly in R. This is especially common on macOS and Linux. A typical example is:
@@ -55,23 +55,35 @@ gdxrrw::igdx("/path/to/gams/")
 
 Apart from installing the software, you should also create a local `config.json` file in the root folder of `OPEN-PROM`. The simplest way is to copy `config.template.json` and edit the relevant fields.
 
-The most important settings are:
+`config.json` is a single file with three top-level blocks:
 
-* `gams_path`: the directory of the GAMS installation, if `gams` is not already available in your system `PATH`
-* `scenario_name`: the scenario label used in run folders and output naming
-* `model_runs_path`: the destination used by the optional run-folder sync step
+* `paths.*`: machine-specific paths
+  * `paths.gams_path`: the directory of the GAMS installation, if `gams` is not already available in your system `PATH`
+  * `paths.model_runs_path`: the destination used by the optional run-folder sync step
+  * `paths.magpie_path`: only needed for the OPEN-PROM ↔ MAgPIE soft-link (task 7)
+* `behavior.*`: four switches controlling the wrapper workflow (see below)
+* `scenario.*`: the scenario to run.
+  * `scenario_name` — also used as the MAgPIE subscenario name for task 7
+  * `description` — free text
+  * `gams_flags.*` — flags forwarded as `--<key>=<value>` to the GAMS command line
+  * `magpie.*` — soft-link-only sub-block; see Tutorial 12. Contains `project` (MAgPIE subdir under `magpie/e3m_projects/`), `existing_prom_run` (optional resume path), and `max_iter` / `price_tol` / `quant_tol` (iteration / convergence controls). Defaults: `max_iter=1` (single round-trip, legacy behaviour), `price_tol=quant_tol=0.05`.
+  * `task_id` is *not* stored here — it comes from the CLI (`task_id=N`, passed by every VS Code task button) or, in batch mode, from each row of `scenarios.csv`.
 
-If you are not working in the internal E3-Modelling environment, `model_runs_path` is often not needed immediately. In that case, the common first change in `start.R` is:
+For batch sweeps over multiple scenarios, create a `scenarios.csv` at the repo root (see `scenarios.template.csv` for the format) and use `Rscript start.R scenarios.csv` or the **RUN BATCH** VS Code button. Each CSV row overlays `config.json:scenario` for that one run. The CSV is opt-in: without it, only the single-scenario workflow (`Rscript start.R task_id=N`) is available.
 
-```r
-withSync <- FALSE
+If you are not working in the internal E3-Modelling environment, `model_runs_path` is often not needed immediately. In that case, set in `config.json`:
+
+```json
+{
+  "behavior": { "withSync": false }
+}
 ```
 
 This avoids errors at the archive and sync stage when no valid internal destination has been configured.
 
-## Understanding the Main `start.R` Switches
+## Understanding the `config.json:behavior` Switches
 
-At the top of `start.R`, OPEN-PROM defines four switches that modify the workflow around the model run:
+OPEN-PROM defines four behavior switches that modify the workflow around the model run:
 
 * `withRunFolder`
 * `withSync`
