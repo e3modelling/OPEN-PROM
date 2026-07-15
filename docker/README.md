@@ -1,6 +1,8 @@
-# OPEN-PROM Docker Setup
+# OPEN-PROM Docker Guide
 
-Αυτός ο φάκελος περιέχει τα αρχεία για να τρέχει το OPEN-PROM μέσα από Docker:
+This guide describes how to build and run OPEN-PROM with Docker.
+
+The Docker setup includes:
 
 - `Dockerfile`
 - `docker-compose.yml`
@@ -8,107 +10,111 @@
 - `.env.example`
 - `docker/install-r-packages.R`
 
-Το container εκτελεί το μοντέλο με:
+The container runs OPEN-PROM through:
 
 ```sh
 Rscript start.R
 ```
 
-και από προεπιλογή τρέχει:
+The default Docker Compose command runs:
 
 ```sh
 Rscript start.R task_id=2
 ```
 
-## Προαπαιτούμενα
+## Requirements
 
-Χρειάζεσαι:
+The host system must provide:
 
-- Docker Desktop ή Docker Engine με Docker Compose.
-- Μία Linux εγκατάσταση του GAMS.
-- Έγκυρη GAMS license για αυτή την εγκατάσταση.
-- Τα input folders `data/` και `targets/` στο root του repository.
+- Docker Desktop or Docker Engine with Docker Compose.
+- A Linux installation of GAMS.
+- A valid GAMS license for that Linux installation.
+- The OPEN-PROM input folders `data/` and `targets/` at the repository root.
 
-Σημαντικό: η υπάρχουσα Windows εγκατάσταση `C:\GAMS\47` δεν μπορεί να εκτελεστεί μέσα στο Linux container. Το container χρειάζεται Linux GAMS binary.
+The Windows GAMS installation path, for example `C:\GAMS\47`, cannot be used directly inside the Linux container. The container requires a Linux GAMS executable.
 
-## GAMS Path
+## GAMS Configuration
 
-Το `docker-compose.yml` κάνει mount το GAMS στο container path:
+The Docker Compose setup mounts GAMS inside the container at:
 
 ```text
 /opt/gams
 ```
 
-Άρα μέσα στο container το executable πρέπει να υπάρχει εδώ:
+The GAMS executable must therefore be available inside the container as:
 
 ```text
 /opt/gams/gams
 ```
 
-Στο host μηχάνημα δηλώνεις το πραγματικό path μέσω `.env`.
+The host path to the Linux GAMS installation is configured with `GAMS_HOME` in a `.env` file.
 
-Πρώτα φτιάξε `.env` από το template:
+Create `.env` from the template:
 
 ```sh
 cp .env.example .env
 ```
 
-Σε Windows PowerShell:
+On Windows PowerShell:
 
 ```powershell
 Copy-Item .env.example .env
 ```
 
-Μετά άνοιξε το `.env` και άλλαξε το placeholder:
+Then edit `.env` and replace:
 
 ```text
 GAMS_HOME=/path/to/linux/gams
 ```
 
-σε πραγματικό path. Παραδείγματα:
+with the actual Linux GAMS installation path.
+
+Examples:
 
 ```text
 GAMS_HOME=/home/user/gams/47
 ```
 
-ή, αν τρέχεις Docker Desktop με WSL και το GAMS είναι μέσα στο WSL:
+or, when using Docker Desktop with WSL:
 
 ```text
 GAMS_HOME=/home/plessias/GAMS/47
 ```
 
-Το folder που θα δηλώσεις πρέπει να περιέχει το executable `gams`.
+The configured directory must contain the Linux `gams` executable.
 
 ## GAMS License
 
-Το Docker setup δεν εγκαθιστά ούτε αντιγράφει GAMS license. Υποθέτει ότι η Linux εγκατάσταση που κάνεις mount μέσω `GAMS_HOME` είναι ήδη λειτουργική.
+The Docker image does not install, copy, or configure a GAMS license.
 
-Αν η license βρίσκεται σε ξεχωριστό path, πρόσθεσε επιπλέον volume στο `docker-compose.yml`, για παράδειγμα:
+The mounted GAMS installation is expected to be already licensed and functional. If the license file is stored outside the GAMS installation directory, add an additional read-only volume to `docker-compose.yml`.
+
+Example:
 
 ```yaml
       - /path/to/gams/license:/opt/gams/license:ro
 ```
 
-Η ακριβής ρύθμιση εξαρτάται από το πώς είναι εγκατεστημένο το GAMS στο σύστημά σου.
+The exact license mount depends on the local GAMS installation and license configuration.
 
-## Container Config
+## Container Configuration
 
-Το container χρησιμοποιεί το:
+The container uses:
 
 ```text
 config.container.json
 ```
 
-και όχι το local `config.json`.
+instead of the local `config.json`.
 
-Αυτό γίνεται μέσω:
+This is configured in `docker-compose.yml`:
 
 ```yaml
 environment:
   OPENPROM_CONFIG: config.container.json
 ```
 
-Τα σημαντικά paths μέσα στο `config.container.json` είναι:
+The main container paths are defined in `config.container.json`:
 
 ```json
 {
@@ -120,17 +126,17 @@ environment:
 }
 ```
 
-Σημασία των paths:
+Path meanings:
 
-- `/opt/gams/`: το GAMS mount μέσα στο container.
-- `/outputs`: folder όπου αντιγράφονται archived outputs όταν `withSync=true`.
-- `/magpie/`: placeholder για MAgPIE, χρήσιμο μόνο για task 7 / soft-linking.
+- `/opt/gams/`: mounted Linux GAMS installation.
+- `/outputs`: destination for synchronized run archives when `withSync=true`.
+- `/magpie/`: placeholder path for MAgPIE, required only for task 7 soft-linking.
 
-Για απλό OPEN-PROM run με `task_id=2`, το `/magpie/` δεν χρειάζεται να υπάρχει.
+For a standard OPEN-PROM research run with `task_id=2`, `/magpie/` is not required.
 
 ## Mounted Folders
 
-Το `docker-compose.yml` κάνει mount:
+`docker-compose.yml` defines the following volume mounts:
 
 ```yaml
       - ./config.container.json:/open-prom/config.container.json:ro
@@ -141,32 +147,39 @@ environment:
       - ${GAMS_HOME:-/path/to/linux/gams}:/opt/gams:ro
 ```
 
-Δηλαδή:
+These mounts mean:
 
-- `data/` και `targets/` διαβάζονται από το host και είναι read-only.
-- `runs/` γράφεται από το container και μένει στο host.
-- `outputs/` γράφεται από το container όταν ενεργοποιείται sync.
-- `GAMS_HOME` γίνεται mount ως `/opt/gams`.
+- `data/` is mounted read-only at `/open-prom/data`.
+- `targets/` is mounted read-only at `/open-prom/targets`.
+- `runs/` receives run folders produced by OPEN-PROM.
+- `outputs/` receives synchronized archives when sync is enabled.
+- `GAMS_HOME` is mounted read-only as `/opt/gams`.
 
 ## R Packages
 
-Το image εγκαθιστά R packages από CRAN και R-universe.
+The image installs R packages from CRAN and R-universe.
 
-Default R-universe repos:
+Default R-universe repositories:
 
 ```text
 https://pik-piam.r-universe.dev
 https://e3modelling.r-universe.dev
 ```
 
-Τα `mrprom` και `postprom` εγκαθίστανται από GitHub:
+The packages `mrprom` and `postprom` are installed from GitHub:
 
 ```text
 https://github.com/e3modelling/mrprom.git
 https://github.com/e3modelling/postprom.git
 ```
 
-Αν θέλεις να αλλάξεις package sources, δώσε build args:
+Package installation is handled by:
+
+```text
+docker/install-r-packages.R
+```
+
+Package sources can be overridden at build time:
 
 ```sh
 docker compose build \
@@ -174,178 +187,152 @@ docker compose build \
   --build-arg GITHUB_R_PACKAGES="https://github.com/e3modelling/mrprom.git,https://github.com/e3modelling/postprom.git"
 ```
 
-Το installer βρίσκεται στο:
-
-```text
-docker/install-r-packages.R
-```
-
 ## IAMC Common Definitions
 
-Το image κάνει clone το:
+The image clones:
 
 ```text
 https://github.com/IAMconsortium/common-definitions.git
 ```
 
-στο container path:
+into:
 
 ```text
 /opt/iamc/common-definitions
 ```
 
-και ορίζει:
+The path is exposed as:
 
 ```text
 IAMC_COMMON_DEFINITIONS=/opt/iamc/common-definitions
 ```
 
-Εγκαθίσταται επίσης το Python package:
+The image also installs the Python package:
 
 ```text
 nomenclature-iamc
 ```
 
-Αυτό είναι χρήσιμο για IAMC codelists, mappings, validation και exports. Δεν είναι το ίδιο πράγμα με το R package `iamc`.
+This repository and package support IAMC codelists, mappings, validation, and exports. They are separate from the R package `iamc`.
 
 ## Build
 
-Από το root του repository:
+Build the image from the repository root:
 
 ```sh
 docker compose build
 ```
 
-Σε PowerShell:
-
-```powershell
-docker compose build
-```
-
-Αν αλλάξεις R package sources, common-definitions branch ή Dockerfile dependencies, κάνε rebuild:
+Rebuild without cache after changing package sources, Docker dependencies, or the common-definitions reference:
 
 ```sh
 docker compose build --no-cache
 ```
 
-## Single Scenario Run
+## Single Scenario Execution
 
-Πρώτα έλεγξε/ρύθμισε το scenario στο:
+Configure the scenario in:
 
 ```text
 config.container.json
 ```
 
-Μετά τρέξε:
+Run the default command:
 
 ```sh
 docker compose run --rm open-prom
 ```
 
-Αυτό χρησιμοποιεί το default command από `docker-compose.yml`:
+This uses the default command from `docker-compose.yml`:
 
 ```yaml
 command: ["task_id=2"]
 ```
 
-Άρα ισοδυναμεί με:
+The equivalent explicit command is:
 
 ```sh
 docker compose run --rm open-prom task_id=2
 ```
 
-Για άλλο task:
+Other tasks can be selected by changing the `task_id` argument:
 
 ```sh
 docker compose run --rm open-prom task_id=0
 ```
 
-ή:
-
 ```sh
 docker compose run --rm open-prom task_id=5
 ```
 
-## Batch Run
+## Batch Execution
 
-Για batch mode, δώσε CSV:
+Batch mode is executed by passing a CSV file:
 
 ```sh
 docker compose run --rm open-prom scenarios.template.csv
 ```
 
-Για δικό σου CSV, πρώτα βεβαιώσου ότι το αρχείο δεν αγνοείται ή ότι υπάρχει στο working tree που γίνεται mount/copy στο image. Παράδειγμα:
+For a custom batch file:
 
 ```sh
 docker compose run --rm open-prom scenarios.csv
 ```
 
-Το `start.R` υποστηρίζει batch mode για tasks που είναι batch-compatible.
+The CSV must be available inside the project tree used by the container. `start.R` supports batch execution only for tasks that are batch-compatible.
 
 ## Outputs
 
-Με:
-
-```json
-"withRunFolder": true
-```
-
-τα runs γράφονται στο:
+When `withRunFolder=true`, run folders are written under:
 
 ```text
 runs/
 ```
 
-Με:
-
-```json
-"withSync": true
-```
-
-το archive αντιγράφεται στο:
+When `withSync=true`, synchronized archives are copied to:
 
 ```text
 outputs/
 ```
 
-Στο τωρινό `config.container.json`:
+The default container configuration sets:
 
 ```json
 "withSync": true,
 "uploadGDX": false
 ```
 
-Άρα το sync archive δεν περιλαμβάνει `.gdx` outputs, ώστε να μένει μικρότερο.
+With this configuration, synchronized archives exclude `.gdx` files to reduce archive size.
 
-Αν θέλεις να περιλαμβάνει και `.gdx`:
+To include `.gdx` files in synchronized archives, set:
 
 ```json
 "uploadGDX": true
 ```
 
-## MAgPIE / Task 7
+## MAgPIE and Task 7
 
-Το `config.container.json` έχει:
+`config.container.json` defines:
 
 ```json
 "magpie_path": "/magpie/"
 ```
 
-Αυτό είναι placeholder. Για task 7 χρειάζεται να κάνεις mount MAgPIE στο `/magpie`.
+This is a placeholder for task 7 soft-linking. To run task 7, mount a MAgPIE installation at `/magpie`.
 
-Παράδειγμα στο `docker-compose.yml`:
+Example `docker-compose.yml` volume:
 
 ```yaml
       - /path/to/magpie:/magpie
 ```
 
-Τότε το host path `/path/to/magpie` πρέπει να περιέχει το MAgPIE setup και το `e3m_start.R` που καλεί το `task7SoftLinkMagpie.R`.
+The mounted MAgPIE directory must contain the setup expected by `scripts/tasks/task7SoftLinkMagpie.R`, including `e3m_start.R`.
 
-Αν δεν τρέχεις task 7, μπορείς να αγνοήσεις το `/magpie/`.
+For non-task-7 runs, the `/magpie/` path can be ignored.
 
 ## Useful Commands
 
-Build:
+Build the image:
 
 ```sh
 docker compose build
@@ -357,13 +344,13 @@ Run default task 2:
 docker compose run --rm open-prom
 ```
 
-Run explicit task:
+Run explicit task 2:
 
 ```sh
 docker compose run --rm open-prom task_id=2
 ```
 
-Run batch:
+Run batch mode:
 
 ```sh
 docker compose run --rm open-prom scenarios.template.csv
@@ -381,7 +368,7 @@ Check whether GAMS is visible inside the container:
 docker compose run --rm --entrypoint bash open-prom -lc "which gams && gams"
 ```
 
-Check R packages:
+Check selected R packages:
 
 ```sh
 docker compose run --rm --entrypoint Rscript open-prom -e "library(mrprom); library(postprom); library(gdx); library(quitte)"
@@ -389,31 +376,31 @@ docker compose run --rm --entrypoint Rscript open-prom -e "library(mrprom); libr
 
 ## Troubleshooting
 
-If Docker says that `/path/to/linux/gams` does not exist, `.env` has not been configured. Set:
+If Docker reports that `/path/to/linux/gams` does not exist, `.env` has not been configured. Set `GAMS_HOME` to the real Linux GAMS installation path:
 
 ```text
 GAMS_HOME=/real/linux/path/to/gams
 ```
 
-If `gams` is not found inside the container, check that:
+If `gams` is not found inside the container, verify that:
 
-- `GAMS_HOME` points to the folder containing the Linux `gams` executable.
-- The compose volume maps it to `/opt/gams`.
-- `config.container.json` has `"gams_path": "/opt/gams/"`.
+- `GAMS_HOME` points to the directory containing the Linux `gams` executable.
+- The compose volume maps `GAMS_HOME` to `/opt/gams`.
+- `config.container.json` sets `"gams_path": "/opt/gams/"`.
 
-If GAMS starts but reports a license error, the GAMS installation or license mount is incomplete.
+If GAMS starts but reports a license error, the mounted GAMS installation or license configuration is incomplete.
 
-If an R package fails to install, check:
+If an R package fails to install, verify that:
 
-- Whether the package exists in the configured R-universe repos.
-- Whether GitHub access is available during `docker compose build`.
-- Whether `GITHUB_R_PACKAGES` contains the correct repo URLs.
+- The package exists in the configured R-universe repositories.
+- GitHub is reachable during `docker compose build`.
+- `GITHUB_R_PACKAGES` contains the correct repository URLs.
 
-If task 7 fails because MAgPIE is missing, add a `/magpie` volume and update `magpie_path` if needed.
+If task 7 fails because MAgPIE is missing, add a `/magpie` volume and verify `magpie_path`.
 
-If outputs are missing, check:
+If outputs are missing, verify:
 
 - `withRunFolder`
 - `withSync`
 - `model_runs_path`
-- whether `./runs` and `./outputs` exist or can be created by Docker.
+- write access to `./runs` and `./outputs`
