@@ -73,7 +73,15 @@ authors:
     email:
 
 title: OPEN-PROM
-abstract: OPEN-PROM is a global energy-system simulation model based on the PROMETHEUS modelling framework. It is a recursive-dynamic model that simulates the year-by-year evolution of energy demand, energy supply, technology deployment, and emissions under alternative socioeconomic, technological, and policy assumptions, while explicitly accounting for path dependencies and transition dynamics. The model provides a detailed representation of energy demand across the industry, transport, and residential sectors, alongside energy supply, power generation, and fuel-transformation technologies, and it captures the interactions between energy consumption, fuel use, industrial production, and technology adoption. This structure makes OPEN-PROM well suited to analysing industrial decarbonisation pathways, resource-efficiency measures, energy transitions, and climate-policy scenarios at both the European and global levels.
+abstract: OPEN-PROM is a global energy-system simulation model based on the PROMETHEUS modelling framework. 
+          It is a recursive-dynamic model that simulates the year-by-year evolution of energy demand, energy supply, 
+          technology deployment, and emissions under alternative socioeconomic, technological, and policy assumptions, 
+          while explicitly accounting for path dependencies and transition dynamics. The model provides a detailed 
+          representation of energy demand across the industry, transport, and residential sectors, alongside energy supply, 
+          power generation, and fuel-transformation technologies, and it captures the interactions between energy consumption, 
+          fuel use, industrial production, and technology adoption. This structure makes OPEN-PROM well suited to analysing 
+          industrial decarbonisation pathways, resource-efficiency measures, energy transitions, 
+          and climate-policy scenarios at both the European and global levels.
 version: 2.2.0
 date-released: 2026-06-26
 repository-code: https://github.com/e3modelling/OPEN-PROM
