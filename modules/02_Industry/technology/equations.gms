@@ -192,7 +192,7 @@ Q02ConsFuel(allCy,DSBS,EF,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not CDR(DSBS
     sum(ITECH$(ITECHtoEF(ITECH,EF) and SECTTECH(DSBS,ITECH)),
       i02ShareBlend(allCy,DSBS,ITECH,EF,YTIME) *
       V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) *
-      i02util(allCy,DSBS,ITECH,YTIME) * i02CapFactor(allCy,DSBS,ITECH,YTIME) * i02SpecificEnergyIntensity(DSBS,ITECH)
+      i02util(allCy,DSBS,ITECH,YTIME) * i02CapFactor(allCy,DSBS,ITECH,YTIME) * i02INDSpecificEnergyIntensity(allCy,DSBS,ITECH,YTIME) 
     ) +
     V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(INDDOM(DSBS) and ELCEF(EF)) +
     VmElecConsHeatPla(allCy,DSBS,YTIME)$ELCEF(EF);
@@ -201,7 +201,7 @@ Q02ConsFuel(allCy,DSBS,EF,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not CDR(DSBS
 Q02IndAvrEffFinalUseful(allCy,DSBS,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not CDR(DSBS))$runCy(allCy))..
     V02IndAvrEffFinalUseful(allCy,DSBS,YTIME)
        =E=
-    V02DemSubUsefulSubsec(allCy,DSBS,YTIME) * i02SpecificEnergyIntensity(DSBS,ITECH)   /
+    V02DemSubUsefulSubsec(allCy,DSBS,YTIME) * i02INDSpecificEnergyIntensity(allCy,DSBS,ITECH,YTIME)    /
     (sum(EF$SECtoEF(DSBS,EF),VmConsFuel(allCy,DSBS,EF,YTIME)) - (V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(INDDOM(DSBS)) +
     VmElecConsHeatPla(allCy,DSBS,YTIME)) + 1e-3)
     ;

@@ -777,6 +777,8 @@ CCSTECH(ITECH)
 /
 TNGSCCS
 THCLCCS
+BFBOFCCS 
+DREAFCCS
 /
 
 effSET "PG and thermal plants efficiencies"  /effElc, effHeat/
