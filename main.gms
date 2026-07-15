@@ -198,11 +198,48 @@ $offOrder
 
 *' *** GAMS "flags" definitions
 *'
+*' Flags
+$setGlobal ICT Lower !!Lower / Mean / Central / Upper
+$setGlobal SSP SSP2 !!SSP1-5
 *' *** Calibration
 $setGlobal Calibration off !! MatCalibration/Calibration/off
 
-*' *** MAgPIE link
-$setglobal link2MAgPIE off  !! on or off For soft link with MAgPIE
+*' *** softLinkMAgPIE: on = task7 soft-link iteration with MAgPIE (was link2MAgPIE)
+$setglobal softLinkMAgPIE off  !! on or off
+
+*' *** Land-use emulator: pre-fit BMSWAS supply & land-emission curves standing in
+*' *** for a land-use model (was link2GLOBIOM). One of:
+*' ***   legacy  = no emulator (exogenous static price + external emission source)
+*' ***   globiom = GLOBIOM-derived curves
+*' ***   magpie  = MAgPIE-derived curves
+$setglobal landUseEmulator globiom
+*' *** emulatorGHGScen: active carbon-price row in the emulator coefficient tables
+*' *** (used when landUseEmulator != legacy and softLinkMAgPIE == off)
+*' *** Options: GHG000 GHG010 GHG020 GHG050 GHG100 (GHG price in $/tCO2)
+$setglobal emulatorGHGScen GHG000
+
+*' *** Translate the two user switches above (softLinkMAgPIE, landUseEmulator) into
+*' *** the two internal flags the rest of the model actually reads:
+*' ***   bmswasPriceMode = how the BMSWAS biomass price is set:
+*' ***       softfx = fixed from MAgPIE each soft-link round
+*' ***       curve  = from the emulator supply curve
+*' ***       static = standard recursive price dynamics (no emulator)
+*' ***   landEmiMode     = where AFOLU land + agriculture emissions come from:
+*' ***       softmif = MAgPIE's iEmissions_magpie.mif
+*' ***       curve   = computed in-model from the emulator emission curve
+*' ***       exo     = external/legacy emission source
+*' *** Precedence: a MAgPIE soft-link run wins; otherwise the land-use emulator
+*' *** decides (legacy = no emulator -> static/exo; globiom/magpie -> curve).
+$ifThen.coupling %softLinkMAgPIE% == on
+$setglobal bmswasPriceMode softfx
+$setglobal landEmiMode softmif
+$elseIf.coupling %landUseEmulator% == legacy
+$setglobal bmswasPriceMode static
+$setglobal landEmiMode exo
+$else.coupling
+$setglobal bmswasPriceMode curve
+$setglobal landEmiMode curve
+$endIf.coupling
 
 *' *** Maximum number of solver attempts
 $evalGlobal SolverTryMax 4
