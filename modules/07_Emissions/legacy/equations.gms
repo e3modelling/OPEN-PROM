@@ -128,17 +128,3 @@ Q07EmissionsNet(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         - sum(CDRTECH, V06CapCDR(allCy,CDRTECH,YTIME)) * 1e-6))
     ) + 1e-6
     ;
-
-*' The equation calculates the net emissions share for a given country and year, representing the country's 
-*' proportion of global net emissions in the previous time period. The share is determined by dividing the 
-*' country's net emissions by a smoothed global total that uses a hyperbolic tangent function to handle 
-*' zero or negative global emissions gracefully. This approach ensures a stable emissions share calculation 
-*' while preventing numerical issues.
-Q07EmissionsNetPart(allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V07EmissionsNetPart(allCy,YTIME)
-    =E=
-    (V07EmissionsNet(allCy,YTIME-1) /
-    (sum(runCy2, V07EmissionsNet(runCy2,YTIME-1))))
-!!    * 1 / 2 * ( 1 + tanh (10 * sum(runCy2, V07EmissionsNet(runCy2,YTIME-1))))
-    + 1e-6
-    ;

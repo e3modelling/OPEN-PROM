@@ -157,23 +157,24 @@ Q06GapCDR(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 * scaled by the maximum allowable expansion factor and adjusted by a technology-specific 
 * maturity factor. This formulation captures the idea that as DAC technologies become more profitable,
 * their growth rate will accelerate, but will eventually level off as they reach market saturation or face other constraints.
+*'It also chooses the higher between the gap and a minimum growth rate based on last year's capacity.
 *'The maturity factor allows for differentiation between technologies based on their readiness and potential for rapid deployment.
 Q06CapFacNewCDR(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
   V06CapFacNewCDR(allCy,CDRTECH,YTIME)
       =E=
-  V06GapCDR(allCy,CDRTECH,YTIME)
+  (
+  V06GapCDR(allCy,CDRTECH,YTIME) + S06CapFacMinNewCDR * V06CapCDR(allCy,CDRTECH,YTIME-1)
+  +
+  sqrt(sqr(
+    V06GapCDR(allCy,CDRTECH,YTIME) - S06CapFacMinNewCDR * V06CapCDR(allCy,CDRTECH,YTIME-1)
+  ))) / 2
   * i06MatFacCDR(CDRTECH);
 
-*' The equation calculates the CDR installed capacity annually and regionally,
-*' choosing the higher between the new capacity due to the gap mechanism, and the minimum expansion.
+*' The equation calculates the CDR installed capacity annually and regionally.
 Q06CapCDR(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06CapCDR(allCy,CDRTECH,YTIME)
       =E=
-    (V06CapCDR(allCy,CDRTECH,YTIME-1) + V06CapFacNewCDR(allCy,CDRTECH,YTIME)) + V06CapCDR(allCy,CDRTECH,YTIME-1) * (1 + S06CapFacMinNewCDR)
-    +
-    sqrt(sqr(
-      (V06CapCDR(allCy,CDRTECH,YTIME-1) + V06CapFacNewCDR(allCy,CDRTECH,YTIME)) - V06CapCDR(allCy,CDRTECH,YTIME-1) * (1 + S06CapFacMinNewCDR)
-    ))
+    (V06CapCDR(allCy,CDRTECH,YTIME-1) + V06CapFacNewCDR(allCy,CDRTECH,YTIME))
     ;
 
 *' The equation calculates the different fuels consumed by the DAC installed capacity annually and regionally.
