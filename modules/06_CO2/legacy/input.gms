@@ -11,7 +11,7 @@ seq_min 20,
 seq_max 900
 / ;
 
-parameter i06MatFacDAC(CDRTECH)                 "Maturity factor of DAC technology expressing its elasticity in implementation regarding its financial sustainability"
+parameter i06MatFacCDR(CDRTECH)                 "Maturity factor of CDR technology expressing its elasticity in implementation regarding its financial sustainability"
 /
 HTDAC	0.40,
 H2DAC   1,
@@ -19,7 +19,7 @@ LTDAC	1,
 TEW	    1
 / ;
 
-parameter i06CapexDAC(CDRTECH)                  "CAPEX of each DAC technology ($/tCO2)"
+parameter i06CapexCDR(CDRTECH)                  "CAPEX of each CDR technology ($/tCO2)"
 /
 HTDAC	250,
 H2DAC   1100
@@ -27,7 +27,7 @@ LTDAC	1100,
 TEW	400
 / ;
 
-parameter i06CapexDACMin(CDRTECH)               "Minimum possible CAPEX of each DAC technology affected by learning curve ($/tCO2)"
+parameter i06CapexCDRMin(CDRTECH)               "Minimum possible CAPEX of each CDR technology affected by learning curve ($/tCO2)"
 /
 HTDAC	120,
 H2DAC	68,
@@ -35,7 +35,7 @@ LTDAC	68,
 TEW	68
 / ;
 
-parameter i06FixCostDAC(CDRTECH)                "Fixed and O&M costs of each DAC technology ($/tCO2)"
+parameter i06FixCostCDR(CDRTECH)                "Fixed and O&M costs of each CDR technology ($/tCO2)"
 /
 HTDAC	72,
 H2DAC	80,
@@ -43,7 +43,7 @@ LTDAC	180,
 TEW	600
 / ;
 
-parameter i06FixCostDACMin(CDRTECH)             "Minimum possible Fixed and O&M costs of each DAC technology affected by learning curve ($/tCO2)"
+parameter i06FixCostCDRMin(CDRTECH)             "Minimum possible Fixed and O&M costs of each CDR technology affected by learning curve ($/tCO2)"
 /
 HTDAC	40,
 H2DAC	40,
@@ -51,7 +51,7 @@ LTDAC	30,
 TEW	30
 / ;
 
-parameter i06VarDACMin(CDRTECH)                 "Minimum possible Variable and carbon storage costs of each DAC technology affected by learning curve ($/tCO2)"
+parameter i06VarCostCDRMin(CDRTECH)                 "Minimum possible Variable and carbon storage costs of each CDR technology affected by learning curve ($/tCO2)"
 /
 HTDAC	75,
 H2DAC	94,
@@ -59,7 +59,7 @@ LTDAC	250,
 TEW	130
 / ;
 
-parameter i06VarDAC(CDRTECH)                    "Variable and carbon storage costs of each DAC technology ($/tCO2)"
+parameter i06VarCostCDR(CDRTECH)                    "Variable and carbon storage costs of each CDR technology ($/tCO2)"
 /
 HTDAC	90,
 H2DAC	115,
@@ -67,7 +67,7 @@ LTDAC	306,
 TEW	200
 / ;
 
-parameter i06SubsiDAC(CDRTECH)                    "Subsidy factor applied to the carbon price"
+parameter i06SubsiCDR(CDRTECH)                    "Subsidy factor applied to the carbon price"
 /
 HTDAC	1,
 H2DAC	1.8,
@@ -75,7 +75,7 @@ LTDAC	1.8,
 TEW	1.8
 / ;
 
-parameter i06LftExpDAC(CDRTECH)                 "Lifetime of each DAC technology (years)"
+parameter i06LftExpCDR(CDRTECH)                 "Lifetime of each CDR technology (years)"
 /
 HTDAC	25,
 H2DAC	25,
@@ -83,7 +83,7 @@ LTDAC	20,
 TEW	15
 / ;
 
-parameter i06ElNeedsDAC(CDRTECH)                "Specific electricity needs of DAC technologies (toe/tCO2)"
+parameter i06ElNeedsCDR(CDRTECH)                "Specific electricity needs of CDR technologies (toe/tCO2)"
 /
 HTDAC	0.0234,
 H2DAC	0.0234,
@@ -91,7 +91,7 @@ LTDAC	0.0315,
 TEW	0.0186
 / ;
 
-parameter i06HeatNeedsDAC(CDRTECH)               "Specific heat needs of DAC technologies (toe/tCO2)"
+parameter i06HeatNeedsCDR(CDRTECH)               "Specific heat needs of CDR technologies (toe/tCO2)"
 /
 HTDAC	0.234,
 H2DAC	0.234,
@@ -99,7 +99,7 @@ LTDAC	0.127,
 TEW	0.148
 / ;
 
-parameter i06SchedNewCapDAC(allCy,CDRTECH,YTIME)        "Scheduled new DAC capacity" /
+parameter i06SchedNewCapCDR(allCy,CDRTECH,YTIME)        "Scheduled new CDR capacity" /
 !!NEU.LTDAC.2027  4e4,    !!Removr – Mongstad pilot / industrial‑scale projects
 !!NEU.LTDAC.2026  4e4,    !!Orca (Climeworks + Carbfix) + Mammoth (Climeworks + Carbfix)
 !!NEU.LTDAC.2028  1e5,    !!Removr + Carbfix (Large‑Scale Plant)
@@ -143,37 +143,37 @@ $endIf.DACproj
 *---
 Parameters
 i06ElastCO2Seq(allCy,CO2SEQELAST)	       "Elasticities for CO2 sequestration cost curve (1)"
-i06GrossCapDACMin(CDRTECH)           "Minimum possible CAPEX of each DAC technology affected by learning curve ($/tCO2)"
-i06GrossCapDAC(CDRTECH)	           "CAPEX of each DAC technology ($/tCO2)"
-i06VarCostDAC(CDRTECH)               "Variable and carbon storage costs of each DAC technology ($/tCO2)"
-i06VarCostDACMin(CDRTECH)            "Minimum possible Variable and carbon storage costs of each DAC technology affected by learning curve ($/tCO2)"
-i06FixOandMDAC(CDRTECH)              "Fixed and O&M costs of each DAC technology ($/tCO2)"
-i06FixOandMDACMin(CDRTECH)           "Minimum possible Fixed and O&M costs of each DAC technology affected by learning curve ($/tCO2)"
-i06LftDAC(allCy,CDRTECH,YTIME)             "Lifetime of each DAC technology (years)"
-i06SubsiFacDAC(CDRTECH)                  "State subsidy factor for the carbon captured applied on the carbon price"
-i06SpecElecDAC(allCy,CDRTECH,YTIME)        "Specific electricity needs of DAC technologies (MWh/tCO2)"
-i06SpecHeatDAC(allCy,CDRTECH,YTIME)        "Specific heat needs of DAC technologies (MWh/tCO2)"
+i06GrossCapCDRMin(CDRTECH)           "Minimum possible CAPEX of each CDR technology affected by learning curve ($/tCO2)"
+i06GrossCapCDR(CDRTECH)	           "CAPEX of each CDR technology ($/tCO2)"
+i06VarCostCDR(CDRTECH)               "Variable and carbon storage costs of each CDR technology ($/tCO2)"
+i06VarCostCDRMin(CDRTECH)            "Minimum possible Variable and carbon storage costs of each CDR technology affected by learning curve ($/tCO2)"
+i06FixOandMCDR(CDRTECH)              "Fixed and O&M costs of each CDR technology ($/tCO2)"
+i06FixOandMCDRMin(CDRTECH)           "Minimum possible Fixed and O&M costs of each CDR technology affected by learning curve ($/tCO2)"
+i06LftCDR(allCy,CDRTECH,YTIME)             "Lifetime of each CDR technology (years)"
+i06SubsiFacCDR(CDRTECH)                  "State subsidy factor for the carbon captured applied on the carbon price"
+i06SpecElecCDR(allCy,CDRTECH,YTIME)        "Specific electricity needs of CDR technologies (MWh/tCO2)"
+i06SpecHeatCDR(allCy,CDRTECH,YTIME)        "Specific heat needs of CDR technologies (MWh/tCO2)"
 ;
 *---
 i06ElastCO2Seq(runCy,CO2SEQELAST) = i06CO2SeqData(CO2SEQELAST);
 *---
-i06GrossCapDACMin(CDRTECH) = i06CapexDACMin(CDRTECH);
+i06GrossCapCDRMin(CDRTECH) = i06CapexCDRMin(CDRTECH);
 *---
-i06GrossCapDAC(CDRTECH) = i06CapexDAC(CDRTECH);
+i06GrossCapCDR(CDRTECH) = i06CapexCDR(CDRTECH);
 *---
-i06VarCostDAC(CDRTECH) = i06VarDAC(CDRTECH);
+i06VarCostCDR(CDRTECH) = i06VarCostCDR(CDRTECH);
 *---
-i06VarCostDACMin(CDRTECH) = i06VarDACMin(CDRTECH);
+i06VarCostCDRMin(CDRTECH) = i06VarCostCDRMin(CDRTECH);
 *---
-i06FixOandMDACMin(CDRTECH) = i06FixCostDACMin(CDRTECH);
+i06FixOandMCDRMin(CDRTECH) = i06FixCostCDRMin(CDRTECH);
 *---
-i06FixOandMDAC(CDRTECH) = i06FixCostDAC(CDRTECH);
+i06FixOandMCDR(CDRTECH) = i06FixCostCDR(CDRTECH);
 *---
-i06SubsiFacDAC(CDRTECH) = i06SubsiDAC(CDRTECH);
+i06SubsiFacCDR(CDRTECH) = i06SubsiCDR(CDRTECH);
 *---
-i06LftDAC(runCy,CDRTECH,YTIME) = i06LftExpDAC(CDRTECH);
+i06LftCDR(runCy,CDRTECH,YTIME) = i06LftExpCDR(CDRTECH);
 *---
-i06SpecElecDAC(runCy,CDRTECH,YTIME) = i06ElNeedsDAC(CDRTECH);
+i06SpecElecCDR(runCy,CDRTECH,YTIME) = i06ElNeedsCDR(CDRTECH);
 *---
-i06SpecHeatDAC(runCy,CDRTECH,YTIME) = i06HeatNeedsDAC(CDRTECH);
+i06SpecHeatCDR(runCy,CDRTECH,YTIME) = i06HeatNeedsCDR(CDRTECH);
 *---
