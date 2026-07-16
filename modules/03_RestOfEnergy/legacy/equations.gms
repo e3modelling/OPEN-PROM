@@ -184,3 +184,18 @@ Q03FinalEnergy(allCy,DSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$(SECtoEF(DSBS,E
     VmConsFuel(allCy,DSBS,EFS,YTIME) + 
     sum(CDRTECH$TECHtoEF(CDRTECH,EFS),VmConsFuelTechCDRProd(allCy,CDRTECH,EFS,YTIME))$sameas(DSBS,"DAC") +
     VmConsFuelTechCDRProd(allCy,"TEW",EFS,YTIME)$sameas(DSBS,"EW");   
+
+Q03CostAvgProd(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    VmCostAvgProd(allCy,EFS,YTIME)
+      =E=
+    VmCostPowGenAvgLng(allCy,YTIME)$sameas("ELC",EFS) +
+    VmCostAvgProdH2(allCy,YTIME)$sameas("H2F",EFS) +
+    VmCostAvgProdSte(allCy,YTIME)$sameas("STE",EFS) +
+    SUM((SSBS,EFS2)$(SECtoEFPROD(SSBS,EFS) and SECtoEF(SSBS,EFS2)),
+      (
+        (V03InpTotTransf(allCy,SSBS,EFS2,YTIME) + VmConsFiEneSec(allCy,SSBS,EFS,YTIME)) *
+        (i03RatioPrimaryFuels(runCy,EFS2,YTIME) * V08PricePrimary(allCy,EFS2,YTIME) + (1-i03RatioPrimaryFuels(runCy,EFS2,YTIME)) * V08PriceSecondary(allCy,EFS2,YTIME)) +
+        1e-3 * imFactorEmissProcessesCO2(allCy,SSBS,EFS2,YTIME) * sum(NAP$NAPtoALLSBS(NAP,SSBS), VmCarVal(allCy,NAP,YTIME)) * V03InpTotTransf(allCy,SSBS,EFS2,YTIME) +
+        1e-3 * imFactorEmissEnergyCO2(allCy,SSBS,EFS2,YTIME) * sum(NAP$NAPtoALLSBS(NAP,SSBS), VmCarVal(allCy,NAP,YTIME)) * VmConsFiEneSec(allCy,SSBS,EFS,YTIME)
+      ) / V03OutTotTransf(allCy,SSBS,EFS,YTIME)
+    )$(not (sameas("ELC",EFS) or sameas("H2F",EFS) or sameas("STE",EFS)))

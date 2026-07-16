@@ -53,6 +53,8 @@ Parameters
 i08DiffFuelsInSec(SBS)                    "Auxiliary parameter holding the number of different fuels in a sector"
 i08WgtSecAvgPriFueCons(allCy,SBS,EF)	    "Weights for sector's average price, based on fuel consumption (1)"
 i08VAT(allCy,YTIME)                       "VAT (value added tax) rates (1)"
+i08ElastPricePrimary(EFS,EFS)             "Elasticities of energy-form prices (first EFS set) with respect to prices of other energy forms (second EFS set)"
+i08PriceBase(EFS)                         "Base price of primary products"
 ;
 *---
 loop SBS do
@@ -85,3 +87,9 @@ i08VAT(runCy, YTIME) = 0;
 *---
 imFuelPrice(runCy,SBS,"CRO",YTIME) = i08PriceCrudeOil(YTIME);
 *---
+i08ElastPricePrimary("NGS","CRO") = 0.7;
+i08ElastPricePrimary("HCL","NGS") = 0.4;
+i08ElastPricePrimary("BMSWAS","BMSWAS") = 1;
+*---
+i08PriceBase("CRO") = 0.2;
+i08PriceBase("NGS") = 0.2;

@@ -73,6 +73,28 @@ $ELSE.mode
 $ENDIF.mode
     ;
 
+Q08PricePrimary(allCy,EFS,YTIME)$(TIME(YTIME) and runCy(allCy) and not sameas("CRO",EFS))..
+    V08PricePrimary(allCy,EFS,YTIME)
+      =E=
+    i08PriceBase(EFS) +
+    (V08PricePrimary(allCy,EFS,YTIME-1) - i08PriceBase(EFS)) * 
+    (V08PricePrimary(allCy,"CRO",YTIME) / V08PricePrimary(allCy,"CRO",YTIME-1)) ** i08ElastPricePrimary(EFS,"CRO") *
+    (V08PricePrimary(allCy,"NGS",YTIME) / V08PricePrimary(allCy,"NGS",YTIME-1)) ** i08ElastPricePrimary(EFS,"NGS") *
+    V08IndexBioSupply(allCy,YTIME) ** i08ElastPricePrimary(EFS,"BMSWAS");
+    !!(SUM(runCy2,V03ConsGrssInl(runCy2,EFS,YTIME)) / SUM(runCy2,V03ConsGrssInl(runCy2,EFS,YTIME-1))) ** (0.1);
+
+Q08PriceSecondary(allCy,EFS,YTIME)$(TIME(YTIME) and runCy(allCy))..
+    V08PriceSecondary(allCy,EFS,YTIME)
+      =E=
+    V08PriceSecondary(allCy,EFS,YTIME-1) *
+    (VmCostAvgProd(allCy,EFS,YTIME) / VmCostAvgProd(allCy,EFS,YTIME-1)) ** i08ElastPriceSecondary(EFS);
+
+Q08PriceFinal(allCy,DSBS,EFS,YTIME)$(TIME(YTIME) and runCy(allCy))..
+    V08PriceFinal(allCy,DSBS,EFS,YTIME)
+      =E=
+    V08PriceFinal(allCy,DSBS,EFS,YTIME-1) *
+    (V08PriceSecondary(allCy,EFS,YTIME) / V08PriceSecondary(allCy,EFS,YTIME-1)) ** i08ElastPriceFinal(EFS);
+
 Q08PriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME)$(SECtoEF(SBS,EFS) $(not sameas("CRO",EFS)) $TIME(YTIME)
 $IFTHEN %softLinkMAgPIE% == on
    $(not sameas("BMSWAS",EFS))
