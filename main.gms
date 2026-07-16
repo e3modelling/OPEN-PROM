@@ -207,6 +207,8 @@ $setGlobal Calibration off !! MatCalibration/Calibration/off
 *' *** softLinkMAgPIE: on = task7 soft-link iteration with MAgPIE (was link2MAgPIE)
 $setglobal softLinkMAgPIE off  !! on or off
 
+$setglobal OPENGEM off !! on or off
+
 *' *** Land-use emulator: pre-fit BMSWAS supply & land-emission curves standing in
 *' *** for a land-use model (was link2GLOBIOM). One of:
 *' ***   legacy  = no emulator (exogenous static price + external emission source)

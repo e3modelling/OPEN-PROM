@@ -2,6 +2,15 @@
 *' @code
 
 *---
+$IFTHEN.opengem %OPENGEM% == on
+table imActv(YTIME,allCy,DSBS) "Sector activity (various)"
+                              !! main sectors (Billion US$2015) 
+                              !! bunkers and households (1)
+                              !! transport (Gpkm, or Gvehkm or Gtkm)
+$ondelim
+$include "./iActvOPGEM.csvr"
+$offdelim
+$ELSE.opengem
 table imActv(YTIME,allCy,DSBS) "Sector activity (various)"
                               !! main sectors (Billion US$2015) 
                               !! bunkers and households (1)
@@ -9,6 +18,7 @@ table imActv(YTIME,allCy,DSBS) "Sector activity (various)"
 $ondelim
 $include "./iActv.csvr"
 $offdelim
+$ENDIF.opengem
 ;
 imActv(YTIME,allCy,DSBS)$(imActv(YTIME,allCy,DSBS) = NA) = 0;
 imActv(YTIME,allCy,"PN")$DATAY(YTIME) = 1;
