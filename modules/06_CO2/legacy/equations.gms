@@ -72,11 +72,11 @@ Q06GrossCapCDR(CDRTECH,YTIME)$(TIME(YTIME))..
             =E=         
     0.5 * 
     (
-      (i06GrossCapCDR(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.96)/log(2))) +
+      (i06GrossCapCDR(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.98)/log(2))) +
       i06GrossCapCDRMin(CDRTECH) +
       sqrt(
         sqr(
-          (i06GrossCapCDR(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.96)/log(2))) -
+          (i06GrossCapCDR(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.98)/log(2))) -
           i06GrossCapCDRMin(CDRTECH)
         )
       )
@@ -88,11 +88,11 @@ Q06FixOandMCDR(CDRTECH,YTIME)$(TIME(YTIME))..
             =E=         
     0.5 * 
     (
-      (i06FixOandMCDR(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.96)/log(2))) +
+      (i06FixOandMCDR(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.98)/log(2))) +
       i06FixOandMCDRMin(CDRTECH) +
       sqrt(
         sqr(
-          (i06FixOandMCDR(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.96)/log(2))) -
+          (i06FixOandMCDR(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.98)/log(2))) -
           i06FixOandMCDRMin(CDRTECH)
         )
       )
@@ -105,11 +105,11 @@ Q06VarCostCDR(CDRTECH,YTIME)$(TIME(YTIME))..
             =E=         
     0.5 * 
     (
-      (i06VarCostCDR(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.96)/log(2))) +
+      (i06VarCostCDR(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.98)/log(2))) +
       i06VarCostCDRMin(CDRTECH) +
       sqrt(
         sqr(
-          (i06VarCostCDR(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.96)/log(2))) -
+          (i06VarCostCDR(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.98)/log(2))) -
           i06VarCostCDRMin(CDRTECH)
         )
       )
@@ -118,16 +118,23 @@ Q06VarCostCDR(CDRTECH,YTIME)$(TIME(YTIME))..
 
 *' The equation calculates the Levelized Costs of CDR capacity, also taking into account its discount rate and life expectancy, 
 *' for each region (country) and year.
-Q06LvlCostCDR(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+Q06LvlCostCDR(allCy,CDRTECH,YTIME)$(TIME(YTIME))..
     V06LvlCostCDR(allCy,CDRTECH,YTIME)
-        =E=         
-    V06GrossCapCDR(CDRTECH,YTIME)
-    - VmSubsiDemTech(allCy,"DAC",CDRTECH,YTIME)$CDRTECH(CDRTECH) - VmSubsiDemTech(allCy,"EW",CDRTECH,YTIME)$sameas("TEW",CDRTECH) +
+            =E=         
+    V06GrossCapCDR(CDRTECH,YTIME) +
     V06FixOandMCDR(CDRTECH,YTIME) + 
     V06VarCostCDR(CDRTECH,YTIME) - 20 +
     i06SpecElecCDR(allCy,CDRTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME) +
     i06SpecHeatCDR(allCy,CDRTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","NGS",YTIME) / 0.85 +
     VmCstCO2SeqCsts(allCy,YTIME)$(not sameas("TEW", CDRTECH))
+;
+
+*' The equation calculates the Levelized Costs of CDR capacity, also taking into account its subsidy, for each region (country) and year.
+Q06CostFullCDR(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V06CostFullCDR(allCy,CDRTECH,YTIME)
+        =E=         
+    V06LvlCostCDR(allCy,CDRTECH,YTIME)
+    - VmSubsiDemTech(allCy,"DAC",CDRTECH,YTIME)$CDRTECH(CDRTECH) - VmSubsiDemTech(allCy,"EW",CDRTECH,YTIME)$sameas("TEW",CDRTECH)
 ;
 
 *' The equation estimates the profitability of CDR capacity, calculating the rate between levelized costs (CAPEX, fixed and fuel needs)
@@ -136,7 +143,7 @@ Q06ProfRateCDR(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06ProfRateCDR(allCy,CDRTECH,YTIME)
         =E=
     sum(NAP$NAPtoALLSBS(NAP,"DAC"),VmCarVal(allCy,NAP,YTIME)) /
-    V06LvlCostCDR(allCy,CDRTECH,YTIME - 1)
+    V06CostFullCDR(allCy,CDRTECH,YTIME - 1)
 ;
 
 *' The equation estimates the CDR deployment gap for each region, technology and year based on previous-year net emissions

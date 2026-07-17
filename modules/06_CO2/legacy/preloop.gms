@@ -19,6 +19,10 @@ V06LvlCostCDR.LO(runCy,CDRTECH,YTIME) = 0;
 V06LvlCostCDR.L(runCy,CDRTECH,YTIME) = 100;
 V06LvlCostCDR.FX(runCy,CDRTECH,YTIME)$DATAY(YTIME) = 100;
 *---
+V06CostFullCDR.LO(runCy,CDRTECH,YTIME) = 0;
+V06CostFullCDR.L(runCy,CDRTECH,YTIME) = 100;
+V06CostFullCDR.FX(runCy,CDRTECH,YTIME)$DATAY(YTIME) = 100;
+*---
 V06CapCDR.LO(runCy,CDRTECH,YTIME) = 0;
 V06CapCDR.L(runCy,CDRTECH,YTIME) = 1;
 V06CapCDR.FX(runCy,CDRTECH,"%fBaseY%") = 1000 * VmGDPPartGlob.L(runCy,"%fBaseY%"); !! Initial guess of 50 years to reach net zero emissions for each CDR technology, based on the net emissions in 2020
