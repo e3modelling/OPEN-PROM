@@ -826,10 +826,10 @@ imUsfEneConvSubTech(runCy,"BU","TGSL",YTIME) = 0.5;
 imCapCostTech(runCy,"BU","TH2F",YTIME) = 1.5 * imCapCostTech(runCy,"BU","TGDO",YTIME);
 *---
 **  CDR
-imCapCostTechMin(allCy,"DAC","HTDAC",YTIME) = 0.25;
+imCapCostTechMin(allCy,"DAC","HTDAC",YTIME) = 0.2;
 imCapCostTechMin(allCy,"DAC","H2DAC",YTIME) = 0.5;
-imCapCostTechMin(allCy,"DAC","LTDAC",YTIME) = 0.25;
-imCapCostTechMin(allCy,"EW","TEW",YTIME) = 0.25;
+imCapCostTechMin(allCy,"DAC","LTDAC",YTIME) = 0.2;
+imCapCostTechMin(allCy,"EW","TEW",YTIME) = 0.2;
 *---
 !!imUsfEneConvSubTech(runCy,INDSE,"THCL",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCL","USC") + 0.005 * (ord(YTIME)-14);
 imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCLCCS","USC") + 0.005 * (ord(YTIME)-14);

@@ -44,7 +44,7 @@ Q06CaptCummCO2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       =E= 
     V06CaptCummCO2(allCy,YTIME-1) +
     sum((SBS,EFS)$SECtoEF(SBS,EFS),V06CO2CaptureCCS(allCy,SBS,EFS,YTIME)) +
-    sum(CDRTECH,V06CapCDR(allCy,CDRTECH,YTIME) * 1e-6);   
+    sum(DACTECH,V06CapCDR(allCy,DACTECH,YTIME) * 1e-6);   
 
 Q06CaptCummCO2Glob(YTIME)$(TIME(YTIME))..
     V06CaptCummCO2Glob(YTIME) 
@@ -134,7 +134,7 @@ Q06CostFullCDR(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06CostFullCDR(allCy,CDRTECH,YTIME)
         =E=         
     V06LvlCostCDR(allCy,CDRTECH,YTIME)
-    - VmSubsiDemTech(allCy,"DAC",CDRTECH,YTIME)$CDRTECH(CDRTECH) - VmSubsiDemTech(allCy,"EW",CDRTECH,YTIME)$sameas("TEW",CDRTECH)
+    - VmSubsiDemTech(allCy,"DAC",CDRTECH,YTIME)$DACTECH(CDRTECH) - VmSubsiDemTech(allCy,"EW",CDRTECH,YTIME)$sameas("TEW",CDRTECH)
 ;
 
 *' The equation estimates the profitability of CDR capacity, calculating the rate between levelized costs (CAPEX, fixed and fuel needs)
