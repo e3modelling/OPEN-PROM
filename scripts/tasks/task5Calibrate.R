@@ -18,7 +18,7 @@ runTask5 <- function() {
   } else {
     cmdCommand <- paste0(
       gams,
-      " main.gms -o mainCalib.lst --DevMode=0 --Calibration=MatCalibration --fScenario=4 --CountrySolveMode=parallel -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1 | tee fullCalib.log"
+      " main.gms -o mainCalib.lst --DevMode=0 --Calibration=MatCalibration --fScenario=4 --CountrySolveMode=parallel -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1"
     )
     shell(cmdCommand)
   }

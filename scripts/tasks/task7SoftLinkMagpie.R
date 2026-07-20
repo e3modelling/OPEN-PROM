@@ -68,7 +68,7 @@ runTask7 <- function() {
     if (.Platform$OS.type == "unix") {
       system(paste0("sh -c ", shQuote(cmd1)))
     } else {
-      shell(paste0(cmd1, " | tee full_round1.log"))
+      shell(cmd1)
     }
     if (!isRunSuccessful("modelstat.txt"))
       stop("[task 7] First OPEN-PROM run failed. Aborting soft-link.")
@@ -137,7 +137,7 @@ runTask7 <- function() {
   if (.Platform$OS.type == "unix") {
     system(paste0("sh -c ", shQuote(cmd2)))
   } else {
-    shell(paste0(cmd2, " | tee full_round2.log"))
+    shell(cmd2)
   }
 
   # ---- Step 6: reportOutput + sync ----

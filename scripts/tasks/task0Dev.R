@@ -16,7 +16,7 @@ runTask0 <- function() {
   if (.Platform$OS.type == "unix") {
     system(paste0("sh -c ", shQuote(base_cmd)))
   } else {
-    shell(paste0(base_cmd, " | tee full.log"))
+    shell(base_cmd)
   }
 
   if (withRunFolder && withReport) {

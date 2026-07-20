@@ -20,7 +20,7 @@ runTask3 <- function() {
   } else {
     calib_cmd <- paste0(
       gams,
-      " main.gms -o mainCalib.lst --WriteGDX=off --DevMode=0 --fScenario=4 --GenerateInput=on --Calibration=MatCalibration --CountrySolveMode=parallel -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1 | tee fullCalib.log"
+      " main.gms -o mainCalib.lst --WriteGDX=off --DevMode=0 --fScenario=4 --GenerateInput=on --Calibration=MatCalibration --CountrySolveMode=parallel -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1"
     )
     exit_code <- shell(calib_cmd)
   }
@@ -28,7 +28,7 @@ runTask3 <- function() {
 
   if (exit_code != 0) {
     cat("ERROR: GAMS calibration failed with exit code:", exit_code, "\n")
-    cat("Calibration and data generation failed. Check fullCalib.log for details.\n")
+    cat("Calibration and data generation failed. Check main.log for details.\n")
     stop("GAMS calibration execution failed during data generation. Terminating run.")
   }
 
@@ -63,7 +63,7 @@ runTask3 <- function() {
   } else {
     research_cmd <- paste(
       gams, "main.gms --DevMode=0 --GenerateInput=off", extra,
-      "-logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1 | tee full.log"
+      "-logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1"
     )
     exit_code <- shell(research_cmd)
   }
