@@ -39,6 +39,6 @@ VmConsFuelTechCDRProd(allCy,CDRTECH,EF,YTIME)              "Annual fuel demand i
 ;
 
 Scalars
-S06EmissPercCDR                                        "The percentage of emissions that needs to be captured by new CDR equipment" /0.01/
+S06EmissPercCDR                                        "The percentage of emissions that needs to be captured by new CDR equipment" /0.015/
 S06CapFacMinNewCDR                                     "The minimum level of CDR capacity expansion as a percentage of last year's capacity" /0.005/
 ;

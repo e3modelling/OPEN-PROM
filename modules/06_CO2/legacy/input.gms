@@ -13,10 +13,10 @@ seq_max 900
 
 parameter i06MatFacCDR(CDRTECH)                 "Maturity factor of CDR technology expressing its elasticity in implementation regarding its financial sustainability"
 /
-HTDAC	0.40,
-H2DAC   0.5,
+HTDAC	0.50,
+H2DAC   0.7,
 LTDAC	1,
-TEW	    1
+TEW	    0.4
 / ;
 
 parameter i06CapexCDR(CDRTECH)                  "CAPEX of each CDR technology ($/tCO2)"
