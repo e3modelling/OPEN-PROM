@@ -67,7 +67,7 @@ Q06CstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
    (1+tanh(i06CO2SeqData("sig_a") / (i06CO2SeqData("sig_b") * i06CO2SeqData("seq_max")) * (V06CaptCummCO2Glob(YTIME) * 1e-3 - i06CO2SeqData("sig_b") * i06CO2SeqData("seq_max"))));           
 
 *' The equation calculates the CAPEX of each CDR technology, as it's affected by a learning curve ($/tCO2).
-Q06GrossCapCDR(CDRTECH,YTIME)$(TIME(YTIME))..
+Q06GrossCapCDR(CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06GrossCapCDR(CDRTECH,YTIME)
             =E=         
     0.5 * 
@@ -83,7 +83,7 @@ Q06GrossCapCDR(CDRTECH,YTIME)$(TIME(YTIME))..
     );
 
 *' The equation calculates the fixed and O&M costs of each CDR technology, as they are affected by a learning curve.
-Q06FixOandMCDR(CDRTECH,YTIME)$(TIME(YTIME))..
+Q06FixOandMCDR(CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06FixOandMCDR(CDRTECH,YTIME)
             =E=         
     0.5 * 
@@ -100,7 +100,7 @@ Q06FixOandMCDR(CDRTECH,YTIME)$(TIME(YTIME))..
 ;
 
 *' The equation calculates the variable costs of each CDR technology including the CO2 storage costs, as they are affected by a learning curve.
-Q06VarCostCDR(CDRTECH,YTIME)$(TIME(YTIME))..
+Q06VarCostCDR(CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06VarCostCDR(CDRTECH,YTIME)
             =E=         
     0.5 * 
@@ -118,7 +118,7 @@ Q06VarCostCDR(CDRTECH,YTIME)$(TIME(YTIME))..
 
 *' The equation calculates the Levelized Costs of CDR capacity, also taking into account its discount rate and life expectancy, 
 *' for each region (country) and year.
-Q06LvlCostCDR(allCy,CDRTECH,YTIME)$(TIME(YTIME))..
+Q06LvlCostCDR(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06LvlCostCDR(allCy,CDRTECH,YTIME)
             =E=         
     V06GrossCapCDR(CDRTECH,YTIME) +
