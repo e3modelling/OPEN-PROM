@@ -32,6 +32,7 @@ Q03ImpNetEneBrnch(allCy,EFS,YTIME)	                       "Compute net imports"
 Q03ConsFiEneSec(allCy,SSBS,EFS,YTIME)	                       "Compute energy branch final consumption"
 Q03LossesDistr(allCy,EFS,YTIME)                            "Compute distribution losses"
 Q03FinalEnergy(allCy,DSBS,EFS,YTIME)                       "Compute total final energy consumption"
+Q03CostAvgProd(allCy,EFS,YTIME)
 ;
 
 Variables
@@ -51,4 +52,5 @@ VmImpNetEneBrnch(allCy,EFS,YTIME)	                       "Net Imports (Mtoe)"
 VmConsFiEneSec(allCy,SSBS,EFS,YTIME)                            "Final consumption in energy sector (Mtoe)"
 VmLossesDistr(allCy,EFS,YTIME)                             "Distribution losses (Mtoe)"
 VmFinalEnergy(allCy,DSBS,EFS,YTIME)                        "Total final energy (Mtoe)"
+VmCostAvgProd(allCy,EFS,YTIME)
 ;

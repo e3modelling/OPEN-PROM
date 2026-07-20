@@ -56,9 +56,11 @@ imCapCostTech(allCy,SBS,TECH,YTIME)                          "Capital Cost of te
                                                                 !! - For Industrial sectors (except Iron and Steel) is expressed in kUS$2015/toe-year
                                                                 !! - For Iron and Steel is expressed in kUS$2015/tn-of-steel
                                                                 !! - For Domestic Sectors is expressed in kUS$2015/toe-year
+imCapCostTechMin(allCy,DSBS,TECH,YTIME)                    !!Factor for the minimum capex of a demand technology after the state subsidy
+imFactorEmissProcessesCO2(allCy,SBS,EF,YTIME)
+imFactorEmissEnergyCO2(allCy,SBS,EF,YTIME)
 smGwToTwhPerYear(YTIME)                                    "convert GW mean power into TWh/y, depending on whether it's a leap year"
 ;
-
 Equations
 *' *** Miscellaneous'
 qDummyObj                                                  "Define dummy objective function"

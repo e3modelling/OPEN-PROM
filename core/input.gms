@@ -705,14 +705,6 @@ imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$((sameas(DSBS,"PC") or sameas(DSBS,"PB") 
 imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$DATAY(YTIME)= iMatrFactorData(runCy,DSBS,TECH,YTIME);        
 $ENDIF.calib
 *---
-parameters
-!!imFacSubsiCapCostTech(DSBS,TECH)                            !!State subsidy (%) factor in technology capex (demand side)
-!!imGrantCapCostTech(DSBS,TECH)                               !!State granting in technology capex (demand side)
-!!imSubsiCapCostFuel(SBS,EF)                                  !!State subsidy in fuel cost
-!!imFacSubsiCapCostSupply(SSBS,STECH)                         !!State subsidy (%) factor in technology capex (supply side)
-!!imGrantCapCostSupply(SSBS,STECH)                            !!State granting in technology capex (supply side)
-imCapCostTechMin(allCy,DSBS,TECH,YTIME)                    !!Factor for the minimum capex of a demand technology after the state subsidy
-;
 
 $ontext
 if %fScenario% eq 0 then
@@ -851,3 +843,6 @@ imPlantEffByType(runCy,STECH,"effHeat",YTIME)$(not PGALL(STECH))= imPlantEffByTy
 **   Conversion of GW mean power into TWh/y, depending on whether it's a leap year
 smGwToTwhPerYear(YTIME) = 8.76 + 0.024 $ (mod(YTIME.val,4) = 0 and mod (YTIME.val,100) <> 0);
 *--
+imFactorEmissProcessesCO2(allCy,SBS,EF,YTIME) = 0;
+*---
+imFactorEmissEnergyCO2(allCy,SBS,EF,YTIME) = iCo2EmiFacAllSbs(EF);

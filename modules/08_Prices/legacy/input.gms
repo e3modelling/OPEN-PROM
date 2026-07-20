@@ -49,14 +49,6 @@ $include "CrudeOilPrice.csv"
 $offdelim
 /;
 *---
-Parameters
-i08DiffFuelsInSec(SBS)                    "Auxiliary parameter holding the number of different fuels in a sector"
-i08WgtSecAvgPriFueCons(allCy,SBS,EF)	    "Weights for sector's average price, based on fuel consumption (1)"
-i08VAT(allCy,YTIME)                       "VAT (value added tax) rates (1)"
-i08ElastPricePrimary(EFS,EFS)             "Elasticities of energy-form prices (first EFS set) with respect to prices of other energy forms (second EFS set)"
-i08PriceBase(EFS)                         "Base price of primary products"
-;
-*---
 loop SBS do
          i08DiffFuelsInSec(SBS) = 0;
          loop EF$(SECtoEF(SBS,EF))  do
@@ -93,3 +85,10 @@ i08ElastPricePrimary("BMSWAS","BMSWAS") = 1;
 *---
 i08PriceBase("CRO") = 0.2;
 i08PriceBase("NGS") = 0.2;
+*---
+i08ElastPriceSupplyCurve(EFS,EFS) = 1;
+*---
+i08ElastPriceSecondary(EFS) = 1;
+*---
+i08ElastPriceFinal(EFS) = 1;
+*---

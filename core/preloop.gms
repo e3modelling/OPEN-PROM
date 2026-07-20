@@ -41,6 +41,16 @@ VmCstCO2SeqCsts.LO(runCy,YTIME) = i06ElastCO2Seq(runCy,"seq_min");
 VmCstCO2SeqCsts.L(runCy,YTIME) = i06ElastCO2Seq(runCy,"seq_min");
 VmCstCO2SeqCsts.FX(runCy,YTIME)$DATAY(YTIME) = i06ElastCO2Seq(runCy,"seq_min");
 *---
+VmPriceFinal.LO(runCy,DSBS,EFS,YTIME) = 0;
+VmPriceFinal.L(runCy,DSBS,EFS,YTIME) = 1;
+VmPriceFinal.FX(runCy,DSBS,EFS,YTIME)$DATAY(YTIME) = imFuelPrice(runCy,DSBS,EFS,YTIME);
+*VmPriceFinal.FX(runCy,DSBS,"CRO",YTIME)$(not DATAY(YTIME)) = imFuelPrice(runCy,DSBS,"CRO",YTIME);
+*---
+VmPriceSecondary.LO(allCy,EFS,YTIME) = 0;
+VmPriceSecondary.L(allCy,EFS,YTIME) = 1;
+VmPriceSecondary.FX(runCy,EFS,YTIME)$DATAY(YTIME) = imFuelPrice(runCy,"PG",EFS,YTIME);
+*VmPriceSecondary.FX(runCy,"CRO",YTIME)$(not DATAY(YTIME)) = imFuelPrice(runCy,"PG","CRO",YTIME);
+*---
 VmPriceFuelSubsecCarVal.LO(runCy,SBS,EF,YTIME) = 0;
 VmPriceFuelSubsecCarVal.L(runCy,SBS,EF,YTIME)$SECtoEF(SBS,EF) = 1;
 

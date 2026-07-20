@@ -17,6 +17,9 @@ SQRT( SQR(((VmPriceFuelSubsecCarVal.L(runCy,DSBS,EF,YTIME)+imVarCostTech(runCy,D
 $offtext
 *---
 * Init for the BMSWAS bio-supply index variable (positive; neutral start = 1)
-V08IndexBioSupply.LO(runCy,YTIME) = 0;
-V08IndexBioSupply.L(runCy,YTIME)  = 1;
+V08SupplyCurves.LO(runCy,EFS,YTIME) = 0;
+V08SupplyCurves.L(runCy,EFS,YTIME)  = 1;
+V08SupplyCurves.FX(runCy,EFS,YTIME)$DATAY(YTIME) = 1;
 *---
+V08PricePrimary.LO(runCy,EFS,YTIME) = 0;
+V08PricePrimary.L(runCy,EFS,YTIME) = 1;
