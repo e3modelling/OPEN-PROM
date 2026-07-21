@@ -16,7 +16,7 @@ parameter i06MatFacCDR(CDRTECH)                 "Maturity factor of CDR technolo
 HTDAC	0.50,
 H2DAC   0.7,
 LTDAC	1,
-TEW	    0.4
+TEW	    0.2
 / ;
 
 parameter i06CapexCDR(CDRTECH)                  "CAPEX of each CDR technology ($/tCO2)"
