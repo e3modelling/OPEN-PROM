@@ -41,12 +41,25 @@ github_packages <- Sys.getenv("GITHUB_R_PACKAGES", unset = "")
 github_packages <- trimws(unlist(strsplit(github_packages, ",", fixed = TRUE)))
 github_packages <- github_packages[nzchar(github_packages)]
 
+normalize_github_spec <- function(spec) {
+  spec <- trimws(spec)
+  spec <- sub("^https?://github\\.com/", "", spec)
+  spec <- sub("^git@github\\.com:", "", spec)
+  spec <- sub("/+$", "", spec)
+  spec <- sub("\\.git(@.*)?$", "\\1", spec)
+  spec
+}
+
 if (length(github_packages)) {
   if (!requireNamespace("remotes", quietly = TRUE)) {
     install.packages("remotes")
   }
   for (pkg in github_packages) {
-    remotes::install_github(pkg, dependencies = TRUE, upgrade = "never")
+    remotes::install_github(
+      normalize_github_spec(pkg),
+      dependencies = TRUE,
+      upgrade = "never"
+    )
   }
 }
 

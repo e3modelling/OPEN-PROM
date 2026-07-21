@@ -3,6 +3,8 @@
 .codex
 .venv
 .vscode
+.env
+.env.*
 docs/_build
 runs
 outputs

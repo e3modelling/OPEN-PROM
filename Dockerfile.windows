@@ -19,6 +19,10 @@ ENV IAMC_COMMON_DEFINITIONS=C:\iamc\common-definitions
 ENV R_HOME=C:\R
 ENV PATH="C:\R\bin\x64;C:\rtools44\x86_64-w64-mingw32.static.posix\bin;C:\rtools44\usr\bin;C:\GAMS;${PATH}"
 
+RUN Set-Content -Path C:\Windows\System32\tee.cmd -Encoding ASCII -Value `
+    '@echo off', `
+    'powershell -NoProfile -Command "$input | Tee-Object -FilePath ''%~1''"'
+
 RUN New-Item -ItemType Directory -Force C:\install, C:\iamc | Out-Null ; `
     Invoke-WebRequest -Uri $env:R_INSTALLER_URL -OutFile C:\install\R-win.exe ; `
     Start-Process C:\install\R-win.exe -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART', '/DIR=C:\R' -Wait ; `
