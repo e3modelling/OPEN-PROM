@@ -76,43 +76,46 @@ i02ShareElcHP(runCy,"HOU",YTIME) = 0.1;
 i02ShareElcHP(runCy,"SE",YTIME) = 0.1;
 
 *shares iron and steel doubts on the definitions, in principle I would read these share directly from the data source
-i02ShareBlend(runCy,"IS","BFBOFBY","HCL",YTIME)$AN(YTIME) = 0.7;
-i02ShareBlend(runCy,"IS","BFBOFBY","NGS",YTIME)$AN(YTIME) = 0.1;
-i02ShareBlend(runCy,"IS","BFBOFBY","ELC",YTIME)$AN(YTIME) = 0.2;
+i02ShareBlend(runCy,"IS","BFBOFBY","HCL",YTIME) = 0.7;
+i02ShareBlend(runCy,"IS","BFBOFBY","NGS",YTIME) = 0.1;
+i02ShareBlend(runCy,"IS","BFBOFBY","ELC",YTIME)= 0.2;
 
-i02ShareBlend(runCy,"IS","DREAFBY","NGS",YTIME)$AN(YTIME) = 0.7;
-i02ShareBlend(runCy,"IS","DREAFBY","ELC",YTIME)$AN(YTIME) = 0.2;
-i02ShareBlend(runCy,"IS","DREAFBY","HCL",YTIME)$AN(YTIME) = 0.1;
+i02ShareBlend(runCy,"IS","DREAFBY","NGS",YTIME)= 0.7;
+i02ShareBlend(runCy,"IS","DREAFBY","ELC",YTIME)= 0.2;
+i02ShareBlend(runCy,"IS","DREAFBY","HCL",YTIME)= 0.1;
 
-i02ShareBlend(runCy,"IS"," DREAFCOALBY","HCL",YTIME)$AN(YTIME) = 0.8;
-i02ShareBlend(runCy,"IS"," DREAFCOALBY","ELC",YTIME)$AN(YTIME) = 0.2;
+i02ShareBlend(runCy,"IS"," DREAFCOALBY","HCL",YTIME) = 0.8;
+i02ShareBlend(runCy,"IS"," DREAFCOALBY","ELC",YTIME)= 0.2;
 
-i02ShareBlend(runCy,"IS","SCREAFBY","ELC",YTIME)$AN(YTIME) = 0.9;
-i02ShareBlend(runCy,"IS","SCREAFBY","NGS",YTIME)$AN(YTIME) = 0.1;
+i02ShareBlend(runCy,"IS","SCREAFBY","ELC",YTIME) = 0.9;
+i02ShareBlend(runCy,"IS","SCREAFBY","NGS",YTIME) = 0.1;
 
-i02ShareBlend(runCy,"IS","BFBOF","HCL",YTIME)$AN(YTIME) = 0.7;
-i02ShareBlend(runCy,"IS","BFBOF","NGS",YTIME)$AN(YTIME) = 0.1;
-i02ShareBlend(runCy,"IS","BFBOF","ELC",YTIME)$AN(YTIME) = 0.2;
+i02ShareBlend(runCy,"IS","BFBOF","HCL",YTIME)= 0.7;
+i02ShareBlend(runCy,"IS","BFBOF","NGS",YTIME) = 0.1;
+i02ShareBlend(runCy,"IS","BFBOF","ELC",YTIME) = 0.2;
 
-i02ShareBlend(runCy,"IS","DREAF","NGS",YTIME)$AN(YTIME) = 0.7;
-i02ShareBlend(runCy,"IS","DREAF","ELC",YTIME)$AN(YTIME) = 0.2;
-i02ShareBlend(runCy,"IS","DREAF","HCL",YTIME)$AN(YTIME) = 0.1;
+i02ShareBlend(runCy,"IS","DREAF","NGS",YTIME) = 0.7;
+i02ShareBlend(runCy,"IS","DREAF","ELC",YTIME) = 0.2;
+i02ShareBlend(runCy,"IS","DREAF","HCL",YTIME) = 0.1;
 
-i02ShareBlend(runCy,"IS","H2DREAF","H2F",YTIME)$AN(YTIME) = 0.7;
-i02ShareBlend(runCy,"IS","H2DREAF","ELC",YTIME)$AN(YTIME) = 0.2;
-i02ShareBlend(runCy,"IS","H2DREAF","NGS",YTIME)$AN(YTIME) = 0.1;
+i02ShareBlend(runCy,"IS","H2DREAF","H2F",YTIME) = 0.7;
+i02ShareBlend(runCy,"IS","H2DREAF","ELC",YTIME) = 0.2;
+i02ShareBlend(runCy,"IS","H2DREAF","NGS",YTIME) = 0.1;
 
-i02ShareBlend(runCy,"IS","BFBOFCCS","HCL",YTIME)$AN(YTIME) = 0.7;
-i02ShareBlend(runCy,"IS","BFBOFCCS","NGS",YTIME)$AN(YTIME) = 0.1;
-i02ShareBlend(runCy,"IS","BFBOFCCS","ELC",YTIME)$AN(YTIME) = 0.2;
+i02ShareBlend(runCy,"IS","BFBOFCCS","HCL",YTIME) = 0.7;
+i02ShareBlend(runCy,"IS","BFBOFCCS","NGS",YTIME) = 0.1;
+i02ShareBlend(runCy,"IS","BFBOFCCS","ELC",YTIME)= 0.2;
 
-i02ShareBlend(runCy,"IS","DREAFCCS","NGS",YTIME)$AN(YTIME) = 0.7;
-i02ShareBlend(runCy,"IS","DREAFCCS","ELC",YTIME)$AN(YTIME) = 0.2;
-i02ShareBlend(runCy,"IS","DREAFCCS","HCL",YTIME)$AN(YTIME) = 0.1;
+i02ShareBlend(runCy,"IS","DREAFCCS","NGS",YTIME)= 0.7;
+i02ShareBlend(runCy,"IS","DREAFCCS","ELC",YTIME) = 0.2;
+i02ShareBlend(runCy,"IS","DREAFCCS","HCL",YTIME)= 0.1;
 
-i02ShareBlend(runCy,"IS","SCREAF","ELC",YTIME)$AN(YTIME) = 0.9;
-i02ShareBlend(runCy,"IS","SCREAF","NGS",YTIME)$AN(YTIME) = 0.1;
+i02ShareBlend(runCy,"IS","SCREAF","ELC",YTIME) = 0.9;
+i02ShareBlend(runCy,"IS","SCREAF","NGS",YTIME)= 0.1;
 
+i02ShareFeed(runCy,DSBS,ITECH,EF,YTIME) = 0;
+
+imCo2EmiFacFeed(runCy,DSBS,EF,YTIME) = imCo2EmiFac(runCy,DSBS,EF,YTIME);
 
 *---
 table i02FuelConsICT(allCy,ICTSCEN,SSPSCEN,YTIME)             "Electrity demand of Data centers and infrastructure (Mtoe)"
