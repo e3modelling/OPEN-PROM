@@ -826,6 +826,13 @@ imUsfEneConvSubTech(runCy,"BU","TGSL",YTIME) = 0.5;
 imCapCostTech(runCy,"BU","TH2F",YTIME) = 1.5 * imCapCostTech(runCy,"BU","TGDO",YTIME);
 *---
 **  CDR
+*- #PARAM_CDR The following imCapCostTechMin are responsible for the secondary parameterization of the CDR technologies.
+*- Example:
+*- imCapCostTechMin(allCy,"DAC","HTDAC","%fBaseY%") = 1;
+*- imCapCostTechMin(allCy,"DAC","HTDAC",YTIME)$(ord(YTIME)>15 and ord(YTIME)<=25) = imCapCostTechMin(allCy,"DAC","HTDAC","%fBaseY%") - 0.05 * (ord(YTIME)-14);
+*- imCapCostTechMin(allCy,"DAC","HTDAC",YTIME)$(ord(YTIME)>25) = 0.2;
+*- Smooth increase of subsidy from 0 to 80% with an annual increase of 5% from 2025 to 2035, and then a constant subsidy of 80% from 2035 onwards.
+
 imCapCostTechMin(allCy,"DAC","HTDAC","%fBaseY%") = 1;
 imCapCostTechMin(allCy,"DAC","HTDAC",YTIME)$(ord(YTIME)>15 and ord(YTIME)<=25) = imCapCostTechMin(allCy,"DAC","HTDAC","%fBaseY%") - 0.05 * (ord(YTIME)-14);
 imCapCostTechMin(allCy,"DAC","HTDAC",YTIME)$(ord(YTIME)>25) = 0.2;

@@ -39,6 +39,11 @@ VmConsFuelTechCDRProd(allCy,CDRTECH,EF,YTIME)              "Annual fuel demand i
 ;
 
 Scalars
+*' #PARAM_CDR The 2 following scalars are responsible for the primary parameterization of the CDR deployment.
+*' S06EmissPercCDR is responsible for the response to the residual emissions. In ambitious scenarios, this reflects the pre-net-zero phase
+*' Proposed values for S06EmissPercCDR between 0.005 - 0.02.
+*' S06CapFacMinNewCDR is responsible for the minimum deployment of CDR technologies. In ambitious scenarios, this reflects the post-net-zero phase.
+*' Proposed values for S06CapFacMinNewCDR between 0.005 - 0.025.
 S06EmissPercCDR                                        "The percentage of emissions that needs to be captured by new CDR equipment" /0.003/
 S06CapFacMinNewCDR                                     "The minimum level of CDR capacity expansion as a percentage of last year's capacity" /0.015/
 ;

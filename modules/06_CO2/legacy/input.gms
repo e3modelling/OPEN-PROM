@@ -11,6 +11,7 @@ seq_min 20,
 seq_max 900
 / ;
 
+*' #PARAM_CDR i06MatFacCDR is responsible just for the expansion ratio between the CDR technologies. Values between 0 - 1.
 parameter i06MatFacCDR(CDRTECH)                 "Maturity factor of CDR technology expressing its elasticity in implementation regarding its financial sustainability"
 /
 HTDAC	0.50,
