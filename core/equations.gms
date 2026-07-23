@@ -31,7 +31,7 @@ qDummyObjPGALL(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
     1e-5 * SQR(
       i04MatFacPlaAvailCap(allCy,PGALL,YTIME) - i04MatFacPlaAvailCap(allCy,PGALL,YTIME-1)
     ) +
-    0 * SQR(
+    1e-4 * SQR(
       i04ScaleEndogScrap(allCy,PGALL,YTIME) - i04ScaleEndogScrap(allCy,PGALL,YTIME-1)
     )
   ) / CARD(PGALL);
