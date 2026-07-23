@@ -261,7 +261,7 @@ Q04ShareSatPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(PGREN(PGALL)))..
 Q04CostPowGenAvgLng(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCostPowGenAvgLng(allCy,YTIME)
         =E=
-    SUM(PGALL,(VmProdElec(allCy,PGALL,YTIME) + 1e-6) *
+    0.8 * SUM(PGALL,(VmProdElec(allCy,PGALL,YTIME) + 1e-6) *
         (
             (V04CostCapTech(allCy,PGALL,YTIME) + V04CostVarTech(allCy,PGALL,YTIME)) + i04FIT(allCy,PGALL,YTIME)
             +
