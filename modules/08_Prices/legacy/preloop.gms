@@ -20,3 +20,7 @@ $offtext
 V08IndexBioSupply.LO(runCy,YTIME) = 0;
 V08IndexBioSupply.L(runCy,YTIME)  = 1;
 *---
+VmPriceCarbon.LO(runCy,SBS,EFS,YTIME) = 0;
+VmPriceCarbon.FX(runCy,SBS,EFS,YTIME)$DATAY(YTIME) = 1e-3 * (
+      iCarbValYrExog(runCy,YTIME)$(INDSE1(SBS) or ((DOMSE1(SBS) or TRANS1(SBS)) and ord(YTIME) > 17))
+    ) * imCo2EmiFac(runCy,SBS,EFS,YTIME);

@@ -12,6 +12,7 @@ Q08PriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)               "Compute fuel prices 
 Q08PriceFuelAvgSub(allCy,DSBS,YTIME)	                   "Compute average fuel price per subsector" 	
 *Q08PriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)                 "Compute fuel prices per subsector and fuel especially for chp plants"
 Q08PriceElecInd(allCy,TCHP,YTIME)                               "Compute electricity industry prices"
+Q08PriceCarbon(allCy,SBS,EFS,YTIME)
 ;
 
 Variables
@@ -25,6 +26,7 @@ VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)                "Fuel prices per subs
 VmPriceFuelAvgSub(allCy,DSBS,YTIME)                        "Average fuel prices per subsector (k$2015/toe)"
 * VmPriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)                  "Fuel prices per subsector and fuel for CHP plants (kUS$2015/toe)"
 VmPriceElecInd(allCy,TCHP,YTIME)                                "Electricity index - a function of industry price (1)"
+VmPriceCarbon(allCy,SBS,EFS,YTIME)
 
 *' *** Miscellaneous
 *V08FuelPriSubNoCarb(allCy,SBS,EF,YTIME)	                   "Fuel prices per subsector and fuel  without carbon value (kUS$2015/toe)"

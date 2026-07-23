@@ -8,6 +8,7 @@ VmPriceFuelAvgSub.FX(runCyL,DSBS,YTIME)$TIME(YTIME) = VmPriceFuelAvgSub.L(runCyL
 VmPriceFuelSubsecCarVal.FX(runCyL,SBS,EF,YTIME)$TIME(YTIME) = VmPriceFuelSubsecCarVal.L(runCyL,SBS,EF,YTIME)$TIME(YTIME);
 VmPriceElecInd.FX(runCyL,TCHP,YTIME)$TIME(YTIME) = VmPriceElecInd.L(runCyL,TCHP,YTIME)$TIME(YTIME);
 V08PriceFuelSepCarbonWght.FX(runCyL,DSBS,EF,YTIME)$TIME(YTIME) = V08PriceFuelSepCarbonWght.L(runCyL,DSBS,EF,YTIME)$TIME(YTIME);
+VmPriceCarbon.FX(runCyL,SBS,EFS,YTIME)$TIME(YTIME) = VmPriceCarbon.L(runCyL,SBS,EFS,YTIME)$TIME(YTIME);
 *---
 *' ============================================================
 *' Land-use emulator emission accounting (landEmiMode == curve only)
