@@ -98,7 +98,10 @@ $ENDIF
     1e-3 * (
       VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,SBS,EFS,YTIME) -
       VmCarVal(allCy,"TRADE",YTIME-1) * imCo2EmiFac(allCy,SBS,EFS,YTIME-1)
-    )$DSBS(SBS)
+    )$(DSBS(SBS) and not DOMSE1(SBS)) +
+    1e-3 * (
+      VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,SBS,EFS,YTIME) 
+    )$((DOMSE1(SBS) or TRANS1(SBS)) and ord(YTIME) > 17)
     ;
 
 Q08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)$(SECtoEF(DSBS,EF) $TIME(YTIME) $runCy(allCy))..
