@@ -53,16 +53,16 @@ Q05PremRepH2Prod(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$H2TECHPM(H2TECH
         =E=
     V05CostVarProdH2Tech(allCy,H2TECH,YTIME-1)**(-i05WBLGammaH2Prod(allCy,YTIME)) /
     (
-      iWBLPremRepH2Prod(allCy,H2TECH,YTIME) *
+      0.03 * iWBLPremRepH2Prod(allCy,H2TECH,YTIME) *
       (
         sum(H2TECH2$(not sameas(H2TECH,H2TECH2)),
-          V05CostProdH2Tech(allCy,H2TECH2,YTIME-1)
+          V05CostProdH2Tech(allCy,H2TECH2,YTIME-1) ** (-i05WBLGammaH2Prod(allCy,YTIME))
           !!V05GapShareH2Tech1(allCy,H2TECH2,YTIME)*
           !!(1/i05AvailH2Prod(allCy,H2TECH,YTIME)*
           !!V05CostProdH2Tech(allCy,H2TECH2,YTIME) +
           !!(1-1/i05AvailH2Prod(allCy,H2TECH,YTIME)) * V05CostVarProdH2Tech(allCy,H2TECH2,YTIME))
         )
-      )**(-i05WBLGammaH2Prod(allCy,YTIME)) +
+      ) +
       V05CostVarProdH2Tech(allCy,H2TECH,YTIME-1)**(-i05WBLGammaH2Prod(allCy,YTIME))
     );
 
