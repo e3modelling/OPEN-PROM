@@ -116,6 +116,10 @@ i02ShareBlend(runCy,"IS","SCREAF","NGS",YTIME)= 0.1;
 i02ShareFeed(runCy,DSBS,ITECH,EF,YTIME) = 0;
 
 imCo2EmiFacFeed(runCy,DSBS,EF,YTIME) = imCo2EmiFac(runCy,DSBS,EF,YTIME);
+i02CapFactor(allCy,DSBS,ITECH,YTIME) = 1;
+i02CapFactor(allCy,"IS",ITECH,YTIME) = 0.77; !!https://www2.gerdau.com/market-update/global-crude-steel-production-and-capacity-utilization-11
+i02INDSpecificEnergyIntensity(allCy,DSBS,ITECH,YTIME) = 1;
+i02INDSpecificEnergyIntensity(allCy,"IS",ITECH,YTIME) = 0.5;
 
 *---
 table i02FuelConsICT(allCy,ICTSCEN,SSPSCEN,YTIME)             "Electrity demand of Data centers and infrastructure (Mtoe)"
