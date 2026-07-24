@@ -1,0 +1,55 @@
+# escape=`
+
+ARG WINDOWS_VERSION=ltsc2022
+FROM mcr.microsoft.com/windows/servercore:${WINDOWS_VERSION}
+
+SHELL ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command"]
+
+ARG R_VERSION=4.4.3
+ARG RTOOLS_VERSION=44
+ARG R_INSTALLER_URL="https://cran.r-project.org/bin/windows/base/old/4.4.3/R-4.4.3-win.exe"
+ARG RTOOLS_INSTALLER_URL="https://cran.r-project.org/bin/windows/Rtools/rtools44/files/rtools44-6459-6401.exe"
+ARG COMMON_DEFINITIONS_REPO_ZIP="https://github.com/IAMconsortium/common-definitions/archive/d877b5f56386317b66214bdb8cc694befda5596c.zip"
+
+ENV R_INSTALLER_URL=${R_INSTALLER_URL}
+ENV RTOOLS_INSTALLER_URL=${RTOOLS_INSTALLER_URL}
+ENV COMMON_DEFINITIONS_REPO_ZIP=${COMMON_DEFINITIONS_REPO_ZIP}
+ENV OPENPROM_CONFIG=config.windows-container.json
+ENV IAMC_COMMON_DEFINITIONS=C:\iamc\common-definitions
+ENV R_HOME=C:\R
+ENV PATH="C:\R\bin\x64;C:\rtools44\x86_64-w64-mingw32.static.posix\bin;C:\rtools44\usr\bin;C:\GAMS;${PATH}"
+
+RUN Set-Content -Path C:\Windows\System32\tee.cmd -Encoding ASCII -Value `
+    '@echo off', `
+    'powershell -NoProfile -Command "$input | Tee-Object -FilePath ''%~1''"'
+
+RUN New-Item -ItemType Directory -Force C:\install, C:\iamc | Out-Null ; `
+    Invoke-WebRequest -Uri $env:R_INSTALLER_URL -OutFile C:\install\R-win.exe ; `
+    Start-Process C:\install\R-win.exe -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART', '/DIR=C:\R' -Wait ; `
+    Remove-Item C:\install\R-win.exe -Force
+
+RUN Invoke-WebRequest -Uri $env:RTOOLS_INSTALLER_URL -OutFile C:\install\rtools.exe ; `
+    Start-Process C:\install\rtools.exe -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART', '/DIR=C:\rtools44' -Wait ; `
+    Remove-Item C:\install\rtools.exe -Force
+
+RUN Invoke-WebRequest -Uri $env:COMMON_DEFINITIONS_REPO_ZIP -OutFile C:\install\common-definitions.zip ; `
+    Expand-Archive C:\install\common-definitions.zip -DestinationPath C:\iamc ; `
+    $expanded = Get-ChildItem C:\iamc -Directory | Where-Object { $_.Name -like 'common-definitions-*' } | Select-Object -First 1 ; `
+    Move-Item $expanded.FullName $env:IAMC_COMMON_DEFINITIONS ; `
+    Remove-Item C:\install\common-definitions.zip -Force
+
+WORKDIR C:\open-prom
+
+COPY docker\install-r-packages.R docker\install-r-packages.R
+
+ARG R_UNIVERSE_REPOS="https://pik-piam.r-universe.dev,https://e3modelling.r-universe.dev"
+ARG GITHUB_R_PACKAGES="https://github.com/e3modelling/mrprom.git,https://github.com/e3modelling/postprom.git"
+ENV R_UNIVERSE_REPOS=${R_UNIVERSE_REPOS}
+ENV GITHUB_R_PACKAGES=${GITHUB_R_PACKAGES}
+
+RUN Rscript docker\install-r-packages.R
+
+COPY . .
+
+ENTRYPOINT ["Rscript", "start.R"]
+CMD ["task_id=2"]

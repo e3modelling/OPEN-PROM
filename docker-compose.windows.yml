@@ -1,0 +1,23 @@
+services:
+  open-prom-windows:
+    build:
+      context: .
+      dockerfile: Dockerfile.windows
+      args:
+        R_UNIVERSE_REPOS: "https://pik-piam.r-universe.dev,https://e3modelling.r-universe.dev"
+        GITHUB_R_PACKAGES: "https://github.com/e3modelling/mrprom.git,https://github.com/e3modelling/postprom.git"
+        COMMON_DEFINITIONS_REPO_ZIP: "https://github.com/IAMconsortium/common-definitions/archive/d877b5f56386317b66214bdb8cc694befda5596c.zip"
+    image: open-prom:windows-local
+    working_dir: C:\open-prom
+    environment:
+      OPENPROM_CONFIG: config.windows-container.json
+      IAMC_COMMON_DEFINITIONS: C:\iamc\common-definitions
+    volumes:
+      - .\config.windows-container.json:C:\open-prom\config.windows-container.json:ro
+      - .\data:C:\open-prom\data:ro
+      - .\targets:C:\open-prom\targets:ro
+      - .\runs:C:\open-prom\runs
+      - .\outputs:C:\outputs
+      # Set GAMS_WINDOWS_HOME in .env.windows to a Windows GAMS installation.
+      - ${GAMS_WINDOWS_HOME:-C:\GAMS\47}:C:\GAMS:ro
+    command: ["task_id=2"]
