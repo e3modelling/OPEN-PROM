@@ -384,6 +384,9 @@ GAMSCmdArgs <- c("--DevMode=0", "--GenerateInput=off", "lo=4", "idir=./data",
                  paste0("--fEndY=", selectedYear),
                  paste0("--fScenario=", selectedScenario))
 
+# Keep an unmodified template of the GAMS args so we can substitute per-region end years
+GAMSCmdArgsTemplate <- GAMSCmdArgs
+
 # --- Emissions variable to track ---
 # Set emissionsVariable to any variable name returned by reportEmissions().
 # Set emissionsScale so that after multiplication the unit matches your budget targets.
@@ -402,7 +405,9 @@ EU27_REGIONS <- c("AUT","BEL","BGR","CYP","CZE","DEU","DNK","ESP","EST",
                    "LVA","MLT","NLD","POL","PRT","ROU","SVK","SVN","SWE")
 
 # --- Target list ---
-# Each entry is a named budget in the unit of emissionsVariable * emissionsScale.
+# Each entry is one of:
+#  - a scalar numeric budget (backwards compatible): targetList$REGION = BUDGET
+#  - a named list with budget and year: targetList$REGION = list(budget = BUDGET, year = YYYY)
 # Special keys:
 #   "EU27"  -> shared alpha applied to all 27 EU member rows; emissions summed over members.
 #   "WORLD" -> alpha applied to all region rows; emissions summed globally.
@@ -411,20 +416,21 @@ EU27_REGIONS <- c("AUT","BEL","BGR","CYP","CZE","DEU","DNK","ESP","EST",
 #
 # Current unit: cumulated Mt CO2  (Emissions|CO2|Cumulated.Gt CO2 * 1000)
 targetList <- list(
-  #"WORLD" = 1257571,  # optional: comment out to skip world run
-  # "EU27"  = 1425    # sum of all 27 EU member budgets - 2035
-  "CAZ"   = 840,
-  "CHA"   = 13447,
-  "GBR"   = 263,
-  "IND"   = 3981,
-  "JPN"   = 766,
-  "LAM"   = 3618,
-  "MEA"   = 4868,
-  "NEU"   = 842,
-  "OAS"   = 5244,
-  "REF"   = 3119,
-  "SSA"   = 3733
-  # "USA"   = 100855
+  # Examples (mix-and-match supported):
+  # WORLD = 1257571,  # optional: comment out to skip world run
+  EU27  = list(budget = 3000, year = 2027),
+  CAZ  = list(budget = 1300,  year = 2028)
+  # CHA  = list(budget = 13447, year = 2032),
+  # GBR  = list(budget = 263,  year = 2030),
+  # IND  = list(budget = 3981, year = 2040),
+  # JPN  = list(budget = 766,  year = 2030),
+  # LAM  = list(budget = 3618, year = 2035),
+  # MEA  = list(budget = 4868, year = 2030),
+  # NEU  = list(budget = 842,  year = 2030),
+  # OAS  = list(budget = 5244, year = 2040),
+  # REF  = list(budget = 3119, year = 2035),
+  # SSA  = list(budget = 3733, year = 2030)
+  # USA  = 100855  # numeric form still supported: interpreted as budget with fallback year = selectedYear
 )
 
 logFilePath <- "Carbon_price_optimization.log"
@@ -454,7 +460,17 @@ resultsLog <- list()
 for (regName in names(targetList)) {
 
   lastTestedPolicy <- NULL   # don't carry a previous region's tested policy into this run
-  bg <- targetList[[regName]]
+  entry <- targetList[[regName]]
+  # Support two formats: numeric (budget only) or list(budget=..., year=...)
+  if (is.list(entry) && !is.null(entry$budget)) {
+    bg <- as.numeric(entry$budget)
+    regionTargetYear <- if (!is.null(entry$year)) as.integer(entry$year) else selectedYear
+  } else if (is.numeric(entry) && length(entry) == 1) {
+    bg <- as.numeric(entry)
+    regionTargetYear <- selectedYear
+  } else {
+    stop(sprintf("Invalid targetList entry for '%s' — must be numeric or list(budget=..., year=...)", regName))
+  }
 
   if (regName == "WORLD") {
     actualRegion <- NULL   # NULL -> alpha applied to all region rows
@@ -467,7 +483,7 @@ for (regName in names(targetList)) {
     displayName  <- regName
   }
 
-  message(sprintf("\n--- Optimizing %s (Target: %.4f) ---", displayName, bg))
+  message(sprintf("\n--- Optimizing %s (Target: %.4f, Year: %d) ---", displayName, bg, regionTargetYear))
   skipRegion <- FALSE
 
   tryCatch({
@@ -477,13 +493,18 @@ for (regName in names(targetList)) {
     configureGamsFile("main.gms", actualRegion)
   }
 
+  # Ensure GAMS runs use the region-specific solve horizon (end year)
+  GAMSCmdArgs <- GAMSCmdArgsTemplate
+  i_endy <- grep("^--fEndY=", GAMSCmdArgs)
+  if (length(i_endy)) GAMSCmdArgs[i_endy] <- paste0("--fEndY=", regionTargetYear) else GAMSCmdArgs <- c(GAMSCmdArgs, paste0("--fEndY=", regionTargetYear))
+
   brkt <- autoBracketFromSeed(
     seedAlpha    = 0.1,
     budgetTarget = bg,
     envWide      = currentEnvWide,
     yearCols     = yearCols,
     targetRegion = actualRegion,
-    targetYear   = selectedYear,
+    targetYear   = regionTargetYear,
     minAlpha     = -0.5,           # Allow price reduction up to -50% if needed
     maxAlpha     = 40.0,           # Allow up to +1000% increase
     expandFactor = 4.0,
@@ -501,7 +522,7 @@ for (regName in names(targetList)) {
       yearCols     = yearCols,
       budgetTarget = bg,
       targetRegion = actualRegion, # Passes NULL if global
-      targetYear   = selectedYear,
+      targetYear   = regionTargetYear,
       lowerAlpha   = brkt$lowerAlpha,
       upperAlpha   = brkt$upperAlpha,
       eLow         = brkt$EL,
