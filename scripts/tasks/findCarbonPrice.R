@@ -273,9 +273,14 @@ autoBracketFromSeed <- function(seedAlpha, budgetTarget, envWide, yearCols, targ
       EU <- probe(aU); tries <- tries + 1
       if (verbose) message(sprintf("Up probe: alpha=%.4f → E=%.6f", aU, EU))
       if (EU <= budgetTarget || tries >= maxProbes) break
+      # Still above target: this probe is a tighter lower bound than the seed, so keep
+      # it instead of leaving aL stuck at seedAlpha (e.g. bracket [0.4, 1.6], not [0.1, 1.6]).
+      aL <- aU; EL <- EU
       aU <- min(maxAlpha, aU * expandFactor)
     }
-    if (EU > budgetTarget) { aU <- maxAlpha; EU <- Emax }  # probes exhausted: fall back to feasible max
+    # Probes exhausted with the last one still above target: it is a valid lower bound too,
+    # so promote it before falling back to the known-feasible max.
+    if (EU > budgetTarget) { aL <- aU; EL <- EU; aU <- maxAlpha; EU <- Emax }
   }
   list(lowerAlpha = aL, upperAlpha = aU, EL = EL, EU = EU)
 }
@@ -369,7 +374,7 @@ extractEmissions <- function(dataMagpie) {
 # Run
 # ----------------------------
 start_time <- Sys.time()
-selectedYear <- 2030
+selectedYear <- 2050
 changeCarbonPriceFromYear <- 2026
 
 # Model scenario passed to GAMS via --fScenario (overrides $evalGlobal fScenario in main.gms):
@@ -418,19 +423,19 @@ EU27_REGIONS <- c("AUT","BEL","BGR","CYP","CZE","DEU","DNK","ESP","EST",
 targetList <- list(
   # Examples (mix-and-match supported):
   # WORLD = 1257571,  # optional: comment out to skip world run
-  EU27  = list(budget = 3000, year = 2027),
-  CAZ  = list(budget = 1300,  year = 2028)
-  # CHA  = list(budget = 13447, year = 2032),
-  # GBR  = list(budget = 263,  year = 2030),
-  # IND  = list(budget = 3981, year = 2040),
-  # JPN  = list(budget = 766,  year = 2030),
-  # LAM  = list(budget = 3618, year = 2035),
-  # MEA  = list(budget = 4868, year = 2030),
-  # NEU  = list(budget = 842,  year = 2030),
-  # OAS  = list(budget = 5244, year = 2040),
-  # REF  = list(budget = 3119, year = 2035),
-  # SSA  = list(budget = 3733, year = 2030)
-  # USA  = 100855  # numeric form still supported: interpreted as budget with fallback year = selectedYear
+  # EU27  = list(budget = 1710, year = 2045),
+  # CAZ  = list(budget = 1008,  year = 2050),
+  # CHA  = list(budget = 13447, year = 2050),
+  # GBR  = list(budget = 315,  year = 2040),
+  # IND  = list(budget = 4778, year = 2050),
+  # JPN  = list(budget = 920,  year = 2040),
+  # LAM  = list(budget = 3618, year = 2050),
+  # MEA  = list(budget = 4868, year = 2060),
+  # NEU  = list(budget = 842,  year = 2040),
+  # OAS  = list(budget = 5244, year = 2050),
+  # REF  = list(budget = 3119, year = 2060),
+  # SSA  = list(budget = 3733, year = 2050)
+  USA  = 0  # numeric form still supported: interpreted as budget with fallback year = selectedYear
 )
 
 logFilePath <- "Carbon_price_optimization.log"
