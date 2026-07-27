@@ -166,11 +166,11 @@ Q02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     );
 
 *' NEW EQUATION - Useful Electricity to Final Electricity (Check if needed to add equipment of electricity)
-Q02FinalElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V02FinalElecNonSubIndTert(allCy,INDDOM,YTIME) 
+Q02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(TIME(YTIME) and runCy(allCy) and (INDSE(DSBS) or RESCOM(DSBS)))..
+    V02FinalElecNonSubIndTert(allCy,DSBS,YTIME) 
         =E=
-    V02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME) / 
-    imUsfEneConvSubTech(allCy,INDDOM,"TELC",YTIME);
+    V02UsefulElecNonSubIndTert(allCy,DSBS,YTIME) / 
+    imUsfEneConvSubTech(allCy,DSBS,"TELC",YTIME);
 
 *' This equation calculates the consumption of fuels in each demand subsector.
 *' It considers the consumption of remaining substitutable equipment, the technology share in new equipment, and the final demand
@@ -178,15 +178,16 @@ Q02FinalElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' OLD EQUATION: Q02ConsFuelInclHP(allCy,DSBS,EF,YTIME) --> NEW EQUATION:Q02ConsFuelIncl(allCy,DSBS,EF,YTIME)
 
 *' OLD VARIABLE: VmConsElecNonSubIndTert(allCy,INDDOM,YTIME) --> NEW VARIABLE:VmUsefulElecNonSubIndTert(allCy,DSBS,YTIME)
-Q02ConsFuel(allCy,DSBS,EF,YTIME)$(TIME(YTIME)$((INDDOM(DSBS) or NENSE(DSBS)) and SECtoEF(DSBS,EF))$runCy(allCy))..
-    VmConsFuel(allCy,DSBS,EF,YTIME) 
+Q02ConsFuel(allCy,DSBS,EFS,YTIME)$(TIME(YTIME)$((INDDOM(DSBS) or NENSE(DSBS)) and SECtoEF(DSBS,EFS))$runCy(allCy))..
+    VmConsFuel(allCy,DSBS,EFS,YTIME) 
         =E=
-    sum(ITECH$(ITECHtoEF(ITECH,EF) and SECTTECH(DSBS,ITECH)),
-      i02ShareBlend(allCy,DSBS,ITECH,EF,YTIME) *
+    sum(ITECH$(ITECHtoEF(ITECH,EFS) and SECTTECH(DSBS,ITECH)),
+      i02ShareBlend(allCy,DSBS,ITECH,EFS,YTIME) *
       V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) *
       i02util(allCy,DSBS,ITECH,YTIME)
     )$(not sameas("AG",DSBS)) +
-    V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(INDDOM(DSBS) and not sameas("AG",DSBS) and ELCEF(EF));
+    SUM(AGRI_MODES,V12ConsFuel(allCy,AGRI_MODES,EFS,YTIME))$sameas("AG",DSBS) +
+    V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(INDDOM(DSBS) and not sameas("AG",DSBS) and ELCEF(EFS));
 
 *' Average efficiency of substitutable demand
 Q02IndAvrEffFinalUseful(allCy,DSBS,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(DSBS))$runCy(allCy))..

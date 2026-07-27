@@ -3,7 +3,8 @@
  
 *'                *VARIABLE INITIALISATION*
 *---
-V02FinalElecNonSubIndTert.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = imFuelCons(runCy,INDDOM,"ELC",YTIME) * imShrNonSubElecInTotElecDem(runCy,INDDOM);
+V02FinalElecNonSubIndTert.FX(runCy,DSBS,YTIME)$(not An(YTIME)) = imFuelCons(runCy,DSBS,"ELC",YTIME) * imShrNonSubElecInTotElecDem(runCy,DSBS);
+V02FinalElecNonSubIndTert.FX(runCy,DSBS,YTIME)$sameas("AG",DSBS) = 0;
 *---
 V02UsefulElecNonSubIndTert.LO(runCy,INDDOM,YTIME) = 0;
 V02UsefulElecNonSubIndTert.L(runCy,INDDOM,YTIME) = V02FinalElecNonSubIndTert.L(runCy,INDDOM,"%fBaseY%") * imUsfEneConvSubTech(runCy,INDDOM,"TELC","%fBaseY%");
