@@ -726,10 +726,12 @@ subsectors.</p></li>
 <ul class="simple">
 <li><p><strong><code class="docutils literal notranslate"><span class="pre">static</span></code></strong> (<code class="docutils literal notranslate"><span class="pre">softLinkMAgPIE=off</span></code>, <code class="docutils literal notranslate"><span class="pre">landUseEmulator=legacy</span></code>) — BMSWAS follows the same recursive price
 dynamics as every other fuel.</p></li>
-<li><p><strong><code class="docutils literal notranslate"><span class="pre">curve</span></code></strong> (<code class="docutils literal notranslate"><span class="pre">softLinkMAgPIE=off</span></code>, <code class="docutils literal notranslate"><span class="pre">landUseEmulator=globiom</span></code>/<code class="docutils literal notranslate"><span class="pre">magpie</span></code>) — BMSWAS price is driven by a fitted
-land-use supply curve <span class="math notranslate nohighlight">\(P = a + b\,Q^{c}\)</span>, applied as a year-on-year scarcity ratio on lagged primary biomass
-production. The coefficients come from <code class="docutils literal notranslate"><span class="pre">imBmswasSupplyCoef</span></code> (loaded from <code class="docutils literal notranslate"><span class="pre">iBmswasSupplyCoef_&lt;source&gt;.csv</span></code>,
-produced by mrprom), with the active carbon-price row picked by <code class="docutils literal notranslate"><span class="pre">emulatorGHGScen</span></code>.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">curve</span></code></strong> (<code class="docutils literal notranslate"><span class="pre">softLinkMAgPIE=off</span></code>, <code class="docutils literal notranslate"><span class="pre">landUseEmulator=globiom</span></code>/<code class="docutils literal notranslate"><span class="pre">magpie</span></code>) — the selected emulator supplies the
+BMSWAS price response. GLOBIOM applies the year-on-year ratio from <span class="math notranslate nohighlight">\(P=a+bQ^c\)</span> using lagged BMSWAS production
+and <code class="docutils literal notranslate"><span class="pre">iBmswasSupplyCoef_globiom.csv</span></code>. MAgPIE evaluates the H12 absolute-price response
+<span class="math notranslate nohighlight">\(P=p_a+p_bQ+p_cQ^2\)</span> from <code class="docutils literal notranslate"><span class="pre">iBmswasBioPriceH12_magpie.csv</span></code>, where
+<span class="math notranslate nohighlight">\(Q=0.4\,BMSWAS+0.6\,(BGSL+BKRS+BGAS)\)</span>; non-EUR regions use current Q and EU28 share the EUR price based on
+preceding-year EU28 Q. <code class="docutils literal notranslate"><span class="pre">emulatorCarbonPriceScenario</span></code> selects the source-specific carbon-price/policy row.</p></li>
 <li><p><strong><code class="docutils literal notranslate"><span class="pre">softfx</span></code></strong> (<code class="docutils literal notranslate"><span class="pre">softLinkMAgPIE=on</span></code>) — BMSWAS is excluded from the price equation entirely; its price is fixed
 (<code class="docutils literal notranslate"><span class="pre">.FX</span></code>) to <code class="docutils literal notranslate"><span class="pre">iPricesMagpie</span></code> from the MAgPIE soft-link in <code class="docutils literal notranslate"><span class="pre">core/preloop.gms</span></code>.</p></li>
 </ul>

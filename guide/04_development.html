@@ -466,9 +466,10 @@ time. The hydrogen <em>production</em> equations around it are active.</p></td>
 emissions from MAgPIE’s <code class="docutils literal notranslate"><span class="pre">.mif</span></code>) is an opt-in mode.</p></td>
 </tr>
 <tr class="row-odd"><td><p>Land-use emulator</p></td>
-<td><p><strong>globiom</strong></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">landUseEmulator</span></code> defaults to <code class="docutils literal notranslate"><span class="pre">globiom</span></code>, i.e. the pre-fitted supply/emission curves <em>are</em> active by default;
-set it to <code class="docutils literal notranslate"><span class="pre">legacy</span></code> to disable the emulator (static biomass price, exogenous land emissions).</p></td>
+<td><p><strong>magpie / Npi_Default</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">landUseEmulator</span></code> defaults to <code class="docutils literal notranslate"><span class="pre">magpie</span></code> and <code class="docutils literal notranslate"><span class="pre">emulatorCarbonPriceScenario</span></code> defaults to <code class="docutils literal notranslate"><span class="pre">Npi_Default</span></code>, so the
+MAgPIE-derived price and emission responses are active by default. Set the source to <code class="docutils literal notranslate"><span class="pre">legacy</span></code> to disable the
+emulator (static biomass price, exogenous land emissions).</p></td>
 </tr>
 </tbody>
 </table>
