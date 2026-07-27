@@ -81,7 +81,6 @@ vDummyObjPGALL                                             "Dummy maximisation v
 vDummyObjTRANSE                                            "Dummy maximisation variable for TRANSE (1)"
 vDummyObjINDDOMShares(DSBS)                                 "Dummy maximisation variable for INDDOM shares (1)"
 vDummyObjINDDOMFinalEnergy(DSBS)                            "Dummy maximisation variable for INDDOM final energy (1)"
-VmElecConsHeatPla(allCy,DSBS,YTIME)                        "Electricity consumed in heatpump plants (Mtoe)"
 ;
 
 Positive Variables
