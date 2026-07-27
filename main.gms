@@ -283,10 +283,16 @@ $evalGlobal fScenario 1 !! Setting the model scenario: 0 is No carbon price, 1 i
 *** end of dollar commands section, no further flag definitions allowed 
 
 *' *** load input data files
-$ifthen.genInp %GenerateInput% == on 
-$ifthen.loadData %DevMode% == 0 $call "Rscript ./scripts/tasks/loadMadratData.R DevMode=0"
-$elseif.loadData %DevMode% == 1 $call "Rscript ./scripts/tasks/loadMadratData.R DevMode=1"
-$elseif.loadData %DevMode% == 2 $call "Rscript ./scripts/tasks/loadMadratData.R DevMode=2"
+$ifthen.genInp %GenerateInput% == on
+$ifthen.loadData %DevMode% == 0
+$call "Rscript ./scripts/tasks/loadMadratData.R DevMode=0"
+$if errorlevel 1 $abort "mrprom input-data generation failed for DevMode=0. See the R output above."
+$elseif.loadData %DevMode% == 1
+$call "Rscript ./scripts/tasks/loadMadratData.R DevMode=1"
+$if errorlevel 1 $abort "mrprom input-data generation failed for DevMode=1. See the R output above."
+$elseif.loadData %DevMode% == 2
+$call "Rscript ./scripts/tasks/loadMadratData.R DevMode=2"
+$if errorlevel 1 $abort "mrprom input-data generation failed for DevMode=2. See the R output above."
 $endif.loadData
 $endif.genInp
 
