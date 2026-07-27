@@ -40,7 +40,3 @@ V07EmissionsNet.FX(runCy,YTIME)$DATAY(YTIME) = sum(SSBS, V07GrossEmissCO2Supply.
     - sum((SBS,EFS)$SECtoEF(SBS,EFS), V06CO2CaptureCCS.L(runCy,SBS,EFS,YTIME))
     - sum(CDRTECH, V06CapCDR.L(runCy,CDRTECH,YTIME));
 *---
-V07EmissionsNetPart.L(runCy,YTIME) = 0.1;
-V07EmissionsNetPart.FX(runCy,YTIME)$DATAY(YTIME) = V07EmissionsNet.L(runCy,YTIME) /
-    sum(runCy2, V07EmissionsNet.L(runCy2,YTIME));
-*---

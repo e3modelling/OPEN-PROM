@@ -19,7 +19,7 @@
       "CountrySolveMode": "serial"
     },
     "land_use_emulator": {
-      "source": "globiom",
+      "source": "legacy",
       "carbon_price": "GHG100"
     },
     "soft_link_magpie": {

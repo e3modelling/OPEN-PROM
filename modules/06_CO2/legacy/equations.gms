@@ -44,7 +44,7 @@ Q06CaptCummCO2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       =E= 
     V06CaptCummCO2(allCy,YTIME-1) +
     sum((SBS,EFS)$SECtoEF(SBS,EFS),V06CO2CaptureCCS(allCy,SBS,EFS,YTIME)) +
-    sum(CDRTECH,V06CapCDR(allCy,CDRTECH,YTIME) * 1e-6);   
+    sum(DACTECH,V06CapCDR(allCy,DACTECH,YTIME) * 1e-6);   
 
 Q06CaptCummCO2Glob(YTIME)$(TIME(YTIME))..
     V06CaptCummCO2Glob(YTIME) 
@@ -66,108 +66,130 @@ Q06CstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
    (i06CO2SeqData("seq_max") - i06CO2SeqData("seq_min")) / 2 *
    (1+tanh(i06CO2SeqData("sig_a") / (i06CO2SeqData("sig_b") * i06CO2SeqData("seq_max")) * (V06CaptCummCO2Glob(YTIME) * 1e-3 - i06CO2SeqData("sig_b") * i06CO2SeqData("seq_max"))));           
 
-*' The equation calculates the CAPEX of each DAC technology, as it's affected by a learning curve ($/tCO2).
-Q06GrossCapDAC(CDRTECH,YTIME)$(TIME(YTIME))..
-    V06GrossCapDAC(CDRTECH,YTIME)
+*' The equation calculates the CAPEX of each CDR technology, as it's affected by a learning curve ($/tCO2).
+Q06GrossCapCDR(CDRTECH,YTIME)$(TIME(YTIME))..
+    V06GrossCapCDR(CDRTECH,YTIME)
             =E=         
     0.5 * 
     (
-      (i06GrossCapDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.75)/log(2))) +
-      i06GrossCapDACMin(CDRTECH) +
+      (i06GrossCapCDR(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.98)/log(2))) +
+      i06GrossCapCDRMin(CDRTECH) +
       sqrt(
         sqr(
-          (i06GrossCapDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.75)/log(2))) -
-          i06GrossCapDACMin(CDRTECH)
+          (i06GrossCapCDR(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.98)/log(2))) -
+          i06GrossCapCDRMin(CDRTECH)
         )
       )
     );
 
-*' The equation calculates the fixed and O&M costs of each DAC technology, as they are affected by a learning curve.
-Q06FixOandMDAC(CDRTECH,YTIME)$(TIME(YTIME))..
-    V06FixOandMDAC(CDRTECH,YTIME)
+*' The equation calculates the fixed and O&M costs of each CDR technology, as they are affected by a learning curve.
+Q06FixOandMCDR(CDRTECH,YTIME)$(TIME(YTIME))..
+    V06FixOandMCDR(CDRTECH,YTIME)
             =E=         
     0.5 * 
     (
-      (i06FixOandMDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.75)/log(2))) +
-      i06FixOandMDACMin(CDRTECH) +
+      (i06FixOandMCDR(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.98)/log(2))) +
+      i06FixOandMCDRMin(CDRTECH) +
       sqrt(
         sqr(
-          (i06FixOandMDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.75)/log(2))) -
-          i06FixOandMDACMin(CDRTECH)
+          (i06FixOandMCDR(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.98)/log(2))) -
+          i06FixOandMCDRMin(CDRTECH)
         )
       )
     )
 ;
 
-*' The equation calculates the variable costs of each DAC technology including the CO2 storage costs, as they are affected by a learning curve.
-Q06VarCostDAC(CDRTECH,YTIME)$(TIME(YTIME))..
-    V06VarCostDAC(CDRTECH,YTIME)
+*' The equation calculates the variable costs of each CDR technology including the CO2 storage costs, as they are affected by a learning curve.
+Q06VarCostCDR(CDRTECH,YTIME)$(TIME(YTIME))..
+    V06VarCostCDR(CDRTECH,YTIME)
             =E=         
     0.5 * 
     (
-      (i06VarCostDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.75)/log(2))) +
-      i06VarCostDACMin(CDRTECH) +
+      (i06VarCostCDR(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.98)/log(2))) +
+      i06VarCostCDRMin(CDRTECH) +
       sqrt(
         sqr(
-          (i06VarCostDAC(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.75)/log(2))) -
-          i06VarCostDACMin(CDRTECH)
+          (i06VarCostCDR(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.98)/log(2))) -
+          i06VarCostCDRMin(CDRTECH)
         )
       )
     )
 ;
 
-*' The equation calculates the Levelized Costs of DAC capacity, also taking into account its discount rate and life expectancy, 
+*' The equation calculates the Levelized Costs of CDR capacity, also taking into account its discount rate and life expectancy, 
 *' for each region (country) and year.
-Q06LvlCostDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V06LvlCostDAC(allCy,CDRTECH,YTIME)
-        =E=         
-    V06GrossCapDAC(CDRTECH,YTIME)
-    - VmSubsiDemTech(allCy,"DAC",CDRTECH,YTIME)$DACTECH(CDRTECH) - VmSubsiDemTech(allCy,"EW",CDRTECH,YTIME)$sameas("TEW",CDRTECH) +
-    V06FixOandMDAC(CDRTECH,YTIME) + 
-    V06VarCostDAC(CDRTECH,YTIME) - 20 +
-    i06SpecElecDAC(allCy,CDRTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME) +
-    i06SpecHeatDAC(allCy,CDRTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","NGS",YTIME) / 0.85 +
+Q06LvlCostCDR(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V06LvlCostCDR(allCy,CDRTECH,YTIME)
+            =E=         
+    V06GrossCapCDR(CDRTECH,YTIME) +
+    V06FixOandMCDR(CDRTECH,YTIME) + 
+    V06VarCostCDR(CDRTECH,YTIME) - 20 +
+    i06SpecElecCDR(allCy,CDRTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME) +
+    i06SpecHeatCDR(allCy,CDRTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","NGS",YTIME) / 0.85 +
     VmCstCO2SeqCsts(allCy,YTIME)$(not sameas("TEW", CDRTECH))
 ;
 
-*' The equation estimates the profitability of DAC capacity, calculating the rate between levelized costs (CAPEX, fixed and fuel needs)
+*' The equation calculates the Levelized Costs of CDR capacity, also taking into account its subsidy, for each region (country) and year.
+Q06CostFullCDR(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V06CostFullCDR(allCy,CDRTECH,YTIME)
+        =E=         
+    V06LvlCostCDR(allCy,CDRTECH,YTIME)
+    - VmSubsiDemTech(allCy,"DAC",CDRTECH,YTIME)$DACTECH(CDRTECH) - VmSubsiDemTech(allCy,"EW",CDRTECH,YTIME)$sameas("TEW",CDRTECH)
+;
+
+*' The equation estimates the profitability of CDR capacity, calculating the rate between levelized costs (CAPEX, fixed and fuel needs)
 *' and revenues/avoided costs (carbon values, carbon subsidies) regionally.
-Q06ProfRateDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V06ProfRateDAC(allCy,CDRTECH,YTIME)
+Q06ProfRateCDR(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V06ProfRateCDR(allCy,CDRTECH,YTIME)
         =E=
     sum(NAP$NAPtoALLSBS(NAP,"DAC"),VmCarVal(allCy,NAP,YTIME)) /
-    V06LvlCostDAC(allCy,CDRTECH,YTIME - 1)
+    V06CostFullCDR(allCy,CDRTECH,YTIME - 1)
 ;
+
+*' The equation estimates the CDR deployment gap for each region, technology and year based on previous-year net emissions
+*' and the profitability rate of CDR technologies. The emissions term is scaled by a policy parameter and transformed
+*' through a smooth hyperbolic tangent function,
+*' so profitability above a threshold increases deployment pressure while lower profitability keeps the gap close to zero.
+*' This gap is subsequently used to determine the annual increase in CDR capacity.
+Q06GapCDR(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+  V06GapCDR(allCy,CDRTECH,YTIME)
+      =E=
+  S06EmissPercCDR * V07EmissionsNet(allCy,YTIME-1) * 1e6
+  * (tanh(3 * (V06ProfRateCDR(allCy,CDRTECH,YTIME) - 1.5)) + 1) / 2
+  ;
+
 
 * The equation determines the annual growth rate of new DAC capacity by region and technology. 
 * The growth rate is modeled as a smooth S-shaped (tanh) function of the profitability rate, 
 * scaled by the maximum allowable expansion factor and adjusted by a technology-specific 
 * maturity factor. This formulation captures the idea that as DAC technologies become more profitable,
 * their growth rate will accelerate, but will eventually level off as they reach market saturation or face other constraints.
+*'It also chooses the higher between the gap and a minimum growth rate based on last year's capacity.
 *'The maturity factor allows for differentiation between technologies based on their readiness and potential for rapid deployment.
-Q06CapFacNewDAC(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-  V06CapFacNewDAC(allCy,CDRTECH,YTIME)
+Q06CapFacNewCDR(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+  V06CapFacNewCDR(allCy,CDRTECH,YTIME)
       =E=
-  S06CapFacMinNewDAC +
-  S06CapFacMaxNewDAC
-  * (tanh(0.7 * (V06ProfRateDAC(allCy,CDRTECH,YTIME) - 3)) + 1) / 2
-  * (tanh(0.3 * (200 * V07EmissionsNetPart(allCy,YTIME) - 1.5)) + 0.5) / 2
-  * i06MatFacDAC(CDRTECH);
+  (
+  V06GapCDR(allCy,CDRTECH,YTIME) + S06CapFacMinNewCDR * V06CapCDR(allCy,CDRTECH,YTIME-1)
+  +
+  sqrt(sqr(
+    V06GapCDR(allCy,CDRTECH,YTIME) - S06CapFacMinNewCDR * V06CapCDR(allCy,CDRTECH,YTIME-1)
+  ))) / 2
+  * i06MatFacCDR(CDRTECH);
 
-*' The equation calculates the DAC installed capacity annually and regionally,
-*' adding capacity based on the maturity of the technology, as well as given capacities of actual scheduled DAC units.
+*' The equation calculates the CDR installed capacity annually and regionally.
 Q06CapCDR(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06CapCDR(allCy,CDRTECH,YTIME)
       =E=
-    V06CapCDR(allCy,CDRTECH,YTIME-1) * (1 + V06CapFacNewDAC(allCy,CDRTECH,YTIME)) +
-    i06SchedNewCapDAC(allCy,CDRTECH,YTIME);
+    (V06CapCDR(allCy,CDRTECH,YTIME-1) + V06CapFacNewCDR(allCy,CDRTECH,YTIME))
+    ;
 
 *' The equation calculates the different fuels consumed by the DAC installed capacity annually and regionally.
 Q06ConsFuelTechCDRProd(allCy,CDRTECH,EF,YTIME)$(TIME(YTIME) $TECHtoEF(CDRTECH,EF) $(runCy(allCy)))..
     VmConsFuelTechCDRProd(allCy,CDRTECH,EF,YTIME)
       =E=
     (
-      (V06CapCDR(allCy,CDRTECH,YTIME) * i06SpecHeatDAC(allCy,CDRTECH,YTIME) / 0.85)$(sameas(EF, 'ngs')) +
-      (V06CapCDR(allCy,CDRTECH,YTIME) * i06SpecHeatDAC(allCy,CDRTECH,YTIME) / 0.85)$(sameas(EF, 'H2F')) +
-      (V06CapCDR(allCy,CDRTECH,YTIME) * i06SpecElecDAC(allCy,CDRTECH,YTIME))$(sameas(EF, 'elc')) 
+      (V06CapCDR(allCy,CDRTECH,YTIME) * i06SpecHeatCDR(allCy,CDRTECH,YTIME) / 0.85)$(sameas(EF, 'ngs')) +
+      (V06CapCDR(allCy,CDRTECH,YTIME) * i06SpecHeatCDR(allCy,CDRTECH,YTIME) / 0.85)$(sameas(EF, 'H2F')) +
+      (V06CapCDR(allCy,CDRTECH,YTIME) * i06SpecElecCDR(allCy,CDRTECH,YTIME))$(sameas(EF, 'elc')) 
     ) / 1e6;
