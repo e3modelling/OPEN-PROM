@@ -180,6 +180,7 @@ nestDottedKeys <- function(flat) {
 runScenario <- function(scn) {
   if (is.null(scn$task_id)) stop("task_id is missing in the scenario.")
 
+  land_use_extra <- ""
   if (length(scn$gams_flags)) {
     extra <- paste(sprintf("--%s=%s", names(scn$gams_flags),
                            unlist(scn$gams_flags)),
@@ -211,13 +212,18 @@ runScenario <- function(scn) {
       }
     }
 
-    if (!is.null(lue$source))
-      extra <- paste(extra, sprintf("--landUseEmulator=%s", lue$source))
+    source_flag <- sprintf("--landUseEmulator=%s", emulator_source)
+    extra <- paste(extra, source_flag)
+    land_use_extra <- paste(land_use_extra, source_flag)
     carbon_price_scenario <- lue$carbon_price_scenario
-    if (!is.null(carbon_price_scenario))
-      extra <- paste(extra, sprintf("--emulatorCarbonPriceScenario=%s", carbon_price_scenario))
+    if (!is.null(carbon_price_scenario)) {
+      scenario_flag <- sprintf("--emulatorCarbonPriceScenario=%s", carbon_price_scenario)
+      extra <- paste(extra, scenario_flag)
+      land_use_extra <- paste(land_use_extra, scenario_flag)
+    }
   }
   Sys.setenv(OPENPROM_EXTRA_FLAGS          = extra)
+  Sys.setenv(OPENPROM_LAND_USE_FLAGS       = trimws(land_use_extra))
   Sys.setenv(OPENPROM_SCENARIO             = toJSON(scn, auto_unbox = TRUE))
   Sys.setenv(OPENPROM_SCENARIO_DESCRIPTION = scn$description %||% "")
 
