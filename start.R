@@ -191,10 +191,31 @@ runScenario <- function(scn) {
   # consumed by task7, which passes --softLinkMAgPIE itself).
   lue <- scn$land_use_emulator
   if (length(lue)) {
+    emulator_source <- lue$source %||% "magpie"
+    allowed_sources <- c("legacy", "globiom", "magpie")
+    if (length(emulator_source) != 1L || !emulator_source %in% allowed_sources) {
+      stop("land_use_emulator.source must be one of: ",
+           paste(allowed_sources, collapse = ", "), ". Got: ",
+           paste(emulator_source, collapse = ", "))
+    }
+
+    # Every non-legacy source requires a matching coefficient-table scenario.
+    # This also applies to task 7: its round-0 solve explicitly runs with
+    # softLinkMAgPIE=off before the live coupling iterations start.
+    if (emulator_source != "legacy") {
+      carbon_price_scenario <- lue$carbon_price_scenario
+      if (is.null(carbon_price_scenario) || length(carbon_price_scenario) != 1L ||
+          !nzchar(carbon_price_scenario)) {
+        stop("land_use_emulator.carbon_price_scenario must contain one scenario label",
+             " when source='", emulator_source, "'.")
+      }
+    }
+
     if (!is.null(lue$source))
       extra <- paste(extra, sprintf("--landUseEmulator=%s", lue$source))
-    if (!is.null(lue$carbon_price))
-      extra <- paste(extra, sprintf("--emulatorGHGScen=%s", lue$carbon_price))
+    carbon_price_scenario <- lue$carbon_price_scenario
+    if (!is.null(carbon_price_scenario))
+      extra <- paste(extra, sprintf("--emulatorCarbonPriceScenario=%s", carbon_price_scenario))
   }
   Sys.setenv(OPENPROM_EXTRA_FLAGS          = extra)
   Sys.setenv(OPENPROM_SCENARIO             = toJSON(scn, auto_unbox = TRUE))
