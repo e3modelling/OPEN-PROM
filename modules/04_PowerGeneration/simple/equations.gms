@@ -54,7 +54,7 @@ Q04CostCapTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
         =E=
     V04CapexRESRate(allCy,PGALL,YTIME) * V04CapexFixCostPG(allCy,PGALL,YTIME) / 
     (i04AvailRate(allCy,PGALL,YTIME) * smGwToTwhPerYear(YTIME) * 1000)
- #UPT   * (imCostCapTechDisc(YTIME)$(sameas(PGALL,"ATHBMSCCS")) + 1$(not sameas(PGALL,"ATHBMSCCS")))
+ !!#UPT   * (imCostCapTechDisc(YTIME)$(sameas(PGALL,"ATHBMSCCS")) + 1$(not sameas(PGALL,"ATHBMSCCS")))
     ;
 
 *' Compute the variable cost of each power plant technology for every region,

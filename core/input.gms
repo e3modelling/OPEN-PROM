@@ -712,7 +712,7 @@ parameters
 !!imFacSubsiCapCostSupply(SSBS,STECH)                         !!State subsidy (%) factor in technology capex (supply side)
 !!imGrantCapCostSupply(SSBS,STECH)                            !!State granting in technology capex (supply side)
 imCapCostTechMin(allCy,DSBS,TECH,YTIME)                    !!Factor for the minimum capex of a demand technology after the state subsidy
-#UPT imCostCapTechDisc(YTIME)                                   !!Discount rate for capital costs of power generation technologies
+!!#UPT imCostCapTechDisc(YTIME)                                   !!Discount rate for capital costs of power generation technologies
 ;
 
 $ontext
@@ -871,7 +871,7 @@ imPlantEffByType(runCy,STECH,"effHeat",YTIME)$(not PGALL(STECH))= imPlantEffByTy
 **   Conversion of GW mean power into TWh/y, depending on whether it's a leap year
 smGwToTwhPerYear(YTIME) = 8.76 + 0.024 $ (mod(YTIME.val,4) = 0 and mod (YTIME.val,100) <> 0);
 *--
-#UPT imCostCapTechDisc(YTIME) = 0;
-#UPT imCostCapTechDisc(YTIME)$(ord(YTIME) = 20) = 0.75;
-#UPT imCostCapTechDisc(YTIME)$(ord(YTIME) > 20 and ord(YTIME) <= 40) = 0.75 + (ord(YTIME) - 20) * (0.5 - 0.75) / (40 - 20);
-#UPT imCostCapTechDisc(YTIME)$(ord(YTIME) > 40) = 0.5;
+!!#UPT imCostCapTechDisc(YTIME) = 0;
+!!#UPT imCostCapTechDisc(YTIME)$(ord(YTIME) = 20) = 0.75;
+!!#UPT imCostCapTechDisc(YTIME)$(ord(YTIME) > 20 and ord(YTIME) <= 40) = 0.75 + (ord(YTIME) - 20) * (0.5 - 0.75) / (40 - 20);
+!!#UPT imCostCapTechDisc(YTIME)$(ord(YTIME) > 40) = 0.5;
