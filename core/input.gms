@@ -100,18 +100,18 @@ imDisc(runCy,"PC",YTIME) = 0.11;
 * FIXME: Drive the emission factors with mrprom
 * author=giannou
 parameter iCo2EmiFacAllSbs(EF) "CO2 emission factors (kgCO2/kgoe fuel burned)" /
-CRO 2.76
-LGN 4.15330622,
-HCL 3.941453651,
+CRO 3.2
+LGN 4.2,
+HCL 4.2,
 *SLD 4.438008647,
-GSL 2.872144882,
-GDO 3.068924588,
-LPG 2.612562612,
-KRS 2.964253636,
-RFO 3.207089028,
-OLQ 3.207089028,
-NGS 2.336234395,
-OGS 2.336234395,
+GSL 3.2,
+GDO 3.2,
+LPG 3.2,
+KRS 3.2,
+RFO 3.2,
+OLQ 3.2,
+NGS 2.5,
+OGS 2.5,
 BMSWAS 0/;
 *---
 imCo2EmiFac(runCy,SBS,EF,YTIME)$(not (sameas("NEN",SBS) or sameas("PCH",SBS))) = iCo2EmiFacAllSbs(EF);
@@ -387,8 +387,8 @@ SE.TNGS       0.2244   6.8             20  0.88
 SE.TOGS       0.2244   10.88           20  0.8
 *SE.PGTSOL     0.86224  1.36            20  0.85
 SE.TBMSWAS    0.323544 10.88           20  0.5
-SE.TELC       0.3      8.976           12  0.85
-SE.THEATPUMP  0.432    12.9254         20  1.848
+SE.TELC       0.3      8.976           12  0.97
+SE.THEATPUMP  0.432    12.9254         20  3.2
 SE.TSOL       0.432    12.9254         20  1
 SE.TGEO       0.432    12.9254         20  0.5
 AG.THCL       0.323544 10.88           20  0.7
@@ -403,7 +403,7 @@ AG.TNGS       0.2244   6.8             20  0.88
 AG.TOGS       0.2244   10.88           20  0.8
 *AG.PGTSOL     0.86224  1.36            20  0.85
 AG.TBMSWAS    0.323544 10.88           20  0.5
-AG.TELC       0.3      8.976           12  0.85
+AG.TELC       0.3      8.976           12  0.9
 AG.THEATPUMP  0.432    12.9254         20  1.848
 AG.TSOL       0.432    12.9254         20  1
 AG.TGEO       0.432    12.9254         20  0.5
@@ -419,8 +419,8 @@ HOU.TNGS      0.2244   6.8             20  0.88
 HOU.TOGS      0.2244   10.88           20  0.8
 *HOU.PGTSOL    0.86224  1.36            20  0.85
 HOU.TBMSWAS   0.323544 10.88           20  0.5
-HOU.TELC      0.3      8.976           12  0.85
-HOU.THEATPUMP 0.432    12.9254         20  1.848
+HOU.TELC      0.3      8.976           12  0.97
+HOU.THEATPUMP 0.432    12.9254         20  3.2
 HOU.TSOL      0.432    12.9254         20  1
 HOU.TGEO      0.432    12.9254         20  0.5
 ;
@@ -821,9 +821,10 @@ imUsfEneConvSubTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,"USC");
 imFixOMCostTech(runCy,NENSE,TECH,YTIME)= imDataNonEneSec(NENSE,TECH,"FC");
 imVarCostTech(runCy,NENSE,TECH,YTIME) = imDataNonEneSec(NENSE,TECH,"VC");
 imUsfEneConvSubTech(runCy,NENSE,TECH,YTIME) = imDataNonEneSec(NENSE,TECH,"USC");
-imUsfEneConvSubTech(runCy,"BU","TH2F",YTIME) = 0.7;
-imUsfEneConvSubTech(runCy,"BU","TNGS",YTIME) = 0.6;
+imUsfEneConvSubTech(runCy,"BU","TH2F",YTIME) = 0.8;
+imUsfEneConvSubTech(runCy,"BU","TNGS",YTIME) = 0.5;
 imUsfEneConvSubTech(runCy,"BU","TGSL",YTIME) = 0.5;
+imCapCostTech(runCy,"BU",TECH,YTIME)$SECTTECH("BU",TECH) = imCapCostTech(runCy,"GN","TGDO",YTIME);
 imCapCostTech(runCy,"BU","TH2F",YTIME) = 1.5 * imCapCostTech(runCy,"BU","TGDO",YTIME);
 *---
 **  CDR

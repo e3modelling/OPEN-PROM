@@ -83,7 +83,7 @@ Q07GrossEmissCO2Supply(allCy,SSBS,YTIME)$(TIME(YTIME)$runCy(allCy))..
 *' The determination is based on the Marginal Abatement Cost (MAC) curves, the exogenous carbon price, and specific unit conversion factors. The equation 
 *' identifies the maximum abatement potential by scanning the MAC curve steps and selecting the highest reduction level where the implementation cost is less than or
 *' equal to the adjusted carbon price. This ensures that the model adopts all abatement measures that are economically viable given the current carbon price.
-Q07RedAbsBySrcRegTim(E07SrcMacAbate, allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+Q07RedAbsBySrcRegTim(E07SrcMacAbate, allCy, YTIME)$(TIME(YTIME)$(runCy(allCy))$(ord(YTIME) > 17))..
     V07RedAbsBySrcRegTim(E07SrcMacAbate, allCy, YTIME)
     =E=
     smax(E07MAC$(p07MacCost(E07MAC) <= iCarbValYrExog(allCy, YTIME) * p07UnitConvFactor(E07SrcMacAbate)), 
