@@ -26,7 +26,7 @@ Several supply-side features described below are governed by global switches and
   - **Dormant** — the equation block is structurally present but wrapped in `$ontext … $offtext`, so it is excluded from the solved model.
   - Requires reactivating the commented infrastructure block in future development.
 * - Land-use biomass supply curves
-  - **Emulator active** — the `globiom` emulator supplies biomass supply/emission curves by default (`landUseEmulator globiom`); `legacy` disables the emulator (static price, exogenous emissions).
+  - **MAgPIE emulator active** — the default is `landUseEmulator=magpie` with `emulatorCarbonPriceScenario=Npi_Default`; `legacy` disables the emulator (static price, exogenous emissions).
   - Set `landUseEmulator` to `globiom`/`magpie`, or `legacy` to switch the emulator off.
 * - Iterative MAgPIE soft-link
   - **Off** — biomass prices and land emissions are not iterated with the external MAgPIE model (`softLinkMAgPIE off`).
@@ -114,7 +114,13 @@ The estimation of required resources relies on input–output relationships, der
 
 A specific and more detailed treatment is applied to biomass, reflecting its role as both an energy carrier and a land-constrained resource, which couples it to land availability and competing land uses. The way the land-use linkage enters the price block depends on which switch is set, and the two paths are distinct:
 
-- **Emulator path** (`landUseEmulator` = `globiom` or `magpie`). Pre-fitted coefficient tables — `iBmswasSupplyCoef_<source>.csv` (a supply curve $P = a + b\,Q^{c}$), `iBmswasLandEmisCoef_<source>.csv` (a land-emission curve $Em = ea + eb\,Q$) and `iBmswasAgriEmis_<source>.csv` (Q-independent agricultural CH₄/N₂O) — are read into GAMS, so the biomass price responds endogenously to biomass demand within a single OPEN-PROM solve. This is the default (`globiom`).
+- **Emulator path** (`landUseEmulator` = `globiom` or `magpie`). The two sources have independent input and
+  equation branches. GLOBIOM retains its BMSWAS supply curve, linear land-CO₂ curve and direct agricultural
+  CH₄/N₂O table. MAgPIE uses $Q=0.4\,BMSWAS+0.6\,(BGSL+BKRS+BGAS)$, an H12 native-price response, signed linear
+  net land CO₂ (the common schema retains a zero quadratic coefficient), and non-negative quadratic agricultural
+  CH₄/N₂O. The MAgPIE files are `iBmswasBioPriceH12_magpie.csv`, `iBmswasLandEmisCoef_magpie.csv`, and
+  `iBmswasAgriEmisCoef_magpie.csv`. This route evaluates the fitted response inside one OPEN-PROM solve; the
+  default source is `magpie` with the `Npi_Default` coefficient row.
 - **Full iterative soft-link** (`softLinkMAgPIE = on`). The biomass price is **not** an in-GAMS supply curve: a full MAgPIE run writes `iPrices_magpie.csv`, which OPEN-PROM reads to fix biomass prices for the next iteration. The two models are iterated to convergence (task 7). When this switch is on it overrides the emulator.
 
 In either case biomass becomes an explicitly constrained resource that competes across alternative uses, including fuel production and carbon-removal pathways such as bioenergy with carbon capture and storage (BECCS).
