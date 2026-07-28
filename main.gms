@@ -214,7 +214,7 @@ $setglobal OPENGEM off !! on or off
 *' ***   legacy  = no emulator (exogenous static price + external emission source)
 *' ***   globiom = GLOBIOM-specific BMSWAS and AFOLU functions
 *' ***   magpie  = MAgPIE-specific H12 price and effective-2G-biomass functions
-$setglobal landUseEmulator magpie
+$setglobal landUseEmulator globiom
 *' *** emulatorCarbonPriceScenario: active carbon-price/policy row in the
 *' *** selected emulator's coefficient tables
 *' *** (used when landUseEmulator != legacy and softLinkMAgPIE == off)
@@ -278,7 +278,7 @@ $evalGlobal fEndHorizon 2100
 $evalGlobal fEndY 2100
 $evalGlobal fStartY 2024
 $evalGlobal fBaseY %fStartY% - %fPeriodOfYears%
-$evalGlobal fScenario 2 !! Setting the model scenario: 0 is No carbon price, 1 is NPi_Default, 2 is 1.5C and 3 is 2C
+$evalGlobal fScenario 1 !! Setting the model scenario: 0 is No carbon price, 1 is NPi_Default, 2 is 1.5C and 3 is 2C
 
 *** end of dollar commands section, no further flag definitions allowed 
 
