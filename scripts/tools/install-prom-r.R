@@ -4,7 +4,7 @@
 #
 # Installs the R packages mrprom and postprom (E3-Modelling / OPEN-PROM).
 # Runs identically on Windows R (incl. from Git Bash / PowerShell / cmd),
-# on WSL, and on native Linux or macOS.
+# on WSL, and on native Linux
 #
 # TWO MODES
 #
