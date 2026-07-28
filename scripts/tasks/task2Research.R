@@ -15,17 +15,26 @@ runTask2 <- function() {
   )
 
   if (.Platform$OS.type == "unix") {
-    system(base_cmd)
+    exit_code <- system(base_cmd)
   } else {
-    shell(paste0(base_cmd, " | tee full.log"))
+    exit_code <- shell(paste0(base_cmd, " | tee full.log"))
   }
+  if (exit_code != 0) {
+    cat("ERROR: GAMS research execution failed with exit code:", exit_code, "\n")
+    cat("Research run failed. Check full.log for details.\n")
+    stop("GAMS research execution failed. Terminating run.")
+  }
+  cat("Research run completed successfully.\n")
 
   if (withRunFolder && withReport) {
     run_path <- getwd()
     setwd("../../")
     cat("Executing the report output script\n")
-    system(paste0("Rscript ./scripts/tasks/reportOutput.R ", run_path))
+    report_code <- system(paste0("Rscript ./scripts/tasks/reportOutput.R ", run_path))
     setwd(run_path)
+    if (report_code != 0) {
+      stop("reportOutput.R failed with exit code ", report_code, ". Terminating run.")
+    }
   }
   if (withRunFolder && withSync) syncRun()
 }
