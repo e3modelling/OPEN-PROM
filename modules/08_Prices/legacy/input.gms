@@ -22,7 +22,27 @@ $offdelim
 $ENDIF
 *---
 $IFTHEN %bmswasPriceMode% == curve
-* Load the selected emulator's price and AFOLU coefficient tables.
+* Historical AFOLU values are common to the MAgPIE and GLOBIOM emulators.
+* Future price and emission inputs remain backend-specific below.
+$if not exist "./iAfoluLandCO2Hist.csv" $abort "Missing land-use emulator history input: iAfoluLandCO2Hist.csv"
+$if not exist "./iAfoluAgriEmisHist.csv" $abort "Missing land-use emulator history input: iAfoluAgriEmisHist.csv"
+
+* Scope: land-use-change CO2 emissions/removals, excluding indirect land CO2 and fire emissions.
+table i08AfoluLandCO2Hist(allCy,EMTYPE,YTIME) "Historical land-use-change CO2 emissions/removals (Mt CO2/yr)"
+$ondelim
+$include "./iAfoluLandCO2Hist.csv"
+$offdelim
+;
+table i08AfoluAgriEmisHist(allCy,EMTYPE,YTIME) "Common historical agriculture CH4/N2O (CH4 Mt; N2O kt /yr)"
+$ondelim
+$include "./iAfoluAgriEmisHist.csv"
+$offdelim
+;
+
+abort$sum(YTIME$(DATAY(YTIME) and (YTIME.val < 2010 or YTIME.val > 2025)), 1)
+  "Land-use emulator history covers 2010-2025; DATAY requests an unsupported year";
+
+* Load the selected emulator's future price and AFOLU response tables.
 $IFTHEN.emulatorInput %landUseEmulator% == globiom
 $if not exist "./iBmswasSupplyCoef_globiom.csv" $abort "Missing GLOBIOM emulator input: iBmswasSupplyCoef_globiom.csv"
 $if not exist "./iBmswasLandEmisCoef_globiom.csv" $abort "Missing GLOBIOM emulator input: iBmswasLandEmisCoef_globiom.csv"
@@ -63,7 +83,8 @@ parameter i08Bioenergy2GWeightMagpie(EFS) "Fuel weights in MAgPIE effective 2G b
     BKRS   0.6
     BGAS   0.6 /;
 
-table i08LandCO2CoefMagpie(MAGPIESCEN,allCy,EMTYPE,MAGPIEEMISCOEF,YTIME) "MAgPIE net land-CO2 coefficients against H12 effective 2G biomass Q"
+* Scope: land-use-change CO2 emissions/removals, excluding indirect land CO2 and fire emissions.
+table i08LandCO2CoefMagpie(MAGPIESCEN,allCy,EMTYPE,MAGPIEEMISCOEF,YTIME) "MAgPIE land-use-change CO2 coefficients against H12 effective 2G biomass Q"
 $ondelim
 $include "./iBmswasLandEmisCoef_magpie.csv"
 $offdelim

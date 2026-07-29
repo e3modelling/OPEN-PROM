@@ -374,9 +374,10 @@ NoTrade.(SE,AG,HOU,PC,PB,PT,PN,PA,GU,GT,GN,BU,PCH,NEN,LGN_PRD_CH4,HCL_PRD_CH4,GA
 /
 
 *' Emission species shared by the land-use emulator reporting interface:
-*'   CO2LandUse = CO2 from deforestation / land-use change (MtCO2/yr)
-*'   CH4LandUse = CH4 from wetland drainage and biomass burning (MtCH4/yr)
-*'   N2OLandUse = N2O from soil disturbance (ktN2O/yr)
+*'   CO2LandUse = land-use-change CO2 emissions/removals (MtCO2/yr);
+*'                MAgPIE/history exclude indirect land CO2 and fire emissions
+*'   CH4LandUse = Agriculture CH4 (MtCH4/yr)
+*'   N2OLandUse = Agriculture N2O, including direct/indirect N-cycle sources (ktN2O/yr)
 EMTYPE "Land-use emulator emission types"
 / CO2LandUse, CH4LandUse, N2OLandUse /
 
