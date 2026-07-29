@@ -19,8 +19,8 @@
       "CountrySolveMode": "serial"
     },
     "land_use_emulator": {
-      "source": "legacy",
-      "carbon_price": "GHG100"
+      "source": "magpie",
+      "carbon_price_scenario": "Npi_Default"
     },
     "soft_link_magpie": {
       "project": "uptake",

@@ -49,7 +49,7 @@ $onImplicitAssign
             solve openprom using nlp minimizing vDummyObj;
             pSolveHandle(runCyL) = openprom.handle;
          endif;
-      until (sModelStat le 2) or (sAsyncAttempt ge sSolverTryMax);
+      until (sModelStat le 2) or ((sAsyncAttempt ge sSolverTryMax) and (pSolveHandle(runCyL) = 0));
 
       ODummyObj(runCyL,YTIME)$TIME(YTIME) = vDummyObj.L;  !! Assign objective function value
 $ifthen.calib %Calibration% == MatCalibration
