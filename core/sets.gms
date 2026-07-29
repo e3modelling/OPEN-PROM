@@ -769,17 +769,17 @@ TOGS
 TSTE
 TH2F
 *ISTECH_BY   Base Year production, existing technologies IS routes 
-   BFBOFBY "Existing Base Year 2024 blast furnace basic oxygen furnace for primary steel production"
-   DREAFBY "Existing Base Year 2024  direct reduction electric arc furnace fed ny natural gas for primary steel production"
-   DREAFCOALBY "Existing Base Year 2024  direct reduction electric arc furnace fed by coal for primary steel production India tech"
-   SCREAFBY   "Existing Base Year 2024  scrap electric arc furnace for secondary steel production"
+BFBOFBY "Existing Base Year 2024 blast furnace basic oxygen furnace for primary steel production"
+DREAFBY "Existing Base Year 2024  direct reduction electric arc furnace fed ny natural gas for primary steel production"
+DREAFCOALBY "Existing Base Year 2024  direct reduction electric arc furnace fed by coal for primary steel production India tech"
+SCREAFBY   "Existing Base Year 2024  scrap electric arc furnace for secondary steel production"
 *ISTECH_NEW   New IS routes 
-   BFBOF "best available tech blast furnace basic oxygen furnace for primary steel production"
-   DREAF "best available tech direct reduction electric arc furnace fed ny natural gas for primary steel production"
-   H2DREAF    "best available tech direct reduction electric arc furnace fed ny 100% hydrogen "
-   BFBOFCCS   "best available tech blast furnace basic oxygen furnace with CCS ammine based for primary steel production"
-   DREAFCCS "best available tech direct reduction electric arc furnace with CCS ammine based for primary steel production"
-   SCREAF   "best available tech for scrap electric arc furnace for secondary steel production"
+BFBOF "best available tech blast furnace basic oxygen furnace for primary steel production"
+DREAF "best available tech direct reduction electric arc furnace fed ny natural gas for primary steel production"
+H2DREAF    "best available tech direct reduction electric arc furnace fed ny 100% hydrogen "
+BFBOFCCS   "best available tech blast furnace basic oxygen furnace with CCS ammine based for primary steel production"
+DREAFCCS "best available tech direct reduction electric arc furnace with CCS ammine based for primary steel production"
+SCREAF   "best available tech for scrap electric arc furnace for secondary steel production"
 * Domestic Technologies (only add those not already in Industry)
 TGSL
 TBMSWAS
