@@ -696,8 +696,8 @@ $offtext
 
 $ELSE.calib
 variable imMatrFactor(allCy,DSBS,TECH,YTIME)    "Maturity factor per technology and subsector for all countries (1)";
-imMatrFactor.LO(runCy,DSBS,TECH,YTIME) = 1e-6;                                          
-imMatrFactor.UP(runCy,DSBS,TECH,YTIME) = 10;
+imMatrFactor.LO(runCy,DSBS,TECH,YTIME) = 1e-2;                                          
+imMatrFactor.UP(runCy,DSBS,TECH,YTIME) = 1;
 imMatrFactor.L(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);     
 imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(not (sameas(DSBS,"PC") or sameas(DSBS,"PB") or sameas(DSBS,"GU") or INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS))) = iMatrFactorData(runCy,DSBS,TECH,YTIME);   
 imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(sameas(DSBS,"AG") and not EU28(runCy)) = iMatrFactorData(runCy,DSBS,TECH,YTIME); 
