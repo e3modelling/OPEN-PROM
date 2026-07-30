@@ -198,7 +198,8 @@ Q02ConsFuel(allCy,DSBS,EF,YTIME)$(TIME(YTIME)$((INDDOM(DSBS) or NENSE(DSBS)) and
     VmConsFuel(allCy,DSBS,EF,YTIME) 
         =E=
     sum(ITECH$(ITECHtoEF(ITECH,EF) and SECTTECH(DSBS,ITECH)),
-      i02ShareBlend(allCy,DSBS,ITECH,EF,YTIME) *
+      i02ShareBlend(allCy,DSBS,ITECH,EF,YTIME) * 
+      (1-i02ShareFeed(allCy,DSBS,ITECH,EF,YTIME))*
       V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) *
       i02util(allCy,DSBS,ITECH,YTIME) * i02CapFactor(allCy,DSBS,ITECH,YTIME) * i02INDSpecificEnergyIntensity(allCy,DSBS,ITECH,YTIME) 
     ) +
