@@ -82,8 +82,8 @@ $ELSE.mode
     1
 $ENDIF.mode
 ) *
-EXP(0.2 * (SUM(runCy2,V03ProdPrimary(runCy2,"BMSWAS",YTIME-1)) / (140 * 23.88458966275)) ** 12) /
-EXP(0.2 * (SUM(runCy2,V03ProdPrimary(runCy2,"BMSWAS",YTIME-2)) / (140 * 23.88458966275)) ** 12)
+EXP(0.4 * (SUM(runCy2,V03ProdPrimary(runCy2,"BMSWAS",YTIME-1)) / (80 * 23.88458966275)) ** 6) /
+EXP(0.4 * (SUM(runCy2,V03ProdPrimary(runCy2,"BMSWAS",YTIME-2)) / (80 * 23.88458966275)) ** 6)
     ;
 
 Q08PriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME)$(SECtoEF(SBS,EFS) $(not sameas("CRO",EFS)) $TIME(YTIME)

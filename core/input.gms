@@ -871,7 +871,7 @@ imPlantEffByType(runCy,STECH,"effHeat",YTIME)$(not PGALL(STECH))= imPlantEffByTy
 **   Conversion of GW mean power into TWh/y, depending on whether it's a leap year
 smGwToTwhPerYear(YTIME) = 8.76 + 0.024 $ (mod(YTIME.val,4) = 0 and mod (YTIME.val,100) <> 0);
 *--
-!!#UPT imCostCapTechDisc(YTIME) = 0;
-!!#UPT imCostCapTechDisc(YTIME)$(ord(YTIME) = 20) = 0.75;
-!!#UPT imCostCapTechDisc(YTIME)$(ord(YTIME) > 20 and ord(YTIME) <= 40) = 0.75 + (ord(YTIME) - 20) * (0.5 - 0.75) / (40 - 20);
-!!#UPT imCostCapTechDisc(YTIME)$(ord(YTIME) > 40) = 0.5;
+imCostCapTechDisc(YTIME) = 0;
+imCostCapTechDisc(YTIME)$(ord(YTIME) = 20) = 0.75;
+imCostCapTechDisc(YTIME)$(ord(YTIME) > 20 and ord(YTIME) <= 40) = 0.75 + (ord(YTIME) - 20) * (0.5 - 0.75) / (40 - 20);
+imCostCapTechDisc(YTIME)$(ord(YTIME) > 40) = 0.5;
