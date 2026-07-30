@@ -52,6 +52,7 @@ $ENDIF.magpieQuantityEquation
 Q08BmswasPriceFactor(allCy,YTIME)$(TIME(YTIME) $runCy(allCy))..
     V08BmswasPriceFactor(allCy,YTIME)
         =E=
+(
 $IFTHEN.mode %bmswasPriceMode% == curve
 $IFTHEN.emulatorCurve %landUseEmulator% == globiom
     ( 1e-3 + sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"a",YTIME))
@@ -80,6 +81,9 @@ $ELSEIF.mode %bmswasPriceMode% == softfx
 $ELSE.mode
     1
 $ENDIF.mode
+) *
+EXP(0.1 * (SUM(runCy2,V03ProdPrimary(runCy2,"BMSWAS",YTIME-1)) / (150 * 23.88458966275)) ** 10) /
+EXP(0.1 * (SUM(runCy2,V03ProdPrimary(runCy2,"BMSWAS",YTIME-2)) / (150 * 23.88458966275)) ** 10)
     ;
 
 Q08PriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME)$(SECtoEF(SBS,EFS) $(not sameas("CRO",EFS)) $TIME(YTIME)
@@ -132,7 +136,7 @@ Q08PriceCarbon(allCy,SBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmPriceCarbon(allCy,SBS,EFS,YTIME)
      =E=
     1e-3 * (
-      VmCarVal(allCy,"TRADE",YTIME)$(INDSE1(SBS) or ((DOMSE1(SBS) or TRANS1(SBS)) and ord(YTIME) > 17))
+      VmCarVal(allCy,"TRADE",YTIME)$(INDSE1(SBS) or ((DOMSE1(SBS) or TRANS1(SBS) or sameas("BU", SBS)) and ord(YTIME) > 17))
     ) * imCo2EmiFac(allCy,SBS,EFS,YTIME);
 
 *' The equation calculates the average fuel price per subsector. These average prices are used to further compute electricity prices in industry
