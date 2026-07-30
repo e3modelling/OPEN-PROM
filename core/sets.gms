@@ -903,17 +903,17 @@ TOLQ.OLQ
 TOGS.OGS
 TSTE.STE
 *ISTECH_BY   Iron and Steel (IS) Existing Base Year Technologies
-   BFBOFBY.(HCL,NGS,ELC) 
-   DREAFBY.(NGS,ELC)
-   DREAFCOALBY.(HCL,ELC)
-   SCREAFBY.(ELC,NGS)
+BFBOFBY.(HCL,NGS,ELC) 
+DREAFBY.(NGS,ELC)
+DREAFCOALBY.(HCL,ELC)
+SCREAFBY.(ELC,NGS)
 *ISTECH_NEW   Iron and Steel (IS) Existing Base Year Technologies 
-   BFBOF.(HCL,NGS,ELC)  
-   DREAF.(NGS,ELC) 
-   H2DREAF(H2F,ELC,NGS)    
-   BFBOFCCS.(HCL,NGS,ELC)    
-   DREAFCCS.(NGS,ELC)  
-   SCREAF.(ELC,NGS)
+BFBOF.(HCL,NGS,ELC)  
+DREAF.(NGS,ELC) 
+H2DREAF.(H2F,ELC,NGS)    
+BFBOFCCS.(HCL,NGS,ELC)    
+DREAFCCS.(NGS,ELC)  
+SCREAF.(ELC,NGS)
 * Domestic Technologies (only add those not already in Transport & Industry)
 * LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC already exist in TRANSPORT or INDUSTRY technologies
 THEATPUMP.ELC
@@ -961,17 +961,17 @@ TOGS.OGS
 TGSL.(GSL,BGSL)
 TSTE.STE
 *ISTECH_BY   Iron and Steel (IS) Existing Base Year Technologies
-   BFBOFBY.(HCL,NGS,ELC) 
-   DREAFBY.(NGS,ELC)
-   DREAFCOALBY.(HCL,ELC)
-   SCREAFBY.(ELC,NGS)
+BFBOFBY.(HCL,NGS,ELC) 
+DREAFBY.(NGS,ELC)
+DREAFCOALBY.(HCL,ELC)
+SCREAFBY.(ELC,NGS)
 *ISTECH_NEW   Iron and Steel (IS) Existing Base Year Technologies 
-   BFBOF.(HCL,NGS,ELC)  
-   DREAF.(NGS,ELC) 
-   H2DREAF(H2F,ELC,NGS)    
-   BFBOFCCS.(HCL,NGS,ELC)    
-   DREAFCCS.(NGS,ELC)  
-   SCREAF.(ELC,NGS)
+BFBOF.(HCL,NGS,ELC)  
+DREAF.(NGS,ELC) 
+H2DREAF.(H2F,ELC,NGS)    
+BFBOFCCS.(HCL,NGS,ELC)    
+DREAFCCS.(NGS,ELC)  
+SCREAF.(ELC,NGS)
 * Domestic Technologies (only add those not already in Transport & Industry)
 * LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC already exist in TRANSPORT or INDUSTRY technologies
 TH2F.H2F

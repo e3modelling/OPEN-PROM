@@ -84,8 +84,8 @@ i02ShareBlend(runCy,"IS","DREAFBY","NGS",YTIME)= 0.7;
 i02ShareBlend(runCy,"IS","DREAFBY","ELC",YTIME)= 0.2;
 i02ShareBlend(runCy,"IS","DREAFBY","HCL",YTIME)= 0.1;
 
-i02ShareBlend(runCy,"IS"," DREAFCOALBY","HCL",YTIME) = 0.8;
-i02ShareBlend(runCy,"IS"," DREAFCOALBY","ELC",YTIME)= 0.2;
+i02ShareBlend(runCy,"IS","DREAFCOALBY","HCL",YTIME) = 0.8;
+i02ShareBlend(runCy,"IS","DREAFCOALBY","ELC",YTIME)= 0.2;
 
 i02ShareBlend(runCy,"IS","SCREAFBY","ELC",YTIME) = 0.9;
 i02ShareBlend(runCy,"IS","SCREAFBY","NGS",YTIME) = 0.1;
