@@ -81,7 +81,7 @@ Q06GrossCapCDR(CDRTECH,YTIME)$(TIME(YTIME))..
         )
       )
     )
-    * (imCostCapTechDisc(YTIME)$(not sameas(CDRTECH,"TEW")) + 1$(sameas(CDRTECH,"TEW")))
+    !!#UPT* (imCostCapTechDisc(YTIME)$(not sameas(CDRTECH,"TEW")) + 1$(sameas(CDRTECH,"TEW")))
     ;
 
 *' The equation calculates the fixed and O&M costs of each CDR technology, as they are affected by a learning curve.
