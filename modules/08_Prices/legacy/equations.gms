@@ -79,12 +79,11 @@ $ENDIF.emulatorCurve
 $ELSEIF.mode %bmswasPriceMode% == softfx
     VmPriceFuelSubsecCarVal(allCy,"PG","BMSWAS",YTIME) / VmPriceFuelSubsecCarVal(allCy,"PG","BMSWAS",YTIME-1)
 $ELSE.mode
-    EXP(0.9 * (SUM(runCy2,V03ProdPrimary(runCy2,"BMSWAS",YTIME-1)) / (150 * 23.88458966275)) ** 4) / 
-    EXP(0.9 * (SUM(runCy2,V03ProdPrimary(runCy2,"BMSWAS",YTIME-2)) / (150 * 23.88458966275)) ** 4)
+1
 $ENDIF.mode
 ) *
-EXP(0.7 * (SUM(runCy2,V03ProdPrimary(runCy2,"BMSWAS",YTIME-1)) / (140 * 23.88458966275)) ** 6) /
-EXP(0.7 * (SUM(runCy2,V03ProdPrimary(runCy2,"BMSWAS",YTIME-2)) / (140 * 23.88458966275)) ** 6)
+EXP(1.5 * (SUM(runCy2,V03ProdPrimary(runCy2,"BMSWAS",YTIME-1)) / (140 * 23.88458966275)) ** 3) /
+EXP(1.5 * (SUM(runCy2,V03ProdPrimary(runCy2,"BMSWAS",YTIME-2)) / (140 * 23.88458966275)) ** 3)
 ;
 
 Q08PriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME)$(SECtoEF(SBS,EFS) $(not sameas("CRO",EFS)) $TIME(YTIME)
