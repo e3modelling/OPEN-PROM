@@ -21,6 +21,14 @@ V08BmswasPriceFactor.LO(runCy,YTIME) = 0;
 V08BmswasPriceFactor.L(runCy,YTIME)  = 1;
 *---
 VmPriceCarbon.LO(runCy,SBS,EFS,YTIME) = 0;
-VmPriceCarbon.FX(runCy,SBS,EFS,YTIME)$DATAY(YTIME) = 1e-3 * (
-      iCarbValYrExog(runCy,YTIME)$(INDSE1(SBS) or ((DOMSE1(SBS) or TRANS1(SBS)) and ord(YTIME) > 17))
-    ) * imCo2EmiFac(runCy,SBS,EFS,YTIME);
+VmPriceCarbon.FX(runCy,SBS,EFS,YTIME)$DATAY(YTIME) = 1e-3 * iCarbValYrExog(runCy,YTIME)$INDSE1(SBS) * imCo2EmiFac(runCy,SBS,EFS,YTIME);
+*---
+$IFTHEN %landEmiMode% == curve
+* Both emulator backends use the same native-MAgPIE AFOLU history on DATAY.
+* TIME values are calculated by the selected backend in postsolve.
+imAfoluLandEmis(runCy,EMTYPE,YTIME)$(DATAY(YTIME) $sameas(EMTYPE,"CO2LandUse")) =
+  i08AfoluLandCO2Hist(runCy,EMTYPE,YTIME);
+imAfoluAgriEmis(runCy,EMTYPE,YTIME)$(DATAY(YTIME) $(sameas(EMTYPE,"CH4LandUse") or sameas(EMTYPE,"N2OLandUse"))) =
+  i08AfoluAgriEmisHist(runCy,EMTYPE,YTIME);
+$ENDIF
+*---

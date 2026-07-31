@@ -23,7 +23,7 @@ pSolveHandle(allCy)                                      "Asynchronous solve han
 imCGI(allCy,YTIME)                                         "Capital Goods Index (defined as CGI(Scenario)/CGI(Baseline)) (1)"
 imFPDL(SBS,KPDL)                                           "Polynomial Distribution Lags (PDL) Coefficients per subsector (1)"
 imCo2EmiFac(allCy,SBS,EF,YTIME)                            "CO2 emission factors per subsector (kgCO2/kgoe fuel burned)"
-imAfoluLandEmis(allCy,EMTYPE,YTIME)                        "AFOLU land net CO2 reporting interface for the selected emulator (Mt CO2/yr)"
+imAfoluLandEmis(allCy,EMTYPE,YTIME)                        "AFOLU signed land CO2 reporting interface for the selected emulator (Mt CO2/yr)"
 imAfoluAgriEmis(allCy,EMTYPE,YTIME)                        "AFOLU agriculture CH4/N2O reporting interface for the selected emulator (CH4 Mt; N2O kt /yr)"
 imNcon(SBS)                                                "Number of consumers (1)"
 *imDisFunConSize(allCy,DSBS,rCon)                           "Distribution function of consumer size groups (1)"
