@@ -712,7 +712,7 @@ parameters
 !!imFacSubsiCapCostSupply(SSBS,STECH)                         !!State subsidy (%) factor in technology capex (supply side)
 !!imGrantCapCostSupply(SSBS,STECH)                            !!State granting in technology capex (supply side)
 imCapCostTechMin(allCy,DSBS,TECH,YTIME)                    !!Factor for the minimum capex of a demand technology after the state subsidy
-!!#UPT imCostCapTechDisc(YTIME)                                   !!Discount rate for capital costs of power generation technologies
+imCostCapTechDisc(YTIME)                                   !!Discount rate for capital costs of power generation technologies
 ;
 
 $ontext
