@@ -27,7 +27,8 @@ reportOutput <- function(
     htmlReport = htmlReport, model = model,
     dashboard = dashboard,
     project_template = project_template,
-    stripScenarioTimestamp = stripScenarioTimestamp) {
+    stripScenarioTimestamp = stripScenarioTimestamp,
+    PngFiles = PngFiles) {
     
   # setConfig(regionmapping = mapping)
 
@@ -56,10 +57,10 @@ reportOutput <- function(
   if (!is.null(plot_name)) {
     save_names <- file.path(runpath, plot_name)
     mapply( # for each scenario, unpack the magpie obj and a pdf savename
-      function(report, metadata, save) {
-        batchPlotReport(report = report, metadata = metadata, save_pdf = save)
+      function(report, metadata, save, PngFiles) {
+        batchPlotReport(report = report, metadata = metadata, save_pdf = save, PngFiles = PngFiles)
       },
-      reports, metadata, save_names
+      reports, metadata, save_names, PngFiles
     )
   }
   invisible(NULL)
@@ -74,4 +75,4 @@ reportOutput(runpath = runpath, mif_name = mif_name, plot_name = plot_name,
              Validation_data_for_plots = FALSE, Validation2050 = FALSE,
              emissions = TRUE, htmlReport = FALSE, model = "OPEN-PROM 2.2",
              project_template = NULL, dashboard = FALSE,
-             stripScenarioTimestamp = FALSE)
+             stripScenarioTimestamp = FALSE, PngFiles = TRUE)

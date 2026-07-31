@@ -87,13 +87,11 @@ Q11SubsiDemTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS
 $$offtext 
     sum(CDRTECH$(sameas(TECH,CDRTECH)), !! CDR
       (
-        VmSubsiDemTechAvail(allCy,DSBS,CDRTECH,YTIME) * 1e6 / 
-      (V06CapCDR(allCy,CDRTECH,YTIME-1) * V06CapFacNewDAC(allCy,CDRTECH,YTIME-1))
-      + (1 - imCapCostTechMin(allCy,DSBS,CDRTECH,YTIME)) * V06LvlCostDAC(allCy,CDRTECH,YTIME-1)
+        VmSubsiDemTechAvail(allCy,DSBS,CDRTECH,YTIME) * 1e6 / V06CapFacNewCDR(allCy,CDRTECH,YTIME-1)
+      + (1 - imCapCostTechMin(allCy,DSBS,CDRTECH,YTIME)) * V06LvlCostCDR(allCy,CDRTECH,YTIME)
       -
-      sqrt(sqr(VmSubsiDemTechAvail(allCy,DSBS,CDRTECH,YTIME) * 1e6 / 
-      (V06CapCDR(allCy,CDRTECH,YTIME-1) * V06CapFacNewDAC(allCy,CDRTECH,YTIME-1))
-      - (1 - imCapCostTechMin(allCy,DSBS,CDRTECH,YTIME)) * V06LvlCostDAC(allCy,CDRTECH,YTIME-1)))
+      sqrt(sqr(VmSubsiDemTechAvail(allCy,DSBS,CDRTECH,YTIME) * 1e6 / V06CapFacNewCDR(allCy,CDRTECH,YTIME-1)
+      - (1 - imCapCostTechMin(allCy,DSBS,CDRTECH,YTIME)) * V06LvlCostCDR(allCy,CDRTECH,YTIME)))
       ) / 2
     )$(CDR(DSBS) and ord(YTIME) > 15)
 ;
