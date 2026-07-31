@@ -214,7 +214,7 @@ $setglobal OPENGEM off !! on or off
 *' ***   legacy  = no emulator (exogenous static price + external emission source)
 *' ***   globiom = GLOBIOM-specific BMSWAS and AFOLU functions
 *' ***   magpie  = MAgPIE-specific H12 price and effective-2G-biomass functions
-$setglobal landUseEmulator globiom
+$setglobal landUseEmulator magpie
 *' *** emulatorCarbonPriceScenario: active carbon-price/policy row in the
 *' *** selected emulator's coefficient tables
 *' *** (used when landUseEmulator != legacy and softLinkMAgPIE == off)
