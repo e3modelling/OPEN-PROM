@@ -74,16 +74,24 @@ Q07GrossEmissCO2Supply(allCy,SSBS,YTIME)$(TIME(YTIME)$runCy(allCy))..
         =E=   
     SUM(EFS,
       (
-        V03InpTotTransf(allCy,SSBS,EFS,YTIME)$SSBSEMIT(SSBS) +
+        V03InpTotTransf(allCy,SSBS,EFS,YTIME)$SSBSENERGY(SSBS) +
         VmConsFiEneSec(allCy,SSBS,EFS,YTIME) 
       ) * imCo2EmiFac(allCy,SSBS,EFS,YTIME)
     );
-    
+
+Q07GrossEmissCO2Processes(allCy,SSBS,YTIME)$(TIME(YTIME)$runCy(allCy))..
+    V07GrossEmissCO2Processes(allCy,SSBS,YTIME)
+        =E=   
+    SUM(EFS,
+      V03InpTotTransf(allCy,SSBS,EFS,YTIME) * 
+      imCo2EmiFac(allCy,SSBS,EFS,YTIME)
+    )$sameas(SSBS,"H2P");
+
 *' This equation calculates the total absolute abatement of non-CO2 emissions for a specific source, country, and time period.
 *' The determination is based on the Marginal Abatement Cost (MAC) curves, the exogenous carbon price, and specific unit conversion factors. The equation 
 *' identifies the maximum abatement potential by scanning the MAC curve steps and selecting the highest reduction level where the implementation cost is less than or
 *' equal to the adjusted carbon price. This ensures that the model adopts all abatement measures that are economically viable given the current carbon price.
-Q07RedAbsBySrcRegTim(E07SrcMacAbate, allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+Q07RedAbsBySrcRegTim(E07SrcMacAbate, allCy, YTIME)$(TIME(YTIME)$(runCy(allCy))$(ord(YTIME) > 17))..
     V07RedAbsBySrcRegTim(E07SrcMacAbate, allCy, YTIME)
     =E=
     smax(E07MAC$(p07MacCost(E07MAC) <= iCarbValYrExog(allCy, YTIME) * p07UnitConvFactor(E07SrcMacAbate)), 

@@ -3,7 +3,7 @@
 
 sets
 *---
-SSBSEMIT(SSBS)     Supply Subsectors emitting inputs     /PG,H2P,CHP,STEAMP/
+SSBSENERGY(SSBS)     Supply Subsectors with energy processes     /PG,CHP,STEAMP/
 
 E07MAC "Cost categories for Marginal abatement costs curves (MACC) -2010$/tC for CH4,N20 and 2005$/tC for F-gases" / 
     0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 

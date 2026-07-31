@@ -20,6 +20,9 @@ $offtext
 V08BmswasPriceFactor.LO(runCy,YTIME) = 0;
 V08BmswasPriceFactor.L(runCy,YTIME)  = 1;
 *---
+VmPriceCarbon.LO(runCy,SBS,EFS,YTIME) = 0;
+VmPriceCarbon.FX(runCy,SBS,EFS,YTIME)$DATAY(YTIME) = 1e-3 * iCarbValYrExog(runCy,YTIME)$INDSE1(SBS) * imCo2EmiFac(runCy,SBS,EFS,YTIME);
+*---
 $IFTHEN %landEmiMode% == curve
 * Both emulator backends use the same native-MAgPIE AFOLU history on DATAY.
 * TIME values are calculated by the selected backend in postsolve.
