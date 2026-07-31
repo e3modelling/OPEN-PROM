@@ -66,10 +66,14 @@ V02VarCostTech.FX(runCy,DSBS,ITECH,YTIME)$(DATAY(YTIME) and (INDDOM(DSBS) or NEN
   (
     sum(EF$ITECHtoEF(ITECH,EF),
       i02ShareBlend(runCy,DSBS,ITECH,EF,YTIME) *
-      VmPriceFuelSubsecCarVal.L(runCy,DSBS,EF,YTIME) +
-      imCO2CaptRateIndustry(runCy,ITECH,YTIME) * VmCstCO2SeqCsts.L(runCy,YTIME) * 1e-3 * (imCo2EmiFac(runCy,DSBS,EF,YTIME) + 4.17$(sameas("BMSWAS", EF))) +
-      (1-imCO2CaptRateIndustry(runCy,ITECH,YTIME)) * 1e-3 * (imCo2EmiFac(runCy,DSBS,EF,YTIME) + 4.17$(sameas("BMSWAS", EF))) *
-      (sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal.L(runCy,NAP,YTIME)))
+      (
+        (
+          VmPriceFuelSubsecCarVal.L(runCy,DSBS,EF,YTIME) +
+          imCO2CaptRateIndustry(runCy,ITECH,YTIME) * VmCstCO2SeqCsts.L(runCy,YTIME) * 1e-3 * imCo2EmiFac(runCy,DSBS,EF,YTIME)  +
+          (1-imCO2CaptRateIndustry(runCy,ITECH,YTIME)) * 1e-3 * imCo2EmiFac(runCy,DSBS,EF,YTIME)  *
+          sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal.L(runCy,NAP,YTIME))
+        )
+      )
     ) +
     imVarCostTech(runCy,DSBS,ITECH,YTIME) / sUnitToKUnit
   ) / imUsfEneConvSubTech(runCy,DSBS,ITECH,YTIME);

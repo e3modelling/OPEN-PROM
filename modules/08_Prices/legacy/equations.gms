@@ -52,6 +52,7 @@ $ENDIF.magpieQuantityEquation
 Q08BmswasPriceFactor(allCy,YTIME)$(TIME(YTIME) $runCy(allCy))..
     V08BmswasPriceFactor(allCy,YTIME)
         =E=
+(
 $IFTHEN.mode %bmswasPriceMode% == curve
 $IFTHEN.emulatorCurve %landUseEmulator% == globiom
     ( 1e-3 + sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"a",YTIME))
@@ -81,7 +82,10 @@ $ELSE.mode
     EXP(0.9 * (SUM(runCy2,V03ProdPrimary(runCy2,"BMSWAS",YTIME-1)) / (150 * 23.88458966275)) ** 4) / 
     EXP(0.9 * (SUM(runCy2,V03ProdPrimary(runCy2,"BMSWAS",YTIME-2)) / (150 * 23.88458966275)) ** 4)
 $ENDIF.mode
-    ;
+) *
+EXP(0.7 * (SUM(runCy2,V03ProdPrimary(runCy2,"BMSWAS",YTIME-1)) / (140 * 23.88458966275)) ** 6) /
+EXP(0.7 * (SUM(runCy2,V03ProdPrimary(runCy2,"BMSWAS",YTIME-2)) / (140 * 23.88458966275)) ** 6)
+;
 
 Q08PriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME)$(SECtoEF(SBS,EFS) $(not sameas("CRO",EFS)) $TIME(YTIME)
 $IFTHEN %softLinkMAgPIE% == on
@@ -105,10 +109,7 @@ $ENDIF.magpiePriceDomain
     (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** i08PriceTransElast(EFS,"CRO") - 1)$sameas("NGS",EFS)) *
     (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** i08PriceTransElast(EFS,"CRO") - 1)$SECtoEFPROD("LQD",EFS)) *
     (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** i08PriceTransElast(EFS,"CRO") - 1)$(sameas("HCL",EFS) or sameas("LGN",EFS))) +
-    1e-3 * (
-      VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,SBS,EFS,YTIME) -
-      VmCarVal(allCy,"TRADE",YTIME-1) * imCo2EmiFac(allCy,SBS,EFS,YTIME-1)
-    )$DSBS(SBS);
+    VmPriceCarbon(allCy,SBS,EFS,YTIME) - VmPriceCarbon(allCy,SBS,EFS,YTIME-1);
 
 $IFTHEN.magpiePriceEquation "%bmswasPriceMode%" == "curve"
 $IFTHEN.magpiePriceEquationSource "%landUseEmulator%" == "magpie"
@@ -132,6 +133,13 @@ V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)
       SUM(EFS2$SECtoEF(DSBS,EFS2), (VmFinalEnergy(allCy,DSBS,EFS2,YTIME) - V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$ELCEF(EFS2)) + 1e-6)
     );
   
+Q08PriceCarbon(allCy,SBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    VmPriceCarbon(allCy,SBS,EFS,YTIME)
+     =E=
+    1e-3 * (
+      VmCarVal(allCy,"TRADE",YTIME)$(INDSE1(SBS) or ((DOMSE1(SBS) or TRANS1(SBS) or sameas("BU", SBS)) and ord(YTIME) > 17))
+    ) * imCo2EmiFac(allCy,SBS,EFS,YTIME);
+
 *' The equation calculates the average fuel price per subsector. These average prices are used to further compute electricity prices in industry
 *' (using the OI "other industry" avg price), as well as the aggregate fuel demand (of substitutable fuels) per subsector.
 *' In the transport sector they feed into the calculation of the activity levels.
