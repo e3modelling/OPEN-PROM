@@ -16,7 +16,10 @@
     "gams_flags": {
       "fScenario": 200,
       "fEndY": 2100,
-      "CountrySolveMode": "serial"
+      "CountrySolveMode": "serial",
+      "bmswasPriceAdder": 0,
+      "bmswasPriceAdderStartYear": 2030,
+      "bmswasPriceAdderFullYear": 2050
     },
     "land_use_emulator": {
       "source": "magpie",

@@ -11,9 +11,9 @@ Q08BmswasPriceFactor(allCy,YTIME)                         "Compute the BMSWAS pr
 $IFTHEN.magpiePriceEquation "%bmswasPriceMode%" == "curve"
 $IFTHEN.magpiePriceDeclarationSource "%landUseEmulator%" == "magpie"
 Q08Bioenergy2GEffectiveQH12Magpie(allCy,YTIME)            "Compute effective 2G biomass Q for the mapped MAgPIE H12 supply curve"
-Q08PriceBmswasMagpie(allCy,SBS,YTIME)                     "Broadcast the MAgPIE H12 native BMSWAS price to every subsector"
 $ENDIF.magpiePriceDeclarationSource
 $ENDIF.magpiePriceEquation
+Q08PriceBmswas(allCy,SBS,YTIME)                           "Apply the selected backend and additional BMSWAS price"
 Q08PriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)               "Compute fuel prices per subsector and fuel, separate carbon value in each sector"
 Q08PriceFuelAvgSub(allCy,DSBS,YTIME)	                   "Compute average fuel price per subsector" 	
 *Q08PriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)                 "Compute fuel prices per subsector and fuel especially for chp plants"
@@ -24,6 +24,7 @@ Q08PriceCarbon(allCy,SBS,EFS,YTIME)
 Parameters
 i08Bioenergy2GEffectiveQMagpie(allCy,YTIME)                "Current regional MAgPIE effective 2G biomass Q (Mtoe)"
 i08Bioenergy2GEffectiveQH12Magpie(allCy,YTIME)             "MAgPIE effective 2G biomass Q used by the mapped H12 land-CO2 curve (Mtoe)"
+i08BmswasPriceAdder(YTIME)                                 "Additional BMSWAS price (kUS$2015/toe)"
 ;
 
 Variables
@@ -37,7 +38,7 @@ $IFTHEN.magpiePriceVariableSource "%landUseEmulator%" == "magpie"
 V08Bioenergy2GEffectiveQH12Magpie(allCy,YTIME)             "Effective 2G biomass Q used by the mapped MAgPIE H12 supply curve (Mtoe)"
 $ENDIF.magpiePriceVariableSource
 $ENDIF.magpiePriceVariable
-V08BmswasPriceFactor(allCy,YTIME)                         "Multiplicative factor mapping the preceding BMSWAS price to the active price target (1)"
+V08BmswasPriceFactor(allCy,YTIME)                         "Year-over-year ratio of the final PG BMSWAS price used by the model (1)"
 VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)                "Fuel prices per subsector and fuel (k$2015/toe)"
 VmPriceFuelAvgSub(allCy,DSBS,YTIME)                        "Average fuel prices per subsector (k$2015/toe)"
 * VmPriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)                  "Fuel prices per subsector and fuel for CHP plants (kUS$2015/toe)"

@@ -14,6 +14,20 @@ $offdelim
 ;
 i08PriceTransElast(EFS,"CRO")$SECtoEFPROD("LQD",EFS) = 0.65;
 *---
+* Smoothly ramp the additional biomass price from zero to its configured value.
+* The ramp starts after the historical DATAY period, whose prices contain no adder.
+i08BmswasPriceAdder(YTIME) = 0;
+i08BmswasPriceAdder(YTIME)$(
+  YTIME.val > %bmswasPriceAdderStartYear% and
+  YTIME.val < %bmswasPriceAdderFullYear%
+) = %bmswasPriceAdder%
+  * sqr((YTIME.val - %bmswasPriceAdderStartYear%)
+      / (%bmswasPriceAdderFullYear% - %bmswasPriceAdderStartYear%))
+  * (3 - 2 * (YTIME.val - %bmswasPriceAdderStartYear%)
+      / (%bmswasPriceAdderFullYear% - %bmswasPriceAdderStartYear%));
+i08BmswasPriceAdder(YTIME)$(YTIME.val >= %bmswasPriceAdderFullYear%) =
+  %bmswasPriceAdder%;
+*---
 $IFTHEN %softLinkMAgPIE% == on
 table iPricesMagpie(allCy,SBS,YTIME)	"Prices of biomass per subsector (k$2015/toe)"
 $ondelim

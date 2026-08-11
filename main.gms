@@ -221,6 +221,14 @@ $setglobal landUseEmulator magpie
 *' *** Valid values are defined once by the selected source's scenario set.
 $setglobal emulatorCarbonPriceScenario Npi_Default
 
+*' *** Optional additional BMSWAS price for every land-use price mode
+*' *** (kUS$2015/toe). The model ramps the increment smoothly from zero to
+*' *** bmswasPriceAdder between the two years.
+*' *** A value of zero disables the mechanism.
+$setglobal bmswasPriceAdder 0
+$setglobal bmswasPriceAdderStartYear 2030
+$setglobal bmswasPriceAdderFullYear 2050
+
 *' *** Validate the public land-use switches before translating them to internal
 *' *** modes. A soft-link run still validates landUseEmulator, but its scenario row
 *' *** is ignored because softLinkMAgPIE takes precedence.
