@@ -50,6 +50,7 @@ ENV GITHUB_R_PACKAGES=${GITHUB_R_PACKAGES}
 RUN Rscript docker\install-r-packages.R
 
 COPY . .
+COPY docker\config.windows-container.json config.windows-container.json
 
 ENTRYPOINT ["Rscript", "start.R"]
 CMD ["task_id=2"]

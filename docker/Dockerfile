@@ -55,6 +55,7 @@ ENV GITHUB_R_PACKAGES=${GITHUB_R_PACKAGES}
 RUN Rscript docker/install-r-packages.R
 
 COPY . .
+COPY docker/config.container.json config.container.json
 
 ENV OPENPROM_CONFIG=config.container.json
 ENV PATH="/opt/gams:${PATH}"

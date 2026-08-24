@@ -10,6 +10,8 @@ The Docker setup includes:
 - `.env.example`
 - `docker/install-r-packages.R`
 
+All Docker-related files live in the `docker/` directory. Commands in this guide are intended to be run from the repository root.
+
 The container runs OPEN-PROM through:
 
 ```sh
@@ -52,16 +54,16 @@ The host path to the Linux GAMS installation is configured with `GAMS_HOME` in a
 Create `.env` from the template:
 
 ```sh
-cp .env.example .env
+cp docker/.env.example docker/.env
 ```
 
 On Windows PowerShell:
 
 ```powershell
-Copy-Item .env.example .env
+Copy-Item docker/.env.example docker/.env
 ```
 
-Then edit `.env` and replace:
+Then edit `docker/.env` and replace:
 
 ```text
 GAMS_HOME=/path/to/linux/gams
@@ -87,7 +89,7 @@ The configured directory must contain the Linux `gams` executable.
 
 The Docker image does not install, copy, or configure a GAMS license.
 
-The mounted GAMS installation is expected to be already licensed and functional. If the license file is stored outside the GAMS installation directory, add an additional read-only volume to `docker-compose.yml`.
+The mounted GAMS installation is expected to be already licensed and functional. If the license file is stored outside the GAMS installation directory, add an additional read-only volume to `docker/docker-compose.yml`.
 
 Example:
 
@@ -107,7 +109,7 @@ config.container.json
 
 instead of the local `config.json`.
 
-This is configured in `docker-compose.yml`:
+This is configured in `docker/docker-compose.yml`:
 
 ```yaml
 environment:
@@ -136,14 +138,14 @@ For a standard OPEN-PROM research run with `task_id=2`, `/magpie/` is not requir
 
 ## Mounted Folders
 
-`docker-compose.yml` defines the following volume mounts:
+`docker/docker-compose.yml` defines the following volume mounts:
 
 ```yaml
       - ./config.container.json:/open-prom/config.container.json:ro
-      - ./data:/open-prom/data:ro
-      - ./targets:/open-prom/targets:ro
-      - ./runs:/open-prom/runs
-      - ./outputs:/outputs
+      - ../data:/open-prom/data:ro
+      - ../targets:/open-prom/targets:ro
+      - ../runs:/open-prom/runs
+      - ../outputs:/outputs
       - ${GAMS_HOME:-/path/to/linux/gams}:/opt/gams:ro
 ```
 
@@ -182,7 +184,7 @@ docker/install-r-packages.R
 Package sources can be overridden at build time:
 
 ```sh
-docker compose build \
+docker compose --env-file docker/.env -f docker/docker-compose.yml build \
   --build-arg R_UNIVERSE_REPOS="https://pik-piam.r-universe.dev,https://e3modelling.r-universe.dev" \
   --build-arg GITHUB_R_PACKAGES="https://github.com/e3modelling/mrprom.git,https://github.com/e3modelling/postprom.git"
 ```
@@ -224,7 +226,7 @@ This repository and package support IAMC codelists, mappings, validation, and ex
 Both pins can be overridden at build time:
 
 ```sh
-docker compose build \
+docker compose --env-file docker/.env -f docker/docker-compose.yml build \
   --build-arg COMMON_DEFINITIONS_REF="main" \
   --build-arg NOMENCLATURE_IAMC_VERSION="0.31.0"
 ```
@@ -236,13 +238,13 @@ These pins make the IAMC common-definitions layer reproducible by default. Full 
 Build the image from the repository root:
 
 ```sh
-docker compose build
+docker compose --env-file docker/.env -f docker/docker-compose.yml build
 ```
 
 Rebuild without cache after changing package sources, Docker dependencies, or the common-definitions reference:
 
 ```sh
-docker compose build --no-cache
+docker compose --env-file docker/.env -f docker/docker-compose.yml build --no-cache
 ```
 
 ## Single Scenario Execution
@@ -250,16 +252,16 @@ docker compose build --no-cache
 Configure the scenario in:
 
 ```text
-config.container.json
+docker/config.container.json
 ```
 
 Run the default command:
 
 ```sh
-docker compose run --rm open-prom
+docker compose --env-file docker/.env -f docker/docker-compose.yml run --rm open-prom
 ```
 
-This uses the default command from `docker-compose.yml`:
+This uses the default command from `docker/docker-compose.yml`:
 
 ```yaml
 command: ["task_id=2"]
@@ -268,17 +270,17 @@ command: ["task_id=2"]
 The equivalent explicit command is:
 
 ```sh
-docker compose run --rm open-prom task_id=2
+docker compose --env-file docker/.env -f docker/docker-compose.yml run --rm open-prom task_id=2
 ```
 
 Other tasks can be selected by changing the `task_id` argument:
 
 ```sh
-docker compose run --rm open-prom task_id=0
+docker compose --env-file docker/.env -f docker/docker-compose.yml run --rm open-prom task_id=0
 ```
 
 ```sh
-docker compose run --rm open-prom task_id=5
+docker compose --env-file docker/.env -f docker/docker-compose.yml run --rm open-prom task_id=5
 ```
 
 ## Batch Execution
@@ -286,13 +288,13 @@ docker compose run --rm open-prom task_id=5
 Batch mode is executed by passing a CSV file:
 
 ```sh
-docker compose run --rm open-prom scenarios.template.csv
+docker compose --env-file docker/.env -f docker/docker-compose.yml run --rm open-prom scenarios.template.csv
 ```
 
 For a custom batch file:
 
 ```sh
-docker compose run --rm open-prom scenarios.csv
+docker compose --env-file docker/.env -f docker/docker-compose.yml run --rm open-prom scenarios.csv
 ```
 
 The CSV must be available inside the project tree used by the container. `start.R` supports batch execution only for tasks that are batch-compatible.
@@ -328,7 +330,7 @@ To include `.gdx` files in synchronized archives, set:
 
 ## MAgPIE and Task 7
 
-`config.container.json` defines:
+`docker/config.container.json` defines:
 
 ```json
 "magpie_path": "/magpie/"
@@ -336,7 +338,7 @@ To include `.gdx` files in synchronized archives, set:
 
 This is a placeholder for task 7 soft-linking. To run task 7, mount a MAgPIE installation at `/magpie`.
 
-Example `docker-compose.yml` volume:
+Example `docker/docker-compose.yml` volume:
 
 ```yaml
       - /path/to/magpie:/magpie
@@ -351,48 +353,48 @@ For non-task-7 runs, the `/magpie/` path can be ignored.
 Build the image:
 
 ```sh
-docker compose build
+docker compose --env-file docker/.env -f docker/docker-compose.yml build
 ```
 
 Run default task 2:
 
 ```sh
-docker compose run --rm open-prom
+docker compose --env-file docker/.env -f docker/docker-compose.yml run --rm open-prom
 ```
 
 Run explicit task 2:
 
 ```sh
-docker compose run --rm open-prom task_id=2
+docker compose --env-file docker/.env -f docker/docker-compose.yml run --rm open-prom task_id=2
 ```
 
 Run batch mode:
 
 ```sh
-docker compose run --rm open-prom scenarios.template.csv
+docker compose --env-file docker/.env -f docker/docker-compose.yml run --rm open-prom scenarios.template.csv
 ```
 
 Open a shell inside the container:
 
 ```sh
-docker compose run --rm --entrypoint bash open-prom
+docker compose --env-file docker/.env -f docker/docker-compose.yml run --rm --entrypoint bash open-prom
 ```
 
 Check whether GAMS is visible inside the container:
 
 ```sh
-docker compose run --rm --entrypoint bash open-prom -lc "which gams && gams"
+docker compose --env-file docker/.env -f docker/docker-compose.yml run --rm --entrypoint bash open-prom -lc "which gams && gams"
 ```
 
 Check selected R packages:
 
 ```sh
-docker compose run --rm --entrypoint Rscript open-prom -e "library(mrprom); library(postprom); library(gdx); library(quitte)"
+docker compose --env-file docker/.env -f docker/docker-compose.yml run --rm --entrypoint Rscript open-prom -e "library(mrprom); library(postprom); library(gdx); library(quitte)"
 ```
 
 ## Troubleshooting
 
-If Docker reports that `/path/to/linux/gams` does not exist, `.env` has not been configured. Set `GAMS_HOME` to the real Linux GAMS installation path:
+If Docker reports that `/path/to/linux/gams` does not exist, `docker/.env` has not been configured. Set `GAMS_HOME` to the real Linux GAMS installation path:
 
 ```text
 GAMS_HOME=/real/linux/path/to/gams
@@ -402,14 +404,14 @@ If `gams` is not found inside the container, verify that:
 
 - `GAMS_HOME` points to the directory containing the Linux `gams` executable.
 - The compose volume maps `GAMS_HOME` to `/opt/gams`.
-- `config.container.json` sets `"gams_path": "/opt/gams/"`.
+- `docker/config.container.json` sets `"gams_path": "/opt/gams/"`.
 
 If GAMS starts but reports a license error, the mounted GAMS installation or license configuration is incomplete.
 
 If an R package fails to install, verify that:
 
 - The package exists in the configured R-universe repositories.
-- GitHub is reachable during `docker compose build`.
+- GitHub is reachable during the Docker build.
 - `GITHUB_R_PACKAGES` contains the correct repository URLs.
 
 If task 7 fails because MAgPIE is missing, add a `/magpie` volume and verify `magpie_path`.
@@ -444,10 +446,10 @@ Windows-container requirements:
 Create the Windows environment file:
 
 ```powershell
-Copy-Item .env.windows.example .env.windows
+Copy-Item docker/.env.windows.example docker/.env.windows
 ```
 
-Edit `.env.windows` if GAMS is not installed at the default path:
+Edit `docker/.env.windows` if GAMS is not installed at the default path:
 
 ```text
 GAMS_WINDOWS_HOME=C:\GAMS\47
@@ -456,29 +458,29 @@ GAMS_WINDOWS_HOME=C:\GAMS\47
 Build the Windows image:
 
 ```powershell
-docker compose --env-file .env.windows -f docker-compose.windows.yml build
+docker compose --env-file docker/.env.windows -f docker/docker-compose.windows.yml build
 ```
 
 Run task 2:
 
 ```powershell
-docker compose --env-file .env.windows -f docker-compose.windows.yml run --rm open-prom-windows
+docker compose --env-file docker/.env.windows -f docker/docker-compose.windows.yml run --rm open-prom-windows
 ```
 
 Run another task:
 
 ```powershell
-docker compose --env-file .env.windows -f docker-compose.windows.yml run --rm open-prom-windows task_id=5
+docker compose --env-file docker/.env.windows -f docker/docker-compose.windows.yml run --rm open-prom-windows task_id=5
 ```
 
 The Windows container maps paths as follows:
 
 ```yaml
       - .\config.windows-container.json:C:\open-prom\config.windows-container.json:ro
-      - .\data:C:\open-prom\data:ro
-      - .\targets:C:\open-prom\targets:ro
-      - .\runs:C:\open-prom\runs
-      - .\outputs:C:\outputs
+      - ..\data:C:\open-prom\data:ro
+      - ..\targets:C:\open-prom\targets:ro
+      - ..\runs:C:\open-prom\runs
+      - ..\outputs:C:\outputs
       - ${GAMS_WINDOWS_HOME:-C:\GAMS\47}:C:\GAMS:ro
 ```
 
