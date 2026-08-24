@@ -52,20 +52,20 @@ Q06CaptCummCO2Glob(YTIME)$(TIME(YTIME))..
       =E= 
     sum(allCy$runCy(allCy),V06CaptCummCO2(allCy,YTIME));
 
-*' The equation calculates the CO2 sequestration cost in Euro per ton of CO2 sequestered for a given scenario 
-*' and year. The cost curve is determined based on global cumulative CO2 captured and sequestration cost parameters.
+*' The equation calculates the effective CO2 sequestration cost in US$2015 per tCO2.
+*' Its physical curve is determined by global cumulative capture and sequestration-cost parameters.
 *' The cost curve transitions smoothly from a minimum to a maximum cost using a hyperbolic tangent function, 
 *' representing a realistic relationship between cumulative CO2 captured and sequestration costs. The transition 
 *' behavior is controlled by shape parameters that define the steepness and midpoint of the cost curve. This 
-*' equation provides a dynamic approach to modeling CO2 sequestration costs, reflecting increasing costs as 
-*' cumulative CO2 captured expands. The result represents the cost of sequestering one ton of CO2 in the 
-*' specified scenario and year.
+*' The physical cost increases as cumulative capture expands. An optional point-source CCS policy adder is
+*' then included, so VmCstCO2SeqCsts is not a pure underground-storage cost when that adder is enabled.
 Q06CstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCstCO2SeqCsts(allCy,YTIME) 
         =E=
    i06CO2SeqData("seq_min") + 
    (i06CO2SeqData("seq_max") - i06CO2SeqData("seq_min")) / 2 *
-   (1+tanh(i06CO2SeqData("sig_a") / (i06CO2SeqData("sig_b") * i06CO2SeqData("seq_max")) * (V06CaptCummCO2Glob(YTIME) * 1e-3 - i06CO2SeqData("sig_b") * i06CO2SeqData("seq_max"))));           
+   (1+tanh(i06CO2SeqData("sig_a") / (i06CO2SeqData("sig_b") * i06CO2SeqData("seq_max")) * (V06CaptCummCO2Glob(YTIME) * 1e-3 - i06CO2SeqData("sig_b") * i06CO2SeqData("seq_max")))) +
+   i06CCSEnergyCostAdder(YTIME);
 
 *' The equation calculates the CAPEX of each CDR technology, as it's affected by a learning curve ($/tCO2).
 Q06GrossCapCDR(CDRTECH,YTIME)$(TIME(YTIME))..
@@ -127,7 +127,7 @@ Q06LvlCostCDR(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06VarCostCDR(CDRTECH,YTIME) - 20 +
     i06SpecElecCDR(allCy,CDRTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME) +
     i06SpecHeatCDR(allCy,CDRTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","NGS",YTIME) / 0.85 +
-    VmCstCO2SeqCsts(allCy,YTIME)$(not sameas("TEW", CDRTECH))
+    (VmCstCO2SeqCsts(allCy,YTIME) - i06CCSEnergyCostAdder(YTIME))$(not sameas("TEW", CDRTECH))
 ;
 
 *' The equation calculates the Levelized Costs of CDR capacity, also taking into account its subsidy, for each region (country) and year.

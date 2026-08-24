@@ -229,6 +229,15 @@ $setglobal bmswasPriceAdder 0
 $setglobal bmswasPriceAdderStartYear 2030
 $setglobal bmswasPriceAdderFullYear 2050
 
+*' *** Optional additional cost for point-source Energy CCS
+*' *** (US$2015/tCO2). The increment ramps smoothly from zero to
+*' *** ccsEnergyCostAdder between the two years. It affects point-source CCS
+*' *** in power, hydrogen, industry, and heat, but not DAC or TEW directly.
+*' *** Zero disables the mechanism.
+$setglobal ccsEnergyCostAdder 0
+$setglobal ccsEnergyCostAdderStartYear 2030
+$setglobal ccsEnergyCostAdderFullYear 2050
+
 *' *** Validate the public land-use switches before translating them to internal
 *' *** modes. A soft-link run still validates landUseEmulator, but its scenario row
 *' *** is ignored because softLinkMAgPIE takes precedence.

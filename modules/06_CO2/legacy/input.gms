@@ -11,6 +11,19 @@ seq_min 20,
 seq_max 900
 / ;
 
+* Smoothly ramp the additional point-source Energy CCS cost.
+i06CCSEnergyCostAdder(YTIME) = 0;
+i06CCSEnergyCostAdder(YTIME)$(
+  YTIME.val > %ccsEnergyCostAdderStartYear% and
+  YTIME.val < %ccsEnergyCostAdderFullYear%
+) = %ccsEnergyCostAdder%
+  * sqr((YTIME.val - %ccsEnergyCostAdderStartYear%)
+      / (%ccsEnergyCostAdderFullYear% - %ccsEnergyCostAdderStartYear%))
+  * (3 - 2 * (YTIME.val - %ccsEnergyCostAdderStartYear%)
+      / (%ccsEnergyCostAdderFullYear% - %ccsEnergyCostAdderStartYear%));
+i06CCSEnergyCostAdder(YTIME)$(YTIME.val >= %ccsEnergyCostAdderFullYear%) =
+  %ccsEnergyCostAdder%;
+
 *' #PARAM_CDR i06MatFacCDR is responsible just for the expansion ratio between the CDR technologies. Values between 0 - 1.
 parameter i06MatFacCDR(CDRTECH)                 "Maturity factor of CDR technology expressing its elasticity in implementation regarding its financial sustainability"
 /

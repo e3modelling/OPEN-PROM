@@ -19,7 +19,10 @@
       "CountrySolveMode": "serial",
       "bmswasPriceAdder": 0,
       "bmswasPriceAdderStartYear": 2030,
-      "bmswasPriceAdderFullYear": 2050
+      "bmswasPriceAdderFullYear": 2050,
+      "ccsEnergyCostAdder": 0,
+      "ccsEnergyCostAdderStartYear": 2030,
+      "ccsEnergyCostAdderFullYear": 2050
     },
     "land_use_emulator": {
       "source": "magpie",
