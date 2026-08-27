@@ -2,6 +2,15 @@
 *' @code
 
 *---
+$IFTHEN.opengem %OPENGEM% == on
+table imActv(YTIME,allCy,DSBS) "Sector activity (various)"
+                              !! main sectors (Billion US$2015) 
+                              !! bunkers and households (1)
+                              !! transport (Gpkm, or Gvehkm or Gtkm)
+$ondelim
+$include "./iActvOPGEM.csvr"
+$offdelim
+$ELSE.opengem
 table imActv(YTIME,allCy,DSBS) "Sector activity (various)"
                               !! main sectors (Billion US$2015) 
                               !! bunkers and households (1)
@@ -9,8 +18,10 @@ table imActv(YTIME,allCy,DSBS) "Sector activity (various)"
 $ondelim
 $include "./iActv.csvr"
 $offdelim
+$ENDIF.opengem
 ;
 imActv(YTIME,allCy,DSBS)$(imActv(YTIME,allCy,DSBS) = NA) = 0;
+imActv(YTIME,allCy,"PN")$DATAY(YTIME) = 1;
 *---
 table i01GDP(YTIME,allCy) "GDP (billion US$2015)"
 $ondelim
@@ -28,7 +39,7 @@ $IFTHEN.calib %Calibration% == Calibration
 variable imElastA(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)";
 table imElastAL(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)"
 $ondelim
-$include "./parameters/iElastA.csv"
+$include "iElastA.csv"
 $offdelim
 ;
 imElastA.L(runCy, SBS, ETYPES, YTIME) = imElastAL("ELL", SBS, ETYPES, YTIME);
@@ -40,7 +51,7 @@ imElastA.UP(runCy, SBS, negElast, YTIME) = -0.001;
 $ELSE.calib
 table imElastA(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)"
 $ondelim
-$include "./parameters/iElastA.csv"
+$include "iElastA.csv"
 $offdelim
 ;
 imElastA(runCy,SBS,ETYPES,YTIME) = imElastA("ELL",SBS,ETYPES,YTIME);
@@ -89,22 +100,22 @@ imDisc(runCy,"PC",YTIME) = 0.11;
 * FIXME: Drive the emission factors with mrprom
 * author=giannou
 parameter iCo2EmiFacAllSbs(EF) "CO2 emission factors (kgCO2/kgoe fuel burned)" /
-CRO 2.76
-LGN 4.15330622,
-HCL 3.941453651,
-SLD 4.438008647,
-GSL 2.872144882,
-GDO 3.068924588,
-LPG 2.612562612,
-KRS 2.964253636,
-RFO 3.207089028,
-OLQ 3.207089028,
-NGS 2.336234395,
-OGS 2.336234395,
+CRO 3.2
+LGN 4.2,
+HCL 4.2,
+*SLD 4.438008647,
+GSL 3.2,
+GDO 3.2,
+LPG 3.2,
+KRS 3.2,
+RFO 3.2,
+OLQ 3.2,
+NGS 2.5,
+OGS 2.5,
 BMSWAS 0/;
 *---
 imCo2EmiFac(runCy,SBS,EF,YTIME)$(not (sameas("NEN",SBS) or sameas("PCH",SBS))) = iCo2EmiFacAllSbs(EF);
-imCo2EmiFac(runCy,"IS","HCL",YTIME) = iCo2EmiFacAllSbs("SLD"); !! This is the assignment for coke
+imCo2EmiFac(runCy,"IS","HCL",YTIME) = 4.438008647; !! This is the assignment for coke
 *imCo2EmiFac(runCy,"H2P","NGS",YTIME) = 3.107;
 *imCo2EmiFac(runCy,"H2P","BMSWAS",YTIME) = 0.497;
 *---
@@ -165,6 +176,7 @@ imFuelPrice(runCy,"BU","BGSL",YTIME) = imFuelPrice(runCy,"OI","BGSL",YTIME);
 imFuelPrice(runCy,TRANSE,"RFO",YTIME) = imFuelPrice(runCy,"BU","RFO",YTIME);
 imFuelPrice(runCy,TRANSE,"OGS",YTIME) = imFuelPrice(runCy,TRANSE,"NGS",YTIME);
 imFuelPrice(runCy,TRANSE,"OLQ",YTIME) = imFuelPrice(runCy,TRANSE,"GDO",YTIME);
+imFuelPrice(runCy,TRANSE,"H2F",YTIME) = 2 * imFuelPrice(runCy,TRANSE,"H2F",YTIME);
 imFuelPrice(runCy,"ICT",EFS,YTIME)$SECtoEF("ICT",EFS) = imFuelPrice(runCy,"SE",EFS,YTIME);
 *---
 table imPriceFuelsIntBase(WEF,YTIME)	              "International Fuel Prices USED IN BASELINE SCENARIO ($2015/toe)"
@@ -202,6 +214,7 @@ $ondelim
 $include"./iDataTransTech.csv"
 $offdelim
 ;
+imDataTransTech(NAVIGATION,"TRFO",ECONCHAR,YTIME) = imDataTransTech(NAVIGATION,"TGDO",ECONCHAR,YTIME)
 *---
 table imDataIndTechnology(INDSE,TECH,ECONCHAR)          "Technoeconomic characteristics of industry (various)"
             IC      FC      VC      LFT USC
@@ -373,8 +386,8 @@ SE.TNGS       0.2244   6.8             20  0.88
 SE.TOGS       0.2244   10.88           20  0.8
 *SE.PGTSOL     0.86224  1.36            20  0.85
 SE.TBMSWAS    0.323544 10.88           20  0.5
-SE.TELC       0.3      8.976           12  0.85
-SE.THEATPUMP  0.432    12.9254         20  1.848
+SE.TELC       0.3      8.976           12  0.97
+SE.THEATPUMP  0.432    12.9254         20  3.2
 SE.TSOL       0.432    12.9254         20  1
 SE.TGEO       0.432    12.9254         20  0.5
 AG.THCL       0.323544 10.88           20  0.7
@@ -389,7 +402,7 @@ AG.TNGS       0.2244   6.8             20  0.88
 AG.TOGS       0.2244   10.88           20  0.8
 *AG.PGTSOL     0.86224  1.36            20  0.85
 AG.TBMSWAS    0.323544 10.88           20  0.5
-AG.TELC       0.3      8.976           12  0.85
+AG.TELC       0.3      8.976           12  0.9
 AG.THEATPUMP  0.432    12.9254         20  1.848
 AG.TSOL       0.432    12.9254         20  1
 AG.TGEO       0.432    12.9254         20  0.5
@@ -405,8 +418,8 @@ HOU.TNGS      0.2244   6.8             20  0.88
 HOU.TOGS      0.2244   10.88           20  0.8
 *HOU.PGTSOL    0.86224  1.36            20  0.85
 HOU.TBMSWAS   0.323544 10.88           20  0.5
-HOU.TELC      0.3      8.976           12  0.85
-HOU.THEATPUMP 0.432    12.9254         20  1.848
+HOU.TELC      0.3      8.976           12  0.97
+HOU.THEATPUMP 0.432    12.9254         20  3.2
 HOU.TSOL      0.432    12.9254         20  1
 HOU.TGEO      0.432    12.9254         20  0.5
 ;
@@ -706,8 +719,8 @@ imMatrFactor("USA",DSBS,"TELC",YTIME)$(INDDOM(DSBS) ) = 5;
 
 $ELSE.calib
 variable imMatrFactor(allCy,DSBS,TECH,YTIME)    "Maturity factor per technology and subsector for all countries (1)";
-imMatrFactor.LO(runCy,DSBS,TECH,YTIME) = 1e-6;                                          
-imMatrFactor.UP(runCy,DSBS,TECH,YTIME) = 10;
+imMatrFactor.LO(runCy,DSBS,TECH,YTIME) = 1e-2;                                          
+imMatrFactor.UP(runCy,DSBS,TECH,YTIME) = 1;
 imMatrFactor.L(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);     
 imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(not (sameas(DSBS,"PC") or sameas(DSBS,"PB") or sameas(DSBS,"GU") or INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS))) = iMatrFactorData(runCy,DSBS,TECH,YTIME);   
 imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(sameas(DSBS,"AG") and not EU28(runCy)) = iMatrFactorData(runCy,DSBS,TECH,YTIME); 
@@ -722,6 +735,7 @@ parameters
 !!imFacSubsiCapCostSupply(SSBS,STECH)                         !!State subsidy (%) factor in technology capex (supply side)
 !!imGrantCapCostSupply(SSBS,STECH)                            !!State granting in technology capex (supply side)
 imCapCostTechMin(allCy,DSBS,TECH,YTIME)                    !!Factor for the minimum capex of a demand technology after the state subsidy
+!!#UPT imCostCapTechDisc(YTIME)                                   !!Discount rate for capital costs of power generation technologies
 ;
 
 $ontext
@@ -822,22 +836,43 @@ imUsfEneConvSubTech(runCy,INDSE,TECH,YTIME)  = imDataIndTechnology(INDSE,TECH,"U
 imCapCostTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,"IC");
 imFixOMCostTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,"FC");
 imVarCostTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,"VC");
+imVarCostTech(runCy,DOMSE,"TSOL",YTIME) = 1e-3;
+imVarCostTech(runCy,DOMSE,"TGEO",YTIME) = 1e-3;
 imUsfEneConvSubTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,"USC");
 *---
 **  Non Energy Sector and Bunkers
 imFixOMCostTech(runCy,NENSE,TECH,YTIME)= imDataNonEneSec(NENSE,TECH,"FC");
 imVarCostTech(runCy,NENSE,TECH,YTIME) = imDataNonEneSec(NENSE,TECH,"VC");
 imUsfEneConvSubTech(runCy,NENSE,TECH,YTIME) = imDataNonEneSec(NENSE,TECH,"USC");
-imUsfEneConvSubTech(runCy,"BU","TH2F",YTIME) = 0.7;
-imUsfEneConvSubTech(runCy,"BU","TNGS",YTIME) = 0.6;
+imUsfEneConvSubTech(runCy,"BU","TH2F",YTIME) = 0.8;
+imUsfEneConvSubTech(runCy,"BU","TNGS",YTIME) = 0.5;
 imUsfEneConvSubTech(runCy,"BU","TGSL",YTIME) = 0.5;
+imCapCostTech(runCy,"BU",TECH,YTIME)$SECTTECH("BU",TECH) = imCapCostTech(runCy,"GN","TGDO",YTIME);
 imCapCostTech(runCy,"BU","TH2F",YTIME) = 1.5 * imCapCostTech(runCy,"BU","TGDO",YTIME);
 *---
 **  CDR
-imCapCostTechMin(allCy,"DAC","HTDAC",YTIME) = 0.3;
-imCapCostTechMin(allCy,"DAC","H2DAC",YTIME) = 0.3;
-imCapCostTechMin(allCy,"DAC","LTDAC",YTIME) = 0.3;
-imCapCostTechMin(allCy,"EW","TEW",YTIME) = 0.3;
+*- #PARAM_CDR The following imCapCostTechMin are responsible for the secondary parameterization of the CDR technologies.
+*- Example:
+*- imCapCostTechMin(allCy,"DAC","HTDAC","%fBaseY%") = 1;
+*- imCapCostTechMin(allCy,"DAC","HTDAC",YTIME)$(ord(YTIME)>15 and ord(YTIME)<=25) = imCapCostTechMin(allCy,"DAC","HTDAC","%fBaseY%") - 0.05 * (ord(YTIME)-14);
+*- imCapCostTechMin(allCy,"DAC","HTDAC",YTIME)$(ord(YTIME)>25) = 0.2;
+*- Smooth increase of subsidy from 0 to 80% with an annual increase of 5% from 2025 to 2035, and then a constant subsidy of 80% from 2035 onwards.
+
+imCapCostTechMin(allCy,"DAC","HTDAC","%fBaseY%") = 1;
+imCapCostTechMin(allCy,"DAC","HTDAC",YTIME)$(ord(YTIME)>15 and ord(YTIME)<=25) = imCapCostTechMin(allCy,"DAC","HTDAC","%fBaseY%") - 0.05 * (ord(YTIME)-14);
+imCapCostTechMin(allCy,"DAC","HTDAC",YTIME)$(ord(YTIME)>25) = 0.2;
+
+imCapCostTechMin(allCy,"DAC","H2DAC","%fBaseY%") = 1;
+imCapCostTechMin(allCy,"DAC","H2DAC",YTIME)$(ord(YTIME)>15 and ord(YTIME)<=25) = imCapCostTechMin(allCy,"DAC","HTDAC","%fBaseY%") - 0.05 * (ord(YTIME)-14);
+imCapCostTechMin(allCy,"DAC","H2DAC",YTIME)$(ord(YTIME)>25) = 0.5;
+
+imCapCostTechMin(allCy,"DAC","LTDAC","%fBaseY%") = 1;
+imCapCostTechMin(allCy,"DAC","LTDAC",YTIME)$(ord(YTIME)>15 and ord(YTIME)<=25) = imCapCostTechMin(allCy,"DAC","HTDAC","%fBaseY%") - 0.05 * (ord(YTIME)-14);
+imCapCostTechMin(allCy,"DAC","LTDAC",YTIME)$(ord(YTIME)>25) = 0.2;
+
+imCapCostTechMin(allCy,"EW","TEW","%fBaseY%") = 1;
+imCapCostTechMin(allCy,"EW","TEW",YTIME)$(ord(YTIME)>15 and ord(YTIME)<=25) = imCapCostTechMin(allCy,"DAC","HTDAC","%fBaseY%") - 0.05 * (ord(YTIME)-14);
+imCapCostTechMin(allCy,"EW","TEW",YTIME)$(ord(YTIME)>25) = 0.2;
 *---
 !!imUsfEneConvSubTech(runCy,INDSE,"THCL",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCL","USC") + 0.005 * (ord(YTIME)-14);
 imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCLCCS","USC") + 0.005 * (ord(YTIME)-14);
@@ -859,3 +894,7 @@ imPlantEffByType(runCy,STECH,"effHeat",YTIME)$(not PGALL(STECH))= imPlantEffByTy
 **   Conversion of GW mean power into TWh/y, depending on whether it's a leap year
 smGwToTwhPerYear(YTIME) = 8.76 + 0.024 $ (mod(YTIME.val,4) = 0 and mod (YTIME.val,100) <> 0);
 *--
+!!#UPT imCostCapTechDisc(YTIME) = 0;
+!!#UPT imCostCapTechDisc(YTIME)$(ord(YTIME) = 20) = 0.75;
+!!#UPT imCostCapTechDisc(YTIME)$(ord(YTIME) > 20 and ord(YTIME) <= 40) = 0.75 + (ord(YTIME) - 20) * (0.5 - 0.75) / (40 - 20);
+!!#UPT imCostCapTechDisc(YTIME)$(ord(YTIME) > 40) = 0.5;

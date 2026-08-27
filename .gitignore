@@ -18,11 +18,13 @@ regionmappingOP.csv
 /data2
 /targets
 /runs
+/outputs
 /default*
 metadata.json
 /doc
 *.pyc
 config.json
 modelstat.txt
+docs/_build/
 git_diff.txt
 scenarios.csv

@@ -16,24 +16,113 @@
 *' carbon values for all countries, electricity prices to industrial and residential consumers,
 *' efficiency values, and the total hydrogen cost per sector.The result of the equation is the fuel price per 
 *' subsector and fuel, adjusted based on changes in carbon values, electricity prices, efficiency, and hydrogen costs.
+*'
+*' BMSWAS price modes are derived in main.gms:
+*'   static: standard recursive fuel-price dynamics.
+*'   softfx: price fixed to iPricesMagpie in core/preloop.gms.
+*'   curve/globiom: year-over-year P=a+b*Q^c ratio using lagged BMSWAS Q.
+*'   curve/magpie: H12 P=pa+pb*Q+pc*Q^2 using effective 2G Q,
+*'                 0.4*BMSWAS + 0.6*(BGSL+BKRS+BGAS). Non-EUR regions use
+*'                 current regional Q; all EU28 members use the common EUR
+*'                 price based on preceding-year EU28 Q.
+*'
+*' V08BmswasPriceFactor equals the GLOBIOM curve ratio, the MAgPIE H12 target
+*' divided by the preceding PG price, the soft-link price ratio, or one.
+$IFTHEN.magpieQuantityEquation "%bmswasPriceMode%" == "curve"
+$IFTHEN.magpieQuantityEquationSource "%landUseEmulator%" == "magpie"
+* Non-EUR H12 regions use current regional Q. EUR uses preceding-year EU28 Q
+* so its common price is independent of country solve order.
+Q08Bioenergy2GEffectiveQH12Magpie(allCy,YTIME)$(TIME(YTIME) $runCy(allCy))..
+    V08Bioenergy2GEffectiveQH12Magpie(allCy,YTIME)
+        =E=
+    sum(MAGPIEH12REG$mapMagpieH12Cy(MAGPIEH12REG,allCy),
+      sum(allCy2$mapMagpieH12Cy(MAGPIEH12REG,allCy2),
+        sum(EFS$i08Bioenergy2GWeightMagpie(EFS),
+          i08Bioenergy2GWeightMagpie(EFS) * (
+            V03ProdPrimary(allCy2,EFS,YTIME)$(not sameas(MAGPIEH12REG,"EUR"))
+          + V03ProdPrimary(allCy2,EFS,YTIME-1)$sameas(MAGPIEH12REG,"EUR")
+          )
+        )
+      )
+    )
+    ;
+$ENDIF.magpieQuantityEquationSource
+$ENDIF.magpieQuantityEquation
+
+Q08BmswasPriceFactor(allCy,YTIME)$(TIME(YTIME) $runCy(allCy))..
+    V08BmswasPriceFactor(allCy,YTIME)
+        =E=
+(
+$IFTHEN.mode %bmswasPriceMode% == curve
+$IFTHEN.emulatorCurve %landUseEmulator% == globiom
+    ( 1e-3 + sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"a",YTIME))
+           + sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"b",YTIME))
+           * (V03ProdPrimary(allCy,"BMSWAS",YTIME-1) + 1e-6)
+           ** sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"c",YTIME)) )
+    /
+    ( 1e-3 + sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"a",YTIME))
+           + sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"b",YTIME))
+           * (V03ProdPrimary(allCy,"BMSWAS",YTIME-2) + 1e-6)
+           ** sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"c",YTIME)) )
+$ELSEIF.emulatorCurve %landUseEmulator% == magpie
+    sum(MAGPIEH12REG$mapMagpieH12Cy(MAGPIEH12REG,allCy),
+      sum(activeMagpieScen,
+          i08BmswasPriceH12Magpie(activeMagpieScen,MAGPIEH12REG,"pa",YTIME)
+        + i08BmswasPriceH12Magpie(activeMagpieScen,MAGPIEH12REG,"pb",YTIME)
+          * V08Bioenergy2GEffectiveQH12Magpie(allCy,YTIME)
+        + i08BmswasPriceH12Magpie(activeMagpieScen,MAGPIEH12REG,"pc",YTIME)
+          * sqr(V08Bioenergy2GEffectiveQH12Magpie(allCy,YTIME))
+      )
+    )
+    / VmPriceFuelSubsecCarVal(allCy,"PG","BMSWAS",YTIME-1)
+$ENDIF.emulatorCurve
+$ELSEIF.mode %bmswasPriceMode% == softfx
+    VmPriceFuelSubsecCarVal(allCy,"PG","BMSWAS",YTIME) / VmPriceFuelSubsecCarVal(allCy,"PG","BMSWAS",YTIME-1)
+$ELSE.mode
+1
+$ENDIF.mode
+) *
+EXP(1.5 * (SUM(runCy2,V03ProdPrimary(runCy2,"BMSWAS",YTIME-1)) / (140 * 23.88458966275)) ** 3) /
+EXP(1.5 * (SUM(runCy2,V03ProdPrimary(runCy2,"BMSWAS",YTIME-2)) / (140 * 23.88458966275)) ** 3)
+;
+
 Q08PriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME)$(SECtoEF(SBS,EFS) $(not sameas("CRO",EFS)) $TIME(YTIME)
-$IFTHEN %link2MAgPIE% == on 
+$IFTHEN %softLinkMAgPIE% == on
    $(not sameas("BMSWAS",EFS))
 $ENDIF
+$IFTHEN.magpiePriceDomain "%bmswasPriceMode%" == "curve"
+$IFTHEN.magpiePriceDomainSource "%landUseEmulator%" == "magpie"
+   $(not sameas("BMSWAS",EFS))
+$ENDIF.magpiePriceDomainSource
+$ENDIF.magpiePriceDomain
    $(not sameas("NUC",EFS)) $runCy(allCy))..
     VmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME)
         =E=
+*' Fuel prices follow the preceding value, production-cost or supply indices,
+*' crude-oil pass-through, and the change in carbon cost.
     VmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME-1) *
     (1 + (VmCostPowGenAvgLng(allCy,YTIME-1) / VmCostPowGenAvgLng(allCy,YTIME-2) - 1)$sameas("ELC",EFS)) *
-    (1 + (VmCostAvgProdH2(allCy,YTIME-1) / VmCostAvgProdH2(allCy,YTIME-2) - 1)$sameas("H2F",EFS)) * 
+    (1 + ((VmCostAvgProdH2(allCy,YTIME-1) / VmCostAvgProdH2(allCy,YTIME-2)) ** 0.7 - 1)$sameas("H2F",EFS)) * 
     (1 + (VmCostAvgProdSte(allCy,YTIME-1) / VmCostAvgProdSte(allCy,YTIME-2) - 1)$sameas("STE",EFS)) *
-    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.4 - 1)$sameas("NGS",EFS)) *
-    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.8 - 1)$SECtoEFPROD("LQD",EFS)) *
-    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** 0.2 - 1)$(sameas("HCL",EFS) or sameas("LGN",EFS))) +
-    1e-3 * (
-      VmCarVal(allCy,"TRADE",YTIME) * imCo2EmiFac(allCy,SBS,EFS,YTIME) - 
-      VmCarVal(allCy,"TRADE",YTIME-1) * imCo2EmiFac(allCy,SBS,EFS,YTIME-1)
-    )$DSBS(SBS);
+    (1 + (V08BmswasPriceFactor(allCy,YTIME) ** i08PriceTransElast(EFS,"BMSWAS") - 1)$(BIOFUELS(EFS) or sameas("BMSWAS",EFS))) *
+    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** i08PriceTransElast(EFS,"CRO") - 1)$sameas("NGS",EFS)) *
+    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** i08PriceTransElast(EFS,"CRO") - 1)$SECtoEFPROD("LQD",EFS)) *
+    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** i08PriceTransElast(EFS,"CRO") - 1)$(sameas("HCL",EFS) or sameas("LGN",EFS))) +
+    VmPriceCarbon(allCy,SBS,EFS,YTIME) - VmPriceCarbon(allCy,SBS,EFS,YTIME-1);
+
+$IFTHEN.magpiePriceEquation "%bmswasPriceMode%" == "curve"
+$IFTHEN.magpiePriceEquationSource "%landUseEmulator%" == "magpie"
+* Apply the H12 MAgPIE BMSWAS price to every subsector; EU28 share EUR price.
+Q08PriceBmswasMagpie(allCy,SBS,YTIME)$(
+  SECtoEF(SBS,"BMSWAS") $TIME(YTIME) $runCy(allCy)
+)..
+  VmPriceFuelSubsecCarVal(allCy,SBS,"BMSWAS",YTIME)
+    =E=
+  V08BmswasPriceFactor(allCy,YTIME)
+  * VmPriceFuelSubsecCarVal(allCy,"PG","BMSWAS",YTIME-1)
+  ;
+$ENDIF.magpiePriceEquationSource
+$ENDIF.magpiePriceEquation
 
 Q08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)$(SECtoEF(DSBS,EF) $TIME(YTIME) $runCy(allCy))..
 V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)
@@ -43,6 +132,13 @@ V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)
       SUM(EFS2$SECtoEF(DSBS,EFS2), (VmFinalEnergy(allCy,DSBS,EFS2,YTIME) - V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$ELCEF(EFS2)) + 1e-6)
     );
   
+Q08PriceCarbon(allCy,SBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    VmPriceCarbon(allCy,SBS,EFS,YTIME)
+     =E=
+    1e-3 * (
+      VmCarVal(allCy,"TRADE",YTIME)$(INDSE1(SBS) or ((DOMSE1(SBS) or TRANS1(SBS) or sameas("BU", SBS)) and ord(YTIME) > 17))
+    ) * imCo2EmiFac(allCy,SBS,EFS,YTIME);
+
 *' The equation calculates the average fuel price per subsector. These average prices are used to further compute electricity prices in industry
 *' (using the OI "other industry" avg price), as well as the aggregate fuel demand (of substitutable fuels) per subsector.
 *' In the transport sector they feed into the calculation of the activity levels.

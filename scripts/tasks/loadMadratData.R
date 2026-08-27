@@ -78,10 +78,63 @@ if (!is.null(DevMode) && DevMode == 0) {
     
 } else if (!is.null(DevMode) && DevMode == 1) {
     library(mrprom)
-    print( paste("Generating development mode data with mrprom ver.", installed.packages()["mrprom","Version"]) )
+# Load mrprom library with error handling
+    tryCatch({
+        library(mrprom)
+    }, error = function(e) {
+        cat("ERROR: Failed to load mrprom library:\n", conditionMessage(e), "\n")
+        stop("Cannot load required mrprom library. Please ensure it is properly installed.")
+    })
+    
+    print( paste("Generating research mode data with mrprom ver.", installed.packages()["mrprom","Version"]) )
     fname <- paste0("rev0",dev,"_bdd58f98_open_prom.tgz") # file name
-    retrieveData("OPEN_PROM",puc=F,renv=F,regionmapping = "regionmappingOPDEV4.csv",dev=dev)
-    file.copy(paste0(getConfig("outputfolder"),"/",fname),fname)
+    fnameTargets <- paste0("rev0",dev,"_bdd58f98_targets.tgz")
+    # run the fullOPEN-PROM function generating the whole input dataset of OPEN-PROM
+    # retrieveData contains a call to fullOPEN-PROM
+    
+    cat("Retrieving OPEN_PROM data...\n")
+    tryCatch({
+        retrieveData("OPEN_PROM",puc=F,renv=F,regionmapping = "regionmappingOPDEV4.csv",dev=dev)
+    }, error = function(e) {
+        cat("ERROR: Failed to retrieve OPEN_PROM data:\n", conditionMessage(e), "\n")
+        stop("Data retrieval for OPEN_PROM failed. Terminating data generation.")
+    })
+    
+    # retrieve targets for calibration
+    #setConfig(ignorecache = T)
+    cat("Retrieving TARGETS data...\n")
+    tryCatch({
+        retrieveData("TARGETS",puc=F,renv=F,regionmapping = "regionmappingOPDEV4.csv",dev=dev)
+    }, error = function(e) {
+        cat("ERROR: Failed to retrieve TARGETS data:\n", conditionMessage(e), "\n")
+        stop("Data retrieval for TARGETS failed. Terminating data generation.")
+    })
+    
+    # Copy generated files with error handling
+    src_fname <- paste0(getConfig("outputfolder"),"/",fname)
+    src_targets <- paste0(getConfig("outputfolder"),"/",fnameTargets)
+
+        if (!file.exists(src_fname)) {
+        cat("ERROR: Generated OPEN_PROM data file not found:", src_fname, "\n")
+        stop("Expected data file was not generated. Data generation failed.")
+    }
+    
+    if (!file.exists(src_targets)) {
+        cat("ERROR: Generated TARGETS data file not found:", src_targets, "\n")
+        stop("Expected targets file was not generated. Data generation failed.")
+    }
+    
+    if (!file.copy(src_fname, fname)) {
+        cat("ERROR: Failed to copy OPEN_PROM data file\n")
+        stop("File copy operation failed for OPEN_PROM data.")
+    }
+    
+    if (!file.copy(src_targets, fnameTargets)) {
+        cat("ERROR: Failed to copy TARGETS data file\n")
+        stop("File copy operation failed for TARGETS data.")
+    }
+    
+    cat("Research mode data generation completed successfully.\n")
 
 } else if (!is.null(DevMode) && DevMode == 2) {
     print("Getting data for test mode")

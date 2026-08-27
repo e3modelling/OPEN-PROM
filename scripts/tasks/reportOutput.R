@@ -25,7 +25,10 @@ reportOutput <- function(
     Validation2050 = Validation2050,
     emissions = emissions,
     htmlReport = htmlReport, model = model,
-    project_template = project_template) {
+    dashboard = dashboard,
+    project_template = project_template,
+    stripScenarioTimestamp = stripScenarioTimestamp,
+    PngFiles = PngFiles) {
     
   # setConfig(regionmapping = mapping)
 
@@ -33,7 +36,9 @@ reportOutput <- function(
     mif_name = mif_name,
     aggregate = aggregate, fullValidation = fullValidation,
     emissions = emissions, htmlReport = htmlReport,
-    project_template = project_template, model = model
+    project_template = project_template, model = model,
+    stripScenarioTimestamp = stripScenarioTimestamp,
+    dashboard = dashboard
   )
   metadata <- getMetadata(path = runpath)
   print("Report generation completed.")
@@ -52,10 +57,10 @@ reportOutput <- function(
   if (!is.null(plot_name)) {
     save_names <- file.path(runpath, plot_name)
     mapply( # for each scenario, unpack the magpie obj and a pdf savename
-      function(report, metadata, save) {
-        batchPlotReport(report = report, metadata = metadata, save_pdf = save)
+      function(report, metadata, save, PngFiles) {
+        batchPlotReport(report = report, metadata = metadata, save_pdf = save, PngFiles = PngFiles)
       },
-      reports, metadata, save_names
+      reports, metadata, save_names, PngFiles
     )
   }
   invisible(NULL)
@@ -69,4 +74,5 @@ plot_name <- if (length(args) > 2) args[3] else "plot.tex"
 reportOutput(runpath = runpath, mif_name = mif_name, plot_name = plot_name,
              Validation_data_for_plots = FALSE, Validation2050 = FALSE,
              emissions = TRUE, htmlReport = FALSE, model = "OPEN-PROM 2.2",
-             project_template = NULL)
+             project_template = NULL, dashboard = FALSE,
+             stripScenarioTimestamp = FALSE, PngFiles = TRUE)

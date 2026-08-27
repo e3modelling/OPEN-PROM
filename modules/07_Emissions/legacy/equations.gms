@@ -74,16 +74,24 @@ Q07GrossEmissCO2Supply(allCy,SSBS,YTIME)$(TIME(YTIME)$runCy(allCy))..
         =E=   
     SUM(EFS,
       (
-        V03InpTotTransf(allCy,SSBS,EFS,YTIME)$SSBSEMIT(SSBS) +
+        V03InpTotTransf(allCy,SSBS,EFS,YTIME)$SSBSENERGY(SSBS) +
         VmConsFiEneSec(allCy,SSBS,EFS,YTIME) 
       ) * imCo2EmiFac(allCy,SSBS,EFS,YTIME)
     );
-    
+
+Q07GrossEmissCO2Processes(allCy,SSBS,YTIME)$(TIME(YTIME)$runCy(allCy))..
+    V07GrossEmissCO2Processes(allCy,SSBS,YTIME)
+        =E=   
+    SUM(EFS,
+      V03InpTotTransf(allCy,SSBS,EFS,YTIME) * 
+      imCo2EmiFac(allCy,SSBS,EFS,YTIME)
+    )$sameas(SSBS,"H2P");
+
 *' This equation calculates the total absolute abatement of non-CO2 emissions for a specific source, country, and time period.
 *' The determination is based on the Marginal Abatement Cost (MAC) curves, the exogenous carbon price, and specific unit conversion factors. The equation 
 *' identifies the maximum abatement potential by scanning the MAC curve steps and selecting the highest reduction level where the implementation cost is less than or
 *' equal to the adjusted carbon price. This ensures that the model adopts all abatement measures that are economically viable given the current carbon price.
-Q07RedAbsBySrcRegTim(E07SrcMacAbate, allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+Q07RedAbsBySrcRegTim(E07SrcMacAbate, allCy, YTIME)$(TIME(YTIME)$(runCy(allCy))$(ord(YTIME) > 17))..
     V07RedAbsBySrcRegTim(E07SrcMacAbate, allCy, YTIME)
     =E=
     smax(E07MAC$(p07MacCost(E07MAC) <= iCarbValYrExog(allCy, YTIME) * p07UnitConvFactor(E07SrcMacAbate)), 
@@ -127,18 +135,4 @@ Q07EmissionsNet(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         - sum((SBS,EFS)$SECtoEF(SBS,EFS), V06CO2CaptureCCS(allCy,SBS,EFS,YTIME))
         - sum(CDRTECH, V06CapCDR(allCy,CDRTECH,YTIME)) * 1e-6))
     ) + 1e-6
-    ;
-
-*' The equation calculates the net emissions share for a given country and year, representing the country's 
-*' proportion of global net emissions in the previous time period. The share is determined by dividing the 
-*' country's net emissions by a smoothed global total that uses a hyperbolic tangent function to handle 
-*' zero or negative global emissions gracefully. This approach ensures a stable emissions share calculation 
-*' while preventing numerical issues.
-Q07EmissionsNetPart(allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V07EmissionsNetPart(allCy,YTIME)
-    =E=
-    (V07EmissionsNet(allCy,YTIME-1) /
-    (sum(runCy2, V07EmissionsNet(runCy2,YTIME-1))))
-!!    * 1 / 2 * ( 1 + tanh (10 * sum(runCy2, V07EmissionsNet(runCy2,YTIME-1))))
-    + 1e-6
     ;

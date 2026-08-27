@@ -62,7 +62,12 @@ Apart from installing the software, you should also create a local `config.json`
   * `paths.model_runs_path`: the destination used by the optional run-folder sync step
   * `paths.magpie_path`: only needed for the OPEN-PROM ↔ MAgPIE soft-link (task 7)
 * `behavior.*`: four switches controlling the wrapper workflow (see below)
-* `scenario.*`: the scenario to run (`scenario_name`, `description`, `gams_flags`, `magpie`). `task_id` is *not* stored here — it comes from the CLI (`task_id=N`, passed by every VS Code task button) or, in batch mode, from each row of `scenarios.csv`.
+* `scenario.*`: the scenario to run.
+  * `scenario_name` — also used as the MAgPIE subscenario name for task 7
+  * `description` — free text
+  * `gams_flags.*` — flags forwarded as `--<key>=<value>` to the GAMS command line
+  * `magpie.*` — soft-link-only sub-block; see Tutorial 12. Contains `project` (MAgPIE subdir under `magpie/e3m_projects/`), `existing_prom_run` (optional resume path), and `max_iter` / `price_tol` / `quant_tol` (iteration / convergence controls). Defaults: `max_iter=1` (single round-trip, legacy behaviour), `price_tol=quant_tol=0.05`.
+  * `task_id` is *not* stored here — it comes from the CLI (`task_id=N`, passed by every VS Code task button) or, in batch mode, from each row of `scenarios.csv`.
 
 For batch sweeps over multiple scenarios, create a `scenarios.csv` at the repo root (see `scenarios.template.csv` for the format) and use `Rscript start.R scenarios.csv` or the **RUN BATCH** VS Code button. Each CSV row overlays `config.json:scenario` for that one run. The CSV is opt-in: without it, only the single-scenario workflow (`Rscript start.R task_id=N`) is available.
 

@@ -89,7 +89,7 @@ V04NewCapElec.L(runCy,PGALL,YTIME) = 1;
 V04NewCapElec.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = 0;
 *---
 V04CapElecNominal.LO(runCy,PGALL,YTIME) = 0;
-V04CapElecNominal.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = imInstCapPastNonCHP(runCy,PGALL,YTIME) / i04AvailRate(runCy,PGALL,YTIME);
+V04CapElecNominal.FX(runCy,PGALL,YTIME)$DATAY(YTIME) = imInstCapPastNonCHP(runCy,PGALL,YTIME);
 *---
 V04ShareTechPG.LO(runCy,PGALL,YTIME) = 0;
 V04ShareTechPG.UP(runCy,PGALL,YTIME) = 1; 

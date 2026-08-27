@@ -46,14 +46,13 @@ Q02RatioRem(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and (INDD
 Q02PremScrpIndu(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and (INDDOM(DSBS) or NENSE(DSBS)))$runCy(allCy))..
     V02PremScrpIndu(allCy,DSBS,ITECH,YTIME)
         =E=
-    1 - (V02VarCostTech(allCy,DSBS,ITECH,YTIME-1) * i02util(allCy,DSBS,ITECH,YTIME-1) + 1e-3) ** (-2) /
+    1 - (V02VarCostTech(allCy,DSBS,ITECH,YTIME-1) * i02util(allCy,DSBS,ITECH,YTIME-1) + 1e-3) ** (-1) /
     (
-      (V02VarCostTech(allCy,DSBS,ITECH,YTIME-1) * i02util(allCy,DSBS,ITECH,YTIME-1) + 1e-3) ** (-2) +
-      i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME) * (
-        sum(ITECH2$(not sameas(ITECH2,ITECH) and SECTTECH(DSBS,ITECH2)),
-          V02CostTech(allCy,DSBS,ITECH2,YTIME-1) + V02VarCostTech(allCy,DSBS,ITECH2,YTIME-1)
-        )
-      )**(-2)
+      (V02VarCostTech(allCy,DSBS,ITECH,YTIME-1) * i02util(allCy,DSBS,ITECH,YTIME-1) + 1e-3) ** (-1) +
+      0.01 * i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME) *
+      sum(ITECH2$(not sameas(ITECH2,ITECH) and SECTTECH(DSBS,ITECH2)),
+          (V02CostTech(allCy,DSBS,ITECH2,YTIME-1) + 1e-3) ** (-1)
+      )
     );
 
 *'NEW EQUATION' - kind of --> substitutes Q02ConsRemSubEquipSubSec
@@ -113,8 +112,7 @@ Q02VarCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(DSBS)
         VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME) +
         imCO2CaptRateIndustry(allCy,ITECH,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * imCo2EmiFac(allCy,DSBS,EF,YTIME)  +
         (1-imCO2CaptRateIndustry(allCy,ITECH,YTIME)) * 1e-3 * imCo2EmiFac(allCy,DSBS,EF,YTIME)  *
-        (sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME))) +
-        (VmRenValue(YTIME)/1000)$(not RENEF(ITECH) and not NENSE(DSBS)) !! needs change of units
+        sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME))
       )
     ) +
     imVarCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit
@@ -125,7 +123,8 @@ Q02CostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(DSBS))$S
         =E=
     V02CapCostTech(allCy,DSBS,ITECH,YTIME) +
     V02VarCostTech(allCy,DSBS,ITECH,YTIME) -
-    VmSubsiDemTech(allCy,DSBS,ITECH,YTIME);
+    VmSubsiDemTech(allCy,DSBS,ITECH,YTIME)
+    ;
 
 *' This equation calculates the technology share in new equipment based on factors such as maturity factor,
 *' cumulative distribution function of consumer size groups, number of consumers, technology cost, distribution function of consumer
@@ -171,8 +170,7 @@ Q02FinalElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V02FinalElecNonSubIndTert(allCy,INDDOM,YTIME) 
         =E=
     V02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME) / 
-    imUsfEneConvSubTech(allCy,INDDOM,"TELC",YTIME)
-    ;
+    imUsfEneConvSubTech(allCy,INDDOM,"TELC",YTIME);
 
 *' This equation calculates the consumption of fuels in each demand subsector.
 *' It considers the consumption of remaining substitutable equipment, the technology share in new equipment, and the final demand

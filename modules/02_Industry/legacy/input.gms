@@ -4,7 +4,7 @@
 *---
 table i02ElastNonSubElecData(SBS,ETYPES,YTIME)             "Elasticities of Non Substitutable Electricity (1)"
 $ondelim
-$include "./parameters/iElastNonSubElecData.csv"
+$include "iElastNonSubElecData.csv"
 $offdelim
 ;
 *---

@@ -14,7 +14,9 @@
 #              column is absent, every row runs (backwards compatible).
 
 library(jsonlite)
-
+# Always (re)install the local mrprom/postprom so every run uses the root copies.
+if (dir.exists("./mrprom"))  devtools::install_local("./mrprom")
+if (dir.exists("./postprom")) devtools::install_local("./postprom")
 `%||%` <- function(a, b) if (is.null(a)) b else a
 
 # ---- Read config.json (or the OPENPROM_CONFIG env var override (rarely used)) -----
@@ -88,7 +90,6 @@ createRunFolder <- function(scenario = "default") {
   file.copy("targets",    to = runfolder, recursive = TRUE)
   file.copy("core",       to = runfolder, recursive = TRUE)
   file.copy("modules",    to = runfolder, recursive = TRUE)
-  file.copy("parameters", to = runfolder, recursive = TRUE)
   file.copy("scripts",    to = runfolder, recursive = TRUE)
 
   setwd(runfolder)
@@ -179,6 +180,7 @@ nestDottedKeys <- function(flat) {
 runScenario <- function(scn) {
   if (is.null(scn$task_id)) stop("task_id is missing in the scenario.")
 
+  land_use_extra <- ""
   if (length(scn$gams_flags)) {
     extra <- paste(sprintf("--%s=%s", names(scn$gams_flags),
                            unlist(scn$gams_flags)),
@@ -186,7 +188,42 @@ runScenario <- function(scn) {
   } else {
     extra <- ""
   }
+  # Land-use emulator config group -> GAMS flags (the soft_link_magpie group is
+  # consumed by task7, which passes --softLinkMAgPIE itself).
+  lue <- scn$land_use_emulator
+  if (length(lue)) {
+    emulator_source <- lue$source %||% "magpie"
+    allowed_sources <- c("legacy", "globiom", "magpie")
+    if (length(emulator_source) != 1L || !emulator_source %in% allowed_sources) {
+      stop("land_use_emulator.source must be one of: ",
+           paste(allowed_sources, collapse = ", "), ". Got: ",
+           paste(emulator_source, collapse = ", "))
+    }
+
+    # Every non-legacy source requires a matching coefficient-table scenario.
+    # This also applies to task 7: its round-0 solve explicitly runs with
+    # softLinkMAgPIE=off before the live coupling iterations start.
+    if (emulator_source != "legacy") {
+      carbon_price_scenario <- lue$carbon_price_scenario
+      if (is.null(carbon_price_scenario) || length(carbon_price_scenario) != 1L ||
+          !nzchar(carbon_price_scenario)) {
+        stop("land_use_emulator.carbon_price_scenario must contain one scenario label",
+             " when source='", emulator_source, "'.")
+      }
+    }
+
+    source_flag <- sprintf("--landUseEmulator=%s", emulator_source)
+    extra <- paste(extra, source_flag)
+    land_use_extra <- paste(land_use_extra, source_flag)
+    carbon_price_scenario <- lue$carbon_price_scenario
+    if (!is.null(carbon_price_scenario)) {
+      scenario_flag <- sprintf("--emulatorCarbonPriceScenario=%s", carbon_price_scenario)
+      extra <- paste(extra, scenario_flag)
+      land_use_extra <- paste(land_use_extra, scenario_flag)
+    }
+  }
   Sys.setenv(OPENPROM_EXTRA_FLAGS          = extra)
+  Sys.setenv(OPENPROM_LAND_USE_FLAGS       = trimws(land_use_extra))
   Sys.setenv(OPENPROM_SCENARIO             = toJSON(scn, auto_unbox = TRUE))
   Sys.setenv(OPENPROM_SCENARIO_DESCRIPTION = scn$description %||% "")
 
