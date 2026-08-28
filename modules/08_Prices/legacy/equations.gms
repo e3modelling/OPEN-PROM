@@ -19,7 +19,7 @@
 *'
 *' BMSWAS price modes are derived in main.gms:
 *'   static: standard recursive fuel-price dynamics.
-*'   softfx: absolute backend price read from iPricesMagpie.
+*'   softlink: absolute backend price read from iPricesMagpie.
 *'   curve/globiom: year-over-year P=a+b*Q^c ratio using lagged BMSWAS Q.
 *'   curve/magpie: H12 P=pa+pb*Q+pc*Q^2 using effective 2G Q,
 *'                 0.4*BMSWAS + 0.6*(BGSL+BKRS+BGAS). Non-EUR regions use
@@ -81,7 +81,7 @@ Q08PriceBmswas(allCy,SBS,YTIME)$(
   VmPriceFuelSubsecCarVal(allCy,SBS,"BMSWAS",YTIME)
     =E=
   (
-$IFTHEN.bmswasBackend %bmswasPriceMode% == softfx
+$IFTHEN.bmswasBackend %bmswasPriceMode% == softlink
     iPricesMagpie(allCy,SBS,YTIME)
 $ELSEIF.bmswasBackend %bmswasPriceMode% == curve
 $IFTHEN.bmswasEmulatorBackend %landUseEmulator% == magpie

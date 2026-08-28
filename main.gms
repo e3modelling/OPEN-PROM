@@ -250,7 +250,7 @@ $endIf.landUseSource
 *' *** Translate the two user switches above (softLinkMAgPIE, landUseEmulator) into
 *' *** the two internal flags the rest of the model actually reads:
 *' ***   bmswasPriceMode = how the BMSWAS biomass price is set:
-*' ***       softfx = fixed from MAgPIE each soft-link round
+*' ***       softlink = absolute backend price returned by MAgPIE each round
 *' ***       curve  = from the emulator supply curve
 *' ***       static = standard recursive price dynamics (no emulator)
 *' ***   landEmiMode     = where AFOLU land + agriculture emissions come from:
@@ -261,7 +261,7 @@ $endIf.landUseSource
 *' *** decides. The public source name remains available downstream so the GLOBIOM
 *' *** and MAgPIE curve equations can be compiled as separate branches.
 $ifThen.coupling %softLinkMAgPIE% == on
-$setglobal bmswasPriceMode softfx
+$setglobal bmswasPriceMode softlink
 $setglobal landEmiMode softmif
 $elseIf.coupling %landUseEmulator% == legacy
 $setglobal bmswasPriceMode static

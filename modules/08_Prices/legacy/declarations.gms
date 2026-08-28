@@ -7,7 +7,7 @@ Q08PriceFuelSepCarbonWght(allCy,SBS,EF,YTIME)	           "Compute fuel prices pe
 
 *'                **Interdependent Equations**
 *Q08PriceElecIndResConsu(allCy,ESET,YTIME)                  "Compute electricity price in Industrial and Residential Consumers"
-Q08BmswasPriceFactor(allCy,YTIME)                         "Compute the BMSWAS price factor selected by the active land-use mode"
+Q08BmswasPriceFactor(allCy,YTIME)                         "Compute final BMSWAS used-price change for biofuel pass-through"
 $IFTHEN.magpiePriceEquation "%bmswasPriceMode%" == "curve"
 $IFTHEN.magpiePriceDeclarationSource "%landUseEmulator%" == "magpie"
 Q08Bioenergy2GEffectiveQH12Magpie(allCy,YTIME)            "Compute effective 2G biomass Q for the mapped MAgPIE H12 supply curve"
