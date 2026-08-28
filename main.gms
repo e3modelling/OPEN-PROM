@@ -221,21 +221,19 @@ $setglobal landUseEmulator magpie
 *' *** Valid values are defined once by the selected source's scenario set.
 $setglobal emulatorCarbonPriceScenario Npi_Default
 
-*' *** Optional global BMSWAS sustainability-tax coefficient A for every
+*' *** Global BMSWAS sustainability-tax coefficient A for every
 *' *** land-use price mode (kUS$2015/toe). For each solved model year t:
 *' ***   tau(t) = A * (Qworld(t-1) / 150 EJ)^2
 *' *** The first model year uses observed base-year global BMSWAS production.
-*' *** A value of zero disables the mechanism.
-$setglobal bmswasPriceAdder 0
+*' *** The default calibration is A = 3.2; a value of zero disables the mechanism.
+$setglobal bmswasPriceAdder 3.2
 
-*' *** Optional additional cost for point-source Energy CCS
-*' *** (US$2015/tCO2). The increment ramps smoothly from zero to
-*' *** ccsEnergyCostAdder between the two years. It affects point-source CCS
-*' *** in power, hydrogen, industry, and heat, but not DAC or TEW directly.
-*' *** Zero disables the mechanism.
-$setglobal ccsEnergyCostAdder 0
-$setglobal ccsEnergyCostAdderStartYear 2030
-$setglobal ccsEnergyCostAdderFullYear 2050
+*' *** Global point-source Energy CCS deployment-pressure coefficient A
+*' *** (US$2015/tCO2). For each solved model year t:
+*' ***   tau(t) = A * (Qworld(t-1) / 10 GtCO2/yr)^2
+*' *** The first model year uses base-year capture. DAC and TEW are excluded.
+*' *** The default calibration is A = 200; zero disables the mechanism.
+$setglobal ccsEnergyCostAdder 200
 
 *' *** Validate the public land-use switches before translating them to internal
 *' *** modes. A soft-link run still validates landUseEmulator, but its scenario row

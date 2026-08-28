@@ -56,9 +56,9 @@ Q06CaptCummCO2Glob(YTIME)$(TIME(YTIME))..
 *' Its physical curve is determined by global cumulative capture and sequestration-cost parameters.
 *' The cost curve transitions smoothly from a minimum to a maximum cost using a hyperbolic tangent function, 
 *' representing a realistic relationship between cumulative CO2 captured and sequestration costs. The transition 
-*' behavior is controlled by shape parameters that define the steepness and midpoint of the cost curve. This 
-*' The physical cost increases as cumulative capture expands. An optional point-source CCS policy adder is
-*' then included, so VmCstCO2SeqCsts is not a pure underground-storage cost when that adder is enabled.
+*' behavior is controlled by shape parameters that define the steepness and midpoint of the cost curve.
+*' The global Energy CCS deployment-pressure adder is then included, so VmCstCO2SeqCsts is not a pure
+*' underground-storage cost. Setting ccsEnergyCostAdder to zero disables the adder.
 Q06CstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCstCO2SeqCsts(allCy,YTIME) 
         =E=

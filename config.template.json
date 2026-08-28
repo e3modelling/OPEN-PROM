@@ -17,10 +17,8 @@
       "fScenario": 200,
       "fEndY": 2100,
       "CountrySolveMode": "serial",
-      "bmswasPriceAdder": 0,
-      "ccsEnergyCostAdder": 0,
-      "ccsEnergyCostAdderStartYear": 2030,
-      "ccsEnergyCostAdderFullYear": 2050
+      "bmswasPriceAdder": 3.2,
+      "ccsEnergyCostAdder": 200
     },
     "land_use_emulator": {
       "source": "magpie",

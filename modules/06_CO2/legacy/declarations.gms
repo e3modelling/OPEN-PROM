@@ -34,12 +34,12 @@ V06GapCDR(allCy,CDRTECH,YTIME)                            "The CDR deployment ga
 V06CapCDR(allCy,CDRTECH,YTIME)                             "CDR regional installed capacity (tCO2)"
 
 *'                **Interdependent Variables**
-VmCstCO2SeqCsts(allCy,YTIME)	                           "Effective CO2 sequestration cost: physical curve plus optional policy adder (US$2015/tCO2)"
+VmCstCO2SeqCsts(allCy,YTIME)	                           "Effective CO2 sequestration cost: physical curve plus Energy CCS deployment-pressure adder (US$2015/tCO2)"
 VmConsFuelTechCDRProd(allCy,CDRTECH,EF,YTIME)              "Annual fuel demand in each CDR technology regionally (Mtoe)"
 ;
 
 Parameters
-i06CCSEnergyCostAdder(YTIME)                               "Additional point-source Energy CCS cost (US$2015/tCO2)"
+i06CCSEnergyCostAdder(YTIME)                               "Global point-source Energy CCS deployment-pressure cost adder (US$2015/tCO2)"
 ;
 
 Scalars

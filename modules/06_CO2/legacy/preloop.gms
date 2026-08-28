@@ -6,6 +6,13 @@
 V06CO2CaptureCCS.LO(runCy,SBS,EFS,YTIME) = 0;
 V06CO2CaptureCCS.L(runCy,SBS,EFS,YTIME)$SECtoEF(SBS,EFS) = 1;
 V06CO2CaptureCCS.FX(runCy,SBS,EFS,YTIME)$(DATAY(YTIME) or not SECtoEF(SBS,EFS)) = 0;
+* Initialize the first solved model year from base-year global Energy CCS.
+i06CCSEnergyCostAdder("%fStartY%") = %ccsEnergyCostAdder%
+  * sqr(
+      sum((runCyL,SBS,EFS)$SECtoEF(SBS,EFS),
+        V06CO2CaptureCCS.L(runCyL,SBS,EFS,"%fBaseY%"))
+      * 1e-3 / 10
+    );
 *---
 V06CaptCummCO2.LO(runCy,YTIME) = 0;
 V06CaptCummCO2.L(runCy,YTIME) = 1;
