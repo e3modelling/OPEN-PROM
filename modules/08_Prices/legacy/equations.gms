@@ -74,7 +74,7 @@ Q08PriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME)$(SECtoEF(SBS,EFS) $(not sameas("CR
     (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** i08PriceTransElast(EFS,"CRO") - 1)$(sameas("HCL",EFS) or sameas("LGN",EFS))) +
     VmPriceCarbon(allCy,SBS,EFS,YTIME) - VmPriceCarbon(allCy,SBS,EFS,YTIME-1);
 
-* Select the land-use backend price, then apply the same additional price once.
+* Select the land-use backend price, then apply the global sustainability tax once.
 Q08PriceBmswas(allCy,SBS,YTIME)$(
   SECtoEF(SBS,"BMSWAS") $TIME(YTIME) $runCy(allCy)
 )..

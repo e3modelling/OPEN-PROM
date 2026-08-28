@@ -13,7 +13,7 @@ $IFTHEN.magpiePriceDeclarationSource "%landUseEmulator%" == "magpie"
 Q08Bioenergy2GEffectiveQH12Magpie(allCy,YTIME)            "Compute effective 2G biomass Q for the mapped MAgPIE H12 supply curve"
 $ENDIF.magpiePriceDeclarationSource
 $ENDIF.magpiePriceEquation
-Q08PriceBmswas(allCy,SBS,YTIME)                           "Apply the selected backend and additional BMSWAS price"
+Q08PriceBmswas(allCy,SBS,YTIME)                           "Apply the selected backend and global BMSWAS sustainability tax"
 Q08PriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)               "Compute fuel prices per subsector and fuel, separate carbon value in each sector"
 Q08PriceFuelAvgSub(allCy,DSBS,YTIME)	                   "Compute average fuel price per subsector" 	
 *Q08PriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)                 "Compute fuel prices per subsector and fuel especially for chp plants"
@@ -24,7 +24,7 @@ Q08PriceCarbon(allCy,SBS,EFS,YTIME)
 Parameters
 i08Bioenergy2GEffectiveQMagpie(allCy,YTIME)                "Current regional MAgPIE effective 2G biomass Q (Mtoe)"
 i08Bioenergy2GEffectiveQH12Magpie(allCy,YTIME)             "MAgPIE effective 2G biomass Q used by the mapped H12 land-CO2 curve (Mtoe)"
-i08BmswasPriceAdder(YTIME)                                 "Additional BMSWAS price (kUS$2015/toe)"
+i08BmswasPriceAdder(YTIME)                                 "Global BMSWAS sustainability tax (kUS$2015/toe)"
 ;
 
 Variables

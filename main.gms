@@ -221,13 +221,12 @@ $setglobal landUseEmulator magpie
 *' *** Valid values are defined once by the selected source's scenario set.
 $setglobal emulatorCarbonPriceScenario Npi_Default
 
-*' *** Optional additional BMSWAS price for every land-use price mode
-*' *** (kUS$2015/toe). The model ramps the increment smoothly from zero to
-*' *** bmswasPriceAdder between the two years.
+*' *** Optional global BMSWAS sustainability-tax coefficient A for every
+*' *** land-use price mode (kUS$2015/toe). For each solved model year t:
+*' ***   tau(t) = A * (Qworld(t-1) / 150 EJ)^2
+*' *** The first model year uses observed base-year global BMSWAS production.
 *' *** A value of zero disables the mechanism.
 $setglobal bmswasPriceAdder 0
-$setglobal bmswasPriceAdderStartYear 2030
-$setglobal bmswasPriceAdderFullYear 2050
 
 *' *** Optional additional cost for point-source Energy CCS
 *' *** (US$2015/tCO2). The increment ramps smoothly from zero to
