@@ -628,13 +628,13 @@ elseif %fScenario% eq 1 then
      iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"exogCV_NPi",YTIME);
 elseif %fScenario% eq 2 then
      iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"exogCV_1_5C",YTIME);
-elseif %fScenario% eq 11 then
+elseif %fScenario% eq 11 then !! MultiFutures Mission Economy scenario
      iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"exogCV_1_5C",YTIME);
-elseif %fScenario% eq 12 then
+elseif %fScenario% eq 12 then !! MultiFutures Green Growth scenario
      iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"exogCV_1_5C",YTIME);
-elseif %fScenario% eq 13 then
+elseif %fScenario% eq 13 then !! MultiFutures Post Growth scenario
      iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"exogCV_1_5C",YTIME);
-elseif %fScenario% eq 14 then
+elseif %fScenario% eq 14 then !! MultiFutures Great Mindshift scenario
      iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"exogCV_1_5C",YTIME);
 elseif %fScenario% eq 3 then
      iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"exogCV_2C",YTIME);
@@ -669,6 +669,14 @@ parameter imMatrFactor(allCy,DSBS,TECH,YTIME)   "Maturity factor per technology 
 imMatrFactor(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                          
 
 imMatrFactor(runCy,DSBS,"TBMSWAS",YTIME)$(sameas("AG",DSBS) and not EU28(runCy)) = 0.01;
+
+if %fScenario% eq 11 or %fScenario% eq 13 or %fScenario% eq 14 then
+     imMatrFactor(runCy,"PC","TGDO",YTIME)$(ord(YTIME) > 20) = 0;
+     imMatrFactor(runCy,"PC","TGSL",YTIME)$(ord(YTIME) > 20) = 0;
+     imMatrFactor(runCy,"PC","TNGS",YTIME)$(ord(YTIME) > 20) = 0;
+     imMatrFactor(runCy,"PC","TLPG",YTIME)$(ord(YTIME) > 20) = 0;
+endif;
+
 $ontext
 imMatrFactor(runCy,DSBS,"TGDO",YTIME)$((ord(YTIME) > 14) and TRANSE(DSBS)) = 0.5;
 imMatrFactor(runCy,DSBS,"TGSL",YTIME)$((ord(YTIME) > 14) and TRANSE(DSBS)) = 0.5;

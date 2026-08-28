@@ -134,6 +134,9 @@ Q01CostFuel(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) $SECTTECH(TRANSE,TTECH) $runC
     (
       1$(not sameas(TRANSE,"PC")) +
       1e-3 * V01ActivPassTrnsp(allCy,TRANSE,YTIME)$sameas(TRANSE,"PC")
+    ) *
+    (
+      i01TaxFuelScen(TRANSE,TTECH,YTIME) + 1
     )
     ;
 
@@ -289,7 +292,7 @@ Q01PremScrp(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME)$SECTTECH(TRANSE,TTECH)$runCy(
     (V01CostFuel(allCy,TRANSE,TTECH,YTIME-1)) ** (-1) /
     (
       V01CostFuel(allCy,TRANSE,TTECH,YTIME-1) ** (-1) +
-      0.02*i01PremScrpFac(allCy,TRANSE,TTECH,YTIME) * 
+      0.15*i01PremScrpFac(allCy,TRANSE,TTECH,YTIME) * 
       SUM(TTECH2$(not sameas(TTECH2,TTECH) and SECTTECH(TRANSE,TTECH2)),
         V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1) ** (-1)
       )

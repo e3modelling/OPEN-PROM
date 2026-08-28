@@ -227,6 +227,16 @@ i01ShareAnnMilePlugInHybrid(runCy,YTIME) = i01PlugHybrFractData(YTIME);
 *---
 i01AvgVehCapLoadFac(runCy,TRANSE,TRANSUSE,YTIME) = i01CapDataLoadFacEachTransp(TRANSE,TRANSUSE);
 *---
+**  Fuel tax scenario for each transport mode and technology (1)
+parameter i01TaxFuelScen(TRANSE,TTECH,YTIME) "Fuel tax scenario for each transport mode and technology (1). 0 is the neutral value, 1 doubles the fuel price."; 
+i01TaxFuelScen(TRANSE,TTECH,YTIME) = 0;
+if %fScenario% eq 11 or %fScenario% eq 13 or %fScenario% eq 14 then
+  i01TaxFuelScen("PC","TGDO",YTIME)$(ord(YTIME) > 20) = 1.5;
+  i01TaxFuelScen("PC","TGSL",YTIME)$(ord(YTIME) > 20) = 1.5;
+  i01TaxFuelScen("PC","TNGS",YTIME)$(ord(YTIME) > 20) = 1.5;
+  i01TaxFuelScen("PC","TLPG",YTIME)$(ord(YTIME) > 20) = 1.5;
+endif;
+*---
 **  Transport Sector
 i01TechLft(runCy,TRANSE,TTECH,YTIME) = imDataTransTech(TRANSE,TTECH,"LFT",YTIME);
 i01TechLft(runCy,TRANSE,TTECH,YTIME) = 20;
