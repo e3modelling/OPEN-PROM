@@ -421,6 +421,7 @@ TRANSE(DSBS)      All Transport Subsectors      /PC,PT,PA,PB,PN,GU,GT,GN/
 TRANS1(SBS)       All Transport Subsectors      /PC,PT,PA,PB,PN,GU,GT,GN/
 TRANP(TRANSE)     Passenger Transport           /PC,PT,PA,PB,PN/
 TRANG(TRANSE)     Goods Transport               /GU,GT,GN/
+TRANR(TRANSE)     Road Transport                /PC,PB,GU/
 
 INDSE(DSBS)       Industrial SubSectors         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI/
 DOMSE(DSBS)       Tertiary SubSectors           /SE,AG,HOU/

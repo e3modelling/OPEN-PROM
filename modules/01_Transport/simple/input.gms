@@ -231,6 +231,11 @@ i01AvgVehCapLoadFac(runCy,TRANSE,TRANSUSE,YTIME) = i01CapDataLoadFacEachTransp(T
 parameter i01TaxFuelScen(TRANSE,TTECH,YTIME) "Fuel tax scenario for each transport mode and technology (1). 0 is the neutral value, 1 doubles the fuel price."; 
 i01TaxFuelScen(TRANSE,TTECH,YTIME) = 0;
 if %fScenario% eq 11 or %fScenario% eq 13 or %fScenario% eq 14 then
+  i01TaxFuelScen(TRANSE,"TGDO",YTIME)$(TRANR(TRANSE) and ord(YTIME) > 30) = 3;
+  i01TaxFuelScen(TRANSE,"TGSL",YTIME)$(TRANR(TRANSE) and ord(YTIME) > 30) = 3;
+  i01TaxFuelScen(TRANSE,"TNGS",YTIME)$(TRANR(TRANSE) and ord(YTIME) > 30) = 3;
+  i01TaxFuelScen(TRANSE,"TLPG",YTIME)$(TRANR(TRANSE) and ord(YTIME) > 30) = 3;
+
   i01TaxFuelScen("PC","TGDO",YTIME)$(ord(YTIME) > 20) = 1.5;
   i01TaxFuelScen("PC","TGSL",YTIME)$(ord(YTIME) > 20) = 1.5;
   i01TaxFuelScen("PC","TNGS",YTIME)$(ord(YTIME) > 20) = 1.5;
