@@ -51,6 +51,15 @@ i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$(sameas("AG",DSBS) and not EU28(runCy)
 $ENDIF.calib
 i02ElastNonSubElec(runCy,DSBS,ETYPES,YTIME) = i02ElastNonSubElecData(DSBS,ETYPES,YTIME);
 *---
+parameter i02TaxVarCostScen(DSBS,TTECH,YTIME) "Fuel tax scenario for each transport mode and technology (1). 0 is the neutral value, 1 doubles the fuel price."; 
+i02TaxVarCostScen(DSBS,TTECH,YTIME) = 0;
+if %fScenario% eq 11 or %fScenario% eq 13 or %fScenario% eq 14 then
+  i02TaxVarCostScen(DSBS,"TGDO",YTIME)$(DOMSE(DSBS) and ord(YTIME) > 30) = 3;
+  i02TaxVarCostScen(DSBS,"TGSL",YTIME)$(DOMSE(DSBS) and ord(YTIME) > 30) = 3;
+  i02TaxVarCostScen(DSBS,"TNGS",YTIME)$(DOMSE(DSBS) and ord(YTIME) > 30) = 3;
+  i02TaxVarCostScen(DSBS,"TLPG",YTIME)$(DOMSE(DSBS) and ord(YTIME) > 30) = 3;
+endif;
+*---
 i02ElaSub(runCy,DSBS) = imElaSubData(DSBS);
 i02ElaSub(runCy,DSBS) = 2;
 *---

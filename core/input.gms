@@ -675,6 +675,10 @@ if %fScenario% eq 11 or %fScenario% eq 13 or %fScenario% eq 14 then
      imMatrFactor(runCy,"PC","TGSL",YTIME)$(ord(YTIME) > 20) = 0;
      imMatrFactor(runCy,"PC","TNGS",YTIME)$(ord(YTIME) > 20) = 0;
      imMatrFactor(runCy,"PC","TLPG",YTIME)$(ord(YTIME) > 20) = 0;
+     imMatrFactor(runCy,DSBS,"TGDO",YTIME)$(DOMSE(DSBS) and ord(YTIME) > 20) = 0;
+     imMatrFactor(runCy,DSBS,"TGSL",YTIME)$(DOMSE(DSBS) and ord(YTIME) > 20) = 0;
+     imMatrFactor(runCy,DSBS,"TNGS",YTIME)$(DOMSE(DSBS) and ord(YTIME) > 30) = 0;
+     imMatrFactor(runCy,DSBS,"TLPG",YTIME)$(DOMSE(DSBS) and ord(YTIME) > 20) = 0;
 endif;
 
 $ontext

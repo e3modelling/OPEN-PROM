@@ -49,7 +49,7 @@ Q02PremScrpIndu(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and (
     1 - (V02VarCostTech(allCy,DSBS,ITECH,YTIME-1) * i02util(allCy,DSBS,ITECH,YTIME-1) + 1e-3) ** (-1) /
     (
       (V02VarCostTech(allCy,DSBS,ITECH,YTIME-1) * i02util(allCy,DSBS,ITECH,YTIME-1) + 1e-3) ** (-1) +
-      0.01 * i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME) *
+      0.15 * i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME) *
       sum(ITECH2$(not sameas(ITECH2,ITECH) and SECTTECH(DSBS,ITECH2)),
           (V02CostTech(allCy,DSBS,ITECH2,YTIME-1) + 1e-3) ** (-1)
       )
@@ -116,7 +116,10 @@ Q02VarCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(DSBS)
       )
     ) +
     imVarCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit
-  ) / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME);
+  ) / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME)
+  * (
+    1 + i02TaxVarCostScen(DSBS,"TGDO",YTIME)
+  );
 
 Q02CostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(DSBS))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
     V02CostTech(allCy,DSBS,ITECH,YTIME) 
