@@ -27,8 +27,8 @@ if (!is.null(DevMode) && DevMode == 0) {
     })
     
     print( paste("Generating research mode data with mrprom ver.", installed.packages()["mrprom","Version"]) )
-    fname <- paste0("rev0",dev,"_dabc6ef9_open_prom.tgz") # file name
-    fnameTargets <- paste0("rev0",dev,"_dabc6ef9_targets.tgz")
+    fname <- paste0("rev0",dev,"_5d9a8b1e_open_prom.tgz") # file name
+    fnameTargets <- paste0("rev0",dev,"_5d9a8b1e_targets.tgz")
     # run the fullOPEN-PROM function generating the whole input dataset of OPEN-PROM
     # retrieveData contains a call to fullOPEN-PROM
     
