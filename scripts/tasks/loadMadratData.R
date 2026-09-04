@@ -34,7 +34,7 @@ if (!is.null(DevMode) && DevMode == 0) {
     
     cat("Retrieving OPEN_PROM data...\n")
     tryCatch({
-        retrieveData("OPEN_PROM",puc=F,renv=F,regionmapping = "regionmappingOPDEV5.csv",dev=dev)
+        retrieveData("OPEN_PROM",puc=F,renv=F,regionmapping = "regionmappingOMNIA.csv",dev=dev)
     }, error = function(e) {
         cat("ERROR: Failed to retrieve OPEN_PROM data:\n", conditionMessage(e), "\n")
         stop("Data retrieval for OPEN_PROM failed. Terminating data generation.")
@@ -44,7 +44,7 @@ if (!is.null(DevMode) && DevMode == 0) {
     #setConfig(ignorecache = T)
     cat("Retrieving TARGETS data...\n")
     tryCatch({
-        retrieveData("TARGETS",puc=F,renv=F,regionmapping = "regionmappingOPDEV5.csv",dev=dev)
+        retrieveData("TARGETS",puc=F,renv=F,regionmapping = "regionmappingOMNIA.csv",dev=dev)
     }, error = function(e) {
         cat("ERROR: Failed to retrieve TARGETS data:\n", conditionMessage(e), "\n")
         stop("Data retrieval for TARGETS failed. Terminating data generation.")
