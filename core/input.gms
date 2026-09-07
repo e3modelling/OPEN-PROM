@@ -390,22 +390,6 @@ SE.TELC       0.3      8.976           12  0.97
 SE.THEATPUMP  0.432    12.9254         20  3.2
 SE.TSOL       0.432    12.9254         20  1
 SE.TGEO       0.432    12.9254         20  0.5
-AG.THCL       0.323544 10.88           20  0.7
-AG.TLGN       0.323544 10.88           20  0.5
-AG.TLPG       0.24888  10.88           20  0.8
-AG.TGSL       0.323544 10.88           20  0.7
-AG.TKRS       0.24888  10.88           20  0.8
-AG.TGDO       0.24888  6.8             20  0.85
-AG.TRFO       0.24888  10.88           20  0.8
-AG.TOLQ       0.24888  10.88           20  0.8
-AG.TNGS       0.2244   6.8             20  0.88
-AG.TOGS       0.2244   10.88           20  0.8
-*AG.PGTSOL     0.86224  1.36            20  0.85
-AG.TBMSWAS    0.323544 10.88           20  0.5
-AG.TELC       0.3      8.976           12  0.9
-AG.THEATPUMP  0.432    12.9254         20  1.848
-AG.TSOL       0.432    12.9254         20  1
-AG.TGEO       0.432    12.9254         20  0.5
 HOU.THCL      0.323544 10.88           20  0.7
 HOU.TLGN      0.323544 10.88           20  0.5
 HOU.TLPG      0.24888  10.88           20  0.8
@@ -481,7 +465,6 @@ table iInitConsSubAndInitShaNonSubElec(DOMSE,Indu_Scon_Set)      "Initial Consum
      BASE   SHR_NSE SH_HPELC
 SE   1.8266 0.9     0.00001
 HOU  11.511 0.9     0.00001
-AG   0.2078 0.9     0.00001
 ;
 *---
 iShrHeatPumpElecCons(runCy,INDSE) = iIndCharData(INDSE,"SH_HPELC");

@@ -185,8 +185,7 @@ Q02ConsFuel(allCy,DSBS,EFS,YTIME)$(TIME(YTIME)$((INDDOM(DSBS) or NENSE(DSBS)) an
       i02ShareBlend(allCy,DSBS,ITECH,EFS,YTIME) *
       V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) *
       i02util(allCy,DSBS,ITECH,YTIME)
-    )$(not sameas("AG",DSBS)) +
-    SUM(AGRI_MODES,V12ConsFuel(allCy,AGRI_MODES,EFS,YTIME))$sameas("AG",DSBS) +
+    ) +
     V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(INDDOM(DSBS) and not sameas("AG",DSBS) and ELCEF(EFS));
 
 *' Average efficiency of substitutable demand

@@ -9,6 +9,8 @@ i12SpecificFuelCons(allCy,AGRI_MODES,EFS,YTIME)
 i12IntensityFertilizers(allCy,FERT_TYPES,YTIME)
 i12IndexGlobalCaloriesIntake(FOOD_TYPES,YTIME)
 *i12RatioCropsIrrigated(allCy,YTIME)
+i12DataEnergyService(allCy,AGRI_MODES,YTIME)
+i12ConsFuel(allCy,AGRI_MODES,EFS,YTIME)
 ;
 
 Equations 
