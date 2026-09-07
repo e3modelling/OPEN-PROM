@@ -60,9 +60,10 @@
 # never declares victory on an empty (region, year) grid.
 #
 # Why h12 (not resCy / not subsector): h12 is the natural shared-boundary
-# granularity of the two models. The 39-country resCy and 34-subsector
-# broadcasts inside OPEN-PROM are deterministic expansions of h12 values --
-# measuring there adds noise without information.
+# granularity of the two models. OPEN-PROM's 28 EU members contribute to one
+# summed EUR quantity and receive one common returned EUR marginal price. The
+# 39-region and subsector price rows are deterministic broadcasts of H12 values,
+# so measuring convergence there adds rows without new price information.
 #
 # Why max judges (not L2): L2 averages cells, so a single bad cell can be
 # washed out. BMSWAS price is .FX-ed into OPEN-PROM per (region, year), so

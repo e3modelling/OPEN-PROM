@@ -26,12 +26,12 @@ qDummyObjPGALL(allCy,YTIME)$(TIME(YTIME) and runCy(allCy))..
     =e=
   SUM(PGALL,
     SQR(
-      VmProdElec(allCy,PGALL,YTIME) / SUM(PGALL2, VmProdElec(allCy,PGALL2,YTIME)) - t04SharePowPlaNewEq(allCy,PGALL,YTIME)
+      VmProdElec(allCy,PGALL,YTIME) / (SUM(PGALL2, VmProdElec(allCy,PGALL2,YTIME)) + 1e-6) - t04SharePowPlaNewEq(allCy,PGALL,YTIME)
     ) +
     1e-5 * SQR(
       i04MatFacPlaAvailCap(allCy,PGALL,YTIME) - i04MatFacPlaAvailCap(allCy,PGALL,YTIME-1)
     ) +
-    0 * SQR(
+    1e-4 * SQR(
       i04ScaleEndogScrap(allCy,PGALL,YTIME) - i04ScaleEndogScrap(allCy,PGALL,YTIME-1)
     )
   ) / CARD(PGALL);
@@ -71,7 +71,7 @@ qDummyObjINDDOMShares(allCy,YTIME,DSBS)$(TIME(YTIME) and runCy(allCy) and (INDDO
   ) / SUM(EFS$SECtoEF(DSBS,EFS), 1)
   )$((INDSE(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and t02FinalEnergyINDSE(allCy,DSBS,YTIME)) +
   SUM(ITECH$SECTTECH(DSBS,ITECH),
-    1e-5 * SQR(
+    1e-3 * SQR(
       i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME) - i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME-1)
     )
   ) / card(ITECH);

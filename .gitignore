@@ -18,6 +18,7 @@ regionmappingOP.csv
 /data2
 /targets
 /runs
+/outputs
 /default*
 metadata.json
 /doc

@@ -46,13 +46,13 @@ Q02RatioRem(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and (INDD
 Q02PremScrpIndu(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and (INDDOM(DSBS) or NENSE(DSBS)))$runCy(allCy))..
     V02PremScrpIndu(allCy,DSBS,ITECH,YTIME)
         =E=
-    1 - (V02VarCostTech(allCy,DSBS,ITECH,YTIME-1) * i02util(allCy,DSBS,ITECH,YTIME-1) + 1e-3) ** (-2) /
+    1 - (V02VarCostTech(allCy,DSBS,ITECH,YTIME-1) * i02util(allCy,DSBS,ITECH,YTIME-1) + 1e-3) ** (-1) /
     (
-      (V02VarCostTech(allCy,DSBS,ITECH,YTIME-1) * i02util(allCy,DSBS,ITECH,YTIME-1) + 1e-3) ** (-2) +
-      i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME) *
+      (V02VarCostTech(allCy,DSBS,ITECH,YTIME-1) * i02util(allCy,DSBS,ITECH,YTIME-1) + 1e-3) ** (-1) +
+      0.01 * i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME) *
       sum(ITECH2$(not sameas(ITECH2,ITECH) and SECTTECH(DSBS,ITECH2)),
-          V02CostTech(allCy,DSBS,ITECH2,YTIME-1) + V02VarCostTech(allCy,DSBS,ITECH2,YTIME-1)
-      ) ** (-2)
+          (V02CostTech(allCy,DSBS,ITECH2,YTIME-1) + 1e-3) ** (-1)
+      )
     );
 
 *'NEW EQUATION' - kind of --> substitutes Q02ConsRemSubEquipSubSec
@@ -132,7 +132,8 @@ Q02CostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS))$SECTTECH(DSB
         =E=
     V02CapCostTech(allCy,DSBS,ITECH,YTIME) +
     V02VarCostTech(allCy,DSBS,ITECH,YTIME) -
-    VmSubsiDemTech(allCy,DSBS,ITECH,YTIME);
+    VmSubsiDemTech(allCy,DSBS,ITECH,YTIME)
+    ;
 
 *' This equation calculates the technology share in new equipment based on factors such as maturity factor,
 *' cumulative distribution function of consumer size groups, number of consumers, technology cost, distribution function of consumer

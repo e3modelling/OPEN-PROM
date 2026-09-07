@@ -230,6 +230,7 @@ i01AvgVehCapLoadFac(runCy,TRANSE,TRANSUSE,YTIME) = i01CapDataLoadFacEachTransp(T
 **  Transport Sector
 i01TechLft(runCy,TRANSE,TTECH,YTIME) = imDataTransTech(TRANSE,TTECH,"LFT",YTIME);
 i01TechLft(runCy,TRANSE,TTECH,YTIME) = 20;
+i01TechLft(runCy,DOMSE,"TELC",YTIME) = 20;
 *---
 **  Industrial Sector
 i01TechLft(runCy,INDSE,ITECH,YTIME) = imDataIndTechnology(INDSE,ITECH,"LFT");
