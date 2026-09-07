@@ -4,21 +4,28 @@
 
 runTask1 <- function() {
   scn <- jsonlite::fromJSON(Sys.getenv("OPENPROM_SCENARIO"))
+  land_use_extra <- Sys.getenv("OPENPROM_LAND_USE_FLAGS")
 
   if (withRunFolder) createRunFolder(scn$scenario_name)
   saveMetadata(DevMode = 1)
 
-  # ---- Stage 1: calibration + new data generation (not affected by scenario gams_flags) ----
+  # ---- Stage 1: calibration + new data generation --------------------
+  # Keep the fixed calibration flags, but compile with the configured
+  # land-use implementation rather than the default from main.gms.
   if (.Platform$OS.type == "unix") {
-    calib_cmd <- paste0(
+    calib_cmd <- paste(
       gams,
-      " main.gms -o mainCalib.lst --WriteGDX=off --DevMode=1 --fScenario=4 --GenerateInput=on --Calibration=MatCalibration --CountrySolveMode=parallel -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1"
+      "main.gms -o mainCalib.lst --WriteGDX=off --DevMode=1 --fScenario=4 --GenerateInput=on --Calibration=MatCalibration --CountrySolveMode=parallel",
+      land_use_extra,
+      "-logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1"
     )
     exit_code <- system(calib_cmd)
   } else {
-    calib_cmd <- paste0(
+    calib_cmd <- paste(
       gams,
-      " main.gms -o mainCalib.lst --WriteGDX=off --DevMode=1 --fScenario=4 --GenerateInput=on --Calibration=MatCalibration --CountrySolveMode=parallel -logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1 | tee fullCalib.log"
+      "main.gms -o mainCalib.lst --WriteGDX=off --DevMode=1 --fScenario=4 --GenerateInput=on --Calibration=MatCalibration --CountrySolveMode=parallel",
+      land_use_extra,
+      "-logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1 | tee fullCalib.log"
     )
     exit_code <- shell(calib_cmd)
   }

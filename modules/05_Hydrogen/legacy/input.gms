@@ -2,7 +2,7 @@
 *' @code
 
 *---
-table i05H2Production(ECONCHARHY,H2TECH,YTIME)	            "Data for Hydrogen production"
+table i05H2Production(ECONCHARHY2,H2TECH,YTIME)	            "Data for Hydrogen production"
 $ondelim
 $include"./iH2Production.csv"
 $offdelim
@@ -36,7 +36,8 @@ i05CostCapH2Prod(allCy,H2TECH,YTIME)        "Capital cost of hydrogen production
 i05CostFOMH2Prod(allCy,H2TECH,YTIME)        "Fixed operating and maintenance costs of hydrogen production technologies in US$2015 per kW output H2"
 i05CostVOMH2Prod(allCy,H2TECH,YTIME)        "Variable operating and maintenance costs of hydrogen production technologies in US$2015 per kW output H2"
 i05AvailH2Prod(allCy,H2TECH,YTIME)          "Availability of hydrogen production technologies"
-i05EffH2Prod(allCy,H2TECH,YTIME)            "Efficiency of hydrogen production technologies"
+i05InputOverOutH2ProdFeed(allCy,H2TECH,EF,YTIME)            
+i05InputOverOutH2ProdEnergy(allCy,H2TECH,EF,YTIME)            
 i05CostInvH2Transp(allCy,INFRTECH,YTIME)    "Investment cost of infrastructure technology"
                                                    !! - Turnpike pipeline in Euro per km
                                                    !! - Low pressure urban pipeline in Euro per km
@@ -56,6 +57,7 @@ i05EffNetH2Transp(allCy,INFRTECH,YTIME)     "Total efficiency of the distributio
 i05CostAvgWeight(allCy,YTIME)               "Weight for pricing in average cost or in marginal cost"
 iWBLShareH2Prod(allCy,H2TECH,YTIME)         "Maturity factors for H2 technologies"
 iWBLPremRepH2Prod(allCy,H2TECH,YTIME)       "Maturity factors for premature replacement of H2 technologies"
+i05MatFacH2(allCy,H2TECH,YTIME)
 ;
 *---
 iWBLShareH2Prod(runCy,H2TECH,YTIME) = iTechShareH2Prod(H2TECH,YTIME);
@@ -67,8 +69,6 @@ i05ProdLftH2("wes",YTIME)  = i05H2Production("LFT","weg",YTIME);
 i05ProdLftH2("wew",YTIME)  = i05H2Production("LFT","weg",YTIME);
 *---
 i05CaptRateH2Prod(H2TECH) = i05H2Production("CR",H2TECH,"%fBaseY%");
-i05CaptRateH2Prod("wes")  = i05CaptRateH2Prod("weg");
-i05CaptRateH2Prod("wew")  = i05CaptRateH2Prod("weg");
 i05CaptRateH2Prod(H2TECH)$(not H2CCS(H2TECH)) = 0;
 *---
 i05H2Adopt(runCy,"b",YTIME)   = i05H2Parameters(runCy,"B");
@@ -77,6 +77,8 @@ i05H2Adopt(runCy,"mid",YTIME) = i05H2Parameters(runCy,"mid");
 i05TranspLftH2(INFRTECH,YTIME) = i05H2InfrCapCosts("LFT",INFRTECH,YTIME);
 *---
 i05CostCapH2Prod(runCy,H2TECH,YTIME) = i05H2Production("IC",H2TECH,YTIME);
+i05CostCapH2Prod("CHA","cgf",YTIME) = 0.5 * i05CostCapH2Prod("CHA","cgf",YTIME);
+i05CostCapH2Prod("CHA","cgs",YTIME) = 0.54 * i05CostCapH2Prod("CHA","cgs",YTIME);
 i05CostCapH2Prod(runCy,"wes",YTIME)  = i05H2Production("IC","weg",YTIME);
 i05CostCapH2Prod(runCy,"wew",YTIME)  = i05H2Production("IC","weg",YTIME);
 *---
@@ -89,12 +91,14 @@ i05CostVOMH2Prod(runCy,"wes",YTIME)  = i05H2Production("VC","weg",YTIME);
 i05CostVOMH2Prod(runCy,"wew",YTIME)  = i05H2Production("VC","weg",YTIME);
 *---
 i05AvailH2Prod(runCy,H2TECH,YTIME) = i05H2Production("AVAIL",H2TECH,YTIME);
-i05AvailH2Prod(runCy,"wes",YTIME)  = min(i05AvailH2Prod(runCy,"weg",YTIME),i04AvailRate(runCy,"PGSOL",YTIME));
-i05AvailH2Prod(runCy,"wew",YTIME)  = min(i05AvailH2Prod(runCy,"weg",YTIME),i04AvailRate(runCy,"PGAWNO",YTIME));
+i05AvailH2Prod(runCy,"wes",YTIME)  = i04AvailRate(runCy,"PGSOL",YTIME);
+i05AvailH2Prod(runCy,"wew",YTIME)  = i04AvailRate(runCy,"PGAWNO",YTIME);
 *---
-i05EffH2Prod(runCy,H2TECH,YTIME) = i05H2Production("EFF",H2TECH,YTIME);
-i05EffH2Prod(runCy,"wes",YTIME)  = i05H2Production("EFF","weg",YTIME);
-i05EffH2Prod(runCy,"wew",YTIME)  = i05H2Production("EFF","weg",YTIME);
+i05InputOverOutH2ProdFeed(runCy,H2TECH,EFS,YTIME)$H2TECHtoFEEDSTOCK(H2TECH,EFS) = 0.7 * i05H2Production("INOUT_HEAT",H2TECH,YTIME);
+i05InputOverOutH2ProdEnergy(runCy,H2TECH,EFS,YTIME)$(H2TECHtoENERGY(H2TECH,EFS) and not sameas("ELC",EFS)) = 0.3 * i05H2Production("INOUT_HEAT",H2TECH,YTIME);
+i05InputOverOutH2ProdEnergy(runCy,H2TECH,EFS,YTIME)$(H2TECHtoENERGY(H2TECH,EFS) and sameas("ELC",EFS)) = i05H2Production("INOUT_ELC",H2TECH,YTIME);
+i05InputOverOutH2ProdFeed(runCy,"wes",EFS,YTIME)$H2TECHtoFEEDSTOCK("wes",EFS) = i05InputOverOutH2ProdEnergy(runCy,"weg","ELC",YTIME);
+i05InputOverOutH2ProdFeed(runCy,"wew",EFS,YTIME)$H2TECHtoFEEDSTOCK("wew",EFS) = i05InputOverOutH2ProdEnergy(runCy,"weg","ELC",YTIME);
 *---
 i05CostInvH2Transp(runCy,INFRTECH,YTIME) = i05H2InfrCapCosts("IC",INFRTECH,YTIME);
 *---
@@ -118,7 +122,7 @@ i05HabAreaCountry(runCy) = i05H2Parameters(runCy,"AREA");
 *---
 i05EffNetH2Transp(runCy,INFRTECH,YTIME) = i05EffH2Transp(runCy,INFRTECH,YTIME)*(1-i05ConsSelfH2Transp(runCy,INFRTECH,YTIME));
 *---
-iWBLPremRepH2Prod(runCy,H2TECH,YTIME) = 0.1 ;
+iWBLPremRepH2Prod(runCy,H2TECH,YTIME) = 0.01 ;
 *---
 loop H2EFFLOOP do
   loop INFRTECH2$H2NETWORK(INFRTECH2,H2EFFLOOP) do
@@ -131,3 +135,6 @@ loop YTIME$(An(YTIME)) do
          i05CostAvgWeight(runCy,YTIME) = -1/19+i05CostAvgWeight(runCy,YTIME-1);
 endloop;
 *---
+i05MatFacH2(allCy,H2TECH,YTIME) = 1;
+i05MatFacH2(allCy,H2TECH,YTIME)$(H2CCS(H2TECH) and ord(YTIME) <= 25) = 0.5;
+i05MatFacH2(allCy,H2TECH,YTIME)$(H2CCS(H2TECH) and ord(YTIME) <= 20) = 0;

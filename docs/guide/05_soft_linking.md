@@ -126,16 +126,22 @@ current configuration exactly; runs that already failed, converged, or hit `max_
 For cases where running the full MAgPIE model on every round is too costly, the land-use response can instead be
 represented by **pre-fitted emulator curves**, selected with the user switches at the top of `main.gms`. These
 are configured for ordinary single-solve tasks (0–6) through `config.json:scenario.land_use_emulator`, which
-`start.R` maps onto the GAMS flags `--landUseEmulator` and `--emulatorGHGScen`:
+`start.R` maps onto the GAMS flags `--landUseEmulator` and `--emulatorCarbonPriceScenario`:
 
 - `softLinkMAgPIE` (`on`/`off`) — the iterative task-7 soft-link above. When `on` it wins: the biomass price is
   fixed from MAgPIE and AFOLU emissions are read from MAgPIE's `.mif`. The emulator switches below only take
   effect when `softLinkMAgPIE` is `off`.
 - `land_use_emulator.source` → `landUseEmulator` (`legacy`/`globiom`/`magpie`) — selects the emulator source.
-  `legacy` means no emulator (static biomass price, exogenous AFOLU emissions); `globiom`/`magpie` drive the
-  biomass price from a fitted supply curve and AFOLU emissions from fitted land-use-emission curves.
-- `land_use_emulator.carbon_price` → `emulatorGHGScen` (`GHG000`, `GHG010`, `GHG020`, `GHG050`, `GHG100`) — picks
-  the active land-use carbon-price row in the emulator coefficient tables.
+  `legacy` means no emulator (static biomass price, exogenous AFOLU emissions). `globiom` retains the historical
+  BMSWAS/linear/direct-value implementation. `magpie` uses a separate effective-2G-biomass predictor with
+  an H12 native-price response, signed linear net-land-CO₂ curve and quadratic agricultural-emission curves.
+  A quadratic land-CO₂ form remains available in the input generator for experiment reproduction.
+- `land_use_emulator.carbon_price_scenario` → `emulatorCarbonPriceScenario` — picks the active
+  source-specific carbon-price/policy row.
+  GLOBIOM accepts `GHG000`, `GHG010`, `GHG020`, `GHG050`, or `GHG100`; MAgPIE accepts `Npi_Default`, `NDC_LTT`,
+  `2C`, or `1p5C`. `start.R` and GAMS both reject a label that does not belong to the selected source.
+  The embedded MAgPIE tables currently cover OP39 only; `RWO` and `ELL` are intentionally rejected instead
+  of receiving silent zero coefficients.
 
 :::{tip}
 The three approaches form a hierarchy of increasing fidelity and cost: exogenous land-use assumptions

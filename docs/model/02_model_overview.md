@@ -466,10 +466,12 @@ Biomass (`BMSWAS`) is priced through one of three compile-time modes, derived in
 
 - **`static`** (`softLinkMAgPIE=off`, `landUseEmulator=legacy`) — BMSWAS follows the same recursive price
   dynamics as every other fuel.
-- **`curve`** (`softLinkMAgPIE=off`, `landUseEmulator=globiom`/`magpie`) — BMSWAS price is driven by a fitted
-  land-use supply curve $P = a + b\,Q^{c}$, applied as a year-on-year scarcity ratio on lagged primary biomass
-  production. The coefficients come from `imBmswasSupplyCoef` (loaded from `iBmswasSupplyCoef_<source>.csv`,
-  produced by mrprom), with the active carbon-price row picked by `emulatorGHGScen`.
+- **`curve`** (`softLinkMAgPIE=off`, `landUseEmulator=globiom`/`magpie`) — the selected emulator supplies the
+  BMSWAS price response. GLOBIOM applies the year-on-year ratio from $P=a+bQ^c$ using lagged BMSWAS production
+  and `iBmswasSupplyCoef_globiom.csv`. MAgPIE evaluates the H12 absolute-price response
+  $P=p_a+p_bQ+p_cQ^2$ from `iBmswasBioPriceH12_magpie.csv`, where
+  $Q=0.4\,BMSWAS+0.6\,(BGSL+BKRS+BGAS)$; non-EUR regions use current Q and EU28 share the EUR price based on
+  preceding-year EU28 Q. `emulatorCarbonPriceScenario` selects the source-specific carbon-price/policy row.
 - **`softfx`** (`softLinkMAgPIE=on`) — BMSWAS is excluded from the price equation entirely; its price is fixed
   (`.FX`) to `iPricesMagpie` from the MAgPIE soft-link in `core/preloop.gms`.
 
