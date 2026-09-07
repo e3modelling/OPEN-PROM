@@ -12,7 +12,6 @@
 Q12Activity(allCy,AGRI_MODES,YTIME)$(TIME(YTIME) and runCy(allCy))..
   V12Activity(allCy,AGRI_MODES,YTIME)
         =E=
-  V12Activity(allCy,AGRI_MODES,YTIME-1) *
   (1 + (i12IndexGlobalCaloriesIntake("PLANT",YTIME) - 1)$(sameas("CROPS",AGRI_MODES) or sameas("CLIMATE",AGRI_MODES) or sameas("IRRIGATION",AGRI_MODES))) *
   (1 + (i12IndexGlobalCaloriesIntake("MEAT",YTIME) - 1)$sameas("LIVESTOCK",AGRI_MODES)) *
   (1 + (i12IndexGlobalCaloriesIntake("FISH",YTIME) - 1)$sameas("FISHING",AGRI_MODES)) *
@@ -24,7 +23,7 @@ Q12EnergyService(allCy,AGRI_MODES,YTIME)$(TIME(YTIME) and runCy(allCy))..
   V12EnergyService(allCy,AGRI_MODES,YTIME)
         =E=
   V12EnergyService(allCy,AGRI_MODES,YTIME-1) *
-  V12Activity(allCy,AGRI_MODES,YTIME) / V12Activity(allCy,AGRI_MODES,YTIME-1) *
+  V12Activity(allCy,AGRI_MODES,YTIME) *
   i12IndexClimateShift(allCy,AGRI_MODES,YTIME) * 
   i12IndexTechShift(allCy,AGRI_MODES,YTIME);
 
@@ -38,14 +37,14 @@ Q12GapActivity(allCy,AGRI_MODES,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
   V12GapActivity(allCy,AGRI_MODES,YTIME)
     =E=
   (
-    V12Activity(allCy,AGRI_MODES,YTIME) - 
-    V12Activity(allCy,AGRI_MODES,YTIME-1) +
+    V12EnergyService(allCy,AGRI_MODES,YTIME) - 
+    V12EnergyService(allCy,AGRI_MODES,YTIME-1) +
     SUM(AGRITECH$AGRMODEStoTECH(AGRI_MODES,AGRITECH),
       V12Capacity(allCy,AGRI_MODES,AGRITECH,YTIME-1) * V12ScrpRate(allCy,AGRI_MODES,AGRITECH,YTIME)
     ) +
     SQRT(SQR(
-      V12Activity(allCy,AGRI_MODES,YTIME) - 
-      V12Activity(allCy,AGRI_MODES,YTIME-1) +
+      V12EnergyService(allCy,AGRI_MODES,YTIME) - 
+      V12EnergyService(allCy,AGRI_MODES,YTIME-1) +
       SUM(AGRITECH$AGRMODEStoTECH(AGRI_MODES,AGRITECH),
         V12Capacity(allCy,AGRI_MODES,AGRITECH,YTIME-1) * V12ScrpRate(allCy,AGRI_MODES,AGRITECH,YTIME)
       )
@@ -69,11 +68,11 @@ Q12ShareTech(allCy,AGRI_MODES,AGRITECH,YTIME)$(TIME(YTIME)$AGRMODEStoTECH(AGRI_M
 Q12ConsFuel(allCy,AGRI_MODES,EFS,YTIME)$(TIME(YTIME) and runCy(allCy))..
     V12ConsFuel(allCy,AGRI_MODES,EFS,YTIME)
         =E=
-    i12SpecificFuelCons(allCy,AGRI_MODES,EFS,YTIME) * !! Mtoe / Energy servie --> ha
+    i12SpecificFuelCons(allCy,AGRI_MODES,EFS,YTIME) * !! Mtoe / Energy service --> ha
     V12EnergyService(allCy,AGRI_MODES,YTIME);
 
 Q12ConsFertilizers(allCy,FERT_TYPES,YTIME)$(TIME(YTIME) and runCy(allCy))..
     V12ConsFertilizers(allCy,FERT_TYPES,YTIME)
         =E=
-    i12IntensityFertilizers(allCy,FERT_TYPES,YTIME) * !! Mtoe / Energy servie --> ha
+    i12IntensityFertilizers(allCy,FERT_TYPES,YTIME) * !! Mtoe / Energy service --> ha
     V12EnergyService(allCy,"CROPS",YTIME);
