@@ -85,13 +85,18 @@ Q11SubsiDemTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS
     
     +
 $$offtext 
+* The CCS availability adder is not eligible for DAC technology subsidies.
     sum(CDRTECH$(sameas(TECH,CDRTECH)), !! CDR
       (
         VmSubsiDemTechAvail(allCy,DSBS,CDRTECH,YTIME) * 1e6 / V06CapFacNewCDR(allCy,CDRTECH,YTIME-1)
-      + (1 - imCapCostTechMin(allCy,DSBS,CDRTECH,YTIME)) * V06LvlCostCDR(allCy,CDRTECH,YTIME)
+      + (1 - imCapCostTechMin(allCy,DSBS,CDRTECH,YTIME))
+        * (V06LvlCostCDR(allCy,CDRTECH,YTIME)
+          - i06CCSAvailabilityCostAdder(YTIME)$DACTECH(CDRTECH))
       -
       sqrt(sqr(VmSubsiDemTechAvail(allCy,DSBS,CDRTECH,YTIME) * 1e6 / V06CapFacNewCDR(allCy,CDRTECH,YTIME-1)
-      - (1 - imCapCostTechMin(allCy,DSBS,CDRTECH,YTIME)) * V06LvlCostCDR(allCy,CDRTECH,YTIME)))
+      - (1 - imCapCostTechMin(allCy,DSBS,CDRTECH,YTIME))
+        * (V06LvlCostCDR(allCy,CDRTECH,YTIME)
+          - i06CCSAvailabilityCostAdder(YTIME)$DACTECH(CDRTECH))))
       ) / 2
     )$(CDR(DSBS) and ord(YTIME) > 15)
 ;
@@ -186,4 +191,4 @@ Q11NetSubsiTax(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 !!        sum((SSBS,STECH)$SSECTTECH(SSBS,STECH),
 !!          VmSubsiCapCostSupply(allCy,SSBS,STECH,YTIME)
 !!        )
-;       
+;

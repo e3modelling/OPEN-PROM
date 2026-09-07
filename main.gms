@@ -221,6 +221,21 @@ $setglobal landUseEmulator magpie
 *' *** Valid values are defined once by the selected source's scenario set.
 $setglobal emulatorCarbonPriceScenario Npi_Default
 
+*' *** Global BMSWAS sustainability-tax coefficient A for every
+*' *** land-use price mode (kUS$2015/toe). For each solved model year t:
+*' ***   tau(t) = A * (Qworld(t-1) / 150 EJ)^2
+*' *** The first model year uses observed base-year global BMSWAS production.
+*' *** The default calibration is A = 3.2; a value of zero disables the mechanism.
+$setglobal bmswasPriceAdder 3.2
+
+*' *** Global CCS storage-availability cost-adder coefficient A
+*' *** (US$2015/tCO2). For each solved model year t:
+*' ***   tau(t) = A * ((Qenergy(t-1) + Qdac(t-1)) / 10 GtCO2/yr)^2
+*' *** The first model year uses base-year capture. The adder applies to
+*' *** point-source CCS and DAC; TEW is excluded.
+*' *** The default calibration is A = 300; zero disables the mechanism.
+$setglobal ccsAvailabilityCostAdder 300
+
 *' *** Validate the public land-use switches before translating them to internal
 *' *** modes. A soft-link run still validates landUseEmulator, but its scenario row
 *' *** is ignored because softLinkMAgPIE takes precedence.
@@ -234,7 +249,7 @@ $endIf.landUseSource
 *' *** Translate the two user switches above (softLinkMAgPIE, landUseEmulator) into
 *' *** the two internal flags the rest of the model actually reads:
 *' ***   bmswasPriceMode = how the BMSWAS biomass price is set:
-*' ***       softfx = fixed from MAgPIE each soft-link round
+*' ***       softlink = absolute backend price returned by MAgPIE each round
 *' ***       curve  = from the emulator supply curve
 *' ***       static = standard recursive price dynamics (no emulator)
 *' ***   landEmiMode     = where AFOLU land + agriculture emissions come from:
@@ -245,7 +260,7 @@ $endIf.landUseSource
 *' *** decides. The public source name remains available downstream so the GLOBIOM
 *' *** and MAgPIE curve equations can be compiled as separate branches.
 $ifThen.coupling %softLinkMAgPIE% == on
-$setglobal bmswasPriceMode softfx
+$setglobal bmswasPriceMode softlink
 $setglobal landEmiMode softmif
 $elseIf.coupling %landUseEmulator% == legacy
 $setglobal bmswasPriceMode static

@@ -472,8 +472,17 @@ Biomass (`BMSWAS`) is priced through one of three compile-time modes, derived in
   $P=p_a+p_bQ+p_cQ^2$ from `iBmswasBioPriceH12_magpie.csv`, where
   $Q=0.4\,BMSWAS+0.6\,(BGSL+BKRS+BGAS)$; non-EUR regions use current Q and EU28 share the EUR price based on
   preceding-year EU28 Q. `emulatorCarbonPriceScenario` selects the source-specific carbon-price/policy row.
-- **`softfx`** (`softLinkMAgPIE=on`) — BMSWAS is excluded from the price equation entirely; its price is fixed
-  (`.FX`) to `iPricesMagpie` from the MAgPIE soft-link in `core/preloop.gms`.
+- **`softlink`** (`softLinkMAgPIE=on`) — `iPricesMagpie` supplies the absolute backend price returned by
+  MAgPIE for each region, subsector, and year.
+
+All three modes feed the common `Q08PriceBmswas` equation. The model then adds one global sustainability tax,
+
+$$
+\tau_t=A\left(\frac{Q^{world}_{t-1}}{150\ \mathrm{EJ/yr}}\right)^2,
+\qquad P^{used}_{r,s,t}=P^{backend}_{r,s,t}+\tau_t.
+$$
+
+The first solved year uses observed base-year global BMSWAS production. `bmswasPriceAdder` configures the coefficient $A$ in kUS$2015/toe, and zero disables the mechanism. Recursive `static` and GLOBIOM backends remove the previous year's tax before applying their ordinary price dynamics, so the tax is not compounded. The final PG BMSWAS used-price ratio is passed through to processed biofuels using `i08PriceTransElast`.
 
 The determination of prices is done endogenously through a combination of complementary mechanisms. For energy
 carriers with a detailed supply representation (electricity, hydrogen, and heat) prices are derived from the average

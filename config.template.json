@@ -16,7 +16,9 @@
     "gams_flags": {
       "fScenario": 200,
       "fEndY": 2100,
-      "CountrySolveMode": "serial"
+      "CountrySolveMode": "serial",
+      "bmswasPriceAdder": 3.2,
+      "ccsAvailabilityCostAdder": 250
     },
     "land_use_emulator": {
       "source": "magpie",

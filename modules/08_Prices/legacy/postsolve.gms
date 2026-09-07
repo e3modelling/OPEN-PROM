@@ -68,3 +68,13 @@ imAfoluAgriEmis(runCyL,EMTYPE,YTIME)$(TIME(YTIME) $(sameas(EMTYPE,"CH4LandUse") 
 $ENDIF.emulatorEmissions
 $ENDIF
 *---
+* After the last regional solve, set the global sustainability tax for the next
+* model year: tau(t) = A * (Qworld(t-1) / 150 EJ)^2.
+i08BmswasPriceAdder(YTIME)$(
+  sCY = card(runCyL) and TIME(YTIME-1) and AN(YTIME)
+) = %bmswasPriceAdder%
+  * sqr(
+      sum(runCy2, V03ProdPrimary.L(runCy2,"BMSWAS",YTIME-1))
+      * 0.041868 / 150
+    );
+*---
