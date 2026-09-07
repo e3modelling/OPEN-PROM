@@ -228,12 +228,13 @@ $setglobal emulatorCarbonPriceScenario Npi_Default
 *' *** The default calibration is A = 3.2; a value of zero disables the mechanism.
 $setglobal bmswasPriceAdder 3.2
 
-*' *** Global point-source Energy CCS deployment-pressure coefficient A
+*' *** Global CCS storage-availability cost-adder coefficient A
 *' *** (US$2015/tCO2). For each solved model year t:
-*' ***   tau(t) = A * (Qworld(t-1) / 10 GtCO2/yr)^2
-*' *** The first model year uses base-year capture. DAC and TEW are excluded.
-*' *** The default calibration is A = 200; zero disables the mechanism.
-$setglobal ccsEnergyCostAdder 200
+*' ***   tau(t) = A * ((Qenergy(t-1) + Qdac(t-1)) / 10 GtCO2/yr)^2
+*' *** The first model year uses base-year capture. The adder applies to
+*' *** point-source CCS and DAC; TEW is excluded.
+*' *** The default calibration is A = 300; zero disables the mechanism.
+$setglobal ccsAvailabilityCostAdder 300
 
 *' *** Validate the public land-use switches before translating them to internal
 *' *** modes. A soft-link run still validates landUseEmulator, but its scenario row

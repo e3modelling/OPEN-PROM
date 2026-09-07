@@ -57,15 +57,15 @@ Q06CaptCummCO2Glob(YTIME)$(TIME(YTIME))..
 *' The cost curve transitions smoothly from a minimum to a maximum cost using a hyperbolic tangent function, 
 *' representing a realistic relationship between cumulative CO2 captured and sequestration costs. The transition 
 *' behavior is controlled by shape parameters that define the steepness and midpoint of the cost curve.
-*' The global Energy CCS deployment-pressure adder is then included, so VmCstCO2SeqCsts is not a pure
-*' underground-storage cost. Setting ccsEnergyCostAdder to zero disables the adder.
+*' The global CCS availability adder is then included, so VmCstCO2SeqCsts is not a pure
+*' underground-storage cost. Setting ccsAvailabilityCostAdder to zero disables the adder.
 Q06CstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCstCO2SeqCsts(allCy,YTIME) 
         =E=
    i06CO2SeqData("seq_min") + 
    (i06CO2SeqData("seq_max") - i06CO2SeqData("seq_min")) / 2 *
    (1+tanh(i06CO2SeqData("sig_a") / (i06CO2SeqData("sig_b") * i06CO2SeqData("seq_max")) * (V06CaptCummCO2Glob(YTIME) * 1e-3 - i06CO2SeqData("sig_b") * i06CO2SeqData("seq_max")))) +
-   i06CCSEnergyCostAdder(YTIME);
+   i06CCSAvailabilityCostAdder(YTIME);
 
 *' The equation calculates the CAPEX of each CDR technology, as it's affected by a learning curve ($/tCO2).
 Q06GrossCapCDR(CDRTECH,YTIME)$(TIME(YTIME))..
@@ -127,7 +127,7 @@ Q06LvlCostCDR(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06VarCostCDR(CDRTECH,YTIME) - 20 +
     i06SpecElecCDR(allCy,CDRTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME) +
     i06SpecHeatCDR(allCy,CDRTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","NGS",YTIME) / 0.85 +
-    (VmCstCO2SeqCsts(allCy,YTIME) - i06CCSEnergyCostAdder(YTIME))$(not sameas("TEW", CDRTECH))
+    VmCstCO2SeqCsts(allCy,YTIME)$(not sameas("TEW", CDRTECH))
 ;
 
 *' The equation calculates the Levelized Costs of CDR capacity, also taking into account its subsidy, for each region (country) and year.

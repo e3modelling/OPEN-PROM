@@ -6,13 +6,6 @@
 V06CO2CaptureCCS.LO(runCy,SBS,EFS,YTIME) = 0;
 V06CO2CaptureCCS.L(runCy,SBS,EFS,YTIME)$SECtoEF(SBS,EFS) = 1;
 V06CO2CaptureCCS.FX(runCy,SBS,EFS,YTIME)$(DATAY(YTIME) or not SECtoEF(SBS,EFS)) = 0;
-* Initialize the first solved model year from base-year global Energy CCS.
-i06CCSEnergyCostAdder("%fStartY%") = %ccsEnergyCostAdder%
-  * sqr(
-      sum((runCyL,SBS,EFS)$SECtoEF(SBS,EFS),
-        V06CO2CaptureCCS.L(runCyL,SBS,EFS,"%fBaseY%"))
-      * 1e-3 / 10
-    );
 *---
 V06CaptCummCO2.LO(runCy,YTIME) = 0;
 V06CaptCummCO2.L(runCy,YTIME) = 1;
@@ -33,6 +26,16 @@ V06CostFullCDR.FX(runCy,CDRTECH,YTIME)$DATAY(YTIME) = 100;
 V06CapCDR.LO(runCy,CDRTECH,YTIME) = 0;
 V06CapCDR.L(runCy,CDRTECH,YTIME) = 1;
 V06CapCDR.FX(runCy,CDRTECH,"%fBaseY%") = 1000 * VmGDPPartGlob.L(runCy,"%fBaseY%"); !! Initial guess of 50 years to reach net zero emissions for each CDR technology, based on the net emissions in 2020
+* Initialize the first solved model year from base-year global Energy CCS and DAC.
+i06CCSAvailabilityCostAdder("%fStartY%") = %ccsAvailabilityCostAdder%
+  * sqr(
+      (
+        sum((runCyL,SBS,EFS)$SECtoEF(SBS,EFS),
+          V06CO2CaptureCCS.L(runCyL,SBS,EFS,"%fBaseY%")) * 1e-3
+        + sum((runCyL,DACTECH),
+          V06CapCDR.L(runCyL,DACTECH,"%fBaseY%")) * 1e-9
+      ) / 10
+    );
 *---
 V06ProfRateCDR.LO(runCy,CDRTECH,YTIME) = 0;
 V06ProfRateCDR.L(runCy,CDRTECH,YTIME) = 1;

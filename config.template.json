@@ -18,7 +18,7 @@
       "fEndY": 2100,
       "CountrySolveMode": "serial",
       "bmswasPriceAdder": 3.2,
-      "ccsEnergyCostAdder": 200
+      "ccsAvailabilityCostAdder": 300
     },
     "land_use_emulator": {
       "source": "magpie",

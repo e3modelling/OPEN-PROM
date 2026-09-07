@@ -2,7 +2,7 @@
 *' @code
 
 Equations
-Q06CO2CaptureCCS(allCy,SBS,EF,YTIME)	               "Compute CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
+Q06CO2CaptureCCS(allCy,SBS,EF,YTIME)	               "Compute point-source CO2 captured by energy supply and demand technologies (Mtn CO2)"
 Q06CaptCummCO2(allCy,YTIME)	                               "Compute cumulative CO2 captured (Mtn of CO2)"
 Q06CaptCummCO2Glob(YTIME)                                   "Compute global cumulative CO2 captured (Mtn of CO2)"
 Q06GrossCapCDR(CDRTECH,YTIME)                        "Computes CAPEX of CDR technologies with learning curve"
@@ -20,7 +20,7 @@ Q06CstCO2SeqCsts(allCy,YTIME)	                           "Compute cost curve for
 ;
 
 Variables
-V06CO2CaptureCCS(allCy,SBS,EF,YTIME)	                "CO2 captured by electricity and hydrogen production plants (Mtn CO2)"
+V06CO2CaptureCCS(allCy,SBS,EF,YTIME)	                "Point-source CO2 captured by energy supply and demand technologies (Mtn CO2)"
 V06CaptCummCO2(allCy,YTIME)	                              "Cumulative CO2 captured (Mtn CO2)"
 V06CaptCummCO2Glob(YTIME)                                   "Global cumulative CO2 captured (Mtn of CO2)"
 V06GrossCapCDR(CDRTECH,YTIME)                        "CAPEX of CDR technologies with learning curve"
@@ -34,12 +34,12 @@ V06GapCDR(allCy,CDRTECH,YTIME)                            "The CDR deployment ga
 V06CapCDR(allCy,CDRTECH,YTIME)                             "CDR regional installed capacity (tCO2)"
 
 *'                **Interdependent Variables**
-VmCstCO2SeqCsts(allCy,YTIME)	                           "Effective CO2 sequestration cost: physical curve plus Energy CCS deployment-pressure adder (US$2015/tCO2)"
+VmCstCO2SeqCsts(allCy,YTIME)	                           "Effective CO2 sequestration cost: physical curve plus CCS availability adder (US$2015/tCO2)"
 VmConsFuelTechCDRProd(allCy,CDRTECH,EF,YTIME)              "Annual fuel demand in each CDR technology regionally (Mtoe)"
 ;
 
 Parameters
-i06CCSEnergyCostAdder(YTIME)                               "Global point-source Energy CCS deployment-pressure cost adder (US$2015/tCO2)"
+i06CCSAvailabilityCostAdder(YTIME)                         "Global CCS availability cost adder (US$2015/tCO2)"
 ;
 
 Scalars

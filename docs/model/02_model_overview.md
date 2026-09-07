@@ -482,10 +482,7 @@ $$
 \qquad P^{used}_{r,s,t}=P^{backend}_{r,s,t}+\tau_t.
 $$
 
-The first solved year uses observed base-year global BMSWAS production. `bmswasPriceAdder` configures the
-coefficient $A$ in kUS$2015/toe; zero disables the mechanism. Recursive `static` and GLOBIOM backends remove the
-previous year's tax before applying their ordinary price dynamics, so the tax is not compounded. The final PG
-BMSWAS used-price ratio is passed through to processed biofuels using `i08PriceTransElast`.
+The first solved year uses observed base-year global BMSWAS production. `bmswasPriceAdder` configures the coefficient $A$ in kUS$2015/toe, and zero disables the mechanism. Recursive `static` and GLOBIOM backends remove the previous year's tax before applying their ordinary price dynamics, so the tax is not compounded. The final PG BMSWAS used-price ratio is passed through to processed biofuels using `i08PriceTransElast`.
 
 The determination of prices is done endogenously through a combination of complementary mechanisms. For energy
 carriers with a detailed supply representation (electricity, hydrogen, and heat) prices are derived from the average

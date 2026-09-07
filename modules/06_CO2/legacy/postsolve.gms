@@ -9,14 +9,17 @@ V06CapCDR.FX(runCyL,CDRTECH,YTIME)$TIME(YTIME) = V06CapCDR.L(runCyL,CDRTECH,YTIM
 V06LvlCostCDR.FX(runCyL,CDRTECH,YTIME)$TIME(YTIME) = V06LvlCostCDR.L(runCyL,CDRTECH,YTIME)$TIME(YTIME);
 V06CostFullCDR.FX(runCy,CDRTECH,YTIME)$TIME(YTIME) = V06CostFullCDR.L(runCy,CDRTECH,YTIME)$TIME(YTIME);
 V06CapFacNewCDR.FX(runCyL,CDRTECH,YTIME)$TIME(YTIME) = V06CapFacNewCDR.L(runCyL,CDRTECH,YTIME)$TIME(YTIME);
-* After the last regional solve, update next year's global Energy CCS adder.
-i06CCSEnergyCostAdder(YTIME)$(
+* After the last regional solve, update next year's global CCS availability adder.
+i06CCSAvailabilityCostAdder(YTIME)$(
   sCY = card(runCyL) and TIME(YTIME-1) and AN(YTIME)
-) = %ccsEnergyCostAdder%
+) = %ccsAvailabilityCostAdder%
   * sqr(
-      sum((runCy2,SBS,EFS)$SECtoEF(SBS,EFS),
-        V06CO2CaptureCCS.L(runCy2,SBS,EFS,YTIME-1))
-      * 1e-3 / 10
+      (
+        sum((runCy2,SBS,EFS)$SECtoEF(SBS,EFS),
+          V06CO2CaptureCCS.L(runCy2,SBS,EFS,YTIME-1)) * 1e-3
+        + sum((runCy2,DACTECH),
+          V06CapCDR.L(runCy2,DACTECH,YTIME-1)) * 1e-9
+      ) / 10
     );
 $ontext
 V06GrossCapCDR.FX(CDRTECH,YTIME)$TIME(YTIME) = V06GrossCapCDR.L(CDRTECH,YTIME)$TIME(YTIME);
