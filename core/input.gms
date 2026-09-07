@@ -381,8 +381,10 @@ SE.TOGS       0.14459    12.74        20    0.8
 SE.TBMSWAS    0.26753    17.14        20    0.75
 SE.TELC       0.05195    7.79         20    0.99
 SE.THEATPUMP  0.30736    22.16        20    3.175
-SE.TSOL       0.432    12.9254         20  1 *** change values in toe
-SE.TGEO       0.432    12.9254         20  0.5 *** change values in toe
+*** change values in toe
+SE.TSOL       0.432      12.9254      20    1 
+*** change values in toe
+SE.TGEO       0.432      12.9254      20    0.5 
 HOU.THCL      0.35498    1.13         20    0.7
 HOU.TLGN      0.42338    1.21         20    0.5
 HOU.TLPG      0.14459    12.74        20    0.8
@@ -397,8 +399,10 @@ HOU.TOGS      0.14459    12.74        20    0.8
 HOU.TBMSWAS   0.26753    17.14        20    0.75
 HOU.TELC      0.05195    7.79         20    0.99
 HOU.THEATPUMP 0.30736    22.16        20    3.175
-HOU.TSOL      0.432    12.9254         20  1 *** change values in toe
-HOU.TGEO      0.432    12.9254         20  0.5 ***     change values in toe
+*** change values in toe
+HOU.TSOL      0.432      12.9254      20    1
+***     change values in toe      
+HOU.TGEO      0.432      12.9254      20    0.5 
 *units        kUSD/toe USD/toe/y       
 AG.THCL       0.323544   10.88        20    0.7
 AG.TLGN       0.323544   10.88        20    0.5
