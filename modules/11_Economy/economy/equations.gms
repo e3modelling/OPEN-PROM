@@ -121,10 +121,10 @@ Q11SubsiDemTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS
 
 *' The equation splits the available state grants to the various supply technologies through a policy parameter expressing this proportional division.
 *' The resulting amount (in Millions US$2015) is going to be implemented to the cost calculation of each subsided supply technology.
-Q11SubsiSupTech(allCy,STECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    VmSubsiSupTech(allCy,STECH,YTIME)
+Q11SubsiSupTechAvail(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    VmSubsiSupTechAvail(allCy,PGALL,YTIME)
         =E=
-        V11SubsiTot(allCy,YTIME) * i11SubsiPerSupTechAvail(allCy,STECH,YTIME) * i11SubsiShare("PowGen");
+        V11SubsiTot(allCy,YTIME) * i11SubsiPerSupTechAvail(allCy,PGALL,YTIME) * i11SubsiShare("PowGen");
 ;
 
 *' Subsidies in demand (Millions US$2015) 
@@ -182,29 +182,27 @@ Q11SubsiFuelTot(allCy,SBS,EFS,YTIME)$(TIME(YTIME) and runCy(allCy) and SECtoEF(S
     * i11SubsiShare("Fuel")
     / 2;
 
-$ontext
-*' Subsidies in supply (Millions US$2015)
-Q11SubsiCapCostSupply(allCy,SSBS,STECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-      VmSubsiCapCostSupply(allCy,SSBS,STECH,YTIME)
+*' Subsidies in power supply (Millions US$2015)
+Q11SubsiCapCostSupply(allCy,SSBS,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+      VmSubsiCapCostSupply(allCy,SSBS,PGALL,YTIME)
       =E=
-      sum(PGALL$sameas(PGALL,STECH),
-        i04GrossCapCosSubRen(allCy,PGALL,YTIME) * imFacSubsiCapCostSupply(SSBS,STECH) *
-        V04NewCapElec(allCy,PGALL,YTIME) * 1e3 / i04AvailRate(allCy,PGALL,YTIME)
-        +
-        imGrantCapCostSupply(SSBS,STECH) *
-        V04NewCapElec(allCy,PGALL,YTIME) * 1e3 / i04AvailRate(allCy,PGALL,YTIME)
-      )$sameas(SSBS,"PG")
-      +
-      sum(H2TECH$sameas(H2TECH,STECH),
-        V05CostProdH2Tech(allCy,H2TECH,YTIME) *
-        VmDemTotH2(allCy,YTIME) * (1 - V05ShareCCSH2Prod(allCy,H2TECH,YTIME)) * (1 - V05ShareNoCCSH2Prod(allCy,H2TECH,YTIME)) *
-        imFacSubsiCapCostSupply(SSBS,STECH)
-        +
-        VmDemTotH2(allCy,YTIME) * (1 - V05ShareCCSH2Prod(allCy,H2TECH,YTIME)) * (1 - V05ShareNoCCSH2Prod(allCy,H2TECH,YTIME)) *
-        imGrantCapCostSupply(SSBS,STECH)
-      )$sameas(SSBS,"H2P")
+      (VmSubsiSupTechAvail(allCy,PGALL,YTIME) / (V04NewCapElec(allCy,PGALL,YTIME-1) * i04AvailRate(allCy,PGALL,YTIME-1))
+      + V04CostHourProdInvDec(allCy,PGALL,YTIME-1) * 0.5
+      -
+      sqrt(sqr(VmSubsiSupTechAvail(allCy,PGALL,YTIME) / (V04NewCapElec(allCy,PGALL,YTIME-1) * i04AvailRate(allCy,PGALL,YTIME-1))
+      - V04CostHourProdInvDec(allCy,PGALL,YTIME-1) * 0.5))
+      )$(ord(YTIME) > 15 and sameas(SSBS,"PG"))
+      / 2;
+!!      +
+!!      sum(H2TECH$sameas(H2TECH,STECH),
+!!        V05CostProdH2Tech(allCy,H2TECH,YTIME) *
+!!        VmDemTotH2(allCy,YTIME) * (1 - V05ShareCCSH2Prod(allCy,H2TECH,YTIME)) * (1 - V05ShareNoCCSH2Prod(allCy,H2TECH,YTIME)) *
+!!        imFacSubsiCapCostSupply(SSBS,STECH)
+!!        +
+!!        VmDemTotH2(allCy,YTIME) * (1 - V05ShareCCSH2Prod(allCy,H2TECH,YTIME)) * (1 - V05ShareNoCCSH2Prod(allCy,H2TECH,YTIME)) *
+!!        imGrantCapCostSupply(SSBS,STECH)
+!!      )$sameas(SSBS,"H2P")
 ;
-$offtext
 
 *'This equation calculated the difference between the state revenues by collected carbon taxes, and the green grants and subsidies given in
 *'both the supply and demand sectors.

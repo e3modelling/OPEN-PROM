@@ -11,8 +11,8 @@ parameter i11SubsiPerFuelAvail(allCy,SBS,EFS,YTIME);                            
 i11SubsiPerFuelAvail(allCy,"H2P","ELC",YTIME) = 0.1;
 i11SubsiPerFuelAvail(allCy,"HOU","ELC",YTIME) = 0.9;
 *---
-parameter i11SubsiPerSupTechAvail(allCy,STECH,YTIME);                             !!State fuel support policy, expressed as a proportion factor of the available state grants (1)"
-i11SubsiPerSupTechAvail(allCy,STECH,YTIME) = 0;
+parameter i11SubsiPerSupTechAvail(allCy,PGALL,YTIME);                             !!State fuel support policy, expressed as a proportion factor of the available state grants (1)"
+i11SubsiPerSupTechAvail(allCy,PGALL,YTIME) = 0;
 i11SubsiPerSupTechAvail(allCy,"PGAWNO",YTIME) = 0;
 *---
 parameter i11SubsiShare(SubsiCat);                                      !!State support policy, expressed as a proportion factor of the available state grants (1)"
