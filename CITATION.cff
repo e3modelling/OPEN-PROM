@@ -1,0 +1,90 @@
+cff-version: 1.2.0
+message: "If you use OPEN-PROM, please cite it using these metadata."
+authors:
+
+  - family-names: Baka
+    given-names: Maro
+    affiliation: "E3Modelling-WSP"
+    orcid: https://orcid.org/0000-0003-3253-7462
+
+  - family-names: Efthymiadou
+    given-names: Margarita
+    affiliation: "E3Modelling-WSP"
+    orcid: https://orcid.org/0009-0006-0649-4066
+
+  - family-names: Fragkos
+    given-names: Panagiotis
+    affiliation: "E3Modelling-WSP"
+    orcid: https://orcid.org/0000-0003-3596-0661
+
+  - family-names: Giannousakis
+    given-names: Anastasis
+    affiliation: "E3Modelling-WSP"
+    orcid: https://orcid.org/0000-0002-4225-0011
+    
+  - family-names: Koumparakis
+    given-names: Christos
+    affiliation: "E3Modelling-WSP"
+    orcid: https://orcid.org/0009-0001-3836-5481
+
+  - family-names: Madianos
+    given-names: Michael
+    affiliation: "E3Modelling-WSP"
+    orcid: https://orcid.org/0009-0001-9357-5211
+
+  - family-names: Plessias
+    given-names: Giorgos
+    affiliation: "E3Modelling-WSP"
+    orcid: https://orcid.org/0009-0006-7803-8895
+
+  - family-names: Pramangioulis
+    given-names: Dionysis
+    affiliation: "E3Modelling-WSP"
+    orcid: https://orcid.org/0000-0003-0167-2880
+
+  - family-names: Sechi
+    given-names: Sonja
+    affiliation: "E3Modelling-WSP"
+    orcid: https://orcid.org/0000-0002-4303-0256
+
+  - family-names: Sioutas
+    given-names: Fotis
+    affiliation: "E3Modelling-WSP"
+    orcid: https://orcid.org/0009-0009-2331-2377
+
+  - family-names: Tsimpoukis
+    given-names: Alexandros
+    affiliation: "E3Modelling-WSP"
+    orcid: https://orcid.org/0000-0003-4086-5693
+
+  - family-names: Yu
+    given-names:  Songmin
+    affiliation: "E3Modelling-WSP"
+    orcid: https://orcid.org/0000-0001-6062-4382
+    
+  - family-names: Tolios
+    given-names: Giannis
+    affiliation: 
+    email: 
+
+  - family-names: Zisarou
+    given-names: Eleftheria
+    affiliation:
+    email:
+
+title: OPEN-PROM
+abstract: OPEN-PROM is a global energy-system simulation model based on the PROMETHEUS modelling framework. 
+          It is a recursive-dynamic model that simulates the year-by-year evolution of energy demand, energy supply, 
+          technology deployment, and emissions under alternative socioeconomic, technological, and policy assumptions, 
+          while explicitly accounting for path dependencies and transition dynamics. The model provides a detailed 
+          representation of energy demand across the industry, transport, and residential sectors, alongside energy supply, 
+          power generation, and fuel-transformation technologies, and it captures the interactions between energy consumption, 
+          fuel use, industrial production, and technology adoption. This structure makes OPEN-PROM well suited to analysing 
+          industrial decarbonisation pathways, resource-efficiency measures, energy transitions, 
+          and climate-policy scenarios at both the European and global levels.
+version: 2.2.0
+date-released: 2026-06-26
+repository-code: https://github.com/e3modelling/OPEN-PROM
+keywords:
+  - prometheus
+license: GNU AGPLv3

@@ -73,4 +73,4 @@ jobs:
   
       - name: Test Model Run - ${{ matrix.name }}
         run: |
-          & "C:\GAMS\48\gams.exe" main.gms lo 2 --DevMode=0 --WriteGDX=off --GenerateInput=off --fEndY=2100 --fScenario=${{ matrix.id }} -Idir=./data
+          & "C:\GAMS\48\gams.exe" main.gms lo 2 --DevMode=0 --WriteGDX=off --GenerateInput=off --fEndY=2100 --fScenario=${{ matrix.id }} --landUseEmulator=magpie --emulatorCarbonPriceScenario=Npi_Default -Idir=./data

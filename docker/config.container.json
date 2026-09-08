@@ -1,26 +1,26 @@
 {
   "paths": {
-    "model_runs_path": "local/path/to/model/runs/",
-    "magpie_path": "path/to/magpie/folder/including/trailing/slash/",
-    "gams_path": "path/to/gams/folder/including/trailing/slash/"
+    "model_runs_path": "/outputs",
+    "magpie_path": "/magpie/",
+    "gams_path": "/opt/gams/"
   },
   "behavior": {
     "withRunFolder": true,
     "withSync": true,
     "withReport": true,
-    "uploadGDX": true
+    "uploadGDX": false
   },
   "scenario": {
     "scenario_name": "SCEN",
-    "description": "Replace with your scenario description.",
+    "description": "Container run.",
     "gams_flags": {
       "fScenario": 200,
       "fEndY": 2100,
       "CountrySolveMode": "serial"
     },
     "land_use_emulator": {
-      "source": "magpie",
-      "carbon_price_scenario": "Npi_Default"
+      "source": "legacy",
+      "carbon_price": "GHG100"
     },
     "soft_link_magpie": {
       "project": "uptake",
