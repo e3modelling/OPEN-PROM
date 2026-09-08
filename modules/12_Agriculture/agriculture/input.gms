@@ -14,11 +14,11 @@ $include"./iDataAgricultureService.csv"
 $offdelim
 ;
 *---
-i12IndexClimateShift(allCy,"CROPS",YTIME) = 1;
-i12IndexTechShift(allCy,"CROPS",YTIME) = 1;
-i12IndexFertiliserShift(allCy,"CROPS",YTIME) = 1;
+i12IndexClimateShift(allCy,AGRI_MODES,YTIME) = 1;
+i12IndexTechShift(allCy,AGRI_MODES,YTIME) = 1;
+i12IndexFertiliserShift(allCy,AGRI_MODES,YTIME) = 1;
 *---
-i12SpecificFuelCons(allCy,AGRI_MODES,"GDO",YTIME) = 1.5;
+i12SpecificFuelCons(allCy,AGRI_MODES,"GDO",YTIME) = 1e-6;
 i12IntensityFertilizers(allCy,FERT_TYPES,YTIME) = 1;
 *---
 i12ConsFuel(allCy,AGRI_MODES,EFS,YTIME) = imFuelCons(allCy,"AG",EFS,YTIME) / card(AGRI_MODES);

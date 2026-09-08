@@ -13,7 +13,7 @@
 Q12Activity(allCy,AGRI_MODES,YTIME)$(TIME(YTIME) and runCy(allCy))..
   V12Activity(allCy,AGRI_MODES,YTIME)
     =E=
-  (1 + (i12IndexGlobalCaloriesIntake("PLANT",YTIME) - 1)$(sameas("CROPS",AGRI_MODES) or sameas("CLIMATE",AGRI_MODES)) or sameas("IRRIGATION",AGRI_MODES)) *
+  (1 + (i12IndexGlobalCaloriesIntake("PLANT",YTIME) - 1)$(sameas("CROPS",AGRI_MODES) or sameas("CLIMATE",AGRI_MODES) or sameas("IRRIGATION",AGRI_MODES))) *
   (1 + (i12IndexGlobalCaloriesIntake("MEAT",YTIME) - 1)$sameas("LIVESTOCK",AGRI_MODES)) *
   (1 + (i12IndexGlobalCaloriesIntake("FISH",YTIME) - 1)$sameas("FISHING",AGRI_MODES)) *
   (1 + ((V03ProdPrimary(allCy,"BMSWAS",YTIME) + 1e-6) / (V03ProdPrimary(allCy,"BMSWAS",YTIME-1) + 1e-6) * (1 + imActv(YTIME,allCy,"OE")) - 1)$sameas("FORESTRY",AGRI_MODES)) *
