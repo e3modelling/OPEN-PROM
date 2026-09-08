@@ -882,19 +882,3 @@ smGwToTwhPerYear(YTIME) = 8.76 + 0.024 $ (mod(YTIME.val,4) = 0 and mod (YTIME.va
 !!#UPT imCostCapTechDisc(YTIME)$(ord(YTIME) > 20 and ord(YTIME) <= 40) = 0.75 + (ord(YTIME) - 20) * (0.5 - 0.75) / (40 - 20);
 !!#UPT imCostCapTechDisc(YTIME)$(ord(YTIME) > 40) = 0.5;
 
-**  Residential and Commercial space heating - Capacity factor
-*---
-parameter iResHeatCapFac(allCy)   "Data for the capacity factor of residential and commercial space heating technologies in 2024"
-/
-$ondelim
-$include "./iResHeatCapFac.csv"
-$offdelim
-/
-;
-parameter iCapFacHeat(allCy,DSBS,YTIME);
-*set a default value of 1 for all other sectors
-iCapFacHeat(allCy,DSBS,YTIME) = 1;
-* set capacity factor for residential and commercial sectors
-iCapFacHeat(allCy,DSBS,YTIME)$(sameas(DSBS,"HOU") or sameas(DSBS,"SE")) = iResHeatCapFac(allCy);
-*set a realistic value for the countries with no info (nonEU)
-iCapFacHeat(allCy,DSBS,YTIME)$(iCapFacHeat(allCy,DSBS,YTIME)> 0.8 and (sameas(DSBS,"HOU") or sameas(DSBS,"SE"))) = 0.2; 

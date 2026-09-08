@@ -40,7 +40,7 @@ Q02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITE
 Q02RatioRem(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and (INDDOM(DSBS) or NENSE(DSBS)))$runCy(allCy))..
     V02RatioRem(allCy,DSBS,ITECH,YTIME) 
         =E=
-    (1 - 1/VmLft(allCy,DSBS,ITECH,YTIME)) * 
+    (1 - 1/(VmLft(allCy,DSBS,ITECH,YTIME)+ 1e-6)) * 
     (1 - V02PremScrpIndu(allCy,DSBS,ITECH,YTIME));
 
 Q02PremScrpIndu(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and (INDDOM(DSBS) or NENSE(DSBS)))$runCy(allCy))..
@@ -89,22 +89,20 @@ Q02GapUsefulDemSubsec(allCy,DSBS,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(DSBS
 *' Check ITECH and CHPs
 
 * The units of capital cost of HOU and SE are kUSD2015/kWh while for other sectors per kUSD2015/toe.
-Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not CDR(DSBS))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
+Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(DSBS))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
     V02CapCostTech(allCy,DSBS,ITECH,YTIME) 
         =E=
-    (
         (
             (
                 (imDisc(allCy,DSBS,YTIME) * !! in case of chp plants we use the discount rate of power generation sector
                     exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME))
                 ) /
-                (exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME)) - 1)
+                (exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME)) - 1 + 1e-6)
             ) *
             (imCapCostTech(allCy,DSBS,ITECH,YTIME) * imCGI(allCy,YTIME) +
             imFixOMCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit )
-            / iCapFacHeat(allCy,DSBS,YTIME)
-        ) / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME)
-    )
+            / (i02CapFacHeat(allCy,DSBS,YTIME)+ 1e-6)
+        ) / (imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME) + 1e-6)
 ;
 
 *' The equation computes the variable cost (variable + fuel) of each technology in each subsector - to check about consumer sizes
@@ -114,17 +112,14 @@ Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not CD
 Q02VarCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(DSBS))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
   V02VarCostTech(allCy,DSBS,ITECH,YTIME) 
       =E=
-  (
     sum(EF$ITECHtoEF(ITECH,EF), 
       i02ShareBlend(allCy,DSBS,ITECH,EF,YTIME) *
       VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME) +
       imCO2CaptRateIndustry(allCy,ITECH,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * imCo2EmiFac(allCy,DSBS,EF,YTIME)  +
       (1-imCO2CaptRateIndustry(allCy,ITECH,YTIME)) * 1e-3 * imCo2EmiFac(allCy,DSBS,EF,YTIME)  *
       (sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME))) +
-      (VmRenValue(YTIME)/1000)$(not RENEF(ITECH) and not NENSE(DSBS)) !! needs change of units
-    )/toeToTwh(DSBS) +
     imVarCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit
-  ) / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME);
+  ) / (imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME) + 1e-6);
 
 *The units of capital cost of HOU and SE are kUSD2015/kW while for other sectors per kUSD2015/toe.
 Q02CostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
@@ -155,7 +150,7 @@ Q02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and TIME(YTI
         =E= 
     V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) +
     (V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME) * V02GapUsefulDemSubsec(allCy,DSBS,YTIME)) / 
-    (imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME) * i02util(allCy,DSBS,ITECH,YTIME));
+    ((imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME) * i02util(allCy,DSBS,ITECH,YTIME))+ 1e-6);
         
 *' This equation computes the consumption/demand of non-substitutable electricity for subsectors of INDUSTRY and DOMESTIC in the "typical useful energy demand equation".
 *' The main explanatory variables are activity indicators of each subsector and electricity prices per subsector. Corresponding elasticities are applied for activity indicators

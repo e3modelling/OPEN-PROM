@@ -76,7 +76,7 @@ V02VarCostTech.FX(runCy,DSBS,ITECH,YTIME)$(DATAY(YTIME) and (INDDOM(DSBS) or NEN
       )
     ) +
     imVarCostTech(runCy,DSBS,ITECH,YTIME) / sUnitToKUnit
-  ) / imUsfEneConvSubTech(runCy,DSBS,ITECH,YTIME);
+  ) / (imUsfEneConvSubTech(runCy,DSBS,ITECH,YTIME) + 1e-6);
 V02VarCostTech.FX(runCy,"ICT",ITECH,YTIME) = 0;
 *---
 V02CapCostTech.FX(runCy,DSBS,ITECH,YTIME)$(not An(YTIME) and (INDDOM(DSBS) or NENSE(DSBS)) and SECTTECH(DSBS,ITECH)) = ((
@@ -84,11 +84,11 @@ V02CapCostTech.FX(runCy,DSBS,ITECH,YTIME)$(not An(YTIME) and (INDDOM(DSBS) or NE
         (imDisc(runCy,DSBS,YTIME)$(not TSTEAM(ITECH)) + imDisc(runCy,"PG",YTIME)$TSTEAM(ITECH)) * !! in case of chp plants we use the discount rate of power generation sector
         exp((imDisc(runCy,DSBS,YTIME)$(not TSTEAM(ITECH)) + imDisc(runCy,"PG",YTIME)$TSTEAM(ITECH)) * VmLft.L(runCy,DSBS,ITECH,YTIME))
       ) /
-      (exp((imDisc(runCy,DSBS,YTIME)$(not TSTEAM(ITECH)) + imDisc(runCy,"PG",YTIME)$TSTEAM(ITECH)) * VmLft.L(runCy,DSBS,ITECH,YTIME)) - 1)
+      (exp((imDisc(runCy,DSBS,YTIME)$(not TSTEAM(ITECH)) + imDisc(runCy,"PG",YTIME)$TSTEAM(ITECH)) * VmLft.L(runCy,DSBS,ITECH,YTIME)) - 1 +1e-6)
     ) *
     imCapCostTech(runCy,DSBS,ITECH,YTIME) * imCGI(runCy,YTIME) +
     imFixOMCostTech(runCy,DSBS,ITECH,YTIME) / sUnitToKUnit)
-    / imUsfEneConvSubTech(runCy,DSBS,ITECH,YTIME);
+    / (imUsfEneConvSubTech(runCy,DSBS,ITECH,YTIME) + 1e-6);
 *---
 V02CostTech.LO(runCy,DSBS,ITECH,YTIME) = 0;
 V02CostTech.L(runCy,DSBS,ITECH,YTIME) = 1;

@@ -102,3 +102,22 @@ $ondelim
 $include "../targets/tProjectionsINDSE.csv"
 $offdelim;
 $ENDIF.calib
+
+**  Residential and Commercial space heating - Capacity factor
+*---
+parameter iResHeatCapFac(allCy)   "Data for the capacity factor of residential and commercial space heating technologies in 2024"
+/
+$ondelim
+$include "./iResHeatCapFac.csv"
+$offdelim
+/
+;
+
+*set a default value of 1 for all other sectors
+i02CapFacHeat(allCy,DSBS,YTIME) = 1;
+* set capacity factor for residential and commercial sectors
+i02CapFacHeat(allCy,DSBS,YTIME)$(sameas(DSBS,"HOU") or sameas(DSBS,"SE")) = iResHeatCapFac(allCy);
+*set a realistic value for the countries with no info (nonEU)
+i02CapFacHeat(allCy,DSBS,YTIME)$(i02CapFacHeat(allCy,DSBS,YTIME)> 0.8 and (sameas(DSBS,"HOU") or sameas(DSBS,"SE"))) = 0.2; 
+
+display i02CapFacHeat;
