@@ -5,6 +5,7 @@ Parameters
 i12CaloriesIntake(allCy,FOOD_TYPES,YTIME)                  "Daily calories intake per capita (kcal/capita/day)"
 i12IndexClimateShift(allCy,AGRI_MODES,YTIME)
 i12IndexTechShift(allCy,AGRI_MODES,YTIME)
+i12IndexFertiliserShift(allCy,AGRI_MODES,YTIME)
 i12SpecificFuelCons(allCy,AGRI_MODES,EFS,YTIME)
 i12IntensityFertilizers(allCy,FERT_TYPES,YTIME)
 i12IndexGlobalCaloriesIntake(FOOD_TYPES,YTIME)
@@ -22,6 +23,8 @@ Q12Capacity(allCy,AGRI_MODES,AGRITECH,YTIME)
 Q12GapActivity(allCy,AGRI_MODES,YTIME)
 Q12ScrpRate(allCy,AGRI_MODES,AGRITECH,YTIME)
 Q12ShareTech(allCy,AGRI_MODES,AGRITECH,YTIME)
+Q12ScrpPrem(allCy,AGRI_MODES,AGRITECH,YTIME)
+Q12CostFuel(allCy,AGRI_MODES,AGRITECH,YTIME)
 ;
 
 Variables
@@ -43,4 +46,6 @@ V12Capacity(allCy,AGRI_MODES,AGRITECH,YTIME)
 V12GapActivity(allCy,AGRI_MODES,YTIME)
 V12ScrpRate(allCy,AGRI_MODES,AGRITECH,YTIME)
 V12ShareTech(allCy,AGRI_MODES,AGRITECH,YTIME)
+V12ScrpPrem(allCy,AGRI_MODES,AGRITECH,YTIME)
+V12CostFuel(allCy,AGRI_MODES,AGRITECH,YTIME)
 ;

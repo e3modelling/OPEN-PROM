@@ -9,15 +9,16 @@
 *' and the ratio of lagged energy costs (with the corresponding elasticities). This type of equation captures both short term and long term reactions to energy costs. 
 
 *' * Agriculture module
+* We need another driver for food crops: 1st generation biofuels.
 Q12Activity(allCy,AGRI_MODES,YTIME)$(TIME(YTIME) and runCy(allCy))..
   V12Activity(allCy,AGRI_MODES,YTIME)
-        =E=
-  (1 + (i12IndexGlobalCaloriesIntake("PLANT",YTIME) - 1)$(sameas("CROPS",AGRI_MODES) or sameas("CLIMATE",AGRI_MODES) or sameas("IRRIGATION",AGRI_MODES))) *
+    =E=
+  (1 + (i12IndexGlobalCaloriesIntake("PLANT",YTIME) - 1)$(sameas("CROPS",AGRI_MODES) or sameas("CLIMATE",AGRI_MODES)) or sameas("IRRIGATION",AGRI_MODES)) *
   (1 + (i12IndexGlobalCaloriesIntake("MEAT",YTIME) - 1)$sameas("LIVESTOCK",AGRI_MODES)) *
   (1 + (i12IndexGlobalCaloriesIntake("FISH",YTIME) - 1)$sameas("FISHING",AGRI_MODES)) *
-  (1 + ((V03ProdPrimary(allCy,"BMSWAS",YTIME) + 1e-6) / (V03ProdPrimary(allCy,"BMSWAS",YTIME-1) + 1e-6) - 1)$sameas("FORESTRY",AGRI_MODES)) +
-  !! ()$sameas("ENERGY_CROPS",AGRI_MODES))
-  0.1;
+  (1 + ((V03ProdPrimary(allCy,"BMSWAS",YTIME) + 1e-6) / (V03ProdPrimary(allCy,"BMSWAS",YTIME-1) + 1e-6) * (1 + imActv(YTIME,allCy,"OE")) - 1)$sameas("FORESTRY",AGRI_MODES)) *
+  !!(1)$sameas("POSTHARVESTING",AGRI_MODES) *
+  (1 + ((V03ProdPrimary(allCy,"BGDO",YTIME) + 1e-6) / (V03ProdPrimary(allCy,"BGDO",YTIME-1) + 1e-6) - 1)$sameas("ENERGY_CROPS",AGRI_MODES));
 
 Q12EnergyService(allCy,AGRI_MODES,YTIME)$(TIME(YTIME) and runCy(allCy))..
   V12EnergyService(allCy,AGRI_MODES,YTIME)
@@ -25,7 +26,8 @@ Q12EnergyService(allCy,AGRI_MODES,YTIME)$(TIME(YTIME) and runCy(allCy))..
   V12EnergyService(allCy,AGRI_MODES,YTIME-1) *
   V12Activity(allCy,AGRI_MODES,YTIME) *
   i12IndexClimateShift(allCy,AGRI_MODES,YTIME) * 
-  i12IndexTechShift(allCy,AGRI_MODES,YTIME);
+  i12IndexTechShift(allCy,AGRI_MODES,YTIME) *
+  i12IndexFertiliserShift(allCy,AGRI_MODES,YTIME);
 
 Q12Capacity(allCy,AGRI_MODES,AGRITECH,YTIME)$(TIME(YTIME) and runCy(allCy))..
   V12Capacity(allCy,AGRI_MODES,AGRITECH,YTIME)
@@ -51,11 +53,25 @@ Q12GapActivity(allCy,AGRI_MODES,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     ))
   ) / 2;
 
+* toe / activity
+Q12CostFuel(allCy,AGRI_MODES,AGRITECH,YTIME)$(TIME(YTIME) $AGRMODEStoTECH(AGRI_MODES,AGRITECH) $runCy(allCy))..
+  V12CostFuel(allCy,AGRI_MODES,AGRITECH,YTIME)
+      =E=
+  sum(EFS$AGRITECHTOEF(AGRITECH,EFS), 
+      VmPriceFuelSubsecCarVal(allCy,"AG",EFS,YTIME) * 
+      i12SpecificFuelCons(allCy,AGRI_MODES,EFS,YTIME)
+  ) ;
+
+Q12ScrpPrem(allCy,AGRI_MODES,AGRITECH,YTIME)$(TIME(YTIME)$AGRMODEStoTECH(AGRI_MODES,AGRITECH)$runCy(allCy))..
+    V12ScrpPrem(allCy,AGRI_MODES,AGRITECH,YTIME)
+        =E=
+    0;
+
 Q12ScrpRate(allCy,AGRI_MODES,AGRITECH,YTIME)$(TIME(YTIME) and runCy(allCy))..
     V12ScrpRate(allCy,AGRI_MODES,AGRITECH,YTIME)
         =E=
-    1 - (1 - 1 / 20); !! * LIFETIME
-    !!(1 - V01PremScrp(allCy,AGRI_MODES,AGRITECH,YTIME));
+    1 - (1 - 1 / 20) * !! * LIFETIME
+    (1-V12ScrpPrem(allCy,AGRI_MODES,AGRITECH,YTIME));
 
 Q12ShareTech(allCy,AGRI_MODES,AGRITECH,YTIME)$(TIME(YTIME)$AGRMODEStoTECH(AGRI_MODES,AGRITECH) $runCy(allCy))..
     V12ShareTech(allCy,AGRI_MODES,AGRITECH,YTIME)
