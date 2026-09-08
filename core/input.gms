@@ -427,7 +427,10 @@ AG.TOGS       0.2244     10.88        20    0.8
 AG.TBMSWAS    0.323544   10.88        20    0.5
 AG.TELC       0.3        8.976        12    0.85
 AG.THEATPUMP  0.432      12.9254      20    1.848
-
+*** change values in toe
+AG.TSOL       0.432      12.9254      20    1 
+*** change values in toe
+AG.TGEO       0.432      12.9254      20    0.5 
 
 ;
 *---
