@@ -754,7 +754,8 @@ parameters
 !!imSubsiCapCostFuel(SBS,EF)                                  !!State subsidy in fuel cost
 !!imFacSubsiCapCostSupply(SSBS,STECH)                         !!State subsidy (%) factor in technology capex (supply side)
 !!imGrantCapCostSupply(SSBS,STECH)                            !!State granting in technology capex (supply side)
-imCapCostTechMin(allCy,DSBS,TECH,YTIME)                    !!Factor for the minimum capex of a demand technology after the state subsidy
+imCapCostTechMin(allCy,DSBS,TECH,YTIME)                       !!Factor for the minimum capex of a demand technology after the state subsidy
+imPriceFuelMin(allCy,SBS,EFS,YTIME);                          !!Bottom fuel price percentage after the state subsidy"
 !!#UPT imCostCapTechDisc(YTIME)                                   !!Discount rate for capital costs of power generation technologies
 ;
 
@@ -839,7 +840,7 @@ imShrNonSubElecInTotElecDem(runCy,DOMSE)$(imShrNonSubElecInTotElecDem(runCy,DOMS
 *---
 **  Transport Sector
 imCapCostTech(runCy,TRANSE,TECH,YTIME) = imDataTransTech(TRANSE,TECH,"IC",YTIME);
-imCapCostTechMin(allCy,TRANSE,TECH,YTIME) = 0.4;
+imCapCostTechMin(allCy,TRANSE,TECH,YTIME) = 0.75;
 imFixOMCostTech(runCy,TRANSE,TECH,YTIME) = imDataTransTech(TRANSE,TECH,"FC",YTIME);
 imVarCostTech(runCy,TRANSE,TECH,YTIME) = imDataTransTech(TRANSE,TECH,"VC",YTIME);
 *---
@@ -899,6 +900,10 @@ imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$AN(YTIME)  = imDataIndTechnolog
 imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$(ord(YTIME)>50)  = 0.7;
 
 **  Power Generation
+*---
+**  Fuel Prices
+imPriceFuelMin(allCy,"HOU","ELC",YTIME) = 0.7;
+imPriceFuelMin(allCy,"H2P","ELC",YTIME) = 0.9;
 *---
 table imPlantEffByType(allCy,STECH,effSET,YTIME)   "Data for plant efficiency per plant type"
 $ondelim

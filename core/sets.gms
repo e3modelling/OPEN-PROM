@@ -1110,6 +1110,12 @@ seq_min   "Minimum sequestration cost"
 seq_max   "Maximum sequestration cost"
 /
 
+SubsiCat Subsidy categories for sharing the total subsidy amount between demand and supply side
+/
+Dem       "Demand side subsidies"
+PowGen    "Power generation subsidies"
+Fuel      "Fuel subsidies"
+/
 
 *   DUMMY SETS USED FOR DATA INPUT  *
 

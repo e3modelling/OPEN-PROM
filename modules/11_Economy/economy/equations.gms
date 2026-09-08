@@ -39,13 +39,21 @@ Q11SubsiTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q11SubsiDemTechAvail(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS,TECH))..
     VmSubsiDemTechAvail(allCy,DSBS,TECH,YTIME)
         =E=
-    V11SubsiTot(allCy,YTIME) * i11SubsiPerDemTechAvail(allCy,DSBS,TECH,YTIME);
+    V11SubsiTot(allCy,YTIME) * 0.5 * i11SubsiPerDemTechAvail(allCy,DSBS,TECH,YTIME);
+
+*' The equation splits the available state grants to the various fuels through a policy parameter expressing this proportional division.
+*' The resulting amount (in Millions US$2015) is going to be implemented to the cost calculation of each subsidized demand fuel.
+Q11SubsiFuelAvail(allCy,SBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECtoEF(SBS,EFS))..
+    VmSubsiFuelAvail(allCy,SBS,EFS,YTIME)
+        =E=
+        0 * 
+    V11SubsiTot(allCy,YTIME) * i11SubsiShare("Dem") * i11SubsiPerFuelAvail(allCy,SBS,EFS,YTIME);
 
 *' The equation calculates the state support per unit of new capacity in the industrial subsectors and technologies (kUS$2015/toe-year).
 Q11SubsiDemITech(allCy,DSBS,ITECH,YTIME)$(INDSE(DSBS) and SECTTECH(DSBS,ITECH) and TIME(YTIME) and runCy(allCy))..
     VmSubsiDemITech(allCy,DSBS,ITECH,YTIME)
         =E=
-    0 * (
+    (
       VmSubsiDemTechAvail(allCy,DSBS,ITECH,YTIME) * 1e3 /
       (V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME-1) * V02GapUsefulDemSubsec(allCy,DSBS,YTIME-1) * 1e6 * VmLft(allCy,DSBS,ITECH,YTIME) + 1e-6) +
       (1 - imCapCostTechMin(allCy,DSBS,ITECH,YTIME)) * V02CostTech(allCy,DSBS,ITECH,YTIME-1)
@@ -57,6 +65,25 @@ Q11SubsiDemITech(allCy,DSBS,ITECH,YTIME)$(INDSE(DSBS) and SECTTECH(DSBS,ITECH) a
     ))
     )$(ord(YTIME) > 15) / 2;
 
+*' The equation calculates the state support for each fuel (kUS$2015/toe-year).
+Q11SubsiFuel(allCy,SBS,EFS,YTIME)$(TIME(YTIME) and runCy(allCy) and SECtoEF(SBS,EFS))..
+    VmSubsiFuel(allCy,SBS,EFS,YTIME)
+        =E=
+    (
+      VmSubsiFuelAvail(allCy,SBS,EFS,YTIME) /
+      sum(DSBS$DSBS(SBS),
+        ((VmConsFuelShare(allCy,DSBS,EFS,YTIME-1) * V02DemSubUsefulSubsec(allCy,DSBS,YTIME-1)))*1e-3 + 1e-6) +
+      imPriceFuelMin(allCy,SBS,EFS,YTIME) * VmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME-1)
+      -
+      sqrt(sqr(
+        VmSubsiFuelAvail(allCy,SBS,EFS,YTIME) /
+        sum(DSBS$DSBS(SBS),
+          ((VmConsFuelShare(allCy,DSBS,EFS,YTIME-1) * V02DemSubUsefulSubsec(allCy,DSBS,YTIME-1)))*1e-3 + 1e-6)
+        - imPriceFuelMin(allCy,SBS,EFS,YTIME) * VmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME-1))
+        )
+    )$(ord(YTIME) > 15 and DSBS(SBS) and sameas(SBS,"HOU")) !!NEED TO ADD H2P
+    / 2;
+
 *' The equation calculates the state support per unit of new capacity in the demand subsectors and technologies for the following units:
 *' - Transport (kUS$2015 per vehicle)
 *' - Industry (kUS$2015/toe-year)
@@ -65,26 +92,22 @@ Q11SubsiDemITech(allCy,DSBS,ITECH,YTIME)$(INDSE(DSBS) and SECTTECH(DSBS,ITECH) a
 Q11SubsiDemTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS,TECH))..
     VmSubsiDemTech(allCy,DSBS,TECH,YTIME)
         =E=
-    $$ontext
     (sum(TTECH$(sameas(TECH,TTECH)), !! Transport
       ( !! Transport (EVs)
         (
           VmSubsiDemTechAvail(allCy,DSBS,TECH,YTIME) * 1e3 / (V01NewRegPcTechYearly(allCy,TTECH,YTIME-1) * 1e6 + 1e-6) +
            (1 - imCapCostTechMin(allCy,DSBS,TECH,YTIME)) * imCapCostTech(allCy,DSBS,TECH,YTIME)
-          + (1 - imCapCostTechMin(allCy,DSBS,TECH,YTIME)) * imCapCostTech(allCy,DSBS,TECH,YTIME)
         ) -
         sqrt(sqr(
         VmSubsiDemTechAvail(allCy,DSBS,TECH,YTIME) * 1e3 / (V01NewRegPcTechYearly(allCy,TTECH,YTIME-1) * 1e6 + 1e-6)
         - (1 - imCapCostTechMin(allCy,DSBS,TECH,YTIME)) * imCapCostTech(allCy,DSBS,TECH,YTIME)))
       ) / 2
     )$(ord(YTIME) > 15 and TRANSE(DSBS) and sameas(DSBS,"PC") and sameas(TECH,"TELC")))
-    +
+    +  
     (sum(ITECH$(sameas(TECH,ITECH)), !! Industry
       VmSubsiDemITech(allCy,DSBS,ITECH,YTIME)
     )$INDSE(DSBS))
-    
     +
-$$offtext 
     sum(CDRTECH$(sameas(TECH,CDRTECH)), !! CDR
       (
         VmSubsiDemTechAvail(allCy,DSBS,CDRTECH,YTIME) * 1e6 / V06CapFacNewCDR(allCy,CDRTECH,YTIME-1)
@@ -101,7 +124,7 @@ $$offtext
 Q11SubsiSupTech(allCy,STECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmSubsiSupTech(allCy,STECH,YTIME)
         =E=
-        V11SubsiTot(allCy,YTIME) !!* i11SubsiPerSupTech(allCy,STECH,YTIME)
+        V11SubsiTot(allCy,YTIME) * i11SubsiPerSupTechAvail(allCy,STECH,YTIME) * i11SubsiShare("PowGen");
 ;
 
 *' Subsidies in demand (Millions US$2015) 
@@ -149,6 +172,16 @@ Q11SubsiCapCostTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(
     !!  imSubsiCapCostFuel("HOU","ELC") * VmConsFuel(allCy,"HOU","ELC",YTIME) !!Residential electricity subsidies
 ;
 
+Q11SubsiFuelTot(allCy,SBS,EFS,YTIME)$(TIME(YTIME) and runCy(allCy) and SECtoEF(SBS,EFS))..
+    VmSubsiFuelTot(allCy,SBS,EFS,YTIME)
+        =E=
+    (
+      sum(DSBS$DSBS(SBS),
+      VmSubsiFuel(allCy,SBS,EFS,YTIME) * 1e-3 * (V02DemSubUsefulSubsec(allCy,DSBS,YTIME) * VmConsFuelShare(allCy,DSBS,EFS,YTIME)))
+    )$(ord(YTIME) > 15 and DSBS(SBS) and sameas(SBS,"HOU")) !!NEED TO ADD H2P
+    * i11SubsiShare("Fuel")
+    / 2;
+
 $ontext
 *' Subsidies in supply (Millions US$2015)
 Q11SubsiCapCostSupply(allCy,SSBS,STECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
@@ -181,6 +214,10 @@ Q11NetSubsiTax(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         V11SubsiTot(allCy,YTIME) -
         sum((DSBS,TECH)$SECTTECH(DSBS,TECH),
           VmSubsiCapCostTech(allCy,DSBS,TECH,YTIME)
+        )
+        -
+        sum((SBS,EFS)$SECtoEF(SBS,EFS),
+          VmSubsiFuelTot(allCy,SBS,EFS,YTIME)
         )
 !!        -
 !!        sum((SSBS,STECH)$SSECTTECH(SSBS,STECH),
