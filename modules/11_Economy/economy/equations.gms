@@ -46,7 +46,8 @@ Q11SubsiDemTechAvail(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH
 Q11SubsiFuelAvail(allCy,SBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECtoEF(SBS,EFS))..
     VmSubsiFuelAvail(allCy,SBS,EFS,YTIME)
         =E=
-    V11SubsiTot(allCy,YTIME) * 0.5 * i11SubsiPerFuelAvail(allCy,SBS,EFS,YTIME);
+        0 * 
+    V11SubsiTot(allCy,YTIME) * i11SubsiShare("Dem") * i11SubsiPerFuelAvail(allCy,SBS,EFS,YTIME);
 
 *' The equation calculates the state support per unit of new capacity in the industrial subsectors and technologies (kUS$2015/toe-year).
 Q11SubsiDemITech(allCy,DSBS,ITECH,YTIME)$(INDSE(DSBS) and SECTTECH(DSBS,ITECH) and TIME(YTIME) and runCy(allCy))..
@@ -123,7 +124,7 @@ Q11SubsiDemTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS
 Q11SubsiSupTech(allCy,STECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmSubsiSupTech(allCy,STECH,YTIME)
         =E=
-        V11SubsiTot(allCy,YTIME) !!* i11SubsiPerSupTech(allCy,STECH,YTIME)
+        V11SubsiTot(allCy,YTIME) * i11SubsiPerSupTechAvail(allCy,STECH,YTIME) * i11SubsiShare("PowGen");
 ;
 
 *' Subsidies in demand (Millions US$2015) 
@@ -178,6 +179,7 @@ Q11SubsiFuelTot(allCy,SBS,EFS,YTIME)$(TIME(YTIME) and runCy(allCy) and SECtoEF(S
       sum(DSBS$DSBS(SBS),
       VmSubsiFuel(allCy,SBS,EFS,YTIME) * 1e-3 * (V02DemSubUsefulSubsec(allCy,DSBS,YTIME) * VmConsFuelShare(allCy,DSBS,EFS,YTIME)))
     )$(ord(YTIME) > 15 and DSBS(SBS) and sameas(SBS,"HOU")) !!NEED TO ADD H2P
+    * i11SubsiShare("Fuel")
     / 2;
 
 $ontext
