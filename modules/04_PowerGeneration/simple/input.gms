@@ -86,6 +86,20 @@ $include"./iScaleEndogScrapPG.csv"
 $offdelim
 ;
 *---
+*' Multiplier of maturity factors. If not defined in config, they keep their calibrated value.
+table i04MatFacMultSupply(PGALL,YTIME)             "Scenario multiplier on the plant maturity factor (1)"
+$ondelim
+$include"./iMatFacMultSupply.csv"
+$offdelim
+;
+*---
+*' Region-specific multiplier. A region entry overrides the global one for that region.
+table i04MatFacMultSupplyCy(allCy,PGALL,YTIME)     "Region-specific scenario multiplier on the plant maturity factor (1)"
+$ondelim
+$include"./iMatFacMultSupplyCy.csv"
+$offdelim
+;
+*---
 $IFTHEN.calib %Calibration% == MatCalibration
 variable i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   "Maturity factor related to plant available capacity (1)";
 variable i04ScaleEndogScrap(allCy,PGALL,YTIME)     "Scale parameter for endogenous scrapping applied to the sum of full costs (1)";
@@ -102,6 +116,13 @@ parameter i04ScaleEndogScrap(allCy,PGALL,YTIME)     "Scale parameter for endogen
 i04MatFacPlaAvailCap(runCy,PGALL,YTIME) = iMatFacPlaAvailCapData(runCy,PGALL,YTIME);
 i04MatFacPlaAvailCap(runCy,"ATHBMSCCS",YTIME)$(ord(YTIME) > 22) = 0.1;
 i04ScaleEndogScrap(runCy,PGALL,YTIME) = iScaleEndogScrapData(runCy,PGALL,YTIME);
+
+*' Modification of the maturity factor based on the multipliers.
+i04MatFacPlaAvailCap(runCy,PGALL,YTIME)$(i04MatFacMultSupply(PGALL,YTIME)
+                                          and not i04MatFacMultSupplyCy(runCy,PGALL,YTIME)) =
+    i04MatFacPlaAvailCap(runCy,PGALL,YTIME) * i04MatFacMultSupply(PGALL,YTIME);
+i04MatFacPlaAvailCap(runCy,PGALL,YTIME)$i04MatFacMultSupplyCy(runCy,PGALL,YTIME) =
+    i04MatFacPlaAvailCap(runCy,PGALL,YTIME) * i04MatFacMultSupplyCy(runCy,PGALL,YTIME);
 $ENDIF.calib
 *---
 $$ontext

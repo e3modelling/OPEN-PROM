@@ -656,6 +656,20 @@ $include"./iMatrFactorData.csv"
 $offdelim
 ;
 *---
+*' Multiplier of maturity factors. If not defined in config, they keep their calibrated value.
+table iMatFacMultDemand(DSBS,TECH,YTIME)              "Scenario multiplier on the demand maturity factor (1)"
+$ondelim
+$include"./iMatFacMultDemand.csv"
+$offdelim
+;
+*---
+*' Region-specific multiplier. A region entry overrides the global one for that region.
+table iMatFacMultDemandCy(allCy,DSBS,TECH,YTIME)      "Region-specific scenario multiplier on the demand maturity factor (1)"
+$ondelim
+$include"./iMatFacMultDemandCy.csv"
+$offdelim
+;
+*---
 $IFTHEN.calib %Calibration% == off
 parameter imMatrFactor(allCy,DSBS,TECH,YTIME)   "Maturity factor per technology and subsector for all countries (1)";
 imMatrFactor(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                          
@@ -693,6 +707,12 @@ imMatrFactor(runCy,DSBS,"TCHEVGSL",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 0
 imMatrFactor(runCy,DSBS,"TCHEVGDO",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 0.001;
 $offtext
 
+*' Modification of the maturity factor based on the multipliers.
+imMatrFactor(runCy,DSBS,TECH,YTIME)$(iMatFacMultDemand(DSBS,TECH,YTIME)
+                                     and not iMatFacMultDemandCy(runCy,DSBS,TECH,YTIME)) =
+    imMatrFactor(runCy,DSBS,TECH,YTIME) * iMatFacMultDemand(DSBS,TECH,YTIME);
+imMatrFactor(runCy,DSBS,TECH,YTIME)$iMatFacMultDemandCy(runCy,DSBS,TECH,YTIME) =
+    imMatrFactor(runCy,DSBS,TECH,YTIME) * iMatFacMultDemandCy(runCy,DSBS,TECH,YTIME);
 $ELSE.calib
 variable imMatrFactor(allCy,DSBS,TECH,YTIME)    "Maturity factor per technology and subsector for all countries (1)";
 imMatrFactor.LO(runCy,DSBS,TECH,YTIME) = 1e-2;                                          

@@ -137,6 +137,118 @@ isRunSuccessful <- function(statusFilePath) {
   all(modelStatus %in% c(2.0, 5.0))
 }
 
+# ---- Maturity factor switches ------------------------------------------
+matFacYears     <- 2010:2100                     # must match ytime in core/sets.gms
+matFacSpecKeys  <- c("level", "value", "from", "to")
+matFacReserved  <- c("levels", "regions")
+
+matFacLevel <- function(name, levels, label) {
+  i <- match(as.character(name %||% ""), names(levels))
+  if (is.na(i))
+    stop("maturity_factors.", label, ": unknown level '", name %||% "", "'. Levels defined in config.json: ",
+         paste(names(levels), collapse = ", "), ". Use one of those, a number, or { level | value, from, to }.")
+  as.numeric(levels[[i]])
+}
+
+# An unnamed list is a sequence of windows rather than a single spec.
+matFacIsWindowList <- function(x) is.list(x) && !length(names(x))
+
+# One config entry -> multiplier, first year, last year.
+matFacSpec <- function(spec, levels, label) {
+  from <- min(matFacYears)
+  to   <- max(matFacYears)
+  if (is.list(spec)) {
+    mult <- if (!is.null(spec$value)) as.numeric(spec$value)
+            else                      matFacLevel(spec$level, levels, label)
+    from <- as.integer(spec$from %||% from)
+    to   <- as.integer(spec$to   %||% to)
+  } else if (is.numeric(spec)) {
+    mult <- as.numeric(spec)
+  } else {
+    mult <- matFacLevel(spec, levels, label)
+  }
+  list(mult = mult, from = from, to = to)
+}
+
+# One config entry -> one multiplier per year of the model horizon. A list of
+# windows is applied in order, so a later window wins where they overlap.
+matFacRow <- function(spec, levels, label) {
+  specs <- if (matFacIsWindowList(spec)) spec else list(spec)
+  vals  <- rep(1, length(matFacYears))
+  for (s in specs) {
+    w <- matFacSpec(s, levels, label)
+    vals[matFacYears >= w$from & matFacYears <= w$to] <- w$mult
+  }
+  vals
+}
+
+# JSON keeps duplicate keys but lookup returns only the first, so reject them.
+matFacCheckDup <- function(nms, where) {
+  d <- unique(nms[duplicated(nms)])
+  if (length(d))
+    stop("maturity_factors", where, ": duplicate keys (", paste(d, collapse = ", "),
+         "). Give each technology one entry, using a list of windows for several periods.")
+}
+
+matFacWriteCsv <- function(path, keyNames, rows) {
+  header <- paste(sprintf('"%s"', c(keyNames, matFacYears)), collapse = ",")
+  body   <- vapply(rows, function(r)
+                     paste(c(sprintf('"%s"', r$keys), as.character(r$vals)), collapse = ","),
+                   character(1))
+  writeLines(c(header, body), path)
+}
+
+# Always rewritten, so dropping the block from config.json clears the last run's switches.
+# One block of entries - the global ones, or the contents of one region.
+# cyKey is prepended to every row key, so the same parser serves both files.
+matFacEntries <- function(mf, levels, where, cyKey) {
+  matFacCheckDup(names(mf), where)
+  supply <- list()
+  demand <- list()
+  for (key in setdiff(names(mf), matFacReserved)) {
+    spec <- mf[[key]]
+    # a named map with no spec keys is a demand subsector, anything else a technology
+    if (is.list(spec) && length(names(spec)) && !any(names(spec) %in% matFacSpecKeys)) {
+      matFacCheckDup(names(spec), paste0(where, ".", key))
+      for (tech in names(spec))
+        demand[[length(demand) + 1L]] <-
+          list(keys = c(cyKey, key, tech),
+               vals = matFacRow(spec[[tech]], levels, paste0(where, ".", key, ".", tech)))
+    } else {
+      supply[[length(supply) + 1L]] <-
+        list(keys = c(cyKey, key), vals = matFacRow(spec, levels, paste0(where, ".", key)))
+    }
+  }
+  list(supply = supply, demand = demand)
+}
+
+writeMaturityFactors <- function(mf) {
+  levels  <- mf$levels  %||% list()
+  regions <- mf$regions %||% list()
+  entries <- setdiff(names(mf), matFacReserved)
+  if ((length(entries) || length(regions)) && !length(levels))
+    stop("maturity_factors needs a \"levels\" block saying what the level names mean, ",
+         "e.g. \"levels\": { \"low\": 0.5, \"def\": 1, \"high\": 2 }.")
+
+  glob <- matFacEntries(mf, levels, "", character(0))
+  cy   <- list(supply = list(), demand = list())
+  matFacCheckDup(names(regions), ".regions")
+  for (region in names(regions)) {
+    r <- matFacEntries(regions[[region]], levels, paste0(".regions.", region), region)
+    cy$supply <- c(cy$supply, r$supply)
+    cy$demand <- c(cy$demand, r$demand)
+  }
+
+  matFacWriteCsv("data/iMatFacMultSupply.csv",   "PGALL",                    glob$supply)
+  matFacWriteCsv("data/iMatFacMultDemand.csv",   c("DSBS", "TECH"),          glob$demand)
+  matFacWriteCsv("data/iMatFacMultSupplyCy.csv", c("allCy", "PGALL"),        cy$supply)
+  matFacWriteCsv("data/iMatFacMultDemandCy.csv", c("allCy", "DSBS", "TECH"), cy$demand)
+  if (length(glob$supply) + length(glob$demand) + length(cy$supply) + length(cy$demand))
+    cat("Maturity-factor switches: global", length(glob$supply), "supply,", length(glob$demand),
+        "demand; regional", length(cy$supply), "supply,", length(cy$demand), "demand
+")
+}
+
 # ---- Load task bodies --------------------------------------------------
 for (f in list.files("scripts/tasks", pattern = "^task\\d+[A-Z].*\\.R$",
                      full.names = TRUE)) source(f)
@@ -222,6 +334,8 @@ runScenario <- function(scn) {
       land_use_extra <- paste(land_use_extra, scenario_flag)
     }
   }
+  # Maturity-factor switches -> the two multiplier CSVs that GAMS reads.
+  writeMaturityFactors(scn$maturity_factors %||% list())
   Sys.setenv(OPENPROM_EXTRA_FLAGS          = extra)
   Sys.setenv(OPENPROM_LAND_USE_FLAGS       = trimws(land_use_extra))
   Sys.setenv(OPENPROM_SCENARIO             = toJSON(scn, auto_unbox = TRUE))
