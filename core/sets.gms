@@ -63,23 +63,35 @@ SKT
 
 resCy "Countries for Research Mode"
 /
-AFE
-AFN
-AFW
-AFZ
-ANZ
-ASC
-ASE
-ASO
-ENE
-ENW
-EUE
-EUM
-EUW
 LAM
-MEA
+ASC
+AFZ
 ROP
+ENE
+EUW
+MEA
+ASE
+ANZ
+AFE
+AFW
+ASO
+EUE
+BRA
+CAN
+CHN
+ENW
+CHL
+EUM
+AFN
+IDN
+IND
+MDA
+JPN
 SKT
+MEX
+NIG
+RUS
+USA
 /
 
 EU28(allCy) "EU27 and UK"
