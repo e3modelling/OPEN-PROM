@@ -389,11 +389,11 @@ SE.TOGS       0.14459    12.74        20    0.8
 *SE.PGTSOL
 SE.TBMSWAS    0.26753    17.14        20    0.75
 SE.TELC       0.05195    7.79         20    0.99
-SE.THEATPUMP  0.30736    22.16        20    3.175
-*** change values in toe
-SE.TSOL       0.432      12.9254      20    1 
-*** change values in toe
-SE.TGEO       0.432      12.9254      20    0.5 
+SE.TASHP      0.30736    22.16        20    3.175
+SE.TAWHP      1.20260    60.61        20    3.37
+SE.TGSHP      1.39221    60.61        20    3.81
+SE.TSOL       0.63896    10.30        20    1 
+SE.TGEO       0.69264    67.71        20    0.5 
 HOU.THCL      0.35498    1.13         20    0.7
 HOU.TLGN      0.42338    1.21         20    0.5
 HOU.TLPG      0.14459    12.74        20    0.8
@@ -407,11 +407,11 @@ HOU.TOGS      0.14459    12.74        20    0.8
 *HOU.PGTSOL
 HOU.TBMSWAS   0.26753    17.14        20    0.75
 HOU.TELC      0.05195    7.79         20    0.99
-HOU.THEATPUMP 0.30736    22.16        20    3.175
-*** change values in toe
-HOU.TSOL      0.432      12.9254      20    1
-***     change values in toe      
-HOU.TGEO      0.432      12.9254      20    0.5 
+HOU.TASHP     0.30736    22.16        20    3.175
+HOU.TAWHP     1.20260    60.61        20    3.37
+HOU.TGSHP     1.39221    60.61        20    3.81
+HOU.TSOL      0.63896    10.30        20    1 
+HOU.TGEO      0.69264    67.71        20    0.5 
 *units        kUSD/toe USD/toe/y       
 AG.THCL       0.323544   10.88        20    0.7
 AG.TLGN       0.323544   10.88        20    0.5
@@ -426,11 +426,11 @@ AG.TOGS       0.2244     10.88        20    0.8
 *AG.PGTSOL     0.86224    1.36         20    0.85
 AG.TBMSWAS    0.323544   10.88        20    0.5
 AG.TELC       0.3        8.976        12    0.85
-AG.THEATPUMP  0.432      12.9254      20    1.848
-*** change values in toe
-AG.TSOL       0.432      12.9254      20    1 
-*** change values in toe
-AG.TGEO       0.432      12.9254      20    0.5 
+AG.TASHP      0.30736    22.16        20    3.175
+AG.TAWHP      1.20260    60.61        20    3.37
+AG.TGSHP      1.39221    60.61        20    3.81
+AG.TSOL       0.63896    10.30        20    1 
+AG.TGEO       0.69264    67.71        20    0.5 
 
 ;
 *---
