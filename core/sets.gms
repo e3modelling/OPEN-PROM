@@ -3,7 +3,6 @@ sets
 ***        Geographic Coverage      *
 allCy    "All Countries Used in the Model"
 /
-EU28
 CHA
 DEU
 RWO

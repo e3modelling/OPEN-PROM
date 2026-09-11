@@ -42,9 +42,9 @@ $ondelim
 $include "iElastA.csv"
 $offdelim
 ;
-imElastA.L(runCy, SBS, ETYPES, YTIME) = imElastAL("ELL", SBS, ETYPES, YTIME);
+imElastA.L(runCy, SBS, ETYPES, YTIME) = imElastAL("USA", SBS, ETYPES, YTIME);
 imElastA.LO(runCy, SBS, posElast, YTIME) = 0.001;
-imElastA.UP(runCy, SBS, posElast, YTIME) = 5 * imElastAL("ELL", SBS, posElast, YTIME);
+imElastA.UP(runCy, SBS, posElast, YTIME) = 5 * imElastAL("USA", SBS, posElast, YTIME);
 imElastA.LO(runCy, SBS, negElast, YTIME) = -10;
 imElastA.UP(runCy, SBS, negElast, YTIME) = -0.001;
 
@@ -54,7 +54,7 @@ $ondelim
 $include "iElastA.csv"
 $offdelim
 ;
-imElastA(runCy,SBS,ETYPES,YTIME) = imElastA("ELL",SBS,ETYPES,YTIME);
+imElastA(runCy,SBS,ETYPES,YTIME) = imElastA("USA",SBS,ETYPES,YTIME);
 imElastA(runCy,DSBS,"b1",YTIME)$(not TRANSE(DSBS)) = imElastA(runCy,DSBS,"b1",YTIME) / 4;
 imElastA(runCy,DSBS,"b2",YTIME)$(not TRANSE(DSBS)) = imElastA(runCy,DSBS,"b2",YTIME) / 4;
 $ENDIF.calib
