@@ -75,7 +75,6 @@ resCy "Countries for Research Mode"
 LAM
 ASC
 AFZ
-ROP
 ENE
 EUW
 MEA

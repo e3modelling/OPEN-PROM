@@ -27,14 +27,14 @@ if (!is.null(DevMode) && DevMode == 0) {
     })
     
     print( paste("Generating research mode data with mrprom ver.", installed.packages()["mrprom","Version"]) )
-    fname <- paste0("rev0",dev,"_d78af2a4_open_prom.tgz") # file name
-    fnameTargets <- paste0("rev0",dev,"_d78af2a4_targets.tgz")
+    fname <- paste0("rev0",dev,"_3d38e137_open_prom.tgz") # file name
+    fnameTargets <- paste0("rev0",dev,"_3d38e137_targets.tgz")
     # run the fullOPEN-PROM function generating the whole input dataset of OPEN-PROM
     # retrieveData contains a call to fullOPEN-PROM
     
     cat("Retrieving OPEN_PROM data...\n")
     tryCatch({
-        retrieveData("OPEN_PROM",puc=F,renv=F,regionmapping = "omniaregmap.csv",dev=dev)
+        retrieveData("OPEN_PROM",puc=F,renv=F,regionmapping = "omniaregmap_ROP_to_LAM.csv",dev=dev)
     }, error = function(e) {
         cat("ERROR: Failed to retrieve OPEN_PROM data:\n", conditionMessage(e), "\n")
         stop("Data retrieval for OPEN_PROM failed. Terminating data generation.")
@@ -44,7 +44,7 @@ if (!is.null(DevMode) && DevMode == 0) {
     #setConfig(ignorecache = T)
     cat("Retrieving TARGETS data...\n")
     tryCatch({
-        retrieveData("TARGETS",puc=F,renv=F,regionmapping = "omniaregmap.csv",dev=dev)
+        retrieveData("TARGETS",puc=F,renv=F,regionmapping = "omniaregmap_ROP_to_LAM.csv",dev=dev)
     }, error = function(e) {
         cat("ERROR: Failed to retrieve TARGETS data:\n", conditionMessage(e), "\n")
         stop("Data retrieval for TARGETS failed. Terminating data generation.")
