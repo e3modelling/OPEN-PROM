@@ -650,7 +650,6 @@ TGSHP
 * Non-Energy and Bunkers Technologies (only add those not already in Transport & Industry & Domestic)
 * GDO,RFO,LGN,HCL,GDO,LPG,OLQ,NGS,OGS already exist
 * NOT USED
-THEATPUMP
 * DAC Technologies
 HTDAC
 H2DAC
@@ -730,14 +729,13 @@ TOLQ
 TOGS
 TSTE
 TH2F
-THEATPUMP
 * Domestic Technologies (only add those not already in Industry)
 TGSL
 TBMSWAS
 TSOL
 TGEO
 TASHP
-TAWHP
+THTHP
 TGSHP
 /
 
@@ -841,7 +839,6 @@ TOGS.OGS
 TSTE.STE
 * Domestic Technologies (only add those not already in Transport & Industry)
 * LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC already exist in TRANSPORT or INDUSTRY technologies
-THEATPUMP.ELC
 TASHP.ELC
 TAWHP.ELC
 TGSHP.ELC
@@ -892,7 +889,6 @@ TSTE.STE
 * LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC already exist in TRANSPORT or INDUSTRY technologies
 TH2F.H2F
 TBMSWAS.BMSWAS
-THEATPUMP.ELC
 TASHP.ELC
 TAWHP.ELC
 TGSHP.ELC
