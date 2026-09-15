@@ -11,6 +11,7 @@ i02ShareBlend(allCy,DSBS,ITECH,EF,YTIME)                   "Share of each energy
 i02ShareElcHP(allCy,DSBS,YTIME)                            "Share of final electricity consumption of HeatPumps in substitutable electricity consumption (1)"
 i02CapFacHeat(allCy,DSBS,YTIME)                            "Capacity factor of residential and commercial subsectors (1)"
 i02ShareHP(allCy,ITECH,YTIME)                              "Share of Heat Pumps in substitutable electricity consumption (1)"
+i02ShareWSpHeat(allCy,DSBS,YTIME)                          "Share of Water and Space Heating of total demand (1)"
 ;
 
 Equations
