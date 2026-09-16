@@ -3,10 +3,10 @@
 #   data/iMatFacMultSupply.csv    (PGALL, years)         data/iMatFacMultSupplyCy.csv  (allCy, PGALL, years)
 #   data/iMatFacMultDemand.csv    (DSBS, TECH, years)    data/iMatFacMultDemandCy.csv  (allCy, DSBS, TECH, years)
 # main.gms runs this on every compile, so the files always match the scenario.
-# Config syntax: tutorials/15_Pushing technologies with maturity factors.md
+# Config syntax: tutorials/15_Pushing technologies through maturity factors.md
 
 `%||%` <- function(a, b) if (is.null(a)) b else a
-years  <- 2010:2100                              # must match ytime in core/sets.gms
+years  <- 2010:2100                            # must match ytime in core/sets.gms
 fields <- c("tech", "mult", "sector", "region", "from", "to")
 header <- list(Supply   = "PGALL",            SupplyCy = c("allCy", "PGALL"),
                Demand   = c("DSBS", "TECH"),  DemandCy = c("allCy", "DSBS", "TECH"))

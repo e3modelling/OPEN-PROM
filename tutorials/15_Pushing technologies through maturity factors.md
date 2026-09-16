@@ -53,6 +53,8 @@ These are the five names `config.template.json` ships, with every `mult` set to
 
 * `levels` is optional. `low` = 0.5, `def` = 1 and `high` = 2 are built in; add
   or override names as you like, e.g. `"aggressive": 5`.
+  A level is shared: every change with `"mult": "high"` uses the same value, so
+  redefining `high` moves all of them at once.
 * Technologies and years that have no entry in config keep their calibrated values (multiplied by 1).
 * Every entry needs its own name, and names must be unique.
 * Leave the block out, or `changes` empty, for an unmodified run.
@@ -125,7 +127,9 @@ that are defined. To switch a lever on in some rows only, define it in
 entry per technology, region and window: a later entry wins where two overlap,
 even at `def`.
 
-Levels can be edited in the same way, e.g. `maturity_factors.levels.high`.
+Levels can be edited in the same way, e.g. `maturity_factors.levels.high`. That
+redefines `high` for the whole row, so every change using `high` moves together.
+To change one technology only, set its `mult` instead.
 
 ### A complete example
 

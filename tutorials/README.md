@@ -80,7 +80,7 @@ Instructions for creating and using soft links when integrating OPEN-PROM with c
 - ***14_Modelling Server Setup Guide in Windows:***
 Step-by-step instructions for preparing a Windows modelling server environment for OPEN-PROM.
 
-- ***15_Pushing technologies with maturity factors:***
+- ***15_Pushing technologies through maturity factors:***
 Instructions for making a technology expand faster or slower from `config.json`, using the `maturity_factors` block, without editing GAMS code manually.
 
 Additional resources in this folder:
