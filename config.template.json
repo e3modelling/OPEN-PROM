@@ -17,8 +17,8 @@
       "fScenario": 200,
       "fEndY": 2100,
       "CountrySolveMode": "serial",
-      "bmswasPriceAdder": 3.2,
-      "ccsAvailabilityCostAdder": 250
+      "biomassReferenceEJ": 150,
+      "ccsStorageReferenceGtCO2": 400
     },
     "land_use_emulator": {
       "source": "magpie",

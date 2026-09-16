@@ -221,20 +221,20 @@ $setglobal landUseEmulator magpie
 *' *** Valid values are defined once by the selected source's scenario set.
 $setglobal emulatorCarbonPriceScenario Npi_Default
 
-*' *** Global BMSWAS sustainability-tax coefficient A for every
-*' *** land-use price mode (kUS$2015/toe). For each solved model year t:
-*' ***   tau(t) = A * (Qworld(t-1) / 150 EJ)^2
-*' *** The first model year uses observed base-year global BMSWAS production.
-*' *** The default calibration is A = 3.2; a value of zero disables the mechanism.
-$setglobal bmswasPriceAdder 3.2
+*' *** Global annual primary BMSWAS reference quantity (EJ/yr), not a hard cap.
+*' *** Module 08 fixes A = 3.2 kUS$2015/toe and computes tau(t) = A*(Q(t-1)/reference)^2.
+*' *** The first solved year uses base-year production. Zero disables the tax.
+$setglobal biomassReferenceEJ 150
 
-*' *** Global CCS storage-availability cost-adder coefficient A
-*' *** (US$2015/tCO2). For each solved model year t:
-*' ***   tau(t) = A * ((Qenergy(t-1) + Qdac(t-1)) / 10 GtCO2/yr)^2
-*' *** The first model year uses base-year capture. The adder applies to
-*' *** point-source CCS and DAC; TEW is excluded.
-*' *** The default calibration is A = 300; zero disables the mechanism.
-$setglobal ccsAvailabilityCostAdder 300
+*' *** Global cumulative geological-storage reference quantity (GtCO2), not a hard cap.
+*' *** Module 06 defines the fixed tax scale A (US$2015/tCO2): tau(t) = A*(S(t-1)/reference)^2.
+*' *** Energy CCS and DAC share this charge; TEW is excluded. Zero disables the tax.
+$setglobal ccsStorageReferenceGtCO2 400
+
+$if set bmswasPriceAdder $abort "Use biomassReferenceEJ (EJ/yr) instead of bmswasPriceAdder."
+$if set ccsAvailabilityCostAdder $abort "Use ccsStorageReferenceGtCO2 (cumulative GtCO2) instead of ccsAvailabilityCostAdder."
+$ifE %biomassReferenceEJ%<0 $abort "biomassReferenceEJ must be non-negative (EJ/yr); zero disables the tax."
+$ifE %ccsStorageReferenceGtCO2%<0 $abort "ccsStorageReferenceGtCO2 must be non-negative (GtCO2); zero disables the tax."
 
 *' *** Validate the public land-use switches before translating them to internal
 *' *** modes. A soft-link run still validates landUseEmulator, but its scenario row

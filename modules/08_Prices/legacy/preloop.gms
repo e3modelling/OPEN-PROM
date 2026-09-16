@@ -21,13 +21,17 @@ V08BmswasPriceFactor.LO(runCy,YTIME) = 0;
 V08BmswasPriceFactor.L(runCy,YTIME)  = 1;
 *---
 * Initialize the first solved model year from observed base-year global demand:
-* tau(t0) = A * (Qworld(base year) / 150 EJ)^2.
+* tau(t0) = A * (Qworld(base year) / biomassReferenceEJ)^2.
 * This binds the policy start to fStartY/fBaseY rather than a calendar year.
-i08BmswasPriceAdder("%fStartY%") = %bmswasPriceAdder%
+$ifthenE.biomassTax %biomassReferenceEJ%>0
+i08BmswasPriceAdder("%fStartY%") = i08BmswasTaxScale
   * sqr(
       sum(runCyL, V03ProdPrimary.L(runCyL,"BMSWAS","%fBaseY%"))
-      * 0.041868 / 150
+      * i08MtoeToEJ / %biomassReferenceEJ%
     );
+$else.biomassTax
+i08BmswasPriceAdder(YTIME) = 0;
+$endif.biomassTax
 *---
 VmPriceCarbon.LO(runCy,SBS,EFS,YTIME) = 0;
 VmPriceCarbon.FX(runCy,SBS,EFS,YTIME)$DATAY(YTIME) = 1e-3 * iCarbValYrExog(runCy,YTIME)$INDSE1(SBS) * imCo2EmiFac(runCy,SBS,EFS,YTIME);
