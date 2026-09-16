@@ -4,8 +4,8 @@
 
 *---
 *' Fuel price pass-through elasticity, indexed (target, source): i08PriceTransElast(EFS,"CRO"),
-*' i08PriceTransElast(EFS,"BMSWAS"). CRO rows use 0.4/0.8/0.2; BMSWAS rows
-*' use 0.6 for biofuels and 1 for BMSWAS itself. Table = target rows x source cols.
+*' i08PriceTransElast(EFS,"BMSWAS"). CRO rows use 0.4/0.8/0.2; BMSWAS-source
+*' rows use 0.6 for processed biofuels. Table = target rows x source cols.
 *' GAMS param i08PriceTransElast <-> mrprom output file iPriceTransElast.csv.
 table i08PriceTransElast(EF,EF)   "Fuel price pass-through elasticity: target (rows) -> source (cols)"
 $ondelim
