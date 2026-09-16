@@ -36,6 +36,18 @@ if (length(changes) && (!is.list(changes) || is.null(names(changes))))
 dup <- unique(names(changes)[duplicated(names(changes))])
 if (length(dup)) fail("has duplicate change name(s): ", paste(dup, collapse = ", "))
 
+# Changes are defined in the config file only. A batch CSV
+# may override their fields but not introduce new names, so a misspelled name is caught here.
+if (nzchar(raw) && length(changes)) {
+  if (!file.exists(cfg)) fail("cannot check change names: ", cfg, " not found in ", getwd())
+  defined <- names(jsonlite::fromJSON(cfg, simplifyVector = FALSE)$scenario$maturity_factors$changes)
+  extra   <- setdiff(names(changes), defined)
+  if (length(extra))
+    fail("change(s) not defined in ", cfg, ": ", paste(extra, collapse = ", "),
+         ". A batch CSV can only override existing changes (defined: ",
+         if (length(defined)) paste(defined, collapse = ", ") else "none", ").")
+}
+
 # ---- changes -> one line per (file, keys); later changes overwrite earlier ones where they overlap ----
 lines <- list()
 for (i in seq_along(changes)) {
