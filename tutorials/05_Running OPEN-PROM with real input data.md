@@ -145,6 +145,7 @@ the merged scenario `start.R` runs for this row is:
 **Extensibility — any flag works, no R-code changes needed.** The dot-notation rule above is *generic*: `start.R` does not hard-code any particular column name. Some practical consequences:
 
 * **Any `gams_flags.X` works**, where `X` is any `$setGlobal` / `$evalGlobal` symbol declared in `main.gms` — e.g. `gams_flags.fEndY`, `gams_flags.CountrySolveMode`, `gams_flags.Transport`, `gams_flags.Industry`, `gams_flags.Curves`, etc. Each becomes a `--X=value` CLI flag passed to GAMS.
+* **Maturity factors work the same way.** `maturity_factors.changes.<name>.<field>` overrides one field of a named change in `config.json`, and `maturity_factors.levels.<name>` redefines a level. See Tutorial 15, section 5.
 * **The column does not need to pre-exist in `config.json`.** A CSV column for a key that isn't in `config.json:scenario` simply injects that key for rows where the cell is non-empty. (Putting it in `config.json` only gives it a default for the rows that leave the cell blank.)
 * **Column order is irrelevant.** `start.R` reads columns by name, not by position. `gams_flags.fEndY,gams_flags.Transport,…` and `gams_flags.Transport,gams_flags.fEndY,…` behave identically.
 * **Adding a flag is a data-only change.** You never edit `start.R` to expose a new flag — add the column, fill the cells you want overridden, leave the rest blank.
