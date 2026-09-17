@@ -6,7 +6,7 @@ sets
 *---
 FOOD_TYPES       Food types /PLANT,MEAT,FISH/
 AGRI_MODES       Agriculture energy services  /CROPS,ENERGY_CROPS,IRRIGATION,CLIMATE,POSTHARVESTING,LIVESTOCK,FORESTRY,FISHING/
-FERT_TYPES       Fertilizer types /N,PH,K/
+FERT_TYPES       Fertilizer types /N,P,K/
 
 MODEStoFOOD(AGRI_MODES,FOOD_TYPES)      "Agriculture modes mapped to the corresponding food type production"
 /
