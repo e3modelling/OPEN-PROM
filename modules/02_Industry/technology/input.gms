@@ -123,21 +123,17 @@ i02CapFacHeat(allCy,DSBS,YTIME)$(i02CapFacHeat(allCy,DSBS,YTIME)> 0.8 and (samea
 display i02CapFacHeat;
 
 parameter iECEMF(allCy,YTIME)   "Data for the share of water and space heating of total demand up to 2100"
-/
 $ondelim
 $include "./iECEMF.csv"
 $offdelim
-/
 ;
 
 i02ShareWSpHeat(allCy,DSBS,YTIME)$(sameas(DSBS,"HOU") or sameas(DSBS,"SE")) = iECEMF(allCy,YTIME);
 
 parameter iHeatPumpMix(allCy,ITECH,YTIME)   "Data for the capacity factor of residential and commercial space heating technologies in 2024"
-/
 $ondelim
 $include "./iHeatPumpMix.csv"
 $offdelim
-/
 ;
 
 i02ShareHP(allCy,ITECH,YTIME) =  0;
