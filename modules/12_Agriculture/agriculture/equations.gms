@@ -17,7 +17,7 @@ Q12Activity(allCy,AGRI_MODES,YTIME)$(TIME(YTIME) and runCy(allCy))..
   (1 + (i12IndexGlobalCaloriesIntake("MEAT",YTIME) - 1)$sameas("LIVESTOCK",AGRI_MODES)) *
   (1 + (i12IndexGlobalCaloriesIntake("FISH",YTIME) - 1)$sameas("FISHING",AGRI_MODES)) *
   (1 + ((V03ProdPrimary(allCy,"BMSWAS",YTIME) + 1e-6) / (V03ProdPrimary(allCy,"BMSWAS",YTIME-1) + 1e-6) * imActv(YTIME,allCy,"OE") - 1)$sameas("FORESTRY",AGRI_MODES)) *
-  !!(1)$sameas("POSTHARVESTING",AGRI_MODES) *
+  (1 + (V12EnergyService(allCy,"CROPS",YTIME) / V12EnergyService(allCy,"CROPS",YTIME-1) - 1)$sameas("POSTHARVESTING",AGRI_MODES)) *
   (1 + ((V03ProdPrimary(allCy,"BGDO",YTIME) + 1e-6) / (V03ProdPrimary(allCy,"BGDO",YTIME-1) + 1e-6) - 1)$sameas("ENERGY_CROPS",AGRI_MODES));
 
 Q12EnergyService(allCy,AGRI_MODES,YTIME)$(TIME(YTIME) and runCy(allCy))..
