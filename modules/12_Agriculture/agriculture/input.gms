@@ -14,11 +14,13 @@ $include"./iDataAgricultureService.csv"
 $offdelim
 ;
 *---
+$ontext
 table i12SpecificFuelCons(allCy,AGRI_MODES,EFS,YTIME)	      ""
 $ondelim
 $include"./iDataAgricultureEff.csv"
 $offdelim
 ;
+$offtext
 *---
 table i12ConsFuel(allCy,AGRI_MODES,EFS,YTIME)	      ""
 $ondelim
@@ -31,6 +33,8 @@ $ondelim
 $include"./iDataIntensityFertiliser.csv"
 $offdelim
 ;
+*---
+i12SpecificFuelCons(allCy,AGRI_MODES,AGRITECH,EFS,YTIME) = 1; !!ERROR
 *---
 i12IndexClimateShift(allCy,AGRI_MODES,YTIME) = 1;
 i12IndexTechShift(allCy,AGRI_MODES,YTIME) = 1;

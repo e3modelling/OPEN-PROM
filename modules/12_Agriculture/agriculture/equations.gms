@@ -29,14 +29,14 @@ Q12EnergyService(allCy,AGRI_MODES,YTIME)$(TIME(YTIME) and runCy(allCy))..
   i12IndexTechShift(allCy,AGRI_MODES,YTIME) *
   i12IndexFertiliserShift(allCy,AGRI_MODES,YTIME);
 
-Q12Capacity(allCy,AGRI_MODES,AGRITECH,YTIME)$(TIME(YTIME) and runCy(allCy))..
+Q12Capacity(allCy,AGRI_MODES,AGRITECH,YTIME)$(TIME(YTIME) and runCy(allCy) and AGRMODEStoTECH(AGRI_MODES,AGRITECH))..
   V12Capacity(allCy,AGRI_MODES,AGRITECH,YTIME)
         =E=
   V12Capacity(allCy,AGRI_MODES,AGRITECH,YTIME-1) * (1 - V12ScrpRate(allCy,AGRI_MODES,AGRITECH,YTIME)) +
-  V12ShareTech(allCy,AGRI_MODES,AGRITECH,YTIME) *  V12GapActivity(allCy,AGRI_MODES,YTIME);
+  V12ShareTech(allCy,AGRI_MODES,AGRITECH,YTIME) *  V12GapCapacity(allCy,AGRI_MODES,YTIME);
 
-Q12GapActivity(allCy,AGRI_MODES,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-  V12GapActivity(allCy,AGRI_MODES,YTIME)
+Q12GapCapacity(allCy,AGRI_MODES,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+  V12GapCapacity(allCy,AGRI_MODES,YTIME)
     =E=
   (
     V12EnergyService(allCy,AGRI_MODES,YTIME) - 
@@ -59,33 +59,48 @@ Q12CostFuel(allCy,AGRI_MODES,AGRITECH,YTIME)$(TIME(YTIME) $AGRMODEStoTECH(AGRI_M
       =E=
   sum(EFS$AGRITECHTOEF(AGRITECH,EFS), 
       VmPriceFuelSubsecCarVal(allCy,"AG",EFS,YTIME) * 
-      i12SpecificFuelCons(allCy,AGRI_MODES,EFS,YTIME)
-  ) ;
+      i12SpecificFuelCons(allCy,AGRI_MODES,AGRITECH,EFS,YTIME)
+  ) + 1e-6;
+
+Q12CostTotal(allCy,AGRI_MODES,AGRITECH,YTIME)$(TIME(YTIME) $AGRMODEStoTECH(AGRI_MODES,AGRITECH) $runCy(allCy))..
+  V12CostTotal(allCy,AGRI_MODES,AGRITECH,YTIME)
+      =E=
+  V12CostFuel(allCy,AGRI_MODES,AGRITECH,YTIME) + 1e-6;
 
 Q12ScrpPrem(allCy,AGRI_MODES,AGRITECH,YTIME)$(TIME(YTIME)$AGRMODEStoTECH(AGRI_MODES,AGRITECH)$runCy(allCy))..
     V12ScrpPrem(allCy,AGRI_MODES,AGRITECH,YTIME)
         =E=
-    0;
+    1 -
+    V12CostFuel(allCy,AGRI_MODES,AGRITECH,YTIME-1) ** (-1) /
+    (
+      V12CostFuel(allCy,AGRI_MODES,AGRITECH,YTIME-1) ** (-1) +
+      0.1 *
+      SUM(AGRITECH2$(not sameas(AGRITECH2,AGRITECH) and AGRMODEStoTECH(AGRI_MODES,AGRITECH2)),
+        V12CostTotal(allCy,AGRI_MODES,AGRITECH2,YTIME-1) ** (-1)
+      )
+    );
 
-Q12ScrpRate(allCy,AGRI_MODES,AGRITECH,YTIME)$(TIME(YTIME) and runCy(allCy))..
+Q12ScrpRate(allCy,AGRI_MODES,AGRITECH,YTIME)$(TIME(YTIME) and runCy(allCy) and AGRMODEStoTECH(AGRI_MODES,AGRITECH))..
     V12ScrpRate(allCy,AGRI_MODES,AGRITECH,YTIME)
         =E=
     1 - (1 - 1 / 20) * !! * LIFETIME
     (1-V12ScrpPrem(allCy,AGRI_MODES,AGRITECH,YTIME));
 
-Q12ShareTech(allCy,AGRI_MODES,AGRITECH,YTIME)$(TIME(YTIME)$AGRMODEStoTECH(AGRI_MODES,AGRITECH) $runCy(allCy))..
+Q12ShareTech(allCy,AGRI_MODES,AGRITECH,YTIME)$(TIME(YTIME)$AGRMODEStoTECH(AGRI_MODES,AGRITECH)$runCy(allCy))..
     V12ShareTech(allCy,AGRI_MODES,AGRITECH,YTIME)
       =E=
-    1 /
+    V12CostTotal(allCy,AGRI_MODES,AGRITECH,YTIME-1) ** (-1) /
     SUM(AGRITECH2$AGRMODEStoTECH(AGRI_MODES,AGRITECH2),
-      1
+      V12CostTotal(allCy,AGRI_MODES,AGRITECH2,YTIME-1) ** (-1)
     );
 
 Q12ConsFuel(allCy,AGRI_MODES,EFS,YTIME)$(TIME(YTIME) and runCy(allCy))..
     V12ConsFuel(allCy,AGRI_MODES,EFS,YTIME)
         =E=
-    i12SpecificFuelCons(allCy,AGRI_MODES,EFS,"%fBaseY%") * !! Mtoe / Energy service --> ha
-    V12EnergyService(allCy,AGRI_MODES,YTIME);
+    SUM(AGRITECH$(AGRMODEStoTECH(AGRI_MODES,AGRITECH) and AGRITECHTOEF(AGRITECH,EFS)),
+      V12Capacity(allCy,AGRI_MODES,AGRITECH,YTIME) *
+      i12SpecificFuelCons(allCy,AGRI_MODES,AGRITECH,EFS,YTIME) !! Mtoe / Energy service --> ha
+    );
 
 Q12ConsFertilizers(allCy,FERT_TYPES,YTIME)$(TIME(YTIME) and runCy(allCy))..
     V12ConsFertilizers(allCy,FERT_TYPES,YTIME)
