@@ -207,7 +207,8 @@ PA    "Passenger Transport - Aviation"
 GU    "Goods Transport - Trucks"
 GT    "Goods Transport - Rail"
 GN    "Goods Transport - Inland Navigation"
-BU    "Bunkers"
+BAV    "Bunkers"
+BMAR
 PCH   "Petrochemicals Industry"
 NEN   "Other Non Energy Uses"
 ICT   "Data centers and Networks"
@@ -262,7 +263,8 @@ PA    "Passenger Transport - Aviation"
 GU    "Goods Transport - Trucks"
 GT    "Goods Transport - Rail"
 GN    "Goods Transport - Inland Navigation"
-BU    "Bunkers"
+BAV    "Bunkers"
+BMAR
 PCH   "Petrochemicals Industry"
 NEN   "Other Non Energy Uses"
 ICT   "Data centers and Networks"
@@ -370,7 +372,7 @@ NoTrade  Carbon Value for non-trading sectors
 NAPtoALLSBS(NAP,ALLSBS) Energy sectors corresponding to NAP sectors
 /
 Trade.(FD,EN,TX,OE,OI,NF,CH,IS,BM,PP,PG,BM_CO2,H2P,STEAMP,DAC,EW)
-NoTrade.(SE,AG,HOU,PC,PB,PT,PN,PA,GU,GT,GN,BU,PCH,NEN,LGN_PRD_CH4,HCL_PRD_CH4,GAS_PRD_CH4,TERT_CH4,TRAN_CH4,AG_CH4,SE_CH4,TRAN_N2O,TX_N2O,AG_N2O,OI_HFC,OI_PFC,NF_PFC,PG_SF6,OI_SF6)
+NoTrade.(SE,AG,HOU,PC,PB,PT,PN,PA,GU,GT,GN,BAV,BMAR,PCH,NEN,LGN_PRD_CH4,HCL_PRD_CH4,GAS_PRD_CH4,TERT_CH4,TRAN_CH4,AG_CH4,SE_CH4,TRAN_N2O,TX_N2O,AG_N2O,OI_HFC,OI_PFC,NF_PFC,PG_SF6,OI_SF6)
 /
 
 *' Emission species shared by the land-use emulator reporting interface:
@@ -409,7 +411,8 @@ PA    "Passenger Transport - Aviation"
 GU    "Goods Transport - Trucks"
 GT    "Goods Transport - Rail"
 GN    "Goods Transport - Inland Navigation"
-BU    "Bunkers"
+BAV    "Bunkers aviation"
+BMAR   "Bunkers maritime"
 PCH   "Petrochemicals Industry"
 NEN   "Other Non Energy Uses"
 ICT   "Data centers and Networks"
@@ -417,10 +420,11 @@ DAC   "Direct Air Capture"
 EW    "Enhanced Weathering"
 /
 
-TRANSE(DSBS)      All Transport Subsectors      /PC,PT,PA,PB,PN,GU,GT,GN/
-TRANS1(SBS)       All Transport Subsectors      /PC,PT,PA,PB,PN,GU,GT,GN/
+TRANSE(DSBS)      All Transport Subsectors      /PC,PT,PA,PB,PN,GU,GT,GN,BAV,BMAR/
+TRANS1(SBS)       All Transport Subsectors      /PC,PT,PA,PB,PN,GU,GT,GN,BAV,BMAR/
 TRANP(TRANSE)     Passenger Transport           /PC,PT,PA,PB,PN/
 TRANG(TRANSE)     Goods Transport               /GU,GT,GN/
+BUN(SBS)          Bunkers                       /BAV,BMAR/
 
 INDSE(DSBS)       Industrial SubSectors         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI/
 DOMSE(DSBS)       Tertiary SubSectors           /SE,AG,HOU/
@@ -429,9 +433,8 @@ DOMSE1(SBS)       Tertiary SubSectors           /SE,AG,HOU/
 HOU(DSBS)         Households                    /HOU/
 CDR(DSBS)         Carbon Dioxide Removal         /DAC,EW/
 
-NENSE(DSBS)       Non Energy and Bunkers        /PCH,NEN,BU/
-NENSE1(SBS)       Non Energy and Bunkers        /PCH,NEN,BU/
-BUN(DSBS)         Bunkers                       /BU/
+NENSE(DSBS)       Non Energy and Bunkers        /PCH,NEN/
+NENSE1(SBS)       Non Energy and Bunkers        /PCH,NEN/
 
 INDDOM(DSBS)      Industry and Tertiary         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,SE,AG,HOU/
 * The following sets are used in price equation for electricity
@@ -918,12 +921,13 @@ GU.(TLPG,TGSL,TGDO,TNGS,TELC,TCHEVGDO,TH2F) !! Removed GSL and PHEVGSL
 (PT,GT).(TGDO,TELC)
 PA.(TKRS,TH2F)
 (PN,GN).(TGDO,TH2F,TRFO)
+BAV.(TKRS,TH2F)
+BMAR.(TGDO,TRFO,TH2F,TNGS)
 (IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(TLGN,THCL,TGDO,TGSL,TRFO,TLPG,TKRS,TOLQ,TNGS,TOGS,
                                 TELC,TBMSWAS,TSTE,TH2F)
 (IS,BM,CH).(TNGSCCS,THCLCCS)
 (HOU,AG,SE).(THCL,TLPG,TKRS,TGDO,TNGS,TOGS,TBMSWAS,TELC,TSTE,TGSL,TLGN,TOLQ,TRFO,TSOL,TGEO)
 (HOU,SE).(THEATPUMP)
-BU.(TGDO,TRFO,TKRS,TH2F,TNGS)
 (PCH,NEN).(TLGN,THCL,TGDO,TRFO,TLPG,TOLQ,TNGS,TOGS)
 ICT.TELC
 DAC.(HTDAC,H2DAC,LTDAC)

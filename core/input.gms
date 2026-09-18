@@ -172,7 +172,6 @@ imFuelPrice(runCy,DOMSE,"RFO",YTIME) = imFuelPrice(runCy,"OI","RFO",YTIME);
 imFuelPrice(runCy,"SE","GDO",YTIME) = imFuelPrice(runCy,"OI","GDO",YTIME);
 imFuelPrice(runCy,"SE","BGDO",YTIME) = imFuelPrice(runCy,"OI","BGDO",YTIME);
 *imFuelPrice(runCy,"SE","BMSWAS",YTIME) = imFuelPrice(runCy,"AG","BMSWAS",YTIME);
-imFuelPrice(runCy,"BU","BGSL",YTIME) = imFuelPrice(runCy,"OI","BGSL",YTIME);
 imFuelPrice(runCy,TRANSE,"RFO",YTIME) = imFuelPrice(runCy,"BU","RFO",YTIME);
 imFuelPrice(runCy,TRANSE,"OGS",YTIME) = imFuelPrice(runCy,TRANSE,"NGS",YTIME);
 imFuelPrice(runCy,TRANSE,"OLQ",YTIME) = imFuelPrice(runCy,TRANSE,"GDO",YTIME);
@@ -441,10 +440,6 @@ PCH.TRFO 0.18088 18.088  2.37209 20  0.72
 PCH.TOLQ 0.18088 20.4    2.37209 20  0.72
 PCH.TNGS 0.18088 0.9044  2.37209 20  0.8
 PCH.TOGS 0.18088 1.36    2.37209 20  0.8
-BU.TGDO  0.204   0.136           25  0.72
-BU.TRFO  0.204   0.136           25  0.72
-BU.TKRS  0.136   6.8             25  0.72
-BU.TOLQ  0.136   6.8             25  0.72
 NEN.THCL 0.26227 45.22   2.37209 20  0.65
 NEN.TLGN 0.26227 47.6    2.37209 20  0.5
 NEN.TLPG 0.612   20.4    2.37209 20  0.72
@@ -492,8 +487,7 @@ imNcon(TRANSE)$(sameas(TRANSE,"PC") or sameas(TRANSE,"GU")) = 10;      !! 11 dif
 imNcon(TRANSE)$(not (sameas(TRANSE,"PC") or sameas(TRANSE,"GU"))) = 1; !! 2 different consumer size groups for inland navigation, trains, busses and aviation
 imNcon(INDSE) = 10;                                                    !! 11 different consumer size groups for industrial sectors
 imNcon(DOMSE) = 10;                                                    !! 11 different consumer size groups for domestic and tertiary sectors
-imNcon(NENSE) = 10;                                                    !! 11 different consumer size groups for non energy uses
-imNcon("BU") = 2;                                                      !! ... except bunkers .
+imNcon(NENSE) = 10;                                                    !! 11 different consumer size groups for non energy uses                                                     !! ... except bunkers .
 imNcon("DAC") = 1;                                                      !! 
 imNcon("EW") = 1;
 *---
@@ -551,10 +545,6 @@ imAnnCons(runCy,NENSE,"largest")  = 0.9 ;
 * assuming an average utilisation rate of 0.5 for non-energy uses:
 imAnnCons(runCy,NENSE,"modal") = 0.487 ;
 *---
-imAnnCons(runCy,"BU","smallest") = 0.2 ;
-imAnnCons(runCy,"BU","largest") = 1 ;
-imAnnCons(runCy,"BU","modal") = 0.5 ;
-
 imAnnCons(runCy,"DAC","smallest") = 0.2 ;
 imAnnCons(runCy,"DAC","largest") = 1 ;
 imAnnCons(runCy,"DAC","modal") = 0.5 ;
@@ -608,7 +598,7 @@ $ondelim
 $include"./iFuelCons.csv"
 $offdelim
 ;
-imFuelCons(runCy,"BU",EF,YTIME) = -imFuelCons(runCy,"BU",EF,YTIME);
+imFuelCons(runCy,BUN,EF,YTIME) = -imFuelCons(runCy,BUN,EF,YTIME);
 *---
 imCO2CaptRate(PGALL)$CCS(PGALL) = 0.90; 
 imEffValueInDollars(runCy,SBS,YTIME) = 0;
@@ -820,11 +810,6 @@ imUsfEneConvSubTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,"USC");
 imFixOMCostTech(runCy,NENSE,TECH,YTIME)= imDataNonEneSec(NENSE,TECH,"FC");
 imVarCostTech(runCy,NENSE,TECH,YTIME) = imDataNonEneSec(NENSE,TECH,"VC");
 imUsfEneConvSubTech(runCy,NENSE,TECH,YTIME) = imDataNonEneSec(NENSE,TECH,"USC");
-imUsfEneConvSubTech(runCy,"BU","TH2F",YTIME) = 0.8;
-imUsfEneConvSubTech(runCy,"BU","TNGS",YTIME) = 0.5;
-imUsfEneConvSubTech(runCy,"BU","TGSL",YTIME) = 0.5;
-imCapCostTech(runCy,"BU",TECH,YTIME)$SECTTECH("BU",TECH) = imCapCostTech(runCy,"GN","TGDO",YTIME);
-imCapCostTech(runCy,"BU","TH2F",YTIME) = 1.5 * imCapCostTech(runCy,"BU","TGDO",YTIME);
 *---
 **  CDR
 *- #PARAM_CDR The following imCapCostTechMin are responsible for the secondary parameterization of the CDR technologies.

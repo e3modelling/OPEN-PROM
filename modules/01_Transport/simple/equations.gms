@@ -43,7 +43,7 @@ Q01ActivGoodsTransp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANG(TRANSE) $runCy(allCy
           (V01ActivGoodsTransp(allCy,"GU",YTIME) + 1e-6) / 
           (V01ActivGoodsTransp(allCy,"GU",YTIME-1) + 1e-6)
         )**imElastA(allCy,TRANSE,"c4",YTIME)
-      )$(not sameas(TRANSE,"GU"));        !!other freight transport
+      )$(TRANG(TRANSE) and not sameas(TRANSE,"GU"));        !!other freight transport
 
 *' This equation calculates the gap in transport activity, which represents the activity that needs to be filled by new technologies.
 *' The gap is calculated separately for passenger cars, other passenger transportation modes, and goods transport. The equation involves
@@ -251,7 +251,7 @@ Q01ActivPassTrnsp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANP(TRANSE) $runCy(allCy))
           ]**(imElastA(allCy,TRANSE,"c3",YTIME)*imFPDL(TRANSE,KPDL))
         ) *
         [i01Pop(YTIME,allCy) / i01Pop(YTIME-1,allCy)] ** 0.4
-      )$(NOT (sameas(TRANSE,"PC") or sameas(TRANSE,"PA")));
+      )$(TRANP(TRANSE) and not (sameas(TRANSE,"PC") or sameas(TRANSE,"PA")));
 
 *' This equation calculates the number of scrapped passenger cars based on the scrapping rate and the stock of passenger cars from the previous year.
 *' The scrapping rate represents the proportion of cars that are retired from the total stock, and it influences the annual number of cars taken out of service.
