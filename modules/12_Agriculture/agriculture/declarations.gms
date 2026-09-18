@@ -12,6 +12,7 @@ i12IndexGlobalCaloriesIntake(FOOD_TYPES,YTIME)
 *i12RatioCropsIrrigated(allCy,YTIME)
 i12DataEnergyService(allCy,AGRI_MODES,YTIME)
 i12ConsFuel(allCy,AGRI_MODES,EFS,YTIME)
+i12Lft(AGRI_MODES,AGRITECH)
 ;
 
 Equations 
