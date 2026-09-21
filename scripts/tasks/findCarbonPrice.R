@@ -52,10 +52,27 @@
 #   `data/iEnvPolicies_updated.csv` (plus a timestamped copy).
 # • Execution log stored in `Carbon_price_optimization.log`.
 #
+# Parameterisation (set by `parameterisation` in the Run section):
+# • "scale"  – the solved parameter is a multiplier alpha applied to the existing curve:
+#                  new_price(t) = old_price(t) * (1 + alpha),  t >= fromYear
+#              Alpha < 0 decreases prices; alpha > 0 increases them. Preserves the shape of
+#              the source trajectory, including any terminal plateau baked into it.
+# • "growth" – the solved parameter is an annual growth rate r, and the forward path is
+#              rebuilt as a Hotelling-style geometric curve anchored on the price already in
+#              the file for `fromYear`:
+#                  new_price(t) = price(fromYear) * (1 + r)^(t - fromYear),  t > fromYear
+#              Years up to and including fromYear are left untouched, so near-term prices stay
+#              consistent with enacted policy. Each region keeps its own anchor level, so
+#              regional differentiation in the source data survives; only r is solved for.
+#              Prices are capped at `carbonPriceCap` after compounding.
+#
+# Prefer "growth" when the target is a *cumulative* budget: a cumulative budget is an integral
+# over time, so when abatement happens matters as much as the price level, and a single scalar
+# on a curve that already flattens late in the century gives very little terminal leverage.
+#
 # Notes:
-# • Alpha represents a proportional change in carbon prices:
-#       new_price = old_price * (1 + alpha)
-# • Alpha < 0 decreases prices; alpha > 0 increases prices.
+# • Only the one policy row the active scenario reads (see SCENARIO_POLICY_ROW) is modified;
+#   the other scenarios' price paths and the non-price EFF/OPT/REN/TRADE rows are left alone.
 # • Sequential runs update the policy file cumulatively so each region’s
 #   optimization builds on the prices already set for previous regions.
 
@@ -102,30 +119,159 @@ readEnvPolicies <- function(csvPath = inputCsvPath) {
   list(envWide = envWide, envLong = envLong, yearCols = yearCols)
 }
 
-applyAlpha <- function(envWide, yearCols, alpha, targetRegion, fromYear = changeCarbonPriceFromYear) {
+# Maps a model scenario id (--fScenario) to the policy row that core/input.gms reads into
+# iCarbValYrExog. Must stay in sync with the if/elseif chain in core/input.gms.
+# Scenario 0 has no carbon price at all, so there is no row to scale.
+SCENARIO_POLICY_ROW <- c(
+  "1"   = "exogCV_NPi",
+  "2"   = "exogCV_1_5C",
+  "3"   = "exogCV_2C",
+  "4"   = "exogCV_Calib",
+  "5"   = "SoCDR_DelayedAction",
+  "6"   = "SoCDR_HighestAmbition",
+  "7"   = "SSP2_800f",
+  "9"   = "SSP1_800f", 
+  "100" = "UPT_100",
+  "200" = "UPT_200",
+  "400" = "UPT_400",
+  "600" = "UPT_600",
+  "800" = "UPT_800"
+)
+
+policyRowForScenario <- function(scenarioId) {
+  key <- as.character(scenarioId)
+  if (key == "0") {
+    stop("fScenario=0 sets iCarbValYrExog to 0 — there is no carbon price to optimize.")
+  }
+  row <- SCENARIO_POLICY_ROW[[key]]
+  if (is.null(row)) {
+    stop(sprintf("Unknown fScenario '%s'. Known: %s",
+                 key, paste(names(SCENARIO_POLICY_ROW), collapse = ", ")))
+  }
+  row
+}
+
+applyAlpha <- function(envWide, yearCols, alpha, targetRegion, fromYear = changeCarbonPriceFromYear,
+                       policyRow = carbonPricePolicyRow) {
   x <- data.table::copy(envWide)
 
   yearColsFuture <- yearCols[as.integer(yearCols) >= fromYear]
 
+  # Scale only the policy row the active scenario actually reads. iEnvPolicies.csv also holds
+  # the other scenarios' price paths plus non-price rows (EFF, OPT, REN, TRADE); scaling those
+  # would corrupt unrelated inputs and silently contaminate later runs of other scenarios.
+  isPolicy <- x$policy == policyRow
+
   if (is.null(targetRegion)) {
     # GLOBAL: apply to all regions
-    x[, (yearColsFuture) := lapply(.SD, function(col) col * (1 + alpha)), .SDcols = yearColsFuture]
+    rows <- which(isPolicy)
   } else if (targetRegion == "EU27") {
     # EU27: apply the same alpha to all 27 member rows (they share one price)
-    x[region %in% EU27_REGIONS, (yearColsFuture) := lapply(.SD, function(col) col * (1 + alpha)), .SDcols = yearColsFuture]
+    rows <- which(isPolicy & x$region %in% EU27_REGIONS)
   } else {
     # Single region
-    x[region == targetRegion, (yearColsFuture) := lapply(.SD, function(col) col * (1 + alpha)), .SDcols = yearColsFuture]
+    rows <- which(isPolicy & x$region == targetRegion)
+  }
+
+  if (!length(rows)) {
+    stop(sprintf("No rows matched policy '%s' for region '%s' — check iEnvPolicies.csv.",
+                 policyRow, if (is.null(targetRegion)) "WORLD" else targetRegion))
+  }
+
+  x[rows, (yearColsFuture) := lapply(.SD, function(col) col * (1 + alpha)), .SDcols = yearColsFuture]
+  x
+}
+
+# ----------------------------
+# Growth-rate ("Hotelling") parameterisation
+# ----------------------------
+# Instead of rescaling the whole trajectory by a scalar, rebuild it as a geometric path
+# anchored at the price already in the file for `anchorYear`:
+#
+#     P(t) = P(anchorYear) * (1 + r)^(t - anchorYear)     for t > anchorYear
+#
+# The anchor year itself and everything before it are left exactly as they are, so near-term
+# prices stay consistent with enacted policy and only the forward path is being solved for.
+#
+# Why this beats a scalar multiplier for a cumulative budget:
+#  * It controls the *shape* (when abatement happens), not just the level. A cumulative budget
+#    is an integral over time, so timing is most of the answer.
+#  * It does not inherit the terminal plateau baked into the source row. The stock SSP2_800f
+#    path flattens to a hard 700 for every region by 2100; multiplying that by (1+alpha) keeps
+#    the plateau and gives almost no late-century leverage. A growth path keeps rising.
+#  * r is the economically meaningful parameter: under Hotelling logic an efficient carbon
+#    price rises at roughly the discount rate, so a solved r is directly interpretable.
+applyGrowthRate <- function(envWide, yearCols, rate, targetRegion,
+                            anchorYear = carbonPriceAnchorYear,
+                            policyRow = carbonPricePolicyRow,
+                            priceCap = carbonPriceCap) {
+  x <- data.table::copy(envWide)
+
+  anchorCol <- as.character(anchorYear)
+  if (!anchorCol %in% yearCols) {
+    stop(sprintf("Anchor year %s is not a column in iEnvPolicies.csv.", anchorCol))
+  }
+  yearColsFuture <- yearCols[as.integer(yearCols) > anchorYear]
+
+  isPolicy <- x$policy == policyRow
+  if (is.null(targetRegion)) {
+    rows <- which(isPolicy)
+  } else if (targetRegion == "EU27") {
+    rows <- which(isPolicy & x$region %in% EU27_REGIONS)
+  } else {
+    rows <- which(isPolicy & x$region == targetRegion)
+  }
+
+  if (!length(rows)) {
+    stop(sprintf("No rows matched policy '%s' for region '%s' — check iEnvPolicies.csv.",
+                 policyRow, if (is.null(targetRegion)) "WORLD" else targetRegion))
+  }
+
+  anchorVal <- as.numeric(x[[anchorCol]][rows])
+  if (anyNA(anchorVal)) {
+    stop(sprintf("Anchor year %s holds NA for policy '%s' in %d region(s); pick an anchor year with data.",
+                 anchorCol, policyRow, sum(is.na(anchorVal))))
+  }
+
+  # Each region keeps its own anchor level, so regional price differentiation present in the
+  # source data is preserved; only the common forward growth rate is being solved for.
+  for (yc in yearColsFuture) {
+    horizon <- as.integer(yc) - anchorYear
+    newVal  <- anchorVal * (1 + rate)^horizon
+    if (is.finite(priceCap)) newVal <- pmin(newVal, priceCap)
+    data.table::set(x, i = rows, j = yc, value = newVal)
   }
   x
 }
 
-writeFinalPolicyFiles <- function(envWide, yearCols, alphaFinal, region,
-                                  fromYear = changeCarbonPriceFromYear,
-                                  canonicalPath = file.path("data","iEnvPolicies.csv"),
-                                  updatedPath   = file.path("data","iEnvPolicies_updated.csv"),
-                                  alsoTimestamped = TRUE) {
-  envFinal <- applyAlpha(envWide, yearCols, alphaFinal, region, fromYear)
+# Single entry point used by the solver, so the rest of the script is identical in both modes.
+# `param` is alpha when parameterisation == "scale" and the annual growth rate r when it is
+# "growth"; `fromYear` doubles as the scale start year / the growth anchor year.
+applyPriceParam <- function(envWide, yearCols, param, targetRegion,
+                            fromYear = changeCarbonPriceFromYear,
+                            policyRow = carbonPricePolicyRow,
+                            mode = parameterisation) {
+  if (mode == "scale") {
+    applyAlpha(envWide, yearCols, param, targetRegion, fromYear, policyRow)
+  } else if (mode == "growth") {
+    applyGrowthRate(envWide, yearCols, param, targetRegion, fromYear, policyRow)
+  } else {
+    stop(sprintf("Unknown parameterisation '%s' — use \"scale\" or \"growth\".", mode))
+  }
+}
+
+# Human-readable name of the parameter being solved for, used in log messages.
+paramLabel <- function(mode = parameterisation) {
+  if (mode == "growth") "r" else "Alpha"
+}
+
+# Persist an already-final policy table. Takes the table verbatim — no parameter is applied —
+# so it is safe in both parameterisations.
+writeSolvedPolicyFiles <- function(envFinal,
+                                   canonicalPath = file.path("data","iEnvPolicies.csv"),
+                                   updatedPath   = file.path("data","iEnvPolicies_updated.csv"),
+                                   alsoTimestamped = TRUE,
+                                   restoreBackup = TRUE) {
   dir.create(dirname(canonicalPath), showWarnings = FALSE, recursive = TRUE)
   dir.create(dirname(updatedPath),   showWarnings = FALSE, recursive = TRUE)
   fwrite(envFinal, canonicalPath, na = "NA")
@@ -135,7 +281,18 @@ writeFinalPolicyFiles <- function(envWide, yearCols, alphaFinal, region,
     fwrite(envFinal, tsPath, na = "NA")
   }
   # Restore original file
-  if (file.exists(backupCsvPath)) file.copy(backupCsvPath, inputCsvPath, overwrite = TRUE)
+  if (restoreBackup && file.exists(backupCsvPath)) file.copy(backupCsvPath, inputCsvPath, overwrite = TRUE)
+  invisible(envFinal)
+}
+
+writeFinalPolicyFiles <- function(envWide, yearCols, alphaFinal, region,
+                                  fromYear = changeCarbonPriceFromYear,
+                                  policyRow = carbonPricePolicyRow,
+                                  canonicalPath = file.path("data","iEnvPolicies.csv"),
+                                  updatedPath   = file.path("data","iEnvPolicies_updated.csv"),
+                                  alsoTimestamped = TRUE) {
+  envFinal <- applyPriceParam(envWide, yearCols, alphaFinal, region, fromYear, policyRow)
+  writeSolvedPolicyFiles(envFinal, canonicalPath, updatedPath, alsoTimestamped)
 }
 
 # ----------------------------
@@ -166,6 +323,7 @@ run_gams <- function(gms = "main.gms",
 # Runs OPEN-PROM for a given alpha and returns the tracked emissions value.
 emissionsOPENPROM <- function(envWide, yearCols, alpha, targetRegion, targetYear,
                               fromYear = changeCarbonPriceFromYear,
+                              policyRow = carbonPricePolicyRow,
                               dataDir = "data",
                               gms = "main.gms",
                               gamsArgs = GAMSCmdArgs,
@@ -177,7 +335,7 @@ emissionsOPENPROM <- function(envWide, yearCols, alpha, targetRegion, targetYear
   }, add = TRUE)
   
   # Remember the exact policy table sent to GAMS so it can be recovered if this run fails.
-  lastTestedPolicy <<- applyAlpha(envWide, yearCols, alpha, targetRegion, fromYear)
+  lastTestedPolicy <<- applyPriceParam(envWide, yearCols, alpha, targetRegion, fromYear, policyRow)
   fwrite(lastTestedPolicy, canonicalCsv, na = "NA")
   ok <- run_gams(gms = gms, args = gamsArgs, log = log, echo_on_success = echo_on_success)
   if (!ok) stop("OPEN-PROM run failed for alpha=", alpha)
@@ -232,54 +390,174 @@ alphaSeedLinear <- function(alpha0, E0, alphar, Er, Etarget, warn = TRUE, stopIf
   alpha0 + (Etarget - E0) * (alphar - alpha0) / (Er - E0)
 }
 
+# ----------------------------
+# Response survey: measure E(param) before assuming anything about its shape
+# ----------------------------
+# The bracketing + regula falsi scheme below is only valid if emissions decrease monotonically
+# in the parameter. OPEN-PROM does not guarantee that: the CCS availability adder
+# (tau = A*(Q/10)^2, main.gms) and the biomass sustainability tax (tau = A*(Q/150)^2) are
+# lagged quadratic feedbacks onto cost, so pushing the carbon price harder can make abatement
+# *more* expensive and the emissions response can saturate, flatten, or turn back up.
+# carbonPriceCap compounds this: once the cap binds, different parameter values produce nearly
+# identical price paths and E(param) goes flat, which makes the false-position step divide by
+# ~zero.
+#
+# So: sample the curve first, then decide whether root-finding is even meaningful.
+
+surveyResponse <- function(grid, budgetTarget, envWide, yearCols, targetRegion, targetYear,
+                           fromYear = changeCarbonPriceFromYear,
+                           policyRow = carbonPricePolicyRow,
+                           mode = parameterisation, verbose = TRUE) {
+  grid <- sort(unique(grid))
+  E <- rep(NA_real_, length(grid))
+  for (k in seq_along(grid)) {
+    E[k] <- emissionsOPENPROM(envWide, yearCols, grid[k], targetRegion, targetYear, fromYear, policyRow)
+    if (verbose) message(sprintf("  survey %d/%d: %s=%.4f -> E=%.4f%s",
+                                 k, length(grid), paramLabel(mode), grid[k], E[k],
+                                 if (E[k] <= budgetTarget) "  [meets target]" else ""))
+  }
+  data.frame(param = grid, emissions = E)
+}
+
+# Classify the sampled curve. `flatTol` is the emissions change below which a step counts as
+# flat (no usable gradient); it should be on the order of the solver's emissions tolerance.
+analyseResponse <- function(survey, budgetTarget, flatTol = 1e-6) {
+  p <- survey$param; E <- survey$emissions
+  dE <- diff(E)
+
+  decreasing <- dE < -flatTol
+  increasing <- dE >  flatTol
+  flat       <- abs(dE) <= flatTol
+
+  monotone <- !any(increasing)
+  anyMeets <- any(E <= budgetTarget)
+
+  # Tightest window of consecutive strictly-decreasing steps that brackets the target.
+  # Root-finding is only defensible inside such a window, and the tightest one converges
+  # fastest — each model run is a full 2024-2100 all-region solve, so width matters.
+  bracket <- NULL
+  if (anyMeets) {
+    best <- Inf
+    for (i in seq_along(p)) {
+      for (j in seq_along(p)) {
+        if (j <= i) next
+        seg <- seq.int(i, j - 1)
+        if (all(decreasing[seg]) && E[i] > budgetTarget && E[j] <= budgetTarget) {
+          width <- p[j] - p[i]
+          if (width < best) {
+            best <- width
+            bracket <- list(lo = p[i], hi = p[j], Elo = E[i], Ehi = E[j])
+          }
+        }
+      }
+    }
+  }
+
+  list(monotone = monotone, anyMeets = anyMeets, bracket = bracket,
+       nIncreasing = sum(increasing), nFlat = sum(flat),
+       minE = min(E), minAt = p[which.min(E)])
+}
+
+reportResponse <- function(survey, analysis, budgetTarget, mode = parameterisation) {
+  message("\n  --- response curve ---")
+  lab <- paramLabel(mode)
+  for (k in seq_len(nrow(survey))) {
+    message(sprintf("   %s=%8.4f  E=%12.4f  %s", lab, survey$param[k], survey$emissions[k],
+                    if (survey$emissions[k] <= budgetTarget) "<= target" else ""))
+  }
+  message(sprintf("   target=%.4f   min E=%.4f at %s=%.4f",
+                  budgetTarget, analysis$minE, lab, analysis$minAt))
+  if (!analysis$monotone) {
+    message(sprintf("   !! NON-MONOTONE: %d step(s) increase emissions. The root-finder's core",
+                    analysis$nIncreasing))
+    message("      assumption does not hold across the sampled range.")
+  }
+  if (analysis$nFlat > 0) {
+    message(sprintf("   !! %d flat step(s): no usable gradient (cap binding, or saturation).",
+                    analysis$nFlat))
+  }
+  if (!analysis$anyMeets) {
+    message("   !! Target not reached anywhere on the grid — infeasible over this range.")
+  }
+  invisible(NULL)
+}
+
+# Expand the upper probe away from `a`. Multiplying by expandFactor is fine for a scale
+# multiplier, but collapses for a growth rate near zero (0 * 4 == 0, and 0.005 * 4 crawls),
+# so fall back to an additive step that is guaranteed to make progress across the range.
+stepUp <- function(a, expandFactor, maxAlpha) {
+  mult <- a * expandFactor
+  addStep <- max(0.01, abs(maxAlpha) / 20)
+  nxt <- if (is.finite(mult) && mult > a + 1e-9) mult else a + addStep
+  min(maxAlpha, nxt)
+}
+
 autoBracketFromSeed <- function(seedAlpha, budgetTarget, envWide, yearCols, targetRegion, targetYear,
                                    fromYear = changeCarbonPriceFromYear,
-                                   minAlpha = 0.0, maxAlpha = 5.0,
-                                   expandFactor = 1.35, maxProbes = 20, verbose = TRUE) {
-  probe <- function(a) emissionsOPENPROM(envWide, yearCols, a, targetRegion, targetYear, fromYear)
+                                   policyRow = carbonPricePolicyRow,
+                                   minAlpha = 0.0, maxAlpha = 10.0,
+                                   expandFactor = 1.35, maxProbes = 20, verbose = TRUE,
+                                   mode = parameterisation) {
+  probe <- function(a) emissionsOPENPROM(envWide, yearCols, a, targetRegion, targetYear, fromYear, policyRow)
 
   # --- Feasibility probe: test the maximum carbon price first ---
   # If even the highest allowed price cannot pull emissions down to the target, the
   # target is unreachable — stop now (one run) instead of climbing toward it probe by probe.
-  if (verbose) message(sprintf("Feasibility probe at maxAlpha=%.4f", maxAlpha))
+  if (verbose) message(sprintf("Feasibility probe at max %s=%.4f", paramLabel(mode), maxAlpha))
   Emax <- probe(maxAlpha)
-  if (verbose) message(sprintf("maxAlpha: alpha=%.4f -> E=%.6f (target=%.6f)", maxAlpha, Emax, budgetTarget))
+  if (verbose) message(sprintf("Max: %s=%.4f -> E=%.6f (target=%.6f)", paramLabel(mode), maxAlpha, Emax, budgetTarget))
   if (Emax > budgetTarget) {
-    stop(sprintf(
-      "maxAlpha too low: at alpha=%.4f emissions are %.6f, still above target %.6f. Increase maxAlpha.",
-      maxAlpha, Emax, budgetTarget))
+    # Do NOT claim the range is simply too low. In a non-monotone response, raising the
+    # parameter further can make emissions worse, so "increase maxAlpha" may be the wrong
+    # direction entirely. State both possibilities and point at the real suspects.
+    stop(sprintf(paste0(
+      "Target not reached at the top of the range: %s=%.4f gives E=%.6f vs target %.6f.\n",
+      "  This means EITHER the range is too low, OR the emissions response has saturated and\n",
+      "  raising %s further will not help. These are opposite fixes, so do not just raise the\n",
+      "  range — run the survey (surveyOnly <- TRUE) to see the actual shape of E(%s) first.\n",
+      "  Common causes of saturation on this branch: the CCS availability adder\n",
+      "  (ccsAvailabilityCostAdder, tau = A*(Q/10 Gt)^2) and the biomass sustainability tax\n",
+      "  (bmswasPriceAdder, tau = A*(Q/150 EJ)^2), plus carbonPriceCap truncating the path."),
+      paramLabel(mode), maxAlpha, Emax, budgetTarget, paramLabel(mode), paramLabel(mode)))
   }
 
-  if (verbose) message(sprintf("maxAlpha feasible; seeding bracket near alpha %.4f", seedAlpha))
+  if (verbose) message(sprintf("Max feasible; seeding bracket near %s %.4f", paramLabel(mode), seedAlpha))
   Eseed <- probe(seedAlpha)
-  if (verbose) message(sprintf("Seed: alpha=%.4f → E=%.6f (target=%.6f)", seedAlpha, Eseed, budgetTarget))
+  if (verbose) message(sprintf("Seed: %s=%.4f → E=%.6f (target=%.6f)", paramLabel(mode), seedAlpha, Eseed, budgetTarget))
 
   if (Eseed <= budgetTarget) {
-    # Seed already meets the target. Check whether unchanged prices (alpha = 0) meet it
-    # too — if so there is nothing to optimize, so keep the original prices and skip.
-    E0 <- probe(0)
-    if (verbose) message(sprintf("No-change probe: alpha=0.0000 -> E=%.6f (target=%.6f)", E0, budgetTarget))
+    # Seed already meets the target. Probe the floor of the search range to see whether the
+    # target is met without raising prices at all — if so there is nothing to optimize.
+    # In "scale" mode the floor is alpha = 0, i.e. the untouched trajectory. In "growth" mode
+    # r = 0 is a FLAT price at the anchor level, which is a real (and weaker) policy change,
+    # so the floor is minAlpha and "already met" does not imply "leave the file alone".
+    floorParam <- if (identical(mode, "growth")) minAlpha else 0
+    E0 <- probe(floorParam)
+    if (verbose) message(sprintf("Floor probe: %s=%.4f -> E=%.6f (target=%.6f)",
+                                 paramLabel(mode), floorParam, E0, budgetTarget))
     if (E0 <= budgetTarget) {
-      if (verbose) message("Region already meets target with unchanged carbon prices; skipping optimization.")
-      return(list(alreadyMet = TRUE, alpha = 0,
-                  lowerAlpha = 0, upperAlpha = 0, EL = E0, EU = E0))
+      if (verbose) message(sprintf(
+        "Region already meets target at the floor of the search range (%s=%.4f); skipping optimization.",
+        paramLabel(mode), floorParam))
+      return(list(alreadyMet = TRUE, alpha = floorParam,
+                  lowerAlpha = floorParam, upperAlpha = floorParam, EL = E0, EU = E0))
     }
-    # alpha = 0 fails but the seed passes → [0, seed] brackets the target.
-    aL <- 0;         EL <- E0
-    aU <- seedAlpha; EU <- Eseed
+    # Floor fails but the seed passes → [floor, seed] brackets the target.
+    aL <- floorParam; EL <- E0
+    aU <- seedAlpha;  EU <- Eseed
   } else {
     # Seed exceeds the target → expand upward toward the (already feasible) maxAlpha.
     aL <- seedAlpha; EL <- Eseed
-    aU <- min(maxAlpha, seedAlpha * expandFactor); tries <- 0
+    aU <- min(maxAlpha, stepUp(seedAlpha, expandFactor, maxAlpha)); tries <- 0
     repeat {
       if (aU >= maxAlpha - 1e-9) { aU <- maxAlpha; EU <- Emax; break }  # reuse feasibility probe
       EU <- probe(aU); tries <- tries + 1
-      if (verbose) message(sprintf("Up probe: alpha=%.4f → E=%.6f", aU, EU))
+      if (verbose) message(sprintf("Up probe: %s=%.4f → E=%.6f", paramLabel(mode), aU, EU))
       if (EU <= budgetTarget || tries >= maxProbes) break
       # Still above target: this probe is a tighter lower bound than the seed, so keep
       # it instead of leaving aL stuck at seedAlpha (e.g. bracket [0.4, 1.6], not [0.1, 1.6]).
       aL <- aU; EL <- EU
-      aU <- min(maxAlpha, aU * expandFactor)
+      aU <- min(maxAlpha, stepUp(aU, expandFactor, maxAlpha))
     }
     # Probes exhausted with the last one still above target: it is a valid lower bound too,
     # so promote it before falling back to the known-feasible max.
@@ -292,19 +570,21 @@ findAlphaForBudget <- function(envWide, yearCols, budgetTarget,
                                lowerAlpha, upperAlpha,
                                eLow = NULL, eHigh = NULL, targetRegion, targetYear,
                                fromYear = changeCarbonPriceFromYear,
+                               policyRow = carbonPricePolicyRow,
                                tolAlphaRel = 1e-3, tolEmisAbs = 1e-3,
+                               tolParamAbs = searchBounds$tolParamAbs,
                                maxIter = 60, verbose = TRUE, writeFinalCsv = TRUE) {
 
   # Evaluate bounds if not already provided by autoBracketFromSeed.
-  if (is.null(eLow))  eLow  <- emissionsOPENPROM(envWide, yearCols, lowerAlpha, targetRegion, targetYear, fromYear)
-  if (is.null(eHigh)) eHigh <- emissionsOPENPROM(envWide, yearCols, upperAlpha, targetRegion, targetYear, fromYear)
+  if (is.null(eLow))  eLow  <- emissionsOPENPROM(envWide, yearCols, lowerAlpha, targetRegion, targetYear, fromYear, policyRow)
+  if (is.null(eHigh)) eHigh <- emissionsOPENPROM(envWide, yearCols, upperAlpha, targetRegion, targetYear, fromYear, policyRow)
 
   if (verbose) message(sprintf(
-    "Initial: aL=%.6f -> E=%.6f; aU=%.6f -> E=%.6f; target=%.6f",
-    lowerAlpha, eLow, upperAlpha, eHigh, budgetTarget))
+    "Initial: %s_lo=%.6f -> E=%.6f; %s_hi=%.6f -> E=%.6f; target=%.6f",
+    paramLabel(), lowerAlpha, eLow, paramLabel(), upperAlpha, eHigh, budgetTarget))
 
   if (eLow <= budgetTarget) {
-    if (writeFinalCsv) writeFinalPolicyFiles(envWide, yearCols, lowerAlpha, targetRegion, fromYear)
+    if (writeFinalCsv) writeFinalPolicyFiles(envWide, yearCols, lowerAlpha, targetRegion, fromYear, policyRow)
     return(list(alpha = lowerAlpha, emissions = eLow, converged = TRUE, iters = 0))
   }
   if (eHigh > budgetTarget) stop("upperAlpha still exceeds budget. Increase it or check monotonicity.")
@@ -332,12 +612,18 @@ findAlphaForBudget <- function(envWide, yearCols, budgetTarget,
     }
     prevAM <- aM
 
-    emisM <- emissionsOPENPROM(envWide, yearCols, aM, targetRegion, targetYear, fromYear)
-    if (verbose) message(sprintf("Iter %02d: aM=%.6f -> E=%.6f (target=%.6f)", it, aM, emisM, budgetTarget))
+    emisM <- emissionsOPENPROM(envWide, yearCols, aM, targetRegion, targetYear, fromYear, policyRow)
+    if (verbose) message(sprintf("Iter %02d: %s=%.6f -> E=%.6f (target=%.6f)", it, paramLabel(), aM, emisM, budgetTarget))
 
-    if (abs(emisM - budgetTarget) < tolEmisAbs || abs(aU - aL) / max(1.0, abs(aM)) < tolAlphaRel) {
+    # Bracket-width test: the relative form alone is useless when the parameter is a small
+    # rate (dividing by max(1, |aM|) makes it effectively absolute against 1.0), so also stop
+    # once the bracket is narrower than a meaningful absolute step in the parameter.
+    bracketWidth <- abs(aU - aL)
+    if (abs(emisM - budgetTarget) < tolEmisAbs ||
+        bracketWidth / max(1.0, abs(aM)) < tolAlphaRel ||
+        bracketWidth < tolParamAbs) {
       if (verbose) message("Converged.")
-      if (writeFinalCsv) writeFinalPolicyFiles(envWide, yearCols, aM, targetRegion, fromYear)
+      if (writeFinalCsv) writeFinalPolicyFiles(envWide, yearCols, aM, targetRegion, fromYear, policyRow)
       return(list(alpha = aM, emissions = emisM, converged = TRUE, iters = it))
     }
 
@@ -349,7 +635,7 @@ findAlphaForBudget <- function(envWide, yearCols, budgetTarget,
   }
 
   warning("Max iterations reached without strict tolerance convergence.")
-  if (writeFinalCsv) writeFinalPolicyFiles(envWide, yearCols, aU, targetRegion, fromYear)
+  if (writeFinalCsv) writeFinalPolicyFiles(envWide, yearCols, aU, targetRegion, fromYear, policyRow)
   list(alpha = aU, emissions = emisU, converged = FALSE, iters = it)
 }
 configureGamsFile <- function(gmsPath, targetRegion) {
@@ -378,12 +664,97 @@ extractEmissions <- function(dataMagpie) {
 # Run
 # ----------------------------
 start_time <- Sys.time()
-selectedYear <- 2050              # default target year, overridable per region via targetList `year`
+selectedYear <- 2100              # default target year, overridable per region via targetList `year`
 changeCarbonPriceFromYear <- 2026 # default first year the price is scaled, overridable per region via targetList `fromYear`
+
+# --- How the carbon price path is parameterised ---
+# "scale"  : P(t) <- P(t) * (1 + param) for t >= fromYear. One scalar on the existing curve;
+#            preserves its shape, including any terminal plateau baked into the source row.
+# "growth" : P(t) <- P(anchor) * (1 + param)^(t - anchor) for t > anchor. Rebuilds the forward
+#            path as a Hotelling-style geometric curve anchored on the price already in the
+#            file for `fromYear`. `param` is then an annual growth rate, not a multiplier.
+#
+# Prefer "growth" for cumulative-budget targets: a cumulative budget is an integral over time,
+# so the timing of abatement matters as much as the level, and the stock SSP2_800f path
+# flattens to a hard 700 for every region by 2100 — scaling that keeps the plateau and gives
+# very little late-century leverage.
+parameterisation <- "scale"
+
+# Upper bound on any carbon price the growth path may produce (US$2015/tCO2), applied after
+# compounding. Guards against absurd end-century values when a high r runs for ~75 years.
+# Set to Inf to disable. Only used in "growth" mode.
+carbonPriceCap <- 1500
+
+# In "growth" mode the anchor year is the last year left untouched; the path is rebuilt from
+# the year after it onward. It defaults to each region's fromYear so near-term prices stay
+# consistent with enacted policy.
+carbonPriceAnchorYear <- changeCarbonPriceFromYear
+
+# --- Search range for the root-find, per parameterisation ---
+# The two parameters live on completely different scales, so the bracket must follow the mode:
+#   scale  : a multiplier. 0 = unchanged, 40 = a 41x price.
+#   growth : an annual rate compounding over ~75 years. 0.02 = 2%/yr, 0.15 = 15%/yr. Anything
+#            much above ~0.20 is already explosive by 2100 (1.20^74 ~= 700,000x the anchor),
+#            which is why carbonPriceCap exists.
+# minAlpha is the search floor, not a hard bound on the file: in growth mode r can legitimately
+# be small or negative (a declining real price), so it is allowed below zero.
+# Calibration note for the growth seed: the stock SSP2_800f path front-loads much harder than
+# any constant rate (69%/yr in 2027, decaying below 1%/yr after 2070). Measured on CHA over
+# 2027-2100, a constant rate reproduces the original path's price integral at roughly 6.5%/yr
+# (r=6% gives 0.80x, r=8% gives 2.47x). So ~0.065 is "about as stringent as the baseline" and
+# is the sensible seed; lower rates are genuinely weaker policy despite compounding.
+searchBoundsFor <- function(mode) {
+  if (mode == "growth") {
+    list(seed = 0.065, min = 0.0, max = 0.20, expandFactor = 1.5, maxProbes = 7,
+         tolParamAbs = 1e-3)   # 0.1 percentage point on r
+  } else {
+    list(seed = 0.217,  min = 0,  max = 3,   expandFactor = 4.0, maxProbes = 7,
+         tolParamAbs = 1e-2)
+  }
+}
+searchBounds <- searchBoundsFor(parameterisation)
+
+# --- Response survey -------------------------------------------------------
+# The root-finder assumes emissions fall monotonically in the parameter. On this branch that
+# assumption is not safe (see surveyResponse() above), so the survey measures the curve first
+# and gates the root-find on what it finds.
+#
+#   withSurvey  TRUE  : sample surveyGrid before each region's root-find. Costs
+#                       length(surveyGrid) extra model runs per region, but they are not
+#                       wasted — the bracket is taken from the sampled points.
+#   surveyOnly  TRUE  : sample, report the curve, then STOP without root-finding or writing
+#                       any CSV. This is the diagnostic mode — use it first.
+#   requireMonotone   : if TRUE, refuse to root-find when the sampled curve is non-monotone.
+#                       Set FALSE to proceed anyway on the largest decreasing window found
+#                       (a warning is logged either way).
+withSurvey      <- FALSE
+surveyOnly      <- FALSE
+requireMonotone <- FALSE
+
+# Grid of parameter values to sample. Defaults span the search range; override for a finer or
+# coarser sweep. In growth mode these are annual rates, in scale mode multipliers.
+surveyGrid <- if (parameterisation == "growth") {
+  c(0, 0.05, 0.10, 0.15, 0.20)
+} else {
+  c(0, 0.5, 2, 8, 20)
+}
+
+# Emissions change below which a survey step counts as "flat" (no usable gradient). Keep it at
+# or above the solver's own emissions tolerance so cap-induced plateaus are detected.
+surveyFlatTol <- 1e+1
+
+# Where the sampled curve is written, so it can be plotted / kept across runs.
+surveyCsvPath <- "carbon_price_response_survey.csv"
 
 # Model scenario passed to GAMS via --fScenario (overrides $evalGlobal fScenario in main.gms):
 #   0 = No carbon price, 1 = NPi_Default, 2 = 1.5C, 3 = 2C
-selectedScenario <- 2
+selectedScenario <- 7
+
+# The single policy row in iEnvPolicies.csv that this scenario feeds into iCarbValYrExog.
+# Alpha is applied to this row only — every other row in the file (the other scenarios'
+# price paths, and the non-price EFF/OPT/REN/TRADE rows) is left untouched.
+carbonPricePolicyRow <- policyRowForScenario(selectedScenario)
+message(sprintf("Scenario %s -> scaling policy row '%s'", selectedScenario, carbonPricePolicyRow))
 
 # --fEndY caps the solve horizon at selectedYear instead of always running to 2100, so
 # shortening a run is just a matter of lowering selectedYear (use --fEndY, never
@@ -404,7 +775,7 @@ GAMSCmdArgsTemplate <- GAMSCmdArgs
 #   "Emissions|CO2|Cumulated.Gt CO2"          * 1000  -> Mt CO2  (cumulated)
 #   "Emissions|CO2.Mt CO2/yr"                 * 1     -> Mt CO2/yr
 #   "Emissions|Kyoto Gases.Mt CO2-equiv/yr"   * 1     -> Mt CO2-equiv/yr
-emissionsVariable <- "Emissions|Kyoto Gases.Mt CO2-equiv/yr"
+emissionsVariable <- "Emissions|CO2|Cumulated.Gt CO2"
 emissionsScale    <- 1   # Gt -> Mt
 
 # EU27 member regions — share a single carbon price in iEnvPolicies.csv.
@@ -431,20 +802,20 @@ EU27_REGIONS <- c("AUT","BEL","BGR","CYP","CZE","DEU","DNK","ESP","EST",
 # Current unit: cumulated Mt CO2  (Emissions|CO2|Cumulated.Gt CO2 * 1000)
 targetList <- list(
   # Examples (mix-and-match supported):
-  # WORLD = 1257571,  # optional: comment out to skip world run
-  EU27  = list(budget = 0, year = 2050),
-  CAZ  = list(budget = 0,  year = 2050),
-  # CHA  = list(budget = 13447, year = 2050),
-  GBR  = list(budget = 0,  year = 2050),
-  IND  = list(budget = 0, year = 2070),
-  JPN  = list(budget = 0,  year = 2050),
-  LAM  = list(budget = 703, year = 2050),
-  MEA  = list(budget = 3245, year = 2060),
-  NEU  = list(budget = 101,  year = 2050),
-  OAS  = list(budget = 1186, year = 2060),
-  REF  = list(budget = 355, year = 2060),
-  SSA  = list(budget = 2238, year = 2050),
-  USA  = list(budget = 0, year = 2050)  # numeric form still supported: interpreted as budget with fallback year = selectedYear
+  WORLD  = list(budget = 1198, year = selectedYear)  # optional: comment out to skip world run
+  # EU27  = list(budget = 0, year = 2050),
+  # CAZ  = list(budget = 0,  year = 2050),
+  # # CHA  = list(budget = 13447, year = 2050),
+  # GBR  = list(budget = 0,  year = 2050),
+  # IND  = list(budget = 0, year = 2070),
+  # JPN  = list(budget = 0,  year = 2050),
+  # LAM  = list(budget = 703, year = 2050),
+  # MEA  = list(budget = 3245, year = 2060),
+  # NEU  = list(budget = 101,  year = 2050),
+  # OAS  = list(budget = 1186, year = 2060),
+  # REF  = list(budget = 355, year = 2060),
+  # SSA  = list(budget = 2238, year = 2050),
+  # USA  = list(budget = 0, year = 2050)  # numeric form still supported: interpreted as budget with fallback year = selectedYear
 )
 
 logFilePath <- "Carbon_price_optimization.log"
@@ -470,6 +841,7 @@ on.exit({
   message("Log redirection ended. Console restored.")
 }, add = TRUE)
 resultsLog <- list()
+surveyLog  <- list()   # per-region sampled response curves + their analysis
 
 for (regName in names(targetList)) {
 
@@ -514,25 +886,92 @@ for (regName in names(targetList)) {
   i_endy <- grep("^--fEndY=", GAMSCmdArgs)
   if (length(i_endy)) GAMSCmdArgs[i_endy] <- paste0("--fEndY=", regionTargetYear) else GAMSCmdArgs <- c(GAMSCmdArgs, paste0("--fEndY=", regionTargetYear))
 
-  brkt <- autoBracketFromSeed(
-    seedAlpha    = 0.1,
-    budgetTarget = bg,
-    envWide      = currentEnvWide,
-    yearCols     = yearCols,
-    targetRegion = actualRegion,
-    targetYear   = regionTargetYear,
-    fromYear     = regionFromYear,
-    minAlpha     = -0.5,           # Allow price reduction up to -50% if needed
-    maxAlpha     = 40,           # Allow up to +1000% increase
-    expandFactor = 4.0,
-    maxProbes    = 7,
-    verbose      = TRUE
-  )
+  # --- A. Survey the response curve before assuming it is monotone -----------
+  brkt <- NULL
+  if (isTRUE(withSurvey)) {
+    message(sprintf(" Surveying %d point(s) of E(%s) for %s...",
+                    length(surveyGrid), paramLabel(), displayName))
+    survey <- surveyResponse(
+      grid         = surveyGrid,
+      budgetTarget = bg,
+      envWide      = currentEnvWide,
+      yearCols     = yearCols,
+      targetRegion = actualRegion,
+      targetYear   = regionTargetYear,
+      fromYear     = regionFromYear,
+      verbose      = TRUE
+    )
+    analysis <- analyseResponse(survey, bg, flatTol = surveyFlatTol)
+    reportResponse(survey, analysis, bg)
 
-  # C. Solve (skip the root-find when the region already meets its target unchanged)
-  if (isTRUE(brkt$alreadyMet)) {
-    finalAlpha <- 0
-    message(sprintf(" -> %s already meets target; carbon prices left unchanged (Alpha=0).", displayName))
+    # Persist the curve so it can be plotted and compared across adder settings.
+    surveyOut <- cbind(region = displayName, parameterisation = parameterisation,
+                       target = bg, year = regionTargetYear, survey)
+    fwrite(surveyOut, surveyCsvPath, na = "NA",
+           append = file.exists(surveyCsvPath))
+    message(sprintf("   survey written to %s", surveyCsvPath))
+
+    surveyLog[[regName]] <- list(survey = survey, analysis = analysis)
+
+    if (isTRUE(surveyOnly)) {
+      message(" surveyOnly = TRUE -> not root-finding, not writing any policy CSV.")
+      resultsLog[[regName]] <- list(status = "SURVEY",
+                                    minE = analysis$minE, minAt = analysis$minAt,
+                                    monotone = analysis$monotone, meets = analysis$anyMeets)
+      skipRegion <- TRUE
+    } else if (!analysis$anyMeets) {
+      stop(sprintf(paste0(
+        "Target %.4f not reached anywhere on the surveyed range [%.4f, %.4f]; the best was ",
+        "E=%.4f at %s=%.4f. Raising the range further is only one possible fix — check the ",
+        "CCS/biomass adders and carbonPriceCap before assuming the parameter is too low."),
+        bg, min(surveyGrid), max(surveyGrid), analysis$minE, paramLabel(), analysis$minAt))
+    } else if (!analysis$monotone && isTRUE(requireMonotone)) {
+      stop(sprintf(paste0(
+        "Emissions response is NON-MONOTONE over the surveyed range (%d increasing step(s)). ",
+        "Root-finding assumes a monotone decreasing E(%s), so its result would not be ",
+        "trustworthy. Either narrow surveyGrid to a monotone window, or set ",
+        "requireMonotone <- FALSE to proceed on the largest decreasing window found."),
+        analysis$nIncreasing, paramLabel()))
+    } else if (!is.null(analysis$bracket)) {
+      # Reuse the sampled points: they already bracket the target on a decreasing window,
+      # so no extra model runs are needed to build the bracket.
+      if (!analysis$monotone) {
+        warning(sprintf("Non-monotone response; proceeding on the decreasing window [%.4f, %.4f].",
+                        analysis$bracket$lo, analysis$bracket$hi), call. = FALSE)
+      }
+      brkt <- list(lowerAlpha = analysis$bracket$lo, upperAlpha = analysis$bracket$hi,
+                   EL = analysis$bracket$Elo, EU = analysis$bracket$Ehi)
+      message(sprintf(" Bracket from survey: [%.4f, %.4f] -> E [%.4f, %.4f]",
+                      brkt$lowerAlpha, brkt$upperAlpha, brkt$EL, brkt$EU))
+    }
+  }
+
+  # --- B. Fall back to probe-based bracketing when the survey did not supply one ---
+  if (!skipRegion && is.null(brkt)) {
+    brkt <- autoBracketFromSeed(
+      seedAlpha    = searchBounds$seed,
+      budgetTarget = bg,
+      envWide      = currentEnvWide,
+      yearCols     = yearCols,
+      targetRegion = actualRegion,
+      targetYear   = regionTargetYear,
+      fromYear     = regionFromYear,
+      minAlpha     = searchBounds$min,
+      maxAlpha     = searchBounds$max,
+      expandFactor = searchBounds$expandFactor,
+      maxProbes    = searchBounds$maxProbes,
+      verbose      = TRUE
+    )
+  }
+
+  # C. Solve (skip entirely in surveyOnly mode; skip the root-find when the region already
+  #    meets its target at the search floor)
+  if (skipRegion) {
+    # surveyOnly: nothing to solve and nothing to write for this region.
+  } else if (isTRUE(brkt$alreadyMet)) {
+    finalAlpha <- brkt$alpha
+    message(sprintf(" -> %s already meets target at the search floor (%s=%.4f).",
+                    displayName, paramLabel(), finalAlpha))
   } else {
     solveResult <- findAlphaForBudget(
       envWide      = currentEnvWide,
@@ -553,14 +992,22 @@ for (regName in names(targetList)) {
     )
 
     finalAlpha <- solveResult$alpha
-    message(sprintf(" -> Converged %s: Alpha=%.3f", displayName, finalAlpha))
+    if (parameterisation == "growth") {
+      message(sprintf(" -> Converged %s: r=%.4f (%.2f%%/yr from %d)",
+                      displayName, finalAlpha, 100 * finalAlpha, regionFromYear))
+    } else {
+      message(sprintf(" -> Converged %s: Alpha=%.3f", displayName, finalAlpha))
+    }
   }
 
-  # Apply converged alpha and persist as the new baseline for subsequent regions
-  currentEnvWide <- applyAlpha(currentEnvWide, yearCols, finalAlpha, actualRegion, regionFromYear)
-  fwrite(currentEnvWide, inputCsvPath, na = "NA")
-  file.copy(inputCsvPath, backupCsvPath, overwrite = TRUE)
-  resultsLog[[regName]] <- list(status = "OK", alpha = finalAlpha)
+  # Apply converged parameter and persist as the new baseline for subsequent regions.
+  # Skipped in surveyOnly mode: a survey is a measurement, it must not mutate the policy file.
+  if (!skipRegion) {
+    currentEnvWide <- applyPriceParam(currentEnvWide, yearCols, finalAlpha, actualRegion, regionFromYear, carbonPricePolicyRow)
+    fwrite(currentEnvWide, inputCsvPath, na = "NA")
+    file.copy(inputCsvPath, backupCsvPath, overwrite = TRUE)
+    resultsLog[[regName]] <- list(status = "OK", alpha = finalAlpha)
+  }
 
   }, error = function(e) {
     message(sprintf("  !! FAILURE for %s: %s", displayName, e$message))
@@ -581,17 +1028,39 @@ for (regName in names(targetList)) {
 }
 
 message("\n--- Final Summary ---")
+message(sprintf(" parameterisation: %s   policy row: %s", parameterisation, carbonPricePolicyRow))
 for (r in names(resultsLog)) {
   item <- resultsLog[[r]]
   if (item$status == "OK") {
-    message(sprintf(" [OK]     %s : Alpha = %.3f", r, item$alpha))
+    if (parameterisation == "growth") {
+      message(sprintf(" [OK]     %s : r = %.4f (%.2f%%/yr)", r, item$alpha, 100 * item$alpha))
+    } else {
+      message(sprintf(" [OK]     %s : Alpha = %.3f", r, item$alpha))
+    }
+  } else if (item$status == "SURVEY") {
+    message(sprintf(" [SURVEY] %s : min E = %.4f at %s = %.4f | monotone: %s | target met: %s",
+                    r, item$minE, paramLabel(), item$minAt,
+                    if (item$monotone) "yes" else "NO", if (item$meets) "yes" else "NO"))
   } else {
     message(sprintf(" [FAILED] %s : %s", r, item$error))
   }
 }
 
+if (isTRUE(surveyOnly)) {
+  message(sprintf("\n Survey-only run: no policy CSV was written. Curves saved to %s.", surveyCsvPath))
+  message(" Set surveyOnly <- FALSE to root-find once the response looks usable.")
+}
+
 sink(type = "message")
 sink()
 
-writeFinalPolicyFiles(currentEnvWide, yearCols, 0.0, NULL)
+# `currentEnvWide` already holds every converged region's path (each loop iteration applied its
+# solved parameter to it), so write it out as-is. Re-applying a neutral parameter here would be
+# a no-op in "scale" mode but would flatten the whole path to the anchor level in "growth" mode.
+# In surveyOnly mode nothing was solved, so the file must be left exactly as it was.
+if (!isTRUE(surveyOnly)) {
+  writeSolvedPolicyFiles(currentEnvWide)
+} else if (file.exists(backupCsvPath)) {
+  file.copy(backupCsvPath, inputCsvPath, overwrite = TRUE)
+}
 message(sprintf("Done. Total time: %s", Sys.time() - start_time))

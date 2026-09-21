@@ -351,6 +351,11 @@ UPT_200
 UPT_400
 UPT_600
 UPT_800
+SoCDR_CurrentTargets
+SoCDR_DelayedAction
+SoCDR_HighestAmbition
+SSP2_800f
+SSP1_800f
 /
 
 RegulaPolicies(POLICIES_set) Set of policies entering in the regula falsi loops
