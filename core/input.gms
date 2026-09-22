@@ -82,7 +82,8 @@ PN      0.12
 GU      0.12
 GT      0.08
 GN      0.12
-BU      0.12
+BMAR    0.12
+BAV     0.12
 NEN     0.08
 PG      0.1
 H2P     0.08
@@ -134,7 +135,8 @@ OI	1.61
 SE	1.47
 AG	1.82
 HOU	2.41
-BU	2
+BMAR	2
+BAV	2
 NEN	2
 /;
 *---
@@ -172,7 +174,10 @@ imFuelPrice(runCy,DOMSE,"RFO",YTIME) = imFuelPrice(runCy,"OI","RFO",YTIME);
 imFuelPrice(runCy,"SE","GDO",YTIME) = imFuelPrice(runCy,"OI","GDO",YTIME);
 imFuelPrice(runCy,"SE","BGDO",YTIME) = imFuelPrice(runCy,"OI","BGDO",YTIME);
 *imFuelPrice(runCy,"SE","BMSWAS",YTIME) = imFuelPrice(runCy,"AG","BMSWAS",YTIME);
-imFuelPrice(runCy,TRANSE,"RFO",YTIME) = imFuelPrice(runCy,"BU","RFO",YTIME);
+imFuelPrice(runCy,"BAV","BKRS",YTIME) = imFuelPrice(runCy,"PA","BKRS",YTIME) + 1e-6;
+imFuelPrice(runCy,"BMAR","BGDO",YTIME) = imFuelPrice(runCy,"GN","BGDO",YTIME) + 1e-6;
+imFuelPrice(runCy,"BMAR","BGAS",YTIME) = imFuelPrice(runCy,"GN","BGAS",YTIME) + 1e-6;
+imFuelPrice(runCy,TRANSE,"RFO",YTIME) = imFuelPrice(runCy,"BMAR","RFO",YTIME);
 imFuelPrice(runCy,TRANSE,"OGS",YTIME) = imFuelPrice(runCy,TRANSE,"NGS",YTIME);
 imFuelPrice(runCy,TRANSE,"OLQ",YTIME) = imFuelPrice(runCy,TRANSE,"GDO",YTIME);
 imFuelPrice(runCy,TRANSE,"H2F",YTIME) = 2 * imFuelPrice(runCy,TRANSE,"H2F",YTIME);
