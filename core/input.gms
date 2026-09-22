@@ -42,9 +42,14 @@ $ondelim
 $include "iElastA.csv"
 $offdelim
 ;
-imElastA.L(runCy, SBS, ETYPES, YTIME) = imElastAL("ELL", SBS, ETYPES, YTIME);
+* iElastA.csv (mrprom) holds ONE representative region; detect it instead of hard-coding it.
+* The old hard-coded "ELL" silently zeroed every elasticity once mrprom switched to "LAM" (MIP_REVIEW F26).
+set iElastASrcCy(allCy) "Representative region holding the elasticities in iElastA.csv";
+iElastASrcCy(allCy) = yes$sum((SBS,ETYPES,YTIME), abs(imElastAL(allCy,SBS,ETYPES,YTIME)));
+abort$(card(iElastASrcCy) <> 1) "iElastA.csv must contain exactly one representative region with non-zero data", iElastASrcCy;
+imElastA.L(runCy, SBS, ETYPES, YTIME) = sum(iElastASrcCy, imElastAL(iElastASrcCy, SBS, ETYPES, YTIME));
 imElastA.LO(runCy, SBS, posElast, YTIME) = 0.001;
-imElastA.UP(runCy, SBS, posElast, YTIME) = 5 * imElastAL("ELL", SBS, posElast, YTIME);
+imElastA.UP(runCy, SBS, posElast, YTIME) = 5 * sum(iElastASrcCy, imElastAL(iElastASrcCy, SBS, posElast, YTIME));
 imElastA.LO(runCy, SBS, negElast, YTIME) = -10;
 imElastA.UP(runCy, SBS, negElast, YTIME) = -0.001;
 
@@ -54,7 +59,14 @@ $ondelim
 $include "iElastA.csv"
 $offdelim
 ;
-imElastA(runCy,SBS,ETYPES,YTIME) = imElastA("ELL",SBS,ETYPES,YTIME);
+* iElastA.csv (mrprom) holds ONE representative region; detect it instead of hard-coding it.
+* The old hard-coded "ELL" silently zeroed every elasticity once mrprom switched to "LAM" (MIP_REVIEW F26).
+set iElastASrcCy(allCy) "Representative region holding the elasticities in iElastA.csv";
+parameter iElastARep(SBS,ETYPES,YTIME) "Representative elasticities copied to every region (1)";
+iElastASrcCy(allCy) = yes$sum((SBS,ETYPES,YTIME), abs(imElastA(allCy,SBS,ETYPES,YTIME)));
+abort$(card(iElastASrcCy) <> 1) "iElastA.csv must contain exactly one representative region with non-zero data", iElastASrcCy;
+iElastARep(SBS,ETYPES,YTIME) = sum(iElastASrcCy, imElastA(iElastASrcCy,SBS,ETYPES,YTIME));
+imElastA(runCy,SBS,ETYPES,YTIME) = iElastARep(SBS,ETYPES,YTIME);
 imElastA(runCy,DSBS,"b1",YTIME)$(not TRANSE(DSBS)) = imElastA(runCy,DSBS,"b1",YTIME) / 4;
 imElastA(runCy,DSBS,"b2",YTIME)$(not TRANSE(DSBS)) = imElastA(runCy,DSBS,"b2",YTIME) / 4;
 $ENDIF.calib
