@@ -171,6 +171,7 @@ imFuelPrice(runCy,DOMSE,"OLQ",YTIME) = imFuelPrice(runCy,"OI","OLQ",YTIME);
 imFuelPrice(runCy,DOMSE,"RFO",YTIME) = imFuelPrice(runCy,"OI","RFO",YTIME);
 imFuelPrice(runCy,"SE","GDO",YTIME) = imFuelPrice(runCy,"OI","GDO",YTIME);
 imFuelPrice(runCy,"SE","BGDO",YTIME) = imFuelPrice(runCy,"OI","BGDO",YTIME);
+imFuelPrice(runCy,"AG","BGAS",YTIME) = imFuelPrice(runCy,"AG","NGS",YTIME);
 *imFuelPrice(runCy,"SE","BMSWAS",YTIME) = imFuelPrice(runCy,"AG","BMSWAS",YTIME);
 imFuelPrice(runCy,"BU","BGSL",YTIME) = imFuelPrice(runCy,"OI","BGSL",YTIME);
 imFuelPrice(runCy,TRANSE,"RFO",YTIME) = imFuelPrice(runCy,"BU","RFO",YTIME);

@@ -6,13 +6,13 @@ i12CaloriesIntake(allCy,FOOD_TYPES,YTIME)                  "Daily calories intak
 i12IndexClimateShift(allCy,AGRI_MODES,YTIME)
 i12IndexTechShift(allCy,AGRI_MODES,YTIME)
 i12IndexFertiliserShift(allCy,AGRI_MODES,YTIME)
-i12SpecificFuelCons(allCy,AGRI_MODES,AGRITECH,EFS,YTIME)
 i12IntensityFertilizers(allCy,FERT_TYPES,YTIME)
 i12IndexGlobalCaloriesIntake(FOOD_TYPES,YTIME)
 *i12RatioCropsIrrigated(allCy,YTIME)
 i12DataEnergyService(allCy,AGRI_MODES,YTIME)
 i12ConsFuel(allCy,AGRI_MODES,EFS,YTIME)
 i12Lft(AGRI_MODES,AGRITECH)
+i12DataShareBlend(allCy,AGRI_MODES,AGRITECH,EFS,YTIME)
 ;
 
 Equations 
@@ -27,6 +27,7 @@ Q12ShareTech(allCy,AGRI_MODES,AGRITECH,YTIME)
 Q12ScrpPrem(allCy,AGRI_MODES,AGRITECH,YTIME)
 Q12CostFuel(allCy,AGRI_MODES,AGRITECH,YTIME)
 Q12CostTotal(allCy,AGRI_MODES,AGRITECH,YTIME)
+Q12ShareBlend(allCy,AGRI_MODES,AGRITECH,EFS,YTIME)
 ;
 
 Variables
@@ -51,4 +52,5 @@ V12ShareTech(allCy,AGRI_MODES,AGRITECH,YTIME)
 V12ScrpPrem(allCy,AGRI_MODES,AGRITECH,YTIME)
 V12CostFuel(allCy,AGRI_MODES,AGRITECH,YTIME)
 V12CostTotal(allCy,AGRI_MODES,AGRITECH,YTIME)
+V12ShareBlend(allCy,AGRI_MODES,AGRITECH,EFS,YTIME)
 ;
