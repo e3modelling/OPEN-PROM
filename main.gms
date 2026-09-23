@@ -310,6 +310,8 @@ $call "Rscript ./scripts/tasks/loadMadratData.R DevMode=2"
 $if errorlevel 1 $abort "mrprom input-data generation failed for DevMode=2. See the R output above."
 $endif.loadData
 $endif.genInp
+$call "Rscript ./scripts/tasks/writeMaturityFactors.R"
+$if errorlevel 1 $abort "Writing the maturity-factor multipliers failed. See the R output above."
 
 * Open file to write txt
 file fStat /'modelstat.txt'/; 
