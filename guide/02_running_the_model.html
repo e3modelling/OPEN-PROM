@@ -280,7 +280,7 @@ input data. It uses a public dummy dataset and solves only the single dummy regi
 VS Code Task Runner on this path, set <code class="docutils literal notranslate"><span class="pre">behavior.withSync</span></code> to <code class="docutils literal notranslate"><span class="pre">false</span></code> in <code class="docutils literal notranslate"><span class="pre">config.json</span></code>; otherwise <code class="docutils literal notranslate"><span class="pre">syncRun()</span></code> can
 stop the wrapper when <code class="docutils literal notranslate"><span class="pre">paths.model_runs_path</span></code> is not configured.</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;behavior&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;withSync&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="nt">"behavior"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"withSync"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -292,7 +292,7 @@ stop the wrapper when <code class="docutils literal notranslate"><span class="pr
 <p>This downloads <code class="docutils literal notranslate"><span class="pre">dummy_data.tgz</span></code> and extracts it into <code class="docutils literal notranslate"><span class="pre">./data</span></code>. It does <strong>not</strong> create <code class="docutils literal notranslate"><span class="pre">./targets</span></code>, so it cannot be
 used for calibration or any workflow that depends on targets.</p>
 <p><strong>2. Run the model</strong> directly with GAMS once <code class="docutils literal notranslate"><span class="pre">./data</span></code> exists:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gams<span class="w"> </span>main.gms<span class="w"> </span>--DevMode<span class="o">=</span><span class="m">1</span><span class="w"> </span>--GenerateInput<span class="o">=</span>off<span class="w"> </span>--fCountries<span class="o">=</span><span class="s1">&#39;RWO&#39;</span><span class="w"> </span>-Idir<span class="o">=</span>./data
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gams<span class="w"> </span>main.gms<span class="w"> </span>--DevMode<span class="o">=</span><span class="m">1</span><span class="w"> </span>--GenerateInput<span class="o">=</span>off<span class="w"> </span>--fCountries<span class="o">=</span><span class="s1">'RWO'</span><span class="w"> </span>-Idir<span class="o">=</span>./data
 </pre></div>
 </div>
 <ul class="simple">
@@ -319,7 +319,7 @@ task-based workflow described here.</p>
 <p>Make sure your local <code class="docutils literal notranslate"><span class="pre">madrat</span></code> directory is synced from SharePoint (or another internal source), then point R to
 that local archive:</p>
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">madrat</span><span class="p">)</span>
-<span class="nf">setConfig</span><span class="p">(</span><span class="n">mainfolder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/path/to/local/madrat&quot;</span><span class="p">)</span>
+<span class="nf">setConfig</span><span class="p">(</span><span class="n">mainfolder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"/path/to/local/madrat"</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>In the usual setup, <code class="docutils literal notranslate"><span class="pre">mainfolder</span></code> is the only path you need to set explicitly: <code class="docutils literal notranslate"><span class="pre">madrat</span></code> derives the relevant
@@ -448,10 +448,10 @@ CSV changes.</p></li>
 </ol>
 <p>Worked example — given <code class="docutils literal notranslate"><span class="pre">config.json:scenario</span></code>:</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;scenario_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Default&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w">   </span><span class="s2">&quot;Default UPTAKE run&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;gams_flags&quot;</span><span class="p">:</span><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;fScenario&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w"> </span><span class="p">},</span>
-<span class="w">  </span><span class="nt">&quot;soft_link_magpie&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;project&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;uptake&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;existing_prom_run&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="nt">"scenario_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Default"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"description"</span><span class="p">:</span><span class="w">   </span><span class="s2">"Default UPTAKE run"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"gams_flags"</span><span class="p">:</span><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">"fScenario"</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"soft_link_magpie"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"project"</span><span class="p">:</span><span class="w"> </span><span class="s2">"uptake"</span><span class="p">,</span><span class="w"> </span><span class="nt">"existing_prom_run"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -462,13 +462,13 @@ C600_landHigh,7,UPTAKE C600 landHigh,600,
 </div>
 <p>the merged scenario <code class="docutils literal notranslate"><span class="pre">start.R</span></code> runs is:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{
-  &quot;scenario_name&quot;: &quot;C600_landHigh&quot;,        // from CSV
-  &quot;task_id&quot;:       7,                       // from CSV
-  &quot;description&quot;:   &quot;UPTAKE C600 landHigh&quot;,  // from CSV
-  &quot;gams_flags&quot;:    { &quot;fScenario&quot;: 600 },    // CSV overrides 200 -&gt; 600
-  &quot;soft_link_magpie&quot;: {
-    &quot;project&quot;:           &quot;uptake&quot;,          // inherited from config
-    &quot;existing_prom_run&quot;: null               // CSV cell empty, inherited
+  "scenario_name": "C600_landHigh",        // from CSV
+  "task_id":       7,                       // from CSV
+  "description":   "UPTAKE C600 landHigh",  // from CSV
+  "gams_flags":    { "fScenario": 600 },    // CSV overrides 200 -&gt; 600
+  "soft_link_magpie": {
+    "project":           "uptake",          // inherited from config
+    "existing_prom_run": null               // CSV cell empty, inherited
   }
 }
 </pre></div>
@@ -567,7 +567,7 @@ reforming economies of the former Soviet Union, <code class="docutils literal no
 countries are identified by their official three-letter ISO codes.</p>
 <p>To <strong>restrict</strong> a run to a subset of regions without editing the mapping, pass <code class="docutils literal notranslate"><span class="pre">fCountries</span></code>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># solve only China, Germany, India, the USA and rest-of-world</span>
-...<span class="w"> </span>--fCountries<span class="o">=</span><span class="s1">&#39;CHA,DEU,IND,USA,RWO&#39;</span>
+...<span class="w"> </span>--fCountries<span class="o">=</span><span class="s1">'CHA,DEU,IND,USA,RWO'</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">fCountries</span></code> defaults to <code class="docutils literal notranslate"><span class="pre">CHA,DEU,IND,USA,RWO</span></code>. To <strong>redefine</strong> which countries belong to a region, edit the

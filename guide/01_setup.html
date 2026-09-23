@@ -309,8 +309,8 @@
 <ol class="arabic">
 <li><p>If you do not have an account, sign up at <a class="reference external" href="https://github.com">https://github.com</a> and verify your email address.</p></li>
 <li><p>Configure your identity for Git, using the <strong>same</strong> name and email registered on GitHub:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.name<span class="w"> </span><span class="s2">&quot;Your Name&quot;</span>
-git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.email<span class="w"> </span><span class="s2">&quot;youremail@example.com&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.name<span class="w"> </span><span class="s2">"Your Name"</span>
+git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.email<span class="w"> </span><span class="s2">"youremail@example.com"</span>
 </pre></div>
 </div>
 </li>
@@ -456,16 +456,16 @@ git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"
 <p>Install <strong>Git first</strong>, before R and VS Code, so the latter can detect it automatically. It is recommended <strong>not</strong> to set up Git credentials per user.</p>
 <p><strong>Git</strong> — download from <a class="reference external" href="https://git-scm.com/download/win">https://git-scm.com/download/win</a> and install as administrator with “Install for all users”, a preferred path of <code class="docutils literal notranslate"><span class="pre">C:\Git\</span></code>, and “Add Git to PATH”. Verify with <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">--version</span></code>.</p>
 <p><strong>R</strong> — download from <a class="reference external" href="https://cloud.r-project.org">https://cloud.r-project.org</a>, install for all users to e.g. <code class="docutils literal notranslate"><span class="pre">C:\R\R-4.4.0\</span></code>, and install RStudio for all users afterwards (with admin rights). Then edit the global startup profile <code class="docutils literal notranslate"><span class="pre">C:\R\R-4.4.0\etc\Rprofile.site</span></code> so all users share consistent settings:</p>
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">options</span><span class="p">(</span><span class="n">MADRAT_MAINFOLDER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;C:/madratverse&quot;</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">options</span><span class="p">(</span><span class="n">MADRAT_MAINFOLDER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"C:/madratverse"</span><span class="p">)</span>
 <span class="nf">Sys.setenv</span><span class="p">(</span><span class="n">RENV_CONFIG_AUTOINSTALL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">)</span>
 <span class="nf">Sys.setenv</span><span class="p">(</span><span class="n">RENV_CONFIG_PROJECT_AUTO</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">)</span>
 <span class="nf">Sys.setenv</span><span class="p">(</span><span class="n">RENV_CONFIG_USER_PROFILE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">)</span>
-<span class="nf">Sys.setenv</span><span class="p">(</span><span class="n">RENV_PATHS_CACHE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">)</span>
+<span class="nf">Sys.setenv</span><span class="p">(</span><span class="n">RENV_PATHS_CACHE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">""</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Confirm by opening R (or a VS Code R terminal) as another user and running <code class="docutils literal notranslate"><span class="pre">.libPaths()</span></code> — it should point at the shared library, e.g. <code class="docutils literal notranslate"><span class="pre">C:/R/R-4.4.1/library</span></code>.</p>
 <p><strong>VS Code</strong> — install to <code class="docutils literal notranslate"><span class="pre">C:\Microsoft</span> <span class="pre">VS</span> <span class="pre">Code\</span></code>, then create shared data and extensions folders (<code class="docutils literal notranslate"><span class="pre">C:\VSCodeUserData</span></code>, <code class="docutils literal notranslate"><span class="pre">C:\VSCodeExtensions</span></code>). Edit <strong>every</strong> shortcut (Desktop, Start Menu, Taskbar) so its target passes these folders:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>&quot;C:\Microsoft VS Code\Code.exe&quot; --user-data-dir &quot;C:\VSCodeUserData&quot; --extensions-dir &quot;C:\VSCodeExtensions&quot;
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>"C:\Microsoft VS Code\Code.exe" --user-data-dir "C:\VSCodeUserData" --extensions-dir "C:\VSCodeExtensions"
 </pre></div>
 </div>
 <p>Do not launch the original executable directly; with this change all users share extensions, settings and interpreter paths.</p>
@@ -478,21 +478,21 @@ git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"
 <p>Do <strong>not</strong> install MAgPIE via Chocolatey — it is unsuitable for multi-user setups.</p>
 </div>
 <p>Once R, Git and shared VS Code are working and users have the correct <code class="docutils literal notranslate"><span class="pre">PATH</span></code> and permissions, MAgPIE can be cloned and used system-wide without renv. In R (as admin):</p>
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">install.packages</span><span class="p">(</span><span class="s">&quot;remotes&quot;</span><span class="p">)</span>
-<span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&quot;pik-piam/magclass&quot;</span><span class="p">)</span>
-<span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&quot;pik-piam/madrat&quot;</span><span class="p">)</span>
-<span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&quot;pik-piam/mrcommons&quot;</span><span class="p">)</span>
-<span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&quot;pik-piam/mrdrivers&quot;</span><span class="p">)</span>
-<span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&quot;pik-piam/mrvalidation&quot;</span><span class="p">)</span>
-<span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&quot;pik-piam/magpie&quot;</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">install.packages</span><span class="p">(</span><span class="s">"remotes"</span><span class="p">)</span>
+<span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">"pik-piam/magclass"</span><span class="p">)</span>
+<span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">"pik-piam/madrat"</span><span class="p">)</span>
+<span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">"pik-piam/mrcommons"</span><span class="p">)</span>
+<span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">"pik-piam/mrdrivers"</span><span class="p">)</span>
+<span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">"pik-piam/mrvalidation"</span><span class="p">)</span>
+<span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">"pik-piam/magpie"</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Then:</p>
 <ol class="arabic">
 <li><p>Remove the <code class="docutils literal notranslate"><span class="pre">renv</span></code> folder from the MAgPIE directory.</p></li>
 <li><p>Edit <code class="docutils literal notranslate"><span class="pre">.Rprofile</span></code> in the MAgPIE folder to disable renv auto-activation, commenting out all lines except the PIK package repository:</p>
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="kr">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="s">&quot;https://rse.pik-potsdam.de/r/packages&quot;</span><span class="w"> </span><span class="o">%in%</span><span class="w"> </span><span class="nf">getOption</span><span class="p">(</span><span class="s">&quot;repos&quot;</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="nf">options</span><span class="p">(</span><span class="n">repos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="nf">getOption</span><span class="p">(</span><span class="s">&quot;repos&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">pik</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;https://rse.pik-potsdam.de/r/packages&quot;</span><span class="p">))</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="kr">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="s">"https://rse.pik-potsdam.de/r/packages"</span><span class="w"> </span><span class="o">%in%</span><span class="w"> </span><span class="nf">getOption</span><span class="p">(</span><span class="s">"repos"</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nf">options</span><span class="p">(</span><span class="n">repos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="nf">getOption</span><span class="p">(</span><span class="s">"repos"</span><span class="p">),</span><span class="w"> </span><span class="n">pik</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"https://rse.pik-potsdam.de/r/packages"</span><span class="p">))</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -508,8 +508,8 @@ git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"
 </pre></div>
 </div>
 <p><strong>TinyTeX</strong> — needed for automated PDF reporting. In R (as admin):</p>
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">install.packages</span><span class="p">(</span><span class="s">&quot;tinytex&quot;</span><span class="p">)</span>
-<span class="n">tinytex</span><span class="o">::</span><span class="nf">install_tinytex</span><span class="p">(</span><span class="n">force</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">,</span><span class="w"> </span><span class="n">dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;C:/TinyTeX&quot;</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">install.packages</span><span class="p">(</span><span class="s">"tinytex"</span><span class="p">)</span>
+<span class="n">tinytex</span><span class="o">::</span><span class="nf">install_tinytex</span><span class="p">(</span><span class="n">force</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">,</span><span class="w"> </span><span class="n">dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"C:/TinyTeX"</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Add <code class="docutils literal notranslate"><span class="pre">C:\TinyTeX\bin\win32</span></code> to the system <code class="docutils literal notranslate"><span class="pre">PATH</span></code>.</p>

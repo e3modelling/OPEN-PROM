@@ -289,25 +289,25 @@ Make sure the <code class="docutils literal notranslate"><span class="pre">retic
 visible in a new terminal session.</p>
 <p>Once R is set up, launch the R console and run:</p>
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">options</span><span class="p">(</span><span class="n">repos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span>
-<span class="w">  </span><span class="n">pik</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;https://pik-piam.r-universe.dev&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="n">CRAN</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;https://cloud.r-project.org&quot;</span>
+<span class="w">  </span><span class="n">pik</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"https://pik-piam.r-universe.dev"</span><span class="p">,</span>
+<span class="w">  </span><span class="n">CRAN</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"https://cloud.r-project.org"</span>
 <span class="p">))</span>
 
 <span class="nf">install.packages</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span>
-<span class="w">  </span><span class="s">&quot;magclass&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="s">&quot;madrat&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="s">&quot;gdx&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="s">&quot;gdxrrw&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="s">&quot;quitte&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="s">&quot;mip&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="s">&quot;piamValidation&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="s">&quot;mrdrivers&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="s">&quot;gms&quot;</span>
+<span class="w">  </span><span class="s">"magclass"</span><span class="p">,</span>
+<span class="w">  </span><span class="s">"madrat"</span><span class="p">,</span>
+<span class="w">  </span><span class="s">"gdx"</span><span class="p">,</span>
+<span class="w">  </span><span class="s">"gdxrrw"</span><span class="p">,</span>
+<span class="w">  </span><span class="s">"quitte"</span><span class="p">,</span>
+<span class="w">  </span><span class="s">"mip"</span><span class="p">,</span>
+<span class="w">  </span><span class="s">"piamValidation"</span><span class="p">,</span>
+<span class="w">  </span><span class="s">"mrdrivers"</span><span class="p">,</span>
+<span class="w">  </span><span class="s">"gms"</span>
 <span class="p">))</span>
 
-<span class="nf">install.packages</span><span class="p">(</span><span class="s">&quot;remotes&quot;</span><span class="p">)</span>
-<span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&quot;e3modelling/mrprom&quot;</span><span class="p">)</span>
-<span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&quot;e3modelling/postprom&quot;</span><span class="p">)</span>
+<span class="nf">install.packages</span><span class="p">(</span><span class="s">"remotes"</span><span class="p">)</span>
+<span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">"e3modelling/mrprom"</span><span class="p">)</span>
+<span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">"e3modelling/postprom"</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>These commands install <code class="docutils literal notranslate"><span class="pre">mrprom</span></code>, <code class="docutils literal notranslate"><span class="pre">postprom</span></code> and the main supporting packages used by the OPEN-PROM workflow;
@@ -322,7 +322,7 @@ visible in a new terminal session.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">gdxrrw</span></code> cannot find your GAMS installation automatically — common on macOS and Linux — configure it explicitly in
 R:</p>
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">gdxrrw</span><span class="p">)</span>
-<span class="n">gdxrrw</span><span class="o">::</span><span class="nf">igdx</span><span class="p">(</span><span class="s">&quot;/path/to/gams/&quot;</span><span class="p">)</span>
+<span class="n">gdxrrw</span><span class="o">::</span><span class="nf">igdx</span><span class="p">(</span><span class="s">"/path/to/gams/"</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -354,7 +354,7 @@ overlays <code class="docutils literal notranslate"><span class="pre">config.jso
 that case set the following in <code class="docutils literal notranslate"><span class="pre">config.json</span></code>, which avoids errors at the archive and sync stage when no valid
 internal destination has been configured:</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;behavior&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;withSync&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="nt">"behavior"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"withSync"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>
