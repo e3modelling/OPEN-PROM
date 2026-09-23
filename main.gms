@@ -229,7 +229,7 @@ $setglobal biomassReferenceEJ 150
 *' *** Global cumulative geological-storage reference quantity (GtCO2), not a hard cap.
 *' *** Module 06 defines the fixed tax scale A (US$2015/tCO2): tau(t) = A*(S(t-1)/reference)^2.
 *' *** Energy CCS and DAC share this charge; TEW is excluded. Zero disables the tax.
-$setglobal ccsStorageReferenceGtCO2 400
+$setglobal ccsStorageReferenceGtCO2 1445
 
 $if set bmswasPriceAdder $abort "Use biomassReferenceEJ (EJ/yr) instead of bmswasPriceAdder."
 $if set ccsAvailabilityCostAdder $abort "Use ccsStorageReferenceGtCO2 (cumulative GtCO2) instead of ccsAvailabilityCostAdder."
