@@ -425,6 +425,7 @@ TRANS1(SBS)       All Transport Subsectors      /PC,PT,PA,PB,PN,GU,GT,GN,BAV,BMA
 TRANP(TRANSE)     Passenger Transport           /PC,PT,PA,PB,PN/
 TRANG(TRANSE)     Goods Transport               /GU,GT,GN/
 BUN(SBS)          Bunkers                       /BAV,BMAR/
+BUN1(TRANSE)      Bunkers                       /BAV,BMAR/
 
 INDSE(DSBS)       Industrial SubSectors         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI/
 DOMSE(DSBS)       Tertiary SubSectors           /SE,AG,HOU/
@@ -433,8 +434,8 @@ DOMSE1(SBS)       Tertiary SubSectors           /SE,AG,HOU/
 HOU(DSBS)         Households                    /HOU/
 CDR(DSBS)         Carbon Dioxide Removal         /DAC,EW/
 
-NENSE(DSBS)       Non Energy and Bunkers        /PCH,NEN/
-NENSE1(SBS)       Non Energy and Bunkers        /PCH,NEN/
+NENSE(DSBS)       Non Energy                    /PCH,NEN/
+NENSE1(SBS)       Non Energy                    /PCH,NEN/
 
 INDDOM(DSBS)      Industry and Tertiary         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,SE,AG,HOU/
 * The following sets are used in price equation for electricity
@@ -922,7 +923,7 @@ GU.(TLPG,TGSL,TGDO,TNGS,TELC,TCHEVGDO,TH2F) !! Removed GSL and PHEVGSL
 PA.(TKRS,TH2F)
 (PN,GN).(TGDO,TH2F,TRFO)
 BAV.(TKRS,TH2F)
-BMAR.(TGDO,TRFO,TH2F,TNGS)
+BMAR.(TGDO,TRFO,TH2F)
 (IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(TLGN,THCL,TGDO,TGSL,TRFO,TLPG,TKRS,TOLQ,TNGS,TOGS,
                                 TELC,TBMSWAS,TSTE,TH2F)
 (IS,BM,CH).(TNGSCCS,THCLCCS)
