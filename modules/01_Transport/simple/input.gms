@@ -216,6 +216,12 @@ GN.TGSL	2.0
 GN.TGDO	2.5
 GN.TRFO	2.5
 GN.TH2F	2.5
+BAV.TKRS 20
+BAV.TH2F 25
+BMAR.TGDO 20
+BMAR.TRFO 20
+BMAR.TH2F 25
+BMAR.TNGS 20
 /
 ;
 
@@ -267,9 +273,7 @@ i01TechLft(runCy,DOMSE,ITECH,YTIME) = imDataDomTech(DOMSE,ITECH,"LFT");
 *---
 **  Non Energy Sector and Bunkers
 i01TechLft(runCy,NENSE,ITECH,YTIME) = imDataNonEneSec(NENSE,ITECH,"LFT");
-i01TechLft(runCy,"BU","TH2F",YTIME) = 25;
-i01TechLft(runCy,"BU","TNGS",YTIME) = 25;
-i01TechLft(runCy,"BU","TGSL",YTIME) = 25;
+i01TechLft(runCy,BUN1,TTECH,YTIME) = 30;
 *---
 **  CDR Sector
 i01TechLft(runCy,"DAC",DACTECH,YTIME) = 25;
@@ -308,7 +312,7 @@ i01calibweibul(runCy,TRANSE,EF,YTIME)$AN(YTIME) = i01calibweibul(runCy,TRANSE,EF
 i01calibweibul(runCy,TRANSE,EF,YTIME)$(AN(YTIME) and SECtoEF(TRANSE,EF) and yes$SUM(EF2,BLENDMAP2(EF,EF2)) and not sameas("BGAS",EF)) = min(1, i01calibweibul(runCy,TRANSE,EF,YTIME-1) + (ord(YTIME) - (%fBaseY% - %fStartHorizon% + 1)) * (1-i01calibweibul(runCy,TRANSE,EF,"%fBaseY%")) / (2050 - %fBaseY%));
 
 
-testSFC(runCy,TRANSE,TTECH)$(not sameas("PC",TRANSE) ) = 
+testSFC(runCy,TRANSE,TTECH)$(not (sameas("PC",TRANSE) or BUN1(TRANSE))) = 
 test2SFC(TRANSE,TTECH) * 
 [
   (
@@ -325,3 +329,4 @@ test2SFC(TRANSE,TTECH) *
   
 ];
 testSFC(runCy,TRANSE,TTECH)$(testSFC(runCy,TRANSE,TTECH) > 500) = 500;
+testSFC(runCy,BUN1,TTECH) = 1000;
