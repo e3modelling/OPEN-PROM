@@ -88,7 +88,7 @@ V02CapCostTech.FX(runCy,DSBS,ITECH,YTIME)$(not An(YTIME) and (INDDOM(DSBS) or NE
     ) *
     imCapCostTech(runCy,DSBS,ITECH,YTIME) * imCGI(runCy,YTIME) +
     imFixOMCostTech(runCy,DSBS,ITECH,YTIME) / sUnitToKUnit)
-    / imUsfEneConvSubTech(runCy,DSBS,ITECH,YTIME);
+    / (imUsfEneConvSubTech(runCy,DSBS,ITECH,YTIME) * i02util(runCy,DSBS,ITECH,YTIME));
 *---
 V02CostTech.LO(runCy,DSBS,ITECH,YTIME) = 0;
 V02CostTech.L(runCy,DSBS,ITECH,YTIME) = 1;

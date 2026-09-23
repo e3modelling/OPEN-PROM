@@ -16,4 +16,11 @@ Set sFGases(E07SrcMacAbate) "F-gases (Input data in kt)"
     HFC_125, HFC_134a, HFC_143a, HFC_152a, HFC_227ea
     HFC_23,  HFC_236fa, HFC_32,   HFC_43_10, HFC_245ca
     CF4,     C2F6,      C6F14,    SF6
+/;
+*' Fugitive CH4 sources and the fuels whose primary production drives them (MIP_REVIEW F31)
+Set E07FugToEF(E07SrcMacAbate,EFS) "Fugitive CH4 sources mapped to the primary-production fuels that drive them"
 /
+    CH4_coal.(HCL,LGN)
+    CH4_ngas.NGS
+    CH4_oilp.CRO
+/;

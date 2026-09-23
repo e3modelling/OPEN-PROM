@@ -78,3 +78,15 @@ p07UnitConvFactor(E07SrcMacAbate)$(ord(E07SrcMacAbate) > 14) = smCtoCO2 * smDefl
 * * [$/tC 2005] * 1.2136 (Infl) -> [$ 2015] -> [$ 2015] / 10^6 -> [Mil $]
 p07CostCorrection(E07SrcMacAbate)$sFGases(E07SrcMacAbate) = 
     1e3 * p07GWP(E07SrcMacAbate) * (1 / smCtoCO2) * (1/smDefl_15_to_05) * 1e-6;
+*---
+*' Fugitive CH4 (coal mining, oil and gas) follows the model's own primary production instead of the exogenous
+*' SSP2 activity behind i07DataCh4N2OFEmis (MIP_REVIEW F31). The baseline emission intensity is held at its
+*' base-year value, so baseline(t) = baseline(base) * production(t) / production(base). The MAC abatement
+*' fraction of the exogenous data is preserved (see Q07EmiActBySrcRegTim). Regions whose base-year production is
+*' below S07FugProdMin keep the exogenous baseline: for near-zero producers the ratio is meaningless (e.g. BEL gas
+*' 0.01 Mtoe in the data vs 3.2 Mtoe solved in 2024, a 320x jump).
+scalar S07FugProdMin "Minimum base-year primary production for fugitive CH4 to follow model production (Mtoe)" /1/;
+p07FugProdBase(runCy,E07SrcMacAbate) =
+  sum(EFS$E07FugToEF(E07SrcMacAbate,EFS), i03PrimProd(runCy,EFS,"%fBaseY%"));
+p07FugBaseRatio(runCy,E07SrcMacAbate,YTIME)$(p07FugProdBase(runCy,E07SrcMacAbate) >= S07FugProdMin and i07DataCh4N2OFEmis(runCy,E07SrcMacAbate,YTIME)) =
+  i07DataCh4N2OFEmis(runCy,E07SrcMacAbate,"%fBaseY%") / i07DataCh4N2OFEmis(runCy,E07SrcMacAbate,YTIME);

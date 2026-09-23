@@ -115,7 +115,17 @@ Q07CostAbateBySrcRegTim(E07SrcMacAbate, allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)
 Q07EmiActBySrcRegTim(E07SrcMacAbate, allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V07EmiActBySrcRegTim(E07SrcMacAbate, allCy, YTIME)
     =E=
-    i07DataCh4N2OFEmis(allCy, E07SrcMacAbate, YTIME)  - V07RedAbsBySrcRegTim(E07SrcMacAbate, allCy, YTIME);
+    (i07DataCh4N2OFEmis(allCy, E07SrcMacAbate, YTIME)  - V07RedAbsBySrcRegTim(E07SrcMacAbate, allCy, YTIME)) *
+    !! Fugitive CH4: rescale the exogenous baseline (and with it the absolute MAC abatement, so the abatement fraction is
+    !! kept) to the model's own primary production of coal, crude oil and natural gas (MIP_REVIEW F31).
+    (
+      1$(not p07FugBaseRatio(allCy, E07SrcMacAbate, YTIME)) +
+      (
+        p07FugBaseRatio(allCy, E07SrcMacAbate, YTIME) *
+        SUM(EFS$E07FugToEF(E07SrcMacAbate,EFS), V03ProdPrimary(allCy,EFS,YTIME)) /
+        p07FugProdBase(allCy, E07SrcMacAbate)
+      )$p07FugBaseRatio(allCy, E07SrcMacAbate, YTIME)
+    );
 
 *' The equation calculates the net CO2 emissions in million tons of CO2 for a given country and year.
 *' Net emissions are determined by summing gross CO2 emissions from both supply-side and demand-side 

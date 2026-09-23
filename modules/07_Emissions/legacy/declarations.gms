@@ -7,6 +7,8 @@ p07MacCost(E07MAC)                                     "Numeric value of the MAC
 p07UnitConvFactor(E07SrcMacAbate)                      "Multiplier to convert carbon price units to MAC units"
 p07GWP(E07SrcMacAbate)                                 "Global Warming Potentials, AR4 100yr (CO2=1, CH4=25, N2O=298, etc), Data from Hamsen et al 2019"
 p07CostCorrection(E07SrcMacAbate)                      "Factor to convert (Qty * Cost) to Million 2015$"
+p07FugProdBase(allCy,E07SrcMacAbate)                   "Base-year primary production of the fuels driving each fugitive CH4 source (Mtoe)"
+p07FugBaseRatio(allCy,E07SrcMacAbate,YTIME)            "Base-year over current exogenous baseline of each fugitive CH4 source (1)"
 ;
 
 Equations

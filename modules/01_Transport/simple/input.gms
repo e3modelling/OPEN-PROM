@@ -221,7 +221,34 @@ GN.TH2F	2.5
 
 parameter testSFC(allCy,TRANSE,TTECH)      "Initial Specific fuel consumption: (ktoe/Gvkm)";
 *---
+*' Car-ownership saturation (cars per capita) of the Gompertz curve. It used to be a uniform 0.7, which drives every
+*' region towards 700 cars/1000 people and gave a 4.65 bn world fleet in 2100 (MIP_REVIEW F21). Lower levels are
+*' assumed for dense, fast-urbanising regions, and higher ones for North America. It is floored at 1.05x the observed
+*' base-year ownership in preloop, so the Gompertz calibration (i01Sigma "S1") always stays valid.
+parameter i01PassCarsMarkSatReg(allCy) "Assumed car-ownership saturation by region (cars per capita)" /
+USA 0.80, CAZ 0.80,
+REF 0.60,
+CHA 0.50, LAM 0.50, MEA 0.50,
+IND 0.35, OAS 0.35, SSA 0.35
+/;
 i01PassCarsMarkSat(runCy) = 0.7;
+i01PassCarsMarkSat(runCy)$i01PassCarsMarkSatReg(runCy) = i01PassCarsMarkSatReg(runCy);
+*---
+*' Autonomous improvement of car specific fuel consumption (stock average). i01SFCPC was frozen at the base year for all
+*' projection years, so a 2100 car used as much energy per km as a 2023 one (MIP_REVIEW F21). Consumption falls at
+*' i01SFCImprRate per year from the base year down to a floor of i01SFCImprFloor times the base-year value.
+parameter i01SFCImprRate(EF)  "Yearly improvement of car specific fuel consumption (1)";
+parameter i01SFCImprFloor(EF) "Floor of car specific fuel consumption relative to the base year (1)";
+parameter i01SFCImprIndex(EF,YTIME) "Car specific fuel consumption relative to the base year (1)";
+i01SFCImprRate(EF)  = 0.010;
+i01SFCImprFloor(EF) = 0.60;
+i01SFCImprRate("ELC") = 0.005;
+i01SFCImprFloor("ELC") = 0.75;
+i01SFCImprRate("H2F") = 0.008;
+i01SFCImprFloor("H2F") = 0.70;
+i01SFCImprIndex(EF,YTIME) = 1;
+i01SFCImprIndex(EF,YTIME)$(YTIME.val > %fBaseY%) =
+  max(i01SFCImprFloor(EF), (1 - i01SFCImprRate(EF)) ** (YTIME.val - %fBaseY%));
 *---
 i01ShareAnnMilePlugInHybrid(runCy,YTIME) = i01PlugHybrFractData(YTIME);
 *---

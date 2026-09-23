@@ -401,7 +401,8 @@ SE.TBMSWAS    0.323544 10.88           20  0.5
 SE.TELC       0.3      8.976           12  0.97
 SE.THEATPUMP  0.432    12.9254         20  3.2
 SE.TSOL       0.432    12.9254         20  1
-SE.TGEO       0.432    12.9254         20  0.5
+* SE.TGEO: own capital cost, 2x the heat-pump row it used to copy (wells / ground loops); utilisation in 02_Industry input.gms (MIP_REVIEW F36)
+SE.TGEO       0.864    12.9254         20  0.5
 AG.THCL       0.323544 10.88           20  0.7
 AG.TLGN       0.323544 10.88           20  0.5
 AG.TLPG       0.24888  10.88           20  0.8
@@ -417,7 +418,8 @@ AG.TBMSWAS    0.323544 10.88           20  0.5
 AG.TELC       0.3      8.976           12  0.9
 AG.THEATPUMP  0.432    12.9254         20  1.848
 AG.TSOL       0.432    12.9254         20  1
-AG.TGEO       0.432    12.9254         20  0.5
+* AG.TGEO: own capital cost, 2x the heat-pump row it used to copy (wells / ground loops); utilisation in 02_Industry input.gms (MIP_REVIEW F36)
+AG.TGEO       0.864    12.9254         20  0.5
 HOU.THCL      0.323544 10.88           20  0.7
 HOU.TLGN      0.323544 10.88           20  0.5
 HOU.TLPG      0.24888  10.88           20  0.8
@@ -433,7 +435,8 @@ HOU.TBMSWAS   0.323544 10.88           20  0.5
 HOU.TELC      0.3      8.976           12  0.97
 HOU.THEATPUMP 0.432    12.9254         20  3.2
 HOU.TSOL      0.432    12.9254         20  1
-HOU.TGEO      0.432    12.9254         20  0.5
+* HOU.TGEO: own capital cost, 2x the heat-pump row it used to copy (wells / ground loops); utilisation in 02_Industry input.gms (MIP_REVIEW F36)
+HOU.TGEO      0.864    12.9254         20  0.5
 ;
 *---
 * Coverting EUR05 to US2015
@@ -681,6 +684,11 @@ parameter imMatrFactor(allCy,DSBS,TECH,YTIME)   "Maturity factor per technology 
 imMatrFactor(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                          
 
 imMatrFactor(runCy,DSBS,"TBMSWAS",YTIME)$(sameas("AG",DSBS) and not EU28(runCy)) = 0.01;
+*' Geothermal direct use is site-limited (~0.4 EJ worldwide today) and the building targets give it a zero share, but
+*' the share-based calibration objective is insensitive to such a small fuel: maturity stayed near its base-year 1.0 in
+*' the first projected year, so geothermal took >20% of new equipment in 2024 and reached 6.6 EJ by 2030
+*' (MIP_REVIEW F38). Hold it at a small niche value over the projection instead.
+imMatrFactor(runCy,DOMSE,"TGEO",YTIME)$AN(YTIME) = 0.02;
 $ontext
 imMatrFactor(runCy,DSBS,"TGDO",YTIME)$((ord(YTIME) > 14) and TRANSE(DSBS)) = 0.5;
 imMatrFactor(runCy,DSBS,"TGSL",YTIME)$((ord(YTIME) > 14) and TRANSE(DSBS)) = 0.5;
@@ -722,6 +730,9 @@ imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(not (sameas(DSBS,"PC") or sameas(DSBS,"P
 imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(sameas(DSBS,"AG") and not EU28(runCy)) = iMatrFactorData(runCy,DSBS,TECH,YTIME); 
 imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$((sameas(DSBS,"PC") or sameas(DSBS,"PB") or sameas(DSBS,"GU") or INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and not SECTTECH(DSBS,TECH)) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                      
 imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$DATAY(YTIME)= iMatrFactorData(runCy,DSBS,TECH,YTIME);        
+*' Same niche cap on geothermal direct use as in the non-calibration branch (MIP_REVIEW F38): fixed, so the
+*' calibration cannot push it back up through the (share-insensitive) objective.
+imMatrFactor.FX(runCy,DOMSE,"TGEO",YTIME)$AN(YTIME) = 0.02;
 $ENDIF.calib
 *---
 parameters

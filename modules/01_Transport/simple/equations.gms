@@ -224,10 +224,10 @@ Q01NewRegPcYearly(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q01ActivPassTrnsp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANP(TRANSE) $runCy(allCy))..
       V01ActivPassTrnsp(allCy,TRANSE,YTIME)
               =E=
-      (  !! passenger cars
+      (  !! passenger cars (km/vehicle); fuel-price terms restored so driving responds to the carbon price (MIP_REVIEW F21)
         V01ActivPassTrnsp(allCy,TRANSE,YTIME-1) *
-        !!(VmPriceFuelAvgSub(allCy,TRANSE,YTIME)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1))**imElastA(allCy,TRANSE,"b1",YTIME) *
-        !!(VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2))**imElastA(allCy,TRANSE,"b2",YTIME) *
+        (VmPriceFuelAvgSub(allCy,TRANSE,YTIME)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1))**imElastA(allCy,TRANSE,"b1",YTIME) *
+        (VmPriceFuelAvgSub(allCy,TRANSE,YTIME-1)/VmPriceFuelAvgSub(allCy,TRANSE,YTIME-2))**imElastA(allCy,TRANSE,"b2",YTIME) *
         [(V01StockPcYearly(allCy,YTIME)/(i01Pop(YTIME,allCy)*1000))/(V01PcOwnPcLevl(allCy,YTIME-1))]**imElastA(allCy,TRANSE,"b3",YTIME) *
         [i01GDPperCapita(YTIME,allCy) / i01GDPperCapita(YTIME-1,allCy)] ** 0.2 !!imElastA(allCy,TRANSE,"b4",YTIME)
       )$sameas(TRANSE,"PC") +
@@ -339,16 +339,20 @@ Q01ConsFuelTransport(allCy,TRANSE,EF,YTIME)$(TIME(YTIME) $SECtoEF(TRANSE,EF) $ru
     ) +
     SUM(PLUGIN$(TTECHtoEF(PLUGIN,EF) and SECTTECH(TRANSE,PLUGIN)),
       (
-        i01ShareAnnMilePlugInHybrid(allCy,YTIME) *
-        V01CapacityTransport(allCy,TRANSE,PLUGIN,YTIME) * !![pkm] mvh
-        V01ConsSpecificFuel(allCy,TRANSE,PLUGIN,EF,YTIME) / 1000
-      )$sameas("ELC",EF) +
-      (
-        (1-i01ShareAnnMilePlugInHybrid(allCy,YTIME)) *
-        V01ShareBlend(allCy,TRANSE,EF,YTIME) *
-        V01CapacityTransport(allCy,TRANSE,PLUGIN,YTIME) * !![pkm] mvh
-        V01ConsSpecificFuel(allCy,TRANSE,PLUGIN,EF,YTIME) / 1000
-      )$(not sameas("ELC",EF))
+        (
+          i01ShareAnnMilePlugInHybrid(allCy,YTIME) *
+          V01CapacityTransport(allCy,TRANSE,PLUGIN,YTIME) * !![pkm] mvh
+          V01ConsSpecificFuel(allCy,TRANSE,PLUGIN,EF,YTIME) / 1000
+        )$sameas("ELC",EF) +
+        (
+          (1-i01ShareAnnMilePlugInHybrid(allCy,YTIME)) *
+          V01ShareBlend(allCy,TRANSE,EF,YTIME) *
+          V01CapacityTransport(allCy,TRANSE,PLUGIN,YTIME) * !![pkm] mvh
+          V01ConsSpecificFuel(allCy,TRANSE,PLUGIN,EF,YTIME) / 1000
+        )$(not sameas("ELC",EF))
+      ) *
+      !! km/vehicle for cars, as in the non-plug-in term above (was missing; MIP_REVIEW F21)
+      (1$(not sameas(TRANSE,"PC")) + V01ActivPassTrnsp(allCy,TRANSE,YTIME)$sameas(TRANSE,"PC"))
     );
 
 Q01CapacityTransport(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME)$SECTTECH(TRANSE,TTECH)$runCy(allCy))..

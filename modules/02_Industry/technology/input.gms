@@ -18,6 +18,12 @@ imTotFinEneDemSubBaseYr(runCy,NENSE,YTIME)   = SUM(EF$SECtoEF(NENSE,EF),imFuelCo
 i02ExogDemOfBiomass(runCy,DOMSE,YTIME) = 0;
 *---
 i02util(runCy,DSBS,ITECH,YTIME)$SECTTECH(DSBS,ITECH) = 1;
+*' Intermittent heat sources deliver far less than their rated output over a year (MIP_REVIEW F36). With utilisation 1
+*' and no fuel cost, solar thermal cost ~0.1 k$/toe useful, 5-20x cheaper than heat pumps or gas, and took up to
+*' 45 EJ of agriculture + building heat. Capacity factors: solar thermal ~12%; geothermal direct use ~40% (heating
+*' season load). i02util enters both the cost (Q02CapCostTech) and the delivered energy, so accounting stays consistent.
+i02util(runCy,DOMSE,"TSOL",YTIME)$SECTTECH(DOMSE,"TSOL") = 0.12;
+i02util(runCy,DOMSE,"TGEO",YTIME)$SECTTECH(DOMSE,"TGEO") = 0.40;
 *---
 $IFTHEN.calib %Calibration% == off
 table i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME)       "Scale parameter for endogenous scrapping applied to the sum of full costs (1)"
@@ -80,6 +86,19 @@ $ondelim
 $include "./iFuelConsICT.csv"
 $offdelim
 ;
+*' The ICT input extrapolates an exponential fit with no saturation (≈ 5%/yr after 2050 even in "Lower",
+*' about 15,000 TWh by 2100; MIP_REVIEW F22). After S02ICTSatStartY, the year-on-year growth of the input is
+*' damped linearly to zero at the end of the horizon, so demand saturates instead of doubling every ~14 years.
+*' Years up to S02ICTSatStartY keep the input exactly. Set S02ICTSatStartY >= %fEndHorizon% to switch off.
+scalar S02ICTSatStartY "Year after which exogenous ICT demand growth is damped to zero by the end of the horizon (year)" /2050/;
+parameter i02FuelConsICTRaw(allCy,ICTSCEN,SSPSCEN,YTIME) "ICT electricity demand as read from the input, before damping (Mtoe)";
+i02FuelConsICTRaw(allCy,ICTSCEN,SSPSCEN,YTIME) = i02FuelConsICT(allCy,ICTSCEN,SSPSCEN,YTIME);
+loop YTIME$(YTIME.val > S02ICTSatStartY) do
+  i02FuelConsICT(allCy,ICTSCEN,SSPSCEN,YTIME)$i02FuelConsICTRaw(allCy,ICTSCEN,SSPSCEN,YTIME-1) =
+    i02FuelConsICT(allCy,ICTSCEN,SSPSCEN,YTIME-1) *
+    (i02FuelConsICTRaw(allCy,ICTSCEN,SSPSCEN,YTIME) / i02FuelConsICTRaw(allCy,ICTSCEN,SSPSCEN,YTIME-1)) **
+    max(0, (%fEndHorizon% - YTIME.val) / (%fEndHorizon% - S02ICTSatStartY));
+endloop;
 *---
 $IFTHEN.calib %Calibration% == MatCalibration
 table t02SharesFuelBuildings(allCy,DSBS,EFS,YTIME)    "Targets for share of new passenger cars"

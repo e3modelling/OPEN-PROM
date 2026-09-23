@@ -35,9 +35,11 @@ V01ActivGoodsTransp.L(runCy,TRANSE,YTIME) = 0.1;
 V01ActivGoodsTransp.FX(runCy,TRANG,YTIME)$(not An(YTIME)) = imActv(YTIME,runCy,TRANG);
 V01ActivGoodsTransp.FX(runCy,TRANSE,YTIME)$(not TRANG(TRANSE)) = 0;
 *---
-V01PcOwnPcLevl.UP(runCy,YTIME) = 2*i01PassCarsMarkSat(runCy);
 V01PcOwnPcLevl.L(runCy,YTIME) = 0.5;
 V01PcOwnPcLevl.FX(runCy,YTIME)$(not An(YTIME)) = V01StockPcYearly.L(runCy,YTIME) / (i01Pop(YTIME,runCy) * 1000) ;
+* Saturation must stay above observed base-year ownership, otherwise S1 below turns negative and ownership falls.
+i01PassCarsMarkSat(runCy) = max(i01PassCarsMarkSat(runCy), 1.05 * V01PcOwnPcLevl.L(runCy,"%fBaseY%"));
+V01PcOwnPcLevl.UP(runCy,YTIME) = 2*i01PassCarsMarkSat(runCy);
 *---
 i01Sigma(runCy,"S2") = 0.4;
 i01Sigma(runCy,"S1") = -log(V01PcOwnPcLevl.L(runCy,"%fBaseY%") / i01PassCarsMarkSat(runCy)) * EXP(i01Sigma(runCy,"S2") * i01GDPperCapita("%fBaseY%",runCy) / 10000);
@@ -46,9 +48,19 @@ V01GapTranspActiv.LO(runCy,TRANSE,YTIME) = 0;
 V01GapTranspActiv.FX(runCy,TRANSE,YTIME)$DATAY(YTIME) = 0;
 *---
 V01ConsSpecificFuel.FX(runCy,TRANSE,TTECH,EF,YTIME)$(not sameas(TRANSE,"PC") and SECTTECH(TRANSE,TTECH) and TTECHtoEF(TTECH,EF)) = testSFC(runCy,TRANSE,TTECH);
-V01ConsSpecificFuel.FX(runCy,TRANSE,TTECH,EF,YTIME)$(sameas(TRANSE,"PC")$(SECTTECH(TRANSE,TTECH)$TTECHtoEF(TTECH,EF))) = i01SFCPC(runCy,TTECH,EF,"%fBaseY%") * 
-SUM(EFS,imFuelCons(runCy,"PC",EFS,"%fBaseY%")) * 1e3 / 
-SUM((TTECH2,EF2)$TTECHtoEF(TTECH2,EF2), i01SFCPC(runCy,TTECH2,EF2,"%fBaseY%") * i01StockPC(runCy,TTECH2,"%fBaseY%") * i01ShareBlend(runCy,TRANSE,EF2,"%fBaseY%") * imTransChar(runCy,"KM_VEH","%fBaseY%"))
+* Car specific fuel consumption = base-year data x base-year calibration scaler x autonomous improvement index.
+* The scaler (base-year PC fuel / implied fuel from stock x km x SFC) reaches 2-7 in several regions (MEA 6.8); it
+* reflects inconsistencies in the historical fossil data. It is not applied to electricity and hydrogen, which barely
+* exist in the base year, so a MEA BEV no longer uses ~1 kWh/km (MIP_REVIEW F21).
+V01ConsSpecificFuel.FX(runCy,TRANSE,TTECH,EF,YTIME)$(sameas(TRANSE,"PC")$(SECTTECH(TRANSE,TTECH)$TTECHtoEF(TTECH,EF))) =
+i01SFCPC(runCy,TTECH,EF,"%fBaseY%") * i01SFCImprIndex(EF,YTIME) *
+(
+  (
+    SUM(EFS,imFuelCons(runCy,"PC",EFS,"%fBaseY%")) * 1e3 /
+    SUM((TTECH2,EF2)$TTECHtoEF(TTECH2,EF2), i01SFCPC(runCy,TTECH2,EF2,"%fBaseY%") * i01StockPC(runCy,TTECH2,"%fBaseY%") * i01ShareBlend(runCy,TRANSE,EF2,"%fBaseY%") * imTransChar(runCy,"KM_VEH","%fBaseY%"))
+  )$(not (sameas(EF,"ELC") or sameas(EF,"H2F"))) +
+  1$(sameas(EF,"ELC") or sameas(EF,"H2F"))
+)
 ;
 
 

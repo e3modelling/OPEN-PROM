@@ -87,15 +87,19 @@ Q02GapUsefulDemSubsec(allCy,DSBS,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(DSBS
 *' OLD VARIABLE: V02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME) --> NEW VARIABLE:V02CapCostTech(allCy,DSBS,rCon,EF,YTIME)
 *' Add parameter sUnitToKUnit = 1000
 *' Check ITECH and CHPs
+*' Capital and fixed costs are spread over the useful energy the equipment actually delivers, i.e. divided by the
+*' utilisation rate i02util as well as the conversion efficiency. i02util is 1 for all technologies except those
+*' with intermittent output (solar thermal, geothermal direct use; see input.gms), whose capital cost per unit of
+*' useful energy was otherwise understated by 2-8x (MIP_REVIEW F36).
 Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(DSBS))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
-    V02CapCostTech(allCy,DSBS,ITECH,YTIME) 
+    V02CapCostTech(allCy,DSBS,ITECH,YTIME)
         =E=
     (
       imDisc(allCy,DSBS,YTIME) * exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME)) /
-      (exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME)) - 1) * 
+      (exp(imDisc(allCy,DSBS,YTIME) * VmLft(allCy,DSBS,ITECH,YTIME)) - 1) *
       imCapCostTech(allCy,DSBS,ITECH,YTIME) * imCGI(allCy,YTIME) +
       imFixOMCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit
-    ) / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME)
+    ) / (imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME) * i02util(allCy,DSBS,ITECH,YTIME))
 ;
 
 *' The equation computes the variable cost (variable + fuel) of each technology in each subsector - to check about consumer sizes
