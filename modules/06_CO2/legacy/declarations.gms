@@ -4,7 +4,6 @@
 Equations
 Q06CO2CaptureCCS(allCy,SBS,EF,YTIME)	               "Compute point-source CO2 captured by energy supply and demand technologies (Mtn CO2)"
 Q06CaptCummCO2(allCy,YTIME)	                               "Compute cumulative CO2 captured (Mtn of CO2)"
-Q06CaptCummCO2Glob(YTIME)                                   "Compute global cumulative CO2 captured (Mtn of CO2)"
 Q06GrossCapCDR(CDRTECH,YTIME)                        "Computes CAPEX of CDR technologies with learning curve"
 Q06FixOandMCDR(CDRTECH,YTIME)                        "Computes Fixed and O&M costs of CDR technologies with learning curve"
 Q06LvlCostCDR(allCy,CDRTECH,YTIME)                         "Calculates the CAPEX and the Fixed Costs of CDR capacity regionally (US$2015/tCO2)"
@@ -22,11 +21,11 @@ Q06CstCO2SeqCsts(allCy,YTIME)	                           "Compute cost curve for
 Variables
 V06CO2CaptureCCS(allCy,SBS,EF,YTIME)	                "Point-source CO2 captured by energy supply and demand technologies (Mtn CO2)"
 V06CaptCummCO2(allCy,YTIME)	                              "Cumulative CO2 captured (Mtn CO2)"
-V06CaptCummCO2Glob(YTIME)                                   "Global cumulative CO2 captured (Mtn of CO2)"
+V06CaptCummCO2Glob(YTIME)                                   "Global cumulative geological storage since the base year, updated after all regions (MtCO2)"
 V06GrossCapCDR(CDRTECH,YTIME)                        "CAPEX of CDR technologies with learning curve"
 V06FixOandMCDR(CDRTECH,YTIME)                        "Fixed and O&M costs of CDR technologies with learning curve"
 V06VarCostCDR(CDRTECH,YTIME)                         "Variable costs of CDR technologies including carbon storage costs, with learning curve"
-V06LvlCostCDR(allCy,CDRTECH,YTIME)                         "Regional CAPEX and the Fixed Costs of CDR capacity (US$2015/tCO2)"
+V06LvlCostCDR(allCy,CDRTECH,YTIME)                         "CDR levelized cost before subsidy and the storage tax (US$2015/tCO2)"
 V06CostFullCDR(allCy,CDRTECH,YTIME)                        "Levelized Costs of CDR capacity including its subsidy, for each region (country) and year (US$2015/tCO2)"
 V06ProfRateCDR(allCy,CDRTECH,YTIME)                        "The annual profitability rate of CDR including the lifecycle costs and revenues regionally"
 V06CapFacNewCDR(allCy,CDRTECH,YTIME)                       "Factor expressing the annual increase in the installed capacity of CDR regionally"
@@ -39,10 +38,11 @@ VmConsFuelTechCDRProd(allCy,CDRTECH,EF,YTIME)              "Annual fuel demand i
 ;
 
 Parameters
-i06CCSAvailabilityCostAdder(YTIME)                         "Global CCS availability cost adder (US$2015/tCO2)"
+i06CCSAvailabilityCostAdder(YTIME)                         "Shared geological-storage tax based on prior-year global cumulative storage (US$2015/tCO2)"
 ;
 
 Scalars
+i06CCSStorageTaxScale                                 "Tax at the cumulative storage reference quantity (US$2015/tCO2)" /1000/
 *' #PARAM_CDR The 2 following scalars are responsible for the primary parameterization of the CDR deployment.
 *' S06EmissPercCDR is responsible for the response to the residual emissions. In ambitious scenarios, this reflects the pre-net-zero phase
 *' Proposed values for S06EmissPercCDR between 0.005 - 0.02.

@@ -27,6 +27,11 @@ i08Bioenergy2GEffectiveQH12Magpie(allCy,YTIME)             "MAgPIE effective 2G 
 i08BmswasPriceAdder(YTIME)                                 "Global BMSWAS sustainability tax (kUS$2015/toe)"
 ;
 
+Scalars
+i08BmswasTaxScale                                        "Tax at the annual biomass reference quantity (kUS$2015/toe)" /3.2/
+i08MtoeToEJ                                             "Energy conversion (EJ/Mtoe)" /0.041868/
+;
+
 Variables
 *' *** Prices Variables
 V08PriceFuelSepCarbonWght(allCy,SBS,EF,YTIME)	           "Fuel prices per subsector and fuel  mutliplied by weights (kUS$2015/toe)"
