@@ -279,7 +279,7 @@ i01calibweibul(runCy,TRANSE,EF,"%fBaseY%")$(SECtoEF(TRANSE,EF) and yes$SUM(EF2,B
 i01calibweibul(runCy,TRANSE,EF,YTIME)$AN(YTIME) = i01calibweibul(runCy,TRANSE,EF,"%fBaseY%");
 **i01calibweibul(runCy,TRANSE,EF,YTIME)$(AN(YTIME) and SECtoEF(TRANSE,EF) and yes$SUM(EF2,BLENDMAP2(EF,EF2))) = i01calibweibul(runCy,TRANSE,EF,YTIME-1) + (ord(YTIME) - (%fBaseY% - %fStartHorizon% + 1)) * (1-i01calibweibul(runCy,TRANSE,EF,"%fBaseY%")) / (%fEndHorizon% - %fBaseY%);
 i01calibweibul(runCy,TRANSE,EF,YTIME)$(AN(YTIME) and SECtoEF(TRANSE,EF) and yes$SUM(EF2,BLENDMAP2(EF,EF2)) and not sameas("BGAS",EF)) = min(1, i01calibweibul(runCy,TRANSE,EF,YTIME-1) + (ord(YTIME) - (%fBaseY% - %fStartHorizon% + 1)) * (1-i01calibweibul(runCy,TRANSE,EF,"%fBaseY%")) / (2050 - %fBaseY%));
-
+i01calibweibul("BRA",TRANSE,"BGSL",YTIME)$AN(YTIME) = 1;
 
 testSFC(runCy,TRANSE,TTECH)$(not sameas("PC",TRANSE) ) = 
 test2SFC(TRANSE,TTECH) * 
