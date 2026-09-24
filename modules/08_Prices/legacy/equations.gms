@@ -56,14 +56,24 @@ Q08SupplyCurves(allCy,EFS,YTIME)$(TIME(YTIME) $runCy(allCy))..
     V08SupplyCurves(allCy,EFS,YTIME)
       =E=
     (
-$IFTHEN.mode %bmswasPriceMode% == curve
-      1e-3 + imBmswasSupplyCoef("%emulatorGHGScen%",allCy,"a",YTIME) +
-      imBmswasSupplyCoef("%emulatorGHGScen%",allCy,"b",YTIME) * V03ProdPrimary(allCy,"BMSWAS",YTIME) ** imBmswasSupplyCoef("%emulatorGHGScen%",allCy,"c",YTIME)
-$ELSEIF.mode %bmswasPriceMode% == softfx
-      VmPriceFuelSubsecCarVal(allCy,"PG","BMSWAS",YTIME) / VmPriceFuelSubsecCarVal(allCy,"PG","BMSWAS",YTIME-1)
-$ELSE.mode
-      1
-$ENDIF.mode
+      $IFTHEN.bmswasBackend %bmswasPriceMode% == softlink
+        iPricesMagpie(allCy,SBS,YTIME)
+      $ELSEIF.bmswasBackend %bmswasPriceMode% == curve
+        $IFTHEN.bmswasEmulatorBackend %landUseEmulator% == magpie
+          sum((MAGPIEH12REG,activeMagpieScen)$mapMagpieH12Cy(MAGPIEH12REG,allCy),
+            i08BmswasPriceH12Magpie(activeMagpieScen,MAGPIEH12REG,"pa",YTIME) +
+            i08BmswasPriceH12Magpie(activeMagpieScen,MAGPIEH12REG,"pb",YTIME) * V08Bioenergy2GEffectiveQH12Magpie(allCy,YTIME) + 
+            i08BmswasPriceH12Magpie(activeMagpieScen,MAGPIEH12REG,"pc",YTIME) * sqr(V08Bioenergy2GEffectiveQH12Magpie(allCy,YTIME))
+          )
+        $ELSE.bmswasEmulatorBackend
+          1e-3 +
+          sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"a",YTIME)) + 
+          sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"b",YTIME)) * 
+          V03ProdPrimary(allCy,"BMSWAS",YTIME) ** sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"c",YTIME)) 
+        $ENDIF.bmswasEmulatorBackend
+      $ELSE.bmswasBackend
+        VmPriceFuelSubsecCarVal(allCy,SBS,"BMSWAS",YTIME-1) - i08BmswasPriceAdder(YTIME-1)
+      $ENDIF.bmswasBackend
     )$sameas("BMSWAS",EFS) +
     1$(not sameas("BMSWAS",EFS));
 
@@ -71,11 +81,11 @@ Q08PricePrimary(allCy,EFS,YTIME)$(TIME(YTIME) and runCy(allCy) and not sameas("C
     V08PricePrimary(allCy,EFS,YTIME)
       =E=
     i08PriceBase(EFS) +
-    (V08PricePrimary(allCy,EFS,YTIME-1) - i08PriceBase(EFS)) * 
+    (V08PricePrimary(allCy,EFS,YTIME-1) - i08PriceBase(EFS) - i08BmswasPriceAdder(YTIME-1)$sameas(EFS,"BMSWAS")) * 
     (V08PricePrimary(allCy,"CRO",YTIME) / V08PricePrimary(allCy,"CRO",YTIME-1)) ** i08ElastPricePrimary(EFS,"CRO") *
     (V08PricePrimary(allCy,"NGS",YTIME-1) / V08PricePrimary(allCy,"NGS",YTIME-2)) ** i08ElastPricePrimary(EFS,"NGS") *
-    (V08SupplyCurves(allCy,"BMSWAS",YTIME-1) / V08SupplyCurves(allCy,"BMSWAS",YTIME-2)) ** i08ElastPriceSupplyCurve(EFS,"BMSWAS");
-    !!(SUM(runCy2,V03ConsGrssInl(runCy2,EFS,YTIME)) / SUM(runCy2,V03ConsGrssInl(runCy2,EFS,YTIME-1))) ** (0.1);
+    (V08SupplyCurves(allCy,"BMSWAS",YTIME-1) / V08SupplyCurves(allCy,"BMSWAS",YTIME-2)) ** i08ElastPriceSupplyCurve(EFS,"BMSWAS") +
+    i08BmswasPriceAdder(YTIME)$sameas(EFS,"BMSWAS");
 
 Q08PriceSecondary(allCy,EFS,YTIME)$(TIME(YTIME) and runCy(allCy))..
     VmPriceSecondary(allCy,EFS,YTIME)
@@ -117,28 +127,26 @@ $IFTHEN.bmswasBackend %bmswasPriceMode% == softlink
     iPricesMagpie(allCy,SBS,YTIME)
 $ELSEIF.bmswasBackend %bmswasPriceMode% == curve
     $IFTHEN.bmswasEmulatorBackend %landUseEmulator% == magpie
-        sum((MAGPIEH12REG,activeMagpieScen)$mapMagpieH12Cy(MAGPIEH12REG,allCy),
-          i08BmswasPriceH12Magpie(activeMagpieScen,MAGPIEH12REG,"pa",YTIME) +
-          i08BmswasPriceH12Magpie(activeMagpieScen,MAGPIEH12REG,"pb",YTIME) * V08Bioenergy2GEffectiveQH12Magpie(allCy,YTIME) + 
-          i08BmswasPriceH12Magpie(activeMagpieScen,MAGPIEH12REG,"pc",YTIME) * sqr(V08Bioenergy2GEffectiveQH12Magpie(allCy,YTIME))
-        )
+      sum((MAGPIEH12REG,activeMagpieScen)$mapMagpieH12Cy(MAGPIEH12REG,allCy),
+        i08BmswasPriceH12Magpie(activeMagpieScen,MAGPIEH12REG,"pa",YTIME) +
+        i08BmswasPriceH12Magpie(activeMagpieScen,MAGPIEH12REG,"pb",YTIME) * V08Bioenergy2GEffectiveQH12Magpie(allCy,YTIME) + 
+        i08BmswasPriceH12Magpie(activeMagpieScen,MAGPIEH12REG,"pc",YTIME) * sqr(V08Bioenergy2GEffectiveQH12Magpie(allCy,YTIME))
+      )
     $ELSE.bmswasEmulatorBackend
-        (VmPriceFuelSubsecCarVal(allCy,SBS,"BMSWAS",YTIME-1) - i08BmswasPriceAdder(YTIME-1)) *
-        ( 1e-3 + 
-          sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"a",YTIME)) + 
-          sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"b",YTIME)) * 
-          (V03ProdPrimary(allCy,"BMSWAS",YTIME-1) + 1e-6) ** sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"c",YTIME)) 
-        ) /
-        (1e-3 + 
-          sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"a",YTIME)) +
-          sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"b",YTIME)) *
-            (V03ProdPrimary(allCy,"BMSWAS",YTIME-2) + 1e-6) ** sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"c",YTIME))
-        ) +
-        VmPriceCarbon(allCy,SBS,"BMSWAS",YTIME) - VmPriceCarbon(allCy,SBS,"BMSWAS",YTIME-1)
+      (VmPriceFuelSubsecCarVal(allCy,SBS,"BMSWAS",YTIME-1) - i08BmswasPriceAdder(YTIME-1)) *
+      (1e-3 + 
+        sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"a",YTIME)) + 
+        sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"b",YTIME)) * 
+        (V03ProdPrimary(allCy,"BMSWAS",YTIME-1) + 1e-6) ** sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"c",YTIME)) 
+      ) /
+      (1e-3 + 
+        sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"a",YTIME)) +
+        sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"b",YTIME)) *
+          (V03ProdPrimary(allCy,"BMSWAS",YTIME-2) + 1e-6) ** sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"c",YTIME))
+      )
     $ENDIF.bmswasEmulatorBackend
 $ELSE.bmswasBackend
-    VmPriceFuelSubsecCarVal(allCy,SBS,"BMSWAS",YTIME-1) - i08BmswasPriceAdder(YTIME-1) +
-    VmPriceCarbon(allCy,SBS,"BMSWAS",YTIME) - VmPriceCarbon(allCy,SBS,"BMSWAS",YTIME-1)
+    VmPriceFuelSubsecCarVal(allCy,SBS,"BMSWAS",YTIME-1) - i08BmswasPriceAdder(YTIME-1)
 $ENDIF.bmswasBackend
   ) + 
   i08BmswasPriceAdder(YTIME);
