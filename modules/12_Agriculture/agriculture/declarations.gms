@@ -13,6 +13,7 @@ i12DataEnergyService(allCy,AGRI_MODES,YTIME)
 i12ConsFuel(allCy,AGRI_MODES,EFS,YTIME)
 i12Lft(AGRI_MODES,AGRITECH)
 i12DataShareBlend(allCy,AGRI_MODES,AGRITECH,EFS,YTIME)
+i12calibweibul(allCy,AGRI_MODES,AGRITECH,EFS,YTIME)
 ;
 
 Equations 

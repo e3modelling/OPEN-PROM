@@ -98,7 +98,12 @@ Q12ShareTech(allCy,AGRI_MODES,AGRITECH,YTIME)$(TIME(YTIME)$AGRMODEStoTECH(AGRI_M
 Q12ShareBlend(allCy,AGRI_MODES,AGRITECH,EFS,YTIME)$(TIME(YTIME)$runCy(allCy)$AGRMODEStoTECH(AGRI_MODES,AGRITECH)$AGRITECHTOEF(AGRITECH,EFS))..
     V12ShareBlend(allCy,AGRI_MODES,AGRITECH,EFS,YTIME)
         =E=
-    i12DataShareBlend(allCy,AGRI_MODES,AGRITECH,EFS,"%fBaseY%");
+    i12calibweibul(allCy,AGRI_MODES,AGRITECH,EFS,YTIME) * 
+    (VmPriceFuelSubsecCarVal(allCy,"AG",EFS,YTIME-1) + 1e-6) ** (-2) /
+    SUM(EFS2$AGRITECHTOEF(AGRITECH,EFS2),
+      i12calibweibul(allCy,AGRI_MODES,AGRITECH,EFS2,YTIME) * 
+      (VmPriceFuelSubsecCarVal(allCy,"AG",EFS2,YTIME-1) + 1e-6) ** (-2)
+    );
 
 Q12ConsFuel(allCy,AGRI_MODES,EFS,YTIME)$(TIME(YTIME) and runCy(allCy))..
     V12ConsFuel(allCy,AGRI_MODES,EFS,YTIME)
