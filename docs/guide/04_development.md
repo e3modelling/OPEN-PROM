@@ -155,9 +155,10 @@ which is which before you reason about a default run.
   - `softLinkMAgPIE` defaults to `off`; the iterative task-7 coupling with MAgPIE (fixed biomass price, AFOLU
     emissions from MAgPIE's `.mif`) is an opt-in mode.
 * - Land-use emulator
-  - **globiom**
-  - `landUseEmulator` defaults to `globiom`, i.e. the pre-fitted supply/emission curves *are* active by default;
-    set it to `legacy` to disable the emulator (static biomass price, exogenous land emissions).
+  - **magpie / Npi_Default**
+  - `landUseEmulator` defaults to `magpie` and `emulatorCarbonPriceScenario` defaults to `Npi_Default`, so the
+    MAgPIE-derived price and emission responses are active by default. Set the source to `legacy` to disable the
+    emulator (static biomass price, exogenous land emissions).
 :::
 
 :::{warning}

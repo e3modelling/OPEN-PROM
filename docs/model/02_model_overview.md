@@ -466,12 +466,25 @@ Biomass (`BMSWAS`) is priced through one of three compile-time modes, derived in
 
 - **`static`** (`softLinkMAgPIE=off`, `landUseEmulator=legacy`) — BMSWAS follows the same recursive price
   dynamics as every other fuel.
-- **`curve`** (`softLinkMAgPIE=off`, `landUseEmulator=globiom`/`magpie`) — BMSWAS price is driven by a fitted
-  land-use supply curve $P = a + b\,Q^{c}$, applied as a year-on-year scarcity ratio on lagged primary biomass
-  production. The coefficients come from `imBmswasSupplyCoef` (loaded from `iBmswasSupplyCoef_<source>.csv`,
-  produced by mrprom), with the active carbon-price row picked by `emulatorGHGScen`.
-- **`softfx`** (`softLinkMAgPIE=on`) — BMSWAS is excluded from the price equation entirely; its price is fixed
-  (`.FX`) to `iPricesMagpie` from the MAgPIE soft-link in `core/preloop.gms`.
+- **`curve`** (`softLinkMAgPIE=off`, `landUseEmulator=globiom`/`magpie`) — the selected emulator supplies the
+  BMSWAS price response. GLOBIOM applies the year-on-year ratio from $P=a+bQ^c$ using lagged BMSWAS production
+  and `iBmswasSupplyCoef_globiom.csv`. MAgPIE evaluates the H12 absolute-price response
+  $P=p_a+p_bQ+p_cQ^2$ from `iBmswasBioPriceH12_magpie.csv`, where
+  $Q=0.4\,BMSWAS+0.6\,(BGSL+BKRS+BGAS)$; non-EUR regions use current Q and EU28 share the EUR price based on
+  preceding-year EU28 Q. `emulatorCarbonPriceScenario` selects the source-specific carbon-price/policy row.
+- **`softlink`** (`softLinkMAgPIE=on`) — `iPricesMagpie` supplies the absolute backend price returned by
+  MAgPIE for each region, subsector, and year.
+
+All three modes feed the common `Q08PriceBmswas` equation. The model then adds one global sustainability tax,
+
+$$
+\tau_t=A\left(\frac{Q^{world}_{t-1}}{\bar Q}\right)^2,
+\qquad P^{used}_{r,s,t}=P^{backend}_{r,s,t}+\tau_t.
+$$
+
+The first solved year uses observed base-year global primary BMSWAS production. Module 08 fixes $A=3.2$ kUS$2015/toe; `biomassReferenceEJ` configures $\bar Q$ in EJ/yr (default 150). This reference scale is not a hard cap, and setting it to zero disables the tax. Recursive `static` and GLOBIOM backends remove the previous year's tax before applying their ordinary price dynamics, so the tax is not compounded. The final PG BMSWAS used-price ratio is passed through to processed biofuels using `i08PriceTransElast`.
+
+Geological storage has a separate cumulative feedback, $\tau_t^{CCS}=1000(S_{t-1}/\bar S)^2$ in US$2015/tCO2. `ccsStorageReferenceGtCO2` configures the cumulative reference $\bar S$ in GtCO2 (default 400), not an annual capture limit or a hard cumulative cap; zero disables this additional tax but retains the physical storage-cost curve. The fixed internal coefficient was calibrated against cumulative storage through 2100 under the 1.5C / MAgPIE-emulator scenario, with annual capture checked separately; changing the scenario or time horizon need not reproduce the reference quantity. $S_t$ sums point-source Energy CCS and DAC over all modelled regions and solved years, with zero cumulative storage in the base year; BECCS is already included in Energy CCS and TEW is excluded. The global stock is updated only after all regional solves are collected. Both the physical cost curve and the next year's tax use the completed previous-year stock, so all regions face the same storage-cost signal. DAC's subsidy-eligible levelized cost excludes this tax: the effective cost deducts the technology subsidy first, then adds the shared tax in full.
 
 The determination of prices is done endogenously through a combination of complementary mechanisms. For energy
 carriers with a detailed supply representation (electricity, hydrogen, and heat) prices are derived from the average

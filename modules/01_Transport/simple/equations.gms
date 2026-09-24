@@ -286,21 +286,21 @@ Q01PremScrp(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME)$SECTTECH(TRANSE,TTECH)$runCy(
     V01PremScrp(allCy,TRANSE,TTECH,YTIME)
         =E=
     1 -
-    (V01CostFuel(allCy,TRANSE,TTECH,YTIME-1)) ** (-2) /
+    (V01CostFuel(allCy,TRANSE,TTECH,YTIME-1)) ** (-1) /
     (
-      V01CostFuel(allCy,TRANSE,TTECH,YTIME-1) ** (-2) +
-      0.05*i01PremScrpFac(allCy,TRANSE,TTECH,YTIME) * 
+      V01CostFuel(allCy,TRANSE,TTECH,YTIME-1) ** (-1) +
+      0.02*i01PremScrpFac(allCy,TRANSE,TTECH,YTIME) * 
       SUM(TTECH2$(not sameas(TTECH2,TTECH) and SECTTECH(TRANSE,TTECH2)),
-        V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1) ** (-2)
+        V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1) ** (-1)
       )
     );
 
 Q01ShareBlend(allCy,TRANSE,EF,YTIME)$(TIME(YTIME)$SECtoEF(TRANSE,EF)$runCy(allCy) and yes$SUM(EF2,BLENDMAP(EF2,EF)))..
     V01ShareBlend(allCy,TRANSE,EF,YTIME)
       =E=
-    i01calibweibul(allCy,TRANSE,EF,YTIME) * VmPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME-1) ** (-2) /
+    i01calibweibul(allCy,TRANSE,EF,YTIME) * (VmPriceFuelSubsecCarVal(allCy,TRANSE,EF,YTIME-1) + 1e-6) ** (-2) /
     SUM(EF2$(BLENDMAP(EF,EF2) or BLENDMAP2(EF,EF2)),
-      i01calibweibul(allCy,TRANSE,EF2,YTIME) * VmPriceFuelSubsecCarVal(allCy,TRANSE,EF2,YTIME-1) ** (-2)
+      i01calibweibul(allCy,TRANSE,EF2,YTIME) * (VmPriceFuelSubsecCarVal(allCy,TRANSE,EF2,YTIME-1) + 1e-6) ** (-2)
     );
 
 $ontext

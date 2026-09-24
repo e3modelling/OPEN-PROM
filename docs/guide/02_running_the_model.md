@@ -241,9 +241,15 @@ The dot-notation rule is **generic** — `start.R` hard-codes no column names, s
 Beyond `gams_flags.X`, two scenario groups are read specially by `start.R` rather than passed through verbatim:
 
 - **`land_use_emulator.*`** drives the pre-fitted land-use emulator. `start.R` translates
-  `land_use_emulator.source` into the `--landUseEmulator=` flag and `land_use_emulator.carbon_price` into
-  `--emulatorGHGScen=`. This is the path for **emulator-only runs** (no live MAgPIE coupling): e.g.
-  `land_use_emulator.source = globiom` with `land_use_emulator.carbon_price = GHG100`.
+  `land_use_emulator.source` into the `--landUseEmulator=` flag and
+  `land_use_emulator.carbon_price_scenario` into `--emulatorCarbonPriceScenario=`. This is the path for
+  **emulator-only runs** (no live MAgPIE coupling): e.g. `land_use_emulator.source = globiom` with
+  `land_use_emulator.carbon_price_scenario = GHG100`, or `land_use_emulator.source = magpie` with
+  `land_use_emulator.carbon_price_scenario = 1p5C`. GLOBIOM accepts
+  `GHG000/GHG010/GHG020/GHG050/GHG100`; MAgPIE accepts `Npi_Default/NDC_LTT/2C/1p5C`.
+  The current MAgPIE coefficient package covers the 39 research regions only. It works directly in
+  task 2 (`DevMode=0`); task 0/1 runs must set `fCountries` to covered regions and must not request
+  the development-only aggregates `RWO` or `ELL`.
 - **`soft_link_magpie.*`** configures the task-7 MAgPIE soft-link. This group is **not** turned into GAMS flags by
   the generic dispatcher; task 7 reads it directly (`project`, `existing_prom_run`, `max_iter`, `price_tol`,
   `quant_tol`) and passes `--softLinkMAgPIE` itself. See {doc}`/guide/05_soft_linking`.

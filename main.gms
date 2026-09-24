@@ -204,26 +204,52 @@ $setGlobal SSP SSP2 !!SSP1-5
 *' *** Calibration
 $setGlobal Calibration off !! MatCalibration/Calibration/off
 
-*' *** softLinkMAgPIE: on = task7 soft-link iteration with MAgPIE (was link2MAgPIE)
+*' *** softLinkMAgPIE: on = task 7 iterative soft-link with MAgPIE
 $setglobal softLinkMAgPIE off  !! on or off
 
 $setglobal OPENGEM off !! on or off
 
-*' *** Land-use emulator: pre-fit BMSWAS supply & land-emission curves standing in
-*' *** for a land-use model (was link2GLOBIOM). One of:
+*' *** Land-use emulator: pre-fitted BMSWAS price and AFOLU-emission responses
+*' *** standing in for a land-use model. One of:
 *' ***   legacy  = no emulator (exogenous static price + external emission source)
-*' ***   globiom = GLOBIOM-derived curves
-*' ***   magpie  = MAgPIE-derived curves
-$setglobal landUseEmulator globiom
-*' *** emulatorGHGScen: active carbon-price row in the emulator coefficient tables
+*' ***   globiom = GLOBIOM-specific BMSWAS and AFOLU functions
+*' ***   magpie  = MAgPIE-specific H12 price and effective-2G-biomass functions
+$setglobal landUseEmulator magpie
+*' *** emulatorCarbonPriceScenario: active carbon-price/policy row in the
+*' *** selected emulator's coefficient tables
 *' *** (used when landUseEmulator != legacy and softLinkMAgPIE == off)
-*' *** Options: GHG000 GHG010 GHG020 GHG050 GHG100 (GHG price in $/tCO2)
-$setglobal emulatorGHGScen GHG000
+*' *** Valid values are defined once by the selected source's scenario set.
+$setglobal emulatorCarbonPriceScenario Npi_Default
+
+*' *** Global annual primary BMSWAS reference quantity (EJ/yr), not a hard cap.
+*' *** Module 08 fixes A = 3.2 kUS$2015/toe and computes tau(t) = A*(Q(t-1)/reference)^2.
+*' *** The first solved year uses base-year production. Zero disables the tax.
+$setglobal biomassReferenceEJ 150
+
+*' *** Global cumulative geological-storage reference quantity (GtCO2), not a hard cap.
+*' *** Module 06 defines the fixed tax scale A (US$2015/tCO2): tau(t) = A*(S(t-1)/reference)^2.
+*' *** Energy CCS and DAC share this charge; TEW is excluded. Zero disables the tax.
+$setglobal ccsStorageReferenceGtCO2 1445
+
+$if set bmswasPriceAdder $abort "Use biomassReferenceEJ (EJ/yr) instead of bmswasPriceAdder."
+$if set ccsAvailabilityCostAdder $abort "Use ccsStorageReferenceGtCO2 (cumulative GtCO2) instead of ccsAvailabilityCostAdder."
+$ifE %biomassReferenceEJ%<0 $abort "biomassReferenceEJ must be non-negative (EJ/yr); zero disables the tax."
+$ifE %ccsStorageReferenceGtCO2%<0 $abort "ccsStorageReferenceGtCO2 must be non-negative (GtCO2); zero disables the tax."
+
+*' *** Validate the public land-use switches before translating them to internal
+*' *** modes. A soft-link run still validates landUseEmulator, but its scenario row
+*' *** is ignored because softLinkMAgPIE takes precedence.
+$ifThen.landUseSource %landUseEmulator% == legacy
+$elseIf.landUseSource %landUseEmulator% == globiom
+$elseIf.landUseSource %landUseEmulator% == magpie
+$else.landUseSource
+$abort "Invalid --landUseEmulator. Use legacy, globiom, or magpie."
+$endIf.landUseSource
 
 *' *** Translate the two user switches above (softLinkMAgPIE, landUseEmulator) into
 *' *** the two internal flags the rest of the model actually reads:
 *' ***   bmswasPriceMode = how the BMSWAS biomass price is set:
-*' ***       softfx = fixed from MAgPIE each soft-link round
+*' ***       softlink = absolute backend price returned by MAgPIE each round
 *' ***       curve  = from the emulator supply curve
 *' ***       static = standard recursive price dynamics (no emulator)
 *' ***   landEmiMode     = where AFOLU land + agriculture emissions come from:
@@ -231,9 +257,10 @@ $setglobal emulatorGHGScen GHG000
 *' ***       curve   = computed in-model from the emulator emission curve
 *' ***       exo     = external/legacy emission source
 *' *** Precedence: a MAgPIE soft-link run wins; otherwise the land-use emulator
-*' *** decides (legacy = no emulator -> static/exo; globiom/magpie -> curve).
+*' *** decides. The public source name remains available downstream so the GLOBIOM
+*' *** and MAgPIE curve equations can be compiled as separate branches.
 $ifThen.coupling %softLinkMAgPIE% == on
-$setglobal bmswasPriceMode softfx
+$setglobal bmswasPriceMode softlink
 $setglobal landEmiMode softmif
 $elseIf.coupling %landUseEmulator% == legacy
 $setglobal bmswasPriceMode static
@@ -271,12 +298,20 @@ $evalGlobal fScenario 1 !! Setting the model scenario: 0 is No carbon price, 1 i
 *** end of dollar commands section, no further flag definitions allowed 
 
 *' *** load input data files
-$ifthen.genInp %GenerateInput% == on 
-$ifthen.loadData %DevMode% == 0 $call "Rscript ./scripts/tasks/loadMadratData.R DevMode=0"
-$elseif.loadData %DevMode% == 1 $call "Rscript ./scripts/tasks/loadMadratData.R DevMode=1"
-$elseif.loadData %DevMode% == 2 $call "Rscript ./scripts/tasks/loadMadratData.R DevMode=2"
+$ifthen.genInp %GenerateInput% == on
+$ifthen.loadData %DevMode% == 0
+$call "Rscript ./scripts/tasks/loadMadratData.R DevMode=0"
+$if errorlevel 1 $abort "mrprom input-data generation failed for DevMode=0. See the R output above."
+$elseif.loadData %DevMode% == 1
+$call "Rscript ./scripts/tasks/loadMadratData.R DevMode=1"
+$if errorlevel 1 $abort "mrprom input-data generation failed for DevMode=1. See the R output above."
+$elseif.loadData %DevMode% == 2
+$call "Rscript ./scripts/tasks/loadMadratData.R DevMode=2"
+$if errorlevel 1 $abort "mrprom input-data generation failed for DevMode=2. See the R output above."
 $endif.loadData
 $endif.genInp
+$call "Rscript ./scripts/tasks/writeMaturityFactors.R"
+$if errorlevel 1 $abort "Writing the maturity-factor multipliers failed. See the R output above."
 
 * Open file to write txt
 file fStat /'modelstat.txt'/; 

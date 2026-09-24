@@ -76,7 +76,9 @@ suppressPackageStartupMessages({
 inputCsvPath   <- "data/iEnvPolicies.csv"
 outputCsvPath  <- "data/iEnvPolicies_updated.csv"
 backupCsvPath  <- "data/iEnvPolicies_backup.csv"
+lastTestedCsvPath <- "data/iEnvPolicies_last_tested.csv" # last policy tested before a failure
 workDir        <- getwd()
+lastTestedPolicy  <- NULL                                # most recent policy table sent to OPEN-PROM
 
 # One-time backup of the original canonical file
 if (file.exists(inputCsvPath) && !file.exists(backupCsvPath)) {
@@ -100,10 +102,10 @@ readEnvPolicies <- function(csvPath = inputCsvPath) {
   list(envWide = envWide, envLong = envLong, yearCols = yearCols)
 }
 
-applyAlpha <- function(envWide, yearCols, alpha, targetRegion) {
+applyAlpha <- function(envWide, yearCols, alpha, targetRegion, fromYear = changeCarbonPriceFromYear) {
   x <- data.table::copy(envWide)
 
-  yearColsFuture <- yearCols[as.integer(yearCols) >= changeCarbonPriceFromYear]
+  yearColsFuture <- yearCols[as.integer(yearCols) >= fromYear]
 
   if (is.null(targetRegion)) {
     # GLOBAL: apply to all regions
@@ -119,10 +121,11 @@ applyAlpha <- function(envWide, yearCols, alpha, targetRegion) {
 }
 
 writeFinalPolicyFiles <- function(envWide, yearCols, alphaFinal, region,
+                                  fromYear = changeCarbonPriceFromYear,
                                   canonicalPath = file.path("data","iEnvPolicies.csv"),
                                   updatedPath   = file.path("data","iEnvPolicies_updated.csv"),
                                   alsoTimestamped = TRUE) {
-  envFinal <- applyAlpha(envWide, yearCols, alphaFinal, region)
+  envFinal <- applyAlpha(envWide, yearCols, alphaFinal, region, fromYear)
   dir.create(dirname(canonicalPath), showWarnings = FALSE, recursive = TRUE)
   dir.create(dirname(updatedPath),   showWarnings = FALSE, recursive = TRUE)
   fwrite(envFinal, canonicalPath, na = "NA")
@@ -162,6 +165,7 @@ run_gams <- function(gms = "main.gms",
 
 # Runs OPEN-PROM for a given alpha and returns the tracked emissions value.
 emissionsOPENPROM <- function(envWide, yearCols, alpha, targetRegion, targetYear,
+                              fromYear = changeCarbonPriceFromYear,
                               dataDir = "data",
                               gms = "main.gms",
                               gamsArgs = GAMSCmdArgs,
@@ -172,7 +176,9 @@ emissionsOPENPROM <- function(envWide, yearCols, alpha, targetRegion, targetYear
     if (file.exists(backupCsvPath)) file.copy(backupCsvPath, canonicalCsv, overwrite = TRUE)
   }, add = TRUE)
   
-  fwrite(applyAlpha(envWide, yearCols, alpha, targetRegion), canonicalCsv, na = "NA")
+  # Remember the exact policy table sent to GAMS so it can be recovered if this run fails.
+  lastTestedPolicy <<- applyAlpha(envWide, yearCols, alpha, targetRegion, fromYear)
+  fwrite(lastTestedPolicy, canonicalCsv, na = "NA")
   ok <- run_gams(gms = gms, args = gamsArgs, log = log, echo_on_success = echo_on_success)
   if (!ok) stop("OPEN-PROM run failed for alpha=", alpha)
 
@@ -226,35 +232,58 @@ alphaSeedLinear <- function(alpha0, E0, alphar, Er, Etarget, warn = TRUE, stopIf
   alpha0 + (Etarget - E0) * (alphar - alpha0) / (Er - E0)
 }
 
-autoBracketFromSeed <- function(seedAlpha, budgetTarget, envWide, yearCols, targetRegion, targetYear, 
+autoBracketFromSeed <- function(seedAlpha, budgetTarget, envWide, yearCols, targetRegion, targetYear,
+                                   fromYear = changeCarbonPriceFromYear,
                                    minAlpha = 0.0, maxAlpha = 5.0,
                                    expandFactor = 1.35, maxProbes = 20, verbose = TRUE) {
-  if (verbose) message(sprintf("Seeding bracket near alpha ≈ %.4f", seedAlpha))
-  probe <- function(a) emissionsOPENPROM(envWide, yearCols, a, targetRegion, targetYear)
+  probe <- function(a) emissionsOPENPROM(envWide, yearCols, a, targetRegion, targetYear, fromYear)
 
+  # --- Feasibility probe: test the maximum carbon price first ---
+  # If even the highest allowed price cannot pull emissions down to the target, the
+  # target is unreachable — stop now (one run) instead of climbing toward it probe by probe.
+  if (verbose) message(sprintf("Feasibility probe at maxAlpha=%.4f", maxAlpha))
+  Emax <- probe(maxAlpha)
+  if (verbose) message(sprintf("maxAlpha: alpha=%.4f -> E=%.6f (target=%.6f)", maxAlpha, Emax, budgetTarget))
+  if (Emax > budgetTarget) {
+    stop(sprintf(
+      "maxAlpha too low: at alpha=%.4f emissions are %.6f, still above target %.6f. Increase maxAlpha.",
+      maxAlpha, Emax, budgetTarget))
+  }
+
+  if (verbose) message(sprintf("maxAlpha feasible; seeding bracket near alpha %.4f", seedAlpha))
   Eseed <- probe(seedAlpha)
   if (verbose) message(sprintf("Seed: alpha=%.4f → E=%.6f (target=%.6f)", seedAlpha, Eseed, budgetTarget))
 
   if (Eseed <= budgetTarget) {
-    aU <- seedAlpha; EU <- Eseed
-    aL <- max(minAlpha, seedAlpha / expandFactor); tries <- 0
-    repeat {
-      EL <- probe(aL); tries <- tries + 1
-      if (verbose) message(sprintf("Down probe: alpha=%.4f → E=%.6f", aL, EL))
-      if (EL > budgetTarget || tries >= maxProbes || aL <= minAlpha + 1e-9) break
-      aL <- max(minAlpha, aL / expandFactor)
+    # Seed already meets the target. Check whether unchanged prices (alpha = 0) meet it
+    # too — if so there is nothing to optimize, so keep the original prices and skip.
+    E0 <- probe(0)
+    if (verbose) message(sprintf("No-change probe: alpha=0.0000 -> E=%.6f (target=%.6f)", E0, budgetTarget))
+    if (E0 <= budgetTarget) {
+      if (verbose) message("Region already meets target with unchanged carbon prices; skipping optimization.")
+      return(list(alreadyMet = TRUE, alpha = 0,
+                  lowerAlpha = 0, upperAlpha = 0, EL = E0, EU = E0))
     }
-    if (EL <= budgetTarget) stop("No failing lower bound; decrease minAlpha or revisit monotonicity.")
+    # alpha = 0 fails but the seed passes → [0, seed] brackets the target.
+    aL <- 0;         EL <- E0
+    aU <- seedAlpha; EU <- Eseed
   } else {
+    # Seed exceeds the target → expand upward toward the (already feasible) maxAlpha.
     aL <- seedAlpha; EL <- Eseed
     aU <- min(maxAlpha, seedAlpha * expandFactor); tries <- 0
     repeat {
+      if (aU >= maxAlpha - 1e-9) { aU <- maxAlpha; EU <- Emax; break }  # reuse feasibility probe
       EU <- probe(aU); tries <- tries + 1
       if (verbose) message(sprintf("Up probe: alpha=%.4f → E=%.6f", aU, EU))
-      if (EU <= budgetTarget || tries >= maxProbes || aU >= maxAlpha - 1e-9) break
+      if (EU <= budgetTarget || tries >= maxProbes) break
+      # Still above target: this probe is a tighter lower bound than the seed, so keep
+      # it instead of leaving aL stuck at seedAlpha (e.g. bracket [0.4, 1.6], not [0.1, 1.6]).
+      aL <- aU; EL <- EU
       aU <- min(maxAlpha, aU * expandFactor)
     }
-    if (EU > budgetTarget) stop("No passing upper bound; increase maxAlpha or revisit monotonicity.")
+    # Probes exhausted with the last one still above target: it is a valid lower bound too,
+    # so promote it before falling back to the known-feasible max.
+    if (EU > budgetTarget) { aL <- aU; EL <- EU; aU <- maxAlpha; EU <- Emax }
   }
   list(lowerAlpha = aL, upperAlpha = aU, EL = EL, EU = EU)
 }
@@ -262,19 +291,20 @@ autoBracketFromSeed <- function(seedAlpha, budgetTarget, envWide, yearCols, targ
 findAlphaForBudget <- function(envWide, yearCols, budgetTarget,
                                lowerAlpha, upperAlpha,
                                eLow = NULL, eHigh = NULL, targetRegion, targetYear,
+                               fromYear = changeCarbonPriceFromYear,
                                tolAlphaRel = 1e-3, tolEmisAbs = 1e-3,
                                maxIter = 60, verbose = TRUE, writeFinalCsv = TRUE) {
 
   # Evaluate bounds if not already provided by autoBracketFromSeed.
-  if (is.null(eLow))  eLow  <- emissionsOPENPROM(envWide, yearCols, lowerAlpha, targetRegion, targetYear)
-  if (is.null(eHigh)) eHigh <- emissionsOPENPROM(envWide, yearCols, upperAlpha, targetRegion, targetYear)
+  if (is.null(eLow))  eLow  <- emissionsOPENPROM(envWide, yearCols, lowerAlpha, targetRegion, targetYear, fromYear)
+  if (is.null(eHigh)) eHigh <- emissionsOPENPROM(envWide, yearCols, upperAlpha, targetRegion, targetYear, fromYear)
 
   if (verbose) message(sprintf(
     "Initial: aL=%.6f -> E=%.6f; aU=%.6f -> E=%.6f; target=%.6f",
     lowerAlpha, eLow, upperAlpha, eHigh, budgetTarget))
 
   if (eLow <= budgetTarget) {
-    if (writeFinalCsv) writeFinalPolicyFiles(envWide, yearCols, lowerAlpha, targetRegion)
+    if (writeFinalCsv) writeFinalPolicyFiles(envWide, yearCols, lowerAlpha, targetRegion, fromYear)
     return(list(alpha = lowerAlpha, emissions = eLow, converged = TRUE, iters = 0))
   }
   if (eHigh > budgetTarget) stop("upperAlpha still exceeds budget. Increase it or check monotonicity.")
@@ -302,12 +332,12 @@ findAlphaForBudget <- function(envWide, yearCols, budgetTarget,
     }
     prevAM <- aM
 
-    emisM <- emissionsOPENPROM(envWide, yearCols, aM, targetRegion, targetYear)
+    emisM <- emissionsOPENPROM(envWide, yearCols, aM, targetRegion, targetYear, fromYear)
     if (verbose) message(sprintf("Iter %02d: aM=%.6f -> E=%.6f (target=%.6f)", it, aM, emisM, budgetTarget))
 
     if (abs(emisM - budgetTarget) < tolEmisAbs || abs(aU - aL) / max(1.0, abs(aM)) < tolAlphaRel) {
       if (verbose) message("Converged.")
-      if (writeFinalCsv) writeFinalPolicyFiles(envWide, yearCols, aM, targetRegion)
+      if (writeFinalCsv) writeFinalPolicyFiles(envWide, yearCols, aM, targetRegion, fromYear)
       return(list(alpha = aM, emissions = emisM, converged = TRUE, iters = it))
     }
 
@@ -319,7 +349,7 @@ findAlphaForBudget <- function(envWide, yearCols, budgetTarget,
   }
 
   warning("Max iterations reached without strict tolerance convergence.")
-  if (writeFinalCsv) writeFinalPolicyFiles(envWide, yearCols, aU, targetRegion)
+  if (writeFinalCsv) writeFinalPolicyFiles(envWide, yearCols, aU, targetRegion, fromYear)
   list(alpha = aU, emissions = emisU, converged = FALSE, iters = it)
 }
 configureGamsFile <- function(gmsPath, targetRegion) {
@@ -348,9 +378,23 @@ extractEmissions <- function(dataMagpie) {
 # Run
 # ----------------------------
 start_time <- Sys.time()
-GAMSCmdArgs <- c("--DevMode=0", "--GenerateInput=off", "lo=4", "idir=./data", "--CountrySolveMode=parallel")
-selectedYear <- 2100
-changeCarbonPriceFromYear <- 2026
+selectedYear <- 2050              # default target year, overridable per region via targetList `year`
+changeCarbonPriceFromYear <- 2026 # default first year the price is scaled, overridable per region via targetList `fromYear`
+
+# Model scenario passed to GAMS via --fScenario (overrides $evalGlobal fScenario in main.gms):
+#   0 = No carbon price, 1 = NPi_Default, 2 = 1.5C, 3 = 2C
+selectedScenario <- 2
+
+# --fEndY caps the solve horizon at selectedYear instead of always running to 2100, so
+# shortening a run is just a matter of lowering selectedYear (use --fEndY, never
+# fEndHorizon, which triggers domain-violation errors). --fScenario selects the scenario.
+GAMSCmdArgs <- c("--DevMode=0", "--GenerateInput=off", "lo=4", "idir=./data",
+                 "--CountrySolveMode=parallel",
+                 paste0("--fEndY=", selectedYear),
+                 paste0("--fScenario=", selectedScenario))
+
+# Keep an unmodified template of the GAMS args so we can substitute per-region end years
+GAMSCmdArgsTemplate <- GAMSCmdArgs
 
 # --- Emissions variable to track ---
 # Set emissionsVariable to any variable name returned by reportEmissions().
@@ -360,8 +404,8 @@ changeCarbonPriceFromYear <- 2026
 #   "Emissions|CO2|Cumulated.Gt CO2"          * 1000  -> Mt CO2  (cumulated)
 #   "Emissions|CO2.Mt CO2/yr"                 * 1     -> Mt CO2/yr
 #   "Emissions|Kyoto Gases.Mt CO2-equiv/yr"   * 1     -> Mt CO2-equiv/yr
-emissionsVariable <- "Emissions|CO2|Cumulated.Gt CO2"
-emissionsScale    <- 1000   # Gt -> Mt
+emissionsVariable <- "Emissions|Kyoto Gases.Mt CO2-equiv/yr"
+emissionsScale    <- 1   # Gt -> Mt
 
 # EU27 member regions — share a single carbon price in iEnvPolicies.csv.
 # Never optimised individually; always solved as one aggregated group.
@@ -370,7 +414,14 @@ EU27_REGIONS <- c("AUT","BEL","BGR","CYP","CZE","DEU","DNK","ESP","EST",
                    "LVA","MLT","NLD","POL","PRT","ROU","SVK","SVN","SWE")
 
 # --- Target list ---
-# Each entry is a named budget in the unit of emissionsVariable * emissionsScale.
+# Each entry is one of:
+#  - a scalar numeric budget (backwards compatible): targetList$REGION = BUDGET
+#  - a named list: targetList$REGION = list(budget = BUDGET, year = YYYY, fromYear = YYYY)
+#      * budget   = emissions budget the region must reach.
+#      * year     = year by which the budget must be met  (optional; defaults to selectedYear).
+#      * fromYear = first year whose carbon price is scaled (optional; defaults to
+#                   changeCarbonPriceFromYear). Set it per region to change the price
+#                   from a different start year than the global default.
 # Special keys:
 #   "EU27"  -> shared alpha applied to all 27 EU member rows; emissions summed over members.
 #   "WORLD" -> alpha applied to all region rows; emissions summed globally.
@@ -379,20 +430,21 @@ EU27_REGIONS <- c("AUT","BEL","BGR","CYP","CZE","DEU","DNK","ESP","EST",
 #
 # Current unit: cumulated Mt CO2  (Emissions|CO2|Cumulated.Gt CO2 * 1000)
 targetList <- list(
-  #"WORLD" = 1257571,  # optional: comment out to skip world run
-  "EU27"  = 92917,    # sum of all 27 EU member budgets
-  "CAZ"   = 22517,
-  "CHA"   = 307728,
-  "GBR"   = 14692,
-  "IND"   = 223711,
-  "JPN"   = 29285,
-  "LAM"   = 117008,
-  "MEA"   = 102029,
-  "NEU"   = 22276,
-  "OAS"   = 220646,
-  "REF"   = 64216,
-  "SSA"   = 175989,
-  "USA"   = 100855
+  # Examples (mix-and-match supported):
+  # WORLD = 1257571,  # optional: comment out to skip world run
+  EU27  = list(budget = 0, year = 2050),
+  CAZ  = list(budget = 0,  year = 2050),
+  # CHA  = list(budget = 13447, year = 2050),
+  GBR  = list(budget = 0,  year = 2050),
+  IND  = list(budget = 0, year = 2070),
+  JPN  = list(budget = 0,  year = 2050),
+  LAM  = list(budget = 703, year = 2050),
+  MEA  = list(budget = 3245, year = 2060),
+  NEU  = list(budget = 101,  year = 2050),
+  OAS  = list(budget = 1186, year = 2060),
+  REF  = list(budget = 355, year = 2060),
+  SSA  = list(budget = 2238, year = 2050),
+  USA  = list(budget = 0, year = 2050)  # numeric form still supported: interpreted as budget with fallback year = selectedYear
 )
 
 logFilePath <- "Carbon_price_optimization.log"
@@ -421,7 +473,20 @@ resultsLog <- list()
 
 for (regName in names(targetList)) {
 
-  bg <- targetList[[regName]]
+  lastTestedPolicy <- NULL   # don't carry a previous region's tested policy into this run
+  entry <- targetList[[regName]]
+  # Support two formats: numeric (budget only) or list(budget=..., year=..., fromYear=...)
+  if (is.list(entry) && !is.null(entry$budget)) {
+    bg <- as.numeric(entry$budget)
+    regionTargetYear <- if (!is.null(entry$year))     as.integer(entry$year)     else selectedYear
+    regionFromYear   <- if (!is.null(entry$fromYear)) as.integer(entry$fromYear) else changeCarbonPriceFromYear
+  } else if (is.numeric(entry) && length(entry) == 1) {
+    bg <- as.numeric(entry)
+    regionTargetYear <- selectedYear
+    regionFromYear   <- changeCarbonPriceFromYear
+  } else {
+    stop(sprintf("Invalid targetList entry for '%s' — must be numeric or list(budget=..., year=..., fromYear=...)", regName))
+  }
 
   if (regName == "WORLD") {
     actualRegion <- NULL   # NULL -> alpha applied to all region rows
@@ -434,7 +499,7 @@ for (regName in names(targetList)) {
     displayName  <- regName
   }
 
-  message(sprintf("\n--- Optimizing %s (Target: %.4f) ---", displayName, bg))
+  message(sprintf("\n--- Optimizing %s (Target: %.4f, Year: %d, From: %d) ---", displayName, bg, regionTargetYear, regionFromYear))
   skipRegion <- FALSE
 
   tryCatch({
@@ -444,49 +509,68 @@ for (regName in names(targetList)) {
     configureGamsFile("main.gms", actualRegion)
   }
 
+  # Ensure GAMS runs use the region-specific solve horizon (end year)
+  GAMSCmdArgs <- GAMSCmdArgsTemplate
+  i_endy <- grep("^--fEndY=", GAMSCmdArgs)
+  if (length(i_endy)) GAMSCmdArgs[i_endy] <- paste0("--fEndY=", regionTargetYear) else GAMSCmdArgs <- c(GAMSCmdArgs, paste0("--fEndY=", regionTargetYear))
+
   brkt <- autoBracketFromSeed(
     seedAlpha    = 0.1,
     budgetTarget = bg,
     envWide      = currentEnvWide,
     yearCols     = yearCols,
     targetRegion = actualRegion,
-    targetYear   = selectedYear,
+    targetYear   = regionTargetYear,
+    fromYear     = regionFromYear,
     minAlpha     = -0.5,           # Allow price reduction up to -50% if needed
-    maxAlpha     = 10.0,           # Allow up to +1000% increase
-    expandFactor = 3.0,
+    maxAlpha     = 40,           # Allow up to +1000% increase
+    expandFactor = 4.0,
     maxProbes    = 7,
     verbose      = TRUE
   )
 
-  # C. Solve
-  solveResult <- findAlphaForBudget(
-    envWide      = currentEnvWide,
-    yearCols     = yearCols,
-    budgetTarget = bg,
-    targetRegion = actualRegion, # Passes NULL if global
-    targetYear   = selectedYear,
-    lowerAlpha   = brkt$lowerAlpha,
-    upperAlpha   = brkt$upperAlpha,
-    eLow         = brkt$EL,
-    eHigh        = brkt$EU,
-    tolAlphaRel  = 1e-2,
-    tolEmisAbs   = 1e+1,
-    maxIter      = 60,
-    verbose      = TRUE,
-    writeFinalCsv = FALSE
-  )
-  
-  finalAlpha <- solveResult$alpha
-  message(sprintf(" -> Converged %s: Alpha=%.3f", displayName, finalAlpha))
+  # C. Solve (skip the root-find when the region already meets its target unchanged)
+  if (isTRUE(brkt$alreadyMet)) {
+    finalAlpha <- 0
+    message(sprintf(" -> %s already meets target; carbon prices left unchanged (Alpha=0).", displayName))
+  } else {
+    solveResult <- findAlphaForBudget(
+      envWide      = currentEnvWide,
+      yearCols     = yearCols,
+      budgetTarget = bg,
+      targetRegion = actualRegion, # Passes NULL if global
+      targetYear   = regionTargetYear,
+      fromYear     = regionFromYear,
+      lowerAlpha   = brkt$lowerAlpha,
+      upperAlpha   = brkt$upperAlpha,
+      eLow         = brkt$EL,
+      eHigh        = brkt$EU,
+      tolAlphaRel  = 1e-2,
+      tolEmisAbs   = 1e+1,
+      maxIter      = 60,
+      verbose      = TRUE,
+      writeFinalCsv = FALSE
+    )
+
+    finalAlpha <- solveResult$alpha
+    message(sprintf(" -> Converged %s: Alpha=%.3f", displayName, finalAlpha))
+  }
 
   # Apply converged alpha and persist as the new baseline for subsequent regions
-  currentEnvWide <- applyAlpha(currentEnvWide, yearCols, finalAlpha, actualRegion)
+  currentEnvWide <- applyAlpha(currentEnvWide, yearCols, finalAlpha, actualRegion, regionFromYear)
   fwrite(currentEnvWide, inputCsvPath, na = "NA")
   file.copy(inputCsvPath, backupCsvPath, overwrite = TRUE)
   resultsLog[[regName]] <- list(status = "OK", alpha = finalAlpha)
 
   }, error = function(e) {
     message(sprintf("  !! FAILURE for %s: %s", displayName, e$message))
+    # Preserve the carbon prices that were being tested when the run failed, in a
+    # region-specific file, so each failing region's last-tested policy survives.
+    if (!is.null(lastTestedPolicy)) {
+      regionLastTestedCsvPath <- sub("\\.csv$", paste0("_", regName, ".csv"), lastTestedCsvPath)
+      fwrite(lastTestedPolicy, regionLastTestedCsvPath, na = "NA")
+      message(sprintf("  -> Saved last-tested policy to %s", regionLastTestedCsvPath))
+    }
     message("  -> Reverting to last good state and skipping.")
     if (file.exists(backupCsvPath)) file.copy(backupCsvPath, inputCsvPath, overwrite = TRUE)
     resultsLog[[regName]] <<- list(status = "FAILED", error = e$message)

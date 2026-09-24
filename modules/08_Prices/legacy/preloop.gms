@@ -16,6 +16,34 @@ SQRT( SQR(((VmPriceFuelSubsecCarVal.L(runCy,DSBS,EF,YTIME)+imVarCostTech(runCy,D
 *---
 $offtext
 *---
+* Init for the BMSWAS price factor (positive; neutral start = 1)
+V08BmswasPriceFactor.LO(runCy,YTIME) = 0;
+V08BmswasPriceFactor.L(runCy,YTIME)  = 1;
+*---
+* Initialize the first solved model year from observed base-year global demand:
+* tau(t0) = A * (Qworld(base year) / biomassReferenceEJ)^2.
+* This binds the policy start to fStartY/fBaseY rather than a calendar year.
+$ifthenE.biomassTax %biomassReferenceEJ%>0
+i08BmswasPriceAdder("%fStartY%") = i08BmswasTaxScale
+  * sqr(
+      sum(runCyL, V03ProdPrimary.L(runCyL,"BMSWAS","%fBaseY%"))
+      * i08MtoeToEJ / %biomassReferenceEJ%
+    );
+$else.biomassTax
+i08BmswasPriceAdder(YTIME) = 0;
+$endif.biomassTax
+*---
+VmPriceCarbon.LO(runCy,SBS,EFS,YTIME) = 0;
+VmPriceCarbon.FX(runCy,SBS,EFS,YTIME)$DATAY(YTIME) = 1e-3 * iCarbValYrExog(runCy,YTIME)$INDSE1(SBS) * imCo2EmiFac(runCy,SBS,EFS,YTIME);
+*---
+$IFTHEN %landEmiMode% == curve
+* Both emulator backends use the same native-MAgPIE AFOLU history on DATAY.
+* TIME values are calculated by the selected backend in postsolve.
+imAfoluLandEmis(runCy,EMTYPE,YTIME)$(DATAY(YTIME) $sameas(EMTYPE,"CO2LandUse")) =
+  i08AfoluLandCO2Hist(runCy,EMTYPE,YTIME);
+imAfoluAgriEmis(runCy,EMTYPE,YTIME)$(DATAY(YTIME) $(sameas(EMTYPE,"CH4LandUse") or sameas(EMTYPE,"N2OLandUse"))) =
+  i08AfoluAgriEmisHist(runCy,EMTYPE,YTIME);
+$ENDIF
 * Init for the BMSWAS bio-supply index variable (positive; neutral start = 1)
 V08SupplyCurves.LO(runCy,EFS,YTIME) = 0;
 V08SupplyCurves.L(runCy,EFS,YTIME)  = 1;

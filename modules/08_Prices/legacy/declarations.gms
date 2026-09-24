@@ -18,7 +18,13 @@ Q08PriceFuelSepCarbonWght(allCy,SBS,EF,YTIME)	           "Compute fuel prices pe
 
 *'                **Interdependent Equations**
 *Q08PriceElecIndResConsu(allCy,ESET,YTIME)                  "Compute electricity price in Industrial and Residential Consumers"
-Q08IndexBioSupply(allCy,YTIME)                            "Year-over-year BMSWAS scarcity index (curve=supply curve / softfx=MAgPIE / static=1)"
+Q08BmswasPriceFactor(allCy,YTIME)                         "Compute final BMSWAS used-price change for biofuel pass-through"
+$IFTHEN.magpiePriceEquation "%bmswasPriceMode%" == "curve"
+$IFTHEN.magpiePriceDeclarationSource "%landUseEmulator%" == "magpie"
+Q08Bioenergy2GEffectiveQH12Magpie(allCy,YTIME)            "Compute effective 2G biomass Q for the mapped MAgPIE H12 supply curve"
+$ENDIF.magpiePriceDeclarationSource
+$ENDIF.magpiePriceEquation
+Q08PriceBmswas(allCy,SBS,YTIME)                           "Apply the selected backend and global BMSWAS sustainability tax"
 Q08PriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)               "Compute fuel prices per subsector and fuel, separate carbon value in each sector"
 Q08PriceFuelAvgSub(allCy,DSBS,YTIME)	                   "Compute average fuel price per subsector" 	
 *Q08PriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)                 "Compute fuel prices per subsector and fuel especially for chp plants"
@@ -27,6 +33,18 @@ Q08SupplyCurves(allCy,EFS,YTIME)
 Q08PricePrimary(allCy,EFS,YTIME)
 Q08PriceSecondary(allCy,EFS,YTIME)
 Q08PriceFinal(allCy,DSBS,EFS,YTIME)
+Q08PriceCarbon(allCy,SBS,EFS,YTIME)
+;
+
+Parameters
+i08Bioenergy2GEffectiveQMagpie(allCy,YTIME)                "Current regional MAgPIE effective 2G biomass Q (Mtoe)"
+i08Bioenergy2GEffectiveQH12Magpie(allCy,YTIME)             "MAgPIE effective 2G biomass Q used by the mapped H12 land-CO2 curve (Mtoe)"
+i08BmswasPriceAdder(YTIME)                                 "Global BMSWAS sustainability tax (kUS$2015/toe)"
+;
+
+Scalars
+i08BmswasTaxScale                                        "Tax at the annual biomass reference quantity (kUS$2015/toe)" /3.2/
+i08MtoeToEJ                                             "Energy conversion (EJ/Mtoe)" /0.041868/
 ;
 
 Variables
@@ -35,11 +53,17 @@ V08PriceFuelSepCarbonWght(allCy,SBS,EF,YTIME)	           "Fuel prices per subsec
 
 *'                **Interdependent Variables**
 *VmPriceElecIndResConsu(allCy,ESET,YTIME)	               "Electricity price to Industrial and Residential Consumers (US$2015/KWh)"
-V08IndexBioSupply(allCy,YTIME)                            "Year-over-year BMSWAS scarcity index (1)"
+$IFTHEN.magpiePriceVariable "%bmswasPriceMode%" == "curve"
+$IFTHEN.magpiePriceVariableSource "%landUseEmulator%" == "magpie"
+V08Bioenergy2GEffectiveQH12Magpie(allCy,YTIME)             "Effective 2G biomass Q used by the mapped MAgPIE H12 supply curve (Mtoe)"
+$ENDIF.magpiePriceVariableSource
+$ENDIF.magpiePriceVariable
+V08BmswasPriceFactor(allCy,YTIME)                         "Year-over-year ratio of the final PG BMSWAS price used by the model (1)"
 VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)                "Fuel prices per subsector and fuel (k$2015/toe)"
 VmPriceFuelAvgSub(allCy,DSBS,YTIME)                        "Average fuel prices per subsector (k$2015/toe)"
 * VmPriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)                  "Fuel prices per subsector and fuel for CHP plants (kUS$2015/toe)"
 VmPriceElecInd(allCy,TCHP,YTIME)                                "Electricity index - a function of industry price (1)"
+VmPriceCarbon(allCy,SBS,EFS,YTIME)
 
 V08SupplyCurves(allCy,EFS,YTIME)
 V08PricePrimary(allCy,EFS,YTIME)

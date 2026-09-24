@@ -2,7 +2,7 @@
 
 OPEN-PROM ("open PROMETHEUS") is an energy-economy model currently under development. The present version is based on the MENA-EDS ENERGY MODEL v4.0 (c) E3-Modelling 2020.
 
-Extensive documentation of the PROMETHEUS model on which both MENA-EDS and OPEN-PROM are based can be found here: https://e3modelling.com/modelling-tools/prometheus/.
+Extensive documentation of OPEN-PROM: https://e3modelling.github.io/OPEN-PROM/.
 
 OPEN-PROM is written in GAMS (*G*eneral *A*lgebraic *M*odelling *S*ystem https://gams.com/) and its main file is `main.gms`.
 
@@ -79,6 +79,9 @@ Instructions for creating and using soft links when integrating OPEN-PROM with c
 
 - ***14_Modelling Server Setup Guide in Windows:***
 Step-by-step instructions for preparing a Windows modelling server environment for OPEN-PROM.
+
+- ***15_Pushing technologies through maturity factors:***
+Instructions for making a technology expand faster or slower from `config.json`, using the `maturity_factors` block, without editing GAMS code manually.
 
 Additional resources in this folder:
 
