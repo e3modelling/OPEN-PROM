@@ -351,6 +351,10 @@ UPT_200
 UPT_400
 UPT_600
 UPT_800
+IAMC_C400-lin
+IAMC_C160-gr5
+IAMC_C80-gr5
+IAMC_C0to400-lin
 /
 
 RegulaPolicies(POLICIES_set) Set of policies entering in the regula falsi loops
