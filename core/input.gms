@@ -632,6 +632,14 @@ elseif %fScenario% eq 3 then
      iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"exogCV_2C",YTIME);
 elseif %fScenario% eq 4 then !! Calibration scenario
      iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"exogCV_NPi",YTIME); !!exogCV_Calib
+elseif %fScenario% eq 5 then
+     iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"IAMC_C400-lin",YTIME);     
+elseif %fScenario% eq 6 then
+     iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"IAMC_C160-gr5",YTIME);     
+elseif %fScenario% eq 7 then
+     iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"IAMC_C80-gr5",YTIME);     
+elseif %fScenario% eq 8 then
+     iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"IAMC_C0to400-lin",YTIME);     
 elseif %fScenario% eq 100 then
      iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"UPT_100",YTIME);
 elseif %fScenario% eq 200 then
