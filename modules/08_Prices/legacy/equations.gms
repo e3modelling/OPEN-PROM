@@ -93,7 +93,9 @@ Q08PriceSecondary(allCy,EFS,YTIME)$(TIME(YTIME) and runCy(allCy))..
     VmPriceSecondary(allCy,EFS,YTIME-1) *
     (VmCostAvgProd(allCy,EFS,YTIME) + 1e-3) / (VmCostAvgProd(allCy,EFS,YTIME-1) + 1e-3) ** i08ElastPriceSecondary(EFS);
 
-Q08PriceFinal(allCy,DSBS,EFS,YTIME)$(TIME(YTIME) and runCy(allCy) and SECtoEF(DSBS,EFS))..
+Q08PriceFinal(allCy,DSBS,EFS,YTIME)$(TIME(YTIME) and runCy(allCy) and SECtoEF(DSBS,EFS)
+and not (sameas("NUC",EFS) or sameas("CRO",EFS))
+)..
     VmPriceFinal(allCy,DSBS,EFS,YTIME)
       =E=
     VmPriceFinal(allCy,DSBS,EFS,YTIME-1) *

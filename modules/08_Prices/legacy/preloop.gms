@@ -47,7 +47,8 @@ $ENDIF
 * Init for the BMSWAS bio-supply index variable (positive; neutral start = 1)
 V08SupplyCurves.LO(runCy,EFS,YTIME) = 0;
 V08SupplyCurves.L(runCy,EFS,YTIME)  = 1;
-V08SupplyCurves.FX(runCy,EFS,YTIME)$DATAY(YTIME) = 1;
+V08SupplyCurves.FX(runCy,EFS,YTIME)$DATAY(YTIME) = 0;
 *---
 V08PricePrimary.LO(runCy,EFS,YTIME) = 0;
 V08PricePrimary.L(runCy,EFS,YTIME) = 1;
+*V08PricePrimary.FX(runCy,"CRO",YTIME) = 1;
