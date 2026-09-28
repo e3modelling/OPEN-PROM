@@ -94,8 +94,7 @@ PN      0.12
 GU      0.12
 GT      0.08
 GN      0.12
-BMAR    0.12
-BAV     0.12
+BU      0.12
 NEN     0.08
 PG      0.1
 H2P     0.08
@@ -147,8 +146,7 @@ OI	1.61
 SE	1.47
 AG	1.82
 HOU	2.41
-BMAR	2
-BAV	2
+BU	2
 NEN	2
 /;
 *---
@@ -186,7 +184,8 @@ imFuelPrice(runCy,DOMSE,"RFO",YTIME) = imFuelPrice(runCy,"OI","RFO",YTIME);
 imFuelPrice(runCy,"SE","GDO",YTIME) = imFuelPrice(runCy,"OI","GDO",YTIME);
 imFuelPrice(runCy,"SE","BGDO",YTIME) = imFuelPrice(runCy,"OI","BGDO",YTIME);
 *imFuelPrice(runCy,"SE","BMSWAS",YTIME) = imFuelPrice(runCy,"AG","BMSWAS",YTIME);
-imFuelPrice(runCy,TRANSE,"RFO",YTIME) = imFuelPrice(runCy,"BMAR","RFO",YTIME);
+imFuelPrice(runCy,"BU","BGSL",YTIME) = imFuelPrice(runCy,"OI","BGSL",YTIME);
+imFuelPrice(runCy,TRANSE,"RFO",YTIME) = imFuelPrice(runCy,"BU","RFO",YTIME);
 imFuelPrice(runCy,TRANSE,"OGS",YTIME) = imFuelPrice(runCy,TRANSE,"NGS",YTIME);
 imFuelPrice(runCy,TRANSE,"OLQ",YTIME) = imFuelPrice(runCy,TRANSE,"GDO",YTIME);
 imFuelPrice(runCy,TRANSE,"H2F",YTIME) = 2 * imFuelPrice(runCy,TRANSE,"H2F",YTIME);
@@ -457,6 +456,10 @@ PCH.TRFO 0.18088 18.088  2.37209 20  0.72
 PCH.TOLQ 0.18088 20.4    2.37209 20  0.72
 PCH.TNGS 0.18088 0.9044  2.37209 20  0.8
 PCH.TOGS 0.18088 1.36    2.37209 20  0.8
+BU.TGDO  0.204   0.136           25  0.72
+BU.TRFO  0.204   0.136           25  0.72
+BU.TKRS  0.136   6.8             25  0.72
+BU.TOLQ  0.136   6.8             25  0.72
 NEN.THCL 0.26227 45.22   2.37209 20  0.65
 NEN.TLGN 0.26227 47.6    2.37209 20  0.5
 NEN.TLPG 0.612   20.4    2.37209 20  0.72
@@ -504,7 +507,8 @@ imNcon(TRANSE)$(sameas(TRANSE,"PC") or sameas(TRANSE,"GU")) = 10;      !! 11 dif
 imNcon(TRANSE)$(not (sameas(TRANSE,"PC") or sameas(TRANSE,"GU"))) = 1; !! 2 different consumer size groups for inland navigation, trains, busses and aviation
 imNcon(INDSE) = 10;                                                    !! 11 different consumer size groups for industrial sectors
 imNcon(DOMSE) = 10;                                                    !! 11 different consumer size groups for domestic and tertiary sectors
-imNcon(NENSE) = 10;                                                    !! 11 different consumer size groups for non energy uses                                                     !! ... except bunkers .
+imNcon(NENSE) = 10;                                                    !! 11 different consumer size groups for non energy uses
+imNcon("BU") = 2;                                                      !! ... except bunkers .
 imNcon("DAC") = 1;                                                      !! 
 imNcon("EW") = 1;
 *---
@@ -562,6 +566,10 @@ imAnnCons(runCy,NENSE,"largest")  = 0.9 ;
 * assuming an average utilisation rate of 0.5 for non-energy uses:
 imAnnCons(runCy,NENSE,"modal") = 0.487 ;
 *---
+imAnnCons(runCy,"BU","smallest") = 0.2 ;
+imAnnCons(runCy,"BU","largest") = 1 ;
+imAnnCons(runCy,"BU","modal") = 0.5 ;
+
 imAnnCons(runCy,"DAC","smallest") = 0.2 ;
 imAnnCons(runCy,"DAC","largest") = 1 ;
 imAnnCons(runCy,"DAC","modal") = 0.5 ;
@@ -615,7 +623,7 @@ $ondelim
 $include"./iFuelCons.csv"
 $offdelim
 ;
-imFuelCons(runCy,BUN,EF,YTIME) = -imFuelCons(runCy,BUN,EF,YTIME);
+imFuelCons(runCy,"BU",EF,YTIME) = -imFuelCons(runCy,"BU",EF,YTIME);
 *---
 imCO2CaptRate(PGALL)$CCS(PGALL) = 0.90; 
 imEffValueInDollars(runCy,SBS,YTIME) = 0;
@@ -671,30 +679,11 @@ $include"./iMatrFactorData.csv"
 $offdelim
 ;
 *---
-*' Multiplier of maturity factors. If not defined in config, they keep their calibrated value.
-table iMatFacMultDemand(DSBS,TECH,YTIME)              "Scenario multiplier on the demand maturity factor (1)"
-$ondelim
-$include"./iMatFacMultDemand.csv"
-$offdelim
-;
-*---
-*' Region-specific multiplier. A region entry overrides the global one for that region.
-table iMatFacMultDemandCy(allCy,DSBS,TECH,YTIME)      "Region-specific scenario multiplier on the demand maturity factor (1)"
-$ondelim
-$include"./iMatFacMultDemandCy.csv"
-$offdelim
-;
-*---
 $IFTHEN.calib %Calibration% == off
 parameter imMatrFactor(allCy,DSBS,TECH,YTIME)   "Maturity factor per technology and subsector for all countries (1)";
 imMatrFactor(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                          
 
 imMatrFactor(runCy,DSBS,"TBMSWAS",YTIME)$(sameas("AG",DSBS) and not EU28(runCy)) = 0.01;
-*' Geothermal direct use is site-limited (~0.4 EJ worldwide today) and the building targets give it a zero share, but
-*' the share-based calibration objective is insensitive to such a small fuel: maturity stayed near its base-year 1.0 in
-*' the first projected year, so geothermal took >20% of new equipment in 2024 and reached 6.6 EJ by 2030
-*' (MIP_REVIEW F38). Hold it at a small niche value over the projection instead.
-imMatrFactor(runCy,DOMSE,"TGEO",YTIME)$AN(YTIME) = 0.02;
 $ontext
 imMatrFactor(runCy,DSBS,"TGDO",YTIME)$((ord(YTIME) > 14) and TRANSE(DSBS)) = 0.5;
 imMatrFactor(runCy,DSBS,"TGSL",YTIME)$((ord(YTIME) > 14) and TRANSE(DSBS)) = 0.5;
@@ -727,12 +716,6 @@ imMatrFactor(runCy,DSBS,"TCHEVGSL",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 0
 imMatrFactor(runCy,DSBS,"TCHEVGDO",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 0.001;
 $offtext
 
-*' Modification of the maturity factor based on the multipliers.
-imMatrFactor(runCy,DSBS,TECH,YTIME)$(iMatFacMultDemand(DSBS,TECH,YTIME)
-                                     and not iMatFacMultDemandCy(runCy,DSBS,TECH,YTIME)) =
-    imMatrFactor(runCy,DSBS,TECH,YTIME) * iMatFacMultDemand(DSBS,TECH,YTIME);
-imMatrFactor(runCy,DSBS,TECH,YTIME)$iMatFacMultDemandCy(runCy,DSBS,TECH,YTIME) =
-    imMatrFactor(runCy,DSBS,TECH,YTIME) * iMatFacMultDemandCy(runCy,DSBS,TECH,YTIME);
 $ELSE.calib
 variable imMatrFactor(allCy,DSBS,TECH,YTIME)    "Maturity factor per technology and subsector for all countries (1)";
 imMatrFactor.LO(runCy,DSBS,TECH,YTIME) = 1e-2;                                          
@@ -742,9 +725,6 @@ imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(not (sameas(DSBS,"PC") or sameas(DSBS,"P
 imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(sameas(DSBS,"AG") and not EU28(runCy)) = iMatrFactorData(runCy,DSBS,TECH,YTIME); 
 imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$((sameas(DSBS,"PC") or sameas(DSBS,"PB") or sameas(DSBS,"GU") or INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and not SECTTECH(DSBS,TECH)) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                      
 imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$DATAY(YTIME)= iMatrFactorData(runCy,DSBS,TECH,YTIME);        
-*' Same niche cap on geothermal direct use as in the non-calibration branch (MIP_REVIEW F38): fixed, so the
-*' calibration cannot push it back up through the (share-insensitive) objective.
-imMatrFactor.FX(runCy,DOMSE,"TGEO",YTIME)$AN(YTIME) = 0.02;
 $ENDIF.calib
 *---
 parameters
@@ -863,6 +843,11 @@ imUsfEneConvSubTech(runCy,DOMSE,TECH,YTIME) = imDataDomTech(DOMSE,TECH,"USC");
 imFixOMCostTech(runCy,NENSE,TECH,YTIME)= imDataNonEneSec(NENSE,TECH,"FC");
 imVarCostTech(runCy,NENSE,TECH,YTIME) = imDataNonEneSec(NENSE,TECH,"VC");
 imUsfEneConvSubTech(runCy,NENSE,TECH,YTIME) = imDataNonEneSec(NENSE,TECH,"USC");
+imUsfEneConvSubTech(runCy,"BU","TH2F",YTIME) = 0.8;
+imUsfEneConvSubTech(runCy,"BU","TNGS",YTIME) = 0.5;
+imUsfEneConvSubTech(runCy,"BU","TGSL",YTIME) = 0.5;
+imCapCostTech(runCy,"BU",TECH,YTIME)$SECTTECH("BU",TECH) = imCapCostTech(runCy,"GN","TGDO",YTIME);
+imCapCostTech(runCy,"BU","TH2F",YTIME) = 1.5 * imCapCostTech(runCy,"BU","TGDO",YTIME);
 *---
 **  CDR
 *- #PARAM_CDR The following imCapCostTechMin are responsible for the secondary parameterization of the CDR technologies.

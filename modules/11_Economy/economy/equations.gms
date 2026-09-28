@@ -85,16 +85,18 @@ Q11SubsiDemTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS
     
     +
 $$offtext 
-* CDR levelized cost excludes the storage tax; only technology cost is subsidized.
+* The CCS availability adder is not eligible for DAC technology subsidies.
     sum(CDRTECH$(sameas(TECH,CDRTECH)), !! CDR
       (
         VmSubsiDemTechAvail(allCy,DSBS,CDRTECH,YTIME) * 1e6 / V06CapFacNewCDR(allCy,CDRTECH,YTIME-1)
       + (1 - imCapCostTechMin(allCy,DSBS,CDRTECH,YTIME))
-        * V06LvlCostCDR(allCy,CDRTECH,YTIME)
+        * (V06LvlCostCDR(allCy,CDRTECH,YTIME)
+          - i06CCSAvailabilityCostAdder(YTIME)$DACTECH(CDRTECH))
       -
       sqrt(sqr(VmSubsiDemTechAvail(allCy,DSBS,CDRTECH,YTIME) * 1e6 / V06CapFacNewCDR(allCy,CDRTECH,YTIME-1)
       - (1 - imCapCostTechMin(allCy,DSBS,CDRTECH,YTIME))
-        * V06LvlCostCDR(allCy,CDRTECH,YTIME)))
+        * (V06LvlCostCDR(allCy,CDRTECH,YTIME)
+          - i06CCSAvailabilityCostAdder(YTIME)$DACTECH(CDRTECH))))
       ) / 2
     )$(CDR(DSBS) and ord(YTIME) > 15)
 ;

@@ -69,14 +69,12 @@ $ENDIF.emulatorEmissions
 $ENDIF
 *---
 * After the last regional solve, set the global sustainability tax for the next
-* model year: tau(t) = A * (Qworld(t-1) / biomassReferenceEJ)^2.
-$ifthenE.biomassTax %biomassReferenceEJ%>0
+* model year: tau(t) = A * (Qworld(t-1) / 150 EJ)^2.
 i08BmswasPriceAdder(YTIME)$(
   sCY = card(runCyL) and TIME(YTIME-1) and AN(YTIME)
-) = i08BmswasTaxScale
+) = %bmswasPriceAdder%
   * sqr(
       sum(runCy2, V03ProdPrimary.L(runCy2,"BMSWAS",YTIME-1))
-      * i08MtoeToEJ / %biomassReferenceEJ%
+      * 0.041868 / 150
     );
-$endif.biomassTax
 *---
