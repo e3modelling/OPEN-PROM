@@ -684,6 +684,11 @@ parameter imMatrFactor(allCy,DSBS,TECH,YTIME)   "Maturity factor per technology 
 imMatrFactor(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                          
 
 imMatrFactor(runCy,DSBS,"TBMSWAS",YTIME)$(sameas("AG",DSBS) and not EU28(runCy)) = 0.01;
+*' Geothermal direct use is site-limited (~0.4 EJ worldwide today) and the building targets give it a zero share, but
+*' the share-based calibration objective is insensitive to such a small fuel: maturity stayed near its base-year 1.0 in
+*' the first projected year, so geothermal took >20% of new equipment in 2024 and reached 6.6 EJ by 2030
+*' (MIP_REVIEW F38). Hold it at a small niche value over the projection instead.
+imMatrFactor(runCy,DOMSE,"TGEO",YTIME)$AN(YTIME) = 0.02;
 $ontext
 imMatrFactor(runCy,DSBS,"TGDO",YTIME)$((ord(YTIME) > 14) and TRANSE(DSBS)) = 0.5;
 imMatrFactor(runCy,DSBS,"TGSL",YTIME)$((ord(YTIME) > 14) and TRANSE(DSBS)) = 0.5;
@@ -725,6 +730,9 @@ imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(not (sameas(DSBS,"PC") or sameas(DSBS,"P
 imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(sameas(DSBS,"AG") and not EU28(runCy)) = iMatrFactorData(runCy,DSBS,TECH,YTIME); 
 imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$((sameas(DSBS,"PC") or sameas(DSBS,"PB") or sameas(DSBS,"GU") or INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and not SECTTECH(DSBS,TECH)) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                      
 imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$DATAY(YTIME)= iMatrFactorData(runCy,DSBS,TECH,YTIME);        
+*' Same niche cap on geothermal direct use as in the non-calibration branch (MIP_REVIEW F38): fixed, so the
+*' calibration cannot push it back up through the (share-insensitive) objective.
+imMatrFactor.FX(runCy,DOMSE,"TGEO",YTIME)$AN(YTIME) = 0.02;
 $ENDIF.calib
 *---
 parameters
