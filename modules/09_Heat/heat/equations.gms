@@ -108,10 +108,16 @@ Q09CostAvgProdSte(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q09GapShareSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$runCy(allCy)) ..
     V09GapShareSte(allCy,TSTEAM,YTIME)
         =E=
-    !!i04MatFacPlaAvailCap(allCy,TSTEAM,YTIME) *
+*' The maturity weight was previously commented out because i04MatFacPlaAvailCap is indexed over PGALL (power plants),
+*' not TSTEAM, so it could not be used here. Without it the steam gap was allocated on cost alone, and the two
+*' zero-carbon, near-zero-fuel-cost district-heating options (TSTE2GEO on GEO at price 0, TSTE2OTH on NUC at a fixed
+*' 0.2 k$/toe) took almost the whole gap once the carbon price made fossil steam expensive. That collapsed the average
+*' steam production cost (CHA 5.0 -> 0.4 k$2015/toe between 2050 and 2100), which propagates into the steam price and
+*' then into industrial demand (MIP_REVIEW F40). i09MatFacSteProd is the module's own maturity weight, 1 by default.
+    i09MatFacSteProd(TSTEAM,YTIME) *
     V09CostProdSte(allCy,TSTEAM,YTIME-1) ** (-2) /
     SUM(TSTEAM2,
-      !!i04MatFacPlaAvailCap(allCy,TSTEAM2,YTIME) *
+      i09MatFacSteProd(TSTEAM2,YTIME) *
       V09CostProdSte(allCy,TSTEAM2,YTIME-1) ** (-2)
     );
 

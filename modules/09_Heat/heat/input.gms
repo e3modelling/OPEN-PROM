@@ -6,6 +6,7 @@ Parameters
 i09ProdLftSte(TSTEAM)                   "Lifetime of steam production technologies in years"
 i09CaptRateSteProd(TSTEAM)
 i09ScaleEndogScrap
+S09NucSteCapexFac                        "Capital-cost multiplier for the nuclear district-heating plant (1)"
 i09AvailRateSteProd(TSTEAM,YTIME)       "Availability rate of STEAM Plants ()"
 i09CostVOMSteProd(TSTEAM,YTIME)         "Variable cost per steam plant type (US$2015/toe)"
 i09EffSteThrm(TSTEAM,YTIME)
@@ -15,10 +16,14 @@ i09ParDHEffData(EFS)
 i09CostInvCostSteProd(TSTEAM,YTIME)     "Capital Cost per steam plant type (US$2015/(KWe or KWThrm) )"
 i09CostFixOMSteProd(TSTEAM,YTIME)       "Fixed O&M cost per steam plant type (US$2015/KW )"
 i09ShareFuel(allCy,TSTEAM,EFS,YTIME)
+i09MatFacSteProd(TSTEAM,YTIME)          "Maturity factor per steam production technology (1)"
 ;
 *---
 i09CaptRateSteProd(TSTEAM) = 0;
 i09ScaleEndogScrap = 40 / card(TSTEAM);
+*' Capital-cost multiplier applied to the nuclear district-heating plant relative to the gas-boiler row it
+*' currently copies (MIP_REVIEW F40). PLACEHOLDER - needs calibration.
+S09NucSteCapexFac = 20;
 *---
 table imDataIndTechnologyCHP(INDDOM,TSTEAM,ECONCHAR)          "Technoeconomic characteristics of industry (various)"
               IC      FC      VC      LFT USC
@@ -176,6 +181,24 @@ i09CostInvCostSteProd(TSTEAM,YTIME) = imDataChpPowGen(TSTEAM,"IC",YTIME);
 i09CostFixOMSteProd(TSTEAM,YTIME) = imDataChpPowGen(TSTEAM,"FC",YTIME);
 *---
 i09CostVOMSteProd(TSTEAM,YTIME) = imDataChpPowGen(TSTEAM,"VOM",YTIME);
+*---
+*' TSTE2OTH is the nuclear-fuelled district-heating plant (TSTEAMTOEF maps it to NUC), but iChpPowGen.csv gives it the
+*' gas-boiler cost row: its IC/FC/VOM/effThrm are byte-identical to TSTE2NGS. Combined with the nuclear fuel price
+*' fixed at 0.2 k$/toe (core/preloop.gms) and no carbon cost, that made it the cheapest steam option in the model.
+*' Scale its capital cost off the same table instead of leaving it as a gas boiler (MIP_REVIEW F40).
+*' PLACEHOLDER multiplier - needs calibration against nuclear-heat / small-modular-reactor capex.
+i09CostInvCostSteProd("TSTE2OTH",YTIME) = S09NucSteCapexFac * imDataChpPowGen("TSTE2NGS","IC",YTIME);
+*---
+*' Maturity weights for the steam gap allocation (Q09GapShareSte). 1 = no restraint, which is the default for every
+*' technology so the fossil and biomass options are unaffected.
+i09MatFacSteProd(TSTEAM,YTIME) = 1;
+*' Geothermal and nuclear district heat are both strongly deployment-limited in reality: world geothermal district
+*' heat is ~0.4 EJ/yr and nuclear district heat is a handful of plants. Neither pays a fuel or carbon cost here, so
+*' without a brake they absorb the whole steam gap as the carbon price rises. Hold them at a small niche share, the
+*' same treatment TGEO gets in the buildings sectors (MIP_REVIEW F38, F40).
+*' PLACEHOLDER values - need calibration against observed district-heat capacity by source.
+i09MatFacSteProd("TSTE2GEO",YTIME)$AN(YTIME) = 0.02;
+i09MatFacSteProd("TSTE2OTH",YTIME)$AN(YTIME) = 0.02;
 *---
 imDataChpPowGen("TSTE2GEO","effThrm",YTIME) = 1;
 
