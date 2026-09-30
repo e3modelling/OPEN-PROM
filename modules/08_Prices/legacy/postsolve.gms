@@ -8,7 +8,12 @@ VmPriceFuelAvgSub.FX(runCyL,DSBS,YTIME)$TIME(YTIME) = VmPriceFuelAvgSub.L(runCyL
 VmPriceFuelSubsecCarVal.FX(runCyL,SBS,EF,YTIME)$TIME(YTIME) = VmPriceFuelSubsecCarVal.L(runCyL,SBS,EF,YTIME)$TIME(YTIME);
 VmPriceElecInd.FX(runCyL,TCHP,YTIME)$TIME(YTIME) = VmPriceElecInd.L(runCyL,TCHP,YTIME)$TIME(YTIME);
 V08PriceFuelSepCarbonWght.FX(runCyL,DSBS,EF,YTIME)$TIME(YTIME) = V08PriceFuelSepCarbonWght.L(runCyL,DSBS,EF,YTIME)$TIME(YTIME);
+V08PricePrimary.FX(runCyL,EFS,YTIME)$TIME(YTIME) = V08PricePrimary.L(runCyL,EFS,YTIME)$TIME(YTIME);
+VmPriceSecondary.FX(runCyL,EFS,YTIME)$TIME(YTIME) = VmPriceSecondary.L(runCyL,EFS,YTIME)$TIME(YTIME);
+VmPriceFinal.FX(runCyL,DSBS,EFS,YTIME)$TIME(YTIME) = VmPriceFinal.L(runCyL,DSBS,EFS,YTIME)$TIME(YTIME);
 VmPriceCarbon.FX(runCyL,SBS,EFS,YTIME)$TIME(YTIME) = VmPriceCarbon.L(runCyL,SBS,EFS,YTIME)$TIME(YTIME);
+VmCostAvgProd.FX(runCyL,EFS,YTIME)$TIME(YTIME) = VmCostAvgProd.L(runCyL,EFS,YTIME)$TIME(YTIME);
+V08SupplyCurves.FX(runCyL,EFS,YTIME)$TIME(YTIME) = V08SupplyCurves.L(runCyL,EFS,YTIME)$TIME(YTIME);
 *---
 *' Land-use emulator emission accounting (landEmiMode == curve only)
 *'
@@ -67,4 +72,16 @@ imAfoluAgriEmis(runCyL,EMTYPE,YTIME)$(TIME(YTIME) $(sameas(EMTYPE,"CH4LandUse") 
   );
 $ENDIF.emulatorEmissions
 $ENDIF
+*---
+* After the last regional solve, set the global sustainability tax for the next
+* model year: tau(t) = A * (Qworld(t-1) / biomassReferenceEJ)^2.
+$ifthenE.biomassTax %biomassReferenceEJ%>0
+i08BmswasPriceAdder(YTIME)$(
+  sCY = card(runCyL) and TIME(YTIME-1) and AN(YTIME)
+) = i08BmswasTaxScale
+  * sqr(
+      sum(runCy2, V03ProdPrimary.L(runCy2,"BMSWAS",YTIME-1))
+      * i08MtoeToEJ / %biomassReferenceEJ%
+    );
+$endif.biomassTax
 *---

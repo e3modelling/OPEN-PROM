@@ -179,6 +179,10 @@ imFuelPrice(runCy,TRANSE,"RFO",YTIME) = imFuelPrice(runCy,"BU","RFO",YTIME);
 imFuelPrice(runCy,TRANSE,"OGS",YTIME) = imFuelPrice(runCy,TRANSE,"NGS",YTIME);
 imFuelPrice(runCy,TRANSE,"OLQ",YTIME) = imFuelPrice(runCy,TRANSE,"GDO",YTIME);
 imFuelPrice(runCy,TRANSE,"H2F",YTIME) = 2 * imFuelPrice(runCy,TRANSE,"H2F",YTIME);
+imFuelPrice(runCy,"H2P",EFS,YTIME) = imFuelPrice(runCy,"OI",EFS,YTIME);
+imFuelPrice(runCy,"STEAMP",EFS,YTIME) = imFuelPrice(runCy,"PG",EFS,YTIME);
+imFuelPrice(runCy,SBS,"H2F",YTIME) = 1.5 * imFuelPrice(runCy,"OI","ELC",YTIME);
+imFuelPrice(runCy,SBS,"STE",YTIME) = imFuelPrice(runCy,"OI","ELC",YTIME);
 imFuelPrice(runCy,"ICT",EFS,YTIME)$SECtoEF("ICT",EFS) = imFuelPrice(runCy,"SE",EFS,YTIME);
 *---
 table imPriceFuelsIntBase(WEF,YTIME)	              "International Fuel Prices USED IN BASELINE SCENARIO ($2015/toe)"
@@ -641,6 +645,20 @@ $include"./iMatrFactorData.csv"
 $offdelim
 ;
 *---
+*' Multiplier of maturity factors. If not defined in config, they keep their calibrated value.
+table iMatFacMultDemand(DSBS,TECH,YTIME)              "Scenario multiplier on the demand maturity factor (1)"
+$ondelim
+$include"./iMatFacMultDemand.csv"
+$offdelim
+;
+*---
+*' Region-specific multiplier. A region entry overrides the global one for that region.
+table iMatFacMultDemandCy(allCy,DSBS,TECH,YTIME)      "Region-specific scenario multiplier on the demand maturity factor (1)"
+$ondelim
+$include"./iMatFacMultDemandCy.csv"
+$offdelim
+;
+*---
 $IFTHEN.calib %Calibration% == off
 parameter imMatrFactor(allCy,DSBS,TECH,YTIME)   "Maturity factor per technology and subsector for all countries (1)";
 imMatrFactor(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                          
@@ -678,6 +696,12 @@ imMatrFactor(runCy,DSBS,"TCHEVGSL",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 0
 imMatrFactor(runCy,DSBS,"TCHEVGDO",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 0.001;
 $offtext
 
+*' Modification of the maturity factor based on the multipliers.
+imMatrFactor(runCy,DSBS,TECH,YTIME)$(iMatFacMultDemand(DSBS,TECH,YTIME)
+                                     and not iMatFacMultDemandCy(runCy,DSBS,TECH,YTIME)) =
+    imMatrFactor(runCy,DSBS,TECH,YTIME) * iMatFacMultDemand(DSBS,TECH,YTIME);
+imMatrFactor(runCy,DSBS,TECH,YTIME)$iMatFacMultDemandCy(runCy,DSBS,TECH,YTIME) =
+    imMatrFactor(runCy,DSBS,TECH,YTIME) * iMatFacMultDemandCy(runCy,DSBS,TECH,YTIME);
 $ELSE.calib
 variable imMatrFactor(allCy,DSBS,TECH,YTIME)    "Maturity factor per technology and subsector for all countries (1)";
 imMatrFactor.LO(runCy,DSBS,TECH,YTIME) = 1e-2;                                          
@@ -689,15 +713,6 @@ imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$((sameas(DSBS,"PC") or sameas(DSBS,"PB") 
 imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$DATAY(YTIME)= iMatrFactorData(runCy,DSBS,TECH,YTIME);        
 $ENDIF.calib
 *---
-parameters
-!!imFacSubsiCapCostTech(DSBS,TECH)                            !!State subsidy (%) factor in technology capex (demand side)
-!!imGrantCapCostTech(DSBS,TECH)                               !!State granting in technology capex (demand side)
-!!imSubsiCapCostFuel(SBS,EF)                                  !!State subsidy in fuel cost
-!!imFacSubsiCapCostSupply(SSBS,STECH)                         !!State subsidy (%) factor in technology capex (supply side)
-!!imGrantCapCostSupply(SSBS,STECH)                            !!State granting in technology capex (supply side)
-imCapCostTechMin(allCy,DSBS,TECH,YTIME)                    !!Factor for the minimum capex of a demand technology after the state subsidy
-!!#UPT imCostCapTechDisc(YTIME)                                   !!Discount rate for capital costs of power generation technologies
-;
 
 $ontext
 if %fScenario% eq 0 then
@@ -855,7 +870,6 @@ imPlantEffByType(runCy,STECH,"effHeat",YTIME)$(not PGALL(STECH))= imPlantEffByTy
 **   Conversion of GW mean power into TWh/y, depending on whether it's a leap year
 smGwToTwhPerYear(YTIME) = 8.76 + 0.024 $ (mod(YTIME.val,4) = 0 and mod (YTIME.val,100) <> 0);
 *--
-!!#UPT imCostCapTechDisc(YTIME) = 0;
-!!#UPT imCostCapTechDisc(YTIME)$(ord(YTIME) = 20) = 0.75;
-!!#UPT imCostCapTechDisc(YTIME)$(ord(YTIME) > 20 and ord(YTIME) <= 40) = 0.75 + (ord(YTIME) - 20) * (0.5 - 0.75) / (40 - 20);
-!!#UPT imCostCapTechDisc(YTIME)$(ord(YTIME) > 40) = 0.5;
+imFactorEmissProcessesCO2(allCy,SBS,EF,YTIME) = 0;
+*---
+imFactorEmissEnergyCO2(allCy,SBS,EF,YTIME) = iCo2EmiFacAllSbs(EF);

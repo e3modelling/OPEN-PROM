@@ -3,9 +3,15 @@
 
 
 *---
+table i08PrimaryPrice(allCy,EFS,YTIME)   ""
+$ondelim
+$include "iPrimaryEnergyPrice.csv"
+$offdelim
+;
+
 *' Fuel price pass-through elasticity, indexed (target, source): i08PriceTransElast(EFS,"CRO"),
-*' i08PriceTransElast(EFS,"BMSWAS"). CRO rows use 0.4/0.8/0.2; BMSWAS rows
-*' use 0.6 for biofuels and 1 for BMSWAS itself. Table = target rows x source cols.
+*' i08PriceTransElast(EFS,"BMSWAS"). CRO rows use 0.4/0.8/0.2; BMSWAS-source
+*' rows use 0.6 for processed biofuels. Table = target rows x source cols.
 *' GAMS param i08PriceTransElast <-> mrprom output file iPriceTransElast.csv.
 table i08PriceTransElast(EF,EF)   "Fuel price pass-through elasticity: target (rows) -> source (cols)"
 $ondelim
@@ -148,12 +154,6 @@ $include "CrudeOilPrice.csv"
 $offdelim
 /;
 *---
-Parameters
-i08DiffFuelsInSec(SBS)                    "Auxiliary parameter holding the number of different fuels in a sector"
-i08WgtSecAvgPriFueCons(allCy,SBS,EF)	    "Weights for sector's average price, based on fuel consumption (1)"
-i08VAT(allCy,YTIME)                       "VAT (value added tax) rates (1)"
-;
-*---
 loop SBS do
          i08DiffFuelsInSec(SBS) = 0;
          loop EF$(SECtoEF(SBS,EF))  do
@@ -183,4 +183,30 @@ i08WgtSecAvgPriFueCons(runCy,SBS,EF)$(SECtoEF(SBS,EF) $sum(ef2$SECtoEF(SBS,EF),i
 i08VAT(runCy, YTIME) = 0;
 *---
 imFuelPrice(runCy,SBS,"CRO",YTIME) = i08PriceCrudeOil(YTIME);
+*---
+i08ElastPricePrimary("NGS","CRO") = 0.7;
+i08ElastPricePrimary("HCL","NGS") = 0.4;
+i08ElastPricePrimary("BMSWAS","BMSWAS") = 1;
+*---
+i08PriceBase("CRO") = 0.2;
+i08PriceBase("NGS") = 0.2;
+*---
+i08ElastPriceSupplyCurve(EFS,EFS) = 1;
+*---
+i08ElastPriceSecondary(EFS) = 1;
+*---
+i08ElastPriceFinal(EFS) = 1;
+*---
+i08ElastPricePrimary("NGS","CRO") = 0.7;
+i08ElastPricePrimary("HCL","NGS") = 0.4;
+i08ElastPricePrimary("BMSWAS","BMSWAS") = 1;
+*---
+i08PriceBase("CRO") = 0.2;
+i08PriceBase("NGS") = 0.2;
+*---
+i08ElastPriceSupplyCurve(EFS,EFS) = 1;
+*---
+i08ElastPriceSecondary(EFS) = 1;
+*---
+i08ElastPriceFinal(EFS) = 1;
 *---
