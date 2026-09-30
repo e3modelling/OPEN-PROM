@@ -148,12 +148,6 @@ abort$sum(runCy$(not resCy(runCy)), 1)
 $ENDIF.emulatorInput
 $ENDIF
 *---
-parameter i08PriceCrudeOil(YTIME) /
-$ondelim
-$include "CrudeOilPrice.csv"
-$offdelim
-/;
-*---
 loop SBS do
          i08DiffFuelsInSec(SBS) = 0;
          loop EF$(SECtoEF(SBS,EF))  do
@@ -182,7 +176,7 @@ i08WgtSecAvgPriFueCons(runCy,SBS,EF)$(SECtoEF(SBS,EF) $sum(ef2$SECtoEF(SBS,EF),i
 * FIXME: Check if VAT (value added tax) rates are necessary for the model.
 i08VAT(runCy, YTIME) = 0;
 *---
-imFuelPrice(runCy,SBS,"CRO",YTIME) = i08PriceCrudeOil(YTIME);
+imFuelPrice(runCy,SBS,"CRO",YTIME) = i08PrimaryPrice(runCy,"CRO",YTIME);
 *---
 i08ElastPricePrimary("NGS","CRO") = 0.7;
 i08ElastPricePrimary("HCL","NGS") = 0.4;
