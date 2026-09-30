@@ -44,7 +44,3 @@ VmFinalEnergy.FX(runCy,DSBS,EFS,YTIME)$DATAY(YTIME) = imFuelCons(runCy,DSBS,EFS,
 VmFinalEnergy.FX(runCy,DSBS,EFS,YTIME)$(not SECtoEF(DSBS,EFS)) = 0;
 VmFinalEnergy.FX(runCy,"ICT","ELC",YTIME) = i02FuelConsICT(runCy,"%ICT%","%SSP%",YTIME);
 *---
-VmCostAvgProd.LO(runCy,EFS,YTIME) = 0;
-VmCostAvgProd.L(runCy,EFS,YTIME) = 1;
-VmCostAvgProd.FX(runCy,EFS,YTIME)$DATAY(YTIME) = 
-1;

@@ -34,6 +34,7 @@ Q08PricePrimary(allCy,EFS,YTIME)
 Q08PriceSecondary(allCy,EFS,YTIME)
 Q08PriceFinal(allCy,DSBS,EFS,YTIME)
 Q08PriceCarbon(allCy,SBS,EFS,YTIME)
+Q08CostAvgProd(allCy,EFS,YTIME)
 ;
 
 Parameters
@@ -69,6 +70,7 @@ V08SupplyCurves(allCy,EFS,YTIME)
 V08PricePrimary(allCy,EFS,YTIME)
 VmPriceSecondary(allCy,EFS,YTIME)
 VmPriceFinal(allCy,DSBS,EFS,YTIME)
+VmCostAvgProd(allCy,EFS,YTIME)
 *' *** Miscellaneous
 *V08FuelPriSubNoCarb(allCy,SBS,EF,YTIME)	                   "Fuel prices per subsector and fuel  without carbon value (kUS$2015/toe)"
 ;
