@@ -68,7 +68,7 @@ V01CostFuel.FX(runCy,TRANSE,TTECH,YTIME)$DATAY(YTIME) =
     sum(EFS$TTECHtoEF(TTECH,EFS),
       V01ConsSpecificFuel.L(runCy,TRANSE,TTECH,EFS,YTIME) *
       V01ShareBlend.L(runCy,TRANSE,EFS,YTIME) *
-      VmPriceFuelSubsecCarVal.L(runCy,TRANSE,EFS,YTIME)
+      (VmPriceFinal.L(runCy,TRANSE,EFS,YTIME) + VmPriceCarbon.L(runCy,TRANSE,EFS,YTIME))
     ) 
   )$(not PLUGIN(TTECH)) +
   (
@@ -76,11 +76,11 @@ V01CostFuel.FX(runCy,TRANSE,TTECH,YTIME)$DATAY(YTIME) =
       (1-i01ShareAnnMilePlugInHybrid(runCy,YTIME)) *
       V01ShareBlend.L(runCy,TRANSE,EFS,YTIME) *
       V01ConsSpecificFuel.L(runCy,TRANSE,TTECH,EFS,YTIME) *
-      VmPriceFuelSubsecCarVal.L(runCy,TRANSE,EFS,YTIME)
+      (VmPriceFinal.L(runCy,TRANSE,EFS,YTIME) + VmPriceCarbon.L(runCy,TRANSE,EFS,YTIME))
     ) +
     i01ShareAnnMilePlugInHybrid(runCy,YTIME) *
     V01ConsSpecificFuel.L(runCy,TRANSE,TTECH,"ELC",YTIME) *
-    VmPriceFuelSubsecCarVal.L(runCy,TRANSE,"ELC",YTIME)
+    VmPriceFinal.L(runCy,TRANSE,"ELC",YTIME)
   )$PLUGIN(TTECH) +
   imVarCostTech(runCy,TRANSE,TTECH,YTIME)
 ) *

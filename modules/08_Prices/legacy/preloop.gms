@@ -33,9 +33,6 @@ $else.biomassTax
 i08BmswasPriceAdder(YTIME) = 0;
 $endif.biomassTax
 *---
-VmPriceCarbon.LO(runCy,SBS,EFS,YTIME) = 0;
-VmPriceCarbon.FX(runCy,SBS,EFS,YTIME)$DATAY(YTIME) = 1e-3 * iCarbValYrExog(runCy,YTIME)$INDSE1(SBS) * imCo2EmiFac(runCy,SBS,EFS,YTIME);
-*---
 $IFTHEN %landEmiMode% == curve
 * Both emulator backends use the same native-MAgPIE AFOLU history on DATAY.
 * TIME values are calculated by the selected backend in postsolve.
@@ -66,7 +63,7 @@ VmCostAvgProdH2.L(runCy,YTIME)$sameas("H2F",EFS) +
   SUM((SSBS,EFS2)$(SECtoEFPROD(SSBS,EFS) and SECtoEF(SSBS,EFS2)),
     (V03InpTotTransf.L(runCy,SSBS,EFS2,YTIME) + VmConsFiEneSec.L(runCy,SSBS,EFS2,YTIME)) * V08PricePrimary.L(runCy,EFS2,YTIME) +
     1e-3 * imFactorEmissProcessesCO2(runCy,SSBS,EFS2,YTIME) * sum(NAP$NAPtoALLSBS(NAP,SSBS), VmCarVal.L(runCy,NAP,YTIME)) * V03InpTotTransf.L(runCy,SSBS,EFS2,YTIME) +
-    1e-3 * imFactorEmissEnergyCO2(runCy,SSBS,EFS2,YTIME) * sum(NAP$NAPtoALLSBS(NAP,SSBS), VmCarVal.L(runCy,NAP,YTIME)) * VmConsFiEneSec.L(runCy,SSBS,EFS2,YTIME) + 1e-3
+    1e-3 * imFactorEmissEnergyCO2(runCy,SSBS,EFS2) * sum(NAP$NAPtoALLSBS(NAP,SSBS), VmCarVal.L(runCy,NAP,YTIME)) * VmConsFiEneSec.L(runCy,SSBS,EFS2,YTIME) + 1e-3
   ) / SUM((SSBS,EFS2)$(SECtoEFPROD(SSBS,EFS) and SECtoEF(SSBS,EFS2)), V03OutTotTransf.L(runCy,SSBS,EFS2,YTIME) + 1e-3)
 )$(sameas("GSL",EFS) or sameas("GDO",EFS)) +
 (

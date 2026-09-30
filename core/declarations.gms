@@ -55,7 +55,7 @@ imCapCostTech(allCy,SBS,TECH,YTIME)                          "Capital Cost of te
                                                                 !! - For Domestic Sectors is expressed in kUS$2015/toe-year
 imCapCostTechMin(allCy,DSBS,TECH,YTIME)                    !!Factor for the minimum capex of a demand technology after the state subsidy
 imFactorEmissProcessesCO2(allCy,SBS,EF,YTIME)
-imFactorEmissEnergyCO2(allCy,SBS,EF,YTIME)
+imFactorEmissEnergyCO2(allCy,SBS,EF)
 smGwToTwhPerYear(YTIME)                                    "convert GW mean power into TWh/y, depending on whether it's a leap year"
 ;
 Equations
@@ -73,7 +73,6 @@ $ENDIF.calib
 
 Variables
 *'                **Interdependent Variables**
-
 *' *** Miscellaneous
 vDummyObj                                                  "Dummy maximisation variable (1)"
 vDummyObjPGALL                                             "Dummy maximisation variable for PGALL (1)"
@@ -83,6 +82,7 @@ vDummyObjINDDOMFinalEnergy(DSBS)                            "Dummy maximisation 
 ;
 
 Positive Variables
+VmPriceCarbon(allCy,SBS,EFS,YTIME)
 VmCarVal(allCy,NAP,YTIME)                                  "Carbon prices for all countries (US$2015/tn CO2)"
 common(allCy,TRANSE,YTIME)
 VmGDPPartGlob(allCy,YTIME)                                           "Global GDP share (1)"

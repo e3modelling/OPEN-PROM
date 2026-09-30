@@ -57,6 +57,7 @@ SUM(EFS2$AGRITECHTOEF(AGRITECH,EFS2),
 );
 *---
 i12calibweibul(runCy,AGRI_MODES,AGRITECH,EFS,YTIME)$DATAY(YTIME) = i12DataShareBlend(runCy,AGRI_MODES,AGRITECH,EFS,YTIME) * i12FinalPrices(runCy,AGRI_MODES,EFS,YTIME) ** 2;
-i12calibweibul(runCy,AGRI_MODES,AGRITECH,EFS,YTIME)$(not DATAY(YTIME) and ord(YTIME) >= 20) = 1;
-i12calibweibul(runCy,AGRI_MODES,AGRITECH,EFS,YTIME)$(not DATAY(YTIME) and ord(YTIME) < 20) = 1 + (i12calibweibul(runCy,AGRI_MODES,AGRITECH,EFS,YTIME)-1) * (20-ord(YTIME))/19;
+i12calibweibul(runCy,AGRI_MODES,AGRITECH,EFS,YTIME)$(not DATAY(YTIME) and ord(YTIME) >= 31 and AGRMODEStoTECH(AGRI_MODES,AGRITECH) and AGRITECHTOEF(AGRITECH,EFS)) = 1;
+i12calibweibul(runCy,AGRI_MODES,AGRITECH,EFS,YTIME)$(not DATAY(YTIME) and ord(YTIME) < 31 and AGRMODEStoTECH(AGRI_MODES,AGRITECH) and AGRITECHTOEF(AGRITECH,EFS)) = i12calibweibul(runCy,AGRI_MODES,AGRITECH,EFS,"%fBaseY%") + (2010 + ord(YTIME) - %fBaseY% - 1) * (1-i12calibweibul(runCy,AGRI_MODES,AGRITECH,EFS,"%fBaseY%")) / (2040 - %fBaseY%);
+**(i12calibweibul(runCy,AGRI_MODES,AGRITECH,EFS,"%fBaseY%")-1) * (2010+22-%fBaseY%)/21;
 *i12calibweibul(runCy,AGRI_MODES,AGRITECH,EFS,YTIME)$(not DATAY(YTIME)) = i12calibweibul(runCy,AGRI_MODES,AGRITECH,EFS,"%fBaseY%");

@@ -64,7 +64,6 @@ VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)                "Fuel prices per subs
 VmPriceFuelAvgSub(allCy,DSBS,YTIME)                        "Average fuel prices per subsector (k$2015/toe)"
 * VmPriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)                  "Fuel prices per subsector and fuel for CHP plants (kUS$2015/toe)"
 VmPriceElecInd(allCy,TCHP,YTIME)                                "Electricity index - a function of industry price (1)"
-VmPriceCarbon(allCy,SBS,EFS,YTIME)
 
 V08SupplyCurves(allCy,EFS,YTIME)
 V08PricePrimary(allCy,EFS,YTIME)

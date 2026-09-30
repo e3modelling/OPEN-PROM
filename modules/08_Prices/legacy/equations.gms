@@ -164,8 +164,8 @@ Q08PriceCarbon(allCy,SBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmPriceCarbon(allCy,SBS,EFS,YTIME)
      =E=
     1e-3 * (
-      VmCarVal(allCy,"TRADE",YTIME)$(INDSE1(SBS) or ((DOMSE1(SBS) or TRANS1(SBS) or sameas("BU", SBS)) and ord(YTIME) > 17))
-    ) * imCo2EmiFac(allCy,SBS,EFS,YTIME);
+      VmCarVal(allCy,"TRADE",YTIME)$(INDSE1(SBS) or ((DOMSE1(SBS) or TRANS1(SBS) or sameas("BU", SBS) or sameas("AG", SBS)) and ord(YTIME) > 17))
+    ) * imFactorEmissEnergyCO2(allCy,SBS,EFS);
 
 *' The equation calculates the average fuel price per subsector. These average prices are used to further compute electricity prices in industry
 *' (using the OI "other industry" avg price), as well as the aggregate fuel demand (of substitutable fuels) per subsector.
@@ -200,7 +200,7 @@ Q08CostAvgProd(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       SUM((SSBS,EFS2)$(SECtoEFPROD(SSBS,EFS) and SECtoEF(SSBS,EFS2)),
         (V03InpTotTransf(allCy,SSBS,EFS2,YTIME) + VmConsFiEneSec(allCy,SSBS,EFS2,YTIME)) * V08PricePrimary(allCy,EFS2,YTIME) +
         1e-3 * imFactorEmissProcessesCO2(allCy,SSBS,EFS2,YTIME) * sum(NAP$NAPtoALLSBS(NAP,SSBS), VmCarVal(allCy,NAP,YTIME)) * V03InpTotTransf(allCy,SSBS,EFS2,YTIME) +
-        1e-3 * imFactorEmissEnergyCO2(allCy,SSBS,EFS2,YTIME) * sum(NAP$NAPtoALLSBS(NAP,SSBS), VmCarVal(allCy,NAP,YTIME)) * VmConsFiEneSec(allCy,SSBS,EFS2,YTIME) + 1e-3
+        1e-3 * imFactorEmissEnergyCO2(allCy,SSBS,EFS2) * sum(NAP$NAPtoALLSBS(NAP,SSBS), VmCarVal(allCy,NAP,YTIME)) * VmConsFiEneSec(allCy,SSBS,EFS2,YTIME) + 1e-3
       ) / SUM((SSBS,EFS2)$(SECtoEFPROD(SSBS,EFS) and SECtoEF(SSBS,EFS2)), V03OutTotTransf(allCy,SSBS,EFS2,YTIME) + 1e-3)
     )$(sameas("GSL",EFS) or sameas("GDO",EFS)) +
     (

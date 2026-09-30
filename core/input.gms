@@ -857,4 +857,4 @@ smGwToTwhPerYear(YTIME) = 8.76 + 0.024 $ (mod(YTIME.val,4) = 0 and mod (YTIME.va
 *--
 imFactorEmissProcessesCO2(allCy,SBS,EF,YTIME) = 0;
 *---
-imFactorEmissEnergyCO2(allCy,SBS,EF,YTIME) = iCo2EmiFacAllSbs(EF);
+imFactorEmissEnergyCO2(allCy,SBS,EF) = iCo2EmiFacAllSbs(EF);
