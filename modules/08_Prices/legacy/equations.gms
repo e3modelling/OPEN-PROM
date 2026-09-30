@@ -204,6 +204,7 @@ Q08CostAvgProd(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       ) / SUM((SSBS,EFS2)$(SECtoEFPROD(SSBS,EFS) and SECtoEF(SSBS,EFS2)), V03OutTotTransf(allCy,SSBS,EFS2,YTIME) + 1e-3)
     )$(sameas("GSL",EFS) or sameas("GDO",EFS)) +
     (
-      VmCostAvgProd(allCy,EFS,YTIME-1) - 
-      0.01 * VmCostAvgProd(allCy,EFS,YTIME-1)$BIOFUELS(EFS)
+      VmCostAvgProd(allCy,EFS,YTIME-1) *
+      (1 + (V08SupplyCurves(allCy,"BMSWAS",YTIME) / V08SupplyCurves(allCy,"BMSWAS",YTIME) - 1)$BIOFUELS(EFS)) *
+      (1 - 0.008$BIOFUELS(EFS))
     )$(not (sameas(EFS,"STE") or sameas(EFS,"H2F") or sameas(EFS,"ELC") or sameas("GSL",EFS) or sameas("GDO",EFS)));

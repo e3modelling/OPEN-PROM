@@ -198,9 +198,3 @@ i08ElastPricePrimary("BMSWAS","BMSWAS") = 1;
 i08PriceBase("CRO") = 0.2;
 i08PriceBase("NGS") = 0.2;
 *---
-i08ElastPriceSupplyCurve(EFS,EFS) = 1;
-*---
-i08ElastPriceSecondary(EFS) = 1;
-*---
-i08ElastPriceFinal(EFS) = 1;
-*---
