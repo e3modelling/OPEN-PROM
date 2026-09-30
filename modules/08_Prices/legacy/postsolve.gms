@@ -13,6 +13,7 @@ VmPriceSecondary.FX(runCyL,EFS,YTIME)$TIME(YTIME) = VmPriceSecondary.L(runCyL,EF
 VmPriceFinal.FX(runCyL,DSBS,EFS,YTIME)$TIME(YTIME) = VmPriceFinal.L(runCyL,DSBS,EFS,YTIME)$TIME(YTIME);
 VmPriceCarbon.FX(runCyL,SBS,EFS,YTIME)$TIME(YTIME) = VmPriceCarbon.L(runCyL,SBS,EFS,YTIME)$TIME(YTIME);
 VmCostAvgProd.FX(runCyL,EFS,YTIME)$TIME(YTIME) = VmCostAvgProd.L(runCyL,EFS,YTIME)$TIME(YTIME);
+V08SupplyCurves.FX(runCyL,EFS,YTIME)$TIME(YTIME) = V08SupplyCurves.L(runCyL,EFS,YTIME)$TIME(YTIME);
 *---
 *' Land-use emulator emission accounting (landEmiMode == curve only)
 *'

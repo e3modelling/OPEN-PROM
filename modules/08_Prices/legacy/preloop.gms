@@ -51,7 +51,9 @@ V08SupplyCurves.FX(runCy,EFS,YTIME)$DATAY(YTIME) = 1;
 *---
 V08PricePrimary.LO(runCy,EFS,YTIME) = 0;
 V08PricePrimary.L(runCy,EFS,YTIME) = 1;
-V08PricePrimary.FX(runCy,EFS,YTIME)$DATAY(YTIME) = 1;
+V08PricePrimary.FX(runCy,EFS,YTIME)$DATAY(YTIME) = i08PrimaryPrice(runCy,EFS,YTIME);
+V08PricePrimary.FX(runCy,EFS,YTIME)$sameas(EFS,"CRO") = i08PrimaryPrice(runCy,EFS,YTIME);
+V08PricePrimary.FX(runCy,EFS,YTIME)$(not PRIM_PRICES(EFS)) = 0;
 *---
 VmCostAvgProd.LO(runCy,EFS,YTIME) = 0;
 VmCostAvgProd.L(runCy,EFS,YTIME) = 1;
@@ -60,15 +62,13 @@ VmCostPowGenAvgLng.L(runCy,YTIME)$sameas("ELC",EFS) +
 VmCostAvgProdH2.L(runCy,YTIME)$sameas("H2F",EFS) +
 1$sameas("STE",EFS) + !! ERROR
 !!VmCostAvgProdSte.L(runCy,YTIME)$sameas("STE",EFS) +
-$ontext
 (
   SUM((SSBS,EFS2)$(SECtoEFPROD(SSBS,EFS) and SECtoEF(SSBS,EFS2)),
-    (V03InpTotTransf.L(runCy,SSBS,EFS2,YTIME) + VmConsFiEneSec.L(runCy,SSBS,EFS,YTIME)) * VmPriceSecondary.L(runCy,EFS2,YTIME) +
+    (V03InpTotTransf.L(runCy,SSBS,EFS2,YTIME) + VmConsFiEneSec.L(runCy,SSBS,EFS2,YTIME)) * V08PricePrimary.L(runCy,EFS2,YTIME) +
     1e-3 * imFactorEmissProcessesCO2(runCy,SSBS,EFS2,YTIME) * sum(NAP$NAPtoALLSBS(NAP,SSBS), VmCarVal.L(runCy,NAP,YTIME)) * V03InpTotTransf.L(runCy,SSBS,EFS2,YTIME) +
-    1e-3 * imFactorEmissEnergyCO2(runCy,SSBS,EFS2,YTIME) * sum(NAP$NAPtoALLSBS(NAP,SSBS), VmCarVal.L(runCy,NAP,YTIME)) * VmConsFiEneSec.L(runCy,SSBS,EFS,YTIME) + 1e-3
+    1e-3 * imFactorEmissEnergyCO2(runCy,SSBS,EFS2,YTIME) * sum(NAP$NAPtoALLSBS(NAP,SSBS), VmCarVal.L(runCy,NAP,YTIME)) * VmConsFiEneSec.L(runCy,SSBS,EFS2,YTIME) + 1e-3
   ) / SUM((SSBS,EFS2)$(SECtoEFPROD(SSBS,EFS) and SECtoEF(SSBS,EFS2)), V03OutTotTransf.L(runCy,SSBS,EFS2,YTIME) + 1e-3)
 )$(sameas("GSL",EFS) or sameas("GDO",EFS)) +
-$offtext
 (
   1
-)$(not (sameas("ELC",EFS) or sameas("H2F",EFS) or sameas("STE",EFS)));
+)$(not (sameas("ELC",EFS) or sameas("H2F",EFS) or sameas("STE",EFS) or sameas("GSL",EFS) or sameas("GDO",EFS)));

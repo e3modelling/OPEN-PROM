@@ -77,27 +77,28 @@ $ENDIF.bmswasBackend
     )$sameas("BMSWAS",EFS) +
     1$(not sameas("BMSWAS",EFS));
 
-Q08PricePrimary(allCy,EFS,YTIME)$(TIME(YTIME) and runCy(allCy) and not sameas("CRO",EFS))..
+Q08PricePrimary(allCy,EFS,YTIME)$(TIME(YTIME) and runCy(allCy) and PRIM_PRICES(EFS) and not sameas("CRO",EFS))..
     V08PricePrimary(allCy,EFS,YTIME)
       =E=
     i08PriceBase(EFS) +
     (V08PricePrimary(allCy,EFS,YTIME-1) - i08PriceBase(EFS) - i08BmswasPriceAdder(YTIME-1)$sameas(EFS,"BMSWAS")) * 
     (V08PricePrimary(allCy,"CRO",YTIME) / V08PricePrimary(allCy,"CRO",YTIME-1)) ** i08ElastPricePrimary(EFS,"CRO") *
-    (V08PricePrimary(allCy,"NGS",YTIME-1) / V08PricePrimary(allCy,"NGS",YTIME-2)) ** i08ElastPricePrimary(EFS,"NGS") *
-    (V08SupplyCurves(allCy,"BMSWAS",YTIME-1) / V08SupplyCurves(allCy,"BMSWAS",YTIME-2)) ** i08ElastPriceSupplyCurve(EFS,"BMSWAS") +
+    (V08PricePrimary(allCy,"NGS",YTIME) / V08PricePrimary(allCy,"NGS",YTIME-1)) ** i08ElastPricePrimary(EFS,"NGS") *
+    (V08SupplyCurves(allCy,"BMSWAS",YTIME) / V08SupplyCurves(allCy,"BMSWAS",YTIME-1)) ** i08ElastPriceSupplyCurve(EFS,"BMSWAS") +
     i08BmswasPriceAdder(YTIME)$sameas(EFS,"BMSWAS");
 
 Q08PriceSecondary(allCy,EFS,YTIME)$(TIME(YTIME) and runCy(allCy))..
     VmPriceSecondary(allCy,EFS,YTIME)
       =E=
     VmPriceSecondary(allCy,EFS,YTIME-1) *
-    VmCostAvgProd(allCy,EFS,YTIME) / VmCostAvgProd(allCy,EFS,YTIME-1) ** i08ElastPriceSecondary(EFS);
+    (VmCostAvgProd(allCy,EFS,YTIME) / VmCostAvgProd(allCy,EFS,YTIME-1)) ** i08ElastPriceSecondary(EFS);
 
 Q08PriceFinal(allCy,DSBS,EFS,YTIME)$(TIME(YTIME) and runCy(allCy) and SECtoEF(DSBS,EFS))..
     VmPriceFinal(allCy,DSBS,EFS,YTIME)
       =E=
     VmPriceFinal(allCy,DSBS,EFS,YTIME-1) *
-    (VmCostAvgProd(allCy,EFS,YTIME) + 1e-3) / (VmCostAvgProd(allCy,EFS,YTIME-1) + 1e-3) ** i08ElastPriceFinal(EFS);
+    (VmCostAvgProd(allCy,EFS,YTIME) / VmCostAvgProd(allCy,EFS,YTIME-1)) ** i08ElastPriceFinal(EFS) *
+    (1 + ((V08PricePrimary(allCy,EFS,YTIME) / V08PricePrimary(allCy,EFS,YTIME-1)) ** i08ElastPriceFinal(EFS) - 1)$PRIM_PRICES(EFS));
 
 Q08PriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME)$(SECtoEF(SBS,EFS) $(not sameas("CRO",EFS))
    $(not sameas("BMSWAS",EFS)) $TIME(YTIME)
@@ -195,16 +196,14 @@ Q08CostAvgProd(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCostPowGenAvgLng(allCy,YTIME)$sameas("ELC",EFS) +
     VmCostAvgProdH2(allCy,YTIME)$sameas("H2F",EFS) +
     VmCostAvgProdSte(allCy,YTIME)$sameas("STE",EFS) +
-$ontext
     (
       SUM((SSBS,EFS2)$(SECtoEFPROD(SSBS,EFS) and SECtoEF(SSBS,EFS2)),
-        (V03InpTotTransf(allCy,SSBS,EFS2,YTIME) + VmConsFiEneSec(allCy,SSBS,EFS,YTIME)) * VmPriceSecondary(allCy,EFS2,YTIME) +
+        (V03InpTotTransf(allCy,SSBS,EFS2,YTIME) + VmConsFiEneSec(allCy,SSBS,EFS2,YTIME)) * V08PricePrimary(allCy,EFS2,YTIME) +
         1e-3 * imFactorEmissProcessesCO2(allCy,SSBS,EFS2,YTIME) * sum(NAP$NAPtoALLSBS(NAP,SSBS), VmCarVal(allCy,NAP,YTIME)) * V03InpTotTransf(allCy,SSBS,EFS2,YTIME) +
-        1e-3 * imFactorEmissEnergyCO2(allCy,SSBS,EFS2,YTIME) * sum(NAP$NAPtoALLSBS(NAP,SSBS), VmCarVal(allCy,NAP,YTIME)) * VmConsFiEneSec(allCy,SSBS,EFS,YTIME) + 1e-3
+        1e-3 * imFactorEmissEnergyCO2(allCy,SSBS,EFS2,YTIME) * sum(NAP$NAPtoALLSBS(NAP,SSBS), VmCarVal(allCy,NAP,YTIME)) * VmConsFiEneSec(allCy,SSBS,EFS2,YTIME) + 1e-3
       ) / SUM((SSBS,EFS2)$(SECtoEFPROD(SSBS,EFS) and SECtoEF(SSBS,EFS2)), V03OutTotTransf(allCy,SSBS,EFS2,YTIME) + 1e-3)
     )$(sameas("GSL",EFS) or sameas("GDO",EFS)) +
-$offtext
     (
       VmCostAvgProd(allCy,EFS,YTIME-1) - 
       0.01 * VmCostAvgProd(allCy,EFS,YTIME-1)$BIOFUELS(EFS)
-    )$(not (sameas(EFS,"STE") or sameas(EFS,"H2F") or sameas(EFS,"ELC")));
+    )$(not (sameas(EFS,"STE") or sameas(EFS,"H2F") or sameas(EFS,"ELC") or sameas("GSL",EFS) or sameas("GDO",EFS)));
