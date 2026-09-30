@@ -144,7 +144,7 @@ abort$sum((MAGPIESCEN,allCy,EMTYPE,YTIME)$(
 
 * MAgPIE emission coefficients cover the OP39 research regions.
 abort$sum(runCy$(not resCy(runCy)), 1)
-  "MAgPIE emulator coefficients cover OP39 only; remove unsupported runCy elements (for example ELL/RWO)";
+  "MAgPIE emulator coefficients cover OP39 only; remove unsupported runCy elements (for example LAM/RWO)";
 $ENDIF.emulatorInput
 $ENDIF
 *---

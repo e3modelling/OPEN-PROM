@@ -32,6 +32,12 @@ $include"./iDataIntensityFertiliser.csv"
 $offdelim
 ;
 *---
+table i12FinalPrices(allCy,AGRI_MODES,EFS,YTIME)	      ""
+$ondelim
+$include"./iDataAgriculturePrice.csv"
+$offdelim
+;
+*---
 i12SpecificFuelConsData(allCy,AGRI_MODES,AGRITECH,YTIME)$(DATAY(YTIME) and AGRMODEStoTECH(AGRI_MODES,AGRITECH)) = i12SpecificFuelConsData(allCy,AGRI_MODES,AGRITECH,YTIME) + 1e-6;
 *---
 i12IndexClimateShift(allCy,AGRI_MODES,YTIME) = 1;
@@ -50,5 +56,7 @@ SUM(EFS2$AGRITECHTOEF(AGRITECH,EFS2),
     i12ConsFuel(allCy,AGRI_MODES,EFS2,YTIME) + 1e-6
 );
 *---
-i12calibweibul(runCy,AGRI_MODES,AGRITECH,EFS,YTIME)$DATAY(YTIME) = i12DataShareBlend(runCy,AGRI_MODES,AGRITECH,EFS,YTIME) * imFuelPrice(runCy,"AG",EFS,YTIME) ** 2;
-i12calibweibul(runCy,AGRI_MODES,AGRITECH,EFS,YTIME)$(not DATAY(YTIME)) = i12calibweibul(runCy,AGRI_MODES,AGRITECH,EFS,"%fBaseY%");
+i12calibweibul(runCy,AGRI_MODES,AGRITECH,EFS,YTIME)$DATAY(YTIME) = i12DataShareBlend(runCy,AGRI_MODES,AGRITECH,EFS,YTIME) * i12FinalPrices(runCy,AGRI_MODES,EFS,YTIME) ** 2;
+i12calibweibul(runCy,AGRI_MODES,AGRITECH,EFS,YTIME)$(not DATAY(YTIME) and ord(YTIME) >= 20) = 1;
+i12calibweibul(runCy,AGRI_MODES,AGRITECH,EFS,YTIME)$(not DATAY(YTIME) and ord(YTIME) < 20) = 1 + (i12calibweibul(runCy,AGRI_MODES,AGRITECH,EFS,YTIME)-1) * (20-ord(YTIME))/19;
+*i12calibweibul(runCy,AGRI_MODES,AGRITECH,EFS,YTIME)$(not DATAY(YTIME)) = i12calibweibul(runCy,AGRI_MODES,AGRITECH,EFS,"%fBaseY%");
