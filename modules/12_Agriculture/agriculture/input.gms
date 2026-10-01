@@ -37,8 +37,7 @@ $ondelim
 $include"./iDataAgriculturePrice.csv"
 $offdelim
 ;
-*---
-i12SpecificFuelConsData(allCy,AGRI_MODES,AGRITECH,YTIME)$(DATAY(YTIME) and AGRMODEStoTECH(AGRI_MODES,AGRITECH)) = i12SpecificFuelConsData(allCy,AGRI_MODES,AGRITECH,YTIME) + 1e-6;
+i12FinalPrices(allCy,"CLIMATE","STE",YTIME) = i12FinalPrices(allCy,"CLIMATE","GDO",YTIME);
 *---
 i12IndexClimateShift(allCy,AGRI_MODES,YTIME) = 1;
 i12IndexTechShift(allCy,AGRI_MODES,YTIME) = 1;
