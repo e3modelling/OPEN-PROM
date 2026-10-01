@@ -41,8 +41,19 @@ $include "iElastA.csv"
 $offdelim
 ;
 imElastA(runCy,SBS,ETYPES,YTIME) = imElastA("LAM",SBS,ETYPES,YTIME);
+imElastA(runCy,SBS,ETYPES,YTIME) = imElastA("LAM",SBS,ETYPES,YTIME);
 imElastA(runCy,DSBS,"b1",YTIME)$(not TRANSE(DSBS)) = imElastA(runCy,DSBS,"b1",YTIME) / 4;
 imElastA(runCy,DSBS,"b2",YTIME)$(not TRANSE(DSBS)) = imElastA(runCy,DSBS,"b2",YTIME) / 4;
+$ENDIF.calib
+* Stop if the entire input table is empty or zero; individual zeros are allowed.
+abort$(sum((allCy,SBS,ETYPES,YTIME),
+$IFTHEN.calibCheck %Calibration% == Calibration
+    abs(imElastAL(allCy,SBS,ETYPES,YTIME))
+$ELSE.calibCheck
+    abs(imElastA(allCy,SBS,ETYPES,YTIME))
+$ENDIF.calibCheck
+    ) = 0)
+    "ERROR: iElastA.csv contains no nonzero activity elasticities. Execution stopped.";
 *---
 parameter iDiscData(SBS) "Discount rates per subsector ()" /
 PCH     0.12
