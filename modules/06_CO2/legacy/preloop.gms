@@ -11,9 +11,8 @@ V06CaptCummCO2.LO(runCy,YTIME) = 0;
 V06CaptCummCO2.L(runCy,YTIME) = 1;
 V06CaptCummCO2.FX(runCy,YTIME)$DATAY(YTIME) = 0;
 *---
-V06CaptCummCO2Glob.LO(YTIME) = 0;
-V06CaptCummCO2Glob.L(YTIME) = 1;
-V06CaptCummCO2Glob.FX(YTIME)$DATAY(YTIME) = 0;
+* Global storage is accumulated outside the regional NLPs; the base-year stock is zero.
+V06CaptCummCO2Glob.FX(YTIME) = 0;
 *---
 V06LvlCostCDR.LO(runCy,CDRTECH,YTIME) = 0;
 V06LvlCostCDR.L(runCy,CDRTECH,YTIME) = 100;
@@ -26,6 +25,13 @@ V06CostFullCDR.FX(runCy,CDRTECH,YTIME)$DATAY(YTIME) = 100;
 V06CapCDR.LO(runCy,CDRTECH,YTIME) = 0;
 V06CapCDR.L(runCy,CDRTECH,YTIME) = 1;
 V06CapCDR.FX(runCy,CDRTECH,"%fBaseY%") = 1000 * VmGDPPartGlob.L(runCy,"%fBaseY%"); !! Initial guess of 50 years to reach net zero emissions for each CDR technology, based on the net emissions in 2020
+* Initialize the first solved year's tax from the base-year cumulative stock.
+$ifthenE.ccsStorageTax %ccsStorageReferenceGtCO2%>0
+i06CCSAvailabilityCostAdder("%fStartY%") = i06CCSStorageTaxScale
+  * sqr(V06CaptCummCO2Glob.L("%fBaseY%") * 1e-3 / %ccsStorageReferenceGtCO2%);
+$else.ccsStorageTax
+i06CCSAvailabilityCostAdder(YTIME) = 0;
+$endif.ccsStorageTax
 *---
 V06ProfRateCDR.LO(runCy,CDRTECH,YTIME) = 0;
 V06ProfRateCDR.L(runCy,CDRTECH,YTIME) = 1;
