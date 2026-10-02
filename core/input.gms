@@ -42,9 +42,9 @@ $ondelim
 $include "iElastA.csv"
 $offdelim
 ;
-imElastA.L(runCy, SBS, ETYPES, YTIME) = imElastAL("ELL", SBS, ETYPES, YTIME);
+imElastA.L(runCy, SBS, ETYPES, YTIME) = imElastAL("LAM", SBS, ETYPES, YTIME);
 imElastA.LO(runCy, SBS, posElast, YTIME) = 0.001;
-imElastA.UP(runCy, SBS, posElast, YTIME) = 5 * imElastAL("ELL", SBS, posElast, YTIME);
+imElastA.UP(runCy, SBS, posElast, YTIME) = 5 * imElastAL("LAM", SBS, posElast, YTIME);
 imElastA.LO(runCy, SBS, negElast, YTIME) = -10;
 imElastA.UP(runCy, SBS, negElast, YTIME) = -0.001;
 
@@ -54,10 +54,19 @@ $ondelim
 $include "iElastA.csv"
 $offdelim
 ;
-imElastA(runCy,SBS,ETYPES,YTIME) = imElastA("ELL",SBS,ETYPES,YTIME);
+imElastA(runCy,SBS,ETYPES,YTIME) = imElastA("LAM",SBS,ETYPES,YTIME);
 imElastA(runCy,DSBS,"b1",YTIME)$(not TRANSE(DSBS)) = imElastA(runCy,DSBS,"b1",YTIME) / 4;
 imElastA(runCy,DSBS,"b2",YTIME)$(not TRANSE(DSBS)) = imElastA(runCy,DSBS,"b2",YTIME) / 4;
 $ENDIF.calib
+* Stop if the entire input table is empty or zero; individual zeros are allowed.
+abort$(sum((allCy,SBS,ETYPES,YTIME),
+$IFTHEN.calibCheck %Calibration% == Calibration
+    abs(imElastAL(allCy,SBS,ETYPES,YTIME))
+$ELSE.calibCheck
+    abs(imElastA(allCy,SBS,ETYPES,YTIME))
+$ENDIF.calibCheck
+    ) = 0)
+    "ERROR: iElastA.csv contains no nonzero activity elasticities. Execution stopped.";
 *---
 parameter iDiscData(SBS) "Discount rates per subsector ()" /
 PCH     0.12
@@ -648,6 +657,20 @@ $include"./iMatrFactorData.csv"
 $offdelim
 ;
 *---
+*' Multiplier of maturity factors. If not defined in config, they keep their calibrated value.
+table iMatFacMultDemand(DSBS,TECH,YTIME)              "Scenario multiplier on the demand maturity factor (1)"
+$ondelim
+$include"./iMatFacMultDemand.csv"
+$offdelim
+;
+*---
+*' Region-specific multiplier. A region entry overrides the global one for that region.
+table iMatFacMultDemandCy(allCy,DSBS,TECH,YTIME)      "Region-specific scenario multiplier on the demand maturity factor (1)"
+$ondelim
+$include"./iMatFacMultDemandCy.csv"
+$offdelim
+;
+*---
 $IFTHEN.calib %Calibration% == off
 parameter imMatrFactor(allCy,DSBS,TECH,YTIME)   "Maturity factor per technology and subsector for all countries (1)";
 imMatrFactor(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                          
@@ -685,6 +708,12 @@ imMatrFactor(runCy,DSBS,"TCHEVGSL",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 0
 imMatrFactor(runCy,DSBS,"TCHEVGDO",YTIME)$(ord(YTIME) > 40 and TRANSE(DSBS)) = 0.001;
 $offtext
 
+*' Modification of the maturity factor based on the multipliers.
+imMatrFactor(runCy,DSBS,TECH,YTIME)$(iMatFacMultDemand(DSBS,TECH,YTIME)
+                                     and not iMatFacMultDemandCy(runCy,DSBS,TECH,YTIME)) =
+    imMatrFactor(runCy,DSBS,TECH,YTIME) * iMatFacMultDemand(DSBS,TECH,YTIME);
+imMatrFactor(runCy,DSBS,TECH,YTIME)$iMatFacMultDemandCy(runCy,DSBS,TECH,YTIME) =
+    imMatrFactor(runCy,DSBS,TECH,YTIME) * iMatFacMultDemandCy(runCy,DSBS,TECH,YTIME);
 $ELSE.calib
 variable imMatrFactor(allCy,DSBS,TECH,YTIME)    "Maturity factor per technology and subsector for all countries (1)";
 imMatrFactor.LO(runCy,DSBS,TECH,YTIME) = 1e-2;                                          
