@@ -23,7 +23,6 @@ CZE
 DEU
 DNK
 ESP
-ELL
 FIN
 FRA
 GBR
@@ -430,16 +429,18 @@ BUN(SBS)          Bunkers                       /BAV,BMAR/
 BUN1(TRANSE)      Bunkers                       /BAV,BMAR/
 
 INDSE(DSBS)       Industrial SubSectors         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI/
-DOMSE(DSBS)       Tertiary SubSectors           /SE,AG,HOU/
+DOMSE(DSBS)       Tertiary SubSectors           /SE,HOU/
 INDSE1(SBS)       Industrial SubSectors         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI/
-DOMSE1(SBS)       Tertiary SubSectors           /SE,AG,HOU/
+DOMSE1(SBS)       Tertiary SubSectors           /SE,HOU/
 HOU(DSBS)         Households                    /HOU/
 CDR(DSBS)         Carbon Dioxide Removal         /DAC,EW/
 
 NENSE(DSBS)       Non Energy                    /PCH,NEN/
 NENSE1(SBS)       Non Energy                    /PCH,NEN/
 
-INDDOM(DSBS)      Industry and Tertiary         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,SE,AG,HOU/
+INDDOM(DSBS)      Industry and Tertiary         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,SE,HOU/
+
+RESCOM(DSBS)      Residential and Commercial    /SE,HOU/
 * The following sets are used in price equation for electricity
 HOU1(SBS)         Households                     /HOU/
 SERV(SBS)         Services                       /SE,AG/

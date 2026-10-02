@@ -1,6 +1,17 @@
 *' @title Prices Declarations
 *' @code
 
+Parameters
+i08DiffFuelsInSec(SBS)                    "Auxiliary parameter holding the number of different fuels in a sector"
+i08WgtSecAvgPriFueCons(allCy,SBS,EF)	    "Weights for sector's average price, based on fuel consumption (1)"
+i08VAT(allCy,YTIME)                       "VAT (value added tax) rates (1)"
+i08ElastPricePrimary(EFS,EFS)             "Elasticities of energy-form prices (first EFS set) with respect to prices of other energy forms (second EFS set)"
+i08PriceBase(EFS)                         "Base price of primary products"
+i08ElastPriceSupplyCurve(EFS,EFS)
+i08ElastPriceSecondary(EFS)
+i08ElastPriceFinal(EFS)
+;
+
 Equations
 *' *** Prices
 Q08PriceFuelSepCarbonWght(allCy,SBS,EF,YTIME)	           "Compute fuel prices per subsector and fuel, separate carbon value in each sector"
@@ -18,7 +29,12 @@ Q08PriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)               "Compute fuel prices 
 Q08PriceFuelAvgSub(allCy,DSBS,YTIME)	                   "Compute average fuel price per subsector" 	
 *Q08PriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)                 "Compute fuel prices per subsector and fuel especially for chp plants"
 Q08PriceElecInd(allCy,TCHP,YTIME)                               "Compute electricity industry prices"
+Q08SupplyCurves(allCy,EFS,YTIME)
+Q08PricePrimary(allCy,EFS,YTIME)
+Q08PriceSecondary(allCy,EFS,YTIME)
+Q08PriceFinal(allCy,DSBS,EFS,YTIME)
 Q08PriceCarbon(allCy,SBS,EFS,YTIME)
+Q08CostAvgProd(allCy,EFS,YTIME)
 ;
 
 Parameters
@@ -48,8 +64,12 @@ VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)                "Fuel prices per subs
 VmPriceFuelAvgSub(allCy,DSBS,YTIME)                        "Average fuel prices per subsector (k$2015/toe)"
 * VmPriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)                  "Fuel prices per subsector and fuel for CHP plants (kUS$2015/toe)"
 VmPriceElecInd(allCy,TCHP,YTIME)                                "Electricity index - a function of industry price (1)"
-VmPriceCarbon(allCy,SBS,EFS,YTIME)
 
+V08SupplyCurves(allCy,EFS,YTIME)
+V08PricePrimary(allCy,EFS,YTIME)
+VmPriceSecondary(allCy,EFS,YTIME)
+VmPriceFinal(allCy,DSBS,EFS,YTIME)
+VmCostAvgProd(allCy,EFS,YTIME)
 *' *** Miscellaneous
 *V08FuelPriSubNoCarb(allCy,SBS,EF,YTIME)	                   "Fuel prices per subsector and fuel  without carbon value (kUS$2015/toe)"
 ;

@@ -31,15 +31,22 @@ imTransChar(runCy,"RES_MEXTV",YTIME) = 0.04;
 *'                **Interdependent Variables**
 
 *---
-VmElecConsHeatPla.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = imFuelCons(runCy,INDDOM,"ELC",YTIME)*(1-imShrNonSubElecInTotElecDem(runCy,INDDOM))*iShrHeatPumpElecCons(runCy,INDDOM);
-* Compute electricity consumed in heatpump plants, QElecConsHeatPla(runCy,INDDOM,YTIME)$time(ytime).
-VmElecConsHeatPla.FX(runCy,DSBS,YTIME) = 0;
-*---
 VmCarVal.FX(runCy,"TRADE",YTIME) = iCarbValYrExog(runCy,YTIME);
 *---
 VmCstCO2SeqCsts.LO(runCy,YTIME) = i06ElastCO2Seq(runCy,"seq_min");
 VmCstCO2SeqCsts.L(runCy,YTIME) = i06ElastCO2Seq(runCy,"seq_min");
 VmCstCO2SeqCsts.FX(runCy,YTIME)$DATAY(YTIME) = i06ElastCO2Seq(runCy,"seq_min");
+*---
+VmPriceCarbon.FX(runCy,SBS,EFS,YTIME)$DATAY(YTIME) = 1e-3 * iCarbValYrExog(runCy,YTIME)$INDSE1(SBS) * imCo2EmiFac(runCy,SBS,EFS,YTIME);
+*---
+VmPriceFinal.LO(runCy,DSBS,EFS,YTIME) = 0;
+VmPriceFinal.L(runCy,DSBS,EFS,YTIME) = 1;
+VmPriceFinal.FX(runCy,DSBS,EFS,YTIME)$(DATAY(YTIME) and SECtoEF(DSBS,EFS))= imFuelPrice(runCy,DSBS,EFS,YTIME);
+VmPriceFinal.FX(runCy,DSBS,EFS,YTIME)$(not SECtoEF(DSBS,EFS)) = 0;
+*---
+VmPriceSecondary.LO(runCy,EFS,YTIME) = 0;
+VmPriceSecondary.L(runCy,EFS,YTIME) = 1;
+VmPriceSecondary.FX(runCy,EFS,YTIME)$DATAY(YTIME) = imFuelPrice(runCy,"PG",EFS,YTIME);
 *---
 VmPriceFuelSubsecCarVal.LO(runCy,SBS,EF,YTIME) = 0;
 VmPriceFuelSubsecCarVal.L(runCy,SBS,EF,YTIME)$SECtoEF(SBS,EF) = 1;

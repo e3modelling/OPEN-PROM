@@ -15,8 +15,6 @@ imTotFinEneDemSubBaseYr(runCy,INDSE,YTIME)   = SUM(EF$SECtoEF(INDSE,EF),imFuelCo
 imTotFinEneDemSubBaseYr(runCy,DOMSE,YTIME)   = SUM(EF$SECtoEF(DOMSE,EF),imFuelCons(runCy,DOMSE,EF,YTIME));
 imTotFinEneDemSubBaseYr(runCy,NENSE,YTIME)   = SUM(EF$SECtoEF(NENSE,EF),imFuelCons(runCy,NENSE,EF,YTIME));
 *---
-i02ExogDemOfBiomass(runCy,DOMSE,YTIME) = 0;
-*---
 i02util(runCy,DSBS,ITECH,YTIME)$SECTTECH(DSBS,ITECH) = 1;
 *---
 $IFTHEN.calib %Calibration% == off

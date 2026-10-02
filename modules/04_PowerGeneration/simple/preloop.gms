@@ -124,16 +124,6 @@ V04CCSRetroFit.FX(runCy,PGALL,YTIME)$(DATAY(YTIME) or not NOCCS(PGALL)) = 1;
 V04CO2CaptRate.UP(runCy,PGALL,YTIME) = 1;
 V04CO2CaptRate.LO(runCy,PGALL,YTIME) = 0;
 *---
-VmConsFuelElecProd.LO(runCy,EFS,YTIME) = 0;
-VmConsFuelElecProd.FX(runCy,EFS,YTIME)$(not PGEF(EFS)) = 0;
-VmConsFuelElecProd.FX(runCy,PGEF,YTIME)$DATAY(YTIME) = 
-SUM(PGALL$PGALLTOEF(PGALL,PGEF),
-  i04ShareFuels(runCy,PGALL,PGEF) *
-  VmProdElec.L(runCy,PGALL,YTIME) * smTWhToMtoe / 
-  imPlantEffByType(runCy,PGALL,"effELC",YTIME)
-);
-VmConsFuelElecProd.FX(runCy,PGEF,YTIME)$DATAY(YTIME) = -i03InpTotTransfProcess(runCy,"PG",PGEF,YTIME);
-*---
 V04GapGenCapPowerDiff.LO(runCy,YTIME) = 0;
 V04GapGenCapPowerDiff.L(runCy,YTIME) = 1;
 V04GapGenCapPowerDiff.FX(runCy,YTIME)$DATAY(YTIME) = 0;
