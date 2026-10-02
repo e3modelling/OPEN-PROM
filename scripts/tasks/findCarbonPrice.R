@@ -404,8 +404,8 @@ GAMSCmdArgsTemplate <- GAMSCmdArgs
 #   "Emissions|CO2|Cumulated.Gt CO2"          * 1000  -> Mt CO2  (cumulated)
 #   "Emissions|CO2.Mt CO2/yr"                 * 1     -> Mt CO2/yr
 #   "Emissions|Kyoto Gases.Mt CO2-equiv/yr"   * 1     -> Mt CO2-equiv/yr
-emissionsVariable <- "Emissions|Kyoto Gases.Mt CO2-equiv/yr"
-emissionsScale    <- 1   # Gt -> Mt
+emissionsVariable <- "Emissions|CO2.Mt CO2/yr"
+emissionsScale    <- 1   # Mt CO2/yr
 
 # EU27 member regions — share a single carbon price in iEnvPolicies.csv.
 # Never optimised individually; always solved as one aggregated group.
@@ -428,23 +428,23 @@ EU27_REGIONS <- c("AUT","BEL","BGR","CYP","CZE","DEU","DNK","ESP","EST",
 # Any other key must match a region code in iEnvPolicies.csv.
 # Comment out any entry to skip that region in this run.
 #
-# Current unit: cumulated Mt CO2  (Emissions|CO2|Cumulated.Gt CO2 * 1000)
+# Current unit: annual Mt CO2/yr in the target year.
 targetList <- list(
   # Examples (mix-and-match supported):
   # WORLD = 1257571,  # optional: comment out to skip world run
-  EU27  = list(budget = 0, year = 2050),
-  CAZ  = list(budget = 0,  year = 2050),
+  EU27  = list(budget = 0, year = 2050)
+  # CAZ  = list(budget = 0,  year = 2050),
   # CHA  = list(budget = 13447, year = 2050),
-  GBR  = list(budget = 0,  year = 2050),
-  IND  = list(budget = 0, year = 2070),
-  JPN  = list(budget = 0,  year = 2050),
-  LAM  = list(budget = 703, year = 2050),
-  MEA  = list(budget = 3245, year = 2060),
-  NEU  = list(budget = 101,  year = 2050),
-  OAS  = list(budget = 1186, year = 2060),
-  REF  = list(budget = 355, year = 2060),
-  SSA  = list(budget = 2238, year = 2050),
-  USA  = list(budget = 0, year = 2050)  # numeric form still supported: interpreted as budget with fallback year = selectedYear
+  # GBR  = list(budget = 0,  year = 2050),
+  # IND  = list(budget = 0, year = 2070),
+  # JPN  = list(budget = 0,  year = 2050),
+  # LAM  = list(budget = 703, year = 2050),
+  # MEA  = list(budget = 3245, year = 2060),
+  # NEU  = list(budget = 101, year = 2050),
+  # OAS  = list(budget = 1186, year = 2060),
+  # REF  = list(budget = 355, year = 2060),
+  # SSA  = list(budget = 2238, year = 2050),
+  # USA  = list(budget = 0, year = 2050)
 )
 
 logFilePath <- "Carbon_price_optimization.log"
