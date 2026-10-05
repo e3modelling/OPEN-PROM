@@ -184,7 +184,7 @@ Q11SubsiFuelTot(allCy,SBS,EFS,YTIME)$(TIME(YTIME) and runCy(allCy) and SECtoEF(S
       VmSubsiFuel(allCy,SBS,EFS,YTIME) * 1e-3 * (V02DemSubUsefulSubsec(allCy,DSBS,YTIME) * VmConsFuelShare(allCy,DSBS,EFS,YTIME)))
     )$(ord(YTIME) > 15 and DSBS(SBS) and sameas(SBS,"HOU")) !!NEED TO ADD H2P
     * i11SubsiShare("Fuel")
-    / 2;
+;
 
 $ontext
 *' Subsidies in supply (Millions US$2015)
