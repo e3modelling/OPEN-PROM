@@ -127,13 +127,13 @@ Q08PriceBmswas(allCy,SBS,YTIME)$(
 $IFTHEN.bmswasBackend %bmswasPriceMode% == softlink
     iPricesMagpie(allCy,SBS,YTIME)
 $ELSEIF.bmswasBackend %bmswasPriceMode% == curve
-    $IFTHEN.bmswasEmulatorBackend %landUseEmulator% == magpie
+$IFTHEN.bmswasEmulatorBackend %landUseEmulator% == magpie
       sum((MAGPIEH12REG,activeMagpieScen)$mapMagpieH12Cy(MAGPIEH12REG,allCy),
         i08BmswasPriceH12Magpie(activeMagpieScen,MAGPIEH12REG,"pa",YTIME) +
         i08BmswasPriceH12Magpie(activeMagpieScen,MAGPIEH12REG,"pb",YTIME) * V08Bioenergy2GEffectiveQH12Magpie(allCy,YTIME) + 
         i08BmswasPriceH12Magpie(activeMagpieScen,MAGPIEH12REG,"pc",YTIME) * sqr(V08Bioenergy2GEffectiveQH12Magpie(allCy,YTIME))
       )
-    $ELSE.bmswasEmulatorBackend
+$ELSE.bmswasEmulatorBackend
       (VmPriceFuelSubsecCarVal(allCy,SBS,"BMSWAS",YTIME-1) - i08BmswasPriceAdder(YTIME-1)) *
       (1e-3 + 
         sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"a",YTIME)) + 
@@ -145,7 +145,7 @@ $ELSEIF.bmswasBackend %bmswasPriceMode% == curve
         sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"b",YTIME)) *
           (V03ProdPrimary(allCy,"BMSWAS",YTIME-2) + 1e-6) ** sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"c",YTIME))
       )
-    $ENDIF.bmswasEmulatorBackend
+$ENDIF.bmswasEmulatorBackend
 $ELSE.bmswasBackend
     VmPriceFuelSubsecCarVal(allCy,SBS,"BMSWAS",YTIME-1) - i08BmswasPriceAdder(YTIME-1)
 $ENDIF.bmswasBackend
