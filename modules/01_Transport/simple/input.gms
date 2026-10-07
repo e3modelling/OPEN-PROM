@@ -229,7 +229,8 @@ i01AvgVehCapLoadFac(runCy,TRANSE,TRANSUSE,YTIME) = i01CapDataLoadFacEachTransp(T
 *---
 **  Transport Sector
 i01TechLft(runCy,TRANSE,TTECH,YTIME) = imDataTransTech(TRANSE,TTECH,"LFT",YTIME);
-i01TechLft(runCy,TRANSE,TTECH,YTIME) = 20;
+i01TechLft(runCy,TRANSE,TTECH,YTIME) = 25;
+i01TechLft(runCy,"PC",TTECH,YTIME) = 30;
 i01TechLft(runCy,DOMSE,"TELC",YTIME) = 20;
 *---
 **  Industrial Sector
@@ -278,9 +279,8 @@ i01calibweibul(runCy,TRANSE,EF,"%fBaseY%")$(SECtoEF(TRANSE,EF) and yes$SUM(EF2,B
 );
 i01calibweibul(runCy,TRANSE,EF,YTIME)$AN(YTIME) = i01calibweibul(runCy,TRANSE,EF,"%fBaseY%");
 **i01calibweibul(runCy,TRANSE,EF,YTIME)$(AN(YTIME) and SECtoEF(TRANSE,EF) and yes$SUM(EF2,BLENDMAP2(EF,EF2))) = i01calibweibul(runCy,TRANSE,EF,YTIME-1) + (ord(YTIME) - (%fBaseY% - %fStartHorizon% + 1)) * (1-i01calibweibul(runCy,TRANSE,EF,"%fBaseY%")) / (%fEndHorizon% - %fBaseY%);
-i01calibweibul(runCy,TRANSE,EF,YTIME)$(AN(YTIME) and SECtoEF(TRANSE,EF) and yes$SUM(EF2,BLENDMAP2(EF,EF2)) and not sameas("BGAS",EF)) = min(1, i01calibweibul(runCy,TRANSE,EF,YTIME-1) + (ord(YTIME) - (%fBaseY% - %fStartHorizon% + 1)) * (1-i01calibweibul(runCy,TRANSE,EF,"%fBaseY%")) / (2070 - %fBaseY%));
-
-
+i01calibweibul(runCy,TRANSE,EF,YTIME)$(AN(YTIME) and SECtoEF(TRANSE,EF) and yes$SUM(EF2,BLENDMAP2(EF,EF2)) and not sameas("BGAS",EF)) = min(1, i01calibweibul(runCy,TRANSE,EF,YTIME-1) + (ord(YTIME) - (%fBaseY% - %fStartHorizon% + 1)) * (1-i01calibweibul(runCy,TRANSE,EF,"%fBaseY%")) / (2090 - %fBaseY%));
+*---
 testSFC(runCy,TRANSE,TTECH)$(not sameas("PC",TRANSE) ) = 
 test2SFC(TRANSE,TTECH) * 
 [
