@@ -108,7 +108,6 @@ Q11SubsiDemTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS
       VmSubsiDemITech(allCy,DSBS,ITECH,YTIME)
     )$INDSE(DSBS))
     +
-$$offtext 
 * CDR levelized cost excludes the storage tax; only technology cost is subsidized.
     sum(CDRTECH$(sameas(TECH,CDRTECH)), !! CDR
       (
