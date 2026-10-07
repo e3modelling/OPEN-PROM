@@ -49,8 +49,8 @@ $ENDIF.magpieQuantityEquation
 Q08BmswasPriceFactor(allCy,YTIME)$(TIME(YTIME) $runCy(allCy))..
     V08BmswasPriceFactor(allCy,YTIME)
         =E=
-    VmPriceFuelSubsecCarVal(allCy,"PG","BMSWAS",YTIME) /
-    VmPriceFuelSubsecCarVal(allCy,"PG","BMSWAS",YTIME-1);
+    (VmPriceFuelSubsecCarVal(allCy,"PG","BMSWAS",YTIME) + 1e-6) /
+    (VmPriceFuelSubsecCarVal(allCy,"PG","BMSWAS",YTIME-1) + 1e-6);
 
 Q08SupplyCurves(allCy,EFS,YTIME)$(TIME(YTIME) $runCy(allCy))..
     V08SupplyCurves(allCy,EFS,YTIME)
