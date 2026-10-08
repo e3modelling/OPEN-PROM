@@ -3,9 +3,9 @@
 
 *'                *VARIABLE INITIALISATION*
 
-V01ShareBlend.LO(runCy,TRANSE,EF,YTIME) = 0;
-V01ShareBlend.FX(runCy,TRANSE,EF,YTIME)$DATAY(YTIME) = i01ShareBlend(runCy,TRANSE,EF,"%fBaseY%");
-V01ShareBlend.FX(runCy,TRANSE,EF,YTIME)$(SECtoEF(TRANSE,EF) and not yes$SUM(EF2,BLENDMAP(EF2,EF))) = 1;
+V01ShareBlend.LO(runCy,TRANSE,EFS,YTIME) = 0;
+V01ShareBlend.FX(runCy,TRANSE,EFS,YTIME)$DATAY(YTIME) = i01ShareBlend(runCy,TRANSE,EFS,"%fBaseY%");
+V01ShareBlend.FX(runCy,TRANSE,EFS,YTIME)$(SECtoEF(TRANSE,EFS) and not yes$SUM(EFS2,BLENDMAP(EFS2,EFS))) = 1;
 *---
 V01RateScrPcTot.UP(runCy,TRANSE,TTECH,YTIME) = 1;
 *---
@@ -65,22 +65,22 @@ V01CostFuel.L(runCy,TRANSE,TTECH,YTIME)$SECTTECH(TRANSE,TTECH) = 1;
 V01CostFuel.FX(runCy,TRANSE,TTECH,YTIME)$DATAY(YTIME) = 
 (
   (
-    sum(EF$TTECHtoEF(TTECH,EF),
-      V01ConsSpecificFuel.L(runCy,TRANSE,TTECH,EF,YTIME) *
-      V01ShareBlend.L(runCy,TRANSE,EF,YTIME) *
-      VmPriceFuelSubsecCarVal.L(runCy,TRANSE,EF,YTIME)
+    sum(EFS$TTECHtoEF(TTECH,EFS),
+      V01ConsSpecificFuel.L(runCy,TRANSE,TTECH,EFS,YTIME) *
+      V01ShareBlend.L(runCy,TRANSE,EFS,YTIME) *
+      (VmPriceFinal.L(runCy,TRANSE,EFS,YTIME) + VmPriceCarbon.L(runCy,TRANSE,EFS,YTIME))
     ) 
   )$(not PLUGIN(TTECH)) +
   (
-    sum(EF$(TTECHtoEF(TTECH,EF) $(not sameas("ELC",EF))),
+    sum(EFS$(TTECHtoEF(TTECH,EFS) $(not sameas("ELC",EFS))),
       (1-i01ShareAnnMilePlugInHybrid(runCy,YTIME)) *
-      V01ShareBlend.L(runCy,TRANSE,EF,YTIME) *
-      V01ConsSpecificFuel.L(runCy,TRANSE,TTECH,EF,YTIME) *
-      VmPriceFuelSubsecCarVal.L(runCy,TRANSE,EF,YTIME)
+      V01ShareBlend.L(runCy,TRANSE,EFS,YTIME) *
+      V01ConsSpecificFuel.L(runCy,TRANSE,TTECH,EFS,YTIME) *
+      (VmPriceFinal.L(runCy,TRANSE,EFS,YTIME) + VmPriceCarbon.L(runCy,TRANSE,EFS,YTIME))
     ) +
     i01ShareAnnMilePlugInHybrid(runCy,YTIME) *
     V01ConsSpecificFuel.L(runCy,TRANSE,TTECH,"ELC",YTIME) *
-    VmPriceFuelSubsecCarVal.L(runCy,TRANSE,"ELC",YTIME)
+    VmPriceFinal.L(runCy,TRANSE,"ELC",YTIME)
   )$PLUGIN(TTECH) +
   imVarCostTech(runCy,TRANSE,TTECH,YTIME)
 ) *

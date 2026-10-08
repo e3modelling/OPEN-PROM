@@ -35,29 +35,15 @@ $include "./iTransChar.csv"
 $offdelim
 ;
 *---
-$IFTHEN.calib %Calibration% == Calibration
-variable imElastA(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)";
-table imElastAL(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)"
-$ondelim
-$include "iElastA.csv"
-$offdelim
-;
-imElastA.L(runCy, SBS, ETYPES, YTIME) = imElastAL("LAM", SBS, ETYPES, YTIME);
-imElastA.LO(runCy, SBS, posElast, YTIME) = 0.001;
-imElastA.UP(runCy, SBS, posElast, YTIME) = 5 * imElastAL("LAM", SBS, posElast, YTIME);
-imElastA.LO(runCy, SBS, negElast, YTIME) = -10;
-imElastA.UP(runCy, SBS, negElast, YTIME) = -0.001;
-
-$ELSE.calib
 table imElastA(allCy,SBS,ETYPES,YTIME) "Activity Elasticities per subsector (1)"
 $ondelim
 $include "iElastA.csv"
 $offdelim
 ;
 imElastA(runCy,SBS,ETYPES,YTIME) = imElastA("LAM",SBS,ETYPES,YTIME);
+imElastA(runCy,SBS,ETYPES,YTIME) = imElastA("LAM",SBS,ETYPES,YTIME);
 imElastA(runCy,DSBS,"b1",YTIME)$(not TRANSE(DSBS)) = imElastA(runCy,DSBS,"b1",YTIME) / 4;
 imElastA(runCy,DSBS,"b2",YTIME)$(not TRANSE(DSBS)) = imElastA(runCy,DSBS,"b2",YTIME) / 4;
-$ENDIF.calib
 * Stop if the entire input table is empty or zero; individual zeros are allowed.
 abort$(sum((allCy,SBS,ETYPES,YTIME),
 $IFTHEN.calibCheck %Calibration% == Calibration
@@ -180,12 +166,18 @@ imFuelPrice(runCy,DOMSE,"OLQ",YTIME) = imFuelPrice(runCy,"OI","OLQ",YTIME);
 imFuelPrice(runCy,DOMSE,"RFO",YTIME) = imFuelPrice(runCy,"OI","RFO",YTIME);
 imFuelPrice(runCy,"SE","GDO",YTIME) = imFuelPrice(runCy,"OI","GDO",YTIME);
 imFuelPrice(runCy,"SE","BGDO",YTIME) = imFuelPrice(runCy,"OI","BGDO",YTIME);
+imFuelPrice(runCy,"AG","BGAS",YTIME) = imFuelPrice(runCy,"AG","NGS",YTIME);
+imFuelPrice(runCy,"AG","BGDO",YTIME) = imFuelPrice(runCy,"AG","GDO",YTIME);
 *imFuelPrice(runCy,"SE","BMSWAS",YTIME) = imFuelPrice(runCy,"AG","BMSWAS",YTIME);
 imFuelPrice(runCy,"BU","BGSL",YTIME) = imFuelPrice(runCy,"OI","BGSL",YTIME);
 imFuelPrice(runCy,TRANSE,"RFO",YTIME) = imFuelPrice(runCy,"BU","RFO",YTIME);
 imFuelPrice(runCy,TRANSE,"OGS",YTIME) = imFuelPrice(runCy,TRANSE,"NGS",YTIME);
 imFuelPrice(runCy,TRANSE,"OLQ",YTIME) = imFuelPrice(runCy,TRANSE,"GDO",YTIME);
 imFuelPrice(runCy,TRANSE,"H2F",YTIME) = 2 * imFuelPrice(runCy,TRANSE,"H2F",YTIME);
+imFuelPrice(runCy,"H2P",EFS,YTIME) = imFuelPrice(runCy,"OI",EFS,YTIME);
+imFuelPrice(runCy,"STEAMP",EFS,YTIME) = imFuelPrice(runCy,"PG",EFS,YTIME);
+imFuelPrice(runCy,SBS,"H2F",YTIME) = 1.5 * imFuelPrice(runCy,"OI","ELC",YTIME);
+imFuelPrice(runCy,SBS,"STE",YTIME) = imFuelPrice(runCy,"OI","ELC",YTIME);
 imFuelPrice(runCy,"ICT",EFS,YTIME)$SECtoEF("ICT",EFS) = imFuelPrice(runCy,"SE",EFS,YTIME);
 *---
 table imPriceFuelsIntBase(WEF,YTIME)	              "International Fuel Prices USED IN BASELINE SCENARIO ($2015/toe)"
@@ -399,22 +391,6 @@ SE.TELC       0.3      8.976           12  0.97
 SE.THEATPUMP  0.432    12.9254         20  3.2
 SE.TSOL       0.432    12.9254         20  1
 SE.TGEO       0.432    12.9254         20  0.5
-AG.THCL       0.323544 10.88           20  0.7
-AG.TLGN       0.323544 10.88           20  0.5
-AG.TLPG       0.24888  10.88           20  0.8
-AG.TGSL       0.323544 10.88           20  0.7
-AG.TKRS       0.24888  10.88           20  0.8
-AG.TGDO       0.24888  6.8             20  0.85
-AG.TRFO       0.24888  10.88           20  0.8
-AG.TOLQ       0.24888  10.88           20  0.8
-AG.TNGS       0.2244   6.8             20  0.88
-AG.TOGS       0.2244   10.88           20  0.8
-*AG.PGTSOL     0.86224  1.36            20  0.85
-AG.TBMSWAS    0.323544 10.88           20  0.5
-AG.TELC       0.3      8.976           12  0.9
-AG.THEATPUMP  0.432    12.9254         20  1.848
-AG.TSOL       0.432    12.9254         20  1
-AG.TGEO       0.432    12.9254         20  0.5
 HOU.THCL      0.323544 10.88           20  0.7
 HOU.TLGN      0.323544 10.88           20  0.5
 HOU.TLPG      0.24888  10.88           20  0.8
@@ -490,7 +466,6 @@ table iInitConsSubAndInitShaNonSubElec(DOMSE,Indu_Scon_Set)      "Initial Consum
      BASE   SHR_NSE SH_HPELC
 SE   1.8266 0.9     0.00001
 HOU  11.511 0.9     0.00001
-AG   0.2078 0.9     0.00001
 ;
 *---
 iShrHeatPumpElecCons(runCy,INDSE) = iIndCharData(INDSE,"SH_HPELC");
@@ -733,15 +708,6 @@ imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$((sameas(DSBS,"PC") or sameas(DSBS,"PB") 
 imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$DATAY(YTIME)= iMatrFactorData(runCy,DSBS,TECH,YTIME);        
 $ENDIF.calib
 *---
-parameters
-!!imFacSubsiCapCostTech(DSBS,TECH)                            !!State subsidy (%) factor in technology capex (demand side)
-!!imGrantCapCostTech(DSBS,TECH)                               !!State granting in technology capex (demand side)
-!!imSubsiCapCostFuel(SBS,EF)                                  !!State subsidy in fuel cost
-!!imFacSubsiCapCostSupply(SSBS,STECH)                         !!State subsidy (%) factor in technology capex (supply side)
-!!imGrantCapCostSupply(SSBS,STECH)                            !!State granting in technology capex (supply side)
-imCapCostTechMin(allCy,DSBS,TECH,YTIME)                    !!Factor for the minimum capex of a demand technology after the state subsidy
-!!#UPT imCostCapTechDisc(YTIME)                                   !!Discount rate for capital costs of power generation technologies
-;
 
 $ontext
 if %fScenario% eq 0 then
@@ -899,7 +865,6 @@ imPlantEffByType(runCy,STECH,"effHeat",YTIME)$(not PGALL(STECH))= imPlantEffByTy
 **   Conversion of GW mean power into TWh/y, depending on whether it's a leap year
 smGwToTwhPerYear(YTIME) = 8.76 + 0.024 $ (mod(YTIME.val,4) = 0 and mod (YTIME.val,100) <> 0);
 *--
-!!#UPT imCostCapTechDisc(YTIME) = 0;
-!!#UPT imCostCapTechDisc(YTIME)$(ord(YTIME) = 20) = 0.75;
-!!#UPT imCostCapTechDisc(YTIME)$(ord(YTIME) > 20 and ord(YTIME) <= 40) = 0.75 + (ord(YTIME) - 20) * (0.5 - 0.75) / (40 - 20);
-!!#UPT imCostCapTechDisc(YTIME)$(ord(YTIME) > 40) = 0.5;
+imFactorEmissProcessesCO2(allCy,SBS,EF,YTIME) = 0;
+*---
+imFactorEmissEnergyCO2(allCy,SBS,EF) = iCo2EmiFacAllSbs(EF);
