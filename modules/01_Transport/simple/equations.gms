@@ -293,7 +293,7 @@ Q01PremScrp(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME)$SECTTECH(TRANSE,TTECH)$runCy(
     (V01CostFuel(allCy,TRANSE,TTECH,YTIME-1)) ** (-1) /
     (
       V01CostFuel(allCy,TRANSE,TTECH,YTIME-1) ** (-1) +
-      0.02*i01PremScrpFac(allCy,TRANSE,TTECH,YTIME) * 
+      0.01*i01PremScrpFac(allCy,TRANSE,TTECH,YTIME) * 
       SUM(TTECH2$(not sameas(TTECH2,TTECH) and SECTTECH(TRANSE,TTECH2)),
         V01CostTranspPerMeanConsSize(allCy,TRANSE,TTECH2,YTIME-1) ** (-1)
       )
