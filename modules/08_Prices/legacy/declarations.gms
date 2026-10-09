@@ -63,12 +63,12 @@ V08BmswasPriceFactor(allCy,YTIME)                         "Year-over-year ratio 
 VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)                "Fuel prices per subsector and fuel (k$2015/toe)"
 VmPriceFuelAvgSub(allCy,DSBS,YTIME)                        "Average fuel prices per subsector (k$2015/toe)"
 * VmPriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)                  "Fuel prices per subsector and fuel for CHP plants (kUS$2015/toe)"
-VmPriceElecInd(allCy,TCHP,YTIME)                                "Electricity index - a function of industry price (1)"
+VmPriceElecInd(allCy,TCHP,YTIME)                           "Electricity index - a function of industry price (1)"
 
 V08SupplyCurves(allCy,EFS,YTIME)
 V08PricePrimary(allCy,EFS,YTIME)
 VmPriceSecondary(allCy,EFS,YTIME)
-VmPriceFinal(allCy,DSBS,EFS,YTIME)
+VmPriceFinal(allCy,DSBS,EFS,YTIME)                          "End-user price of final energy, excluding carbon taxes (k$2015/toe)"
 VmCostAvgProd(allCy,EFS,YTIME)
 *' *** Miscellaneous
 *V08FuelPriSubNoCarb(allCy,SBS,EF,YTIME)	                   "Fuel prices per subsector and fuel  without carbon value (kUS$2015/toe)"

@@ -13,7 +13,7 @@
 *' This equation calculates the activity for goods transport, considering different types of goods transport such as trucks and other freight transport.
 *' The activity is influenced by factors such as GDP, population, fuel prices, and elasticities. The equation includes terms for trucks and other
 *' freight transport modes.
-Q01ActivGoodsTransp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANG(TRANSE) $runCy(allCy))..
+Q01ActivGoodsTransp(allCy,TRANSE,YTIME)$(TIME(YTIME) $(TRANG(TRANSE) or BUN1(TRANSE)) $runCy(allCy))..
       V01ActivGoodsTransp(allCy,TRANSE,YTIME)
               =E=
       (
@@ -27,7 +27,7 @@ Q01ActivGoodsTransp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANG(TRANSE) $runCy(allCy
                 VmPriceFuelAvgSub(allCy,TRANSE,YTIME-(ord(kpdl)+1)))/
                 (imCGI(allCy,YTIME)**(1/6))]**(imElastA(allCy,TRANSE,"c3",YTIME)*imFPDL(TRANSE,KPDL))
           )
-      )$sameas(TRANSE,"GU") +      !!trucks
+      )$sameas(TRANSE,"GU") +
       (
         V01ActivGoodsTransp(allCy,TRANSE,YTIME-1) *
         [i01GDPperCapita(YTIME,allCy) / i01GDPperCapita(YTIME-1,allCy)]**imElastA(allCy,TRANSE,"a",YTIME) *
@@ -43,7 +43,11 @@ Q01ActivGoodsTransp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANG(TRANSE) $runCy(allCy
           (V01ActivGoodsTransp(allCy,"GU",YTIME) + 1e-6) / 
           (V01ActivGoodsTransp(allCy,"GU",YTIME-1) + 1e-6)
         )**imElastA(allCy,TRANSE,"c4",YTIME)
-      )$(not sameas(TRANSE,"GU"));        !!other freight transport
+      )$(TRANG(TRANSE) and not sameas(TRANSE,"GU")) +
+      (
+        V01ActivGoodsTransp(allCy,TRANSE,YTIME-1) *
+        imActv(YTIME,allCy,TRANSE)
+      )$BUN1(TRANSE);
 
 *' This equation calculates the gap in transport activity, which represents the activity that needs to be filled by new technologies.
 *' The gap is calculated separately for passenger cars, other passenger transportation modes, and goods transport. The equation involves
@@ -76,7 +80,7 @@ Q01GapTranspActiv(allCy,TRANSE,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
           SUM(TTECH$SECTTECH(TRANSE,TTECH),V01CapacityTransport(allCy,TRANSE,TTECH,YTIME-1) * V01RateScrPcTot(allCy,TRANSE,TTECH,YTIME))
         )) 
       )/2
-    )$TRANG(TRANSE);
+    )$(TRANG(TRANSE) or BUN1(TRANSE));
 
 *' This equation computes the annualized capital cost of new transport technologies by converting upfront investment costs 
 *' into equivalent annual payments. It applies the annuity factor to spread the capital cost over the technology’s lifetime.
@@ -251,7 +255,7 @@ Q01ActivPassTrnsp(allCy,TRANSE,YTIME)$(TIME(YTIME) $TRANP(TRANSE) $runCy(allCy))
           ]**(imElastA(allCy,TRANSE,"c3",YTIME)*imFPDL(TRANSE,KPDL))
         ) *
         [i01Pop(YTIME,allCy) / i01Pop(YTIME-1,allCy)] ** 0.4
-      )$(NOT (sameas(TRANSE,"PC") or sameas(TRANSE,"PA")));
+      )$(TRANP(TRANSE) and not (sameas(TRANSE,"PC") or sameas(TRANSE,"PA")));
 
 *' This equation calculates the number of scrapped passenger cars based on the scrapping rate and the stock of passenger cars from the previous year.
 *' The scrapping rate represents the proportion of cars that are retired from the total stock, and it influences the annual number of cars taken out of service.

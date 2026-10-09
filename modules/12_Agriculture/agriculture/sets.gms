@@ -5,7 +5,17 @@ sets
 
 *---
 FOOD_TYPES       Food types /PLANT,MEAT,FISH/
-AGRI_MODES       Agriculture energy services  /CROPS,ENERGY_CROPS,IRRIGATION,CLIMATE,POSTHARVESTING,LIVESTOCK,FORESTRY,FISHING/
+AGRI_MODES       "Agriculture energy services" 
+/
+CROPS             "Food crops"
+ENERGY_CROPS      "Energy crops"
+IRRIGATION        "Irrigation & Water management"
+CLIMATE           "Greenhouses & Climate control"
+POSTHARVESTING    "Post-harvesting processes"
+LIVESTOCK         "Livestock processes"
+FORESTRY          "Forestry"
+FISHING           "Fishing"
+/
 FERT_TYPES       Fertilizer types /N,P,K/
 
 MODEStoFOOD(AGRI_MODES,FOOD_TYPES)      "Agriculture modes mapped to the corresponding food type production"
@@ -53,6 +63,10 @@ TRFO.RFO
 TLGN.LGN
 TSTE.STE
 /
+
+AGRI_MODEStoEF(AGRI_MODES,EF)
 ;
 
+AGRI_MODEStoEF(AGRI_MODES,EF) = yes$SUM(AGRITECH$(AGRMODEStoTECH(AGRI_MODES,AGRITECH) and AGRITECHTOEF(AGRITECH,EF)), 1);
+SECtoEF("AG",EF) = yes$SUM(AGRI_MODES$AGRI_MODEStoEF(AGRI_MODES,EF), 1);
 alias(AGRITECH, AGRITECH2);

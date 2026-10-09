@@ -49,8 +49,8 @@ $ENDIF.magpieQuantityEquation
 Q08BmswasPriceFactor(allCy,YTIME)$(TIME(YTIME) $runCy(allCy))..
     V08BmswasPriceFactor(allCy,YTIME)
         =E=
-    VmPriceFuelSubsecCarVal(allCy,"PG","BMSWAS",YTIME) /
-    VmPriceFuelSubsecCarVal(allCy,"PG","BMSWAS",YTIME-1);
+    (VmPriceFuelSubsecCarVal(allCy,"PG","BMSWAS",YTIME) + 1e-6) /
+    (VmPriceFuelSubsecCarVal(allCy,"PG","BMSWAS",YTIME-1) + 1e-6);
 
 Q08SupplyCurves(allCy,EFS,YTIME)$(TIME(YTIME) $runCy(allCy))..
     V08SupplyCurves(allCy,EFS,YTIME)
@@ -164,7 +164,7 @@ Q08PriceCarbon(allCy,SBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmPriceCarbon(allCy,SBS,EFS,YTIME)
      =E=
     1e-3 * (
-      VmCarVal(allCy,"TRADE",YTIME)$(INDSE1(SBS) or ((DOMSE1(SBS) or TRANS1(SBS) or sameas("BU", SBS) or sameas("AG", SBS)) and ord(YTIME) > 17))
+      VmCarVal(allCy,"TRADE",YTIME)$(INDSE1(SBS) or ((DOMSE1(SBS) or TRANS1(SBS) or BUN(SBS) or sameas("AG",SBS)) and ord(YTIME) > 17))
     ) * imFactorEmissEnergyCO2(allCy,SBS,EFS);
 
 *' The equation calculates the average fuel price per subsector. These average prices are used to further compute electricity prices in industry
