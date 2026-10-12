@@ -430,20 +430,17 @@ BUN1(TRANSE)      Bunkers                       /BAV,BMAR/
 
 INDSE(DSBS)       Industrial SubSectors         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI/
 DOMSE(DSBS)       Tertiary SubSectors           /SE,HOU/
+NENSE(DSBS)       Non Energy                    /PCH,NEN/
+
 INDSE1(SBS)       Industrial SubSectors         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI/
 DOMSE1(SBS)       Tertiary SubSectors           /SE,HOU/
 HOU(DSBS)         Households                    /HOU/
 CDR(DSBS)         Carbon Dioxide Removal         /DAC,EW/
 
-NENSE(DSBS)       Non Energy                    /PCH,NEN/
-NENSE1(SBS)       Non Energy                    /PCH,NEN/
-
 INDDOM(DSBS)      Industry and Tertiary         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,SE,HOU/
-
 RESCOM(DSBS)      Residential and Commercial    /SE,HOU/
-* The following sets are used in price equation for electricity
-HOU1(SBS)         Households                     /HOU/
-SERV(SBS)         Services                       /SE,AG/
+
+CALIB_DSBS(DSBS)  Calibrated demand subsectors  
 
 SSBS(SBS)     All Supply Subsectors    
 /
@@ -1371,3 +1368,5 @@ SECtoEF(TRANSE,EF) = yes$SUM(TTECH$(SECTTECH(TRANSE,TTECH) and TTECHtoEF(TTECH,E
 *SECtoEF(DSBS, EF)$(sum(TECH, SECTTECH(DSBS, TECH) * TTECHtoEF(TECH, EF))) = yes;
 SSECTTECH("PG",STECH) = yes$PGALL(STECH);
 PGEF(EFS) = yes$(sum(PGALL, PGALLTOEF(PGALL,EFS)));
+
+CALIB_DSBS(DSBS)$(INDDOM(DSBS) or NENSE(DSBS) or sameas("PC",DSBS) or sameas("PB",DSBS) or sameas("GU",DSBS)) = YES;
