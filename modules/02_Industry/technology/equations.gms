@@ -46,13 +46,12 @@ Q02RatioRem(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and (INDD
 Q02PremScrpIndu(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and (INDDOM(DSBS) or NENSE(DSBS)))$runCy(allCy))..
     V02PremScrpIndu(allCy,DSBS,ITECH,YTIME)
         =E=
-    1 - ((V02VarCostTech(allCy,DSBS,ITECH,YTIME-1) + V02CarbonCostTech(allCy,DSBS,ITECH,YTIME - 1)) * i02util(allCy,DSBS,ITECH,YTIME-1) + 1e-3) ** (-2) /
+    1 - ((V02VarCostTech(allCy,DSBS,ITECH,YTIME-1) + V02CarbonCostTech(allCy,DSBS,ITECH,YTIME - 1)) * i02util(allCy,DSBS,ITECH,YTIME-1) + 1e-3) ** (-1) /
     (
-      ((V02VarCostTech(allCy,DSBS,ITECH,YTIME-1) + V02CarbonCostTech(allCy,DSBS,ITECH,YTIME - 1)) * i02util(allCy,DSBS,ITECH,YTIME-1) + 1e-3) ** (-2) +
-      i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME) *
+      ((V02VarCostTech(allCy,DSBS,ITECH,YTIME-1) + V02CarbonCostTech(allCy,DSBS,ITECH,YTIME - 1)) * i02util(allCy,DSBS,ITECH,YTIME-1) + 1e-3) ** (-1) +
+      0.01 * i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME) *
       sum(ITECH2$(not sameas(ITECH2,ITECH) and SECTTECH(DSBS,ITECH2)),
-          V02CostTech(allCy,DSBS,ITECH2,YTIME-1)
-      ) ** (-2)
+          (V02CostTech(allCy,DSBS,ITECH2,YTIME-1) + 1e-3) ** (-1)
     );
 
 *'NEW EQUATION' - kind of --> substitutes Q02ConsRemSubEquipSubSec
@@ -182,11 +181,11 @@ Q02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     );
 
 *' NEW EQUATION - Useful Electricity to Final Electricity (Check if needed to add equipment of electricity)
-Q02FinalElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V02FinalElecNonSubIndTert(allCy,INDDOM,YTIME) 
+Q02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(TIME(YTIME) and runCy(allCy) and (INDSE(DSBS) or RESCOM(DSBS)))..
+    V02FinalElecNonSubIndTert(allCy,DSBS,YTIME) 
         =E=
-    V02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME) / 
-    imUsfEneConvSubTech(allCy,INDDOM,"TELC",YTIME);
+    V02UsefulElecNonSubIndTert(allCy,DSBS,YTIME) / 
+    imUsfEneConvSubTech(allCy,DSBS,"TELC",YTIME);
 
 *' This equation calculates the consumption of fuels in each demand subsector.
 *' It considers the consumption of remaining substitutable equipment, the technology share in new equipment, and the final demand
@@ -194,23 +193,21 @@ Q02FinalElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 *' OLD EQUATION: Q02ConsFuelInclHP(allCy,DSBS,EF,YTIME) --> NEW EQUATION:Q02ConsFuelIncl(allCy,DSBS,EF,YTIME)
 
 *' OLD VARIABLE: VmConsElecNonSubIndTert(allCy,INDDOM,YTIME) --> NEW VARIABLE:VmUsefulElecNonSubIndTert(allCy,DSBS,YTIME)
-Q02ConsFuel(allCy,DSBS,EF,YTIME)$(TIME(YTIME)$((INDDOM(DSBS) or NENSE(DSBS)) and SECtoEF(DSBS,EF))$runCy(allCy))..
-    VmConsFuel(allCy,DSBS,EF,YTIME) 
+Q02ConsFuel(allCy,DSBS,EFS,YTIME)$(TIME(YTIME)$((INDDOM(DSBS) or NENSE(DSBS)) and SECtoEF(DSBS,EFS))$runCy(allCy))..
+    VmConsFuel(allCy,DSBS,EFS,YTIME) 
         =E=
     sum(ITECH$(ITECHtoEF(ITECH,EF) and SECTTECH(DSBS,ITECH)),
-      i02ShareBlend(allCy,DSBS,ITECH,EF,YTIME) * 
-      (1-i02ShareFeed(allCy,DSBS,ITECH,EF,YTIME))*
+      i02ShareBlend(allCy,DSBS,ITECH,EF,YTIME) *
       V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) *
       i02util(allCy,DSBS,ITECH,YTIME) * i02CapFactor(allCy,DSBS,ITECH,YTIME) * i02INDSpecificEnergyIntensity(allCy,DSBS,ITECH,YTIME) 
     ) +
-    V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(INDDOM(DSBS) and ELCEF(EF)) +
-    VmElecConsHeatPla(allCy,DSBS,YTIME)$ELCEF(EF);
+    V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(INDDOM(DSBS) and not sameas("AG",DSBS) and ELCEF(EFS));
 
 *' Average efficiency of substitutable demand
 Q02IndAvrEffFinalUseful(allCy,DSBS,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(DSBS))$runCy(allCy))..
     V02IndAvrEffFinalUseful(allCy,DSBS,YTIME)
        =E=
-    V02DemSubUsefulSubsec(allCy,DSBS,YTIME) * i02INDSpecificEnergyIntensity(allCy,DSBS,ITECH,YTIME)    /
+    V02DemSubUsefulSubsec(allCy,DSBS,YTIME) /
     (sum(EF$SECtoEF(DSBS,EF),VmConsFuel(allCy,DSBS,EF,YTIME)) - (V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(INDDOM(DSBS)) +
     VmElecConsHeatPla(allCy,DSBS,YTIME)) + 1e-3)
     ;

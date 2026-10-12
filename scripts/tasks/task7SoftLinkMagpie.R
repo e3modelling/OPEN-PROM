@@ -19,7 +19,8 @@
 #                   (+ capture h12_price from report.mif; uses round-0 gdx
 #                    purely to read the invariant SBS set)
 #   openprom_hot  OPEN-PROM (--softLinkMAgPIE=on); reads the just-written
-#                 iPrices_magpie.csv and FX-es BMSWAS price
+#                 iPrices_magpie.csv as the absolute BMSWAS backend price,
+#                 then applies the global sustainability tax once
 #                   -> blabla_round{k}.gdx
 #
 # After each k >= 2, convergence is checked vs round k-1 (§2). The loop
@@ -66,9 +67,10 @@
 # so measuring convergence there adds rows without new price information.
 #
 # Why max judges (not L2): L2 averages cells, so a single bad cell can be
-# washed out. BMSWAS price is .FX-ed into OPEN-PROM per (region, year), so
-# even one bad cell distorts the next round's solve. L2 stays as a parallel
-# diagnostic for interpreting whether the max reflects broad disagreement
+# washed out. The returned BMSWAS backend price enters OPEN-PROM per
+# (region, year), so even one bad cell distorts the next round's solve. L2
+# stays as a parallel diagnostic for interpreting whether the max reflects
+# broad disagreement
 # (max ~ L2) or a few outliers (max >> L2); see §5.
 #
 # No damping (Picard relaxation): the coupling channel is narrow (single

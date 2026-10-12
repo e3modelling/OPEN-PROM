@@ -53,7 +53,9 @@ Q04CostCapTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
     V04CostCapTech(allCy,PGALL,YTIME) 
         =E=
     V04CapexRESRate(allCy,PGALL,YTIME) * V04CapexFixCostPG(allCy,PGALL,YTIME) / 
-    (i04AvailRate(allCy,PGALL,YTIME) * smGwToTwhPerYear(YTIME) * 1000);
+    (i04AvailRate(allCy,PGALL,YTIME) * smGwToTwhPerYear(YTIME) * 1000)
+ !!#UPT   * (imCostCapTechDisc(YTIME)$(sameas(PGALL,"ATHBMSCCS")) + 1$(not sameas(PGALL,"ATHBMSCCS")))
+    ;
 
 *' Compute the variable cost of each power plant technology for every region,
 *' By utilizing the gross cost, fuel prices, CO2 emission factors & capture, and plant efficiency. 
@@ -158,7 +160,7 @@ Q04GapGenCapPowerDiff(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         )
       ))
       ) 
-    ) / 2;
+    ) / 2 + 1e-6;
 
 *' Calculates the share of all the unflexible RES penetration into the mixture, and specifically how much above a given threshold it is.
 Q04ShareMixWndSol(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
@@ -315,14 +317,6 @@ Q04ScrpRate(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04IndxEndogScrap(allCy,PGALL,YTIME) *
     V04CCSRetroFit(allCy,PGALL,YTIME);
 
-Q04ConsFuelElecProd(allCy,PGEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    VmConsFuelElecProd(allCy,PGEF,YTIME)
-        =E=
-    SUM(PGALL$PGALLTOEF(PGALL,PGEF),
-      i04ShareFuels(allCy,PGALL,PGEF) *
-      VmProdElec(allCy,PGALL,YTIME) * smTWhToMtoe / 
-      imPlantEffByType(allCy,PGALL,"effELC",YTIME)
-    );
 
 $ontext
 *' The equation computes the electricity production cost per Combined Heat and Power plant for a specific demand sector within a given subsector.

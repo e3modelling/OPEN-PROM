@@ -31,23 +31,27 @@ imTransChar(runCy,"RES_MEXTV",YTIME) = 0.04;
 *'                **Interdependent Variables**
 
 *---
-VmElecConsHeatPla.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = imFuelCons(runCy,INDDOM,"ELC",YTIME)*(1-imShrNonSubElecInTotElecDem(runCy,INDDOM))*iShrHeatPumpElecCons(runCy,INDDOM);
-* Compute electricity consumed in heatpump plants, QElecConsHeatPla(runCy,INDDOM,YTIME)$time(ytime).
-VmElecConsHeatPla.FX(runCy,DSBS,YTIME) = 0;
-*---
 VmCarVal.FX(runCy,"TRADE",YTIME) = iCarbValYrExog(runCy,YTIME);
 *---
 VmCstCO2SeqCsts.LO(runCy,YTIME) = i06ElastCO2Seq(runCy,"seq_min");
 VmCstCO2SeqCsts.L(runCy,YTIME) = i06ElastCO2Seq(runCy,"seq_min");
 VmCstCO2SeqCsts.FX(runCy,YTIME)$DATAY(YTIME) = i06ElastCO2Seq(runCy,"seq_min");
 *---
+VmPriceCarbon.FX(runCy,SBS,EFS,YTIME)$DATAY(YTIME) = 1e-3 * iCarbValYrExog(runCy,YTIME)$INDSE1(SBS) * imCo2EmiFac(runCy,SBS,EFS,YTIME);
+*---
+VmPriceFinal.LO(runCy,DSBS,EFS,YTIME) = 0;
+VmPriceFinal.L(runCy,DSBS,EFS,YTIME) = 1;
+VmPriceFinal.FX(runCy,DSBS,EFS,YTIME)$(DATAY(YTIME) and SECtoEF(DSBS,EFS))= imFuelPrice(runCy,DSBS,EFS,YTIME);
+VmPriceFinal.FX(runCy,DSBS,EFS,YTIME)$(not SECtoEF(DSBS,EFS)) = 0;
+*---
+VmPriceSecondary.LO(runCy,EFS,YTIME) = 0;
+VmPriceSecondary.L(runCy,EFS,YTIME) = 1;
+VmPriceSecondary.FX(runCy,EFS,YTIME)$DATAY(YTIME) = imFuelPrice(runCy,"PG",EFS,YTIME);
+*---
 VmPriceFuelSubsecCarVal.LO(runCy,SBS,EF,YTIME) = 0;
 VmPriceFuelSubsecCarVal.L(runCy,SBS,EF,YTIME)$SECtoEF(SBS,EF) = 1;
 
-$IFTHEN %softLinkMAgPIE% == on 
-VmPriceFuelSubsecCarVal.FX(runCy,SBS,"BMSWAS",YTIME)$(An(YTIME)) = iPricesMagpie(runCy,SBS,YTIME);
-$ENDIF
-VmPriceFuelSubsecCarVal.FX(runCy,SBS,EF,YTIME)$(SECtoEF(SBS,EF) and not sameas("NUC",EF) and DATAY(YTIME)) = imFuelPrice(runCy,SBS,EF,YTIME);
+VmPriceFuelSubsecCarVal.FX(runCy,SBS,EF,YTIME)$(SECtoEF(SBS,EF) and not sameas("NUC",EF) and not sameas("H2F",EF) and DATAY(YTIME)) = imFuelPrice(runCy,SBS,EF,YTIME);
 * Alternative fuel prices are set explicitly below instead of using ALTMAP
 * FIXME: VmPriceFuelSubsecCarVal (NUC/MET/ETH/BGDO) should be computed endogenously after startYear, and with mrprom before startYear
 * author=giannou
@@ -60,6 +64,7 @@ VmPriceFuelSubsecCarVal.FX(runCy,"H2P",EF,YTIME)$(SECtoEF("H2P",EF)$DATAY(YTIME)
 VmPriceFuelSubsecCarVal.FX(runCy,"STEAMP",EF,YTIME)$(SECtoEF("STEAMP",EF)$DATAY(YTIME)) = imFuelPrice(runCy,"PG",EF,YTIME);
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,"CRO",YTIME) = imFuelPrice(runCy,SBS,"CRO",YTIME);
 VmPriceFuelSubsecCarVal.FX(runCy,SBS,"STE",YTIME)$(SECtoEF(SBS,"STE") and DATAY(YTIME)) = imFuelPrice(runCy,"OI","ELC",YTIME);
+VmPriceFuelSubsecCarVal.FX(runCy,SBS,"H2F",YTIME)$(SECtoEF(SBS,"H2F") and DATAY(YTIME)) =  1.5 * imFuelPrice(runCy,"OI","ELC",YTIME);
 *---
 VmPriceFuelAvgSub.LO(runCy,DSBS,YTIME) = 0;
 VmPriceFuelAvgSub.L(runCy,DSBS,YTIME) = 1;

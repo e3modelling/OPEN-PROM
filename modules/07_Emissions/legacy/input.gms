@@ -31,6 +31,13 @@ Parameter p07MacCost(E07MAC) /
     3540 3540, 3600 3600, 3840 3840, 4000 4000
 /;
 
+* Ensure that the abatement from the MAC curve does not exceed the baseline emissions.
+i07DataCh4N2OFMAC(allCy, E07SrcMacAbate, E07MAC, YTIME) =
+    min(
+        i07DataCh4N2OFMAC(allCy, E07SrcMacAbate, E07MAC, YTIME),
+        i07DataCh4N2OFEmis(allCy, E07SrcMacAbate, YTIME)
+    );
+
 * Calculate difference between current step and previous step (E07MAC-1)
 * The condition $(ord(E07MAC)>1) ensures we don't crash on the first element.
 p07MarginalRed(allCy, E07SrcMacAbate, E07MAC, YTIME) = 

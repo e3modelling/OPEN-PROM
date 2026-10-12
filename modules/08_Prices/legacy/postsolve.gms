@@ -8,6 +8,12 @@ VmPriceFuelAvgSub.FX(runCyL,DSBS,YTIME)$TIME(YTIME) = VmPriceFuelAvgSub.L(runCyL
 VmPriceFuelSubsecCarVal.FX(runCyL,SBS,EF,YTIME)$TIME(YTIME) = VmPriceFuelSubsecCarVal.L(runCyL,SBS,EF,YTIME)$TIME(YTIME);
 VmPriceElecInd.FX(runCyL,TCHP,YTIME)$TIME(YTIME) = VmPriceElecInd.L(runCyL,TCHP,YTIME)$TIME(YTIME);
 V08PriceFuelSepCarbonWght.FX(runCyL,DSBS,EF,YTIME)$TIME(YTIME) = V08PriceFuelSepCarbonWght.L(runCyL,DSBS,EF,YTIME)$TIME(YTIME);
+V08PricePrimary.FX(runCyL,EFS,YTIME)$TIME(YTIME) = V08PricePrimary.L(runCyL,EFS,YTIME)$TIME(YTIME);
+VmPriceSecondary.FX(runCyL,EFS,YTIME)$TIME(YTIME) = VmPriceSecondary.L(runCyL,EFS,YTIME)$TIME(YTIME);
+VmPriceFinal.FX(runCyL,DSBS,EFS,YTIME)$TIME(YTIME) = VmPriceFinal.L(runCyL,DSBS,EFS,YTIME)$TIME(YTIME);
+VmPriceCarbon.FX(runCyL,SBS,EFS,YTIME)$TIME(YTIME) = VmPriceCarbon.L(runCyL,SBS,EFS,YTIME)$TIME(YTIME);
+VmCostAvgProd.FX(runCyL,EFS,YTIME)$TIME(YTIME) = VmCostAvgProd.L(runCyL,EFS,YTIME)$TIME(YTIME);
+V08SupplyCurves.FX(runCyL,EFS,YTIME)$TIME(YTIME) = V08SupplyCurves.L(runCyL,EFS,YTIME)$TIME(YTIME);
 *---
 *' Land-use emulator emission accounting (landEmiMode == curve only)
 *'
@@ -15,7 +21,8 @@ V08PriceFuelSepCarbonWght.FX(runCyL,DSBS,EF,YTIME)$TIME(YTIME) = V08PriceFuelSep
 *'   CO2 = ea + eb*BMSWAS; agriculture CH4/N2O are direct table values.
 *' MAgPIE:
 *'   effective Q = 0.4*BMSWAS + 0.6*(BGSL+BKRS+BGAS);
-*'   net land CO2 uses OP39 coefficients and requested H12 Q, with non-EUR
+*'   land-use-change CO2 emissions/removals, excluding indirect land CO2 and fire emissions,
+*'   use OP39 coefficients and requested H12 Q, with non-EUR
 *'   regions using current Q and EU28 using preceding-year EUR Q;
 *'   agriculture CH4/N2O use current OP39 Q and are bounded at zero.
 $IFTHEN %landEmiMode% == curve
@@ -38,11 +45,11 @@ i08Bioenergy2GEffectiveQMagpie(runCyL,YTIME)$TIME(YTIME) =
     i08Bioenergy2GWeightMagpie(EFS) * V03ProdPrimary.L(runCyL,EFS,YTIME)
   );
 
-* H12 effective 2G Q for net land CO2; EU28 share preceding-year EUR Q.
+* H12 effective 2G Q for Land-use Change CO2; EU28 share preceding-year EUR Q.
 i08Bioenergy2GEffectiveQH12Magpie(runCyL,YTIME)$TIME(YTIME) =
   V08Bioenergy2GEffectiveQH12Magpie.L(runCyL,YTIME);
 
-* Land CO2 is net (signed): removals remain negative and are not clamped.
+* Land-use Change CO2 is signed: negative values are retained and not clamped.
 imAfoluLandEmis(runCyL,EMTYPE,YTIME)$(TIME(YTIME) $sameas(EMTYPE,"CO2LandUse")) =
   sum(activeMagpieScen,
       i08LandCO2CoefMagpie(activeMagpieScen,runCyL,EMTYPE,"ea",YTIME)
@@ -65,4 +72,16 @@ imAfoluAgriEmis(runCyL,EMTYPE,YTIME)$(TIME(YTIME) $(sameas(EMTYPE,"CH4LandUse") 
   );
 $ENDIF.emulatorEmissions
 $ENDIF
+*---
+* After the last regional solve, set the global sustainability tax for the next
+* model year: tau(t) = A * (Qworld(t-1) / biomassReferenceEJ)^2.
+$ifthenE.biomassTax %biomassReferenceEJ%>0
+i08BmswasPriceAdder(YTIME)$(
+  sCY = card(runCyL) and TIME(YTIME-1) and AN(YTIME)
+) = i08BmswasTaxScale
+  * sqr(
+      sum(runCy2, V03ProdPrimary.L(runCy2,"BMSWAS",YTIME-1))
+      * i08MtoeToEJ / %biomassReferenceEJ%
+    );
+$endif.biomassTax
 *---
