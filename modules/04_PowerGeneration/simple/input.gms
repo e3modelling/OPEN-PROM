@@ -103,8 +103,8 @@ $offdelim
 $IFTHEN.calib %Calibration% == MatCalibration
 variable i04MatFacPlaAvailCap(allCy,PGALL,YTIME)   "Maturity factor related to plant available capacity (1)";
 variable i04ScaleEndogScrap(allCy,PGALL,YTIME)     "Scale parameter for endogenous scrapping applied to the sum of full costs (1)";
-i04MatFacPlaAvailCap.LO(runCy, PGALL, YTIME) = 1e-2;
-i04MatFacPlaAvailCap.UP(runCy, PGALL, YTIME) = 1;
+i04MatFacPlaAvailCap.LO(runCy,PGALL,YTIME) = 1e-2;
+i04MatFacPlaAvailCap.UP(runCy,PGALL,YTIME) = 1;
 i04MatFacPlaAvailCap.L(runCy,PGALL,YTIME) = iMatFacPlaAvailCapData(runCy,PGALL,YTIME);
 
 i04ScaleEndogScrap.LO(runCy,PGALL,YTIME) = 1e-2;
