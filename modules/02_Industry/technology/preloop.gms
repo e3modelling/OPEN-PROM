@@ -66,7 +66,7 @@ V02VarCostTech.L(runCy,DSBS,ITECH,YTIME)$SECTTECH(DSBS,ITECH) = 2;
 V02VarCostTech.FX(runCy,DSBS,ITECH,YTIME)$(DATAY(YTIME) and (INDDOM(DSBS) or NENSE(DSBS)) and SECTTECH(DSBS,ITECH)) =
   (
     sum(EF$ITECHtoEF(ITECH,EF),
-      i02ShareBlend(runCy,DSBS,ITECH,EF,YTIME) *
+      i02FuelShare(runCy,DSBS,ITECH,EF,YTIME) *
       (
         (
           VmPriceFuelSubsecCarVal.L(runCy,DSBS,EF,YTIME) +

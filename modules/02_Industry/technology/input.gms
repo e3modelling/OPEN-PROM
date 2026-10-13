@@ -46,6 +46,7 @@ i02CalibUsefulEnergy.UP(runCy,DSBS,YTIME) = 1;
 i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$DATAY(YTIME) = 0;
 i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$(not (INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS))) = 0;
 i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$(sameas("AG",DSBS) and not EU28(runCy)) = 0;
+i02CalibUsefulEnergy.FX(runCy,"IS",YTIME)=0;  !!this is for the initial IS runs only
 $ENDIF.calib
 i02ElastNonSubElec(runCy,DSBS,ETYPES,YTIME) = i02ElastNonSubElecData(DSBS,ETYPES,YTIME);
 *---
@@ -57,54 +58,56 @@ imCO2CaptRateIndustry(runCy,CCSTECH,YTIME) = 0.9;
 alias(ITECH,ITECH2);
 i02numtechnologiesUsingEF(DSBS,EF)=sum(ITECH2$(ITECHtoEF(ITECH2,EF)$SECTTECH(DSBS,ITECH2)),1);
 *---
-i02ShareBlend(runCy,DSBS,ITECH,EF,YTIME)$(DATAY(YTIME) and SECTTECH(DSBS,ITECH) and ITECHtoEF(ITECH,EF)) =
+i02FuelShare(runCy,DSBS,ITECH,EF,YTIME)$(DATAY(YTIME) and SECTTECH(DSBS,ITECH) and ITECHtoEF(ITECH,EF)) =
   (
     imFuelCons(runCy,DSBS,EF,YTIME) /
     SUM(EFS2$ITECHtoEF(ITECH,EFS2), imFuelCons(runCy,DSBS,EFS2,YTIME))
   )$SUM(EFS2$ITECHtoEF(ITECH,EFS2), imFuelCons(runCy,DSBS,EFS2,YTIME)) +
   1$(not SUM(EFS2$ITECHtoEF(ITECH,EFS2), imFuelCons(runCy,DSBS,EFS2,YTIME)) and not BIOFUELS(EF));
   
-i02ShareBlend(runCy,DSBS,ITECH,EF,YTIME)$AN(YTIME) = i02ShareBlend(runCy,DSBS,ITECH,EF,"%fBaseY%");
+i02FuelShare(runCy,DSBS,ITECH,EF,YTIME)$AN(YTIME) = i02FuelShare(runCy,DSBS,ITECH,EF,"%fBaseY%");
 i02ShareElcHP(runCy,"HOU",YTIME) = 0.1;
 i02ShareElcHP(runCy,"SE",YTIME) = 0.1;
 
 *shares iron and steel doubts on the definitions, in principle I would read these share directly from the data source
-i02ShareBlend(runCy,"IS","BFBOFBY","HCL",YTIME) = 0.7;
-i02ShareBlend(runCy,"IS","BFBOFBY","NGS",YTIME) = 0.1;
-i02ShareBlend(runCy,"IS","BFBOFBY","ELC",YTIME)= 0.2;
+i02FuelShare(runCy,"IS","BFBOFBY","HCL",YTIME) = 0.7;
+i02FuelShare(runCy,"IS","BFBOFBY","NGS",YTIME) = 0.1;
+i02FuelShare(runCy,"IS","BFBOFBY","ELC",YTIME)= 0.2;
 
-i02ShareBlend(runCy,"IS","DREAFBY","NGS",YTIME)= 0.7;
-i02ShareBlend(runCy,"IS","DREAFBY","ELC",YTIME)= 0.2;
-i02ShareBlend(runCy,"IS","DREAFBY","HCL",YTIME)= 0.1;
+i02FuelShare(runCy,"IS","DREAFBY","NGS",YTIME)= 0.7;
+i02FuelShare(runCy,"IS","DREAFBY","ELC",YTIME)= 0.2;
+i02FuelShare(runCy,"IS","DREAFBY","HCL",YTIME)= 0.1;
 
-i02ShareBlend(runCy,"IS","DREAFCOALBY","HCL",YTIME) = 0.8;
-i02ShareBlend(runCy,"IS","DREAFCOALBY","ELC",YTIME)= 0.2;
+i02FuelShare(runCy,"IS","DREAFCOALBY","HCL",YTIME) = 0.8;
+i02FuelShare(runCy,"IS","DREAFCOALBY","ELC",YTIME)= 0.2;
 
-i02ShareBlend(runCy,"IS","SCREAFBY","ELC",YTIME) = 0.9;
-i02ShareBlend(runCy,"IS","SCREAFBY","NGS",YTIME) = 0.1;
+i02FuelShare(runCy,"IS","SCREAFBY","ELC",YTIME) = 0.9;
+i02FuelShare(runCy,"IS","SCREAFBY","NGS",YTIME) = 0.1;
 
-i02ShareBlend(runCy,"IS","BFBOF","HCL",YTIME)= 0.7;
-i02ShareBlend(runCy,"IS","BFBOF","NGS",YTIME) = 0.1;
-i02ShareBlend(runCy,"IS","BFBOF","ELC",YTIME) = 0.2;
+i02FuelShare(runCy,"IS","BFBOF","HCL",YTIME)= 0.7;
+i02FuelShare(runCy,"IS","BFBOF","NGS",YTIME) = 0.1;
+i02FuelShare(runCy,"IS","BFBOF","ELC",YTIME) = 0.2;
 
-i02ShareBlend(runCy,"IS","DREAF","NGS",YTIME) = 0.7;
-i02ShareBlend(runCy,"IS","DREAF","ELC",YTIME) = 0.2;
-i02ShareBlend(runCy,"IS","DREAF","HCL",YTIME) = 0.1;
+i02FuelShare(runCy,"IS","DREAF","NGS",YTIME) = 0.7;
+i02FuelShare(runCy,"IS","DREAF","ELC",YTIME) = 0.2;
+i02FuelShare(runCy,"IS","DREAF","HCL",YTIME) = 0.1;
 
-i02ShareBlend(runCy,"IS","H2DREAF","H2F",YTIME) = 0.7;
-i02ShareBlend(runCy,"IS","H2DREAF","ELC",YTIME) = 0.2;
-i02ShareBlend(runCy,"IS","H2DREAF","NGS",YTIME) = 0.1;
+i02FuelShare(runCy,"IS","H2DREAF","H2F",YTIME) = 0.7;
+i02FuelShare(runCy,"IS","H2DREAF","ELC",YTIME) = 0.2;
+i02FuelShare(runCy,"IS","H2DREAF","NGS",YTIME) = 0.1;
 
-i02ShareBlend(runCy,"IS","BFBOFCCS","HCL",YTIME) = 0.7;
-i02ShareBlend(runCy,"IS","BFBOFCCS","NGS",YTIME) = 0.1;
-i02ShareBlend(runCy,"IS","BFBOFCCS","ELC",YTIME)= 0.2;
+i02FuelShare(runCy,"IS","BFBOFCCS","HCL",YTIME) = 0.7;
+i02FuelShare(runCy,"IS","BFBOFCCS","NGS",YTIME) = 0.1;
+i02FuelShare(runCy,"IS","BFBOFCCS","ELC",YTIME)= 0.2;
 
-i02ShareBlend(runCy,"IS","DREAFCCS","NGS",YTIME)= 0.7;
-i02ShareBlend(runCy,"IS","DREAFCCS","ELC",YTIME) = 0.2;
-i02ShareBlend(runCy,"IS","DREAFCCS","HCL",YTIME)= 0.1;
+i02FuelShare(runCy,"IS","DREAFCCS","NGS",YTIME)= 0.7;
+i02FuelShare(runCy,"IS","DREAFCCS","ELC",YTIME) = 0.2;
+i02FuelShare(runCy,"IS","DREAFCCS","HCL",YTIME)= 0.1;
 
-i02ShareBlend(runCy,"IS","SCREAF","ELC",YTIME) = 0.9;
-i02ShareBlend(runCy,"IS","SCREAF","NGS",YTIME)= 0.1;
+i02FuelShare(runCy,"IS","SCREAF","ELC",YTIME) = 0.9;
+i02FuelShare(runCy,"IS","SCREAF","NGS",YTIME)= 0.1;
+
+i02ShareBlend(allCy,DSBS,ITECH,EF,EF2,YTIME) = 1;
 
 i02ShareFeed(runCy,DSBS,ITECH,EF,YTIME) = 0;
 

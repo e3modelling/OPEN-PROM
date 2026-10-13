@@ -27,7 +27,7 @@ Q06CO2CaptureCCS(allCy,SBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECtoEF(SBS,EF
       )$sameas("H2P", SBS) +
       sum(DSBS$sameas(DSBS,SBS),
         sum(CCSTECH$SECTTECH(DSBS,CCSTECH),
-            i02ShareBlend(allCy,DSBS,CCSTECH,EFS,YTIME) *
+            i02FuelShare(allCy,DSBS,CCSTECH,EFS,YTIME) *
             V02EquipCapTechSubsec(allcy,DSBS,CCSTECH,YTIME) * 
             i02util(allCy,DSBS,CCSTECH,YTIME) * 
             imCO2CaptRateIndustry(allCy,CCSTECH,YTIME)
