@@ -106,6 +106,8 @@ i02FuelShare(runCy,"IS","DREAFCCS","HCL",YTIME)= 0.1;
 i02FuelShare(runCy,"IS","SCREAF","ELC",YTIME) = 0.9;
 i02FuelShare(runCy,"IS","SCREAF","NGS",YTIME)= 0.1;
 
+i02ShareBlend(allCy,DSBS,ITECH,EF,EF2,YTIME) = 1;
+
 i02ShareFeed(runCy,DSBS,ITECH,EF,YTIME) = 0;
 
 imCo2EmiFacFeed(runCy,DSBS,EF,YTIME) = imCo2EmiFac(runCy,DSBS,EF,YTIME);

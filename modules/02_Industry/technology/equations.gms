@@ -112,21 +112,20 @@ Q02VarCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not C
   V02VarCostTech(allCy,DSBS,ITECH,YTIME) 
       =E=
     sum(EF$ITECHtoEF(ITECH,EF), 
-      (i02FuelShare(allCy,DSBS,ITECH,EF,YTIME) *i02INDSpecificEnergyIntensity(allCy,DSBS,ITECH,YTIME))*  
-      (
-        VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME)  !!to be substituted with final energy fuel price
-    ) +
+      (i02FuelShare(allCy,DSBS,ITECH,EF,YTIME) *i02INDSpecificEnergyIntensity(allCy,DSBS,ITECH,YTIME))*
+        sum(EF2$EFBLEND(ITECH,EF,EF2),i02ShareBlend(allCy,DSBS,ITECH,EF,EF2,YTIME)* 
+      (VmPriceFinal(allCy,DSBS,EFS,YTIME)) +
     imVarCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit 
-  ) / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME);
+  )) / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME);
 
 Q02CarbonCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not CDR(DSBS))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
     V02CarbonCostTech(allCy,DSBS,ITECH,YTIME) 
         =E=
         sum(EF$ITECHtoEF(ITECH,EF), 
-            (1-imCO2CaptRateIndustry(allCy,ITECH,YTIME))*((1-i02ShareFeed(allCy,DSBS,ITECH,EF,YTIME)) * i02FuelShare(allCy,DSBS,ITECH,EF,YTIME) * 1e-3 * imCo2EmiFac(allCy,DSBS,EF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,DSBS), VmCarVal(allCy,NAP,YTIME)) +
-            i02ShareFeed(allCy,DSBS,ITECH,EF,YTIME) * i02FuelShare(allCy,DSBS,ITECH,EF,YTIME) * 1e-3 * imCo2EmiFacFeed(allCy,DSBS,EF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,DSBS), VmCarVal(allCy,NAP,YTIME))) +
+            (1-imCO2CaptRateIndustry(allCy,ITECH,YTIME))*(i02FuelShare(allCy,DSBS,ITECH,EF,YTIME) * 1e-3 * 
+                sum(EF2$EFBLEND(ITECH,EF,EF2),i02ShareBlend(allCy,DSBS,ITECH,EF,EF2,YTIME)* imCo2EmiFac(allCy,DSBS,EF2,YTIME) * sum(NAP$NAPtoALLSBS(NAP,DSBS), VmCarVal(allCy,NAP,YTIME))))+
             imCO2CaptRateIndustry(allCy,ITECH,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * i02FuelShare(allCy,DSBS,ITECH,EF,YTIME) * 
-            ((1-i02ShareFeed(allCy,DSBS,ITECH,EF,YTIME)) * imCo2EmiFac(allCy,DSBS,EF,YTIME)  +  i02ShareFeed(allCy,DSBS,ITECH,EF,YTIME) * imCo2EmiFacFeed(allCy,DSBS,EF,YTIME))
+                sum(EF2$EFBLEND(ITECH,EF,EF2),i02ShareBlend(allCy,DSBS,ITECH,EF,EF2,YTIME)*imCo2EmiFac(allCy,DSBS,EF,YTIME))
         );
 
 
