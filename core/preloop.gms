@@ -37,7 +37,11 @@ VmCstCO2SeqCsts.LO(runCy,YTIME) = i06ElastCO2Seq(runCy,"seq_min");
 VmCstCO2SeqCsts.L(runCy,YTIME) = i06ElastCO2Seq(runCy,"seq_min");
 VmCstCO2SeqCsts.FX(runCy,YTIME)$DATAY(YTIME) = i06ElastCO2Seq(runCy,"seq_min");
 *---
-VmPriceCarbon.FX(runCy,SBS,EFS,YTIME)$DATAY(YTIME) = 1e-3 * iCarbValYrExog(runCy,YTIME)$INDSE1(SBS) * imCo2EmiFac(runCy,SBS,EFS,YTIME);
+VmPriceCarbon.FX(runCy,SBS,EFS,YTIME)$DATAY(YTIME) = 
+(
+  1e-3 * VmCarVal.L(runCy,"TRADE",YTIME) *
+  imFactorEmissEnergyCO2(runCy,SBS,EFS)
+)$SECtoCARBON(SBS,YTIME);
 *---
 VmPriceFinal.LO(runCy,DSBS,EFS,YTIME) = 0;
 VmPriceFinal.L(runCy,DSBS,EFS,YTIME) = 1;

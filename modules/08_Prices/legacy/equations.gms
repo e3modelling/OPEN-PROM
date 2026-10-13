@@ -163,9 +163,10 @@ V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)
 Q08PriceCarbon(allCy,SBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmPriceCarbon(allCy,SBS,EFS,YTIME)
      =E=
-    1e-3 * (
-      VmCarVal(allCy,"TRADE",YTIME)$(INDSE1(SBS) or ((DOMSE1(SBS) or TRANS1(SBS) or BUN(SBS) or sameas("AG",SBS)) and ord(YTIME) > 17))
-    ) * imFactorEmissEnergyCO2(allCy,SBS,EFS);
+    (
+      1e-3 * VmCarVal(allCy,"TRADE",YTIME) *
+      imFactorEmissEnergyCO2(allCy,SBS,EFS)
+    )$SECtoCARBON(SBS,YTIME);
 
 *' The equation calculates the average fuel price per subsector. These average prices are used to further compute electricity prices in industry
 *' (using the OI "other industry" avg price), as well as the aggregate fuel demand (of substitutable fuels) per subsector.

@@ -376,6 +376,7 @@ Trade.(FD,EN,TX,OE,OI,NF,CH,IS,BM,PP,PG,BM_CO2,H2P,STEAMP,DAC,EW)
 NoTrade.(SE,AG,HOU,PC,PB,PT,PN,PA,GU,GT,GN,BAV,BMAR,PCH,NEN,LGN_PRD_CH4,HCL_PRD_CH4,GAS_PRD_CH4,TERT_CH4,TRAN_CH4,AG_CH4,SE_CH4,TRAN_N2O,TX_N2O,AG_N2O,OI_HFC,OI_PFC,NF_PFC,PG_SF6,OI_SF6)
 /
 
+SECtoCARBON(SBS,YTIME)
 *' Emission species shared by the land-use emulator reporting interface:
 *'   CO2LandUse = land-use-change CO2 emissions/removals (MtCO2/yr);
 *'                MAgPIE/history exclude indirect land CO2 and fire emissions
@@ -435,7 +436,8 @@ NENSE(DSBS)       Non Energy                    /PCH,NEN/
 INDSE1(SBS)       Industrial SubSectors         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI/
 DOMSE1(SBS)       Tertiary SubSectors           /SE,HOU/
 HOU(DSBS)         Households                    /HOU/
-CDR(DSBS)         Carbon Dioxide Removal         /DAC,EW/
+CDR(DSBS)         Carbon Dioxide Removal        /DAC,EW/
+CDR1(SBS)         Carbon Dioxide Removal        /DAC,EW/
 
 INDDOM(DSBS)      Industry and Tertiary         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,SE,HOU/
 RESCOM(DSBS)      Residential and Commercial    /SE,HOU/
@@ -1370,3 +1372,6 @@ SSECTTECH("PG",STECH) = yes$PGALL(STECH);
 PGEF(EFS) = yes$(sum(PGALL, PGALLTOEF(PGALL,EFS)));
 
 CALIB_DSBS(DSBS)$(INDDOM(DSBS) or NENSE(DSBS) or sameas("PC",DSBS) or sameas("PB",DSBS) or sameas("GU",DSBS)) = YES;
+SECtoCARBON(SBS,YTIME)$(INDSE1(SBS) or CDR1(SBS) or SSBS(SBS)) = yes;
+SECtoCARBON(SBS,YTIME)$((DOMSE1(SBS) or TRANS1(SBS) or BUN(SBS)) and ord(YTIME) > 18) = yes;
+SECtoCARBON("AG",YTIME)$(not sameas("%fscenario%","1")) = yes;
