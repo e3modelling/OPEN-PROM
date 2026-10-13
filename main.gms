@@ -284,7 +284,7 @@ $setEnv GDXCOMPRESS 1
 *' *** Generate input data?
 $setGlobal GenerateInput off !! can be overwritten if VS Code Tasks are used
 
-$setGlobal fCountries 'CHA,DEU,IND,USA,RWO' !! can be overwritten if VS Code Tasks are used
+$setGlobal fCountries 'CHA,DEU' !! can be overwritten if VS Code Tasks are used
 
 $setGlobal fCountryList %countries%
 

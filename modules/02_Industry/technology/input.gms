@@ -142,3 +142,23 @@ $ondelim
 $include "../targets/tProjectionsINDSE.csv"
 $offdelim;
 $ENDIF.calib
+
+* IRON and STEEL DATA (move to mrPROM)
+table imDataISTechnology(runCY,INDSE,TECH,TECONCHAR)          "Technoeconomic characteristics of industry (various)"
+            IC      FC      VC      LFT USC
+CHA.IS.THCL      0.32196 6.8     1.36    25  2.3255
+*IS.THCL      0.32196 6.8     1.36    25  0.5
+* The share for IS +8% CAPEX -8%OPEX
+*IS.THCLCCS   0.34772 6.256   1.36    25  0.5
+* IS.TLGN      0.48295 10.2    2.04    25  0.5
+* IS.TLPG      0.48295 10.2    2.04    25  0.72
+* IS.TKRS      0.48295 10.2    2.04    25  0.72
+* IS.TGDO      0.48295 10.2    2.04    25  0.72
+* IS.TRFO      0.48295 10.2    2.04    25  0.72
+* IS.TOLQ      0.48295 10.2    2.04    25  0.72
+* IS.TNGS      0.48295 10.2    2.04    25  0.8
+
+imCapCostTech(runCy,"IS",TECH,YTIME) = imDataIndTechnology(INDSE,TECH,"IC");
+imFixOMCostTech(runCy,INDSE,TECH,YTIME)$(not sameas(INDSE,"IS")) = imDataIndTechnology(INDSE,TECH,"FC");
+imVarCostTech(runCy,INDSE,TECH,YTIME)$(not sameas(INDSE,"IS")) = imDataIndTechnology(INDSE,TECH,"VC");
+imUsfEneConvSubTech(runCy,INDSE,TECH,YTIME)$(not sameas(INDSE,"IS"))  = imDataIndTechnology(INDSE,TECH,"USC");

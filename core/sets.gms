@@ -1190,6 +1190,15 @@ LFT      "Technical Lifetime"
 USC   "Useful Energy Conversion Factor"
 /
 
+TECONCHAR         "Technical - Economic characteristics for process technologies"
+/
+IC      "Capital Cost"
+FC      "Fixed O&M Cost"
+VC      "Variable Cost"
+LFT      "Technical Lifetime"
+USC   "Useful Energy Conversion Factor"
+SEC "Specific Energy Consumption"
+/
 
 PGECONCHAR       "Technical - economic characteristics for power generation plants"
 /

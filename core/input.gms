@@ -221,23 +221,23 @@ imDataTransTech(NAVIGATION,"TRFO",ECONCHAR,YTIME) = imDataTransTech(NAVIGATION,"
 table imDataIndTechnology(INDSE,TECH,ECONCHAR)          "Technoeconomic characteristics of industry (various)"
             IC      FC      VC      LFT USC
 *IS.THCL      0.32196 6.8     1.36    25  2.3255
-IS.THCL      0.32196 6.8     1.36    25  0.5
+*IS.THCL      0.32196 6.8     1.36    25  0.5
 * The share for IS +8% CAPEX -8%OPEX
-IS.THCLCCS   0.34772 6.256   1.36    25  0.5
-IS.TLGN      0.48295 10.2    2.04    25  0.5
-IS.TLPG      0.48295 10.2    2.04    25  0.72
-IS.TKRS      0.48295 10.2    2.04    25  0.72
-IS.TGDO      0.48295 10.2    2.04    25  0.72
-IS.TRFO      0.48295 10.2    2.04    25  0.72
-IS.TOLQ      0.48295 10.2    2.04    25  0.72
-IS.TNGS      0.48295 10.2    2.04    25  0.8
+*IS.THCLCCS   0.34772 6.256   1.36    25  0.5
+* IS.TLGN      0.48295 10.2    2.04    25  0.5
+* IS.TLPG      0.48295 10.2    2.04    25  0.72
+* IS.TKRS      0.48295 10.2    2.04    25  0.72
+* IS.TGDO      0.48295 10.2    2.04    25  0.72
+* IS.TRFO      0.48295 10.2    2.04    25  0.72
+* IS.TOLQ      0.48295 10.2    2.04    25  0.72
+* IS.TNGS      0.48295 10.2    2.04    25  0.8
 * The share for IS +8% CAPEX -8%OPEX
-IS.TNGSCCS   0.52159 9.38    2.04    25  0.8
-IS.TOGS      0.48295 10.2    2.04    25  0.8
-IS.TBMSWAS   0.48295 10.2    2.04    25  0.5
-IS.TELC      0.29367 6.8     1.36    25  0.85
-IS.THEATPUMP 0.92974 19.3882 3.1021  25  1.848
-IS.TH2F      1.04547 40.4451 17.68   25  0.85
+* IS.TNGSCCS   0.52159 9.38    2.04    25  0.8
+* IS.TOGS      0.48295 10.2    2.04    25  0.8
+* IS.TBMSWAS   0.48295 10.2    2.04    25  0.5
+* IS.TELC      0.29367 6.8     1.36    25  0.85
+* IS.THEATPUMP 0.92974 19.3882 3.1021  25  1.848
+* IS.TH2F      1.04547 40.4451 17.68   25  0.85
 NF.THCL      3.8528  63.036          30  0.5
 NF.TLGN      3.8528  63.036          30  0.5
 NF.TLPG      3.21067 63.036          30  0.72
@@ -366,13 +366,13 @@ OI.TH2F      2.43133 68.3668 41.1163 25  0.85
 ;
 *---
 * Coverting EUR05 to US2015
-imDataIndTechnology(INDSE,TECH,"IC") = imDataIndTechnology(INDSE,TECH,"IC") * 1.3;
-imDataIndTechnology(INDSE,TECH,"FC") = imDataIndTechnology(INDSE,TECH,"FC") * 1.3;
-imDataIndTechnology(INDSE,TECH,"VC") = imDataIndTechnology(INDSE,TECH,"VC") * 1.3;
+imDataIndTechnology(INDSE,TECH,"IC")$(not sameas(INDSE,"IS")) = imDataIndTechnology(INDSE,TECH,"IC") * 1.3;
+imDataIndTechnology(INDSE,TECH,"FC")$(not sameas(INDSE,"IS")) = imDataIndTechnology(INDSE,TECH,"FC") * 1.3;
+imDataIndTechnology(INDSE,TECH,"VC")$(not sameas(INDSE,"IS")) = imDataIndTechnology(INDSE,TECH,"VC") * 1.3;
 
 *imDataIndTechnology(INDSE,"TBGDO",ECONCHAR) = imDataIndTechnology(INDSE,"TGDO",ECONCHAR);
-imDataIndTechnology(INDSE,"TBMSWAS",ECONCHAR) = imDataIndTechnology("IS","TBMSWAS",ECONCHAR);
-imDataIndTechnology(INDSE,"TSTE",ECONCHAR) = imDataIndTechnology(INDSE,"THCL",ECONCHAR);
+*imDataIndTechnology(INDSE,"TBMSWAS",ECONCHAR) = imDataIndTechnology("IS","TBMSWAS",ECONCHAR);
+imDataIndTechnology(INDSE,"TSTE",ECONCHAR)$(not sameas(INDSE,"IS")) = imDataIndTechnology(INDSE,"THCL",ECONCHAR);
 *---
 table imDataDomTech(DOMSE,TECH,ECONCHAR)                "Technical lifetime of Industry (years)"
              IC       FC      VC      LFT USC
@@ -411,10 +411,10 @@ HOU.TGEO      0.432    12.9254         20  0.5
 ;
 *---
 * Coverting EUR05 to US2015
-imDataDomTech(DOMSE,TECH,"IC") = imDataDomTech(DOMSE,TECH,"IC") * 1.3;
-imDataDomTech(DOMSE,TECH,"FC") = imDataDomTech(DOMSE,TECH,"FC") * 1.3;
-imDataDomTech(DOMSE,TECH,"VC") = imDataDomTech(DOMSE,TECH,"VC") * 1.3;
-imDataIndTechnology(INDSE,"TGSL",ECONCHAR) = imDataDomTech("SE","TGSL",ECONCHAR);
+imDataDomTech(DOMSE,TECH,"IC")$(not sameas(INDSE,"IS")) = imDataDomTech(DOMSE,TECH,"IC") * 1.3;
+imDataDomTech(DOMSE,TECH,"FC")$(not sameas(INDSE,"IS")) = imDataDomTech(DOMSE,TECH,"FC") * 1.3;
+imDataDomTech(DOMSE,TECH,"VC")$(not sameas(INDSE,"IS")) = imDataDomTech(DOMSE,TECH,"VC") * 1.3;
+imDataIndTechnology(INDSE,"TGSL",ECONCHAR)$(not sameas(INDSE,"IS")) = imDataDomTech("SE","TGSL",ECONCHAR);
 imDataDomTech(DOMSE,"TSTE",ECONCHAR) = imDataDomTech(DOMSE,"THCL",ECONCHAR);
 *---
 table imDataNonEneSec(NENSE,TECH,ECONCHAR)              "Technical data of non energy uses and bunkers (various)"
@@ -447,7 +447,7 @@ imDataNonEneSec(NENSE,"TSTE",ECONCHAR) = imDataNonEneSec(NENSE,"THCL",ECONCHAR);
 * author=giannou
 table iIndCharData(INDSE,Indu_Scon_Set)         "Industry sector charactetistics (various)"
      BASE           SHR_NSE   SH_HPELC
-IS   0.4397         0.7       0.00001
+*IS   0.4397         0.7       0.00001
 NF   0              0.85      0.00001
 CH   0.1422         0.95      0.00001
 BM   2.1062         0.95      0.00001
@@ -465,7 +465,7 @@ SE   1.8266 0.9     0.00001
 HOU  11.511 0.9     0.00001
 ;
 *---
-iShrHeatPumpElecCons(runCy,INDSE) = iIndCharData(INDSE,"SH_HPELC");
+iShrHeatPumpElecCons(runCy,INDSE)$(not sameas(INDSE,"IS")) = iIndCharData(INDSE,"SH_HPELC");
 iShrHeatPumpElecCons(runCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(DOMSE,"SH_HPELC");
 *---
 *Calculation of consumer size groups and their distribution function
@@ -771,9 +771,9 @@ endif;
 $offtext
 *---
 ** Industry
-imShrNonSubElecInTotElecDem(runCy,INDSE)  = iIndCharData(INDSE,"SHR_NSE");
-imShrNonSubElecInTotElecDem(runCy,INDSE)  = iIndCharData(INDSE,"SHR_NSE") - 0.2;
-imShrNonSubElecInTotElecDem(runCy,INDSE)$(imShrNonSubElecInTotElecDem(runCy,INDSE)>0.98) = 0.98;
+imShrNonSubElecInTotElecDem(runCy,INDSE)$(not sameas(INDSE,"IS"))  = iIndCharData(INDSE,"SHR_NSE");
+imShrNonSubElecInTotElecDem(runCy,INDSE)$(not sameas(INDSE,"IS"))  = iIndCharData(INDSE,"SHR_NSE") - 0.2;
+imShrNonSubElecInTotElecDem(runCy,INDSE)$(imShrNonSubElecInTotElecDem(runCy,INDSE)>0.98 and $(not sameas(INDSE,"IS"))) = 0.98;
 **Domestic - Tertiary
 imShrNonSubElecInTotElecDem(runCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(DOMSE,"SHR_NSE");
 imShrNonSubElecInTotElecDem(runCy,DOMSE) = iInitConsSubAndInitShaNonSubElec(DOMSE,"SHR_NSE") - 0.4;
@@ -787,11 +787,11 @@ imFixOMCostTech(runCy,TRANSE,TECH,YTIME) = imDataTransTech(TRANSE,TECH,"FC",YTIM
 imVarCostTech(runCy,TRANSE,TECH,YTIME) = imDataTransTech(TRANSE,TECH,"VC",YTIME);
 *---
 **  Industrial Sector
-imCapCostTech(runCy,INDSE,TECH,YTIME) = imDataIndTechnology(INDSE,TECH,"IC");
-imCapCostTechMin(allCy,INDSE,TECH,YTIME) = 0.5;
-imFixOMCostTech(runCy,INDSE,TECH,YTIME) = imDataIndTechnology(INDSE,TECH,"FC");
-imVarCostTech(runCy,INDSE,TECH,YTIME) = imDataIndTechnology(INDSE,TECH,"VC");
-imUsfEneConvSubTech(runCy,INDSE,TECH,YTIME)  = imDataIndTechnology(INDSE,TECH,"USC");
+imCapCostTech(runCy,INDSE,TECH,YTIME)$(not sameas(INDSE,"IS")) = imDataIndTechnology(INDSE,TECH,"IC");
+imCapCostTechMin(allCy,INDSE,TECH,YTIME)$(not sameas(INDSE,"IS")) = 0.5;
+imFixOMCostTech(runCy,INDSE,TECH,YTIME)$(not sameas(INDSE,"IS")) = imDataIndTechnology(INDSE,TECH,"FC");
+imVarCostTech(runCy,INDSE,TECH,YTIME)$(not sameas(INDSE,"IS")) = imDataIndTechnology(INDSE,TECH,"VC");
+imUsfEneConvSubTech(runCy,INDSE,TECH,YTIME)$(not sameas(INDSE,"IS"))  = imDataIndTechnology(INDSE,TECH,"USC");
 *imUsfEneConvSubTech(runCy,INDSE,"THCL",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCL","USC") + 0.005 * (ord(YTIME)-14);
 *imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCLCCS","USC") + 0.005 * (ord(YTIME)-14);
 *---
@@ -833,8 +833,8 @@ imCapCostTechMin(allCy,"EW","TEW",YTIME)$(ord(YTIME)>15 and ord(YTIME)<=25) = im
 imCapCostTechMin(allCy,"EW","TEW",YTIME)$(ord(YTIME)>25) = 0.2;
 *---
 !!imUsfEneConvSubTech(runCy,INDSE,"THCL",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCL","USC") + 0.005 * (ord(YTIME)-14);
-imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCLCCS","USC") + 0.005 * (ord(YTIME)-14);
-imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$(ord(YTIME)>50)  = 0.7;
+imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$(AN(YTIME) and not sameas(INDSE,"IS"))  = imDataIndTechnology(INDSE,"THCLCCS","USC") + 0.005 * (ord(YTIME)-14);
+imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$(ord(YTIME)>50 and not sameas(INDSE,"IS")) = 0.7;
 
 **  Power Generation
 *---
