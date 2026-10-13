@@ -114,7 +114,7 @@ Q02VarCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not C
     sum(EF$ITECHtoEF(ITECH,EF), 
       (i02FuelShare(allCy,DSBS,ITECH,EF,YTIME) *i02INDSpecificEnergyIntensity(allCy,DSBS,ITECH,YTIME))*
         sum(EF2$EFBLEND(ITECH,EF,EF2),i02ShareBlend(allCy,DSBS,ITECH,EF,EF2,YTIME)* 
-      (VmPriceFinal(allCy,DSBS,EFS,YTIME)) +
+      (VmPriceFinal(allCy,DSBS,EF2,YTIME)) +
     imVarCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit 
   )) / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME);
 
@@ -125,7 +125,7 @@ Q02CarbonCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and no
             (1-imCO2CaptRateIndustry(allCy,ITECH,YTIME))*(i02FuelShare(allCy,DSBS,ITECH,EF,YTIME) * 1e-3 * 
                 sum(EF2$EFBLEND(ITECH,EF,EF2),i02ShareBlend(allCy,DSBS,ITECH,EF,EF2,YTIME)* imCo2EmiFac(allCy,DSBS,EF2,YTIME) * sum(NAP$NAPtoALLSBS(NAP,DSBS), VmCarVal(allCy,NAP,YTIME))))+
             imCO2CaptRateIndustry(allCy,ITECH,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * i02FuelShare(allCy,DSBS,ITECH,EF,YTIME) * 
-                sum(EF2$EFBLEND(ITECH,EF,EF2),i02ShareBlend(allCy,DSBS,ITECH,EF,EF2,YTIME)*imCo2EmiFac(allCy,DSBS,EF,YTIME))
+                sum(EF2$EFBLEND(ITECH,EF,EF2),i02ShareBlend(allCy,DSBS,ITECH,EF,EF2,YTIME)*imCo2EmiFac(allCy,DSBS,EF2,YTIME))
         );
 
 
