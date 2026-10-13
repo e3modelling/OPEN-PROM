@@ -105,14 +105,14 @@ Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(DSBS)
 *' OLD EQUATION: Q02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME) --> NEW EQUATION:Q02VarCostTech(allCy,DSBS,rCon,ITECH,YTIME)
 *' OLD VARIABLE: V02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME) --> NEW VARIABLE:V02VarCostTech(allCy,DSBS,rCon,ITECH,YTIME)
 *' NEW SET TECHEF
-*' Note from Maro: i02ShareBlend should be defined per unit of material. Added i02INDSEI Specific Energy Intensity for industry in the equation but need more changes in the code
+*' Note from Maro: i02FuelShare should be defined per unit of material. Added i02INDSEI Specific Energy Intensity for industry in the equation but need more changes in the code
 *' i02INDSEI should be included as a table
 * imUsfEneConvSubTech to be set 1 for industry where tons are used
 Q02VarCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not CDR(DSBS))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
   V02VarCostTech(allCy,DSBS,ITECH,YTIME) 
       =E=
     sum(EF$ITECHtoEF(ITECH,EF), 
-      (i02ShareBlend(allCy,DSBS,ITECH,EF,YTIME) *i02INDSpecificEnergyIntensity(allCy,DSBS,ITECH,YTIME))*  
+      (i02FuelShare(allCy,DSBS,ITECH,EF,YTIME) *i02INDSpecificEnergyIntensity(allCy,DSBS,ITECH,YTIME))*  
       (
         VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME)  !!to be substituted with final energy fuel price
     ) +
@@ -123,9 +123,9 @@ Q02CarbonCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and no
     V02CarbonCostTech(allCy,DSBS,ITECH,YTIME) 
         =E=
         sum(EF$ITECHtoEF(ITECH,EF), 
-            (1-imCO2CaptRateIndustry(allCy,ITECH,YTIME))*((1-i02ShareFeed(allCy,DSBS,ITECH,EF,YTIME)) * i02ShareBlend(allCy,DSBS,ITECH,EF,YTIME) * 1e-3 * imCo2EmiFac(allCy,DSBS,EF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,DSBS), VmCarVal(allCy,NAP,YTIME)) +
-            i02ShareFeed(allCy,DSBS,ITECH,EF,YTIME) * i02ShareBlend(allCy,DSBS,ITECH,EF,YTIME) * 1e-3 * imCo2EmiFacFeed(allCy,DSBS,EF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,DSBS), VmCarVal(allCy,NAP,YTIME))) +
-            imCO2CaptRateIndustry(allCy,ITECH,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * i02ShareBlend(allCy,DSBS,ITECH,EF,YTIME) * 
+            (1-imCO2CaptRateIndustry(allCy,ITECH,YTIME))*((1-i02ShareFeed(allCy,DSBS,ITECH,EF,YTIME)) * i02FuelShare(allCy,DSBS,ITECH,EF,YTIME) * 1e-3 * imCo2EmiFac(allCy,DSBS,EF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,DSBS), VmCarVal(allCy,NAP,YTIME)) +
+            i02ShareFeed(allCy,DSBS,ITECH,EF,YTIME) * i02FuelShare(allCy,DSBS,ITECH,EF,YTIME) * 1e-3 * imCo2EmiFacFeed(allCy,DSBS,EF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,DSBS), VmCarVal(allCy,NAP,YTIME))) +
+            imCO2CaptRateIndustry(allCy,ITECH,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * i02FuelShare(allCy,DSBS,ITECH,EF,YTIME) * 
             ((1-i02ShareFeed(allCy,DSBS,ITECH,EF,YTIME)) * imCo2EmiFac(allCy,DSBS,EF,YTIME)  +  i02ShareFeed(allCy,DSBS,ITECH,EF,YTIME) * imCo2EmiFacFeed(allCy,DSBS,EF,YTIME))
         );
 
@@ -197,7 +197,7 @@ Q02ConsFuel(allCy,DSBS,EFS,YTIME)$(TIME(YTIME)$((INDDOM(DSBS) or NENSE(DSBS)) an
     VmConsFuel(allCy,DSBS,EFS,YTIME) 
         =E=
     sum(ITECH$(ITECHtoEF(ITECH,EF) and SECTTECH(DSBS,ITECH)),
-      i02ShareBlend(allCy,DSBS,ITECH,EF,YTIME) *
+      i02FuelShare(allCy,DSBS,ITECH,EF,YTIME) *
       V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) *
       i02util(allCy,DSBS,ITECH,YTIME) * i02CapFactor(allCy,DSBS,ITECH,YTIME) * i02INDSpecificEnergyIntensity(allCy,DSBS,ITECH,YTIME) 
     ) +
