@@ -168,7 +168,7 @@ Q02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and TIME(YTI
 *' OLD EQUATION: Q02ConsElecNonSubIndTert(allCy,INDDOM,YTIME) --> NEW EQUATION:Q02UsefulElecNonSubIndTert(allCy,DSBS,YTIME)
 *' OLD VARIABLE: VmConsElecNonSubIndTert(allCy,INDDOM,YTIME) --> NEW VARIABLE:V02UsefulElecNonSubIndTert(allCy,DSBS,YTIME)
 
-Q02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+Q02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)) and (not sameas("IS",DSBS)))..
     V02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME) 
         =E=
     V02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME-1) *
@@ -180,7 +180,7 @@ Q02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     );
 
 *' NEW EQUATION - Useful Electricity to Final Electricity (Check if needed to add equipment of electricity)
-Q02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(TIME(YTIME) and runCy(allCy) and (INDSE(DSBS) or RESCOM(DSBS)))..
+Q02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(TIME(YTIME) and runCy(allCy) and (INDSE(DSBS) or RESCOM(DSBS)) and (not sameas("IS",DSBS)))..
     V02FinalElecNonSubIndTert(allCy,DSBS,YTIME) 
         =E=
     V02UsefulElecNonSubIndTert(allCy,DSBS,YTIME) / 

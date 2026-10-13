@@ -6,9 +6,9 @@
 V02FinalElecNonSubIndTert.FX(runCy,DSBS,YTIME)$(not An(YTIME)) = imFuelCons(runCy,DSBS,"ELC",YTIME) * imShrNonSubElecInTotElecDem(runCy,DSBS);
 V02FinalElecNonSubIndTert.FX(runCy,DSBS,YTIME)$sameas("AG",DSBS) = 0;
 *---
-V02UsefulElecNonSubIndTert.LO(runCy,INDDOM,YTIME) = 0;
-V02UsefulElecNonSubIndTert.L(runCy,INDDOM,YTIME) = V02FinalElecNonSubIndTert.L(runCy,INDDOM,"%fBaseY%") * imUsfEneConvSubTech(runCy,INDDOM,"TELC","%fBaseY%");
-V02UsefulElecNonSubIndTert.FX(runCy,INDDOM,YTIME)$DATAY(YTIME) = V02FinalElecNonSubIndTert.L(runCy,INDDOM,YTIME) * imUsfEneConvSubTech(runCy,INDDOM,"TELC",YTIME);
+V02UsefulElecNonSubIndTert.LO(runCy,INDDOM,YTIME)$(not sameas("IS",DSBS)) = 0;
+V02UsefulElecNonSubIndTert.L(runCy,INDDOM,YTIME)$(not sameas("IS",DSBS)) = V02FinalElecNonSubIndTert.L(runCy,INDDOM,"%fBaseY%") * imUsfEneConvSubTech(runCy,INDDOM,"TELC","%fBaseY%");
+V02UsefulElecNonSubIndTert.FX(runCy,INDDOM,YTIME)$(DATAY(YTIME) and (not sameas("IS",DSBS)))= V02FinalElecNonSubIndTert.L(runCy,INDDOM,YTIME) * imUsfEneConvSubTech(runCy,INDDOM,"TELC",YTIME);
 *----
 * Needs to be divided with average efficiency --- WHICH ONE?
 *---
