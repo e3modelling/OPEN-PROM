@@ -112,7 +112,7 @@ Q02VarCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not C
   V02VarCostTech(allCy,DSBS,ITECH,YTIME) 
       =E=
     sum(EF$ITECHtoEF(ITECH,EF), 
-      (i02FuelShare(allCy,DSBS,ITECH,EF,YTIME) *i02INDSpecificEnergyIntensity(allCy,DSBS,ITECH,YTIME))*
+      (i02FuelShare(allCy,DSBS,ITECH,EF,YTIME) *i02SpecificEnergyIntensity(allCy,DSBS,ITECH,YTIME))*
         sum(EF2$EFBLEND(ITECH,EF,EF2),i02ShareBlend(allCy,DSBS,ITECH,EF,EF2,YTIME)* 
       (VmPriceFinal(allCy,DSBS,EF2,YTIME)) +
     imVarCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit 
@@ -218,7 +218,7 @@ Q02ConsFuel(allCy,DSBS,EFS,YTIME)$(TIME(YTIME)$((INDDOM(DSBS) or NENSE(DSBS)) an
     sum(ITECH$(ITECHtoEF(ITECH,EF) and SECTTECH(DSBS,ITECH)),
       i02FuelShare(allCy,DSBS,ITECH,EF,YTIME) *
       V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) *
-      i02util(allCy,DSBS,ITECH,YTIME) * i02CapFactor(allCy,DSBS,ITECH,YTIME) * i02INDSpecificEnergyIntensity(allCy,DSBS,ITECH,YTIME) 
+      i02util(allCy,DSBS,ITECH,YTIME) * i02CapFactor(allCy,DSBS,ITECH,YTIME) * i02SpecificEnergyIntensity(allCy,DSBS,ITECH,YTIME) 
     ) +
     V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(INDDOM(DSBS) and not sameas("AG",DSBS) and ELCEF(EFS)) +
     V02FinalAuxIndTert(allCy,DSBS,EFS,YTIME)$(sameas("IS",DSBS));

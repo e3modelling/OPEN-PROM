@@ -9,7 +9,7 @@ i02numtechnologiesUsingEF(DSBS,EF)                         "Number of technologu
 imCO2CaptRateIndustry(allCy,ITECH,YTIME)	               "Industry CO2 capture rate (1)"
 i02FuelShare(allCy,DSBS,ITECH,EF,YTIME)                    "Share of each energy form in a technology"
 i02ShareElcHP(allCy,DSBS,YTIME)                            "Share of final electricity consumption of HeatPumps in substitutable electricity consumption (1)"
-i02INDSpecificEnergyIntensity(allCy,DSBS,ITECH,YTIME)      "Specific energy intensity of each technology in each subsector (Mtoe/Million tons) - used only for IS"
+i02SpecificEnergyIntensity(allCy,DSBS,ITECH,YTIME)         "Specific energy intensity of each technology in each subsector (Mtoe/Million tons) - used only for IS"
 i02CapFactor(allCy,DSBS,ITECH,YTIME)                       "Capacity factor of each technology in each subsector (1) - this is subject to production constraints - used only for IS"
 i02ShareFeed(allCy,DSBS,ITECH,EF,YTIME)                    "Share of feedstock in each technology in each subsector (1) - used only for IS" 
 imCo2EmiFacFeed(allCy,DSBS,EF,YTIME)                       "CO2 emission factor of feedstock in each subsector (tCO2/toe) - used only for IS" !!to define
@@ -50,10 +50,10 @@ V02DemSubUsefulSubsec(allCy,DSBS,YTIME)                    "Demand for useful su
 V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)           "Remaining Equipment Capacity per Technology in each subsector (substitutable) (Mtoe/y - Million tons/y for IS)"
 V02DemUsefulSubsecRemTech(allCy,DSBS,YTIME)                "Useful energy demand (substitutable) covered by remaining equipment (Mtoe - Million tons for IS)"
 V02GapUsefulDemSubsec(allCy,DSBS,YTIME)                    "gap in useful energy demand per subsector ((Mtoe - Million tons for IS)"
-V02CapCostTech(allCy,DSBS,ITECH,YTIME)                     "capital cost of each technology per subsector (final) (k$/toe - $/tons for IS)"
-V02VarCostTech(allCy,DSBS,ITECH,YTIME)                     "variable cost of each technology per subsector (final) (k$/toe - $/tons for IS)"
-V02CostTech(allCy,DSBS,ITECH,YTIME)                        "total cost of each technology per subsector (useful) (k$/toe - $/tons for IS)"
-V02CarbonCostTech(allCy,DSBS,ITECH,YTIME)
+V02CapCostTech(allCy,DSBS,ITECH,YTIME)                     "capital cost of each technology per subsector (final) (k$/toe - k$/tons for IS)"
+V02VarCostTech(allCy,DSBS,ITECH,YTIME)                     "variable cost of each technology per subsector (final) (k$/toe - k$/tons for IS)"
+V02CostTech(allCy,DSBS,ITECH,YTIME)                        "total cost of each technology per subsector (useful) (k$/toe - k$/tons for IS)"
+V02CarbonCostTech(allCy,DSBS,ITECH,YTIME)                   "carbon cost of each technology per subsector (final) (k$/toe - k$/tons for IS)"
 !!V02CapCostTech1(allCy,DSBS,ITECH,YTIME)
 V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME)         "share of each technology in gap of useful energy (1)"
 V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)              "equipment capacity of each technology in each subsector  (Mtoe/y - Million tons/y for IS)"

@@ -688,10 +688,10 @@ TEW
 *HPTELC
 
 *ISTECH_BY   Base Year production, existing technologies IS routes 
-BFBOFBY "Existing Base Year 2024 blast furnace basic oxygen furnace for primary steel production"
-DREAFBY "Existing Base Year 2024  direct reduction electric arc furnace fed ny natural gas for primary steel production"
-DREAFCOALBY "Existing Base Year 2024  direct reduction electric arc furnace fed by coal for primary steel production India tech"
-SCREAFBY   "Existing Base Year 2024  scrap electric arc furnace for secondary steel production"
+*BFBOFBY "Existing Base Year 2024 blast furnace basic oxygen furnace for primary steel production"
+*DREAFBY "Existing Base Year 2024  direct reduction electric arc furnace fed ny natural gas for primary steel production"
+* DREAFCOALBY "Existing Base Year 2024  direct reduction electric arc furnace fed by coal for primary steel production India tech"
+* SCREAFBY   "Existing Base Year 2024  scrap electric arc furnace for secondary steel production"
 *ISTECH_NEW   New IS routes 
 BFBOF "best available tech blast furnace basic oxygen furnace for primary steel production"
 DREAF "best available tech direct reduction electric arc furnace fed ny natural gas for primary steel production"
@@ -752,10 +752,11 @@ TOGS
 TSTE
 TH2F
 *ISTECH_BY   Base Year production, existing technologies IS routes 
-BFBOFBY "Existing Base Year 2024 blast furnace basic oxygen furnace for primary steel production"
-DREAFBY "Existing Base Year 2024  direct reduction electric arc furnace fed ny natural gas for primary steel production"
-DREAFCOALBY "Existing Base Year 2024  direct reduction electric arc furnace fed by coal for primary steel production India tech"
-SCREAFBY   "Existing Base Year 2024  scrap electric arc furnace for secondary steel production"
+*BFBOFBY "Existing Base Year 2024 blast furnace basic oxygen furnace for primary steel production"
+*DREAFBY "Existing Base Year 2024  direct reduction electric arc furnace fed ny natural gas for primary steel production"
+*DREAFCOALBY "Existing Base Year 2024  direct reduction electric arc furnace fed by coal for primary steel production India tech"
+*SCREAFBY   "Existing Base Year 2024  scrap electric arc furnace for secondary steel production"
+
 *ISTECH_NEW   New IS routes 
 BFBOF "best available tech blast furnace basic oxygen furnace for primary steel production"
 DREAF "best available tech direct reduction electric arc furnace fed ny natural gas for primary steel production"
@@ -763,6 +764,7 @@ H2DREAF    "best available tech direct reduction electric arc furnace fed ny 100
 BFBOFCCS   "best available tech blast furnace basic oxygen furnace with CCS ammine based for primary steel production"
 DREAFCCS "best available tech direct reduction electric arc furnace with CCS ammine based for primary steel production"
 SCREAF   "best available tech for scrap electric arc furnace for secondary steel production"
+*AUX "Auxiliary demand"
 * Domestic Technologies (only add those not already in Industry)
 TGSL
 TBMSWAS
@@ -871,18 +873,13 @@ TRFO.RFO
 TOLQ.OLQ
 TOGS.OGS
 TSTE.STE
-*ISTECH_BY   Iron and Steel (IS) Existing Base Year Technologies
-BFBOFBY.(HCL,NGS,ELC) 
-DREAFBY.(NGS,ELC)
-DREAFCOALBY.(HCL,ELC)
-SCREAFBY.(ELC,NGS)
 *ISTECH_NEW   Iron and Steel (IS) Existing Base Year Technologies 
-BFBOF.(HCL,NGS,ELC)  
-DREAF.(NGS,ELC) 
-H2DREAF.(H2F,ELC,NGS)    
-BFBOFCCS.(HCL,NGS,ELC)    
-DREAFCCS.(NGS,ELC)  
-SCREAF.(ELC,NGS)
+BFBOF.(HCL,NGS,ELC) 
+BFBOFCCS.(HCL,NGS,ELC)  
+DREAF.(HCL,NGS,ELC) 
+DREAFCCS.(HCL,NGS,ELC)
+H2DREAF.(H2F,ELC,BMSWAS)     
+SCREAF.(HCL,ELC,NGS) #HCL may be equal to zero
 * Domestic Technologies (only add those not already in Transport & Industry)
 * LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC already exist in TRANSPORT or INDUSTRY technologies
 THEATPUMP.ELC
@@ -930,17 +927,17 @@ TOGS.OGS
 TGSL.(GSL,BGSL)
 TSTE.STE
 *ISTECH_BY   Iron and Steel (IS) Existing Base Year Technologies
-BFBOFBY.(HCL,NGS,ELC) 
-DREAFBY.(NGS,ELC)
-DREAFCOALBY.(HCL,ELC)
-SCREAFBY.(ELC,NGS)
+* BFBOFBY.(HCL,NGS,ELC) 
+* DREAFBY.(NGS,ELC)
+* DREAFCOALBY.(HCL,ELC)
+* SCREAFBY.(ELC,NGS)
 *ISTECH_NEW   Iron and Steel (IS) Existing Base Year Technologies 
-BFBOF.(HCL,NGS,ELC)  
-DREAF.(NGS,ELC) 
-H2DREAF.(H2F,ELC,NGS)    
-BFBOFCCS.(HCL,NGS,ELC)    
-DREAFCCS.(NGS,ELC)  
-SCREAF.(ELC,NGS)
+BFBOF.(HCL,NGS,ELC) 
+BFBOFCCS.(HCL,NGS,ELC)  
+DREAF.(HCL,NGS,ELC) 
+DREAFCCS.(HCL,NGS,ELC)
+H2DREAF.(H2F,ELC,BMSWAS)     
+SCREAF.(HCL,ELC,NGS) #HCL may be equal to zero
 * Domestic Technologies (only add those not already in Transport & Industry)
 * LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC already exist in TRANSPORT or INDUSTRY technologies
 TH2F.H2F
@@ -952,16 +949,26 @@ TGEO.GEO
 
 EFBLEND(ITECH,EF,EFS)
 /
-BFBOFBY.(HCL,HCL)
-BFBORFBY.(NGS,NGS)
-BFBORFBY.(ELC,ELC)
-DREAFBY.(HCL,HCL)
-DREAFBY.(NGS,NGS)
-DREAFBY.(ELC,ELC)
-SCREAFBY.(NGS,NGS)
-SCREAFBY.(ELC,ELC)
-SCREAFBY.(ELC,ELC)
+BFBOF.(HCL,HCL)
+BFBOF.(NGS,NGS)
+BFBOF.(ELC,ELC)
+BFBOFCCS.(HCL,HCL)
+BFBOFCCS.(NGS,NGS)
+BFBOFCCS.(ELC,ELC)  
+DREAF.(HCL,HCL)
+DREAF.(NGS,NGS)
+DREAF.(ELC,ELC)
+DREAFCCS.(HCL,HCL)
+DREAFCCS.(NGS,NGS)
+DREAFCCS.(ELC,ELC)
+SCREAF.(HCL,HCL)
+SCREAF.(NGS,NGS)
+SCREAF.(ELC,ELC)
+H2DREAF.(H2F,H2F)    
+H2DREAF.(BMSWAS,BMSWAS)
+H2DREAF.(ELC,ELC)
 /
+
 
 PLUGIN(TTECH) Plug-in hybrids
 /
@@ -995,11 +1002,11 @@ PA.(TKRS,TH2F)
 (PN,GN).(TGDO,TH2F,TRFO)
 BAV.(TKRS,TH2F)
 BMAR.(TGDO,TRFO,TH2F)
-(IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(TLGN,THCL,TGDO,TGSL,TRFO,TLPG,TKRS,TOLQ,TNGS,TOGS,
+(NF,CH,BM,PP,FD,EN,TX,OE,OI).(TLGN,THCL,TGDO,TGSL,TRFO,TLPG,TKRS,TOLQ,TNGS,TOGS,
                                 TELC,TBMSWAS,TSTE,TH2F)
 (BM,CH).(TNGSCCS,THCLCCS)
 
-IS.(BFBOFBY,DREAFBY,DREAFCOALBY,SCREAFBY,BFBOF,DREAF,H2DREAF,BFBOFCCS,DREAFCCS,SCREAF) !!Iron and Steel tech routes
+IS.(BFBOF,DREAF,H2DREAF,BFBOFCCS,DREAFCCS,SCREAF) !!Iron and Steel tech routes
 
 (HOU,SE).(THCL,TLPG,TKRS,TGDO,TNGS,TOGS,TBMSWAS,TELC,TSTE,TGSL,TLGN,TOLQ,TRFO,TSOL,TGEO)
 (HOU,SE).(THEATPUMP)
@@ -1200,18 +1207,18 @@ IC       "Capital Cost"
 FC       "Fixed O&M Cost"
 VC       "Variable Cost"
 LFT      "Technical Lifetime"
-USC   "Useful Energy Conversion Factor"
+USC   "Useful Energy Conversion Factor or SEC for IS"
 /
 
-TECONCHAR         "Technical - Economic characteristics for process technologies"
-/
-IC      "Capital Cost"
-FC      "Fixed O&M Cost"
-VC      "Variable Cost"
-LFT      "Technical Lifetime"
-USC   "Useful Energy Conversion Factor"
-SEC "Specific Energy Consumption"
-/
+* TECONCHAR         "Technical - Economic characteristics for process technologies"
+* /
+* IC      "Capital Cost"
+* FC      "Fixed O&M Cost"
+* VC      "Variable Cost"
+* LFT      "Technical Lifetime"
+* USC   "Useful Energy Conversion Factor"
+* SEC "Specific Energy Consumption"
+* /
 
 PGECONCHAR       "Technical - economic characteristics for power generation plants"
 /

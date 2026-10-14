@@ -411,9 +411,9 @@ HOU.TGEO      0.432    12.9254         20  0.5
 ;
 *---
 * Coverting EUR05 to US2015
-imDataDomTech(DOMSE,TECH,"IC")$(not sameas(INDSE,"IS")) = imDataDomTech(DOMSE,TECH,"IC") * 1.3;
-imDataDomTech(DOMSE,TECH,"FC")$(not sameas(INDSE,"IS")) = imDataDomTech(DOMSE,TECH,"FC") * 1.3;
-imDataDomTech(DOMSE,TECH,"VC")$(not sameas(INDSE,"IS")) = imDataDomTech(DOMSE,TECH,"VC") * 1.3;
+imDataDomTech(DOMSE,TECH,"IC")= imDataDomTech(DOMSE,TECH,"IC") * 1.3;
+imDataDomTech(DOMSE,TECH,"FC") = imDataDomTech(DOMSE,TECH,"FC") * 1.3;
+imDataDomTech(DOMSE,TECH,"VC") = imDataDomTech(DOMSE,TECH,"VC") * 1.3;
 imDataIndTechnology(INDSE,"TGSL",ECONCHAR)$(not sameas(INDSE,"IS")) = imDataDomTech("SE","TGSL",ECONCHAR);
 imDataDomTech(DOMSE,"TSTE",ECONCHAR) = imDataDomTech(DOMSE,"THCL",ECONCHAR);
 *---
@@ -697,11 +697,10 @@ imMatrFactor.L(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);
 imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(not (sameas(DSBS,"PC") or sameas(DSBS,"PB") or sameas(DSBS,"GU") or INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS))) = iMatrFactorData(runCy,DSBS,TECH,YTIME);   
 imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(sameas(DSBS,"AG") and not EU28(runCy)) = iMatrFactorData(runCy,DSBS,TECH,YTIME); 
 imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$((sameas(DSBS,"PC") or sameas(DSBS,"PB") or sameas(DSBS,"GU") or INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and not SECTTECH(DSBS,TECH)) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                      
-imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$DATAY(YTIME)= iMatrFactorData(runCy,DSBS,TECH,YTIME);    
-imMatrFactor.FX(runCy,DSBS,"IS",YTIME) = 0;    
+imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$DATAY(YTIME)= iMatrFactorData(runCy,DSBS,TECH,YTIME);        
 $ENDIF.calib
 *---
-
+imMatrFactor.FX(runCy,DSBS,"IS",YTIME) = 0;
 $ontext
 if %fScenario% eq 0 then
      imFacSubsiCapCostTech("PC","TELC") = 0;
