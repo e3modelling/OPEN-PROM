@@ -4,7 +4,7 @@
 *---
 table i01Pop(YTIME,allCy) "Population (billion)"
 $ondelim
-$include "./iPop.csvr"
+$include "./AG_BASE_iPop.csvr"
 $offdelim
 ;
 *---
