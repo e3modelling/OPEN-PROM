@@ -109,11 +109,11 @@ Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(DSBS)
 *' i02INDSEI should be included as a table
 * imUsfEneConvSubTech to be set 1 for industry where tons are used
 Q02VarCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $(not TRANSE(DSBS) and not CDR(DSBS))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
-  V02VarCostTech(allCy,DSBS,ITECH,YTIME) 
+  V02VarCostTech(allCy,DSBS,ITECH,YTIME) #needs to change TODAY
       =E=
     sum(EF$ITECHtoEF(ITECH,EF), 
       (i02FuelShare(allCy,DSBS,ITECH,EF,YTIME) *i02SpecificEnergyIntensity(allCy,DSBS,ITECH,YTIME))*
-        sum(EF2$EFBLEND(ITECH,EF,EF2),i02ShareBlend(allCy,DSBS,ITECH,EF,EF2,YTIME)* 
+        sum(EF2$EFBLEND(ITECH,EF,EF2),i02ShareMix(allCy,DSBS,ITECH,EF,EF2,YTIME) * 
       (VmPriceFinal(allCy,DSBS,EF2,YTIME)) +
     imVarCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit 
   )) / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME);
