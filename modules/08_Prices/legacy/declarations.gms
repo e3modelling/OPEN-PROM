@@ -6,7 +6,7 @@ i08DiffFuelsInSec(SBS)                    "Auxiliary parameter holding the numbe
 i08WgtSecAvgPriFueCons(allCy,SBS,EF)	    "Weights for sector's average price, based on fuel consumption (1)"
 i08VAT(allCy,YTIME)                       "VAT (value added tax) rates (1)"
 i08ElastPricePrimary(EFS,EFS)             "Elasticities of energy-form prices (first EFS set) with respect to prices of other energy forms (second EFS set)"
-i08PriceBase(EFS)                         "Base price of primary products"
+i08PriceBase(EFS)                         "Base price of primary products. It represents the component of the price that is not subject to market fluctuations."
 i08ElastPriceSupplyCurve(EFS,EFS)
 i08ElastPriceSecondary(EFS)
 i08ElastPriceFinal(EFS)

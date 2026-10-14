@@ -117,8 +117,7 @@ Q12ConsFuel(allCy,AGRI_MODES,EFS,YTIME)$(TIME(YTIME) and runCy(allCy))..
         =E=
     SUM(AGRITECH$(AGRMODEStoTECH(AGRI_MODES,AGRITECH) and AGRITECHTOEF(AGRITECH,EFS)),
       V12Capacity(allCy,AGRI_MODES,AGRITECH,YTIME) *
-      V12SpecificFuelCons(allCy,AGRI_MODES,AGRITECH,YTIME) *
-      !!i12SpecificFuelConsData(allCy,AGRI_MODES,AGRITECH,"%fBaseY%") * !! Mtoe / Energy service --> ha
+      V12SpecificFuelCons(allCy,AGRI_MODES,AGRITECH,YTIME) * !! Mtoe / Energy service --> ha
       V12ShareBlend(allCy,AGRI_MODES,AGRITECH,EFS,YTIME)
     );
 

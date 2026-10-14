@@ -44,7 +44,28 @@ $ENDIF
 * Init for the BMSWAS bio-supply index variable (positive; neutral start = 1)
 V08SupplyCurves.LO(runCy,EFS,YTIME) = 0;
 V08SupplyCurves.L(runCy,EFS,YTIME) = 1;
-V08SupplyCurves.FX(runCy,EFS,YTIME)$DATAY(YTIME) = 1;
+V08SupplyCurves.FX(runCy,EFS,YTIME)$DATAY(YTIME) = 
+(
+$IFTHEN.bmswasBackend %bmswasPriceMode% == softlink
+  iPricesMagpie(runCy,SBS,YTIME)
+$ELSEIF.bmswasBackend %bmswasPriceMode% == curve
+$IFTHEN.bmswasEmulatorBackend %landUseEmulator% == magpie
+  sum((MAGPIEH12REG,activeMagpieScen)$mapMagpieH12Cy(MAGPIEH12REG,runCy),
+    i08BmswasPriceH12Magpie(activeMagpieScen,MAGPIEH12REG,"pa",YTIME) +
+    i08BmswasPriceH12Magpie(activeMagpieScen,MAGPIEH12REG,"pb",YTIME) * V08Bioenergy2GEffectiveQH12Magpie(runCy,YTIME) + 
+    i08BmswasPriceH12Magpie(activeMagpieScen,MAGPIEH12REG,"pc",YTIME) * sqr(V08Bioenergy2GEffectiveQH12Magpie(runCy,YTIME))
+  )
+$ELSE.bmswasEmulatorBackend
+  1e-3 +
+  sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,runCy,"a",YTIME)) + 
+  sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,runCy,"b",YTIME)) * 
+  V03ProdPrimary.L(runCy,"BMSWAS",YTIME) ** sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,runCy,"c",YTIME)) 
+$ENDIF.bmswasEmulatorBackend
+$ELSE.bmswasBackend
+  1
+$ENDIF.bmswasBackend
+)$sameas("BMSWAS",EFS) +
+1$(not sameas("BMSWAS",EFS));
 *---
 V08PricePrimary.LO(runCy,EFS,YTIME) = 0;
 V08PricePrimary.L(runCy,EFS,YTIME) = 1;
