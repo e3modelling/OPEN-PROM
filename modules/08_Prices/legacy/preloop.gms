@@ -52,8 +52,8 @@ $ELSEIF.bmswasBackend %bmswasPriceMode% == curve
 $IFTHEN.bmswasEmulatorBackend %landUseEmulator% == magpie
   sum((MAGPIEH12REG,activeMagpieScen)$mapMagpieH12Cy(MAGPIEH12REG,runCy),
     i08BmswasPriceH12Magpie(activeMagpieScen,MAGPIEH12REG,"pa",YTIME) +
-    i08BmswasPriceH12Magpie(activeMagpieScen,MAGPIEH12REG,"pb",YTIME) * V08Bioenergy2GEffectiveQH12Magpie(runCy,YTIME) + 
-    i08BmswasPriceH12Magpie(activeMagpieScen,MAGPIEH12REG,"pc",YTIME) * sqr(V08Bioenergy2GEffectiveQH12Magpie(runCy,YTIME))
+    i08BmswasPriceH12Magpie(activeMagpieScen,MAGPIEH12REG,"pb",YTIME) * V08Bioenergy2GEffectiveQH12Magpie.L(runCy,YTIME) + 
+    i08BmswasPriceH12Magpie(activeMagpieScen,MAGPIEH12REG,"pc",YTIME) * sqr(V08Bioenergy2GEffectiveQH12Magpie.L(runCy,YTIME))
   )
 $ELSE.bmswasEmulatorBackend
   1e-3 +
