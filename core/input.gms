@@ -793,6 +793,7 @@ imCapCostTechMin(allCy,INDSE,TECH,YTIME)$(not sameas(INDSE,"IS")) = 0.5;
 imFixOMCostTech(runCy,INDSE,TECH,YTIME)$(not sameas(INDSE,"IS")) = imDataIndTechnology(INDSE,TECH,"FC");
 imVarCostTech(runCy,INDSE,TECH,YTIME)$(not sameas(INDSE,"IS")) = imDataIndTechnology(INDSE,TECH,"VC");
 imUsfEneConvSubTech(runCy,INDSE,TECH,YTIME)$(not sameas(INDSE,"IS"))  = imDataIndTechnology(INDSE,TECH,"USC");
+imUsfEneConvSubTech(runCy,"IS",TECH,YTIME) = 1;
 *imUsfEneConvSubTech(runCy,INDSE,"THCL",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCL","USC") + 0.005 * (ord(YTIME)-14);
 *imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCLCCS","USC") + 0.005 * (ord(YTIME)-14);
 *---

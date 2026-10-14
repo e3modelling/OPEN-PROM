@@ -186,6 +186,26 @@ Q02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(TIME(YTIME) and runCy(allCy) and (I
     V02UsefulElecNonSubIndTert(allCy,DSBS,YTIME) / 
     imUsfEneConvSubTech(allCy,DSBS,"TELC",YTIME);
 
+*' This equation is created for IS sector 
+*' It calculates the auxilary fuels useful energy that are not allocated in the main technologies for the IS sector.
+Q02UsefulAuxIndTert(allCy,INDDOM,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)) and (sameas("IS",DSBS)))..    
+    V02UsefulAuxIndTert(allCy,INDDOM,EFS,YTIME) 
+        =E=
+    V02UsefulAuxIndTert(allCy,INDDOM,EFS,YTIME-1) *
+    imActv(YTIME,allCy,INDDOM) ** i02ElastAux(allCy,INDDOM,"a",YTIME) *
+    (VmPriceFuelSubsecCarVal(allCy,INDDOM,EFS,YTIME) / VmPriceFuelSubsecCarVal(allCy,INDDOM,EFS,YTIME-1)) ** i02ElastAux(allCy,INDDOM,"b1",YTIME) *
+    (VmPriceFuelSubsecCarVal(allCy,INDDOM,EFS,YTIME-1) / VmPriceFuelSubsecCarVal(allCy,INDDOM,EFS,YTIME-2)) ** i02ElastAux(allCy,INDDOM,"b2",YTIME) *
+    prod(KPDL,
+      (VmPriceFuelSubsecCarVal(allCy,INDDOM,EFS,YTIME-ord(KPDL)) / VmPriceFuelSubsecCarVal(allCy,INDDOM,EFS,YTIME-(ord(KPDL)+1))) ** (i02ElastAux(allCy,INDDOM,"c",YTIME)*imFPDL(INDDOM,KPDL))
+    );
+
+*' NEW EQUATION - Useful Electricity to Final Electricity (Check if needed to add equipment of electricity)
+Q02FinalAuxIndTert(allCy,DSBS,EFS,YTIME)$(TIME(YTIME) and runCy(allCy) and (sameas("IS",DSBS)))..
+    V02FinalAuxIndTert(allCy,DSBS,EFS,YTIME) 
+        =E=
+    V02UsefulAuxIndTert(allCy,DSBS,EFS,YTIME) / 
+    imUsfEneConvSubTech(allCy,DSBS,EFS,YTIME);
+
 *' This equation calculates the consumption of fuels in each demand subsector.
 *' It considers the consumption of remaining substitutable equipment, the technology share in new equipment, and the final demand
 *' gap to be filled by new technologies. Additionally, non-substitutable electricity consumption in Industry and Tertiary sectors is included.
@@ -200,15 +220,16 @@ Q02ConsFuel(allCy,DSBS,EFS,YTIME)$(TIME(YTIME)$((INDDOM(DSBS) or NENSE(DSBS)) an
       V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) *
       i02util(allCy,DSBS,ITECH,YTIME) * i02CapFactor(allCy,DSBS,ITECH,YTIME) * i02INDSpecificEnergyIntensity(allCy,DSBS,ITECH,YTIME) 
     ) +
-    V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(INDDOM(DSBS) and not sameas("AG",DSBS) and ELCEF(EFS));
+    V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(INDDOM(DSBS) and not sameas("AG",DSBS) and ELCEF(EFS)) +
+    V02FinalAuxIndTert(allCy,DSBS,EFS,YTIME)$(sameas("IS",DSBS));
 
 *' Average efficiency of substitutable demand
 Q02IndAvrEffFinalUseful(allCy,DSBS,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(DSBS))$runCy(allCy))..
     V02IndAvrEffFinalUseful(allCy,DSBS,YTIME)
        =E=
     V02DemSubUsefulSubsec(allCy,DSBS,YTIME) /
-    (sum(EF$SECtoEF(DSBS,EF),VmConsFuel(allCy,DSBS,EF,YTIME)) - (V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(INDDOM(DSBS)) +
-    VmElecConsHeatPla(allCy,DSBS,YTIME)) + 1e-3)
+    (sum(EF$SECtoEF(DSBS,EF),VmConsFuel(allCy,DSBS,EF,YTIME)) - (V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(INDDOM(DSBS)) 
+    - V02FinalAuxIndTert(allCy,DSBS,EFS,YTIME)$(sameas("IS",DSBS)) + VmElecConsHeatPla(allCy,DSBS,YTIME)) + 1e-3)
     ;
 
 *' This equation calculates the estimated electricity index of the industry price for a given year. The estimated index is derived by considering the historical

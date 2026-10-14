@@ -3,6 +3,7 @@
 
 Parameters
 $IF NOT %Calibration% == Calibration i02ElastNonSubElec(allCy,DSBS,ETYPES,YTIME)                   "Elasticities of Non Substitutable Electricity (1)"
+ii02ElastAux(allCy,DSBS,ETYPES,YTIME)                      "Elasticities of Auxiliary Fuels for IS sector(1)"
 i02util(allCy,DSBS,ITECH,YTIME)                            "Utilization rate of technology"
 i02numtechnologiesUsingEF(DSBS,EF)                         "Number of technologues using an energy form"     
 imCO2CaptRateIndustry(allCy,ITECH,YTIME)	               "Industry CO2 capture rate (1)"
@@ -30,6 +31,8 @@ Q02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME)         "Compute share of eac
 Q02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)              "Compute equipment capacity of each technology in each subsector"
 Q02UsefulElecNonSubIndTert(allCy,DSBS,YTIME)               "Compute non-substitutable useful electricity"
 Q02FinalElecNonSubIndTert(allCy,DSBS,YTIME)                "Compute final energy of non-substitutable electricity"
+Q02UsefulAuxIndTert(allCy,DSBS,EFS,YTIME)                  "Compute useful auxiliary useful energy in IS sector"
+Q02FinalAuxIndTert(allCy,DSBS,EFS,YTIME)                   "Compute final energy of auxiliary fuels in IS sector"
 
 Q02IndxElecIndPrices(allCy,TCHP,YTIME)                          "Compute Electricity index - a function of industry price - Estimate"
 Q02IndAvrEffFinalUseful(allCy,DSBS,YTIME)                  "Average Efficiency" 
@@ -56,6 +59,8 @@ V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME)         "share of each techno
 V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)              "equipment capacity of each technology in each subsector  (Mtoe/y - Million tons/y for IS)"
 V02UsefulElecNonSubIndTert(allCy,DSBS,YTIME)               "non-substitutable useful electricity (Mtoe)"
 V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)                "final energy of non-substitutable electricity (Mtoe)"
+V02UsefulAuxIndTert(allCy,DSBS,EFS,YTIME)                  "auxiliary useful energy in IS sector(Mtoe)"
+V02FinalAuxIndTert(allCy,DSBS,EFS,YTIME)                   "final energy of auxiliary fuels in IS sector (Mtoe)"
 
 V02IndxElecIndPrices(allCy,TCHP,YTIME)                     "Electricity index - a function of industry price - Estimate (k$/toe)"
 V02IndAvrEffFinalUseful(allCy,DSBS,YTIME)                  "Average Efficiency (1)" 
