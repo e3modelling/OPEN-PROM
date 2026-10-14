@@ -21,21 +21,29 @@ alias(ITECH,ITECH2);
 V02EquipCapTechSubsec.LO(runCy,DSBS,ITECH,YTIME) = 0;
 V02EquipCapTechSubsec.L(runCy,DSBS,ITECH,YTIME)$((INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and SECTTECH(DSBS,ITECH)) = 1;
 V02EquipCapTechSubsec.FX(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and DATAY(YTIME) and not TRANSE(DSBS) and not CCSTECH(ITECH) and not sameas(ITECH,"TELC")) = sum(EF$ITECHtoEF(ITECH,EF), imFuelCons(runCy,DSBS,EF,YTIME)/sum(ITECH2$(ITECHtoEF(ITECH2,EF) and SECTTECH(DSBS,ITECH2) and not CCSTECH(ITECH2)),1)) / i02Util(runCy,DSBS,ITECH,YTIME);
-!!V02EquipCapTechSubsec.FX(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and not An(YTIME) and not TRANSE(DSBS) and not CCSTECH(ITECH) and not sameas(ITECH,"TELC")) = sum(EF$TECHtoEF(ITECH,EF),imFuelConsPerFueSub(runCy,DSBS,EF,YTIME)/ i02Util(runCy,DSBS,ITECH,YTIME));
-!!V02EquipCapTechSubsec.FX(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and not An(YTIME) and not TRANSE(DSBS) and not sameas(ITECH,"TELC")) = sum(EF$TECHtoEF(ITECH,EF), imFuelConsPerFueSub(runCy,DSBS,EF,YTIME)/sum(ITECH2$(TECHtoEF(ITECH2,EF) and SECTTECH(DSBS,ITECH2)),1)) / i02Util(runCy,DSBS,ITECH,YTIME);
-*V02EquipCapTechSubsec.FX(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and not An(YTIME) and not TRANSE(DSBS) and sameas(ITECH,"TELC")) = sum(EF$ITECHtoEF(ITECH,EF), imFuelConsPerFueSub(runCy,DSBS,"ELC",YTIME) * (1-imShrNonSubElecInTotElecDem(runCy,DSBS))/sum(ITECH2$(ITECHtoEF(ITECH2,EF)$SECTTECH(DSBS,ITECH2)),1)) / i02Util(runCy,DSBS,ITECH,YTIME);
+
 V02EquipCapTechSubsec.FX(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and not An(YTIME) and not TRANSE(DSBS) and sameas(ITECH,"TELC")) = (1-i02ShareElcHP(runCy,DSBS,YTIME)) * imFuelCons(runCy,DSBS,"ELC",YTIME) * (1-imShrNonSubElecInTotElecDem(runCy,DSBS));
 V02EquipCapTechSubsec.FX(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and not An(YTIME) and not TRANSE(DSBS) and sameas(ITECH,"THEATPUMP")) = i02ShareElcHP(runCy,DSBS,YTIME) * imFuelCons(runCy,DSBS,"ELC",YTIME) * (1-imShrNonSubElecInTotElecDem(runCy,DSBS));
 
-*V02EquipCapTechSubsec.FX(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and not An(YTIME) and not TRANSE(DSBS) and sameas(ITECH,"TELC")) = imFuelConsPerFueSub(runCy,DSBS,"ELC",YTIME) * (1-imShrNonSubElecInTotElecDem(runCy,DSBS));
 V02EquipCapTechSubsec.FX(runCy,DSBS,CCSTECH,YTIME)$(SECTTECH(DSBS,CCSTECH) and not An(YTIME)) = 0;
+
+V02EquipCapTechSubsec.FX(runCy,"IS",ITECH,"%fBaseY%")$(SECTTECH("IS",ITECH) and not An(YTIME)) = 0;
+
+*mrprom
+V02EquipCapTechSubsec.FX("CHA","IS","BFFOF","%fBaseY%") = 918.2;
+V02EquipCapTechSubsec.FX("CHA","IS","SCREAF","%fBaseY%") = 100.9
+
+V02EquipCapTechSubsec.FX("DEU","IS","BFFOF","%fBaseY%") = 25.6;
+V02EquipCapTechSubsec.FX("DEU","IS","SCREAF","%fBaseY%") = 9.6;
+V02EquipCapTechSubsec.FX("DEU","IS","DREAF","%fBaseY%") = 0.2;
+
 *---
 V02DemSubUsefulSubsec.LO(runCy,INDDOM,YTIME) = 0;
 V02DemSubUsefulSubsec.L(runCy,INDDOM,YTIME) = 1;
 V02DemSubUsefulSubsec.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = SUM(ITECH$SECTTECH(INDDOM,ITECH),
       V02EquipCapTechSubsec.L(runCy,INDDOM,ITECH,YTIME) *
       imUsfEneConvSubTech(runCy,INDDOM,ITECH,YTIME) *
-      i02util(runCy,INDDOM,ITECH,YTIME)
+      i02util(runCy,INDDOM,ITECH,YTIME) * i02CapFactor(runCy,INDDOM,ITECH,YTIME)
     );
 *V02DemSubUsefulSubsec.FX(runCy,INDDOM,YTIME)$(not An(YTIME)) = max(imTotFinEneDemSubBaseYr(runCy,INDDOM,YTIME) - V02UsefulElecNonSubIndTert.L(runCy,INDDOM,YTIME), 1e-5) * 0.5;
 V02DemSubUsefulSubsec.FX(runCy,NENSE,YTIME)$(not An(YTIME)) = SUM(ITECH$SECTTECH(NENSE,ITECH),
@@ -56,6 +64,13 @@ VmConsFuel.LO(runCy,DSBS,EF,YTIME) = 0;
 VmConsFuel.L(runCy,DSBS,EF,YTIME) = imFuelCons(runCy,DSBS,EF,"%fBaseY%");
 VmConsFuel.FX(runCy,DSBS,EF,YTIME)$(not (INDDOM(DSBS) or NENSE(DSBS)) or not SECtoEF(DSBS,EF)) = 0;
 VmConsFuel.FX(runCy,DSBS,EF,YTIME)$(not TRANSE(DSBS) and not sameas(DSBS,"ICT") and DATAY(YTIME)) = imFuelCons(runCy,DSBS,EF,YTIME);
+
+
+
+V02UsefulAuxIndTert(runCy,INDDOM,EF,"%fBaseY%") = VmConsFuel.L(runCy,INDOM,EF,"%fBaseY%") - 
+  sum(ITECH$(SECTTECH(INDDOM,ITECH) and ITECHtoEF(ITECH,EF)), 
+      V02EquipCapTechSubsec.L(runCy,INDDOM,ITECH,"%fBaseY%") * i02CapFac(runCy,INDDOM,ITECH,"%fBaseY%") * imUsfEneConvSubTech(runCy,INDDOM,ITECH,"%fBaseY%") * i02util(runCy,INDDOM,ITECH,"%fBaseY%")
+      * i02SpecificEnergyIntensity(runCy,INDDOM,ITECH,"%fBaseY%") * i02FuelShare(runCy,INDDOM,ITECH,EF,"%fBaseY%"));
 *---
 *vmConsTotElecInd.FX(runCy,YTIME)$(not An(YTIME))= SUM(INDSE,VmConsElecNonSubIndTert.l(runCy,INDSE,YTIME));
  
