@@ -3,10 +3,8 @@
 Parameters
 iNPDL(SBS)                                                 "Number of Polynomial Distribution Lags (PDL) (1)"
 iTransfInpGasworks(allCy,EF,YTIME)                         "Transformation Input in Gasworks, Blast Furnances, Briquetting plants (Mtoe)"
-iResMargTotAvailCap(allCy,PGRES,YTIME)	                   "Reserve margins on total available capacity and peak load (1)"
 iPriceTragets(allCy,SBS,EF,YTIME)	                       "Price Targets	(1)"
 iPriceReform(allCy,SBS,EF,YTIME)	                       "Price reformation (1)"
-iScenarioPri(WEF,NAP,YTIME)	                               "Scenario prices (KUS$2015/toe)"		
 iResNonSubsElecDem(allCy,SBS,YTIME	)	                   "Residuals in Non Substitutable Electricity Demand	(1)"	
 iResFuelConsPerSubAndFuel(allCy,SBS,EF,YTIME)	           "Residuals in fuel consumption per subsector and fuel (1)"	
 iCarbValYrExog(allCy,ytime)	                               "Carbon value for each year when it is exogenous (US$2015/tn CO2)"

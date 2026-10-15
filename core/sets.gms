@@ -356,14 +356,6 @@ SSP1_800f
 SSP2_800f
 /
 
-RegulaPolicies(POLICIES_set) Set of policies entering in the regula falsi loops
-/ OPT           Carbon Value for Optimal CO2 permits allocation
-  TRADE         Carbon Value for Trade sectors
-  REN           Renewable value for renewable target in final demand
-  EFF           Efficiency value for energy savings in final demand
-  NONE          No policy
-/
-
 NAP(Policies_set) National Allocation Plan sector categories
 /
 Trade    Carbon Value for trading sectors
@@ -458,7 +450,7 @@ CHP     "Combined Heat and Power"
 /
 *         Energy Forms            *
 
-EF           Energy Forms
+ALLEF           Energy Forms
 /
 HCL     "Hard Coal, Coke and Other Solids"
 LGN     "Lignite"
@@ -488,8 +480,10 @@ H2F     "Hydrogen"
 ELC     "Electricity"
 /
 
-REFORM(EF) FUELS CONSIDERED IN PRICE REFORM
+EF(ALLEF)           Energy Forms
 /
+HCL     "Hard Coal, Coke and Other Solids"
+LGN     "Lignite"
 CRO     "Crude Oil and Feedstocks"
 LPG     "Liquefied Petroleum Gas"
 GSL     "Gasoline"
@@ -499,6 +493,15 @@ RFO     "Residual Fuel Oil"
 OLQ     "Other Liquids"
 NGS     "Natural Gas"
 OGS     "Other Gases"
+NUC     "Nuclear"
+STE     "Steam"
+HYD     "Hydro"
+WND     "Wind"
+SOL     "Solar"
+BMSWAS  "Biomass and Waste"
+GEO     "Geothermal and other renewable sources (Tidal, etc)"
+H2F     "Hydrogen"
+ELC     "Electricity"
 /
 
 WEF              Imported Energy Forms (affecting fuel prices)
@@ -514,23 +517,7 @@ WRFO    Spot price of heavy fuel oil Rotterdam
 WH2F
 /
 
-WEFMAP(EF,WEF)          Link between Imported Energy Forms and Energy Forms used in Model Subsectors
-/(LGN).WLGN
-(HCL).WHCL
-*(GSL,GDO,RFO,OLQ,KRS,LPG).WCRO
-(NGS,OGS).WNGS
-HCL.WCOKE
-(GSL,KRS).WGSL
-(GDO).WGDO
-(RFO).WRFO
-(OLQ,LPG).WCRO
-*().WH2F
-/
-
-EFtoWEF(DSBS,EF,WEF) Link between Imported Energy Forms and Energy Forms used in Model Subsectors
-
-
-EFS(EF)          Energy Forms used in Supply Side
+EFS(ALLEF)          Energy Forms used in Supply Side
 /
 HCL     "Hard Coal, Coke and Other Solids"
 LGN     "Lignite"
@@ -563,41 +550,10 @@ ELC     "Electricity"
 *EKRS    "Synthetic Kerosene"
 /
 
-EFtoEFS(EF,EFS)    Fuel Aggregation for Supply Side
-/
-LGN.LGN
-HCL.HCL
-CRO.CRO
-GSL.(GSL,BGSL)
-GDO.(GDO,BGDO)
-RFO.RFO
-LPG.LPG
-KRS.(KRS,BKRS)
-OLQ.OLQ
-NGS.(NGS,BGAS)
-OGS.OGS
-NUC.NUC
-HYD.HYD
-BMSWAS.BMSWAS
-SOL.SOL
-GEO.GEO
-WND.WND
-ELC.ELC
-MET.MET
-H2F.H2F
-STE.STE
-/
-
-
 ELCEF(EF)        Electricity                                         /ELC/
 H2EF(EF)         Hydrogen                                            /H2F/
 STEAM(EFS)       Steam                                               /STE/
-ALTEF(EF)        Alternative Fuels used in transport                 /BGDO,BKRS,BGSL,BGAS,MET,ETH/
-
-PGEF(EFS)        "Energy forms used for steam production"
-
-*h2f1(pgef)
-*/h2f/
+ALTEF(EF)        Alternative Fuels used in transport                 /BGDO,BKRS,BGSL,BGAS/
 
 PPRODEF(EFS)     Fuels considered in primary production
 /
@@ -628,16 +584,12 @@ TGDO      "Internal Combustion Engine fueled by Diesel Oil"
 TNGS      "Internal Combustion Engine fueled by Natural Gas"
 TELC      "Pure Electirc Engine"
 TKRS      "Gas Turbine fueled by Kerosene"
-TETH      "Internal Combustion Engine fueled by Ethanol"
-TMET      "Methanol (85% gasoline 15% methanol) coming either from ngs or bms"
-*TBGDO     "Biodiesel internal combustion engine"
 TPHEVGSL  "Plug in Hybrid engine - gasoline"
 TPHEVGDO  "Plug in Hybrid engine - diesel"
 TH2F      "Fuel Cells: Hydrogen"
 TCHEVGSL  "conventional Hybrid engine - gasoline"
 TCHEVGDO  "conventional Hybrid engine - diesel"
-* Industrial Technologies (only add those not already in Transport)
-* GDO,LPG,KRS,NGS,ELC already exist in TRANSPORT technologies
+* Industrial Technologies
 TNGSCCS
 TLGN
 THCL
@@ -647,41 +599,17 @@ TOLQ
 TOGS
 TSTE
 * Domestic Technologies (only add those not already in Transport & Industry)
-* LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC already exist in TRANSPORT or INDUSTRY technologies
 TBMSWAS
 TSOL
 TGEO
 * Non-Energy and Bunkers Technologies (only add those not already in Transport & Industry & Domestic)
 * GDO,RFO,LGN,HCL,GDO,LPG,OLQ,NGS,OGS already exist
-* NOT USED
 THEATPUMP
 * DAC Technologies
 HTDAC
 H2DAC
 LTDAC
 TEW
-*EWDAC 
-* Power Generation Technologies
-*PGTLGN
-*PGTHCL 
-*PGTGDO
-*PGTRFO
-*PGTNGS
-*PGTNUC
-*PGTHYD
-*PGTBMSWAS
-*PGTSOL
-*PGTGEO
-*PGTWND
-* Hydrogen Production Technologies
-*HPTHCL
-*HPTRFO
-*HPTNGS
-*HPTNUC
-*HPTBMSWAS
-*HPTSOL
-*HPTWND
-*HPTELC
 /
 
 TTECH(TECH)      Transport Technologies
@@ -749,28 +677,6 @@ THCLCCS
 /
 
 effSET "PG and thermal plants efficiencies"  /effElc, effHeat/
-
-RENEF(TECH)        Renewable technologies in demand side !! Should these remain in EF?
-/
-*HYD     "Hydro"
-*WND     "Wind"
-*SOL     "Solar"
-TELC
-TPHEVGSL  "Plug in Hybrid engine - gasoline"
-TPHEVGDO  "Plug in Hybrid engine - diesel"
-TH2F      "Fuel Cells: Hydrogen"
-TCHEVGSL  "conventional Hybrid engine - gasoline"
-TCHEVGDO  "conventional Hybrid engine - diesel"
-TBMSWAS  "Biomass and Waste"
-*GEO     "Geothermal and other renewable sources eg. Tidal, etc."
-TNGSCCS
-THCLCCS
-**
-HTDAC
-H2DAC
-LTDAC
-TEW
-/
 
 STECH     "Technologies in supply side"
 /
@@ -851,6 +757,7 @@ TEW.ELC
 TSOL.SOL
 TGEO.GEO
 /
+
 TTECHtoEF(TTECH,EF) Fuels consumed by transport technologies
 /
 TGSL.(GSL,BGSL)
@@ -860,8 +767,6 @@ TNGS.(NGS,BGAS)
 TELC.ELC
 TKRS.(KRS,BKRS)
 TETH.ETH
-*TMET.MET
-*TBGDO.BGDO
 TPHEVGSL.(GSL,BGSL,ELC)
 TPHEVGDO.(GDO,BGDO,ELC)
 TH2F.H2F
@@ -911,17 +816,11 @@ IMPEXP "Imports/Exports" /IMPORTS,EXPORTS/
 
 SSECTTECH(SSBS,STECH) "Link between Model Supply Subsectors and Technologies"
 
-SSECTTECH(SSBS,STECH) "Link between Model Supply Subsectors and Technologies"
-
 SECTTECH(DSBS,TECH) Link between Model Demand Subsectors and Technologies
 /
-*PC.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO,CHEVGSL,CHEVGDO)
-*PB.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO)
-*GU.(LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGDO,CHEVGDO)
-*(PT,GT).(GDO,ELC,MET)
 PC.(TGSL,TLPG,TGDO,TNGS,TELC,TPHEVGSL,TPHEVGDO,TCHEVGSL,TCHEVGDO,TH2F)
 PB.(TLPG,TGSL,TGDO,TNGS,TELC,TH2F)
-GU.(TLPG,TGSL,TGDO,TNGS,TELC,TCHEVGDO,TH2F) !! Removed GSL and PHEVGSL
+GU.(TLPG,TGSL,TGDO,TNGS,TELC,TCHEVGDO,TH2F)
 (PT,GT).(TGDO,TELC)
 PA.(TKRS,TH2F)
 (PN,GN).(TGDO,TH2F,TRFO)
@@ -951,49 +850,21 @@ GAS.(HCL,GSL,GDO,BGDO,RFO,OLQ,NGS,OGS,BMSWAS,SOL,CRO,LPG,KRS,ELC,STE)
 
 PGALL(STECH)     Power Generation Plant Types
 /
-*CTHLGN Conventional thermal monovalent lignite
-*CTHHCL Conventional thermal monovalent hard coal
-*CTHRFO Conventional thermal monovalent fuel oil
-*CTHNGS Conventional thermal monovalent natural gas
-*CTHBMSWAS Conventional thermal monovalent biomass and waste
 ATHLGN  Advanced thermal monovalent lignite
 ATHCOAL Advanced thermal monovalent hard coal
-*ATHRFO Advanced thermal monovalent fuel oil
 ATHGAS Advanced thermal monovalent natural gas
 ATHBMSWAS Advanced thermal monovalent biomass and waste
 ATHBMSCCS
-*SUPCRL  Supercritical lignite
-*SUPCR  Supercritical coal
-*FBCLGN Fluidised bed lignite
-*FBCHCL Fluidised bed hard coal
-*IGCCLGN Integrated gasification combine cycle lignite
-*IGCCHCL Integrtaed gasification combine cycle hard coal
-*IGCCBMS Integrated gasification combine cycle biomass
-*CCCGT  Conventional combined cycle gas turbine
-*ACCGT  Advanced combined cycle gas turbine
-*ACCHT  Advanced combined cycle hydrogen combustion turbine
-*ICEH2  Internal combustion engine powered by H2
-*CGTGDO Conventional gas turbines (peak devices) diesel oil
-*CGTNGS Conventional gas turbines (peak devices) natural gas
 ATHOIL Advanced gas turbines (peak devices) diesel oil
-*AGTNGS Advanced gas turbines (peak devices) natural gas
-*FC1  Fuel cells
-*FC2  Advanced Fuel cells
-*PGNUC Nuclear Plants
 PGLHYD Large Hydro Plants
 PGSHYD Small Hydro Plants
 PGAWND Wind Plants
 PGSOL Solar Photovoltaic Plants
-*PGASHYD Advanced Small Hydro Plants
-*PGAWND Advanced Wind Plants
 PGCSP Advanced Solar Thermal Plants
-*PGADPV Advanced Building Integrated PV Plants
 PGOTHREN Advanced geothermal Plants
 PGANUC New Nuclear Designs
 ATHCOALCCS Supercritical coal with CCS
 ATHLGNCCS Supercritical lignite with CCS
-*PGACGSL Integrated lignite gasification with CCS
-*PGACGS Integrated coal gasification with CCS
 ATHGASCCS Gas turbine combined cycle with CCS
 PGAWNO Wind offshore
 PGH2F
@@ -1008,7 +879,6 @@ ATHLGNCCS
 ATHGASCCS
 ATHBMSCCS
 /
-
 
 NOCCS(PGALL) Plants which can be equipped with CCS but they are not
 /
@@ -1132,7 +1002,6 @@ LFT      "Technical Lifetime"
 USC   "Useful Energy Conversion Factor"
 /
 
-
 PGECONCHAR       "Technical - economic characteristics for power generation plants"
 /
 LFT
@@ -1154,29 +1023,6 @@ TRANSUSE         "Usage (average) data concerning capacity and load factor"
 /
 CAP              "Capacity in tn/vehicle or passengers/vehicle"
 LF               "Load factor"
-/
-
-TOCTSET          "Total Transformation Output and Total District Heating Output"
-/
-TOCT_ELC         "Electricity Total Transformation Output in Mtoe"
-TOCT_STE         "Steam Total Transformation Output in Mtoe"
-TONUC_ELC        "Electricity production from nuclear plants in Mtoe"
-TODH_STE         "Steam produced from District Heating Plants in Mtoe"
-/
-
-
-SUPOTH           "Indicators related to supply side"
-/
-REF_CAP          "Refineries Capacity in Mbl/day"
-REF_CAP_RES      "Residuals of Refineries Capacity"
-HCL_PPROD        "Residual of Hard Coal Primary Production"
-NGS_PPROD        "Residual of Natural Gas Primary Production"
-OIL_PPROD        "Residual of Crude Oil Primary Production"
-NGS_EXPORT       "Residual of Natural Gas Exports"
-ELC_IMP          "Ratio of electricity imports to total final demand"
-TIOTH_RES        "Residual of Total Transformation Input in Gasworks, Blast Furnances, etc."
-TOOTH_RES        "Residual of Total Transformation Output from Gasworks, etc."
-FEED_RES         "Residual for Feedstocks in Transfers"
 /
 
 PGOTH            "Various data related to power generation plants"
@@ -1205,20 +1051,7 @@ OGS
 BMSWAS
 /
 
-PGLOADTYPE(PGOTH)   "Peak and Base load of total electricity demand in GW"
-/PEAKLOAD, BASELOAD/
-
 CHPSET(PGOTH)       "Indicators related to CHP Production"                       /NON_CHP_PER,CHP_CAP/
-
-VARIOUS_LABELS /AMAXBASE, MAXLOADSH/
-
-
-PGRES
-/
-TOT_CAP_RES         "Residual on Total Capacity (Reserve margin on capacity)"
-BASE_LOAD_RES       "Residual on Base Load "
-MAX_LOAD_RES        "Residual on Peak Load (Peak Load margin)"
-/
 
 Indu_SCon_Set /Base, SHR_NSE, SH_HPELC/
 
@@ -1323,23 +1156,6 @@ alias(TTECH2,TTECH)
 scalar TF order of base year in set ytime;
 TF=sum((TFIRST,ytime), ord(ytime)$TFIRST(ytime));
 
-* Allocate imported fuels to fuels used in demand subsectors
-EFtoWEF(DSBS,EF,WEF)=NO;
-loop WEF do
-  loop EF$WEFMAP(EF,WEF) do
-    loop TECH$TECHtoEF(TECH,EF) do
-      loop DSBS$SECTTECH(DSBS,TECH) do
-          if not sameas(WEF,"WCOKE") then
-             EFtoWEF(DSBS,EF,WEF)=yes;
-          endif;
-      endloop;
-    endloop;
-  endloop;
-endloop;
-EFtoWEF("IS","HCL","WCOKE")=yes; !! special case for Iron and Steel -> hard coal is in fact coke
-EFtoWEF("IS","HCL","WHCL")=no; !! special case for Iron and Steel -> hard coal is in fact coke
-
-
 Parameter TECHS(DSBS) Number of technologies in transport subsectors;
 
 loop DSBS$TRANSE(DSBS) do
@@ -1354,7 +1170,7 @@ alias(NAP2,NAP);
 ALIAS (EFS2,EFS);
 ALIAS (INDDOM2,INDDOM);
 ALIAS (YYTIME2,ytime);
-ALIAS (PGEF2,PGEF);
+
 * DSBS2 is a dummy alias of DSBS used as an inner summation index in the GLOBIOM
 * BMSWAS supply curve equation (Q08PriceFuelSubsecCarVal, module 08 equations.gms).
 * A separate alias is needed because DSBS is already used as an outer equation index.
@@ -1363,11 +1179,9 @@ ALIAS (DSBS2,DSBS);
 scalar ordfirst /0/;
 ordfirst=sum((ytime,YYTIME2)$((ord(ytime)<=ord(YYTIME2)) $TFIRST(YYTIME2)),1);
 
-
 SECtoEF(DSBS,EF) = yes$SUM(TECH$(SECTTECH(DSBS,TECH) and TECHtoEF(TECH,EF)), 1);
 SECtoEF(TRANSE,EF) = yes$SUM(TTECH$(SECTTECH(TRANSE,TTECH) and TTECHtoEF(TTECH,EF)), 1);
 
 *This is equivalent with the loop above
 *SECtoEF(DSBS, EF)$(sum(TECH, SECTTECH(DSBS, TECH) * TTECHtoEF(TECH, EF))) = yes;
 SSECTTECH("PG",STECH) = yes$PGALL(STECH);
-PGEF(EFS) = yes$(sum(PGALL, PGALLTOEF(PGALL,EFS)));

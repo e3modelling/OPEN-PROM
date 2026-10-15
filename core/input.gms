@@ -588,7 +588,6 @@ imFuelCons(runCy,BUN,EF,YTIME) = -imFuelCons(runCy,BUN,EF,YTIME);
 *---
 imCO2CaptRate(PGALL)$CCS(PGALL) = 0.90; 
 imEffValueInDollars(runCy,SBS,YTIME) = 0;
-iScenarioPri(WEF,"NOTRADE",YTIME) = 0;
 *---
 **                   Power Generation
 table iEnvPolicies(allCy,POLICIES_SET,YTIME) "Environmental policies on emissions constraints  and subsidy on renewables (Mtn CO2)"

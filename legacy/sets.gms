@@ -1,0 +1,1373 @@
+sets
+
+***        Geographic Coverage      *
+allCy    "All Countries Used in the Model"
+/
+LAM
+OAS
+SSA
+NEU
+MEA
+REF
+LTU
+EST
+LUX
+LVA
+CAZ
+AUT
+BEL
+BGR
+CHA
+CYP
+CZE
+DEU
+DNK
+ESP
+FIN
+FRA
+GBR
+GRC
+HRV
+HUN
+IND
+IRL
+ITA
+JPN
+MLT
+NLD
+POL
+PRT
+ROU
+SVK
+SVN
+SWE
+USA
+RWO
+/
+
+resCy "Countries for Research Mode"
+/
+LAM
+OAS
+SSA
+EST
+LTU
+LUX
+LVA
+NEU
+MEA
+REF
+CAZ
+AUT
+BEL
+BGR
+CHA
+CYP
+CZE
+DEU
+DNK
+ESP
+FIN
+FRA
+GBR
+GRC
+HRV
+HUN
+IND
+IRL
+ITA
+JPN
+MLT
+NLD
+POL
+PRT
+ROU
+SVK
+SVN
+SWE
+USA
+/
+
+EU28(allCy) "EU27 and UK"
+/
+EST
+LTU
+LUX
+LVA
+AUT
+BEL
+BGR
+CYP
+CZE
+DEU
+DNK
+ESP
+FIN
+FRA
+GBR
+GRC
+HRV
+HUN
+IRL
+ITA
+MLT
+NLD
+POL
+PRT
+ROU
+SVK
+SVN
+SWE
+/
+
+fscenario   "Model scenario used: 0 is No carbon price, 1 is NPi_Default, 2 is 1.5C and 3 is 2C"
+/
+%fScenario%
+/
+ICT
+/
+%ICT%
+/
+runCy(allCy) Countries for which the model is running
+/
+%fCountries%
+/
+runCyL(allCy) Countries for which the model is running (used in countries loop)
+/
+%fCountries%
+/;
+
+* runCy is equal to resCy on research mode
+runCy(allCy)$(%DevMode% = 0) = resCy(allCy) ;
+runCyL(allCy)$(%DevMode% = 0) = resCy(allCy) ;
+
+ALIAS(runCyL,runCy2)
+alias(allCy, allCy2);
+sets
+***        Model Time Horizon       *
+ytime           Model time horizon                                /%fStartHorizon%*%fEndHorizon%/
+an(ytime)       Years for which the model is running              /%fStartY%*%fEndY%/
+period(ytime)   Model can also run for periods of years
+tFirst(ytime)   Base year                                         /%fBaseY%/
+time(ytime)     Model time horizon used in equation definitions   /%fStartY%*%fEndY%/
+datay(ytime)    Historical years before the start year of the model /%fStartHorizon%*%fBaseY%/
+hour            "Segments of hours in a year (250,1250,...,8250)" /h0*h8/
+
+
+posElast / a /
+negElast / b1, b2, c, b3, b4, c1, c2, c3, c4, c5 /
+
+***          Consumer Sizes         *
+
+conSet       Consumer size groups related to space heating
+/
+smallest
+modal
+largest
+/
+
+eSet         Electricity consumers used for average electricity price calculations /i,r,c,t/
+iSet(eSet)   Industrial consumer /i/
+rSet(eSet)   Residential consumer /r/
+cSet(eSet)   Commercial consumer /c/
+tSet(eSet)   Transport consumer /t/
+***       Auxiliary Counters        *
+
+rCon         counter for the number of consumers              /0,1*19/
+nSet         auxiliary counter for the definition of Vr       /b1*b20/
+kpdl         counter for Polynomial Distribution Lag          /a1*a6/
+rc                                                            /1*3/
+rcc                                                           /rcc1*rcc10/
+
+SSPSCEN "SSP Scenarios" /SSP1,SSP2,SSP3,SSP4,SSP5/
+
+***       Sectoral Structure        *
+
+ALLSBS   All sectors
+/
+IS    "Iron and Steel"
+NF    "Non Ferrous Metals"
+CH    "Chemicals"
+BM    "Non Metallic Minerals"
+PP    "Paper and Pulp"
+FD    "Food Drink and Tobacco"
+EN    "Engineering"
+TX    "Textiles"
+OE    "Ore Extraction"
+OI    "Other Industrial sectors"
+SE    "Services and Trade"
+AG    "Agriculture, Fishing, Forestry etc."
+HOU   "Households"
+PC    "Passenger Transport - Cars"
+PB    "Passenger Transport - Busses"
+PT    "Passenger Transport - Rail"
+PN    "Passenger Transport - Inland Navigation"
+PA    "Passenger Transport - Aviation"
+GU    "Goods Transport - Trucks"
+GT    "Goods Transport - Rail"
+GN    "Goods Transport - Inland Navigation"
+BAV    "Bunkers"
+BMAR
+PCH   "Petrochemicals Industry"
+NEN   "Other Non Energy Uses"
+ICT   "Data centers and Networks"
+PG    "Power and Steam Generation"
+H2P   "Hydrogen Production"
+STEAMP "Steam Production"
+H2INFR "Hydrogen storage and delivery"
+LGN_PRD_CH4    "Lignite Primary Production, related with CH4"
+HCL_PRD_CH4    "Hard coal primary production, related with CH4"
+GAS_PRD_CH4    "Natural gas primary production, related with CH4"
+TERT_CH4       "Natural gas distribution in tertiary, related with CH4"
+TRAN_CH4       "Gasoline in transport, related with CH4"
+AG_CH4         "Agriculture activities, related with CH4"
+SE_CH4         "Waste used in housing and water charges in services, related with CH4"
+TRAN_N2O       "Oil activities in transport, related with N2O"
+TX_N2O         "Textile activities, related with N2O"
+AG_N2O         "Agriculture activities, related with N2O"
+OI_HFC         "Other Industry activities, related with HFC"
+OI_PFC         "Semiconductor manufacturing, related with PFC"
+NF_PFC         "Aluminium production, related with PFC"
+BM_CO2         "Non metallic minerals production, related with CO2"
+PG_SF6         "Electricity production, related with SF6"
+OI_SF6         "Other Industries activities, related with SF6"
+DAC            "Direct Air Capture"
+EW             "Enhanced Weathering"
+LQD            "Liquids Production"
+SLD            "Solids Production"
+GAS            "Gases Production"
+CHP
+/
+
+SBS(ALLSBS)          Model Subsectors
+/
+IS    "Iron and Steel"
+NF    "Non Ferrous Metals"
+CH    "Chemicals"
+BM    "Non Metallic Minerals"
+PP    "Paper and Pulp"
+FD    "Food Drink and Tobacco"
+EN    "Engineering"
+TX    "Textiles"
+OE    "Ore Extraction"
+OI    "Other Industrial sectors"
+SE    "Services and Trade"
+AG    "Agriculture, Fishing, Forestry etc."
+HOU   "Households"
+PC    "Passenger Transport - Cars"
+PB    "Passenger Transport - Busses"
+PT    "Passenger Transport - Rail"
+PN    "Passenger Transport - Inland Navigation"
+PA    "Passenger Transport - Aviation"
+GU    "Goods Transport - Trucks"
+GT    "Goods Transport - Rail"
+GN    "Goods Transport - Inland Navigation"
+BAV    "Bunkers"
+BMAR
+PCH   "Petrochemicals Industry"
+NEN   "Other Non Energy Uses"
+ICT   "Data centers and Networks"
+PG    "Power and Steam Generation"
+H2P   "Hydrogen production"
+STEAMP "Steam Production"
+LQD    "Liquids Production"
+SLD    "Solids Production"
+GAS    "Gases Production"
+H2INFR "Hydrogen storage and delivery"
+DAC    "Direct Air Capture"
+EW     "Enhanced Weathering"
+CHP    "Combined Heat and Power"
+/
+
+SCT_GHG(ALLSBS)      Aggregate Sectors used in non-energy related GHG emissions
+/
+LGN_PRD_CH4    "Lignite Primary Production, related with CH4"
+HCL_PRD_CH4    "Hard coal primary production, related with CH4"
+GAS_PRD_CH4    "Natural gas primary production, related with CH4"
+TERT_CH4       "Natural gas distribution in tertiary, related with CH4"
+TRAN_CH4       "Gasoline in transport, related with CH4"
+AG_CH4         "Agriculture activities, related with CH4"
+SE_CH4         "Waste used in housing and water charges in services, related with CH4"
+TRAN_N2O       "Oil activities in transport, related with N2O"
+TX_N2O         "Textile activities, related with N2O"
+AG_N2O         "Agriculture activities, related with N2O"
+OI_HFC         "Other Industry activities, related with HFC"
+OI_PFC         "Semiconductor manufacturing, related with PFC"
+NF_PFC         "Aluminium production, related with PFC"
+BM_CO2         "Non metallic minerals production, related with CO2"
+PG_SF6         "Electricity production, related with SF6"
+OI_SF6         "Other Industries activities, related with SF6"
+/
+
+E07SrcMacAbate  "Non-CO₂ emission sources with MAC curves"
+/
+CH4_manure         "Methane from animal waste management"
+CH4_enteric        "Methane from enteric fermentation in livestock"
+CH4_coal           "Methane emissions from coal production and use"
+CH4_sewage         "Methane from domestic wastewater treatment"
+CH4_ngas            "Methane from natural gas production and distribution"
+CH4_landfills      "Methane from solid waste disposal (landfills)"
+CH4_oilp            "Methane from oil extraction and processing"
+CH4_rice           "Methane from wetland rice cultivation"
+N2O_sewage         "Nitrous oxide from domestic wastewater"
+N2O_adipic         "N₂O from adipic acid production (industrial process)"
+N2O_manure         "N₂O from animal waste management"
+N2O_fertilizer     "N₂O from agricultural fertilizer use"
+N2O_nitric         "N₂O from nitric acid production (industrial process)"
+N2O_transport      "N₂O from transport sector emissions"
+HFC_125            "Hydrofluorocarbon-125 emissions"
+HFC_134a           "Hydrofluorocarbon-134a emissions"
+HFC_143a           "Hydrofluorocarbon-143a emissions"
+HFC_152a           "Hydrofluorocarbon-152a emissions"
+HFC_227ea          "Hydrofluorocarbon-227ea emissions"
+HFC_23             "Hydrofluorocarbon-23 emissions"
+HFC_236fa          "Hydrofluorocarbon-236fa emissions"
+HFC_32             "Hydrofluorocarbon-32 emissions"
+HFC_43_10          "Hydrofluorocarbon-43-10 emissions"
+HFC_245ca          "Hydrofluorocarbon-245ca emissions"
+CF4                "Perfluoromethane (CF₄) emissions"
+C2F6               "Perfluoroethane (C₂F₆) emissions"
+C6F14              "Perfluorohexane (C₆F₁₄) emissions"
+SF6                "Sulfur hexafluoride (SF₆) emissions"
+/
+
+POLICIES_set
+/
+TRADE
+NoTrade
+OPT
+REN
+EFF
+NONE
+RENE_SUBS
+BIO_SUBS
+BIOM_SUBS
+SOLRES_SUBS
+exogCV_NPi
+exogCV_1_5C
+exogCV_2C
+exogCV_Calib
+UPT_100
+UPT_200
+UPT_400
+UPT_600
+UPT_800
+SSP1_800f
+SSP2_800f
+/
+
+RegulaPolicies(POLICIES_set) Set of policies entering in the regula falsi loops
+/ OPT           Carbon Value for Optimal CO2 permits allocation
+  TRADE         Carbon Value for Trade sectors
+  REN           Renewable value for renewable target in final demand
+  EFF           Efficiency value for energy savings in final demand
+  NONE          No policy
+/
+
+NAP(Policies_set) National Allocation Plan sector categories
+/
+Trade    Carbon Value for trading sectors
+NoTrade  Carbon Value for non-trading sectors
+/
+
+NAPtoALLSBS(NAP,ALLSBS) Energy sectors corresponding to NAP sectors
+/
+Trade.(FD,EN,TX,OE,OI,NF,CH,IS,BM,PP,PG,BM_CO2,H2P,STEAMP,DAC,EW)
+NoTrade.(SE,AG,HOU,PC,PB,PT,PN,PA,GU,GT,GN,BAV,BMAR,PCH,NEN,LGN_PRD_CH4,HCL_PRD_CH4,GAS_PRD_CH4,TERT_CH4,TRAN_CH4,AG_CH4,SE_CH4,TRAN_N2O,TX_N2O,AG_N2O,OI_HFC,OI_PFC,NF_PFC,PG_SF6,OI_SF6)
+/
+
+*' Emission species shared by the land-use emulator reporting interface:
+*'   CO2LandUse = land-use-change CO2 emissions/removals (MtCO2/yr);
+*'                MAgPIE/history exclude indirect land CO2 and fire emissions
+*'   CH4LandUse = Agriculture CH4 (MtCH4/yr)
+*'   N2OLandUse = Agriculture N2O, including direct/indirect N-cycle sources (ktN2O/yr)
+EMTYPE "Land-use emulator emission types"
+/ CO2LandUse, CH4LandUse, N2OLandUse /
+
+*' Active land-emission mode (curve | softmif | exo), written to blabla.gdx
+*' for postprom reporting-source selection.
+sLandEmiMode "Active land-emission mode (single element, for postprom dispatch)"
+/ %landEmiMode% /
+
+DSBS(SBS)  "All Demand Subsectors"   
+/
+IS    "Iron and Steel"
+NF    "Non Ferrous Metals"
+CH    "Chemicals"
+BM    "Non Metallic Minerals"
+PP    "Paper and Pulp"
+FD    "Food Drink and Tobacco"
+EN    "Engineering"
+TX    "Textiles"
+OE    "Ore Extraction"
+OI    "Other Industrial sectors"
+SE    "Services"
+AG    "Agriculture, Fishing, Forestry"
+HOU   "Residential"
+PC    "Passenger Transport - Cars"
+PB    "Passenger Transport - Busses"
+PT    "Passenger Transport - Rail"
+PN    "Passenger Transport - Inland Navigation"
+PA    "Passenger Transport - Aviation"
+GU    "Goods Transport - Trucks"
+GT    "Goods Transport - Rail"
+GN    "Goods Transport - Inland Navigation"
+BAV    "Bunkers aviation"
+BMAR   "Bunkers maritime"
+PCH   "Petrochemicals Industry"
+NEN   "Other Non Energy Uses"
+ICT   "Data centers and Networks"
+DAC   "Direct Air Capture"
+EW    "Enhanced Weathering"
+/
+
+TRANSE(DSBS)      All Transport Subsectors      /PC,PT,PA,PB,PN,GU,GT,GN,BAV,BMAR/
+TRANS1(SBS)       All Transport Subsectors      /PC,PT,PA,PB,PN,GU,GT,GN,BAV,BMAR/
+TRANP(TRANSE)     Passenger Transport           /PC,PT,PA,PB,PN/
+TRANG(TRANSE)     Goods Transport               /GU,GT,GN/
+BUN(SBS)          Bunkers                       /BAV,BMAR/
+BUN1(TRANSE)      Bunkers                       /BAV,BMAR/
+
+INDSE(DSBS)       Industrial SubSectors         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI/
+DOMSE(DSBS)       Tertiary SubSectors           /SE,HOU/
+INDSE1(SBS)       Industrial SubSectors         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI/
+DOMSE1(SBS)       Tertiary SubSectors           /SE,HOU/
+HOU(DSBS)         Households                    /HOU/
+CDR(DSBS)         Carbon Dioxide Removal         /DAC,EW/
+
+NENSE(DSBS)       Non Energy                    /PCH,NEN/
+NENSE1(SBS)       Non Energy                    /PCH,NEN/
+
+INDDOM(DSBS)      Industry and Tertiary         /IS,NF,CH,BM,PP,FD,EN,TX,OE,OI,SE,HOU/
+
+RESCOM(DSBS)      Residential and Commercial    /SE,HOU/
+* The following sets are used in price equation for electricity
+HOU1(SBS)         Households                     /HOU/
+SERV(SBS)         Services                       /SE,AG/
+
+SSBS(SBS)     All Supply Subsectors    
+/
+PG      "Electricity"
+H2P     "Hydrogen"
+STEAMP  "Heat"
+LQD     "Liquids"
+SLD     "Solids"
+GAS     "Gases"
+H2INFR  "Hydrogen storage and delivery"
+CHP     "Combined Heat and Power"
+/
+*         Energy Forms            *
+
+EF           Energy Forms
+/
+HCL     "Hard Coal, Coke and Other Solids"
+LGN     "Lignite"
+CRO     "Crude Oil and Feedstocks"
+LPG     "Liquefied Petroleum Gas"
+GSL     "Gasoline"
+KRS     "Kerosene"
+GDO     "Diesel Oil"
+RFO     "Residual Fuel Oil"
+OLQ     "Other Liquids"
+NGS     "Natural Gas"
+OGS     "Other Gases"
+NUC     "Nuclear"
+STE     "Steam"
+HYD     "Hydro"
+WND     "Wind"
+SOL     "Solar"
+BMSWAS  "Biomass and Waste"
+GEO     "Geothermal and other renewable sources (Tidal, etc)"
+MET     "Methanol"
+ETH     "Ethanol"
+BGDO    "Biodiesel"
+BGSL    "Biogasoline"
+BKRS    "Biokerosene"
+BGAS    "Biogas"
+H2F     "Hydrogen"
+ELC     "Electricity"
+/
+
+REFORM(EF) FUELS CONSIDERED IN PRICE REFORM
+/
+CRO     "Crude Oil and Feedstocks"
+LPG     "Liquefied Petroleum Gas"
+GSL     "Gasoline"
+KRS     "Kerosene"
+GDO     "Diesel Oil"
+RFO     "Residual Fuel Oil"
+OLQ     "Other Liquids"
+NGS     "Natural Gas"
+OGS     "Other Gases"
+/
+
+WEF              Imported Energy Forms (affecting fuel prices)
+/
+WHCL    Imported Hard Coal
+WCOKE   Imported Coke
+WCRO    Imported Crude Oil
+WNGS    Imported Natural Gas
+WLGN    Lignite for Industry
+WGSL    Spot price of gasoline Rotterdam
+WGDO    Spot price of diesel Rotterdam
+WRFO    Spot price of heavy fuel oil Rotterdam
+WH2F
+/
+
+WEFMAP(EF,WEF)          Link between Imported Energy Forms and Energy Forms used in Model Subsectors
+/(LGN).WLGN
+(HCL).WHCL
+*(GSL,GDO,RFO,OLQ,KRS,LPG).WCRO
+(NGS,OGS).WNGS
+HCL.WCOKE
+(GSL,KRS).WGSL
+(GDO).WGDO
+(RFO).WRFO
+(OLQ,LPG).WCRO
+*().WH2F
+/
+
+EFtoWEF(DSBS,EF,WEF) Link between Imported Energy Forms and Energy Forms used in Model Subsectors
+
+
+EFS(EF)          Energy Forms used in Supply Side
+/
+HCL     "Hard Coal, Coke and Other Solids"
+LGN     "Lignite"
+CRO     "Crude Oil and Feedstocks"
+LPG     "Liquefied Petroleum Gas"
+GSL     "Fossil Gasoline"
+KRS     "Fossil Kerosene"
+GDO     "Fossil Diesel Oil"
+RFO     "Residual Fuel Oil"
+OLQ     "Other Liquids"
+NGS     "Natural Gas"
+OGS     "Other Gases"
+NUC     "Nuclear"
+STE     "Steam"
+HYD     "Hydro"
+WND     "Wind"
+SOL     "Solar"
+BMSWAS  "Biomass and Waste"
+GEO     "Geothermal and other renewable sources"
+MET     "Methanol"
+ETH     "Ethanol"
+BGDO    "Biodiesel"
+BGSL    "Biogasoline"
+BKRS    "Biokerosene"
+BGAS    "Biogas"
+H2F     "Hydrogen"
+ELC     "Electricity"
+*EGSL    "Synthetic Gasoline"
+*EBGDO   "Synthetic Diesel"
+*EKRS    "Synthetic Kerosene"
+/
+
+EFtoEFS(EF,EFS)    Fuel Aggregation for Supply Side
+/
+LGN.LGN
+HCL.HCL
+CRO.CRO
+GSL.(GSL,BGSL)
+GDO.(GDO,BGDO)
+RFO.RFO
+LPG.LPG
+KRS.(KRS,BKRS)
+OLQ.OLQ
+NGS.(NGS,BGAS)
+OGS.OGS
+NUC.NUC
+HYD.HYD
+BMSWAS.BMSWAS
+SOL.SOL
+GEO.GEO
+WND.WND
+ELC.ELC
+MET.MET
+H2F.H2F
+STE.STE
+/
+
+
+ELCEF(EF)        Electricity                                         /ELC/
+H2EF(EF)         Hydrogen                                            /H2F/
+STEAM(EFS)       Steam                                               /STE/
+ALTEF(EF)        Alternative Fuels used in transport                 /BGDO,BKRS,BGSL,BGAS,MET,ETH/
+
+PGEF(EFS)        "Energy forms used for steam production"
+
+*h2f1(pgef)
+*/h2f/
+
+PPRODEF(EFS)     Fuels considered in primary production
+/
+LGN
+BGSL
+BGDO
+BKRS
+BGAS
+OLQ
+HCL
+CRO
+HYD
+BMSWAS
+NUC
+SOL
+GEO
+WND
+NGS
+/
+
+*         Technologies            *
+
+TECH      Technologies (in Demand side)
+/
+TGSL      "Internal Combustion Engine fueled by Gasoline"
+TLPG      "Internal Combustion Engine fueled by Liquified Petroleum Gas"
+TGDO      "Internal Combustion Engine fueled by Diesel Oil"
+TNGS      "Internal Combustion Engine fueled by Natural Gas"
+TELC      "Pure Electirc Engine"
+TKRS      "Gas Turbine fueled by Kerosene"
+TETH      "Internal Combustion Engine fueled by Ethanol"
+TMET      "Methanol (85% gasoline 15% methanol) coming either from ngs or bms"
+*TBGDO     "Biodiesel internal combustion engine"
+TPHEVGSL  "Plug in Hybrid engine - gasoline"
+TPHEVGDO  "Plug in Hybrid engine - diesel"
+TH2F      "Fuel Cells: Hydrogen"
+TCHEVGSL  "conventional Hybrid engine - gasoline"
+TCHEVGDO  "conventional Hybrid engine - diesel"
+* Industrial Technologies (only add those not already in Transport)
+* GDO,LPG,KRS,NGS,ELC already exist in TRANSPORT technologies
+TNGSCCS
+TLGN
+THCL
+THCLCCS
+TRFO
+TOLQ
+TOGS
+TSTE
+* Domestic Technologies (only add those not already in Transport & Industry)
+* LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC already exist in TRANSPORT or INDUSTRY technologies
+TBMSWAS
+TSOL
+TGEO
+* Non-Energy and Bunkers Technologies (only add those not already in Transport & Industry & Domestic)
+* GDO,RFO,LGN,HCL,GDO,LPG,OLQ,NGS,OGS already exist
+* NOT USED
+THEATPUMP
+* DAC Technologies
+HTDAC
+H2DAC
+LTDAC
+TEW
+*EWDAC 
+* Power Generation Technologies
+*PGTLGN
+*PGTHCL 
+*PGTGDO
+*PGTRFO
+*PGTNGS
+*PGTNUC
+*PGTHYD
+*PGTBMSWAS
+*PGTSOL
+*PGTGEO
+*PGTWND
+* Hydrogen Production Technologies
+*HPTHCL
+*HPTRFO
+*HPTNGS
+*HPTNUC
+*HPTBMSWAS
+*HPTSOL
+*HPTWND
+*HPTELC
+/
+
+TTECH(TECH)      Transport Technologies
+/
+TGSL      "Internal Combustion Engine fueled by Gasoline"
+TLPG      "Internal Combustion Engine fueled by Liquified Petroleum Gas"
+TGDO      "Internal Combustion Engine fueled by Diesel Oil"
+TNGS      "Internal Combustion Engine fueled by Natural Gas"
+TELC      "Pure Electirc Engine"
+TKRS      "Gas Turbine fueled by Kerosene"
+TETH      "Internal Combustion Engine fueled by Ethanol"
+*TMET      "Methanol (85% gasoline 15% methanol) coming either from ngs or bms"
+*TBGDO     "Biodiesel internal combustion engine"
+TPHEVGSL  "Plug in Hybrid engine - gasoline"
+TPHEVGDO  "Plug in Hybrid engine - diesel"
+TH2F      "Fuel Cells: Hydrogen"
+TCHEVGSL  "conventional Hybrid engine - gasoline"
+TCHEVGDO  "conventional Hybrid engine - diesel"
+TRFO
+/
+
+CDRTECH(TECH)     CDR Technologies
+/
+HTDAC
+H2DAC
+LTDAC
+TEW
+/
+
+DACTECH(CDRTECH)     DAC Technologies
+/
+HTDAC
+H2DAC
+LTDAC
+/
+
+ITECH(TECH)      Industrial - Domestic - Non-energy & Bunkers Technologies 
+/
+TGDO
+TLPG
+TKRS  
+TNGS
+TNGSCCS
+TELC    
+TLGN
+THCL
+THCLCCS
+TRFO
+TOLQ
+TOGS
+TSTE
+TH2F
+* Domestic Technologies (only add those not already in Industry)
+TGSL
+TBMSWAS
+THEATPUMP
+TSOL
+TGEO
+/
+
+CCSTECH(ITECH)
+/
+TNGSCCS
+THCLCCS
+/
+
+effSET "PG and thermal plants efficiencies"  /effElc, effHeat/
+
+RENEF(TECH)        Renewable technologies in demand side !! Should these remain in EF?
+/
+*HYD     "Hydro"
+*WND     "Wind"
+*SOL     "Solar"
+TELC
+TPHEVGSL  "Plug in Hybrid engine - gasoline"
+TPHEVGDO  "Plug in Hybrid engine - diesel"
+TH2F      "Fuel Cells: Hydrogen"
+TCHEVGSL  "conventional Hybrid engine - gasoline"
+TCHEVGDO  "conventional Hybrid engine - diesel"
+TBMSWAS  "Biomass and Waste"
+*GEO     "Geothermal and other renewable sources eg. Tidal, etc."
+TNGSCCS
+THCLCCS
+**
+HTDAC
+H2DAC
+LTDAC
+TEW
+/
+
+STECH     "Technologies in supply side"
+/
+ATHLGN      "Advanced thermal monovalent lignite"
+ATHCOAL     "Advanced thermal monovalent hard coal"
+ATHGAS      "Advanced thermal monovalent natural gas"
+ATHBMSWAS   "Advanced thermal monovalent biomass and waste"
+ATHBMSCCS   "Advanced thermal monovalent biomass and waste with CCS"
+ATHOIL      "Advanced gas turbines (peak devices) diesel oil"
+PGLHYD      "Large Hydro Plants"
+PGSHYD      "Small Hydro Plants"
+PGAWND      "Wind Plants"
+PGSOL       "Solar Photovoltaic Plants"
+PGCSP       "Advanced Solar Thermal Plants"
+PGOTHREN    "Advanced geothermal Plants"
+PGANUC      "New Nuclear Designs"
+ATHCOALCCS  "Supercritical coal with CCS"
+ATHLGNCCS   "Supercritical lignite with CCS"
+ATHGASCCS   "Gas turbine combined cycle with CCS"
+PGAWNO      "Wind offshore"
+PGH2F       "Hydrogen Production"
+gsr         "gas steam reforming"
+gss         "gas steam reforming with CCS"
+weg         "water electrolysis from grid power"
+wew         "water electrolysis with wind"
+wes         "water electrolysis with solar"
+cgf         "coal gasification"
+cgs         "coal gasification with CCS"
+bgfl        "biomass gasification large scale"
+bgfls       "biomass gasification large scale with CCS"
+TSTE1AL           "Lignite powered advanced CHP"
+TSTE1AH           "Hard Coal powered advanced CHP"
+TSTE1AD           "Diesel Oil powered advanced CHP"
+*STE1AR           "Fuel Oil powered advanced CHP"
+TSTE1AG           "Natural Gas powered advanced CHP"
+TSTE1AB           "Biomass-Waste powered advanced CHP"
+TSTE1AH2F         "HYDROGEN powered FUEL CELL CHP"
+TSTE2LGN
+TSTE2OSL
+TSTE2GDO
+TSTE2NGS
+TSTE2BMS
+TSTE2GEO
+TSTE2OTH
+/
+
+TECHtoEF (TECH,EF) Fuels consumed by technologies
+/
+TGSL.(GSL,BGSL)
+TLPG.LPG
+TGDO.(GDO,BGDO,RFO,CRO)
+TNGS.(NGS,OGS,BGAS)
+TNGSCCS.NGS
+TELC.ELC
+TKRS.(KRS,BKRS)
+TETH.ETH
+TMET.MET
+TPHEVGSL.(GSL,BGSL,ELC)
+TPHEVGDO.(GDO,BGDO,ELC)
+TH2F.H2F
+TCHEVGSL.(GSL,BGSL)
+TCHEVGDO.(GDO,BGDO)     
+TLGN.LGN
+THCL.HCL
+THCLCCS.HCL
+TRFO.RFO
+TOLQ.OLQ
+TOGS.OGS
+TSTE.STE
+* Domestic Technologies (only add those not already in Transport & Industry)
+* LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC already exist in TRANSPORT or INDUSTRY technologies
+THEATPUMP.ELC
+TBMSWAS.BMSWAS
+HTDAC.(NGS,ELC)
+H2DAC.(H2F,ELC)
+LTDAC.ELC
+TEW.ELC
+TSOL.SOL
+TGEO.GEO
+/
+TTECHtoEF(TTECH,EF) Fuels consumed by transport technologies
+/
+TGSL.(GSL,BGSL)
+TLPG.LPG
+TGDO.(GDO,BGDO)
+TNGS.(NGS,BGAS)
+TELC.ELC
+TKRS.(KRS,BKRS)
+TETH.ETH
+*TMET.MET
+*TBGDO.BGDO
+TPHEVGSL.(GSL,BGSL,ELC)
+TPHEVGDO.(GDO,BGDO,ELC)
+TH2F.H2F
+TCHEVGSL.(GSL,BGSL)
+TCHEVGDO.(GDO,BGDO)
+TRFO.RFO
+/
+
+ITECHtoEF(ITECH,EF) Fuels consumed by industrial technologies
+/
+TGDO.(GDO,BGDO,CRO)
+TLPG.LPG
+TKRS.(KRS,BKRS)  
+TNGS.(NGS,BGAS)
+TNGSCCS.NGS
+TELC.ELC    
+TLGN.LGN
+THCL.HCL
+THCLCCS.HCL
+TRFO.RFO
+TOLQ.OLQ
+TOGS.OGS
+TGSL.(GSL,BGSL)
+TSTE.STE
+* Domestic Technologies (only add those not already in Transport & Industry)
+* LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC already exist in TRANSPORT or INDUSTRY technologies
+TH2F.H2F
+TBMSWAS.BMSWAS
+THEATPUMP.ELC
+TSOL.SOL
+TGEO.GEO
+/
+
+PLUGIN(TTECH) Plug-in hybrids
+/
+TPHEVGSL
+TPHEVGDO
+/
+
+CHYBV(TTECH) CONVENTIONAL hybrids
+/
+TCHEVGSL
+TCHEVGDO
+/
+
+IMPEXP "Imports/Exports" /IMPORTS,EXPORTS/
+
+SSECTTECH(SSBS,STECH) "Link between Model Supply Subsectors and Technologies"
+
+SSECTTECH(SSBS,STECH) "Link between Model Supply Subsectors and Technologies"
+
+SECTTECH(DSBS,TECH) Link between Model Demand Subsectors and Technologies
+/
+*PC.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO,CHEVGSL,CHEVGDO)
+*PB.(GSL,LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGSL,PHEVGDO)
+*GU.(LPG,GDO,NGS,ELC,ETH,MET,BGDO,PHEVGDO,CHEVGDO)
+*(PT,GT).(GDO,ELC,MET)
+PC.(TGSL,TLPG,TGDO,TNGS,TELC,TPHEVGSL,TPHEVGDO,TCHEVGSL,TCHEVGDO,TH2F)
+PB.(TLPG,TGSL,TGDO,TNGS,TELC,TH2F)
+GU.(TLPG,TGSL,TGDO,TNGS,TELC,TCHEVGDO,TH2F) !! Removed GSL and PHEVGSL
+(PT,GT).(TGDO,TELC)
+PA.(TKRS,TH2F)
+(PN,GN).(TGDO,TH2F,TRFO)
+BAV.(TKRS,TH2F)
+BMAR.(TGDO,TRFO,TH2F)
+(IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(TLGN,THCL,TGDO,TGSL,TRFO,TLPG,TKRS,TOLQ,TNGS,TOGS,
+                                TELC,TBMSWAS,TSTE,TH2F)
+(IS,BM,CH).(TNGSCCS,THCLCCS)
+(HOU,SE).(THCL,TLPG,TKRS,TGDO,TNGS,TOGS,TBMSWAS,TELC,TSTE,TGSL,TLGN,TOLQ,TRFO,TSOL,TGEO)
+(HOU,SE).(THEATPUMP)
+(PCH,NEN).(TLGN,THCL,TGDO,TRFO,TLPG,TOLQ,TNGS,TOGS)
+ICT.TELC
+DAC.(HTDAC,H2DAC,LTDAC)
+EW.TEW
+/
+
+SECtoEF(SBS,EF) Link between Model Subsectors and Energy Forms consumed
+/
+PG.(LGN,HCL,CRO,GSL,BGSL,KRS,BKRS,GDO,BGDO,RFO,LPG,OLQ,NGS,OGS,NUC,HYD,BMSWAS,SOL,GEO,WND,H2F)
+CHP.(LGN,HCL,GDO,RFO,NGS,OGS,NUC,HYD,BMSWAS,SOL,GEO,WND)
+H2P.(HCL,LGN,RFO,GDO,NGS,OGS,NUC,BMSWAS,SOL,WND,ELC)
+STEAMP.(HCL,LGN,CRO,GDO,BGDO,GSL,BGSL,KRS,BKRS,RFO,LPG,NGS,OGS,OLQ,NUC,GEO,BMSWAS,ELC,H2F)
+SLD.(LGN,HCL,GSL,GDO,BGDO,RFO,OLQ,NGS,OGS,BMSWAS,SOL,CRO,LPG,KRS,ELC,STE)
+LQD.(LGN,HCL,GSL,GDO,BGDO,RFO,OLQ,NGS,OGS,BMSWAS,SOL,CRO,LPG,KRS,ELC,STE)
+GAS.(HCL,GSL,GDO,BGDO,RFO,OLQ,NGS,OGS,BMSWAS,SOL,CRO,LPG,KRS,ELC,STE)
+/
+
+PGALL(STECH)     Power Generation Plant Types
+/
+*CTHLGN Conventional thermal monovalent lignite
+*CTHHCL Conventional thermal monovalent hard coal
+*CTHRFO Conventional thermal monovalent fuel oil
+*CTHNGS Conventional thermal monovalent natural gas
+*CTHBMSWAS Conventional thermal monovalent biomass and waste
+ATHLGN  Advanced thermal monovalent lignite
+ATHCOAL Advanced thermal monovalent hard coal
+*ATHRFO Advanced thermal monovalent fuel oil
+ATHGAS Advanced thermal monovalent natural gas
+ATHBMSWAS Advanced thermal monovalent biomass and waste
+ATHBMSCCS
+*SUPCRL  Supercritical lignite
+*SUPCR  Supercritical coal
+*FBCLGN Fluidised bed lignite
+*FBCHCL Fluidised bed hard coal
+*IGCCLGN Integrated gasification combine cycle lignite
+*IGCCHCL Integrtaed gasification combine cycle hard coal
+*IGCCBMS Integrated gasification combine cycle biomass
+*CCCGT  Conventional combined cycle gas turbine
+*ACCGT  Advanced combined cycle gas turbine
+*ACCHT  Advanced combined cycle hydrogen combustion turbine
+*ICEH2  Internal combustion engine powered by H2
+*CGTGDO Conventional gas turbines (peak devices) diesel oil
+*CGTNGS Conventional gas turbines (peak devices) natural gas
+ATHOIL Advanced gas turbines (peak devices) diesel oil
+*AGTNGS Advanced gas turbines (peak devices) natural gas
+*FC1  Fuel cells
+*FC2  Advanced Fuel cells
+*PGNUC Nuclear Plants
+PGLHYD Large Hydro Plants
+PGSHYD Small Hydro Plants
+PGAWND Wind Plants
+PGSOL Solar Photovoltaic Plants
+*PGASHYD Advanced Small Hydro Plants
+*PGAWND Advanced Wind Plants
+PGCSP Advanced Solar Thermal Plants
+*PGADPV Advanced Building Integrated PV Plants
+PGOTHREN Advanced geothermal Plants
+PGANUC New Nuclear Designs
+ATHCOALCCS Supercritical coal with CCS
+ATHLGNCCS Supercritical lignite with CCS
+*PGACGSL Integrated lignite gasification with CCS
+*PGACGS Integrated coal gasification with CCS
+ATHGASCCS Gas turbine combined cycle with CCS
+PGAWNO Wind offshore
+PGH2F
+/
+
+CCS(PGALL) Plants which can be equipped with CCS
+/
+ATHCOALCCS
+ATHLGNCCS
+*PGACGSL
+*PGACGS
+ATHGASCCS
+ATHBMSCCS
+/
+
+
+NOCCS(PGALL) Plants which can be equipped with CCS but they are not
+/
+ATHLGN
+ATHCOAL
+ATHGAS
+*IGCCLGN
+*ACCGT
+ATHBMSWAS
+/
+
+CCS_NOCCS(PGALL,PGALL) mapping
+/
+ATHLGNCCS.ATHLGN
+ATHCOALCCS.ATHCOAL
+ATHGASCCS.ATHGAS
+*PGACGS.IGCCHCL
+*PGAGGS.ACCGT
+ATHBMSCCS.ATHBMSWAS
+/
+
+PGREN(PGALL)    REN PLANTS with Saturation                /PGLHYD,PGSHYD,PGAWND,PGSOL,PGCSP,PGOTHREN,PGAWNO/
+PGRENSW(PGALL)   Solar and wind Plants                     /PGSOL,PGCSP,PGAWND,PGAWNO/
+PGRENEF          Renewable energy forms in power generation  /HYD,WND,SOL,BMSWAS,GEO/
+
+PGALLtoEF(PGALL,EFS)     Correspondence between plants and energy forms
+/
+(ATHLGN,ATHLGNCCS).LGN
+(ATHCOAL,ATHCOALCCS).HCL
+*(ATHOIL).GDO
+*(ATHGAS,ATHGASCCS).NGS
+ATHOIL.(GSL,BGSL,GDO,BGDO,KRS,BKRS,CRO,OLQ,RFO,LPG)
+(ATHGAS,ATHGASCCS).(NGS,OGS)
+(ATHBMSWAS,ATHBMSCCS).BMSWAS
+PGANUC.NUC
+(PGLHYD,PGSHYD).HYD
+(PGAWND,PGAWNO).WND
+(PGSOL,PGCSP).SOL
+PGOTHREN.GEO
+PGH2F.H2F
+*(ACCHT,ICEH2,FC2).H2F
+/
+
+
+PGSCRN(PGALL)     New plants involved in endogenous scrapping (these plants are not scrapped)
+/
+ATHBMSWAS
+*SUPCRL
+*SUPCR
+*FBCLGN
+*FBCHCL
+*IGCCLGN
+*IGCCHCL
+*IGCCBMS
+*ACCHT,ICEH2
+*FC1,FC2
+*PGNUC
+PGLHYD
+PGSHYD
+PGAWND
+PGSOL
+*PGASHYD
+*PGAWND
+PGCSP
+PGANUC
+ATHCOALCCS
+ATHLGNCCS
+*PGACGSL
+*PGACGS
+ATHGASCCS
+PGAWNO
+*PGADPV
+PGOTHREN
+ATHBMSCCS
+PGH2F
+/
+
+*           Emissions             *
+
+EMISS            "Pollutant Emissions"
+/
+CO2      "Carbon dioxide"
+CH4      "Methanio"
+N2O      "Nitrogen dioxide"
+HFC      "Hydrofluorocarbons"
+PFC      "Perfluorinated Compounds "
+SF6      "Sulfur Hexafluoride"
+/
+
+SCT_GHGtoEMISS(SCT_GHG,EMISS)  Mapping between sectors and emissions
+/
+(LGN_PRD_CH4,HCL_PRD_CH4,GAS_PRD_CH4,TERT_CH4,TRAN_CH4,AG_CH4,SE_CH4).CH4
+(TRAN_N2O,TX_N2O,AG_N2O).N2O
+(OI_PFC,NF_PFC).PFC
+OI_HFC.HFC
+BM_CO2.CO2
+(PG_SF6,OI_SF6).SF6
+/
+
+CO2SEQELAST Elasticities for CO2 sequestration cost curve
+/
+POT      MAXIMUM POTENTIAL
+sig_a     "sigmoid a parameter (steepness of the curve)"
+sig_b     "sigmoid b parameter (position of the curve)"
+seq_min   "Minimum sequestration cost"
+seq_max   "Maximum sequestration cost"
+/
+
+
+*   DUMMY SETS USED FOR DATA INPUT  *
+
+ETYPES           "Elasticities types"
+/a,b1,b2,b3,b4,b5,c,c1,c2,c3,c4,c5,aend,b3end,b4end/
+
+ECONCHAR         "Technical - Economic characteristics for demand technologies"
+/
+IC       "Capital Cost"
+FC       "Fixed O&M Cost"
+VC       "Variable Cost"
+LFT      "Technical Lifetime"
+USC   "Useful Energy Conversion Factor"
+/
+
+
+PGECONCHAR       "Technical - economic characteristics for power generation plants"
+/
+LFT
+/
+
+SG               "S parameters in Gompertz function for passenger cars per capita"
+/S1,S2/
+
+TRANSPCHAR       "Various transport data used in equations and post-solution calculations"
+/
+KM_VEH           "Thousands km per passenger car vehicle"
+KM_VEH_TRUCK     "Thousands km per truck vehicle"
+OCCUP_CAR        "Passengers per car (car occupancy rate)"
+RES_MEXTV        "Residual for controlling the GDP-Dependent market extension of passenger cars"
+RES_MEXTF        "Residual for controlling the GDP-Independent market extension of passenger cars"
+/
+
+TRANSUSE         "Usage (average) data concerning capacity and load factor"
+/
+CAP              "Capacity in tn/vehicle or passengers/vehicle"
+LF               "Load factor"
+/
+
+TOCTSET          "Total Transformation Output and Total District Heating Output"
+/
+TOCT_ELC         "Electricity Total Transformation Output in Mtoe"
+TOCT_STE         "Steam Total Transformation Output in Mtoe"
+TONUC_ELC        "Electricity production from nuclear plants in Mtoe"
+TODH_STE         "Steam produced from District Heating Plants in Mtoe"
+/
+
+
+SUPOTH           "Indicators related to supply side"
+/
+REF_CAP          "Refineries Capacity in Mbl/day"
+REF_CAP_RES      "Residuals of Refineries Capacity"
+HCL_PPROD        "Residual of Hard Coal Primary Production"
+NGS_PPROD        "Residual of Natural Gas Primary Production"
+OIL_PPROD        "Residual of Crude Oil Primary Production"
+NGS_EXPORT       "Residual of Natural Gas Exports"
+ELC_IMP          "Ratio of electricity imports to total final demand"
+TIOTH_RES        "Residual of Total Transformation Input in Gasworks, Blast Furnances, etc."
+TOOTH_RES        "Residual of Total Transformation Output from Gasworks, etc."
+FEED_RES         "Residual for Feedstocks in Transfers"
+/
+
+PGOTH            "Various data related to power generation plants"
+/
+TOTCAP           "Total Available capacity in Base Year (GW)"
+TOTNOMCAP        "Total Nominal Available capacity in Base Year (GW)"
+PEAKLOAD         "Peak Load in Base Year (GW)"
+BASELOAD         "Base Load in Base Year (GW)"
+NON_CHP_PER      "Non-CHP capacity (percentage of total (gross) capacity)"
+CHP_CAP          "CHP Capacity (gross) in GW"
+CHP_ELC          "CHP electricity"
+*STE1CL           "Utilisation rate of Lignite powered conventional CHP"
+*STE1CH           "Utilisation rate of Hard Coal powered conventional CHP"
+*STE1CD           "Utilisation rate of Diesel Oil powered conventional CHP"
+*STE1CR           "Utilisation rate of Fuel Oil powered conventional CHP"
+*STE1CG           "Utilisation rate of Natural Gas powered conventional CHP"
+*STE1CB           "Utilisation rate of Biomass-Waste powered conventional CHP"
+* The following fuels are related with district heating efficiency
+LGN
+HCL
+GDO
+RFO
+OLQ
+NGS
+OGS
+BMSWAS
+/
+
+PGLOADTYPE(PGOTH)   "Peak and Base load of total electricity demand in GW"
+/PEAKLOAD, BASELOAD/
+
+CHPSET(PGOTH)       "Indicators related to CHP Production"                       /NON_CHP_PER,CHP_CAP/
+
+VARIOUS_LABELS /AMAXBASE, MAXLOADSH/
+
+
+PGRES
+/
+TOT_CAP_RES         "Residual on Total Capacity (Reserve margin on capacity)"
+BASE_LOAD_RES       "Residual on Base Load "
+MAX_LOAD_RES        "Residual on Peak Load (Peak Load margin)"
+/
+
+Indu_SCon_Set /Base, SHR_NSE, SH_HPELC/
+
+CHPPGSET /IC,FC,VOM,LFT,AVAIL,effElc,effThrm,MAXCHPSHARE/
+
+BALEF fuels in balance report
+/
+"Total"
+"Other Fuels"
+"Renewables"
+"Solids"
+"Hard coal"
+"Lignite"
+"Crude oil and Feedstocks"
+"Liquids"
+"Fossil Liquids"
+"Fossil"
+"Liquified petroleum gas"
+"Gasoline"
+"Kerosene"
+"Diesel oil"
+"Fuel oil"
+"Other liquids"
+"Gases"
+"Natural gas"
+"Derived gases"
+"Nuclear heat"
+"Heat"
+"Hydro"
+"Wind"
+"Solar energy"
+"Biomass"
+"Biofuels"
+"Geothermal heat"
+"Methanol"
+"Hydrogen"
+"Electricity"
+/
+
+BIOFUELS(EF)
+/BGSL,BGDO,BKRS,BGAS/
+
+BioToFossilFuel(EF,EF)  Mapping from bio fuels to fossil fuels
+/
+BGSL.GSL
+BGDO.GDO
+BKRS.KRS
+BGAS.NGS
+/
+
+BALEF2EFS(BALEF, EFS) Mapping from balance fuels to model fuels
+/
+"Total".(HCL,LGN,CRO,LPG,GSL,BGSL,KRS,BKRS,BGAS,GDO,BGDO,RFO,OLQ,NGS,OGS,NUC,STE,HYD,WND,SOL,BMSWAS,GEO,MET,ETH,H2F,ELC)
+"Solids".(HCL,LGN)
+"Hard coal".HCL
+"Lignite".LGN
+"Crude oil and Feedstocks".CRO
+"Liquids".(LPG,GSL,BGSL,KRS,BKRS,GDO,BGDO,RFO,OLQ,CRO)
+"Fossil Liquids".(LPG,GSL,KRS,GDO,RFO,OLQ,CRO)
+"Fossil".(HCL,LGN,CRO,LPG,GSL,KRS,GDO,RFO,OLQ,NGS,OGS)
+"Renewables".(HYD,WND,SOL,GEO)
+"Other fuels".(MET,ETH)
+"Liquified petroleum gas".LPG
+"Gasoline".(GSL,BGSL)
+"Kerosene".(KRS,BKRS)
+"Diesel oil".(GDO,BGDO)
+"Fuel oil".RFO
+"Other liquids".OLQ
+"Gases".(NGS,OGS,BGAS)
+"Natural gas".NGS
+"Derived gases".OGS
+"Nuclear heat".NUC
+"Heat".STE
+"Hydro".HYD
+"Wind".WND
+"Solar energy".SOL
+"Biomass".BMSWAS
+"Biofuels".(BMSWAS,BGSL,BKRS,BGDO,BGAS)
+"Geothermal heat".GEO
+"Methanol".MET
+"Hydrogen".H2F
+"Electricity".ELC
+/
+
+*         SET ASSIGNMENTS           *
+
+alias(TT, ytime);
+* TT set is used as an index to main time loop
+alias (YYTIME,ytime);
+alias(EF, EF2);
+* this alias is used in alternative transport fuels price calculations
+alias(PGALL2,PGALL);
+*this alias is used in plant dispatching equation
+alias(ITECH,ITECH2)
+
+* This alias is used in tech share equation
+alias(TTECH2,TTECH)
+
+*---
+
+
+scalar TF order of base year in set ytime;
+TF=sum((TFIRST,ytime), ord(ytime)$TFIRST(ytime));
+
+* Allocate imported fuels to fuels used in demand subsectors
+EFtoWEF(DSBS,EF,WEF)=NO;
+loop WEF do
+  loop EF$WEFMAP(EF,WEF) do
+    loop TECH$TECHtoEF(TECH,EF) do
+      loop DSBS$SECTTECH(DSBS,TECH) do
+          if not sameas(WEF,"WCOKE") then
+             EFtoWEF(DSBS,EF,WEF)=yes;
+          endif;
+      endloop;
+    endloop;
+  endloop;
+endloop;
+EFtoWEF("IS","HCL","WCOKE")=yes; !! special case for Iron and Steel -> hard coal is in fact coke
+EFtoWEF("IS","HCL","WHCL")=no; !! special case for Iron and Steel -> hard coal is in fact coke
+
+
+Parameter TECHS(DSBS) Number of technologies in transport subsectors;
+
+loop DSBS$TRANSE(DSBS) do
+     TECHS(DSBS)=0;
+     loop TECH$SECTTECH(DSBS,TECH) do
+       TECHS(DSBS) = TECHS(DSBS)+1;
+     endloop;
+endloop;
+
+alias(NAP2,NAP);
+
+ALIAS (EFS2,EFS);
+ALIAS (INDDOM2,INDDOM);
+ALIAS (YYTIME2,ytime);
+ALIAS (PGEF2,PGEF);
+* DSBS2 is a dummy alias of DSBS used as an inner summation index in the GLOBIOM
+* BMSWAS supply curve equation (Q08PriceFuelSubsecCarVal, module 08 equations.gms).
+* A separate alias is needed because DSBS is already used as an outer equation index.
+ALIAS (DSBS2,DSBS);
+
+scalar ordfirst /0/;
+ordfirst=sum((ytime,YYTIME2)$((ord(ytime)<=ord(YYTIME2)) $TFIRST(YYTIME2)),1);
+
+
+SECtoEF(DSBS,EF) = yes$SUM(TECH$(SECTTECH(DSBS,TECH) and TECHtoEF(TECH,EF)), 1);
+SECtoEF(TRANSE,EF) = yes$SUM(TTECH$(SECTTECH(TRANSE,TTECH) and TTECHtoEF(TTECH,EF)), 1);
+
+*This is equivalent with the loop above
+*SECtoEF(DSBS, EF)$(sum(TECH, SECTTECH(DSBS, TECH) * TTECHtoEF(TECH, EF))) = yes;
+SSECTTECH("PG",STECH) = yes$PGALL(STECH);
+PGEF(EFS) = yes$(sum(PGALL, PGALLTOEF(PGALL,EFS)));

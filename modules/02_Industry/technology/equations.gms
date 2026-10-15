@@ -178,15 +178,15 @@ Q02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(TIME(YTIME) and runCy(allCy) and (I
 *' OLD EQUATION: Q02ConsFuelInclHP(allCy,DSBS,EF,YTIME) --> NEW EQUATION:Q02ConsFuelIncl(allCy,DSBS,EF,YTIME)
 
 *' OLD VARIABLE: VmConsElecNonSubIndTert(allCy,INDDOM,YTIME) --> NEW VARIABLE:VmUsefulElecNonSubIndTert(allCy,DSBS,YTIME)
-Q02ConsFuel(allCy,DSBS,EFS,YTIME)$(TIME(YTIME)$((INDDOM(DSBS) or NENSE(DSBS)) and SECtoEF(DSBS,EFS))$runCy(allCy))..
-    VmConsFuel(allCy,DSBS,EFS,YTIME) 
+Q02ConsFuel(allCy,DSBS,EF,YTIME)$(TIME(YTIME)$((INDDOM(DSBS) or NENSE(DSBS)) and SECtoEF(DSBS,EF))$runCy(allCy))..
+    VmConsFuel(allCy,DSBS,EF,YTIME) 
         =E=
-    sum(ITECH$(ITECHtoEF(ITECH,EFS) and SECTTECH(DSBS,ITECH)),
-      i02ShareBlend(allCy,DSBS,ITECH,EFS,YTIME) *
+    sum(ITECH$(ITECHtoEF(ITECH,EF) and SECTTECH(DSBS,ITECH)),
+      i02ShareBlend(allCy,DSBS,ITECH,EF,YTIME) *
       V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) *
       i02util(allCy,DSBS,ITECH,YTIME)
     ) +
-    V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(INDDOM(DSBS) and not sameas("AG",DSBS) and ELCEF(EFS));
+    V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(INDDOM(DSBS) and not sameas("AG",DSBS) and ELCEF(EF));
 
 *' Average efficiency of substitutable demand
 Q02IndAvrEffFinalUseful(allCy,DSBS,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(DSBS))$runCy(allCy))..
