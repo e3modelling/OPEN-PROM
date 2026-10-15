@@ -30,7 +30,48 @@ reportOutput <- function(
     stripScenarioTimestamp = stripScenarioTimestamp,
     PngFiles = PngFiles) {
     
-  # setConfig(regionmapping = mapping)
+  mappings <- vapply(runpath, function(path) {
+    metadata_path <- file.path(path, "metadata.json")
+    if (!file.exists(metadata_path)) return(NA_character_)
+    metadata <- jsonlite::fromJSON(metadata_path, simplifyVector = FALSE)
+    metadata[["Model Information"]][["Region Mapping"]][[1]]
+  }, character(1))
+  if (length(unique(stats::na.omit(mappings))) == 1L) {
+    setConfig(regionmapping = stats::na.omit(mappings)[[1]])
+  }
+
+  emissions_mif_backups <- character()
+  on.exit({
+    for (mif_path in names(emissions_mif_backups)) {
+      file.copy(emissions_mif_backups[[mif_path]], mif_path, overwrite = TRUE)
+    }
+    unlink(emissions_mif_backups)
+  }, add = TRUE)
+
+  for (path in runpath) {
+    gdx_path <- file.path(path, "blabla.gdx")
+    mif_path <- file.path(path, "iEmissions_magpie.mif")
+    if (!file.exists(gdx_path) || !file.exists(mif_path)) next
+
+    years <- c(
+      as.character(gdx::readGDX(gdx_path, "datay")),
+      as.character(gdx::readGDX(gdx_path, "an"))
+    )
+    years <- paste0("y", years)
+    emissions_mif <- magclass::read.report(mif_path)
+    for (scenario in names(emissions_mif)) {
+      for (model in names(emissions_mif[[scenario]])) {
+        emissions_mif[[scenario]][[model]] <- emissions_mif[[scenario]][[model]][, years, ]
+      }
+    }
+
+    backup_path <- tempfile(fileext = ".mif")
+    if (!file.copy(mif_path, backup_path)) {
+      stop("Could not back up emissions input before report conversion: ", mif_path)
+    }
+    emissions_mif_backups[[mif_path]] <- backup_path
+    magclass::write.report(emissions_mif, file = mif_path, ndigit = 15)
+  }
 
   reports <- convertGDXtoMIF(runpath,
     mif_name = mif_name,

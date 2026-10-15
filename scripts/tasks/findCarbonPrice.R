@@ -383,7 +383,7 @@ changeCarbonPriceFromYear <- 2026 # default first year the price is scaled, over
 
 # Model scenario passed to GAMS via --fScenario (overrides $evalGlobal fScenario in main.gms):
 #   0 = No carbon price, 1 = NPi_Default, 2 = 1.5C, 3 = 2C
-selectedScenario <- 2
+selectedScenario <- 3
 
 # --fEndY caps the solve horizon at selectedYear instead of always running to 2100, so
 # shortening a run is just a matter of lowering selectedYear (use --fEndY, never

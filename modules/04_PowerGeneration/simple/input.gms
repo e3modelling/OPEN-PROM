@@ -138,7 +138,7 @@ JPN.PGSOL.YTIME 0.06
 / ;
 $$offtext
 *---
-i04TechLftPlaType(runCy,PGALL) = i04DataTechLftPlaType(PGALL, "LFT");
+i04TechLftPlaType(runCy,PGALL) = i04DataTechLftPlaType(PGALL, "LFT") + 1;
 i04TechLftPlaType(runCy,"PGH2F") = 20;
 *---
 i04GrossCapCosSubRen(runCy,PGALL,YTIME) = i04GrossCapCosSubRen(runCy,PGALL,YTIME)/1000;

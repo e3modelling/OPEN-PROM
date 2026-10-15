@@ -45,9 +45,9 @@ Scalars
 i06CCSStorageTaxScale                                 "Tax at the cumulative storage reference quantity (US$2015/tCO2)" /1000/
 *' #PARAM_CDR The 2 following scalars are responsible for the primary parameterization of the CDR deployment.
 *' S06EmissPercCDR is responsible for the response to the residual emissions. In ambitious scenarios, this reflects the pre-net-zero phase
-*' Proposed values for S06EmissPercCDR between 0.005 - 0.02.
+*' Proposed values for S06EmissPercCDR between 0.002 - 0.02.
 *' S06CapFacMinNewCDR is responsible for the minimum deployment of CDR technologies. In ambitious scenarios, this reflects the post-net-zero phase.
-*' Proposed values for S06CapFacMinNewCDR between 0.005 - 0.025.
+*' Proposed values for S06CapFacMinNewCDR between 0.005 - 0.04.
 S06EmissPercCDR                                        "The percentage of emissions that needs to be captured by new CDR equipment" /0.004/
 S06CapFacMinNewCDR                                     "The minimum level of CDR capacity expansion as a percentage of last year's capacity" /0.03/
 ;
