@@ -7,9 +7,9 @@ V10CumCapGlobal.FX(LCTECH,YTIME)$TIME(YTIME) = V10CumCapGlobal.L(LCTECH,YTIME)$T
 $endif.curves
 * Export model results to GDX file
 $ifthen.calib %Calibration% == MatCalibration
-execute_unload "outputCalib.gdx", V03ProdPrimary, V03ConsGrssInl, V03OutTotTransf, VmImpNetEneBrnch, V04GapGenCapPowerDiff, V04CapElecNonCHP, ODummyObj, ODummyObjPGALL, ODummyObjTRANSE, ODummyObjINDDOMShares, ODummyObjINDDOMFinalEnergy, VmCapElec, VmProdElec, V04ProdElecEstCHP, i04MatFacPlaAvailCap, i04ScaleEndogScrap, imMatrFactor, V04SharePowPlaNewEq, t04SharePowPlaNewEq, V04ShareTechPG, V04CostHourProdInvDec, V04ShareSatPG, V01ShareTechTr, V04DemElecTot, t01NewShareStockPC, iCarbValYrExog, i02ScaleEndogScrap, i02CalibUsefulEnergy, VmConsFuelShare, t02SharesFuelBuildings, t02FinalEnergyDOMSE, VmFinalEnergy, t02FinalEnergyINDSE, t02SharesFuelINDSE;
+execute_unload "outputCalib.gdx", V03ProdPrimary, V03ConsGrssInl, V03OutTotTransf, VmImpNetEneBrnch, V04GapGenCapPowerDiff, V04CapElecNonCHP, ODummyObj, ODummyObjPGALL, ODummyObjTRANSE, ODummyObjINDDOMShares, ODummyObjINDDOMFinalEnergy, VmCapElec, VmProdElec, V04ProdElecEstCHP, i04MatFacPlaAvailCap, i04ScaleEndogScrap, imMatrFactor, V04SharePowPlaNewEq, t04SharePowPlaNewEq, V04ShareTechPG, V04CostHourProdInvDec, V04ShareSatPG, V01ShareTechTr, V04DemElecTot, t01NewShareStockPC, iCarbValYrExog, i02ScaleEndogScrap, i02CalibUsefulEnergy, t02SharesFuelBuildings, t02FinalEnergyDOMSE, VmFinalEnergy, t02FinalEnergyINDSE, t02SharesFuelINDSE;
 $else.calib
-execute_unload "outputData.gdx", ODummyObj, VmConsFuel, VmCapElec, V04CapElecNominal, VmProdElec, VmPriceFuelSubsecCarVal;
+execute_unload "outputData.gdx", ODummyObj, VmCapElec, V04CapElecNominal, VmProdElec, VmPriceFuelSubsecCarVal;
 $endif.calib
 endloop;  !! close outer iteration loop (time steps)
 putclose fStat;

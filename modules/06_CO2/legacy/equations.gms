@@ -24,15 +24,7 @@ Q06CO2CaptureCCS(allCy,SBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECtoEF(SBS,EF
         VmProdH2(allCy,H2TECH,YTIME) * 
         (i05InputOverOutH2ProdFeed(allCy,H2TECH,EFS,YTIME) + i05InputOverOutH2ProdEnergy(allCy,H2TECH,EFS,YTIME)) *
         V05CaptRateH2(allCy,H2TECH,YTIME)
-      )$sameas("H2P", SBS) +
-      sum(DSBS$sameas(DSBS,SBS),
-        sum(CCSTECH$SECTTECH(DSBS,CCSTECH),
-            i02ShareBlend(allCy,DSBS,CCSTECH,EFS,YTIME) *
-            V02EquipCapTechSubsec(allcy,DSBS,CCSTECH,YTIME) * 
-            i02util(allCy,DSBS,CCSTECH,YTIME) * 
-            imCO2CaptRateIndustry(allCy,CCSTECH,YTIME)
-        )
-      )$INDSE1(SBS)
+      )$sameas("H2P", SBS)
     ) *
     (imCo2EmiFac(allCy,SBS,EFS,YTIME) + 4.17$sameas("BMSWAS",EFS));
 

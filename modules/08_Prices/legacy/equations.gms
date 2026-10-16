@@ -156,8 +156,8 @@ Q08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)$(SECtoEF(DSBS,EF) $TIME(YTIME) $r
 V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)
       =E=
     SUM(EFS$sameas(EF,EFS),
-      (VmFinalEnergy(allCy,DSBS,EFS,YTIME) - V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$ELCEF(EFS) + 1e-6) /
-      SUM(EFS2$SECtoEF(DSBS,EFS2), (VmFinalEnergy(allCy,DSBS,EFS2,YTIME) - V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$ELCEF(EFS2)) + 1e-6)
+      (VmFinalEnergy(allCy,DSBS,EFS,YTIME) + 1e-6) /
+      SUM(EFS2$SECtoEF(DSBS,EFS2), VmFinalEnergy(allCy,DSBS,EFS2,YTIME) + 1e-6)
     );
   
 Q08PriceCarbon(allCy,SBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
@@ -186,9 +186,7 @@ Q08PriceFuelAvgSub(allCy,DSBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q08PriceElecInd(allCy,TCHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmPriceElecInd(allCy,TCHP,YTIME) 
         =E=
-    (
-      V02IndxElecIndPrices(allCy,TCHP,YTIME) + smElecToSteRatioChp - SQRT( SQR(V02IndxElecIndPrices(allCy,TCHP,YTIME)-smElecToSteRatioChp))
-    )/2;
+    1;
 
 Q08CostAvgProd(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCostAvgProd(allCy,EFS,YTIME)

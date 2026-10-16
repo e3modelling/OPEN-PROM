@@ -486,6 +486,8 @@ BKRS    "Biokerosene"
 BGAS    "Biogas"
 H2F     "Hydrogen"
 ELC     "Electricity"
+BFG
+COKE
 /
 
 REFORM(EF) FUELS CONSIDERED IN PRICE REFORM
@@ -561,6 +563,8 @@ ELC     "Electricity"
 *EGSL    "Synthetic Gasoline"
 *EBGDO   "Synthetic Diesel"
 *EKRS    "Synthetic Kerosene"
+BFG
+COKE
 /
 
 EFtoEFS(EF,EFS)    Fuel Aggregation for Supply Side
@@ -682,6 +686,8 @@ TEW
 *HPTSOL
 *HPTWND
 *HPTELC
+BOF     "Blast furnace basic oxygen furnace for primary steel production"
+EAF     "best available tech direct reduction electric arc furnace fed ny natural gas for primary steel production"
 /
 
 TTECH(TECH)      Transport Technologies
