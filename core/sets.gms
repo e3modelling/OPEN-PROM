@@ -486,8 +486,9 @@ BKRS    "Biokerosene"
 BGAS    "Biogas"
 H2F     "Hydrogen"
 ELC     "Electricity"
-BFG
-COKE
+BFG     "Blast furnace gas"
+COKE    "Coke for Iron and Steel"
+COG     "Coke oven gas"
 /
 
 REFORM(EF) FUELS CONSIDERED IN PRICE REFORM
@@ -565,6 +566,7 @@ ELC     "Electricity"
 *EKRS    "Synthetic Kerosene"
 BFG
 COKE
+COG
 /
 
 EFtoEFS(EF,EFS)    Fuel Aggregation for Supply Side

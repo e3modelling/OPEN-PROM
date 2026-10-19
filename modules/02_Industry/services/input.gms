@@ -7,6 +7,18 @@ $include "./iFuelConsICT.csv"
 $offdelim
 ;
 *---
+table i02ISTransfInEF(allCy,IS_TRANSF,EFS,YTIME)	      ""	
+$ondelim
+$include"./iInpFullTransfProcess.csv"
+$offdelim
+;
+*---
+table i02ISTransfOutEF(allCy,IS_TRANSF,EFS,YTIME)	      ""	
+$ondelim
+$include"./iOutFullTransfProcess.csv"
+$offdelim
+;
+*---
 imTotFinEneDemSubBaseYr(runCy,TRANSE,YTIME)  = 1;
 imTotFinEneDemSubBaseYr(runCy,INDSE,YTIME)   = 1;
 imTotFinEneDemSubBaseYr(runCy,DOMSE,YTIME)   = 1;

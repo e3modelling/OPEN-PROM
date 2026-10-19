@@ -117,6 +117,7 @@ Q03ConsGrssInl(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       VmConsFiEneSec(allCy,SSBS,EFS,YTIME) +
       V03InpTotTransf(allCy,SSBS,EFS,YTIME)
     ) +
+    SUM(IS_TRANSF,V02ISTransfInEF(allCy,IS_TRANSF,EFS,YTIME)) +
     VmLossesDistr(allCy,EFS,YTIME) - 
     V03Transfers(allCy,EFS,YTIME); 
 
@@ -187,6 +188,7 @@ Q03FinalEnergy(allCy,DSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$(SECtoEF(DSBS,E
     VmFinalEnergy(allCy,DSBS,EFS,YTIME)
         =E= 
     SUM(TRANSE$sameas(TRANSE,DSBS),V01ConsFuelTransport(allCy,TRANSE,EFS,YTIME)) +
+    SUM((INDDOM,IND_SERVS)$(sameas(INDDOM,DSBS) and INDDOMtoSERVS(INDDOM,IND_SERVS)),V02ConsFuel(allCy,INDDOM,IND_SERVS,EFS,YTIME)) +
 *    SUM((INDDOM,IND_SERVS)$(sameas(INDDOM,DSBS) and INDDOMtoSERVS(INDDOM,IND_SERVS)),V02ConsFuel(allCy,INDDOM,IND_SERVS,YTIME)) +
     SUM(AGRI_MODES,V12ConsFuel(allCy,AGRI_MODES,EFS,YTIME))$sameas("AG",DSBS) +
     sum(DACTECH$TECHtoEF(DACTECH,EFS),VmConsFuelTechCDRProd(allCy,DACTECH,EFS,YTIME))$sameas(DSBS,"DAC") +

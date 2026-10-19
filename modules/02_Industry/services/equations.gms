@@ -71,3 +71,13 @@ Q02ConsFuel(allCy,INDDOM,IND_SERVS,EF,YTIME)$(TIME(YTIME) and runCy(allCy) and I
       i02SpecificFuelConsData(allCy,INDDOM,IND_SERVS,INDITECH,"%fBaseY%") *
       i02DataShareBlend(allCy,INDDOM,IND_SERVS,INDITECH,EF,"%fBaseY%")
     );
+
+Q02ISTransfOutEF(allCy,IS_TRANSF,EFS,YTIME)$(TIME(YTIME) and runCy(allCy) and IS_TRANSF_OUT(IS_TRANSF,EFS))..
+    V02ISTransfOutEF(allCy,IS_TRANSF,EFS,YTIME)
+        =E=
+    V03ConsGrssInl(allCy,EFS,YTIME) - VmImpNetEneBrnch(allCy,EFS,YTIME);
+
+Q02ISTransfInEF(allCy,IS_TRANSF,EFS,YTIME)$(TIME(YTIME) and runCy(allCy) and IS_TRANSF_IN(IS_TRANSF,EFS))..
+    V02ISTransfInEF(allCy,IS_TRANSF,EFS,YTIME)
+        =E=
+    0;
