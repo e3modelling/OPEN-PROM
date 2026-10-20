@@ -92,7 +92,7 @@ Q02ISTransfOutEF(allCy,IS_TRANSF,EFS,YTIME)$(TIME(YTIME) and runCy(allCy) and IS
 Q02ISTransfInEF(allCy,IS_TRANSF,EFS,YTIME)$(TIME(YTIME) and runCy(allCy))..
     V02ISTransfInEF(allCy,IS_TRANSF,EFS,YTIME)
         =E=
-    i02DataTransfInputISratio(allCy,IS_TRANSF,EFS,"%fBaseY%") *
+    i02ratioTransfInputIS(allCy,IS_TRANSF,EFS,"%fBaseY%") *
     SUM(EFS2$IS_TRANSF_OUT(IS_TRANSF,EFS2),
       V02ISTransfOutEF(allCy,IS_TRANSF,EFS2,YTIME)
     );
@@ -100,7 +100,10 @@ Q02ISTransfInEF(allCy,IS_TRANSF,EFS,YTIME)$(TIME(YTIME) and runCy(allCy))..
 Q02ISownEnergyTransf(allCy,IS_TRANSF,EFS,YTIME)$(TIME(YTIME) and runCy(allCy))..
     V02ISownEnergyTransf(allCy,IS_TRANSF,EFS,YTIME)
         =E=
-    0;
+    i02ratioOwnEnergyTransfIS(allCy,IS_TRANSF,EFS,"%fBaseY%") *
+    SUM(EFS2$IS_TRANSF_OUT(IS_TRANSF,EFS2),
+      V02ISTransfOutEF(allCy,IS_TRANSF,EFS2,YTIME)
+    );
 
 $ontext
 Q02ShareBlend(allCy,AGRI_MODES,AGRITECH,EFS,YTIME)$(TIME(YTIME)$runCy(allCy)$INDDOMtoSERVS(INDDOM,IND_SERVS)$SERVStoTECH(IND_SERVS,INDITECH)$INDITECHTOEF(INDITECH,EFS))..
