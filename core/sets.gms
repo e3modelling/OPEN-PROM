@@ -750,12 +750,6 @@ TSOL
 TGEO
 /
 
-CCSTECH(ITECH)
-/
-TNGSCCS
-THCLCCS
-/
-
 effSET "PG and thermal plants efficiencies"  /effElc, effHeat/
 
 RENEF(TECH)        Renewable technologies in demand side !! Should these remain in EF?
