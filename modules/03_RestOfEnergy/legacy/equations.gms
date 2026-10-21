@@ -69,7 +69,7 @@ Q03InpTotTransf(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECtoEF(SSBS,E
     )$sameas("STEAMP",SSBS) +
     (
       i03InputEffSupply(allCy,SSBS,EFS,"%fBaseY%") * 
-      SUM(EFS2, V03OutTotTransf(allCy,SSBS,EFS2,YTIME))
+      (SUM(EFS2, V03OutTotTransf(allCy,SSBS,EFS2,YTIME) - SUM(IS_TRANSF,V02ISTransfOutEF(allCy,IS_TRANSF,EFS2,YTIME))$sameas("SLD",SSBS)))
     )$(sameas(SSBS,"GAS") or sameas(SSBS,"SLD") or sameas(SSBS,"LQD")) +
     (SUM(H2TECH$H2TECHtoFEEDSTOCK(H2TECH,EFS),VmProdH2(allCy,H2TECH,YTIME) * i05InputOverOutH2ProdFeed(allCy,H2TECH,EFS,YTIME)))$sameas("H2P",SSBS);    
 
@@ -93,7 +93,8 @@ Q03OutTotTransf(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$runCy(allCy))..
       (1-i03RatioPrimaryFuels(allCy,EFS,"%fBaseY%")) *
       (V03ConsGrssInl(allCy,EFS,YTIME) - VmImpNetEneBrnch(allCy,EFS,YTIME))
     )$(SECtoEFPROD(SSBS,EFS) and (sameas("LQD",SSBS) or sameas("SLD",SSBS) or sameas("GAS",SSBS))) +
-    VmDemTotH2(allCy,YTIME)$(sameas(EFS, "H2F") and sameas("H2P",SSBS));
+    VmDemTotH2(allCy,YTIME)$(sameas(EFS, "H2F") and sameas("H2P",SSBS)) +
+    SUM(IS_TRANSF,V02ISTransfOutEF(allCy,IS_TRANSF,EFS,YTIME))$sameas("SLD",SSBS);
 
 *' The equation calculates the transfers of a specific energy branch in a given scenario and year.
 *' The result is computed based on a complex formula that involves the previous year's transfers,
@@ -117,7 +118,10 @@ Q03ConsGrssInl(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       VmConsFiEneSec(allCy,SSBS,EFS,YTIME) +
       V03InpTotTransf(allCy,SSBS,EFS,YTIME)
     ) +
-    SUM(IS_TRANSF,V02ISTransfInEF(allCy,IS_TRANSF,EFS,YTIME)) +
+    SUM(IS_TRANSF,
+      V02ISTransfInEF(allCy,IS_TRANSF,EFS,YTIME) +
+      V02ISownEnergyTransf(allCy,IS_TRANSF,EFS,YTIME)
+    ) +
     VmLossesDistr(allCy,EFS,YTIME) - 
     V03Transfers(allCy,EFS,YTIME); 
 
@@ -188,7 +192,7 @@ Q03FinalEnergy(allCy,DSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$(SECtoEF(DSBS,E
     VmFinalEnergy(allCy,DSBS,EFS,YTIME)
         =E= 
     SUM(TRANSE$sameas(TRANSE,DSBS),V01ConsFuelTransport(allCy,TRANSE,EFS,YTIME)) +
-    SUM((INDDOM,IND_SERVS)$(sameas(INDDOM,DSBS) and INDDOMtoSERVS(INDDOM,IND_SERVS)),V02ConsFuel(allCy,INDDOM,IND_SERVS,EFS,YTIME)) +
+    !!SUM((INDDOM,IND_SERVS)$sameas(INDDOM,DSBS),V02ConsFuel(allCy,INDDOM,IND_SERVS,EFS,YTIME)) +
     SUM(AGRI_MODES,V12ConsFuel(allCy,AGRI_MODES,EFS,YTIME))$sameas("AG",DSBS) +
     sum(DACTECH$TECHtoEF(DACTECH,EFS),VmConsFuelTechCDRProd(allCy,DACTECH,EFS,YTIME))$sameas(DSBS,"DAC") +
     VmConsFuelTechCDRProd(allCy,"TEW",EFS,YTIME)$sameas(DSBS,"EW");   

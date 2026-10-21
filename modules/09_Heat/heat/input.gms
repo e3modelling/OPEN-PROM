@@ -175,14 +175,14 @@ i09AvailRateSteProd(TSTEAM,YTIME) = imDataChpPowGen(TSTEAM,"AVAIL",YTIME);
 *---
 i09PowToHeatRatio(TSTEAM,YTIME) = i09EffSteElc(TSTEAM,YTIME) / i09EffSteThrm(TSTEAM,YTIME);
 *---
-i09ShareFuel(runCy,TDHP,EFS,YTIME)$TSTEAMTOEF(TDHP,EFS) = 
+i09ShareFuel(runCy,TDHP,EFS,YTIME)$(DATAY(YTIME) and TSTEAMTOEF(TDHP,EFS)) = 
 (
-  (i03InpTotTransfProcess(runCy,"STEAMP",EFS,"%fBaseY%") - 1e-6)/ 
-  SUM(EFS2$TSTEAMTOEF(TDHP,EFS2),i03InpTotTransfProcess(runCy,"STEAMP",EFS2,"%fBaseY%") - 1e-6)
-)$SUM(EFS2$TSTEAMTOEF(TDHP,EFS2),i03InpTotTransfProcess(runCy,"STEAMP",EFS2,"%fBaseY%") - 1e-6);
+  (i03InpTotTransfProcess(runCy,"STEAMP",EFS,YTIME))/ 
+  SUM(EFS2$TSTEAMTOEF(TDHP,EFS2),i03InpTotTransfProcess(runCy,"STEAMP",EFS2,YTIME))
+)$SUM(EFS2$TSTEAMTOEF(TDHP,EFS2),i03InpTotTransfProcess(runCy,"STEAMP",EFS2,YTIME));
 
-i09ShareFuel(runCy,TCHP,EFS,YTIME)$TSTEAMTOEF(TCHP,EFS) = 
+i09ShareFuel(runCy,TCHP,EFS,YTIME)$(DATAY(YTIME) and TSTEAMTOEF(TCHP,EFS)) = 
 (
-  (i03InpTotTransfProcess(runCy,"CHP",EFS,"%fBaseY%") - 1e-6) / 
-  SUM(EFS2$TSTEAMTOEF(TCHP,EFS2),i03InpTotTransfProcess(runCy,"CHP",EFS2,"%fBaseY%") - 1e-6)
-)$SUM(EFS2$TSTEAMTOEF(TCHP,EFS2),i03InpTotTransfProcess(runCy,"CHP",EFS2,"%fBaseY%") - 1e-6);
+  (i03InpTotTransfProcess(runCy,"CHP",EFS,YTIME)) / 
+  SUM(EFS2$TSTEAMTOEF(TCHP,EFS2),i03InpTotTransfProcess(runCy,"CHP",EFS2,YTIME))
+)$SUM(EFS2$TSTEAMTOEF(TCHP,EFS2),i03InpTotTransfProcess(runCy,"CHP",EFS2,YTIME));

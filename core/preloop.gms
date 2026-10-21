@@ -41,7 +41,7 @@ VmPriceCarbon.FX(runCy,SBS,EFS,YTIME)$DATAY(YTIME) = 1e-3 * iCarbValYrExog(runCy
 *---
 VmPriceFinal.LO(runCy,DSBS,EFS,YTIME) = 0;
 VmPriceFinal.L(runCy,DSBS,EFS,YTIME) = 1;
-VmPriceFinal.FX(runCy,DSBS,EFS,YTIME)$(DATAY(YTIME) and SECtoEF(DSBS,EFS))= imFuelPrice(runCy,DSBS,EFS,YTIME);
+VmPriceFinal.FX(runCy,DSBS,EFS,YTIME)$(DATAY(YTIME) and SECtoEF(DSBS,EFS)) = imFuelPrice(runCy,DSBS,EFS,YTIME);
 VmPriceFinal.FX(runCy,DSBS,EFS,YTIME)$(not SECtoEF(DSBS,EFS)) = 0;
 *---
 VmPriceSecondary.LO(runCy,EFS,YTIME) = 0;
