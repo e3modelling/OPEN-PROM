@@ -192,7 +192,7 @@ Q03FinalEnergy(allCy,DSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$(SECtoEF(DSBS,E
     VmFinalEnergy(allCy,DSBS,EFS,YTIME)
         =E= 
     SUM(TRANSE$sameas(TRANSE,DSBS),V01ConsFuelTransport(allCy,TRANSE,EFS,YTIME)) +
-    !!SUM((INDDOM,IND_SERVS)$sameas(INDDOM,DSBS),V02ConsFuel(allCy,INDDOM,IND_SERVS,EFS,YTIME)) +
+    SUM((INDDOM,IND_SERVS)$sameas(INDDOM,DSBS),V02ConsFuel(allCy,INDDOM,IND_SERVS,EFS,YTIME)) +
     SUM(AGRI_MODES,V12ConsFuel(allCy,AGRI_MODES,EFS,YTIME))$sameas("AG",DSBS) +
     sum(DACTECH$TECHtoEF(DACTECH,EFS),VmConsFuelTechCDRProd(allCy,DACTECH,EFS,YTIME))$sameas(DSBS,"DAC") +
     VmConsFuelTechCDRProd(allCy,"TEW",EFS,YTIME)$sameas(DSBS,"EW");   

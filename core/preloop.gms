@@ -18,7 +18,6 @@ display imDisc;
 display TF;
 display TFIRST;
 display runCy;
-display i08WgtSecAvgPriFueCons;
 display imVarCostTech;
 
 *'                *VARIABLE INITIALISATION*

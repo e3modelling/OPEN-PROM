@@ -35,6 +35,7 @@ Q08PriceSecondary(allCy,EFS,YTIME)
 Q08PriceFinal(allCy,DSBS,EFS,YTIME)
 Q08PriceCarbon(allCy,SBS,EFS,YTIME)
 Q08CostAvgProd(allCy,EFS,YTIME)
+Q08IndxElecIndPrices(allCy,TCHP,YTIME)
 ;
 
 Parameters
@@ -65,6 +66,7 @@ VmPriceFuelAvgSub(allCy,DSBS,YTIME)                        "Average fuel prices 
 * VmPriceFuelSubsecCHP(allCy,DSBS,EF,YTIME)                  "Fuel prices per subsector and fuel for CHP plants (kUS$2015/toe)"
 VmPriceElecInd(allCy,TCHP,YTIME)                           "Electricity index - a function of industry price (1)"
 
+V08IndxElecIndPrices(allCy,TCHP,YTIME)
 V08SupplyCurves(allCy,EFS,YTIME)
 V08PricePrimary(allCy,EFS,YTIME)
 VmPriceSecondary(allCy,EFS,YTIME)

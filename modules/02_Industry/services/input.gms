@@ -45,10 +45,7 @@ $offdelim
 *---
 *i02ISTransfInEF(runCy,"DRI",EF,YTIME)$DATAY(YTIME) = i02FuelConsPerService(runCy,"IS","PRIM_STEEL","EAF",EF,YTIME);
 *---
-imTotFinEneDemSubBaseYr(runCy,TRANSE,YTIME)  = 1;
-imTotFinEneDemSubBaseYr(runCy,INDSE,YTIME)   = 1;
-imTotFinEneDemSubBaseYr(runCy,DOMSE,YTIME)   = 1;
-imTotFinEneDemSubBaseYr(runCy,NENSE,YTIME)   = 1;
+imTotFinEneDemSubBaseYr(runCy,DSBS,YTIME)  = sum(EF$SECtoEF(DSBS,EF),imFuelCons(runCy,DSBS,EF,YTIME));
 *---
 imCO2CaptRateIndustry(runCy,CCSITECH,YTIME) = 0.9;
 *---

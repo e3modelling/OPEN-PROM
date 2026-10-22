@@ -177,6 +177,20 @@ Q08PriceFuelAvgSub(allCy,DSBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME-1) *
       VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-1));         
 
+*' This equation calculates the estimated electricity index of the industry price for a given year. The estimated index is derived by considering the historical
+*' trend of the electricity index, with a focus on the fuel prices in the industrial subsector. The equation utilizes the fuel prices for electricity generation,
+*' both in the current and past years, and computes a weighted average based on the historical pattern. The estimated electricity index is influenced by the ratio
+*' of fuel prices in the current and previous years, with a power of 0.3 applied to each ratio. This weighting factor introduces a gradual adjustment to reflect the
+*' historical changes in fuel prices, providing a more dynamic estimation of the electricity index. This equation provides a method to estimate the electricity index
+*' based on historical fuel price trends, allowing for a more flexible and responsive representation of industry price dynamics.
+Q08IndxElecIndPrices(allCy,TCHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V08IndxElecIndPrices(allCy,TCHP,YTIME)
+        =E=
+    VmPriceElecInd(allCy,TCHP,YTIME-1);
+    !!(VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-1)/VmPriceFuelAvgSub(allCy,"OI",YTIME-1)) ** (-0.01) *
+    !!(VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-2)/VmPriceFuelAvgSub(allCy,"OI",YTIME-2)) ** (-0.005) *
+    !!(VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-3)/VmPriceFuelAvgSub(allCy,"OI",YTIME-3)) ** (-0.005);
+
 *' This equation determines the electricity industry prices based on an estimated electricity index and a technical maximum of the electricity to steam ratio
 *' in Combined Heat and Power plants. The industry prices are calculated as a function of the estimated electricity index and the specified maximum
 *' electricity to steam ratio. The equation ensures that the electricity industry prices remain within a realistic range, considering the technical constraints
@@ -186,7 +200,10 @@ Q08PriceFuelAvgSub(allCy,DSBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q08PriceElecInd(allCy,TCHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmPriceElecInd(allCy,TCHP,YTIME) 
         =E=
-    1;
+    (
+      V08IndxElecIndPrices(allCy,TCHP,YTIME) + smElecToSteRatioChp - 
+      SQRT( SQR(V08IndxElecIndPrices(allCy,TCHP,YTIME)-smElecToSteRatioChp))
+    ) / 2;
 
 Q08CostAvgProd(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCostAvgProd(allCy,EFS,YTIME)
