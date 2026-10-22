@@ -14,8 +14,9 @@ IS.(PRIM_STEEL,SEC_STEEL)
 
 INDITECH(TECH)
 /
-BOF     "Blast furnace basic oxygen furnace for primary steel production"
-EAF     "best available tech direct reduction electric arc furnace fed ny natural gas for primary steel production"
+BOF     "Basic oxygen furnace"
+EAF     "Electric arc furnace"
+H2EAF
 TGDO
 TLPG
 TKRS
@@ -39,7 +40,7 @@ CCSITECH(INDITECH) /THCLCCS/
 
 SERVStoTECH(IND_SERVS,INDITECH)
 /
-PRIM_STEEL.(BOF,EAF)
+PRIM_STEEL.(BOF,EAF,H2EAF)
 SEC_STEEL.EAF
 OTHER.(TGDO,TLPG,TKRS,TNGS,TELC,TLGN,THCL,TRFO,TOLQ,TOGS,TGSL,TSTE,TBMSWAS,TH2F)
 /
@@ -48,6 +49,7 @@ INDITECHTOEF(INDITECH,EF)
 /
 BOF.(BFG,COG,COKE,ELC)
 EAF.(ELC,HCL,NGS,BMSWAS,STE,RFO,GDO,OLQ,LPG,LGN)
+H2EAF.H2F
 TGDO.(GDO,BGDO,CRO)
 TLPG.LPG
 TKRS.(KRS,BKRS)

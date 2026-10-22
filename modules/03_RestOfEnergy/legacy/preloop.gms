@@ -24,6 +24,7 @@ VmConsFiEneSec.L(runCy,SSBS,EFS,YTIME) = i03DataOwnConsEne(runCy,SSBS,EFS,"%fBas
 VmConsFiEneSec.FX(runCy,SSBS,EFS,YTIME)$DATAY(YTIME) = i03DataOwnConsEne(runCy,SSBS,EFS,YTIME);
 *---
 VmLossesDistr.LO(runCy,EFS,YTIME) = 0;
+VmLossesDistr.L(runCy,EFS,YTIME) = imDistrLosses(runCy,EFS,"%fBaseY%");
 VmLossesDistr.FX(runCy,EFS,YTIME)$DATAY(YTIME) = imDistrLosses(runCy,EFS,YTIME);
 *---
 V03OutTotTransf.LO(runCy,SSBS,EFS,YTIME) = 0;

@@ -43,19 +43,19 @@ Q02GapCapacity(allCy,INDDOM,IND_SERVS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q02CostCapital(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)$(TIME(YTIME) and INDDOMtoSERVS(INDDOM,IND_SERVS) and SERVStoTECH(IND_SERVS,INDITECH) and runCy(allCy))..
   V02CostCapital(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)
       =E=
-  1e-6;
+  1; !!FIXME: Add costs
 
 Q02CostVariable(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)$(TIME(YTIME) and INDDOMtoSERVS(INDDOM,IND_SERVS) and SERVStoTECH(IND_SERVS,INDITECH) and runCy(allCy))..
   V02CostVariable(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)
       =E=
   SUM(EFS$INDITECHTOEF(INDITECH,EFS),
     (
-      VmPriceFinal(allCy,INDDOM,EFS,YTIME) +
+      VmPriceFinal(allCy,INDDOM,EFS,YTIME) + !!FIXME: Calculate proper prices for BFG,COKE,COG that include the transf process
       imCO2CaptRateIndustry(allCy,INDITECH,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * imCo2EmiFac(allCy,INDDOM,EFS,YTIME) +
       (1-imCO2CaptRateIndustry(allCy,INDITECH,YTIME)) * 1e-3 * VmPriceCarbon(allCy,INDDOM,EFS,YTIME-1) * imCo2EmiFac(allCy,INDDOM,EFS,YTIME)
     ) * i02SFC(allCy,INDDOM,IND_SERVS,INDITECH,EFS,"%fBaseY%")
   );
-  !!imVarCostTech(allCy,INDDOM,INDITECH,YTIME) / sUnitToKUnit;
+  !!FIXME: imVarCostTech(allCy,INDDOM,INDITECH,YTIME) / sUnitToKUnit;
 
 Q02CostTotal(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)$(TIME(YTIME) and INDDOMtoSERVS(INDDOM,IND_SERVS) and SERVStoTECH(IND_SERVS,INDITECH) and runCy(allCy))..
   V02CostTotal(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)
@@ -66,7 +66,7 @@ Q02CostTotal(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)$(TIME(YTIME) and INDDOMtoSER
 Q02ScrpRate(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)$(TIME(YTIME) and runCy(allCy) and INDDOMtoSERVS(INDDOM,IND_SERVS) and SERVStoTECH(IND_SERVS,INDITECH))..
     V02ScrpRate(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)
         =E=
-    1 - (1 - 1 / 20);
+    1 - (1 - 1 / 20); !!FIXME: Add premature scrapping and replace hard-coded lifetime
 
 Q02ShareTech(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)$(TIME(YTIME) and runCy(allCy) and INDDOMtoSERVS(INDDOM,IND_SERVS) and SERVStoTECH(IND_SERVS,INDITECH))..
     V02ShareTech(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)
@@ -79,9 +79,10 @@ Q02ShareTech(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)$(TIME(YTIME) and runCy(allCy
 Q02ConsFuel(allCy,INDDOM,IND_SERVS,EF,YTIME)$(TIME(YTIME) and runCy(allCy) and INDDOMtoSERVS(INDDOM,IND_SERVS) and IND_SERVStoEF(IND_SERVS,EF))..
     V02ConsFuel(allCy,INDDOM,IND_SERVS,EF,YTIME)
         =E=
+      !!FIXME: Check fuel consumption.
     SUM(INDITECH$(INDDOMtoSERVS(INDDOM,IND_SERVS) and SERVStoTECH(IND_SERVS,INDITECH) and INDITECHTOEF(INDITECH,EF)),
       V02Capacity(allCy,INDDOM,IND_SERVS,INDITECH,YTIME) *
-      i02SFC(allCy,INDDOM,IND_SERVS,INDITECH,EF,"%fBaseY%")
+      i02SFC(allCy,INDDOM,IND_SERVS,INDITECH,EF,"%fBaseY%") !!FIXME: Check the SFC. Add SFC for new techs (H2EAF, EAF if applicable)
     );
 
 Q02ISTransfOutEF(allCy,IS_TRANSF,EFS,YTIME)$(TIME(YTIME) and runCy(allCy) and IS_TRANSF_OUT(IS_TRANSF,EFS))..
@@ -100,19 +101,7 @@ Q02ISTransfInEF(allCy,IS_TRANSF,EFS,YTIME)$(TIME(YTIME) and runCy(allCy))..
 Q02ISownEnergyTransf(allCy,IS_TRANSF,EFS,YTIME)$(TIME(YTIME) and runCy(allCy))..
     V02ISownEnergyTransf(allCy,IS_TRANSF,EFS,YTIME)
         =E=
-    i02ratioOwnEnergyTransfIS(allCy,IS_TRANSF,EFS,"%fBaseY%") *
+    0*i02ratioOwnEnergyTransfIS(allCy,IS_TRANSF,EFS,"%fBaseY%") * !!FIXME remove 0: May lead to infeasibility 
     SUM(EFS2$IS_TRANSF_OUT(IS_TRANSF,EFS2),
       V02ISTransfOutEF(allCy,IS_TRANSF,EFS2,YTIME)
     );
-
-$ontext
-Q02ShareBlend(allCy,AGRI_MODES,AGRITECH,EFS,YTIME)$(TIME(YTIME)$runCy(allCy)$INDDOMtoSERVS(INDDOM,IND_SERVS)$SERVStoTECH(IND_SERVS,INDITECH)$INDITECHTOEF(INDITECH,EFS))..
-    V02ShareBlend(allCy,INDDOM,IND_SERVS,INDITECH,EFS,YTIME)
-        =E=
-    !!i02calibweibul(allCy,AGRI_MODES,AGRITECH,EFS,YTIME) * 
-    (VmPriceFinal(allCy,INDDOM,EFS,YTIME-1) + VmPriceCarbon(allCy,INDDOM,EFS,YTIME-1)) ** (-2) /
-    SUM(EFS2$INDITECHTOEF(INDITECH,EFS2),
-      !!i02calibweibul(allCy,AGRI_MODES,AGRITECH,EFS2,YTIME) * 
-      (VmPriceFinal(allCy,INDDOM,EFS2,YTIME-1) + VmPriceCarbon(allCy,INDDOM,EFS2,YTIME-1)) ** (-2)
-    );
-$offtext

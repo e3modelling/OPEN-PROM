@@ -13,12 +13,6 @@ $include "./iFuelConsICT.csv"
 $offdelim
 ;
 *---
-table i02ISTransfInEF(allCy,IS_TRANSF,EF,YTIME)	      ""	
-$ondelim
-$include"./iInpFullTransfProcess.csv"
-$offdelim
-;
-*---
 table i02ISTransfOutEF(allCy,IS_TRANSF,EF,YTIME)	      ""	
 $ondelim
 $include"./iOutFullTransfProcess.csv"
@@ -37,13 +31,17 @@ $include"./iDataIndustrySFC.csv"
 $offdelim
 ;
 *---
+table i02ISTransfInEF(allCy,IS_TRANSF,EF,YTIME)	      ""	
+$ondelim
+$include"./iInpFullTransfProcess.csv"
+$offdelim
+;
+*---
 table i02OwnEnergyTransf(allCy,IS_TRANSF,EF,YTIME)	      ""	
 $ondelim
 $include"./IDataOwnEnergyTransf.csv"
 $offdelim
 ;
-*---
-*i02ISTransfInEF(runCy,"DRI",EF,YTIME)$DATAY(YTIME) = i02FuelConsPerService(runCy,"IS","PRIM_STEEL","EAF",EF,YTIME);
 *---
 imTotFinEneDemSubBaseYr(runCy,DSBS,YTIME)  = sum(EF$SECtoEF(DSBS,EF),imFuelCons(runCy,DSBS,EF,YTIME));
 *---

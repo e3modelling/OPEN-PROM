@@ -69,7 +69,7 @@ Q03InpTotTransf(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECtoEF(SSBS,E
     )$sameas("STEAMP",SSBS) +
     (
       i03InputEffSupply(allCy,SSBS,EFS,"%fBaseY%") * 
-      (SUM(EFS2, V03OutTotTransf(allCy,SSBS,EFS2,YTIME) - SUM(IS_TRANSF,V02ISTransfOutEF(allCy,IS_TRANSF,EFS2,YTIME))$sameas("SLD",SSBS)))
+      SUM(EFS2, V03OutTotTransf(allCy,SSBS,EFS2,YTIME))
     )$(sameas(SSBS,"GAS") or sameas(SSBS,"SLD") or sameas(SSBS,"LQD")) +
     (SUM(H2TECH$H2TECHtoFEEDSTOCK(H2TECH,EFS),VmProdH2(allCy,H2TECH,YTIME) * i05InputOverOutH2ProdFeed(allCy,H2TECH,EFS,YTIME)))$sameas("H2P",SSBS);    
 
@@ -93,8 +93,7 @@ Q03OutTotTransf(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$runCy(allCy))..
       (1-i03RatioPrimaryFuels(allCy,EFS,"%fBaseY%")) *
       (V03ConsGrssInl(allCy,EFS,YTIME) - VmImpNetEneBrnch(allCy,EFS,YTIME))
     )$(SECtoEFPROD(SSBS,EFS) and (sameas("LQD",SSBS) or sameas("SLD",SSBS) or sameas("GAS",SSBS))) +
-    VmDemTotH2(allCy,YTIME)$(sameas(EFS, "H2F") and sameas("H2P",SSBS)) +
-    SUM(IS_TRANSF,V02ISTransfOutEF(allCy,IS_TRANSF,EFS,YTIME))$sameas("SLD",SSBS);
+    VmDemTotH2(allCy,YTIME)$(sameas(EFS, "H2F") and sameas("H2P",SSBS));
 
 *' The equation calculates the transfers of a specific energy branch in a given scenario and year.
 *' The result is computed based on a complex formula that involves the previous year's transfers,
@@ -140,7 +139,8 @@ Q03ProdPrimary(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         =E=  
     V03ConsGrssInl(allCy,EFS,YTIME) - 
     VmImpNetEneBrnch(allCy,EFS,YTIME) -
-    SUM(SSBS,V03OutTotTransf(allCy,SSBS,EFS,YTIME));   
+    SUM(SSBS,V03OutTotTransf(allCy,SSBS,EFS,YTIME)) -
+    SUM(IS_TRANSF,V02ISTransfOutEF(allCy,IS_TRANSF,EFS,YTIME));   
 
 *' The equation calculates the fake exports for a specific energy branch
 *' in a given scenario and year. The computation is based on the fuel exports for
