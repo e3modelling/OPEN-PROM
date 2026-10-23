@@ -651,7 +651,6 @@ $IFTHEN.calib %Calibration% == off
 parameter imMatrFactor(allCy,DSBS,TECH,YTIME)   "Maturity factor per technology and subsector for all countries (1)";
 imMatrFactor(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                          
 
-imMatrFactor(runCy,DSBS,"TBMSWAS",YTIME)$(sameas("AG",DSBS) and not EU28(runCy)) = 0.01;
 $ontext
 imMatrFactor(runCy,DSBS,"TGDO",YTIME)$((ord(YTIME) > 14) and TRANSE(DSBS)) = 0.5;
 imMatrFactor(runCy,DSBS,"TGSL",YTIME)$((ord(YTIME) > 14) and TRANSE(DSBS)) = 0.5;
