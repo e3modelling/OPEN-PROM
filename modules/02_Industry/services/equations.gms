@@ -10,9 +10,11 @@
 *' The type of "demand" is computed based on its past value, the ratio of the current and past activity indicators (with the corresponding elasticity), 
 *' and the ratio of lagged energy costs (with the corresponding elasticities). This type of equation captures both short term and long term reactions to energy costs. 
 
+!!FIXME: INDDOM does not contain NENSE. Should be added as separate equations, coupled to the corresponding energy service.
 Q02EnergyService(allCy,INDDOM,IND_SERVS,YTIME)$(TIME(YTIME) and runCy(allCy))..
   V02EnergyService(allCy,INDDOM,IND_SERVS,YTIME)
       =E=
+  i02CalibUsefulEnergy(allCy,INDDOM,YTIME) *
   V02EnergyService(allCy,INDDOM,IND_SERVS,YTIME-1) *
   imActv(YTIME,allCy,INDDOM);
 
@@ -66,7 +68,8 @@ Q02CostTotal(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)$(TIME(YTIME) and INDDOMtoSER
 Q02ScrpRate(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)$(TIME(YTIME) and runCy(allCy) and INDDOMtoSERVS(INDDOM,IND_SERVS) and SERVStoTECH(IND_SERVS,INDITECH))..
     V02ScrpRate(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)
         =E=
-    1 - (1 - 1 / 20); !!FIXME: Add premature scrapping and replace hard-coded lifetime
+    1 - (1 - 1 / 20) * !!FIXME: replace hard-coded lifetime
+    (1-V02ScrpRatePrem(allCy,INDDOM,IND_SERVS,INDITECH,YTIME));
 
 Q02ShareTech(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)$(TIME(YTIME) and runCy(allCy) and INDDOMtoSERVS(INDDOM,IND_SERVS) and SERVStoTECH(IND_SERVS,INDITECH))..
     V02ShareTech(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)
@@ -105,3 +108,8 @@ Q02ISownEnergyTransf(allCy,IS_TRANSF,EFS,YTIME)$(TIME(YTIME) and runCy(allCy))..
     SUM(EFS2$IS_TRANSF_OUT(IS_TRANSF,EFS2),
       V02ISTransfOutEF(allCy,IS_TRANSF,EFS2,YTIME)
     );
+
+Q02ScrpRatePrem(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)$(TIME(YTIME)$runCy(allCy)$INDDOMtoSERVS(INDDOM,IND_SERVS)$SERVStoTECH(IND_SERVS,INDITECH))..
+    V02ScrpRatePrem(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)
+        =E=
+    0; !! FIXME

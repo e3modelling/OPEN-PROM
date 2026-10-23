@@ -43,6 +43,59 @@ $include"./IDataOwnEnergyTransf.csv"
 $offdelim
 ;
 *---
+$IFTHEN.calib %Calibration% == off
+$ontext
+table i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME)       "Scale parameter for endogenous scrapping applied to the sum of full costs (1)"
+$ondelim
+$include"./iScaleEndogScrap.csv"
+$offdelim
+;
+$offtext
+*---
+table i02CalibUsefulEnergy(allCy,DSBS,YTIME)      "Calibration parameter for useful energy (1)"
+$ondelim
+$include"./iCalibUsefulEnergy.csv"
+$offdelim
+;
+*---
+$ELSE.calib
+variable i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME)        "Scale parameter for endogenous scrapping applied to the sum of full costs (1)";
+variable i02CalibUsefulEnergy(allCy,DSBS,YTIME);
+
+$ontext
+i02ScaleEndogScrap.LO(runCy,DSBS,ITECH,YTIME) = 0.01;                                      
+i02ScaleEndogScrap.UP(runCy,DSBS,ITECH,YTIME) = 1;
+i02ScaleEndogScrap.L(runCy,DSBS,ITECH,YTIME) = 1;
+i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$(DATAY(YTIME) or not SECTTECH(DSBS,ITECH)) = 0;
+i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and not (INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS))) = 1;
+$offtext
+
+i02CalibUsefulEnergy.LO(runCy,DSBS,YTIME) = -0.5;  
+i02CalibUsefulEnergy.UP(runCy,DSBS,YTIME) = 0.5;  
+i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$DATAY(YTIME) = 0;
+i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$(not (INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS))) = 0;
+*---
+table t02SharesFuelBuildings(allCy,DSBS,EFS,YTIME)    "Targets for share of new passenger cars"
+$ondelim
+$include "../targets/tSharesFuelBuildings.csv"
+$offdelim;
+
+table t02SharesFuelINDSE(allCy,DSBS,EFS,YTIME)    "Targets for share of new passenger cars"
+$ondelim
+$include "../targets/tSharesINDSE.csv"
+$offdelim;
+
+table t02FinalEnergyDOMSE(allCy,DSBS,YTIME)    "Targets for share of new passenger cars"
+$ondelim
+$include "../targets/tProjectionsFuelBuildings.csv"
+$offdelim;
+
+table t02FinalEnergyINDSE(allCy,DSBS,YTIME)    "Targets for share of new passenger cars"
+$ondelim
+$include "../targets/tProjectionsINDSE.csv"
+$offdelim;
+$ENDIF.calib
+*---
 imTotFinEneDemSubBaseYr(runCy,DSBS,YTIME)  = sum(EF$SECtoEF(DSBS,EF),imFuelCons(runCy,DSBS,EF,YTIME));
 *---
 imCO2CaptRateIndustry(runCy,CCSITECH,YTIME) = 0.9;
