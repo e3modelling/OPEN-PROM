@@ -24,6 +24,7 @@ $ondelim
 $include"./IDataFuelConsPerService.csv"
 $offdelim
 ;
+* FIXME: EAF for PRIM_STEEL includes DRI-EAF Energy consumption. Needs disaggregation (mrprom)
 *---
 table i02SFC(allCy,INDDOM,IND_SERVS,INDITECH,EF,YTIME)	      ""	
 $ondelim

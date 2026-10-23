@@ -106,7 +106,7 @@ Q02ISTransfInEF(allCy,IS_TRANSF,EFS,YTIME)$(TIME(YTIME) and runCy(allCy))..
 Q02ISownEnergyTransf(allCy,IS_TRANSF,EFS,YTIME)$(TIME(YTIME) and runCy(allCy))..
     V02ISownEnergyTransf(allCy,IS_TRANSF,EFS,YTIME)
         =E=
-    i02ratioOwnEnergyTransfIS(allCy,IS_TRANSF,EFS,"%fBaseY%") * !!FIXME remove 0: May lead to infeasibility 
+    i02ratioOwnEnergyTransfIS(allCy,IS_TRANSF,EFS,"%fBaseY%") *
     SUM(EFS2$IS_TRANSF_OUT(IS_TRANSF,EFS2),
       V02ISTransfOutEF(allCy,IS_TRANSF,EFS2,YTIME)
     );
