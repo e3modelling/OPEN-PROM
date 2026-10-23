@@ -77,7 +77,7 @@ Q03InpTotTransf(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECtoEF(SSBS,E
 *' The result is obtained by summing the transformation outputs from different sources, including thermal power stations, District Heating Plants,
 *' nuclear plants, patent fuel and briquetting plants, coke-oven plants, blast furnace plants, and gas works
 *' as well as refineries. The outcome represents the total transformation output in million tons of oil equivalent.
-Q03OutTotTransf(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$runCy(allCy))..
+Q03OutTotTransf(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$runCy(allCy)$SECtoEFPROD(SSBS,EFS))..
     V03OutTotTransf(allCy,SSBS,EFS,YTIME)
         =E=
     smTWhToMtoe * 

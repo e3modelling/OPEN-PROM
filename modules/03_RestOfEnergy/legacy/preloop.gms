@@ -30,6 +30,7 @@ VmLossesDistr.FX(runCy,EFS,YTIME)$DATAY(YTIME) = imDistrLosses(runCy,EFS,YTIME);
 V03OutTotTransf.LO(runCy,SSBS,EFS,YTIME) = 0;
 V03OutTotTransf.L(runCy,SSBS,EFS,YTIME) = i03OutTotTransfProcess(runCy,SSBS,EFS,"%fBaseY%");
 V03OutTotTransf.FX(runCy,SSBS,EFS,YTIME)$DATAY(YTIME) = i03OutTotTransfProcess(runCy,SSBS,EFS,YTIME);
+V03OutTotTransf.FX(runCy,SSBS,EFS,YTIME)$(not SECtoEFPROD(SSBS,EFS)) = 0;
 *---
 V03InpTotTransf.LO(runCy,SSBS,EFS,YTIME) = 0;
 V03InpTotTransf.L(runCy,SSBS,EFS,YTIME) = -i03InpTotTransfProcess(runCy,SSBS,EFS,"%fBaseY%");

@@ -14,7 +14,7 @@
 Q02EnergyService(allCy,INDDOM,IND_SERVS,YTIME)$(TIME(YTIME) and runCy(allCy))..
   V02EnergyService(allCy,INDDOM,IND_SERVS,YTIME)
       =E=
-  i02CalibUsefulEnergy(allCy,INDDOM,YTIME) *
+  (1+i02CalibUsefulEnergy(allCy,INDDOM,YTIME)) *
   V02EnergyService(allCy,INDDOM,IND_SERVS,YTIME-1) *
   imActv(YTIME,allCy,INDDOM);
 
