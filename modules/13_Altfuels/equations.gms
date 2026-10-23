@@ -15,8 +15,8 @@ Q13DemAltEFTot(allCy,ALTEF,YTIME)$(TIME(YTIME)$runCy(allCy))..
         =E=
     V03ConsGrssInl(allCy,ALTEF,YTIME) - VmImpNetEneBrnch(allCy,ALTEF,YTIME);  
     
-Q13ScrapRate(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V13ScrapRate(allCy,H2TECH,YTIME)
+Q13ScrapRate(allCy,ALTEFTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V13ScrapRate(allCy,ALTEFTECH,YTIME)
       =E=
     1 - (1-1/20);  
 
@@ -24,22 +24,68 @@ Q13DemGapAltEF(allCy,ALTEF,YTIME)$(TIME(YTIME)$runCy(allCy))..
     V13DemGapAltEF(allCy,ALTEF,YTIME)
       =E=
     ( 
-      V13DemAltEFTot(allCy,YTIME) -
-      sum(H2TECH,
+      V13DemAltEFTot(allCy,ALTEF,YTIME) -
+      sum(ALTEFTECH,
         (1-V13ScrapRate(allCy,ALTEFTECH,YTIME)) *
         VmCapAltEF(allCy,ALTEFTECH,YTIME-1)
       ) +
       SQRT(SQR(
-        V13DemAltEFTot(allCy,YTIME) -
-        sum(H2TECH,
+        V13DemAltEFTot(allCy,ALTEF,YTIME) -
+        sum(ALTEFTECH,
           (1-V13ScrapRate(allCy,ALTEFTECH,YTIME)) *
           VmCapAltEF(allCy,ALTEFTECH,YTIME-1)
         )
       )) 
     ) / 2 + 1e-6; 
 
-Q05CapH2(allCy,H2TECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    VmCapH2(allCy,H2TECH,YTIME)
+Q13CapAltEF(allCy,ALTEF,ALTEFTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    VmCapAltEF(allCy,ALTEF,ALTEFTECH,YTIME)
         =E=
-    (1-V05CapScrapH2ProdTech(allCy,H2TECH,YTIME)) * VmCapAltEF(allCy,ALTEFTECH,YTIME-1) +
-    V13DemGapAltEF(allCy,ALTEF,YTIME) * V13DemAltEFTot(allCy,ALTEF,YTIME) / (i05AvailH2Prod(allCy,H2TECH,YTIME) * smGwToTwhPerYear(YTIME) * smTWhToMtoe);
+    VmCapAltEF(allCy,ALTEF,ALTEFTECH,YTIME-1) * (1 - V13ScrapRate(allCy,ALTEF,ALTEFTECH,YTIME)) +
+    V13DemGapAltEF(allCy,ALTEF,YTIME) * ;
+
+Q13ProdAltEF(allCy,ALTEF,ALTEFTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V13ProdAltEF(allCy,ALTEF,ALTEFTECH,YTIME)
+        =E=
+    V13UtilRate(allCy,ALTEF,ALTEFTECH,YTIME) * 
+    VmCapAltEF(allCy,ALTEF,ALTEFTECH,YTIME);
+
+Q13UtilisationRate(allCy,ALTEF,ALTEFTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V13UtilRate(allCy,ALTEF,ALTEFTECH,YTIME)
+        =E=
+    V13DemAltEFTot(allCy,ALTEF,YTIME) /
+    SUM(ALTEFTECH2, VmCapAltEF(allCy,ALTEF,ALTEFTECH2,YTIME));
+
+Q13ShareGapALTEF(allCy,ALTEF,ALTEFTECH,YTIME)$(TIME(YTIME)$runCy(allCy)) ..
+    V13ShareGapALTEF(allCy,ALTEF,ALTEFTECH,YTIME)
+        =E=
+    V13CostTotalALTEF(allCy,ALTEF,ALTEFTECH,YTIME-1) ** (-2) /
+    SUM(ALTEFTECH2,
+      !!i04MatFacPlaAvailCap(allCy,TSTEAM2,YTIME) *
+      V13CostTotalALTEF(allCy,ALTEF,ALTEFTECH2,YTIME-1) ** (-2)
+    );
+
+Q13CostTotalALTEF(allCy,ALTEF,ALTEFTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V13CostTotalALTEF(allCy,ALTEF,ALTEFTECH,YTIME)
+        =E=
+    V13CostCapexALTEF(allCy,ALTEF,ALTEFTECH,YTIME) +
+    V13CostVariableALTEF(allCy,ALTEF,ALTEFTECH,YTIME);
+
+Q13CostCapexALTEF(allCy,ALTEF,ALTEFTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V13CostCapexALTEF(allCy,ALTEF,ALTEFTECH,YTIME)
+      =E=
+    1;
+
+Q13CostVariableALTEF(allCy,ALTEF,ALTEFTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V13CostVariableALTEF(allCy,ALTEF,ALTEFTECH,YTIME)
+      =E=
+    1;
+
+Q13CostAvgProdALTEF(allCy,ALTEF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    VmCostAvgProdALTEF(allCy,ALTEF,YTIME)
+      =E=
+    sum(ALTEFTECH$ALTEFtoALTEFTECH(ALTEF,ALTEFTECH), 
+      (V13ProdAltEF(allCy,ALTEF,ALTEFTECH,YTIME) + 1e-6) *
+      V13CostTotalALTEF(allCy,ALTEF,ALTEFTECH,YTIME)
+    ) / 
+    sum(ALTEFTECH$ALTEFtoALTEFTECH(ALTEF,ALTEFTECH),V13ProdAltEF(allCy,ALTEF,ALTEFTECH,YTIME) + 1e-6);
