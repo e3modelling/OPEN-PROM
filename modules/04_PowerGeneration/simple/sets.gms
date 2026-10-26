@@ -1,8 +1,7 @@
 *' @title PowerGeneration Sets
 *' @code
-
+sets
 *---
-PGEF(EFS)        "Energy forms used for steam production"
-;
-PGEF(EFS) = yes$(sum(PGALL, PGALLTOEF(PGALL,EFS)));
+PGEF(EF);
+PGEF(EF) = yes$(sum(PGALL, PGALLTOEF(PGALL,EF)));
 ALIAS (PGEF2,PGEF);

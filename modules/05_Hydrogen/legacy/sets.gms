@@ -92,7 +92,7 @@ SSGG
 *---
 H2TECHtoFEEDSTOCK(H2TECH,EF)   "Mapping between production technologies and feedstock fuels for processes"
 /
-(gsr,gss).ngs !! ,smr
+(gsr,gss).GAS !! ,smr
 (cgf,cgs).hcl
 (bgfls,bgfl).(WOODFUEL,WASTE) !! bpy,bgfs,
 *sht.SOL
@@ -104,7 +104,7 @@ wew.WND
 
 H2TECHtoENERGY(H2TECH,EF)   "Mapping between production technologies and fuels for energy use (combustion)"
 /
-(gsr,gss).(ngs,elc)
+(gsr,gss).(GAS,elc)
 (cgf,cgs).(hcl,elc)
 (bgfls,bgfl).(WOODFUEL,WASTE,elc)
 weg.ELC
@@ -120,7 +120,7 @@ $offtext
 *---
 H2PRODEF(EF)               "Fuels used for hydrogen production"
 /
-ngs
+GAS
 hcl
 WOODFUEL
 WASTE
