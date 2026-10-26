@@ -38,7 +38,7 @@ Q13DemGapAltEF(allCy,ALTEF,YTIME)$(TIME(YTIME)$runCy(allCy))..
       )) 
     ) / 2 + 1e-6; 
 
-Q13CapAltEF(allCy,ALTEF,ALTEFTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+Q13CapAltEF(allCy,ALTEF,ALTEFTECH,YTIME)$(TIME(YTIME)$runCy(allCy)$ALTEFtoALTEFTECH(ALTEF,ALTEFTECH))..
     V13ProdAltEF(allCy,ALTEF,ALTEFTECH,YTIME)
         =E=
     V13ProdAltEF(allCy,ALTEF,ALTEFTECH,YTIME-1) * (1 - V13ScrapRate(allCy,ALTEF,ALTEFTECH,YTIME)) +

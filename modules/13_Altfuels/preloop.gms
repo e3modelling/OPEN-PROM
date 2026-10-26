@@ -1,0 +1,9 @@
+*' @title Alternative fuels module Preloop
+*' @code
+
+*'                *VARIABLE INITIALISATION*
+V13ProdAltEF.LO(runCy,ALTEF,ALTEFTECH,YTIME) = 0;
+V13ProdAltEF.L(runCy,ALTEF,ALTEFTECH,YTIME) = 0;
+V13ProdAltEF.FX(runCy,ALTEF,ALTEFTECH,YTIME)$DATAY(YTIME) = 0;
+V13ProdAltEF.FX(runCy,ALTEF,ALTEFTECH,YTIME)$(not ALTEFtoALTEFTECH(ALTEF,ALTEFTECH)) = 0;
+*---
