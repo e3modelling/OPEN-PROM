@@ -492,7 +492,7 @@ KRS     "Kerosene"
 GDO     "Diesel Oil"
 RFO     "Residual Fuel Oil"
 OLQ     "Other Liquids"
-NGS     "Natural Gas"
+GAS     "Gas"
 OGS     "Other Gases"
 NUC     "Nuclear"
 STE     "Steam"
@@ -525,9 +525,9 @@ HCL     "Hard Coal, Coke and Other Solids"
 LGN     "Lignite"
 CRO     "Crude Oil and Feedstocks"
 LPG     "Liquefied Petroleum Gas"
-GSL     "Fossil Gasoline"
-KRS     "Fossil Kerosene"
-GDO     "Fossil Diesel Oil"
+FGSL     "Fossil Gasoline"
+FKRS     "Fossil Kerosene"
+FGDO     "Fossil Diesel Oil"
 RFO     "Residual Fuel Oil"
 OLQ     "Other Liquids"
 NGS     "Natural Gas"
@@ -602,7 +602,7 @@ TGDO      "Internal Combustion Engine fueled by Diesel Oil"
 TNGS      "Internal Combustion Engine fueled by Natural Gas"
 TELC      "Pure Electirc Engine"
 TKRS      "Gas Turbine fueled by Kerosene"
-TETH      "Internal Combustion Engine fueled by Ethanol"
+*TETH      "Internal Combustion Engine fueled by Ethanol"
 *TMET      "Methanol (85% gasoline 15% methanol) coming either from ngs or bms"
 *TBGDO     "Biodiesel internal combustion engine"
 TPHEVGSL  "Plug in Hybrid engine - gasoline"
@@ -707,20 +707,20 @@ TSTE2OTH
 
 TECHtoEF(TECH,EF) Fuels consumed by technologies
 /
-TGSL.(GSL,BGSL)
+TGSL.(GSL)
 TLPG.LPG
-TGDO.(GDO,BGDO,RFO,CRO)
-TNGS.(NGS,OGS,BGAS)
-TNGSCCS.NGS
+TGDO.(GDO,RFO,CRO)
+TNGS.(GAS,OGS)
+TNGSCCS.GAS
 TELC.ELC
-TKRS.(KRS,BKRS)
-TETH.ETH
+TKRS.KRS
+*TETH.ETH
 TMET.MET
-TPHEVGSL.(GSL,BGSL,ELC)
-TPHEVGDO.(GDO,BGDO,ELC)
+TPHEVGSL.(GSL,ELC)
+TPHEVGDO.(GDO,ELC)
 TH2F.H2F
-TCHEVGSL.(GSL,BGSL)
-TCHEVGDO.(GDO,BGDO)     
+TCHEVGSL.GSL
+TCHEVGDO.GDO   
 TLGN.LGN
 THCL.HCL
 THCLCCS.HCL
@@ -732,7 +732,7 @@ TSTE.STE
 * LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC already exist in TRANSPORT or INDUSTRY technologies
 THEATPUMP.ELC
 TBMSWAS.(WOODFUEL,WASTE)
-HTDAC.(NGS,ELC)
+HTDAC.(GAS,ELC)
 H2DAC.(H2F,ELC)
 LTDAC.ELC
 TEW.ELC
@@ -742,36 +742,36 @@ TGEO.GEO
 
 TTECHtoEF(TTECH,EF) Fuels consumed by transport technologies
 /
-TGSL.(GSL,BGSL)
+TGSL.GSL
 TLPG.LPG
-TGDO.(GDO,BGDO)
-TNGS.(NGS,BGAS)
+TGDO.GDO
+TNGS.GAS
 TELC.ELC
-TKRS.(KRS,BKRS)
-TETH.ETH
-TPHEVGSL.(GSL,BGSL,ELC)
-TPHEVGDO.(GDO,BGDO,ELC)
+TKRS.KRS
+*TETH.ETH
+TPHEVGSL.(GSL,ELC)
+TPHEVGDO.(GDO,ELC)
 TH2F.H2F
-TCHEVGSL.(GSL,BGSL)
-TCHEVGDO.(GDO,BGDO)
+TCHEVGSL.GSL
+TCHEVGDO.GDO
 TRFO.RFO
 /
 
 ITECHtoEF(ITECH,EF) Fuels consumed by industrial technologies
 /
-TGDO.(GDO,BGDO,CRO)
+TGDO.(GDO,CRO)
 TLPG.LPG
-TKRS.(KRS,BKRS)  
-TNGS.(NGS,BGAS)
-TNGSCCS.NGS
-TELC.ELC    
+TKRS.KRS  
+TNGS.GAS
+TNGSCCS.GAS
+TELC.ELC
 TLGN.LGN
 THCL.HCL
 THCLCCS.HCL
 TRFO.RFO
 TOLQ.OLQ
 TOGS.OGS
-TGSL.(GSL,BGSL)
+TGSL.GSL
 TSTE.STE
 * Domestic Technologies (only add those not already in Transport & Industry)
 * LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC already exist in TRANSPORT or INDUSTRY technologies
@@ -815,13 +815,13 @@ EW.TEW
 
 SECtoEF(SBS,EF) Link between Model Subsectors and Energy Forms consumed
 /
-PG.(LGN,HCL,CRO,GSL,BGSL,KRS,BKRS,GDO,BGDO,RFO,LPG,OLQ,NGS,OGS,NUC,HYD,WOODFUEL,WASTE,SOL,GEO,WND,H2F)
-CHP.(LGN,HCL,GDO,RFO,NGS,OGS,NUC,HYD,WOODFUEL,WASTE,SOL,GEO,WND)
-H2P.(HCL,LGN,RFO,GDO,NGS,OGS,NUC,WOODFUEL,WASTE,SOL,WND,ELC)
-STEAMP.(HCL,LGN,CRO,GDO,BGDO,GSL,BGSL,KRS,BKRS,RFO,LPG,NGS,OGS,OLQ,NUC,GEO,WOODFUEL,WASTE,ELC,H2F)
-SLD.(LGN,HCL,GSL,GDO,BGDO,RFO,OLQ,NGS,OGS,WOODFUEL,WASTE,SOL,CRO,LPG,KRS,ELC,STE)
-LQD.(LGN,HCL,GSL,GDO,BGDO,RFO,OLQ,NGS,OGS,WOODFUEL,WASTE,SOL,CRO,LPG,KRS,ELC,STE)
-GAS.(HCL,GSL,GDO,BGDO,RFO,OLQ,NGS,OGS,WOODFUEL,WASTE,SOL,CRO,LPG,KRS,ELC,STE)
+PG.(LGN,HCL,CRO,GSL,KRS,GDO,RFO,LPG,OLQ,GAS,OGS,NUC,HYD,WOODFUEL,WASTE,SOL,GEO,WND,H2F)
+CHP.(LGN,HCL,GDO,RFO,GAS,OGS,NUC,HYD,WOODFUEL,WASTE,SOL,GEO,WND)
+H2P.(HCL,LGN,RFO,GDO,GAS,OGS,NUC,WOODFUEL,WASTE,SOL,WND,ELC)
+STEAMP.(HCL,LGN,CRO,GDO,GSL,KRS,RFO,LPG,GAS,OGS,OLQ,NUC,GEO,WOODFUEL,WASTE,ELC,H2F)
+SLD.(LGN,HCL,GSL,GDO,RFO,OLQ,GAS,OGS,WOODFUEL,WASTE,SOL,CRO,LPG,KRS,ELC,STE)
+LQD.(LGN,HCL,GSL,GDO,RFO,OLQ,GAS,OGS,WOODFUEL,WASTE,SOL,CRO,LPG,KRS,ELC,STE)
+GAS.(HCL,GSL,GDO,RFO,OLQ,GAS,OGS,WOODFUEL,WASTE,SOL,CRO,LPG,KRS,ELC,STE)
 /
 
 PGALL(STECH)     Power Generation Plant Types
@@ -1066,7 +1066,7 @@ BALEF fuels in balance report
 "Electricity"
 /
 
-BIOFUELS(EF)
+BIOFUELS(EFS)
 /BGSL,BGDO,BKRS,BGAS/
 
 BioToFossilFuel(EF,EF)  Mapping from bio fuels to fossil fuels
