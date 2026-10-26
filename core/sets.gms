@@ -450,7 +450,7 @@ CHP     "Combined Heat and Power"
 /
 *         Energy Forms            *
 
-ALLEF           Energy Forms
+ALLEF           Energy Forms - All energy forms (EF & EFS)
 /
 HCL     "Hard Coal, Coke and Other Solids"
 LGN     "Lignite"
@@ -459,17 +459,21 @@ LPG     "Liquefied Petroleum Gas"
 GSL     "Gasoline"
 KRS     "Kerosene"
 GDO     "Diesel Oil"
+FGSL    "Fossil Gasoline"
+FKRS    "Fossil Kerosene"
+FGDO    "Fossil Diesel Oil"
 RFO     "Residual Fuel Oil"
 OLQ     "Other Liquids"
 NGS     "Natural Gas"
+GAS     "Gas - blend" 
 OGS     "Other Gases"
 NUC     "Nuclear"
 STE     "Steam"
 HYD     "Hydro"
 WND     "Wind"
 SOL     "Solar"
-WOODFUEL
-WASTE
+WOODFUEL "Wood fuel"
+WASTE   "Waste"
 GEO     "Geothermal and other renewable sources (Tidal, etc)"
 MET     "Methanol"
 ETH     "Ethanol"
@@ -499,8 +503,8 @@ STE     "Steam"
 HYD     "Hydro"
 WND     "Wind"
 SOL     "Solar"
-WOODFUEL
-WASTE
+WOODFUEL "Wood fuel"
+WASTE   "Waste"
 GEO     "Geothermal and other renewable sources (Tidal, etc)"
 H2F     "Hydrogen"
 ELC     "Electricity"
@@ -715,7 +719,7 @@ TNGSCCS.GAS
 TELC.ELC
 TKRS.KRS
 *TETH.ETH
-TMET.MET
+*TMET.MET
 TPHEVGSL.(GSL,ELC)
 TPHEVGDO.(GDO,ELC)
 TH2F.H2F
@@ -880,14 +884,14 @@ PGREN(PGALL)    REN PLANTS with Saturation                /PGLHYD,PGSHYD,PGAWND,
 PGRENSW(PGALL)   Solar and wind Plants                     /PGSOL,PGCSP,PGAWND,PGAWNO/
 PGRENEF          Renewable energy forms in power generation  /HYD,WND,SOL,WOODFUEL,WASTE,GEO/
 
-PGALLtoEF(PGALL,EFS)     Correspondence between plants and energy forms
+PGALLtoEF(PGALL,EF)     Correspondence between plants and energy forms
 /
 (ATHLGN,ATHLGNCCS).LGN
 (ATHCOAL,ATHCOALCCS).HCL
 *(ATHOIL).GDO
 *(ATHGAS,ATHGASCCS).NGS
-ATHOIL.(GSL,BGSL,GDO,BGDO,KRS,BKRS,CRO,OLQ,RFO,LPG)
-(ATHGAS,ATHGASCCS).(NGS,OGS)
+ATHOIL.(GSL,GDO,KRS,CRO,OLQ,RFO,LPG)
+(ATHGAS,ATHGASCCS).(GAS,OGS)
 (ATHBMSWAS,ATHBMSCCS).(WOODFUEL,WASTE)
 PGANUC.NUC
 (PGLHYD,PGSHYD).HYD
@@ -1069,13 +1073,6 @@ BALEF fuels in balance report
 BIOFUELS(EFS)
 /BGSL,BGDO,BKRS,BGAS/
 
-BioToFossilFuel(EF,EF)  Mapping from bio fuels to fossil fuels
-/
-BGSL.GSL
-BGDO.GDO
-BKRS.KRS
-BGAS.NGS
-/
 
 *         SET ASSIGNMENTS           *
 

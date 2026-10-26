@@ -255,15 +255,7 @@ i01TechLft(runCy,"EW","TEW",YTIME) = 25;
 *---
 i01GDPperCapita(YTIME,runCy) = i01GDP(YTIME,runCy) / i01Pop(YTIME,runCy);
 *---or not sameas("BGSL", EF) or not sameas("BGDO", EF) "%fBaseY%"
-i01ShareBlend(runCy,TRANSE,EF,YTIME)$(DATAY(YTIME) and SECtoEF(TRANSE,EF) and yes$SUM(EF2,BLENDMAP(EF,EF2))) =
-(
-  imFuelCons(runCy,TRANSE,EF,YTIME) / 
-  SUM(EF2$BLENDMAP(EF,EF2), imFuelCons(runCy,TRANSE,EF2,YTIME))
-)$SUM(EF2$BLENDMAP(EF,EF2), imFuelCons(runCy,TRANSE,EF2,YTIME)) +
-1$(not SUM(EF2$BLENDMAP(EF,EF2), imFuelCons(runCy,TRANSE,EF2,YTIME)));
-i01ShareBlend(runCy,TRANSE,EF,YTIME)$(DATAY(YTIME) and SECtoEF(TRANSE,EF) and BIOFUELS(EF)) = 1 - SUM(EF2$BLENDMAP(EF2,EF), i01ShareBlend(runCy,TRANSE,EF2,YTIME));
-i01ShareBlend(runCy,TRANSE,EF,YTIME)$(DATAY(YTIME) and SECtoEF(TRANSE,EF) and not yes$SUM(EF2,BLENDMAP(EF2,EF))) = 1;
-i01ShareBlend(runCy,TRANSE,EF,YTIME)$AN(YTIME) = i01ShareBlend(runCy,TRANSE,EF,"%fBaseY%");
+i01ShareBlend(runCy,TRANSE,EF,YTIME)$(DATAY(YTIME) and SECtoEF(TRANSE,EF)) =0;
 *---
 $IFTHEN.calib %Calibration% == MatCalibration
 table t01NewShareStockPC(allCy,TRANSE,TTECH,YTIME)    "Targets for share of new passenger cars"
@@ -275,15 +267,9 @@ $offdelim
 $ENDIF.calib
 *---
 *i01calibweibul(runCy,TRANSE,EF) = -0.1;
-i01calibweibul(runCy,TRANSE,EF,"%fBaseY%")$(SECtoEF(TRANSE,EF) and yes$SUM(EF2,BLENDMAP(EF,EF2))) = 1;
-i01calibweibul(runCy,TRANSE,EF,"%fBaseY%")$(SECtoEF(TRANSE,EF) and yes$SUM(EF2,BLENDMAP2(EF,EF2))) = 
-(
-  i01ShareBlend(runCy,TRANSE,EF,"%fBaseY%") * imFuelPrice(runCy,TRANSE,EF,"%fBaseY%") ** (2) / 
-  SUM(EF2$BLENDMAP(EF2,EF),i01ShareBlend(runCy,TRANSE,EF2,"%fBaseY%") * imFuelPrice(runCy,TRANSE,EF2,"%fBaseY%") ** (2))
-);
-i01calibweibul(runCy,TRANSE,EF,YTIME)$AN(YTIME) = i01calibweibul(runCy,TRANSE,EF,"%fBaseY%");
+i01calibweibul(runCy,TRANSE,EF,"%fBaseY%") = 0;
 **i01calibweibul(runCy,TRANSE,EF,YTIME)$(AN(YTIME) and SECtoEF(TRANSE,EF) and yes$SUM(EF2,BLENDMAP2(EF,EF2))) = i01calibweibul(runCy,TRANSE,EF,YTIME-1) + (ord(YTIME) - (%fBaseY% - %fStartHorizon% + 1)) * (1-i01calibweibul(runCy,TRANSE,EF,"%fBaseY%")) / (%fEndHorizon% - %fBaseY%);
-i01calibweibul(runCy,TRANSE,EF,YTIME)$(AN(YTIME) and SECtoEF(TRANSE,EF) and yes$SUM(EF2,BLENDMAP2(EF,EF2)) and not sameas("BGAS",EF)) = min(1, i01calibweibul(runCy,TRANSE,EF,YTIME-1) + (ord(YTIME) - (%fBaseY% - %fStartHorizon% + 1)) * (1-i01calibweibul(runCy,TRANSE,EF,"%fBaseY%")) / (2090 - %fBaseY%));
+*i01calibweibul(runCy,TRANSE,EF,YTIME)$(AN(YTIME) and SECtoEF(TRANSE,EF) and yes$SUM(EF2,BLENDMAP2(EF,EF2)) and not sameas("BGAS",EF)) = min(1, i01calibweibul(runCy,TRANSE,EF,YTIME-1) + (ord(YTIME) - (%fBaseY% - %fStartHorizon% + 1)) * (1-i01calibweibul(runCy,TRANSE,EF,"%fBaseY%")) / (2090 - %fBaseY%));
 *---
 testSFC(runCy,TRANSE,TTECH)$(not (sameas("PC",TRANSE) or BUN1(TRANSE))) = 
 test2SFC(TRANSE,TTECH) * 

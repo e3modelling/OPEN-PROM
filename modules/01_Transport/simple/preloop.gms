@@ -5,7 +5,7 @@
 
 V01ShareBlend.LO(runCy,TRANSE,EFS,YTIME) = 0;
 V01ShareBlend.FX(runCy,TRANSE,EFS,YTIME)$DATAY(YTIME) = i01ShareBlend(runCy,TRANSE,EFS,"%fBaseY%");
-V01ShareBlend.FX(runCy,TRANSE,EFS,YTIME)$(SECtoEF(TRANSE,EFS) and not yes$SUM(EFS2,BLENDMAP(EFS2,EFS))) = 1;
+V01ShareBlend.FX(runCy,TRANSE,EFS,YTIME)$(SECtoEF(TRANSE,EFS)) = 1;
 *---
 V01RateScrPcTot.UP(runCy,TRANSE,TTECH,YTIME) = 1;
 *---
