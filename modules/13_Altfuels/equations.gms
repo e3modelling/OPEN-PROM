@@ -27,34 +27,22 @@ Q13DemGapAltEF(allCy,ALTEF,YTIME)$(TIME(YTIME)$runCy(allCy))..
       V13DemAltEFTot(allCy,ALTEF,YTIME) -
       sum(ALTEFTECH,
         (1-V13ScrapRate(allCy,ALTEFTECH,YTIME)) *
-        VmCapAltEF(allCy,ALTEFTECH,YTIME-1)
+        V13ProdAltEF(allCy,ALTEF,ALTEFTECH,YTIME-1)
       ) +
       SQRT(SQR(
         V13DemAltEFTot(allCy,ALTEF,YTIME) -
         sum(ALTEFTECH,
           (1-V13ScrapRate(allCy,ALTEFTECH,YTIME)) *
-          VmCapAltEF(allCy,ALTEFTECH,YTIME-1)
+          V13ProdAltEF(allCy,ALTEF,ALTEFTECH,YTIME-1)
         )
       )) 
     ) / 2 + 1e-6; 
 
 Q13CapAltEF(allCy,ALTEF,ALTEFTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    VmCapAltEF(allCy,ALTEF,ALTEFTECH,YTIME)
-        =E=
-    VmCapAltEF(allCy,ALTEF,ALTEFTECH,YTIME-1) * (1 - V13ScrapRate(allCy,ALTEF,ALTEFTECH,YTIME)) +
-    V13DemGapAltEF(allCy,ALTEF,YTIME) * ;
-
-Q13ProdAltEF(allCy,ALTEF,ALTEFTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V13ProdAltEF(allCy,ALTEF,ALTEFTECH,YTIME)
         =E=
-    V13UtilRate(allCy,ALTEF,ALTEFTECH,YTIME) * 
-    VmCapAltEF(allCy,ALTEF,ALTEFTECH,YTIME);
-
-Q13UtilisationRate(allCy,ALTEF,ALTEFTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V13UtilRate(allCy,ALTEF,ALTEFTECH,YTIME)
-        =E=
-    V13DemAltEFTot(allCy,ALTEF,YTIME) /
-    SUM(ALTEFTECH2, VmCapAltEF(allCy,ALTEF,ALTEFTECH2,YTIME));
+    V13ProdAltEF(allCy,ALTEF,ALTEFTECH,YTIME-1) * (1 - V13ScrapRate(allCy,ALTEF,ALTEFTECH,YTIME)) +
+    V13DemGapAltEF(allCy,ALTEF,YTIME) * V13ShareGapALTEF(allCy,ALTEF,ALTEFTECH,YTIME);
 
 Q13ShareGapALTEF(allCy,ALTEF,ALTEFTECH,YTIME)$(TIME(YTIME)$runCy(allCy)) ..
     V13ShareGapALTEF(allCy,ALTEF,ALTEFTECH,YTIME)

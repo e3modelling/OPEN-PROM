@@ -23,7 +23,7 @@ V04CostVarTech.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =
     i04ShareFuels(runCy,PGALL,PGEF) * 
     (
       VmPriceFuelSubsecCarVal.L(runCy,"PG",PGEF,YTIME) +
-      imCO2CaptRate(PGALL) * VmCstCO2SeqCsts.L(runCy,YTIME) * 1e-3 * (imCo2EmiFac(runCy,"PG",PGEF,YTIME) - 4.17$sameas("BMSWAS", PGEF)) +
+      imCO2CaptRate(PGALL) * VmCstCO2SeqCsts.L(runCy,YTIME) * 1e-3 * (imCo2EmiFac(runCy,"PG",PGEF,YTIME) - 4.17$sameas("WOODFUEL", PGEF)) +
       (1-imCO2CaptRate(PGALL)) * 1e-3 * imCo2EmiFac(runCy,"PG",PGEF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal.L(runCy,NAP,YTIME))
     ) * smTWhToMtoe / imPlantEffByType(runCy,PGALL,"effELC",YTIME)
   ) +
@@ -33,7 +33,7 @@ V04CostVarTech.FX(runCy,PGALL,YTIME)$DATAY(YTIME) =
       i04ShareFuels(runCy,PGALL,PGEF) * 
       (
         VmPriceFuelSubsecCarVal.L(runCy,"PG",PGEF,YTIME) +
-        imCO2CaptRate(PGALL) * VmCstCO2SeqCsts.L(runCy,YTIME) * 1e-3 * (imCo2EmiFac(runCy,"PG",PGEF,YTIME) - 4.17$sameas("BMSWAS", PGEF)) +
+        imCO2CaptRate(PGALL) * VmCstCO2SeqCsts.L(runCy,YTIME) * 1e-3 * (imCo2EmiFac(runCy,"PG",PGEF,YTIME) - 4.17$sameas("WOODFUEL", PGEF)) +
         (1-imCO2CaptRate(PGALL)) * 1e-3 * imCo2EmiFac(runCy,"PG",PGEF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal.L(runCy,NAP,YTIME))
       ) * smTWhToMtoe / imPlantEffByType(runCy,PGALL,"effELC",YTIME)
     )

@@ -108,12 +108,13 @@ RFO 3.2,
 OLQ 3.2,
 NGS 2.5,
 OGS 2.5,
-BMSWAS 0/;
+*waste
+*woodfuel
+/;
 *---
 imCo2EmiFac(runCy,SBS,EF,YTIME)$(not (sameas("NEN",SBS) or sameas("PCH",SBS))) = iCo2EmiFacAllSbs(EF);
 imCo2EmiFac(runCy,"IS","HCL",YTIME) = 4.438008647; !! This is the assignment for coke
 *imCo2EmiFac(runCy,"H2P","NGS",YTIME) = 3.107;
-*imCo2EmiFac(runCy,"H2P","BMSWAS",YTIME) = 0.497;
 *---
 parameter imElaSubData(DSBS)       "Elasticities by subsector (1)" /
 PCH	2
@@ -170,7 +171,6 @@ imFuelPrice(runCy,"SE","GDO",YTIME) = imFuelPrice(runCy,"OI","GDO",YTIME);
 imFuelPrice(runCy,"SE","BGDO",YTIME) = imFuelPrice(runCy,"OI","BGDO",YTIME);
 imFuelPrice(runCy,"AG","BGAS",YTIME) = imFuelPrice(runCy,"AG","NGS",YTIME);
 imFuelPrice(runCy,"AG","BGDO",YTIME) = imFuelPrice(runCy,"AG","GDO",YTIME);
-*imFuelPrice(runCy,"SE","BMSWAS",YTIME) = imFuelPrice(runCy,"AG","BMSWAS",YTIME);
 imFuelPrice(runCy,TRANSE,"RFO",YTIME) = imFuelPrice(runCy,"BMAR","RFO",YTIME);
 imFuelPrice(runCy,TRANSE,"OGS",YTIME) = imFuelPrice(runCy,TRANSE,"NGS",YTIME);
 imFuelPrice(runCy,TRANSE,"OLQ",YTIME) = imFuelPrice(runCy,TRANSE,"GDO",YTIME);

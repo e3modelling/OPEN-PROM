@@ -468,7 +468,8 @@ STE     "Steam"
 HYD     "Hydro"
 WND     "Wind"
 SOL     "Solar"
-BMSWAS  "Biomass and Waste"
+WOODFUEL
+WASTE
 GEO     "Geothermal and other renewable sources (Tidal, etc)"
 MET     "Methanol"
 ETH     "Ethanol"
@@ -498,7 +499,8 @@ STE     "Steam"
 HYD     "Hydro"
 WND     "Wind"
 SOL     "Solar"
-BMSWAS  "Biomass and Waste"
+WOODFUEL
+WASTE
 GEO     "Geothermal and other renewable sources (Tidal, etc)"
 H2F     "Hydrogen"
 ELC     "Electricity"
@@ -535,7 +537,8 @@ STE     "Steam"
 HYD     "Hydro"
 WND     "Wind"
 SOL     "Solar"
-BMSWAS  "Biomass and Waste"
+WOODFUEL
+WASTE
 GEO     "Geothermal and other renewable sources"
 MET     "Methanol"
 ETH     "Ethanol"
@@ -551,28 +554,7 @@ ELC     "Electricity"
 /
 
 ELCEF(EF)        Electricity                                         /ELC/
-H2EF(EF)         Hydrogen                                            /H2F/
 STEAM(EFS)       Steam                                               /STE/
-ALTEF(EF)        Alternative Fuels used in transport                 /BGDO,BKRS,BGSL,BGAS/
-
-PPRODEF(EFS)     Fuels considered in primary production
-/
-LGN
-BGSL
-BGDO
-BKRS
-BGAS
-OLQ
-HCL
-CRO
-HYD
-BMSWAS
-NUC
-SOL
-GEO
-WND
-NGS
-/
 
 *         Technologies            *
 
@@ -723,7 +705,7 @@ TSTE2GEO
 TSTE2OTH
 /
 
-TECHtoEF (TECH,EF) Fuels consumed by technologies
+TECHtoEF(TECH,EF) Fuels consumed by technologies
 /
 TGSL.(GSL,BGSL)
 TLPG.LPG
@@ -749,7 +731,7 @@ TSTE.STE
 * Domestic Technologies (only add those not already in Transport & Industry)
 * LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC already exist in TRANSPORT or INDUSTRY technologies
 THEATPUMP.ELC
-TBMSWAS.BMSWAS
+TBMSWAS.(WOODFUEL,WASTE)
 HTDAC.(NGS,ELC)
 H2DAC.(H2F,ELC)
 LTDAC.ELC
@@ -794,7 +776,7 @@ TSTE.STE
 * Domestic Technologies (only add those not already in Transport & Industry)
 * LGN,HCL,GSL,GDO,RFO,LPG,KRS,OLQ,NGS,OGS,ELC already exist in TRANSPORT or INDUSTRY technologies
 TH2F.H2F
-TBMSWAS.BMSWAS
+TBMSWAS.(WOODFUEL,WASTE)
 THEATPUMP.ELC
 TSOL.SOL
 TGEO.GEO
@@ -804,12 +786,6 @@ PLUGIN(TTECH) Plug-in hybrids
 /
 TPHEVGSL
 TPHEVGDO
-/
-
-CHYBV(TTECH) CONVENTIONAL hybrids
-/
-TCHEVGSL
-TCHEVGDO
 /
 
 IMPEXP "Imports/Exports" /IMPORTS,EXPORTS/
@@ -839,13 +815,13 @@ EW.TEW
 
 SECtoEF(SBS,EF) Link between Model Subsectors and Energy Forms consumed
 /
-PG.(LGN,HCL,CRO,GSL,BGSL,KRS,BKRS,GDO,BGDO,RFO,LPG,OLQ,NGS,OGS,NUC,HYD,BMSWAS,SOL,GEO,WND,H2F)
-CHP.(LGN,HCL,GDO,RFO,NGS,OGS,NUC,HYD,BMSWAS,SOL,GEO,WND)
-H2P.(HCL,LGN,RFO,GDO,NGS,OGS,NUC,BMSWAS,SOL,WND,ELC)
-STEAMP.(HCL,LGN,CRO,GDO,BGDO,GSL,BGSL,KRS,BKRS,RFO,LPG,NGS,OGS,OLQ,NUC,GEO,BMSWAS,ELC,H2F)
-SLD.(LGN,HCL,GSL,GDO,BGDO,RFO,OLQ,NGS,OGS,BMSWAS,SOL,CRO,LPG,KRS,ELC,STE)
-LQD.(LGN,HCL,GSL,GDO,BGDO,RFO,OLQ,NGS,OGS,BMSWAS,SOL,CRO,LPG,KRS,ELC,STE)
-GAS.(HCL,GSL,GDO,BGDO,RFO,OLQ,NGS,OGS,BMSWAS,SOL,CRO,LPG,KRS,ELC,STE)
+PG.(LGN,HCL,CRO,GSL,BGSL,KRS,BKRS,GDO,BGDO,RFO,LPG,OLQ,NGS,OGS,NUC,HYD,WOODFUEL,WASTE,SOL,GEO,WND,H2F)
+CHP.(LGN,HCL,GDO,RFO,NGS,OGS,NUC,HYD,WOODFUEL,WASTE,SOL,GEO,WND)
+H2P.(HCL,LGN,RFO,GDO,NGS,OGS,NUC,WOODFUEL,WASTE,SOL,WND,ELC)
+STEAMP.(HCL,LGN,CRO,GDO,BGDO,GSL,BGSL,KRS,BKRS,RFO,LPG,NGS,OGS,OLQ,NUC,GEO,WOODFUEL,WASTE,ELC,H2F)
+SLD.(LGN,HCL,GSL,GDO,BGDO,RFO,OLQ,NGS,OGS,WOODFUEL,WASTE,SOL,CRO,LPG,KRS,ELC,STE)
+LQD.(LGN,HCL,GSL,GDO,BGDO,RFO,OLQ,NGS,OGS,WOODFUEL,WASTE,SOL,CRO,LPG,KRS,ELC,STE)
+GAS.(HCL,GSL,GDO,BGDO,RFO,OLQ,NGS,OGS,WOODFUEL,WASTE,SOL,CRO,LPG,KRS,ELC,STE)
 /
 
 PGALL(STECH)     Power Generation Plant Types
@@ -902,7 +878,7 @@ ATHBMSCCS.ATHBMSWAS
 
 PGREN(PGALL)    REN PLANTS with Saturation                /PGLHYD,PGSHYD,PGAWND,PGSOL,PGCSP,PGOTHREN,PGAWNO/
 PGRENSW(PGALL)   Solar and wind Plants                     /PGSOL,PGCSP,PGAWND,PGAWNO/
-PGRENEF          Renewable energy forms in power generation  /HYD,WND,SOL,BMSWAS,GEO/
+PGRENEF          Renewable energy forms in power generation  /HYD,WND,SOL,WOODFUEL,WASTE,GEO/
 
 PGALLtoEF(PGALL,EFS)     Correspondence between plants and energy forms
 /
@@ -912,7 +888,7 @@ PGALLtoEF(PGALL,EFS)     Correspondence between plants and energy forms
 *(ATHGAS,ATHGASCCS).NGS
 ATHOIL.(GSL,BGSL,GDO,BGDO,KRS,BKRS,CRO,OLQ,RFO,LPG)
 (ATHGAS,ATHGASCCS).(NGS,OGS)
-(ATHBMSWAS,ATHBMSCCS).BMSWAS
+(ATHBMSWAS,ATHBMSCCS).(WOODFUEL,WASTE)
 PGANUC.NUC
 (PGLHYD,PGSHYD).HYD
 (PGAWND,PGAWNO).WND
@@ -1048,10 +1024,9 @@ RFO
 OLQ
 NGS
 OGS
-BMSWAS
+WOODFUEL,
+WASTE
 /
-
-CHPSET(PGOTH)       "Indicators related to CHP Production"                       /NON_CHP_PER,CHP_CAP/
 
 Indu_SCon_Set /Base, SHR_NSE, SH_HPELC/
 
@@ -1102,40 +1077,6 @@ BKRS.KRS
 BGAS.NGS
 /
 
-BALEF2EFS(BALEF, EFS) Mapping from balance fuels to model fuels
-/
-"Total".(HCL,LGN,CRO,LPG,GSL,BGSL,KRS,BKRS,BGAS,GDO,BGDO,RFO,OLQ,NGS,OGS,NUC,STE,HYD,WND,SOL,BMSWAS,GEO,MET,ETH,H2F,ELC)
-"Solids".(HCL,LGN)
-"Hard coal".HCL
-"Lignite".LGN
-"Crude oil and Feedstocks".CRO
-"Liquids".(LPG,GSL,BGSL,KRS,BKRS,GDO,BGDO,RFO,OLQ,CRO)
-"Fossil Liquids".(LPG,GSL,KRS,GDO,RFO,OLQ,CRO)
-"Fossil".(HCL,LGN,CRO,LPG,GSL,KRS,GDO,RFO,OLQ,NGS,OGS)
-"Renewables".(HYD,WND,SOL,GEO)
-"Other fuels".(MET,ETH)
-"Liquified petroleum gas".LPG
-"Gasoline".(GSL,BGSL)
-"Kerosene".(KRS,BKRS)
-"Diesel oil".(GDO,BGDO)
-"Fuel oil".RFO
-"Other liquids".OLQ
-"Gases".(NGS,OGS,BGAS)
-"Natural gas".NGS
-"Derived gases".OGS
-"Nuclear heat".NUC
-"Heat".STE
-"Hydro".HYD
-"Wind".WND
-"Solar energy".SOL
-"Biomass".BMSWAS
-"Biofuels".(BMSWAS,BGSL,BKRS,BGDO,BGAS)
-"Geothermal heat".GEO
-"Methanol".MET
-"Hydrogen".H2F
-"Electricity".ELC
-/
-
 *         SET ASSIGNMENTS           *
 
 alias(TT, ytime);
@@ -1172,7 +1113,6 @@ ALIAS (INDDOM2,INDDOM);
 ALIAS (YYTIME2,ytime);
 
 * DSBS2 is a dummy alias of DSBS used as an inner summation index in the GLOBIOM
-* BMSWAS supply curve equation (Q08PriceFuelSubsecCarVal, module 08 equations.gms).
 * A separate alias is needed because DSBS is already used as an outer equation index.
 ALIAS (DSBS2,DSBS);
 

@@ -94,7 +94,7 @@ H2TECHtoFEEDSTOCK(H2TECH,EF)   "Mapping between production technologies and feed
 /
 (gsr,gss).ngs !! ,smr
 (cgf,cgs).hcl
-(bgfls,bgfl).BMSWAS !! bpy,bgfs,
+(bgfls,bgfl).(WOODFUEL,WASTE) !! bpy,bgfs,
 *sht.SOL
 *(nht,wen).NUC
 wes.SOL
@@ -106,7 +106,7 @@ H2TECHtoENERGY(H2TECH,EF)   "Mapping between production technologies and fuels f
 /
 (gsr,gss).(ngs,elc)
 (cgf,cgs).(hcl,elc)
-(bgfls,bgfl).(BMSWAS,elc)
+(bgfls,bgfl).(WOODFUEL,WASTE,elc)
 weg.ELC
 /
 *---
@@ -122,7 +122,8 @@ H2PRODEF(EF)               "Fuels used for hydrogen production"
 /
 ngs
 hcl
-bmswas
+WOODFUEL
+WASTE
 sol
 nuc
 elc

@@ -85,7 +85,7 @@ $include "./iBmswasBioPriceH12_magpie.csv"
 $offdelim
 ;
 parameter i08Bioenergy2GWeightMagpie(EFS) "Fuel weights in MAgPIE effective 2G biomass Q"
-  / BMSWAS 0.4
+  / WOODFUEL 0.4
     BGSL   0.6
     BKRS   0.6
     BGAS   0.6 /;
@@ -180,7 +180,7 @@ imFuelPrice(runCy,SBS,"CRO",YTIME) = i08PrimaryPrice(runCy,"CRO",YTIME);
 *---
 i08ElastPricePrimary("NGS","CRO") = 0.7;
 i08ElastPricePrimary("HCL","NGS") = 0.4;
-i08ElastPricePrimary("BMSWAS","BMSWAS") = 1;
+i08ElastPricePrimary("WOODFUEL","WOODFUEL") = 1;
 *---
 i08PriceBase("CRO") = 0.2;
 i08PriceBase("NGS") = 0.2;
@@ -193,7 +193,7 @@ i08ElastPriceFinal(EFS) = 1;
 *---
 i08ElastPricePrimary("NGS","CRO") = 0.7;
 i08ElastPricePrimary("HCL","NGS") = 0.4;
-i08ElastPricePrimary("BMSWAS","BMSWAS") = 1;
+i08ElastPricePrimary("WOODFUEL","WOODFUEL") = 1;
 *---
 i08PriceBase("CRO") = 0.2;
 i08PriceBase("NGS") = 0.2;

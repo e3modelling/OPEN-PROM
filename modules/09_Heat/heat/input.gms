@@ -150,7 +150,7 @@ RFO		  0.78,
 OLQ		  0.78,
 NGS		  0.8,
 OGS		  0.78,
-BMSWAS    0.76 
+WOODFUEL    0.76 
 /
 ;
 *---

@@ -61,7 +61,7 @@ sum(EFS$TSTEAMTOEF(TSTEAM,EFS),
   i09ShareFuel(runCy,TSTEAM,EFS,"%fBaseY%") * 
     (
       VmPriceFuelSubsecCarVal.L(runCy,"STEAMP",EFS,YTIME) +
-      V09CaptRateSte.L(runCy,TSTEAM,YTIME) * (imCo2EmiFac(runCy,"STEAMP",EFS,YTIME) + 4.17$(sameas("BMSWAS", EFS))) * VmCstCO2SeqCsts.L(runCy,YTIME) * 1e-3 +
+      V09CaptRateSte.L(runCy,TSTEAM,YTIME) * (imCo2EmiFac(runCy,"STEAMP",EFS,YTIME) + 4.17$(sameas("WOODFUEL", EFS))) * VmCstCO2SeqCsts.L(runCy,YTIME) * 1e-3 +
       (1-V09CaptRateSte.L(runCy,TSTEAM,YTIME)) * 1e-3 * (imCo2EmiFac(runCy,"STEAMP",EFS,YTIME)) * sum(NAP$NAPtoALLSBS(NAP,"STEAMP"),VmCarVal.L(runCy,NAP,YTIME))
     )
 ) / SUM(STECH$sameas(STECH,TSTEAM),imPlantEffByType(runCy,STECH,"effHeat",YTIME)) +

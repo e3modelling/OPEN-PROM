@@ -26,7 +26,7 @@ V08BmswasPriceFactor.L(runCy,YTIME)  = 1;
 $ifthenE.biomassTax %biomassReferenceEJ%>0
 i08BmswasPriceAdder("%fStartY%") = i08BmswasTaxScale
   * sqr(
-      sum(runCyL, V03ProdPrimary.L(runCyL,"BMSWAS","%fBaseY%"))
+      sum(runCyL, V03ProdPrimary.L(runCyL,"WOODFUEL","%fBaseY%"))
       * i08MtoeToEJ / %biomassReferenceEJ%
     );
 $else.biomassTax

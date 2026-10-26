@@ -61,7 +61,7 @@ Q09CostVarProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       i09ShareFuel(allCy,TSTEAM,EFS,"%fBaseY%") * 
       (
         VmPriceFuelSubsecCarVal(allCy,"STEAMP",EFS,YTIME) +
-        V09CaptRateSte(allCy,TSTEAM,YTIME) * (imCo2EmiFac(allCy,"STEAMP",EFS,YTIME) + 4.17$(sameas("BMSWAS", EFS))) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 +
+        V09CaptRateSte(allCy,TSTEAM,YTIME) * (imCo2EmiFac(allCy,"STEAMP",EFS,YTIME) + 4.17$(sameas("WOODFUEL", EFS))) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 +
         (1-V09CaptRateSte(allCy,TSTEAM,YTIME)) * 1e-3 * (imCo2EmiFac(allCy,"STEAMP",EFS,YTIME)) * sum(NAP$NAPtoALLSBS(NAP,"STEAMP"),VmCarVal(allCy,NAP,YTIME))
       )
     ) / SUM(STECH$sameas(STECH,TSTEAM),imPlantEffByType(allCy,STECH,"effHeat","%fBaseY%")) + !!i09EffSteThrm(TSTEAM,YTIME) +

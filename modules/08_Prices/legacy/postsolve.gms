@@ -32,7 +32,7 @@ imAfoluLandEmis(runCyL,EMTYPE,YTIME)$(TIME(YTIME) $sameas(EMTYPE,"CO2LandUse")) 
   sum(activeGlobiomScen,
       i08LandCO2CoefGlobiom(activeGlobiomScen,runCyL,EMTYPE,"ea",YTIME)
     + i08LandCO2CoefGlobiom(activeGlobiomScen,runCyL,EMTYPE,"eb",YTIME)
-      * V03ProdPrimary.L(runCyL,"BMSWAS",YTIME)
+      * V03ProdPrimary.L(runCyL,"WOODFUEL",YTIME)
   );
 imAfoluAgriEmis(runCyL,EMTYPE,YTIME)$(TIME(YTIME) $(sameas(EMTYPE,"CH4LandUse") or sameas(EMTYPE,"N2OLandUse"))) =
   sum(activeGlobiomScen,
@@ -80,7 +80,7 @@ i08BmswasPriceAdder(YTIME)$(
   sCY = card(runCyL) and TIME(YTIME-1) and AN(YTIME)
 ) = i08BmswasTaxScale
   * sqr(
-      sum(runCy2, V03ProdPrimary.L(runCy2,"BMSWAS",YTIME-1))
+      sum(runCy2, V03ProdPrimary.L(runCy2,"WOODFUEL",YTIME-1))
       * i08MtoeToEJ / %biomassReferenceEJ%
     );
 $endif.biomassTax

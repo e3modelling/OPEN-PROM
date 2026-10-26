@@ -49,8 +49,8 @@ $ENDIF.magpieQuantityEquation
 Q08BmswasPriceFactor(allCy,YTIME)$(TIME(YTIME) $runCy(allCy))..
     V08BmswasPriceFactor(allCy,YTIME)
         =E=
-    (VmPriceFuelSubsecCarVal(allCy,"PG","BMSWAS",YTIME) + 1e-6) /
-    (VmPriceFuelSubsecCarVal(allCy,"PG","BMSWAS",YTIME-1) + 1e-6);
+    (VmPriceFuelSubsecCarVal(allCy,"PG","WOODFUEL",YTIME) + 1e-6) /
+    (VmPriceFuelSubsecCarVal(allCy,"PG","WOODFUEL",YTIME-1) + 1e-6);
 
 Q08SupplyCurves(allCy,EFS,YTIME)$(TIME(YTIME) $runCy(allCy))..
     V08SupplyCurves(allCy,EFS,YTIME)
@@ -69,23 +69,23 @@ $ELSE.bmswasEmulatorBackend
           1e-3 +
           sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"a",YTIME)) + 
           sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"b",YTIME)) * 
-          V03ProdPrimary(allCy,"BMSWAS",YTIME) ** sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"c",YTIME)) 
+          V03ProdPrimary(allCy,"WOODFUEL",YTIME) ** sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"c",YTIME)) 
 $ENDIF.bmswasEmulatorBackend
 $ELSE.bmswasBackend
         1
 $ENDIF.bmswasBackend
-    )$sameas("BMSWAS",EFS) +
-    1$(not sameas("BMSWAS",EFS));
+    )$sameas("WOODFUEL",EFS) +
+    1$(not sameas("WOODFUEL",EFS));
 
 Q08PricePrimary(allCy,EFS,YTIME)$(TIME(YTIME) and runCy(allCy) and PRIM_PRICES(EFS) and not sameas("CRO",EFS))..
     V08PricePrimary(allCy,EFS,YTIME)
       =E=
     i08PriceBase(EFS) +
-    (V08PricePrimary(allCy,EFS,YTIME-1) - i08PriceBase(EFS) - i08BmswasPriceAdder(YTIME-1)$sameas(EFS,"BMSWAS")) * 
+    (V08PricePrimary(allCy,EFS,YTIME-1) - i08PriceBase(EFS) - i08BmswasPriceAdder(YTIME-1)$sameas(EFS,"WOODFUEL")) * 
     (V08PricePrimary(allCy,"CRO",YTIME) / V08PricePrimary(allCy,"CRO",YTIME-1)) ** i08ElastPricePrimary(EFS,"CRO") *
     (V08PricePrimary(allCy,"NGS",YTIME) / V08PricePrimary(allCy,"NGS",YTIME-1)) ** i08ElastPricePrimary(EFS,"NGS") *
-    (V08SupplyCurves(allCy,"BMSWAS",YTIME) / V08SupplyCurves(allCy,"BMSWAS",YTIME-1)) ** i08ElastPriceSupplyCurve(EFS,"BMSWAS") +
-    i08BmswasPriceAdder(YTIME)$sameas(EFS,"BMSWAS");
+    (V08SupplyCurves(allCy,"WOODFUEL",YTIME) / V08SupplyCurves(allCy,"WOODFUEL",YTIME-1)) ** i08ElastPriceSupplyCurve(EFS,"WOODFUEL") +
+    i08BmswasPriceAdder(YTIME)$sameas(EFS,"WOODFUEL");
 
 Q08PriceSecondary(allCy,EFS,YTIME)$(TIME(YTIME) and runCy(allCy))..
     VmPriceSecondary(allCy,EFS,YTIME)
@@ -101,7 +101,7 @@ Q08PriceFinal(allCy,DSBS,EFS,YTIME)$(TIME(YTIME) and runCy(allCy) and SECtoEF(DS
     (1 + ((V08PricePrimary(allCy,EFS,YTIME) / V08PricePrimary(allCy,EFS,YTIME-1)) ** i08ElastPriceFinal(EFS) - 1)$PRIM_PRICES(EFS));
 
 Q08PriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME)$(SECtoEF(SBS,EFS) $(not sameas("CRO",EFS))
-   $(not sameas("BMSWAS",EFS)) $TIME(YTIME)
+   $(not sameas("WOODFUEL",EFS)) $TIME(YTIME)
    $(not sameas("NUC",EFS)) $runCy(allCy))..
     VmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME)
         =E=
@@ -111,7 +111,7 @@ Q08PriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME)$(SECtoEF(SBS,EFS) $(not sameas("CR
     (1 + (VmCostPowGenAvgLng(allCy,YTIME-1) / VmCostPowGenAvgLng(allCy,YTIME-2) - 1)$sameas("ELC",EFS)) *
     (1 + ((VmCostAvgProdH2(allCy,YTIME-1) / VmCostAvgProdH2(allCy,YTIME-2)) ** 0.7 - 1)$sameas("H2F",EFS)) * 
     (1 + (VmCostAvgProdSte(allCy,YTIME-1) / VmCostAvgProdSte(allCy,YTIME-2) - 1)$sameas("STE",EFS)) *
-    (1 + (V08BmswasPriceFactor(allCy,YTIME) ** i08PriceTransElast(EFS,"BMSWAS") - 1)$BIOFUELS(EFS)) *
+    (1 + (V08BmswasPriceFactor(allCy,YTIME) ** i08PriceTransElast(EFS,"WOODFUEL") - 1)$BIOFUELS(EFS)) *
     (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** i08PriceTransElast(EFS,"CRO") - 1)$sameas("NGS",EFS)) *
     (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** i08PriceTransElast(EFS,"CRO") - 1)$SECtoEFPROD("LQD",EFS)) *
     (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** i08PriceTransElast(EFS,"CRO") - 1)$(sameas("HCL",EFS) or sameas("LGN",EFS))) +
@@ -119,9 +119,9 @@ Q08PriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME)$(SECtoEF(SBS,EFS) $(not sameas("CR
 
 * Select the land-use backend price, then apply the global sustainability tax once.
 Q08PriceBmswas(allCy,SBS,YTIME)$(
-  SECtoEF(SBS,"BMSWAS") $TIME(YTIME) $runCy(allCy)
+  SECtoEF(SBS,"WOODFUEL") $TIME(YTIME) $runCy(allCy)
 )..
-  VmPriceFuelSubsecCarVal(allCy,SBS,"BMSWAS",YTIME)
+  VmPriceFuelSubsecCarVal(allCy,SBS,"WOODFUEL",YTIME)
     =E=
   (
 $IFTHEN.bmswasBackend %bmswasPriceMode% == softlink
@@ -134,20 +134,20 @@ $IFTHEN.bmswasEmulatorBackend %landUseEmulator% == magpie
         i08BmswasPriceH12Magpie(activeMagpieScen,MAGPIEH12REG,"pc",YTIME) * sqr(V08Bioenergy2GEffectiveQH12Magpie(allCy,YTIME))
       )
 $ELSE.bmswasEmulatorBackend
-      (VmPriceFuelSubsecCarVal(allCy,SBS,"BMSWAS",YTIME-1) - i08BmswasPriceAdder(YTIME-1)) *
+      (VmPriceFuelSubsecCarVal(allCy,SBS,"WOODFUEL",YTIME-1) - i08BmswasPriceAdder(YTIME-1)) *
       (1e-3 + 
         sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"a",YTIME)) + 
         sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"b",YTIME)) * 
-        (V03ProdPrimary(allCy,"BMSWAS",YTIME-1) + 1e-6) ** sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"c",YTIME)) 
+        (V03ProdPrimary(allCy,"WOODFUEL",YTIME-1) + 1e-6) ** sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"c",YTIME)) 
       ) /
       (1e-3 + 
         sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"a",YTIME)) +
         sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"b",YTIME)) *
-          (V03ProdPrimary(allCy,"BMSWAS",YTIME-2) + 1e-6) ** sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"c",YTIME))
+          (V03ProdPrimary(allCy,"WOODFUEL",YTIME-2) + 1e-6) ** sum(activeGlobiomScen, i08BmswasSupplyCoefGlobiom(activeGlobiomScen,allCy,"c",YTIME))
       )
 $ENDIF.bmswasEmulatorBackend
 $ELSE.bmswasBackend
-    VmPriceFuelSubsecCarVal(allCy,SBS,"BMSWAS",YTIME-1) - i08BmswasPriceAdder(YTIME-1)
+    VmPriceFuelSubsecCarVal(allCy,SBS,"WOODFUEL",YTIME-1) - i08BmswasPriceAdder(YTIME-1)
 $ENDIF.bmswasBackend
   ) + 
   i08BmswasPriceAdder(YTIME);
@@ -205,6 +205,6 @@ Q08CostAvgProd(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     )$(sameas("GSL",EFS) or sameas("GDO",EFS)) +
     (
       VmCostAvgProd(allCy,EFS,YTIME-1) *
-      (1 + (V08SupplyCurves(allCy,"BMSWAS",YTIME) / V08SupplyCurves(allCy,"BMSWAS",YTIME) - 1)$BIOFUELS(EFS)) *
+      (1 + (V08SupplyCurves(allCy,"WOODFUEL",YTIME) / V08SupplyCurves(allCy,"WOODFUEL",YTIME) - 1)$BIOFUELS(EFS)) *
       (1 - 0.008$BIOFUELS(EFS))
     )$(not (sameas(EFS,"STE") or sameas(EFS,"H2F") or sameas(EFS,"ELC") or sameas("GSL",EFS) or sameas("GDO",EFS)));

@@ -53,7 +53,7 @@ V05CostVarProdH2Tech.FX(runCy,H2TECH,YTIME)$DATAY(YTIME) =
 sum(EF$(H2TECHtoFEEDSTOCK(H2TECH,EF) or H2TECHtoENERGY(H2TECH,EF)),
   (
     VmPriceFuelSubsecCarVal.L(runCy,"H2P",EF,YTIME) * 1e3 +
-    V05CaptRateH2.L(runCy,H2TECH,YTIME) * (imCo2EmiFac(runCy,"H2P",EF,YTIME) + 4.17$(sameas("BMSWAS", EF))) * VmCstCO2SeqCsts.L(runCy,YTIME) +
+    V05CaptRateH2.L(runCy,H2TECH,YTIME) * (imCo2EmiFac(runCy,"H2P",EF,YTIME) + 4.17$(sameas("WOODFUEL", EF))) * VmCstCO2SeqCsts.L(runCy,YTIME) +
     (1-V05CaptRateH2.L(runCy,H2TECH,YTIME)) * (imCo2EmiFac(runCy,"H2P",EF,YTIME)) *
     sum(NAP$NAPtoALLSBS(NAP,"H2P"),VmCarVal.L(runCy,NAP,YTIME))
   ) * (i05InputOverOutH2ProdFeed(runCy,H2TECH,EF,YTIME) + i05InputOverOutH2ProdEnergy(runCy,H2TECH,EF,YTIME))

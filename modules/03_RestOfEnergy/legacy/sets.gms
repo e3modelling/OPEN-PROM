@@ -4,7 +4,7 @@ sets
 *---
 SECtoEFPROD(SSBS,EFS)      "Energy forms produced by each supply sector"
 /
-SLD.(HCL,LGN,BMSWAS,NUC)
+SLD.(HCL,LGN,WOODFUEL,WASTE,NUC)
 LQD.(GSL,BGSL,GDO,BGDO,RFO,LPG,KRS,BKRS,OLQ)
 GAS.(NGS,OGS,BGAS)
 PG.(ELC)
