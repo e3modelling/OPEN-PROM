@@ -1374,4 +1374,4 @@ PGEF(EFS) = yes$(sum(PGALL, PGALLTOEF(PGALL,EFS)));
 CALIB_DSBS(DSBS)$(INDDOM(DSBS) or NENSE(DSBS) or sameas("PC",DSBS) or sameas("PB",DSBS) or sameas("GU",DSBS)) = YES;
 SECtoCARBON(SBS,YTIME)$(INDSE1(SBS) or CDR1(SBS) or SSBS(SBS)) = yes;
 SECtoCARBON(SBS,YTIME)$((DOMSE1(SBS) or TRANS1(SBS) or BUN(SBS)) and ord(YTIME) > 18) = yes;
-SECtoCARBON("AG",YTIME)$(not sameas("%fscenario%","1")) = yes;
+SECtoCARBON("AG",YTIME)$(not (sameas("%fscenario%","1") or sameas("%fscenario%","4"))) = yes;
