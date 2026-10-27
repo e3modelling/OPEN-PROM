@@ -575,12 +575,14 @@ $offdelim
 *---
 imDistrLosses(runCy,EFS,YTIME) = iDataDistrLosses(runCy,EFS,YTIME);
 *---
-table imFuelCons(allCy,SBS,EF,YTIME)	      "Fuel consumption (Mtoe)"
+table imFinalEnergy(allCy,SBS,EFS,YTIME)	      "Final energy (Mtoe)"
 $ondelim
 $include"./iFuelCons.csv"
 $offdelim
 ;
-imFuelCons(runCy,BUN,EF,YTIME) = -imFuelCons(runCy,BUN,EF,YTIME);
+imFinalEnergy(runCy,BUN,EFS,YTIME) = -imFinalEnergy(runCy,BUN,EFS,YTIME);
+*---
+imFuelCons(allCy,SBS,EF,YTIME) = SUM(EFS$EFtoEFS(EF,EFS), imFinalEnergy(runCy,SBS,EFS,YTIME))
 *---
 imCO2CaptRate(PGALL)$CCS(PGALL) = 0.90; 
 imEffValueInDollars(runCy,SBS,YTIME) = 0;

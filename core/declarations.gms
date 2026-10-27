@@ -1,6 +1,7 @@
 *' @title Core Declarations
 *' @code
 Parameters
+imFuelCons(allCy,SBS,EF,YTIME)                             "Fuel consumption of EF per sector (Mtoe)"
 iNPDL(SBS)                                                 "Number of Polynomial Distribution Lags (PDL) (1)"
 iTransfInpGasworks(allCy,EF,YTIME)                         "Transformation Input in Gasworks, Blast Furnances, Briquetting plants (Mtoe)"
 iPriceTragets(allCy,SBS,EF,YTIME)	                       "Price Targets	(1)"

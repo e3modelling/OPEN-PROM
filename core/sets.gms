@@ -557,6 +557,31 @@ ELC     "Electricity"
 *EKRS    "Synthetic Kerosene"
 /
 
+EFtoEFS(EF,EFS) 
+\
+HCL.HCL   
+LGN   
+CRO   
+LPG   
+GSL.(FGSL,BGSL) 
+KRS.(FKRS,BKRS) 
+GDO.(FGDO,BGDO) 
+RFO  
+OLQ    
+GAS.(NGS,BGAS)   
+OGS     
+NUC     
+STE     
+HYD     
+WND    
+SOL     
+WOODFUEL
+WASTE   
+GEO    
+H2F    
+ELC    
+\
+
 ELCEF(EF)        Electricity                                         /ELC/
 STEAM(EFS)       Steam                                               /STE/
 
