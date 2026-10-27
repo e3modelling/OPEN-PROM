@@ -558,7 +558,7 @@ ELC     "Electricity"
 /
 
 EFtoEFS(EF,EFS) 
-\
+/
 HCL.HCL   
 LGN.LGN   
 CRO.CRO
@@ -580,7 +580,7 @@ WASTE.WASTE
 GEO.GEO    
 H2F.H2F    
 ELC.ELC    
-\
+/
 
 ELCEF(EF)        Electricity                                         /ELC/
 STEAM(EFS)       Steam                                               /STE/
