@@ -60,9 +60,8 @@ i02numtechnologiesUsingEF(DSBS,EF)=sum(ITECH2$(ITECHtoEF(ITECH2,EF)$SECTTECH(DSB
 i02ShareBlend(runCy,DSBS,ITECH,EF,YTIME)$(DATAY(YTIME) and SECTTECH(DSBS,ITECH) and ITECHtoEF(ITECH,EF)) =
   (
     imFuelCons(runCy,DSBS,EF,YTIME) /
-    SUM(EFS2$ITECHtoEF(ITECH,EFS2), imFuelCons(runCy,DSBS,EFS2,YTIME))
-  )$SUM(EFS2$ITECHtoEF(ITECH,EFS2), imFuelCons(runCy,DSBS,EFS2,YTIME)) +
-  1$(not SUM(EFS2$ITECHtoEF(ITECH,EFS2), imFuelCons(runCy,DSBS,EFS2,YTIME)) and not BIOFUELS(EF));
+    SUM(EF2$ITECHtoEF(ITECH,EF2), imFuelCons(runCy,DSBS,EF2,YTIME))
+  )$SUM(EF2$ITECHtoEF(ITECH,EF2), imFuelCons(runCy,DSBS,EF2,YTIME));
   
 i02ShareBlend(runCy,DSBS,ITECH,EF,YTIME)$AN(YTIME) = i02ShareBlend(runCy,DSBS,ITECH,EF,"%fBaseY%");
 i02ShareElcHP(runCy,"HOU",YTIME) = 0.1;

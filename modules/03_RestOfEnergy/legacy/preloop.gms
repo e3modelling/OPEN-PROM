@@ -39,8 +39,8 @@ VmImpNetEneBrnch.L(runCy,EFS,YTIME) = imFuelTrade(runCy,"IMPORTS",EFS,"%fBaseY%"
 VmImpNetEneBrnch.FX(runCy,EFS,YTIME)$DATAY(YTIME) = imFuelTrade(runCy,"IMPORTS",EFS,YTIME) - imFuelTrade(runCy,"EXPORTS",EFS,YTIME);
 *---
 VmFinalEnergy.LO(runCy,DSBS,EFS,YTIME) = 0;
-VmFinalEnergy.L(runCy,DSBS,EFS,YTIME) = imFuelCons(runCy,DSBS,EFS,"%fBaseY%");
-VmFinalEnergy.FX(runCy,DSBS,EFS,YTIME)$DATAY(YTIME) = imFuelCons(runCy,DSBS,EFS,YTIME);
+VmFinalEnergy.L(runCy,DSBS,EFS,YTIME) = imFinalEnergy(runCy,DSBS,EFS,"%fBaseY%");
+VmFinalEnergy.FX(runCy,DSBS,EFS,YTIME)$DATAY(YTIME) = imFinalEnergy(runCy,DSBS,EFS,YTIME);
 VmFinalEnergy.FX(runCy,DSBS,EFS,YTIME)$(not SECtoEF(DSBS,EFS)) = 0;
 VmFinalEnergy.FX(runCy,"ICT","ELC",YTIME) = i02FuelConsICT(runCy,"%ICT%","%SSP%",YTIME);
 *---

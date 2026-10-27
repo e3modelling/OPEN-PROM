@@ -34,7 +34,7 @@ V01NumPcScrap.LO(runCy,YTIME) = 0;
 V01ActivGoodsTransp.L(runCy,TRANSE,YTIME) = 0.1;
 V01ActivGoodsTransp.FX(runCy,TRANG,YTIME)$(not An(YTIME)) = imActv(YTIME,runCy,TRANG);
 V01ActivGoodsTransp.FX(runCy,TRANSE,YTIME)$(not (TRANG(TRANSE) or BUN1(TRANSE))) = 0;
-V01ActivGoodsTransp.FX(runCy,BUN1,YTIME)$DATAY(YTIME) = SUM(EFS,imFuelCons(runCy,BUN1,EFS,YTIME));
+V01ActivGoodsTransp.FX(runCy,BUN1,YTIME)$DATAY(YTIME) = SUM(EFS,imFinalEnergy(runCy,BUN1,EFS,YTIME));
 *---
 V01PcOwnPcLevl.UP(runCy,YTIME) = 2*i01PassCarsMarkSat(runCy);
 V01PcOwnPcLevl.L(runCy,YTIME) = 0.5;
@@ -48,7 +48,7 @@ V01GapTranspActiv.FX(runCy,TRANSE,YTIME)$DATAY(YTIME) = 0;
 *---
 V01ConsSpecificFuel.FX(runCy,TRANSE,TTECH,EF,YTIME)$(not sameas(TRANSE,"PC") and SECTTECH(TRANSE,TTECH) and TTECHtoEF(TTECH,EF)) = testSFC(runCy,TRANSE,TTECH);
 V01ConsSpecificFuel.FX(runCy,TRANSE,TTECH,EF,YTIME)$(sameas(TRANSE,"PC")$(SECTTECH(TRANSE,TTECH)$TTECHtoEF(TTECH,EF))) = i01SFCPC(runCy,TTECH,EF,"%fBaseY%") * 
-SUM(EFS,imFuelCons(runCy,"PC",EFS,"%fBaseY%")) * 1e3 / 
+SUM(EFS,imFinalEnergy(runCy,"PC",EFS,"%fBaseY%")) * 1e3 / 
 SUM((TTECH2,EF2)$TTECHtoEF(TTECH2,EF2), i01SFCPC(runCy,TTECH2,EF2,"%fBaseY%") * i01StockPC(runCy,TTECH2,"%fBaseY%") * i01ShareBlend(runCy,TRANSE,EF2,"%fBaseY%") * imTransChar(runCy,"KM_VEH","%fBaseY%"))
 ;
 *---
