@@ -25,7 +25,7 @@ imActv(YTIME,allCy,"PN")$DATAY(YTIME) = 1;
 *---
 table i01GDP(YTIME,allCy) "GDP (billion US$2015)"
 $ondelim
-$include "./AG_BASE_iGDP.csvr"
+$include "./iGDP.csvr"
 $offdelim
 ;
 *---

@@ -5,7 +5,7 @@
 *---
 table i08PrimaryPrice(allCy,EFS,YTIME)   ""
 $ondelim
-$include "AG_BASE_iPrimaryEnergyPrice.csv"
+$include "iPrimaryEnergyPrice.csv"
 $offdelim
 ;
 *---
