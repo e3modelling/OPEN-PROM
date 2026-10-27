@@ -25,7 +25,7 @@ imActv(YTIME,allCy,"PN")$DATAY(YTIME) = 1;
 *---
 table i01GDP(YTIME,allCy) "GDP (billion US$2015)"
 $ondelim
-$include "./iGDP.csvr"
+$include "./AG_BASE_iGDP.csvr"
 $offdelim
 ;
 *---
@@ -619,6 +619,8 @@ elseif %fScenario% eq 600 then
 elseif %fScenario% eq 800 then
      iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"UPT_800",YTIME);
 endif;
+*---
+imCarVal(allCy,SBS,YTIME)$SECtoCARBON(SBS,YTIME) = iCarbValYrExog(allCy,YTIME);
 *---
 table i01PremScrpFac(allCy,DSBS,TECH,YTIME)     "Parameter that controls premature scrapping"
 $ondelim

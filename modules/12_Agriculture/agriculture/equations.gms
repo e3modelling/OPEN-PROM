@@ -14,9 +14,10 @@ Q12Activity(allCy,AGRI_MODES,YTIME)$(TIME(YTIME) and runCy(allCy))..
   V12Activity(allCy,AGRI_MODES,YTIME)
     =E=
   (1 + (i12IndexGlobalCaloriesIntake("PLANT",YTIME) - 1)$(sameas("CROPS",AGRI_MODES) or sameas("CLIMATE",AGRI_MODES) or sameas("IRRIGATION",AGRI_MODES))) *
+  (1 + (i12IndexGlobalCaloriesIntake("PLANT",YTIME) - 1)$sameas("CLIMATE",AGRI_MODES)) ** 0.3 *
   (1 + (i12IndexGlobalCaloriesIntake("MEAT",YTIME) - 1)$sameas("LIVESTOCK",AGRI_MODES)) *
   (1 + (i12IndexGlobalCaloriesIntake("FISH",YTIME) - 1)$sameas("FISHING",AGRI_MODES)) *
-  (1 + ((V03ProdPrimary(allCy,"BMSWAS",YTIME) + 1e-6) / (V03ProdPrimary(allCy,"BMSWAS",YTIME-1) + 1e-6) * imActv(YTIME,allCy,"OE") - 1)$sameas("FORESTRY",AGRI_MODES)) *
+  (1 + ((V03ProdPrimary(allCy,"BMSWAS",YTIME) + 1e-6) / (V03ProdPrimary(allCy,"BMSWAS",YTIME-1) + 1e-6) * imActv(YTIME,allCy,"OE") - 1)$sameas("FORESTRY",AGRI_MODES)) ** 0.1 *
   (1 + (V12EnergyService(allCy,"CROPS",YTIME) / V12EnergyService(allCy,"CROPS",YTIME-1) - 1)$sameas("POSTHARVESTING",AGRI_MODES)) *
   (1 + ((V03ProdPrimary(allCy,"BGDO",YTIME) + 1e-6) / (V03ProdPrimary(allCy,"BGDO",YTIME-1) + 1e-6) - 1)$sameas("ENERGY_CROPS",AGRI_MODES));
 
@@ -53,28 +54,33 @@ Q12GapCapacity(allCy,AGRI_MODES,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     ))
   ) / 2 + 1e-6;
 
-* toe / activity
-Q12CostFuel(allCy,AGRI_MODES,AGRITECH,YTIME)$(TIME(YTIME) $AGRMODEStoTECH(AGRI_MODES,AGRITECH) $runCy(allCy))..
-  V12CostFuel(allCy,AGRI_MODES,AGRITECH,YTIME)
+Q12CostCapital(allCy,AGRI_MODES,AGRITECH,YTIME)$(TIME(YTIME)$AGRMODEStoTECH(AGRI_MODES,AGRITECH)$runCy(allCy))..
+  V12CostCapital(allCy,AGRI_MODES,AGRITECH,YTIME)
+    =E=
+  V12CostVariable(allCy,AGRI_MODES,AGRITECH,"%fBaseY%") + 1e-6;
+
+Q12CostVariable(allCy,AGRI_MODES,AGRITECH,YTIME)$(TIME(YTIME)$AGRMODEStoTECH(AGRI_MODES,AGRITECH)$runCy(allCy))..
+  V12CostVariable(allCy,AGRI_MODES,AGRITECH,YTIME)
       =E=
   sum(EFS$AGRITECHTOEF(AGRITECH,EFS), 
     (V12PriceFinalAgriculture(allCy,AGRI_MODES,EFS,YTIME) + VmPriceCarbon(allCy,"AG",EFS,YTIME)) *
     V12SpecificFuelCons(allCy,AGRI_MODES,AGRITECH,YTIME) *
     V12ShareBlend(allCy,AGRI_MODES,AGRITECH,EFS,YTIME)
-  ) + 1e-6;
+  );
 
-Q12CostTotal(allCy,AGRI_MODES,AGRITECH,YTIME)$(TIME(YTIME) $AGRMODEStoTECH(AGRI_MODES,AGRITECH) $runCy(allCy))..
+Q12CostTotal(allCy,AGRI_MODES,AGRITECH,YTIME)$(TIME(YTIME)$AGRMODEStoTECH(AGRI_MODES,AGRITECH)$runCy(allCy))..
   V12CostTotal(allCy,AGRI_MODES,AGRITECH,YTIME)
       =E=
-  V12CostFuel(allCy,AGRI_MODES,AGRITECH,YTIME) + 1e-6;
+  V12CostCapital(allCy,AGRI_MODES,AGRITECH,YTIME) +
+  V12CostVariable(allCy,AGRI_MODES,AGRITECH,YTIME);
 
 Q12ScrpPrem(allCy,AGRI_MODES,AGRITECH,YTIME)$(TIME(YTIME)$AGRMODEStoTECH(AGRI_MODES,AGRITECH)$runCy(allCy))..
     V12ScrpPrem(allCy,AGRI_MODES,AGRITECH,YTIME)
         =E=
     1 -
-    V12CostFuel(allCy,AGRI_MODES,AGRITECH,YTIME-1) ** (-1) /
+    V12CostVariable(allCy,AGRI_MODES,AGRITECH,YTIME-1) ** (-1) /
     (
-      V12CostFuel(allCy,AGRI_MODES,AGRITECH,YTIME-1) ** (-1) +
+      V12CostVariable(allCy,AGRI_MODES,AGRITECH,YTIME-1) ** (-1) +
       0.005 *
       SUM(AGRITECH2$(not sameas(AGRITECH2,AGRITECH) and AGRMODEStoTECH(AGRI_MODES,AGRITECH2)),
         V12CostTotal(allCy,AGRI_MODES,AGRITECH2,YTIME-1) ** (-1)

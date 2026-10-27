@@ -5,10 +5,10 @@
 *---
 table i08PrimaryPrice(allCy,EFS,YTIME)   ""
 $ondelim
-$include "iPrimaryEnergyPrice.csv"
+$include "AG_BASE_iPrimaryEnergyPrice.csv"
 $offdelim
 ;
-
+*---
 *' Fuel price pass-through elasticity, indexed (target, source): i08PriceTransElast(EFS,"CRO"),
 *' i08PriceTransElast(EFS,"BMSWAS"). CRO rows use 0.4/0.8/0.2; BMSWAS-source
 *' rows use 0.6 for processed biofuels. Table = target rows x source cols.

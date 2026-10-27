@@ -27,7 +27,8 @@ Q12GapCapacity(allCy,AGRI_MODES,YTIME)
 Q12ScrpRate(allCy,AGRI_MODES,AGRITECH,YTIME)
 Q12ShareTech(allCy,AGRI_MODES,AGRITECH,YTIME)
 Q12ScrpPrem(allCy,AGRI_MODES,AGRITECH,YTIME)
-Q12CostFuel(allCy,AGRI_MODES,AGRITECH,YTIME)
+Q12CostVariable(allCy,AGRI_MODES,AGRITECH,YTIME)            
+Q12CostCapital(allCy,AGRI_MODES,AGRITECH,YTIME)
 Q12CostTotal(allCy,AGRI_MODES,AGRITECH,YTIME)
 Q12ShareBlend(allCy,AGRI_MODES,AGRITECH,EFS,YTIME)
 Q12PriceFinalAgriculture(allCy,AGRI_MODES,EFS,YTIME)
@@ -42,11 +43,11 @@ V12Activity(allCy,AGRI_MODES,YTIME)                       "Activity indicator fo
                                                               !! - Tonnes of primary wood products for FORESTRY
                                                               !! - Tonnes of primary biomass products for ENERGY CROPS
 V12EnergyService(allCy,AGRI_MODES,YTIME)                  "Energy service of each agriculture mode"
-                                                              !! - Area of crops CROPS,GREENHOUSES,ENERGY CROPS (ha)
-                                                              !! - Livestock units for LIVESTOCK (LU)
-                                                              !! - Tonnes of fish-based products for FISHING (tn)
-                                                              !! - Tonnes of primary wood products for FORESTRY (tn)
-                                                              !! - Water irrigated for IRRIGATION (m^3)
+                                                              !! - Area of crops CROPS,GREENHOUSES,ENERGY CROPS,POSTHARVESTING (1e9 ha)
+                                                              !! - Livestock units for LIVESTOCK (1e9 LU)
+                                                              !! - Tonnes of fish-based products for FISHING (1e6 tn)
+                                                              !! - Tonnes of primary wood products for FORESTRY (1e6 m^3)
+                                                              !! - Irrigated crops for IRRIGATION (1e9 ha)
 V12ConsFuel(allCy,AGRI_MODES,EFS,YTIME)
 V12ConsFertilizers(allCy,FERT_TYPES,YTIME)
 V12Capacity(allCy,AGRI_MODES,AGRITECH,YTIME)
@@ -54,9 +55,10 @@ V12GapCapacity(allCy,AGRI_MODES,YTIME)
 V12ScrpRate(allCy,AGRI_MODES,AGRITECH,YTIME)
 V12ShareTech(allCy,AGRI_MODES,AGRITECH,YTIME)
 V12ScrpPrem(allCy,AGRI_MODES,AGRITECH,YTIME)
-V12CostFuel(allCy,AGRI_MODES,AGRITECH,YTIME)
+V12CostVariable(allCy,AGRI_MODES,AGRITECH,YTIME)            "Variable cost per technology (k$2025/1e-6 [Act])"
+V12CostCapital(allCy,AGRI_MODES,AGRITECH,YTIME)
 V12CostTotal(allCy,AGRI_MODES,AGRITECH,YTIME)
 V12ShareBlend(allCy,AGRI_MODES,AGRITECH,EFS,YTIME)
-V12SpecificFuelCons(allCy,AGRI_MODES,AGRITECH,YTIME)
-V12PriceFinalAgriculture(allCy,AGRI_MODES,EFS,YTIME)
+V12SpecificFuelCons(allCy,AGRI_MODES,AGRITECH,YTIME)        "Specific fuel consumption per energy service (Mtoe/[Act])"
+V12PriceFinalAgriculture(allCy,AGRI_MODES,EFS,YTIME)        "Final prices of agriculture servies (k$2015/toe)"
 ;
