@@ -106,8 +106,8 @@ LPG 3.2,
 KRS 3.2,
 RFO 3.2,
 OLQ 3.2,
-NGS 2.5,
-OGS 2.5,
+GAS 2.5,
+OGS 2.5
 *waste
 *woodfuel
 /;
@@ -163,23 +163,19 @@ $offdelim
 imFuelPrice(allCy,SBS,EF,YTIME) = imFuelPrice(allCy,SBS,EF,YTIME)/1000; !! change units $15 -> k$15
 imFuelPrice(runCy,CDR,EF,YTIME)$SECtoEF(CDR,EF) = imFuelPrice(runCy,"OI",EF,YTIME);
 imFuelPrice(runCy,DOMSE,"GSL",YTIME) = imFuelPrice(runCy,"OI","GSL",YTIME);
-imFuelPrice(runCy,DOMSE,"BGSL",YTIME) = imFuelPrice(runCy,"OI","BGSL",YTIME);
 imFuelPrice(runCy,DOMSE,"LGN",YTIME) = imFuelPrice(runCy,"OI","LGN",YTIME);
 imFuelPrice(runCy,DOMSE,"OLQ",YTIME) = imFuelPrice(runCy,"OI","OLQ",YTIME);
 imFuelPrice(runCy,DOMSE,"RFO",YTIME) = imFuelPrice(runCy,"OI","RFO",YTIME);
 imFuelPrice(runCy,"SE","GDO",YTIME) = imFuelPrice(runCy,"OI","GDO",YTIME);
-imFuelPrice(runCy,"SE","BGDO",YTIME) = imFuelPrice(runCy,"OI","BGDO",YTIME);
-imFuelPrice(runCy,"AG","BGAS",YTIME) = imFuelPrice(runCy,"AG","NGS",YTIME);
-imFuelPrice(runCy,"AG","BGDO",YTIME) = imFuelPrice(runCy,"AG","GDO",YTIME);
 imFuelPrice(runCy,TRANSE,"RFO",YTIME) = imFuelPrice(runCy,"BMAR","RFO",YTIME);
-imFuelPrice(runCy,TRANSE,"OGS",YTIME) = imFuelPrice(runCy,TRANSE,"NGS",YTIME);
+imFuelPrice(runCy,TRANSE,"OGS",YTIME) = imFuelPrice(runCy,TRANSE,"GAS",YTIME);
 imFuelPrice(runCy,TRANSE,"OLQ",YTIME) = imFuelPrice(runCy,TRANSE,"GDO",YTIME);
 imFuelPrice(runCy,TRANSE,"H2F",YTIME) = 2 * imFuelPrice(runCy,TRANSE,"H2F",YTIME);
-imFuelPrice(runCy,"H2P",EFS,YTIME) = imFuelPrice(runCy,"OI",EFS,YTIME);
-imFuelPrice(runCy,"STEAMP",EFS,YTIME) = imFuelPrice(runCy,"PG",EFS,YTIME);
+imFuelPrice(runCy,"H2P",EF,YTIME) = imFuelPrice(runCy,"OI",EF,YTIME);
+imFuelPrice(runCy,"STEAMP",EF,YTIME) = imFuelPrice(runCy,"PG",EF,YTIME);
 imFuelPrice(runCy,SBS,"H2F",YTIME) = 1.5 * imFuelPrice(runCy,"OI","ELC",YTIME);
 imFuelPrice(runCy,SBS,"STE",YTIME) = imFuelPrice(runCy,"OI","ELC",YTIME);
-imFuelPrice(runCy,"ICT",EFS,YTIME)$SECtoEF("ICT",EFS) = imFuelPrice(runCy,"SE",EFS,YTIME);
+imFuelPrice(runCy,"ICT",EF,YTIME)$SECtoEF("ICT",EF) = imFuelPrice(runCy,"SE",EF,YTIME);
 *---
 table imPriceFuelsIntBase(WEF,YTIME)	              "International Fuel Prices USED IN BASELINE SCENARIO ($2015/toe)"
 $ondelim
@@ -187,12 +183,12 @@ $include"./iPriceFuelsIntBase.csv"
 $offdelim
 ;
 *---
-table imFuelTrade(allCy,IMPEXP,EF,YTIME)	                   "Imports/exports (Mtoe)"		
+table imFuelTrade(allCy,IMPEXP,EFS,YTIME)	                   "Imports/exports (Mtoe)"		
 $ondelim
 $include"./iDataTrade.csv"
 $offdelim
 ;
-imFuelTrade(allCy,"EXPORTS",EF,YTIME) = - imFuelTrade(allCy,"EXPORTS",EF,YTIME);
+imFuelTrade(allCy,"EXPORTS",EFS,YTIME) = - imFuelTrade(allCy,"EXPORTS",EFS,YTIME);
 *---
 table imPriceFuelsInt(WEF,YTIME)                      "International Fuel Prices ($2015/toe)"
 $ondelim
