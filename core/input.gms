@@ -620,6 +620,8 @@ elseif %fScenario% eq 800 then
      iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"UPT_800",YTIME);
 endif;
 *---
+imCarVal(allCy,SBS,YTIME)$SECtoCARBON(SBS,YTIME) = iCarbValYrExog(allCy,YTIME);
+*---
 table i01PremScrpFac(allCy,DSBS,TECH,YTIME)     "Parameter that controls premature scrapping"
 $ondelim
 $include"./iPremScrpFac.csv"

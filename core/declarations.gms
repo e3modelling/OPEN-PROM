@@ -1,6 +1,7 @@
 *' @title Core Declarations
 *' @code
 Parameters
+imCarVal(allCy,SBS,YTIME)                                  "Carbon prices per country and sector (US$2015/tn CO2)"
 iNPDL(SBS)                                                 "Number of Polynomial Distribution Lags (PDL) (1)"
 iTransfInpGasworks(allCy,EF,YTIME)                         "Transformation Input in Gasworks, Blast Furnances, Briquetting plants (Mtoe)"
 iResMargTotAvailCap(allCy,PGRES,YTIME)	                   "Reserve margins on total available capacity and peak load (1)"
