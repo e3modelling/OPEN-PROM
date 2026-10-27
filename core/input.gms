@@ -567,7 +567,7 @@ $offtext
 *imCumDistrFuncConsSize(runCy,DSBS) = sum(rCon, imDisFunConSize(runCy,DSBS,rCon));
 imCGI(allCy,YTIME) = 1;
 *---
-table iDataDistrLosses(allCy,EF,YTIME)	     "Data for Distribution Losses (Mtoe)"
+table iDataDistrLosses(allCy,EFS,YTIME)	     "Data for Distribution Losses (Mtoe)"
 $ondelim
 $include"./iDataDistrLosses.csv"
 $offdelim

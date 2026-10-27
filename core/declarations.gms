@@ -31,11 +31,11 @@ imAnnCons(allCy,DSBS,conSet)                               "Annual consumption o
                                                                 !! For other passenger tranportation modes (Mpkm/vehicle)
                                                                 !! For goods transport, (Mtkm/vehicle)  
 *imCumDistrFuncConsSize(allCy,DSBS)                         "Cummulative distribution function of consumer size groups (1)"
-imRateLossesFinCons(allCy,EF,YTIME)                        "Rate of losses over Available for Final Consumption (1)"  
+imRateLossesFinCons(allCy,EFS,YTIME)                        "Rate of losses over Available for Final Consumption (1)"  
 imCO2CaptRate(PGALL)	                                    "Plant CO2 capture rate (1)"		
 imEffValueInDollars(allCy,SBS,YTIME)	                   "Efficiency value (US$2015/toe)" 	
 imShrNonSubElecInTotElecDem(allCy,SBS)	                   "Share of non substitutable electricity in total electricity demand per subsector (1)"		
-imDistrLosses(allCy,EF,YTIME)	                           "Distribution Losses (Mtoe)"		
+imDistrLosses(allCy,EFS,YTIME)	                           "Distribution Losses (Mtoe)"		
 imVarCostTech(allCy,SBS,TECH,YTIME)	                       "Variable Cost of technology ()"
                                                                 !! For transport (kUS$2015/vehicle)
                                                                 !! For Industrial sectors, except Iron and Steel (US$2015/toe-year)
