@@ -321,7 +321,7 @@ fStat.ap = 1;
 
 **MODULE REALIZATION SWITCHES**
 $setGlobal Transport        simple
-$setGlobal Industry         technology
+$setGlobal Industry         services
 $setGlobal RestOfEnergy     legacy
 $setGlobal PowerGeneration  simple
 $setGlobal Hydrogen         legacy
