@@ -688,8 +688,10 @@ TEW
 *HPTSOL
 *HPTWND
 *HPTELC
-BOF     "Blast furnace basic oxygen furnace for primary steel production"
-EAF     "best available tech direct reduction electric arc furnace fed ny natural gas for primary steel production"
+BOF       "Blast furnace basic oxygen furnace for primary steel production"
+NGEAF     "Direct reduction electric arc furnace fed ny natural gas for primary steel production"
+H2EAF     "Direct reduction electric arc furnace fed ny hydrogen for primary steel production"
+SCREAF    "Electric arc furnace for secondary steel production"  
 /
 
 TTECH(TECH)      Transport Technologies
