@@ -8,11 +8,13 @@ $include"./iCaloriesIntake.csv"
 $offdelim
 ;
 *---
+$ontext
 table i12BioShareTarget(EFS,YTIME)	      ""
 $ondelim
 $include"./AG_BASE_iEnergyShare_BGSL_BGDO.csv"
 $offdelim
 ;
+$offtext
 *---
 table i12DataEnergyService(allCy,AGRI_MODES,YTIME)	      ""
 $ondelim
@@ -20,7 +22,7 @@ $include"./iDataAgricultureService.csv"
 $offdelim
 ;
 *---
-table i12SpecificFuelConsData(allCy,AGRI_MODES,AGRITECH,YTIME)	      ""
+table i12SpecificFuelConsData(allCy,AGRI_MODES,AGRITECH,EF,YTIME)	      ""
 $ondelim
 $include"./iDataAgricultureEff.csv"
 $offdelim
@@ -67,12 +69,10 @@ i12calibweibul(runCy,AGRI_MODES,AGRITECH,EFS,YTIME)$(not DATAY(YTIME) and ord(YT
 **(i12calibweibul(runCy,AGRI_MODES,AGRITECH,EFS,"%fBaseY%")-1) * (2010+22-%fBaseY%)/21;
 *i12calibweibul(runCy,AGRI_MODES,AGRITECH,EFS,YTIME)$(not DATAY(YTIME)) = i12calibweibul(runCy,AGRI_MODES,AGRITECH,EFS,"%fBaseY%");
 *---
-i12SpecificFuelConsData(runCy,AGRI_MODES,AGRITECH,YTIME)$(DATAY(YTIME) and AGRMODEStoTECH(AGRI_MODES,AGRITECH)) = 
-(i12SpecificFuelConsData(runCy,AGRI_MODES,AGRITECH,YTIME) / i12DataEnergyService(runCy,AGRI_MODES,YTIME) *
-SUM((AGRITECH2,EFS)$(AGRITECHTOEF(AGRITECH2,EFS) and AGRMODEStoTECH(AGRI_MODES,AGRITECH2)),
-    i12ConsFuel(runCy,AGRI_MODES,EFS,YTIME) / i12SpecificFuelConsData(runCy,AGRI_MODES,AGRITECH2,YTIME)
-)
-)$(i12DataEnergyService(runCy,AGRI_MODES,YTIME) and SUM(EFS,i12ConsFuel(runCy,AGRI_MODES,EFS,YTIME))) +
-1e-6;
-*---
-i12Capacity(runCy,AGRI_MODES,AGRITECH,YTIME)$(DATAY(YTIME) and AGRMODEStoTECH(AGRI_MODES,AGRITECH)) = SUM(EFS$AGRITECHTOEF(AGRITECH,EFS), i12ConsFuel(runCy,AGRI_MODES,EFS,YTIME)) / i12SpecificFuelConsData(runCy,AGRI_MODES,AGRITECH,YTIME);
+i12Capacity(runCy,AGRI_MODES,AGRITECH,YTIME)$(DATAY(YTIME) and AGRMODEStoTECH(AGRI_MODES,AGRITECH)) = 
+SUM(EFS$AGRITECHTOEF(AGRITECH,EFS), 
+  (
+    i12ConsFuel(runCy,AGRI_MODES,EFS,YTIME) /
+    i12SpecificFuelConsData(runCy,AGRI_MODES,AGRITECH,EFS,YTIME)
+  )$i12SpecificFuelConsData(runCy,AGRI_MODES,AGRITECH,EFS,YTIME)
+);

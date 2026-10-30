@@ -32,7 +32,7 @@ Q12CostCapital(allCy,AGRI_MODES,AGRITECH,YTIME)
 Q12CostTotal(allCy,AGRI_MODES,AGRITECH,YTIME)
 Q12ShareBlend(allCy,AGRI_MODES,AGRITECH,EFS,YTIME)
 Q12PriceFinalAgriculture(allCy,AGRI_MODES,EFS,YTIME)
-Q12SpecificFuelCons(allCy,AGRI_MODES,AGRITECH,YTIME)
+Q12SpecificFuelCons(allCy,AGRI_MODES,AGRITECH,EFS,YTIME)
 ;
 
 Variables
@@ -59,6 +59,6 @@ V12CostVariable(allCy,AGRI_MODES,AGRITECH,YTIME)            "Variable cost per t
 V12CostCapital(allCy,AGRI_MODES,AGRITECH,YTIME)
 V12CostTotal(allCy,AGRI_MODES,AGRITECH,YTIME)
 V12ShareBlend(allCy,AGRI_MODES,AGRITECH,EFS,YTIME)
-V12SpecificFuelCons(allCy,AGRI_MODES,AGRITECH,YTIME)        "Specific fuel consumption per energy service (Mtoe/[Act])"
+V12SpecificFuelCons(allCy,AGRI_MODES,AGRITECH,EFS,YTIME)        "Specific fuel consumption per energy service (Mtoe/[Act])"
 V12PriceFinalAgriculture(allCy,AGRI_MODES,EFS,YTIME)        "Final prices of agriculture servies (k$2015/toe)"
 ;

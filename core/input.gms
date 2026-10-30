@@ -205,7 +205,7 @@ $ondelim
 $include"./iDataElecInd.csv"
 $offdelim
 ;
-imPriceElecInd(allCy,"TSTE1AH2F",YTIME) = imPriceElecInd(allCy,"TSTE1AG",YTIME)
+imPriceElecInd(allCy,"TSTE1AH2F",YTIME) = imPriceElecInd(allCy,"TSTE1AG",YTIME);
 *---
 parameter imTotFinEneDemSubBaseYr(allCy,SBS,YTIME)    "Total Final Energy Demand per subsector in Base year (Mtoe)";
 *---
