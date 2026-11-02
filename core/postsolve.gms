@@ -22,3 +22,4 @@ execute 'gdxdump outputCalib.gdx output=iMatrFactorData.csv symb=imMatrFactor cD
 execute 'gdxdump outputCalib.gdx output=iScaleEndogScrap.csv symb=i02ScaleEndogScrap cDim=y format=csv';
 execute 'gdxdump outputCalib.gdx output=iCalibUsefulEnergy.csv symb=i02CalibUsefulEnergy cDim=y format=csv';
 $endif.calib
+execute 'gdxdump blabla.gdx output=i12calibweibul.csv symb=i12calibweibul cDim=y format=csv';
