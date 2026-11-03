@@ -82,7 +82,7 @@ Q12ScrpPrem(allCy,AGRI_MODES,AGRITECH,YTIME)$(TIME(YTIME)$AGRMODEStoTECH(AGRI_MO
     V12CostVariable(allCy,AGRI_MODES,AGRITECH,YTIME-1) ** (-2) /
     (
       V12CostVariable(allCy,AGRI_MODES,AGRITECH,YTIME-1) ** (-2) +
-      0.01 *
+      0.05 *
       SUM(AGRITECH2$(not sameas(AGRITECH2,AGRITECH) and AGRMODEStoTECH(AGRI_MODES,AGRITECH2)),
         V12CostTotal(allCy,AGRI_MODES,AGRITECH2,YTIME-1) ** (-2)
       )
