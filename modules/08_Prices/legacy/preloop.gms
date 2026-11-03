@@ -69,3 +69,6 @@ VmCostAvgProdH2.L(runCy,YTIME)$sameas("H2F",EFS) +
 (
   1
 )$(not (sameas("ELC",EFS) or sameas("H2F",EFS) or sameas("STE",EFS) or sameas("GSL",EFS) or sameas("GDO",EFS)));
+
+*ASSUMPTION: BFG,COKE,COG prices to 90% of HCL price 
+VmCostAvgProd.FX(runCy,EFS,YTIME)$(DATAY(YTIME) and (sameas("BFG",EFS) or sameas("COG",EFS) or sameas("COKE",EFS))) = 0.9 * VmCostAvgProd.L(runCy,'HCL',YTIME);
