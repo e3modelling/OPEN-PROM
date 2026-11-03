@@ -32,11 +32,12 @@ $include"./iStockPC.csv"
 $offdelim
 ;
 *---
-table i01DataShareFuel(TRANSE,TTECH,EF,YTIME)                     "Blend share of fuel per transport mode (1)"
+table i01DataShareFuel(TRANSE,TTECH,EF,SHARECHAR)                     "Blend share of fuel per transport mode (1)"
 $ondelim
 $include"./iDataShareFuel.csv"
 $offdelim
 ;
+i01ShareFuel(runCy,TRANSE,TTECH,EF,YTIME) = i01DataShareFuel(TRANSE,TTECH,EF,"SHAREFUEL");
 *---
 parameter i01PlugHybrFractData(YTIME)                   "Plug in hybrid fraction of mileage" /
 2010    0.5
