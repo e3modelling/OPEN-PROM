@@ -32,9 +32,9 @@ $include"./iStockPC.csv"
 $offdelim
 ;
 *---
-table i01DataShareBlend(allCy,TRANSE,EF,YTIME)                     "Blend share of fuel per transport mode (1)"
+table i01DataShareFuel(TRANSE,TTECH,EF,YTIME)                     "Blend share of fuel per transport mode (1)"
 $ondelim
-$include"./iDataShareBlend.csv"
+$include"./iDataShareFuel.csv"
 $offdelim
 ;
 *---
@@ -138,51 +138,39 @@ $ondelim
 $include"./iSFC.csv"
 $offdelim
 ;
-i01SFCPC(allCy,TTECH,"BGSL",YTIME) = i01SFCPC(allCy,TTECH,"GSL",YTIME);
-i01SFCPC(allCy,TTECH,"BGDO",YTIME) = i01SFCPC(allCy,TTECH,"GDO",YTIME);
-i01SFCPC(allCy,TTECH,"BGAS",YTIME) = i01SFCPC(allCy,TTECH,"NGS",YTIME);
+* i01SFCPC(allCy,TTECH,"BGSL",YTIME) = i01SFCPC(allCy,TTECH,"GSL",YTIME);
+* i01SFCPC(allCy,TTECH,"BGDO",YTIME) = i01SFCPC(allCy,TTECH,"GDO",YTIME);
+* i01SFCPC(allCy,TTECH,"BGAS",YTIME) = i01SFCPC(allCy,TTECH,"NGS",YTIME);
 i01SFCPC(allCy,TTECH,EF,YTIME)$AN(YTIME) = i01SFCPC(allCy,TTECH,EF,"%fBaseY%");
 *---
 parameter i01InitSpecFuelConsData(TRANSE,TTECH,EF)      "Initial Specific fuel consumption: (ktoe/Gvkm)" /
 PT.TGDO.GDO	11.
-PT.TGDO.BGDO	11.
-*PT.TMET.MET	12.6
 PT.TH2F.H2F	8.9
 PT.TELC.ELC	7
 *PA.H2F.H2F	21.7
 PA.TKRS.KRS	30
-PA.TKRS.BKRS	30
 PN.TGDO.GDO  30
-PN.TGDO.BGDO  30
 PN.TH2F.H2F  43
 PB.TGSL.GSL  8
-PB.TGSL.BGSL  8
 PB.TGDO.GDO  7.8
-PB.TGDO.BGDO  7.8
-PB.TNGS.NGS  5.6
+PB.TNGS.GAS  5.6
 PB.TNGS.OGS  5.6
 PB.TLPG.LPG  6.6
 PB.TELC.ELC  2.5
 PB.TH2F.H2F  4.3
 GU.TGSL.GSL	6.0
-GU.TGSL.BGSL	6.0
 GU.TLPG.LPG	5.0
 GU.TGDO.GDO	4.0
-GU.TGDO.BGDO	4.0
-GU.TNGS.NGS	2.8
+GU.TNGS.GAS	2.8
 GU.TNGS.OGS	2.8
 GU.TH2F.H2F	1.3
 GU.TELC.ELC	1.0
 GU.TCHEVGDO.GDO	2.7
-GU.TCHEVGDO.BGDO	2.7
 GT.TGDO.GDO	1.9
-GT.TGDO.BGDO	1.9
 GT.TH2F.H2F	1.5
 GT.TELC.ELC	1.9
 GN.TGSL.GSL	2.0
-GN.TGSL.BGSL	2.0
 GN.TGDO.GDO	2.5
-GN.TGDO.BGDO	2.5
 GN.TH2F.H2F	1.5
 /
 ;
