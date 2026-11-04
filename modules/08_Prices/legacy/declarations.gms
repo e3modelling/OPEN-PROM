@@ -67,8 +67,8 @@ VmPriceElecInd(allCy,TCHP,YTIME)                           "Electricity index - 
 
 V08SupplyCurves(allCy,EFS,YTIME)
 V08PricePrimary(allCy,EFS,YTIME)
-VmPriceSecondary(allCy,EFS,YTIME)
-VmPriceFinal(allCy,DSBS,EFS,YTIME)                          "End-user price of final energy, excluding carbon taxes (k$2015/toe)"
+VmPriceSecondary(allCy,EF,YTIME)
+VmPriceFinal(allCy,DSBS,EF,YTIME)                          "End-user price of final energy, excluding carbon taxes (k$2015/toe)"
 VmCostAvgProd(allCy,EFS,YTIME)
 *' *** Miscellaneous
 *V08FuelPriSubNoCarb(allCy,SBS,EF,YTIME)	                   "Fuel prices per subsector and fuel  without carbon value (kUS$2015/toe)"
