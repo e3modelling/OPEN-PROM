@@ -54,19 +54,19 @@ $offtext
 Q03InpTotTransf(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V03InpTotTransf(allCy,SSBS,EFS,YTIME)
         =E=
-    SUM((PGALL,EFS)$(PGALLTOEF(PGALL,EF) and EFtoEFS(EF,EFS)),
+    SUM((PGALL,EF)$(PGALLTOEF(PGALL,EF) and EFtoEFS(EF,EFS)),
       1*
       i04ShareFuels(allCy,PGALL,EF) *
       VmProdElec(allCy,PGALL,YTIME) * smTWhToMtoe / 
       imPlantEffByType(allCy,PGALL,"effELC",YTIME)
     )$sameas("PG",SSBS) + 
-    SUM((TCHP,EFS)$(TSTEAMTOEF(TCHP,EF) and EFtoEFS(EF,EFS)),
+    SUM((TCHP,EF)$(TSTEAMTOEF(TCHP,EF) and EFtoEFS(EF,EFS)),
       1*
       VmProdSte(allCy,TCHP,YTIME) * 
       i09ShareFuel(allCy,TCHP,EF,"%fBaseY%") / 
       SUM(STECH$sameas(STECH,TCHP), imPlantEffByType(allCy,STECH,"effHeat","%fBaseY%"))
     )$sameas("CHP",SSBS) +
-    SUM((TDHP,EFS)$(TSTEAMTOEF(TDHP,EF) and EFtoEFS(EF,EFS)),
+    SUM((TDHP,EF)$(TSTEAMTOEF(TDHP,EF) and EFtoEFS(EF,EFS)),
     1*
       VmProdSte(allCy,TDHP,YTIME) *
       i09ShareFuel(allCy,TDHP,EF,"%fBaseY%") / SUM(STECH$sameas(STECH,TDHP),imPlantEffByType(allCy,STECH,"effHeat","%fBaseY%"))
@@ -75,7 +75,7 @@ Q03InpTotTransf(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       i03InputEffSupply(allCy,SSBS,EFS,"%fBaseY%") * 
       SUM(EFS2, V03OutTotTransf(allCy,SSBS,EFS2,YTIME))
     )$(sameas(SSBS,"GAS") or sameas(SSBS,"SLD") or sameas(SSBS,"LQD")) +
-    (SUM(H2TECH$H2TECHtoFEEDSTOCK(H2TECH,EFS),VmProdH2(allCy,H2TECH,YTIME) * i05InputOverOutH2ProdFeed(allCy,H2TECH,EFS,YTIME)))$sameas("H2P",SSBS);    
+    (SUM((H2TECH,EF)$(H2TECHtoFEEDSTOCK(H2TECH,EF) and EFtoEFS(EF,EFS)), VmProdH2(allCy,H2TECH,YTIME) * i05InputOverOutH2ProdFeed(allCy,H2TECH,EF,YTIME)))$sameas("H2P",SSBS);    
 
 *' The equation calculates the total transformation output for a specific energy branch in a given scenario and year.
 *' The result is obtained by summing the transformation outputs from different sources, including thermal power stations, District Heating Plants,
