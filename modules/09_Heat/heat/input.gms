@@ -14,7 +14,7 @@ i09PowToHeatRatio(TSTEAM,YTIME)
 i09ParDHEffData(EF)
 i09CostInvCostSteProd(TSTEAM,YTIME)     "Capital Cost per steam plant type (US$2015/(KWe or KWThrm) )"
 i09CostFixOMSteProd(TSTEAM,YTIME)       "Fixed O&M cost per steam plant type (US$2015/KW )"
-i09ShareFuel(allCy,TSTEAM,EFS,YTIME)
+i09ShareFuel(allCy,TSTEAM,EF,YTIME)
 ;
 *---
 i09CaptRateSteProd(TSTEAM) = 0;
@@ -175,14 +175,14 @@ i09AvailRateSteProd(TSTEAM,YTIME) = imDataChpPowGen(TSTEAM,"AVAIL",YTIME);
 *---
 i09PowToHeatRatio(TSTEAM,YTIME) = i09EffSteElc(TSTEAM,YTIME) / i09EffSteThrm(TSTEAM,YTIME);
 *---
-i09ShareFuel(runCy,TDHP,EFS,YTIME)$TSTEAMTOEF(TDHP,EFS) = 
+i09ShareFuel(runCy,TDHP,STEAMEF,YTIME)$TSTEAMTOEF(TDHP,STEAMEF) = 
 (
-  (i03InpTotTransfProcess(runCy,"STEAMP",EFS,"%fBaseY%") - 1e-6)/ 
-  SUM(EFS2$TSTEAMTOEF(TDHP,EFS2),i03InpTotTransfProcess(runCy,"STEAMP",EFS2,"%fBaseY%") - 1e-6)
-)$SUM(EFS2$TSTEAMTOEF(TDHP,EFS2),i03InpTotTransfProcess(runCy,"STEAMP",EFS2,"%fBaseY%") - 1e-6);
+  SUM(EFS$(EFtoEFS(STEAMEF,EFS)), i03InpTotTransfProcess(runCy,"STEAMP",EFS,"%fBaseY%") - 1e-6)/ 
+  SUM((EFS,EF2)$(TSTEAMTOEF(TDHP,EF2) and EFtoEFS(EF2,EFS)),i03InpTotTransfProcess(runCy,"STEAMP",EFS,"%fBaseY%") - 1e-6)
+)$SUM((EFS,EF2)$(TSTEAMTOEF(TDHP,EF2) and EFtoEFS(EF2,EFS)),i03InpTotTransfProcess(runCy,"STEAMP",EFS,"%fBaseY%") - 1e-6);
 
-i09ShareFuel(runCy,TCHP,EFS,YTIME)$TSTEAMTOEF(TCHP,EFS) = 
+i09ShareFuel(runCy,TCHP,STEAMEF,YTIME)$TSTEAMTOEF(TCHP,STEAMEF) = 
 (
-  (i03InpTotTransfProcess(runCy,"CHP",EFS,"%fBaseY%") - 1e-6) / 
-  SUM(EFS2$TSTEAMTOEF(TCHP,EFS2),i03InpTotTransfProcess(runCy,"CHP",EFS2,"%fBaseY%") - 1e-6)
-)$SUM(EFS2$TSTEAMTOEF(TCHP,EFS2),i03InpTotTransfProcess(runCy,"CHP",EFS2,"%fBaseY%") - 1e-6);
+  SUM(EFS$(EFtoEFS(STEAMEF,EFS)), i03InpTotTransfProcess(runCy,"CHP",EFS,"%fBaseY%") - 1e-6)/ 
+  SUM((EFS,EF2)$(TSTEAMTOEF(TCHP,EF2) and EFtoEFS(EF2,EFS)),i03InpTotTransfProcess(runCy,"CHP",EFS,"%fBaseY%") - 1e-6)
+)$SUM((EFS,EF2)$(TSTEAMTOEF(TCHP,EF2) and EFtoEFS(EF2,EFS)),i03InpTotTransfProcess(runCy,"CHP",EFS,"%fBaseY%") - 1e-6);

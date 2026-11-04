@@ -94,11 +94,11 @@ i05AvailH2Prod(runCy,H2TECH,YTIME) = i05H2Production("AVAIL",H2TECH,YTIME);
 i05AvailH2Prod(runCy,"wes",YTIME)  = i04AvailRate(runCy,"PGSOL",YTIME);
 i05AvailH2Prod(runCy,"wew",YTIME)  = i04AvailRate(runCy,"PGAWNO",YTIME);
 *---
-i05InputOverOutH2ProdFeed(runCy,H2TECH,EFS,YTIME)$H2TECHtoFEEDSTOCK(H2TECH,EFS) = 0.7 * i05H2Production("INOUT_HEAT",H2TECH,YTIME);
-i05InputOverOutH2ProdEnergy(runCy,H2TECH,EFS,YTIME)$(H2TECHtoENERGY(H2TECH,EFS) and not sameas("ELC",EFS)) = 0.3 * i05H2Production("INOUT_HEAT",H2TECH,YTIME);
-i05InputOverOutH2ProdEnergy(runCy,H2TECH,EFS,YTIME)$(H2TECHtoENERGY(H2TECH,EFS) and sameas("ELC",EFS)) = i05H2Production("INOUT_ELC",H2TECH,YTIME);
-i05InputOverOutH2ProdFeed(runCy,"wes",EFS,YTIME)$H2TECHtoFEEDSTOCK("wes",EFS) = i05InputOverOutH2ProdEnergy(runCy,"weg","ELC",YTIME);
-i05InputOverOutH2ProdFeed(runCy,"wew",EFS,YTIME)$H2TECHtoFEEDSTOCK("wew",EFS) = i05InputOverOutH2ProdEnergy(runCy,"weg","ELC",YTIME);
+i05InputOverOutH2ProdFeed(runCy,H2TECH,EF,YTIME)$H2TECHtoFEEDSTOCK(H2TECH,EF) = 0.7 * i05H2Production("INOUT_HEAT",H2TECH,YTIME);
+i05InputOverOutH2ProdEnergy(runCy,H2TECH,EF,YTIME)$(H2TECHtoENERGY(H2TECH,EF) and not sameas("ELC",EF)) = 0.3 * i05H2Production("INOUT_HEAT",H2TECH,YTIME);
+i05InputOverOutH2ProdEnergy(runCy,H2TECH,EF,YTIME)$(H2TECHtoENERGY(H2TECH,EF) and sameas("ELC",EF)) = i05H2Production("INOUT_ELC",H2TECH,YTIME);
+i05InputOverOutH2ProdFeed(runCy,"wes",EF,YTIME)$H2TECHtoFEEDSTOCK("wes",EF) = i05InputOverOutH2ProdEnergy(runCy,"weg","ELC",YTIME);
+i05InputOverOutH2ProdFeed(runCy,"wew",EF,YTIME)$H2TECHtoFEEDSTOCK("wew",EF) = i05InputOverOutH2ProdEnergy(runCy,"weg","ELC",YTIME);
 *---
 i05CostInvH2Transp(runCy,INFRTECH,YTIME) = i05H2InfrCapCosts("IC",INFRTECH,YTIME);
 *---
