@@ -9,18 +9,18 @@ V12EnergyService.FX(runCy,AGRI_MODES,YTIME)$DATAY(YTIME) = i12DataEnergyService(
 V12Activity.LO(runCy,AGRI_MODES,YTIME) = 0;
 V12Activity.FX(runCy,AGRI_MODES,YTIME)$DATAY(YTIME) = 1;
 *---
-V12ConsFuel.LO(runCy,AGRI_MODES,EFS,YTIME) = 0;
-V12ConsFuel.L(runCy,AGRI_MODES,EFS,YTIME) = i12ConsFuel(runCy,AGRI_MODES,EFS,"%fBaseY%");
-V12ConsFuel.FX(runCy,AGRI_MODES,EFS,YTIME)$DATAY(YTIME) = i12ConsFuel(runCy,AGRI_MODES,EFS,YTIME);
+V12ConsFuel.LO(runCy,AGRI_MODES,EF,YTIME) = 0;
+V12ConsFuel.L(runCy,AGRI_MODES,EF,YTIME) = sum(EFS$EFtoEFS(EF,EFS), i12ConsFuel(runCy,AGRI_MODES,EFS,"%fBaseY%"));
+V12ConsFuel.FX(runCy,AGRI_MODES,EF,YTIME)$DATAY(YTIME) = sum(EFS$EFtoEFS(EF,EFS),i12ConsFuel(runCy,AGRI_MODES,EFS,YTIME));
 *---
 V12GapCapacity.LO(runCy,AGRI_MODES,YTIME) = 0;
 *---
 V12ShareTech.LO(runCy,AGRI_MODES,AGRITECH,YTIME) = 0;
 V12ShareTech.UP(runCy,AGRI_MODES,AGRITECH,YTIME) = 1;
 *---
-V12PriceFinalAgriculture.LO(runCy,AGRI_MODES,EFS,YTIME) = 0;
-V12PriceFinalAgriculture.L(runCy,AGRI_MODES,EFS,YTIME) = i12FinalPrices(runCy,AGRI_MODES,EFS,"%fBaseY%");
-V12PriceFinalAgriculture.FX(runCy,AGRI_MODES,EFS,YTIME)$DATAY(YTIME) = i12FinalPrices(runCy,AGRI_MODES,EFS,YTIME) + VmPriceCarbon.L(runCy,"AG",EFS,YTIME);
+V12PriceFinalAgriculture.LO(runCy,AGRI_MODES,EF,YTIME) = 0;
+V12PriceFinalAgriculture.L(runCy,AGRI_MODES,EF,YTIME) = i12FinalPrices(runCy,AGRI_MODES,EF,"%fBaseY%");
+V12PriceFinalAgriculture.FX(runCy,AGRI_MODES,EF,YTIME)$DATAY(YTIME) = i12FinalPrices(runCy,AGRI_MODES,EF,YTIME) + VmPriceCarbon.L(runCy,"AG",EF,YTIME);
 *---
 V12Capacity.LO(runCy,AGRI_MODES,AGRITECH,YTIME) = 0;
 V12Capacity.FX(runCy,AGRI_MODES,AGRITECH,YTIME)$(DATAY(YTIME) and AGRMODEStoTECH(AGRI_MODES,AGRITECH)) = i12Capacity(runCy,AGRI_MODES,AGRITECH,YTIME);
