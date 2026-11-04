@@ -58,7 +58,7 @@ Q12CostFuel(allCy,AGRI_MODES,AGRITECH,YTIME)$(TIME(YTIME) $AGRMODEStoTECH(AGRI_M
   V12CostFuel(allCy,AGRI_MODES,AGRITECH,YTIME)
       =E=
   sum(EFS$AGRITECHTOEF(AGRITECH,EFS), 
-    (V12PriceFinalAgriculture(allCy,AGRI_MODES,EFS,YTIME) + VmPriceCarbon(allCy,"AG",EFS,YTIME)) *
+    (V12PriceFinalAgriculture(allCy,AGRI_MODES,EFS,YTIME) + VmPriceCarbon(allCy,"AG",EF,YTIME)) *
     i12SpecificFuelConsData(allCy,AGRI_MODES,AGRITECH,"%fBaseY%") *
     V12ShareBlend(allCy,AGRI_MODES,AGRITECH,EFS,YTIME)
   ) + 1e-6;
@@ -99,10 +99,10 @@ Q12ShareBlend(allCy,AGRI_MODES,AGRITECH,EFS,YTIME)$(TIME(YTIME)$runCy(allCy)$AGR
     V12ShareBlend(allCy,AGRI_MODES,AGRITECH,EFS,YTIME)
         =E=
     i12calibweibul(allCy,AGRI_MODES,AGRITECH,EFS,YTIME) * 
-    (V12PriceFinalAgriculture(allCy,AGRI_MODES,EFS,YTIME-1) + VmPriceCarbon(allCy,"AG",EFS,YTIME-1)) ** (-2) /
+    (V12PriceFinalAgriculture(allCy,AGRI_MODES,EFS,YTIME-1) + VmPriceCarbon(allCy,"AG",EF,YTIME-1)) ** (-2) /
     SUM(EFS2$AGRITECHTOEF(AGRITECH,EFS2),
       i12calibweibul(allCy,AGRI_MODES,AGRITECH,EFS2,YTIME) * 
-      (V12PriceFinalAgriculture(allCy,AGRI_MODES,EFS2,YTIME-1) + VmPriceCarbon(allCy,"AG",EFS2,YTIME-1)) ** (-2)
+      (V12PriceFinalAgriculture(allCy,AGRI_MODES,EFS2,YTIME-1) + VmPriceCarbon(allCy,"AG",EF,YTIME-1)) ** (-2)
     );
 
 Q12PriceFinalAgriculture(allCy,AGRI_MODES,EFS,YTIME)$(TIME(YTIME) and runCy(allCy))..

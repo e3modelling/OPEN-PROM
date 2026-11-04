@@ -93,29 +93,29 @@ Q08PriceSecondary(allCy,EFS,YTIME)$(TIME(YTIME) and runCy(allCy))..
     VmPriceSecondary(allCy,EFS,YTIME-1) *
     (VmCostAvgProd(allCy,EFS,YTIME) / VmCostAvgProd(allCy,EFS,YTIME-1)) ** i08ElastPriceSecondary(EFS);
 
-Q08PriceFinal(allCy,DSBS,EFS,YTIME)$(TIME(YTIME) and runCy(allCy) and SECtoEF(DSBS,EFS))..
-    VmPriceFinal(allCy,DSBS,EFS,YTIME)
+Q08PriceFinal(allCy,DSBS,EF,YTIME)$(TIME(YTIME) and runCy(allCy) and SECtoEF(DSBS,EF))..
+    VmPriceFinal(allCy,DSBS,EF,YTIME)
       =E=
-    VmPriceFinal(allCy,DSBS,EFS,YTIME-1) *
-    (VmCostAvgProd(allCy,EFS,YTIME) / VmCostAvgProd(allCy,EFS,YTIME-1)) ** i08ElastPriceFinal(EFS) *
-    (1 + ((V08PricePrimary(allCy,EFS,YTIME) / V08PricePrimary(allCy,EFS,YTIME-1)) ** i08ElastPriceFinal(EFS) - 1)$PRIM_PRICES(EFS));
+    VmPriceFinal(allCy,DSBS,EF,YTIME-1) *
+    (VmCostAvgProd(allCy,EF,YTIME) / VmCostAvgProd(allCy,EF,YTIME-1)) ** i08ElastPriceFinal(EF) *
+    (1 + ((V08PricePrimary(allCy,EF,YTIME) / V08PricePrimary(allCy,EF,YTIME-1)) ** i08ElastPriceFinal(EF) - 1)$PRIM_PRICES(EF));
 
-Q08PriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME)$(SECtoEF(SBS,EFS) $(not sameas("CRO",EFS))
-   $(not sameas("WOODFUEL",EFS)) $TIME(YTIME)
-   $(not sameas("NUC",EFS)) $runCy(allCy))..
-    VmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME)
+Q08PriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)$(SECtoEF(SBS,EF) $(not sameas("CRO",EF))
+   $(not sameas("WOODFUEL",EF)) $TIME(YTIME)
+   $(not sameas("NUC",EF)) $runCy(allCy))..
+    VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME)
         =E=
 *' Fuel prices follow the preceding value, production-cost or supply indices,
 *' crude-oil pass-through, and the change in carbon cost.
-    VmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME-1) *
-    (1 + (VmCostPowGenAvgLng(allCy,YTIME-1) / VmCostPowGenAvgLng(allCy,YTIME-2) - 1)$sameas("ELC",EFS)) *
-    (1 + ((VmCostAvgProdH2(allCy,YTIME-1) / VmCostAvgProdH2(allCy,YTIME-2)) ** 0.7 - 1)$sameas("H2F",EFS)) * 
-    (1 + (VmCostAvgProdSte(allCy,YTIME-1) / VmCostAvgProdSte(allCy,YTIME-2) - 1)$sameas("STE",EFS)) *
-    (1 + (V08BmswasPriceFactor(allCy,YTIME) ** i08PriceTransElast(EFS,"WOODFUEL") - 1)$BIOFUELS(EFS)) *
-    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** i08PriceTransElast(EFS,"CRO") - 1)$sameas("NGS",EFS)) *
-    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** i08PriceTransElast(EFS,"CRO") - 1)$SECtoEFPROD("LQD",EFS)) *
-    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** i08PriceTransElast(EFS,"CRO") - 1)$(sameas("HCL",EFS) or sameas("LGN",EFS))) +
-    VmPriceCarbon(allCy,SBS,EFS,YTIME) - VmPriceCarbon(allCy,SBS,EFS,YTIME-1);
+    VmPriceFuelSubsecCarVal(allCy,SBS,EF,YTIME-1) *
+    (1 + (VmCostPowGenAvgLng(allCy,YTIME-1) / VmCostPowGenAvgLng(allCy,YTIME-2) - 1)$sameas("ELC",EF)) *
+    (1 + ((VmCostAvgProdH2(allCy,YTIME-1) / VmCostAvgProdH2(allCy,YTIME-2)) ** 0.7 - 1)$sameas("H2F",EF)) * 
+    (1 + (VmCostAvgProdSte(allCy,YTIME-1) / VmCostAvgProdSte(allCy,YTIME-2) - 1)$sameas("STE",EF)) *
+    (1 + (V08BmswasPriceFactor(allCy,YTIME) ** i08PriceTransElast(EF,"WOODFUEL") - 1)$BIOFUELS(EF)) *
+    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** i08PriceTransElast(EF,"CRO") - 1)$sameas("NGS",EF)) *
+    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** i08PriceTransElast(EF,"CRO") - 1)$SECtoEFPROD("LQD",EF)) *
+    (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** i08PriceTransElast(EF,"CRO") - 1)$(sameas("HCL",EF) or sameas("LGN",EF))) +
+    VmPriceCarbon(allCy,SBS,EF,YTIME) - VmPriceCarbon(allCy,SBS,EF,YTIME-1);
 
 * Select the land-use backend price, then apply the global sustainability tax once.
 Q08PriceBmswas(allCy,SBS,YTIME)$(
@@ -160,12 +160,12 @@ V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)
       SUM(EFS2$SECtoEF(DSBS,EFS2), (VmFinalEnergy(allCy,DSBS,EFS2,YTIME) - V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$ELCEF(EFS2)) + 1e-6)
     );
   
-Q08PriceCarbon(allCy,SBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    VmPriceCarbon(allCy,SBS,EFS,YTIME)
+Q08PriceCarbon(allCy,SBS,EF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    VmPriceCarbon(allCy,SBS,EF,YTIME)
      =E=
     1e-3 * (
       VmCarVal(allCy,"TRADE",YTIME)$(INDSE1(SBS) or ((DOMSE1(SBS) or TRANS1(SBS) or BUN(SBS) or sameas("AG",SBS)) and ord(YTIME) > 17))
-    ) * imFactorEmissEnergyCO2(allCy,SBS,EFS);
+    ) * imFactorEmissEnergyCO2(allCy,SBS,EF);
 
 *' The equation calculates the average fuel price per subsector. These average prices are used to further compute electricity prices in industry
 *' (using the OI "other industry" avg price), as well as the aggregate fuel demand (of substitutable fuels) per subsector.

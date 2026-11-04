@@ -81,7 +81,7 @@ vDummyObjINDDOMFinalEnergy(DSBS)                            "Dummy maximisation 
 ;
 
 Positive Variables
-VmPriceCarbon(allCy,SBS,EFS,YTIME)
+VmPriceCarbon(allCy,SBS,EF,YTIME)
 VmCarVal(allCy,NAP,YTIME)                                  "Carbon prices for all countries (US$2015/tn CO2)"
 common(allCy,TRANSE,YTIME)
 VmGDPPartGlob(allCy,YTIME)                                           "Global GDP share (1)"

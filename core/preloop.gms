@@ -37,16 +37,16 @@ VmCstCO2SeqCsts.LO(runCy,YTIME) = i06ElastCO2Seq(runCy,"seq_min");
 VmCstCO2SeqCsts.L(runCy,YTIME) = i06ElastCO2Seq(runCy,"seq_min");
 VmCstCO2SeqCsts.FX(runCy,YTIME)$DATAY(YTIME) = i06ElastCO2Seq(runCy,"seq_min");
 *---
-VmPriceCarbon.FX(runCy,SBS,EFS,YTIME)$DATAY(YTIME) = 1e-3 * iCarbValYrExog(runCy,YTIME)$INDSE1(SBS) * imCo2EmiFac(runCy,SBS,EFS,YTIME);
+VmPriceCarbon.FX(runCy,SBS,EF,YTIME)$DATAY(YTIME) = 1e-3 * iCarbValYrExog(runCy,YTIME)$INDSE1(SBS) * imCo2EmiFac(runCy,SBS,EF,YTIME);
 *---
-VmPriceFinal.LO(runCy,DSBS,EFS,YTIME) = 0;
-VmPriceFinal.L(runCy,DSBS,EFS,YTIME) = 1;
-VmPriceFinal.FX(runCy,DSBS,EFS,YTIME)$(DATAY(YTIME) and SECtoEF(DSBS,EFS))= imFuelPrice(runCy,DSBS,EFS,YTIME);
-VmPriceFinal.FX(runCy,DSBS,EFS,YTIME)$(not SECtoEF(DSBS,EFS)) = 0;
+VmPriceFinal.LO(runCy,DSBS,EF,YTIME) = 0;
+VmPriceFinal.L(runCy,DSBS,EF,YTIME) = 1;
+VmPriceFinal.FX(runCy,DSBS,EF,YTIME)$(DATAY(YTIME) and SECtoEF(DSBS,EF))= imFuelPrice(runCy,DSBS,EF,YTIME);
+VmPriceFinal.FX(runCy,DSBS,EF,YTIME)$(not SECtoEF(DSBS,EF)) = 0;
 *---
-VmPriceSecondary.LO(runCy,EFS,YTIME) = 0;
-VmPriceSecondary.L(runCy,EFS,YTIME) = 1;
-VmPriceSecondary.FX(runCy,EFS,YTIME)$DATAY(YTIME) = imFuelPrice(runCy,"PG",EFS,YTIME);
+VmPriceSecondary.LO(runCy,EF,YTIME) = 0;
+VmPriceSecondary.L(runCy,EF,YTIME) = 1;
+VmPriceSecondary.FX(runCy,EF,YTIME)$DATAY(YTIME) = imFuelPrice(runCy,"PG",EF,YTIME);
 *---
 VmPriceFuelSubsecCarVal.LO(runCy,SBS,EF,YTIME) = 0;
 VmPriceFuelSubsecCarVal.L(runCy,SBS,EF,YTIME)$SECtoEF(SBS,EF) = 1;

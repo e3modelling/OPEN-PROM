@@ -51,21 +51,25 @@ $offtext
 *' fuel and briquetting plants, and refineries. In the case where the energy branch is "OGS"
 *' (Other Gas), the total transformation input is calculated as the difference between the total transformation output and various consumption
 *' and loss components. The outcome represents the total transformation input in million tons of oil equivalent.
-Q03InpTotTransf(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECtoEF(SSBS,EFS))..
+Q03InpTotTransf(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V03InpTotTransf(allCy,SSBS,EFS,YTIME)
         =E=
-    SUM(PGALL$PGALLTOEF(PGALL,EFS),
-      i04ShareFuels(allCy,PGALL,EFS) *
+    SUM((PGALL,EFS)$(PGALLTOEF(PGALL,EF) and EFtoEFS(EF,EFS)),
+      1*
+      i04ShareFuels(allCy,PGALL,EF) *
       VmProdElec(allCy,PGALL,YTIME) * smTWhToMtoe / 
       imPlantEffByType(allCy,PGALL,"effELC",YTIME)
     )$sameas("PG",SSBS) + 
-    SUM(TCHP$(TSTEAMTOEF(TCHP,EFS)),
-      VmProdSte(allCy,TCHP,YTIME) * i09ShareFuel(allCy,TCHP,EFS,"%fBaseY%") / 
+    SUM((TCHP,EFS)$(TSTEAMTOEF(TCHP,EF) and EFtoEFS(EF,EFS)),
+      1*
+      VmProdSte(allCy,TCHP,YTIME) * 
+      i09ShareFuel(allCy,TCHP,EF,"%fBaseY%") / 
       SUM(STECH$sameas(STECH,TCHP), imPlantEffByType(allCy,STECH,"effHeat","%fBaseY%"))
     )$sameas("CHP",SSBS) +
-    SUM(TDHP$(TSTEAMTOEF(TDHP,EFS)),
+    SUM((TDHP,EFS)$(TSTEAMTOEF(TDHP,EF) and EFtoEFS(EF,EFS)),
+    1*
       VmProdSte(allCy,TDHP,YTIME) *
-      i09ShareFuel(allCy,TDHP,EFS,"%fBaseY%") / SUM(STECH$sameas(STECH,TDHP),imPlantEffByType(allCy,STECH,"effHeat","%fBaseY%"))
+      i09ShareFuel(allCy,TDHP,EF,"%fBaseY%") / SUM(STECH$sameas(STECH,TDHP),imPlantEffByType(allCy,STECH,"effHeat","%fBaseY%"))
     )$sameas("STEAMP",SSBS) +
     (
       i03InputEffSupply(allCy,SSBS,EFS,"%fBaseY%") * 
