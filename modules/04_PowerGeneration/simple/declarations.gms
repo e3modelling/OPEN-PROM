@@ -7,7 +7,6 @@ i04DecInvPlantSched(allCy,PGALL,YTIME)             "Decided plant investment sch
 i04MxmShareChpElec(allCy,YTIME)	                   "Maximum share of CHP electricity in a country (1)"
 i04ShareFuels(allCy,PGALL,EF)
 i04Util(allCy,PGALL,YTIME)                         "Utilisation rate of power plants"
-i04InpTotTransfPG(allCy,EF)                        "Total transformation input of power generation sector (Mtoe)"
 ;
 
 Equations

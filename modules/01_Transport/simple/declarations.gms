@@ -14,7 +14,6 @@ i01ShareBlend(allCy,TRANSE,EF,YTIME)
 i01ShareMix(allCy,TRANSE,EF,YTIME)
 i01calb(allCy,TRANSE,EF)
 i01calibweibul(allCy,TRANSE,EF,YTIME)
-i01ShareFuel(allCy,TRANSE,TTECH,EF,YTIME)
 ;
 
 Equations

@@ -1012,11 +1012,6 @@ PGECONCHAR       "Technical - economic characteristics for power generation plan
 LFT
 /
 
-SHARECHAR         "Characteristics of the fuel share data for technologies"
-/
-SHAREFUEL
-/
-
 SG               "S parameters in Gompertz function for passenger cars per capita"
 /S1,S2/
 
