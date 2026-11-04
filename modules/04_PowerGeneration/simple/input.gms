@@ -152,8 +152,8 @@ i04Util(allCy,PGALL,YTIME) = 1;
 i04ShareFuels(runCy,PGALL,PGEF)$PGALLTOEF(PGALL,PGEF) = 
 (
   SUM(EFS$EFtoEFS(PGEF,EFS), i03InpTotTransfProcess(runCy,"PG",EFS,"%fBaseY%")) /
-  SUM((EFS,PGEF2)$(PGALLTOEF(PGALL,PGEF2) and EFtoEFS(PGEF2,EFS)),i03InpTotTransfProcess(runCy,"PG",PGEF2,"%fBaseY%"))
-)$SUM((EFS,PGEF2)$(PGALLTOEF(PGALL,PGEF2) and EFtoEFS(PGEF2,EFS)),i03InpTotTransfProcess(runCy,"PG",PGEF2,"%fBaseY%")) +
+  SUM((EFS,PGEF2)$(PGALLTOEF(PGALL,PGEF2) and EFtoEFS(PGEF2,EFS)),i03InpTotTransfProcess(runCy,"PG",EFS,"%fBaseY%"))
+)$SUM((EFS,PGEF2)$(PGALLTOEF(PGALL,PGEF2) and EFtoEFS(PGEF2,EFS)),i03InpTotTransfProcess(runCy,"PG",EFS,"%fBaseY%")) +
 (
-  1 / CARD(yes$SUM(EF,PGALLTOEF(PGALL,EF)))
-)$(not SUM((EFS,PGEF2)$(PGALLTOEF(PGALL,PGEF2) and EFtoEFS(PGEF2,EFS)),i03InpTotTransfProcess(runCy,"PG",PGEF2,"%fBaseY%")));
+  1 / SUM(PGEF2$PGALLTOEF(PGALL,PGEF2), 1)
+)$(not SUM((EFS,PGEF2)$(PGALLTOEF(PGALL,PGEF2) and EFtoEFS(PGEF2,EFS)),i03InpTotTransfProcess(runCy,"PG",EFS,"%fBaseY%")));

@@ -11,7 +11,7 @@ i09CostVOMSteProd(TSTEAM,YTIME)         "Variable cost per steam plant type (US$
 i09EffSteThrm(TSTEAM,YTIME)
 i09EffSteElc(TSTEAM,YTIME)
 i09PowToHeatRatio(TSTEAM,YTIME)
-i09ParDHEffData(EFS)
+i09ParDHEffData(EF)
 i09CostInvCostSteProd(TSTEAM,YTIME)     "Capital Cost per steam plant type (US$2015/(KWe or KWThrm) )"
 i09CostFixOMSteProd(TSTEAM,YTIME)       "Fixed O&M cost per steam plant type (US$2015/KW )"
 i09ShareFuel(allCy,TSTEAM,EFS,YTIME)
@@ -141,14 +141,14 @@ $include"./iChpPowGen.csv"
 $offdelim
 ;
 *---
-parameter i09ParDHEffData(EFS)                  "Parameter of  district heating Efficiency (1)" 
+parameter i09ParDHEffData(EF)                  "Parameter of  district heating Efficiency (1)" 
 /
 HCL		  0.76,
 LGN		  0.75,
 GDO		  0.78,
 RFO		  0.78,
 OLQ		  0.78,
-NGS		  0.8,
+GAS		  0.8,
 OGS		  0.78,
 WOODFUEL    0.76 
 /

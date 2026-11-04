@@ -18,7 +18,7 @@ $ondelim
 $include "iPriceTransElast.csv"
 $offdelim
 ;
-i08PriceTransElast(EFS,"CRO")$SECtoEFPROD("LQD",EFS) = 0.65;
+* i08PriceTransElast(EFS,"CRO")$SECtoEFPROD("LQD",EFS) = 0.65;
 *---
 $IFTHEN %softLinkMAgPIE% == on
 table iPricesMagpie(allCy,SBS,YTIME)	"Prices of biomass per subsector (k$2015/toe)"
