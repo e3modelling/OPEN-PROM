@@ -42,6 +42,7 @@ VmPriceFinal.LO(runCy,DSBS,EFS,YTIME) = 0;
 VmPriceFinal.L(runCy,DSBS,EFS,YTIME) = 1;
 VmPriceFinal.FX(runCy,DSBS,EFS,YTIME)$(DATAY(YTIME) and SECtoEF(DSBS,EFS)) = imFuelPrice(runCy,DSBS,EFS,YTIME);
 VmPriceFinal.FX(runCy,DSBS,EFS,YTIME)$(not SECtoEF(DSBS,EFS)) = 0;
+VmPriceFinal.FX(runCy,DSBS,EFS,YTIME)$((DATAY(YTIME)) and (sameas("BFG",EFS) or sameas("COG",EFS) or sameas("COKE",EFS))) = 0.9*imFuelPrice(runCy,DSBS,'HCL',YTIME);
 *---
 VmPriceSecondary.LO(runCy,EFS,YTIME) = 0;
 VmPriceSecondary.L(runCy,EFS,YTIME) = 1;

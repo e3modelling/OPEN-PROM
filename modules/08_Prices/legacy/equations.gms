@@ -99,7 +99,7 @@ Q08PriceFinal(allCy,DSBS,EFS,YTIME)$(TIME(YTIME) and runCy(allCy) and SECtoEF(DS
     (VmPriceFinal(allCy,DSBS,EFS,YTIME-1) *
     (VmCostAvgProd(allCy,EFS,YTIME) / VmCostAvgProd(allCy,EFS,YTIME-1)) ** i08ElastPriceFinal(EFS) *
     (1 + ((V08PricePrimary(allCy,EFS,YTIME) / V08PricePrimary(allCy,EFS,YTIME-1)) ** i08ElastPriceFinal(EFS) - 1)$PRIM_PRICES(EFS)))$(not (sameas("BFG",EFS) or sameas("COG",EFS) or sameas("COKE",EFS))) +
-    0.9*VmPriceFinal(allCy,DSBS,'HCL',YTIME)$(sameas("BFG",EFS) or sameas("COG",EFS) or sameas("COKE",EFS)) !!this is an assumption to define a BFG price based on HCL price as it is used in other subsectors
+    0.9*VmPriceFinal(allCy,DSBS,'HCL',YTIME-1)$(sameas("BFG",EFS) or sameas("COG",EFS) or sameas("COKE",EFS)) !!this is an assumption to define a BFG price based on HCL price as it is used in other subsectors
     ;
 
 Q08PriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME)$(SECtoEF(SBS,EFS) $(not sameas("CRO",EFS))
