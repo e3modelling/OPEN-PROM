@@ -47,24 +47,25 @@ Q02CostCapital(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)$(TIME(YTIME) and INDDOMtoS
       =E=
   (
     imDisc(allCy,INDDOM,YTIME) * exp(imDisc(allCy,INDDOM,YTIME) * VmLft(allCy,INDDOM,INDITECH,YTIME)) /
-    (exp(imDisc(allCy,INDDOM,YTIME) * VmLft(allCy,INDDOM,INDITECH,YTIME)) - 1 
-    ) * 
+    (exp(imDisc(allCy,INDDOM,YTIME) * VmLft(allCy,INDDOM,INDITECH,YTIME)) - 1 ) * 
     imCapCostTech(allCy,INDDOM,INDITECH,YTIME) * imCGI(allCy,YTIME) +
     imFixOMCostTech(allCy,INDDOM,INDITECH,YTIME) / (sUnitToKUnit)
-  ) / (imUsfEneConvSubTech(allCy,INDDOM,INDITECH,YTIME)+1)
+  ) / (imUsfEneConvSubTech(allCy,INDDOM,INDITECH,YTIME)) !!FIXME: This needs to be changed when technologies replace fuels in industry
   ;
 
 Q02CostVariable(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)$(TIME(YTIME) and INDDOMtoSERVS(INDDOM,IND_SERVS) and SERVStoTECH(IND_SERVS,INDITECH) and runCy(allCy))..
   V02CostVariable(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)
       =E=
-  SUM(EFS$INDITECHTOEF(INDITECH,EFS),
+  (SUM(EFS$INDITECHTOEF(INDITECH,EFS),
     (
       VmPriceFinal(allCy,INDDOM,EFS,YTIME) + !!FIXME: Calculate proper prices for BFG,COKE,COG that include the transf process
       imCO2CaptRateIndustry(allCy,INDITECH,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * imCo2EmiFac(allCy,INDDOM,EFS,YTIME) +
       (1-imCO2CaptRateIndustry(allCy,INDITECH,YTIME)) * 1e-3 * VmPriceCarbon(allCy,INDDOM,EFS,YTIME-1) * imCo2EmiFac(allCy,INDDOM,EFS,YTIME)
     ) * i02SFC(allCy,INDDOM,IND_SERVS,INDITECH,EFS,"%fBaseY%")
-  );
-  !!FIXME: imVarCostTech(allCy,INDDOM,INDITECH,YTIME) / sUnitToKUnit;
+  )+
+    imVarCostTech(allCy,INDDOM,INDITECH,YTIME) / sUnitToKUnit
+  ) / imUsfEneConvSubTech(allCy,INDDOM,INDITECH,YTIME); !!FIXME: This needs to be changed when technologies replace fuels in industry
+
 
 Q02CostTotal(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)$(TIME(YTIME) and INDDOMtoSERVS(INDDOM,IND_SERVS) and SERVStoTECH(IND_SERVS,INDITECH) and runCy(allCy))..
   V02CostTotal(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)

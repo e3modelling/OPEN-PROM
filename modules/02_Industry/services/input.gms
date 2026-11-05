@@ -7,7 +7,7 @@ $include"./iProductionIS.csv"
 $offdelim
 ;
 *---
-table i02IndCosts(*,*,YTIME)	      ""	
+table i02IndCosts(*,*,YTIME)	      "Costs for industry technologies (Capex, Opex, OM) in Million $2015/ Million tonnes of steel"	
 $ondelim
 $include"./iIndustryCosts.csv"
 $offdelim
@@ -32,7 +32,7 @@ $offdelim
 ;
 * FIXME: EAF for PRIM_STEEL includes DRI-EAF Energy consumption. Needs disaggregation (mrprom)
 *---
-table i02SFC(allCy,INDDOM,IND_SERVS,INDITECH,EF,YTIME)	      ""	
+table i02SFC(allCy,INDDOM,IND_SERVS,INDITECH,EF,YTIME)	      "Specific fuel consumption of industry technologies (mtoe/mtoe or mtoe/Million tonnes of steel)"	
 $ondelim
 $include"./iDataIndustrySFC.csv"
 $offdelim
@@ -109,7 +109,11 @@ imCO2CaptRateIndustry(runCy,CCSITECH,YTIME) = 0.9;
 *---
 i02DataEnergyService(runCy,INDDOM,IND_SERVS,YTIME)$(INDDOMtoSERVS(INDDOM,IND_SERVS)) = SUM(INDITECH,i02Capacity(runCy,INDDOM,IND_SERVS,INDITECH,YTIME));
 *---
-imCapCostTech(runCy,"IS",INDITECH,YTIME) = i02IndCosts(INDITECH,'Capex',YTIME)/sUnitToKUnit;
+imCapCostTech(runCy,"IS",INDITECH,YTIME) = i02IndCosts(INDITECH,'Capex',YTIME)*1e3; !!Million $2015 to k$2015
+*---
+imFixOMCostTech(runCy,"IS",INDITECH,YTIME) = i02IndCosts(INDITECH,'OM',YTIME)*1e6;  !!Million $2015 to $2015
+*--
+imVarCostTech(allCy,"IS",INDITECH,YTIME)= i02IndCosts(INDITECH,'Opex',YTIME)*1e6;   !!Million $2015 to $2015
 *--
 VmLft.FX(allCy,INDSE,INDITECH,YTIME)=imDataIndTechnology(INDSE,INDITECH,"LFT");
 VmLft.FX(allCy,"IS",INDITECH,YTIME)$(sameas("BOF",INDITECH) or sameas("SCREAF",INDITECH) or sameas("NGEAF",INDITECH) or sameas("H2EAF",INDITECH)) = 25;  !!FIX ME: Add lifetimes for INDITECH in mrprom -> IS to be 25y
