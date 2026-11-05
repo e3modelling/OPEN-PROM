@@ -45,7 +45,14 @@ Q02GapCapacity(allCy,INDDOM,IND_SERVS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 Q02CostCapital(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)$(TIME(YTIME) and INDDOMtoSERVS(INDDOM,IND_SERVS) and SERVStoTECH(IND_SERVS,INDITECH) and runCy(allCy))..
   V02CostCapital(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)
       =E=
-  1; !!FIXME: Add costs
+  (
+    imDisc(allCy,INDDOM,YTIME) * exp(imDisc(allCy,INDDOM,YTIME) * VmLft(allCy,INDDOM,INDITECH,YTIME)) /
+    (exp(imDisc(allCy,INDDOM,YTIME) * VmLft(allCy,INDDOM,INDITECH,YTIME)) - 1 
+    ) * 
+    imCapCostTech(allCy,INDDOM,INDITECH,YTIME) * imCGI(allCy,YTIME) +
+    imFixOMCostTech(allCy,INDDOM,INDITECH,YTIME) / (sUnitToKUnit)
+  ) / (imUsfEneConvSubTech(allCy,INDDOM,INDITECH,YTIME)+1)
+  ;
 
 Q02CostVariable(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)$(TIME(YTIME) and INDDOMtoSERVS(INDDOM,IND_SERVS) and SERVStoTECH(IND_SERVS,INDITECH) and runCy(allCy))..
   V02CostVariable(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)

@@ -7,6 +7,12 @@ $include"./iProductionIS.csv"
 $offdelim
 ;
 *---
+table i02IndCosts(*,*,YTIME)	      ""	
+$ondelim
+$include"./iIndustryCosts.csv"
+$offdelim
+;
+*---
 table i02FuelConsICT(allCy,ICTSCEN,SSPSCEN,YTIME)             "Electrity demand of Data centers and infrastructure (Mtoe)"
 $ondelim
 $include "./iFuelConsICT.csv"
@@ -103,6 +109,14 @@ imCO2CaptRateIndustry(runCy,CCSITECH,YTIME) = 0.9;
 *---
 i02DataEnergyService(runCy,INDDOM,IND_SERVS,YTIME)$(INDDOMtoSERVS(INDDOM,IND_SERVS)) = SUM(INDITECH,i02Capacity(runCy,INDDOM,IND_SERVS,INDITECH,YTIME));
 *---
+imCapCostTech(runCy,"IS",INDITECH,YTIME) = i02IndCosts(INDITECH,'Capex',YTIME)/sUnitToKUnit;
+*--
+VmLft.FX(allCy,INDSE,INDITECH,YTIME)=imDataIndTechnology(INDSE,INDITECH,"LFT");
+VmLft.FX(allCy,"IS",INDITECH,YTIME)$(sameas("BOF",INDITECH) or sameas("SCREAF",INDITECH) or sameas("NGEAF",INDITECH) or sameas("H2EAF",INDITECH)) = 25;  !!FIX ME: Add lifetimes for INDITECH in mrprom -> IS to be 25y
+VmLft.FX(allCy,INDSE,INDITECH,YTIME)$(sameas("TGEO",INDITECH) or sameas("TSOL",INDITECH) or sameas("TH2F",INDITECH)) = 25; !!FIX ME: revisit this
+
+display imUsfEneConvSubTech, VmLft.L,imDisc,imCapCostTech;
+
 $ontext
 i02SpecificFuelConsData(runCy,INDDOM,IND_SERVS,INDITECH,YTIME)$(DATAY(YTIME) and INDDOMtoSERVS(INDDOM,IND_SERVS) or SERVStoTECH(IND_SERVS,INDITECH)) = 1;
 i02SpecificFuelConsData(runCy,INDDOM,IND_SERVS,INDITECH,YTIME)$(DATAY(YTIME) and INDDOMtoSERVS(INDDOM,IND_SERVS) or SERVStoTECH(IND_SERVS,INDITECH)) = 
