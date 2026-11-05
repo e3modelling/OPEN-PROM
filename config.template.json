@@ -41,5 +41,27 @@
       "price_tol": 0.05,
       "quant_tol": 0.05
     }
+  },
+  "global_carbon_price_calibration": {
+    "resume_from": null,
+    "prefix_policy": "exogCV_NPi",
+    "fixed_through_year": 2028,
+    "common_year": 2035,
+    "common_price": 100,
+    "net_zero_year": null,
+    "end_year": 2100,
+    "budget_start_year": 2020,
+    "budget_gtco2": 1150,
+    "temperature_case": "2C",
+    "search": {
+      "net_zero_start_price": null,
+      "end_start_price": 400,
+      "initial_price_step": 100,
+      "max_price": 5000,
+      "price_resolution": 1,
+      "max_evaluations": 50,
+      "net_zero_tolerance_mtco2": 100,
+      "budget_tolerance_gtco2": 5
+    }
   }
 }

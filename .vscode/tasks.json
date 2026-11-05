@@ -3,7 +3,7 @@
     // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
-        // ---- Single-scenario task buttons (task 0 ... task 7) ----
+        // ---- Single-scenario task buttons (task 0 ... task 8) ----
         {
             "label": "OPEN-PROM DEV",
             "type": "shell",
@@ -116,6 +116,14 @@
             }
         },
 
+        {
+            "label": "CALIBRATE GLOBAL CARBON PRICE",
+            "type": "shell",
+            "command": "Rscript",
+            "args": ["start.R", "task_id=8"],
+            "problemMatcher": [],
+            "presentation": { "focus": true }
+        },
         // ---- Batch button (extends the task system across many scenarios) ----
         {
             "label": "RUN BATCH",

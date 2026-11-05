@@ -190,7 +190,8 @@ runScenario <- function(scn) {
   }
   # Land-use emulator config group -> GAMS flags (the soft_link_magpie group is
   # consumed by task7, which passes --softLinkMAgPIE itself).
-  lue <- scn$land_use_emulator
+  # Task 8 builds its own emulator flags; skip this unused configuration block.
+  lue <- if (identical(as.character(scn$task_id), "8")) NULL else scn$land_use_emulator
   if (length(lue)) {
     emulator_source <- lue$source %||% "magpie"
     allowed_sources <- c("legacy", "globiom", "magpie")
@@ -230,7 +231,7 @@ runScenario <- function(scn) {
   switch(as.character(scn$task_id),
          "0" = runTask0(), "1" = runTask1(), "2" = runTask2(),
          "3" = runTask3(), "4" = runTask4(), "5" = runTask5(),
-         "6" = runTask6(), "7" = runTask7(),
+         "6" = runTask6(), "7" = runTask7(), "8" = runTask8(),
          stop("Unknown task_id: ", scn$task_id))
 
   message(sprintf("[%s] task_id=%d done",
