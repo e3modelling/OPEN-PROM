@@ -2,7 +2,6 @@
 *' @code
 
 Parameters
-i02ExogDemOfBiomass(allCy,DSBS,YTIME)	                   "Demand of tranditional biomass defined exogenously ()"
 $IF NOT %Calibration% == Calibration i02ElastNonSubElec(allCy,DSBS,ETYPES,YTIME)                   "Elasticities of Non Substitutable Electricity (1)"
 i02util(allCy,DSBS,ITECH,YTIME)                            "Utilization rate of technology"
 i02numtechnologiesUsingEF(DSBS,EF)                         "Number of technologues using an energy form"     

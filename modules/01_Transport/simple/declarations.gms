@@ -34,7 +34,7 @@ Q01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)
 Q01CostFuel(allCy,TRANSE,TTECH,YTIME)
 Q01PremScrp(allCy,TRANSE,TTECH,YTIME)
 Q01RateScrPcTot(allCy,TRANSE,TTECH,YTIME)
-Q01ShareBlend(allCy,TRANSE,EF,YTIME)
+Q01ShareBlend(allCy,TRANSE,EFS,YTIME)
 *'                **Interdependent Equations**
 Q01ConsFuelTransport(allCy,TRANSE,EF,YTIME)
 Q01CapacityTransport(allCy,TRANSE,TTECH,YTIME)
@@ -67,7 +67,7 @@ V01CapCostAnnualized(allCy,TRANSE,TTECH,YTIME)
 V01CostFuel(allCy,TRANSE,TTECH,YTIME)
 V01PremScrp(allCy,TRANSE,TTECH,YTIME)
 V01RateScrPcTot(allCy,TRANSE,TTECH,YTIME)
-V01ShareBlend(allCy,TRANSE,EF,YTIME)
+V01ShareBlend(allCy,TRANSE,EFS,YTIME)
 *'                **Interdependent Equations**
 VmLft(allCy,DSBS,TECH,YTIME)                                 "Lifetime of technologies (years)"
 V01ConsFuelTransport(allCy,TRANSE,EF,YTIME)	           "Consumption of each technology and subsector (Mtoe)"

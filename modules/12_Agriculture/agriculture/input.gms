@@ -1,0 +1,72 @@
+*' @title Agriculture Inputs
+*' @code
+
+*' Parameters
+table i12CaloriesIntake(allCy,FOOD_TYPES,YTIME)	      ""
+$ondelim
+$include"./iCaloriesIntake.csv"
+$offdelim
+;
+*---
+table i12DataEnergyService(allCy,AGRI_MODES,YTIME)	      ""
+$ondelim
+$include"./iDataAgricultureService.csv"
+$offdelim
+;
+*---
+table i12SpecificFuelConsData(allCy,AGRI_MODES,AGRITECH,YTIME)	      ""
+$ondelim
+$include"./iDataAgricultureEff.csv"
+$offdelim
+;
+*---
+table i12ConsFuel(allCy,AGRI_MODES,EFS,YTIME)	      ""
+$ondelim
+$include"./iDataAgricultureTFC.csv"
+$offdelim
+;
+*---
+table i12IntensityFertilizers(allCy,FERT_TYPES,YTIME)	      ""
+$ondelim
+$include"./iDataIntensityFertiliser.csv"
+$offdelim
+;
+*---
+table i12FinalPrices(allCy,AGRI_MODES,EFS,YTIME)	      ""
+$ondelim
+$include"./iDataAgriculturePrice.csv"
+$offdelim
+;
+i12FinalPrices(allCy,"CLIMATE","STE",YTIME) = i12FinalPrices(allCy,"CLIMATE","GDO",YTIME);
+*---
+i12IndexClimateShift(allCy,AGRI_MODES,YTIME) = 1;
+i12IndexTechShift(allCy,AGRI_MODES,YTIME) = 1;
+i12IndexFertiliserShift(allCy,AGRI_MODES,YTIME) = 1;
+*---
+i12IndexGlobalCaloriesIntake(FOOD_TYPES,YTIME)$(ord(YTIME) > 1) = 
+SUM(runCy2,i12CaloriesIntake(runCy2,FOOD_TYPES,YTIME) * i01Pop(YTIME,runCy2)) / 
+SUM(runCy2,i12CaloriesIntake(runCy2,FOOD_TYPES,YTIME-1) * i01Pop(YTIME-1,runCy2));
+*---
+i12Lft(AGRI_MODES,AGRITECH) = 25;
+*---
+i12DataShareBlend(runCy,AGRI_MODES,AGRITECH,EFS,YTIME)$(DATAY(YTIME) and AGRMODEStoTECH(AGRI_MODES,AGRITECH) and AGRITECHTOEF(AGRITECH,EFS)) = 
+(i12ConsFuel(runCy,AGRI_MODES,EFS,YTIME) + 1e-6) /
+SUM(EFS2$AGRITECHTOEF(AGRITECH,EFS2),
+    i12ConsFuel(runCy,AGRI_MODES,EFS2,YTIME) + 1e-6
+);
+*---
+i12calibweibul(runCy,AGRI_MODES,AGRITECH,EFS,YTIME)$DATAY(YTIME) = i12DataShareBlend(runCy,AGRI_MODES,AGRITECH,EFS,YTIME) * i12FinalPrices(runCy,AGRI_MODES,EFS,YTIME) ** 2;
+i12calibweibul(runCy,AGRI_MODES,AGRITECH,EFS,YTIME)$(not DATAY(YTIME) and ord(YTIME) >= 31 and AGRMODEStoTECH(AGRI_MODES,AGRITECH) and AGRITECHTOEF(AGRITECH,EFS)) = 1;
+i12calibweibul(runCy,AGRI_MODES,AGRITECH,EFS,YTIME)$(not DATAY(YTIME) and ord(YTIME) < 31 and AGRMODEStoTECH(AGRI_MODES,AGRITECH) and AGRITECHTOEF(AGRITECH,EFS)) = i12calibweibul(runCy,AGRI_MODES,AGRITECH,EFS,"%fBaseY%") + (2010 + ord(YTIME) - %fBaseY% - 1) * (1-i12calibweibul(runCy,AGRI_MODES,AGRITECH,EFS,"%fBaseY%")) / (2040 - %fBaseY%);
+**(i12calibweibul(runCy,AGRI_MODES,AGRITECH,EFS,"%fBaseY%")-1) * (2010+22-%fBaseY%)/21;
+*i12calibweibul(runCy,AGRI_MODES,AGRITECH,EFS,YTIME)$(not DATAY(YTIME)) = i12calibweibul(runCy,AGRI_MODES,AGRITECH,EFS,"%fBaseY%");
+*---
+i12SpecificFuelConsData(runCy,AGRI_MODES,AGRITECH,YTIME)$(DATAY(YTIME) and AGRMODEStoTECH(AGRI_MODES,AGRITECH)) = 
+(i12SpecificFuelConsData(runCy,AGRI_MODES,AGRITECH,YTIME) / i12DataEnergyService(runCy,AGRI_MODES,YTIME) *
+SUM((AGRITECH2,EFS)$(AGRITECHTOEF(AGRITECH2,EFS) and AGRMODEStoTECH(AGRI_MODES,AGRITECH2)),
+    i12ConsFuel(runCy,AGRI_MODES,EFS,YTIME) / i12SpecificFuelConsData(runCy,AGRI_MODES,AGRITECH2,YTIME)
+)
+)$(i12DataEnergyService(runCy,AGRI_MODES,YTIME) and SUM(EFS,i12ConsFuel(runCy,AGRI_MODES,EFS,YTIME))) +
+1e-6;
+*---
+i12Capacity(runCy,AGRI_MODES,AGRITECH,YTIME)$(DATAY(YTIME) and AGRMODEStoTECH(AGRI_MODES,AGRITECH)) = SUM(EFS$AGRITECHTOEF(AGRITECH,EFS), i12ConsFuel(runCy,AGRI_MODES,EFS,YTIME)) / i12SpecificFuelConsData(runCy,AGRI_MODES,AGRITECH,YTIME);

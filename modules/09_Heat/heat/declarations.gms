@@ -15,7 +15,6 @@ Q09DemTotSte(allCy,YTIME)
 Q09CapSte(allCy,TSTEAM,YTIME)
 Q09ProdSte(allCy,TSTEAM,YTIME)
 Q09CostAvgProdSte(allCy,YTIME)
-Q09ConsFuelSteProd(allCy,STEMODE,EFS,YTIME)
 ;
 
 Variables
@@ -32,5 +31,4 @@ VmDemTotSte(allCy,YTIME)
 VmCapSte(allCy,TSTEAM,YTIME)
 VmProdSte(allCy,TSTEAM,YTIME)
 VmCostAvgProdSte(allCy,YTIME)                 "Average cost of steam production (kUS$2015/toe)"
-VmConsFuelSteProd(allCy,STEMODE,EFS,YTIME)
 ;

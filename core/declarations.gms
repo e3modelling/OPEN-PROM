@@ -53,9 +53,11 @@ imCapCostTech(allCy,SBS,TECH,YTIME)                          "Capital Cost of te
                                                                 !! - For Industrial sectors (except Iron and Steel) is expressed in kUS$2015/toe-year
                                                                 !! - For Iron and Steel is expressed in kUS$2015/tn-of-steel
                                                                 !! - For Domestic Sectors is expressed in kUS$2015/toe-year
+imCapCostTechMin(allCy,DSBS,TECH,YTIME)                    !!Factor for the minimum capex of a demand technology after the state subsidy
+imFactorEmissProcessesCO2(allCy,SBS,EF,YTIME)
+imFactorEmissEnergyCO2(allCy,SBS,EF)
 smGwToTwhPerYear(YTIME)                                    "convert GW mean power into TWh/y, depending on whether it's a leap year"
 ;
-
 Equations
 *' *** Miscellaneous'
 qDummyObj                                                  "Define dummy objective function"
@@ -71,17 +73,16 @@ $ENDIF.calib
 
 Variables
 *'                **Interdependent Variables**
-
 *' *** Miscellaneous
 vDummyObj                                                  "Dummy maximisation variable (1)"
 vDummyObjPGALL                                             "Dummy maximisation variable for PGALL (1)"
 vDummyObjTRANSE                                            "Dummy maximisation variable for TRANSE (1)"
 vDummyObjINDDOMShares(DSBS)                                 "Dummy maximisation variable for INDDOM shares (1)"
 vDummyObjINDDOMFinalEnergy(DSBS)                            "Dummy maximisation variable for INDDOM final energy (1)"
-VmElecConsHeatPla(allCy,DSBS,YTIME)                        "Electricity consumed in heatpump plants (Mtoe)"
 ;
 
 Positive Variables
+VmPriceCarbon(allCy,SBS,EFS,YTIME)
 VmCarVal(allCy,NAP,YTIME)                                  "Carbon prices for all countries (US$2015/tn CO2)"
 common(allCy,TRANSE,YTIME)
 VmGDPPartGlob(allCy,YTIME)                                           "Global GDP share (1)"

@@ -3,6 +3,12 @@
 
 
 *---
+table i08PrimaryPrice(allCy,EFS,YTIME)   ""
+$ondelim
+$include "iPrimaryEnergyPrice.csv"
+$offdelim
+;
+
 *' Fuel price pass-through elasticity, indexed (target, source): i08PriceTransElast(EFS,"CRO"),
 *' i08PriceTransElast(EFS,"BMSWAS"). CRO rows use 0.4/0.8/0.2; BMSWAS-source
 *' rows use 0.6 for processed biofuels. Table = target rows x source cols.
@@ -138,21 +144,9 @@ abort$sum((MAGPIESCEN,allCy,EMTYPE,YTIME)$(
 
 * MAgPIE emission coefficients cover the OP39 research regions.
 abort$sum(runCy$(not resCy(runCy)), 1)
-  "MAgPIE emulator coefficients cover OP39 only; remove unsupported runCy elements (for example ELL/RWO)";
+  "MAgPIE emulator coefficients cover OP39 only; remove unsupported runCy elements (for example LAM/RWO)";
 $ENDIF.emulatorInput
 $ENDIF
-*---
-parameter i08PriceCrudeOil(YTIME) /
-$ondelim
-$include "CrudeOilPrice.csv"
-$offdelim
-/;
-*---
-Parameters
-i08DiffFuelsInSec(SBS)                    "Auxiliary parameter holding the number of different fuels in a sector"
-i08WgtSecAvgPriFueCons(allCy,SBS,EF)	    "Weights for sector's average price, based on fuel consumption (1)"
-i08VAT(allCy,YTIME)                       "VAT (value added tax) rates (1)"
-;
 *---
 loop SBS do
          i08DiffFuelsInSec(SBS) = 0;
@@ -182,5 +176,25 @@ i08WgtSecAvgPriFueCons(runCy,SBS,EF)$(SECtoEF(SBS,EF) $sum(ef2$SECtoEF(SBS,EF),i
 * FIXME: Check if VAT (value added tax) rates are necessary for the model.
 i08VAT(runCy, YTIME) = 0;
 *---
-imFuelPrice(runCy,SBS,"CRO",YTIME) = i08PriceCrudeOil(YTIME);
+imFuelPrice(runCy,SBS,"CRO",YTIME) = i08PrimaryPrice(runCy,"CRO",YTIME);
+*---
+i08ElastPricePrimary("NGS","CRO") = 0.7;
+i08ElastPricePrimary("HCL","NGS") = 0.4;
+i08ElastPricePrimary("BMSWAS","BMSWAS") = 1;
+*---
+i08PriceBase("CRO") = 0.2;
+i08PriceBase("NGS") = 0.2;
+*---
+i08ElastPriceSupplyCurve(EFS,EFS) = 1;
+*---
+i08ElastPriceSecondary(EFS) = 1;
+*---
+i08ElastPriceFinal(EFS) = 1;
+*---
+i08ElastPricePrimary("NGS","CRO") = 0.7;
+i08ElastPricePrimary("HCL","NGS") = 0.4;
+i08ElastPricePrimary("BMSWAS","BMSWAS") = 1;
+*---
+i08PriceBase("CRO") = 0.2;
+i08PriceBase("NGS") = 0.2;
 *---

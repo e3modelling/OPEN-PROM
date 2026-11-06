@@ -30,6 +30,9 @@ MAGPIEPRICEFIELD "MAgPIE H12 price coefficients and fitted quantity domain"
 
 MAGPIEEMISCOEF "MAgPIE land and agriculture emission coefficients"
 / ea, eb, ec /
+
+PRIM_PRICES(EFS) 
+/CRO,HCL,NGS,BMSWAS/
 ;
 
 mapMagpieH12Cy("EUR",allCy)$EU28(allCy) = yes;

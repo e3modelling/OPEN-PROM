@@ -15,8 +15,6 @@ imTotFinEneDemSubBaseYr(runCy,INDSE,YTIME)   = SUM(EF$SECtoEF(INDSE,EF),imFuelCo
 imTotFinEneDemSubBaseYr(runCy,DOMSE,YTIME)   = SUM(EF$SECtoEF(DOMSE,EF),imFuelCons(runCy,DOMSE,EF,YTIME));
 imTotFinEneDemSubBaseYr(runCy,NENSE,YTIME)   = SUM(EF$SECtoEF(NENSE,EF),imFuelCons(runCy,NENSE,EF,YTIME));
 *---
-i02ExogDemOfBiomass(runCy,DOMSE,YTIME) = 0;
-*---
 i02util(runCy,DSBS,ITECH,YTIME)$SECTTECH(DSBS,ITECH) = 1;
 *' Intermittent heat sources deliver far less than their rated output over a year (MIP_REVIEW F36). With utilisation 1
 *' and no fuel cost, solar thermal cost ~0.1 k$/toe useful, 5-20x cheaper than heat pumps or gas, and took up to
