@@ -51,13 +51,13 @@ $offdelim
 ;
 *---
 $IFTHEN.calib %Calibration% == off
-$ontext
-table i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME)       "Scale parameter for endogenous scrapping applied to the sum of full costs (1)"
+*$ontext
+table i02ScaleEndogScrap(allCy,DSBS,TECH,YTIME)       "Scale parameter for endogenous scrapping applied to the sum of full costs (1)"
 $ondelim
 $include"./iScaleEndogScrap.csv"
 $offdelim
 ;
-$offtext
+*$offtext
 *---
 table i02CalibUsefulEnergy(allCy,DSBS,YTIME)      "Calibration parameter for useful energy (1)"
 $ondelim
@@ -66,15 +66,15 @@ $offdelim
 ;
 *---
 $ELSE.calib
-variable i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME)        "Scale parameter for endogenous scrapping applied to the sum of full costs (1)";
+variable i02ScaleEndogScrap(allCy,DSBS,INDITECH,YTIME)        "Scale parameter for endogenous scrapping applied to the sum of full costs (1)";
 variable i02CalibUsefulEnergy(allCy,DSBS,YTIME);
 
 $ontext
-i02ScaleEndogScrap.LO(runCy,DSBS,ITECH,YTIME) = 0.01;                                      
-i02ScaleEndogScrap.UP(runCy,DSBS,ITECH,YTIME) = 1;
-i02ScaleEndogScrap.L(runCy,DSBS,ITECH,YTIME) = 1;
-i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$(DATAY(YTIME) or not SECTTECH(DSBS,ITECH)) = 0;
-i02ScaleEndogScrap.FX(runCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and not (INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS))) = 1;
+i02ScaleEndogScrap.LO(runCy,DSBS,INDITECH,YTIME) = 0.01;                                      
+i02ScaleEndogScrap.UP(runCy,DSBS,INDITECH,YTIME) = 1;
+i02ScaleEndogScrap.L(runCy,DSBS,INDITECH,YTIME) = 1;
+i02ScaleEndogScrap.FX(runCy,DSBS,INDITECH,YTIME)$(DATAY(YTIME) or not SECTTECH(DSBS,INDITECH)) = 0;
+i02ScaleEndogScrap.FX(runCy,DSBS,INDITECH,YTIME)$(SECTTECH(DSBS,INDITECH) and not (INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS))) = 1;
 $offtext
 
 i02CalibUsefulEnergy.LO(runCy,DSBS,YTIME) = -0.5;  
@@ -116,7 +116,7 @@ imFixOMCostTech(runCy,"IS",INDITECH,YTIME) = i02IndCosts(INDITECH,'OM',YTIME)*1e
 imVarCostTech(allCy,"IS",INDITECH,YTIME)= i02IndCosts(INDITECH,'Opex',YTIME)*1e6;   !!Million $2015 to $2015
 *--
 VmLft.FX(allCy,INDSE,INDITECH,YTIME)=imDataIndTechnology(INDSE,INDITECH,"LFT");
-VmLft.FX(allCy,"IS",INDITECH,YTIME)$(sameas("BOF",INDITECH) or sameas("SCREAF",INDITECH) or sameas("NGEAF",INDITECH) or sameas("H2EAF",INDITECH)) = 25;  !!FIX ME: Add lifetimes for INDITECH in mrprom -> IS to be 25y
+VmLft.FX(allCy,"IS",INDITECH,YTIME)$(sameas("BOF",INDITECH) or sameas("SCREAF",INDITECH) or sameas("NGEAF",INDITECH) or sameas("H2EAF",INDITECH)) = 30;  !!FIX ME: Add lifetimes for INDITECH in mrprom -> IS to be 25y
 VmLft.FX(allCy,INDSE,INDITECH,YTIME)$(sameas("TGEO",INDITECH) or sameas("TSOL",INDITECH) or sameas("TH2F",INDITECH)) = 25; !!FIX ME: revisit this
 
 display imUsfEneConvSubTech, VmLft.L,imDisc,imCapCostTech;

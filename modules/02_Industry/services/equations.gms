@@ -60,7 +60,7 @@ Q02CostVariable(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)$(TIME(YTIME) and INDDOMto
     (
       VmPriceFinal(allCy,INDDOM,EFS,YTIME) + !!FIXME: Calculate proper prices for BFG,COKE,COG that include the transf process
       imCO2CaptRateIndustry(allCy,INDITECH,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * imCo2EmiFac(allCy,INDDOM,EFS,YTIME) +
-      (1-imCO2CaptRateIndustry(allCy,INDITECH,YTIME)) * 1e-3 * VmPriceCarbon(allCy,INDDOM,EFS,YTIME-1) * imCo2EmiFac(allCy,INDDOM,EFS,YTIME)
+      (1-imCO2CaptRateIndustry(allCy,INDITECH,YTIME)) * 1e-3 * VmPriceCarbon(allCy,INDDOM,EFS,YTIME) * imCo2EmiFac(allCy,INDDOM,EFS,YTIME)
     ) * i02SFC(allCy,INDDOM,IND_SERVS,INDITECH,EFS,"%fBaseY%")
   )+
     imVarCostTech(allCy,INDDOM,INDITECH,YTIME) / sUnitToKUnit
@@ -76,17 +76,17 @@ Q02CostTotal(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)$(TIME(YTIME) and INDDOMtoSER
 Q02ScrpRate(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)$(TIME(YTIME) and runCy(allCy) and INDDOMtoSERVS(INDDOM,IND_SERVS) and SERVStoTECH(IND_SERVS,INDITECH))..
     V02ScrpRate(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)
         =E=
-    1 - (1 - 1 / 20) * !!FIXME: replace hard-coded lifetime
+    1 - (1 - 1 / VmLft(allCy,INDDOM,INDITECH,YTIME)) * !!FIXME: replace hard-coded lifetime
     (1-V02ScrpRatePrem(allCy,INDDOM,IND_SERVS,INDITECH,YTIME));
 
 Q02ShareTech(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)$(TIME(YTIME) and runCy(allCy) and INDDOMtoSERVS(INDDOM,IND_SERVS) and SERVStoTECH(IND_SERVS,INDITECH))..
     V02ShareTech(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)
       =E=
     !!imMatrFactor(allCy,INDDOM,INDITECH,YTIME) *
-    V02CostTotal(allCy,INDDOM,IND_SERVS,INDITECH,YTIME-1) ** (-2) /
+    V02CostTotal(allCy,INDDOM,IND_SERVS,INDITECH,YTIME-1) ** (-4) /
     SUM(INDITECH2$(INDDOMtoSERVS(INDDOM,IND_SERVS) and SERVStoTECH(IND_SERVS,INDITECH2)),
       !!imMatrFactor(allCy,INDDOM,INDITECH2,YTIME) *
-      V02CostTotal(allCy,INDDOM,IND_SERVS,INDITECH2,YTIME-1) ** (-2)
+      V02CostTotal(allCy,INDDOM,IND_SERVS,INDITECH2,YTIME-1) ** (-4)
     );
 
 Q02ConsFuel(allCy,INDDOM,IND_SERVS,EF,YTIME)$(TIME(YTIME) and runCy(allCy) and INDDOMtoSERVS(INDDOM,IND_SERVS) and IND_SERVStoEF(IND_SERVS,EF))..
@@ -122,4 +122,11 @@ Q02ISownEnergyTransf(allCy,IS_TRANSF,EFS,YTIME)$(TIME(YTIME) and runCy(allCy))..
 Q02ScrpRatePrem(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)$(TIME(YTIME)$runCy(allCy)$INDDOMtoSERVS(INDDOM,IND_SERVS)$SERVStoTECH(IND_SERVS,INDITECH))..
     V02ScrpRatePrem(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)
         =E=
-    0; !! FIXME
+    1 - (V02CostVariable(allCy,INDDOM,IND_SERVS,INDITECH,YTIME-1)+1e-3) ** (-1) /
+    (
+      (V02CostVariable(allCy,INDDOM,IND_SERVS,INDITECH,YTIME-1) + 1e-3) ** (-1) +
+      0.01 * i02ScaleEndogScrap(allCy,INDDOM,INDITECH,YTIME) *
+      sum(INDITECH2$(not sameas(INDITECH2,INDITECH) and SERVStoTECH(IND_SERVS,INDITECH2)),
+          (V02CostTotal(allCy,INDDOM,IND_SERVS,INDITECH2,YTIME-1) + 1e-3) ** (-1)
+      )
+    );
