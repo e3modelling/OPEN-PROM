@@ -240,7 +240,7 @@ i01TechLft(runCy,"PC",TTECH,YTIME) = 30;
 i01TechLft(runCy,DOMSE,"TELC",YTIME) = 20;
 *---
 **  Industrial Sector
-i01TechLft(runCy,INDSE,ITECH,YTIME) = imDataIndTechnology(INDSE,ITECH,"LFT");
+i01TechLft(runCy,INDSE,INDITECH,YTIME) = imDataIndTechnology(INDSE,INDITECH,"LFT");
 *---
 **  Domestic Sector
 i01TechLft(runCy,DOMSE,ITECH,YTIME) = imDataDomTech(DOMSE,ITECH,"LFT");

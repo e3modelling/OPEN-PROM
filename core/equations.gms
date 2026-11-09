@@ -68,9 +68,9 @@ qDummyObjINDDOMShares(allCy,YTIME,DSBS)$(TIME(YTIME) and runCy(allCy) and (INDDO
     )
   ) / SUM(EFS$SECtoEF(DSBS,EFS), 1)
   )$(INDSE(DSBS) and t02FinalEnergyINDSE(allCy,DSBS,YTIME)) +
-  SUM(ITECH$SECTTECH(DSBS,ITECH),
+  SUM(INDITECH$SECTTECH(DSBS,INDITECH),
     1e-3 * SQR(
-      i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME) - i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME-1)
+      i02ScaleEndogScrap(allCy,INDDOM,ITECH,YTIME) - i02ScaleEndogScrap(allCy,DSBS,ITECH,YTIME-1)
     )
   ) / card(ITECH);
 
