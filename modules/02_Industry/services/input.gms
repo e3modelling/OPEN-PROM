@@ -80,7 +80,7 @@ $offtext
 i02CalibUsefulEnergy.LO(runCy,DSBS,YTIME) = -0.5;  
 i02CalibUsefulEnergy.UP(runCy,DSBS,YTIME) = 0.5;  
 i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$DATAY(YTIME) = 0;
-i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$(not (INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS))) = 0;
+i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$(not INDDOM(DSBS)) = 0;
 *---
 table t02SharesFuelBuildings(allCy,DSBS,EFS,YTIME)    "Targets for share of new passenger cars"
 $ondelim
