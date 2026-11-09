@@ -23,6 +23,7 @@ Q02ISTransfInEF(allCy,IS_TRANSF,EFS,YTIME)
 Q02CostCapital(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)
 Q02ISownEnergyTransf(allCy,IS_TRANSF,EFS,YTIME)
 Q02ScrpRatePrem(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)
+Q02ConsFuelNonEnergy(allCy,INDDOM,IND_SERVS,EF,YTIME)
 ;
 
 Variables
@@ -40,4 +41,5 @@ V02ISTransfInEF(allCy,IS_TRANSF,EFS,YTIME)                 "Input of energy tran
 V02CostCapital(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)      "Capital cost of technologies in the industry sector (k$/Million tonnes for IS)"
 V02ISownEnergyTransf(allCy,IS_TRANSF,EFS,YTIME)            "Own energy consumption of energy transfer processes in the industry sector (Mtoe)"
 V02ScrpRatePrem(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)
+V02ConsFuelNonEnergy(allCy,INDDOM,IND_SERVS,EF,YTIME)
 ;

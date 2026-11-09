@@ -59,7 +59,7 @@ $offdelim
 ;
 *$offtext
 *---
-table i02CalibUsefulEnergy(allCy,DSBS,YTIME)      "Calibration parameter for useful energy (1)"
+table i02CalibUsefulEnergy(allCy,INDDOM,YTIME)      "Calibration parameter for useful energy (1)"
 $ondelim
 $include"./iCalibUsefulEnergy.csv"
 $offdelim
@@ -74,30 +74,33 @@ i02ScaleEndogScrap.UP(runCy,INDDOM,INDITECH,YTIME) = 10;
 i02ScaleEndogScrap.L(runCy,INDDOM,INDITECH,YTIME) = 1;
 *i02ScaleEndogScrap.FX(runCy,INDDOM,INDITECH,YTIME)$(DATAY(YTIME) or not SECTTECH(INDDOM,INDITECH)) = 0;
 
-i02CalibUsefulEnergy.LO(runCy,DSBS,YTIME) = -0.5;  
-i02CalibUsefulEnergy.UP(runCy,DSBS,YTIME) = 0.5;  
-i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$DATAY(YTIME) = 0;
-i02CalibUsefulEnergy.FX(runCy,DSBS,YTIME)$(not INDDOM(DSBS)) = 0;
+i02CalibUsefulEnergy.LO(runCy,INDDOM,YTIME) = -0.05;  
+i02CalibUsefulEnergy.UP(runCy,INDDOM,YTIME) = 0.05;  
+i02CalibUsefulEnergy.FX(runCy,INDDOM,YTIME)$DATAY(YTIME) = 0;
 *---
 table t02SharesFuelBuildings(allCy,DSBS,EFS,YTIME)    "Targets for share of new passenger cars"
 $ondelim
 $include "../targets/tSharesFuelBuildings.csv"
-$offdelim;
+$offdelim
+;
 
 table t02SharesFuelINDSE(allCy,DSBS,EFS,YTIME)    "Targets for share of new passenger cars"
 $ondelim
 $include "../targets/tSharesINDSE.csv"
-$offdelim;
+$offdelim
+;
 
 table t02FinalEnergyDOMSE(allCy,DSBS,YTIME)    "Targets for share of new passenger cars"
 $ondelim
 $include "../targets/tProjectionsFuelBuildings.csv"
-$offdelim;
+$offdelim
+;
 
 table t02FinalEnergyINDSE(allCy,DSBS,YTIME)    "Targets for share of new passenger cars"
 $ondelim
 $include "../targets/tProjectionsINDSE.csv"
-$offdelim;
+$offdelim
+;
 $ENDIF.calib
 *---
 imTotFinEneDemSubBaseYr(runCy,DSBS,YTIME)  = sum(EF$SECtoEF(DSBS,EF),imFuelCons(runCy,DSBS,EF,YTIME));

@@ -55,8 +55,8 @@ $onImplicitAssign
 $ifthen.calib %Calibration% == MatCalibration
       ODummyObjPGALL(runCyL,YTIME)$TIME(YTIME) = vDummyObjPGALL.L;  !! Assign objective function value for PGALL
       ODummyObjTRANSE(runCyL,YTIME)$TIME(YTIME) = vDummyObjTRANSE.L;  !! Assign objective function value for TRANSE
-      ODummyObjINDDOMShares(allCy,YTIME,DSBS)$(TIME(YTIME) and runCy(allCy) and ((INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and not (sameas("AG",DSBS) and not EU28(allCy)))) = vDummyObjINDDOMShares.L(DSBS);  !! Assign objective function value for INDDOM Shares
-      ODummyObjINDDOMFinalEnergy(allCy,YTIME,DSBS)$(TIME(YTIME) and runCy(allCy) and ((INDDOM(DSBS) or sameas("NEN",DSBS) or sameas("PCH",DSBS)) and not (sameas("AG",DSBS) and not EU28(allCy)))) = vDummyObjINDDOMFinalEnergy.L(DSBS);  !! Assign objective function value for INDDOM Final Energy
+      ODummyObjINDDOMShares(allCy,YTIME,INDDOM)$(TIME(YTIME) and runCy(allCy)) = vDummyObjINDDOMShares.L(INDDOM);  !! Assign objective function value for INDDOM Shares
+      ODummyObjINDDOMFinalEnergy(allCy,YTIME,INDDOM)$(TIME(YTIME) and runCy(allCy)) = vDummyObjINDDOMFinalEnergy.L(INDDOM);  !! Assign objective function value for INDDOM Final Energy
 $ENDIF.calib
 
       put fStat;

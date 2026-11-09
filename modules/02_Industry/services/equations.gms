@@ -130,3 +130,8 @@ Q02ScrpRatePrem(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)$(TIME(YTIME)$runCy(allCy)
           (V02CostTotal(allCy,INDDOM,IND_SERVS,INDITECH2,YTIME-1) + 1e-3) ** (-1)
       )
     );
+
+Q02ConsFuelNonEnergy(allCy,INDDOM,IND_SERVS,EF,YTIME)$(TIME(YTIME) and runCy(allCy) and INDDOMtoSERVS(INDDOM,IND_SERVS) and IND_SERVStoEF(IND_SERVS,EF))..
+    V02ConsFuelNonEnergy(allCy,INDDOM,IND_SERVS,EF,YTIME)
+        =E=
+    0;
