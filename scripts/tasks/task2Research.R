@@ -1,6 +1,6 @@
 # Task 2: OPEN-PROM RESEARCH
 # DevMode=0 (research mode). Single GAMS solve + reportOutput.
-# One of the two batch-capable tasks (together with task 7).
+# One of the two batch-capable tasks (together with task 6).
 
 runTask2 <- function() {
   scn <- jsonlite::fromJSON(Sys.getenv("OPENPROM_SCENARIO"))
