@@ -23,7 +23,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-        
+
+      - name: Task 8 scalar search checks (no model solve)
+        run: Rscript tests/task8-search-regression.R
+
+      - name: Task 8 deferred repair checks (no model solve)
+        run: Rscript tests/task8-deferred-repair-regression.R
+
       - name: Download Datasets
         env:
           DATASET: ${{ secrets.DATASET }}
