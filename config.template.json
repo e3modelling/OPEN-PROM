@@ -45,23 +45,48 @@
   "global_carbon_price_calibration": {
     "resume_from": null,
     "prefix_policy": "exogCV_NPi",
-    "fixed_through_year": 2028,
-    "common_year": 2035,
-    "common_price": 100,
-    "net_zero_year": null,
+    "fixed_through_year": 2027,
+    "common_year": 2032,
+    "common_price": 400,
+    "post_net_zero_slope_multiplier": 0.5,
+    "peak_budget_gtco2": 550,
+    "end_budget_gtco2": 400,
     "end_year": 2100,
     "budget_start_year": 2020,
-    "budget_gtco2": 1150,
-    "temperature_case": "2C",
+    "temperature_case": "1.5C",
     "search": {
-      "net_zero_start_price": null,
-      "end_start_price": 400,
-      "initial_price_step": 100,
+      "start_slope": 18,
+      "initial_slope_step": 40,
+      "initial_end_price_step": 200,
+      "max_price": 5000,
+      "slope_resolution": 0.01,
+      "end_price_resolution": 1,
+      "max_evaluations": 50,
+      "peak_tolerance_gtco2": 5,
+      "end_tolerance_gtco2": 5
+    }
+  },
+  "regional_carbon_price_calibration": {
+    "resume_from": null,
+    "prefix_policy": "exogCV_NPi",
+    "fixed_through_year": 2023,
+    "target_mode": "ndc-ltt",
+    "target_variant": "unconditional",
+    "ndc_year": 2030,
+    "end_year": 2100,
+    "min_target_coverage": 0.9,
+    "continuation_slope_multiplier_max": 0.2,
+    "search": {
+      "ndc_start_price": 400,
+      "initial_ndc_price_step": 200,
+      "ltt_start_slope": 10,
+      "initial_ltt_slope_step": 10,
       "max_price": 5000,
       "price_resolution": 1,
-      "max_evaluations": 50,
-      "net_zero_tolerance_mtco2": 100,
-      "budget_tolerance_gtco2": 5
+      "slope_resolution": 0.01,
+      "max_evaluations": 150,
+      "ndc_tolerance_mtco2eq": 5,
+      "ltt_tolerance_mtco2eq": 5
     }
   }
 }

@@ -206,7 +206,7 @@ $setGlobal SSP SSP2 !!SSP1-5
 *' *** Calibration
 $setGlobal Calibration off !! MatCalibration/Calibration/off
 
-*' *** softLinkMAgPIE: on = task 7 iterative soft-link with MAgPIE
+*' *** softLinkMAgPIE: on = task 6 iterative soft-link with MAgPIE
 $setglobal softLinkMAgPIE off  !! on or off
 
 $setglobal OPENGEM off !! on or off
