@@ -89,7 +89,7 @@
         },
 
         {
-            "label": "CALIBRATE CARBON PRICES",
+            "label": "OPEN-PROM SOFT-LINK MAgPIE",
             "type": "shell",
             "command": "Rscript start.R task_id=6",
             "problemMatcher": [],
@@ -103,7 +103,7 @@
         },
 
         {
-            "label": "OPEN-PROM SOFT-LINK MAgPIE",
+            "label": "CALIBRATE GLOBAL CARBON PRICE",
             "type": "shell",
             "command": "Rscript start.R task_id=7",
             "problemMatcher": [],
@@ -117,13 +117,14 @@
         },
 
         {
-            "label": "CALIBRATE GLOBAL CARBON PRICE",
+            "label": "CALIBRATE REGIONAL CARBON PRICE",
             "type": "shell",
-            "command": "Rscript",
-            "args": ["start.R", "task_id=8"],
+            "command": "Rscript start.R task_id=8",
             "problemMatcher": [],
+            "group": "build",
             "presentation": { "focus": true }
         },
+
         // ---- Batch button (extends the task system across many scenarios) ----
         {
             "label": "RUN BATCH",
