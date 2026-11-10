@@ -54,7 +54,7 @@
 #
 #   ndc_year = 2030
 #     Year of the NDC cap and first calibrated price anchor. Years other than
-#     2030 require the dedicated NDC rows from mrprom::fullNDCLTT().
+#     2030 require the dedicated NDC rows generated with retrieveData("TARGETS").
 #   end_year = 2100
 #     Last model year and latest eligible LTT year. The year order is
 #     2023 <= fixed_through_year < ndc_year < end_year <= 2100.
