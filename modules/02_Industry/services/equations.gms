@@ -76,17 +76,17 @@ Q02CostTotal(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)$(TIME(YTIME) and INDDOMtoSER
 Q02ScrpRate(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)$(TIME(YTIME) and runCy(allCy) and INDDOMtoSERVS(INDDOM,IND_SERVS) and SERVStoTECH(IND_SERVS,INDITECH))..
     V02ScrpRate(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)
         =E=
-    1 - (1 - 1 / VmLft(allCy,INDDOM,INDITECH,YTIME)) * !!FIXME: replace hard-coded lifetime
+    1 - (1 - 1 / VmLft(allCy,INDDOM,INDITECH,YTIME)) *
     (1-V02ScrpRatePrem(allCy,INDDOM,IND_SERVS,INDITECH,YTIME));
 
 Q02ShareTech(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)$(TIME(YTIME) and runCy(allCy) and INDDOMtoSERVS(INDDOM,IND_SERVS) and SERVStoTECH(IND_SERVS,INDITECH))..
     V02ShareTech(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)
       =E=
-    !!imMatrFactor(allCy,INDDOM,INDITECH,YTIME) *
-    V02CostTotal(allCy,INDDOM,IND_SERVS,INDITECH,YTIME-1) ** (-4) /
+    imMatrFactor(allCy,INDDOM,INDITECH,YTIME) *
+    V02CostTotal(allCy,INDDOM,IND_SERVS,INDITECH,YTIME-1) ** (-3) /
     SUM(INDITECH2$(INDDOMtoSERVS(INDDOM,IND_SERVS) and SERVStoTECH(IND_SERVS,INDITECH2)),
-      !!imMatrFactor(allCy,INDDOM,INDITECH2,YTIME) *
-      V02CostTotal(allCy,INDDOM,IND_SERVS,INDITECH2,YTIME-1) ** (-4)
+      imMatrFactor(allCy,INDDOM,INDITECH2,YTIME) *
+      V02CostTotal(allCy,INDDOM,IND_SERVS,INDITECH2,YTIME-1) ** (-3)
     );
 
 Q02ConsFuel(allCy,INDDOM,IND_SERVS,EF,YTIME)$(TIME(YTIME) and runCy(allCy) and INDDOMtoSERVS(INDDOM,IND_SERVS) and IND_SERVStoEF(IND_SERVS,EF))..
@@ -109,6 +109,10 @@ Q02ISTransfInEF(allCy,IS_TRANSF,EFS,YTIME)$(TIME(YTIME) and runCy(allCy))..
     i02ratioTransfInputIS(allCy,IS_TRANSF,EFS,"%fBaseY%") *
     SUM(EFS2$IS_TRANSF_OUT(IS_TRANSF,EFS2),
       V02ISTransfOutEF(allCy,IS_TRANSF,EFS2,YTIME)
+    ) +
+    SUM(MATERIAL,
+      i02ratioFuelConsPerMaterial(IS_TRANSF,MATERIAL,EFS) *
+      V02InputMaterials(allCy,"PRIM_STEEL",MATERIAL,YTIME)
     );
 
 Q02ISownEnergyTransf(allCy,IS_TRANSF,EFS,YTIME)$(TIME(YTIME) and runCy(allCy))..
@@ -135,3 +139,11 @@ Q02ConsFuelNonEnergy(allCy,INDDOM,IND_SERVS,EF,YTIME)$(TIME(YTIME) and runCy(all
     V02ConsFuelNonEnergy(allCy,INDDOM,IND_SERVS,EF,YTIME)
         =E=
     0;
+
+Q02InputMaterials(allCy,IND_SERVS,MATERIAL,YTIME)$(TIME(YTIME) and runCy(allCy))..
+    V02InputMaterials(allCy,IND_SERVS,MATERIAL,YTIME)
+        =E=
+    SUM(INDITECH,
+      i02ratioMaterialCons(IND_SERVS,INDITECH,MATERIAL) *
+      V02Capacity(allCy,"IS",IND_SERVS,INDITECH,YTIME)
+    );
