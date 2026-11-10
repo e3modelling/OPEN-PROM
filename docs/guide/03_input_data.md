@@ -80,7 +80,7 @@ edit the relevant fields. `config.json` has three top-level blocks:
 - `paths.*` — machine-specific paths:
   - `paths.gams_path` — the GAMS installation directory, if `gams` is not already on your system `PATH`;
   - `paths.model_runs_path` — the destination used by the optional run-folder sync step;
-  - `paths.magpie_path` — only needed for the OPEN-PROM ↔ MAgPIE soft-link (task 7).
+  - `paths.magpie_path` — only needed for the OPEN-PROM ↔ MAgPIE soft-link (task 6).
 - `behavior.*` — four switches controlling the wrapper workflow (see below).
 - `scenario.*` — the scenario to run (`scenario_name`, `description`, `gams_flags`, `magpie`). `task_id` is *not*
   stored here — it comes from the CLI (`task_id=N`, passed by every VS Code task button) or, in batch mode, from each

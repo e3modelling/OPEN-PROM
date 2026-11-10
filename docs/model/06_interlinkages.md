@@ -289,7 +289,7 @@ distributional analyses in future work.
 
 OPEN-PROM is soft-linked, during the DIAMOND project, with MAgPIE to connect the evolution of the energy system with
 land-use, bioenergy and AFOLU emission dynamics. This is the one interlinkage that runs as an operational workflow
-in the repository today: it is implemented as task 7 of the model harness. The link is designed as a sequential
+in the repository today: it is implemented as task 6 of the model harness. The link is designed as a sequential
 exchange between two independently solved models rather than as a single integrated optimisation problem. OPEN-PROM
 provides an energy-system pathway, including carbon-price signals and demand for advanced bioenergy, while MAgPIE
 evaluates the associated land-use implications and returns land-system information that is relevant for the

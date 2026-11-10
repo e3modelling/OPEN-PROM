@@ -152,7 +152,7 @@ which is which before you reason about a default run.
     time. The hydrogen *production* equations around it are active.
 * - MAgPIE soft-link
   - **off**
-  - `softLinkMAgPIE` defaults to `off`; the iterative task-7 coupling with MAgPIE (fixed biomass price, AFOLU
+  - `softLinkMAgPIE` defaults to `off`; the iterative task-6 coupling with MAgPIE (fixed biomass price, AFOLU
     emissions from MAgPIE's `.mif`) is an opt-in mode.
 * - Land-use emulator
   - **magpie / Npi_Default**
