@@ -53,7 +53,8 @@
 #     Conditional NDC and LTT        "ndc-ltt"     "conditional"
 #
 #   ndc_year = 2030
-#     Year of the NDC cap and first calibrated price anchor.
+#     Year of the NDC cap and first calibrated price anchor. Years other than
+#     2030 require the dedicated NDC rows from mrprom::fullNDCLTT().
 #   end_year = 2100
 #     Last model year and latest eligible LTT year. The year order is
 #     2023 <= fixed_through_year < ndc_year < end_year <= 2100.
@@ -125,16 +126,27 @@ task8Targets <- function(folder, regions, cfg) {
   eu <- c("AUT","BEL","BGR","HRV","CYP","CZE","DNK","EST","FIN","FRA","DEU","GRC","HUN","IRL","ITA","LVA","LTU","LUX","MLT","NLD","POL","PRT","ROU","SVK","SVN","ESP","SWE")
   if (!all(eu %in% regions)) stop("Research mapping lacks EU27")
   groups <- c(list(EU27 = eu), setNames(lapply(setdiff(regions,eu),function(r) r),setdiff(regions,eu)))
-  variable <- paste0("target", if (cfg$target_variant == "unconditional") "Unconditional" else "Conditional", "MtCO2e")
-  rows <- match(paste(regions,variable),paste(caps[[1]],caps[[2]]))
-  if (anyNA(rows)) stop("Missing target rows for research regions")
+  variants <- c("Unconditional", "Conditional")
+  ndcVariables <- paste0("targetNDC", variants, "MtCO2e")
+  lttVariables <- paste0("targetLongTerm", variants, "MtCO2e")
+  keys <- paste(caps[[1]], caps[[2]])
+  dedicatedNdc <- any(caps[[2]] %in% ndcVariables)
+  if (!dedicatedNdc && cfg$ndc_year != 2030L) {
+    stop("Regenerate the NDC/LTT pair with current mrprom for NDC years other than 2030")
+  }
+  # The original pair is supported for the default 2030 NDC year.
+  ndcPrefix <- if (dedicatedNdc) "targetNDC" else "target"
+  required <- c(paste0(ndcPrefix, variants, "MtCO2e"), lttVariables)
+  if (!all(as.vector(outer(regions, required, paste)) %in% keys)) {
+    stop("Missing NDC/LTT source rows. Regenerate the pair with current mrprom.")
+  }
+  variant <- match(cfg$target_variant, tolower(variants))
   # EU members are single-country model regions; their accepted annual caps must
   # cover all members. This avoids averaging percentages with unequal emissions.
   get <- function(members,y,kind="NDC") {
     if (!as.character(y) %in% names(caps)) return(c(cap = 0, coverage = 0))
-    selected_variable <- if(kind=="LTT") sub("target","targetLongTerm",variable) else variable
-    i <- match(paste(members,selected_variable),paste(caps[[1]],caps[[2]]))
-    if(anyNA(i)) stop("Missing ",kind," source rows; regenerate the NDC/LTT pair with current mrprom")
+    variable <- if (kind == "LTT") lttVariables[variant] else paste0(ndcPrefix, variants[variant], "MtCO2e")
+    i <- match(paste(members, variable), keys)
     c(cap = sum(as.numeric(caps[i,as.character(y)])), coverage = min(as.numeric(cov[i,as.character(y)])))
   }
   out <- list()
@@ -733,7 +745,21 @@ runTask8 <- function() {
   lock <- filelock::lock(file.path(dirname(tempdir()),paste0("openprom-task8-",digest::digest(campaign),".lock")),timeout=0)
   if (is.null(lock)) stop("Campaign already running")
   on.exit(filelock::unlock(lock),add=TRUE)
-  if (!resuming) task7Snapshot(root,campaign,config)
+  if (!resuming) {
+    targetHashes <- function(folder) {
+      targets <- file.path(folder, "targets")
+      files <- file.path(targets, c("tNDCLTT.csv", "tNDCLTT_coverage.csv"))
+      if (dir.exists(file.path(targets, ".ndcltt-publish")) || any(file.exists(paste0(files, ".previous")))) {
+        stop("NDC/LTT export is active or needs recovery in ", targets)
+      }
+      vapply(files, task7Hash, character(1), USE.NAMES = FALSE)
+    }
+    expectedTargets <- targetHashes(root)
+    task7Snapshot(root, campaign, config)
+    if (!identical(expectedTargets, targetHashes(campaign)) || !identical(expectedTargets, targetHashes(root))) {
+      stop("NDC/LTT inputs changed during the Task 8 snapshot")
+    }
+  }
   run_config <- jsonlite::read_json(file.path(campaign,"config.json"),simplifyVector=FALSE)
   input <- task7ReadPolicy(file.path(campaign,"data/iEnvPolicies.csv")); regions <- task7ReadRegions(campaign)
   state_dir <- task7StateFolder(campaign); work <- file.path(campaign,".work"); history <- file.path(campaign,"calibration-history.xlsx")
