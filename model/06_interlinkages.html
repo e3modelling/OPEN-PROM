@@ -89,13 +89,13 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../guide/02_running_the_model.html">Running the model</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../guide/02_running_the_model.html#a-first-run-public-dummy-data">A first run (public dummy data)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/02_running_the_model.html#running-first-run">A first run (public dummy data)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guide/02_running_the_model.html#running-with-real-input-data">Running with real input data</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../guide/02_running_the_model.html#point-r-to-the-local-madrat-archive">Point R to the local <code class="docutils literal notranslate"><span class="pre">madrat</span></code> archive</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../guide/02_running_the_model.html#how-data-and-targets-are-created">How <code class="docutils literal notranslate"><span class="pre">data/</span></code> and <code class="docutils literal notranslate"><span class="pre">targets/</span></code> are created</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../guide/02_running_the_model.html#task-modes-in-start-r">Task modes in <code class="docutils literal notranslate"><span class="pre">start.R</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../guide/02_running_the_model.html#batch-mode">Batch mode</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../guide/02_running_the_model.html#what-the-outputs-mean">What the outputs mean</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/02_running_the_model.html#running-outputs">What the outputs mean</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../guide/02_running_the_model.html#changing-the-region-set">Changing the region set</a></li>
@@ -142,17 +142,17 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="01_introduction.html">1. Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="02_model_overview.html">2. Model overview</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="02_model_overview.html#time-granularity-and-regions">2.1. Time granularity and regions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="02_model_overview.html#sector-granularity">2.2. Sector granularity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="02_model_overview.html#gap-and-substitution-mechanism">2.3. Gap and substitution mechanism</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="02_model_overview.html#regions">2.1. Time granularity and regions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_model_overview.html#sectors">2.2. Sector granularity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_model_overview.html#gap-substitution">2.3. Gap and substitution mechanism</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="02_model_overview.html#gap-and-scrapping-mechanism">2.3.1. Gap and scrapping mechanism</a></li>
 <li class="toctree-l3"><a class="reference internal" href="02_model_overview.html#substitution-mechanism">2.3.2. Substitution mechanism</a></li>
-<li class="toctree-l3"><a class="reference internal" href="02_model_overview.html#implementation-by-realisation">2.3.3. Implementation by realisation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_model_overview.html#gap-implementation">2.3.3. Implementation by realisation</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="02_model_overview.html#prices">2.4. Prices</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="02_model_overview.html#conceptual-framing-legacy">2.4.1. Conceptual framing (legacy)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="02_model_overview.html#active-price-formation-current-code">2.4.2. Active price formation (current code)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_model_overview.html#active-price-formation">2.4.2. Active price formation (current code)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="02_model_overview.html#energy-supply">2.5. Energy supply</a><ul>
@@ -163,10 +163,10 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="03_demand_sectors.html">3. Demand sectors</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="03_demand_sectors.html#industry-and-domestic-demand">3.1. Industry and domestic demand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_demand_sectors.html#industry-demand">3.1. Industry and domestic demand</a></li>
 <li class="toctree-l2"><a class="reference internal" href="03_demand_sectors.html#residential-and-commercial">3.2. Residential and commercial</a></li>
-<li class="toctree-l2"><a class="reference internal" href="03_demand_sectors.html#transport-and-bunkers-demand">3.3. Transport and bunkers demand</a></li>
-<li class="toctree-l2"><a class="reference internal" href="03_demand_sectors.html#carbon-dioxide-removal-cdr-technologies">3.4. Carbon Dioxide Removal (CDR) technologies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_demand_sectors.html#transport-demand">3.3. Transport and bunkers demand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_demand_sectors.html#cdr">3.4. Carbon Dioxide Removal (CDR) technologies</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="04_supply_sectors.html">4. Supply sectors</a><ul>
@@ -177,27 +177,27 @@
 <li class="toctree-l3"><a class="reference internal" href="04_supply_sectors.html#output-and-role-in-the-full-energy-system">4.3.2. Output and role in the full energy system</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="04_supply_sectors.html#supply-of-other-fuels">4.4. Supply of other fuels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_supply_sectors.html#other-fuels">4.4. Supply of other fuels</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="05_data_and_calibration.html">5. Data pipeline and calibration</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="05_data_and_calibration.html#input-data-sources-and-data-preparation">5.1. Input data sources and data preparation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="05_data_and_calibration.html#output-post-processing">5.2. Output post-processing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="05_data_and_calibration.html#calibration-mechanism">5.3. Calibration mechanism</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_data_and_calibration.html#input-data">5.1. Input data sources and data preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_data_and_calibration.html#postprocessing">5.2. Output post-processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_data_and_calibration.html#calibration">5.3. Calibration mechanism</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">6. Model interlinkages</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#link-with-opentepes">6.1. Link with openTEPES</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#link-with-meteor">6.2. Link with METEOR</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#opentepes">6.1. Link with openTEPES</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#meteor">6.2. Link with METEOR</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#overview-of-meteor">6.2.1. Overview of METEOR</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#rationale-for-linking-meteor-with-open-prom">6.2.2. Rationale for linking METEOR with OPEN-PROM</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#coupling-workflow-between-open-prom-and-meteor">6.2.3. Coupling workflow between OPEN-PROM and METEOR</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#added-value-for-open-prom">6.2.4. Added value for OPEN-PROM</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#circular-economy-representation-with-omnia-engage">6.3. Circular economy representation with OMNIA-ENGAGE</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#link-with-ftt-heat">6.4. Link with FTT:Heat</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#link-with-magpie">6.5. Link with MAgPIE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#omnia-engage">6.3. Circular economy representation with OMNIA-ENGAGE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ftt-heat">6.4. Link with FTT:Heat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#magpie-link">6.5. Link with MAgPIE</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="07_baseline_results.html">7. Baseline results</a><ul>
@@ -219,7 +219,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/abbreviations.html">Abbreviations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/bibliography.html">Bibliography and data sources</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../reference/bibliography.html#references">References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/bibliography.html#bibliography-references">References</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../reference/bibliography.html#data-sources-and-tools">Data sources and tools</a></li>
 </ul>
 </li>
@@ -267,8 +267,8 @@ detail), METEOR (spatial climate emulation), OMNIA-ENGAGE (circular economy), FT
 MAgPIE (land use and bioenergy). Of these, only the MAgPIE soft-link is operational in the repository today (task
 7); the others are external links that are planned or under development within DIAMOND.</p>
 </div>
-<section id="link-with-opentepes">
-<span id="opentepes"></span><h2><span class="section-number">6.1. </span>Link with openTEPES<a class="headerlink" href="#link-with-opentepes" title="Link to this heading"></a></h2>
+<section id="opentepes">
+<span id="link-with-opentepes"></span><h2><span class="section-number">6.1. </span>Link with openTEPES<a class="headerlink" href="#opentepes" title="Link to this heading"></a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p><strong>Status — external / planned.</strong> The openTEPES link is described here as an intended DIAMOND development, not as a
@@ -294,8 +294,8 @@ a checkpoint year which OPEN-PROM uses as a target from its first year of simula
 <p>As a result, the OPEN-PROM simulation can calibrate its power-supply technology expansion, and therefore shares,
 with trustful targets for 2030. This soft-link is expected to be achieved during July of 2026.</p>
 </section>
-<section id="link-with-meteor">
-<span id="meteor"></span><h2><span class="section-number">6.2. </span>Link with METEOR<a class="headerlink" href="#link-with-meteor" title="Link to this heading"></a></h2>
+<section id="meteor">
+<span id="link-with-meteor"></span><h2><span class="section-number">6.2. </span>Link with METEOR<a class="headerlink" href="#meteor" title="Link to this heading"></a></h2>
 <section id="overview-of-meteor">
 <h3><span class="section-number">6.2.1. </span>Overview of METEOR<a class="headerlink" href="#overview-of-meteor" title="Link to this heading"></a></h3>
 <p>METEOR<a class="footnote-reference brackets" href="#meteor-fn" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> — Multivariate Emulation of Time-Evolving and Overlapping Responses (Sandstad, Steinert, Baur, &amp;
@@ -393,8 +393,8 @@ impact-relevant indicators, which can then inform subsequent scenario iterations
 toward more integrated, feedback-aware climate-energy-economy modelling within the DIAMOND modelling framework.</p>
 </section>
 </section>
-<section id="circular-economy-representation-with-omnia-engage">
-<span id="omnia-engage"></span><h2><span class="section-number">6.3. </span>Circular economy representation with OMNIA-ENGAGE<a class="headerlink" href="#circular-economy-representation-with-omnia-engage" title="Link to this heading"></a></h2>
+<section id="omnia-engage">
+<span id="circular-economy-representation-with-omnia-engage"></span><h2><span class="section-number">6.3. </span>Circular economy representation with OMNIA-ENGAGE<a class="headerlink" href="#omnia-engage" title="Link to this heading"></a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p><strong>Status — external / planned.</strong> The OMNIA-ENGAGE link is a DIAMOND harmonisation exercise, not a coded OPEN-PROM
@@ -487,8 +487,8 @@ associated decreases in scrap production — generated by linking OMNIA and ENGA
 primary and secondary production for steel and aluminium, and the changes in sectoral production described in the
 model, will be updated based on OMNIA-ENGAGE outputs.</p>
 </section>
-<section id="link-with-ftt-heat">
-<span id="ftt-heat"></span><h2><span class="section-number">6.4. </span>Link with FTT:Heat<a class="headerlink" href="#link-with-ftt-heat" title="Link to this heading"></a></h2>
+<section id="ftt-heat">
+<span id="link-with-ftt-heat"></span><h2><span class="section-number">6.4. </span>Link with FTT:Heat<a class="headerlink" href="#ftt-heat" title="Link to this heading"></a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p><strong>Status — external / planned.</strong> The FTT:Heat coupling is a planned development: the two models are “going to be
@@ -514,8 +514,8 @@ included to capture stock turnover and path-dependent technology adoption dynami
 behaviourally based technology adoption, providing a necessary foundation for more detailed demand-side and
 distributional analyses in future work.</p>
 </section>
-<section id="link-with-magpie">
-<span id="magpie-link"></span><h2><span class="section-number">6.5. </span>Link with MAgPIE<a class="headerlink" href="#link-with-magpie" title="Link to this heading"></a></h2>
+<section id="magpie-link">
+<span id="link-with-magpie"></span><h2><span class="section-number">6.5. </span>Link with MAgPIE<a class="headerlink" href="#magpie-link" title="Link to this heading"></a></h2>
 <p>OPEN-PROM is soft-linked, during the DIAMOND project, with MAgPIE to connect the evolution of the energy system with
 land-use, bioenergy and AFOLU emission dynamics. This is the one interlinkage that runs as an operational workflow
 in the repository today: it is implemented as task 7 of the model harness. The link is designed as a sequential

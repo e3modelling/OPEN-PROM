@@ -89,13 +89,13 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../guide/02_running_the_model.html">Running the model</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../guide/02_running_the_model.html#a-first-run-public-dummy-data">A first run (public dummy data)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/02_running_the_model.html#running-first-run">A first run (public dummy data)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guide/02_running_the_model.html#running-with-real-input-data">Running with real input data</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../guide/02_running_the_model.html#point-r-to-the-local-madrat-archive">Point R to the local <code class="docutils literal notranslate"><span class="pre">madrat</span></code> archive</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../guide/02_running_the_model.html#how-data-and-targets-are-created">How <code class="docutils literal notranslate"><span class="pre">data/</span></code> and <code class="docutils literal notranslate"><span class="pre">targets/</span></code> are created</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../guide/02_running_the_model.html#task-modes-in-start-r">Task modes in <code class="docutils literal notranslate"><span class="pre">start.R</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../guide/02_running_the_model.html#batch-mode">Batch mode</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../guide/02_running_the_model.html#what-the-outputs-mean">What the outputs mean</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/02_running_the_model.html#running-outputs">What the outputs mean</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../guide/02_running_the_model.html#changing-the-region-set">Changing the region set</a></li>
@@ -142,17 +142,17 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="01_introduction.html">1. Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="02_model_overview.html">2. Model overview</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="02_model_overview.html#time-granularity-and-regions">2.1. Time granularity and regions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="02_model_overview.html#sector-granularity">2.2. Sector granularity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="02_model_overview.html#gap-and-substitution-mechanism">2.3. Gap and substitution mechanism</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="02_model_overview.html#regions">2.1. Time granularity and regions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_model_overview.html#sectors">2.2. Sector granularity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_model_overview.html#gap-substitution">2.3. Gap and substitution mechanism</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="02_model_overview.html#gap-and-scrapping-mechanism">2.3.1. Gap and scrapping mechanism</a></li>
 <li class="toctree-l3"><a class="reference internal" href="02_model_overview.html#substitution-mechanism">2.3.2. Substitution mechanism</a></li>
-<li class="toctree-l3"><a class="reference internal" href="02_model_overview.html#implementation-by-realisation">2.3.3. Implementation by realisation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_model_overview.html#gap-implementation">2.3.3. Implementation by realisation</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="02_model_overview.html#prices">2.4. Prices</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="02_model_overview.html#conceptual-framing-legacy">2.4.1. Conceptual framing (legacy)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="02_model_overview.html#active-price-formation-current-code">2.4.2. Active price formation (current code)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_model_overview.html#active-price-formation">2.4.2. Active price formation (current code)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="02_model_overview.html#energy-supply">2.5. Energy supply</a><ul>
@@ -163,10 +163,10 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">3. Demand sectors</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#industry-and-domestic-demand">3.1. Industry and domestic demand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#industry-demand">3.1. Industry and domestic demand</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#residential-and-commercial">3.2. Residential and commercial</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#transport-and-bunkers-demand">3.3. Transport and bunkers demand</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#carbon-dioxide-removal-cdr-technologies">3.4. Carbon Dioxide Removal (CDR) technologies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#transport-demand">3.3. Transport and bunkers demand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cdr">3.4. Carbon Dioxide Removal (CDR) technologies</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="04_supply_sectors.html">4. Supply sectors</a><ul>
@@ -177,27 +177,27 @@
 <li class="toctree-l3"><a class="reference internal" href="04_supply_sectors.html#output-and-role-in-the-full-energy-system">4.3.2. Output and role in the full energy system</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="04_supply_sectors.html#supply-of-other-fuels">4.4. Supply of other fuels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_supply_sectors.html#other-fuels">4.4. Supply of other fuels</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="05_data_and_calibration.html">5. Data pipeline and calibration</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="05_data_and_calibration.html#input-data-sources-and-data-preparation">5.1. Input data sources and data preparation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="05_data_and_calibration.html#output-post-processing">5.2. Output post-processing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="05_data_and_calibration.html#calibration-mechanism">5.3. Calibration mechanism</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_data_and_calibration.html#input-data">5.1. Input data sources and data preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_data_and_calibration.html#postprocessing">5.2. Output post-processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_data_and_calibration.html#calibration">5.3. Calibration mechanism</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="06_interlinkages.html">6. Model interlinkages</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="06_interlinkages.html#link-with-opentepes">6.1. Link with openTEPES</a></li>
-<li class="toctree-l2"><a class="reference internal" href="06_interlinkages.html#link-with-meteor">6.2. Link with METEOR</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="06_interlinkages.html#opentepes">6.1. Link with openTEPES</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_interlinkages.html#meteor">6.2. Link with METEOR</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="06_interlinkages.html#overview-of-meteor">6.2.1. Overview of METEOR</a></li>
 <li class="toctree-l3"><a class="reference internal" href="06_interlinkages.html#rationale-for-linking-meteor-with-open-prom">6.2.2. Rationale for linking METEOR with OPEN-PROM</a></li>
 <li class="toctree-l3"><a class="reference internal" href="06_interlinkages.html#coupling-workflow-between-open-prom-and-meteor">6.2.3. Coupling workflow between OPEN-PROM and METEOR</a></li>
 <li class="toctree-l3"><a class="reference internal" href="06_interlinkages.html#added-value-for-open-prom">6.2.4. Added value for OPEN-PROM</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="06_interlinkages.html#circular-economy-representation-with-omnia-engage">6.3. Circular economy representation with OMNIA-ENGAGE</a></li>
-<li class="toctree-l2"><a class="reference internal" href="06_interlinkages.html#link-with-ftt-heat">6.4. Link with FTT:Heat</a></li>
-<li class="toctree-l2"><a class="reference internal" href="06_interlinkages.html#link-with-magpie">6.5. Link with MAgPIE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_interlinkages.html#omnia-engage">6.3. Circular economy representation with OMNIA-ENGAGE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_interlinkages.html#ftt-heat">6.4. Link with FTT:Heat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_interlinkages.html#magpie-link">6.5. Link with MAgPIE</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="07_baseline_results.html">7. Baseline results</a><ul>
@@ -219,7 +219,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/abbreviations.html">Abbreviations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/bibliography.html">Bibliography and data sources</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../reference/bibliography.html#references">References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/bibliography.html#bibliography-references">References</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../reference/bibliography.html#data-sources-and-tools">Data sources and tools</a></li>
 </ul>
 </li>
@@ -266,8 +266,8 @@
 ICT / data-centre sub-sector split off during PRISMA, transport and bunkers, and the carbon dioxide removal (CDR)
 technologies. Each module turns economic activity into final energy demand by fuel and feeds the supply modules.</p>
 </div>
-<section id="industry-and-domestic-demand">
-<span id="industry-demand"></span><h2><span class="section-number">3.1. </span>Industry and domestic demand<a class="headerlink" href="#industry-and-domestic-demand" title="Link to this heading"></a></h2>
+<section id="industry-demand">
+<span id="industry-and-domestic-demand"></span><h2><span class="section-number">3.1. </span>Industry and domestic demand<a class="headerlink" href="#industry-demand" title="Link to this heading"></a></h2>
 <p>The Industry and Domestic Demand module covers final energy consumption in the industrial sector and in the domestic
 sector (households and commercial/services, often grouped with residential demand). It projects how energy demand
 evolves in these sectors across the model horizon, disaggregating key subsectors and end-uses to capture structural
@@ -343,8 +343,8 @@ which is expected to have significant growth over the coming years. For the proj
 demand we fit an econometric curve based on the IEA short-term projections, with further analysis leading to the
 creation of different scenarios (Lower, Medium and Higher Usage).</p>
 </section>
-<section id="transport-and-bunkers-demand">
-<span id="transport-demand"></span><h2><span class="section-number">3.3. </span>Transport and bunkers demand<a class="headerlink" href="#transport-and-bunkers-demand" title="Link to this heading"></a></h2>
+<section id="transport-demand">
+<span id="transport-and-bunkers-demand"></span><h2><span class="section-number">3.3. </span>Transport and bunkers demand<a class="headerlink" href="#transport-demand" title="Link to this heading"></a></h2>
 <p>The Transport Demand module models energy demand in the transportation sector by distinguishing between passenger and
 freight transport modes. In OPEN-PROM, transport is disaggregated into eight categories (modes) to reflect
 differences in technologies and usage patterns. Passenger transport includes passenger cars, passenger rail, aviation,
@@ -409,8 +409,8 @@ maritime transport.</p>
 <a class="reference internal" href="04_supply_sectors.html#power-supply"><span class="std std-ref">Power supply</span></a> and <a class="reference internal" href="04_supply_sectors.html#hydrogen-supply"><span class="std std-ref">Hydrogen supply</span></a>.</p>
 </div>
 </section>
-<section id="carbon-dioxide-removal-cdr-technologies">
-<span id="cdr"></span><h2><span class="section-number">3.4. </span>Carbon Dioxide Removal (CDR) technologies<a class="headerlink" href="#carbon-dioxide-removal-cdr-technologies" title="Link to this heading"></a></h2>
+<section id="cdr">
+<span id="carbon-dioxide-removal-cdr-technologies"></span><h2><span class="section-number">3.4. </span>Carbon Dioxide Removal (CDR) technologies<a class="headerlink" href="#cdr" title="Link to this heading"></a></h2>
 <p>The CO₂ module includes the calculation of carbon captured by the CCS and DAC technologies, as well as the curve of
 the sequestration costs according to the cumulative carbon captured as a result of the limitation in carbon storage.
 The rest of the module analyses the capacity expansion in CDR technologies.</p>

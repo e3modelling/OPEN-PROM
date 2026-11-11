@@ -91,13 +91,13 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../guide/02_running_the_model.html">Running the model</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../guide/02_running_the_model.html#a-first-run-public-dummy-data">A first run (public dummy data)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/02_running_the_model.html#running-first-run">A first run (public dummy data)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guide/02_running_the_model.html#running-with-real-input-data">Running with real input data</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../guide/02_running_the_model.html#point-r-to-the-local-madrat-archive">Point R to the local <code class="docutils literal notranslate"><span class="pre">madrat</span></code> archive</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../guide/02_running_the_model.html#how-data-and-targets-are-created">How <code class="docutils literal notranslate"><span class="pre">data/</span></code> and <code class="docutils literal notranslate"><span class="pre">targets/</span></code> are created</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../guide/02_running_the_model.html#task-modes-in-start-r">Task modes in <code class="docutils literal notranslate"><span class="pre">start.R</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../guide/02_running_the_model.html#batch-mode">Batch mode</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../guide/02_running_the_model.html#what-the-outputs-mean">What the outputs mean</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/02_running_the_model.html#running-outputs">What the outputs mean</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../guide/02_running_the_model.html#changing-the-region-set">Changing the region set</a></li>
@@ -144,17 +144,17 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="01_introduction.html">1. Introduction</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">2. Model overview</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#time-granularity-and-regions">2.1. Time granularity and regions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#sector-granularity">2.2. Sector granularity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#gap-and-substitution-mechanism">2.3. Gap and substitution mechanism</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#regions">2.1. Time granularity and regions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sectors">2.2. Sector granularity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#gap-substitution">2.3. Gap and substitution mechanism</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#gap-and-scrapping-mechanism">2.3.1. Gap and scrapping mechanism</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#substitution-mechanism">2.3.2. Substitution mechanism</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#implementation-by-realisation">2.3.3. Implementation by realisation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gap-implementation">2.3.3. Implementation by realisation</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#prices">2.4. Prices</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#conceptual-framing-legacy">2.4.1. Conceptual framing (legacy)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#active-price-formation-current-code">2.4.2. Active price formation (current code)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#active-price-formation">2.4.2. Active price formation (current code)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#energy-supply">2.5. Energy supply</a><ul>
@@ -165,10 +165,10 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="03_demand_sectors.html">3. Demand sectors</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="03_demand_sectors.html#industry-and-domestic-demand">3.1. Industry and domestic demand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_demand_sectors.html#industry-demand">3.1. Industry and domestic demand</a></li>
 <li class="toctree-l2"><a class="reference internal" href="03_demand_sectors.html#residential-and-commercial">3.2. Residential and commercial</a></li>
-<li class="toctree-l2"><a class="reference internal" href="03_demand_sectors.html#transport-and-bunkers-demand">3.3. Transport and bunkers demand</a></li>
-<li class="toctree-l2"><a class="reference internal" href="03_demand_sectors.html#carbon-dioxide-removal-cdr-technologies">3.4. Carbon Dioxide Removal (CDR) technologies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_demand_sectors.html#transport-demand">3.3. Transport and bunkers demand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_demand_sectors.html#cdr">3.4. Carbon Dioxide Removal (CDR) technologies</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="04_supply_sectors.html">4. Supply sectors</a><ul>
@@ -179,27 +179,27 @@
 <li class="toctree-l3"><a class="reference internal" href="04_supply_sectors.html#output-and-role-in-the-full-energy-system">4.3.2. Output and role in the full energy system</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="04_supply_sectors.html#supply-of-other-fuels">4.4. Supply of other fuels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_supply_sectors.html#other-fuels">4.4. Supply of other fuels</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="05_data_and_calibration.html">5. Data pipeline and calibration</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="05_data_and_calibration.html#input-data-sources-and-data-preparation">5.1. Input data sources and data preparation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="05_data_and_calibration.html#output-post-processing">5.2. Output post-processing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="05_data_and_calibration.html#calibration-mechanism">5.3. Calibration mechanism</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_data_and_calibration.html#input-data">5.1. Input data sources and data preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_data_and_calibration.html#postprocessing">5.2. Output post-processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_data_and_calibration.html#calibration">5.3. Calibration mechanism</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="06_interlinkages.html">6. Model interlinkages</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="06_interlinkages.html#link-with-opentepes">6.1. Link with openTEPES</a></li>
-<li class="toctree-l2"><a class="reference internal" href="06_interlinkages.html#link-with-meteor">6.2. Link with METEOR</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="06_interlinkages.html#opentepes">6.1. Link with openTEPES</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_interlinkages.html#meteor">6.2. Link with METEOR</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="06_interlinkages.html#overview-of-meteor">6.2.1. Overview of METEOR</a></li>
 <li class="toctree-l3"><a class="reference internal" href="06_interlinkages.html#rationale-for-linking-meteor-with-open-prom">6.2.2. Rationale for linking METEOR with OPEN-PROM</a></li>
 <li class="toctree-l3"><a class="reference internal" href="06_interlinkages.html#coupling-workflow-between-open-prom-and-meteor">6.2.3. Coupling workflow between OPEN-PROM and METEOR</a></li>
 <li class="toctree-l3"><a class="reference internal" href="06_interlinkages.html#added-value-for-open-prom">6.2.4. Added value for OPEN-PROM</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="06_interlinkages.html#circular-economy-representation-with-omnia-engage">6.3. Circular economy representation with OMNIA-ENGAGE</a></li>
-<li class="toctree-l2"><a class="reference internal" href="06_interlinkages.html#link-with-ftt-heat">6.4. Link with FTT:Heat</a></li>
-<li class="toctree-l2"><a class="reference internal" href="06_interlinkages.html#link-with-magpie">6.5. Link with MAgPIE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_interlinkages.html#omnia-engage">6.3. Circular economy representation with OMNIA-ENGAGE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_interlinkages.html#ftt-heat">6.4. Link with FTT:Heat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_interlinkages.html#magpie-link">6.5. Link with MAgPIE</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="07_baseline_results.html">7. Baseline results</a><ul>
@@ -221,7 +221,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/abbreviations.html">Abbreviations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/bibliography.html">Bibliography and data sources</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../reference/bibliography.html#references">References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/bibliography.html#bibliography-references">References</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../reference/bibliography.html#data-sources-and-tools">Data sources and tools</a></li>
 </ul>
 </li>
@@ -281,8 +281,8 @@ post-processing framework developed to support the analysis, validation, visuali
 generated by the OPEN-PROM modelling platform. Together, OPEN-PROM, mrprom, and postprom constitute an integrated
 framework for energy system modelling, data management, and results analysis. The following subsections provide a
 detailed overview of the model’s energy demand and energy supply components.</p>
-<section id="time-granularity-and-regions">
-<span id="regions"></span><h2><span class="section-number">2.1. </span>Time granularity and regions<a class="headerlink" href="#time-granularity-and-regions" title="Link to this heading"></a></h2>
+<section id="regions">
+<span id="time-granularity-and-regions"></span><h2><span class="section-number">2.1. </span>Time granularity and regions<a class="headerlink" href="#regions" title="Link to this heading"></a></h2>
 <p>OPEN-PROM performs 1-year step simulations, beginning from 2024 to 2100, using data of historical years from 2010.
 The 1-year resolution is critical for short-term realism, but less so for the long term, so it is planned to change
 the late-horizon resolution to 5-year steps.</p>
@@ -379,8 +379,8 @@ the spatial resolution expanded from 15 to 39 regions.</p>
 </tbody>
 </table>
 </section>
-<section id="sector-granularity">
-<span id="sectors"></span><h2><span class="section-number">2.2. </span>Sector granularity<a class="headerlink" href="#sector-granularity" title="Link to this heading"></a></h2>
+<section id="sectors">
+<span id="sector-granularity"></span><h2><span class="section-number">2.2. </span>Sector granularity<a class="headerlink" href="#sectors" title="Link to this heading"></a></h2>
 <p>Energy demand is modelled in terms of useful energy services, such as heating, mobility, industrial production of
 materials (e.g. steel or cement), and appliance use, and their corresponding final energy carriers. The model
 ensures a consistent energy balance by linking useful and final energy through technology-specific efficiencies.</p>
@@ -431,10 +431,8 @@ Transport – Inland Navigation</p></td>
 <p>A typical useful energy demand equation is used to estimate the evolution of total demand for useful energy
 services<a class="footnote-reference brackets" href="#id9" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> for each subsector in OPEN-PROM, and has the following form:</p>
 <div class="math notranslate nohighlight">
-\[
-\ln\left( \frac{DEM_{i,t}}{DEM_{i,t-1}} \right) = \alpha + \beta\,\ln\left( \frac{ACT_{i,t}}{ACT_{i,t-1}} \right)
-+ \sum_{l=0}^{p}{\gamma_{l}\left\lbrack \ln\left( \frac{AVPrice_{i,t-l}}{AVPrice_{i,t-l-1}} \right) \right\rbrack}
-\]</div>
+\[\ln\left( \frac{DEM_{i,t}}{DEM_{i,t-1}} \right) = \alpha + \beta\,\ln\left( \frac{ACT_{i,t}}{ACT_{i,t-1}} \right)
++ \sum_{l=0}^{p}{\gamma_{l}\left\lbrack \ln\left( \frac{AVPrice_{i,t-l}}{AVPrice_{i,t-l-1}} \right) \right\rbrack}\]</div>
 <dl class="simple myst">
 <dt><span class="math notranslate nohighlight">\(DEM\)</span></dt><dd><p>useful energy demand</p>
 </dd>
@@ -472,9 +470,7 @@ infrastructure, policies, and equipment. More information regarding substitution
 forms is provided in the <a class="reference internal" href="#gap-substitution"><span class="std std-ref">Gap and substitution mechanism</span></a> section. Final energy demand is then derived from useful energy
 requirements and the efficiency of the selected options (technology/fuels):</p>
 <div class="math notranslate nohighlight">
-\[
-FE_{i,k,t} = \frac{UseDemRemEquip_{i,k,t} + sh_{i,k,t}\,\ast\,GAP_{i,t}}{eff_{i,k,t}}
-\]</div>
+\[FE_{i,k,t} = \frac{UseDemRemEquip_{i,k,t} + sh_{i,k,t}\,\ast\,GAP_{i,t}}{eff_{i,k,t}}\]</div>
 <dl class="simple myst">
 <dt><span class="math notranslate nohighlight">\(FE_{i,k}\)</span></dt><dd><p>final energy of technology/fuel <span class="math notranslate nohighlight">\(k\)</span> in subsector <span class="math notranslate nohighlight">\(i\)</span></p>
 </dd>
@@ -497,8 +493,8 @@ electricity (<code class="docutils literal notranslate"><span class="pre">VmElec
 carbon-dioxide-removal technologies (direct air capture and enhanced weathering).</p>
 </div>
 </section>
-<section id="gap-and-substitution-mechanism">
-<span id="gap-substitution"></span><h2><span class="section-number">2.3. </span>Gap and substitution mechanism<a class="headerlink" href="#gap-and-substitution-mechanism" title="Link to this heading"></a></h2>
+<section id="gap-substitution">
+<span id="gap-and-substitution-mechanism"></span><h2><span class="section-number">2.3. </span>Gap and substitution mechanism<a class="headerlink" href="#gap-substitution" title="Link to this heading"></a></h2>
 <p>The energy-related equipment (e.g. power plants, passenger cars, or heating boilers) available in each period, on
 both the energy supply and the demand side, represents the installed technologies that can actively produce and
 consume energy, respectively. This includes power plants, heating systems, industrial machinery, vehicles, and
@@ -537,16 +533,12 @@ generic forms onto the active equations.</p>
 (<span class="math notranslate nohighlight">\(DEM_{i,t}\)</span> — the useful energy demand equation) and the amount of energy that can be satisfied using existing
 equipment:</p>
 <div class="math notranslate nohighlight">
-\[
-GAP_{i,t} = DEM_{i,t} - CAP_{i,t}
-\]</div>
+\[GAP_{i,t} = DEM_{i,t} - CAP_{i,t}\]</div>
 <p>In the equation above, <span class="math notranslate nohighlight">\(CAP_{i,t}\)</span> represents the useful energy satisfied by the capacity of the equipment of
 subsector <span class="math notranslate nohighlight">\(i\)</span> which has been installed by year <span class="math notranslate nohighlight">\(t-1\)</span> and is not scrapped in year <span class="math notranslate nohighlight">\(t\)</span> (remaining equipment), and is
 defined as follows:</p>
 <div class="math notranslate nohighlight">
-\[
-CAP_{i,t} = \sum_{k}{(1 - SCR_{i,k,t})\,\ast\,DEM_{i,k,t-1}}
-\]</div>
+\[CAP_{i,t} = \sum_{k}{(1 - SCR_{i,k,t})\,\ast\,DEM_{i,k,t-1}}\]</div>
 <p>where the summation includes all competing technologies <span class="math notranslate nohighlight">\(k\)</span>, <span class="math notranslate nohighlight">\(DEM_{i,k,t-1}\)</span> stands for the demand satisfied by
 technology <span class="math notranslate nohighlight">\(k\)</span> in year <span class="math notranslate nohighlight">\(t-1\)</span>, and <span class="math notranslate nohighlight">\(SCR_{i,k,t}\)</span> is the overall scrapping rate of technology <span class="math notranslate nohighlight">\(k\)</span> in year <span class="math notranslate nohighlight">\(t\)</span>, which
 includes normal scrapping (<span class="math notranslate nohighlight">\(norscr_{i,k,t}\)</span>), premature scrapping (<span class="math notranslate nohighlight">\(prescr_{i,k,t}\)</span>) and retrofitting
@@ -560,21 +552,15 @@ transforms a conventional thermal plant into a CCS-equipped plant. The general a
 scrapping rates are the following:</p>
 <p>Normal scrapping:</p>
 <div class="math notranslate nohighlight">
-\[
-norscr_{k,t} = \frac{1}{lft_{k}}
-\]</div>
+\[norscr_{k,t} = \frac{1}{lft_{k}}\]</div>
 <p>Premature scrapping:</p>
 <div class="math notranslate nohighlight">
-\[
-prescr_{k,t} = 1 - \frac{vom_{k,t}^{-\gamma_{t}}}{h_{k,t}\,\ast\,\sum_{j \neq k}{\left( totcost_{j,t}^{-\gamma_{t}}
-\right)} + vom_{k,t}^{-\gamma_{t}}}
-\]</div>
+\[prescr_{k,t} = 1 - \frac{vom_{k,t}^{-\gamma_{t}}}{h_{k,t}\,\ast\,\sum_{j \neq k}{\left( totcost_{j,t}^{-\gamma_{t}}
+\right)} + vom_{k,t}^{-\gamma_{t}}}\]</div>
 <p>Retrofitting scrapping:</p>
 <div class="math notranslate nohighlight">
-\[
-retrscr_{k,t} = 1 - \frac{vom_{k,t}^{-\gamma_{t}}}{a_{k,t}\,\ast\,totcost_{k',t}^{-\gamma_{t}} +
-vom_{k,t}^{-\gamma_{t}}}
-\]</div>
+\[retrscr_{k,t} = 1 - \frac{vom_{k,t}^{-\gamma_{t}}}{a_{k,t}\,\ast\,totcost_{k',t}^{-\gamma_{t}} +
+vom_{k,t}^{-\gamma_{t}}}\]</div>
 <p>where <span class="math notranslate nohighlight">\(norscr_{k,t}\)</span> is the normal scrapping rate of technology <span class="math notranslate nohighlight">\(k\)</span>, <span class="math notranslate nohighlight">\(lft_{k}\)</span> is the economic lifetime of
 technology <span class="math notranslate nohighlight">\(k\)</span>, and <span class="math notranslate nohighlight">\(prescr_{k,t}\)</span> is the premature replacement rate of technology <span class="math notranslate nohighlight">\(k\)</span>; <span class="math notranslate nohighlight">\(vom_{k,t}\)</span> is the variable
 (including fuel) cost of technology <span class="math notranslate nohighlight">\(k\)</span> and <span class="math notranslate nohighlight">\(totcost_{j,t}\)</span> is the total cost of using technology <span class="math notranslate nohighlight">\(j\)</span> including
@@ -596,19 +582,15 @@ that can be met by existing equipment, the gap is assumed to be zero, and no com
 is modelled as a quasi-cost-minimising function and is driven by the total cost of the competing options. The total
 cost of technology <span class="math notranslate nohighlight">\(k\)</span> at time <span class="math notranslate nohighlight">\(t\)</span> is expressed as:</p>
 <div class="math notranslate nohighlight">
-\[
-totcost_{k,t} = \frac{\left( \frac{dr_{t}\,\ast\,e^{dr_{t}\,\ast\,lft_{k}}}{e^{dr_{t}\,\ast\,lft_{k}} - 1}
-\right)\,\ast\,cc_{k,t} + fc_{k,t}}{ur_{k,t}} + vom_{k,t} + \frac{fuelprice_{k,t}}{eff_{k,t}}
-\]</div>
+\[totcost_{k,t} = \frac{\left( \frac{dr_{t}\,\ast\,e^{dr_{t}\,\ast\,lft_{k}}}{e^{dr_{t}\,\ast\,lft_{k}} - 1}
+\right)\,\ast\,cc_{k,t} + fc_{k,t}}{ur_{k,t}} + vom_{k,t} + \frac{fuelprice_{k,t}}{eff_{k,t}}\]</div>
 <p>where <span class="math notranslate nohighlight">\(cc_{k,t}\)</span> is the capital cost, <span class="math notranslate nohighlight">\(fc_{k,t}\)</span> is the fixed cost for operation and maintenance (O&amp;M), <span class="math notranslate nohighlight">\(vom_{k,t}\)</span>
 refers to the variable costs of O&amp;M, <span class="math notranslate nohighlight">\(eff_{k,t}\)</span> is the efficiency factor, <span class="math notranslate nohighlight">\(ur_{k,t}\)</span> is the utilisation rate,
 <span class="math notranslate nohighlight">\(fuelprice_{k,t}\)</span> is the price of the energy source used by technology <span class="math notranslate nohighlight">\(k\)</span>, <span class="math notranslate nohighlight">\(dr_{t}\)</span> is the discount rate (a function
 of long-term interest rates), and <span class="math notranslate nohighlight">\(lft_{k}\)</span> is the economic lifetime of technology <span class="math notranslate nohighlight">\(k\)</span>.</p>
 <p>The shares of each option <span class="math notranslate nohighlight">\(k\)</span> in the gap for the year <span class="math notranslate nohighlight">\(t\)</span> are calculated as follows:</p>
 <div class="math notranslate nohighlight">
-\[
-sh_{k,t} = \frac{w_{k,t}\,\ast\,totcost_{k,t}^{-\gamma_{t}}}{\sum_{k}{w_{k,t}\,\ast\,totcost_{k,t}^{-\gamma_{t}}}}
-\]</div>
+\[sh_{k,t} = \frac{w_{k,t}\,\ast\,totcost_{k,t}^{-\gamma_{t}}}{\sum_{k}{w_{k,t}\,\ast\,totcost_{k,t}^{-\gamma_{t}}}}\]</div>
 <p>The equation above (Weibull specification) determines the market share in the gap of technology <span class="math notranslate nohighlight">\(k\)</span> based on its
 total cost <span class="math notranslate nohighlight">\(totcost_{k,t}\)</span>. In this specification, the parameter <span class="math notranslate nohighlight">\(\gamma_{t}\)</span> represents the sensitivity of the share
 in the gap with respect to the total cost of each technology, while the weights <span class="math notranslate nohighlight">\(w_{k,t}\)</span> can be interpreted as
@@ -624,8 +606,8 @@ preferences, uncertainty, and imperfect information, allowing for smoother, more
 pathways.</p>
 </div>
 </section>
-<section id="implementation-by-realisation">
-<span id="gap-implementation"></span><h3><span class="section-number">2.3.3. </span>Implementation by realisation<a class="headerlink" href="#implementation-by-realisation" title="Link to this heading"></a></h3>
+<section id="gap-implementation">
+<span id="implementation-by-realisation"></span><h3><span class="section-number">2.3.3. </span>Implementation by realisation<a class="headerlink" href="#gap-implementation" title="Link to this heading"></a></h3>
 <p>The table below maps the generic gap/scrapping/cost/share algebra onto the active equations in each module, with
 the cost-sensitivity exponent (<span class="math notranslate nohighlight">\(-\gamma\)</span>) and the distinctive terms each one uses. A common device across modules
 is the non-negative-gap transform <span class="math notranslate nohighlight">\(\tfrac{1}{2}\!\left(x + \sqrt{x^{2}}\right)\)</span>, which clips a negative gap to zero.</p>
@@ -704,8 +686,8 @@ regulatory measures such as subsidy phase-outs or energy price reforms. Ultimate
 for transmitting economic signals between supply and demand components and for ensuring the internal consistency of
 the integrated model solution.</p>
 </section>
-<section id="active-price-formation-current-code">
-<span id="active-price-formation"></span><h3><span class="section-number">2.4.2. </span>Active price formation (current code)<a class="headerlink" href="#active-price-formation-current-code" title="Link to this heading"></a></h3>
+<section id="active-price-formation">
+<span id="active-price-formation-current-code"></span><h3><span class="section-number">2.4.2. </span>Active price formation (current code)<a class="headerlink" href="#active-price-formation" title="Link to this heading"></a></h3>
 <p>The active Prices realisation (<code class="docutils literal notranslate"><span class="pre">modules/08_Prices/legacy</span></code>) is <strong>recursive index propagation</strong>, not market
 clearing. The central equation <code class="docutils literal notranslate"><span class="pre">Q08PriceFuelSubsecCarVal</span></code> sets each subsector–fuel price for year <span class="math notranslate nohighlight">\(t\)</span> by
 multiplying the previous year’s price by a set of fuel-specific factors and then adding a carbon-value increment:</p>
@@ -737,10 +719,8 @@ MAgPIE for each region, subsector, and year.</p></li>
 </ul>
 <p>All three modes feed the common <code class="docutils literal notranslate"><span class="pre">Q08PriceBmswas</span></code> equation. The model then adds one global sustainability tax,</p>
 <div class="math notranslate nohighlight">
-\[
-\tau_t=A\left(\frac{Q^{world}_{t-1}}{\bar Q}\right)^2,
-\qquad P^{used}_{r,s,t}=P^{backend}_{r,s,t}+\tau_t.
-\]</div>
+\[\tau_t=A\left(\frac{Q^{world}_{t-1}}{\bar Q}\right)^2,
+\qquad P^{used}_{r,s,t}=P^{backend}_{r,s,t}+\tau_t.\]</div>
 <p>The first solved year uses observed base-year global primary BMSWAS production. Module 08 fixes <span class="math notranslate nohighlight">\(A=3.2\)</span> kUS<span class="math notranslate nohighlight">\(2015/toe; `biomassReferenceEJ` configures \)</span>\bar Q$ in EJ/yr (default 150). This reference scale is not a hard cap, and setting it to zero disables the tax. Recursive <code class="docutils literal notranslate"><span class="pre">static</span></code> and GLOBIOM backends remove the previous year’s tax before applying their ordinary price dynamics, so the tax is not compounded. The final PG BMSWAS used-price ratio is passed through to processed biofuels using <code class="docutils literal notranslate"><span class="pre">i08PriceTransElast</span></code>.</p>
 <p>Geological storage has a separate cumulative feedback, <span class="math notranslate nohighlight">\(\tau_t^{CCS}=1000(S_{t-1}/\bar S)^2\)</span> in US<span class="math notranslate nohighlight">\(2015/tCO2. `ccsStorageReferenceGtCO2` configures the cumulative reference \)</span>\bar S<span class="math notranslate nohighlight">\( in GtCO2 (default 400), not an annual capture limit or a hard cumulative cap; zero disables this additional tax but retains the physical storage-cost curve. The fixed internal coefficient was calibrated against cumulative storage through 2100 under the 1.5C / MAgPIE-emulator scenario, with annual capture checked separately; changing the scenario or time horizon need not reproduce the reference quantity. \)</span>S_t$ sums point-source Energy CCS and DAC over all modelled regions and solved years, with zero cumulative storage in the base year; BECCS is already included in Energy CCS and TEW is excluded. The global stock is updated only after all regional solves are collected. Both the physical cost curve and the next year’s tax use the completed previous-year stock, so all regions face the same storage-cost signal. DAC’s subsidy-eligible levelized cost excludes this tax: the effective cost deducts the technology subsidy first, then adds the shared tax in full.</p>
 <p>The determination of prices is done endogenously through a combination of complementary mechanisms. For energy
