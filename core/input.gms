@@ -612,6 +612,8 @@ elseif %fScenario% eq 100 then
      iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"UPT_100",YTIME);
 elseif %fScenario% eq 200 then
      iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"UPT_200",YTIME);
+elseif %fScenario% eq 300 then
+     iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"UPT_300",YTIME);
 elseif %fScenario% eq 400 then
      iCarbValYrExog(allCy,YTIME) = iEnvPolicies(allCy,"UPT_400",YTIME);
 elseif %fScenario% eq 600 then
