@@ -122,8 +122,11 @@ Q06LvlCostCDR(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06GrossCapCDR(CDRTECH,YTIME) +
     V06FixOandMCDR(CDRTECH,YTIME) + 
     V06VarCostCDR(CDRTECH,YTIME) - 20 +
-    i06SpecElecCDR(allCy,CDRTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME) +
-    i06SpecHeatCDR(allCy,CDRTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","NGS",YTIME) / 0.85 +
+    !! Specific energy use is in toe/tCO2 and fuel prices are in kUSD2015/toe.
+    1e3 * (
+      i06SpecElecCDR(allCy,CDRTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME) +
+      i06SpecHeatCDR(allCy,CDRTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","NGS",YTIME) / 0.85
+    ) +
     (VmCstCO2SeqCsts(allCy,YTIME) - i06CCSAvailabilityCostAdder(YTIME))$DACTECH(CDRTECH)
 ;
 
