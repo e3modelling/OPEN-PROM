@@ -156,13 +156,13 @@ i02ratioOwnEnergyTransfIS(runCy,IS_TRANSF,EFS,YTIME)$DATAY(YTIME) =
 )$SUM(EFS2$IS_TRANSF_OUT(IS_TRANSF,EFS2),i02ISTransfOutEF(runCy,IS_TRANSF,EFS2,YTIME));
 i02ratioOwnEnergyTransfIS("FRA",IS_TRANSF,EFS,"%fBaseY%") = i02ratioOwnEnergyTransfIS("FRA",IS_TRANSF,EFS,"2016");
 *---
-parameter i02ratioMaterialCons(IND_SERVS,INDITECH,MATERIAL)      "Material consumption: (ton/ton of steel)"/
-PRIM_STEEL.NGEAF.IRNSPNG 1.1
-PRIM_STEEL.NGEAF.SCRAP 0.1
-SEC_STEEL.SCREAF.SCRAP 1.12
+parameter i02ratioMaterialCons(IND_SERVS,INDITECH,MATERIAL)      "Material consumption: (ton/ton of steel)"/ !!From EU-CHINA BRIGDE DATA
+PRIM_STEEL.NGEAF.IRNSPNG 0.99
+PRIM_STEEL.NGEAF.SCRAP 0.19
+SEC_STEEL.SCREAF.SCRAP 1.10
 /;
 
-parameter i02ratioFuelConsPerMaterial(IS_TRANSF,MATERIAL,EFS)      "Fuel consumption per output material: (Mtoe/Mton of material)"/
-DRI.IRNSPNG.NGS 0.263
-DRI.IRNSPNG.ELC 0.0095
+parameter i02ratioFuelConsPerMaterial(IS_TRANSF,MATERIAL,EFS)      "Fuel consumption per output material: (Mtoe/Mton of material)"/ !!From EU-CHINA BRIGDE DATA
+DRI.IRNSPNG.NGS 0.199
+DRI.IRNSPNG.ELC 0.005
 /;
