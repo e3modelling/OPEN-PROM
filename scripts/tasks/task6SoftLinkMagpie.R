@@ -151,8 +151,8 @@
 #                              reportOutput.R
 #   openprom_coupling.mif      last round's forward output (overwritten)
 #   iPrices_magpie.csv         last round's backward price output (overwritten)
-#   iEmissions_magpie.mif      last round's backward emissions output
-#                              (overwritten)
+#   iEmissions_magpie.mif      last round's backward emissions output (overwritten)
+#   iLandCover_magpie.mif      selected MAgPIE round's land areas for reporting
 #   coupling_state.json        full state machine snapshot (see §3)
 #   convergence_log.csv        per-round convergence trajectory (see below)
 #   coupling_summary.json      finalize-time summary: status, thresholds,
@@ -428,6 +428,7 @@
       quant_max = final_round$delta_quant_max
     ),
     magpie_output_dirs = magpie_dirs,
+    final_magpie_output_dir = final_round$magpie_output_dir,
     final_gdx          = finalGdx,
     started            = state$started,
     completed          = .isoNow()
@@ -786,6 +787,16 @@ runTask6 <- function() {
   .writeCouplingSummary(state, openPromRun, final_gdx, cfg)
 
   if (withRunFolder && withReport) {
+    final_magpie_dir <- state$rounds[[as.character(final_k)]]$magpie_output_dir
+    tryCatch(
+      postprom::writeMagpieLandCover(
+        reportMifPath = file.path(final_magpie_dir, "report.mif"),
+        outMifPath = file.path(openPromRun, "iLandCover_magpie.mif"),
+        scenario = sceName
+      ),
+      error = function(e) warning("[task 6] Land-cover report skipped: ",
+                                  conditionMessage(e), call. = FALSE)
+    )
     cat(">>> [task 6] reportOutput.R\n")
     run_path <- getwd()
     setwd("../../")
