@@ -162,7 +162,7 @@ PRIM_STEEL.NGEAF.SCRAP 0.1
 SEC_STEEL.SCREAF.SCRAP 1.12
 /;
 
-parameter i02ratioFuelConsPerMaterial(IS_TRANSF,MATERIAL,EFS)      "Fuel consumption per output material: (Mtoe/ton of material)"/
+parameter i02ratioFuelConsPerMaterial(IS_TRANSF,MATERIAL,EFS)      "Fuel consumption per output material: (Mtoe/Mton of material)"/
 DRI.IRNSPNG.NGS 0.263
 DRI.IRNSPNG.ELC 0.0095
 /;
